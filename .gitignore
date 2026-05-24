@@ -1,0 +1,6 @@
+.claude-flow/
+.ux/
+ruvector.db
+*.db-journal
+.DS_Store
+node_modules/

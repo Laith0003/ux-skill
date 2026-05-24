@@ -1,0 +1,10 @@
+{
+  "name": "ux",
+  "description": "The strongest UX plugin ever made. Review, generate, audit, and ship case studies grounded in Norman, Krug, Lean UX (Gothelf/Seiden + Klein), Laws of UX, Kocienda's Creative Selection, and the awwwards-grade frontend bar. Multi-mode platform with named slash commands, sub-agents, and Polaris-foundations house style. Cross-system, cross-stack.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Laith Aljunaidy",
+    "email": "laith.aljunaidy.laith@gmail.com",
+    "url": "https://www.linkedin.com/in/laithaljunaidy/"
+  }
+}
