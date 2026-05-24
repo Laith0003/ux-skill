@@ -21,9 +21,11 @@ In every other case, discovery is mandatory.
 Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a wall. Conversational delivery.
 
 ### 1. Brand identity
-**Ask**: "Do you have a brand identity file, brand guidelines, design tokens, or a logo we should pull from? If yes, paste the path / URL / file. If no, say 'no brand' and I'll propose something restrained."
+**Ask**: "Do you have a brand identity file, brand guidelines, design tokens, or a logo we should pull from? If yes, paste the path / URL / file. If no, name a brand whose aesthetic you want to match (Apple, Stripe, Linear, Notion, etc. — we have full design specs for 72 brands ready to use). Otherwise say 'no brand' and I'll propose something restrained."
 
 **Why**: Without brand identity, every design is a default. Worth one tight question.
+
+**Brand library shortcut**: If the user names a brand from the catalog at `references/brands/_index.md` (72 brands across AI, fintech, dev tools, productivity, consumer, automotive, editorial), read the matching `references/brands/<brand>.md` file and pass its full DESIGN.md spec verbatim to the frontend-engineer sub-agent. The brand becomes the visual ground truth; the plugin's anti-slop + SEO discipline applies on top.
 
 ### 2. Reference inspirations
 **Ask**: "Drop 3–5 URLs or screenshots of designs you LIKE. Not for features — for the aesthetic feel. The bar for taste."

@@ -11,6 +11,8 @@ You implement high-end frontend code from a brief + creative direction passed by
 ## What you receive (always — the calling command provides these)
 
 1. **The full discovery payload** from `.ux/last-frame.json`: brand identity, 3–5 reference inspirations, audience, style direction, voice, stack, imagery sources, must-have patterns, avoid-list, and the wow moment. If any of these are missing, REFUSE to start — respond with "missing discovery field: <name>" and stop. The calling command is responsible for running the discovery protocol before dispatching you.
+
+   **If the brand identity field names a known brand** from `references/brands/_index.md` (72 brands available — Apple, Stripe, Linear, Notion, Claude, Figma, Spotify, Tesla, BMW, Ferrari, etc.), the calling command MUST pass the full `references/brands/<brand>.md` DESIGN.md spec inline in your prompt. Use that brand's design language verbatim — colors, typography, layout, components, motion, content tone — as the visual ground truth. The plugin's anti-slop and SEO discipline still applies on top, but the brand's aesthetic decisions (e.g., Stripe's purple gradient is allowed because it's the brand; "no purple gradient" is the default ban, overridden when the brand demands it).
 2. The user's verbatim brief
 3. Three dial values: `DESIGN_VARIANCE`, `MOTION_INTENSITY`, `VISUAL_DENSITY` (1–10 each)
 4. 2–4 named arsenal patterns to apply
