@@ -356,11 +356,11 @@ Embedded in plugin README and surfaced by `/ux-expert` when a user asks for a re
 ## 13. Open questions (decisions deferred to plan phase)
 
 1. **Canonical install location**: `~/.claude/plugins/ux/` vs separate publishable git repo (community plugin marketplace).
-3. **State persistence path**: `.ux/` in project root, or `~/.gstack/projects/<slug>/ux/`?
-4. **Severity → "must-fix-now" cutoff**: Critical + High by default? Per-team config flag?
-5. **Motion philosophy split** (v2): single foundation doc with a "perspectives" section, or separate files per philosophy?
-6. **Sub-agent isolation**: agents share the same context with the command, or get fresh context per dispatch?
-7. **Stack detection** for `/ux-design` and `/ux-component`: auto-detect from `package.json` / `composer.json`, or always ask the user?
+2. **State persistence path**: `.ux/` in project root, or `~/.gstack/projects/<slug>/ux/`?
+3. **Severity → "must-fix-now" cutoff**: Critical + High by default? Per-team config flag?
+4. **Motion philosophy split** (v2): single foundation doc with a "perspectives" section, or separate files per philosophy?
+5. **Sub-agent isolation**: agents share the same context with the command, or get fresh context per dispatch?
+6. **Stack detection** for `/ux-design` and `/ux-component`: auto-detect from `package.json` / `composer.json`, or always ask the user?
 
 ---
 
