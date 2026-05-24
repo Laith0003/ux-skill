@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ux — design intelligence for Claude Code</title>
+  <meta name="description" content="The strongest UX plugin for Claude Code. 17 slash commands, 5 sub-agents, 30+ reference files. Anti-AI-slop. SEO baked in. Open source.">
+
+  <link rel="canonical" href="https://laith0003.github.io/ux-skill/">
+
+  <meta name="robots" content="index,follow">
+
+  <meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#181715" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light">
+
+  <!-- Favicons: placeholders. Generate at /favicon-32x32.png, /favicon-16x16.png,
+       /apple-touch-icon.png (180x180), /safari-pinned-tab.svg, /site.webmanifest -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#cc785c">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- Font preconnect for LCP -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="ux — design intelligence for Claude Code">
+  <meta property="og:description" content="The strongest UX plugin for Claude Code. 17 slash commands, 5 sub-agents, 30+ reference files. Anti-AI-slop. SEO baked in. Open source.">
+  <meta property="og:image" content="https://laith0003.github.io/ux-skill/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ux plugin wordmark on cream canvas with the line: design intelligence for a Claude Code session.">
+  <meta property="og:url" content="https://laith0003.github.io/ux-skill/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ux">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ux — design intelligence for Claude Code">
+  <meta name="twitter:description" content="17 slash commands, 5 sub-agents, 30+ reference files. Anti-AI-slop. SEO baked in. Open source.">
+  <meta name="twitter:image" content="https://laith0003.github.io/ux-skill/og-image.png">
+  <meta name="twitter:image:alt" content="ux plugin wordmark on cream canvas with the line: design intelligence for a Claude Code session.">
+
+  <!-- JSON-LD: Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "ux",
+    "url": "https://laith0003.github.io/ux-skill/",
+    "logo": "https://laith0003.github.io/ux-skill/logo.png",
+    "founder": {
+      "@type": "Person",
+      "name": "Laith Aljunaidy",
+      "url": "https://www.linkedin.com/in/laithaljunaidy/"
+    },
+    "sameAs": [
+      "https://github.com/Laith0003/ux-skill",
+      "https://www.linkedin.com/in/laithaljunaidy/"
+    ]
+  }
+  </script>
+
+  <!-- JSON-LD: WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "ux",
+    "url": "https://laith0003.github.io/ux-skill/"
+  }
+  </script>
+
+  <!-- JSON-LD: SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "ux",
+    "description": "A plugin for Claude Code that ships 17 slash commands, 5 sub-agents, and 30+ reference files for design intelligence, anti-AI-slop discipline, and shipping production UI.",
+    "operatingSystem": "macOS, Linux, Windows",
+    "applicationCategory": "DeveloperApplication",
+    "softwareVersion": "1.2",
+    "license": "https://opensource.org/licenses/MIT",
+    "url": "https://github.com/Laith0003/ux-skill",
+    "author": {
+      "@type": "Person",
+      "name": "Laith Aljunaidy",
+      "url": "https://www.linkedin.com/in/laithaljunaidy/"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <!-- Tailwind via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            canvas: '#faf9f5',
+            'surface-soft': '#f5f0e8',
+            'surface-card': '#efe9de',
+            'surface-cream-strong': '#e8e0d2',
+            'surface-dark': '#181715',
+            'surface-dark-elevated': '#252320',
+            'surface-dark-soft': '#1f1e1b',
+            hairline: '#e6dfd8',
+            'hairline-soft': '#ebe6df',
+            ink: '#141413',
+            'body-strong': '#252523',
+            body: '#3d3d3a',
+            muted: '#6c6a64',
+            'muted-soft': '#8e8b82',
+            'on-dark': '#faf9f5',
+            'on-dark-soft': '#a09d96',
+            primary: '#cc785c',
+            'primary-active': '#a9583e',
+            'primary-disabled': '#e6dfd8',
+            'accent-teal': '#5db8a6',
+            'accent-amber': '#e8a55a',
+            success: '#5db872',
+            warning: '#d4a017',
+            error: '#c64545',
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', 'EB Garamond', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'Menlo', 'monospace'],
+          },
+          letterSpacing: {
+            'display': '-0.02em',
+            'display-tight': '-0.025em',
+            'eyebrow': '0.08em',
+          },
+          spacing: {
+            'section': '6rem',
+            'section-lg': '8rem',
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ---------- Base ---------- */
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 72px;
+      background: #faf9f5;
+    }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      color: #141413;
+      background: #faf9f5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+    ::selection {
+      background: #cc785c;
+      color: #faf9f5;
+    }
+
+    /* ---------- Display type ---------- */
+    .font-display {
+      font-family: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      font-feature-settings: "lnum" 1;
+    }
+
+    /* ---------- Two-tone body emphasis ---------- */
+    .body-prose {
+      color: #6c6a64;
+      line-height: 1.6;
+    }
+    .body-prose strong,
+    .body-prose .ink {
+      color: #141413;
+      font-weight: 500;
+    }
+
+    /* ---------- Eyebrow ---------- */
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: #6c6a64;
+      text-transform: lowercase;
+    }
+
+    /* ---------- Skip link ---------- */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 16px;
+      background: #141413;
+      color: #faf9f5;
+      padding: 12px 18px;
+      border-radius: 8px;
+      z-index: 100;
+      transition: top 0.2s ease-out;
+    }
+    .skip-link:focus {
+      top: 12px;
+    }
+
+    /* ---------- Brand mark ---------- */
+    .brand-mark {
+      --mark-stroke: #141413;
+      --mark-dot: #cc785c;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0;
+    }
+    .brand-mark svg {
+      display: block;
+    }
+    .brand-mark .mark-stroke {
+      stroke: var(--mark-stroke);
+      transition: stroke 600ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .brand-mark .mark-dot {
+      fill: var(--mark-dot);
+      transition: fill 600ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Adapt brand-mark color per surface */
+    [data-nav-surface="dark"] .brand-mark {
+      --mark-stroke: #faf9f5;
+    }
+    [data-nav-surface="coral"] .brand-mark {
+      --mark-stroke: #ffffff;
+      --mark-dot: #ffffff;
+    }
+    [data-nav-surface="card"] .brand-mark,
+    [data-nav-surface="cream"] .brand-mark {
+      --mark-stroke: #141413;
+      --mark-dot: #cc785c;
+    }
+
+    /* Nav background adapt */
+    .site-nav {
+      background: rgba(250, 249, 245, 0.72);
+      backdrop-filter: saturate(180%) blur(14px);
+      -webkit-backdrop-filter: saturate(180%) blur(14px);
+      border-bottom: 1px solid rgba(230, 223, 216, 0.4);
+      transition: background 480ms cubic-bezier(0.16, 1, 0.3, 1), border-color 480ms;
+    }
+    [data-nav-surface="dark"] .site-nav {
+      background: rgba(24, 23, 21, 0.72);
+      border-bottom-color: rgba(160, 157, 150, 0.18);
+    }
+    [data-nav-surface="coral"] .site-nav {
+      background: rgba(204, 120, 92, 0.85);
+      border-bottom-color: rgba(255, 255, 255, 0.18);
+    }
+    [data-nav-surface="card"] .site-nav {
+      background: rgba(239, 233, 222, 0.82);
+    }
+
+    .nav-link {
+      color: #3d3d3a;
+      transition: color 320ms ease-out;
+    }
+    [data-nav-surface="dark"] .nav-link {
+      color: #a09d96;
+    }
+    [data-nav-surface="dark"] .nav-link:hover {
+      color: #faf9f5;
+    }
+    [data-nav-surface="coral"] .nav-link {
+      color: rgba(255, 255, 255, 0.86);
+    }
+    [data-nav-surface="coral"] .nav-link:hover {
+      color: #ffffff;
+    }
+    .nav-link:hover {
+      color: #141413;
+    }
+
+    /* The wordmark text adapts via inline CSS variable */
+    .wordmark-text {
+      color: var(--mark-stroke, #141413);
+      transition: color 600ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ---------- Mark draw-on-load animation ---------- */
+    .mark-path {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      opacity: 1;
+    }
+    .mark-dot-circle {
+      transform: scale(0);
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+
+    @keyframes drawStroke {
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes popDot {
+      0%   { transform: scale(0); }
+      70%  { transform: scale(1.18); }
+      100% { transform: scale(1); }
+    }
+
+    .mark-loaded .mark-path-u {
+      animation: drawStroke 520ms cubic-bezier(0.16, 1, 0.3, 1) 80ms forwards;
+    }
+    .mark-loaded .mark-path-x1 {
+      animation: drawStroke 460ms cubic-bezier(0.16, 1, 0.3, 1) 480ms forwards;
+    }
+    .mark-loaded .mark-path-x2 {
+      animation: drawStroke 460ms cubic-bezier(0.16, 1, 0.3, 1) 600ms forwards;
+    }
+    .mark-loaded .mark-dot-circle {
+      animation: popDot 320ms cubic-bezier(0.34, 1.56, 0.64, 1) 920ms forwards;
+    }
+
+    /* ---------- Buttons ---------- */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 44px;
+      padding: 0 22px;
+      background: #cc785c;
+      color: #ffffff;
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: -0.005em;
+      border-radius: 8px;
+      transition: background 200ms ease-out, transform 150ms ease-out;
+    }
+    .btn-primary:hover {
+      background: #a9583e;
+    }
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+    .btn-primary:focus-visible {
+      outline: 2px solid #141413;
+      outline-offset: 3px;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 44px;
+      padding: 0 22px;
+      background: transparent;
+      color: #141413;
+      font-weight: 500;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #e6dfd8;
+      transition: border-color 200ms ease-out, background 200ms ease-out, transform 150ms ease-out;
+    }
+    .btn-secondary:hover {
+      border-color: #141413;
+      background: rgba(20, 20, 19, 0.03);
+    }
+    .btn-secondary:active {
+      transform: scale(0.98);
+    }
+    .btn-secondary:focus-visible {
+      outline: 2px solid #141413;
+      outline-offset: 3px;
+    }
+
+    .btn-on-coral {
+      background: #faf9f5;
+      color: #141413;
+    }
+    .btn-on-coral:hover {
+      background: #ffffff;
+    }
+
+    /* ---------- Pill ---------- */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      background: rgba(204, 120, 92, 0.08);
+      border: 1px solid rgba(204, 120, 92, 0.22);
+      color: #a9583e;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #cc785c;
+    }
+
+    /* ---------- Code window ---------- */
+    .code-window {
+      background: #181715;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 18px 60px -24px rgba(20, 20, 19, 0.28);
+    }
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      background: #1f1e1b;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #6c6a64;
+    }
+    .code-body {
+      padding: 22px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #faf9f5;
+      overflow-x: auto;
+    }
+    .code-body .c-prompt { color: #6c6a64; }
+    .code-body .c-cmd    { color: #faf9f5; }
+    .code-body .c-divider { color: #3d3d3a; }
+    .code-body .c-label  { color: #a09d96; }
+    .code-body .c-value  { color: #faf9f5; }
+    .code-body .c-fade   { color: #6c6a64; }
+    .code-body .c-coral  { color: #cc785c; }
+    .code-body .c-success { color: #5db872; }
+    .code-body .c-warn   { color: #d4a017; }
+    .code-body .c-error  { color: #c64545; }
+    .code-body .c-strike { text-decoration: line-through; text-decoration-color: #cc785c; text-decoration-thickness: 1.5px; color: #6c6a64; }
+    .code-body .c-arrow  { color: #6c6a64; }
+
+    /* ---------- Strikethrough emphasis (the bans) ---------- */
+    .ban {
+      text-decoration: line-through;
+      text-decoration-color: #cc785c;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      color: #6c6a64;
+    }
+
+    /* ---------- Hairline divider ---------- */
+    .hairline {
+      border-top: 1px solid #e6dfd8;
+    }
+    .hairline-strong {
+      border-top: 1px solid #141413;
+    }
+
+    /* ---------- Bento tiles ---------- */
+    .bento-tile {
+      position: relative;
+      background: #efe9de;
+      border-radius: 12px;
+      padding: 36px;
+      overflow: hidden;
+      transition: transform 480ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 480ms;
+    }
+    .bento-tile.hairline-tile {
+      background: #faf9f5;
+      border: 1px solid #e6dfd8;
+    }
+    .bento-tile:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px -20px rgba(20, 20, 19, 0.12);
+    }
+    .bento-tile.spotlight::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: 13px;
+      pointer-events: none;
+      background: radial-gradient(
+        420px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(204, 120, 92, 0.22),
+        transparent 60%
+      );
+      opacity: 0;
+      transition: opacity 320ms ease-out;
+    }
+    .bento-tile.spotlight:hover::before {
+      opacity: 1;
+    }
+    .cmd-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      background: rgba(20, 20, 19, 0.05);
+      border: 1px solid rgba(20, 20, 19, 0.08);
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #141413;
+      letter-spacing: -0.005em;
+      transition: background 200ms, border-color 200ms;
+    }
+    .cmd-pill:hover {
+      background: rgba(204, 120, 92, 0.08);
+      border-color: rgba(204, 120, 92, 0.28);
+      color: #a9583e;
+    }
+    .bento-tile.hairline-tile .cmd-pill {
+      background: rgba(20, 20, 19, 0.04);
+    }
+
+    /* ---------- Fade-up reveal ---------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1), transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---------- Reduced motion ---------- */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .mark-loaded .mark-path-u,
+      .mark-loaded .mark-path-x1,
+      .mark-loaded .mark-path-x2 {
+        animation: none;
+        stroke-dashoffset: 0;
+      }
+      .mark-loaded .mark-dot-circle {
+        animation: none;
+        transform: scale(1);
+      }
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+
+    /* ---------- Mobile tweaks ---------- */
+    @media (max-width: 768px) {
+      .code-body {
+        font-size: 11px;
+        padding: 18px 18px;
+      }
+    }
+  </style>
+</head>
+<body class="bg-canvas text-ink antialiased">
+
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- ============================================================
+       Sticky nav
+       ============================================================ -->
+  <header class="site-nav fixed top-0 inset-x-0 z-50">
+    <nav aria-label="Primary" class="max-w-[1200px] mx-auto h-16 px-6 md:px-8 flex items-center justify-between">
+      <a href="#" class="brand-mark group" aria-label="ux home">
+        <!-- The brand mark: lowercase "ux" wordmark in Cormorant + coral tittle dot -->
+        <svg width="48" height="28" viewBox="0 0 48 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- u path: two verticals + bottom curve -->
+          <path
+            class="mark-stroke mark-path mark-path-u"
+            d="M4 6 L4 18 Q4 22 8 22 Q12 22 12 18 L12 6"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            fill="none"
+          />
+          <!-- x first diagonal -->
+          <path
+            class="mark-stroke mark-path mark-path-x1"
+            d="M18 8 L30 22"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            fill="none"
+          />
+          <!-- x second diagonal -->
+          <path
+            class="mark-stroke mark-path mark-path-x2"
+            d="M30 8 L18 22"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            fill="none"
+          />
+          <!-- Coral dot above the x -->
+          <circle
+            class="mark-dot mark-dot-circle"
+            cx="24"
+            cy="3"
+            r="2.4"
+          />
+        </svg>
+        <span class="font-display wordmark-text text-[20px] leading-none ml-1.5">ux</span>
+      </a>
+
+      <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <li><a href="#commands" class="nav-link">Commands</a></li>
+        <li><a href="#what-ships" class="nav-link">What ships</a></li>
+        <li><a href="#install" class="nav-link">Install</a></li>
+        <li><a href="#creator" class="nav-link">Creator</a></li>
+      </ul>
+
+      <div class="flex items-center gap-3">
+        <a href="https://github.com/Laith0003/ux-skill" class="nav-link hidden sm:inline-flex items-center gap-2 text-sm font-medium">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.55v-2.1c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.11-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18.92-.26 1.91-.39 2.89-.39.98 0 1.97.13 2.89.39 2.21-1.49 3.18-1.18 3.18-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.4-5.25 5.68.41.35.78 1.05.78 2.12v3.14c0 .31.21.66.79.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/>
+          </svg>
+          GitHub
+        </a>
+        <a href="https://github.com/Laith0003/ux-skill#install" class="btn-primary !h-9 !px-4 text-[13px]">Install</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main" tabindex="-1" class="pt-16">
+
+    <!-- ============================================================
+         HERO — asymmetric split (7/5)
+         ============================================================ -->
+    <section data-surface="cream" aria-labelledby="hero-h1" class="relative">
+      <div class="max-w-[1200px] mx-auto px-6 md:px-8 pt-20 pb-24 md:pt-28 md:pb-32 min-h-[calc(100dvh-64px)] flex items-center">
+        <div class="grid grid-cols-12 gap-8 md:gap-10 w-full">
+
+          <!-- Left: 7 cols -->
+          <div class="col-span-12 md:col-span-7 flex flex-col justify-center">
+            <span class="pill mb-7 self-start">
+              <span class="pill-dot"></span>
+              v1.2 · MIT · for Claude Code
+            </span>
+
+            <h1 id="hero-h1" class="font-display text-[44px] md:text-[68px] leading-[1.05] tracking-display text-ink mb-7">
+              Design intelligence,<br>
+              for a Claude&nbsp;Code session.
+            </h1>
+
+            <p class="body-prose text-[17px] md:text-[18px] leading-[1.55] max-w-[560px] mb-9">
+              <span class="ink">17 slash commands, 5 sub-agents, 30+ reference files</span> — every command reads the bans before producing anything. <span class="ink">Built to ship work that doesn't look generated.</span>
+            </p>
+
+            <div class="flex flex-wrap items-center gap-3 mb-12">
+              <a href="https://github.com/Laith0003/ux-skill#install" class="btn-primary">
+                Install the plugin
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M13 5l7 7-7 7"/>
+                </svg>
+              </a>
+              <a href="https://github.com/Laith0003/ux-skill" class="btn-secondary">View on GitHub</a>
+            </div>
+
+            <!-- Stats row -->
+            <dl class="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-5 max-w-[600px]">
+              <div>
+                <dt class="sr-only">Slash commands</dt>
+                <dd class="font-display text-[40px] md:text-[44px] leading-none tracking-display text-ink tabular-nums">17</dd>
+                <p class="text-[12px] text-muted mt-1.5">callable commands</p>
+              </div>
+              <div>
+                <dt class="sr-only">Sub-agents</dt>
+                <dd class="font-display text-[40px] md:text-[44px] leading-none tracking-display text-ink tabular-nums">5</dd>
+                <p class="text-[12px] text-muted mt-1.5">specialized sub-agents</p>
+              </div>
+              <div>
+                <dt class="sr-only">Reference files</dt>
+                <dd class="font-display text-[40px] md:text-[44px] leading-none tracking-display text-ink tabular-nums">30+</dd>
+                <p class="text-[12px] text-muted mt-1.5">reference files</p>
+              </div>
+              <div>
+                <dt class="sr-only">Lines of guidance</dt>
+                <dd class="font-display text-[40px] md:text-[44px] leading-none tracking-display text-ink tabular-nums">19,704</dd>
+                <p class="text-[12px] text-muted mt-1.5">lines of guidance</p>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Right: 5 cols — dark code window mockup -->
+          <div class="col-span-12 md:col-span-5 flex items-center">
+            <div class="code-window w-full">
+              <div class="code-header">
+                <span>~/ux-design</span>
+                <span class="text-[#5db872]">running</span>
+              </div>
+              <pre class="code-body"><span class="c-prompt">$</span> <span class="c-cmd">/ux-design "a SaaS landing for a fintech for freelancers"</span>
+
+<span class="c-divider">─── discovery ─────────────────────────</span>
+<span class="c-label">Brand</span>        <span class="c-value">no brand</span> <span class="c-arrow">→</span> <span class="c-coral">restrained proposal</span>
+<span class="c-label">References</span>   <span class="c-value">3 (provided)</span>
+<span class="c-label">Audience</span>     <span class="c-value">solo founders, freelance consultants</span>
+<span class="c-label">Style</span>        <span class="c-value">minimalist (premium fintech editorial)</span>
+<span class="c-label">Voice</span>        <span class="c-value">direct, warm, brief</span>
+<span class="c-label">Stack</span>        <span class="c-value">React + Tailwind + Framer Motion</span>
+<span class="c-label">Wow</span>          <span class="c-value">first-scroll metric counter reveal</span>
+
+<span class="c-divider">─── design brief ──────────────────────</span>
+<span class="c-label">Dials</span>        <span class="c-value">DESIGN_VARIANCE=6 · MOTION_INTENSITY=5 · DENSITY=4</span>
+<span class="c-label">Patterns</span>     <span class="c-value">Asymmetric split · Editorial rhythm</span>
+             <span class="c-value">Spotlight cards · Counter reveal</span>
+
+<span class="c-divider">─── self-review ───────────────────────</span>
+<span class="c-fade">avoided</span>  <span class="c-strike">Inter as display</span>          <span class="c-arrow">→</span> <span class="c-coral">Geist</span>
+<span class="c-fade">avoided</span>  <span class="c-strike">purple-to-blue gradient</span>   <span class="c-arrow">→</span> <span class="c-coral">single Electric Blue</span>
+<span class="c-fade">avoided</span>  <span class="c-strike">3 equal cards</span>             <span class="c-arrow">→</span> <span class="c-coral">7/5 split + zig-zag</span>
+<span class="c-fade">avoided</span>  <span class="c-strike">centered hero</span>             <span class="c-arrow">→</span> <span class="c-coral">asymmetric</span>
+<span class="c-fade">avoided</span>  <span class="c-strike">"John Doe"</span>                <span class="c-arrow">→</span> <span class="c-coral">Lina, Bashar, Adnan</span>
+
+<span class="c-success">writing</span>  components/Hero.tsx</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         THESIS — the discipline (fingerprints)
+         ============================================================ -->
+    <section data-surface="cream" aria-labelledby="thesis-h2" class="relative">
+      <div class="max-w-[1200px] mx-auto px-6 md:px-8 py-section md:py-section-lg">
+        <div class="grid grid-cols-12 gap-8 md:gap-10">
+          <div class="col-span-12 md:col-span-4 reveal">
+            <p class="eyebrow mb-4">the discipline</p>
+            <h2 id="thesis-h2" class="font-display text-[36px] md:text-[48px] leading-[1.08] tracking-display text-ink">
+              Default AI output<br>has fingerprints.<br>
+              <span class="text-primary">We catalogued them.</span>
+            </h2>
+          </div>
+
+          <div class="col-span-12 md:col-span-7 md:col-start-6 reveal">
+            <p class="body-prose text-[18px] md:text-[19px] leading-[1.62] max-w-[640px]">
+              <span class="ban">Pure black <span class="font-mono text-[15px]">#000000</span></span>. <span class="ban">The purple-to-blue AI gradient on white</span>. <span class="ban">Three equal cards in a row</span>. <span class="ban">"John Doe", "Acme", <span class="font-mono text-[15px]">99.99%</span></span>. <span class="ban">Centered hero over a dark image</span>. <span class="ban">Decorative animation with no meaning</span>. <span class="ban">Filler verbs — "Elevate", "Seamless", "Unleash"</span>. <span class="ban">A 3-line testimonial with no name attached</span>. <span class="ink">The unconstrained generator reaches for these reflexively. The result reads as machine-made within seconds.</span>
+            </p>
+
+            <p class="text-[14px] text-muted mt-7 max-w-[640px] leading-[1.55]">
+              8 of 200+ catalogued. Every command reads the list before producing anything — refusing the safest default is half the discipline.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         COMMANDS BENTO — surface-card
+         ============================================================ -->
+    <section id="commands" data-surface="card" aria-labelledby="commands-h2" class="relative bg-surface-card">
+      <div class="max-w-[1200px] mx-auto px-6 md:px-8 py-section md:py-section-lg">
+        <div class="grid grid-cols-12 gap-6 md:gap-8 mb-14">
+          <div class="col-span-12 md:col-span-7 reveal">
+            <p class="eyebrow mb-4">the surface area</p>
+            <h2 id="commands-h2" class="font-display text-[36px] md:text-[52px] leading-[1.08] tracking-display text-ink">
+              17 callable commands,<br>grouped by intent.
+            </h2>
+          </div>
+          <div class="col-span-12 md:col-span-4 md:col-start-9 flex items-end reveal">
+            <p class="body-prose text-[16px] leading-[1.6] max-w-[360px]">
+              <span class="ink">Frame · Audit · Generate · Apply.</span> Each command ends with a next-prompt block naming the most useful next move.
+            </p>
+          </div>
+        </div>
+
+        <!-- Bento: row 1 = AUDIT(7) + GENERATE(5); row 2 = FRAME(5) + APPLY(7) -->
+        <div class="grid grid-cols-12 gap-5 md:gap-6">
+
+          <!-- AUDIT — col-span 7, surface-card on canvas tile (spotlight) -->
+          <article class="bento-tile spotlight col-span-12 md:col-span-7 reveal" style="background: #faf9f5;">
+            <header class="flex items-start justify-between mb-6">
+              <div>
+                <p class="eyebrow mb-2">audit</p>
+                <h3 class="font-display text-[26px] md:text-[30px] leading-[1.15] tracking-display text-ink max-w-[420px]">
+                  Find what's wrong<br>before shipping it.
+                </h3>
+              </div>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#cc785c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0 mt-1">
+                <circle cx="11" cy="11" r="7"/>
+                <path d="m20 20-4.35-4.35"/>
+              </svg>
+            </header>
+            <p class="text-[14px] text-muted leading-[1.6] mb-6 max-w-[480px]">
+              Critique, accessibility, copy, motion, polish — six commands that read the surface against the catalogue, name the violations with evidence, and route fixes.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <code class="cmd-pill">/ux-audit</code>
+              <code class="cmd-pill">/ux-critique</code>
+              <code class="cmd-pill">/ux-a11y</code>
+              <code class="cmd-pill">/ux-copy</code>
+              <code class="cmd-pill">/ux-motion</code>
+              <code class="cmd-pill">/ux-polish</code>
+            </div>
+          </article>
+
+          <!-- GENERATE — col-span 5, surface-card spotlight -->
+          <article class="bento-tile spotlight col-span-12 md:col-span-5 reveal" style="background: #faf9f5;">
+            <header class="flex items-start justify-between mb-6">
+              <div>
+                <p class="eyebrow mb-2">generate</p>
+                <h3 class="font-display text-[26px] md:text-[30px] leading-[1.15] tracking-display text-ink">
+                  Produce the<br>artifact, in style.
+                </h3>
+              </div>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#cc785c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0 mt-1">
+                <path d="M12 2v20M2 12h20"/>
+              </svg>
+            </header>
+            <p class="text-[14px] text-muted leading-[1.6] mb-6">
+              Landing pages, design systems, dashboards, single components. Each output passes through the discovery protocol and the ban list before a line of code is written.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <code class="cmd-pill">/ux-design</code>
+              <code class="cmd-pill">/ux-system</code>
+              <code class="cmd-pill">/ux-dashboard</code>
+              <code class="cmd-pill">/ux-component</code>
+            </div>
+          </article>
+
+          <!-- FRAME — col-span 5, hairline -->
+          <article class="bento-tile hairline-tile col-span-12 md:col-span-5 reveal">
+            <header class="flex items-start justify-between mb-6">
+              <div>
+                <p class="eyebrow mb-2">frame</p>
+                <h3 class="font-display text-[26px] md:text-[30px] leading-[1.15] tracking-display text-ink">
+                  Set the brief<br>before you build.
+                </h3>
+              </div>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#141413" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0 mt-1">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <path d="M3 9h18M9 21V9"/>
+              </svg>
+            </header>
+            <p class="text-[14px] text-muted leading-[1.6] mb-6">
+              Discovery protocols, research synthesis, workshop framing. The work no one wants to do, done well.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <code class="cmd-pill">/ux-frame</code>
+              <code class="cmd-pill">/ux-research</code>
+              <code class="cmd-pill">/ux-workshop</code>
+            </div>
+          </article>
+
+          <!-- APPLY — col-span 7, hairline -->
+          <article class="bento-tile hairline-tile col-span-12 md:col-span-7 reveal">
+            <header class="flex items-start justify-between mb-6">
+              <div>
+                <p class="eyebrow mb-2">apply</p>
+                <h3 class="font-display text-[26px] md:text-[30px] leading-[1.15] tracking-display text-ink max-w-[420px]">
+                  Turn findings<br>into committed changes.
+                </h3>
+              </div>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#141413" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0 mt-1">
+                <path d="M20 6 9 17l-5-5"/>
+              </svg>
+            </header>
+            <p class="text-[14px] text-muted leading-[1.6] mb-6 max-w-[480px]">
+              Route fixes, write case studies, name the next prompt, summon the right expert. Apply turns the audit's red ink into a shipped diff.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <code class="cmd-pill">/ux-fix</code>
+              <code class="cmd-pill">/ux-case-study</code>
+              <code class="cmd-pill">/ux-next</code>
+              <code class="cmd-pill">/ux-expert</code>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         WHAT SHIPS — editorial column rhythm — cream
+         ============================================================ -->
+    <section id="what-ships" data-surface="cream" aria-labelledby="ships-h2" class="relative">
+      <div class="max-w-[1200px] mx-auto px-6 md:px-8 py-section md:py-section-lg">
+
+        <div class="mb-16 reveal">
+          <p class="eyebrow mb-4">what's in the box</p>
+          <h2 id="ships-h2" class="font-display text-[36px] md:text-[52px] leading-[1.08] tracking-display text-ink max-w-[820px]">
+            Three numbers do<br>most of the explaining.
+          </h2>
+        </div>
+
+        <!-- Block 1: 17 — text-right -->
+        <div class="grid grid-cols-12 gap-8 md:gap-12 items-center hairline pt-14 pb-14 reveal">
+          <div class="col-span-12 md:col-span-5 md:col-start-1">
+            <p class="font-display text-[100px] md:text-[160px] leading-[0.95] tracking-display-tight text-ink tabular-nums">17</p>
+            <p class="eyebrow mt-2">callable slash commands</p>
+          </div>
+          <div class="col-span-12 md:col-span-6 md:col-start-7">
+            <p class="body-prose text-[18px] md:text-[19px] leading-[1.6] max-w-[480px]">
+              <span class="ink">Frame · Audit · Generate · Apply.</span> Each one ends with a next-prompt block that names the most useful next move — so the session compounds instead of unraveling.
+            </p>
+          </div>
+        </div>
+
+        <!-- Block 2: 5 — flipped -->
+        <div class="grid grid-cols-12 gap-8 md:gap-12 items-center hairline pt-14 pb-14 reveal">
+          <div class="col-span-12 md:col-span-6 md:col-start-1 md:order-1 order-2">
+            <p class="body-prose text-[18px] md:text-[19px] leading-[1.6] max-w-[480px]">
+              <span class="ink">frontend-engineer, motion-engineer, copy-writer, research-synthesizer, design-system-architect.</span> Dispatched in parallel where work is independent — the main session stays the conductor.
+            </p>
+          </div>
+          <div class="col-span-12 md:col-span-5 md:col-start-8 md:order-2 order-1 text-left md:text-right">
+            <p class="font-display text-[100px] md:text-[160px] leading-[0.95] tracking-display-tight text-ink tabular-nums">5</p>
+            <p class="eyebrow mt-2">specialized sub-agents</p>
+          </div>
+        </div>
+
+        <!-- Block 3: 30+ — text-right -->
+        <div class="grid grid-cols-12 gap-8 md:gap-12 items-center hairline pt-14 pb-14 reveal">
+          <div class="col-span-12 md:col-span-5 md:col-start-1">
+            <p class="font-display text-[100px] md:text-[160px] leading-[0.95] tracking-display-tight text-ink tabular-nums">30<span class="text-primary">+</span></p>
+            <p class="eyebrow mt-2">reference files</p>
+          </div>
+          <div class="col-span-12 md:col-span-6 md:col-start-7">
+            <p class="body-prose text-[18px] md:text-[19px] leading-[1.6] max-w-[520px]">
+              <span class="ink">Foundations, laws, process, styles, components, output formats, conditional, creator.</span> 19,704 lines of curated guidance the commands read before producing anything.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================================================
+         REAL EXAMPLE — second dark code window (full-bleed dark)
+         ============================================================ -->
+    <section data-surface="dark" aria-labelledby="example-h2" class="relative bg-surface-dark text-on-dark">
+      <div class="max-w-[1200px] mx-auto px-6 md:px-8 py-section md:py-section-lg">
+        <div class="grid grid-cols-12 gap-8 md:gap-12 items-start">
+
+          <div class="col-span-12 md:col-span-5 reveal">
+            <p class="eyebrow mb-4" style="color: #a09d96;">a real run</p>
+            <h2 id="example-h2" class="font-display text-[36px] md:text-[48px] leading-[1.08] tracking-display text-on-dark mb-6">
+              The audit names<br>the violation,<br>names the fix.
+            </h2>
+            <p class="text-[16px] leading-[1.6] text-on-dark-soft max-w-[420px] mb-6">
+              Every finding has a <span class="text-on-dark">severity tag</span>, an <span class="text-on-dark">evidence line</span>, and a <span class="text-on-dark">fix</span>. The verdict at the bottom is a number, not vibes.
+            </p>
+            <p class="text-[14px] text-on-dark-soft max-w-[420px]">
+              Output sample below — actual command, actual page, slightly tightened for the page width.
+            </p>
+          </div>
+
+          <div class="col-span-12 md:col-span-7 reveal">
+            <div class="code-window">
+              <div class="code-header">
+                <span>~/audit-report</span>
+                <span style="color: #d4a017;">3 critical</span>
+              </div>
+              <pre class="code-body"><span class="c-prompt">$</span> <span class="c-cmd">/ux-audit https://my-app.com/pricing</span>
+
+<span class="c-divider">─── findings ──────────────────────────</span>
+<span class="c-error">[CRITICAL]</span>  <span class="c-fade">[SCAN]</span>   <span class="c-value">Krug: Omit Needless Words</span>
+            <span class="c-fade">Evidence:</span> <span class="c-value">hero h1 is 6 lines (147 words)</span>
+            <span class="c-coral">Fix:</span>      <span class="c-value">Tighten to 2 lines, ≤22 words</span>
+
+<span class="c-warn">[HIGH]</span>      <span class="c-fade">[ACT]</span>    <span class="c-value">Hick's Law</span>
+            <span class="c-fade">Evidence:</span> <span class="c-value">11 plan tiers on the pricing grid</span>
+            <span class="c-coral">Fix:</span>      <span class="c-value">Collapse to 3 tiers + "Compare all"</span>
+
+<span class="c-fade">[MEDIUM]</span>    <span class="c-fade">[READ]</span>   <span class="c-value">error specificity</span>
+            <span class="c-fade">Evidence:</span> <span class="c-value">"Form contains errors"</span>
+            <span class="c-coral">Fix:</span>      <span class="c-value">"Email is required. Add an email and try again."</span>
+
+<span class="c-divider">─── verdict ────────────────────────────</span>
+<span class="c-error">3 critical</span> <span class="c-divider">·</span> <span class="c-warn">7 high</span> <span class="c-divider">·</span> <span class="c-fade">12 medium</span> <span class="c-divider">·</span> <span class="c-value">ship-readiness:</span> <span class="c-error">NO-GO</span>
+<span class="c-fade">Recommended next:</span> <span class="c-coral">/ux-copy --fix</span> <span class="c-fade">(highest leverage)</span></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         CORAL CALLOUT — the voltage moment
+         ============================================================ -->
+    <section data-surface="coral" aria-labelledby="callout-h2" class="relative bg-primary text-white">
+      <div class="max-w-[1200px] mx-auto px-6 md:px-8 py-section md:py-section-lg">
+        <div class="grid grid-cols-12 gap-8 md:gap-12 items-center">
+          <div class="col-span-12 md:col-span-7 reveal">
+            <p class="eyebrow mb-5" style="color: rgba(255,255,255,0.7);">install</p>
+            <h2 id="callout-h2" class="font-display text-[44px] md:text-[64px] leading-[1.05] tracking-display text-white">
+              Install in 60 seconds.
+            </h2>
+          </div>
+          <div class="col-span-12 md:col-span-5 reveal">
+            <p class="text-[17px] md:text-[18px] leading-[1.55] mb-8" style="color: rgba(255,255,255,0.9);">
+              Clone the repo, symlink into <code class="font-mono text-[15px] bg-white/15 px-1.5 py-0.5 rounded">~/.claude/plugins/</code>, restart Claude Code. All 17 commands appear in <code class="font-mono text-[15px] bg-white/15 px-1.5 py-0.5 rounded">/help</code>.
+            </p>
+            <a href="https://github.com/Laith0003/ux-skill#install" class="btn-primary btn-on-coral">
+              Get the plugin
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14M13 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         INSTALL — numbered editorial steps — cream
+         ============================================================ -->
+    <section id="install" data-surface="cream" aria-labelledby="install-h2" class="relative">
+      <div class="max-w-[1200px] mx-auto px-6 md:px-8 py-section md:py-section-lg">
+
+        <div class="mb-14 reveal">
+          <p class="eyebrow mb-4">the four steps</p>
+          <h2 id="install-h2" class="font-display text-[36px] md:text-[48px] leading-[1.08] tracking-display text-ink max-w-[720px]">
+            Four lines between you<br>and a working session.
+          </h2>
+        </div>
+
+        <ol class="space-y-0">
+          <!-- 01 Clone -->
+          <li class="grid grid-cols-12 gap-6 md:gap-10 items-center hairline py-10 reveal">
+            <div class="col-span-3 md:col-span-1">
+              <span class="font-display text-[48px] md:text-[64px] leading-none tracking-display-tight text-muted tabular-nums">01</span>
+            </div>
+            <div class="col-span-9 md:col-span-4">
+              <h3 class="font-display text-[22px] md:text-[26px] leading-[1.2] tracking-display text-ink mb-1.5">Clone the repository</h3>
+              <p class="text-[14px] text-muted leading-[1.55]">Public on GitHub, MIT licensed. No login, no waitlist.</p>
+            </div>
+            <div class="col-span-12 md:col-span-7">
+              <div class="code-window">
+                <div class="code-header"><span>terminal</span><span></span></div>
+                <pre class="code-body"><span class="c-prompt">$</span> <span class="c-cmd">git clone https://github.com/Laith0003/ux-skill.git</span></pre>
+              </div>
+            </div>
+          </li>
+
+          <!-- 02 Symlink -->
+          <li class="grid grid-cols-12 gap-6 md:gap-10 items-center hairline py-10 reveal">
+            <div class="col-span-3 md:col-span-1">
+              <span class="font-display text-[48px] md:text-[64px] leading-none tracking-display-tight text-muted tabular-nums">02</span>
+            </div>
+            <div class="col-span-9 md:col-span-4">
+              <h3 class="font-display text-[22px] md:text-[26px] leading-[1.2] tracking-display text-ink mb-1.5">Symlink into Claude Code</h3>
+              <p class="text-[14px] text-muted leading-[1.55]">One line. The plugin lives where Claude Code expects it.</p>
+            </div>
+            <div class="col-span-12 md:col-span-7">
+              <div class="code-window">
+                <div class="code-header"><span>terminal</span><span></span></div>
+                <pre class="code-body"><span class="c-prompt">$</span> <span class="c-cmd">ln -s "$(pwd)/ux-skill" ~/.claude/plugins/ux</span></pre>
+              </div>
+            </div>
+          </li>
+
+          <!-- 03 Restart -->
+          <li class="grid grid-cols-12 gap-6 md:gap-10 items-center hairline py-10 reveal">
+            <div class="col-span-3 md:col-span-1">
+              <span class="font-display text-[48px] md:text-[64px] leading-none tracking-display-tight text-muted tabular-nums">03</span>
+            </div>
+            <div class="col-span-9 md:col-span-4">
+              <h3 class="font-display text-[22px] md:text-[26px] leading-[1.2] tracking-display text-ink mb-1.5">Restart Claude Code</h3>
+              <p class="text-[14px] text-muted leading-[1.55]">The plugin loader picks up the new directory at boot.</p>
+            </div>
+            <div class="col-span-12 md:col-span-7">
+              <div class="code-window">
+                <div class="code-header"><span>terminal</span><span></span></div>
+                <pre class="code-body"><span class="c-prompt">$</span> <span class="c-cmd">claude restart</span>
+<span class="c-success">→ ux plugin loaded · 17 commands · 5 sub-agents</span></pre>
+              </div>
+            </div>
+          </li>
+
+          <!-- 04 Run -->
+          <li class="grid grid-cols-12 gap-6 md:gap-10 items-center hairline py-10 reveal">
+            <div class="col-span-3 md:col-span-1">
+              <span class="font-display text-[48px] md:text-[64px] leading-none tracking-display-tight text-muted tabular-nums">04</span>
+            </div>
+            <div class="col-span-9 md:col-span-4">
+              <h3 class="font-display text-[22px] md:text-[26px] leading-[1.2] tracking-display text-ink mb-1.5">Run <code class="font-mono text-[18px]">/ux-frame</code></h3>
+              <p class="text-[14px] text-muted leading-[1.55]">Frame the brief before building. Every other command compounds from here.</p>
+            </div>
+            <div class="col-span-12 md:col-span-7">
+              <div class="code-window">
+                <div class="code-header"><span>claude code</span><span></span></div>
+                <pre class="code-body"><span class="c-prompt">&gt;</span> <span class="c-cmd">/ux-frame "landing for a niche developer tool"</span>
+<span class="c-fade">→ asking 10 questions to nail audience, voice, style, wow…</span></pre>
+              </div>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         CREATOR — cream
+         ============================================================ -->
+    <section id="creator" data-surface="cream" aria-labelledby="creator-h2" class="relative">
+      <div class="max-w-[1200px] mx-auto px-6 md:px-8 py-section md:py-section-lg">
+        <div class="grid grid-cols-12 gap-8 md:gap-12">
+          <div class="col-span-12 md:col-span-4 reveal">
+            <p class="eyebrow mb-4">real-life UX work</p>
+            <h2 id="creator-h2" class="font-display text-[36px] md:text-[48px] leading-[1.08] tracking-display text-ink">
+              Created by<br>Laith Aljunaidy.
+            </h2>
+          </div>
+
+          <div class="col-span-12 md:col-span-7 md:col-start-6 reveal">
+            <p class="body-prose text-[18px] md:text-[19px] leading-[1.62] mb-8 max-w-[640px]">
+              <span class="ink">Solo founder of Dot</span> (<a href="https://thedotwallet.com" class="underline decoration-primary decoration-2 underline-offset-4 hover:text-primary transition-colors">thedotwallet.com</a>), a MENA-first loyalty platform. <span class="ink">This plugin is his shipped playbook</span> for premium product UI/UX, anti-AI-slop discipline, and RTL-first thinking — extracted from real production work and tightened into 17 commands.
+            </p>
+
+            <ul class="space-y-2.5 text-[15px] text-body mb-9">
+              <li class="flex items-center gap-3">
+                <span class="text-muted text-[12px] w-[68px]">LinkedIn</span>
+                <a href="https://www.linkedin.com/in/laithaljunaidy/" class="text-ink hover:text-primary transition-colors">linkedin.com/in/laithaljunaidy</a>
+              </li>
+              <li class="flex items-center gap-3">
+                <span class="text-muted text-[12px] w-[68px]">Phone</span>
+                <a href="tel:+962797868335" class="text-ink hover:text-primary transition-colors font-mono text-[14px]">+962 79 786 8335</a>
+              </li>
+            </ul>
+
+            <a href="mailto:laith.aljunaidy.laith@gmail.com?subject=UX%20consulting" class="inline-flex items-center gap-2 text-primary font-medium border-b border-primary pb-0.5 hover:gap-3 transition-all">
+              Reach out for UX consulting
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14M13 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER — dark
+       ============================================================ -->
+  <footer data-surface="dark" class="bg-surface-dark text-on-dark-soft">
+    <div class="max-w-[1200px] mx-auto px-6 md:px-8 py-16 md:py-20">
+
+      <div class="grid grid-cols-12 gap-8 mb-12">
+        <div class="col-span-12 md:col-span-4">
+          <a href="#" class="brand-mark inline-flex items-baseline" aria-label="ux home">
+            <svg width="48" height="28" viewBox="0 0 48 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M4 6 L4 18 Q4 22 8 22 Q12 22 12 18 L12 6" stroke="#faf9f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <path d="M18 8 L30 22" stroke="#faf9f5" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+              <path d="M30 8 L18 22" stroke="#faf9f5" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+              <circle cx="24" cy="3" r="2.4" fill="#cc785c"/>
+            </svg>
+            <span class="font-display text-[20px] leading-none ml-1.5 text-on-dark">ux</span>
+          </a>
+          <p class="text-[14px] mt-5 leading-[1.6] max-w-[260px]">
+            The strongest UX plugin for Claude Code. Design intelligence in 17 commands.
+          </p>
+        </div>
+
+        <div class="col-span-6 md:col-span-2">
+          <p class="text-[12px] uppercase tracking-eyebrow mb-4" style="color: #faf9f5;">Product</p>
+          <ul class="space-y-2.5 text-[14px]">
+            <li><a href="#commands" class="hover:text-on-dark transition-colors">Commands</a></li>
+            <li><a href="#what-ships" class="hover:text-on-dark transition-colors">Sub-agents</a></li>
+            <li><a href="https://github.com/Laith0003/ux-skill/tree/main/references" class="hover:text-on-dark transition-colors">References</a></li>
+            <li><a href="https://github.com/Laith0003/ux-skill/releases" class="hover:text-on-dark transition-colors">Releases</a></li>
+          </ul>
+        </div>
+
+        <div class="col-span-6 md:col-span-2">
+          <p class="text-[12px] uppercase tracking-eyebrow mb-4" style="color: #faf9f5;">Resources</p>
+          <ul class="space-y-2.5 text-[14px]">
+            <li><a href="https://github.com/Laith0003/ux-skill#readme" class="hover:text-on-dark transition-colors">README</a></li>
+            <li><a href="https://github.com/Laith0003/ux-skill/blob/main/docs/spec.md" class="hover:text-on-dark transition-colors">Spec</a></li>
+            <li><a href="https://github.com/Laith0003/ux-skill/blob/main/CONTRIBUTING.md" class="hover:text-on-dark transition-colors">Contributing</a></li>
+          </ul>
+        </div>
+
+        <div class="col-span-6 md:col-span-2">
+          <p class="text-[12px] uppercase tracking-eyebrow mb-4" style="color: #faf9f5;">Open source</p>
+          <ul class="space-y-2.5 text-[14px]">
+            <li><a href="https://github.com/Laith0003/ux-skill" class="hover:text-on-dark transition-colors">GitHub</a></li>
+            <li><a href="https://github.com/Laith0003/ux-skill/issues" class="hover:text-on-dark transition-colors">Issues</a></li>
+            <li><a href="https://github.com/Laith0003/ux-skill/blob/main/LICENSE" class="hover:text-on-dark transition-colors">MIT License</a></li>
+          </ul>
+        </div>
+
+        <div class="col-span-6 md:col-span-2">
+          <p class="text-[12px] uppercase tracking-eyebrow mb-4" style="color: #faf9f5;">Made by</p>
+          <ul class="space-y-2.5 text-[14px]">
+            <li><a href="#creator" class="hover:text-on-dark transition-colors">Laith</a></li>
+            <li><a href="https://www.linkedin.com/in/laithaljunaidy/" class="hover:text-on-dark transition-colors">LinkedIn</a></li>
+            <li><a href="tel:+962797868335" class="hover:text-on-dark transition-colors">Phone</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-[13px]" style="border-top: 1px solid rgba(160, 157, 150, 0.18);">
+        <p>© 2026 Laith Aljunaidy. MIT licensed.</p>
+        <p class="text-[12px]" style="color: #6c6a64;">v1.2 · for Claude Code</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       GSAP + ScrollTrigger
+       ============================================================ -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    window.addEventListener('load', function () {
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // ---------- Brand mark draw-on-load ----------
+      // The CSS keyframes drive the reveal. We just toggle the class
+      // after first paint so the dasharray initial state takes effect.
+      requestAnimationFrame(function () {
+        document.querySelectorAll('.brand-mark').forEach(function (el) {
+          el.classList.add('mark-loaded');
+        });
+      });
+
+      // ---------- Bento spotlight (mouse-tracked CSS variables) ----------
+      document.querySelectorAll('.bento-tile.spotlight').forEach(function (tile) {
+        tile.addEventListener('mousemove', function (e) {
+          const rect = tile.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          const y = ((e.clientY - rect.top) / rect.height) * 100;
+          tile.style.setProperty('--mx', x + '%');
+          tile.style.setProperty('--my', y + '%');
+        });
+      });
+
+      // ---------- Intersection-based reveal (no scroll-jacking) ----------
+      const revealEls = document.querySelectorAll('.reveal');
+      if (!prefersReduced && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.08, rootMargin: '0px 0px -8% 0px' });
+        revealEls.forEach(function (el) { io.observe(el); });
+      } else {
+        revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+      }
+
+      // ---------- GSAP ScrollTrigger: nav surface adapt ----------
+      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+
+        const sections = document.querySelectorAll('section[data-surface], footer[data-surface]');
+        sections.forEach(function (section) {
+          ScrollTrigger.create({
+            trigger: section,
+            start: 'top 72px',
+            end: 'bottom 72px',
+            onToggle: function (self) {
+              if (self.isActive) {
+                document.documentElement.dataset.navSurface = section.dataset.surface;
+              }
+            }
+          });
+        });
+
+        // Fallback for the initial state
+        if (!document.documentElement.dataset.navSurface) {
+          document.documentElement.dataset.navSurface = 'cream';
+        }
+      } else {
+        // GSAP failed to load — fall back to plain IntersectionObserver for nav surface
+        if ('IntersectionObserver' in window) {
+          const surfaceObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting && entry.intersectionRatio > 0.1) {
+                document.documentElement.dataset.navSurface = entry.target.dataset.surface;
+              }
+            });
+          }, { rootMargin: '-64px 0px -60% 0px', threshold: [0.1, 0.5] });
+          document.querySelectorAll('[data-surface]').forEach(function (s) {
+            surfaceObserver.observe(s);
+          });
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
