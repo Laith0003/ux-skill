@@ -65,3 +65,34 @@ Track star growth daily for the first 30 days. If a particular channel drives 10
 - Don't fight critics on HN — concede, learn, ship the fix
 - Don't claim "strongest ever" anywhere
 - Don't use AI-generated post copy verbatim (HN smells it)
+
+---
+
+## Live launch state (auto-updated)
+
+### Submitted PRs (waiting on review)
+
+| PR | Repo | Status | Link |
+|---|---|---|---|
+| Anthropic marketplace (the big one) | `anthropics/claude-plugins-official` | Open | [#2010](https://github.com/anthropics/claude-plugins-official/pull/2010) |
+| Claude Code Toolkit awesome list | `rohitg00/awesome-claude-code-toolkit` | Open | [#447](https://github.com/rohitg00/awesome-claude-code-toolkit/pull/447) |
+| Composio awesome-claude-plugins | `ComposioHQ/awesome-claude-plugins` | Open | [#244](https://github.com/ComposioHQ/awesome-claude-plugins/pull/244) |
+| CCplugins Design UX list | `ccplugins/awesome-claude-code-plugins` | Open | [#230](https://github.com/ccplugins/awesome-claude-code-plugins/pull/230) |
+
+### Submitted on Day 1 (review timelines)
+
+- Anthropic marketplace: 1–2 weeks typical
+- Awesome lists: 2–3 days typical (community-maintained, faster turnaround)
+
+### Watch for
+
+- Anthropic reviewers may ask for: stronger description trimming, install verification, screenshots, demo video. Address inline.
+- Awesome-list reviewers usually merge or close in one pass. If closed, ask why — usually a format issue.
+- After 7 days of silence: leave one polite comment on the PR. Don't bump twice.
+
+### Still blocked on user action
+
+- ProductHunt — requires PH account login (see `producthunt-launch.md`)
+- Hacker News Show HN — restricted on the current account; needs 1–2 weeks of karma-building first (see `show-hn-comment.md`)
+- Twitter/X thread — image needs to be screenshot from the `tweet-hook` HTML mockup (see `twitter-thread.md`)
+
