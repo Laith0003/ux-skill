@@ -1,5 +1,5 @@
 ---
-description: Workflow conductor. Reads the latest reports from .ux/ and names the highest-leverage next command. Triggers on "what should I do next", "what's the next move", "decide for me", "/ux-next".
+description: Workflow conductor. Reads the latest reports from .ux/ and names the highest-leverage next command. Triggers on "what should I do next", "what's the next move", "decide for me", "/ux-next". Use when asking "what should I do next", the user wants the conductor to pick the next command, post-audit / post-fix decision-making, navigating between commands. Skip when no prior reports exist in .ux/, the user has a specific next command in mind.
 allowed-tools: Read, Bash(ls:*), Bash(cat:*), Bash(find:*), Glob, Grep
 disable-model-invocation: false
 ---
@@ -99,6 +99,18 @@ This command is read-only. Do not write to `.ux/`. The user re-runs `/ux-next` a
 - **All reports older than 30 days**: warn the user that state is stale; recommend `/ux-frame` to re-baseline.
 - **Conflicting signals across reports** (e.g. polish says ship-ready, a11y says no-go): surface the conflict explicitly. Recommend resolving a11y first — accessibility is a blocker.
 - **Stale state vs. current code**: this command cannot detect drift between `.ux/` reports and the actual codebase. If the user has made changes since the last report, recommend re-running the relevant audit before acting.
+
+## Error Handling
+
+| Error condition | Recovery |
+|---|---|
+| No prior reports in `.ux/` | Output the empty-state response and suggest `/ux-frame` or `/ux-design` as entry points |
+| All reports older than 30 days | Warn that state is stale; recommend `/ux-frame` to re-baseline |
+| Conflicting signals (polish says ship, a11y says no-go) | Surface the conflict explicitly; recommend resolving a11y first — accessibility is a blocker |
+| `.ux/last-*.json` files are malformed or unreadable | Skip the unreadable file, surface the parse error in evidence, continue with the rest |
+| User asks for a specific report and it doesn't exist | List the reports that do exist and let the user pick |
+
+For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.
 
 ## Next prompt
 

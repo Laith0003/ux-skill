@@ -1,5 +1,5 @@
 ---
-description: Cosmetic pass on a surface. Spacing rhythm, hierarchy, AI-slop detection, token consistency. Triggers on "polish", "tighten this up", "remove the AI-slop", or "make it premium".
+description: Cosmetic pass on a surface. Spacing rhythm, hierarchy, AI-slop detection, token consistency. Triggers on "polish", "tighten this up", "remove the AI-slop", or "make it premium". Use when polishing an existing surface, tightening spacing / hierarchy, removing AI-slop tells, the user says "make this premium" or "tighten this up". Skip when the surface is missing core functionality (fix that first), the surface needs a redesign not a polish (use ux-design), backend or infrastructure.
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(grep:*), Bash(find:*), Bash(mkdir:*), Bash(date:*), Glob, Grep, Task, WebFetch
 disable-model-invocation: false
 ---
@@ -200,3 +200,15 @@ If Critical count > 5 OR a purple-blue gradient is found as the primary visual, 
 - **Token zealotry**: flagging every hex literal even when the project does not have a token system. Match the project's existing pattern.
 - **Hidden bias against Inter**: Inter is fine on dashboards and utilitarian surfaces. The tell is "Inter on every kind of surface because it is the AI default," not "Inter ever."
 - **Auto-fix overreach**: applying a layout change without the user agreeing it is the right move. Auto-fix is for the unambiguous swaps; layout decisions go through the sub-agent with the user in the loop.
+
+## Error Handling
+
+| Error condition | Recovery |
+|---|---|
+| Code style unclear (formatter, class convention, file structure) | Ask for stack and formatting preferences before applying any auto-fix |
+| Project has no design token system | Propose ones from references/foundations/color.md + typography.md as a starter; do not invent literals beyond what the file currently uses |
+| Surface is too far gone for polish (Critical > 5 or purple-blue gradient as hero) | Refuse `--fix`; recommend `/ux-design` instead |
+| Auto-fixable flag conflicts with project convention | Show the diff before applying; require user confirmation |
+| Screenshot-only mode for token consistency check | Limit findings to visible rhythm/hierarchy/slop; mark token check as `not_verifiable` |
+
+For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.

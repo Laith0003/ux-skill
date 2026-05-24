@@ -1,5 +1,5 @@
 ---
-description: Run a design thinking workshop / discovery session. Five sequential phases ending in a concrete Game Plan. Triggers on "run a workshop", "facilitate a discovery", "let's do a design thinking session".
+description: Run a design thinking workshop / discovery session. Five sequential phases ending in a concrete Game Plan. Triggers on "run a workshop", "facilitate a discovery", "let's do a design thinking session". Use when running a discovery workshop, facilitating a design thinking session, exploring a problem space, running an exploration → heat map → stakeholder map → game plan flow, scoping a new product opportunity. Skip when the brief is already clear and scoped, the user just wants to design a single component, the team is mid-execution rather than in discovery.
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Glob, Grep, Task
 disable-model-invocation: false
 ---
@@ -187,6 +187,19 @@ Write to `.ux/last-workshop.json`:
 - **Blockers ignored**: Phase 3 names a high-influence blocker, Phase 5 doesn't address them. Reject.
 - **MVP too big**: Phase 5 MVP is a 6-month build. Reject — split into a smaller test or fake-door first.
 - **No kill criteria**: every Game Plan needs an explicit "what would tell us to stop." Without it, the initiative will live forever.
+
+## Error Handling
+
+| Error condition | Recovery |
+|---|---|
+| Participants not provided | Ask for roles (not names) — e.g., "2 PMs, 1 designer, 1 eng lead, 1 customer rep" |
+| Time budget vague or missing | Propose 90-minute / 180-minute / half-day options; pick one before continuing |
+| Phases blending in real time (Phase 1 runs into Phase 2) | Re-time-box, truncate the over-running phase, hold the rest of the schedule |
+| Phase 3 surfaces blockers but Phase 5 ignores them | Reject the Game Plan as incomplete; require explicit blocker mitigation |
+| Phase 5 MVP is a 6-month build | Reject; split into a smaller test or fake-door first |
+| Raw notes pile up between phases | Dispatch `research-synthesizer` before continuing |
+
+For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.
 
 ## Next prompt
 

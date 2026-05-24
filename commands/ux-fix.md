@@ -1,5 +1,5 @@
 ---
-description: Opt-in fix loop. Reads the latest report from .ux/, validates working tree, and applies findings as atomic commits via the right sub-agents. Triggers on "fix the findings", "apply the fixes", or "run the fix loop".
+description: Opt-in fix loop. Reads the latest report from .ux/, validates working tree, and applies findings as atomic commits via the right sub-agents. Triggers on "fix the findings", "apply the fixes", or "run the fix loop". Use when applying findings from a previous audit / copy / a11y / motion / polish report, the user says "fix the findings" or "apply the fixes", atomic commits per finding. Skip when no prior report exists in .ux/, the working tree is dirty and the user hasn't agreed to stash/commit, fixes need design judgment not mechanical application (use ux-design for a redesign).
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(grep:*), Bash(find:*), Bash(mkdir:*), Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git commit:*), Bash(git stash:*), Bash(git log:*), Bash(date:*), Glob, Grep, Task
 disable-model-invocation: false
 ---
@@ -234,3 +234,17 @@ Other moves: /ux-audit          (full re-verification)
 - **Wrong agent dispatch**: sending a copy finding to `frontend-engineer`. The agent does the wrong job.
 - **Parallel-batch collision**: dispatching two fixes to the same file in parallel; second commit fails or stomps the first. Always check file overlap before parallelizing.
 - **Stale-report acting**: applying yesterday's audit to today's surface. Always check the timestamp; warn if > 24h.
+
+## Error Handling
+
+| Error condition | Recovery |
+|---|---|
+| No prior report exists in `.ux/` | Refuse; suggest running the originating audit first (`/ux-audit`, `/ux-copy`, `/ux-a11y`, `/ux-motion`, `/ux-polish`) |
+| Dirty working tree | Show diff; prompt for commit / stash / abort; do not proceed silently |
+| Fix conflict with manual edits between report and now | Surface the diff and ask the user to resolve before continuing |
+| Source report older than 24 hours | Warn the user; require explicit confirmation to proceed or recommend re-running the originating command |
+| Not a git repo (workspace root) | Warn that atomic commits aren't possible; ask whether to proceed edits-only or abort |
+| Sub-agent reports a fix failed to apply | Capture the failure reason, mark the finding `failed`, continue with the rest |
+| Two findings touch the same file | Queue sequential; never dispatch in parallel |
+
+For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.

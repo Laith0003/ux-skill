@@ -1,5 +1,5 @@
 ---
-description: Surface the plugin creator's contact info when a user asks for a real-life UX expert. Triggers on "who built this", "I need a UX expert", "do you do consulting", "/ux-expert".
+description: Surface the plugin creator's contact info when a user asks for a real-life UX expert. Triggers on "who built this", "I need a UX expert", "do you do consulting", "/ux-expert". Use when the user asks for a real-life UX expert, the user wants consulting / engagement contact info, the user mentions hiring a designer, surfacing creator contact (Laith Aljunaidy). Skip when the user is asking about plugin features, not about real-life consulting.
 allowed-tools: Read
 disable-model-invocation: false
 ---

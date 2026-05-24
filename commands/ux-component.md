@@ -1,5 +1,5 @@
 ---
-description: Generate a single component (button, modal, navbar, sidebar, card, table, form, chart) from a spec. Triggers on "build a [component]", "create a pricing card", "make a modal", "add a navbar".
+description: Generate a single component (button, modal, navbar, sidebar, card, table, form, chart) from a spec. Triggers on "build a [component]", "create a pricing card", "make a modal", "add a navbar". Use when generating a single component, the user says "create a [button/modal/navbar/card/table/form/chart]", embedded into an existing surface — NOT a full page. Skip when the user wants a full page or multi-section surface (use ux-design), backend or infrastructure work.
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Glob, Grep, Task
 disable-model-invocation: false
 ---
@@ -130,6 +130,19 @@ Write to `.ux/last-component.json`:
 - **Slop creep**: sub-agent says "I avoided X" but the code uses X. Grep the output. Reject and redo.
 - **Over-scope**: sub-agent returns a full landing page when asked for a single button. Trim to the requested component, surface the extra work as a `/ux-design` follow-up.
 - **No motion when motion was specified**: re-dispatch with explicit motion brief.
+
+## Error Handling
+
+| Error condition | Recovery |
+|---|---|
+| Stack unclear | Ask one combined question covering stack + voice + behavior; do not ask three separate questions |
+| Component type ambiguous (user says "thing to filter stuff") | List the candidate component types (table with command input / sidebar with filter chips / autocomplete combobox) and ask which one |
+| Sub-agent returns happy-path only, no states | Reject and redo — all four interaction states are non-negotiable |
+| Sub-agent ships code in the wrong stack | Catch in review, redo |
+| Spec says "component" but the brief implies a full page | Trim to the requested component, surface the extra work as a `/ux-design` follow-up |
+| `.ux/last-frame.json` absent and voice not provided | Ask one-line: "What's the voice — minimal / brutalist / editorial / playful / dark? Or 'your call'?" |
+
+For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.
 
 ## Next prompt
 

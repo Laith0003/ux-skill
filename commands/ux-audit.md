@@ -1,5 +1,5 @@
 ---
-description: Full 6-lens UX review of a surface. Outputs a structured Polaris-style report with findings, severity, evidence, and fixes. Triggers on "audit", "review the ux", "is this any good", or "what's broken".
+description: Full 6-lens UX review of a surface. Outputs a structured Polaris-style report with findings, severity, evidence, and fixes. Triggers on "audit", "review the ux", "is this any good", or "what's broken". Use when auditing UX on a page or surface, running a structured UX review, the user asks "is this any good", checking against Norman / Krug / Laws of UX, producing a Polaris-style severity-tagged report. Skip when the surface doesn't exist yet (use ux-design for new builds), the user wants only one lens (use the targeted command — ux-a11y / ux-copy / ux-motion / ux-polish), backend-only work, infrastructure.
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Bash(curl:*), Bash(date:*), Glob, Grep, Task, WebFetch
 disable-model-invocation: false
 ---
@@ -213,3 +213,16 @@ Other moves: /ux-audit --fix    (apply all findings)
 - **Lens skip**: running 4 lenses because the others "seem fine." Run all 6.
 - **Fix without verify**: applying fixes in `--fix` mode but not re-running the audit. The user needs to see the delta.
 - **Parallel-dispatch confusion**: dispatching dependent agents in parallel. If two findings touch the same file, queue them sequential.
+
+## Error Handling
+
+| Error condition | Recovery |
+|---|---|
+| Surface URL returns 4xx / 5xx / timeout | Fall back to a file path, screenshot, or pasted code; surface the fetch error to the user |
+| File path does not exist | List nearby paths with `ls` of the parent directory; ask which one matches |
+| Screenshot too low-resolution or scope too broad to inspect | Ask for higher resolution or scope narrowed to one section |
+| `.ux/last-frame.json` absent and surface clearly needs framing | Suggest running `/ux-frame` first; proceed if the user insists, with "no framing on file" stamped on the report |
+| Description-only input with no inspectable artifact | Ask one clarifying question to either obtain an artifact or narrow scope; then proceed |
+| `--fix` requested on a dirty working tree | Stop; prompt for commit / stash / abort before any dispatch |
+
+For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.

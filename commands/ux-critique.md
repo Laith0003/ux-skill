@@ -1,5 +1,5 @@
 ---
-description: Open-ended taste call on a specific surface. Not a structured audit — a designer's opinion. Returns 3 wins, 3 misses, and 1 strategic move. Triggers on "what do you think", "is this good", "critique this", or "honest take".
+description: Open-ended taste call on a specific surface. Not a structured audit — a designer's opinion. Returns 3 wins, 3 misses, and 1 strategic move. Triggers on "what do you think", "is this good", "critique this", or "honest take". Use when open-ended taste call, the user asks "what do you think", design review without a structured checklist, producing the 3-wins + 3-misses + 1-strategic-move format. Skip when the user explicitly wants a structured audit (use ux-audit instead), the surface is missing context for taste judgment, backend or infrastructure work.
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Bash(date:*), Glob, Grep, WebFetch
 disable-model-invocation: false
 ---
@@ -160,3 +160,15 @@ Routing logic for "Recommended":
 - **Strategic-move ambiguity**: "improve the UX." That is not a move. The move names a concrete change.
 - **Word bloat**: 800 words of careful prose. The user asked for an opinion. Trim.
 - **Missing audience anchor**: critiquing in a vacuum when the framing is on file. Read `.ux/last-frame.json` before forming the take.
+
+## Error Handling
+
+| Error condition | Recovery |
+|---|---|
+| Surface input too thin to have a real take | Ask once for more — a screenshot at minimum, or one sentence of context |
+| `.ux/last-frame.json` absent | Anchor to "general" audience and state that in the prose |
+| User says "your call" with no audience anchor | Reuse `.ux/last-frame.json` if present; otherwise note the absence and form a take against a general audience |
+| Critique drifting into a 12-item findings list | Stop and cut to 3+3+1; hand off to `/ux-audit` for the structured version |
+| User pushes back on the strategic move | Defend it or revise — never capitulate to a vague "make it nicer" |
+
+For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.

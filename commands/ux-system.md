@@ -1,5 +1,5 @@
 ---
-description: Propose a complete starter design system for a project that doesn't have one. Triggers on "we don't have a design system", "build us a system", "propose tokens", "what should our theme be".
+description: Propose a complete starter design system for a project that doesn't have one. Triggers on "we don't have a design system", "build us a system", "propose tokens", "what should our theme be". Use when proposing a starter design system, generating tokens / foundations / components from a brand brief, the project has no existing design system, extracting a system from an existing site. Skip when the project already has a complete design system (use ux-component to build against it), backend or infrastructure.
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Glob, Grep, Task
 disable-model-invocation: false
 ---
@@ -131,6 +131,19 @@ Write to `.ux/last-system.json`:
 - **Dark mode is just inverted light**: reject. Dark mode needs its own decisions (lower contrast, different elevation strategy).
 - **No accessibility floor specified**: reject. Every system must state its AA/AAA target.
 - **Output overwrites existing files**: stop and ask the user. Never silently overwrite.
+
+## Error Handling
+
+| Error condition | Recovery |
+|---|---|
+| Existing partial system detected | Ask whether to extend or replace; never silently overwrite |
+| Brand brief missing | Reuse brand library from `references/brands/` if a brand was named; otherwise ask the user to paste a brief or pick "your call" |
+| Source material is a screenshot only | Extract tokens visually with stated uncertainty; flag derived tokens for user confirmation |
+| Target stack unclear | Ask for the stack before dispatching the architect — token output format is stack-dependent |
+| Output path collides with existing files | Stop and ask the user; never silently overwrite |
+| Architect returns a single CSS file instead of a structured system | Reject and redo with the structured-output instruction restated |
+
+For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.
 
 ## Next prompt
 

@@ -1,5 +1,5 @@
 ---
-description: Microcopy review and rewrite against the voice rubric. Produces a before/after table with severity per string and a clean rewrite block. Triggers on "review the copy", "fix the microcopy", "the error messages are bad", or "rewrite this".
+description: Microcopy review and rewrite against the voice rubric. Produces a before/after table with severity per string and a clean rewrite block. Triggers on "review the copy", "fix the microcopy", "the error messages are bad", or "rewrite this". Use when reviewing or rewriting microcopy, fixing error messages that sound like AI, tightening empty/loading/success state copy, checking CTAs against the voice rubric, auditing forms for label / helper / error patterns. Skip when the surface has no user-facing strings, the copy is auto-generated from data with no editorial layer, backend or infrastructure.
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(grep:*), Bash(find:*), Bash(mkdir:*), Bash(date:*), Glob, Grep, Task, WebFetch
 disable-model-invocation: false
 ---
@@ -160,3 +160,16 @@ If all severities are Cosmetic only, recommend `/ux-polish` instead of `--fix` â
 - **Missing the error pattern**: leaving error messages with no fix included. Every error rewrite must name the field AND tell the user what to do.
 - **Locale orphans**: rewriting English and never flagging the other 10 locales for Dot. Always surface the translation task.
 - **CTAs that hide**: rewriting a CTA to "Continue" or "OK." A CTA is verb + outcome ("Save payment method," "Send reset code"). Generic CTAs are a fix regression.
+
+## Error Handling
+
+| Error condition | Recovery |
+|---|---|
+| Voice profile missing | Reuse `.ux/last-frame.json` if present; otherwise apply the default voice rubric and surface it at the top of output for the user to disagree |
+| Source strings ambiguous (which file / which key / which surface) | Echo back what you extracted before rewriting; ask one clarifier if still unclear |
+| Multi-locale project â€” non-source-locale strings encountered | Flag for translation; never machine-translate; hand off to the named translator (Hala for Dot) |
+| `--fix` requested without a diff-confirm step | Refuse; copy fixes always require explicit user go on the before/after |
+| Legal, accessibility-required, or branded copy detected in the rewrite scope | Flag it as a constraint, do not silently rewrite |
+| Locale file path malformed or unreadable | Surface the parse error, ask for the canonical path |
+
+For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.

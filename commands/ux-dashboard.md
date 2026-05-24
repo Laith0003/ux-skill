@@ -1,5 +1,5 @@
 ---
-description: Specialized dashboard generation. Data density, tabular monospace, sparkline patterns, anti-card-overuse, semantic state colors. Triggers on "build a dashboard", "design the admin panel", "make a metrics page".
+description: Specialized dashboard generation. Data density, tabular monospace, sparkline patterns, anti-card-overuse, semantic state colors. Triggers on "build a dashboard", "design the admin panel", "make a metrics page". Use when designing or generating a dashboard / admin panel / analytics view, the user says "build a dashboard", specialized dashboard discipline — bento, tabular monospace, sparkline patterns. Skip when the user wants a marketing page with stats (use ux-design), the user wants only one widget (use ux-component), backend or infrastructure.
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Glob, Grep, Task
 disable-model-invocation: false
 ---
@@ -136,6 +136,19 @@ Write to `.ux/last-dashboard.json`:
 - **Color-only chart series**: reject, add patterns/shapes/labels.
 - **Marketing gradient on the analytics page**: reject, swap to neutral + semantic accent.
 - **No empty/loading/error states**: reject and redo.
+
+## Error Handling
+
+| Error condition | Recovery |
+|---|---|
+| Data shape missing | Ask for entities + relationships + metrics in one combined question |
+| Audience unclear (operator / analyst / exec) | Ask once; density and motion defaults depend on it |
+| User answers "all of them" for audience | Push back — density and motion calls depend on a single primary audience; pick one |
+| Key metrics list exceeds 7 numbers | Force a triage to the 3-7 that dominate; surface the rest as secondary |
+| Sub-agent returns 3-equal-card KPI row | Reject and redo with hairline-separated or asymmetric bento |
+| Sub-agent returns proportional digits in metrics | Reject; force `tabular-nums` |
+
+For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.
 
 ## Next prompt
 

@@ -1,5 +1,5 @@
 ---
-description: Lean UX intake. Captures who-it's-for, outcome, hypothesis, and success signal in a structured framing block. Triggers on "frame this", "what's the brief", "set up the project", or "framing".
+description: Lean UX intake. Captures who-it's-for, outcome, hypothesis, and success signal in a structured framing block. Triggers on "frame this", "what's the brief", "set up the project", or "framing". Use when framing a new project, asking the four framing questions, before any audit or design, capturing audience + outcome + hypothesis + success signal, scoping a brief. Skip when the user has already framed the project (check .ux/last-frame.json), the brief is a one-off component build with no framing implications, backend-only work, infrastructure.
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(mkdir:*), Bash(date:*), Glob, Grep
 disable-model-invocation: false
 ---
@@ -117,3 +117,16 @@ Other moves: <2-3 alternatives>
 - **Scope creep**: starting to design or critique mid-frame. Stop. Frame only. Hand off to `/ux-design` or `/ux-audit`.
 - **State skip**: forgetting to write `.ux/last-frame.json`. Every downstream command silently degrades when this file is missing.
 - **Over-formatting**: padding the output with prose. The framing block is four lines. Resist the urge to explain it.
+
+## Error Handling
+
+| Error condition | Recovery |
+|---|---|
+| User provides empty or near-empty brief | Ask the single combined four-field question once; do not split into four asks |
+| User answers "everyone" or "users" as audience | Push back with a specific clarifier ("Which customers? Returning, first-time, a specific tier?") up to twice, then flag as a soft field |
+| User answers with a vague outcome ("make it better", "improve UX", "modernize") | Push back: "What does the audience do differently after we ship that they don't do today?" |
+| Hypothesis lacks causal reasoning | Push back: "What's the bet? If we change X, then Y will happen because Z." |
+| Success signal is unmeasurable ("users will love it") | Push back: "What metric, behavior, or signal would prove this worked in two weeks?" |
+| `.ux/` directory cannot be created (permissions) | Surface the path error to the user and ask for an alternative project root |
+
+For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.

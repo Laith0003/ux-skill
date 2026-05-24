@@ -1,5 +1,5 @@
 ---
-description: User research planning — interview scripts, survey design, recruitment screener, synthesis. Triggers on "plan a research study", "I need interview questions", "design a survey", "how do I recruit users".
+description: User research planning — interview scripts, survey design, recruitment screener, synthesis. Triggers on "plan a research study", "I need interview questions", "design a survey", "how do I recruit users". Use when planning user research, writing interview scripts, designing a survey, creating a screener, scoping recruitment, synthesizing research data into recommendations. Skip when the user already has research data and wants synthesis (use ux-research --synthesize), the answer is already known with high confidence, low-risk reversible decisions, backend or infrastructure work.
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Glob, Grep, Task
 disable-model-invocation: false
 ---
@@ -144,6 +144,19 @@ Write to `.ux/last-research.json`:
 - **Recruiting from product users only**: confirmation bias. Mix in non-users for discovery work.
 - **No incentive**: response rate craters. Always pay participants.
 - **Synthesis as a quote dump**: themes need to be patterns across participants, not "one person said X."
+
+## Error Handling
+
+| Error condition | Recovery |
+|---|---|
+| No research budget specified | Ask: "Sessions × minutes × incentive — what's the budget?" |
+| Conflicting research goals (study tries to learn 3+ things) | List the goals, ask the user to pick the primary one; offer to split into separate studies |
+| Recruitment channel unclear | Propose channels matched to the audience (Respondent.io / UserInterviews / Prolific / customer list / community / DM intercept) |
+| Synthesis mode: raw input files missing or unreadable | Ask for the file path or pasted transcript; stop until provided |
+| Sample size requested below floor (n<5 qual, n<30 quant) | Refuse and explain the floor; offer the minimum viable design |
+| Voice/leading wording in interview script | Rewrite and flag the bias risk before delivery |
+
+For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.
 
 ## Next prompt
 

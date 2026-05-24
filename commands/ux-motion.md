@@ -1,5 +1,5 @@
 ---
-description: Animation and motion rubric. Checks timing, easing, meaning, reduced-motion compliance, and performance for every animation on a surface. Triggers on "motion check", "are the animations good", or "fix the motion".
+description: Animation and motion rubric. Checks timing, easing, meaning, reduced-motion compliance, and performance for every animation on a surface. Triggers on "motion check", "are the animations good", or "fix the motion". Use when auditing motion or animations, checking durations / easing / reduced-motion / performance, is the motion premium or generic, validating Core Web Vitals impact of animations. Skip when the surface has no motion or animations (use ux-audit or ux-polish for static review), backend or infrastructure work.
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(grep:*), Bash(find:*), Bash(mkdir:*), Bash(date:*), Glob, Grep, Task, WebFetch
 disable-model-invocation: false
 ---
@@ -211,3 +211,15 @@ If the verdict is "Cut" on more than half the animations, recommend `/ux-design`
 - **Performance theater**: flagging "animates `margin`" without checking if the animation actually causes layout (sometimes the parent is `position: absolute` and there is no reflow). Verify before flagging.
 - **Reduced-motion blind spot**: testing on the dev's machine where reduced-motion is off. Toggle the OS setting or simulate via DevTools.
 - **Spring overuse**: applying spring easing to every animation because it "feels modern." Springs belong on physical interactions, not on every transition.
+
+## Error Handling
+
+| Error condition | Recovery |
+|---|---|
+| Motion not visible in static review (screenshot only) | Stop and request a screen recording or live URL — motion is unobservable in a still frame |
+| Animations defined in JS not CSS | Ask for the motion code (GSAP / Framer Motion / Motion One / WAAPI source) before evaluating |
+| Reduced-motion check not testable in current environment | Note the assumption (code-only inspection of `@media (prefers-reduced-motion)` queries); flag as partial |
+| Performance test not possible (no live URL) | Inspect properties animated; flag perf-cost from code rather than measured fps |
+| `--fix` requested but originating spec is unclear | Re-dispatch with explicit timing tier, easing rule, and reduced-motion expectation |
+
+For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.

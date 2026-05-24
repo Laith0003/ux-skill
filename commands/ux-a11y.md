@@ -1,5 +1,5 @@
 ---
-description: WCAG 2.1 AA accessibility audit plus common-courtesy checks beyond the spec. Produces findings grouped by WCAG criterion with severity, evidence, and fix. Triggers on "accessibility check", "WCAG audit", "is this accessible", or "a11y review".
+description: WCAG 2.1 AA accessibility audit plus common-courtesy checks beyond the spec. Produces findings grouped by WCAG criterion with severity, evidence, and fix. Triggers on "accessibility check", "WCAG audit", "is this accessible", or "a11y review". Use when WCAG 2.1 AA audit, checking accessibility on a page or component, verifying contrast / keyboard / screen reader / focus / ARIA / motion preferences / form-error patterns, pre-ship accessibility gate. Skip when the surface is not user-facing, backend or infrastructure work, work-in-progress sketches that aren't ready for an a11y audit.
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(grep:*), Bash(find:*), Bash(mkdir:*), Bash(curl:*), Bash(date:*), Glob, Grep, Task, WebFetch
 disable-model-invocation: false
 ---
@@ -223,3 +223,16 @@ If `not_verified` is non-empty and a live URL is feasible, recommend re-running 
 - **Contrast eyeballing**: declaring "this looks fine" instead of computing. Always compute.
 - **Color-only-signal blindness**: missing that a red error border is the only error indicator. Look for the redundancy in every status communication.
 - **Reduced-motion oversight**: not checking `prefers-reduced-motion` because the animation "looks fine." That is the wrong test — the test is whether motion-sensitive users can use the surface.
+
+## Error Handling
+
+| Error condition | Recovery |
+|---|---|
+| Surface is JS-rendered and the crawler can't see the DOM | Ask the user to paste rendered HTML or send a screenshot of the live DOM |
+| Contrast tooling not available | Describe the ratio check verbally (sample foreground + background hex, compute ratio), flag as partial |
+| Screenshot-only mode for points requiring live DOM (keyboard, screen reader, dynamic states) | Mark those points `not_verified` and explain in the report; do not silently pass |
+| Color samples ambiguous (gradient, transparency, image background) | Sample worst-case area, note assumption, flag as partial |
+| `--fix` requested on items marked `not_verified` | Refuse; require verification first |
+| Live URL unreachable | Fall back to code or screenshot, mark mode change in report |
+
+For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.

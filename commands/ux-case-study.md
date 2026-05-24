@@ -1,5 +1,5 @@
 ---
-description: Generate a project case study in pure-monochrome editorial format. Triggers on "write a case study", "case study this project", "do the wrap-up doc".
+description: Generate a project case study in pure-monochrome editorial format. Triggers on "write a case study", "case study this project", "do the wrap-up doc". Use when writing a project case study, shipping a publishable Wfrah-editorial document, ending a project with a case-study artifact, producing the (A)–(G) section format in pure monochrome. Skip when the project lacks the data to populate (A)–(G) sections, the user wants a marketing landing not a case study (use ux-design).
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Glob, Grep, Task
 disable-model-invocation: false
 ---
@@ -163,6 +163,19 @@ Write to `.ux/last-case-study.json`:
 - **Cards reappear**: a section gets a shaded background box. Reject — hairlines only.
 - **Section codes out of order or skipped**: reject — A through G, in sequence.
 - **DS not respected (Blade format)**: case study written with generic Tailwind when project has a Dot-style DS. Reject — pull tokens + classes.
+
+## Error Handling
+
+| Error condition | Recovery |
+|---|---|
+| Section (A)–(G) data missing from `.ux/` state and the user can't supply it | Fill placeholders with `{TODO_FILL}` and warn the user that the document is a draft until those fields are populated |
+| Impact metrics requested but none are real | Use qualitative observations only; never invent numbers |
+| `.ux/last-frame.json` absent and project facts unclear | Ask the user in a single round for the missing fields; never piecemeal |
+| Format ambiguous (HTML / Blade / Markdown) | Default to HTML; surface the choice in the meta-output for the user to override |
+| Output path collides with existing file | Stop and ask the user; never silently overwrite |
+| Blade format requested but no Dot-style DS detected | Fall back to project layout if applicable; otherwise use case-study-specific classes |
+
+For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.
 
 ## Next prompt
 
