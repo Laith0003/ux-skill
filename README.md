@@ -1,6 +1,6 @@
 # ux — the design intelligence plugin for Claude Code
 
-> 17 callable slash commands. 5 specialized sub-agents. 30+ reference files. 19,000+ lines of curated UX guidance. Built to produce premium frontend work directly inside Claude Code — and to defeat the AI-aesthetic fingerprints that mark output as machine-generated.
+> 18 callable slash commands. 5 specialized sub-agents. 35+ reference files. 26,000+ lines of curated UX guidance plus a deterministic regex linter. Built to produce premium frontend work directly inside Claude Code — and to defeat the AI-aesthetic fingerprints that mark output as machine-generated.
 >
 > **v1.4 — 72-brand library absorbed.** Built-in design specs for Apple, Stripe, Linear, Notion, Claude, Figma, Spotify, Tesla, BMW, Ferrari, Coinbase, Airbnb, Shopify, Vercel, Supabase and 57 more. When a user says "build me a landing in Stripe's style" the plugin reads the full brand DESIGN.md and produces output that matches the brand's design language — not a generic default. See `references/brands/_index.md`.
 >
@@ -10,10 +10,11 @@
 >
 > **v1.1 — Discovery protocol enforced.** Every generation command runs a mandatory 10-field intake before producing anything: brand identity, references, audience, style, voice, stack, imagery, must-have patterns, avoid-list, and the wow moment. Improvisation is banned. The plugin asks before it builds.
 
-[![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)](https://github.com/Laith0003/ux-skill/releases)
+[![Version](https://img.shields.io/badge/version-1.5.0-blue.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Brands](https://img.shields.io/badge/brands-72-cc785c.svg)](https://github.com/Laith0003/ux-skill/blob/main/references/brands/_index.md)
+[![Linter](https://img.shields.io/badge/lint-deterministic_(no_LLM)-2563EB.svg)](https://github.com/Laith0003/ux-skill/blob/main/commands/ux-lint.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Commands](https://img.shields.io/badge/commands-17-blueviolet)](#the-17-commands)
+[![Commands](https://img.shields.io/badge/commands-18-blueviolet)](#the-17-commands)
 [![Sub-Agents](https://img.shields.io/badge/sub--agents-5-green)](#the-5-sub-agents)
 [![References](https://img.shields.io/badge/references-30%2B-orange)](#references)
 [![Guidance](https://img.shields.io/badge/guidance-19%2C000%2B_lines-red)](#references)
