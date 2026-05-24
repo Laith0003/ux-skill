@@ -1,6 +1,6 @@
 # ux — the design intelligence plugin for Claude Code
 
-> 18 callable slash commands. 5 specialized sub-agents. 35+ reference files. 26,000+ lines of curated UX guidance plus a deterministic regex linter. Built to produce premium frontend work directly inside Claude Code — and to defeat the AI-aesthetic fingerprints that mark output as machine-generated.
+> **The strongest UX plugin for Claude Code.** Generate premium frontend designs, audit accessibility (WCAG 2.1 AA), review microcopy, propose design systems, ship case studies — all from a Claude Code session. 18 callable slash commands · 5 specialized sub-agents · 35+ Polaris-style reference files · 26,000+ lines of curated UX guidance · deterministic regex linter (no LLM, CI-friendly) · 72 brand DESIGN.md specs (Apple, Stripe, Linear, Notion, Figma, Tesla, BMW, Ferrari, Coinbase, Airbnb, Shopify and 60 more). Built to defeat the AI-aesthetic fingerprints — Inter as display, purple gradients, three equal cards, "John Doe" placeholders — that mark output as generated. Cross-stack: **React · Next.js · Vue · Blade · Astro · vanilla HTML**. MIT licensed, anti-AI-slop by default.
 >
 > **v1.4 — 72-brand library absorbed.** Built-in design specs for Apple, Stripe, Linear, Notion, Claude, Figma, Spotify, Tesla, BMW, Ferrari, Coinbase, Airbnb, Shopify, Vercel, Supabase and 57 more. When a user says "build me a landing in Stripe's style" the plugin reads the full brand DESIGN.md and produces output that matches the brand's design language — not a generic default. See `references/brands/_index.md`.
 >
@@ -10,7 +10,11 @@
 >
 > **v1.1 — Discovery protocol enforced.** Every generation command runs a mandatory 10-field intake before producing anything: brand identity, references, audience, style, voice, stack, imagery, must-have patterns, avoid-list, and the wow moment. Improvisation is banned. The plugin asks before it builds.
 
-**Live at [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)** · [GitHub repo](https://github.com/Laith0003/ux-skill)
+**Live at [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)** · [GitHub repo](https://github.com/Laith0003/ux-skill) · ⭐ **If this saves you from shipping AI slop, star the repo. It's the cheapest way to support it.**
+
+[![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/network/members)
+[![Last commit](https://img.shields.io/github/last-commit/Laith0003/ux-skill)](https://github.com/Laith0003/ux-skill/commits/main)
 
 [![Version](https://img.shields.io/badge/version-1.5.3-blue.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Brands](https://img.shields.io/badge/brands-72-cc785c.svg)](https://github.com/Laith0003/ux-skill/blob/main/references/brands/_index.md)
@@ -434,3 +438,11 @@ MIT. See [LICENSE](LICENSE).
 ## Star history
 
 If this plugin helps you ship work you're proud of, a star is the cheapest way to support it.
+
+---
+
+## Star history
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Laith0003/ux-skill&type=Date)](https://star-history.com/#Laith0003/ux-skill&Date)
+
+If this plugin saves you from shipping work that looks generated, **star the repo**. It's the cheapest way to support it and the fastest way to help other builders find it.
