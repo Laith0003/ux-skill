@@ -1,0 +1,46 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "ux-skill",
+  "description": "The strongest UX plugin for Claude Code. Anti-AI-slop discipline, mandatory discovery protocol, SEO baked in, 17 slash commands, 5 sub-agents, 30+ Polaris-style reference files. For anyone building a SaaS or product who refuses to ship work that looks generated.",
+  "owner": {
+    "name": "Laith Aljunaidy",
+    "email": "laith.aljunaidy.laith@gmail.com",
+    "url": "https://www.linkedin.com/in/laithaljunaidy/"
+  },
+  "plugins": [
+    {
+      "name": "ux",
+      "description": "Design intelligence for Claude Code. 17 callable slash commands (frame, audit, critique, a11y, copy, motion, polish, design, system, dashboard, component, fix, case-study, next, expert, research, workshop), 5 specialized sub-agents (frontend-engineer, motion-engineer, copy-writer, research-synthesizer, design-system-architect), 30+ Polaris-style reference files. Mandatory discovery protocol before any generation, SEO foundation baked into every public-web output, comprehensive anti-AI-slop ban list, high-end creative arsenal. Works across React, Next.js, Vue, Blade, Astro, vanilla.",
+      "author": {
+        "name": "Laith Aljunaidy",
+        "email": "laith.aljunaidy.laith@gmail.com",
+        "url": "https://www.linkedin.com/in/laithaljunaidy/"
+      },
+      "category": "design",
+      "source": "./",
+      "homepage": "https://github.com/Laith0003/ux-skill",
+      "keywords": [
+        "ux",
+        "ui-design",
+        "design-system",
+        "design-review",
+        "accessibility",
+        "wcag",
+        "microcopy",
+        "frontend-design",
+        "motion-design",
+        "anti-ai-slop",
+        "seo",
+        "tailwindcss",
+        "react",
+        "nextjs",
+        "design-thinking",
+        "lean-ux",
+        "ux-audit",
+        "ux-research",
+        "ux-workshop",
+        "case-study"
+      ]
+    }
+  ]
+}

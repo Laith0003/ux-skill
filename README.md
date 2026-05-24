@@ -150,20 +150,42 @@ Other moves: /ux-copy            (3 copy issues)
 
 ## Install
 
-### Local development
+### Recommended — via Claude Code plugin marketplace
+
+Inside any Claude Code session:
+
+```
+/plugin marketplace add Laith0003/ux-skill
+/plugin install ux@ux-skill
+```
+
+That's it. All 17 `/ux-*` slash commands and 5 sub-agents are immediately available. Run `/help` to see them.
+
+### Alternative — local clone for development
+
+If you want to hack on the plugin or pin a specific commit:
 
 ```bash
 git clone https://github.com/Laith0003/ux-skill.git
 cd ux-skill
-ln -s "$(pwd)" ~/.claude/plugins/ux
+/plugin marketplace add "$(pwd)"
+/plugin install ux@ux-skill
 ```
 
-Restart Claude Code. All 17 `/ux-*` commands should appear in `/help`.
+### Updating
 
-### Via Claude Code plugin marketplace (when published)
+When new versions ship:
 
 ```
-/plugin install ux
+/plugin marketplace update ux-skill
+/plugin update ux
+```
+
+### Uninstalling
+
+```
+/plugin uninstall ux
+/plugin marketplace remove ux-skill
 ```
 
 ---
