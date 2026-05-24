@@ -103,16 +103,18 @@ This lets `/ux-next` and downstream commands pick up where you left off.
 
 ## Hard rules (non-negotiable)
 
-- NEVER use Inter font. Use Geist, Outfit, Cabinet Grotesk, or Satoshi.
 - NEVER use purple/blue AI gradients. Single high-contrast accent, saturation < 80%.
 - NEVER use generic names ("John Doe", "Acme", "Nexus") in placeholder content.
 - NEVER use pure black (`#000`). Use Zinc-950, Charcoal, or Off-Black.
-- NEVER use Unsplash URLs. Use `picsum.photos/seed/<random>/W/H` or SVG.
+- NEVER use Unsplash URLs. Use `picsum.photos/seed/<descriptive-seed>/W/H` or real assets.
+- NEVER ship a text-only wall — always include intentional imagery.
+- NEVER use emoji as icons. Prioritize **Google Material Symbols** (load via Google Fonts: `Material+Symbols+Outlined` / `Rounded` / `Sharp`, styled with `font-variation-settings`). Phosphor / Radix / Lucide are acceptable secondary choices when an icon doesn't exist in Material Symbols.
 - NEVER ship 3-equal-cards layouts. Use 2-col zig-zag, asymmetric, or horizontal scroll.
 - NEVER animate `width`/`height`/`top`/`left`. Use `transform` and `opacity` only.
 - NEVER skip empty/loading/error states.
 - NEVER use serif fonts on dashboards.
 - NEVER produce centered hero sections when `DESIGN_VARIANCE > 4` — force asymmetry.
+- NEVER use scroll progress paths / scroll-tied SVG line drawing on the side of the page.
 
 If you find yourself reaching for any of these, stop. Re-read `anti-slop.md`. Pick the alternative.
 

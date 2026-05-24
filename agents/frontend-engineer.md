@@ -61,6 +61,21 @@ Every interactive component MUST implement:
 - **Error state** — clear inline error, near the source, with a recovery path
 - **Tactile press** — `:active` uses `-translate-y-[1px]` or `scale-[0.98]`
 
+### 4b. Mandatory imagery
+
+Every design MUST include intentional imagery. Text-only walls are forbidden.
+- **Source for placeholders**: `https://picsum.photos/seed/<descriptive-seed>/W/H` — use seeds that match the content (e.g., `seed/cafe-counter/1600/900`, `seed/jordan-souk/1200/800`).
+- **Source for real assets**: brand-provided when available.
+- **Banned**: Unsplash URLs (broken/unreliable), Lucide user-egg avatars as people avatars (use seeded picsum instead).
+- **Treatment**: full-bleed product shots, inline contextual photos, editorial image+headline juxtapositions, soft-edge lifestyle images, irregular image grids. See arsenal "Imagery patterns" section.
+- **Performance**: `loading="lazy"` on below-the-fold images; declare `width`/`height` to prevent CLS.
+
+### 4c. Icons
+
+- **Prioritize Google Material Symbols** — load via Google Fonts (`Material Symbols Outlined`, `Rounded`, or `Sharp`). Style via `font-variation-settings: 'FILL' 0..1, 'wght' 100..700, 'GRAD' -50..200, 'opsz' 20..48` for fine control.
+- **Acceptable fallbacks** (only when Material Symbols lacks a needed glyph): Phosphor, Radix Icons, Lucide. Use consistent stroke width (1.5 or 2.0) across the surface.
+- **NEVER emoji as icons.**
+
 ### 5. Motion rules
 
 - Duration 150–300ms for micro-interactions, ≤400ms for complex transitions, never >500ms
@@ -86,9 +101,8 @@ Every interactive component MUST implement:
 
 - Display headlines: `text-4xl md:text-6xl tracking-tighter leading-none`
 - Body: `text-base text-gray-600 leading-relaxed max-w-[65ch]`
-- Banned fonts: Inter (always), Serif on dashboards
-- Approved display: Geist, Outfit, Cabinet Grotesk, Satoshi
-- Approved mono (for numbers, data): Geist Mono, JetBrains Mono — use `font-mono` for any tabular figures
+- Banned: Serif on dashboards. (Inter is fine — use whatever sans-serif fits the brief: Inter, Geist, Outfit, Cabinet Grotesk, Satoshi, or Apple system stack.)
+- Approved mono (for numbers, data): Geist Mono, JetBrains Mono, IBM Plex Mono — use `font-mono` for any tabular figures
 
 ### 8. Color
 

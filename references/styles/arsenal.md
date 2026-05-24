@@ -127,10 +127,6 @@ The calling command (`/ux-design`) picks the patterns based on:
 **What it is**: Central background image zooming in/out seamlessly as user scrolls.
 **Cost**: medium — GSAP + transform.
 
-### Scroll progress path
-**What it is**: SVG vector lines that draw themselves as user scrolls.
-**Cost**: medium — `stroke-dasharray` + `stroke-dashoffset` tied to scroll.
-
 ### Liquid swipe transition
 **What it is**: Page transitions that wipe like viscous liquid.
 **Cost**: high — SVG path morphing.
@@ -232,6 +228,31 @@ Document view that animates staggered highlight on a text block, followed by a "
 
 ---
 
+## Imagery patterns (mandatory — never ship text-only walls)
+
+Imagery is part of the design, not a nice-to-have. Every layout must accommodate it.
+
+### Full-width product image
+**Use when**: showcasing the actual product / app screen. Anchor every major section with one.
+**What it is**: A single edge-to-edge image (or container-width) running full bleed between text blocks. No frame, no shadow, no caption chrome — let the image speak.
+**Source**: `picsum.photos/seed/<descriptive-seed>/1600/900` for placeholders, or real product screenshots when available.
+
+### Inline contextual image
+**Use when**: illustrating a feature, a moment, a person.
+**What it is**: 1:1 or 4:5 image embedded in the text flow, sized to match a body-text column. Caption optional, italic small type.
+
+### Editorial image-headline juxtaposition
+**Use when**: a hero or section-opener needs visual + verbal weight together.
+**What it is**: A large image to one side, a large headline to the other, deliberately uneven gutters. The image is NOT decoration behind the text — it stands as its own element.
+
+### Soft-edge lifestyle image
+**Use when**: hero or brand sections that need warmth.
+**What it is**: Lifestyle photo with a subtle fade-to-canvas edge (radial gradient mask) so the image grounds the page without a hard boundary.
+
+### Image grid (sparingly)
+**Use when**: showing a portfolio, a gallery, multi-product proof.
+**What it is**: 2-column or 3-column image grid, irregular aspect ratios, generous gaps. NOT cards — just images.
+
 ## Performance reminders
 
 - Any perpetual animation → memoize + isolate in its own micro-Client-Component
@@ -240,9 +261,4 @@ Document view that animates staggered highlight on a text block, followed by a "
 - Lazy-load below-the-fold pattern code
 - Apply grain/noise filters only to `fixed pointer-events-none` pseudo-elements, never to scrolling containers
 - Always memo (`React.memo`) components with continuous motion
-
-## Sources
-
-- `design-taste-frontend` SKILL — Section 8 "THE CREATIVE ARSENAL", Section 9 "THE MOTION-ENGINE BENTO PARADIGM"
-- `gpt-taste` SKILL — component arsenal references
-- awwwards.com — patterns that consistently win SOTD
+- Lazy-load images below the fold (`loading="lazy"`) and declare `width`/`height` attributes to prevent CLS

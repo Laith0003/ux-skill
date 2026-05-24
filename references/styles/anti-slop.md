@@ -27,8 +27,7 @@
 
 | Don't | Do instead |
 |---|---|
-| Inter as the brand display font | Geist, Outfit, Cabinet Grotesk, Satoshi |
-| Serif on dashboards/admin/data UIs | Sans-serif only — Geist + Geist Mono or Satoshi + JetBrains Mono |
+| Serif on dashboards/admin/data UIs | Sans-serif only — Inter + JetBrains Mono, Geist + Geist Mono, or Satoshi + JetBrains Mono are all fine |
 | H1 that screams (`text-9xl`) | Weight + color + spacing carry hierarchy; cap display at `text-4xl md:text-6xl tracking-tighter leading-none` |
 | H1 longer than 2 lines | Tighten the headline; split into headline + supporting line if needed |
 | Mismatched font families per section | One display + one body across the project |
@@ -80,8 +79,9 @@ This is what immediately marks output as AI. The design can be perfect; if the p
 | Don't | Do instead |
 |---|---|
 | Generic card containers everywhere | Cards only when elevation communicates hierarchy; otherwise `border-t`, `divide-y`, or pure negative space |
-| Emoji as icons | SVG (Phosphor, Radix, Lucide) at consistent stroke width (1.5 or 2.0) |
+| Emoji as icons | Google Material Symbols (preferred — `Material Symbols Outlined` / `Material Symbols Rounded` / `Material Symbols Sharp`) styled via font-variation-settings. Phosphor / Radix / Lucide are acceptable fallbacks at consistent stroke width (1.5 or 2.0). |
 | Mixed icon styles (filled + outline at same level) | One icon family, one style across the surface |
+| No imagery anywhere (a wall of text + cards) | Use real imagery interspersed with content. Placeholders via `picsum.photos/seed/<descriptive-seed>/W/H`. Layouts must accommodate imagery, not avoid it. |
 | Random radius values | Token: `rounded-sm` / `md` / `lg` / `2xl` / `[2.5rem]` — pick a scale, stick to it |
 | Toast that steals focus | `aria-live="polite"` toasts; never grab focus |
 | Placeholder-only labels | Visible label above; helper below; error below input |
@@ -101,7 +101,6 @@ This is what immediately marks output as AI. The design can be perfect; if the p
 
 ## Checklist (run before shipping any /ux-design output)
 
-- [ ] No Inter font (Critical)
 - [ ] No purple/blue AI gradient (Critical)
 - [ ] No generic names or "Acme/Nexus" brand placeholders (Critical)
 - [ ] No 3-equal-cards layout (High)
@@ -116,9 +115,5 @@ This is what immediately marks output as AI. The design can be perfect; if the p
 - [ ] Spacing on 4/8 rhythm (Medium)
 - [ ] No Unsplash URLs (Medium)
 - [ ] `prefers-reduced-motion` respected (High)
-
-## Sources
-
-- `gpt-taste` SKILL — "AI Tells (Forbidden Patterns)", "Bias Correction", "Meta-Labels Ban"
-- `design-taste-frontend` SKILL — sections 3, 4, 5, 7 (Design Engineering Directives, Creative Proactivity, Performance Guardrails, AI Tells)
-- `ui-ux-pro-max` SKILL — Quick Reference §1–§3 (Accessibility, Touch, Performance)
+- [ ] Imagery is present and intentional (Medium) — text-only walls are forbidden
+- [ ] Icons are Google Material Symbols (preferred) or one consistent SVG family (High)
