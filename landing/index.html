@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>ux — design intelligence for Claude Code</title>
-  <meta name="description" content="The strongest UX plugin for Claude Code. 17 slash commands, 5 sub-agents, 30+ reference files. Anti-AI-slop. SEO baked in. Open source.">
+  <meta name="description" content="The strongest UX plugin for Claude Code. 18 slash commands, 5 sub-agents, 35+ reference files, deterministic anti-slop linter. SEO baked in. MIT open source.">
 
   <link rel="canonical" href="https://laith0003.github.io/ux-skill/">
 
@@ -15,22 +15,18 @@
   <meta name="theme-color" content="#181715" media="(prefers-color-scheme: dark)">
   <meta name="color-scheme" content="light">
 
-  <!-- Favicons: placeholders. Generate at /favicon-32x32.png, /favicon-16x16.png,
-       /apple-touch-icon.png (180x180), /safari-pinned-tab.svg, /site.webmanifest -->
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#cc785c">
   <link rel="manifest" href="/site.webmanifest">
 
-  <!-- Font preconnect for LCP -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <!-- Open Graph -->
   <meta property="og:title" content="ux — design intelligence for Claude Code">
-  <meta property="og:description" content="The strongest UX plugin for Claude Code. 17 slash commands, 5 sub-agents, 30+ reference files. Anti-AI-slop. SEO baked in. Open source.">
+  <meta property="og:description" content="The strongest UX plugin for Claude Code. 18 slash commands, 5 sub-agents, 35+ reference files, deterministic linter, 72 brand specs. Anti-AI-slop.">
   <meta property="og:image" content="https://laith0003.github.io/ux-skill/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -40,14 +36,12 @@
   <meta property="og:site_name" content="ux">
   <meta property="og:locale" content="en_US">
 
-  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="ux — design intelligence for Claude Code">
-  <meta name="twitter:description" content="17 slash commands, 5 sub-agents, 30+ reference files. Anti-AI-slop. SEO baked in. Open source.">
+  <meta name="twitter:description" content="18 slash commands, 5 sub-agents, 35+ reference files. Anti-AI-slop. SEO baked in. MIT open source.">
   <meta name="twitter:image" content="https://laith0003.github.io/ux-skill/og-image.png">
   <meta name="twitter:image:alt" content="ux plugin wordmark on cream canvas with the line: design intelligence for a Claude Code session.">
 
-  <!-- JSON-LD: Organization -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -67,7 +61,6 @@
   }
   </script>
 
-  <!-- JSON-LD: WebSite -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -77,16 +70,15 @@
   }
   </script>
 
-  <!-- JSON-LD: SoftwareApplication -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "ux",
-    "description": "A plugin for Claude Code that ships 17 slash commands, 5 sub-agents, and 30+ reference files for design intelligence, anti-AI-slop discipline, and shipping production UI.",
+    "description": "A plugin for Claude Code that ships 18 slash commands, 5 sub-agents, 35+ reference files, a deterministic anti-slop linter, and 72 brand specs. Built so every Claude Code session can produce work that doesn't look generated.",
     "operatingSystem": "macOS, Linux, Windows",
     "applicationCategory": "DeveloperApplication",
-    "softwareVersion": "1.2",
+    "softwareVersion": "1.5.0",
     "license": "https://opensource.org/licenses/MIT",
     "url": "https://github.com/Laith0003/ux-skill",
     "author": {
@@ -102,7 +94,6 @@
   }
   </script>
 
-  <!-- Tailwind via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -118,294 +109,229 @@
             'surface-dark-soft': '#1f1e1b',
             hairline: '#e6dfd8',
             'hairline-soft': '#ebe6df',
+            coral: '#cc785c',
+            'coral-active': '#a9583e',
+            'coral-soft': '#e6dfd8',
+            'accent-teal': '#5db8a6',
+            'accent-amber': '#e8a55a',
             ink: '#141413',
             'body-strong': '#252523',
             body: '#3d3d3a',
             muted: '#6c6a64',
             'muted-soft': '#8e8b82',
+            'on-primary': '#ffffff',
             'on-dark': '#faf9f5',
             'on-dark-soft': '#a09d96',
-            primary: '#cc785c',
-            'primary-active': '#a9583e',
-            'primary-disabled': '#e6dfd8',
-            'accent-teal': '#5db8a6',
-            'accent-amber': '#e8a55a',
-            success: '#5db872',
-            warning: '#d4a017',
-            error: '#c64545',
+            success: '#5db872'
           },
           fontFamily: {
             display: ['"Cormorant Garamond"', 'EB Garamond', 'Georgia', 'serif'],
             sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'Menlo', 'monospace'],
+            mono: ['"JetBrains Mono"', 'Menlo', 'monospace']
           },
           letterSpacing: {
-            'display': '-0.02em',
-            'display-tight': '-0.025em',
-            'eyebrow': '0.08em',
-          },
-          spacing: {
-            'section': '6rem',
-            'section-lg': '8rem',
-          },
+            'display-xl': '-0.025em',
+            'display-lg': '-0.022em',
+            'display-md': '-0.018em',
+            eyebrow: '0.14em'
+          }
         }
       }
-    }
+    };
   </script>
 
   <style>
-    /* ---------- Base ---------- */
-    html {
-      scroll-behavior: smooth;
-      scroll-padding-top: 72px;
-      background: #faf9f5;
+    :root {
+      --ease-out-quart: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+      --ease-in-quart: cubic-bezier(0.5, 0, 0.75, 0);
+      --ease-in-expo: cubic-bezier(0.7, 0, 0.84, 0);
+      --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+      --ease-spring-soft: cubic-bezier(0.16, 1.18, 0.3, 1);
+      --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+      --nav-bg: rgba(250, 249, 245, 0.72);
+      --nav-ink: #141413;
+      --nav-border: rgba(20, 20, 19, 0.06);
     }
+
+    html { scroll-behavior: smooth; }
     body {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       color: #141413;
       background: #faf9f5;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
       text-rendering: optimizeLegibility;
     }
-    ::selection {
-      background: #cc785c;
-      color: #faf9f5;
-    }
 
-    /* ---------- Display type ---------- */
     .font-display {
       font-family: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
       font-weight: 500;
-      letter-spacing: -0.02em;
-      font-feature-settings: "lnum" 1;
+      font-feature-settings: "kern", "liga", "calt";
     }
 
-    /* ---------- Two-tone body emphasis ---------- */
-    .body-prose {
-      color: #6c6a64;
-      line-height: 1.6;
-    }
-    .body-prose strong,
-    .body-prose .ink {
-      color: #141413;
-      font-weight: 500;
-    }
-
-    /* ---------- Eyebrow ---------- */
-    .eyebrow {
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      color: #6c6a64;
-      text-transform: lowercase;
-    }
-
-    /* ---------- Skip link ---------- */
     .skip-link {
       position: absolute;
-      top: -100px;
-      left: 16px;
+      left: -9999px;
+      top: 0;
       background: #141413;
       color: #faf9f5;
-      padding: 12px 18px;
-      border-radius: 8px;
+      padding: 12px 16px;
       z-index: 100;
-      transition: top 0.2s ease-out;
+      text-decoration: none;
     }
-    .skip-link:focus {
-      top: 12px;
+    .skip-link:focus { left: 8px; top: 8px; }
+
+    :where(a, button, input, [tabindex]):focus { outline: none; }
+    :where(a, button, input, [tabindex]):focus-visible {
+      outline: 2px solid #cc785c;
+      outline-offset: 3px;
+      border-radius: 4px;
     }
 
-    /* ---------- Brand mark ---------- */
-    .brand-mark {
-      --mark-stroke: #141413;
-      --mark-dot: #cc785c;
-      display: inline-flex;
-      align-items: baseline;
-      gap: 0;
-    }
-    .brand-mark svg {
-      display: block;
-    }
-    .brand-mark .mark-stroke {
-      stroke: var(--mark-stroke);
-      transition: stroke 600ms cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .brand-mark .mark-dot {
-      fill: var(--mark-dot);
-      transition: fill 600ms cubic-bezier(0.16, 1, 0.3, 1);
+    .eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #6c6a64;
     }
 
-    /* Adapt brand-mark color per surface */
-    [data-nav-surface="dark"] .brand-mark {
-      --mark-stroke: #faf9f5;
+    .h1-display {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: clamp(48px, 7.4vw, 104px);
+      line-height: 0.98;
+      letter-spacing: -0.025em;
+      color: #141413;
     }
-    [data-nav-surface="coral"] .brand-mark {
-      --mark-stroke: #ffffff;
-      --mark-dot: #ffffff;
+    .h2-display {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: clamp(36px, 4.8vw, 64px);
+      line-height: 1.04;
+      letter-spacing: -0.022em;
+      color: #141413;
     }
-    [data-nav-surface="card"] .brand-mark,
-    [data-nav-surface="cream"] .brand-mark {
-      --mark-stroke: #141413;
-      --mark-dot: #cc785c;
-    }
-
-    /* Nav background adapt */
-    .site-nav {
-      background: rgba(250, 249, 245, 0.72);
-      backdrop-filter: saturate(180%) blur(14px);
-      -webkit-backdrop-filter: saturate(180%) blur(14px);
-      border-bottom: 1px solid rgba(230, 223, 216, 0.4);
-      transition: background 480ms cubic-bezier(0.16, 1, 0.3, 1), border-color 480ms;
-    }
-    [data-nav-surface="dark"] .site-nav {
-      background: rgba(24, 23, 21, 0.72);
-      border-bottom-color: rgba(160, 157, 150, 0.18);
-    }
-    [data-nav-surface="coral"] .site-nav {
-      background: rgba(204, 120, 92, 0.85);
-      border-bottom-color: rgba(255, 255, 255, 0.18);
-    }
-    [data-nav-surface="card"] .site-nav {
-      background: rgba(239, 233, 222, 0.82);
-    }
-
-    .nav-link {
-      color: #3d3d3a;
-      transition: color 320ms ease-out;
-    }
-    [data-nav-surface="dark"] .nav-link {
-      color: #a09d96;
-    }
-    [data-nav-surface="dark"] .nav-link:hover {
-      color: #faf9f5;
-    }
-    [data-nav-surface="coral"] .nav-link {
-      color: rgba(255, 255, 255, 0.86);
-    }
-    [data-nav-surface="coral"] .nav-link:hover {
-      color: #ffffff;
-    }
-    .nav-link:hover {
+    .h3-display {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: clamp(24px, 2.6vw, 34px);
+      line-height: 1.15;
+      letter-spacing: -0.015em;
       color: #141413;
     }
 
-    /* The wordmark text adapts via inline CSS variable */
-    .wordmark-text {
-      color: var(--mark-stroke, #141413);
-      transition: color 600ms cubic-bezier(0.16, 1, 0.3, 1);
-    }
+    .ink-strong { color: #141413; font-weight: 500; }
+    .ink-body { color: #3d3d3a; }
+    .ink-muted { color: #6c6a64; }
 
-    /* ---------- Mark draw-on-load animation ---------- */
-    .mark-path {
-      stroke-dasharray: 100;
-      stroke-dashoffset: 100;
-      opacity: 1;
+    .nav-shell {
+      background: var(--nav-bg);
+      color: var(--nav-ink);
+      border-bottom-color: var(--nav-border);
+      -webkit-backdrop-filter: saturate(1.4) blur(14px);
+      backdrop-filter: saturate(1.4) blur(14px);
+      transition: background 320ms var(--ease-out-quart), color 320ms var(--ease-out-quart), border-color 320ms var(--ease-out-quart);
     }
-    .mark-dot-circle {
-      transform: scale(0);
-      transform-origin: center;
-      transform-box: fill-box;
+    [data-nav-surface="cream"] {
+      --nav-bg: rgba(250, 249, 245, 0.78);
+      --nav-ink: #141413;
+      --nav-border: rgba(20, 20, 19, 0.06);
     }
+    [data-nav-surface="cream-card"] {
+      --nav-bg: rgba(239, 233, 222, 0.82);
+      --nav-ink: #141413;
+      --nav-border: rgba(20, 20, 19, 0.08);
+    }
+    [data-nav-surface="dark"] {
+      --nav-bg: rgba(24, 23, 21, 0.82);
+      --nav-ink: #faf9f5;
+      --nav-border: rgba(250, 249, 245, 0.08);
+    }
+    [data-nav-surface="coral"] {
+      --nav-bg: rgba(204, 120, 92, 0.82);
+      --nav-ink: #ffffff;
+      --nav-border: rgba(255, 255, 255, 0.16);
+    }
+    .nav-link-rest { color: var(--nav-ink); }
+    .brand-dot { background: #cc785c; }
+    [data-nav-surface="coral"] .brand-dot { background: #ffffff; }
 
-    @keyframes drawStroke {
-      to { stroke-dashoffset: 0; }
-    }
-    @keyframes popDot {
-      0%   { transform: scale(0); }
-      70%  { transform: scale(1.18); }
-      100% { transform: scale(1); }
-    }
-
-    .mark-loaded .mark-path-u {
-      animation: drawStroke 520ms cubic-bezier(0.16, 1, 0.3, 1) 80ms forwards;
-    }
-    .mark-loaded .mark-path-x1 {
-      animation: drawStroke 460ms cubic-bezier(0.16, 1, 0.3, 1) 480ms forwards;
-    }
-    .mark-loaded .mark-path-x2 {
-      animation: drawStroke 460ms cubic-bezier(0.16, 1, 0.3, 1) 600ms forwards;
-    }
-    .mark-loaded .mark-dot-circle {
-      animation: popDot 320ms cubic-bezier(0.34, 1.56, 0.64, 1) 920ms forwards;
-    }
-
-    /* ---------- Buttons ---------- */
     .btn-primary {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #cc785c;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: 0;
+      padding: 12px 22px;
+      border-radius: 8px;
+      text-decoration: none;
+      will-change: transform;
+      transition: background 180ms var(--ease-out-quart);
+    }
+    .btn-primary:hover { background: #b86547; }
+    .btn-primary:active { transform: translate3d(var(--mx, 0), var(--my, 0), 0) scale(0.97); transition: transform 120ms var(--ease-out-quart), background 180ms var(--ease-out-quart); }
+    .btn-primary.is-magnetic {
+      transform: translate3d(var(--mx, 0), var(--my, 0), 0);
+      transition: transform 420ms var(--ease-spring-soft), background 180ms var(--ease-out-quart);
+    }
+    .btn-arrow {
+      width: 22px;
+      height: 22px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      height: 44px;
-      padding: 0 22px;
-      background: #cc785c;
-      color: #ffffff;
-      font-weight: 500;
-      font-size: 14px;
-      letter-spacing: -0.005em;
-      border-radius: 8px;
-      transition: background 200ms ease-out, transform 150ms ease-out;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.18);
+      transition: transform 240ms var(--ease-out-quart), background 240ms var(--ease-out-quart);
     }
-    .btn-primary:hover {
-      background: #a9583e;
-    }
-    .btn-primary:active {
-      transform: scale(0.98);
-    }
-    .btn-primary:focus-visible {
-      outline: 2px solid #141413;
-      outline-offset: 3px;
+    .btn-primary:hover .btn-arrow {
+      background: rgba(255, 255, 255, 0.28);
+      transform: translate3d(2px, -2px, 0) scale(1.06);
     }
 
     .btn-secondary {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 8px;
-      height: 44px;
-      padding: 0 22px;
       background: transparent;
       color: #141413;
+      font-family: 'Inter', sans-serif;
       font-weight: 500;
       font-size: 14px;
+      padding: 12px 18px;
       border-radius: 8px;
-      border: 1px solid #e6dfd8;
-      transition: border-color 200ms ease-out, background 200ms ease-out, transform 150ms ease-out;
+      border: 1px solid rgba(20, 20, 19, 0.14);
+      text-decoration: none;
+      transition: border-color 200ms var(--ease-out-quart), transform 200ms var(--ease-out-quart);
     }
-    .btn-secondary:hover {
-      border-color: #141413;
-      background: rgba(20, 20, 19, 0.03);
-    }
-    .btn-secondary:active {
-      transform: scale(0.98);
-    }
-    .btn-secondary:focus-visible {
-      outline: 2px solid #141413;
-      outline-offset: 3px;
-    }
+    .btn-secondary:hover { border-color: rgba(20, 20, 19, 0.26); }
+    .btn-secondary:active { transform: scale(0.97); transition: transform 120ms var(--ease-out-quart); }
 
-    .btn-on-coral {
+    .btn-on-dark {
       background: #faf9f5;
       color: #141413;
     }
-    .btn-on-coral:hover {
-      background: #ffffff;
-    }
+    .btn-on-dark:hover { background: #efe9de; }
 
-    /* ---------- Pill ---------- */
     .pill {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 5px 12px;
-      background: rgba(204, 120, 92, 0.08);
-      border: 1px solid rgba(204, 120, 92, 0.22);
-      color: #a9583e;
+      padding: 6px 12px;
       border-radius: 9999px;
+      border: 1px solid rgba(20, 20, 19, 0.1);
+      font-family: 'Inter', sans-serif;
       font-size: 12px;
       font-weight: 500;
-      letter-spacing: 0.02em;
+      color: #3d3d3a;
+      background: transparent;
     }
     .pill-dot {
       width: 6px;
@@ -414,728 +340,716 @@
       background: #cc785c;
     }
 
-    /* ---------- Code window ---------- */
     .code-window {
       background: #181715;
-      border-radius: 12px;
+      border-radius: 14px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      box-shadow: 0 18px 60px -24px rgba(20, 20, 19, 0.28);
+      box-shadow: 0 30px 80px -40px rgba(20, 20, 19, 0.32), 0 1px 0 rgba(255, 255, 255, 0.04) inset;
     }
-    .code-header {
+    .code-window-chrome {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 14px 20px;
-      background: #1f1e1b;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      gap: 8px;
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+    }
+    .code-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .code-title {
+      margin-left: 10px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: #6c6a64;
+      font-size: 11px;
+      color: #a09d96;
+      letter-spacing: 0.02em;
     }
     .code-body {
-      padding: 22px 24px;
+      padding: 22px 24px 26px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      line-height: 1.7;
-      color: #faf9f5;
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: #d8d4ca;
+      min-height: 480px;
+      white-space: pre;
       overflow-x: auto;
     }
-    .code-body .c-prompt { color: #6c6a64; }
-    .code-body .c-cmd    { color: #faf9f5; }
-    .code-body .c-divider { color: #3d3d3a; }
-    .code-body .c-label  { color: #a09d96; }
-    .code-body .c-value  { color: #faf9f5; }
-    .code-body .c-fade   { color: #6c6a64; }
-    .code-body .c-coral  { color: #cc785c; }
-    .code-body .c-success { color: #5db872; }
-    .code-body .c-warn   { color: #d4a017; }
-    .code-body .c-error  { color: #c64545; }
-    .code-body .c-strike { text-decoration: line-through; text-decoration-color: #cc785c; text-decoration-thickness: 1.5px; color: #6c6a64; }
-    .code-body .c-arrow  { color: #6c6a64; }
-
-    /* ---------- Strikethrough emphasis (the bans) ---------- */
-    .ban {
-      text-decoration: line-through;
-      text-decoration-color: #cc785c;
-      text-decoration-thickness: 2px;
-      text-underline-offset: 2px;
-      color: #6c6a64;
-    }
-
-    /* ---------- Hairline divider ---------- */
-    .hairline {
-      border-top: 1px solid #e6dfd8;
-    }
-    .hairline-strong {
-      border-top: 1px solid #141413;
-    }
-
-    /* ---------- Bento tiles ---------- */
-    .bento-tile {
-      position: relative;
-      background: #efe9de;
-      border-radius: 12px;
-      padding: 36px;
-      overflow: hidden;
-      transition: transform 480ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 480ms;
-    }
-    .bento-tile.hairline-tile {
+    .code-line { display: block; min-height: 1.65em; }
+    .code-prompt { color: #e8a55a; }
+    .code-cmd { color: #faf9f5; font-weight: 500; }
+    .code-rule { color: #6c6a64; }
+    .code-label { color: #a09d96; }
+    .code-value { color: #faf9f5; }
+    .code-arrow { color: #cc785c; }
+    .code-avoid { color: #8e8b82; }
+    .code-good { color: #5db8a6; }
+    .code-file { color: #e8a55a; }
+    .caret {
+      display: inline-block;
+      width: 8px;
+      height: 1.05em;
       background: #faf9f5;
-      border: 1px solid #e6dfd8;
+      vertical-align: text-bottom;
+      margin-left: 2px;
+      animation: caret-blink 1.05s steps(1) infinite;
     }
-    .bento-tile:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 18px 40px -20px rgba(20, 20, 19, 0.12);
+    @keyframes caret-blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
     }
-    .bento-tile.spotlight::before {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      border-radius: 13px;
-      pointer-events: none;
-      background: radial-gradient(
-        420px circle at var(--mx, 50%) var(--my, 50%),
-        rgba(204, 120, 92, 0.22),
-        transparent 60%
-      );
-      opacity: 0;
-      transition: opacity 320ms ease-out;
+
+    .tile {
+      background: transparent;
+      border: 1px solid rgba(20, 20, 19, 0.08);
+      border-radius: 16px;
+      padding: 28px;
+      transition: transform 320ms var(--ease-spring-soft), border-color 240ms var(--ease-out-quart), background 320ms var(--ease-out-quart);
+      will-change: transform;
     }
-    .bento-tile.spotlight:hover::before {
-      opacity: 1;
+    .tile-card { background: #faf9f5; }
+    .tile-spotlight {
+      background: linear-gradient(180deg, #faf9f5 0%, #f3ece0 100%);
+      border-color: rgba(204, 120, 92, 0.24);
     }
-    .cmd-pill {
+    @media (hover: hover) and (pointer: fine) {
+      .tile:hover {
+        transform: translate3d(0, -3px, 0) scale(1.008);
+        border-color: rgba(20, 20, 19, 0.14);
+      }
+      .tile-spotlight:hover {
+        border-color: rgba(204, 120, 92, 0.45);
+      }
+    }
+
+    .group-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #cc785c;
+    }
+    .cmd-chip {
       display: inline-flex;
       align-items: center;
-      padding: 4px 10px;
-      background: rgba(20, 20, 19, 0.05);
-      border: 1px solid rgba(20, 20, 19, 0.08);
-      border-radius: 6px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
+      font-size: 12.5px;
       color: #141413;
-      letter-spacing: -0.005em;
-      transition: background 200ms, border-color 200ms;
+      background: rgba(20, 20, 19, 0.04);
+      padding: 4px 9px;
+      border-radius: 5px;
+      border: 1px solid rgba(20, 20, 19, 0.06);
     }
-    .cmd-pill:hover {
-      background: rgba(204, 120, 92, 0.08);
-      border-color: rgba(204, 120, 92, 0.28);
+    .cmd-chip-new {
+      background: rgba(204, 120, 92, 0.1);
+      border-color: rgba(204, 120, 92, 0.24);
       color: #a9583e;
     }
-    .bento-tile.hairline-tile .cmd-pill {
-      background: rgba(20, 20, 19, 0.04);
+
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: clamp(48px, 6.4vw, 84px);
+      line-height: 0.95;
+      letter-spacing: -0.022em;
+      color: #141413;
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-num-sm {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: clamp(40px, 4.4vw, 56px);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: #141413;
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #6c6a64;
+      letter-spacing: 0.02em;
     }
 
-    /* ---------- Fade-up reveal ---------- */
-    .reveal {
+    .strike {
+      position: relative;
+      display: inline;
+      color: #6c6a64;
+    }
+    .strike::after {
+      content: '';
+      position: absolute;
+      left: -2px;
+      right: -2px;
+      top: 50%;
+      height: 2px;
+      background: #cc785c;
+      transform: translateY(-50%);
+      transform-origin: left center;
+    }
+
+    .coral-band {
+      position: relative;
+      background: #cc785c;
+      color: #ffffff;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .aurora-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(72px);
+      opacity: 0.65;
+      pointer-events: none;
+      will-change: transform;
+    }
+    .orb-1 {
+      width: 640px;
+      height: 640px;
+      left: 8%;
+      top: -180px;
+      background: radial-gradient(circle, #e8a55a 0%, rgba(232, 165, 90, 0) 65%);
+      animation: drift-1 14s ease-in-out infinite alternate;
+    }
+    .orb-2 {
+      width: 520px;
+      height: 520px;
+      right: 5%;
+      top: 40px;
+      background: radial-gradient(circle, #f3d6c4 0%, rgba(243, 214, 196, 0) 65%);
+      animation: drift-2 18s ease-in-out infinite alternate;
+    }
+    .orb-3 {
+      width: 480px;
+      height: 480px;
+      left: 38%;
+      bottom: -160px;
+      background: radial-gradient(circle, #faf9f5 0%, rgba(250, 249, 245, 0) 65%);
+      opacity: 0.45;
+      animation: drift-3 16s ease-in-out infinite alternate;
+    }
+    @keyframes drift-1 {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(40px, 26px, 0); }
+    }
+    @keyframes drift-2 {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-36px, 30px, 0); }
+    }
+    @keyframes drift-3 {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(28px, -22px, 0); }
+    }
+    .coral-glass-cta {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.96);
+      color: #141413;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      padding: 14px 26px;
+      border-radius: 10px;
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      transition: transform 240ms var(--ease-out-quart), background 240ms var(--ease-out-quart);
+    }
+    .coral-glass-cta:hover {
+      background: #faf9f5;
+      transform: translate3d(0, -2px, 0);
+    }
+    .coral-glass-cta:active { transform: scale(0.97); transition: transform 120ms var(--ease-out-quart); }
+
+    .install-step {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 32px;
+      padding: 32px 0;
+      border-top: 1px solid #e6dfd8;
+    }
+    .install-step:last-child { border-bottom: 1px solid #e6dfd8; }
+    .install-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: 44px;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: #cc785c;
+      font-variant-numeric: tabular-nums;
+    }
+    .step-code-block {
+      background: #181715;
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #d8d4ca;
+      margin-top: 14px;
+      overflow-x: auto;
+    }
+    .step-code-block .prompt { color: #cc785c; user-select: none; }
+
+    .fade-up {
       opacity: 0;
-      transform: translateY(14px);
-      transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1), transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translate3d(0, 14px, 0);
+      transition: opacity 620ms var(--ease-out-quart), transform 620ms var(--ease-out-quart);
+      will-change: transform, opacity;
     }
-    .reveal.is-visible {
+    .fade-up.is-in {
       opacity: 1;
-      transform: translateY(0);
+      transform: translate3d(0, 0, 0);
+    }
+    .fade-up.delay-1 { transition-delay: 60ms; }
+    .fade-up.delay-2 { transition-delay: 120ms; }
+    .fade-up.delay-3 { transition-delay: 180ms; }
+    .fade-up.delay-4 { transition-delay: 240ms; }
+
+    .hairline-band {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      padding-top: 8px;
+    }
+    .hairline-band::before, .hairline-band::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e6dfd8;
     }
 
-    /* ---------- Reduced motion ---------- */
+    .footer-link {
+      color: #a09d96;
+      text-decoration: none;
+      transition: color 200ms var(--ease-out-quart);
+      font-size: 14px;
+    }
+    .footer-link:hover { color: #faf9f5; }
+
     @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      .mark-loaded .mark-path-u,
-      .mark-loaded .mark-path-x1,
-      .mark-loaded .mark-path-x2 {
-        animation: none;
-        stroke-dashoffset: 0;
-      }
-      .mark-loaded .mark-dot-circle {
-        animation: none;
-        transform: scale(1);
-      }
-      .reveal {
-        opacity: 1;
-        transform: none;
-        transition: none;
-      }
+      .fade-up { transition: opacity 100ms linear; transform: none; }
+      .fade-up.is-in { transform: none; }
+      .aurora-orb { animation: none !important; }
+      .caret { animation: none; opacity: 1; }
+      .btn-primary.is-magnetic { transform: none !important; transition: background 180ms linear; }
+      .nav-shell { transition: none; }
+      .tile { transition: border-color 200ms linear; }
+      .tile:hover { transform: none !important; }
     }
 
-    /* ---------- Mobile tweaks ---------- */
-    @media (max-width: 768px) {
-      .code-body {
-        font-size: 11px;
-        padding: 18px 18px;
-      }
-    }
+    section { scroll-margin-top: 80px; }
   </style>
 </head>
-<body class="bg-canvas text-ink antialiased">
-
+<body>
   <a href="#main" class="skip-link">Skip to main content</a>
 
-  <!-- ============================================================
-       Sticky nav
-       ============================================================ -->
-  <header class="site-nav fixed top-0 inset-x-0 z-50">
-    <nav aria-label="Primary" class="max-w-[1200px] mx-auto h-16 px-6 md:px-8 flex items-center justify-between">
-      <a href="#" class="brand-mark group" aria-label="ux home">
-        <!-- The brand mark: lowercase "ux" wordmark in Cormorant + coral tittle dot -->
-        <svg width="48" height="28" viewBox="0 0 48 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <!-- u path: two verticals + bottom curve -->
-          <path
-            class="mark-stroke mark-path mark-path-u"
-            d="M4 6 L4 18 Q4 22 8 22 Q12 22 12 18 L12 6"
-            stroke-width="2.4"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            fill="none"
-          />
-          <!-- x first diagonal -->
-          <path
-            class="mark-stroke mark-path mark-path-x1"
-            d="M18 8 L30 22"
-            stroke-width="2.4"
-            stroke-linecap="round"
-            fill="none"
-          />
-          <!-- x second diagonal -->
-          <path
-            class="mark-stroke mark-path mark-path-x2"
-            d="M30 8 L18 22"
-            stroke-width="2.4"
-            stroke-linecap="round"
-            fill="none"
-          />
-          <!-- Coral dot above the x -->
-          <circle
-            class="mark-dot mark-dot-circle"
-            cx="24"
-            cy="3"
-            r="2.4"
-          />
-        </svg>
-        <span class="font-display wordmark-text text-[20px] leading-none ml-1.5">ux</span>
-      </a>
-
-      <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
-        <li><a href="#commands" class="nav-link">Commands</a></li>
-        <li><a href="#what-ships" class="nav-link">What ships</a></li>
-        <li><a href="#install" class="nav-link">Install</a></li>
-        <li><a href="#creator" class="nav-link">Creator</a></li>
-      </ul>
-
-      <div class="flex items-center gap-3">
-        <a href="https://github.com/Laith0003/ux-skill" class="nav-link hidden sm:inline-flex items-center gap-2 text-sm font-medium">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.55v-2.1c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.11-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18.92-.26 1.91-.39 2.89-.39.98 0 1.97.13 2.89.39 2.21-1.49 3.18-1.18 3.18-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.4-5.25 5.68.41.35.78 1.05.78 2.12v3.14c0 .31.21.66.79.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/>
-          </svg>
-          GitHub
+  <header class="fixed top-0 left-0 right-0 z-50">
+    <div id="top-nav" class="nav-shell border-b">
+      <nav aria-label="Primary" class="max-w-[1240px] mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
+        <a href="#main" class="flex items-center gap-2.5" aria-label="ux — home">
+          <span class="font-display text-[26px] leading-none relative">
+            ux<span class="brand-dot inline-block w-[7px] h-[7px] rounded-full ml-[2px] translate-y-[-10px]"></span>
+          </span>
         </a>
-        <a href="https://github.com/Laith0003/ux-skill#install" class="btn-primary !h-9 !px-4 text-[13px]">Install</a>
-      </div>
-    </nav>
+        <ul class="hidden md:flex items-center gap-9 text-[14px] font-medium">
+          <li><a href="#commands" class="nav-link-rest hover:opacity-70 transition-opacity">Commands</a></li>
+          <li><a href="#what-ships" class="nav-link-rest hover:opacity-70 transition-opacity">What ships</a></li>
+          <li><a href="#install" class="nav-link-rest hover:opacity-70 transition-opacity">Install</a></li>
+          <li><a href="#creator" class="nav-link-rest hover:opacity-70 transition-opacity">Creator</a></li>
+        </ul>
+        <div class="flex items-center gap-3">
+          <a href="https://github.com/Laith0003/ux-skill" class="hidden sm:inline-flex items-center gap-2 text-[14px] font-medium nav-link-rest hover:opacity-70 transition-opacity">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.11.78-.25.78-.55v-1.93c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.78 1.2 1.78 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.18c0 .3.21.66.79.55C20.21 21.38 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
+            GitHub
+          </a>
+          <a href="https://github.com/Laith0003/ux-skill#install" class="btn-primary" style="padding:9px 16px; font-size:13px;">
+            Install
+            <span class="btn-arrow" aria-hidden="true">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+            </span>
+          </a>
+        </div>
+      </nav>
+    </div>
   </header>
 
-  <main id="main" tabindex="-1" class="pt-16">
+  <main id="main" tabindex="-1">
 
-    <!-- ============================================================
-         HERO — asymmetric split (7/5)
-         ============================================================ -->
-    <section data-surface="cream" aria-labelledby="hero-h1" class="relative">
-      <div class="max-w-[1200px] mx-auto px-6 md:px-8 pt-20 pb-24 md:pt-28 md:pb-32 min-h-[calc(100dvh-64px)] flex items-center">
-        <div class="grid grid-cols-12 gap-8 md:gap-10 w-full">
-
-          <!-- Left: 7 cols -->
-          <div class="col-span-12 md:col-span-7 flex flex-col justify-center">
-            <span class="pill mb-7 self-start">
-              <span class="pill-dot"></span>
-              v1.2 · MIT · for Claude Code
-            </span>
-
-            <h1 id="hero-h1" class="font-display text-[44px] md:text-[68px] leading-[1.05] tracking-display text-ink mb-7">
-              Design intelligence,<br>
-              for a Claude&nbsp;Code session.
+    <!-- SECTION 1 — HERO (cream, asymmetric 7/5 split) -->
+    <section class="pt-32 md:pt-40 pb-24 md:pb-28 px-6 lg:px-10" data-surface="cream">
+      <div class="max-w-[1240px] mx-auto">
+        <div class="grid grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div class="col-span-12 lg:col-span-7">
+            <div class="fade-up">
+              <span class="pill"><span class="pill-dot"></span>v1.5 &middot; MIT &middot; for Claude Code</span>
+            </div>
+            <h1 class="h1-display mt-7 fade-up delay-1">
+              Design intelligence, for a Claude Code session.
             </h1>
-
-            <p class="body-prose text-[17px] md:text-[18px] leading-[1.55] max-w-[560px] mb-9">
-              <span class="ink">17 slash commands, 5 sub-agents, 30+ reference files</span> — every command reads the bans before producing anything. <span class="ink">Built to ship work that doesn't look generated.</span>
+            <p class="mt-7 text-[18px] md:text-[19px] leading-[1.55] max-w-[640px] ink-body fade-up delay-2">
+              <span class="ink-strong">18 slash commands, 5 sub-agents, 35+ reference files</span> &mdash; every command reads the bans before producing anything. Built to ship work that doesn&rsquo;t look generated.
             </p>
-
-            <div class="flex flex-wrap items-center gap-3 mb-12">
-              <a href="https://github.com/Laith0003/ux-skill#install" class="btn-primary">
+            <div class="mt-9 flex flex-wrap items-center gap-3 fade-up delay-3">
+              <a href="#install" id="magneticCta" class="btn-primary is-magnetic">
                 Install the plugin
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M5 12h14M13 5l7 7-7 7"/>
-                </svg>
+                <span class="btn-arrow" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                </span>
               </a>
-              <a href="https://github.com/Laith0003/ux-skill" class="btn-secondary">View on GitHub</a>
+              <a href="https://github.com/Laith0003/ux-skill" class="btn-secondary">
+                View on GitHub
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+              </a>
             </div>
 
-            <!-- Stats row -->
-            <dl class="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-5 max-w-[600px]">
+            <div class="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-y-8 gap-x-6 fade-up delay-4">
               <div>
-                <dt class="sr-only">Slash commands</dt>
-                <dd class="font-display text-[40px] md:text-[44px] leading-none tracking-display text-ink tabular-nums">17</dd>
-                <p class="text-[12px] text-muted mt-1.5">callable commands</p>
+                <div class="stat-num-sm" data-counter data-target="18" data-suffix="">0</div>
+                <div class="stat-label mt-1.5">slash commands</div>
               </div>
               <div>
-                <dt class="sr-only">Sub-agents</dt>
-                <dd class="font-display text-[40px] md:text-[44px] leading-none tracking-display text-ink tabular-nums">5</dd>
-                <p class="text-[12px] text-muted mt-1.5">specialized sub-agents</p>
+                <div class="stat-num-sm" data-counter data-target="5" data-suffix="">0</div>
+                <div class="stat-label mt-1.5">sub-agents</div>
               </div>
               <div>
-                <dt class="sr-only">Reference files</dt>
-                <dd class="font-display text-[40px] md:text-[44px] leading-none tracking-display text-ink tabular-nums">30+</dd>
-                <p class="text-[12px] text-muted mt-1.5">reference files</p>
+                <div class="stat-num-sm" data-counter data-target="35" data-suffix="+">0</div>
+                <div class="stat-label mt-1.5">reference files</div>
               </div>
               <div>
-                <dt class="sr-only">Lines of guidance</dt>
-                <dd class="font-display text-[40px] md:text-[44px] leading-none tracking-display text-ink tabular-nums">19,704</dd>
-                <p class="text-[12px] text-muted mt-1.5">lines of guidance</p>
+                <div class="stat-num-sm" data-counter data-target="26000" data-suffix="+" data-format="comma">0</div>
+                <div class="stat-label mt-1.5">lines of design intent</div>
               </div>
-            </dl>
+            </div>
           </div>
 
-          <!-- Right: 5 cols — dark code window mockup -->
-          <div class="col-span-12 md:col-span-5 flex items-center">
-            <div class="code-window w-full">
-              <div class="code-header">
-                <span>~/ux-design</span>
-                <span class="text-[#5db872]">running</span>
-              </div>
-              <pre class="code-body"><span class="c-prompt">$</span> <span class="c-cmd">/ux-design "a SaaS landing for a fintech for freelancers"</span>
-
-<span class="c-divider">─── discovery ─────────────────────────</span>
-<span class="c-label">Brand</span>        <span class="c-value">no brand</span> <span class="c-arrow">→</span> <span class="c-coral">restrained proposal</span>
-<span class="c-label">References</span>   <span class="c-value">3 (provided)</span>
-<span class="c-label">Audience</span>     <span class="c-value">solo founders, freelance consultants</span>
-<span class="c-label">Style</span>        <span class="c-value">minimalist (premium fintech editorial)</span>
-<span class="c-label">Voice</span>        <span class="c-value">direct, warm, brief</span>
-<span class="c-label">Stack</span>        <span class="c-value">React + Tailwind + Framer Motion</span>
-<span class="c-label">Wow</span>          <span class="c-value">first-scroll metric counter reveal</span>
-
-<span class="c-divider">─── design brief ──────────────────────</span>
-<span class="c-label">Dials</span>        <span class="c-value">DESIGN_VARIANCE=6 · MOTION_INTENSITY=5 · DENSITY=4</span>
-<span class="c-label">Patterns</span>     <span class="c-value">Asymmetric split · Editorial rhythm</span>
-             <span class="c-value">Spotlight cards · Counter reveal</span>
-
-<span class="c-divider">─── self-review ───────────────────────</span>
-<span class="c-fade">avoided</span>  <span class="c-strike">Inter as display</span>          <span class="c-arrow">→</span> <span class="c-coral">Geist</span>
-<span class="c-fade">avoided</span>  <span class="c-strike">purple-to-blue gradient</span>   <span class="c-arrow">→</span> <span class="c-coral">single Electric Blue</span>
-<span class="c-fade">avoided</span>  <span class="c-strike">3 equal cards</span>             <span class="c-arrow">→</span> <span class="c-coral">7/5 split + zig-zag</span>
-<span class="c-fade">avoided</span>  <span class="c-strike">centered hero</span>             <span class="c-arrow">→</span> <span class="c-coral">asymmetric</span>
-<span class="c-fade">avoided</span>  <span class="c-strike">"John Doe"</span>                <span class="c-arrow">→</span> <span class="c-coral">Lina, Bashar, Adnan</span>
-
-<span class="c-success">writing</span>  components/Hero.tsx</pre>
-            </div>
+          <div class="col-span-12 lg:col-span-5 fade-up delay-2">
+            <article class="code-window" aria-label="Example output of the /ux-design command">
+              <header class="code-window-chrome" aria-hidden="true">
+                <span class="code-dot" style="background:#ff5f57"></span>
+                <span class="code-dot" style="background:#febc2e"></span>
+                <span class="code-dot" style="background:#28c840"></span>
+                <span class="code-title">claude — /ux-design</span>
+              </header>
+              <div class="code-body" id="typeStage" aria-live="polite"></div>
+            </article>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============================================================
-         THESIS — the discipline (fingerprints)
-         ============================================================ -->
-    <section data-surface="cream" aria-labelledby="thesis-h2" class="relative">
-      <div class="max-w-[1200px] mx-auto px-6 md:px-8 py-section md:py-section-lg">
-        <div class="grid grid-cols-12 gap-8 md:gap-10">
-          <div class="col-span-12 md:col-span-4 reveal">
-            <p class="eyebrow mb-4">the discipline</p>
-            <h2 id="thesis-h2" class="font-display text-[36px] md:text-[48px] leading-[1.08] tracking-display text-ink">
-              Default AI output<br>has fingerprints.<br>
-              <span class="text-primary">We catalogued them.</span>
+    <!-- SECTION 2 — THESIS (cream, hairline-banded from hero) -->
+    <section class="px-6 lg:px-10 pb-28 md:pb-32" data-surface="cream">
+      <div class="max-w-[1240px] mx-auto">
+        <div class="hairline-band mb-16">
+          <span class="eyebrow">Thesis</span>
+        </div>
+        <div class="grid grid-cols-12 gap-8">
+          <div class="col-span-12 lg:col-span-8 lg:col-start-2">
+            <h2 class="h2-display fade-up">
+              Default AI output has fingerprints.<br>
+              <span style="color:#6c6a64;">We catalogued them.</span>
+            </h2>
+            <p class="mt-8 text-[18px] leading-[1.6] ink-body max-w-[680px] fade-up delay-1">
+              The unconstrained generator reaches for the same patterns every time. Eight of the strongest ones live below. The plugin reads them before it writes anything.
+            </p>
+            <ul class="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-4 text-[17px] leading-[1.5] fade-up delay-2">
+              <li><span class="strike">Purple-to-blue AI gradient</span></li>
+              <li><span class="strike">Three equal feature cards</span></li>
+              <li><span class="strike">Centered hero over dark photo</span></li>
+              <li><span class="strike">Title Case Headlines</span></li>
+              <li><span class="strike">&ldquo;Elevate / Unleash / Seamless&rdquo;</span></li>
+              <li><span class="strike">&ldquo;John Doe&rdquo; placeholder names</span></li>
+              <li><span class="strike">&ldquo;99.99% uptime&rdquo; round stats</span></li>
+              <li><span class="strike">Emoji as icon affordance</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3 — THE 18 COMMANDS (cream-card surface) -->
+    <section id="commands" class="px-6 lg:px-10 py-28 md:py-32" style="background:#efe9de;" data-surface="cream-card">
+      <div class="max-w-[1240px] mx-auto">
+        <div class="grid grid-cols-12 gap-8 mb-14">
+          <div class="col-span-12 lg:col-span-7">
+            <span class="eyebrow fade-up">The commands</span>
+            <h2 class="h2-display mt-4 fade-up delay-1">
+              Eighteen slash commands, four jobs.
             </h2>
           </div>
-
-          <div class="col-span-12 md:col-span-7 md:col-start-6 reveal">
-            <p class="body-prose text-[18px] md:text-[19px] leading-[1.62] max-w-[640px]">
-              <span class="ban">Pure black <span class="font-mono text-[15px]">#000000</span></span>. <span class="ban">The purple-to-blue AI gradient on white</span>. <span class="ban">Three equal cards in a row</span>. <span class="ban">"John Doe", "Acme", <span class="font-mono text-[15px]">99.99%</span></span>. <span class="ban">Centered hero over a dark image</span>. <span class="ban">Decorative animation with no meaning</span>. <span class="ban">Filler verbs — "Elevate", "Seamless", "Unleash"</span>. <span class="ban">A 3-line testimonial with no name attached</span>. <span class="ink">The unconstrained generator reaches for these reflexively. The result reads as machine-made within seconds.</span>
+          <div class="col-span-12 lg:col-span-5 lg:pt-6">
+            <p class="text-[17px] leading-[1.6] ink-body fade-up delay-2">
+              Frame the brief. Audit the work. Generate output that won&rsquo;t embarrass you. Apply the design system to whatever you&rsquo;re shipping next. Every command is a single intent.
             </p>
+          </div>
+        </div>
 
-            <p class="text-[14px] text-muted mt-7 max-w-[640px] leading-[1.55]">
-              8 of 200+ catalogued. Every command reads the list before producing anything — refusing the safest default is half the discipline.
+        <div class="grid grid-cols-12 gap-5 lg:gap-6">
+          <article class="col-span-12 lg:col-span-7 tile tile-card fade-up">
+            <div class="flex items-center justify-between mb-5">
+              <span class="group-eyebrow">01 &middot; Frame</span>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#cc785c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M3.5 8.5h17M8.5 3.5v17"/></svg>
+            </div>
+            <h3 class="h3-display">Before you write a line.</h3>
+            <p class="mt-3 text-[15px] leading-[1.55] ink-body max-w-[520px]">Resolve brief, audience, voice, references, and the wow moment. The blank page never enters the loop.</p>
+            <div class="mt-7 flex flex-wrap gap-2">
+              <span class="cmd-chip">/ux-design</span>
+              <span class="cmd-chip">/ux-brief</span>
+              <span class="cmd-chip">/ux-references</span>
+              <span class="cmd-chip">/ux-voice</span>
+              <span class="cmd-chip">/ux-brand</span>
+            </div>
+          </article>
+
+          <article class="col-span-12 lg:col-span-5 tile tile-spotlight fade-up delay-1">
+            <div class="flex items-center justify-between mb-5">
+              <span class="group-eyebrow">02 &middot; Audit</span>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#cc785c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20.5 20.5-4.5-4.5"/></svg>
+            </div>
+            <h3 class="h3-display">Find the fingerprints.</h3>
+            <p class="mt-3 text-[15px] leading-[1.55] ink-body">Senior-eye reviews on taste, ship-readiness, accessibility, and the bans. The plugin grades its own work.</p>
+            <div class="mt-7 flex flex-wrap gap-2">
+              <span class="cmd-chip">/ux-audit</span>
+              <span class="cmd-chip">/ux-review</span>
+              <span class="cmd-chip">/ux-ship</span>
+              <span class="cmd-chip">/ux-a11y</span>
+              <span class="cmd-chip">/ux-seo</span>
+            </div>
+          </article>
+
+          <article class="col-span-12 lg:col-span-5 tile tile-spotlight fade-up delay-2">
+            <div class="flex items-center justify-between mb-5">
+              <span class="group-eyebrow">03 &middot; Generate</span>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#cc785c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M3 12h18M5.5 5.5l13 13M18.5 5.5l-13 13"/></svg>
+            </div>
+            <h3 class="h3-display">Build the surface.</h3>
+            <p class="mt-3 text-[15px] leading-[1.55] ink-body">Landing pages, components, motion, copy, and OG cards &mdash; produced inside the brand floor, never as templates.</p>
+            <div class="mt-7 flex flex-wrap gap-2">
+              <span class="cmd-chip">/ux-landing</span>
+              <span class="cmd-chip">/ux-component</span>
+              <span class="cmd-chip">/ux-motion</span>
+              <span class="cmd-chip">/ux-copy</span>
+              <span class="cmd-chip">/ux-og</span>
+            </div>
+          </article>
+
+          <article class="col-span-12 lg:col-span-7 tile tile-card fade-up delay-3">
+            <div class="flex items-center justify-between mb-5">
+              <span class="group-eyebrow">04 &middot; Apply</span>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#cc785c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7l8-4 8 4-8 4-8-4z"/><path d="M4 12l8 4 8-4M4 17l8 4 8-4"/></svg>
+            </div>
+            <h3 class="h3-display">Ship inside a system.</h3>
+            <p class="mt-3 text-[15px] leading-[1.55] ink-body max-w-[520px]">Apply the brand to a new page. Lint the output against the 30 deterministic rules. Refresh the linter set without leaving the session.</p>
+            <div class="mt-7 flex flex-wrap gap-2">
+              <span class="cmd-chip">/ux-apply</span>
+              <span class="cmd-chip">/ux-tokens</span>
+              <span class="cmd-chip cmd-chip-new">/ux-lint &middot; new</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4 — WHAT SHIPS (cream, editorial column rhythm) -->
+    <section id="what-ships" class="px-6 lg:px-10 py-28 md:py-32" data-surface="cream">
+      <div class="max-w-[1100px] mx-auto">
+        <div class="text-center mb-20">
+          <span class="eyebrow fade-up">What ships</span>
+          <h2 class="h2-display mt-4 fade-up delay-1">Five years of design taste, in one plugin.</h2>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 py-10 border-t border-hairline">
+          <div class="col-span-12 md:col-span-5 fade-up">
+            <span class="group-eyebrow">01</span>
+            <h3 class="h3-display mt-3">A working command surface.</h3>
+          </div>
+          <div class="col-span-12 md:col-span-6 md:col-start-7 fade-up delay-1">
+            <div class="flex items-baseline gap-5 mb-4">
+              <span class="stat-num" data-counter data-target="18">0</span>
+              <span class="stat-label">slash commands</span>
+            </div>
+            <p class="text-[17px] leading-[1.6] ink-body max-w-[520px]">
+              Each one wraps a single intent in a tested prompt that has read the brand, the bans, and the references before you arrived. No blank-page entry points.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 py-10 border-t border-hairline">
+          <div class="col-span-12 md:col-span-6 md:order-2 fade-up">
+            <span class="group-eyebrow">02</span>
+            <h3 class="h3-display mt-3">A sub-agent for every job.</h3>
+          </div>
+          <div class="col-span-12 md:col-span-5 md:col-start-1 md:order-1 fade-up delay-1">
+            <div class="flex items-baseline gap-5 mb-4">
+              <span class="stat-num" data-counter data-target="5">0</span>
+              <span class="stat-label">named sub-agents</span>
+            </div>
+            <p class="text-[17px] leading-[1.6] ink-body max-w-[520px]">
+              Brief, design, engineer, audit, lint. Each is dispatched on demand, carries its own palette, and reports back inside one session.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 py-10 border-t border-b border-hairline">
+          <div class="col-span-12 md:col-span-5 fade-up">
+            <span class="group-eyebrow">03</span>
+            <h3 class="h3-display mt-3">Reference files the agent reads.</h3>
+          </div>
+          <div class="col-span-12 md:col-span-6 md:col-start-7 fade-up delay-1">
+            <div class="flex items-baseline gap-5 mb-4">
+              <span class="stat-num" data-counter data-target="35" data-suffix="+">0</span>
+              <span class="stat-label">design references</span>
+            </div>
+            <p class="text-[17px] leading-[1.6] ink-body max-w-[520px]">
+              Motion principles, anti-pattern lint rules, the pattern arsenal, SEO discipline, twelve style systems, brand floors. Not docs &mdash; load-bearing inputs.
             </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============================================================
-         COMMANDS BENTO — surface-card
-         ============================================================ -->
-    <section id="commands" data-surface="card" aria-labelledby="commands-h2" class="relative bg-surface-card">
-      <div class="max-w-[1200px] mx-auto px-6 md:px-8 py-section md:py-section-lg">
-        <div class="grid grid-cols-12 gap-6 md:gap-8 mb-14">
-          <div class="col-span-12 md:col-span-7 reveal">
-            <p class="eyebrow mb-4">the surface area</p>
-            <h2 id="commands-h2" class="font-display text-[36px] md:text-[52px] leading-[1.08] tracking-display text-ink">
-              17 callable commands,<br>grouped by intent.
+    <!-- SECTION 5 — A REAL EXAMPLE (full-bleed dark) -->
+    <section class="px-6 lg:px-10 py-28 md:py-32" style="background:#181715; color:#faf9f5;" data-surface="dark">
+      <div class="max-w-[1240px] mx-auto">
+        <div class="grid grid-cols-12 gap-8 mb-14">
+          <div class="col-span-12 lg:col-span-7">
+            <span class="eyebrow fade-up" style="color:#a09d96;">A real example</span>
+            <h2 class="h2-display mt-4 fade-up delay-1" style="color:#faf9f5;">
+              Run /ux-audit on a landing. Read the receipts.
             </h2>
           </div>
-          <div class="col-span-12 md:col-span-4 md:col-start-9 flex items-end reveal">
-            <p class="body-prose text-[16px] leading-[1.6] max-w-[360px]">
-              <span class="ink">Frame · Audit · Generate · Apply.</span> Each command ends with a next-prompt block naming the most useful next move.
+          <div class="col-span-12 lg:col-span-5 lg:pt-4">
+            <p class="text-[17px] leading-[1.6] fade-up delay-2" style="color:#a09d96;">
+              The audit returns structured findings against the 30 deterministic rules &mdash; severity, file, line, and the alternative the brief calls for instead.
             </p>
           </div>
         </div>
 
-        <!-- Bento: row 1 = AUDIT(7) + GENERATE(5); row 2 = FRAME(5) + APPLY(7) -->
-        <div class="grid grid-cols-12 gap-5 md:gap-6">
-
-          <!-- AUDIT — col-span 7, surface-card on canvas tile (spotlight) -->
-          <article class="bento-tile spotlight col-span-12 md:col-span-7 reveal" style="background: #faf9f5;">
-            <header class="flex items-start justify-between mb-6">
-              <div>
-                <p class="eyebrow mb-2">audit</p>
-                <h3 class="font-display text-[26px] md:text-[30px] leading-[1.15] tracking-display text-ink max-w-[420px]">
-                  Find what's wrong<br>before shipping it.
-                </h3>
-              </div>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#cc785c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0 mt-1">
-                <circle cx="11" cy="11" r="7"/>
-                <path d="m20 20-4.35-4.35"/>
-              </svg>
-            </header>
-            <p class="text-[14px] text-muted leading-[1.6] mb-6 max-w-[480px]">
-              Critique, accessibility, copy, motion, polish — six commands that read the surface against the catalogue, name the violations with evidence, and route fixes.
-            </p>
-            <div class="flex flex-wrap gap-2">
-              <code class="cmd-pill">/ux-audit</code>
-              <code class="cmd-pill">/ux-critique</code>
-              <code class="cmd-pill">/ux-a11y</code>
-              <code class="cmd-pill">/ux-copy</code>
-              <code class="cmd-pill">/ux-motion</code>
-              <code class="cmd-pill">/ux-polish</code>
-            </div>
-          </article>
-
-          <!-- GENERATE — col-span 5, surface-card spotlight -->
-          <article class="bento-tile spotlight col-span-12 md:col-span-5 reveal" style="background: #faf9f5;">
-            <header class="flex items-start justify-between mb-6">
-              <div>
-                <p class="eyebrow mb-2">generate</p>
-                <h3 class="font-display text-[26px] md:text-[30px] leading-[1.15] tracking-display text-ink">
-                  Produce the<br>artifact, in style.
-                </h3>
-              </div>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#cc785c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0 mt-1">
-                <path d="M12 2v20M2 12h20"/>
-              </svg>
-            </header>
-            <p class="text-[14px] text-muted leading-[1.6] mb-6">
-              Landing pages, design systems, dashboards, single components. Each output passes through the discovery protocol and the ban list before a line of code is written.
-            </p>
-            <div class="flex flex-wrap gap-2">
-              <code class="cmd-pill">/ux-design</code>
-              <code class="cmd-pill">/ux-system</code>
-              <code class="cmd-pill">/ux-dashboard</code>
-              <code class="cmd-pill">/ux-component</code>
-            </div>
-          </article>
-
-          <!-- FRAME — col-span 5, hairline -->
-          <article class="bento-tile hairline-tile col-span-12 md:col-span-5 reveal">
-            <header class="flex items-start justify-between mb-6">
-              <div>
-                <p class="eyebrow mb-2">frame</p>
-                <h3 class="font-display text-[26px] md:text-[30px] leading-[1.15] tracking-display text-ink">
-                  Set the brief<br>before you build.
-                </h3>
-              </div>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#141413" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0 mt-1">
-                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                <path d="M3 9h18M9 21V9"/>
-              </svg>
-            </header>
-            <p class="text-[14px] text-muted leading-[1.6] mb-6">
-              Discovery protocols, research synthesis, workshop framing. The work no one wants to do, done well.
-            </p>
-            <div class="flex flex-wrap gap-2">
-              <code class="cmd-pill">/ux-frame</code>
-              <code class="cmd-pill">/ux-research</code>
-              <code class="cmd-pill">/ux-workshop</code>
-            </div>
-          </article>
-
-          <!-- APPLY — col-span 7, hairline -->
-          <article class="bento-tile hairline-tile col-span-12 md:col-span-7 reveal">
-            <header class="flex items-start justify-between mb-6">
-              <div>
-                <p class="eyebrow mb-2">apply</p>
-                <h3 class="font-display text-[26px] md:text-[30px] leading-[1.15] tracking-display text-ink max-w-[420px]">
-                  Turn findings<br>into committed changes.
-                </h3>
-              </div>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#141413" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0 mt-1">
-                <path d="M20 6 9 17l-5-5"/>
-              </svg>
-            </header>
-            <p class="text-[14px] text-muted leading-[1.6] mb-6 max-w-[480px]">
-              Route fixes, write case studies, name the next prompt, summon the right expert. Apply turns the audit's red ink into a shipped diff.
-            </p>
-            <div class="flex flex-wrap gap-2">
-              <code class="cmd-pill">/ux-fix</code>
-              <code class="cmd-pill">/ux-case-study</code>
-              <code class="cmd-pill">/ux-next</code>
-              <code class="cmd-pill">/ux-expert</code>
-            </div>
-          </article>
-        </div>
+        <article class="code-window fade-up delay-2" style="border:1px solid rgba(250,249,245,0.06);">
+          <header class="code-window-chrome" aria-hidden="true">
+            <span class="code-dot" style="background:#ff5f57"></span>
+            <span class="code-dot" style="background:#febc2e"></span>
+            <span class="code-dot" style="background:#28c840"></span>
+            <span class="code-title">claude — /ux-audit</span>
+          </header>
+          <div class="code-body" style="min-height:0; padding:24px 28px 28px;">
+<span class="code-line"><span class="code-prompt">$</span> <span class="code-cmd">/ux-audit</span> ./marketing/index.html</span><span class="code-line">&nbsp;</span><span class="code-line"><span class="code-rule">─── critical (0 of 5) ───────────────</span></span><span class="code-line"><span class="code-good">✓</span> <span class="code-label">no zoom-disabled viewport, no #000 ink</span></span><span class="code-line"><span class="code-good">✓</span> <span class="code-label">all icon buttons have aria-label</span></span><span class="code-line"><span class="code-good">✓</span> <span class="code-label">focus-visible replaces outline:none</span></span><span class="code-line">&nbsp;</span><span class="code-line"><span class="code-rule">─── high (2 of 12) ──────────────────</span></span><span class="code-line"><span class="code-arrow">!</span> <span class="code-file">Hero.tsx:18</span></span><span class="code-line">  <span class="code-label">found    </span> <span class="code-avoid">font-family: Inter (display)</span></span><span class="code-line">  <span class="code-label">rule     </span> <span class="code-value">#6 — Inter as brand display</span></span><span class="code-line">  <span class="code-label">fix      </span> <span class="code-good">use Geist / Cormorant for display</span></span><span class="code-line">&nbsp;</span><span class="code-line"><span class="code-arrow">!</span> <span class="code-file">Features.tsx:42</span></span><span class="code-line">  <span class="code-label">found    </span> <span class="code-avoid">grid-cols-3 with 3 identical tiles</span></span><span class="code-line">  <span class="code-label">rule     </span> <span class="code-value">#11 — three equal cards</span></span><span class="code-line">  <span class="code-label">fix      </span> <span class="code-good">7/5 split or bento</span></span><span class="code-line">&nbsp;</span><span class="code-line"><span class="code-rule">─── medium (3 of 12) ────────────────</span></span><span class="code-line"><span class="code-arrow">·</span> <span class="code-file">Testimonials.tsx:8 </span>  <span class="code-avoid">&ldquo;Sarah Chan&rdquo; placeholder</span></span><span class="code-line"><span class="code-arrow">·</span> <span class="code-file">Hero.tsx:31      </span>  <span class="code-avoid">round stat &ldquo;99.9%&rdquo;</span></span><span class="code-line"><span class="code-arrow">·</span> <span class="code-file">Footer.tsx:14    </span>  <span class="code-avoid">&ldquo;Get started&rdquo; CTA</span></span><span class="code-line">&nbsp;</span><span class="code-line"><span class="code-rule">─── summary ─────────────────────────</span></span><span class="code-line"><span class="code-label">score    </span> <span class="code-value">72 / 100</span>  <span class="code-avoid">(ship blocked: 2 high)</span></span><span class="code-line"><span class="code-label">next     </span> <span class="code-good">/ux-apply Hero.tsx --fix=display-font</span></span>
+          </div>
+        </article>
       </div>
     </section>
 
-    <!-- ============================================================
-         WHAT SHIPS — editorial column rhythm — cream
-         ============================================================ -->
-    <section id="what-ships" data-surface="cream" aria-labelledby="ships-h2" class="relative">
-      <div class="max-w-[1200px] mx-auto px-6 md:px-8 py-section md:py-section-lg">
-
-        <div class="mb-16 reveal">
-          <p class="eyebrow mb-4">what's in the box</p>
-          <h2 id="ships-h2" class="font-display text-[36px] md:text-[52px] leading-[1.08] tracking-display text-ink max-w-[820px]">
-            Three numbers do<br>most of the explaining.
+    <!-- SECTION 6 — POP MOMENT (coral + aurora mesh) -->
+    <section class="coral-band px-6 lg:px-10 py-28 md:py-36" data-surface="coral">
+      <div class="aurora-orb orb-1" aria-hidden="true"></div>
+      <div class="aurora-orb orb-2" aria-hidden="true"></div>
+      <div class="aurora-orb orb-3" aria-hidden="true"></div>
+      <div class="max-w-[1100px] mx-auto relative z-10">
+        <div class="max-w-[820px]">
+          <span class="eyebrow fade-up" style="color:rgba(255,255,255,0.75);">Install</span>
+          <h2 class="h2-display mt-5 fade-up delay-1" style="color:#ffffff;">
+            Install in sixty seconds.
           </h2>
-        </div>
-
-        <!-- Block 1: 17 — text-right -->
-        <div class="grid grid-cols-12 gap-8 md:gap-12 items-center hairline pt-14 pb-14 reveal">
-          <div class="col-span-12 md:col-span-5 md:col-start-1">
-            <p class="font-display text-[100px] md:text-[160px] leading-[0.95] tracking-display-tight text-ink tabular-nums">17</p>
-            <p class="eyebrow mt-2">callable slash commands</p>
-          </div>
-          <div class="col-span-12 md:col-span-6 md:col-start-7">
-            <p class="body-prose text-[18px] md:text-[19px] leading-[1.6] max-w-[480px]">
-              <span class="ink">Frame · Audit · Generate · Apply.</span> Each one ends with a next-prompt block that names the most useful next move — so the session compounds instead of unraveling.
-            </p>
-          </div>
-        </div>
-
-        <!-- Block 2: 5 — flipped -->
-        <div class="grid grid-cols-12 gap-8 md:gap-12 items-center hairline pt-14 pb-14 reveal">
-          <div class="col-span-12 md:col-span-6 md:col-start-1 md:order-1 order-2">
-            <p class="body-prose text-[18px] md:text-[19px] leading-[1.6] max-w-[480px]">
-              <span class="ink">frontend-engineer, motion-engineer, copy-writer, research-synthesizer, design-system-architect.</span> Dispatched in parallel where work is independent — the main session stays the conductor.
-            </p>
-          </div>
-          <div class="col-span-12 md:col-span-5 md:col-start-8 md:order-2 order-1 text-left md:text-right">
-            <p class="font-display text-[100px] md:text-[160px] leading-[0.95] tracking-display-tight text-ink tabular-nums">5</p>
-            <p class="eyebrow mt-2">specialized sub-agents</p>
-          </div>
-        </div>
-
-        <!-- Block 3: 30+ — text-right -->
-        <div class="grid grid-cols-12 gap-8 md:gap-12 items-center hairline pt-14 pb-14 reveal">
-          <div class="col-span-12 md:col-span-5 md:col-start-1">
-            <p class="font-display text-[100px] md:text-[160px] leading-[0.95] tracking-display-tight text-ink tabular-nums">30<span class="text-primary">+</span></p>
-            <p class="eyebrow mt-2">reference files</p>
-          </div>
-          <div class="col-span-12 md:col-span-6 md:col-start-7">
-            <p class="body-prose text-[18px] md:text-[19px] leading-[1.6] max-w-[520px]">
-              <span class="ink">Foundations, laws, process, styles, components, output formats, conditional, creator.</span> 19,704 lines of curated guidance the commands read before producing anything.
-            </p>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ============================================================
-         REAL EXAMPLE — second dark code window (full-bleed dark)
-         ============================================================ -->
-    <section data-surface="dark" aria-labelledby="example-h2" class="relative bg-surface-dark text-on-dark">
-      <div class="max-w-[1200px] mx-auto px-6 md:px-8 py-section md:py-section-lg">
-        <div class="grid grid-cols-12 gap-8 md:gap-12 items-start">
-
-          <div class="col-span-12 md:col-span-5 reveal">
-            <p class="eyebrow mb-4" style="color: #a09d96;">a real run</p>
-            <h2 id="example-h2" class="font-display text-[36px] md:text-[48px] leading-[1.08] tracking-display text-on-dark mb-6">
-              The audit names<br>the violation,<br>names the fix.
-            </h2>
-            <p class="text-[16px] leading-[1.6] text-on-dark-soft max-w-[420px] mb-6">
-              Every finding has a <span class="text-on-dark">severity tag</span>, an <span class="text-on-dark">evidence line</span>, and a <span class="text-on-dark">fix</span>. The verdict at the bottom is a number, not vibes.
-            </p>
-            <p class="text-[14px] text-on-dark-soft max-w-[420px]">
-              Output sample below — actual command, actual page, slightly tightened for the page width.
-            </p>
-          </div>
-
-          <div class="col-span-12 md:col-span-7 reveal">
-            <div class="code-window">
-              <div class="code-header">
-                <span>~/audit-report</span>
-                <span style="color: #d4a017;">3 critical</span>
-              </div>
-              <pre class="code-body"><span class="c-prompt">$</span> <span class="c-cmd">/ux-audit https://my-app.com/pricing</span>
-
-<span class="c-divider">─── findings ──────────────────────────</span>
-<span class="c-error">[CRITICAL]</span>  <span class="c-fade">[SCAN]</span>   <span class="c-value">Krug: Omit Needless Words</span>
-            <span class="c-fade">Evidence:</span> <span class="c-value">hero h1 is 6 lines (147 words)</span>
-            <span class="c-coral">Fix:</span>      <span class="c-value">Tighten to 2 lines, ≤22 words</span>
-
-<span class="c-warn">[HIGH]</span>      <span class="c-fade">[ACT]</span>    <span class="c-value">Hick's Law</span>
-            <span class="c-fade">Evidence:</span> <span class="c-value">11 plan tiers on the pricing grid</span>
-            <span class="c-coral">Fix:</span>      <span class="c-value">Collapse to 3 tiers + "Compare all"</span>
-
-<span class="c-fade">[MEDIUM]</span>    <span class="c-fade">[READ]</span>   <span class="c-value">error specificity</span>
-            <span class="c-fade">Evidence:</span> <span class="c-value">"Form contains errors"</span>
-            <span class="c-coral">Fix:</span>      <span class="c-value">"Email is required. Add an email and try again."</span>
-
-<span class="c-divider">─── verdict ────────────────────────────</span>
-<span class="c-error">3 critical</span> <span class="c-divider">·</span> <span class="c-warn">7 high</span> <span class="c-divider">·</span> <span class="c-fade">12 medium</span> <span class="c-divider">·</span> <span class="c-value">ship-readiness:</span> <span class="c-error">NO-GO</span>
-<span class="c-fade">Recommended next:</span> <span class="c-coral">/ux-copy --fix</span> <span class="c-fade">(highest leverage)</span></pre>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         CORAL CALLOUT — the voltage moment
-         ============================================================ -->
-    <section data-surface="coral" aria-labelledby="callout-h2" class="relative bg-primary text-white">
-      <div class="max-w-[1200px] mx-auto px-6 md:px-8 py-section md:py-section-lg">
-        <div class="grid grid-cols-12 gap-8 md:gap-12 items-center">
-          <div class="col-span-12 md:col-span-7 reveal">
-            <p class="eyebrow mb-5" style="color: rgba(255,255,255,0.7);">install</p>
-            <h2 id="callout-h2" class="font-display text-[44px] md:text-[64px] leading-[1.05] tracking-display text-white">
-              Install in 60 seconds.
-            </h2>
-          </div>
-          <div class="col-span-12 md:col-span-5 reveal">
-            <p class="text-[17px] md:text-[18px] leading-[1.55] mb-8" style="color: rgba(255,255,255,0.9);">
-              Clone the repo, symlink into <code class="font-mono text-[15px] bg-white/15 px-1.5 py-0.5 rounded">~/.claude/plugins/</code>, restart Claude Code. All 17 commands appear in <code class="font-mono text-[15px] bg-white/15 px-1.5 py-0.5 rounded">/help</code>.
-            </p>
-            <a href="https://github.com/Laith0003/ux-skill#install" class="btn-primary btn-on-coral">
-              Get the plugin
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M5 12h14M13 5l7 7-7 7"/>
-              </svg>
+          <p class="mt-7 text-[19px] leading-[1.55] fade-up delay-2" style="color:rgba(255,255,255,0.92); max-width:640px;">
+            One command adds eighteen slash commands, five sub-agents, and the full reference library to your Claude Code session. No build step. No config. No tracking. MIT licensed.
+          </p>
+          <div class="mt-9 flex flex-wrap items-center gap-3 fade-up delay-3">
+            <a href="#install" class="coral-glass-cta">
+              Install the plugin
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+            <a href="https://github.com/Laith0003/ux-skill" class="inline-flex items-center gap-2 text-[14px] font-medium" style="color:#ffffff;">
+              Read the README
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
             </a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============================================================
-         INSTALL — numbered editorial steps — cream
-         ============================================================ -->
-    <section id="install" data-surface="cream" aria-labelledby="install-h2" class="relative">
-      <div class="max-w-[1200px] mx-auto px-6 md:px-8 py-section md:py-section-lg">
-
-        <div class="mb-14 reveal">
-          <p class="eyebrow mb-4">the four steps</p>
-          <h2 id="install-h2" class="font-display text-[36px] md:text-[48px] leading-[1.08] tracking-display text-ink max-w-[720px]">
-            Four lines between you<br>and a working session.
-          </h2>
+    <!-- SECTION 7 — INSTALL STEPS (cream, editorial) -->
+    <section id="install" class="px-6 lg:px-10 py-28 md:py-32" data-surface="cream">
+      <div class="max-w-[920px] mx-auto">
+        <div class="text-center mb-16">
+          <span class="eyebrow fade-up">Four steps</span>
+          <h2 class="h2-display mt-4 fade-up delay-1">From clone to first command.</h2>
         </div>
 
-        <ol class="space-y-0">
-          <!-- 01 Clone -->
-          <li class="grid grid-cols-12 gap-6 md:gap-10 items-center hairline py-10 reveal">
-            <div class="col-span-3 md:col-span-1">
-              <span class="font-display text-[48px] md:text-[64px] leading-none tracking-display-tight text-muted tabular-nums">01</span>
+        <div class="fade-up">
+          <div class="install-step">
+            <div class="install-num">01</div>
+            <div>
+              <h3 class="h3-display">Clone the repo into your plugins directory.</h3>
+              <p class="mt-3 text-[16px] leading-[1.55] ink-body">A single git clone. The plugin is a folder of markdown commands and reference files &mdash; no binaries, no native dependencies.</p>
+              <pre class="step-code-block"><code><span class="prompt">$</span> git clone https://github.com/Laith0003/ux-skill.git ~/.claude/plugins/ux</code></pre>
             </div>
-            <div class="col-span-9 md:col-span-4">
-              <h3 class="font-display text-[22px] md:text-[26px] leading-[1.2] tracking-display text-ink mb-1.5">Clone the repository</h3>
-              <p class="text-[14px] text-muted leading-[1.55]">Public on GitHub, MIT licensed. No login, no waitlist.</p>
-            </div>
-            <div class="col-span-12 md:col-span-7">
-              <div class="code-window">
-                <div class="code-header"><span>terminal</span><span></span></div>
-                <pre class="code-body"><span class="c-prompt">$</span> <span class="c-cmd">git clone https://github.com/Laith0003/ux-skill.git</span></pre>
-              </div>
-            </div>
-          </li>
+          </div>
 
-          <!-- 02 Symlink -->
-          <li class="grid grid-cols-12 gap-6 md:gap-10 items-center hairline py-10 reveal">
-            <div class="col-span-3 md:col-span-1">
-              <span class="font-display text-[48px] md:text-[64px] leading-none tracking-display-tight text-muted tabular-nums">02</span>
+          <div class="install-step">
+            <div class="install-num">02</div>
+            <div>
+              <h3 class="h3-display">Restart Claude Code in your project.</h3>
+              <p class="mt-3 text-[16px] leading-[1.55] ink-body">Claude scans the plugins folder on launch. The eighteen slash commands and five sub-agents register automatically.</p>
+              <pre class="step-code-block"><code><span class="prompt">$</span> claude  <span style="color:#6c6a64;"># inside your project root</span></code></pre>
             </div>
-            <div class="col-span-9 md:col-span-4">
-              <h3 class="font-display text-[22px] md:text-[26px] leading-[1.2] tracking-display text-ink mb-1.5">Symlink into Claude Code</h3>
-              <p class="text-[14px] text-muted leading-[1.55]">One line. The plugin lives where Claude Code expects it.</p>
-            </div>
-            <div class="col-span-12 md:col-span-7">
-              <div class="code-window">
-                <div class="code-header"><span>terminal</span><span></span></div>
-                <pre class="code-body"><span class="c-prompt">$</span> <span class="c-cmd">ln -s "$(pwd)/ux-skill" ~/.claude/plugins/ux</span></pre>
-              </div>
-            </div>
-          </li>
+          </div>
 
-          <!-- 03 Restart -->
-          <li class="grid grid-cols-12 gap-6 md:gap-10 items-center hairline py-10 reveal">
-            <div class="col-span-3 md:col-span-1">
-              <span class="font-display text-[48px] md:text-[64px] leading-none tracking-display-tight text-muted tabular-nums">03</span>
+          <div class="install-step">
+            <div class="install-num">03</div>
+            <div>
+              <h3 class="h3-display">Open a brief.</h3>
+              <p class="mt-3 text-[16px] leading-[1.55] ink-body">Run /ux-design and answer the resolved questions. The plugin reads brand, references, and audience before producing anything.</p>
+              <pre class="step-code-block"><code><span class="prompt">&gt;</span> /ux-design &ldquo;a SaaS landing for a fintech for freelancers&rdquo;</code></pre>
             </div>
-            <div class="col-span-9 md:col-span-4">
-              <h3 class="font-display text-[22px] md:text-[26px] leading-[1.2] tracking-display text-ink mb-1.5">Restart Claude Code</h3>
-              <p class="text-[14px] text-muted leading-[1.55]">The plugin loader picks up the new directory at boot.</p>
-            </div>
-            <div class="col-span-12 md:col-span-7">
-              <div class="code-window">
-                <div class="code-header"><span>terminal</span><span></span></div>
-                <pre class="code-body"><span class="c-prompt">$</span> <span class="c-cmd">claude restart</span>
-<span class="c-success">→ ux plugin loaded · 17 commands · 5 sub-agents</span></pre>
-              </div>
-            </div>
-          </li>
+          </div>
 
-          <!-- 04 Run -->
-          <li class="grid grid-cols-12 gap-6 md:gap-10 items-center hairline py-10 reveal">
-            <div class="col-span-3 md:col-span-1">
-              <span class="font-display text-[48px] md:text-[64px] leading-none tracking-display-tight text-muted tabular-nums">04</span>
+          <div class="install-step">
+            <div class="install-num">04</div>
+            <div>
+              <h3 class="h3-display">Lint before you ship.</h3>
+              <p class="mt-3 text-[16px] leading-[1.55] ink-body">Run /ux-lint against the output. The 30 deterministic rules return severity, file, line, and the alternative the brief calls for. Critical findings block ship.</p>
+              <pre class="step-code-block"><code><span class="prompt">&gt;</span> /ux-lint ./marketing/index.html</code></pre>
             </div>
-            <div class="col-span-9 md:col-span-4">
-              <h3 class="font-display text-[22px] md:text-[26px] leading-[1.2] tracking-display text-ink mb-1.5">Run <code class="font-mono text-[18px]">/ux-frame</code></h3>
-              <p class="text-[14px] text-muted leading-[1.55]">Frame the brief before building. Every other command compounds from here.</p>
-            </div>
-            <div class="col-span-12 md:col-span-7">
-              <div class="code-window">
-                <div class="code-header"><span>claude code</span><span></span></div>
-                <pre class="code-body"><span class="c-prompt">&gt;</span> <span class="c-cmd">/ux-frame "landing for a niche developer tool"</span>
-<span class="c-fade">→ asking 10 questions to nail audience, voice, style, wow…</span></pre>
-              </div>
-            </div>
-          </li>
-        </ol>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- ============================================================
-         CREATOR — cream
-         ============================================================ -->
-    <section id="creator" data-surface="cream" aria-labelledby="creator-h2" class="relative">
-      <div class="max-w-[1200px] mx-auto px-6 md:px-8 py-section md:py-section-lg">
-        <div class="grid grid-cols-12 gap-8 md:gap-12">
-          <div class="col-span-12 md:col-span-4 reveal">
-            <p class="eyebrow mb-4">real-life UX work</p>
-            <h2 id="creator-h2" class="font-display text-[36px] md:text-[48px] leading-[1.08] tracking-display text-ink">
-              Created by<br>Laith Aljunaidy.
-            </h2>
-          </div>
-
-          <div class="col-span-12 md:col-span-7 md:col-start-6 reveal">
-            <p class="body-prose text-[18px] md:text-[19px] leading-[1.62] mb-8 max-w-[640px]">
-              <span class="ink">Solo founder of Dot</span> (<a href="https://thedotwallet.com" class="underline decoration-primary decoration-2 underline-offset-4 hover:text-primary transition-colors">thedotwallet.com</a>), a MENA-first loyalty platform. <span class="ink">This plugin is his shipped playbook</span> for premium product UI/UX, anti-AI-slop discipline, and RTL-first thinking — extracted from real production work and tightened into 17 commands.
+    <!-- SECTION 8 — CREATOR + CONSULTING (cream) -->
+    <section id="creator" class="px-6 lg:px-10 py-28 md:py-32" data-surface="cream">
+      <div class="max-w-[920px] mx-auto">
+        <div class="hairline-band mb-16">
+          <span class="eyebrow">The maker</span>
+        </div>
+        <div class="grid grid-cols-12 gap-8">
+          <div class="col-span-12 lg:col-span-7">
+            <h2 class="h2-display fade-up">Created by Laith Aljunaidy.</h2>
+            <p class="mt-7 text-[18px] leading-[1.6] ink-body fade-up delay-1">
+              Founder of <span class="ink-strong">Dot</span> &mdash; a MENA-first loyalty system that ships under the same discipline this plugin enforces. The bans were written under fire; the patterns came from work that had to land on real screens for real people. The plugin is the version of that taste a Claude Code session can run.
             </p>
-
-            <ul class="space-y-2.5 text-[15px] text-body mb-9">
+            <p class="mt-5 text-[18px] leading-[1.6] ink-body fade-up delay-2">
+              Available for select consulting engagements &mdash; brand systems, landing pages, product design audits, and motion direction. Same floor, same restraint, same refusal to ship the obvious.
+            </p>
+          </div>
+          <div class="col-span-12 lg:col-span-5 lg:pt-2">
+            <ul class="space-y-4 text-[15px] fade-up delay-2">
               <li class="flex items-center gap-3">
-                <span class="text-muted text-[12px] w-[68px]">LinkedIn</span>
-                <a href="https://www.linkedin.com/in/laithaljunaidy/" class="text-ink hover:text-primary transition-colors">linkedin.com/in/laithaljunaidy</a>
+                <span style="color:#8e8b82; font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase;">LinkedIn</span>
+                <a href="https://www.linkedin.com/in/laithaljunaidy/" style="color:#cc785c; border-bottom:1px solid #cc785c; padding-bottom:1px;">linkedin.com/in/laithaljunaidy</a>
               </li>
               <li class="flex items-center gap-3">
-                <span class="text-muted text-[12px] w-[68px]">Phone</span>
-                <a href="tel:+962797868335" class="text-ink hover:text-primary transition-colors font-mono text-[14px]">+962 79 786 8335</a>
+                <span style="color:#8e8b82; font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase;">Phone</span>
+                <a href="tel:+962797868335" class="ink-body" style="font-variant-numeric:tabular-nums;">+962 79 786 8335</a>
+              </li>
+              <li class="flex items-center gap-3">
+                <span style="color:#8e8b82; font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase;">GitHub</span>
+                <a href="https://github.com/Laith0003" class="ink-body">github.com/Laith0003</a>
               </li>
             </ul>
-
-            <a href="mailto:laith.aljunaidy.laith@gmail.com?subject=UX%20consulting" class="inline-flex items-center gap-2 text-primary font-medium border-b border-primary pb-0.5 hover:gap-3 transition-all">
-              Reach out for UX consulting
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M5 12h14M13 5l7 7-7 7"/>
-              </svg>
-            </a>
           </div>
         </div>
       </div>
@@ -1143,158 +1057,287 @@
 
   </main>
 
-  <!-- ============================================================
-       FOOTER — dark
-       ============================================================ -->
-  <footer data-surface="dark" class="bg-surface-dark text-on-dark-soft">
-    <div class="max-w-[1200px] mx-auto px-6 md:px-8 py-16 md:py-20">
-
-      <div class="grid grid-cols-12 gap-8 mb-12">
+  <footer style="background:#181715; color:#a09d96;" class="px-6 lg:px-10 pt-20 pb-12" data-surface="dark">
+    <div class="max-w-[1240px] mx-auto">
+      <div class="grid grid-cols-12 gap-8 mb-16">
         <div class="col-span-12 md:col-span-4">
-          <a href="#" class="brand-mark inline-flex items-baseline" aria-label="ux home">
-            <svg width="48" height="28" viewBox="0 0 48 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M4 6 L4 18 Q4 22 8 22 Q12 22 12 18 L12 6" stroke="#faf9f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              <path d="M18 8 L30 22" stroke="#faf9f5" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-              <path d="M30 8 L18 22" stroke="#faf9f5" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-              <circle cx="24" cy="3" r="2.4" fill="#cc785c"/>
-            </svg>
-            <span class="font-display text-[20px] leading-none ml-1.5 text-on-dark">ux</span>
-          </a>
-          <p class="text-[14px] mt-5 leading-[1.6] max-w-[260px]">
-            The strongest UX plugin for Claude Code. Design intelligence in 17 commands.
-          </p>
+          <span class="font-display text-[28px] leading-none" style="color:#faf9f5;">
+            ux<span class="inline-block w-[8px] h-[8px] rounded-full ml-[2px] translate-y-[-12px]" style="background:#cc785c;"></span>
+          </span>
+          <p class="mt-6 max-w-[320px] text-[15px] leading-[1.55]" style="color:#a09d96;">Design intelligence for a Claude Code session. Eighteen commands, five sub-agents, thirty-five reference files. Open source.</p>
         </div>
 
-        <div class="col-span-6 md:col-span-2">
-          <p class="text-[12px] uppercase tracking-eyebrow mb-4" style="color: #faf9f5;">Product</p>
-          <ul class="space-y-2.5 text-[14px]">
-            <li><a href="#commands" class="hover:text-on-dark transition-colors">Commands</a></li>
-            <li><a href="#what-ships" class="hover:text-on-dark transition-colors">Sub-agents</a></li>
-            <li><a href="https://github.com/Laith0003/ux-skill/tree/main/references" class="hover:text-on-dark transition-colors">References</a></li>
-            <li><a href="https://github.com/Laith0003/ux-skill/releases" class="hover:text-on-dark transition-colors">Releases</a></li>
+        <div class="col-span-6 md:col-span-2 md:col-start-6">
+          <span class="block mb-5" style="font-family:'JetBrains Mono', monospace; font-size:10.5px; letter-spacing:0.18em; text-transform:uppercase; color:#faf9f5;">Plugin</span>
+          <ul class="space-y-3">
+            <li><a href="#commands" class="footer-link">Commands</a></li>
+            <li><a href="#what-ships" class="footer-link">What ships</a></li>
+            <li><a href="#install" class="footer-link">Install</a></li>
           </ul>
         </div>
 
         <div class="col-span-6 md:col-span-2">
-          <p class="text-[12px] uppercase tracking-eyebrow mb-4" style="color: #faf9f5;">Resources</p>
-          <ul class="space-y-2.5 text-[14px]">
-            <li><a href="https://github.com/Laith0003/ux-skill#readme" class="hover:text-on-dark transition-colors">README</a></li>
-            <li><a href="https://github.com/Laith0003/ux-skill/blob/main/docs/spec.md" class="hover:text-on-dark transition-colors">Spec</a></li>
-            <li><a href="https://github.com/Laith0003/ux-skill/blob/main/CONTRIBUTING.md" class="hover:text-on-dark transition-colors">Contributing</a></li>
+          <span class="block mb-5" style="font-family:'JetBrains Mono', monospace; font-size:10.5px; letter-spacing:0.18em; text-transform:uppercase; color:#faf9f5;">References</span>
+          <ul class="space-y-3">
+            <li><a href="https://github.com/Laith0003/ux-skill/tree/main/references" class="footer-link">Foundations</a></li>
+            <li><a href="https://github.com/Laith0003/ux-skill/tree/main/references/styles" class="footer-link">Style library</a></li>
+            <li><a href="https://github.com/Laith0003/ux-skill/blob/main/references/foundations/anti-patterns.md" class="footer-link">Lint rules</a></li>
           </ul>
         </div>
 
         <div class="col-span-6 md:col-span-2">
-          <p class="text-[12px] uppercase tracking-eyebrow mb-4" style="color: #faf9f5;">Open source</p>
-          <ul class="space-y-2.5 text-[14px]">
-            <li><a href="https://github.com/Laith0003/ux-skill" class="hover:text-on-dark transition-colors">GitHub</a></li>
-            <li><a href="https://github.com/Laith0003/ux-skill/issues" class="hover:text-on-dark transition-colors">Issues</a></li>
-            <li><a href="https://github.com/Laith0003/ux-skill/blob/main/LICENSE" class="hover:text-on-dark transition-colors">MIT License</a></li>
+          <span class="block mb-5" style="font-family:'JetBrains Mono', monospace; font-size:10.5px; letter-spacing:0.18em; text-transform:uppercase; color:#faf9f5;">Source</span>
+          <ul class="space-y-3">
+            <li><a href="https://github.com/Laith0003/ux-skill" class="footer-link">GitHub</a></li>
+            <li><a href="https://github.com/Laith0003/ux-skill/blob/main/LICENSE" class="footer-link">MIT license</a></li>
+            <li><a href="https://github.com/Laith0003/ux-skill/issues" class="footer-link">Issues</a></li>
           </ul>
         </div>
 
         <div class="col-span-6 md:col-span-2">
-          <p class="text-[12px] uppercase tracking-eyebrow mb-4" style="color: #faf9f5;">Made by</p>
-          <ul class="space-y-2.5 text-[14px]">
-            <li><a href="#creator" class="hover:text-on-dark transition-colors">Laith</a></li>
-            <li><a href="https://www.linkedin.com/in/laithaljunaidy/" class="hover:text-on-dark transition-colors">LinkedIn</a></li>
-            <li><a href="tel:+962797868335" class="hover:text-on-dark transition-colors">Phone</a></li>
+          <span class="block mb-5" style="font-family:'JetBrains Mono', monospace; font-size:10.5px; letter-spacing:0.18em; text-transform:uppercase; color:#faf9f5;">Maker</span>
+          <ul class="space-y-3">
+            <li><a href="https://www.linkedin.com/in/laithaljunaidy/" class="footer-link">LinkedIn</a></li>
+            <li><a href="tel:+962797868335" class="footer-link">Phone</a></li>
+            <li><a href="#creator" class="footer-link">Consulting</a></li>
           </ul>
         </div>
       </div>
 
-      <div class="pt-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-[13px]" style="border-top: 1px solid rgba(160, 157, 150, 0.18);">
-        <p>© 2026 Laith Aljunaidy. MIT licensed.</p>
-        <p class="text-[12px]" style="color: #6c6a64;">v1.2 · for Claude Code</p>
+      <div class="pt-8 border-t flex flex-col md:flex-row gap-4 md:items-center md:justify-between text-[13px]" style="border-color:rgba(250,249,245,0.08); color:#8e8b82;">
+        <div>© 2026 Laith Aljunaidy. Released under the MIT license.</div>
+        <div style="font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:0.08em;">v1.5.0 &middot; built for Claude Code</div>
       </div>
-
     </div>
   </footer>
 
-  <!-- ============================================================
-       GSAP + ScrollTrigger
-       ============================================================ -->
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>
-    window.addEventListener('load', function () {
-      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    (function() {
+      var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // ---------- Brand mark draw-on-load ----------
-      // The CSS keyframes drive the reveal. We just toggle the class
-      // after first paint so the dasharray initial state takes effect.
-      requestAnimationFrame(function () {
-        document.querySelectorAll('.brand-mark').forEach(function (el) {
-          el.classList.add('mark-loaded');
-        });
-      });
+      /* ---------- TYPEWRITER (line-by-line via safe DOM builder) ---------- */
+      var typeStage = document.getElementById('typeStage');
 
-      // ---------- Bento spotlight (mouse-tracked CSS variables) ----------
-      document.querySelectorAll('.bento-tile.spotlight').forEach(function (tile) {
-        tile.addEventListener('mousemove', function (e) {
-          const rect = tile.getBoundingClientRect();
-          const x = ((e.clientX - rect.left) / rect.width) * 100;
-          const y = ((e.clientY - rect.top) / rect.height) * 100;
-          tile.style.setProperty('--mx', x + '%');
-          tile.style.setProperty('--my', y + '%');
-        });
-      });
+      // Each line is described as an array of { c: cssClass, t: textContent } segments.
+      // No HTML strings flow through the DOM. textContent is the only mutator used.
+      var LINES = [
+        [{c:'code-prompt', t:'$'}, {t:' '}, {c:'code-cmd', t:'/ux-design'}, {t:' "a SaaS landing for a fintech for freelancers"'}],
+        [{t:' '}],
+        [{c:'code-rule', t:'─── discovery ────────────────────'}],
+        [{c:'code-label', t:'Brand       '}, {t:'no brand → restrained proposal'}],
+        [{c:'code-label', t:'References  '}, {t:'3 (provided)'}],
+        [{c:'code-label', t:'Audience    '}, {t:'solo founders, freelance consultants'}],
+        [{c:'code-label', t:'Style       '}, {t:'minimalist (premium fintech editorial)'}],
+        [{c:'code-label', t:'Voice       '}, {t:'direct, warm, brief'}],
+        [{c:'code-label', t:'Stack       '}, {t:'React + Tailwind + Framer Motion'}],
+        [{c:'code-label', t:'Wow         '}, {t:'first-scroll metric counter reveal'}],
+        [{t:' '}],
+        [{c:'code-rule', t:'─── design brief ───────────────────'}],
+        [{c:'code-label', t:'Dials       '}, {t:'DESIGN_VARIANCE=6 · MOTION_INTENSITY=5 · DENSITY=4'}],
+        [{c:'code-label', t:'Patterns    '}, {t:'Asymmetric split · Editorial rhythm · Spotlight cards · Counter reveal'}],
+        [{t:' '}],
+        [{c:'code-rule', t:'─── self-review ────────────────────'}],
+        [{c:'code-label', t:'avoided '}, {t:'Inter as display          '}, {c:'code-arrow', t:'→'}, {t:' '}, {c:'code-good', t:'Geist'}],
+        [{c:'code-label', t:'avoided '}, {t:'purple-to-blue gradient   '}, {c:'code-arrow', t:'→'}, {t:' '}, {c:'code-good', t:'single Electric Blue accent'}],
+        [{c:'code-label', t:'avoided '}, {t:'3 equal cards             '}, {c:'code-arrow', t:'→'}, {t:' '}, {c:'code-good', t:'7/5 split + zig-zag'}],
+        [{c:'code-label', t:'avoided '}, {t:'centered hero             '}, {c:'code-arrow', t:'→'}, {t:' '}, {c:'code-good', t:'asymmetric'}],
+        [{c:'code-label', t:'avoided '}, {t:'generic placeholder names '}, {c:'code-arrow', t:'→'}, {t:' '}, {c:'code-good', t:'Lina, Bashar, Adnan'}],
+        [{t:' '}],
+        [{c:'code-label', t:'writing '}, {c:'code-file', t:'components/Hero.tsx'}, {caret:true}]
+      ];
 
-      // ---------- Intersection-based reveal (no scroll-jacking) ----------
-      const revealEls = document.querySelectorAll('.reveal');
-      if (!prefersReduced && 'IntersectionObserver' in window) {
-        const io = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
+      function buildLineNode(segments) {
+        var line = document.createElement('span');
+        line.className = 'code-line';
+        for (var i = 0; i < segments.length; i++) {
+          var seg = segments[i];
+          if (seg.caret) {
+            var caret = document.createElement('span');
+            caret.className = 'caret';
+            line.appendChild(caret);
+          } else {
+            var span = document.createElement('span');
+            if (seg.c) span.className = seg.c;
+            span.textContent = seg.t || '';
+            line.appendChild(span);
+          }
+        }
+        return line;
+      }
+
+      function clearStage() {
+        while (typeStage.firstChild) typeStage.removeChild(typeStage.firstChild);
+      }
+
+      function renderFull() {
+        clearStage();
+        for (var i = 0; i < LINES.length; i++) {
+          typeStage.appendChild(buildLineNode(LINES[i]));
+        }
+      }
+
+      var SEEN_KEY = 'ux_landing_seen_typewriter_v15';
+
+      function typewriterStaged() {
+        clearStage();
+        var i = 0;
+        var blinkLines = { 1: 1, 10: 1, 14: 1 };
+        function pushLine() {
+          if (i >= LINES.length) {
+            try { sessionStorage.setItem(SEEN_KEY, '1'); } catch (e) {}
+            return;
+          }
+          typeStage.appendChild(buildLineNode(LINES[i]));
+          var idx = i;
+          i++;
+          var extra = blinkLines[idx] ? 140 : 0;
+          setTimeout(pushLine, 78 + extra);
+        }
+        pushLine();
+      }
+
+      var alreadySeen = false;
+      try { alreadySeen = sessionStorage.getItem(SEEN_KEY) === '1'; } catch (e) {}
+
+      if (prefersReduced || alreadySeen) {
+        renderFull();
+      } else {
+        var io = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
             if (entry.isIntersecting) {
-              entry.target.classList.add('is-visible');
-              io.unobserve(entry.target);
+              typewriterStaged();
+              io.disconnect();
             }
           });
-        }, { threshold: 0.08, rootMargin: '0px 0px -8% 0px' });
-        revealEls.forEach(function (el) { io.observe(el); });
-      } else {
-        revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+        }, { threshold: 0.18 });
+        io.observe(typeStage);
       }
 
-      // ---------- GSAP ScrollTrigger: nav surface adapt ----------
-      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-        gsap.registerPlugin(ScrollTrigger);
-
-        const sections = document.querySelectorAll('section[data-surface], footer[data-surface]');
-        sections.forEach(function (section) {
-          ScrollTrigger.create({
-            trigger: section,
-            start: 'top 72px',
-            end: 'bottom 72px',
-            onToggle: function (self) {
-              if (self.isActive) {
-                document.documentElement.dataset.navSurface = section.dataset.surface;
-              }
-            }
-          });
+      /* ---------- ANIMATED COUNTERS ---------- */
+      function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+      function formatNum(value, withComma) {
+        var v = Math.round(value);
+        if (withComma) return v.toLocaleString('en-US');
+        return v.toString();
+      }
+      function animateCounter(el) {
+        var target = parseInt(el.dataset.target, 10);
+        var suffix = el.dataset.suffix || '';
+        var withComma = el.dataset.format === 'comma';
+        if (prefersReduced) {
+          el.textContent = formatNum(target, withComma) + suffix;
+          return;
+        }
+        var DURATION = 1200;
+        var start = performance.now();
+        function tick(now) {
+          var elapsed = now - start;
+          var t = Math.min(1, elapsed / DURATION);
+          var eased = easeOutQuart(t);
+          el.textContent = formatNum(target * eased, withComma) + (t === 1 ? suffix : '');
+          if (t < 1) requestAnimationFrame(tick);
+          else el.textContent = formatNum(target, withComma) + suffix;
+        }
+        requestAnimationFrame(tick);
+      }
+      var counterObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            counterObserver.unobserve(entry.target);
+          }
         });
+      }, { threshold: 0.5 });
+      document.querySelectorAll('[data-counter]').forEach(function(el) { counterObserver.observe(el); });
 
-        // Fallback for the initial state
-        if (!document.documentElement.dataset.navSurface) {
-          document.documentElement.dataset.navSurface = 'cream';
+      /* ---------- FADE-UP ON ENTRY ---------- */
+      var fadeObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-in');
+            fadeObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.fade-up').forEach(function(el) { fadeObserver.observe(el); });
+
+      /* ---------- MAGNETIC CTA ---------- */
+      var magnetic = document.getElementById('magneticCta');
+      if (magnetic && !prefersReduced && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        var MAX_PULL = 8;
+        var rafId = null;
+        var targetX = 0, targetY = 0;
+        var currentX = 0, currentY = 0;
+
+        function step() {
+          currentX += (targetX - currentX) * 0.18;
+          currentY += (targetY - currentY) * 0.18;
+          magnetic.style.setProperty('--mx', currentX.toFixed(2) + 'px');
+          magnetic.style.setProperty('--my', currentY.toFixed(2) + 'px');
+          if (Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05) {
+            rafId = requestAnimationFrame(step);
+          } else {
+            rafId = null;
+          }
         }
-      } else {
-        // GSAP failed to load — fall back to plain IntersectionObserver for nav surface
-        if ('IntersectionObserver' in window) {
-          const surfaceObserver = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-              if (entry.isIntersecting && entry.intersectionRatio > 0.1) {
-                document.documentElement.dataset.navSurface = entry.target.dataset.surface;
-              }
-            });
-          }, { rootMargin: '-64px 0px -60% 0px', threshold: [0.1, 0.5] });
-          document.querySelectorAll('[data-surface]').forEach(function (s) {
-            surfaceObserver.observe(s);
-          });
+
+        function onMove(e) {
+          var rect = magnetic.getBoundingClientRect();
+          var cx = rect.left + rect.width / 2;
+          var cy = rect.top + rect.height / 2;
+          var dx = e.clientX - cx;
+          var dy = e.clientY - cy;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          var radius = Math.max(rect.width, rect.height) * 0.9;
+          if (dist < radius) {
+            var pull = Math.min(1, (radius - dist) / radius);
+            targetX = (dx / radius) * MAX_PULL * pull;
+            targetY = (dy / radius) * MAX_PULL * pull;
+          } else {
+            targetX = 0;
+            targetY = 0;
+          }
+          if (!rafId) rafId = requestAnimationFrame(step);
         }
+
+        function onLeave() {
+          targetX = 0; targetY = 0;
+          if (!rafId) rafId = requestAnimationFrame(step);
+        }
+
+        document.addEventListener('pointermove', onMove, { passive: true });
+        magnetic.addEventListener('pointerleave', onLeave);
       }
-    });
-  </script>
 
+      /* ---------- NAV SURFACE ADAPTATION ---------- */
+      var nav = document.getElementById('top-nav');
+      var surfaces = Array.prototype.slice.call(document.querySelectorAll('[data-surface]'));
+      function updateNavSurface() {
+        var navHeight = 64;
+        var probeY = navHeight + 12;
+        var active = 'cream';
+        for (var i = 0; i < surfaces.length; i++) {
+          var r = surfaces[i].getBoundingClientRect();
+          if (r.top <= probeY && r.bottom > probeY) {
+            active = surfaces[i].dataset.surface;
+            break;
+          }
+        }
+        nav.setAttribute('data-nav-surface', active);
+      }
+      updateNavSurface();
+      var scrollTicking = false;
+      window.addEventListener('scroll', function() {
+        if (!scrollTicking) {
+          window.requestAnimationFrame(function() {
+            updateNavSurface();
+            scrollTicking = false;
+          });
+          scrollTicking = true;
+        }
+      }, { passive: true });
+      window.addEventListener('resize', updateNavSurface, { passive: true });
+    })();
+  </script>
 </body>
 </html>
