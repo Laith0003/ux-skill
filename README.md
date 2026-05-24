@@ -1,8 +1,10 @@
 # ux — the design intelligence plugin for Claude Code
 
 > 17 callable slash commands. 5 specialized sub-agents. 30+ reference files. 19,000+ lines of curated UX guidance. Built to produce premium frontend work directly inside Claude Code — and to defeat the AI-aesthetic fingerprints that mark output as machine-generated.
+>
+> **v1.1 — Discovery protocol enforced.** Every generation command now runs a mandatory 10-field intake before producing anything: brand identity, references, audience, style, voice, stack, imagery, must-have patterns, avoid-list, and the wow moment. Improvisation is banned. The plugin asks before it builds.
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/Laith0003/ux-skill/releases)
+[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Commands](https://img.shields.io/badge/commands-17-blueviolet)](#the-17-commands)
 [![Sub-Agents](https://img.shields.io/badge/sub--agents-5-green)](#the-5-sub-agents)

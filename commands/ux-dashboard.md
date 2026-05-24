@@ -14,6 +14,10 @@ Triggers: "build a dashboard", "design the admin panel", "make a metrics page", 
 
 ## Process
 
+### 0. Discovery protocol (MANDATORY)
+
+Before anything else, read `references/process/discovery-protocol.md` and run its intake. For dashboards, highest-leverage fields: brand identity, references (admired dashboards), audience (operator / analyst / exec — different density needs), key metrics + data shape, style direction, voice for state messages, stack, must-have widgets (intelligent-list / command-input / live-status / wide-stream / contextual-focus), avoid-list, and the wow moment. Group into 2–3 messages. Push back on "anything's fine".
+
 ### 1. Capture the brief
 
 Required:

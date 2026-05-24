@@ -14,14 +14,37 @@ Triggers: "design a", "build me a", "generate a landing page", "create a dashboa
 
 ## Process
 
-### 1. Capture the brief
+### 1. Run the discovery protocol (MANDATORY)
 
-If the user provided a brief in the same turn, use it. If not, ask ONCE for:
-- **Product type**: landing page / dashboard / component / e-commerce / portfolio / SaaS app / mobile / brand site
-- **Style direction**: minimal / brutalist / glassmorphism / editorial / playful / dark mode / etc. (or "you choose")
-- **Stack**: React + Tailwind / Next.js / Vue / Blade + Alpine / vanilla HTML / Astro / whatever they have
+**Never improvise.** Before doing anything else, read `references/process/discovery-protocol.md` and run its 10-field intake on the user. The output of every generation command is downstream of the inputs — improvisation is the single biggest source of mediocre, generic results.
 
-Don't ask 4 questions in a row. One short question that surfaces all three, e.g.: *"One line: what's the product, what's the vibe, and what stack? Or say 'your call' and I'll pick."*
+The 10 required fields are:
+1. **Brand identity** — pasted brand brief, design tokens, logo files, or "no brand"
+2. **Reference inspirations** — 3–5 URLs/screenshots of designs the user LIKES (for aesthetic, not features)
+3. **Product type & audience** — one sentence
+4. **Style direction** — minimalist / industrial / high-end-visual / editorial / dev-tool-dark / playful / your-call
+5. **Voice** — direct, warm, brief / technical / friendly / editorial / playful / from brand
+6. **Stack** — React+Tailwind / Next.js / Vue / Blade+Alpine / vanilla / Astro / "what we have"
+7. **Imagery sources** — real screenshots / brand photos / placeholders / described generations
+8. **Must-have patterns** — terminal mock / bento / interactive demo / specific arsenal pattern / freely pick
+9. **Avoid list** — user's personal taste hard-rules beyond standard anti-slop
+10. **The wow moment** — the ONE thing this design must do that lifts it above generic
+
+**Delivery rules**:
+- Group into 2–3 messages of 3–4 questions each. NEVER all 10 at once.
+- First message: brand + references + audience (highest-leverage).
+- Second message: style + voice + stack.
+- Third message: imagery + must-haves + avoid + wow.
+- Wait for each batch's answer before sending the next.
+
+**Skip conditions** (the only ones):
+- User passes `--skip-discovery` flag.
+- User's first message already covers ALL 10 fields. Verify it does; if anything's missing, ask only for the missing fields.
+- User is iterating on a prior design (read `.ux/last-frame.json`; ask only what's changed).
+
+**After collecting answers**: write `.ux/last-frame.json` with the full discovery payload. Echo a 2-sentence summary back to the user before generating — let them stop you if their intent didn't land.
+
+NEVER proceed to step 2 without the wow moment field populated. If the user says "anything's fine", push back: "Give me one concrete moment, even tiny — something a visitor would remember."
 
 ### 2. Read the references
 

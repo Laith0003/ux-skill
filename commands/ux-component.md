@@ -16,6 +16,10 @@ If the user is asking for a full page or multi-section surface, hand off to `/ux
 
 ## Process
 
+### 0. Discovery protocol (MANDATORY)
+
+Before anything else, read `references/process/discovery-protocol.md` and run its intake on the user. For components, focus on: brand identity, 2–3 references for the component type, audience, style direction, voice, stack, imagery (if applicable), must-have-patterns, avoid-list, and the wow moment for THIS component specifically. Group into one or two messages. Skip only on `--skip-discovery` or if the spec already covers every field. Without the wow moment, push back.
+
 ### 1. Capture the spec
 
 Required:

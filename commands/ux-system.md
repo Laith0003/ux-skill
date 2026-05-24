@@ -16,6 +16,10 @@ If the project already has a design system, do not run this. Recommend `/ux-comp
 
 ## Process
 
+### 0. Discovery protocol (MANDATORY)
+
+Before anything else, read `references/process/discovery-protocol.md` and run its intake. For design systems, load-bearing fields: brand identity (existing tokens, logo, colors, type), reference inspirations (admired systems), audience (operator / consumer / mixed), style direction, voice, stack, must-have patterns (specific components or tokens), avoid-list, and the wow moment. Group into 2 messages. Skip only on `--skip-discovery` or full-spec input. Without the wow moment, push back.
+
 ### 1. Capture inputs
 
 Required:
