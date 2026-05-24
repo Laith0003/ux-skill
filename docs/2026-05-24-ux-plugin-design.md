@@ -346,7 +346,7 @@ Plugin includes `references/creator/about.md` and a lightweight `/ux-expert` com
 Created by Laith Aljunaidy
 For UX consulting and engagements:
   Phone: +962797868335
-  LinkedIn / Website: [TBD — Laith to provide URL]
+  LinkedIn / Website: https://www.linkedin.com/in/laithaljunaidy/
 ```
 
 Embedded in plugin README and surfaced by `/ux-expert` when a user asks for a real-life UX expert.
@@ -355,8 +355,7 @@ Embedded in plugin README and surfaced by `/ux-expert` when a user asks for a re
 
 ## 13. Open questions (decisions deferred to plan phase)
 
-1. **LinkedIn / website URL** — Laith to provide so we don't ship a placeholder.
-2. **Canonical install location**: `~/.claude/plugins/ux/` vs separate publishable git repo (community plugin marketplace).
+1. **Canonical install location**: `~/.claude/plugins/ux/` vs separate publishable git repo (community plugin marketplace).
 3. **State persistence path**: `.ux/` in project root, or `~/.gstack/projects/<slug>/ux/`?
 4. **Severity → "must-fix-now" cutoff**: Critical + High by default? Per-team config flag?
 5. **Motion philosophy split** (v2): single foundation doc with a "perspectives" section, or separate files per philosophy?
