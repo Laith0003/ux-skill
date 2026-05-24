@@ -254,6 +254,201 @@ For reference, the full list of patterns the plugin flags, with do/don't pairs.
 | Loading spinners with no copy | A spinner alone in the middle of the page | "Closing the books for May..." with progress |
 | Empty states with no action | "No data yet" with no next step | Sentence plus action ("No customers yet. Add one.") |
 
+## Why AI converges on these patterns
+
+A note on root cause. Understanding why AI produces these fingerprints helps you write better prompts and recognize failures faster.
+
+### Training data bias
+
+Language models are trained on the public internet. The public internet is full of generic SaaS landings, default Tailwind palettes, and Inter-everywhere. When asked to generate a SaaS landing, the model produces the statistical average of what it has seen. The average is what you are fighting.
+
+### Reward signal bias
+
+Models are tuned with human preference data. Humans, when given two outputs, tend to pick the one that looks "safe" and "professional." Safe and professional often means generic. Over many rounds of preference tuning, the model gravitates further toward the safe option.
+
+### Lack of taste anchor
+
+When you ask "generate a landing page," you give the model no taste anchor. The model has no idea whether you want Apple-clean, brutalist, editorial, or maximalist. With no anchor, it defaults to the center of its distribution — generic SaaS.
+
+The discovery protocol fixes the third problem. The anti-slop audit fixes the first two by checking the output against a catalogue of known-bad patterns and forcing corrections.
+
+## Manual checks the plugin can't fully automate
+
+Some AI fingerprints need a human eye. The audit flags them; the human decides.
+
+### The hero illustration that screams Midjourney
+
+AI-generated hero illustrations have their own fingerprints. Floating glass orbs. Geometric abstract shapes. Hyper-saturated gradients. People rendered with slightly-wrong hands or faces. Logos with letters that almost-but-not-quite match the brand name.
+
+The plugin flags any hero image. The human checks whether it looks generated. If yes, replace with:
+
+- A real product screenshot (best)
+- A custom illustration commissioned from a real illustrator
+- A clean photograph with attribution
+- No image at all — sometimes the absence is the better choice
+
+### The "as featured in" badge row that is not real
+
+If your landing has badges saying "Featured in TechCrunch, Forbes, Wired" — verify each one is real. The model will invent these. Inventing press coverage is fraud, not bad design.
+
+The plugin flags any badge row. The human verifies each citation has a real link to a real article published with permission to use the badge.
+
+### The customer logos you do not have permission to use
+
+A logo strip with company logos you do not have permission to display is both an AI-output tell and a legal problem. The model will happily generate logos for "Acme Corp," "Stripe," "Notion," and "Linear" because those are common in its training data. None of those companies gave you permission.
+
+The plugin flags any logo strip. The human verifies permission for each one.
+
+### The roadmap that promises features that do not exist
+
+AI-generated roadmaps include capabilities the product has not built. "Coming Q3 — AI-powered insights." "Roadmap — automated reconciliation." Reads as ambitious; in reality, sets up disappointment.
+
+The plugin flags any roadmap section. The human verifies every promised feature has a real plan to ship by the stated date.
+
+## Stack-specific fixes
+
+The fix recipes change slightly by framework. The principles do not.
+
+### React / Next.js fixes
+
+Common patterns the plugin rewrites:
+
+```jsx
+// Before: generic Tailwind defaults
+<div className="bg-gradient-to-br from-indigo-500 to-pink-500 text-white">
+  <h1 className="text-5xl font-bold text-center">Unleash the Power</h1>
+</div>
+
+// After: token-based, asymmetric
+<div className="bg-(--color-bg-primary) text-(--color-text-primary)">
+  <div className="grid grid-cols-12 gap-8 py-24">
+    <h1 className="col-span-7 font-display text-6xl leading-tight">
+      Close your weekly treasury report in 14 minutes.
+    </h1>
+    <ProductScreenshot className="col-span-5" />
+  </div>
+</div>
+```
+
+### Vue / Nuxt fixes
+
+```vue
+<!-- Before -->
+<template>
+  <div class="hero-centered">
+    <h1>Empower Your Business</h1>
+    <p>Seamlessly integrate with your existing tools.</p>
+    <button>Get Started</button>
+  </div>
+</template>
+
+<!-- After -->
+<template>
+  <section class="hero-asymmetric">
+    <div class="hero-content">
+      <h1>Close your weekly treasury report in 14 minutes.</h1>
+      <p>Reconciliation across 6 bank accounts, FX positions, intercompany loans.</p>
+      <button class="cta-primary">Book a 15-minute demo</button>
+    </div>
+    <ProductScreenshot class="hero-visual" />
+  </section>
+</template>
+```
+
+### Laravel / Blade fixes
+
+```blade
+{{-- Before --}}
+<div class="text-center py-20 bg-gradient-to-r from-purple-600 to-pink-600">
+  <h1 class="text-5xl text-white font-bold">{{ __('marketing.hero.title') }}</h1>
+  <p class="text-white/80 mt-4">{{ __('marketing.hero.subtitle') }}</p>
+  <a href="#" class="bg-white text-purple-600 px-8 py-4 rounded-full">Get Started</a>
+</div>
+
+{{-- After --}}
+<section class="grid grid-cols-12 gap-8 py-24">
+  <div class="col-span-7">
+    <h1 class="font-display text-6xl leading-tight">
+      {{ __('marketing.hero.title') }}
+    </h1>
+    <p class="mt-6 text-xl text-(--color-text-muted)">
+      {{ __('marketing.hero.subtitle') }}
+    </p>
+    <a href="/demo" class="mt-10 inline-flex items-center bg-(--color-accent) text-(--color-text-on-accent) px-6 py-3 rounded-full">
+      {{ __('marketing.hero.cta') }}
+    </a>
+  </div>
+  <x-product.screenshot class="col-span-5" />
+</section>
+```
+
+The Blade version also enforces locale keys — the headline and subtitle live in `lang/{locale}/marketing.php`, not hardcoded.
+
+### Astro fixes
+
+Astro's static-first output makes anti-slop patterns easier to enforce — no runtime override of token values, no client-side framework injecting defaults.
+
+```astro
+---
+import ProductScreenshot from "../components/ProductScreenshot.astro";
+---
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>Close your weekly treasury report in 14 minutes.</h1>
+    <p>Reconciliation across 6 bank accounts, FX positions, intercompany loans.</p>
+    <a href="/demo" class="cta-primary">Book a 15-minute demo</a>
+  </div>
+  <ProductScreenshot />
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: 2rem;
+    padding: 6rem 0;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.05;
+  }
+</style>
+```
+
+## Edge cases the audit handles
+
+### Multi-page audits
+
+For a project with 20+ pages, the plugin can run a project-wide audit.
+
+```bash
+/ux-polish ./src/pages/ --recursive
+```
+
+The report consolidates findings across pages and surfaces patterns. If three pages all use the same purple-pink gradient, the recommendation is "fix this once at the token level, not three times at the component level."
+
+### Generated documentation sites
+
+Documentation sites (Docusaurus, MkDocs, Mintlify defaults) often have their own AI-slop fingerprints — generic feature grids, identical card layouts on every concept page, placeholder examples. The audit handles them.
+
+```bash
+/ux-polish ./docs/ --recursive --doc-mode
+```
+
+The doc-mode flag relaxes the "asymmetric grids" rule (documentation often benefits from grid consistency) but tightens the "specific examples" rule (a doc with `foo = "bar"` examples is doc slop).
+
+### Component libraries
+
+When auditing a component library (your own design system, or one you maintain for clients), the plugin checks token discipline, prop API consistency, and the do/don't pairs published in the docs.
+
+```bash
+/ux-polish ./packages/ui/src/ --component-library
+```
+
+The output flags components that hardcode colors instead of referencing tokens, components missing variants, and components without TypeScript types where the rest of the library has them.
+
 ## Beyond the audit: prevent recurrence
 
 Once a project is on the plugin, the same checks run in three other places:
@@ -263,6 +458,26 @@ Once a project is on the plugin, the same checks run in three other places:
 - `/ux-copy` — when reviewing microcopy, the filler-verb ban list and marketing-cliché ban list catch generic phrasing
 
 You stop fighting AI slop one component at a time. You build a workflow where it does not appear.
+
+## The shipping discipline
+
+A practical rule of thumb for production work.
+
+### Rule 1: never ship a page without running the audit
+
+Make `/ux-polish` part of the pre-merge check. If a PR adds or modifies a marketing surface, the audit runs in CI and posts findings as PR comments. Critical findings block merge.
+
+### Rule 2: store the audit report alongside the surface
+
+Keep the audit output in `./surface-name.audit.md` next to the file. When the next person edits it, they have the audit history.
+
+### Rule 3: run the audit on staging before production
+
+Staging URLs sometimes use placeholder content that gets replaced on production. Run the audit against staging to catch issues before they reach customers.
+
+### Rule 4: track audit scores over time
+
+The audit produces a numeric score. Track it across the project — when it drops, investigate the cause. Sudden drops usually mean someone shipped without running the audit, or a generation step regressed.
 
 ## Linked next steps
 
