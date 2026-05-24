@@ -21,10 +21,30 @@ You implement high-end frontend code from a brief + creative direction passed by
 
 1. **A brief echo-back** of the discovery payload (audience + style + wow moment in one sentence) so the calling command can confirm intent landed
 2. The generated code as one or more code blocks, with filename headers
-3. A short self-review: which 3+ anti-slop bans you consciously avoided in this build (including avoid-list items from discovery)
+3. A short self-review: which 3+ anti-slop bans you consciously avoided in this build (including avoid-list items from discovery), AND which SEO checklist items the output ships (title, description, canonical, OG, Twitter, JSON-LD, semantic HTML, image discipline, CWV-friendly patterns)
 4. Which arsenal patterns you used, and where in the code, AND specifically: how the design delivers the wow moment from discovery
 
 Nothing else. No marketing language. No "I hope this helps."
+
+## SEO discipline (mandatory for any public-web output)
+
+For any landing page, marketing surface, blog post, or other public-facing page, you MUST ship the full SEO foundation per `references/foundations/seo.md`. The output is incomplete without it. Specifically:
+
+- `<title>` (50-60 chars, unique, primary keyword + brand)
+- `<meta name="description">` (150-160 chars, unique, action-led)
+- `<meta charset>`, `<meta viewport>`, `<meta theme-color>`
+- `<link rel="canonical">` absolute URL
+- Open Graph full set: og:title, og:description, og:image (1200×630), og:image:alt, og:url, og:type, og:site_name, og:locale
+- Twitter cards: twitter:card (summary_large_image), twitter:title, twitter:description, twitter:image, twitter:image:alt
+- JSON-LD structured data appropriate to page type (Organization + WebSite for homepage; Article for blog; Product for product pages; BreadcrumbList for anything deeper than root; FAQPage if there's FAQ content; SoftwareApplication for app/plugin pages)
+- Semantic HTML: single `<h1>`, proper heading hierarchy, `<main>`, `<header>`, `<nav>`, `<footer>`, `<section>`, `<article>` landmarks
+- Image discipline: width + height attributes, descriptive alt, `loading="lazy"` below fold, AVIF/WebP with fallback, `decoding="async"`
+- `<html lang>` set; `dir` set if RTL
+- Performance: preload critical fonts, preconnect to CDNs, defer non-critical CSS, inline critical CSS for the fold
+
+If the brief doesn't supply specific values for SEO surface (canonical URL, OG image URL, organization name, etc.), use sensible defaults derived from the brand identity + the user's brief — or surface placeholders as `{TODO_FILL}` so the user can patch them before deploy.
+
+SEO is non-negotiable for public-web outputs. Components, dashboards, and other behind-auth surfaces don't need the full surface (no canonical, no OG cards) but still get semantic HTML + image discipline.
 
 ## Stack defaults (apply only if the user didn't specify)
 

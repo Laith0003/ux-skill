@@ -124,6 +124,10 @@ Write to `.ux/last-design.json` in the project root:
 
 This lets `/ux-next` and downstream commands pick up where you left off.
 
+## SEO is mandatory for public-web outputs
+
+For any landing page or public-facing surface, read `references/foundations/seo.md` and require the frontend-engineer to ship the full SEO foundation (head surface, OG + Twitter, JSON-LD, semantic HTML, image discipline, CWV targets). Surface this requirement in your dispatch prompt. The output is incomplete without it. Use sensible placeholder values (`{TODO_FILL}` for canonical, og:image URL, etc.) when the brief doesn't supply them — let the user patch before deploy.
+
 ## Hard rules (non-negotiable)
 
 - NEVER use purple/blue AI gradients. Single high-contrast accent, saturation < 80%.
