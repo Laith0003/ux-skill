@@ -4,3 +4,5 @@ ruvector.db
 *.db-journal
 .DS_Store
 node_modules/
+agentdb.rvf
+agentdb.rvf.lock

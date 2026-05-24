@@ -521,7 +521,7 @@ Layout archetypes — pick ONE per project:
 Universal mobile rules:
 
 - Any asymmetric layout that uses fractional widths above the `md:` breakpoint must aggressively fall back to `w-full` with `px-4` and `py-8` padding below `768px`.
-- Never use `h-screen` for full-height sections — always `min-h-[100dvh]` to prevent iOS Safari viewport jumping.
+- Never use `h-screen` for full-height sections — always `min-h-[100dvh]` to prevent mobile viewport jumping when the address bar collapses.
 
 Eyebrow rhythm:
 
