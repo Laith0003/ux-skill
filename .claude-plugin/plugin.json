@@ -2,7 +2,7 @@
   "name": "ux",
   "displayName": "UX — the design intelligence plugin for Claude Code",
   "description": "The strongest UX plugin ever made for Claude Code. 17 callable slash commands, 5 specialized sub-agents, and 30+ reference files covering every dimension of digital product UX: review, audit, generate, motion, copy, accessibility, design systems, dashboards, case studies. Grounded in the canon (Norman, Krug, Lean UX, 30 Laws of UX, Creative Selection), trained on patterns from 21+ premium SaaS sites, and built to defeat AI-aesthetic biases. Works on any stack — React, Next.js, Vue, Blade, vanilla. Cross-system. Anti-AI-slop by default.",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "author": {
     "name": "Laith Aljunaidy",
     "email": "laith.aljunaidy.laith@gmail.com",
@@ -57,7 +57,7 @@
     "ux-plugin"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/Laith0003/ux-skill",
+  "homepage": "https://uxskill.laithjunaidy.com",
   "repository": "https://github.com/Laith0003/ux-skill.git",
   "bugs": "https://github.com/Laith0003/ux-skill/issues"
 }
