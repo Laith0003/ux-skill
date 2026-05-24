@@ -8,7 +8,8 @@
 >
 > **v1.1 — Discovery protocol enforced.** Every generation command runs a mandatory 10-field intake before producing anything: brand identity, references, audience, style, voice, stack, imagery, must-have patterns, avoid-list, and the wow moment. Improvisation is banned. The plugin asks before it builds.
 
-[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](https://github.com/Laith0003/ux-skill/releases)
+[![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)](https://github.com/Laith0003/ux-skill/releases)
+[![Brands](https://img.shields.io/badge/brands-72-cc785c.svg)](https://github.com/Laith0003/ux-skill/blob/main/references/brands/_index.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Commands](https://img.shields.io/badge/commands-17-blueviolet)](#the-17-commands)
 [![Sub-Agents](https://img.shields.io/badge/sub--agents-5-green)](#the-5-sub-agents)
