@@ -25,11 +25,11 @@
     "spacing": "4-based"
   },
   "trademark_signals": [
-    "A single black-ink primary CTA carries every conversion target",
-    "A multi-stop mesh gradient (cyan-blue-magenta-amber) is the only decorative chrome",
+    "A single black-ink primary CTA carries every conversion target, paired with white-on-white button-secondary for the secondary action.",
+    "A multi-stop mesh gradient (cyan-blue-magenta-amber) is the only decorative chrome — used at hero scale and inside feature-band atmospheric backdrops. It is the brand",
     "Every section eyebrow and small label uses the monospace face or ; everything else is in the geometric sans",
     "Subtle stacked-shadow elevation — three offsets layered with 4-12 % black opacity — never a single heavy drop-shadow",
-    "A complete 100–1000 gray + blue + red + amber + green + teal + purple + pink colour scale exists as a system token set, but the marketing surface uses only t..."
+    "A complete 100–1000 gray + blue + red + amber + green + teal + purple + pink colour scale exists as a system token set, but the marketing surface uses only the 100, 1000, and 700-level tones; the rest stay in the design-system tokens for in-product surfaces"
   ],
   "components_observed": [
     "code-editor-mockup",
@@ -44,9 +44,9 @@
     "vercel.com/pricing"
   ],
   "ai_slop_avoided": [
-    "introduce a sixth accent colour. The brand operates with ink + gray + the four-pair gradient palette; new accents flatten the voice",
-    "render headlines in all-caps. Sentence-case + negative tracking is non-negotiable",
-    "drop a single heavy drop-shadow on cards. The brand's elevation is built from stacked small offsets + inset hairline rings"
+    "Don't introduce a sixth accent colour. The brand operates with ink + gray + the four-pair gradient palette; new accents flatten the voice",
+    "Don't render headlines in all-caps. Sentence-case + negative tracking is non-negotiable",
+    "Don't drop a single heavy drop-shadow on cards. The brand's elevation is built from stacked small offsets + inset hairline rings"
   ],
   "source_md": "references/brands/vercel.md"
 }

@@ -1,6 +1,6 @@
 {
   "id": "linear.app",
-  "name": "Linear App",
+  "name": "Linear",
   "category": "Productivity / Collaboration",
   "year_observed": 2026,
   "philosophy": "A near-black product-focused marketing canvas built around #010102 (the deepest dark surface of any tool in this collection), light gray text (#f7f8f8), and the signature Linear lavender-blue (#5e6ad2) used as the single chromatic accent.",
@@ -33,19 +33,19 @@
   "components_observed": [
     "pricing-card-featured",
     "customer-logo-tile",
-    "pricing-tab-default",
     "pricing-tab-selected",
     "pricing-card",
-    "feature-card"
+    "feature-card",
+    "pricing-tab"
   ],
   "exemplar_pages": [
     "linear.app",
     "linear.app/method"
   ],
   "ai_slop_avoided": [
-    "ship a light-mode marketing page",
-    "use lavender as a section background or card fill",
-    "introduce a second chromatic accent (orange, pink, green for marketing)"
+    "Don't ship a light-mode marketing page",
+    "Don't use lavender as a section background or card fill",
+    "Don't introduce a second chromatic accent (orange, pink, green for marketing)"
   ],
   "source_md": "references/brands/linear.app.md"
 }

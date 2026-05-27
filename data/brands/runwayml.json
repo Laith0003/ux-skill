@@ -1,6 +1,6 @@
 {
   "id": "runwayml",
-  "name": "Runwayml",
+  "name": "Runway",
   "category": "AI / ML Platform",
   "year_observed": 2026,
   "philosophy": "An inspired interpretation of Runwai's design language — an editorial, gallery-grade marketing system for an AI creative-tools company.",
@@ -40,9 +40,9 @@
     "runwayml.com"
   ],
   "ai_slop_avoided": [
-    "introduce accent colours (blue, green, red) into marketing surfaces — Runwai's voice is monochrome plus photography",
-    "apply drop shadows or glows to cards. Depth is photographic and tonal, not material",
-    "badge the featured pricing tier with a coloured ribbon or border — the surface step is the badge"
+    "Don't introduce accent colours (blue, green, red) into marketing surfaces",
+    "Don't apply drop shadows or glows to cards. Depth is photographic and tonal, not material",
+    "Don't badge the featured pricing tier with a coloured ribbon or border"
   ],
   "source_md": "references/brands/runwayml.md"
 }

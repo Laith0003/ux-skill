@@ -22,8 +22,8 @@
     "spacing": "4-based"
   },
   "trademark_signals": [
-    "Single accent color: (#FCD535) does all brand voltage",
-    "Custom type stack: BinanceNova (display + body) and BinancePlex (numbers",
+    "Single accent color: (#FCD535) does all brand voltage — primary CTAs, hero headlines, brand mark, badges. Used scarcely on dark for emphasis, ubiquitously on transactional dialogs",
+    "Custom type stack: BinanceNova (display + body) and BinancePlex (numbers, prices, financial data). Big stat numbers always render in BinancePlex for tabular consistency",
     "Multi-theme: marketing pages default dark ; transactional pages flip light. Yellow CTAs and trading green/red are shared across both",
     "Light footer on dark body: the homepage uses (#fafafa) for the footer even when the body above it is dark — a deliberate inversion that visually closes the page",
     "Trading semantics: green up / red down ( / ) for price changes, applied as text color rather than badge background"
@@ -40,9 +40,9 @@
     "binance.com"
   ],
   "ai_slop_avoided": [
-    "introduce a second brand color. The system has exactly one accent  and any expansion dilutes the brand identity. The turquoise on Smart Money is a single-product experiment, not a system token",
-    "use yellow for body text or large surface fills. It is for focal-point CTAs and headlines only",
-    "use / as background fills on cards. They are price-direction signals, expressed as text color or small badge fill"
+    "Don't introduce a second brand color. The system has exactly one accent and any expansion dilutes the brand identity. The turquoise on Smart Money is a single-product experiment, not a system token",
+    "Don't use yellow for body text or large surface fills. It is for focal-point CTAs and headlines only",
+    "Don't use / as background fills on cards. They are price-direction signals, expressed as text color or small badge fill"
   ],
   "source_md": "references/brands/binance.md"
 }

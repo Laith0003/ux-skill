@@ -25,27 +25,27 @@
     "spacing": "4-based"
   },
   "trademark_signals": [
-    "Stark white canvas  carrying full-bleed product photography with (32px) corner softening on showcase tiles",
+    "Stark white canvas carrying full-bleed product photography with (32px) corner softening on showcase tiles",
     "Two-tier primary button system: marketing CTAs use pills; commerce CTAs use cobalt pills inside buy-now panels",
     "Optimistic VF as the universal display + body face with consistent ss01, ss02 OpenType features",
-    "Pill-shaped buttons  and / cards as the dominant geometric signature",
-    "Saturated promotional banners (yellow , dark ) used sparingly above the nav for time-bound offers"
+    "Pill-shaped buttons and / cards as the dominant geometric signature",
+    "Saturated promotional banners (yellow, dark ) used sparingly above the nav for time-bound offers"
   ],
   "components_observed": [
-    "button-pill-tab-active",
     "button-pill-tab",
     "card-product-feature",
     "card-feature-photo",
     "card-icon-feature",
-    "why-buy-tile"
+    "why-buy-tile",
+    "hero-band-marketing"
   ],
   "exemplar_pages": [
     "about.meta.com"
   ],
   "ai_slop_avoided": [
-    "use (cobalt) for marketing-surface primary buttons",
-    "introduce additional accent colors beyond cobalt + Oculus purple. The hardware brand is deliberately monochromatic outside its product photography",
-    "soften the corners of pill buttons below. The pill is a brand signature"
+    "Don't use (cobalt) for marketing-surface primary buttons",
+    "Don't introduce additional accent colors beyond cobalt + Oculus purple. The hardware brand is deliberately monochromatic outside its product photography",
+    "Don't soften the corners of pill buttons below. The pill is a brand signature"
   ],
   "source_md": "references/brands/meta.md"
 }

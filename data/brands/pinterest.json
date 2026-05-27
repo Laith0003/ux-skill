@@ -3,7 +3,7 @@
   "name": "Pinterest",
   "category": "Consumer / Lifestyle / Retail",
   "year_observed": 2026,
-  "philosophy": "| A photography-first discovery system organized around the Pinterest Red CTA, the masonry pin grid, and a soft warm-cream chrome that gets out of the imagery's way.",
+  "philosophy": "A photography-first discovery system organized around the Pinterest Red CTA, the masonry pin grid, and a soft warm-cream chrome that gets out of the imagery's way.",
   "design_language": {
     "type": {
       "display": "Pin Sans",
@@ -21,7 +21,7 @@
     "spacing": "4-based"
   },
   "trademark_signals": [
-    "Single-accent CTA: Pinterest Red  carries every primary action; everything else is monochrome",
+    "Single-accent CTA: Pinterest Red carries every primary action; everything else is monochrome",
     "Pin Sans proprietary typography across every text role from (70px) down to (12px) — no serif, no monospace anywhere",
     "Two-radius shape system: (16px) for most components, (32px) for large cards and modals, for circular elements",
     "Masonry pin grid as the load-bearing visual element — column-based layout where each pin's natural aspect ratio is preserved",
@@ -39,9 +39,9 @@
     "pinterest.com"
   ],
   "ai_slop_avoided": [
-    "use sharp-cornered buttons or cards. There are no interactive elements in the system",
-    "introduce drop shadows on cards. The only shadow in the system is the 16px ambient under",
-    "pad internally. The image is full-bleed; metadata sits over the image as an overlay pill, not below it"
+    "Don't use sharp-cornered buttons or cards. There are no interactive elements in the system",
+    "Don't introduce drop shadows on cards. The only shadow in the system is the 16px ambient under",
+    "Don't pad internally. The image is full-bleed; metadata sits over the image as an overlay pill, not below it"
   ],
   "source_md": "references/brands/pinterest.md"
 }

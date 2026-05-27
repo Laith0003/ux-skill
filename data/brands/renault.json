@@ -3,7 +3,7 @@
   "name": "Renault",
   "category": "Automotive",
   "year_observed": 2026,
-  "philosophy": "| Renault's web presence pairs the freshly-modernised Renault diamond (the 2021 flat-line rhombus mark) with a stark black-and-white canvas, a signature Sunlight Yellow accent, and the proprietary NouvelR display typeface.",
+  "philosophy": "Renault's web presence pairs the freshly-modernised Renault diamond (the 2021 flat-line rhombus mark) with a stark black-and-white canvas, a signature Sunlight Yellow accent, and the proprietary NouvelR display typeface.",
   "design_language": {
     "type": {
       "display": "NouvelR",
@@ -39,9 +39,9 @@
     "renault.com"
   ],
   "ai_slop_avoided": [
-    "introduce a secondary accent colour. Yellow is the only brand accent; semantic colours (, ) are functional, not decorative",
-    "round vehicle cards or promo tiles. Square-cornered photography is core to the brand expression",
-    "soften body weights to 500 or 600 — the system relies on the 400 / 700 contrast"
+    "Don't introduce a secondary accent colour. Yellow is the only brand accent; semantic colours (, ) are functional, not decorative",
+    "Don't round vehicle cards or promo tiles. Square-cornered photography is core to the brand expression",
+    "Don't soften body weights to 500 or 600"
   ],
   "source_md": "references/brands/renault.md"
 }

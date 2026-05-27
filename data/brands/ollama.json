@@ -3,7 +3,7 @@
   "name": "Ollama",
   "category": "Developer Tools",
   "year_observed": 2026,
-  "philosophy": "| An almost defiantly minimal documentation-first system that treats the home page like a Markdown README — paper-white canvas, 36px center-aligned heading, a single black pill CTA, an inline terminal install snippet, and a hand-drawn llama mascot as the only ornamental element.",
+  "philosophy": "An almost defiantly minimal documentation-first system that treats the home page like a Markdown README — paper-white canvas, 36px center-aligned heading, a single black pill CTA, an inline terminal install snippet, and a hand-drawn llama mascot as the only ornamental element.",
   "design_language": {
     "type": {
       "display": "SF Pro Rounded",
@@ -30,19 +30,19 @@
   ],
   "components_observed": [
     "button-pill-on-dark",
-    "search-pill-focused",
     "pricing-card-dark",
     "search-pill",
     "command-tag",
-    "pricing-card"
+    "pricing-card",
+    "feature-bullet"
   ],
   "exemplar_pages": [
     "ollama.com"
   ],
   "ai_slop_avoided": [
-    "introduce gradients, drop shadows, or atmospheric backgrounds. The canvas is pure",
-    "add brand colors. The system is (black) on (white) with (gray) text. That is it",
-    "soften pills or sharpen cards — pills stay , cards stay. Don't introduce for buttons or for cards"
+    "Don't introduce gradients, drop shadows, or atmospheric backgrounds. The canvas is pure",
+    "Don't add brand colors. The system is (black) on (white) with (gray) text. That is it",
+    "Don't soften pills or sharpen cards"
   ],
   "source_md": "references/brands/ollama.md"
 }

@@ -1,6 +1,6 @@
 {
   "id": "clickhouse",
-  "name": "Clickhouse",
+  "name": "ClickHouse",
   "category": "Developer Tools",
   "year_observed": 2026,
   "philosophy": "A high-performance database interface anchored on near-pure black canvas with electric yellow as the brand voltage.",
@@ -40,9 +40,9 @@
     "clickhouse.com"
   ],
   "ai_slop_avoided": [
-    "introduce a second brand color. ClickHouse is monochromatic + yellow",
-    "bold display weight beyond 700 or use weight 500 for headlines. The hierarchy depends on size, not on weight gradation",
-    "use yellow for body text or large surface fills outside of intentional yellow cards"
+    "Don't introduce a second brand color. ClickHouse is monochromatic + yellow",
+    "Don't bold display weight beyond 700 or use weight 500 for headlines. The hierarchy depends on size, not on weight gradation",
+    "Don't use yellow for body text or large surface fills outside of intentional yellow cards"
   ],
   "source_md": "references/brands/clickhouse.md"
 }

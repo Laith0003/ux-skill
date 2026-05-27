@@ -22,27 +22,27 @@
     "spacing": "4-based"
   },
   "trademark_signals": [
-    "A two-colour CTA hierarchy: black pill for primary conversion targets",
+    "A two-colour CTA hierarchy: black pill for primary conversion targets; white pill (sometimes with a soft drop shadow) for secondary; subtle gray pill for tertiary or chip variants",
     "The pill is the single signature shape — 999 px on every interactive element except the tab-toggle ( 36 px) and the larger product cards ( 16 px)",
     "Every headline is sentence-case in / weight 700; no all-caps display",
-    "Editorial 4:3 illustrations of riders / drivers / cars are the only consistent decorative system",
-    "A signature alternating-band rhythm: white feature card → black promo card (with white text and white CTA) → white feature card → black footer. The black ban..."
+    "Editorial 4:3 illustrations of riders / drivers / cars are the only consistent decorative system; no gradients, no atmospheric backdrops, no shadows that aren't card-elevation hints",
+    "A signature alternating-band rhythm: white feature card → black promo card (with white text and white CTA) → white feature card → black footer. The black bands are NOT hero-only; they appear mid-page as promo callouts"
   ],
   "components_observed": [
     "app-download-pill",
     "hero-band-light",
     "hero-band-dark",
+    "showcase-image-card",
     "text-input-on-soft",
-    "promo-card-on-dark",
-    "request-form-input-row"
+    "promo-card-on-dark"
   ],
   "exemplar_pages": [
     "uber.com"
   ],
   "ai_slop_avoided": [
-    "introduce a second brand accent colour (orange, blue, green). The brand's entire UI is black-and-white plus grayscale; new accents flatten the system",
-    "render the primary CTA as a rectangle except inside the larger ride-request flow (where button-large-rounded is the documented exception)",
-    "use all-caps display headlines. Sentence-case is the voice; uppercase is restricted to rare eyebrow tags"
+    "Don't introduce a second brand accent colour (orange, blue, green). The brand's entire UI is black-and-white plus grayscale; new accents flatten the system",
+    "Don't render the primary CTA as a rectangle except inside the larger ride-request flow (where button-large-rounded is the documented exception)",
+    "Don't use all-caps display headlines. Sentence-case is the voice; uppercase is restricted to rare eyebrow tags"
   ],
   "source_md": "references/brands/uber.md"
 }

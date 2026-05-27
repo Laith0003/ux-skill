@@ -23,10 +23,10 @@
   },
   "trademark_signals": [
     "A single lime-green CTA accent (#9fe870) — the brand's universal primary action color. No second accent",
-    "Two-face display typography",
+    "Two-face display typography — Wise Sans (proprietary, weight 900, hero scale) + Inter (weight 600, sub-display scale). The contrast is the brand's typographic story",
     "24 px is the canonical card and button radius. Generous, friendly",
     "Sage-tinted canvas (#e8ebe6) is the brand's hero surface; white is reserved for cards within the sage band",
-    "A full semantic palette: positive green family, warning yellow family, negative red family"
+    "A full semantic palette: positive green family, warning yellow family, negative red family — each documented with content / hover / active variants for in-product use"
   ],
   "components_observed": [
     "card-feature-sage",
@@ -40,9 +40,9 @@
     "wise.com"
   ],
   "ai_slop_avoided": [
-    "introduce a second brand accent. Wise green is the sole identity colour",
-    "render the hero in weight 700 or lighter. The brand's display weight is 900",
-    "render CTAs as sharp rectangles. The 24 px pill geometry is non-negotiable"
+    "Don't introduce a second brand accent. Wise green is the sole identity colour",
+    "Don't render the hero in weight 700 or lighter. The brand's display weight is 900",
+    "Don't render CTAs as sharp rectangles. The 24 px pill geometry is non-negotiable"
   ],
   "source_md": "references/brands/wise.md"
 }

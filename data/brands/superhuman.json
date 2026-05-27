@@ -22,7 +22,7 @@
     "spacing": "4-based"
   },
   "trademark_signals": [
-    "Three-canvas system: indigo navy  for hero, white  for body, deep teal  for closing CTA",
+    "Three-canvas system: indigo navy for hero, white for body, deep teal for closing CTA",
     "Half-bleed portrait subject in the hero with violet-sky atmospheric backdrop — the brand uses a person looking off-frame as a recurring visual",
     "Single CTA per band; the marketing pages never crowd actions",
     "Super Sans VF at sub-default weights (460, 540, 600) — the brand's typographic warmth signature",
@@ -40,9 +40,9 @@
     "superhuman.com"
   ],
   "ai_slop_avoided": [
-    "use pill-shaped buttons in the body of the page; the pill is hero-only",
-    "bump display weight above 540 unless using body-strong (700) for emphasized inline body",
-    "render body text in pure black — the warm grey #292827 is part of the brand"
+    "Don't use pill-shaped buttons in the body of the page; the pill is hero-only",
+    "Don't bump display weight above 540 unless using body-strong (700) for emphasized inline body",
+    "Don't render body text in pure black"
   ],
   "source_md": "references/brands/superhuman.md"
 }

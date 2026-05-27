@@ -24,7 +24,7 @@
   "trademark_signals": [
     "A single primary CTA color (#e60000) — Vodafone Red. Pill-filled for primary, pill-outline for secondary. No third button variant",
     "Massive uppercase display weight 800 ( and siblings) is the brand's signature. The 300-weight headline siblings ( / ) handle calmer secondary moments",
-    "The speechmark-logo-orb",
+    "The speechmark-logo-orb — a red square hosting Vodafone's quotation-mark icon — is the only piece of decorative chrome that's not a CTA. It anchors the brand's centre of every page",
     "Pill geometry on every interactive shape — 60 px for buttons, 32 px for inline badges. Card chrome stays at 6 px",
     "A two-band page rhythm — dark hero / light content. No mid-band greys; the brand uses surface contrast, not soft neutrals, for elevation"
   ],
@@ -40,9 +40,9 @@
     "vodafone.com"
   ],
   "ai_slop_avoided": [
-    "introduce a second accent colour. The brand operates with red + ink + grayscale only",
-    "render headlines in sentence case at hero scale. Hero display IS uppercase weight 800",
-    "render the primary CTA as a square rectangle. The 60 px pill is non-negotiable"
+    "Don't introduce a second accent colour. The brand operates with red + ink + grayscale only",
+    "Don't render headlines in sentence case at hero scale. Hero display IS uppercase weight 800",
+    "Don't render the primary CTA as a square rectangle. The 60 px pill is non-negotiable"
   ],
   "source_md": "references/brands/vodafone.md"
 }

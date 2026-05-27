@@ -23,9 +23,9 @@
   "trademark_signals": [
     "Primary CTA is (near-black ink) with white text and a (12px) corner — it reads as confident and final, never decorative",
     "Secondary CTA is a button with text and a hairline outline. The two together form Airtable's signature button pair",
-    "Hero is white canvas. There is no atmospheric gradient",
-    "Brand voltage lives in signature surface cards: , and carry full-bleed product callouts every few screens",
-    "Demo-card grids carry product UI fragments on , and other warm pastel surfaces"
+    "Hero is white canvas. There is no atmospheric gradient, no mesh, no background flourish. The brand strength comes from the type and the buttons sitting in clean whitespace",
+    "Brand voltage lives in signature surface cards:, and carry full-bleed product callouts every few screens",
+    "Demo-card grids carry product UI fragments on, and other warm pastel surfaces"
   ],
   "components_observed": [
     "pricing-tier-card-featured",
@@ -39,9 +39,9 @@
     "airtable.com"
   ],
   "ai_slop_avoided": [
-    "make (#1b61c9) the primary button color. It is the link color. The primary button is (#181d26, near-black). Treating link-blue as the brand action is the most common mistake when reading Airtable's CSS variables",
-    "add a gradient backdrop to the hero. Airtable's hero is white, full stop. Mesh, aurora, spotlight gradients all read as \"another SaaS template\"",
-    "bold display-weight type. and are intentionally weight 400 / 500 — going to 700 reads as marketing-page-template"
+    "Don't make (#1b61c9) the primary button color. It is the link color. The primary button is (#181d26, near-black). Treating link-blue as the brand action is the most common mistake when reading Airtable's CSS variables",
+    "Don't add a gradient backdrop to the hero. Airtable's hero is white, full stop. Mesh, aurora, spotlight gradients all read as \"another SaaS template\"",
+    "Don't bold display-weight type. and are intentionally weight 400 / 500"
   ],
   "source_md": "references/brands/airtable.md"
 }

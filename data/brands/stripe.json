@@ -29,21 +29,21 @@
     "Dark-app dashboard track: deep navy product UI mockups sit composited above the white canvas, frequently with rendered code or dashboard tables inside"
   ],
   "components_observed": [
-    "button-primary-pill-pressed",
     "nav-bar-on-mesh",
     "button-primary-pill",
     "card-feature-light",
     "card-pricing-featured",
-    "card-cream-band"
+    "card-cream-band",
+    "card-dashboard-mockup"
   ],
   "exemplar_pages": [
     "stripe.com/payments",
     "stripe.com/pricing"
   ],
   "ai_slop_avoided": [
-    "bump display weight above 300 — at 400 the brand's editorial air collapses",
-    "add new accent colors outside the documented gradient stops (cream / orange / lavender / indigo / ruby / magenta)",
-    "use the indigo as a body-text color — it's a CTA and link color, not a type color at body size"
+    "Don't bump display weight above 300",
+    "Don't add new accent colors outside the documented gradient stops (cream / orange / lavender / indigo / ruby / magenta)",
+    "Don't use the indigo as a body-text color"
   ],
   "source_md": "references/brands/stripe.md"
 }

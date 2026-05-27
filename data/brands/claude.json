@@ -25,8 +25,8 @@
   "trademark_signals": [
     "Warm cream canvas (#faf9f5) with dark warm-ink text (#141413). The brand's defining color choice",
     "Coral primary CTA (#cc785c). Used scarcely on individual buttons, generously on full-bleed coral callout cards",
-    "Slab-serif display headlines via Copernicus / Tiempos Headline at weight 400 with negative letter-spacing. Pairs with humanist sans body for a literary edito...",
-    "Dark navy product mockup cards (#181715) carrying code blocks, terminal panels, model comparison data",
+    "Slab-serif display headlines via Copernicus / Tiempos Headline at weight 400 with negative letter-spacing. Pairs with humanist sans body for a literary editorial voice",
+    "Dark navy product mockup cards (#181715) carrying code blocks, terminal panels, model comparison data — the brand shows the product chrome at scale rather than abstract marketing illustrations",
     "Light cream feature cards (#efe9de) — slightly darker than canvas, used for content-driven feature explanations"
   ],
   "components_observed": [
@@ -43,9 +43,9 @@
     "anthropic.com"
   ],
   "ai_slop_avoided": [
-    "use cool grays or pure white for canvas. Cream is the brand",
-    "bold serif display weight. Copernicus at 700 reads as bombastic; the system stays at 400",
-    "use cool blue or saturated cyan as a brand accent. The coral is the brand voltage"
+    "Don't use cool grays or pure white for canvas. Cream is the brand",
+    "Don't bold serif display weight. Copernicus at 700 reads as bombastic; the system stays at 400",
+    "Don't use cool blue or saturated cyan as a brand accent. The coral is the brand voltage"
   ],
   "source_md": "references/brands/claude.md"
 }

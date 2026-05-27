@@ -25,7 +25,7 @@
   "trademark_signals": [
     "Single accent color: (#0052ff Coinbase Blue) carries every primary CTA, wordmark, and inline brand link. Used scarcely",
     "Modest display weights — CoinbaseDisplay at weight 400, never 700+",
-    "Editorial pill geometry: every CTA is (100px), every asset glyph is , every card is (24px). Sharp corners absent",
+    "Editorial pill geometry: every CTA is (100px), every asset glyph is, every card is (24px). Sharp corners absent",
     "Full-bleed dark heroes with floating product-UI cards: plus inline mockups is the brand's strongest signature pattern",
     "Trading semantics: (#05b169) and (#cf202f) — text color only, never background fills"
   ],
@@ -41,9 +41,9 @@
     "coinbase.com"
   ],
   "ai_slop_avoided": [
-    "introduce a secondary brand color. Coinbase Blue is the only action color; trading green/red are semantic-only",
-    "bold display copy — display sits at weight 400; bolding shifts the brand voice",
-    "add drop shadow tiers — system has one shadow tier"
+    "Don't introduce a secondary brand color. Coinbase Blue is the only action color; trading green/red are semantic-only",
+    "Don't bold display copy — display sits at weight 400; bolding shifts the brand voice",
+    "Don't add drop shadow tiers — system has one shadow tier"
   ],
   "source_md": "references/brands/coinbase.md"
 }

@@ -23,10 +23,10 @@
     "spacing": "4-based"
   },
   "trademark_signals": [
-    "Two-polarity canvas system: deep violet midnight  for marketing hero and product feature pages, white  for pricing, contact, and dense reference content",
-    "Lime keyword highlight  treated as a typographic device, not a color swatch",
-    "Sticker illustration system: floating mascot characters with hand-drawn outlines, appearing at section junctions, never inside cards",
-    "Uppercase eyebrow + button caps in and , with a consistent 0.2px tracking lift, give the brand its \"developer console\" cadence",
+    "Two-polarity canvas system: deep violet midnight for marketing hero and product feature pages, white for pricing, contact, and dense reference content — the system never tries to blur the two",
+    "Lime keyword highlight treated as a typographic device, not a color swatch — it wraps single words inside the display headline to act as a syntax highlight on the reading flow",
+    "Sticker illustration system: floating mascot characters with hand-drawn outlines, appearing at section junctions, never inside cards — they create rhythm and personality between dense info blocks",
+    "Uppercase eyebrow + button caps in and, with a consistent 0.2px tracking lift, give the brand its \"developer console\" cadence",
     "Single-primary CTA hierarchy: every page has one filled button reading either on light or on dark; outlined and ghost variants are downgraded"
   ],
   "components_observed": [
@@ -41,9 +41,9 @@
     "sentry.io"
   ],
   "ai_slop_avoided": [
-    "introduce additional accent colors beyond and — adding teal, orange, or yellow dilutes the violet-and-lime signature",
-    "apply drop shadows to cards on dark canvas",
-    "use (88px) for anything except the marketing hero — even sub-pages cap at (60px)"
+    "Don't introduce additional accent colors beyond and",
+    "Don't apply drop shadows to cards on dark canvas",
+    "Don't use (88px) for anything except the marketing hero"
   ],
   "source_md": "references/brands/sentry.md"
 }

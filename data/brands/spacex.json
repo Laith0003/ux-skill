@@ -1,6 +1,6 @@
 {
   "id": "spacex",
-  "name": "Spacex",
+  "name": "SpaceX",
   "category": "Automotive",
   "year_observed": 2026,
   "philosophy": "An inspired interpretation of Spasex's design language — a mission-oriented aerospace brand built on pure black canvas, full-bleed photographic and video heroes of rockets and Mars landscapes, and uppercase D-DIN display type set in tight vertical leading.",
@@ -37,9 +37,9 @@
     "spacex.com"
   ],
   "ai_slop_avoided": [
-    "introduce brand accent colors — black, white, and photography are the entire palette",
-    "use drop shadows or gradient overlays on dark canvas — they fight the photography",
-    "render display tiers in sentence-case or title-case — uppercase is the brand"
+    "Don't introduce brand accent colors",
+    "Don't use drop shadows or gradient overlays on dark canvas",
+    "Don't render display tiers in sentence-case or title-case"
   ],
   "source_md": "references/brands/spacex.md"
 }

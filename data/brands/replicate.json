@@ -3,7 +3,7 @@
   "name": "Replicate",
   "category": "Developer Tools",
   "year_observed": 2026,
-  "philosophy": "| Replicate's marketing surfaces pair the warm-cream developer-tools aesthetic of an indie ML playground with a confident hot-orange brand accent and a signature display typeface (rb-freigeist-neue) sized aggressively large at 72px+.",
+  "philosophy": "Replicate's marketing surfaces pair the warm-cream developer-tools aesthetic of an indie ML playground with a confident hot-orange brand accent and a signature display typeface (rb-freigeist-neue) sized aggressively large at 72px+.",
   "design_language": {
     "type": {
       "display": "rb-freigeist-neue",
@@ -41,9 +41,9 @@
     "replicate.com"
   ],
   "ai_slop_avoided": [
-    "replace cream with pure white at the page level. The brand temperature comes from",
-    "introduce a secondary brand colour. Orange is the only accent; semantic green and focus blue are functional, not decorative",
-    "loosen display lineHeight past 1.0. Tight stacking is structural"
+    "Don't replace cream with pure white at the page level. The brand temperature comes from",
+    "Don't introduce a secondary brand colour. Orange is the only accent; semantic green and focus blue are functional, not decorative",
+    "Don't loosen display lineHeight past 1.0. Tight stacking is structural"
   ],
   "source_md": "references/brands/replicate.md"
 }

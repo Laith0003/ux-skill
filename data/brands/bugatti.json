@@ -21,8 +21,8 @@
     "Pure black canvas (#000000) with white type. The system does not have a light mode",
     "Three custom Bugatti typefaces: Display (uppercase headlines + wordmark), Text Regular (body serif), Monospace (buttons, captions, nav)",
     "All display headlines are UPPERCASE with wide letter-spacing (2-4px). Body copy stays sentence-case at standard tracking",
-    "No accent color. The only non-monochrome color anywhere on the site is (#c3d9f3)",
-    "Buttons are pill-shaped  with transparent background and a 1px white outline. Bugatti is the only luxury-auto brand whose primary CTA is fully transparent"
+    "No accent color. The only non-monochrome color anywhere on the site is (#c3d9f3) — a desaturated ice-blue used on inline anchor links, and even that appears rarely",
+    "Buttons are pill-shaped with transparent background and a 1px white outline. Bugatti is the only luxury-auto brand whose primary CTA is fully transparent"
   ],
   "components_observed": [
     "hero-photo-band",
@@ -36,9 +36,9 @@
     "bugatti.com"
   ],
   "ai_slop_avoided": [
-    "introduce any accent color outside. Bugatti's brand discipline is total monochrome + photography. Adding a brand-blue or brand-red breaks the contract",
-    "bold any type. The system has no bold weight — every typeface stays at 400",
-    "fill primary buttons. Transparent + outline only. A solid white button reads as off-brand"
+    "Don't introduce any accent color outside. Bugatti's brand discipline is total monochrome + photography. Adding a brand-blue or brand-red breaks the contract",
+    "Don't bold any type. The system has no bold weight",
+    "Don't fill primary buttons. Transparent + outline only. A solid white button reads as off-brand"
   ],
   "source_md": "references/brands/bugatti.md"
 }

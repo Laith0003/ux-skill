@@ -41,9 +41,9 @@
     "cohere.com"
   ],
   "ai_slop_avoided": [
-    "turn coral or blue into broad decorative surface colors",
-    "add heavy drop shadows to cards",
-    "make every section card-based; Cohere often uses unframed rows, rules, and open space"
+    "Do not turn coral or blue into broad decorative surface colors",
+    "Do not add heavy drop shadows to cards",
+    "Do not make every section card-based; Cohere often uses unframed rows, rules, and open space"
   ],
   "source_md": "references/brands/cohere.md"
 }

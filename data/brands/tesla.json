@@ -10,7 +10,8 @@
       "body": "Universal Sans Text"
     },
     "color_primary": "#3e6ae1",
-    "color_canvas": "#ffffff"
+    "color_canvas": "#ffffff",
+    "color_ink": "#393c41"
   },
   "trademark_signals": [
     "Full-viewport hero sections (100vh) dominated by cinematic car photography with minimal overlay UI",
@@ -32,9 +33,9 @@
     "tesla.com/model-s"
   ],
   "ai_slop_avoided": [
-    "add shadows to any element — elevation through shadow contradicts the flat, gallery aesthetic",
-    "use more than one chromatic color besides the blue CTA — the palette is intentionally monochrome-plus-one",
-    "apply gradients, patterns, or decorative backgrounds to surfaces — white and photography are the only backgrounds"
+    "Add shadows to any element — elevation through shadow contradicts the flat, gallery aesthetic",
+    "Use more than one chromatic color besides the blue CTA",
+    "Apply gradients, patterns, or decorative backgrounds to surfaces"
   ],
   "source_md": "references/brands/tesla.md"
 }

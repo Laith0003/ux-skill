@@ -1,6 +1,6 @@
 {
   "id": "bmw-m",
-  "name": "Bmw M",
+  "name": "BMW M",
   "category": "Automotive",
   "year_observed": 2026,
   "philosophy": "A motorsport-engineering interface anchored on a near-black canvas with white BMW Type Next Latin display headlines in confident UPPERCASE.",
@@ -39,9 +39,9 @@
     "bmw.com/en/m.html"
   ],
   "ai_slop_avoided": [
-    "introduce a brand color outside the M tricolor ( / / ) and the heritage",
-    "bold body type. Body stays at 300 (Light)",
-    "use rounded buttons. The rectangular silhouette IS the brand. Rounded corners read as consumer-tech, not motorsport"
+    "Don't introduce a brand color outside the M tricolor ( / / ) and the heritage",
+    "Don't bold body type. Body stays at 300 (Light)",
+    "Don't use rounded buttons. The rectangular silhouette IS the brand. Rounded corners read as consumer-tech, not motorsport"
   ],
   "source_md": "references/brands/bmw-m.md"
 }

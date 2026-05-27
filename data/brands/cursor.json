@@ -3,7 +3,7 @@
   "name": "Cursor",
   "category": "Developer Tools",
   "year_observed": 2026,
-  "philosophy": "An AI-first code editor whose marketing site reads like a quietly-confident developer-tools brand with a warm-cream editorial canvas (`#f7f7f4`) instead of the typical dark IDE atmosphere.",
+  "philosophy": "An AI-first code editor whose marketing site reads like a quietly-confident developer-tools brand with a warm-cream editorial canvas (#f7f7f4) instead of the typical dark IDE atmosphere.",
   "design_language": {
     "type": {
       "display": "CursorGothic",
@@ -43,9 +43,9 @@
     "cursor.com/pricing"
   ],
   "ai_slop_avoided": [
-    "introduce a secondary brand action color. Cursor Orange is the only one",
-    "drop display to bold weights (700+). Magazine voice depends on 400",
-    "add drop shadows. Hairlines + ink-on-cream contrast carry the depth"
+    "Don't introduce a secondary brand action color. Cursor Orange is the only one",
+    "Don't drop display to bold weights (700+). Magazine voice depends on 400",
+    "Don't add drop shadows. Hairlines + ink-on-cream contrast carry the depth"
   ],
   "source_md": "references/brands/cursor.md"
 }

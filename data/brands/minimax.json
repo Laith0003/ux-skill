@@ -1,6 +1,6 @@
 {
   "id": "minimax",
-  "name": "Minimax",
+  "name": "MiniMax",
   "category": "AI / ML Platform",
   "year_observed": 2026,
   "philosophy": "MiniMax presents itself as a premium AI infrastructure brand through a striking duality — bold black-pill CTAs and stark white canvas for marketing, paired with vibrant gradient product cards (orange-red, magenta-pink, purple, blue) that turn each model release into a distinctive visual identity.",
@@ -25,27 +25,27 @@
     "spacing": "4-based"
   },
   "trademark_signals": [
-    "Stark monochrome palette — black  and white  — broken open by saturated brand-color gradient cards",
+    "Stark monochrome palette — black and white — broken open by saturated brand-color gradient cards",
     "Distinct product-color encoding: each model line has its own vibrant brand color (coral M2.7, magenta Music 2.6, blue Hailuo, orange Speech 2.8)",
     "DM Sans across the entire system; Inter as fallback",
-    "Pill-shaped buttons  and pill-shaped tabs everywhere; rectangular forms only inside data tables and dense docs",
+    "Pill-shaped buttons and pill-shaped tabs everywhere; rectangular forms only inside data tables and dense docs",
     "Hero typography uses tight 1.10 line-height with -2px letter-spacing for impact"
   ],
   "components_observed": [
-    "pill-tab-active",
     "ai-product-tile",
     "hero-band-marketing",
     "testimonial-stat-row",
     "card-feature",
-    "search-pill"
+    "search-pill",
+    "pill-tab"
   ],
   "exemplar_pages": [
     "minimax.io"
   ],
   "ai_slop_avoided": [
-    "use brand-coral or brand-magenta on body text or large surfaces — they lose meaning when overused",
-    "soften corners on buttons (anything less than ); the pill is a brand signature",
-    "introduce a second display typeface; DM Sans handles every role"
+    "Don't use brand-coral or brand-magenta on body text or large surfaces",
+    "Don't soften corners on buttons (anything less than ); the pill is a brand signature",
+    "Don't introduce a second display typeface; DM Sans handles every role"
   ],
   "source_md": "references/brands/minimax.md"
 }

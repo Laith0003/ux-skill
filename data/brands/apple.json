@@ -25,7 +25,7 @@
     "Photography-first presentation; UI recedes so the product can speak",
     "Alternating full-bleed tile sections: white/parchment ↔ near-black, with the color change itself acting as the section divider",
     "Single blue accent (#0066cc) carries every interactive element. No second brand color exists",
-    "Two button grammars: tiny blue pill CTAs  and compact utility rects",
+    "Two button grammars: tiny blue pill CTAs and compact utility rects",
     "SF Pro Display + SF Pro Text — negative letter-spacing at display sizes for the signature \"Apple tight\" headline feel"
   ],
   "components_observed": [
@@ -42,9 +42,9 @@
     "apple.com/mac"
   ],
   "ai_slop_avoided": [
-    "introduce a second accent color; every \"click me\" signal is (Action Blue)",
-    "add shadows to cards, buttons, or text — shadow is reserved for product imagery",
-    "use gradients as decorative backgrounds; atmosphere comes from photography"
+    "Don't introduce a second accent color; every \"click me\" signal is (Action Blue)",
+    "Don't add shadows to cards, buttons, or text",
+    "Don't use gradients as decorative backgrounds; atmosphere comes from photography"
   ],
   "source_md": "references/brands/apple.md"
 }

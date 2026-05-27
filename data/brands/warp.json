@@ -42,9 +42,9 @@
     "warp.dev"
   ],
   "ai_slop_avoided": [
-    "introduce a chromatic brand accent. The off-white-on-warm-dark IS the brand's voice",
-    "render the hero headline in heavy weight (700+). The brand's display is intentionally light",
-    "use generous pill CTAs. The brand's button radius is 3-4 px, almost rectangular"
+    "Don't introduce a chromatic brand accent. The off-white-on-warm-dark IS the brand's voice",
+    "Don't render the hero headline in heavy weight (700+). The brand's display is intentionally light",
+    "Don't use generous pill CTAs. The brand's button radius is 3-4 px, almost rectangular"
   ],
   "source_md": "references/brands/warp.md"
 }

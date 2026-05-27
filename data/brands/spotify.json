@@ -6,11 +6,12 @@
   "philosophy": "Spotify's web interface is a dark, immersive music player that wraps listeners in a near-black cocoon (#121212, #181818, #1f1f1f) where album art and content become the primary source of color.",
   "design_language": {
     "type": {
+      "display": "SpotifyMixUITitle",
       "body": "SpotifyMixUI"
     },
-    "color_primary": "#121212",
-    "color_canvas": "#ffffff",
-    "color_ink": "#000000"
+    "color_primary": "#1ed760",
+    "color_canvas": "#121212",
+    "color_ink": "#ffffff"
   },
   "trademark_signals": [
     "Near-black immersive dark theme (#121212–#1f1f1f) — UI disappears behind content",
@@ -20,20 +21,20 @@
     "Uppercase button labels with wide letter-spacing (1.4px–2px)"
   ],
   "components_observed": [
-    "primary-brand",
-    "surface-border",
-    "cards-containers",
-    "grid-container",
-    "collapsing-strategy"
+    "dark-large-pill",
+    "dark-pill",
+    "light-pill",
+    "outlined-pill",
+    "circular-play"
   ],
   "exemplar_pages": [
     "spotify.com",
     "open.spotify.com"
   ],
   "ai_slop_avoided": [
-    "use Spotify Green decoratively or on backgrounds — it's functional only",
-    "use light backgrounds for primary surfaces — the dark immersion is core",
-    "skip the pill/circle geometry on buttons — square buttons break the identity"
+    "Don't use Spotify Green decoratively or on backgrounds",
+    "Don't use light backgrounds for primary surfaces",
+    "Don't skip the pill/circle geometry on buttons"
   ],
   "source_md": "references/brands/spotify.md"
 }

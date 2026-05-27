@@ -27,7 +27,7 @@
   "trademark_signals": [
     "Pure white canvas with sky-blue gradient atmospheric backdrop in hero only",
     "Single primary CTA: pure black pill at (8px) — compact developer-tool dialect",
-    "Text-link blue  for inline links only — never on a CTA",
+    "Text-link blue for inline links only — never on a CTA",
     "Inter as the single sans family — no custom display typeface",
     "JetBrains Mono on every code surface"
   ],
@@ -43,9 +43,9 @@
     "expo.dev"
   ],
   "ai_slop_avoided": [
-    "introduce a saturated brand action color. Black is the only CTA fill",
-    "use blue  on a CTA. Inline links only",
-    "drop display below weight 600 or above 700"
+    "Don't introduce a saturated brand action color. Black is the only CTA fill",
+    "Don't use blue on a CTA. Inline links only",
+    "Don't drop display below weight 600 or above 700"
   ],
   "source_md": "references/brands/expo.md"
 }

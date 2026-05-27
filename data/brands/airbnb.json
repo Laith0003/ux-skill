@@ -23,19 +23,19 @@
     "spacing": "4-based"
   },
   "trademark_signals": [
-    "Single accent color: (#ff385c",
-    "Custom variable type: Airbnb Cereal VF. Display weights sit at 500–700, body at 400. Modest weight is intentional",
-    "Three-product top nav: Homes, Experiences, Services",
-    "Pill-shaped global search bar: white surface",
-    "Property cards are photo-first: aspect-ratio rectangles with corner clipping"
+    "Single accent color: (#ff385c — \"Rausch\") carries every primary CTA, the search orb, the heart save state, and the brand wordmark. Used scarcely — most pages are 90% white + ink with one or two Rausch moments",
+    "Custom variable type: Airbnb Cereal VF. Display weights sit at 500–700, body at 400. Modest weight is intentional — the system trusts photography for visual heft",
+    "Three-product top nav: Homes, Experiences, Services — each with a hand-illustrated 32px icon and \"NEW\" badges on the two newer products. Active tab uses an underline rule",
+    "Pill-shaped global search bar: white surface, fully rounded, divided by 1px hairlines into Where / When / Who segments, terminated by a circular Rausch search orb",
+    "Property cards are photo-first: aspect-ratio rectangles with corner clipping, swipeable image carousel, \"Guest favorite\" floating badge top-left, heart icon top-right, then 4–5 lines of meta beneath"
   ],
   "components_observed": [
     "button-pill-rausch",
     "search-bar-pill",
     "legal-band",
     "date-picker-day-selected",
-    "button-primary-active",
-    "button-primary-disabled"
+    "button-tertiary-text",
+    "icon-button-circle"
   ],
   "exemplar_pages": [
     "airbnb.com"

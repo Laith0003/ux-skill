@@ -3,7 +3,7 @@
   "name": "Resend",
   "category": "Developer Tools",
   "year_observed": 2026,
-  "philosophy": "| Resend's marketing surfaces sit on a near-pure black canvas with off-white text and a single signature color — the deep editorial-serif Domaine Display headline mark — that gives an otherwise utilitarian developer-tool brand its print-magazine confidence.",
+  "philosophy": "Resend's marketing surfaces sit on a near-pure black canvas with off-white text and a single signature color — the deep editorial-serif Domaine Display headline mark — that gives an otherwise utilitarian developer-tool brand its print-magazine confidence.",
   "design_language": {
     "type": {
       "display": "Domaine Display",
@@ -26,7 +26,7 @@
   "trademark_signals": [
     "Pure black canvas (#000000) on every public page; off-white text (#fcfdff) carries the full read",
     "A serif-led type system: Domaine Display at 76–96px for hero headlines, ABC Favorit for marketing body, Inter for UI, Geist Mono for code",
-    "Six accent glow colours used only as low-opacity atmospheric washes (, , ) — never as buttons or solid surfaces",
+    "Six accent glow colours used only as low-opacity atmospheric washes (,, ) — never as buttons or solid surfaces",
     "Strict container vocabulary: (12px) for feature cards, code wells, and email mockups; (8px) for buttons; for pills and avatars",
     "Translucent white borders ( 6% / 14%) replace shadows entirely — the system has no traditional drop-shadow elevation language"
   ],
@@ -42,9 +42,9 @@
     "resend.com"
   ],
   "ai_slop_avoided": [
-    "use a near-black canvas. The brand sits on #000000, not #0a0a0a",
-    "apply solid colour to atmospheric accent tokens. is for inline highlights only — its glow form is for backdrops",
-    "add drop shadows to feature cards or code wells. Translucent white borders carry depth on this canvas"
+    "Don't use a near-black canvas. The brand sits on #000000, not #0a0a0a",
+    "Don't apply solid colour to atmospheric accent tokens. is for inline highlights only",
+    "Don't add drop shadows to feature cards or code wells. Translucent white borders carry depth on this canvas"
   ],
   "source_md": "references/brands/resend.md"
 }

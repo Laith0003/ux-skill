@@ -3,7 +3,7 @@
   "name": "Revolut",
   "category": "Fintech / Crypto",
   "year_observed": 2026,
-  "philosophy": "| Revolut's marketing surfaces pair a stark black canvas with the brand's cobalt-violet (`#494fdf`) and a wide accent palette of deep, fully-saturated product colours — teal, light-blue, deep pink, light-green, warning orange.",
+  "philosophy": "Revolut's marketing surfaces pair a stark black canvas with the brand's cobalt-violet (#494fdf) and a wide accent palette of deep, fully-saturated product colours — teal, light-blue, deep pink, light-green, warning orange.",
   "design_language": {
     "type": {
       "display": "Aeonik Pro",
@@ -24,8 +24,8 @@
   "trademark_signals": [
     "Two-mode canvas system — (true black) for storytelling, (white) for browsing — switched in full-bleed bands",
     "Display typography is Aeonik Pro 500 at sizes 20–136px with tight lineHeight: 1.0 and large negative letter-spacing on display sizes",
-    "The actual primary CTA is",
-    "Eight saturated accent colours live inside product mockups and illustrations only, never as button surfaces",
+    "The actual primary CTA is — a white pill with black text, sitting on the dark canvas as the brightest pixel. Cobalt-violet is reserved for featured plan cards and secondary CTAs",
+    "Eight saturated accent colours live inside product mockups and illustrations only, never as button surfaces — teal, light-blue, deep-pink, light-green, warning orange, yellow, brown, danger red",
     "All buttons are pill-shaped ; content cards use (20px); inputs and small chips use (12px)"
   ],
   "components_observed": [
@@ -40,9 +40,9 @@
     "revolut.com"
   ],
   "ai_slop_avoided": [
-    "use accent colours (, etc.) as button surfaces. They live inside illustrations only",
-    "use a near-black canvas. The brand is #000000, not #0a0a0a",
-    "pair white text with cobalt violet inside body content — is for the featured plan card surface, not large prose"
+    "Don't use accent colours (, etc.) as button surfaces. They live inside illustrations only",
+    "Don't use a near-black canvas. The brand is #000000, not #0a0a0a",
+    "Don't pair white text with cobalt violet inside body content"
   ],
   "source_md": "references/brands/revolut.md"
 }

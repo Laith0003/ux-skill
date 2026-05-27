@@ -25,26 +25,26 @@
   "trademark_signals": [
     "Black-canvas marketing system: is the surface for hero, body, pricing, FAQ, and footer alike — no light interludes",
     "Massive negative letter-spacing on display sizes (-5.5px / -4.25px / -3.1px) creates a poster-grade headline cadence",
-    "White pill  is the only primary CTA shape across the site; secondary actions live as charcoal pills  or text links",
-    "Oversized gradient spotlight cards (violet, magenta, orange, coral) act as showcase tiles inside the dark grid",
-    "Inter Variable with bespoke OpenType character variants (cv01/05/09/11, ss03/ss07, dlig) used everywhere body type appears"
+    "White pill is the only primary CTA shape across the site; secondary actions live as charcoal pills or text links",
+    "Oversized gradient spotlight cards (violet, magenta, orange, coral) act as showcase tiles inside the dark grid; they are individual cards, not section backgrounds",
+    "Inter Variable with bespoke OpenType character variants (cv01/05/09/11, ss03/ss07, dlig) used everywhere body type appears — the typographic voice is unmistakable"
   ],
   "components_observed": [
     "gradient-spotlight-card-magenta",
     "gradient-spotlight-card-orange",
-    "pricing-tab-default",
     "pricing-tab-selected",
     "pricing-card-featured",
-    "gradient-spotlight-card"
+    "gradient-spotlight-card",
+    "product-mockup-tile"
   ],
   "exemplar_pages": [
     "framer.com",
     "framer.com/pricing"
   ],
   "ai_slop_avoided": [
-    "ship a light-mode marketing page. Framer's identity is dark",
-    "introduce mid-tone gray text outside. The hierarchy is binary: ink or ink-muted",
-    "use as a brand fill (e.g., a blue CTA pill). The blue is a signal color, not a surface"
+    "Don't ship a light-mode marketing page. Framer's identity is dark",
+    "Don't introduce mid-tone gray text outside. The hierarchy is binary: ink or ink-muted",
+    "Don't use as a brand fill (e.g., a blue CTA pill). The blue is a signal color, not a surface"
   ],
   "source_md": "references/brands/framer.md"
 }

@@ -5,9 +5,9 @@
   "year_observed": 2026,
   "philosophy": "Mastercard's experience reads like a warm, editorial magazine built from soft stone and signal orange.",
   "design_language": {
-    "color_primary": "#f3f0ee",
-    "color_canvas": "#ffffff",
-    "color_ink": "#000000"
+    "color_primary": "#eb001b",
+    "color_canvas": "#f3f0ee",
+    "color_ink": "#141413"
   },
   "trademark_signals": [
     "Warm cream canvas (#F3F0EE) replaces traditional white — every surface is tinted, never sterile",
@@ -17,20 +17,20 @@
     "Black primary CTAs with 20px radius in the body — the cookie-banner orange is kept to consent flows"
   ],
   "components_observed": [
-    "gradient-system",
-    "decorative-orbital-lines",
-    "secondary-accent",
-    "surface-background",
-    "neutrals-text",
-    "semantic-accent"
+    "consent-signal-orange-pill",
+    "icon-only-circle-button-carousel-play-pause",
+    "hero-media-frame-stadium",
+    "floating-nav-pill-desktop",
+    "primary-ink-pill",
+    "secondary-outlined-pill"
   ],
   "exemplar_pages": [
     "mastercard.com"
   ],
   "ai_slop_avoided": [
-    "use pure white as a page background — it breaks the warm editorial tone",
-    "round image frames at 8–16px — Mastercard either uses full-pill, 40px, or full-circle. In-between radii look generic",
-    "use Signal Orange for marketing CTAs — it reads as cookie-consent orange and dilutes the legal color signal"
+    "Don't use pure white as a page background",
+    "Don't round image frames at 8–16px",
+    "Don't use Signal Orange for marketing CTAs"
   ],
   "source_md": "references/brands/mastercard.md"
 }

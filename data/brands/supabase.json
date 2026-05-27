@@ -42,9 +42,9 @@
     "supabase.com/pricing"
   ],
   "ai_slop_avoided": [
-    "introduce additional accent colors as system colors",
-    "bump display weight above 500 — the brand's calibrated mid-weight breaks at 600+",
-    "use pill-shaped buttons; the brand's button radius is square-ish 6px"
+    "Don't introduce additional accent colors as system colors",
+    "Don't bump display weight above 500",
+    "Don't use pill-shaped buttons; the brand's button radius is square-ish 6px"
   ],
   "source_md": "references/brands/supabase.md"
 }

@@ -5,8 +5,9 @@
   "year_observed": 2026,
   "philosophy": "Lovable's website radiates warmth through restraint.",
   "design_language": {
-    "color_primary": "#f7f4ed",
-    "color_canvas": "#ffffff"
+    "color_primary": "#1c1c1c",
+    "color_canvas": "#f7f4ed",
+    "color_ink": "#1c1c1c"
   },
   "trademark_signals": [
     "Warm parchment background (#f7f4ed) — not white, not beige, a deliberate cream that feels hand-selected",
@@ -16,20 +17,19 @@
     "Warm neutral border palette: #eceae4 for subtle, rgba(28,28,28,0.4) for interactive elements"
   ],
   "components_observed": [
-    "surface-border",
-    "inset-shadows",
-    "cards-containers",
-    "inputs-forms",
-    "image-treatment",
-    "distinctive-components"
+    "pill-icon-button",
+    "primary-dark-inset-shadow",
+    "ghost-outline",
+    "cream-surface",
+    "template-gallery"
   ],
   "exemplar_pages": [
     "lovable.dev"
   ],
   "ai_slop_avoided": [
-    "use pure white (#ffffff) as a page background — the cream is intentional",
-    "use heavy box-shadows for cards — borders are the containment mechanism",
-    "introduce saturated accent colors — the palette is intentionally warm-neutral"
+    "Don't use pure white (#ffffff) as a page background",
+    "Don't use heavy box-shadows for cards",
+    "Don't introduce saturated accent colors"
   ],
   "source_md": "references/brands/lovable.md"
 }

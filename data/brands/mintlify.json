@@ -13,7 +13,7 @@
     "color_primary": "#0a0a0a",
     "color_canvas": "#ffffff",
     "color_ink": "#0a0a0a",
-    "color_accent_gradient": "linear-gradient(180deg, {colors.hero-sky-from} 0%, {colors.hero-sky-to} 100%)",
+    "color_accent_gradient": "linear-gradient(180deg, #87a8c8 0%, #f5e9d8 100%)",
     "radius": [
       4,
       6,
@@ -26,7 +26,7 @@
   },
   "trademark_signals": [
     "Atmospheric gradient hero bands (sky-blue to cream on homepage; teal-to-mint on startups) provide cinematic marketing presentation",
-    "Signature Mintlify mint green  reserved for accent CTAs, active states, and feature confirmations",
+    "Signature Mintlify mint green reserved for accent CTAs, active states, and feature confirmations",
     "Black-pill primary buttons ( + ) for marketing CTAs",
     "Inter for all UI prose; Geist Mono for code blocks, inline code, and type/property signatures",
     "3-column documentation layout (sidebar / prose / TOC) with dense 14px body type for long-form developer reading"
@@ -34,18 +34,18 @@
   "components_observed": [
     "pricing-card-featured",
     "testimonial-card-feature",
-    "pill-tab-active",
     "code-block-header",
     "feature-comparison-table",
-    "feature-comparison-row"
+    "feature-comparison-row",
+    "copy-code-button"
   ],
   "exemplar_pages": [
     "mintlify.com"
   ],
   "ai_slop_avoided": [
-    "use on body text or large surfaces — it loses signal",
-    "introduce additional accent colors beyond mint, tag-blue, error-red, and the testimonial orange",
-    "apply heavy shadows on flat documentation cards; reserve elevation for the hero product mockup"
+    "Don't use on body text or large surfaces",
+    "Don't introduce additional accent colors beyond mint, tag-blue, error-red, and the testimonial orange",
+    "Don't apply heavy shadows on flat documentation cards; reserve elevation for the hero product mockup"
   ],
   "source_md": "references/brands/mintlify.md"
 }

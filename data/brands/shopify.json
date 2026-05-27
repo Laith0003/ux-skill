@@ -23,27 +23,27 @@
   },
   "trademark_signals": [
     "Two-canvas system: for cinematic marketing, / for transactional surfaces — never blended",
-    "Pill-shape  is the only button shape across both tracks; rounded rectangles do not exist for buttons",
+    "Pill-shape is the only button shape across both tracks; rounded rectangles do not exist for buttons",
     "Thin-weight (330) display typography is the signature; at 96px / weight 330 is the brand's loudest visual",
     "Aloe and pistachio greens (, ) are reserved for the light track — they signal commerce, growth, transactional success",
-    "Photography is full-bleed, edge-to-edge, never inset in cards on the cinematic track"
+    "Photography is full-bleed, edge-to-edge, never inset in cards on the cinematic track; merchants and storefront imagery do the heavy visual lifting that gradients and illustrations would do elsewhere"
   ],
   "components_observed": [
-    "button-primary-pill-pressed",
     "button-primary-pill",
     "button-aloe-pill",
     "card-pricing-featured",
     "card-feature-cinematic",
-    "card-pistachio-band"
+    "card-pistachio-band",
+    "pill-tag-mint"
   ],
   "exemplar_pages": [
     "shopify.com",
     "shopify.com/pricing"
   ],
   "ai_slop_avoided": [
-    "introduce a third canvas color — stick to black or light/cream. Greys, beiges, and blues are not in the system",
-    "add drop shadows on cinematic dark cards beyond the subtle inset top-highlight; the cinematic track wants flat blackness",
-    "shrink display tiers below (48px) on hero surfaces; below that they read as section heads, not display"
+    "Don't introduce a third canvas color",
+    "Don't add drop shadows on cinematic dark cards beyond the subtle inset top-highlight; the cinematic track wants flat blackness",
+    "Don't shrink display tiers below (48px) on hero surfaces; below that they read as section heads, not display"
   ],
   "source_md": "references/brands/shopify.md"
 }

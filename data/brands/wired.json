@@ -20,7 +20,7 @@
   "trademark_signals": [
     "A strict black-and-white duet with no chromatic accent except the inline link blue. The brand reads as a printed magazine",
     "Three-face typographic system — WiredDisplay serif for display, BreveText serif for body, Apercu sans for metadata and buttons",
-    "Square buttons  — the brand never softens corners on interactive elements",
+    "Square buttons — the brand never softens corners on interactive elements",
     "A magazine-style story grid: large feature card at top, two-up secondary, then a vertical stack of bylined story rows separated by 1 px dividers",
     "The brand's only signature decorative move is the masthead band — a thin black strip with the wordmark centred, no other decoration"
   ],
@@ -36,9 +36,9 @@
     "wired.com"
   ],
   "ai_slop_avoided": [
-    "introduce a chromatic brand accent. The link blue is reserved for inline body links inside articles only",
-    "round button corners. The brand never softens its rectangular geometry",
-    "drop a soft drop-shadow on cards. Surface contrast and hairlines carry elevation"
+    "Don't introduce a chromatic brand accent. The link blue is reserved for inline body links inside articles only",
+    "Don't round button corners. The brand never softens its rectangular geometry",
+    "Don't drop a soft drop-shadow on cards. Surface contrast and hairlines carry elevation"
   ],
   "source_md": "references/brands/wired.md"
 }

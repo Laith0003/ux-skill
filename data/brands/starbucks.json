@@ -5,9 +5,8 @@
   "year_observed": 2026,
   "philosophy": "Starbucks' design system is a warm, confident retail flagship wearing the green of their storefront apron across every surface.",
   "design_language": {
-    "color_primary": "#f2f0eb",
-    "color_canvas": "#ffffff",
-    "color_ink": "#000000"
+    "color_primary": "#006241",
+    "color_canvas": "#006241"
   },
   "trademark_signals": [
     "Four-tier green brand system (Starbucks / Accent / House / Uplift) each mapped to a distinct surface role — not a single \"brand green\"",
@@ -17,20 +16,20 @@
     "Context-specific type switches: serif (Lander Tall) for Rewards, script (Kalam) for Careers cup-names"
   ],
   "components_observed": [
-    "gradient-system",
-    "black-white-alpha-ladders",
-    "cookie-consent-module",
-    "secondary-accent",
-    "surface-background",
-    "neutrals-text"
+    "rewards-cost-pill-200-item",
+    "gift-card-tile",
+    "dropdown-menu-account-dropdown-top-nav",
+    "option-icon-checkbox-radio",
+    "sub-nav-second-bar-e-g-rewards-internal",
+    "add-in-milk-select-outlined-rectangle"
   ],
   "exemplar_pages": [
     "starbucks.com"
   ],
   "ai_slop_avoided": [
-    "use pure white as the page canvas — the warm cream temperature is load-bearing",
-    "pick \"one brand green\" — the four-green system is intentional; using only #006241 everywhere flattens the brand",
-    "use Gold as a general-purpose accent — it's a Rewards signal only"
+    "Don't use pure white as the page canvas",
+    "Don't pick \"one brand green\" — the four-green system is intentional; using only #006241 everywhere flattens the brand",
+    "Don't use Gold as a general-purpose accent"
   ],
   "source_md": "references/brands/starbucks.md"
 }

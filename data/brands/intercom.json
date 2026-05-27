@@ -34,17 +34,17 @@
     "pricing-card-featured",
     "product-mockup-card",
     "customer-logo-tile",
-    "pricing-tab-default",
     "pricing-tab-selected",
-    "pricing-card"
+    "pricing-card",
+    "feature-card"
   ],
   "exemplar_pages": [
     "intercom.com"
   ],
   "ai_slop_avoided": [
-    "use pure white as the canvas",
-    "use Fin Orange as a section background or as a generic primary CTA",
-    "add drop shadows to floating cards"
+    "Don't use pure white as the canvas",
+    "Don't use Fin Orange as a section background or as a generic primary CTA",
+    "Don't add drop shadows to floating cards"
   ],
   "source_md": "references/brands/intercom.md"
 }

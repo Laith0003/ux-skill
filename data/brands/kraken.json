@@ -20,12 +20,19 @@
     "12px radius buttons (rounded but not pill)",
     "Subtle shadows (rgba(0,0,0,0.03) 0px 4px 24px) — whisper-level"
   ],
+  "components_observed": [
+    "primary-purple",
+    "purple-outlined",
+    "purple-subtle",
+    "white-button",
+    "secondary-gray"
+  ],
   "exemplar_pages": [
     "kraken.com"
   ],
   "ai_slop_avoided": [
-    "use pill buttons — 12px is the max radius for buttons",
-    "use other purples outside the defined scale"
+    "Don't use pill buttons — 12px is the max radius for buttons",
+    "Don't use other purples outside the defined scale"
   ],
   "source_md": "references/brands/kraken.md"
 }

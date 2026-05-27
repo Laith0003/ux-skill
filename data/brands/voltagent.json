@@ -1,6 +1,6 @@
 {
   "id": "voltagent",
-  "name": "Voltagent",
+  "name": "VoltAgent",
   "category": "AI / ML Platform",
   "year_observed": 2026,
   "philosophy": "An inspired interpretation of Voltagent's design language — a developer-focused AI agent engineering platform whose surface is an unrelenting near-black canvas broken only by a single electric-green brand accent, code-editor mockups inside the hero, and a precise grid of dark feature cards that read like a documentation site dressed as marketing.",
@@ -23,7 +23,7 @@
   },
   "trademark_signals": [
     "A single electric-green accent (#00d992) carries every CTA, every status pill, and the brand's lightning logo. No second accent",
-    "Dark canvas ( #101010) is the only page surface",
+    "Dark canvas ( #101010) is the only page surface — there is no light-mode rhythm; the entire site reads as one continuous dark surface broken by feature-card boundaries",
     "Hairline-bordered feature cards ( #3d3a39, 1 px solid) are the brand's primary chrome — no shadows, no fills, just precise hairline rectangles",
     "A signature dashed-border accent (1px dashed rgba(79, 93, 117, 0.4)) appears between sections as a quiet rhythm cue — the brand's only ornamental line",
     "Inter + SF Mono pair carries every typographic role. SF Mono is reserved for code blocks, inline command snippets, and metric counters"
@@ -40,9 +40,9 @@
     "voltagent.dev"
   ],
   "ai_slop_avoided": [
-    "introduce a light-mode counterpart. The brand is dark-canvas only",
-    "use the primary green as a body-text fill. It's CTA-only",
-    "drop a soft drop-shadow on cards. The brand uses hairlines + occasional glow, never material shadows"
+    "Don't introduce a light-mode counterpart. The brand is dark-canvas only",
+    "Don't use the primary green as a body-text fill. It's CTA-only",
+    "Don't drop a soft drop-shadow on cards. The brand uses hairlines + occasional glow, never material shadows"
   ],
   "source_md": "references/brands/voltagent.md"
 }

@@ -1,6 +1,6 @@
 {
   "id": "ibm",
-  "name": "Ibm",
+  "name": "IBM",
   "category": "Developer Tools",
   "year_observed": 2026,
   "philosophy": "An enterprise-marketing canvas faithful to Carbon Design System: white surfaces, charcoal type, IBM Blue (#0f62fe) as the single confident accent, and a deliberately flat-square aesthetic where corners stay at 0–4px.",
@@ -25,7 +25,7 @@
     "Carbon Design System — IBM's marketing chrome IS Carbon. Buttons are square, inputs are square-with-bottom-rule, corners stay at 0px",
     "Light-weight display type: Plex Sans at weight 300 for 42–76px headlines is the brand's typographic signature",
     "One accent color: IBM Blue carries every link, primary CTA, and CTA banner. There is no second brand color",
-    "White canvas + light gray  + charcoal  cover 95% of surfaces",
+    "White canvas + light gray + charcoal cover 95% of surfaces",
     "Footer inverts to charcoal ( #161616) — the only dark surface above the page break"
   ],
   "components_observed": [
@@ -34,15 +34,15 @@
     "feature-card",
     "hero-card",
     "resource-tile",
-    "button-primary-pressed"
+    "product-tab-selected"
   ],
   "exemplar_pages": [
     "ibm.com"
   ],
   "ai_slop_avoided": [
-    "round corners on buttons, cards, or inputs. Even 4px rounded corners break the Carbon look",
-    "bold display headlines. Plex Sans at weight 300 is the brand voice; weight 700 makes it look generic",
-    "add atmospheric depth (gradient backdrops, drop shadows, atmospheric overlays) outside the documented soft-blue hero gradient"
+    "Don't round corners on buttons, cards, or inputs. Even 4px rounded corners break the Carbon look",
+    "Don't bold display headlines. Plex Sans at weight 300 is the brand voice; weight 700 makes it look generic",
+    "Don't add atmospheric depth (gradient backdrops, drop shadows, atmospheric overlays) outside the documented soft-blue hero gradient"
   ],
   "source_md": "references/brands/ibm.md"
 }

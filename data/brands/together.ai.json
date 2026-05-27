@@ -1,6 +1,6 @@
 {
   "id": "together.ai",
-  "name": "Together Ai",
+  "name": "Together AI",
   "category": "AI / ML Platform",
   "year_observed": 2026,
   "philosophy": "An inspired interpretation of Together AI's design language — an AI infrastructure platform whose surface alternates between near-black hero bands (with a three-color orange-magenta-periwinkle gradient as the single piece of brand chrome) and bright white research / pricing / docs bands, knit together by a custom display sans and an uppercase mono eyebrow face.",
@@ -39,9 +39,9 @@
     "together.ai"
   ],
   "ai_slop_avoided": [
-    "introduce a fifth accent colour. The three-stop gradient + mint pill is the entire decorative palette; new accents flatten the brand",
-    "set body paragraphs in the mono face. The mono is for labels only; long-form mono reads as a console log, not as marketing copy",
-    "centre-align body paragraphs under a left-aligned display headline. The brand keeps text-block alignment consistent within a copy stack"
+    "Don't introduce a fifth accent colour. The three-stop gradient + mint pill is the entire decorative palette; new accents flatten the brand",
+    "Don't set body paragraphs in the mono face. The mono is for labels only; long-form mono reads as a console log, not as marketing copy",
+    "Don't centre-align body paragraphs under a left-aligned display headline. The brand keeps text-block alignment consistent within a copy stack"
   ],
   "source_md": "references/brands/together.ai.md"
 }

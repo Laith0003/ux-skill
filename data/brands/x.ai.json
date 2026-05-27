@@ -1,6 +1,6 @@
 {
   "id": "x.ai",
-  "name": "X Ai",
+  "name": "xAI",
   "category": "AI / ML Platform",
   "year_observed": 2026,
   "philosophy": "An inspired interpretation of xAI's design language — Elon Musk's frontier-AI company whose web surface is a strict near-black canvas broken only by white pill outlines, occasional warm sunset / dusk gradient accents, a custom geometric sans (Universal Sans) for display, and an uppercase tracked monospace caption face; the whole system reads as engineered-cosmic, unmarketed.",
@@ -24,7 +24,7 @@
     "Universal Sans weight 400 for display, Geist Mono uppercase tracked for labels — the two-face contrast IS the brand voice",
     "Every button is a outline with translucent-white border. The brand never uses filled CTAs except for one variant (white-filled pill on Sign Up)",
     "Cards are tight 8 px rectangles in a slightly-lighter (#191919) fill with hairline border. No shadows",
-    "A muted accent palette of sunset-orange / dusk-purple / twilight-violet / breeze-blue lives in the design tokens but appears rarely on the main marketing sur..."
+    "A muted accent palette of sunset-orange / dusk-purple / twilight-violet / breeze-blue lives in the design tokens but appears rarely on the main marketing surface — reserved for product illustrations / icons"
   ],
   "components_observed": [
     "card-feature-product",
@@ -38,9 +38,9 @@
     "x.ai"
   ],
   "ai_slop_avoided": [
-    "introduce a light-mode counterpart. xAI is dark-canvas only",
-    "bold display headlines. Weight 400 is the entire scale",
-    "use filled buttons broadly. The brand uses outline pills almost exclusively; one Sign Up white-filled pill is the rare exception"
+    "Don't introduce a light-mode counterpart. xAI is dark-canvas only",
+    "Don't bold display headlines. Weight 400 is the entire scale",
+    "Don't use filled buttons broadly. The brand uses outline pills almost exclusively; one Sign Up white-filled pill is the rare exception"
   ],
   "source_md": "references/brands/x.ai.md"
 }

@@ -28,7 +28,7 @@
     "Oversized editorial display type up to 112px in waldenburgNormal with aggressive negative tracking",
     "Dual-theme rhythm: dark hero/feature sections invert to light pricing/comparison surfaces, both using the same type system",
     "IBM Plex Mono reserved exclusively for technical eyebrows and small-caps labels — every other role is the proprietary sans",
-    "Pill primary buttons  for marketing CTAs paired with sharply-cut application radii (3–6px) for in-product Studio screenshots"
+    "Pill primary buttons for marketing CTAs paired with sharply-cut application radii (3–6px) for in-product Studio screenshots"
   ],
   "components_observed": [
     "feature-card-dark",
@@ -42,9 +42,9 @@
     "sanity.io"
   ],
   "ai_slop_avoided": [
-    "use as a background for dark-mode body sections — it must remain a quiet accent, not a section colour",
-    "introduce additional accent hues (purple, teal, magenta gradients). Saniti's chromatic story is monochrome plus coral-red",
-    "apply OpenType variants to body running text"
+    "Don't use as a background for dark-mode body sections",
+    "Don't introduce additional accent hues (purple, teal, magenta gradients). Saniti's chromatic story is monochrome plus coral-red",
+    "Don't apply OpenType variants to body running text"
   ],
   "source_md": "references/brands/sanity.md"
 }

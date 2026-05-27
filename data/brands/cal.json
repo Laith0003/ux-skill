@@ -1,6 +1,6 @@
 {
   "id": "cal",
-  "name": "Cal",
+  "name": "Cal.com",
   "category": "Productivity / Collaboration",
   "year_observed": 2026,
   "philosophy": "A clean, calendar-software-first interface anchored on white canvas with black primary CTAs and custom Cal Sans display typography.",
@@ -24,10 +24,10 @@
   },
   "trademark_signals": [
     "White canvas with black primary CTA (#111111). Buttons are (8px) with confident weight-600 labels. Standard friendly-SaaS button",
-    "Custom Cal Sans display typeface for headlines (substituted with Inter weight 600 here). Negative letter-spacing on display sizes",
-    "Light-gray card surfaces (#f5f5f5) for feature cards",
-    "Product UI fragments embedded directly in cards",
-    "Nav-pill-group "
+    "Custom Cal Sans display typeface for headlines (substituted with Inter weight 600 here). Negative letter-spacing on display sizes — geometric, precise, slightly condensed",
+    "Light-gray card surfaces (#f5f5f5) for feature cards, testimonials, and pricing tiers (non-featured). The featured pricing tier flips to (the only dark card on light pages)",
+    "Product UI fragments embedded directly in cards — Cal.com shows real schedule pickers, calendar widgets, integration grids inside its marketing cards. Brand voltage from real product chrome at small scale",
+    "Nav-pill-group — a small pill-radius wrapper around grouped nav segments (e.g., the sub-nav switcher between product views). The pill wrapper is one of the system's signature interactive components"
   ],
   "components_observed": [
     "hero-app-mockup-card",
@@ -41,9 +41,9 @@
     "cal.com"
   ],
   "ai_slop_avoided": [
-    "use accent colors (, badge pastels) on primary CTAs. The system is monochrome at the action layer",
-    "bold display weight beyond 600. Cal Sans at 700 reads as bombastic",
-    "use rounded radius beyond (16px) on cards. Larger radii read as consumer-app, not professional booking software"
+    "Don't use accent colors (, badge pastels) on primary CTAs. The system is monochrome at the action layer",
+    "Don't bold display weight beyond 600. Cal Sans at 700 reads as bombastic",
+    "Don't use rounded radius beyond (16px) on cards. Larger radii read as consumer-app, not professional booking software"
   ],
   "source_md": "references/brands/cal.md"
 }

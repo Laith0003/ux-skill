@@ -1,9 +1,9 @@
 {
   "id": "mongodb",
-  "name": "Mongodb",
+  "name": "MongoDB",
   "category": "Developer Tools",
   "year_observed": 2026,
-  "philosophy": "MongoDB carries a strong dual-mode visual identity — dark deep-teal hero bands with bright MongoDB green ({colors.brand-green}) CTAs paired with stark white documentation surfaces.",
+  "philosophy": "MongoDB carries a strong dual-mode visual identity — dark deep-teal hero bands with bright MongoDB green CTAs paired with stark white documentation surfaces.",
   "design_language": {
     "type": {
       "display": "Euclid Circular A",
@@ -24,27 +24,27 @@
     "spacing": "4-based"
   },
   "trademark_signals": [
-    "Deep navy/teal hero bands  with bright MongoDB green  CTA pills",
+    "Deep navy/teal hero bands with bright MongoDB green CTA pills",
     "Stark white pricing/documentation surfaces with colored category tags for course tiles (purple, orange, green, teal)",
     "Euclid Circular A across every UI surface",
-    "Pill-shaped buttons  and 12px-rounded cards",
+    "Pill-shaped buttons and 12px-rounded cards",
     "3-tier pricing comparison (Free / Flex / Dedicated) with featured-mint highlight tier"
   ],
   "components_observed": [
     "card-feature-dark",
     "pricing-card-featured",
     "search-pill-large",
-    "pill-tab-active",
     "hero-band-dark",
-    "hero-platform-card"
+    "hero-platform-card",
+    "code-mockup-card"
   ],
   "exemplar_pages": [
     "mongodb.com"
   ],
   "ai_slop_avoided": [
-    "use the bright green for body text or large surfaces",
-    "introduce additional accent colors beyond the brand green and category-encoding palette",
-    "soften corners on buttons; the pill is a brand signature"
+    "Don't use the bright green for body text or large surfaces",
+    "Don't introduce additional accent colors beyond the brand green and category-encoding palette",
+    "Don't soften corners on buttons; the pill is a brand signature"
   ],
   "source_md": "references/brands/mongodb.md"
 }

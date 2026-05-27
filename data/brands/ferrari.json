@@ -42,9 +42,9 @@
     "ferrari.com"
   ],
   "ai_slop_avoided": [
-    "introduce a saturated brand color other than Rosso Corsa",
-    "use rounded or pill CTAs — sharp 0px corners are the brand button",
-    "bold display copy. The cinematic photography does the visual heavy-lifting"
+    "Don't introduce a saturated brand color other than Rosso Corsa",
+    "Don't use rounded or pill CTAs",
+    "Don't bold display copy. The cinematic photography does the visual heavy-lifting"
   ],
   "source_md": "references/brands/ferrari.md"
 }

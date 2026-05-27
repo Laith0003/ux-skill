@@ -3,7 +3,7 @@
   "name": "Composio",
   "category": "Developer Tools",
   "year_observed": 2026,
-  "philosophy": "A developer-tools brand for AI-agent tool integration whose marketing surfaces lean into a dark, technical aesthetic with a single deep-electric-blue voltage (`#0007cd`).",
+  "philosophy": "A developer-tools brand for AI-agent tool integration whose marketing surfaces lean into a dark, technical aesthetic with a single deep-electric-blue voltage (#0007cd).",
   "design_language": {
     "type": {
       "display": "abcDiatype",
@@ -42,9 +42,9 @@
     "composio.dev"
   ],
   "ai_slop_avoided": [
-    "introduce a secondary brand color. Cyan and violet are illustrative-only",
-    "use full pills on CTAs",
-    "drop display weight to 400"
+    "Don't introduce a secondary brand color. Cyan and violet are illustrative-only",
+    "Don't use full pills on CTAs",
+    "Don't drop display weight to 400"
   ],
   "source_md": "references/brands/composio.md"
 }

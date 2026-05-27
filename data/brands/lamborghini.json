@@ -8,9 +8,9 @@
     "type": {
       "body": "Open Sans — used for some button/form contexts as system fallback"
     },
-    "color_primary": "#000000",
-    "color_canvas": "#ffffff",
-    "color_ink": "#000000"
+    "color_primary": "#29abe2",
+    "color_canvas": "#000000",
+    "color_ink": "#ffffff"
   },
   "trademark_signals": [
     "True black (#000000) dominant surfaces with white and gold as the only relief colors",
@@ -31,9 +31,9 @@
     "lamborghini.com"
   ],
   "ai_slop_avoided": [
-    "introduce additional accent colors beyond gold — the monochrome-plus-gold system is sacred",
-    "apply border-radius to buttons or cards — curved edges contradict the angular vehicle aesthetic",
-    "use LamboType in italic or decorative styles — the brand is always upright and direct"
+    "Introduce additional accent colors beyond gold",
+    "Apply border-radius to buttons or cards",
+    "Use LamboType in italic or decorative styles"
   ],
   "source_md": "references/brands/lamborghini.md"
 }

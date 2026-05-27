@@ -3,7 +3,7 @@
   "name": "Zapier",
   "category": "Productivity / Collaboration",
   "year_observed": 2026,
-  "philosophy": "An inspired interpretation of Zapier's design language — a workflow-automation platform whose surface combines warm-cream neutrals (`#fffefb` canvas, `#f8f4f0` soft cream) with deep coffee ink (`#201515`) and a single saturated orange CTA accent (`#ff4f00`); typography pairs the proprietary Degular Display family at hero scale with Inter for sub-displays and body, giving the brand a confident-warm rather than cool-tech voice.",
+  "philosophy": "An inspired interpretation of Zapier's design language — a workflow-automation platform whose surface combines warm-cream neutrals (#fffefb canvas, #f8f4f0 soft cream) with deep coffee ink (#201515) and a single saturated orange CTA accent (#ff4f00); typography pairs the proprietary Degular Display family at hero scale with Inter for sub-displays and body, giving the brand a confident-warm rather than cool-tech voice.",
   "design_language": {
     "type": {
       "display": "Degular Display",
@@ -38,9 +38,9 @@
     "zapier.com"
   ],
   "ai_slop_avoided": [
-    "replace cream canvas with pure white. The warmth is the brand",
-    "use pure black ink. The coffee-warmth in #201515 carries through every text color",
-    "render CTAs as pills. The brand's button is 12 px rounded rectangle"
+    "Don't replace cream canvas with pure white. The warmth is the brand",
+    "Don't use pure black ink. The coffee-warmth in #201515 carries through every text color",
+    "Don't render CTAs as pills. The brand's button is 12 px rounded rectangle"
   ],
   "source_md": "references/brands/zapier.md"
 }

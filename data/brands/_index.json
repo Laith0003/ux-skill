@@ -29,12 +29,12 @@
     },
     {
       "id": "bmw",
-      "name": "Bmw",
+      "name": "BMW",
       "category": "Automotive"
     },
     {
       "id": "bmw-m",
-      "name": "Bmw M",
+      "name": "BMW M",
       "category": "Automotive"
     },
     {
@@ -44,7 +44,7 @@
     },
     {
       "id": "cal",
-      "name": "Cal",
+      "name": "Cal.com",
       "category": "Productivity / Collaboration"
     },
     {
@@ -59,7 +59,7 @@
     },
     {
       "id": "clickhouse",
-      "name": "Clickhouse",
+      "name": "ClickHouse",
       "category": "Developer Tools"
     },
     {
@@ -84,7 +84,7 @@
     },
     {
       "id": "elevenlabs",
-      "name": "Elevenlabs",
+      "name": "ElevenLabs",
       "category": "AI / ML Platform"
     },
     {
@@ -109,17 +109,17 @@
     },
     {
       "id": "hashicorp",
-      "name": "Hashicorp",
+      "name": "HashiCorp",
       "category": "Developer Tools"
     },
     {
       "id": "hp",
-      "name": "Hp",
+      "name": "HP",
       "category": "Consumer / Lifestyle / Retail"
     },
     {
       "id": "ibm",
-      "name": "Ibm",
+      "name": "IBM",
       "category": "Developer Tools"
     },
     {
@@ -139,7 +139,7 @@
     },
     {
       "id": "linear.app",
-      "name": "Linear App",
+      "name": "Linear",
       "category": "Productivity / Collaboration"
     },
     {
@@ -159,7 +159,7 @@
     },
     {
       "id": "minimax",
-      "name": "Minimax",
+      "name": "MiniMax",
       "category": "AI / ML Platform"
     },
     {
@@ -174,12 +174,12 @@
     },
     {
       "id": "mistral.ai",
-      "name": "Mistral Ai",
+      "name": "Mistral AI",
       "category": "AI / ML Platform"
     },
     {
       "id": "mongodb",
-      "name": "Mongodb",
+      "name": "MongoDB",
       "category": "Developer Tools"
     },
     {
@@ -194,7 +194,7 @@
     },
     {
       "id": "nvidia",
-      "name": "Nvidia",
+      "name": "NVIDIA",
       "category": "Editorial / Media"
     },
     {
@@ -204,7 +204,7 @@
     },
     {
       "id": "opencode.ai",
-      "name": "Opencode Ai",
+      "name": "OpenCode",
       "category": "Developer Tools"
     },
     {
@@ -214,12 +214,12 @@
     },
     {
       "id": "playstation",
-      "name": "Playstation",
+      "name": "PlayStation",
       "category": "Consumer / Lifestyle / Retail"
     },
     {
       "id": "posthog",
-      "name": "Posthog",
+      "name": "PostHog",
       "category": "Developer Tools"
     },
     {
@@ -249,7 +249,7 @@
     },
     {
       "id": "runwayml",
-      "name": "Runwayml",
+      "name": "Runway",
       "category": "AI / ML Platform"
     },
     {
@@ -274,7 +274,7 @@
     },
     {
       "id": "spacex",
-      "name": "Spacex",
+      "name": "SpaceX",
       "category": "Automotive"
     },
     {
@@ -314,7 +314,7 @@
     },
     {
       "id": "together.ai",
-      "name": "Together Ai",
+      "name": "Together AI",
       "category": "AI / ML Platform"
     },
     {
@@ -334,7 +334,7 @@
     },
     {
       "id": "voltagent",
-      "name": "Voltagent",
+      "name": "VoltAgent",
       "category": "AI / ML Platform"
     },
     {
@@ -359,7 +359,7 @@
     },
     {
       "id": "x.ai",
-      "name": "X Ai",
+      "name": "xAI",
       "category": "AI / ML Platform"
     },
     {
