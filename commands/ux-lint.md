@@ -164,19 +164,45 @@ One row per finding on stdout. Summary on stderr in the form:
 
 ## Implementation notes
 
-The linter is implemented as a shell script at `bin/ux-lint.sh` inside the plugin. The slash command itself is shallow — it just invokes the script and surfaces the output. There is no LLM call inside `/ux-lint`. The intelligence lives in the rules file; the script applies it.
+**v2.0 — Python-first.** The linter has two implementations:
 
-When the command runs, dispatch the script via the `Bash` tool:
+1. **`bin/ux-lint.py`** (preferred in v2) — Python script that reads rules from the structured `data/anti-patterns.json` manifest. Faster, extensible, identical regex semantics.
+2. **`bin/ux-lint.sh`** (v1 fallback) — Bash + perl-PCRE, reads from `references/foundations/anti-patterns.md`. Kept for environments without Python.
+
+The slash command itself is shallow — it just invokes one of the scripts and surfaces the output. There is no LLM call inside `/ux-lint`. The intelligence lives in the rules file; the script applies it.
+
+### Dispatch order
+
+Try Python first:
+
+```
+python3 <plugin-root>/bin/ux-lint.py [user-supplied args]
+```
+
+If Python is unavailable OR the engine package isn't importable, fall back to:
 
 ```
 bash <plugin-root>/bin/ux-lint.sh [user-supplied args]
 ```
 
-Pass through whatever flags the user named in their invocation. If the user said `/ux-lint --severity high src/`, run `bash <plugin-root>/bin/ux-lint.sh --severity high src/`.
+### Flag mapping (Python ↔ Bash)
 
-If the script exits with code 2, surface the rules-file-missing error to the user and stop — do not retry.
+| User-facing flag | Python | Bash |
+|---|---|---|
+| `--severity high src/` | `--threshold high src/` | `--severity high src/` |
+| `--fail-on high` | `--threshold high` (default) | `--fail-on high` |
+| `--json` | `--json` | `--ci` |
 
-If the script exits with code 3, surface the CLI usage error and the script's stderr to the user.
+Pass through whatever flags the user named in their invocation, mapping the names through the table above when invoking Python.
+
+### Exit codes
+
+- 0 — no findings at or above the threshold
+- 1 — findings at or above threshold (CI gate failure)
+- 2 — rules file missing (Bash only)
+- 3 — invalid CLI usage (Bash only)
+
+If the script exits with code 2 or 3, surface the error to the user and stop — do not retry.
 
 Do not paraphrase the script's output. The output is the contract — the report is designed to be the deliverable.
 
