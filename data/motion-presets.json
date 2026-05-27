@@ -1,0 +1,1103 @@
+{
+  "_meta": {
+    "version": "2.0.0",
+    "entries": 57,
+    "last_updated": "2026-05-27",
+    "source": "ux-skill v2 — Python pivot",
+    "schema_version": "1.0"
+  },
+  "entries": [
+    {
+      "id": "fade-up-12px",
+      "name": "Fade-Up 12px",
+      "category": "Entry",
+      "tokens": {
+        "duration_ms": 360,
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "transform_from": "translateY(12px)",
+        "transform_to": "translateY(0)",
+        "opacity_from": 0,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "{ initial: { y: 12, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { duration: 0.36, ease: [0.16, 1, 0.3, 1] } }",
+        "gsap": "gsap.from(el, { y: 12, opacity: 0, duration: 0.36, ease: 'expo.out' })",
+        "css": "@keyframes fade-up-12 { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } } .fade-up-12 { animation: fade-up-12 360ms cubic-bezier(0.16, 1, 0.3, 1) both; }"
+      },
+      "reduced_motion": "instant — fade only, no transform",
+      "performance": "transform + opacity only — GPU composited"
+    },
+    {
+      "id": "fade-in-pure",
+      "name": "Fade-In Pure",
+      "category": "Entry",
+      "tokens": {
+        "duration_ms": 200,
+        "easing": "cubic-bezier(0.4, 0.0, 0.2, 1)",
+        "opacity_from": 0,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "{ initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] } }",
+        "gsap": "gsap.from(el, { opacity: 0, duration: 0.2, ease: 'power2.inOut' })",
+        "css": "@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } } .fade-in { animation: fade-in 200ms cubic-bezier(0.4, 0.0, 0.2, 1) both; }"
+      },
+      "reduced_motion": "no change — already opacity-only, safe as-is",
+      "performance": "opacity only — GPU composited, cheapest entry"
+    },
+    {
+      "id": "fade-up-24px-slow",
+      "name": "Fade-Up 24px Slow",
+      "category": "Entry",
+      "tokens": {
+        "duration_ms": 560,
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "transform_from": "translateY(24px)",
+        "transform_to": "translateY(0)",
+        "opacity_from": 0,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "{ initial: { y: 24, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { duration: 0.56, ease: [0.16, 1, 0.3, 1] } }",
+        "gsap": "gsap.from(el, { y: 24, opacity: 0, duration: 0.56, ease: 'expo.out' })",
+        "css": "@keyframes fade-up-24 { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } } .fade-up-24 { animation: fade-up-24 560ms cubic-bezier(0.16, 1, 0.3, 1) both; }"
+      },
+      "reduced_motion": "instant — fade only at 200ms, no transform",
+      "performance": "transform + opacity only — GPU composited; use for hero-level reveals not list items"
+    },
+    {
+      "id": "slide-up-from-clip",
+      "name": "Slide-Up From Clip",
+      "category": "Entry",
+      "tokens": {
+        "duration_ms": 480,
+        "easing": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "transform_from": "translateY(100%)",
+        "transform_to": "translateY(0)",
+        "opacity_from": 1,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "{ initial: { y: '100%' }, animate: { y: 0 }, transition: { duration: 0.48, ease: [0.22, 1, 0.36, 1] } }",
+        "gsap": "gsap.from(el, { yPercent: 100, duration: 0.48, ease: 'expo.out' })",
+        "css": "@keyframes slide-up-clip { from { transform: translateY(100%); } to { transform: translateY(0); } } .slide-up-clip-parent { overflow: hidden; } .slide-up-clip { animation: slide-up-clip 480ms cubic-bezier(0.22, 1, 0.36, 1) both; }"
+      },
+      "reduced_motion": "instant — set transform to 0 immediately",
+      "performance": "transform only — GPU composited; requires parent with overflow:hidden for the mask effect"
+    },
+    {
+      "id": "scale-pop-95-100",
+      "name": "Scale-Pop 95 to 100",
+      "category": "Entry",
+      "tokens": {
+        "duration_ms": 220,
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "transform_from": "scale(0.95)",
+        "transform_to": "scale(1)",
+        "opacity_from": 0,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "{ initial: { scale: 0.95, opacity: 0 }, animate: { scale: 1, opacity: 1 }, transition: { duration: 0.22, ease: [0.16, 1, 0.3, 1] } }",
+        "gsap": "gsap.from(el, { scale: 0.95, opacity: 0, duration: 0.22, ease: 'expo.out' })",
+        "css": "@keyframes scale-pop { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } } .scale-pop { animation: scale-pop 220ms cubic-bezier(0.16, 1, 0.3, 1) both; transform-origin: center; }"
+      },
+      "reduced_motion": "instant — fade only, no scale",
+      "performance": "transform + opacity only — GPU composited; default for popovers, menus, tooltips"
+    },
+    {
+      "id": "scale-pop-90-100-bouncy",
+      "name": "Scale-Pop 90 to 100 Bouncy",
+      "category": "Entry",
+      "tokens": {
+        "duration_ms": 420,
+        "easing": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "transform_from": "scale(0.9)",
+        "transform_to": "scale(1)",
+        "opacity_from": 0,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "{ initial: { scale: 0.9, opacity: 0 }, animate: { scale: 1, opacity: 1 }, transition: { type: 'spring', stiffness: 300, damping: 18 } }",
+        "gsap": "gsap.from(el, { scale: 0.9, opacity: 0, duration: 0.42, ease: 'back.out(1.6)' })",
+        "css": "@keyframes scale-pop-bouncy { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } } .scale-pop-bouncy { animation: scale-pop-bouncy 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both; transform-origin: center; }"
+      },
+      "reduced_motion": "instant — fade only, no overshoot",
+      "performance": "transform + opacity only — GPU composited; reserve for celebratory/badge moments, not every modal"
+    },
+    {
+      "id": "blur-in",
+      "name": "Blur-In",
+      "category": "Entry",
+      "tokens": {
+        "duration_ms": 480,
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "transform_from": "scale(1.02)",
+        "transform_to": "scale(1)",
+        "opacity_from": 0,
+        "opacity_to": 1,
+        "filter_from": "blur(8px)",
+        "filter_to": "blur(0)"
+      },
+      "stacks": {
+        "framer_motion": "{ initial: { filter: 'blur(8px)', scale: 1.02, opacity: 0 }, animate: { filter: 'blur(0px)', scale: 1, opacity: 1 }, transition: { duration: 0.48, ease: [0.16, 1, 0.3, 1] } }",
+        "gsap": "gsap.from(el, { filter: 'blur(8px)', scale: 1.02, opacity: 0, duration: 0.48, ease: 'expo.out' })",
+        "css": "@keyframes blur-in { from { filter: blur(8px); transform: scale(1.02); opacity: 0; } to { filter: blur(0); transform: scale(1); opacity: 1; } } .blur-in { animation: blur-in 480ms cubic-bezier(0.16, 1, 0.3, 1) both; }"
+      },
+      "reduced_motion": "instant — fade only, no blur (filter animation is expensive AND can cause vestibular discomfort)",
+      "performance": "WARNING: filter:blur is NOT cheap — it composites off-thread on Chromium but can drop frames on mid-tier mobile. Reserve for hero-level reveals, never for list items"
+    },
+    {
+      "id": "mask-reveal-text",
+      "name": "Mask-Reveal Text",
+      "category": "Entry",
+      "tokens": {
+        "duration_ms": 720,
+        "easing": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "transform_from": "translateY(100%)",
+        "transform_to": "translateY(0)",
+        "opacity_from": 1,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "// Wrap each line in <span style={{display:'block', overflow:'hidden'}}>; <motion.span initial={{y:'100%'}} animate={{y:0}} transition={{duration:0.72, ease:[0.22,1,0.36,1], delay: i*0.06}}>",
+        "gsap": "gsap.from('.line-inner', { yPercent: 100, duration: 0.72, ease: 'expo.out', stagger: 0.06 }) // .line wraps each line with overflow:hidden",
+        "css": ".line { display: block; overflow: hidden; } .line-inner { display: block; animation: mask-reveal 720ms cubic-bezier(0.22, 1, 0.36, 1) both; } @keyframes mask-reveal { from { transform: translateY(100%); } to { transform: translateY(0); } }"
+      },
+      "reduced_motion": "instant — render text in place, no mask",
+      "performance": "transform only — GPU composited; requires line-splitting (SplitType / Splitting.js / manual <span> per line)"
+    },
+    {
+      "id": "typewriter-cursor-blink",
+      "name": "Typewriter Cursor Blink",
+      "category": "Entry",
+      "tokens": {
+        "duration_ms": 1100,
+        "easing": "steps(1, end)",
+        "opacity_from": 1,
+        "opacity_to": 0
+      },
+      "stacks": {
+        "framer_motion": "{ animate: { opacity: [1, 1, 0, 0] }, transition: { duration: 1.1, ease: 'linear', repeat: Infinity, times: [0, 0.5, 0.5, 1] } }",
+        "gsap": "gsap.to('.cursor', { opacity: 0, duration: 0, repeat: -1, yoyo: true, repeatDelay: 0.55 })",
+        "css": "@keyframes blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } } .cursor { animation: blink 1100ms steps(1, end) infinite; }"
+      },
+      "reduced_motion": "static — cursor visible but does not blink",
+      "performance": "opacity only — GPU composited; use steps() not linear to get the hard on/off blink that matches real terminal cursors"
+    },
+    {
+      "id": "fade-out-pure",
+      "name": "Fade-Out Pure",
+      "category": "Exit",
+      "tokens": {
+        "duration_ms": 140,
+        "easing": "cubic-bezier(0.4, 0.0, 1, 1)",
+        "opacity_from": 1,
+        "opacity_to": 0
+      },
+      "stacks": {
+        "framer_motion": "{ exit: { opacity: 0 }, transition: { duration: 0.14, ease: [0.4, 0, 1, 1] } }",
+        "gsap": "gsap.to(el, { opacity: 0, duration: 0.14, ease: 'power2.in' })",
+        "css": "@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } } .fade-out { animation: fade-out 140ms cubic-bezier(0.4, 0.0, 1, 1) both; }"
+      },
+      "reduced_motion": "no change — already opacity-only",
+      "performance": "opacity only — GPU composited; exits should always be faster than entries"
+    },
+    {
+      "id": "fade-down-8px",
+      "name": "Fade-Down 8px",
+      "category": "Exit",
+      "tokens": {
+        "duration_ms": 200,
+        "easing": "cubic-bezier(0.7, 0, 0.84, 0)",
+        "transform_from": "translateY(0)",
+        "transform_to": "translateY(8px)",
+        "opacity_from": 1,
+        "opacity_to": 0
+      },
+      "stacks": {
+        "framer_motion": "{ exit: { y: 8, opacity: 0 }, transition: { duration: 0.2, ease: [0.7, 0, 0.84, 0] } }",
+        "gsap": "gsap.to(el, { y: 8, opacity: 0, duration: 0.2, ease: 'expo.in' })",
+        "css": "@keyframes fade-down-8 { from { transform: translateY(0); opacity: 1; } to { transform: translateY(8px); opacity: 0; } } .fade-down-8 { animation: fade-down-8 200ms cubic-bezier(0.7, 0, 0.84, 0) both; }"
+      },
+      "reduced_motion": "instant — fade only, no transform",
+      "performance": "transform + opacity only — GPU composited; mirrors fade-up-12px exit"
+    },
+    {
+      "id": "scale-shrink-to-95",
+      "name": "Scale-Shrink to 95",
+      "category": "Exit",
+      "tokens": {
+        "duration_ms": 160,
+        "easing": "cubic-bezier(0.4, 0.0, 1, 1)",
+        "transform_from": "scale(1)",
+        "transform_to": "scale(0.95)",
+        "opacity_from": 1,
+        "opacity_to": 0
+      },
+      "stacks": {
+        "framer_motion": "{ exit: { scale: 0.95, opacity: 0 }, transition: { duration: 0.16, ease: [0.4, 0, 1, 1] } }",
+        "gsap": "gsap.to(el, { scale: 0.95, opacity: 0, duration: 0.16, ease: 'power2.in' })",
+        "css": "@keyframes scale-shrink { from { transform: scale(1); opacity: 1; } to { transform: scale(0.95); opacity: 0; } } .scale-shrink { animation: scale-shrink 160ms cubic-bezier(0.4, 0.0, 1, 1) both; transform-origin: center; }"
+      },
+      "reduced_motion": "instant — fade only, no scale",
+      "performance": "transform + opacity only — GPU composited; default exit for popovers/menus/tooltips"
+    },
+    {
+      "id": "slide-out-right",
+      "name": "Slide-Out Right",
+      "category": "Exit",
+      "tokens": {
+        "duration_ms": 240,
+        "easing": "cubic-bezier(0.7, 0, 0.84, 0)",
+        "transform_from": "translateX(0)",
+        "transform_to": "translateX(100%)",
+        "opacity_from": 1,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "{ exit: { x: '100%' }, transition: { duration: 0.24, ease: [0.7, 0, 0.84, 0] } }",
+        "gsap": "gsap.to(el, { xPercent: 100, duration: 0.24, ease: 'expo.in' })",
+        "css": "@keyframes slide-out-right { from { transform: translateX(0); } to { transform: translateX(100%); } } .slide-out-right { animation: slide-out-right 240ms cubic-bezier(0.7, 0, 0.84, 0) both; }"
+      },
+      "reduced_motion": "instant — element removed without slide",
+      "performance": "transform only — GPU composited; under RTL, mirror to translateX(-100%) — direction must match dismissal gesture"
+    },
+    {
+      "id": "blur-out",
+      "name": "Blur-Out",
+      "category": "Exit",
+      "tokens": {
+        "duration_ms": 220,
+        "easing": "cubic-bezier(0.4, 0.0, 1, 1)",
+        "transform_from": "scale(1)",
+        "transform_to": "scale(0.98)",
+        "opacity_from": 1,
+        "opacity_to": 0,
+        "filter_from": "blur(0)",
+        "filter_to": "blur(6px)"
+      },
+      "stacks": {
+        "framer_motion": "{ exit: { filter: 'blur(6px)', scale: 0.98, opacity: 0 }, transition: { duration: 0.22, ease: [0.4, 0, 1, 1] } }",
+        "gsap": "gsap.to(el, { filter: 'blur(6px)', scale: 0.98, opacity: 0, duration: 0.22, ease: 'power2.in' })",
+        "css": "@keyframes blur-out { from { filter: blur(0); transform: scale(1); opacity: 1; } to { filter: blur(6px); transform: scale(0.98); opacity: 0; } } .blur-out { animation: blur-out 220ms cubic-bezier(0.4, 0.0, 1, 1) both; }"
+      },
+      "reduced_motion": "instant — fade only, no blur",
+      "performance": "WARNING: filter:blur can drop frames on mid-tier mobile; reserve for hero-level surfaces"
+    },
+    {
+      "id": "instant-exit",
+      "name": "Instant Exit",
+      "category": "Exit",
+      "tokens": {
+        "duration_ms": 0,
+        "easing": "linear",
+        "opacity_from": 1,
+        "opacity_to": 0
+      },
+      "stacks": {
+        "framer_motion": "{ exit: { opacity: 0 }, transition: { duration: 0 } }",
+        "gsap": "gsap.set(el, { opacity: 0 })",
+        "css": ".instant-exit { opacity: 0; }"
+      },
+      "reduced_motion": "no change — already instant",
+      "performance": "no animation — explicit instant removal for high-frequency state churn (autocomplete suggestions, validation flashes)"
+    },
+    {
+      "id": "magnetic-pointer-6px",
+      "name": "Magnetic Pointer 6px",
+      "category": "Hover",
+      "tokens": {
+        "duration_ms": 320,
+        "easing": "spring(0.5, 100, 14)",
+        "transform_from": "translate(0, 0)",
+        "transform_to": "translate(var(--mx, 0), var(--my, 0))",
+        "opacity_from": 1,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "const x = useMotionValue(0); const y = useMotionValue(0); const sx = useSpring(x, {stiffness: 100, damping: 14}); const sy = useSpring(y, {stiffness: 100, damping: 14}); // onMouseMove: x.set((e.clientX - rect.left - rect.width/2) * 0.15); cap at +-6",
+        "gsap": "gsap.quickTo(el, 'x', {duration: 0.32, ease: 'power3.out'}); gsap.quickTo(el, 'y', {duration: 0.32, ease: 'power3.out'}); // onmousemove: xTo(dx * 0.15) — cap at +-6",
+        "css": "/* CSS alone cannot do magnetic — requires JS to read pointer position and set --mx/--my custom properties */ .magnetic { transform: translate(var(--mx, 0), var(--my, 0)); transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1); }"
+      },
+      "reduced_motion": "disable — no pointer-tracking transform; element stays static",
+      "performance": "transform only via motion values (bypass React state) — NEVER useState in mousemove; use useMotionValue + useSpring. Wrap in its own client component to avoid re-rendering siblings"
+    },
+    {
+      "id": "magnetic-pointer-12px",
+      "name": "Magnetic Pointer 12px Strong",
+      "category": "Hover",
+      "tokens": {
+        "duration_ms": 360,
+        "easing": "spring(0.5, 80, 12)",
+        "transform_from": "translate(0, 0)",
+        "transform_to": "translate(var(--mx, 0), var(--my, 0))",
+        "opacity_from": 1,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "const x = useMotionValue(0); const y = useMotionValue(0); const sx = useSpring(x, {stiffness: 80, damping: 12}); // onMouseMove: x.set((e.clientX - rect.left - rect.width/2) * 0.30); cap at +-12",
+        "gsap": "gsap.quickTo(el, 'x', {duration: 0.36, ease: 'power3.out'}); // onmousemove: xTo(dx * 0.30) — cap at +-12",
+        "css": "/* CSS alone cannot do magnetic — see magnetic-pointer-6px */"
+      },
+      "reduced_motion": "disable — no pointer-tracking transform",
+      "performance": "transform only via motion values; stronger pull, reserve for primary CTAs not every link"
+    },
+    {
+      "id": "scale-101-subtle",
+      "name": "Scale 101 Subtle",
+      "category": "Hover",
+      "tokens": {
+        "duration_ms": 200,
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "transform_from": "scale(1)",
+        "transform_to": "scale(1.01)",
+        "opacity_from": 1,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "<motion.div whileHover={{ scale: 1.01 }} transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }} />",
+        "gsap": "el.addEventListener('mouseenter', () => gsap.to(el, { scale: 1.01, duration: 0.2, ease: 'expo.out' }))",
+        "css": ".scale-101 { transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1); } @media (hover: hover) { .scale-101:hover { transform: scale(1.01); } }"
+      },
+      "reduced_motion": "disable — no scale on hover",
+      "performance": "transform only — GPU composited; gate with @media (hover: hover) to skip on touch devices"
+    },
+    {
+      "id": "lift-on-hover-2px",
+      "name": "Lift on Hover 2px",
+      "category": "Hover",
+      "tokens": {
+        "duration_ms": 200,
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "transform_from": "translateY(0)",
+        "transform_to": "translateY(-2px)",
+        "opacity_from": 1,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "<motion.div whileHover={{ y: -2 }} transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }} />",
+        "gsap": "el.addEventListener('mouseenter', () => gsap.to(el, { y: -2, duration: 0.2, ease: 'expo.out' }))",
+        "css": ".lift-2 { transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1); } @media (hover: hover) { .lift-2:hover { transform: translateY(-2px); } }"
+      },
+      "reduced_motion": "disable — no transform on hover",
+      "performance": "transform only — GPU composited; cards lift up, never down — direction matters"
+    },
+    {
+      "id": "parallax-3d-tilt-soft",
+      "name": "Parallax 3D Tilt Soft",
+      "category": "Hover",
+      "tokens": {
+        "duration_ms": 400,
+        "easing": "spring(0.5, 90, 16)",
+        "transform_from": "perspective(800px) rotateX(0) rotateY(0)",
+        "transform_to": "perspective(800px) rotateX(var(--ry, 0)) rotateY(var(--rx, 0))",
+        "opacity_from": 1,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "const rx = useMotionValue(0); const ry = useMotionValue(0); const srx = useSpring(rx, {stiffness: 90, damping: 16}); // onMouseMove: rx.set(((e.clientY - rect.top)/rect.height - 0.5) * 6); cap at +-3deg",
+        "gsap": "gsap.quickTo(el, 'rotationX', {duration: 0.4, ease: 'power3.out'}); gsap.quickTo(el, 'rotationY', {duration: 0.4, ease: 'power3.out'}); // CSS: transform-style: preserve-3d; perspective: 800px on parent",
+        "css": ".tilt-parent { perspective: 800px; } .tilt { transform: rotateX(var(--ry, 0)) rotateY(var(--rx, 0)); transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1); transform-style: preserve-3d; }"
+      },
+      "reduced_motion": "disable — element stays flat, no rotation",
+      "performance": "transform (3D) — GPU composited; pointer events ONLY (no DeviceOrientation/DeviceMotion), max ±3deg to avoid vestibular discomfort"
+    },
+    {
+      "id": "parallax-3d-tilt-strong",
+      "name": "Parallax 3D Tilt Strong",
+      "category": "Hover",
+      "tokens": {
+        "duration_ms": 360,
+        "easing": "spring(0.5, 120, 14)",
+        "transform_from": "perspective(800px) rotateX(0) rotateY(0)",
+        "transform_to": "perspective(800px) rotateX(var(--ry, 0)) rotateY(var(--rx, 0))",
+        "opacity_from": 1,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "// see soft variant — multiplier is 14 instead of 6, cap +-7deg",
+        "gsap": "// see soft variant — cap rotation at +-7deg",
+        "css": "/* see tilt-soft — only the deg cap differs */"
+      },
+      "reduced_motion": "disable — element stays flat",
+      "performance": "transform (3D) — GPU composited; reserve for showcase cards (product hero, premium card preview), not every clickable card. Pointer events only — NEVER DeviceOrientation/DeviceMotion"
+    },
+    {
+      "id": "cursor-spotlight",
+      "name": "Cursor Spotlight",
+      "category": "Hover",
+      "tokens": {
+        "duration_ms": 0,
+        "easing": "linear",
+        "opacity_from": 0,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "const x = useMotionValue(0); const y = useMotionValue(0); // onMouseMove: x.set(e.clientX - rect.left); use as backgroundImage: `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.06), transparent 40%)`",
+        "gsap": "el.addEventListener('mousemove', e => { const r = el.getBoundingClientRect(); el.style.setProperty('--mx', `${e.clientX - r.left}px`); el.style.setProperty('--my', `${e.clientY - r.top}px`); })",
+        "css": ".spotlight { background: radial-gradient(circle 200px at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.06), transparent 40%); transition: background 0ms; }"
+      },
+      "reduced_motion": "disable — no spotlight tracking; static background",
+      "performance": "background-position via custom property — composites cheaper than full background animation; throttle mousemove with requestAnimationFrame in JS, NEVER useState"
+    },
+    {
+      "id": "scale-press-97",
+      "name": "Scale Press 97",
+      "category": "Press",
+      "tokens": {
+        "duration_ms": 100,
+        "easing": "cubic-bezier(0.4, 0.0, 0.2, 1)",
+        "transform_from": "scale(1)",
+        "transform_to": "scale(0.97)",
+        "opacity_from": 1,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "<motion.button whileTap={{ scale: 0.97 }} transition={{ duration: 0.1, ease: [0.4, 0, 0.2, 1] }} />",
+        "gsap": "el.addEventListener('pointerdown', () => gsap.to(el, { scale: 0.97, duration: 0.1, ease: 'power2.out' })); el.addEventListener('pointerup', () => gsap.to(el, { scale: 1, duration: 0.15, ease: 'expo.out' }))",
+        "css": ".press-97 { transition: transform 100ms cubic-bezier(0.4, 0.0, 0.2, 1); } .press-97:active { transform: scale(0.97); }"
+      },
+      "reduced_motion": "disable — no scale on press; rely on color/border change for feedback",
+      "performance": "transform only — GPU composited; press goes DOWN (scale <1), release returns to 1. Buttons depress, never inflate"
+    },
+    {
+      "id": "scale-press-95-bouncy",
+      "name": "Scale Press 95 Bouncy",
+      "category": "Press",
+      "tokens": {
+        "duration_ms": 320,
+        "easing": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "transform_from": "scale(0.95)",
+        "transform_to": "scale(1)",
+        "opacity_from": 1,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "<motion.button whileTap={{ scale: 0.95 }} transition={{ type: 'spring', stiffness: 400, damping: 17 }} />",
+        "gsap": "el.addEventListener('pointerdown', () => gsap.to(el, { scale: 0.95, duration: 0.08 })); el.addEventListener('pointerup', () => gsap.to(el, { scale: 1, duration: 0.32, ease: 'back.out(1.6)' }))",
+        "css": ".press-95-bouncy:active { transform: scale(0.95); transition: transform 80ms cubic-bezier(0.4, 0.0, 0.2, 1); } .press-95-bouncy { transition: transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1); }"
+      },
+      "reduced_motion": "disable — no scale; rely on color/border feedback",
+      "performance": "transform only — GPU composited; release overshoot is the personality. Use sparingly — primary CTAs only"
+    },
+    {
+      "id": "ripple-material-3",
+      "name": "Ripple Material 3",
+      "category": "Press",
+      "tokens": {
+        "duration_ms": 600,
+        "easing": "cubic-bezier(0.4, 0.0, 0.2, 1)",
+        "transform_from": "scale(0)",
+        "transform_to": "scale(4)",
+        "opacity_from": 0.3,
+        "opacity_to": 0
+      },
+      "stacks": {
+        "framer_motion": "// On pointerdown, append a <motion.span> at click coords with initial scale 0, opacity 0.3, animate to scale 4 opacity 0, remove on complete",
+        "gsap": "el.addEventListener('pointerdown', e => { const ripple = document.createElement('span'); ripple.className = 'ripple'; const r = el.getBoundingClientRect(); ripple.style.left = `${e.clientX - r.left}px`; ripple.style.top = `${e.clientY - r.top}px`; el.appendChild(ripple); gsap.fromTo(ripple, { scale: 0, opacity: 0.3 }, { scale: 4, opacity: 0, duration: 0.6, ease: 'power2.out', onComplete: () => ripple.remove() }); })",
+        "css": ".ripple-parent { position: relative; overflow: hidden; } .ripple { position: absolute; width: 12px; height: 12px; border-radius: 50%; background: currentColor; pointer-events: none; transform: translate(-50%, -50%) scale(0); opacity: 0.3; animation: ripple 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards; } @keyframes ripple { to { transform: translate(-50%, -50%) scale(4); opacity: 0; } }"
+      },
+      "reduced_motion": "instant — append + remove without scale animation, or skip entirely",
+      "performance": "transform + opacity only — GPU composited; parent MUST have overflow:hidden and position:relative; spawned span MUST be removed on animation end to avoid DOM bloat"
+    },
+    {
+      "id": "press-3d-pushdown",
+      "name": "Press 3D Pushdown",
+      "category": "Press",
+      "tokens": {
+        "duration_ms": 120,
+        "easing": "cubic-bezier(0.4, 0.0, 0.2, 1)",
+        "transform_from": "translateY(0) scale(1)",
+        "transform_to": "translateY(2px) scale(0.98)",
+        "opacity_from": 1,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "<motion.button whileTap={{ y: 2, scale: 0.98 }} transition={{ duration: 0.12, ease: [0.4, 0, 0.2, 1] }} />",
+        "gsap": "// see scale-press-97; chain y:2 along with scale",
+        "css": ".press-3d { transition: transform 120ms cubic-bezier(0.4, 0.0, 0.2, 1); box-shadow: 0 2px 0 rgba(0,0,0,0.2); } .press-3d:active { transform: translateY(2px) scale(0.98); box-shadow: 0 0 0 rgba(0,0,0,0.2); }"
+      },
+      "reduced_motion": "disable — no transform on press",
+      "performance": "transform only — GPU composited; box-shadow change is acceptable here because shadow IS the visual cue for depth"
+    },
+    {
+      "id": "shake-error",
+      "name": "Shake Error",
+      "category": "Press",
+      "tokens": {
+        "duration_ms": 400,
+        "easing": "cubic-bezier(0.4, 0.0, 0.2, 1)",
+        "transform_from": "translateX(0)",
+        "transform_to": "translateX(0)"
+      },
+      "stacks": {
+        "framer_motion": "<motion.div animate={{ x: [0, -6, 6, -4, 4, -2, 0] }} transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }} />",
+        "gsap": "gsap.fromTo(el, { x: 0 }, { x: 0, duration: 0.4, ease: 'power2.out', keyframes: [{ x: -6 }, { x: 6 }, { x: -4 }, { x: 4 }, { x: -2 }, { x: 0 }] })",
+        "css": "@keyframes shake { 0%, 100% { transform: translateX(0); } 15% { transform: translateX(-6px); } 30% { transform: translateX(6px); } 45% { transform: translateX(-4px); } 60% { transform: translateX(4px); } 80% { transform: translateX(-2px); } } .shake { animation: shake 400ms cubic-bezier(0.4, 0.0, 0.2, 1); }"
+      },
+      "reduced_motion": "replace — flash red border or red bg pulse instead of shake (shake is a known vestibular trigger)",
+      "performance": "transform only — GPU composited; trigger on form-submit failure, OTP wrong, not on every validation tick. Specific errors named per field is the better UX (per standing rule #4)"
+    },
+    {
+      "id": "parallax-bg-slow",
+      "name": "Parallax BG Slow",
+      "category": "Scroll",
+      "tokens": {
+        "duration_ms": 0,
+        "easing": "linear",
+        "transform_from": "translateY(0)",
+        "transform_to": "translateY(calc(var(--scroll) * -0.3))"
+      },
+      "stacks": {
+        "framer_motion": "const { scrollY } = useScroll(); const y = useTransform(scrollY, [0, 1000], [0, -300]); <motion.div style={{ y }} />",
+        "gsap": "gsap.to('.bg', { yPercent: -30, ease: 'none', scrollTrigger: { trigger: '.section', start: 'top bottom', end: 'bottom top', scrub: 1 } })",
+        "css": "/* Pure CSS parallax requires perspective + translateZ trick on container; for reliable scrub use JS */"
+      },
+      "reduced_motion": "disable — background stays fixed, no parallax tracking",
+      "performance": "transform only via scrub:1 (not scrub:true — jittery); use will-change:transform sparingly on the parallax layer; ScrollTrigger.batch() for many"
+    },
+    {
+      "id": "parallax-bg-fast",
+      "name": "Parallax BG Fast",
+      "category": "Scroll",
+      "tokens": {
+        "duration_ms": 0,
+        "easing": "linear",
+        "transform_from": "translateY(0)",
+        "transform_to": "translateY(calc(var(--scroll) * -0.7))"
+      },
+      "stacks": {
+        "framer_motion": "const { scrollY } = useScroll(); const y = useTransform(scrollY, [0, 1000], [0, -700]); <motion.div style={{ y }} />",
+        "gsap": "gsap.to('.foreground', { yPercent: -70, ease: 'none', scrollTrigger: { trigger: '.section', start: 'top bottom', end: 'bottom top', scrub: 1 } })",
+        "css": "/* see parallax-bg-slow */"
+      },
+      "reduced_motion": "disable — element stays in place",
+      "performance": "transform only; reserve high-multiplier parallax for foreground elements; backgrounds beyond -0.5 feel disorienting"
+    },
+    {
+      "id": "scroll-mask-reveal",
+      "name": "Scroll Mask Reveal",
+      "category": "Scroll",
+      "tokens": {
+        "duration_ms": 800,
+        "easing": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "transform_from": "translateY(100%)",
+        "transform_to": "translateY(0)",
+        "opacity_from": 1,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "// Use whileInView on .line-inner with viewport: { once: true, margin: '-10% 0px' } and the mask-reveal-text setup",
+        "gsap": "ScrollTrigger.batch('.line-inner', { onEnter: batch => gsap.from(batch, { yPercent: 100, duration: 0.8, stagger: 0.06, ease: 'expo.out' }), start: 'top 85%', once: true })",
+        "css": "/* CSS @starting-style or scroll-driven animations (animation-timeline: view()) work in Chrome 115+ but Safari support trails — JS fallback required */"
+      },
+      "reduced_motion": "instant — text renders in place on viewport entry, no mask",
+      "performance": "transform only; once:true is mandatory or every scroll-up replays the reveal — feels broken"
+    },
+    {
+      "id": "scroll-pin-then-release",
+      "name": "Scroll Pin Then Release",
+      "category": "Scroll",
+      "tokens": {
+        "duration_ms": 0,
+        "easing": "linear",
+        "transform_from": "scale(1)",
+        "transform_to": "scale(1)"
+      },
+      "stacks": {
+        "framer_motion": "// Framer doesn't natively pin — fall back to position:sticky CSS + useScroll for the interpolated content. For real pinning, use GSAP.",
+        "gsap": "ScrollTrigger.create({ trigger: '.section', start: 'top top', end: '+=1000', pin: true, scrub: 1, anticipatePin: 1 })",
+        "css": ".section { position: sticky; top: 0; height: 100vh; } /* sticky gives the pin, but you cannot scrub a sub-animation inside it without JS */"
+      },
+      "reduced_motion": "disable — remove pin; section scrolls normally",
+      "performance": "transform only inside the pinned timeline; anticipatePin:1 prevents the layout flash on enter; ScrollTrigger.refresh() after font/image load is mandatory"
+    },
+    {
+      "id": "scroll-stack-cards",
+      "name": "Scroll Stack Cards",
+      "category": "Scroll",
+      "tokens": {
+        "duration_ms": 0,
+        "easing": "linear",
+        "transform_from": "translateY(0) scale(1)",
+        "transform_to": "translateY(-40px) scale(0.92)"
+      },
+      "stacks": {
+        "framer_motion": "// Each card has position:sticky + top:80px; useScroll with target on each card; useTransform maps progress to scale + translateY",
+        "gsap": "gsap.utils.toArray('.card').forEach((card, i) => { gsap.to(card, { yPercent: -8, scale: 0.92, ease: 'none', scrollTrigger: { trigger: card, start: 'top 10%', endTrigger: '.cards-container', end: 'bottom 60%', scrub: 1 } }); })",
+        "css": ".card { position: sticky; top: 80px; } /* sticky stack only — for the scale/y shift you need JS */"
+      },
+      "reduced_motion": "disable — cards scroll normally without stacking",
+      "performance": "transform only — GPU composited; each card needs its own ScrollTrigger; use ScrollTrigger.batch when card count > 6"
+    },
+    {
+      "id": "scroll-hero-scale",
+      "name": "Scroll Hero Scale",
+      "category": "Scroll",
+      "tokens": {
+        "duration_ms": 0,
+        "easing": "linear",
+        "transform_from": "scale(1)",
+        "transform_to": "scale(1.15)"
+      },
+      "stacks": {
+        "framer_motion": "const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] }); const scale = useTransform(scrollYProgress, [0, 1], [1, 1.15]); <motion.img style={{ scale }} />",
+        "gsap": "gsap.to('.hero-img', { scale: 1.15, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 } })",
+        "css": "/* requires JS scrub */"
+      },
+      "reduced_motion": "disable — image stays at scale 1",
+      "performance": "transform only — GPU composited; combine with subtle opacity fade (1 to 0.6) for hero exit feel"
+    },
+    {
+      "id": "scroll-progress-bar",
+      "name": "Scroll Progress Bar",
+      "category": "Scroll",
+      "tokens": {
+        "duration_ms": 0,
+        "easing": "linear",
+        "transform_from": "scaleX(0)",
+        "transform_to": "scaleX(1)"
+      },
+      "stacks": {
+        "framer_motion": "const { scrollYProgress } = useScroll(); <motion.div style={{ scaleX: scrollYProgress, transformOrigin: '0% 50%' }} className=\"progress\" />",
+        "gsap": "gsap.to('.progress', { scaleX: 1, ease: 'none', scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 0 } }) // CSS: transform-origin: left",
+        "css": "@supports (animation-timeline: scroll()) { .progress { animation: scale linear; animation-timeline: scroll(); transform-origin: left; } @keyframes scale { to { transform: scaleX(1); } } }"
+      },
+      "reduced_motion": "no change — progress feedback is informational, not decorative; keep it",
+      "performance": "transform only — GPU composited; scrub:0 (instant) is correct here, this is feedback not animation"
+    },
+    {
+      "id": "page-fade-cross",
+      "name": "Page Fade Cross",
+      "category": "Transition",
+      "tokens": {
+        "duration_ms": 220,
+        "easing": "cubic-bezier(0.4, 0.0, 0.2, 1)",
+        "opacity_from": 0,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "<AnimatePresence mode=\"wait\"><motion.div key={route} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }} /></AnimatePresence>",
+        "gsap": "gsap.fromTo('.page', { opacity: 0 }, { opacity: 1, duration: 0.22, ease: 'power2.inOut' })",
+        "css": ".page-enter { opacity: 0; } .page-enter-active { opacity: 1; transition: opacity 220ms cubic-bezier(0.4, 0.0, 0.2, 1); }"
+      },
+      "reduced_motion": "no change — already opacity-only",
+      "performance": "opacity only — GPU composited; mode=\"wait\" prevents double-mount layout jank"
+    },
+    {
+      "id": "page-slide-horizontal",
+      "name": "Page Slide Horizontal",
+      "category": "Transition",
+      "tokens": {
+        "duration_ms": 400,
+        "easing": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "transform_from": "translateX(100%)",
+        "transform_to": "translateX(0)",
+        "opacity_from": 1,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "<AnimatePresence><motion.div key={route} initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }} /></AnimatePresence>",
+        "gsap": "gsap.fromTo('.page', { xPercent: 100 }, { xPercent: 0, duration: 0.4, ease: 'expo.out' })",
+        "css": "/* requires JS to orchestrate enter+exit pair */"
+      },
+      "reduced_motion": "instant — set translateX(0) without animation",
+      "performance": "transform only — GPU composited; under RTL, mirror direction (entering page from left, exiting to right)"
+    },
+    {
+      "id": "route-shared-element",
+      "name": "Route Shared Element",
+      "category": "Transition",
+      "tokens": {
+        "duration_ms": 480,
+        "easing": "spring(0.5, 300, 30)",
+        "transform_from": "scale(1)",
+        "transform_to": "scale(1)"
+      },
+      "stacks": {
+        "framer_motion": "<motion.img layoutId=\"hero-image\" transition={{ type: 'spring', stiffness: 300, damping: 30 }} /> // same layoutId on both routes",
+        "gsap": "// Flip plugin: const state = Flip.getState('.hero'); /* navigate */ Flip.from(state, { duration: 0.48, ease: 'expo.out' })",
+        "css": "@supports (view-transition-name: hero) { .hero { view-transition-name: hero; } } /* + document.startViewTransition() */"
+      },
+      "reduced_motion": "instant — element jumps to destination without morphing",
+      "performance": "Framer's layoutId / GSAP Flip / View Transitions API all do FLIP under the hood (record bounds, swap DOM, transform from old to new) — NEVER animate width/height manually"
+    },
+    {
+      "id": "modal-anchored-spring",
+      "name": "Modal Anchored Spring",
+      "category": "Transition",
+      "tokens": {
+        "duration_ms": 420,
+        "easing": "spring(0.5, 400, 30)",
+        "transform_from": "scale(0.96) translateY(8px)",
+        "transform_to": "scale(1) translateY(0)",
+        "opacity_from": 0,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "<motion.div initial={{ scale: 0.96, y: 8, opacity: 0 }} animate={{ scale: 1, y: 0, opacity: 1 }} exit={{ scale: 0.96, y: 8, opacity: 0 }} transition={{ type: 'spring', stiffness: 400, damping: 30 }} />",
+        "gsap": "gsap.fromTo(el, { scale: 0.96, y: 8, opacity: 0 }, { scale: 1, y: 0, opacity: 1, duration: 0.42, ease: 'expo.out' })",
+        "css": "@keyframes modal-in { from { transform: scale(0.96) translateY(8px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } } .modal { animation: modal-in 420ms cubic-bezier(0.16, 1, 0.3, 1) both; transform-origin: center; }"
+      },
+      "reduced_motion": "instant — fade only, no scale or translate",
+      "performance": "transform + opacity only — GPU composited; transform-origin matters — anchor modal scale to where the trigger was when possible (use FLIP/layoutId)"
+    },
+    {
+      "id": "drawer-slide-from-right",
+      "name": "Drawer Slide From Right",
+      "category": "Transition",
+      "tokens": {
+        "duration_ms": 320,
+        "easing": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "transform_from": "translateX(100%)",
+        "transform_to": "translateX(0)",
+        "opacity_from": 1,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "<motion.aside initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }} />",
+        "gsap": "gsap.fromTo(el, { xPercent: 100 }, { xPercent: 0, duration: 0.32, ease: 'expo.out' })",
+        "css": "@keyframes drawer-in-right { from { transform: translateX(100%); } to { transform: translateX(0); } } .drawer-right { animation: drawer-in-right 320ms cubic-bezier(0.22, 1, 0.36, 1) both; }"
+      },
+      "reduced_motion": "instant — drawer appears in place, no slide",
+      "performance": "transform only — GPU composited; under RTL, mirror to translateX(-100%) — drawer must come from the leading edge, not the trailing"
+    },
+    {
+      "id": "sheet-slide-from-bottom",
+      "name": "Sheet Slide From Bottom",
+      "category": "Transition",
+      "tokens": {
+        "duration_ms": 380,
+        "easing": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "transform_from": "translateY(100%)",
+        "transform_to": "translateY(0)",
+        "opacity_from": 1,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "<motion.div drag=\"y\" dragConstraints={{ top: 0 }} initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} transition={{ type: 'spring', stiffness: 300, damping: 30 }} />",
+        "gsap": "gsap.fromTo(el, { yPercent: 100 }, { yPercent: 0, duration: 0.38, ease: 'expo.out' })",
+        "css": "@keyframes sheet-up { from { transform: translateY(100%); } to { transform: translateY(0); } } .sheet { animation: sheet-up 380ms cubic-bezier(0.22, 1, 0.36, 1) both; }"
+      },
+      "reduced_motion": "instant — sheet appears at destination without slide",
+      "performance": "transform only — GPU composited; mobile sheets — pair with drag-to-dismiss gesture"
+    },
+    {
+      "id": "tab-underline-slide",
+      "name": "Tab Underline Slide",
+      "category": "Transition",
+      "tokens": {
+        "duration_ms": 280,
+        "easing": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "transform_from": "translateX(0)",
+        "transform_to": "translateX(var(--tab-x, 0))"
+      },
+      "stacks": {
+        "framer_motion": "<motion.div layoutId=\"tab-indicator\" transition={{ type: 'spring', stiffness: 400, damping: 30 }} /> // single element rendered inside the active tab",
+        "gsap": "const state = Flip.getState('.tab-indicator'); /* update active class */ Flip.from(state, { duration: 0.28, ease: 'expo.out' })",
+        "css": ".tab-indicator { position: absolute; bottom: 0; height: 2px; transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), width 280ms cubic-bezier(0.22, 1, 0.36, 1); }"
+      },
+      "reduced_motion": "instant — indicator jumps to active tab without slide",
+      "performance": "transform only via FLIP (Framer layoutId / GSAP Flip) — measures width/x of old and new positions, animates transform between them. Never animate left/width directly"
+    },
+    {
+      "id": "loading-spinner-3-arcs",
+      "name": "Loading Spinner 3 Arcs",
+      "category": "State",
+      "tokens": {
+        "duration_ms": 900,
+        "easing": "linear",
+        "transform_from": "rotate(0deg)",
+        "transform_to": "rotate(360deg)"
+      },
+      "stacks": {
+        "framer_motion": "<motion.div animate={{ rotate: 360 }} transition={{ duration: 0.9, ease: 'linear', repeat: Infinity }} />",
+        "gsap": "gsap.to(el, { rotation: 360, duration: 0.9, ease: 'none', repeat: -1 })",
+        "css": "@keyframes spin { to { transform: rotate(360deg); } } .spinner { animation: spin 900ms linear infinite; }"
+      },
+      "reduced_motion": "replace — show a static three-dot indicator that pulses opacity, not rotation",
+      "performance": "transform only — GPU composited; linear is the ONE place linear is correct (continuous loop). 900ms feels brisk; below 700ms feels frantic, above 1200ms feels broken"
+    },
+    {
+      "id": "skeleton-shimmer-1500ms",
+      "name": "Skeleton Shimmer 1.5s",
+      "category": "State",
+      "tokens": {
+        "duration_ms": 1500,
+        "easing": "linear",
+        "transform_from": "translateX(-100%)",
+        "transform_to": "translateX(100%)"
+      },
+      "stacks": {
+        "framer_motion": "<motion.div animate={{ x: ['-100%', '100%'] }} transition={{ duration: 1.5, ease: 'linear', repeat: Infinity }} className=\"shimmer-bar\" />",
+        "gsap": "gsap.fromTo('.shimmer', { xPercent: -100 }, { xPercent: 100, duration: 1.5, ease: 'none', repeat: -1 })",
+        "css": "@keyframes shimmer { from { transform: translateX(-100%); } to { transform: translateX(100%); } } .skeleton::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); animation: shimmer 1500ms linear infinite; }"
+      },
+      "reduced_motion": "static — keep skeleton's base gray; no shimmer translate",
+      "performance": "WARNING: 1500ms duration exceeds the 1200ms guideline — acceptable here because it's an infinite ambient loop, not a state transition. Continuous loops are the exception. Use transform on the gradient pseudo-element, NEVER on the background-position"
+    },
+    {
+      "id": "progress-bar-eased",
+      "name": "Progress Bar Eased",
+      "category": "State",
+      "tokens": {
+        "duration_ms": 400,
+        "easing": "cubic-bezier(0.4, 0.0, 0.2, 1)",
+        "transform_from": "scaleX(var(--prev, 0))",
+        "transform_to": "scaleX(var(--next, 0.5))"
+      },
+      "stacks": {
+        "framer_motion": "<motion.div animate={{ scaleX: progress / 100 }} transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }} style={{ transformOrigin: '0% 50%' }} />",
+        "gsap": "gsap.to('.progress-fill', { scaleX: progress / 100, duration: 0.4, ease: 'power2.inOut', transformOrigin: 'left center' })",
+        "css": ".progress-fill { transform: scaleX(0); transform-origin: left; transition: transform 400ms cubic-bezier(0.4, 0.0, 0.2, 1); }"
+      },
+      "reduced_motion": "instant — width updates immediately, no transition",
+      "performance": "transform only — GPU composited via scaleX with transform-origin:left; never animate width directly"
+    },
+    {
+      "id": "toast-stack-in-out",
+      "name": "Toast Stack In/Out",
+      "category": "State",
+      "tokens": {
+        "duration_ms": 320,
+        "easing": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "transform_from": "translateY(24px) scale(0.95)",
+        "transform_to": "translateY(0) scale(1)",
+        "opacity_from": 0,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "<AnimatePresence><motion.div layout initial={{ y: 24, opacity: 0, scale: 0.95 }} animate={{ y: 0, opacity: 1, scale: 1 }} exit={{ y: 24, opacity: 0, scale: 0.95, transition: { duration: 0.2 } }} transition={{ type: 'spring', stiffness: 350, damping: 30 }} /></AnimatePresence>",
+        "gsap": "gsap.from(toast, { y: 24, opacity: 0, scale: 0.95, duration: 0.32, ease: 'expo.out' }); // on dismiss: gsap.to + remove",
+        "css": "@keyframes toast-in { from { transform: translateY(24px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } } .toast { animation: toast-in 320ms cubic-bezier(0.22, 1, 0.36, 1) both; }"
+      },
+      "reduced_motion": "instant — toast appears at final position with opacity fade only",
+      "performance": "transform + opacity only — GPU composited; use `layout` prop in Framer so existing toasts shift up when a new one stacks, without animating top/margin"
+    },
+    {
+      "id": "badge-count-bump",
+      "name": "Badge Count Bump",
+      "category": "State",
+      "tokens": {
+        "duration_ms": 360,
+        "easing": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "transform_from": "scale(1)",
+        "transform_to": "scale(1)"
+      },
+      "stacks": {
+        "framer_motion": "<motion.span animate={{ scale: [1, 1.25, 1] }} transition={{ duration: 0.36, ease: [0.34, 1.56, 0.64, 1], times: [0, 0.4, 1] }} key={count}>{count}</motion.span>",
+        "gsap": "gsap.fromTo(el, { scale: 1 }, { scale: 1, duration: 0.36, ease: 'back.out(1.6)', keyframes: [{ scale: 1.25, duration: 0.14 }, { scale: 1, duration: 0.22 }] })",
+        "css": "@keyframes count-bump { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.25); } } .badge-bump { animation: count-bump 360ms cubic-bezier(0.34, 1.56, 0.64, 1); }"
+      },
+      "reduced_motion": "static — count updates without scale bump; color/opacity flash optional",
+      "performance": "transform only — GPU composited; key prop in React forces remount so each new count gets its own bump"
+    },
+    {
+      "id": "pulse-attention",
+      "name": "Pulse Attention",
+      "category": "Attention",
+      "tokens": {
+        "duration_ms": 1200,
+        "easing": "cubic-bezier(0.4, 0.0, 0.6, 1)",
+        "transform_from": "scale(1)",
+        "transform_to": "scale(1)",
+        "opacity_from": 1,
+        "opacity_to": 0.6
+      },
+      "stacks": {
+        "framer_motion": "<motion.div animate={{ scale: [1, 1.05, 1], opacity: [1, 0.6, 1] }} transition={{ duration: 1.2, repeat: Infinity, ease: [0.4, 0, 0.6, 1] }} />",
+        "gsap": "gsap.to(el, { scale: 1.05, opacity: 0.6, duration: 0.6, ease: 'sine.inOut', repeat: -1, yoyo: true })",
+        "css": "@keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.6; } } .pulse { animation: pulse 1200ms cubic-bezier(0.4, 0.0, 0.6, 1) infinite; }"
+      },
+      "reduced_motion": "disable — element stays static; rely on color/border to draw attention",
+      "performance": "WARNING: 1200ms is the upper limit and acceptable here ONLY because it's an ambient loop. Use sparingly — one element on screen at a time. Bidirectional ease is the correct call (sine.inOut/ease-in-out) for symmetric loops"
+    },
+    {
+      "id": "glow-soft",
+      "name": "Glow Soft",
+      "category": "Attention",
+      "tokens": {
+        "duration_ms": 800,
+        "easing": "cubic-bezier(0.4, 0.0, 0.6, 1)",
+        "opacity_from": 0.3,
+        "opacity_to": 0.8
+      },
+      "stacks": {
+        "framer_motion": "<motion.div className=\"glow-halo\" animate={{ opacity: [0.3, 0.8, 0.3] }} transition={{ duration: 0.8, ease: [0.4, 0, 0.6, 1], repeat: Infinity }} /> // halo is a sibling element with the glow, not a box-shadow on the target",
+        "gsap": "gsap.to('.glow-halo', { opacity: 0.8, duration: 0.4, ease: 'sine.inOut', repeat: -1, yoyo: true })",
+        "css": ".glow-halo { position: absolute; inset: -8px; border-radius: inherit; box-shadow: 0 0 24px 4px var(--accent); opacity: 0.3; animation: glow-pulse 800ms cubic-bezier(0.4, 0.0, 0.6, 1) infinite alternate; } @keyframes glow-pulse { to { opacity: 0.8; } }"
+      },
+      "reduced_motion": "static — glow visible at mid opacity, no pulse",
+      "performance": "opacity only — GPU composited. CRITICAL: animate the OPACITY of a sibling halo element with the shadow baked in. NEVER animate box-shadow keyframes — they repaint, not composite"
+    },
+    {
+      "id": "bounce-once-only",
+      "name": "Bounce Once Only",
+      "category": "Attention",
+      "tokens": {
+        "duration_ms": 600,
+        "easing": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "transform_from": "translateY(0)",
+        "transform_to": "translateY(0)"
+      },
+      "stacks": {
+        "framer_motion": "<motion.div animate={{ y: [0, -8, 0, -4, 0] }} transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }} />",
+        "gsap": "gsap.fromTo(el, { y: 0 }, { y: 0, duration: 0.6, ease: 'back.out(1.4)', keyframes: [{ y: -8 }, { y: 0 }, { y: -4 }, { y: 0 }] })",
+        "css": "@keyframes bounce-once { 0%, 50%, 100% { transform: translateY(0); } 25% { transform: translateY(-8px); } 75% { transform: translateY(-4px); } } .bounce-once { animation: bounce-once 600ms cubic-bezier(0.34, 1.56, 0.64, 1) 1; }"
+      },
+      "reduced_motion": "disable — no bounce; rely on a momentary scale or color flash",
+      "performance": "transform only — GPU composited; the `1` iteration count is the discipline — never set bounce to infinite, that's the casino-app trope"
+    },
+    {
+      "id": "wiggle-error-tilt",
+      "name": "Wiggle Error Tilt",
+      "category": "Attention",
+      "tokens": {
+        "duration_ms": 500,
+        "easing": "cubic-bezier(0.4, 0.0, 0.2, 1)",
+        "transform_from": "rotate(0deg)",
+        "transform_to": "rotate(0deg)"
+      },
+      "stacks": {
+        "framer_motion": "<motion.div animate={{ rotate: [0, -3, 3, -2, 2, 0] }} transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }} />",
+        "gsap": "gsap.fromTo(el, { rotation: 0 }, { rotation: 0, duration: 0.5, ease: 'power2.inOut', keyframes: [{ rotation: -3 }, { rotation: 3 }, { rotation: -2 }, { rotation: 2 }, { rotation: 0 }] })",
+        "css": "@keyframes wiggle { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(-3deg); } 40% { transform: rotate(3deg); } 60% { transform: rotate(-2deg); } 80% { transform: rotate(2deg); } } .wiggle { animation: wiggle 500ms cubic-bezier(0.4, 0.0, 0.2, 1); }"
+      },
+      "reduced_motion": "replace — flash error color, no rotation (rotation triggers some vestibular issues)",
+      "performance": "transform only — GPU composited; reserve for soft errors. For hard errors, use shake-error or just-name-the-field per standing rule #4"
+    },
+    {
+      "id": "cta-shine-sweep",
+      "name": "CTA Shine Sweep",
+      "category": "Attention",
+      "tokens": {
+        "duration_ms": 1100,
+        "easing": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "transform_from": "translateX(-150%) skewX(-20deg)",
+        "transform_to": "translateX(250%) skewX(-20deg)"
+      },
+      "stacks": {
+        "framer_motion": "<motion.span className=\"shine\" animate={{ x: ['-150%', '250%'] }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], repeat: Infinity, repeatDelay: 3 }} />",
+        "gsap": "gsap.fromTo('.shine', { xPercent: -150 }, { xPercent: 250, duration: 1.1, ease: 'expo.out', repeat: -1, repeatDelay: 3 })",
+        "css": ".cta { position: relative; overflow: hidden; } .shine { position: absolute; top: 0; left: 0; width: 30%; height: 100%; background: linear-gradient(120deg, transparent, rgba(255,255,255,0.25), transparent); transform: translateX(-150%) skewX(-20deg); animation: shine-sweep 1100ms cubic-bezier(0.22, 1, 0.36, 1) infinite 3s; } @keyframes shine-sweep { to { transform: translateX(250%) skewX(-20deg); } }"
+      },
+      "reduced_motion": "disable — no sweep; CTA shows static background",
+      "performance": "transform only — GPU composited; the 3s repeatDelay is the discipline. A non-stop sweep is the gambling-app red flag. Skip for accessibility-leaning audiences"
+    },
+    {
+      "id": "stagger-list-children",
+      "name": "Stagger List Children",
+      "category": "Entry",
+      "tokens": {
+        "duration_ms": 320,
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "transform_from": "translateY(8px)",
+        "transform_to": "translateY(0)",
+        "opacity_from": 0,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "<motion.ul variants={{ visible: { transition: { staggerChildren: 0.04 } } }} initial=\"hidden\" animate=\"visible\">{items.map(i => <motion.li key={i.id} variants={{ hidden: { y: 8, opacity: 0 }, visible: { y: 0, opacity: 1 } }} transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }} />)}</motion.ul>",
+        "gsap": "gsap.from('.item', { y: 8, opacity: 0, duration: 0.32, ease: 'expo.out', stagger: 0.04 })",
+        "css": ".item { animation: fade-up-8 320ms cubic-bezier(0.16, 1, 0.3, 1) both; } .item:nth-child(1) { animation-delay: 0ms; } .item:nth-child(2) { animation-delay: 40ms; } /* etc — cap at child 8 */"
+      },
+      "reduced_motion": "instant — render list with opacity 1, no stagger or transform",
+      "performance": "transform + opacity only — GPU composited; cap stagger at ~300ms total. 20-item list: use 15-20ms per child OR only stagger visible viewport children"
+    },
+    {
+      "id": "accordion-content-reveal",
+      "name": "Accordion Content Reveal",
+      "category": "Transition",
+      "tokens": {
+        "duration_ms": 280,
+        "easing": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "transform_from": "scaleY(0)",
+        "transform_to": "scaleY(1)",
+        "opacity_from": 0,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "<motion.div initial={false} animate={{ height: open ? 'auto' : 0 }} transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }} style={{ overflow: 'hidden' }} /> // Framer's height:auto uses CSS not transform — see WARNING",
+        "gsap": "gsap.to('.content', { height: open ? 'auto' : 0, duration: 0.28, ease: 'expo.out' }) // same caveat — height animation is the necessary evil here",
+        "css": "details[open] .content { animation: accordion-down 280ms cubic-bezier(0.22, 1, 0.36, 1); } @keyframes accordion-down { from { height: 0; opacity: 0; } to { height: var(--content-h); opacity: 1; } } /* must set --content-h in JS or use CSS Grid 1fr trick */"
+      },
+      "reduced_motion": "instant — content toggles without height animation",
+      "performance": "WARNING: this is the rare case where animating height is the right call. Mitigate with: (a) CSS Grid 1fr trick (`grid-template-rows: 0fr` to `1fr`), or (b) Framer's `layout` prop, or (c) GSAP Flip — all three convert layout to transforms under the hood. Direct height keyframes will jank under high load"
+    },
+    {
+      "id": "underline-link-grow",
+      "name": "Underline Link Grow",
+      "category": "Hover",
+      "tokens": {
+        "duration_ms": 240,
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "transform_from": "scaleX(0)",
+        "transform_to": "scaleX(1)"
+      },
+      "stacks": {
+        "framer_motion": "<a className=\"link\"><span>label</span><motion.span className=\"underline\" initial={{ scaleX: 0 }} whileHover={{ scaleX: 1 }} transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }} style={{ transformOrigin: '0% 50%' }} /></a>",
+        "gsap": "// onmouseenter: gsap.to('.underline', { scaleX: 1, duration: 0.24, ease: 'expo.out', transformOrigin: 'left center' }); onmouseleave: gsap.to('.underline', { scaleX: 0, duration: 0.18, ease: 'expo.in', transformOrigin: 'right center' })",
+        "css": ".link { position: relative; } .link::after { content: ''; position: absolute; left: 0; bottom: -2px; right: 0; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1); } @media (hover: hover) { .link:hover::after { transform: scaleX(1); } }"
+      },
+      "reduced_motion": "instant — underline appears on hover without grow; or use a permanent underline",
+      "performance": "transform only — GPU composited; pro touch is to swap transform-origin on exit (right) vs enter (left) so it grows from leading edge then retracts to trailing edge"
+    },
+    {
+      "id": "fab-rotate-on-open",
+      "name": "FAB Rotate on Open",
+      "category": "State",
+      "tokens": {
+        "duration_ms": 240,
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "transform_from": "rotate(0deg)",
+        "transform_to": "rotate(45deg)"
+      },
+      "stacks": {
+        "framer_motion": "<motion.button animate={{ rotate: open ? 45 : 0 }} transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}><PlusIcon /></motion.button>",
+        "gsap": "gsap.to(el, { rotation: open ? 45 : 0, duration: 0.24, ease: 'expo.out' })",
+        "css": ".fab.is-open .fab-icon { transform: rotate(45deg); transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1); }"
+      },
+      "reduced_motion": "instant — icon flips without rotation; or swap icon entirely",
+      "performance": "transform only — GPU composited; 45deg turns a plus into an X — cheap, legible state cue"
+    },
+    {
+      "id": "input-focus-ring-grow",
+      "name": "Input Focus Ring Grow",
+      "category": "State",
+      "tokens": {
+        "duration_ms": 180,
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "transform_from": "scale(0.98)",
+        "transform_to": "scale(1)",
+        "opacity_from": 0,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "<motion.div className=\"focus-ring\" animate={{ scale: focused ? 1 : 0.98, opacity: focused ? 1 : 0 }} transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }} />",
+        "gsap": "gsap.to('.focus-ring', { scale: focused ? 1 : 0.98, opacity: focused ? 1 : 0, duration: 0.18, ease: 'expo.out' })",
+        "css": ".input { position: relative; } .focus-ring { position: absolute; inset: -3px; border-radius: inherit; box-shadow: 0 0 0 2px var(--accent); opacity: 0; transform: scale(0.98); transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), opacity 180ms; } .input:focus-within ~ .focus-ring { opacity: 1; transform: scale(1); }"
+      },
+      "reduced_motion": "instant — outline appears with opacity 1, no scale grow",
+      "performance": "transform + opacity on a sibling halo element — never animate the input's box-shadow keyframes. The outline ITSELF can have a 0ms appearance but the surrounding glow can fade in"
+    },
+    {
+      "id": "marquee-infinite-loop",
+      "name": "Marquee Infinite Loop",
+      "category": "Attention",
+      "tokens": {
+        "duration_ms": 1200,
+        "easing": "linear",
+        "transform_from": "translateX(0)",
+        "transform_to": "translateX(-50%)"
+      },
+      "stacks": {
+        "framer_motion": "<motion.div animate={{ x: ['0%', '-50%'] }} transition={{ duration: 1.2, ease: 'linear', repeat: Infinity }} /> // duration here is per-loop in seconds — for slow ticker, set to 20+",
+        "gsap": "gsap.to('.marquee-track', { xPercent: -50, duration: 20, ease: 'none', repeat: -1 }) // CSS: track contains 2 copies of content for seamless loop",
+        "css": "@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } } .marquee-track { display: flex; animation: marquee 20s linear infinite; } /* track contains 2 copies side-by-side */"
+      },
+      "reduced_motion": "static — pause the marquee at frame 0",
+      "performance": "WARNING: duration here is the per-loop time; for slow tickers 15-25s is the right range. Linear is the ONLY correct easing for seamless infinite loops. Pre-duplicate content in DOM (two copies side-by-side) so the -50% wrap is invisible"
+    }
+  ]
+}

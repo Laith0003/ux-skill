@@ -1,0 +1,2041 @@
+{
+  "_meta": {
+    "version": "2.0.0",
+    "entries": 70,
+    "last_updated": "2026-05-27",
+    "source": "ux-skill v2 — Python pivot",
+    "schema_version": "1.0"
+  },
+  "entries": [
+    {
+      "id": "cormorant-inter-jetbrains",
+      "name": "Cormorant Garamond × Inter × JetBrains Mono",
+      "display": {
+        "family": "Cormorant Garamond",
+        "weights": [500, 600, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Cormorant+Garamond"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["editorial", "warm", "literary", "trustworthy"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Inter as body is fine; only flagged when used as DISPLAY (the slop signal)."
+    },
+    {
+      "id": "fraunces-inter-jetbrains",
+      "name": "Fraunces × Inter × JetBrains Mono",
+      "display": {
+        "family": "Fraunces",
+        "weights": [400, 600, 700, 900],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Fraunces"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["distinctive", "playful-serious", "modern-classical", "expressive"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Fraunces SOFT axis at 100 turns playful fast; keep SOFT 0–30 for editorial gravitas."
+    },
+    {
+      "id": "playfair-source-sans-ibm-mono",
+      "name": "Playfair Display × Source Sans 3 × IBM Plex Mono",
+      "display": {
+        "family": "Playfair Display",
+        "weights": [600, 700, 900],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Playfair+Display"
+      },
+      "body": {
+        "family": "Source Sans 3",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Source+Sans+3"
+      },
+      "mono": {
+        "family": "IBM Plex Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/IBM+Plex+Mono"
+      },
+      "character": ["magazine", "high-contrast", "classical", "formal"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Playfair below 32px collapses on screen; use 40px+ only or thin strokes disappear."
+    },
+    {
+      "id": "eb-garamond-work-sans-fira",
+      "name": "EB Garamond × Work Sans × Fira Code",
+      "display": {
+        "family": "EB Garamond",
+        "weights": [500, 600, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/EB+Garamond"
+      },
+      "body": {
+        "family": "Work Sans",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Work+Sans"
+      },
+      "mono": {
+        "family": "Fira Code",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Fira+Code"
+      },
+      "character": ["scholarly", "calm", "traditional", "readable"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "EB Garamond's italics are stronger than its roman; lean italic for quotes and pull-outs."
+    },
+    {
+      "id": "crimson-pro-ibm-plex-sans-ibm-mono",
+      "name": "Crimson Pro × IBM Plex Sans × IBM Plex Mono",
+      "display": {
+        "family": "Crimson Pro",
+        "weights": [500, 600, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Crimson+Pro"
+      },
+      "body": {
+        "family": "IBM Plex Sans",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/IBM+Plex+Sans"
+      },
+      "mono": {
+        "family": "IBM Plex Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/IBM+Plex+Mono"
+      },
+      "character": ["literary", "considered", "technical-warm", "documentation"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Crimson Pro at body sizes also works — consider single-family typography pairing."
+    },
+    {
+      "id": "lora-nunito-sans-cascadia",
+      "name": "Lora × Nunito Sans × Cascadia Code",
+      "display": {
+        "family": "Lora",
+        "weights": [500, 600, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Lora"
+      },
+      "body": {
+        "family": "Nunito Sans",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Nunito+Sans"
+      },
+      "mono": {
+        "family": "Cascadia Code",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Cascadia+Code"
+      },
+      "character": ["friendly", "rounded", "soft", "approachable"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Nunito Sans can read juvenile at heavier weights; cap at 600 for serious surfaces."
+    },
+    {
+      "id": "domine-dm-sans-jetbrains",
+      "name": "Domine × DM Sans × JetBrains Mono",
+      "display": {
+        "family": "Domine",
+        "weights": [500, 600, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Domine"
+      },
+      "body": {
+        "family": "DM Sans",
+        "weights": [400, 500, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/DM+Sans"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["bookish", "stable", "readable", "calm"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Domine designed FOR body text — promoting to display works but loses identity above 48px."
+    },
+    {
+      "id": "spectral-public-sans-source-code",
+      "name": "Spectral × Public Sans × Source Code Pro",
+      "display": {
+        "family": "Spectral",
+        "weights": [500, 600, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Spectral"
+      },
+      "body": {
+        "family": "Public Sans",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Public+Sans"
+      },
+      "mono": {
+        "family": "Source Code Pro",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Source+Code+Pro"
+      },
+      "character": ["governmental", "civic", "neutral", "considered"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Public Sans was designed for US gov — reads bureaucratic outside that context; pair with warm display."
+    },
+    {
+      "id": "source-serif-pro-source-sans-source-code",
+      "name": "Source Serif Pro × Source Sans 3 × Source Code Pro",
+      "display": {
+        "family": "Source Serif Pro",
+        "weights": [500, 600, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Source+Serif+Pro"
+      },
+      "body": {
+        "family": "Source Sans 3",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Source+Sans+3"
+      },
+      "mono": {
+        "family": "Source Code Pro",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Source+Code+Pro"
+      },
+      "character": ["systemic", "documentation", "balanced", "matched"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Adobe-designed superfamily; reads engineered/neutral — add personality elsewhere."
+    },
+    {
+      "id": "merriweather-source-sans-ibm-mono",
+      "name": "Merriweather × Source Sans 3 × IBM Plex Mono",
+      "display": {
+        "family": "Merriweather",
+        "weights": [400, 700, 900],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Merriweather"
+      },
+      "body": {
+        "family": "Source Sans 3",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Source+Sans+3"
+      },
+      "mono": {
+        "family": "IBM Plex Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/IBM+Plex+Mono"
+      },
+      "character": ["screen-optimized", "sturdy", "newspaper", "readable"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Merriweather is heavy on screen; cap at 700 unless going truly massive (96px+)."
+    },
+    {
+      "id": "newsreader-figtree-jetbrains",
+      "name": "Newsreader × Figtree × JetBrains Mono",
+      "display": {
+        "family": "Newsreader",
+        "weights": [500, 600, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Newsreader"
+      },
+      "body": {
+        "family": "Figtree",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Figtree"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["news", "long-form", "current", "open"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Newsreader has optical sizing — must apply 'opsz' axis to match display vs body context."
+    },
+    {
+      "id": "libre-caslon-libre-franklin-jetbrains",
+      "name": "Libre Caslon Display × Libre Franklin × JetBrains Mono",
+      "display": {
+        "family": "Libre Caslon Display",
+        "weights": [400],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Libre+Caslon+Display"
+      },
+      "body": {
+        "family": "Libre Franklin",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Libre+Franklin"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["classical", "american", "newspaper", "elegant"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Caslon Display only has one weight — locked into a single visual gesture; works on hero, less on cards."
+    },
+    {
+      "id": "young-serif-inter-jetbrains",
+      "name": "Young Serif × Inter × JetBrains Mono",
+      "display": {
+        "family": "Young Serif",
+        "weights": [400],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Young+Serif"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["chunky", "confident", "editorial-modern", "distinctive"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Single-weight display means you cannot build a heading hierarchy from Young Serif alone — use size only."
+    },
+    {
+      "id": "instrument-serif-inter-jetbrains",
+      "name": "Instrument Serif × Inter × JetBrains Mono",
+      "display": {
+        "family": "Instrument Serif",
+        "weights": [400],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Instrument+Serif"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["elegant", "thin", "luxe-startup", "refined"],
+      "compatible_styles": [],
+      "ai_slop_risk": "medium",
+      "notes": "Instrument Serif has become a Stripe/Linear-era cliché in 2025; still beautiful but signals 'I read TechCrunch.'"
+    },
+    {
+      "id": "bricolage-grotesque-inter-jetbrains",
+      "name": "Bricolage Grotesque × Inter × JetBrains Mono",
+      "display": {
+        "family": "Bricolage Grotesque",
+        "weights": [500, 600, 700, 800],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Bricolage+Grotesque"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["expressive", "wide", "modern-grotesque", "distinctive"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Bricolage has width axis — fight the urge to animate width; treat as static type, not interactive toy."
+    },
+    {
+      "id": "syne-inter-jetbrains",
+      "name": "Syne × Inter × JetBrains Mono",
+      "display": {
+        "family": "Syne",
+        "weights": [500, 600, 700, 800],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Syne"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["contemporary-art", "gallery", "asymmetric", "bold"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Syne Mono exists — consider switching mono to Syne Mono for full-family pairing on art/gallery sites."
+    },
+    {
+      "id": "space-grotesk-inter-space-mono",
+      "name": "Space Grotesk × Inter × Space Mono",
+      "display": {
+        "family": "Space Grotesk",
+        "weights": [500, 600, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Space+Grotesk"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "Space Mono",
+        "weights": [400, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Space+Mono"
+      },
+      "character": ["technical", "spacey", "geometric", "developer-friendly"],
+      "compatible_styles": [],
+      "ai_slop_risk": "medium",
+      "notes": "Space Grotesk became the default 'web3 startup' font 2022–2025; design around the cliché or own it."
+    },
+    {
+      "id": "schibsted-grotesk-inter-jetbrains",
+      "name": "Schibsted Grotesk × Inter × JetBrains Mono",
+      "display": {
+        "family": "Schibsted Grotesk",
+        "weights": [500, 700, 800, 900],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Schibsted+Grotesk"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["nordic", "tight", "tabloid-modern", "high-contrast"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Designed for Scandinavian news brand; carries journalism DNA — use for editorial, not pure marketing."
+    },
+    {
+      "id": "ibm-plex-mono-everywhere",
+      "name": "IBM Plex Mono (mono-only)",
+      "display": {
+        "family": "IBM Plex Mono",
+        "weights": [400, 500, 600, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/IBM+Plex+Mono"
+      },
+      "body": {
+        "family": "IBM Plex Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/IBM+Plex+Mono"
+      },
+      "mono": {
+        "family": "IBM Plex Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/IBM+Plex+Mono"
+      },
+      "character": ["brutalist", "engineering", "uniform", "punchcard"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Mono-only kills readability past two paragraphs — use for landing pages, dev tools, never long-form docs."
+    },
+    {
+      "id": "klein-condensed-inter-jetbrains",
+      "name": "Klein Condensed × Inter × JetBrains Mono",
+      "display": {
+        "family": "Big Shoulders Display",
+        "weights": [600, 700, 800, 900],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Big+Shoulders+Display"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["industrial", "tall", "civic", "chicago"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Big Shoulders shouts at sizes below 32px; reserve for 72px+ headlines only."
+    },
+    {
+      "id": "anton-inter-jetbrains",
+      "name": "Anton × Inter × JetBrains Mono",
+      "display": {
+        "family": "Anton",
+        "weights": [400],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Anton"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["compressed", "poster", "shouty", "high-impact"],
+      "compatible_styles": [],
+      "ai_slop_risk": "medium",
+      "notes": "Anton was THE 2018-era Squarespace cliché; still works but feels 'designed by a marketer.'"
+    },
+    {
+      "id": "archivo-black-archivo-jetbrains",
+      "name": "Archivo Black × Archivo × JetBrains Mono",
+      "display": {
+        "family": "Archivo Black",
+        "weights": [400],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Archivo+Black"
+      },
+      "body": {
+        "family": "Archivo",
+        "weights": [400, 500, 600, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Archivo"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["sturdy", "agency", "campaign", "same-family"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Archivo Black is its own family — pair with regular Archivo for cohesion without contrast loss."
+    },
+    {
+      "id": "barlow-condensed-barlow-jetbrains",
+      "name": "Barlow Condensed × Barlow × JetBrains Mono",
+      "display": {
+        "family": "Barlow Condensed",
+        "weights": [500, 600, 700, 800],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Barlow+Condensed"
+      },
+      "body": {
+        "family": "Barlow",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Barlow"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["athletic", "transportation", "highway-signage", "energetic"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Barlow is the California DOT signage font — carries that institutional energy whether you want it or not."
+    },
+    {
+      "id": "outfit-outfit-jetbrains",
+      "name": "Outfit Display × Outfit × JetBrains Mono",
+      "display": {
+        "family": "Outfit",
+        "weights": [600, 700, 800, 900],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Outfit"
+      },
+      "body": {
+        "family": "Outfit",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Outfit"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["geometric", "modern", "minimal", "same-family"],
+      "compatible_styles": [],
+      "ai_slop_risk": "medium",
+      "notes": "Single-family typography saves loading but loses visual texture; works for product, fails for editorial."
+    },
+    {
+      "id": "manrope-manrope-jetbrains",
+      "name": "Manrope × Manrope × JetBrains Mono",
+      "display": {
+        "family": "Manrope",
+        "weights": [600, 700, 800],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Manrope"
+      },
+      "body": {
+        "family": "Manrope",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Manrope"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["dashboard", "neutral", "modern", "saas-default"],
+      "compatible_styles": [],
+      "ai_slop_risk": "high",
+      "notes": "Manrope-everywhere IS the AI-generated SaaS landing page look; pair with something idiosyncratic to escape."
+    },
+    {
+      "id": "geist-geist-geist-mono",
+      "name": "Geist × Geist × Geist Mono (Vercel)",
+      "display": {
+        "family": "Geist",
+        "weights": [600, 700, 800],
+        "source": "Vercel (Google Fonts mirror)",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Geist"
+      },
+      "body": {
+        "family": "Geist",
+        "weights": [400, 500, 600],
+        "source": "Vercel (Google Fonts mirror)",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Geist"
+      },
+      "mono": {
+        "family": "Geist Mono",
+        "weights": [400, 500],
+        "source": "Vercel (Google Fonts mirror)",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Geist+Mono"
+      },
+      "character": ["vercel", "developer-platform", "neutral", "engineered"],
+      "compatible_styles": [],
+      "ai_slop_risk": "high",
+      "notes": "This IS the Vercel look — instantly reads 'AI/dev startup'; deliberate choice or avoid entirely."
+    },
+    {
+      "id": "inter-tight-inter-jetbrains",
+      "name": "Inter Tight × Inter × JetBrains Mono (Linear-style)",
+      "display": {
+        "family": "Inter Tight",
+        "weights": [600, 700, 800],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter+Tight"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["linear", "saas", "neutral-modern", "engineered"],
+      "compatible_styles": [],
+      "ai_slop_risk": "high",
+      "notes": "Inter Tight as display IS the Linear-clone signal of 2024–2026; differentiate or commit fully."
+    },
+    {
+      "id": "redaction-inter-jetbrains",
+      "name": "Redaction × Inter × JetBrains Mono",
+      "display": {
+        "family": "Redaction",
+        "weights": [400, 700],
+        "source": "Self-hosted (Redaction Studio, OFL)",
+        "license": "OFL",
+        "url": "https://www.redaction.us/"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["activist", "newsprint-decayed", "investigative", "stark"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Redaction has multiple decay levels (10, 20, 35, 50, 70, 100); pick ONE and stay there or chaos."
+    },
+    {
+      "id": "ogg-inter-jetbrains-freemium",
+      "name": "Ogg × Inter × JetBrains Mono (premium display)",
+      "display": {
+        "family": "Ogg",
+        "weights": [400, 500, 700],
+        "source": "Sharp Type",
+        "license": "Commercial",
+        "url": "https://sharptype.co/typefaces/ogg/"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["calligraphic", "expressive", "hand-cut", "editorial"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Ogg's italics are the headline asset; favor italic over roman for hero work."
+    },
+    {
+      "id": "tobias-inter-jetbrains-freemium",
+      "name": "Tobias × Inter × JetBrains Mono (premium display)",
+      "display": {
+        "family": "Tobias",
+        "weights": [300, 400, 600, 700],
+        "source": "Klim Type Foundry",
+        "license": "Commercial",
+        "url": "https://klim.co.nz/retail-fonts/tobias/"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["high-contrast", "fashion", "literary-luxe", "didone-influenced"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Tobias hairlines vanish under 32px and below 1.5x device pixel ratio; size and resolution matter."
+    },
+    {
+      "id": "domaine-display-inter-jetbrains-freemium",
+      "name": "Domaine Display × Inter × JetBrains Mono (premium display)",
+      "display": {
+        "family": "Domaine Display",
+        "weights": [400, 500, 700],
+        "source": "Klim Type Foundry",
+        "license": "Commercial",
+        "url": "https://klim.co.nz/retail-fonts/domaine-display/"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["luxury", "editorial", "fashion-publishing", "elegant"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Domaine reads heritage-luxe; pair with too-modern body and the dissonance kills both."
+    },
+    {
+      "id": "founders-grotesk-inter-jetbrains-freemium",
+      "name": "Founders Grotesk × Inter × JetBrains Mono (freemium)",
+      "display": {
+        "family": "Founders Grotesk",
+        "weights": [500, 600, 700],
+        "source": "Klim Type Foundry",
+        "license": "Commercial",
+        "url": "https://klim.co.nz/retail-fonts/founders-grotesk/"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["neue-haas", "swiss-modern", "neutral-confident", "agency"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Founders is THE design-agency default — choose deliberately, not by reflex."
+    },
+    {
+      "id": "national-2-inter-jetbrains-freemium",
+      "name": "National 2 × Inter × JetBrains Mono (freemium)",
+      "display": {
+        "family": "National 2",
+        "weights": [500, 700, 900],
+        "source": "Klim Type Foundry",
+        "license": "Commercial",
+        "url": "https://klim.co.nz/retail-fonts/national-2/"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["humanist-sans", "considered", "warm-grotesque", "considered"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "National 2 reads warmer than Founders — better fit for brands wanting humanity not just precision."
+    },
+    {
+      "id": "soehne-inter-jetbrains-freemium",
+      "name": "Söhne × Inter × JetBrains Mono (freemium, ChatGPT-style)",
+      "display": {
+        "family": "Söhne",
+        "weights": [500, 600, 700],
+        "source": "Klim Type Foundry",
+        "license": "Commercial",
+        "url": "https://klim.co.nz/retail-fonts/soehne/"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["chatgpt", "neue-helvetica-warm", "editorial-platform", "considered"],
+      "compatible_styles": [],
+      "ai_slop_risk": "medium",
+      "notes": "Söhne is the OpenAI/ChatGPT font — instant 'AI product' association; lean in or don't pick it."
+    },
+    {
+      "id": "pangram-sans-inter-jetbrains-premium",
+      "name": "Pangram Sans × Inter × JetBrains Mono (Pangram Pangram)",
+      "display": {
+        "family": "Pangram Sans",
+        "weights": [500, 600, 700, 800],
+        "source": "Pangram Pangram Foundry",
+        "license": "Commercial",
+        "url": "https://pangrampangram.com/products/pangram-sans"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["pangram-pangram", "modern-grotesque", "creative-startup", "characterful"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "PPP has become the 'design-aware founder' signal; signal-rich but no longer obscure in 2026."
+    },
+    {
+      "id": "neue-machina-inter-jetbrains-premium",
+      "name": "PP Neue Machina × Inter × JetBrains Mono (Pangram Pangram)",
+      "display": {
+        "family": "PP Neue Machina",
+        "weights": [400, 500, 700, 800],
+        "source": "Pangram Pangram Foundry",
+        "license": "Commercial",
+        "url": "https://pangrampangram.com/products/neue-machina"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["mechanical", "techno", "monospace-influenced", "futuristic"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Neue Machina was the 2021 web3 cliche; less common in 2026, but still reads 'crypto-adjacent.'"
+    },
+    {
+      "id": "pp-editorial-new-inter-jetbrains-premium",
+      "name": "PP Editorial New × Inter × JetBrains Mono (Pangram Pangram)",
+      "display": {
+        "family": "PP Editorial New",
+        "weights": [200, 400, 500, 700],
+        "source": "Pangram Pangram Foundry",
+        "license": "Commercial",
+        "url": "https://pangrampangram.com/products/editorial-new"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["didone", "fashion-editorial", "high-contrast", "ultralight"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Editorial New ultralight at 200 vanishes below 48px — sized below that defeats the purpose."
+    },
+    {
+      "id": "pp-mori-inter-jetbrains-premium",
+      "name": "PP Mori × Inter × JetBrains Mono (Pangram Pangram)",
+      "display": {
+        "family": "PP Mori",
+        "weights": [400, 500, 600, 700],
+        "source": "Pangram Pangram Foundry",
+        "license": "Commercial",
+        "url": "https://pangrampangram.com/products/mori"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["minimal", "alpine-clean", "neutral-warm", "considered"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Mori is the 'we paid for our font' minimal-startup move; PPP licensing is reasonable but it's not free."
+    },
+    {
+      "id": "feijoa-inter-berkeley-premium",
+      "name": "Feijoa × Inter × Berkeley Mono (Klim premium)",
+      "display": {
+        "family": "Feijoa",
+        "weights": [400, 500, 700],
+        "source": "Klim Type Foundry",
+        "license": "Commercial",
+        "url": "https://klim.co.nz/retail-fonts/feijoa/"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "Berkeley Mono",
+        "weights": [400, 500, 700],
+        "source": "U.S. Graphics Company",
+        "license": "Commercial",
+        "url": "https://berkeleygraphics.com/typefaces/berkeley-mono/"
+      },
+      "character": ["humanist-serif", "soft", "warm", "considered"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Feijoa is calligraphic-warm and rare; Berkeley Mono adds engineering counterweight."
+    },
+    {
+      "id": "national-2-national-2-berkeley-premium",
+      "name": "National 2 × National 2 × Berkeley Mono (single-family premium)",
+      "display": {
+        "family": "National 2",
+        "weights": [500, 700, 900],
+        "source": "Klim Type Foundry",
+        "license": "Commercial",
+        "url": "https://klim.co.nz/retail-fonts/national-2/"
+      },
+      "body": {
+        "family": "National 2",
+        "weights": [400, 500, 600],
+        "source": "Klim Type Foundry",
+        "license": "Commercial",
+        "url": "https://klim.co.nz/retail-fonts/national-2/"
+      },
+      "mono": {
+        "family": "Berkeley Mono",
+        "weights": [400, 500],
+        "source": "U.S. Graphics Company",
+        "license": "Commercial",
+        "url": "https://berkeleygraphics.com/typefaces/berkeley-mono/"
+      },
+      "character": ["single-family", "premium-stack", "documentation-luxe", "considered"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Single-family pairings need careful weight discipline — display 700, body 400 minimum gap."
+    },
+    {
+      "id": "akkurat-akkurat-berkeley-premium",
+      "name": "Akkurat × Akkurat × Berkeley Mono (Lineto premium)",
+      "display": {
+        "family": "Akkurat",
+        "weights": [500, 700],
+        "source": "Lineto",
+        "license": "Commercial",
+        "url": "https://lineto.com/typefaces/akkurat"
+      },
+      "body": {
+        "family": "Akkurat",
+        "weights": [400, 500],
+        "source": "Lineto",
+        "license": "Commercial",
+        "url": "https://lineto.com/typefaces/akkurat"
+      },
+      "mono": {
+        "family": "Berkeley Mono",
+        "weights": [400, 500],
+        "source": "U.S. Graphics Company",
+        "license": "Commercial",
+        "url": "https://berkeleygraphics.com/typefaces/berkeley-mono/"
+      },
+      "character": ["swiss-modern", "lineto", "considered-neutral", "design-system"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Akkurat is the 'we read Wallpaper magazine' typeface — earned by craft, not loud."
+    },
+    {
+      "id": "gt-walsheim-gt-walsheim-jetbrains-premium",
+      "name": "GT Walsheim × GT Walsheim × JetBrains Mono (Grilli Type)",
+      "display": {
+        "family": "GT Walsheim",
+        "weights": [500, 600, 700, 800],
+        "source": "Grilli Type",
+        "license": "Commercial",
+        "url": "https://www.grillitype.com/typeface/gt-walsheim"
+      },
+      "body": {
+        "family": "GT Walsheim",
+        "weights": [400, 500, 600],
+        "source": "Grilli Type",
+        "license": "Commercial",
+        "url": "https://www.grillitype.com/typeface/gt-walsheim"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["geometric-warm", "consumer-friendly", "rounded", "approachable"],
+      "compatible_styles": [],
+      "ai_slop_risk": "medium",
+      "notes": "Walsheim was the 2018–2022 mid-market SaaS default; familiar enough to feel safe, not distinctive."
+    },
+    {
+      "id": "gt-america-gt-america-jetbrains-premium",
+      "name": "GT America × GT America × JetBrains Mono (Grilli Type)",
+      "display": {
+        "family": "GT America",
+        "weights": [500, 600, 700],
+        "source": "Grilli Type",
+        "license": "Commercial",
+        "url": "https://www.grillitype.com/typeface/gt-america"
+      },
+      "body": {
+        "family": "GT America",
+        "weights": [400, 500, 600],
+        "source": "Grilli Type",
+        "license": "Commercial",
+        "url": "https://www.grillitype.com/typeface/gt-america"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["american-grotesque", "considered", "tech-publishing", "versatile"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "GT America has 6 widths × 7 weights — easy to overuse the variety; pick 3 weights max."
+    },
+    {
+      "id": "neue-haas-grotesk-neue-haas-jetbrains-premium",
+      "name": "Neue Haas Grotesk × Neue Haas × JetBrains Mono (Linotype)",
+      "display": {
+        "family": "Neue Haas Grotesk",
+        "weights": [500, 700, 900],
+        "source": "Linotype / Monotype",
+        "license": "Commercial",
+        "url": "https://www.linotype.com/1245961/neue-haas-grotesk-family.html"
+      },
+      "body": {
+        "family": "Neue Haas Grotesk Text",
+        "weights": [400, 500, 600],
+        "source": "Linotype / Monotype",
+        "license": "Commercial",
+        "url": "https://www.linotype.com/1245961/neue-haas-grotesk-family.html"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["original-helvetica", "swiss", "modernist", "authoritative"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Neue Haas is the 'real' Helvetica restoration — use Display for headlines, Text for body, never swap."
+    },
+    {
+      "id": "calibre-calibre-jetbrains-premium",
+      "name": "Calibre × Calibre × JetBrains Mono (Klim)",
+      "display": {
+        "family": "Calibre",
+        "weights": [500, 700, 800],
+        "source": "Klim Type Foundry",
+        "license": "Commercial",
+        "url": "https://klim.co.nz/retail-fonts/calibre/"
+      },
+      "body": {
+        "family": "Calibre",
+        "weights": [400, 500, 600],
+        "source": "Klim Type Foundry",
+        "license": "Commercial",
+        "url": "https://klim.co.nz/retail-fonts/calibre/"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["neo-geometric", "saas-premium", "considered-warm", "dropbox"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Calibre was THE pre-Inter SaaS choice (Dropbox, etc.); now feels late-2010s if not balanced with distinctive display."
+    },
+    {
+      "id": "jetbrains-mono-only",
+      "name": "JetBrains Mono everywhere (mono-only)",
+      "display": {
+        "family": "JetBrains Mono",
+        "weights": [600, 700, 800],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "body": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["developer-tool", "terminal", "uniform", "brutalist-tech"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Works for dev tools and brutalist landing; readability collapses past 200 words — never long-form."
+    },
+    {
+      "id": "geist-mono-only",
+      "name": "Geist Mono everywhere (mono-only)",
+      "display": {
+        "family": "Geist Mono",
+        "weights": [500, 700, 800],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Geist+Mono"
+      },
+      "body": {
+        "family": "Geist Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Geist+Mono"
+      },
+      "mono": {
+        "family": "Geist Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Geist+Mono"
+      },
+      "character": ["vercel-brutalist", "engineering-tool", "monospace-everywhere", "considered"],
+      "compatible_styles": [],
+      "ai_slop_risk": "medium",
+      "notes": "Mono-everywhere screams 'AI-platform 2024'; readable for nav and labels, never narrative paragraphs."
+    },
+    {
+      "id": "fira-mono-only",
+      "name": "Fira Code everywhere (mono-only)",
+      "display": {
+        "family": "Fira Code",
+        "weights": [500, 600, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Fira+Code"
+      },
+      "body": {
+        "family": "Fira Code",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Fira+Code"
+      },
+      "mono": {
+        "family": "Fira Code",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Fira+Code"
+      },
+      "character": ["mozilla", "open-source-default", "ligatures", "terminal-warm"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Ligatures (== => -> :=) read as 'this is code' visually; disable for non-code surfaces."
+    },
+    {
+      "id": "berkeley-mono-only",
+      "name": "Berkeley Mono everywhere (mono-only, premium)",
+      "display": {
+        "family": "Berkeley Mono",
+        "weights": [500, 700, 800],
+        "source": "U.S. Graphics Company",
+        "license": "Commercial",
+        "url": "https://berkeleygraphics.com/typefaces/berkeley-mono/"
+      },
+      "body": {
+        "family": "Berkeley Mono",
+        "weights": [400, 500],
+        "source": "U.S. Graphics Company",
+        "license": "Commercial",
+        "url": "https://berkeleygraphics.com/typefaces/berkeley-mono/"
+      },
+      "mono": {
+        "family": "Berkeley Mono",
+        "weights": [400, 500],
+        "source": "U.S. Graphics Company",
+        "license": "Commercial",
+        "url": "https://berkeleygraphics.com/typefaces/berkeley-mono/"
+      },
+      "character": ["80s-engineering", "american-utility", "considered-mono", "distinctive"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Berkeley Mono carries strong American-utility 1980s memory; doesn't suit fashion or wellness brands."
+    },
+    {
+      "id": "departure-mono-only",
+      "name": "Departure Mono everywhere (mono-only)",
+      "display": {
+        "family": "Departure Mono",
+        "weights": [400],
+        "source": "Self-hosted (Departure Type Foundry)",
+        "license": "OFL",
+        "url": "https://departuremono.com/"
+      },
+      "body": {
+        "family": "Departure Mono",
+        "weights": [400],
+        "source": "Self-hosted (Departure Type Foundry)",
+        "license": "OFL",
+        "url": "https://departuremono.com/"
+      },
+      "mono": {
+        "family": "Departure Mono",
+        "weights": [400],
+        "source": "Self-hosted (Departure Type Foundry)",
+        "license": "OFL",
+        "url": "https://departuremono.com/"
+      },
+      "character": ["pixel-mono", "y2k", "retro-tech", "lo-fi"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Single weight, pixel-style; works for memorial pages and y2k zines, fails on professional product surfaces."
+    },
+    {
+      "id": "ibm-plex-sans-arabic-ibm-plex-sans-ibm-plex-mono-arabic",
+      "name": "IBM Plex Sans Arabic × IBM Plex Sans × IBM Plex Mono (RTL)",
+      "display": {
+        "family": "IBM Plex Sans Arabic",
+        "weights": [500, 600, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/IBM+Plex+Sans+Arabic"
+      },
+      "body": {
+        "family": "IBM Plex Sans",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/IBM+Plex+Sans"
+      },
+      "mono": {
+        "family": "IBM Plex Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/IBM+Plex+Mono"
+      },
+      "character": ["bilingual", "considered-arabic", "humanist", "documentation"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Plex Arabic and Plex Latin are matched in metrics; line-height needs +0.1 in Arabic vs Latin context."
+    },
+    {
+      "id": "tajawal-inter-jetbrains-rtl",
+      "name": "Tajawal × Inter × JetBrains Mono (RTL)",
+      "display": {
+        "family": "Tajawal",
+        "weights": [500, 700, 800],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Tajawal"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["modern-arabic", "geometric-arabic", "saudi", "bilingual"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Tajawal is heavily used in Saudi gov/startup; pairs naturally with Inter but reduce Arabic by 1 size step."
+    },
+    {
+      "id": "cairo-inter-ibm-mono-rtl",
+      "name": "Cairo × Inter × IBM Plex Mono (RTL)",
+      "display": {
+        "family": "Cairo",
+        "weights": [500, 600, 700, 800],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Cairo"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "IBM Plex Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/IBM+Plex+Mono"
+      },
+      "character": ["egyptian", "geometric-arabic", "bilingual", "neutral-arabic"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Cairo's lighter weights vanish on Arabic glyphs; cap minimum weight at 500 for Arabic content."
+    },
+    {
+      "id": "amiri-source-serif-ibm-mono-rtl",
+      "name": "Amiri × Source Serif Pro × IBM Plex Mono (RTL editorial)",
+      "display": {
+        "family": "Amiri",
+        "weights": [400, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Amiri"
+      },
+      "body": {
+        "family": "Source Serif Pro",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Source+Serif+Pro"
+      },
+      "mono": {
+        "family": "IBM Plex Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/IBM+Plex+Mono"
+      },
+      "character": ["classical-arabic", "naskh", "literary", "scholarly"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Amiri is naskh-style with deep classical roots; reads Quranic/scholarly — wrong for tech/startup, perfect for publishing."
+    },
+    {
+      "id": "noto-naskh-arabic-inter-jetbrains-rtl",
+      "name": "Noto Naskh Arabic × Inter × JetBrains Mono (RTL multilingual)",
+      "display": {
+        "family": "Noto Naskh Arabic",
+        "weights": [500, 600, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/noto/specimen/Noto+Naskh+Arabic"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["multilingual", "noto-system", "neutral-arabic", "documentation"],
+      "compatible_styles": [],
+      "ai_slop_risk": "medium",
+      "notes": "Noto is the Google 'no script left behind' fallback — neutral to a fault; lacks character of dedicated Arabic foundries."
+    },
+    {
+      "id": "rubik-rubik-jetbrains",
+      "name": "Rubik × Rubik × JetBrains Mono",
+      "display": {
+        "family": "Rubik",
+        "weights": [500, 600, 700, 800],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Rubik"
+      },
+      "body": {
+        "family": "Rubik",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Rubik"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["rounded-geometric", "hebrew-arabic-support", "friendly", "single-family"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Rubik has Arabic and Hebrew variants — great for tri-script products; slightly soft for serious B2B."
+    },
+    {
+      "id": "be-vietnam-pro-be-vietnam-jetbrains",
+      "name": "Be Vietnam Pro × Be Vietnam × JetBrains Mono",
+      "display": {
+        "family": "Be Vietnam Pro",
+        "weights": [600, 700, 800],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Be+Vietnam+Pro"
+      },
+      "body": {
+        "family": "Be Vietnam Pro",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Be+Vietnam+Pro"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["southeast-asian", "vietnamese-optimized", "geometric", "diacritic-friendly"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Built for Vietnamese diacritics — best choice when shipping to that market; otherwise overkill."
+    },
+    {
+      "id": "playfair-display-mulish-jetbrains",
+      "name": "Playfair Display × Mulish × JetBrains Mono",
+      "display": {
+        "family": "Playfair Display",
+        "weights": [600, 700, 800],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Playfair+Display"
+      },
+      "body": {
+        "family": "Mulish",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Mulish"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["minimalist-luxe", "wedding", "boutique", "feminine"],
+      "compatible_styles": [],
+      "ai_slop_risk": "high",
+      "notes": "Playfair + minimal sans is the wedding-blog / Substack / Etsy boutique cliché — overused since 2015."
+    },
+    {
+      "id": "literata-source-sans-jetbrains",
+      "name": "Literata × Source Sans 3 × JetBrains Mono",
+      "display": {
+        "family": "Literata",
+        "weights": [500, 600, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Literata"
+      },
+      "body": {
+        "family": "Source Sans 3",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Source+Sans+3"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["e-reader", "long-form", "google-play-books", "optical-sized"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Literata was designed for Google Play Books — has optical sizing; ideal for reading apps and long-form."
+    },
+    {
+      "id": "epilogue-epilogue-jetbrains",
+      "name": "Epilogue × Epilogue × JetBrains Mono",
+      "display": {
+        "family": "Epilogue",
+        "weights": [600, 700, 800, 900],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Epilogue"
+      },
+      "body": {
+        "family": "Epilogue",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Epilogue"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["squareish-geometric", "tech-confident", "wide-letterforms", "modern"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Epilogue's wide letterforms swallow horizontal space; not ideal for dense data tables."
+    },
+    {
+      "id": "rubik-mono-one-inter-jetbrains",
+      "name": "Rubik Mono One × Inter × JetBrains Mono",
+      "display": {
+        "family": "Rubik Mono One",
+        "weights": [400],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Rubik+Mono+One"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["cyberpunk", "arcade", "blocky", "y2k-revival"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Rubik Mono One is single-weight maximal; works as ONE word in hero, fails for headings beyond that."
+    },
+    {
+      "id": "vt323-inter-vt323",
+      "name": "VT323 × Inter × VT323 (terminal cyberpunk)",
+      "display": {
+        "family": "VT323",
+        "weights": [400],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/VT323"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "VT323",
+        "weights": [400],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/VT323"
+      },
+      "character": ["dec-terminal", "retro-tech", "phosphor-glow", "lo-fi"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "VT323 is the 1970s DEC VT320 terminal screen; works as a deliberate retro signature, never neutral."
+    },
+    {
+      "id": "share-tech-mono-inter-share-tech-mono",
+      "name": "Share Tech Mono × Inter × Share Tech Mono (cyberpunk)",
+      "display": {
+        "family": "Share Tech Mono",
+        "weights": [400],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Share+Tech+Mono"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "Share Tech Mono",
+        "weights": [400],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Share+Tech+Mono"
+      },
+      "character": ["cyberpunk", "blade-runner", "hud", "scifi"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Share Tech Mono is heavily themed — pair with neutral body or it's costume design, not type."
+    },
+    {
+      "id": "syne-mono-syne-jetbrains",
+      "name": "Syne Mono × Syne × JetBrains Mono (art gallery)",
+      "display": {
+        "family": "Syne",
+        "weights": [600, 700, 800],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Syne"
+      },
+      "body": {
+        "family": "Syne",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Syne"
+      },
+      "mono": {
+        "family": "Syne Mono",
+        "weights": [400],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Syne+Mono"
+      },
+      "character": ["contemporary-art", "gallery", "alternative", "playful-serious"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Syne Mono carries the same designer's voice as Syne; rare unified-family triple for art and design brands."
+    },
+    {
+      "id": "tinos-arimo-cousine-google-system",
+      "name": "Tinos × Arimo × Cousine (system-safe metric clones)",
+      "display": {
+        "family": "Tinos",
+        "weights": [400, 700],
+        "source": "Google Fonts",
+        "license": "Apache",
+        "url": "https://fonts.google.com/specimen/Tinos"
+      },
+      "body": {
+        "family": "Arimo",
+        "weights": [400, 500, 700],
+        "source": "Google Fonts",
+        "license": "Apache",
+        "url": "https://fonts.google.com/specimen/Arimo"
+      },
+      "mono": {
+        "family": "Cousine",
+        "weights": [400, 700],
+        "source": "Google Fonts",
+        "license": "Apache",
+        "url": "https://fonts.google.com/specimen/Cousine"
+      },
+      "character": ["metric-compatible", "system-fallback", "documents", "office"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Tinos/Arimo/Cousine are metric-compatible with Times/Arial/Courier — ideal for documents and legal printing."
+    },
+    {
+      "id": "alegreya-alegreya-sans-jetbrains",
+      "name": "Alegreya × Alegreya Sans × JetBrains Mono",
+      "display": {
+        "family": "Alegreya",
+        "weights": [500, 700, 800],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Alegreya"
+      },
+      "body": {
+        "family": "Alegreya Sans",
+        "weights": [400, 500, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Alegreya+Sans"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["argentinian", "calligraphic", "warm-formal", "literary"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Alegreya's italic carries hand-cut energy; designed by Huerta in Argentina for long fiction reading."
+    },
+    {
+      "id": "petrona-petrona-jetbrains",
+      "name": "Petrona × Petrona × JetBrains Mono",
+      "display": {
+        "family": "Petrona",
+        "weights": [500, 700, 800],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Petrona"
+      },
+      "body": {
+        "family": "Petrona",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Petrona"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["pastoral", "soft-serif", "rural", "warm"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Petrona has gentle terminals; good for wellness, slow-living, food brands — wrong for fintech."
+    },
+    {
+      "id": "abril-fatface-poppins-jetbrains",
+      "name": "Abril Fatface × Poppins × JetBrains Mono",
+      "display": {
+        "family": "Abril Fatface",
+        "weights": [400],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Abril+Fatface"
+      },
+      "body": {
+        "family": "Poppins",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Poppins"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["didone-fatface", "fashion-marketing", "high-contrast", "vintage-poster"],
+      "compatible_styles": [],
+      "ai_slop_risk": "high",
+      "notes": "Abril Fatface + Poppins is THE 2017-era Squarespace template look — instantly dated and overused."
+    },
+    {
+      "id": "unifrakturmaguntia-inter-jetbrains",
+      "name": "UnifrakturMaguntia × Inter × JetBrains Mono (gothic)",
+      "display": {
+        "family": "UnifrakturMaguntia",
+        "weights": [400],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/UnifrakturMaguntia"
+      },
+      "body": {
+        "family": "Inter",
+        "weights": [400, 500, 600],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Inter"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["blackletter", "gothic", "newspaper-masthead", "metal"],
+      "compatible_styles": [],
+      "ai_slop_risk": "low",
+      "notes": "Blackletter has carried fascist, gothic, and metal-band baggage; pick context with care."
+    },
+    {
+      "id": "marcellus-lato-jetbrains",
+      "name": "Marcellus × Lato × JetBrains Mono",
+      "display": {
+        "family": "Marcellus",
+        "weights": [400],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Marcellus"
+      },
+      "body": {
+        "family": "Lato",
+        "weights": [400, 500, 700],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/Lato"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "weights": [400, 500],
+        "source": "Google Fonts",
+        "license": "OFL",
+        "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+      },
+      "character": ["roman-capital", "monumental", "single-weight", "considered"],
+      "compatible_styles": [],
+      "ai_slop_risk": "medium",
+      "notes": "Marcellus is built only for ALL-CAPS headlines; lowercase glyphs are functional but never the asset."
+    }
+  ]
+}

@@ -1,0 +1,536 @@
+{
+  "_meta": {
+    "version": "2.0.0",
+    "entries": 35,
+    "last_updated": "2026-05-27",
+    "source": "ux-skill v2 - Python pivot",
+    "schema_version": "1.0"
+  },
+  "entries": [
+    {
+      "id": "bar-vertical",
+      "name": "Vertical Bar Chart",
+      "category": "Comparison",
+      "when_to_use": ["compare discrete categories", "ranked values", "single-metric comparison across 4-15 items"],
+      "when_to_skip": ["more than 30 categories", "time series with regular intervals", "part-to-whole composition"],
+      "encoding": "Position along x-axis maps category; height maps value.",
+      "stacks": {
+        "d3": "d3.scaleBand + rect elements",
+        "recharts": "<BarChart><Bar /></BarChart>",
+        "vega-lite": "mark: bar with x: nominal, y: quantitative",
+        "chartjs": "type: 'bar' with indexAxis: 'x'"
+      },
+      "a11y": ["always include axis labels and units", "pair with a data table for screen readers", "use sufficient bar-to-gap ratio (>=0.4)"]
+    },
+    {
+      "id": "bar-horizontal",
+      "name": "Horizontal Bar Chart",
+      "category": "Comparison",
+      "when_to_use": ["long category labels", "ranked lists where ordering is the story", "more than 8 categories"],
+      "when_to_skip": ["time-series data", "very short labels that fit beneath vertical bars"],
+      "encoding": "Position along y-axis maps category; width maps value.",
+      "stacks": {
+        "d3": "d3.scaleBand on y + rect with computed width",
+        "recharts": "<BarChart layout='vertical'>",
+        "vega-lite": "mark: bar with y: nominal, x: quantitative",
+        "chartjs": "type: 'bar' with indexAxis: 'y'"
+      },
+      "a11y": ["sort descending unless ordering carries meaning", "show exact values on bars when space permits", "ensure label truncation has a tooltip"]
+    },
+    {
+      "id": "bar-grouped",
+      "name": "Grouped Bar Chart",
+      "category": "Comparison",
+      "when_to_use": ["compare 2-4 series across categories", "side-by-side comparison of related metrics", "before/after analysis"],
+      "when_to_skip": ["more than 4 series per group", "if part-to-whole is the actual story (use stacked)"],
+      "encoding": "Outer position maps category; inner offset maps series; height maps value.",
+      "stacks": {
+        "d3": "nested scaleBand for inner grouping",
+        "recharts": "multiple <Bar /> children inside <BarChart>",
+        "vega-lite": "xOffset channel for series grouping",
+        "chartjs": "multiple datasets in 'bar' type"
+      },
+      "a11y": ["use a categorical palette that is colorblind safe", "pattern fills as a secondary encoding for B/W printing", "legend order matches bar order within group"]
+    },
+    {
+      "id": "bar-stacked",
+      "name": "Stacked Bar Chart",
+      "category": "Composition",
+      "when_to_use": ["part-to-whole across categories", "showing totals AND breakdown together", "budget allocation views"],
+      "when_to_skip": ["comparing individual segment values across bars (hard to read)", "more than 5 segments per bar"],
+      "encoding": "Segments stack vertically (or horizontally); total height encodes sum, segment heights encode parts.",
+      "stacks": {
+        "d3": "d3.stack() + rect generator",
+        "recharts": "<Bar stackId='a' /> on each series",
+        "vega-lite": "y: aggregate sum with color: nominal",
+        "chartjs": "type: 'bar' with stacked: true on both scales"
+      },
+      "a11y": ["100% stacked variant should be labeled as percentages", "always include legend with consistent ordering", "consider a paired view (stacked + small multiples) for accurate comparison"]
+    },
+    {
+      "id": "line-single",
+      "name": "Single Line Chart",
+      "category": "Time Series",
+      "when_to_use": ["continuous values over time", "trend analysis on one metric", "long time ranges with many points"],
+      "when_to_skip": ["fewer than 4 data points", "categorical (non-ordered) x-axis"],
+      "encoding": "Connected points encode value over an ordered axis (usually time).",
+      "stacks": {
+        "d3": "d3.line() path generator",
+        "recharts": "<LineChart><Line /></LineChart>",
+        "vega-lite": "mark: line with x: temporal, y: quantitative",
+        "chartjs": "type: 'line' with single dataset"
+      },
+      "a11y": ["mark notable inflection points with annotations", "include date range in chart title", "use line width >= 2px for low-vision readers"]
+    },
+    {
+      "id": "line-multi",
+      "name": "Multi-Line Chart",
+      "category": "Time Series",
+      "when_to_use": ["comparing trends across 2-5 series", "correlated metrics over time", "performance benchmarking"],
+      "when_to_skip": ["more than 7 series (use small multiples instead)", "series with vastly different scales (use dual-axis or normalize)"],
+      "encoding": "Multiple lines on a shared axis; color encodes series identity.",
+      "stacks": {
+        "d3": "d3.line() per series mapped over data array",
+        "recharts": "multiple <Line /> children",
+        "vega-lite": "mark: line with color: nominal channel",
+        "chartjs": "type: 'line' with multiple datasets"
+      },
+      "a11y": ["direct-label lines at end rather than a separate legend", "use distinguishable line styles (dashed, dotted) as secondary encoding", "ensure at least 3:1 contrast between adjacent series"]
+    },
+    {
+      "id": "line-area",
+      "name": "Area Chart",
+      "category": "Time Series",
+      "when_to_use": ["emphasize magnitude over time", "single-series cumulative visual", "highlighting volume trends"],
+      "when_to_skip": ["multiple overlapping series (filled areas occlude each other)", "values that go negative across zero"],
+      "encoding": "Line with the region between line and baseline filled.",
+      "stacks": {
+        "d3": "d3.area() path generator",
+        "recharts": "<AreaChart><Area /></AreaChart>",
+        "vega-lite": "mark: area with x: temporal, y: quantitative",
+        "chartjs": "type: 'line' with fill: true"
+      },
+      "a11y": ["use a fill opacity around 0.2-0.4 so the line stays visible", "avoid heavy gradients that obscure values", "always show y-axis baseline"]
+    },
+    {
+      "id": "line-stacked-area",
+      "name": "Stacked Area Chart",
+      "category": "Composition",
+      "when_to_use": ["part-to-whole over time", "cumulative composition trends", "market share evolution"],
+      "when_to_skip": ["data with gaps or missing points", "comparing individual series magnitudes (use multi-line)"],
+      "encoding": "Areas stack on top of each other; total height = sum; each band = one series.",
+      "stacks": {
+        "d3": "d3.stack() + d3.area() composition",
+        "recharts": "<AreaChart> with stackId on each <Area />",
+        "vega-lite": "mark: area with color: nominal and stack channel",
+        "chartjs": "type: 'line' with fill: 'origin' and stacked scales"
+      },
+      "a11y": ["use a 100% normalized variant when proportions matter more than totals", "order series by stability (least-varying at bottom)", "label each band directly when possible"]
+    },
+    {
+      "id": "pie",
+      "name": "Pie Chart",
+      "category": "Composition",
+      "when_to_use": ["2-5 categories with clear dominant slice", "part-to-whole at a glance", "executive summary contexts where comparison is informal"],
+      "when_to_skip": ["more than 5 categories", "precise comparison between slices", "any case where a bar chart would also work"],
+      "encoding": "Angle of each slice encodes proportion of the whole.",
+      "stacks": {
+        "d3": "d3.pie() + d3.arc()",
+        "recharts": "<PieChart><Pie /></PieChart>",
+        "vega-lite": "mark: arc with theta: quantitative",
+        "chartjs": "type: 'pie' with data array"
+      },
+      "a11y": ["always show percentages or values as labels", "do not use as the primary chart for decision-making", "pair with a data table when 4+ slices exist"]
+    },
+    {
+      "id": "donut",
+      "name": "Donut Chart",
+      "category": "Composition",
+      "when_to_use": ["same as pie but with center space for a total or KPI", "2-5 categories with central summary statistic", "dashboard widget composition"],
+      "when_to_skip": ["more than 5 categories", "precise inter-slice comparison", "small render sizes under 80px diameter"],
+      "encoding": "Annular ring with angle encoding proportion; center reserved for a total or KPI.",
+      "stacks": {
+        "d3": "d3.pie() + d3.arc() with innerRadius",
+        "recharts": "<Pie innerRadius={60} outerRadius={80} />",
+        "vega-lite": "mark: arc with innerRadius",
+        "chartjs": "type: 'doughnut'"
+      },
+      "a11y": ["center total must have clear semantic markup, not visually-only", "labels follow same rules as pie", "ensure ring thickness is at least 16px at intended display size"]
+    },
+    {
+      "id": "scatter",
+      "name": "Scatter Plot",
+      "category": "Relationship",
+      "when_to_use": ["correlation between two continuous variables", "identifying clusters and outliers", "exploring distribution shape"],
+      "when_to_skip": ["categorical x-axis", "more than 5000 points without aggregation (use density plot)"],
+      "encoding": "Position (x, y) encodes two quantitative values; optionally color, shape, or size encode additional dimensions.",
+      "stacks": {
+        "d3": "circle elements with cx, cy bound to data",
+        "recharts": "<ScatterChart><Scatter /></ScatterChart>",
+        "vega-lite": "mark: point with x and y both quantitative",
+        "chartjs": "type: 'scatter'"
+      },
+      "a11y": ["use markers with at least 2px stroke for outline definition", "describe correlation direction in chart caption", "consider regression-line overlay for trend communication"]
+    },
+    {
+      "id": "bubble",
+      "name": "Bubble Chart",
+      "category": "Relationship",
+      "when_to_use": ["three quantitative dimensions on one chart", "portfolio analysis (e.g. price/quality/market-share)", "weighted scatter contexts"],
+      "when_to_skip": ["fewer than 5 data points (no advantage over a table)", "if the third dimension is binary"],
+      "encoding": "x and y position plus circle area encode three quantitative values.",
+      "stacks": {
+        "d3": "circle with r bound to a sqrt scale of the third dimension",
+        "recharts": "<Scatter /> with z dimension",
+        "vega-lite": "mark: point with size channel",
+        "chartjs": "type: 'bubble' with r in data points"
+      },
+      "a11y": ["never map size linearly to value (perception is by area, so use sqrt scale)", "minimum bubble diameter 8px for distinguishability", "legend must show size-to-value mapping with sample bubbles"]
+    },
+    {
+      "id": "heatmap",
+      "name": "Heatmap",
+      "category": "Distribution",
+      "when_to_use": ["matrix of values across two categorical dimensions", "correlation matrices", "session-by-feature usage grids"],
+      "when_to_skip": ["sparse data with many empty cells", "if precise values matter more than patterns"],
+      "encoding": "Color intensity encodes value at the intersection of two categorical axes.",
+      "stacks": {
+        "d3": "rect grid with sequential color scale",
+        "recharts": "no native heatmap; compose with rect or grid library",
+        "vega-lite": "mark: rect with x and y nominal, color quantitative",
+        "chartjs": "matrix chart plugin (chartjs-chart-matrix)"
+      },
+      "a11y": ["never use rainbow palettes; use perceptually uniform (viridis, magma)", "include numeric values on hover and on focus", "provide a sequential legend with min/max anchored"]
+    },
+    {
+      "id": "heatmap-calendar",
+      "name": "Calendar Heatmap",
+      "category": "Time Series",
+      "when_to_use": ["daily activity over a year", "GitHub-contributions-style summaries", "spotting seasonal patterns"],
+      "when_to_skip": ["sub-daily resolution data", "non-uniform time intervals"],
+      "encoding": "Each cell is a date in a year-grid; color encodes daily aggregate value.",
+      "stacks": {
+        "d3": "d3.timeDays + rect grid with weekday/week scales",
+        "recharts": "no native; compose with grid library",
+        "vega-lite": "mark: rect with x: day, y: week, color: quantitative",
+        "chartjs": "matrix plugin with date adapter"
+      },
+      "a11y": ["each cell must be focusable with date + value in accessible name", "use ordinal sequential palette (5-7 stops)", "include month-boundary visual markers"]
+    },
+    {
+      "id": "histogram",
+      "name": "Histogram",
+      "category": "Distribution",
+      "when_to_use": ["distribution of a single continuous variable", "frequency analysis", "understanding skew and modality"],
+      "when_to_skip": ["categorical data (use bar chart)", "fewer than 30 data points"],
+      "encoding": "X-axis binned into continuous ranges; bar height encodes count per bin.",
+      "stacks": {
+        "d3": "d3.bin() + rect rendering",
+        "recharts": "compose <BarChart> after pre-binning",
+        "vega-lite": "mark: bar with x: bin: true",
+        "chartjs": "type: 'bar' with pre-computed bins"
+      },
+      "a11y": ["bin count justification belongs in the chart caption", "axes labels must clarify bin widths and units", "consider a paired density overlay for shape clarity"]
+    },
+    {
+      "id": "box-plot",
+      "name": "Box Plot",
+      "category": "Distribution",
+      "when_to_use": ["summary of distribution across categories", "comparing medians and ranges", "spotting outliers explicitly"],
+      "when_to_skip": ["audience unfamiliar with quartile concept", "very small sample sizes (under 10 per box)"],
+      "encoding": "Box spans IQR (25th-75th percentile); median line inside; whiskers extend to range; points show outliers.",
+      "stacks": {
+        "d3": "compose rect + line + circle from pre-computed quantiles",
+        "recharts": "no native; compose ErrorBar with Bar",
+        "vega-lite": "mark: boxplot with x: nominal, y: quantitative",
+        "chartjs": "type: 'boxplot' via chartjs-chart-boxplot-violin"
+      },
+      "a11y": ["always annotate min, Q1, median, Q3, max in caption or tooltip", "use a single color when comparing across one dimension", "describe boxplot anatomy near first use in interface"]
+    },
+    {
+      "id": "violin",
+      "name": "Violin Plot",
+      "category": "Distribution",
+      "when_to_use": ["distribution shape across categories", "comparing modality and density", "research and statistical contexts"],
+      "when_to_skip": ["non-technical audiences", "small sample sizes per group (under 30)"],
+      "encoding": "Mirrored kernel density estimate around a vertical axis; width encodes frequency at each value.",
+      "stacks": {
+        "d3": "compose path with d3.area + KDE smoothing",
+        "recharts": "no native; build with path primitives",
+        "vega-lite": "transform: density + mark: area mirrored",
+        "chartjs": "type: 'violin' via chartjs-chart-boxplot-violin"
+      },
+      "a11y": ["include median markers inside the violin", "explain the encoding in the legend or caption", "consider a boxplot overlay for non-technical readers"]
+    },
+    {
+      "id": "candlestick",
+      "name": "Candlestick (OHLC) Chart",
+      "category": "Time Series",
+      "when_to_use": ["financial price data with open/high/low/close", "trading and market analysis", "session-bounded volatility"],
+      "when_to_skip": ["non-financial data", "audiences unfamiliar with the encoding"],
+      "encoding": "Body spans open-to-close; wicks extend to high and low; color indicates up (close>open) vs down.",
+      "stacks": {
+        "d3": "compose rect for body + line for wick per period",
+        "recharts": "no native; specialized libs (lightweight-charts) preferred",
+        "vega-lite": "mark: rule + bar with combined encodings",
+        "chartjs": "type: 'candlestick' via chartjs-chart-financial"
+      },
+      "a11y": ["green/red is conventional but never the only encoding (add shape or pattern)", "include explicit OHLC values in tooltip", "time-axis labels must include timezone"]
+    },
+    {
+      "id": "waterfall",
+      "name": "Waterfall Chart",
+      "category": "Composition",
+      "when_to_use": ["showing incremental contributions to a total", "financial bridges (revenue to net income)", "before-and-after with intermediate steps"],
+      "when_to_skip": ["more than 12 contribution steps", "non-additive metrics"],
+      "encoding": "Bars stacked sequentially; each starts where the previous ended; color encodes positive vs negative contribution.",
+      "stacks": {
+        "d3": "compute cumulative offsets then render rects",
+        "recharts": "compose <BarChart> with stacked bars and computed base",
+        "vega-lite": "transform: window + mark: bar with computed y2",
+        "chartjs": "type: 'bar' with floating bars (y as [start, end])"
+      },
+      "a11y": ["label every bar with its delta value", "show the running total at each step", "color encoding must have a pattern alternative for printing"]
+    },
+    {
+      "id": "funnel",
+      "name": "Funnel Chart",
+      "category": "Flow",
+      "when_to_use": ["sequential conversion stages", "drop-off analysis", "sales pipeline visualization"],
+      "when_to_skip": ["non-sequential stages", "data without monotonically decreasing values"],
+      "encoding": "Stages stacked vertically; width at each stage encodes value (typically count or rate).",
+      "stacks": {
+        "d3": "polygon paths between paired x-coordinates per stage",
+        "recharts": "<FunnelChart><Funnel /></FunnelChart>",
+        "vega-lite": "mark: trail with custom width encoding",
+        "chartjs": "type: 'funnel' via chartjs-funnel plugin"
+      },
+      "a11y": ["always show absolute counts and conversion rate at each step", "label each stage clearly on the funnel itself", "use sequential color steps that imply progression"]
+    },
+    {
+      "id": "sankey",
+      "name": "Sankey Diagram",
+      "category": "Flow",
+      "when_to_use": ["flow between categories with conserved totals", "user-journey path analysis", "energy or material flow"],
+      "when_to_skip": ["more than 20 nodes (visual chaos)", "non-conserved flows (use chord or network)"],
+      "encoding": "Nodes connected by bands; band width encodes flow magnitude between source and target.",
+      "stacks": {
+        "d3": "d3-sankey plugin",
+        "recharts": "<Sankey> component (Recharts 2+)",
+        "vega-lite": "no first-class support; use Vega specification",
+        "chartjs": "type: 'sankey' via chartjs-chart-sankey"
+      },
+      "a11y": ["label both nodes and key flows directly", "use categorical color on source nodes that propagates to bands", "provide tabular flow summary as alternative view"]
+    },
+    {
+      "id": "parallel-coordinates",
+      "name": "Parallel Coordinates",
+      "category": "Relationship",
+      "when_to_use": ["multivariate analysis across 4-10 dimensions", "filtering and brushing in exploration tools", "spotting correlations across many features"],
+      "when_to_skip": ["non-technical audiences", "fewer than 4 dimensions"],
+      "encoding": "Each dimension is a vertical axis; each record is a polyline crossing all axes at its values.",
+      "stacks": {
+        "d3": "d3.line() across mapped axes per record",
+        "recharts": "no native; build with custom path",
+        "vega-lite": "transform: fold + mark: line with detail channel",
+        "chartjs": "no native; use d3 inside chart shell"
+      },
+      "a11y": ["brushing must have keyboard equivalents", "axis order is a design decision; explain rationale", "highlight selected polylines with 3:1 contrast against unselected"]
+    },
+    {
+      "id": "radar",
+      "name": "Radar (Spider) Chart",
+      "category": "Comparison",
+      "when_to_use": ["comparing 1-3 entities across 5-8 dimensions", "skill or capability assessments", "product feature comparisons"],
+      "when_to_skip": ["more than 3 series (overlap obscures shape)", "more than 10 axes (clutter)"],
+      "encoding": "Polar layout with one axis per dimension; closed polygon connects values along each axis.",
+      "stacks": {
+        "d3": "polygon path with polar coordinates per axis",
+        "recharts": "<RadarChart><Radar /></RadarChart>",
+        "vega-lite": "no native; use Vega spec with polar projection",
+        "chartjs": "type: 'radar'"
+      },
+      "a11y": ["values do not encode area well; label all vertices with exact values", "use semi-transparent fills (opacity around 0.3)", "include grid rings labeled with reference values"]
+    },
+    {
+      "id": "treemap",
+      "name": "Treemap",
+      "category": "Hierarchy",
+      "when_to_use": ["hierarchical part-to-whole composition", "showing 10-100 leaf categories", "budget or storage allocation views"],
+      "when_to_skip": ["values that vary by orders of magnitude (small slices unreadable)", "non-hierarchical data"],
+      "encoding": "Nested rectangles tile a containing area; rect area encodes value; nesting encodes hierarchy.",
+      "stacks": {
+        "d3": "d3.treemap() layout + rect rendering",
+        "recharts": "<Treemap> component",
+        "vega-lite": "transform: treemap layout + mark: rect",
+        "chartjs": "type: 'treemap' via chartjs-chart-treemap"
+      },
+      "a11y": ["each rect must have an accessible name with category and value", "use ordinal color for top-level categories", "avoid relying on text inside small rects (use tooltips)"]
+    },
+    {
+      "id": "sunburst",
+      "name": "Sunburst Chart",
+      "category": "Hierarchy",
+      "when_to_use": ["radial hierarchical composition", "drill-down navigation interfaces", "categorical breakdown by levels"],
+      "when_to_skip": ["deep hierarchies (more than 4 levels become unreadable)", "audiences who prefer treemaps for the same data"],
+      "encoding": "Concentric rings represent levels of hierarchy; arc angle encodes value within each level.",
+      "stacks": {
+        "d3": "d3.partition() + d3.arc() composition",
+        "recharts": "no native; compose with custom arc generator",
+        "vega-lite": "no native; use Vega partition transform",
+        "chartjs": "no native; use d3 inside chart shell"
+      },
+      "a11y": ["interactive drill-down must work with keyboard", "label each visible segment when space allows", "provide a breadcrumb of current zoom path"]
+    },
+    {
+      "id": "gauge",
+      "name": "Gauge Chart",
+      "category": "Comparison",
+      "when_to_use": ["single KPI against a target or threshold", "dashboard at-a-glance status", "performance monitoring contexts"],
+      "when_to_skip": ["comparing multiple metrics (gauges do not compare well)", "any case where a labeled number would suffice"],
+      "encoding": "Arc with a needle or filled segment; position along arc encodes value relative to range.",
+      "stacks": {
+        "d3": "d3.arc() with rotation per value",
+        "recharts": "compose <RadialBarChart> with limited angle",
+        "vega-lite": "mark: arc with theta in a constrained range",
+        "chartjs": "type: 'doughnut' configured as half-ring"
+      },
+      "a11y": ["always show the exact numeric value below or inside the gauge", "include threshold markers labeled with their values", "ensure colored zones are not the only signal (add labels)"]
+    },
+    {
+      "id": "kpi-card",
+      "name": "KPI Card",
+      "category": "Comparison",
+      "when_to_use": ["single metric prominently displayed", "dashboard summary tiles", "alongside a comparison delta and sparkline"],
+      "when_to_skip": ["if multiple metrics need to be compared (use a table)", "if the metric is meaningless without distribution context"],
+      "encoding": "Large numeric value with a label; optional delta indicator and sparkline below.",
+      "stacks": {
+        "d3": "compose text + sparkline path manually",
+        "recharts": "compose <Sparkline> or <Line> inside a div card",
+        "vega-lite": "compose mark: text with embedded mark: line",
+        "chartjs": "compose type: 'line' minimal config inside a card"
+      },
+      "a11y": ["delta direction must use word or icon, not color alone", "the metric label should be an h-tag with semantic value", "currency or unit must be explicit, not inferred"]
+    },
+    {
+      "id": "sparkline",
+      "name": "Sparkline",
+      "category": "Time Series",
+      "when_to_use": ["inline trend within a table cell or KPI card", "ambient trend awareness", "compact dashboard contexts"],
+      "when_to_skip": ["precise value reading is required", "data spans wildly different magnitudes (lacks axis context)"],
+      "encoding": "Small word-sized line chart without axes; emphasizes shape over exact values.",
+      "stacks": {
+        "d3": "d3.line() in a small SVG with no axes",
+        "recharts": "<Sparkline> component or minimal <LineChart>",
+        "vega-lite": "mark: line with config: axis disabled",
+        "chartjs": "type: 'line' with display: false on scales"
+      },
+      "a11y": ["include the latest value adjacent as text", "provide a tooltip or table view for actual values", "minimum line stroke 1.5px for visibility"]
+    },
+    {
+      "id": "density-plot",
+      "name": "Density Plot",
+      "category": "Distribution",
+      "when_to_use": ["smooth distribution visualization", "comparing 2-3 distributions side-by-side", "alternative to histogram for continuous data"],
+      "when_to_skip": ["small samples under 30 points", "discrete or binned data (use histogram)"],
+      "encoding": "Smoothed kernel density estimate as a continuous curve; area under curve sums to 1.",
+      "stacks": {
+        "d3": "d3.area() with KDE smoothing",
+        "recharts": "compose <AreaChart> with pre-computed KDE",
+        "vega-lite": "transform: density + mark: area",
+        "chartjs": "type: 'line' with pre-computed density data"
+      },
+      "a11y": ["disclose the bandwidth choice (it affects shape)", "use semi-transparent fills when overlaying distributions", "consider paired histogram for non-technical audiences"]
+    },
+    {
+      "id": "horizon-chart",
+      "name": "Horizon Chart",
+      "category": "Time Series",
+      "when_to_use": ["dense time-series", "multiple series side-by-side", "anomaly detection across many lanes"],
+      "when_to_skip": ["sparse data", "non-technical audience"],
+      "encoding": "Series mirrored and banded by intensity; color band plus density encode magnitude and sign.",
+      "stacks": {
+        "d3": "d3-horizon-chart plugin",
+        "recharts": "no native; custom composition",
+        "vega-lite": "supported via mark: rect with layered transforms",
+        "chartjs": "no native; use d3 inside chart shell"
+      },
+      "a11y": ["always pair with a table view", "use ordinal palette, never rainbow", "include band-width explanation near first use"]
+    },
+    {
+      "id": "ridgeline",
+      "name": "Ridgeline Plot",
+      "category": "Distribution",
+      "when_to_use": ["distributions across many ordered categories (e.g. months)", "comparing shape evolution", "research and editorial contexts"],
+      "when_to_skip": ["categories that are not naturally ordered", "more than 25 ridges (overlap becomes chaos)"],
+      "encoding": "Stacked, partially overlapping density curves; vertical offset encodes category; ridge height encodes density.",
+      "stacks": {
+        "d3": "compose d3.area() per row with KDE",
+        "recharts": "no native; build with path primitives",
+        "vega-lite": "facet on y with mark: area + offset transform",
+        "chartjs": "no native; use d3 inside chart shell"
+      },
+      "a11y": ["label each ridge directly at the start of the row", "use sequential color or single color across all ridges", "include median markers per ridge"]
+    },
+    {
+      "id": "bullet-chart",
+      "name": "Bullet Chart",
+      "category": "Comparison",
+      "when_to_use": ["progress to target with qualitative bands", "compact replacement for gauges", "executive dashboards"],
+      "when_to_skip": ["comparing many entities (better as a sortable table)", "audiences unfamiliar with the encoding"],
+      "encoding": "Horizontal bar with feature measure plus comparative target marker against qualitative range bands.",
+      "stacks": {
+        "d3": "compose nested rects + line for target",
+        "recharts": "no native; compose <BarChart> with overlay",
+        "vega-lite": "layered mark: bar + tick",
+        "chartjs": "no native; compose via bar with custom plugin"
+      },
+      "a11y": ["always label the target value clearly", "use 3 qualitative bands max (bad/ok/good)", "include exact measure value as text alongside"]
+    },
+    {
+      "id": "choropleth-map",
+      "name": "Choropleth Map",
+      "category": "Geographic",
+      "when_to_use": ["regional comparisons of a single metric", "geographic distribution of normalized values", "election results, population density, regional KPIs"],
+      "when_to_skip": ["absolute counts where area bias distorts perception", "comparing very small regions adjacent to very large ones"],
+      "encoding": "Geographic regions filled with sequential color encoding a quantitative value.",
+      "stacks": {
+        "d3": "d3.geoPath() with TopoJSON + sequential scale",
+        "recharts": "no native; use react-simple-maps",
+        "vega-lite": "mark: geoshape with color: quantitative",
+        "chartjs": "type: 'choropleth' via chartjs-chart-geo"
+      },
+      "a11y": ["always include a sortable data table as an alternative view", "use perceptually uniform palettes (viridis, blues)", "label key regions directly when space allows"]
+    },
+    {
+      "id": "network-graph",
+      "name": "Network Graph",
+      "category": "Relationship",
+      "when_to_use": ["showing connections between entities", "social networks, dependency graphs, knowledge graphs", "spotting clusters and hubs"],
+      "when_to_skip": ["more than 200 nodes without aggregation (hairball problem)", "data without meaningful pairwise connections"],
+      "encoding": "Nodes as circles connected by edges; force-directed or hierarchical layout encodes structure.",
+      "stacks": {
+        "d3": "d3-force simulation + line/circle rendering",
+        "recharts": "no native; use specialized libs (react-force-graph)",
+        "vega-lite": "no native; use Vega force directives",
+        "chartjs": "no native; use d3 or cytoscape.js inside chart shell"
+      },
+      "a11y": ["provide a tabular adjacency view as alternative", "ensure node selection is keyboard accessible", "highlight neighborhoods on hover and focus consistently"]
+    },
+    {
+      "id": "dual-axis-mixed",
+      "name": "Dual-Axis Mixed Chart",
+      "category": "Time Series",
+      "when_to_use": ["two related metrics with different scales over time", "volume + price contexts", "calls + duration contexts"],
+      "when_to_skip": ["unrelated metrics (misleading correlation)", "more than 2 axes (cognitive overload)"],
+      "encoding": "Shared x-axis; primary y-axis maps one metric (e.g. bars), secondary y-axis maps another (e.g. line).",
+      "stacks": {
+        "d3": "compose two scales with overlaid mark renderers",
+        "recharts": "<ComposedChart> with <Bar yAxisId='left'> + <Line yAxisId='right'>",
+        "vega-lite": "layer spec with independent y-resolutions",
+        "chartjs": "mixed type: 'bar' + 'line' with multiple y-axes"
+      },
+      "a11y": ["label both y-axes with their units explicitly", "use color to associate each series with its axis", "include a disclaimer when axes use independent scales"]
+    }
+  ]
+}

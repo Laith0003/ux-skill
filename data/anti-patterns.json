@@ -1,0 +1,755 @@
+{
+  "_meta": {
+    "version": "2.0.0",
+    "entries": 35,
+    "last_updated": "2026-05-27",
+    "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
+    "schema_version": "1.0"
+  },
+  "entries": [
+    {
+      "id": "inter-as-display",
+      "name": "Inter used as display font",
+      "severity": "high",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "font-family:\\s*['\"]?Inter['\"]?[^;}]*[;}][^{]*(?:font-size:\\s*([4-9]\\d|\\d{3,})px|\\btext-(5xl|6xl|7xl|8xl|9xl)\\b)",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Inter is a body font tuned for screen legibility at small sizes; deployed as display it reads as the default startup-landing fingerprint.",
+      "fix": "Pair Inter (body) with a distinctive display face: Geist, Satoshi, Cabinet Grotesk, General Sans, Outfit, or a brand-specific variable sans."
+    },
+    {
+      "id": "purple-to-blue-gradient",
+      "name": "Default purple-to-blue AI gradient",
+      "severity": "high",
+      "category": "Color",
+      "detection": {
+        "type": "regex",
+        "pattern": "bg-gradient-to-[a-z]+\\s+from-(purple|violet|fuchsia|indigo)-(400|500|600)\\s+(?:via-[a-z]+-[0-9]+\\s+)?to-(blue|sky|cyan)-(400|500|600)|linear-gradient\\([^)]*#(7c3aed|8b5cf6|a855f7|6366f1)[^)]*#(3b82f6|2563eb|0ea5e9)[^)]*\\)",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Purple-to-blue gradient on white is the strongest visual fingerprint of unconstrained model output and reads as template-marketplace AI slop.",
+      "fix": "Use a single restrained accent (Emerald, Electric Blue, Deep Rose, Amber) against neutrals; keep gradient hue spread under 60 degrees if used at all."
+    },
+    {
+      "id": "three-equal-card-grid",
+      "name": "Three equal cards in a row",
+      "severity": "high",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:grid-cols-3|grid-template-columns:\\s*repeat\\(\\s*3\\s*,\\s*(?:1fr|minmax))[^>]*>(?:\\s*<[^/][^>]*class=\"[^\"]*(?:card|feature)[^\"]*\"[^>]*>[\\s\\S]*?</[^>]+>\\s*){3}",
+        "flags": "im",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Three equal cards with three icons and three short paragraphs is the safest default the generator reaches for and the strongest layout fingerprint in AI-generated marketing surfaces.",
+      "fix": "Use asymmetric layouts: bento grids, 2-and-1 splits, 4 with one spanning width. Vary card size by content priority."
+    },
+    {
+      "id": "fake-name-john-doe",
+      "name": "Generic placeholder names",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\b(?:John\\s+Doe|Jane\\s+Doe|John\\s+Smith|Jane\\s+Smith|Sarah\\s+Chan|Test\\s+User|Demo\\s+User|Foo\\s+Bar)\\b|\\b(?:john\\.doe|jane\\.doe|test\\.user)@(?:example|test|demo)\\.com\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "ts",
+          "js",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "John/Jane Doe and their cousins signal that nobody thought about who would actually use the product - immediate AI-generated-tutorial vibe.",
+      "fix": "Use plausible names that fit the target market: Maya Iqbal, Adam Levin, Wen Zhang, Layla Haddad. Match region for regional products."
+    },
+    {
+      "id": "lorem-ipsum-leak",
+      "name": "Lorem ipsum in shipping code",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\b(?:Lorem\\s+ipsum|lorem\\s+ipsum\\s+dolor|consectetur\\s+adipiscing|sed\\s+do\\s+eiusmod)\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "ts",
+          "js",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md",
+          "css",
+          "scss"
+        ]
+      },
+      "why": "Lorem ipsum in production source code is unshipped placeholder content - the most obvious draft-state leak.",
+      "fix": "Write real copy that makes a specific claim about the product. If you can't write it yet, mark the block with TODO and a content owner."
+    },
+    {
+      "id": "emoji-in-ui",
+      "name": "Emoji used as UI element",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:button|a|h[1-6]|span|div|p|li)[^>]*>[^<]*(?:[\\U0001F300-\\U0001F9FF]|[\\U0001F600-\\U0001F64F]|[\\U0001F680-\\U0001F6FF]|[\\u2600-\\u26FF]|[\\u2700-\\u27BF])",
+        "flags": "u",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Emojis render inconsistently across platforms, ignore brand color, and signal informality where SVG icons signal craft.",
+      "fix": "Inline SVG from Lucide, Feather, Phosphor, or Heroicons at 1.5-2px stroke with currentColor. Whitelist U+2713 check and U+2318 command only."
+    },
+    {
+      "id": "centered-everything-hero",
+      "name": "Centered hero composition",
+      "severity": "medium",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:section|div|header)[^>]*class=\"[^\"]*\\b(?:hero|banner)\\b[^\"]*\"[^>]*>[\\s\\S]{0,800}?<h1[^>]*class=\"[^\"]*\\b(?:text-center|items-center\\s+justify-center)\\b[^\"]*\"|<(?:section|div)[^>]*class=\"[^\"]*\\b(?:hero|banner)\\b[^\"]*\\bflex\\b[^\"]*\\bitems-center\\b[^\"]*\\bjustify-center\\b[^\"]*\\btext-center\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Centered headline + centered subtitle + centered button stack is the laziest hero composition and signals the generator picked it when it couldn't find a better layout.",
+      "fix": "Use left-aligned hero with editorial 7-5 or 8-4 grid split; let the imagery earn its own column."
+    },
+    {
+      "id": "gradient-text-rainbow",
+      "name": "Multi-stop gradient text",
+      "severity": "medium",
+      "category": "Color",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:bg-clip-text|background-clip:\\s*text)[^\"';]*(?:bg-gradient-to-[a-z]+\\s+from-[a-z]+-[0-9]+\\s+via-[a-z]+-[0-9]+\\s+to-[a-z]+-[0-9]+|linear-gradient\\([^)]*,[^)]*,[^)]*,[^)]*\\))",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Three-stop rainbow text on a hero word is the strongest 'AI hero' tell after the purple-to-blue gradient.",
+      "fix": "Use a single solid color for headlines. If gradient text is essential, two stops in analogous hues at modest saturation."
+    },
+    {
+      "id": "card-glow-purple-shadow",
+      "name": "Purple glow shadow on cards",
+      "severity": "medium",
+      "category": "Color",
+      "detection": {
+        "type": "regex",
+        "pattern": "box-shadow:[^;]*rgba?\\(\\s*(?:12[0-9]|13[0-9]|14[0-9])\\s*,\\s*(?:5[0-9]|6[0-9]|7[0-9])\\s*,\\s*(?:2[0-9]\\d|2[3-5]\\d)|shadow-(?:purple|violet|fuchsia|indigo)-(?:400|500|600)",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Purple-tinted shadows on cards are the second-strongest 'AI premium' fingerprint after the gradient itself.",
+      "fix": "Use neutral diffusion shadow: shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)]. Color comes from the surface, not the shadow."
+    },
+    {
+      "id": "timing-300ms-default",
+      "name": "Default 300ms transition timing",
+      "severity": "low",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:transition(?:-duration)?|animation-duration):\\s*300ms\\b|duration-300\\b|\\bduration:\\s*0\\.3s\\b",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "300ms is the editor default - using it everywhere signals zero motion intent and reads as laziness to anyone who tunes animation curves.",
+      "fix": "Micro-interactions 150-220ms, complex transitions 250-400ms, exit 60-70% of entry. Pick durations that match the feel, not the default."
+    },
+    {
+      "id": "cubic-bezier-material-only",
+      "name": "Material default easing everywhere",
+      "severity": "low",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "cubic-bezier\\(\\s*0?\\.4\\s*,\\s*0\\s*,\\s*0?\\.2\\s*,\\s*1\\s*\\)",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "cubic-bezier(0.4, 0, 0.2, 1) is Material Design's default standard ease - using it as the only curve signals no taste decision was made.",
+      "fix": "Use cubic-bezier(0.16, 1, 0.3, 1) for premium exits, cubic-bezier(0.34, 1.56, 0.64, 1) for playful overshoot, or spring physics."
+    },
+    {
+      "id": "font-system-only",
+      "name": "System font stack with no chosen typeface",
+      "severity": "low",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "font-family:\\s*(?:-apple-system|BlinkMacSystemFont)(?:\\s*,\\s*(?:BlinkMacSystemFont|'?Segoe UI'?|Roboto|Oxygen|Ubuntu|Cantarell|'?Helvetica Neue'?|sans-serif|system-ui))*\\s*;",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Falling back to the system stack alone with no chosen typeface gives up the chance to have any typographic identity.",
+      "fix": "Pick a real face: Geist, Inter, Satoshi, IBM Plex Sans, Cabinet Grotesk, or the brand's variable. System stack is the absolute last fallback."
+    },
+    {
+      "id": "icon-emoji-stamp",
+      "name": "Emoji used as icon stamp",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "class=\"[^\"]*(?:icon|stamp|badge|achievement|reward)[^\"]*\"[^>]*>\\s*(?:[\\U0001F300-\\U0001F9FF]|[\\u2600-\\u27BF]|[\\U0001F600-\\U0001F6FF])",
+        "flags": "u",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Emoji where an SVG icon belongs breaks brand color, scales poorly, and renders differently on every OS.",
+      "fix": "Inline SVG icon with currentColor and a consistent stroke width across the surface."
+    },
+    {
+      "id": "pill-rounded-full-everywhere",
+      "name": "rounded-full applied to everything",
+      "severity": "low",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "<button[^>]*class=\"[^\"]*\\brounded-full\\b[^\"]*\"[^>]*>(?![^<]*(?:×|close|menu|search))|<(?:input|textarea)[^>]*class=\"[^\"]*\\brounded-full\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "rounded-full on every button and input is the iOS-tutorial fingerprint - signals the radius decision was skipped entirely.",
+      "fix": "rounded-full for pills, avatars, icon buttons only. Use rounded-md or rounded-lg for primary buttons; rounded-xl or rounded-2xl for cards."
+    },
+    {
+      "id": "hero-text-arbitrary-90px",
+      "name": "Arbitrary hero font size",
+      "severity": "medium",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "text-\\[(?:9[0-9]|1[0-9]{2})px\\]|font-size:\\s*(?:9[0-9]|1[0-9]{2})px\\b",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Arbitrary px values like text-[90px] or text-[112px] bypass the type scale and signal the size was picked by eye, not by system.",
+      "fix": "Extend the Tailwind theme scale or use clamp() for fluid hero typography. text-6xl/text-7xl/text-8xl exist for a reason."
+    },
+    {
+      "id": "blur-bg-only-decoration",
+      "name": "Backdrop blur with no glass surface",
+      "severity": "low",
+      "category": "Visual",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:backdrop-blur(?:-(?:sm|md|lg|xl|2xl|3xl))?|backdrop-filter:\\s*blur\\([^)]+\\))(?![^\"';]*(?:bg-white/[0-9]|bg-black/[0-9]|bg-[a-z]+-[0-9]+/[0-9]|background:[^;]*rgba))",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Backdrop blur applied without a translucent surface behind it is GPU work for zero visual benefit - decoration, not design.",
+      "fix": "Pair backdrop-blur with a translucent fill: bg-white/70 or bg-zinc-950/60. Otherwise remove the blur entirely."
+    },
+    {
+      "id": "avatar-stack-overlapping",
+      "name": "Generic overlapping avatar stack",
+      "severity": "medium",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "class=\"[^\"]*-space-x-[0-9]+[^\"]*\"[^>]*>(?:\\s*<(?:img|div)[^>]*class=\"[^\"]*(?:avatar|rounded-full)[^\"]*\"[^>]*/?>\\s*){3,}",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Three overlapping circular avatars in the nav as 'our team' or 'join 10k users' is a content-marketing template tell.",
+      "fix": "Use real customer logos, named testimonials with quotes, or specific signal (Used by 312 engineering teams at Series-A companies)."
+    },
+    {
+      "id": "testimonial-fake-five-stars",
+      "name": "Hardcoded five-star testimonial",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:\\u2605{5}|★{5}|⭐{5}|\\*{5})|<(?:span|div|p)[^>]*class=\"[^\"]*stars?[^\"]*\"[^>]*>\\s*(?:\\u2605|★){4,}",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "Five hardcoded stars next to a fake quote is the lowest-trust pattern on the web; users have learned to discount it on sight.",
+      "fix": "Show real, named, attributable testimonials with company affiliation and a specific outcome. No star count unless aggregated from a real review system."
+    },
+    {
+      "id": "cta-arrow-rightward-bouncing",
+      "name": "Bouncing arrow on CTA",
+      "severity": "medium",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:button|a)[^>]*>[^<]*(?:→|->|&rarr;|&#8594;)[^<]*</(?:button|a)>|class=\"[^\"]*\\banimate-bounce\\b[^\"]*\"[^>]*>\\s*(?:→|→|&rarr;|<svg)",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Bouncing arrow on a CTA is the desperate-attention pattern that signals the copy itself isn't doing the work.",
+      "fix": "Let the CTA copy carry the action (Start a 14-day trial, Read the deployment guide). If you need an arrow, use a static SVG that nudges 2-4px on hover."
+    },
+    {
+      "id": "nav-equal-hamburger-desktop",
+      "name": "Hamburger menu on desktop",
+      "severity": "low",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:button|div)[^>]*(?:aria-label=\"(?:menu|navigation|hamburger)\"|class=\"[^\"]*\\b(?:hamburger|menu-toggle)\\b[^\"]*\")[^>]*>(?![\\s\\S]*?(?:md:hidden|lg:hidden|hidden\\s+md:|hidden\\s+lg:))",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Hamburger on a wide viewport hides nav from users for no reason; signals the responsive breakpoint was skipped.",
+      "fix": "Show inline nav on md: and up; hide the hamburger above that breakpoint with md:hidden."
+    },
+    {
+      "id": "tailwind-color-named-vague",
+      "name": "Named Tailwind colors with no semantic token",
+      "severity": "low",
+      "category": "Color",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\b(?:bg|text|border|ring|from|to|via)-(?:blue|red|green|yellow|purple|pink|indigo|orange)-(?:400|500|600)\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "css"
+        ]
+      },
+      "why": "Raw bg-blue-500 / bg-purple-500 with no semantic token (primary, success, danger) signals the color system was never designed.",
+      "fix": "Define semantic tokens in tailwind.config or CSS custom properties: bg-primary, text-success, ring-accent. Map them once."
+    },
+    {
+      "id": "inline-style-attribute",
+      "name": "Inline style attribute",
+      "severity": "medium",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:div|span|p|section|article|h[1-6]|button|a|img)[^>]*\\sstyle=\"[^\"]+\"",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Inline style= attributes bypass the design system, defeat caching, and signal the styling decision was made ad hoc.",
+      "fix": "Use Tailwind utilities, a CSS class, or a styled component. Reserve inline style for runtime-computed values (animated translate, dynamic CSS vars) only."
+    },
+    {
+      "id": "console-log-leak",
+      "name": "console.log in component code",
+      "severity": "high",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": "console\\.(?:log|warn|debug|info)\\s*\\(",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "ts",
+          "js",
+          "vue",
+          "astro"
+        ]
+      },
+      "why": "console.log shipped to production leaks state to anyone with DevTools open and signals the build didn't go through a real review.",
+      "fix": "Remove debug logs before shipping. If you need structured logging, use a logger module that's tree-shaken out of production builds."
+    },
+    {
+      "id": "todo-fixme-comment",
+      "name": "TODO or FIXME in shipping code",
+      "severity": "low",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?://|/\\*|<!--|\\{/\\*)\\s*(?:TODO|FIXME|XXX|HACK|WIP|REFACTOR)\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "ts",
+          "js",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "css",
+          "scss"
+        ]
+      },
+      "why": "TODO/FIXME in shipping code is an unresolved promise to the reader and a draft-state leak.",
+      "fix": "Resolve the TODO before merge, or move it to the issue tracker with a specific owner and date."
+    },
+    {
+      "id": "any-type-leak",
+      "name": "TypeScript any type",
+      "severity": "medium",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": ":\\s*any(?:\\s*[;,)=\\]>]|\\s*$)|<any[,>]|as\\s+any\\b",
+        "flags": "",
+        "scope": [
+          "ts",
+          "tsx"
+        ]
+      },
+      "why": "any defeats the type system and signals the type was never figured out - the code is JavaScript pretending to be TypeScript.",
+      "fix": "Use unknown for genuinely unknown shapes and narrow with type guards. Use a specific interface or generic for everything else."
+    },
+    {
+      "id": "inline-svg-no-aria",
+      "name": "SVG without aria-label or aria-hidden",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<svg(?![^>]*\\baria-label=)(?![^>]*\\baria-labelledby=)(?![^>]*\\baria-hidden=)(?![^>]*\\brole=\"presentation\")[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "SVG with no aria-label and no aria-hidden is announced by screen readers as 'graphic' with no context - failure of WCAG 1.1.1.",
+      "fix": "Decorative SVG gets aria-hidden=\"true\". Informative SVG gets aria-label=\"description\" or aria-labelledby pointing to a title element."
+    },
+    {
+      "id": "button-no-type",
+      "name": "Button missing type attribute",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<button(?![^>]*\\btype=)[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "A <button> inside a <form> without type=\"button\" defaults to type=\"submit\" and silently submits the form on every click.",
+      "fix": "Always set type=\"button\" or type=\"submit\" explicitly. The default is a footgun, not a feature."
+    },
+    {
+      "id": "img-no-alt",
+      "name": "Image missing alt attribute",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<img(?![^>]*\\balt=)[^>]*/?>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Missing alt breaks screen readers, SEO image indexing, and the broken-image fallback all at once - WCAG 1.1.1 failure.",
+      "fix": "Every <img> gets alt. Decorative images get alt=\"\" (empty). Informative images get a description a screen reader user would need."
+    },
+    {
+      "id": "link-onclick-no-href",
+      "name": "Anchor with onClick but no href",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<a(?![^>]*\\bhref=)[^>]*\\b(?:onClick|onclick)=",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "An <a> without href is not focusable by default and is invisible to assistive tech - it looks like a link but behaves like a button.",
+      "fix": "Use <button> for actions. Use <a href=\"...\"> for navigation. Never an anchor without href as a click target."
+    },
+    {
+      "id": "heading-skip-h1-h3",
+      "name": "Skipped heading level",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<h1[^>]*>[\\s\\S]*?</h1>[\\s\\S]*?<h3[^>]*>(?![\\s\\S]*?<h2)|<h2[^>]*>[\\s\\S]*?</h2>[\\s\\S]*?<h4[^>]*>(?![\\s\\S]*?<h3)|<h3[^>]*>(?:(?!<h[12]).)*?</h3>",
+        "flags": "is",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Heading hierarchy gaps (h1 then h3, or h3 with no h1/h2 preceding) break the screen-reader landmark tree and the SEO outline.",
+      "fix": "h1 once per page; nest h2/h3/h4 in order. If you need a small visual heading without a logical level, use a styled <p> instead."
+    },
+    {
+      "id": "shadcn-default-everywhere",
+      "name": "Default shadcn token block unmodified",
+      "severity": "low",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": "--background:\\s*0\\s+0%\\s+100%[\\s\\S]{0,200}--foreground:\\s*222\\.2\\s+84%\\s+4\\.9%|--primary:\\s*222\\.2\\s+47\\.4%\\s+11\\.2%|--radius:\\s*0\\.5rem;",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss"
+        ]
+      },
+      "why": "The default shadcn HSL token block with --radius 0.5rem is recognizable in two seconds by anyone who has shipped one shadcn app.",
+      "fix": "Customize tokens at init: swap slate for zinc/stone, shift primary to a brand hue, set --radius to 0.625rem or 0.75rem."
+    },
+    {
+      "id": "gradient-mesh-purple-pink",
+      "name": "Purple-pink mesh gradient hero",
+      "severity": "medium",
+      "category": "Color",
+      "detection": {
+        "type": "regex",
+        "pattern": "radial-gradient\\([^)]*#(?:a855f7|c084fc|d946ef|e879f9|ec4899|f472b6)[^)]*\\)|conic-gradient\\([^)]*(?:purple|fuchsia|pink|violet)[^)]*\\)|bg-gradient-to-[a-z]+\\s+from-(?:purple|fuchsia|violet)-(?:400|500|600)\\s+to-(?:pink|rose|fuchsia)-(?:400|500|600)",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Purple-to-pink mesh gradient is the second-most fingerprinted AI-hero pattern after blue-to-purple - 'I generated a landing page' aesthetic.",
+      "fix": "Single accent against neutral canvas. If a hero needs depth, layer subtle noise or a single low-saturation analogous gradient under 60deg hue spread."
+    },
+    {
+      "id": "dark-text-on-dark-card",
+      "name": "Low-contrast text on card",
+      "severity": "high",
+      "category": "Color",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:bg-zinc-(?:[89]00|950)|bg-slate-(?:[89]00|950)|bg-gray-(?:[89]00|950)|bg-black|background:\\s*#0[0-9a-f]{5})[^\"';]*(?:text-zinc-(?:[5-7]00)|text-slate-(?:[5-7]00)|text-gray-(?:[5-7]00)|color:\\s*#[4-6][0-9a-f]{5})",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Dark text token (zinc-500/600/700) on a dark surface fails WCAG AA 4.5:1 contrast and signals the dark mode pairing was never tested.",
+      "fix": "Test contrast on both themes. On dark surfaces use text-zinc-100 to text-zinc-300; reserve 500-700 for tertiary captions on light surfaces."
+    },
+    {
+      "id": "arbitrary-z-index-9999",
+      "name": "Lazy z-index value",
+      "severity": "medium",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": "z-index:\\s*(?:9999+|99999+|2147483647)\\b|\\bz-\\[(?:9999+|99999+)\\]",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "z-index: 9999 is the 'I gave up on the stacking system' value - signals there's no z-scale token map and stacking bugs are coming.",
+      "fix": "Define a z-scale token set (z-base: 0, z-dropdown: 10, z-sticky: 20, z-modal: 50, z-toast: 60). Use the tokens, never a raw 9999."
+    },
+    {
+      "id": "infinite-scroll-no-pagination",
+      "name": "Infinite scroll without keyboard fallback",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:IntersectionObserver|useInfiniteScroll|InfiniteScroll|on(?:Scroll|EndReached))[\\s\\S]{0,500}?(?:loadMore|fetchMore|loadNext)(?![\\s\\S]{0,800}?<button[^>]*>(?:Load|Show|More))",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "ts",
+          "js",
+          "vue"
+        ]
+      },
+      "why": "Pure infinite scroll with no Load more button locks out keyboard users and breaks back-button history - WCAG 2.4 failure plus a usability one.",
+      "fix": "Ship infinite scroll AND a visible Load more button. The button is the keyboard path; the observer is the convenience layer."
+    }
+  ]
+}

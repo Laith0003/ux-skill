@@ -1,8 +1,8 @@
 {
   "name": "ux",
   "displayName": "UX — the design intelligence plugin for Claude Code",
-  "description": "The strongest UX plugin ever made for Claude Code. 17 callable slash commands, 5 specialized sub-agents, and 30+ reference files covering every dimension of digital product UX: review, audit, generate, motion, copy, accessibility, design systems, dashboards, case studies. Grounded in the canon (Norman, Krug, Lean UX, 30 Laws of UX, Creative Selection), trained on patterns from 21+ premium SaaS sites, and built to defeat AI-aesthetic biases. Works on any stack — React, Next.js, Vue, Blade, vanilla. Cross-system. Anti-AI-slop by default.",
-  "version": "1.5.3",
+  "description": "Design intelligence engine for AI coding. v2 ships a Python-backed reasoning core: 5-parallel-search recommender, 75+ styles, 170+ palettes, 65+ type pairs, 120+ components, 170+ industry rules, 110+ named UX laws, 50+ motion presets, 30+ regex anti-patterns, 72 real brand specs (Apple, Stripe, Linear, Figma, Tesla, Notion, Spotify, BMW). Plus the 18 slash commands and 5 sub-agents from v1. Cross-IDE via pip/npx — runs in 17 environments including Claude Code, Cursor, Windsurf, Copilot, Gemini CLI, Codex, Cline, Continue, Aider, Zed. Anti-AI-slop by default.",
+  "version": "2.0.0-alpha.1",
   "author": {
     "name": "Laith Aljunaidy",
     "email": "laith.aljunaidy.laith@gmail.com",
