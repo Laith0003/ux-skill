@@ -1,0 +1,31 @@
+{
+  "id": "kraken",
+  "name": "Kraken",
+  "category": "Fintech / Crypto",
+  "year_observed": 2026,
+  "philosophy": "Kraken's website is a clean, trustworthy crypto exchange that uses purple as its commanding brand color.",
+  "design_language": {
+    "type": {
+      "display": "Kraken-Brand",
+      "body": "Kraken-Product"
+    },
+    "color_primary": "#7132f5",
+    "color_canvas": "#ffffff",
+    "color_ink": "#101114"
+  },
+  "trademark_signals": [
+    "Kraken Purple (#7132f5) as primary brand with darker variants (#5741d8, #5b1ecf)",
+    "Kraken-Brand (display) + Kraken-Product (UI) dual font system",
+    "Near-black (#101114) text with cool blue-gray neutral scale",
+    "12px radius buttons (rounded but not pill)",
+    "Subtle shadows (rgba(0,0,0,0.03) 0px 4px 24px) — whisper-level"
+  ],
+  "exemplar_pages": [
+    "kraken.com"
+  ],
+  "ai_slop_avoided": [
+    "use pill buttons — 12px is the max radius for buttons",
+    "use other purples outside the defined scale"
+  ],
+  "source_md": "references/brands/kraken.md"
+}

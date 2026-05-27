@@ -1,0 +1,48 @@
+{
+  "id": "ollama",
+  "name": "Ollama",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "| An almost defiantly minimal documentation-first system that treats the home page like a Markdown README — paper-white canvas, 36px center-aligned heading, a single black pill CTA, an inline terminal install snippet, and a hand-drawn llama mascot as the only ornamental element.",
+  "design_language": {
+    "type": {
+      "display": "SF Pro Rounded",
+      "body": "ui-sans-serif",
+      "mono": "ui-monospace"
+    },
+    "color_primary": "#000000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000",
+    "radius": [
+      0,
+      6,
+      8,
+      12
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Paper-white end-to-end with no surface alternation — the whole page is one continuous sheet",
+    "Center-aligned hero with SF Pro Rounded headline, no eyebrow, no subhead beyond a small \"Power OpenClaw with Ollama\" line under the llama",
+    "Pill geometry everywhere: every button and pill input is ; cards use ; nothing is sharp-cornered except section dividers",
+    "Single-color CTA system: pure black pills carry every action; \"Get Pro\" / \"Get Max\" inside pricing cards are the only variations",
+    "Inline curl install snippet rendered as a pill with — the most signature element, sitting directly under the hero headline"
+  ],
+  "components_observed": [
+    "button-pill-on-dark",
+    "search-pill-focused",
+    "pricing-card-dark",
+    "search-pill",
+    "command-tag",
+    "pricing-card"
+  ],
+  "exemplar_pages": [
+    "ollama.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce gradients, drop shadows, or atmospheric backgrounds. The canvas is pure",
+    "add brand colors. The system is (black) on (white) with (gray) text. That is it",
+    "soften pills or sharpen cards — pills stay , cards stay. Don't introduce for buttons or for cards"
+  ],
+  "source_md": "references/brands/ollama.md"
+}

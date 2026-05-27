@@ -1,0 +1,48 @@
+{
+  "id": "uber",
+  "name": "Uber",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Uber's design language — a transportation-and-delivery super-app brand whose web surface is a black-and-white duet, framed by a custom geometric display sans, accented by a single signature pill shape (radius 999px) on every interactive element, and decorated only by editorial 4:3 illustrations of riders, drivers, and city objects.",
+  "design_language": {
+    "type": {
+      "display": "UberMove",
+      "body": "UberMoveText"
+    },
+    "color_primary": "#000000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000",
+    "radius": [
+      0,
+      8,
+      12,
+      16,
+      36
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "A two-colour CTA hierarchy: black pill for primary conversion targets",
+    "The pill is the single signature shape — 999 px on every interactive element except the tab-toggle ( 36 px) and the larger product cards ( 16 px)",
+    "Every headline is sentence-case in / weight 700; no all-caps display",
+    "Editorial 4:3 illustrations of riders / drivers / cars are the only consistent decorative system",
+    "A signature alternating-band rhythm: white feature card → black promo card (with white text and white CTA) → white feature card → black footer. The black ban..."
+  ],
+  "components_observed": [
+    "app-download-pill",
+    "hero-band-light",
+    "hero-band-dark",
+    "text-input-on-soft",
+    "promo-card-on-dark",
+    "request-form-input-row"
+  ],
+  "exemplar_pages": [
+    "uber.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce a second brand accent colour (orange, blue, green). The brand's entire UI is black-and-white plus grayscale; new accents flatten the system",
+    "render the primary CTA as a rectangle except inside the larger ride-request flow (where button-large-rounded is the documented exception)",
+    "use all-caps display headlines. Sentence-case is the voice; uppercase is restricted to rare eyebrow tags"
+  ],
+  "source_md": "references/brands/uber.md"
+}

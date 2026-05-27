@@ -1,0 +1,51 @@
+{
+  "id": "cursor",
+  "name": "Cursor",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An AI-first code editor whose marketing site reads like a quietly-confident developer-tools brand with a warm-cream editorial canvas (`#f7f7f4`) instead of the typical dark IDE atmosphere.",
+  "design_language": {
+    "type": {
+      "display": "CursorGothic",
+      "body": "CursorGothic",
+      "mono": "JetBrains Mono"
+    },
+    "color_primary": "#f54e00",
+    "color_canvas": "#f7f7f4",
+    "color_ink": "#26251e",
+    "radius": [
+      0,
+      4,
+      6,
+      8,
+      12,
+      16
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Warm cream canvas, not white. Ink is warm (#26251e), not pure black",
+    "Single CTA color: (Cursor Orange #f54e00). Used scarcely",
+    "Display weight stays at 400 — never bold. Magazine voice",
+    "AI timeline pastels: 5 dedicated tokens for in-product agent action stages",
+    "Compact 8px CTA radius — developer dialect"
+  ],
+  "components_observed": [
+    "ide-mockup-card",
+    "timeline-pill-thinking",
+    "timeline-pill-grep",
+    "timeline-pill-read",
+    "timeline-pill-edit",
+    "timeline-pill-done"
+  ],
+  "exemplar_pages": [
+    "cursor.com",
+    "cursor.com/pricing"
+  ],
+  "ai_slop_avoided": [
+    "introduce a secondary brand action color. Cursor Orange is the only one",
+    "drop display to bold weights (700+). Magazine voice depends on 400",
+    "add drop shadows. Hairlines + ink-on-cream contrast carry the depth"
+  ],
+  "source_md": "references/brands/cursor.md"
+}

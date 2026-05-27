@@ -1,0 +1,48 @@
+{
+  "id": "runwayml",
+  "name": "Runwayml",
+  "category": "AI / ML Platform",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Runwai's design language — an editorial, gallery-grade marketing system for an AI creative-tools company.",
+  "design_language": {
+    "type": {
+      "display": "abcNormal",
+      "body": "abcNormal"
+    },
+    "color_primary": "#000000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#030303",
+    "radius": [
+      0,
+      4,
+      6,
+      8,
+      16
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Cinematic dark photographic heroes ( over editorial stills) bookending crisp reading bands",
+    "A single proprietary sans (abcNormal) covering every typographic role, with tight negative tracking on display sizes",
+    "Black-only primary action language: every CTA is ( pill with corners and 14px/600 button text)",
+    "Five-tier neutral ladder ( → → → → ) carries the entire UI without accent colour",
+    "5-column pricing grid where the featured tier is signalled by a infill rather than a coloured border"
+  ],
+  "components_observed": [
+    "pricing-card-featured",
+    "pricing-tier-name",
+    "pricing-card",
+    "pricing-amount",
+    "hero-photo",
+    "studios-tile"
+  ],
+  "exemplar_pages": [
+    "runwayml.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce accent colours (blue, green, red) into marketing surfaces — Runwai's voice is monochrome plus photography",
+    "apply drop shadows or glows to cards. Depth is photographic and tonal, not material",
+    "badge the featured pricing tier with a coloured ribbon or border — the surface step is the badge"
+  ],
+  "source_md": "references/brands/runwayml.md"
+}

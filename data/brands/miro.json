@@ -1,0 +1,51 @@
+{
+  "id": "miro",
+  "name": "Miro",
+  "category": "Productivity / Collaboration",
+  "year_observed": 2026,
+  "philosophy": "Miro presents itself as the AI-powered visual workspace through a confident, almost playful brand voice — anchored by its signature canary yellow ({colors.brand-yellow}) wordmark over white canvas, broken open by colorful pastel feature tints (rose, teal, coral, orange, mint) that echo the actual sticky-note color palette used on the live whiteboard.",
+  "design_language": {
+    "type": {
+      "display": "Roobert PRO",
+      "body": "Roobert PRO"
+    },
+    "color_primary": "#1c1c1e",
+    "color_canvas": "#ffffff",
+    "color_ink": "#1c1c1e",
+    "radius": [
+      4,
+      6,
+      8,
+      12,
+      16,
+      20,
+      28,
+      32
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Stark white canvas + Miro wordmark in canary yellow  as the recognizable opening signature",
+    "Black-pill primary CTAs ( + ) as the dominant interactive element",
+    "Pastel feature cards (yellow, rose, coral, teal, mint) that echo the actual sticky-note palette",
+    "Roobert PRO across every UI surface; geometric, slightly rounded character",
+    "Real Miro-board mockup imagery used as feature illustrations"
+  ],
+  "components_observed": [
+    "card-feature-yellow",
+    "card-feature-coral",
+    "card-feature-teal",
+    "card-feature-rose",
+    "pricing-card-featured",
+    "pricing-card-enterprise"
+  ],
+  "exemplar_pages": [
+    "miro.com"
+  ],
+  "ai_slop_avoided": [
+    "use on standard CTAs or large background surfaces",
+    "introduce additional accent colors beyond yellow + brand pastels",
+    "soften corners on buttons; the pill is a brand signature"
+  ],
+  "source_md": "references/brands/miro.md"
+}

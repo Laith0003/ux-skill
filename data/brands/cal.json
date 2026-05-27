@@ -1,0 +1,49 @@
+{
+  "id": "cal",
+  "name": "Cal",
+  "category": "Productivity / Collaboration",
+  "year_observed": 2026,
+  "philosophy": "A clean, calendar-software-first interface anchored on white canvas with black primary CTAs and custom Cal Sans display typography.",
+  "design_language": {
+    "type": {
+      "display": "Cal Sans",
+      "body": "Inter",
+      "mono": "JetBrains Mono"
+    },
+    "color_primary": "#111111",
+    "color_canvas": "#ffffff",
+    "color_ink": "#111111",
+    "radius": [
+      4,
+      6,
+      8,
+      12,
+      16
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "White canvas with black primary CTA (#111111). Buttons are (8px) with confident weight-600 labels. Standard friendly-SaaS button",
+    "Custom Cal Sans display typeface for headlines (substituted with Inter weight 600 here). Negative letter-spacing on display sizes",
+    "Light-gray card surfaces (#f5f5f5) for feature cards",
+    "Product UI fragments embedded directly in cards",
+    "Nav-pill-group "
+  ],
+  "components_observed": [
+    "hero-app-mockup-card",
+    "pricing-tier-card-featured",
+    "nav-pill-group",
+    "feature-icon-card",
+    "product-mockup-card",
+    "pricing-tier-card"
+  ],
+  "exemplar_pages": [
+    "cal.com"
+  ],
+  "ai_slop_avoided": [
+    "use accent colors (, badge pastels) on primary CTAs. The system is monochrome at the action layer",
+    "bold display weight beyond 600. Cal Sans at 700 reads as bombastic",
+    "use rounded radius beyond (16px) on cards. Larger radii read as consumer-app, not professional booking software"
+  ],
+  "source_md": "references/brands/cal.md"
+}

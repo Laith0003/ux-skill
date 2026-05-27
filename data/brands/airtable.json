@@ -1,0 +1,47 @@
+{
+  "id": "airtable",
+  "name": "Airtable",
+  "category": "Productivity / Collaboration",
+  "year_observed": 2026,
+  "philosophy": "A sober, editorial workflow-software interface anchored on white canvas and dark-ink type, where brand voltage comes from full-bleed signature cards in coral, dark green, peach, and dark navy that punctuate long-scroll explainer pages.",
+  "design_language": {
+    "type": {
+      "display": "Haas Groot Disp",
+      "body": "Haas"
+    },
+    "color_primary": "#181d26",
+    "color_canvas": "#ffffff",
+    "color_ink": "#181d26",
+    "radius": [
+      2,
+      6,
+      10,
+      12
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Primary CTA is (near-black ink) with white text and a (12px) corner — it reads as confident and final, never decorative",
+    "Secondary CTA is a button with text and a hairline outline. The two together form Airtable's signature button pair",
+    "Hero is white canvas. There is no atmospheric gradient",
+    "Brand voltage lives in signature surface cards: , and carry full-bleed product callouts every few screens",
+    "Demo-card grids carry product UI fragments on , and other warm pastel surfaces"
+  ],
+  "components_observed": [
+    "pricing-tier-card-featured",
+    "button-pricing-pill",
+    "hero-card-dark",
+    "feature-card-tabbed",
+    "cream-callout-card",
+    "topic-filter-rail"
+  ],
+  "exemplar_pages": [
+    "airtable.com"
+  ],
+  "ai_slop_avoided": [
+    "make (#1b61c9) the primary button color. It is the link color. The primary button is (#181d26, near-black). Treating link-blue as the brand action is the most common mistake when reading Airtable's CSS variables",
+    "add a gradient backdrop to the hero. Airtable's hero is white, full stop. Mesh, aurora, spotlight gradients all read as \"another SaaS template\"",
+    "bold display-weight type. and are intentionally weight 400 / 500 — going to 700 reads as marketing-page-template"
+  ],
+  "source_md": "references/brands/airtable.md"
+}

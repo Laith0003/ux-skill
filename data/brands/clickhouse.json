@@ -1,0 +1,48 @@
+{
+  "id": "clickhouse",
+  "name": "Clickhouse",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "A high-performance database interface anchored on near-pure black canvas with electric yellow as the brand voltage.",
+  "design_language": {
+    "type": {
+      "display": "Inter",
+      "body": "Inter",
+      "mono": "JetBrains Mono"
+    },
+    "color_primary": "#faff69",
+    "color_canvas": "#0a0a0a",
+    "color_ink": "#ffffff",
+    "radius": [
+      4,
+      6,
+      8,
+      12
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Near-pure black canvas (#0a0a0a) with white type. The system has no light-mode marketing surface",
+    "Electric yellow primary (#faff69). Used on primary CTAs, large stat-callout numbers (\"2.8k+\", \"74k+\"), and full-bleed yellow CTA bands",
+    "Inter at weight 700 for display, weight 600 for sub-titles + buttons, weight 400 for body. No serif counterpoint",
+    "Dark surface cards (#1a1a1a) for feature cards, code windows, and product mockups. Cards barely lighter than canvas — color-block contrast is subtle",
+    "Code blocks render in JetBrains Mono inside. SQL syntax-highlighted in muted blues / yellows / grays"
+  ],
+  "components_observed": [
+    "pricing-tier-card-featured",
+    "hero-stat-card",
+    "feature-card-yellow",
+    "feature-card-dark",
+    "code-window-card",
+    "product-mockup-card"
+  ],
+  "exemplar_pages": [
+    "clickhouse.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce a second brand color. ClickHouse is monochromatic + yellow",
+    "bold display weight beyond 700 or use weight 500 for headlines. The hierarchy depends on size, not on weight gradation",
+    "use yellow for body text or large surface fills outside of intentional yellow cards"
+  ],
+  "source_md": "references/brands/clickhouse.md"
+}

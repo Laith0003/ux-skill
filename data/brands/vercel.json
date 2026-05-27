@@ -1,0 +1,52 @@
+{
+  "id": "vercel",
+  "name": "Vercel",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Vercel's design language — a developer-platform brand whose surface is a stark black-and-ink duet on near-white canvas, broken at hero scale by a multi-color mesh gradient (cyan / blue / magenta / amber) that acts as the entire decorative system, paired with a custom geometric sans for headlines and a monospaced caption face for technical labels.",
+  "design_language": {
+    "type": {
+      "display": "Geist",
+      "body": "Geist",
+      "mono": "Geist Mono"
+    },
+    "color_primary": "#171717",
+    "color_canvas": "#ffffff",
+    "color_ink": "#171717",
+    "radius": [
+      0,
+      4,
+      6,
+      8,
+      12,
+      16,
+      64
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "A single black-ink primary CTA carries every conversion target",
+    "A multi-stop mesh gradient (cyan-blue-magenta-amber) is the only decorative chrome",
+    "Every section eyebrow and small label uses the monospace face or ; everything else is in the geometric sans",
+    "Subtle stacked-shadow elevation — three offsets layered with 4-12 % black opacity — never a single heavy drop-shadow",
+    "A complete 100–1000 gray + blue + red + amber + green + teal + purple + pink colour scale exists as a system token set, but the marketing surface uses only t..."
+  ],
+  "components_observed": [
+    "code-editor-mockup",
+    "pricing-card-featured",
+    "feature-mesh-band",
+    "showcase-band-light",
+    "showcase-band-dark",
+    "pricing-card"
+  ],
+  "exemplar_pages": [
+    "vercel.com",
+    "vercel.com/pricing"
+  ],
+  "ai_slop_avoided": [
+    "introduce a sixth accent colour. The brand operates with ink + gray + the four-pair gradient palette; new accents flatten the voice",
+    "render headlines in all-caps. Sentence-case + negative tracking is non-negotiable",
+    "drop a single heavy drop-shadow on cards. The brand's elevation is built from stacked small offsets + inset hairline rings"
+  ],
+  "source_md": "references/brands/vercel.md"
+}

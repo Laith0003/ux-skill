@@ -1,0 +1,48 @@
+{
+  "id": "clay",
+  "name": "Clay",
+  "category": "Editorial / Media",
+  "year_observed": 2026,
+  "philosophy": "A vibrant claymation-meets-data interface for Clay.com (GTM data-orchestration platform).",
+  "design_language": {
+    "type": {
+      "display": "Plain Black",
+      "body": "Inter"
+    },
+    "color_primary": "#0a0a0a",
+    "color_canvas": "#fffaf0",
+    "color_ink": "#0a0a0a",
+    "radius": [
+      6,
+      8,
+      12,
+      16,
+      24
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Cream-tinted white canvas (#fffaf0). The warmth differentiates Clay from cool-gray competitor sites",
+    "Dark navy/black primary CTAs (#0a0a0a). Buttons rounded (12px) — friendly modern but not pill",
+    "6-color saturated feature card palette: , , , (cream)",
+    "3D claymation illustrations (mountains, characters, abstract shapes) as full-bleed hero artifacts — the brand's most-recognized visual element",
+    "Custom rounded Plain Black display typeface at 500 weight with -1 to -2.5px letter-spacing on display sizes"
+  ],
+  "components_observed": [
+    "pricing-tier-card-featured",
+    "hero-illustration-card",
+    "feature-card-pink",
+    "feature-card-teal",
+    "feature-card-lavender",
+    "feature-card-peach"
+  ],
+  "exemplar_pages": [
+    "clay.global"
+  ],
+  "ai_slop_avoided": [
+    "use cool grays for canvas. The cream tint is non-negotiable",
+    "use a 7th brand-color card. The 6-color palette is saturated enough",
+    "bold display weight beyond 500. Plain Black at 700 reads as bombastic"
+  ],
+  "source_md": "references/brands/clay.md"
+}

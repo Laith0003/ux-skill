@@ -1,0 +1,47 @@
+{
+  "id": "bmw-m",
+  "name": "Bmw M",
+  "category": "Automotive",
+  "year_observed": 2026,
+  "philosophy": "A motorsport-engineering interface anchored on a near-black canvas with white BMW Type Next Latin display headlines in confident UPPERCASE.",
+  "design_language": {
+    "type": {
+      "display": "BMWTypeNextLatin",
+      "body": "BMWTypeNextLatin Light"
+    },
+    "color_primary": "#ffffff",
+    "color_canvas": "#000000",
+    "color_ink": "#ffffff",
+    "radius": [
+      0,
+      2,
+      4,
+      6
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Near-pure black canvas (#000) with white type. The system inverts almost nothing — there is no light-mode marketing surface",
+    "Display headlines in UPPERCASE BMW Type Next Latin at weight 700. Sub-heads stay sentence-case at lighter weight",
+    "M tricolor ( / / ) used as 4px brand-stripe dividers, M-wordmark accents, and motorsport chrome — never as buttons or fills",
+    "Photography fills entire bands edge-to-edge. Cars are always the visual subject; UI chrome backs off to small white labels overlaid on photography",
+    "Buttons are flat with (0px) corners and uppercase letterspaced labels. The \"industrial precision\" rectangular silhouette IS the brand"
+  ],
+  "components_observed": [
+    "hero-photo-band",
+    "feature-photo-card",
+    "cta-band-photo",
+    "carousel-arrow",
+    "button-primary-outline",
+    "button-on-light"
+  ],
+  "exemplar_pages": [
+    "bmw.com/en/m.html"
+  ],
+  "ai_slop_avoided": [
+    "introduce a brand color outside the M tricolor ( / / ) and the heritage",
+    "bold body type. Body stays at 300 (Light)",
+    "use rounded buttons. The rectangular silhouette IS the brand. Rounded corners read as consumer-tech, not motorsport"
+  ],
+  "source_md": "references/brands/bmw-m.md"
+}

@@ -1,0 +1,36 @@
+{
+  "id": "mastercard",
+  "name": "Mastercard",
+  "category": "Fintech / Crypto",
+  "year_observed": 2026,
+  "philosophy": "Mastercard's experience reads like a warm, editorial magazine built from soft stone and signal orange.",
+  "design_language": {
+    "color_primary": "#f3f0ee",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000"
+  },
+  "trademark_signals": [
+    "Warm cream canvas (#F3F0EE) replaces traditional white — every surface is tinted, never sterile",
+    "Extreme border-radius as design language: 40px, 99px, 1000px dominate; anything square is a cookie-banner third-party",
+    "Circular image portraits with attached white satellite-CTAs and traced-orange orbital paths",
+    "Ghost \"watermark\" headlines (cream-on-cream text at heading scale) layered behind circle portraits",
+    "Black primary CTAs with 20px radius in the body — the cookie-banner orange is kept to consent flows"
+  ],
+  "components_observed": [
+    "gradient-system",
+    "decorative-orbital-lines",
+    "secondary-accent",
+    "surface-background",
+    "neutrals-text",
+    "semantic-accent"
+  ],
+  "exemplar_pages": [
+    "mastercard.com"
+  ],
+  "ai_slop_avoided": [
+    "use pure white as a page background — it breaks the warm editorial tone",
+    "round image frames at 8–16px — Mastercard either uses full-pill, 40px, or full-circle. In-between radii look generic",
+    "use Signal Orange for marketing CTAs — it reads as cookie-consent orange and dilutes the legal color signal"
+  ],
+  "source_md": "references/brands/mastercard.md"
+}

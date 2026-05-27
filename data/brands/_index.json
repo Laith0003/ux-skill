@@ -1,0 +1,371 @@
+{
+  "_meta": {
+    "version": "2.0.0",
+    "entries": 72,
+    "last_updated": "2026-05-27",
+    "source": "ux-skill v2 — Python pivot (converted from references/brands/*.md)",
+    "schema_version": "1.0"
+  },
+  "brands": [
+    {
+      "id": "airbnb",
+      "name": "Airbnb",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "airtable",
+      "name": "Airtable",
+      "category": "Productivity / Collaboration"
+    },
+    {
+      "id": "apple",
+      "name": "Apple",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "binance",
+      "name": "Binance",
+      "category": "Fintech / Crypto"
+    },
+    {
+      "id": "bmw",
+      "name": "Bmw",
+      "category": "Automotive"
+    },
+    {
+      "id": "bmw-m",
+      "name": "Bmw M",
+      "category": "Automotive"
+    },
+    {
+      "id": "bugatti",
+      "name": "Bugatti",
+      "category": "Automotive"
+    },
+    {
+      "id": "cal",
+      "name": "Cal",
+      "category": "Productivity / Collaboration"
+    },
+    {
+      "id": "claude",
+      "name": "Claude",
+      "category": "AI / ML Platform"
+    },
+    {
+      "id": "clay",
+      "name": "Clay",
+      "category": "Editorial / Media"
+    },
+    {
+      "id": "clickhouse",
+      "name": "Clickhouse",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "cohere",
+      "name": "Cohere",
+      "category": "AI / ML Platform"
+    },
+    {
+      "id": "coinbase",
+      "name": "Coinbase",
+      "category": "Fintech / Crypto"
+    },
+    {
+      "id": "composio",
+      "name": "Composio",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "elevenlabs",
+      "name": "Elevenlabs",
+      "category": "AI / ML Platform"
+    },
+    {
+      "id": "expo",
+      "name": "Expo",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "ferrari",
+      "name": "Ferrari",
+      "category": "Automotive"
+    },
+    {
+      "id": "figma",
+      "name": "Figma",
+      "category": "Productivity / Collaboration"
+    },
+    {
+      "id": "framer",
+      "name": "Framer",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "hashicorp",
+      "name": "Hashicorp",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "hp",
+      "name": "Hp",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "ibm",
+      "name": "Ibm",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "intercom",
+      "name": "Intercom",
+      "category": "Productivity / Collaboration"
+    },
+    {
+      "id": "kraken",
+      "name": "Kraken",
+      "category": "Fintech / Crypto"
+    },
+    {
+      "id": "lamborghini",
+      "name": "Lamborghini",
+      "category": "Automotive"
+    },
+    {
+      "id": "linear.app",
+      "name": "Linear App",
+      "category": "Productivity / Collaboration"
+    },
+    {
+      "id": "lovable",
+      "name": "Lovable",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "mastercard",
+      "name": "Mastercard",
+      "category": "Fintech / Crypto"
+    },
+    {
+      "id": "meta",
+      "name": "Meta",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "minimax",
+      "name": "Minimax",
+      "category": "AI / ML Platform"
+    },
+    {
+      "id": "mintlify",
+      "name": "Mintlify",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "miro",
+      "name": "Miro",
+      "category": "Productivity / Collaboration"
+    },
+    {
+      "id": "mistral.ai",
+      "name": "Mistral Ai",
+      "category": "AI / ML Platform"
+    },
+    {
+      "id": "mongodb",
+      "name": "Mongodb",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "nike",
+      "name": "Nike",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "notion",
+      "name": "Notion",
+      "category": "Productivity / Collaboration"
+    },
+    {
+      "id": "nvidia",
+      "name": "Nvidia",
+      "category": "Editorial / Media"
+    },
+    {
+      "id": "ollama",
+      "name": "Ollama",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "opencode.ai",
+      "name": "Opencode Ai",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "pinterest",
+      "name": "Pinterest",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "playstation",
+      "name": "Playstation",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "posthog",
+      "name": "Posthog",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "raycast",
+      "name": "Raycast",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "renault",
+      "name": "Renault",
+      "category": "Automotive"
+    },
+    {
+      "id": "replicate",
+      "name": "Replicate",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "resend",
+      "name": "Resend",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "revolut",
+      "name": "Revolut",
+      "category": "Fintech / Crypto"
+    },
+    {
+      "id": "runwayml",
+      "name": "Runwayml",
+      "category": "AI / ML Platform"
+    },
+    {
+      "id": "sanity",
+      "name": "Sanity",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "sentry",
+      "name": "Sentry",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "shopify",
+      "name": "Shopify",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "slack",
+      "name": "Slack",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "spacex",
+      "name": "Spacex",
+      "category": "Automotive"
+    },
+    {
+      "id": "spotify",
+      "name": "Spotify",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "starbucks",
+      "name": "Starbucks",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "stripe",
+      "name": "Stripe",
+      "category": "Fintech / Crypto"
+    },
+    {
+      "id": "supabase",
+      "name": "Supabase",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "superhuman",
+      "name": "Superhuman",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "tesla",
+      "name": "Tesla",
+      "category": "Automotive"
+    },
+    {
+      "id": "theverge",
+      "name": "The Verge",
+      "category": "Editorial / Media"
+    },
+    {
+      "id": "together.ai",
+      "name": "Together Ai",
+      "category": "AI / ML Platform"
+    },
+    {
+      "id": "uber",
+      "name": "Uber",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "vercel",
+      "name": "Vercel",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "vodafone",
+      "name": "Vodafone",
+      "category": "Editorial / Media"
+    },
+    {
+      "id": "voltagent",
+      "name": "Voltagent",
+      "category": "AI / ML Platform"
+    },
+    {
+      "id": "warp",
+      "name": "Warp",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "webflow",
+      "name": "Webflow",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "wired",
+      "name": "Wired",
+      "category": "Editorial / Media"
+    },
+    {
+      "id": "wise",
+      "name": "Wise",
+      "category": "Fintech / Crypto"
+    },
+    {
+      "id": "x.ai",
+      "name": "X Ai",
+      "category": "AI / ML Platform"
+    },
+    {
+      "id": "zapier",
+      "name": "Zapier",
+      "category": "Productivity / Collaboration"
+    }
+  ]
+}

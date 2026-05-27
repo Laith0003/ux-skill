@@ -1,0 +1,50 @@
+{
+  "id": "ferrari",
+  "name": "Ferrari",
+  "category": "Automotive",
+  "year_observed": 2026,
+  "philosophy": "A luxury-automotive brand whose marketing surfaces read as cinematic editorial.",
+  "design_language": {
+    "type": {
+      "display": "FerrariSans",
+      "body": "FerrariSans"
+    },
+    "color_primary": "#da291c",
+    "color_canvas": "#181818",
+    "color_ink": "#ffffff",
+    "color_accent_gradient": "linear-gradient(180deg, #a00c01, #da291c 64%)",
+    "radius": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      12
+    ],
+    "spacing": "8-based"
+  },
+  "trademark_signals": [
+    "Single accent: (Rosso Corsa #da291c) for primary CTAs, the Cavallino, F1 race-position highlights. Used scarcely",
+    "Near-black canvas (#181818) — never pure black. White-canvas bands only inside editorial contexts",
+    "Single sans family: FerrariSans across every text role",
+    "Display weight stays at 500 — never bold",
+    "CTA labels render uppercase with 1.4px tracking"
+  ],
+  "components_observed": [
+    "hero-band-cinema",
+    "hero-band-light",
+    "feature-card-photo",
+    "feature-card-light",
+    "cta-band-dark",
+    "newsletter-input-band"
+  ],
+  "exemplar_pages": [
+    "ferrari.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce a saturated brand color other than Rosso Corsa",
+    "use rounded or pill CTAs — sharp 0px corners are the brand button",
+    "bold display copy. The cinematic photography does the visual heavy-lifting"
+  ],
+  "source_md": "references/brands/ferrari.md"
+}

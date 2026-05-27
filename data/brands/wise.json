@@ -1,0 +1,48 @@
+{
+  "id": "wise",
+  "name": "Wise",
+  "category": "Fintech / Crypto",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Wise's design language — a global money-transfer brand whose surface combines an unusually heavy near-black display sans (weight 900 at 64–126 px) with a vivid lime-green brand accent, sage-tinted surface neutrals, and rounded white cards on a pale green-tinted canvas; the whole system reads more like a Scandinavian fintech magazine than a bank.",
+  "design_language": {
+    "type": {
+      "display": "Wise Sans",
+      "body": "Inter"
+    },
+    "color_primary": "#9fe870",
+    "color_canvas": "#ffffff",
+    "color_ink": "#0e0f0c",
+    "radius": [
+      0,
+      8,
+      12,
+      16,
+      24
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "A single lime-green CTA accent (#9fe870) — the brand's universal primary action color. No second accent",
+    "Two-face display typography",
+    "24 px is the canonical card and button radius. Generous, friendly",
+    "Sage-tinted canvas (#e8ebe6) is the brand's hero surface; white is reserved for cards within the sage band",
+    "A full semantic palette: positive green family, warning yellow family, negative red family"
+  ],
+  "components_observed": [
+    "card-feature-sage",
+    "card-feature-green",
+    "card-feature-dark",
+    "hero-band-dark",
+    "hero-band",
+    "content-band"
+  ],
+  "exemplar_pages": [
+    "wise.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce a second brand accent. Wise green is the sole identity colour",
+    "render the hero in weight 700 or lighter. The brand's display weight is 900",
+    "render CTAs as sharp rectangles. The 24 px pill geometry is non-negotiable"
+  ],
+  "source_md": "references/brands/wise.md"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "hp",
+  "name": "Hp",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of HP's design language — a white-paper enterprise-consumer system anchored by HP Electric Blue (`#024ad8`) as the lone signal CTA, near-black ink (`#1a1a1a`) for headlines, geometric Forma-DJR sans throughout, and angular blue-chevron decorations that nod to the HP wordmark's slashes.",
+  "design_language": {
+    "type": {
+      "display": "Forma DJR Micro",
+      "body": "Forma DJR Micro"
+    },
+    "color_primary": "#024ad8",
+    "color_canvas": "#ffffff",
+    "color_ink": "#1a1a1a",
+    "radius": [
+      0,
+      2,
+      3,
+      4,
+      8,
+      16
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Pure white canvas  with deep ink  running every body surface; light fog bands (, ) alternate for section rhythm",
+    "HP Electric Blue  is the lone CTA fill and link color; it appears at most twice per viewport",
+    "Bespoke Forma DJR Micro across every surface — display, body, button, caption — at weights 400 / 500 / 600 / 700",
+    "Cards round at (16px) for product/pricing tiles; buttons sit at (4px) with capitalize labels",
+    "Geometric blue chevrons ( rectangles cut at 45°) frame hero photography and reinforce the wordmark"
+  ],
+  "components_observed": [
+    "card-pricing-tier-featured",
+    "badge-pill-ink",
+    "badge-pill-outline",
+    "card-product-feature",
+    "card-pricing-tier",
+    "card-article-tile"
+  ],
+  "exemplar_pages": [
+    "hp.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce secondary saturated colors outside family + the bloom-coral sale-tag and storm printer-plan accents",
+    "apply heavy material shadows — depth is via color contrast (cloud vs. white) and Soft Lift only",
+    "round buttons above (4px); a soft 8px+ button reads as a different brand"
+  ],
+  "source_md": "references/brands/hp.md"
+}

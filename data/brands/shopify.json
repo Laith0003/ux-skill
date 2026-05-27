@@ -1,0 +1,49 @@
+{
+  "id": "shopify",
+  "name": "Shopify",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Shopifi's design language — a cinematic commerce platform that runs two parallel design tracks.",
+  "design_language": {
+    "type": {
+      "display": "NeueHaasGrotesk Display",
+      "body": "Inter Variable",
+      "mono": "ui-monospace"
+    },
+    "color_primary": "#000000",
+    "color_ink": "#000000",
+    "radius": [
+      4,
+      5,
+      8,
+      12,
+      20
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Two-canvas system: for cinematic marketing, / for transactional surfaces — never blended",
+    "Pill-shape  is the only button shape across both tracks; rounded rectangles do not exist for buttons",
+    "Thin-weight (330) display typography is the signature; at 96px / weight 330 is the brand's loudest visual",
+    "Aloe and pistachio greens (, ) are reserved for the light track — they signal commerce, growth, transactional success",
+    "Photography is full-bleed, edge-to-edge, never inset in cards on the cinematic track"
+  ],
+  "components_observed": [
+    "button-primary-pill-pressed",
+    "button-primary-pill",
+    "button-aloe-pill",
+    "card-pricing-featured",
+    "card-feature-cinematic",
+    "card-pistachio-band"
+  ],
+  "exemplar_pages": [
+    "shopify.com",
+    "shopify.com/pricing"
+  ],
+  "ai_slop_avoided": [
+    "introduce a third canvas color — stick to black or light/cream. Greys, beiges, and blues are not in the system",
+    "add drop shadows on cinematic dark cards beyond the subtle inset top-highlight; the cinematic track wants flat blackness",
+    "shrink display tiers below (48px) on hero surfaces; below that they read as section heads, not display"
+  ],
+  "source_md": "references/brands/shopify.md"
+}

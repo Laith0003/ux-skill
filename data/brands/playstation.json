@@ -1,0 +1,47 @@
+{
+  "id": "playstation",
+  "name": "Playstation",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "| A three-surface marketing system organized around alternating black, white, and PlayStation Blue chapters that scroll past the viewer like a console launch trailer.",
+  "design_language": {
+    "type": {
+      "display": "PlayStation SST",
+      "body": "PlayStation SST"
+    },
+    "color_primary": "#0070d1",
+    "color_canvas": "#000000",
+    "color_ink": "#000000",
+    "radius": [
+      0,
+      4,
+      8,
+      16
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Three-canvas chapter system: (black), (white), (PlayStation Blue) alternating down the page",
+    "PlayStation Blue (#0070d1) is the universal primary CTA — fully-rounded pill at (9999px)",
+    "Commerce orange (#d53b00) is the secondary CTA reserved for \"Buy now\" / \"Pre-order\" / store actions",
+    "PlayStation SST display tier renders at weight 300 with -0.1px to +0.4px tracking — the brand's signature airy editorial voice",
+    "8px-radius  for product cards and feature panels; 4px-radius  for inputs; pills  for every CTA"
+  ],
+  "components_observed": [
+    "filter-pill-active",
+    "hero-band-blue",
+    "hero-band-dark",
+    "hero-band-light",
+    "filter-pill",
+    "game-tile"
+  ],
+  "exemplar_pages": [
+    "playstation.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce drop shadows on resting cards. The system is flat-on-canvas; cards lift only on press",
+    "replace with another shade of blue. The brand blue is precise — #0070d1 for default and #0064b7 for pressed",
+    "use (orange) on marketing/hero CTAs. It's reserved exclusively for store actions"
+  ],
+  "source_md": "references/brands/playstation.md"
+}

@@ -1,0 +1,48 @@
+{
+  "id": "vodafone",
+  "name": "Vodafone",
+  "category": "Editorial / Media",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Vodafone's design language — a telecom super-brand whose web surface alternates between editorial photography hero bands with massive uppercase display headlines and clean white content bands, anchored by the company's signature scarlet red CTA and the proprietary Vodafone display sans set at impossibly heavy 800 weight.",
+  "design_language": {
+    "type": {
+      "display": "Vodafone",
+      "body": "Vodafone"
+    },
+    "color_primary": "#e60000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#25282b",
+    "radius": [
+      0,
+      1,
+      6,
+      32,
+      60
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "A single primary CTA color (#e60000) — Vodafone Red. Pill-filled for primary, pill-outline for secondary. No third button variant",
+    "Massive uppercase display weight 800 ( and siblings) is the brand's signature. The 300-weight headline siblings ( / ) handle calmer secondary moments",
+    "The speechmark-logo-orb",
+    "Pill geometry on every interactive shape — 60 px for buttons, 32 px for inline badges. Card chrome stays at 6 px",
+    "A two-band page rhythm — dark hero / light content. No mid-band greys; the brand uses surface contrast, not soft neutrals, for elevation"
+  ],
+  "components_observed": [
+    "hero-band-dark",
+    "hero-band-red",
+    "content-band-light",
+    "card-hero",
+    "button-outline-red",
+    "button-outline-dark"
+  ],
+  "exemplar_pages": [
+    "vodafone.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce a second accent colour. The brand operates with red + ink + grayscale only",
+    "render headlines in sentence case at hero scale. Hero display IS uppercase weight 800",
+    "render the primary CTA as a square rectangle. The 60 px pill is non-negotiable"
+  ],
+  "source_md": "references/brands/vodafone.md"
+}

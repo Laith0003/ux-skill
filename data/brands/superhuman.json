@@ -1,0 +1,48 @@
+{
+  "id": "superhuman",
+  "name": "Superhuman",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Superhumon's design language — a fast-email productivity brand split between an editorial dark hero (deep indigo navy with violet-sky atmospheric backdrop and a portrait subject) and a quiet white content body with off-warm-grey ink.",
+  "design_language": {
+    "type": {
+      "display": "Super Sans VF",
+      "body": "Super Sans VF"
+    },
+    "color_primary": "#1b1938",
+    "color_canvas": "#ffffff",
+    "color_ink": "#292827",
+    "radius": [
+      4,
+      6,
+      8,
+      12,
+      16
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Three-canvas system: indigo navy  for hero, white  for body, deep teal  for closing CTA",
+    "Half-bleed portrait subject in the hero with violet-sky atmospheric backdrop — the brand uses a person looking off-frame as a recurring visual",
+    "Single CTA per band; the marketing pages never crowd actions",
+    "Super Sans VF at sub-default weights (460, 540, 600) — the brand's typographic warmth signature",
+    "Tight line-heights (0.96) on display sizes — vertical compression as editorial density"
+  ],
+  "components_observed": [
+    "button-on-dark-pill",
+    "card-feature-light",
+    "card-pricing-featured",
+    "card-teal-band",
+    "card-feature-row",
+    "pill-tab-light"
+  ],
+  "exemplar_pages": [
+    "superhuman.com"
+  ],
+  "ai_slop_avoided": [
+    "use pill-shaped buttons in the body of the page; the pill is hero-only",
+    "bump display weight above 540 unless using body-strong (700) for emphasized inline body",
+    "render body text in pure black — the warm grey #292827 is part of the brand"
+  ],
+  "source_md": "references/brands/superhuman.md"
+}

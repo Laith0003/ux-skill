@@ -1,0 +1,49 @@
+{
+  "id": "figma",
+  "name": "Figma",
+  "category": "Productivity / Collaboration",
+  "year_observed": 2026,
+  "philosophy": "A confident black-and-white editorial frame interrupted by oversized, hand-cut pastel color blocks.",
+  "design_language": {
+    "type": {
+      "display": "figmaSans",
+      "body": "figmaSans"
+    },
+    "color_primary": "#000000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000",
+    "radius": [
+      2,
+      6,
+      8,
+      24,
+      32
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Monochrome system core: (black) and (white) carry every CTA, every body line, every footer link",
+    "Oversized pastel color-block sections (, , , ) define the narrative rhythm of every long-form page",
+    "Pill is the only button shape — for text CTAs, for icon buttons. No square buttons anywhere",
+    "figmaSans variable typeface used at unusually fine weight increments (320, 330, 340, 450, 480, 540)",
+    "Tight negative letter-spacing on display sizes (-1.72px at 86px, -0.96px at 64px) creates a confident editorial cadence"
+  ],
+  "components_observed": [
+    "pricing-card-feature-row",
+    "pricing-tab-default",
+    "pricing-tab-selected",
+    "feature-illustration-tile",
+    "pricing-card",
+    "marquee-strip"
+  ],
+  "exemplar_pages": [
+    "figma.com",
+    "figma.com/pricing"
+  ],
+  "ai_slop_avoided": [
+    "introduce mid-gray text. Body hierarchy comes from figmaSans weight, not from opacity",
+    "add drop shadows to color-block sections — the color is the depth device",
+    "introduce new accent colors outside the documented palette and. Adding, e.g., a saturated brand orange would break the system"
+  ],
+  "source_md": "references/brands/figma.md"
+}

@@ -1,0 +1,47 @@
+{
+  "id": "renault",
+  "name": "Renault",
+  "category": "Automotive",
+  "year_observed": 2026,
+  "philosophy": "| Renault's web presence pairs the freshly-modernised Renault diamond (the 2021 flat-line rhombus mark) with a stark black-and-white canvas, a signature Sunlight Yellow accent, and the proprietary NouvelR display typeface.",
+  "design_language": {
+    "type": {
+      "display": "NouvelR",
+      "body": "NouvelR"
+    },
+    "color_primary": "#ffed00",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000",
+    "radius": [
+      0,
+      2,
+      3,
+      4
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Two-tone canvas system — (white) for browsing, (black) for storytelling — switched in full-bleed bands rather than subtle gradations",
+    "A single brand accent — Sunlight Yellow — used scarcely on primary CTAs, \"NEW\" badges, R5 hero photography, and configurator dot indicators",
+    "NouvelR everywhere, with headlines at 56px / weight 700 / lineHeight: 0.95 so condensed multi-line headlines stack cleanly",
+    "Square geometry: (2px) on buttons, on tiles and product cards, reserved exclusively for sub-nav chips and decorative badges",
+    "Photography-first product tiles — vehicle photos full-bleed inside otherwise neutral cards, with copy stacked beneath rather than overlaid"
+  ],
+  "components_observed": [
+    "promo-tile-light",
+    "promo-tile-dark",
+    "promo-tile-yellow",
+    "sub-nav-pill",
+    "button-pill",
+    "hero-banner"
+  ],
+  "exemplar_pages": [
+    "renault.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce a secondary accent colour. Yellow is the only brand accent; semantic colours (, ) are functional, not decorative",
+    "round vehicle cards or promo tiles. Square-cornered photography is core to the brand expression",
+    "soften body weights to 500 or 600 — the system relies on the 400 / 700 contrast"
+  ],
+  "source_md": "references/brands/renault.md"
+}

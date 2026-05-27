@@ -1,0 +1,49 @@
+{
+  "id": "posthog",
+  "name": "Posthog",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "| A playful developer-tools system rendered on a warm cream canvas with hand-drawn hedgehog mascots dotted across every page like marginalia in a sketchbook.",
+  "design_language": {
+    "type": {
+      "display": "IBM Plex Sans Variable",
+      "body": "IBM Plex Sans Variable",
+      "mono": "ui-monospace"
+    },
+    "color_primary": "#f7a501",
+    "color_canvas": "#eeefe9",
+    "color_ink": "#23251d",
+    "radius": [
+      0,
+      2,
+      4,
+      6,
+      8
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Warm cream canvas (#eeefe9) end-to-end with no surface alternation between sections — the page is one continuous sheet",
+    "Single yellow-orange CTA pill (#f7a501) with deep olive text  — the brand's only saturated color",
+    "IBM Plex Sans Variable across every text role with weights 400/500/600/700/800 — no other typeface in the system",
+    "Hand-drawn hedgehog mascots scattered across the layout as the entire decorative system — no gradients, no mesh, no atmospheric backgrounds",
+    "4–8px radius card vocabulary: (6px) for most components, (8px) for select containers, fully rounded for pill chips"
+  ],
+  "components_observed": [
+    "pricing-tier-card",
+    "pill-tab-active",
+    "feature-tile",
+    "pill-tab",
+    "code-block",
+    "button-primary-pressed"
+  ],
+  "exemplar_pages": [
+    "posthog.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce drop shadows on cards. Cards sit flat on cream with thin olive borders only",
+    "add a second saturated chromatic CTA. Yellow-orange is the only loud color in the system",
+    "replace the cream canvas with pure white or full-bleed dark hero bands. The cream is the brand"
+  ],
+  "source_md": "references/brands/posthog.md"
+}

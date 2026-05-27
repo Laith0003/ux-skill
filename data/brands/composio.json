@@ -1,0 +1,50 @@
+{
+  "id": "composio",
+  "name": "Composio",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "A developer-tools brand for AI-agent tool integration whose marketing surfaces lean into a dark, technical aesthetic with a single deep-electric-blue voltage (`#0007cd`).",
+  "design_language": {
+    "type": {
+      "display": "abcDiatype",
+      "body": "abcDiatype",
+      "mono": "JetBrains Mono"
+    },
+    "color_primary": "#0007cd",
+    "color_canvas": "#0f0f0f",
+    "color_ink": "#ffffff",
+    "radius": [
+      0,
+      4,
+      6,
+      8,
+      12,
+      16
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Single accent: (#0007cd) for primary CTAs, wordmark, spotlight glows",
+    "Single sans family: abcDiatype carries everything except code (JetBrains Mono)",
+    "Dark monolithic canvas: runs top to bottom; depth from and brightness steps",
+    "Terminal-mockup hero: 2×2 grid of code/output panes is the brand signature",
+    "Compact pill geometry: CTAs sit at (8px), not full pills — developer-tool dialect"
+  ],
+  "components_observed": [
+    "terminal-mockup-grid",
+    "cta-band-spotlight",
+    "hero-band",
+    "feature-card",
+    "code-block",
+    "badge-pill"
+  ],
+  "exemplar_pages": [
+    "composio.dev"
+  ],
+  "ai_slop_avoided": [
+    "introduce a secondary brand color. Cyan and violet are illustrative-only",
+    "use full pills on CTAs",
+    "drop display weight to 400"
+  ],
+  "source_md": "references/brands/composio.md"
+}

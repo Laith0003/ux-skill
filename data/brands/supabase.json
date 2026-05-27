@@ -1,0 +1,50 @@
+{
+  "id": "supabase",
+  "name": "Supabase",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Supabaze's design language — an open-source database platform built on a clean white-and-near-black system with a single signature emerald-green CTA, a custom humanist sans display tier, and dense product UI mockups composited above the hero.",
+  "design_language": {
+    "type": {
+      "display": "Circular",
+      "body": "Circular",
+      "mono": "ui-monospace"
+    },
+    "color_primary": "#3ecf8e",
+    "color_canvas": "#ffffff",
+    "color_ink": "#171717",
+    "radius": [
+      4,
+      6,
+      8,
+      12,
+      16
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Single emerald primary ( #3ecf8e) as the only chromatic event; everything else is monochrome",
+    "White canvas marketing track with greyscale hierarchy from to",
+    "Custom humanist sans display tier at weight 500 with negative letter-spacing of -1.92px to -0.42px",
+    "Composited product UI screenshots (dashboard, SQL editor, log stream) are the dominant decorative element — never photography, never illustrations",
+    "Tight 6px / 8px button radii — square-ish, technical, never pill-shaped"
+  ],
+  "components_observed": [
+    "card-feature-light",
+    "card-pricing-featured",
+    "card-feature-dark",
+    "pill-tag-green",
+    "pill-tag-soft",
+    "card-pricing"
+  ],
+  "exemplar_pages": [
+    "supabase.com",
+    "supabase.com/pricing"
+  ],
+  "ai_slop_avoided": [
+    "introduce additional accent colors as system colors",
+    "bump display weight above 500 — the brand's calibrated mid-weight breaks at 600+",
+    "use pill-shaped buttons; the brand's button radius is square-ish 6px"
+  ],
+  "source_md": "references/brands/supabase.md"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "coinbase",
+  "name": "Coinbase",
+  "category": "Fintech / Crypto",
+  "year_observed": 2026,
+  "philosophy": "An institutional-grade crypto exchange whose marketing surfaces read like a quietly-confident financial-services brand.",
+  "design_language": {
+    "type": {
+      "display": "Coinbase Display",
+      "body": "Coinbase Sans"
+    },
+    "color_primary": "#0052ff",
+    "color_canvas": "#ffffff",
+    "color_ink": "#0a0b0d",
+    "radius": [
+      0,
+      4,
+      8,
+      12,
+      16,
+      24
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Single accent color: (#0052ff Coinbase Blue) carries every primary CTA, wordmark, and inline brand link. Used scarcely",
+    "Modest display weights — CoinbaseDisplay at weight 400, never 700+",
+    "Editorial pill geometry: every CTA is (100px), every asset glyph is , every card is (24px). Sharp corners absent",
+    "Full-bleed dark heroes with floating product-UI cards: plus inline mockups is the brand's strongest signature pattern",
+    "Trading semantics: (#05b169) and (#cf202f) — text color only, never background fills"
+  ],
+  "components_observed": [
+    "button-pill-cta",
+    "hero-band-dark",
+    "hero-band-light",
+    "pricing-tier-card",
+    "pricing-tier-featured",
+    "cta-band-dark"
+  ],
+  "exemplar_pages": [
+    "coinbase.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce a secondary brand color. Coinbase Blue is the only action color; trading green/red are semantic-only",
+    "bold display copy — display sits at weight 400; bolding shifts the brand voice",
+    "add drop shadow tiers — system has one shadow tier"
+  ],
+  "source_md": "references/brands/coinbase.md"
+}

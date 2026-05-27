@@ -1,0 +1,44 @@
+{
+  "id": "airbnb",
+  "name": "Airbnb",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "A warm, generous consumer marketplace anchored on a clean white canvas and Airbnb Rausch (#ff385c), the single brand voltage that carries every primary CTA, search-button orb, and rating dot.",
+  "design_language": {
+    "type": {
+      "display": "Airbnb Cereal VF",
+      "body": "Airbnb Cereal VF"
+    },
+    "color_primary": "#ff385c",
+    "color_canvas": "#ffffff",
+    "color_ink": "#222222",
+    "radius": [
+      0,
+      4,
+      8,
+      14,
+      20,
+      32
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Single accent color: (#ff385c",
+    "Custom variable type: Airbnb Cereal VF. Display weights sit at 500–700, body at 400. Modest weight is intentional",
+    "Three-product top nav: Homes, Experiences, Services",
+    "Pill-shaped global search bar: white surface",
+    "Property cards are photo-first: aspect-ratio rectangles with corner clipping"
+  ],
+  "components_observed": [
+    "button-pill-rausch",
+    "search-bar-pill",
+    "legal-band",
+    "date-picker-day-selected",
+    "button-primary-active",
+    "button-primary-disabled"
+  ],
+  "exemplar_pages": [
+    "airbnb.com"
+  ],
+  "source_md": "references/brands/airbnb.md"
+}

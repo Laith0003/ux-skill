@@ -1,0 +1,2527 @@
+{
+  "_meta": {
+    "version": "2.0.0",
+    "entries": 148,
+    "last_updated": "2026-05-27",
+    "source": "ux-skill v2 — Python pivot",
+    "schema_version": "1.0"
+  },
+  "entries": [
+    {
+      "id": "mega-nav-product-grid",
+      "name": "Mega Navigation — Product Grid",
+      "category": "Navigation",
+      "purpose": "Reveal a multi-column product or feature index from a top-bar trigger without leaving the page.",
+      "anatomy": ["trigger-link", "panel-container", "column-headings", "product-rows", "promo-card-right", "panel-footer-cta"],
+      "states": ["closed", "hover-intent", "open", "loading", "keyboard-focused"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "hairline", "primary"],
+      "motion": ["fade-down-8px", "panel-stagger-cols"],
+      "a11y": ["aria-expanded on trigger", "focus trap when open", "Esc closes and returns focus", "first item receives focus on open"],
+      "code_refs": {
+        "react": "examples/react/MegaNavProductGrid.tsx",
+        "vue": "examples/vue/MegaNavProductGrid.vue",
+        "blade": "examples/blade/mega-nav-product-grid.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "sidebar-rail-collapsible",
+      "name": "Collapsible Sidebar Rail",
+      "category": "Navigation",
+      "purpose": "Persistent app navigation that collapses to icon-only rail to reclaim horizontal space.",
+      "anatomy": ["logo-zone", "primary-nav-items", "section-divider", "secondary-nav-items", "collapse-toggle", "user-footer"],
+      "states": ["expanded", "collapsed", "hover-expand-peek", "active-item", "loading"],
+      "tokens_used": ["surface", "ink", "muted", "primary", "primary_active", "hairline"],
+      "motion": ["width-collapse-200ms", "label-fade-out-tight"],
+      "a11y": ["aria-current=page on active item", "tooltip on icons when collapsed", "keyboard arrow navigation"],
+      "code_refs": {
+        "react": "examples/react/SidebarRail.tsx",
+        "vue": "examples/vue/SidebarRail.vue",
+        "blade": "examples/blade/sidebar-rail.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "breadcrumb-truncating",
+      "name": "Truncating Breadcrumb",
+      "category": "Navigation",
+      "purpose": "Show path hierarchy with middle-truncation when ancestor chain exceeds available width.",
+      "anatomy": ["home-link", "separator", "ancestor-links", "ellipsis-menu", "current-page-label"],
+      "states": ["default", "truncated", "ellipsis-open", "hover"],
+      "tokens_used": ["body", "muted", "ink", "hairline"],
+      "motion": ["popover-fade-up-4px"],
+      "a11y": ["nav element with aria-label=Breadcrumb", "ordered list semantics", "current page marked aria-current=page"],
+      "code_refs": {
+        "react": "examples/react/Breadcrumb.tsx",
+        "vue": "examples/vue/Breadcrumb.vue",
+        "blade": "examples/blade/breadcrumb.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "tab-segmented-control",
+      "name": "Segmented Tab Control",
+      "category": "Navigation",
+      "purpose": "Switch between 2-5 sibling views inside a card or panel with an inline pill indicator.",
+      "anatomy": ["segment-track", "segment-labels", "active-indicator-pill", "content-panel"],
+      "states": ["default", "active", "hover", "disabled", "focus-visible"],
+      "tokens_used": ["surface", "ink", "muted", "primary", "hairline"],
+      "motion": ["pill-slide-spring", "content-crossfade-120ms"],
+      "a11y": ["role=tablist with role=tab children", "arrow keys cycle tabs", "Home/End jump to ends"],
+      "code_refs": {
+        "react": "examples/react/SegmentedTabs.tsx",
+        "vue": "examples/vue/SegmentedTabs.vue",
+        "blade": "examples/blade/segmented-tabs.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "mobile-bottom-nav",
+      "name": "Mobile Bottom Navigation",
+      "category": "Navigation",
+      "purpose": "Five-or-fewer thumb-reachable destinations pinned to the bottom of mobile viewports.",
+      "anatomy": ["nav-bar-container", "icon-buttons", "active-indicator-dot", "label-text", "safe-area-padding"],
+      "states": ["default", "active", "pressed", "with-badge", "hidden-on-scroll"],
+      "tokens_used": ["surface", "ink", "muted", "primary", "hairline"],
+      "motion": ["icon-scale-pop-95-100", "indicator-slide-spring"],
+      "a11y": ["role=navigation with aria-label", "44px min touch target", "aria-current=page on active"],
+      "code_refs": {
+        "react": "examples/react/BottomNav.tsx",
+        "vue": "examples/vue/BottomNav.vue",
+        "blade": "examples/blade/bottom-nav.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "command-palette-cmdk",
+      "name": "Command Palette",
+      "category": "Navigation",
+      "purpose": "Keyboard-first global search and action launcher invoked via Cmd/Ctrl+K.",
+      "anatomy": ["overlay-backdrop", "search-input", "result-groups", "result-row", "shortcut-hint", "empty-state", "footer-hints"],
+      "states": ["closed", "open", "searching", "results", "empty", "loading", "error"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["scale-pop-95-100", "result-stagger-12ms"],
+      "a11y": ["role=combobox + listbox", "arrow keys navigate results", "Esc closes", "screen reader announces result count"],
+      "code_refs": {
+        "react": "examples/react/CommandPalette.tsx",
+        "vue": "examples/vue/CommandPalette.vue",
+        "blade": "examples/blade/command-palette.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "anchor-rail-scrollspy",
+      "name": "Anchor Rail with Scrollspy",
+      "category": "Navigation",
+      "purpose": "Right-rail table of contents that highlights the visible section as the user scrolls long-form content.",
+      "anatomy": ["rail-container", "section-links", "active-indicator-bar", "progress-track"],
+      "states": ["default", "active-section", "hover", "scrolled-past"],
+      "tokens_used": ["body", "muted", "primary", "hairline"],
+      "motion": ["active-bar-slide-spring"],
+      "a11y": ["nav with aria-label=Table of contents", "aria-current=true on active", "smooth scroll respects prefers-reduced-motion"],
+      "code_refs": {
+        "react": "examples/react/AnchorRail.tsx",
+        "vue": "examples/vue/AnchorRail.vue",
+        "blade": "examples/blade/anchor-rail.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "navbar-sticky-shrink",
+      "name": "Sticky Navbar with Shrink",
+      "category": "Navigation",
+      "purpose": "Top navigation that reduces height and adds elevation as the page scrolls.",
+      "anatomy": ["nav-container", "logo-mark", "primary-links", "right-actions", "elevation-shadow"],
+      "states": ["top", "scrolled", "hidden-on-scroll-down", "shown-on-scroll-up"],
+      "tokens_used": ["surface", "canvas", "ink", "muted", "hairline"],
+      "motion": ["height-shrink-200ms", "shadow-elevate-fade"],
+      "a11y": ["nav landmark", "skip-to-content link as first focusable", "no opacity below WCAG 4.5 on scroll"],
+      "code_refs": {
+        "react": "examples/react/StickyNavbar.tsx",
+        "vue": "examples/vue/StickyNavbar.vue",
+        "blade": "examples/blade/sticky-navbar.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "pagination-numbered",
+      "name": "Numbered Pagination",
+      "category": "Navigation",
+      "purpose": "Discrete page selector with prev/next, current page emphasis, and ellipsis for large ranges.",
+      "anatomy": ["prev-button", "page-buttons", "ellipsis-gap", "next-button", "page-summary-text"],
+      "states": ["default", "current", "hover", "disabled-edge", "loading"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["button-press-scale-98"],
+      "a11y": ["nav with aria-label=Pagination", "aria-current=page on current", "prev/next have descriptive labels"],
+      "code_refs": {
+        "react": "examples/react/Pagination.tsx",
+        "vue": "examples/vue/Pagination.vue",
+        "blade": "examples/blade/pagination.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "stepper-horizontal",
+      "name": "Horizontal Stepper",
+      "category": "Navigation",
+      "purpose": "Show progression through an N-step process with clear current and completed states.",
+      "anatomy": ["step-circle", "step-label", "connector-line", "step-count", "current-marker"],
+      "states": ["pending", "current", "completed", "error-step", "skipped"],
+      "tokens_used": ["surface", "ink", "muted", "primary", "hairline", "success", "danger"],
+      "motion": ["connector-fill-300ms", "circle-check-draw"],
+      "a11y": ["ordered list semantics", "aria-current=step on current", "screen reader announces step N of M"],
+      "code_refs": {
+        "react": "examples/react/Stepper.tsx",
+        "vue": "examples/vue/Stepper.vue",
+        "blade": "examples/blade/stepper.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "tab-bar-underline",
+      "name": "Underline Tab Bar",
+      "category": "Navigation",
+      "purpose": "Editorial-feeling tab navigation with a sliding underline indicator under the active label.",
+      "anatomy": ["tab-track", "tab-labels", "underline-indicator", "overflow-scroll-edge-fade"],
+      "states": ["default", "active", "hover", "focus-visible", "scrolled-overflow"],
+      "tokens_used": ["ink", "body", "muted", "primary", "hairline"],
+      "motion": ["underline-slide-spring", "underline-width-morph"],
+      "a11y": ["role=tablist + role=tab", "arrow keys cycle", "tab content is role=tabpanel"],
+      "code_refs": {
+        "react": "examples/react/UnderlineTabs.tsx",
+        "vue": "examples/vue/UnderlineTabs.vue",
+        "blade": "examples/blade/underline-tabs.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "drawer-nav-mobile",
+      "name": "Mobile Drawer Navigation",
+      "category": "Navigation",
+      "purpose": "Off-canvas full-height navigation panel triggered by hamburger button on mobile.",
+      "anatomy": ["hamburger-trigger", "overlay-backdrop", "drawer-panel", "close-button", "nav-list", "footer-actions"],
+      "states": ["closed", "opening", "open", "closing", "dragging"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "primary", "hairline"],
+      "motion": ["drawer-slide-in-right", "backdrop-fade"],
+      "a11y": ["focus trap", "Esc closes", "aria-modal=true", "scroll lock on body"],
+      "code_refs": {
+        "react": "examples/react/MobileDrawer.tsx",
+        "vue": "examples/vue/MobileDrawer.vue",
+        "blade": "examples/blade/mobile-drawer.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "stat-card-magnetic",
+      "name": "Magnetic Stat Card",
+      "category": "Data Display",
+      "purpose": "Show one metric with optional delta and sparkline. Magnetic hover for engagement.",
+      "anatomy": ["label", "value", "delta-pill", "sparkline (optional)", "footer-note (optional)"],
+      "states": ["default", "hover", "loading", "empty", "error"],
+      "tokens_used": ["surface", "ink", "primary", "muted", "hairline"],
+      "motion": ["magnetic-pointer-track", "delta-pill-fade-up"],
+      "a11y": ["label is visual h-tag mapped to h3", "delta has aria-label with direction", "sparkline has aria-describedby summary"],
+      "code_refs": {
+        "react": "examples/react/StatCardMagnetic.tsx",
+        "vue": "examples/vue/StatCardMagnetic.vue",
+        "blade": "examples/blade/stat-card-magnetic.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "stat-card-comparison",
+      "name": "Comparison Stat Card",
+      "category": "Data Display",
+      "purpose": "Show a metric alongside a baseline or target value with explicit comparison delta.",
+      "anatomy": ["primary-label", "primary-value", "comparison-label", "comparison-value", "delta-text", "trend-arrow"],
+      "states": ["default", "improving", "regressing", "neutral", "loading"],
+      "tokens_used": ["surface", "ink", "muted", "success", "danger", "hairline"],
+      "motion": ["value-count-up", "trend-arrow-rotate"],
+      "a11y": ["delta wrapped in screen-reader text like 'up 12 percent'", "color not sole carrier of direction"],
+      "code_refs": {
+        "react": "examples/react/ComparisonStatCard.tsx",
+        "vue": "examples/vue/ComparisonStatCard.vue",
+        "blade": "examples/blade/comparison-stat-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "data-table-modern",
+      "name": "Modern Data Table",
+      "category": "Data Display",
+      "purpose": "Dense tabular data with sortable headers, row hover, sticky first column, and selection.",
+      "anatomy": ["header-row", "filter-row", "data-rows", "row-select-checkbox", "sort-icons", "pagination-footer", "sticky-column"],
+      "states": ["default", "sorted-asc", "sorted-desc", "row-hover", "row-selected", "loading-skeleton", "empty"],
+      "tokens_used": ["surface", "ink", "body", "muted", "hairline", "primary"],
+      "motion": ["row-hover-bg-fade", "sort-icon-rotate"],
+      "a11y": ["proper th/td semantics", "aria-sort on sorted column", "keyboard navigation cell-by-cell", "screen reader row count"],
+      "code_refs": {
+        "react": "examples/react/DataTable.tsx",
+        "vue": "examples/vue/DataTable.vue",
+        "blade": "examples/blade/data-table.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "sparkline-cell",
+      "name": "Inline Sparkline Cell",
+      "category": "Data Display",
+      "purpose": "Tiny inline trend chart inside a table cell or stat card to show a short-term direction.",
+      "anatomy": ["line-path", "area-fill-optional", "end-point-marker", "axis-baseline"],
+      "states": ["default", "positive-trend", "negative-trend", "flat", "no-data"],
+      "tokens_used": ["primary", "muted", "success", "danger", "hairline"],
+      "motion": ["path-draw-on-mount-600ms"],
+      "a11y": ["aria-label summarizing trend in words", "table view available as fallback"],
+      "code_refs": {
+        "react": "examples/react/SparklineCell.tsx",
+        "vue": "examples/vue/SparklineCell.vue",
+        "blade": "examples/blade/sparkline-cell.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "kanban-card",
+      "name": "Kanban Board Card",
+      "category": "Data Display",
+      "purpose": "Draggable task tile representing one unit of work inside a kanban column.",
+      "anatomy": ["title", "metadata-tags", "assignee-avatar", "due-date-pill", "priority-flag", "drag-handle"],
+      "states": ["default", "hover", "dragging", "drop-target-preview", "selected", "blocked"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "warning", "danger", "hairline"],
+      "motion": ["card-lift-on-grab", "drop-settle-spring"],
+      "a11y": ["draggable + keyboard alternative (Space to grab, arrows to move)", "screen reader announces column changes"],
+      "code_refs": {
+        "react": "examples/react/KanbanCard.tsx",
+        "vue": "examples/vue/KanbanCard.vue",
+        "blade": "examples/blade/kanban-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "timeline-event",
+      "name": "Vertical Timeline Event",
+      "category": "Data Display",
+      "purpose": "Single chronological event on a vertical timeline with date, actor, and description.",
+      "anatomy": ["timestamp", "dot-marker", "vertical-connector", "actor-name", "event-body", "metadata-row"],
+      "states": ["default", "first-event", "last-event", "highlighted", "collapsed"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["dot-pulse-on-mount", "connector-draw-down"],
+      "a11y": ["ordered list semantics", "datetime attribute on timestamp", "screen reader reads chronologically"],
+      "code_refs": {
+        "react": "examples/react/TimelineEvent.tsx",
+        "vue": "examples/vue/TimelineEvent.vue",
+        "blade": "examples/blade/timeline-event.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "list-item-row-dense",
+      "name": "Dense List Item Row",
+      "category": "Data Display",
+      "purpose": "Compact horizontal row with leading avatar, primary text, secondary text, and trailing action.",
+      "anatomy": ["leading-avatar", "primary-text", "secondary-text", "metadata-text", "trailing-action"],
+      "states": ["default", "hover", "selected", "with-divider", "compact"],
+      "tokens_used": ["surface", "ink", "body", "muted", "hairline"],
+      "motion": ["row-bg-fade-on-hover"],
+      "a11y": ["proper button/link role on trailing action", "44px min touch target on mobile"],
+      "code_refs": {
+        "react": "examples/react/DenseListRow.tsx",
+        "vue": "examples/vue/DenseListRow.vue",
+        "blade": "examples/blade/dense-list-row.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "badge-status-dot",
+      "name": "Status Dot Badge",
+      "category": "Data Display",
+      "purpose": "Small colored dot plus label indicating online/offline/busy or similar finite status.",
+      "anatomy": ["status-dot", "label-text", "optional-pulse-halo"],
+      "states": ["online", "offline", "busy", "away", "unknown"],
+      "tokens_used": ["success", "muted", "warning", "danger", "ink"],
+      "motion": ["pulse-halo-2s-loop"],
+      "a11y": ["text label always present, not just color", "aria-label includes status word"],
+      "code_refs": {
+        "react": "examples/react/StatusBadge.tsx",
+        "vue": "examples/vue/StatusBadge.vue",
+        "blade": "examples/blade/status-badge.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "tag-chip-removable",
+      "name": "Removable Tag Chip",
+      "category": "Data Display",
+      "purpose": "Label representing a filter, selection, or category with optional remove affordance.",
+      "anatomy": ["chip-container", "leading-icon", "label", "remove-button"],
+      "states": ["default", "hover", "active", "disabled", "removing"],
+      "tokens_used": ["surface", "ink", "muted", "primary", "hairline"],
+      "motion": ["chip-fade-out-on-remove", "chip-press-scale-95"],
+      "a11y": ["remove button has aria-label like 'Remove tag X'", "Backspace removes when focused", "focus moves to next chip after removal"],
+      "code_refs": {
+        "react": "examples/react/TagChip.tsx",
+        "vue": "examples/vue/TagChip.vue",
+        "blade": "examples/blade/tag-chip.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "metric-bar-horizontal",
+      "name": "Horizontal Metric Bar",
+      "category": "Data Display",
+      "purpose": "Show a value as a proportion of a max within a horizontal bar, with label and numeric value.",
+      "anatomy": ["label", "track", "fill-bar", "value-text", "max-text"],
+      "states": ["default", "loading", "complete", "exceeded", "empty"],
+      "tokens_used": ["surface", "ink", "muted", "primary", "hairline", "warning", "success"],
+      "motion": ["fill-width-animate-600ms"],
+      "a11y": ["role=progressbar", "aria-valuenow/min/max", "text fallback for screen readers"],
+      "code_refs": {
+        "react": "examples/react/MetricBar.tsx",
+        "vue": "examples/vue/MetricBar.vue",
+        "blade": "examples/blade/metric-bar.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "avatar-stack",
+      "name": "Overlapping Avatar Stack",
+      "category": "Data Display",
+      "purpose": "Show 3-5 user avatars overlapped horizontally with an overflow counter.",
+      "anatomy": ["avatar-circles", "overlap-offset", "border-ring", "overflow-counter", "hover-expand"],
+      "states": ["default", "hover-expanded", "tooltip-active"],
+      "tokens_used": ["surface", "ink", "muted", "hairline"],
+      "motion": ["hover-fan-out", "tooltip-fade-up-4px"],
+      "a11y": ["aria-label lists all names or summary", "tab order through each avatar"],
+      "code_refs": {
+        "react": "examples/react/AvatarStack.tsx",
+        "vue": "examples/vue/AvatarStack.vue",
+        "blade": "examples/blade/avatar-stack.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "key-value-list",
+      "name": "Key-Value Definition List",
+      "category": "Data Display",
+      "purpose": "Two-column read-only rows of property name on left, value on right (used for details/specs).",
+      "anatomy": ["row-container", "key-label", "value-text", "row-divider", "section-heading"],
+      "states": ["default", "loading-skeleton", "empty-value", "edited-recently"],
+      "tokens_used": ["ink", "body", "muted", "hairline", "surface"],
+      "motion": ["highlight-recent-edit-fade"],
+      "a11y": ["use dl/dt/dd semantics", "key-value pairs read in order by screen readers"],
+      "code_refs": {
+        "react": "examples/react/KeyValueList.tsx",
+        "vue": "examples/vue/KeyValueList.vue",
+        "blade": "examples/blade/key-value-list.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "comparison-table-pricing",
+      "name": "Pricing Comparison Table",
+      "category": "Data Display",
+      "purpose": "Side-by-side comparison of plan features with check/cross icons and a recommended-plan highlight.",
+      "anatomy": ["plan-header-cells", "feature-row-labels", "value-cells", "recommended-ribbon", "footer-cta-row"],
+      "states": ["default", "recommended-highlight", "feature-tooltip-open", "monthly-yearly-toggle"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "hairline", "success"],
+      "motion": ["recommended-ribbon-tilt-1deg", "tooltip-fade-up"],
+      "a11y": ["table semantics with proper scope", "icons paired with sr-only words like 'included' or 'not included'"],
+      "code_refs": {
+        "react": "examples/react/PricingComparisonTable.tsx",
+        "vue": "examples/vue/PricingComparisonTable.vue",
+        "blade": "examples/blade/pricing-comparison-table.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "leaderboard-row",
+      "name": "Leaderboard Row",
+      "category": "Data Display",
+      "purpose": "Ranked row with position, avatar, name, score, and trend indicator versus previous period.",
+      "anatomy": ["rank-number", "avatar", "name-text", "score-value", "trend-indicator", "rank-medal-top3"],
+      "states": ["default", "top-three", "current-user-highlight", "rank-up", "rank-down", "new-entry"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "success", "danger", "warning"],
+      "motion": ["rank-change-shimmer", "medal-shine-loop"],
+      "a11y": ["ordered list semantics", "rank change announced via aria-live=polite"],
+      "code_refs": {
+        "react": "examples/react/LeaderboardRow.tsx",
+        "vue": "examples/vue/LeaderboardRow.vue",
+        "blade": "examples/blade/leaderboard-row.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "tree-node-expandable",
+      "name": "Expandable Tree Node",
+      "category": "Data Display",
+      "purpose": "Hierarchical row with chevron toggle, indent, and optional checkbox for nested selection.",
+      "anatomy": ["chevron-toggle", "indent-guides", "icon", "label", "select-checkbox", "trailing-meta"],
+      "states": ["collapsed", "expanded", "partial-selected", "fully-selected", "loading-children", "leaf"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["chevron-rotate-90", "children-expand-height"],
+      "a11y": ["role=treeitem + role=group", "aria-expanded on parent", "arrow keys traverse and expand"],
+      "code_refs": {
+        "react": "examples/react/TreeNode.tsx",
+        "vue": "examples/vue/TreeNode.vue",
+        "blade": "examples/blade/tree-node.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "input-with-affix",
+      "name": "Input with Leading/Trailing Affix",
+      "category": "Forms",
+      "purpose": "Single-line input with a fixed prefix or suffix slot (currency, URL prefix, unit).",
+      "anatomy": ["leading-affix", "input-field", "trailing-affix", "label", "helper-text", "error-text"],
+      "states": ["default", "focus", "filled", "disabled", "readonly", "error", "success"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline", "danger"],
+      "motion": ["focus-ring-fade-in", "error-text-fade-up-4px"],
+      "a11y": ["label associated via htmlFor/id", "aria-describedby for helper and error", "affix is not focusable as input"],
+      "code_refs": {
+        "react": "examples/react/InputAffix.tsx",
+        "vue": "examples/vue/InputAffix.vue",
+        "blade": "examples/blade/input-affix.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "password-with-strength",
+      "name": "Password Field with Strength Meter",
+      "category": "Forms",
+      "purpose": "Password input with show/hide toggle and live strength meter computed from entropy rules.",
+      "anatomy": ["input-field", "show-hide-toggle", "strength-bar", "strength-label", "criteria-checklist"],
+      "states": ["empty", "weak", "fair", "good", "strong", "visible", "hidden", "error"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "danger", "warning", "success", "hairline"],
+      "motion": ["strength-bar-width-200ms", "criteria-check-pop"],
+      "a11y": ["strength announced via aria-live=polite", "criteria are real list, not divs", "show/hide labeled clearly"],
+      "code_refs": {
+        "react": "examples/react/PasswordStrength.tsx",
+        "vue": "examples/vue/PasswordStrength.vue",
+        "blade": "examples/blade/password-strength.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "multi-step-form-wizard",
+      "name": "Multi-Step Form Wizard",
+      "category": "Forms",
+      "purpose": "Long form chunked into N steps with persistent progress and back/next navigation.",
+      "anatomy": ["stepper-header", "step-panel", "field-group", "back-button", "next-button", "save-draft-link"],
+      "states": ["step-N-of-M", "step-valid", "step-invalid", "submitting", "saved-draft", "complete"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline", "danger"],
+      "motion": ["panel-slide-transition", "stepper-fill-on-advance"],
+      "a11y": ["focus moves to step heading on advance", "errors announced before submit", "draft save state visible"],
+      "code_refs": {
+        "react": "examples/react/FormWizard.tsx",
+        "vue": "examples/vue/FormWizard.vue",
+        "blade": "examples/blade/form-wizard.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "otp-input",
+      "name": "OTP / PIN Input",
+      "category": "Forms",
+      "purpose": "Six-digit one-time-password input with auto-advance and paste support.",
+      "anatomy": ["digit-boxes", "label", "resend-link", "error-text", "timer-countdown"],
+      "states": ["empty", "typing", "filled", "verifying", "error", "expired", "success"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "danger", "hairline"],
+      "motion": ["digit-fill-scale-pop", "error-shake-x"],
+      "a11y": ["single semantic input with visual digit boxes (preferred)", "inputmode=numeric", "autocomplete=one-time-code"],
+      "code_refs": {
+        "react": "examples/react/OtpInput.tsx",
+        "vue": "examples/vue/OtpInput.vue",
+        "blade": "examples/blade/otp-input.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "search-with-filters",
+      "name": "Search Bar with Inline Filters",
+      "category": "Forms",
+      "purpose": "Search input with filter chips inline that scope or narrow the active query.",
+      "anatomy": ["search-icon", "input", "active-filter-chips", "clear-button", "filter-add-button", "suggestions-dropdown"],
+      "states": ["empty", "typing", "with-filters", "loading-suggestions", "results-showing", "no-results"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["suggestions-fade-down-8px", "chip-add-scale-pop"],
+      "a11y": ["role=combobox", "filters announced as part of query", "Esc clears or closes suggestions"],
+      "code_refs": {
+        "react": "examples/react/SearchWithFilters.tsx",
+        "vue": "examples/vue/SearchWithFilters.vue",
+        "blade": "examples/blade/search-with-filters.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "select-combobox",
+      "name": "Searchable Select / Combobox",
+      "category": "Forms",
+      "purpose": "Dropdown select with type-ahead filtering, keyboard navigation, and groupable options.",
+      "anatomy": ["trigger-input", "chevron-icon", "popover-listbox", "option-rows", "group-headings", "empty-state"],
+      "states": ["closed", "open", "filtering", "selected", "loading", "no-match", "disabled"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["popover-fade-down-4px", "option-highlight-fade"],
+      "a11y": ["role=combobox + listbox", "aria-activedescendant on focused option", "Esc closes and restores prior value"],
+      "code_refs": {
+        "react": "examples/react/Combobox.tsx",
+        "vue": "examples/vue/Combobox.vue",
+        "blade": "examples/blade/combobox.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "multi-select-tagged",
+      "name": "Tagged Multi-Select",
+      "category": "Forms",
+      "purpose": "Pick multiple options that render as removable tags inline with the input.",
+      "anatomy": ["selected-tags", "input-field", "popover-options", "remove-tag-button", "clear-all-button"],
+      "states": ["empty", "with-selections", "open", "max-reached", "disabled", "error"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline", "danger"],
+      "motion": ["tag-add-scale-pop", "tag-remove-fade-out"],
+      "a11y": ["aria-multiselectable=true", "Backspace removes last tag when input empty", "screen reader announces selection count"],
+      "code_refs": {
+        "react": "examples/react/MultiSelect.tsx",
+        "vue": "examples/vue/MultiSelect.vue",
+        "blade": "examples/blade/multi-select.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "date-picker-inline",
+      "name": "Inline Date Picker",
+      "category": "Forms",
+      "purpose": "Calendar grid for selecting a single date with month/year navigation and keyboard arrows.",
+      "anatomy": ["month-year-header", "prev-next-buttons", "weekday-row", "date-grid", "today-marker", "selected-marker"],
+      "states": ["default", "selected", "today", "disabled-date", "out-of-month", "hover-date"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "primary_active", "hairline"],
+      "motion": ["month-slide-on-change", "date-select-scale-pop"],
+      "a11y": ["grid role with proper labels", "arrow keys navigate dates", "screen reader announces full date on focus"],
+      "code_refs": {
+        "react": "examples/react/DatePicker.tsx",
+        "vue": "examples/vue/DatePicker.vue",
+        "blade": "examples/blade/date-picker.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "date-range-picker",
+      "name": "Date Range Picker",
+      "category": "Forms",
+      "purpose": "Pick a start and end date across one or two month grids with a range highlight band.",
+      "anatomy": ["two-month-grid", "range-highlight-band", "start-end-markers", "preset-shortcuts", "apply-cancel-buttons"],
+      "states": ["start-only", "complete-range", "hover-extending", "invalid-range", "preset-active"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["range-band-extend-on-hover"],
+      "a11y": ["start and end dates announced separately", "preset buttons are real buttons", "min/max constraints announced when violated"],
+      "code_refs": {
+        "react": "examples/react/DateRangePicker.tsx",
+        "vue": "examples/vue/DateRangePicker.vue",
+        "blade": "examples/blade/date-range-picker.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "phone-input-international",
+      "name": "International Phone Input",
+      "category": "Forms",
+      "purpose": "Phone input with country selector showing flag, dial code, and international formatting.",
+      "anatomy": ["country-trigger", "flag-icon", "dial-code", "phone-field", "format-mask"],
+      "states": ["default", "country-picker-open", "valid", "invalid", "filled", "disabled"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "hairline", "danger"],
+      "motion": ["country-popover-fade-down-4px"],
+      "a11y": ["inputmode=tel", "country selector has searchable label", "format hint is visible and described"],
+      "code_refs": {
+        "react": "examples/react/PhoneInput.tsx",
+        "vue": "examples/vue/PhoneInput.vue",
+        "blade": "examples/blade/phone-input.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "file-upload-dropzone",
+      "name": "File Upload Dropzone",
+      "category": "Forms",
+      "purpose": "Drag-and-drop file upload area with click fallback and per-file progress.",
+      "anatomy": ["dropzone-area", "icon-illustration", "primary-text", "secondary-text", "file-list", "progress-bars"],
+      "states": ["idle", "drag-over", "uploading", "complete", "error", "max-reached"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline", "danger", "success"],
+      "motion": ["dropzone-border-dash-flow", "file-row-fade-in"],
+      "a11y": ["fallback file input is keyboard focusable", "drag/drop has button alternative", "progress announced via aria-live"],
+      "code_refs": {
+        "react": "examples/react/FileDropzone.tsx",
+        "vue": "examples/vue/FileDropzone.vue",
+        "blade": "examples/blade/file-dropzone.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "toggle-switch",
+      "name": "Toggle Switch",
+      "category": "Forms",
+      "purpose": "Binary on/off switch for instant-apply settings, larger and clearer than a checkbox.",
+      "anatomy": ["track", "thumb", "label", "helper-text"],
+      "states": ["off", "on", "hover", "focus-visible", "disabled", "transitioning"],
+      "tokens_used": ["surface", "muted", "primary", "ink", "hairline"],
+      "motion": ["thumb-slide-spring", "track-color-fade"],
+      "a11y": ["role=switch with aria-checked", "label is clickable", "high contrast in both states"],
+      "code_refs": {
+        "react": "examples/react/ToggleSwitch.tsx",
+        "vue": "examples/vue/ToggleSwitch.vue",
+        "blade": "examples/blade/toggle-switch.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "checkbox-tri-state",
+      "name": "Tri-State Checkbox",
+      "category": "Forms",
+      "purpose": "Checkbox supporting checked, unchecked, and indeterminate states for parent rows in trees.",
+      "anatomy": ["box", "check-mark", "indeterminate-bar", "label"],
+      "states": ["unchecked", "checked", "indeterminate", "hover", "focus-visible", "disabled"],
+      "tokens_used": ["surface", "ink", "primary", "muted", "hairline"],
+      "motion": ["check-draw-200ms", "indeterminate-bar-fade"],
+      "a11y": ["aria-checked=mixed for indeterminate", "label clickable", "keyboard space toggles"],
+      "code_refs": {
+        "react": "examples/react/TriCheckbox.tsx",
+        "vue": "examples/vue/TriCheckbox.vue",
+        "blade": "examples/blade/tri-checkbox.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "slider-range-dual",
+      "name": "Dual Range Slider",
+      "category": "Forms",
+      "purpose": "Two handles selecting a min/max value range with a fill between them and live value labels.",
+      "anatomy": ["track", "fill-band", "min-thumb", "max-thumb", "value-labels", "tick-marks"],
+      "states": ["default", "dragging-min", "dragging-max", "focus-visible", "disabled"],
+      "tokens_used": ["surface", "muted", "primary", "ink", "hairline"],
+      "motion": ["thumb-grow-on-active", "value-label-fade-up-4px"],
+      "a11y": ["two sliders with arrow keys", "aria-valuemin/max/now on each", "screen reader announces both values"],
+      "code_refs": {
+        "react": "examples/react/RangeSlider.tsx",
+        "vue": "examples/vue/RangeSlider.vue",
+        "blade": "examples/blade/range-slider.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "textarea-autogrow",
+      "name": "Auto-Growing Textarea",
+      "category": "Forms",
+      "purpose": "Textarea that grows in height as the user types, with optional max-height before scrolling.",
+      "anatomy": ["textarea", "label", "char-count", "helper-text", "max-height-scroll"],
+      "states": ["empty", "typing", "near-limit", "at-limit", "overflowing-scroll", "disabled"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline", "warning", "danger"],
+      "motion": ["height-grow-on-input"],
+      "a11y": ["maxlength enforced and announced", "char count uses aria-live=polite at thresholds"],
+      "code_refs": {
+        "react": "examples/react/AutoTextarea.tsx",
+        "vue": "examples/vue/AutoTextarea.vue",
+        "blade": "examples/blade/auto-textarea.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "modal-anchored-center",
+      "name": "Center-Anchored Modal",
+      "category": "Overlays",
+      "purpose": "Standard center-screen modal dialog with backdrop and focus trap for blocking interactions.",
+      "anatomy": ["overlay-backdrop", "modal-container", "header-with-title", "close-button", "body-content", "footer-actions"],
+      "states": ["closed", "opening", "open", "closing", "destructive-confirm"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "danger", "hairline"],
+      "motion": ["backdrop-fade", "modal-scale-pop-95-100"],
+      "a11y": ["role=dialog with aria-modal", "focus trap", "Esc closes (unless destructive)", "return focus to trigger on close"],
+      "code_refs": {
+        "react": "examples/react/Modal.tsx",
+        "vue": "examples/vue/Modal.vue",
+        "blade": "examples/blade/modal.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "drawer-side-right",
+      "name": "Right-Side Drawer",
+      "category": "Overlays",
+      "purpose": "Side panel sliding from screen edge for forms, detail views, or settings without full page navigation.",
+      "anatomy": ["overlay-backdrop", "drawer-panel", "header", "close-button", "body-scroll-area", "sticky-footer-actions"],
+      "states": ["closed", "opening", "open", "closing", "dragging-to-close"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["drawer-slide-in-right", "backdrop-fade"],
+      "a11y": ["role=dialog", "focus trap", "swipe-to-close has keyboard equivalent (Esc)"],
+      "code_refs": {
+        "react": "examples/react/SideDrawer.tsx",
+        "vue": "examples/vue/SideDrawer.vue",
+        "blade": "examples/blade/side-drawer.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "sheet-bottom-mobile",
+      "name": "Mobile Bottom Sheet",
+      "category": "Overlays",
+      "purpose": "Bottom-anchored sheet on mobile that snaps to peek, half, or full height with drag handle.",
+      "anatomy": ["drag-handle", "sheet-panel", "header", "body-content", "snap-indicators"],
+      "states": ["closed", "peek", "half", "full", "dragging", "snapping"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["snap-spring-medium", "rubber-band-overdrag"],
+      "a11y": ["close button required for keyboard", "snap states announced", "respects safe-area insets"],
+      "code_refs": {
+        "react": "examples/react/BottomSheet.tsx",
+        "vue": "examples/vue/BottomSheet.vue",
+        "blade": "examples/blade/bottom-sheet.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "popover-anchored",
+      "name": "Anchored Popover",
+      "category": "Overlays",
+      "purpose": "Floating panel anchored to a trigger element with smart edge collision avoidance.",
+      "anatomy": ["trigger", "popover-container", "arrow-pointer", "content-slot", "footer-actions"],
+      "states": ["closed", "open", "flipped", "shifted", "with-arrow", "without-arrow"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["popover-fade-up-4px", "arrow-fade-in"],
+      "a11y": ["aria-haspopup and aria-expanded on trigger", "Esc closes", "focus returned to trigger"],
+      "code_refs": {
+        "react": "examples/react/Popover.tsx",
+        "vue": "examples/vue/Popover.vue",
+        "blade": "examples/blade/popover.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "tooltip-hover",
+      "name": "Hover Tooltip",
+      "category": "Overlays",
+      "purpose": "Brief explanatory label appearing on hover or focus, with delay-in/delay-out timing.",
+      "anatomy": ["trigger", "tooltip-bubble", "arrow", "text-content"],
+      "states": ["hidden", "delay-showing", "visible", "delay-hiding"],
+      "tokens_used": ["ink", "canvas", "muted"],
+      "motion": ["tooltip-fade-up-4px", "delay-150ms-in"],
+      "a11y": ["aria-describedby links trigger to tooltip", "tooltip text accessible to screen readers without hover", "Esc dismisses"],
+      "code_refs": {
+        "react": "examples/react/Tooltip.tsx",
+        "vue": "examples/vue/Tooltip.vue",
+        "blade": "examples/blade/tooltip.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "toast-stack-corner",
+      "name": "Corner Toast Stack",
+      "category": "Overlays",
+      "purpose": "Stack of dismissible notifications appearing in a screen corner with auto-dismiss timing.",
+      "anatomy": ["stack-container", "toast-card", "icon", "message-text", "action-link", "close-button", "progress-bar"],
+      "states": ["entering", "visible", "exiting", "paused-on-hover", "swipe-dismissing"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "success", "warning", "danger", "hairline"],
+      "motion": ["toast-slide-in-up", "stack-reorder-spring"],
+      "a11y": ["aria-live=polite for non-critical, assertive for errors", "swipe-dismiss has button alternative", "auto-dismiss pauses on focus"],
+      "code_refs": {
+        "react": "examples/react/Toast.tsx",
+        "vue": "examples/vue/Toast.vue",
+        "blade": "examples/blade/toast.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "alert-dialog-destructive",
+      "name": "Destructive Alert Dialog",
+      "category": "Overlays",
+      "purpose": "Confirmation dialog for irreversible actions, requiring explicit user choice (no Esc to dismiss).",
+      "anatomy": ["overlay", "icon-warning", "title", "description", "confirm-button-destructive", "cancel-button"],
+      "states": ["open", "confirming", "cancelled"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "danger", "hairline"],
+      "motion": ["scale-pop-95-100", "shake-on-cancel-attempt"],
+      "a11y": ["role=alertdialog", "destructive button is not auto-focused (prevent accidental)", "explicit cancel required"],
+      "code_refs": {
+        "react": "examples/react/AlertDialog.tsx",
+        "vue": "examples/vue/AlertDialog.vue",
+        "blade": "examples/blade/alert-dialog.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "context-menu",
+      "name": "Right-Click Context Menu",
+      "category": "Overlays",
+      "purpose": "Floating menu of contextual actions invoked by right-click or long-press on a target element.",
+      "anatomy": ["menu-container", "menu-items", "icons", "shortcut-hints", "submenu-chevron", "separator-divider"],
+      "states": ["closed", "open", "submenu-open", "item-hover", "disabled-item"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["menu-fade-down-4px", "submenu-slide-right"],
+      "a11y": ["keyboard alternative via Shift+F10 or button", "role=menu and role=menuitem", "arrow keys navigate"],
+      "code_refs": {
+        "react": "examples/react/ContextMenu.tsx",
+        "vue": "examples/vue/ContextMenu.vue",
+        "blade": "examples/blade/context-menu.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "lightbox-image-viewer",
+      "name": "Lightbox Image Viewer",
+      "category": "Overlays",
+      "purpose": "Full-screen image viewer with prev/next navigation, zoom, and caption.",
+      "anatomy": ["overlay", "image-container", "prev-button", "next-button", "caption", "close-button", "thumb-strip"],
+      "states": ["closed", "open", "zoomed", "loading-next", "first-image", "last-image"],
+      "tokens_used": ["ink", "canvas", "muted"],
+      "motion": ["image-crossfade", "zoom-spring", "swipe-snap"],
+      "a11y": ["arrow keys for prev/next", "Esc closes", "image alt text visible as caption"],
+      "code_refs": {
+        "react": "examples/react/Lightbox.tsx",
+        "vue": "examples/vue/Lightbox.vue",
+        "blade": "examples/blade/lightbox.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "primary-cta-stack",
+      "name": "Primary CTA Stack",
+      "category": "Actions",
+      "purpose": "Stacked primary + secondary action pair (e.g., Sign up / Sign in) with strong hierarchy.",
+      "anatomy": ["primary-button", "secondary-button", "helper-text", "divider-or-text"],
+      "states": ["default", "hover", "active", "loading", "disabled"],
+      "tokens_used": ["primary", "primary_active", "surface", "ink", "muted", "hairline"],
+      "motion": ["button-press-scale-98"],
+      "a11y": ["one primary action per surface", "secondary visually subordinate, equally accessible"],
+      "code_refs": {
+        "react": "examples/react/CtaStack.tsx",
+        "vue": "examples/vue/CtaStack.vue",
+        "blade": "examples/blade/cta-stack.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "button-magnetic",
+      "name": "Magnetic Button",
+      "category": "Actions",
+      "purpose": "Button that subtly tracks the cursor within its bounding radius for premium hover feel.",
+      "anatomy": ["button-shell", "label", "leading-icon-optional", "trailing-icon-optional"],
+      "states": ["default", "hover", "magnetic-active", "active", "focus-visible", "disabled"],
+      "tokens_used": ["primary", "primary_active", "surface", "ink", "hairline"],
+      "motion": ["magnetic-pointer-track", "button-press-scale-98"],
+      "a11y": ["pointer-only effect; keyboard focus unaffected", "respects prefers-reduced-motion (disables tracking)"],
+      "code_refs": {
+        "react": "examples/react/MagneticButton.tsx",
+        "vue": "examples/vue/MagneticButton.vue",
+        "blade": "examples/blade/magnetic-button.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "button-loading-progress",
+      "name": "Loading Button with Progress",
+      "category": "Actions",
+      "purpose": "Button that morphs into a determinate progress indicator during async submit work.",
+      "anatomy": ["button-shell", "label", "spinner-or-progress-ring", "progress-text"],
+      "states": ["idle", "loading-indeterminate", "loading-determinate", "success-pulse", "error-shake"],
+      "tokens_used": ["primary", "primary_active", "surface", "ink", "muted", "success", "danger"],
+      "motion": ["spinner-rotate", "ring-stroke-progress", "success-pulse"],
+      "a11y": ["aria-busy=true during loading", "label changes are announced", "disabled during submit prevents double click"],
+      "code_refs": {
+        "react": "examples/react/LoadingButton.tsx",
+        "vue": "examples/vue/LoadingButton.vue",
+        "blade": "examples/blade/loading-button.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "fab-mobile",
+      "name": "Floating Action Button (Mobile)",
+      "category": "Actions",
+      "purpose": "Persistent circular action button fixed bottom-right for the primary screen action.",
+      "anatomy": ["fab-circle", "icon", "optional-label-pill", "shadow-elevation"],
+      "states": ["default", "pressed", "extended-with-label", "scrolled-collapsed", "hidden-on-scroll"],
+      "tokens_used": ["primary", "surface", "ink", "hairline"],
+      "motion": ["fab-scale-press", "label-pill-collapse"],
+      "a11y": ["aria-label required (icon-only)", "44px min touch target met", "z-order does not obscure critical text"],
+      "code_refs": {
+        "react": "examples/react/Fab.tsx",
+        "vue": "examples/vue/Fab.vue",
+        "blade": "examples/blade/fab.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "button-icon-only",
+      "name": "Icon-Only Button",
+      "category": "Actions",
+      "purpose": "Compact action button containing only an icon, for toolbars and dense controls.",
+      "anatomy": ["button-shell", "icon", "optional-tooltip", "focus-ring"],
+      "states": ["default", "hover", "active", "toggled-on", "disabled", "loading"],
+      "tokens_used": ["surface", "ink", "muted", "primary", "hairline"],
+      "motion": ["press-scale-95", "tooltip-fade-up-4px"],
+      "a11y": ["aria-label always required", "tooltip echoes the label", "44px min touch target on mobile"],
+      "code_refs": {
+        "react": "examples/react/IconButton.tsx",
+        "vue": "examples/vue/IconButton.vue",
+        "blade": "examples/blade/icon-button.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "button-split-action",
+      "name": "Split Action Button",
+      "category": "Actions",
+      "purpose": "Primary action with a dropdown chevron exposing related secondary actions.",
+      "anatomy": ["primary-action-button", "divider", "dropdown-trigger", "dropdown-menu"],
+      "states": ["default", "primary-hover", "dropdown-hover", "menu-open", "disabled"],
+      "tokens_used": ["primary", "primary_active", "surface", "ink", "hairline"],
+      "motion": ["menu-fade-down-4px"],
+      "a11y": ["two separate focusable controls", "menu items reached via arrow keys", "Esc closes menu"],
+      "code_refs": {
+        "react": "examples/react/SplitButton.tsx",
+        "vue": "examples/vue/SplitButton.vue",
+        "blade": "examples/blade/split-button.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "button-group-segmented",
+      "name": "Segmented Button Group",
+      "category": "Actions",
+      "purpose": "Group of mutually-exclusive option buttons sharing borders (radio-style selection).",
+      "anatomy": ["group-container", "segment-buttons", "active-segment-highlight", "shared-border"],
+      "states": ["default", "selected-segment", "hover", "focus-visible", "disabled-segment"],
+      "tokens_used": ["surface", "ink", "muted", "primary", "hairline"],
+      "motion": ["highlight-slide-spring"],
+      "a11y": ["role=radiogroup with role=radio segments", "arrow keys cycle selection"],
+      "code_refs": {
+        "react": "examples/react/ButtonGroup.tsx",
+        "vue": "examples/vue/ButtonGroup.vue",
+        "blade": "examples/blade/button-group.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "copy-to-clipboard-button",
+      "name": "Copy-to-Clipboard Button",
+      "category": "Actions",
+      "purpose": "Inline button that copies adjacent text or code to clipboard with success confirmation state.",
+      "anatomy": ["icon-default", "icon-success", "tooltip", "value-source"],
+      "states": ["idle", "hovered", "copied", "error"],
+      "tokens_used": ["surface", "ink", "muted", "success", "hairline"],
+      "motion": ["icon-swap-scale-pop", "tooltip-fade-up-4px"],
+      "a11y": ["aria-label includes target content", "success state announced via aria-live=polite"],
+      "code_refs": {
+        "react": "examples/react/CopyButton.tsx",
+        "vue": "examples/vue/CopyButton.vue",
+        "blade": "examples/blade/copy-button.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "share-button-row",
+      "name": "Share Action Row",
+      "category": "Actions",
+      "purpose": "Horizontal row of share targets (social, copy link, native share) with platform-aware fallback.",
+      "anatomy": ["share-buttons", "platform-icons", "labels", "native-share-trigger"],
+      "states": ["default", "hover-target", "native-share-available", "fallback-mode"],
+      "tokens_used": ["surface", "ink", "muted", "primary", "hairline"],
+      "motion": ["button-press-scale-95"],
+      "a11y": ["each target labeled with platform name", "native share preferred when available"],
+      "code_refs": {
+        "react": "examples/react/ShareRow.tsx",
+        "vue": "examples/vue/ShareRow.vue",
+        "blade": "examples/blade/share-row.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "pricing-card-tiered",
+      "name": "Tiered Pricing Card",
+      "category": "Card Patterns",
+      "purpose": "Single plan tier card with price, feature list, and prominent CTA, optionally marked recommended.",
+      "anatomy": ["plan-name", "price-display", "billing-period", "feature-checklist", "cta-button", "recommended-badge"],
+      "states": ["default", "recommended-highlighted", "hover", "selected", "yearly-toggle"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "primary_active", "hairline", "success"],
+      "motion": ["card-lift-on-hover", "recommended-badge-tilt-1deg"],
+      "a11y": ["price has clear currency and period", "feature list is a real ul", "CTA describes destination"],
+      "code_refs": {
+        "react": "examples/react/PricingCard.tsx",
+        "vue": "examples/vue/PricingCard.vue",
+        "blade": "examples/blade/pricing-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "blog-card-magazine",
+      "name": "Magazine Blog Card",
+      "category": "Card Patterns",
+      "purpose": "Editorial-style article card with large headline, byline, date, and category tag, no image.",
+      "anatomy": ["category-tag", "headline", "deck-summary", "byline", "date", "read-time"],
+      "states": ["default", "hover", "visited", "featured-large"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["headline-underline-grow", "card-hairline-darken-on-hover"],
+      "a11y": ["headline is real heading", "card link wraps headline (not whole card) for screen reader sanity"],
+      "code_refs": {
+        "react": "examples/react/MagazineCard.tsx",
+        "vue": "examples/vue/MagazineCard.vue",
+        "blade": "examples/blade/magazine-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "product-card-ecom",
+      "name": "E-Commerce Product Card",
+      "category": "Card Patterns",
+      "purpose": "Shop product tile with image, name, price, rating, and quick-add or wishlist actions.",
+      "anatomy": ["product-image", "wishlist-icon", "name", "price-cluster", "rating-stars", "quick-add-button"],
+      "states": ["default", "hover-quick-actions", "out-of-stock", "on-sale", "in-wishlist", "added-to-cart"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "danger", "warning", "hairline"],
+      "motion": ["image-zoom-on-hover-103", "quick-add-slide-up"],
+      "a11y": ["image alt describes product", "price reads as currency", "rating has aria-label with value"],
+      "code_refs": {
+        "react": "examples/react/ProductCard.tsx",
+        "vue": "examples/vue/ProductCard.vue",
+        "blade": "examples/blade/product-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "profile-card",
+      "name": "User Profile Card",
+      "category": "Card Patterns",
+      "purpose": "Profile summary card with avatar, name, role, bio snippet, and connection actions.",
+      "anatomy": ["banner-image", "avatar", "name", "role-title", "bio-snippet", "stats-row", "action-button-pair"],
+      "states": ["default", "connected", "pending-request", "blocked", "loading"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["avatar-rise-on-mount", "stats-count-up"],
+      "a11y": ["name is heading", "actions have clear labels (not just 'Connect' but 'Connect with X')"],
+      "code_refs": {
+        "react": "examples/react/ProfileCard.tsx",
+        "vue": "examples/vue/ProfileCard.vue",
+        "blade": "examples/blade/profile-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "testimonial-card-quote",
+      "name": "Testimonial Quote Card",
+      "category": "Card Patterns",
+      "purpose": "Customer quote card with avatar, name, role, company logo, and decorative quote mark.",
+      "anatomy": ["decorative-quote-mark", "quote-text", "avatar", "attribution-name", "attribution-role", "company-logo"],
+      "states": ["default", "hover", "in-carousel-active", "in-carousel-inactive"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "hairline"],
+      "motion": ["quote-mark-color-shift", "card-tilt-on-hover-subtle"],
+      "a11y": ["use blockquote element with cite attribute", "attribution clearly distinguished from quote"],
+      "code_refs": {
+        "react": "examples/react/TestimonialCard.tsx",
+        "vue": "examples/vue/TestimonialCard.vue",
+        "blade": "examples/blade/testimonial-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "feature-card-icon",
+      "name": "Feature Card with Icon",
+      "category": "Card Patterns",
+      "purpose": "Marketing feature highlight card with leading icon, headline, and body copy.",
+      "anatomy": ["icon-container", "headline", "body-text", "optional-link"],
+      "states": ["default", "hover", "icon-animated"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["icon-rotate-on-hover", "link-arrow-translate-x"],
+      "a11y": ["icon has aria-hidden if decorative", "headline is heading element"],
+      "code_refs": {
+        "react": "examples/react/FeatureCard.tsx",
+        "vue": "examples/vue/FeatureCard.vue",
+        "blade": "examples/blade/feature-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "bento-card-tall",
+      "name": "Tall Bento Card",
+      "category": "Card Patterns",
+      "purpose": "Tall asymmetric card for bento-grid layouts, holding mixed image+text content.",
+      "anatomy": ["aspect-frame", "headline", "supporting-text", "visual-zone", "footer-link"],
+      "states": ["default", "hover", "tilted-slight", "image-zoom"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["card-tilt-on-pointer-3d", "image-parallax-on-scroll"],
+      "a11y": ["3D tilt respects prefers-reduced-motion", "decorative visuals marked aria-hidden"],
+      "code_refs": {
+        "react": "examples/react/BentoCardTall.tsx",
+        "vue": "examples/vue/BentoCardTall.vue",
+        "blade": "examples/blade/bento-card-tall.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "loyalty-stamp-card",
+      "name": "Loyalty Stamp Card",
+      "category": "Card Patterns",
+      "purpose": "Punch-card style loyalty UI showing N earned of M total stamps for a reward.",
+      "anatomy": ["program-title", "stamp-grid", "earned-stamps", "remaining-stamps", "reward-preview", "progress-text"],
+      "states": ["default", "stamp-added", "complete-redeemable", "redeemed", "near-completion-1-away"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "success", "hairline"],
+      "motion": ["stamp-press-on-add", "complete-celebration-pulse"],
+      "a11y": ["progress announced as 'N of M stamps'", "stamps not just visual — text count present"],
+      "code_refs": {
+        "react": "examples/react/StampCard.tsx",
+        "vue": "examples/vue/StampCard.vue",
+        "blade": "examples/blade/stamp-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "voucher-card-redemption",
+      "name": "Voucher Redemption Card",
+      "category": "Card Patterns",
+      "purpose": "Promotional voucher card with code, expiry, redeem CTA, and serrated edge motif.",
+      "anatomy": ["serrated-edge", "voucher-headline", "discount-value", "voucher-code", "expiry-date", "redeem-button", "terms-link"],
+      "states": ["available", "expiring-soon", "expired", "redeemed", "code-copied"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "warning", "danger", "hairline"],
+      "motion": ["redeem-pulse", "code-copy-flash"],
+      "a11y": ["expiry date in machine-readable format", "code is selectable text, not image"],
+      "code_refs": {
+        "react": "examples/react/VoucherCard.tsx",
+        "vue": "examples/vue/VoucherCard.vue",
+        "blade": "examples/blade/voucher-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "tier-badge-card",
+      "name": "Tier Status Badge Card",
+      "category": "Card Patterns",
+      "purpose": "Member tier display showing current tier, progress to next tier, and tier perks.",
+      "anatomy": ["tier-emblem", "tier-name", "progress-bar-to-next", "points-current", "points-needed", "perks-list"],
+      "states": ["default", "near-tier-up", "just-tiered-up", "max-tier"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "success", "warning", "hairline"],
+      "motion": ["progress-fill-on-mount", "tier-up-celebration-confetti-svg"],
+      "a11y": ["tier name and progress announced together", "progress bar has aria-valuenow"],
+      "code_refs": {
+        "react": "examples/react/TierBadgeCard.tsx",
+        "vue": "examples/vue/TierBadgeCard.vue",
+        "blade": "examples/blade/tier-badge-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "case-study-card",
+      "name": "Case Study Card",
+      "category": "Card Patterns",
+      "purpose": "Marketing card linking to a customer success story with logo, metric, and headline.",
+      "anatomy": ["customer-logo", "headline-result", "supporting-metric", "industry-tag", "read-link"],
+      "states": ["default", "hover", "featured-large"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "success", "hairline"],
+      "motion": ["metric-count-up", "arrow-translate-on-hover"],
+      "a11y": ["metric reads with units, not just number", "logo has company name alt"],
+      "code_refs": {
+        "react": "examples/react/CaseStudyCard.tsx",
+        "vue": "examples/vue/CaseStudyCard.vue",
+        "blade": "examples/blade/case-study-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "media-card-video-thumb",
+      "name": "Video Thumbnail Card",
+      "category": "Card Patterns",
+      "purpose": "Video preview tile with thumbnail, duration overlay, play indicator, and title.",
+      "anatomy": ["thumbnail-image", "duration-pill", "play-icon-overlay", "title", "channel-name", "view-count"],
+      "states": ["default", "hover-play-larger", "watching", "watched", "live-badge"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "danger", "hairline"],
+      "motion": ["play-icon-scale-pop", "thumb-zoom-103-on-hover"],
+      "a11y": ["aria-label includes duration", "play button is real button, not div"],
+      "code_refs": {
+        "react": "examples/react/VideoCard.tsx",
+        "vue": "examples/vue/VideoCard.vue",
+        "blade": "examples/blade/video-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "event-card-calendar",
+      "name": "Calendar Event Card",
+      "category": "Card Patterns",
+      "purpose": "Upcoming event card with date prominent, title, location, and RSVP action.",
+      "anatomy": ["date-block", "title", "location", "time-range", "attendee-count", "rsvp-button"],
+      "states": ["upcoming", "today", "in-progress", "past", "rsvp-yes", "rsvp-no", "full"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "warning", "danger", "success", "hairline"],
+      "motion": ["date-block-flip-on-mount", "rsvp-button-success-pulse"],
+      "a11y": ["date in machine-readable format", "RSVP state announced via aria-live"],
+      "code_refs": {
+        "react": "examples/react/EventCard.tsx",
+        "vue": "examples/vue/EventCard.vue",
+        "blade": "examples/blade/event-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "review-card-rating",
+      "name": "Customer Review Card",
+      "category": "Card Patterns",
+      "purpose": "Display a single customer review with rating, reviewer name, date, and body text.",
+      "anatomy": ["rating-stars", "headline", "body-text", "reviewer-name", "verified-badge", "date", "helpful-count"],
+      "states": ["default", "expanded-show-more", "helpful-voted", "reported", "verified"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "warning", "success", "hairline"],
+      "motion": ["expand-height-on-show-more", "helpful-thumbs-up-pop"],
+      "a11y": ["rating has aria-label with value", "show-more is real button toggling aria-expanded"],
+      "code_refs": {
+        "react": "examples/react/ReviewCard.tsx",
+        "vue": "examples/vue/ReviewCard.vue",
+        "blade": "examples/blade/review-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "job-card-listing",
+      "name": "Job Posting Card",
+      "category": "Card Patterns",
+      "purpose": "Job listing card with company, role, location, salary range, and apply CTA.",
+      "anatomy": ["company-logo", "role-title", "company-name", "location-tags", "salary-range", "posted-date", "apply-button"],
+      "states": ["default", "new-badge", "applied", "saved", "expired"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "success", "hairline"],
+      "motion": ["new-badge-pulse-soft", "save-icon-fill-toggle"],
+      "a11y": ["role title is heading", "salary range reads with currency and period"],
+      "code_refs": {
+        "react": "examples/react/JobCard.tsx",
+        "vue": "examples/vue/JobCard.vue",
+        "blade": "examples/blade/job-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "skeleton-loader-card",
+      "name": "Card Skeleton Loader",
+      "category": "States",
+      "purpose": "Shimmering placeholder mimicking card structure during async content load.",
+      "anatomy": ["skeleton-image-block", "skeleton-title-line", "skeleton-body-lines", "skeleton-action-block"],
+      "states": ["loading", "shimmering", "fade-out-on-content"],
+      "tokens_used": ["surface", "muted", "hairline"],
+      "motion": ["shimmer-gradient-sweep-1500ms"],
+      "a11y": ["aria-busy=true on container", "aria-live=polite announces 'Loading' once", "respects prefers-reduced-motion (no shimmer)"],
+      "code_refs": {
+        "react": "examples/react/CardSkeleton.tsx",
+        "vue": "examples/vue/CardSkeleton.vue",
+        "blade": "examples/blade/card-skeleton.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "empty-state-illustration",
+      "name": "Empty State with Illustration",
+      "category": "States",
+      "purpose": "Friendly empty-state panel with line illustration, headline, body, and primary action.",
+      "anatomy": ["illustration", "headline", "body-text", "primary-action", "secondary-link"],
+      "states": ["default", "first-time-user", "post-search-empty", "filtered-empty"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["illustration-fade-up-12px", "stagger-text-mount"],
+      "a11y": ["illustration is decorative (aria-hidden)", "headline is heading", "action describes what it does"],
+      "code_refs": {
+        "react": "examples/react/EmptyState.tsx",
+        "vue": "examples/vue/EmptyState.vue",
+        "blade": "examples/blade/empty-state.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "error-explainer",
+      "name": "Inline Error Explainer",
+      "category": "States",
+      "purpose": "Error block explaining what went wrong AND what to do, with retry and report actions.",
+      "anatomy": ["error-icon", "headline", "body-explanation", "next-step-text", "retry-button", "report-link", "error-code-small"],
+      "states": ["recoverable", "non-recoverable", "retrying", "reported"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "danger", "primary", "hairline"],
+      "motion": ["icon-shake-once", "fade-in-up-8px"],
+      "a11y": ["role=alert for critical", "explanation specific (not 'something went wrong')", "error code visible but small"],
+      "code_refs": {
+        "react": "examples/react/ErrorExplainer.tsx",
+        "vue": "examples/vue/ErrorExplainer.vue",
+        "blade": "examples/blade/error-explainer.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "spinner-inline",
+      "name": "Inline Spinner",
+      "category": "States",
+      "purpose": "Small rotating spinner for inline async indicators (within buttons, list items, table cells).",
+      "anatomy": ["circular-track", "rotating-arc", "optional-label"],
+      "states": ["spinning", "stopped", "with-label"],
+      "tokens_used": ["primary", "muted", "hairline"],
+      "motion": ["spinner-rotate-1s-linear"],
+      "a11y": ["aria-label='Loading' when standalone", "respects prefers-reduced-motion (slower spin or static)"],
+      "code_refs": {
+        "react": "examples/react/Spinner.tsx",
+        "vue": "examples/vue/Spinner.vue",
+        "blade": "examples/blade/spinner.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "progress-bar-determinate",
+      "name": "Determinate Progress Bar",
+      "category": "States",
+      "purpose": "Linear progress indicator with known completion percentage and optional label.",
+      "anatomy": ["track", "fill", "percent-label", "step-text"],
+      "states": ["zero", "in-progress", "near-complete", "complete", "paused", "error"],
+      "tokens_used": ["surface", "muted", "primary", "success", "danger", "hairline"],
+      "motion": ["fill-width-animate-200ms"],
+      "a11y": ["role=progressbar", "aria-valuenow/min/max", "label visible or aria-labelledby"],
+      "code_refs": {
+        "react": "examples/react/ProgressBar.tsx",
+        "vue": "examples/vue/ProgressBar.vue",
+        "blade": "examples/blade/progress-bar.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "loading-page-shell",
+      "name": "Page Shell Loader",
+      "category": "States",
+      "purpose": "Full-page skeleton mimicking the upcoming layout (nav + content + sidebar) during initial load.",
+      "anatomy": ["nav-skeleton", "sidebar-skeleton", "content-skeleton-blocks", "shimmer-overlay"],
+      "states": ["loading-initial", "loading-content-only", "fade-out-on-ready"],
+      "tokens_used": ["surface", "canvas", "muted", "hairline"],
+      "motion": ["shimmer-gradient-sweep", "fade-out-on-content-ready"],
+      "a11y": ["aria-busy=true on root", "real layout matches skeleton (no jolt on load)"],
+      "code_refs": {
+        "react": "examples/react/PageShell.tsx",
+        "vue": "examples/vue/PageShell.vue",
+        "blade": "examples/blade/page-shell.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "no-results-state",
+      "name": "No Results State",
+      "category": "States",
+      "purpose": "Empty state specifically for empty search/filter results, with query echo and clear action.",
+      "anatomy": ["icon-search-off", "headline-with-query", "suggestion-text", "clear-filters-button", "popular-searches-list"],
+      "states": ["default", "with-filters", "with-typo-suggestion"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["fade-in-up-8px"],
+      "a11y": ["search query echoed in heading", "suggested actions are real buttons/links"],
+      "code_refs": {
+        "react": "examples/react/NoResults.tsx",
+        "vue": "examples/vue/NoResults.vue",
+        "blade": "examples/blade/no-results.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "offline-banner",
+      "name": "Offline Connection Banner",
+      "category": "States",
+      "purpose": "Persistent banner indicating loss of network connectivity with retry option.",
+      "anatomy": ["icon-offline", "headline", "subtext", "retry-button", "dismiss-button"],
+      "states": ["offline", "reconnecting", "back-online-brief", "dismissed"],
+      "tokens_used": ["warning", "danger", "success", "ink", "body", "muted"],
+      "motion": ["slide-down-on-loss", "slide-up-on-restore"],
+      "a11y": ["role=alert when first shown", "aria-live=assertive", "state changes announced"],
+      "code_refs": {
+        "react": "examples/react/OfflineBanner.tsx",
+        "vue": "examples/vue/OfflineBanner.vue",
+        "blade": "examples/blade/offline-banner.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "maintenance-mode-page",
+      "name": "Maintenance Mode Page",
+      "category": "States",
+      "purpose": "Full-page state during planned downtime explaining timing and providing status link.",
+      "anatomy": ["illustration", "headline", "estimated-time", "status-page-link", "subscribe-updates-input"],
+      "states": ["default", "subscribed", "estimated-time-passed"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["illustration-breathe-loop"],
+      "a11y": ["clear timing in human terms", "status link opens in new tab with proper label"],
+      "code_refs": {
+        "react": "examples/react/MaintenancePage.tsx",
+        "vue": "examples/vue/MaintenancePage.vue",
+        "blade": "examples/blade/maintenance-page.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "chart-area-stacked",
+      "name": "Stacked Area Chart",
+      "category": "Charts",
+      "purpose": "Time-series chart with multiple categories stacked, showing both individual and combined trends.",
+      "anatomy": ["x-axis-time", "y-axis-value", "stacked-areas", "legend", "hover-tooltip", "gridlines"],
+      "states": ["default", "hovered-x", "series-highlighted", "series-hidden", "loading", "no-data"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "success", "warning", "danger", "hairline"],
+      "motion": ["area-stroke-draw-on-mount", "tooltip-fade"],
+      "a11y": ["always pair with table view", "ordinal palette (not rainbow)", "screen reader summary of total trend"],
+      "code_refs": {
+        "react": "examples/react/AreaChart.tsx",
+        "vue": "examples/vue/AreaChart.vue",
+        "blade": "examples/blade/area-chart.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "chart-radial-progress",
+      "name": "Radial Progress Chart",
+      "category": "Charts",
+      "purpose": "Circular progress arc showing a single completion percentage with central numeric label.",
+      "anatomy": ["track-circle", "fill-arc", "center-percent-label", "supporting-text"],
+      "states": ["zero", "in-progress", "complete", "exceeded", "loading"],
+      "tokens_used": ["surface", "muted", "primary", "ink", "success", "warning", "danger"],
+      "motion": ["arc-stroke-progress-600ms", "center-number-count-up"],
+      "a11y": ["role=progressbar with aria-valuenow", "numeric label is real text, not image"],
+      "code_refs": {
+        "react": "examples/react/RadialProgress.tsx",
+        "vue": "examples/vue/RadialProgress.vue",
+        "blade": "examples/blade/radial-progress.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "heatmap-calendar",
+      "name": "Calendar Heatmap",
+      "category": "Charts",
+      "purpose": "GitHub-style yearly grid where each day-cell intensity encodes activity volume.",
+      "anatomy": ["week-rows", "day-cells", "month-labels", "weekday-labels", "intensity-legend", "hover-tooltip"],
+      "states": ["default", "cell-hovered", "year-changed", "loading"],
+      "tokens_used": ["surface", "muted", "primary", "primary_active", "ink", "hairline"],
+      "motion": ["cell-stagger-fade-in-on-mount", "tooltip-fade-up"],
+      "a11y": ["each cell has aria-label with date and value", "table view available", "color-blind safe scale"],
+      "code_refs": {
+        "react": "examples/react/CalendarHeatmap.tsx",
+        "vue": "examples/vue/CalendarHeatmap.vue",
+        "blade": "examples/blade/calendar-heatmap.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "chart-bar-grouped",
+      "name": "Grouped Bar Chart",
+      "category": "Charts",
+      "purpose": "Side-by-side bars for comparing categories across groups (e.g., quarterly results by region).",
+      "anatomy": ["x-axis-categories", "y-axis-value", "grouped-bars", "legend", "value-labels-optional", "hover-tooltip"],
+      "states": ["default", "bar-highlighted", "group-isolated", "loading", "no-data"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "success", "warning", "danger", "hairline"],
+      "motion": ["bar-height-grow-on-mount-stagger", "tooltip-fade"],
+      "a11y": ["table view fallback", "axis labels readable", "ordinal palette"],
+      "code_refs": {
+        "react": "examples/react/BarChart.tsx",
+        "vue": "examples/vue/BarChart.vue",
+        "blade": "examples/blade/bar-chart.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "chart-donut-with-legend",
+      "name": "Donut Chart with Legend",
+      "category": "Charts",
+      "purpose": "Circular proportion chart with category legend; central label often shows total or selected slice.",
+      "anatomy": ["donut-arcs", "center-label", "legend-rows", "hover-tooltip"],
+      "states": ["default", "slice-hovered", "slice-isolated", "loading"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "success", "warning", "danger", "hairline"],
+      "motion": ["arc-draw-on-mount", "center-label-crossfade"],
+      "a11y": ["legend is a real list with values", "donut not the only data view", "high-contrast palette"],
+      "code_refs": {
+        "react": "examples/react/DonutChart.tsx",
+        "vue": "examples/vue/DonutChart.vue",
+        "blade": "examples/blade/donut-chart.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "chart-funnel",
+      "name": "Funnel Chart",
+      "category": "Charts",
+      "purpose": "Conversion funnel showing volume drop across sequential stages with conversion ratios.",
+      "anatomy": ["stage-blocks", "stage-labels", "value-labels", "drop-off-percent", "axis-vertical"],
+      "states": ["default", "stage-hovered", "comparison-mode", "loading"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "warning", "danger", "hairline"],
+      "motion": ["stage-grow-from-top-stagger", "drop-off-text-fade"],
+      "a11y": ["stages are an ordered list", "ratios in machine-readable percent format", "table view fallback"],
+      "code_refs": {
+        "react": "examples/react/FunnelChart.tsx",
+        "vue": "examples/vue/FunnelChart.vue",
+        "blade": "examples/blade/funnel-chart.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "chart-sankey",
+      "name": "Sankey Flow Diagram",
+      "category": "Charts",
+      "purpose": "Flow chart showing magnitude of transfers between categories via proportional band widths.",
+      "anatomy": ["source-nodes", "target-nodes", "flow-bands", "node-labels", "hover-tooltip"],
+      "states": ["default", "node-hovered", "flow-highlighted", "loading"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "success", "warning", "danger", "hairline"],
+      "motion": ["flow-band-draw-on-mount", "hover-band-emphasis"],
+      "a11y": ["pair with structured flow table", "color-blind safe palette", "screen reader announces flow values"],
+      "code_refs": {
+        "react": "examples/react/SankeyChart.tsx",
+        "vue": "examples/vue/SankeyChart.vue",
+        "blade": "examples/blade/sankey-chart.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "chart-gauge-semicircle",
+      "name": "Semicircle Gauge",
+      "category": "Charts",
+      "purpose": "Half-circle gauge for a single bounded metric with threshold zones (e.g., NPS, score).",
+      "anatomy": ["arc-track", "fill-arc", "needle-or-marker", "zone-bands", "center-value-label", "min-max-labels"],
+      "states": ["default", "in-zone-good", "in-zone-warning", "in-zone-danger", "loading"],
+      "tokens_used": ["surface", "muted", "ink", "primary", "success", "warning", "danger"],
+      "motion": ["needle-spring-to-value", "arc-fill-progress"],
+      "a11y": ["role=progressbar with aria-valuenow/min/max", "zones labeled in text adjacent"],
+      "code_refs": {
+        "react": "examples/react/GaugeChart.tsx",
+        "vue": "examples/vue/GaugeChart.vue",
+        "blade": "examples/blade/gauge-chart.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "hero-split-screen",
+      "name": "Split-Screen Hero",
+      "category": "Hero",
+      "purpose": "50/50 hero with text content on one side and visual asset (image, video, illustration) on the other.",
+      "anatomy": ["text-zone", "headline", "subhead", "cta-stack", "visual-zone", "decorative-elements"],
+      "states": ["default", "image-loaded", "image-fallback", "mobile-stacked"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["text-fade-up-stagger", "visual-parallax-on-scroll-subtle"],
+      "a11y": ["one h1 only", "visual alt describes the scene", "mobile reorders text-first"],
+      "code_refs": {
+        "react": "examples/react/HeroSplit.tsx",
+        "vue": "examples/vue/HeroSplit.vue",
+        "blade": "examples/blade/hero-split.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "hero-typewriter",
+      "name": "Typewriter Hero",
+      "category": "Hero",
+      "purpose": "Hero with rotating action verb or phrase animated like a typewriter to dramatize range of use cases.",
+      "anatomy": ["static-prefix", "rotating-word", "cursor-bar", "subhead", "cta-button"],
+      "states": ["typing", "pausing", "deleting", "swapping"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary"],
+      "motion": ["typewriter-char-step", "cursor-blink-500ms"],
+      "a11y": ["full text accessible to screen readers (not letter-by-letter)", "respects prefers-reduced-motion (static word)"],
+      "code_refs": {
+        "react": "examples/react/HeroTypewriter.tsx",
+        "vue": "examples/vue/HeroTypewriter.vue",
+        "blade": "examples/blade/hero-typewriter.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "hero-video-bg",
+      "name": "Video Background Hero",
+      "category": "Hero",
+      "purpose": "Full-bleed looping background video with overlay text, muted and autoplaying for ambient atmosphere.",
+      "anatomy": ["video-element", "overlay-tint", "headline", "subhead", "cta-stack", "scroll-cue"],
+      "states": ["video-loading", "video-playing", "video-paused-by-user", "reduced-motion-poster"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary"],
+      "motion": ["video-fade-in-on-load", "scroll-cue-bounce"],
+      "a11y": ["video must be muted to autoplay", "pause control visible", "poster image fallback for reduced-motion users"],
+      "code_refs": {
+        "react": "examples/react/HeroVideo.tsx",
+        "vue": "examples/vue/HeroVideo.vue",
+        "blade": "examples/blade/hero-video.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "hero-text-mask",
+      "name": "Text Mask Hero",
+      "category": "Hero",
+      "purpose": "Hero where large display headline is filled with an image or gradient via CSS background-clip text.",
+      "anatomy": ["display-headline", "masked-fill", "subhead", "cta-button"],
+      "states": ["default", "image-loaded", "fallback-solid", "mobile-scaled"],
+      "tokens_used": ["canvas", "ink", "body", "muted", "primary"],
+      "motion": ["mask-pan-slow", "fade-up-on-mount"],
+      "a11y": ["fallback solid color in reduced-motion or unsupported browsers", "contrast verified for fallback"],
+      "code_refs": {
+        "react": "examples/react/HeroTextMask.tsx",
+        "vue": "examples/vue/HeroTextMask.vue",
+        "blade": "examples/blade/hero-text-mask.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "hero-centered-minimal",
+      "name": "Centered Minimal Hero",
+      "category": "Hero",
+      "purpose": "Centered eyebrow + headline + subhead + CTA on generous whitespace; classic editorial hero.",
+      "anatomy": ["eyebrow-text", "headline", "subhead", "primary-cta", "social-proof-row"],
+      "states": ["default", "with-social-proof", "with-video-cta"],
+      "tokens_used": ["canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["fade-up-stagger-tight", "social-proof-fade-late"],
+      "a11y": ["h1 is the headline", "social proof has names accessible (not just logos)"],
+      "code_refs": {
+        "react": "examples/react/HeroMinimal.tsx",
+        "vue": "examples/vue/HeroMinimal.vue",
+        "blade": "examples/blade/hero-minimal.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "hero-product-screenshot",
+      "name": "Product Screenshot Hero",
+      "category": "Hero",
+      "purpose": "Hero featuring a tilted or floating product UI screenshot with surrounding context.",
+      "anatomy": ["text-zone", "headline", "subhead", "cta", "screenshot-frame", "browser-chrome-optional", "shadow-elevation"],
+      "states": ["default", "scrolled-parallax", "mobile-static"],
+      "tokens_used": ["canvas", "surface", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["screenshot-tilt-3d-pointer", "parallax-on-scroll"],
+      "a11y": ["screenshot alt describes the UI", "tilt respects prefers-reduced-motion"],
+      "code_refs": {
+        "react": "examples/react/HeroScreenshot.tsx",
+        "vue": "examples/vue/HeroScreenshot.vue",
+        "blade": "examples/blade/hero-screenshot.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "hero-scroll-narrative",
+      "name": "Scroll Narrative Hero",
+      "category": "Hero",
+      "purpose": "Hero that progressively reveals layered scenes as the user scrolls, used for storytelling brands.",
+      "anatomy": ["pinned-stage", "scroll-progress-track", "scene-layers", "headline-swap", "scroll-cue"],
+      "states": ["scene-1", "scene-2", "scene-3", "complete", "scroll-locked"],
+      "tokens_used": ["canvas", "surface", "ink", "body", "primary"],
+      "motion": ["scroll-driven-keyframes", "scene-crossfade"],
+      "a11y": ["non-scroll fallback (linear page)", "scroll lock has Esc release", "respects prefers-reduced-motion"],
+      "code_refs": {
+        "react": "examples/react/HeroScrollNarrative.tsx",
+        "vue": "examples/vue/HeroScrollNarrative.vue",
+        "blade": "examples/blade/hero-scroll-narrative.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "hero-gradient-blur",
+      "name": "Gradient Blur Hero",
+      "category": "Hero",
+      "purpose": "Soft animated gradient blob background behind centered text for atmospheric modern hero.",
+      "anatomy": ["gradient-blob-svg", "blur-overlay", "headline", "subhead", "cta"],
+      "states": ["default", "blob-animating", "static-fallback"],
+      "tokens_used": ["canvas", "primary", "ink", "body", "muted"],
+      "motion": ["blob-morph-slow-12s-loop", "fade-up-on-mount"],
+      "a11y": ["blob is decorative aria-hidden", "static fallback when prefers-reduced-motion"],
+      "code_refs": {
+        "react": "examples/react/HeroGradientBlur.tsx",
+        "vue": "examples/vue/HeroGradientBlur.vue",
+        "blade": "examples/blade/hero-gradient-blur.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "footer-grid-rich",
+      "name": "Rich Grid Footer",
+      "category": "Footer",
+      "purpose": "Multi-column footer with sitemap links, contact info, newsletter signup, and brand block.",
+      "anatomy": ["brand-block", "link-columns", "newsletter-form", "social-icons", "legal-row", "copyright-line"],
+      "states": ["default", "newsletter-subscribed", "newsletter-error"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["link-hover-underline-grow"],
+      "a11y": ["each column has heading", "social icons have aria-labels", "newsletter input has visible label"],
+      "code_refs": {
+        "react": "examples/react/FooterRich.tsx",
+        "vue": "examples/vue/FooterRich.vue",
+        "blade": "examples/blade/footer-rich.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "footer-cta-final",
+      "name": "Final CTA Footer",
+      "category": "Footer",
+      "purpose": "Bold final-call footer with oversized headline, single primary CTA, and minimal sub-links.",
+      "anatomy": ["oversized-headline", "subhead", "primary-cta", "secondary-link-row", "legal-row"],
+      "states": ["default", "hover-cta", "in-view-revealing", "loading"],
+      "tokens_used": ["canvas", "surface", "ink", "body", "muted", "primary", "primary_active", "hairline"],
+      "motion": ["headline-fade-up-on-scroll-into-view"],
+      "a11y": ["h2 for the oversized headline", "CTA describes action clearly"],
+      "code_refs": {
+        "react": "examples/react/FooterCta.tsx",
+        "vue": "examples/vue/FooterCta.vue",
+        "blade": "examples/blade/footer-cta.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "footer-sitemap",
+      "name": "Sitemap Footer",
+      "category": "Footer",
+      "purpose": "Compact sitemap footer with categorized link columns and minimal branding.",
+      "anatomy": ["category-headings", "link-lists", "copyright", "compact-social-icons"],
+      "states": ["default", "link-hover", "compact-mobile"],
+      "tokens_used": ["surface", "ink", "body", "muted", "hairline"],
+      "motion": ["link-color-fade-on-hover"],
+      "a11y": ["nav role on the sitemap", "category headings are real headings"],
+      "code_refs": {
+        "react": "examples/react/FooterSitemap.tsx",
+        "vue": "examples/vue/FooterSitemap.vue",
+        "blade": "examples/blade/footer-sitemap.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "footer-newsletter-focus",
+      "name": "Newsletter Focus Footer",
+      "category": "Footer",
+      "purpose": "Footer dominated by a newsletter signup with social proof (subscriber count, testimonials).",
+      "anatomy": ["headline", "subhead", "email-input", "submit-button", "subscriber-proof-row", "minimal-links"],
+      "states": ["default", "submitting", "subscribed", "already-subscribed", "error"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "success", "danger", "hairline"],
+      "motion": ["success-checkmark-draw", "input-shake-on-error"],
+      "a11y": ["email input labeled", "success/error state announced via aria-live"],
+      "code_refs": {
+        "react": "examples/react/FooterNewsletter.tsx",
+        "vue": "examples/vue/FooterNewsletter.vue",
+        "blade": "examples/blade/footer-newsletter.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "footer-minimal-brand",
+      "name": "Minimal Brand Footer",
+      "category": "Footer",
+      "purpose": "One-line footer with logo, copyright, and 3-4 essential links (privacy, terms, contact).",
+      "anatomy": ["logo-mark", "copyright-line", "essential-links", "language-switcher-optional"],
+      "states": ["default", "link-hover", "mobile-stacked"],
+      "tokens_used": ["surface", "ink", "muted", "hairline"],
+      "motion": ["link-underline-grow-hover"],
+      "a11y": ["copyright in machine-readable year", "language switcher labeled with current language name"],
+      "code_refs": {
+        "react": "examples/react/FooterMinimal.tsx",
+        "vue": "examples/vue/FooterMinimal.vue",
+        "blade": "examples/blade/footer-minimal.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "welcome-modal-first-time",
+      "name": "First-Time Welcome Modal",
+      "category": "Onboarding",
+      "purpose": "Modal greeting new users with a concise pitch and pathway choice (e.g., 'I'm a customer / I'm a partner').",
+      "anatomy": ["illustration-or-logo", "welcome-headline", "supporting-text", "path-choice-buttons", "skip-link"],
+      "states": ["initial", "path-selected", "submitting", "complete"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "primary_active", "hairline"],
+      "motion": ["modal-scale-pop-95-100", "illustration-fade-up"],
+      "a11y": ["focus on primary path on open", "skip is real button not just text", "Esc skip and proceed"],
+      "code_refs": {
+        "react": "examples/react/WelcomeModal.tsx",
+        "vue": "examples/vue/WelcomeModal.vue",
+        "blade": "examples/blade/welcome-modal.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "progress-checklist",
+      "name": "Onboarding Progress Checklist",
+      "category": "Onboarding",
+      "purpose": "Persistent collapsible checklist tracking completion of key first-day setup tasks.",
+      "anatomy": ["progress-summary", "task-items", "checkbox-or-tick", "task-cta-links", "collapse-toggle", "dismiss-when-complete"],
+      "states": ["collapsed", "expanded", "task-incomplete", "task-complete", "all-complete-celebration", "dismissed"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "success", "hairline"],
+      "motion": ["task-check-draw", "complete-celebration-pulse"],
+      "a11y": ["progress announced as 'N of M complete'", "task links describe destination"],
+      "code_refs": {
+        "react": "examples/react/OnboardingChecklist.tsx",
+        "vue": "examples/vue/OnboardingChecklist.vue",
+        "blade": "examples/blade/onboarding-checklist.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "tour-coachmark",
+      "name": "Coachmark Tour Tooltip",
+      "category": "Onboarding",
+      "purpose": "Sequential spotlight tooltips highlighting UI features for first-time users, with prev/next/skip controls.",
+      "anatomy": ["spotlight-mask", "coachmark-bubble", "step-counter", "title", "description", "prev-next-buttons", "skip-link"],
+      "states": ["step-N", "spotlighting", "advancing", "skipped", "complete"],
+      "tokens_used": ["canvas", "surface", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["spotlight-shift-spring", "bubble-fade-up-4px"],
+      "a11y": ["screen reader announces step number and content", "skip available at every step", "respects prefers-reduced-motion"],
+      "code_refs": {
+        "react": "examples/react/CoachmarkTour.tsx",
+        "vue": "examples/vue/CoachmarkTour.vue",
+        "blade": "examples/blade/coachmark-tour.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "empty-state-cta-onboard",
+      "name": "Onboarding Empty State CTA",
+      "category": "Onboarding",
+      "purpose": "First-use empty state guiding the user to create the first record (e.g., 'Create your first project').",
+      "anatomy": ["illustration", "headline", "step-list-preview", "primary-cta", "template-shortcuts"],
+      "states": ["default", "hover-cta", "loading-templates"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["illustration-fade-up", "stagger-list"],
+      "a11y": ["headline as h2", "step list is real ordered list", "CTA describes outcome"],
+      "code_refs": {
+        "react": "examples/react/OnboardingEmpty.tsx",
+        "vue": "examples/vue/OnboardingEmpty.vue",
+        "blade": "examples/blade/onboarding-empty.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "feature-announcement-popover",
+      "name": "Feature Announcement Popover",
+      "category": "Onboarding",
+      "purpose": "Anchored popover introducing a newly-released feature with a 'Got it' or 'Try it' action.",
+      "anatomy": ["new-badge", "title", "description", "screenshot-or-icon", "got-it-button", "try-it-link"],
+      "states": ["showing", "dismissed", "try-it-clicked"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "primary_active", "hairline"],
+      "motion": ["popover-fade-down-4px", "badge-pulse-gentle"],
+      "a11y": ["anchored to feature element with aria-describedby", "dismissible via keyboard", "non-blocking"],
+      "code_refs": {
+        "react": "examples/react/FeatureAnnounce.tsx",
+        "vue": "examples/vue/FeatureAnnounce.vue",
+        "blade": "examples/blade/feature-announce.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "otp-auth-flow",
+      "name": "OTP Authentication Flow",
+      "category": "Authentication",
+      "purpose": "Passwordless sign-in via phone or email with OTP delivery, entry, and verification.",
+      "anatomy": ["phone-or-email-input", "send-code-button", "otp-digit-input", "resend-link", "timer", "verify-button"],
+      "states": ["entering-identifier", "code-sent", "entering-code", "verifying", "verified", "expired", "error"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "primary_active", "success", "danger", "hairline"],
+      "motion": ["step-slide-transition", "verify-success-pulse"],
+      "a11y": ["autocomplete=one-time-code on OTP input", "resend timer announced", "errors specific (e.g., 'Code expired — request a new one')"],
+      "code_refs": {
+        "react": "examples/react/OtpFlow.tsx",
+        "vue": "examples/vue/OtpFlow.vue",
+        "blade": "examples/blade/otp-flow.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "social-signin-stack",
+      "name": "Social Sign-In Stack",
+      "category": "Authentication",
+      "purpose": "Vertical stack of branded SSO provider buttons (Apple, Google, Microsoft) with consistent sizing.",
+      "anatomy": ["provider-buttons", "provider-logos", "labels", "divider-or-text", "fallback-email-link"],
+      "states": ["default", "hover-provider", "loading-redirect", "error-from-provider"],
+      "tokens_used": ["surface", "ink", "body", "muted", "hairline"],
+      "motion": ["button-press-scale-98"],
+      "a11y": ["each button labeled 'Continue with X'", "provider logos have alt text", "errors specific to provider"],
+      "code_refs": {
+        "react": "examples/react/SocialSignin.tsx",
+        "vue": "examples/vue/SocialSignin.vue",
+        "blade": "examples/blade/social-signin.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "password-reset-flow",
+      "name": "Password Reset Flow",
+      "category": "Authentication",
+      "purpose": "Multi-step flow: request reset, check email, set new password, confirm.",
+      "anatomy": ["email-input", "request-button", "check-email-illustration", "new-password-input", "confirm-input", "submit-button"],
+      "states": ["request", "request-sent", "set-new", "submitting", "success", "expired-link", "error"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "primary_active", "success", "danger", "hairline"],
+      "motion": ["step-fade-transition"],
+      "a11y": ["password fields properly labeled", "show/hide toggle accessible", "expired link clear and actionable"],
+      "code_refs": {
+        "react": "examples/react/PasswordReset.tsx",
+        "vue": "examples/vue/PasswordReset.vue",
+        "blade": "examples/blade/password-reset.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "twofa-setup-flow",
+      "name": "2FA Setup Flow",
+      "category": "Authentication",
+      "purpose": "Set up two-factor authentication using authenticator app: scan QR, enter code, save backup codes.",
+      "anatomy": ["instruction-text", "qr-code", "manual-key-fallback", "verify-code-input", "backup-codes-list", "copy-or-download-backups"],
+      "states": ["scan-step", "verify-step", "backup-step", "complete"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "warning", "success", "hairline"],
+      "motion": ["step-slide", "backup-codes-fade-in"],
+      "a11y": ["QR code has accessible text alternative (manual key)", "backup codes are selectable text"],
+      "code_refs": {
+        "react": "examples/react/TwoFaSetup.tsx",
+        "vue": "examples/vue/TwoFaSetup.vue",
+        "blade": "examples/blade/twofa-setup.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "session-list-active-devices",
+      "name": "Active Sessions List",
+      "category": "Authentication",
+      "purpose": "List of active sessions across devices with location, last activity, and revoke action.",
+      "anatomy": ["session-row", "device-icon", "device-name", "location", "last-active-time", "current-badge", "revoke-button"],
+      "states": ["active", "current-session", "stale", "revoking", "revoked"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "danger", "success", "hairline"],
+      "motion": ["row-fade-out-on-revoke"],
+      "a11y": ["current session clearly marked", "revoke confirms via dialog (destructive)", "location reads as text"],
+      "code_refs": {
+        "react": "examples/react/SessionList.tsx",
+        "vue": "examples/vue/SessionList.vue",
+        "blade": "examples/blade/session-list.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "settings-section-grouped",
+      "name": "Grouped Settings Section",
+      "category": "Settings",
+      "purpose": "Section of related settings rows under a heading, each with label, description, and control.",
+      "anatomy": ["section-heading", "section-description", "settings-rows", "row-label", "row-description", "row-control"],
+      "states": ["default", "control-changed", "saving", "saved-indicator", "error"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "success", "danger", "hairline"],
+      "motion": ["save-indicator-fade-in-out", "row-flash-on-change"],
+      "a11y": ["section heading is real heading", "each control properly labeled", "save state announced via aria-live"],
+      "code_refs": {
+        "react": "examples/react/SettingsSection.tsx",
+        "vue": "examples/vue/SettingsSection.vue",
+        "blade": "examples/blade/settings-section.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "theme-switcher-tri",
+      "name": "Tri-State Theme Switcher",
+      "category": "Settings",
+      "purpose": "Three-way switch for light, dark, and system theme preferences with active indicator.",
+      "anatomy": ["segment-container", "light-segment", "dark-segment", "system-segment", "active-indicator"],
+      "states": ["light-active", "dark-active", "system-active", "transitioning"],
+      "tokens_used": ["surface", "ink", "muted", "primary", "hairline"],
+      "motion": ["indicator-slide-spring", "theme-crossfade-on-change"],
+      "a11y": ["role=radiogroup with role=radio segments", "arrow keys cycle", "icons paired with labels"],
+      "code_refs": {
+        "react": "examples/react/ThemeSwitcher.tsx",
+        "vue": "examples/vue/ThemeSwitcher.vue",
+        "blade": "examples/blade/theme-switcher.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "locale-picker-rtl-aware",
+      "name": "RTL-Aware Locale Picker",
+      "category": "Settings",
+      "purpose": "Language and region picker that updates UI direction (LTR/RTL) and date/number formats live.",
+      "anatomy": ["trigger-with-current-locale", "popover-list", "language-rows", "region-subgroup", "rtl-preview-toggle"],
+      "states": ["closed", "open", "filtering", "selected", "switching-direction"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["popover-fade-down-4px", "direction-flip-tween"],
+      "a11y": ["each language in its native script", "current locale clearly marked", "direction change announced"],
+      "code_refs": {
+        "react": "examples/react/LocalePicker.tsx",
+        "vue": "examples/vue/LocalePicker.vue",
+        "blade": "examples/blade/locale-picker.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "notification-preferences-matrix",
+      "name": "Notification Preferences Matrix",
+      "category": "Settings",
+      "purpose": "Grid of notification categories across delivery channels (email/push/SMS) with per-cell toggles.",
+      "anatomy": ["category-rows", "channel-columns", "header-row", "toggle-cells", "all-on-off-shortcut"],
+      "states": ["default", "saving-cell", "all-disabled-row", "all-disabled-column", "saved"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["toggle-flip-fast", "save-indicator-fade"],
+      "a11y": ["table semantics with proper scope", "each toggle labeled with category+channel", "save state announced"],
+      "code_refs": {
+        "react": "examples/react/NotificationMatrix.tsx",
+        "vue": "examples/vue/NotificationMatrix.vue",
+        "blade": "examples/blade/notification-matrix.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "danger-zone-section",
+      "name": "Danger Zone Settings Section",
+      "category": "Settings",
+      "purpose": "Section grouping destructive account actions (deactivate, delete account) with distinct visual treatment.",
+      "anatomy": ["section-heading-danger", "action-rows", "row-description", "destructive-button", "confirm-dialog-trigger"],
+      "states": ["default", "confirming", "destructive-in-progress", "error"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "danger", "hairline"],
+      "motion": ["section-border-pulse-danger-once-on-mount"],
+      "a11y": ["destructive actions trigger alertdialog confirmation", "irreversible actions require typed confirmation"],
+      "code_refs": {
+        "react": "examples/react/DangerZone.tsx",
+        "vue": "examples/vue/DangerZone.vue",
+        "blade": "examples/blade/danger-zone.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "logo-cloud",
+      "name": "Logo Cloud Trust Strip",
+      "category": "Data Display",
+      "purpose": "Horizontal row of customer or partner logos used as social proof beneath hero or in landing pages.",
+      "anatomy": ["logo-row", "logo-items", "muted-treatment", "scroll-marquee-optional"],
+      "states": ["default", "marquee-scrolling", "paused-on-hover"],
+      "tokens_used": ["canvas", "muted", "hairline"],
+      "motion": ["marquee-scroll-slow", "pause-on-hover"],
+      "a11y": ["each logo has company name alt", "marquee pauseable for prefers-reduced-motion"],
+      "code_refs": {
+        "react": "examples/react/LogoCloud.tsx",
+        "vue": "examples/vue/LogoCloud.vue",
+        "blade": "examples/blade/logo-cloud.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "stat-card-with-chart-bg",
+      "name": "Stat Card with Chart Background",
+      "category": "Data Display",
+      "purpose": "Stat card where the entire background is a low-opacity sparkline or area chart of the metric.",
+      "anatomy": ["background-chart", "label", "value", "delta-pill", "time-range-text"],
+      "states": ["default", "hover-chart-emphasized", "loading", "empty"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["chart-fade-emphasize-on-hover", "value-count-up"],
+      "a11y": ["chart marked aria-hidden (decorative); text values are primary data", "contrast verified for text over chart"],
+      "code_refs": {
+        "react": "examples/react/StatChartBg.tsx",
+        "vue": "examples/vue/StatChartBg.vue",
+        "blade": "examples/blade/stat-chart-bg.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "carousel-snap-cards",
+      "name": "Snap Carousel of Cards",
+      "category": "Card Patterns",
+      "purpose": "Horizontally scrollable carousel of cards with scroll-snap and visible peek of next/prev cards.",
+      "anatomy": ["scroll-track", "cards", "peek-edges", "indicator-dots", "prev-next-buttons", "scrollbar-hidden"],
+      "states": ["default", "scrolling", "at-start", "at-end", "card-active"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["snap-spring-on-release", "edge-fade-mask"],
+      "a11y": ["arrow keys scroll cards", "prev/next are real buttons", "dot indicators are real buttons with labels"],
+      "code_refs": {
+        "react": "examples/react/CarouselCards.tsx",
+        "vue": "examples/vue/CarouselCards.vue",
+        "blade": "examples/blade/carousel-cards.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "accordion-expandable",
+      "name": "Expandable Accordion",
+      "category": "Data Display",
+      "purpose": "Vertical list of expandable rows revealing content on click, with single or multi-open mode.",
+      "anatomy": ["accordion-rows", "row-header", "chevron-icon", "row-content", "divider"],
+      "states": ["collapsed", "expanded", "single-open-mode", "multi-open-mode", "disabled-row"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["chevron-rotate-90", "content-height-expand-spring"],
+      "a11y": ["aria-expanded on header", "header is real button", "Enter and Space toggle"],
+      "code_refs": {
+        "react": "examples/react/Accordion.tsx",
+        "vue": "examples/vue/Accordion.vue",
+        "blade": "examples/blade/accordion.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "faq-section",
+      "name": "FAQ Section",
+      "category": "Card Patterns",
+      "purpose": "Section of frequently-asked questions as expandable accordion entries with category filtering.",
+      "anatomy": ["section-heading", "category-filter-chips", "question-rows", "answer-content", "contact-cta-footer"],
+      "states": ["default", "filtered", "all-collapsed", "any-expanded"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["filter-chip-active-pop", "answer-height-expand"],
+      "a11y": ["questions are real headings inside the button", "filter chips have aria-pressed state"],
+      "code_refs": {
+        "react": "examples/react/FaqSection.tsx",
+        "vue": "examples/vue/FaqSection.vue",
+        "blade": "examples/blade/faq-section.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "filter-rail-side",
+      "name": "Side Filter Rail",
+      "category": "Forms",
+      "purpose": "Sticky left/right rail of grouped filters (checkboxes, ranges) for catalog or list views.",
+      "anatomy": ["filter-groups", "group-heading", "group-collapse", "filter-controls", "clear-group-link", "apply-button-mobile"],
+      "states": ["default", "with-active-filters", "group-collapsed", "mobile-drawer"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["group-collapse-spring", "active-count-pop"],
+      "a11y": ["each group has heading", "filters are real form controls", "active count announced"],
+      "code_refs": {
+        "react": "examples/react/FilterRail.tsx",
+        "vue": "examples/vue/FilterRail.vue",
+        "blade": "examples/blade/filter-rail.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "active-filter-bar",
+      "name": "Active Filter Bar",
+      "category": "Forms",
+      "purpose": "Horizontal strip displaying currently-applied filters as removable chips with a 'Clear all' action.",
+      "anatomy": ["active-chips", "remove-buttons", "clear-all-link", "result-count-text"],
+      "states": ["empty", "with-filters", "removing-chip", "all-cleared"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["chip-remove-fade-out", "result-count-flash"],
+      "a11y": ["each chip is a button with 'Remove X filter' label", "result count uses aria-live=polite"],
+      "code_refs": {
+        "react": "examples/react/ActiveFilterBar.tsx",
+        "vue": "examples/vue/ActiveFilterBar.vue",
+        "blade": "examples/blade/active-filter-bar.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "color-swatch-picker",
+      "name": "Color Swatch Picker",
+      "category": "Forms",
+      "purpose": "Visual color selector showing palette swatches with selected indicator (for theming, product variants).",
+      "anatomy": ["swatch-grid", "swatch-circles", "selected-ring", "name-tooltip"],
+      "states": ["default", "swatch-hover", "selected", "disabled-swatch"],
+      "tokens_used": ["surface", "ink", "muted", "primary", "hairline"],
+      "motion": ["ring-fade-in-on-select", "tooltip-fade-up"],
+      "a11y": ["each swatch labeled by color name (not hex)", "selected has aria-checked"],
+      "code_refs": {
+        "react": "examples/react/ColorSwatchPicker.tsx",
+        "vue": "examples/vue/ColorSwatchPicker.vue",
+        "blade": "examples/blade/color-swatch-picker.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "size-picker-grid",
+      "name": "Size Picker Grid",
+      "category": "Forms",
+      "purpose": "Grid of selectable size options (XS, S, M, L, XL) with out-of-stock and selected states.",
+      "anatomy": ["size-buttons", "selected-ring", "out-of-stock-strikethrough", "size-guide-link"],
+      "states": ["default", "selected", "out-of-stock", "low-stock-indicator", "hover"],
+      "tokens_used": ["surface", "ink", "muted", "primary", "danger", "hairline"],
+      "motion": ["select-scale-pop"],
+      "a11y": ["role=radiogroup with role=radio buttons", "out-of-stock has accessible label, not just strikethrough"],
+      "code_refs": {
+        "react": "examples/react/SizePicker.tsx",
+        "vue": "examples/vue/SizePicker.vue",
+        "blade": "examples/blade/size-picker.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "quantity-stepper",
+      "name": "Quantity Stepper",
+      "category": "Forms",
+      "purpose": "Minus/plus stepper with numeric input for adjusting integer quantities (cart, table rows).",
+      "anatomy": ["decrement-button", "value-input", "increment-button"],
+      "states": ["default", "min-disabled", "max-disabled", "updating", "error"],
+      "tokens_used": ["surface", "ink", "muted", "primary", "danger", "hairline"],
+      "motion": ["press-scale-95", "value-flash-on-change"],
+      "a11y": ["buttons have 'Decrease/Increase quantity' labels", "input is numeric and editable", "min/max enforced"],
+      "code_refs": {
+        "react": "examples/react/QuantityStepper.tsx",
+        "vue": "examples/vue/QuantityStepper.vue",
+        "blade": "examples/blade/quantity-stepper.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "rating-input-stars",
+      "name": "Star Rating Input",
+      "category": "Forms",
+      "purpose": "Interactive 5-star rating selector with hover preview and half-star support.",
+      "anatomy": ["star-buttons", "hover-fill-preview", "label-feedback-text", "clear-rating-link"],
+      "states": ["empty", "hovering", "selected", "half-selected", "disabled", "readonly-display"],
+      "tokens_used": ["surface", "ink", "muted", "warning", "hairline"],
+      "motion": ["star-scale-pop-on-fill", "feedback-text-fade-up"],
+      "a11y": ["role=radiogroup with arrow-key navigation", "current value announced", "label per star is 'N stars'"],
+      "code_refs": {
+        "react": "examples/react/StarRating.tsx",
+        "vue": "examples/vue/StarRating.vue",
+        "blade": "examples/blade/star-rating.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "wallet-card-payment-method",
+      "name": "Payment Method Wallet Card",
+      "category": "Card Patterns",
+      "purpose": "Saved payment method tile (card or wallet) with brand icon, last-four digits, and default toggle.",
+      "anatomy": ["brand-icon", "last-four-digits", "cardholder-name", "expiry-date", "default-badge", "edit-button", "remove-button"],
+      "states": ["default", "is-default", "expired", "expiring-soon", "editing", "removing"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "warning", "danger", "hairline"],
+      "motion": ["card-flip-on-edit", "default-badge-pulse-once"],
+      "a11y": ["only last four read aloud (security)", "expired status announced", "default toggle clearly labeled"],
+      "code_refs": {
+        "react": "examples/react/PaymentMethodCard.tsx",
+        "vue": "examples/vue/PaymentMethodCard.vue",
+        "blade": "examples/blade/payment-method-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "transaction-row",
+      "name": "Financial Transaction Row",
+      "category": "Data Display",
+      "purpose": "Single transaction row showing merchant, category, date, amount, and direction (credit/debit).",
+      "anatomy": ["category-icon", "merchant-name", "category-tag", "timestamp", "amount", "direction-indicator", "pending-badge"],
+      "states": ["default", "pending", "completed", "failed", "refunded", "selected"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "success", "warning", "danger", "hairline"],
+      "motion": ["pending-pulse-loop", "row-bg-fade-on-hover"],
+      "a11y": ["amount reads with currency", "direction announced as 'paid' or 'received'", "pending state announced"],
+      "code_refs": {
+        "react": "examples/react/TransactionRow.tsx",
+        "vue": "examples/vue/TransactionRow.vue",
+        "blade": "examples/blade/transaction-row.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "qr-code-display",
+      "name": "QR Code Display Card",
+      "category": "Card Patterns",
+      "purpose": "Display a QR code for scanning (redemption, payment, wifi) with label and copy fallback.",
+      "anatomy": ["qr-svg", "label", "instruction-text", "manual-code-text", "copy-button", "regenerate-button"],
+      "states": ["default", "expiring-soon", "expired", "regenerating", "copied"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "warning", "danger"],
+      "motion": ["qr-fade-in-on-mount", "expired-overlay-fade"],
+      "a11y": ["always include text/manual code alongside QR", "expiry announced via aria-live", "regenerate is a real button"],
+      "code_refs": {
+        "react": "examples/react/QrCard.tsx",
+        "vue": "examples/vue/QrCard.vue",
+        "blade": "examples/blade/qr-card.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "receipt-summary",
+      "name": "Receipt Summary",
+      "category": "Data Display",
+      "purpose": "Itemized purchase summary with line items, subtotals, taxes, discounts, and grand total.",
+      "anatomy": ["line-items", "subtotal-row", "discount-row", "tax-row", "total-row", "payment-method-row", "receipt-footer"],
+      "states": ["default", "with-discounts", "with-multiple-taxes", "refunded", "printable"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "success", "danger", "hairline"],
+      "motion": ["total-emphasis-fade-in-late"],
+      "a11y": ["uses real dl/table semantics", "total clearly distinguished", "currency consistent throughout"],
+      "code_refs": {
+        "react": "examples/react/ReceiptSummary.tsx",
+        "vue": "examples/vue/ReceiptSummary.vue",
+        "blade": "examples/blade/receipt-summary.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "comment-thread",
+      "name": "Comment Thread",
+      "category": "Data Display",
+      "purpose": "Nested comment list with reply, edit, delete, and reaction actions; supports threading depth.",
+      "anatomy": ["avatar", "author-name", "timestamp", "body", "reactions", "reply-button", "thread-indent"],
+      "states": ["default", "expanded-thread", "collapsed-thread", "editing", "deleted-placeholder", "with-reactions"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["new-comment-fade-up", "reaction-pop"],
+      "a11y": ["thread is real ordered/nested list", "deleted comments still have placeholder for context", "reactions announce count and verb"],
+      "code_refs": {
+        "react": "examples/react/CommentThread.tsx",
+        "vue": "examples/vue/CommentThread.vue",
+        "blade": "examples/blade/comment-thread.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "rich-text-toolbar",
+      "name": "Rich Text Editor Toolbar",
+      "category": "Forms",
+      "purpose": "Toolbar of formatting controls (bold, italic, list, link, code) above a rich-text editor.",
+      "anatomy": ["toolbar-container", "format-button-group", "list-button-group", "block-button-group", "overflow-menu"],
+      "states": ["default", "format-active", "selection-context", "disabled-no-selection"],
+      "tokens_used": ["surface", "ink", "muted", "primary", "hairline"],
+      "motion": ["button-active-pop"],
+      "a11y": ["each button has aria-label and aria-pressed", "keyboard shortcuts displayed in tooltips", "role=toolbar"],
+      "code_refs": {
+        "react": "examples/react/RichTextToolbar.tsx",
+        "vue": "examples/vue/RichTextToolbar.vue",
+        "blade": "examples/blade/rich-text-toolbar.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "code-block-with-copy",
+      "name": "Code Block with Copy",
+      "category": "Data Display",
+      "purpose": "Syntax-highlighted code block with language label, copy button, and optional line numbers.",
+      "anatomy": ["language-label", "copy-button", "code-content", "line-numbers", "line-highlight"],
+      "states": ["default", "code-copied", "with-highlighted-lines", "scrollable-overflow"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "success", "hairline"],
+      "motion": ["copy-icon-swap-pop", "highlight-pulse-once"],
+      "a11y": ["code in pre+code semantics", "copy state announced via aria-live", "language label readable"],
+      "code_refs": {
+        "react": "examples/react/CodeBlock.tsx",
+        "vue": "examples/vue/CodeBlock.vue",
+        "blade": "examples/blade/code-block.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "diff-view-side-by-side",
+      "name": "Side-by-Side Diff View",
+      "category": "Data Display",
+      "purpose": "Two-column code diff showing original vs. modified with line-level additions and deletions.",
+      "anatomy": ["left-column-old", "right-column-new", "line-numbers", "diff-markers", "added-lines", "removed-lines", "hunk-headers"],
+      "states": ["default", "with-conflicts", "expanded-hunks", "unified-view-toggle"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "success", "danger", "hairline"],
+      "motion": ["hunk-expand-on-click"],
+      "a11y": ["screen reader announces added/removed status", "line numbers paired with content", "conflict markers clear"],
+      "code_refs": {
+        "react": "examples/react/DiffView.tsx",
+        "vue": "examples/vue/DiffView.vue",
+        "blade": "examples/blade/diff-view.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "feature-comparison-grid",
+      "name": "Feature Comparison Grid",
+      "category": "Data Display",
+      "purpose": "Grid comparing 2-4 products or plans across feature rows with check/limit/feature-text cells.",
+      "anatomy": ["product-headers", "feature-row-labels", "value-cells", "category-section-dividers", "winner-highlight"],
+      "states": ["default", "category-collapsed", "feature-tooltip-open"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "success", "hairline"],
+      "motion": ["category-collapse-spring", "winner-glow-soft"],
+      "a11y": ["table semantics with scoped headers", "icons paired with sr-only labels", "winner column clearly marked"],
+      "code_refs": {
+        "react": "examples/react/ComparisonGrid.tsx",
+        "vue": "examples/vue/ComparisonGrid.vue",
+        "blade": "examples/blade/comparison-grid.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "mobile-tab-bar-floating",
+      "name": "Floating Mobile Tab Bar",
+      "category": "Navigation",
+      "purpose": "Floating pill-style bottom tab bar with detached visual treatment for premium mobile apps.",
+      "anatomy": ["floating-pill", "tab-buttons", "active-blob-indicator", "label-text", "shadow-elevation"],
+      "states": ["default", "active-tab", "scrolled-hidden", "scrolled-shown"],
+      "tokens_used": ["surface", "ink", "muted", "primary", "hairline"],
+      "motion": ["blob-morph-spring", "tab-bar-show-hide-on-scroll"],
+      "a11y": ["each tab labeled", "44px min touch target", "respects safe-area-inset-bottom"],
+      "code_refs": {
+        "react": "examples/react/FloatingTabBar.tsx",
+        "vue": "examples/vue/FloatingTabBar.vue",
+        "blade": "examples/blade/floating-tab-bar.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "compose-message-input",
+      "name": "Message Compose Input",
+      "category": "Forms",
+      "purpose": "Multi-line message composer with attachment, emoji, mention, and send controls (chat/email style).",
+      "anatomy": ["text-area", "attachment-button", "emoji-button", "mention-popover", "send-button", "character-count"],
+      "states": ["empty", "typing", "mention-open", "attachment-uploading", "sending", "sent", "error"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline", "danger"],
+      "motion": ["send-button-fade-enable", "mention-popover-fade-up"],
+      "a11y": ["compose area has label", "send button enabled state matches actual ability to send", "mention popover keyboard navigable"],
+      "code_refs": {
+        "react": "examples/react/MessageCompose.tsx",
+        "vue": "examples/vue/MessageCompose.vue",
+        "blade": "examples/blade/message-compose.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "presence-indicator-typing",
+      "name": "Typing Presence Indicator",
+      "category": "States",
+      "purpose": "Three-dot animated indicator showing another user is typing, with name and avatar.",
+      "anatomy": ["avatar", "name-text", "dot-bouncing-trio"],
+      "states": ["hidden", "typing", "fading-out"],
+      "tokens_used": ["surface", "body", "muted"],
+      "motion": ["dot-bounce-stagger-loop", "indicator-fade-up-4px"],
+      "a11y": ["aria-live=polite announces 'X is typing'", "respects prefers-reduced-motion (static)"],
+      "code_refs": {
+        "react": "examples/react/TypingIndicator.tsx",
+        "vue": "examples/vue/TypingIndicator.vue",
+        "blade": "examples/blade/typing-indicator.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "cookie-consent-banner",
+      "name": "Cookie Consent Banner",
+      "category": "Overlays",
+      "purpose": "GDPR-compliant cookie consent banner with accept-all, reject-all, and custom preferences.",
+      "anatomy": ["banner-container", "headline", "explanation-text", "accept-all-button", "reject-all-button", "customize-link", "preferences-modal"],
+      "states": ["showing", "preferences-open", "accepted", "rejected", "saved-custom"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "primary_active", "hairline"],
+      "motion": ["banner-slide-up-on-load", "fade-out-on-accept"],
+      "a11y": ["role=region with aria-label", "reject is equally prominent as accept (GDPR)", "preferences modal has focus trap"],
+      "code_refs": {
+        "react": "examples/react/CookieConsent.tsx",
+        "vue": "examples/vue/CookieConsent.vue",
+        "blade": "examples/blade/cookie-consent.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "search-result-snippet",
+      "name": "Search Result Snippet",
+      "category": "Data Display",
+      "purpose": "Single search result row with title, URL or breadcrumb, snippet with highlighted query terms.",
+      "anatomy": ["url-or-breadcrumb", "title", "snippet-text", "match-highlights", "metadata-tags"],
+      "states": ["default", "hover", "visited", "with-rich-data"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "warning", "hairline"],
+      "motion": ["highlight-pulse-on-mount", "title-color-on-hover"],
+      "a11y": ["title is heading or strong link", "highlights are real mark elements", "URL readable"],
+      "code_refs": {
+        "react": "examples/react/SearchSnippet.tsx",
+        "vue": "examples/vue/SearchSnippet.vue",
+        "blade": "examples/blade/search-snippet.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "audit-log-row",
+      "name": "Audit Log Row",
+      "category": "Data Display",
+      "purpose": "Single audit event row with actor, action verb, object, timestamp, and metadata link.",
+      "anatomy": ["actor-avatar", "actor-name", "action-verb", "object-link", "timestamp", "metadata-button"],
+      "states": ["default", "metadata-expanded", "filtered-match", "sensitive-event"],
+      "tokens_used": ["surface", "ink", "body", "muted", "primary", "warning", "hairline"],
+      "motion": ["metadata-expand-spring"],
+      "a11y": ["semantic timestamp", "action verb readable in context", "sensitive events marked clearly"],
+      "code_refs": {
+        "react": "examples/react/AuditLogRow.tsx",
+        "vue": "examples/vue/AuditLogRow.vue",
+        "blade": "examples/blade/audit-log-row.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "user-presence-badge",
+      "name": "User Presence Avatar Badge",
+      "category": "Data Display",
+      "purpose": "Avatar with small overlaid presence dot indicating online/away/offline status.",
+      "anatomy": ["avatar-image", "presence-dot", "border-ring", "tooltip-with-name"],
+      "states": ["online", "away", "busy", "offline", "with-tooltip"],
+      "tokens_used": ["surface", "ink", "muted", "success", "warning", "danger", "hairline"],
+      "motion": ["online-pulse-soft", "tooltip-fade-up"],
+      "a11y": ["status announced as text via aria-label", "tooltip echoes status word", "color not sole carrier"],
+      "code_refs": {
+        "react": "examples/react/PresenceBadge.tsx",
+        "vue": "examples/vue/PresenceBadge.vue",
+        "blade": "examples/blade/presence-badge.blade.php"
+      },
+      "compatible_styles": []
+    },
+    {
+      "id": "notification-row-inbox",
+      "name": "Inbox Notification Row",
+      "category": "Data Display",
+      "purpose": "Single notification entry in an inbox list with actor, action, timestamp, and read/unread state.",
+      "anatomy": ["actor-avatar", "message-text", "timestamp", "unread-dot", "action-buttons", "preview-thumbnail"],
+      "states": ["unread", "read", "hover", "with-actions", "archived"],
+      "tokens_used": ["surface", "canvas", "ink", "body", "muted", "primary", "hairline"],
+      "motion": ["unread-dot-fade-on-read", "row-bg-fade-on-hover"],
+      "a11y": ["unread state in aria-label", "actions are real buttons not icons", "timestamp readable"],
+      "code_refs": {
+        "react": "examples/react/InboxRow.tsx",
+        "vue": "examples/vue/InboxRow.vue",
+        "blade": "examples/blade/inbox-row.blade.php"
+      },
+      "compatible_styles": []
+    }
+  ]
+}

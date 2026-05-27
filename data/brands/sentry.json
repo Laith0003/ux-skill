@@ -1,0 +1,49 @@
+{
+  "id": "sentry",
+  "name": "Sentry",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Sentri's design language — a developer-tools brand built on a deep purple-violet midnight canvas, electric lime accents, and a slightly subversive illustrated personality.",
+  "design_language": {
+    "type": {
+      "display": "Sentri Display",
+      "body": "Rubik",
+      "mono": "Monaco"
+    },
+    "color_primary": "#150f23",
+    "color_ink": "#1f1633",
+    "radius": [
+      4,
+      6,
+      8,
+      10,
+      12,
+      18
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Two-polarity canvas system: deep violet midnight  for marketing hero and product feature pages, white  for pricing, contact, and dense reference content",
+    "Lime keyword highlight  treated as a typographic device, not a color swatch",
+    "Sticker illustration system: floating mascot characters with hand-drawn outlines, appearing at section junctions, never inside cards",
+    "Uppercase eyebrow + button caps in and , with a consistent 0.2px tracking lift, give the brand its \"developer console\" cadence",
+    "Single-primary CTA hierarchy: every page has one filled button reading either on light or on dark; outlined and ghost variants are downgraded"
+  ],
+  "components_observed": [
+    "pill-neutral-dark",
+    "card-pricing-featured",
+    "card-feature-dark",
+    "card-pricing",
+    "code-block",
+    "button-ghost-on-dark"
+  ],
+  "exemplar_pages": [
+    "sentry.io"
+  ],
+  "ai_slop_avoided": [
+    "introduce additional accent colors beyond and — adding teal, orange, or yellow dilutes the violet-and-lime signature",
+    "apply drop shadows to cards on dark canvas",
+    "use (88px) for anything except the marketing hero — even sub-pages cap at (60px)"
+  ],
+  "source_md": "references/brands/sentry.md"
+}

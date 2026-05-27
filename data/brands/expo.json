@@ -1,0 +1,51 @@
+{
+  "id": "expo",
+  "name": "Expo",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "A React Native developer-platform whose marketing site reads like a quietly-confident infrastructure brand.",
+  "design_language": {
+    "type": {
+      "display": "Inter",
+      "body": "Inter",
+      "mono": "JetBrains Mono"
+    },
+    "color_primary": "#000000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#171717",
+    "radius": [
+      0,
+      4,
+      6,
+      8,
+      12,
+      16,
+      24
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Pure white canvas with sky-blue gradient atmospheric backdrop in hero only",
+    "Single primary CTA: pure black pill at (8px) — compact developer-tool dialect",
+    "Text-link blue  for inline links only — never on a CTA",
+    "Inter as the single sans family — no custom display typeface",
+    "JetBrains Mono on every code surface"
+  ],
+  "components_observed": [
+    "device-mockup-card",
+    "feature-card-dark",
+    "ide-mockup-card",
+    "pricing-tier-card",
+    "pricing-tier-featured",
+    "hero-band"
+  ],
+  "exemplar_pages": [
+    "expo.dev"
+  ],
+  "ai_slop_avoided": [
+    "introduce a saturated brand action color. Black is the only CTA fill",
+    "use blue  on a CTA. Inline links only",
+    "drop display below weight 600 or above 700"
+  ],
+  "source_md": "references/brands/expo.md"
+}

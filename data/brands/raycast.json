@@ -1,0 +1,49 @@
+{
+  "id": "raycast",
+  "name": "Raycast",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "| Raycast's marketing system reads like an extended product screenshot.",
+  "design_language": {
+    "type": {
+      "display": "Inter",
+      "body": "Inter"
+    },
+    "color_primary": "#ffffff",
+    "color_canvas": "#07080a",
+    "color_ink": "#f4f4f6",
+    "radius": [
+      0,
+      4,
+      6,
+      8,
+      10,
+      16
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Single dark surface mode with a 4-step surface ladder: (#07080a) → (#0d0d0d) → (#101111) → (#121212)",
+    "White CTA pill (#ffffff) is the universal primary action; everything else is monochrome dark",
+    "Inter typography with font-feature-settings: \"calt\", \"kern\", \"liga\", \"ss03\" enabled site-wide — the ss03 alternate g is part of the brand voice",
+    "Hairline 1px borders (#242728) carry every card edge; there are no drop shadows in the system",
+    "Multi-radius card vocabulary: (6px) for keycaps, (8px) for buttons and small cards, (10px) for feature cards, (16px) for hero command-palette mockup containers"
+  ],
+  "components_observed": [
+    "command-palette-row-active",
+    "pricing-tier-card-featured",
+    "app-icon-tile-large",
+    "command-palette-row",
+    "pill-tab-active",
+    "command-palette-card"
+  ],
+  "exemplar_pages": [
+    "raycast.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce a light mode. The system is dark-only by design",
+    "add drop shadows on cards. Elevation is built from the surface ladder, not from shadows",
+    "replace (white) with a tinted accent for the primary CTA. Pure white is the brand action color"
+  ],
+  "source_md": "references/brands/raycast.md"
+}

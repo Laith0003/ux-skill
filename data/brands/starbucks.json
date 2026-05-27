@@ -1,0 +1,36 @@
+{
+  "id": "starbucks",
+  "name": "Starbucks",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "Starbucks' design system is a warm, confident retail flagship wearing the green of their storefront apron across every surface.",
+  "design_language": {
+    "color_primary": "#f2f0eb",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000"
+  },
+  "trademark_signals": [
+    "Four-tier green brand system (Starbucks / Accent / House / Uplift) each mapped to a distinct surface role — not a single \"brand green\"",
+    "Gold reserved for Rewards-status moments only; never a general-purpose accent",
+    "Warm-neutral canvas (#f2f0eb / #edebe9) instead of cold white — references café materials",
+    "Custom proprietary typeface (SoDoSans) with tight -0.16px letter-spacing as the universal voice",
+    "Context-specific type switches: serif (Lander Tall) for Rewards, script (Kalam) for Careers cup-names"
+  ],
+  "components_observed": [
+    "gradient-system",
+    "black-white-alpha-ladders",
+    "cookie-consent-module",
+    "secondary-accent",
+    "surface-background",
+    "neutrals-text"
+  ],
+  "exemplar_pages": [
+    "starbucks.com"
+  ],
+  "ai_slop_avoided": [
+    "use pure white as the page canvas — the warm cream temperature is load-bearing",
+    "pick \"one brand green\" — the four-green system is intentional; using only #006241 everywhere flattens the brand",
+    "use Gold as a general-purpose accent — it's a Rewards signal only"
+  ],
+  "source_md": "references/brands/starbucks.md"
+}

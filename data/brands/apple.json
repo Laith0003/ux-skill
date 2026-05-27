@@ -1,0 +1,50 @@
+{
+  "id": "apple",
+  "name": "Apple",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "A photography-first interface that turns marketing into a museum gallery.",
+  "design_language": {
+    "type": {
+      "display": "SF Pro Display",
+      "body": "SF Pro Text"
+    },
+    "color_primary": "#0066cc",
+    "color_canvas": "#ffffff",
+    "color_ink": "#1d1d1f",
+    "radius": [
+      0,
+      5,
+      8,
+      11,
+      18
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Photography-first presentation; UI recedes so the product can speak",
+    "Alternating full-bleed tile sections: white/parchment ↔ near-black, with the color change itself acting as the section divider",
+    "Single blue accent (#0066cc) carries every interactive element. No second brand color exists",
+    "Two button grammars: tiny blue pill CTAs  and compact utility rects",
+    "SF Pro Display + SF Pro Text — negative letter-spacing at display sizes for the signature \"Apple tight\" headline feel"
+  ],
+  "components_observed": [
+    "product-tile-dark-2",
+    "product-tile-dark-3",
+    "button-secondary-pill",
+    "button-store-hero",
+    "product-tile-light",
+    "product-tile-parchment"
+  ],
+  "exemplar_pages": [
+    "apple.com",
+    "apple.com/iphone",
+    "apple.com/mac"
+  ],
+  "ai_slop_avoided": [
+    "introduce a second accent color; every \"click me\" signal is (Action Blue)",
+    "add shadows to cards, buttons, or text — shadow is reserved for product imagery",
+    "use gradients as decorative backgrounds; atmosphere comes from photography"
+  ],
+  "source_md": "references/brands/apple.md"
+}

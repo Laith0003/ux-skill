@@ -1,0 +1,45 @@
+{
+  "id": "opencode.ai",
+  "name": "Opencode Ai",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "| A terminal-native marketing system rendered entirely in Berkeley Mono — every word on the page, from the hero headline down to the footer fine print, is monospaced.",
+  "design_language": {
+    "type": {
+      "display": "Berkeley Mono",
+      "body": "Berkeley Mono"
+    },
+    "color_primary": "#201d1d",
+    "color_canvas": "#fdfcfc",
+    "color_ink": "#201d1d",
+    "radius": [
+      0,
+      4
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "100% Berkeley Mono typography across every text role — no sans-serif fallback anywhere in the chrome",
+    "Warm cream (#fdfcfc) as the only body background — no surface alternation across sections",
+    "Single dark surface (#201d1d) reserved exclusively for the hero TUI mockup",
+    "4px radius  on every interactive element; sections themselves are sharp rectangles bordered in 1px hairline",
+    "ASCII bracket markers ([+], [-], [x]) used as bullet glyphs in feature lists and FAQ rows"
+  ],
+  "components_observed": [
+    "hero-tui-mockup",
+    "chart-tile",
+    "button-primary-active",
+    "button-tab-active",
+    "text-input-focused",
+    "tui-prompt-row"
+  ],
+  "exemplar_pages": [
+    "opencode.ai"
+  ],
+  "ai_slop_avoided": [
+    "introduce a sans-serif body font, a display face, or an italic style. Berkeley Mono carries everything",
+    "add drop shadows, gradients, or atmospheric backgrounds. The system is flat-on-cream",
+    "replace the ASCII bracket markers with SVG icons. The brackets are the icons"
+  ],
+  "source_md": "references/brands/opencode.ai.md"
+}

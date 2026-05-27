@@ -1,0 +1,49 @@
+{
+  "id": "replicate",
+  "name": "Replicate",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "| Replicate's marketing surfaces pair the warm-cream developer-tools aesthetic of an indie ML playground with a confident hot-orange brand accent and a signature display typeface (rb-freigeist-neue) sized aggressively large at 72px+.",
+  "design_language": {
+    "type": {
+      "display": "rb-freigeist-neue",
+      "body": "basier-square",
+      "mono": "jetbrains-mono"
+    },
+    "color_primary": "#ea2804",
+    "color_canvas": "#f9f7f3",
+    "color_ink": "#202020",
+    "radius": [
+      0,
+      4,
+      6,
+      10,
+      16
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "A warm cream canvas (#f9f7f3) replaces the typical white background, paired with for inset cards",
+    "Hot orange (#ea2804) is reserved for the primary CTA, the hero band, and inline link colour. Never decorative",
+    "Display headlines run massive — at 128px in hero bands and at 72px on section openers — with tight lineHeight: 1.0 and negative letter-spacing",
+    "Three-family typography stack: rb-freigeist-neue for display, basier-square for UI/body, jetbrains-mono for code",
+    "Every interactive element is fully rounded ( 9999px) — buttons, inputs, badges, avatars — while content cards step to 10px"
+  ],
+  "components_observed": [
+    "pricing-tier-featured",
+    "sub-nav-pill",
+    "hero-band",
+    "collection-tile",
+    "pricing-tier",
+    "code-block"
+  ],
+  "exemplar_pages": [
+    "replicate.com"
+  ],
+  "ai_slop_avoided": [
+    "replace cream with pure white at the page level. The brand temperature comes from",
+    "introduce a secondary brand colour. Orange is the only accent; semantic green and focus blue are functional, not decorative",
+    "loosen display lineHeight past 1.0. Tight stacking is structural"
+  ],
+  "source_md": "references/brands/replicate.md"
+}

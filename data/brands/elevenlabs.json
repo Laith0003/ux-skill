@@ -1,0 +1,50 @@
+{
+  "id": "elevenlabs",
+  "name": "Elevenlabs",
+  "category": "AI / ML Platform",
+  "year_observed": 2026,
+  "philosophy": "A voice-AI brand whose marketing surfaces read like a quietly editorial print magazine.",
+  "design_language": {
+    "type": {
+      "display": "Waldenburg",
+      "body": "Inter"
+    },
+    "color_primary": "#292524",
+    "color_canvas": "#f5f5f5",
+    "color_ink": "#0c0a09",
+    "radius": [
+      0,
+      4,
+      6,
+      8,
+      12,
+      16,
+      24
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Off-white canvas, warm near-black ink. No saturated CTA color",
+    "Single primary action: ink pill at. Atmospheric gradients carry visual brand voltage",
+    "Display runs Waldenburg Light at weight 300 — editorial magazine voice",
+    "Body runs Inter at 400 with subtle letter-spacing (+0.15-0.18px)",
+    "Pastel gradient orbs (5 tokens: mint, peach, lavender, sky, rose) used as atmospheric brand decoration only"
+  ],
+  "components_observed": [
+    "gradient-orb-card",
+    "pricing-tier-card",
+    "pricing-tier-featured",
+    "hero-band",
+    "feature-card",
+    "badge-pill"
+  ],
+  "exemplar_pages": [
+    "elevenlabs.io"
+  ],
+  "ai_slop_avoided": [
+    "introduce a saturated brand action color. Ink pill is the only CTA color",
+    "bold display copy. Display sits at weight 300 — bolding shifts the brand voice from editorial to consumer-marketing",
+    "use gradient orbs as button fills, text colors, or component backgrounds. They are pure atmosphere"
+  ],
+  "source_md": "references/brands/elevenlabs.md"
+}

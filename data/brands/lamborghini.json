@@ -1,0 +1,39 @@
+{
+  "id": "lamborghini",
+  "name": "Lamborghini",
+  "category": "Automotive",
+  "year_observed": 2026,
+  "philosophy": "Lamborghini's website is a cathedral of darkness — a digital stage where jet-black surfaces stretch infinitely and every element emerges from the void like a machine under a spotlight.",
+  "design_language": {
+    "type": {
+      "body": "Open Sans — used for some button/form contexts as system fallback"
+    },
+    "color_primary": "#000000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000"
+  },
+  "trademark_signals": [
+    "True black (#000000) dominant surfaces with white and gold as the only relief colors",
+    "LamboType custom Neo-Grotesk font with 12° angled terminals inspired by aerodynamic car lines",
+    "Lamborghini Gold (#FFC000) as the sole accent color — used exclusively for primary CTA buttons",
+    "All-uppercase display typography at extreme scales (120px, 80px, 54px) with tight line-heights",
+    "Full-viewport video heroes with cinematic event/vehicle content"
+  ],
+  "components_observed": [
+    "gradient-system",
+    "secondary-accent",
+    "surface-background",
+    "neutrals-text",
+    "semantic-accent",
+    "cards-containers"
+  ],
+  "exemplar_pages": [
+    "lamborghini.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce additional accent colors beyond gold — the monochrome-plus-gold system is sacred",
+    "apply border-radius to buttons or cards — curved edges contradict the angular vehicle aesthetic",
+    "use LamboType in italic or decorative styles — the brand is always upright and direct"
+  ],
+  "source_md": "references/brands/lamborghini.md"
+}

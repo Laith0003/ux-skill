@@ -1,0 +1,50 @@
+{
+  "id": "intercom",
+  "name": "Intercom",
+  "category": "Productivity / Collaboration",
+  "year_observed": 2026,
+  "philosophy": "An editorial customer-service marketing canvas built around a soft cream-white ground, charcoal type set in Saans (Intercom's proprietary geometric sans), and a single confident Fin Orange (#ff5600) reserved for the Fin AI brand.",
+  "design_language": {
+    "type": {
+      "display": "Saans",
+      "body": "Saans",
+      "mono": "SaansMono"
+    },
+    "color_primary": "#111111",
+    "color_canvas": "#f5f1ec",
+    "color_ink": "#111111",
+    "radius": [
+      4,
+      6,
+      8,
+      12,
+      16,
+      24
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Cream canvas ( #f5f1ec) is the brand's defining surface — neither white nor gray, deliberately warm",
+    "Product-screenshot-led page rhythm: every section centers a product mockup card, marketing chrome stays minimal",
+    "Saans proprietary sans-serif carries the entire hierarchy; SaansMono for code-only contexts",
+    "Charcoal (#111111) is the system primary — buttons, headlines, body type all sit on charcoal",
+    "Fin Orange ( #ff5600) is the AI product color — used on the Fin CTA and Fin badge, never decoratively"
+  ],
+  "components_observed": [
+    "pricing-card-featured",
+    "product-mockup-card",
+    "customer-logo-tile",
+    "pricing-tab-default",
+    "pricing-tab-selected",
+    "pricing-card"
+  ],
+  "exemplar_pages": [
+    "intercom.com"
+  ],
+  "ai_slop_avoided": [
+    "use pure white as the canvas",
+    "use Fin Orange as a section background or as a generic primary CTA",
+    "add drop shadows to floating cards"
+  ],
+  "source_md": "references/brands/intercom.md"
+}

@@ -1,3 +1,1 @@
-from engine.cli.main import cli
-
-__all__ = ["cli"]
+"""CLI entry — invoke via `python -m engine.cli.main`."""

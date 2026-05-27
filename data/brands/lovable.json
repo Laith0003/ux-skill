@@ -1,0 +1,35 @@
+{
+  "id": "lovable",
+  "name": "Lovable",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "Lovable's website radiates warmth through restraint.",
+  "design_language": {
+    "color_primary": "#f7f4ed",
+    "color_canvas": "#ffffff"
+  },
+  "trademark_signals": [
+    "Warm parchment background (#f7f4ed) — not white, not beige, a deliberate cream that feels hand-selected",
+    "Camera Plain Variable typeface with humanist warmth and editorial letter-spacing at display sizes",
+    "Opacity-driven color system: all grays derived from #1c1c1c at varying transparency levels",
+    "Inset shadow technique on buttons: rgba(255,255,255,0.2) 0px 0.5px 0px 0px inset, rgba(0,0,0,0.2) 0px 0px 0px 0.5px inset",
+    "Warm neutral border palette: #eceae4 for subtle, rgba(28,28,28,0.4) for interactive elements"
+  ],
+  "components_observed": [
+    "surface-border",
+    "inset-shadows",
+    "cards-containers",
+    "inputs-forms",
+    "image-treatment",
+    "distinctive-components"
+  ],
+  "exemplar_pages": [
+    "lovable.dev"
+  ],
+  "ai_slop_avoided": [
+    "use pure white (#ffffff) as a page background — the cream is intentional",
+    "use heavy box-shadows for cards — borders are the containment mechanism",
+    "introduce saturated accent colors — the palette is intentionally warm-neutral"
+  ],
+  "source_md": "references/brands/lovable.md"
+}

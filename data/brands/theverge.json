@@ -1,0 +1,36 @@
+{
+  "id": "theverge",
+  "name": "The Verge",
+  "category": "Editorial / Media",
+  "year_observed": 2026,
+  "philosophy": "The Verge's 2024 redesign feels like somebody wired a Condé Nast magazine to a chiptune soundboard.",
+  "design_language": {
+    "color_primary": "#131313",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000"
+  },
+  "trademark_signals": [
+    "Near-black editorial canvas (#131313) as the default surface — no light mode on the homepage",
+    "Acid-mint #3cffd0 + ultraviolet #5200ff as hazard-tape accents, never quiet background wash",
+    "Massive Manuka display headlines up to 107px — the single loudest type move in mainstream tech media",
+    "Rounded pill-card everything: 20/24/30/40px corner radii, never square",
+    "Fully saturated color-block story tiles (mint, purple, yellow, pink, orange, electric blue) on a dark page"
+  ],
+  "components_observed": [
+    "gradient-system",
+    "secondary-accent",
+    "surface-background",
+    "neutrals-text",
+    "semantic-accent",
+    "cards-containers"
+  ],
+  "exemplar_pages": [
+    "theverge.com"
+  ],
+  "ai_slop_avoided": [
+    "use a light background. The dark canvas is the product",
+    "add box-shadow for elevation. Use 1px borders or saturated accent fills instead",
+    "use square corners. Every interactive and content container is rounded"
+  ],
+  "source_md": "references/brands/theverge.md"
+}

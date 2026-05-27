@@ -1,0 +1,45 @@
+{
+  "id": "spacex",
+  "name": "Spacex",
+  "category": "Automotive",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Spasex's design language — a mission-oriented aerospace brand built on pure black canvas, full-bleed photographic and video heroes of rockets and Mars landscapes, and uppercase D-DIN display type set in tight vertical leading.",
+  "design_language": {
+    "type": {
+      "display": "D-DIN-Bold",
+      "body": "D-DIN"
+    },
+    "color_primary": "#000000",
+    "color_ink": "#000000",
+    "radius": [
+      4,
+      8,
+      16
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Single canvas: pure (#000000) for marketing; only on the shop site",
+    "Display tier in uppercase D-DIN-Bold with positive horizontal tracking (1.6px at 80px) — the brand's typographic signature",
+    "Full-bleed photography or autoplaying video as the dominant decorative element; type sits directly on imagery with no scrim",
+    "Single ghost-outlined pill CTA per band, at 32px radius — never filled, never accent-colored",
+    "All-caps eyebrow microtext ( and ) with positive 0.96–1.17px tracking — every chrome element shouts in caps"
+  ],
+  "components_observed": [
+    "card-photo-band",
+    "button-ghost-on-dark",
+    "button-ghost-on-light",
+    "button-filled-cool",
+    "card-shop-product",
+    "nav-bar-overlay"
+  ],
+  "exemplar_pages": [
+    "spacex.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce brand accent colors — black, white, and photography are the entire palette",
+    "use drop shadows or gradient overlays on dark canvas — they fight the photography",
+    "render display tiers in sentence-case or title-case — uppercase is the brand"
+  ],
+  "source_md": "references/brands/spacex.md"
+}

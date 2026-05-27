@@ -1,0 +1,49 @@
+{
+  "id": "cohere",
+  "name": "Cohere",
+  "category": "AI / ML Platform",
+  "year_observed": 2026,
+  "philosophy": "Cohere's 2026 web system is a controlled enterprise AI interface built from stark white editorial space, deep green-black product bands, soft mineral surfaces, rounded media cards, and a distinctive type split between monospaced-feeling display headlines and precise Unica77 UI text.",
+  "design_language": {
+    "type": {
+      "display": "CohereText",
+      "body": "Unica77 Cohere Web",
+      "mono": "CohereMono"
+    },
+    "color_primary": "#17171c",
+    "color_canvas": "#ffffff",
+    "color_ink": "#212121",
+    "radius": [
+      4,
+      8,
+      16,
+      22,
+      30
+    ],
+    "spacing": "2-based"
+  },
+  "trademark_signals": [
+    "Monumental display headlines with very tight line height and negative tracking",
+    "White editorial canvases interrupted by deep green, dark navy, and image-led CTA bands",
+    "Rounded media cards and product cards, usually 8px to 22px",
+    "Pill CTAs in near-black or white, with most secondary actions rendered as underlined text links",
+    "Trust-logo strips with monochrome partner marks and very wide vertical spacing"
+  ],
+  "components_observed": [
+    "button-pill-outline",
+    "hero-photo-card",
+    "dark-feature-band",
+    "agent-console-card",
+    "trust-logo-strip",
+    "blog-filter-chip"
+  ],
+  "exemplar_pages": [
+    "cohere.com"
+  ],
+  "ai_slop_avoided": [
+    "turn coral or blue into broad decorative surface colors",
+    "add heavy drop shadows to cards",
+    "make every section card-based; Cohere often uses unframed rows, rules, and open space"
+  ],
+  "source_md": "references/brands/cohere.md"
+}

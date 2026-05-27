@@ -1,0 +1,50 @@
+{
+  "id": "framer",
+  "name": "Framer",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "A confident dark-canvas builder marketing site that treats the page like a working artboard — pure black surfaces, white display type set in GT Walsheim Medium with aggressive negative tracking, and a single confident blue (#0099ff) reserved for hyperlinks and selection states.",
+  "design_language": {
+    "type": {
+      "display": "GT Walsheim Framer Medium",
+      "body": "Inter Variable"
+    },
+    "color_primary": "#ffffff",
+    "color_canvas": "#090909",
+    "color_ink": "#ffffff",
+    "radius": [
+      4,
+      6,
+      10,
+      15,
+      20,
+      30
+    ],
+    "spacing": "1-based"
+  },
+  "trademark_signals": [
+    "Black-canvas marketing system: is the surface for hero, body, pricing, FAQ, and footer alike — no light interludes",
+    "Massive negative letter-spacing on display sizes (-5.5px / -4.25px / -3.1px) creates a poster-grade headline cadence",
+    "White pill  is the only primary CTA shape across the site; secondary actions live as charcoal pills  or text links",
+    "Oversized gradient spotlight cards (violet, magenta, orange, coral) act as showcase tiles inside the dark grid",
+    "Inter Variable with bespoke OpenType character variants (cv01/05/09/11, ss03/ss07, dlig) used everywhere body type appears"
+  ],
+  "components_observed": [
+    "gradient-spotlight-card-magenta",
+    "gradient-spotlight-card-orange",
+    "pricing-tab-default",
+    "pricing-tab-selected",
+    "pricing-card-featured",
+    "gradient-spotlight-card"
+  ],
+  "exemplar_pages": [
+    "framer.com",
+    "framer.com/pricing"
+  ],
+  "ai_slop_avoided": [
+    "ship a light-mode marketing page. Framer's identity is dark",
+    "introduce mid-tone gray text outside. The hierarchy is binary: ink or ink-muted",
+    "use as a brand fill (e.g., a blue CTA pill). The blue is a signal color, not a surface"
+  ],
+  "source_md": "references/brands/framer.md"
+}

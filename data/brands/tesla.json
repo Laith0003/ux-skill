@@ -1,0 +1,40 @@
+{
+  "id": "tesla",
+  "name": "Tesla",
+  "category": "Automotive",
+  "year_observed": 2026,
+  "philosophy": "Tesla's website is an exercise in radical subtraction — a digital showroom where the product is everything and the interface is almost nothing.",
+  "design_language": {
+    "type": {
+      "display": "Universal Sans Display",
+      "body": "Universal Sans Text"
+    },
+    "color_primary": "#3e6ae1",
+    "color_canvas": "#ffffff"
+  },
+  "trademark_signals": [
+    "Full-viewport hero sections (100vh) dominated by cinematic car photography with minimal overlay UI",
+    "Near-zero UI decoration: no shadows, no gradients, no borders, no patterns anywhere on the page",
+    "Single accent color — Electric Blue (#3E6AE1) — used exclusively for primary CTA buttons",
+    "Universal Sans font family (Display + Text) unifying web, app, and in-car interfaces",
+    "Photography-first presentation where product imagery carries all emotional weight"
+  ],
+  "components_observed": [
+    "gradient-system",
+    "persistent-chat-bar",
+    "secondary-accent",
+    "surface-background",
+    "neutrals-text",
+    "semantic-accent"
+  ],
+  "exemplar_pages": [
+    "tesla.com",
+    "tesla.com/model-s"
+  ],
+  "ai_slop_avoided": [
+    "add shadows to any element — elevation through shadow contradicts the flat, gallery aesthetic",
+    "use more than one chromatic color besides the blue CTA — the palette is intentionally monochrome-plus-one",
+    "apply gradients, patterns, or decorative backgrounds to surfaces — white and photography are the only backgrounds"
+  ],
+  "source_md": "references/brands/tesla.md"
+}

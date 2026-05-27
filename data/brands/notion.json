@@ -1,0 +1,51 @@
+{
+  "id": "notion",
+  "name": "Notion",
+  "category": "Productivity / Collaboration",
+  "year_observed": 2026,
+  "philosophy": "Notion presents itself as the all-in-one workspace through a confident, illustration-rich brand voice — anchored by a deep navy hero band ({colors.brand-navy}) decorated with brand-colored sticky-note dots and mesh wire illustrations, a signature purple pill primary CTA ({colors.primary}), and a rich palette of pastel-tinted feature cards that echo the colorful database properties of the live product.",
+  "design_language": {
+    "type": {
+      "display": "Notion Sans",
+      "body": "Notion Sans"
+    },
+    "color_primary": "#5645d4",
+    "color_canvas": "#ffffff",
+    "color_ink": "#1a1a1a",
+    "radius": [
+      4,
+      6,
+      8,
+      12,
+      16,
+      20,
+      24
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Deep navy hero band  with scattered sticky-note dots + mesh wire decorative illustrations",
+    "Signature purple pill  primary CTA — Notion's recognizable \"Get Notion free\" button color",
+    "Real Notion workspace UI mockup card embedded in the hero with deep drop shadow",
+    "Bold yellow feature banner  for high-emphasis content sections",
+    "Pastel feature card palette (peach, rose, mint, lavender, sky, yellow) echoing the live product database properties"
+  ],
+  "components_observed": [
+    "card-feature-yellow-bold",
+    "card-feature-peach",
+    "card-feature-rose",
+    "card-feature-mint",
+    "card-feature-sky",
+    "card-feature-lavender"
+  ],
+  "exemplar_pages": [
+    "notion.com",
+    "notion.com/pricing"
+  ],
+  "ai_slop_avoided": [
+    "use the purple for body text or large background surfaces",
+    "use pill-shaped buttons; Notion's geometry is rectangular-sober",
+    "mix link-blue  with primary-purple  — they have distinct roles"
+  ],
+  "source_md": "references/brands/notion.md"
+}

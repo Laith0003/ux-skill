@@ -1,0 +1,50 @@
+{
+  "id": "warp",
+  "name": "Warp",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Warp's design language — an agentic terminal-and-development-environment brand whose surface is a warm near-charcoal canvas (a tint warmer than pure black), broken only by clean Inter typography, the occasional Instrument Serif italic moment, and dense terminal-mockup imagery; CTAs are unusually understated, with shape geometry running tighter than most marketing sites.",
+  "design_language": {
+    "type": {
+      "display": "Inter",
+      "body": "Inter",
+      "mono": "DM Mono"
+    },
+    "color_primary": "#f7f5f0",
+    "color_canvas": "#2b2622",
+    "color_ink": "#f7f5f0",
+    "radius": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      6
+    ],
+    "spacing": "2-based"
+  },
+  "trademark_signals": [
+    "A single primary \"color\" — really an off-white (#f7f5f0) — that doubles as text on canvas and as the button-primary fill. There is no chromatic brand accent",
+    "Warm dark canvas ( #2b2622) is the only page surface. The brand's defining tone is the brown-warmth, not pure black",
+    "Extremely tight button radii — 3 / 4 px (1 / 2× the brand's 4 px base) — the brand never uses generous pill shapes for CTAs. Only icon containers use",
+    "Inter sans + DM Mono mono is the canonical pairing. Instrument Serif appears as a third editorial face for occasional italics",
+    "Terminal-mockup imagery is the brand's only consistent decorative system — no gradients, no atmospheric overlays"
+  ],
+  "components_observed": [
+    "partner-logo-tile",
+    "card-mockup",
+    "download-tile",
+    "hero-band",
+    "content-band",
+    "button-secondary-ghost"
+  ],
+  "exemplar_pages": [
+    "warp.dev"
+  ],
+  "ai_slop_avoided": [
+    "introduce a chromatic brand accent. The off-white-on-warm-dark IS the brand's voice",
+    "render the hero headline in heavy weight (700+). The brand's display is intentionally light",
+    "use generous pill CTAs. The brand's button radius is 3-4 px, almost rectangular"
+  ],
+  "source_md": "references/brands/warp.md"
+}

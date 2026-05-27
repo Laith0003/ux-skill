@@ -1,0 +1,47 @@
+{
+  "id": "nike",
+  "name": "Nike",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "| A photography-first commerce system built on extreme typographic contrast — towering uppercase Futura display lockups burned into editorial campaign imagery, sitting above a dense, neutral, near-monochrome retail chrome of pill-shaped black CTAs, gray search and tag pills, and tight 8px-grid product cards.",
+  "design_language": {
+    "type": {
+      "display": "Nike Futura ND",
+      "body": "Helvetica Now Text"
+    },
+    "color_primary": "#111111",
+    "color_canvas": "#ffffff",
+    "color_ink": "#111111",
+    "radius": [
+      0,
+      18,
+      24,
+      30
+    ],
+    "spacing": "2-based"
+  },
+  "trademark_signals": [
+    "Editorial campaign hero with (Nike Futura ND, 96px, line-height 0.9, uppercase) burned directly into full-bleed photography",
+    "Pure black/white/single-gray UI palette: , and carry ~95% of the chrome surface area",
+    "Pill geometry everywhere: every CTA, search field, filter chip, and badge uses (30px) or (24px) — there are no sharp-cornered buttons in the system",
+    "Product cards have zero radius, zero shadow, sit directly on swatch backgrounds — the photograph is the card",
+    "Two-tone CTA hierarchy: (black on anything light) versus ( on anything bright) — never both at once on the same surface"
+  ],
+  "components_observed": [
+    "search-pill-focused",
+    "search-pill",
+    "campaign-tile",
+    "button-outline-on-image",
+    "button-primary-active",
+    "button-icon-circular"
+  ],
+  "exemplar_pages": [
+    "nike.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce drop shadows or card elevation. Cards sit flat on the page; the only depth cue is the 1px inset hairline on sticky bars",
+    "use any of the category accent colors (, ) for primary chrome",
+    "replace with a near-black gray like for a CTA — Nike's primary pill is true #111111"
+  ],
+  "source_md": "references/brands/nike.md"
+}

@@ -1,0 +1,48 @@
+{
+  "id": "binance",
+  "name": "Binance",
+  "category": "Fintech / Crypto",
+  "year_observed": 2026,
+  "philosophy": "A confident financial-platform interface anchored on a deep near-black canvas, where Binance's iconic yellow (#FCD535) carries every primary CTA, brand accent, and value-claim moment.",
+  "design_language": {
+    "type": {
+      "display": "BinanceNova",
+      "body": "BinanceNova"
+    },
+    "color_primary": "#fcd535",
+    "color_canvas": "#0b0e11",
+    "color_ink": "#181a20",
+    "radius": [
+      2,
+      4,
+      6,
+      8,
+      12
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Single accent color: (#FCD535) does all brand voltage",
+    "Custom type stack: BinanceNova (display + body) and BinancePlex (numbers",
+    "Multi-theme: marketing pages default dark ; transactional pages flip light. Yellow CTAs and trading green/red are shared across both",
+    "Light footer on dark body: the homepage uses (#fafafa) for the footer even when the body above it is dark — a deliberate inversion that visually closes the page",
+    "Trading semantics: green up / red down ( / ) for price changes, applied as text color rather than badge background"
+  ],
+  "components_observed": [
+    "button-primary-pill",
+    "hero-band-dark",
+    "stat-callout-card",
+    "funds-safu-band",
+    "feature-photo-card",
+    "cta-band-dark"
+  ],
+  "exemplar_pages": [
+    "binance.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce a second brand color. The system has exactly one accent  and any expansion dilutes the brand identity. The turquoise on Smart Money is a single-product experiment, not a system token",
+    "use yellow for body text or large surface fills. It is for focal-point CTAs and headlines only",
+    "use / as background fills on cards. They are price-direction signals, expressed as text color or small badge fill"
+  ],
+  "source_md": "references/brands/binance.md"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "nvidia",
+  "name": "Nvidia",
+  "category": "Editorial / Media",
+  "year_observed": 2026,
+  "philosophy": "| An engineering-grade marketing system organized around two surface modes — a deep black canvas for hero and footer chapters and a flat paper-white canvas for body content — connected by a single, almost violently saturated NVIDIA Green accent that carries every CTA, every active tab, and the small decorative corner squares that mark out cards.",
+  "design_language": {
+    "type": {
+      "display": "NVIDIA-EMEA",
+      "body": "NVIDIA-EMEA"
+    },
+    "color_primary": "#76b900",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000",
+    "radius": [
+      0,
+      1,
+      2
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Single-accent system: carries every CTA, active state, and decorative motif. The rest is monochrome black/white/gray",
+    "Two-mode surface architecture: for hero/footer chapters; for body — alternating in a predictable rhythm down the page",
+    "Hyper-angular geometry: (2px) on every interactive element. There are no pill buttons, no rounded cards, no soft chrome",
+    "NVIDIA-EMEA proprietary sans-serif at weights 400 and 700, scaled across a 12-tier hierarchy from (10px) up to (48px)",
+    "Card library leans on hairline borders and backgrounds rather than shadows for separation"
+  ],
+  "components_observed": [
+    "pill-tab-active",
+    "hero-card-dark",
+    "pill-tab",
+    "feature-card",
+    "callout-stat",
+    "button-outline-on-dark"
+  ],
+  "exemplar_pages": [
+    "nvidia.com"
+  ],
+  "ai_slop_avoided": [
+    "introduce drop shadows on cards or content surfaces. The only allowed shadow is the 5px ambient on sticky chrome",
+    "substitute , or any other green for in CTAs. The brand green is precise",
+    "use outside of inline body-prose links. It is not a button color, not a chrome color"
+  ],
+  "source_md": "references/brands/nvidia.md"
+}

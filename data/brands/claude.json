@@ -1,0 +1,51 @@
+{
+  "id": "claude",
+  "name": "Claude",
+  "category": "AI / ML Platform",
+  "year_observed": 2026,
+  "philosophy": "A warm-canvas editorial interface for Anthropic's Claude product.",
+  "design_language": {
+    "type": {
+      "display": "Copernicus",
+      "body": "StyreneB",
+      "mono": "JetBrains Mono"
+    },
+    "color_primary": "#cc785c",
+    "color_canvas": "#faf9f5",
+    "color_ink": "#141413",
+    "radius": [
+      4,
+      6,
+      8,
+      12,
+      16
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Warm cream canvas (#faf9f5) with dark warm-ink text (#141413). The brand's defining color choice",
+    "Coral primary CTA (#cc785c). Used scarcely on individual buttons, generously on full-bleed coral callout cards",
+    "Slab-serif display headlines via Copernicus / Tiempos Headline at weight 400 with negative letter-spacing. Pairs with humanist sans body for a literary edito...",
+    "Dark navy product mockup cards (#181715) carrying code blocks, terminal panels, model comparison data",
+    "Light cream feature cards (#efe9de) — slightly darker than canvas, used for content-driven feature explanations"
+  ],
+  "components_observed": [
+    "product-mockup-card-dark",
+    "pricing-tier-card-featured",
+    "hero-illustration-card",
+    "code-window-card",
+    "pricing-tier-card",
+    "callout-card-coral"
+  ],
+  "exemplar_pages": [
+    "claude.com",
+    "claude.com/pricing",
+    "anthropic.com"
+  ],
+  "ai_slop_avoided": [
+    "use cool grays or pure white for canvas. Cream is the brand",
+    "bold serif display weight. Copernicus at 700 reads as bombastic; the system stays at 400",
+    "use cool blue or saturated cyan as a brand accent. The coral is the brand voltage"
+  ],
+  "source_md": "references/brands/claude.md"
+}

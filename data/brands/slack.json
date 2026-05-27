@@ -1,0 +1,49 @@
+{
+  "id": "slack",
+  "name": "Slack",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Slacc's design language — a workplace messaging brand built on a deep aubergine primary, with cream-lavender hero gradients, blue inline links, and pill CTAs.",
+  "design_language": {
+    "type": {
+      "display": "Salesforce-Avant-Garde",
+      "body": "Salesforce-Sans"
+    },
+    "color_primary": "#4a154b",
+    "color_canvas": "#ffffff",
+    "color_ink": "#1d1d1d",
+    "radius": [
+      2,
+      4,
+      8,
+      12,
+      16,
+      48
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Single aubergine primary  reused across CTAs, the featured pricing tier, the footer band, and the wordmark — the brand's chromatic monotheism",
+    "Cream-lavender hero canvas ( / ) with diffused pastel-mesh atmospheric gradients and floating UI mockups composited above",
+    "Pill buttons at (90px radius) with generous 28–30px horizontal padding — over-padded by SaaS-default standards, deliberately so",
+    "Tight negative letter-spacing on display sizes (-0.768px on 64px hero) for editorial-density headlines",
+    "Blue inline links  — the only non-aubergine chromatic accent in body type"
+  ],
+  "components_observed": [
+    "button-primary-pill-pressed",
+    "button-primary-pill",
+    "button-secondary-pill",
+    "pill-cap-shade",
+    "card-pricing-featured",
+    "card-feature-cream"
+  ],
+  "exemplar_pages": [
+    "slack.com"
+  ],
+  "ai_slop_avoided": [
+    "add a third accent color to the system — the aubergine + blue link combination is exhaustive",
+    "shrink button padding below 14px 28px — the over-padded pill is part of the brand feel",
+    "render display tiers at default tracking (0) — without negative letter-spacing the headlines read loose and unedited"
+  ],
+  "source_md": "references/brands/slack.md"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "stripe",
+  "name": "Stripe",
+  "category": "Fintech / Crypto",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Stripi's design language — a financial-infrastructure brand built on a deep navy ink, an electric indigo primary, and a recurring atmospheric gradient mesh that occupies the upper third of nearly every marketing page.",
+  "design_language": {
+    "type": {
+      "display": "sohne-var",
+      "body": "sohne-var"
+    },
+    "color_primary": "#533afd",
+    "color_canvas": "#ffffff",
+    "color_ink": "#0d253d",
+    "radius": [
+      4,
+      6,
+      8,
+      12,
+      16
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Gradient-mesh backdrop on every marketing hero — cream/orange/lavender/indigo/ruby horizontally washed across the upper third of the page",
+    "Single-indigo CTA hierarchy: filled pill is the only filled button on marketing surfaces",
+    "Sohne thin (weight 300) display tier with negative tracking from -1.4px to -0.2px depending on size",
+    "Tabular-figure body type (tnum) for any cell containing money or numerics — the brand's quiet financial-data signal",
+    "Dark-app dashboard track: deep navy product UI mockups sit composited above the white canvas, frequently with rendered code or dashboard tables inside"
+  ],
+  "components_observed": [
+    "button-primary-pill-pressed",
+    "nav-bar-on-mesh",
+    "button-primary-pill",
+    "card-feature-light",
+    "card-pricing-featured",
+    "card-cream-band"
+  ],
+  "exemplar_pages": [
+    "stripe.com/payments",
+    "stripe.com/pricing"
+  ],
+  "ai_slop_avoided": [
+    "bump display weight above 300 — at 400 the brand's editorial air collapses",
+    "add new accent colors outside the documented gradient stops (cream / orange / lavender / indigo / ruby / magenta)",
+    "use the indigo as a body-text color — it's a CTA and link color, not a type color at body size"
+  ],
+  "source_md": "references/brands/stripe.md"
+}

@@ -1,0 +1,48 @@
+{
+  "id": "webflow",
+  "name": "Webflow",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Webflow's design language — a visual web development platform whose surface contrasts a deep near-black `#080808` primary against a generous white canvas, broken by a five-stop chromatic accent system (purple / pink / blue / orange / green) that maps to the brand's product categories, and anchored by the proprietary WF Visual Sans family used at restrained 500 / 600 weights with negative tracking.",
+  "design_language": {
+    "type": {
+      "display": "WF Visual Sans Variable",
+      "body": "WF Visual Sans Variable",
+      "mono": "WFVisualSans-Mono"
+    },
+    "color_primary": "#080808",
+    "color_canvas": "#ffffff",
+    "color_ink": "#080808",
+    "radius": [
+      0,
+      2,
+      4,
+      8
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "A two-colour conversion hierarchy",
+    "The brand's signature is its five-stop chromatic category palette: purple / pink / blue / orange / green",
+    "Hero typography at 80 px weight 600 with -0.8 px tracking — restrained, confident, never billboard-loud",
+    "WF Visual Sans Variable is the single family",
+    "Tight 4 px button geometry; cards at 8 px. The brand never uses pill CTAs"
+  ],
+  "components_observed": [
+    "card-feature-dark",
+    "hero-band-dark",
+    "card-feature",
+    "card-pricing",
+    "hero-band",
+    "content-band"
+  ],
+  "exemplar_pages": [
+    "webflow.com"
+  ],
+  "ai_slop_avoided": [
+    "promote button-medium weight to 700+. The brand's weight ceiling is 600",
+    "use chromatic accents as button backgrounds. They're surface fills, not actions",
+    "render CTAs as pills. The brand's button geometry is tight 4 px rectangle"
+  ],
+  "source_md": "references/brands/webflow.md"
+}

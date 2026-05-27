@@ -1,0 +1,51 @@
+{
+  "id": "mintlify",
+  "name": "Mintlify",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "Mintlify presents documentation infrastructure with a dual-mode aesthetic — atmospheric sky-gradient marketing heroes (cloud illustration backdrops, soft cream-to-blue washes) paired with dense developer-grade documentation surfaces.",
+  "design_language": {
+    "type": {
+      "display": "Inter",
+      "body": "Inter",
+      "mono": "Geist Mono"
+    },
+    "color_primary": "#0a0a0a",
+    "color_canvas": "#ffffff",
+    "color_ink": "#0a0a0a",
+    "color_accent_gradient": "linear-gradient(180deg, {colors.hero-sky-from} 0%, {colors.hero-sky-to} 100%)",
+    "radius": [
+      4,
+      6,
+      8,
+      12,
+      16,
+      24
+    ],
+    "spacing": "4-based"
+  },
+  "trademark_signals": [
+    "Atmospheric gradient hero bands (sky-blue to cream on homepage; teal-to-mint on startups) provide cinematic marketing presentation",
+    "Signature Mintlify mint green  reserved for accent CTAs, active states, and feature confirmations",
+    "Black-pill primary buttons ( + ) for marketing CTAs",
+    "Inter for all UI prose; Geist Mono for code blocks, inline code, and type/property signatures",
+    "3-column documentation layout (sidebar / prose / TOC) with dense 14px body type for long-form developer reading"
+  ],
+  "components_observed": [
+    "pricing-card-featured",
+    "testimonial-card-feature",
+    "pill-tab-active",
+    "code-block-header",
+    "feature-comparison-table",
+    "feature-comparison-row"
+  ],
+  "exemplar_pages": [
+    "mintlify.com"
+  ],
+  "ai_slop_avoided": [
+    "use on body text or large surfaces — it loses signal",
+    "introduce additional accent colors beyond mint, tag-blue, error-red, and the testimonial orange",
+    "apply heavy shadows on flat documentation cards; reserve elevation for the hero product mockup"
+  ],
+  "source_md": "references/brands/mintlify.md"
+}
