@@ -12,8 +12,17 @@
       "name": "Swiss International",
       "category": "Minimalist / Swiss",
       "philosophy": "Grid is law. Type does the heavy lifting. Decoration is failure.",
-      "when_to_use": ["editorial publications", "design portfolios", "cultural institutions", "premium consultancies"],
-      "when_to_skip": ["consumer apps for casual audiences", "gamified products", "children's products"],
+      "when_to_use": [
+        "editorial publications",
+        "design portfolios",
+        "cultural institutions",
+        "premium consultancies"
+      ],
+      "when_to_skip": [
+        "consumer apps for casual audiences",
+        "gamified products",
+        "children's products"
+      ],
       "tokens": {
         "borders": "hairline (1px), pure or near-black, used as separators only",
         "shadows": "none — depth comes from spacing, not light",
@@ -22,10 +31,31 @@
         "radius": "0 — sharp corners only",
         "motion": "linear or instant, no flourish"
       },
-      "exemplars": ["bureauborsche.com", "kasper-florio.ch", "experimentaljetset.nl"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["design-studios", "cultural-institutions", "publishing", "luxury-consulting"],
+      "exemplars": [
+        "bureauborsche.com",
+        "kasper-florio.ch",
+        "experimentaljetset.nl"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "linear-graphite",
+        "apple-clarity",
+        "monochrome-pure",
+        "editorial-cream"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "young-serif-inter-jetbrains",
+        "instrument-serif-inter-jetbrains",
+        "bricolage-grotesque-inter-jetbrains"
+      ],
+      "compatible_industries": [
+        "design-studios",
+        "cultural-institutions",
+        "publishing",
+        "luxury-consulting"
+      ],
       "ai_slop_risk": "low",
       "notes": "The trap is mistaking minimalism for blankness — Swiss is precise placement, not empty canvas."
     },
@@ -34,8 +64,17 @@
       "name": "Monochrome Precise",
       "category": "Monochrome Precise",
       "philosophy": "Black is chrome, white is canvas, negative space is the system. Color belongs to content.",
-      "when_to_use": ["B2B SaaS dashboards", "developer platforms", "fintech admin surfaces", "white-label products"],
-      "when_to_skip": ["consumer e-commerce", "kids products", "entertainment apps"],
+      "when_to_use": [
+        "B2B SaaS dashboards",
+        "developer platforms",
+        "fintech admin surfaces",
+        "white-label products"
+      ],
+      "when_to_skip": [
+        "consumer e-commerce",
+        "kids products",
+        "entertainment apps"
+      ],
       "tokens": {
         "borders": "1-1.5px zinc-200/zinc-800, hairlines never thicker",
         "shadows": "shadow-xs to shadow-md, never tinted, never colored",
@@ -44,10 +83,31 @@
         "radius": "8-12px, never pill-shape unless badge/avatar",
         "motion": "instant to fast (100-200ms), ease-out for entries"
       },
-      "exemplars": ["linear.app", "vercel.com", "raycast.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["b2b-saas", "dev-tools", "fintech-admin", "infrastructure"],
+      "exemplars": [
+        "linear.app",
+        "vercel.com",
+        "raycast.com"
+      ],
+      "compatible_palettes": [
+        "linear-graphite",
+        "stripe-indigo",
+        "notion-paper",
+        "vercel-stark",
+        "github-octicon"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "spectral-public-sans-source-code",
+        "young-serif-inter-jetbrains",
+        "instrument-serif-inter-jetbrains"
+      ],
+      "compatible_industries": [
+        "b2b-saas",
+        "dev-tools",
+        "fintech-admin",
+        "infrastructure"
+      ],
       "ai_slop_risk": "low",
       "notes": "Easy to drift into gray-on-gray mush — keep type contrast at WCAG AAA for body."
     },
@@ -56,8 +116,18 @@
       "name": "Neo-Brutalism",
       "category": "Bold Statement",
       "philosophy": "Raw, intentionally crude, high-contrast geometry. Rejects polish in favor of presence.",
-      "when_to_use": ["indie SaaS", "creator tools", "developer products with personality", "design-forward startups"],
-      "when_to_skip": ["finance", "healthcare", "enterprise IT", "government"],
+      "when_to_use": [
+        "indie SaaS",
+        "creator tools",
+        "developer products with personality",
+        "design-forward startups"
+      ],
+      "when_to_skip": [
+        "finance",
+        "healthcare",
+        "enterprise IT",
+        "government"
+      ],
       "tokens": {
         "borders": "thick (3-6px), pure black, never softened",
         "shadows": "harsh hard-edge offsets (e.g., 6px 6px 0 #000), never blurred",
@@ -66,10 +136,30 @@
         "radius": "0 or 8px max, never rounded",
         "motion": "abrupt, no easing, snap transitions"
       },
-      "exemplars": ["gumroad.com", "fey.com", "valtown.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["indie-saas", "creator-tools", "design-agencies"],
+      "exemplars": [
+        "gumroad.com",
+        "fey.com",
+        "valtown.com"
+      ],
+      "compatible_palettes": [
+        "vercel-stark",
+        "github-octicon",
+        "monochrome-pure",
+        "vibrant-magenta",
+        "vibrant-electric"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "indie-saas",
+        "creator-tools",
+        "design-agencies"
+      ],
       "ai_slop_risk": "low",
       "notes": "Don't add gradients. Don't soften edges. The whole point is the edge."
     },
@@ -78,8 +168,17 @@
       "name": "Brutalism Raw",
       "category": "Bold Statement",
       "philosophy": "Web as document. HTML defaults are the design. Nothing hidden, nothing styled away.",
-      "when_to_use": ["personal sites", "anti-corporate manifestos", "punk publications", "art portfolios"],
-      "when_to_skip": ["any product that needs trust", "checkout flows", "onboarding"],
+      "when_to_use": [
+        "personal sites",
+        "anti-corporate manifestos",
+        "punk publications",
+        "art portfolios"
+      ],
+      "when_to_skip": [
+        "any product that needs trust",
+        "checkout flows",
+        "onboarding"
+      ],
       "tokens": {
         "borders": "browser defaults, often missing entirely",
         "shadows": "none, ever",
@@ -88,10 +187,30 @@
         "radius": "0 always",
         "motion": "none — page reloads, no JS choreography"
       },
-      "exemplars": ["motherfuckingwebsite.com", "bettermotherfuckingwebsite.com", "berkshirehathaway.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["art-portfolios", "manifestos", "punk-publications"],
+      "exemplars": [
+        "motherfuckingwebsite.com",
+        "bettermotherfuckingwebsite.com",
+        "berkshirehathaway.com"
+      ],
+      "compatible_palettes": [
+        "vercel-stark",
+        "vibrant-magenta",
+        "vibrant-electric",
+        "brutalist-primary",
+        "swiss-design"
+      ],
+      "compatible_type_pairs": [
+        "source-serif-pro-source-sans-source-code",
+        "young-serif-inter-jetbrains",
+        "instrument-serif-inter-jetbrains",
+        "syne-inter-jetbrains",
+        "archivo-black-archivo-jetbrains"
+      ],
+      "compatible_industries": [
+        "art-portfolios",
+        "manifestos",
+        "punk-publications"
+      ],
       "ai_slop_risk": "low",
       "notes": "The risk is faking it with styled-to-look-unstyled — true brutalism uses defaults, not imitation."
     },
@@ -100,8 +219,17 @@
       "name": "Industrial Brutalist",
       "category": "Industrial / Brutalist",
       "philosophy": "Concrete in pixel form. Heavy, blocky, monospace, no apology.",
-      "when_to_use": ["architecture firms", "industrial design portfolios", "music labels", "post-punk brands"],
-      "when_to_skip": ["consumer fintech", "healthcare", "child-facing products"],
+      "when_to_use": [
+        "architecture firms",
+        "industrial design portfolios",
+        "music labels",
+        "post-punk brands"
+      ],
+      "when_to_skip": [
+        "consumer fintech",
+        "healthcare",
+        "child-facing products"
+      ],
       "tokens": {
         "borders": "5-10px solid concrete-gray or black, sometimes inset/double",
         "shadows": "none or hard-block (no blur)",
@@ -110,10 +238,30 @@
         "radius": "0 — never rounded",
         "motion": "mechanical — linear curves, no spring physics"
       },
-      "exemplars": ["www.thomas-heatherwick.com", "barbican.org.uk", "off---white.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["architecture", "music-labels", "industrial-design"],
+      "exemplars": [
+        "www.thomas-heatherwick.com",
+        "barbican.org.uk",
+        "off---white.com"
+      ],
+      "compatible_palettes": [
+        "linear-graphite",
+        "spotify-energy",
+        "brutalist-primary",
+        "swiss-design",
+        "dark-true-black"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "architecture",
+        "music-labels",
+        "industrial-design"
+      ],
       "ai_slop_risk": "low",
       "notes": "The trap is making it 'tough' with skull icons — restraint is what makes the weight land."
     },
@@ -122,8 +270,17 @@
       "name": "Editorial Magazine",
       "category": "Editorial / Magazine",
       "philosophy": "Long-form reading is the design problem. Type sets the rhythm; everything else serves the eye.",
-      "when_to_use": ["long-form journalism", "literary publications", "fashion editorial", "interview features"],
-      "when_to_skip": ["transactional dashboards", "data-heavy admin UIs", "configuration screens"],
+      "when_to_use": [
+        "long-form journalism",
+        "literary publications",
+        "fashion editorial",
+        "interview features"
+      ],
+      "when_to_skip": [
+        "transactional dashboards",
+        "data-heavy admin UIs",
+        "configuration screens"
+      ],
       "tokens": {
         "borders": "subtle (0.5-1px), often horizontal rules between sections only",
         "shadows": "none — flat typography surfaces",
@@ -132,10 +289,30 @@
         "radius": "0 to 4px max — restrained",
         "motion": "fade-in on scroll, no parallax, page transitions feel like turning a page"
       },
-      "exemplars": ["www.newyorker.com", "www.theatlantic.com", "magculture.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["publishing", "journalism", "fashion-editorial"],
+      "exemplars": [
+        "www.newyorker.com",
+        "www.theatlantic.com",
+        "magculture.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "airbnb-coral",
+        "monochrome-warm",
+        "editorial-cream",
+        "editorial-bone"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "source-serif-pro-source-sans-source-code",
+        "newsreader-figtree-jetbrains"
+      ],
+      "compatible_industries": [
+        "publishing",
+        "journalism",
+        "fashion-editorial"
+      ],
       "ai_slop_risk": "low",
       "notes": "Don't apply this to product UI — the type rhythm collapses without paragraphs to anchor it."
     },
@@ -144,8 +321,17 @@
       "name": "Editorial Warm",
       "category": "Editorial Warm",
       "philosophy": "Magazine craft with warmth — cream paper, coral accent, serif body. Reading should feel like an object you'd buy.",
-      "when_to_use": ["food and travel publications", "lifestyle DTC brands", "design memoirs", "hospitality marketing"],
-      "when_to_skip": ["B2B dashboards", "developer tooling", "anything financial"],
+      "when_to_use": [
+        "food and travel publications",
+        "lifestyle DTC brands",
+        "design memoirs",
+        "hospitality marketing"
+      ],
+      "when_to_skip": [
+        "B2B dashboards",
+        "developer tooling",
+        "anything financial"
+      ],
       "tokens": {
         "borders": "1px warm-taupe (#D4C9B8) used as section dividers",
         "shadows": "shadow-sm with a warm tint, very rare",
@@ -154,10 +340,31 @@
         "radius": "8-12px, never sharp",
         "motion": "slow fades, no bounce, 400-600ms transitions"
       },
-      "exemplars": ["cereal-magazine.com", "kinfolk.com", "openhousepublishing.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["lifestyle-dtc", "hospitality", "food-publications", "design-memoirs"],
+      "exemplars": [
+        "cereal-magazine.com",
+        "kinfolk.com",
+        "openhousepublishing.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "notion-paper",
+        "airbnb-coral",
+        "monochrome-warm",
+        "editorial-cream"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "lifestyle-dtc",
+        "hospitality",
+        "food-publications",
+        "design-memoirs"
+      ],
       "ai_slop_risk": "low",
       "notes": "Beware of going generic 'beige aesthetic' — the coral or terracotta accent is what stops it being a Pinterest mood board."
     },
@@ -166,8 +373,17 @@
       "name": "Newspaper Long-form",
       "category": "Newspaper / Long-form",
       "philosophy": "Front page of a respected paper. Density without clutter. Hierarchy by type weight and width.",
-      "when_to_use": ["news products", "investigative journalism", "policy publications", "research institutions"],
-      "when_to_skip": ["e-commerce", "mobile-first consumer apps", "kids products"],
+      "when_to_use": [
+        "news products",
+        "investigative journalism",
+        "policy publications",
+        "research institutions"
+      ],
+      "when_to_skip": [
+        "e-commerce",
+        "mobile-first consumer apps",
+        "kids products"
+      ],
       "tokens": {
         "borders": "1px ink-black hairlines between columns and sections",
         "shadows": "none — print metaphor",
@@ -176,10 +392,30 @@
         "radius": "0 — sharp edges only",
         "motion": "minimal — fades for content swap, no flourish"
       },
-      "exemplars": ["nytimes.com", "ft.com", "washingtonpost.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["news-publishing", "policy-research", "investigative-media"],
+      "exemplars": [
+        "nytimes.com",
+        "ft.com",
+        "washingtonpost.com"
+      ],
+      "compatible_palettes": [
+        "linear-graphite",
+        "stripe-indigo",
+        "notion-paper",
+        "vercel-stark",
+        "monochrome-pure"
+      ],
+      "compatible_type_pairs": [
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia",
+        "domine-dm-sans-jetbrains"
+      ],
+      "compatible_industries": [
+        "news-publishing",
+        "policy-research",
+        "investigative-media"
+      ],
       "ai_slop_risk": "low",
       "notes": "Don't try to be 'mobile-first newspaper' — the form lives on the column grid; respect it or pick another style."
     },
@@ -188,8 +424,17 @@
       "name": "Glassmorphism",
       "category": "Glassmorphism / Frosted",
       "philosophy": "Translucent panels floating over color. Depth through blur, not shadow.",
-      "when_to_use": ["dashboards over vibrant brand backgrounds", "marketing landing pages", "music apps", "creative tools"],
-      "when_to_skip": ["accessibility-critical surfaces", "text-dense interfaces", "low-power mobile contexts"],
+      "when_to_use": [
+        "dashboards over vibrant brand backgrounds",
+        "marketing landing pages",
+        "music apps",
+        "creative tools"
+      ],
+      "when_to_skip": [
+        "accessibility-critical surfaces",
+        "text-dense interfaces",
+        "low-power mobile contexts"
+      ],
       "tokens": {
         "borders": "1px white/30% alpha for highlight, sometimes 0px",
         "shadows": "soft, large radius, low opacity (e.g., 0 8px 32px rgba(0,0,0,0.1))",
@@ -198,10 +443,30 @@
         "radius": "12-24px — always rounded",
         "motion": "smooth ease-out, blur transitions feel airy"
       },
-      "exemplars": ["apple.com/macos", "music.apple.com", "stripe.com/billing"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["creative-tools", "music-apps", "marketing-sites"],
+      "exemplars": [
+        "apple.com/macos",
+        "music.apple.com",
+        "stripe.com/billing"
+      ],
+      "compatible_palettes": [
+        "figma-canvas",
+        "spotify-energy",
+        "pastel-mist",
+        "pastel-rose",
+        "pastel-lavender"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "creative-tools",
+        "music-apps",
+        "marketing-sites"
+      ],
       "ai_slop_risk": "high",
       "notes": "The default AI move — make sure the blur is doing visual work, not hiding a lack of design decisions."
     },
@@ -210,8 +475,17 @@
       "name": "Apple Liquid Glass",
       "category": "Apple Liquid Glass",
       "philosophy": "Glass that bends light and adapts to content underneath. Material with physics, not a Photoshop filter.",
-      "when_to_use": ["iOS/iPadOS native-feeling web", "premium consumer products", "music/video apps", "Apple ecosystem extensions"],
-      "when_to_skip": ["B2B admin tools", "high-density data UIs", "low-end Android primary audiences"],
+      "when_to_use": [
+        "iOS/iPadOS native-feeling web",
+        "premium consumer products",
+        "music/video apps",
+        "Apple ecosystem extensions"
+      ],
+      "when_to_skip": [
+        "B2B admin tools",
+        "high-density data UIs",
+        "low-end Android primary audiences"
+      ],
       "tokens": {
         "borders": "1px gradient highlight (top-light, bottom-dark) simulating glass edges",
         "shadows": "layered — outer drop + inner highlight + ambient occlusion",
@@ -220,10 +494,30 @@
         "radius": "continuous corner (squircle) — never circular, never sharp",
         "motion": "spring physics, 60fps interruptible, parallax with depth"
       },
-      "exemplars": ["apple.com", "apple.com/macos/sequoia", "developer.apple.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["consumer-premium", "apple-ecosystem", "music-video-apps"],
+      "exemplars": [
+        "apple.com",
+        "apple.com/macos/sequoia",
+        "developer.apple.com"
+      ],
+      "compatible_palettes": [
+        "apple-clarity",
+        "spotify-energy",
+        "ecommerce-luxury",
+        "dark-true-black",
+        "dark-soft-black"
+      ],
+      "compatible_type_pairs": [
+        "playfair-source-sans-ibm-mono",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "spectral-public-sans-source-code",
+        "source-serif-pro-source-sans-source-code",
+        "libre-caslon-libre-franklin-jetbrains"
+      ],
+      "compatible_industries": [
+        "consumer-premium",
+        "apple-ecosystem",
+        "music-video-apps"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Squircles (not rounded rectangles) are the tell — getting the corner curvature wrong reads as fake-Apple."
     },
@@ -232,8 +526,17 @@
       "name": "Bento Modular",
       "category": "Bento / Modular Grid",
       "philosophy": "Marketing as a grid of self-contained windows. Each cell tells a small story; the grid tells the big one.",
-      "when_to_use": ["product feature pages", "AI tool marketing", "creator platform landings", "developer product launches"],
-      "when_to_skip": ["transactional flows", "long-form editorial", "single-action conversion pages"],
+      "when_to_use": [
+        "product feature pages",
+        "AI tool marketing",
+        "creator platform landings",
+        "developer product launches"
+      ],
+      "when_to_skip": [
+        "transactional flows",
+        "long-form editorial",
+        "single-action conversion pages"
+      ],
       "tokens": {
         "borders": "0-1px, when present use border-default zinc-200",
         "shadows": "shadow-md to shadow-xl on hover, often a soft diffusion shadow",
@@ -242,10 +545,31 @@
         "radius": "16-24px, occasionally one signature 2.5rem cell for hero",
         "motion": "hover-lift on cells, cursor parallax inside cells, no autoplay scroll-jacking"
       },
-      "exemplars": ["apple.com/apple-vision-pro", "linear.app", "framer.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["ai-tools", "creator-platforms", "dev-tools", "product-marketing"],
+      "exemplars": [
+        "apple.com/apple-vision-pro",
+        "linear.app",
+        "framer.com"
+      ],
+      "compatible_palettes": [
+        "github-octicon",
+        "figma-canvas",
+        "pastel-mist",
+        "pastel-rose",
+        "pastel-lavender"
+      ],
+      "compatible_type_pairs": [
+        "playfair-source-sans-ibm-mono",
+        "lora-nunito-sans-cascadia",
+        "libre-caslon-libre-franklin-jetbrains",
+        "space-grotesk-inter-space-mono",
+        "outfit-outfit-jetbrains"
+      ],
+      "compatible_industries": [
+        "ai-tools",
+        "creator-platforms",
+        "dev-tools",
+        "product-marketing"
+      ],
       "ai_slop_risk": "high",
       "notes": "Bento done badly is just a 3x3 with no idea per cell — every cell needs a reason to exist."
     },
@@ -254,8 +578,17 @@
       "name": "Claymorphism",
       "category": "Claymorphism / Soft 3D",
       "philosophy": "Soft, pillow-like 3D forms. Friendly, tactile, child-of-Figma aesthetic.",
-      "when_to_use": ["onboarding flows", "education products", "kids apps", "wellness onboarding"],
-      "when_to_skip": ["enterprise SaaS", "finance", "professional creative tools"],
+      "when_to_use": [
+        "onboarding flows",
+        "education products",
+        "kids apps",
+        "wellness onboarding"
+      ],
+      "when_to_skip": [
+        "enterprise SaaS",
+        "finance",
+        "professional creative tools"
+      ],
       "tokens": {
         "borders": "0 — depth from shadow, not outline",
         "shadows": "double soft shadows (light from top, ambient from bottom), large radius",
@@ -264,10 +597,31 @@
         "radius": "20-32px — soft and pillowy",
         "motion": "spring-soft (stiffness 60, damping 14), gentle bounce on press"
       },
-      "exemplars": ["headway.app", "calm.com", "duolingo.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["education", "wellness", "kids-apps", "onboarding-products"],
+      "exemplars": [
+        "headway.app",
+        "calm.com",
+        "duolingo.com"
+      ],
+      "compatible_palettes": [
+        "figma-canvas",
+        "airbnb-coral",
+        "monochrome-pure",
+        "pastel-mist",
+        "pastel-rose"
+      ],
+      "compatible_type_pairs": [
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia",
+        "domine-dm-sans-jetbrains"
+      ],
+      "compatible_industries": [
+        "education",
+        "wellness",
+        "kids-apps",
+        "onboarding-products"
+      ],
       "ai_slop_risk": "high",
       "notes": "Easy to push into Fisher-Price territory — keep the type discipline tight to avoid babyish drift."
     },
@@ -276,8 +630,16 @@
       "name": "Neumorphism",
       "category": "Neumorphism",
       "philosophy": "Surfaces that look pressed-in or pushed-out from the same material. Soft, monochromatic UI sculpture.",
-      "when_to_use": ["audio interfaces", "premium hardware companion apps", "concept work, art-direction showpieces"],
-      "when_to_skip": ["production apps with accessibility requirements", "any flow that needs strong CTAs", "data-dense UIs"],
+      "when_to_use": [
+        "audio interfaces",
+        "premium hardware companion apps",
+        "concept work, art-direction showpieces"
+      ],
+      "when_to_skip": [
+        "production apps with accessibility requirements",
+        "any flow that needs strong CTAs",
+        "data-dense UIs"
+      ],
       "tokens": {
         "borders": "0 — pure soft-light/shadow contrast carries edges",
         "shadows": "twin shadows (top-left light, bottom-right dark) of same surface color shifted ±5-10% lightness",
@@ -286,10 +648,30 @@
         "radius": "20-50px, very soft",
         "motion": "press-in on click — invert shadows briefly to simulate physical button"
       },
-      "exemplars": ["dribbble.com/shots/neumorphism", "behance.net/gallery/neumorphism", "tildra.io"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["audio-hardware", "concept-work", "premium-companion-apps"],
+      "exemplars": [
+        "dribbble.com/shots/neumorphism",
+        "behance.net/gallery/neumorphism",
+        "tildra.io"
+      ],
+      "compatible_palettes": [
+        "apple-clarity",
+        "monochrome-pure",
+        "pastel-mist",
+        "pastel-rose",
+        "pastel-lavender"
+      ],
+      "compatible_type_pairs": [
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia",
+        "domine-dm-sans-jetbrains"
+      ],
+      "compatible_industries": [
+        "audio-hardware",
+        "concept-work",
+        "premium-companion-apps"
+      ],
       "ai_slop_risk": "medium",
       "notes": "WCAG-hostile by default — contrast never gets above 3:1 on body. Use sparingly and provide a high-contrast mode."
     },
@@ -298,8 +680,17 @@
       "name": "Maximalist / Anti-Design",
       "category": "Maximalist / Anti-Design",
       "philosophy": "More is more. Stacked patterns, clashing color, intentional ugly. Rejects taste.",
-      "when_to_use": ["music labels", "fashion drops", "underground events", "art-direction portfolios"],
-      "when_to_skip": ["product UIs of any kind", "conversion-focused landing pages", "anything that needs trust"],
+      "when_to_use": [
+        "music labels",
+        "fashion drops",
+        "underground events",
+        "art-direction portfolios"
+      ],
+      "when_to_skip": [
+        "product UIs of any kind",
+        "conversion-focused landing pages",
+        "anything that needs trust"
+      ],
       "tokens": {
         "borders": "thick, dashed, neon, sometimes barbed — anything BUT neutral hairlines",
         "shadows": "long, colored, multiple per element, glow on glow",
@@ -308,10 +699,30 @@
         "radius": "mixed — 0 next to 50px, no system",
         "motion": "marquee scrolls, autoplay sound, GIFs, blink"
       },
-      "exemplars": ["pleasr.org", "thisisnouvelle.com", "trapital.co"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["music-labels", "fashion-drops", "art-direction"],
+      "exemplars": [
+        "pleasr.org",
+        "thisisnouvelle.com",
+        "trapital.co"
+      ],
+      "compatible_palettes": [
+        "notion-paper",
+        "github-octicon",
+        "apple-clarity",
+        "figma-canvas",
+        "spotify-energy"
+      ],
+      "compatible_type_pairs": [
+        "spectral-public-sans-source-code",
+        "newsreader-figtree-jetbrains",
+        "syne-inter-jetbrains",
+        "manrope-manrope-jetbrains",
+        "geist-geist-geist-mono"
+      ],
+      "compatible_industries": [
+        "music-labels",
+        "fashion-drops",
+        "art-direction"
+      ],
       "ai_slop_risk": "low",
       "notes": "Stop before it crosses from intentional ugly into broken — there's a line, find it."
     },
@@ -320,8 +731,17 @@
       "name": "Cyberpunk Neon",
       "category": "Cyberpunk / Neon",
       "philosophy": "Night city palette: neon signs over wet pavement. Glow, scan lines, terminal-as-UI.",
-      "when_to_use": ["crypto/web3 products", "gaming companion apps", "AI labs that want edge", "speculative-design portfolios"],
-      "when_to_skip": ["enterprise SaaS", "healthcare", "finance compliance UIs"],
+      "when_to_use": [
+        "crypto/web3 products",
+        "gaming companion apps",
+        "AI labs that want edge",
+        "speculative-design portfolios"
+      ],
+      "when_to_skip": [
+        "enterprise SaaS",
+        "healthcare",
+        "finance compliance UIs"
+      ],
       "tokens": {
         "borders": "1-2px neon (cyan/magenta/lime), occasionally with outer glow",
         "shadows": "neon glow (text-shadow + box-shadow same color), scan-line overlays",
@@ -330,10 +750,31 @@
         "radius": "0-4px, sharp",
         "motion": "glitch on hover, scan-line sweeps, brief CRT flicker on enter"
       },
-      "exemplars": ["cyberpunk.net", "midjourney.com", "tldraw.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["web3", "gaming", "ai-labs", "speculative-design"],
+      "exemplars": [
+        "cyberpunk.net",
+        "midjourney.com",
+        "tldraw.com"
+      ],
+      "compatible_palettes": [
+        "vibrant-magenta",
+        "vibrant-lime",
+        "ocean-deep",
+        "y2k-chrome",
+        "swiss-design"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "domine-dm-sans-jetbrains"
+      ],
+      "compatible_industries": [
+        "web3",
+        "gaming",
+        "ai-labs",
+        "speculative-design"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Without restraint this becomes a parody of itself — limit scan-line/glitch effects to entry moments, not constant noise."
     },
@@ -342,8 +783,17 @@
       "name": "Vaporwave / Retro-Wave",
       "category": "Vaporwave / Retro-Wave",
       "philosophy": "80s mall in synthwave palette. Greek statues, gridlines, palm trees, sunset gradient. Ironic nostalgia.",
-      "when_to_use": ["music/synth products", "indie game marketing", "art zines", "vintage tech revival projects"],
-      "when_to_skip": ["any serious product context", "anything healthcare/finance", "audiences born after 2005"],
+      "when_to_use": [
+        "music/synth products",
+        "indie game marketing",
+        "art zines",
+        "vintage tech revival projects"
+      ],
+      "when_to_skip": [
+        "any serious product context",
+        "anything healthcare/finance",
+        "audiences born after 2005"
+      ],
       "tokens": {
         "borders": "thin pink/cyan, gridline patterns over backgrounds",
         "shadows": "neon glow on type, chromatic aberration",
@@ -352,10 +802,30 @@
         "radius": "0 — sharp geometry, hard-edged angles",
         "motion": "VHS tracking glitches, slow zoom on statues, slow gradient drift"
       },
-      "exemplars": ["aesthetic.computer", "n.eko.land", "vaporwave.org"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["indie-music", "retro-games", "art-zines"],
+      "exemplars": [
+        "aesthetic.computer",
+        "n.eko.land",
+        "vaporwave.org"
+      ],
+      "compatible_palettes": [
+        "spotify-energy",
+        "vibrant-electric",
+        "tropical-sunset",
+        "tropical-flamingo",
+        "sunset-amber"
+      ],
+      "compatible_type_pairs": [
+        "playfair-source-sans-ibm-mono",
+        "libre-caslon-libre-franklin-jetbrains",
+        "instrument-serif-inter-jetbrains",
+        "bricolage-grotesque-inter-jetbrains",
+        "syne-inter-jetbrains"
+      ],
+      "compatible_industries": [
+        "indie-music",
+        "retro-games",
+        "art-zines"
+      ],
       "ai_slop_risk": "low",
       "notes": "Has to commit fully — half-vaporwave reads as a typo, not a style."
     },
@@ -364,8 +834,17 @@
       "name": "Solarpunk / Eco",
       "category": "Solarpunk / Eco",
       "philosophy": "Optimistic future where nature and tech merge. Living surfaces, plants, hand-drawn detail, warm sun.",
-      "when_to_use": ["climate tech", "regenerative agriculture", "sustainable-fashion DTC", "community-energy products"],
-      "when_to_skip": ["finance trading platforms", "performance-marketing tools", "industrial B2B"],
+      "when_to_use": [
+        "climate tech",
+        "regenerative agriculture",
+        "sustainable-fashion DTC",
+        "community-energy products"
+      ],
+      "when_to_skip": [
+        "finance trading platforms",
+        "performance-marketing tools",
+        "industrial B2B"
+      ],
       "tokens": {
         "borders": "organic — hand-drawn or 2-3px green/earth-tone",
         "shadows": "soft, warm (amber-tinted), as if from sunlight",
@@ -374,10 +853,31 @@
         "radius": "12-24px, organic curves, asymmetric where useful",
         "motion": "slow grow/leaf-unfurl animations, particles drifting, never abrupt"
       },
-      "exemplars": ["patagonia.com", "ecosia.org", "loomstate.org"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["climate-tech", "sustainable-fashion", "regenerative-ag", "community-energy"],
+      "exemplars": [
+        "patagonia.com",
+        "ecosia.org",
+        "loomstate.org"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "airbnb-coral",
+        "spotify-energy",
+        "monochrome-warm",
+        "editorial-cream"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "climate-tech",
+        "sustainable-fashion",
+        "regenerative-ag",
+        "community-energy"
+      ],
       "ai_slop_risk": "low",
       "notes": "Don't let the leaves become decoration — every organic element should imply the brand's actual relationship with the natural system."
     },
@@ -386,8 +886,17 @@
       "name": "Skeuomorphic Modern",
       "category": "Skeuomorphic Modern",
       "philosophy": "Digital surfaces that remember their analog parents. Paper, fabric, wood, leather — rendered with restraint, not maximalism.",
-      "when_to_use": ["calendars", "journals", "audio software", "notebook/note-taking apps"],
-      "when_to_skip": ["enterprise admin", "data-viz tools", "developer terminals"],
+      "when_to_use": [
+        "calendars",
+        "journals",
+        "audio software",
+        "notebook/note-taking apps"
+      ],
+      "when_to_skip": [
+        "enterprise admin",
+        "data-viz tools",
+        "developer terminals"
+      ],
       "tokens": {
         "borders": "subtle texture-aware (paper edges, leather stitching)",
         "shadows": "object-realistic — directional, soft, ambient occlusion",
@@ -396,10 +905,30 @@
         "radius": "varies by material — paper sharp, leather rounded",
         "motion": "page-turn animations, knob rotation, physical-feel response"
       },
-      "exemplars": ["culturedcode.com/things", "fantastical.app", "logic-pro.apple.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["productivity-apps", "audio-software", "journaling-apps"],
+      "exemplars": [
+        "culturedcode.com/things",
+        "fantastical.app",
+        "logic-pro.apple.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "notion-paper",
+        "airbnb-coral",
+        "monochrome-warm",
+        "editorial-cream"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "productivity-apps",
+        "audio-software",
+        "journaling-apps"
+      ],
       "ai_slop_risk": "medium",
       "notes": "The 2007 iOS skeuomorphism was rejected for a reason — modern skeuo is metaphor, not literal imitation."
     },
@@ -408,8 +937,17 @@
       "name": "Y2K Revival",
       "category": "Y2K Revival",
       "philosophy": "Early-2000s web optimism: chrome, gradients, bubble buttons, Windows XP rolling hills. Earnest, not ironic.",
-      "when_to_use": ["nostalgia-driven DTC", "Gen-Z fashion", "music/streaming for young audiences", "art-direction microsites"],
-      "when_to_skip": ["B2B", "finance", "anything that needs to feel modern-enterprise"],
+      "when_to_use": [
+        "nostalgia-driven DTC",
+        "Gen-Z fashion",
+        "music/streaming for young audiences",
+        "art-direction microsites"
+      ],
+      "when_to_skip": [
+        "B2B",
+        "finance",
+        "anything that needs to feel modern-enterprise"
+      ],
       "tokens": {
         "borders": "chrome-bevels, 2-3px with inset gradients",
         "shadows": "inner light + outer drop, glossy reflections",
@@ -418,10 +956,30 @@
         "radius": "12-20px on buttons, pill-shapes, bubble forms",
         "motion": "bouncy, GIF-like, marquee scrolls, sparkle effects"
       },
-      "exemplars": ["heaven.nyc", "wonton.org", "twonk.computer"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["gen-z-dtc", "art-microsites", "indie-fashion"],
+      "exemplars": [
+        "heaven.nyc",
+        "wonton.org",
+        "twonk.computer"
+      ],
+      "compatible_palettes": [
+        "spotify-energy",
+        "vibrant-electric",
+        "tropical-flamingo",
+        "y2k-chrome",
+        "memphis"
+      ],
+      "compatible_type_pairs": [
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia",
+        "domine-dm-sans-jetbrains"
+      ],
+      "compatible_industries": [
+        "gen-z-dtc",
+        "art-microsites",
+        "indie-fashion"
+      ],
       "ai_slop_risk": "low",
       "notes": "Don't add an ironic wink — Y2K works because it commits earnestly to a moment, not because it's making fun of it."
     },
@@ -430,8 +988,17 @@
       "name": "Dark Mode Luxe",
       "category": "Dark Mode Luxe",
       "philosophy": "Premium products in deep dark. Gold/champagne accent. Pure black banned — atmosphere lives in the warm darks.",
-      "when_to_use": ["luxury hospitality", "high-end fashion", "private banking", "premium SaaS for execs"],
-      "when_to_skip": ["mass-market consumer apps", "kids products", "high-volume e-commerce"],
+      "when_to_use": [
+        "luxury hospitality",
+        "high-end fashion",
+        "private banking",
+        "premium SaaS for execs"
+      ],
+      "when_to_skip": [
+        "mass-market consumer apps",
+        "kids products",
+        "high-volume e-commerce"
+      ],
       "tokens": {
         "borders": "0.5-1px champagne-gold or muted gold, used as separators",
         "shadows": "subtle inner glow, ambient warmth — never neon",
@@ -440,10 +1007,30 @@
         "radius": "0-8px, often sharp for luxury feel",
         "motion": "slow, deliberate — 400-800ms fades, no spring, no bounce"
       },
-      "exemplars": ["aman.com", "rolex.com", "fourseasons.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["luxury-hospitality", "high-fashion", "private-banking"],
+      "exemplars": [
+        "aman.com",
+        "rolex.com",
+        "fourseasons.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "apple-clarity",
+        "airbnb-coral",
+        "monochrome-pure",
+        "monochrome-warm"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "luxury-hospitality",
+        "high-fashion",
+        "private-banking"
+      ],
       "ai_slop_risk": "low",
       "notes": "Gold on pure black reads as casino — use warm dark (#0E0B08) and the gold becomes elegant."
     },
@@ -452,8 +1039,17 @@
       "name": "Gradient Sunset",
       "category": "Gradient Surface / Sunset",
       "philosophy": "Bold marketing surfaces in warm gradients. Sun-down palettes, instagram-glow, hero panels that look like the sky.",
-      "when_to_use": ["creator marketing landing pages", "music releases", "design-tool launches", "wellness apps"],
-      "when_to_skip": ["dashboards", "long-form reading", "B2B admin"],
+      "when_to_use": [
+        "creator marketing landing pages",
+        "music releases",
+        "design-tool launches",
+        "wellness apps"
+      ],
+      "when_to_skip": [
+        "dashboards",
+        "long-form reading",
+        "B2B admin"
+      ],
       "tokens": {
         "borders": "0 — gradients carry the surface",
         "shadows": "colored ambient glows, not crisp shadows",
@@ -462,10 +1058,31 @@
         "radius": "20-32px on cards, often pill-shaped CTAs",
         "motion": "slow gradient drift (8-15s loops), subtle position shifts"
       },
-      "exemplars": ["stripe.com", "openai.com", "anthropic.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["creator-marketing", "wellness", "ai-products", "music-releases"],
+      "exemplars": [
+        "stripe.com",
+        "openai.com",
+        "anthropic.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "vercel-stark",
+        "figma-canvas",
+        "airbnb-coral",
+        "spotify-energy"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "creator-marketing",
+        "wellness",
+        "ai-products",
+        "music-releases"
+      ],
       "ai_slop_risk": "high",
       "notes": "The default AI gradient is blue→purple — push to magenta→amber or amber→teal to break out of generic."
     },
@@ -474,8 +1091,17 @@
       "name": "Stripe-style Documentation",
       "category": "Documentation / Stripe-style",
       "philosophy": "Technical docs as a product surface. Calm, dense, scannable. Code is first-class content.",
-      "when_to_use": ["API documentation", "developer platforms", "engineering blogs", "open-source project sites"],
-      "when_to_skip": ["consumer marketing", "transactional checkout", "marketing landing pages"],
+      "when_to_use": [
+        "API documentation",
+        "developer platforms",
+        "engineering blogs",
+        "open-source project sites"
+      ],
+      "when_to_skip": [
+        "consumer marketing",
+        "transactional checkout",
+        "marketing landing pages"
+      ],
       "tokens": {
         "borders": "1px hairline, light gray, used between sections and around code blocks",
         "shadows": "shadow-xs on cards, very subtle, rarely",
@@ -484,10 +1110,30 @@
         "radius": "6-10px on code blocks and cards",
         "motion": "instant or near-instant — no spring, no flourish, fast scroll-into-view"
       },
-      "exemplars": ["stripe.com/docs", "vercel.com/docs", "supabase.com/docs"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["dev-platforms", "api-products", "open-source"],
+      "exemplars": [
+        "stripe.com/docs",
+        "vercel.com/docs",
+        "supabase.com/docs"
+      ],
+      "compatible_palettes": [
+        "linear-graphite",
+        "stripe-indigo",
+        "notion-paper",
+        "github-octicon",
+        "pastel-sky"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "dev-platforms",
+        "api-products",
+        "open-source"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Avoid drifting into marketing-page gradients — docs surfaces stay calm to keep developer trust."
     },
@@ -496,8 +1142,17 @@
       "name": "Material Expressive 3",
       "category": "Material Expressive 3",
       "philosophy": "Google's expressive evolution — bold shapes, dynamic color from wallpaper/brand, expressive type, motion as identity.",
-      "when_to_use": ["Android-native web", "Google ecosystem extensions", "kids/family apps", "expressive consumer brands"],
-      "when_to_skip": ["iOS-feeling premium", "minimalist dashboards", "long-form editorial"],
+      "when_to_use": [
+        "Android-native web",
+        "Google ecosystem extensions",
+        "kids/family apps",
+        "expressive consumer brands"
+      ],
+      "when_to_skip": [
+        "iOS-feeling premium",
+        "minimalist dashboards",
+        "long-form editorial"
+      ],
       "tokens": {
         "borders": "0 mostly — color and shape carry hierarchy",
         "shadows": "elevation system (1dp-24dp), tinted to surface color",
@@ -506,10 +1161,30 @@
         "radius": "shape morphing — buttons squish on press, varied radii (8/16/28/full)",
         "motion": "easing emphasized (340ms), springs on interaction, shape morph transitions"
       },
-      "exemplars": ["m3.material.io", "play.google.com", "google.com/calendar"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["android-apps", "google-ecosystem", "family-products"],
+      "exemplars": [
+        "m3.material.io",
+        "play.google.com",
+        "google.com/calendar"
+      ],
+      "compatible_palettes": [
+        "vercel-stark",
+        "spotify-energy",
+        "vibrant-citrus",
+        "vibrant-magenta",
+        "vibrant-electric"
+      ],
+      "compatible_type_pairs": [
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "android-apps",
+        "google-ecosystem",
+        "family-products"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Shape morphing on interaction is the M3 signature — without it, this is just round-rect Material 2."
     },
@@ -518,8 +1193,17 @@
       "name": "Aurora Iridescent",
       "category": "Aurora / Iridescent",
       "philosophy": "Shifting prismatic surfaces — northern lights, oil-on-water, holographic foil. Color that changes with viewing angle.",
-      "when_to_use": ["AI product marketing", "creative tools launches", "music visualizers", "speculative-tech hero panels"],
-      "when_to_skip": ["transactional flows", "dashboards", "anything in production UI"],
+      "when_to_use": [
+        "AI product marketing",
+        "creative tools launches",
+        "music visualizers",
+        "speculative-tech hero panels"
+      ],
+      "when_to_skip": [
+        "transactional flows",
+        "dashboards",
+        "anything in production UI"
+      ],
       "tokens": {
         "borders": "0 or 1px iridescent gradient",
         "shadows": "colored glows shifting through hue range",
@@ -528,10 +1212,30 @@
         "radius": "16-32px, often signature 2.5rem on hero cells",
         "motion": "slow hue rotation (15-30s), cursor-reactive gradient angle, no autoplay overload"
       },
-      "exemplars": ["midjourney.com", "claude.ai", "openai.com/sora"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["ai-marketing", "creative-tools", "speculative-tech"],
+      "exemplars": [
+        "midjourney.com",
+        "claude.ai",
+        "openai.com/sora"
+      ],
+      "compatible_palettes": [
+        "figma-canvas",
+        "spotify-energy",
+        "vibrant-magenta",
+        "vibrant-electric",
+        "y2k-chrome"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "ai-marketing",
+        "creative-tools",
+        "speculative-tech"
+      ],
       "ai_slop_risk": "high",
       "notes": "Confine iridescent to hero panels — full-page holographic reads as a screensaver, not a product."
     },
@@ -540,8 +1244,17 @@
       "name": "Discord Chat-UI",
       "category": "Discord-style chat-UI",
       "philosophy": "Three-pane chat: server rail, channel list, conversation. Dense, friendly-dark, optimized for live presence.",
-      "when_to_use": ["community products", "team chat tools", "gaming companion apps", "live-collab tools"],
-      "when_to_skip": ["marketing sites", "transactional checkout", "single-purpose consumer utilities"],
+      "when_to_use": [
+        "community products",
+        "team chat tools",
+        "gaming companion apps",
+        "live-collab tools"
+      ],
+      "when_to_skip": [
+        "marketing sites",
+        "transactional checkout",
+        "single-purpose consumer utilities"
+      ],
       "tokens": {
         "borders": "1px dark separators between panes, near-invisible",
         "shadows": "shadow-md on modals, none on inline UI",
@@ -550,10 +1263,30 @@
         "radius": "8-16px on bubbles, full on avatars, 6px on inputs",
         "motion": "instant for hovers, fast spring for modal entries, presence pulses"
       },
-      "exemplars": ["discord.com", "slack.com", "guilded.gg"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["community-products", "team-chat", "live-collab"],
+      "exemplars": [
+        "discord.com",
+        "slack.com",
+        "guilded.gg"
+      ],
+      "compatible_palettes": [
+        "airbnb-coral",
+        "ecommerce-friendly",
+        "dark-true-black",
+        "dark-soft-black",
+        "dark-charcoal"
+      ],
+      "compatible_type_pairs": [
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia",
+        "domine-dm-sans-jetbrains"
+      ],
+      "compatible_industries": [
+        "community-products",
+        "team-chat",
+        "live-collab"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Three-pane is the template — going two-pane breaks the muscle memory users have from Discord/Slack."
     },
@@ -562,8 +1295,17 @@
       "name": "Linear Precise Dark",
       "category": "Linear-style precise dark",
       "philosophy": "Engineering taste at the OS level. Sharp dark, hairline borders, keyboard-first, no decoration.",
-      "when_to_use": ["dev tools", "issue tracking", "engineering workflow products", "precise admin UIs"],
-      "when_to_skip": ["consumer marketing", "kids products", "anything playful"],
+      "when_to_use": [
+        "dev tools",
+        "issue tracking",
+        "engineering workflow products",
+        "precise admin UIs"
+      ],
+      "when_to_skip": [
+        "consumer marketing",
+        "kids products",
+        "anything playful"
+      ],
       "tokens": {
         "borders": "1px zinc-800, hairline, used for separation not decoration",
         "shadows": "shadow-sm at most, never colored, never atmospheric",
@@ -572,10 +1314,30 @@
         "radius": "6-8px on buttons, 10-12px on cards, never pill",
         "motion": "instant (100ms) for state, fast spring (snappy) for entries, never bouncy"
       },
-      "exemplars": ["linear.app", "height.app", "graphite.dev"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["dev-tools", "engineering-workflow", "precise-admin"],
+      "exemplars": [
+        "linear.app",
+        "height.app",
+        "graphite.dev"
+      ],
+      "compatible_palettes": [
+        "linear-graphite",
+        "stripe-indigo",
+        "notion-paper",
+        "github-octicon",
+        "apple-clarity"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "spectral-public-sans-source-code",
+        "young-serif-inter-jetbrains",
+        "instrument-serif-inter-jetbrains"
+      ],
+      "compatible_industries": [
+        "dev-tools",
+        "engineering-workflow",
+        "precise-admin"
+      ],
       "ai_slop_risk": "low",
       "notes": "Keyboard shortcut affordances are part of the visual language — without ⌘K hints this drifts toward generic dark mode."
     },
@@ -584,8 +1346,17 @@
       "name": "Notion Soft Document",
       "category": "Notion-style soft-document",
       "philosophy": "Personal-wiki softness. Generous whitespace, soft callouts, friendly icons, document-as-database.",
-      "when_to_use": ["knowledge bases", "internal wikis", "personal productivity", "note-taking products"],
-      "when_to_skip": ["transactional dashboards", "design portfolios", "marketing sites"],
+      "when_to_use": [
+        "knowledge bases",
+        "internal wikis",
+        "personal productivity",
+        "note-taking products"
+      ],
+      "when_to_skip": [
+        "transactional dashboards",
+        "design portfolios",
+        "marketing sites"
+      ],
       "tokens": {
         "borders": "0 mostly — soft tinted backgrounds carry hierarchy",
         "shadows": "shadow-xs on hover, gentle, ambient",
@@ -594,10 +1365,30 @@
         "radius": "6-10px on blocks, soft and consistent",
         "motion": "ease-out 200-300ms, no bounce, hover-lift on blocks"
       },
-      "exemplars": ["notion.so", "craft.do", "logseq.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["knowledge-base", "productivity", "internal-wikis"],
+      "exemplars": [
+        "notion.so",
+        "craft.do",
+        "logseq.com"
+      ],
+      "compatible_palettes": [
+        "notion-paper",
+        "github-octicon",
+        "apple-clarity",
+        "figma-canvas",
+        "airbnb-coral"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "lora-nunito-sans-cascadia",
+        "spectral-public-sans-source-code",
+        "young-serif-inter-jetbrains"
+      ],
+      "compatible_industries": [
+        "knowledge-base",
+        "productivity",
+        "internal-wikis"
+      ],
       "ai_slop_risk": "high",
       "notes": "Easy to make this read 'generic doc app' — character comes from typography decisions and tint discipline, not block shapes."
     },
@@ -606,8 +1397,17 @@
       "name": "Raycast Command Bar",
       "category": "Monochrome Precise",
       "philosophy": "Single-input launcher aesthetic. Fast, monospace-flavored, keyboard-first, fast-forward animations.",
-      "when_to_use": ["command palettes", "search-first products", "developer launchers", "AI assistant UIs"],
-      "when_to_skip": ["marketing sites", "consumer e-commerce", "long-form content"],
+      "when_to_use": [
+        "command palettes",
+        "search-first products",
+        "developer launchers",
+        "AI assistant UIs"
+      ],
+      "when_to_skip": [
+        "marketing sites",
+        "consumer e-commerce",
+        "long-form content"
+      ],
       "tokens": {
         "borders": "1px subtle, occasional rounded outer border on the launcher itself",
         "shadows": "shadow-xl outer (large blur, low alpha), creates floating-window feel",
@@ -616,10 +1416,30 @@
         "radius": "12-16px on the bar, 6-8px on rows",
         "motion": "instant (no delay) for focus and rows, fast spring for opens/closes"
       },
-      "exemplars": ["raycast.com", "linear.app/cmd-k", "vercel.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["dev-launchers", "ai-assistants", "command-palette-tools"],
+      "exemplars": [
+        "raycast.com",
+        "linear.app/cmd-k",
+        "vercel.com"
+      ],
+      "compatible_palettes": [
+        "linear-graphite",
+        "stripe-indigo",
+        "vercel-stark",
+        "github-octicon",
+        "monochrome-pure"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "dev-launchers",
+        "ai-assistants",
+        "command-palette-tools"
+      ],
       "ai_slop_risk": "low",
       "notes": "The speed is the design — animations longer than 200ms break the launcher illusion."
     },
@@ -628,8 +1448,17 @@
       "name": "Vercel Precision",
       "category": "Monochrome Precise",
       "philosophy": "Black canvas, white type, geometric precision. Engineering brand as fashion brand.",
-      "when_to_use": ["infrastructure products", "developer platforms", "modern dev-tool marketing", "premium technical brands"],
-      "when_to_skip": ["consumer products", "kids apps", "any softness-required context"],
+      "when_to_use": [
+        "infrastructure products",
+        "developer platforms",
+        "modern dev-tool marketing",
+        "premium technical brands"
+      ],
+      "when_to_skip": [
+        "consumer products",
+        "kids apps",
+        "any softness-required context"
+      ],
       "tokens": {
         "borders": "1px gray-200 or gray-800, sharp",
         "shadows": "none in dark mode, shadow-sm in light",
@@ -638,10 +1467,30 @@
         "radius": "6-12px, never pill, never circular",
         "motion": "fast (150ms) ease-out, no bounce, page transitions feel instant"
       },
-      "exemplars": ["vercel.com", "v0.dev", "geist-ui.dev"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["infrastructure", "dev-platforms", "premium-tech-brands"],
+      "exemplars": [
+        "vercel.com",
+        "v0.dev",
+        "geist-ui.dev"
+      ],
+      "compatible_palettes": [
+        "linear-graphite",
+        "vercel-stark",
+        "github-octicon",
+        "apple-clarity",
+        "figma-canvas"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "libre-caslon-libre-franklin-jetbrains"
+      ],
+      "compatible_industries": [
+        "infrastructure",
+        "dev-platforms",
+        "premium-tech-brands"
+      ],
       "ai_slop_risk": "low",
       "notes": "The trap is making it too cold — Vercel's character comes from typography character, not just black backgrounds."
     },
@@ -650,8 +1499,17 @@
       "name": "Arc Browser Playful",
       "category": "Bold Statement",
       "philosophy": "Browser as personality. Soft animations, expressive color choices per-space, generous padding, mac-native feel.",
-      "when_to_use": ["consumer productivity", "browser-adjacent products", "creator tools with personality", "modern macOS-native apps"],
-      "when_to_skip": ["enterprise admin", "B2B dashboards", "anything in-form-heavy"],
+      "when_to_use": [
+        "consumer productivity",
+        "browser-adjacent products",
+        "creator tools with personality",
+        "modern macOS-native apps"
+      ],
+      "when_to_skip": [
+        "enterprise admin",
+        "B2B dashboards",
+        "anything in-form-heavy"
+      ],
       "tokens": {
         "borders": "0 — colored backgrounds and gradients carry hierarchy",
         "shadows": "soft layered shadows for floating panels, ambient warmth",
@@ -660,10 +1518,30 @@
         "radius": "16-24px on panels, full on avatars, 10-12px on buttons",
         "motion": "spring physics on every interaction, playful but not childish, tab-switching as choreography"
       },
-      "exemplars": ["arc.net", "thebrowser.company", "warp.dev"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["consumer-productivity", "creator-tools", "macos-native"],
+      "exemplars": [
+        "arc.net",
+        "thebrowser.company",
+        "warp.dev"
+      ],
+      "compatible_palettes": [
+        "vercel-stark",
+        "airbnb-coral",
+        "spotify-energy",
+        "pastel-mist",
+        "pastel-rose"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "consumer-productivity",
+        "creator-tools",
+        "macos-native"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Playful without committing to specific motion is just gradient-soup — the spring physics is the brand."
     },
@@ -672,8 +1550,17 @@
       "name": "Japanese Zen",
       "category": "Minimalist / Swiss",
       "philosophy": "Ma — the negative space between elements is part of the composition. Asymmetric, restrained, paper-and-ink.",
-      "when_to_use": ["luxury wellness", "tea/hospitality", "design-craft portfolios", "cultural institutions"],
-      "when_to_skip": ["B2B dashboards", "high-density data UIs", "gamified products"],
+      "when_to_use": [
+        "luxury wellness",
+        "tea/hospitality",
+        "design-craft portfolios",
+        "cultural institutions"
+      ],
+      "when_to_skip": [
+        "B2B dashboards",
+        "high-density data UIs",
+        "gamified products"
+      ],
       "tokens": {
         "borders": "0 to single hairline — only where the eye needs guidance",
         "shadows": "none — surfaces are paper, not layered",
@@ -682,10 +1569,30 @@
         "radius": "0 mostly, occasional 4-8px on minor surfaces",
         "motion": "very slow fade-ins (600-900ms), no bounce, scroll feels meditative"
       },
-      "exemplars": ["muji.com", "uniqlo.com", "kinto-usa.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["luxury-wellness", "hospitality-tea", "cultural-institutions"],
+      "exemplars": [
+        "muji.com",
+        "uniqlo.com",
+        "kinto-usa.com"
+      ],
+      "compatible_palettes": [
+        "stripe-indigo",
+        "notion-paper",
+        "airbnb-coral",
+        "editorial-cream",
+        "tropical-flamingo"
+      ],
+      "compatible_type_pairs": [
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia",
+        "domine-dm-sans-jetbrains"
+      ],
+      "compatible_industries": [
+        "luxury-wellness",
+        "hospitality-tea",
+        "cultural-institutions"
+      ],
       "ai_slop_risk": "low",
       "notes": "Don't confuse Zen with empty — every void has a purpose, every element is placed deliberately."
     },
@@ -694,8 +1601,17 @@
       "name": "Scandinavian Quiet",
       "category": "Minimalist / Swiss",
       "philosophy": "Hygge in pixels. Warm muted neutrals, generous space, restrained typography, function-first warmth.",
-      "when_to_use": ["lifestyle DTC", "furniture/interior products", "wellness apps", "premium consumer brands"],
-      "when_to_skip": ["dev tools", "data-dense admin", "loud consumer marketing"],
+      "when_to_use": [
+        "lifestyle DTC",
+        "furniture/interior products",
+        "wellness apps",
+        "premium consumer brands"
+      ],
+      "when_to_skip": [
+        "dev tools",
+        "data-dense admin",
+        "loud consumer marketing"
+      ],
       "tokens": {
         "borders": "0.5-1px in warm gray, used minimally",
         "shadows": "shadow-xs and shadow-sm only, warm-tinted",
@@ -704,10 +1620,31 @@
         "radius": "8-16px on cards, soft consistent",
         "motion": "slow ease-out (300-450ms), no bounce, calm transitions"
       },
-      "exemplars": ["hay.dk", "muuto.com", "norse-store.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["lifestyle-dtc", "furniture-interior", "wellness", "premium-consumer"],
+      "exemplars": [
+        "hay.dk",
+        "muuto.com",
+        "norse-store.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "notion-paper",
+        "apple-clarity",
+        "airbnb-coral",
+        "monochrome-warm"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "lifestyle-dtc",
+        "furniture-interior",
+        "wellness",
+        "premium-consumer"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Going too restrained becomes invisible — keep one warm accent doing visible work."
     },
@@ -716,8 +1653,17 @@
       "name": "MENA Elegant",
       "category": "Editorial Warm",
       "philosophy": "Arabic-first elegance — calligraphic display, generous space, RTL-native rhythm, warm cream surfaces.",
-      "when_to_use": ["MENA-region products", "Arabic-first publications", "regional luxury", "GCC hospitality"],
-      "when_to_skip": ["English-only products", "tech-bro-coded products", "loud Western consumer marketing"],
+      "when_to_use": [
+        "MENA-region products",
+        "Arabic-first publications",
+        "regional luxury",
+        "GCC hospitality"
+      ],
+      "when_to_skip": [
+        "English-only products",
+        "tech-bro-coded products",
+        "loud Western consumer marketing"
+      ],
       "tokens": {
         "borders": "1px warm gold or warm-taupe, used between sections",
         "shadows": "shadow-sm, ambient warmth",
@@ -726,10 +1672,31 @@
         "radius": "12-20px, often asymmetric on hero surfaces (RTL-aware)",
         "motion": "slow fade-ins, RTL-aware direction, no Western chevron defaults"
       },
-      "exemplars": ["almosafer.com", "marka-vip.com", "namshi.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["mena-products", "gcc-hospitality", "regional-luxury", "arabic-publications"],
+      "exemplars": [
+        "almosafer.com",
+        "marka-vip.com",
+        "namshi.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "airbnb-coral",
+        "monochrome-warm",
+        "editorial-cream",
+        "editorial-bone"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "mena-products",
+        "gcc-hospitality",
+        "regional-luxury",
+        "arabic-publications"
+      ],
       "ai_slop_risk": "low",
       "notes": "Apply RTL logical properties throughout — `margin-inline-start` not `margin-left`. Arabic glyphs are visually heavier; reduce scale ratio."
     },
@@ -738,8 +1705,17 @@
       "name": "Academic Paper",
       "category": "Documentation / Stripe-style",
       "philosophy": "Journal article in web form. Serif body, footnotes, citation rigor. Reading is a long-form act.",
-      "when_to_use": ["research publications", "policy papers", "academic journals", "long-form essays"],
-      "when_to_skip": ["consumer marketing", "transactional flows", "anything mobile-first"],
+      "when_to_use": [
+        "research publications",
+        "policy papers",
+        "academic journals",
+        "long-form essays"
+      ],
+      "when_to_skip": [
+        "consumer marketing",
+        "transactional flows",
+        "anything mobile-first"
+      ],
       "tokens": {
         "borders": "1px hairline between sections, page-break rules",
         "shadows": "none — print metaphor",
@@ -748,10 +1724,30 @@
         "radius": "0 — sharp",
         "motion": "minimal — anchor-link smooth scroll, fade-in for footnotes"
       },
-      "exemplars": ["distill.pub", "stratechery.com", "arxiv.org"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["research", "academic-publishing", "policy"],
+      "exemplars": [
+        "distill.pub",
+        "stratechery.com",
+        "arxiv.org"
+      ],
+      "compatible_palettes": [
+        "linear-graphite",
+        "stripe-indigo",
+        "vercel-stark",
+        "monochrome-pure",
+        "vibrant-electric"
+      ],
+      "compatible_type_pairs": [
+        "fraunces-inter-jetbrains",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "source-serif-pro-source-sans-source-code",
+        "newsreader-figtree-jetbrains",
+        "young-serif-inter-jetbrains"
+      ],
+      "compatible_industries": [
+        "research",
+        "academic-publishing",
+        "policy"
+      ],
       "ai_slop_risk": "low",
       "notes": "Don't shorten the line length to mobile-feel widths — academic reading wants 60-75 chars per line."
     },
@@ -760,8 +1756,17 @@
       "name": "Fintech Precise",
       "category": "Monochrome Precise",
       "philosophy": "Numbers are the design. Tabular type, generous numeric whitespace, semantic color for direction (gain/loss), no decoration.",
-      "when_to_use": ["banking apps", "trading platforms", "treasury dashboards", "expense management"],
-      "when_to_skip": ["consumer onboarding marketing", "kids/family products", "creator-economy products"],
+      "when_to_use": [
+        "banking apps",
+        "trading platforms",
+        "treasury dashboards",
+        "expense management"
+      ],
+      "when_to_skip": [
+        "consumer onboarding marketing",
+        "kids/family products",
+        "creator-economy products"
+      ],
       "tokens": {
         "borders": "1px zinc-200, used on tables and inputs only",
         "shadows": "shadow-xs on cards, shadow-sm on modals, never colored",
@@ -770,10 +1775,31 @@
         "radius": "6-10px, never pill, never circular",
         "motion": "instant on state, fast on entries, no celebratory animations"
       },
-      "exemplars": ["ramp.com", "mercury.com", "brex.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["fintech", "banking", "treasury", "expense-management"],
+      "exemplars": [
+        "ramp.com",
+        "mercury.com",
+        "brex.com"
+      ],
+      "compatible_palettes": [
+        "linear-graphite",
+        "notion-paper",
+        "vercel-stark",
+        "github-octicon",
+        "apple-clarity"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "eb-garamond-work-sans-fira",
+        "lora-nunito-sans-cascadia",
+        "spectral-public-sans-source-code"
+      ],
+      "compatible_industries": [
+        "fintech",
+        "banking",
+        "treasury",
+        "expense-management"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Don't add gradient hero cards — fintech trust comes from boring precision, not marketing flair."
     },
@@ -782,8 +1808,17 @@
       "name": "Medical Clinical",
       "category": "Monochrome Precise",
       "philosophy": "Clinical clarity — high contrast, large hit targets, generous spacing, semantic color used only for safety states.",
-      "when_to_use": ["EHR systems", "patient portals", "clinical decision support", "telehealth"],
-      "when_to_skip": ["consumer wellness marketing", "kids products", "playful onboarding"],
+      "when_to_use": [
+        "EHR systems",
+        "patient portals",
+        "clinical decision support",
+        "telehealth"
+      ],
+      "when_to_skip": [
+        "consumer wellness marketing",
+        "kids products",
+        "playful onboarding"
+      ],
       "tokens": {
         "borders": "1.5px borders on inputs, high-contrast",
         "shadows": "shadow-sm at most, no atmospheric depth",
@@ -792,10 +1827,31 @@
         "radius": "8-10px, generous",
         "motion": "instant — no animations on critical states, fade only for non-critical"
       },
-      "exemplars": ["epic.com", "athenahealth.com", "doximity.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["ehr", "patient-portals", "telehealth", "clinical-software"],
+      "exemplars": [
+        "epic.com",
+        "athenahealth.com",
+        "doximity.com"
+      ],
+      "compatible_palettes": [
+        "linear-graphite",
+        "vercel-stark",
+        "apple-clarity",
+        "monochrome-pure",
+        "monochrome-warm"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "young-serif-inter-jetbrains",
+        "instrument-serif-inter-jetbrains"
+      ],
+      "compatible_industries": [
+        "ehr",
+        "patient-portals",
+        "telehealth",
+        "clinical-software"
+      ],
       "ai_slop_risk": "low",
       "notes": "Aesthetic restraint isn't dullness — every visual decision needs to support clinician trust and patient legibility."
     },
@@ -804,8 +1860,17 @@
       "name": "SaaS Stripe-Modern",
       "category": "Gradient Surface / Sunset",
       "philosophy": "Marketing hero gradients + clean docs + dashboard precision. The full modern-SaaS template.",
-      "when_to_use": ["B2B SaaS marketing", "API products", "developer platforms", "modern infrastructure brands"],
-      "when_to_skip": ["consumer products", "kids apps", "any non-tech context"],
+      "when_to_use": [
+        "B2B SaaS marketing",
+        "API products",
+        "developer platforms",
+        "modern infrastructure brands"
+      ],
+      "when_to_skip": [
+        "consumer products",
+        "kids apps",
+        "any non-tech context"
+      ],
       "tokens": {
         "borders": "1px hairline in docs, 0 in hero marketing",
         "shadows": "atmospheric soft in marketing, shadow-xs in product UI",
@@ -814,10 +1879,30 @@
         "radius": "8-12px in product, 16-24px in marketing",
         "motion": "gradient drift in hero, instant in product"
       },
-      "exemplars": ["stripe.com", "vercel.com", "supabase.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["b2b-saas", "api-products", "modern-infra"],
+      "exemplars": [
+        "stripe.com",
+        "vercel.com",
+        "supabase.com"
+      ],
+      "compatible_palettes": [
+        "stripe-indigo",
+        "github-octicon",
+        "apple-clarity",
+        "pastel-mist",
+        "pastel-rose"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "lora-nunito-sans-cascadia",
+        "libre-caslon-libre-franklin-jetbrains"
+      ],
+      "compatible_industries": [
+        "b2b-saas",
+        "api-products",
+        "modern-infra"
+      ],
       "ai_slop_risk": "high",
       "notes": "This is what every AI defaults to — to differentiate, push one variable hard (type, color, or motion) instead of all moderately."
     },
@@ -826,8 +1911,17 @@
       "name": "Terminal CRT",
       "category": "Cyberpunk / Neon",
       "philosophy": "Phosphor green on black, scan lines, monospace everywhere. The terminal as nostalgia object and modern tool.",
-      "when_to_use": ["developer-nostalgic products", "AI agent UIs", "shell launchers", "hacker-coded brand microsites"],
-      "when_to_skip": ["consumer products", "marketing for non-tech audiences", "anything mainstream-trustworthy"],
+      "when_to_use": [
+        "developer-nostalgic products",
+        "AI agent UIs",
+        "shell launchers",
+        "hacker-coded brand microsites"
+      ],
+      "when_to_skip": [
+        "consumer products",
+        "marketing for non-tech audiences",
+        "anything mainstream-trustworthy"
+      ],
       "tokens": {
         "borders": "1px phosphor-green (#00FF6A), occasional ASCII-art borders",
         "shadows": "outer green glow on text, CRT bloom",
@@ -836,10 +1930,30 @@
         "radius": "0 always",
         "motion": "type-on effect for headers, blinking cursor, scan-line sweep on entry"
       },
-      "exemplars": ["warp.dev", "wezfurlong.org/wezterm", "the.dev"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["dev-nostalgia", "ai-agents", "hacker-brands"],
+      "exemplars": [
+        "warp.dev",
+        "wezfurlong.org/wezterm",
+        "the.dev"
+      ],
+      "compatible_palettes": [
+        "github-octicon",
+        "figma-canvas",
+        "sunset-amber",
+        "y2k-chrome",
+        "saas-modern"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "domine-dm-sans-jetbrains"
+      ],
+      "compatible_industries": [
+        "dev-nostalgia",
+        "ai-agents",
+        "hacker-brands"
+      ],
       "ai_slop_risk": "low",
       "notes": "Type-on effects become annoying if used on every header — reserve for hero moments."
     },
@@ -848,8 +1962,17 @@
       "name": "Pastoral Soft Editorial",
       "category": "Pastoral / Soft Editorial",
       "philosophy": "Magazine softness with countryside palette. Botanical illustration, soft serifs, generous breathable rhythm.",
-      "when_to_use": ["food/recipe products", "garden/plant brands", "rural-lifestyle DTC", "wellness publishing"],
-      "when_to_skip": ["fintech", "dev tools", "fast-moving consumer transactional UIs"],
+      "when_to_use": [
+        "food/recipe products",
+        "garden/plant brands",
+        "rural-lifestyle DTC",
+        "wellness publishing"
+      ],
+      "when_to_skip": [
+        "fintech",
+        "dev tools",
+        "fast-moving consumer transactional UIs"
+      ],
       "tokens": {
         "borders": "1px sage-green or muted-rose, occasionally botanical illustration as divider",
         "shadows": "shadow-sm, warm and ambient",
@@ -858,10 +1981,31 @@
         "radius": "12-20px, soft consistent",
         "motion": "slow scroll-fades, no bounce, leaf-fall particles allowed in hero"
       },
-      "exemplars": ["fortheloveofgardening.com", "kinfolk.com", "thegardenedit.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["garden-plants", "food-recipe", "rural-lifestyle", "wellness-publishing"],
+      "exemplars": [
+        "fortheloveofgardening.com",
+        "kinfolk.com",
+        "thegardenedit.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "airbnb-coral",
+        "monochrome-warm",
+        "editorial-cream",
+        "editorial-bone"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "garden-plants",
+        "food-recipe",
+        "rural-lifestyle",
+        "wellness-publishing"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Botanical illustration is the differentiator — without it this drops to generic 'soft beige' Pinterest."
     },
@@ -870,8 +2014,17 @@
       "name": "Swiss Grid Data",
       "category": "Minimalist / Swiss",
       "philosophy": "Information design from Tufte's lineage. Type, grid, sparkline, no decoration. Data is the design.",
-      "when_to_use": ["data journalism", "research dashboards", "analytics products", "civic-data visualizations"],
-      "when_to_skip": ["consumer marketing", "creative portfolios", "anything emotion-led"],
+      "when_to_use": [
+        "data journalism",
+        "research dashboards",
+        "analytics products",
+        "civic-data visualizations"
+      ],
+      "when_to_skip": [
+        "consumer marketing",
+        "creative portfolios",
+        "anything emotion-led"
+      ],
       "tokens": {
         "borders": "0.5px hairlines for axis lines and table separators",
         "shadows": "none — flat",
@@ -880,10 +2033,30 @@
         "radius": "0 to 2px on data cells",
         "motion": "instant — no transitions on data updates, scroll-into-view fade only"
       },
-      "exemplars": ["ourworldindata.org", "observablehq.com", "ft.com/visualisations"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["data-journalism", "analytics", "civic-data"],
+      "exemplars": [
+        "ourworldindata.org",
+        "observablehq.com",
+        "ft.com/visualisations"
+      ],
+      "compatible_palettes": [
+        "high-contrast-civic",
+        "memphis",
+        "swiss-design",
+        "dark-true-black",
+        "dark-soft-black"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "eb-garamond-work-sans-fira",
+        "lora-nunito-sans-cascadia",
+        "spectral-public-sans-source-code"
+      ],
+      "compatible_industries": [
+        "data-journalism",
+        "analytics",
+        "civic-data"
+      ],
       "ai_slop_risk": "low",
       "notes": "Resist colorful chart defaults — categorical colors should be perceptually distinct, not maximally saturated."
     },
@@ -892,8 +2065,17 @@
       "name": "Pitch Deck Modern",
       "category": "Bento / Modular Grid",
       "philosophy": "Investor-deck aesthetic translated to web. Large stats, oversized hero numbers, bento-grid feature spread.",
-      "when_to_use": ["startup landing pages", "fundraising microsites", "product launch announcements", "investor updates"],
-      "when_to_skip": ["editorial content", "transactional checkout", "documentation"],
+      "when_to_use": [
+        "startup landing pages",
+        "fundraising microsites",
+        "product launch announcements",
+        "investor updates"
+      ],
+      "when_to_skip": [
+        "editorial content",
+        "transactional checkout",
+        "documentation"
+      ],
       "tokens": {
         "borders": "0 on hero bento cells, 1px on data tables",
         "shadows": "shadow-xl on bento cells, soft and diffused",
@@ -902,10 +2084,30 @@
         "radius": "16-24px on bento cells, signature 2.5rem on hero",
         "motion": "scroll-driven counter animations on stats, parallax on bento cells"
       },
-      "exemplars": ["airbnb.com/about", "stripe.com/sessions", "linear.app/changelog"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["startups", "fundraising", "product-launches"],
+      "exemplars": [
+        "airbnb.com/about",
+        "stripe.com/sessions",
+        "linear.app/changelog"
+      ],
+      "compatible_palettes": [
+        "notion-paper",
+        "github-octicon",
+        "apple-clarity",
+        "figma-canvas",
+        "monochrome-pure"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "lora-nunito-sans-cascadia",
+        "spectral-public-sans-source-code"
+      ],
+      "compatible_industries": [
+        "startups",
+        "fundraising",
+        "product-launches"
+      ],
       "ai_slop_risk": "high",
       "notes": "The oversized stat is a cliché now — back the number with proof, not just a big numeral."
     },
@@ -914,8 +2116,17 @@
       "name": "Swiss Poster",
       "category": "Editorial / Magazine",
       "philosophy": "International Typographic Style as web. Type as image, asymmetric composition, color used as field not decoration.",
-      "when_to_use": ["design conferences", "cultural events", "art exhibition microsites", "design-studio portfolios"],
-      "when_to_skip": ["product UIs", "transactional flows", "long-form articles"],
+      "when_to_use": [
+        "design conferences",
+        "cultural events",
+        "art exhibition microsites",
+        "design-studio portfolios"
+      ],
+      "when_to_skip": [
+        "product UIs",
+        "transactional flows",
+        "long-form articles"
+      ],
       "tokens": {
         "borders": "0 — type carries composition",
         "shadows": "none",
@@ -924,10 +2135,30 @@
         "radius": "0",
         "motion": "instant or single-fade entry, no interaction-flourish"
       },
-      "exemplars": ["aiga.org/eye-on-design", "kasper-florio.ch", "dunkelweiss.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["design-conferences", "cultural-events", "art-exhibitions"],
+      "exemplars": [
+        "aiga.org/eye-on-design",
+        "kasper-florio.ch",
+        "dunkelweiss.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "monochrome-pure",
+        "editorial-cream",
+        "editorial-bone",
+        "editorial-newsprint"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "young-serif-inter-jetbrains",
+        "instrument-serif-inter-jetbrains"
+      ],
+      "compatible_industries": [
+        "design-conferences",
+        "cultural-events",
+        "art-exhibitions"
+      ],
       "ai_slop_risk": "low",
       "notes": "Composition asymmetry is mandatory — centered Swiss-poster reads as default web, not as the style."
     },
@@ -936,8 +2167,17 @@
       "name": "Art Portfolio Image-First",
       "category": "Editorial / Magazine",
       "philosophy": "Images are the work; chrome disappears. Edge-to-edge media, captions whisper, navigation hidden until needed.",
-      "when_to_use": ["photographer portfolios", "art directors", "video production studios", "fashion creatives"],
-      "when_to_skip": ["text-heavy content", "B2B products", "transactional flows"],
+      "when_to_use": [
+        "photographer portfolios",
+        "art directors",
+        "video production studios",
+        "fashion creatives"
+      ],
+      "when_to_skip": [
+        "text-heavy content",
+        "B2B products",
+        "transactional flows"
+      ],
       "tokens": {
         "borders": "0 — images carry the surface",
         "shadows": "none on images, occasional shadow-sm on captions",
@@ -946,10 +2186,30 @@
         "radius": "0 on most images, occasional 4-8px",
         "motion": "smooth horizontal/vertical scroll, slow image fades, no parallax tricks"
       },
-      "exemplars": ["timwalkerphotography.com", "dejaqi.com", "studioharvey.co.uk"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["photography", "art-direction", "fashion-creative"],
+      "exemplars": [
+        "timwalkerphotography.com",
+        "dejaqi.com",
+        "studioharvey.co.uk"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "notion-paper",
+        "vercel-stark",
+        "github-octicon",
+        "apple-clarity"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "spectral-public-sans-source-code",
+        "young-serif-inter-jetbrains"
+      ],
+      "compatible_industries": [
+        "photography",
+        "art-direction",
+        "fashion-creative"
+      ],
       "ai_slop_risk": "low",
       "notes": "Don't add hero gradients or marketing patterns — the work has to do the talking, chrome is invisible."
     },
@@ -958,8 +2218,17 @@
       "name": "Data-Viz Dense",
       "category": "Industrial / Brutalist",
       "philosophy": "Bloomberg terminal aesthetic for the web. Dense rows, multiple panels, color-coded states, every pixel earns its place.",
-      "when_to_use": ["trading platforms", "operations dashboards", "monitoring tools", "logistics control rooms"],
-      "when_to_skip": ["consumer products", "marketing sites", "low-density mobile-first UIs"],
+      "when_to_use": [
+        "trading platforms",
+        "operations dashboards",
+        "monitoring tools",
+        "logistics control rooms"
+      ],
+      "when_to_skip": [
+        "consumer products",
+        "marketing sites",
+        "low-density mobile-first UIs"
+      ],
       "tokens": {
         "borders": "0.5px hairline between every row and column",
         "shadows": "none — flat density",
@@ -968,10 +2237,30 @@
         "radius": "0 — sharp grid",
         "motion": "instant — data updates flash briefly (50-100ms), no animations beyond"
       },
-      "exemplars": ["bloomberg.com/terminal", "tradingview.com", "datadoghq.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["trading-platforms", "monitoring-tools", "logistics-control"],
+      "exemplars": [
+        "bloomberg.com/terminal",
+        "tradingview.com",
+        "datadoghq.com"
+      ],
+      "compatible_palettes": [
+        "sunset-amber",
+        "brutalist-primary",
+        "swiss-design",
+        "dark-true-black",
+        "dark-soft-black"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "domine-dm-sans-jetbrains"
+      ],
+      "compatible_industries": [
+        "trading-platforms",
+        "monitoring-tools",
+        "logistics-control"
+      ],
       "ai_slop_risk": "low",
       "notes": "Every visual decision has to support fast scanning — beautiful-but-slow is wrong here."
     },
@@ -980,8 +2269,17 @@
       "name": "Paper Craft",
       "category": "Skeuomorphic Modern",
       "philosophy": "Cut-and-folded paper as UI metaphor. Layered cards with hand-cut edges, soft shadows, paper-grain texture.",
-      "when_to_use": ["education products", "card-based mobile games", "craft-themed marketing", "kids storybook apps"],
-      "when_to_skip": ["dashboards", "trading UIs", "developer tools"],
+      "when_to_use": [
+        "education products",
+        "card-based mobile games",
+        "craft-themed marketing",
+        "kids storybook apps"
+      ],
+      "when_to_skip": [
+        "dashboards",
+        "trading UIs",
+        "developer tools"
+      ],
       "tokens": {
         "borders": "0 — paper edges shown via shadow",
         "shadows": "double soft shadows simulating paper-on-paper depth",
@@ -990,10 +2288,30 @@
         "radius": "12-20px, organic asymmetric on some edges",
         "motion": "paper-flip transitions, layer-shift on hover, gentle"
       },
-      "exemplars": ["calmblossom.app", "thecardlab.co", "khanacademy.org/kids"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["education", "kids-apps", "craft-marketing"],
+      "exemplars": [
+        "calmblossom.app",
+        "thecardlab.co",
+        "khanacademy.org/kids"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "notion-paper",
+        "airbnb-coral",
+        "monochrome-warm",
+        "editorial-cream"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "education",
+        "kids-apps",
+        "craft-marketing"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Cheap paper texture is the failure mode — use subtle grain, not stock-photo paper backgrounds."
     },
@@ -1002,8 +2320,17 @@
       "name": "Blueprint Architectural",
       "category": "Industrial / Brutalist",
       "philosophy": "Technical drawing as web aesthetic. Cyan-on-white-paper, dimension lines, callouts, drafting precision.",
-      "when_to_use": ["architecture portfolios", "engineering documentation", "industrial-design case studies", "manufacturing brands"],
-      "when_to_skip": ["consumer marketing", "lifestyle DTC", "fashion editorial"],
+      "when_to_use": [
+        "architecture portfolios",
+        "engineering documentation",
+        "industrial-design case studies",
+        "manufacturing brands"
+      ],
+      "when_to_skip": [
+        "consumer marketing",
+        "lifestyle DTC",
+        "fashion editorial"
+      ],
       "tokens": {
         "borders": "1px cyan (#0066CC) or dark navy on white, dashed for callouts",
         "shadows": "none — drafting paper is flat",
@@ -1012,10 +2339,30 @@
         "radius": "0 — technical drawing has no rounded corners by default",
         "motion": "instant or technical reveal (build-up of line work, no flourish)"
       },
-      "exemplars": ["bjarkeingelsgroup.com", "soa.com", "olsonkundig.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["architecture", "engineering-docs", "industrial-design"],
+      "exemplars": [
+        "bjarkeingelsgroup.com",
+        "soa.com",
+        "olsonkundig.com"
+      ],
+      "compatible_palettes": [
+        "linear-graphite",
+        "notion-paper",
+        "editorial-cream",
+        "vibrant-electric",
+        "brutalist-primary"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "architecture",
+        "engineering-docs",
+        "industrial-design"
+      ],
       "ai_slop_risk": "low",
       "notes": "Real architectural drawings have measurement annotations — adding callout dimensions to UI elements sells the metaphor."
     },
@@ -1024,8 +2371,17 @@
       "name": "Hospitality Warm Luxe",
       "category": "Dark Mode Luxe",
       "philosophy": "Hotel lobby in pixel form. Warm cream, brass accents, generous space, slow elegance. Trust without coldness.",
-      "when_to_use": ["luxury hotels", "private dining", "premium travel", "spa/wellness retreats"],
-      "when_to_skip": ["B2B SaaS", "dev tools", "mass-market e-commerce"],
+      "when_to_use": [
+        "luxury hotels",
+        "private dining",
+        "premium travel",
+        "spa/wellness retreats"
+      ],
+      "when_to_skip": [
+        "B2B SaaS",
+        "dev tools",
+        "mass-market e-commerce"
+      ],
       "tokens": {
         "borders": "0.5-1px brass (#B8985E) or warm-taupe, used between sections",
         "shadows": "shadow-md with warm tint, ambient",
@@ -1034,10 +2390,31 @@
         "radius": "8-16px on cards, 0 on print-style chrome",
         "motion": "slow (500-700ms) fades, no bounce, page transitions feel like turning brochure pages"
       },
-      "exemplars": ["aman.com", "rosewoodhotels.com", "soho-house.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["luxury-hotels", "private-dining", "premium-travel", "spa-wellness"],
+      "exemplars": [
+        "aman.com",
+        "rosewoodhotels.com",
+        "soho-house.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "apple-clarity",
+        "airbnb-coral",
+        "monochrome-warm",
+        "editorial-cream"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "luxury-hotels",
+        "private-dining",
+        "premium-travel",
+        "spa-wellness"
+      ],
       "ai_slop_risk": "low",
       "notes": "Brass not gold — gold reads cheap, brass reads heritage."
     },
@@ -1046,8 +2423,17 @@
       "name": "Fashion Monochrome",
       "category": "Monochrome Precise",
       "philosophy": "High-fashion editorial restraint. Type as logo, oversized imagery, white space, no decoration that distracts from the work.",
-      "when_to_use": ["fashion houses", "model agencies", "fashion publications", "high-end DTC apparel"],
-      "when_to_skip": ["fast-fashion volume retail", "kids products", "tech tools"],
+      "when_to_use": [
+        "fashion houses",
+        "model agencies",
+        "fashion publications",
+        "high-end DTC apparel"
+      ],
+      "when_to_skip": [
+        "fast-fashion volume retail",
+        "kids products",
+        "tech tools"
+      ],
       "tokens": {
         "borders": "0 mostly, occasional 1px hairlines between sections",
         "shadows": "none",
@@ -1056,10 +2442,30 @@
         "radius": "0 — sharp luxury",
         "motion": "slow fades, parallax restrained, hover-zoom on product images"
       },
-      "exemplars": ["balenciaga.com", "celine.com", "saint-laurent.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["fashion-houses", "model-agencies", "fashion-publications"],
+      "exemplars": [
+        "balenciaga.com",
+        "celine.com",
+        "saint-laurent.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "linear-graphite",
+        "vercel-stark",
+        "monochrome-pure",
+        "monochrome-warm"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "libre-caslon-libre-franklin-jetbrains",
+        "young-serif-inter-jetbrains"
+      ],
+      "compatible_industries": [
+        "fashion-houses",
+        "model-agencies",
+        "fashion-publications"
+      ],
       "ai_slop_risk": "medium",
       "notes": "It's not just black-and-white — the type discipline, the editorial photography, the spacing are what separate fashion from generic minimal."
     },
@@ -1068,8 +2474,17 @@
       "name": "Music Album Art",
       "category": "Maximalist / Anti-Design",
       "philosophy": "Microsite as album cover. Whole-page hero image, type as artwork, full-bleed expression. The record is the design.",
-      "when_to_use": ["music release microsites", "tour announcements", "label drops", "artist landing pages"],
-      "when_to_skip": ["product UIs", "documentation", "transactional flows"],
+      "when_to_use": [
+        "music release microsites",
+        "tour announcements",
+        "label drops",
+        "artist landing pages"
+      ],
+      "when_to_skip": [
+        "product UIs",
+        "documentation",
+        "transactional flows"
+      ],
       "tokens": {
         "borders": "0 — image is the surface",
         "shadows": "drop shadows on type for legibility over imagery",
@@ -1078,10 +2493,30 @@
         "radius": "0 on hero, 8-12px on product chrome",
         "motion": "slow zoom on hero image, type entry choreography, autoplay audio with intent"
       },
-      "exemplars": ["taylorswift.com", "rosalia.com", "fkatwigs.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["music-releases", "tour-announcements", "artist-landing"],
+      "exemplars": [
+        "taylorswift.com",
+        "rosalia.com",
+        "fkatwigs.com"
+      ],
+      "compatible_palettes": [
+        "spotify-energy",
+        "y2k-chrome",
+        "swiss-design",
+        "dark-one-dark",
+        "auto-spotify"
+      ],
+      "compatible_type_pairs": [
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "music-releases",
+        "tour-announcements",
+        "artist-landing"
+      ],
       "ai_slop_risk": "low",
       "notes": "Audio autoplay only with user gesture — modern browsers block it anyway, but make it discoverable."
     },
@@ -1090,8 +2525,17 @@
       "name": "Crypto Web3 Precise",
       "category": "Cyberpunk / Neon",
       "philosophy": "Sharp dark, technical typography, accent neon, blockchain-as-UI. Restraint instead of degenerate-gambler aesthetic.",
-      "when_to_use": ["crypto products with credibility intent", "Ethereum tooling", "L2 marketing", "DeFi dashboards"],
-      "when_to_skip": ["mass-market consumer fintech", "kids/family", "compliance-heavy banking"],
+      "when_to_use": [
+        "crypto products with credibility intent",
+        "Ethereum tooling",
+        "L2 marketing",
+        "DeFi dashboards"
+      ],
+      "when_to_skip": [
+        "mass-market consumer fintech",
+        "kids/family",
+        "compliance-heavy banking"
+      ],
       "tokens": {
         "borders": "1px subtle dark, occasional 1px neon (electric blue) accent",
         "shadows": "shadow-sm to shadow-md, occasional subtle neon glow on focus states",
@@ -1100,10 +2544,30 @@
         "radius": "6-10px, never pill",
         "motion": "fast spring on transactions, no celebration overload, success states restrained"
       },
-      "exemplars": ["uniswap.org", "ethereum.org", "rainbow.me"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["crypto-defi", "ethereum-tooling", "l2-platforms"],
+      "exemplars": [
+        "uniswap.org",
+        "ethereum.org",
+        "rainbow.me"
+      ],
+      "compatible_palettes": [
+        "linear-graphite",
+        "pastel-mint",
+        "vibrant-electric",
+        "ocean-deep",
+        "dark-true-black"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "crypto-defi",
+        "ethereum-tooling",
+        "l2-platforms"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Avoid degenerate-gambler aesthetic (gold coins, flame icons, rocket emojis) — credibility comes from technical precision."
     },
@@ -1112,8 +2576,17 @@
       "name": "AI Product Marketing",
       "category": "Aurora / Iridescent",
       "philosophy": "AI brand surfaces — gradient meshes, glow rings, conversational UI hero shots, future-soft palettes.",
-      "when_to_use": ["AI product launches", "LLM tool marketing", "AI-agent platforms", "AI infrastructure"],
-      "when_to_skip": ["enterprise dashboards", "transactional fintech", "kids products"],
+      "when_to_use": [
+        "AI product launches",
+        "LLM tool marketing",
+        "AI-agent platforms",
+        "AI infrastructure"
+      ],
+      "when_to_skip": [
+        "enterprise dashboards",
+        "transactional fintech",
+        "kids products"
+      ],
       "tokens": {
         "borders": "0 mostly, occasional gradient borders",
         "shadows": "colored ambient glows, never hard-edge",
@@ -1122,10 +2595,30 @@
         "radius": "16-24px, often signature 2.5rem on hero panels",
         "motion": "slow gradient mesh drift, conversational typing animation, restraint over flash"
       },
-      "exemplars": ["claude.ai", "openai.com", "anthropic.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["ai-products", "llm-tools", "ai-infrastructure"],
+      "exemplars": [
+        "claude.ai",
+        "openai.com",
+        "anthropic.com"
+      ],
+      "compatible_palettes": [
+        "figma-canvas",
+        "pastel-mist",
+        "pastel-rose",
+        "pastel-mint",
+        "pastel-lavender"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "lora-nunito-sans-cascadia",
+        "libre-caslon-libre-franklin-jetbrains"
+      ],
+      "compatible_industries": [
+        "ai-products",
+        "llm-tools",
+        "ai-infrastructure"
+      ],
       "ai_slop_risk": "high",
       "notes": "Generic AI marketing reads as a brand-colored cloud — push the gradient choices beyond the obvious indigo→pink default."
     },
@@ -1134,8 +2627,16 @@
       "name": "Dribbble SaaS Dashboard",
       "category": "Gradient Surface / Sunset",
       "philosophy": "The aesthetic that every Tailwind UI competitor ships. Card with chart, sidebar, gradient stat. Default modern dashboard.",
-      "when_to_use": ["modern admin templates", "quick MVPs that need to look 'designed'", "B2B SaaS that wants to look mainstream"],
-      "when_to_skip": ["products that need to differentiate", "premium brands", "anything where 'looks like every other SaaS' is a critique"],
+      "when_to_use": [
+        "modern admin templates",
+        "quick MVPs that need to look 'designed'",
+        "B2B SaaS that wants to look mainstream"
+      ],
+      "when_to_skip": [
+        "products that need to differentiate",
+        "premium brands",
+        "anything where 'looks like every other SaaS' is a critique"
+      ],
       "tokens": {
         "borders": "1px gray-200/zinc-800, hairline",
         "shadows": "shadow-sm to shadow-md on cards, sometimes colored",
@@ -1144,10 +2645,30 @@
         "radius": "8-12px on cards, 6-8px on buttons",
         "motion": "fast ease-out on hover, 150-200ms"
       },
-      "exemplars": ["tailwindui.com", "vercel.com/dashboard", "supabase.com/dashboard"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["b2b-saas-template", "admin-mvps", "mainstream-saas"],
+      "exemplars": [
+        "tailwindui.com",
+        "vercel.com/dashboard",
+        "supabase.com/dashboard"
+      ],
+      "compatible_palettes": [
+        "stripe-indigo",
+        "notion-paper",
+        "github-octicon",
+        "apple-clarity",
+        "figma-canvas"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "spectral-public-sans-source-code",
+        "young-serif-inter-jetbrains",
+        "instrument-serif-inter-jetbrains"
+      ],
+      "compatible_industries": [
+        "b2b-saas-template",
+        "admin-mvps",
+        "mainstream-saas"
+      ],
       "ai_slop_risk": "high",
       "notes": "This IS the AI default — if you want to differentiate, change one fundamental: type, color, or density."
     },
@@ -1156,8 +2677,17 @@
       "name": "Minimal Portfolio",
       "category": "Minimalist / Swiss",
       "philosophy": "Designer-portfolio restraint. One column, type-led, work links lowered, attention on craft not chrome.",
-      "when_to_use": ["designer/developer portfolios", "writer sites", "consultant landing pages", "single-person brands"],
-      "when_to_skip": ["product marketing", "e-commerce", "team/agency sites"],
+      "when_to_use": [
+        "designer/developer portfolios",
+        "writer sites",
+        "consultant landing pages",
+        "single-person brands"
+      ],
+      "when_to_skip": [
+        "product marketing",
+        "e-commerce",
+        "team/agency sites"
+      ],
       "tokens": {
         "borders": "0 mostly, occasional 1px under work-link rows",
         "shadows": "none",
@@ -1166,10 +2696,29 @@
         "radius": "0 to 4px",
         "motion": "instant on links, slow on page transitions, no flourish"
       },
-      "exemplars": ["paulstamatiou.com", "jasonsantamaria.com", "rauno.me"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["personal-portfolios", "single-person-brands"],
+      "exemplars": [
+        "paulstamatiou.com",
+        "jasonsantamaria.com",
+        "rauno.me"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "github-octicon",
+        "airbnb-coral",
+        "monochrome-warm",
+        "editorial-cream"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "personal-portfolios",
+        "single-person-brands"
+      ],
       "ai_slop_risk": "low",
       "notes": "Don't add gradients to compensate for empty space — empty space IS the design."
     },
@@ -1178,8 +2727,17 @@
       "name": "Agency Brutalist Modern",
       "category": "Bold Statement",
       "philosophy": "Design studio swagger — oversized type, aggressive grid, scroll choreography, GSAP-driven entries.",
-      "when_to_use": ["design agency sites", "creative studio portfolios", "branding-agency case studies", "art-directed self-promotion"],
-      "when_to_skip": ["product UIs", "documentation", "consumer e-commerce"],
+      "when_to_use": [
+        "design agency sites",
+        "creative studio portfolios",
+        "branding-agency case studies",
+        "art-directed self-promotion"
+      ],
+      "when_to_skip": [
+        "product UIs",
+        "documentation",
+        "consumer e-commerce"
+      ],
       "tokens": {
         "borders": "thick (3-6px) when present, often horizontal divider blocks",
         "shadows": "harsh offset shadows, rarely soft",
@@ -1188,10 +2746,30 @@
         "radius": "0 mostly, occasional 4-8px",
         "motion": "scroll-driven choreography (GSAP), type morph on scroll, image reveals"
       },
-      "exemplars": ["activetheory.net", "ueno.co", "lusion.co"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["design-agencies", "creative-studios", "branding-agencies"],
+      "exemplars": [
+        "activetheory.net",
+        "ueno.co",
+        "lusion.co"
+      ],
+      "compatible_palettes": [
+        "vercel-stark",
+        "figma-canvas",
+        "monochrome-pure",
+        "pastel-mist",
+        "pastel-rose"
+      ],
+      "compatible_type_pairs": [
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia",
+        "domine-dm-sans-jetbrains"
+      ],
+      "compatible_industries": [
+        "design-agencies",
+        "creative-studios",
+        "branding-agencies"
+      ],
       "ai_slop_risk": "low",
       "notes": "Scroll choreography is the brand — without GSAP/Framer Motion timeline work this becomes static and ordinary."
     },
@@ -1200,8 +2778,17 @@
       "name": "Soft 3D Illustration",
       "category": "Claymorphism / Soft 3D",
       "philosophy": "Spline-rendered shapes, pillow blobs, ambient occlusion, Y2K-meets-modern. 3D as decoration, not metaphor.",
-      "when_to_use": ["AI product marketing", "creator-tool launches", "design-tool brands", "consumer-soft-tech"],
-      "when_to_skip": ["B2B dashboards", "enterprise admin", "transactional flows"],
+      "when_to_use": [
+        "AI product marketing",
+        "creator-tool launches",
+        "design-tool brands",
+        "consumer-soft-tech"
+      ],
+      "when_to_skip": [
+        "B2B dashboards",
+        "enterprise admin",
+        "transactional flows"
+      ],
       "tokens": {
         "borders": "0 — 3D shapes carry visual interest",
         "shadows": "ambient occlusion baked into 3D, soft drop shadows under shapes",
@@ -1210,10 +2797,30 @@
         "radius": "16-24px on cards, shapes are organic blobs",
         "motion": "slow rotation on 3D objects (15-30s loops), cursor-tracked parallax"
       },
-      "exemplars": ["spline.design", "framer.com", "linear.app"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["ai-marketing", "creator-tools", "design-tools"],
+      "exemplars": [
+        "spline.design",
+        "framer.com",
+        "linear.app"
+      ],
+      "compatible_palettes": [
+        "notion-paper",
+        "github-octicon",
+        "apple-clarity",
+        "figma-canvas",
+        "monochrome-pure"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "ai-marketing",
+        "creator-tools",
+        "design-tools"
+      ],
       "ai_slop_risk": "high",
       "notes": "Spline blobs are an AI-marketing cliché now — if you use 3D, it should reference something specific to the product."
     },
@@ -1222,8 +2829,17 @@
       "name": "Isometric Tech",
       "category": "Skeuomorphic Modern",
       "philosophy": "Diagonal 30/60 projection. Pixel illustration revival — buildings, devices, robots in clean isometric.",
-      "when_to_use": ["dev-tool feature diagrams", "B2B technical illustrations", "platform architecture marketing", "education content"],
-      "when_to_skip": ["fashion", "long-form editorial", "fast-moving consumer marketing"],
+      "when_to_use": [
+        "dev-tool feature diagrams",
+        "B2B technical illustrations",
+        "platform architecture marketing",
+        "education content"
+      ],
+      "when_to_skip": [
+        "fashion",
+        "long-form editorial",
+        "fast-moving consumer marketing"
+      ],
       "tokens": {
         "borders": "1-2px solid, often colored stroke on illustrations",
         "shadows": "flat shadows at consistent angle, no atmospheric depth",
@@ -1232,10 +2848,30 @@
         "radius": "0 in illustration (sharp polygons), 8-12px in UI chrome",
         "motion": "isolated illustration animation (one element moves at a time), parallax on hover"
       },
-      "exemplars": ["asana.com", "twilio.com", "monday.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["dev-tools", "b2b-technical", "platform-marketing"],
+      "exemplars": [
+        "asana.com",
+        "twilio.com",
+        "monday.com"
+      ],
+      "compatible_palettes": [
+        "linear-graphite",
+        "stripe-indigo",
+        "apple-clarity",
+        "figma-canvas",
+        "pastel-mist"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "dev-tools",
+        "b2b-technical",
+        "platform-marketing"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Isometric illustrations went generic around 2018 — to avoid the cliché, the illustrations need to be specific (your product's actual objects, not stock characters)."
     },
@@ -1244,8 +2880,17 @@
       "name": "Biotech Clinical Modern",
       "category": "Minimalist / Swiss",
       "philosophy": "Lab precision in pixels. Pale science palette, sans-serif rigor, restrained color reserved for status, organic shapes used sparingly.",
-      "when_to_use": ["biotech startups", "pharmaceutical brands", "medical-device companies", "genomics products"],
-      "when_to_skip": ["consumer wellness marketing", "kids products", "loud DTC"],
+      "when_to_use": [
+        "biotech startups",
+        "pharmaceutical brands",
+        "medical-device companies",
+        "genomics products"
+      ],
+      "when_to_skip": [
+        "consumer wellness marketing",
+        "kids products",
+        "loud DTC"
+      ],
       "tokens": {
         "borders": "1px cool-gray hairlines, used between sections",
         "shadows": "shadow-xs on cards, shadow-sm on modals",
@@ -1254,10 +2899,31 @@
         "radius": "8-12px on cards, 6-8px on buttons",
         "motion": "instant on state, slow (400-600ms) on transitions, no celebratory animation"
       },
-      "exemplars": ["modernatx.com", "verilylifesciences.com", "ginkgobioworks.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["biotech", "pharmaceuticals", "medical-devices", "genomics"],
+      "exemplars": [
+        "modernatx.com",
+        "verilylifesciences.com",
+        "ginkgobioworks.com"
+      ],
+      "compatible_palettes": [
+        "monochrome-slate",
+        "vibrant-electric",
+        "forest-moss",
+        "ocean-deep",
+        "high-contrast-aaa"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "biotech",
+        "pharmaceuticals",
+        "medical-devices",
+        "genomics"
+      ],
       "ai_slop_risk": "low",
       "notes": "Avoid stock photos of test tubes or DNA helices — they read as generic biotech. Use abstract science-inspired patterns instead."
     },
@@ -1266,8 +2932,17 @@
       "name": "Video Streaming Immersive",
       "category": "Dark Mode Luxe",
       "philosophy": "TV-app aesthetic in browser. Edge-to-edge poster art, gradient overlays for legibility, generous focus rings, content-first.",
-      "when_to_use": ["streaming platforms", "video-on-demand services", "TV companion apps", "cinematic content products"],
-      "when_to_skip": ["text-heavy content", "B2B dashboards", "transactional flows"],
+      "when_to_use": [
+        "streaming platforms",
+        "video-on-demand services",
+        "TV companion apps",
+        "cinematic content products"
+      ],
+      "when_to_skip": [
+        "text-heavy content",
+        "B2B dashboards",
+        "transactional flows"
+      ],
       "tokens": {
         "borders": "0 — poster art carries surface",
         "shadows": "gradient overlays on imagery for text contrast",
@@ -1276,10 +2951,30 @@
         "radius": "8-12px on poster cards, 0 in player chrome",
         "motion": "slow hero auto-scroll, smooth focus-ring transitions, parallax tile entries"
       },
-      "exemplars": ["netflix.com", "max.com", "apple.com/apple-tv-plus"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["streaming-platforms", "video-on-demand", "cinematic-content"],
+      "exemplars": [
+        "netflix.com",
+        "max.com",
+        "apple.com/apple-tv-plus"
+      ],
+      "compatible_palettes": [
+        "ocean-deep",
+        "y2k-chrome",
+        "high-contrast-aaa",
+        "high-contrast-civic",
+        "memphis"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "streaming-platforms",
+        "video-on-demand",
+        "cinematic-content"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Focus rings are the design — TV-app accessibility lives or dies by the visible-keyboard-focus indicator."
     },
@@ -1288,8 +2983,17 @@
       "name": "Warm Marketplace",
       "category": "Editorial Warm",
       "philosophy": "Independent-marketplace warmth. Hand-curated feel, generous product photography, soft cream palette, anti-Amazon.",
-      "when_to_use": ["independent marketplaces", "handcraft platforms", "vintage marketplaces", "creator-led commerce"],
-      "when_to_skip": ["enterprise B2B", "fast-fashion volume", "transactional fintech"],
+      "when_to_use": [
+        "independent marketplaces",
+        "handcraft platforms",
+        "vintage marketplaces",
+        "creator-led commerce"
+      ],
+      "when_to_skip": [
+        "enterprise B2B",
+        "fast-fashion volume",
+        "transactional fintech"
+      ],
       "tokens": {
         "borders": "0.5-1px warm-taupe between sections, hairline on inputs",
         "shadows": "shadow-sm warm-tinted on product cards",
@@ -1298,10 +3002,30 @@
         "radius": "10-16px on product cards, 8px on inputs/buttons",
         "motion": "ease-out 250-350ms, gentle hover-lift, no bounce"
       },
-      "exemplars": ["etsy.com", "verishop.com", "thefoldlondon.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["independent-marketplaces", "handcraft", "creator-commerce"],
+      "exemplars": [
+        "etsy.com",
+        "verishop.com",
+        "thefoldlondon.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "airbnb-coral",
+        "monochrome-warm",
+        "editorial-cream",
+        "editorial-bone"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "independent-marketplaces",
+        "handcraft",
+        "creator-commerce"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Warmth lives in the photography style — without curated product imagery, this reads as a generic cream-themed shop."
     },
@@ -1310,8 +3034,17 @@
       "name": "Kids Playful Rounded",
       "category": "Claymorphism / Soft 3D",
       "philosophy": "Soft rounded shapes, oversized friendly type, primary saturated palette, generous tap targets. Built for small fingers.",
-      "when_to_use": ["children's education apps", "kids games", "family-content platforms", "early literacy products"],
-      "when_to_skip": ["B2B SaaS", "finance", "anything for adults that needs gravitas"],
+      "when_to_use": [
+        "children's education apps",
+        "kids games",
+        "family-content platforms",
+        "early literacy products"
+      ],
+      "when_to_skip": [
+        "B2B SaaS",
+        "finance",
+        "anything for adults that needs gravitas"
+      ],
       "tokens": {
         "borders": "0 — soft shapes have no edges",
         "shadows": "soft, large radius, often colored ambient glow",
@@ -1320,10 +3053,30 @@
         "radius": "20-40px, very soft pillow-like",
         "motion": "bouncy spring on every interaction, celebratory micro-animations on success"
       },
-      "exemplars": ["khanacademy.org/kids", "duolingo.com", "epic.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["kids-education", "family-platforms", "early-literacy"],
+      "exemplars": [
+        "khanacademy.org/kids",
+        "duolingo.com",
+        "epic.com"
+      ],
+      "compatible_palettes": [
+        "airbnb-coral",
+        "editorial-cream",
+        "pastel-mist",
+        "pastel-rose",
+        "pastel-lavender"
+      ],
+      "compatible_type_pairs": [
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia",
+        "domine-dm-sans-jetbrains"
+      ],
+      "compatible_industries": [
+        "kids-education",
+        "family-platforms",
+        "early-literacy"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Saturation has to be high or it reads as 'baby-faded' — kids' eyes respond to vibrant color."
     },
@@ -1332,8 +3085,17 @@
       "name": "Podcast Audio",
       "category": "Editorial Warm",
       "philosophy": "Audio-first marketing — episode covers as hero, transcript-friendly type, generous space for listening surfaces.",
-      "when_to_use": ["podcast publisher sites", "audiobook platforms", "interview series", "audio creator landing pages"],
-      "when_to_skip": ["dashboards", "trading platforms", "kids products"],
+      "when_to_use": [
+        "podcast publisher sites",
+        "audiobook platforms",
+        "interview series",
+        "audio creator landing pages"
+      ],
+      "when_to_skip": [
+        "dashboards",
+        "trading platforms",
+        "kids products"
+      ],
       "tokens": {
         "borders": "0 on episode tiles, 1px hairline between sections",
         "shadows": "shadow-sm on episode covers, soft",
@@ -1342,10 +3104,30 @@
         "radius": "8-12px on cards, full on play buttons",
         "motion": "slow fade-ins, audio-waveform animations on playback"
       },
-      "exemplars": ["overcast.fm", "transistor.fm", "wondery.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["podcasting", "audiobooks", "audio-creators"],
+      "exemplars": [
+        "overcast.fm",
+        "transistor.fm",
+        "wondery.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "airbnb-coral",
+        "monochrome-warm",
+        "editorial-cream",
+        "editorial-bone"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "podcasting",
+        "audiobooks",
+        "audio-creators"
+      ],
       "ai_slop_risk": "low",
       "notes": "Waveform animations should be subtle — flashy waveforms distract from the listening intent."
     },
@@ -1354,8 +3136,17 @@
       "name": "Minimalist Mobile App",
       "category": "Minimalist / Swiss",
       "philosophy": "Single-purpose app aesthetic. One screen, one action, no chrome that distracts. Mobile-native restraint.",
-      "when_to_use": ["focused single-purpose apps", "meditation/habit apps", "calculators", "minimalist tool apps"],
-      "when_to_skip": ["multi-feature platforms", "marketplaces", "complex dashboards"],
+      "when_to_use": [
+        "focused single-purpose apps",
+        "meditation/habit apps",
+        "calculators",
+        "minimalist tool apps"
+      ],
+      "when_to_skip": [
+        "multi-feature platforms",
+        "marketplaces",
+        "complex dashboards"
+      ],
       "tokens": {
         "borders": "0 — surfaces tell hierarchy",
         "shadows": "shadow-xs at most",
@@ -1364,10 +3155,30 @@
         "radius": "12-16px on cards, full on action buttons",
         "motion": "soft spring on every press, slow page transitions"
       },
-      "exemplars": ["oakmeditation.com", "streaks.app", "centered.app"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["meditation-apps", "single-purpose-tools", "minimalist-apps"],
+      "exemplars": [
+        "oakmeditation.com",
+        "streaks.app",
+        "centered.app"
+      ],
+      "compatible_palettes": [
+        "notion-paper",
+        "github-octicon",
+        "apple-clarity",
+        "figma-canvas",
+        "monochrome-pure"
+      ],
+      "compatible_type_pairs": [
+        "lora-nunito-sans-cascadia",
+        "spectral-public-sans-source-code",
+        "merriweather-source-sans-ibm-mono",
+        "archivo-black-archivo-jetbrains",
+        "outfit-outfit-jetbrains"
+      ],
+      "compatible_industries": [
+        "meditation-apps",
+        "single-purpose-tools",
+        "minimalist-apps"
+      ],
       "ai_slop_risk": "low",
       "notes": "Mobile minimalism fails when navigation gets unclear — restraint requires obvious next steps."
     },
@@ -1376,8 +3187,17 @@
       "name": "Blog Personal Warm",
       "category": "Pastoral / Soft Editorial",
       "philosophy": "Personal essay site — long reading surface, warm typography, generous margins, single column at 600-700px max.",
-      "when_to_use": ["personal blogs", "essay sites", "newsletter archives", "individual writer landing pages"],
-      "when_to_skip": ["product UIs", "ecommerce", "anything multi-author or feed-based"],
+      "when_to_use": [
+        "personal blogs",
+        "essay sites",
+        "newsletter archives",
+        "individual writer landing pages"
+      ],
+      "when_to_skip": [
+        "product UIs",
+        "ecommerce",
+        "anything multi-author or feed-based"
+      ],
       "tokens": {
         "borders": "0 mostly, occasional 1px between posts",
         "shadows": "none",
@@ -1386,10 +3206,30 @@
         "radius": "0 to 4px",
         "motion": "instant — no animations on long-form, scroll fade only"
       },
-      "exemplars": ["stratechery.com", "paulgraham.com", "patio11.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["personal-blogs", "newsletter-archives", "writer-sites"],
+      "exemplars": [
+        "stratechery.com",
+        "paulgraham.com",
+        "patio11.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "airbnb-coral",
+        "monochrome-warm",
+        "editorial-cream",
+        "editorial-bone"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia",
+        "source-serif-pro-source-sans-source-code",
+        "newsreader-figtree-jetbrains"
+      ],
+      "compatible_industries": [
+        "personal-blogs",
+        "newsletter-archives",
+        "writer-sites"
+      ],
       "ai_slop_risk": "low",
       "notes": "Don't add gradients or hero images — long-form is about reading speed, not visual decoration."
     },
@@ -1398,8 +3238,17 @@
       "name": "Newsletter Substack",
       "category": "Editorial / Magazine",
       "philosophy": "Email-newsletter aesthetic translated to web. Subscribe-first, post-feed, archive-friendly, type-led.",
-      "when_to_use": ["independent journalism", "paid newsletters", "writer commerce", "thought-leader platforms"],
-      "when_to_skip": ["product UIs", "long-form static publications", "consumer marketing"],
+      "when_to_use": [
+        "independent journalism",
+        "paid newsletters",
+        "writer commerce",
+        "thought-leader platforms"
+      ],
+      "when_to_skip": [
+        "product UIs",
+        "long-form static publications",
+        "consumer marketing"
+      ],
       "tokens": {
         "borders": "1px hairline between posts",
         "shadows": "shadow-xs on subscribe cards",
@@ -1408,10 +3257,30 @@
         "radius": "6-10px",
         "motion": "instant — newsletters reward speed, not flourish"
       },
-      "exemplars": ["substack.com", "ghost.org", "stratechery.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["independent-journalism", "paid-newsletters", "thought-leadership"],
+      "exemplars": [
+        "substack.com",
+        "ghost.org",
+        "stratechery.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "notion-paper",
+        "github-octicon",
+        "apple-clarity",
+        "figma-canvas"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "independent-journalism",
+        "paid-newsletters",
+        "thought-leadership"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Substack default look is becoming a cliché — adding type personality (custom display, unique link color) breaks the default."
     },
@@ -1420,8 +3289,17 @@
       "name": "Gaming Companion",
       "category": "Cyberpunk / Neon",
       "philosophy": "Game-launcher aesthetic — dark surface, neon accent, achievement chips, presence indicators. Built for hype.",
-      "when_to_use": ["game launchers", "esports platforms", "gaming community products", "streaming-overlay tools"],
-      "when_to_skip": ["B2B SaaS", "finance", "healthcare"],
+      "when_to_use": [
+        "game launchers",
+        "esports platforms",
+        "gaming community products",
+        "streaming-overlay tools"
+      ],
+      "when_to_skip": [
+        "B2B SaaS",
+        "finance",
+        "healthcare"
+      ],
       "tokens": {
         "borders": "1px subtle dark, 1-2px neon on focus/active states",
         "shadows": "neon glow on interactive elements, depth on cards",
@@ -1430,10 +3308,30 @@
         "radius": "8-12px on cards, 4-6px on chips/badges",
         "motion": "fast spring, presence pulse, hover-lift on game tiles"
       },
-      "exemplars": ["steampowered.com", "playstation.com", "epicgames.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["game-launchers", "esports", "gaming-community"],
+      "exemplars": [
+        "steampowered.com",
+        "playstation.com",
+        "epicgames.com"
+      ],
+      "compatible_palettes": [
+        "pastel-mint",
+        "vibrant-magenta",
+        "vibrant-electric",
+        "ocean-deep",
+        "dark-true-black"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "game-launchers",
+        "esports",
+        "gaming-community"
+      ],
       "ai_slop_risk": "medium",
       "notes": "RGB-overload (every accent at full neon) is the failure mode — pick ONE accent and hold the line."
     },
@@ -1442,8 +3340,17 @@
       "name": "Ecommerce Minimal Luxury",
       "category": "Monochrome Precise",
       "philosophy": "Apparel/object commerce with restraint. Edge-to-edge product photography, type at scale, no decoration competing with the product.",
-      "when_to_use": ["premium DTC apparel", "object/furniture commerce", "high-end accessories", "single-product brands"],
-      "when_to_skip": ["high-volume marketplaces", "fast-fashion", "kids/family commerce"],
+      "when_to_use": [
+        "premium DTC apparel",
+        "object/furniture commerce",
+        "high-end accessories",
+        "single-product brands"
+      ],
+      "when_to_skip": [
+        "high-volume marketplaces",
+        "fast-fashion",
+        "kids/family commerce"
+      ],
       "tokens": {
         "borders": "0 mostly, 1px hairline on inputs and product specs",
         "shadows": "none on product imagery, shadow-xs on action surfaces",
@@ -1452,10 +3359,30 @@
         "radius": "0 to 4px on chrome, 0 on product images",
         "motion": "slow hover-zoom on products, restrained transitions, no flourish"
       },
-      "exemplars": ["everlane.com", "norse-store.com", "kinto-usa.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["premium-dtc-apparel", "object-furniture", "single-product-brands"],
+      "exemplars": [
+        "everlane.com",
+        "norse-store.com",
+        "kinto-usa.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "linear-graphite",
+        "vercel-stark",
+        "apple-clarity",
+        "airbnb-coral"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "premium-dtc-apparel",
+        "object-furniture",
+        "single-product-brands"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Product photography is 80% of the design — without art-directed images, restraint reads as 'unfinished.'"
     },
@@ -1464,8 +3391,17 @@
       "name": "Travel Immersive",
       "category": "Editorial Warm",
       "philosophy": "Place-based marketing — full-bleed location imagery, generous serif headlines, slow scroll, the destination is the design.",
-      "when_to_use": ["travel brands", "hotel/destination microsites", "tour operators", "premium travel publishing"],
-      "when_to_skip": ["dashboards", "B2B SaaS", "fast transactional flows"],
+      "when_to_use": [
+        "travel brands",
+        "hotel/destination microsites",
+        "tour operators",
+        "premium travel publishing"
+      ],
+      "when_to_skip": [
+        "dashboards",
+        "B2B SaaS",
+        "fast transactional flows"
+      ],
       "tokens": {
         "borders": "0 — imagery edge-to-edge",
         "shadows": "gradient overlays for text legibility over photography",
@@ -1474,10 +3410,30 @@
         "radius": "0 on hero images, 8-12px on cards",
         "motion": "slow hero zoom, parallax on scroll (restrained, not seasick), fade-on-scroll text"
       },
-      "exemplars": ["aman.com", "airbnb.com/luxury", "blackcassiandresort.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["travel-brands", "premium-destinations", "tour-operators"],
+      "exemplars": [
+        "aman.com",
+        "airbnb.com/luxury",
+        "blackcassiandresort.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "notion-paper",
+        "github-octicon",
+        "apple-clarity",
+        "figma-canvas"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "travel-brands",
+        "premium-destinations",
+        "tour-operators"
+      ],
       "ai_slop_risk": "low",
       "notes": "Parallax overload is the failure mode — slow, intentional movement; never cumulative seasickness."
     },
@@ -1486,8 +3442,17 @@
       "name": "Developer Portfolio Precise",
       "category": "Linear-style precise dark",
       "philosophy": "Engineer's homepage — terminal-feel, dark surface, project tiles, GitHub-adjacent typography.",
-      "when_to_use": ["developer portfolios", "engineering blogs", "open-source maintainer sites", "engineer-creator landing pages"],
-      "when_to_skip": ["fashion", "lifestyle DTC", "art direction"],
+      "when_to_use": [
+        "developer portfolios",
+        "engineering blogs",
+        "open-source maintainer sites",
+        "engineer-creator landing pages"
+      ],
+      "when_to_skip": [
+        "fashion",
+        "lifestyle DTC",
+        "art direction"
+      ],
       "tokens": {
         "borders": "1px hairline zinc-800, used sparingly",
         "shadows": "none on dark, shadow-xs on light variants",
@@ -1496,10 +3461,30 @@
         "radius": "6-10px on project cards",
         "motion": "instant on hover, fast spring on entries"
       },
-      "exemplars": ["rauno.me", "leerob.io", "joshwcomeau.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["developer-portfolios", "engineering-blogs", "engineer-creators"],
+      "exemplars": [
+        "rauno.me",
+        "leerob.io",
+        "joshwcomeau.com"
+      ],
+      "compatible_palettes": [
+        "linear-graphite",
+        "github-octicon",
+        "ocean-deep",
+        "memphis",
+        "swiss-design"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "developer-portfolios",
+        "engineering-blogs",
+        "engineer-creators"
+      ],
       "ai_slop_risk": "low",
       "notes": "Personality lives in the type and motion choices — without them this becomes generic dark mode."
     },
@@ -1508,8 +3493,17 @@
       "name": "SaaS Onboarding Warm",
       "category": "Claymorphism / Soft 3D",
       "philosophy": "Onboarding-flow softness. Friendly illustrations, large progress, warm accents, soft animations. The first impression is friendly.",
-      "when_to_use": ["product onboarding flows", "first-run experiences", "signup wizards", "welcome surfaces"],
-      "when_to_skip": ["admin dashboards", "expert-mode product surfaces", "data-dense UIs"],
+      "when_to_use": [
+        "product onboarding flows",
+        "first-run experiences",
+        "signup wizards",
+        "welcome surfaces"
+      ],
+      "when_to_skip": [
+        "admin dashboards",
+        "expert-mode product surfaces",
+        "data-dense UIs"
+      ],
       "tokens": {
         "borders": "0 — illustrations and soft cards carry hierarchy",
         "shadows": "shadow-md soft on cards, shadow-lg on hero illustrations",
@@ -1518,10 +3512,30 @@
         "radius": "16-24px on cards, soft consistent",
         "motion": "spring physics on progress, soft entries, celebratory micro-animation on completion"
       },
-      "exemplars": ["linear.app/onboarding", "vercel.com/signup", "notion.so/onboarding"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["product-onboarding", "signup-flows", "first-run-experiences"],
+      "exemplars": [
+        "linear.app/onboarding",
+        "vercel.com/signup",
+        "notion.so/onboarding"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "airbnb-coral",
+        "monochrome-warm",
+        "editorial-cream",
+        "pastel-mist"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "product-onboarding",
+        "signup-flows",
+        "first-run-experiences"
+      ],
       "ai_slop_risk": "high",
       "notes": "Friendly illustrations are a default AI move — make sure illustrations are specific to the product, not generic happy people."
     },
@@ -1530,8 +3544,17 @@
       "name": "Civic Public Service",
       "category": "Minimalist / Swiss",
       "philosophy": "Government/civic clarity — high contrast, large type, no decoration, ADA-AAA throughout. Trust through legibility.",
-      "when_to_use": ["government services", "public-health products", "civic apps", "non-profit transparency sites"],
-      "when_to_skip": ["fashion", "consumer entertainment", "creative agency portfolios"],
+      "when_to_use": [
+        "government services",
+        "public-health products",
+        "civic apps",
+        "non-profit transparency sites"
+      ],
+      "when_to_skip": [
+        "fashion",
+        "consumer entertainment",
+        "creative agency portfolios"
+      ],
       "tokens": {
         "borders": "2px on focus, 1px on inputs, high-contrast",
         "shadows": "none — flatness for accessibility",
@@ -1540,10 +3563,31 @@
         "radius": "6-8px",
         "motion": "instant — never animate critical UI, fade only for non-critical"
       },
-      "exemplars": ["gov.uk", "usa.gov", "code.gov"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["government", "public-health", "civic-apps", "non-profits"],
+      "exemplars": [
+        "gov.uk",
+        "usa.gov",
+        "code.gov"
+      ],
+      "compatible_palettes": [
+        "github-octicon",
+        "apple-clarity",
+        "vibrant-electric",
+        "high-contrast-aaa",
+        "high-contrast-civic"
+      ],
+      "compatible_type_pairs": [
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia",
+        "domine-dm-sans-jetbrains"
+      ],
+      "compatible_industries": [
+        "government",
+        "public-health",
+        "civic-apps",
+        "non-profits"
+      ],
       "ai_slop_risk": "low",
       "notes": "Accessibility isn't a constraint here — it's the brief. Every visual decision needs to support universal usability."
     },
@@ -1552,8 +3596,17 @@
       "name": "Platform Developer Tools",
       "category": "Documentation / Stripe-style",
       "philosophy": "Infrastructure-platform marketing — code snippets as hero, terminal motifs, dark/light parity, dense docs.",
-      "when_to_use": ["cloud platforms", "API products", "developer-infra marketing", "open-source company sites"],
-      "when_to_skip": ["consumer products", "kids apps", "non-tech marketing"],
+      "when_to_use": [
+        "cloud platforms",
+        "API products",
+        "developer-infra marketing",
+        "open-source company sites"
+      ],
+      "when_to_skip": [
+        "consumer products",
+        "kids apps",
+        "non-tech marketing"
+      ],
       "tokens": {
         "borders": "1px hairline around code blocks, 1px on cards",
         "shadows": "shadow-sm to shadow-md on hero code snippets",
@@ -1562,10 +3615,30 @@
         "radius": "8-12px on code blocks, 6-10px on buttons",
         "motion": "fast (150ms) ease-out, code-block hover-copy ritual"
       },
-      "exemplars": ["vercel.com", "supabase.com", "planetscale.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["cloud-platforms", "api-products", "developer-infra"],
+      "exemplars": [
+        "vercel.com",
+        "supabase.com",
+        "planetscale.com"
+      ],
+      "compatible_palettes": [
+        "stripe-indigo",
+        "github-octicon",
+        "dark-true-black",
+        "dark-soft-black",
+        "dark-charcoal"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "cloud-platforms",
+        "api-products",
+        "developer-infra"
+      ],
       "ai_slop_risk": "high",
       "notes": "Code-block-as-hero is a developer-marketing cliché — choose code that demonstrates the product's actual ergonomics, not generic boilerplate."
     },
@@ -1574,8 +3647,17 @@
       "name": "Calendar Time Precise",
       "category": "Linear-style precise dark",
       "philosophy": "Time as the primary axis. Hairline grids, sharp event blocks, dense time labels, keyboard-shortcut hints visible.",
-      "when_to_use": ["calendar apps", "scheduling tools", "time-blocking products", "operations planning"],
-      "when_to_skip": ["marketing sites", "consumer entertainment", "kids products"],
+      "when_to_use": [
+        "calendar apps",
+        "scheduling tools",
+        "time-blocking products",
+        "operations planning"
+      ],
+      "when_to_skip": [
+        "marketing sites",
+        "consumer entertainment",
+        "kids products"
+      ],
       "tokens": {
         "borders": "1px hairline between hours and days, slightly stronger on day boundaries",
         "shadows": "shadow-xs on event blocks for elevation",
@@ -1584,10 +3666,30 @@
         "radius": "4-6px on event blocks, 0 on grid lines",
         "motion": "instant on drag, smooth on event create, fast on view switch"
       },
-      "exemplars": ["cron.com", "fantastical.app", "amie.so"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["calendar-apps", "scheduling-tools", "time-blocking"],
+      "exemplars": [
+        "cron.com",
+        "fantastical.app",
+        "amie.so"
+      ],
+      "compatible_palettes": [
+        "linear-graphite",
+        "notion-paper",
+        "github-octicon",
+        "apple-clarity",
+        "figma-canvas"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "spectral-public-sans-source-code",
+        "young-serif-inter-jetbrains",
+        "instrument-serif-inter-jetbrains"
+      ],
+      "compatible_industries": [
+        "calendar-apps",
+        "scheduling-tools",
+        "time-blocking"
+      ],
       "ai_slop_risk": "low",
       "notes": "Saturated event blocks become noisy — use tinted (15-25% opacity) blocks against the surface, not full color."
     },
@@ -1596,8 +3698,17 @@
       "name": "Magazine Fashion Editorial",
       "category": "Editorial / Magazine",
       "philosophy": "High-fashion magazine in browser. Oversized type as image, layered photography, restraint on color, italics as voice.",
-      "when_to_use": ["fashion publications", "high-end editorial", "art-direction magazines", "luxury campaign microsites"],
-      "when_to_skip": ["product UIs", "dashboards", "transactional commerce"],
+      "when_to_use": [
+        "fashion publications",
+        "high-end editorial",
+        "art-direction magazines",
+        "luxury campaign microsites"
+      ],
+      "when_to_skip": [
+        "product UIs",
+        "dashboards",
+        "transactional commerce"
+      ],
       "tokens": {
         "borders": "0 — type and image carry composition",
         "shadows": "none on imagery, occasional shadow-sm on captions",
@@ -1606,10 +3717,30 @@
         "radius": "0",
         "motion": "slow scroll-driven type entries, image cross-fades, no JS gimmicks"
       },
-      "exemplars": ["vogue.com", "thegentlewoman.co.uk", "i-d.co"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["fashion-publications", "luxury-campaigns", "art-direction"],
+      "exemplars": [
+        "vogue.com",
+        "thegentlewoman.co.uk",
+        "i-d.co"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "monochrome-pure",
+        "editorial-cream",
+        "editorial-bone",
+        "editorial-newsprint"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "source-serif-pro-source-sans-source-code",
+        "young-serif-inter-jetbrains",
+        "instrument-serif-inter-jetbrains"
+      ],
+      "compatible_industries": [
+        "fashion-publications",
+        "luxury-campaigns",
+        "art-direction"
+      ],
       "ai_slop_risk": "low",
       "notes": "Italic restraint is the tell — italics as voice (not decoration) is what separates fashion editorial from generic magazine."
     },
@@ -1618,8 +3749,17 @@
       "name": "Data Journalism Rich",
       "category": "Newspaper / Long-form",
       "philosophy": "Scrollytelling with embedded charts. NYT-grade visual essays where the chart, the prose, and the design speak together.",
-      "when_to_use": ["data investigations", "research storytelling", "policy explainers", "long-form data essays"],
-      "when_to_skip": ["dashboards", "product UIs", "fast-moving consumer marketing"],
+      "when_to_use": [
+        "data investigations",
+        "research storytelling",
+        "policy explainers",
+        "long-form data essays"
+      ],
+      "when_to_skip": [
+        "dashboards",
+        "product UIs",
+        "fast-moving consumer marketing"
+      ],
       "tokens": {
         "borders": "0.5px hairlines on axes, 1px between chart sections",
         "shadows": "none — print metaphor",
@@ -1628,10 +3768,30 @@
         "radius": "0 to 4px",
         "motion": "scroll-driven chart reveals, smooth interpolation between data states"
       },
-      "exemplars": ["nytimes.com/interactive", "pudding.cool", "reuters.com/graphics"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["data-journalism", "research-storytelling", "policy-explainers"],
+      "exemplars": [
+        "nytimes.com/interactive",
+        "pudding.cool",
+        "reuters.com/graphics"
+      ],
+      "compatible_palettes": [
+        "editorial-newsprint",
+        "japan-sumi",
+        "memphis",
+        "swiss-design",
+        "dark-paper-ink"
+      ],
+      "compatible_type_pairs": [
+        "source-serif-pro-source-sans-source-code",
+        "merriweather-source-sans-ibm-mono",
+        "newsreader-figtree-jetbrains",
+        "libre-caslon-libre-franklin-jetbrains",
+        "young-serif-inter-jetbrains"
+      ],
+      "compatible_industries": [
+        "data-journalism",
+        "research-storytelling",
+        "policy-explainers"
+      ],
       "ai_slop_risk": "low",
       "notes": "Chart-as-decoration is the failure — every chart needs to teach something specific, never wallpaper."
     },
@@ -1640,8 +3800,17 @@
       "name": "Creator Platform Vibrant",
       "category": "Bento / Modular Grid",
       "philosophy": "Creator-economy platform marketing. Bento grids of creator examples, vibrant accent colors, social-proof first.",
-      "when_to_use": ["creator platforms", "content monetization tools", "creator marketing landing pages", "no-code product launches"],
-      "when_to_skip": ["enterprise SaaS", "developer-only tools", "fintech compliance UIs"],
+      "when_to_use": [
+        "creator platforms",
+        "content monetization tools",
+        "creator marketing landing pages",
+        "no-code product launches"
+      ],
+      "when_to_skip": [
+        "enterprise SaaS",
+        "developer-only tools",
+        "fintech compliance UIs"
+      ],
       "tokens": {
         "borders": "0 mostly, 1px on inputs",
         "shadows": "shadow-md on bento cells, shadow-lg on hover",
@@ -1650,10 +3819,30 @@
         "radius": "16-24px on bento cells, full on action buttons",
         "motion": "hover-lift on cells, cursor parallax, scroll-driven counter-up on stats"
       },
-      "exemplars": ["beehiiv.com", "patreon.com", "buy-me-a-coffee.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["creator-platforms", "content-monetization", "no-code-products"],
+      "exemplars": [
+        "beehiiv.com",
+        "patreon.com",
+        "buy-me-a-coffee.com"
+      ],
+      "compatible_palettes": [
+        "spotify-energy",
+        "pastel-mint",
+        "vibrant-citrus",
+        "vibrant-magenta",
+        "vibrant-electric"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "creator-platforms",
+        "content-monetization",
+        "no-code-products"
+      ],
       "ai_slop_risk": "high",
       "notes": "Every creator platform now looks the same — to differentiate, pick a type or color that's not in the standard creator-economy palette."
     },
@@ -1662,8 +3851,17 @@
       "name": "AR/VR Spatial Marketing",
       "category": "Apple Liquid Glass",
       "philosophy": "Spatial-computing brand surfaces — 3D-floating panels, depth cues, translucent material, motion that suggests volume.",
-      "when_to_use": ["AR/VR product marketing", "spatial-computing platforms", "headset companion apps", "future-of-computing brand sites"],
-      "when_to_skip": ["dashboards", "long-form content", "kids products"],
+      "when_to_use": [
+        "AR/VR product marketing",
+        "spatial-computing platforms",
+        "headset companion apps",
+        "future-of-computing brand sites"
+      ],
+      "when_to_skip": [
+        "dashboards",
+        "long-form content",
+        "kids products"
+      ],
       "tokens": {
         "borders": "1px gradient highlight simulating panel edges",
         "shadows": "layered shadows simulating depth, ambient occlusion",
@@ -1672,10 +3870,30 @@
         "radius": "continuous corner squircles, 24-32px on hero panels",
         "motion": "spring physics with depth, gyro-aware parallax on capable devices, panel-emerge entries"
       },
-      "exemplars": ["apple.com/apple-vision-pro", "meta.com/quest", "magicleap.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["ar-vr-products", "spatial-computing", "headset-companions"],
+      "exemplars": [
+        "apple.com/apple-vision-pro",
+        "meta.com/quest",
+        "magicleap.com"
+      ],
+      "compatible_palettes": [
+        "apple-clarity",
+        "figma-canvas",
+        "ocean-deep",
+        "dark-true-black",
+        "dark-soft-black"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "spectral-public-sans-source-code"
+      ],
+      "compatible_industries": [
+        "ar-vr-products",
+        "spatial-computing",
+        "headset-companions"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Spatial without depth cues is just translucent panels — every visual decision should suggest a third dimension."
     },
@@ -1684,8 +3902,17 @@
       "name": "Indie SaaS Personality",
       "category": "Bold Statement",
       "philosophy": "Solo-founder product with personality. Big type, opinionated copy, hand-drawn doodles, anti-corporate energy.",
-      "when_to_use": ["indie maker products", "solo-founder launches", "opinionated tool brands", "developer-creator products"],
-      "when_to_skip": ["enterprise SaaS", "healthcare", "anything that needs to be 'safe'"],
+      "when_to_use": [
+        "indie maker products",
+        "solo-founder launches",
+        "opinionated tool brands",
+        "developer-creator products"
+      ],
+      "when_to_skip": [
+        "enterprise SaaS",
+        "healthcare",
+        "anything that needs to be 'safe'"
+      ],
       "tokens": {
         "borders": "occasional thick (3-4px) blocks, often hand-drawn",
         "shadows": "harsh offsets in brand color or pure black",
@@ -1694,10 +3921,30 @@
         "radius": "0 to 12px, mixed",
         "motion": "personality-driven — bounce on success, jitter on errors, never generic"
       },
-      "exemplars": ["screen.studio", "ray.so", "tldraw.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["indie-saas", "solo-founder-products", "developer-creators"],
+      "exemplars": [
+        "screen.studio",
+        "ray.so",
+        "tldraw.com"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "vercel-stark",
+        "github-octicon",
+        "figma-canvas",
+        "airbnb-coral"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "indie-saas",
+        "solo-founder-products",
+        "developer-creators"
+      ],
       "ai_slop_risk": "low",
       "notes": "Personality lives in the copywriting AND the design — without distinctive voice in the words, the visual personality reads as random."
     },
@@ -1706,8 +3953,17 @@
       "name": "Kindle Paperwhite",
       "category": "Newspaper / Long-form",
       "philosophy": "E-ink reader aesthetic in the browser. Off-white surface, ink text, no shadow, no animation. Pure reading.",
-      "when_to_use": ["reading apps", "ebook platforms", "long-form publishing", "reading-mode views"],
-      "when_to_skip": ["product UIs", "marketing landing pages", "dashboards"],
+      "when_to_use": [
+        "reading apps",
+        "ebook platforms",
+        "long-form publishing",
+        "reading-mode views"
+      ],
+      "when_to_skip": [
+        "product UIs",
+        "marketing landing pages",
+        "dashboards"
+      ],
       "tokens": {
         "borders": "0 — pure surface",
         "shadows": "none — e-ink has no depth",
@@ -1716,10 +3972,30 @@
         "radius": "0",
         "motion": "none — instant page changes, no scroll-fade"
       },
-      "exemplars": ["amazon.com/kindle/cloud-reader", "readwise.io/reader", "books.apple.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["ebook-platforms", "reading-apps", "long-form-publishing"],
+      "exemplars": [
+        "amazon.com/kindle/cloud-reader",
+        "readwise.io/reader",
+        "books.apple.com"
+      ],
+      "compatible_palettes": [
+        "monochrome-pure",
+        "editorial-newsprint",
+        "japan-sumi",
+        "dark-paper-ink",
+        "auto-paper-ink"
+      ],
+      "compatible_type_pairs": [
+        "source-serif-pro-source-sans-source-code",
+        "merriweather-source-sans-ibm-mono",
+        "newsreader-figtree-jetbrains",
+        "libre-caslon-libre-franklin-jetbrains",
+        "young-serif-inter-jetbrains"
+      ],
+      "compatible_industries": [
+        "ebook-platforms",
+        "reading-apps",
+        "long-form-publishing"
+      ],
       "ai_slop_risk": "low",
       "notes": "Restraint is mandatory — any color or animation breaks the e-ink illusion that makes long reading possible."
     },
@@ -1728,8 +4004,17 @@
       "name": "Habit Tracker Warm",
       "category": "Pastoral / Soft Editorial",
       "philosophy": "Daily-ritual app warmth — soft accent per habit, gentle progress indicators, no dopamine-hijacking celebrations.",
-      "when_to_use": ["habit trackers", "journaling apps", "mood/meditation logs", "personal-data-quiet products"],
-      "when_to_skip": ["work productivity tools", "trading platforms", "anything competitive"],
+      "when_to_use": [
+        "habit trackers",
+        "journaling apps",
+        "mood/meditation logs",
+        "personal-data-quiet products"
+      ],
+      "when_to_skip": [
+        "work productivity tools",
+        "trading platforms",
+        "anything competitive"
+      ],
       "tokens": {
         "borders": "0 mostly, 0.5px between rows",
         "shadows": "shadow-xs on cards, warm",
@@ -1738,10 +4023,30 @@
         "radius": "12-16px on cards, full on streak indicators",
         "motion": "gentle fade on check-off, no confetti, no celebration overload"
       },
-      "exemplars": ["streaks.app", "daylio.net", "morning.so"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["habit-trackers", "journaling", "personal-data"],
+      "exemplars": [
+        "streaks.app",
+        "daylio.net",
+        "morning.so"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "airbnb-coral",
+        "monochrome-warm",
+        "editorial-cream",
+        "editorial-bone"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "habit-trackers",
+        "journaling",
+        "personal-data"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Dopamine-hijacking animations (confetti, fanfare) are the failure mode — calm consistency builds habit, not celebration."
     },
@@ -1750,8 +4055,17 @@
       "name": "Research Tool Precise",
       "category": "Documentation / Stripe-style",
       "philosophy": "Academic-software clarity. Sidebar for sources, central reading pane, citation as first-class UI, no marketing flair.",
-      "when_to_use": ["academic research tools", "PDF readers", "citation managers", "knowledge-graph products"],
-      "when_to_skip": ["consumer products", "marketing", "kids products"],
+      "when_to_use": [
+        "academic research tools",
+        "PDF readers",
+        "citation managers",
+        "knowledge-graph products"
+      ],
+      "when_to_skip": [
+        "consumer products",
+        "marketing",
+        "kids products"
+      ],
       "tokens": {
         "borders": "1px hairline between panes, 0.5px between annotations",
         "shadows": "shadow-xs on hover, shadow-sm on modals",
@@ -1760,10 +4074,30 @@
         "radius": "6-8px",
         "motion": "instant on selection, smooth on pane resize, no flourish"
       },
-      "exemplars": ["readwise.io", "research-rabbit.com", "elicit.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["academic-software", "research-tools", "knowledge-graphs"],
+      "exemplars": [
+        "readwise.io",
+        "research-rabbit.com",
+        "elicit.com"
+      ],
+      "compatible_palettes": [
+        "stripe-indigo",
+        "notion-paper",
+        "github-octicon",
+        "apple-clarity",
+        "figma-canvas"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "spectral-public-sans-source-code"
+      ],
+      "compatible_industries": [
+        "academic-software",
+        "research-tools",
+        "knowledge-graphs"
+      ],
       "ai_slop_risk": "low",
       "notes": "Don't add gradient hero panels — research-tool credibility comes from precision UI, not marketing decoration."
     },
@@ -1772,8 +4106,17 @@
       "name": "Podcast Player Immersive",
       "category": "Dark Mode Luxe",
       "philosophy": "Audio app in dark mode — large cover art, generous play controls, transcript-aware. Listening as primary, browsing secondary.",
-      "when_to_use": ["podcast players", "music players", "audiobook apps", "audio-first consumer products"],
-      "when_to_skip": ["text-heavy UIs", "dashboards", "B2B products"],
+      "when_to_use": [
+        "podcast players",
+        "music players",
+        "audiobook apps",
+        "audio-first consumer products"
+      ],
+      "when_to_skip": [
+        "text-heavy UIs",
+        "dashboards",
+        "B2B products"
+      ],
       "tokens": {
         "borders": "0 — cover art carries hierarchy",
         "shadows": "shadow-lg on cover art for floating-card depth",
@@ -1782,10 +4125,30 @@
         "radius": "12-16px on cover art, full on play button",
         "motion": "smooth audio-progress, slow background-blur on hero cover, no flashy waveforms"
       },
-      "exemplars": ["overcast.fm", "podcasts.apple.com", "spotify.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["podcast-players", "music-players", "audiobook-apps"],
+      "exemplars": [
+        "overcast.fm",
+        "podcasts.apple.com",
+        "spotify.com"
+      ],
+      "compatible_palettes": [
+        "spotify-energy",
+        "ocean-deep",
+        "brutalist-primary",
+        "bauhaus",
+        "dark-true-black"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "spectral-public-sans-source-code"
+      ],
+      "compatible_industries": [
+        "podcast-players",
+        "music-players",
+        "audiobook-apps"
+      ],
       "ai_slop_risk": "medium",
       "notes": "Background blur of cover art is the signature touch — getting blur intensity right (not too smooth, not too pixelated) is the craft."
     },
@@ -1794,8 +4157,17 @@
       "name": "Checkout Trust Minimal",
       "category": "Monochrome Precise",
       "philosophy": "Conversion-focused checkout — generous hit targets, minimal chrome, trust signals at every step, no distractions.",
-      "when_to_use": ["e-commerce checkout flows", "subscription signup", "donation flows", "payment surfaces"],
-      "when_to_skip": ["marketing landing pages", "long-form content", "dashboards"],
+      "when_to_use": [
+        "e-commerce checkout flows",
+        "subscription signup",
+        "donation flows",
+        "payment surfaces"
+      ],
+      "when_to_skip": [
+        "marketing landing pages",
+        "long-form content",
+        "dashboards"
+      ],
       "tokens": {
         "borders": "1.5px on focused inputs (clear active state), 1px on resting",
         "shadows": "shadow-xs on form sections, shadow-sm on completion",
@@ -1804,10 +4176,31 @@
         "radius": "8-12px on inputs and buttons",
         "motion": "instant on focus, fast on validation, gentle success state — no celebration"
       },
-      "exemplars": ["shopify.com/checkout", "stripe.com/checkout", "shop.app"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["ecommerce-checkout", "subscription-flows", "donation-flows", "payment-surfaces"],
+      "exemplars": [
+        "shopify.com/checkout",
+        "stripe.com/checkout",
+        "shop.app"
+      ],
+      "compatible_palettes": [
+        "linear-graphite",
+        "vercel-stark",
+        "monochrome-pure",
+        "monochrome-warm",
+        "monochrome-slate"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "newsreader-figtree-jetbrains",
+        "young-serif-inter-jetbrains",
+        "instrument-serif-inter-jetbrains"
+      ],
+      "compatible_industries": [
+        "ecommerce-checkout",
+        "subscription-flows",
+        "donation-flows",
+        "payment-surfaces"
+      ],
       "ai_slop_risk": "low",
       "notes": "Trust comes from the absence of distractions — adding hero gradients or marketing in checkout kills conversion."
     },
@@ -1816,8 +4209,17 @@
       "name": "Social Feed Warm",
       "category": "Notion-style soft-document",
       "philosophy": "Reading-feed warmth — soft cards, generous space, no engagement-bait, calm timeline for thoughtful content.",
-      "when_to_use": ["thoughtful social platforms", "reading-focused communities", "indie social products", "anti-engagement networks"],
-      "when_to_skip": ["dopamine-driven social apps", "short-video platforms", "growth-hacking products"],
+      "when_to_use": [
+        "thoughtful social platforms",
+        "reading-focused communities",
+        "indie social products",
+        "anti-engagement networks"
+      ],
+      "when_to_skip": [
+        "dopamine-driven social apps",
+        "short-video platforms",
+        "growth-hacking products"
+      ],
       "tokens": {
         "borders": "0 mostly, 0.5px between feed items",
         "shadows": "shadow-xs on cards, gentle",
@@ -1826,10 +4228,30 @@
         "radius": "10-14px on cards, full on avatars",
         "motion": "ease-out 250-350ms, no infinite scroll teleport, no autoplay videos"
       },
-      "exemplars": ["substack.com/notes", "tumblr.com", "are.na"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["thoughtful-social", "reading-communities", "indie-social"],
+      "exemplars": [
+        "substack.com/notes",
+        "tumblr.com",
+        "are.na"
+      ],
+      "compatible_palettes": [
+        "claude-warm-editorial",
+        "notion-paper",
+        "github-octicon",
+        "apple-clarity",
+        "figma-canvas"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono",
+        "lora-nunito-sans-cascadia"
+      ],
+      "compatible_industries": [
+        "thoughtful-social",
+        "reading-communities",
+        "indie-social"
+      ],
       "ai_slop_risk": "medium",
       "notes": "If you optimize for engagement metrics, you'll drift back to dopamine UX — design discipline must hold the line."
     },
@@ -1838,8 +4260,17 @@
       "name": "Music Creation Tool",
       "category": "Industrial / Brutalist",
       "philosophy": "DAW aesthetic for the browser. Hardware-inspired knobs, oscilloscope displays, monospace labels, expert-mode density.",
-      "when_to_use": ["music production tools", "audio-effect apps", "synthesizer companions", "audio-engineering software"],
-      "when_to_skip": ["consumer apps", "marketing sites", "mass-market products"],
+      "when_to_use": [
+        "music production tools",
+        "audio-effect apps",
+        "synthesizer companions",
+        "audio-engineering software"
+      ],
+      "when_to_skip": [
+        "consumer apps",
+        "marketing sites",
+        "mass-market products"
+      ],
       "tokens": {
         "borders": "1-2px on knobs and modules, often inset/recessed",
         "shadows": "object-realistic on knobs (top light), shadow-md on modules",
@@ -1848,10 +4279,30 @@
         "radius": "0 to 4px (hardware-feeling), full on knobs",
         "motion": "knob rotation feedback, parameter-value flash on change, no UI-bounce"
       },
-      "exemplars": ["ableton.com", "splice.com", "soundtrap.com"],
-      "compatible_palettes": [],
-      "compatible_type_pairs": [],
-      "compatible_industries": ["music-production", "audio-effects", "synth-companions"],
+      "exemplars": [
+        "ableton.com",
+        "splice.com",
+        "soundtrap.com"
+      ],
+      "compatible_palettes": [
+        "spotify-energy",
+        "sunset-amber",
+        "brutalist-primary",
+        "dark-true-black",
+        "dark-soft-black"
+      ],
+      "compatible_type_pairs": [
+        "cormorant-inter-jetbrains",
+        "fraunces-inter-jetbrains",
+        "playfair-source-sans-ibm-mono",
+        "eb-garamond-work-sans-fira",
+        "crimson-pro-ibm-plex-sans-ibm-mono"
+      ],
+      "compatible_industries": [
+        "music-production",
+        "audio-effects",
+        "synth-companions"
+      ],
       "ai_slop_risk": "low",
       "notes": "Hardware-inspired without becoming literal — abstract the knob, don't render a photorealistic one."
     }
