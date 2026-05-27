@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uxskill"
+version = "2.0.0-alpha.1"
+description = "Design intelligence engine for AI coding assistants. Anti-AI-slop linter, mandatory discovery, 5-parallel-search recommender, 75+ styles, 170+ palettes, 65+ type pairs, 72 brand specs."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [
+  { name = "Laith Aljunaidy", email = "laith.aljunaidy.laith@gmail.com" }
+]
+keywords = [
+  "ux", "ui", "design-system", "ai-coding", "claude-code", "cursor",
+  "windsurf", "linter", "design", "frontend", "anti-ai-slop"
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: User Interfaces",
+  "Topic :: Software Development :: Libraries :: Python Modules"
+]
+dependencies = [
+  "click>=8.1",
+  "rich>=13.0",
+  "pydantic>=2.5",
+  "tomli>=2.0;python_version<'3.11'"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.4",
+  "pytest-cov>=4.1",
+  "ruff>=0.1.9",
+  "mypy>=1.7",
+  "black>=23.12"
+]
+
+[project.urls]
+Homepage = "https://uxskill.laithjunaidy.com"
+Repository = "https://github.com/Laith0003/ux-skill"
+Issues = "https://github.com/Laith0003/ux-skill/issues"
+Documentation = "https://uxskill.laithjunaidy.com"
+
+[project.scripts]
+ux = "engine.cli.main:cli"
+uxskill = "engine.cli.main:cli"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["engine*"]
+
+[tool.setuptools.package-data]
+"engine" = ["../data/**/*.json"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "-v --tb=short"

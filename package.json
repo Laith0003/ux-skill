@@ -1,0 +1,32 @@
+{
+  "name": "uxskill",
+  "version": "2.0.0-alpha.1",
+  "description": "ux-skill — design intelligence engine for AI coding assistants. npx wrapper around the Python engine.",
+  "type": "module",
+  "bin": {
+    "uxskill": "bin/uxskill.mjs",
+    "ux": "bin/uxskill.mjs"
+  },
+  "files": [
+    "bin/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "homepage": "https://uxskill.laithjunaidy.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Laith0003/ux-skill.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Laith0003/ux-skill/issues"
+  },
+  "keywords": [
+    "ux", "ui", "design-system", "ai-coding", "claude-code",
+    "cursor", "windsurf", "linter", "design", "frontend"
+  ],
+  "author": "Laith Aljunaidy <laith.aljunaidy.laith@gmail.com>",
+  "license": "MIT"
+}
