@@ -1,0 +1,10 @@
+{
+  "project_type": "patient-portal",
+  "industry": "telehealth",
+  "audience": ["patients varying ages", "literacy varies", "anxious"],
+  "tone": ["calm", "clinical-but-warm", "specific"],
+  "must_have": ["a11y-AAA", "high-contrast", "no-jargon"],
+  "forbidden": ["brutalism", "playful-gradient", "celebratory-tone"],
+  "stack": "react-vite",
+  "region": "us"
+}

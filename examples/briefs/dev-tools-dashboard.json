@@ -1,0 +1,10 @@
+{
+  "project_type": "dashboard",
+  "industry": "dev-tools",
+  "audience": ["senior engineers", "platform teams"],
+  "tone": ["precise", "calm", "technical"],
+  "must_have": ["dark-mode", "data-density", "keyboard-nav-first"],
+  "forbidden": ["playful-gradient", "claymorphism", "soft-3d"],
+  "stack": "nextjs-15-app-router",
+  "region": "us"
+}

@@ -1,0 +1,10 @@
+{
+  "project_type": "marketing-site",
+  "industry": "luxury-fashion",
+  "audience": ["high-net-worth", "image-led shoppers", "global"],
+  "tone": ["editorial", "luxe", "restrained"],
+  "must_have": ["image-first", "premium-typography", "multi-region"],
+  "forbidden": ["brutalism", "playful-gradient", "shadcn-default"],
+  "stack": "astro",
+  "region": "global"
+}

@@ -1,0 +1,10 @@
+{
+  "project_type": "landing",
+  "industry": "fintech-neobank",
+  "audience": ["B2C", "mobile-first", "MENA region"],
+  "tone": ["warm", "trustworthy", "precise"],
+  "must_have": ["dark-mode", "rtl-arabic", "a11y-AA", "kyc-flow-clear"],
+  "forbidden": ["brutalism", "purple-to-blue-gradient", "playful-gradient", "emoji-in-ui"],
+  "stack": "nextjs-15-app-router",
+  "region": "mena"
+}
