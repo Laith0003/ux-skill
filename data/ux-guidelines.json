@@ -1,0 +1,1579 @@
+{
+  "_meta": {
+    "version": "2.0.0",
+    "entries": 112,
+    "last_updated": "2026-05-27",
+    "source": "ux-skill v2 - Python pivot",
+    "schema_version": "1.0"
+  },
+  "entries": [
+    {
+      "id": "hicks-law",
+      "name": "Hick's Law",
+      "category": "Decision Cost",
+      "source": "Hick (1952), Hyman (1953)",
+      "principle": "Decision time grows logarithmically with the number of choices presented.",
+      "application": [
+        "Limit primary actions to one per surface.",
+        "Chunk secondary options behind progressive disclosure.",
+        "Provide sensible defaults to reduce perceived choice."
+      ],
+      "anti_patterns": ["20+ item top-level navigation", "10-option settings dropdown without grouping"],
+      "compatible_components": ["primary-cta", "stepped-form", "progressive-disclosure", "command-palette"]
+    },
+    {
+      "id": "fitts-law",
+      "name": "Fitts's Law",
+      "category": "Decision Cost",
+      "source": "Fitts (1954)",
+      "principle": "Time to acquire a target is a function of distance to and size of the target.",
+      "application": [
+        "Make primary actions large (44px+ touch targets).",
+        "Place frequent actions near pointer rest positions or screen edges.",
+        "Group related actions so the next click is close to the previous one."
+      ],
+      "anti_patterns": ["tiny close buttons in modals", "destructive actions next to the default action"],
+      "compatible_components": ["primary-cta", "floating-action-button", "context-menu", "toolbar"]
+    },
+    {
+      "id": "doherty-threshold",
+      "name": "Doherty Threshold",
+      "category": "Decision Cost",
+      "source": "Doherty and Thadhani (1982)",
+      "principle": "Productivity soars when computer and user interact at a pace (<400ms) that ensures neither has to wait.",
+      "application": [
+        "Aim for sub-400ms response on every user-initiated action.",
+        "Use optimistic UI to acknowledge intent before server confirms.",
+        "Show progress for any operation longer than 400ms."
+      ],
+      "anti_patterns": ["spinners for sub-second waits", "blocking UI on every form submit"],
+      "compatible_components": ["optimistic-update", "skeleton-loader", "inline-spinner"]
+    },
+    {
+      "id": "teslers-law",
+      "name": "Tesler's Law (Law of Conservation of Complexity)",
+      "source": "Tesler (1984)",
+      "category": "Decision Cost",
+      "principle": "Every system has an irreducible amount of complexity; the question is who bears it.",
+      "application": [
+        "Move complexity into product internals when users would not benefit from exposure.",
+        "Surface complexity only when the user has a reason to engage with it.",
+        "Validate that hiding complexity does not silently change user-meaningful behavior."
+      ],
+      "anti_patterns": ["forcing users to configure defaults the product could infer", "exposing implementation details in user-facing copy"],
+      "compatible_components": ["smart-defaults", "progressive-disclosure", "expert-mode-toggle"]
+    },
+    {
+      "id": "goal-gradient-effect",
+      "name": "Goal-Gradient Effect",
+      "category": "Decision Cost",
+      "source": "Hull (1932); Kivetz et al. (2006)",
+      "principle": "Motivation to reach a goal increases as proximity to the goal increases.",
+      "application": [
+        "Show progress prominently in multi-step flows.",
+        "Front-load early easy wins so users feel close to completion.",
+        "Surface a percent-complete indicator for long tasks."
+      ],
+      "anti_patterns": ["hiding progress in multi-step forms", "ambiguous 'almost done' messaging without numbers"],
+      "compatible_components": ["progress-bar", "stepper", "completion-meter"]
+    },
+    {
+      "id": "choice-overload",
+      "name": "Choice Overload (Paradox of Choice)",
+      "category": "Decision Cost",
+      "source": "Iyengar and Lepper (2000); Schwartz (2004)",
+      "principle": "Too many options reduce satisfaction and increase decision paralysis.",
+      "application": [
+        "Recommend a default or top 3 picks before showing the full set.",
+        "Use category filters to slice large catalogs.",
+        "Allow comparison of at most 3-4 items side by side."
+      ],
+      "anti_patterns": ["100-item pricing-plan comparison", "ungrouped settings page with 50+ toggles"],
+      "compatible_components": ["recommended-pick", "category-filter", "comparison-table"]
+    },
+    {
+      "id": "postels-law",
+      "name": "Postel's Law (Robustness Principle)",
+      "category": "Decision Cost",
+      "source": "Postel (1980)",
+      "principle": "Be liberal in what you accept, conservative in what you send.",
+      "application": [
+        "Accept input in multiple formats and normalize internally.",
+        "Trim whitespace, normalize phone formats, and accept varying date formats.",
+        "Never reject input for formatting if intent is clear."
+      ],
+      "anti_patterns": ["rejecting phone numbers without country code instead of inferring", "rigid date inputs that reject MM/DD vs DD/MM"],
+      "compatible_components": ["smart-input", "phone-input", "date-input"]
+    },
+    {
+      "id": "sunk-cost-effect",
+      "name": "Sunk Cost Effect",
+      "category": "Decision Cost",
+      "source": "Arkes and Blumer (1985)",
+      "principle": "People continue investing in something to justify prior investment, even when abandoning would be better.",
+      "application": [
+        "Acknowledge user progress before asking for restart.",
+        "Allow saving partial state so users do not feel they wasted time.",
+        "Show recoverable drafts after closing flows mid-way."
+      ],
+      "anti_patterns": ["losing form data on session timeout without warning", "no autosave during long content creation"],
+      "compatible_components": ["autosave-indicator", "draft-recovery", "save-and-resume"]
+    },
+    {
+      "id": "millers-law",
+      "name": "Miller's Law (7 plus or minus 2)",
+      "category": "Memory & Attention",
+      "source": "Miller (1956)",
+      "principle": "Working memory holds about 7 (+/- 2) chunks of information at once.",
+      "application": [
+        "Chunk navigation into 5-9 top-level items.",
+        "Break long forms into sections of no more than 7 fields.",
+        "Group related options under a single label."
+      ],
+      "anti_patterns": ["flat 20-item primary nav", "30-field forms without sectioning"],
+      "compatible_components": ["section-divider", "tabbed-nav", "stepped-form"]
+    },
+    {
+      "id": "recognition-vs-recall",
+      "name": "Recognition Over Recall",
+      "category": "Memory & Attention",
+      "source": "Nielsen (1995) - Heuristic #6",
+      "principle": "Minimize memory load by showing options rather than requiring recall.",
+      "application": [
+        "Show recently used or relevant items inline.",
+        "Use autocomplete for predictable inputs.",
+        "Surface available commands in menus rather than hidden shortcuts."
+      ],
+      "anti_patterns": ["command-line-only interfaces without help", "search boxes without recent-search suggestions"],
+      "compatible_components": ["autocomplete", "recent-items", "command-palette"]
+    },
+    {
+      "id": "working-memory-limits",
+      "name": "Working Memory Limits",
+      "category": "Memory & Attention",
+      "source": "Baddeley (1992)",
+      "principle": "Working memory has limited capacity (~4 items active at once per Cowan's revision).",
+      "application": [
+        "Keep step-to-step dependencies within 3-4 visible items.",
+        "Repeat context at decision points rather than relying on prior screens.",
+        "Show summary of inputs before final submission."
+      ],
+      "anti_patterns": ["multi-page wizards that hide prior answers", "confirmation screens with no recap of what was decided"],
+      "compatible_components": ["context-summary", "review-step", "sticky-context-bar"]
+    },
+    {
+      "id": "chunking",
+      "name": "Chunking",
+      "category": "Memory & Attention",
+      "source": "Miller (1956)",
+      "principle": "Grouping related items into meaningful units increases recall and reduces cognitive load.",
+      "application": [
+        "Format phone numbers and account IDs into hyphen-separated groups.",
+        "Group form fields by topic with visible separators.",
+        "Cluster related menu items under labeled categories."
+      ],
+      "anti_patterns": ["16-digit credit card field with no spacing", "unsegmented IBAN inputs"],
+      "compatible_components": ["formatted-input", "field-group", "category-menu"]
+    },
+    {
+      "id": "spacing-effect",
+      "name": "Spacing Effect",
+      "category": "Memory & Attention",
+      "source": "Ebbinghaus (1885)",
+      "principle": "Learning is more effective when distributed over time rather than crammed.",
+      "application": [
+        "Space onboarding tips across multiple sessions instead of one tour.",
+        "Surface tips contextually at the moment of need.",
+        "Reinforce key features through repeated, distributed exposures."
+      ],
+      "anti_patterns": ["10-step product tour on first login", "single dense help page nobody returns to"],
+      "compatible_components": ["contextual-tooltip", "drip-onboarding", "feature-hint"]
+    },
+    {
+      "id": "attention-tunneling",
+      "name": "Attention Tunneling",
+      "category": "Memory & Attention",
+      "source": "Wickens (2005)",
+      "principle": "Users focused on a goal may miss salient information outside their attentional focus.",
+      "application": [
+        "Place critical information directly in the user's task path.",
+        "Use motion or contrast sparingly to redirect attention only when needed.",
+        "Surface errors near the field that caused them."
+      ],
+      "anti_patterns": ["error toasts at top of page while user is at bottom", "important warnings in collapsed accordions"],
+      "compatible_components": ["inline-error", "in-flow-alert", "focus-redirect"]
+    },
+    {
+      "id": "banner-blindness",
+      "name": "Banner Blindness",
+      "category": "Memory & Attention",
+      "source": "Benway and Lane (1998)",
+      "principle": "Users ignore elements that resemble advertisements, regardless of relevance.",
+      "application": [
+        "Avoid styling important messages like banner ads.",
+        "Place critical information inline with content, not in floating sidebars.",
+        "Use restraint with colored callout blocks; reserve them for genuinely critical signals."
+      ],
+      "anti_patterns": ["important alerts in colorful right-rail banners", "billboard-styled cookie consent on critical pages"],
+      "compatible_components": ["inline-alert", "callout-card", "info-strip"]
+    },
+    {
+      "id": "inattentional-blindness",
+      "name": "Inattentional Blindness",
+      "category": "Memory & Attention",
+      "source": "Mack and Rock (1998)",
+      "principle": "Users focused on one task may completely miss unexpected elements.",
+      "application": [
+        "Do not introduce critical UI in peripheral vision during a focused task.",
+        "Pause or block the flow when an unmissable decision is required.",
+        "Use modal dialogs sparingly but commit fully when used."
+      ],
+      "anti_patterns": ["floating side-toaster for irreversible warnings", "non-blocking confirmations for destructive actions"],
+      "compatible_components": ["modal-dialog", "blocking-prompt", "interrupt-toast"]
+    },
+    {
+      "id": "gestalt-proximity",
+      "name": "Gestalt Principle of Proximity",
+      "category": "Visual Hierarchy",
+      "source": "Wertheimer (1923)",
+      "principle": "Elements close to each other are perceived as grouped.",
+      "application": [
+        "Use whitespace to separate sections more than borders.",
+        "Place labels closer to their inputs than to neighboring fields.",
+        "Cluster related cards into bands with consistent inner spacing."
+      ],
+      "anti_patterns": ["equal spacing between unrelated elements", "labels equidistant from two adjacent fields"],
+      "compatible_components": ["card-grid", "form-group", "section-block"]
+    },
+    {
+      "id": "gestalt-similarity",
+      "name": "Gestalt Principle of Similarity",
+      "category": "Visual Hierarchy",
+      "source": "Wertheimer (1923)",
+      "principle": "Elements that share visual characteristics are perceived as related.",
+      "application": [
+        "Use a consistent style for elements of the same function.",
+        "Reserve a single color and shape language for primary actions.",
+        "Break similarity intentionally when distinguishing dangerous actions."
+      ],
+      "anti_patterns": ["inconsistent button styles across the same page", "same-color destructive and primary buttons"],
+      "compatible_components": ["primary-cta", "destructive-cta", "icon-button"]
+    },
+    {
+      "id": "gestalt-closure",
+      "name": "Gestalt Principle of Closure",
+      "category": "Visual Hierarchy",
+      "source": "Wertheimer (1923)",
+      "principle": "The mind completes partial shapes into recognizable forms.",
+      "application": [
+        "Use suggested edges and partial outlines instead of heavy borders.",
+        "Lean on whitespace to define group boundaries without explicit lines.",
+        "Trim repeated visual chrome where the brain will fill it in."
+      ],
+      "anti_patterns": ["thick borders around every card", "boxes-within-boxes nested visual chrome"],
+      "compatible_components": ["card-bare", "open-card", "suggested-divider"]
+    },
+    {
+      "id": "gestalt-continuity",
+      "name": "Gestalt Principle of Continuity",
+      "category": "Visual Hierarchy",
+      "source": "Wertheimer (1923)",
+      "principle": "Elements arranged on a line or curve are perceived as related.",
+      "application": [
+        "Align elements along consistent axes for scannability.",
+        "Use baseline grids to reinforce reading direction.",
+        "Connect related steps with a continuous visual line in steppers."
+      ],
+      "anti_patterns": ["randomly offset card grids", "stepper indicators that do not align"],
+      "compatible_components": ["baseline-grid", "stepper", "timeline"]
+    },
+    {
+      "id": "gestalt-common-region",
+      "name": "Gestalt Principle of Common Region",
+      "category": "Visual Hierarchy",
+      "source": "Palmer (1992)",
+      "principle": "Elements enclosed within the same boundary are perceived as a group.",
+      "application": [
+        "Use background panels to group related controls.",
+        "Apply rounded corners and subtle shading to denote a region without heavy borders.",
+        "Separate distinct regions with adequate negative space between them."
+      ],
+      "anti_patterns": ["controls floating without container suggesting their grouping", "regions defined by color alone without spacing"],
+      "compatible_components": ["panel", "section-region", "subtle-card"]
+    },
+    {
+      "id": "gestalt-figure-ground",
+      "name": "Gestalt Principle of Figure-Ground",
+      "category": "Visual Hierarchy",
+      "source": "Rubin (1915)",
+      "principle": "Foreground figures stand out from a background; users perceive them as distinct.",
+      "application": [
+        "Maintain consistent figure-ground contrast for interactive elements.",
+        "Use elevation (shadows) to separate foreground modal from background canvas.",
+        "Mute background content when modals appear."
+      ],
+      "anti_patterns": ["modals that blend into background", "buttons indistinguishable from surrounding surface"],
+      "compatible_components": ["modal-dialog", "elevated-card", "scrim-overlay"]
+    },
+    {
+      "id": "gestalt-common-fate",
+      "name": "Gestalt Principle of Common Fate",
+      "category": "Visual Hierarchy",
+      "source": "Wertheimer (1923)",
+      "principle": "Elements that move together are perceived as related.",
+      "application": [
+        "Stagger entry animations of related items in quick succession.",
+        "Use synchronized motion to suggest grouping during transitions.",
+        "Avoid independent motion of items that should appear unified."
+      ],
+      "anti_patterns": ["items in the same group animating at random delays", "cards in one list each easing at different durations"],
+      "compatible_components": ["staggered-list", "transition-group", "synchronized-fade"]
+    },
+    {
+      "id": "gestalt-pragnanz",
+      "name": "Law of Pragnanz (Simplicity)",
+      "category": "Visual Hierarchy",
+      "source": "Koffka (1935)",
+      "principle": "The mind perceives ambiguous images in their simplest possible form.",
+      "application": [
+        "Choose the simplest layout that conveys hierarchy.",
+        "Reduce visual noise so the structural shape of the page is the message.",
+        "Trim decorative elements that do not aid understanding."
+      ],
+      "anti_patterns": ["decorative gradients on every surface", "excessive shadows and borders competing for attention"],
+      "compatible_components": ["minimal-card", "clean-layout", "structural-frame"]
+    },
+    {
+      "id": "aesthetic-usability-effect",
+      "name": "Aesthetic-Usability Effect",
+      "category": "Cognitive Load",
+      "source": "Kurosu and Kashimura (1995)",
+      "principle": "Users perceive aesthetically pleasing designs as more usable, even when underlying usability is equal.",
+      "application": [
+        "Invest in visual polish for first-impression surfaces.",
+        "Maintain typographic consistency to signal care.",
+        "Do not let aesthetic mask actual usability problems in research."
+      ],
+      "anti_patterns": ["polished surface hiding broken interactions", "skipping usability testing because it 'looks good'"],
+      "compatible_components": ["polished-landing", "consistent-typography", "branded-system"]
+    },
+    {
+      "id": "cognitive-load-theory",
+      "name": "Cognitive Load Theory",
+      "category": "Cognitive Load",
+      "source": "Sweller (1988)",
+      "principle": "Working memory is constrained; reduce extraneous load to free capacity for the task.",
+      "application": [
+        "Remove decoration that does not aid the task.",
+        "Use familiar patterns to lean on existing schemas.",
+        "Reveal information progressively rather than all at once."
+      ],
+      "anti_patterns": ["dense dashboards showing every metric at once", "novel interaction patterns for routine tasks"],
+      "compatible_components": ["progressive-disclosure", "familiar-pattern", "summary-card"]
+    },
+    {
+      "id": "cognitive-friction",
+      "name": "Cognitive Friction",
+      "category": "Cognitive Load",
+      "source": "Cooper (2004)",
+      "principle": "Resistance encountered by the mind when interacting with a product reduces task completion.",
+      "application": [
+        "Match interaction labels to user vocabulary.",
+        "Eliminate decisions that have no real consequence.",
+        "Reduce the number of distinct concepts a user must learn."
+      ],
+      "anti_patterns": ["custom terminology where standard terms exist", "asking the user to choose between meaningless variants"],
+      "compatible_components": ["plain-language-cta", "single-default-flow", "guided-setup"]
+    },
+    {
+      "id": "confirmation-bias",
+      "name": "Confirmation Bias",
+      "category": "Cognitive Load",
+      "source": "Wason (1960)",
+      "principle": "People prefer information that confirms their existing beliefs.",
+      "application": [
+        "Present balanced data that includes counter-evidence in research summaries.",
+        "Default to neutral framing in surveys and analytics dashboards.",
+        "Highlight disconfirming signals when they exist."
+      ],
+      "anti_patterns": ["dashboards that show only positive metrics", "survey questions leading toward a desired answer"],
+      "compatible_components": ["balanced-dashboard", "neutral-survey", "trend-context"]
+    },
+    {
+      "id": "anchoring-bias",
+      "name": "Anchoring Bias",
+      "category": "Cognitive Load",
+      "source": "Tversky and Kahneman (1974)",
+      "principle": "Initial information disproportionately influences subsequent judgments.",
+      "application": [
+        "Place the recommended price tier visually first.",
+        "Show the regular price before discount to anchor savings perception.",
+        "Surface a strong default that frames the choice set."
+      ],
+      "anti_patterns": ["pricing tables in random order", "discount displays without showing the original anchor"],
+      "compatible_components": ["pricing-table", "discount-badge", "recommended-default"]
+    },
+    {
+      "id": "default-effect",
+      "name": "Default Effect",
+      "category": "Cognitive Load",
+      "source": "Johnson and Goldstein (2003)",
+      "principle": "People tend to accept default options rather than make explicit choices.",
+      "application": [
+        "Set defaults to the most beneficial common choice.",
+        "Make defaults reversible to preserve agency.",
+        "Document and audit default settings carefully because they shape behavior."
+      ],
+      "anti_patterns": ["opt-in defaults for items that benefit only the company", "buried defaults that users cannot find later"],
+      "compatible_components": ["smart-defaults", "preference-center", "default-indicator"]
+    },
+    {
+      "id": "mental-model",
+      "name": "Mental Model Alignment",
+      "category": "Cognitive Load",
+      "source": "Norman (1983)",
+      "principle": "Users build internal models of how systems work; alignment between user model and system model improves usability.",
+      "application": [
+        "Match information architecture to how users group concepts.",
+        "Use research to identify mental models before designing.",
+        "When system model must differ, explicitly teach the difference."
+      ],
+      "anti_patterns": ["IA based on company org chart instead of user tasks", "metaphors that break under closer inspection"],
+      "compatible_components": ["task-based-nav", "concept-onboarding", "explanatory-tooltip"]
+    },
+    {
+      "id": "jakobs-law",
+      "name": "Jakob's Law",
+      "category": "Cognitive Load",
+      "source": "Nielsen (2000)",
+      "principle": "Users spend most of their time on other sites and expect yours to work the same way.",
+      "application": [
+        "Follow established conventions for common patterns (cart, login, search).",
+        "Innovate on differentiation, not on conventions users have internalized.",
+        "Test deviations from convention with care."
+      ],
+      "anti_patterns": ["reinventing the shopping cart icon as something obscure", "custom login flows where standard would do"],
+      "compatible_components": ["cart-icon", "search-field", "login-form"]
+    },
+    {
+      "id": "von-restorff-effect",
+      "name": "Von Restorff Effect (Isolation Effect)",
+      "category": "Perception",
+      "source": "von Restorff (1933)",
+      "principle": "An item that visually differs from its surroundings is more likely to be remembered.",
+      "application": [
+        "Style the recommended pricing tier distinctly from others.",
+        "Use a single accent color to highlight the primary action.",
+        "Reserve emphasis sparingly so it retains power."
+      ],
+      "anti_patterns": ["every button styled to stand out", "multiple competing 'recommended' badges"],
+      "compatible_components": ["primary-cta", "highlight-badge", "featured-card"]
+    },
+    {
+      "id": "pareto-principle",
+      "name": "Pareto Principle (80/20 Rule)",
+      "category": "Perception",
+      "source": "Pareto (1896); Juran (1941)",
+      "principle": "Roughly 80% of effects come from 20% of causes.",
+      "application": [
+        "Identify the 20% of features producing 80% of usage and prioritize their polish.",
+        "Audit usage data to find the long tail and consider deprecation.",
+        "Optimize the critical path before edge cases."
+      ],
+      "anti_patterns": ["polishing rarely used features while top tasks remain rough", "equal investment across all features regardless of usage"],
+      "compatible_components": ["analytics-dashboard", "top-tasks-card", "usage-heatmap"]
+    },
+    {
+      "id": "serial-position-effect",
+      "name": "Serial Position Effect",
+      "category": "Perception",
+      "source": "Ebbinghaus (1885); Murdock (1962)",
+      "principle": "Items at the beginning and end of a list are most easily remembered.",
+      "application": [
+        "Place the most important item first in lists.",
+        "Place secondary key items last to ride the recency effect.",
+        "Avoid burying critical items in the middle of long lists."
+      ],
+      "anti_patterns": ["alphabetical sorting of high-stakes options", "critical CTA in the middle of a long form"],
+      "compatible_components": ["priority-list", "navigation-menu", "settings-list"]
+    },
+    {
+      "id": "primacy-effect",
+      "name": "Primacy Effect",
+      "category": "Perception",
+      "source": "Murdock (1962)",
+      "principle": "Items presented first are more likely to be remembered than items in the middle.",
+      "application": [
+        "Lead with the most important benefit on landing pages.",
+        "Open onboarding with the value, not the friction.",
+        "Structure error summaries so the most actionable item is first."
+      ],
+      "anti_patterns": ["burying value props after company history", "error lists in alphabetical order"],
+      "compatible_components": ["hero-section", "value-prop-block", "ordered-error-list"]
+    },
+    {
+      "id": "recency-effect",
+      "name": "Recency Effect",
+      "category": "Perception",
+      "source": "Murdock (1962)",
+      "principle": "Items presented last are most easily recalled from short-term memory.",
+      "application": [
+        "End onboarding with the most memorable success moment.",
+        "Close pricing pages with the strongest closing argument.",
+        "Place the primary CTA at the end of long-form content."
+      ],
+      "anti_patterns": ["landing pages that end on a fine-print legal disclaimer", "scrolling pages where the CTA is mid-fold and forgotten"],
+      "compatible_components": ["closing-cta", "summary-recap", "sticky-bottom-bar"]
+    },
+    {
+      "id": "zeigarnik-effect",
+      "name": "Zeigarnik Effect",
+      "category": "Perception",
+      "source": "Zeigarnik (1927)",
+      "principle": "People remember uncompleted tasks better than completed ones.",
+      "application": [
+        "Show partial completion to motivate continuation.",
+        "Use progress indicators to keep incomplete tasks salient.",
+        "Surface 'in-progress' items at the top of dashboards."
+      ],
+      "anti_patterns": ["hiding incomplete tasks", "no completion indicator on partially filled forms"],
+      "compatible_components": ["progress-bar", "in-progress-list", "task-resume-card"]
+    },
+    {
+      "id": "peak-end-rule",
+      "name": "Peak-End Rule",
+      "category": "Perception",
+      "source": "Kahneman et al. (1993)",
+      "principle": "People judge an experience largely by its peak (best or worst moment) and its end.",
+      "application": [
+        "Invest disproportionately in peak moments (delight, magic, surprise).",
+        "Ensure the end of any flow is satisfying, not abrupt.",
+        "Pay attention to the post-error recovery experience."
+      ],
+      "anti_patterns": ["ending checkout on a plain 'order received' page", "long flows that end with a dead screen"],
+      "compatible_components": ["delight-moment", "celebration-screen", "recovery-affirmation"]
+    },
+    {
+      "id": "weber-fechner-law",
+      "name": "Weber-Fechner Law",
+      "category": "Perception",
+      "source": "Weber (1834); Fechner (1860)",
+      "principle": "Perceived intensity of a stimulus is proportional to the logarithm of its actual intensity.",
+      "application": [
+        "Use logarithmic scales for chart sizing (bubble area, audio level).",
+        "Recognize that small absolute changes feel small unless near a threshold.",
+        "Design size and motion increments that step rather than scale linearly."
+      ],
+      "anti_patterns": ["linearly mapping circle area to value", "expecting users to notice tiny perceptual changes"],
+      "compatible_components": ["bubble-chart", "log-scale-axis", "stepped-typography"]
+    },
+    {
+      "id": "wcag-aa-contrast",
+      "name": "WCAG AA Contrast",
+      "category": "Color & Contrast",
+      "source": "W3C WCAG 2.1 (2018)",
+      "principle": "Text must have a contrast ratio of at least 4.5:1 against its background (3:1 for large text >=18pt).",
+      "application": [
+        "Audit every text-on-color combination against thresholds.",
+        "Use tools like Stark or browser DevTools contrast checkers.",
+        "Avoid pure-on-pure (white on yellow, black on red) without verification."
+      ],
+      "anti_patterns": ["light gray body text on white", "low-contrast hover states for interactive elements"],
+      "compatible_components": ["text-body", "link-default", "form-label"]
+    },
+    {
+      "id": "wcag-aaa-contrast",
+      "name": "WCAG AAA Contrast",
+      "category": "Color & Contrast",
+      "source": "W3C WCAG 2.1 (2018)",
+      "principle": "For AAA conformance, text must meet a 7:1 contrast ratio (4.5:1 for large text).",
+      "application": [
+        "Adopt AAA for high-stakes contexts: medical, legal, government.",
+        "Treat AAA as the goal even when AA is the minimum.",
+        "Document where AAA cannot be met and why."
+      ],
+      "anti_patterns": ["claiming AAA when only AA is met", "ignoring contrast on disabled states (still must be readable)"],
+      "compatible_components": ["accessible-text", "high-contrast-mode", "alt-color-scheme"]
+    },
+    {
+      "id": "color-blindness-accommodation",
+      "name": "Color Blindness Accommodation",
+      "category": "Color & Contrast",
+      "source": "Heaton (1981); WCAG 1.4.1",
+      "principle": "Roughly 8% of men and 0.5% of women have some form of color blindness; color cannot be the only signal.",
+      "application": [
+        "Pair color with shape, icon, or pattern for state indication.",
+        "Test designs in deuteranopia and protanopia simulations.",
+        "Never rely on red-green alone for error vs success."
+      ],
+      "anti_patterns": ["red-green-only diff views", "stoplight charts without secondary encoding"],
+      "compatible_components": ["icon-status", "pattern-fill", "labeled-state"]
+    },
+    {
+      "id": "semantic-color",
+      "name": "Semantic Color Consistency",
+      "category": "Color & Contrast",
+      "source": "Material Design and Apple HIG conventions",
+      "principle": "Reserve specific colors for specific meanings (red=danger, green=success, blue=info).",
+      "application": [
+        "Define a single danger color and use only it for destructive signals.",
+        "Do not use semantic colors decoratively.",
+        "Document semantic color assignments in your design system."
+      ],
+      "anti_patterns": ["red buttons for primary actions where danger is implied", "green text used decoratively"],
+      "compatible_components": ["alert-danger", "alert-success", "alert-info"]
+    },
+    {
+      "id": "color-temperature",
+      "name": "Color Temperature",
+      "category": "Color & Contrast",
+      "source": "Itten (1961)",
+      "principle": "Warm colors feel near and active; cool colors feel distant and calm.",
+      "application": [
+        "Use warm accents for energy and urgency moments.",
+        "Use cool tones for focus contexts where calm matters.",
+        "Stay consistent within a brand's temperature signature."
+      ],
+      "anti_patterns": ["mixing warm and cool primaries without intent", "warm colors in calm-focused contexts (e.g. meditation app)"],
+      "compatible_components": ["accent-warm", "calm-background", "brand-palette"]
+    },
+    {
+      "id": "60-30-10-rule",
+      "name": "60-30-10 Color Rule",
+      "category": "Color & Contrast",
+      "source": "Itten (1961) - color composition tradition",
+      "principle": "Distribute color in approximate 60% dominant, 30% secondary, 10% accent ratio.",
+      "application": [
+        "Reserve the accent color for the single most important action.",
+        "Keep the secondary supporting structure (chrome, headings).",
+        "Use dominant for canvas and surfaces."
+      ],
+      "anti_patterns": ["equal-area distribution of all brand colors", "accents on every interactive element"],
+      "compatible_components": ["balanced-page", "branded-layout", "accent-cta"]
+    },
+    {
+      "id": "cultural-color-meaning",
+      "name": "Cultural Color Meaning",
+      "category": "Color & Contrast",
+      "source": "Aslam (2006) - cross-cultural color research",
+      "principle": "Colors carry different meanings across cultures (e.g. white = purity in Western, mourning in some Eastern contexts).",
+      "application": [
+        "Research color associations for target markets.",
+        "Avoid relying on a single color symbol for global products.",
+        "Test color choices with users from each target region."
+      ],
+      "anti_patterns": ["assuming Western color meanings globally", "red for negative in Chinese markets where it signals fortune"],
+      "compatible_components": ["region-aware-palette", "localized-theme", "market-specific-accent"]
+    },
+    {
+      "id": "color-independence",
+      "name": "Information Color Independence",
+      "category": "Color & Contrast",
+      "source": "WCAG 1.4.1 (2008)",
+      "principle": "Information should not be conveyed by color alone.",
+      "application": [
+        "Add icons or text labels to state indicators.",
+        "Use underlines or weight changes for links, not color alone.",
+        "Provide text alternatives wherever color carries meaning."
+      ],
+      "anti_patterns": ["link styled only via color", "form errors indicated only by red borders"],
+      "compatible_components": ["underlined-link", "icon-status", "labeled-error"]
+    },
+    {
+      "id": "optimal-measure",
+      "name": "Optimal Line Length (Measure)",
+      "category": "Typography",
+      "source": "Bringhurst (2004) - The Elements of Typographic Style",
+      "principle": "Comfortable reading line length is 45-75 characters per line (66 is the classical optimum).",
+      "application": [
+        "Constrain prose containers to max-width around 65-75ch.",
+        "Use max-width on body text in dashboards and articles.",
+        "Test reading flow at different viewport widths."
+      ],
+      "anti_patterns": ["full-viewport-width body text on desktop", "extremely narrow columns under 35 characters"],
+      "compatible_components": ["prose-container", "article-body", "readable-column"]
+    },
+    {
+      "id": "vertical-rhythm",
+      "name": "Vertical Rhythm",
+      "category": "Typography",
+      "source": "Bringhurst (2004); Reichenstein (2006)",
+      "principle": "Consistent vertical spacing between baselines creates visual rhythm and aids scanning.",
+      "application": [
+        "Base spacing on a baseline grid derived from body line-height.",
+        "Use spacing tokens that are multiples of the base grid.",
+        "Align headings, paragraphs, and images to the same rhythm."
+      ],
+      "anti_patterns": ["arbitrary spacing between text and images", "mismatched line-heights between paragraphs and headings"],
+      "compatible_components": ["baseline-grid", "typography-scale", "spacing-tokens"]
+    },
+    {
+      "id": "modular-scale",
+      "name": "Modular Type Scale",
+      "category": "Typography",
+      "source": "Brown (2011) - Modular Scale tool",
+      "principle": "Type sizes derived from a mathematical ratio create visual harmony.",
+      "application": [
+        "Choose a ratio (1.125, 1.25, 1.333, 1.5, 1.618) and derive sizes from it.",
+        "Use 5-7 sizes maximum across the entire system.",
+        "Document the scale and forbid off-scale type."
+      ],
+      "anti_patterns": ["ad-hoc font sizes per component", "10 different heading sizes across a product"],
+      "compatible_components": ["type-scale", "heading-tokens", "size-modular"]
+    },
+    {
+      "id": "body-16px-min",
+      "name": "Minimum Body Size 16px",
+      "category": "Typography",
+      "source": "Lupton (2010); modern web defaults",
+      "principle": "Body text below 16px is hard to read on mobile and small displays.",
+      "application": [
+        "Set base font-size to at least 16px (1rem).",
+        "Use rem-based scaling so users can adjust system size.",
+        "Reserve 14px or smaller for metadata, captions, and chrome only."
+      ],
+      "anti_patterns": ["12px body text", "fixed pixel sizes that ignore user preferences"],
+      "compatible_components": ["body-text", "responsive-typography", "user-zoom-friendly"]
+    },
+    {
+      "id": "type-pair-contrast",
+      "name": "Type Pair Contrast",
+      "category": "Typography",
+      "source": "Lupton (2010); Mueller-Brockmann (1981)",
+      "principle": "Pair contrasting (not similar) type families: a display + a body, not two display fonts.",
+      "application": [
+        "Pair a humanist serif with a clean sans-serif, or vice versa.",
+        "Avoid pairing two fonts of the same classification.",
+        "Maintain consistent character widths in mono pairs."
+      ],
+      "anti_patterns": ["two sans-serifs with subtle differences", "using one font for everything when contrast would help"],
+      "compatible_components": ["display-font", "body-font", "type-pair"]
+    },
+    {
+      "id": "line-height-rule",
+      "name": "Line Height 1.4-1.6 for Body",
+      "category": "Typography",
+      "source": "W3C WCAG 1.4.12; practical web typography",
+      "principle": "Body text line-height between 1.4 and 1.6 is the comfortable reading range.",
+      "application": [
+        "Default body line-height to 1.5.",
+        "Increase line-height slightly for sans-serif body fonts.",
+        "Tighten line-height for headings (1.1-1.3)."
+      ],
+      "anti_patterns": ["line-height of 1.0 for body text", "line-height of 2.0 across paragraphs"],
+      "compatible_components": ["body-text", "heading-tight", "readable-prose"]
+    },
+    {
+      "id": "tracking-by-size",
+      "name": "Tracking Adjusted by Size",
+      "category": "Typography",
+      "source": "Bringhurst (2004)",
+      "principle": "Larger sizes need tighter tracking; smaller sizes benefit from looser tracking.",
+      "application": [
+        "Apply negative letter-spacing to display sizes (-0.02em to -0.04em).",
+        "Apply slight positive tracking to all-caps small labels (+0.05em).",
+        "Tune tracking per typeface; defaults are not always right."
+      ],
+      "anti_patterns": ["same letter-spacing across all text sizes", "loose tracking on display headlines"],
+      "compatible_components": ["display-heading", "small-caps-label", "type-tokens"]
+    },
+    {
+      "id": "hierarchy-via-weight",
+      "name": "Hierarchy via Weight, Not Just Size",
+      "category": "Typography",
+      "source": "Lupton (2010); modern editorial typography",
+      "principle": "Type hierarchy emerges from weight, size, color, and spacing together.",
+      "application": [
+        "Use weight contrast (400 vs 700) more than size jumps within content blocks.",
+        "Combine weight with color (ink vs muted) for secondary emphasis.",
+        "Avoid relying solely on size for emphasis."
+      ],
+      "anti_patterns": ["bold-only emphasis with no color or size variation", "huge size jumps where weight contrast would suffice"],
+      "compatible_components": ["weight-hierarchy", "emphasis-muted", "balanced-heading"]
+    },
+    {
+      "id": "8pt-grid",
+      "name": "8-Point Grid System",
+      "category": "Spacing & Layout",
+      "source": "Material Design (2014); Bryn Jackson (2015)",
+      "principle": "Spacing values derived from multiples of 8px create visual harmony across screens.",
+      "application": [
+        "Define spacing tokens as 4, 8, 16, 24, 32, 48, 64.",
+        "Avoid off-grid values unless necessary for optical alignment.",
+        "Apply the grid to both component spacing and layout spacing."
+      ],
+      "anti_patterns": ["arbitrary 13px or 27px gaps", "mixing 8px and 10px-based scales inconsistently"],
+      "compatible_components": ["spacing-tokens", "layout-grid", "component-padding"]
+    },
+    {
+      "id": "golden-ratio",
+      "name": "Golden Ratio (1.618)",
+      "category": "Spacing & Layout",
+      "source": "Euclid (300 BCE); Pacioli (1509)",
+      "principle": "The 1.618 ratio appears in classical proportions and is often perceived as harmonious.",
+      "application": [
+        "Use 1.618 as the ratio between primary and secondary column widths.",
+        "Apply to image aspect ratios in editorial layouts.",
+        "Use it as a type-scale ratio for visually expressive systems."
+      ],
+      "anti_patterns": ["forcing golden ratio in contexts where 8pt grid is cleaner", "treating it as mystical rather than one option among many"],
+      "compatible_components": ["editorial-column", "hero-image", "type-scale-1618"]
+    },
+    {
+      "id": "rule-of-thirds",
+      "name": "Rule of Thirds",
+      "category": "Spacing & Layout",
+      "source": "Smith (1797) - landscape painting composition",
+      "principle": "Dividing a composition into thirds creates visually balanced placement points.",
+      "application": [
+        "Place key focal points at third intersections in hero imagery.",
+        "Use third-based grids for editorial layouts.",
+        "Avoid centering everything; offset to a third for visual interest."
+      ],
+      "anti_patterns": ["centered subjects in every hero image", "perfect symmetry in editorial design"],
+      "compatible_components": ["hero-composition", "editorial-grid", "image-crop-guide"]
+    },
+    {
+      "id": "optical-alignment",
+      "name": "Optical Alignment",
+      "category": "Spacing & Layout",
+      "source": "Lupton (2010); Frutiger (1989)",
+      "principle": "Mathematical alignment is not always perceived as aligned; adjust optically for visual correctness.",
+      "application": [
+        "Shift round shapes slightly past edges to appear aligned.",
+        "Adjust quotation marks and asymmetric letterforms by eye.",
+        "Pull icon glyphs into baselines based on perceived weight."
+      ],
+      "anti_patterns": ["mechanically centered text that looks off-center", "pixel-perfect alignment ignoring perceptual cues"],
+      "compatible_components": ["icon-aligned-text", "centered-button", "quote-block"]
+    },
+    {
+      "id": "whitespace-density",
+      "name": "Whitespace Density Management",
+      "category": "Spacing & Layout",
+      "source": "Tufte (1983); Mueller-Brockmann (1981)",
+      "principle": "Generous whitespace reads as quality and clarity; cramped layouts feel busy and untrustworthy.",
+      "application": [
+        "Increase outer padding on premium and editorial surfaces.",
+        "Allow components to breathe even on dense dashboards.",
+        "Use whitespace as an active design element, not leftover space."
+      ],
+      "anti_patterns": ["squeezing every pixel for content density", "treating whitespace as wasted real estate"],
+      "compatible_components": ["editorial-spacing", "premium-card", "dashboard-air"]
+    },
+    {
+      "id": "layout-grid-consistency",
+      "name": "Layout Grid Consistency",
+      "category": "Spacing & Layout",
+      "source": "Mueller-Brockmann (1981) - Grid Systems",
+      "principle": "A consistent underlying grid creates structural coherence across pages.",
+      "application": [
+        "Define a 12-column grid with consistent gutters across breakpoints.",
+        "Snap all blocks to the grid; document exceptions explicitly.",
+        "Use container queries and grid templates for responsive consistency."
+      ],
+      "anti_patterns": ["mixing 12 and 16 column grids on adjacent pages", "off-grid floats and absolute positioning everywhere"],
+      "compatible_components": ["12-col-grid", "container-grid", "responsive-layout"]
+    },
+    {
+      "id": "f-pattern-reading",
+      "name": "F-Pattern Reading",
+      "category": "Spacing & Layout",
+      "source": "Nielsen (2006)",
+      "principle": "Users scan content-heavy pages in an F-shape: across the top, then partway down, then briefly down the left.",
+      "application": [
+        "Place the most important info top-left.",
+        "Start paragraphs with the key phrase (front-load).",
+        "Use bulleted lists and bold first words to support scanning."
+      ],
+      "anti_patterns": ["burying key value below the F-fold", "long paragraphs without front-loaded key information"],
+      "compatible_components": ["content-headline", "front-loaded-paragraph", "scannable-list"]
+    },
+    {
+      "id": "z-pattern-reading",
+      "name": "Z-Pattern Reading",
+      "category": "Spacing & Layout",
+      "source": "Krug (2000); web composition tradition",
+      "principle": "On sparse, visual-first pages, users scan in a Z-shape: top-left to top-right, then diagonally to bottom-left, then bottom-right.",
+      "application": [
+        "Place the logo top-left, primary nav top-right.",
+        "Place the CTA at the bottom-right of hero sections.",
+        "Use Z-pattern for landing pages, not for dense content."
+      ],
+      "anti_patterns": ["primary CTA hidden top-left where users start", "Z-pattern applied to dense article content"],
+      "compatible_components": ["landing-hero", "nav-top-right", "cta-bottom-right"]
+    },
+    {
+      "id": "300ms-threshold",
+      "name": "300ms Response Threshold",
+      "category": "Motion & Time",
+      "source": "Card et al. (1991); Nielsen (1993)",
+      "principle": "UI responses faster than 300ms feel instant; longer needs feedback.",
+      "application": [
+        "Target 100-300ms for transitions and feedback.",
+        "Use spring or ease-out curves to feel responsive.",
+        "Show immediate visual change on press, not just on release."
+      ],
+      "anti_patterns": ["500ms+ button feedback animations", "no immediate response on tap or press"],
+      "compatible_components": ["press-state", "transition-snappy", "instant-feedback"]
+    },
+    {
+      "id": "1s-patience-window",
+      "name": "1-Second Patience Window",
+      "category": "Motion & Time",
+      "source": "Card et al. (1991); Nielsen (1993)",
+      "principle": "Users tolerate up to 1 second before flow breaks; beyond, they need explicit progress.",
+      "application": [
+        "Show a spinner or skeleton if a task exceeds 1 second.",
+        "Use estimated progress for tasks exceeding 10 seconds.",
+        "Break long tasks into visible sub-steps."
+      ],
+      "anti_patterns": ["10-second blank screens with no feedback", "spinners for 200ms operations (jitter)"],
+      "compatible_components": ["skeleton-loader", "progress-bar", "task-stepper"]
+    },
+    {
+      "id": "prefers-reduced-motion",
+      "name": "Prefers Reduced Motion",
+      "category": "Motion & Time",
+      "source": "WCAG 2.3.3; macOS Reduce Motion (2014)",
+      "principle": "Some users have vestibular disorders or motion sensitivity; honor their system preference.",
+      "application": [
+        "Respect the prefers-reduced-motion media query.",
+        "Replace parallax and large-distance transforms with instant fades.",
+        "Default reduced-motion behavior should still convey meaning."
+      ],
+      "anti_patterns": ["parallax that cannot be disabled", "motion required to convey meaning"],
+      "compatible_components": ["motion-reduced-variant", "instant-fade", "static-fallback"]
+    },
+    {
+      "id": "easing-curves",
+      "name": "Easing Curve Selection",
+      "category": "Motion & Time",
+      "source": "Material Design Motion; Apple HIG Animation",
+      "principle": "Easing shapes how motion feels: ease-out enters smoothly, ease-in exits sharply, springs feel physical.",
+      "application": [
+        "Use ease-out (or out-expo) for entries; user attention is rewarded immediately.",
+        "Use ease-in for exits when items should accelerate offscreen.",
+        "Use spring curves for natural, physical-feeling interactions."
+      ],
+      "anti_patterns": ["linear timing on all transitions", "bounce easing on functional micro-interactions"],
+      "compatible_components": ["fade-up-entry", "spring-interaction", "exit-fade"]
+    },
+    {
+      "id": "stagger-delay",
+      "name": "Stagger Delay",
+      "category": "Motion & Time",
+      "source": "Disney 12 Principles of Animation; Material Motion",
+      "principle": "Sequentially delaying animations in a group creates a sense of order and rhythm.",
+      "application": [
+        "Stagger list-item entry by 30-60ms intervals.",
+        "Cap stagger total at 600ms so the last item is not annoyingly late.",
+        "Use stagger to imply common-fate grouping."
+      ],
+      "anti_patterns": ["all items animating simultaneously (loses hierarchy)", "stagger delays over 100ms (feels slow)"],
+      "compatible_components": ["staggered-list", "card-grid-entry", "menu-cascade"]
+    },
+    {
+      "id": "motion-hierarchy",
+      "name": "Motion Hierarchy",
+      "category": "Motion & Time",
+      "source": "Material Motion (2018); Apple HIG",
+      "principle": "Motion guides attention and signals importance just as visual hierarchy does.",
+      "application": [
+        "Reserve large or dramatic motion for primary moments.",
+        "Use subtle motion for ambient or background changes.",
+        "Match motion intensity to the action's significance."
+      ],
+      "anti_patterns": ["dramatic motion on every micro-interaction", "all motion at the same intensity"],
+      "compatible_components": ["hero-motion", "ambient-fade", "primary-action-celebrate"]
+    },
+    {
+      "id": "doherty-for-animation",
+      "name": "Doherty Threshold Applied to Animation",
+      "category": "Motion & Time",
+      "source": "Doherty and Thadhani (1982); modern motion design",
+      "principle": "Animations longer than 400ms feel slow and break the productivity flow.",
+      "application": [
+        "Cap UI transitions at 300-400ms maximum.",
+        "Use 150-250ms for hover and press feedback.",
+        "Reserve 500ms+ only for ceremonial or onboarding moments."
+      ],
+      "anti_patterns": ["800ms modal entries", "1s+ page transitions"],
+      "compatible_components": ["fast-transition", "snappy-hover", "modal-entry-300ms"]
+    },
+    {
+      "id": "100ms-perception-threshold",
+      "name": "100ms Perception Threshold",
+      "category": "Motion & Time",
+      "source": "Card et al. (1991); Nielsen (1993)",
+      "principle": "Users perceive responses under 100ms as instantaneous.",
+      "application": [
+        "Target sub-100ms response for press, hover, and focus feedback.",
+        "Pre-load and cache to keep navigation feeling instant.",
+        "Use local optimistic updates for actions that take longer."
+      ],
+      "anti_patterns": ["delayed press-down feedback", "hover delays over 100ms"],
+      "compatible_components": ["instant-press", "instant-hover", "pre-cached-nav"]
+    },
+    {
+      "id": "inline-validation",
+      "name": "Inline Validation",
+      "category": "Forms",
+      "source": "Wroblewski (2008) - Web Form Design",
+      "principle": "Validating fields inline as users complete them reduces error rates compared to submit-time validation.",
+      "application": [
+        "Validate on blur (after user leaves the field), not on every keystroke.",
+        "Show success indicators where helpful (e.g. password strength).",
+        "Surface errors directly below the field with a clear fix."
+      ],
+      "anti_patterns": ["validation only on submit for a 20-field form", "aggressive per-keystroke validation that scolds typing"],
+      "compatible_components": ["inline-error", "blur-validation", "success-indicator"]
+    },
+    {
+      "id": "single-column-forms",
+      "name": "Single-Column Form Layout",
+      "category": "Forms",
+      "source": "Wroblewski (2008); Penzo (2006) eye-tracking study",
+      "principle": "Single-column forms are completed faster and more accurately than multi-column.",
+      "application": [
+        "Default to single-column layout for all forms.",
+        "Reserve side-by-side only for closely related pairs (first/last name).",
+        "Maintain a consistent vertical alignment."
+      ],
+      "anti_patterns": ["two-column forms with unrelated fields side by side", "forms that snake left-to-right then back"],
+      "compatible_components": ["single-column-form", "vertical-field-flow", "stacked-input"]
+    },
+    {
+      "id": "required-vs-optional",
+      "name": "Required vs Optional Marking",
+      "category": "Forms",
+      "source": "Wroblewski (2008); modern accessibility guidance",
+      "principle": "Mark whichever set (required or optional) is smaller; favor marking optional in modern UX.",
+      "application": [
+        "If most fields are required, mark only the optional ones.",
+        "Use the word 'optional' rather than '*' for clarity.",
+        "Document required state programmatically (aria-required)."
+      ],
+      "anti_patterns": ["asterisks on every field in a fully required form", "no marking at all"],
+      "compatible_components": ["form-label-optional", "required-aria", "field-helper"]
+    },
+    {
+      "id": "label-above-field",
+      "name": "Label Above Field",
+      "category": "Forms",
+      "source": "Penzo (2006); Wroblewski (2008)",
+      "principle": "Labels placed above fields are completed faster than labels beside or inside fields.",
+      "application": [
+        "Default to label-above for all forms.",
+        "Reserve floating labels for very dense surfaces only.",
+        "Never use placeholder text as the only label (accessibility hazard)."
+      ],
+      "anti_patterns": ["placeholder-only inputs that lose context on focus", "labels right-aligned beside fields"],
+      "compatible_components": ["label-above-input", "form-field", "accessible-input"]
+    },
+    {
+      "id": "error-message-specificity",
+      "name": "Specific Error Messages",
+      "category": "Forms",
+      "source": "Nielsen (1995) - Heuristic #9",
+      "principle": "Errors must say what went wrong and what to do about it, in plain language.",
+      "application": [
+        "Name the field, the problem, and the fix in the error message.",
+        "Avoid generic 'form contains errors' summaries; surface per-field.",
+        "Pass through server validation messages verbatim where useful."
+      ],
+      "anti_patterns": ["'invalid input' with no detail", "'form contains errors' with no field-level guidance"],
+      "compatible_components": ["inline-error", "field-error-summary", "error-with-fix"]
+    },
+    {
+      "id": "input-affordance",
+      "name": "Input Affordance",
+      "category": "Forms",
+      "source": "Norman (1988) - The Design of Everyday Things",
+      "principle": "An input should look like an input: bordered, fillable, and visually distinct from non-interactive text.",
+      "application": [
+        "Use visible borders or distinct backgrounds to mark input fields.",
+        "Avoid borderless or flat inputs unless context makes them obvious.",
+        "Provide hover, focus, and disabled states that reinforce affordance."
+      ],
+      "anti_patterns": ["text fields styled like static text", "buttons that do not look clickable"],
+      "compatible_components": ["bordered-input", "focused-input", "input-states"]
+    },
+    {
+      "id": "smart-defaults",
+      "name": "Smart Defaults",
+      "category": "Forms",
+      "source": "Cooper (2004); Wroblewski (2008)",
+      "principle": "Pre-fill safe, common, or inferable values to reduce user effort.",
+      "application": [
+        "Pre-fill country from IP or browser locale (always overridable).",
+        "Default newsletter opt-in based on context; never sneak it.",
+        "Pre-select the most common timezone, currency, or language."
+      ],
+      "anti_patterns": ["empty country dropdowns starting at A", "no defaults on multi-step setup"],
+      "compatible_components": ["smart-default-field", "locale-aware-input", "inferred-value"]
+    },
+    {
+      "id": "field-grouping",
+      "name": "Field Grouping",
+      "category": "Forms",
+      "source": "Miller (1956); Wroblewski (2008)",
+      "principle": "Group related fields visually to reduce cognitive load and improve scanning.",
+      "application": [
+        "Use fieldset/legend pairs for semantic grouping.",
+        "Add visible section dividers between groups.",
+        "Limit each section to 5-7 fields where possible."
+      ],
+      "anti_patterns": ["one long undifferentiated field list", "groupings that lump unrelated fields together"],
+      "compatible_components": ["fieldset", "form-section", "field-divider"]
+    },
+    {
+      "id": "44px-touch-targets",
+      "name": "44px Minimum Touch Target",
+      "category": "Mobile / Touch",
+      "source": "Apple Human Interface Guidelines (2010)",
+      "principle": "Tappable elements should be at least 44x44px to be reliably hit by a fingertip.",
+      "application": [
+        "Set min-height and min-width 44px on all tap targets.",
+        "Add invisible padding on small icons to extend hit area.",
+        "Apply universally to mobile and tablet contexts."
+      ],
+      "anti_patterns": ["16px icon buttons in mobile toolbars", "links smaller than thumbtip"],
+      "compatible_components": ["icon-button-44", "tap-target-padded", "mobile-button"]
+    },
+    {
+      "id": "48dp-touch-targets",
+      "name": "48dp Minimum Touch Target (Android)",
+      "category": "Mobile / Touch",
+      "source": "Google Material Design (2014)",
+      "principle": "Android touch targets should be at least 48dp x 48dp.",
+      "application": [
+        "Match the Material Design 48dp minimum on Android contexts.",
+        "Use dp/sp for scalable sizes that respect user font preferences.",
+        "Treat 44-48 as equivalent on cross-platform products."
+      ],
+      "anti_patterns": ["mixing iOS and Android target sizes inconsistently", "ignoring dp scaling on Android"],
+      "compatible_components": ["material-button", "android-tap-target", "fab-48dp"]
+    },
+    {
+      "id": "thumb-zone",
+      "name": "Thumb Zone Reachability",
+      "category": "Mobile / Touch",
+      "source": "Hoober (2013) - How Do Users Really Hold Mobile Devices",
+      "principle": "Most users one-hand their phones; comfortable reach is the bottom 2/3 of the screen.",
+      "application": [
+        "Place primary actions in the bottom-third reachable zone.",
+        "Avoid placing critical taps in the top-left corner.",
+        "Consider thumb dominance (right-handed bias in many regions)."
+      ],
+      "anti_patterns": ["primary CTA top-left on mobile", "navigation bars users cannot reach without two hands"],
+      "compatible_components": ["bottom-nav", "thumb-zone-cta", "reachable-action"]
+    },
+    {
+      "id": "gesture-vs-button",
+      "name": "Gesture vs Button Tradeoff",
+      "category": "Mobile / Touch",
+      "source": "Norman and Nielsen (2010); Apple HIG",
+      "principle": "Gestures are efficient but discoverable only through teaching; buttons are obvious but take more space.",
+      "application": [
+        "Pair gestures with discoverable button equivalents.",
+        "Reserve novel gestures for delight, not core actions.",
+        "Teach gestures through first-use tooltips or coachmarks."
+      ],
+      "anti_patterns": ["hidden gestures for critical paths with no button fallback", "swipe-only deletion with no visible affordance"],
+      "compatible_components": ["swipe-with-button", "coachmark", "gesture-hint"]
+    },
+    {
+      "id": "bottom-sheet-pattern",
+      "name": "Bottom Sheet Pattern",
+      "category": "Mobile / Touch",
+      "source": "Material Design (2018); Apple HIG (iOS 15+)",
+      "principle": "Bottom sheets bring contextual content into the thumb zone while keeping background visible.",
+      "application": [
+        "Use bottom sheets for filters, actions, and short flows.",
+        "Allow drag-to-dismiss as the natural mobile gesture.",
+        "Reserve full-screen modals for focused multi-step flows."
+      ],
+      "anti_patterns": ["top-anchored modals on mobile (out of thumb reach)", "bottom sheets with too much content (becomes a page)"],
+      "compatible_components": ["bottom-sheet", "action-sheet", "filter-drawer"]
+    },
+    {
+      "id": "pull-to-refresh",
+      "name": "Pull to Refresh",
+      "category": "Mobile / Touch",
+      "source": "Loren Brichter (2008) - Tweetie app",
+      "principle": "Pull-to-refresh is a learned mobile convention for refreshing top-of-list content.",
+      "application": [
+        "Implement pull-to-refresh for feed and list views.",
+        "Add visible affordance (arrow, spinner) on pull.",
+        "Pair with explicit refresh option for accessibility."
+      ],
+      "anti_patterns": ["pull-to-refresh on non-list contexts", "missing pull-to-refresh on chronological feeds"],
+      "compatible_components": ["pull-refresh-list", "feed-view", "refresh-indicator"]
+    },
+    {
+      "id": "mobile-viewport-width",
+      "name": "Mobile Viewport Configuration",
+      "category": "Mobile / Touch",
+      "source": "W3C CSS Device Adaptation; Apple Safari guides",
+      "principle": "Set the viewport meta tag correctly so mobile browsers render at device width.",
+      "application": [
+        "Use width=device-width, initial-scale=1 in the viewport meta.",
+        "Do not disable user zoom (maximum-scale=1 hurts accessibility).",
+        "Test layouts at 320px (small phones) and 768px (tablets)."
+      ],
+      "anti_patterns": ["maximum-scale=1 disabling zoom", "fixed pixel widths that break under 360px"],
+      "compatible_components": ["viewport-meta", "responsive-layout", "zoom-friendly-text"]
+    },
+    {
+      "id": "tap-hold-delay",
+      "name": "Tap and Hold Delay",
+      "category": "Mobile / Touch",
+      "source": "Apple HIG; Material Design touch guidelines",
+      "principle": "Tap-and-hold gestures require a recognized delay (around 500ms) to trigger contextual actions.",
+      "application": [
+        "Reserve long-press for power-user shortcuts, not critical paths.",
+        "Provide visual feedback during the hold (pulse, halo).",
+        "Pair with an alternative discoverable affordance."
+      ],
+      "anti_patterns": ["only way to delete is long-press with no other option", "long-press triggers without visual feedback"],
+      "compatible_components": ["long-press-action", "hold-feedback", "context-menu-mobile"]
+    },
+    {
+      "id": "keyboard-navigation",
+      "name": "Keyboard Navigation",
+      "category": "Accessibility",
+      "source": "WCAG 2.1 Guideline 2.1; W3C ARIA APG",
+      "principle": "All interactive elements must be reachable and operable via keyboard.",
+      "application": [
+        "Verify tab order matches visual order.",
+        "Implement Tab, Shift+Tab, Enter, Space, Arrow keys per ARIA APG.",
+        "Test by unplugging the mouse."
+      ],
+      "anti_patterns": ["dropdowns that only open on hover", "modals where Tab cycles outside"],
+      "compatible_components": ["focusable-element", "skip-link", "keyboard-modal"]
+    },
+    {
+      "id": "focus-management",
+      "name": "Focus Management",
+      "category": "Accessibility",
+      "source": "WCAG 2.4.3; W3C ARIA APG",
+      "principle": "Visible focus indicators and intentional focus transitions are required for keyboard users.",
+      "application": [
+        "Never remove focus outlines without replacing with a visible alternative.",
+        "Move focus into modals on open; return to trigger on close.",
+        "Trap focus inside modal dialogs."
+      ],
+      "anti_patterns": ["outline:none with no replacement", "modals that leak focus to background"],
+      "compatible_components": ["focus-ring", "focus-trap", "modal-focus-return"]
+    },
+    {
+      "id": "aria-labels",
+      "name": "ARIA Labels and Roles",
+      "category": "Accessibility",
+      "source": "W3C ARIA 1.2 (2023)",
+      "principle": "ARIA attributes provide assistive technology with information not conveyed by native HTML.",
+      "application": [
+        "Prefer native HTML over ARIA when possible.",
+        "Use aria-label and aria-labelledby on controls lacking visible text.",
+        "Validate ARIA usage with axe or WAVE."
+      ],
+      "anti_patterns": ["role='button' on a real <button>", "icon-only buttons with no accessible name"],
+      "compatible_components": ["aria-label-button", "labeled-icon", "describedby-helper"]
+    },
+    {
+      "id": "screen-reader-compat",
+      "name": "Screen Reader Compatibility",
+      "category": "Accessibility",
+      "source": "W3C WCAG; NVDA, JAWS, VoiceOver guidelines",
+      "principle": "Content must convey meaning when read non-visually.",
+      "application": [
+        "Test with NVDA, VoiceOver, or TalkBack on actual flows.",
+        "Provide text alternatives for all non-decorative imagery.",
+        "Use semantic landmarks (header, nav, main, footer)."
+      ],
+      "anti_patterns": ["images of text with no alt", "interactive divs with no role"],
+      "compatible_components": ["semantic-landmark", "alt-text-image", "sr-only-text"]
+    },
+    {
+      "id": "skip-to-content",
+      "name": "Skip-to-Content Link",
+      "category": "Accessibility",
+      "source": "WCAG 2.4.1 Bypass Blocks",
+      "principle": "Provide a skip link so keyboard users can bypass repeated navigation.",
+      "application": [
+        "Place skip link as the first focusable element on the page.",
+        "Show it visibly on focus (it can be visually hidden otherwise).",
+        "Target the main content landmark with a clear id."
+      ],
+      "anti_patterns": ["no skip link on pages with extensive header nav", "skip link broken (target missing)"],
+      "compatible_components": ["skip-link", "main-landmark", "visually-hidden-text"]
+    },
+    {
+      "id": "semantic-html",
+      "name": "Semantic HTML",
+      "category": "Accessibility",
+      "source": "W3C HTML5 specification; accessibility tradition",
+      "principle": "Use the correct HTML element for the content's purpose.",
+      "application": [
+        "Use <button> for actions, <a> for navigation.",
+        "Use heading hierarchy (h1-h6) reflecting document structure.",
+        "Use <nav>, <main>, <article>, <aside> landmarks."
+      ],
+      "anti_patterns": ["<div onclick> instead of <button>", "skipping heading levels (h1 then h3)"],
+      "compatible_components": ["semantic-button", "heading-hierarchy", "landmark-section"]
+    },
+    {
+      "id": "alt-text-discipline",
+      "name": "Alt Text Discipline",
+      "category": "Accessibility",
+      "source": "WCAG 1.1.1; WebAIM guidance",
+      "principle": "Alt text should communicate the content and function of an image, not describe it filename-style.",
+      "application": [
+        "Decorative images get alt=''.",
+        "Functional images describe the action (e.g. alt='Search').",
+        "Content images describe what matters for the surrounding context."
+      ],
+      "anti_patterns": ["alt='image123.jpg'", "decorative images with alt='decorative'"],
+      "compatible_components": ["alt-text-content", "alt-text-functional", "decorative-image"]
+    },
+    {
+      "id": "live-regions",
+      "name": "ARIA Live Regions",
+      "category": "Accessibility",
+      "source": "W3C ARIA 1.2; WCAG 4.1.3 Status Messages",
+      "principle": "Dynamic content updates must be announced to screen readers via live regions.",
+      "application": [
+        "Use aria-live='polite' for non-urgent updates (form-save).",
+        "Use aria-live='assertive' for urgent updates (errors).",
+        "Use role='status' or role='alert' as appropriate."
+      ],
+      "anti_patterns": ["error toasts invisible to screen readers", "form updates that vanish before being announced"],
+      "compatible_components": ["live-status-region", "toast-alert", "aria-live-update"]
+    },
+    {
+      "id": "halo-effect",
+      "name": "Halo Effect",
+      "category": "Brand & Trust",
+      "source": "Thorndike (1920)",
+      "principle": "Positive impressions in one area influence perception in unrelated areas.",
+      "application": [
+        "Invest in first-impression surfaces (landing, sign-up).",
+        "Maintain consistent quality across product surfaces.",
+        "Acknowledge that a polished docs site raises trust in the entire product."
+      ],
+      "anti_patterns": ["polished marketing site, neglected in-app polish", "ignoring small details on critical paths"],
+      "compatible_components": ["polished-landing", "consistent-surface", "high-trust-page"]
+    },
+    {
+      "id": "social-proof",
+      "name": "Social Proof",
+      "category": "Brand & Trust",
+      "source": "Cialdini (1984) - Influence",
+      "principle": "People look to others' behavior to guide their own decisions.",
+      "application": [
+        "Show customer logos and testimonials on conversion pages.",
+        "Use 'X people are looking at this' patterns carefully and honestly.",
+        "Highlight number of users, reviews, or downloads where relevant."
+      ],
+      "anti_patterns": ["fake or exaggerated proof", "logo soup with no context"],
+      "compatible_components": ["testimonial-card", "logo-strip", "review-snippet"]
+    },
+    {
+      "id": "authority-bias",
+      "name": "Authority Bias",
+      "category": "Brand & Trust",
+      "source": "Milgram (1963)",
+      "principle": "People give more weight to opinions and signals from authority figures.",
+      "application": [
+        "Display industry certifications, security badges, expert endorsements.",
+        "Use authoritative voice in critical content (medical, legal, financial).",
+        "Reference research and sources where claims are made."
+      ],
+      "anti_patterns": ["overstating credentials", "fake trust badges with no actual certification"],
+      "compatible_components": ["cert-badge", "expert-byline", "source-citation"]
+    },
+    {
+      "id": "reciprocity-principle",
+      "name": "Reciprocity Principle",
+      "category": "Brand & Trust",
+      "source": "Cialdini (1984)",
+      "principle": "People feel obligated to return what they receive; gifts and value upfront build relationships.",
+      "application": [
+        "Offer genuine free value before asking for commitment.",
+        "Provide useful free tools, content, or community.",
+        "Avoid manipulative 'free trial' tactics that feel like traps."
+      ],
+      "anti_patterns": ["paywalled key info that should be free", "fake free tools that gate the result"],
+      "compatible_components": ["free-resource", "trial-no-card", "open-tool"]
+    },
+    {
+      "id": "familiarity-effect",
+      "name": "Familiarity Effect (Mere Exposure)",
+      "category": "Brand & Trust",
+      "source": "Zajonc (1968)",
+      "principle": "Repeated exposure to something increases preference for it.",
+      "application": [
+        "Maintain consistent visual identity across surfaces.",
+        "Reuse familiar patterns within the product.",
+        "Build distinctive brand assets that reward repeated viewing."
+      ],
+      "anti_patterns": ["redesigning core surfaces too frequently", "inconsistent branding across product touchpoints"],
+      "compatible_components": ["brand-identity", "consistent-pattern", "repeated-motif"]
+    },
+    {
+      "id": "loss-aversion",
+      "name": "Loss Aversion",
+      "category": "Brand & Trust",
+      "source": "Kahneman and Tversky (1979) - Prospect Theory",
+      "principle": "Losses feel roughly twice as bad as equivalent gains feel good.",
+      "application": [
+        "Frame value as preventing a loss when relevant ('do not lose your data').",
+        "Use loss aversion ethically; do not manufacture artificial scarcity.",
+        "Surface what users keep when they upgrade vs what they lose if they downgrade."
+      ],
+      "anti_patterns": ["fake countdowns and artificial urgency", "fear-driven copy that does not reflect real stakes"],
+      "compatible_components": ["upgrade-prompt", "data-protection-message", "honest-urgency"]
+    },
+    {
+      "id": "trust-signals",
+      "name": "Trust Signals",
+      "category": "Brand & Trust",
+      "source": "Nielsen (1999); modern e-commerce research",
+      "principle": "Visible markers of trust (security badges, payment logos, return policies) reduce friction at decision points.",
+      "application": [
+        "Place trust signals near commitment moments (checkout, sign-up).",
+        "Show SSL, PCI, GDPR, SOC2 indicators where genuine.",
+        "Make refund and return policies findable, not buried."
+      ],
+      "anti_patterns": ["trust badges in footer only, not at checkout", "hiding return policy behind multiple clicks"],
+      "compatible_components": ["trust-badge", "security-strip", "policy-disclosure"]
+    },
+    {
+      "id": "cognitive-ease",
+      "name": "Cognitive Ease (System 1 vs System 2)",
+      "category": "Brand & Trust",
+      "source": "Kahneman (2011) - Thinking, Fast and Slow",
+      "principle": "Easy-to-process content feels more credible than effortful content.",
+      "application": [
+        "Use simple, familiar language for trust-critical claims.",
+        "Maintain high readability (legible type, sufficient contrast).",
+        "Reduce cognitive effort for users making evaluation judgments."
+      ],
+      "anti_patterns": ["dense legal copy on the homepage", "complex pricing tables with hard-to-compare units"],
+      "compatible_components": ["clear-claim", "simple-pricing-card", "readable-policy"]
+    },
+    {
+      "id": "progressive-disclosure",
+      "name": "Progressive Disclosure",
+      "category": "Patterns",
+      "source": "Nielsen (2006); Cooper (2004)",
+      "principle": "Show only what is needed at each moment; reveal advanced options on demand.",
+      "application": [
+        "Start with the simplest viable version of the interface.",
+        "Use 'Show advanced' toggles for power-user options.",
+        "Tier complexity so casual users never see expert noise."
+      ],
+      "anti_patterns": ["showing every setting on first load", "burying primary actions among expert options"],
+      "compatible_components": ["show-advanced-toggle", "tiered-form", "expandable-panel"]
+    },
+    {
+      "id": "empty-states",
+      "name": "Empty States",
+      "category": "Patterns",
+      "source": "Nielsen (2008); modern UX patterns",
+      "principle": "Empty states should orient, motivate, and guide the user to a first action.",
+      "application": [
+        "Show why the section is empty and what action populates it.",
+        "Provide a primary CTA to fill the empty state.",
+        "Use empty state as a teaching moment for the feature."
+      ],
+      "anti_patterns": ["literally blank screens with no guidance", "empty states that say 'No data' and nothing else"],
+      "compatible_components": ["empty-state-card", "first-action-cta", "illustration-empty"]
+    },
+    {
+      "id": "skeleton-vs-spinner",
+      "name": "Skeleton vs Spinner Loading",
+      "category": "Patterns",
+      "source": "Lin (2014); Facebook engineering blog",
+      "principle": "Skeleton screens reduce perceived wait time more than spinners by hinting at incoming content shape.",
+      "application": [
+        "Use skeletons for content-heavy views (lists, articles, dashboards).",
+        "Use spinners for short, indeterminate actions (button submits).",
+        "Match skeleton shapes to actual content layout."
+      ],
+      "anti_patterns": ["spinners on full-page loads", "generic skeletons that do not match real content"],
+      "compatible_components": ["skeleton-card", "skeleton-list", "button-spinner"]
+    },
+    {
+      "id": "optimistic-ui",
+      "name": "Optimistic UI",
+      "category": "Patterns",
+      "source": "Linear engineering blog (2019); modern SPA patterns",
+      "principle": "Update the UI as if the action succeeded; reconcile if the server disagrees.",
+      "application": [
+        "Update local state immediately on user action.",
+        "Show a subtle state if the action is still pending.",
+        "Reconcile gracefully if the server rejects (show clear error and revert)."
+      ],
+      "anti_patterns": ["waiting for server before any visual feedback", "optimistic update that silently fails"],
+      "compatible_components": ["optimistic-update", "pending-indicator", "reconcile-error"]
+    },
+    {
+      "id": "confirmation-dialogs",
+      "name": "Confirmation Dialogs (Used Sparingly)",
+      "category": "Patterns",
+      "source": "Cooper (1995) - About Face",
+      "principle": "Confirmation dialogs train users to dismiss them; reserve for irreversible high-cost actions only.",
+      "application": [
+        "Use undo over confirmation where possible.",
+        "Reserve confirms for delete, dispatch, payment-finalize.",
+        "Word confirmation clearly: name the action and its consequence."
+      ],
+      "anti_patterns": ["confirming every save", "confirmation with ambiguous 'Are you sure?' wording"],
+      "compatible_components": ["confirmation-dialog", "destructive-confirm", "undo-toast"]
+    },
+    {
+      "id": "undo-over-confirm",
+      "name": "Undo Over Confirm",
+      "category": "Patterns",
+      "source": "Cooper (1995); Gmail's undo-send pattern",
+      "principle": "Offering an undo after an action is less disruptive than a pre-action confirmation.",
+      "application": [
+        "Implement undo for delete, archive, and most reversible actions.",
+        "Keep undo window long enough for human reaction (5-10s).",
+        "Make undo discoverable via a toast or status bar."
+      ],
+      "anti_patterns": ["confirming every delete instead of allowing undo", "undo windows of 1-2s (too short to react)"],
+      "compatible_components": ["undo-toast", "soft-delete", "reversible-action"]
+    },
+    {
+      "id": "wizard-vs-single-page",
+      "name": "Wizard vs Single Page",
+      "category": "Patterns",
+      "source": "Wroblewski (2008); modern conversion research",
+      "principle": "Long forms benefit from wizard segmentation; short forms benefit from single-page directness.",
+      "application": [
+        "Use wizards for 10+ field flows or multi-section setups.",
+        "Use single page for 3-7 field forms.",
+        "Show progress and allow back navigation in wizards."
+      ],
+      "anti_patterns": ["3-field wizards (overkill)", "30-field single-page forms"],
+      "compatible_components": ["wizard-stepper", "single-page-form", "progress-stepper"]
+    },
+    {
+      "id": "onboarding-patterns",
+      "name": "Onboarding Patterns",
+      "category": "Patterns",
+      "source": "Nielsen (2008); Pulkkinen (2021) onboarding research",
+      "principle": "Effective onboarding teaches via doing, not via tours; defers complexity until needed.",
+      "application": [
+        "Get the user to a first success moment as fast as possible.",
+        "Replace tours with contextual hints at the moment of need.",
+        "Use empty-state CTAs as in-product onboarding."
+      ],
+      "anti_patterns": ["10-step product tours on first login", "modal interruptions that block the first task"],
+      "compatible_components": ["first-success-flow", "contextual-hint", "empty-state-onboarding"]
+    }
+  ]
+}

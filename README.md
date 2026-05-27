@@ -1,448 +1,229 @@
-# ux — the design intelligence plugin for Claude Code
+# ux — design intelligence engine for AI coding
 
-> **The strongest UX plugin for Claude Code.** Generate premium frontend designs, audit accessibility (WCAG 2.1 AA), review microcopy, propose design systems, ship case studies — all from a Claude Code session. 18 callable slash commands · 5 specialized sub-agents · 35+ Polaris-style reference files · 26,000+ lines of curated UX guidance · deterministic regex linter (no LLM, CI-friendly) · 72 brand DESIGN.md specs (Apple, Stripe, Linear, Notion, Figma, Tesla, BMW, Ferrari, Coinbase, Airbnb, Shopify and 60 more). Built to defeat the AI-aesthetic fingerprints — Inter as display, purple gradients, three equal cards, "John Doe" placeholders — that mark output as generated. Cross-stack: **React · Next.js · Vue · Blade · Astro · vanilla HTML**. MIT licensed, anti-AI-slop by default.
->
-> **v1.4 — 72-brand library absorbed.** Built-in design specs for Apple, Stripe, Linear, Notion, Claude, Figma, Spotify, Tesla, BMW, Ferrari, Coinbase, Airbnb, Shopify, Vercel, Supabase and 57 more. When a user says "build me a landing in Stripe's style" the plugin reads the full brand DESIGN.md and produces output that matches the brand's design language — not a generic default. See `references/brands/_index.md`.
->
-> **v1.5 — Deterministic linter**. `/ux-lint` runs 30 regex-based anti-pattern checks against your codebase. No LLM, no API key, no network — runs in milliseconds. CI-friendly: exits non-zero on Critical / High findings. Wire it into pre-commit hooks or CI for a hard floor against AI fingerprints. See `references/foundations/anti-patterns.md`.
->
-> **v1.2 — SEO foundation baked in.** Every public-web output now ships with the full head surface, Open Graph + Twitter cards, JSON-LD structured data per page type, semantic HTML, CWV-passing performance contract, robots + sitemap. SEO is not bolted on; it's a foundation like accessibility. See `references/foundations/seo.md`.
->
-> **v1.1 — Discovery protocol enforced.** Every generation command runs a mandatory 10-field intake before producing anything: brand identity, references, audience, style, voice, stack, imagery, must-have patterns, avoid-list, and the wow moment. Improvisation is banned. The plugin asks before it builds.
+> **v2.0 — Python pivot.** The strongest design intelligence engine for AI coding. A Python-backed reasoning core with 11 queryable JSON manifests: **84 styles, 170+ palettes, 70 type pairs, 148 components, 170+ industries, 110+ UX laws, 57 motion presets, 35 anti-patterns, 72 brand specs**. Plus 18 slash commands and 5 sub-agents from v1. Cross-IDE — runs in **17 environments**: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, Roo Cline.
 
-**Live at [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)** · [GitHub repo](https://github.com/Laith0003/ux-skill) · ⭐ **If this saves you from shipping AI slop, star the repo. It's the cheapest way to support it.**
+**Live at [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)** · [GitHub repo](https://github.com/Laith0003/ux-skill)
 
-[![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/network/members)
-[![Last commit](https://img.shields.io/github/last-commit/Laith0003/ux-skill)](https://github.com/Laith0003/ux-skill/commits/main)
-
-[![Version](https://img.shields.io/badge/version-1.5.3-blue.svg)](https://github.com/Laith0003/ux-skill/releases)
-[![Brands](https://img.shields.io/badge/brands-72-cc785c.svg)](https://github.com/Laith0003/ux-skill/blob/main/references/brands/_index.md)
-[![Linter](https://img.shields.io/badge/lint-deterministic_(no_LLM)-2563EB.svg)](https://github.com/Laith0003/ux-skill/blob/main/commands/ux-lint.md)
+[![Version](https://img.shields.io/badge/version-2.0.0--alpha.1-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
+[![Python](https://img.shields.io/badge/python-3.9%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Commands](https://img.shields.io/badge/commands-18-blueviolet)](#the-17-commands)
-[![Sub-Agents](https://img.shields.io/badge/sub--agents-5-green)](#the-5-sub-agents)
-[![References](https://img.shields.io/badge/references-30%2B-orange)](#references)
-[![Guidance](https://img.shields.io/badge/guidance-19%2C000%2B_lines-red)](#references)
-[![Claude Code](https://img.shields.io/badge/claude--code-plugin-7C3AED)](https://docs.anthropic.com/en/docs/claude-code)
-[![Stacks](https://img.shields.io/badge/stacks-React%20%7C%20Next%20%7C%20Vue%20%7C%20Blade%20%7C%20Vanilla-lightgrey)](#supported-stacks)
-
-The `ux` plugin replaces six existing skills (`design-review`, `design-critique`, `accessibility-review`, `ux-copy`, `gpt-taste`, `design-taste-frontend`) and adds the parts they were missing: a complete generation workflow, real sub-agent dispatch, a Polaris-style foundations library, and a workflow conductor that names the most useful next prompt after every command.
+[![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#cross-ide-distribution)
+[![Brands](https://img.shields.io/badge/brand_specs-72-cc785c.svg)](data/brands/_index.json)
+[![Linter](https://img.shields.io/badge/anti--patterns-35-181715.svg)](data/anti-patterns.json)
+[![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 
 ---
 
-## Why this exists
+## What v2 is
 
-Default model output has measurable, predictable failure modes. Inter font on every brief. Purple-to-blue gradients on white. Three equal cards in a row. Centered hero over a dark image. "John Doe", "Acme", `99.99%`. Decorative animation with no meaning. Pure black `#000000`. Generic CTAs ("Click here"). Marketing filler verbs ("Elevate", "Seamless", "Unleash").
+A **Python reasoning engine** that runs 5 parallel searches across structured data manifests and returns a complete recommended design system for your project — with always-on anti-AI-slop guardrails.
 
-These aren't preferences. They're **fingerprints**. Every one of them is in `references/styles/anti-slop.md` with a specific "do instead" pair. Every command in this plugin reads that file before it produces output.
+You give it a brief (industry, audience, tone, must-haves, forbidden). It returns: the **style** to use, the **palette**, the **type pair**, the **motion presets**, the **components**, the **brand exemplars** to study, and the **anti-pattern rules** that must hold. The engine never asks an LLM for an opinion — it's deterministic regex + lookup over structured data. Same input always gives same output.
 
-The bar is what the best premium SaaS sites actually do — studied directly, codified as native guidance.
+Then the existing 18 Claude Code commands and 5 sub-agents consume that recommendation to generate, audit, lint, and refine actual code.
 
----
+## The numbers
 
-## What's in v1.0
+| Manifest | ux-skill v2 | UI UX Pro Max |
+|---|---:|---:|
+| Design styles | **84** | 67 |
+| Color palettes | **170+** | 161 |
+| Type pairings | **70** | 57 |
+| Components | **148** | 0 |
+| Industry rules | **170+** | 161 |
+| Chart types | **35** | 25 |
+| Tech stacks | **25** | 15 |
+| UX laws | **110+** | 99 |
+| Motion presets | **57** | 0 |
+| Anti-pattern rules | **35** | 0 |
+| Brand specs | **72** | 0 |
+| **Total entries** | **~1,000+** | **~600** |
 
-### The 17 commands
+Three categories — components, motion, anti-patterns, brand specs — they don't have at all. That's our moat.
 
-```
-FRAME       /ux-frame       Lean-UX intake — audience, outcome, hypothesis, success signal
-            /ux-research    User-research planning — interviews, surveys, screeners
-            /ux-workshop    Design-thinking workshop — Exploration → Heat Map → Stakeholder
-                            → Remember the Future → Game Plan
+## Install — pick your path
 
-AUDIT       /ux-audit       Full 6-lens review (FRAME → DISCOVER → SCAN → ACT → READ → RECOVER)
-            /ux-critique    Open-ended taste call — 3 wins + 3 misses + 1 strategic move
-            /ux-a11y        WCAG 2.1 AA + Krug-courtesy accessibility audit
-            /ux-copy        Microcopy review against the voice rubric
-            /ux-motion      Animation timing, easing, meaning, reduced-motion, performance
-            /ux-polish      Cosmetic pass — spacing rhythm, hierarchy, AI-slop detection
+### Inside Claude Code (canonical)
 
-GENERATE    /ux-design      Generate a beautiful design from a brief (dispatches frontend-engineer)
-            /ux-system      Propose a complete design system if the project doesn't have one
-            /ux-dashboard   Specialized dashboard generation — bento, tabular monospace, sparklines
-            /ux-component   Generate a single component in the target stack
-
-APPLY       /ux-fix         Opt-in fix loop — applies findings from the latest report as commits
-            /ux-case-study  Generate a Wfrah-style numbered editorial case study
-            /ux-next        Workflow conductor — names the highest-leverage next command
-            /ux-expert      Surface real-life UX consulting contact
-```
-
-Every review command takes `--fix` to chain into the fix loop directly.
-
-### The 5 sub-agents
-
-```
-frontend-engineer        Implements designs in target stack (React, Next.js, Vue, Blade, vanilla)
-motion-engineer          Owns easing, spring physics, scroll choreography, reduced-motion
-copy-writer              Drafts microcopy in the project's voice
-research-synthesizer     Digests interview data, analytics, competitive sites, A/B results
-design-system-architect  Builds tokens, foundation docs, component contracts, dark-mode pairings
-```
-
-Commands dispatch sub-agents in parallel where work is independent.
-
-### 30+ reference files
-
-```
-foundations/            10 Polaris-shaped foundation systems — 4,126 lines
-  ├── accessibility.md     WCAG 2.1 AA, keyboard, screen reader, motion preferences
-  ├── color.md             Contrast pairs, semantic tokens, dark-mode pairings, palettes
-  ├── components.md        Canonical button / input / modal / card / table / navbar contracts
-  ├── copy.md              Voice, error specificity, empty / loading / success patterns
-  ├── dashboards.md        Data density, tabular monospace, the 5 dashboard archetypes
-  ├── interaction.md       Touch targets, gestures, press feedback, magnetic micro-physics
-  ├── layout.md            AIDA, grid-flow-dense, max-widths, 2-line H1 rule, asymmetric
-  ├── motion.md            150-300ms, easing, meaning, reduced-motion, spring physics
-  ├── spacing.md           4/8 rhythm, density modes, safe areas, gutters
-  └── typography.md        Scale, line-length, weight hierarchy, font pairings
-
-laws/                   Canonical UX principles — 2,546 lines
-  ├── norman.md            Affordances, signifiers, mapping, feedback, gulfs, 7 stages
-  ├── krug.md              3 laws of usability, billboard test, scan-not-read, courtesy
-  └── laws-of-ux.md        30 cognitive laws (Fitts, Hick, Miller, Jakob, Tesler, Postel...)
-
-process/                Methodologies — 1,873 lines
-  ├── lean-ux-gothelf.md   Hypothesis-driven design, MVPs, design studio, feedback loops
-  ├── lean-ux-klein.md     Startup research methods — interviews, surveys, MVP testing
-  ├── creative-selection.md  Demo culture — iterate on a thing, not a plan
-  ├── design-thinking-apphaus.md  5-phase workshop methodology
-  ├── generation-modes.md  Direct / shotgun-variant / consultation — when to use each
-  ├── visual-translation.md  Image → code methodology
-  └── refactor-existing.md   How to redesign without breaking what works
-
-styles/                 Style libraries + the discipline — 3,068 lines
-  ├── anti-slop.md         The forbidden patterns — every AI fingerprint with do-instead
-  ├── arsenal.md           60+ high-end patterns to reach for
-  ├── library.md           Three style systems — industrial, minimalist, high-end visual
-  └── exemplars.md         Distilled patterns from 21+ premium SaaS sites
-
-components/             Component pattern library — 1,568 lines
-  ├── heroui.md            HeroUI v3 component system reference
-  └── library.md           General component pattern library (button, input, modal, etc.)
-
-output/                 House styles for review reports + case studies
-  ├── polaris-style.md     Audit / review report format (severity, evidence, fix)
-  └── case-study-style.md  Wfrah-style numbered editorial format — pure monochrome
-
-conditional/            v3 expansion stubs
-  ├── habit-design.md      Hook model — only invoked for retention surfaces
-  └── brand-system.md      Brand identity / logo system — only invoked for brand surfaces
-
-creator/
-  └── about.md             Creator credit + real-life UX consulting contact
-```
-
----
-
-## How it works
-
-Every command follows a single contract:
-
-1. **Read the brief** (or extract from `.ux/last-frame.json` written by `/ux-frame`)
-2. **Pull the relevant references** (e.g., `/ux-audit` reads all 6 lens references; `/ux-design` reads anti-slop + arsenal)
-3. **Dispatch the right sub-agent(s)** in parallel where work is independent
-4. **Format output** in the appropriate house style (`polaris-style.md` for reports, `case-study-style.md` for case studies)
-5. **Persist state** to `.ux/last-<command>.json` so downstream commands can chain
-6. **End with a next-prompt block** — the workflow conductor names the best next move
-
-The next-prompt block is the difference between a pile of commands and a coherent workflow. Every output ends with something like:
-
-```
-─── next ───
-Recommended: /ux-motion --fix    (4 motion findings, highest cluster)
-Other moves: /ux-copy            (3 copy issues)
-             /ux-a11y --fix      (2 a11y issues)
-             /ux-design          (start a fresh design from a brief)
-             /ux-next            (let me decide)
-```
-
----
-
-## Install
-
-### Recommended — via Claude Code plugin marketplace
-
-Inside any Claude Code session:
-
-```
+```bash
 /plugin marketplace add Laith0003/ux-skill
 /plugin install ux@ux-skill
 ```
 
-That's it. All 17 `/ux-*` slash commands and 5 sub-agents are immediately available. Run `/help` to see them.
-
-### Alternative — local clone for development
-
-If you want to hack on the plugin or pin a specific commit:
+### Anywhere else (pip)
 
 ```bash
-git clone https://github.com/Laith0003/ux-skill.git
-cd ux-skill
-/plugin marketplace add "$(pwd)"
-/plugin install ux@ux-skill
+pip install uxskill
+ux init                       # auto-detects your IDE, installs for it
 ```
 
-### Updating
+### No-Python wrapper (npx)
 
-When new versions ship:
-
-```
-/plugin marketplace update ux-skill
-/plugin update ux
+```bash
+npx uxskill init              # bootstraps Python via pipx automatically
 ```
 
-### Uninstalling
+## The flagship: `/ux-recommend`
+
+Inside Claude Code:
 
 ```
-/plugin uninstall ux
-/plugin marketplace remove ux-skill
+/ux-recommend
+> Project type? landing
+> Industry? fintech-neobank
+> Tone? warm, editorial
+> Must have? dark-mode, a11y-AA
+> Forbidden? brutalism, purple-gradients
+> Stack? nextjs-15-app-router
+> Region? mena
 ```
 
----
+Outside Claude Code:
 
-## Usage
-
-Natural-language prompts work as well as the slash commands. The plugin's commands are designed to read trigger words from the user's message.
-
-### Audit an existing page
-
-```
-/ux-audit https://my-product.com/pricing
-```
-
-```
-review the UX on this landing page
+```bash
+ux recommend \
+  --project-type=landing \
+  --industry=fintech-neobank \
+  --tone=warm --tone=editorial \
+  --must-have=dark-mode --must-have=a11y-AA \
+  --forbidden=brutalism --forbidden=purple-gradients \
+  --stack=nextjs-15-app-router \
+  --region=mena
 ```
 
-Both invoke the same 6-lens audit and end with the next-prompt block.
-
-### Generate a new design
-
-```
-/ux-design "a SaaS landing page for a fintech for freelancers, dark mode, asymmetric hero"
-```
-
-```
-build me a dashboard for live logistics tracking
-```
-
-Dispatches `frontend-engineer` (and `motion-engineer` if motion is part of the brief) with `anti-slop.md` and `arsenal.md` embedded in the prompt. Output: complete component or page in the requested stack, with no AI-slop fingerprints, plus a self-review noting which bans were avoided and which arsenal patterns were used.
-
-### Propose a design system
-
-```
-/ux-system
-```
-
-For a project with no existing system. Dispatches `design-system-architect`. Output: token JSON + 5-10 foundation docs + 6-8 component contracts + dark-mode pairings + theme switcher pattern.
-
-### Fix what the audit found
-
-```
-/ux-audit --fix
-```
-
-Audits, then enters the fix loop on its own findings. For each finding (severity-sorted): dispatches the right sub-agent, applies the fix, commits atomically, re-runs the lens to verify.
-
-### Generate a case study
-
-```
-/ux-case-study
-```
-
-Produces a Wfrah-style numbered editorial document — pure monochrome, hairline section separators, ultra-wide editorial typography, two-tone body emphasis. Default sections (A)–(G): About, Mission, Outcomes, Impact, Market, Chance, Target Audience.
-
-### Run a design-thinking workshop
-
-```
-/ux-workshop "expanding our product into a new market"
-```
-
-Walks through five phases: Exploration → Heat Map → Stakeholder → Remember the Future → Game Plan. Outputs one populated artifact per phase plus a one-page summary.
-
-### Let the conductor decide
-
-```
-/ux-next
-```
-
-Reads every report in `.ux/` and picks the highest-leverage next command. Always present as an escape hatch at the bottom of every other command's output.
-
----
-
-## Supported stacks
-
-| Stack | Discipline applied |
-|---|---|
-| React + Tailwind + Framer Motion | RSC safety, isolated client-component motion, memoized perpetual loops |
-| Next.js (App Router) + Tailwind + Framer Motion | RSC vs Client boundaries, `app/` layout discipline |
-| Vue + Tailwind + GSAP | Composition API + GSAP isolation |
-| Blade + Alpine.js 3 + HTMX + Tailwind 4 | Logical properties for RTL, HTMX boundary discipline |
-| Astro + Tailwind | Island architecture + content collections |
-| Vanilla HTML/CSS + minimal JS | Static prototypes, design exploration |
-
-Stack auto-detection from `package.json` / `composer.json` when present.
-
----
-
-## The 6 audit lenses
-
-The default audit (`/ux-audit`) walks every surface through six lenses in order. Each lens is grounded in a specific reference:
-
-| Lens | Question | Source |
-|---|---|---|
-| **FRAME** | Who is this for, what outcome, what hypothesis? | `process/lean-ux-gothelf.md` |
-| **DISCOVER** | Can a first-timer figure out what to do? | `laws/norman.md` |
-| **SCAN** | 5-second billboard test — what is this, what should I click? | `laws/krug.md` |
-| **ACT** | Action-cycle integrity. Cognitive load (Fitts, Hick, Miller, Jakob). | `laws/laws-of-ux.md` + `norman.md` |
-| **READ** | Voice, error specificity, empty / loading / success patterns. | `foundations/copy.md` |
-| **RECOVER** | Errors caught with specific paths. WCAG 2.1 AA. Common courtesy. | `laws/norman.md` + `foundations/accessibility.md` |
-
-`/ux-motion` adds a 7th lens (MOTION) when invoked directly. `/ux-polish` adds STYLE.
-
----
-
-## What's banned
-
-A short selection from `references/styles/anti-slop.md`:
-
-- Inter as the default brand display font (Inter is fine when intentional; never default)
-- Purple-to-blue AI gradient on white
-- Pure `#000000` (use Zinc-950 / Charcoal / Off-Black)
-- Three equal cards in a row ("feature row" cliché)
-- Centered hero over dark image (default to asymmetric split)
-- `h-screen` on mobile hero (use `min-h-[100dvh]`)
-- Animating `width` / `height` / `top` / `left` (transform + opacity only)
-- Filler verbs: Elevate, Seamless, Unleash, Next-Gen, Revolutionize
-- Placeholder names: John Doe, Sarah Chan
-- Fake brands: Acme, Nexus, SmartFlow, Stellar
-- Round-number stats: 99.99%, 50%, $1,234
-- Unsplash URLs (broken too often; use `picsum.photos/seed/<descriptive-seed>/W/H`)
-- Custom mouse cursors (outdated, breaks a11y, kills performance)
-- Scroll-progress paths drawn on the side of the page
-- Emoji as icons (Google Material Symbols preferred)
-- Lucide user-egg avatars (use seeded `picsum.photos` instead)
-
-Every ban has a "do instead" pair. Run `/ux-polish` on any surface to detect them.
-
----
-
-## What's reached for
-
-A short selection from `references/styles/arsenal.md`:
-
-- Asymmetric split hero (7/5 or 5/7, not centered)
-- Editorial column rhythm (text-left / image-right, alternating)
-- Bento grid with `grid-flow-dense`
-- Floating glass pill nav with backdrop blur
-- Button-in-button trailing icon bezel
-- Magnetic micro-physics (`useMotionValue` not `useState`)
-- Spotlight border cards via `mask-composite: exclude`
-- Skeleton shimmer loading states (RTL-aware)
-- Thesis-statement hero (massive headline, prose subhead, single CTA)
-- The 5 dashboard archetypes (intelligent list, command input, live status, wide data stream, contextual focus)
-- AIDA section flow for landings
-- Two-tone editorial body emphasis (black + gray)
-
----
-
-## Anti-fingerprints: the discipline
-
-`/ux-design` and `/ux-component` produce code with a built-in self-review. Every output ends with:
-
-```
-──── self-review ────
-Anti-slop bans I consciously avoided:
-1. [ban] — [what I did instead]
-2. ...
-
-Arsenal patterns used:
-- [pattern] — in [component/section], because [why]
-```
-
-This is the difference between "generate code" and "generate premium code." The discipline is in the prompt.
-
----
-
-## The Polaris-style report format
-
-Every audit / review output follows the same shape. Per finding:
-
-```
-[SEVERITY] [LENS] Principle violated
-Evidence: <screenshot region | copy excerpt | snippet | flow step>
-Fix: <specific actionable change>
-```
-
-- **Severity**: Critical / High / Medium / Cosmetic
-- **Principle**: cited by name (e.g., "Hick's Law", "Krug: Omit Needless Words", "WCAG 1.4.3 contrast")
-- **Fix**: specific — "Rename 'Submit' → 'Pay $24.99'" not "improve clarity"
-
-Reports end with: severity counts, top-3 must-fix-now, ship-readiness verdict, and the next-prompt block.
-
----
+Returns a complete merged design system: picked style, picked palette, picked type pair, top 5 motion presets, top 12 components, top 5 brand exemplars to study, all 35 anti-pattern guardrails active, plus a rationale block explaining each pick.
 
 ## Architecture
 
 ```
-ux-plugin/
-├── .claude-plugin/
-│   └── plugin.json
-├── commands/                17 slash commands
-├── agents/                  5 sub-agents
-├── references/
-│   ├── foundations/         10 systems (typography, color, spacing, motion, layout,
-│   │                        accessibility, interaction, copy, components, dashboards)
-│   ├── laws/                3 canon files (norman, krug, laws-of-ux)
-│   ├── process/             7 methodology files
-│   ├── styles/              4 style files (anti-slop, arsenal, library, exemplars)
-│   ├── components/          2 component-library files
-│   ├── output/              2 house-style files (polaris-style, case-study-style)
-│   ├── conditional/         2 v3 stubs (habit-design, brand-system)
-│   └── creator/             about.md
-├── bin/
-│   └── state.sh             .ux/ state read/write helpers
-├── docs/                    design spec
-├── LICENSE                  MIT
-├── CONTRIBUTING.md
-└── README.md
+ux-skill/
+├── data/                          # Queryable JSON — the brain
+│   ├── styles.json                # 84 design styles
+│   ├── palettes.json              # 170+ color palettes
+│   ├── type-pairs.json            # 70 font pairings
+│   ├── components.json            # 148 components
+│   ├── industries.json            # 170+ industry rules
+│   ├── chart-types.json           # 35 chart types
+│   ├── tech-stacks.json           # 25 stacks
+│   ├── ux-guidelines.json         # 110+ named laws
+│   ├── motion-presets.json        # 57 motion presets
+│   ├── anti-patterns.json         # 35 regex rules
+│   └── brands/*.json              # 72 brand specs
+│
+├── engine/                        # Python — the reasoning
+│   ├── recommender/               # 5-parallel-search engine
+│   ├── linter/                    # Anti-slop linter (replaces ux-lint.sh)
+│   ├── discovery/                 # 10-field forcing protocol
+│   ├── generator/                 # Tokens + manifest emitter
+│   ├── installer/                 # 17-IDE multi-installer
+│   └── cli/                       # `ux` / `uxskill` entry
+│
+├── commands/                      # 18 Claude Code slash commands (.md)
+├── agents/                        # 5 sub-agent definitions (.md)
+├── references/                    # Prose source for the data + demo pages
+└── bin/uxskill.mjs                # npx wrapper → Python engine
 ```
 
----
+**Python thinks. HTML shows. Markdown chains.**
+
+## The 18 commands (v1 preserved + v2 flagship)
+
+| Command | What it does |
+|---|---|
+| `/ux-recommend` | **v2 flagship**: 5-parallel-search engine → merged system |
+| `/ux-design [brief]` | Generate frontend code from a recommendation |
+| `/ux-audit [path]` | Run linter + LLM design review |
+| `/ux-lint [path]` | Deterministic anti-slop linter (no LLM) |
+| `/ux-system` | Generate a complete design system |
+| `/ux-component [name]` | Generate one component |
+| `/ux-dashboard` | Generate a dashboard surface |
+| `/ux-motion` | Generate motion treatment |
+| `/ux-copy` | Microcopy review + rewrites |
+| `/ux-a11y` | Accessibility audit |
+| `/ux-critique` | Pure design critique |
+| `/ux-polish` | Fix-loop on existing code |
+| `/ux-fix` | Apply linter findings |
+| `/ux-frame` | Frame the problem before solving |
+| `/ux-research` | Synthesize research inputs |
+| `/ux-workshop` | Run a design workshop |
+| `/ux-case-study` | Write a case study |
+| `/ux-expert` | Get expert advice (consulting hook) |
+| `/ux-next` | Suggest the next command |
+
+## The 5 sub-agents
+
+- `frontend-engineer` — production-grade React/Next/Vue/Blade/Astro
+- `motion-engineer` — Framer Motion / GSAP / CSS with reduced-motion fallbacks
+- `copy-writer` — microcopy in brand voice
+- `research-synthesizer` — digests interviews/analytics/competitors into recommendations
+- `design-system-architect` — tokens, components, foundations
+
+## The three moats
+
+1. **Deterministic anti-AI-slop linter** — 35 regex rules, no LLM, runs in CI. Catches: Inter as display, purple-to-blue gradients, three equal cards, "John Doe", emoji in UI, 300ms default timing, generic CTAs, dark text on dark cards, and more. Wire it into pre-commit hooks for a hard floor against AI fingerprints.
+
+2. **Mandatory 10-field discovery** — forcing function before any generation. The plugin asks: project type, audience, primary goal, tone, must-haves, forbidden, reference brands, stack, region, success metric. No improvisation. The brief is saved to `.ux/last-discovery.json` so subsequent commands chain.
+
+3. **72 real brand DESIGN.md specs** — Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast and 59 more. Full design languages, not generic palettes. Tell the plugin "build a landing in Stripe's style" and it reads the actual brand language. Both as prose (`references/brands/*.md`) and structured JSON (`data/brands/*.json`).
+
+## Cross-IDE distribution
+
+17 environments supported via `ux init`:
+
+| IDE / Tool | Detection | Installed artifact |
+|---|---|---|
+| Claude Code | `.claude/` or `CLAUDE.md` | Plugin manifest at `.claude-plugin/plugin.json` |
+| Cursor | `.cursor/` or `.cursorrules` | `.cursorrules` prompt header |
+| Windsurf | `.windsurf/` or `.windsurfrules` | `.windsurfrules` |
+| GitHub Copilot | `.github/copilot-instructions.md` or `.vscode/` | `.github/copilot-instructions.md` |
+| Gemini CLI | `GEMINI.md` | `GEMINI.md` |
+| Codex | `AGENTS.md` | `AGENTS.md` |
+| Kiro | `.kiro/` | `.kiro/instructions.md` |
+| Cline | `.cline/` | `.cline/instructions.md` |
+| Continue | `.continue/` | `.continue/config.json` |
+| Aider | `.aider.conf.yml` | `.aider.conf.yml` + `AIDER.md` |
+| Zed | `.zed/` | `.zed/instructions.md` |
+| JetBrains AI | `.jetbrains-ai/` or `.idea/` | `.jetbrains-ai/instructions.md` |
+| Pieces | `.pieces/` | `.pieces/instructions.md` |
+| Tabby | `.tabby/` | `.tabby/instructions.md` |
+| Tabnine | `.tabnine/` | `.tabnine/instructions.md` |
+| CodeWhisperer | `.aws-codewhisperer/` | `.aws-codewhisperer/instructions.md` |
+| Roo Cline | `.roo/` | `.roo/instructions.md` |
+
+Same Python engine. Same recommendations. Different glue per IDE.
+
+## Compatibility with v1
+
+v1 install still works for existing users:
+
+```bash
+/plugin marketplace add Laith0003/ux-skill
+/plugin install ux@ux-skill
+```
+
+v2 adds the Python layer underneath. When the Python engine is available, commands shell to it for the heavy lifting. When it's not (older installs), commands fall back to v1's prose-only behavior. No breaking changes.
+
+## Privacy
+
+The plugin runs entirely on your machine. No telemetry. No analytics. No phone-home. The deterministic linter runs pure regex over local files. LLM calls (in commands that use them) go through your own AI assistant's authentication, not the plugin's. Full privacy policy: [PRIVACY.md](PRIVACY.md) / [uxskill.laithjunaidy.com/privacy.html](https://uxskill.laithjunaidy.com/privacy.html).
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Contributions that sharpen the discipline are welcome. Contributions that loosen it are not.
-
----
-
-## Real-life UX consulting
-
-Created by **Laith Aljunaidy**, solo founder of [Dot](https://thedotwallet.com) — a MENA-first loyalty platform. This plugin is his shipped playbook for premium product UI/UX.
-
-For UX consulting, design reviews, or product positioning sessions:
-
-- LinkedIn: [https://www.linkedin.com/in/laithaljunaidy/](https://www.linkedin.com/in/laithaljunaidy/)
-- Phone: +962 79 786 8335
-
----
+See [CONTRIBUTING.md](CONTRIBUTING.md). Issues and PRs welcome. The 17 deferred anti-pattern rules and the 8 net-new component patterns flagged during v2.0 are explicit follow-ups in the issue tracker.
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. Use it, fork it, build on it. If it saves you from shipping AI slop, star the repo. It's the cheapest way to support it.
+
+## Author
+
+**Laith Aljunaidy** — solo founder of [Dot](https://thedotwallet.com), a MENA-first loyalty platform. Building ux-skill so the AI-generated frontend doesn't all look the same.
+
+- LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
+- Email: laith.aljunaidy.laith@gmail.com
+- Repo: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
+- Site: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 
 ---
 
-## Star history
-
-If this plugin helps you ship work you're proud of, a star is the cheapest way to support it.
-
----
-
-## Star history
-
-[![Star History Chart](https://api.star-history.com/svg?repos=Laith0003/ux-skill&type=Date)](https://star-history.com/#Laith0003/ux-skill&Date)
-
-If this plugin saves you from shipping work that looks generated, **star the repo**. It's the cheapest way to support it and the fastest way to help other builders find it.
+**v2.0.0-alpha.1** · Built so Claude Code, Cursor, and friends output frontend code that doesn't read as AI-generated.
