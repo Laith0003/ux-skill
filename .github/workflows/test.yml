@@ -52,13 +52,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Scan for forbidden emoji
+      - name: Scan plugin source for forbidden emoji
         run: |
-          if grep -rP '[\x{1F300}-\x{1F9FF}\x{2600}-\x{26FF}\x{2700}-\x{27BF}]' \
-            --include='*.py' --include='*.json' --include='*.md' \
-            --include='*.html' --include='*.css' --include='*.ts' \
-            --include='*.js' --include='*.tsx' --include='*.jsx' \
-            --exclude-dir='.git' --exclude-dir='node_modules' .; then
-            echo "::error::Forbidden emoji detected"
+          # SCAN: commands/, agents/, engine/, tests/, bin/, root .md files
+          # SKIP: references/brands/* (documents brands' own emoji usage),
+          #       data/anti-patterns.json (regex literals for detecting slop),
+          #       docs/launch/* (marketing copy),
+          #       landing/*.html docs/*.html (demo code blocks contain U+2713)
+          # WHITELIST: U+2713 (check mark dingbat) and U+2318 (command key)
+          #            -- both allowed per project rules
+          set +e
+          FOUND=0
+          for dir in commands agents engine tests bin; do
+            if [ -d "$dir" ]; then
+              if grep -rP '[\x{1F300}-\x{1F9FF}\x{2600}-\x{2712}\x{2714}-\x{27BF}]' \
+                --include='*.py' --include='*.json' --include='*.md' \
+                --include='*.html' --include='*.css' --include='*.ts' \
+                --include='*.js' --include='*.tsx' --include='*.jsx' \
+                "$dir"; then
+                FOUND=1
+              fi
+            fi
+          done
+          for f in README.md CHANGELOG.md PRIVACY.md CONTRIBUTING.md CODE_OF_CONDUCT.md; do
+            if [ -f "$f" ]; then
+              if grep -P '[\x{1F300}-\x{1F9FF}\x{2600}-\x{2712}\x{2714}-\x{27BF}]' "$f"; then
+                FOUND=1
+              fi
+            fi
+          done
+          if [ "$FOUND" -eq 1 ]; then
+            echo "::error::Forbidden emoji detected in plugin source"
             exit 1
           fi
+          echo "Scan clean"
