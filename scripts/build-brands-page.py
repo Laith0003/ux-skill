@@ -69,7 +69,13 @@ def render_card(brand_idx, spec):
         if p:
             philosophy = html.escape(str(p))
     swatches = render_swatches(spec.get("design_language", {})) if spec else ""
-    md_link = f"<a href=\"https://github.com/Laith0003/ux-skill/blob/main/references/brands/{bid}-DESIGN.md\" rel=\"noopener\" class=\"br-md\">DESIGN.md</a>"
+    # Only emit the DESIGN.md link if the file actually exists on disk —
+    # 72 of 160 brands historically had no DESIGN.md and the link 404'd.
+    md_path = ROOT / "references" / "brands" / f"{bid}-DESIGN.md"
+    if md_path.exists():
+        md_link = f"<a href=\"https://github.com/Laith0003/ux-skill/blob/main/references/brands/{bid}-DESIGN.md\" rel=\"noopener\" class=\"br-md\">DESIGN.md</a>"
+    else:
+        md_link = ""
     json_link = f"<a href=\"https://github.com/Laith0003/ux-skill/blob/main/data/brands/{bid}.json\" rel=\"noopener\" class=\"br-json\">spec.json</a>"
     return f'''
     <article class="br-card" id="{bid}" data-cat="{category}">
