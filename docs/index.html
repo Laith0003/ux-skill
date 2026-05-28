@@ -734,17 +734,10 @@ h1, h2, h3, h4 {
       will-change: transform;
       width: max-content;
     }
-    .triple-rail__row[data-dir="left"]  .triple-rail__track {
-      animation: triple-drift-left  var(--row-speed, 80s) linear infinite;
-    }
-    .triple-rail__row[data-dir="right"] .triple-rail__track {
-      animation: triple-drift-right var(--row-speed, 80s) linear infinite;
-    }
-    .triple-rail__row.is-grabbing .triple-rail__track { animation: none; }
-    @keyframes triple-drift-left  { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
-    @keyframes triple-drift-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+    /* No CSS animation — JS drives the drift via requestAnimationFrame to
+       avoid the snap-back bug when releasing a finger after a drag. */
     @media (prefers-reduced-motion: reduce) {
-      .triple-rail__track { animation: none !important; transform: translateX(-8%); }
+      .triple-rail__track { transform: translateX(-8%) !important; }
     }
     .trc {
       flex: 0 0 240px;
@@ -3714,43 +3707,88 @@ h1, h2, h3, h4 {
       });
     });
 
-    // Per-row speeds.
+    // JS-driven drift — smooth continuous scroll with drag-to-scrub.
+    // Replaces the old CSS animation which snapped back to translateX(0)
+    // when the user released a drag.
     var rowEls = root.querySelectorAll('.triple-rail__row');
-    rowEls.forEach(function(row) {
-      var s = parseInt(row.dataset.speed || '80', 10);
-      row.style.setProperty('--row-speed', s + 's');
-    });
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Drag-to-scrub each row.
     rowEls.forEach(function(row) {
       var track = row.querySelector('.triple-rail__track');
-      var isDown = false, startX = 0, baseX = 0;
+      var direction = row.dataset.dir === 'right' ? 1 : -1;
+      var speedSec = parseInt(row.dataset.speed || '80', 10);
+      // CSS animation moved -50% over `speed` seconds. Convert to px/sec
+      // once we know the track's measured width.
+      var pxPerSec = 0;
+      var offset = 0;          // current translateX in px (negative = scrolled left)
+      var startOffset = 0;     // offset at the start of a drag
+      var pointerStart = 0;    // pointer x at the start of a drag
+      var isDown = false;
+      var lastTime = performance.now();
 
-      function getCurrent() {
-        var m = new DOMMatrixReadOnly(getComputedStyle(track).transform);
-        return m.m41;
+      function measure() {
+        // We duplicated the children for seamless loop, so the actual unique
+        // content is half the track width. We drift over that distance.
+        var half = track.scrollWidth / 2;
+        pxPerSec = half / speedSec;
+        // If we've drifted past one loop, modulo back into range.
+        var modHalf = half || 1;
+        // For right-direction rails we start at -half so we have room to drift right.
+        if (direction === 1 && offset === 0) offset = -modHalf;
+      }
+      // Measure once after fonts/images settle.
+      requestAnimationFrame(function() { requestAnimationFrame(measure); });
+      window.addEventListener('resize', measure);
+
+      function applyTransform() {
+        track.style.transform = 'translateX(' + offset + 'px)';
       }
 
+      function tick(now) {
+        var dt = (now - lastTime) / 1000;
+        lastTime = now;
+        if (!isDown && !reduceMotion && pxPerSec > 0) {
+          offset += direction * -pxPerSec * dt;   // left-direction = negative drift
+          var half = track.scrollWidth / 2;
+          if (half > 0) {
+            // Wrap so offset stays in (-half, 0] for left-drift, or [-half, 0) for right-drift.
+            while (offset <= -half) offset += half;
+            while (offset > 0) offset -= half;
+          }
+          applyTransform();
+        }
+        requestAnimationFrame(tick);
+      }
+      if (!reduceMotion) requestAnimationFrame(tick);
+      else applyTransform();
+
+      // Drag-to-scrub.
       row.addEventListener('pointerdown', function(e) {
         isDown = true;
-        startX = e.clientX;
-        baseX = getCurrent();
-        track.style.animation = 'none';
-        track.style.transform = 'translateX(' + baseX + 'px)';
+        pointerStart = e.clientX;
+        startOffset = offset;
         row.classList.add('is-grabbing');
         try { row.setPointerCapture(e.pointerId); } catch (_) {}
       });
       row.addEventListener('pointermove', function(e) {
         if (!isDown) return;
-        var dx = e.clientX - startX;
-        track.style.transform = 'translateX(' + (baseX + dx) + 'px)';
+        var dx = e.clientX - pointerStart;
+        offset = startOffset + dx;
+        applyTransform();
       });
       function release() {
         if (!isDown) return;
         isDown = false;
         row.classList.remove('is-grabbing');
-        track.style.transform = '';
-        track.style.animation = '';
+        // No snap — drift continues smoothly from wherever we released.
+        // Normalize offset back into wrap range so the next tick can wrap cleanly.
+        var half = track.scrollWidth / 2;
+        if (half > 0) {
+          while (offset <= -half) offset += half;
+          while (offset > 0) offset -= half;
+          applyTransform();
+        }
+        lastTime = performance.now();
       }
       row.addEventListener('pointerup', release);
       row.addEventListener('pointercancel', release);
