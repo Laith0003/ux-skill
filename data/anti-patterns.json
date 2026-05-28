@@ -637,7 +637,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<h1[^>]*>[\\s\\S]*?</h1>[\\s\\S]*?<h3[^>]*>(?![\\s\\S]*?<h2)|<h2[^>]*>[\\s\\S]*?</h2>[\\s\\S]*?<h4[^>]*>(?![\\s\\S]*?<h3)|<h3[^>]*>(?:(?!<h[12]).)*?</h3>",
+        "pattern": "<h1[^>]*>(?:(?!<h2)[\\s\\S])*?<h3\\b|<h2[^>]*>(?:(?!<h3)[\\s\\S])*?<h4\\b",
         "flags": "is",
         "scope": [
           "tsx",
@@ -1948,7 +1948,7 @@
       "category": "Performance",
       "detection": {
         "type": "regex",
-        "pattern": "addEventListener\\s*\\(\\s*['\"](?:scroll|touchmove|touchstart|wheel|mousewheel)['\"]\\s*,[^)]*\\)(?![^;]*\\{[^}]*passive\\s*:\\s*true)",
+        "pattern": "addEventListener\\s*\\(\\s*['\"](?:scroll|touchmove|touchstart|wheel|mousewheel)['\"]\\s*,(?:(?!passive\\s*:\\s*true)[^)])*\\)",
         "flags": "i",
         "scope": [
           "ts",
