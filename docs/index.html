@@ -259,8 +259,6 @@
 
     .nav__drawer {
       position: fixed; inset: 0;
-      background: rgba(7, 8, 10, 0.94);
-      backdrop-filter: blur(20px);
       z-index: 90;
       display: flex;
       flex-direction: column;
@@ -268,6 +266,7 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity var(--t-mid) var(--ease-cinema);
+      backdrop-filter: blur(20px); background: rgba(7, 8, 10, 0.94);
     }
     .nav__drawer.is-open { opacity: 1; pointer-events: auto; }
     .nav__drawer a {
@@ -640,8 +639,8 @@
     .brand-tile[data-id="spotify"]   .brand-tile__name { font-family: 'Onest', sans-serif; font-weight: 700; letter-spacing: -0.03em; }
     .brand-tile[data-id="cursor"]    .brand-tile__name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; letter-spacing: -0.045em; }
     .brand-tile[data-id="claude"]    .brand-tile__name { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; letter-spacing: -0.005em; font-size: 32px; }
-    .brand-tile[data-id="ferrari"]   .brand-tile__name { font-family: 'Inter Tight', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; font-size: 22px; color: #ef4444; }
-    .brand-tile[data-id="bmw-m"]     .brand-tile__name { font-family: 'Inter Tight', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: 22px; }
+    .brand-tile[data-id="ferrari"]   .brand-tile__name { font-family: 'Inter Tight', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; font-size: 18px; color: #ef4444; }
+    .brand-tile[data-id="bmw-m"]     .brand-tile__name { font-family: 'Inter Tight', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: 18px; }
     .brand-tile[data-id="apple"]     .brand-tile__name { font-family: 'SF Pro Display', 'Inter Tight', sans-serif; font-weight: 600; letter-spacing: -0.04em; }
     .brand-tile[data-id="figma"]     .brand-tile__name { color: #a259ff; }
     .brand-tile[data-id="linear"]    .brand-tile__name { color: #5e6ad2; }
@@ -1283,7 +1282,7 @@
       border: 1px solid var(--hairline-2);
       border-radius: 18px;
     }
-    .mcp__head h3 {
+    .mcp__head .mcp__h2 {
       font-size: clamp(28px, 4vw, 42px);
       font-variation-settings: 'wdth' 88, 'wght' 580;
       letter-spacing: -0.028em;
@@ -1521,14 +1520,14 @@
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
       <span>Star on GitHub</span>
     </a>
-    <button class="nav__menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer" id="nav-menu-btn">
+    <button type="button" class="nav__menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer" id="nav-menu-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
   </div>
 </header>
 
 <div class="nav__drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Site menu" aria-hidden="true">
-  <button class="nav__drawer-close" aria-label="Close menu" id="nav-drawer-close">
+  <button type="button" class="nav__drawer-close" aria-label="Close menu" id="nav-drawer-close">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
   </button>
   <a href="/compare.html">Compare</a>
@@ -1575,8 +1574,8 @@
           <div class="hero__meta" aria-label="Plugin facts">
             <span><span class="num">998</span> entries</span>
             <span><span class="num">22</span> commands</span>
-            <span><span class="num">68</span> lint rules</span>
-            <span><span class="num">72</span> brand specs</span>
+            <span><span class="num">85</span> lint rules</span>
+            <span><span class="num">92</span> brand specs</span>
             <span><span class="num">17</span> IDEs</span>
           </div>
         </div>
@@ -1704,7 +1703,7 @@
 
           <div class="linter__stats">
             <div class="linter__stat">
-              <div class="v">68</div>
+              <div class="v">85</div>
               <div class="l">Regex rules</div>
             </div>
             <div class="linter__stat">
@@ -1833,7 +1832,7 @@
             </div>
             <div class="device__result">
               <span class="lbl">Anti-slop guardrails</span>
-              <span class="val">68 active · 0 violations</span>
+              <span class="val">85 active · 0 violations</span>
             </div>
             <div class="device__result is-ok">
               <span class="lbl">Pages persisted</span>
@@ -1895,8 +1894,8 @@
       </div>
       <div class="stats__grid" id="stats-grid">
         <div class="stat reveal" data-stat data-target="998"><span class="stat__v" data-out>0</span><span class="stat__l">Structured entries</span></div>
-        <div class="stat reveal" data-stat data-target="68"><span class="stat__v" data-out>0</span><span class="stat__l">Anti-pattern rules</span></div>
-        <div class="stat reveal" data-stat data-target="72"><span class="stat__v" data-out>0</span><span class="stat__l">Brand DESIGN.md specs</span></div>
+        <div class="stat reveal" data-stat data-target="85"><span class="stat__v" data-out>0</span><span class="stat__l">Anti-pattern rules</span></div>
+        <div class="stat reveal" data-stat data-target="92"><span class="stat__v" data-out>0</span><span class="stat__l">Brand DESIGN.md specs</span></div>
         <div class="stat reveal" data-stat data-target="22"><span class="stat__v" data-out>0</span><span class="stat__l">Slash commands</span></div>
         <div class="stat reveal" data-stat data-target="17"><span class="stat__v" data-out>0</span><span class="stat__l">IDE integrations</span></div>
         <div class="stat reveal" data-stat data-target="4"><span class="stat__v" data-out>0</span><span class="stat__l">Languages emitted</span></div>
@@ -1918,28 +1917,28 @@
       <div class="compare__panel" id="compare-panel">
         <div class="compare__row compare__row-h" role="presentation">
           <span>Plugin</span>
-          <span style="text-align:right;">Score</span>
-          <span style="text-align:right;">Stars</span>
+          <span class="compare__col-right">Score</span>
+          <span class="compare__col-right">Stars</span>
         </div>
         <div class="compare__row is-ours" data-score-pct="0.88">
-          <span class="compare__name">uxskill <span style="font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:0.06em;">— this plugin</span></span>
-          <span class="compare__score"><span class="pct">44<span style="color:var(--muted);font-size:18px;">/50</span></span><span class="compare__score-bar"><span></span></span></span>
-          <span class="compare__score" style="font-size:13.5px;color:var(--body);">14 stars<br><span style="color:var(--muted);font-size:11px;">v2.0.0-alpha.1</span></span>
+          <span class="compare__name">uxskill <span class="compare__sub-mono">— this plugin</span></span>
+          <span class="compare__score"><span class="pct">44<span class="compare__pct-unit">/50</span></span><span class="compare__score-bar"><span></span></span></span>
+          <span class="compare__score compare__score-stars">14 stars<br><span class="compare__score-stars-meta">v2.0.0-alpha.1</span></span>
         </div>
         <div class="compare__row" data-score-pct="0.66">
           <span class="compare__name is-them">ui-ux-pro-max-skill</span>
-          <span class="compare__score is-them"><span class="pct">33<span style="font-size:18px;">/50</span></span><span class="compare__score-bar"><span></span></span></span>
-          <span class="compare__score" style="font-size:13.5px;color:var(--body);">241 stars</span>
+          <span class="compare__score is-them"><span class="pct">33<span class="compare__pct-unit--them">/50</span></span><span class="compare__score-bar"><span></span></span></span>
+          <span class="compare__score compare__score-stars">241 stars</span>
         </div>
         <div class="compare__row" data-score-pct="0.56">
           <span class="compare__name is-them">design-shotgun</span>
-          <span class="compare__score is-them"><span class="pct">28<span style="font-size:18px;">/50</span></span><span class="compare__score-bar"><span></span></span></span>
-          <span class="compare__score" style="font-size:13.5px;color:var(--body);">182 stars</span>
+          <span class="compare__score is-them"><span class="pct">28<span class="compare__pct-unit--them">/50</span></span><span class="compare__score-bar"><span></span></span></span>
+          <span class="compare__score compare__score-stars">182 stars</span>
         </div>
         <div class="compare__row" data-score-pct="0.50">
           <span class="compare__name is-them">design-html</span>
-          <span class="compare__score is-them"><span class="pct">25<span style="font-size:18px;">/50</span></span><span class="compare__score-bar"><span></span></span></span>
-          <span class="compare__score" style="font-size:13.5px;color:var(--body);">126 stars</span>
+          <span class="compare__score is-them"><span class="pct">25<span class="compare__pct-unit--them">/50</span></span><span class="compare__score-bar"><span></span></span></span>
+          <span class="compare__score compare__score-stars">126 stars</span>
         </div>
       </div>
 
@@ -1962,13 +1961,13 @@
       </div>
 
       <div class="install__tabs" role="tablist" aria-label="Install methods">
-        <button class="install__tab is-active" role="tab" aria-selected="true" aria-controls="install-pip" id="tab-pip" data-tab="pip">pip</button>
-        <button class="install__tab" role="tab" aria-selected="false" aria-controls="install-npm" id="tab-npm" data-tab="npm">npm</button>
-        <button class="install__tab" role="tab" aria-selected="false" aria-controls="install-claude" id="tab-claude" data-tab="claude">claude plugin</button>
+        <button type="button" class="install__tab is-active" role="tab" aria-selected="true" aria-controls="install-pip" id="tab-pip" data-tab="pip">pip</button>
+        <button type="button" class="install__tab" role="tab" aria-selected="false" aria-controls="install-npm" id="tab-npm" data-tab="npm">npm</button>
+        <button type="button" class="install__tab" role="tab" aria-selected="false" aria-controls="install-claude" id="tab-claude" data-tab="claude">claude plugin</button>
       </div>
 
       <div class="install__pane is-active" id="install-pip" role="tabpanel" aria-labelledby="tab-pip">
-        <button class="install__copy" aria-label="Copy install command" data-copy-target="cmd-pip">copy</button>
+        <button type="button" class="install__copy" aria-label="Copy install command" data-copy-target="cmd-pip">copy</button>
         <p class="install__line" id="cmd-pip">
           <span class="install__cmd">pip install</span> <span class="install__arg">'uxskill[all]'</span>
         </p>
@@ -1976,7 +1975,7 @@
       </div>
 
       <div class="install__pane" id="install-npm" role="tabpanel" aria-labelledby="tab-npm">
-        <button class="install__copy" aria-label="Copy install command" data-copy-target="cmd-npm">copy</button>
+        <button type="button" class="install__copy" aria-label="Copy install command" data-copy-target="cmd-npm">copy</button>
         <p class="install__line" id="cmd-npm">
           <span class="install__cmd">npx</span> <span class="install__arg">uxskill@latest init</span>
         </p>
@@ -1984,7 +1983,7 @@
       </div>
 
       <div class="install__pane" id="install-claude" role="tabpanel" aria-labelledby="tab-claude">
-        <button class="install__copy" aria-label="Copy install command" data-copy-target="cmd-claude">copy</button>
+        <button type="button" class="install__copy" aria-label="Copy install command" data-copy-target="cmd-claude">copy</button>
         <p class="install__line" id="cmd-claude">
           <span class="install__cmd">claude plugin install</span> <span class="install__arg">ux@ux-skill</span>
         </p>
@@ -1999,7 +1998,7 @@
       <div class="mcp__panel">
         <div class="mcp__head">
           <span class="eyebrow">10 — MCP server</span>
-          <h3>14 tools over stdio.<br>Any MCP host.</h3>
+          <h2 class="mcp__h2">14 tools over stdio.<br>Any MCP host.</h2>
           <p>The engine ships an MCP server so non-Claude hosts can drive the recommender and linter through the model-context protocol. No extra runtime; the same Python wheel exposes the tools.</p>
           <a href="/mcp.html" class="mcp__cta">
             Read the MCP spec

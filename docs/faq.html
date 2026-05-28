@@ -34,7 +34,7 @@
         "name": "What is ux-skill?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "ux-skill is an open-source Python design engine that runs inside AI coding tools like Claude Code, Cursor, and Windsurf. It provides 22 slash-commands, 998 manifest entries, 72 brand specs, and a 35-rule anti-slop linter that catches the design fingerprints every LLM produces by default — purple gradients, generic SaaS cards, three-tier pricing, default-Inter typography."
+          "text": "ux-skill is an open-source Python design engine that runs inside AI coding tools like Claude Code, Cursor, and Windsurf. It provides 22 slash-commands, 998 manifest entries, 92 brand specs, and a 85-rule anti-slop linter that catches the design fingerprints every LLM produces by default — purple gradients, generic SaaS cards, three-tier pricing, default-Inter typography."
         }
       },
       {
@@ -42,7 +42,7 @@
         "name": "How is ux-skill different from ui-ux-pro-max-skill?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "ui-ux-pro-max-skill is a single-purpose recommender at 84k stars — it scores intent against a catalog and returns a structured plan. ux-skill borrows that recommender pattern and adds three things it does not have: a 35-rule anti-slop linter that runs in CI, a 72-brand spec library, and cross-IDE adapters for 17 editors. The scored compare table is at /compare.html."
+          "text": "ui-ux-pro-max-skill is a single-purpose recommender at 84k stars — it scores intent against a catalog and returns a structured plan. ux-skill borrows that recommender pattern and adds three things it does not have: a 85-rule anti-slop linter that runs in CI, a 72-brand spec library, and cross-IDE adapters for 17 editors. The scored compare table is at /compare.html."
         }
       },
       {
@@ -130,7 +130,7 @@
         "name": "What is the anti-slop linter, exactly?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "A 35-rule pattern checker that scans your HTML, CSS, and component files for known AI-design fingerprints. Each rule has a regex or AST check, a severity, and a recommended fix. Sample rules: ban purple-to-blue gradients (CSS regex), require non-default type pairings, refuse emoji in user-facing strings, flag three-tier pricing without a stated reason. Run it via `npx uxskill lint`."
+          "text": "An 85-rule pattern checker that scans your HTML, CSS, and component files for known AI-design fingerprints. Each rule has a regex or AST check, a severity, and a recommended fix. Sample rules: ban purple-to-blue gradients (CSS regex), require non-default type pairings, refuse emoji in user-facing strings, flag three-tier pricing without a stated reason. Run it via `npx uxskill lint`."
         }
       },
       {
@@ -151,7 +151,7 @@
       },
       {
         "@type": "Question",
-        "name": "What are the 72 brand specs?",
+        "name": "What are the 92 brand specs?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "DESIGN.md-style spec files for 72 known brand identities — Apple, Stripe, Linear, Vercel, Notion, Airbnb, Figma, Replit, Anthropic, plus 63 more. Each spec encodes that brand's allowed typography, color usage rules, motion vocabulary, and explicit anti-patterns. Pick a brand with /ux-design --brand=stripe and the recommender narrows everything accordingly."
@@ -521,7 +521,7 @@
         <li><a href="#q13">What's the anti-slop linter?</a></li>
         <li><a href="#q14">Linter in CI?</a></li>
         <li><a href="#q15">5-parallel-search recommender?</a></li>
-        <li><a href="#q16">72 brand specs?</a></li>
+        <li><a href="#q16">92 brand specs?</a></li>
         <li><a href="#q17">Generate a landing page?</a></li>
         <li><a href="#q18">Generate a dashboard?</a></li>
         <li><a href="#q19">RTL / Arabic?</a></li>
@@ -538,7 +538,7 @@
       <div class="q-num">Question 01</div>
       <h2 class="question">What is ux-skill?</h2>
       <div class="answer">
-        <p><strong>ux-skill is an open-source Python design engine that runs inside AI coding tools</strong> like Claude Code, Cursor, and Windsurf. It provides 22 slash-commands, 998 manifest entries across nine YAML manifests, 72 brand specs, and a 35-rule anti-slop linter.</p>
+        <p><strong>ux-skill is an open-source Python design engine that runs inside AI coding tools</strong> like Claude Code, Cursor, and Windsurf. It provides 22 slash-commands, 998 manifest entries across nine YAML manifests, 92 brand specs, and a 85-rule anti-slop linter.</p>
         <p>The job it's hired to do: catch the design fingerprints every LLM produces by default — purple gradients, generic SaaS cards, three-tier pricing, default-Inter typography — <em>before</em> they reach your repo.</p>
       </div>
     </section>
@@ -548,7 +548,7 @@
       <h2 class="question">How is ux-skill different from ui-ux-pro-max-skill?</h2>
       <div class="answer">
         <p><strong>ui-ux-pro-max-skill</strong> (nextlevelbuilder, 84k stars) is a single-purpose recommender — it scores intent against a catalog and returns a structured plan. It's the canonical recommender pattern in the ecosystem.</p>
-        <p>ux-skill borrows that pattern and adds three things it does not have: <strong>a 35-rule anti-slop linter</strong> that runs in CI, <strong>a 72-brand spec library</strong>, and <strong>cross-IDE adapters for 17 editors</strong>. The scored side-by-side is at <a href="/compare.html">/compare.html</a> — we score 44/50, ui-ux-pro-max scores 28/50.</p>
+        <p>ux-skill borrows that pattern and adds three things it does not have: <strong>a 85-rule anti-slop linter</strong> that runs in CI, <strong>a 72-brand spec library</strong>, and <strong>cross-IDE adapters for 17 editors</strong>. The scored side-by-side is at <a href="/compare.html">/compare.html</a> — we score 44/50, ui-ux-pro-max scores 28/50.</p>
       </div>
     </section>
 
@@ -647,7 +647,7 @@
       <div class="q-num">Question 13</div>
       <h2 class="question">What's the anti-slop linter, exactly?</h2>
       <div class="answer">
-        <p>A 35-rule pattern checker that scans your HTML, CSS, JSX, Vue, and Svelte files for known AI-design fingerprints. Each rule has a regex or AST matcher, a severity (warn / error), and a recommended fix link into the brand spec library.</p>
+        <p>An 85-rule pattern checker that scans your HTML, CSS, JSX, Vue, and Svelte files for known AI-design fingerprints. Each rule has a regex or AST matcher, a severity (warn / error), and a recommended fix link into the brand spec library.</p>
         <p>Sample rules: <strong>ban purple-to-blue gradients</strong> (CSS regex), <strong>require non-default type pairings</strong>, <strong>refuse emoji in user-facing strings</strong>, <strong>flag three-tier pricing without a stated reason</strong>, <strong>block <code>border-radius: 12px</code> defaults without brand justification</strong>. Run with <code>npx uxskill lint</code>.</p>
       </div>
     </section>
@@ -677,7 +677,7 @@ npx uxskill lint --staged</code></pre>
 
     <section id="q16" class="q-block">
       <div class="q-num">Question 16</div>
-      <h2 class="question">What are the 72 brand specs?</h2>
+      <h2 class="question">What are the 92 brand specs?</h2>
       <div class="answer">
         <p><strong>72 DESIGN.md-style spec files</strong> under <code>references/brands/</code>, one per known brand identity. Apple, Stripe, Linear, Vercel, Notion, Airbnb, Figma, Replit, Anthropic, plus 63 more.</p>
         <p>Each spec encodes that brand's <strong>allowed typography pairings</strong>, <strong>color usage rules</strong>, <strong>motion vocabulary</strong>, and <strong>explicit anti-patterns</strong> (e.g. Stripe brand spec forbids serif body type and warns on heavy drop shadow). Pick a brand with <code>/ux-design --brand=stripe</code> and the recommender narrows everything to brand-compliant choices.</p>

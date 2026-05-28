@@ -441,7 +441,7 @@
       </p>
       <ol>
         <li><strong>Cross-lane compatibility check.</strong> A neon-cyberpunk style with a Cormorant/Inter editorial pairing fails the cross-check. The merger picks combinations the manifest has flagged as coherent.</li>
-        <li><strong>Brand spec overlay.</strong> If the brief mentions a brand by name (Apple, Stripe, Linear, Figma, Tesla, BMW…) or matches a brand's industry-tone signature, the merger overlays the brand's DESIGN.md tokens. 72 brand specs available.</li>
+        <li><strong>Brand spec overlay.</strong> If the brief mentions a brand by name (Apple, Stripe, Linear, Figma, Tesla, BMW…) or matches a brand's industry-tone signature, the merger overlays the brand's DESIGN.md tokens. 92 brand specs available.</li>
         <li><strong>Component pick.</strong> Given style + palette + type, the merger picks compatible components from the 148-entry catalog. Editorial-modern gets long-form layouts and quote pulls; dashboard-dense gets data tables and KPI cards.</li>
       </ol>
 
@@ -581,7 +581,7 @@
         <div class="label">Honesty card</div>
         <h4>About the catalog depth claim</h4>
         <p>ui-ux-pro-max-skill is the comparator here. Their recommender pioneered the 5-parallel-search architecture (we adopted it directly) and has ~600 structured entries. ux-skill v2 extends to 998. The architecture is shared; the depth is ours.</p>
-        <p>The 998 number is not the moat. The moat is the four nets new — 35-rule deterministic linter, 72 named brand specs, 57 motion presets, 148-component catalog — that don't exist in ui-ux-pro-max's recommender.</p>
+        <p>The 998 number is not the moat. The moat is the four nets new — 85-rule deterministic linter, 92 named brand specs, 57 motion presets, 148-component catalog — that don't exist in ui-ux-pro-max's recommender.</p>
       </div>
 
       <h2>Beyond the recommendation</h2>
@@ -590,7 +590,7 @@
       </p>
       <ul>
         <li><code>uxskill.generate(system, page="landing")</code> — emit code for a target surface using the recommended system.</li>
-        <li><code>uxskill.lint(code, threshold="high")</code> — 35-rule anti-slop pass on the generated code.</li>
+        <li><code>uxskill.lint(code, threshold="high")</code> — 85-rule anti-slop pass on the generated code.</li>
         <li><code>uxskill.fix(code, lint_result)</code> — apply lint fixes inline.</li>
         <li><code>uxskill.critique(code, system)</code> — taste-level review citing named UX laws and brand exemplars.</li>
         <li><code>uxskill.case_study(system, code)</code> — auto-generated handoff doc.</li>
@@ -620,7 +620,7 @@
     <section class="cta">
       <span class="eyebrow">pip install uxskill</span>
       <h2>998 entries. <span class="accent">5 lanes.</span> One Python call.</h2>
-      <p>The Python design system generator: deterministic recommender + 35-rule linter + 72 brand specs. MIT licensed, no telemetry, no account, fits in a CI pipeline.</p>
+      <p>The Python design system generator: deterministic recommender + 85-rule linter + 92 brand specs. MIT licensed, no telemetry, no account, fits in a CI pipeline.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
