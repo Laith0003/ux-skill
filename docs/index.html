@@ -2633,6 +2633,41 @@ tone=["bold","editorial"]</pre>
       if (e.key === 'Escape') close();
     });
   })();
+
+  /* ========== ANALYTICS — custom GA4 events on the key actions ==========
+     Enhanced Measurement auto-captures page_view / scroll / outbound clicks.
+     These named events make the conversions legible in GA reports. No-op if
+     the analytics tag is blocked (gtag undefined). */
+  (function () {
+    if (typeof window.gtag !== 'function') return;
+    var send = function (name, params) { try { window.gtag('event', name, params || {}); } catch (e) {} };
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a, button');
+      if (!a) return;
+      var href = a.getAttribute && (a.getAttribute('href') || '');
+      var cls = (a.className && a.className.toString) ? a.className.toString() : '';
+      if (a.classList && a.classList.contains('lang-picker__item')) {
+        send('language_switch', { language: a.getAttribute('lang') || a.textContent.trim() });
+      } else if (/github\.com/.test(href)) {
+        send('github_click', { placement: a.closest('.nav') ? 'nav' : (a.closest('footer') ? 'footer' : 'body'), link_url: href });
+      } else if (/pypi\.org/.test(href) || /\bcta-primary\b/.test(cls)) {
+        send('install_cta_click', { link_url: href });
+      } else if (href === '#dogfood' || /\bcta-secondary\b/.test(cls)) {
+        send('see_it_work_click', {});
+      }
+    }, { passive: true });
+    var hit = {};
+    function onScrollDepth() {
+      var el = document.documentElement;
+      var max = el.scrollHeight - window.innerHeight;
+      if (max <= 0) return;
+      var pct = Math.round((el.scrollTop || window.pageYOffset) / max * 100);
+      [25, 50, 75, 100].forEach(function (m) {
+        if (pct >= m && !hit[m]) { hit[m] = 1; send('scroll_depth', { percent: m }); }
+      });
+    }
+    window.addEventListener('scroll', onScrollDepth, { passive: true });
+  })();
 </script>
 
 </body>
