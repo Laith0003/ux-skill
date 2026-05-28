@@ -2,7 +2,7 @@
 
 # ux-skill — bộ máy trí tuệ thiết kế cho Claude Code, Cursor và mọi công cụ lập trình AI khác
 
-> **Plugin UX mạnh nhất cho lập trình AI.** Một lõi suy luận Python với 11 manifest JSON truy vấn được (84 phong cách, 176 bảng màu, 70 cặp typography, 148 component, 184 ngành nghề, 35 loại biểu đồ, 57 preset chuyển động, 112 quy luật UX, 145 quy tắc anti-pattern, 25 tech stack, 160 spec thương hiệu), 22 slash command, 5 sub-agent và một bộ linter chống AI-slop xác định. Liên-IDE: triển khai vào Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer và Roo Cline.
+> **v3.0.0 stable — THE BRAIN.** Plugin UX mạnh nhất cho lập trình AI. Một lõi suy luận Python với 11 manifest JSON truy vấn được (84 phong cách, 176 bảng màu, 70 cặp typography, 148 component, 184 ngành nghề, 35 loại biểu đồ, 57 preset chuyển động, 112 quy luật UX, 145 quy tắc anti-pattern, 25 tech stack, 160 spec thương hiệu), 22 slash command, 5 sub-agent và một bộ linter chống AI-slop xác định. Liên-IDE: triển khai vào Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer và Roo Cline.
 
 > **Tên thương hiệu là `ux-skill`.** Tên gói PyPI / npm vẫn là `uxskill`. Kho GitHub nằm tại [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
@@ -20,6 +20,20 @@
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
 [![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
+
+### Có gì mới trong v3
+
+- **Brand specs trở thành dữ liệu huấn luyện, không phải template.** 160 brand specs không còn là catalog mà recommender chọn từ — chúng là vốn từ mà synthesizer chưng cất. Output mới ở mỗi lần gọi.
+- **Synthesizer 7 trục** (warmth, contrast, density, geometry, formality, motion, type_personality). Brief được ánh xạ tất định sang giá trị trục; giá trị trục được biên dịch thành palette + typography + spacing + radius + motion token tươi.
+- **Ba chế độ tự động phân phối** — `strict_brand` (100% một thương hiệu), `brand_anchor` (70% một thương hiệu + 30% thích ứng theo trục từ thương hiệu anh em), `pure_synthesis` (không thương hiệu nào được nêu — chưng cất từ 8 ví dụ khớp trục).
+- **Sổ cái quyết định xếp hạng lại recommender.** `.ux/decisions.jsonl` xếp hạng lại ứng viên theo chiến thắng quá khứ trong cùng bucket `(industry, ui_type)`. An toàn cold-start. Chỉ đếm các quyết định có `lint_score >= 80` + `user_accepted = true`.
+- **Ma trận tương tác trục** — giải quyết xung đột rõ ràng giữa các trục cạnh tranh (dense + corporate → 4px, airy + corporate → 12px, soft + playful → 18px radius). Không còn quy tắc tùy biến im lặng.
+- **Vòng lặp tự động `/ux-evolve`** — lint → polish → re-lint cho đến khi điểm ≥ 90, chững lại, hoặc 5 vòng. Quality gate ở 65.
+- **3 công cụ MCP mới** (15 → 18): `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`.
+- **Bảng điều khiển stats cục bộ** — `uxskill stats --html` ghi `.ux/stats.html` cho biết cài đặt **của bạn** đã học được gì. Không telemetry, không tổng hợp toàn cục.
+- **223 test đậu.** Offline. Tất định. Không bao giờ gọi LLM.
+
+Chi tiết đầy đủ trong [CHANGELOG.md](CHANGELOG.md#300--2026-05-28--the-brain).
 
 ### Lịch sử sao
 
@@ -39,21 +53,34 @@ README này là tài liệu tham chiếu chính thức. Mọi command, mọi sub
 
 ## Mục lục
 
-1. [Cài đặt nhanh](#cài-đặt-nhanh)
-2. [Những con số — so sánh trực tiếp với 8 skill UX hàng đầu cho Claude](#những-con-số--so-sánh-trực-tiếp-với-8-skill-ux-hàng-đầu-cho-claude)
-3. [Kiến trúc — các mảnh ghép khớp với nhau thế nào](#kiến-trúc--các-mảnh-ghép-khớp-với-nhau-thế-nào)
-4. [22 slash command — tham chiếu chi tiết](#22-slash-command--tham-chiếu-chi-tiết)
-5. [5 sub-agent](#5-sub-agent)
-6. [11 data manifest](#11-data-manifest)
-7. [145 quy tắc chống AI-slop — bộ linter](#145-quy-tắc-chống-ai-slop--bộ-linter)
-8. [160 spec DESIGN.md thương hiệu — theo danh mục](#160-spec-designmd-thương-hiệu--theo-danh-mục)
-9. [Máy chủ MCP — nước cờ bất đối xứng](#máy-chủ-mcp--nước-cờ-bất-đối-xứng)
-10. [Trình cài đặt 17 IDE](#trình-cài-đặt-17-ide)
-11. [Tình huống sử dụng — kịch bản cụ thể](#tình-huống-sử-dụng--kịch-bản-cụ-thể)
-12. [So sánh với các lựa chọn khác](#so-sánh-với-các-lựa-chọn-khác)
-13. [Lộ trình](#lộ-trình)
-14. [Đóng góp](#đóng-góp)
-15. [Giấy phép, tác giả, lời cảm ơn](#giấy-phép-tác-giả-lời-cảm-ơn)
+1. [Bộ não — v3.0 là gì](#bộ-não--v30-là-gì)
+2. [Cài đặt nhanh](#cài-đặt-nhanh)
+3. [Những con số — so sánh trực tiếp với 8 skill UX hàng đầu cho Claude](#những-con-số--so-sánh-trực-tiếp-với-8-skill-ux-hàng-đầu-cho-claude)
+4. [Kiến trúc — các mảnh ghép khớp với nhau thế nào](#kiến-trúc--các-mảnh-ghép-khớp-với-nhau-thế-nào)
+5. [22 slash command — tham chiếu chi tiết](#22-slash-command--tham-chiếu-chi-tiết)
+6. [5 sub-agent](#5-sub-agent)
+7. [11 data manifest](#11-data-manifest)
+8. [145 quy tắc chống AI-slop — bộ linter](#145-quy-tắc-chống-ai-slop--bộ-linter)
+9. [160 spec DESIGN.md thương hiệu — theo danh mục](#160-spec-designmd-thương-hiệu--theo-danh-mục)
+10. [Máy chủ MCP — nước cờ bất đối xứng](#máy-chủ-mcp--nước-cờ-bất-đối-xứng)
+11. [Trình cài đặt 17 IDE](#trình-cài-đặt-17-ide)
+12. [Tình huống sử dụng — kịch bản cụ thể](#tình-huống-sử-dụng--kịch-bản-cụ-thể)
+13. [So sánh với các lựa chọn khác](#so-sánh-với-các-lựa-chọn-khác)
+14. [Lộ trình](#lộ-trình)
+15. [Đóng góp](#đóng-góp)
+16. [Giấy phép, tác giả, lời cảm ơn](#giấy-phép-tác-giả-lời-cảm-ơn)
+
+---
+
+## Bộ não — v3.0 là gì
+
+v3.0.0 là sự dịch chuyển kiến trúc lớn nhất trong lịch sử ux-skill. Recommender không còn chọn template từ catalog — engine **tổng hợp** một ngôn ngữ thiết kế tươi cho mỗi brief. Cùng một brief luôn cho ra cùng một output (hoàn toàn tất định), nhưng mỗi brief khác nhau nhận được hệ thống mới của riêng nó. Brand specs không còn là template; chúng là dữ liệu huấn luyện mà engine học vốn từ. Hệ thống có mắt nhìn vào lịch sử của chính nó, đóng vòng phản hồi cục bộ, và không bao giờ gọi LLM.
+
+Compiler là **synthesizer tất định 7 trục** — warmth, contrast, density, geometry, formality, motion, type_personality. Mỗi brief ánh xạ sang giá trị trục; giá trị trục biên dịch thành palette + typography + spacing + radius + motion token tươi. Thang typography mô-đun chọn tỷ lệ từ contrast (1.200 quiet / 1.250 balanced / 1.333 loud). Layout primitive đáp ứng theo cấu trúc (`auto-fit minmax(min(N, 100%), 1fr)` + container queries). Layout hỏng không thể phát ra vì chúng không thể biểu diễn.
+
+Có ba chế độ tự động phân phối: `strict_brand` (`reference_brands=[stripe] strict=True` → 100% token Stripe, đường nhanh nhất); `brand_anchor` (`reference_brands=[stripe]` → 70% Stripe + 30% thích ứng theo trục từ 4 thương hiệu anh em); và `pure_synthesis` (không thương hiệu nào được nêu → không gian vô hạn, chưng cất 8 ví dụ khớp trục thành ngôn ngữ thiết kế mới). Các trục cạnh tranh được giải quyết bằng **ma trận tương tác trục** đã tài liệu hóa — dense + corporate biên dịch thành 4px (density thắng, trường phái Bloomberg), airy + corporate thành 12px (formality thắng, sang trọng), soft + playful thành 18px radius, sharp + corporate thành 2px. Không quy tắc tùy biến im lặng trong triển khai.
+
+**Sổ cái quyết định** (`.ux/decisions.jsonl`, schema `_v: 1` khóa) đóng vòng phản hồi. Recommender giờ xếp hạng lại ứng viên theo chiến thắng quá khứ trong cùng bucket `(industry, ui_type)`. An toàn cold-start — bỏ qua khi dưới 3 priors. Chỉ đếm các quyết định có `lint_score >= 80` VÀ `user_accepted = true`. Thêm vào đó `/ux-evolve` chạy lint → polish → re-lint cho đến khi điểm ≥ 90, chững lại, hoặc 5 vòng, với quality gate ở 65 mà dưới đó output bị từ chối nếu không có `--force`. Kết quả: mỗi cài đặt thông minh hơn trên corpus của chính mình, mỗi lần chạy tái lập được giữa các máy, và engine vẫn hoàn toàn offline.
 
 ---
 
@@ -174,6 +201,8 @@ ux-skill (tên gói: uxskill)
 │   └── brands/*.json                  160 spec DESIGN thương hiệu + _index.json
 │
 ├── engine/                            Python — phần suy luận
+│   ├── synthesizer/                   v3 — compiler tất định 7 trục
+│   ├── decisions/                     v3 — sổ cái .ux/decisions.jsonl + xếp hạng lại recommender
 │   ├── recommender/                   bộ máy merge 5 tìm kiếm song song
 │   ├── linter/                        bộ quét anti-slop xác định
 │   ├── discovery/                     giao thức ép buộc 10 trường

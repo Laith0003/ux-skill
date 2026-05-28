@@ -2,7 +2,7 @@
 
 # ux-skill — mesin design intelligence untuk Claude Code, Cursor, dan setiap tool coding AI lainnya
 
-> **Plugin UX terkuat untuk coding AI.** Inti reasoning Python dengan 11 manifest JSON yang bisa di-query (84 style, 176 palette, 70 pasangan tipografi, 148 komponen, 184 industri, 35 tipe chart, 57 preset motion, 112 hukum UX, 145 aturan anti-pattern, 25 tech stack, 160 spec brand), 22 slash command, 5 sub-agent, dan linter deterministik anti-AI-slop. Lintas IDE: tersedia di Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, dan Roo Cline.
+> **v3.0.0 stable — THE BRAIN.** Plugin UX terkuat untuk coding AI. Inti reasoning Python dengan 11 manifest JSON yang bisa di-query (84 style, 176 palette, 70 pasangan tipografi, 148 komponen, 184 industri, 35 tipe chart, 57 preset motion, 112 hukum UX, 145 aturan anti-pattern, 25 tech stack, 160 spec brand), 22 slash command, 5 sub-agent, dan linter deterministik anti-AI-slop. Lintas IDE: tersedia di Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, dan Roo Cline.
 
 > **Nama brand-nya adalah `ux-skill`.** Nama paket PyPI / npm tetap `uxskill`. Repo GitHub ada di [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
@@ -20,6 +20,20 @@
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
 [![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
+
+### Apa yang baru di v3
+
+- **Brand specs jadi data pelatihan, bukan template.** 160 brand specs tidak lagi katalog yang diambil recommender — melainkan kosakata yang disuling synthesizer. Output baru di setiap panggilan.
+- **Synthesizer 7-sumbu** (warmth, contrast, density, geometry, formality, motion, type_personality). Brief dipetakan secara deterministik ke nilai sumbu; nilai sumbu dikompilasi ke palette + tipografi + spacing + radius + motion segar.
+- **Tiga mode auto-dispatch** — `strict_brand` (100% satu brand), `brand_anchor` (70% satu brand + 30% adaptasi sumbu dari brand saudara), `pure_synthesis` (tanpa brand disebut — destilasi 8 contoh selaras sumbu).
+- **Decisions ledger me-rerank recommender.** `.ux/decisions.jsonl` me-rerank kandidat berdasar kemenangan masa lalu di bucket `(industry, ui_type)` yang sama. Cold-start aman. Hanya menghitung keputusan dengan `lint_score >= 80` + `user_accepted = true`.
+- **Matriks interaksi sumbu** — resolusi konflik eksplisit antar sumbu bersaing (dense + corporate → 4px, airy + corporate → 12px, soft + playful → 18px radius). Tidak ada lagi aturan ad-hoc senyap.
+- **Loop otomatis `/ux-evolve`** — lint → polish → re-lint hingga skor ≥ 90, plateau, atau 5 putaran. Quality gate di 65.
+- **3 tool MCP baru** (15 → 18): `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`.
+- **Dashboard stats lokal** — `uxskill stats --html` menulis `.ux/stats.html` yang menunjukkan apa yang dipelajari instalasi **kamu**. Tanpa telemetri, tanpa agregasi global.
+- **223 tes lolos.** Offline. Deterministik. LLM tak pernah dipanggil.
+
+Detail lengkap di [CHANGELOG.md](CHANGELOG.md#300--2026-05-28--the-brain).
 
 ### Riwayat star
 
@@ -39,21 +53,34 @@ README ini adalah referensi kanonis. Setiap command, setiap sub-agent, setiap da
 
 ## Daftar isi
 
-1. [Install cepat](#install-cepat)
-2. [Angka — perbandingan live dengan 8 skill UX Claude teratas](#angka--perbandingan-live-dengan-8-skill-ux-claude-teratas)
-3. [Arsitektur — bagaimana semuanya cocok](#arsitektur--bagaimana-semuanya-cocok)
-4. [22 slash command — referensi detail](#22-slash-command--referensi-detail)
-5. [5 sub-agent](#5-sub-agent)
-6. [11 data manifest](#11-data-manifest)
-7. [145 aturan anti-AI-slop — linter](#145-aturan-anti-ai-slop--linter)
-8. [160 spec brand DESIGN.md — per kategori](#160-spec-brand-designmd--per-kategori)
-9. [Server MCP — langkah asimetris](#server-mcp--langkah-asimetris)
-10. [Installer 17 IDE](#installer-17-ide)
-11. [Use case — skenario konkret](#use-case--skenario-konkret)
-12. [Dibandingkan dengan alternatif](#dibandingkan-dengan-alternatif)
-13. [Roadmap](#roadmap)
-14. [Kontribusi](#kontribusi)
-15. [Lisensi, penulis, ucapan terima kasih](#lisensi-penulis-ucapan-terima-kasih)
+1. [Otak — apa itu v3.0](#otak--apa-itu-v30)
+2. [Install cepat](#install-cepat)
+3. [Angka — perbandingan live dengan 8 skill UX Claude teratas](#angka--perbandingan-live-dengan-8-skill-ux-claude-teratas)
+4. [Arsitektur — bagaimana semuanya cocok](#arsitektur--bagaimana-semuanya-cocok)
+5. [22 slash command — referensi detail](#22-slash-command--referensi-detail)
+6. [5 sub-agent](#5-sub-agent)
+7. [11 data manifest](#11-data-manifest)
+8. [145 aturan anti-AI-slop — linter](#145-aturan-anti-ai-slop--linter)
+9. [160 spec brand DESIGN.md — per kategori](#160-spec-brand-designmd--per-kategori)
+10. [Server MCP — langkah asimetris](#server-mcp--langkah-asimetris)
+11. [Installer 17 IDE](#installer-17-ide)
+12. [Use case — skenario konkret](#use-case--skenario-konkret)
+13. [Dibandingkan dengan alternatif](#dibandingkan-dengan-alternatif)
+14. [Roadmap](#roadmap)
+15. [Kontribusi](#kontribusi)
+16. [Lisensi, penulis, ucapan terima kasih](#lisensi-penulis-ucapan-terima-kasih)
+
+---
+
+## Otak — apa itu v3.0
+
+v3.0.0 adalah pergeseran arsitektur terbesar dalam sejarah ux-skill. Recommender tidak lagi mengambil template dari katalog — engine **mensintesis** bahasa desain segar per brief. Brief yang sama selalu menghasilkan output yang sama (sepenuhnya deterministik), tetapi setiap brief berbeda mendapat sistem barunya sendiri. Brand specs bukan lagi template; mereka adalah data pelatihan tempat engine belajar kosakata. Sistem memiliki mata pada sejarahnya sendiri, menutup loop umpan balik secara lokal, dan tidak pernah memanggil LLM.
+
+Compiler adalah **synthesizer deterministik 7-sumbu** — warmth, contrast, density, geometry, formality, motion, type_personality. Setiap brief dipetakan ke nilai sumbu; nilai sumbu dikompilasi ke palette + tipografi + spacing + radius + motion segar. Skala tipografi modular memilih rasio dari contrast (1.200 quiet / 1.250 balanced / 1.333 loud). Primitif layout responsif sejak dirancang (`auto-fit minmax(min(N, 100%), 1fr)` + container queries). Layout rusak tak bisa dipancarkan karena tak bisa direpresentasikan.
+
+Ada tiga mode auto-dispatch: `strict_brand` (`reference_brands=[stripe] strict=True` → 100% token Stripe, jalur tercepat); `brand_anchor` (`reference_brands=[stripe]` → 70% Stripe + 30% adaptasi sumbu dari 4 brand saudara); dan `pure_synthesis` (tanpa brand disebut → ruang tak terbatas, 8 contoh selaras sumbu disuling jadi bahasa desain baru). Konflik antar sumbu diselesaikan oleh **matriks interaksi sumbu** terdokumentasi — dense + corporate kompilasi ke 4px (density menang, mazhab Bloomberg), airy + corporate ke 12px (formality menang, mewah), soft + playful ke 18px radius, sharp + corporate ke 2px. Tak ada aturan ad-hoc senyap dalam implementasi.
+
+**Decisions ledger** (`.ux/decisions.jsonl`, schema `_v: 1` terkunci) menutup loop umpan balik. Recommender kini me-rerank kandidat berdasar kemenangan masa lalu di bucket `(industry, ui_type)` yang sama. Cold-start aman — melewati di bawah 3 priors. Hanya menghitung keputusan dengan `lint_score >= 80` DAN `user_accepted = true`. Selain itu `/ux-evolve` menjalankan lint → polish → re-lint hingga skor ≥ 90, plateau, atau 5 putaran, dengan quality gate di 65 yang menolak output di bawahnya tanpa `--force`. Hasilnya: tiap instalasi makin pintar di corpus-nya sendiri, tiap run reproducible antar mesin, dan engine tetap sepenuhnya offline.
 
 ---
 
@@ -174,6 +201,8 @@ ux-skill (nama paket: uxskill)
 │   └── brands/*.json                  160 spec DESIGN brand + _index.json
 │
 ├── engine/                            Python — penalarannya
+│   ├── synthesizer/                   v3 — compiler deterministik 7-sumbu
+│   ├── decisions/                     v3 — ledger .ux/decisions.jsonl + re-rank recommender
 │   ├── recommender/                   engine merge 5-pencarian-paralel
 │   ├── linter/                        scanner anti-slop deterministik
 │   ├── discovery/                     protokol pemaksa 10-field

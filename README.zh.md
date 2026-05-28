@@ -2,7 +2,7 @@
 
 # ux-skill — 为 Claude Code、Cursor 及一切 AI 编程工具打造的设计智能引擎
 
-> **AI 编程领域最强的 UX 插件。** 一个由 Python 驱动的推理内核,包含 11 份可查询的 JSON 清单(84 种风格、176 套配色、70 组字体搭配、148 个组件、184 个行业、35 种图表类型、57 个动效预设、112 条 UX 法则、145 条反模式规则、25 个技术栈、160 份品牌规范)、22 个斜杠命令、5 个子代理,以及一个确定性的反 AI-slop 静态检查器。跨 IDE 支持:可装入 Claude Code、Cursor、Windsurf、GitHub Copilot、Gemini CLI、Codex、Kiro、Cline、Continue、Aider、Zed、JetBrains AI、Pieces、Tabby、Tabnine、CodeWhisperer 以及 Roo Cline。
+> **v3.0.0 稳定版 — THE BRAIN.** AI 编程领域最强的 UX 插件。 一个由 Python 驱动的推理内核,包含 11 份可查询的 JSON 清单(84 种风格、176 套配色、70 组字体搭配、148 个组件、184 个行业、35 种图表类型、57 个动效预设、112 条 UX 法则、145 条反模式规则、25 个技术栈、160 份品牌规范)、22 个斜杠命令、5 个子代理,以及一个确定性的反 AI-slop 静态检查器。跨 IDE 支持:可装入 Claude Code、Cursor、Windsurf、GitHub Copilot、Gemini CLI、Codex、Kiro、Cline、Continue、Aider、Zed、JetBrains AI、Pieces、Tabby、Tabnine、CodeWhisperer 以及 Roo Cline。
 
 > **品牌名是 `ux-skill`。** PyPI / npm 上的包名依旧是 `uxskill`。GitHub 仓库地址是 [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill)。
 
@@ -20,6 +20,20 @@
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
 [![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
+
+### v3 新增内容
+
+- **品牌规格变成训练数据,而非模板。** 160 个品牌规格不再是推荐器从中挑选的目录,而是合成器蒸馏的词汇。每次调用都产生新输出。
+- **7 轴合成器**(warmth, contrast, density, geometry, formality, motion, type_personality)。Brief 确定性映射到轴值;轴值编译为全新的 palette + 字体 + spacing + radius + motion token。
+- **三种自动分派模式** — `strict_brand`(单一品牌 100%)、`brand_anchor`(单一品牌 70% + 同类品牌轴向适配 30%)、`pure_synthesis`(未指定品牌 — 从轴向匹配的 8 个范例中蒸馏)。
+- **决策日志重新排序推荐器。** `.ux/decisions.jsonl` 按同一 `(industry, ui_type)` 桶内的历史胜出对候选重新排序。冷启动安全。仅计算 `lint_score >= 80` 且 `user_accepted = true` 的决策。
+- **轴交互矩阵** — 显式解决竞争轴之间的冲突(dense + corporate → 4px, airy + corporate → 12px, soft + playful → 18px radius)。不再有沉默的临时规则。
+- **`/ux-evolve` 自动循环** — lint → polish → re-lint,直到分数 ≥ 90、平台期或 5 轮。质量门控在 65。
+- **3 个新 MCP 工具**(15 → 18):`ux_synthesize`、`ux_decisions_query`、`ux_decisions_stats`。
+- **本地统计仪表盘** — `uxskill stats --html` 写出 `.ux/stats.html`,显示**你的**安装学到了什么。无遥测,无全局聚合。
+- **223 个测试通过。** 离线。确定性。从不调用 LLM。
+
+完整细节见 [CHANGELOG.md](CHANGELOG.md#300--2026-05-28--the-brain)。
 
 ### Star 历史
 
@@ -39,21 +53,34 @@ ux-skill 是一个面向 AI 编程工具的**设计智能引擎**。它以 Pytho
 
 ## 目录
 
-1. [快速安装](#快速安装)
-2. [数据对比——与 Top 8 Claude UX 技能的实时比较](#数据对比与-top-8-claude-ux-技能的实时比较)
-3. [架构——各部件如何咬合](#架构各部件如何咬合)
-4. [22 个斜杠命令——详细参考](#22-个斜杠命令详细参考)
-5. [5 个子代理](#5-个子代理)
-6. [11 份数据清单](#11-份数据清单)
-7. [145 条反 AI-slop 规则——静态检查器](#145-条反-ai-slop-规则静态检查器)
-8. [160 份 DESIGN.md 品牌规范——按类别](#160-份-designmd-品牌规范按类别)
-9. [MCP 服务器——非对称的一着](#mcp-服务器非对称的一着)
-10. [面向 17 个 IDE 的安装器](#面向-17-个-ide-的安装器)
-11. [使用案例——具体场景](#使用案例具体场景)
-12. [与其他方案的对比](#与其他方案的对比)
-13. [路线图](#路线图)
-14. [参与贡献](#参与贡献)
-15. [许可证、作者、致谢](#许可证作者致谢)
+1. [大脑 — v3.0 是什么](#大脑--v30-是什么)
+2. [快速安装](#快速安装)
+3. [数据对比——与 Top 8 Claude UX 技能的实时比较](#数据对比与-top-8-claude-ux-技能的实时比较)
+4. [架构——各部件如何咬合](#架构各部件如何咬合)
+5. [22 个斜杠命令——详细参考](#22-个斜杠命令详细参考)
+6. [5 个子代理](#5-个子代理)
+7. [11 份数据清单](#11-份数据清单)
+8. [145 条反 AI-slop 规则——静态检查器](#145-条反-ai-slop-规则静态检查器)
+9. [160 份 DESIGN.md 品牌规范——按类别](#160-份-designmd-品牌规范按类别)
+10. [MCP 服务器——非对称的一着](#mcp-服务器非对称的一着)
+11. [面向 17 个 IDE 的安装器](#面向-17-个-ide-的安装器)
+12. [使用案例——具体场景](#使用案例具体场景)
+13. [与其他方案的对比](#与其他方案的对比)
+14. [路线图](#路线图)
+15. [参与贡献](#参与贡献)
+16. [许可证、作者、致谢](#许可证作者致谢)
+
+---
+
+## 大脑 — v3.0 是什么
+
+v3.0.0 是 ux-skill 历史上最大的架构转变。推荐器不再从目录中挑选模板 — 引擎为每份 brief **合成**新鲜的设计语言。相同的 brief 始终产生相同的输出(完全确定性),但每份不同的 brief 都得到自己的新系统。品牌规格不再是模板;它们是引擎从中学习词汇的训练数据。系统能看到自身历史,在本地闭合反馈回路,从不调用 LLM。
+
+编译器是**确定性 7 轴合成器** — warmth, contrast, density, geometry, formality, motion, type_personality。每份 brief 映射到轴值;轴值编译为全新的 palette + 字体 + spacing + radius + motion token。模块化字体比例从 contrast 中选取比率(1.200 quiet / 1.250 balanced / 1.333 loud)。布局原语由构造即响应式(`auto-fit minmax(min(N, 100%), 1fr)` + 容器查询)。损坏的布局无法发出,因为它们不可表示。
+
+三种自动分派模式:`strict_brand`(`reference_brands=[stripe] strict=True` → 100% Stripe token,最快路径);`brand_anchor`(`reference_brands=[stripe]` → 70% Stripe + 来自 4 个同类品牌的轴向适配 30%);以及 `pure_synthesis`(未指定品牌 → 无限空间,从轴向匹配的 8 个范例蒸馏为新设计语言)。竞争轴由文档化的**轴交互矩阵**解决 — dense + corporate 编译为 4px(density 胜出,Bloomberg 流派),airy + corporate 为 12px(formality 胜出,奢华),soft + playful 为 18px radius,sharp + corporate 为 2px。实现中无沉默的临时规则。
+
+**决策日志**(`.ux/decisions.jsonl`,schema `_v: 1` 已锁定)闭合反馈回路。推荐器现在按同一 `(industry, ui_type)` 桶内的历史胜出对候选重新排序。冷启动安全 — 当先验少于 3 个时跳过。仅计算 `lint_score >= 80` AND `user_accepted = true` 的决策。此外 `/ux-evolve` 运行 lint → polish → re-lint 直到分数 ≥ 90、平台期或 5 轮,质量门控在 65,低于此值的输出在没有 `--force` 时被拒绝。结果:每次安装都在自己的语料上变得更聪明,每次运行都在机器间可复现,引擎保持完全离线。
 
 ---
 
@@ -174,6 +201,8 @@ ux-skill (包名: uxskill)
 │   └── brands/*.json                  160 份 DESIGN 规范 + _index.json
 │
 ├── engine/                            Python——推理层
+│   ├── synthesizer/                   v3 — 确定性 7 轴编译器
+│   ├── decisions/                     v3 — .ux/decisions.jsonl 日志 + 推荐器重新排序
 │   ├── recommender/                   五路并行检索的合并引擎
 │   ├── linter/                        确定性反 slop 扫描器
 │   ├── discovery/                     10 字段强制协议

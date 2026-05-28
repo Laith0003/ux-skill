@@ -22,6 +22,20 @@
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
 [![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
 
+### What's new in v3
+
+- **Brand specs become training data, not templates.** The 160 brand specs are no longer a catalogue the recommender picks from — they're vocabulary the synthesizer distills from. Output is novel every call.
+- **7-axis synthesizer** (warmth, contrast, density, geometry, formality, motion, type_personality). Briefs map deterministically to axis values; axis values compile to fresh palette + type + spacing + radius + motion tokens.
+- **Three auto-dispatched modes** — `strict_brand` (100% of one brand), `brand_anchor` (70% one brand + 30% axis-adapted siblings), `pure_synthesis` (no brand named — distill from 8 axis-matching exemplars).
+- **Decisions ledger drives the recommender.** `.ux/decisions.jsonl` re-ranks candidates by past wins in the same `(industry, ui_type)` bucket. Cold-start safe. Counts only `lint_score >= 80` + `user_accepted = true` decisions.
+- **Axis interaction matrix** — explicit conflict resolution between competing axes (dense + corporate → 4px, airy + corporate → 12px, soft + playful → 18px radius). No more silent ad-hoc rules.
+- **`/ux-evolve` auto-loop** — lint → polish → re-lint until score ≥ 90 or plateau or 5 rounds. Quality gate at 65.
+- **3 new MCP tools** (15 → 18): `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`.
+- **Local stats dashboard** — `uxskill stats --html` writes `.ux/stats.html` showing what YOUR install has learned. No telemetry, no global aggregate.
+- **223 tests pass.** Offline. Deterministic. No LLM ever called.
+
+Full details in [CHANGELOG.md](CHANGELOG.md#300--2026-05-28--the-brain).
+
 ### Star history
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Laith0003/ux-skill&type=Date)](https://star-history.com/#Laith0003/ux-skill&Date)
@@ -40,21 +54,34 @@ This README is the canonical reference. Every command, every sub-agent, every da
 
 ## Table of contents
 
-1. [Quick install](#quick-install)
-2. [The numbers — live comparison vs the top 8 Claude UX skills](#the-numbers--live-comparison-vs-the-top-8-claude-ux-skills)
-3. [Architecture — how the pieces fit](#architecture--how-the-pieces-fit)
-4. [The 22 slash commands — detailed reference](#the-22-slash-commands--detailed-reference)
-5. [The 5 sub-agents](#the-5-sub-agents)
-6. [The 11 data manifests](#the-11-data-manifests)
-7. [The 145 anti-AI-slop rules — the linter](#the-145-anti-ai-slop-rules--the-linter)
-8. [The 160 brand DESIGN.md specs — by category](#the-160-brand-designmd-specs--by-category)
-9. [MCP server — the asymmetric move](#mcp-server--the-asymmetric-move)
-10. [The 17-IDE installer](#the-17-ide-installer)
-11. [Use cases — concrete scenarios](#use-cases--concrete-scenarios)
-12. [Compared to alternatives](#compared-to-alternatives)
-13. [Roadmap](#roadmap)
-14. [Contributing](#contributing)
-15. [License, author, acknowledgments](#license-author-acknowledgments)
+1. [The Brain — what v3.0 is](#the-brain--what-v30-is)
+2. [Quick install](#quick-install)
+3. [The numbers — live comparison vs the top 8 Claude UX skills](#the-numbers--live-comparison-vs-the-top-8-claude-ux-skills)
+4. [Architecture — how the pieces fit](#architecture--how-the-pieces-fit)
+5. [The 22 slash commands — detailed reference](#the-22-slash-commands--detailed-reference)
+6. [The 5 sub-agents](#the-5-sub-agents)
+7. [The 11 data manifests](#the-11-data-manifests)
+8. [The 145 anti-AI-slop rules — the linter](#the-145-anti-ai-slop-rules--the-linter)
+9. [The 160 brand DESIGN.md specs — by category](#the-160-brand-designmd-specs--by-category)
+10. [MCP server — the asymmetric move](#mcp-server--the-asymmetric-move)
+11. [The 17-IDE installer](#the-17-ide-installer)
+12. [Use cases — concrete scenarios](#use-cases--concrete-scenarios)
+13. [Compared to alternatives](#compared-to-alternatives)
+14. [Roadmap](#roadmap)
+15. [Contributing](#contributing)
+16. [License, author, acknowledgments](#license-author-acknowledgments)
+
+---
+
+## The Brain — what v3.0 is
+
+v3.0.0 is the biggest architectural shift in ux-skill's history. The recommender no longer picks templates from a catalogue — the engine **synthesizes** a fresh design language per brief. Same brief always yields the same output (fully deterministic), but every distinct brief gets its own novel system. Brand specs aren't templates anymore; they're training data the engine learns the vocabulary from. The system has eyes on its own history, closes the feedback loop locally, and never calls an LLM.
+
+The compiler is a **deterministic 7-axis synthesizer** — warmth, contrast, density, geometry, formality, motion, type_personality. Every brief maps to axis values; axis values compile to fresh palette + type + spacing + radius + motion tokens. Modular type scales pick their ratio from contrast (1.200 quiet / 1.250 balanced / 1.333 loud). Layout primitives are responsive by construction (`auto-fit minmax(min(N, 100%), 1fr)` + container queries). Broken layouts can't be emitted because they aren't representable.
+
+There are three auto-dispatched modes: `strict_brand` (`reference_brands=[stripe] strict=True` → 100% Stripe tokens, fastest path); `brand_anchor` (`reference_brands=[stripe]` → 70% Stripe + 30% axis-adapted from 4 sibling brands); and `pure_synthesis` (no brand named → infinity space, 8 axis-matching exemplars distilled into a novel design language). Conflicting axes are resolved by a documented **axis interaction matrix** — dense + corporate compiles to 4px (density wins, Bloomberg-school), airy + corporate to 12px (formality wins, luxury), soft + playful to 18px radius, sharp + corporate to 2px. No silent ad-hoc rules in the implementation.
+
+The **decisions ledger** (`.ux/decisions.jsonl`, schema `_v: 1` locked) closes the feedback loop. The recommender now re-ranks candidates by past wins in the same `(industry, ui_type)` bucket. Cold-start safe — it skips below 3 priors. It only counts decisions with `lint_score >= 80` AND `user_accepted = true`. Plus `/ux-evolve` runs lint → polish → re-lint until score ≥ 90 or plateau or 5 rounds, with a 65-score quality gate below which output is refused unless `--force`. The result: every install gets smarter on its own corpus, every run is reproducible across machines, and the engine stays fully offline.
 
 ---
 
@@ -175,7 +202,9 @@ ux-skill (package name: uxskill)
 │   └── brands/*.json                  160 brand DESIGN specs + _index.json
 │
 ├── engine/                            Python — the reasoning
-│   ├── recommender/                   5-parallel-search merge engine
+│   ├── synthesizer/                   v3 — 7-axis deterministic compiler
+│   ├── decisions/                     v3 — .ux/decisions.jsonl ledger + recommender re-rank
+│   ├── recommender/                   5-parallel-search merge engine (re-ranked by decisions)
 │   ├── linter/                        Deterministic anti-slop scanner
 │   ├── discovery/                     10-field forcing protocol
 │   ├── generator/                     Token + manifest emitter
@@ -249,6 +278,8 @@ ux-skill (package name: uxskill)
 4. **Output.** A JSON document with the picked style, palette, type pair, top 5 motion presets, top 12 components, top 5 brand exemplars, and all 145 anti-pattern guardrails active. Plus a rationale block explaining each pick.
 5. **Generation.** Downstream commands (`/ux-design`, `/ux-component`, `/ux-system`, `/ux-dashboard`) consume the recommendation to generate actual code via the sub-agents.
 6. **Verification.** `/ux-lint` re-scans the generated code against the 145 regex rules. Exits non-zero on Critical/High in CI.
+
+**v3 additions.** The recommender now re-ranks candidates from `engine/decisions/` using `.ux/decisions.jsonl` (only counts decisions with `lint_score >= 80` AND `user_accepted = true`; cold-start safe below 3 priors). The generator path can dispatch into `engine/synthesizer/` — a deterministic 7-axis compiler that produces fresh palette + type + spacing + radius + motion tokens per brief instead of picking templates from a catalogue. See [The Brain — what v3.0 is](#the-brain--what-v30-is) for details.
 
 **Python thinks. HTML shows. Markdown chains.**
 

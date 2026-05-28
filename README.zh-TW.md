@@ -2,7 +2,7 @@
 
 # ux-skill — 為 Claude Code、Cursor 及一切 AI 程式設計工具打造的設計智慧引擎
 
-> **AI 程式設計領域最強的 UX 外掛。** 一個由 Python 驅動的推理核心,包含 11 份可查詢的 JSON 清單(84 種風格、176 套配色、70 組字體搭配、148 個元件、184 個產業、35 種圖表類型、57 個動效預設、112 條 UX 法則、145 條反模式規則、25 個技術堆疊、160 份品牌規範)、22 個斜線命令、5 個子代理,以及一個確定性的反 AI-slop 程式碼檢查器。跨 IDE 支援:可安裝到 Claude Code、Cursor、Windsurf、GitHub Copilot、Gemini CLI、Codex、Kiro、Cline、Continue、Aider、Zed、JetBrains AI、Pieces、Tabby、Tabnine、CodeWhisperer 以及 Roo Cline。
+> **v3.0.0 穩定版 — THE BRAIN.** AI 程式設計領域最強的 UX 外掛。 一個由 Python 驅動的推理核心,包含 11 份可查詢的 JSON 清單(84 種風格、176 套配色、70 組字體搭配、148 個元件、184 個產業、35 種圖表類型、57 個動效預設、112 條 UX 法則、145 條反模式規則、25 個技術堆疊、160 份品牌規範)、22 個斜線命令、5 個子代理,以及一個確定性的反 AI-slop 程式碼檢查器。跨 IDE 支援:可安裝到 Claude Code、Cursor、Windsurf、GitHub Copilot、Gemini CLI、Codex、Kiro、Cline、Continue、Aider、Zed、JetBrains AI、Pieces、Tabby、Tabnine、CodeWhisperer 以及 Roo Cline。
 
 > **品牌名稱是 `ux-skill`。** PyPI / npm 上的套件名稱仍然是 `uxskill`。GitHub 儲存庫位於 [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill)。
 
@@ -20,6 +20,20 @@
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
 [![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
+
+### v3 新增內容
+
+- **品牌規格成為訓練資料,而非範本。** 160 個品牌規格不再是推薦器從中挑選的目錄,而是合成器蒸餾的詞彙。每次呼叫都產生新輸出。
+- **7 軸合成器**(warmth, contrast, density, geometry, formality, motion, type_personality)。Brief 確定性映射到軸值;軸值編譯為全新的 palette + 字體 + spacing + radius + motion token。
+- **三種自動派發模式** — `strict_brand`(單一品牌 100%)、`brand_anchor`(單一品牌 70% + 同類品牌軸向適配 30%)、`pure_synthesis`(未指定品牌 — 從軸向匹配的 8 個範例中蒸餾)。
+- **決策日誌重新排序推薦器。** `.ux/decisions.jsonl` 按同一 `(industry, ui_type)` 桶內的歷史勝出對候選重新排序。冷啟動安全。僅計算 `lint_score >= 80` 且 `user_accepted = true` 的決策。
+- **軸交互矩陣** — 顯式解決競爭軸之間的衝突(dense + corporate → 4px, airy + corporate → 12px, soft + playful → 18px radius)。不再有沉默的臨時規則。
+- **`/ux-evolve` 自動迴圈** — lint → polish → re-lint,直到分數 ≥ 90、平台期或 5 輪。品質閘門在 65。
+- **3 個新 MCP 工具**(15 → 18):`ux_synthesize`、`ux_decisions_query`、`ux_decisions_stats`。
+- **本地統計儀表板** — `uxskill stats --html` 寫出 `.ux/stats.html`,顯示**你的**安裝學到了什麼。無遙測,無全域彙整。
+- **223 個測試通過。** 離線。確定性。從不呼叫 LLM。
+
+完整細節見 [CHANGELOG.md](CHANGELOG.md#300--2026-05-28--the-brain)。
 
 ### Star 歷史
 
@@ -39,21 +53,34 @@ ux-skill 是一個面向 AI 程式設計工具的**設計智慧引擎**。它以
 
 ## 目錄
 
-1. [快速安裝](#快速安裝)
-2. [數據對照——與 Top 8 Claude UX 技能的即時比較](#數據對照與-top-8-claude-ux-技能的即時比較)
-3. [架構——各部件如何咬合](#架構各部件如何咬合)
-4. [22 個斜線命令——詳細參考](#22-個斜線命令詳細參考)
-5. [5 個子代理](#5-個子代理)
-6. [11 份資料清單](#11-份資料清單)
-7. [145 條反 AI-slop 規則——程式碼檢查器](#145-條反-ai-slop-規則程式碼檢查器)
-8. [160 份 DESIGN.md 品牌規範——按類別](#160-份-designmd-品牌規範按類別)
-9. [MCP 伺服器——非對稱的一著](#mcp-伺服器非對稱的一著)
-10. [面向 17 個 IDE 的安裝程式](#面向-17-個-ide-的安裝程式)
-11. [使用案例——具體場景](#使用案例具體場景)
-12. [與其他方案的對照](#與其他方案的對照)
-13. [路線圖](#路線圖)
-14. [參與貢獻](#參與貢獻)
-15. [授權、作者、致謝](#授權作者致謝)
+1. [大腦 — v3.0 是什麼](#大腦--v30-是什麼)
+2. [快速安裝](#快速安裝)
+3. [數據對照——與 Top 8 Claude UX 技能的即時比較](#數據對照與-top-8-claude-ux-技能的即時比較)
+4. [架構——各部件如何咬合](#架構各部件如何咬合)
+5. [22 個斜線命令——詳細參考](#22-個斜線命令詳細參考)
+6. [5 個子代理](#5-個子代理)
+7. [11 份資料清單](#11-份資料清單)
+8. [145 條反 AI-slop 規則——程式碼檢查器](#145-條反-ai-slop-規則程式碼檢查器)
+9. [160 份 DESIGN.md 品牌規範——按類別](#160-份-designmd-品牌規範按類別)
+10. [MCP 伺服器——非對稱的一著](#mcp-伺服器非對稱的一著)
+11. [面向 17 個 IDE 的安裝程式](#面向-17-個-ide-的安裝程式)
+12. [使用案例——具體場景](#使用案例具體場景)
+13. [與其他方案的對照](#與其他方案的對照)
+14. [路線圖](#路線圖)
+15. [參與貢獻](#參與貢獻)
+16. [授權、作者、致謝](#授權作者致謝)
+
+---
+
+## 大腦 — v3.0 是什麼
+
+v3.0.0 是 ux-skill 歷史上最大的架構轉變。推薦器不再從目錄中挑選範本 — 引擎為每份 brief **合成**新鮮的設計語言。相同的 brief 始終產生相同的輸出(完全確定性),但每份不同的 brief 都得到自己的新系統。品牌規格不再是範本;它們是引擎從中學習詞彙的訓練資料。系統能看到自身歷史,在本地閉合回饋迴路,從不呼叫 LLM。
+
+編譯器是**確定性 7 軸合成器** — warmth, contrast, density, geometry, formality, motion, type_personality。每份 brief 映射到軸值;軸值編譯為全新的 palette + 字體 + spacing + radius + motion token。模組化字體比例從 contrast 中選取比率(1.200 quiet / 1.250 balanced / 1.333 loud)。版面配置原語由構造即響應式(`auto-fit minmax(min(N, 100%), 1fr)` + 容器查詢)。損壞的版面無法發出,因為它們不可表示。
+
+三種自動派發模式:`strict_brand`(`reference_brands=[stripe] strict=True` → 100% Stripe token,最快路徑);`brand_anchor`(`reference_brands=[stripe]` → 70% Stripe + 來自 4 個同類品牌的軸向適配 30%);以及 `pure_synthesis`(未指定品牌 → 無限空間,從軸向匹配的 8 個範例蒸餾為新設計語言)。競爭軸由文件化的**軸交互矩陣**解決 — dense + corporate 編譯為 4px(density 勝出,Bloomberg 流派),airy + corporate 為 12px(formality 勝出,奢華),soft + playful 為 18px radius,sharp + corporate 為 2px。實作中無沉默的臨時規則。
+
+**決策日誌**(`.ux/decisions.jsonl`,schema `_v: 1` 已鎖定)閉合回饋迴路。推薦器現在按同一 `(industry, ui_type)` 桶內的歷史勝出對候選重新排序。冷啟動安全 — 當先驗少於 3 個時跳過。僅計算 `lint_score >= 80` AND `user_accepted = true` 的決策。此外 `/ux-evolve` 執行 lint → polish → re-lint 直到分數 ≥ 90、平台期或 5 輪,品質閘門在 65,低於此值的輸出在沒有 `--force` 時被拒絕。結果:每次安裝都在自己的語料上變得更聰明,每次執行都在機器間可重現,引擎保持完全離線。
 
 ---
 
@@ -174,6 +201,8 @@ ux-skill (套件名: uxskill)
 │   └── brands/*.json                  160 份 DESIGN 規範 + _index.json
 │
 ├── engine/                            Python——推理層
+│   ├── synthesizer/                   v3 — 確定性 7 軸編譯器
+│   ├── decisions/                     v3 — .ux/decisions.jsonl 日誌 + 推薦器重新排序
 │   ├── recommender/                   五路平行檢索的合併引擎
 │   ├── linter/                        確定性反 slop 掃描器
 │   ├── discovery/                     10 欄位強制協定

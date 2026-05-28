@@ -2,7 +2,7 @@
 
 # ux-skill — Claude Code, Cursor ve diğer her AI coding aracı için design intelligence motoru
 
-> **AI coding için en güçlü UX plugin'i.** 11 sorgulanabilir JSON manifesti olan Python akıl yürütme çekirdeği (84 stil, 176 palet, 70 tipografik eşleşme, 148 component, 184 sektör, 35 chart tipi, 57 motion preset, 112 UX yasası, 145 anti-pattern kuralı, 25 tech stack, 160 brand specs), 22 slash komutu, 5 sub-agent ve deterministik anti-AI-slop linter. IDE'ler arası: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer ve Roo Cline'a dağıtılır.
+> **v3.0.0 stable — THE BRAIN.** AI coding için en güçlü UX plugin'i. 11 sorgulanabilir JSON manifesti olan Python akıl yürütme çekirdeği (84 stil, 176 palet, 70 tipografik eşleşme, 148 component, 184 sektör, 35 chart tipi, 57 motion preset, 112 UX yasası, 145 anti-pattern kuralı, 25 tech stack, 160 brand specs), 22 slash komutu, 5 sub-agent ve deterministik anti-AI-slop linter. IDE'ler arası: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer ve Roo Cline'a dağıtılır.
 
 > **Brand adı `ux-skill`.** PyPI / npm paket adı `uxskill` olarak kalır. GitHub deposu [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill) adresinde.
 
@@ -20,6 +20,20 @@
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
 [![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
+
+### v3'te yeni neler var
+
+- **Brand spec'leri artık şablon değil, eğitim verisi.** 160 brand spec, recommender'ın seçtiği bir katalog olmaktan çıktı — sentezleyicinin damıttığı kelime hazinesine dönüştü. Çıktı her çağrıda yeni.
+- **7 eksenli sentezleyici** (warmth, contrast, density, geometry, formality, motion, type_personality). Brief deterministik biçimde eksen değerlerine eşlenir; eksen değerleri taze palette + tipografi + spacing + radius + motion token'larına derlenir.
+- **Üç otomatik mod** — `strict_brand` (tek bir markanın %100'ü), `brand_anchor` (%70 tek marka + %30 kardeş markalardan eksen uyarlamalı), `pure_synthesis` (marka adı yok — eksen eşleşmeli 8 örnekten damıtma).
+- **Decisions ledger recommender'ı yeniden sıralıyor.** `.ux/decisions.jsonl` aynı `(industry, ui_type)` kovasındaki geçmiş kazanımlara göre adayları re-rank ediyor. Cold-start güvenli. Sadece `lint_score >= 80` + `user_accepted = true` olan kararlar sayılır.
+- **Eksen etkileşim matrisi** — rakip eksenler arasında açık çatışma çözümü (dense + corporate → 4px, airy + corporate → 12px, soft + playful → 18px radius). Artık sessiz ad-hoc kural yok.
+- **`/ux-evolve` otomatik döngüsü** — skor ≥ 90 olana, plato olana veya 5 tura kadar lint → polish → re-lint. Kalite kapısı 65'te.
+- **3 yeni MCP aracı** (15 → 18): `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`.
+- **Yerel stats panosu** — `uxskill stats --html` SENİN kurulumunun öğrendiklerini `.ux/stats.html`'e yazar. Telemetri yok, küresel toplam yok.
+- **223 test geçiyor.** Çevrimdışı. Deterministik. LLM hiç çağrılmıyor.
+
+Tüm detaylar [CHANGELOG.md](CHANGELOG.md#300--2026-05-28--the-brain) içinde.
 
 ### Yıldız geçmişi
 
@@ -39,21 +53,34 @@ Bu README kanonik referans. Her komut, her sub-agent, her data manifest, her ins
 
 ## İçindekiler
 
-1. [Hızlı kurulum](#hızlı-kurulum)
-2. [Sayılar — top 8 Claude UX skill'ine karşı canlı karşılaştırma](#sayılar--top-8-claude-ux-skilline-karşı-canlı-karşılaştırma)
-3. [Mimari — parçalar nasıl birleşiyor](#mimari--parçalar-nasıl-birleşiyor)
-4. [22 slash komutu — detaylı referans](#22-slash-komutu--detaylı-referans)
-5. [5 sub-agent](#5-sub-agent)
-6. [11 data manifest'i](#11-data-manifesti)
-7. [145 anti-AI-slop kuralı — linter](#145-anti-ai-slop-kuralı--linter)
-8. [160 brand DESIGN.md spec'i — kategoriye göre](#160-brand-designmd-speci--kategoriye-göre)
-9. [MCP sunucusu — asimetrik hamle](#mcp-sunucusu--asimetrik-hamle)
-10. [17 IDE yükleyicisi](#17-ide-yükleyicisi)
-11. [Kullanım senaryoları — somut senaryolar](#kullanım-senaryoları--somut-senaryolar)
-12. [Alternatiflerle karşılaştırma](#alternatiflerle-karşılaştırma)
-13. [Roadmap](#roadmap)
-14. [Katkıda bulunma](#katkıda-bulunma)
-15. [Lisans, yazar, teşekkürler](#lisans-yazar-teşekkürler)
+1. [Beyin — v3.0 nedir](#beyin--v30-nedir)
+2. [Hızlı kurulum](#hızlı-kurulum)
+3. [Sayılar — top 8 Claude UX skill'ine karşı canlı karşılaştırma](#sayılar--top-8-claude-ux-skilline-karşı-canlı-karşılaştırma)
+4. [Mimari — parçalar nasıl birleşiyor](#mimari--parçalar-nasıl-birleşiyor)
+5. [22 slash komutu — detaylı referans](#22-slash-komutu--detaylı-referans)
+6. [5 sub-agent](#5-sub-agent)
+7. [11 data manifest'i](#11-data-manifesti)
+8. [145 anti-AI-slop kuralı — linter](#145-anti-ai-slop-kuralı--linter)
+9. [160 brand DESIGN.md spec'i — kategoriye göre](#160-brand-designmd-speci--kategoriye-göre)
+10. [MCP sunucusu — asimetrik hamle](#mcp-sunucusu--asimetrik-hamle)
+11. [17 IDE yükleyicisi](#17-ide-yükleyicisi)
+12. [Kullanım senaryoları — somut senaryolar](#kullanım-senaryoları--somut-senaryolar)
+13. [Alternatiflerle karşılaştırma](#alternatiflerle-karşılaştırma)
+14. [Roadmap](#roadmap)
+15. [Katkıda bulunma](#katkıda-bulunma)
+16. [Lisans, yazar, teşekkürler](#lisans-yazar-teşekkürler)
+
+---
+
+## Beyin — v3.0 nedir
+
+v3.0.0, ux-skill tarihindeki en büyük mimari kaymadır. Recommender artık bir katalogdan şablon seçmiyor — motor her brief için taze bir tasarım dili **sentezliyor**. Aynı brief her zaman aynı çıktıyı verir (tamamen deterministik), ama her farklı brief kendi yeni sistemini alır. Brand spec'leri artık şablon değil; motorun kelime hazinesini öğrendiği eğitim verisidir. Sistem kendi geçmişini görür, geri besleme döngüsünü yerel olarak kapatır ve asla LLM çağırmaz.
+
+Derleyici, **deterministik 7 eksenli sentezleyicidir** — warmth, contrast, density, geometry, formality, motion, type_personality. Her brief eksen değerlerine eşlenir; eksen değerleri taze palette + tipografi + spacing + radius + motion token'larına derlenir. Modüler tipografi ölçekleri oranlarını contrast'tan seçer (1.200 quiet / 1.250 balanced / 1.333 loud). Layout primitif'leri inşa gereği responsive (`auto-fit minmax(min(N, 100%), 1fr)` + container query). Kırık layout'lar yayınlanamaz çünkü temsil edilemezler.
+
+Üç otomatik mod var: `strict_brand` (`reference_brands=[stripe] strict=True` → %100 Stripe token, en hızlı yol); `brand_anchor` (`reference_brands=[stripe]` → %70 Stripe + %30 4 kardeş markadan eksen uyarlamalı); ve `pure_synthesis` (marka adı yok → sonsuz uzay, eksen eşleşmeli 8 örnekten damıtılmış yeni bir tasarım dili). Çatışan eksenler belgelenmiş bir **eksen etkileşim matrisi** ile çözülür — dense + corporate 4px'e derlenir (density kazanır, Bloomberg ekolü), airy + corporate 12px'e (formality kazanır, lüks), soft + playful 18px radius'a, sharp + corporate 2px'e. Uygulamada sessiz ad-hoc kural yok.
+
+**Decisions ledger** (`.ux/decisions.jsonl`, schema `_v: 1` kilitli) geri besleme döngüsünü kapatır. Recommender artık aynı `(industry, ui_type)` kovasındaki geçmiş kazanımlara göre adayları re-rank ediyor. Cold-start güvenli — 3 prior altında atlar. Sadece `lint_score >= 80` VE `user_accepted = true` olan kararları sayar. Ayrıca `/ux-evolve` skor ≥ 90 olana, plato olana veya 5 tura kadar lint → polish → re-lint çalıştırır; 65'in altında çıktı `--force` olmadan reddedilir. Sonuç: her kurulum kendi külliyatı üzerinde daha akıllı hale gelir, her çalıştırma makineler arasında tekrarlanabilir, motor tamamen çevrimdışı kalır.
 
 ---
 
@@ -174,6 +201,8 @@ ux-skill (paket adı: uxskill)
 │   └── brands/*.json                  160 brand DESIGN spec'i + _index.json
 │
 ├── engine/                            Python — akıl yürütme
+│   ├── synthesizer/                   v3 — deterministik 7 eksenli derleyici
+│   ├── decisions/                     v3 — .ux/decisions.jsonl ledger + recommender re-rank
 │   ├── recommender/                   5-paralel-arama merge motoru
 │   ├── linter/                        Deterministik anti-slop tarayıcı
 │   ├── discovery/                     10 alanlı zorlayıcı protokol

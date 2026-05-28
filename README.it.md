@@ -2,7 +2,7 @@
 
 # ux-skill — il motore di intelligenza di design per Claude Code, Cursor e ogni altro strumento di coding con IA
 
-> **Il plugin UX più potente per il coding con IA.** Un nucleo di ragionamento Python con 11 manifest JSON interrogabili (84 stili, 176 palette, 70 abbinamenti tipografici, 148 componenti, 184 settori, 35 tipi di grafico, 57 preset di motion, 112 leggi UX, 145 regole di anti-pattern, 25 stack tecnologici, 160 specifiche di brand), 22 comandi slash, 5 sub-agent e un linter deterministico anti-AI-slop. Multi-IDE: si distribuisce in Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer e Roo Cline.
+> **v3.0.0 stable — THE BRAIN.** Il plugin UX più potente per il coding con IA. Un nucleo di ragionamento Python con 11 manifest JSON interrogabili (84 stili, 176 palette, 70 abbinamenti tipografici, 148 componenti, 184 settori, 35 tipi di grafico, 57 preset di motion, 112 leggi UX, 145 regole di anti-pattern, 25 stack tecnologici, 160 specifiche di brand), 22 comandi slash, 5 sub-agent e un linter deterministico anti-AI-slop. Multi-IDE: si distribuisce in Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer e Roo Cline.
 
 > **Il nome del brand è `ux-skill`.** Il nome del pacchetto PyPI / npm rimane `uxskill`. Il repository GitHub si trova su [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
@@ -20,6 +20,20 @@
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
 [![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
+
+### Novità di v3
+
+- **Le brand specs diventano dati di addestramento, non template.** Le 160 brand specs non sono più un catalogo da cui il recommender pesca — sono vocabolario che il sintetizzatore distilla. Ogni chiamata produce un sistema nuovo.
+- **Sintetizzatore a 7 assi** (warmth, contrast, density, geometry, formality, motion, type_personality). Il brief è mappato in modo deterministico su valori di assi; i valori di assi compilano in palette + tipografia + spacing + radius + motion freschi.
+- **Tre modalità auto-dispatch** — `strict_brand` (100 % di un brand), `brand_anchor` (70 % di un brand + 30 % adattato per assi da brand fratelli), `pure_synthesis` (nessun brand nominato — distillazione di 8 esempi allineati agli assi).
+- **Il ledger delle decisioni ri-ordina il recommender.** `.ux/decisions.jsonl` ri-classifica i candidati per vittorie passate nello stesso bucket `(industry, ui_type)`. Cold-start sicuro. Conta solo le decisioni con `lint_score >= 80` + `user_accepted = true`.
+- **Matrice di interazione degli assi** — risoluzione esplicita dei conflitti (dense + corporate → 4px, airy + corporate → 12px, soft + playful → 18px di radius). Niente più regole ad-hoc silenziose.
+- **Loop automatico `/ux-evolve`** — lint → polish → re-lint fino a punteggio ≥ 90, plateau o 5 giri. Quality gate a 65.
+- **3 nuovi strumenti MCP** (15 → 18): `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`.
+- **Dashboard di stats locale** — `uxskill stats --html` scrive `.ux/stats.html` che mostra cosa ha imparato la TUA installazione. Niente telemetria, niente aggregazione globale.
+- **223 test passano.** Offline. Deterministico. Mai una chiamata LLM.
+
+Dettagli completi in [CHANGELOG.md](CHANGELOG.md#300--2026-05-28--the-brain).
 
 ### Cronologia stelle
 
@@ -39,21 +53,34 @@ Questo README è il riferimento canonico. Ogni comando, ogni sub-agent, ogni man
 
 ## Indice
 
-1. [Installazione rapida](#installazione-rapida)
-2. [I numeri — confronto live con le 8 migliori skill UX per Claude](#i-numeri--confronto-live-con-le-8-migliori-skill-ux-per-claude)
-3. [Architettura — come si incastrano i pezzi](#architettura--come-si-incastrano-i-pezzi)
-4. [I 22 comandi slash — riferimento dettagliato](#i-22-comandi-slash--riferimento-dettagliato)
-5. [I 5 sub-agent](#i-5-sub-agent)
-6. [Gli 11 manifest di dati](#gli-11-manifest-di-dati)
-7. [Le 145 regole anti-AI-slop — il linter](#le-145-regole-anti-ai-slop--il-linter)
-8. [Le 160 specifiche di brand DESIGN.md — per categoria](#le-160-specifiche-di-brand-designmd--per-categoria)
-9. [Server MCP — la mossa asimmetrica](#server-mcp--la-mossa-asimmetrica)
-10. [L'installatore per 17 IDE](#linstallatore-per-17-ide)
-11. [Casi d'uso — scenari concreti](#casi-duso--scenari-concreti)
-12. [Confronto con le alternative](#confronto-con-le-alternative)
-13. [Roadmap](#roadmap)
-14. [Contribuire](#contribuire)
-15. [Licenza, autore, ringraziamenti](#licenza-autore-ringraziamenti)
+1. [Il cervello — cos'è v3.0](#il-cervello--cosè-v30)
+2. [Installazione rapida](#installazione-rapida)
+3. [I numeri — confronto live con le 8 migliori skill UX per Claude](#i-numeri--confronto-live-con-le-8-migliori-skill-ux-per-claude)
+4. [Architettura — come si incastrano i pezzi](#architettura--come-si-incastrano-i-pezzi)
+5. [I 22 comandi slash — riferimento dettagliato](#i-22-comandi-slash--riferimento-dettagliato)
+6. [I 5 sub-agent](#i-5-sub-agent)
+7. [Gli 11 manifest di dati](#gli-11-manifest-di-dati)
+8. [Le 145 regole anti-AI-slop — il linter](#le-145-regole-anti-ai-slop--il-linter)
+9. [Le 160 specifiche di brand DESIGN.md — per categoria](#le-160-specifiche-di-brand-designmd--per-categoria)
+10. [Server MCP — la mossa asimmetrica](#server-mcp--la-mossa-asimmetrica)
+11. [L'installatore per 17 IDE](#linstallatore-per-17-ide)
+12. [Casi d'uso — scenari concreti](#casi-duso--scenari-concreti)
+13. [Confronto con le alternative](#confronto-con-le-alternative)
+14. [Roadmap](#roadmap)
+15. [Contribuire](#contribuire)
+16. [Licenza, autore, ringraziamenti](#licenza-autore-ringraziamenti)
+
+---
+
+## Il cervello — cos'è v3.0
+
+v3.0.0 è il cambiamento architetturale più grande nella storia di ux-skill. Il recommender non sceglie più template da un catalogo — il motore **sintetizza** un linguaggio di design fresco per ogni brief. Lo stesso brief produce sempre lo stesso output (totalmente deterministico), ma ogni brief distinto riceve il suo sistema nuovo. Le brand specs non sono più template; sono dati di addestramento da cui il motore impara il vocabolario. Il sistema ha occhi sulla propria storia, chiude il loop di feedback localmente, e non chiama mai un LLM.
+
+Il compilatore è un **sintetizzatore deterministico a 7 assi** — warmth, contrast, density, geometry, formality, motion, type_personality. Ogni brief mappa a valori di assi; i valori di assi compilano in palette + tipografia + spacing + radius + motion freschi. Le scale tipografiche modulari scelgono il loro rapporto dal contrast (1.200 quiet / 1.250 balanced / 1.333 loud). Le primitive di layout sono responsive by construction (`auto-fit minmax(min(N, 100%), 1fr)` + container queries). Layout rotti non possono essere emessi perché non sono rappresentabili.
+
+Ci sono tre modalità auto-dispatch: `strict_brand` (`reference_brands=[stripe] strict=True` → 100 % token Stripe, percorso più veloce); `brand_anchor` (`reference_brands=[stripe]` → 70 % Stripe + 30 % adattato per assi da 4 brand fratelli); e `pure_synthesis` (nessun brand nominato → spazio infinito, 8 esempi allineati agli assi distillati in un linguaggio di design nuovo). I conflitti tra assi sono risolti da una **matrice di interazione degli assi** documentata — dense + corporate compila in 4px (density vince, scuola Bloomberg), airy + corporate in 12px (formality vince, lusso), soft + playful in 18px di radius, sharp + corporate in 2px. Niente regole ad-hoc silenziose nell'implementazione.
+
+Il **ledger delle decisioni** (`.ux/decisions.jsonl`, schema `_v: 1` bloccato) chiude il loop di feedback. Il recommender ora ri-classifica i candidati per vittorie passate nello stesso bucket `(industry, ui_type)`. Cold-start sicuro — salta sotto i 3 priors. Conta solo le decisioni con `lint_score >= 80` E `user_accepted = true`. Inoltre `/ux-evolve` esegue lint → polish → re-lint fino a punteggio ≥ 90, plateau o 5 giri, con un quality gate a 65 sotto il quale l'output viene rifiutato senza `--force`. Risultato: ogni installazione diventa più intelligente sul proprio corpus, ogni esecuzione è riproducibile tra macchine, e il motore rimane totalmente offline.
 
 ---
 
@@ -174,6 +201,8 @@ ux-skill (nome del pacchetto: uxskill)
 │   └── brands/*.json                  160 specifiche DESIGN di brand + _index.json
 │
 ├── engine/                            Python — il ragionamento
+│   ├── synthesizer/                   v3 — compilatore deterministico a 7 assi
+│   ├── decisions/                     v3 — ledger .ux/decisions.jsonl + ri-classificazione del recommender
 │   ├── recommender/                   motore di merge a 5 ricerche parallele
 │   ├── linter/                        scanner deterministico anti-slop
 │   ├── discovery/                     protocollo forzante a 10 campi
