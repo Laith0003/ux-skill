@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reglas de diseño para coding con IA — por qué toda IA genera la misma UI — ux-skill</title>
-  <meta name="description" content="Claude Code, Cursor, Windsurf, GitHub Copilot, Cline — toda herramienta de IA de programación cae en los mismos ocho defectos visuales. Inter como tipografía display, degradado morado a azul, tres tarjetas iguales. ux-skill bloquea esos patrones en CI con 120 reglas regex.">
+  <meta name="description" content="Claude Code, Cursor, Windsurf, GitHub Copilot, Cline — toda herramienta de IA de programación cae en los mismos ocho defectos visuales. Inter como tipografía display, degradado morado a azul, tres tarjetas iguales. ux-skill bloquea esos patrones en CI con 145 reglas regex.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/es/diseno-ai-coding-espanol.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/es/diseno-ai-coding-espanol.html">
   <meta property="og:title" content="Reglas de diseño para coding con IA — por qué toda IA genera la misma UI">
-  <meta property="og:description" content="120 reglas regex deterministas. 1,182 entradas de catálogo. 131 especificaciones de marca. 17 IDEs. MIT.">
+  <meta property="og:description" content="145 reglas regex deterministas. 1,182 entradas de catálogo. 131 especificaciones de marca. 17 IDEs. MIT.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/es-diseno-ai-coding-espanol.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -22,7 +22,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Reglas de diseño para coding con IA — ux-skill">
-  <meta name="twitter:description" content="Detén los ocho defectos visuales que toda IA produce por defecto. 120 reglas regex, sin LLM, en CI.">
+  <meta name="twitter:description" content="Detén los ocho defectos visuales que toda IA produce por defecto. 145 reglas regex, sin LLM, en CI.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,7 +33,7 @@
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "Reglas de diseño para coding con IA — por qué toda IA genera la misma UI",
-    "description": "Claude Code, Cursor, Windsurf, GitHub Copilot, Cline — toda herramienta de IA de programación cae en los mismos ocho defectos visuales. ux-skill bloquea esos patrones en CI con 120 reglas regex.",
+    "description": "Claude Code, Cursor, Windsurf, GitHub Copilot, Cline — toda herramienta de IA de programación cae en los mismos ocho defectos visuales. ux-skill bloquea esos patrones en CI con 145 reglas regex.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -365,7 +365,7 @@
       <span class="eyebrow">Blog &middot; Español &middot; 2026-05-28</span>
       <h1>Reglas de diseño para coding con IA — por qué toda IA genera <span class="accent">la misma UI</span>.</h1>
       <p class="lede">
-        <strong>Cualquier persona que haya pedido a Claude Code, Cursor, Windsurf, GitHub Copilot, Cline o Continue que construya una landing reconoce el resultado:</strong> tipografía Inter llevada a tamaños de display, un degradado de morado a azul, tres tarjetas idénticas en fila, y la copia <em>«Build something amazing»</em> bajo el héroe. El problema no es la herramienta. El problema es que todas las herramientas aprendieron del mismo conjunto de plantillas. ux-skill bloquea esos defectos en CI con 120 reglas regex deterministas.
+        <strong>Cualquier persona que haya pedido a Claude Code, Cursor, Windsurf, GitHub Copilot, Cline o Continue que construya una landing reconoce el resultado:</strong> tipografía Inter llevada a tamaños de display, un degradado de morado a azul, tres tarjetas idénticas en fila, y la copia <em>«Build something amazing»</em> bajo el héroe. El problema no es la herramienta. El problema es que todas las herramientas aprendieron del mismo conjunto de plantillas. ux-skill bloquea esos defectos en CI con 145 reglas regex deterministas.
       </p>
       <p class="byline">By the ux-skill team &middot; 8 min read &middot; MIT-licensed open source</p>
 
@@ -395,9 +395,9 @@
         Lo que se necesita es un suelo determinista — un control que corre <em>después</em> de que el modelo escribió, sin LLM en el bucle. Ese es el hueco que llena ux-skill. El recomendador acota primero las opciones del modelo; el linter castiga al modelo cuando los defectos pasan de todos modos.
       </p>
 
-      <h2>120 reglas regex, sin LLM, en CI</h2>
+      <h2>145 reglas regex, sin LLM, en CI</h2>
       <p>
-        El linter escanea cualquier archivo bajo <code>*.tsx</code>, <code>*.jsx</code>, <code>*.vue</code>, <code>*.svelte</code>, <code>*.astro</code>, <code>*.css</code>, <code>*.scss</code>, <code>*.html</code>. Aplica 120 expresiones regulares con flags <code>i</code> y <code>m</code>. Devuelve JSON con la regla, la severidad, el archivo, la línea, la columna, un extracto y la corrección sugerida.
+        El linter escanea cualquier archivo bajo <code>*.tsx</code>, <code>*.jsx</code>, <code>*.vue</code>, <code>*.svelte</code>, <code>*.astro</code>, <code>*.css</code>, <code>*.scss</code>, <code>*.html</code>. Aplica 145 expresiones regulares con flags <code>i</code> y <code>m</code>. Devuelve JSON con la regla, la severidad, el archivo, la línea, la columna, un extracto y la corrección sugerida.
       </p>
       <pre class="code"><span class="c"># Lint local, gate en high+critical por defecto</span>
 $ uxskill lint
@@ -484,7 +484,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
         </table>
       </div>
       <p>
-        Bajo todos: 1.182 entradas de catálogo, 120 reglas, 131 especificaciones de marca, 22 comandos, 75 tests verdes en cada release.
+        Bajo todos: 1.182 entradas de catálogo, 145 reglas, 131 especificaciones de marca, 22 comandos, 75 tests verdes en cada release.
       </p>
 
       <div class="honesty">
@@ -497,7 +497,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <h2>Lecturas relacionadas</h2>
       <ul>
         <li><a href="/blog/ai-design-fingerprints-list.html" class="link">Las 35 huellas de diseño que toda herramienta de IA envía por defecto</a>.</li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Linter regex para coding con IA — 120 reglas en CI</a>.</li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Linter regex para coding con IA — 145 reglas en CI</a>.</li>
         <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Herramientas anti-slop para Claude Code — el ranking honesto</a>.</li>
         <li><a href="/blog/cursor-design-plugin.html" class="link">Plugin de diseño para Cursor — guía de instalación</a>.</li>
       </ul>
@@ -505,7 +505,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
 
     <section class="cta">
       <span class="eyebrow">Instalar</span>
-      <h2>17 IDEs. <span class="accent">Un motor.</span> 120 reglas.</h2>
+      <h2>17 IDEs. <span class="accent">Un motor.</span> 145 reglas.</h2>
       <p>El recomendador, el linter, el servidor MCP, los 22 comandos, las 131 especificaciones de marca y las 1.182 entradas de catálogo se distribuyen juntos. El linter corre en sub-segundo; el resto corre bajo demanda. MIT, sin telemetría, sin cuenta.</p>
 
       <div class="install-block">
@@ -524,7 +524,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <h2 class="related-reads-h">Related reads</h2>
       <ul>
         <li><a href="/blog/ai-design-fingerprints-list.html">35 huellas de diseño de IA</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html">Linter regex — 120 reglas</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html">Linter regex — 145 reglas</a></li>
         <li><a href="/blog/anti-ai-slop-claude-skills.html">Ranking anti-slop</a></li>
         <li><a href="/blog/cursor-design-plugin.html">Plugin de diseño para Cursor</a></li>
       </ul>

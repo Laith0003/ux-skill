@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The anti-slop CLI for vibe coders — 120 rules, no LLM, runs in CI</title>
-  <meta name="description" content="A command-line design linter built for vibe coders. 120 deterministic regex rules, 1,182-entry catalog, zero LLM calls, sub-second on a 200-file repo. Plugs into pre-commit, GitHub Actions, Husky, Lefthook, and any shell hook.">
+  <title>The anti-slop CLI for vibe coders — 145 rules, no LLM, runs in CI</title>
+  <meta name="description" content="A command-line design linter built for vibe coders. 145 deterministic regex rules, 1,182-entry catalog, zero LLM calls, sub-second on a 200-file repo. Plugs into pre-commit, GitHub Actions, Husky, Lefthook, and any shell hook.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/anti-slop-cli-vibe-coders.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -12,8 +12,8 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/anti-slop-cli-vibe-coders.html">
-  <meta property="og:title" content="The anti-slop CLI for vibe coders — 120 rules, no LLM, runs in CI">
-  <meta property="og:description" content="A command-line design linter built for the vibe-coding workflow. 120 deterministic rules, 1,182-entry catalog, sub-second runtime, MIT-licensed.">
+  <meta property="og:title" content="The anti-slop CLI for vibe coders — 145 rules, no LLM, runs in CI">
+  <meta property="og:description" content="A command-line design linter built for the vibe-coding workflow. 145 deterministic rules, 1,182-entry catalog, sub-second runtime, MIT-licensed.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/anti-slop-cli-vibe-coders.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -21,7 +21,7 @@
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/anti-slop-cli-vibe-coders.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="The anti-slop CLI for vibe coders — 120 rules, no LLM">
+  <meta name="twitter:title" content="The anti-slop CLI for vibe coders — 145 rules, no LLM">
   <meta name="twitter:description" content="A deterministic command-line design linter for the vibe-coding workflow. Runs in CI. Costs nothing per check.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,8 +32,8 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "The anti-slop CLI for vibe coders — 120 rules, no LLM, runs in CI",
-    "description": "A command-line design linter built for vibe coders. 120 deterministic regex rules, 1,182-entry catalog, zero LLM calls, sub-second on a 200-file repo.",
+    "headline": "The anti-slop CLI for vibe coders — 145 rules, no LLM, runs in CI",
+    "description": "A command-line design linter built for vibe coders. 145 deterministic regex rules, 1,182-entry catalog, zero LLM calls, sub-second on a 200-file repo.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -369,7 +369,7 @@
   <div class="wrap">
     <article>
       <span class="eyebrow">Blog &middot; CLI &middot; 2026-05-28</span>
-      <h1>The anti-slop CLI for vibe coders &mdash; <span class="accent">120 rules, no LLM</span>, runs in CI.</h1>
+      <h1>The anti-slop CLI for vibe coders &mdash; <span class="accent">145 rules, no LLM</span>, runs in CI.</h1>
       <p class="lede">
         <strong>The vibe coder's tool belt is a hand-rolled set of CLI primitives.</strong> Cursor, Claude Code, Cline, Aider, Codex &mdash; the model writes; the developer reviews. The missing piece is a deterministic gate that catches the AI design fingerprint before it merges. Not an LLM judge. Not a SaaS dashboard. A command-line linter that runs in milliseconds, plugs into pre-commit, and exits non-zero on a finding. Here is the engineering write-up.
       </p>
@@ -544,7 +544,7 @@ npx uxskill@latest lint --threshold high --staged || exit 1</pre>
         Make the slow path good and the fast path invisible. The CLI is the fast path.
       </blockquote>
 
-      <h2>What the 120 rules cover</h2>
+      <h2>What the 145 rules cover</h2>
       <p>
         The catalog is grouped by category. The counts are current as of v2.1:
       </p>
@@ -649,7 +649,7 @@ src/**/*.stories.tsx                   fade-in-up-everywhere</pre>
     <section class="cta">
       <span class="eyebrow">Install the gate</span>
       <h2>One CLI. <span class="accent">Three install paths.</span> No LLM.</h2>
-      <p>120 deterministic regex rules, a 1,182-entry catalog, 22 commands across 17 IDEs. Plugs into pre-commit, Husky, Lefthook, GitHub Actions, GitLab CI. MIT-licensed. No telemetry. No account.</p>
+      <p>145 deterministic regex rules, a 1,182-entry catalog, 22 commands across 17 IDEs. Plugs into pre-commit, Husky, Lefthook, GitHub Actions, GitLab CI. MIT-licensed. No telemetry. No account.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>

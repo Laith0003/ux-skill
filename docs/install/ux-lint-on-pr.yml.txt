@@ -1,6 +1,6 @@
 name: ux-skill PR lint
 
-# Runs the ux-skill 120-rule anti-AI-slop linter on every pull request.
+# Runs the ux-skill 145-rule anti-AI-slop linter on every pull request.
 # Posts a comment with findings + fails the build on Critical/High.
 #
 # To use this in YOUR repo, copy this file to .github/workflows/.

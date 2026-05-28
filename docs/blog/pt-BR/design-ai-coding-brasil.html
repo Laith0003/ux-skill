@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Regras de design para AI coding — por que toda IA produz a mesma UI? — ux-skill</title>
-  <meta name="description" content="Cursor, Claude Code, Cline, Windsurf — toda ferramenta de AI coding cai nos mesmos padrões padrão. Inter 90px, gradiente roxo-azul, três cards iguais. ux-skill é um engine Python open source com 120 regras determinísticas que barram slop no CI — sem chamada de LLM, sem token gasto.">
+  <meta name="description" content="Cursor, Claude Code, Cline, Windsurf — toda ferramenta de AI coding cai nos mesmos padrões padrão. Inter 90px, gradiente roxo-azul, três cards iguais. ux-skill é um engine Python open source com 145 regras determinísticas que barram slop no CI — sem chamada de LLM, sem token gasto.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/pt-BR/design-ai-coding-brasil.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/pt-BR/design-ai-coding-brasil.html">
   <meta property="og:title" content="Regras de design para AI coding — por que toda IA produz a mesma UI?">
-  <meta property="og:description" content="ux-skill é um engine Python open source. 120 regras, 998 entradas no catálogo, 22 comandos, 17 IDEs. Claude Code e Cursor.">
+  <meta property="og:description" content="ux-skill é um engine Python open source. 145 regras, 998 entradas no catálogo, 22 comandos, 17 IDEs. Claude Code e Cursor.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/pt-br-design-ai-coding-brasil.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -22,7 +22,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Regras de design para AI coding — ux-skill, Português">
-  <meta name="twitter:description" content="120 regras determinísticas, 998 entradas, 22 comandos, 17 IDEs. Engine Python, MIT, sem telemetria.">
+  <meta name="twitter:description" content="145 regras determinísticas, 998 entradas, 22 comandos, 17 IDEs. Engine Python, MIT, sem telemetria.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,7 +33,7 @@
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "Regras de design para AI coding — por que toda IA produz a mesma UI?",
-    "description": "Cursor, Claude Code, Cline, Windsurf — toda ferramenta de AI coding cai nos mesmos padrões. ux-skill barra slop no CI com 120 regras determinísticas.",
+    "description": "Cursor, Claude Code, Cline, Windsurf — toda ferramenta de AI coding cai nos mesmos padrões. ux-skill barra slop no CI com 145 regras determinísticas.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -368,7 +368,7 @@
       <span class="eyebrow">Blog · Português · 2026-05-28</span>
       <h1>Regras de design para AI coding — por que toda IA produz a <span class="accent">mesma UI</span>?</h1>
       <p class="lede">
-        <strong>Cursor, Claude Code, Cline, Windsurf — toda ferramenta de AI coding cai no mesmo conjunto de padrões.</strong> Inter 90px no título, gradiente roxo-azul, três cards iguais lado a lado. Troca o modelo — a saída praticamente não muda. ux-skill é um engine Python open source (licença MIT) com 120 regras determinísticas que barram slop no CI. Sem chamada de LLM, sem token gasto, sem telemetria.
+        <strong>Cursor, Claude Code, Cline, Windsurf — toda ferramenta de AI coding cai no mesmo conjunto de padrões.</strong> Inter 90px no título, gradiente roxo-azul, três cards iguais lado a lado. Troca o modelo — a saída praticamente não muda. ux-skill é um engine Python open source (licença MIT) com 145 regras determinísticas que barram slop no CI. Sem chamada de LLM, sem token gasto, sem telemetria.
       </p>
       <p class="byline">Equipe ux-skill · 13 min de leitura · Licença MIT</p>
 
@@ -403,7 +403,7 @@
 
       <h2>ux-skill — a camada determinística</h2>
       <p>
-        ux-skill é um pacote Python open source (MIT), com CLI e servidor MCP. Um mesmo engine, um mesmo catálogo de 998 entradas, um mesmo linter de 120 regras. Três caminhos de instalação cobrem 17 IDEs:
+        ux-skill é um pacote Python open source (MIT), com CLI e servidor MCP. Um mesmo engine, um mesmo catálogo de 998 entradas, um mesmo linter de 145 regras. Três caminhos de instalação cobrem 17 IDEs:
       </p>
       <ol>
         <li><strong>Plugin do Claude Code</strong> — <code>/plugin marketplace add Laith0003/ux-skill; /plugin install ux@ux-skill</code></li>
@@ -411,14 +411,14 @@
         <li><strong>Servidor MCP</strong> — <code>npx uxskill@alpha mcp</code>, plugável em qualquer cliente MCP</li>
       </ol>
       <p>
-        O engine tem três ações principais. Um — <code>uxskill discover</code> roda o protocolo de discovery de 10 campos para capturar um briefing estruturado (sem improvisação — o discovery protocol é requisito rígido). Dois — <code>uxskill recommend</code> roda cinco buscas paralelas sobre as 998 entradas do catálogo e devolve um sistema de design resolvido (paleta, par de fontes, motion, grid de espaçamento, lista de componentes). Três — <code>uxskill lint</code> roda as 120 regras regex no código. Exit 0 se limpo, exit 1 se houver finding no threshold.
+        O engine tem três ações principais. Um — <code>uxskill discover</code> roda o protocolo de discovery de 10 campos para capturar um briefing estruturado (sem improvisação — o discovery protocol é requisito rígido). Dois — <code>uxskill recommend</code> roda cinco buscas paralelas sobre as 998 entradas do catálogo e devolve um sistema de design resolvido (paleta, par de fontes, motion, grid de espaçamento, lista de componentes). Três — <code>uxskill lint</code> roda as 145 regras regex no código. Exit 0 se limpo, exit 1 se houver finding no threshold.
       </p>
 
       <h2>Uma regra real — Inter como display</h2>
       <p>
-        Essa é a regra número um do manifesto de 120, direto do <code>data/anti-patterns.json</code>. Severidade <code>high</code>:
+        Essa é a regra número um do manifesto de 145, direto do <code>data/anti-patterns.json</code>. Severidade <code>high</code>:
       </p>
-      <pre class="code"><span class="c">// 1 das 120 regras</span>
+      <pre class="code"><span class="c">// 1 das 145 regras</span>
 {
   <span class="k">"id"</span>: <span class="s">"inter-as-display"</span>,
   <span class="k">"severity"</span>: <span class="s">"high"</span>,
@@ -473,7 +473,7 @@
             <tr><td>Motion presets</td><td class="num">57</td><td>Framer Motion, GSAP, CSS — com ramos <code>prefers-reduced-motion</code>.</td></tr>
             <tr><td>Componentes</td><td class="num">182</td><td>De cards a dialogs a dashboards, com regras de composição.</td></tr>
             <tr><td>Brand specs</td><td class="num">110</td><td>Gramática de marcas reais como Stripe, Airbnb, Vercel.</td></tr>
-            <tr><td>Anti-patterns</td><td class="num">120</td><td>As 120 regras do linter. Mesmo JSON, dois consumidores.</td></tr>
+            <tr><td>Anti-patterns</td><td class="num">145</td><td>As 145 regras do linter. Mesmo JSON, dois consumidores.</td></tr>
             <tr><td>Outras taxonomias</td><td class="num">120</td><td>Perfis de densidade, voice register, deltas para RTL.</td></tr>
             <tr><td><strong>Total</strong></td><td class="num"><strong>998</strong></td><td>Uma árvore JSON. recommender, linter e servidor MCP a leem.</td></tr>
           </tbody>
@@ -510,12 +510,12 @@
           <tbody>
             <tr><td><strong>ui-ux-pro-max</strong></td><td class="num">84k</td><td>Sim</td><td>Não</td><td>Não</td><td class="num">~600</td></tr>
             <tr><td><strong>taste-skill</strong></td><td class="num">25k</td><td>Sim</td><td>Não</td><td>Não</td><td class="num">~480</td></tr>
-            <tr><td><strong>ux-skill</strong></td><td class="num">14</td><td>Sim</td><td>120 regras</td><td>14 tools</td><td class="num">998</td></tr>
+            <tr><td><strong>ux-skill</strong></td><td class="num">14</td><td>Sim</td><td>145 regras</td><td>14 tools</td><td class="num">998</td></tr>
           </tbody>
         </table>
       </div>
       <p>
-        ux-skill é o menor em estrelas (14) e o maior em superfície de funcionalidades. 998 entradas no catálogo, 120 regras regex que rodam no CI como exit não-zero, servidor MCP com 14 tools que alcança 17 IDEs, 22 comandos, 131 brand specs como gramática de referência, 75 testes. ui-ux-pro-max e taste-skill ambos entregam um recommender. ux-skill entrega recommender + linter + MCP. É um lance assimétrico.
+        ux-skill é o menor em estrelas (14) e o maior em superfície de funcionalidades. 998 entradas no catálogo, 145 regras regex que rodam no CI como exit não-zero, servidor MCP com 14 tools que alcança 17 IDEs, 22 comandos, 131 brand specs como gramática de referência, 75 testes. ui-ux-pro-max e taste-skill ambos entregam um recommender. ux-skill entrega recommender + linter + MCP. É um lance assimétrico.
       </p>
 
       <h2>Onde isso encaixa no time brasileiro de produto</h2>
@@ -535,21 +535,21 @@
 
       <h2>O que ler em seguida</h2>
       <p>
-        Para ver o manifesto completo de 120 regras com antes/depois em um hero Next.js real, leia <a href="/blog/regex-linter-for-ai-coding.html" class="link">o post sobre regex linter</a>. Para a taxonomia completa com regex de detecção de cada regra, leia <a href="/blog/ai-design-fingerprints-list.html" class="link">o post das 35 impressões digitais de design AI</a>. Para o ranking 2026 de ferramentas de AI coding por qualidade de design, leia <a href="/blog/anti-ai-slop-claude-skills.html" class="link">o ranking anti-AI-slop</a>.
+        Para ver o manifesto completo de 145 regras com antes/depois em um hero Next.js real, leia <a href="/blog/regex-linter-for-ai-coding.html" class="link">o post sobre regex linter</a>. Para a taxonomia completa com regex de detecção de cada regra, leia <a href="/blog/ai-design-fingerprints-list.html" class="link">o post das 35 impressões digitais de design AI</a>. Para o ranking 2026 de ferramentas de AI coding por qualidade de design, leia <a href="/blog/anti-ai-slop-claude-skills.html" class="link">o ranking anti-AI-slop</a>.
       </p>
 
       <h2>Leituras relacionadas</h2>
       <ul>
         <li><a href="/blog/vibe-coding-design-system.html" class="link">Vibe coding + ux-skill — o post em inglês com exemplo completo</a></li>
         <li><a href="/blog/ai-design-fingerprints-list.html" class="link">35 impressões digitais de design AI</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter — 120 regras no CI</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter — 145 regras no CI</a></li>
         <li><a href="/blog/cursor-design-plugin.html" class="link">Cursor design plugin — install do bolt-on para Cursor</a></li>
       </ul>
     </article>
 
     <section class="cta">
       <span class="eyebrow">Instalar</span>
-      <h2>Um pacote. <span class="accent">Três caminhos.</span> 120 regras.</h2>
+      <h2>Um pacote. <span class="accent">Três caminhos.</span> 145 regras.</h2>
       <p>Recommender, linter, servidor MCP, 22 comandos, 131 brand specs — tudo junto. Linter em sub-segundo, o resto sob demanda. Licença MIT, sem telemetria, sem conta.</p>
 
       <div class="install-block">

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI 編程的設計規則——為什麼每個 AI 寫出來的網站都長得一樣 — ux-skill</title>
-  <meta name="description" content="Cursor、Claude Code、Cline、Windsurf——每個 AI 編程工具都掉進同一組預設。90px Inter、紫到藍漸層、三張一樣的卡片。ux-skill 用 120 條確定性正則規則在 CI 中擋住預設值,不呼叫 LLM、不耗 token。">
+  <meta name="description" content="Cursor、Claude Code、Cline、Windsurf——每個 AI 編程工具都掉進同一組預設。90px Inter、紫到藍漸層、三張一樣的卡片。ux-skill 用 145 條確定性正則規則在 CI 中擋住預設值,不呼叫 LLM、不耗 token。">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/zh-TW/ai-coding-design-zh-tw.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/zh-TW/ai-coding-design-zh-tw.html">
   <meta property="og:title" content="AI 編程的設計規則——為什麼每個 AI 寫出來的網站都長得一樣">
-  <meta property="og:description" content="120 條確定性規則、998 條目錄、22 個指令、17 個 IDE。Claude Code 與 Cursor 都能用。">
+  <meta property="og:description" content="145 條確定性規則、998 條目錄、22 個指令、17 個 IDE。Claude Code 與 Cursor 都能用。">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/zh-tw-ai-coding-design.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -22,7 +22,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="AI 編程的設計規則——ux-skill 為繁體中文工程師">
-  <meta name="twitter:description" content="120 條規則、998 條目錄、22 個指令、17 個 IDE。MIT 授權,無遙測。">
+  <meta name="twitter:description" content="145 條規則、998 條目錄、22 個指令、17 個 IDE。MIT 授權,無遙測。">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,7 +33,7 @@
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "AI 編程的設計規則——為什麼每個 AI 寫出來的網站都長得一樣",
-    "description": "Cursor、Claude Code、Cline、Windsurf——每個 AI 編程工具都掉進同一組預設。ux-skill 用 120 條確定性正則規則在 CI 中擋住預設值。",
+    "description": "Cursor、Claude Code、Cline、Windsurf——每個 AI 編程工具都掉進同一組預設。ux-skill 用 145 條確定性正則規則在 CI 中擋住預設值。",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -357,7 +357,7 @@
       <span class="eyebrow">Blog · 繁體中文 · 2026-05-28</span>
       <h1>AI 編程的<span class="accent">設計規則</span>——為什麼每個 AI 寫出來的網站都長得一樣。</h1>
       <p class="lede">
-        <strong>Cursor、Claude Code、Cline、Windsurf——每個 AI 編程工具都掉進同一組預設。</strong>90px Inter、紫到藍漸層、三張一模一樣的卡片。換 model 也一樣,輸出幾乎沒變。ux-skill 是一個 MIT 授權的 Python 開源引擎,用 120 條確定性正則規則在 CI 中擋下預設值。不呼叫 LLM,不耗 token,沒有遙測。
+        <strong>Cursor、Claude Code、Cline、Windsurf——每個 AI 編程工具都掉進同一組預設。</strong>90px Inter、紫到藍漸層、三張一模一樣的卡片。換 model 也一樣,輸出幾乎沒變。ux-skill 是一個 MIT 授權的 Python 開源引擎,用 145 條確定性正則規則在 CI 中擋下預設值。不呼叫 LLM,不耗 token,沒有遙測。
       </p>
       <p class="byline">ux-skill 團隊 · 10 分鐘閱讀 · MIT 授權</p>
 
@@ -392,7 +392,7 @@
 
       <h2>ux-skill 的回應——確定性的那一層</h2>
       <p>
-        ux-skill 是 MIT 授權的 Python 套件,附 CLI 與 MCP server。同一份引擎、同一份 998 條目錄、同一個 120 條規則的 linter,三種安裝方式覆蓋 17 個 IDE:
+        ux-skill 是 MIT 授權的 Python 套件,附 CLI 與 MCP server。同一份引擎、同一份 998 條目錄、同一個 145 條規則的 linter,三種安裝方式覆蓋 17 個 IDE:
       </p>
       <ol>
         <li><strong>Claude Code 外掛</strong>——<code>/plugin marketplace add Laith0003/ux-skill; /plugin install ux@ux-skill</code></li>
@@ -400,14 +400,14 @@
         <li><strong>MCP server</strong>——<code>npx uxskill@alpha mcp</code>,可接到任何 MCP client</li>
       </ol>
       <p>
-        引擎有三個主要動作。一,<code>uxskill discover</code> 跑 10 欄位的 discovery protocol,擷取有結構的 brief(不允許隨機發揮——discovery protocol 是硬性需求)。二,<code>uxskill recommend</code> 在 998 條目錄上跑五路平行搜尋,回傳一份解算完的設計系統(色票、字體配對、motion、間距網格、元件清單)。三,<code>uxskill lint</code> 用 120 條正則跑程式碼。乾淨就 exit 0,有 finding 達 threshold 就 exit 1。
+        引擎有三個主要動作。一,<code>uxskill discover</code> 跑 10 欄位的 discovery protocol,擷取有結構的 brief(不允許隨機發揮——discovery protocol 是硬性需求)。二,<code>uxskill recommend</code> 在 998 條目錄上跑五路平行搜尋,回傳一份解算完的設計系統(色票、字體配對、motion、間距網格、元件清單)。三,<code>uxskill lint</code> 用 145 條正則跑程式碼。乾淨就 exit 0,有 finding 達 threshold 就 exit 1。
       </p>
 
       <h2>一條真的規則——Inter 當顯示字體</h2>
       <p>
-        這是 120 條中的第一條,直接從 <code>data/anti-patterns.json</code> 拿出來。severity 是 <code>high</code>:
+        這是 145 條中的第一條,直接從 <code>data/anti-patterns.json</code> 拿出來。severity 是 <code>high</code>:
       </p>
-      <pre class="code"><span class="c">// 120 條規則之 1</span>
+      <pre class="code"><span class="c">// 145 條規則之 1</span>
 {
   <span class="k">"id"</span>: <span class="s">"inter-as-display"</span>,
   <span class="k">"severity"</span>: <span class="s">"high"</span>,
@@ -462,7 +462,7 @@
             <tr><td>Motion preset</td><td class="num">57</td><td>Framer Motion、GSAP、CSS 三套,每套附 <code>prefers-reduced-motion</code> 分支。</td></tr>
             <tr><td>元件</td><td class="num">182</td><td>從卡片到對話框到儀表板,附構圖規則。</td></tr>
             <tr><td>品牌規範</td><td class="num">110</td><td>Stripe、Airbnb、Vercel 等真實品牌的文法。</td></tr>
-            <tr><td>Anti-pattern</td><td class="num">120</td><td>linter 的 120 條規則。同一份 JSON,兩個 consumer。</td></tr>
+            <tr><td>Anti-pattern</td><td class="num">145</td><td>linter 的 145 條規則。同一份 JSON,兩個 consumer。</td></tr>
             <tr><td>其他分類</td><td class="num">120</td><td>密度 profile、voice register、RTL delta。</td></tr>
             <tr><td><strong>總計</strong></td><td class="num"><strong>998</strong></td><td>一棵 JSON。recommender、linter、MCP server 共讀。</td></tr>
           </tbody>
@@ -499,12 +499,12 @@
           <tbody>
             <tr><td><strong>ui-ux-pro-max</strong></td><td class="num">84k</td><td>有</td><td>無</td><td>無</td><td class="num">~600</td></tr>
             <tr><td><strong>taste-skill</strong></td><td class="num">25k</td><td>有</td><td>無</td><td>無</td><td class="num">~480</td></tr>
-            <tr><td><strong>ux-skill</strong></td><td class="num">14</td><td>有</td><td>120 條</td><td>14 個 tool</td><td class="num">998</td></tr>
+            <tr><td><strong>ux-skill</strong></td><td class="num">14</td><td>有</td><td>145 條</td><td>14 個 tool</td><td class="num">998</td></tr>
           </tbody>
         </table>
       </div>
       <p>
-        ux-skill 在 stars 上最小(14),在功能面最大。998 條目錄、120 條正則規則在 CI 中以 non-zero exit 觸發、14-tool MCP server 跨 17 個 IDE、22 個指令、110 條品牌規範作為參考文法、75 個測試。ui-ux-pro-max 與 taste-skill 都只出貨 recommender。ux-skill 同時出貨 recommender + linter + MCP。這是不對稱的下棋。
+        ux-skill 在 stars 上最小(14),在功能面最大。998 條目錄、145 條正則規則在 CI 中以 non-zero exit 觸發、14-tool MCP server 跨 17 個 IDE、22 個指令、110 條品牌規範作為參考文法、75 個測試。ui-ux-pro-max 與 taste-skill 都只出貨 recommender。ux-skill 同時出貨 recommender + linter + MCP。這是不對稱的下棋。
       </p>
 
       <div class="honesty">
@@ -516,21 +516,21 @@
 
       <h2>下一步讀什麼</h2>
       <p>
-        想看完整的 120 條規則 manifest 加上一個真的 Next.js hero 的 before/after,讀 <a href="/blog/regex-linter-for-ai-coding.html" class="link">regex linter 一文</a>。想看完整 taxonomy 與每條規則的偵測正則,讀 <a href="/blog/ai-design-fingerprints-list.html" class="link">35 條 AI 設計指紋一文</a>。想看 2026 年 AI 編程工具的設計品質完整排名,讀 <a href="/blog/anti-ai-slop-claude-skills.html" class="link">anti-AI-slop ranking 一文</a>。
+        想看完整的 145 條規則 manifest 加上一個真的 Next.js hero 的 before/after,讀 <a href="/blog/regex-linter-for-ai-coding.html" class="link">regex linter 一文</a>。想看完整 taxonomy 與每條規則的偵測正則,讀 <a href="/blog/ai-design-fingerprints-list.html" class="link">35 條 AI 設計指紋一文</a>。想看 2026 年 AI 編程工具的設計品質完整排名,讀 <a href="/blog/anti-ai-slop-claude-skills.html" class="link">anti-AI-slop ranking 一文</a>。
       </p>
 
       <h2>相關閱讀</h2>
       <ul>
         <li><a href="/blog/ai-design-fingerprints-list.html" class="link">35 條 AI 設計指紋——完整 taxonomy</a></li>
         <li><a href="/blog/vibe-coding-design-system.html" class="link">Vibe coding + ux-skill</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter——120 條規則在 CI</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter——145 條規則在 CI</a></li>
         <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Anti-AI-slop tools 誠實排名</a></li>
       </ul>
     </article>
 
     <section class="cta">
       <span class="eyebrow">安裝</span>
-      <h2>一個套件。<span class="accent">三種安裝路徑。</span>120 條規則。</h2>
+      <h2>一個套件。<span class="accent">三種安裝路徑。</span>145 條規則。</h2>
       <p>Recommender、linter、MCP server、22 個指令、110 條品牌規範——全都打包在一起。Linter 在 sub-second 內跑完,其餘隨選使用。MIT 授權、無遙測、無需帳號。</p>
 
       <div class="install-block">

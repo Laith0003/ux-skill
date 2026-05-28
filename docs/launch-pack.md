@@ -3,7 +3,7 @@
 Pre-written launch copy for Hacker News, Product Hunt, Reddit, X/Twitter, LinkedIn, and Discord. Tuned to each platform's tone. **You** post — Claude never posts on your behalf.
 
 Numbers are accurate as of 2026-05-28:
-- 998 manifest entries · 120 anti-pattern rules (after round 5) · 131 brand specs
+- 998 manifest entries · 145 anti-pattern rules (after round 5) · 131 brand specs
 - 23 slash commands · 14 MCP tools · 17 IDE adapters
 - 4 install paths (pip / npx / Claude Code plugin / Cursor rules)
 - 6 language READMEs (en / ar / es / zh / fr / de)
@@ -23,7 +23,7 @@ ux-skill is an open-source Python engine that catches the AI-design fingerprints
 The architecture:
 - 1,182 entries across 11 queryable JSON manifests (styles, palettes, type pairs, components, motion presets, industries, brand specs)
 - A 5-parallel-search recommender that fans out across style → palette → type → motion → components for a given brief
-- A deterministic regex linter with 120 anti-pattern rules (no LLM in the audit lane — runs in CI in <50ms)
+- A deterministic regex linter with 145 anti-pattern rules (no LLM in the audit lane — runs in CI in <50ms)
 - 131 brand DESIGN.md specs as queryable JSON (Apple, Stripe, Linear, Notion, Vercel, Figma, Tesla, BMW, Spotify, plus 83 more)
 - An MCP server exposing 14 tools — works in Claude Desktop, Cursor, Windsurf, and generic MCP hosts. None of the top 8 Claude UX skills ship one.
 
@@ -48,7 +48,7 @@ Open to feedback — especially on the linter rule catalog and the recommender's
 
 **Description:**
 ```
-ux-skill is the strongest design plugin for AI coding tools. A Python engine with 998 manifest entries, a 120-rule anti-AI-slop linter that runs in CI, and 131 brand DESIGN.md specs (Apple, Stripe, Linear, Figma, Tesla, BMW, plus 86 more). Ships into Claude Code, Cursor, Windsurf, GitHub Copilot, and 13 more IDEs via a single npx command.
+ux-skill is the strongest design plugin for AI coding tools. A Python engine with 998 manifest entries, a 145-rule anti-AI-slop linter that runs in CI, and 131 brand DESIGN.md specs (Apple, Stripe, Linear, Figma, Tesla, BMW, plus 86 more). Ships into Claude Code, Cursor, Windsurf, GitHub Copilot, and 13 more IDEs via a single npx command.
 
 What it catches: purple-to-blue gradients, Inter at 90px, John Doe placeholders, three-equal-card heros, lorem ipsum, emoji-as-icons, and 94 more AI design fingerprints.
 
@@ -128,7 +128,7 @@ PyPI: https://pypi.org/project/uxskill/
 ```
 shipped ux-skill — open-source python engine that catches AI-generated UI slop in CI.
 
-120 deterministic regex rules. 131 brand specs (apple, stripe, linear, figma, tesla, bmw, +86 more). MCP server with 14 tools. ships into claude code, cursor, windsurf, github copilot.
+145 deterministic regex rules. 131 brand specs (apple, stripe, linear, figma, tesla, bmw, +86 more). MCP server with 14 tools. ships into claude code, cursor, windsurf, github copilot.
 
 pip install uxskill
 
@@ -197,7 +197,7 @@ Site: https://uxskill.laithjunaidy.com
 
 **Short pitch (one-liner + link):**
 ```
-Open-sourced ux-skill yesterday — a Python design intelligence engine for Claude Code, Cursor, Windsurf, +14 more IDEs. 120-rule anti-AI-slop linter, 5-parallel-search recommender, 131 brand specs, MCP server with 14 tools. MIT.
+Open-sourced ux-skill yesterday — a Python design intelligence engine for Claude Code, Cursor, Windsurf, +14 more IDEs. 145-rule anti-AI-slop linter, 5-parallel-search recommender, 131 brand specs, MCP server with 14 tools. MIT.
 https://github.com/Laith0003/ux-skill
 ```
 
@@ -214,7 +214,7 @@ The full scored side-by-side is at uxskill.laithjunaidy.com/compare.html.
 
 **Q: "What does the recommender actually return?"**
 ```
-A JSON document with a picked style, picked palette, picked type pair, top 5 motion presets, top 12 compatible components, top 5 brand exemplars, and all 120 anti-pattern guardrails active. Plus a rationale block explaining each pick.
+A JSON document with a picked style, picked palette, picked type pair, top 5 motion presets, top 12 compatible components, top 5 brand exemplars, and all 145 anti-pattern guardrails active. Plus a rationale block explaining each pick.
 
 Output goes to .ux/last-recommendation.json. The /ux-design and /ux-component commands chain off that file — the same recommendation flows through your whole workflow.
 ```

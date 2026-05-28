@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chống "AI slop" trong thiết kế web — engine Python mã nguồn mở cho người Việt — ux-skill</title>
-  <meta name="description" content="Claude Code, Cursor, Cline, Windsurf đều rơi vào cùng một bộ mặc định. Inter 90px, gradient tím-xanh, ba thẻ giống nhau. ux-skill là engine Python mã nguồn mở với 120 quy tắc deterministic chặn slop trong CI — không gọi LLM, không tốn token.">
+  <meta name="description" content="Claude Code, Cursor, Cline, Windsurf đều rơi vào cùng một bộ mặc định. Inter 90px, gradient tím-xanh, ba thẻ giống nhau. ux-skill là engine Python mã nguồn mở với 145 quy tắc deterministic chặn slop trong CI — không gọi LLM, không tốn token.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/vi/anti-ai-slop-vietnam.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/vi/anti-ai-slop-vietnam.html">
   <meta property="og:title" content="Chống AI slop trong thiết kế web — cho người Việt dùng AI coding">
-  <meta property="og:description" content="ux-skill là engine Python mã nguồn mở. 120 quy tắc, 998 mục trong catalog, 22 lệnh, 17 IDE. Claude Code và Cursor đều dùng được.">
+  <meta property="og:description" content="ux-skill là engine Python mã nguồn mở. 145 quy tắc, 998 mục trong catalog, 22 lệnh, 17 IDE. Claude Code và Cursor đều dùng được.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/vi-anti-ai-slop-vietnam.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -22,7 +22,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Chống AI slop trong thiết kế web — ux-skill cho người Việt">
-  <meta name="twitter:description" content="120 quy tắc deterministic, 998 mục, 22 lệnh, 17 IDE. Engine Python, MIT, không telemetry.">
+  <meta name="twitter:description" content="145 quy tắc deterministic, 998 mục, 22 lệnh, 17 IDE. Engine Python, MIT, không telemetry.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,7 +33,7 @@
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "Chống AI slop trong thiết kế web — engine Python mã nguồn mở cho người Việt",
-    "description": "Claude Code, Cursor, Cline, Windsurf đều rơi vào cùng một bộ mặc định. ux-skill chặn slop trong CI với 120 quy tắc deterministic.",
+    "description": "Claude Code, Cursor, Cline, Windsurf đều rơi vào cùng một bộ mặc định. ux-skill chặn slop trong CI với 145 quy tắc deterministic.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -368,7 +368,7 @@
       <span class="eyebrow">Blog · Tiếng Việt · 2026-05-28</span>
       <h1>Chống "AI slop" trong thiết kế web — engine Python mã nguồn mở cho <span class="accent">người Việt</span>.</h1>
       <p class="lede">
-        <strong>Cursor, Claude Code, Cline, Windsurf đều rơi vào cùng một bộ mặc định.</strong> Inter 90px làm chữ tiêu đề, gradient tím-xanh, ba thẻ giống nhau xếp ngang. Bạn đổi model — kết quả gần như không thay đổi. ux-skill là một engine Python mã nguồn mở (MIT) với 120 quy tắc deterministic chặn slop ngay trong CI. Không gọi LLM, không tốn token, không có telemetry.
+        <strong>Cursor, Claude Code, Cline, Windsurf đều rơi vào cùng một bộ mặc định.</strong> Inter 90px làm chữ tiêu đề, gradient tím-xanh, ba thẻ giống nhau xếp ngang. Bạn đổi model — kết quả gần như không thay đổi. ux-skill là một engine Python mã nguồn mở (MIT) với 145 quy tắc deterministic chặn slop ngay trong CI. Không gọi LLM, không tốn token, không có telemetry.
       </p>
       <p class="byline">Đội ux-skill · 11 phút đọc · Giấy phép MIT, mã nguồn mở</p>
 
@@ -408,7 +408,7 @@
 
       <h2>ux-skill — engine Python cho người Việt làm web</h2>
       <p>
-        ux-skill là một package Python mã nguồn mở (MIT), kèm CLI và MCP server. Cùng một engine, cùng catalog 998 mục, cùng linter 120 quy tắc, ba đường cài đặt phủ 17 IDE:
+        ux-skill là một package Python mã nguồn mở (MIT), kèm CLI và MCP server. Cùng một engine, cùng catalog 998 mục, cùng linter 145 quy tắc, ba đường cài đặt phủ 17 IDE:
       </p>
       <ol>
         <li><strong>Plugin Claude Code</strong> — <code>/plugin marketplace add Laith0003/ux-skill; /plugin install ux@ux-skill</code></li>
@@ -416,14 +416,14 @@
         <li><strong>MCP server</strong> — <code>npx uxskill@alpha mcp</code>, plug vào mọi MCP client</li>
       </ol>
       <p>
-        Engine có ba hành động chính. Một — <code>uxskill discover</code> chạy giao thức 10 trường để bắt brief có cấu trúc (không có chỗ ngẫu hứng — discovery protocol là yêu cầu cứng). Hai — <code>uxskill recommend</code> chạy năm tìm kiếm song song trên 998 mục catalog và trả về một hệ thống thiết kế đã giải quyết (bảng màu, cặp typeface, motion, lưới spacing, danh sách component). Ba — <code>uxskill lint</code> chạy 120 quy tắc regex trên code. Exit 0 nếu sạch, exit 1 nếu có finding ở threshold.
+        Engine có ba hành động chính. Một — <code>uxskill discover</code> chạy giao thức 10 trường để bắt brief có cấu trúc (không có chỗ ngẫu hứng — discovery protocol là yêu cầu cứng). Hai — <code>uxskill recommend</code> chạy năm tìm kiếm song song trên 998 mục catalog và trả về một hệ thống thiết kế đã giải quyết (bảng màu, cặp typeface, motion, lưới spacing, danh sách component). Ba — <code>uxskill lint</code> chạy 145 quy tắc regex trên code. Exit 0 nếu sạch, exit 1 nếu có finding ở threshold.
       </p>
 
       <h2>Một quy tắc thật — Inter làm font tiêu đề</h2>
       <p>
-        Đây là quy tắc số một trong manifest 120, lấy trực tiếp từ <code>data/anti-patterns.json</code>. Severity là <code>high</code>:
+        Đây là quy tắc số một trong manifest 145, lấy trực tiếp từ <code>data/anti-patterns.json</code>. Severity là <code>high</code>:
       </p>
-      <pre class="code"><span class="c">// 1 trong 120 quy tắc</span>
+      <pre class="code"><span class="c">// 1 trong 145 quy tắc</span>
 {
   <span class="k">"id"</span>: <span class="s">"inter-as-display"</span>,
   <span class="k">"severity"</span>: <span class="s">"high"</span>,
@@ -478,7 +478,7 @@
             <tr><td>Motion presets</td><td class="num">57</td><td>Framer Motion, GSAP, CSS — đi kèm nhánh <code>prefers-reduced-motion</code>.</td></tr>
             <tr><td>Component</td><td class="num">182</td><td>Card, dialog, dashboard, mọi pattern với quy tắc kết hợp.</td></tr>
             <tr><td>Brand spec</td><td class="num">110</td><td>Văn phạm của các brand thật như Stripe, Airbnb, Vercel.</td></tr>
-            <tr><td>Anti-patterns</td><td class="num">120</td><td>120 quy tắc linter. Cùng JSON, hai consumer.</td></tr>
+            <tr><td>Anti-patterns</td><td class="num">145</td><td>145 quy tắc linter. Cùng JSON, hai consumer.</td></tr>
             <tr><td>Khác</td><td class="num">120</td><td>Hồ sơ mật độ, voice register, delta RTL.</td></tr>
             <tr><td><strong>Tổng</strong></td><td class="num"><strong>998</strong></td><td>Một cây JSON. Recommender, linter, MCP server cùng đọc.</td></tr>
           </tbody>
@@ -515,12 +515,12 @@
           <tbody>
             <tr><td><strong>ui-ux-pro-max</strong></td><td class="num">84k</td><td>Có</td><td>Không</td><td>Không</td><td class="num">~600</td></tr>
             <tr><td><strong>taste-skill</strong></td><td class="num">25k</td><td>Có</td><td>Không</td><td>Không</td><td class="num">~480</td></tr>
-            <tr><td><strong>ux-skill</strong></td><td class="num">14</td><td>Có</td><td>120 quy tắc</td><td>14 tool</td><td class="num">998</td></tr>
+            <tr><td><strong>ux-skill</strong></td><td class="num">14</td><td>Có</td><td>145 quy tắc</td><td>14 tool</td><td class="num">998</td></tr>
           </tbody>
         </table>
       </div>
       <p>
-        ux-skill là dự án nhỏ nhất về sao (14) và lớn nhất về bề mặt tính năng. 998 mục catalog, 120 quy tắc regex chạy trong CI dưới dạng non-zero exit, MCP server với 14 tool phủ 17 IDE, 22 lệnh, 131 brand specs làm văn phạm tham chiếu, 75 test. ui-ux-pro-max và taste-skill đều ship recommender. ux-skill ship recommender + linter + MCP. Đó là nước cờ bất đối xứng.
+        ux-skill là dự án nhỏ nhất về sao (14) và lớn nhất về bề mặt tính năng. 998 mục catalog, 145 quy tắc regex chạy trong CI dưới dạng non-zero exit, MCP server với 14 tool phủ 17 IDE, 22 lệnh, 131 brand specs làm văn phạm tham chiếu, 75 test. ui-ux-pro-max và taste-skill đều ship recommender. ux-skill ship recommender + linter + MCP. Đó là nước cờ bất đối xứng.
       </p>
 
       <div class="honesty">
@@ -532,7 +532,7 @@
 
       <h2>Đọc tiếp gì</h2>
       <p>
-        Nếu muốn xem manifest 120 quy tắc đầy đủ kèm before/after trên một Next.js hero thật, đọc <a href="/blog/regex-linter-for-ai-coding.html" class="link">bài regex linter</a>. Nếu muốn taxonomy đầy đủ — mỗi quy tắc đi kèm detection regex, đọc <a href="/blog/ai-design-fingerprints-list.html" class="link">bài 35 dấu vân tay thiết kế AI</a>. Nếu muốn xếp hạng toàn cảnh AI coding tool 2026 cho chất lượng thiết kế, đọc <a href="/blog/anti-ai-slop-claude-skills.html" class="link">bài anti-AI-slop ranking</a>.
+        Nếu muốn xem manifest 145 quy tắc đầy đủ kèm before/after trên một Next.js hero thật, đọc <a href="/blog/regex-linter-for-ai-coding.html" class="link">bài regex linter</a>. Nếu muốn taxonomy đầy đủ — mỗi quy tắc đi kèm detection regex, đọc <a href="/blog/ai-design-fingerprints-list.html" class="link">bài 35 dấu vân tay thiết kế AI</a>. Nếu muốn xếp hạng toàn cảnh AI coding tool 2026 cho chất lượng thiết kế, đọc <a href="/blog/anti-ai-slop-claude-skills.html" class="link">bài anti-AI-slop ranking</a>.
       </p>
 
       <h2>Bài đọc liên quan</h2>
@@ -540,13 +540,13 @@
         <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Anti-AI-slop tools cho Claude Code — xếp hạng trung thực</a></li>
         <li><a href="/blog/vibe-coding-design-system.html" class="link">Vibe coding + ux-skill</a> — bài tiếng Anh kèm minh họa.</li>
         <li><a href="/blog/ai-design-fingerprints-list.html" class="link">35 dấu vân tay thiết kế AI</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter cho AI coding — 120 quy tắc trong CI</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter cho AI coding — 145 quy tắc trong CI</a></li>
       </ul>
     </article>
 
     <section class="cta">
       <span class="eyebrow">Cài đặt</span>
-      <h2>Một package. <span class="accent">Ba đường cài.</span> 120 quy tắc.</h2>
+      <h2>Một package. <span class="accent">Ba đường cài.</span> 145 quy tắc.</h2>
       <p>Recommender, linter, MCP server, 22 lệnh, 131 brand specs — tất cả trong một. Linter sub-second, phần còn lại on demand. Giấy phép MIT, không telemetry, không cần account.</p>
 
       <div class="install-block">

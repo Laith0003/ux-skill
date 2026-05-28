@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cursor 디자인 규칙 — AI 코딩의 디자인 슬롭을 막는 방법 — ux-skill</title>
-  <meta name="description" content="Cursor의 기본 출력은 모든 AI 코딩 도구가 공유하는 8가지 디폴트(Inter를 헤드라인으로, 보라-파랑 그라데이션, 동일한 카드 3개)를 그대로 가져갑니다. ux-skill은 120개의 결정론적 정규식 규칙으로 이를 CI에서 막습니다.">
+  <meta name="description" content="Cursor의 기본 출력은 모든 AI 코딩 도구가 공유하는 8가지 디폴트(Inter를 헤드라인으로, 보라-파랑 그라데이션, 동일한 카드 3개)를 그대로 가져갑니다. ux-skill은 145개의 결정론적 정규식 규칙으로 이를 CI에서 막습니다.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ko/cursor-design-rules-korean.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ko/cursor-design-rules-korean.html">
   <meta property="og:title" content="Cursor 디자인 규칙 — AI 코딩의 디자인 슬롭을 막는 방법">
-  <meta property="og:description" content="Cursor에 ux-skill을 설치해 8가지 AI 디자인 디폴트를 CI에서 막는 방법. 120 규칙, 1,182 카탈로그, 131 브랜드 사양.">
+  <meta property="og:description" content="Cursor에 ux-skill을 설치해 8가지 AI 디자인 디폴트를 CI에서 막는 방법. 145 규칙, 1,182 카탈로그, 131 브랜드 사양.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/ko-cursor-design-rules-korean.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -22,7 +22,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Cursor 디자인 규칙 — ux-skill로 슬롭을 막는다">
-  <meta name="twitter:description" content=".cursorrules에 ux-skill을 끼우는 3단계. 120 결정론적 규칙, 1,182 항목, 17 IDE.">
+  <meta name="twitter:description" content=".cursorrules에 ux-skill을 끼우는 3단계. 145 결정론적 규칙, 1,182 항목, 17 IDE.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,7 +33,7 @@
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "Cursor 디자인 규칙 — AI 코딩의 디자인 슬롭을 막는 방법",
-    "description": "Cursor의 기본 출력은 모든 AI 코딩 도구가 공유하는 8가지 디폴트를 그대로 가져갑니다. ux-skill은 120개의 결정론적 정규식 규칙으로 이를 CI에서 막습니다.",
+    "description": "Cursor의 기본 출력은 모든 AI 코딩 도구가 공유하는 8가지 디폴트를 그대로 가져갑니다. ux-skill은 145개의 결정론적 정규식 규칙으로 이를 CI에서 막습니다.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -411,7 +411,7 @@ $ cat ~/.cursor/mcp.json
 
       <h2>린트를 CI에 넣는 결정적 한 줄</h2>
       <p>
-        Cursor가 글을 쓴 다음, PR이 머지되기 전에 120개의 결정론적 정규식 규칙이 디자인 지문을 잡습니다. LLM 호출 없음. 평균 200 파일 Next.js 저장소에서 콜드 380ms, 웜 90ms.
+        Cursor가 글을 쓴 다음, PR이 머지되기 전에 145개의 결정론적 정규식 규칙이 디자인 지문을 잡습니다. LLM 호출 없음. 평균 200 파일 Next.js 저장소에서 콜드 380ms, 웜 90ms.
       </p>
       <pre class="code"><span class="c"># .github/workflows/ux-lint.yml</span>
 <span class="k">name</span>: <span class="s">ux-lint</span>
@@ -430,7 +430,7 @@ $ cat ~/.cursor/mcp.json
       - <span class="k">run</span>: <span class="s">pip install uxskill</span>
       - <span class="k">run</span>: <span class="s">uxskill lint --threshold high</span></pre>
       <p>
-        규칙이 발화하면 CI가 빨갛게 변하고, 작성자는 정확히 어떤 패턴이 어느 줄에서 잡혔는지 텍스트로 봅니다. 자세한 워크플로는 <a href="/blog/regex-linter-for-ai-coding.html" class="link">정규식 린터 — 120 규칙</a>에서 다룹니다.
+        규칙이 발화하면 CI가 빨갛게 변하고, 작성자는 정확히 어떤 패턴이 어느 줄에서 잡혔는지 텍스트로 봅니다. 자세한 워크플로는 <a href="/blog/regex-linter-for-ai-coding.html" class="link">정규식 린터 — 145 규칙</a>에서 다룹니다.
       </p>
 
       <h2>Cursor에서 잡히는 가장 흔한 5가지 지문</h2>
@@ -474,7 +474,7 @@ $ cat ~/.cursor/mcp.json
 
       <h2>관련 글</h2>
       <ul>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">AI 코딩을 위한 정규식 린터 — 120 규칙</a>.</li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">AI 코딩을 위한 정규식 린터 — 145 규칙</a>.</li>
         <li><a href="/blog/ai-design-fingerprints-list.html" class="link">AI 코딩 도구가 기본으로 출력하는 35개의 디자인 지문</a>.</li>
         <li><a href="/blog/cursor-design-plugin.html" class="link">Cursor 디자인 플러그인 — 설치 가이드</a>.</li>
         <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Claude Code의 안티-슬롭 도구 — 정직한 랭킹</a>.</li>
@@ -484,7 +484,7 @@ $ cat ~/.cursor/mcp.json
     <section class="cta">
       <span class="eyebrow">설치</span>
       <h2>Cursor에 ux-skill을 끼우는 <span class="accent">한 줄.</span></h2>
-      <p>120 규칙, 1,182 카탈로그, 131 브랜드 사양, 22 커맨드, 17 IDE. 린터는 서브초, 그 외는 온디맨드. MIT 라이선스, 텔레메트리 없음, 계정 불필요.</p>
+      <p>145 규칙, 1,182 카탈로그, 131 브랜드 사양, 22 커맨드, 17 IDE. 린터는 서브초, 그 외는 온디맨드. MIT 라이선스, 텔레메트리 없음, 계정 불필요.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
@@ -500,7 +500,7 @@ $ cat ~/.cursor/mcp.json
     <div class="related-reads-inner">
       <h2 class="related-reads-h">Related reads</h2>
       <ul>
-        <li><a href="/blog/regex-linter-for-ai-coding.html">정규식 린터 — 120 규칙</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html">정규식 린터 — 145 규칙</a></li>
         <li><a href="/blog/ai-design-fingerprints-list.html">35개의 AI 디자인 지문</a></li>
         <li><a href="/blog/cursor-design-plugin.html">Cursor 디자인 플러그인</a></li>
         <li><a href="/blog/anti-ai-slop-claude-skills.html">안티-슬롭 도구 랭킹</a></li>

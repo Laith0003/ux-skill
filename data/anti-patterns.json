@@ -1,7 +1,7 @@
 {
   "_meta": {
     "version": "2.0.0",
-    "entries": 120,
+    "entries": 145,
     "last_updated": "2026-05-28",
     "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
     "schema_version": "1.0"
@@ -2520,6 +2520,545 @@
       },
       "why": "background-color: inherit on body chains to <html>, which by default has no background and resolves to canvas/white - so the inherit chain breaks the moment <html> is themed differently from body, and the page shows a flash of system canvas before paint. AI shortcut for 'just inherit it' when the dev didn't bother to choose a real surface token.",
       "fix": "Set body { background-color: var(--bg-surface-0, white) } with an explicit token. If dark mode is in play, the token should respond to color-scheme or .dark, not chain through inherit."
+    },
+    {
+      "id": "marketing-buzz-next-generation",
+      "name": "Buzzword: next-generation",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\bnext[\\s-]generation\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "'Next-generation' is a category-leader cliche that names nothing - every press release in the last 30 years has claimed it. The phrase signals unedited marketing copy and shows the writer skipped the work of saying what is actually new.",
+      "fix": "Name the specific capability that is new (e.g., 'first MCP-native design engine', 'first regex linter with 145 rules'). If you can't name a specific advance, drop the qualifier."
+    },
+    {
+      "id": "marketing-buzz-cutting-edge",
+      "name": "Buzzword: cutting-edge",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\bcutting[\\s-]edge\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "'Cutting-edge' is the laziest tech adjective in marketing copy - empty signal that means 'we don't want to commit to a specific claim'. Skipped by anyone reading critically.",
+      "fix": "Replace with a concrete capability: 'ships in under 50ms', 'covers 145 anti-patterns', 'runs inside Cursor and Windsurf'. Specifics beat adjectives."
+    },
+    {
+      "id": "marketing-buzz-best-in-class",
+      "name": "Buzzword: best-in-class",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\bbest[\\s-]in[\\s-]class\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "'Best-in-class' is a vendor pitch phrase with no defined benchmark - reads as marketing autopilot. If you really are best at something, name the comparison.",
+      "fix": "Replace with a measurable claim: 'fastest CI lint at 90ms', 'most rules in the category at 145'. If no comparison exists, drop the phrase."
+    },
+    {
+      "id": "marketing-buzz-world-class",
+      "name": "Buzzword: world-class",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\bworld[\\s-]class\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "'World-class' is consultancy filler - signals the writer either had nothing concrete to say or was scared to commit. Costs trust in a landing page.",
+      "fix": "Name the specific bar you cleared: 'tested in 17 IDEs', 'WCAG AA on every component'. If there's no bar, the word does not belong."
+    },
+    {
+      "id": "marketing-buzz-industry-leading",
+      "name": "Buzzword: industry-leading",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\bindustry[\\s-]leading\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "'Industry-leading' is unverifiable by definition - every category leader and every follower uses it identically. Removes signal, adds slop.",
+      "fix": "Cite the specific lead: 'first design linter in Claude Code marketplace', '4x more rules than the next entrant'. No claim, no superlative."
+    },
+    {
+      "id": "marketing-buzz-game-changing",
+      "name": "Buzzword: game-changing / game-changer",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\bgame[\\s-]chang(?:er|ing|e)\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "'Game-changing' is the most overused tech-PR adjective in the last decade - means the writer wanted hype without committing to a specific shift. Reads instantly as filler.",
+      "fix": "Describe the shift in one sentence: 'design intelligence in the model context, not just in Figma'. Concrete > grandiose."
+    },
+    {
+      "id": "marketing-buzz-ai-powered-driven",
+      "name": "Buzzword: AI-powered / AI-driven",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\bAI[\\s-]?(?:powered|driven|enabled|enhanced|first)\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "'AI-powered' has become the new 'cloud-based' - every landing page claims it, nobody asks what model, what data, what task. Empty by saturation.",
+      "fix": "Name the model and the function: 'uses Claude to generate brand-aware tokens', 'embeddings from text-embedding-3-small for palette match'. Or drop the qualifier and just describe the feature."
+    },
+    {
+      "id": "marketing-buzz-leverage-ai-harness",
+      "name": "Buzzword: leverage / harness the power of",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\b(?:leverage(?:\\s+the\\s+power\\s+of)?\\s+AI|harness(?:\\s+the\\s+power\\s+of)?|tap\\s+into\\s+the\\s+power\\s+of)\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "'Leverage AI', 'harness the power of', 'tap into the power of' are LinkedIn-thinkpiece formulas - immediately telegraphs generated marketing copy with no specifics.",
+      "fix": "Use 'use' or name the verb directly: 'uses Claude for layout suggestions'. Plain verbs beat power-of-X scaffolding."
+    },
+    {
+      "id": "placeholder-via-com",
+      "name": "via.placeholder.com placeholder image",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:^|[\\s\"'(=])(?:https?:)?//via\\.placeholder\\.com/",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "ts",
+          "js",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "css",
+          "scss",
+          "md"
+        ]
+      },
+      "why": "via.placeholder.com is the default stock placeholder URL that AI generators reach for - signals the design got shipped with the scaffolding still in place. Immediate trust kill on a landing page.",
+      "fix": "Use real artwork, real product screenshots, or a domain-specific empty-state SVG. If you genuinely need a placeholder for a demo, generate it locally and serve it from your own static path."
+    },
+    {
+      "id": "placeholder-com-direct",
+      "name": "placeholder.com direct placeholder",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:^|[\\s\"'(=])(?:https?:)?//(?:www\\.)?placeholder\\.com/",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "ts",
+          "js",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "css",
+          "scss",
+          "md"
+        ]
+      },
+      "why": "placeholder.com URLs ship the gray box with the dimensions printed inside - the universal 'I forgot to swap in real art' tell. Generators emit these whenever they don't know what image to use.",
+      "fix": "Replace with a real asset under /assets, /og, or your image CDN. For dev-only scaffolds, use a local 1x1 transparent PNG or an inline SVG empty state with a real label."
+    },
+    {
+      "id": "placekitten-com",
+      "name": "placekitten.com kitten placeholder",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:^|[\\s\"'(=])(?:https?:)?//(?:www\\.)?placekitten\\.com/",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "ts",
+          "js",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "css",
+          "scss",
+          "md"
+        ]
+      },
+      "why": "placekitten.com is the joke-placeholder service - shipping it to production says nobody reviewed the page before deploy. The kitten is funny in the design doc and devastating on the live landing page.",
+      "fix": "Replace every kitten URL with the real asset for that surface. If the page truly needs a stand-in, use a brand-aware blank state with copy explaining what should be there."
+    },
+    {
+      "id": "picsum-photos-seed",
+      "name": "picsum.photos lorem-picsum placeholder",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:^|[\\s\"'(=])(?:https?:)?//picsum\\.photos/",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "ts",
+          "js",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "css",
+          "scss",
+          "md"
+        ]
+      },
+      "why": "picsum.photos serves random rotating Lorem Picsum stock images - the design never settles, and the same hero photo on a Stripe-like landing page is an instant tell that the visuals were never chosen.",
+      "fix": "Commission, license, or generate the real image. If you need a stable placeholder, generate one once and self-host it under /assets so it stops drifting between deploys."
+    },
+    {
+      "id": "generic-alt-image-photo-icon",
+      "name": "Generic alt text: image / photo / picture / icon",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<img[^>]*\\balt\\s*=\\s*['\\\"](?:image|photo|picture|icon|graphic|illustration|pic|img)['\\\"]",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "alt='image' or alt='photo' tells the screen reader nothing the user did not already know from the tag name - it is technically present but functionally absent. WCAG 1.1.1 demands meaningful equivalents, not the word 'image'.",
+      "fix": "Describe what the image conveys: 'Stripe Dashboard with revenue chart', 'team standing in front of the office'. For purely decorative images, use alt='' so the screen reader skips them."
+    },
+    {
+      "id": "generic-alt-untitled-screenshot-logo-banner",
+      "name": "Generic alt text: untitled / screenshot / logo / banner",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<img[^>]*\\balt\\s*=\\s*['\\\"](?:untitled|screenshot|logo|banner|hero|placeholder|asset|file|upload|attachment)['\\\"]",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "alt='untitled' / 'screenshot' / 'logo' / 'banner' is the CMS/Webflow/SaaS default fingerprint - signals the alt field was never filled in and the default leaked through. Screen reader users hear the same word for every image on the page.",
+      "fix": "Name the subject: alt='ux-skill logo', alt='Stripe pricing page screenshot from Mar 2026', alt='hero banner: model writes the code, designer sets the rules'. Specific enough that someone could find the image from the alt alone."
+    },
+    {
+      "id": "generic-alt-decorative-not-empty",
+      "name": "alt='decorative' instead of empty alt",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<img[^>]*\\balt\\s*=\\s*['\\\"](?:decorative|decoration|spacer|divider|ornament)['\\\"]",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "alt='decorative' announces the literal word 'decorative' to a screen reader user - the opposite of what was intended. The correct way to mark a decorative image is alt='' (empty string).",
+      "fix": "Use alt='' (empty quotes) for purely presentational images so the screen reader skips them. If the image conveys any meaning at all, give it a real description instead."
+    },
+    {
+      "id": "cta-text-read-more",
+      "name": "Generic CTA text: Read more / View more / See more",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:a|button)[^>]*>\\s*(?:Read\\s+more|View\\s+more|See\\s+more|Find\\s+out\\s+more|More\\s+info|Discover\\s+more)\\s*</(?:a|button)>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "'Read more' / 'View more' / 'See more' tells the user nothing about the destination and fails screen-reader scan-by-link mode (where users hear only link text). Every card on the page reads the same.",
+      "fix": "Make link text describe the destination: 'Read the launch post', 'See all 145 rules', 'View the changelog'. The link should make sense out of context."
+    },
+    {
+      "id": "cta-text-tap-continue-go",
+      "name": "Generic CTA text: Tap here / Continue / Go",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:a|button)[^>]*>\\s*(?:Tap\\s+here|Continue|Go|Next|Submit\\s+now|Sign\\s+up\\s+now)\\s*</(?:a|button)>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "'Tap here' / 'Continue' / 'Go' / 'Next' name an action but not a target - the screen reader user has no idea where the link lands. 'Submit now' / 'Sign up now' add urgency without value. Generic CTA fingerprint.",
+      "fix": "Replace with destination-aware copy: 'Install the plugin', 'Open the changelog', 'See the comparison table'. The CTA should be a tiny one-line promise."
+    },
+    {
+      "id": "body-text-shadow-on-prose",
+      "name": "text-shadow applied to body or prose",
+      "severity": "medium",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:^|[\\s,}>+~])(?:body|p|li|main|article|\\.(?:body|prose|text|content|paragraph))[^{}]*\\{[^}]*\\btext-shadow\\s*:",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss"
+        ]
+      },
+      "why": "text-shadow on body text smears the glyph edges, drops contrast, and is the classic 2010s skeuomorphic tell. Long-form reading becomes measurably harder, and the shadow does not survive dark mode without a separate override.",
+      "fix": "Remove text-shadow from body, p, li, prose, and content classes. If you need depth on a hero title or display headline, scope text-shadow to that one element class and verify contrast in both light and dark themes."
+    },
+    {
+      "id": "body-letter-spacing-too-wide",
+      "name": "Excessive letter-spacing on body / paragraph",
+      "severity": "medium",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:^|[\\s,}>+~])(?:body|p|li|main|article|\\.(?:body|prose|text|content|paragraph))[^{}]*\\{[^}]*\\bletter-spacing\\s*:\\s*(?:0?\\.[3-9]\\d*em|[1-9]\\d*(?:\\.\\d+)?em|0?\\.[3-9]\\d*rem|[1-9]\\d*(?:\\.\\d+)?rem|[6-9]px|[1-9]\\d+px)",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss"
+        ]
+      },
+      "why": "Letter-spacing above ~0.25em or 5px on body text breaks reading flow and exceeds every typography guideline since the 1990s. Wide tracking belongs on display caps, never on paragraph text or list items.",
+      "fix": "Keep letter-spacing on body, p, li to ~0 to 0.02em max. Reserve wide tracking (0.2em to 0.4em) for short ALL-CAPS labels or eyebrow text only."
+    },
+    {
+      "id": "body-font-weight-bold-or-700-keyword",
+      "name": "body / p / li set to font-weight: bold or 700",
+      "severity": "medium",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:^|[\\s,}>+~])(?:body|p|li|main|article|\\.(?:body|prose|text|content|paragraph))[^{}]*\\{[^}]*\\bfont-weight\\s*:\\s*(?:bold|700|800)\\s*[;}]",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss"
+        ]
+      },
+      "why": "Making the entire body or every paragraph bold defeats hierarchy - the page has no normal weight to bold against. Long-form reading at weight 700 is measurably slower than at 400. AI shortcut for 'make it pop' that breaks the typographic system.",
+      "fix": "Keep body and paragraph weight at 400 (or 450 if the typeface needs a touch more presence). Use bold sparingly inside paragraphs (strong / b) or on headings - never as the default body weight."
+    },
+    {
+      "id": "body-cursor-pointer-default",
+      "name": "body or main given cursor: pointer",
+      "severity": "medium",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:^|[\\s,}>+~])(?:body|html|main|\\.(?:app|root|page))[^{}]*\\{[^}]*\\bcursor\\s*:\\s*pointer\\s*[;}]",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss"
+        ]
+      },
+      "why": "cursor: pointer on body or html signals 'everything is clickable' when most things are not - users learn to distrust the cursor cue, and accessibility regressions follow. AI shortcut for 'I am not sure what is interactive so I will hint at everything'.",
+      "fix": "Remove cursor: pointer from body / html / main. Apply it only to elements that are genuinely interactive (buttons, links, custom controls with the right ARIA role)."
+    },
+    {
+      "id": "generic-class-container-wrapper-only",
+      "name": "div with only 'wrapper' / 'box' / 'inner' as class",
+      "severity": "low",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": "<div\\s+class\\s*=\\s*['\\\"](?:wrapper|box|inner|outer|main-wrapper|page-wrapper|content-wrapper|outer-wrapper|inner-wrapper)['\\\"]\\s*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "A bare class='wrapper' / 'box' / 'inner' with nothing else gives the design system no information about what the div is for - the throwaway naming a generator falls back to when it has no concept of role or semantic. Tailwind's '.container' utility is intentionally excluded - it carries layout intent.",
+      "fix": "Name the role: class='hero__inner', class='pricing-grid', class='footer-cta-block'. Even if it carries the layout utility, the prefix should say what kind of block it is."
+    },
+    {
+      "id": "data-testid-in-production-markup",
+      "name": "data-testid left in production markup",
+      "severity": "low",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\sdata-testid\\s*=\\s*['\\\"][^'\\\"]+['\\\"]",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "data-testid attributes are test-runner hooks that have no business in the production payload - they bloat the DOM, leak internal test names to anyone who Views Source, and signal the build pipeline strips nothing. AI-pasted-from-example-code fingerprint.",
+      "fix": "Strip data-testid at build time (Vite / Webpack / esbuild plugin) or move identifiers to data-test-* / aria-label that the test harness reads. Keep production HTML free of test-only attributes."
+    },
+    {
+      "id": "footer-built-with-love-coffee",
+      "name": "Footer: Built with love / Made with coffee / Crafted with care",
+      "severity": "low",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\b(?:(?:Built|Made|Crafted|Designed|Forged|Brewed)\\s+with\\s+(?:love|care|coffee|caffeine|passion|heart|joy|pride)|with\\s+love\\s+from)\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "'Built with love' / 'Made with coffee' / 'Crafted with care' is the universal indie-hacker footer template - signals the writer reached for a meme line because they did not want to commit to a real footer voice. Reads as the most generated of all generated lines.",
+      "fix": "Use a real footer line - your domain, the year, a one-line manifesto, a credit. If you want to be warm, be specific: 'Shipped from Amman' / 'Open source since 2026' beats 'made with love' every time."
+    },
+    {
+      "id": "marketing-unlock-unleash-potential",
+      "name": "Buzzword: unlock / unleash the potential, reach new heights",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\b(?:unlock(?:\\s+the)?\\s+(?:potential|power|magic|future)|unleash\\s+(?:your|the)\\s+(?:potential|creativity|power)|reach\\s+new\\s+heights|take\\s+(?:it|things)\\s+to\\s+the\\s+next\\s+level|the\\s+future\\s+is\\s+here)\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "'Unlock the potential' / 'unleash your creativity' / 'reach new heights' / 'take it to the next level' / 'the future is here' is the strongest cluster of LinkedIn-thinkpiece phrases in any landing page - immediate AI-generated marketing copy tell.",
+      "fix": "Describe what the user can do that they could not do before: 'lint AI-generated code in 50ms', 'install in three IDEs from one command'. Specifics beat 'unlock' every time."
     }
   ]
 }

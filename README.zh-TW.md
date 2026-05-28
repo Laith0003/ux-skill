@@ -2,7 +2,7 @@
 
 # ux-skill — 為 Claude Code、Cursor 及一切 AI 程式設計工具打造的設計智慧引擎
 
-> **AI 程式設計領域最強的 UX 外掛。** 一個由 Python 驅動的推理核心,包含 11 份可查詢的 JSON 清單(84 種風格、176 套配色、70 組字體搭配、148 個元件、184 個產業、35 種圖表類型、57 個動效預設、112 條 UX 法則、120 條反模式規則、25 個技術堆疊、131 份品牌規範)、22 個斜線命令、5 個子代理,以及一個確定性的反 AI-slop 程式碼檢查器。跨 IDE 支援:可安裝到 Claude Code、Cursor、Windsurf、GitHub Copilot、Gemini CLI、Codex、Kiro、Cline、Continue、Aider、Zed、JetBrains AI、Pieces、Tabby、Tabnine、CodeWhisperer 以及 Roo Cline。
+> **AI 程式設計領域最強的 UX 外掛。** 一個由 Python 驅動的推理核心,包含 11 份可查詢的 JSON 清單(84 種風格、176 套配色、70 組字體搭配、148 個元件、184 個產業、35 種圖表類型、57 個動效預設、112 條 UX 法則、145 條反模式規則、25 個技術堆疊、131 份品牌規範)、22 個斜線命令、5 個子代理,以及一個確定性的反 AI-slop 程式碼檢查器。跨 IDE 支援:可安裝到 Claude Code、Cursor、Windsurf、GitHub Copilot、Gemini CLI、Codex、Kiro、Cline、Continue、Aider、Zed、JetBrains AI、Pieces、Tabby、Tabnine、CodeWhisperer 以及 Roo Cline。
 
 > **品牌名稱是 `ux-skill`。** PyPI / npm 上的套件名稱仍然是 `uxskill`。GitHub 儲存庫位於 [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill)。
 
@@ -14,7 +14,7 @@
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#面向-17-個-ide-的安裝程式)
 [![Brands](https://img.shields.io/badge/brand_specs-131-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
-[![Linter](https://img.shields.io/badge/anti--patterns-120-181715.svg)](data/anti-patterns.json)
+[![Linter](https://img.shields.io/badge/anti--patterns-145-181715.svg)](data/anti-patterns.json)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -44,7 +44,7 @@ ux-skill 是一個面向 AI 程式設計工具的**設計智慧引擎**。它以
 4. [22 個斜線命令——詳細參考](#22-個斜線命令詳細參考)
 5. [5 個子代理](#5-個子代理)
 6. [11 份資料清單](#11-份資料清單)
-7. [120 條反 AI-slop 規則——程式碼檢查器](#120-條反-ai-slop-規則程式碼檢查器)
+7. [145 條反 AI-slop 規則——程式碼檢查器](#145-條反-ai-slop-規則程式碼檢查器)
 8. [131 份 DESIGN.md 品牌規範——按類別](#131-份-designmd-品牌規範按類別)
 9. [MCP 伺服器——非對稱的一著](#mcp-伺服器非對稱的一著)
 10. [面向 17 個 IDE 的安裝程式](#面向-17-個-ide-的安裝程式)
@@ -133,7 +133,7 @@ Star 數最後一次透過 `gh api` 核對的時間是 **2026-05-28**。ux-skill
 | dominikmartn/nothing-design-skill | **2,391** | 單一美學 skill | 1 | — | — | 0 | 0 | 1 |
 | Nutlope/hallmark | **2,164** | 反 slop 設計 skill | 1 | — | — | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | MD3 元件 + 稽核 | 1 | — | (僅 MD3) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Python 引擎 + 11 份清單 + 22 個命令 + 5 個子代理 + CI 檢查器** | **22** | **120 條 regex 規則** | **110** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Python 引擎 + 11 份清單 + 22 個命令 + 5 個子代理 + CI 檢查器** | **22** | **145 條 regex 規則** | **110** | **148** | **57** | **17** |
 
 ### 我們輸在哪裡
 
@@ -145,7 +145,7 @@ Star 數最後一次透過 `gh api` 核對的時間是 **2026-05-28**。ux-skill
 
 - **元件庫:** 148 個帶解剖結構、狀態、所用 token 與動效規範的文件化元件。其他 8 個裡沒有任何一個發布過元件清單。
 - **動效預設:** 57 個開箱即用的堆疊層級項目(Framer Motion、GSAP、CSS),全部帶 reduced-motion 後援。其他幾家都不發布動效清單。
-- **反模式程式碼檢查器:** 120 條確定性 regex 規則,能在 CI 中執行,遇 Critical/High 結束非零碼。其他幾家沒有任何確定性檢查器。
+- **反模式程式碼檢查器:** 145 條確定性 regex 規則,能在 CI 中執行,遇 Critical/High 結束非零碼。其他幾家沒有任何確定性檢查器。
 - **品牌規範:** 110 份真實 DESIGN.md 規範(Apple、Stripe、Linear、Figma、Tesla、BMW、Notion、Spotify、Airbnb、Vercel、Supabase、Cursor、Raycast、Claude,以及其餘 96 個)。其他幾家沒有品牌庫。
 - **支援 17 個 IDE:** 同一個引擎,IDE 之間用不同的「膠水」對接。
 - **22 個斜線命令:** discovery、生成、稽核、lint、polish、修復循環、案例研究、工作坊、文案、動效、a11y、dashboard、conductor——彼此完全打通。
@@ -169,7 +169,7 @@ ux-skill (套件名: uxskill)
 │   ├── tech-stacks.json               25 個技術堆疊(Next、Astro、SvelteKit、Blade...)
 │   ├── ux-guidelines.json             112 條具名 UX 法則(Hick、Fitts、Miller...)
 │   ├── motion-presets.json            57 個動效預設(進場、出場、hover...)
-│   ├── anti-patterns.json             120 條 regex 規則(CI 安全的檢查器來源)
+│   ├── anti-patterns.json             145 條 regex 規則(CI 安全的檢查器來源)
 │   └── brands/*.json                  110 份 DESIGN 規範 + _index.json
 │
 ├── engine/                            Python——推理層
@@ -244,9 +244,9 @@ ux-skill (套件名: uxskill)
    - **技術堆疊 → 元件相容性 + 動效預設**(tech-stacks.json、motion-presets.json)
    - **禁忌項 + 地區 → 護欄 + 品牌範例候選**(anti-patterns.json、brands/)
 3. **合併。** 一個確定性的合併器對候選項排序、化解衝突(例如,「必備暗色模式」會強制配色模式),最終給出唯一的推薦系統。
-4. **輸出。** 一份 JSON,內含選定的風格、配色、字體搭配、動效 Top 5、元件 Top 12、品牌範例 Top 5,以及全部 120 條反模式護欄的啟用狀態。外加一段說明,逐項解釋為什麼這樣選。
+4. **輸出。** 一份 JSON,內含選定的風格、配色、字體搭配、動效 Top 5、元件 Top 12、品牌範例 Top 5,以及全部 145 條反模式護欄的啟用狀態。外加一段說明,逐項解釋為什麼這樣選。
 5. **生成。** 下游命令(`/ux-design`、`/ux-component`、`/ux-system`、`/ux-dashboard`)讀取推薦結果,透過子代理生成實際程式碼。
-6. **驗證。** `/ux-lint` 用 120 條 regex 規則再掃一遍生成出的程式碼。在 CI 中遇 Critical/High 結束非零碼。
+6. **驗證。** `/ux-lint` 用 145 條 regex 規則再掃一遍生成出的程式碼。在 CI 中遇 Critical/High 結束非零碼。
 
 **Python 思考。HTML 展示。Markdown 串聯。**
 
@@ -309,7 +309,7 @@ ux-skill (套件名: uxskill)
     --stack=nextjs-15-app-router \
     --region=mena
   ```
-- **輸出:** 寫入 `.ux/last-recommendation.json` —— 選定的風格、選定的配色、選定的字體搭配、動效 Top 5、元件 Top 12、品牌範例 Top 5、120 條反模式護欄的啟用狀態,以及理據。
+- **輸出:** 寫入 `.ux/last-recommendation.json` —— 選定的風格、選定的配色、選定的字體搭配、動效 Top 5、元件 Top 12、品牌範例 Top 5、145 條反模式護欄的啟用狀態,以及理據。
 - **下接:** `/ux-design [簡報]` → 用推薦 token 生成前端程式碼;`/ux-system` → 由推薦生成完整設計系統;`/ux-component <名稱>` → 用推薦風格生成單個元件;`/ux-lint` → 驗證生成的程式碼。
 
 ### 生成
@@ -363,7 +363,7 @@ ux-skill (套件名: uxskill)
 
 #### `/ux-lint` — 基於 regex 的確定性檢查器(無 LLM,CI 安全)
 
-- **做什麼:** 對你的程式碼跑 120 條 regex 規則。無 LLM 呼叫。CI 中遇 Critical / High 結束非零碼。原始檔:`data/anti-patterns.json`。規則覆蓋 A11y(23)、內容(15)、配置(13)、字體(10)、顏色(9)、品質(9)、視覺(9)、動效(8)、效能(4)。
+- **做什麼:** 對你的程式碼跑 145 條 regex 規則。無 LLM 呼叫。CI 中遇 Critical / High 結束非零碼。原始檔:`data/anti-patterns.json`。規則覆蓋 A11y(23)、內容(15)、配置(13)、字體(10)、顏色(9)、品質(9)、視覺(9)、動效(8)、效能(4)。
 - **何時使用:** 預提交鉤子;CI 關卡;在花 `/ux-audit` 成本之前對大程式碼庫做的快速首輪;在 `/ux-design` 或 `/ux-component` 之後用於驗證生成。
 - **何時跳過:** 你想要修復循環(檢查器只報告、不修改——請接 `/ux-polish --fix` 或 `/ux-fix`);你想要品味判斷(用 `/ux-critique`)。
 - **呼叫方式(slash):** `/ux-lint src/`。
@@ -594,7 +594,7 @@ ux-skill (套件名: uxskill)
 
 1. 簡報 / 推薦(從 `.ux/` 載入)。
 2. 與之相關的清單切片(例如 `frontend-engineer` 拿到選定的風格 + 配色 + 元件;`motion-engineer` 拿到選定的動效預設)。
-3. 120 條反模式護欄(始終啟用)。
+3. 145 條反模式護欄(始終啟用)。
 4. 一個成功判據(產出物必須做到什麼)。
 
 子代理回傳:
@@ -709,7 +709,7 @@ ux-skill (套件名: uxskill)
 
 每個預設都有一個 reduced-motion 變體。Framer Motion、GSAP 和純 CSS 都提供開箱可用的程式碼。
 
-### `anti-patterns.json` — 120 條 regex 規則
+### `anti-patterns.json` — 145 條 regex 規則
 
 | 欄位 | 描述 |
 |---|---|
@@ -717,7 +717,7 @@ ux-skill (套件名: uxskill)
 | `keys per entry` | `id`、`name`、`severity`(critical/high/medium/low)、`category`、`detection`(type、pattern、flags、scope)、`evidence_template`、`fix`、`references` |
 | `categories` | A11y(23)、Content(15)、Layout(13)、Typography(10)、Color(9)、Quality(9)、Visual(9)、Motion(8)、Performance(4) |
 
-完整規則清單見[120 條反 AI-slop 規則](#120-條反-ai-slop-規則程式碼檢查器)。
+完整規則清單見[145 條反 AI-slop 規則](#145-條反-ai-slop-規則程式碼檢查器)。
 
 ### `brands/*.json` — 131 份品牌規範
 
@@ -731,7 +731,7 @@ ux-skill (套件名: uxskill)
 
 ---
 
-## 120 條反 AI-slop 規則——程式碼檢查器
+## 145 條反 AI-slop 規則——程式碼檢查器
 
 ux-skill 提供一個基於 regex 的確定性檢查器。**無 LLM。** **無 API。** **無網路。** 在典型 Next.js 應用上 CI 中 ~200ms 跑完。設定 `--fail-on high` 時,遇 Critical / High 結束非零碼。
 

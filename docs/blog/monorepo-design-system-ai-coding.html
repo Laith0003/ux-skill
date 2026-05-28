@@ -410,7 +410,7 @@
         That works fine for human-written code. With AI-generated code, the dynamic changes. Every <code>apps/*</code> package becomes a place where a Cursor agent, Claude Code skill, or Cascade run can produce drift — Inter at 90px in <code>apps/admin</code>, indigo gradient in <code>apps/web</code>, three equal cards in <code>apps/mobile</code> — even when <code>packages/design-system</code> defines none of those.
       </p>
       <p>
-        The shared package can't fix this alone because the design system is what to use, not what not to use. The not-to-use list is the 120 anti-pattern rules. Those rules need to run in every package that ships AI-generated code.
+        The shared package can't fix this alone because the design system is what to use, not what not to use. The not-to-use list is the 145 anti-pattern rules. Those rules need to run in every package that ships AI-generated code.
       </p>
 
       <h2>What ux-skill generates</h2>
@@ -560,7 +560,7 @@
 
       <h2>The linter as the enforcement boundary</h2>
       <p>
-        ux-skill's <code>ux lint</code> command reads <code>packages/design-system/manifest.json</code> and applies the 120 anti-pattern rules to every consumer app's source. Run it locally, in a pre-commit hook, or as a Turborepo task.
+        ux-skill's <code>ux lint</code> command reads <code>packages/design-system/manifest.json</code> and applies the 145 anti-pattern rules to every consumer app's source. Run it locally, in a pre-commit hook, or as a Turborepo task.
       </p>
 
       <h3>As a Turborepo task</h3>

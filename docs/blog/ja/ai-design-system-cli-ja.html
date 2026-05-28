@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI 設計システム CLI — Claude Code と Cursor のためのデザインインテリジェンス — ux-skill</title>
-  <meta name="description" content="Claude Code、Cursor、Windsurf に対応した Python ベースのデザインインテリジェンス CLI。1,182 件のカタログ、120 個の正規表現ルール、131 件のブランド仕様、22 個のコマンド、17 個の IDE。MIT ライセンス。">
+  <meta name="description" content="Claude Code、Cursor、Windsurf に対応した Python ベースのデザインインテリジェンス CLI。1,182 件のカタログ、145 個の正規表現ルール、131 件のブランド仕様、22 個のコマンド、17 個の IDE。MIT ライセンス。">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ja/ai-design-system-cli-ja.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ja/ai-design-system-cli-ja.html">
   <meta property="og:title" content="AI 設計システム CLI — Claude Code と Cursor のためのデザインインテリジェンス">
-  <meta property="og:description" content="Claude Code、Cursor、Windsurf に対応した Python 製の設計システム CLI。1,182 件のカタログ、120 個の正規表現ルール、131 件のブランド仕様。">
+  <meta property="og:description" content="Claude Code、Cursor、Windsurf に対応した Python 製の設計システム CLI。1,182 件のカタログ、145 個の正規表現ルール、131 件のブランド仕様。">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/ja-ai-design-system-cli.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -33,7 +33,7 @@
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "AI 設計システム CLI — Claude Code と Cursor のためのデザインインテリジェンス",
-    "description": "Claude Code、Cursor、Windsurf に対応した Python ベースのデザインインテリジェンス CLI。1,182 件のカタログ、120 個の正規表現ルール、131 件のブランド仕様、22 個のコマンド、17 個の IDE。",
+    "description": "Claude Code、Cursor、Windsurf に対応した Python ベースのデザインインテリジェンス CLI。1,182 件のカタログ、145 個の正規表現ルール、131 件のブランド仕様、22 個のコマンド、17 個の IDE。",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -365,7 +365,7 @@
       <span class="eyebrow">Blog &middot; 日本語 &middot; 2026-05-28</span>
       <h1>AI 設計システム CLI<br>Claude Code と Cursor のための<br><span class="accent">デザインインテリジェンス</span></h1>
       <p class="lede">
-        <strong>設計システムは、もはやデザイナーが Figma で組み立てる成果物ではなく、AI のセッションが参照するデータレイヤだ。</strong>ux-skill は、Python 製の CLI として、Claude Code、Cursor、Windsurf、その他 14 個の IDE にデザインインテリジェンスを供給する。1,182 件のカタログ、120 個の決定論的な正規表現ルール、131 件のブランド仕様、22 個のコマンド——一つのインストールで全部届く。
+        <strong>設計システムは、もはやデザイナーが Figma で組み立てる成果物ではなく、AI のセッションが参照するデータレイヤだ。</strong>ux-skill は、Python 製の CLI として、Claude Code、Cursor、Windsurf、その他 14 個の IDE にデザインインテリジェンスを供給する。1,182 件のカタログ、145 個の決定論的な正規表現ルール、131 件のブランド仕様、22 個のコマンド——一つのインストールで全部届く。
       </p>
       <p class="byline">By the ux-skill team &middot; 8 min read &middot; MIT-licensed open source</p>
 
@@ -395,7 +395,7 @@
             <tr><td>推薦</td><td><code>ux recommend</code></td><td>5 つの並列検索（業界、スタイル、パレット、書体、モーション）を統合し、整った設計システムを返す。</td></tr>
             <tr><td>適用</td><td><code>ux design</code> · <code>ux component</code></td><td>推薦された設計に対して、画面とコンポーネントを生成する。</td></tr>
             <tr><td>適用</td><td><code>ux persist save</code></td><td>MASTER.md、tokens.css、manifest.json をファイルシステムに永続化。</td></tr>
-            <tr><td>検証</td><td><code>ux lint</code></td><td>120 個の正規表現ルールで指紋を検出。CI で非ゼロ終了。</td></tr>
+            <tr><td>検証</td><td><code>ux lint</code></td><td>145 個の正規表現ルールで指紋を検出。CI で非ゼロ終了。</td></tr>
             <tr><td>検証</td><td><code>ux fix</code></td><td>リンターが拾った指紋を、自動でパッチする。</td></tr>
             <tr><td>参照</td><td><code>ux brand</code></td><td>131 件のブランド仕様（Stripe、Linear、Vercel など）を参照グラマーとして引く。</td></tr>
           </tbody>
@@ -443,7 +443,7 @@ $ uxskill recommend
 $ uxskill persist save .uxskill/
   &gt; written 3 files in 38ms
 
-<span class="c"># 4. 検証 — 120 ルールで CI ゲート</span>
+<span class="c"># 4. 検証 — 145 ルールで CI ゲート</span>
 $ uxskill lint apps/web/src --threshold high
   &gt; [OK] 142 files scanned in 412ms · 0 findings at threshold high</pre>
       <p>
@@ -459,7 +459,7 @@ $ uxskill lint apps/web/src --threshold high
         Claude Code のプラグインマーケットプレイスには、すでに有力な設計プラグインがいくつかある。ui-ux-pro-max は 84k スター、taste-skill は 25k スター。これらは推薦器に強い。ux-skill は 14 スターと小さいが、リンターと MCP サーバーをセットで持っている点が違う。<a href="/blog/best-claude-code-design-skills-2026.html" class="link">2026 年版の Claude Code 設計プラグインのランキング</a> で詳しく比較した。
       </p>
       <p>
-        非対称性は「強制力」だ。推薦器は床を上げ、リンターは天井を決める。両方が必要だ。<a href="/blog/regex-linter-for-ai-coding.html" class="link">120 個の正規表現ルール</a> の中身は、もう一本の記事で全部開示している。
+        非対称性は「強制力」だ。推薦器は床を上げ、リンターは天井を決める。両方が必要だ。<a href="/blog/regex-linter-for-ai-coding.html" class="link">145 個の正規表現ルール</a> の中身は、もう一本の記事で全部開示している。
       </p>
 
       <div class="honesty">
@@ -472,7 +472,7 @@ $ uxskill lint apps/web/src --threshold high
       <h2>関連記事</h2>
       <ul>
         <li><a href="/blog/python-design-system-generator.html" class="link">Python 設計システム生成器 — 5 並列検索の中身</a>。</li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">AI コーディングのための正規表現リンター — 120 ルール</a>。</li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">AI コーディングのための正規表現リンター — 145 ルール</a>。</li>
         <li><a href="/blog/best-claude-code-design-skills-2026.html" class="link">2026 年 Claude Code 設計スキルのランキング</a>。</li>
         <li><a href="/blog/ai-design-fingerprints-list.html" class="link">AI コーディングツールが既定で出す 35 の指紋</a>。</li>
       </ul>
@@ -480,7 +480,7 @@ $ uxskill lint apps/web/src --threshold high
 
     <section class="cta">
       <span class="eyebrow">インストール</span>
-      <h2>17 個の IDE。<span class="accent">ひとつのエンジン。</span>120 ルール。</h2>
+      <h2>17 個の IDE。<span class="accent">ひとつのエンジン。</span>145 ルール。</h2>
       <p>推薦器、リンター、MCP サーバー、22 個のコマンド、131 件のブランド仕様、1,182 件のカタログ。リンターはサブ秒、その他はオンデマンド。MIT ライセンス、テレメトリなし、アカウント不要。</p>
 
       <div class="install-block">
@@ -499,7 +499,7 @@ $ uxskill lint apps/web/src --threshold high
       <h2 class="related-reads-h">Related reads</h2>
       <ul>
         <li><a href="/blog/python-design-system-generator.html">Python 設計システム生成器</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html">正規表現リンター — 120 ルール</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html">正規表現リンター — 145 ルール</a></li>
         <li><a href="/blog/best-claude-code-design-skills-2026.html">2026 Claude Code 設計スキル</a></li>
         <li><a href="/blog/ai-design-fingerprints-list.html">35 の AI 設計指紋</a></li>
       </ul>
