@@ -1391,22 +1391,26 @@ h1, h2, h3, h4 {
     }
     .device--rotor {
       width: 100%;
-      position: relative;
-      min-height: 360px;
+    }
+    /* Stack all panes in the same grid cell so the card height is the tallest pane,
+       never clips, and a crossfade swaps them without re-flowing. */
+    .device--rotor .device__rotor-pane-stack {
+      display: grid;
+      grid-template-columns: 1fr;
     }
     .device__rotor-pane {
+      grid-row: 1;
+      grid-column: 1;
       opacity: 0;
-      transition: opacity 520ms var(--ease-cinema);
+      visibility: hidden;
+      transition: opacity 520ms var(--ease-cinema), visibility 0s linear 520ms;
       pointer-events: none;
     }
     .device__rotor-pane.is-active {
       opacity: 1;
+      visibility: visible;
       pointer-events: auto;
-    }
-    /* Stack panes so the rotor doesn't grow/shrink as panes swap */
-    .device__rotor-pane:not(:first-of-type) {
-      position: absolute;
-      inset: 49px 0 0 0; /* below the chrome row */
+      transition: opacity 520ms var(--ease-cinema), visibility 0s linear 0s;
     }
     @media (prefers-reduced-motion: reduce) {
       .device__rotor-pane { transition: none; }
@@ -2647,6 +2651,7 @@ h1, h2, h3, h4 {
             <span class="device__name" id="rotor-name"><strong data-rotor-host>Cursor</strong> &nbsp;·&nbsp; <span data-rotor-file>landing.tsx</span></span>
           </div>
 
+          <div class="device__rotor-pane-stack">
           <!-- Cursor pane -->
           <div class="device__rotor-pane is-active" data-ide="cursor" aria-label="Cursor running ux-recommend">
             <div class="device__body">
@@ -2715,6 +2720,7 @@ h1, h2, h3, h4 {
               </div>
             </div>
           </div>
+          </div><!-- /device__rotor-pane-stack -->
         </div>
 
         <div class="devices__pips" role="tablist" aria-label="Switch IDE">
