@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ux-skill v3.0 in 5 minutes — install, synthesize, evolve, ship</title>
+<meta name="description" content="A 5-minute walkthrough of ux-skill v3.0 — THE BRAIN. Install. Synthesize a fresh design language for your brief. Run the evolve loop. Check your local stats. Ship.">
+<link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/v3-quickstart-five-minutes.html">
+<meta property="og:title" content="ux-skill v3.0 in 5 minutes">
+<meta property="og:description" content="Install. Synthesize. Evolve. Ship. The fastest path from zero to a shipped surface using v3.0's brain.">
+<meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
+<meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/v3-quickstart-five-minutes.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ux-skill v3.0 quickstart — 5 minutes">
+<meta name="twitter:description" content="Zero to ship using v3.0's 7-axis synthesizer + auto-polish loop.">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"Install and ship with ux-skill v3.0 in 5 minutes","description":"Step-by-step quickstart for ux-skill v3.0 — install, synthesize a design language, evolve to ship-ready, check stats.","totalTime":"PT5M","datePublished":"2026-05-28","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/v3-quickstart-five-minutes.html","inLanguage":"en","step":[{"@type":"HowToStep","name":"Install","text":"pip install uxskill","position":1},{"@type":"HowToStep","name":"Initialize","text":"uxskill init","position":2},{"@type":"HowToStep","name":"Synthesize","text":"uxskill synthesize --industry fintech-payments --tone bold","position":3},{"@type":"HowToStep","name":"Lint","text":"uxskill lint . --score-only","position":4},{"@type":"HowToStep","name":"Evolve","text":"uxskill evolve out.html","position":5},{"@type":"HowToStep","name":"Stats","text":"uxskill stats --html","position":6}]}
+</script>
+
+<style>
+  :root {
+    --canvas: #07080a; --surface: #0e1014; --ink: #f6f7f9; --body: #c0c3c9;
+    --muted: #8a8f96; --accent: #22d3ee; --hairline: rgba(255,255,255,0.08);
+    --display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--canvas); color: var(--body); font-family: var(--sans); line-height: 1.65; overflow-x: clip; }
+  a { color: var(--accent); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: clamp(20px, 4vw, 56px); }
+  header.post { margin-bottom: 48px; padding-bottom: 24px; border-bottom: 1px solid var(--hairline); }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  h1 { font-family: var(--display); font-size: clamp(32px, 5vw, 52px); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; font-weight: 600; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede { font-size: 19px; line-height: 1.55; color: var(--body); max-width: 60ch; }
+  h2 { font-family: var(--display); font-size: 28px; letter-spacing: -0.02em; color: var(--ink); margin: 56px 0 18px; }
+  .step { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.10em; text-transform: uppercase; margin-bottom: 8px; }
+  h3 { font-family: var(--display); font-size: 21px; color: var(--ink); margin: 32px 0 12px; }
+  p { margin-bottom: 18px; font-size: 16.5px; max-width: 60ch; }
+  ul { margin: 0 0 18px 22px; }
+  li { margin-bottom: 8px; max-width: 60ch; }
+  code { font-family: var(--mono); font-size: 14px; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+  pre { background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; padding: 18px 22px; overflow-x: auto; margin: 18px 0; }
+  pre code { background: transparent; padding: 0; font-size: 13.5px; line-height: 1.6; color: var(--body); }
+  blockquote { border-left: 2px solid var(--accent); padding-left: 18px; margin: 28px 0; color: var(--ink); font-style: italic; }
+  .nav { padding: 18px 0; border-bottom: 1px solid var(--hairline); }
+  .nav__row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); }
+  .nav__brand { font-family: var(--display); font-weight: 700; font-size: 17px; color: var(--ink); }
+  .nav__link { font-family: var(--mono); font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted); }
+  footer { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--hairline); color: var(--muted); font-family: var(--mono); font-size: 11.5px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__row">
+    <a class="nav__brand" href="/">uxskill</a>
+    <a class="nav__link" href="/">Home</a>
+    <a class="nav__link" href="/brands.html">Brands</a>
+    <a class="nav__link" href="/anti-patterns.html">Anti-patterns</a>
+    <a class="nav__link" href="/blog/">Blog</a>
+    <a class="nav__link" href="/compare.html">Compare</a>
+    <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+  </div>
+</header>
+
+<div class="wrap">
+<header class="post">
+<p class="eyebrow">v3.0 — THE BRAIN · 2026-05-28 · ~5 min read</p>
+<h1>ux-skill v3.0 in <em>five minutes</em>.</h1>
+<p class="lede">Install. Synthesize a fresh design language from a brief. Run the evolve loop. Check what your install has learned. Ship. The whole flow, end to end, in a single coffee.</p>
+</header>
+
+<h2>What you'll have at the end</h2>
+<ul>
+<li>A working v3.0 install of ux-skill</li>
+<li>A complete synthesized design language for one brief (palette + type + spacing + radius + motion)</li>
+<li>A linted output with a 0-100 quality score</li>
+<li>The evolve loop run once</li>
+<li>A local stats dashboard showing what your install has learned</li>
+</ul>
+
+<h2>Minute 1 — Install</h2>
+<p class="step">step 1 / 6</p>
+
+<pre><code># Python path (works in any IDE / terminal)
+pip install uxskill
+
+# OR npm path (npx wrapper, same backend)
+npm install -g uxskill</code></pre>
+
+<p>Verify:</p>
+<pre><code>uxskill version
+# → 3.0.0</code></pre>
+
+<h2>Minute 2 — Initialize</h2>
+<p class="step">step 2 / 6</p>
+
+<pre><code>cd your-project
+uxskill init</code></pre>
+
+<p>This auto-detects your IDE (Claude Code, Cursor, Windsurf, Codex, Gemini CLI, JetBrains AI, Pieces, Continue, Cline, Aider, Zed, Kiro, Roo Cline, Tabby, Tabnine, CodeWhisperer, GitHub Copilot) and writes the right configuration file. It also creates <code>.ux/</code> for the decisions ledger.</p>
+
+<p>Verify the install:</p>
+<pre><code>uxskill stats
+# → version: 3.0.0, counts: {styles: 84, palettes: 176, type-pairs: 70,
+#   components: 148, industries: 184, ...}</code></pre>
+
+<h2>Minute 3 — Synthesize a design language</h2>
+<p class="step">step 3 / 6</p>
+
+<p>This is the v3.0 flagship. Give the engine a brief and it computes a complete design language — palette, type pair, spacing scale, radius scale, motion timing — from 7 axes derived from your brief.</p>
+
+<pre><code>uxskill synthesize \
+  --industry fintech-payments \
+  --tone bold --tone serious</code></pre>
+
+<p>You'll get back JSON like:</p>
+
+<pre><code>{
+  "mode": "pure_synthesis",
+  "axes": {
+    "warmth": 0.35,
+    "contrast": 0.80,
+    "density": 0.6,
+    "geometry": 0.4,
+    "formality": 0.95,
+    "motion": 0.55,
+    "type_personality": 0.4
+  },
+  "palette": {
+    "canvas": "#0a1014",
+    "ink": "#f6f8fa",
+    "body": "#9ca3af",
+    "primary": "#3b82f6",
+    "muted": "#6b7280",
+    "hairline": "rgba(255,255,255,0.08)"
+  },
+  "type_pair": {
+    "display": "Inter Tight",
+    "body": "Inter",
+    "mono": "JetBrains Mono"
+  },
+  "spacing": { "base": 4, "scale": [4, 8, 12, 20, 32, 52, 84] },
+  "radius": { "base_px": 4, "sm": 2, "md": 4, "lg": 6, "xl": 10, "pill": 999 },
+  "motion": { "base_ms": 245, "curve_name": "ease-cinema" }
+}</code></pre>
+
+<p>This output is <strong>deterministic</strong> — same brief always produces the same JSON. Reproducible across machines.</p>
+
+<p><strong>Try a brand anchor:</strong></p>
+<pre><code>uxskill synthesize --brand stripe \
+  --industry healthcare \
+  --tone warm --tone trustworthy
+# → mode: "brand_anchor" — Stripe-flavored, healthcare-adapted</code></pre>
+
+<p><strong>Try strict brand:</strong></p>
+<pre><code>uxskill synthesize --brand stripe --strict
+# → mode: "strict_brand" — 100% Stripe tokens, no synthesis</code></pre>
+
+<h2>Minute 4 — Lint with a 0-100 score</h2>
+<p class="step">step 4 / 6</p>
+
+<p>v3.0's linter returns a quality score in addition to findings. 100 = clean. Below 65 trips the quality gate.</p>
+
+<pre><code># Plain run — JSON output with findings + score
+uxskill lint .
+
+# Just the score (useful in shell pipes)
+uxskill lint . --score-only
+# → 92
+
+# CI mode — exit code 1 if findings >= --threshold severity
+uxskill lint . --threshold high
+echo $?  # 0 = clean enough; 1 = fail</code></pre>
+
+<p>Each call writes one line to <code>.ux/decisions.jsonl</code> automatically. The recommender will consult this on the next call.</p>
+
+<p><strong>Disable logging for a single call:</strong></p>
+<pre><code>uxskill lint . --no-log
+# or
+UXSKILL_NO_LOG=1 uxskill lint .</code></pre>
+
+<h2>Minute 5 — Run the evolve loop</h2>
+<p class="step">step 5 / 6</p>
+
+<p>Given a generated HTML file, the evolve loop auto-iterates lint → polish → re-lint until score ≥ 90 or plateau or 5 rounds.</p>
+
+<pre><code>uxskill evolve docs/hero.html --css docs/hero.css
+
+# Output:
+# EVOLVING: docs/hero.html (initial score: 72)
+# Round 1: composite=72 → applied: strip_inline_styles, normalize_spacing
+# Round 2: composite=84 (Δ +12) → applied: replace_generic_ctas, fontweight_numeric
+# Round 3: composite=89 (Δ +5) → applied: swap_placeholder_urls
+# Round 4: composite=91 → target_hit. Stop.
+#
+# EVOLVE COMPLETE: 72 → 91 (target_hit, 4 rounds)
+# artifact:     docs/hero.evolved.html
+# evaluation:   .ux/last-evolve.json
+# ledger entry: .ux/decisions.jsonl (+1)</code></pre>
+
+<p>If the final score is below 65, the loop refuses to ship unless you pass <code>--force</code>:</p>
+<pre><code># Force-ship below quality gate
+uxskill evolve <file> --force</code></pre>
+
+<h2>Minute 6 — See what your install has learned</h2>
+<p class="step">step 6 / 6</p>
+
+<pre><code>uxskill stats --html
+# → writes .ux/stats.html
+
+open .ux/stats.html
+# Opens a single-file dashboard in your browser showing:
+# - Total decisions logged
+# - Lint score median / mean
+# - By command / by industry / by mode breakdown
+# - Top brands picked
+# - Acceptance rate</code></pre>
+
+<p>This is YOUR install's data. No telemetry. No global aggregate. It just shows what YOUR work has produced.</p>
+
+<h2>What's happening behind the scenes</h2>
+<ul>
+<li><strong>Synthesize</strong> ran the 7-axis derivation, distilled vocabulary from 8 axis-matching brand specs, mixed weighted by axis position. No LLM call.</li>
+<li><strong>Lint</strong> ran 145 deterministic regex rules in &lt;50ms. Each call wrote one JSONL line.</li>
+<li><strong>Evolve</strong> ran the 6 idempotent polish passes (strip inline styles, normalize spacing, replace generic CTAs, swap placeholder URLs, strip Lorem, fontweight numeric).</li>
+<li><strong>Stats</strong> aggregated the JSONL ledger into the HTML dashboard.</li>
+</ul>
+
+<p>After 3+ accepted+clean decisions in any <code>(industry, ui_type)</code> bucket, the recommender starts re-ranking by past wins. Your install gets smarter for the kinds of products you ship.</p>
+
+<h2>One-line everything (for your shell history)</h2>
+
+<pre><code>pip install uxskill && uxskill init && \
+  uxskill synthesize --industry fintech-payments --tone bold &gt; design.json && \
+  uxskill lint . --score-only &amp;&amp; \
+  uxskill stats --html &amp;&amp; open .ux/stats.html</code></pre>
+
+<h2>Next reads</h2>
+<ul>
+<li><a href="/blog/v3-the-brain-launch.html">The v3.0 launch — The Brain</a></li>
+<li><a href="/blog/seven-axes-design-system-explained.html">The 7 axes explained</a></li>
+<li><a href="/blog/brand-specs-training-data-not-templates.html">Brand specs are training data, not templates</a></li>
+<li><a href="/blog/closed-loop-design-system-feedback.html">What a closed loop actually means</a></li>
+<li><a href="https://github.com/Laith0003/ux-skill/wiki/v3-The-Brain">Wiki — v3-The-Brain</a></li>
+<li><a href="https://github.com/Laith0003/ux-skill/wiki/Migration-v2-to-v3">Wiki — Migration v2 → v3</a></li>
+</ul>
+
+<footer>
+ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM in the engine · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+</footer>
+
+</div>
+</body>
+</html>
