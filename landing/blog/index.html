@@ -22,7 +22,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Bricolage Grotesque (display, variable), Inter (body), JetBrains Mono (mono) -->
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -284,32 +285,305 @@
     table { max-width: 100%; }
   </style>
   <!-- force-dark-theme: applied -->
+  <style id="unified-nav-css">
+    /* ============================================================
+       UNIFIED SITE NAV (v3.0.3)
+       Canonical source: docs/index.html
+       ============================================================ */
+    :root {
+      --nav-t-fast: 160ms;
+      --nav-t-mid: 280ms;
+      --nav-ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --nav-r-pill: 999px;
+      --nav-r-md: 8px;
+      --nav-gutter: clamp(20px, 4vw, 48px);
+      --nav-max-w: 1180px;
+      --nav-canvas: #07080a;
+      --nav-ink: #f6f7f9;
+      --nav-body: #c7ccd3;
+      --nav-muted: #8a8f96;
+      --nav-hairline: rgba(246, 247, 249, 0.07);
+      --nav-hairline-2: rgba(246, 247, 249, 0.14);
+      --nav-accent-fallback: #f59e0b;
+      --nav-display: 'Bricolage Grotesque', 'Inter Tight', system-ui, sans-serif;
+      --nav-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+      --nav-body-face: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    /* All canonical nav rules are prefixed with #nav or #nav-drawer
+       so they always win against page-local .nav / .wordmark / .nav__link
+       rules left over in the page CSS (specificity (0,1,1,0) > (0,0,1,0)). */
+
+    #nav.nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 80;
+      padding: 14px 0;
+      transition: backdrop-filter var(--nav-t-mid) var(--nav-ease),
+                  background-color var(--nav-t-mid) var(--nav-ease),
+                  border-color var(--nav-t-mid) var(--nav-ease);
+      border-bottom: 1px solid transparent;
+    }
+    #nav.nav.is-scrolled {
+      background: rgba(7, 8, 10, 0.72);
+      backdrop-filter: saturate(140%) blur(18px);
+      -webkit-backdrop-filter: saturate(140%) blur(18px);
+      border-bottom-color: var(--hairline, var(--nav-hairline));
+    }
+    #nav .nav__inner {
+      max-width: var(--max-w, var(--nav-max-w));
+      margin: 0 auto;
+      padding: 0 var(--gutter, var(--nav-gutter));
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 18px;
+    }
+    #nav .wordmark {
+      font-family: var(--display, var(--nav-display));
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-size: 24px;
+      letter-spacing: -0.025em;
+      line-height: 1;
+      color: var(--ink, var(--nav-ink));
+      display: inline-flex;
+      align-items: baseline;
+      gap: 4px;
+      text-decoration: none;
+      text-transform: none;
+    }
+    #nav .wordmark:hover { text-decoration: none; }
+    #nav .wordmark__dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 2px;
+      background: var(--accent, var(--nav-accent-fallback));
+      transform: none;
+      margin-left: 0;
+    }
+    #nav .nav__links {
+      display: flex; gap: 22px;
+      align-items: center;
+    }
+    #nav .nav__link {
+      font-family: var(--mono, var(--nav-mono));
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted, var(--nav-muted));
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: color var(--nav-t-fast) var(--nav-ease);
+    }
+    #nav .nav__link:hover,
+    #nav .nav__link:focus-visible { color: var(--ink, var(--nav-ink)); text-decoration: none; }
+    #nav .nav__link.is-current { color: var(--ink, var(--nav-ink)); }
+    #nav .nav__cta,
+    #nav .cta-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 14px;
+      min-height: 0;
+      background: transparent;
+      border: 1px solid var(--hairline-2, var(--nav-hairline-2));
+      border-radius: var(--r-pill, var(--nav-r-pill));
+      font-family: var(--mono, var(--nav-mono));
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink, var(--nav-ink));
+      text-decoration: none;
+      transition: border-color var(--nav-t-fast) var(--nav-ease),
+                  background-color var(--nav-t-fast) var(--nav-ease),
+                  transform var(--nav-t-fast) var(--nav-ease);
+    }
+    #nav .nav__cta:hover,
+    #nav .cta-pill:hover {
+      border-color: var(--accent, var(--nav-accent-fallback));
+      background: transparent;
+      transform: none;
+    }
+    #nav .nav__menu-btn {
+      display: none;
+      width: 38px; height: 38px;
+      align-items: center; justify-content: center;
+      border: 1px solid var(--hairline, var(--nav-hairline));
+      border-radius: var(--r-md, var(--nav-r-md));
+      color: var(--ink, var(--nav-ink));
+      background: transparent;
+      cursor: pointer;
+    }
+    @media (max-width: 880px) {
+      #nav .nav__links { display: none; }
+      #nav .nav__cta, #nav .cta-pill { display: none; }
+      #nav .nav__menu-btn { display: inline-flex; }
+    }
+
+    #nav-drawer.nav__drawer {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      inset: auto;
+      z-index: 90;
+      background: var(--canvas, var(--nav-canvas));
+      padding: 22px var(--gutter, var(--nav-gutter)) 44px;
+      display: flex; flex-direction: column; gap: 18px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-8px);
+      transition: opacity var(--nav-t-mid) var(--nav-ease),
+                  transform var(--nav-t-mid) var(--nav-ease);
+      overflow-y: auto;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+    #nav-drawer.nav__drawer.is-open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    #nav-drawer a {
+      font-family: var(--display, var(--nav-display));
+      font-variation-settings: 'wdth' 90, 'opsz' 80, 'wght' 540;
+      font-size: 28px;
+      letter-spacing: -0.015em;
+      color: var(--ink, var(--nav-ink));
+      text-decoration: none;
+      padding: 6px 0;
+      border-bottom: none;
+      display: block;
+    }
+    #nav-drawer .nav__drawer-top {
+      position: static;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 4px;
+    }
+    #nav-drawer .nav__drawer-close {
+      position: static;
+      width: 38px; height: 38px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border: 1px solid var(--hairline, var(--nav-hairline));
+      border-radius: var(--r-md, var(--nav-r-md));
+      color: var(--ink, var(--nav-ink));
+      background: transparent;
+      cursor: pointer;
+    }
+    #nav-drawer .nav__drawer-langs-details summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 0;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--hairline, var(--nav-hairline));
+      border-bottom: 1px solid var(--hairline, var(--nav-hairline));
+      font-family: var(--mono, var(--nav-mono));
+      font-size: 12px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--muted, var(--nav-muted));
+    }
+    #nav-drawer .nav__drawer-langs-details summary::-webkit-details-marker { display: none; }
+    #nav-drawer .nav__drawer-langs-summary-label { display: inline-flex; align-items: center; gap: 10px; }
+    #nav-drawer .nav__drawer-langs-caret { transition: transform var(--nav-t-mid) var(--nav-ease); }
+    #nav-drawer .nav__drawer-langs-details[open] .nav__drawer-langs-caret { transform: rotate(180deg); }
+    #nav-drawer .nav__drawer-langs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 24px;
+      padding: 16px 0;
+    }
+    #nav-drawer .nav__drawer-langs-grid a {
+      font-family: var(--body-face, var(--nav-body-face));
+      font-size: 14px;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--body, var(--nav-body));
+      padding: 4px 0;
+      border-bottom: none;
+    }
+    #nav-drawer .nav__drawer-langs-grid a:hover { color: var(--ink, var(--nav-ink)); }
+
+    /* RTL — nav inner flips */
+    html[dir="rtl"] #nav .nav__inner { direction: rtl; }
+
+    /* Defensive — when the fixed .nav is present, give layouts that
+       previously assumed an inline header (.wrap on blog/index,
+       .top/.toolbar on the catalogue pages) enough headroom so
+       content isn't hidden behind the nav. */
+    .wrap > main:first-of-type { padding-top: clamp(56px, 8vw, 80px); }
+    body > section.top:first-of-type,
+    body > .top:first-of-type { padding-top: clamp(96px, 12vw, 128px); }
+    body > section.toolbar { top: 64px; }
+  </style>
 </head>
 <body>
   <a class="skip-link sr-only" href="#main">Go to articles</a>
   <div class="wrap">
-    <header class="top">
-      <a href="/" class="wordmark" aria-label="ux-skill home">uxskill<span class="dot" aria-hidden="true"></span></a>
-      <nav class="crumbs" aria-label="Primary">
-        <a href="/">home</a>
-        <a href="/compare.html">compare</a>
-        <a href="/blog/" class="current">blog</a>
-        <a href="https://github.com/Laith0003/ux-skill">github</a>
-      </nav>
-      <button type="button" class="menu-btn" aria-label="Open menu" aria-controls="drawer" aria-expanded="false" id="menuBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-      </button>
-    </header>
+    <header class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="/" class="wordmark" aria-label="uxskill home">
+      uxskill<span class="wordmark__dot" aria-hidden="true"></span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="/brands.html">Brands</a>
+      <a class="nav__link" href="/anti-patterns.html">Anti-patterns</a>
+      <a class="nav__link" href="/commands.html">Commands</a>
+      <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+    </nav>
+    <a href="https://github.com/Laith0003/ux-skill" class="nav__cta" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      <span>Star on GitHub</span>
+    </a>
+    <button type="button" class="nav__menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer" id="nav-menu-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+</header>
 
-    <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Site menu">
-      <button type="button" class="drawer-close" aria-label="Close menu" id="drawerClose">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M6 18L18 6"/></svg>
-      </button>
-      <a href="/">Home</a>
-      <a href="/compare.html">Compare</a>
-      <a href="/blog/">Blog</a>
-      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+<div class="nav__drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Site menu" aria-hidden="true">
+  <div class="nav__drawer-top">
+    <span aria-hidden="true"></span>
+    <button type="button" class="nav__drawer-close" aria-label="Close menu" id="nav-drawer-close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <details class="nav__drawer-langs-details" id="nav-drawer-langs">
+    <summary>
+      <span class="nav__drawer-langs-summary-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span>Language &middot; 17</span>
+      </span>
+      <svg class="nav__drawer-langs-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+    </summary>
+    <div class="nav__drawer-langs-grid">
+      <a href="/"        lang="en"   >English</a>
+      <a href="/zh-CN/"  lang="zh-CN">&#31616;&#20307;&#20013;&#25991;</a>
+      <a href="/zh-TW/"  lang="zh-TW">&#32321;&#39636;&#20013;&#25991;</a>
+      <a href="/ja/"     lang="ja"   >&#26085;&#26412;&#35486;</a>
+      <a href="/ko/"     lang="ko"   >&#54620;&#44397;&#50612;</a>
+      <a href="/hi/"     lang="hi"   >&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</a>
+      <a href="/id/"     lang="id"   >Bahasa</a>
+      <a href="/vi/"     lang="vi"   >Ti&#7871;ng Vi&#7879;t</a>
+      <a href="/th/"     lang="th"   >&#3652;&#3607;&#3618;</a>
+      <a href="/ar/"     lang="ar"   dir="rtl">&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</a>
+      <a href="/es/"     lang="es"   >Espa&ntilde;ol</a>
+      <a href="/fr/"     lang="fr"   >Fran&ccedil;ais</a>
+      <a href="/de/"     lang="de"   >Deutsch</a>
+      <a href="/pt-BR/"  lang="pt-BR">Portugu&ecirc;s</a>
+      <a href="/ru/"     lang="ru"   >&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;</a>
+      <a href="/tr/"     lang="tr"   >T&uuml;rk&ccedil;e</a>
+      <a href="/it/"     lang="it"   >Italiano</a>
     </div>
+  </details>
+
+  <a href="/brands.html">Brands</a>
+  <a href="/anti-patterns.html">Anti-patterns</a>
+  <a href="/commands.html">Commands</a>
+  <a href="/mcp.html">MCP</a>
+  <a href="/compare.html">Compare</a>
+  <a href="/blog/">Blog</a>
+  <a href="/faq.html">FAQ</a>
+  <a href="/about.html">About</a>
+  <a href="/roadmap.html">Roadmap</a>
+  <a href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+</div>
 
     <main id="main">
     <span class="eyebrow">Blog &middot; plugin landscape &middot; design engineering</span>
@@ -321,10 +595,83 @@
     </p>
 
     <ul class="post-list">
+      <!-- v3.0 — THE BRAIN launch (2026-05-28) -->
+      <li class="post" style="border-color: rgba(34,211,238,0.30); background: linear-gradient(180deg, rgba(34,211,238,0.06), var(--surface));"><a href="/blog/v3-the-brain-launch.html">
+        <div class="post-meta"><span class="tag" style="color: #22d3ee;">launch</span> &middot; v3.0 &middot; ~3,300 words &middot; ~12 min</div>
+        <h2>ux-skill v3.0 &mdash; we shipped The Brain. Brand specs are training data now, not templates.</h2>
+        <p>The biggest architectural shift since v1. 7-axis synthesizer. Triple-mode dispatch (<code>strict_brand</code> / <code>brand_anchor</code> / <code>pure_synthesis</code>). Axis interaction matrix with four documented conflicts. Decisions ledger closes the feedback loop. New <code>/ux-evolve</code> auto-loop with a 65 quality gate. Fully offline. No LLM ever called.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/ja/v3-the-brain.html">
+        <div class="post-meta"><span class="tag">日本語 &middot; launch v3.0</span> &middot; ~10,900 chars &middot; ~12 min</div>
+        <h2>ux-skill v3.0 &mdash; The Brain をリリース。ブランド仕様はテンプレートではなく訓練データに。</h2>
+        <p>v2 はカタログから選んでいた。v3 はそこから蒸留する。7 軸シンセサイザー、3 つの自動振り分けモード、軸の相互作用マトリックス、決定台帳による閉じたフィードバックループ、そして品質ゲート 65 を持つ新しい <code>/ux-evolve</code> オートループ。</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/zh-CN/v3-the-brain.html">
+        <div class="post-meta"><span class="tag">简体中文 &middot; launch v3.0</span> &middot; ~8,400 chars &middot; ~12 min</div>
+        <h2>ux-skill v3.0 &mdash; 我们发布了 The Brain。品牌规范现在是训练数据,不是模板。</h2>
+        <p>v2 从目录里挑,v3 从目录里蒸馏。七轴合成器、三种自动分发模式、轴的相互作用矩阵、闭合反馈回路的决策账本,以及质量门禁卡在 65 的新 <code>/ux-evolve</code> 自动循环。</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/ar/v3-the-brain.html">
+        <div class="post-meta"><span class="tag">العربية &middot; launch v3.0</span> &middot; ~14,900 chars &middot; ~12 min</div>
+        <h2 dir="rtl" style="text-align: right;">ux-skill v3.0 &mdash; أطلقنا The Brain. مواصفات العلامات صارت بيانات تدريب لا قوالب.</h2>
+        <p dir="rtl" style="text-align: right;">في v2 كنّا نختار من الكتالوج. في v3 نُقطّر منه. مُولِّد بسبعة محاور، ثلاثة أوضاع تلقائيّة، مصفوفة تفاعُل المحاور، سِجلّ قرارات يُغلِق حلقة التغذية الراجعة، وحلقة <code>/ux-evolve</code> الجديدة ببوّابة جودة عند 65.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/es/v3-the-brain.html">
+        <div class="post-meta"><span class="tag">Español &middot; launch v3.0</span> &middot; ~3,500 words &middot; ~12 min</div>
+        <h2>ux-skill v3.0 &mdash; lanzamos The Brain. Las brand specs ahora son datos de entrenamiento, no plantillas.</h2>
+        <p>v2 elegía del catálogo. v3 destila de él. El sintetizador de 7 ejes, los tres modos auto-despachados, la matriz de interacción de ejes, el log de decisiones que cierra el bucle de retroalimentación, y el nuevo auto-loop <code>/ux-evolve</code> con un quality gate en 65.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/de/v3-the-brain.html">
+        <div class="post-meta"><span class="tag">Deutsch &middot; launch v3.0</span> &middot; ~3,100 words &middot; ~12 min</div>
+        <h2>ux-skill v3.0 &mdash; wir haben The Brain veröffentlicht. Brand-Specs sind jetzt Trainingsdaten, keine Vorlagen.</h2>
+        <p>v2 hat aus dem Katalog gewählt. v3 destilliert daraus. Der 7-Achsen-Synthesizer, die drei automatisch gewählten Modi, die Achsen-Interaktionsmatrix, das Entscheidungs-Ledger als geschlossene Rückkopplungsschleife und der neue <code>/ux-evolve</code>-Auto-Loop mit Quality-Gate bei 65.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/fr/v3-the-brain.html">
+        <div class="post-meta"><span class="tag">Français &middot; launch v3.0</span> &middot; ~3,300 words &middot; ~12 min</div>
+        <h2>ux-skill v3.0 &mdash; on a livré The Brain. Les brand specs sont des données d'entraînement, plus des templates.</h2>
+        <p>v2 piochait dans le catalogue. v3 le distille. Le synthétiseur à 7 axes, les trois modes auto-dispatchés, la matrice d'interaction des axes, le journal de décisions qui boucle la rétroaction, et la nouvelle boucle automatique <code>/ux-evolve</code> avec un seuil qualité à 65.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/brand-specs-training-data-not-templates.html">
+        <div class="post-meta"><span class="tag">reframe</span> &middot; v3.0 &middot; ~2,400 words</div>
+        <h2>Brand specs are training data, not templates &mdash; the v3.0 reframe</h2>
+        <p>The 160-brand catalogue used to be a pool the recommender picked from. v3.0 makes it the vocabulary a 7-axis synthesizer distills into novel design languages per brief. Same files. Different role. Three modes auto-dispatched by what's in the brief.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/deterministic-design-engine-no-llm.html">
+        <div class="post-meta"><span class="tag">architecture</span> &middot; v3.0 &middot; ~2,200 words</div>
+        <h2>A deterministic design engine that learns offline &mdash; how v3.0 avoids the LLM trap</h2>
+        <p>Same brief always produces the same output. Reproducible across machines. Yet the system genuinely learns from its own decisions log over time. The math behind a generative system without an LLM call in the engine.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/closed-loop-design-system-feedback.html">
+        <div class="post-meta"><span class="tag">architecture</span> &middot; v3.0 &middot; ~2,100 words</div>
+        <h2>What a closed-loop design system actually means &mdash; ux-skill v3.0 explained</h2>
+        <p>Most AI design tools generate once and forget. v3.0 writes every recommendation, every lint score, every accept/reject to a local ledger. The recommender reads that ledger and re-ranks. The feedback loop is closed for real.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/seven-axes-design-system-explained.html">
+        <div class="post-meta"><span class="tag">deep dive</span> &middot; v3.0 &middot; ~2,400 words</div>
+        <h2>The 7 axes of a design system &mdash; how v3.0 maps a brief to tokens</h2>
+        <p>warmth &middot; contrast &middot; density &middot; geometry &middot; formality &middot; motion &middot; type_personality. The seven continuous axes that v3.0's synthesizer derives from your brief and compiles to palette, type, spacing, radius, motion tokens. With the actual math.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/ux-skill-v3-vs-ui-ux-pro-max.html">
+        <div class="post-meta"><span class="tag">comparison</span> &middot; v3.0 &middot; ~2,000 words</div>
+        <h2>ux-skill v3.0 vs UI/UX Pro Max &mdash; engine vs atlas, scored honestly</h2>
+        <p>UI/UX Pro Max is the finished atlas of UI knowledge. ux-skill v3.0 is the engine that decides what UI should exist. Different categories. Where each wins, where the other doesn't, and why we picked the engine path.</p>
+      </a></li>
+
       <li class="post"><a href="/blog/vibe-coding-design-system.html">
         <div class="post-meta"><span class="tag">practice</span> &middot; ~1650 words &middot; ~7 min</div>
         <h2>Vibe coding is real &mdash; but your AI still ships the same defaults</h2>
-        <p>The honest take on vibe coding in 2026: the velocity is real, the fingerprint is recognizable. <code>ux discover</code> is the brief, <code>ux recommend</code> narrows the model's choices, <code>ux lint</code> sets the deterministic floor with 120 regex rules over a 1,182-entry catalog.</p>
+        <p>The honest take on vibe coding in 2026: the velocity is real, the fingerprint is recognizable. <code>ux discover</code> is the brief, <code>ux recommend</code> narrows the model's choices, <code>ux lint</code> sets the deterministic floor with 145 regex rules over a 1,182-entry catalog.</p>
       </a></li>
 
       <li class="post"><a href="/blog/ai-built-website-no-slop.html">
@@ -335,7 +682,7 @@
 
       <li class="post"><a href="/blog/anti-slop-cli-vibe-coders.html">
         <div class="post-meta"><span class="tag">technical</span> &middot; ~1900 words &middot; ~9 min</div>
-        <h2>The anti-slop CLI for vibe coders &mdash; 120 rules, no LLM, runs in CI</h2>
+        <h2>The anti-slop CLI for vibe coders &mdash; 145 rules, no LLM, runs in CI</h2>
         <p>A deterministic command-line design linter built for the vibe-coding workflow. JSON output, exit-code contract, pre-commit + GitHub Actions + GitLab CI + Husky + Lefthook recipes. Measured numbers: 18ms staged-diff, 96ms warm full repo, 412ms cold.</p>
       </a></li>
 
@@ -450,13 +797,13 @@
       <li class="post"><a href="/blog/vs-ui-ux-pro-max.html">
         <div class="post-meta"><span class="tag">comparison</span> &middot; ~1200 words &middot; ~5 min</div>
         <h2>ui-ux-pro-max alternative: ux-skill v2 &mdash; every dimension, side by side</h2>
-        <p>The most-starred Claude UX skill on GitHub is ui-ux-pro-max-skill at 84k. ux-skill v2 borrows their recommender pattern and goes further. Honest table: 1,182 entries vs ~600, 120-rule linter vs none, 131 brand specs vs none.</p>
+        <p>The most-starred Claude UX skill on GitHub is ui-ux-pro-max-skill at 84k. ux-skill v2 borrows their recommender pattern and goes further. Honest table: 1,182 entries vs ~600, 145-rule linter vs none, 160 brand specs vs none.</p>
       </a></li>
 
       <li class="post"><a href="/blog/anti-ai-slop-claude-skills.html">
         <div class="post-meta"><span class="tag">ranking</span> &middot; ~1500 words &middot; ~7 min</div>
         <h2>Anti-AI-slop tools for Claude Code in 2026 &mdash; the honest ranking</h2>
-        <p>Every AI coding tool produces the same fingerprints: Inter as display, purple gradients, three identical cards. Ranked: Leonxlnx/taste-skill (25k stars), Nutlope/hallmark (2.1k), ux-skill v2 (120 deterministic regex rules, only one with CI-friendly enforcement).</p>
+        <p>Every AI coding tool produces the same fingerprints: Inter as display, purple gradients, three identical cards. Ranked: Leonxlnx/taste-skill (25k stars), Nutlope/hallmark (2.1k), ux-skill v2 (145 deterministic regex rules, only one with CI-friendly enforcement).</p>
       </a></li>
 
       <li class="post"><a href="/blog/best-claude-code-design-skills-2026.html">
@@ -475,6 +822,60 @@
         <div class="post-meta"><span class="tag">technical</span> &middot; ~1100 words &middot; ~5 min</div>
         <h2>Python design system generator &mdash; ux-skill v2's 5-parallel-search engine</h2>
         <p>How the engine merges five lanes (industry &rarr; style &rarr; palette &rarr; type &rarr; motion) into one recommendation, deterministically, in seconds. Brief in, complete design system out. 1,182 structured entries under the hood.</p>
+      </a></li>
+
+      <li class="post" style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.04);"><div style="padding: 4px 0;">
+        <div class="post-meta" style="color: var(--scene-accent); margin-bottom: 6px;">more languages</div>
+        <h2 style="font-size: 18px; margin-bottom: 6px;">Read in your language</h2>
+        <p>Long-form SEO writing in eight more locales &mdash; same depth, native prose. Topics: what ux-skill does, how to install for Claude Code / Cursor / Windsurf, why the anti-AI-slop linter matters.</p>
+      </div></li>
+
+      <li class="post"><a href="/blog/ja/ai-coding-design-japanese.html">
+        <div class="post-meta"><span class="tag">日本語</span> &middot; ~2000 words &middot; ~9 min</div>
+        <h2>AI コーディング デザイン &mdash; Claude Code デザインシステムの作り方</h2>
+        <p>Claude Code、Cursor、Windsurf、GitHub Copilot、Cline が踏む 8 つの視覚的デフォルト。Inter を 90px の見出しに、紫から青のグラデーション、3 つの同じカード。ux-skill は 145 の決定論的正規表現ルールで CI 上でこれを止めます。</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/de/ki-coding-design-deutsch.html">
+        <div class="post-meta"><span class="tag">Deutsch</span> &middot; ~2000 words &middot; ~9 min</div>
+        <h2>KI-Coding Design &mdash; wie man ein Cursor-AI-Designsystem baut</h2>
+        <p>Jedes KI-Coding-Werkzeug liefert dieselben acht visuellen Defaults. Inter als Display-Schrift, Verlauf von Lila nach Blau, drei identische Karten. ux-skill blockiert sie in der CI mit 145 deterministischen Regex-Regeln.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/fr/ia-coding-design-francais.html">
+        <div class="post-meta"><span class="tag">Français</span> &middot; ~2000 words &middot; ~9 min</div>
+        <h2>IA coding design &mdash; construire un système de design pour Claude Code</h2>
+        <p>Chaque outil d'IA de programmation produit les mêmes huit défauts visuels. Inter en typographie display, dégradé violet vers bleu, trois cartes identiques. ux-skill bloque ces motifs dans la CI avec 145 règles regex déterministes.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/zh-CN/ai-coding-design-chinese.html">
+        <div class="post-meta"><span class="tag">简体中文</span> &middot; ~2000 words &middot; ~9 min</div>
+        <h2>AI 编程设计 &mdash; 用 ux-skill 给 Cursor 设计系统兜底</h2>
+        <p>任何 AI 编程工具都会输出同样八个视觉默认值:Inter 当显示字、紫到蓝渐变、三张一模一样的卡。ux-skill 用 145 条确定性正则规则,在 CI 上拦住这些模式。</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/ko/ai-coding-design-korean.html">
+        <div class="post-meta"><span class="tag">한국어</span> &middot; ~2000 words &middot; ~9 min</div>
+        <h2>AI 코딩 디자인 &mdash; Claude Code 디자인 시스템을 만드는 법</h2>
+        <p>모든 AI 코딩 도구가 같은 8가지 시각적 디폴트를 뱉습니다. 본문용 Inter를 90px 헤드라인으로, 보라-파랑 그라데이션, 동일한 카드 3개. ux-skill은 145개의 결정론적 정규식 규칙으로 CI에서 이를 막습니다.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/ar/ai-coding-design-arabic.html">
+        <div class="post-meta"><span class="tag">العربية</span> &middot; ~2000 words &middot; ~9 min</div>
+        <h2 dir="rtl" style="text-align: right;">تصميم برمجة الذكاء الاصطناعي &mdash; كيف تبني نظام تصميم لـ Claude Code</h2>
+        <p dir="rtl" style="text-align: right;">كل أداة برمجة بالذكاء الاصطناعي تنتج نفس الافتراضات الثمانية البصرية: خط Inter في حجم العنوان، تدرّج من البنفسجي إلى الأزرق، ثلاث بطاقات متطابقة. يوقف ux-skill هذه الأنماط في الـ CI عبر 145 قاعدة Regex حتمية.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/pt-BR/ai-coding-design-portuguese.html">
+        <div class="post-meta"><span class="tag">Português (BR)</span> &middot; ~2000 words &middot; ~9 min</div>
+        <h2>Design para programação com IA &mdash; como montar um sistema no Claude Code</h2>
+        <p>Toda ferramenta de programação com IA cai nos mesmos oito defeitos visuais: Inter em tamanho de display, gradiente roxo para azul, três cartões idênticos. O ux-skill bloqueia esses padrões no CI com 145 regras regex determinísticas.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/it/ai-coding-design-italian.html">
+        <div class="post-meta"><span class="tag">Italiano</span> &middot; ~2000 words &middot; ~9 min</div>
+        <h2>Design AI coding &mdash; come costruire un design system con Claude Code</h2>
+        <p>Ogni strumento di AI coding cade negli stessi otto difetti visivi: Inter usato come display, gradiente da viola a blu, tre card identiche. ux-skill blocca questi pattern nella CI con 145 regole regex deterministiche.</p>
       </a></li>
     </ul>
     </main>
@@ -513,6 +914,43 @@
         if (e.key === 'Escape' && drawer.classList.contains('is-open')) shut();
       });
     }());
+  </script>
+  <script id="unified-nav-js">
+  (function () {
+    var nav = document.getElementById('nav');
+    function onScroll() {
+      var y = window.scrollY;
+      if (!nav) return;
+      if (y > 24) nav.classList.add('is-scrolled');
+      else nav.classList.remove('is-scrolled');
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    var drawer = document.getElementById('nav-drawer');
+    var menuBtn = document.getElementById('nav-menu-btn');
+    var closeBtn = document.getElementById('nav-drawer-close');
+    function openDrawer() {
+      if (!drawer || !menuBtn) return;
+      drawer.classList.add('is-open');
+      drawer.setAttribute('aria-hidden', 'false');
+      menuBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer() {
+      if (!drawer || !menuBtn) return;
+      drawer.classList.remove('is-open');
+      drawer.setAttribute('aria-hidden', 'true');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+    if (menuBtn) menuBtn.addEventListener('click', openDrawer);
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+    if (drawer) drawer.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', closeDrawer); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && drawer && drawer.classList.contains('is-open')) closeDrawer();
+    });
+  })();
   </script>
 </body>
 </html>
