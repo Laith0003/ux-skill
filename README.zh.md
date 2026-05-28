@@ -1,4 +1,4 @@
-[English](README.md) · [العربية](README.ar.md) · [Español](README.es.md) · **中文**
+[English](README.md) · [العربية](README.ar.md) · [Español](README.es.md) · **中文** · [Français](README.fr.md) · [Deutsch](README.de.md)
 
 # ux-god-skill — 为 Claude Code、Cursor 及一切 AI 编程工具打造的设计智能引擎
 

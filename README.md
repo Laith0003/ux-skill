@@ -1,4 +1,4 @@
-**English** · [العربية](README.ar.md) · [Español](README.es.md) · [中文](README.zh.md)
+**English** · [العربية](README.ar.md) · [Español](README.es.md) · [中文](README.zh.md) · [Français](README.fr.md) · [Deutsch](README.de.md)
 
 # ux-skill — the design intelligence engine for Claude Code, Cursor, and every other AI coding tool
 

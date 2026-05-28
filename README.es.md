@@ -1,4 +1,4 @@
-[English](README.md) · [العربية](README.ar.md) · **Español** · [中文](README.zh.md)
+[English](README.md) · [العربية](README.ar.md) · **Español** · [中文](README.zh.md) · [Français](README.fr.md) · [Deutsch](README.de.md)
 
 # ux-skill — el motor de inteligencia de diseño para Claude Code, Cursor y todas las demás herramientas de codificación con IA
 

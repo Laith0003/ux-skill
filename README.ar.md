@@ -1,4 +1,4 @@
-[English](README.md) · **العربية** · [Español](README.es.md) · [中文](README.zh.md)
+[English](README.md) · **العربية** · [Español](README.es.md) · [中文](README.zh.md) · [Français](README.fr.md) · [Deutsch](README.de.md)
 
 <div dir="rtl">
 
