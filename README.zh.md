@@ -12,12 +12,17 @@
 [![Python](https://img.shields.io/badge/python-3.9%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#面向-17-个-ide-的安装器)
-[![Brands](https://img.shields.io/badge/brand_specs-72-cc785c.svg)](data/brands/_index.json)
+[![Brands](https://img.shields.io/badge/brand_specs-110-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
-[![Linter](https://img.shields.io/badge/anti--patterns-35-181715.svg)](data/anti-patterns.json)
+[![Linter](https://img.shields.io/badge/anti--patterns-100-181715.svg)](data/anti-patterns.json)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
+[![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
+
+### Star 历史
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Laith0003/ux-skill&type=Date)](https://star-history.com/#Laith0003/ux-skill&Date)
 
 ---
 
@@ -39,14 +44,15 @@ ux-skill 是一个面向 AI 编程工具的**设计智能引擎**。它以 Pytho
 4. [22 个斜杠命令——详细参考](#22-个斜杠命令详细参考)
 5. [5 个子代理](#5-个子代理)
 6. [11 份数据清单](#11-份数据清单)
-7. [100 条反 AI-slop 规则——静态检查器](#35-条反-ai-slop-规则静态检查器)
-8. [72 份 DESIGN.md 品牌规范——按类别](#72-份-designmd-品牌规范按类别)
-9. [面向 17 个 IDE 的安装器](#面向-17-个-ide-的安装器)
-10. [使用案例——具体场景](#使用案例具体场景)
-11. [与其他方案的对比](#与其他方案的对比)
-12. [路线图](#路线图)
-13. [参与贡献](#参与贡献)
-14. [许可证、作者、致谢](#许可证作者致谢)
+7. [100 条反 AI-slop 规则——静态检查器](#100-条反-ai-slop-规则静态检查器)
+8. [110 份 DESIGN.md 品牌规范——按类别](#110-份-designmd-品牌规范按类别)
+9. [MCP 服务器——非对称的一着](#mcp-服务器非对称的一着)
+10. [面向 17 个 IDE 的安装器](#面向-17-个-ide-的安装器)
+11. [使用案例——具体场景](#使用案例具体场景)
+12. [与其他方案的对比](#与其他方案的对比)
+13. [路线图](#路线图)
+14. [参与贡献](#参与贡献)
+15. [许可证、作者、致谢](#许可证作者致谢)
 
 ---
 
@@ -103,8 +109,8 @@ ux stats
 #     "tech-stacks": 25,
 #     "ux-guidelines": 112,
 #     "motion-presets": 57,
-#     "anti-patterns": 35,
-#     "brands": 72
+#     "anti-patterns": 100,
+#     "brands": 110
 #   }
 # }
 ```
@@ -127,7 +133,7 @@ Star 数最后一次通过 `gh api` 核对的时间是 **2026-05-28**。ux-skill
 | dominikmartn/nothing-design-skill | **2,391** | 单一审美 skill | 1 | — | — | 0 | 0 | 1 |
 | Nutlope/hallmark | **2,164** | 反 slop 设计 skill | 1 | — | — | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | MD3 组件 + 审查 | 1 | — | (仅 MD3) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Python 引擎 + 11 份清单 + 22 个命令 + 5 个子代理 + CI 检查器** | **22** | **100 条正则规则** | **72** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Python 引擎 + 11 份清单 + 22 个命令 + 5 个子代理 + CI 检查器** | **22** | **100 条正则规则** | **110** | **148** | **57** | **17** |
 
 ### 我们输在哪里
 
@@ -140,7 +146,7 @@ Star 数最后一次通过 `gh api` 核对的时间是 **2026-05-28**。ux-skill
 - **组件库:** 148 个带解剖结构、状态、所用 token 与动效规范的文档化组件。其他 8 个里没有任何一个发布过组件清单。
 - **动效预设:** 57 个开箱即用的栈级条目(Framer Motion、GSAP、CSS),全部带 reduced-motion 兜底。其他几家都不发布动效清单。
 - **反模式静态检查器:** 100 条确定性正则规则,能在 CI 中运行,遇 Critical/High 退出非零码。其他几家没有任何确定性检查器。
-- **品牌规范:** 72 份真实 DESIGN.md 规范(Apple、Stripe、Linear、Figma、Tesla、BMW、Notion、Spotify、Airbnb、Vercel、Supabase、Cursor、Raycast、Claude,以及其余 58 个)。其他几家没有品牌库。
+- **品牌规范:** 110 份真实 DESIGN.md 规范(Apple、Stripe、Linear、Figma、Tesla、BMW、Notion、Spotify、Airbnb、Vercel、Supabase、Cursor、Raycast、Claude,以及其余 96 个)。其他几家没有品牌库。
 - **支持 17 个 IDE:** 同一个引擎,IDE 之间用不同的"胶水"对接。
 - **22 个斜杠命令:** discovery、生成、审查、lint、polish、修复循环、案例研究、工作坊、文案、动效、a11y、dashboard、conductor——彼此完全打通。
 
@@ -164,7 +170,7 @@ ux-skill (包名: uxskill)
 │   ├── ux-guidelines.json             112 条具名 UX 法则(Hick、Fitts、Miller...)
 │   ├── motion-presets.json            57 个动效预设(入场、出场、hover...)
 │   ├── anti-patterns.json             100 条正则规则(CI 安全的检查器源)
-│   └── brands/*.json                  72 份 DESIGN 规范 + _index.json
+│   └── brands/*.json                  110 份 DESIGN 规范 + _index.json
 │
 ├── engine/                            Python——推理层
 │   ├── recommender/                   五路并行检索的合并引擎
@@ -707,21 +713,21 @@ ux-skill (包名: uxskill)
 
 | 字段 | 描述 |
 |---|---|
-| `entries` | 35 |
-| `keys per entry` | `id`、`name`、`severity`(high/medium/low)、`category`、`detection`(type、pattern、flags、scope)、`evidence_template`、`fix`、`references` |
-| `categories` | A11y(6)、Color(6)、Content(5)、Layout(5)、Motion(3)、Quality(6)、Typography(3)、Visual(1) |
+| `entries` | 100 |
+| `keys per entry` | `id`、`name`、`severity`(critical/high/medium/low)、`category`、`detection`(type、pattern、flags、scope)、`evidence_template`、`fix`、`references` |
+| `categories` | A11y(23)、Content(15)、Layout(13)、Typography(10)、Color(9)、Quality(9)、Visual(9)、Motion(8)、Performance(4) |
 
-完整规则清单见[100 条反 AI-slop 规则](#35-条反-ai-slop-规则静态检查器)。
+完整规则清单见[100 条反 AI-slop 规则](#100-条反-ai-slop-规则静态检查器)。
 
 ### `brands/*.json` — 110 份品牌规范
 
 | 字段 | 描述 |
 |---|---|
-| `entries` | 72(再加一份 `_index.json` 列出全部) |
+| `entries` | 110(再加一份 `_index.json` 列出全部) |
 | `keys per entry` | `id`、`name`、`category`、`voice`、`tokens`(color、type、motion)、`design_principles`、`signature_moves`、`anti-moves`、`references` |
-| `categories` | Developer Tools(24)、Consumer / Lifestyle / Retail(11)、AI / ML Platform(9)、Productivity / Collaboration(8)、Automotive(8)、Fintech / Crypto(7)、Editorial / Media(5) |
+| `categories` | Developer Tools(36)、Consumer / Lifestyle / Retail(19)、Fintech / Crypto(14)、Editorial / Media(13)、AI / ML Platform(12)、Productivity / Collaboration(8)、Automotive(8) |
 
-完整名单见[72 份 DESIGN.md 品牌规范](#72-份-designmd-品牌规范按类别)。
+完整名单见[110 份 DESIGN.md 品牌规范](#110-份-designmd-品牌规范按类别)。
 
 ---
 
@@ -853,23 +859,31 @@ Recommended next: /ux-polish --fix (LLM-driven, addresses both lintable and aest
 
 ---
 
-## 72 份 DESIGN.md 品牌规范——按类别
+## 110 份 DESIGN.md 品牌规范——按类别
 
 真实的品牌。真实的设计语言。真实的 DESIGN.md 规范——不是通用配色。告诉插件"按 Stripe 的风格做个落地页",它会读取真实的品牌词汇表:嗓音量规、颜色 tokens、动效约定、签名手法、反向手法。
 
 每个品牌都以一份结构化 JSON(`data/brands/<slug>.json`)外加一份散文参考(`references/brands/<slug>.md`)的形式发布。
 
-### Developer Tools(24)
+### Developer Tools(36)
 
-ClickHouse、Composio、Cursor、Expo、Framer、HashiCorp、IBM、Lovable、Mintlify、MongoDB、Ollama、OpenCode、PostHog、Raycast、Replicate、Resend、Sanity、Sentry、Slack、Supabase、Superhuman、Vercel、Warp、Webflow
+ClickHouse、Composio、Cursor、Datadog、dbt Labs、Expo、Fivetran、Fly.io、Framer、HashiCorp、Honeycomb、IBM、Lovable、Mintlify、Modal、MongoDB、Neon、Ollama、OpenCode、PostHog、Railway、Raycast、Render、Replicate、Resend、Retool、Sanity、Sentry、Slack、Snowflake、Sourcegraph、Supabase、Superhuman、Vercel、Warp、Webflow
 
-### Consumer / Lifestyle / Retail(11)
+### Consumer / Lifestyle / Retail(19)
 
-Airbnb、Apple、HP、Meta、Nike、Pinterest、PlayStation、Shopify、Spotify、Starbucks、Uber
+Aesop、Airbnb、Allbirds、Apple、Apple Music、Glossier、HP、Hims & Hers、Instagram、Meta、Nike、Patagonia、Pinterest、PlayStation、Shopify、Spotify、Starbucks、TikTok、Uber
 
-### AI / ML Platform(9)
+### Fintech / Crypto(14)
 
-Claude、Cohere、ElevenLabs、MiniMax、Mistral AI、Runway、Together AI、VoltAgent、xAI
+Binance、Brex、Coinbase、Kraken、Mastercard、Mercury、Monzo、N26、Plaid、Ramp、Revolut、Robinhood、Stripe、Wise
+
+### Editorial / Media(13)
+
+Bloomberg、Clay、Dezeen、NVIDIA、Pitchfork、Substack、The Atlantic、The Economist、The New York Times、The Verge、The Wall Street Journal、Vodafone、Wired
+
+### AI / ML Platform(12)
+
+Anthropic、Claude、Cohere、ElevenLabs、MiniMax、Mistral AI、OpenAI、Perplexity、Runway、Together AI、VoltAgent、xAI
 
 ### Productivity / Collaboration(8)
 
@@ -879,17 +893,24 @@ Airtable、Cal.com、Figma、Intercom、Linear、Miro、Notion、Zapier
 
 BMW、BMW M、Bugatti、Ferrari、Lamborghini、Renault、SpaceX、Tesla
 
-### Fintech / Crypto(7)
-
-Binance、Coinbase、Kraken、Mastercard、Revolut、Stripe、Wise
-
-### Editorial / Media(5)
-
-Clay、NVIDIA、The Verge、Vodafone、Wired
-
 ### 为什么这件事很重要
 
 另外 8 个热门 Claude UX 插件生成的是"现代极简"或"干净仪表盘"——同一种默认美学的变体。ux-skill 让你能要**Linear 的清晰**、**Stripe 的严肃**、**Apple 的克制**、**Tesla 的整块感**、**Notion 的亲和**、**Cursor 的渐变纪律**、**Raycast 的发丝密度**、**Claude 的暖色 editorial**——引擎会从品牌规范里取出对应的 tokens、嗓音、动效约定与签名手法。
+
+---
+
+## MCP 服务器——非对称的一着
+
+ux-skill 提供一个 **Model Context Protocol 服务器**。运行 `ux-mcp`,引擎就变成一个常驻的 stdio 进程,任何支持 MCP 的宿主——Claude Desktop、Cursor、Windsurf 以及通用代理——都可以调用它。共 14 个工具:`ux_recommend`、`ux_lint`、`ux_styles`、`ux_palettes`、`ux_type_pairs`、`ux_components`、`ux_industries`、`ux_motion_presets`、`ux_anti_patterns`、`ux_brands`、`ux_landing_patterns`、`ux_persist_save`、`ux_persist_load`、`ux_stats`。这些工具背后是斜杠命令使用的同一套 Python 处理器、同一批数据清单、同一个确定性推荐器。
+
+**为什么这是非对称的一着:** 排名前八的 Claude UX 技能(ui-ux-pro-max-skill、open-design、taste-skill、huashu-design、stitch、nothing-design、hallmark、material-3)没有一个提供 MCP 服务器。它们都被锁在 Claude Code 的插件运行时里。ux-skill 则能从任何讲 MCP 的宿主接入,包括从未听说过 Claude Code 插件的代理。
+
+```bash
+pip install 'uxskill[mcp]'             # mcp 是一个可选 extra
+ux-mcp                                  # 启动 stdio JSON-RPC 服务器
+```
+
+把你的客户端指向 `ux-mcp` 二进制即可。完整工具文档、JSON 示例,以及面向 Claude Desktop、Cursor、Windsurf 的逐客户端配置见 [docs/mcp.html](docs/mcp.html) 和 `commands/ux-mcp.md`。
 
 ---
 
@@ -1066,6 +1087,16 @@ cat .ux/last-discovery.json
 
 你可以把 JSON 交给团队,粘到 Notion 文档里,或者喂给其他 AI 工具。ux-skill 不止是引擎,也是一个结构化录入工具。
 
+### 9. MASTER.md 持久化——把你的设计决策写进仓库
+
+跑完 `/ux-recommend` 之后,把选定的风格 + 配色 + 字体 + 动效 + 组件 + 品牌范例 + 护栏持久化为一份可读的 Markdown 文件,让团队能审查、对比(diff)、纳入版本控制。
+
+```bash
+python3 -m engine.cli.main persist save --project-root .
+```
+
+写出 `.ux/design-system/MASTER.md`(YAML frontmatter + 正文),并通过 `persist save-page` 为每个生成出的界面写出 `.ux/design-system/pages/<name>.md`。幂等——相同输入产出按字节完全一致的输出,所以在状态未变时重跑在 git 里就是个 no-op。
+
 ---
 
 ## 与其他方案的对比
@@ -1077,8 +1108,8 @@ cat .ux/last-discovery.json
 | 斜杠命令 | **22** | 1 | 19 | 1 | 1 | 多 | 1 | 1 | 1 |
 | 组件 | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | 动效预设 | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 品牌规范 | **72** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 反模式规则 | **35** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 品牌规范 | **110** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 反模式规则 | **100** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | CI 安全的确定性检查器 | **是** | 否 | 否 | 否 | 否 | 否 | 否 | 否 | 否 |
 | 支持的 IDE | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | Discovery 关卡 | **10 字段** | 隐式 | 隐式 | 隐式 | 隐式 | 隐式 | 隐式 | 隐式 | 隐式 |

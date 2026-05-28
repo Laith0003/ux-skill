@@ -612,6 +612,104 @@ h1, h2, h3, h4 {
       overflow: hidden;
       --scene-accent: #06b6d4;
     }
+
+    /* ---------- TRIPLE-RAIL — 3 rows, opposite directions, draggable ---------- */
+    .triple-rail {
+      margin-top: 40px;
+      display: grid;
+      gap: 14px;
+      mask-image: linear-gradient(to right, transparent, #000 5%),
+                  linear-gradient(to left, transparent, #000 5%);
+      mask-composite: intersect;
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 5%),
+                          linear-gradient(to left, transparent, #000 5%);
+      -webkit-mask-composite: source-in;
+    }
+    .triple-rail__row {
+      position: relative;
+      overflow: hidden;
+      cursor: grab;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: pan-y;
+    }
+    .triple-rail__row.is-grabbing { cursor: grabbing; }
+    .triple-rail__track {
+      display: flex;
+      gap: 14px;
+      will-change: transform;
+      width: max-content;
+    }
+    .triple-rail__row[data-dir="left"]  .triple-rail__track {
+      animation: triple-drift-left  var(--row-speed, 80s) linear infinite;
+    }
+    .triple-rail__row[data-dir="right"] .triple-rail__track {
+      animation: triple-drift-right var(--row-speed, 80s) linear infinite;
+    }
+    .triple-rail__row.is-grabbing .triple-rail__track { animation: none; }
+    @keyframes triple-drift-left  { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
+    @keyframes triple-drift-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+    @media (prefers-reduced-motion: reduce) {
+      .triple-rail__track { animation: none !important; transform: translateX(-8%); }
+    }
+    .trc {
+      flex: 0 0 240px;
+      width: 240px;
+      height: 132px;
+      border-radius: 14px;
+      border: 1px solid var(--hairline);
+      background: var(--trc-bg, rgba(20, 24, 29, 0.55));
+      color: var(--trc-ink, var(--ink));
+      padding: 14px 16px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--t-fast) var(--ease-cinema),
+                  border-color var(--t-fast) var(--ease-cinema),
+                  box-shadow var(--t-fast) var(--ease-cinema);
+    }
+    .trc:hover, .trc:focus-visible {
+      transform: translateY(-3px);
+      border-color: var(--trc-accent, var(--scene-accent));
+      box-shadow: 0 18px 40px -20px rgba(0, 0, 0, 0.55);
+    }
+    .trc:focus-visible { outline: 2px solid var(--trc-accent, var(--scene-accent)); outline-offset: 3px; }
+    .trc__head { display: flex; align-items: center; gap: 10px; min-height: 26px; }
+    .trc__logo { height: 22px; width: 22px; flex: 0 0 22px; display: inline-flex; align-items: center; }
+    .trc__logo img { height: 22px; width: 22px; object-fit: contain; filter: var(--trc-logo-filter, brightness(0) invert(1)); opacity: 0.92; }
+    .trc__name {
+      font-family: var(--trc-display, var(--display));
+      font-size: 18px;
+      letter-spacing: var(--trc-tracking, -0.02em);
+      font-weight: var(--trc-weight, 600);
+      font-style: var(--trc-style, normal);
+      color: var(--trc-ink, var(--ink));
+      line-height: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .trc__cat {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      letter-spacing: 0.10em;
+      color: var(--trc-muted, var(--muted));
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .trc__palette { display: flex; height: 6px; border-radius: 999px; overflow: hidden; }
+    .trc__palette span { flex: 1; }
+    @media (max-width: 640px) {
+      .trc { flex: 0 0 200px; width: 200px; height: 116px; padding: 12px 14px 10px; }
+      .trc__name { font-size: 16px; }
+    }
+
+    /* ---------- OLD single-rail (kept dead for safety; no markup renders it) ---------- */
     .brand-rail-shell {
       position: relative;
       margin-top: 32px;
@@ -1280,6 +1378,67 @@ h1, h2, h3, h4 {
         gap: 20px;
       }
     }
+    /* Trimmed devices: ONE rotor that crossfades Cursor → Claude Code → Windsurf */
+    .devices__solo {
+      margin-top: 48px;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+    }
+    .device--rotor {
+      width: 100%;
+      position: relative;
+      min-height: 360px;
+    }
+    .device__rotor-pane {
+      opacity: 0;
+      transition: opacity 520ms var(--ease-cinema);
+      pointer-events: none;
+    }
+    .device__rotor-pane.is-active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    /* Stack panes so the rotor doesn't grow/shrink as panes swap */
+    .device__rotor-pane:not(:first-of-type) {
+      position: absolute;
+      inset: 49px 0 0 0; /* below the chrome row */
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .device__rotor-pane { transition: none; }
+    }
+
+    .devices__pips {
+      display: inline-flex;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--hairline-2);
+      border-radius: 999px;
+      background: var(--surface-1);
+    }
+    .devices__pip {
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+      transition: color var(--t-fast) var(--ease-cinema),
+                  background-color var(--t-fast) var(--ease-cinema);
+    }
+    .devices__pip:hover { color: var(--body); }
+    .devices__pip.is-active {
+      color: var(--ink);
+      background: rgba(96, 165, 250, 0.14);
+    }
+    .devices__pip:focus-visible {
+      outline: 2px solid #60a5fa;
+      outline-offset: 2px;
+    }
 
     /* =========================================================================
        EDITORIAL PARALLAX — full-bleed CC0 photos with parallax overlay
@@ -1496,6 +1655,48 @@ h1, h2, h3, h4 {
         grid-column: 1 / -1;
       }
     }
+    /* Trimmed shots: hero shot + a 3-up thumb row. */
+    .shots__thumbs {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+      margin-top: 64px;
+    }
+    .shots__thumbs figure {
+      margin: 0;
+      animation: shots-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 35%;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .shots__thumbs figure { animation: none; transform: none; opacity: 1; }
+    }
+    .shots__thumbs img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      border: 1px solid var(--hairline);
+      box-shadow: 0 18px 40px -28px rgba(0,0,0,0.5);
+      display: block;
+    }
+    .shots__thumbs figcaption {
+      margin-top: 10px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .shots__thumbs figcaption code {
+      font-family: var(--mono);
+      background: rgba(255,255,255,0.06);
+      padding: 1px 5px;
+      border-radius: 4px;
+      color: var(--ink);
+    }
+    @media (min-width: 768px) {
+      .shots__thumbs { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    }
 
     /* =========================================================================
        ABSTRACT CANVAS SECTION
@@ -1600,6 +1801,25 @@ h1, h2, h3, h4 {
     @media (min-width: 1024px) {
       .stats__grid { grid-template-columns: repeat(6, 1fr); }
     }
+    /* Four-stat variant — bigger, slower, with more breathing room */
+    .stats__grid--four { grid-template-columns: repeat(2, 1fr); }
+    .stats__grid--four .stat {
+      padding: 44px 28px;
+    }
+    .stats__grid--four .stat__v {
+      font-size: clamp(52px, 9vw, 96px);
+      font-variation-settings: 'wdth' 78, 'opsz' 96, 'wght' 620;
+    }
+    .stats__grid--four .stat__l {
+      margin-top: 18px;
+      font-size: 12px;
+    }
+    @media (min-width: 720px) {
+      .stats__grid--four { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      .stats__grid--four { grid-template-columns: repeat(4, 1fr); }
+    }
 
     /* =========================================================================
        COMPETITOR SCORECARD TEASER
@@ -1683,6 +1903,77 @@ h1, h2, h3, h4 {
     }
     .compare__row.is-ours .compare__score-bar > span { background: #f43f5e; }
     .compare__row.is-revealed .compare__score-bar > span { transform: scaleX(var(--score-fill, 0)); }
+    /* Trimmed compare: two bar rows. ux-skill vs next-best, real numbers (44 vs 33). */
+    .compare__duel {
+      margin-top: 48px;
+      max-width: 960px;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .compare__bar {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      align-items: center;
+    }
+    .compare__bar-name {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'wght' 580;
+      font-size: clamp(20px, 3.2vw, 30px);
+      letter-spacing: -0.025em;
+      color: var(--body);
+      line-height: 1;
+    }
+    .compare__bar--ours .compare__bar-name { color: var(--ink); }
+    .compare__bar-track {
+      position: relative;
+      height: 18px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      overflow: hidden;
+      border: 1px solid var(--hairline);
+    }
+    .compare__bar-fill {
+      display: block;
+      height: 100%;
+      width: 100%;
+      background: var(--body);
+      border-radius: 999px;
+      transform-origin: left center;
+      transform: scaleX(0);
+      transition: transform 1400ms var(--ease-cinema);
+    }
+    .compare__bar--ours .compare__bar-fill {
+      background: linear-gradient(90deg, #f43f5e, #fb7185);
+    }
+    .compare__bar.is-revealed .compare__bar-fill {
+      transform: scaleX(var(--score-fill, 0));
+    }
+    .compare__bar-pct {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 80, 'wght' 620;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--body);
+    }
+    .compare__bar--ours .compare__bar-pct { color: #f43f5e; }
+    .compare__bar-pct-n {
+      font-size: clamp(40px, 6vw, 68px);
+    }
+    .compare__bar-pct-of {
+      font-size: clamp(18px, 2.4vw, 26px);
+      color: var(--muted);
+      margin-left: 4px;
+    }
+    @media (min-width: 720px) {
+      .compare__bar {
+        grid-template-columns: 220px 1fr 120px;
+        gap: 24px;
+      }
+    }
 
     .compare__cta {
       margin-top: 28px;
@@ -1838,6 +2129,32 @@ h1, h2, h3, h4 {
       .mcp__panel {
         grid-template-columns: 1.1fr 0.9fr;
       }
+    }
+    /* Trimmed MCP: a single callout strip, no tools table. */
+    .mcp__callout {
+      margin-top: 36px;
+      padding: 36px;
+      background-color: var(--surface-1);
+      background-image: radial-gradient(ellipse at top left, rgba(129, 140, 248, 0.12), transparent 60%);
+      border: 1px solid var(--hairline-2);
+      border-radius: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 18px;
+    }
+    .mcp__callout-line {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'wght' 540;
+      font-size: clamp(22px, 3vw, 32px);
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      color: var(--body);
+      max-width: 640px;
+    }
+    .mcp__callout-line strong {
+      color: var(--ink);
+      font-weight: inherit;
     }
 
     /* =========================================================================
@@ -2175,33 +2492,33 @@ h1, h2, h3, h4 {
     </div>
   </section>
 
-  <!-- ============ 2. BRAND INSPECTOR — draggable specimens ============ -->
-  <section class="brands" data-scene="brands" aria-label="Brand specs — drag, hold to fast-forward, click to apply">
+  <!-- ============ 2. BRAND TRIPLE-RAIL — 3 rows, opposite directions ============ -->
+  <section class="brands" data-scene="brands" aria-label="Brand specs — 110 specimens across 3 draggable rails">
     <div class="container">
       <div class="section-head">
-        <span class="eyebrow">02 — 品牌规范 · 110 个目录</span>
-        <h2 class="section-head__title">Each card is a real specimen.<br>Click any to <em class="accent-italic">reskin this page</em>.</h2>
+        <span class="eyebrow">02 — 品牌规范 · 110 个目录 · growing</span>
+        <h2 class="section-head__title">110 design languages.<br>Three rails, <em class="accent-italic">opposite directions</em>.</h2>
         <p class="section-head__lead">
-          Drag to scroll. Hold either edge button to fast-forward at 2x. Tap a card to apply its tokens to the whole page for six seconds — the engine swaps display, body, mono, canvas, ink, and accent live so you can read this section in any of the 110 brand voices.
+          Each card is a real specimen — logo, brand colour strip, name in its own typeface. Top rail drifts left, middle drifts right, bottom drifts left. Drag any row with your finger to scrub it; release and it resumes. Tap a card to reskin the page in that brand's voice for six seconds.
         </p>
       </div>
     </div>
 
-    <div class="brand-rail-shell">
-      <button class="brand-rail-edge" data-dir="prev" aria-label="Previous · hold to fast-rewind" type="button">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-      <div class="brand-rail" id="brand-rail" tabindex="0" aria-roledescription="carousel" aria-label="Brand specimens — 14 of 110">
-        <!-- Cards populated by JS — see BRAND_SPECIMENS below -->
+    <div class="triple-rail" id="triple-rail">
+      <div class="triple-rail__row" data-dir="left"  data-speed="80">
+        <div class="triple-rail__track" data-row="0"></div>
       </div>
-      <button class="brand-rail-edge" data-dir="next" aria-label="Next · hold to fast-forward" type="button">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </button>
+      <div class="triple-rail__row" data-dir="right" data-speed="100">
+        <div class="triple-rail__track" data-row="1"></div>
+      </div>
+      <div class="triple-rail__row" data-dir="left"  data-speed="120">
+        <div class="triple-rail__track" data-row="2"></div>
+      </div>
     </div>
 
     <div class="container">
       <p class="brand-rail-hint">
-        drag · swipe · arrow keys · or hold <kbd>◀</kbd> <kbd>▶</kbd> to fast-forward 2x
+        110 brand DESIGN.md specs · drag any rail to scrub · tap any card to reskin the page · the catalogue keeps growing
       </p>
     </div>
 
@@ -2317,36 +2634,22 @@ h1, h2, h3, h4 {
         <span class="eyebrow">05 — Inside the editor</span>
         <h2 class="section-head__title">Same engine.<br>Every coding agent.</h2>
         <p class="section-head__lead">
-          The plugin packages the same recommender and the same linter for every host that speaks MCP or slash-commands. Below: the live tool inside Cursor, Claude Code, and Windsurf.
+          One mockup. Three hosts. The same tool reads the same brief.
         </p>
       </div>
 
-      <div class="devices__rail">
-
-        <!-- Device 1 — Cursor -->
-        <article class="device" aria-label="Cursor IDE running ux-recommend">
+      <div class="devices__solo" id="devices-rotor" aria-live="polite" aria-atomic="true">
+        <div class="device device--rotor" aria-label="IDE rotor — cycles Cursor, Claude Code, Windsurf">
           <div class="device__chrome">
             <span class="terminal__dot term-dot--red" aria-hidden="true"></span>
             <span class="terminal__dot term-dot--blue" aria-hidden="true"></span>
             <span class="terminal__dot term-dot--green" aria-hidden="true"></span>
-            <span class="device__name"><strong>Cursor</strong> &nbsp;·&nbsp; landing.tsx</span>
+            <span class="device__name" id="rotor-name"><strong data-rotor-host>Cursor</strong> &nbsp;·&nbsp; <span data-rotor-file>landing.tsx</span></span>
           </div>
-          <div class="device__strip">
-            <div class="device__sidebar">
-              <span class="device__sidebar-tab is-active">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-                landing.tsx
-              </span>
-              <span class="device__sidebar-tab">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
-                hero.css
-              </span>
-              <span class="device__sidebar-tab">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>
-                .ux/last
-              </span>
-            </div>
-            <div class="device__body device__body--inline">
+
+          <!-- Cursor pane -->
+          <div class="device__rotor-pane is-active" data-ide="cursor" aria-label="Cursor running ux-recommend">
+            <div class="device__body">
               <div class="device__cmd-row">
                 <span class="slash">/</span><span class="arg">ux-recommend</span>
                 <span class="at">cmd+k</span>
@@ -2365,67 +2668,60 @@ h1, h2, h3, h4 {
               </div>
             </div>
           </div>
-        </article>
 
-        <!-- Device 2 — Claude Code -->
-        <article class="device" aria-label="Claude Code running ux-design">
-          <div class="device__chrome">
-            <span class="terminal__dot term-dot--red" aria-hidden="true"></span>
-            <span class="terminal__dot term-dot--blue" aria-hidden="true"></span>
-            <span class="terminal__dot term-dot--green" aria-hidden="true"></span>
-            <span class="device__name"><strong>Claude Code</strong> &nbsp;·&nbsp; ux-skill</span>
-          </div>
-          <div class="device__body">
-            <div class="device__cmd-row">
-              <span class="slash">/</span><span class="arg">ux-design</span>
-              <span class="at">@claude</span>
-            </div>
-            <div class="device__assist-line">
-              Discovery confirmed. Loading 998 entries. Running 5-lane recommender against your brief...
-            </div>
-            <div class="device__result is-ok">
-              <span class="lbl">Discovery</span>
-              <span class="val">10/10 fields locked</span>
-            </div>
-            <div class="device__result">
-              <span class="lbl">Anti-slop guardrails</span>
-              <span class="val">85 active · 0 violations</span>
-            </div>
-            <div class="device__result is-ok">
-              <span class="lbl">Pages persisted</span>
-              <span class="val">.ux/design-system/MASTER.md</span>
+          <!-- Claude Code pane -->
+          <div class="device__rotor-pane" data-ide="claude" aria-label="Claude Code running ux-design" hidden>
+            <div class="device__body">
+              <div class="device__cmd-row">
+                <span class="slash">/</span><span class="arg">ux-design</span>
+                <span class="at">@claude</span>
+              </div>
+              <div class="device__assist-line">
+                Discovery confirmed. Loading 998 entries. Merging 5 lanes against your brief.
+              </div>
+              <div class="device__result is-ok">
+                <span class="lbl">Discovery</span>
+                <span class="val">10/10 fields locked</span>
+              </div>
+              <div class="device__result">
+                <span class="lbl">Anti-slop guardrails</span>
+                <span class="val">100 active · 0 violations</span>
+              </div>
+              <div class="device__result is-ok">
+                <span class="lbl">Pages persisted</span>
+                <span class="val">.ux/design-system/MASTER.md</span>
+              </div>
             </div>
           </div>
-        </article>
 
-        <!-- Device 3 — Windsurf -->
-        <article class="device" aria-label="Windsurf running ux-component">
-          <div class="device__chrome">
-            <span class="terminal__dot term-dot--red" aria-hidden="true"></span>
-            <span class="terminal__dot term-dot--blue" aria-hidden="true"></span>
-            <span class="terminal__dot term-dot--green" aria-hidden="true"></span>
-            <span class="device__name"><strong>Windsurf</strong> &nbsp;·&nbsp; Cascade</span>
-          </div>
-          <div class="device__body">
-            <div class="device__cmd-row">
-              <span class="slash">/</span><span class="arg">ux-component combobox</span>
-              <span class="at">cascade</span>
-            </div>
-            <div class="device__result is-ok">
-              <span class="lbl">Component</span>
-              <span class="val">select-combobox</span>
-            </div>
-            <div class="device__result">
-              <span class="lbl">Anatomy</span>
-              <span class="val">trigger · popover · listbox · empty</span>
-            </div>
-            <div class="device__result is-warn">
-              <span class="lbl">Warning</span>
-              <span class="val">avoid rounded-full on input</span>
+          <!-- Windsurf pane -->
+          <div class="device__rotor-pane" data-ide="windsurf" aria-label="Windsurf running ux-component" hidden>
+            <div class="device__body">
+              <div class="device__cmd-row">
+                <span class="slash">/</span><span class="arg">ux-component combobox</span>
+                <span class="at">cascade</span>
+              </div>
+              <div class="device__result is-ok">
+                <span class="lbl">Component</span>
+                <span class="val">select-combobox</span>
+              </div>
+              <div class="device__result">
+                <span class="lbl">Anatomy</span>
+                <span class="val">trigger · popover · listbox · empty</span>
+              </div>
+              <div class="device__result is-warn">
+                <span class="lbl">Warning</span>
+                <span class="val">avoid rounded-full on input</span>
+              </div>
             </div>
           </div>
-        </article>
+        </div>
 
+        <div class="devices__pips" role="tablist" aria-label="Switch IDE">
+          <button type="button" class="devices__pip is-active" role="tab" aria-selected="true"  data-rotor-target="cursor"   aria-label="Show Cursor">Cursor</button>
+          <button type="button" class="devices__pip"            role="tab" aria-selected="false" data-rotor-target="claude"   aria-label="Show Claude Code">Claude Code</button>
+          <button type="button" class="devices__pip"            role="tab" aria-selected="false" data-rotor-target="windsurf" aria-label="Show Windsurf">Windsurf</button>
+        </div>
       </div>
     </div>
   </section>
@@ -2490,30 +2786,37 @@ h1, h2, h3, h4 {
         <span class="eyebrow">05·5 — In the editor</span>
         <h2 class="section-head__title">Not a marketing render.<br><em class="accent-italic">The plugin, in the editor</em>.</h2>
         <p class="section-head__lead">
-          What you actually see inside Cursor and Claude Code after one install. The recommendation lands in the chat, the component lands in the editor, the linter runs against the file you just saved.
+          One install. Recommendation in chat. Component in editor.
         </p>
       </div>
-      <div class="shots__grid">
-        <figure>
-          <img src="/screenshots/cursor-running-ux.png"
-               alt="Cursor IDE running /ux-design — sidebar shows .ux/last-recommendation.json, editor shows generated Hero.tsx, chat shows linter result"
-               width="1600" height="1000"
-               loading="lazy" decoding="async">
-          <figcaption>Cursor running <code>/ux-design</code>. The recommendation feeds the chat; the chat writes the component.</figcaption>
-        </figure>
+      <figure class="shots__hero">
+        <img src="/screenshots/cursor-running-ux.png"
+             alt="Cursor IDE running /ux-design — sidebar shows .ux/last-recommendation.json, editor shows generated Hero.tsx, chat shows linter result"
+             width="1600" height="1000"
+             loading="lazy" decoding="async">
+        <figcaption>Cursor running <code>/ux-design</code>. The recommendation feeds the chat; the chat writes the component.</figcaption>
+      </figure>
+      <div class="shots__thumbs">
         <figure>
           <img src="/screenshots/claude-code-running-ux.png"
-               alt="Claude Code session — running ux recommend then ux design, with structured engine output and a green clean linter line"
+               alt="Claude Code session — ux recommend chained into ux design"
                width="1600" height="1000"
                loading="lazy" decoding="async">
-          <figcaption>Claude Code session — <code>/ux-recommend</code> chained into <code>/ux-design</code>. State persists in <code>.ux/</code>.</figcaption>
+          <figcaption>Claude Code · <code>/ux-recommend</code> → <code>/ux-design</code></figcaption>
         </figure>
-        <figure class="shots__mosaic">
-          <img src="/screenshots/brand-mosaic.png"
-               alt="110 brand DESIGN.md specs — a mosaic of brand surfaces with their actual wordmarks and palettes"
+        <figure>
+          <img src="/screenshots/terminal-ux-lint.png"
+               alt="Terminal output of ux lint — findings with file:line, severity, why, fix"
                width="1600" height="1000"
                loading="lazy" decoding="async">
-          <figcaption>110 brand DESIGN.md specs. Each ships with typography, palette, voice. The engine pulls from any of them on the brief.</figcaption>
+          <figcaption><code>ux lint</code> · 100 rules · file:line, why, fix</figcaption>
+        </figure>
+        <figure>
+          <img src="/screenshots/brand-mosaic.png"
+               alt="110 brand DESIGN.md specs — a mosaic of brand surfaces"
+               width="1600" height="1000"
+               loading="lazy" decoding="async">
+          <figcaption>110 brand specs · type, palette, voice</figcaption>
         </figure>
       </div>
     </div>
@@ -2538,13 +2841,11 @@ h1, h2, h3, h4 {
         <span class="eyebrow">07 — By the numbers</span>
         <h2 class="section-head__title">The catalogue.<br>The surface area.</h2>
       </div>
-      <div class="stats__grid" id="stats-grid">
+      <div class="stats__grid stats__grid--four" id="stats-grid">
         <div class="stat reveal" data-stat data-target="998"><span class="stat__v" data-out>0</span><span class="stat__l">Structured entries</span></div>
-        <div class="stat reveal" data-stat data-target="85"><span class="stat__v" data-out>0</span><span class="stat__l">Anti-pattern rules</span></div>
-        <div class="stat reveal" data-stat data-target="92"><span class="stat__v" data-out>0</span><span class="stat__l">Brand DESIGN.md specs</span></div>
-        <div class="stat reveal" data-stat data-target="22"><span class="stat__v" data-out>0</span><span class="stat__l">Slash commands</span></div>
+        <div class="stat reveal" data-stat data-target="100"><span class="stat__v" data-out>0</span><span class="stat__l">Anti-pattern rules</span></div>
+        <div class="stat reveal" data-stat data-target="110"><span class="stat__v" data-out>0</span><span class="stat__l">Brand DESIGN.md specs</span></div>
         <div class="stat reveal" data-stat data-target="17"><span class="stat__v" data-out>0</span><span class="stat__l">IDE integrations</span></div>
-        <div class="stat reveal" data-stat data-target="4"><span class="stat__v" data-out>0</span><span class="stat__l">Output stacks (React, Vue, Blade, HTML)</span></div>
       </div>
     </div>
   </section>
@@ -2554,37 +2855,22 @@ h1, h2, h3, h4 {
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">08 — The scorecard</span>
-        <h2 class="section-head__title">We measured. We wrote it down.</h2>
+        <h2 class="section-head__title">We measured.<br>We wrote it down.</h2>
         <p class="section-head__lead">
-          50-point rubric across recommender depth, lint coverage, brand catalogue, MCP surface, IDE breadth, telemetry posture, and documentation. Built from <code class="inline-code--ink">gh api</code> on 2026-05-28. No empty cells, no manufactured advantages.
+          50-point rubric. Built from <code class="inline-code--ink">gh api</code> on 2026-05-28.
         </p>
       </div>
 
-      <div class="compare__panel" id="compare-panel">
-        <div class="compare__row compare__row-h" role="presentation">
-          <span>Plugin</span>
-          <span class="compare__col-right">Score</span>
-          <span class="compare__col-right">Stars</span>
+      <div class="compare__duel" id="compare-panel" aria-label="ux-skill 44 out of 50 versus next-best plugin 33 out of 50">
+        <div class="compare__bar compare__bar--ours" data-score-pct="0.88" data-score-target="44">
+          <span class="compare__bar-name">uxskill</span>
+          <span class="compare__bar-track"><span class="compare__bar-fill"></span></span>
+          <span class="compare__bar-pct"><span class="compare__bar-pct-n" data-score-out>0</span><span class="compare__bar-pct-of">/50</span></span>
         </div>
-        <div class="compare__row is-ours" data-score-pct="0.88">
-          <span class="compare__name">uxskill <span class="compare__sub-mono">— this plugin</span></span>
-          <span class="compare__score"><span class="pct">44<span class="compare__pct-unit">/50</span></span><span class="compare__score-bar"><span></span></span></span>
-          <span class="compare__score compare__score-stars">14 stars<br><span class="compare__score-stars-meta">v2.0.0-alpha.1</span></span>
-        </div>
-        <div class="compare__row" data-score-pct="0.66">
-          <span class="compare__name is-them">ui-ux-pro-max-skill</span>
-          <span class="compare__score is-them"><span class="pct">33<span class="compare__pct-unit--them">/50</span></span><span class="compare__score-bar"><span></span></span></span>
-          <span class="compare__score compare__score-stars">241 stars</span>
-        </div>
-        <div class="compare__row" data-score-pct="0.56">
-          <span class="compare__name is-them">design-shotgun</span>
-          <span class="compare__score is-them"><span class="pct">28<span class="compare__pct-unit--them">/50</span></span><span class="compare__score-bar"><span></span></span></span>
-          <span class="compare__score compare__score-stars">182 stars</span>
-        </div>
-        <div class="compare__row" data-score-pct="0.50">
-          <span class="compare__name is-them">design-html</span>
-          <span class="compare__score is-them"><span class="pct">25<span class="compare__pct-unit--them">/50</span></span><span class="compare__score-bar"><span></span></span></span>
-          <span class="compare__score compare__score-stars">126 stars</span>
+        <div class="compare__bar" data-score-pct="0.66" data-score-target="33">
+          <span class="compare__bar-name">next-best plugin</span>
+          <span class="compare__bar-track"><span class="compare__bar-fill"></span></span>
+          <span class="compare__bar-pct"><span class="compare__bar-pct-n" data-score-out>0</span><span class="compare__bar-pct-of">/50</span></span>
         </div>
       </div>
 
@@ -2641,32 +2927,15 @@ h1, h2, h3, h4 {
   <!-- ============ 10. MCP ============ -->
   <section data-scene="mcp" aria-label="MCP server">
     <div class="container">
-      <div class="mcp__panel">
-        <div class="mcp__head">
-          <span class="eyebrow">10 — MCP server</span>
-          <h2 class="mcp__h2">14 tools over stdio.<br>Any MCP host.</h2>
-          <p>The engine ships an MCP server so non-Claude hosts can drive the recommender and linter through the model-context protocol. No extra runtime; the same Python wheel exposes the tools.</p>
-          <a href="/mcp.html" class="mcp__cta">
-            Read the MCP spec
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
-          </a>
-        </div>
-        <div class="mcp__tools" aria-label="MCP tools exposed">
-          <span class="mcp__tool">ux_recommend</span>
-          <span class="mcp__tool">ux_lint</span>
-          <span class="mcp__tool">ux_brand_lookup</span>
-          <span class="mcp__tool">ux_palette</span>
-          <span class="mcp__tool">ux_type_pair</span>
-          <span class="mcp__tool">ux_motion</span>
-          <span class="mcp__tool">ux_components</span>
-          <span class="mcp__tool">ux_industry</span>
-          <span class="mcp__tool">ux_law</span>
-          <span class="mcp__tool">ux_audit</span>
-          <span class="mcp__tool">ux_recipe</span>
-          <span class="mcp__tool">ux_persist</span>
-          <span class="mcp__tool">ux_anti_slop_explain</span>
-          <span class="mcp__tool">ux_compare</span>
-        </div>
+      <div class="mcp__callout">
+        <span class="eyebrow">10 — MCP server</span>
+        <p class="mcp__callout-line">
+          <strong>14 tools over stdio</strong> for any MCP host. Same Python wheel, no extra runtime.
+        </p>
+        <a href="/mcp.html" class="mcp__cta">
+          Read the MCP spec
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+        </a>
       </div>
     </div>
   </section>
@@ -3173,6 +3442,167 @@ h1, h2, h3, h4 {
      APPLY-BRAND — swap CSS variables on :root for 6 seconds so the whole
      page momentarily reads in that brand's typeface + palette.
      ========================================================================= */
+
+  /* =========================================================================
+     TRIPLE-RAIL — 3 rows, opposite drifts, draggable, click-to-reskin.
+     Cards built via createElement/textContent (no innerHTML) for XSS safety.
+     ========================================================================= */
+  (function setupTripleRail() {
+    var root = document.getElementById('triple-rail');
+    if (!root) return;
+
+    var CATALOG = [{"id":"aesop","name":"Aesop","category":"Consumer / Lifestyle / Retail"},{"id":"airbnb","name":"Airbnb","category":"Consumer / Lifestyle / Retail"},{"id":"airtable","name":"Airtable","category":"Productivity / Collaboration"},{"id":"allbirds","name":"Allbirds","category":"Consumer / Lifestyle / Retail"},{"id":"anthropic","name":"Anthropic","category":"AI / ML Platform"},{"id":"apple-music","name":"Apple Music","category":"Consumer / Lifestyle / Retail"},{"id":"apple","name":"Apple","category":"Consumer / Lifestyle / Retail"},{"id":"atlantic","name":"The Atlantic","category":"Editorial / Media"},{"id":"binance","name":"Binance","category":"Fintech / Crypto"},{"id":"bloomberg","name":"Bloomberg","category":"Editorial / Media"},{"id":"bmw-m","name":"BMW M","category":"Automotive"},{"id":"bmw","name":"BMW","category":"Automotive"},{"id":"brex","name":"Brex","category":"Fintech / Crypto"},{"id":"bugatti","name":"Bugatti","category":"Automotive"},{"id":"cal","name":"Cal.com","category":"Productivity / Collaboration"},{"id":"claude","name":"Claude","category":"AI / ML Platform"},{"id":"clay","name":"Clay","category":"Editorial / Media"},{"id":"clickhouse","name":"ClickHouse","category":"Developer Tools"},{"id":"cohere","name":"Cohere","category":"AI / ML Platform"},{"id":"coinbase","name":"Coinbase","category":"Fintech / Crypto"},{"id":"composio","name":"Composio","category":"Developer Tools"},{"id":"cursor","name":"Cursor","category":"Developer Tools"},{"id":"datadog","name":"Datadog","category":"Developer Tools"},{"id":"dbt","name":"dbt Labs","category":"Developer Tools"},{"id":"dezeen","name":"Dezeen","category":"Editorial / Media"},{"id":"economist","name":"The Economist","category":"Editorial / Media"},{"id":"elevenlabs","name":"ElevenLabs","category":"AI / ML Platform"},{"id":"expo","name":"Expo","category":"Developer Tools"},{"id":"ferrari","name":"Ferrari","category":"Automotive"},{"id":"figma","name":"Figma","category":"Productivity / Collaboration"},{"id":"fivetran","name":"Fivetran","category":"Developer Tools"},{"id":"fly-io","name":"Fly.io","category":"Developer Tools"},{"id":"framer","name":"Framer","category":"Developer Tools"},{"id":"glossier","name":"Glossier","category":"Consumer / Lifestyle / Retail"},{"id":"hashicorp","name":"HashiCorp","category":"Developer Tools"},{"id":"hims-hers","name":"Hims & Hers","category":"Consumer / Lifestyle / Retail"},{"id":"honeycomb","name":"Honeycomb","category":"Developer Tools"},{"id":"hp","name":"HP","category":"Consumer / Lifestyle / Retail"},{"id":"ibm","name":"IBM","category":"Developer Tools"},{"id":"instagram","name":"Instagram","category":"Consumer / Lifestyle / Retail"},{"id":"intercom","name":"Intercom","category":"Productivity / Collaboration"},{"id":"kraken","name":"Kraken","category":"Fintech / Crypto"},{"id":"lamborghini","name":"Lamborghini","category":"Automotive"},{"id":"linear.app","name":"Linear","category":"Productivity / Collaboration"},{"id":"lovable","name":"Lovable","category":"Developer Tools"},{"id":"mastercard","name":"Mastercard","category":"Fintech / Crypto"},{"id":"mercury","name":"Mercury","category":"Fintech / Crypto"},{"id":"meta","name":"Meta","category":"Consumer / Lifestyle / Retail"},{"id":"minimax","name":"MiniMax","category":"AI / ML Platform"},{"id":"mintlify","name":"Mintlify","category":"Developer Tools"},{"id":"miro","name":"Miro","category":"Productivity / Collaboration"},{"id":"mistral.ai","name":"Mistral AI","category":"AI / ML Platform"},{"id":"modal","name":"Modal","category":"Developer Tools"},{"id":"mongodb","name":"MongoDB","category":"Developer Tools"},{"id":"monzo","name":"Monzo","category":"Fintech / Crypto"},{"id":"n26","name":"N26","category":"Fintech / Crypto"},{"id":"neon","name":"Neon","category":"Developer Tools"},{"id":"nike","name":"Nike","category":"Consumer / Lifestyle / Retail"},{"id":"notion","name":"Notion","category":"Productivity / Collaboration"},{"id":"nvidia","name":"NVIDIA","category":"Editorial / Media"},{"id":"nytimes","name":"The New York Times","category":"Editorial / Media"},{"id":"ollama","name":"Ollama","category":"Developer Tools"},{"id":"openai","name":"OpenAI","category":"AI / ML Platform"},{"id":"opencode.ai","name":"OpenCode","category":"Developer Tools"},{"id":"patagonia","name":"Patagonia","category":"Consumer / Lifestyle / Retail"},{"id":"perplexity","name":"Perplexity","category":"AI / ML Platform"},{"id":"pinterest","name":"Pinterest","category":"Consumer / Lifestyle / Retail"},{"id":"pitchfork","name":"Pitchfork","category":"Editorial / Media"},{"id":"plaid","name":"Plaid","category":"Fintech / Crypto"},{"id":"playstation","name":"PlayStation","category":"Consumer / Lifestyle / Retail"},{"id":"posthog","name":"PostHog","category":"Developer Tools"},{"id":"railway","name":"Railway","category":"Developer Tools"},{"id":"ramp","name":"Ramp","category":"Fintech / Crypto"},{"id":"raycast","name":"Raycast","category":"Developer Tools"},{"id":"renault","name":"Renault","category":"Automotive"},{"id":"render","name":"Render","category":"Developer Tools"},{"id":"replicate","name":"Replicate","category":"Developer Tools"},{"id":"resend","name":"Resend","category":"Developer Tools"},{"id":"retool","name":"Retool","category":"Developer Tools"},{"id":"revolut","name":"Revolut","category":"Fintech / Crypto"},{"id":"robinhood","name":"Robinhood","category":"Fintech / Crypto"},{"id":"runwayml","name":"Runway","category":"AI / ML Platform"},{"id":"sanity","name":"Sanity","category":"Developer Tools"},{"id":"sentry","name":"Sentry","category":"Developer Tools"},{"id":"shopify","name":"Shopify","category":"Consumer / Lifestyle / Retail"},{"id":"slack","name":"Slack","category":"Developer Tools"},{"id":"snowflake","name":"Snowflake","category":"Developer Tools"},{"id":"sourcegraph","name":"Sourcegraph","category":"Developer Tools"},{"id":"spacex","name":"SpaceX","category":"Automotive"},{"id":"spotify","name":"Spotify","category":"Consumer / Lifestyle / Retail"},{"id":"starbucks","name":"Starbucks","category":"Consumer / Lifestyle / Retail"},{"id":"stripe","name":"Stripe","category":"Fintech / Crypto"},{"id":"substack","name":"Substack","category":"Editorial / Media"},{"id":"supabase","name":"Supabase","category":"Developer Tools"},{"id":"superhuman","name":"Superhuman","category":"Developer Tools"},{"id":"tesla","name":"Tesla","category":"Automotive"},{"id":"theverge","name":"The Verge","category":"Editorial / Media"},{"id":"tiktok","name":"TikTok","category":"Consumer / Lifestyle / Retail"},{"id":"together.ai","name":"Together AI","category":"AI / ML Platform"},{"id":"uber","name":"Uber","category":"Consumer / Lifestyle / Retail"},{"id":"vercel","name":"Vercel","category":"Developer Tools"},{"id":"vodafone","name":"Vodafone","category":"Editorial / Media"},{"id":"voltagent","name":"VoltAgent","category":"AI / ML Platform"},{"id":"warp","name":"Warp","category":"Developer Tools"},{"id":"webflow","name":"Webflow","category":"Developer Tools"},{"id":"wired","name":"Wired","category":"Editorial / Media"},{"id":"wise","name":"Wise","category":"Fintech / Crypto"},{"id":"wsj","name":"The Wall Street Journal","category":"Editorial / Media"},{"id":"x.ai","name":"xAI","category":"AI / ML Platform"},{"id":"zapier","name":"Zapier","category":"Productivity / Collaboration"}];
+
+    var CAT = {
+      'Consumer / Lifestyle / Retail':   { acc: '#f472b6', font: "'Bricolage Grotesque',sans-serif" },
+      'Consumer / Lifestyle':            { acc: '#f472b6', font: "'Bricolage Grotesque',sans-serif" },
+      'Consumer / Media':                { acc: '#fb7185', font: "'Inter Tight',sans-serif" },
+      'SaaS / Developer Tools':          { acc: '#06b6d4', font: "'Inter Tight',sans-serif" },
+      'SaaS / Productivity':             { acc: '#a78bfa', font: "'Bricolage Grotesque',sans-serif" },
+      'SaaS / Project Management':       { acc: '#818cf8', font: "'Inter Tight',sans-serif" },
+      'Productivity / Collaboration':    { acc: '#a78bfa', font: "'Bricolage Grotesque',sans-serif" },
+      'Design Tools':                    { acc: '#a855f7', font: "'General Sans','Inter Tight',sans-serif" },
+      'AI / ML':                         { acc: '#10b981', font: "'Instrument Serif',Georgia,serif" },
+      'Fintech / Payments':              { acc: '#22d3ee', font: "'Switzer','Inter Tight',sans-serif" },
+      'Fintech / Banking':               { acc: '#34d399', font: "'Inter Tight',sans-serif" },
+      'Media / Editorial':               { acc: '#fb923c', font: "'Instrument Serif',Georgia,serif" },
+      'Automotive / Performance':        { acc: '#ef4444', font: "'Inter Tight',sans-serif" },
+      'Hospitality / Travel':            { acc: '#facc15', font: "'Instrument Serif',Georgia,serif" },
+      'Healthcare / Wellness':           { acc: '#34d399', font: "'Inter',sans-serif" },
+      'E-commerce / Marketplace':        { acc: '#fb7185', font: "'Bricolage Grotesque',sans-serif" },
+      'Gaming / Entertainment':          { acc: '#f472b6', font: "'Inter Tight',sans-serif" },
+      'Default':                         { acc: '#06b6d4', font: "'Bricolage Grotesque',sans-serif" }
+    };
+
+    var LOGO_IDS = ['apple','linear','vercel','stripe','figma','framer','notion','supabase','posthog','resend','raycast','warp','spotify','ferrari','bmw','anthropic','openai','nike','instagram','tiktok','pinterest','discord','github'];
+    var HAS_LOGO = {}; for (var i = 0; i < LOGO_IDS.length; i++) HAS_LOGO[LOGO_IDS[i]] = true;
+
+    function elt(tag, opts) {
+      var el = document.createElement(tag);
+      if (!opts) return el;
+      if (opts.cls) el.className = opts.cls;
+      if (opts.text != null) el.textContent = opts.text;
+      if (opts.attrs) Object.keys(opts.attrs).forEach(function(k){ el.setAttribute(k, opts.attrs[k]); });
+      if (opts.css) Object.keys(opts.css).forEach(function(k){ el.style.setProperty(k, opts.css[k]); });
+      if (opts.children) opts.children.forEach(function(c){ if (c) el.appendChild(c); });
+      return el;
+    }
+
+    function build(brand) {
+      var cat = CAT[brand.category] || CAT.Default;
+      var card = elt('article', {
+        cls: 'trc',
+        attrs: { role: 'button', tabindex: '0',
+                 'aria-label': brand.name + ' — tap to reskin the page in this brand for six seconds',
+                 'data-id': brand.id },
+        css: { '--trc-accent': cat.acc, '--trc-display': cat.font }
+      });
+
+      var headChildren = [];
+      if (HAS_LOGO[brand.id]) {
+        var img = elt('img', { attrs: { src: '/logos/' + brand.id + '.svg',
+                                         alt: brand.name + ' logo',
+                                         width: '22', height: '22',
+                                         loading: 'lazy', decoding: 'async' } });
+        headChildren.push(elt('span', { cls: 'trc__logo', children: [img] }));
+      }
+      headChildren.push(elt('span', { cls: 'trc__name', text: brand.name }));
+      card.appendChild(elt('div', { cls: 'trc__head', children: headChildren }));
+      card.appendChild(elt('span', { cls: 'trc__cat', text: brand.category || 'Brand spec' }));
+
+      var palette = elt('div', { cls: 'trc__palette', attrs: { 'aria-hidden': 'true' } });
+      var colors = [cat.acc, 'rgba(255,255,255,0.92)', 'rgba(255,255,255,0.55)', 'rgba(255,255,255,0.18)'];
+      colors.forEach(function(c){ palette.appendChild(elt('span', { css: { background: c } })); });
+      card.appendChild(palette);
+
+      var activate = function() {
+        var full = (window.BRAND_SPECIMENS_BY_ID && window.BRAND_SPECIMENS_BY_ID[brand.id]) || null;
+        if (full && typeof applyBrand === 'function') {
+          applyBrand(full);
+        } else {
+          var docEl = document.documentElement;
+          docEl.style.setProperty('--scene-accent', cat.acc);
+          var toast = document.getElementById('brand-reskin-toast');
+          if (toast) {
+            toast.style.setProperty('--brand-accent', cat.acc);
+            toast.textContent = 'lite reskin · ' + brand.name + ' · 6s';
+            toast.classList.add('is-on');
+          }
+          setTimeout(function() {
+            docEl.style.removeProperty('--scene-accent');
+            if (toast) toast.classList.remove('is-on');
+          }, 6000);
+        }
+      };
+      card.addEventListener('click', activate);
+      card.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+      });
+      return card;
+    }
+
+    var rows = [
+      root.querySelector('[data-row="0"]'),
+      root.querySelector('[data-row="1"]'),
+      root.querySelector('[data-row="2"]')
+    ];
+    CATALOG.forEach(function(brand, idx) { rows[idx % 3].appendChild(build(brand)); });
+
+    // Duplicate the children for seamless loop.
+    rows.forEach(function(track) {
+      var kids = Array.prototype.slice.call(track.children);
+      kids.forEach(function(c) {
+        var clone = c.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        clone.tabIndex = -1;
+        track.appendChild(clone);
+      });
+    });
+
+    // Per-row speeds.
+    var rowEls = root.querySelectorAll('.triple-rail__row');
+    rowEls.forEach(function(row) {
+      var s = parseInt(row.dataset.speed || '80', 10);
+      row.style.setProperty('--row-speed', s + 's');
+    });
+
+    // Drag-to-scrub each row.
+    rowEls.forEach(function(row) {
+      var track = row.querySelector('.triple-rail__track');
+      var isDown = false, startX = 0, baseX = 0;
+
+      function getCurrent() {
+        var m = new DOMMatrixReadOnly(getComputedStyle(track).transform);
+        return m.m41;
+      }
+
+      row.addEventListener('pointerdown', function(e) {
+        isDown = true;
+        startX = e.clientX;
+        baseX = getCurrent();
+        track.style.animation = 'none';
+        track.style.transform = 'translateX(' + baseX + 'px)';
+        row.classList.add('is-grabbing');
+        try { row.setPointerCapture(e.pointerId); } catch (_) {}
+      });
+      row.addEventListener('pointermove', function(e) {
+        if (!isDown) return;
+        var dx = e.clientX - startX;
+        track.style.transform = 'translateX(' + (baseX + dx) + 'px)';
+      });
+      function release() {
+        if (!isDown) return;
+        isDown = false;
+        row.classList.remove('is-grabbing');
+        track.style.transform = '';
+        track.style.animation = '';
+      }
+      row.addEventListener('pointerup', release);
+      row.addEventListener('pointercancel', release);
+      row.addEventListener('pointerleave', release);
+    });
+  })();
+
   function applyBrand(b) {
     const root = document.documentElement;
     const body = document.body;
@@ -3248,9 +3678,11 @@ h1, h2, h3, h4 {
     const target = parseInt(el.dataset.target, 10);
     const out = el.querySelector('[data-out]');
     if (reduce) { out.textContent = target.toLocaleString(); return; }
-    const duration = 1200;
+    // Slow, cinematic count-up — bigger numbers, more time on screen.
+    const duration = 2200;
     const start = performance.now();
-    const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+    // ease-out quart — settles slowly at the end
+    const easeOut = (t) => 1 - Math.pow(1 - t, 4);
     const tick = (now) => {
       const t = Math.min(1, (now - start) / duration);
       const v = Math.round(target * easeOut(t));
@@ -3270,20 +3702,120 @@ h1, h2, h3, h4 {
   statEls.forEach((el) => statsIO.observe(el));
 
   /* =========================================================================
-     COMPARE — reveal score bars on scroll
+     COMPARE — reveal score bars on scroll (covers both legacy rows and the
+     trimmed two-bar duel).
      ========================================================================= */
-  const compareRows = document.querySelectorAll('.compare__row[data-score-pct]');
+  const compareRows = document.querySelectorAll('.compare__row[data-score-pct], .compare__bar[data-score-pct]');
+  const animateScore = (el) => {
+    const out = el.querySelector('[data-score-out]');
+    if (!out) return;
+    const target = parseInt(el.dataset.scoreTarget, 10);
+    if (!target) return;
+    if (reduce) { out.textContent = target; return; }
+    const duration = 1400;
+    const start = performance.now();
+    const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / duration);
+      out.textContent = Math.round(target * easeOut(t));
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
   const compareIO = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (e.isIntersecting) {
         const pct = parseFloat(e.target.dataset.scorePct);
         e.target.style.setProperty('--score-fill', pct);
         e.target.classList.add('is-revealed');
+        animateScore(e.target);
         compareIO.unobserve(e.target);
       }
     });
   }, { threshold: 0.3 });
   compareRows.forEach((r) => compareIO.observe(r));
+
+  /* =========================================================================
+     DEVICES ROTOR — single mockup that cycles between Cursor, Claude, Windsurf.
+     Auto-rotate when in view, pause on hover/focus, manual override via pips.
+     Honors prefers-reduced-motion (no auto-rotate, pips still work).
+     ========================================================================= */
+  (function devicesRotor() {
+    const rotor = document.getElementById('devices-rotor');
+    if (!rotor) return;
+    const panes = Array.from(rotor.querySelectorAll('.device__rotor-pane'));
+    const pips  = Array.from(rotor.querySelectorAll('.devices__pip'));
+    const host  = rotor.querySelector('[data-rotor-host]');
+    const file  = rotor.querySelector('[data-rotor-file]');
+    if (!panes.length || !pips.length) return;
+
+    // chrome label per IDE
+    const labels = {
+      cursor:   { host: 'Cursor',      file: 'landing.tsx' },
+      claude:   { host: 'Claude Code', file: 'ux-skill' },
+      windsurf: { host: 'Windsurf',    file: 'Cascade' }
+    };
+
+    let idx = 0;
+    let timer = null;
+    let paused = false;
+    const ROTATE_MS = 3600;
+
+    const setActive = (i) => {
+      idx = ((i % panes.length) + panes.length) % panes.length;
+      panes.forEach((p, n) => {
+        const on = n === idx;
+        p.classList.toggle('is-active', on);
+        if (on) { p.removeAttribute('hidden'); } else { p.setAttribute('hidden', ''); }
+      });
+      pips.forEach((b, n) => {
+        b.classList.toggle('is-active', n === idx);
+        b.setAttribute('aria-selected', n === idx ? 'true' : 'false');
+      });
+      const id = panes[idx].dataset.ide;
+      const lab = labels[id];
+      if (lab && host) host.textContent = lab.host;
+      if (lab && file) file.textContent = lab.file;
+    };
+
+    const startTimer = () => {
+      if (reduce || paused) return;
+      stopTimer();
+      timer = setInterval(() => setActive(idx + 1), ROTATE_MS);
+    };
+    const stopTimer = () => {
+      if (timer) { clearInterval(timer); timer = null; }
+    };
+
+    // pause on hover / focus for a11y
+    rotor.addEventListener('mouseenter', () => { paused = true;  stopTimer(); });
+    rotor.addEventListener('mouseleave', () => { paused = false; startTimer(); });
+    rotor.addEventListener('focusin',    () => { paused = true;  stopTimer(); });
+    rotor.addEventListener('focusout',   () => { paused = false; startTimer(); });
+
+    // manual pip switch + arrow keys
+    pips.forEach((btn, i) => {
+      btn.addEventListener('click', () => { setActive(i); startTimer(); });
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+          e.preventDefault();
+          const next = (i + (e.key === 'ArrowRight' ? 1 : -1) + pips.length) % pips.length;
+          pips[next].focus();
+          setActive(next);
+          startTimer();
+        }
+      });
+    });
+
+    // only rotate when in view
+    const rotorIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) startTimer();
+        else stopTimer();
+      });
+    }, { threshold: 0.25 });
+    rotorIO.observe(rotor);
+  })();
 
   /* =========================================================================
      INSTALL TABS

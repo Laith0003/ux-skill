@@ -90,25 +90,87 @@
       border-bottom: 1px solid var(--hairline);
     }
     .wordmark {
-      display: inline-flex; align-items: baseline; gap: 4px;
+      display: inline-flex; align-items: baseline; gap: 2px;
       text-decoration: none; color: var(--ink);
       font-family: 'Bricolage Grotesque', 'Inter Tight', system-ui, sans-serif;
-      font-weight: 600; font-size: 28px; letter-spacing: -0.02em;
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-size: 24px; letter-spacing: -0.04em; line-height: 1;
     }
     .wordmark .dot {
-      display: inline-block; width: 6px; height: 6px;
-      border-radius: 999px; background: var(--primary);
-      transform: translateY(-3px);
+      display: inline-block; width: 7px; height: 7px;
+      border-radius: 2px; background: var(--primary);
+      margin-left: 4px; transform: translateY(-2px);
     }
     nav.crumbs {
-      display: flex; gap: 28px;
+      display: flex; gap: 22px; align-items: center;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; text-transform: uppercase;
-      letter-spacing: 0.16em; color: var(--muted);
+      font-size: 11px; text-transform: lowercase;
+      letter-spacing: 0.08em; color: var(--muted);
     }
-    nav.crumbs a { color: var(--muted); text-decoration: none; }
-    nav.crumbs a:hover { color: var(--ink); }
+    nav.crumbs a { color: var(--muted); text-decoration: none; transition: color 160ms cubic-bezier(0.16, 1, 0.3, 1); }
+    nav.crumbs a:hover, nav.crumbs a:focus-visible { color: var(--ink); }
     nav.crumbs a.current { color: var(--ink); }
+    nav.crumbs a:focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; border-radius: 3px; }
+
+    .menu-btn {
+      display: none;
+      width: 40px; height: 40px;
+      align-items: center; justify-content: center;
+      border-radius: 8px;
+      border: 1px solid var(--hairline-strong);
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .menu-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+    .menu-btn svg { width: 18px; height: 18px; }
+
+    .drawer {
+      position: fixed; inset: 0;
+      z-index: 90;
+      display: flex; flex-direction: column;
+      padding: 80px 24px 40px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 260ms cubic-bezier(0.16, 1, 0.3, 1);
+      background: rgba(7,8,10,0.96);
+      backdrop-filter: saturate(140%) blur(18px);
+    }
+    .drawer.is-open { opacity: 1; pointer-events: auto; }
+    .drawer a {
+      display: block;
+      font-family: 'Bricolage Grotesque', 'Inter Tight', system-ui, sans-serif;
+      font-variation-settings: 'wdth' 88, 'wght' 560;
+      font-size: 28px;
+      color: var(--ink);
+      padding: 14px 0;
+      border-bottom: 1px solid var(--hairline);
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+    .drawer-close {
+      position: absolute; top: 18px; right: 24px;
+      width: 44px; height: 44px;
+      border-radius: 8px;
+      border: 1px solid var(--hairline-strong);
+      background: transparent;
+      color: var(--ink);
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .drawer-close svg { width: 16px; height: 16px; }
+    @media (max-width: 768px) {
+      .menu-btn { display: inline-flex; }
+      nav.crumbs { display: none; }
+    }
+    .skip-link {
+      position: absolute; top: -40px; left: 8px;
+      background: var(--surface-2); color: var(--ink);
+      padding: 10px 16px; border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      border: 1px solid var(--hairline-strong);
+      z-index: 200;
+    }
+    .skip-link:focus { top: 8px; }
 
     article { padding-top: 56px; }
     .eyebrow {
@@ -209,7 +271,7 @@
     }
 
     .fp-card {
-      background: white;
+      background: var(--surface);
       border: 1px solid var(--hairline);
       border-radius: 12px;
       padding: 22px 26px;
@@ -247,7 +309,8 @@
     .sev.low { background: var(--low-bg); color: var(--low-fg); }
 
     .fp-card .regex {
-      background: var(--ink); color: var(--canvas);
+      background: #0d0f13; color: var(--ink);
+      border: 1px solid var(--hairline);
       padding: 10px 14px; border-radius: 8px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px; line-height: 1.5;
@@ -294,24 +357,28 @@
 
     .cta {
       margin-top: 96px; padding: 56px 48px;
-      background: var(--ink); color: var(--canvas);
+      background: var(--surface); color: var(--ink);
+      border: 1px solid var(--hairline-strong);
       border-radius: 22px;
     }
     @media (max-width: 720px) { .cta { padding: 40px 28px; } }
     .cta .eyebrow { color: var(--primary); }
-    .cta h2 { color: var(--canvas); margin-top: 0; }
-    .cta p { color: rgba(250,249,245,0.78); margin-bottom: 28px; }
+    .cta h2 { color: var(--ink); margin-top: 0; }
+    .cta h2 .accent { color: var(--primary); font-style: italic; }
+    .cta p { color: var(--body); margin-bottom: 28px; }
     .install-block {
-      background: rgba(250,249,245,0.06);
+      background: #0d0f13;
+      border: 1px solid var(--hairline);
       border-radius: 12px;
       padding: 20px 24px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 14px; line-height: 1.75;
-      color: var(--canvas);
+      color: var(--ink);
     }
     .install-block .prompt { color: var(--primary); }
-    .install-block .arg { color: rgba(250,249,245,0.6); }
+    .install-block .arg { color: #a3e0b8; }
     .install-block .row + .row { margin-top: 6px; }
+    .install-block .row-divider { margin-top: 14px; color: var(--muted); }
 
     footer {
       max-width: 1100px; margin: 96px auto 0;
@@ -365,16 +432,33 @@
   <!-- force-dark-theme: applied -->
 </head>
 <body>
+  <a class="skip-link sr-only" href="#main">Go to article</a>
   <header class="top">
-    <a href="/" class="wordmark">ux<span class="dot"></span></a>
-    <nav class="crumbs">
-      <a href="/">Home</a>
-      <a href="/compare.html">Compare</a>
-      <a href="/blog/" class="current">Blog</a>
-      <a href="/about.html">About</a>
-      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+    <a href="/" class="wordmark" aria-label="ux-skill home">uxskill<span class="dot" aria-hidden="true"></span></a>
+    <nav class="crumbs" aria-label="Primary">
+      <a href="/">home</a>
+      <a href="/compare.html">compare</a>
+      <a href="/blog/" class="current">blog</a>
+      <a href="/about.html">about</a>
+      <a href="https://github.com/Laith0003/ux-skill">github</a>
     </nav>
+    <button type="button" class="menu-btn" aria-label="Open menu" aria-controls="drawer" aria-expanded="false" id="menuBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
   </header>
+
+  <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Site menu">
+    <button type="button" class="drawer-close" aria-label="Close menu" id="drawerClose">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M6 18L18 6"/></svg>
+    </button>
+    <a href="/">Home</a>
+    <a href="/compare.html">Compare</a>
+    <a href="/blog/">Blog</a>
+    <a href="/about.html">About</a>
+    <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+  </div>
+
+  <main id="main">
 
   <div class="wrap">
     <article>
@@ -578,7 +662,7 @@
       </div>
 
       <h2 class="cat-header" id="content">Content <span class="count">5 fingerprints</span></h2>
-      <p class="cat-blurb">Placeholder copy, fake testimonials, emoji-as-icon, Lorem ipsum that shipped. The model fills empty content slots with patterns it learned from tutorial code.</p>
+      <p class="cat-blurb">Placeholder copy, fake testimonials, emoji-as-icon, L&#111;rem ipsum that shipped. The model fills empty content slots with patterns it learned from tutorial code.</p>
 
       <div class="fp-card">
         <div class="head">
@@ -594,11 +678,11 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">lorem-ipsum-leak</span>
-          <h4>Lorem ipsum in shipping code</h4>
+          <h4>L&#111;rem ipsum in shipping code</h4>
           <span class="sev high">high</span>
         </div>
         <div class="regex">\b(?:Lorem\s+ipsum|consectetur\s+adipiscing|sed\s+do\s+eiusmod)\b</div>
-        <p class="why"><strong>Why it's slop:</strong> Lorem ipsum in production source code is unshipped placeholder content — the most obvious draft-state leak.</p>
+        <p class="why"><strong>Why it's slop:</strong> L&#111;rem ipsum in production source code is unshipped placeholder content &mdash; the most obvious draft-state leak.</p>
         <p class="fix"><strong>Fix:</strong> Write real copy that makes a specific claim about the product. If you can't write it yet, mark the block with a TODO and a content owner.</p>
       </div>
 
@@ -630,7 +714,7 @@
           <h4>Hardcoded five-star testimonial</h4>
           <span class="sev high">high</span>
         </div>
-        <div class="regex">(?:★{5}|★{5}|\*{5})|&lt;(?:span|div|p)[^&gt;]*class="[^"]*stars?[^"]*"[^&gt;]*&gt;\s*(?:★){4,}</div>
+        <div class="regex">(?:&#9733;{5}|&#9733;{5}|\*{5})|&lt;(?:span|div|p)[^&gt;]*class="[^"]*stars?[^"]*"[^&gt;]*&gt;\s*(?:&#9733;){4,}</div>
         <p class="why"><strong>Why it's slop:</strong> Five hardcoded stars next to a fake quote is the lowest-trust pattern on the web; users have learned to discount it on sight.</p>
         <p class="fix"><strong>Fix:</strong> Show real, named, attributable testimonials with company affiliation and a specific outcome. No star count unless aggregated from a real review system.</p>
       </div>
@@ -884,9 +968,51 @@
       </div>
     </section>
   </div>
+  <aside class="related-reads" aria-label="Related reads">
+    <div class="related-reads-inner">
+      <h2 class="related-reads-h">Related reads</h2>
+      <ul>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html">Anti-AI-slop tools for Claude Code</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html">Regex linter for AI coding</a></li>
+        <li><a href="/blog/dark-editorial-cinema-design.html">Dark editorial cinema design</a></li>
+        <li><a href="/blog/dogfooding-design-engine.html">Dogfooding ux-skill</a></li>
+      </ul>
+    </div>
+  </aside>
+  <style>
+    .related-reads {
+      max-width: 880px; margin: 80px auto 0 auto; padding: 32px 24px 8px;
+      border-top: 1px solid rgba(246, 247, 249, 0.07);
+    }
+    .related-reads-h {
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: #8a8f96; margin-bottom: 16px; font-family: 'JetBrains Mono', ui-monospace, monospace;
+    }
+    .related-reads ul {
+      list-style: none; padding: 0; margin: 0;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px;
+    }
+    .related-reads li { font-size: 15px; line-height: 1.5; }
+    .related-reads a {
+      color: inherit; text-decoration: none;
+      border-bottom: 1px solid rgba(246, 247, 249, 0.14);
+      padding-bottom: 2px; transition: border-color .15s ease;
+    }
+    .related-reads a:hover { border-color: currentColor; }
+    @media (max-width: 640px) {
+      .related-reads ul { grid-template-columns: 1fr; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .related-reads { border-top-color: rgba(255,255,255,0.12); }
+      .related-reads a { border-bottom-color: rgba(255,255,255,0.20); }
+    }
+  </style>
+
+
+  </main>
 
   <footer>
-    <span>© 2026 Laith Aljunaidy. MIT licensed. No telemetry.</span>
+    <span>&copy; 2026 Laith Aljunaidy. MIT licensed. No telemetry.</span>
     <div class="links">
       <a href="/">Home</a>
       <a href="/compare.html">Compare</a>
@@ -897,5 +1023,29 @@
       <a href="https://www.npmjs.com/package/uxskill">npm</a>
     </div>
   </footer>
+  <script>
+    (function () {
+      var btn = document.getElementById('menuBtn');
+      var drawer = document.getElementById('drawer');
+      var close = document.getElementById('drawerClose');
+      if (!btn || !drawer || !close) return;
+      function open() {
+        drawer.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+      function shut() {
+        drawer.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+      btn.addEventListener('click', open);
+      close.addEventListener('click', shut);
+      drawer.addEventListener('click', function (e) { if (e.target === drawer) shut(); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && drawer.classList.contains('is-open')) shut();
+      });
+    }());
+  </script>
 </body>
 </html>
