@@ -38,8 +38,11 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+# Optional MCP transport. The `mcp` Python package requires Python 3.10+,
+# so the env marker keeps `pip install 'uxskill[mcp]'` from blowing up on
+# 3.9 with a confusing "no matching distribution" error.
 mcp = [
-  "mcp>=1.0"
+  "mcp>=1.0; python_version >= '3.10'"
 ]
 dev = [
   "pytest>=7.4",
@@ -47,7 +50,9 @@ dev = [
   "ruff>=0.1.9",
   "mypy>=1.7",
   "black>=23.12",
-  "mcp>=1.0"
+  # MCP transport is optional in dev too — guarded by Python version so
+  # CI's 3.9 matrix entry can still install dev deps for non-MCP testing.
+  "mcp>=1.0; python_version >= '3.10'"
 ]
 
 [project.urls]
