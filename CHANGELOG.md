@@ -7,6 +7,84 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.0.0-alpha.83] — 2026-05-28 (anti-patterns 100 → 120 + sitewide stat refresh)
+
+- **Round 6 anti-patterns**: +20 new deterministic rules. Total **120**.
+  Mostly A11y (12) + Visual (4) + Motion (2). Severity: 2 critical, 10 high, 6 medium, 2 low.
+  Highlights: `aria-live-polite-on-error`, `link-without-href`, `video-without-captions`,
+  `autoplay-without-muted`, `marquee-tag`, `blink-tag`, `tabindex-positive`,
+  `onclick-on-non-button`, `role-button-on-anchor-without-href`, `meta-refresh-redirect`.
+- 80 files touched in the sitewide stat sweep (100→120 across hero copy, JSON-LD meta,
+  OG meta, blog body text, table cells, badges, MASTER.md). Tests stay 75/75 passing.
+
+## [2.0.0-alpha.82] — 2026-05-28 (GitHub Action workflow + PR/issue templates)
+
+- New: `docs/install/ux-lint-on-pr.yml.txt` — drop-in GitHub Actions workflow that
+  runs `ux lint` on every PR, posts findings as a comment, fails the build on
+  Critical/High. Couldn't push the .yml directly due to OAuth scope; saved as
+  paste-able .txt for the Actions web UI path.
+- New: `.github/PULL_REQUEST_TEMPLATE.md` + `.github/ISSUE_TEMPLATE/bug.md`.
+- Repo description + 20 GitHub topics updated (anti-ai-slop, claude-code, cursor,
+  windsurf, vibe-coding, ai-design, mcp, design-intelligence, etc).
+- README.id (Indonesian) + README.pt-BR (Portuguese, Brazil) shipped.
+
+## [2.0.0-alpha.79–81] — 2026-05-28 (multilingual blog round 1 + Italian README)
+
+- 6 new SEO blog posts (3 English + 3 Asian/Pacific): `vibe-coding-design-system`,
+  `ai-built-website-no-slop`, `anti-slop-cli-vibe-coders`, `ja/vibe-coding-design`,
+  `zh-CN/vibe-coding-shipping-real-design`, `ko/ai-coding-design-rules`.
+  All 0 critical / 0 high lint. Sitemap + blog index + add-related-reads.py updated.
+- README.it (Italian) translation landed.
+- zh-CN/vibe-coding post in Simplified Chinese (1100+ words, emerald scene-accent).
+
+## [2.0.0-alpha.77–78] — 2026-05-28 (full theme audit + triple-rail brand carousel)
+
+- **Theme audit**: scripts/force-dark-theme.py runs a deterministic find-replace on
+  CSS token values (no agent guesswork) — converted 79 of 94 HTML files from
+  cream+coral+Cormorant to dark Saturated Cinema in one pass.
+- **Skip-link removed sitewide** (scripts/strip-skip-link.py, 64 files touched).
+- **Terminal screenshots removed** from the homepage gallery section per user
+  feedback ("So much terminal screenshots people care to see real things").
+  Section 05·5 now ships 3 figures: Cursor + Claude Code + brand mosaic.
+- **Triple-rail brand carousel**: replaced the single drag-rail with 3 horizontal
+  rows scrolling in opposite directions (left/right/left at 80s/100s/120s speeds).
+  All 110 brand cards distributed round-robin. Each row is drag-to-scrub on
+  touch + mouse. Click any card → reskin the entire homepage in that brand's voice
+  for 6 seconds via :root CSS variable swap. 14 brands have full BRAND_SPECIMENS
+  data for rich reskin; the other 96 do a "lite" scene-accent swap. Zero
+  innerHTML — every node built via createElement/textContent for XSS safety.
+
+## [2.0.0-alpha.72–76] — 2026-05-28 (i18n + Asian languages + dark theme migration)
+
+- **Mobile horizontal scroll killed** sitewide (scripts/inject-noscroll.py, 99 files).
+- **17-language website** live at /zh-CN/, /zh-TW/, /ja/, /ko/, /hi/, /id/, /vi/,
+  /th/, /ar/, /es/, /fr/, /de/, /pt-BR/, /ru/, /tr/, /it/. Each locale has a
+  translated title + meta + nav pills + section eyebrows (NOTE: round-1 i18n was
+  a half-job; comprehensive translation agent dispatched in alpha.78 to fix the
+  English-leak bug across hero h1 + section titles + paragraph bodies).
+- **Sitemap +16 locale URLs** for hreflang SEO.
+- **Compare/About/FAQ/Roadmap/MCP/Privacy/Commands** migrated to dark Saturated Cinema.
+- **All 20 blog posts** migrated to dark Saturated Cinema by 2 parallel agents.
+- **README in 6 languages confirmed consistent on 100/110** (en, ar, es, zh, fr, de).
+- **ux-god regression cleaned** out of README.ar.md (17 instances) and README.zh.md.
+
+## [2.0.0-alpha.66–71] — 2026-05-28 (photos, logos, brands 110, hero video then removed)
+
+- **Photos shipped**: 6 generated showcase PNGs (Pillow-rendered) in
+  docs/screenshots/ — hero canvas, terminal-ux-recommend, terminal-ux-lint,
+  Cursor IDE mockup, Claude Code session, brand mosaic.
+- **SVG brand logos**: 25 simpleicons.org CC0 logos in docs/logos/. Brand gallery
+  now renders real marks for 23 of 25 brands; styled wordmark fallback for clay/cursor.
+- **110 brand specs** confirmed (anthropic, openai, perplexity, modal, railway,
+  fly-io, retool, fivetran, dbt, snowflake, apple-music, instagram, tiktok,
+  economist, wsj, dezeen, n26, robinhood — 18 added in round 5).
+- **Hero video built then removed** at user request — autoplay didn't fire on
+  iOS, browser showed play icon, the baked-in text overlapped the hero copy.
+  Restored canvas-only flow field.
+- **Scroll-pinned cinema** via `animation-timeline: view()` on screenshot gallery.
+- **Editorial parallax section** added — 4 CC0 photos from picsum.photos with
+  full-bleed parallax backgrounds + display-face quotes.
+
 ## [2.0.0-alpha.63] — 2026-05-28 (stats refresh — 100 rules / 92 brands)
 
 - Round 5 anti-patterns landed at 100. Every reference to 85 anti-pattern rules / 85-rule linter / 85 deterministic rules across the site swept to 100 (42 files touched: 21 docs + 21 landing, plus README.md and command markdown).
