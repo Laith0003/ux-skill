@@ -58,14 +58,19 @@ logger.setLevel(logging.INFO)
 # ---------------------------------------------------------------------------
 
 try:  # pragma: no cover - depends on env
-    from mcp.server import Server  # type: ignore
+    # The canonical low-level public path per the official Anthropic SDK docs:
+    # https://github.com/modelcontextprotocol/python-sdk
+    from mcp.server.lowlevel import Server, NotificationOptions  # type: ignore
     from mcp.server.stdio import stdio_server  # type: ignore
+    from mcp.server.models import InitializationOptions  # type: ignore
     import mcp.types as mcp_types  # type: ignore
 
     MCP_AVAILABLE = True
 except Exception as _import_error:  # pragma: no cover - depends on env
     Server = None  # type: ignore
+    NotificationOptions = None  # type: ignore
     stdio_server = None  # type: ignore
+    InitializationOptions = None  # type: ignore
     mcp_types = None  # type: ignore
     MCP_AVAILABLE = False
     _MCP_IMPORT_ERROR: Optional[BaseException] = _import_error
@@ -493,7 +498,14 @@ def run_server() -> None:
             await server.run(
                 read_stream,
                 write_stream,
-                server.create_initialization_options(),
+                InitializationOptions(
+                    server_name="ux-skill",
+                    server_version=__version__,
+                    capabilities=server.get_capabilities(
+                        notification_options=NotificationOptions(),
+                        experimental_capabilities={},
+                    ),
+                ),
             )
 
     asyncio.run(_main())

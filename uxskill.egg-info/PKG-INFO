@@ -1,0 +1,267 @@
+Metadata-Version: 2.4
+Name: uxskill
+Version: 2.0.0a1
+Summary: Design intelligence engine for AI coding assistants. Anti-AI-slop linter, mandatory discovery, 5-parallel-search recommender, 75+ styles, 170+ palettes, 65+ type pairs, 72 brand specs.
+Author-email: Laith Aljunaidy <laith.aljunaidy.laith@gmail.com>
+License: MIT
+Project-URL: Homepage, https://uxskill.laithjunaidy.com
+Project-URL: Repository, https://github.com/Laith0003/ux-skill
+Project-URL: Issues, https://github.com/Laith0003/ux-skill/issues
+Project-URL: Documentation, https://uxskill.laithjunaidy.com
+Keywords: ux,ui,design-system,ai-coding,claude-code,cursor,windsurf,linter,design,frontend,anti-ai-slop
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Software Development :: User Interfaces
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: click>=8.1
+Requires-Dist: rich>=13.0
+Requires-Dist: pydantic>=2.5
+Requires-Dist: tomli>=2.0; python_version < "3.11"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4; extra == "dev"
+Requires-Dist: pytest-cov>=4.1; extra == "dev"
+Requires-Dist: ruff>=0.1.9; extra == "dev"
+Requires-Dist: mypy>=1.7; extra == "dev"
+Requires-Dist: black>=23.12; extra == "dev"
+Dynamic: license-file
+
+# ux — design intelligence engine for AI coding
+
+> **v2.0 — Python pivot.** The strongest design intelligence engine for AI coding. A Python-backed reasoning core with 11 queryable JSON manifests: **84 styles, 170+ palettes, 70 type pairs, 148 components, 170+ industries, 110+ UX laws, 57 motion presets, 35 anti-patterns, 72 brand specs**. Plus 18 slash commands and 5 sub-agents from v1. Cross-IDE — runs in **17 environments**: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, Roo Cline.
+
+**Live at [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)** · [GitHub repo](https://github.com/Laith0003/ux-skill)
+
+[![Version](https://img.shields.io/badge/version-2.0.0--alpha.1-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
+[![Python](https://img.shields.io/badge/python-3.9%2B-3776ab.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#cross-ide-distribution)
+[![Brands](https://img.shields.io/badge/brand_specs-72-cc785c.svg)](data/brands/_index.json)
+[![Linter](https://img.shields.io/badge/anti--patterns-35-181715.svg)](data/anti-patterns.json)
+[![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
+
+---
+
+## What v2 is
+
+A **Python reasoning engine** that runs 5 parallel searches across structured data manifests and returns a complete recommended design system for your project — with always-on anti-AI-slop guardrails.
+
+You give it a brief (industry, audience, tone, must-haves, forbidden). It returns: the **style** to use, the **palette**, the **type pair**, the **motion presets**, the **components**, the **brand exemplars** to study, and the **anti-pattern rules** that must hold. The engine never asks an LLM for an opinion — it's deterministic regex + lookup over structured data. Same input always gives same output.
+
+Then the existing 18 Claude Code commands and 5 sub-agents consume that recommendation to generate, audit, lint, and refine actual code.
+
+## The numbers
+
+| Manifest | ux-skill v2 | UI UX Pro Max |
+|---|---:|---:|
+| Design styles | **84** | 67 |
+| Color palettes | **170+** | 161 |
+| Type pairings | **70** | 57 |
+| Components | **148** | 0 |
+| Industry rules | **170+** | 161 |
+| Chart types | **35** | 25 |
+| Tech stacks | **25** | 15 |
+| UX laws | **110+** | 99 |
+| Motion presets | **57** | 0 |
+| Anti-pattern rules | **35** | 0 |
+| Brand specs | **72** | 0 |
+| **Total entries** | **~1,000+** | **~600** |
+
+Three categories — components, motion, anti-patterns, brand specs — they don't have at all. That's our moat.
+
+## Install — pick your path
+
+### Inside Claude Code (canonical)
+
+```bash
+/plugin marketplace add Laith0003/ux-skill
+/plugin install ux@ux-skill
+```
+
+### Anywhere else (pip)
+
+```bash
+pip install uxskill
+ux init                       # auto-detects your IDE, installs for it
+```
+
+### No-Python wrapper (npx)
+
+```bash
+npx uxskill init              # bootstraps Python via pipx automatically
+```
+
+## The flagship: `/ux-recommend`
+
+Inside Claude Code:
+
+```
+/ux-recommend
+> Project type? landing
+> Industry? fintech-neobank
+> Tone? warm, editorial
+> Must have? dark-mode, a11y-AA
+> Forbidden? brutalism, purple-gradients
+> Stack? nextjs-15-app-router
+> Region? mena
+```
+
+Outside Claude Code:
+
+```bash
+ux recommend \
+  --project-type=landing \
+  --industry=fintech-neobank \
+  --tone=warm --tone=editorial \
+  --must-have=dark-mode --must-have=a11y-AA \
+  --forbidden=brutalism --forbidden=purple-gradients \
+  --stack=nextjs-15-app-router \
+  --region=mena
+```
+
+Returns a complete merged design system: picked style, picked palette, picked type pair, top 5 motion presets, top 12 components, top 5 brand exemplars to study, all 35 anti-pattern guardrails active, plus a rationale block explaining each pick.
+
+## Architecture
+
+```
+ux-skill/
+├── data/                          # Queryable JSON — the brain
+│   ├── styles.json                # 84 design styles
+│   ├── palettes.json              # 170+ color palettes
+│   ├── type-pairs.json            # 70 font pairings
+│   ├── components.json            # 148 components
+│   ├── industries.json            # 170+ industry rules
+│   ├── chart-types.json           # 35 chart types
+│   ├── tech-stacks.json           # 25 stacks
+│   ├── ux-guidelines.json         # 110+ named laws
+│   ├── motion-presets.json        # 57 motion presets
+│   ├── anti-patterns.json         # 35 regex rules
+│   └── brands/*.json              # 72 brand specs
+│
+├── engine/                        # Python — the reasoning
+│   ├── recommender/               # 5-parallel-search engine
+│   ├── linter/                    # Anti-slop linter (replaces ux-lint.sh)
+│   ├── discovery/                 # 10-field forcing protocol
+│   ├── generator/                 # Tokens + manifest emitter
+│   ├── installer/                 # 17-IDE multi-installer
+│   └── cli/                       # `ux` / `uxskill` entry
+│
+├── commands/                      # 18 Claude Code slash commands (.md)
+├── agents/                        # 5 sub-agent definitions (.md)
+├── references/                    # Prose source for the data + demo pages
+└── bin/uxskill.mjs                # npx wrapper → Python engine
+```
+
+**Python thinks. HTML shows. Markdown chains.**
+
+## The 18 commands (v1 preserved + v2 flagship)
+
+| Command | What it does |
+|---|---|
+| `/ux-recommend` | **v2 flagship**: 5-parallel-search engine → merged system |
+| `/ux-design [brief]` | Generate frontend code from a recommendation |
+| `/ux-audit [path]` | Run linter + LLM design review |
+| `/ux-lint [path]` | Deterministic anti-slop linter (no LLM) |
+| `/ux-system` | Generate a complete design system |
+| `/ux-component [name]` | Generate one component |
+| `/ux-dashboard` | Generate a dashboard surface |
+| `/ux-motion` | Generate motion treatment |
+| `/ux-copy` | Microcopy review + rewrites |
+| `/ux-a11y` | Accessibility audit |
+| `/ux-critique` | Pure design critique |
+| `/ux-polish` | Fix-loop on existing code |
+| `/ux-fix` | Apply linter findings |
+| `/ux-frame` | Frame the problem before solving |
+| `/ux-research` | Synthesize research inputs |
+| `/ux-workshop` | Run a design workshop |
+| `/ux-case-study` | Write a case study |
+| `/ux-expert` | Get expert advice (consulting hook) |
+| `/ux-next` | Suggest the next command |
+
+## The 5 sub-agents
+
+- `frontend-engineer` — production-grade React/Next/Vue/Blade/Astro
+- `motion-engineer` — Framer Motion / GSAP / CSS with reduced-motion fallbacks
+- `copy-writer` — microcopy in brand voice
+- `research-synthesizer` — digests interviews/analytics/competitors into recommendations
+- `design-system-architect` — tokens, components, foundations
+
+## The three moats
+
+1. **Deterministic anti-AI-slop linter** — 35 regex rules, no LLM, runs in CI. Catches: Inter as display, purple-to-blue gradients, three equal cards, "John Doe", emoji in UI, 300ms default timing, generic CTAs, dark text on dark cards, and more. Wire it into pre-commit hooks for a hard floor against AI fingerprints.
+
+2. **Mandatory 10-field discovery** — forcing function before any generation. The plugin asks: project type, audience, primary goal, tone, must-haves, forbidden, reference brands, stack, region, success metric. No improvisation. The brief is saved to `.ux/last-discovery.json` so subsequent commands chain.
+
+3. **72 real brand DESIGN.md specs** — Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast and 59 more. Full design languages, not generic palettes. Tell the plugin "build a landing in Stripe's style" and it reads the actual brand language. Both as prose (`references/brands/*.md`) and structured JSON (`data/brands/*.json`).
+
+## Cross-IDE distribution
+
+17 environments supported via `ux init`:
+
+| IDE / Tool | Detection | Installed artifact |
+|---|---|---|
+| Claude Code | `.claude/` or `CLAUDE.md` | Plugin manifest at `.claude-plugin/plugin.json` |
+| Cursor | `.cursor/` or `.cursorrules` | `.cursorrules` prompt header |
+| Windsurf | `.windsurf/` or `.windsurfrules` | `.windsurfrules` |
+| GitHub Copilot | `.github/copilot-instructions.md` or `.vscode/` | `.github/copilot-instructions.md` |
+| Gemini CLI | `GEMINI.md` | `GEMINI.md` |
+| Codex | `AGENTS.md` | `AGENTS.md` |
+| Kiro | `.kiro/` | `.kiro/instructions.md` |
+| Cline | `.cline/` | `.cline/instructions.md` |
+| Continue | `.continue/` | `.continue/config.json` |
+| Aider | `.aider.conf.yml` | `.aider.conf.yml` + `AIDER.md` |
+| Zed | `.zed/` | `.zed/instructions.md` |
+| JetBrains AI | `.jetbrains-ai/` or `.idea/` | `.jetbrains-ai/instructions.md` |
+| Pieces | `.pieces/` | `.pieces/instructions.md` |
+| Tabby | `.tabby/` | `.tabby/instructions.md` |
+| Tabnine | `.tabnine/` | `.tabnine/instructions.md` |
+| CodeWhisperer | `.aws-codewhisperer/` | `.aws-codewhisperer/instructions.md` |
+| Roo Cline | `.roo/` | `.roo/instructions.md` |
+
+Same Python engine. Same recommendations. Different glue per IDE.
+
+## Compatibility with v1
+
+v1 install still works for existing users:
+
+```bash
+/plugin marketplace add Laith0003/ux-skill
+/plugin install ux@ux-skill
+```
+
+v2 adds the Python layer underneath. When the Python engine is available, commands shell to it for the heavy lifting. When it's not (older installs), commands fall back to v1's prose-only behavior. No breaking changes.
+
+## Privacy
+
+The plugin runs entirely on your machine. No telemetry. No analytics. No phone-home. The deterministic linter runs pure regex over local files. LLM calls (in commands that use them) go through your own AI assistant's authentication, not the plugin's. Full privacy policy: [PRIVACY.md](PRIVACY.md) / [uxskill.laithjunaidy.com/privacy.html](https://uxskill.laithjunaidy.com/privacy.html).
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Issues and PRs welcome. The 17 deferred anti-pattern rules and the 8 net-new component patterns flagged during v2.0 are explicit follow-ups in the issue tracker.
+
+## License
+
+MIT. Use it, fork it, build on it. If it saves you from shipping AI slop, star the repo. It's the cheapest way to support it.
+
+## Author
+
+**Laith Aljunaidy** — solo founder of [Dot](https://thedotwallet.com), a MENA-first loyalty platform. Building ux-skill so the AI-generated frontend doesn't all look the same.
+
+- LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
+- Email: laith.aljunaidy.laith@gmail.com
+- Repo: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
+- Site: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
+
+---
+
+**v2.0.0-alpha.1** · Built so Claude Code, Cursor, and friends output frontend code that doesn't read as AI-generated.

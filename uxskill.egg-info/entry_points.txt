@@ -1,0 +1,3 @@
+[console_scripts]
+ux = engine.cli.main:cli
+uxskill = engine.cli.main:cli
