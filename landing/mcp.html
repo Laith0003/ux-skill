@@ -6,8 +6,8 @@
   <title>ux-skill MCP server — the design intelligence MCP for Claude Desktop, Cursor, Windsurf, any agent</title>
   <meta name="description" content="ux-skill ships a Model Context Protocol server exposing 14 tools — the 5-parallel-search recommender, the 100-rule anti-AI-slop linter, and the 11 data manifests — over stdio. Any MCP-capable host can call into the engine. None of the top 8 Claude UX skills ship one.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/mcp.html">
-  <meta name="theme-color" content="#faf9f5">
-  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
   <meta name="robots" content="index,follow">
 
   <meta property="og:type" content="website">
@@ -26,138 +26,306 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
   <style>
+    /* =========================================================================
+       UXSKILL DOCS v3 — Saturated Cinema (dark)
+       Scene accent: emerald #10b981
+       ========================================================================= */
     :root {
-      --canvas: #faf9f5;
-      --surface: #efe9de;
-      --surface-2: #f3eee4;
-      --ink: #181715;
-      --body: #3d3d3a;
-      --muted: #6c6a64;
-      --hairline: rgba(20,20,19,0.10);
-      --primary: #cc785c;
-      --primary-active: #a9583e;
-      --primary-soft: rgba(204,120,92,0.12);
-      --win-bg: #ddebd9;
-      --win-fg: #28681c;
-      --weak-bg: #f4e5dc;
-      --weak-fg: #a4502f;
-      --neutral-bg: #ece6dc;
-      --neutral-fg: #6c6a64;
+      --canvas:        #07080a;
+      --surface-1:     #0d0f12;
+      --surface-2:     #14181d;
+      --surface-3:     #1c2128;
+      --ink:           #f6f7f9;
+      --body:          #c7ccd3;
+      --muted:         #8a8f96;
+      --faint:         #5a5f66;
+      --hairline:      rgba(246, 247, 249, 0.07);
+      --hairline-2:    rgba(246, 247, 249, 0.14);
+
+      --scene-glow:    #10b981;
+      --scene-accent:  #10b981;
+      --scene-soft:    rgba(16, 185, 129, 0.10);
+
+      /* Win/loss ramp — dark equivalents */
+      --win-bg:    rgba(16, 185, 129, 0.14);
+      --win-fg:    #34d399;
+      --weak-bg:   rgba(244, 114, 182, 0.14);
+      --weak-fg:   #f472b6;
+
+      --display:   'Bricolage Grotesque', 'Inter Tight', system-ui, sans-serif;
+      --body-face: 'Inter', system-ui, -apple-system, sans-serif;
+      --mono:      'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+      --italic-face: 'Instrument Serif', Georgia, serif;
+
+      --max-w:    1320px;
+      --gutter:   clamp(20px, 5vw, 56px);
+
+      --ease-cinema: cubic-bezier(0.16, 1, 0.3, 1);
+      --t-fast:   160ms;
+      --t-mid:    260ms;
+      --t-slow:   520ms;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { background: var(--canvas); scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      margin: 0;
       background: var(--canvas);
       color: var(--body);
+      font-family: var(--body-face);
       font-size: 16px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
-    .wrap { max-width: 1180px; margin: 0 auto; padding: 64px 24px 96px; }
+    a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--hairline-2); text-underline-offset: 3px; transition: text-decoration-color var(--t-fast) var(--ease-cinema), color var(--t-fast) var(--ease-cinema); }
+    a:hover, a:focus-visible { text-decoration-color: var(--scene-accent); }
+    a:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 3px; border-radius: 2px; }
+    button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 
-    header.top {
+    .skip-link {
+      position: absolute; top: -40px; left: 8px;
+      background: var(--surface-2); color: var(--ink);
+      padding: 12px 18px; border-radius: 8px;
+      font-family: var(--mono); font-size: 12px;
+      border: 1px solid var(--hairline-2);
+      z-index: 200;
+    }
+    .skip-link:focus { top: 8px; }
+
+    /* ===== NAV ===== */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 80;
+      padding: 14px 0;
+      transition: backdrop-filter var(--t-mid) var(--ease-cinema),
+                  background-color var(--t-mid) var(--ease-cinema),
+                  border-color var(--t-mid) var(--ease-cinema);
+      border-bottom: 1px solid transparent;
+    }
+    .nav.is-scrolled {
+      background: rgba(7, 8, 10, 0.72);
+      backdrop-filter: saturate(140%) blur(18px);
+      -webkit-backdrop-filter: saturate(140%) blur(18px);
+      border-bottom-color: var(--hairline);
+    }
+    .nav__inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 8px 0 56px;
-      border-bottom: 1px solid var(--hairline);
-      margin-bottom: 56px;
+      gap: 18px;
     }
     .wordmark {
-      display: inline-flex; align-items: baseline; gap: 4px;
-      text-decoration: none; color: var(--ink);
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 600; font-size: 28px; letter-spacing: -0.02em;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-size: 22px;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--ink);
+      display: inline-flex;
+      align-items: baseline;
+      gap: 2px;
+      text-decoration: none;
     }
-    .wordmark .dot {
-      display: inline-block; width: 6px; height: 6px;
-      border-radius: 999px; background: var(--primary);
-      transform: translateY(-3px);
+    .wordmark:hover { text-decoration: none; }
+    .wordmark__dot {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 2px;
+      background: linear-gradient(135deg, #06b6d4, #ec4899);
+      margin-left: 4px;
+      transform: translateY(-2px);
     }
-    nav.crumbs {
-      display: flex; gap: 28px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+    .nav__links { display: none; gap: 26px; align-items: center; }
+    .nav__link {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
       color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: lowercase;
+      text-decoration: none;
+      transition: color var(--t-fast) var(--ease-cinema);
     }
-    nav.crumbs a { color: var(--muted); text-decoration: none; }
-    nav.crumbs a:hover { color: var(--ink); }
-    nav.crumbs a.current { color: var(--ink); }
+    .nav__link:hover, .nav__link:focus-visible { color: var(--ink); text-decoration: none; }
+    .nav__link.is-current { color: var(--ink); }
+    .nav__link:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 6px; border-radius: 3px; }
+    .cta-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 14px; min-height: 36px;
+      border-radius: 10px;
+      background: var(--ink); color: var(--canvas);
+      font-family: var(--mono); font-size: 12px; font-weight: 500;
+      text-decoration: none;
+      transition: transform var(--t-mid) var(--ease-cinema),
+                  background-color var(--t-fast) var(--ease-cinema);
+    }
+    .cta-pill:hover, .cta-pill:focus-visible { transform: translateY(-1px); background: #ffffff; text-decoration: none; }
+    .cta-pill:active { transform: translateY(0); }
+    .cta-pill:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 4px; }
+
+    .nav__menu-btn {
+      display: inline-flex; width: 40px; height: 40px;
+      align-items: center; justify-content: center;
+      border-radius: 8px;
+      border: 1px solid var(--hairline-2);
+      color: var(--ink);
+    }
+    .nav__menu-btn:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 3px; }
+    .nav__drawer {
+      position: fixed; inset: 0;
+      z-index: 90;
+      display: flex; flex-direction: column;
+      padding: 80px var(--gutter) 40px;
+      opacity: 0; pointer-events: none;
+      transition: opacity var(--t-mid) var(--ease-cinema);
+      background-color: rgba(7, 8, 10, 0.94);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .nav__drawer.is-open { opacity: 1; pointer-events: auto; }
+    .nav__drawer a {
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'wght' 560;
+      font-size: 32px;
+      color: var(--ink);
+      padding: 14px 0;
+      border-bottom: 1px solid var(--hairline);
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+    .nav__drawer .nav__drawer-close {
+      position: absolute; top: 18px; right: var(--gutter);
+      width: 44px; height: 44px;
+      border-radius: 8px;
+      border: 1px solid var(--hairline-2);
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent; color: var(--ink);
+    }
+    @media (min-width: 768px) {
+      .nav__links { display: flex; }
+      .nav__menu-btn { display: none; }
+    }
+
+    /* ===== PAGE ===== */
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: clamp(120px, 16vw, 168px) var(--gutter) clamp(80px, 12vw, 140px);
+    }
+
+    .crumbs {
+      display: flex; gap: 18px; flex-wrap: wrap;
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.06em;
+      text-transform: lowercase;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+    .crumbs a { color: var(--muted); text-decoration: none; }
+    .crumbs a:hover { color: var(--ink); }
+    .crumbs a.is-current { color: var(--ink); }
 
     .hero { margin-bottom: 56px; }
     .eyebrow {
-      display: inline-block;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--primary);
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: inline-flex; align-items: center; gap: 10px;
       margin-bottom: 22px;
     }
-    h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-      font-size: clamp(48px, 7vw, 80px);
+    .eyebrow::before {
+      content: ''; display: inline-block;
+      width: 22px; height: 1px;
+      background: currentColor;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--display);
+      font-weight: 600;
+      font-variation-settings: 'wdth' 88, 'opsz' 96, 'wght' 580;
+      margin: 0;
       line-height: 1.04;
-      letter-spacing: -0.025em;
+      letter-spacing: -0.028em;
       color: var(--ink);
+    }
+    h1 {
+      font-size: clamp(44px, 7vw, 76px);
+      font-variation-settings: 'wdth' 84, 'opsz' 96, 'wght' 600;
+      letter-spacing: -0.036em;
       margin-bottom: 24px;
       max-width: 960px;
     }
-    h1 .accent { font-style: italic; color: var(--primary); font-weight: 600; }
+    h1 .accent, h2 .accent {
+      font-family: var(--italic-face);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--scene-accent);
+      letter-spacing: -0.015em;
+    }
     .lede {
-      font-size: 19px; line-height: 1.55;
-      color: var(--body); max-width: 820px; margin-bottom: 28px;
+      font-size: 19px;
+      line-height: 1.55;
+      color: var(--body);
+      max-width: 820px;
+      margin-bottom: 28px;
     }
     .lede strong { color: var(--ink); font-weight: 600; }
     .lede code, p code, td code, th code, li code {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 12.5px;
-      background: var(--surface);
+      background: var(--surface-2);
       padding: 1px 6px;
       border-radius: 4px;
       color: var(--ink);
+      border: 1px solid var(--hairline);
     }
 
     .pitch {
-      background: var(--surface);
-      border-left: 3px solid var(--primary);
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-left: 3px solid var(--scene-accent);
       padding: 24px 28px;
       border-radius: 0 14px 14px 0;
       max-width: 880px;
       margin-bottom: 48px;
       font-size: 16px;
+      color: var(--body);
     }
     .pitch strong { color: var(--ink); }
     .pitch .label {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 10.5px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--primary);
+      color: var(--scene-accent);
       margin-bottom: 10px;
     }
 
     section { margin-top: 88px; }
     h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
       font-size: clamp(28px, 4vw, 44px);
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      color: var(--ink);
+      font-variation-settings: 'wdth' 86, 'opsz' 64, 'wght' 580;
+      letter-spacing: -0.026em;
       margin-bottom: 14px;
     }
-    h2 .accent { color: var(--primary); font-style: italic; font-weight: 600; }
     h3 {
-      font-family: 'Inter', sans-serif;
+      font-family: var(--body-face);
       font-weight: 600;
       font-size: 17px;
       color: var(--ink);
       margin: 28px 0 10px;
+      letter-spacing: -0.005em;
     }
     .sub-eye {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 11px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
@@ -165,49 +333,51 @@
       margin-bottom: 14px;
       display: block;
     }
-    p { margin-bottom: 14px; max-width: 820px; }
+    p { margin: 0 0 14px; max-width: 820px; color: var(--body); }
     p.intro { color: var(--body); margin: 8px 0 28px; max-width: 880px; font-size: 17px; }
     p.intro strong { color: var(--ink); font-weight: 600; }
+    p strong { color: var(--ink); font-weight: 600; }
     ul, ol { padding-left: 0; list-style: none; max-width: 820px; }
-    li { margin-bottom: 10px; padding-left: 18px; position: relative; }
+    li { margin-bottom: 10px; padding-left: 18px; position: relative; color: var(--body); }
     li::before {
       content: "";
       width: 5px; height: 5px;
       border-radius: 999px;
-      background: var(--primary);
+      background: var(--scene-accent);
       position: absolute;
       left: 0; top: 11px;
     }
+    li strong { color: var(--ink); }
 
-    /* Code blocks ------------------------------------------------------- */
+    /* Code blocks */
     pre.code {
-      background: var(--ink);
-      color: #e8e6df;
+      background: #0a0c10;
+      color: #d8dde4;
+      border: 1px solid var(--hairline);
       border-radius: 12px;
       padding: 20px 22px;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 13px;
       line-height: 1.65;
       overflow-x: auto;
       margin: 14px 0 20px;
       max-width: 880px;
-      box-shadow: 0 10px 30px -22px rgba(24,23,21,0.30);
     }
-    pre.code .k { color: #f3b58e; }     /* keys / keywords */
-    pre.code .s { color: #c8e0c2; }     /* strings */
-    pre.code .c { color: #8a8780; font-style: italic; }
-    pre.code .p { color: var(--primary); }
+    pre.code .k { color: #c4b5fd; }     /* keys */
+    pre.code .s { color: #86efac; }     /* strings */
+    pre.code .c { color: var(--muted); font-style: italic; }
+    pre.code .p { color: var(--scene-accent); }
 
-    /* Tool table -------------------------------------------------------- */
+    /* Tool table */
     .tools {
       width: 100%;
       border-collapse: collapse;
       font-size: 14px;
       margin: 16px 0 28px;
-      background: white;
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
       border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 8px 28px -16px rgba(24,23,21,0.12);
     }
     .tools th, .tools td {
       padding: 14px 18px;
@@ -216,16 +386,17 @@
       vertical-align: top;
     }
     .tools thead th {
-      background: var(--surface);
-      font-family: 'JetBrains Mono', monospace;
+      background: var(--surface-2);
+      font-family: var(--mono);
       font-size: 11px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--ink);
-      font-weight: 600;
+      color: var(--muted);
+      font-weight: 500;
     }
+    .tools tbody td { color: var(--body); }
     .tools tbody td.tname {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 13px;
       color: var(--ink);
       font-weight: 600;
@@ -235,21 +406,22 @@
     .tools tbody td.tname code {
       background: transparent;
       padding: 0;
-      color: var(--primary);
+      color: var(--scene-accent);
+      border: 0;
     }
     .tools tr:last-child td { border-bottom: 0; }
     .tools tr:hover td { background: var(--surface-2); }
 
-    /* Asymmetric table -------------------------------------------------- */
+    /* H2H table */
     .h2h {
       width: 100%;
       border-collapse: collapse;
       font-size: 14px;
       margin-bottom: 28px;
-      background: white;
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
       border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 8px 28px -16px rgba(24,23,21,0.12);
     }
     .h2h th, .h2h td {
       padding: 14px 18px;
@@ -258,60 +430,72 @@
       vertical-align: middle;
     }
     .h2h thead th {
-      background: var(--surface);
-      font-family: 'JetBrains Mono', monospace;
+      background: var(--surface-2);
+      font-family: var(--mono);
       font-size: 11px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--ink);
-      font-weight: 600;
+      color: var(--muted);
+      font-weight: 500;
     }
+    .h2h tbody td { color: var(--body); }
     .h2h tbody td.plugin { font-weight: 600; color: var(--ink); font-size: 13.5px; white-space: nowrap; }
-    .h2h tbody td.mcp { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; }
+    .h2h tbody td.mcp { font-family: var(--mono); font-size: 12.5px; color: var(--ink); }
     .h2h tbody td.reach { color: var(--muted); }
-    .h2h tr.ours td { background: rgba(204,120,92,0.06); }
-    .h2h tr.ours td.plugin { color: var(--primary); }
+    .h2h tr.ours td { background: var(--scene-soft); }
+    .h2h tr.ours td.plugin { color: var(--scene-accent); }
     .h2h tr:last-child td { border-bottom: 0; }
     .pill {
       display: inline-block;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 10.5px;
       letter-spacing: 0.10em;
       text-transform: uppercase;
-      padding: 2px 9px;
+      padding: 3px 9px;
       border-radius: 4px;
       font-weight: 600;
+      border: 1px solid transparent;
     }
-    .pill.yes { background: var(--win-bg); color: var(--win-fg); }
-    .pill.no  { background: var(--weak-bg); color: var(--weak-fg); }
+    .pill.yes { background: var(--win-bg); color: var(--win-fg); border-color: rgba(52, 211, 153, 0.25); }
+    .pill.no  { background: var(--weak-bg); color: var(--weak-fg); border-color: rgba(244, 114, 182, 0.25); }
 
-    /* Client config cards ---------------------------------------------- */
+    /* Client cards */
     .clients {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
       gap: 18px;
       margin: 12px 0 28px;
+      list-style: none;
+      padding: 0;
     }
+    .clients > * { padding-left: 0; }
+    .clients > *::before { display: none; }
     .client-card {
-      background: white;
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-top: 3px solid var(--scene-accent);
       border-radius: 14px;
       padding: 22px 24px 18px;
-      box-shadow: 0 8px 28px -16px rgba(24,23,21,0.12);
-      border-top: 3px solid var(--primary);
     }
     .client-card h4 {
-      font-family: 'Inter', sans-serif;
+      font-family: var(--body-face);
       font-weight: 600;
       font-size: 15px;
       color: var(--ink);
       margin-bottom: 6px;
+      letter-spacing: -0.005em;
     }
     .client-card p.path {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 11.5px;
       color: var(--muted);
       margin-bottom: 14px;
       word-break: break-all;
+    }
+    .client-card p { color: var(--body); }
+    .client-card p em {
+      color: var(--ink);
+      font-style: italic;
     }
     .client-card pre.code {
       margin: 0;
@@ -319,47 +503,109 @@
       max-width: none;
     }
 
-    /* CTA ---------------------------------------------------------------- */
+    /* CTA */
     .cta {
       margin-top: 96px;
       padding: 56px 48px;
-      background: var(--ink);
-      color: var(--canvas);
+      background: var(--surface-1);
+      border: 1px solid var(--hairline-2);
       border-radius: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--scene-accent) 0%, transparent 60%);
     }
     @media (max-width: 720px) { .cta { padding: 40px 28px; } }
-    .cta .eyebrow { color: var(--primary); }
-    .cta h2 { color: var(--canvas); max-width: 740px; }
-    .cta p { color: rgba(250,249,245,0.78); max-width: 640px; margin-bottom: 28px; }
+    .cta .eyebrow { color: var(--scene-accent); }
+    .cta .eyebrow::before { background: currentColor; }
+    .cta h2 { color: var(--ink); max-width: 740px; }
+    .cta p { color: var(--body); max-width: 640px; margin-bottom: 28px; }
     .install-block {
-      background: rgba(250,249,245,0.06);
+      background: var(--surface-2);
+      border: 1px solid var(--hairline);
       border-radius: 12px;
       padding: 20px 24px;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 14px;
       line-height: 1.75;
-      color: var(--canvas);
+      color: var(--body);
       max-width: 720px;
     }
-    .install-block .prompt { color: var(--primary); }
-    .install-block .arg { color: rgba(250,249,245,0.6); }
+    .install-block .prompt { color: var(--scene-accent); }
+    .install-block .arg { color: var(--muted); }
     .install-block .row + .row { margin-top: 6px; }
+    .install-block .row { padding-left: 0; margin-bottom: 0; }
+    .install-block .row::before { display: none; }
+    .install-block code { background: var(--surface-3); color: var(--ink); border: 0; }
 
-    footer {
-      margin-top: 96px;
-      padding-top: 32px;
+    /* ===== FOOTER ===== */
+    .footer {
+      padding: 88px 0 56px;
       border-top: 1px solid var(--hairline);
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      flex-wrap: wrap;
+      background: var(--surface-1);
+    }
+    .footer__inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 44px;
+    }
+    .footer__col-h {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .footer__col ul { list-style: none; padding: 0; margin: 0; max-width: none; }
+    .footer__col li { margin-bottom: 10px; padding: 0; }
+    .footer__col li::before { display: none; }
+    .footer__link {
+      color: var(--body);
+      font-size: 13.5px;
+      text-decoration: none;
+      transition: color var(--t-fast) var(--ease-cinema);
+    }
+    .footer__link:hover, .footer__link:focus-visible { color: var(--ink); text-decoration: none; }
+    .footer__link:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 3px; border-radius: 2px; }
+    .footer__tagline {
+      margin-top: 12px;
+      font-size: 13.5px;
+      color: var(--body);
+      max-width: 320px;
+    }
+    .footer__bottom {
+      max-width: var(--max-w);
+      margin: 64px auto 0;
+      padding: 28px var(--gutter) 0;
+      display: flex; flex-wrap: wrap;
       gap: 16px;
-      font-size: 13px;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--hairline);
+      font-family: var(--mono);
+      font-size: 11.5px;
       color: var(--muted);
     }
-    footer a { color: var(--muted); text-decoration: none; }
-    footer a:hover { color: var(--ink); }
-    footer .links { display: flex; gap: 24px; }
+    @media (min-width: 720px) {
+      .footer__inner { grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr; gap: 40px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
   </style>
   <script type="application/ld+json">
   {
@@ -387,38 +633,78 @@
   </script>
 </head>
 <body>
-  <div class="wrap">
-    <header class="top">
-      <a href="/" class="wordmark">ux<span class="dot"></span></a>
-      <nav class="crumbs">
-        <a href="/">Home</a>
-        <a href="/compare.html">Compare</a>
-        <a href="/mcp.html" class="current">MCP</a>
-        <a href="/blog/">Blog</a>
-        <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
-      </nav>
-    </header>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="/" class="wordmark" aria-label="uxskill home">
+      uxskill<span class="wordmark__dot" aria-hidden="true"></span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="/compare.html">compare</a>
+      <a class="nav__link" href="/about.html">about</a>
+      <a class="nav__link" href="/roadmap.html">roadmap</a>
+      <a class="nav__link" href="/faq.html">faq</a>
+      <a class="nav__link is-current" href="/mcp.html">mcp</a>
+      <a class="nav__link" href="/commands.html">commands</a>
+      <a class="nav__link" href="/blog/">blog</a>
+    </nav>
+    <a href="https://github.com/Laith0003/ux-skill" class="cta-pill" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      <span>GitHub</span>
+    </a>
+    <button type="button" class="nav__menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer" id="nav-menu-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="nav__drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Site menu" aria-hidden="true">
+  <button type="button" class="nav__drawer-close" aria-label="Close menu" id="nav-drawer-close">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <a href="/compare.html">Compare</a>
+  <a href="/about.html">About</a>
+  <a href="/roadmap.html">Roadmap</a>
+  <a href="/faq.html">FAQ</a>
+  <a href="/mcp.html">MCP</a>
+  <a href="/commands.html">Commands</a>
+  <a href="/blog/">Blog</a>
+  <a href="/privacy.html">Privacy</a>
+  <a href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+</div>
+
+<main id="main">
+  <div class="page">
+    <nav class="crumbs" aria-label="Breadcrumbs">
+      <a href="/">home</a>
+      <a href="/compare.html">compare</a>
+      <a href="/mcp.html" class="is-current">mcp</a>
+      <a href="/blog/">blog</a>
+      <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+    </nav>
 
     <section class="hero">
-      <span class="eyebrow">MCP server · stdio · 14 tools · 2026</span>
+      <span class="eyebrow">MCP server &middot; stdio &middot; 14 tools &middot; 2026</span>
       <h1>Design intelligence over <span class="accent">Model Context Protocol</span>.</h1>
       <p class="lede">
-        ux-skill ships a Model Context Protocol server. <strong>Any MCP-capable host</strong> — Claude Desktop, Cursor, Windsurf, generic agents — can call the recommender, the linter, and all eleven data manifests over stdio. No plugin install, no IDE lock-in, just a long-running daemon and 14 tools.
+        ux-skill ships a Model Context Protocol server. <strong>Any MCP-capable host</strong> &mdash; Claude Desktop, Cursor, Windsurf, generic agents &mdash; can call the recommender, the linter, and all eleven data manifests over stdio. No plugin install, no IDE lock-in, just a long-running daemon and 14 tools.
       </p>
 
       <div class="pitch">
         <div class="label">Why this exists</div>
         <p>
-          Reaching design intelligence used to mean installing a plugin into the specific tool the plugin was written for. Claude Code plugins stay in Claude Code. Cursor rules stay in Cursor. The same recommender, the same linter, the same brand specs had to be re-wired for every host. The MCP server collapses that. <strong>One process. One protocol. Every host that speaks MCP gets the engine, identically.</strong> The recommender is deterministic, the linter is regex-grounded, and both come straight out of the same Python package as the slash commands — so an agent in a fresh repo can ask for the same Stripe-grade landing or fintech-dashboard system that a Claude Code session can.
+          Reaching design intelligence used to mean installing a plugin into the specific tool the plugin was written for. Claude Code plugins stay in Claude Code. Cursor rules stay in Cursor. The same recommender, the same linter, the same brand specs had to be re-wired for every host. The MCP server collapses that. <strong>One process. One protocol. Every host that speaks MCP gets the engine, identically.</strong> The recommender is deterministic, the linter is regex-grounded, and both come straight out of the same Python package as the slash commands &mdash; so an agent in a fresh repo can ask for the same Stripe-grade landing or fintech-dashboard system that a Claude Code session can.
         </p>
       </div>
     </section>
 
-    <!-- Asymmetric position --------------------------------------------- -->
+    <!-- Asymmetric position -->
     <section>
       <span class="sub-eye">The asymmetric position</span>
       <h2>None of the top eight ship one. <span class="accent">We do.</span></h2>
-      <p class="intro">The competition is locked inside Claude Code's plugin runtime. The MCP server makes ux-skill reachable from <strong>any</strong> agent — even agents that have never heard of a Claude Code plugin.</p>
+      <p class="intro">The competition is locked inside Claude Code's plugin runtime. The MCP server makes ux-skill reachable from <strong>any</strong> agent &mdash; even agents that have never heard of a Claude Code plugin.</p>
 
       <table class="h2h">
         <thead><tr><th>Plugin</th><th>MCP server</th><th>Effective reach</th></tr></thead>
@@ -441,7 +727,7 @@
       <p>One server. Every host. That's the move.</p>
     </section>
 
-    <!-- The 14 tools ----------------------------------------------------- -->
+    <!-- The 14 tools -->
     <section>
       <span class="sub-eye">The catalogue</span>
       <h2>Fourteen tools, <span class="accent">one engine.</span></h2>
@@ -454,28 +740,28 @@
         <tbody>
           <tr><td class="tname"><code>ux_recommend</code></td><td>Run the 5-parallel-search recommender over a brief. Returns style, palette, type pair, motion presets, components, brand exemplars, anti-pattern guardrails, and a rationale line per lane.</td></tr>
           <tr><td class="tname"><code>ux_lint</code></td><td>Run the 100-rule anti-AI-slop regex linter over file paths. Returns findings with rule id, severity, file, line, excerpt, and fix.</td></tr>
-          <tr><td class="tname"><code>ux_styles</code></td><td>Return all 84+ entries from <code>data/styles.json</code> — design philosophies with tokens.</td></tr>
+          <tr><td class="tname"><code>ux_styles</code></td><td>Return all 84+ entries from <code>data/styles.json</code> &mdash; design philosophies with tokens.</td></tr>
           <tr><td class="tname"><code>ux_palettes</code></td><td>Return 176+ entries from <code>data/palettes.json</code>. Optional <code>mode</code> filter (<code>light</code> / <code>dark</code>).</td></tr>
-          <tr><td class="tname"><code>ux_type_pairs</code></td><td>Return 70+ entries from <code>data/type-pairs.json</code> — display + body + mono pairings.</td></tr>
+          <tr><td class="tname"><code>ux_type_pairs</code></td><td>Return 70+ entries from <code>data/type-pairs.json</code> &mdash; display + body + mono pairings.</td></tr>
           <tr><td class="tname"><code>ux_components</code></td><td>Return 148+ entries from <code>data/components.json</code>. Optional <code>category</code> filter.</td></tr>
           <tr><td class="tname"><code>ux_industries</code></td><td>Return 184+ entries from <code>data/industries.json</code> with style/palette/type biases per domain.</td></tr>
           <tr><td class="tname"><code>ux_motion_presets</code></td><td>Return 57+ entries from <code>data/motion-presets.json</code> with easing, duration, stagger tokens.</td></tr>
           <tr><td class="tname"><code>ux_anti_patterns</code></td><td>Return 35+ entries from <code>data/anti-patterns.json</code> (the regex rules that drive the linter). Optional <code>severity</code> filter.</td></tr>
           <tr><td class="tname"><code>ux_brands</code></td><td>Return 110 brand specs from <code>data/brands/*.json</code> (Apple, Stripe, Linear, Tesla, Notion, etc.). Optional <code>category</code> filter.</td></tr>
-          <tr><td class="tname"><code>ux_landing_patterns</code></td><td>Return 24+ entries from <code>data/landing-patterns.json</code> — proven landing-page section patterns.</td></tr>
-          <tr><td class="tname"><code>ux_persist_save</code></td><td>Write a recommendation as <code>.ux/design-system/MASTER.md</code> in the given project root. Idempotent — same input writes byte-identical bytes.</td></tr>
+          <tr><td class="tname"><code>ux_landing_patterns</code></td><td>Return 24+ entries from <code>data/landing-patterns.json</code> &mdash; proven landing-page section patterns.</td></tr>
+          <tr><td class="tname"><code>ux_persist_save</code></td><td>Write a recommendation as <code>.ux/design-system/MASTER.md</code> in the given project root. Idempotent &mdash; same input writes byte-identical bytes.</td></tr>
           <tr><td class="tname"><code>ux_persist_load</code></td><td>Load <code>.ux/design-system/MASTER.md</code> back into a structured dict, or report not-found.</td></tr>
           <tr><td class="tname"><code>ux_stats</code></td><td>Return the engine version and per-manifest entry counts. Useful as a health probe.</td></tr>
         </tbody>
       </table>
     </section>
 
-    <!-- Examples --------------------------------------------------------- -->
+    <!-- Examples -->
     <section>
       <span class="sub-eye">Example calls</span>
       <h2>What it <span class="accent">actually does</span>.</h2>
 
-      <h3>ux_recommend — get a complete system from a brief</h3>
+      <h3>ux_recommend &mdash; get a complete system from a brief</h3>
 <pre class="code"><span class="c">// Input</span>
 {
   <span class="k">"brief"</span>: {
@@ -492,8 +778,8 @@
 <span class="c">// Output (abridged)</span>
 {
   <span class="k">"style"</span>: { <span class="k">"id"</span>: <span class="s">"monochrome-precise"</span>, <span class="k">"name"</span>: <span class="s">"Monochrome Precise"</span>, ... },
-  <span class="k">"palette"</span>: { <span class="k">"id"</span>: <span class="s">"ink-cream-amber"</span>, <span class="k">"mode"</span>: <span class="s">"light"</span>, ... },
-  <span class="k">"type_pair"</span>: { <span class="k">"id"</span>: <span class="s">"cormorant-inter-jetbrains"</span>, ... },
+  <span class="k">"palette"</span>: { <span class="k">"id"</span>: <span class="s">"dark-editorial-cinema"</span>, <span class="k">"mode"</span>: <span class="s">"dark"</span>, ... },
+  <span class="k">"type_pair"</span>: { <span class="k">"id"</span>: <span class="s">"bricolage-inter-jetbrains"</span>, ... },
   <span class="k">"motion"</span>: [ ... <span class="c">/* top 5 presets compatible with style */</span> ],
   <span class="k">"components"</span>: [ ... <span class="c">/* top 12 compatible components */</span> ],
   <span class="k">"brand_exemplars"</span>: [ ... <span class="c">/* top 5 brands to study */</span> ],
@@ -501,12 +787,12 @@
   <span class="k">"rationale"</span>: [
     <span class="s">"Industry: Fintech Neobank"</span>,
     <span class="s">"Style: Monochrome Precise"</span>,
-    <span class="s">"Palette: Ink Cream Amber"</span>,
+    <span class="s">"Palette: Dark Editorial Cinema"</span>,
     ...
   ]
 }</pre>
 
-      <h3>ux_lint — anti-slop regex sweep across paths</h3>
+      <h3>ux_lint &mdash; anti-slop regex sweep across paths</h3>
 <pre class="code"><span class="c">// Input</span>
 { <span class="k">"paths"</span>: [<span class="s">"./app"</span>, <span class="s">"./components"</span>], <span class="k">"threshold"</span>: <span class="s">"high"</span> }
 
@@ -521,15 +807,15 @@
       <span class="k">"severity"</span>: <span class="s">"high"</span>,
       <span class="k">"file"</span>: <span class="s">"./app/page.tsx"</span>,
       <span class="k">"line"</span>: 42,
-      <span class="k">"excerpt"</span>: <span class="s">"&lt;p&gt;Lorem ipsum dolor sit amet&lt;/p&gt;"</span>,
-      <span class="k">"fix"</span>: <span class="s">"Replace with real, specific copy."</span>
+      <span class="k">"excerpt"</span>: <span class="s">"&lt;p&gt;Your headline goes here.&lt;/p&gt;"</span>,
+      <span class="k">"fix"</span>: <span class="s">"Write real copy that names the user value."</span>
     },
     ...
   ],
   <span class="k">"summary"</span>: { <span class="k">"critical"</span>: 0, <span class="k">"high"</span>: 4, <span class="k">"medium"</span>: 7, <span class="k">"low"</span>: 12, <span class="k">"total"</span>: 23 }
 }</pre>
 
-      <h3>ux_stats — engine health probe</h3>
+      <h3>ux_stats &mdash; engine health probe</h3>
 <pre class="code"><span class="c">// Input: {} ; Output:</span>
 {
   <span class="k">"version"</span>: <span class="s">"2.0.0-alpha.1"</span>,
@@ -542,7 +828,7 @@
 }</pre>
     </section>
 
-    <!-- Client configuration -------------------------------------------- -->
+    <!-- Client configuration -->
     <section>
       <span class="sub-eye">Client configuration</span>
       <h2>Connect any MCP host in <span class="accent">three lines.</span></h2>
@@ -574,7 +860,7 @@
     }
   }
 }</pre>
-          <p style="margin-top:10px; font-size:13px; color:var(--muted);">Then in <code>.cursorrules</code>: <em>"When designing UI, call ux-skill MCP tools first: ux_recommend for the system, ux_lint to catch slop."</em></p>
+          <p>Then in <code>.cursorrules</code>: <em>"When designing UI, call ux-skill MCP tools first: ux_recommend for the system, ux_lint to catch slop."</em></p>
         </div>
 
         <div class="client-card">
@@ -605,20 +891,20 @@
       </div>
     </section>
 
-    <!-- Design notes ----------------------------------------------------- -->
+    <!-- Design notes -->
     <section>
       <span class="sub-eye">How it's built</span>
       <h2>Transport separated from <span class="accent">handlers.</span></h2>
       <p>The 14 tools are pure <code>dict -&gt; dict</code> Python functions in <code>engine.mcp.server</code>. The MCP stdio transport is an optional dependency that lazy-imports inside <code>run_server()</code>. Three consequences fall out:</p>
       <ul>
         <li>The <code>engine.mcp</code> module imports cleanly whether or not the <code>mcp</code> Python package is installed.</li>
-        <li>Tests exercise the handlers directly — no async event loop, no subprocess plumbing in the test suite.</li>
+        <li>Tests exercise the handlers directly &mdash; no async event loop, no subprocess plumbing in the test suite.</li>
         <li><code>ux-mcp</code> fails fast with a clear <code>pip install</code> hint if the transport library is missing.</li>
       </ul>
       <p>One source of truth, one entry point, every host.</p>
     </section>
 
-    <!-- CTA -------------------------------------------------------------- -->
+    <!-- CTA -->
     <section class="cta">
       <span class="eyebrow">Install. Connect. Run.</span>
       <h2>Three lines to design intelligence in <span class="accent">any agent.</span></h2>
@@ -627,21 +913,97 @@
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">'uxskill[mcp]'</span></div>
         <div class="row"><span class="prompt">$</span> ux-mcp <span class="arg"># starts the stdio server</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— then point your MCP host at <code style="background:rgba(250,249,245,0.08); color:inherit;">ux-mcp</code> —</div>
+        <div class="row" style="margin-top:14px; opacity:0.6;">&mdash; then point your MCP host at <code>ux-mcp</code> &mdash;</div>
       </div>
     </section>
-
-    <footer>
-      <span>&copy; 2026 Laith Aljunaidy. MIT. Built into ux-skill v2.0.0-alpha.</span>
-      <div class="links">
-        <a href="/">Home</a>
-        <a href="/compare.html">Compare</a>
-        <a href="/blog/">Blog</a>
-        <a href="/privacy.html">Privacy</a>
-        <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
-        <a href="https://pypi.org/project/uxskill/">PyPI</a>
-      </div>
-    </footer>
   </div>
+</main>
+
+<footer class="footer" role="contentinfo">
+  <div class="footer__inner">
+    <div class="footer__col">
+      <a href="/" class="wordmark" aria-label="uxskill home">uxskill<span class="wordmark__dot" aria-hidden="true"></span></a>
+      <p class="footer__tagline">Design intelligence for AI coding. Built so every model session ships work that does not look generated.</p>
+    </div>
+    <div class="footer__col">
+      <p class="footer__col-h">Plugin</p>
+      <ul>
+        <li><a class="footer__link" href="/about.html">About</a></li>
+        <li><a class="footer__link" href="/compare.html">Compare</a></li>
+        <li><a class="footer__link" href="/roadmap.html">Roadmap</a></li>
+        <li><a class="footer__link" href="/faq.html">FAQ</a></li>
+        <li><a class="footer__link" href="/mcp.html">MCP</a></li>
+        <li><a class="footer__link" href="/privacy.html">Privacy</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <p class="footer__col-h">Reading</p>
+      <ul>
+        <li><a class="footer__link" href="/blog/">Blog index</a></li>
+        <li><a class="footer__link" href="/blog/dark-editorial-cinema-design.html">Dark editorial cinema</a></li>
+        <li><a class="footer__link" href="/blog/best-claude-code-design-skills-2026.html">Best Claude Code design skills</a></li>
+        <li><a class="footer__link" href="/blog/anti-ai-slop-claude-skills.html">Anti AI-slop skills</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <p class="footer__col-h">Reference</p>
+      <ul>
+        <li><a class="footer__link" href="/commands.html">Commands</a></li>
+        <li><a class="footer__link" href="/blog/ai-design-fingerprints-list.html">AI design fingerprints</a></li>
+        <li><a class="footer__link" href="/blog/regex-linter-for-ai-coding.html">Regex linter for AI coding</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <p class="footer__col-h">Get it</p>
+      <ul>
+        <li><a class="footer__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a></li>
+        <li><a class="footer__link" href="https://pypi.org/project/uxskill/" rel="noopener">PyPI</a></li>
+        <li><a class="footer__link" href="https://www.npmjs.com/package/uxskill" rel="noopener">npm</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <span>MIT licensed &middot; No telemetry &middot; No account</span>
+    <span>&copy; 2026 Laith Aljunaidy &middot; Built into ux-skill v2.0.0-alpha</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var nav = document.getElementById('nav');
+  function onScroll() {
+    if (window.scrollY > 24) nav.classList.add('is-scrolled');
+    else nav.classList.remove('is-scrolled');
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  var menuBtn = document.getElementById('nav-menu-btn');
+  var drawer = document.getElementById('nav-drawer');
+  var drawerClose = document.getElementById('nav-drawer-close');
+  function openDrawer() {
+    drawer.classList.add('is-open');
+    drawer.setAttribute('aria-hidden', 'false');
+    menuBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    drawer.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  if (menuBtn) menuBtn.addEventListener('click', openDrawer);
+  if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && drawer.classList.contains('is-open')) closeDrawer();
+  });
+  Array.prototype.forEach.call(drawer.querySelectorAll('a'), function (a) {
+    a.addEventListener('click', closeDrawer);
+  });
+})();
+</script>
+
 </body>
 </html>
