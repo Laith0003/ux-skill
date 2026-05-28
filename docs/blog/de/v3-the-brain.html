@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ux-skill v3.0 — wir haben The Brain veröffentlicht. Brand-Specs sind jetzt Trainingsdaten, keine Templates.</title>
+  <meta name="description" content="v2 hat aus dem Katalog ausgewählt. v3 destilliert aus ihm. Dieselben 160 Brand-Specs, eine völlig neue Rolle. Der 7-Achsen-Synthesizer, das Entscheidungs-Ledger und der geschlossene Feedback-Kreis.">
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/de/v3-the-brain.html">
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="index,follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/de/v3-the-brain.html">
+  <meta property="og:title" content="ux-skill v3.0 — The Brain. Brand-Specs sind Trainingsdaten, keine Templates.">
+  <meta property="og:description" content="v2 hat aus dem Katalog ausgewählt, v3 destilliert aus ihm. Dieselben 1.182 Einträge, völlig andere Rolle.">
+  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/de-v3-the-brain.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ux-skill v3.0 — The Brain">
+  <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/de-v3-the-brain.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ux-skill v3.0 — The Brain">
+  <meta name="twitter:description" content="Ein deterministischer, generativer Design-Compiler mit geschlossenem Feedback-Kreis. 7 Achsen, 3 Modi, eine Entscheidungslogik. Komplett offline. Kein LLM.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "ux-skill v3.0 — wir haben The Brain veröffentlicht. Brand-Specs sind jetzt Trainingsdaten, keine Templates.",
+    "description": "v2 hat aus dem Katalog ausgewählt. v3 destilliert aus ihm. Der 7-Achsen-Synthesizer, das Entscheidungs-Ledger und der geschlossene Feedback-Kreis.",
+    "datePublished": "2026-05-28",
+    "dateModified": "2026-05-28",
+    "author": { "@type": "Organization", "name": "ux-skill", "url": "https://uxskill.laithjunaidy.com/" },
+    "publisher": { "@type": "Organization", "name": "ux-skill", "url": "https://uxskill.laithjunaidy.com/" },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://uxskill.laithjunaidy.com/blog/de/v3-the-brain.html" },
+    "image": "https://uxskill.laithjunaidy.com/og/de-v3-the-brain.png",
+    "inLanguage": "de"
+  }
+  </script>
+
+  <style>
+    :root {
+      --canvas: #07080a;
+      --surface-1: #0f1115;
+      --surface-2: #14181d;
+      --surface-3: #1c2128;
+      --ink: #f6f7f9;
+      --body: #c7ccd3;
+      --muted: #7a7972;
+      --faint: #5a5f66;
+      --hairline: rgba(255,255,255,0.08);
+      --hairline-2: rgba(255,255,255,0.14);
+      --scene-accent: #06b6d4;
+      --scene-soft: rgba(6,182,212,0.18);
+      --display: 'Bricolage Grotesque', system-ui, sans-serif;
+      --body-face: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+      --serif-italic: 'Instrument Serif', Georgia, serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; background: var(--canvas); }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      font-family: var(--body-face);
+      background: var(--canvas);
+      color: var(--body);
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+    header.top {
+      max-width: 1100px; margin: 0 auto; padding: 8px 24px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .wordmark {
+      display: inline-flex; align-items: baseline; gap: 4px;
+      text-decoration: none; color: var(--ink);
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-weight: 620;
+      font-size: 26px; letter-spacing: -0.04em; line-height: 1;
+    }
+    .wordmark .dot {
+      display: inline-block; width: 7px; height: 7px;
+      border-radius: 2px; background: var(--scene-accent); transform: translateY(-3px);
+    }
+    nav.crumbs {
+      display: flex; gap: 28px;
+      font-family: var(--mono);
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+    nav.crumbs a { color: var(--muted); text-decoration: none; transition: color 0.16s ease; }
+    nav.crumbs a:hover { color: var(--ink); }
+    nav.crumbs a.current { color: var(--ink); }
+
+    article { padding-top: 56px; }
+    .eyebrow {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--scene-accent); margin-bottom: 22px;
+    }
+    h1 {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 96, 'wght' 600;
+      font-weight: 600;
+      font-size: clamp(36px, 5vw, 58px);
+      line-height: 1.08; letter-spacing: -0.026em;
+      color: var(--ink); margin-bottom: 28px;
+    }
+    h1 .accent {
+      font-family: var(--serif-italic);
+      font-style: italic; font-weight: 400; color: var(--scene-accent);
+    }
+    .lede { font-size: 20px; line-height: 1.55; color: var(--body); margin-bottom: 16px; }
+    .lede strong { color: var(--ink); font-weight: 600; }
+    .byline {
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 56px; padding-bottom: 24px;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .hero-quote {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 86, 'opsz' 96, 'wght' 600;
+      font-size: clamp(32px, 4.4vw, 52px);
+      line-height: 1.1; letter-spacing: -0.022em;
+      color: var(--ink);
+      padding: 56px 0 64px;
+      border-top: 1px solid var(--hairline);
+      border-bottom: 1px solid var(--hairline);
+      margin: 48px 0 56px;
+    }
+    .hero-quote .accent {
+      color: var(--scene-accent);
+      font-family: var(--serif-italic);
+      font-style: italic; font-weight: 400;
+    }
+    h2 {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 80, 'wght' 580;
+      font-weight: 580;
+      font-size: clamp(26px, 3vw, 34px);
+      line-height: 1.22; letter-spacing: -0.018em;
+      color: var(--ink); margin: 64px 0 18px;
+    }
+    h2 .accent {
+      font-family: var(--serif-italic);
+      color: var(--scene-accent);
+      font-style: italic; font-weight: 400;
+    }
+    h3 {
+      font-family: var(--body-face);
+      font-weight: 600; font-size: 19px;
+      letter-spacing: -0.005em; color: var(--ink);
+      margin: 36px 0 14px;
+    }
+    h4 { font-family: var(--body-face); font-weight: 600; font-size: 17px; color: var(--ink); }
+    p { margin-bottom: 18px; color: var(--body); }
+    p strong { color: var(--ink); font-weight: 600; }
+    em { color: var(--ink); }
+    ul, ol { margin: 0 0 22px 22px; }
+    ul li, ol li { margin-bottom: 10px; color: var(--body); }
+    ul li::marker { color: var(--scene-accent); }
+    ol li::marker { color: var(--scene-accent); font-family: var(--mono); font-size: 0.9em; }
+
+    pre.code {
+      background: var(--surface-2);
+      color: var(--ink);
+      border: 1px solid var(--hairline);
+      padding: 22px 24px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 13.5px;
+      line-height: 1.65;
+      margin: 24px 0 28px;
+    }
+    pre.code .c { color: rgba(250,249,245,0.45); font-style: italic; }
+    pre.code .k { color: #e8b894; }
+    pre.code .s { color: #a3e0b8; }
+    pre.code .v { color: var(--ink); }
+    pre.code .n { color: var(--scene-accent); }
+    code {
+      font-family: var(--mono);
+      font-size: 13px;
+      background: var(--surface-2);
+      border: 1px solid var(--hairline);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--ink);
+    }
+    a.link {
+      color: var(--scene-accent);
+      text-decoration: underline;
+      text-decoration-color: rgba(6,182,212,0.4);
+      text-underline-offset: 3px;
+    }
+    a.link:hover { color: var(--ink); }
+
+    .honesty {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-left: 3px solid var(--scene-accent);
+      padding: 24px 28px;
+      border-radius: 0 14px 14px 0;
+      margin: 32px 0;
+    }
+    .honesty .label {
+      font-family: var(--mono);
+      font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--scene-accent); margin-bottom: 8px;
+    }
+    .honesty h4 { font-weight: 600; font-size: 17px; color: var(--ink); margin-bottom: 10px; }
+
+    .axis-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0 32px;
+      font-size: 14.5px;
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .axis-table th, .axis-table td {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--hairline);
+      vertical-align: top;
+    }
+    .axis-table th {
+      background: var(--surface-2);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .axis-table tr:last-child td { border-bottom: none; }
+    .axis-table .axis-name { color: var(--ink); font-weight: 600; font-family: var(--mono); font-size: 13px; }
+
+    .conflict-card {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-left: 3px solid var(--scene-accent);
+      border-radius: 0 14px 14px 0;
+      padding: 20px 24px;
+      margin: 18px 0;
+    }
+    .conflict-card .input {
+      font-family: var(--mono);
+      font-size: 12px; letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--scene-accent); margin-bottom: 8px;
+    }
+    .conflict-card .outcome { color: var(--ink); font-weight: 600; font-size: 17px; margin-bottom: 6px; }
+    .conflict-card .reason { font-size: 14.5px; color: var(--body); margin: 0; }
+
+    .mode-card {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-radius: 14px;
+      padding: 22px 26px;
+      margin: 16px 0;
+    }
+    .mode-card .mode-name {
+      font-family: var(--mono);
+      font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--scene-accent); margin-bottom: 8px;
+    }
+    .mode-card h4 { font-size: 19px; margin-bottom: 8px; color: var(--ink); }
+    .mode-card p { margin-bottom: 0; font-size: 15px; }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));
+      gap: 12px;
+      margin: 32px 0;
+    }
+    .stat {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 18px 16px;
+      text-align: center;
+    }
+    .stat .n {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 80, 'wght' 600;
+      font-size: 30px; color: var(--ink); line-height: 1; margin-bottom: 6px;
+    }
+    .stat .l {
+      font-family: var(--mono);
+      font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .cta {
+      margin-top: 96px;
+      padding: 56px 48px;
+      background: var(--surface-1);
+      color: var(--ink);
+      border: 1px solid var(--hairline-2);
+      border-radius: 22px;
+    }
+    @media (max-width: 720px) { .cta { padding: 40px 28px; } }
+    .cta .eyebrow { color: var(--scene-accent); }
+    .cta h2 { color: var(--ink); margin-top: 0; }
+
+    .install-block {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-family: var(--mono);
+      font-size: 14px; line-height: 1.75;
+      color: var(--ink);
+    }
+    .install-block .prompt { color: var(--scene-accent); }
+    .install-block .arg { color: var(--muted); }
+    .install-block .row + .row { margin-top: 6px; }
+
+    footer {
+      max-width: 1100px;
+      margin: 96px auto 0;
+      padding: 32px 24px 0;
+      border-top: 1px solid var(--hairline);
+      display: flex; justify-content: space-between; align-items: baseline;
+      flex-wrap: wrap; gap: 16px;
+      font-size: 13px; color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--ink); }
+    footer .links { display: flex; gap: 24px; flex-wrap: wrap; }
+
+    blockquote {
+      border-left: 3px solid var(--scene-accent);
+      padding: 6px 0 6px 22px;
+      margin: 24px 0;
+      font-family: var(--serif-italic);
+      font-size: 22px; line-height: 1.45;
+      color: var(--ink); font-style: italic;
+    }
+
+    .locale-row {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .locale-row a { color: var(--muted); text-decoration: none; }
+    .locale-row a.current { color: var(--scene-accent); }
+    .locale-row a:hover { color: var(--ink); }
+
+    @media (max-width: 720px) {
+      header.top { flex-direction: column; align-items: flex-start; gap: 16px; }
+      nav.crumbs { gap: 18px; flex-wrap: wrap; }
+      .wrap { padding: 40px 20px 72px; }
+    }
+  </style>
+  <style>
+    html, body { overflow-x: clip; max-width: 100%; }
+    section, header, footer, main, article { max-width: 100vw; }
+    img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
+    table { max-width: 100%; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a href="/de/" class="wordmark">ux<span class="dot"></span></a>
+    <nav class="crumbs">
+      <a href="/de/">Startseite</a>
+      <a href="/brands.html">Brands</a>
+      <a href="/anti-patterns.html">Anti-patterns</a>
+      <a href="/compare.html">Vergleich</a>
+      <a href="/blog/" class="current">Blog</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="wrap">
+    <article>
+      <span class="eyebrow">Release &middot; v3.0.0 &middot; 2026-05-28</span>
+      <h1>ux-skill v3.0 &mdash; wir haben <span class="accent">The Brain</span> veröffentlicht. Brand-Specs sind jetzt Trainingsdaten, keine Templates.</h1>
+      <p class="lede">
+        <strong>v2 hat aus dem Katalog ausgewählt. v3 destilliert aus ihm.</strong> Dieselben 160 Brand-Specs, eine vollkommen andere Rolle. Der bisherige Recommender hat 1.182 Einträge bewertet und das ähnlichste Match zurückgegeben. Der Synthesizer liest diese Einträge nun als <em>Vokabular</em> und kompiliert aus einem Brief eine neue Designsprache. Jeder Aufruf liefert ein System, das es vor dem Aufruf nicht gegeben hat.
+      </p>
+      <p class="byline">Vom ux-skill Team &middot; 12 Min. Lesezeit &middot; MIT-lizenzierte Open Source</p>
+
+      <div class="locale-row" aria-label="Sprachen">
+        <a href="/blog/v3-the-brain-launch.html">EN</a>
+        <a href="/blog/ja/v3-the-brain.html">JA</a>
+        <a href="/blog/zh-CN/v3-the-brain.html">ZH-CN</a>
+        <a href="/blog/ar/v3-the-brain.html">AR</a>
+        <a href="/blog/es/v3-the-brain.html">ES</a>
+        <a href="/blog/de/v3-the-brain.html" class="current">DE</a>
+        <a href="/blog/fr/v3-the-brain.html">FR</a>
+      </div>
+
+      <div class="hero-quote">
+        Brand-Specs sind <span class="accent">Trainingsdaten</span>,<br>keine Templates.
+      </div>
+
+      <h2>Die Verschiebung in einem Absatz</h2>
+      <p>
+        v2 war ein <em>Recommender</em>. Du gabst einen Brief hinein und bekamst das nächstgelegene Match aus einem kuratierten Katalog &mdash; 84 Styles, 176 Paletten, 160 Brand-Specs, 70 Type-Pairs. Die Ausgabe war immer eine Zeile aus der Datenbank. v3 behält den gesamten Katalog, kehrt aber dessen Zweck um: Diese 1.182 Einträge sind jetzt das <em>Vokabular, aus dem die Engine destilliert</em>. Ein Brief zieht keine Zeile mehr heraus &mdash; er wird in sieben Achsenwerte kompiliert, und diese Werte synthetisieren frische Tokens. Der Katalog bringt der Engine bei, wie etwas Luftig-Korporatives aussieht; die Engine erzeugt ein neues luftig-korporatives System, das es so noch nie gegeben hat. Dieselben Daten. Eine völlig andere Rolle.
+      </p>
+
+      <h2>Was in v2 kaputt war und v3 <span class="accent">behebt</span></h2>
+      <p>
+        Drei echte Bugs und ein Designloch. Die Bugs waren nicht laut &mdash; sie waren die leise Sorte, bei der die Engine weiterhin plausible Ergebnisse zurückgegeben hat und wir sie weiterhin ausgeliefert haben. Wir haben sie erst entdeckt, als wir uns hingesetzt haben, um die Upgrade-Spezifikation zu schreiben, und ein externes Review uns gezwungen hat, ehrlich hinzuschauen.
+      </p>
+
+      <h3>1. Pseudo-Determinismus durch Tie-Breaks in Dateisystem-Reihenfolge</h3>
+      <p>
+        Mehrere Sortierungen innerhalb der Recommender-Pipeline haben Kandidaten nach Ähnlichkeit bewertet und Gleichstände mit der Reihenfolge aufgelöst, die Pythons <code>os.listdir</code> zurückgab. Auf macOS war das alphabetisch. Auf Linux war es die Einfügereihenfolge im Dateisystem-Journal. Zwischen einem frischen Clone und einem alten Clone konnte der Tie-Break kippen. Wir haben uns selbst erzählt, die Engine sei deterministisch. Sie war deterministisch bis zum Gleichstand. Nach dem Gleichstand war sie das, woran sich das Betriebssystem zufällig erinnerte.
+      </p>
+      <p>
+        v3 verstärkt jede Sortierung mit einem expliziten alphabetischen Tie-Break über <code>brand_id</code>. Gleicher Brief, gleiche Achsen, gleiche Ausgabe &mdash; über Maschinen, Dateisysteme und Python-Versionen hinweg. Es gibt einen Test, der den Synthesizer 200-mal in drei Temp-Verzeichnissen laufen lässt und byte-identische Ausgabe behauptet.
+      </p>
+
+      <h3>2. Achsenkonflikte, die per Zufall aufgelöst wurden</h3>
+      <p>
+        Wenn ein Brief in v2 zwei Tags hatte, die in entgegengesetzte Richtungen zogen &mdash; etwa <em>dense</em> und <em>corporate</em> &mdash; gewichtete der Scorer des Recommenders einen davon stärker durch irgendeinen versteckten Koeffizienten, und das Ergebnis lehnte sich an den Tag an, den der Koeffizient gerade bevorzugte. Es gab keine dokumentierte Regel. Wir konnten das Ergebnis hinterher erklären. Wir konnten es vorher nicht vorhersagen.
+      </p>
+      <p>
+        v3 hebt das auf eine <strong>Achsen-Interaktionsmatrix</strong>. Jeder dokumentierte Konflikt hat eine explizite Auflösung und eine Begründung. Dichte und Formalität streiten um den Spacing-Wert &mdash; Dichte gewinnt für dichte Briefs (Bloomberg-Schule), Formalität gewinnt für luftige Briefs (Luxury). Die Matrix ist getestet. Sie ist lesbar. Sie ist eingecheckt.
+      </p>
+
+      <h3>3. Der Evaluator hat die Hausaufgaben des Synthesizers benotet</h3>
+      <p>
+        Das war das peinlichste, und wir haben es bemerkt, weil <em>ChatGPT es im externen Review der v2.1-Spezifikation markiert hat</em> &mdash; was es als <strong>self-referential drift</strong> bezeichnete. Der Flow sah sauber aus: Der Synthesizer kompiliert ein System aus dem Brief, dann bewertet <code>score_tone_match</code>, wie gut das System zum Ton des Briefs passt. Das Problem war, dass <code>score_tone_match</code> Achsenwerte aus dem Brief mit derselben Logik wie der Synthesizer ableitete und dann die Achsen des Synthesizers mit seinen eigenen abgeleiteten Achsen verglich. Beide Seiten des Vergleichs liefen durch dieselbe Funktion. Natürlich war die Note gut. Der Synthesizer hat sich mit seiner eigenen Rubrik selbst benotet.
+      </p>
+      <p>
+        v3 entkoppelt das. <code>score_tone_match</code> vergleicht die Synthesizer-Ausgabe nun mit den <em>rohen Tone-Tags</em> des Briefs &mdash; den Strings <code>warm</code>, <code>bold</code>, <code>minimal</code> usw. &mdash; über ein unabhängiges Mapping, das die Achsenlogik des Synthesizers nicht berührt. Die beiden Pfade können nicht mehr voneinander abschreiben. Diese Beobachtung verdanken wir dem externen Review, und wir halten das hier ausdrücklich fest.
+      </p>
+
+      <h3>4. Das Decisions-Log war write-only &mdash; nie konsumiert</h3>
+      <p>
+        v2 hat nach jeder Empfehlung einen Eintrag in <code>.ux/decisions.jsonl</code> geschrieben, aber nichts hat ihn zurückgelesen. Es war eine Log-Datei für unser eigenes Debugging, kein Feedback-Signal. Der Recommender lief beim Aufruf 1 und beim Aufruf 1.000 identisch. Es gab kein Lernen. Das Repo hatte ein Gedächtnis, und die Engine ignorierte es.
+      </p>
+      <p>
+        v3 schließt diesen Kreis. Das Ledger hat ein gesperrtes Schema (<code>_v: 1</code>), der Recommender re-rankt Kandidaten anhand vergangener Erfolge im selben <code>(industry, ui_type)</code>-Bucket, und nur Entscheidungen, die gut bewertet wurden <em>und</em> die der Benutzer tatsächlich ausgeliefert hat, zählen für das Re-Rank. Das Gehirn hat jetzt Augen auf die eigene Geschichte. Abschnitt 6 ist der vollständige Durchgang.
+      </p>
+
+      <h2>Der 7-Achsen-<span class="accent">Synthesizer</span></h2>
+      <p>
+        Im Zentrum von v3 steht eine deterministische Funktion, die einen Brief auf sieben numerische Achsen mappt &mdash; und diese sieben Achsen auf ein vollständiges Designsystem. Die Achsen sind keine Magie: Jede ist ein normalisierter Skalar mit einem dokumentierten Wertebereich, und jede zeigt auf ein bestimmtes Token-Bündel. Der Sinn, über Achsen zu arbeiten (statt eine Zeile aus dem Katalog zu wählen), ist, dass jede Kombination erreichbar wird &mdash; auch Kombinationen, die keine reale Marke im Katalog verwendet. Der Katalog definiert die Form des Raums; der Synthesizer kann überall darin landen.
+      </p>
+
+      <table class="axis-table">
+        <thead>
+          <tr>
+            <th>Achse</th>
+            <th>Was sie misst</th>
+            <th>Mappt auf</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="axis-name">warmth</td>
+            <td>Farbtemperatur der Palette &mdash; kühles Charcoal bis warmes Sienna</td>
+            <td>Palette-Farbtonfamilie, Sättigungskurve des Akzents</td>
+          </tr>
+          <tr>
+            <td class="axis-name">contrast</td>
+            <td>Visuelle Lautstärke &mdash; quiet/balanced/loud</td>
+            <td>Type-Scale-Ratio (1.200 / 1.250 / 1.333), Schattentiefe, Akzent-Intensität</td>
+          </tr>
+          <tr>
+            <td class="axis-name">density</td>
+            <td>Informationsdichte pro Viewport &mdash; airy bis dense</td>
+            <td>Spacing-Scale-Basis (4/8/12/16px), Line-Height-Multiplikatoren</td>
+          </tr>
+          <tr>
+            <td class="axis-name">geometry</td>
+            <td>Kanten-Persönlichkeit &mdash; sharp/balanced/soft</td>
+            <td>Radius-Skala (2/8/18px), Eck-Topologie, Border-Stärken</td>
+          </tr>
+          <tr>
+            <td class="axis-name">formality</td>
+            <td>Tonregister &mdash; playful/balanced/corporate</td>
+            <td>Typografie-Gewichtskurven, Tracking, Caption-zu-Hero-Spreizung</td>
+          </tr>
+          <tr>
+            <td class="axis-name">motion</td>
+            <td>Animations-Budget &mdash; restrained/balanced/cinematic</td>
+            <td>Dauer-Rampen (120/240/420ms), Easing-Familie, Scroll-Verhalten</td>
+          </tr>
+          <tr>
+            <td class="axis-name">type_personality</td>
+            <td>Typografische Stimme &mdash; humanist/neutral/geometric/expressive</td>
+            <td>Display-Face-Familie, Gewichtsleiter, Kursiv-Strategie</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        Der Python-Einstiegspunkt ist klein genug für ein einziges Beispiel. Du übergibst einen Brief und bekommst ein synthetisiertes System zurück, mit Achsenwerten, gewählter Palette, Type-Konfiguration, Spacing-Skala, Radius-Skala und Motion-Presets.
+      </p>
+
+      <pre class="code"><span class="c"># vom Brief zum System in einem Aufruf</span>
+<span class="k">from</span> engine.synthesizer <span class="k">import</span> synthesize
+
+brief = Brief(
+  industry=<span class="s">"fintech-payments"</span>,
+  tone=[<span class="s">"bold"</span>, <span class="s">"serious"</span>],
+  audience=[<span class="s">"merchants"</span>, <span class="s">"developers"</span>],
+)
+
+sys = synthesize(brief)
+<span class="c"># sys.mode == "pure_synthesis"</span>
+<span class="c"># sys.axes == {warmth: 0.32, contrast: 0.72, density: 0.58, ...}</span>
+<span class="c"># sys.palette, sys.type, sys.spacing, sys.radius, sys.motion</span></pre>
+
+      <p>
+        Gleicher Brief rein, gleiche Achsen raus, gleiche Tokens raus. Immer. Der Synthesizer hat keinen Random-Seed, weil es keine Zufälligkeit zu seeden gibt.
+      </p>
+
+      <h2>Drei Modi, <span class="accent">eine Entscheidungslogik</span></h2>
+      <p>
+        Der Synthesizer dispatcht je nach Briefinhalt automatisch zwischen drei Modi. Für die meisten Anwendungen gibt es kein Flag, um den Modus von Hand zu wählen &mdash; die Form des Briefs entscheidet. Die Logik ist absichtlich einfach: Das Vorhandensein einer Referenzmarke und ein Strict-Flag bestimmen den Pfad.
+      </p>
+
+      <div class="mode-card">
+        <div class="mode-name">strict_brand &middot; am schnellsten</div>
+        <h4>100% die genannte Marke</h4>
+        <p>
+          <code>reference_brands=[stripe]</code> mit <code>strict=True</code> liefert die Stripe-Spezifikation wortgetreu. Keine Interpretation, kein Mischen, keine Synthese. Nützlich, wenn die Marke existiert, die Spezifikation autoritativ ist und der Brief nur die Tokens will. Das ist der Pfad, wenn du eine Figma-Datei und ein dokumentiertes System hast und Code brauchst, der nicht improvisiert.
+        </p>
+      </div>
+
+      <div class="mode-card">
+        <div class="mode-name">brand_anchor &middot; 70 / 30</div>
+        <h4>An die Marke verankert, per Achsen auf den Brief angepasst</h4>
+        <p>
+          <code>reference_brands=[stripe]</code> ohne <code>strict=True</code> liefert 70% Stripe-Tokens, fusioniert mit 30% achsenabgeleiteten Deltas aus vier Geschwister-Marken, die per Achsen-Nähe ausgewählt wurden. Die Ausgabe bleibt unmissverständlich Stripe, beugt sich aber zum Ton des Briefs &mdash; ein verspielteres Stripe für ein Consumer-Feature, ein formaleres Stripe für ein Enterprise-Dashboard. Die Anker-Marke überlebt jeden Konflikt.
+        </p>
+      </div>
+
+      <div class="mode-card">
+        <div class="mode-name">pure_synthesis &middot; Unendlichkeitsraum</div>
+        <h4>Keine Marke genannt &mdash; bei jedem Aufruf eine neue Sprache</h4>
+        <p>
+          Keine <code>reference_brands</code> im Brief. Der Synthesizer bewertet die sieben Achsen aus dem Brief, findet die acht nächsten Exemplare im Katalog per Achsen-Distanz, destilliert deren gemeinsame Struktur und gibt ein frisches Bündel aus Palette, Type, Spacing, Radius und Motion aus. Unterschiedliche Briefs landen in unterschiedlichen Regionen desselben Raums; jede Ausgabe ist intern konsistent und als sie selbst erkennbar.
+        </p>
+      </div>
+
+      <p>Auf der CLI sehen die drei Pfade so aus:</p>
+
+      <pre class="code"><span class="c"># strict — 100% diese Marke</span>
+$ uxskill synthesize <span class="n">--brand</span> stripe <span class="n">--strict</span>
+
+<span class="c"># anchor — 70/30</span>
+$ uxskill synthesize <span class="n">--brand</span> stripe
+
+<span class="c"># pure synthesis — ohne Marke</span>
+$ uxskill synthesize <span class="n">--industry</span> fintech-payments <span class="n">--tone</span> bold</pre>
+
+      <p>Ein Synthesizer, eine Entscheidungslogik, drei Ausgabepersönlichkeiten. Der Benutzer wechselt keine Implementierung &mdash; der Brief routet sich selbst.</p>
+
+      <h2>Die Achsen-<span class="accent">Interaktionsmatrix</span></h2>
+      <p>
+        Achsen ziehen an denselben Tokens. <em>Dichte</em> will enges Spacing; <em>Formalität</em> will großzügiges Spacing für ein Luxus-Register. <em>Geometrie</em> will scharfe Ecken für ein redaktionelles Gefühl; <em>Formalität</em> will sanfte Ecken für ein Finanz-Dashboard. In v2 wurden diese Konflikte über den im Scorer gerade größeren Koeffizienten aufgelöst. In v3 hat jeder dokumentierte Konflikt ein erklärtes Ergebnis und eine Designschule, auf die er zeigt &mdash; benannt, sodass du es lesen und widersprechen kannst.
+      </p>
+
+      <p>Vier repräsentative Fälle, alle als Test-Fixtures eingecheckt:</p>
+
+      <div class="conflict-card">
+        <div class="input">dense + corporate</div>
+        <div class="outcome">Spacing-Scale-Basis: 4px</div>
+        <p class="reason">Dichte gewinnt. Die Bloomberg-Antwort. Informationsdichte ist die höchste Tugend, wenn der Brief dichte Daten-Dashboards in einem korporativen Register verlangt &mdash; Formalität verbeugt sich vor der Lesbarkeit unter Dichte.</p>
+      </div>
+
+      <div class="conflict-card">
+        <div class="input">airy + corporate</div>
+        <div class="outcome">Spacing-Scale-Basis: 12px</div>
+        <p class="reason">Formalität gewinnt. Die Luxury-Finance-Antwort. Airy + corporate ist der Brief für Premium-Banking, Private Wealth, Executive-Dashboards &mdash; der Raum um jedes Element <em>ist</em> die Botschaft von Ernsthaftigkeit.</p>
+      </div>
+
+      <div class="conflict-card">
+        <div class="input">sharp + corporate</div>
+        <div class="outcome">Radius-Skala: 2px</div>
+        <p class="reason">Geometrie gewinnt. Die NYT-Antwort. Sharp + corporate ist der redaktionelle Brief &mdash; rechte Winkel und 2px-Mikro-Radien lesen sich als institutionell, durchdacht, im Broadsheet-Format.</p>
+      </div>
+
+      <div class="conflict-card">
+        <div class="input">soft + playful</div>
+        <div class="outcome">Radius-Skala: 18px</div>
+        <p class="reason">Beide Achsen ziehen in dieselbe Richtung. Die Glossier-Antwort. Weiche Geometrie und ein verspieltes Register kollabieren auf großzügige Rundungen &mdash; 18px ist die Schwelle, an der Rechtecke beginnen, wie Kieselsteine zu wirken.</p>
+      </div>
+
+      <p>
+        Warum das wichtig ist: In v2 konnte derselbe Brief je nachdem, welcher Koeffizient diesen Monat den Scorer gewann, auf 4px oder 12px landen. In v3 ist <code>dense + corporate</code> immer 4px. <code>airy + corporate</code> ist immer 12px. Die Regeln sind lesbar, testbar und diskutierbar. Wenn du mit einer Auflösung nicht einverstanden bist, kannst du gegen die Matrix ein Issue eröffnen, und die Diskussion geht um Geschmack, nicht um eine versteckte Konstante.
+      </p>
+
+      <h2>Das Gehirn <span class="accent">lernt</span></h2>
+      <p>
+        Das ist der Teil von v3, der für das Projekt wirklich neu ist: Die Engine lernt jetzt aus deinen lokalen Entscheidungen. Der Mechanismus ist klein, deterministisch und komplett offline. Keine Telemetrie, kein Account, kein Cloud-Sync. Deine Installation lernt aus deiner Installation. Unterschiedliche Repos bauen unterschiedliche Gehirne.
+      </p>
+
+      <h3>Das Ledger</h3>
+      <p>
+        Jeder Aufruf von <code>/ux-recommend</code> und <code>/ux-synthesize</code> schreibt eine einzelne Zeile in <code>.ux/decisions.jsonl</code>. Das Schema ist auf <code>_v: 1</code> festgenagelt:
+      </p>
+
+      <pre class="code">{
+  <span class="k">"_v"</span>: <span class="v">1</span>,
+  <span class="k">"ts"</span>: <span class="s">"2026-05-28T14:22:09Z"</span>,
+  <span class="k">"frame"</span>: { <span class="k">"industry"</span>: <span class="s">"fintech-payments"</span>, <span class="k">"ui_type"</span>: <span class="s">"dashboard"</span>, ... },
+  <span class="k">"system"</span>: { <span class="k">"style_id"</span>: <span class="s">"editorial-calm-dark"</span>, <span class="k">"palette_id"</span>: <span class="s">"charcoal-amber"</span>, ... },
+  <span class="k">"axes"</span>: { <span class="k">"warmth"</span>: <span class="v">0.31</span>, <span class="k">"contrast"</span>: <span class="v">0.72</span>, ... },
+  <span class="k">"lint_score"</span>: <span class="v">88</span>,
+  <span class="k">"user_accepted"</span>: <span class="v">true</span>
+}</pre>
+
+      <h3>Das Re-Rank</h3>
+      <p>
+        Beim nächsten Aufruf gruppiert der Recommender die vergangenen Einträge nach <code>(industry, ui_type)</code>. Jeder Kandidat erhält einen <strong>+5-Bump</strong>, wenn er einem Vorgänger im selben Bucket entspricht. Nur Vorgänger mit <code>lint_score &gt;= 80</code> UND <code>user_accepted = true</code> zählen &mdash; aus abgelehnten Ergebnissen lernen wir nicht. Der Bucket braucht mindestens drei qualifizierende Vorgänger, bevor überhaupt ein Re-Rank greift. Darunter läuft die Engine im Cold-Start und verhält sich identisch zu einer frischen Installation.
+      </p>
+
+      <h3>Die Garantien</h3>
+      <p>
+        Die Garantien, die wir dazu geben, sind eng und es lohnt, sie laut auszusprechen. <strong>Determinismus bleibt erhalten.</strong> Gleicher Brief plus gleiches Ledger erzeugen immer dieselbe Ausgabe. Der +5-Bump wird vor jedem Tie-Break angewendet, und die Regel der alphabetischen Reihenfolge nach <code>brand_id</code> gewinnt die Gleichstände darunter weiterhin. <strong>Cold-Start ist sicher.</strong> Ein neues Repo verhält sich wie jedes andere neue Repo. <strong>Das Lernen ist lokal.</strong> Deine Entscheidungen verlassen deine Maschine nicht.
+      </p>
+
+      <p>Du kannst jederzeit prüfen, was deine Installation gelernt hat:</p>
+
+      <pre class="code">$ uxskill stats <span class="n">--html</span>
+<span class="n">[OK]</span> Wrote .ux/stats.html
+<span class="n">[OK]</span> Open in browser to see your install's learned priors</pre>
+
+      <p>
+        Das HTML-Dashboard zeigt die Anzahl der Entscheidungen pro Bucket, den durchschnittlichen Lint-Score, die häufigsten Paletten, die Achsen-Verteilungen. Das ist der sichtbare Beweis des Selbstlernens &mdash; du siehst das Geschmacksprofil deiner Installation über die Zeit dichter werden, während du weiter ausspielst. Nichts davon liegt auf einem Server. Es liegt in deinem Repo, in Klartext-JSONL plus einer generierten HTML-Ansicht.
+      </p>
+
+      <h2>/ux-evolve <span class="accent">Auto-Loop</span></h2>
+      <p>
+        Das neue Kommando in v3 ist <code>/ux-evolve</code>. Bisher war der Polish-Loop manuell: Lint laufen lassen, Findings lesen, beheben, neu linten, wiederholen. Evolve schließt diesen Loop. Du übergibst ein Artefakt und einen Zielscore; das System läuft Lint, wendet sechs idempotente Polish-Pässe an, lintet erneut und stoppt entweder beim Ziel, auf einem Plateau oder beim Cap von fünf Runden.
+      </p>
+
+      <p>Die Form einer Runde:</p>
+
+      <ol>
+        <li><strong>Lint</strong> &mdash; 145 deterministische Regex-Regeln über A11y, Inhalt, Qualität, Typografie. Liefert einen Score von 0 bis 100 und eine Findings-Liste.</li>
+        <li><strong>Polish</strong> &mdash; sechs Pässe, die zuerst die Findings höchster Severity beheben. Idempotent: Einen Pass auf bereits polierten Ausgaben erneut anzuwenden ist ein No-Op.</li>
+        <li><strong>Re-Lint</strong> &mdash; bewertet das polierte Artefakt.</li>
+        <li><strong>Entscheiden</strong> &mdash; ist der neue Score &ge; 90, stopp. Ist das Delta zur Vorrunde unter 5 (Plateau), stopp. Sind wir in Runde 5, stopp. Sonst weiterloopen.</li>
+      </ol>
+
+      <p>
+        Das <strong>Quality-Gate</strong> steht fest bei 65. Liegt der finale Score unter 65, weigert sich die Engine, das Artefakt zu liefern, sofern nicht <code>--force</code> übergeben wird. Die Begründung: Eine 65-oder-darunter-Ausgabe ist erkennbarer AI-Slop, und wir lassen unsere eigene Engine nicht still Slop ausstoßen. Der Benutzer kann das Gate übersteuern, aber das Override ist explizit und taucht im Decisions-Ledger auf.
+      </p>
+
+      <p>
+        Ein konkreter Lauf: Ein Fintech-Dashboard-Scaffold lag im ersten Lint bei 72 &mdash; meist fehlende Focus-States, ein paar kontrastschwache Labels, ein Finding zu Inter in Display-Größe. Runde 1 polierte die Focus-States auf 81. Runde 2 korrigierte den Kontrast auf 86. Runde 3 tauschte Inter gegen die im Brief tatsächlich vorgesehene Display-Schrift und rebalancierte die Caption-Größe &mdash; 91, Ziel erreicht, Loop beendet. Drei Runden, keine Ablehnungen, ausgeliefert.
+      </p>
+
+      <h2>Was wir <span class="accent">nicht</span> gebaut haben (und warum)</h2>
+      <p>
+        Die maximalistische v2.1-Spezifikation schlug einige Dinge vor, die es nicht in v3 geschafft haben. Zu sagen, welche und warum, ist der einzige ehrliche Weg, über Scope zu reden.
+      </p>
+
+      <h3>Kein LLM im Loop</h3>
+      <p>
+        Der maximalistische Vorschlag enthielt eine LLM-beurteilte, subjektive Ästhetik-Achse &mdash; "frag ein Modell, ob sich das redaktionell anfühlt". Wir haben das aus Prinzip abgelehnt. Der gesamte Sinn der Engine ist Determinismus: gleicher Brief, gleiche Ausgabe, morgen früh keine Überraschungen. Ein LLM im Synthesizer würde jeden Aufruf unreproduzierbar machen. v3 ruft null LLMs. Der Synthesizer ist reines Python über JSON; der Linter ist Regex; der Evaluator ist regelbasiert.
+      </p>
+
+      <h3>Keine genetische Mutation mit mehreren Kandidaten</h3>
+      <p>
+        Der Vorschlag hatte außerdem einen Schritt mit genetischem Algorithmus &mdash; N Kandidaten pro Aufruf ausgeben, mutieren, bewerten, den fittesten zurückgeben. Wir haben es in einem Branch versucht. Die Ausgabe wurde <em>schlechter</em>, nicht besser, weil Mutation Rauschen einführte, das der Polish-Loop danach wieder rausnehmen musste. v3 liefert Single-Artifact-Synthese plus Polish-Loop. Ein Kandidat. Sechs idempotente Pässe. Bessere Ergebnisse, kleinere Codeoberfläche.
+      </p>
+
+      <h3>Keine umbenannten Kommandos</h3>
+      <p>
+        Der Vorschlag benannte <code>/ux-recommend</code> in <code>/generate:ui</code> um und <code>/ux-polish</code> in <code>/mutate:ui</code>. Wir haben alle 22 existierenden Kommandos unter ihren existierenden Namen behalten und <code>/ux-evolve</code> als 23. hinzugefügt. Wir wollten nicht, dass ein v2-zu-v3-Update jemandem das Muskelgedächtnis oder die Shell-Aliasse zerschießt.
+      </p>
+
+      <h3>Kein "Katalog für unendlichen Raum verbrennen"</h3>
+      <p>
+        Die maximalistischste Version des Vorschlags meinte, der Katalog sei eine Last &mdash; der Synthesizer könne den gesamten Design-Raum aus eigener Kraft erreichen, also sollten die 1.182 Einträge weg. Wir haben jeden Eintrag behalten. Der Katalog ist, was dem Synthesizer die <em>Form</em> des Raums beibringt &mdash; ohne Exemplare haben die Achsen keine Anker, und die Ausgabe driftet weg. v3 liest den Katalog als Vokabular; v3 braucht das Vokabular.
+      </p>
+
+      <p>
+        Das sind Geschmacksentscheidungen. Menschen mit anderen Prioritäten werden widersprechen, und das ist in Ordnung. Wir schulden es dem Projekt zu sagen, was wir nicht getan haben und warum &mdash; aktenkundig.
+      </p>
+
+      <h2>Die <span class="accent">Zahlen</span> bei v3</h2>
+
+      <div class="stats-row">
+        <div class="stat"><div class="n">23</div><div class="l">Kommandos</div></div>
+        <div class="stat"><div class="n">18</div><div class="l">MCP-Tools</div></div>
+        <div class="stat"><div class="n">1.182</div><div class="l">Einträge</div></div>
+        <div class="stat"><div class="n">145</div><div class="l">Anti-patterns</div></div>
+        <div class="stat"><div class="n">160</div><div class="l">Brand-Specs</div></div>
+        <div class="stat"><div class="n">17</div><div class="l">IDEs</div></div>
+        <div class="stat"><div class="n">17</div><div class="l">Sprachen</div></div>
+        <div class="stat"><div class="n">223</div><div class="l">Tests OK</div></div>
+      </div>
+
+      <p>
+        Die 22 Slash-Kommandos behalten ihre Namen, plus <code>/ux-evolve</code> als 23. Die 15 MCP-Tools bleiben, plus drei neue &mdash; <code>ux_synthesize</code>, <code>ux_decisions_query</code>, <code>ux_decisions_stats</code> &mdash; für Agenten, die den Synthesizer steuern oder abfragen wollen, was das Gehirn gelernt hat. Katalog und Linter sind unberührt. Der 17-IDE-Installer ist unberührt. Die 17 lokalisierten Homepages und READMEs sind unverändert. v3 ist an der Oberfläche additiv und im Kern neu geschrieben.
+      </p>
+
+      <blockquote>
+        v2 war ein Recommender, der aus einem Katalog ausgewählt hat. v3 ist ein Compiler, der aus einem destilliert. Dieselben Daten machen den entgegengesetzten Job.
+      </blockquote>
+
+      <h2>Installation in 60 Sekunden</h2>
+      <p>
+        v3 wird über dieselben drei Wege ausgeliefert wie v2 &mdash; pip, npm und die IDE-Plugin-Marketplaces. Der <code>init</code>-Schritt erkennt deine IDE automatisch und schreibt die richtige Config-Datei an die richtige Stelle. Der <code>synthesize</code>-Schritt nimmt einen Brief oder ein Paar aus Industry + Tone und liefert ein vollständiges Designsystem nach <code>.ux/last-system.json</code> im aktuellen Repo.
+      </p>
+
+      <pre class="code">$ pip install uxskill
+$ uxskill init                     <span class="c"># erkennt deine IDE automatisch</span>
+$ uxskill synthesize <span class="n">--industry</span> fintech-payments <span class="n">--tone</span> bold
+
+<span class="n">[OK]</span> Mode: pure_synthesis
+<span class="n">[OK]</span> Axes: warmth=0.31, contrast=0.74, density=0.58, geometry=0.42, ...
+<span class="n">[OK]</span> Wrote .ux/last-system.json (palette, type, spacing, radius, motion)
+<span class="n">[OK]</span> Wrote .ux/decisions.jsonl (1 entry, schema _v: 1)</pre>
+
+      <p>
+        Derselbe Installationspfad in jeder unterstützten IDE: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, Roo Cline. Der MCP-Stdio-Server ist die einzige Wahrheitsquelle für sie alle.
+      </p>
+
+      <div class="honesty">
+        <div class="label">Ehrlicher Scope</div>
+        <h4>v3 ist ein Fundament, kein fertiges Ziel.</h4>
+        <p>Der 7-Achsen-Synthesizer ist die Arbeit, für die wir Belege veröffentlicht haben. Achsen 8 und 9 (<code>saturation_strategy</code>, <code>surface_depth</code>) sind skizziert, aber nicht ausgeliefert &mdash; sie würden die Dark/Light-Trennung und die Gradient-Strategie vertiefen. Das Decisions-Ledger wird heute nur vom Recommender-Re-Rank konsumiert; wir erwarten, dass Evaluator und Lint-Scorer es in v3.1 zu lesen anfangen. Der von uns abgelehnte maximalistische v2.1-Vorschlag ist nicht verschwunden &mdash; einige Ideen werden später landen, wenn wir beweisen können, dass sie helfen.</p>
+        <p>Wenn du einen Brief findest, der unbefriedigende Ausgaben produziert, oder eine Konfliktauflösung in der Matrix, die deinem Geschmack widerspricht, eröffne ein Issue. Die Matrix ist eingecheckt, die Tests sind eingecheckt, das Gehirn liegt in deinem Repo. Die Diskussionen finden jetzt auf einem Substrat statt, das du lesen kannst.</p>
+      </div>
+
+      <h2>Was sich für dich ändert</h2>
+      <p>
+        Wenn du auf v2 warst: Nichts geht kaputt. Die 22 Kommandos, die du bereits benutzt, verhalten sich gleich. Der Linter läuft mit derselben Geschwindigkeit. Der MCP-Server exponiert 15 der 18 Tools unter ihren alten Namen, plus drei neue. Wenn du upgradest und nie <code>/ux-synthesize</code> oder <code>/ux-evolve</code> aufrufst, bewegt sich dein täglicher Workflow überhaupt nicht.
+      </p>
+      <p>
+        Wenn du darauf gewartet hast, dass die Engine <em>generiert</em> statt <em>empfiehlt</em>: Das ist v3. Der Synthesizer ist das neue Zentrum; <code>/ux-recommend</code> funktioniert weiter und re-rankt jetzt aus deinem Ledger; <code>/ux-evolve</code> schließt den Polish-Loop. Brand-Specs sind jetzt Trainingsdaten, keine Templates. Dieselben 1.182 Einträge erledigen einen völlig anderen Job.
+      </p>
+      <p>
+        Wir haben v3 The Brain genannt, weil das das ist, was gebaut wurde &mdash; ein eingeschränkter, generativer Design-Compiler mit geschlossenem Feedback-Kreis. Komplett offline. Ruft null LLMs. Gleicher Brief, gleiche Achsen, gleiche Ausgabe. Unterschiedliche Briefs, unterschiedliche Regionen, unendliche Ausgaben. Deine Installation lernt aus deinem Repo. Unterschiedliche Repos bauen unterschiedliche Gehirne. Das Ganze ist MIT, sub-300ms auf einer normalen Maschine, pip-installierbar.
+      </p>
+      <p>
+        Lass es auf einem Brief laufen, der dir wichtig ist. Schau, was es zurückgibt. Eröffne ein Issue, wenn die Ausgabe deinem Geschmack widerspricht &mdash; der Konflikt wandert in die Matrix, die Regel bekommt einen Namen, und die nächste Installation verhält sich besser. So kompounded sich das Gehirn.
+      </p>
+
+    </article>
+
+    <section class="cta">
+      <span class="eyebrow">Lass es auf deinem Projekt laufen</span>
+      <h2>Eine Engine. <span class="accent">Drei Installationswege.</span></h2>
+      <p>Der Synthesizer, der v3 antreibt, wird im selben Paket wie Linter und Recommender ausgeliefert. 145 Anti-patterns. 160 Brand-Specs. 1.182 Einträge. 17 IDEs. MIT, keine Telemetrie, kein Account.</p>
+
+      <div class="install-block">
+        <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
+        <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; oder &mdash;</div>
+        <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; oder &mdash;</div>
+        <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@latest init</span></div>
+      </div>
+
+      <p style="margin-top: 28px; font-size: 14px;">
+        Quellcode auf GitHub: <a class="link" href="https://github.com/Laith0003/ux-skill">Laith0003/ux-skill</a> &middot;
+        Deutsches README: <a class="link" href="https://github.com/Laith0003/ux-skill/blob/main/README.de.md">README.de.md</a> &middot;
+        npm: <a class="link" href="https://www.npmjs.com/package/uxskill">uxskill</a> &middot;
+        PyPI: <a class="link" href="https://pypi.org/project/uxskill/">uxskill</a> &middot;
+        Englische Version: <a class="link" href="/blog/v3-the-brain-launch.html">English version</a> &middot;
+        Verwandte Lektüre: <a class="link" href="/blog/brand-specs-training-data-not-templates.html">Brand-Specs als Trainingsdaten</a>, <a class="link" href="/anti-patterns.html">Anti-patterns</a>, <a class="link" href="/brands.html">Brands</a>
+      </p>
+    </section>
+  </div>
+
+  <footer>
+    <span>&copy; 2026 Laith Aljunaidy &middot; MIT-Lizenz &middot; Keine Telemetrie</span>
+    <div class="links">
+      <a href="/de/">Startseite</a>
+      <a href="/compare.html">Vergleich</a>
+      <a href="/blog/">Blog</a>
+      <a href="/privacy.html">Datenschutz</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+    </div>
+  </footer>
+</body>
+</html>

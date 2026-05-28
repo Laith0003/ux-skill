@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ux-skill v3.0 — أطلقنا The Brain. مواصفات العلامات التجارية صارت بيانات تدريب، لا قوالب.</title>
+  <meta name="description" content="في v2 كنّا نختار من الكتالوج. في v3 نقطّر منه. نفس الـ 160 مواصفة علامة تجارية، دور مختلف تمامًا. مُولِّد بسبعة محاور، سجلّ قرارات، حلقة تغذية راجعة مُغلقة.">
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ar/v3-the-brain.html">
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="index,follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ar/v3-the-brain.html">
+  <meta property="og:title" content="ux-skill v3.0 — أطلقنا The Brain. مواصفات العلامات صارت بيانات تدريب لا قوالب.">
+  <meta property="og:description" content="v2 كان ينتقي من الكتالوج. v3 يقطّر منه. نفس الـ 1,182 مدخلًا — دور المحرّك انعكس تمامًا.">
+  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/ar-v3-the-brain.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ux-skill v3.0 — The Brain">
+  <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/ar-v3-the-brain.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ux-skill v3.0 — The Brain">
+  <meta name="twitter:description" content="مُجمِّع تصميم توليدي حتمي بحلقة تغذية راجعة مغلقة. 7 محاور، 3 أوضاع، منطق قرار واحد. يعمل دون اتصال، دون استدعاء أي LLM.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "ux-skill v3.0 — أطلقنا The Brain. مواصفات العلامات التجارية صارت بيانات تدريب، لا قوالب.",
+    "description": "v2 كان ينتقي من الكتالوج. v3 يقطّر منه. مُولِّد سباعي المحاور، سجلّ قرارات، حلقة تغذية راجعة مغلقة.",
+    "datePublished": "2026-05-28",
+    "dateModified": "2026-05-28",
+    "author": {
+      "@type": "Organization",
+      "name": "ux-skill",
+      "url": "https://uxskill.laithjunaidy.com/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ux-skill",
+      "url": "https://uxskill.laithjunaidy.com/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://uxskill.laithjunaidy.com/blog/ar/v3-the-brain.html"
+    },
+    "image": "https://uxskill.laithjunaidy.com/og/ar-v3-the-brain.png",
+    "inLanguage": "ar"
+  }
+  </script>
+
+  <style>
+    :root {
+      --canvas: #07080a;
+      --surface-1: #0f1115;
+      --surface-2: #14181d;
+      --surface-3: #1c2128;
+      --ink: #f6f7f9;
+      --body: #c7ccd3;
+      --muted: #7a7972;
+      --faint: #5a5f66;
+      --hairline: rgba(255,255,255,0.08);
+      --hairline-2: rgba(255,255,255,0.14);
+      --scene-accent: #a78bfa;
+      --scene-soft: rgba(167,139,250,0.18);
+      --win-bg: rgba(16,185,129,0.10);
+      --win-fg: #34d399;
+      --lose-bg: rgba(244,63,94,0.10);
+      --lose-fg: #fb7185;
+      --neutral-bg: rgba(255,255,255,0.05);
+      --neutral-fg: #c7ccd3;
+      --display: 'IBM Plex Sans Arabic', 'Bricolage Grotesque', system-ui, sans-serif;
+      --body-face: 'IBM Plex Sans Arabic', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+      --serif-italic: 'Instrument Serif', Georgia, serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; background: var(--canvas); }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      font-family: var(--body-face);
+      background: var(--canvas);
+      color: var(--body);
+      font-size: 16.5px;
+      line-height: 1.95;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+    header.top {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8px 24px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .wordmark {
+      display: inline-flex; align-items: baseline; gap: 4px;
+      text-decoration: none; color: var(--ink);
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-weight: 620;
+      font-size: 26px; letter-spacing: -0.04em; line-height: 1;
+      direction: ltr;
+    }
+    .wordmark .dot {
+      display: inline-block; width: 7px; height: 7px;
+      border-radius: 2px;
+      background: var(--scene-accent);
+      transform: translateY(-3px);
+    }
+    nav.crumbs {
+      display: flex; gap: 28px;
+      font-family: var(--mono);
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+      color: var(--muted);
+      direction: ltr;
+    }
+    nav.crumbs a { color: var(--muted); text-decoration: none; transition: color 0.16s ease; }
+    nav.crumbs a:hover { color: var(--ink); }
+    nav.crumbs a.current { color: var(--ink); }
+
+    article { padding-top: 56px; }
+    .eyebrow {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--scene-accent);
+      margin-bottom: 22px;
+      direction: ltr;
+    }
+    h1 {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: clamp(32px, 4.6vw, 52px);
+      line-height: 1.35; letter-spacing: 0;
+      color: var(--ink); margin-bottom: 28px;
+    }
+    h1 .accent {
+      color: var(--scene-accent);
+    }
+    .lede {
+      font-size: 18.5px; line-height: 1.95; color: var(--body);
+      margin-bottom: 16px;
+    }
+    .lede strong { color: var(--ink); font-weight: 700; }
+    .byline {
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 56px; padding-bottom: 24px;
+      border-bottom: 1px solid var(--hairline);
+      direction: ltr;
+    }
+    .hero-quote {
+      font-family: var(--display);
+      font-weight: 600;
+      font-size: clamp(28px, 4.0vw, 42px);
+      line-height: 1.6; letter-spacing: 0;
+      color: var(--ink);
+      padding: 56px 0 64px;
+      border-top: 1px solid var(--hairline);
+      border-bottom: 1px solid var(--hairline);
+      margin: 48px 0 56px;
+    }
+    .hero-quote .accent {
+      color: var(--scene-accent);
+    }
+    h2 {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: clamp(24px, 2.9vw, 34px);
+      line-height: 1.45; letter-spacing: 0;
+      color: var(--ink); margin: 64px 0 18px;
+    }
+    h2 .accent { color: var(--scene-accent); }
+    h3 {
+      font-family: var(--body-face);
+      font-weight: 600; font-size: 19px;
+      color: var(--ink);
+      margin: 36px 0 14px;
+    }
+    p { margin-bottom: 18px; color: var(--body); }
+    p strong { color: var(--ink); font-weight: 700; }
+    em { color: var(--ink); font-style: normal; font-weight: 600; }
+    ul, ol { margin: 0 22px 22px 0; padding-right: 0; }
+    ul li, ol li { margin-bottom: 10px; color: var(--body); }
+    ul li::marker { color: var(--scene-accent); }
+    ol li::marker { color: var(--scene-accent); font-family: var(--mono); font-size: 0.9em; }
+
+    pre.code {
+      background: var(--surface-2);
+      color: var(--ink);
+      border: 1px solid var(--hairline);
+      padding: 22px 24px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 13.5px;
+      line-height: 1.65;
+      margin: 24px 0 28px;
+      direction: ltr;
+      text-align: left;
+    }
+    pre.code .c { color: rgba(250,249,245,0.45); font-style: italic; }
+    pre.code .k { color: #e8b894; }
+    pre.code .s { color: #a3e0b8; }
+    pre.code .n { color: var(--scene-accent); }
+    code {
+      font-family: var(--mono);
+      font-size: 13px;
+      background: var(--surface-2);
+      border: 1px solid var(--hairline);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--ink);
+      direction: ltr;
+      display: inline-block;
+    }
+    a.link {
+      color: var(--scene-accent);
+      text-decoration: underline;
+      text-decoration-color: rgba(167,139,250,0.4);
+      text-underline-offset: 3px;
+    }
+    a.link:hover { color: var(--ink); }
+
+    .honesty {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-right: 3px solid var(--scene-accent);
+      padding: 24px 28px;
+      border-radius: 14px 0 0 14px;
+      margin: 32px 0;
+    }
+    .honesty .label {
+      font-family: var(--mono);
+      font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--scene-accent); margin-bottom: 8px;
+      direction: ltr;
+    }
+    .honesty h4 {
+      font-weight: 700; font-size: 17px; color: var(--ink);
+      margin-bottom: 10px;
+    }
+
+    .axis-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0 32px;
+      font-size: 14.5px;
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .axis-table th, .axis-table td {
+      text-align: right;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--hairline);
+      vertical-align: top;
+    }
+    .axis-table th {
+      background: var(--surface-2);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .axis-table tr:last-child td { border-bottom: none; }
+    .axis-table .axis-name { color: var(--ink); font-weight: 600; font-family: var(--mono); font-size: 13px; direction: ltr; display: inline-block; }
+
+    .conflict-card {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-right: 3px solid var(--scene-accent);
+      border-radius: 14px 0 0 14px;
+      padding: 20px 24px;
+      margin: 18px 0;
+    }
+    .conflict-card .input {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--scene-accent);
+      margin-bottom: 8px;
+      direction: ltr;
+    }
+    .conflict-card .outcome {
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+    .conflict-card .reason {
+      font-size: 14.5px;
+      color: var(--body);
+      margin: 0;
+    }
+
+    .mode-card {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-radius: 14px;
+      padding: 22px 26px;
+      margin: 16px 0;
+    }
+    .mode-card .mode-name {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--scene-accent);
+      margin-bottom: 8px;
+      direction: ltr;
+    }
+    .mode-card h4 {
+      font-size: 19px;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));
+      gap: 12px;
+      margin: 32px 0;
+    }
+    .stat {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 18px 16px;
+      text-align: center;
+    }
+    .stat .n {
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-variation-settings: 'wdth' 88, 'opsz' 80, 'wght' 600;
+      font-size: 30px;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: 6px;
+      direction: ltr;
+    }
+    .stat .l {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      direction: ltr;
+    }
+
+    .cta {
+      margin-top: 96px;
+      padding: 56px 48px;
+      background: var(--surface-1);
+      color: var(--ink);
+      border: 1px solid var(--hairline-2);
+      border-radius: 22px;
+    }
+    @media (max-width: 720px) { .cta { padding: 40px 28px; } }
+    .cta .eyebrow { color: var(--scene-accent); }
+    .cta h2 { color: var(--ink); margin-top: 0; }
+
+    .install-block {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-family: var(--mono);
+      font-size: 14px; line-height: 1.75;
+      color: var(--ink);
+      direction: ltr;
+      text-align: left;
+    }
+    .install-block .prompt { color: var(--scene-accent); }
+    .install-block .arg { color: var(--muted); }
+    .install-block .row + .row { margin-top: 6px; }
+
+    footer {
+      max-width: 1100px;
+      margin: 96px auto 0;
+      padding: 32px 24px 0;
+      border-top: 1px solid var(--hairline);
+      display: flex; justify-content: space-between; align-items: baseline;
+      flex-wrap: wrap; gap: 16px;
+      font-size: 13px; color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--ink); }
+    footer .links { display: flex; gap: 24px; flex-wrap: wrap; }
+
+    blockquote {
+      border-right: 3px solid var(--scene-accent);
+      padding: 6px 22px 6px 0;
+      margin: 24px 0;
+      font-size: 21px; line-height: 1.75;
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .locale-row {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 24px;
+      direction: ltr;
+    }
+    .locale-row a { color: var(--muted); text-decoration: none; }
+    .locale-row a.current { color: var(--scene-accent); }
+    .locale-row a:hover { color: var(--ink); }
+
+    @media (max-width: 720px) {
+      header.top { flex-direction: column; align-items: flex-start; gap: 16px; }
+      nav.crumbs { gap: 18px; flex-wrap: wrap; }
+      .wrap { padding: 40px 20px 72px; }
+    }
+  </style>
+  <style>
+    html, body { overflow-x: clip; max-width: 100%; }
+    section, header, footer, main, article { max-width: 100vw; }
+    img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
+    table { max-width: 100%; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a href="/" class="wordmark">ux<span class="dot"></span></a>
+    <nav class="crumbs">
+      <a href="/">Home</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/blog/" class="current">Blog</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="wrap">
+    <article>
+      <span class="eyebrow">Launch · v3.0.0 · 2026-05-28</span>
+      <h1>ux-skill v3.0 &mdash; أطلقنا <span class="accent">The Brain</span>. مواصفات العلامات التجارية صارت بيانات تدريب، لا قوالب.</h1>
+      <p class="lede">
+        <strong>كان v2 يختار من الكتالوج. v3 يُقطّر منه.</strong> نفس الـ 160 مواصفة علامة تجارية، لكن دورها اختلف اختلافًا تامًا. مُحرِّك التوصية القديم كان يُقيّم 1,182 مدخلًا ويُعيد الأقرب تطابقًا. أمّا المُولِّد الجديد فيقرأ تلك المداخل بوصفها <em>مفردات</em>، ويُكوِّن من المُلخّص لغةَ تصميمٍ جديدة. كلّ نداء يُعيد نظامًا لم يكن موجودًا قبل ذلك النداء.
+      </p>
+      <p class="byline">فريق ux-skill &middot; قراءة 12 دقيقة &middot; مفتوح المصدر برخصة MIT</p>
+
+      <div class="locale-row" aria-label="Languages">
+        <a href="/blog/v3-the-brain-launch.html">EN</a>
+        <a href="/blog/ja/v3-the-brain.html">JA</a>
+        <a href="/blog/zh-CN/v3-the-brain.html">ZH-CN</a>
+        <a href="/blog/ar/v3-the-brain.html" class="current">AR</a>
+        <a href="/blog/es/v3-the-brain.html">ES</a>
+        <a href="/blog/de/v3-the-brain.html">DE</a>
+      </div>
+
+      <div class="hero-quote">
+        مواصفات العلامات التجارية <span class="accent">بيانات تدريب</span>،<br>وليست قوالب.
+      </div>
+
+      <h2>التحوّل في فقرة واحدة</h2>
+      <p>
+        كان v2 <em>محرّك توصية</em>. تُعطيه ملخّصًا، فيُعيد لك الأقرب من كتالوج منظَّم بعناية &mdash; 84 أسلوبًا، و176 لوحة ألوان، و160 مواصفة علامة، و70 ثنائيًا من الخطوط. كان الناتج دائمًا صفًّا من قاعدة البيانات. v3 يحتفظ بالكتالوج كاملًا، لكنه يقلب وظيفته رأسًا على عقب: الـ 1,182 مدخلًا أصبحت <em>المفردات التي يُقطِّر منها المُحرّك</em>. الملخّص لم يعد يستدعي صفًّا، بل يُترجَم إلى قيم سبعة محاور، وتلك القيم تُولِّد رموزًا (tokens) جديدة. الكتالوج يُعلِّم المُحرّك شكل "العصري المؤسّسي"؛ والمحرّك يُكوِّن نظامًا جديدًا "عصريًّا مؤسّسيًّا" لم يُشحَن من قبل. نفس البيانات، دور مختلف كليًّا.
+      </p>
+
+      <h2>ما الذي كان معطوبًا في v2 ويُصلِحه <span class="accent">v3</span></h2>
+      <p>
+        ثلاث علل حقيقيّة وثُغرة تصميميّة واحدة. لم تكن العلل صاخبة بل من النوع الصامت الذي يستمرّ المُحرّك معه في إنتاج مُخرَجات معقولة ونحن نواصل إصدارها. لم نتنبَّه إليها إلّا حين جلسنا لكتابة مواصفات الترقية، وحين أرغمَتنا مراجعة خارجيّة على أن ننظر بصدق.
+      </p>
+
+      <h3>1. حتميّة زائفة من ترتيب نظام الملفّات</h3>
+      <p>
+        كانت عدّة عمليّات فرز داخل خطّ التوصية تُقيّم المرشّحين بالتشابُه، وتفُكّ التعادُل بأيّ ترتيب يُعيده <code>os.listdir</code> في بايثون. على macOS كان الترتيب أبجديًّا، وعلى Linux كان ترتيب الإدراج في سِجلّ نظام الملفّات. بين نسخة جديدة من المستودع ونسخة قديمة قد ينقلب فاكّ التعادُل. كنّا نخبر أنفسنا أنّ المُحرّك حتميّ؛ كان حتميًّا إلى حدّ التعادل، وبعد التعادل صار كيفما حدث أن يتذكّر نظام التشغيل.
+      </p>
+      <p>
+        v3 يُحصّن كلّ عمليّة فرز بفاكّ تعادُل صريح: ترتيب أبجديّ على معرّف العلامة. نفس الملخّص، نفس المحاور، نفس الناتج عبر مختلف الأجهزة وأنظمة الملفّات وإصدارات بايثون. لدينا اختبار يُشغّل المُولِّد 200 مرّة عبر ثلاثة أدِلّة مؤقّتة ويتحقّق من تطابُق المُخرَج بايتًا ببايت.
+      </p>
+
+      <h3>2. تصادُمات بين المحاور تُحلّ بالصُّدفة</h3>
+      <p>
+        في v2، إن احتوى الملخّص على وسمَين متعارضَين &mdash; مثل <em>dense</em> و<em>corporate</em> &mdash; كان مُقيِّم المُوصِّي يُرجِّح أحدهما بمعامِل مخفيّ، فيميل الناتج إلى الجانب الذي صادف أن يُحابيه ذلك المعامِل. لا قاعدة موثّقة. كنّا قادرين على شرح النتيجة بعد وقوعها، عاجزين عن التنبّؤ بها قبله.
+      </p>
+      <p>
+        v3 يرفع هذا الأمر إلى <strong>مصفوفة تفاعُل المحاور</strong>. لكلّ تصادُم موثَّق نتيجةٌ مُعلَنة ومُسوِّغ. الكثافة والرسميّة تتصارعان على المسافات &mdash; الكثافة تفوز في الملخّصات المُكتظّة (مدرسة Bloomberg)، والرسميّة تفوز في الملخّصات المُتنفِّسة (الفخامة). المصفوفة مُختبَرة، قابلة للقراءة، ومُودَعة في المستودع.
+      </p>
+
+      <h3>3. المُقيِّم كان يُصحِّح واجبات المُولِّد بنفسه</h3>
+      <p>
+        هذه أكثرها إحراجًا، واكتشفناها لأنّ <em>ChatGPT أشار إليها في مراجعة خارجيّة لمواصفات v2.1</em> &mdash; سمّاها مشكلة <strong>الانحراف الذاتي المرجعيّ (self-referential drift)</strong>. التدفّق كان يبدو نظيفًا: المُولِّد يُكوِّن نظامًا من الملخّص، ثمّ <code>score_tone_match</code> يُقيّم مدى تطابُق هذا النظام مع لهجة الملخّص. المشكلة أنّ <code>score_tone_match</code> كان يستنبط قيم المحاور من الملخّص بنفس منطق المُولِّد، ثمّ يُقارن محاور المُولِّد بمحاوره هو نفسه. كِلا طرفَي المُقارنة كانا يمرّان عبر الدالّة نفسها. بطبيعة الحال كانت الدرجات مرتفعة. كان المُولِّد يُصحِّح نفسه بمسطرته الخاصّة.
+      </p>
+      <p>
+        v3 يفصلهما. <code>score_tone_match</code> الآن يُقارن مُخرَج المُولِّد بـ<em>وسوم اللهجة الخام</em> في الملخّص &mdash; السلاسل <code>warm</code>، <code>bold</code>، <code>minimal</code>، وما إليها &mdash; عبر تخطيط مستقلّ لا يلمس منطق المحاور إطلاقًا. لم يَعُد بإمكان أيٍّ من المسارين الغشّ على الآخر. ندين بهذه الملاحظة للمراجعة الخارجيّة، ونُسجِّل ذلك علنًا.
+      </p>
+
+      <h3>4. سِجلّ القرارات كان يُكتَب فقط ولا يُقرَأ أبدًا</h3>
+      <p>
+        كان v2 يكتب سطرًا في <code>.ux/decisions.jsonl</code> بعد كلّ توصية، لكنّ لا شيء يُعيد قراءته. كان مجرّد ملفّ سجلّ لتصحيح أخطائنا، لا إشارة تغذية راجعة. كان المُوصِّي يعمل بنفس الطريقة في النداء الأوّل وفي النداء الألف. لا تعلُّم. كان للمستودع ذاكرة، والمُحرّك يتجاهلها.
+      </p>
+      <p>
+        v3 يُغلِق تلك الحلقة. للسِّجل مُخطّط مُغلَق (<code>_v: 1</code>)، والمُوصِّي يُعيد ترتيب المرشّحين وفقًا لانتصارات سابقة في نفس مجموعة <code>(industry, ui_type)</code>، ولا تُحسَب إلّا القرارات التي كانت درجتها جيّدة <em>و</em>أرسلَها المستخدم فعلًا. الدماغ صار يرى تاريخه. القسم السادس هو الجولة الكاملة.
+      </p>
+
+      <h2>المُولِّد ذو السبعة <span class="accent">محاور</span></h2>
+      <p>
+        قلب v3 دالّة حتميّة تُحوِّل ملخّصًا إلى سبع قيم محوريّة عدديّة، ثمّ تُحوِّل هذه القيم إلى نظام تصميم متكامل. المحاور ليست سحرًا &mdash; كلٌّ منها قياسٌ مُعَيَّر بمدًى موثَّق، يُشير إلى حزمة رموز محدّدة. جدوى العمل على المحاور (بدلًا من اختيار صفٍّ من الكتالوج) أنّ أيّ توليفة داخل الفضاء قابلة للوصول، بما فيها توليفات لا تستعملها أيّ علامة حقيقيّة في الكتالوج. الكتالوج يُعرِّف شكل الفضاء؛ والمُولِّد يمكنه أن يهبط في أيّ نقطة داخله.
+      </p>
+
+      <table class="axis-table">
+        <thead>
+          <tr>
+            <th>المحور</th>
+            <th>ما الذي يقيسه</th>
+            <th>يُترجَم إلى</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="axis-name">warmth</span></td>
+            <td>حرارة لون اللوحة &mdash; من الفحميّ البارد إلى السيينّا الدافئة</td>
+            <td>عائلة درجات اللوحة، منحنى تشبُّع لون التركيز</td>
+          </tr>
+          <tr>
+            <td><span class="axis-name">contrast</span></td>
+            <td>صخب بصريّ &mdash; quiet / balanced / loud</td>
+            <td>نسبة سُلَّم الخطّ (1.200 / 1.250 / 1.333)، عُمق الظِّلال، شِدّة التركيز</td>
+          </tr>
+          <tr>
+            <td><span class="axis-name">density</span></td>
+            <td>كثافة المعلومات في الشاشة الواحدة &mdash; من airy إلى dense</td>
+            <td>أساس سُلَّم المسافات (4/8/12/16px)، مُضاعفات ارتفاع السطر</td>
+          </tr>
+          <tr>
+            <td><span class="axis-name">geometry</span></td>
+            <td>شخصيّة الحوافّ &mdash; sharp / balanced / soft</td>
+            <td>سُلَّم نصف القُطر (2/8/18px)، طوبولوجيا الزوايا، سماكة الحواشي</td>
+          </tr>
+          <tr>
+            <td><span class="axis-name">formality</span></td>
+            <td>سِجلّ اللهجة &mdash; playful / balanced / corporate</td>
+            <td>منحنيات أوزان الخطّ، التتبُّع، المسافة بين caption وhero</td>
+          </tr>
+          <tr>
+            <td><span class="axis-name">motion</span></td>
+            <td>ميزانيّة الحركة &mdash; restrained / balanced / cinematic</td>
+            <td>مُنحدرات المُدد (120/240/420ms)، عائلة التيسير، سلوك التمرير</td>
+          </tr>
+          <tr>
+            <td><span class="axis-name">type_personality</span></td>
+            <td>صوت الخطّ &mdash; humanist / neutral / geometric / expressive</td>
+            <td>عائلة الخطّ التعريفيّ، سُلَّم الأوزان، استراتيجيّة المائل</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        نقطة الدخول في Python صغيرة بحيث تتّسع في مثال واحد. تُمرِّر ملخّصًا، فتسترجع نظامًا مُولَّدًا مُرفقًا به قيم المحاور، واللوحة المختارة، وإعدادات الخطّ، وسُلَّم المسافات، وسُلَّم نصف القُطر، وإعدادات الحركة المسبقة.
+      </p>
+
+      <pre class="code"><span class="c"># from a brief to a system, in one call</span>
+<span class="k">from</span> engine.synthesizer <span class="k">import</span> synthesize
+
+brief = Brief(
+  industry=<span class="s">"fintech-payments"</span>,
+  tone=[<span class="s">"bold"</span>, <span class="s">"serious"</span>],
+  audience=[<span class="s">"merchants"</span>, <span class="s">"developers"</span>],
+)
+
+sys = synthesize(brief)
+<span class="c"># sys.mode == "pure_synthesis"</span>
+<span class="c"># sys.axes == {warmth: 0.32, contrast: 0.72, density: 0.58, ...}</span>
+<span class="c"># sys.palette, sys.type, sys.spacing, sys.radius, sys.motion</span></pre>
+
+      <p>
+        إن دخل نفس الملخّص، خرجَت نفس المحاور، خرجَت نفس الرموز. دائمًا. لا يحتاج المُولِّد إلى بذرة عشوائيّة، ببساطة لأنّه لا توجد عشوائيّة تحتاج إلى تبذير.
+      </p>
+
+      <h2>ثلاثة أوضاع، <span class="accent">منطق قرار واحد</span></h2>
+      <p>
+        المُولِّد يُوزِّع المرشّحات تلقائيًّا على ثلاثة أوضاع وفقًا لمحتوى الملخّص. في معظم الاستخدامات لا توجد رايةٌ تختار وضعًا يدويًّا &mdash; شكل الملخّص هو ما يختار. المنطق مقصودٌ في بساطته: وجود علامة مرجعيّة وراية strict يقرّر المسار.
+      </p>
+
+      <div class="mode-card">
+        <div class="mode-name">strict_brand &middot; الأسرع</div>
+        <h4>100% العلامة المُسمّاة</h4>
+        <p><code>reference_brands=[stripe]</code> مع <code>strict=True</code> يُعيد مواصفة Stripe كما هي. لا تأويل، لا مزج، لا توليد. مفيد حين تكون العلامة موجودة، والمواصفة مرجعيّة، والملخّص يكتفي بالرموز فحسب. هذا هو المسار الذي تختاره حين يكون لديك ملفّ Figma ونظام موثَّق وتحتاج إلى كود لا يرتجل.</p>
+      </div>
+
+      <div class="mode-card">
+        <div class="mode-name">brand_anchor &middot; 70 / 30</div>
+        <h4>مرسى على العلامة، مُكيَّف على محاور الملخّص</h4>
+        <p><code>reference_brands=[stripe]</code> دون <code>strict=True</code> يُعيد 70% من رموز Stripe ممزوجةً بـ30% من فروقات محوريّة مُستمَدّة من أربع علامات شقيقة مختارة بقُرب المحاور. الناتج يبقى Stripe بلا لَبس، لكنّه ينحني نحو لهجة الملخّص &mdash; Stripe أكثر مرحًا لميزة استهلاكيّة، Stripe أكثر رسميّةً للوحة قيادة مؤسّسيّة. تصمد العلامة المرساة أمام كلّ تصادم.</p>
+      </div>
+
+      <div class="mode-card">
+        <div class="mode-name">pure_synthesis &middot; فضاء لانهائيّ</div>
+        <h4>دون علامة مُسمّاة &mdash; لغة جديدة في كلّ نداء</h4>
+        <p>دون <code>reference_brands</code> في الملخّص، يُقيّم المُولِّد المحاور السبعة من الملخّص، ويُحدِّد أقرب ثمانية أمثلة في الكتالوج بحسب مسافة المحاور، ويُقطِّر البنية المشتركة بينها، ويُصدِر حزمة طازجة من اللوحة + الخطّ + المسافات + نصف القُطر + الحركة. الملخّصات المختلفة تهبط في مناطق مختلفة من الفضاء نفسه؛ كلّ ناتج متماسك داخليًّا، ويحمل هويّةً خاصّة قابلة للتمييز.</p>
+      </div>
+
+      <p>من سطر الأوامر تبدو المسارات الثلاثة هكذا:</p>
+
+      <pre class="code"><span class="c"># strict — 100% the brand</span>
+$ uxskill synthesize <span class="n">--brand</span> stripe <span class="n">--strict</span>
+
+<span class="c"># anchor — 70/30</span>
+$ uxskill synthesize <span class="n">--brand</span> stripe
+
+<span class="c"># pure synthesis — no brand</span>
+$ uxskill synthesize <span class="n">--industry</span> fintech-payments <span class="n">--tone</span> bold</pre>
+
+      <p>مُولِّد واحد، منطق قرار واحد، ثلاث شخصيّات مُخرَجات. لا يُبدِّل المستخدم التطبيق &mdash; الملخّص نفسه يُوجِّه المسار.</p>
+
+      <h2>مصفوفة <span class="accent">تفاعُل المحاور</span></h2>
+      <p>
+        المحاور تتنازع نفس الرموز. <em>density</em> تطلب مسافات ضيّقة؛ <em>formality</em> تطلب مسافات كريمة في سِجلّ الفخامة. <em>geometry</em> تطلب حوافّ حادّة في الطابع التحريريّ؛ <em>formality</em> تطلب زوايا لطيفة في لوحة قيادة ماليّة. في v2 كانت هذه التصادُمات تُحلّ بأيّ معامِل أكبر في المُقيِّم. في v3 لكلّ تصادم موثَّق نتيجةٌ مُعلَنة ومدرسةٌ تصميميّة يُشير إليها &mdash; مُسمّاة، حتى يتاح للقارئ أن يقرأها ويختلف معها.
+      </p>
+
+      <p>أربع حالات تمثيليّة، كلّها مُودَعة في الاختبارات:</p>
+
+      <div class="conflict-card">
+        <div class="input">dense + corporate</div>
+        <div class="outcome">أساس سُلَّم المسافات: 4px</div>
+        <p class="reason">density تفوز. جواب مدرسة Bloomberg. كثافة المعلومات هي أعلى الفضائل حين يطلب الملخّص لوحات بيانات مُكتظّة في سِجلّ مؤسّسيّ &mdash; formality تنحني أمام مقروئيّة الكثافة.</p>
+      </div>
+
+      <div class="conflict-card">
+        <div class="input">airy + corporate</div>
+        <div class="outcome">أساس سُلَّم المسافات: 12px</div>
+        <p class="reason">formality تفوز. جواب فخامة الماليّات. airy + corporate هي مواصفة المصارف الراقية والثروة الخاصّة ولوحات قيادة التنفيذيّين &mdash; الفراغ المُحيط بكلّ عنصر <em>هو</em> رسالة الجدّيّة.</p>
+      </div>
+
+      <div class="conflict-card">
+        <div class="input">sharp + corporate</div>
+        <div class="outcome">سُلَّم نصف القُطر: 2px</div>
+        <p class="reason">geometry تفوز. جواب مدرسة NYT. sharp + corporate هي مواصفة الطابع التحريريّ &mdash; الزوايا القائمة ونصف قُطر 2px تُقرأ مؤسّسيّةً، مُتأمّلة، صحفيّةً كبرى.</p>
+      </div>
+
+      <div class="conflict-card">
+        <div class="input">soft + playful</div>
+        <div class="outcome">سُلَّم نصف القُطر: 18px</div>
+        <p class="reason">المحوران يتّفقان. جواب مدرسة Glossier. الهندسة الطريّة مع سِجلّ مرِح ينهاران معًا إلى تدوير كريم &mdash; 18px هي العتبة التي تبدأ المستطيلات عندها تُقرأ كحصى.</p>
+      </div>
+
+      <p>
+        لماذا يهمّ هذا: في v2 كان من الممكن للملخّص نفسه أن يهبط على 4px أو 12px بحسب أيّ معامِل فاز ذلك الشهر. في v3، <code>dense + corporate</code> هي دائمًا 4px، و<code>airy + corporate</code> هي دائمًا 12px. القواعد قابلة للقراءة وللاختبار وللجدال. إن لم تتّفق مع نتيجةٍ ما، افتح قضيّة على المصفوفة وسيتحوّل النقاش إلى نقاش ذوقٍ، لا إلى نقاش حول ثابتٍ مخفيّ.
+      </p>
+
+      <h2>الدماغ <span class="accent">يتعلّم</span></h2>
+      <p>
+        هذا هو الجزء الجديد فعليًّا في v3: المُحرّك يتعلّم من قراراتك المحليّة. الآليّة صغيرة، حتميّة، خارج الاتّصال تمامًا. لا قياس استخدام، لا حساب، لا مزامنة سحابيّة. تثبيتك يتعلّم من تثبيتك. مستودعات مختلفة تُربّي أدمغة مختلفة.
+      </p>
+
+      <h3>السِّجل</h3>
+      <p>
+        كلّ نداء لـ<code>/ux-recommend</code> أو <code>/ux-synthesize</code> يكتب سطرًا واحدًا في <code>.ux/decisions.jsonl</code>. المُخطّط مُغلَق عند <code>_v: 1</code>:
+      </p>
+
+      <pre class="code">{
+  <span class="k">"_v"</span>: <span class="s">1</span>,
+  <span class="k">"ts"</span>: <span class="s">"2026-05-28T14:22:09Z"</span>,
+  <span class="k">"frame"</span>: { <span class="k">"industry"</span>: <span class="s">"fintech-payments"</span>, <span class="k">"ui_type"</span>: <span class="s">"dashboard"</span>, ... },
+  <span class="k">"system"</span>: { <span class="k">"style_id"</span>: <span class="s">"editorial-calm-dark"</span>, <span class="k">"palette_id"</span>: <span class="s">"charcoal-amber"</span>, ... },
+  <span class="k">"axes"</span>: { <span class="k">"warmth"</span>: <span class="s">0.31</span>, <span class="k">"contrast"</span>: <span class="s">0.72</span>, ... },
+  <span class="k">"lint_score"</span>: <span class="s">88</span>,
+  <span class="k">"user_accepted"</span>: <span class="s">true</span>
+}</pre>
+
+      <h3>إعادة الترتيب</h3>
+      <p>
+        في النداء التالي، يُجمِّع المُوصِّي القرارات السابقة بحسب <code>(industry, ui_type)</code>. كلّ مرشّح يحصل على <strong>قفزة +5</strong> إن طابق سابقةً في نفس المجموعة. لا تُحتسَب إلّا السوابق التي <code>lint_score &gt;= 80</code> و<code>user_accepted = true</code> &mdash; لا نتعلّم من ناتج مرفوض. تحتاج المجموعة إلى ثلاث سوابق مؤهّلة على الأقلّ قبل أن تعمل إعادة الترتيب. تحت ذلك، يعمل المُحرّك في وضع الإقلاع البارد ويتصرّف تمامًا كتثبيت جديد.
+      </p>
+
+      <h3>الضمانات</h3>
+      <p>
+        الضمانات هنا ضيّقة وتستحقّ أن تُقال بصوت عالٍ. <strong>الحتميّة محفوظة.</strong> نفس الملخّص + نفس السِّجل يُنتجان دائمًا نفس الناتج. تُطبَّق قفزة +5 قبل أيّ فاكّ تعادل، وقاعدة الترتيب الأبجديّ على معرّف العلامة لا تزال تفوز تحتها. <strong>الإقلاع البارد آمن.</strong> المستودع الجديد يتصرّف كأيّ مستودع جديد آخر. <strong>التعلّم محليّ.</strong> قراراتك لا تُغادر جهازك أبدًا.
+      </p>
+
+      <p>يمكنك أن ترى ما تعلَّمَه تثبيتك في أيّ وقت:</p>
+
+      <pre class="code">$ uxskill stats <span class="n">--html</span>
+<span class="n">[OK]</span> Wrote .ux/stats.html
+<span class="n">[OK]</span> Open in browser to see your install's learned priors</pre>
+
+      <p>
+        لوحة HTML تُظهر عدد القرارات لكلّ مجموعة، ومتوسّط درجة linter، واللوحات الأكثر تكرارًا، وتوزيعات المحاور. هذه هي الحجّة المرئيّة على التعلّم الذاتيّ &mdash; ترى ملمح ذوقك يثخن مع الوقت وأنت تُواصل الإصدار. لا شيء من ذلك في خادم. كلّه في مستودعك، في JSONL واضح وHTML مُولَّد.
+      </p>
+
+      <h2>الحلقة التلقائيّة <span class="accent">/ux-evolve</span></h2>
+      <p>
+        الأمر الجديد في v3 هو <code>/ux-evolve</code>. حتى الآن، كانت حلقة التلميع يدويّة: شغّل linter، اقرأ النتائج، أصلِح، أعِد التشغيل. Evolve يُغلِق تلك الحلقة. تُسلّمه أصلًا ودرجةً مستهدَفة؛ فيُشغّل linter، ويُطبِّق ستّة تمريرات تلميع لا أثر مُكرَّرًا فيها، ويُعيد التشغيل، ويتوقّف عند الهدف أو على هضبة أو عند سقف خمس جولات.
+      </p>
+
+      <p>شكل الجولة الواحدة:</p>
+
+      <ol>
+        <li><strong>Lint</strong> &mdash; 145 قاعدة Regex حتميّة عبر إمكانيّة الوصول، والمحتوى، والجودة، والطباعة. تُعيد درجةً من 0 إلى 100 وقائمة بالنتائج.</li>
+        <li><strong>Polish</strong> &mdash; ستّة تمريرات تُصلِح أوّلًا أعلى الشِّدّات. لا أثر مُكرَّرًا: إعادة تمريرٍ على مُخرَجٍ مُلمَّعٍ تصبح عمليّةً صفريّة.</li>
+        <li><strong>Re-lint</strong> &mdash; تقييم الأصل المُلمَّع.</li>
+        <li><strong>Decide</strong> &mdash; إن صارت الدرجة &ge; 90، توقّف. إن كان الفارق عن الجولة الأخيرة أقلّ من 5 (هضبة)، توقّف. إن وصلنا للجولة 5، توقّف. وإلّا، أعِد الكرّة.</li>
+      </ol>
+
+      <p>
+        <strong>بوّابة الجودة</strong> ثابتة على 65. إن نزلَت الدرجة النهائيّة عن 65، يرفض المُحرّك إرسال الأصل ما لم تُمرَّر <code>--force</code>. السبب: المُخرَج عند 65 أو دونها يُعَدّ هُراء ذكاء اصطناعيّ يمكن تمييزه، ولن ندع محرّكنا يُصدِر هُراءً بصمت. يمكن للمستخدم تجاوز البوّابة، لكنّ التجاوز صريح ويُسجَّل في سِجلّ القرارات.
+      </p>
+
+      <p>
+        مثال ملموس: هيكلٌ للوحة قيادة فينتك بدرجة 72 في أوّل تشغيل لـ linter &mdash; غالبيّتها حالات تركيز غائبة، وبعض التسميات منخفضة التباين، ونتيجة "Inter بحجم تعريفيّ". الجولة 1 لَمّعَت حالات التركيز إلى 81. الجولة 2 رفعَت التباين إلى 86. الجولة 3 استبدلَت Inter بالخطّ التعريفيّ الذي طلبه الملخّص وأعادت توازن أحجام caption &mdash; 91، تمّ بلوغ الهدف، انتهت الحلقة. ثلاث جولات، لا رفض، الإصدار جاهز.
+      </p>
+
+      <h2>ما الذي <span class="accent">لم</span> نَبنِه (ولماذا)</h2>
+      <p>
+        المواصفات الأقصى لـv2.1 اقترحَت أمورًا لم تَدخُل v3. الحديث الصادق عن النطاق هو أن نقول أيّها، ولماذا.
+      </p>
+
+      <h3>لا LLM في الحلقة</h3>
+      <p>
+        كان الاقتراح الأقصى يتضمّن محورًا جماليًّا ذاتيًّا يحكُمه نموذج لغويّ كبير &mdash; "اسأل نموذجًا هل تشعُر بأنّ هذا تحريريّ". رفضنا ذلك من حيث المبدأ. مغزى المُحرّك كلّه هو الحتميّة: نفس الملخّص، نفس الناتج، دون مُفاجآت صباح الغد. وضع LLM داخل المُولِّد يجعل كلّ نداء غير قابل للاستنساخ. v3 يستدعي صفر LLM. المُولِّد بايثون نقيّ يعمل على JSON؛ وlinter قواعد Regex؛ والمُقيِّم قائم على القواعد.
+      </p>
+
+      <h3>لا توليد بعدّة مُرشّحين بالتحوير الجينيّ</h3>
+      <p>
+        تضمّن الاقتراح خطوةً بخوارزميّة جينيّة &mdash; أصدِر N من المرشّحين في كلّ نداء، حوِّر، قيِّم، أعِد الأصلح. جرّبناها في فرع. تدهور الناتج، لأنّ التحوير أدخل ضوضاء كانت حلقة التلميع تضطرّ لإزالتها. v3 يُصدِر توليفًا بأصلٍ واحد وحلقة تلميع. مُرشَّح واحد، ستّة تمريرات لا أثر مُكرَّرًا فيها. نتائج أفضل، سطح كود أصغر.
+      </p>
+
+      <h3>لا إعادة تسمية للأوامر</h3>
+      <p>
+        أعاد الاقتراح تسمية <code>/ux-recommend</code> إلى <code>/generate:ui</code> و<code>/ux-polish</code> إلى <code>/mutate:ui</code>. أبقَيْنا على الـ 22 أمرًا القائمة بأسمائها، وأضفنا <code>/ux-evolve</code> بوصفه الأمر الثالث والعشرين. لا نريد لترقيةٍ من v2 إلى v3 أن تكسر ذاكرة عضلاتٍ لأحدٍ أو أسماء shell aliases.
+      </p>
+
+      <h3>لا "حرق الكتالوج من أجل فضاء لا نهائيّ"</h3>
+      <p>
+        النسخة الأقصى من الاقتراح قالت إنّ الكتالوج عبء &mdash; إنّ المُولِّد يصل إلى فضاء التصميم كلّه بمفرده، وإنّ المداخل الـ 1,182 يجب أن تذهب. أبقَينا كلّ مُدخَل. الكتالوج هو ما يُعلِّم المُولِّد <em>شكل</em> الفضاء &mdash; دون أمثلة، لا مرسى للمحاور، ويصير الناتج طافيًا. v3 يقرأ الكتالوج بوصفه مفردات، وv3 يحتاج إلى تلك المفردات.
+      </p>
+
+      <p>
+        هذه أحكام ذوق. سيختلف معها أصحاب أولويّات مختلفة، وهذا حقّهم. واجبنا تجاه المشروع أن نُسجِّل ما لم نَفعله، ولماذا.
+      </p>
+
+      <h2>الأرقام عند <span class="accent">v3</span></h2>
+
+      <div class="stats-row">
+        <div class="stat"><div class="n">23</div><div class="l">Commands</div></div>
+        <div class="stat"><div class="n">18</div><div class="l">MCP tools</div></div>
+        <div class="stat"><div class="n">1,182</div><div class="l">Entries</div></div>
+        <div class="stat"><div class="n">145</div><div class="l">Anti-patterns</div></div>
+        <div class="stat"><div class="n">160</div><div class="l">Brand specs</div></div>
+        <div class="stat"><div class="n">17</div><div class="l">IDEs</div></div>
+        <div class="stat"><div class="n">17</div><div class="l">Locales</div></div>
+        <div class="stat"><div class="n">223</div><div class="l">Tests pass</div></div>
+      </div>
+
+      <p>
+        اثنان وعشرون أمرًا قائمًا بأسمائها، ثمّ <code>/ux-evolve</code> بوصفه الثالث والعشرين. خمس عشرة أداة MCP محفوظة، وثلاث جديدة &mdash; <code>ux_synthesize</code>، <code>ux_decisions_query</code>، <code>ux_decisions_stats</code> &mdash; للوكلاء الراغبين في قيادة المُولِّد أو الاستعلام عمّا تعلّمَه الدماغ. الكتالوج وlinter لم يُمَسّا. مُثبِّت الـ 17 IDE لم يُمَسّ. الصفحات الرئيسة وملفّات README بلُغاتها الـ 17 لم تتغيّر. v3 إضافة على السطح وإعادة كتابة في القلب.
+      </p>
+
+      <blockquote>
+        كان v2 محرّك توصية ينتقي من كتالوج. v3 مُجمِّع يُقطِّر منه. نفس البيانات تؤدّي العمل المعاكس.
+      </blockquote>
+
+      <h2>التثبيت في 60 ثانية</h2>
+      <p>
+        يُشحَن v3 عبر المسارات الثلاثة نفسها التي كانت في v2 &mdash; pip، وnpm، وأسواق إضافات بيئات التطوير. خطوة init تكتشف بيئتك تلقائيًّا وتكتب ملفّ الإعدادات في المكان الصحيح. خطوة synthesize تأخذ ملخّصًا أو زوج industry + tone وتُعيد نظام تصميمٍ مُكتمِلًا إلى <code>.ux/last-system.json</code> في المستودع الحاليّ.
+      </p>
+
+      <pre class="code">$ pip install uxskill
+$ uxskill init                     <span class="c"># auto-detects your IDE</span>
+$ uxskill synthesize <span class="n">--industry</span> fintech-payments <span class="n">--tone</span> bold
+
+<span class="n">[OK]</span> Mode: pure_synthesis
+<span class="n">[OK]</span> Axes: warmth=0.31, contrast=0.74, density=0.58, geometry=0.42, ...
+<span class="n">[OK]</span> Wrote .ux/last-system.json (palette, type, spacing, radius, motion)
+<span class="n">[OK]</span> Wrote .ux/decisions.jsonl (1 entry, schema _v: 1)</pre>
+
+      <p>
+        نفس مسار التثبيت على كلّ بيئة مدعومة: Claude Code، وCursor، وWindsurf، وGitHub Copilot، وGemini CLI، وCodex، وKiro، وCline، وContinue، وAider، وZed، وJetBrains AI، وPieces، وTabby، وTabnine، وCodeWhisperer، وRoo Cline. خادم MCP stdio هو المصدر الوحيد للحقيقة لها جميعًا.
+      </p>
+
+      <div class="honesty">
+        <div class="label">نطاق صريح</div>
+        <h4>v3 أساس، لا وِجهة نهائيّة.</h4>
+        <p>المُولِّد بسبعة محاور هو العمل الذي نشَرنا أدلّته. المحوران 8 و9 (saturation_strategy، surface_depth) مرسومان لكن لم يُشحَنا &mdash; سيُعمِّقان الانقسام الداكن/الفاتح واستراتيجيّة التدرّجات. سِجلّ القرارات يُستهلَك اليوم من قِبل إعادة ترتيب المُوصِّي فقط؛ نتوقّع أن يبدأ المُقيِّم ومُقيِّم linter بقراءته في v3.1. المُقترحات الأقصى التي رفضناها ليسَت غائبة &mdash; بعضها قد يحطّ لاحقًا، حين نستطيع إثبات نفعها.</p>
+        <p>إن وجدتَ ملخّصًا يُنتِج ناتجًا غير مُرضٍ، أو حلًّا في المصفوفة لا يوافق ذوقك، افتح قضيّة. المصفوفة في المستودع، والاختبارات في المستودع، والدماغ في مستودعك. النقاشات الآن تجري على ركيزة يمكنك قراءتها.</p>
+      </div>
+
+      <h2>ما الذي يتغيّر بالنسبة لك</h2>
+      <p>
+        إن كنتَ على v2: لا شيء سيُكسَر. الـ 22 أمرًا التي تستعملها تتصرّف كما هي. linter يعمل بالسرعة ذاتها. خادم MCP يُتيح 15 أداة من 18 بأسمائها القديمة، إضافةً إلى ثلاث جديدة. إن ترقّيتَ ولم تستدعِ <code>/ux-synthesize</code> أو <code>/ux-evolve</code>، فلن يتحرّك سَير عملك اليوميّ إطلاقًا.
+      </p>
+      <p>
+        إن كنتَ بانتظار أن <em>يُولِّد</em> المُحرّك بدل أن <em>يُوصِي</em>: هذا هو v3. المُولِّد هو المركز الجديد؛ <code>/ux-recommend</code> لا يزال يعمل وصار يُعيد الترتيب من سِجلّك؛ <code>/ux-evolve</code> يُغلق حلقة التلميع. مواصفات العلامات بيانات تدريب الآن، لا قوالب. نفس الـ 1,182 مدخلًا تؤدّي عملًا مختلفًا تمامًا.
+      </p>
+      <p>
+        سمَّيْنا v3 The Brain لأنّ هذا ما تَمَّ بناؤه &mdash; مُجمِّع تصميم توليديّ مُقيَّد بحلقة تغذية راجعة مغلقة. خارج الاتّصال تمامًا. صفر استدعاءات LLM. نفس الملخّص، نفس المحاور، نفس الناتج. ملخّصات مختلفة، مناطق مختلفة، مُخرَجات لا نهائيّة. تثبيتك يتعلّم من مستودعك. مستودعات مختلفة تُربّي أدمغة مختلفة. كلّ ذلك بترخيص MIT، بأقلّ من 300ms على جهاز عاديّ، وقابل للتثبيت عبر pip.
+      </p>
+      <p>
+        شغِّله على ملخّصٍ يَهمّك. انظُر ماذا يُعيد. افتح قضيّة إن خالف الناتج ذوقك &mdash; التصادُم يدخل المصفوفة، وتُسمَّى القاعدة، ويتصرّف التثبيت التالي على نحو أفضل. هكذا يتراكم الدماغ.
+      </p>
+
+    </article>
+
+    <section class="cta">
+      <span class="eyebrow">شغّله على مشروعك</span>
+      <h2>محرِّك واحد. <span class="accent">ثلاثة مسارات للتثبيت.</span></h2>
+      <p>المُولِّد الذي يُشغِّل v3 يُشحَن في الحزمة نفسها مع linter ومُحرِّك التوصية. 145 نمطًا مضادًّا. 160 مواصفة علامة. 1,182 مدخلًا. 17 بيئة تطوير. MIT، دون قياس استخدام، دون حساب.</p>
+
+      <div class="install-block">
+        <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
+        <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; or &mdash;</div>
+        <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; or &mdash;</div>
+        <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@latest init</span></div>
+      </div>
+
+      <p style="margin-top: 28px; font-size: 14px;">
+        المصدر على GitHub: <a class="link" href="https://github.com/Laith0003/ux-skill">Laith0003/ux-skill</a> &middot;
+        npm: <a class="link" href="https://www.npmjs.com/package/uxskill">uxskill</a> &middot;
+        PyPI: <a class="link" href="https://pypi.org/project/uxskill/">uxskill</a> &middot;
+        التوثيق: <a class="link" href="https://uxskill.laithjunaidy.com/">uxskill.laithjunaidy.com</a>
+      </p>
+    </section>
+  </div>
+
+  <footer>
+    <span>&copy; 2026 Laith Aljunaidy &middot; مُرخَّص بـMIT &middot; دون قياس استخدام</span>
+    <div class="links">
+      <a href="/">Home</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/blog/">Blog</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+    </div>
+  </footer>
+</body>
+</html>

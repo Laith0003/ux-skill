@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ux-skill v3.0 — lanzamos The Brain. Las brand specs son datos de entrenamiento, no plantillas.</title>
+  <meta name="description" content="v2 elegía del catálogo. v3 destila desde él. Las mismas 160 brand specs, un papel completamente distinto. El sintetizador de 7 ejes, el registro de decisiones y el ciclo cerrado.">
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/es/v3-the-brain.html">
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="index,follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/es/v3-the-brain.html">
+  <meta property="og:title" content="ux-skill v3.0 — lanzamos The Brain. Las brand specs son datos de entrenamiento, no plantillas.">
+  <meta property="og:description" content="v2 elegía del catálogo. v3 destila desde él. El sintetizador de 7 ejes, el ciclo cerrado y por qué el motor ahora aprende de tus decisiones locales.">
+  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/es-v3-the-brain.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ux-skill v3.0 — The Brain">
+  <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/es-v3-the-brain.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ux-skill v3.0 — The Brain">
+  <meta name="twitter:description" content="Un compilador de diseño generativo y determinista con un ciclo de retroalimentación cerrado. 7 ejes, 3 modos, una sola lógica. Sin LLM. Sin telemetría.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "ux-skill v3.0 — lanzamos The Brain. Las brand specs son datos de entrenamiento, no plantillas.",
+    "description": "v2 elegía del catálogo. v3 destila desde él. El sintetizador de 7 ejes, el registro de decisiones y el ciclo cerrado.",
+    "datePublished": "2026-05-28",
+    "dateModified": "2026-05-28",
+    "author": {
+      "@type": "Organization",
+      "name": "ux-skill",
+      "url": "https://uxskill.laithjunaidy.com/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ux-skill",
+      "url": "https://uxskill.laithjunaidy.com/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://uxskill.laithjunaidy.com/blog/es/v3-the-brain.html"
+    },
+    "image": "https://uxskill.laithjunaidy.com/og/es-v3-the-brain.png",
+    "inLanguage": "es"
+  }
+  </script>
+
+  <style>
+    :root {
+      --canvas: #07080a;
+      --surface-1: #0f1115;
+      --surface-2: #14181d;
+      --surface-3: #1c2128;
+      --ink: #f6f7f9;
+      --body: #c7ccd3;
+      --muted: #7a7972;
+      --faint: #5a5f66;
+      --hairline: rgba(255,255,255,0.08);
+      --hairline-2: rgba(255,255,255,0.14);
+      --scene-accent: #8b5cf6;
+      --scene-soft: rgba(139,92,246,0.18);
+      --win-bg: rgba(16,185,129,0.10);
+      --win-fg: #34d399;
+      --lose-bg: rgba(244,63,94,0.10);
+      --lose-fg: #fb7185;
+      --neutral-bg: rgba(255,255,255,0.05);
+      --neutral-fg: #c7ccd3;
+      --display: 'Bricolage Grotesque', system-ui, sans-serif;
+      --body-face: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+      --serif-italic: 'Instrument Serif', Georgia, serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; background: var(--canvas); }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      font-family: var(--body-face);
+      background: var(--canvas);
+      color: var(--body);
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+    header.top {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8px 24px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .wordmark {
+      display: inline-flex; align-items: baseline; gap: 4px;
+      text-decoration: none; color: var(--ink);
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-weight: 620;
+      font-size: 26px; letter-spacing: -0.04em; line-height: 1;
+    }
+    .wordmark .dot {
+      display: inline-block; width: 7px; height: 7px;
+      border-radius: 2px;
+      background: var(--scene-accent);
+      transform: translateY(-3px);
+    }
+    nav.crumbs {
+      display: flex; gap: 28px;
+      font-family: var(--mono);
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+    nav.crumbs a { color: var(--muted); text-decoration: none; transition: color 0.16s ease; }
+    nav.crumbs a:hover { color: var(--ink); }
+    nav.crumbs a.current { color: var(--ink); }
+
+    article { padding-top: 56px; }
+    .eyebrow {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--scene-accent);
+      margin-bottom: 22px;
+    }
+    h1 {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 96, 'wght' 600;
+      font-weight: 600;
+      font-size: clamp(38px, 5.2vw, 60px);
+      line-height: 1.06; letter-spacing: -0.028em;
+      color: var(--ink); margin-bottom: 28px;
+    }
+    h1 .accent {
+      font-family: var(--serif-italic);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--scene-accent);
+      letter-spacing: -0.015em;
+    }
+    .lede {
+      font-size: 20px; line-height: 1.55; color: var(--body);
+      margin-bottom: 16px;
+    }
+    .lede strong { color: var(--ink); font-weight: 600; }
+    .byline {
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 56px; padding-bottom: 24px;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .hero-quote {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 86, 'opsz' 96, 'wght' 600;
+      font-size: clamp(34px, 4.6vw, 54px);
+      line-height: 1.08; letter-spacing: -0.025em;
+      color: var(--ink);
+      padding: 56px 0 64px;
+      border-top: 1px solid var(--hairline);
+      border-bottom: 1px solid var(--hairline);
+      margin: 48px 0 56px;
+    }
+    .hero-quote .accent {
+      color: var(--scene-accent);
+      font-family: var(--serif-italic);
+      font-style: italic;
+      font-weight: 400;
+    }
+    h2 {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 80, 'wght' 580;
+      font-weight: 580;
+      font-size: clamp(28px, 3.2vw, 36px);
+      line-height: 1.18; letter-spacing: -0.022em;
+      color: var(--ink); margin: 64px 0 18px;
+    }
+    h2 .accent {
+      font-family: var(--serif-italic);
+      color: var(--scene-accent);
+      font-style: italic; font-weight: 400;
+    }
+    h3 {
+      font-family: var(--body-face);
+      font-weight: 600; font-size: 19px;
+      letter-spacing: -0.005em; color: var(--ink);
+      margin: 36px 0 14px;
+    }
+    h4 { font-family: var(--body-face); font-weight: 600; font-size: 17px; color: var(--ink); }
+    p { margin-bottom: 18px; color: var(--body); }
+    p strong { color: var(--ink); font-weight: 600; }
+    em { color: var(--ink); }
+    ul, ol { margin: 0 0 22px 22px; }
+    ul li, ol li { margin-bottom: 10px; color: var(--body); }
+    ul li::marker { color: var(--scene-accent); }
+    ol li::marker { color: var(--scene-accent); font-family: var(--mono); font-size: 0.9em; }
+
+    pre.code {
+      background: var(--surface-2);
+      color: var(--ink);
+      border: 1px solid var(--hairline);
+      padding: 22px 24px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 13.5px;
+      line-height: 1.65;
+      margin: 24px 0 28px;
+    }
+    pre.code .c { color: rgba(250,249,245,0.45); font-style: italic; }
+    pre.code .k { color: #e8b894; }
+    pre.code .s { color: #a3e0b8; }
+    pre.code .v { color: var(--ink); }
+    pre.code .n { color: var(--scene-accent); }
+    code {
+      font-family: var(--mono);
+      font-size: 13px;
+      background: var(--surface-2);
+      border: 1px solid var(--hairline);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--ink);
+    }
+    a.link {
+      color: var(--scene-accent);
+      text-decoration: underline;
+      text-decoration-color: rgba(139,92,246,0.4);
+      text-underline-offset: 3px;
+    }
+    a.link:hover { color: var(--ink); }
+
+    .honesty {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-left: 3px solid var(--scene-accent);
+      padding: 24px 28px;
+      border-radius: 0 14px 14px 0;
+      margin: 32px 0;
+    }
+    .honesty .label {
+      font-family: var(--mono);
+      font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--scene-accent); margin-bottom: 8px;
+    }
+    .honesty h4 { font-weight: 600; font-size: 17px; color: var(--ink); margin-bottom: 10px; }
+
+    .axis-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0 32px;
+      font-size: 14.5px;
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .axis-table th, .axis-table td {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--hairline);
+      vertical-align: top;
+    }
+    .axis-table th {
+      background: var(--surface-2);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .axis-table tr:last-child td { border-bottom: none; }
+    .axis-table .axis-name { color: var(--ink); font-weight: 600; font-family: var(--mono); font-size: 13px; }
+
+    .conflict-card {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-left: 3px solid var(--scene-accent);
+      border-radius: 0 14px 14px 0;
+      padding: 20px 24px;
+      margin: 18px 0;
+    }
+    .conflict-card .input {
+      font-family: var(--mono);
+      font-size: 12px; letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--scene-accent); margin-bottom: 8px;
+    }
+    .conflict-card .outcome {
+      color: var(--ink); font-weight: 600; font-size: 17px; margin-bottom: 6px;
+    }
+    .conflict-card .reason { font-size: 14.5px; color: var(--body); margin: 0; }
+
+    .mode-card {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-radius: 14px;
+      padding: 22px 26px;
+      margin: 16px 0;
+    }
+    .mode-card .mode-name {
+      font-family: var(--mono);
+      font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--scene-accent); margin-bottom: 8px;
+    }
+    .mode-card h4 { font-size: 19px; margin-bottom: 8px; color: var(--ink); }
+    .mode-card p { margin-bottom: 0; font-size: 15px; }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));
+      gap: 12px;
+      margin: 32px 0;
+    }
+    .stat {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 18px 16px;
+      text-align: center;
+    }
+    .stat .n {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 80, 'wght' 600;
+      font-size: 30px; color: var(--ink); line-height: 1; margin-bottom: 6px;
+    }
+    .stat .l {
+      font-family: var(--mono);
+      font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .cta {
+      margin-top: 96px;
+      padding: 56px 48px;
+      background: var(--surface-1);
+      color: var(--ink);
+      border: 1px solid var(--hairline-2);
+      border-radius: 22px;
+    }
+    @media (max-width: 720px) { .cta { padding: 40px 28px; } }
+    .cta .eyebrow { color: var(--scene-accent); }
+    .cta h2 { color: var(--ink); margin-top: 0; }
+
+    .install-block {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-family: var(--mono);
+      font-size: 14px; line-height: 1.75;
+      color: var(--ink);
+    }
+    .install-block .prompt { color: var(--scene-accent); }
+    .install-block .arg { color: var(--muted); }
+    .install-block .row + .row { margin-top: 6px; }
+
+    footer {
+      max-width: 1100px;
+      margin: 96px auto 0;
+      padding: 32px 24px 0;
+      border-top: 1px solid var(--hairline);
+      display: flex; justify-content: space-between; align-items: baseline;
+      flex-wrap: wrap; gap: 16px;
+      font-size: 13px; color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--ink); }
+    footer .links { display: flex; gap: 24px; flex-wrap: wrap; }
+
+    blockquote {
+      border-left: 3px solid var(--scene-accent);
+      padding: 6px 0 6px 22px;
+      margin: 24px 0;
+      font-family: var(--serif-italic);
+      font-size: 22px; line-height: 1.45;
+      color: var(--ink); font-style: italic;
+    }
+
+    .locale-row {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .locale-row a { color: var(--muted); text-decoration: none; }
+    .locale-row a.current { color: var(--scene-accent); }
+    .locale-row a:hover { color: var(--ink); }
+
+    @media (max-width: 720px) {
+      header.top { flex-direction: column; align-items: flex-start; gap: 16px; }
+      nav.crumbs { gap: 18px; flex-wrap: wrap; }
+      .wrap { padding: 40px 20px 72px; }
+    }
+  </style>
+  <style>
+    html, body { overflow-x: clip; max-width: 100%; }
+    section, header, footer, main, article { max-width: 100vw; }
+    img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
+    table { max-width: 100%; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a href="/es/" class="wordmark">ux<span class="dot"></span></a>
+    <nav class="crumbs">
+      <a href="/es/">Inicio</a>
+      <a href="/brands.html">Brands</a>
+      <a href="/anti-patterns.html">Anti-patterns</a>
+      <a href="/compare.html">Comparar</a>
+      <a href="/blog/" class="current">Blog</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="wrap">
+    <article>
+      <span class="eyebrow">Lanzamiento &middot; v3.0.0 &middot; 2026-05-28</span>
+      <h1>ux-skill v3.0 &mdash; lanzamos <span class="accent">The Brain</span>. Las brand specs son datos de entrenamiento, no plantillas.</h1>
+      <p class="lede">
+        <strong>v2 elegía del catálogo. v3 destila desde él.</strong> Las mismas 160 brand specs, un papel completamente distinto. El recomendador puntuaba 1.182 entradas y devolvía la más cercana al brief. El sintetizador ahora las lee como <em>vocabulario</em> y compila un lenguaje de diseño nuevo a partir de cada brief. Cada llamada devuelve un sistema que no existía antes de la llamada.
+      </p>
+      <p class="byline">Por el equipo de ux-skill &middot; 12 min de lectura &middot; Código abierto bajo licencia MIT</p>
+
+      <div class="locale-row" aria-label="Idiomas">
+        <a href="/blog/v3-the-brain-launch.html">EN</a>
+        <a href="/blog/ja/v3-the-brain.html">JA</a>
+        <a href="/blog/zh-CN/v3-the-brain.html">ZH-CN</a>
+        <a href="/blog/ar/v3-the-brain.html">AR</a>
+        <a href="/blog/es/v3-the-brain.html" class="current">ES</a>
+        <a href="/blog/de/v3-the-brain.html">DE</a>
+        <a href="/blog/fr/v3-the-brain.html">FR</a>
+      </div>
+
+      <div class="hero-quote">
+        Las brand specs son <span class="accent">datos de entrenamiento</span>,<br>no plantillas.
+      </div>
+
+      <h2>El cambio en un párrafo</h2>
+      <p>
+        v2 era un <em>recomendador</em>. Le dabas un brief y devolvía la coincidencia más cercana de un catálogo curado: 84 estilos, 176 paletas, 160 brand specs, 70 parejas tipográficas. La salida era siempre una fila de la base de datos. v3 conserva el catálogo entero pero invierte su propósito: esas 1.182 entradas son ahora el <em>vocabulario del que destila el motor</em>. Un brief ya no extrae una fila: se compila en siete valores de eje, y esos valores sintetizan tokens frescos. El catálogo le enseña al motor cómo se ve algo «aireado y corporativo»; el motor genera un sistema «aireado y corporativo» nuevo que nunca se ha enviado. Los mismos datos. Un papel completamente diferente.
+      </p>
+
+      <h2>Lo que se rompió en v2 y v3 <span class="accent">arregla</span></h2>
+      <p>
+        Tres bugs reales y un agujero de diseño. Los bugs no eran ruidosos: eran del tipo silencioso donde el motor seguía devolviendo salidas plausibles y nosotros las seguíamos enviando. Solo los pillamos cuando nos sentamos a escribir la especificación de la actualización y una revisión externa nos obligó a mirarlo con honestidad.
+      </p>
+
+      <h3>1. Pseudo-determinismo por desempates basados en el orden del sistema de archivos</h3>
+      <p>
+        Varias ordenaciones dentro del pipeline del recomendador puntuaban candidatos por similitud y rompían empates con el orden que devolvía <code>os.listdir</code> de Python. En macOS era alfabético. En Linux dependía del orden de inserción en el diario del sistema de archivos. Entre un clon recién creado y un clon viejo, el desempate podía invertirse. Nos contábamos a nosotros mismos que el motor era determinista. Era determinista hasta el empate. Después del empate era lo que el sistema operativo casualmente recordara.
+      </p>
+      <p>
+        v3 endurece cada ordenación con un desempate explícito por orden alfabético de <code>brand_id</code>. Mismo brief, mismos ejes, misma salida entre máquinas, sistemas de archivos y versiones de Python. Hay un test que ejecuta el sintetizador 200 veces en tres directorios temporales y afirma que la salida es idéntica byte a byte.
+      </p>
+
+      <h3>2. Colisiones de ejes resueltas por casualidad</h3>
+      <p>
+        En v2, cuando un brief tenía dos etiquetas que tiraban en direcciones opuestas &mdash; por ejemplo <em>dense</em> y <em>corporate</em> &mdash; el scorer del recomendador ponderaba una más fuerte mediante algún coeficiente oculto, y la salida se inclinaba hacia la etiqueta que el coeficiente favorecía. No había ninguna regla documentada. Podíamos explicar el resultado a toro pasado. No podíamos predecirlo antes.
+      </p>
+      <p>
+        v3 sube esto a una <strong>matriz de interacción de ejes</strong>. Cada conflicto documentado tiene una resolución explícita y una justificación. Densidad y formalidad pelean por el espaciado: gana la densidad en briefs densos (escuela Bloomberg), gana la formalidad en briefs aireados (lujo). La matriz está testeada. Es legible. Está commiteada.
+      </p>
+
+      <h3>3. El evaluador estaba corrigiendo los deberes del propio sintetizador</h3>
+      <p>
+        Este fue el más vergonzoso, y lo pillamos porque <em>ChatGPT lo señaló</em> en una revisión externa de la especificación v2.1 &mdash; lo que llamó el problema del <strong>self-referential drift</strong>. El flujo parecía limpio: el sintetizador compilaba un sistema desde el brief, luego <code>score_tone_match</code> evaluaba cómo de bien el sistema casaba con el tono del brief. El problema era que <code>score_tone_match</code> derivaba los valores de eje desde el brief usando la misma lógica que el sintetizador, y después comparaba los ejes del sintetizador con sus propios ejes derivados. Ambos lados de la comparación pasaban por la misma función. Claro que puntuaba bien. El sintetizador se estaba calificando a sí mismo con su propia rúbrica.
+      </p>
+      <p>
+        v3 los desacopla. <code>score_tone_match</code> ahora compara la salida del sintetizador con las <em>tone tags crudas</em> del brief &mdash; las cadenas <code>warm</code>, <code>bold</code>, <code>minimal</code>, etc. &mdash; a través de un mapeo independiente que nunca toca la lógica de ejes del sintetizador. Los dos caminos ya no pueden copiarse. Esta observación se la debemos a la revisión externa, y lo decimos para que conste.
+      </p>
+
+      <h3>4. El registro de decisiones era de solo escritura: nunca se consumía</h3>
+      <p>
+        v2 escribía una entrada en <code>.ux/decisions.jsonl</code> tras cada recomendación, pero nada la volvía a leer. Era un archivo de log para nuestra propia depuración, no una señal de retroalimentación. El recomendador se comportaba igual en la llamada 1 y en la llamada 1.000. No había aprendizaje. El repositorio tenía memoria y el motor la ignoraba.
+      </p>
+      <p>
+        v3 cierra ese ciclo. El registro tiene un esquema bloqueado (<code>_v: 1</code>), el recomendador re-rankea candidatos según éxitos pasados en el mismo bucket <code>(industry, ui_type)</code>, y solo cuentan para el re-rank las decisiones que sacaron buena puntuación <em>y</em> que el usuario realmente envió. El cerebro tiene por fin ojos sobre su propio historial. La sección 6 es el paseo completo.
+      </p>
+
+      <h2>El <span class="accent">sintetizador</span> de 7 ejes</h2>
+      <p>
+        En el centro de v3 hay una función determinista que mapea un brief a siete ejes numéricos, y esos siete ejes a un sistema de diseño completo. Los ejes no son magia: cada uno es un escalar normalizado con un rango documentado, y cada uno apunta a un bundle de tokens concreto. La idea de funcionar sobre ejes (en lugar de elegir una fila del catálogo) es que cualquier combinación es alcanzable, incluyendo combinaciones que ninguna marca real del catálogo usa. El catálogo define la forma del espacio; el sintetizador puede aterrizar en cualquier punto dentro de él.
+      </p>
+
+      <table class="axis-table">
+        <thead>
+          <tr>
+            <th>Eje</th>
+            <th>Qué mide</th>
+            <th>Mapea a</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="axis-name">warmth</td>
+            <td>Temperatura cromática de la paleta &mdash; del carbón frío a la sienna cálida</td>
+            <td>familia de tono de la paleta, curva de saturación del acento</td>
+          </tr>
+          <tr>
+            <td class="axis-name">contrast</td>
+            <td>Volumen visual &mdash; quiet/balanced/loud</td>
+            <td>ratio de escala tipográfica (1.200 / 1.250 / 1.333), profundidad de sombra, intensidad del acento</td>
+          </tr>
+          <tr>
+            <td class="axis-name">density</td>
+            <td>Densidad de información por viewport &mdash; aireado a denso</td>
+            <td>base de la escala de espaciado (4/8/12/16px), multiplicadores de line-height</td>
+          </tr>
+          <tr>
+            <td class="axis-name">geometry</td>
+            <td>Personalidad del borde &mdash; sharp/balanced/soft</td>
+            <td>escala de radius (2/8/18px), topología de esquina, grosor de borde</td>
+          </tr>
+          <tr>
+            <td class="axis-name">formality</td>
+            <td>Registro de tono &mdash; playful/balanced/corporate</td>
+            <td>curvas de peso tipográfico, tracking, recorrido de caption a hero</td>
+          </tr>
+          <tr>
+            <td class="axis-name">motion</td>
+            <td>Presupuesto de animación &mdash; restrained/balanced/cinematic</td>
+            <td>rampas de duración (120/240/420ms), familia de easing, comportamiento de scroll</td>
+          </tr>
+          <tr>
+            <td class="axis-name">type_personality</td>
+            <td>Voz tipográfica &mdash; humanist/neutral/geometric/expressive</td>
+            <td>familia de la display face, escalera de pesos, estrategia de cursiva</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        El punto de entrada en Python es lo bastante pequeño para caber en un solo ejemplo. Pasas un brief y recibes un sistema sintetizado con los valores de eje, la paleta elegida, la configuración tipográfica, la escala de espaciado, la escala de radius y los presets de motion adjuntos.
+      </p>
+
+      <pre class="code"><span class="c"># de un brief a un sistema, en una sola llamada</span>
+<span class="k">from</span> engine.synthesizer <span class="k">import</span> synthesize
+
+brief = Brief(
+  industry=<span class="s">"fintech-payments"</span>,
+  tone=[<span class="s">"bold"</span>, <span class="s">"serious"</span>],
+  audience=[<span class="s">"merchants"</span>, <span class="s">"developers"</span>],
+)
+
+sys = synthesize(brief)
+<span class="c"># sys.mode == "pure_synthesis"</span>
+<span class="c"># sys.axes == {warmth: 0.32, contrast: 0.72, density: 0.58, ...}</span>
+<span class="c"># sys.palette, sys.type, sys.spacing, sys.radius, sys.motion</span></pre>
+
+      <p>
+        Mismo brief de entrada, mismos ejes, mismos tokens de salida. Siempre. El sintetizador no tiene semilla aleatoria porque no hay aleatoriedad que sembrar.
+      </p>
+
+      <h2>Tres modos, <span class="accent">una sola lógica</span></h2>
+      <p>
+        El sintetizador despacha automáticamente entre tres modos según lo que contenga el brief. Para la mayoría de usos no hay un flag para elegir modo a mano: la forma del brief lo decide. La lógica es deliberadamente simple: la presencia de una marca de referencia y un flag estricto determinan el camino.
+      </p>
+
+      <div class="mode-card">
+        <div class="mode-name">strict_brand &middot; el más rápido</div>
+        <h4>100% la marca nombrada</h4>
+        <p>
+          <code>reference_brands=[stripe]</code> con <code>strict=True</code> devuelve la spec de Stripe tal cual. Sin interpretación, sin mezcla, sin síntesis. Útil cuando la marca existe, la spec es autoritativa y el brief solo quiere los tokens. Es el camino cuando tienes un Figma y un sistema documentado y necesitas código que no improvise.
+        </p>
+      </div>
+
+      <div class="mode-card">
+        <div class="mode-name">brand_anchor &middot; 70 / 30</div>
+        <h4>Anclado a la marca, ajustado por ejes al brief</h4>
+        <p>
+          <code>reference_brands=[stripe]</code> sin <code>strict=True</code> devuelve un 70% de tokens de Stripe fusionado con un 30% de deltas derivados de los ejes de cuatro marcas hermanas elegidas por proximidad axial. La salida sigue siendo inconfundiblemente Stripe, pero se inclina hacia el tono del brief: un Stripe más juguetón para una función de consumo, un Stripe más formal para un panel de empresa. La marca ancla sobrevive a todos los conflictos.
+        </p>
+      </div>
+
+      <div class="mode-card">
+        <div class="mode-name">pure_synthesis &middot; espacio infinito</div>
+        <h4>Sin marca nombrada &mdash; lenguaje nuevo en cada llamada</h4>
+        <p>
+          Sin <code>reference_brands</code> en el brief. El sintetizador puntúa los siete ejes desde el brief, encuentra los ocho ejemplares más cercanos del catálogo por distancia axial, destila la estructura compartida entre ellos y emite un bundle fresco de paleta, tipografía, espaciado, radius y motion. Briefs distintos aterrizan en regiones distintas del mismo espacio; cada salida es internamente coherente e identificable como propia.
+        </p>
+      </div>
+
+      <p>Desde la CLI los tres caminos se ven así:</p>
+
+      <pre class="code"><span class="c"># strict — 100% la marca</span>
+$ uxskill synthesize <span class="n">--brand</span> stripe <span class="n">--strict</span>
+
+<span class="c"># anchor — 70/30</span>
+$ uxskill synthesize <span class="n">--brand</span> stripe
+
+<span class="c"># pure synthesis — sin marca</span>
+$ uxskill synthesize <span class="n">--industry</span> fintech-payments <span class="n">--tone</span> bold</pre>
+
+      <p>Un sintetizador, una lógica, tres personalidades de salida. El usuario no cambia de implementación: el brief se enruta solo.</p>
+
+      <h2>La <span class="accent">matriz de interacción</span> de ejes</h2>
+      <p>
+        Los ejes tiran de los mismos tokens. La <em>densidad</em> quiere espaciado apretado; la <em>formalidad</em> quiere espaciado generoso para un registro de lujo. La <em>geometría</em> quiere esquinas afiladas para un tono editorial; la <em>formalidad</em> quiere esquinas suaves para un panel financiero. En v2 esos conflictos se resolvían por el coeficiente que resultara mayor en el scorer. En v3 cada conflicto documentado tiene un resultado declarado y una escuela de diseño a la que apunta, con nombre, para que puedas leerlo y discrepar si quieres.
+      </p>
+
+      <p>Cuatro casos representativos, todos commiteados como fixtures de test:</p>
+
+      <div class="conflict-card">
+        <div class="input">dense + corporate</div>
+        <div class="outcome">Base de la escala de espaciado: 4px</div>
+        <p class="reason">Gana la densidad. La respuesta de la escuela Bloomberg. La densidad de información es la virtud máxima cuando el brief pide paneles densos con registro corporativo &mdash; la formalidad cede ante la legibilidad a alta densidad.</p>
+      </div>
+
+      <div class="conflict-card">
+        <div class="input">airy + corporate</div>
+        <div class="outcome">Base de la escala de espaciado: 12px</div>
+        <p class="reason">Gana la formalidad. La respuesta de las finanzas premium. Aireado + corporativo es el brief para banca privada, gestión de patrimonios, paneles ejecutivos &mdash; el aire alrededor de cada elemento <em>es</em> el mensaje de seriedad.</p>
+      </div>
+
+      <div class="conflict-card">
+        <div class="input">sharp + corporate</div>
+        <div class="outcome">Escala de radius: 2px</div>
+        <p class="reason">Gana la geometría. La respuesta de la escuela NYT. Afilado + corporativo es el brief editorial &mdash; los ángulos rectos y los micro-radios de 2px se leen como institucionales, meditados, de gran formato.</p>
+      </div>
+
+      <div class="conflict-card">
+        <div class="input">soft + playful</div>
+        <div class="outcome">Escala de radius: 18px</div>
+        <p class="reason">Ambos ejes alinean. La respuesta de la escuela Glossier. Geometría suave más un registro juguetón colapsan en redondeos generosos &mdash; 18px es el umbral donde los rectángulos empiezan a leerse como guijarros.</p>
+      </div>
+
+      <p>
+        Por qué importa: en v2 el mismo brief podía aterrizar en 4px o 12px según qué coeficiente le ganara ese mes al scorer. En v3, <code>dense + corporate</code> siempre es 4px. <code>airy + corporate</code> siempre es 12px. Las reglas son legibles, testeables y discutibles. Si no estás de acuerdo con una resolución, puedes abrir un issue contra la matriz y la conversación va sobre gusto, no sobre una constante oculta.
+      </p>
+
+      <h2>El cerebro <span class="accent">aprende</span></h2>
+      <p>
+        Esta es la parte de v3 que es genuinamente nueva para el proyecto: el motor ahora aprende de tus decisiones locales. El mecanismo es pequeño, determinista y totalmente offline. No hay telemetría, no hay cuenta, no hay sync en la nube. Tu instalación aprende de tu instalación. Repositorios distintos construyen cerebros distintos.
+      </p>
+
+      <h3>El registro</h3>
+      <p>
+        Cada llamada a <code>/ux-recommend</code> y a <code>/ux-synthesize</code> escribe una línea en <code>.ux/decisions.jsonl</code>. El esquema está bloqueado en <code>_v: 1</code>:
+      </p>
+
+      <pre class="code">{
+  <span class="k">"_v"</span>: <span class="v">1</span>,
+  <span class="k">"ts"</span>: <span class="s">"2026-05-28T14:22:09Z"</span>,
+  <span class="k">"frame"</span>: { <span class="k">"industry"</span>: <span class="s">"fintech-payments"</span>, <span class="k">"ui_type"</span>: <span class="s">"dashboard"</span>, ... },
+  <span class="k">"system"</span>: { <span class="k">"style_id"</span>: <span class="s">"editorial-calm-dark"</span>, <span class="k">"palette_id"</span>: <span class="s">"charcoal-amber"</span>, ... },
+  <span class="k">"axes"</span>: { <span class="k">"warmth"</span>: <span class="v">0.31</span>, <span class="k">"contrast"</span>: <span class="v">0.72</span>, ... },
+  <span class="k">"lint_score"</span>: <span class="v">88</span>,
+  <span class="k">"user_accepted"</span>: <span class="v">true</span>
+}</pre>
+
+      <h3>El re-rank</h3>
+      <p>
+        En la siguiente llamada, el recomendador agrupa las entradas pasadas por <code>(industry, ui_type)</code>. Cada candidato que considera recibe un <strong>+5 de bonificación</strong> si coincide con un precedente del mismo bucket. Solo cuentan los precedentes con <code>lint_score &gt;= 80</code> Y <code>user_accepted = true</code> &mdash; no aprendemos de salidas rechazadas. El bucket necesita al menos tres precedentes válidos para que el re-rank se active. Por debajo de eso, el motor arranca en frío y se comporta igual que una instalación recién hecha.
+      </p>
+
+      <h3>Las garantías</h3>
+      <p>
+        Las garantías que damos sobre esto son estrechas y merecen decirse en voz alta. <strong>El determinismo se preserva.</strong> Mismo brief más mismo registro siempre producen la misma salida. El +5 se aplica antes de cualquier desempate, y la regla del orden alfabético por <code>brand_id</code> sigue ganando los empates por debajo. <strong>El arranque en frío es seguro.</strong> Un repositorio nuevo se comporta como cualquier otro repositorio nuevo. <strong>El aprendizaje es local.</strong> Tus decisiones no salen de tu máquina.
+      </p>
+
+      <p>Puedes inspeccionar lo que ha aprendido tu instalación cuando quieras:</p>
+
+      <pre class="code">$ uxskill stats <span class="n">--html</span>
+<span class="n">[OK]</span> Wrote .ux/stats.html
+<span class="n">[OK]</span> Open in browser to see your install's learned priors</pre>
+
+      <p>
+        El dashboard HTML muestra el número de decisiones por bucket, la puntuación media del linter, las paletas más recurrentes, las distribuciones de ejes. Es la prueba visible del auto-aprendizaje: ves cómo el perfil de gusto de tu instalación se va espesando con el tiempo a medida que envías. Nada de esto está en un servidor. Está en tu repo, en JSONL plano más una vista HTML generada.
+      </p>
+
+      <h2>/ux-evolve, <span class="accent">el bucle automático</span></h2>
+      <p>
+        El nuevo comando de v3 es <code>/ux-evolve</code>. Hasta ahora el ciclo de pulido era manual: ejecutar el linter, leer los findings, arreglarlos, volver a lintear. Evolve cierra ese ciclo. Le pasas un artefacto y una puntuación objetivo; ejecuta el linter, aplica seis pasadas de pulido idempotentes, vuelve a lintear y para al alcanzar el objetivo, al detectar una meseta, o al llegar al tope de cinco rondas.
+      </p>
+
+      <p>La forma de una ronda:</p>
+
+      <ol>
+        <li><strong>Lint</strong> &mdash; 145 reglas regex deterministas sobre A11y, contenido, calidad y tipografía. Devuelve una puntuación de 0 a 100 y una lista de findings.</li>
+        <li><strong>Pulido</strong> &mdash; seis pasadas que atacan primero los findings de mayor severidad. Idempotentes: volver a aplicar una pasada sobre una salida ya pulida es un no-op.</li>
+        <li><strong>Re-lint</strong> &mdash; puntúa el artefacto pulido.</li>
+        <li><strong>Decidir</strong> &mdash; si la nueva puntuación es &ge; 90, para. Si el delta respecto a la ronda anterior es menor que 5 (meseta), para. Si estamos en la ronda 5, para. Si no, sigue.</li>
+      </ol>
+
+      <p>
+        La <strong>puerta de calidad</strong> está fija en 65. Si la puntuación final está por debajo de 65, el motor se niega a enviar el artefacto salvo que pases <code>--force</code>. La razón: una salida de 65 o menos es slop de IA reconocible, y no dejamos que nuestro propio motor emita slop en silencio. El usuario puede saltarse la puerta, pero el override es explícito y queda en el registro de decisiones.
+      </p>
+
+      <p>
+        Una ejecución concreta: un esqueleto de panel fintech sacó 72 en el primer lint &mdash; sobre todo estados de foco ausentes, un par de etiquetas con contraste bajo, un finding por Inter en tamaño display. La ronda 1 pulió los estados de foco hasta 81. La ronda 2 arregló contraste hasta 86. La ronda 3 cambió Inter por la display face propia del brief y rebalanceó las captions &mdash; 91, objetivo alcanzado, bucle terminado. Tres rondas, sin rechazos, enviado.
+      </p>
+
+      <h2>Lo que <span class="accent">no</span> construimos (y por qué)</h2>
+      <p>
+        La especificación maximalista de v2.1 proponía varias cosas que no entraron en v3. Decir cuáles, y por qué, es la única manera honesta de hablar de alcance.
+      </p>
+
+      <h3>Nada de LLM en el bucle</h3>
+      <p>
+        La propuesta maximalista incluía un eje estético subjetivo juzgado por LLM &mdash; «pregúntale a un modelo si esto se siente editorial». Lo descartamos por principio. El punto entero del motor es el determinismo: mismo brief, misma salida, sin sorpresas mañana por la mañana. Un LLM dentro del sintetizador haría que cada llamada fuera irreproducible. v3 llama a cero LLMs. El sintetizador es Python puro sobre JSON; el linter es regex; el evaluador es basado en reglas.
+      </p>
+
+      <h3>Nada de mutación genética multi-candidato</h3>
+      <p>
+        La propuesta también tenía un paso de algoritmo genético: emitir N candidatos por llamada, mutarlos, puntuarlos y devolver el más apto. Lo intentamos en una rama. La salida empeoró, no mejoró, porque la mutación introducía ruido que el ciclo de pulido luego tenía que deshacer. v3 envía síntesis de artefacto único con ciclo de pulido. Un candidato. Seis pasadas idempotentes. Mejores resultados, menos superficie de código.
+      </p>
+
+      <h3>Nada de renombrar comandos</h3>
+      <p>
+        La propuesta renombraba <code>/ux-recommend</code> a <code>/generate:ui</code> y <code>/ux-polish</code> a <code>/mutate:ui</code>. Mantuvimos los 22 comandos existentes con sus nombres existentes y añadimos <code>/ux-evolve</code> como el 23º. No queríamos que una actualización de v2 a v3 rompiera la memoria muscular de nadie ni sus alias de shell.
+      </p>
+
+      <h3>Nada de «quemar el catálogo por espacio infinito»</h3>
+      <p>
+        La versión más maximalista de la propuesta decía que el catálogo era un lastre &mdash; que el sintetizador podía alcanzar el espacio de diseño entero por su cuenta y que las 1.182 entradas deberían irse. Las conservamos todas. El catálogo es lo que le enseña al sintetizador la <em>forma</em> del espacio &mdash; sin ejemplares los ejes no tienen anclas, y la salida se desboca. v3 lee el catálogo como vocabulario; v3 necesita el vocabulario.
+      </p>
+
+      <p>
+        Son juicios de gusto. Quienes tengan otras prioridades discreparán, y está bien. Le debemos al proyecto decir qué no hicimos y por qué, para que conste.
+      </p>
+
+      <h2>Los <span class="accent">números</span> de v3</h2>
+
+      <div class="stats-row">
+        <div class="stat"><div class="n">23</div><div class="l">Comandos</div></div>
+        <div class="stat"><div class="n">18</div><div class="l">Tools MCP</div></div>
+        <div class="stat"><div class="n">1.182</div><div class="l">Entradas</div></div>
+        <div class="stat"><div class="n">145</div><div class="l">Anti-patterns</div></div>
+        <div class="stat"><div class="n">160</div><div class="l">Brand specs</div></div>
+        <div class="stat"><div class="n">17</div><div class="l">IDEs</div></div>
+        <div class="stat"><div class="n">17</div><div class="l">Idiomas</div></div>
+        <div class="stat"><div class="n">223</div><div class="l">Tests OK</div></div>
+      </div>
+
+      <p>
+        Los 22 slash commands existentes mantienen sus nombres, más <code>/ux-evolve</code> como el 23º. Las 15 herramientas MCP se conservan, más tres nuevas &mdash; <code>ux_synthesize</code>, <code>ux_decisions_query</code>, <code>ux_decisions_stats</code> &mdash; para agentes que quieran pilotar el sintetizador o consultar lo que el cerebro ha aprendido. El catálogo y el linter no se han tocado. El instalador de 17 IDEs no se ha tocado. Las 17 homepages localizadas y los READMEs no han cambiado. v3 es aditivo en la superficie y reescrito en el núcleo.
+      </p>
+
+      <blockquote>
+        v2 era un recomendador que elegía de un catálogo. v3 es un compilador que destila desde uno. Los mismos datos están haciendo el trabajo opuesto.
+      </blockquote>
+
+      <h2>Instalación en 60 segundos</h2>
+      <p>
+        v3 se distribuye por los mismos tres caminos que v2 &mdash; pip, npm y los marketplaces de plugins de IDE. El paso <code>init</code> auto-detecta tu IDE y escribe el archivo de configuración correcto en el sitio correcto. El paso <code>synthesize</code> toma un brief o un par industry + tone y devuelve un sistema de diseño completo en <code>.ux/last-system.json</code> dentro del repo actual.
+      </p>
+
+      <pre class="code">$ pip install uxskill
+$ uxskill init                     <span class="c"># auto-detecta tu IDE</span>
+$ uxskill synthesize <span class="n">--industry</span> fintech-payments <span class="n">--tone</span> bold
+
+<span class="n">[OK]</span> Mode: pure_synthesis
+<span class="n">[OK]</span> Axes: warmth=0.31, contrast=0.74, density=0.58, geometry=0.42, ...
+<span class="n">[OK]</span> Wrote .ux/last-system.json (palette, type, spacing, radius, motion)
+<span class="n">[OK]</span> Wrote .ux/decisions.jsonl (1 entry, schema _v: 1)</pre>
+
+      <p>
+        El mismo camino de instalación en todos los IDEs soportados: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, Roo Cline. El servidor MCP por stdio es la única fuente de verdad para todos ellos.
+      </p>
+
+      <div class="honesty">
+        <div class="label">Alcance honesto</div>
+        <h4>v3 es una base, no un destino terminado.</h4>
+        <p>El sintetizador de 7 ejes es el trabajo para el que hemos publicado evidencia. Los ejes 8 y 9 (<code>saturation_strategy</code>, <code>surface_depth</code>) están esbozados pero no enviados &mdash; profundizarían el split dark / light y la estrategia de gradiente. El registro de decisiones solo lo consume hoy el re-rank del recomendador; esperamos que el evaluador y el scorer del linter empiecen a leerlo en v3.1. La propuesta maximalista v2.1 que rechazamos no está muerta &mdash; algunas de esas ideas aterrizarán más tarde, cuando podamos probar que ayudan.</p>
+        <p>Si encuentras un brief que produce salidas insatisfactorias, o una resolución de la matriz que choca con tu gusto, abre un issue. La matriz está commiteada, los tests están commiteados, el cerebro está en tu repo. Las discusiones se dan ahora sobre un sustrato que puedes leer.</p>
+      </div>
+
+      <h2>Qué cambia para ti</h2>
+      <p>
+        Si venías de v2: no se rompe nada. Los 22 comandos que ya usas se comportan igual. El linter corre a la misma velocidad. El servidor MCP expone 15 de las 18 tools con sus nombres antiguos más tres nuevas. Si actualizas y nunca llamas a <code>/ux-synthesize</code> ni a <code>/ux-evolve</code>, tu flujo diario no se mueve nada.
+      </p>
+      <p>
+        Si estabas esperando a que el motor <em>generara</em> en lugar de <em>recomendar</em>: eso es v3. El sintetizador es el nuevo centro; <code>/ux-recommend</code> sigue funcionando y ahora re-rankea desde tu registro; <code>/ux-evolve</code> cierra el ciclo de pulido. Las brand specs son datos de entrenamiento ahora, no plantillas. Las mismas 1.182 entradas están haciendo un trabajo completamente distinto.
+      </p>
+      <p>
+        Llamamos a v3 The Brain porque eso es lo que se construyó &mdash; un compilador de diseño generativo y restringido con un ciclo de retroalimentación cerrado. Completamente offline. Llama a cero LLMs. Mismo brief, mismos ejes, misma salida. Briefs distintos, regiones distintas, salidas infinitas. Tu instalación aprende de tu repo. Repositorios distintos construyen cerebros distintos. Todo bajo licencia MIT, sub-300ms en una máquina normal, instalable con pip.
+      </p>
+      <p>
+        Pruébalo en un brief que te importe. Mira qué devuelve. Abre un issue si la salida discrepa con tu gusto &mdash; el conflicto entra en la matriz, la regla recibe un nombre y la siguiente instalación se comporta mejor. Así se compone el cerebro.
+      </p>
+
+    </article>
+
+    <section class="cta">
+      <span class="eyebrow">Ejecútalo en tu proyecto</span>
+      <h2>Un motor. <span class="accent">Tres caminos de instalación.</span></h2>
+      <p>El sintetizador que mueve v3 se distribuye en el mismo paquete que el linter y el recomendador. 145 anti-patterns. 160 brand specs. 1.182 entradas. 17 IDEs. MIT, sin telemetría, sin cuenta.</p>
+
+      <div class="install-block">
+        <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
+        <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; o &mdash;</div>
+        <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; o &mdash;</div>
+        <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@latest init</span></div>
+      </div>
+
+      <p style="margin-top: 28px; font-size: 14px;">
+        Código en GitHub: <a class="link" href="https://github.com/Laith0003/ux-skill">Laith0003/ux-skill</a> &middot;
+        README en español: <a class="link" href="https://github.com/Laith0003/ux-skill/blob/main/README.es.md">README.es.md</a> &middot;
+        npm: <a class="link" href="https://www.npmjs.com/package/uxskill">uxskill</a> &middot;
+        PyPI: <a class="link" href="https://pypi.org/project/uxskill/">uxskill</a> &middot;
+        Versión en inglés: <a class="link" href="/blog/v3-the-brain-launch.html">English version</a> &middot;
+        Lecturas relacionadas: <a class="link" href="/blog/brand-specs-training-data-not-templates.html">Brand specs son training data</a>, <a class="link" href="/anti-patterns.html">Anti-patterns</a>, <a class="link" href="/brands.html">Brands</a>
+      </p>
+    </section>
+  </div>
+
+  <footer>
+    <span>&copy; 2026 Laith Aljunaidy &middot; MIT &middot; Sin telemetría</span>
+    <div class="links">
+      <a href="/es/">Inicio</a>
+      <a href="/compare.html">Comparar</a>
+      <a href="/blog/">Blog</a>
+      <a href="/privacy.html">Privacidad</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+    </div>
+  </footer>
+</body>
+</html>
