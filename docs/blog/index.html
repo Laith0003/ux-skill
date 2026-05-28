@@ -29,7 +29,7 @@
       --canvas: #07080a;
       --surface: #0f1115;
       --surface-2: #14181d;
-      --ink: #faf9f5;
+      --ink: #07080a;
       --body: #c8c6bf;
       --muted: #7a7972;
       --hairline: rgba(255,255,255,0.08);
@@ -54,17 +54,7 @@
       -webkit-font-smoothing: antialiased;
     }
     a { color: inherit; text-decoration: none; }
-    .skip-link {
-      position: absolute; top: -40px; left: 8px;
-      background: var(--surface-2); color: var(--ink);
-      padding: 10px 16px; border-radius: 8px;
-      font-family: var(--mono); font-size: 12px;
-      border: 1px solid var(--hairline-2);
-      z-index: 200;
-    }
-    .skip-link:focus { top: 8px; }
-
-    .wrap { max-width: 880px; margin: 0 auto; padding: 18px 24px 96px; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 18px 24px 96px; }
 
     header.top {
       display: flex; align-items: center; justify-content: space-between;
@@ -293,6 +283,7 @@
     img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
     table { max-width: 100%; }
   </style>
+  <!-- force-dark-theme: applied -->
 </head>
 <body>
   <a class="skip-link sr-only" href="#main">Go to articles</a>

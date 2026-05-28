@@ -6,8 +6,8 @@
   <title>Figma MCP vs ux-skill — design intelligence in your AI coding session</title>
   <meta name="description" content="Figma MCP imports designs from a Figma file into the AI session. ux-skill generates a design system from a written brief. Side-by-side: what each is for, when to pick which, how they compose.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/figma-vs-ux-skill.html">
-  <meta name="theme-color" content="#faf9f5">
-  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
   <meta name="robots" content="index,follow">
 
   <meta property="og:type" content="article">
@@ -26,7 +26,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <script type="application/ld+json">
   {
@@ -36,160 +36,236 @@
     "description": "Figma MCP imports designs from a file into the AI session. ux-skill generates a design system from a written brief. When to pick which, how they compose.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
-    "author": {
-      "@type": "Organization",
-      "name": "ux-skill",
-      "url": "https://uxskill.laithjunaidy.com/"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "ux-skill",
-      "url": "https://uxskill.laithjunaidy.com/"
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": "https://uxskill.laithjunaidy.com/blog/figma-vs-ux-skill.html"
-    },
+    "author": {"@type": "Organization", "name": "ux-skill", "url": "https://uxskill.laithjunaidy.com/"},
+    "publisher": {"@type": "Organization", "name": "ux-skill", "url": "https://uxskill.laithjunaidy.com/"},
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://uxskill.laithjunaidy.com/blog/figma-vs-ux-skill.html"},
     "image": "https://uxskill.laithjunaidy.com/og.png"
   }
   </script>
 
   <style>
     :root {
-      --canvas: #faf9f5;
-      --surface: #efe9de;
-      --surface-2: #f3eee4;
-      --ink: #181715;
-      --body: #3d3d3a;
-      --muted: #6c6a64;
-      --hairline: rgba(20,20,19,0.10);
-      --hairline-strong: rgba(20,20,19,0.18);
-      --primary: #cc785c;
-      --primary-active: #a9583e;
-      --primary-soft: rgba(204,120,92,0.12);
-      --win-bg: #ecf2ec;
-      --win-fg: #2f7d32;
-      --lose-bg: #f5e6e3;
-      --lose-fg: #b3261e;
-      --neutral-bg: #f4f0e8;
-      --neutral-fg: #6c6a64;
+      --canvas: #07080a;
+      --surface: #0f1115;
+      --surface-2: #14181d;
+      --code-bg: #0d0f13;
+      --ink: #07080a;
+      --body: #c8c6bf;
+      --muted: #7a7972;
+      --hairline: rgba(255,255,255,0.08);
+      --hairline-2: rgba(255,255,255,0.14);
+      --scene-accent: #f472b6;
+      --scene-soft: rgba(244,114,182,0.14);
+      --syntax-string: #a3e0b8;
+      --syntax-comment: rgba(250,249,245,0.45);
+      --display: 'Bricolage Grotesque', 'Inter Tight', system-ui, sans-serif;
+      --body-face: 'Inter', system-ui, -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --t-fast: 160ms;
+      --t-mid: 260ms;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; background: var(--canvas); }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-      background: var(--canvas); color: var(--body);
-      font-size: 17px; line-height: 1.65;
+      font-family: var(--body-face);
+      background: var(--canvas);
+      color: var(--body);
+      font-size: 16.5px;
+      line-height: 1.65;
       -webkit-font-smoothing: antialiased;
     }
-    .wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+    a { color: inherit; text-decoration: none; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
     .wrap-wide { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .wrap-article { padding: 64px 0 0; }
 
     header.top {
-      max-width: 1100px; margin: 0 auto;
-      padding: 8px 24px 32px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px 24px 22px;
       display: flex; align-items: center; justify-content: space-between;
+      gap: 16px;
       border-bottom: 1px solid var(--hairline);
     }
     .wordmark {
-      display: inline-flex; align-items: baseline; gap: 4px;
-      text-decoration: none; color: var(--ink);
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 600; font-size: 28px; letter-spacing: -0.02em;
+      display: inline-flex; align-items: baseline; gap: 2px;
+      color: var(--ink);
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-size: 24px;
+      letter-spacing: -0.04em;
+      line-height: 1;
     }
     .wordmark .dot {
-      display: inline-block; width: 6px; height: 6px;
-      border-radius: 999px; background: var(--primary);
-      transform: translateY(-3px);
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 2px;
+      background: var(--scene-accent);
+      margin-left: 4px;
+      transform: translateY(-2px);
     }
     nav.crumbs {
-      display: flex; gap: 28px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; text-transform: uppercase;
-      letter-spacing: 0.16em; color: var(--muted);
+      display: flex; gap: 22px; align-items: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: lowercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
     }
-    nav.crumbs a { color: var(--muted); text-decoration: none; }
-    nav.crumbs a:hover { color: var(--ink); }
+    nav.crumbs a { color: var(--muted); transition: color var(--t-fast) var(--ease); }
+    nav.crumbs a:hover, nav.crumbs a:focus-visible { color: var(--ink); }
     nav.crumbs a.current { color: var(--ink); }
+    nav.crumbs a:focus-visible { outline: 2px solid var(--scene-accent); outline-offset: 4px; border-radius: 3px; }
 
-    article { padding-top: 56px; }
+    .menu-btn {
+      display: none;
+      width: 40px; height: 40px;
+      align-items: center; justify-content: center;
+      border-radius: 8px;
+      border: 1px solid var(--hairline-2);
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .menu-btn:focus-visible { outline: 2px solid var(--scene-accent); outline-offset: 3px; }
+    .menu-btn svg { width: 18px; height: 18px; }
+
+    .drawer {
+      position: fixed; inset: 0;
+      z-index: 90;
+      display: flex; flex-direction: column;
+      padding: 80px 24px 40px;
+      opacity: 0; pointer-events: none;
+      transition: opacity var(--t-mid) var(--ease);
+      background: rgba(7,8,10,0.96);
+      backdrop-filter: saturate(140%) blur(18px);
+    }
+    .drawer.is-open { opacity: 1; pointer-events: auto; }
+    .drawer a {
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'wght' 560;
+      font-size: 28px;
+      color: var(--ink);
+      padding: 14px 0;
+      border-bottom: 1px solid var(--hairline);
+      letter-spacing: -0.02em;
+    }
+    .drawer-close {
+      position: absolute; top: 18px; right: 24px;
+      width: 44px; height: 44px;
+      border-radius: 8px;
+      border: 1px solid var(--hairline-2);
+      background: transparent;
+      color: var(--ink);
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .drawer-close svg { width: 16px; height: 16px; }
+
+    @media (max-width: 768px) {
+      .menu-btn { display: inline-flex; }
+      nav.crumbs { display: none; }
+    }
+
+    article { padding-top: 0; }
     .eyebrow {
       display: inline-block;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px; letter-spacing: 0.18em;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--primary);
+      color: var(--scene-accent);
       margin-bottom: 22px;
     }
-    h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-      font-size: clamp(40px, 5.5vw, 64px);
-      line-height: 1.08;
-      letter-spacing: -0.022em;
+    h1, h2, h3, h4 {
+      font-family: var(--display);
       color: var(--ink);
+      margin: 0;
+    }
+    h1 {
+      font-variation-settings: 'wdth' 86, 'opsz' 96, 'wght' 620;
+      font-size: clamp(40px, 5.5vw, 64px);
+      line-height: 1.05;
+      letter-spacing: -0.028em;
       margin-bottom: 28px;
     }
-    h1 .accent { font-style: italic; color: var(--primary); font-weight: 600; }
+    h1 .accent {
+      color: var(--scene-accent);
+      font-style: italic;
+      font-variation-settings: 'wdth' 86, 'opsz' 96, 'wght' 580;
+    }
     .lede {
-      font-size: 20px; line-height: 1.55;
-      color: var(--body); margin-bottom: 16px;
+      font-size: 19px;
+      line-height: 1.55;
+      color: var(--body);
+      margin-bottom: 16px;
     }
     .lede strong { color: var(--ink); font-weight: 600; }
     .byline {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--muted);
-      margin-bottom: 56px; padding-bottom: 24px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 48px;
+      padding-bottom: 22px;
       border-bottom: 1px solid var(--hairline);
     }
+
     h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-      font-size: clamp(28px, 3.2vw, 36px);
-      line-height: 1.18; letter-spacing: -0.018em;
-      color: var(--ink); margin: 64px 0 18px;
+      font-variation-settings: 'wdth' 88, 'opsz' 64, 'wght' 580;
+      font-size: clamp(26px, 3vw, 34px);
+      line-height: 1.16;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin: 56px 0 16px;
     }
-    h2 .accent { color: var(--primary); font-style: italic; font-weight: 600; }
+    h2 .accent { color: var(--scene-accent); }
     h3 {
-      font-family: 'Inter', sans-serif;
-      font-weight: 600; font-size: 19px;
-      letter-spacing: -0.005em;
-      color: var(--ink); margin: 36px 0 14px;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 32, 'wght' 600;
+      font-size: 19px;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin: 32px 0 12px;
     }
-    p { margin-bottom: 18px; }
+    p { margin-bottom: 18px; color: var(--body); }
     p strong { color: var(--ink); font-weight: 600; }
-    ul, ol { margin: 0 0 22px 22px; }
+    ul, ol { margin: 0 0 22px 22px; color: var(--body); }
     ul li, ol li { margin-bottom: 10px; }
-    ul li::marker { color: var(--primary); }
+    ul li::marker { color: var(--scene-accent); }
 
     .table-wrap { max-width: 1000px; margin: 32px auto 28px; overflow-x: auto; }
     .compare-table {
       width: 100%; border-collapse: collapse;
-      font-size: 14px; background: white;
+      font-size: 14px; background: var(--surface);
       border-radius: 14px; overflow: hidden;
-      box-shadow: 0 8px 28px -16px rgba(24,23,21,0.12);
+      border: 1px solid var(--hairline);
     }
     .compare-table th, .compare-table td {
       padding: 14px 18px; text-align: left;
       border-bottom: 1px solid var(--hairline);
       vertical-align: top;
+      color: var(--body);
     }
     .compare-table th {
-      background: var(--surface);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; letter-spacing: 0.14em;
+      background: var(--surface-2);
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.12em;
       text-transform: uppercase; color: var(--ink);
       font-weight: 600;
     }
     .compare-table th.row-h {
-      width: 200px; background: var(--surface);
+      width: 200px; background: var(--surface-2);
       color: var(--ink); font-size: 13px;
       text-transform: none; letter-spacing: 0;
-      font-family: 'Inter', sans-serif; font-weight: 600;
+      font-family: var(--body-face); font-weight: 600;
     }
     .compare-table tr:last-child td { border-bottom: 0; }
-    .compare-table tr:hover td { background: var(--surface-2); }
+    .compare-table tr:hover td { background: rgba(255,255,255,0.04); }
 
     .flow-grid {
       display: grid;
@@ -199,15 +275,15 @@
     }
     @media (max-width: 720px) { .flow-grid { grid-template-columns: 1fr; } }
     .flow-cell {
-      background: white;
+      background: var(--surface);
       border: 1px solid var(--hairline);
       border-radius: 14px;
       padding: 26px 28px;
     }
     .flow-cell h4 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 600;
-      font-size: 22px;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 620;
+      font-size: 20px;
       color: var(--ink);
       letter-spacing: -0.015em;
       margin-bottom: 14px;
@@ -224,15 +300,16 @@
       margin-bottom: 10px;
       font-size: 14.5px;
       line-height: 1.55;
+      color: var(--body);
     }
     .flow-cell .arrow-list li::before {
       content: counter(step);
       position: absolute;
       left: 0;
       top: 1px;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 11px;
-      color: var(--primary);
+      color: var(--scene-accent);
       font-weight: 600;
       width: 20px;
       text-align: right;
@@ -240,20 +317,21 @@
 
     .honesty {
       background: var(--surface);
-      border-left: 3px solid var(--primary);
+      border-left: 3px solid var(--scene-accent);
       padding: 24px 28px;
       border-radius: 0 14px 14px 0;
       margin: 32px 0;
     }
     .honesty .label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10.5px; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--primary);
-      margin-bottom: 8px;
+      font-family: var(--mono);
+      font-size: 10.5px; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--scene-accent);
+      margin-bottom: 10px;
     }
     .honesty h4 {
-      font-family: 'Inter', sans-serif;
-      font-weight: 600; font-size: 17px;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 600;
+      font-size: 18px;
       color: var(--ink); margin-bottom: 10px;
     }
     .honesty p { margin-bottom: 8px; }
@@ -261,102 +339,141 @@
 
     .cta {
       margin-top: 96px; padding: 56px 48px;
-      background: var(--ink); color: var(--canvas);
+      background: var(--surface);
+      border: 1px solid var(--hairline-2);
+      color: var(--ink);
       border-radius: 22px;
     }
     @media (max-width: 720px) { .cta { padding: 40px 28px; } }
-    .cta .eyebrow { color: var(--primary); }
-    .cta h2 { color: var(--canvas); margin-top: 0; }
-    .cta p { color: rgba(250,249,245,0.78); margin-bottom: 28px; }
+    .cta .eyebrow { color: var(--scene-accent); }
+    .cta h2 { color: var(--ink); margin-top: 0; margin-bottom: 16px; }
+    .cta h2 .accent { color: var(--scene-accent); font-style: italic; }
+    .cta p { color: var(--body); margin-bottom: 28px; }
     .install-block {
-      background: rgba(250,249,245,0.06);
+      background: var(--code-bg);
+      border: 1px solid var(--hairline);
       border-radius: 12px;
       padding: 20px 24px;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 14px; line-height: 1.75;
-      color: var(--canvas);
-    }
-    .install-block .prompt { color: var(--primary); }
-    .install-block .arg { color: rgba(250,249,245,0.6); }
-    .install-block .row + .row { margin-top: 6px; }
-
-    footer {
-      max-width: 1100px; margin: 96px auto 0;
-      padding: 32px 24px 0;
-      border-top: 1px solid var(--hairline);
-      display: flex; justify-content: space-between;
-      align-items: baseline; flex-wrap: wrap;
-      gap: 16px; font-size: 13px; color: var(--muted);
-    }
-    footer a { color: var(--muted); text-decoration: none; }
-    footer a:hover { color: var(--ink); }
-    footer .links { display: flex; gap: 24px; }
-
-    code {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px; background: var(--surface);
-      padding: 1px 6px; border-radius: 4px;
       color: var(--ink);
     }
+    .install-block .prompt { color: var(--scene-accent); }
+    .install-block .arg { color: var(--syntax-string); }
+    .install-block .row + .row { margin-top: 6px; }
+    .install-block .row-divider { margin-top: 14px; color: var(--muted); }
+
+    footer.site {
+      max-width: 1100px;
+      margin: 96px auto 0;
+      padding: 32px 24px 40px;
+      border-top: 1px solid var(--hairline);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    footer.site a { color: var(--muted); transition: color var(--t-fast) var(--ease); }
+    footer.site a:hover, footer.site a:focus-visible { color: var(--ink); }
+    footer.site .links { display: flex; gap: 22px; flex-wrap: wrap; }
+    @media (max-width: 560px) { footer.site { flex-direction: column; } }
+
+    code {
+      font-family: var(--mono);
+      font-size: 13px; background: var(--surface-2);
+      padding: 1px 6px; border-radius: 4px;
+      color: var(--ink);
+      border: 1px solid var(--hairline);
+    }
     a.link {
-      color: var(--primary);
+      color: var(--scene-accent);
       text-decoration: underline;
-      text-decoration-color: rgba(204,120,92,0.4);
+      text-decoration-color: rgba(244,114,182,0.4);
       text-underline-offset: 3px;
     }
-    a.link:hover { color: var(--primary-active); text-decoration-color: var(--primary-active); }
+    a.link:hover { text-decoration-color: var(--scene-accent); }
     blockquote {
-      border-left: 3px solid var(--primary);
+      border-left: 3px solid var(--scene-accent);
       padding: 6px 0 6px 22px;
-      margin: 24px 0;
-      font-family: 'Cormorant Garamond', serif;
+      margin: 28px 0;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 32, 'wght' 500;
       font-size: 22px; line-height: 1.45;
       color: var(--ink); font-style: italic;
     }
-  </style>
-  <!-- noscroll-fix -->
-  <style>
-    /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
-       and max-width: 100%; carousels that need their own horizontal scroll
-       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves —
-       overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
-    html, body {
-      overflow-x: clip;
-      max-width: 100%;
+
+    .related-reads {
+      max-width: 880px; margin: 80px auto 0 auto; padding: 32px 24px 8px;
+      border-top: 1px solid var(--hairline);
     }
-    /* Defensive — make sure no section, image, or table forces width >100%. */
-    section, header, footer, main, article { max-width: 100vw; }
-    img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
-    table { max-width: 100%; }
+    .related-reads-h {
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 18px;
+    }
+    .related-reads ul {
+      list-style: none; padding: 0; margin: 0;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px;
+    }
+    .related-reads li { font-size: 15px; line-height: 1.5; }
+    .related-reads a {
+      color: var(--body);
+      border-bottom: 1px solid var(--hairline-2);
+      padding-bottom: 2px;
+      transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+    }
+    .related-reads a:hover { border-color: var(--scene-accent); color: var(--ink); }
+    @media (max-width: 640px) { .related-reads ul { grid-template-columns: 1fr; } }
   </style>
+  <!-- force-dark-theme: applied -->
 </head>
 <body>
+  <a class="skip-link sr-only" href="#main">Go to article</a>
   <header class="top">
-    <a href="/" class="wordmark">ux<span class="dot"></span></a>
-    <nav class="crumbs">
-      <a href="/">Home</a>
-      <a href="/compare.html">Compare</a>
-      <a href="/blog/" class="current">Blog</a>
-      <a href="/about.html">About</a>
-      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+    <a href="/" class="wordmark" aria-label="ux-skill home">uxskill<span class="dot" aria-hidden="true"></span></a>
+    <nav class="crumbs" aria-label="Primary">
+      <a href="/">home</a>
+      <a href="/compare.html">compare</a>
+      <a href="/blog/" class="current">blog</a>
+      <a href="/about.html">about</a>
+      <a href="https://github.com/Laith0003/ux-skill">github</a>
     </nav>
+    <button type="button" class="menu-btn" aria-label="Open menu" aria-controls="drawer" aria-expanded="false" id="menuBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
   </header>
 
-  <div class="wrap">
+  <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Site menu">
+    <button type="button" class="drawer-close" aria-label="Close menu" id="drawerClose">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M6 18L18 6"/></svg>
+    </button>
+    <a href="/">Home</a>
+    <a href="/compare.html">Compare</a>
+    <a href="/blog/">Blog</a>
+    <a href="/about.html">About</a>
+    <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+  </div>
+
+  <main id="main">
+  <div class="wrap wrap-article">
     <article>
-      <span class="eyebrow">Blog · Comparison · 2026-05-28</span>
-      <h1>Figma MCP vs ux-skill — design intelligence in your <span class="accent">AI coding session</span>.</h1>
+      <span class="eyebrow">Blog &middot; Comparison &middot; 2026-05-28</span>
+      <h1>Figma MCP vs ux-skill &mdash; design intelligence in your <span class="accent">AI coding session</span>.</h1>
       <p class="lede">
         Both ship as MCP tools you load into Claude Code, Cursor, or any IDE that speaks Model Context Protocol. Both promise design intelligence. But they solve <strong>different problems</strong>: Figma MCP imports an existing design from a file, ux-skill generates one from a written brief. Most teams who ask "Figma MCP vs ux-skill" actually need both.
       </p>
-      <p class="byline">By the ux-skill team · 6 min read · MIT-licensed open source</p>
+      <p class="byline">By the ux-skill team &middot; 6 min read &middot; MIT-licensed open source</p>
 
       <h2>The fundamental difference</h2>
       <p>
-        Figma MCP is an <strong>importer</strong>. You point it at a Figma file URL or node ID, and it returns structured data the AI session can read — frames, layers, components, variables, styles, code-connect mappings. The design already exists; the MCP brings it into the coding context.
+        Figma MCP is an <strong>importer</strong>. You point it at a Figma file URL or node ID, and it returns structured data the AI session can read &mdash; frames, layers, components, variables, styles, code-connect mappings. The design already exists; the MCP brings it into the coding context.
       </p>
       <p>
-        ux-skill is a <strong>generator</strong>. You write a brief — "fintech neobank, MENA market, conservative tone, partner-facing dashboard" — and it returns a recommended design system: style + palette + type + motion + components. There's no source Figma file. The brief is the input.
+        ux-skill is a <strong>generator</strong>. You write a brief &mdash; "fintech neobank, MENA market, conservative tone, partner-facing dashboard" &mdash; and it returns a recommended design system: style + palette + type + motion + components. There's no source Figma file. The brief is the input.
       </p>
       <p>
         If you already designed it in Figma, use Figma MCP. If you're starting from a written brief and need the system to exist, use ux-skill. The two paths are orthogonal.
@@ -379,13 +496,13 @@
         <tbody>
           <tr>
             <th class="row-h">Primary role</th>
-            <td>Importer — read existing Figma file into AI session</td>
-            <td>Generator — produce a new design system from a brief</td>
+            <td>Importer &mdash; read existing Figma file into AI session</td>
+            <td>Generator &mdash; produce a new design system from a brief</td>
           </tr>
           <tr>
             <th class="row-h">Input</th>
             <td>Figma file URL, node ID, or component link</td>
-            <td>10-field discovery (industry, audience, brand, tone, constraints…)</td>
+            <td>10-field discovery (industry, audience, brand, tone, constraints&hellip;)</td>
           </tr>
           <tr>
             <th class="row-h">Output</th>
@@ -404,18 +521,18 @@
           </tr>
           <tr>
             <th class="row-h">Catalog size</th>
-            <td>—  (your file is the catalog)</td>
-            <td>998 entries — 84 styles, 176 palettes, 70 type pairs, 57 motion, 110 brand specs</td>
+            <td>&mdash; (your file is the catalog)</td>
+            <td>998 entries &mdash; 84 styles, 176 palettes, 70 type pairs, 57 motion, 110 brand specs</td>
           </tr>
           <tr>
             <th class="row-h">Anti-slop linter</th>
-            <td>—</td>
+            <td>&mdash;</td>
             <td>100 deterministic regex rules</td>
           </tr>
           <tr>
             <th class="row-h">Best for</th>
-            <td>Code from existing design — implement what the designer drew</td>
-            <td>Design from scratch — pick a system when no design file exists</td>
+            <td>Code from existing design &mdash; implement what the designer drew</td>
+            <td>Design from scratch &mdash; pick a system when no design file exists</td>
           </tr>
           <tr>
             <th class="row-h">Cost</th>
@@ -442,7 +559,7 @@
         Strong surfaces for Figma MCP:
       </p>
       <ul>
-        <li><strong>Pixel-faithful implementation.</strong> The frame is the spec. Padding, font size, hex code — all queryable.</li>
+        <li><strong>Pixel-faithful implementation.</strong> The frame is the spec. Padding, font size, hex code &mdash; all queryable.</li>
         <li><strong>Variable extraction.</strong> Figma variables (color tokens, spacing tokens) come into the session as named tokens the model can reference.</li>
         <li><strong>Code-connect.</strong> If your design system has code-connect mappings, the MCP returns the import path and prop signature for each component.</li>
         <li><strong>Auto-layout to flexbox.</strong> Figma's auto-layout translates cleanly to flexbox / grid; the MCP carries the constraints through.</li>
@@ -451,12 +568,12 @@
 
       <h2>Where Figma MCP can't help</h2>
       <p>
-        If the design doesn't exist yet, Figma MCP has nothing to import. The "make me a dashboard" prompt without a Figma file falls back to the model's defaults — the same defaults that produce Inter at 90px and indigo-to-blue gradients. Figma MCP makes existing design accessible; it doesn't make design decisions.
+        If the design doesn't exist yet, Figma MCP has nothing to import. The "make me a dashboard" prompt without a Figma file falls back to the model's defaults &mdash; the same defaults that produce Inter at 90px and indigo-to-blue gradients. Figma MCP makes existing design accessible; it doesn't make design decisions.
       </p>
 
       <h2>What ux-skill is good at</h2>
       <p>
-        ux-skill is the inverse path. The team has a brief, not a design file. The 10-field discovery in <code>/ux-frame</code> takes 15 minutes; the recommender in <code>/ux-recommend</code> returns a design system in seconds. The output is the seed for what gets drawn later — in code first, optionally back into Figma after.
+        ux-skill is the inverse path. The team has a brief, not a design file. The 10-field discovery in <code>/ux-frame</code> takes 15 minutes; the recommender in <code>/ux-recommend</code> returns a design system in seconds. The output is the seed for what gets drawn later &mdash; in code first, optionally back into Figma after.
       </p>
       <p>
         Strong surfaces for ux-skill:
@@ -466,7 +583,7 @@
         <li><strong>Style + palette + type + motion + components</strong> as a coordinated recommendation, not five separate decisions.</li>
         <li><strong>110 brand DESIGN.md specs.</strong> Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, and 84 more. If the brief mentions a brand, the recommender pulls in the spec.</li>
         <li><strong>100-rule deterministic linter.</strong> Once code is generated, the linter catches drift from the recommended system.</li>
-        <li><strong>22 chained commands.</strong> Discovery → recommend → design → critique → a11y → copy → motion → lint → fix → polish → case-study → handoff.</li>
+        <li><strong>22 chained commands.</strong> Discovery &rarr; recommend &rarr; design &rarr; critique &rarr; a11y &rarr; copy &rarr; motion &rarr; lint &rarr; fix &rarr; polish &rarr; case-study &rarr; handoff.</li>
         <li><strong>Tokens.css output</strong> that drops into Tailwind config or any CSS-variable-based system.</li>
       </ul>
 
@@ -485,9 +602,9 @@
           <h4>Greenfield project (no Figma yet)</h4>
           <ol class="arrow-list">
             <li>Run <code>/ux-frame</code> for the 10-field discovery.</li>
-            <li>Run <code>/ux-recommend</code> — get style, palette, type, motion, components.</li>
-            <li>Run <code>/ux-design</code> — generate Blade/JSX/Vue surfaces in the system.</li>
-            <li>Run <code>/ux-lint</code> — catch any fingerprints that drifted in.</li>
+            <li>Run <code>/ux-recommend</code> &mdash; get style, palette, type, motion, components.</li>
+            <li>Run <code>/ux-design</code> &mdash; generate Blade/JSX/Vue surfaces in the system.</li>
+            <li>Run <code>/ux-lint</code> &mdash; catch any fingerprints that drifted in.</li>
             <li><strong>Optional:</strong> Export tokens.css back to Figma variables for the designer to refine.</li>
           </ol>
         </div>
@@ -509,7 +626,7 @@
 
       <h2>When the two overlap</h2>
       <p>
-        There is a thin overlap — when you have a partial Figma file (logo, brand colors, type) and need to extend it into a full system the designer hasn't drawn yet. Figma MCP gives you the seed values; ux-skill's recommender takes those seeds plus the discovery brief and returns a complete system that the designer can refine back in Figma.
+        There is a thin overlap &mdash; when you have a partial Figma file (logo, brand colors, type) and need to extend it into a full system the designer hasn't drawn yet. Figma MCP gives you the seed values; ux-skill's recommender takes those seeds plus the discovery brief and returns a complete system that the designer can refine back in Figma.
       </p>
 
       <h3>Practical example</h3>
@@ -517,9 +634,9 @@
         The designer drew the logo, picked the brand color, and laid out the marketing hero. They didn't draw the settings page, the table views, or the empty states. Workflow:
       </p>
       <ol>
-        <li>Figma MCP reads the brand color (<code>#cc785c</code>) and the logo SVG.</li>
-        <li>You paste both into ux-skill's <code>/ux-recommend</code> as seed values: <code>--brand: #cc785c</code>, brand spec: "warm minimal."</li>
-        <li>ux-skill returns the full system — palette (anchored on the brand color), type pairing, motion preset, component shapes for the surfaces the designer hasn't drawn.</li>
+        <li>Figma MCP reads the brand color (an accent token) and the logo SVG.</li>
+        <li>You paste both into ux-skill's <code>/ux-recommend</code> as seed values: the brand token plus a brand spec ("warm minimal").</li>
+        <li>ux-skill returns the full system &mdash; palette (anchored on the brand color), type pairing, motion preset, component shapes for the surfaces the designer hasn't drawn.</li>
         <li>You generate the settings page / table / empty states in code.</li>
         <li>Optionally export the new tokens back to Figma variables for the designer to align.</li>
       </ol>
@@ -527,7 +644,7 @@
       <div class="honesty">
         <div class="label">Honesty card</div>
         <h4>Figma MCP and ux-skill are complementary, not competitive.</h4>
-        <p>We don't claim ux-skill replaces Figma MCP. Figma is the source of truth for any design that's been drawn. ux-skill is the source of truth for any design that hasn't been drawn yet — when the input is a brief, not a file.</p>
+        <p>We don't claim ux-skill replaces Figma MCP. Figma is the source of truth for any design that's been drawn. ux-skill is the source of truth for any design that hasn't been drawn yet &mdash; when the input is a brief, not a file.</p>
         <p>If your team has a Figma file for everything, install Figma MCP and skip ux-skill's generator (but keep the linter for the implementation lane). If your team starts from a brief and codes the first version, install ux-skill (and add Figma MCP later when the designer joins).</p>
       </div>
 
@@ -536,7 +653,7 @@
         Both run as MCP servers. Both load into Claude Code via <code>.mcp.json</code> at project root or via the Claude Code marketplace. Both respect the same Model Context Protocol message types.
       </p>
       <p>
-        ux-skill is also installable via pip and npx, not just MCP, so it works in IDEs without an MCP host — Cursor, Windsurf, Aider, Continue. Figma MCP requires an MCP-capable client.
+        ux-skill is also installable via pip and npx, not just MCP, so it works in IDEs without an MCP host &mdash; Cursor, Windsurf, Aider, Continue. Figma MCP requires an MCP-capable client.
       </p>
       <p>
         See <a href="/blog/cursor-design-plugin.html" class="link">install paths for Cursor</a> and <a href="/blog/windsurf-design-rules.html" class="link">install paths for Windsurf</a> for the non-MCP routes.
@@ -557,7 +674,7 @@
 
       <h3>Install ux-skill if</h3>
       <ul>
-        <li>The design doesn't exist yet — you're starting from a written brief.</li>
+        <li>The design doesn't exist yet &mdash; you're starting from a written brief.</li>
         <li>You need a 100-rule linter that catches AI slop in any generated code, Figma-derived or not.</li>
         <li>You're working in Cursor, Windsurf, Aider, or any IDE without an MCP host.</li>
         <li>You want 110 brand DESIGN.md specs as queryable manifests when the brief mentions a brand by name.</li>
@@ -571,40 +688,51 @@
       </ul>
 
       <p>
-        Figma MCP and ux-skill don't compete. They sit in different parts of the design-to-code arc — one reads what exists, one generates what doesn't. Pick by where your bottleneck is.
+        Figma MCP and ux-skill don't compete. They sit in different parts of the design-to-code arc &mdash; one reads what exists, one generates what doesn't. Pick by where your bottleneck is.
       </p>
 
       <h2>Related reading</h2>
       <ul>
         <li><a href="/blog/vs-ui-ux-pro-max.html" class="link">ui-ux-pro-max alternative: every dimension, side by side</a></li>
         <li><a href="/blog/python-design-system-generator.html" class="link">How the Python recommender produces tokens.css</a></li>
-        <li><a href="/blog/ai-design-fingerprints-list.html" class="link">The 35 AI design fingerprints — full taxonomy</a></li>
-        <li><a href="/blog/monorepo-design-system-ai-coding.html" class="link">Monorepo design system — shared tokens across packages</a></li>
+        <li><a href="/blog/ai-design-fingerprints-list.html" class="link">The 35 AI design fingerprints &mdash; full taxonomy</a></li>
+        <li><a href="/blog/monorepo-design-system-ai-coding.html" class="link">Monorepo design system &mdash; shared tokens across packages</a></li>
         <li><a href="/compare.html" class="link">Compare ux-skill v2 against the field</a></li>
-        <li><a href="/about.html" class="link">About ux-skill — the project and the maker</a></li>
-        <li><a href="/faq.html" class="link">FAQ — does ux-skill work with Figma files</a></li>
-        <li><a href="/roadmap.html" class="link">Roadmap — Figma sync planned for v2.2</a></li>
+        <li><a href="/about.html" class="link">About ux-skill &mdash; the project and the maker</a></li>
+        <li><a href="/faq.html" class="link">FAQ &mdash; does ux-skill work with Figma files</a></li>
+        <li><a href="/roadmap.html" class="link">Roadmap &mdash; Figma sync planned for v2.2</a></li>
       </ul>
     </article>
 
     <section class="cta">
       <span class="eyebrow">Install ux-skill alongside Figma</span>
       <h2>One engine. <span class="accent">Three channels.</span> Pairs with Figma MCP.</h2>
-      <p>ux-skill ships through pip, npx, and the Claude Code marketplace. Compatible with Figma MCP — run both in the same session.</p>
+      <p>ux-skill ships through pip, npx, and the Claude Code marketplace. Compatible with Figma MCP &mdash; run both in the same session.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— or —</div>
+        <div class="row row-divider">&mdash; or &mdash;</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— or —</div>
+        <div class="row row-divider">&mdash; or &mdash;</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>
   </div>
 
-  <footer>
-    <span>© 2026 Laith Aljunaidy. MIT licensed. No telemetry.</span>
+  <aside class="related-reads" aria-label="Related reads">
+    <h2 class="related-reads-h">Related reads</h2>
+    <ul>
+      <li><a href="/blog/vs-ui-ux-pro-max.html">ui-ux-pro-max alternative</a></li>
+      <li><a href="/blog/best-claude-code-design-skills-2026.html">Best Claude Code design skills 2026</a></li>
+      <li><a href="/blog/python-design-system-generator.html">Python design system generator</a></li>
+      <li><a href="/blog/monorepo-design-system-ai-coding.html">Monorepo design system for AI coding</a></li>
+    </ul>
+  </aside>
+  </main>
+
+  <footer class="site">
+    <span>&copy; 2026 Laith Aljunaidy. MIT licensed. No telemetry.</span>
     <div class="links">
       <a href="/">Home</a>
       <a href="/compare.html">Compare</a>
@@ -615,5 +743,30 @@
       <a href="https://www.npmjs.com/package/uxskill">npm</a>
     </div>
   </footer>
+
+  <script>
+    (function () {
+      var btn = document.getElementById('menuBtn');
+      var drawer = document.getElementById('drawer');
+      var close = document.getElementById('drawerClose');
+      if (!btn || !drawer || !close) return;
+      function open() {
+        drawer.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+      function shut() {
+        drawer.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+      btn.addEventListener('click', open);
+      close.addEventListener('click', shut);
+      drawer.addEventListener('click', function (e) { if (e.target === drawer) shut(); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && drawer.classList.contains('is-open')) shut();
+      });
+    }());
+  </script>
 </body>
 </html>

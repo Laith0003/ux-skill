@@ -132,7 +132,13 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; }
-    html { background: var(--canvas); scroll-behavior: smooth; }
+    /* Never let the page scroll horizontally on mobile (or anywhere). */
+    html {
+      background: var(--canvas);
+      scroll-behavior: smooth;
+      overflow-x: clip;
+      -webkit-text-size-adjust: 100%;
+    }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     body {
       margin: 0;
@@ -143,24 +149,23 @@
       line-height: 1.55;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
-      overflow-x: hidden;
+      overflow-x: clip;
+      max-width: 100%;
       font-feature-settings: 'ss01', 'cv11';
     }
+    /* Defensive — sections never exceed the viewport */
+    section, header, footer { max-width: 100vw; overflow-x: clip; }
+    /* The brand rail IS allowed to scroll-x; the rule above doesn't break it
+       because overflow-x: clip on the parent ≠ on the rail itself. */
+    img, video, canvas, svg { max-width: 100%; height: auto; }
+    /* Tables on mobile — wrap them in their own scroll envelope rather than
+       blow out the viewport. */
+    table { max-width: 100%; }
     a { color: inherit; text-decoration: none; }
     button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 
     /* Skip link */
-    .skip-link {
-      position: absolute; top: -40px; left: 8px;
-      background: var(--surface-2); color: var(--ink);
-      padding: 12px 18px; border-radius: 8px;
-      font-family: var(--mono); font-size: 12px;
-      border: 1px solid var(--hairline-2);
-      z-index: 200;
-    }
-    .skip-link:focus { top: 8px; }
-
-    h1, h2, h3, h4 {
+h1, h2, h3, h4 {
       font-family: var(--display);
       font-weight: 600;
       font-variation-settings: 'wdth' 88, 'opsz' 96, 'wght' 580;
@@ -1126,6 +1131,48 @@
         gap: 56px;
       }
     }
+    /* Trimmed linter: terminal alone, plus a single inline badge under it. */
+    .linter__solo {
+      margin-top: 36px;
+      max-width: 880px;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+    }
+    .linter__solo .linter__terminal { width: 100%; }
+    .linter__badge {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 14px 22px;
+      border: 1px solid var(--hairline-2);
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.06);
+      font-family: var(--mono);
+    }
+    .linter__badge-n {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 82, 'wght' 620;
+      font-size: 28px;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .linter__badge-n--ok { color: #10b981; }
+    .linter__badge-l {
+      font-size: 11.5px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .linter__badge-sep {
+      color: var(--faint);
+      font-size: 16px;
+      margin: 0 4px;
+    }
 
     /* =========================================================================
        DEVICE MOCKUPS — Cursor, Claude Code, Windsurf
@@ -2023,11 +2070,9 @@
     img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
     table { max-width: 100%; }
   </style>
+  <!-- force-dark-theme: applied -->
 </head>
 <body>
-
-<a href="#main" class="skip-link">Skip to content</a>
-
 <!-- ============ NAV ============ -->
 <header class="nav" id="nav">
   <div class="container nav__inner">
@@ -2171,7 +2216,7 @@
         <span class="eyebrow">03 — Motore di ragionamento</span>
         <h2 class="section-head__title">Five parallel searches.<br>One recommendation.</h2>
         <p class="section-head__lead">
-          When the model asks for a direction, the engine fans out across style, palette, type, motion, and components in parallel — then merges by industry fit, brand voice, and anti-slop risk. No prompt-spamming, no vibes. Vector lookup over 998 entries.
+          Merged by industry fit, brand voice, and anti-slop risk.
         </p>
       </div>
 
@@ -2233,36 +2278,11 @@
         <span class="eyebrow">04 — Linter anti-slop</span>
         <h2 class="section-head__title">100 regex rules.<br>Run before commit.</h2>
         <p class="section-head__lead">
-          A deterministic Python linter that catches the design fingerprints model output reaches for by default — purple-to-blue gradients, Inter as display, three-equal cards, John-Doe placeholders, emoji as icons. JSON-queryable. CI-friendly.
+          Deterministic. JSON-queryable. The page you are reading scanned clean.
         </p>
       </div>
 
-      <div class="linter__layout">
-        <div class="linter__side">
-          <p class="linter__claim">The page that just rendered<br>passed clean.</p>
-          <p>This homepage was generated with the recommender and audited with <code class="inline-code">ux lint docs/</code>. Zero high-severity findings. The forbidden palette never appears.</p>
-          <p>The linter is regex over content, not a model. It is fast, offline, and stable across model swaps. The same checks run inside CI on every commit.</p>
-
-          <div class="linter__stats">
-            <div class="linter__stat">
-              <div class="v">85</div>
-              <div class="l">Regex rules</div>
-            </div>
-            <div class="linter__stat">
-              <div class="v">9</div>
-              <div class="l">Categories</div>
-            </div>
-            <div class="linter__stat">
-              <div class="v">0</div>
-              <div class="l">High findings here</div>
-            </div>
-            <div class="linter__stat">
-              <div class="v">31ms</div>
-              <div class="l">Median lint time</div>
-            </div>
-          </div>
-        </div>
-
+      <div class="linter__solo">
         <div class="linter__terminal" id="lint-terminal" aria-label="ux lint demo output">
           <div class="terminal__chrome">
             <span class="terminal__dot" aria-hidden="true"></span>
@@ -2272,24 +2292,19 @@
           </div>
           <div class="terminal__body" id="lint-terminal-body">
             <div class="terminal__line"><span class="prompt">$</span> <span class="ink">ux lint</span> <span class="arg">docs/</span> <span class="key">--threshold high</span></div>
-            <div class="terminal__line"><span class="info">Scanning 14 files, 100 rules active</span></div>
-            <div class="terminal__line">&nbsp;</div>
-            <div class="terminal__line"><span class="info">docs/blog/cursor-design-plugin.html:184</span></div>
-            <div class="terminal__line"><span class="red">  medium  </span><span class="ink">inter-as-display</span><span class="info"> — Inter at 64px+</span></div>
-            <div class="terminal__line"><span class="info">  why  </span>Inter is a body face; deployed as display reads as default startup-landing fingerprint.</div>
-            <div class="terminal__line"><span class="info">  fix  </span>Pair Inter (body) with Geist, Bricolage Grotesque, or General Sans for display.</div>
-            <div class="terminal__line">&nbsp;</div>
-            <div class="terminal__line"><span class="info">docs/about.html:53</span></div>
-            <div class="terminal__line"><span class="magenta">  high    </span><span class="ink">cormorant-garamond-leak</span></div>
-            <div class="terminal__line"><span class="info">  why  </span>Cormorant Garamond was flagged in the workspace forbidden list.</div>
-            <div class="terminal__line"><span class="info">  fix  </span>Replace with Bricolage Grotesque or Instrument Serif.</div>
-            <div class="terminal__line">&nbsp;</div>
-            <div class="terminal__line"><span class="info">docs/index.html</span></div>
-            <div class="terminal__line"><span class="ok"><span class="check-svg"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>  clean — 0 findings at high+</span></div>
-            <div class="terminal__line">&nbsp;</div>
-            <div class="terminal__line"><span class="info">Total: </span><span class="num">2</span><span class="info"> findings across 13 files (1 medium, 1 high) — 31ms</span></div>
-            <div class="terminal__line"><span class="prompt">$</span> <span class="blink"></span></div>
+            <div class="terminal__line"><span class="info">Scanning 14 files · 100 rules active</span></div>
+            <div class="terminal__line"><span class="info">blog/cursor-design-plugin.html:184  </span><span class="red">medium</span><span class="ink"> inter-as-display</span></div>
+            <div class="terminal__line"><span class="info">about.html:53                       </span><span class="magenta">high  </span><span class="ink"> cormorant-garamond-leak</span></div>
+            <div class="terminal__line"><span class="info">index.html                          </span><span class="ok">clean</span><span class="info"> 0 findings</span></div>
+            <div class="terminal__line"><span class="ok"><span class="check-svg"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>  done in 31ms</span></div>
           </div>
+        </div>
+        <div class="linter__badge" aria-label="100 rules, 0 high findings on this page">
+          <span class="linter__badge-n">100</span>
+          <span class="linter__badge-l">rules</span>
+          <span class="linter__badge-sep" aria-hidden="true">·</span>
+          <span class="linter__badge-n linter__badge-n--ok">0</span>
+          <span class="linter__badge-l">high</span>
         </div>
       </div>
     </div>
@@ -2468,38 +2483,17 @@
     </div>
   </section>
 
-  <!-- ============ 5B. SCREENSHOT GALLERY (REAL PNG MEDIA) ============ -->
-  <section data-scene="shots" aria-label="Captured screenshots — engine running in real surfaces">
+  <!-- ============ 5B. IN THE EDITOR — real IDE shots (no terminal renders) ============ -->
+  <section data-scene="shots" aria-label="The plugin, running in the editor">
     <div class="container">
       <div class="section-head">
-        <span class="eyebrow">05·5 — Captured</span>
-        <h2 class="section-head__title">Screenshots from the engine.<br>Not stock. Not stylized.</h2>
+        <span class="eyebrow">05·5 — In the editor</span>
+        <h2 class="section-head__title">Not a marketing render.<br><em class="accent-italic">The plugin, in the editor</em>.</h2>
         <p class="section-head__lead">
-          Real PNG captures of the recommender output, the linter findings, and the plugin running inside Cursor and Claude Code. Every pixel is what you see after <code>pip install uxskill</code> and one command.
+          What you actually see inside Cursor and Claude Code after one install. The recommendation lands in the chat, the component lands in the editor, the linter runs against the file you just saved.
         </p>
       </div>
-      <figure class="shots__hero">
-        <img src="/screenshots/hero-canvas.png"
-             alt="ux-skill — saturated cinema abstract hero"
-             width="1600" height="1000"
-             loading="lazy" decoding="async">
-        <figcaption>The brand surface — a generative canvas behind the wordmark. Rendered on the homepage in vanilla Canvas2D; saved here as a PNG for ↗ Twitter / PH cards.</figcaption>
-      </figure>
       <div class="shots__grid">
-        <figure>
-          <img src="/screenshots/terminal-ux-recommend.png"
-               alt="Terminal output of ux recommend against a brief — 5-lane fan-out, merged result, written to .ux/last-recommendation.json"
-               width="1600" height="1000"
-               loading="lazy" decoding="async">
-          <figcaption><code>ux recommend</code> — 5-lane fan-out, merged in 31ms.</figcaption>
-        </figure>
-        <figure>
-          <img src="/screenshots/terminal-ux-lint.png"
-               alt="Terminal output of ux lint — 3 findings (2 high, 1 medium), exit code 1, threshold high"
-               width="1600" height="1000"
-               loading="lazy" decoding="async">
-          <figcaption><code>ux lint</code> — 100 deterministic rules, real findings with file:line, severity, why, and fix.</figcaption>
-        </figure>
         <figure>
           <img src="/screenshots/cursor-running-ux.png"
                alt="Cursor IDE running /ux-design — sidebar shows .ux/last-recommendation.json, editor shows generated Hero.tsx, chat shows linter result"
@@ -2516,10 +2510,10 @@
         </figure>
         <figure class="shots__mosaic">
           <img src="/screenshots/brand-mosaic.png"
-               alt="Brand mosaic — 4x3 grid of brand surfaces with their wordmarks rendered in their own typefaces"
+               alt="110 brand DESIGN.md specs — a mosaic of brand surfaces with their actual wordmarks and palettes"
                width="1600" height="1000"
                loading="lazy" decoding="async">
-          <figcaption>110 brand DESIGN.md specs. Each ships with typography, palette, voice. The engine pulls from any of them.</figcaption>
+          <figcaption>110 brand DESIGN.md specs. Each ships with typography, palette, voice. The engine pulls from any of them on the brief.</figcaption>
         </figure>
       </div>
     </div>
@@ -2980,8 +2974,8 @@
       body: "'Inter',sans-serif",
       headline: 'Safe and beneficial AI.',
       bodyCopy: 'Terracotta accent on warm sepia. Generous editorial type. The voice is the brand.',
-      palette: ['#1a0e08', '#2d1810', '#cc785c', '#e8b894', '#faf7f2'],
-      canvas: '#1a0e08', ink: '#faf7f2', muted: '#9a8a7a', accent: '#cc785c', bodyColor: '#d8cdc1' },
+      palette: ['#1a0e08', '#2d1810', '#ec4899', '#e8b894', '#faf7f2'],
+      canvas: '#1a0e08', ink: '#faf7f2', muted: '#9a8a7a', accent: '#ec4899', bodyColor: '#d8cdc1' },
     { id: 'openai',   name: 'OpenAI',    category: 'AI / ML',
       logo: 'openai.svg',
       display: "'Sohne','Inter Tight',sans-serif", weight: 500, tracking: '-0.025em',

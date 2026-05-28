@@ -859,23 +859,31 @@ Recommended next: /ux-polish --fix (LLM-driven, addresses both lintable and aest
 
 ---
 
-## Die 72 Brand-DESIGN.md-Specs — nach Kategorie
+## Die 110 Brand-DESIGN.md-Specs — nach Kategorie
 
 Echte Marken. Echte Designsprachen. Echte DESIGN.md-Specs — keine generischen Paletten. Sagen Sie dem Plugin „bau eine Landing im Stil von Stripe" und es liest das tatsächliche Markenvokabular: Stimm-Rubrik, Farbtokens, Motion-Konventionen, Signature Moves, Anti-Moves.
 
 Jede Marke wird als strukturiertes JSON (`data/brands/<slug>.json`) plus Prosa-Referenz (`references/brands/<slug>.md`) ausgeliefert.
 
-### Developer Tools (24)
+### Developer Tools (36)
 
-ClickHouse, Composio, Cursor, Expo, Framer, HashiCorp, IBM, Lovable, Mintlify, MongoDB, Ollama, OpenCode, PostHog, Raycast, Replicate, Resend, Sanity, Sentry, Slack, Supabase, Superhuman, Vercel, Warp, Webflow
+ClickHouse, Composio, Cursor, Datadog, dbt Labs, Expo, Fivetran, Fly.io, Framer, HashiCorp, Honeycomb, IBM, Lovable, Mintlify, Modal, MongoDB, Neon, Ollama, OpenCode, PostHog, Railway, Raycast, Render, Replicate, Resend, Retool, Sanity, Sentry, Slack, Snowflake, Sourcegraph, Supabase, Superhuman, Vercel, Warp, Webflow
 
-### Consumer / Lifestyle / Retail (11)
+### Consumer / Lifestyle / Retail (19)
 
-Airbnb, Apple, HP, Meta, Nike, Pinterest, PlayStation, Shopify, Spotify, Starbucks, Uber
+Aesop, Airbnb, Allbirds, Apple, Apple Music, Glossier, HP, Hims & Hers, Instagram, Meta, Nike, Patagonia, Pinterest, PlayStation, Shopify, Spotify, Starbucks, TikTok, Uber
 
-### AI / ML Platform (9)
+### Fintech / Crypto (14)
 
-Claude, Cohere, ElevenLabs, MiniMax, Mistral AI, Runway, Together AI, VoltAgent, xAI
+Binance, Brex, Coinbase, Kraken, Mastercard, Mercury, Monzo, N26, Plaid, Ramp, Revolut, Robinhood, Stripe, Wise
+
+### Editorial / Media (13)
+
+Bloomberg, Clay, Dezeen, NVIDIA, Pitchfork, Substack, The Atlantic, The Economist, The New York Times, The Verge, The Wall Street Journal, Vodafone, Wired
+
+### AI / ML Platform (12)
+
+Anthropic, Claude, Cohere, ElevenLabs, MiniMax, Mistral AI, OpenAI, Perplexity, Runway, Together AI, VoltAgent, xAI
 
 ### Productivity / Collaboration (8)
 
@@ -884,14 +892,6 @@ Airtable, Cal.com, Figma, Intercom, Linear, Miro, Notion, Zapier
 ### Automobil (8)
 
 BMW, BMW M, Bugatti, Ferrari, Lamborghini, Renault, SpaceX, Tesla
-
-### Fintech / Crypto (7)
-
-Binance, Coinbase, Kraken, Mastercard, Revolut, Stripe, Wise
-
-### Editorial / Media (5)
-
-Clay, NVIDIA, The Verge, Vodafone, Wired
 
 ### Warum das wichtig ist
 
@@ -1108,8 +1108,8 @@ Kurze Zusammenfassungstabelle. Vollständiger Tabelle-für-Tabelle-Vergleich unt
 | Slash-Befehle | **22** | 1 | 19 | 1 | 1 | multi | 1 | 1 | 1 |
 | Komponenten | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | Motion-Presets | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Brand-Specs | **72** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Anti-Pattern-Regeln | **35** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Brand-Specs | **110** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Anti-Pattern-Regeln | **100** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | CI-fähiger deterministischer Linter | **ja** | nein | nein | nein | nein | nein | nein | nein | nein |
 | Unterstützte IDEs | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | Discovery-Gate | **10 Felder** | implizit | implizit | implizit | implizit | implizit | implizit | implizit | implizit |

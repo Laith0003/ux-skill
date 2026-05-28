@@ -85,18 +85,7 @@
     a:hover, a:focus-visible { text-decoration-color: var(--scene-accent); }
     a:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 3px; border-radius: 2px; }
     button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
-
-    .skip-link {
-      position: absolute; top: -40px; left: 8px;
-      background: var(--surface-2); color: var(--ink);
-      padding: 12px 18px; border-radius: 8px;
-      font-family: var(--mono); font-size: 12px;
-      border: 1px solid var(--hairline-2);
-      z-index: 200;
-    }
-    .skip-link:focus { top: 8px; }
-
-    /* ===== NAV ===== */
+/* ===== NAV ===== */
     .nav {
       position: fixed; top: 0; left: 0; right: 0;
       z-index: 80;
@@ -648,9 +637,6 @@
   </style>
 </head>
 <body>
-
-<a href="#main" class="skip-link">Skip to content</a>
-
 <header class="nav" id="nav">
   <div class="nav__inner">
     <a href="/" class="wordmark" aria-label="uxskill home">
