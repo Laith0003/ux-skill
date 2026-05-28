@@ -2,7 +2,7 @@
 
 # ux-skill — the design intelligence engine for Claude Code, Cursor, and every other AI coding tool
 
-> **The strongest UX plugin for AI coding.** A Python reasoning core with 11 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 35 anti-pattern rules, 25 tech stacks, 72 brand specs), 22 slash commands, 5 sub-agents, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
+> **The strongest UX plugin for AI coding.** A Python reasoning core with 11 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 85 anti-pattern rules, 25 tech stacks, 92 brand specs), 22 slash commands, 5 sub-agents, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
 
 > **The brand name is `ux-skill`.** The PyPI / npm package name stays `uxskill`. The GitHub repo lives at [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
@@ -14,7 +14,7 @@
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#the-17-ide-installer)
 [![Brands](https://img.shields.io/badge/brand_specs-72-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
-[![Linter](https://img.shields.io/badge/anti--patterns-51-181715.svg)](data/anti-patterns.json)
+[![Linter](https://img.shields.io/badge/anti--patterns-85-181715.svg)](data/anti-patterns.json)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -44,8 +44,8 @@ This README is the canonical reference. Every command, every sub-agent, every da
 4. [The 22 slash commands — detailed reference](#the-22-slash-commands--detailed-reference)
 5. [The 5 sub-agents](#the-5-sub-agents)
 6. [The 11 data manifests](#the-11-data-manifests)
-7. [The 35 anti-AI-slop rules — the linter](#the-35-anti-ai-slop-rules--the-linter)
-8. [The 72 brand DESIGN.md specs — by category](#the-72-brand-designmd-specs--by-category)
+7. [The 85 anti-AI-slop rules — the linter](#the-85-anti-ai-slop-rules--the-linter)
+8. [The 92 brand DESIGN.md specs — by category](#the-92-brand-designmd-specs--by-category)
 9. [MCP server — the asymmetric move](#mcp-server--the-asymmetric-move)
 10. [The 17-IDE installer](#the-17-ide-installer)
 11. [Use cases — concrete scenarios](#use-cases--concrete-scenarios)
@@ -170,7 +170,7 @@ ux-skill (package name: uxskill)
 │   ├── ux-guidelines.json             112 named UX laws (Hick, Fitts, Miller...)
 │   ├── motion-presets.json            57 motion presets (entry, exit, hover...)
 │   ├── anti-patterns.json             35 regex rules (CI-safe linter source)
-│   └── brands/*.json                  72 brand DESIGN specs + _index.json
+│   └── brands/*.json                  92 brand DESIGN specs + _index.json
 │
 ├── engine/                            Python — the reasoning
 │   ├── recommender/                   5-parallel-search merge engine
@@ -244,7 +244,7 @@ ux-skill (package name: uxskill)
    - **Stack → component compatibility + motion presets** (tech-stacks.json, motion-presets.json)
    - **Forbidden + region → guardrails + brand exemplar shortlist** (anti-patterns.json, brands/)
 3. **Merge.** A deterministic merger ranks candidates, resolves conflicts (e.g., must-have dark-mode forces palette mode), and emits a single recommended system.
-4. **Output.** A JSON document with the picked style, palette, type pair, top 5 motion presets, top 12 components, top 5 brand exemplars, and all 35 anti-pattern guardrails active. Plus a rationale block explaining each pick.
+4. **Output.** A JSON document with the picked style, palette, type pair, top 5 motion presets, top 12 components, top 5 brand exemplars, and all 85 anti-pattern guardrails active. Plus a rationale block explaining each pick.
 5. **Generation.** Downstream commands (`/ux-design`, `/ux-component`, `/ux-system`, `/ux-dashboard`) consume the recommendation to generate actual code via the sub-agents.
 6. **Verification.** `/ux-lint` re-scans the generated code against the 35 regex rules. Exits non-zero on Critical/High in CI.
 
@@ -309,7 +309,7 @@ Commands are grouped into five buckets: **bootstrap & inventory**, **discovery &
     --stack=nextjs-15-app-router \
     --region=mena
   ```
-- **Output:** Writes `.ux/last-recommendation.json` — picked style, picked palette, picked type pair, top 5 motion presets, top 12 components, top 5 brand exemplars, all 35 anti-pattern guardrails active, plus rationale.
+- **Output:** Writes `.ux/last-recommendation.json` — picked style, picked palette, picked type pair, top 5 motion presets, top 12 components, top 5 brand exemplars, all 85 anti-pattern guardrails active, plus rationale.
 - **Chains to:** `/ux-design [brief]` → frontend code using the recommended tokens. `/ux-system` → full design system from the recommendation. `/ux-component <name>` → one component using the recommended style. `/ux-lint` → verify the generated code.
 
 ### Generation
@@ -594,7 +594,7 @@ When a command dispatches a sub-agent, it passes:
 
 1. The brief / recommendation (loaded from `.ux/`).
 2. The relevant manifest slice (e.g., `frontend-engineer` gets the picked style + palette + components; `motion-engineer` gets the picked motion presets).
-3. The 35 anti-pattern guardrails (always active).
+3. The 85 anti-pattern guardrails (always active).
 4. A success criterion (what the artifact must do).
 
 Sub-agents return:
@@ -717,9 +717,9 @@ Every preset has a reduced-motion variant. Stack-ready code for Framer Motion, G
 | `keys per entry` | `id`, `name`, `severity` (high/medium/low), `category`, `detection` (type, pattern, flags, scope), `evidence_template`, `fix`, `references` |
 | `categories` | A11y (6), Color (6), Content (5), Layout (5), Motion (3), Quality (6), Typography (3), Visual (1) |
 
-The full rule list is in [The 35 anti-AI-slop rules](#the-35-anti-ai-slop-rules--the-linter).
+The full rule list is in [The 85 anti-AI-slop rules](#the-85-anti-ai-slop-rules--the-linter).
 
-### `brands/*.json` — 72 brand specs
+### `brands/*.json` — 92 brand specs
 
 | Field | Description |
 |---|---|
@@ -727,11 +727,11 @@ The full rule list is in [The 35 anti-AI-slop rules](#the-35-anti-ai-slop-rules-
 | `keys per entry` | `id`, `name`, `category`, `voice`, `tokens` (color, type, motion), `design_principles`, `signature_moves`, `anti-moves`, `references` |
 | `categories` | Developer Tools (24), Consumer / Lifestyle / Retail (11), AI / ML Platform (9), Productivity / Collaboration (8), Automotive (8), Fintech / Crypto (7), Editorial / Media (5) |
 
-Full list in [The 72 brand DESIGN.md specs](#the-72-brand-designmd-specs--by-category).
+Full list in [The 92 brand DESIGN.md specs](#the-92-brand-designmd-specs--by-category).
 
 ---
 
-## The 35 anti-AI-slop rules — the linter
+## The 85 anti-AI-slop rules — the linter
 
 ux-skill ships a deterministic regex-based linter. **No LLM.** **No API.** **No network.** Runs in CI in ~200ms on a typical Next.js app. Exits non-zero on Critical / High findings when `--fail-on high` is set.
 
@@ -859,7 +859,7 @@ Recommended next: /ux-polish --fix (LLM-driven, addresses both lintable and aest
 
 ---
 
-## The 72 brand DESIGN.md specs — by category
+## The 92 brand DESIGN.md specs — by category
 
 Real brands. Real design languages. Real DESIGN.md specs — not generic palettes. Tell the plugin "build a landing in Stripe's style" and it reads the actual brand vocabulary: voice rubric, color tokens, motion conventions, signature moves, anti-moves.
 
