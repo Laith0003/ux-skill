@@ -1,6 +1,6 @@
 ---
 name: ux-recommend
-description: The v2 flagship. Runs the 5-parallel-search Python engine across 11 data manifests (75+ styles, 170+ palettes, 65+ type pairs, 120+ components, 170+ industries, 110+ UX laws, 50+ motion presets, 100+ anti-patterns, 92 brand specs) and returns a complete recommended design system for your project — with always-on anti-slop guardrails.
+description: The v2 flagship. Runs the 5-parallel-search Python engine across 11 data manifests (75+ styles, 170+ palettes, 65+ type pairs, 120+ components, 170+ industries, 110+ UX laws, 50+ motion presets, 120+ anti-patterns, 92 brand specs) and returns a complete recommended design system for your project — with always-on anti-slop guardrails.
 allowed-tools: Bash, Read, Write
 disable-model-invocation: false
 ---
@@ -73,7 +73,7 @@ rec = recommend(Brief(
 print(rec.rationale)              # one-line rationale per lane
 print(rec.style["id"])             # picked style
 print(rec.palette["colors"])       # token map
-print(len(rec.guardrails))         # 100+ anti-patterns always on
+print(len(rec.guardrails))         # 120+ anti-patterns always on
 ```
 
 ## Output shape
@@ -86,7 +86,7 @@ The recommendation is a JSON document with:
 - `motion` — top 5 motion presets compatible with the style
 - `components` — top 12 components compatible with the style
 - `brand_exemplars` — top 5 brands in the same industry to study
-- `guardrails` — all 100+ anti-patterns (always-on)
+- `guardrails` — all 120+ anti-patterns (always-on)
 - `rationale` — one line per lane explaining the pick
 
 ## Chaining

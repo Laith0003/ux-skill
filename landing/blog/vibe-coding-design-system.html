@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vibe coding is real — but your AI still ships Inter at 90px. Fix it with ux-skill.</title>
-  <meta name="description" content="Vibe coding is the new term for &quot;describe what you want, AI ships it.&quot; But the output looks generated. ux-skill is the rules layer that catches the AI defaults — 100 deterministic rules, 998-entry catalog, runs in CI without an LLM.">
+  <meta name="description" content="Vibe coding is the new term for &quot;describe what you want, AI ships it.&quot; But the output looks generated. ux-skill is the rules layer that catches the AI defaults — 120 deterministic rules, 998-entry catalog, runs in CI without an LLM.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/vibe-coding-design-system.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -22,7 +22,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Vibe coding + ux-skill — keep velocity, lose the fingerprint">
-  <meta name="twitter:description" content="100 regex rules, 998-entry catalog, 22 commands across 17 IDEs. Anti-AI-slop for the vibe-coding workflow.">
+  <meta name="twitter:description" content="120 regex rules, 998-entry catalog, 22 commands across 17 IDEs. Anti-AI-slop for the vibe-coding workflow.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -429,7 +429,7 @@
             <tr><td><strong>1. Brief</strong></td><td><code>ux discover</code></td><td>10-field forced intake &mdash; project type, audience, tone, must-haves, anti-list, references.</td><td><code>.ux/last-discovery.json</code></td></tr>
             <tr><td><strong>2. System</strong></td><td><code>ux recommend</code></td><td>Five parallel lookups over the 998-entry catalog &mdash; industry, style, palette, type, motion &mdash; merged into one structured system.</td><td><code>tokens.css</code>, <code>manifest.json</code></td></tr>
             <tr><td><strong>3. Generate</strong></td><td>any vibe-coding tool</td><td>Cursor, Claude Code, Cline, Codex, Windsurf, Aider &mdash; whichever shipped the prompt &mdash; writes the surface against those tokens.</td><td>Component code in your repo</td></tr>
-            <tr><td><strong>4. Gate</strong></td><td><code>ux lint</code></td><td>100 deterministic regex rules over the generated code. Zero LLM cost. Exits non-zero on any high or critical finding.</td><td>JSON findings &middot; CI fail</td></tr>
+            <tr><td><strong>4. Gate</strong></td><td><code>ux lint</code></td><td>120 deterministic regex rules over the generated code. Zero LLM cost. Exits non-zero on any high or critical finding.</td><td>JSON findings &middot; CI fail</td></tr>
           </tbody>
         </table>
       </div>
@@ -466,7 +466,7 @@
         Every later command reads from that file. The recommender uses the forbidden list to filter candidate palettes and motion presets out. The linter uses the must-haves to upgrade the default threshold (RTL adds <code>direction</code> and bidirectional-icon rules; AA adds contrast and target-size rules).
       </p>
 
-      <h2>The 100 rules, in one paragraph</h2>
+      <h2>The 120 rules, in one paragraph</h2>
       <p>
         The lint catalog is 100 entries today, up from 35 at the v2.0.0 cut. Each rule is a regex paired with a severity (<code>low</code>, <code>medium</code>, <code>high</code>, <code>critical</code>), a category (Typography, Color, Layout, Content, Motion, A11y, Quality, Visual, Performance), a one-line why, and a one-line fix.
       </p>
@@ -507,7 +507,7 @@
             <tr><td><strong>Prompt-only</strong></td><td>Instructions block in <code>.md</code></td><td class="num">0</td><td>High &mdash; context decay</td></tr>
             <tr><td><strong>LLM judge in CI</strong></td><td>Prompt run by Claude or GPT</td><td class="num">~$0.04 per push</td><td>Medium &mdash; nondeterministic</td></tr>
             <tr><td><strong>Custom ESLint plugin</strong></td><td>JavaScript AST rules</td><td class="num">~200ms</td><td>Low &mdash; but you wrote them</td></tr>
-            <tr><td><strong>ux-skill lint</strong></td><td>100 regex rules &middot; 998-entry catalog</td><td class="num">~90ms</td><td>Low &mdash; deterministic</td></tr>
+            <tr><td><strong>ux-skill lint</strong></td><td>120 regex rules &middot; 998-entry catalog</td><td class="num">~90ms</td><td>Low &mdash; deterministic</td></tr>
           </tbody>
         </table>
       </div>
@@ -543,7 +543,7 @@
       <h2>Related reading</h2>
       <ul>
         <li><a href="/blog/ai-design-fingerprints-list.html" class="link">The AI design fingerprints every AI coding tool ships by default</a> &mdash; the taxonomy.</li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter for AI coding &mdash; 100 rules in CI without an LLM</a> &mdash; the engineering write-up.</li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter for AI coding &mdash; 120 rules in CI without an LLM</a> &mdash; the engineering write-up.</li>
         <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Anti-AI-slop tools for Claude Code &mdash; the honest ranking</a> &mdash; where ux-skill fits.</li>
         <li><a href="/blog/python-design-system-generator.html" class="link">Python design system generator &mdash; the 5-parallel-search recommender</a> &mdash; how the system gets built.</li>
       </ul>

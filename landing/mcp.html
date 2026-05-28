@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ux-skill MCP server — the design intelligence MCP for Claude Desktop, Cursor, Windsurf, any agent</title>
-  <meta name="description" content="ux-skill ships a Model Context Protocol server exposing 14 tools — the 5-parallel-search recommender, the 100-rule anti-AI-slop linter, and the 11 data manifests — over stdio. Any MCP-capable host can call into the engine. None of the top 8 Claude UX skills ship one.">
+  <meta name="description" content="ux-skill ships a Model Context Protocol server exposing 14 tools — the 5-parallel-search recommender, the 120-rule anti-AI-slop linter, and the 11 data manifests — over stdio. Any MCP-capable host can call into the engine. None of the top 8 Claude UX skills ship one.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/mcp.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -740,7 +740,7 @@
         </thead>
         <tbody>
           <tr><td class="tname"><code>ux_recommend</code></td><td>Run the 5-parallel-search recommender over a brief. Returns style, palette, type pair, motion presets, components, brand exemplars, anti-pattern guardrails, and a rationale line per lane.</td></tr>
-          <tr><td class="tname"><code>ux_lint</code></td><td>Run the 100-rule anti-AI-slop regex linter over file paths. Returns findings with rule id, severity, file, line, excerpt, and fix.</td></tr>
+          <tr><td class="tname"><code>ux_lint</code></td><td>Run the 120-rule anti-AI-slop regex linter over file paths. Returns findings with rule id, severity, file, line, excerpt, and fix.</td></tr>
           <tr><td class="tname"><code>ux_styles</code></td><td>Return all 84+ entries from <code>data/styles.json</code> &mdash; design philosophies with tokens.</td></tr>
           <tr><td class="tname"><code>ux_palettes</code></td><td>Return 176+ entries from <code>data/palettes.json</code>. Optional <code>mode</code> filter (<code>light</code> / <code>dark</code>).</td></tr>
           <tr><td class="tname"><code>ux_type_pairs</code></td><td>Return 70+ entries from <code>data/type-pairs.json</code> &mdash; display + body + mono pairings.</td></tr>
@@ -784,7 +784,7 @@
   <span class="k">"motion"</span>: [ ... <span class="c">/* top 5 presets compatible with style */</span> ],
   <span class="k">"components"</span>: [ ... <span class="c">/* top 12 compatible components */</span> ],
   <span class="k">"brand_exemplars"</span>: [ ... <span class="c">/* top 5 brands to study */</span> ],
-  <span class="k">"guardrails"</span>: [ ... <span class="c">/* all 100 anti-pattern rules — always-on */</span> ],
+  <span class="k">"guardrails"</span>: [ ... <span class="c">/* all 120 anti-pattern rules — always-on */</span> ],
   <span class="k">"rationale"</span>: [
     <span class="s">"Industry: Fintech Neobank"</span>,
     <span class="s">"Style: Monochrome Precise"</span>,

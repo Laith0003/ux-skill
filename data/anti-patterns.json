@@ -1,7 +1,7 @@
 {
   "_meta": {
     "version": "2.0.0",
-    "entries": 100,
+    "entries": 120,
     "last_updated": "2026-05-28",
     "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
     "schema_version": "1.0"
@@ -299,7 +299,7 @@
       "category": "Layout",
       "detection": {
         "type": "regex",
-        "pattern": "<button[^>]*class=\"[^\"]*\\brounded-full\\b[^\"]*\"[^>]*>(?![^<]*(?:\u00d7|close|menu|search))|<(?:input|textarea)[^>]*class=\"[^\"]*\\brounded-full\\b",
+        "pattern": "<button[^>]*class=\"[^\"]*\\brounded-full\\b[^\"]*\"[^>]*>(?![^<]*(?:×|close|menu|search))|<(?:input|textarea)[^>]*class=\"[^\"]*\\brounded-full\\b",
         "flags": "i",
         "scope": [
           "tsx",
@@ -383,7 +383,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "(?:\\u2605{5}|\u2605{5}|\u2b50{5}|\\*{5})|<(?:span|div|p)[^>]*class=\"[^\"]*stars?[^\"]*\"[^>]*>\\s*(?:\\u2605|\u2605){4,}",
+        "pattern": "(?:\\u2605{5}|★{5}|⭐{5}|\\*{5})|<(?:span|div|p)[^>]*class=\"[^\"]*stars?[^\"]*\"[^>]*>\\s*(?:\\u2605|★){4,}",
         "flags": "i",
         "scope": [
           "tsx",
@@ -405,7 +405,7 @@
       "category": "Motion",
       "detection": {
         "type": "regex",
-        "pattern": "<(?:button|a)[^>]*>[^<]*(?:\u2192|->|&rarr;|&#8594;)[^<]*</(?:button|a)>|class=\"[^\"]*\\banimate-bounce\\b[^\"]*\"[^>]*>\\s*(?:\u2192|\u2192|&rarr;|<svg)",
+        "pattern": "<(?:button|a)[^>]*>[^<]*(?:→|->|&rarr;|&#8594;)[^<]*</(?:button|a)>|class=\"[^\"]*\\banimate-bounce\\b[^\"]*\"[^>]*>\\s*(?:→|→|&rarr;|<svg)",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2097,6 +2097,429 @@
       },
       "why": "An <a> tag with pointer-events: none and no aria-disabled='true' is announced to screen readers as a fully working link, takes a position in the tab order, and gives keyboard users an Enter-key path to nothing - the click is silently swallowed. This is the AI shortcut for 'disabled link' that breaks every assistive technology user while looking fine to the designer.",
       "fix": "If the link is permanently inactive, render a <span> with the same visual treatment instead of an <a>. If it's temporarily disabled (loading, gated state), add aria-disabled='true' AND tabindex='-1' AND a handler that returns early - or remove the href until the action becomes available."
+    },
+    {
+      "id": "aria-live-polite-on-error",
+      "name": "aria-live='polite' on a critical error region",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:className|class)\\s*=\\s*['\"][^'\"]*\\b(?:error|danger|alert-danger|toast-error|notification-error)\\b[^'\"]*['\"][^>]*\\baria-live\\s*=\\s*['\"]polite['\"]|\\baria-live\\s*=\\s*['\"]polite['\"][^>]*(?:className|class)\\s*=\\s*['\"][^'\"]*\\b(?:error|danger|alert-danger|toast-error|notification-error)\\b",
+        "flags": "im",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "aria-live='polite' on an error region tells screen readers to wait until the user is idle before announcing - the user submits a broken form, walks away to next field, and the failure announcement may be delayed or skipped entirely. Critical errors that block the flow need to interrupt.",
+      "fix": "Use aria-live='assertive' (or role='alert', which implies assertive) for blocking validation errors and destructive-action failures. Reserve aria-live='polite' for non-critical status text (saved, syncing, last updated)."
+    },
+    {
+      "id": "aria-busy-without-aria-live",
+      "name": "aria-busy='true' with no aria-live companion",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<[^>]+\\baria-busy\\s*=\\s*['\"]true['\"](?![^>]*\\baria-live=)[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "aria-busy='true' tells assistive tech to suspend updates inside a region, but without an aria-live region around it the eventual content swap is never announced - the user is left in silence after the spinner disappears.",
+      "fix": "Pair aria-busy='true' with aria-live='polite' (or role='status') on the same node or a parent region, so the post-load content is announced once aria-busy flips back to false."
+    },
+    {
+      "id": "link-without-href",
+      "name": "<a> element without an href attribute",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<a(?![^>]*\\bhref=)(?![^>]*\\bname=)(?![^>]*\\bid=)(?![^>]*\\bxlink:href=)\\s[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "An anchor with no href is not focusable, not in the tab order, and not announced as a link by assistive tech - it's a styled <span> that the dev mistook for a button. Common AI shortcut for 'I want a clickable thing but the route isn't ready yet.'",
+      "fix": "If the element triggers an action, use <button>. If it navigates, set href='...' (even href='#' with preventDefault during loading is better than no href at all). Pure anchor targets (legacy bookmarks) use name= or id= and are exempt."
+    },
+    {
+      "id": "fieldset-without-legend",
+      "name": "<fieldset> missing a <legend> child",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<fieldset[^>]*>\\s*(?!<legend\\b)",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "<fieldset> without a <legend> gives the grouped controls a semantic container but no group name - screen readers announce each control without the shared context (e.g. 'shipping address - street' becomes just 'street'). The dev got halfway to the WCAG 1.3.1 grouping pattern then stopped.",
+      "fix": "First child of every <fieldset> is <legend>Group label</legend>. Visually hide the legend with .sr-only if the design doesn't show a heading, but never omit it."
+    },
+    {
+      "id": "select-without-label",
+      "name": "<select> with no associated <label> or aria-label",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<select(?![^>]*\\baria-label=)(?![^>]*\\baria-labelledby=)(?![^>]*\\bid=)[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "A <select> with no id (so <label for=> cannot reach it), no aria-label, and no aria-labelledby is announced to screen readers as just 'combobox, 1 of 3' with no clue what it controls. WCAG 1.3.1 / 4.1.2 fail.",
+      "fix": "Either give the <select> an id and reference it from <label for='...'>, or set aria-label='Country' / aria-labelledby='country-heading'. Don't rely on a placeholder option ('Select a country...') as the label - placeholder options are not labels."
+    },
+    {
+      "id": "iframe-without-title",
+      "name": "<iframe> missing title attribute",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<iframe(?![^>]*\\btitle\\s*=)[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "An <iframe> with no title is announced to screen readers as 'frame' with no description of what it contains - blank, unactionable. WCAG 2.4.1 (Bypass Blocks) and 4.1.2 (Name, Role, Value) fail. Every embedded video, payment widget, map, or ad triggers this.",
+      "fix": "Always set title='Stripe payment form' / 'YouTube video: product tour' / 'Google Maps: office location'. The title should describe the frame's purpose, not just say 'iframe' or 'embed'."
+    },
+    {
+      "id": "video-without-captions",
+      "name": "<video> element without <track kind='captions'>",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<video\\b(?![^>]*>(?:(?!</video>)[\\s\\S])*<track[^>]+\\bkind\\s*=\\s*['\"]captions['\"])[^>]*>",
+        "flags": "im",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "A <video> with no captions <track> is inaccessible to Deaf and hard-of-hearing users, fails WCAG 1.2.2 (Captions, Prerecorded) at AA, and is unusable in any sound-off context (open-plan office, public transport, autoplay-muted social feeds).",
+      "fix": "Provide at least one <track kind='captions' src='cap.vtt' srclang='en' label='English' default> child for every <video>. Subtitles (kind='subtitles') translate dialog but skip sound effects; captions include both - WCAG asks for captions, not subtitles."
+    },
+    {
+      "id": "autoplay-without-muted",
+      "name": "<video autoplay> without muted attribute",
+      "severity": "high",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "<video(?![^>]*\\bmuted\\b)[^>]*\\bautoplay\\b[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Browsers (Chrome, Safari, Firefox, Edge) block autoplay on any <video> that isn't muted - the video silently fails to play and the layout shifts when the user manually starts it. Also a sound-blast hazard if it ever does autoplay in an older client.",
+      "fix": "If you want hero video to autoplay, add muted (and usually playsinline, loop, preload='auto'). If you genuinely need audio, drop autoplay and require an explicit user gesture."
+    },
+    {
+      "id": "inline-style-display-none-no-aria",
+      "name": "Interactive element hidden via inline display:none without aria-hidden",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:button|a|input|select|textarea)(?![^>]*\\baria-hidden\\s*=\\s*['\"]true['\"])[^>]*\\bstyle\\s*=\\s*['\"][^'\"]*display\\s*:\\s*none[^'\"]*['\"][^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "An interactive element with style='display:none' is removed from the visual flow but its DOM node and event handlers remain. Without aria-hidden='true' some screen readers still expose it to virtual cursors, and JS event delegation can still fire clicks on it - inconsistent state across users.",
+      "fix": "Toggle visibility with a class (.is-hidden { display:none }) and conditionally render via the framework (v-if / x-if / @if) for true removal. If you must use inline display:none on an interactive element, also set aria-hidden='true' AND tabindex='-1'."
+    },
+    {
+      "id": "marquee-tag",
+      "name": "<marquee> element used",
+      "severity": "high",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "<marquee\\b",
+        "flags": "i",
+        "scope": [
+          "html",
+          "blade",
+          "astro",
+          "vue",
+          "tsx",
+          "jsx"
+        ]
+      },
+      "why": "<marquee> is deprecated, has no prefers-reduced-motion support, scrolls continuously regardless of user motion preferences, and causes nausea/dizziness for users with vestibular disorders. WCAG 2.2.2 (Pause, Stop, Hide) fail and a strong AI-shortcut signal.",
+      "fix": "Use CSS animation with prefers-reduced-motion: reduce { animation: none } as a respect-the-user fallback. For ticker/news content prefer a paginated carousel with explicit prev/next controls."
+    },
+    {
+      "id": "blink-tag",
+      "name": "<blink> element used",
+      "severity": "critical",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<blink\\b",
+        "flags": "i",
+        "scope": [
+          "html",
+          "blade",
+          "astro",
+          "vue",
+          "tsx",
+          "jsx"
+        ]
+      },
+      "why": "<blink> is deprecated, removed from every modern browser, AND a documented seizure trigger for photosensitive epilepsy users. WCAG 2.3.1 (Three Flashes or Below Threshold) fail at AA. There is no legitimate use.",
+      "fix": "Remove the tag. If you need to draw attention to a status change, use a one-time toast with role='status', or a brief CSS pulse animation that respects prefers-reduced-motion and limits to 3 flashes per second."
+    },
+    {
+      "id": "bgcolor-html-attribute",
+      "name": "Presentational bgcolor= attribute",
+      "severity": "medium",
+      "category": "Visual",
+      "detection": {
+        "type": "regex",
+        "pattern": "<[a-z][a-z0-9]*\\s+[^>]*\\bbgcolor\\s*=\\s*['\"][^'\"]+['\"][^>]*>",
+        "flags": "i",
+        "scope": [
+          "html",
+          "blade",
+          "astro",
+          "vue",
+          "tsx",
+          "jsx"
+        ]
+      },
+      "why": "bgcolor= is an HTML 3.2 presentational attribute deprecated since HTML 4.01 - it bypasses the design system, ignores tokens, breaks dark mode, and signals the file was either copy-pasted from a 1998 tutorial or a model that didn't know any better.",
+      "fix": "Use CSS background-color via a design token (--bg-surface-1, .bg-surface-1, bg-zinc-50). If the surface is tenant-themed, drive it from a CSS variable bound to the tenant palette."
+    },
+    {
+      "id": "align-html-attribute",
+      "name": "Presentational align= HTML attribute",
+      "severity": "medium",
+      "category": "Visual",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:p|div|table|td|th|tr|img|h[1-6]|caption|col|colgroup|tbody|tfoot|thead)\\s+[^>]*\\balign\\s*=\\s*['\"](?:left|right|center|justify)['\"][^>]*>",
+        "flags": "i",
+        "scope": [
+          "html",
+          "blade",
+          "astro",
+          "vue",
+          "tsx",
+          "jsx"
+        ]
+      },
+      "why": "align='left|right|center' on block elements is deprecated since HTML 4.01 - it bypasses logical properties (text-align: start/end) so it never flips correctly under dir='rtl', and the model only reaches for it when it doesn't know the modern equivalent. Critical regression for any RTL-first product.",
+      "fix": "Use CSS text-align with logical values: text-align: start for left in LTR / right in RTL; text-align: end for the opposite; text-align: center stays center. For tables use <td class='text-end'> with a logical-property utility, not align='right'."
+    },
+    {
+      "id": "meta-refresh-redirect",
+      "name": "<meta http-equiv='refresh'> redirect",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<meta[^>]+http-equiv\\s*=\\s*['\"]refresh['\"][^>]*>",
+        "flags": "i",
+        "scope": [
+          "html",
+          "blade",
+          "astro",
+          "vue",
+          "tsx",
+          "jsx"
+        ]
+      },
+      "why": "<meta http-equiv='refresh'> auto-redirects without user consent, breaks back-button navigation, disorients screen reader users, and is a documented WCAG 2.2.1 (Timing Adjustable) and 3.2.5 (Change on Request) fail. Google also down-ranks pages that use it for redirects.",
+      "fix": "For a true redirect, do it server-side (301 / 302). For client-side route changes, use the router's navigate() method tied to a user action. Never use meta-refresh for the 'you'll be redirected in 5 seconds' pattern - use an inline link the user clicks."
+    },
+    {
+      "id": "tabindex-positive",
+      "name": "Positive tabindex value",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\btabindex\\s*=\\s*['\"][1-9][0-9]*['\"]",
+        "flags": "i",
+        "scope": [
+          "html",
+          "blade",
+          "astro",
+          "vue",
+          "tsx",
+          "jsx"
+        ]
+      },
+      "why": "tabindex='1' (or any positive value) pulls the element out of source order and into a synthetic tab sequence, so the keyboard tab order no longer matches the visual or DOM order. Any new element added to the page disrupts the explicit numbering - WCAG 2.4.3 (Focus Order) fail and an ongoing maintenance trap.",
+      "fix": "Use tabindex='0' to make a non-interactive element focusable, tabindex='-1' to remove a focusable element from the tab order (still programmatically focusable). Source order should match tab order; fix layout with CSS, not synthetic tabindex."
+    },
+    {
+      "id": "onclick-on-non-button",
+      "name": "onclick handler on non-interactive element",
+      "severity": "critical",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:div|span|p|li|td|h[1-6])\\b[^>]*\\bonclick\\s*=\\s*['\"][^'\"]+['\"][^>]*>",
+        "flags": "i",
+        "scope": [
+          "html",
+          "blade",
+          "astro",
+          "vue",
+          "tsx",
+          "jsx"
+        ]
+      },
+      "why": "onclick (lowercase, HTML attribute form) on a <div>, <span>, <p>, <li>, <td>, or <h*> is invisible to keyboard users and assistive tech - WCAG 2.1.1 and 4.1.2 fail. Unlike the JSX onClick rule we already catch, this fires in plain HTML and Blade where the lowercased attribute is the only form available.",
+      "fix": "Use <button onclick='...'> for actions. If you genuinely cannot change the tag, add role='button' tabindex='0' AND an onkeydown handler that fires the same action on Enter or Space keypress."
+    },
+    {
+      "id": "role-button-on-anchor-without-href",
+      "name": "<a role='button'> with no href",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<a(?![^>]*\\bhref=)[^>]*\\brole\\s*=\\s*['\"]button['\"][^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "<a role='button'> with no href is the worst of both worlds - the link semantics are overridden, the element is not focusable (no href = not in tab order), and the WAI-ARIA promise of 'this behaves like a button' is silently broken. WCAG 4.1.2 fail.",
+      "fix": "Just use <button type='button'>. If the design demands link-text styling, give the <button> the same classes as your text-link recipe. Never patch a semantically wrong anchor with role='button' - replace it."
+    },
+    {
+      "id": "cursor-pointer-on-disabled",
+      "name": "cursor:pointer applied to :disabled state",
+      "severity": "low",
+      "category": "Visual",
+      "detection": {
+        "type": "regex",
+        "pattern": ":disabled[^{]*\\{[^}]*cursor\\s*:\\s*pointer\\s*[;}]",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "A :disabled element with cursor: pointer signals to the user that the element is clickable - the visual affordance says 'I respond' while the actual element says 'I don't.' Confused state, immediate friction. Common when a global utility class wins over the :disabled override.",
+      "fix": "Override to cursor: not-allowed (or cursor: default) inside the :disabled selector. Pair with opacity: 0.5 and pointer-events: none on the visual layer if the disabled state must be unreachable to mouse users."
+    },
+    {
+      "id": "negative-margin-pull-left-right",
+      "name": "Large negative horizontal margin on body content",
+      "severity": "medium",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\bmargin-(?:left|right|inline-start|inline-end)\\s*:\\s*-(?:[1-9]\\d|\\d{3,})px\\b",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "A negative margin of -10px or more on margin-left/right (or the logical equivalent) is almost always pulling content outside its container, which causes horizontal scroll on narrow viewports and silent overflow under RTL. Classic AI shortcut for 'align this to the edge' that should be solved by negative space, not negative margins.",
+      "fix": "Use grid/flex with gap and align-items / justify-self for edge alignment. If you genuinely need to escape the gutter, use a calc() with the gutter token (margin-inline: calc(var(--gutter) * -1)) so the escape stays in sync with the grid."
+    },
+    {
+      "id": "body-background-color-inherit",
+      "name": "body { background-color: inherit }",
+      "severity": "low",
+      "category": "Visual",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\bbody\\s*\\{[^}]*\\bbackground(?:-color)?\\s*:\\s*inherit\\s*[;}]",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "background-color: inherit on body chains to <html>, which by default has no background and resolves to canvas/white - so the inherit chain breaks the moment <html> is themed differently from body, and the page shows a flash of system canvas before paint. AI shortcut for 'just inherit it' when the dev didn't bother to choose a real surface token.",
+      "fix": "Set body { background-color: var(--bg-surface-0, white) } with an explicit token. If dark mode is in play, the token should respond to color-scheme or .dark, not chain through inherit."
     }
   ]
 }
