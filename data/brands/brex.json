@@ -1,0 +1,49 @@
+{
+  "id": "brex",
+  "name": "Brex",
+  "category": "Fintech / Crypto",
+  "year_observed": 2026,
+  "philosophy": "Dark-editorial financial magazine for ambitious mid-market — coffee-black canvas, amber voltage, serif display at magazine-cover scale, surface-flip rhythm between coffee bands and cream pricing.",
+  "design_language": {
+    "type": {
+      "display": "GT Super Display",
+      "body": "Söhne",
+      "mono": "Söhne Mono"
+    },
+    "color_primary": "#e8a14f",
+    "color_canvas": "#0e0e0c",
+    "color_ink": "#f5f1e8",
+    "color_accent_gradient": null,
+    "radius": [4, 6, 12, 16],
+    "spacing": "8-based",
+    "motion_signature": "220ms ease-out hover with amber glow ring; slow 40% parallax shift on hero photography on scroll."
+  },
+  "trademark_signals": [
+    "Coffee-black canvas with amber accent — a maturation away from earlier neon Brex",
+    "Photographic art direction — real founders, never stock",
+    "Massive serif display at 80-104px — magazine cover scale",
+    "Surface flip between coffee bands and cream pricing — the rhythm is the brand",
+    "Tabular figures on every dollar amount"
+  ],
+  "components_observed": [
+    "hero-band-coffee-with-photo",
+    "pricing-band-cream",
+    "feature-card-dark",
+    "cta-button-amber-fill",
+    "quote-band-large-serif",
+    "dashboard-mockup-dark"
+  ],
+  "exemplar_pages": [
+    "https://www.brex.com/",
+    "https://www.brex.com/product/spend-management",
+    "https://www.brex.com/customers",
+    "https://www.brex.com/journal"
+  ],
+  "ai_slop_avoided": [
+    "Don't render a light-mode hero — coffee is the entry point",
+    "Don't add mascot characters or playful illustrations",
+    "Don't render serif display heavier than weight 500",
+    "Don't use saturated rainbow gradients"
+  ],
+  "source_md": "references/brands/brex-DESIGN.md"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "monzo",
+  "name": "Monzo",
+  "category": "Fintech / Crypto",
+  "year_observed": 2026,
+  "philosophy": "Consumer-fintech with maximum personality — hot coral card is the brand, pill-shape CTAs, illustrated objects with simplified geometry. Children's-book illustration system reading as a neobank.",
+  "design_language": {
+    "type": {
+      "display": "FK Display",
+      "body": "ABC Diatype",
+      "mono": "Söhne Mono"
+    },
+    "color_primary": "#ff4f40",
+    "color_canvas": "#ffffff",
+    "color_ink": "#091723",
+    "color_accent_gradient": null,
+    "radius": [8, 16, 24, 9999],
+    "spacing": "4-based",
+    "motion_signature": "220ms ease-out hover; signature gentle tilt-and-shadow on coral card on scroll-reveal; coin/icon illustrations with subtle hover bounce."
+  },
+  "trademark_signals": [
+    "Hot coral card render — the card is the brand, rendered photorealistically in every hero",
+    "Pill-shape CTAs at full radius — never square",
+    "Illustrated objects with simplified geometry — coins, plants, characters, hand-drawn-feeling",
+    "Industry-first coral circle badges — small, restrained",
+    "Cyan/yellow/green accents used in illustration only, never as buttons"
+  ],
+  "components_observed": [
+    "hero-band-coral-card-render",
+    "feature-illustration-card",
+    "product-comparison-three-tier",
+    "pill-cta-coral-fill",
+    "industry-first-badge",
+    "app-screenshot-card-rounded"
+  ],
+  "exemplar_pages": [
+    "https://monzo.com/",
+    "https://monzo.com/features/",
+    "https://monzo.com/business/",
+    "https://monzo.com/help/"
+  ],
+  "ai_slop_avoided": [
+    "Don't render a dark-mode hero",
+    "Don't use square buttons — full-pill only",
+    "Don't render 3D hyper-realistic finance geometry",
+    "Don't set coral type on white — coral is for surfaces and the card"
+  ],
+  "source_md": "references/brands/monzo-DESIGN.md"
+}

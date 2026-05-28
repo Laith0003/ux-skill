@@ -1,0 +1,49 @@
+{
+  "id": "pitchfork",
+  "name": "Pitchfork",
+  "category": "Editorial / Media",
+  "year_observed": 2026,
+  "philosophy": "Raw, loud, bold black-on-white music criticism. The 0.0-10.0 score numeral at 96-160px is the brand. Heavy industrial sans display against serif body. 90s zine made the journey to the web without losing edge.",
+  "design_language": {
+    "type": {
+      "display": "Founders Grotesk Condensed",
+      "body": "Tiempos Text",
+      "mono": null
+    },
+    "color_primary": "#000000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000",
+    "color_accent_gradient": null,
+    "radius": [0, 2],
+    "spacing": "4-based",
+    "motion_signature": "None on hover beyond 100ms link color shift. Score reveal on review page scales 98%-100% over 300ms — the only branded motion moment."
+  },
+  "trademark_signals": [
+    "0.0-10.0 score numeral at 96-160px — most-recognized Pitchfork visual",
+    "Heavy industrial sans display — anti-elegant, anti-magazine",
+    "Album art as visual anchor, never decorative",
+    "Best New Music red badge — small, hot, reserved",
+    "Serif body against heavy sans display — the contrast is the brand"
+  ],
+  "components_observed": [
+    "score-numeral-display",
+    "album-art-square-tile",
+    "best-new-music-badge",
+    "review-headline-band",
+    "byline-block-mono",
+    "list-page-grid-three-up"
+  ],
+  "exemplar_pages": [
+    "https://pitchfork.com/",
+    "https://pitchfork.com/reviews/albums/",
+    "https://pitchfork.com/best/",
+    "https://pitchfork.com/features/"
+  ],
+  "ai_slop_avoided": [
+    "Don't render a dark-mode hero",
+    "Don't introduce a section-color system — monochrome plus one red",
+    "Don't add mascot characters",
+    "Don't introduce saturated rainbow gradients"
+  ],
+  "source_md": "references/brands/pitchfork-DESIGN.md"
+}

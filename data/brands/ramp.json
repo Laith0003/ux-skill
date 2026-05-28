@@ -1,0 +1,49 @@
+{
+  "id": "ramp",
+  "name": "Ramp",
+  "category": "Fintech / Crypto",
+  "year_observed": 2026,
+  "philosophy": "Modernist B2B fintech with editorial weight — white canvas, signal red voltage, geometric serif display at hero scale, dashboard mockup as the marketing artifact.",
+  "design_language": {
+    "type": {
+      "display": "GT Sectra",
+      "body": "Söhne",
+      "mono": "Söhne Mono"
+    },
+    "color_primary": "#e84a4a",
+    "color_canvas": "#ffffff",
+    "color_ink": "#0e0e0e",
+    "color_accent_gradient": null,
+    "radius": [4, 6, 8, 12],
+    "spacing": "8-based",
+    "motion_signature": "180ms ease-out hover; signature 600ms tabular-figure count-up on savings numbers; 400ms scale-from-98% fade on dashboard mockup scroll-reveal."
+  },
+  "trademark_signals": [
+    "Signal red as the only brand voltage — no second accent except savings-green",
+    "Geometric serif (GT Sectra) at hero scale — editorial weight",
+    "Savings dollar amounts in display-size serif numerals — money as type, not chart",
+    "Dashboard mockups are full product chrome, never abstract",
+    "Customer quotes as editorial pull-quotes with large serif"
+  ],
+  "components_observed": [
+    "hero-band-with-dashboard",
+    "savings-callout-card",
+    "pricing-three-tier-light",
+    "cta-button-red-fill",
+    "customer-quote-band",
+    "dashboard-screenshot-card"
+  ],
+  "exemplar_pages": [
+    "https://ramp.com/",
+    "https://ramp.com/spend-management",
+    "https://ramp.com/customers",
+    "https://ramp.com/pricing"
+  ],
+  "ai_slop_avoided": [
+    "Don't render a dark-mode hero",
+    "Don't render 3D card geometry or floating chrome",
+    "Don't use saturated rainbow gradients",
+    "Don't add scarcity/limited-time banners"
+  ],
+  "source_md": "references/brands/ramp-DESIGN.md"
+}

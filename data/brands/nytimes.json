@@ -1,0 +1,51 @@
+{
+  "id": "nytimes",
+  "name": "The New York Times",
+  "category": "Editorial / Media",
+  "year_observed": 2026,
+  "philosophy": "Canonical American newspaper online — Cheltenham masthead, Imperial body, Franklin Gothic bylines, hairline-grid rhythm, color used only as section accent and breaking-news red.",
+  "design_language": {
+    "type": {
+      "display": "NYT Cheltenham",
+      "body": "NYT Imperial Text",
+      "mono": null
+    },
+    "color_primary": "#000000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000",
+    "color_accent_gradient": null,
+    "radius": [0, 2, 4],
+    "spacing": "4-based",
+    "motion_signature": "Almost none. 120ms hover color shift on links; breaking-news ribbon subtle pulse when live."
+  },
+  "trademark_signals": [
+    "Cheltenham masthead — most recognized newspaper wordmark online",
+    "Imperial body text at 18px — the text size itself is the brand",
+    "Franklin Gothic small caps for bylines and section labels",
+    "Section-specific accent colors (recipe green, opinion blue)",
+    "Hairline 1px dividers between every section/story"
+  ],
+  "components_observed": [
+    "masthead-cheltenham",
+    "headline-imperial-bold",
+    "subhead-franklin-caps",
+    "byline-block",
+    "breaking-news-ribbon-red",
+    "section-front-grid",
+    "recipe-card",
+    "opinion-essay-card"
+  ],
+  "exemplar_pages": [
+    "https://www.nytimes.com/",
+    "https://www.nytimes.com/section/opinion",
+    "https://cooking.nytimes.com/",
+    "https://www.nytimes.com/section/technology"
+  ],
+  "ai_slop_avoided": [
+    "Don't add animated illustrations in standard news content",
+    "Don't introduce saturated rainbow gradients",
+    "Don't add mascot characters",
+    "Don't render the homepage in dark mode"
+  ],
+  "source_md": "references/brands/nytimes-DESIGN.md"
+}

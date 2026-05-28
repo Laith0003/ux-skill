@@ -1,0 +1,49 @@
+{
+  "id": "aesop",
+  "name": "Aesop",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "The deepest apothecary in beauty — sepia canvas, chocolate ink, Walbaum serif everywhere, text-link CTAs instead of buttons. Reads like a 19th-century pharmacopeia.",
+  "design_language": {
+    "type": {
+      "display": "Walbaum",
+      "body": "Walbaum",
+      "mono": null
+    },
+    "color_primary": "#241f17",
+    "color_canvas": "#dccfb6",
+    "color_ink": "#241f17",
+    "color_accent_gradient": null,
+    "radius": [0, 2],
+    "spacing": "8-based",
+    "motion_signature": "None on hover. The brand voice is stillness — animation is anti-aesthetic. Quiet 200ms link fades only."
+  },
+  "trademark_signals": [
+    "Sepia canvas — the entire industry runs white, Aesop refuses",
+    "Walbaum serif everywhere — display, body, navigation, captions",
+    "Text-link CTAs instead of button-fill — absence of buttons is the brand",
+    "Latin botanical names italicized in ingredient lists — scientific cadence",
+    "Numbered instructional steps with serif numerals, not symbols"
+  ],
+  "components_observed": [
+    "apothecary-product-card",
+    "essay-band-single-column",
+    "ingredient-list-band",
+    "category-nav-text-only",
+    "cta-link-underlined",
+    "instructional-band"
+  ],
+  "exemplar_pages": [
+    "https://www.aesop.com/us/",
+    "https://www.aesop.com/us/r/online-magazine/",
+    "https://www.aesop.com/us/c/skin/",
+    "https://www.aesop.com/us/p/products/"
+  ],
+  "ai_slop_avoided": [
+    "Don't render filled-button CTAs except in checkout",
+    "Don't introduce saturated colors — sepia is the entire palette",
+    "Don't add promotional/sale/scarcity banners",
+    "Don't animate beyond quiet 200ms link fades"
+  ],
+  "source_md": "references/brands/aesop-DESIGN.md"
+}

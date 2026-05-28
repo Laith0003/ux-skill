@@ -1,0 +1,50 @@
+{
+  "id": "atlantic",
+  "name": "The Atlantic",
+  "category": "Editorial / Media",
+  "year_observed": 2026,
+  "philosophy": "American long-form literary editorial — paper-cream canvas, Domaine serif at 19px reading scale, Atlantic Red masthead voltage, drop-cap article openers, audio-narration as feature.",
+  "design_language": {
+    "type": {
+      "display": "Domaine Display",
+      "body": "Domaine Text",
+      "mono": null
+    },
+    "color_primary": "#c8102e",
+    "color_canvas": "#fcf9f4",
+    "color_ink": "#000000",
+    "color_accent_gradient": null,
+    "radius": [0, 2, 4],
+    "spacing": "4-based",
+    "motion_signature": "Almost none. 150ms hover on links; slow red progress indicator at top of long-form scroll; audio-narration controls fade in on article load."
+  },
+  "trademark_signals": [
+    "Atlantic Red as the brand's only voltage — masthead, section names, link hover",
+    "Drop caps on feature article openers — magazine convention preserved",
+    "Domaine Text body at 19px — larger than most digital pubs",
+    "Audio-narration option on most long-form articles",
+    "Full-bleed essay cover photography with type overlay"
+  ],
+  "components_observed": [
+    "essay-cover-fullbleed",
+    "drop-cap-article-opener",
+    "single-column-reading-body",
+    "section-masthead-red",
+    "byline-block-with-bio",
+    "pull-quote-band",
+    "audio-narration-player"
+  ],
+  "exemplar_pages": [
+    "https://www.theatlantic.com/",
+    "https://www.theatlantic.com/magazine/",
+    "https://www.theatlantic.com/podcasts/",
+    "https://www.theatlantic.com/projects/"
+  ],
+  "ai_slop_avoided": [
+    "Don't render dark-mode hero on homepage",
+    "Don't add animated illustrations in body articles",
+    "Don't introduce saturated rainbow gradients",
+    "Don't add mascot characters"
+  ],
+  "source_md": "references/brands/atlantic-DESIGN.md"
+}

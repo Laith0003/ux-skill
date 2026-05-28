@@ -1,0 +1,49 @@
+{
+  "id": "substack",
+  "name": "Substack",
+  "category": "Editorial / Media",
+  "year_observed": 2026,
+  "philosophy": "Writer-first warmth — cream canvas, slab-serif Spectral display, signature orange Subscribe CTA, 17-18px reading-first body. Small-press literary magazine that grew up.",
+  "design_language": {
+    "type": {
+      "display": "Spectral",
+      "body": "Inter",
+      "mono": null
+    },
+    "color_primary": "#ff6719",
+    "color_canvas": "#f9f7f1",
+    "color_ink": "#1a1a1a",
+    "color_accent_gradient": null,
+    "radius": [4, 8, 12, 16],
+    "spacing": "4-based",
+    "motion_signature": "180ms ease-out hover; signature Subscribe button orange glow when entering viewport; 300ms ease slide-in new-post notifications."
+  },
+  "trademark_signals": [
+    "Substack Orange (#ff6719) — most-recognized Subscribe button color on writer-platform internet",
+    "Slab-serif display (Spectral) — literary cadence, distinguishes from Medium's geometric sans",
+    "17-18px body reading size — accessible reading-first commitment",
+    "Subscriber count displayed openly — social proof as content",
+    "Writer-customizable masthead colors and fonts — platform bends to writer's brand"
+  ],
+  "components_observed": [
+    "newsletter-masthead-card",
+    "subscribe-cta-orange-fill",
+    "article-card-with-byline",
+    "paywall-card-soft",
+    "comment-thread-nested",
+    "discover-grid-three-up"
+  ],
+  "exemplar_pages": [
+    "https://substack.com/",
+    "https://substack.com/browse",
+    "https://substack.com/about",
+    "https://on.substack.com/"
+  ],
+  "ai_slop_avoided": [
+    "Don't render a dark-mode hero on marketing",
+    "Don't introduce saturated rainbow gradients",
+    "Don't add mascot characters",
+    "Don't add scarcity/limited-time marketing"
+  ],
+  "source_md": "references/brands/substack-DESIGN.md"
+}

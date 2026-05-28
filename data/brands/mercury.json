@@ -1,0 +1,49 @@
+{
+  "id": "mercury",
+  "name": "Mercury",
+  "category": "Fintech / Crypto",
+  "year_observed": 2026,
+  "philosophy": "Startup-bank-for-startups — restrained monochrome canvas, serif-display voltage, tabular-figure mono numerals, warm-muted bronze accent appearing only at brand-mark moments.",
+  "design_language": {
+    "type": {
+      "display": "GT Sectra Display",
+      "body": "Söhne",
+      "mono": "Söhne Mono"
+    },
+    "color_primary": "#191b1f",
+    "color_canvas": "#fafafa",
+    "color_ink": "#191b1f",
+    "color_accent_gradient": null,
+    "radius": [4, 8, 12],
+    "spacing": "8-based",
+    "motion_signature": "180ms ease-out hover; signature 400ms scroll-reveal fade on dashboard mockups; tabular-figure crossfades on number transitions, never slot-machine."
+  },
+  "trademark_signals": [
+    "Serif display in fintech — almost no competitor runs serif at hero scale",
+    "Tabular-figure mono numerals on every balance/rate/yield",
+    "Warm-bone surface for major bands — never pure cream, never pure white",
+    "Modest 8px button radius — refuses both square and pill",
+    "Mercury Bronze accent only at brand-mark moments, never as button or surface"
+  ],
+  "components_observed": [
+    "dashboard-screenshot-card",
+    "pricing-three-tier-card",
+    "executive-profile-card",
+    "cta-button-ink-fill",
+    "treasury-yield-card",
+    "customer-story-band"
+  ],
+  "exemplar_pages": [
+    "https://mercury.com/",
+    "https://mercury.com/business-banking",
+    "https://mercury.com/treasury",
+    "https://mercury.com/customers"
+  ],
+  "ai_slop_avoided": [
+    "Don't render a dark-mode hero",
+    "Don't use saturated brand colors — restraint is the voltage",
+    "Don't animate beyond fades",
+    "Don't add scarcity/limited-time marketing"
+  ],
+  "source_md": "references/brands/mercury-DESIGN.md"
+}

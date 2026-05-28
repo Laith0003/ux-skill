@@ -1,0 +1,49 @@
+{
+  "id": "plaid",
+  "name": "Plaid",
+  "category": "Fintech / Crypto",
+  "year_observed": 2026,
+  "philosophy": "Developer-fintech brand balancing institutional credibility with a single moment of warmth — cobalt-on-white, geometric sans, Benjamin Franklin mascot, holographic gradient strip at hero only.",
+  "design_language": {
+    "type": {
+      "display": "Faktum",
+      "body": "Inter",
+      "mono": "IBM Plex Mono"
+    },
+    "color_primary": "#0a2540",
+    "color_canvas": "#ffffff",
+    "color_ink": "#0a2540",
+    "color_accent_gradient": "linear-gradient(90deg, #ff6b6b 0%, #ffce5c 25%, #6cf09e 50%, #5dd4ff 75%, #b87cff 100%)",
+    "radius": [4, 8, 12, 16],
+    "spacing": "8-based",
+    "motion_signature": "180ms ease-out hover; signature 40s barely-perceptible horizontal shift of the holographic gradient strip beneath h1; Franklin mascot blink/wink on hover."
+  },
+  "trademark_signals": [
+    "Tail Holo gradient strip — rainbow-holographic, only at hero base, never repeated",
+    "Benjamin Franklin mascot — fintech with personality, the rare illustration that survived",
+    "Cobalt ink (#0a2540) as both type and primary button",
+    "Geometric sans with tight tracking — technical-precision cadence",
+    "Customer logos always in cobalt mono, never colored"
+  ],
+  "components_observed": [
+    "hero-band-with-holo-strip",
+    "benjamin-mascot-illustration",
+    "code-snippet-card-light",
+    "customer-logo-strip-mono",
+    "cta-button-cobalt-fill",
+    "pricing-tier-three-column-light"
+  ],
+  "exemplar_pages": [
+    "https://plaid.com/",
+    "https://plaid.com/products/",
+    "https://plaid.com/docs/",
+    "https://plaid.com/customers/"
+  ],
+  "ai_slop_avoided": [
+    "Don't render a dark-mode hero",
+    "Don't introduce saturated colors except in the Tail Holo",
+    "Don't add 3D rendered geometry or floating cards",
+    "Don't add a second mascot — Franklin stands alone"
+  ],
+  "source_md": "references/brands/plaid-DESIGN.md"
+}
