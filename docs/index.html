@@ -581,6 +581,11 @@
       line-height: 1.02;
       margin-top: 18px;
     }
+    .section-head__title .accent-italic {
+      font-style: italic;
+      color: var(--scene-accent);
+      font-variation-settings: 'wdth' 86, 'opsz' 96, 'wght' 500;
+    }
     .section-head__lead {
       font-size: clamp(16px, 1.8vw, 19px);
       color: var(--body);
@@ -590,93 +595,274 @@
     }
 
     /* =========================================================================
-       BRAND WORDMARK GALLERY — each brand in its own typeface
-       Scene palette: per-brand
+       BRAND INSPECTOR — draggable rail of brand cards with hold-to-fastforward
+       Each card is a real specimen: logo + actual typeface + actual palette.
+       Click a card → inline brand inspector unfurls below it.
+       Click "Apply" → the whole page momentarily reskins to that brand.
        ========================================================================= */
     .brands {
       background: linear-gradient(180deg, var(--canvas) 0%, var(--surface-1) 50%, var(--canvas) 100%);
       overflow: hidden;
+      --scene-accent: #06b6d4;
     }
-    .brands__marquee {
+    .brand-rail-shell {
       position: relative;
-      margin-top: 24px;
-      --brands-mask: linear-gradient(to right, transparent 0%, #000 12%);
-      mask-image: linear-gradient(to right, transparent, #000 12%),
-                  linear-gradient(to left, transparent, #000 12%);
+      margin-top: 32px;
+    }
+    .brand-rail {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 24px clamp(16px, 5vw, 56px) 32px;
+      scroll-snap-type: x mandatory;
+      cursor: grab;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      -webkit-overflow-scrolling: touch;
+      user-select: none;
+      mask-image: linear-gradient(to right, transparent, #000 4%),
+                  linear-gradient(to left, transparent, #000 4%);
       mask-composite: intersect;
-      -webkit-mask-image: linear-gradient(to right, transparent, #000 12%),
-                          linear-gradient(to left, transparent, #000 12%);
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 4%),
+                          linear-gradient(to left, transparent, #000 4%);
       -webkit-mask-composite: source-in;
     }
-    .brands__track {
-      display: flex;
-      gap: 56px;
-      width: max-content;
-      animation: brand-scroll 60s linear infinite;
-      will-change: transform;
+    .brand-rail::-webkit-scrollbar { display: none; }
+    .brand-rail.is-grabbing { cursor: grabbing; scroll-behavior: auto; }
+
+    /* Edge hold zones — touch + hold to fast-forward 2x */
+    .brand-rail-edge {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 64px;
+      height: 64px;
+      border-radius: 999px;
+      border: 1px solid var(--hairline-2);
+      background: rgba(20, 24, 29, 0.7);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ink);
+      cursor: pointer;
+      z-index: 4;
+      transition: background-color var(--t-fast) var(--ease-cinema),
+                  transform var(--t-fast) var(--ease-cinema);
+      -webkit-tap-highlight-color: transparent;
     }
-    @keyframes brand-scroll {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
+    .brand-rail-edge:hover { background: rgba(28, 33, 40, 0.85); }
+    .brand-rail-edge:active,
+    .brand-rail-edge.is-held { background: var(--scene-accent); color: #07080a; transform: translateY(-50%) scale(1.08); }
+    .brand-rail-edge svg { width: 22px; height: 22px; }
+    .brand-rail-edge[data-dir="prev"] { left: 8px; }
+    .brand-rail-edge[data-dir="next"] { right: 8px; }
+    @media (max-width: 640px) {
+      .brand-rail-edge { width: 52px; height: 52px; }
     }
-    @media (prefers-reduced-motion: reduce) {
-      .brands__track { animation: none; transform: translateX(-8%); }
+    .brand-rail-hint {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 12px;
     }
-    .brand-tile {
-      display: inline-flex;
-      flex-direction: column;
-      gap: 6px;
-      padding: 28px 32px;
-      min-width: 240px;
+    .brand-rail-hint kbd {
+      font-family: inherit;
+      background: rgba(255,255,255,0.06);
       border: 1px solid var(--hairline);
-      border-radius: 14px;
-      background: rgba(20, 24, 29, 0.4);
-      transition: border-color var(--t-mid) var(--ease-cinema),
-                  transform var(--t-mid) var(--ease-cinema),
-                  background-color var(--t-mid) var(--ease-cinema);
-    }
-    .brand-tile:hover {
-      border-color: var(--hairline-2);
-      transform: translateY(-2px);
-      background: rgba(28, 33, 40, 0.6);
-    }
-    .brand-tile__name {
-      font-size: 30px;
-      letter-spacing: -0.025em;
-      line-height: 1;
+      border-radius: 5px;
+      padding: 2px 7px;
       color: var(--ink);
+      font-size: 10.5px;
     }
-    /* Real-logo path — SVG via /logos/<id>.svg */
-    .brand-tile__logo {
-      display: inline-flex;
-      align-items: center;
-      justify-content: flex-start;
-      height: 56px;
-      margin-bottom: 4px;
+
+    /* Big card — one specimen per brand */
+    .brand-card {
+      flex: 0 0 360px;
+      min-width: 360px;
+      height: 480px;
+      scroll-snap-align: center;
+      border-radius: 18px;
+      border: 1px solid var(--hairline);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: var(--brand-canvas, rgba(20, 24, 29, 0.6));
+      color: var(--brand-ink, var(--ink));
+      transition: transform var(--t-mid) var(--ease-cinema),
+                  box-shadow var(--t-mid) var(--ease-cinema),
+                  border-color var(--t-mid) var(--ease-cinema);
+      cursor: pointer;
     }
-    .brand-tile__logo img {
-      height: 56px;
-      width: auto;
-      max-width: 180px;
-      object-fit: contain;
-      filter: brightness(0) invert(1);
-      opacity: 0.96;
+    .brand-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--brand-accent, var(--scene-accent));
+      box-shadow: 0 24px 60px -28px rgba(0,0,0,0.55);
     }
-    /* Caption (always shown) — small white label under the logo or wordmark */
-    .brand-tile__cap {
-      font-family: var(--sans);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--ink);
-      letter-spacing: -0.005em;
-      margin-top: 6px;
+    .brand-card.is-active {
+      transform: translateY(-6px);
+      border-color: var(--brand-accent, var(--scene-accent));
+      box-shadow: 0 0 0 1px var(--brand-accent, var(--scene-accent)),
+                  0 32px 80px -28px rgba(0,0,0,0.65);
     }
-    .brand-tile__meta {
+    .brand-card__chrome {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--hairline);
       font-family: var(--mono);
       font-size: 10.5px;
-      color: var(--muted);
-      letter-spacing: 0.04em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
+      color: var(--brand-muted, var(--muted));
+    }
+    .brand-card__chrome-dots { display: flex; gap: 6px; }
+    .brand-card__chrome-dot {
+      width: 8px; height: 8px; border-radius: 999px;
+      background: var(--brand-muted, var(--muted));
+      opacity: 0.5;
+    }
+    .brand-card__chrome-dot:nth-child(1) { background: #ef4444; opacity: 0.7; }
+    .brand-card__chrome-dot:nth-child(2) { background: #f59f00; opacity: 0.7; }
+    .brand-card__chrome-dot:nth-child(3) { background: #10b981; opacity: 0.7; }
+    .brand-card__logo {
+      padding: 36px 28px 22px;
+      min-height: 90px;
+      display: flex; align-items: center;
+    }
+    .brand-card__logo img {
+      max-height: 36px;
+      max-width: 220px;
+      width: auto;
+      object-fit: contain;
+      filter: var(--brand-logo-filter, brightness(0) invert(1));
+      opacity: 0.96;
+    }
+    .brand-card__wordmark {
+      font-size: 32px;
+      letter-spacing: -0.03em;
+      color: var(--brand-ink, var(--ink));
+    }
+    .brand-card__specimen {
+      padding: 0 28px 18px;
+      flex: 1;
+    }
+    .brand-card__headline {
+      font-family: var(--brand-display, var(--display));
+      font-size: 30px;
+      line-height: 1.06;
+      letter-spacing: var(--brand-display-tracking, -0.02em);
+      font-weight: var(--brand-display-weight, 600);
+      font-style: var(--brand-display-style, normal);
+      color: var(--brand-ink, var(--ink));
+      margin-bottom: 14px;
+      max-width: 280px;
+    }
+    .brand-card__body {
+      font-family: var(--brand-body, var(--sans));
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--brand-body-color, var(--body));
+      max-width: 280px;
+    }
+    .brand-card__palette {
+      display: flex;
+      height: 36px;
+    }
+    .brand-card__palette span {
+      flex: 1; height: 100%;
+      transition: flex var(--t-mid) var(--ease-cinema);
+    }
+    .brand-card:hover .brand-card__palette span:nth-child(1) { flex: 2; }
+    .brand-card__foot {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 22px;
+      border-top: 1px solid var(--hairline);
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--brand-muted, var(--muted));
+    }
+    .brand-card__foot-name {
+      font-family: var(--sans);
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: -0.005em;
+      text-transform: none;
+      color: var(--brand-ink, var(--ink));
+    }
+    .brand-card__foot-cat {
+      font-size: 9.5px;
+    }
+    .brand-card__try {
+      position: absolute;
+      bottom: 64px; right: 22px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: var(--brand-accent, var(--scene-accent));
+      color: var(--brand-canvas, #07080a);
+      font-family: var(--sans);
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: -0.005em;
+      border: 0;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity var(--t-fast) var(--ease-cinema), transform var(--t-fast) var(--ease-cinema);
+      box-shadow: 0 8px 22px -10px rgba(0,0,0,0.5);
+    }
+    .brand-card:hover .brand-card__try,
+    .brand-card:focus-within .brand-card__try {
+      opacity: 1; transform: translateY(0);
+    }
+
+    /* Page reskin state — when "Apply this brand" is pressed, the homepage's
+       :root variables get swapped to the brand for 6 seconds. Everything fades. */
+    body.is-reskinned * {
+      transition: background-color 320ms var(--ease-cinema),
+                  color 320ms var(--ease-cinema),
+                  border-color 320ms var(--ease-cinema) !important;
+    }
+    .brand-reskin-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translateX(-50%);
+      background: var(--brand-accent, var(--scene-accent));
+      color: #07080a;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      z-index: 100;
+      opacity: 0;
+      transform: translateX(-50%) translateY(20px);
+      transition: opacity 220ms var(--ease-cinema), transform 220ms var(--ease-cinema);
+      pointer-events: none;
+      box-shadow: 0 12px 32px -10px rgba(0,0,0,0.5);
+    }
+    .brand-reskin-toast.is-on {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .brand-card__try:focus-visible {
+      outline: 2px solid var(--brand-accent, var(--scene-accent));
+      outline-offset: 3px;
+    }
+    @media (max-width: 640px) {
+      .brand-card {
+        flex: 0 0 80vw;
+        min-width: 280px;
+        height: 440px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .brand-card, .brand-card__try, .brand-reskin-toast { transition: none; }
     }
     .brand-tile[data-id="linear"]    .brand-tile__name { font-family: 'Inter Tight', sans-serif; font-weight: 700; letter-spacing: -0.04em; }
     .brand-tile[data-id="vercel"]    .brand-tile__name { font-family: 'Geist', sans-serif; font-weight: 600; letter-spacing: -0.03em; }
@@ -1754,29 +1940,38 @@
     </div>
   </section>
 
-  <!-- ============ 2. BRAND GALLERY ============ -->
-  <section class="brands" data-scene="brands" aria-label="Brand specs in their own typefaces">
+  <!-- ============ 2. BRAND INSPECTOR — draggable specimens ============ -->
+  <section class="brands" data-scene="brands" aria-label="Brand specs — drag, hold to fast-forward, click to apply">
     <div class="container">
       <div class="section-head">
-        <span class="eyebrow">02 — Brand specs</span>
-        <h2 class="section-head__title">110 design languages.<br>Each in its own voice.</h2>
+        <span class="eyebrow">02 — Brand specs · 110 catalogue</span>
+        <h2 class="section-head__title">Each card is a real specimen.<br>Click any to <em class="accent-italic">reskin this page</em>.</h2>
         <p class="section-head__lead">
-          Every brand DESIGN.md ships with its typography, palette, and trademark signals. Below: a fraction of the catalogue, rendered in the typeface mapped to each brand. Hover to pause.
+          Drag to scroll. Hold either edge button to fast-forward at 2x. Tap a card to apply its tokens to the whole page for six seconds — the engine swaps display, body, mono, canvas, ink, and accent live so you can read this section in any of the 110 brand voices.
         </p>
       </div>
     </div>
 
-    <div class="brands__marquee" id="brands-marquee">
-      <div class="brands__track" id="brands-track">
-        <!-- Track populated twice by JS so the scroll loop is seamless -->
+    <div class="brand-rail-shell">
+      <button class="brand-rail-edge" data-dir="prev" aria-label="Previous · hold to fast-rewind" type="button">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="brand-rail" id="brand-rail" tabindex="0" aria-roledescription="carousel" aria-label="Brand specimens — 14 of 110">
+        <!-- Cards populated by JS — see BRAND_SPECIMENS below -->
       </div>
+      <button class="brand-rail-edge" data-dir="next" aria-label="Next · hold to fast-forward" type="button">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
     </div>
 
     <div class="container">
-      <p class="brands__caption">
-        <span class="brands__caption-line">From <em class="brands__caption-em-serif">a quiet Apple</em> to <em class="brands__caption-em-shout">a loud BMW M</em> — the engine knows what to ask of itself for each.</span>
+      <p class="brand-rail-hint">
+        drag · swipe · arrow keys · or hold <kbd>◀</kbd> <kbd>▶</kbd> to fast-forward 2x
       </p>
     </div>
+
+    <!-- Reskin toast — appears bottom-center when a brand is applied -->
+    <div class="brand-reskin-toast" id="brand-reskin-toast" role="status" aria-live="polite"></div>
   </section>
 
   <!-- ============ 3. REASONING ENGINE ============ -->
@@ -2456,73 +2651,329 @@
   /* =========================================================================
      BRANDS — populate track twice for seamless loop, pause on hover
      ========================================================================= */
-  // Each entry has `logo` if a real SVG logo lives at /logos/<file>.svg
-  // (downloaded from simpleicons.org CC0 collection — see scripts/fetch-logos.sh).
-  // If `logo` is null, the brand renders as a styled-typeface wordmark instead.
-  const brandList = [
-    { id: 'apple',    name: 'Apple',     logo: 'apple.svg',     meta: 'SF Pro · 1d1d1f' },
-    { id: 'linear',   name: 'Linear',    logo: 'linear.svg',    meta: 'Inter Tight · 5e6ad2' },
-    { id: 'vercel',   name: 'Vercel',    logo: 'vercel.svg',    meta: 'Geist · 171717' },
-    { id: 'stripe',   name: 'Stripe',    logo: 'stripe.svg',    meta: 'Switzer · 635bff' },
-    { id: 'figma',    name: 'Figma',     logo: 'figma.svg',     meta: 'General Sans · a259ff' },
-    { id: 'framer',   name: 'Framer',    logo: 'framer.svg',    meta: 'Outfit · 0099ff' },
-    { id: 'notion',   name: 'Notion',    logo: 'notion.svg',    meta: 'Bricolage · 191919' },
-    { id: 'supabase', name: 'Supabase',  logo: 'supabase.svg',  meta: 'Manrope · 3ecf8e' },
-    { id: 'posthog',  name: 'PostHog',   logo: 'posthog.svg',   meta: 'IBM Plex · 23251d' },
-    { id: 'resend',   name: 'Resend',    logo: 'resend.svg',    meta: 'Instrument · 000' },
-    { id: 'raycast',  name: 'Raycast',   logo: 'raycast.svg',   meta: 'Inter · 07080a' },
-    { id: 'warp',     name: 'Warp',      logo: 'warp.svg',      meta: 'DM Mono · 2b2622' },
-    { id: 'clay',     name: 'Clay',      logo: null,            meta: 'Bricolage cond' },
-    { id: 'spotify',  name: 'Spotify',   logo: 'spotify.svg',   meta: 'Onest · 1ed760' },
-    { id: 'cursor',   name: 'Cursor',    logo: null,            meta: 'Space Grotesk' },
-    { id: 'claude',   name: 'Claude',    logo: 'anthropic.svg', meta: 'Instrument Serif' },
-    { id: 'ferrari',  name: 'Ferrari',   logo: 'ferrari.svg',   meta: 'Inter Tight up · ff2800' },
-    { id: 'bmw-m',    name: 'BMW M',     logo: 'bmw.svg',       meta: 'BMW Next · 000' }
+  /* =========================================================================
+     BRAND INSPECTOR — draggable specimens with hold-to-fastforward + reskin
+     ========================================================================= */
+  // 14 specimens out of 110 — picked to span the design-language range
+  // (quiet Apple, loud Ferrari, editorial Resend, retro Warp, etc).
+  // Each carries the full info needed to render its specimen card AND to
+  // reskin the homepage when clicked.
+  const BRAND_SPECIMENS = [
+    { id: 'apple',    name: 'Apple',     category: 'Consumer / Lifestyle',
+      logo: 'apple.svg',
+      display: "'SF Pro Display','Inter Tight',sans-serif", weight: 600, tracking: '-0.04em',
+      body: "'SF Pro Text','Inter',sans-serif",
+      headline: 'The most personal device we make.',
+      bodyCopy: 'Type that does not announce itself. Color that disappears so the product can speak.',
+      palette: ['#1d1d1f', '#f5f5f7', '#ffffff', '#a1a1a6', '#0071e3'],
+      canvas: '#0d0d0e', ink: '#f5f5f7', muted: '#a1a1a6', accent: '#0071e3', bodyColor: '#d6d6d8' },
+    { id: 'linear',   name: 'Linear',    category: 'SaaS / Developer Tools',
+      logo: 'linear.svg',
+      display: "'Inter Tight',sans-serif", weight: 700, tracking: '-0.04em',
+      body: "'Inter',sans-serif",
+      headline: 'A new standard for modern software development.',
+      bodyCopy: 'Geometric sans, indigo, precise typography. The interface stays out of the way.',
+      palette: ['#080a13', '#1c1f2e', '#5e6ad2', '#8b94e0', '#f4f4f5'],
+      canvas: '#08090d', ink: '#f4f4f5', muted: '#8a8d9c', accent: '#5e6ad2', bodyColor: '#c8cad6' },
+    { id: 'vercel',   name: 'Vercel',    category: 'SaaS / Developer Tools',
+      logo: 'vercel.svg',
+      display: "'Geist','Inter Tight',sans-serif", weight: 600, tracking: '-0.03em',
+      body: "'Geist','Inter',sans-serif",
+      headline: 'Develop. Preview. Ship.',
+      bodyCopy: 'Pure monochrome. Triangle mark. The platform vanishes into a deploy button.',
+      palette: ['#000000', '#0a0a0a', '#171717', '#737373', '#fafafa'],
+      canvas: '#000000', ink: '#fafafa', muted: '#a3a3a3', accent: '#fafafa', bodyColor: '#d4d4d4' },
+    { id: 'stripe',   name: 'Stripe',    category: 'Fintech / Payments',
+      logo: 'stripe.svg',
+      display: "'Switzer','Inter Tight',sans-serif", weight: 500, tracking: '-0.02em',
+      body: "'Sohne','Inter',sans-serif",
+      headline: 'Financial infrastructure for the internet.',
+      bodyCopy: 'Iris purple, generous whitespace, illustrations precise as machine drawings.',
+      palette: ['#0a2540', '#635bff', '#7a73ff', '#adabff', '#f6f9fc'],
+      canvas: '#0a1a2f', ink: '#f6f9fc', muted: '#a3a8b8', accent: '#635bff', bodyColor: '#d8dde8' },
+    { id: 'figma',    name: 'Figma',     category: 'Design Tools',
+      logo: 'figma.svg',
+      display: "'General Sans','Inter Tight',sans-serif", weight: 700, tracking: '-0.025em',
+      body: "'Inter',sans-serif",
+      headline: 'Where teams design together.',
+      bodyCopy: 'Four-color mark, geometric sans, design-tool chrome. Tools are the brand.',
+      palette: ['#0a0a0c', '#a259ff', '#f24e1e', '#1abcfe', '#0acf83'],
+      canvas: '#0a0a0c', ink: '#fafafa', muted: '#9099a8', accent: '#a259ff', bodyColor: '#cfd2db' },
+    { id: 'notion',   name: 'Notion',    category: 'SaaS / Productivity',
+      logo: 'notion.svg',
+      display: "'Bricolage Grotesque','Inter Tight',sans-serif", weight: 700, tracking: '-0.02em',
+      body: "'Inter',sans-serif",
+      headline: 'One workspace. Every team.',
+      bodyCopy: 'Mono cover, editorial type, generous block padding. The page is the product.',
+      palette: ['#191919', '#2a2a2a', '#a8a29e', '#e8e6e0', '#ffffff'],
+      canvas: '#161616', ink: '#fafaf8', muted: '#a8a29e', accent: '#ffffff', bodyColor: '#d4d2cc' },
+    { id: 'spotify',  name: 'Spotify',   category: 'Consumer / Media',
+      logo: 'spotify.svg',
+      display: "'Onest','Inter Tight',sans-serif", weight: 700, tracking: '-0.03em',
+      body: "'Inter',sans-serif",
+      headline: 'Music for every moment.',
+      bodyCopy: 'Spotify green on jet black. Album art is the page. Type stays out of the way.',
+      palette: ['#040404', '#181818', '#1ed760', '#1aa34a', '#ffffff'],
+      canvas: '#040404', ink: '#ffffff', muted: '#a7a7a7', accent: '#1ed760', bodyColor: '#d4d4d4' },
+    { id: 'supabase', name: 'Supabase',  category: 'SaaS / Developer Tools',
+      logo: 'supabase.svg',
+      display: "'Manrope','Inter Tight',sans-serif", weight: 700, tracking: '-0.045em',
+      body: "'Inter',sans-serif",
+      headline: 'Build in a weekend. Scale to millions.',
+      bodyCopy: 'Emerald on near-black. Lots of code samples. The dashboard is the marketing.',
+      palette: ['#050d08', '#0d1f12', '#3ecf8e', '#71e0a8', '#f8fafc'],
+      canvas: '#050d08', ink: '#f8fafc', muted: '#94a99c', accent: '#3ecf8e', bodyColor: '#d0d6d2' },
+    { id: 'resend',   name: 'Resend',    category: 'SaaS / Developer Tools',
+      logo: 'resend.svg',
+      display: "'Instrument Serif',Georgia,serif", weight: 400, tracking: '-0.005em', italic: 'italic',
+      body: "'Inter',sans-serif",
+      headline: 'Email for developers.',
+      bodyCopy: 'A literary serif on a dev-tool. Soft cream paper. Generous line-height. Quiet.',
+      palette: ['#070707', '#1a1a1a', '#737373', '#e8e6e0', '#ffffff'],
+      canvas: '#070707', ink: '#ffffff', muted: '#a8a29e', accent: '#ffffff', bodyColor: '#d4d2cc' },
+    { id: 'anthropic', name: 'Anthropic', category: 'AI / ML',
+      logo: 'anthropic.svg',
+      display: "'Tiempos','Instrument Serif',Georgia,serif", weight: 400, tracking: '-0.01em',
+      body: "'Inter',sans-serif",
+      headline: 'Safe and beneficial AI.',
+      bodyCopy: 'Terracotta accent on warm sepia. Generous editorial type. The voice is the brand.',
+      palette: ['#1a0e08', '#2d1810', '#cc785c', '#e8b894', '#faf7f2'],
+      canvas: '#1a0e08', ink: '#faf7f2', muted: '#9a8a7a', accent: '#cc785c', bodyColor: '#d8cdc1' },
+    { id: 'openai',   name: 'OpenAI',    category: 'AI / ML',
+      logo: 'openai.svg',
+      display: "'Sohne','Inter Tight',sans-serif", weight: 500, tracking: '-0.025em',
+      body: "'Inter',sans-serif",
+      headline: 'Creating safe AGI that benefits all of humanity.',
+      bodyCopy: 'Black canvas, Söhne everywhere, the hex-petal mark. Sharp grid. No decoration.',
+      palette: ['#000000', '#0a0a0a', '#10a37f', '#9b9b9b', '#ffffff'],
+      canvas: '#000000', ink: '#ffffff', muted: '#9b9b9b', accent: '#10a37f', bodyColor: '#cfcfcf' },
+    { id: 'ferrari',  name: 'Ferrari',   category: 'Automotive / Performance',
+      logo: 'ferrari.svg',
+      display: "'Inter Tight',sans-serif", weight: 700, tracking: '0.04em',
+      body: "'Inter',sans-serif",
+      headline: 'PASSION HAS A COLOR.',
+      bodyCopy: 'Rosso Corsa on bone. Caps. Tight tracking. Numbers and torque curves do the talking.',
+      palette: ['#0f0000', '#180303', '#ff2800', '#ffe14a', '#fdf6e3'],
+      canvas: '#0f0000', ink: '#fdf6e3', muted: '#a89a8a', accent: '#ff2800', bodyColor: '#e0d4c0' },
+    { id: 'pitchfork',name: 'Pitchfork', category: 'Media / Editorial',
+      logo: null,
+      display: "'Inter Tight',sans-serif", weight: 800, tracking: '-0.04em',
+      body: "'Inter',sans-serif",
+      headline: '8.7 — Best New Music.',
+      bodyCopy: 'Industrial sans masthead, scores 0.0—10.0 at 160px, single signal red. Zine energy.',
+      palette: ['#0a0a0a', '#171717', '#ff3a3a', '#ffffff', '#e6e6e6'],
+      canvas: '#0a0a0a', ink: '#ffffff', muted: '#9a9a9a', accent: '#ff3a3a', bodyColor: '#d0d0d0' },
+    { id: 'tiktok',   name: 'TikTok',    category: 'Consumer / Media',
+      logo: 'tiktok.svg',
+      display: "'Inter Tight',sans-serif", weight: 700, tracking: '-0.025em',
+      body: "'Inter',sans-serif",
+      headline: 'Make Your Day.',
+      bodyCopy: 'Black canvas, cyan and magenta chromatic aberration. Vertical video is the page.',
+      palette: ['#000000', '#0a0a0a', '#25f4ee', '#fe2c55', '#ffffff'],
+      canvas: '#000000', ink: '#ffffff', muted: '#a7a7a7', accent: '#fe2c55', bodyColor: '#d4d4d4' },
   ];
-  const track = document.getElementById('brands-track');
-  if (track) {
-    const buildTile = (b) => {
-      const tile = document.createElement('a');
-      tile.className = 'brand-tile';
-      tile.dataset.id = b.id;
-      tile.href = 'https://github.com/Laith0003/ux-skill/blob/main/data/brands/' + b.id + '.json';
-      tile.target = '_blank'; tile.rel = 'noopener';
-      tile.setAttribute('aria-label', b.name + ' DESIGN.md');
-      // Logo block — real SVG if available, styled typeface wordmark otherwise.
-      if (b.logo) {
-        const logoWrap = document.createElement('span');
-        logoWrap.className = 'brand-tile__logo';
-        const img = document.createElement('img');
-        img.src = '/logos/' + b.logo;
-        img.alt = b.name + ' logo';
-        img.loading = 'lazy';
-        img.decoding = 'async';
-        img.width = 56; img.height = 56;
-        logoWrap.appendChild(img);
-        tile.appendChild(logoWrap);
-      } else {
-        const name = document.createElement('span');
-        name.className = 'brand-tile__name';
-        name.textContent = b.name;
-        tile.appendChild(name);
-      }
-      // Brand caption (always shown — name + typography meta).
-      const cap = document.createElement('span');
-      cap.className = 'brand-tile__cap';
-      cap.textContent = b.name;
-      const meta = document.createElement('span');
-      meta.className = 'brand-tile__meta';
-      meta.textContent = b.meta;
-      tile.appendChild(cap); tile.appendChild(meta);
-      return tile;
-    };
-    // append the list twice for seamless loop
-    [brandList, brandList].forEach((arr) => {
-      arr.forEach((b) => track.appendChild(buildTile(b)));
+
+  const rail = document.getElementById('brand-rail');
+  const reskinToast = document.getElementById('brand-reskin-toast');
+  let reskinTimer = null;
+
+  if (rail) {
+    // ----- Build cards -----
+    BRAND_SPECIMENS.forEach((b, idx) => {
+      const card = document.createElement('article');
+      card.className = 'brand-card';
+      card.dataset.id = b.id;
+      card.tabIndex = 0;
+      card.setAttribute('role', 'group');
+      card.setAttribute('aria-label', b.name + ' — ' + b.category);
+
+      // Per-card CSS variables so the card looks AS the brand looks.
+      card.style.setProperty('--brand-canvas', b.canvas);
+      card.style.setProperty('--brand-ink', b.ink);
+      card.style.setProperty('--brand-muted', b.muted);
+      card.style.setProperty('--brand-accent', b.accent);
+      card.style.setProperty('--brand-display', b.display);
+      card.style.setProperty('--brand-body', b.body);
+      card.style.setProperty('--brand-display-weight', b.weight);
+      card.style.setProperty('--brand-display-tracking', b.tracking);
+      card.style.setProperty('--brand-display-style', b.italic || 'normal');
+      card.style.setProperty('--brand-body-color', b.bodyColor || b.ink);
+      // If the brand canvas is light, invert logo back to dark
+      const canvasL = (() => {
+        const m = (b.canvas || '#000000').match(/\\#?([0-9a-fA-F]{6})/);
+        if (!m) return 0;
+        const r = parseInt(m[1].slice(0,2),16), g = parseInt(m[1].slice(2,4),16), bl = parseInt(m[1].slice(4,6),16);
+        return (r*299 + g*587 + bl*114) / 1000;
+      })();
+      if (canvasL > 160) card.style.setProperty('--brand-logo-filter', 'brightness(0)');
+
+      card.innerHTML =
+        '<header class="brand-card__chrome">' +
+          '<span class="brand-card__chrome-dots">' +
+            '<span class="brand-card__chrome-dot"></span>' +
+            '<span class="brand-card__chrome-dot"></span>' +
+            '<span class="brand-card__chrome-dot"></span>' +
+          '</span>' +
+          '<span>spec.' + b.id + '</span>' +
+        '</header>' +
+        '<div class="brand-card__logo">' +
+          (b.logo
+            ? '<img src="/logos/' + b.logo + '" alt="' + b.name + ' logo" width="220" height="36" loading="lazy" decoding="async">'
+            : '<span class="brand-card__wordmark" style="font-family:' + b.display + ';font-weight:' + b.weight + ';letter-spacing:' + b.tracking + ';">' + b.name + '</span>'
+          ) +
+        '</div>' +
+        '<div class="brand-card__specimen">' +
+          '<p class="brand-card__headline">' + b.headline + '</p>' +
+          '<p class="brand-card__body">' + b.bodyCopy + '</p>' +
+        '</div>' +
+        '<div class="brand-card__palette" aria-hidden="true">' +
+          b.palette.map(c => '<span style="background:' + c + '"></span>').join('') +
+        '</div>' +
+        '<footer class="brand-card__foot">' +
+          '<span class="brand-card__foot-name">' + b.name + '</span>' +
+          '<span class="brand-card__foot-cat">' + b.category + '</span>' +
+        '</footer>' +
+        '<button class="brand-card__try" type="button" aria-label="Apply ' + b.name + ' to the page for 6 seconds">Try on page →</button>';
+
+      // Click handler — "Apply this brand" button
+      card.querySelector('.brand-card__try').addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        applyBrand(b);
+      });
+      // Whole card clickable too (just adds is-active state)
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.brand-card.is-active').forEach(c => c.classList.remove('is-active'));
+        card.classList.add('is-active');
+      });
+
+      rail.appendChild(card);
     });
-    // hover pause
-    track.addEventListener('mouseenter', () => { track.style.animationPlayState = 'paused'; });
-    track.addEventListener('mouseleave', () => { track.style.animationPlayState = 'running'; });
+
+    // ----- Drag-to-scroll (pointer events for mouse + touch + pen) -----
+    let isDown = false;
+    let startX = 0;
+    let scrollX = 0;
+    let pointerId = null;
+
+    rail.addEventListener('pointerdown', (e) => {
+      // ignore drags that start on the Try button
+      if (e.target.closest('.brand-card__try')) return;
+      isDown = true;
+      pointerId = e.pointerId;
+      rail.classList.add('is-grabbing');
+      startX = e.clientX;
+      scrollX = rail.scrollLeft;
+      try { rail.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+    const endDrag = () => {
+      isDown = false;
+      rail.classList.remove('is-grabbing');
+    };
+    rail.addEventListener('pointermove', (e) => {
+      if (!isDown) return;
+      const dx = e.clientX - startX;
+      rail.scrollLeft = scrollX - dx;
+    });
+    rail.addEventListener('pointerup', endDrag);
+    rail.addEventListener('pointercancel', endDrag);
+    rail.addEventListener('pointerleave', endDrag);
+
+    // ----- Keyboard arrow keys -----
+    rail.addEventListener('keydown', (e) => {
+      const step = 380;
+      if (e.key === 'ArrowRight') { rail.scrollBy({ left: step, behavior: 'smooth' }); e.preventDefault(); }
+      if (e.key === 'ArrowLeft')  { rail.scrollBy({ left: -step, behavior: 'smooth' }); e.preventDefault(); }
+    });
+
+    // ----- Edge buttons: click = jump · press-and-hold = fast-forward 2x -----
+    const edges = document.querySelectorAll('.brand-rail-edge');
+    edges.forEach((edge) => {
+      const dir = edge.dataset.dir === 'next' ? 1 : -1;
+      let holdTimer = null;
+      let rafId = null;
+      let speed = 0;
+
+      const tick = () => {
+        rail.scrollLeft += dir * speed;
+        rafId = requestAnimationFrame(tick);
+      };
+
+      const startHold = (e) => {
+        // single click = jump one card
+        rail.scrollBy({ left: dir * 380, behavior: 'smooth' });
+        // long-press = start scrolling at 6 px/frame; ramps to 12 px/frame (2x) after 700ms
+        speed = 6;
+        edge.classList.add('is-held');
+        clearTimeout(holdTimer);
+        holdTimer = setTimeout(() => {
+          rafId = requestAnimationFrame(tick);
+          // ramp to 2x after another 700ms
+          setTimeout(() => { if (rafId) speed = 12; }, 700);
+        }, 280);
+      };
+      const stopHold = () => {
+        clearTimeout(holdTimer);
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+        speed = 0;
+        edge.classList.remove('is-held');
+      };
+
+      edge.addEventListener('pointerdown', startHold);
+      edge.addEventListener('pointerup', stopHold);
+      edge.addEventListener('pointerleave', stopHold);
+      edge.addEventListener('pointercancel', stopHold);
+      // keyboard
+      edge.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          rail.scrollBy({ left: dir * 380, behavior: 'smooth' });
+        }
+      });
+    });
+  }
+
+  /* =========================================================================
+     APPLY-BRAND — swap CSS variables on :root for 6 seconds so the whole
+     page momentarily reads in that brand's typeface + palette.
+     ========================================================================= */
+  function applyBrand(b) {
+    const root = document.documentElement;
+    const body = document.body;
+    const original = {
+      canvas: root.style.getPropertyValue('--canvas'),
+      surface1: root.style.getPropertyValue('--surface-1'),
+      ink: root.style.getPropertyValue('--ink'),
+      body: root.style.getPropertyValue('--body'),
+      muted: root.style.getPropertyValue('--muted'),
+      display: root.style.getPropertyValue('--display'),
+      sans: root.style.getPropertyValue('--sans'),
+    };
+    root.style.setProperty('--canvas', b.canvas);
+    root.style.setProperty('--surface-1', b.canvas);
+    root.style.setProperty('--ink', b.ink);
+    root.style.setProperty('--body', b.bodyColor || b.ink);
+    root.style.setProperty('--muted', b.muted);
+    root.style.setProperty('--display', b.display);
+    root.style.setProperty('--sans', b.body);
+    body.classList.add('is-reskinned');
+
+    reskinToast.style.setProperty('--brand-accent', b.accent);
+    reskinToast.textContent = 'reskinned · ' + b.name + ' · 6s';
+    reskinToast.classList.add('is-on');
+
+    if (reskinTimer) clearTimeout(reskinTimer);
+    reskinTimer = setTimeout(() => {
+      // Reset to defaults — clear inline overrides so the stylesheet defaults win
+      root.style.removeProperty('--canvas');
+      root.style.removeProperty('--surface-1');
+      root.style.removeProperty('--ink');
+      root.style.removeProperty('--body');
+      root.style.removeProperty('--muted');
+      root.style.removeProperty('--display');
+      root.style.removeProperty('--sans');
+      body.classList.remove('is-reskinned');
+      reskinToast.classList.remove('is-on');
+    }, 6000);
   }
 
   /* =========================================================================
