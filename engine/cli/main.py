@@ -159,6 +159,21 @@ else:
         """Run the 5-parallel-search recommender."""
         if brief_file:
             payload = json.loads(Path(brief_file).read_text(encoding="utf-8"))
+            # Discovery files store answers nested under "answers"; flatten
+            if "answers" in payload and isinstance(payload["answers"], dict):
+                payload = payload["answers"]
+            # Filter to fields Brief actually accepts (Discovery has more)
+            from dataclasses import fields as _dc_fields
+            allowed = {f.name for f in _dc_fields(Brief)}
+            payload = {k: v for k, v in payload.items() if k in allowed}
+            # Coerce string fields that may have come in as lists
+            for k in ("project_type", "industry", "stack", "region"):
+                if isinstance(payload.get(k), list):
+                    payload[k] = ", ".join(payload[k])
+            # Coerce list fields that may have come in as strings (from discovery)
+            for k in ("audience", "tone", "must_have", "forbidden"):
+                if isinstance(payload.get(k), str):
+                    payload[k] = [s.strip() for s in payload[k].split(",") if s.strip()]
             brief = Brief(**payload)
         else:
             brief = Brief(

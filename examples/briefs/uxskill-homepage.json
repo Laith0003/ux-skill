@@ -1,0 +1,12 @@
+{
+  "project_type": "marketing-site",
+  "industry": "dev-tools",
+  "audience": ["frontend engineers", "design-engineers", "AI coding tool users (Cursor, Claude Code, Windsurf)"],
+  "tone": ["editorial", "cinematic", "confident", "precise", "dark"],
+  "must_have": ["dark-mode", "mobile-first-responsive", "a11y-AA", "no-cormorant-no-coral-no-cream", "fraunces-variable-display", "inter-tight-body", "scroll-pinned-scenes", "single-amber-accent"],
+  "forbidden": ["claude-com-clone", "cream-canvas", "coral-primary", "cormorant-garamond", "three-equal-cards", "inter-as-display", "purple-to-blue-gradient", "john-doe", "lorem-ipsum", "emoji-in-ui", "marketing-verbs"],
+  "reference_brands": ["linear", "vercel", "stripe-docs", "the-browser-company"],
+  "stack": "vanilla-html-css-js",
+  "region": "global",
+  "success_metric": "0 high-severity ux-lint findings on the generated HTML + reads as distinctly NOT Claude-derived to a critical viewer"
+}
