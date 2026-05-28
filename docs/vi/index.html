@@ -1624,6 +1624,23 @@
       font-variation-settings: 'wdth' 90, 'opsz' 96, 'wght' 520;
     }
 
+    /* Arabic sizing — Plex Sans Arabic runs larger per glyph and the
+       translations are longer than the English source, so the English headline
+       clamps overflow their columns (the problem-section h2 rendered at 70px →
+       11 lines in a 376px column). Family + axis settings are set in the
+       html[lang="ar"] block above; this rule is SIZE ONLY. */
+    html[lang="ar"] .hero__h1 {
+      font-size: clamp(32px, 5vw, 72px);
+      line-height: 1.14;
+    }
+    html[lang="ar"] .section__title {
+      font-size: clamp(23px, 3vw, 42px);
+      line-height: 1.2;
+    }
+    html[lang="ar"] section[data-weight="beat"] .section__title {
+      font-size: clamp(21px, 2.6vw, 34px);
+    }
+
     /* =========================================================================
        ACT DIVIDERS — language-neutral ghost roman numerals that read as
        chapter breaks between the three movements. Numeral-only (no translatable
@@ -1737,6 +1754,31 @@
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
       <span>Star trên GitHub</span>
     </a>
+    <div class="lang-picker">
+      <button class="lang-picker__btn" aria-haspopup="true" aria-expanded="false" type="button" id="lang-picker-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span>Tiếng Việt</span>
+      </button>
+      <div class="lang-picker__menu" role="menu" aria-label="Ngôn ngữ">
+      <a href="/" lang="en" class="lang-picker__item">English</a>
+      <a href="/zh-CN/" lang="zh-CN" class="lang-picker__item">简体中文</a>
+      <a href="/zh-TW/" lang="zh-TW" class="lang-picker__item">繁體中文</a>
+      <a href="/ja/" lang="ja" class="lang-picker__item">日本語</a>
+      <a href="/ko/" lang="ko" class="lang-picker__item">한국어</a>
+      <a href="/hi/" lang="hi" class="lang-picker__item">हिन्दी</a>
+      <a href="/id/" lang="id" class="lang-picker__item">Bahasa Indonesia</a>
+      <a href="/vi/" lang="vi" class="lang-picker__item is-current">Tiếng Việt</a>
+      <a href="/th/" lang="th" class="lang-picker__item">ไทย</a>
+      <a href="/ar/" lang="ar" class="lang-picker__item">العربية</a>
+      <a href="/es/" lang="es" class="lang-picker__item">Español</a>
+      <a href="/fr/" lang="fr" class="lang-picker__item">Français</a>
+      <a href="/de/" lang="de" class="lang-picker__item">Deutsch</a>
+      <a href="/pt-BR/" lang="pt-BR" class="lang-picker__item">Português</a>
+      <a href="/ru/" lang="ru" class="lang-picker__item">Русский</a>
+      <a href="/tr/" lang="tr" class="lang-picker__item">Türkçe</a>
+      <a href="/it/" lang="it" class="lang-picker__item">Italiano</a>
+      </div>
+    </div>
     <button type="button" class="nav__menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer" id="nav-menu-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>

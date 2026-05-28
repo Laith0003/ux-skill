@@ -147,7 +147,7 @@ PICKER_JS = """
 # Where to inject things in the base template.
 HEAD_INSERTION_MARKER = '  <link rel="canonical"'
 NAV_INSERTION_MARKER = '<header class="nav" id="nav">'
-NAV_BTN_MARKER = '<button class="nav__menu-btn"'  # we'll insert the picker BEFORE the hamburger button
+NAV_BTN_MARKER = '<button type="button" class="nav__menu-btn"'  # we'll insert the picker BEFORE the hamburger button (markup carries type="button")
 
 
 def build_lang(data: dict, lang: str) -> str:
@@ -245,8 +245,16 @@ def build_lang(data: dict, lang: str) -> str:
         html = html.replace('</head>', f'<style>{PICKER_CSS}</style>\n</head>', 1)
 
     # Picker in the nav — insert before the hamburger button.
-    if 'class="lang-picker"' not in html:
-        html = html.replace(NAV_BTN_MARKER, picker_html + "\n    " + NAV_BTN_MARKER, 1)
+    # docs/index.html doubles as BOTH the source template and the en output, and
+    # base_html() re-reads it each iteration — so the en pass (first in the dict)
+    # bakes its own picker into the base, and every later locale would inherit
+    # en's picker via a naive "if not present" guard. Strip any existing picker
+    # first, then inject the locale-correct one. Idempotent across run count and
+    # language order.
+    html = re.sub(
+        r'\s*<div class="lang-picker">.*?(?=' + re.escape(NAV_BTN_MARKER) + ')',
+        '', html, count=1, flags=re.DOTALL)
+    html = html.replace(NAV_BTN_MARKER, picker_html + "\n    " + NAV_BTN_MARKER, 1)
 
     # Picker JS — append before the closing </script> of the homepage's main script.
     # Find the last </script> and inject right before.
