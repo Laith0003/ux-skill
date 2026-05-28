@@ -177,38 +177,56 @@ def _lane_palette(brief: Brief, style: Dict[str, Any]) -> Dict[str, Any]:
     data = load("palettes")
     entries = data.get("entries", [])
     compatible = set(style.get("compatible_palettes", []))
+    # v2.2 fix (task #57): pre-compute scores so we can DROP forbidden entries
+    # before applying the compatibility-first sort. Without this, the tuple
+    # sort puts a compatible-but-forbidden palette ahead of a non-compatible
+    # but acceptable palette, because True > False outranks the -100 penalty.
+    scored = [(e, _score(e, brief)) for e in entries]
+    valid = [(e, s) for (e, s) in scored if s > -50]
     ranked = sorted(
-        entries,
-        key=lambda e: (e.get("id") in compatible, _score(e, brief)),
+        valid,
+        key=lambda es: (es[0].get("id") in compatible, es[1]),
         reverse=True,
     )
-    return ranked[0] if ranked else {}
+    return ranked[0][0] if ranked else {}
 
 
 def _lane_type(brief: Brief, style: Dict[str, Any]) -> Dict[str, Any]:
     data = load("type-pairs")
     entries = data.get("entries", [])
     compatible = set(style.get("compatible_type_pairs", []))
+    # v2.2 fix (task #57): same shape as _lane_palette — drop forbidden
+    # type pairs (Cormorant in display, Inter as display, anything in
+    # brief.forbidden) before the compatibility-first sort.
+    scored = [(e, _score(e, brief)) for e in entries]
+    valid = [(e, s) for (e, s) in scored if s > -50]
     ranked = sorted(
-        entries,
-        key=lambda e: (e.get("id") in compatible, _score(e, brief)),
+        valid,
+        key=lambda es: (es[0].get("id") in compatible, es[1]),
         reverse=True,
     )
-    return ranked[0] if ranked else {}
+    return ranked[0][0] if ranked else {}
 
 
 def _lane_motion(brief: Brief, style: Dict[str, Any]) -> List[Dict[str, Any]]:
     data = load("motion-presets")
     entries = data.get("entries", [])
-    ranked = sorted(entries, key=lambda e: _score(e, brief), reverse=True)
+    # v2.2 fix (task #57): filter forbidden before slicing top-5.
+    scored = [(e, _score(e, brief)) for e in entries]
+    valid = [e for (e, s) in scored if s > -50]
+    ranked = sorted(valid, key=lambda e: _score(e, brief), reverse=True)
     return ranked[:5]
 
 
-def _lane_components(style: Dict[str, Any]) -> List[Dict[str, Any]]:
+def _lane_components(style: Dict[str, Any], brief: Brief = None) -> List[Dict[str, Any]]:
     data = load("components")
     entries = data.get("entries", [])
     sid = style.get("id")
-    return [c for c in entries if sid in c.get("compatible_styles", [])][:12]
+    compat = [c for c in entries if sid in c.get("compatible_styles", [])]
+    # v2.2 fix (task #57): when called with a brief, drop forbidden components.
+    if brief is not None:
+        compat = [c for c in compat if _score(c, brief) > -50]
+    return compat[:12]
 
 
 def _lane_brands(style: Dict[str, Any], industry: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -240,7 +258,7 @@ def recommend(brief: Brief) -> Recommendation:
         palette_future = pool.submit(_lane_palette, brief, style)
         type_future = pool.submit(_lane_type, brief, style)
         motion_future = pool.submit(_lane_motion, brief, style)
-        components_future = pool.submit(_lane_components, style)
+        components_future = pool.submit(_lane_components, style, brief)
         brand_future = pool.submit(_lane_brands, style, industry)
 
         palette = palette_future.result()
