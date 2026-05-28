@@ -16,35 +16,36 @@ Show HN: ux-skill – Python engine for UX in AI coding, 17 IDEs, 998 entries
 
 **Self-comment (first reply — drop ~60 seconds after submission):**
 ```
-Solo founder. Built ux-skill because I kept hitting the same wall with Claude Code, Cursor,
-and Windsurf: ask for a landing, get back Inter as display + purple-to-blue gradient + three
-equal cards + "John Doe" placeholders. Same fingerprints every time.
+Solo founder. v2.0.0-alpha.1 shipped today.
 
-v2.0 (just released) pivots from "markdown an LLM reads" to a Python reasoning engine over
-11 queryable JSON manifests:
+Background: every popular Claude UX skill on GitHub today is either a catalog
+(ui-ux-pro-max-skill — 84k stars, BM25 over CSV), an environment (nexu-io/open-design — 54k,
+Node + preview), or a taste primer (Leonxlnx/taste-skill — 25k, anti-slop). I borrowed the
+recommender pattern from Pro Max and extended in four directions none of them ship:
 
-- 84 design styles (industry rules → style → palette → type → motion)
-- 176 color palettes (light/dark/auto, AAA-contrast verified)
-- 148 components, 70 type pairings, 57 motion presets
-- 184 industry rules (each with recommended/forbidden styles)
-- 112 named UX laws (Hicks, Fitts, Miller, Gestalt — cited sources)
-- 35 deterministic regex anti-patterns (no LLM, runs in CI)
-- 72 real brand DESIGN.md specs (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify...)
+  - 35 deterministic regex anti-pattern rules (no LLM, runs in CI)
+  - 57 named motion presets (cubic-bezier + framer/gsap/css for each)
+  - 148 structured components with anatomy + states + tokens used
+  - 72 brand DESIGN.md specs (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify + 64 more)
 
-The 5-parallel-search recommender is similar to UI UX Pro Max's flagship; ux-skill beats it
-on every numeric dimension and has four categories they don't have at all (linter, brand
-specs, motion presets, components).
+Plus 998 total entries across 11 JSON manifests, a 22-command pipeline (frame → recommend →
+design → audit → lint → fix → polish → case-study), 5 sub-agents, and a 10-field mandatory
+discovery before any generation.
 
 Cross-IDE — runs in 17 environments via `pip install uxskill` or `npx uxskill init`. Same
-Python engine under each IDE. MIT licensed, no telemetry, no account.
+Python engine under each. MIT, no telemetry, no account.
 
-The honest side-by-side vs 13 other UX plugins: https://uxskill.laithjunaidy.com/compare.html
+Honest disclosure: we're at 14 stars vs 84k for the leader. This is an architecture argument,
+not a popularity one.
+
+Side-by-side comparison vs the top 8 popular Claude UX skills:
+https://uxskill.laithjunaidy.com/compare.html
 
 Repo: https://github.com/Laith0003/ux-skill
 PyPI: https://pypi.org/project/uxskill/
 npm:  https://www.npmjs.com/package/uxskill
 
-Looking for: the 30th AI design fingerprint I missed in the linter. Reply with one I should add.
+Looking for: the 36th AI design fingerprint I missed in the linter. Reply with one I should add.
 ```
 
 ---
