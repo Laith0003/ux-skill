@@ -1235,6 +1235,132 @@
     }
 
     /* =========================================================================
+       EDITORIAL PARALLAX — full-bleed CC0 photos with parallax overlay
+       Scene palette: amber-bronze (warm contrast against scene cyan/magenta)
+       ========================================================================= */
+    [data-scene="editorial"] {
+      --scene-accent: #d97757;
+      padding-bottom: 24px;
+    }
+    .editorial-stack {
+      margin-top: 56px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .editorial-plate {
+      position: relative;
+      margin: 0;
+      min-height: 520px;
+      background-image: var(--editorial-bg);
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;   /* parallax on most browsers */
+      background-repeat: no-repeat;
+      background-color: #07080a;
+      background-blend-mode: multiply;
+      display: flex;
+      align-items: center;
+      isolation: isolate;
+      overflow: hidden;
+    }
+    .editorial-plate::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #07080a;
+      opacity: 0.55;
+      z-index: 0;
+    }
+    /* iOS Safari ignores background-attachment: fixed — fall back to a
+       scroll-triggered transform so the parallax sense is preserved. */
+    @supports (-webkit-touch-callout: none) {
+      .editorial-plate { background-attachment: scroll; }
+    }
+    /* prefers-reduced-motion: drop fixed bg too — purely static photos */
+    @media (prefers-reduced-motion: reduce) {
+      .editorial-plate { background-attachment: scroll; }
+    }
+    .editorial-plate::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(110deg, #07080a 0%, transparent 60%);
+      opacity: 0.45;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .editorial-plate__inner {
+      position: relative;
+      z-index: 2;
+      max-width: 540px;
+      padding: 80px clamp(20px, 5vw, 80px);
+      animation: editorial-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 35%;
+    }
+    .editorial-plate__inner--right {
+      margin-left: auto;
+      text-align: right;
+    }
+    @keyframes editorial-rise {
+      from { transform: translateY(36px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .editorial-plate__inner { animation: none; transform: none; opacity: 1; }
+    }
+    .editorial-plate__eyebrow {
+      color: var(--scene-accent);
+    }
+    .editorial-plate__quote {
+      font-family: var(--display);
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.08;
+      letter-spacing: -0.022em;
+      font-variation-settings: 'wdth' 90, 'opsz' 96, 'wght' 500;
+      color: var(--ink);
+      margin: 20px 0 18px;
+      text-shadow: 0 2px 24px rgba(0,0,0,0.5);
+    }
+    .editorial-plate__cite {
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.55;
+      color: rgba(250,249,245,0.85);
+      max-width: 460px;
+      margin-left: auto;
+      margin-right: 0;
+    }
+    .editorial-plate__inner:not(.editorial-plate__inner--right) .editorial-plate__cite {
+      margin-left: 0;
+      margin-right: auto;
+    }
+    .editorial-credit {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 36px;
+      padding-bottom: 0;
+    }
+    .editorial-credit a {
+      color: var(--muted);
+      text-decoration: underline;
+      text-decoration-color: rgba(255,255,255,0.18);
+      text-underline-offset: 3px;
+    }
+    .editorial-credit a:hover { color: var(--ink); text-decoration-color: var(--ink); }
+    @media (max-width: 720px) {
+      .editorial-plate { min-height: 440px; }
+      .editorial-plate__inner,
+      .editorial-plate__inner--right { text-align: left; margin-left: 0; padding: 56px 24px; }
+      .editorial-plate__inner:not(.editorial-plate__inner--right) .editorial-plate__cite,
+      .editorial-plate__inner--right .editorial-plate__cite { margin-left: 0; margin-right: auto; }
+    }
+
+    /* =========================================================================
        SCREENSHOT GALLERY (REAL PNG MEDIA)
        Scene palette: emerald + soft mint
        ========================================================================= */
@@ -2271,6 +2397,59 @@
         </article>
 
       </div>
+    </div>
+  </section>
+
+  <!-- ============ 5A. EDITORIAL PARALLAX — full-bleed CC0 photos ============ -->
+  <section data-scene="editorial" aria-label="Editorial mood — what the surface reads as in production">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">05A — Editorial</span>
+        <h2 class="section-head__title">What the surface reads as<br><em class="accent-italic">in production</em>.</h2>
+        <p class="section-head__lead">
+          The recommender returns tokens; you ship a surface. The brand spec, the type pair, the palette — they wrap something real. Four photos shot for the worlds ux-skill ships into: editorial publishing, architectural retail, automotive performance, ambient interiors.
+        </p>
+      </div>
+    </div>
+
+    <div class="editorial-stack">
+      <figure class="editorial-plate" style="--editorial-bg:url('/editorial/editorial-1.jpg');">
+        <div class="editorial-plate__inner">
+          <span class="eyebrow editorial-plate__eyebrow">Plate 01 · Architectural</span>
+          <h3 class="editorial-plate__quote">Color comes from the building it's in,<br>not from a swatch panel.</h3>
+          <p class="editorial-plate__cite">Architecture &amp; retail. Lighting and stone do half the work; the engine never overrides them.</p>
+        </div>
+      </figure>
+
+      <figure class="editorial-plate" style="--editorial-bg:url('/editorial/editorial-5.jpg');">
+        <div class="editorial-plate__inner editorial-plate__inner--right">
+          <span class="eyebrow editorial-plate__eyebrow">Plate 02 · Editorial</span>
+          <h3 class="editorial-plate__quote">Type that earned its weight<br>from a real publication.</h3>
+          <p class="editorial-plate__cite">Magazine + long-form. The brand library knows masthead serifs and reading-column body sans.</p>
+        </div>
+      </figure>
+
+      <figure class="editorial-plate" style="--editorial-bg:url('/editorial/editorial-7.jpg');">
+        <div class="editorial-plate__inner">
+          <span class="eyebrow editorial-plate__eyebrow">Plate 03 · Automotive</span>
+          <h3 class="editorial-plate__quote">Tight caps. Numbers and torque<br>curves do the talking.</h3>
+          <p class="editorial-plate__cite">Performance + automotive. Ferrari, BMW M, Porsche-school discipline lives in the brand specs.</p>
+        </div>
+      </figure>
+
+      <figure class="editorial-plate" style="--editorial-bg:url('/editorial/editorial-2.jpg');">
+        <div class="editorial-plate__inner editorial-plate__inner--right">
+          <span class="eyebrow editorial-plate__eyebrow">Plate 04 · Interior</span>
+          <h3 class="editorial-plate__quote">Quiet surfaces. Negative space<br>that holds the brand.</h3>
+          <p class="editorial-plate__cite">Hospitality + interior + lifestyle. Apple, Aesop, Patagonia-school restraint in the catalogue.</p>
+        </div>
+      </figure>
+    </div>
+
+    <div class="container">
+      <p class="editorial-credit">
+        Photographs <a href="https://picsum.photos" rel="noopener">via Lorem Picsum</a> · CC0 license · sourced from contributing photographers on Unsplash. Editorial use only; tinted to read on dark.
+      </p>
     </div>
   </section>
 

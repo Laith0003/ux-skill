@@ -719,15 +719,15 @@ Every preset has a reduced-motion variant. Stack-ready code for Framer Motion, G
 
 The full rule list is in [The 100 anti-AI-slop rules](#the-100-anti-ai-slop-rules--the-linter).
 
-### `brands/*.json` — 92 brand specs
+### `brands/*.json` — 110 brand specs
 
 | Field | Description |
 |---|---|
-| `entries` | 72 (plus `_index.json` listing all) |
+| `entries` | 110 (plus `_index.json` listing all) |
 | `keys per entry` | `id`, `name`, `category`, `voice`, `tokens` (color, type, motion), `design_principles`, `signature_moves`, `anti-moves`, `references` |
-| `categories` | Developer Tools (24), Consumer / Lifestyle / Retail (11), AI / ML Platform (9), Productivity / Collaboration (8), Automotive (8), Fintech / Crypto (7), Editorial / Media (5) |
+| `categories` | Developer Tools (36), Consumer / Lifestyle / Retail (19), Fintech / Crypto (14), Editorial / Media (13), AI / ML Platform (12), Productivity / Collaboration (8), Automotive (8) |
 
-Full list in [The 92 brand DESIGN.md specs](#the-92-brand-designmd-specs--by-category).
+Full list in [The 110 brand DESIGN.md specs](#the-110-brand-designmd-specs--by-category).
 
 ---
 
@@ -859,23 +859,31 @@ Recommended next: /ux-polish --fix (LLM-driven, addresses both lintable and aest
 
 ---
 
-## The 92 brand DESIGN.md specs — by category
+## The 110 brand DESIGN.md specs — by category
 
 Real brands. Real design languages. Real DESIGN.md specs — not generic palettes. Tell the plugin "build a landing in Stripe's style" and it reads the actual brand vocabulary: voice rubric, color tokens, motion conventions, signature moves, anti-moves.
 
 Each brand ships as a structured JSON (`data/brands/<slug>.json`) plus a prose reference (`references/brands/<slug>.md`).
 
-### Developer Tools (24)
+### Developer Tools (36)
 
-ClickHouse, Composio, Cursor, Expo, Framer, HashiCorp, IBM, Lovable, Mintlify, MongoDB, Ollama, OpenCode, PostHog, Raycast, Replicate, Resend, Sanity, Sentry, Slack, Supabase, Superhuman, Vercel, Warp, Webflow
+ClickHouse, Composio, Cursor, Datadog, dbt Labs, Expo, Fivetran, Fly.io, Framer, HashiCorp, Honeycomb, IBM, Lovable, Mintlify, Modal, MongoDB, Neon, Ollama, OpenCode, PostHog, Railway, Raycast, Render, Replicate, Resend, Retool, Sanity, Sentry, Slack, Snowflake, Sourcegraph, Supabase, Superhuman, Vercel, Warp, Webflow
 
-### Consumer / Lifestyle / Retail (11)
+### Consumer / Lifestyle / Retail (19)
 
-Airbnb, Apple, HP, Meta, Nike, Pinterest, PlayStation, Shopify, Spotify, Starbucks, Uber
+Aesop, Airbnb, Allbirds, Apple, Apple Music, Glossier, HP, Hims & Hers, Instagram, Meta, Nike, Patagonia, Pinterest, PlayStation, Shopify, Spotify, Starbucks, TikTok, Uber
 
-### AI / ML Platform (9)
+### Fintech / Crypto (14)
 
-Claude, Cohere, ElevenLabs, MiniMax, Mistral AI, Runway, Together AI, VoltAgent, xAI
+Binance, Brex, Coinbase, Kraken, Mastercard, Mercury, Monzo, N26, Plaid, Ramp, Revolut, Robinhood, Stripe, Wise
+
+### Editorial / Media (13)
+
+Bloomberg, Clay, Dezeen, NVIDIA, Pitchfork, Substack, The Atlantic, The Economist, The New York Times, The Verge, The Wall Street Journal, Vodafone, Wired
+
+### AI / ML Platform (12)
+
+Anthropic, Claude, Cohere, ElevenLabs, MiniMax, Mistral AI, OpenAI, Perplexity, Runway, Together AI, VoltAgent, xAI
 
 ### Productivity / Collaboration (8)
 
@@ -884,14 +892,6 @@ Airtable, Cal.com, Figma, Intercom, Linear, Miro, Notion, Zapier
 ### Automotive (8)
 
 BMW, BMW M, Bugatti, Ferrari, Lamborghini, Renault, SpaceX, Tesla
-
-### Fintech / Crypto (7)
-
-Binance, Coinbase, Kraken, Mastercard, Revolut, Stripe, Wise
-
-### Editorial / Media (5)
-
-Clay, NVIDIA, The Verge, Vodafone, Wired
 
 ### Why this matters
 
