@@ -1060,6 +1060,19 @@
       max-width: 1200px;
       margin-left: auto;
       margin-right: auto;
+      /* Scroll-pinned cinematic effect — the hero shot slides up + scales
+         as the viewport reaches it. CSS scroll-driven animation degrades
+         gracefully on browsers that don't support animation-timeline. */
+      animation: shots-zoom linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 50%;
+    }
+    @keyframes shots-zoom {
+      from { transform: translateY(40px) scale(0.96); opacity: 0.4; }
+      to   { transform: translateY(0) scale(1);       opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .shots__hero { animation: none; transform: none; opacity: 1; }
     }
     .shots__hero img {
       width: 100%;
@@ -1094,6 +1107,17 @@
     }
     .shots__grid figure {
       margin: 0;
+      /* Each tile rises and reveals on scroll — staggered via :nth-child */
+      animation: shots-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 35%;
+    }
+    @keyframes shots-rise {
+      from { transform: translateY(60px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .shots__grid figure { animation: none; transform: none; opacity: 1; }
     }
     .shots__grid img {
       width: 100%;
