@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What a closed-loop design system actually means — ux-skill v3.0 explained</title>
+<meta name="description" content="Most "AI design tools" generate once and forget. ux-skill v3.0 writes every recommendation, every lint score, every accept/reject to a local ledger. The recommender reads that ledger and re-ranks. The feedback loop is closed for real.">
+<link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/closed-loop-design-system-feedback.html">
+<meta property="og:title" content="What a closed-loop design system actually means — ux-skill v3.0">
+<meta property="og:description" content="Most AI design tools generate once and forget. v3.0 writes every decision to a local ledger and re-ranks future calls. Real feedback loop, offline.">
+<meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
+<meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/closed-loop-design-system-feedback.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="A real closed-loop design system — ux-skill v3.0">
+<meta name="twitter:description" content="Every recommendation logged. Every lint score logged. The recommender reads the log and re-ranks. The loop is actually closed.">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"What a closed-loop design system actually means — ux-skill v3.0 explained","datePublished":"2026-05-28","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/closed-loop-design-system-feedback.html","inLanguage":"en"}
+</script>
+
+<style>
+  :root {
+    --canvas: #07080a; --surface: #0e1014; --ink: #f6f7f9; --body: #c0c3c9;
+    --muted: #8a8f96; --accent: #a78bfa; --hairline: rgba(255,255,255,0.08);
+    --display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--canvas); color: var(--body); font-family: var(--sans); line-height: 1.65; overflow-x: clip; }
+  a { color: var(--accent); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: clamp(20px, 4vw, 56px); }
+  header.post { margin-bottom: 48px; padding-bottom: 24px; border-bottom: 1px solid var(--hairline); }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  h1 { font-family: var(--display); font-size: clamp(32px, 5vw, 52px); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; font-weight: 600; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede { font-size: 19px; line-height: 1.55; color: var(--body); max-width: 60ch; }
+  h2 { font-family: var(--display); font-size: 28px; letter-spacing: -0.02em; color: var(--ink); margin: 56px 0 18px; }
+  h3 { font-family: var(--display); font-size: 21px; color: var(--ink); margin: 32px 0 12px; }
+  p { margin-bottom: 18px; font-size: 16.5px; max-width: 60ch; }
+  ul { margin: 0 0 18px 22px; }
+  li { margin-bottom: 8px; max-width: 60ch; }
+  code { font-family: var(--mono); font-size: 14px; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+  pre { background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; padding: 18px 22px; overflow-x: auto; margin: 18px 0; }
+  pre code { background: transparent; padding: 0; font-size: 13.5px; line-height: 1.6; color: var(--body); }
+  blockquote { border-left: 2px solid var(--accent); padding-left: 18px; margin: 28px 0; color: var(--ink); font-style: italic; }
+  .nav { padding: 18px 0; border-bottom: 1px solid var(--hairline); }
+  .nav__row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); }
+  .nav__brand { font-family: var(--display); font-weight: 700; font-size: 17px; color: var(--ink); }
+  .nav__link { font-family: var(--mono); font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted); }
+  footer { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--hairline); color: var(--muted); font-family: var(--mono); font-size: 11.5px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__row">
+    <a class="nav__brand" href="/">uxskill</a>
+    <a class="nav__link" href="/">Home</a>
+    <a class="nav__link" href="/brands.html">Brands</a>
+    <a class="nav__link" href="/anti-patterns.html">Anti-patterns</a>
+    <a class="nav__link" href="/blog/">Blog</a>
+    <a class="nav__link" href="/compare.html">Compare</a>
+    <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+  </div>
+</header>
+
+<div class="wrap">
+<header class="post">
+<p class="eyebrow">v3.0 — THE BRAIN · 2026-05-28</p>
+<h1>What a <em>closed-loop</em> design system<br>actually means.</h1>
+<p class="lede">Most "AI design tools" generate once and forget. ux-skill v3.0 writes every recommendation, every lint score, every accept/reject signal to a local ledger. The recommender reads that ledger on the next call and re-ranks. The feedback loop is closed for real.</p>
+</header>
+
+<h2>What "closed loop" usually means in marketing</h2>
+<p>Search for "closed-loop design system" and you'll find a lot of vendor copy claiming it. What they usually mean: a Slack notification when someone deletes a token. A Figma plugin that imports tokens once. A linter that runs in CI and shouts when something breaks.</p>
+<p>That's not a closed loop. That's a notification system with extra steps.</p>
+<p>A real closed loop has FOUR pieces:</p>
+<ol>
+<li>A <strong>signal</strong> — the system did something specific and measurable</li>
+<li>A <strong>memory</strong> — that signal is recorded persistently and queryable</li>
+<li>A <strong>read path</strong> — the system queries the memory on the next decision</li>
+<li>A <strong>bias</strong> — the read result actually changes the next output</li>
+</ol>
+<p>Most "AI design tools" have piece 1. Some have 2. Almost none have 3 and 4.</p>
+
+<h2>What ux-skill v3.0 actually does</h2>
+
+<h3>1. The signal</h3>
+<p>Every <code>/ux-recommend</code>, <code>/ux-design</code>, <code>/ux-lint</code>, <code>/ux-evolve</code>, and <code>/ux-synthesize</code> call produces a row of structured data. Industry. UI type. Mode picked. Brand anchored. Style chosen. Lint score 0-100. Anti-pattern count by severity. Did the user accept the output? How long did it take?</p>
+
+<h3>2. The memory</h3>
+<p>That row is appended to <code>.ux/decisions.jsonl</code> in the project, AND to <code>~/.uxskill/decisions.jsonl</code> for cross-project memory. JSONL format. Schema locked at <code>_v: 1</code>. Column names are a public contract that never gets renamed.</p>
+<pre><code>{"_v": 1, "ts": 1727380123.4, "command": "design",
+ "industry": "fintech-payments", "ui_type": "dashboard",
+ "mode": "brand_anchor", "picked_brand": "stripe",
+ "picked_style": "swiss-grid", "picked_palette": "stripe-cool",
+ "lint_score": 92, "lint_high": 0, "lint_med": 1, "lint_low": 3,
+ "user_accepted": true, "duration_ms": 1240}</code></pre>
+
+<h3>3. The read path</h3>
+<p>When the recommender runs on the next call, before sorting candidates by manifest-based scores, it reads the ledger filtered by <code>(industry, ui_type)</code>. It counts how often each candidate's id appears in PRIOR rows where <code>lint_score &gt;= 80</code> AND <code>user_accepted = true</code>.</p>
+
+<h3>4. The bias</h3>
+<p>Each matching prior win adds +5 to that candidate's score. Re-sort. Top entry wins. The same call that previously returned "Bauhaus minimalism" might now return "Swiss editorial" because Swiss has won 3 times in this bucket.</p>
+
+<h2>Cold-start protection</h2>
+<p>Below 3 priors per bucket, the re-ranker is a no-op. Behaves exactly like v2.0. This prevents the system from "learning" garbage from N=1 noise. It learns slowly, only when the signal is real.</p>
+
+<h2>The privacy contract</h2>
+<p>The ledger is a <strong>local file</strong>. Not synced to a cloud. Not analyzed by a vendor. The data is yours and stays on your disk. Three switches you control:</p>
+<ul>
+<li><code>UXSKILL_NO_LOG=1</code> env var disables all writes</li>
+<li><code>--no-log</code> CLI flag has the same effect per-call</li>
+<li><code>Scope.PROJECT</code> writes only to the project ledger, never to the per-user one</li>
+</ul>
+
+<h2>How to see what your install has learned</h2>
+<pre><code>uxskill stats --decisions    # JSON aggregate
+uxskill stats --html         # writes .ux/stats.html — open in browser</code></pre>
+<p>The HTML dashboard shows: total decisions, lint score median, by-command breakdown, top brands picked, by-industry distribution, accept rate. <strong>This is YOUR install's data.</strong> No global aggregate. No leaderboard. Just what your work has produced.</p>
+
+<h2>What we deliberately don't track</h2>
+<ul>
+<li>Raw user prompts (only the structured fields)</li>
+<li>External user IDs</li>
+<li>Machine fingerprints</li>
+<li>Network or IP info</li>
+<li>Telemetry uploads to any vendor</li>
+</ul>
+<p>Nothing leaves your laptop. Ever.</p>
+
+<h2>Why this matters more than another model</h2>
+<p>The dominant pattern in 2026 is: chuck the brief at a bigger LLM, hope for better output. v3.0 says: keep the same generation logic, but make it CONSULT your history. The next call is always strictly better-informed than the last, even with the same underlying model.</p>
+<p>And critically, this approach scales linearly with usage. Every 100 decisions in your ledger sharpens future recommendations for your specific industry + UI-type buckets. After a year of working on fintech dashboards, your install knows exactly which brand combinations ship clean. Without ever sharing that knowledge with anyone else.</p>
+
+<h2>How this compares to vendor "personalization"</h2>
+<p>SaaS design platforms talk about "AI that learns your style." What they mean: their model is fine-tuned on your design system uploads, your output is sent to their servers, your feedback signals improve their global model.</p>
+<p>That's <strong>vendor learning</strong>, not user learning. The benefit accrues to them.</p>
+<p>ux-skill v3.0 inverts this. The learning happens on YOUR machine, in YOUR ledger, biasing YOUR future recommendations. The vendor (Laith) sees none of it. Other users see none of it. No knowledge graph, no embedding store, no third-party. Just a JSONL file on your disk that your local recommender reads.</p>
+
+<h2>Try the loop</h2>
+<pre><code>pip install uxskill
+uxskill init
+
+# Generate something
+uxskill synthesize --industry fintech-payments --tone bold
+
+# Lint it (writes decision)
+uxskill lint . --score-only
+
+# Generate again — same brief
+# After 3+ accepted+lint-clean decisions, the bias kicks in
+uxskill synthesize --industry fintech-payments --tone bold
+
+# See what your install has learned
+uxskill stats --html
+open .ux/stats.html</code></pre>
+
+<h2>Related reads</h2>
+<ul>
+<li><a href="/blog/v3-the-brain-launch.html">The full v3.0 launch — The Brain</a></li>
+<li><a href="/blog/brand-specs-training-data-not-templates.html">Brand specs are training data, not templates</a></li>
+<li><a href="/blog/deterministic-design-engine-no-llm.html">A deterministic design engine that learns offline</a></li>
+<li><a href="/blog/regex-linter-for-ai-coding.html">The deterministic linter</a></li>
+</ul>
+
+<footer>
+ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+</footer>
+
+</div>
+</body>
+</html>
