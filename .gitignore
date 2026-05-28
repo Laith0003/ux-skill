@@ -1,8 +1,29 @@
-.claude-flow/
-.ux/
-ruvector.db
+
+# Build artifacts (added v2.0.0-alpha.32)
+# Engine state (project-local)
+# Existing entries
+# IDE / editor
+# Node
+# Test artifacts
 *.db-journal
+*.egg-info/
+*.pyc
+*.swp
+*.tar.gz
+*.whl
 .DS_Store
-node_modules/
+.claude-flow/
+.coverage
+.idea/
+.pytest_cache/
+.ux/
+.vscode/
+__pycache__/
 agentdb.rvf
 agentdb.rvf.lock
+build/
+dist/
+htmlcov/
+node_modules/
+npm-debug.log*
+ruvector.db
