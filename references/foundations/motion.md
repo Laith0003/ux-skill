@@ -2,6 +2,26 @@
 
 > Motion expresses cause and effect. Every animation must communicate something the static interface cannot. If it does not communicate, cut it.
 
+## Recommended engines (first-class in `/ux-motion`)
+
+ux-god-skill's `/ux-motion` command accepts a `--engine` flag selecting one of three first-class implementations. Each one is fully supported in `data/motion-presets.json` — every preset has a snippet for all three.
+
+| Engine | URL | Use when |
+|---|---|---|
+| **Framer Motion** (default) | https://www.framer.com/motion/ | React projects, declarative API, ~30 KB gzipped. Best balance of power and ergonomics for most apps. |
+| **GSAP** | https://gsap.com | Cinematic scroll-pinned scenes, SVG path animation, complex timelines. The crown of web animation — every motion preset in our manifest ships with a GSAP snippet you can copy. Free for commercial use as of 2024-05 (Webflow acquisition). |
+| **CSS keyframes** | https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes | Server-rendered or no-JS surfaces. Smallest cost. ux-god-skill outputs CSS-only when the picked style or brief requires it (e.g. <code>SSR-static</code>, <code>JS-disabled-allowed</code> must-have). |
+
+**Invocation:**
+
+```bash
+ux motion --engine framer-motion    # default
+ux motion --engine gsap             # cinematic scroll, complex timelines
+ux motion --engine css              # SSR / no-JS surfaces
+```
+
+For motion principles beyond the engine choice (timing, easing, restraint), see [`motion-principles.md`](motion-principles.md) in the same folder.
+
 ## Principles
 
 1. **Motion communicates, never decorates** — Every animation expresses a cause-effect relationship: a state change, a hierarchy shift, a confirmation, a spatial transition. Decoration-only motion is noise that drains attention and battery.

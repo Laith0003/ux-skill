@@ -2,6 +2,52 @@
 
 A reference catalog of thirty cognitive laws that govern how users perceive, decide, and act inside interfaces. Use this when you need to name what is wrong with a screen — or what is right — in language that survives stakeholder challenge.
 
+## Primary source
+
+This catalog is synthesized from production design work. The canonical reference for the named laws is **[lawsofux.com](https://lawsofux.com)** by Jon Yablonski — each law there has an illustrated card, the original research citation, and worked examples. When ux-god-skill's `/ux-critique` cites a named law, link to the corresponding lawsofux.com page so readers reach the canonical card in one click.
+
+Other foundational sources cited throughout:
+
+- Don Norman — *The Design of Everyday Things* (see `references/laws/norman.md`)
+- Steve Krug — *Don't Make Me Think* (see `references/laws/krug.md`)
+- Susan Weinschenk — *100 Things Every Designer Needs to Know About People*
+- Daniel Kahneman — *Thinking, Fast and Slow* (cognitive bias laws)
+
+### Source link index — by canonical name
+
+| Law | Primary source |
+|---|---|
+| Aesthetic-Usability Effect | https://lawsofux.com/aesthetic-usability-effect/ |
+| Choice Overload | https://lawsofux.com/choice-overload/ |
+| Chunking | https://lawsofux.com/chunking/ |
+| Cognitive Bias | https://lawsofux.com/cognitive-bias/ |
+| Cognitive Load | https://lawsofux.com/cognitive-load/ |
+| Doherty Threshold | https://lawsofux.com/doherty-threshold/ |
+| Fitts's Law | https://lawsofux.com/fittss-law/ |
+| Flow | https://lawsofux.com/flow/ |
+| Goal-Gradient Effect | https://lawsofux.com/goal-gradient-effect/ |
+| Hick's Law | https://lawsofux.com/hicks-law/ |
+| Jakob's Law | https://lawsofux.com/jakobs-law/ |
+| Law of Common Region | https://lawsofux.com/law-of-common-region/ |
+| Law of Proximity | https://lawsofux.com/law-of-proximity/ |
+| Law of Prägnanz | https://lawsofux.com/law-of-pragnanz/ |
+| Law of Similarity | https://lawsofux.com/law-of-similarity/ |
+| Law of Uniform Connectedness | https://lawsofux.com/law-of-uniform-connectedness/ |
+| Mental Model | https://lawsofux.com/mental-model/ |
+| Miller's Law | https://lawsofux.com/millers-law/ |
+| Occam's Razor | https://lawsofux.com/occams-razor/ |
+| Paradox of the Active User | https://lawsofux.com/paradox-of-the-active-user/ |
+| Pareto Principle | https://lawsofux.com/pareto-principle/ |
+| Parkinson's Law | https://lawsofux.com/parkinsons-law/ |
+| Peak-End Rule | https://lawsofux.com/peak-end-rule/ |
+| Postel's Law | https://lawsofux.com/postels-law/ |
+| Selective Attention | https://lawsofux.com/selective-attention/ |
+| Serial Position Effect | https://lawsofux.com/serial-position-effect/ |
+| Tesler's Law | https://lawsofux.com/teslers-law/ |
+| Von Restorff Effect | https://lawsofux.com/von-restorff-effect/ |
+| Working Memory | https://lawsofux.com/working-memory/ |
+| Zeigarnik Effect | https://lawsofux.com/zeigarnik-effect/ |
+
 ## How to read this file
 
 Each law has the same shape: a one-line definition, when it applies, how to use it in design, the violation pattern that ships in default AI-slop output, and a fix example you can copy. The laws compound. A screen that violates one is uncomfortable. A screen that violates four is unusable. A screen that obeys all thirty is rare — design is the practice of choosing which ones matter most for this surface, this user, this moment.

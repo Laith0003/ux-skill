@@ -224,6 +224,20 @@ If the verdict is "Cut" on more than half the animations, recommend `/ux-design`
 
 For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.
 
+## Engine selection — `--engine`
+
+`/ux-motion` accepts a `--engine` flag that pins which motion library to target. Every preset in `data/motion-presets.json` ships with a snippet for all three.
+
+| Flag | Engine | When to use |
+|---|---|---|
+| `--engine framer-motion` (default) | [Framer Motion](https://www.framer.com/motion/) | React projects, declarative API, ~30 KB gzipped. Best ergonomics for most apps. |
+| `--engine gsap` | [GSAP](https://gsap.com) | Cinematic scroll-pinned scenes, SVG path animation, complex orchestrated timelines. Free for commercial use as of 2024-05. |
+| `--engine css` | CSS keyframes | SSR / no-JS surfaces. Smallest bundle. Use when the brief or stack forbids JS animation. |
+
+When the recommendation picks `prefers-reduced-motion` as a must-have, ALL three engines fall through to a respectful equivalent (no transforms, opacity-only entries, instant for press/hover).
+
+See [references/foundations/motion.md](../references/foundations/motion.md) for the engine-by-engine principle table.
+
 ---
 
 ## v2 Python integration — required preamble

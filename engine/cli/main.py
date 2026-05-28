@@ -86,14 +86,33 @@ else:
     @cli.command("init")
     @click.option("--root", default=".", help="Project root.")
     @click.option("--dry-run", is_flag=True, help="Show what would be written without writing.")
+    @click.option("--global", "global_install", is_flag=True,
+                  help="Install at the user level (~/.config/ux-skill) instead of the project root.")
+    @click.option("--offline", is_flag=True,
+                  help="Skip any network calls. Fail fast if the engine needs to fetch.")
     @click.pass_context
-    def init_cmd(ctx, root: str, dry_run: bool) -> None:
-        """Detect IDEs in the project root and install for each."""
+    def init_cmd(ctx, root: str, dry_run: bool, global_install: bool, offline: bool) -> None:
+        """Detect IDEs in the project root and install for each.
+
+        --global  : install at ~/.config/ux-skill (Pro Max parity)
+        --offline : skip all network calls; use only local manifests
+        """
+        if global_install:
+            root = str(Path.home() / ".config" / "ux-skill")
+            Path(root).mkdir(parents=True, exist_ok=True)
+        if offline:
+            import os
+            os.environ["UX_SKILL_OFFLINE"] = "1"
         detected = detect_ides(Path(root))
         if not detected:
             detected = ["claude-code"]
         reports = [run_install(t, root, dry_run).to_dict() for t in detected]
-        _emit({"detected": detected, "installs": reports}, ctx.obj["pretty"])
+        _emit({
+            "detected": detected,
+            "installs": reports,
+            "mode": {"global": global_install, "offline": offline},
+            "root": root,
+        }, ctx.obj["pretty"])
 
     # -------- ux install -------------------------------------------------
 
@@ -101,9 +120,19 @@ else:
     @click.argument("target", type=click.Choice(SUPPORTED, case_sensitive=False))
     @click.option("--root", default=".")
     @click.option("--dry-run", is_flag=True)
+    @click.option("--global", "global_install", is_flag=True,
+                  help="Install at ~/.config/ux-skill instead of project root.")
+    @click.option("--offline", is_flag=True, help="Skip network; use local manifests only.")
     @click.pass_context
-    def install_cmd(ctx, target: str, root: str, dry_run: bool) -> None:
+    def install_cmd(ctx, target: str, root: str, dry_run: bool,
+                    global_install: bool, offline: bool) -> None:
         """Install for a specific IDE."""
+        if global_install:
+            root = str(Path.home() / ".config" / "ux-skill")
+            Path(root).mkdir(parents=True, exist_ok=True)
+        if offline:
+            import os
+            os.environ["UX_SKILL_OFFLINE"] = "1"
         report = run_install(target, root, dry_run)
         _emit(report.to_dict(), ctx.obj["pretty"])
 

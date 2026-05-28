@@ -2,6 +2,29 @@
 
 > Color carries meaning when scarce and noise when generous. A disciplined palette is the difference between a designed product and a decorated one.
 
+## Tools we recommend for color discovery
+
+When the brief is open and you need to explore palettes before locking one in, these are the tools we actually use. Each one has a different job; pick by what you're trying to figure out.
+
+| Tool | URL | When to reach for it |
+|---|---|---|
+| **Huemint** | https://huemint.com | AI-driven palette generator with context awareness. Best when you want to feed in a brief ("fintech, calm, dark mode") and explore variants. |
+| **Picular** | https://picular.co | Google Image-based color picker. Type "Spotify green" or "Tesla red" and get the dominant hue. Useful for matching a brand the user keeps citing. |
+| **Colourcode** | https://colourco.de | Cursor-position-driven palette explorer. Best for taste calibration when you don't know what you want yet. |
+| **Colir** | https://colir.io | Web color browser organized by hue family. Useful for finding the right shade family before fine-tuning. |
+| **Coolors** | https://coolors.co | The mainstream palette generator. Best when you need 5-color schemes fast and don't have a strong brief. |
+| **PhysicallyBased.info** | https://physicallybased.info | Public PBR materials database — real-world albedo / roughness / IOR values for actual materials (oak, brushed aluminium, glass, leather). Cite this when you need an *honest* L-value for a designed surface rather than guessing. |
+
+**For verifying contrast after picking colors:**
+
+| Tool | URL | Job |
+|---|---|---|
+| WebAIM Contrast Checker | https://webaim.org/resources/contrastchecker/ | The canonical WCAG AA/AAA verifier |
+| OKLCH Color Picker | https://oklch.com | For palettes designed in OKLCH (the perceptual space) |
+| APCA contrast | https://www.myndex.com/APCA/ | Newer perceptual contrast standard (WCAG 3 draft) — use for forward-compat checks |
+
+ux-god-skill's `data/palettes.json` already includes 176 palettes verified for AAA contrast on body text. When you pick one of those, you've already cleared the contrast bar. When you build a new one from these tools, run it through WebAIM before shipping.
+
 ## Principles
 
 1. **Color is a scarce resource** — Build the foundation in neutrals. Reserve chromatic energy for action (CTAs, links, focus rings, status indicators). Decoration uses spacing, typography, and contrast; not color.

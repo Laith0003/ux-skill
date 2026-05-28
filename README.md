@@ -1,3 +1,5 @@
+**English** · [العربية](README.ar.md) · [Español](README.es.md) · [中文](README.zh.md)
+
 # ux-god-skill — the design intelligence engine for Claude Code, Cursor, and every other AI coding tool
 
 > **The strongest UX plugin for AI coding.** A Python reasoning core with 11 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 35 anti-pattern rules, 25 tech stacks, 72 brand specs), 22 slash commands, 5 sub-agents, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
@@ -16,6 +18,11 @@
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
+[![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
+
+### Star history
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Laith0003/ux-skill&type=Date)](https://star-history.com/#Laith0003/ux-skill&Date)
 
 ---
 
