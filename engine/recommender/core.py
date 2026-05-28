@@ -25,7 +25,7 @@ from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field, asdict
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from engine.data_loader import load, load_brands
 
@@ -169,20 +169,22 @@ def _lane_style(brief: Brief, industry: Dict[str, Any]) -> Dict[str, Any]:
             s += 10.0
         return s
 
-    ranked = sorted(entries, key=style_score, reverse=True)
-    return ranked[0] if ranked else {}
+    # v3.0: pre-score then run through the decisions re-ranker, then sort
+    scored = [(e, style_score(e)) for e in entries]
+    valid = [(e, s) for (e, s) in scored if s > -50]
+    valid = _rerank_from_decisions(valid, brief, key="picked_style")
+    ranked = sorted(valid, key=lambda es: es[1], reverse=True)
+    return ranked[0][0] if ranked else {}
 
 
 def _lane_palette(brief: Brief, style: Dict[str, Any]) -> Dict[str, Any]:
     data = load("palettes")
     entries = data.get("entries", [])
     compatible = set(style.get("compatible_palettes", []))
-    # v2.2 fix (task #57): pre-compute scores so we can DROP forbidden entries
-    # before applying the compatibility-first sort. Without this, the tuple
-    # sort puts a compatible-but-forbidden palette ahead of a non-compatible
-    # but acceptable palette, because True > False outranks the -100 penalty.
     scored = [(e, _score(e, brief)) for e in entries]
     valid = [(e, s) for (e, s) in scored if s > -50]
+    # v3.0: bump entries that won in prior similar decisions
+    valid = _rerank_from_decisions(valid, brief, key="picked_palette")
     ranked = sorted(
         valid,
         key=lambda es: (es[0].get("id") in compatible, es[1]),
@@ -195,11 +197,10 @@ def _lane_type(brief: Brief, style: Dict[str, Any]) -> Dict[str, Any]:
     data = load("type-pairs")
     entries = data.get("entries", [])
     compatible = set(style.get("compatible_type_pairs", []))
-    # v2.2 fix (task #57): same shape as _lane_palette — drop forbidden
-    # type pairs (Cormorant in display, Inter as display, anything in
-    # brief.forbidden) before the compatibility-first sort.
     scored = [(e, _score(e, brief)) for e in entries]
     valid = [(e, s) for (e, s) in scored if s > -50]
+    # v3.0: bump entries that won in prior similar decisions
+    valid = _rerank_from_decisions(valid, brief, key="picked_type_pair")
     ranked = sorted(
         valid,
         key=lambda es: (es[0].get("id") in compatible, es[1]),
@@ -211,11 +212,12 @@ def _lane_type(brief: Brief, style: Dict[str, Any]) -> Dict[str, Any]:
 def _lane_motion(brief: Brief, style: Dict[str, Any]) -> List[Dict[str, Any]]:
     data = load("motion-presets")
     entries = data.get("entries", [])
-    # v2.2 fix (task #57): filter forbidden before slicing top-5.
     scored = [(e, _score(e, brief)) for e in entries]
-    valid = [e for (e, s) in scored if s > -50]
-    ranked = sorted(valid, key=lambda e: _score(e, brief), reverse=True)
-    return ranked[:5]
+    valid_pairs = [(e, s) for (e, s) in scored if s > -50]
+    # v3.0: bump entries that won in prior similar decisions
+    valid_pairs = _rerank_from_decisions(valid_pairs, brief, key="picked_motion")
+    ranked = sorted(valid_pairs, key=lambda es: es[1], reverse=True)
+    return [e for e, _ in ranked[:5]]
 
 
 def _lane_components(style: Dict[str, Any], brief: Brief = None) -> List[Dict[str, Any]]:
@@ -229,10 +231,14 @@ def _lane_components(style: Dict[str, Any], brief: Brief = None) -> List[Dict[st
     return compat[:12]
 
 
-def _lane_brands(style: Dict[str, Any], industry: Dict[str, Any]) -> List[Dict[str, Any]]:
+def _lane_brands(style: Dict[str, Any], industry: Dict[str, Any],
+                 brief: Optional[Brief] = None) -> List[Dict[str, Any]]:
     brands = load_brands()
     bias = set(industry.get("exemplars", []))
-    ranked = sorted(brands, key=lambda b: (b.get("id") in bias, b.get("name", "")))
+    ranked = sorted(brands, key=lambda b: (not (b.get("id") in bias), b.get("name", "")))
+    # v3.0: re-rank by past wins in this bucket
+    if brief is not None:
+        ranked = _rerank_brands_from_decisions(ranked, brief)
     return ranked[:5]
 
 
@@ -240,6 +246,114 @@ def _lane_guardrails() -> List[Dict[str, Any]]:
     """Always-on. The 30 anti-patterns are non-negotiable."""
     data = load("anti-patterns")
     return data.get("entries", [])
+
+
+# ---------------------------------------------------------------------------
+# v3.0 — decisions-driven re-rank (the actual learning loop)
+# ---------------------------------------------------------------------------
+
+# Cold-start threshold. Below this many matching prior decisions, fall back
+# to the manifest-only ranking. Prevents learning-from-N=1.
+_REROUTE_MIN_PRIORS = 3
+
+# Bump per matching prior decision (lint_score >= 80 AND user_accepted=true).
+_REROUTE_BUMP = 5.0
+
+
+def _rerank_from_decisions(
+    entries_with_scores: List[Tuple[Dict[str, Any], float]],
+    brief: Brief,
+    key: str,
+) -> List[Tuple[Dict[str, Any], float]]:
+    """Bump entries whose id appears in the local decisions ledger with
+    ``lint_score >= 80`` AND ``user_accepted=true`` for the same
+    ``(industry, ui_type)`` bucket.
+
+    **This is the actual closing of the intelligence loop.** Before this
+    call, decisions were logged but never consumed; the recommender behaved
+    like v2.0. After this call, ux-skill genuinely learns from its own
+    history without ever calling an LLM.
+
+    Cold-start safe: below 3 matching priors, returns the input untouched.
+
+    Args:
+        entries_with_scores: list of (entry, score) tuples
+        brief:              the active Brief
+        key:                which decision field to match (e.g. "picked_style",
+                            "picked_palette", "picked_brand")
+
+    Returns:
+        A new list of (entry, possibly_bumped_score) tuples.
+    """
+    try:
+        from engine.decisions import query
+    except Exception:
+        return entries_with_scores
+
+    try:
+        hits = query(
+            industry=getattr(brief, "industry", None) or None,
+            ui_type=getattr(brief, "project_type", None) or None,
+            min_score=80,
+            accepted_only=True,
+        )
+    except Exception:
+        return entries_with_scores
+
+    if len(hits) < _REROUTE_MIN_PRIORS:
+        return entries_with_scores  # cold start
+
+    # Count how often each id won in this bucket
+    win_counts: Dict[str, int] = {}
+    for h in hits:
+        v = h.get(key)
+        if v:
+            win_counts[str(v).lower()] = win_counts.get(str(v).lower(), 0) + 1
+
+    if not win_counts:
+        return entries_with_scores
+
+    # Apply bumps
+    out: List[Tuple[Dict[str, Any], float]] = []
+    for e, s in entries_with_scores:
+        eid = str(e.get("id", "")).lower()
+        bumped = s + win_counts.get(eid, 0) * _REROUTE_BUMP
+        out.append((e, bumped))
+    return out
+
+
+def _rerank_brands_from_decisions(
+    brands: List[Dict[str, Any]],
+    brief: Brief,
+) -> List[Dict[str, Any]]:
+    """Same idea, applied to the brand exemplar list."""
+    try:
+        from engine.decisions import query
+    except Exception:
+        return brands
+    try:
+        hits = query(
+            industry=getattr(brief, "industry", None) or None,
+            ui_type=getattr(brief, "project_type", None) or None,
+            min_score=80,
+            accepted_only=True,
+        )
+    except Exception:
+        return brands
+    if len(hits) < _REROUTE_MIN_PRIORS:
+        return brands
+    win_counts: Dict[str, int] = {}
+    for h in hits:
+        v = h.get("picked_brand")
+        if v:
+            win_counts[str(v).lower()] = win_counts.get(str(v).lower(), 0) + 1
+    if not win_counts:
+        return brands
+    # Stable sort: prior winners first (by win count, then by original order)
+    return sorted(
+        brands,
+        key=lambda b: -win_counts.get(str(b.get("id", "")).lower(), 0),
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -259,7 +373,7 @@ def recommend(brief: Brief) -> Recommendation:
         type_future = pool.submit(_lane_type, brief, style)
         motion_future = pool.submit(_lane_motion, brief, style)
         components_future = pool.submit(_lane_components, style, brief)
-        brand_future = pool.submit(_lane_brands, style, industry)
+        brand_future = pool.submit(_lane_brands, style, industry, brief)
 
         palette = palette_future.result()
         type_pair = type_future.result()

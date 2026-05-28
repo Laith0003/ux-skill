@@ -180,36 +180,43 @@ def _synthesize_palette(vocab: Vocabulary, axes: AxisValues) -> Dict[str, str]:
 
 
 def _synthesize_spacing(axes: AxisValues) -> Dict[str, Any]:
-    """Compute spacing scale from density axis.
+    """Compute spacing scale from density + formality interaction.
 
-    Dense systems (axes.density > 0.6) use a tight 4px grid step.
-    Airy systems (axes.density < 0.4) use a loose 8px grid step.
+    Uses the documented axis interaction matrix
+    (engine.synthesizer.interactions.spacing_base_for) so dense + formal,
+    airy + corporate, etc. all resolve predictably instead of letting
+    whichever axis the primitive checks first win silently.
     """
-    if axes.density > 0.65:
-        base = 4
+    from engine.synthesizer.interactions import spacing_base_for
+    base = spacing_base_for(axes)
+    # Fibonacci-ish scale anchored on the resolved base
+    if base <= 4:
         scale = [base, base * 2, base * 3, base * 5, base * 8, base * 13, base * 21]
-    elif axes.density < 0.4:
-        base = 8
+    elif base >= 10:
+        scale = [base, base * 2, base * 3, base * 4, base * 6, base * 9, base * 14]
+    elif base >= 8:
         scale = [base, base * 2, base * 4, base * 6, base * 8, base * 12, base * 16]
     else:
-        base = 6
         scale = [base, base * 2, base * 3, base * 4, base * 6, base * 9, base * 14]
     return {
         "base": base,
         "scale": scale,
         "density_signal": round(axes.density, 3),
+        "formality_signal": round(axes.formality, 3),
     }
 
 
 def _synthesize_radius(vocab: Vocabulary, axes: AxisValues) -> Dict[str, Any]:
-    """Compute radius scale from geometry axis."""
-    g = axes.geometry  # 0 sharp ↔ 1 soft
-    # Vocabulary mean as a sanity check
+    """Compute radius scale via geometry × formality interaction.
+
+    Uses interactions.radius_base_px_for() so sharp+corporate explicitly
+    resolves to nearly-no-radius, soft+playful explicitly resolves to
+    generous radius, and blends only in the ambiguous middle.
+    """
+    from engine.synthesizer.interactions import radius_base_px_for
     voc_signals = vocab.radius_signals
-    voc_mean = (sum(voc_signals) / len(voc_signals)) if voc_signals else g
-    # Weighted: 60% axis, 40% vocabulary mean
-    target = 0.6 * g + 0.4 * voc_mean
-    base_px = round(target * 16)  # 0..16 px base radius
+    voc_mean = (sum(voc_signals) / len(voc_signals)) if voc_signals else 0.5
+    base_px = radius_base_px_for(axes, vocab_mean=voc_mean)
     return {
         "base_px": base_px,
         "sm": max(1, int(base_px * 0.5)),
@@ -217,19 +224,23 @@ def _synthesize_radius(vocab: Vocabulary, axes: AxisValues) -> Dict[str, Any]:
         "lg": int(base_px * 1.5),
         "xl": int(base_px * 2.5),
         "pill": 999,
-        "geometry_signal": round(g, 3),
+        "geometry_signal": round(axes.geometry, 3),
+        "formality_signal": round(axes.formality, 3),
     }
 
 
 def _synthesize_motion(axes: AxisValues) -> Dict[str, Any]:
-    """Compute motion timing + curve from motion axis."""
-    m = axes.motion
-    # Higher motion = snappier timing
-    base_ms = int(220 - 80 * m)  # 220ms → 140ms range
-    fast_ms = max(80, int(base_ms * 0.6))
-    slow_ms = int(base_ms * 1.8)
+    """Compute motion timing via motion × formality interaction.
 
-    # Curve picks: low motion → ease, high → spring-like
+    Uses interactions.motion_timing_for() so high motion + corporate
+    formality is dampened (slower base, same curve) instead of letting
+    motion axis win blindly.
+    """
+    from engine.synthesizer.interactions import motion_timing_for
+    m = axes.motion
+    timings = motion_timing_for(axes)
+
+    # Curve picks: still axis-driven
     if m > 0.7:
         curve = "cubic-bezier(0.34, 1.56, 0.64, 1)"  # springy overshoot
         curve_name = "spring-soft"
@@ -241,12 +252,13 @@ def _synthesize_motion(axes: AxisValues) -> Dict[str, Any]:
         curve_name = "ease-standard"
 
     return {
-        "base_ms": base_ms,
-        "fast_ms": fast_ms,
-        "slow_ms": slow_ms,
+        "base_ms": timings["base_ms"],
+        "fast_ms": timings["fast_ms"],
+        "slow_ms": timings["slow_ms"],
         "curve": curve,
         "curve_name": curve_name,
         "motion_signal": round(m, 3),
+        "formality_signal": round(axes.formality, 3),
     }
 
 

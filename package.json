@@ -1,6 +1,6 @@
 {
   "name": "uxskill",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "ux-skill — design intelligence engine for AI coding assistants. npx wrapper around the Python engine.",
   "type": "module",
   "bin": {

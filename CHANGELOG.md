@@ -7,6 +7,103 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [3.0.0] — 2026-05-28 — **THE BRAIN**
+
+The biggest architectural shift in ux-skill's history. Brand specs are no
+longer templates the recommender picks from — they're **training data the
+engine learns from**. Output is novel every call. The system has eyes on
+its own history. Self-learning. Fully offline. No LLM ever called.
+
+We named this **The Brain** because that's what got built: a constrained
+generative design compiler with a closed feedback loop.
+
+### What's new
+
+- **7-axis synthesizer** (warmth / contrast / density / geometry / formality /
+  motion / type_personality). Briefs map deterministically to axis values;
+  axis values compile to fresh palette + type + spacing + radius + motion
+  tokens. Same brief always yields the same output.
+
+- **Three auto-dispatched modes**:
+  - `strict_brand` — `reference_brands=[stripe] strict=True` → 100% Stripe
+    tokens, fastest path
+  - `brand_anchor` — `reference_brands=[stripe]` → 70% Stripe + 30%
+    axis-adapted from 4 sibling brands
+  - `pure_synthesis` — no brand named → infinity space, 8 axis-matching
+    exemplars distilled into a novel design language
+
+- **Axis interaction matrix** — explicit conflict resolution between
+  competing axes. Dense + corporate → 4px (density wins, Bloomberg-school).
+  Airy + corporate → 12px (formality wins, luxury). Soft + playful → 18px
+  radius. Sharp + corporate → 2px radius. Documented, tested, no silent
+  ad-hoc rules in implementation.
+
+- **Decoupled tone evaluator** — `score_tone_match` now compares synth
+  output to the brief's RAW tags (warm / bold / minimal / etc.), not
+  against axes pre-derived by the same function the synthesizer used.
+  Independent ground truth instead of self-grading.
+
+- **Decisions ledger as a learning substrate** — `.ux/decisions.jsonl`
+  (schema `_v: 1` locked) is no longer just a log. The recommender now
+  re-ranks candidates by past wins in the same `(industry, ui_type)`
+  bucket. Cold-start safe (skips below 3 priors). Only counts decisions
+  with `lint_score >= 80` AND `user_accepted = true`. This is the actual
+  closing of the feedback loop.
+
+- **`/ux-evolve` auto-loop** — lint → polish → re-lint until score ≥ 90 or
+  plateau or 5 rounds. 6 idempotent polish passes. Quality gate at 65 —
+  below that, output is refused unless `--force`.
+
+- **Layout primitives — responsive by construction**. 7 primitives
+  (stack / cluster / grid / sidebar / cover / frame / split) all use
+  `auto-fit minmax(min(N, 100%), 1fr)` + container queries. Zero
+  size-based `@media` queries. Broken layouts cannot be emitted.
+
+- **Typography computation** — modular scale ratio picked from contrast
+  (1.200 quiet / 1.250 balanced / 1.333 loud). 9-step size ladder
+  caption → hero. Weight curves from `type_personality + contrast`.
+  Tracking + line-heights from `formality + density`.
+
+- **Local stats dashboard** — `uxskill stats --html` writes `.ux/stats.html`
+  showing what YOUR install has learned. No telemetry, no global aggregate.
+  Visible proof of self-learning in your own repo.
+
+- **3 new MCP tools** (15 → 18): `ux_synthesize`, `ux_decisions_query`,
+  `ux_decisions_stats`.
+
+- **Determinism hardened** — every sort in the synthesizer pipeline now
+  has explicit tie-breakers (alphabetical on brand id). Same brief →
+  same output across machines, filesystems, Python versions.
+
+### What got KEPT (we cut nothing)
+
+All 22 slash commands preserved. All 11 data manifests + 1,182 entries
+kept. All 160 brand specs kept — their role just changed from
+"templates to copy" to "vocabulary the engine distills from." All 145
+anti-pattern rules kept. The 17-IDE installer untouched.
+
+### What got REJECTED from the v2.1 maximalist spec
+
+- "Burn the catalogue for infinite space" — kept all 1,182 entries
+- "LLM-judged subjective aesthetic axes" — went deterministic
+- "Multi-candidate generation + genetic mutation" — single artifact +
+  polish loop
+- "Rename commands to generate:ui / mutate:ui" — kept all 22 names
+
+### Numbers
+
+- 22 slash commands (was 22) + 1 new (`/ux-evolve`) = **23 commands**
+- 18 MCP tools (was 15) — added `ux_synthesize`, `ux_decisions_query`,
+  `ux_decisions_stats`
+- 11 data manifests, **1,182 structured entries**
+- **145** deterministic anti-pattern rules
+- **160** brand DESIGN specs (queryable JSON + prose MD each)
+- **17 IDEs** supported
+- **17 localized homepages + READMEs**
+- **223 tests pass**
+
+---
+
 ## [2.0.0] — 2026-05-28 — STABLE
 
 First stable release. Cuts the long alpha tail (alpha.1 → alpha.101).

@@ -112,19 +112,24 @@ def pick_exemplars_by_axes(axes: AxisValues, n: int = 8,
 
     Sort by 7-D euclidean distance. Excludes any brand id passed in
     ``exclude_brand_ids``.
+
+    **Fully deterministic.** Ties are broken by brand id (alphabetical) so
+    two brands with identical category-seed axes always resolve in the
+    same order across machines, filesystems, and Python versions.
     """
     all_brands = load_brands()
     excluded = {str(b).lower() for b in (exclude_brand_ids or [])}
-    scored: List[Tuple[float, Dict[str, Any]]] = []
+    scored: List[Tuple[float, str, Dict[str, Any]]] = []
     for b in all_brands:
         bid = (b.get("id") or "").lower()
         if bid in excluded:
             continue
         b_axes = _brand_axes(b)
         dist = _axis_distance(axes, b_axes)
-        scored.append((dist, b))
-    scored.sort(key=lambda kv: kv[0])
-    return [b for _, b in scored[:n]]
+        # Primary: distance. Secondary: brand id (alphabetical, deterministic).
+        scored.append((dist, bid, b))
+    scored.sort(key=lambda t: (t[0], t[1]))
+    return [b for _, _, b in scored[:n]]
 
 
 def _extract_palette(brand: Dict[str, Any]) -> Optional[Dict[str, Any]]:
