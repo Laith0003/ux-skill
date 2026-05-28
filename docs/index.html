@@ -313,18 +313,42 @@
       overflow: hidden;
       isolation: isolate;
     }
+    /* Hero video — full-bleed cinematic loop behind the copy.
+       Plays the moment the page loads; the canvas runs ON TOP of it
+       at lower opacity for live interaction. */
+    .hero__video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -3;
+      opacity: 0.86;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero__video { display: none; }
+    }
     .hero__canvas {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       z-index: -2;
-      opacity: 0.7;
+      opacity: 0.35;
+      mix-blend-mode: screen;
     }
     .hero::after {
       content: '';
       position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 70% 30%, transparent 0%, var(--canvas) 75%);
+      background: radial-gradient(ellipse at 70% 30%, transparent 0%, rgba(7,8,10,0.55) 70%, var(--canvas) 95%);
+      z-index: -1;
+      pointer-events: none;
+    }
+    .hero__fade-bottom {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 28%;
+      background-image: linear-gradient(to bottom, transparent, var(--canvas));
       z-index: -1;
       pointer-events: none;
     }
@@ -1643,7 +1667,16 @@
 
   <!-- ============ 1. HERO ============ -->
   <section class="hero" data-scene="hero" aria-label="uxskill — design intelligence for AI coding">
+    <!-- Cinematic hero video — 6s loop, autoplay muted, plays beneath the copy.
+         The canvas runs on top of the video frame for live interaction; the
+         video gives motion the moment the page loads (before JS hits). -->
+    <video class="hero__video" autoplay muted loop playsinline preload="metadata"
+           poster="/media/hero-loop.jpg" aria-hidden="true">
+      <source src="/media/hero-loop.webm" type="video/webm">
+      <source src="/media/hero-loop.mp4" type="video/mp4">
+    </video>
     <canvas class="hero__canvas" id="hero-canvas" aria-hidden="true"></canvas>
+    <div class="hero__fade-bottom" aria-hidden="true"></div>
     <div class="container">
       <div class="hero__grid">
         <div class="hero__copy">
