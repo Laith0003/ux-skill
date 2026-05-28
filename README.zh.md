@@ -1,4 +1,4 @@
-[English](README.md) · [العربية](README.ar.md) · [Español](README.es.md) · **中文** · [Français](README.fr.md) · [Deutsch](README.de.md)
+[English](README.md) · [العربية](README.ar.md) · **简体中文** · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md) · [Bahasa Indonesia](README.id.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Português](README.pt-BR.md) · [Italiano](README.it.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md)
 
 # ux-skill — 为 Claude Code、Cursor 及一切 AI 编程工具打造的设计智能引擎
 
