@@ -1,0 +1,52 @@
+{
+  "id": "cloudflare",
+  "name": "Cloudflare",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Cloudflare's brand language — the global-network infrastructure brand that operationalizes a single chromatic asset: orange. The orange (#f48120) is reserved with monastic discipline for the brand mark and primary CTAs. Canvas is white-to-near-white with cool blue-gray ink. Type runs a precise grotesk (Inter / IBM Plex / proprietary Sans) and the brand projects 'global, infrastructural, calm' — never SaaS-marketing kinetic. The mark — a stylized orange cloud — appears on the navigation; the rest of the page reads as quiet, dense, technical documentation.",
+  "design_language": {
+    "type": {
+      "display": "Cloudflare Sans",
+      "body": "Inter",
+      "mono": "IBM Plex Mono"
+    },
+    "color_primary": "#f48120",
+    "color_canvas": "#ffffff",
+    "color_ink": "#0d1620",
+    "color_accent": "#003682",
+    "radius": [4, 6, 8],
+    "spacing": "8-based",
+    "motion_signature": "Almost-no-motion. Section reveals fade in over 400ms with no translate. Global-network animations (the signature globe with arc-paths) move at slow 12s loop — calm, infrastructural, never twitchy. Hover states change opacity, never scale."
+  },
+  "trademark_signals": [
+    "Single-asset orange (#f48120) — used only on brand mark, primary CTAs, and the occasional inline highlight; never as a section background, never as a gradient stop with another color",
+    "Map-of-the-world hero — the brand's signature is the global network map with arc-paths between data centers, often used as a watermark or full-bleed hero behind a centered headline",
+    "Dense technical content blocks with clear semantic hierarchy — sub-headers, monospace code excerpts, tabular data — the brand reads as documentation more than marketing",
+    "Cool blue secondary (#003682) for emphasized inline links and chart series — never replaces orange as the primary CTA fill",
+    "Generous white-space rhythm with 96–128px section padding — the brand projects 'infrastructure scale' through breathing room, not visual density"
+  ],
+  "components_observed": [
+    "globe-network-hero",
+    "stat-counter-tile",
+    "product-feature-card",
+    "code-snippet-block",
+    "button-primary-orange",
+    "button-secondary-outline",
+    "comparison-table-dense",
+    "footer-multi-column-monochrome"
+  ],
+  "exemplar_pages": [
+    "cloudflare.com",
+    "cloudflare.com/network",
+    "blog.cloudflare.com",
+    "developers.cloudflare.com"
+  ],
+  "ai_slop_avoided": [
+    "Don't introduce a second saturated color. Orange is the single chromatic asset; emphasis comes from weight and spacing, not a second hue",
+    "Don't paint the canvas dark. Cloudflare marketing is light-canvas; only the developer docs pivot to a code-block-heavy treatment with dark snippet wells",
+    "Don't animate the network globe to spin fast. The signature motion is slow and constant — 'we are infrastructure', not 'we are demo-reel kinetic'",
+    "Don't use display weights below 600. Cloudflare display tiers carry semantic weight via heavy grotesk faces; thin reads as off-brand",
+    "Don't decorate with stock vector illustrations. The brand favors the network globe, real data visualizations, and clean photography of data centers — never abstract gradient blobs"
+  ],
+  "source_md": "references/brands/cloudflare-DESIGN.md"
+}

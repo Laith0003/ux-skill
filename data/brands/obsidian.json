@@ -1,0 +1,54 @@
+{
+  "id": "obsidian",
+  "name": "Obsidian",
+  "category": "Productivity / Collaboration",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Obsidian's brand language — the personal-knowledge-management tool that worships the knowledge graph. Canvas is a deep slate-purple-black (#202020) in dark mode (the default), or a parchment-cream (#f6f3ee) in light. The signature visual element is the force-directed graph of nodes — purple glowing dots connected by faint white edges — that appears as both the product's centerpiece and the marketing hero. Type is a precise grotesk (Inter / Söhne) with markdown-derived hierarchy: H1 / H2 / H3 styled to mirror raw markdown rendering. The brand reads as 'private, infinite, sovereign' — the antithesis of cloud-collab.",
+  "design_language": {
+    "type": {
+      "display": "Inter",
+      "body": "Inter",
+      "mono": "JetBrains Mono"
+    },
+    "color_primary": "#a882ff",
+    "color_canvas": "#202020",
+    "color_canvas_light": "#f6f3ee",
+    "color_ink": "#dcddde",
+    "color_ink_light": "#1a1a1a",
+    "color_accent": "#7f6df2",
+    "radius": [4, 8, 12],
+    "spacing": "8-based",
+    "motion_signature": "Knowledge-graph nodes drift in slow physics simulation — gentle force-directed jiggle, ~0.2 Hz. Edges glow faintly purple on hover. New-node animation pulses out from center over 600ms. Markdown preview updates use a 120ms cross-fade. The product chrome is otherwise still — sovereignty is calmness."
+  },
+  "trademark_signals": [
+    "Force-directed knowledge graph — purple glowing nodes connected by faint white edges on a slate-purple-black canvas — appears as the marketing hero, the product centerpiece, and as decorative motif inside feature blocks",
+    "Dark slate-purple canvas (#202020) as default — Obsidian is a 'dark-mode-first' brand; light mode is the second-class citizen",
+    "Markdown-rendered hierarchy on the marketing page itself — H1s with the same styling as in-product H1, code-blocks in identical syntax-highlight palette as the product",
+    "Plugin-grid ecosystem showcase — 1500+ community plugins displayed as a dense card grid is itself a marketing device, reinforcing the 'infinitely extensible' message",
+    "Long-form feature explanations with screenshot-as-illustration — Obsidian shows actual product screenshots (not abstract gradient art) embedded in editorial-length paragraphs"
+  ],
+  "components_observed": [
+    "knowledge-graph-hero",
+    "plugin-grid-card",
+    "markdown-preview-pane",
+    "feature-screenshot-block",
+    "theme-gallery-card",
+    "pricing-tier-comparison-table",
+    "button-primary-purple",
+    "footer-minimal-dark"
+  ],
+  "exemplar_pages": [
+    "obsidian.md",
+    "obsidian.md/about",
+    "obsidian.md/plugins",
+    "help.obsidian.md"
+  ],
+  "ai_slop_avoided": [
+    "Don't paint the canvas pure black. The slight purple-tint slate (#202020) is the brand differentiator from generic dark-mode SaaS",
+    "Don't render the knowledge graph as a flat illustration. It must look like the real product output — physics-simulated, glowing, connected — never a static SVG diagram",
+    "Don't add saturated accent colors. The brand is monochrome-on-slate with a single purple voltage; introducing teal/orange/red breaks the sovereignty-and-focus voice",
+    "Don't show cloud-sync as a primary value proposition. Obsidian's brand is 'your notes, on your machine, forever'; messaging around cloud or collaboration reads as off-brand (Obsidian Sync is a paid add-on, not the lead)",
+    "Don't use stock illustrations. Every visual on an Obsidian marketing page is either a product screenshot, a knowledge-graph render, or a plugin tile"
+  ],
+  "source_md": "references/brands/obsidian-DESIGN.md"
+}

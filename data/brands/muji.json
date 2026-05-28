@@ -1,0 +1,53 @@
+{
+  "id": "muji",
+  "name": "MUJI",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of MUJI (無印良品 — 'no-brand quality goods') — the Japanese lifestyle retailer whose brand strategy is to have no brand. Canvas is pure white or kraft-paper beige (#f0ebe1). Type runs a mixed Japanese-Latin grotesk (Yu Gothic / Hiragino Kaku Gothic / Helvetica Neue) at modest 11–13px sizes — never large display. Product photography is shot on shadowless white with the object floating in negative space. Color is reserved for the deep MUJI red (#8a1538) used only on the brand mark and on price tags. Everything else is the kraft-and-cotton palette of un-bleached materials. The page reads as a department-store catalog from 1985 — quiet, dense, anti-marketing.",
+  "design_language": {
+    "type": {
+      "display": "Yu Gothic",
+      "body": "Yu Gothic",
+      "mono": null
+    },
+    "color_primary": "#8a1538",
+    "color_canvas": "#ffffff",
+    "color_canvas_kraft": "#f0ebe1",
+    "color_ink": "#1a1a1a",
+    "color_muted": "#878787",
+    "radius": [0, 2, 4],
+    "spacing": "4-based",
+    "motion_signature": "Almost-zero motion. Image hover changes opacity only — no scale, no shadow lift. Page transitions use a 200ms cross-fade. Product carousel uses a slow ~600ms ease-in-out between frames. The brand voice is 'the object is the point' — motion would distract."
+  },
+  "trademark_signals": [
+    "Product-floating-in-white photography — every product shot on a shadowless pure-white background with the object centered in generous negative space, no styling, no props",
+    "Tiny type at every tier — 11–13px body, 14–16px display — refusing the SaaS-marketing convention of 48px hero headlines",
+    "Kraft-paper texture (#f0ebe1) as the secondary canvas — used on craft-category pages, gift-wrap sections, and stationery line — an actual paper-fiber surface, not a flat fill",
+    "Deep MUJI red (#8a1538) reserved for the wordmark and red price tags — never used as a CTA fill, never as a section background",
+    "Dense vertical product lists with thumbnail + price + spec — the page reads like a 1985 mail-order catalog, not a 2026 e-commerce hero"
+  ],
+  "components_observed": [
+    "product-floating-white-tile",
+    "kraft-canvas-band",
+    "price-tag-red",
+    "dense-product-row",
+    "category-tab-minimal",
+    "footer-store-locator",
+    "button-text-link-underlined",
+    "magazine-spread-editorial"
+  ],
+  "exemplar_pages": [
+    "muji.com",
+    "muji.com/jp",
+    "muji.us",
+    "muji.eu"
+  ],
+  "ai_slop_avoided": [
+    "Don't increase type sizes to SaaS-marketing scale. MUJI's voice is 'whispered' — 48px headlines read as off-brand shouting",
+    "Don't paint accent moments in MUJI red. The red is reserved for the wordmark and the red price tag; using it on a CTA fill breaks the discipline",
+    "Don't add product-photography styling. The objects float on white with no props, no shadow, no model — the absence IS the brand",
+    "Don't use shadows on product cards. Cards are flat hairline-bordered tiles; depth would contradict the 'no-frills' brand",
+    "Don't introduce a chromatic accent palette. The brand is kraft + white + ink + red price tag; teal/yellow/green accents are off-brand"
+  ],
+  "source_md": "references/brands/muji-DESIGN.md"
+}

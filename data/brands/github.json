@@ -1,0 +1,55 @@
+{
+  "id": "github",
+  "name": "GitHub",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of GitHub's marketing language — the developer-platform brand that owns the social experience of writing software. Light mode is a near-white canvas with deep navy ink; dark mode is the dominant in-product surface (#0d1117) the engineers actually live in. The signature is the Octocat universe — a hand-illustrated cat-octopus cast joining seven-shade green contribution heatmaps, GitHub Sans display, and a typographic discipline borrowed from technical manuals, not SaaS marketing.",
+  "design_language": {
+    "type": {
+      "display": "Mona Sans",
+      "body": "Mona Sans",
+      "mono": "Mona Sans Mono"
+    },
+    "color_primary": "#2da44e",
+    "color_canvas": "#ffffff",
+    "color_canvas_dark": "#0d1117",
+    "color_ink": "#1f2328",
+    "color_accent": "#0969da",
+    "radius": [4, 6, 8, 12],
+    "spacing": "8-based",
+    "motion_signature": "Octocat hover wiggles 4 degrees over 600ms cubic-bezier — the only chromatic motion the brand permits. Contribution-graph cell pops use a 120ms ease-out scale-in. Code-block reveal on scroll uses a slow 800ms opacity fade, no translate."
+  },
+  "trademark_signals": [
+    "Octocat cast — Mona, Mojo, Hubot — hand-drawn anthropomorphic cat-octopus mascots appearing as illustrated, often-animated heroes, never flat sticker-style",
+    "Seven-shade green contribution heatmap (#ebedf0 → #9be9a8 → #40c463 → #30a14e → #216e39) — the brand's most-cited UI element, used both as data viz and as decorative texture",
+    "Mona Sans (the custom variable typeface) at display tiers with weight 800–950 and tight letter-spacing — never a thin display weight",
+    "Dual canvas — light mode (#ffffff) for marketing, near-black (#0d1117) for product chrome — most landing pages reveal both within scroll distance",
+    "Code-block screenshots with line numbers, syntax highlighting in the actual GitHub palette (orange keywords, blue idents, green strings), and an Octocat or hand-drawn motif overlaid"
+  ],
+  "components_observed": [
+    "octocat-hero-illustration",
+    "contribution-graph-grid",
+    "code-block-with-line-numbers",
+    "pull-request-card",
+    "repo-stats-row",
+    "issue-thread-card",
+    "button-primary-green",
+    "button-secondary-outline",
+    "footer-dark-multi-column"
+  ],
+  "exemplar_pages": [
+    "github.com",
+    "github.com/features",
+    "github.com/copilot",
+    "github.com/about",
+    "github.blog"
+  ],
+  "ai_slop_avoided": [
+    "Don't substitute the Octocat with a generic mascot or emoji cat. The octopus-cat hybrid is non-negotiable and must be illustrated, not stickered",
+    "Don't paint the contribution graph in a non-green palette. The seven-shade green is the recognized data-viz signature",
+    "Don't use a thin Mona Sans weight at display sizes. Display weight is locked at 800+ — the typographic muscle is the voice",
+    "Don't drop the dark product chrome. Marketing pages without a dark code-block screenshot read as non-GitHub",
+    "Don't use shadows on code blocks. Code blocks carry their own elevation via the dark fill against light canvas"
+  ],
+  "source_md": "references/brands/github-DESIGN.md"
+}

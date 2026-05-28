@@ -1,0 +1,51 @@
+{
+  "id": "arc-browser",
+  "name": "Arc Browser",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of The Browser Company's Arc brand language — the post-Chrome browser that treats the address bar as the enemy. The brand canvas is a soft warm off-white (#f5f3ed) with deep ink, or alternatively a watercolor-gradient hero band sweeping pastel coral, peach, and lavender across a hand-drawn marketing page. The voice is wide-eyed earnest tech-utopianism — sentence-case headlines, generous serif accents (Söhne or Inter for body, with proprietary curvilinear display nameplates), and animation that feels closer to children's illustration than browser-chrome. Arc is the brand where motion is the marketing.",
+  "design_language": {
+    "type": {
+      "display": "ABC Diatype Mono",
+      "body": "Söhne",
+      "mono": "ABC Diatype Mono"
+    },
+    "color_primary": "#ff7a5c",
+    "color_canvas": "#f5f3ed",
+    "color_ink": "#1a1a1a",
+    "color_accent": "#bca7e8",
+    "radius": [8, 12, 16, 24],
+    "spacing": "8-based",
+    "motion_signature": "Constant gentle motion is the brand. Hero gradients drift slowly with watercolor-bleed transitions (~12s loop). UI mockups float with subtle 4px vertical bobs over 3s ease-in-out. Hover states scale 1.02x with a 200ms cubic-bezier. Page transitions use slow 600ms fade-with-translate, never abrupt cuts."
+  },
+  "trademark_signals": [
+    "Watercolor-gradient hero — peach + coral + lavender pastels that bleed into each other like wet paint, used as full-bleed hero backgrounds beneath sentence-case display headlines",
+    "Sentence-case display headlines (never ALL CAPS, never Title Case) — 'Browse the web like a person' reads like a manifesto, not a marketing tagline",
+    "Curvilinear hand-drawn UI mockups — sidebar tabs render with rounded organic edges, not the chrome-rectangular grid every other browser uses",
+    "Color-personalization theme: every Arc screenshot shows a different user's chosen color palette — the chrome is meant to be expressive, not corporate",
+    "Long-scroll marketing pages narrated like a short film — each section reveals a new feature with a custom animated UI mockup, no static screenshots"
+  ],
+  "components_observed": [
+    "watercolor-gradient-hero",
+    "sidebar-tab-organic",
+    "feature-animation-card",
+    "split-view-mockup",
+    "color-palette-picker",
+    "command-bar-floating",
+    "button-primary-coral",
+    "manifesto-paragraph-block"
+  ],
+  "exemplar_pages": [
+    "arc.net",
+    "thebrowser.company",
+    "arc.net/browse"
+  ],
+  "ai_slop_avoided": [
+    "Don't use Title Case or ALL CAPS headlines. Sentence-case is the brand voice — 'Browse the web like a person', not 'Browse The Web Like A Person'",
+    "Don't paint hero gradients with hard linear stops. The watercolor effect — soft bleed transitions, painterly edges — is the signature",
+    "Don't render browser UI mockups in flat rectangular Material/Fluent geometry. Arc UI mockups have organic curves, generous corners, and hand-drawn warmth",
+    "Don't show one corporate color theme across all screenshots. Every Arc screenshot should pick a different user-chosen palette — variety IS the personalization message",
+    "Don't strip the long-scroll narrative. Arc landing pages walk through features as a guided tour with custom animations; a single screenshot grid reads as off-brand"
+  ],
+  "source_md": "references/brands/arc-browser-DESIGN.md"
+}

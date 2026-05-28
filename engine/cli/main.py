@@ -12,6 +12,7 @@ Subcommands
 ``ux persist save-page``-- write a per-page .md from a brief + output
 ``ux persist load``     -- read MASTER.md back as JSON
 ``ux persist list``     -- list page names persisted under pages/
+``ux image-extract``    -- read a design image, return brief + hints + recommendation
 ``ux stats``            -- show data manifest counts
 ``ux version``          -- print version
 """

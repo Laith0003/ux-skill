@@ -311,6 +311,36 @@ h1, h2, h3, h4 {
       border-bottom: 1px solid var(--hairline);
       letter-spacing: -0.02em;
     }
+    /* Mobile drawer — language switcher block at the bottom */
+    .nav__drawer-langs {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--hairline);
+      width: 100%;
+    }
+    .nav__drawer-langs-eyebrow {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 14px;
+    }
+    .nav__drawer-langs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 14px;
+    }
+    .nav__drawer-langs-grid a {
+      font-family: var(--sans);
+      font-size: 15px;
+      color: var(--body);
+      padding: 6px 0;
+      text-decoration: none;
+      transition: color var(--t-fast) var(--ease-cinema);
+    }
+    .nav__drawer-langs-grid a:hover,
+    .nav__drawer-langs-grid a:focus-visible { color: var(--ink); }
     .nav__drawer .nav__drawer-close {
       position: absolute; top: 18px; right: var(--gutter);
       width: 44px; height: 44px;
@@ -2446,8 +2476,33 @@ h1, h2, h3, h4 {
   <a href="/roadmap.html">Roadmap</a>
   <a href="/faq.html">FAQ</a>
   <a href="/mcp.html">MCP</a>
+  <a href="/commands.html">Commands</a>
   <a href="/blog/">Blog</a>
   <a href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+
+  <!-- Language switcher — mobile drawer surface -->
+  <div class="nav__drawer-langs">
+    <p class="nav__drawer-langs-eyebrow">Language · 17</p>
+    <div class="nav__drawer-langs-grid">
+      <a href="/"        lang="en"   >English</a>
+      <a href="/zh-CN/"  lang="zh-CN">简体中文</a>
+      <a href="/zh-TW/"  lang="zh-TW">繁體中文</a>
+      <a href="/ja/"     lang="ja"   >日本語</a>
+      <a href="/ko/"     lang="ko"   >한국어</a>
+      <a href="/hi/"     lang="hi"   >हिन्दी</a>
+      <a href="/id/"     lang="id"   >Bahasa</a>
+      <a href="/vi/"     lang="vi"   >Tiếng Việt</a>
+      <a href="/th/"     lang="th"   >ไทย</a>
+      <a href="/ar/"     lang="ar"   dir="rtl">العربية</a>
+      <a href="/es/"     lang="es"   >Español</a>
+      <a href="/fr/"     lang="fr"   >Français</a>
+      <a href="/de/"     lang="de"   >Deutsch</a>
+      <a href="/pt-BR/"  lang="pt-BR">Português</a>
+      <a href="/ru/"     lang="ru"   >Русский</a>
+      <a href="/tr/"     lang="tr"   >Türkçe</a>
+      <a href="/it/"     lang="it"   >Italiano</a>
+    </div>
+  </div>
 </div>
 
 <main id="main">
@@ -2490,8 +2545,8 @@ h1, h2, h3, h4 {
           <div class="hero__meta" aria-label="Plugin facts">
             <span><span class="num">998</span> entries</span>
             <span><span class="num">22</span> commands</span>
-            <span><span class="num">85</span> lint rules</span>
-            <span><span class="num">92</span> brand specs</span>
+            <span><span class="num">120</span> lint rules</span>
+            <span><span class="num">110</span> brand specs</span>
             <span><span class="num">17</span> IDEs</span>
           </div>
         </div>
