@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The 7 axes of a design system — how ux-skill v3.0 maps a brief to tokens</title>
+<meta name="description" content="warmth · contrast · density · geometry · formality · motion · type_personality — the seven continuous axes that v3.0's synthesizer derives from your brief and compiles to palette, type, spacing, radius, motion tokens.">
+<link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/seven-axes-design-system-explained.html">
+<meta property="og:title" content="The 7 axes of a design system — ux-skill v3.0">
+<meta property="og:description" content="warmth · contrast · density · geometry · formality · motion · type_personality. The seven continuous axes that compile a brief into a complete token system.">
+<meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
+<meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/seven-axes-design-system-explained.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The 7 axes of a design system">
+<meta name="twitter:description" content="warmth · contrast · density · geometry · formality · motion · type_personality. The math behind v3.0's synthesizer.">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"The 7 axes of a design system — how ux-skill v3.0 maps a brief to tokens","datePublished":"2026-05-28","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/seven-axes-design-system-explained.html","inLanguage":"en"}
+</script>
+
+<style>
+  :root {
+    --canvas: #07080a; --surface: #0e1014; --ink: #f6f7f9; --body: #c0c3c9;
+    --muted: #8a8f96; --accent: #f59e0b; --hairline: rgba(255,255,255,0.08);
+    --display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--canvas); color: var(--body); font-family: var(--sans); line-height: 1.65; overflow-x: clip; }
+  a { color: var(--accent); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: clamp(20px, 4vw, 56px); }
+  header.post { margin-bottom: 48px; padding-bottom: 24px; border-bottom: 1px solid var(--hairline); }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  h1 { font-family: var(--display); font-size: clamp(32px, 5vw, 52px); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; font-weight: 600; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede { font-size: 19px; line-height: 1.55; color: var(--body); max-width: 60ch; }
+  h2 { font-family: var(--display); font-size: 28px; letter-spacing: -0.02em; color: var(--ink); margin: 56px 0 18px; }
+  h3 { font-family: var(--display); font-size: 21px; color: var(--ink); margin: 32px 0 12px; }
+  p { margin-bottom: 18px; font-size: 16.5px; max-width: 60ch; }
+  ul { margin: 0 0 18px 22px; }
+  li { margin-bottom: 8px; max-width: 60ch; }
+  code { font-family: var(--mono); font-size: 14px; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+  pre { background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; padding: 18px 22px; overflow-x: auto; margin: 18px 0; }
+  pre code { background: transparent; padding: 0; font-size: 13.5px; line-height: 1.6; color: var(--body); }
+  blockquote { border-left: 2px solid var(--accent); padding-left: 18px; margin: 28px 0; color: var(--ink); font-style: italic; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--hairline); }
+  th { color: var(--ink); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .nav { padding: 18px 0; border-bottom: 1px solid var(--hairline); }
+  .nav__row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); }
+  .nav__brand { font-family: var(--display); font-weight: 700; font-size: 17px; color: var(--ink); }
+  .nav__link { font-family: var(--mono); font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted); }
+  footer { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--hairline); color: var(--muted); font-family: var(--mono); font-size: 11.5px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__row">
+    <a class="nav__brand" href="/">uxskill</a>
+    <a class="nav__link" href="/">Home</a>
+    <a class="nav__link" href="/brands.html">Brands</a>
+    <a class="nav__link" href="/anti-patterns.html">Anti-patterns</a>
+    <a class="nav__link" href="/blog/">Blog</a>
+    <a class="nav__link" href="/compare.html">Compare</a>
+    <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+  </div>
+</header>
+
+<div class="wrap">
+<header class="post">
+<p class="eyebrow">v3.0 — THE BRAIN · 2026-05-28</p>
+<h1>The <em>7 axes</em> of a design system,<br>and how a brief maps to all of them.</h1>
+<p class="lede">v3.0 introduces a 7-axis synthesizer. Every brief becomes seven continuous values. Those values then compile to palette, type ladder, spacing scale, radius scale, and motion timing. Here's what each axis measures, where it comes from, and how it lands as code.</p>
+</header>
+
+<h2>The full axis table</h2>
+
+<table>
+<thead><tr><th>Axis</th><th>0.0 end</th><th>1.0 end</th><th>Compiles to</th></tr></thead>
+<tbody>
+<tr><td><code>warmth</code></td><td>cold</td><td>warm</td><td>RGB warmth-shift</td></tr>
+<tr><td><code>contrast</code></td><td>flat</td><td>dramatic</td><td>Type scale ratio + weight curve</td></tr>
+<tr><td><code>density</code></td><td>airy</td><td>dense</td><td>Spacing base + line-height</td></tr>
+<tr><td><code>geometry</code></td><td>sharp</td><td>soft</td><td>Radius scale</td></tr>
+<tr><td><code>formality</code></td><td>playful</td><td>corporate</td><td>Tracking + motion dampening</td></tr>
+<tr><td><code>motion</code></td><td>still</td><td>kinetic</td><td>Animation timing + curve</td></tr>
+<tr><td><code>type_personality</code></td><td>geometric</td><td>humanist</td><td>Display family bias</td></tr>
+</tbody>
+</table>
+
+<h2>Where the axis values come from</h2>
+<p>Each axis is derived through three steps:</p>
+
+<h3>1. Industry seed</h3>
+<p>17 documented industries each have a 7-axis seed dictionary. Unknown industries default to neutral 0.5 across the board.</p>
+<pre><code>INDUSTRY_SEEDS = {
+    "fintech-payments": {"warmth": 0.35, "contrast": 0.55, "density": 0.6,
+                         "geometry": 0.4, "formality": 0.75, "motion": 0.45,
+                         "type_personality": 0.4},
+    "luxury":           {"warmth": 0.55, "contrast": 0.7, "density": 0.3,
+                         "geometry": 0.55, "formality": 0.75, "motion": 0.4,
+                         "type_personality": 0.75},
+    "gaming":           {"warmth": 0.5,  "contrast": 0.85, "density": 0.7,
+                         "geometry": 0.35, "formality": 0.3, "motion": 0.85,
+                         "type_personality": 0.45},
+    # ... 14 more
+}</code></pre>
+
+<h3>2. Tone nudges</h3>
+<p>35+ documented tone tags push axes by ±0.10 to ±0.30:</p>
+<pre><code>TONE_NUDGES = {
+    "warm":         {"warmth": +0.20},
+    "bold":         {"contrast": +0.25, "motion": +0.10},
+    "minimal":      {"density": -0.30, "contrast": -0.10},
+    "rounded":      {"geometry": +0.25, "warmth": +0.10},
+    "corporate":    {"formality": +0.25, "warmth": -0.10},
+    "kinetic":      {"motion": +0.25, "contrast": +0.10},
+    "editorial":    {"type_personality": +0.25, "density": +0.10},
+    # ... 28 more
+}</code></pre>
+
+<h3>3. Forbidden clamps</h3>
+<p>The brief's <code>forbidden</code> list applies hard clamps to specific axes:</p>
+<pre><code>FORBIDDEN_CLAMPS = {
+    "playful":    ("formality", (0.6, 1.0)),
+    "loud":       ("contrast",  (0.0, 0.5)),
+    "dense":      ("density",   (0.0, 0.55)),
+    "brutalism":  ("geometry",  (0.3, 1.0)),
+}</code></pre>
+
+<p>So <code>forbidden=["playful"]</code> clamps formality to at minimum 0.6, regardless of what the seed + nudges produced.</p>
+
+<h2>How each axis lands as code</h2>
+
+<h3>warmth → palette RGB shift</h3>
+<p>The palette synthesizer mixes anchor colors from the chosen brand exemplars, then applies a warmth shift based on the axis value. Distance from 0.5 sets intensity, max ±18 RGB units.</p>
+<pre><code>def _warmth_shift(rgb, warmth):
+    delta = (warmth - 0.5) * 2     # -1.0 .. +1.0
+    shift = 18 * delta             # ±18 max
+    r, g, b = rgb
+    return (r + shift, g + shift / 2, b - shift / 2)</code></pre>
+<p>So a brief with warmth=0.7 produces palette canvas ~12 R units warmer, ~6 G warmer, ~6 B cooler than the same brief at warmth=0.5.</p>
+
+<h3>contrast → modular scale ratio + weight curve</h3>
+<p>Pick the type-size ratio from contrast:</p>
+<ul>
+<li><code>contrast >= 0.7</code> → 1.333 (perfect fourth, loud)</li>
+<li><code>contrast >= 0.4</code> → 1.250 (major third, balanced)</li>
+<li><code>contrast < 0.4</code> → 1.200 (minor third, quiet)</li>
+</ul>
+<p>So a "minimal/quiet" brief produces tightly-stepped headings (16/19.2/23/27.7/33.2). A "bold/dramatic" brief produces dramatic jumps (16/21.3/28.4/37.9/50.5).</p>
+
+<h3>density → spacing base</h3>
+<p>This is where the axis interaction matrix kicks in (we documented density × formality conflict resolution in <a href="/blog/v3-the-brain-launch.html">the launch post</a>):</p>
+
+<table>
+<thead><tr><th>density</th><th>formality</th><th>base px</th></tr></thead>
+<tbody>
+<tr><td>> 0.65</td><td>any</td><td>4 (Bloomberg)</td></tr>
+<tr><td>< 0.4</td><td>> 0.7</td><td>12 (luxury)</td></tr>
+<tr><td>< 0.4</td><td>< 0.7</td><td>8 (airy SaaS)</td></tr>
+<tr><td>else</td><td>any</td><td>6 (mid)</td></tr>
+</tbody>
+</table>
+
+<h3>geometry → radius scale</h3>
+<p>Sharp + corporate = 2px (NYT). Soft + playful = 18px (Glossier). Otherwise blended target.</p>
+
+<h3>formality → tracking + motion dampening</h3>
+<p>High formality tightens display letter-spacing (-0.025em vs -0.015em). Also dampens kinetic motion timings by 25% when motion is also high (the "Bloomberg with hover animations" case).</p>
+
+<h3>motion → animation timing + curve pick</h3>
+<p><code>base_ms = 220 - 80 * motion</code>, so a kinetic brief gets 140ms base timings, a still brief gets 220ms.</p>
+<p>Curve picks:</p>
+<ul>
+<li><code>motion > 0.7</code> → spring overshoot (<code>cubic-bezier(0.34, 1.56, 0.64, 1)</code>)</li>
+<li><code>motion > 0.4</code> → ease-cinema (<code>cubic-bezier(0.22, 1, 0.36, 1)</code>)</li>
+<li>else → standard ease</li>
+</ul>
+
+<h3>type_personality → display family bias</h3>
+<p>Low (geometric) biases the synthesizer toward Inter Tight / Söhne / Grotesque families. High (humanist) biases toward Bricolage Grotesque / IBM Plex / Source families. Body always anchors on Inter.</p>
+
+<h2>What this means in practice</h2>
+
+<p>You ask for: <code>industry=fintech-payments, tone=["bold", "serious"]</code>.</p>
+
+<ol>
+<li>Industry seed: warmth=0.35, contrast=0.55, density=0.6, geometry=0.4, formality=0.75, motion=0.45, type_personality=0.4</li>
+<li>Apply "bold" nudge: contrast=0.55+0.25=0.80, motion=0.45+0.10=0.55</li>
+<li>Apply "serious" nudge: formality=0.75+0.20=0.95</li>
+<li>Final axes: (0.35, 0.80, 0.6, 0.4, 0.95, 0.55, 0.4)</li>
+</ol>
+
+<p>The synthesizer compiles this to:</p>
+
+<ul>
+<li>Palette: cool-leaning (warmth 0.35 = cool shift) with high saturation accent (contrast 0.80)</li>
+<li>Type ratio: 1.333 (contrast 0.80 puts it in the "loud" branch)</li>
+<li>Spacing base: 4px (dense 0.6 + formal 0.95 → density wins, Bloomberg-style)</li>
+<li>Radius: small but not zero (geometry 0.4 + formal 0.95 → conservative)</li>
+<li>Tracking display: -0.025em (formality > 0.6 = tight)</li>
+<li>Motion timing: ~196ms base, +25% dampener (formality 0.95 dampens), final ~245ms</li>
+<li>Motion curve: ease-cinema (motion 0.55 is in the mid range)</li>
+<li>Display font: Inter Tight (type_personality 0.4 = geometric-leaning)</li>
+</ul>
+
+<p>All deterministic. All from a brief with 3 fields. All offline, no LLM call.</p>
+
+<h2>Try it yourself</h2>
+
+<pre><code>pip install uxskill
+uxskill synthesize \
+  --industry fintech-payments \
+  --tone bold --tone serious
+
+# Outputs: { mode: "pure_synthesis",
+#            axes: {warmth: 0.35, contrast: 0.80, ...},
+#            palette: {canvas: "#0a1014", ink: "#f6f8fa", ...},
+#            type_pair: {display: "Inter Tight", body: "Inter", ...},
+#            spacing: {base: 4, scale: [4, 8, 12, 20, 32, 52, 84]},
+#            radius: {base_px: 4, sm: 2, md: 4, lg: 6, xl: 10, pill: 999},
+#            motion: {base_ms: 245, fast_ms: 147, slow_ms: 441, ... } }</code></pre>
+
+<h2>Related</h2>
+<ul>
+<li><a href="/blog/v3-the-brain-launch.html">The v3.0 launch — The Brain</a></li>
+<li><a href="/blog/brand-specs-training-data-not-templates.html">Brand specs are training data</a></li>
+<li><a href="/blog/deterministic-design-engine-no-llm.html">A deterministic design engine</a></li>
+<li><a href="/blog/closed-loop-design-system-feedback.html">What closed-loop actually means</a></li>
+</ul>
+
+<footer>
+ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+</footer>
+
+</div>
+</body>
+</html>
