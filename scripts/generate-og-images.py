@@ -50,6 +50,12 @@ PAGES = {
     "mcp-server-design-intelligence": ("MCP", "MCP server for\ndesign intelligence", "14 tools over stdio"),
     "motion-presets-framer-gsap-css": ("Motion", "Motion presets — Framer,\nGSAP, CSS", "57 presets · 8 categories · 3 engines"),
     "dogfooding-design-engine":   ("Story", "Dogfooding ux-skill —\nbugs we found by using it", "Two engine bugs filed against ourselves · both fixed"),
+    "zed-design-plugin":          ("Integration", "Zed design plugin", "Install ux-skill in the Rust IDE · 85-rule linter"),
+    "github-copilot-design-rules":("Integration", "GitHub Copilot\ndesign rules", "Catch AI-design fingerprints in Copilot output"),
+    "jetbrains-ai-design-system": ("Integration", "JetBrains AI\ndesign system rules", "IntelliJ + WebStorm · 85-rule linter"),
+    "ai-design-system-cli":       ("Tooling", "AI design system CLI", "10-field discovery · 60-second MASTER.md"),
+    "claude-desktop-mcp-design":  ("MCP", "Claude Desktop + MCP\ndesign intelligence", "ux-skill as stdio server · 14 tools"),
+    "commands":                   ("Reference", "Every slash command,\ndocumented", "23 commands · discovery -> recommend -> generate -> lint"),
 }
 
 

@@ -32,6 +32,12 @@ PAGE_TO_SLUG = {
     "docs/blog/mcp-server-design-intelligence.html":   "mcp-server-design-intelligence",
     "docs/blog/motion-presets-framer-gsap-css.html":   "motion-presets-framer-gsap-css",
     "docs/blog/dogfooding-design-engine.html":         "dogfooding-design-engine",
+    "docs/blog/zed-design-plugin.html":                "zed-design-plugin",
+    "docs/blog/github-copilot-design-rules.html":      "github-copilot-design-rules",
+    "docs/blog/jetbrains-ai-design-system.html":       "jetbrains-ai-design-system",
+    "docs/blog/ai-design-system-cli.html":             "ai-design-system-cli",
+    "docs/blog/claude-desktop-mcp-design.html":        "claude-desktop-mcp-design",
+    "docs/commands.html":                              "commands",
 }
 
 
