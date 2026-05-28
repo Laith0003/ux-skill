@@ -7,6 +7,53 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.0.0-alpha.63] — 2026-05-28 (stats refresh — 100 rules / 92 brands)
+
+- Round 5 anti-patterns landed at 100. Every reference to 85 anti-pattern rules / 85-rule linter / 85 deterministic rules across the site swept to 100 (42 files touched: 21 docs + 21 landing, plus README.md and command markdown).
+
+## [2.0.0-alpha.62] — 2026-05-28 (anti-patterns 85 → 100)
+
+- **+15 new deterministic regex rules** across A11y (6), Typography (2), Layout (2), Quality (2), Performance (2), Motion (1). Highlights: `overflow-hidden-on-html` (high), `lang-attribute-missing` (high), `cursor-not-allowed-no-visual` (high), `pointer-events-none-on-link` (high), `font-weight-numeric-100-or-900-on-body` (high), `event-listener-no-passive-on-scroll`, `image-format-jpg-no-webp-avif`, `transition-duration-500ms-or-longer`.
+- The agent dropped 9 candidates: 6 duplicates of existing rules (viewport-no-zoom, img-no-dimensions, arbitrary-z-index-9999, h-screen-no-dvh-fallback, console-log-leak, target-blank-no-noopener) and 3 that required surrounding-context regex can't see.
+- Total: **4 critical / 33 high / 42 medium / 21 low.** Demo file findings: 115 → 144.
+
+## [2.0.0-alpha.61] — 2026-05-28 (CI green on Python 3.9)
+
+- **Bug:** `python-tests (3.9)` matrix entry red on every push. Install step failed with `ERROR: Could not find a version that satisfies the requirement mcp>=1.0`.
+- **Root cause:** `mcp>=1.0` listed unconditionally in `[project.optional-dependencies]` for both `mcp` and `dev` extras. The `mcp` package on PyPI requires Python ≥3.10, so pip on 3.9 couldn't resolve it.
+- **Fix:** added a PEP 508 env marker — `mcp>=1.0; python_version >= '3.10'`. Engine MCP module already uses graceful try/except with `MCP_AVAILABLE` flag; test_mcp.py passes without the package on 3.9. Verified locally on Python 3.9.6 and via CI on the next push.
+
+## [2.0.0-alpha.60] — 2026-05-28 (launch pack)
+
+- New artifact: `docs/launch-pack.md` — ready-to-post copy for HN Show HN, Product Hunt, Reddit (r/ClaudeAI, r/cursor, r/programming), X/Twitter, LinkedIn, Discord. Per-platform tone-tuning, post-launch monitoring checklist, "what NOT to post" list.
+
+## [2.0.0-alpha.59] — 2026-05-28 (README stat refresh)
+
+- README.md stats updated to current numbers (85 → 100 in next ship; 72 → 92 brand specs). Shield badge `anti--patterns-51` bumped to `anti--patterns-85` then to `100` in alpha.63.
+
+## [2.0.0-alpha.58] — 2026-05-28 (German README)
+
+- Translation agent shipped README.de.md (1214 lines, native German). All 6 README files (en, ar, es, zh, fr, de) share the same 6-language picker with the current language bolded.
+- Round-4 blog posts stat-snapshot bug: agent used '68 anti-patterns' / '93 brand specs' / '959 entries' from when it started; swept to current numbers.
+
+## [2.0.0-alpha.53–57] — 2026-05-28
+
+- alpha.57: 6 new OG images (zed, github-copilot, jetbrains, ai-design-system-cli, claude-desktop-mcp, commands).
+- alpha.56: round-4 SEO blogs complete (5/5 IDE-specific posts shipped).
+- alpha.55: rebuild commands.html with refreshed descriptions.
+- alpha.54: refresh commands/*.md stat references.
+- alpha.53: French README shipped (en, ar, es, zh, fr — de pending).
+
+## [2.0.0-alpha.52] — 2026-05-28 (register landing-patterns in MANIFESTS)
+
+- Round-3 manifest landing-patterns was authored but never wired into `engine/data_loader.py:MANIFESTS` — `ux stats` and the MCP `ux_landing_patterns` tool couldn't see it. Added. test_manifest_list_canonical now expects 11 manifests.
+
+## [2.0.0-alpha.51] — 2026-05-28 (commands page + landing-patterns 40 + round-4 blogs)
+
+- New page: `docs/commands.html` — reference for all 23 slash commands, with ItemList + BreadcrumbList JSON-LD, quick TOC, and source links. Lints clean.
+- landing-patterns 24 → 40 (16 new patterns + 2 new categories: Trust, Onboarding).
+- 2 round-4 blog posts landed (github-copilot-design-rules, zed-design-plugin).
+
 ## [2.0.0-alpha.45] — 2026-05-28 (stats refresh — 85 / 92)
 
 - Homepage copy + JSON-LD + meta synced to the live numbers: **85 anti-pattern rules** (was 68), **92 brand specs** (was 72). Brand-gallery section title now reads "92 design languages. Each in its own voice." Linter section title now reads "85 regex rules. Run before commit."
