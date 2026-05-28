@@ -1,17 +1,22 @@
-# Brand library — 72 production-grade DESIGN.md files
+# Brand library — 92 production-grade DESIGN.md files
 
 When a user asks for a specific brand's aesthetic — "build me a landing in Stripe's style", "match the Notion editorial feel", "make it like Linear" — read the matching file in this directory. Every brand here has a full design system spec: colors, typography, layout, components, motion, content tone, do/don't pairs.
 
 The frontend-engineer sub-agent MUST consult the relevant brand file before producing output when the user has named a specific brand. The brand's design language overrides defaults; the plugin's anti-AI-slop discipline still applies on top.
 
-## Brands available (72)
+## Brands available (92)
 
+- [`aesop`](aesop-DESIGN.md) — Apothecary beauty heritage. Sepia canvas, Walbaum serif everywhere, text-link CTAs.
 - [`airbnb`](airbnb.md) — Travel marketplace. Warm coral accent, photography-driven, rounded UI.
 - [`airtable`](airtable.md) — Spreadsheet-database hybrid. Colorful, friendly, structured data aesthetic.
+- [`allbirds`](allbirds-DESIGN.md) — Warm-minimalism e-commerce. Ivory canvas, sage/terracotta accents, serif display.
 - [`apple`](apple.md) — Consumer electronics. Premium white space, SF Pro, cinematic imagery.
+- [`atlantic`](atlantic-DESIGN.md) — Long-form literary editorial. Paper-cream canvas, Domaine 19px reading body, drop caps.
 - [`binance`](binance.md) — Crypto exchange. Bold yellow accent on monochrome, trading-floor urgency.
+- [`bloomberg`](bloomberg-DESIGN.md) — Financial news institution. Terminal-black canvas, signature orange, ticker scroll, tabular figures.
 - [`bmw`](bmw.md) — Luxury automotive. Dark premium surfaces, precise German engineering aesthetic.
 - [`bmw-m`](bmw-m.md) — Motorsport automotive. Pure black canvas, M tricolor stripe accents, full-bleed photography.
+- [`brex`](brex-DESIGN.md) — Dark-editorial corporate fintech. Coffee canvas, amber voltage, serif display at magazine-cover scale.
 - [`bugatti`](bugatti.md) — Hypercar brand. Cinema-black canvas, monochrome austerity, monumental display type.
 - [`cal`](cal.md) — Open-source scheduling. Clean neutral UI, developer-oriented simplicity.
 - [`claude`](claude.md) — Anthropic's AI assistant. Warm terracotta accent, clean editorial layout.
@@ -21,12 +26,16 @@ The frontend-engineer sub-agent MUST consult the relevant brand file before prod
 - [`coinbase`](coinbase.md) — Crypto exchange. Clean blue identity, trust-focused, institutional feel.
 - [`composio`](composio.md) — Tool integration platform. Modern dark with colorful integration icons.
 - [`cursor`](cursor.md) — AI-first code editor. Sleek dark interface, gradient accents.
+- [`datadog`](datadog-DESIGN.md) — Institutional observability. Purple-on-white, Tiempos serif display, Bark dog mascot.
 - [`elevenlabs`](elevenlabs.md) — AI voice platform. Dark cinematic UI, audio-waveform aesthetics.
 - [`expo`](expo.md) — React Native platform. Dark theme, tight letter-spacing, code-centric.
 - [`ferrari`](ferrari.md) — Luxury automotive. Chiaroscuro editorial, Ferrari Red accents, cinematic black.
 - [`figma`](figma.md) — Collaborative design tool. Vibrant multi-color, playful yet professional.
 - [`framer`](framer.md) — Website builder. Bold black and blue, motion-first, design-forward.
+- [`glossier`](glossier-DESIGN.md) — Matured beauty editorial. Pink as surface band, true-black CTAs, magazine-masthead navigation caps.
 - [`hashicorp`](hashicorp.md) — Infrastructure automation. Enterprise-clean, black and white.
+- [`hims-hers`](hims-hers-DESIGN.md) — Modern wellness telehealth. Warm bone canvas, sage/tan sub-brand accents, quiz funnel as marketing.
+- [`honeycomb`](honeycomb-DESIGN.md) — Distributed-systems observability. Honey-amber on midnight-teal, hexagon dividers, technical-but-warm voice.
 - [`hp`](hp.md) — Consumer electronics catalog. White canvas with electric blue accent, angular chevron motifs.
 - [`ibm`](ibm.md) — Enterprise technology. Carbon design system, structured blue palette.
 - [`intercom`](intercom.md) — Customer messaging. Friendly blue palette, conversational UI patterns.
@@ -35,22 +44,31 @@ The frontend-engineer sub-agent MUST consult the relevant brand file before prod
 - [`linear.app`](linear.app.md) — Project management. Ultra-minimal, precise, purple accent.
 - [`lovable`](lovable.md) — AI full-stack builder. Playful gradients, friendly dev aesthetic.
 - [`mastercard`](mastercard.md) — Global payments network. Warm cream canvas, orbital pill shapes, editorial warmth.
+- [`mercury`](mercury-DESIGN.md) — Startup-bank-for-startups. Monochrome canvas, serif voltage, tabular figures, bronze brand-mark accent.
 - [`meta`](meta.md) — Tech retail store. Photography-first, binary light/dark surfaces, Meta Blue CTAs.
 - [`minimax`](minimax.md) — AI model provider. Bold dark interface with neon accents.
 - [`mintlify`](mintlify.md) — Documentation platform. Clean, green-accented, reading-optimized.
 - [`miro`](miro.md) — Visual collaboration. Bright yellow accent, infinite canvas aesthetic.
 - [`mistral.ai`](mistral.ai.md) — Open-weight LLM provider. French-engineered minimalism, purple-toned.
 - [`mongodb`](mongodb.md) — Document database. Green leaf branding, developer documentation focus.
+- [`monzo`](monzo-DESIGN.md) — Consumer neobank. Hot coral card as the brand, pill CTAs, illustrated objects.
+- [`neon`](neon-DESIGN.md) — Serverless Postgres. Graphite canvas, electric green voltage, branching diagrams as hero.
 - [`nike`](nike.md) — Athletic retail. Monochrome UI, massive uppercase type, full-bleed photography.
 - [`notion`](notion.md) — All-in-one workspace. Warm minimalism, serif headings, soft surfaces.
 - [`nvidia`](nvidia.md) — GPU computing. Green-black energy, technical power aesthetic.
+- [`nytimes`](nytimes-DESIGN.md) — American newspaper canonical. Cheltenham masthead, Imperial body, Franklin Gothic bylines.
 - [`ollama`](ollama.md) — Run LLMs locally. Terminal-first, monochrome simplicity.
 - [`opencode.ai`](opencode.ai.md) — AI coding platform. Developer-centric dark theme.
+- [`patagonia`](patagonia-DESIGN.md) — Heritage outdoor. Sand-cream canvas, alpine red, serif display, photo credits everywhere.
 - [`pinterest`](pinterest.md) — Visual discovery. Red accent, masonry grid, image-first.
+- [`pitchfork`](pitchfork-DESIGN.md) — Music criticism zine-on-the-web. Heavy industrial sans, 0-10 score numerals, BNM red badge.
+- [`plaid`](plaid-DESIGN.md) — Developer fintech. Cobalt-on-white, Benjamin Franklin mascot, holographic gradient strip at hero.
 - [`playstation`](playstation.md) — Gaming console retail. Three-surface channel layout, quiet-authority display type, cyan hover-scale.
 - [`posthog`](posthog.md) — Product analytics. Playful hedgehog branding, developer-friendly dark UI.
+- [`ramp`](ramp-DESIGN.md) — Modernist B2B fintech. Signal red, GT Sectra serif, dashboard mockup as hero, savings numbers in serif.
 - [`raycast`](raycast.md) — Productivity launcher. Sleek dark chrome, vibrant gradient accents.
 - [`renault`](renault.md) — French automotive. Vibrant aurora gradients, NouvelR typography, bold energy.
+- [`render`](render-DESIGN.md) — Cloud platform. Cream canvas, deep aubergine purple, italic wordmark, magazine-spread pacing.
 - [`replicate`](replicate.md) — Run ML models via API. Clean white canvas, code-forward.
 - [`resend`](resend.md) — Email API. Minimal dark theme, monospace accents.
 - [`revolut`](revolut.md) — Digital banking. Sleek dark interface, gradient cards, fintech precision.
@@ -59,10 +77,12 @@ The frontend-engineer sub-agent MUST consult the relevant brand file before prod
 - [`sentry`](sentry.md) — Error monitoring. Dark dashboard, data-dense, pink-purple accent.
 - [`shopify`](shopify.md) — E-commerce platform. Dark-first cinematic, neon green accent, ultra-light type.
 - [`slack`](slack.md) — slack design system template.
+- [`sourcegraph`](sourcegraph-DESIGN.md) — Code search and AI coding. Slate canvas, electric cyan voltage, violet for Cody, half the homepage is real syntax.
 - [`spacex`](spacex.md) — Space technology. Stark black and white, full-bleed imagery, futuristic.
 - [`spotify`](spotify.md) — Music streaming. Vibrant green on dark, bold type, album-art-driven.
 - [`starbucks`](starbucks.md) — Global coffee retail brand. Four-tier green system, warm cream canvas, full-pill buttons.
 - [`stripe`](stripe.md) — Payment infrastructure. Signature purple gradients, weight-300 elegance.
+- [`substack`](substack-DESIGN.md) — Writer-first newsletter platform. Cream canvas, slab-serif Spectral, signature orange Subscribe CTA.
 - [`supabase`](supabase.md) — Open-source Firebase alternative. Dark emerald theme, code-first.
 - [`superhuman`](superhuman.md) — Fast email client. Premium dark UI, keyboard-first, purple glow.
 - [`tesla`](tesla.md) — Electric automotive. Radical subtraction, full-viewport photography, near-zero UI.
@@ -100,22 +120,22 @@ Offer to:
 `claude` · `cohere` · `mistral.ai` · `x.ai` · `minimax` · `runwayml` · `elevenlabs` · `together.ai` · `voltagent`
 
 ### Developer tools / infra
-`cursor` · `vercel` · `supabase` · `webflow` · `framer` · `expo` · `posthog` · `sentry` · `replicate` · `resend` · `warp` · `hashicorp` · `ibm` · `mongodb` · `mintlify` · `sanity` · `clickhouse` · `composio` · `opencode.ai` · `slack` · `lovable` · `ollama` · `superhuman` · `raycast`
+`cursor` · `vercel` · `supabase` · `webflow` · `framer` · `expo` · `posthog` · `sentry` · `replicate` · `resend` · `warp` · `hashicorp` · `ibm` · `mongodb` · `mintlify` · `sanity` · `clickhouse` · `composio` · `opencode.ai` · `slack` · `lovable` · `ollama` · `superhuman` · `raycast` · `neon` · `render` · `datadog` · `honeycomb` · `sourcegraph`
 
 ### Fintech / crypto
-`stripe` · `coinbase` · `kraken` · `binance` · `revolut` · `mastercard` · `wise`
+`stripe` · `coinbase` · `kraken` · `binance` · `revolut` · `mastercard` · `wise` · `plaid` · `monzo` · `mercury` · `brex` · `ramp`
 
 ### Productivity / collaboration
 `notion` · `linear.app` · `figma` · `airtable` · `miro` · `intercom` · `cal` · `zapier`
 
 ### Consumer / lifestyle / retail
-`apple` · `meta` · `nike` · `spotify` · `pinterest` · `airbnb` · `uber` · `shopify` · `starbucks` · `playstation` · `hp`
+`apple` · `meta` · `nike` · `spotify` · `pinterest` · `airbnb` · `uber` · `shopify` · `starbucks` · `playstation` · `hp` · `patagonia` · `allbirds` · `glossier` · `hims-hers` · `aesop`
 
 ### Automotive
 `bmw` · `bmw-m` · `bugatti` · `ferrari` · `lamborghini` · `renault` · `tesla` · `spacex`
 
 ### Editorial / media
-`theverge` · `wired` · `clay` · `vodafone` · `nvidia`
+`theverge` · `wired` · `clay` · `vodafone` · `nvidia` · `nytimes` · `atlantic` · `substack` · `pitchfork` · `bloomberg`
 
 ## Updating the library
 

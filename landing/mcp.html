@@ -356,6 +356,30 @@
     footer a:hover { color: var(--ink); }
     footer .links { display: flex; gap: 24px; }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "ux-mcp",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Cross-platform (MCP stdio server)",
+    "description": "Model Context Protocol server exposing the ux-skill engine as 14 tools — works in Claude Desktop, Cursor, Windsurf, and any MCP-capable host. ux_recommend, ux_lint, 11 manifest readers, persistence, stats.",
+    "softwareVersion": "2.0.0-alpha.39",
+    "downloadUrl": "https://pypi.org/project/uxskill/",
+    "url": "https://uxskill.laithjunaidy.com/mcp.html",
+    "license": "https://opensource.org/license/mit/",
+    "author": {"@type": "Person", "name": "Laith Aljunaidy", "url": "https://github.com/Laith0003"},
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "featureList": [
+      "14 MCP tools over stdio",
+      "ux_recommend — 5-parallel-search reasoning",
+      "ux_lint — deterministic regex linter",
+      "11 manifest readers (styles, palettes, type-pairs, components, industries, motion, anti-patterns, brands, landing-patterns, etc.)",
+      "ux_persist_save / ux_persist_load — design system persistence",
+      "ux_stats — engine telemetry"
+    ]
+  }
+  </script>
 </head>
 <body>
   <div class="wrap">

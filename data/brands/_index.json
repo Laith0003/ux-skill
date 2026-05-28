@@ -1,12 +1,17 @@
 {
   "_meta": {
-    "version": "2.0.0",
-    "entries": 72,
-    "last_updated": "2026-05-27",
-    "source": "ux-skill v2 — Python pivot (converted from references/brands/*.md)",
+    "version": "2.1.0",
+    "entries": 92,
+    "last_updated": "2026-05-28",
+    "source": "ux-skill v2 — expanded brand catalog (72 -> 92)",
     "schema_version": "1.0"
   },
   "brands": [
+    {
+      "id": "aesop",
+      "name": "Aesop",
+      "category": "Consumer / Lifestyle / Retail"
+    },
     {
       "id": "airbnb",
       "name": "Airbnb",
@@ -18,14 +23,29 @@
       "category": "Productivity / Collaboration"
     },
     {
+      "id": "allbirds",
+      "name": "Allbirds",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
       "id": "apple",
       "name": "Apple",
       "category": "Consumer / Lifestyle / Retail"
     },
     {
+      "id": "atlantic",
+      "name": "The Atlantic",
+      "category": "Editorial / Media"
+    },
+    {
       "id": "binance",
       "name": "Binance",
       "category": "Fintech / Crypto"
+    },
+    {
+      "id": "bloomberg",
+      "name": "Bloomberg",
+      "category": "Editorial / Media"
     },
     {
       "id": "bmw",
@@ -36,6 +56,11 @@
       "id": "bmw-m",
       "name": "BMW M",
       "category": "Automotive"
+    },
+    {
+      "id": "brex",
+      "name": "Brex",
+      "category": "Fintech / Crypto"
     },
     {
       "id": "bugatti",
@@ -83,6 +108,11 @@
       "category": "Developer Tools"
     },
     {
+      "id": "datadog",
+      "name": "Datadog",
+      "category": "Developer Tools"
+    },
+    {
       "id": "elevenlabs",
       "name": "ElevenLabs",
       "category": "AI / ML Platform"
@@ -108,8 +138,23 @@
       "category": "Developer Tools"
     },
     {
+      "id": "glossier",
+      "name": "Glossier",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
       "id": "hashicorp",
       "name": "HashiCorp",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "hims-hers",
+      "name": "Hims & Hers",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "honeycomb",
+      "name": "Honeycomb",
       "category": "Developer Tools"
     },
     {
@@ -153,6 +198,11 @@
       "category": "Fintech / Crypto"
     },
     {
+      "id": "mercury",
+      "name": "Mercury",
+      "category": "Fintech / Crypto"
+    },
+    {
       "id": "meta",
       "name": "Meta",
       "category": "Consumer / Lifestyle / Retail"
@@ -183,6 +233,16 @@
       "category": "Developer Tools"
     },
     {
+      "id": "monzo",
+      "name": "Monzo",
+      "category": "Fintech / Crypto"
+    },
+    {
+      "id": "neon",
+      "name": "Neon",
+      "category": "Developer Tools"
+    },
+    {
       "id": "nike",
       "name": "Nike",
       "category": "Consumer / Lifestyle / Retail"
@@ -198,6 +258,11 @@
       "category": "Editorial / Media"
     },
     {
+      "id": "nytimes",
+      "name": "The New York Times",
+      "category": "Editorial / Media"
+    },
+    {
       "id": "ollama",
       "name": "Ollama",
       "category": "Developer Tools"
@@ -208,9 +273,24 @@
       "category": "Developer Tools"
     },
     {
+      "id": "patagonia",
+      "name": "Patagonia",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
       "id": "pinterest",
       "name": "Pinterest",
       "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "pitchfork",
+      "name": "Pitchfork",
+      "category": "Editorial / Media"
+    },
+    {
+      "id": "plaid",
+      "name": "Plaid",
+      "category": "Fintech / Crypto"
     },
     {
       "id": "playstation",
@@ -223,6 +303,11 @@
       "category": "Developer Tools"
     },
     {
+      "id": "ramp",
+      "name": "Ramp",
+      "category": "Fintech / Crypto"
+    },
+    {
       "id": "raycast",
       "name": "Raycast",
       "category": "Developer Tools"
@@ -231,6 +316,11 @@
       "id": "renault",
       "name": "Renault",
       "category": "Automotive"
+    },
+    {
+      "id": "render",
+      "name": "Render",
+      "category": "Developer Tools"
     },
     {
       "id": "replicate",
@@ -273,6 +363,11 @@
       "category": "Developer Tools"
     },
     {
+      "id": "sourcegraph",
+      "name": "Sourcegraph",
+      "category": "Developer Tools"
+    },
+    {
       "id": "spacex",
       "name": "SpaceX",
       "category": "Automotive"
@@ -291,6 +386,11 @@
       "id": "stripe",
       "name": "Stripe",
       "category": "Fintech / Crypto"
+    },
+    {
+      "id": "substack",
+      "name": "Substack",
+      "category": "Editorial / Media"
     },
     {
       "id": "supabase",
