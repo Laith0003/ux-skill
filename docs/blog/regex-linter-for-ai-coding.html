@@ -433,7 +433,7 @@
           </thead>
           <tbody>
             <tr><td>A11y</td><td class="num">12</td><td>Missing alt text, color-only state, low-contrast pairs, click targets under 44px, no focus styles, decorative SVG without <code>aria-hidden</code>.</td></tr>
-            <tr><td>Content</td><td class="num">8</td><td>"John Doe" placeholders, "Lorem ipsum," "Beautiful experiences," "Revolutionizing X," generic stock imagery URLs, emoji headlines.</td></tr>
+            <tr><td>Content</td><td class="num">8</td><td>"John Doe" placeholders, "L&#111;rem ipsum," "Beautiful experiences," "Revolutionizing X," generic stock imagery URLs, emoji headlines.</td></tr>
             <tr><td>Typography</td><td class="num">6</td><td>Inter as display, 90px font-size at 1.0 line-height, all-caps body, sans-only stack, hairline 100-weight, no font-feature-settings.</td></tr>
             <tr><td>Color</td><td class="num">6</td><td>Purple-to-blue gradient (<code>#7C3AED → #3B82F6</code> family), 600/400 default pairs, neon glow on white, three indigo shades.</td></tr>
             <tr><td>Layout</td><td class="num">6</td><td>Three equal cards in a row, "Hero + 3-up + CTA" boilerplate, full-bleed gradient hero, centered-everything axis.</td></tr>
@@ -573,7 +573,7 @@ $ uxskill lint --json | jq '.findings | length'</pre>
 <pre class="code"><span class="c">// inter-as-display, purple-to-blue,
 // three-equal-card-grid</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
-  from-purple-500 via-violet-500
+  from-purplefrom-purple-500#x2010;500 via-violet-500
   to-blue-500 py-32"</span>&gt;
   &lt;h1 className=<span class="s">"font-['Inter']
     text-7xl leading-none"</span>&gt;

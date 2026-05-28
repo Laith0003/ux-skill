@@ -1271,6 +1271,23 @@ h1, h2, h3, h4 {
       font-size: 16px;
       margin: 0 4px;
     }
+    /* Staggered scan reveal on the trimmed lint terminal. Each line fades up
+       ~120ms after the previous when the terminal enters the viewport. */
+    .lint-reveal {
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 260ms var(--ease-cinema), transform 260ms var(--ease-cinema);
+    }
+    #lint-terminal.is-running .lint-reveal { opacity: 1; transform: translateY(0); }
+    #lint-terminal.is-running .lint-reveal:nth-child(1) { transition-delay:   0ms; }
+    #lint-terminal.is-running .lint-reveal:nth-child(2) { transition-delay: 120ms; }
+    #lint-terminal.is-running .lint-reveal:nth-child(3) { transition-delay: 240ms; }
+    #lint-terminal.is-running .lint-reveal:nth-child(4) { transition-delay: 360ms; }
+    #lint-terminal.is-running .lint-reveal:nth-child(5) { transition-delay: 480ms; }
+    #lint-terminal.is-running .lint-reveal:nth-child(6) { transition-delay: 600ms; }
+    @media (prefers-reduced-motion: reduce) {
+      .lint-reveal { opacity: 1; transform: none; transition: none; }
+    }
 
     /* =========================================================================
        DEVICE MOCKUPS — Cursor, Claude Code, Windsurf
@@ -2612,12 +2629,12 @@ h1, h2, h3, h4 {
             <span class="terminal__title">~/dot/landing — ux lint</span>
           </div>
           <div class="terminal__body" id="lint-terminal-body">
-            <div class="terminal__line"><span class="prompt">$</span> <span class="ink">ux lint</span> <span class="arg">docs/</span> <span class="key">--threshold high</span></div>
-            <div class="terminal__line"><span class="info">Scanning 14 files · 100 rules active</span></div>
-            <div class="terminal__line"><span class="info">blog/cursor-design-plugin.html:184  </span><span class="red">medium</span><span class="ink"> inter-as-display</span></div>
-            <div class="terminal__line"><span class="info">about.html:53                       </span><span class="magenta">high  </span><span class="ink"> cormorant-garamond-leak</span></div>
-            <div class="terminal__line"><span class="info">index.html                          </span><span class="ok">clean</span><span class="info"> 0 findings</span></div>
-            <div class="terminal__line"><span class="ok"><span class="check-svg"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>  done in 31ms</span></div>
+            <div class="terminal__line lint-reveal"><span class="prompt">$</span> <span class="ink">ux lint</span> <span class="arg">docs/</span> <span class="key">--threshold high</span></div>
+            <div class="terminal__line lint-reveal"><span class="info">Scanning 14 files · 100 rules active</span></div>
+            <div class="terminal__line lint-reveal"><span class="info">blog/cursor-design-plugin.html:184  </span><span class="red">medium</span><span class="ink"> inter-as-display</span></div>
+            <div class="terminal__line lint-reveal"><span class="info">about.html:53                       </span><span class="magenta">high  </span><span class="ink"> cormorant-garamond-leak</span></div>
+            <div class="terminal__line lint-reveal"><span class="info">index.html                          </span><span class="ok">clean</span><span class="info"> 0 findings</span></div>
+            <div class="terminal__line lint-reveal"><span class="ok"><span class="check-svg"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>  done in 31ms</span></div>
           </div>
         </div>
         <div class="linter__badge" aria-label="100 rules, 0 high findings on this page">
@@ -2653,7 +2670,7 @@ h1, h2, h3, h4 {
 
           <div class="device__rotor-pane-stack">
           <!-- Cursor pane -->
-          <div class="device__rotor-pane is-active" data-ide="cursor" aria-label="Cursor running ux-recommend">
+          <div class="device__rotor-pane is-active" data-ide="cursor" aria-label="Cursor running ux-recommend" aria-hidden="false">
             <div class="device__body">
               <div class="device__cmd-row">
                 <span class="slash">/</span><span class="arg">ux-recommend</span>
@@ -2675,7 +2692,7 @@ h1, h2, h3, h4 {
           </div>
 
           <!-- Claude Code pane -->
-          <div class="device__rotor-pane" data-ide="claude" aria-label="Claude Code running ux-design" hidden>
+          <div class="device__rotor-pane" data-ide="claude" aria-label="Claude Code running ux-design" aria-hidden="true">
             <div class="device__body">
               <div class="device__cmd-row">
                 <span class="slash">/</span><span class="arg">ux-design</span>
@@ -2700,7 +2717,7 @@ h1, h2, h3, h4 {
           </div>
 
           <!-- Windsurf pane -->
-          <div class="device__rotor-pane" data-ide="windsurf" aria-label="Windsurf running ux-component" hidden>
+          <div class="device__rotor-pane" data-ide="windsurf" aria-label="Windsurf running ux-component" aria-hidden="true">
             <div class="device__body">
               <div class="device__cmd-row">
                 <span class="slash">/</span><span class="arg">ux-component combobox</span>
@@ -3677,6 +3694,27 @@ h1, h2, h3, h4 {
   if (enginePanel) engineIO.observe(enginePanel);
 
   /* =========================================================================
+     LINT TERMINAL — 6-line staggered scan reveal on viewport entry
+     (CSS handles the per-line delay; we just toggle the .is-running class).
+     ========================================================================= */
+  const lintTerm = document.getElementById('lint-terminal');
+  if (lintTerm) {
+    const lintIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          lintTerm.classList.add('is-running');
+          lintIO.unobserve(lintTerm);
+        }
+      });
+    }, { threshold: 0.35 });
+    if (reduce) {
+      lintTerm.classList.add('is-running');
+    } else {
+      lintIO.observe(lintTerm);
+    }
+  }
+
+  /* =========================================================================
      STATS — count-up on reveal
      ========================================================================= */
   const statEls = document.querySelectorAll('[data-stat]');
@@ -3772,7 +3810,9 @@ h1, h2, h3, h4 {
       panes.forEach((p, n) => {
         const on = n === idx;
         p.classList.toggle('is-active', on);
-        if (on) { p.removeAttribute('hidden'); } else { p.setAttribute('hidden', ''); }
+        // No `hidden` attribute — the grid-stack layout depends on all panes occupying
+        // the same cell. CSS visibility + opacity drives the crossfade.
+        p.setAttribute('aria-hidden', on ? 'false' : 'true');
       });
       pips.forEach((b, n) => {
         b.classList.toggle('is-active', n === idx);
