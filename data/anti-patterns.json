@@ -1,8 +1,8 @@
 {
   "_meta": {
     "version": "2.0.0",
-    "entries": 35,
-    "last_updated": "2026-05-27",
+    "entries": 51,
+    "last_updated": "2026-05-28",
     "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
     "schema_version": "1.0"
   },
@@ -750,6 +750,346 @@
       },
       "why": "Pure infinite scroll with no Load more button locks out keyboard users and breaks back-button history - WCAG 2.4 failure plus a usability one.",
       "fix": "Ship infinite scroll AND a visible Load more button. The button is the keyboard path; the observer is the convenience layer."
+    },
+    {
+      "id": "viewport-no-zoom",
+      "name": "Viewport blocks pinch-zoom",
+      "severity": "critical",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<meta[^>]+viewport[^>]+user-scalable\\s*=\\s*['\"]?no",
+        "flags": "i",
+        "scope": [
+          "html",
+          "blade",
+          "astro",
+          "vue",
+          "tsx",
+          "jsx"
+        ]
+      },
+      "why": "user-scalable=no blocks pinch-zoom for low-vision users on touch devices - a WCAG 1.4.4 failure that locks out anyone who needs to enlarge text.",
+      "fix": "Remove user-scalable=no entirely, or set it to yes. Default viewport: <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">."
+    },
+    {
+      "id": "outline-none-no-focus-visible",
+      "name": "outline removed without focus-visible replacement",
+      "severity": "critical",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "outline\\s*:\\s*(?:none|0)\\s*;(?![^}]*:focus-visible)",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "outline: none removes the only keyboard focus indicator and leaves keyboard users with no signal of focus state - a WCAG 2.4.7 failure.",
+      "fix": "Pair outline: none with a :focus-visible rule that restores a visible ring: :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }."
+    },
+    {
+      "id": "placeholder-as-label",
+      "name": "Input placeholder used as the only label",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<input(?![^>]*\\baria-label=)(?![^>]*\\baria-labelledby=)[^>]+placeholder=",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Placeholders disappear on focus, sit at low contrast by default, and are not announced consistently by assistive tech - using one as the only label fails WCAG 3.3.2.",
+      "fix": "Always pair <input> with a <label for=\"id\"> or aria-label. Placeholder is for an optional hint, never the field name."
+    },
+    {
+      "id": "div-onclick-no-role",
+      "name": "Click handler on <div> without role or tabindex",
+      "severity": "critical",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<div[^>]+onClick=(?![^>]+role\\s*=\\s*['\"]button)",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "A <div onClick> is invisible to keyboard users and assistive tech - the action exists only for mouse users, a WCAG 2.1.1 and 4.1.2 failure.",
+      "fix": "Use <button onClick> for actions. If you must keep the <div>, add role=\"button\" tabindex=\"0\" and an onKeyDown handler for Enter and Space."
+    },
+    {
+      "id": "anchor-no-href-as-button",
+      "name": "Anchor styled as button without href",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<a[^>]+class=['\"][^'\"]*btn[^'\"]*['\"](?![^>]+href)",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "An <a class=\"btn\"> without href is not focusable, not in the tab order, and not announced as a link - looks like a button but behaves like nothing.",
+      "fix": "Use <button> for actions, <a href=\"...\"> for navigation. If the destination is unknown until runtime, render a button or set href=\"#\" with preventDefault."
+    },
+    {
+      "id": "h-screen-no-dvh-fallback",
+      "name": "100vh without 100dvh fallback for mobile",
+      "severity": "high",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:height\\s*:\\s*100vh|class=[^>]*h-screen)(?![^}]*100dvh)",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "100vh on mobile includes the browser chrome that retracts on scroll, so the layout jumps as the address bar collapses - dynamic viewport units (dvh) fix this.",
+      "fix": "Use height: 100dvh or h-[100dvh] as the primary, with h-screen / 100vh as the legacy fallback for browsers that lack dvh."
+    },
+    {
+      "id": "title-case-headlines",
+      "name": "Title Case On Display Headings",
+      "severity": "medium",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "<h[12][^>]*>\\s*(?:[A-Z][a-z]+\\s+){3,}",
+        "flags": "",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Marketing-style Title Case on every headline dates the design to a 2014 SaaS template and slows reading. Sentence case scales better and reads faster.",
+      "fix": "Default to sentence case for headlines. Reserve title case for proper nouns and brand names, or for an explicit editorial decision."
+    },
+    {
+      "id": "filler-marketing-verbs",
+      "name": "Filler marketing verb in headline",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "<h[1-3][^>]*>[^<]*(?:Elevate|Seamless|Unleash|Revolutionize|Empower|Supercharge|Transform)[^<]*<",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "Elevate, Seamless, Unleash, Revolutionize, Empower, Supercharge, Transform - the unmistakable fingerprint of unedited marketing copy generated without a real product in mind.",
+      "fix": "Name the specific action and the specific outcome. Cut the verb if it isn't carrying weight. The reader knows what the product does only if you say what the product does."
+    },
+    {
+      "id": "generic-cta-text",
+      "name": "Generic CTA text (Click here, Learn more)",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:a|button)[^>]*>\\s*(?:Click here|Learn more|Get started)\\s*</(?:a|button)>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Click here / Learn more / Get started reveals nothing about the destination and fails screen-reader scan-by-link - users hear a list of identical labels with no context.",
+      "fix": "Name the specific action: Read pricing, Start free trial, View dashboard, Open API docs. The link text should make sense out of context."
+    },
+    {
+      "id": "round-number-stats",
+      "name": "Round number marketing stat",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:99\\.99%|99\\.9%|10x faster|100% guaranteed|10x more)",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "99.99%, 10x faster, 100% guaranteed - the suspiciously round numbers AI invents to sound credible. Real measurements are messy and specific.",
+      "fix": "Use the real number you measured: 99.93% uptime over Q1, 4.2x faster median build, refunded 218 of 244 reported issues. Specificity is the signal."
+    },
+    {
+      "id": "display-bold-700",
+      "name": "Display heading at 700+ font-weight",
+      "severity": "medium",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "font-weight\\s*:\\s*(?:700|bolder)[^}]*font-size\\s*:\\s*(?:[3-9]\\d|\\d{3,})",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Display fonts at 700 weight read dense and visually muddy. Most display faces are drawn to sing at 500-600; 700+ is for body emphasis, not headlines.",
+      "fix": "Use font-weight 500 or 600 on display headings. Reserve 700+ for body emphasis (bold inline text, table totals, primary CTA labels)."
+    },
+    {
+      "id": "all-caps-large",
+      "name": "ALL CAPS at body-text size or larger",
+      "severity": "medium",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "text-transform\\s*:\\s*uppercase[^}]*font-size\\s*:\\s*(?:[2-9]\\d|\\d{3,})",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "ALL CAPS reading speed is 13-20% slower than mixed case because word shape is lost. At 14px or larger it actively impedes reading.",
+      "fix": "Reserve uppercase for eyebrows, labels, and badges under 14px. Use sentence case for anything readers need to read, not just scan."
+    },
+    {
+      "id": "cursor-pointer-non-interactive",
+      "name": "cursor:pointer on non-interactive element",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:div|span)[^>]+(?:class=[^>]+cursor-pointer|style=[^>]+cursor\\s*:\\s*pointer)",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "A <div> or <span> with cursor: pointer promises clickable behavior to sighted mouse users while keyboard and screen-reader users get nothing - a hidden interaction.",
+      "fix": "If it clicks, make it a <button> or <a href>. If you keep the <div>, add role and tabindex and a keydown handler - the cursor change is the smallest signal a real control owes."
+    },
+    {
+      "id": "animating-layout-properties",
+      "name": "Transition on a layout property",
+      "severity": "high",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "transition[^;]*:\\s*[^;]*(?:width|height|top|left|margin|padding)[^;]*;",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Animating width, height, top, left, margin, padding triggers layout and paint on every frame - the dropped-frame jank pattern that makes the UI feel cheap.",
+      "fix": "Animate transform (translate, scale) and opacity only. Use scale instead of width, translate instead of top/left. The compositor thanks you."
+    },
+    {
+      "id": "img-no-dimensions",
+      "name": "Image without width and height attributes",
+      "severity": "high",
+      "category": "Performance",
+      "detection": {
+        "type": "regex",
+        "pattern": "<img(?![^>]+\\bwidth=)[^>]+>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "An <img> without width and height attributes causes Cumulative Layout Shift as the image loads and the page reflows - the single biggest CLS regression on most sites.",
+      "fix": "Always set width and height (the intrinsic pixel dimensions) on every <img>, even when styled with CSS. The browser uses them to reserve space."
+    },
+    {
+      "id": "lone-emoji-as-icon",
+      "name": "Lone emoji used as functional icon",
+      "severity": "high",
+      "category": "Visual",
+      "detection": {
+        "type": "regex",
+        "pattern": ">[\\u2700-\\u27BF\\U0001F300-\\U0001F9FF](?:</)",
+        "flags": "u",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "A bare emoji standing in for an icon renders inconsistently across platforms, ignores brand color, and is announced unpredictably by screen readers.",
+      "fix": "Use inline SVG (Lucide, Feather, Phosphor, Heroicons) at 1.5-2px stroke with currentColor. Add aria-label when the icon carries meaning."
     }
   ]
 }
