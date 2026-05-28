@@ -2,7 +2,7 @@
 
 > **v2.0 — Python pivot.** The strongest design intelligence engine for AI coding. A Python-backed reasoning core with 11 queryable JSON manifests: **84 styles, 170+ palettes, 70 type pairs, 148 components, 170+ industries, 110+ UX laws, 57 motion presets, 35 anti-patterns, 72 brand specs**. Plus 18 slash commands and 5 sub-agents from v1. Cross-IDE — runs in **17 environments**: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, Roo Cline.
 
-**Live at [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)** · [GitHub repo](https://github.com/Laith0003/ux-skill)
+**Live at [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)** · [Compare vs every other UX plugin](https://uxskill.laithjunaidy.com/compare.html) · [GitHub repo](https://github.com/Laith0003/ux-skill)
 
 [![Version](https://img.shields.io/badge/version-2.0.0--alpha.1-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Python](https://img.shields.io/badge/python-3.9%2B-3776ab.svg)](https://www.python.org/downloads/)
@@ -13,6 +13,22 @@
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 
 ---
+
+## Quick compare — against every other UX/UI plugin
+
+| Plugin | Architecture | Total entries | Linter | Brand specs | IDEs | License |
+|---|---|---:|---|---:|---:|---|
+| **ux-skill v2** | **Python engine + 11 JSON manifests + 22 commands + 5 sub-agents** | **998** | **35 regex rules, CI-friendly** | **72** | **17** | **MIT** |
+| UI UX Pro Max | Python recommender | ~600 | — | — | 18 | MIT |
+| anthropic-skills:frontend-design | Markdown prose, 1 SKILL.md | — | — | — | 1 | MIT |
+| design-taste-frontend (gpt-taste) | Single prompt | — | — | — | 1 | MIT |
+| stitch-design-taste | Single prompt | — | — | — | 1 | MIT |
+| design-html / design-shotgun | Single prompt | — | — | — | 1 | MIT |
+| heroui-react | Component library | — | — | (one lib) | 1 | MIT |
+| shadcn-ui MCP | Component fetcher | — | — | (one lib) | 1 | MIT |
+| Figma MCP | Live design import | — | — | — | 1 | proprietary |
+
+**Full comparison page:** [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html) — side-by-side against 13 plugins across every dimension, with an honest "where we lose" section.
 
 ## What v2 is
 
