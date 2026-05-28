@@ -58,7 +58,7 @@ This README is the canonical reference. Every command, every sub-agent, every da
 2. [Quick install](#quick-install)
 3. [The numbers — live comparison vs the top 8 Claude UX skills](#the-numbers--live-comparison-vs-the-top-8-claude-ux-skills)
 4. [Architecture — how the pieces fit](#architecture--how-the-pieces-fit)
-5. [The 22 slash commands — detailed reference](#the-22-slash-commands--detailed-reference)
+5. [The 23 slash commands — detailed reference](#the-23-slash-commands--detailed-reference)
 6. [The 5 sub-agents](#the-5-sub-agents)
 7. [The 11 data manifests](#the-11-data-manifests)
 8. [The 145 anti-AI-slop rules — the linter](#the-145-anti-ai-slop-rules--the-linter)
@@ -98,7 +98,7 @@ If you live in Claude Code, install via the plugin marketplace:
 /plugin install ux@ux-skill
 ```
 
-That wires all 22 slash commands and 5 sub-agents into your Claude Code session. After install, run `/ux-init` to set up the per-project `.ux/` state directory and verify the Python engine is reachable.
+That wires all 23 slash commands and 5 sub-agents into your Claude Code session. After install, run `/ux-init` to set up the per-project `.ux/` state directory and verify the Python engine is reachable.
 
 ### Path 2 — pip (universal)
 
@@ -177,7 +177,7 @@ Star counts last verified via `gh api` on **2026-05-28**. ux-skill (Laith0003/ux
 - **Anti-pattern linter:** 145 deterministic regex rules, runs in CI, exits non-zero on Critical/High. None of the others ship a deterministic linter.
 - **Brand specs:** 160 real DESIGN.md specs (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, and 96 more). None of the others ship a brand library.
 - **17 IDEs supported:** same engine, different glue per IDE.
-- **22 slash commands:** discovery, generation, audit, lint, polish, fix loop, case-study, workshop, copy, motion, a11y, dashboard, conductor — fully integrated.
+- **23 slash commands:** discovery, generation, audit, lint, polish, fix loop, case-study, workshop, copy, motion, a11y, dashboard, conductor — fully integrated.
 
 Full table-by-table side-by-side at [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html).
 
@@ -285,7 +285,7 @@ ux-skill (package name: uxskill)
 
 ---
 
-## The 22 slash commands — detailed reference
+## The 23 slash commands — detailed reference
 
 Every command is shipped as a `.md` file under `commands/` with `description`, `allowed-tools`, `triggers`, `when to use`, `when to skip`, `input`, `process`, and `output state file`. The descriptions below are condensed; the full source is the canonical spec.
 
@@ -934,7 +934,7 @@ The other 8 popular Claude UX plugins generate "modern minimal" or "clean dashbo
 
 ## MCP server — the asymmetric move
 
-ux-skill ships a **Model Context Protocol server**. Run `ux-mcp` and the engine becomes a long-running stdio process that any MCP-capable host — Claude Desktop, Cursor, Windsurf, generic agents — can call into. Fourteen tools: `ux_recommend`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`. Same Python handlers the slash commands use; same data manifests; same deterministic recommender.
+ux-skill ships a **Model Context Protocol server**. Run `ux-mcp` and the engine becomes a long-running stdio process that any MCP-capable host — Claude Desktop, Cursor, Windsurf, generic agents — can call into. Eighteen tools: `ux_recommend`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`. Same Python handlers the slash commands use; same data manifests; same deterministic recommender.
 
 **Why this is the asymmetric move:** none of the top eight Claude UX skills (ui-ux-pro-max-skill, open-design, taste-skill, huashu-design, stitch, nothing-design, hallmark, material-3) ship an MCP server. They are locked inside Claude Code's plugin runtime. ux-skill is reachable from any host that speaks MCP, including agents that have never heard of a Claude Code plugin.
 
