@@ -185,6 +185,36 @@
     </p>
 
     <ul class="post-list">
+      <li class="post"><a href="/blog/zed-design-plugin.html">
+        <div class="post-meta"><span class="tag">tutorial</span> · ~1450 words · ~7 min</div>
+        <h2>Zed design plugin — install ux-skill to stop generic AI design output</h2>
+        <p>Zed is the high-performance Rust IDE with a first-class MCP client called the Agent Panel. Three install paths: MCP stdio server, CLI in the terminal pane, pre-commit hook. ux-skill plugs in through <code>~/.config/zed/settings.json</code>.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/github-copilot-design-rules.html">
+        <div class="post-meta"><span class="tag">tutorial</span> · ~1625 words · ~8 min</div>
+        <h2>GitHub Copilot design rules — how ux-skill catches AI design fingerprints in Copilot output</h2>
+        <p>Copilot ships great code completion and generic design. ux-skill generates a <code>.github/copilot-instructions.md</code> file plus a 68-rule deterministic linter that runs on disk after Copilot writes. Custom instructions raise the floor; the linter sets the ceiling.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/jetbrains-ai-design-system.html">
+        <div class="post-meta"><span class="tag">tutorial</span> · ~1700 words · ~8 min</div>
+        <h2>JetBrains AI Assistant design system rules — keeping IntelliJ + WebStorm generations on-brand</h2>
+        <p>Works in IntelliJ, WebStorm, PyCharm, GoLand, RubyMine, RustRover. <code>.junie/guidelines.md</code> generator, tokens.css for Spring projects, Kotlin object emit for Compose, MCP server for AI Assistant.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/ai-design-system-cli.html">
+        <div class="post-meta"><span class="tag">technical</span> · ~1700 words · ~8 min</div>
+        <h2>AI design system CLI — the npx and pip way to generate a design system in under 60 seconds</h2>
+        <p>Three CLI commands cover the full pipeline: <code>ux discover</code> (10-field brief), <code>ux recommend</code> (5-parallel-search), <code>ux persist save</code> (MASTER.md + tokens.css + manifest.json). Engine compute under 300 ms; brief is 100% of the human time.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/claude-desktop-mcp-design.html">
+        <div class="post-meta"><span class="tag">technical</span> · ~1550 words · ~8 min</div>
+        <h2>Claude Desktop + MCP design intelligence — ux-skill as a stdio server</h2>
+        <p>None of the top eight Claude design skills ship an MCP server. ux-skill v2 does — 14 tools registered, a dedicated <code>ux-mcp</code> entry point, one JSON block in <code>claude_desktop_config.json</code>. Same engine reaches Cursor, Windsurf, Cline, Continue.</p>
+      </a></li>
+
       <li class="post"><a href="/blog/dogfooding-design-engine.html">
         <div class="post-meta"><span class="tag">story</span> · ~1100 words · ~6 min</div>
         <h2>Dogfooding ux-skill — bugs we found by using our own design engine</h2>

@@ -24,6 +24,11 @@ POSTS = {
     "mcp-server-design-intelligence": "MCP server design intelligence",
     "motion-presets-framer-gsap-css": "Motion presets: Framer, GSAP, CSS",
     "dogfooding-design-engine": "Dogfooding ux-skill",
+    "zed-design-plugin": "Zed design plugin",
+    "github-copilot-design-rules": "GitHub Copilot design rules",
+    "jetbrains-ai-design-system": "JetBrains AI design system",
+    "ai-design-system-cli": "AI design system CLI",
+    "claude-desktop-mcp-design": "Claude Desktop MCP design intelligence",
 }
 
 # Each post maps to 4 related posts.
@@ -58,6 +63,16 @@ RELATIONS = {
                                        "ai-design-fingerprints-list", "anti-ai-slop-claude-skills"],
     "dogfooding-design-engine": ["dark-editorial-cinema-design", "ai-design-fingerprints-list",
                                  "regex-linter-for-ai-coding", "python-design-system-generator"],
+    "zed-design-plugin": ["cursor-design-plugin", "windsurf-design-rules",
+                          "github-copilot-design-rules", "jetbrains-ai-design-system"],
+    "github-copilot-design-rules": ["cursor-design-plugin", "jetbrains-ai-design-system",
+                                    "regex-linter-for-ai-coding", "ai-design-fingerprints-list"],
+    "jetbrains-ai-design-system": ["cursor-design-plugin", "ai-design-system-cli",
+                                   "monorepo-design-system-ai-coding", "python-design-system-generator"],
+    "ai-design-system-cli": ["python-design-system-generator", "claude-desktop-mcp-design",
+                             "regex-linter-for-ai-coding", "dogfooding-design-engine"],
+    "claude-desktop-mcp-design": ["mcp-server-design-intelligence", "ai-design-system-cli",
+                                  "cursor-design-plugin", "anti-ai-slop-claude-skills"],
 }
 
 

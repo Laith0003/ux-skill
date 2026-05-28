@@ -127,6 +127,36 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://uxskill.laithjunaidy.com/blog/zed-design-plugin.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://uxskill.laithjunaidy.com/blog/github-copilot-design-rules.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://uxskill.laithjunaidy.com/blog/jetbrains-ai-design-system.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://uxskill.laithjunaidy.com/blog/ai-design-system-cli.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://uxskill.laithjunaidy.com/blog/claude-desktop-mcp-design.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://uxskill.laithjunaidy.com/commands.html</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>weekly</changefreq>

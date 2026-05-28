@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JetBrains AI Assistant design system rules — keeping IntelliJ + WebStorm generations on-brand</title>
+  <meta name="description" content="Wire ux-skill into JetBrains AI Assistant. Custom instructions, tokens.css for Spring or Kotlin, the .ux/ state directory, and the recommender output for IntelliJ.">
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/jetbrains-ai-design-system.html">
+  <meta name="theme-color" content="#faf9f5">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="index,follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/jetbrains-ai-design-system.html">
+  <meta property="og:title" content="JetBrains AI Assistant design system rules — IntelliJ + WebStorm on-brand">
+  <meta property="og:description" content="JetBrains AI defaults to generic Tailwind for frontend code, generic Material for Compose. ux-skill adds 68 deterministic regex rules and a 10-field recommender.">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="JetBrains AI design system — ux-skill">
+  <meta name="twitter:description" content="The custom instructions surface, the .ux/ state directory, and a real tokens.css for a Spring or Kotlin project.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "JetBrains AI Assistant design system rules — keeping IntelliJ + WebStorm generations on-brand",
+    "description": "Wire ux-skill into JetBrains AI Assistant. Custom instructions, tokens.css for Spring or Kotlin, the .ux/ state directory, and the recommender output for IntelliJ.",
+    "datePublished": "2026-05-28",
+    "dateModified": "2026-05-28",
+    "author": {"@type": "Organization", "name": "ux-skill", "url": "https://uxskill.laithjunaidy.com/"},
+    "publisher": {"@type": "Organization", "name": "ux-skill", "url": "https://uxskill.laithjunaidy.com/"},
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://uxskill.laithjunaidy.com/blog/jetbrains-ai-design-system.html"},
+    "url": "https://uxskill.laithjunaidy.com/blog/jetbrains-ai-design-system.html",
+    "keywords": "JetBrains AI design, IntelliJ design plugin, WebStorm design system AI, JetBrains AI Assistant, Compose design, Spring frontend design",
+    "articleSection": "Integration"
+  }
+  </script>
+
+  <style>
+    :root {
+      --canvas: #faf9f5;
+      --surface: #efe9de;
+      --surface-2: #f3eee4;
+      --ink: #181715;
+      --body: #3d3d3a;
+      --muted: #6c6a64;
+      --hairline: rgba(20,20,19,0.10);
+      --hairline-strong: rgba(20,20,19,0.18);
+      --primary: #cc785c;
+      --primary-active: #a9583e;
+      --primary-soft: rgba(204,120,92,0.12);
+      --win-bg: #ecf2ec;
+      --win-fg: #2f7d32;
+      --lose-bg: #f5e6e3;
+      --lose-fg: #b3261e;
+      --neutral-bg: #f4f0e8;
+      --neutral-fg: #6c6a64;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background: var(--canvas);
+      color: var(--body);
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+
+    header.top {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8px 24px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .wordmark {
+      display: inline-flex; align-items: baseline; gap: 4px;
+      text-decoration: none; color: var(--ink);
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600; font-size: 28px; letter-spacing: -0.02em;
+    }
+    .wordmark .dot {
+      display: inline-block; width: 6px; height: 6px;
+      border-radius: 999px; background: var(--primary);
+      transform: translateY(-3px);
+    }
+    nav.crumbs {
+      display: flex; gap: 28px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+    nav.crumbs a { color: var(--muted); text-decoration: none; }
+    nav.crumbs a:hover { color: var(--ink); }
+    nav.crumbs a.current { color: var(--ink); }
+
+    article { padding-top: 56px; }
+    .eyebrow {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 22px;
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: clamp(40px, 5.5vw, 64px);
+      line-height: 1.08; letter-spacing: -0.022em;
+      color: var(--ink); margin-bottom: 28px;
+    }
+    h1 .accent { font-style: italic; color: var(--primary); font-weight: 600; }
+    .lede {
+      font-size: 20px; line-height: 1.55; color: var(--body);
+      margin-bottom: 16px;
+    }
+    .lede strong { color: var(--ink); font-weight: 600; }
+    .byline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 56px; padding-bottom: 24px;
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: clamp(28px, 3.2vw, 36px);
+      line-height: 1.18; letter-spacing: -0.018em;
+      color: var(--ink); margin: 64px 0 18px;
+    }
+    h2 .accent { color: var(--primary); font-style: italic; font-weight: 600; }
+    h3 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600; font-size: 19px;
+      letter-spacing: -0.005em; color: var(--ink);
+      margin: 36px 0 14px;
+    }
+    p { margin-bottom: 18px; }
+    p strong { color: var(--ink); font-weight: 600; }
+    ul, ol { margin: 0 0 22px 22px; }
+    ul li, ol li { margin-bottom: 10px; }
+    ul li::marker { color: var(--primary); }
+
+    pre.code {
+      background: var(--ink);
+      color: #e8e6e0;
+      padding: 22px 24px;
+      border-radius: 14px;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      line-height: 1.65;
+      margin: 24px 0 28px;
+    }
+    pre.code .c { color: #7b7872; font-style: italic; }
+    pre.code .k { color: #cc785c; }
+    pre.code .s { color: #b8c5a6; }
+    pre.code .v { color: #e8e6e0; }
+    pre.code .n { color: #d6a86c; }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: var(--surface);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--ink);
+    }
+    a.link {
+      color: var(--primary);
+      text-decoration: underline;
+      text-decoration-color: rgba(204,120,92,0.4);
+      text-underline-offset: 3px;
+    }
+    a.link:hover { color: var(--primary-active); text-decoration-color: var(--primary-active); }
+
+    .table-wrap { margin: 32px 0 28px; overflow-x: auto; }
+    .compare-table {
+      width: 100%; border-collapse: collapse;
+      font-size: 14px;
+      background: white; border-radius: 14px; overflow: hidden;
+      box-shadow: 0 8px 28px -16px rgba(24,23,21,0.12);
+    }
+    .compare-table th, .compare-table td {
+      padding: 14px 18px; text-align: left;
+      border-bottom: 1px solid var(--hairline);
+      vertical-align: top;
+    }
+    .compare-table th {
+      background: var(--surface);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink); font-weight: 600;
+    }
+    .compare-table td.num { font-variant-numeric: tabular-nums; font-weight: 500; color: var(--ink); }
+    .compare-table tr:last-child td { border-bottom: 0; }
+
+    .honesty {
+      background: var(--surface);
+      border-left: 3px solid var(--primary);
+      padding: 24px 28px;
+      border-radius: 0 14px 14px 0;
+      margin: 32px 0;
+    }
+    .honesty .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--primary); margin-bottom: 8px;
+    }
+    .honesty h4 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600; font-size: 17px; color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .honesty p { margin-bottom: 8px; }
+    .honesty p:last-child { margin-bottom: 0; }
+
+    .cta {
+      margin-top: 96px;
+      padding: 56px 48px;
+      background: var(--ink);
+      color: var(--canvas);
+      border-radius: 22px;
+    }
+    .cta .eyebrow { color: var(--primary); }
+    .cta h2 { color: var(--canvas); margin-top: 0; }
+    .cta p { color: rgba(250,249,245,0.78); margin-bottom: 28px; }
+    .install-block {
+      background: rgba(250,249,245,0.06);
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px; line-height: 1.75;
+      color: var(--canvas);
+    }
+    .install-block .prompt { color: var(--primary); }
+    .install-block .arg { color: rgba(250,249,245,0.6); }
+    .install-block .row + .row { margin-top: 6px; }
+
+    blockquote {
+      border-left: 3px solid var(--primary);
+      padding: 6px 0 6px 22px;
+      margin: 24px 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; line-height: 1.45;
+      color: var(--ink); font-style: italic;
+    }
+
+    footer {
+      max-width: 1100px;
+      margin: 96px auto 0;
+      padding: 32px 24px 0;
+      border-top: 1px solid var(--hairline);
+      display: flex; justify-content: space-between; align-items: baseline;
+      flex-wrap: wrap; gap: 16px;
+      font-size: 13px; color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--ink); }
+    footer .links { display: flex; gap: 24px; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a href="/" class="wordmark">ux<span class="dot"></span></a>
+    <nav class="crumbs">
+      <a href="/">Home</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/blog/" class="current">Blog</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="wrap">
+    <article>
+      <span class="eyebrow">Blog &middot; JetBrains &middot; 2026-05-28</span>
+      <h1>JetBrains AI Assistant design rules &mdash; keeping IntelliJ and <span class="accent">WebStorm generations on-brand</span>.</h1>
+      <p class="lede">
+        <strong>JetBrains AI Assistant ships in IntelliJ, WebStorm, PyCharm, GoLand, RubyMine, and the rest of the suite.</strong> It is excellent at refactoring and code completion. On design tasks, it reverts to the same model defaults every other AI surface produces &mdash; Inter as display, the canonical purple-to-blue gradient, three identical cards. ux-skill wires into JetBrains AI through the custom instructions surface and a CLI-driven linter that runs in the integrated terminal.
+      </p>
+      <p class="byline">By the ux-skill team &middot; 8 min read &middot; MIT-licensed open source</p>
+
+      <h2>Why JetBrains projects hit the design problem</h2>
+      <p>
+        A typical JetBrains project is backend-led: a Spring Boot API in IntelliJ, a Kotlin service, a Python data pipeline in PyCharm, a Go service in GoLand. The frontend often sits adjacent as a small Next.js or Vue app generated quickly to expose the API. That frontend is where AI Assistant lands its defaults &mdash; because it is treated as the boilerplate part of the job.
+      </p>
+      <p>
+        The result is consistent across teams: a backend whose architecture took weeks of design thinking and a frontend whose visual choices took ten minutes. The frontend ends up looking like every other AI-generated frontend, because no one budgeted the cognition for the brief.
+      </p>
+      <p>
+        ux-skill is the forcing function for that brief. The 10-field discovery takes 90 seconds. The recommender returns a design system. The linter catches drift on the way back. JetBrains AI generates the code; ux-skill enforces the rails.
+      </p>
+
+      <h2>Where JetBrains AI reads instructions from</h2>
+      <p>
+        JetBrains AI Assistant reads project context from a few sources. The most useful for design rules is the workspace AI Rules file at <code>.junie/guidelines.md</code> (the convention shared with JetBrains' Junie agent) or a project-level <code>AI_ASSISTANT_GUIDELINES.md</code> in the repo root. JetBrains AI also reads <code>.cursorrules</code> when present, for cross-IDE compatibility.
+      </p>
+      <p>
+        ux-skill generates a JetBrains-flavored rules file with <code>uxskill init --target jetbrains</code>. The generator writes a 30-line guidelines file plus a reference to <code>.ux/design-system/MASTER.md</code> for deeper context.
+      </p>
+      <pre class="code">$ uxskill init --target jetbrains
+
+[OK] Wrote .junie/guidelines.md
+[OK] Wrote .ux/design-system/MASTER.md
+[OK] Wrote .ux/design-system/tokens.css
+[OK] Wrote .ux/design-system/manifest.json</pre>
+
+      <h2>The .ux state directory is the source of truth</h2>
+      <p>
+        Every ux-skill install writes into one directory: <code>.ux/</code> at the project root. JetBrains AI reads files in this directory the same way it reads <code>src/</code> &mdash; through the workspace context window.
+      </p>
+
+      <div class="table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>File</th>
+              <th>Purpose</th>
+              <th>Read by</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>.ux/last-discovery.json</code></td>
+              <td>10-field brief, the human input</td>
+              <td>Recommender, regenerator</td>
+            </tr>
+            <tr>
+              <td><code>.ux/last-recommendation.json</code></td>
+              <td>Recommender output, structured</td>
+              <td>persist save, MCP server</td>
+            </tr>
+            <tr>
+              <td><code>.ux/design-system/MASTER.md</code></td>
+              <td>Readable design system source of truth</td>
+              <td>JetBrains AI, humans, Claude Code</td>
+            </tr>
+            <tr>
+              <td><code>.ux/design-system/tokens.css</code></td>
+              <td>CSS custom properties</td>
+              <td>Your app.css, Tailwind config</td>
+            </tr>
+            <tr>
+              <td><code>.ux/design-system/manifest.json</code></td>
+              <td>Structured form of the recommendation</td>
+              <td>lint, generate, MCP server</td>
+            </tr>
+            <tr>
+              <td><code>.junie/guidelines.md</code></td>
+              <td>JetBrains-flavored rules summary</td>
+              <td>JetBrains AI Assistant</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Commit <code>.ux/</code> and <code>.junie/</code>. The next JetBrains AI session reads them on startup. The state is repo-local, version-controlled, and deterministic &mdash; same brief, same files.
+      </p>
+
+      <h2>The tokens.css that lands in a Spring project</h2>
+      <p>
+        A concrete example. Run discovery for a Spring Boot admin dashboard, audience is internal ops at a logistics company, tone is precise and technical, reference brands are Linear and Stripe, region is MENA, dark mode required. The recommender returns editorial-precise + cool-neutral + Fraunces-Inter + restrained motion. The persist save step writes this <code>tokens.css</code>:
+      </p>
+      <pre class="code"><span class="c">/* .ux/design-system/tokens.css */</span>
+<span class="c">/* Generated by ux-skill v2.0.0-alpha.1 &mdash; 2026-05-28 */</span>
+
+<span class="k">:root</span> {
+  <span class="c">/* Surface */</span>
+  <span class="k">--surface</span>: <span class="s">#f5f3ee</span>;
+  <span class="k">--surface-2</span>: <span class="s">#ece8df</span>;
+  <span class="k">--ink</span>: <span class="s">#1c1a17</span>;
+  <span class="k">--body</span>: <span class="s">#3f3d39</span>;
+  <span class="k">--muted</span>: <span class="s">#6e6c66</span>;
+
+  <span class="c">/* Accent (single, restrained) */</span>
+  <span class="k">--accent</span>: <span class="s">#b5703f</span>;
+  <span class="k">--accent-active</span>: <span class="s">#945a30</span>;
+
+  <span class="c">/* Type ramp */</span>
+  <span class="k">--font-display</span>: <span class="s">"Fraunces", "Cormorant Garamond", serif</span>;
+  <span class="k">--font-body</span>: <span class="s">"Inter", system-ui, sans-serif</span>;
+  <span class="k">--font-mono</span>: <span class="s">"JetBrains Mono", ui-monospace, monospace</span>;
+
+  <span class="c">/* Spacing (4px base) */</span>
+  <span class="k">--space-2</span>: <span class="s">8px</span>;
+  <span class="k">--space-3</span>: <span class="s">12px</span>;
+  <span class="k">--space-4</span>: <span class="s">16px</span>;
+  <span class="k">--space-6</span>: <span class="s">24px</span>;
+  <span class="k">--space-8</span>: <span class="s">32px</span>;
+
+  <span class="c">/* Motion */</span>
+  <span class="k">--ease-out</span>: <span class="s">cubic-bezier(0.16, 1, 0.3, 1)</span>;
+  <span class="k">--duration-fast</span>: <span class="s">160ms</span>;
+  <span class="k">--duration-normal</span>: <span class="s">220ms</span>;
+}
+
+<span class="k">@media (prefers-color-scheme: dark)</span> {
+  <span class="k">:root</span> {
+    <span class="k">--surface</span>: <span class="s">#1a1816</span>;
+    <span class="k">--surface-2</span>: <span class="s">#252320</span>;
+    <span class="k">--ink</span>: <span class="s">#f0ede5</span>;
+    <span class="k">--body</span>: <span class="s">#c8c4ba</span>;
+    <span class="k">--muted</span>: <span class="s">#807d75</span>;
+  }
+}</pre>
+      <p>
+        Note the choice of mono: JetBrains Mono. The recommender knows that a JetBrains-targeted project pairs well with the family. Import this file from your <code>app.css</code> or <code>tailwind.config.js</code> and every component built from there inherits the system.
+      </p>
+
+      <h2>The recommender output for a JetBrains project brief</h2>
+      <p>
+        Here is what <code>ux recommend</code> returns for the brief above, running in IntelliJ's integrated terminal:
+      </p>
+      <pre class="code">$ ux recommend
+
+<span class="n">[OK]</span> Loaded brief from .ux/last-discovery.json
+<span class="n">[OK]</span> 5 parallel searches complete &middot; 156ms
+
+industry      logistics-saas-internal-ops    (score 0.89 / 184 entries)
+style         editorial-precise              (score 0.86 / 84 entries)
+palette       cool-neutral-warm-accent       (score 0.81 / 176 entries)
+type_pair     fraunces-inter-jetbrains-mono  (score 0.83 / 70 entries)
+motion        restrained-supportive          (score 0.78 / 57 entries)
+
+components    nav, kpi-strip, data-table, drawer, command-palette, toast
+brand_refs    Linear, Stripe, Vercel
+guardrails    35 anti-patterns at threshold high
+
+Recommendation saved to .ux/last-recommendation.json</pre>
+      <p>
+        Two-hundred milliseconds, no LLM call. The components list reflects an internal admin dashboard (data-table, drawer, command-palette) rather than a marketing landing page (hero, social-proof, feature-strip). The recommender scores against the brief's <code>project_type</code> field, which was "app-dashboard."
+      </p>
+
+      <h2>The Kotlin angle &mdash; Compose Multiplatform projects</h2>
+      <p>
+        Kotlin projects in IntelliJ that target Compose for Web or Compose Multiplatform consume tokens differently. Instead of CSS, ux-skill emits a Kotlin-friendly token object. The same recommendation translates to:
+      </p>
+      <pre class="code"><span class="c">// build/generated/uxskill/Tokens.kt</span>
+<span class="k">object</span> <span class="v">Tokens</span> {
+  <span class="k">val</span> <span class="v">surface</span> = Color(<span class="n">0xFFF5F3EE</span>)
+  <span class="k">val</span> <span class="v">surfaceAlt</span> = Color(<span class="n">0xFFECE8DF</span>)
+  <span class="k">val</span> <span class="v">ink</span> = Color(<span class="n">0xFF1C1A17</span>)
+  <span class="k">val</span> <span class="v">accent</span> = Color(<span class="n">0xFFB5703F</span>)
+
+  <span class="k">val</span> <span class="v">fontDisplay</span> = FontFamily(Font(R.font.fraunces_variable))
+  <span class="k">val</span> <span class="v">fontBody</span> = FontFamily(Font(R.font.inter_variable))
+
+  <span class="k">val</span> <span class="v">space2</span> = <span class="n">8</span>.dp
+  <span class="k">val</span> <span class="v">space4</span> = <span class="n">16</span>.dp
+  <span class="k">val</span> <span class="v">space6</span> = <span class="n">24</span>.dp
+
+  <span class="k">val</span> <span class="v">durationFast</span> = <span class="n">160</span>
+  <span class="k">val</span> <span class="v">durationNormal</span> = <span class="n">220</span>
+}</pre>
+      <p>
+        Generated by <code>uxskill generate --target compose</code>. The same recommendation can emit CSS, Tailwind config, or Kotlin tokens. The system is the contract; the emitted format adapts to the stack.
+      </p>
+
+      <h2>Three install paths in JetBrains</h2>
+
+      <h3>Path A &mdash; pip install plus integrated terminal</h3>
+      <p>
+        Open IntelliJ's terminal pane. Install ux-skill globally:
+      </p>
+      <pre class="code">$ pipx install uxskill
+$ ux discover                 <span class="c"># 10-field brief</span>
+$ ux recommend                <span class="c"># 5-parallel-search</span>
+$ ux init --target jetbrains  <span class="c"># writes .junie/guidelines.md</span>
+$ ux persist save --project-root .</pre>
+      <p>
+        JetBrains AI reads <code>.junie/guidelines.md</code> on the next session. The linter runs from the same terminal whenever you want to gate a generation.
+      </p>
+
+      <h3>Path B &mdash; pre-commit hook</h3>
+      <p>
+        If your JetBrains project uses pre-commit (most modern Kotlin or Spring repos do), register ux-skill as a hook so the linter runs before any commit:
+      </p>
+      <pre class="code"><span class="c"># .pre-commit-config.yaml</span>
+repos:
+  - repo: <span class="s">local</span>
+    hooks:
+      - id: <span class="s">uxskill-lint</span>
+        entry: <span class="s">uxskill lint --threshold high</span>
+        language: <span class="s">python</span>
+        additional_dependencies: [<span class="s">uxskill</span>]
+        files: <span class="s">\.(tsx|jsx|vue|css|scss|html)$</span></pre>
+
+      <h3>Path C &mdash; MCP server for the agent</h3>
+      <p>
+        JetBrains AI Assistant gained MCP support in 2025. Wire ux-skill as a stdio MCP server through the AI Assistant settings:
+      </p>
+      <pre class="code"><span class="c">// Settings &gt; Tools &gt; AI Assistant &gt; MCP Servers</span>
+{
+  <span class="k">"uxskill"</span>: {
+    <span class="k">"command"</span>: <span class="s">"ux-mcp"</span>,
+    <span class="k">"args"</span>: []
+  }
+}</pre>
+      <p>
+        After restart, the 14 ux-skill MCP tools are reachable from any AI Assistant prompt. Same engine as Claude Desktop and Zed, different host. Documented in the <a href="/blog/claude-desktop-mcp-design.html" class="link">MCP post</a>.
+      </p>
+
+      <blockquote>
+        IntelliJ is the IDE that already understood "treat your project as a domain model." ux-skill brings that mindset to the design surface.
+      </blockquote>
+
+      <h2>Compose, Spring, or pure frontend &mdash; same engine</h2>
+      <p>
+        ux-skill ships 25 tech-stack entries in <code>data/tech-stacks.json</code>. The relevant subset for JetBrains projects:
+      </p>
+
+      <div class="table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Stack</th>
+              <th>Token emit target</th>
+              <th>Best for</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Spring Boot + Thymeleaf</td><td>CSS custom properties</td><td>Server-rendered Java/Kotlin frontend</td></tr>
+            <tr><td>Spring Boot + Next.js</td><td>CSS + Tailwind config</td><td>API + adjacent SPA</td></tr>
+            <tr><td>Kotlin + Compose Web</td><td>Kotlin object</td><td>Compose Multiplatform shared UI</td></tr>
+            <tr><td>Ktor + Vue</td><td>CSS + Vue plugin</td><td>Lightweight Kotlin API + Vue SPA</td></tr>
+            <tr><td>Django + HTMX</td><td>CSS + Alpine config</td><td>PyCharm full-stack</td></tr>
+            <tr><td>Rails + Hotwire</td><td>CSS + Stimulus values</td><td>RubyMine full-stack</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        The recommender picks the appropriate target automatically from the <code>stack</code> field in the discovery brief. The persist step writes the right file format for that stack.
+      </p>
+
+      <h2>What ux-skill ships for JetBrains users</h2>
+      <ul>
+        <li><strong>68 deterministic regex rules</strong> in the anti-slop linter.</li>
+        <li><strong>Custom guidelines generator</strong> via <code>uxskill init --target jetbrains</code>, writes <code>.junie/guidelines.md</code>.</li>
+        <li><strong>959 structured entries</strong> across 11 JSON manifests.</li>
+        <li><strong>93 brand DESIGN.md specs</strong>.</li>
+        <li><strong>25 tech stack entries</strong> with token emit targets for Spring, Kotlin, Compose, Django, Rails, Ktor.</li>
+        <li><strong>14 MCP tools</strong> reachable from AI Assistant's MCP client.</li>
+      </ul>
+
+      <h2>What it does not do</h2>
+      <ul>
+        <li><strong>No JetBrains plugin.</strong> ux-skill is a CLI plus an MCP server. It does not ship as a Marketplace plugin today. The integration surface is the terminal, the rules file, and MCP.</li>
+        <li><strong>No live preview.</strong> Use JetBrains' built-in browser preview or pair with a dev server.</li>
+        <li><strong>Not branded.</strong> ux-skill is 14 stars on GitHub. ui-ux-pro-max-skill is 84,005. The case for installing is architecture, not awareness.</li>
+      </ul>
+
+      <div class="honesty">
+        <div class="label">Honesty card</div>
+        <h4>A JetBrains plugin is on the roadmap.</h4>
+        <p>The current integration is CLI plus MCP. A native JetBrains Marketplace plugin would let us surface the recommender inside the AI Assistant chat without leaving the IDE. That is on the roadmap for v2.3 but not shipped yet.</p>
+        <p>The CLI plus MCP approach covers the full functionality today &mdash; you just live in the integrated terminal more than you might in a plugin-first world. That terminal is fast and right there.</p>
+      </div>
+
+      <h2>Five minutes to working</h2>
+      <p>
+        End to end in IntelliJ, from a fresh checkout:
+      </p>
+      <ol>
+        <li><code>pipx install uxskill</code> in IntelliJ's integrated terminal.</li>
+        <li><code>uxskill init --target jetbrains</code> &mdash; writes <code>.junie/guidelines.md</code>.</li>
+        <li><code>uxskill discover</code> &mdash; 10-field interactive brief.</li>
+        <li><code>uxskill recommend</code> &mdash; 5-parallel-search merge, about 200 ms.</li>
+        <li><code>uxskill persist save --project-root .</code> &mdash; writes MASTER.md, tokens.css, manifest.json.</li>
+        <li>Restart AI Assistant. It reads the guidelines and the MASTER.md on the next prompt.</li>
+        <li>Generate visual code. Run <code>uxskill lint src/</code> to catch drift.</li>
+      </ol>
+      <p>
+        Total wall-clock: under five minutes. Total cost: zero. License: MIT.
+      </p>
+    </article>
+
+    <section class="cta">
+      <span class="eyebrow">Install for JetBrains</span>
+      <h2>One CLI install. <span class="accent">All twelve IDEs.</span></h2>
+      <p>ux-skill works in IntelliJ, WebStorm, PyCharm, GoLand, RubyMine, RustRover, CLion, PhpStorm, DataGrip, RubyMine, Rider, and Android Studio. Same Python engine, same integrated terminal, same files.</p>
+
+      <div class="install-block">
+        <div class="row"><span class="prompt">$</span> pipx install <span class="arg">uxskill</span></div>
+        <div class="row"><span class="prompt">$</span> uxskill <span class="arg">init --target jetbrains</span></div>
+        <div class="row"><span class="prompt">$</span> uxskill <span class="arg">lint src/ --threshold high</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; or via npx if Python is not installed &mdash;</div>
+        <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init --target jetbrains</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; or as a Claude Code plugin alongside JetBrains &mdash;</div>
+        <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
+      </div>
+    </section>
+  </div>
+
+  <aside class="related-reads" aria-label="Related reads">
+    <div class="related-reads-inner">
+      <h2 class="related-reads-h">Related reads</h2>
+      <ul>
+        <li><a href="/blog/cursor-design-plugin.html">Cursor design plugin</a></li>
+        <li><a href="/blog/ai-design-system-cli.html">AI design system CLI</a></li>
+        <li><a href="/blog/monorepo-design-system-ai-coding.html">Monorepo design system for AI coding</a></li>
+        <li><a href="/blog/python-design-system-generator.html">Python design system generator</a></li>
+      </ul>
+    </div>
+  </aside>
+  <style>
+    .related-reads {
+      max-width: 880px; margin: 80px auto 0 auto; padding: 32px 24px 8px;
+      border-top: 1px solid rgba(20,20,19,0.10);
+    }
+    .related-reads-h {
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: #6c6a64; margin-bottom: 16px; font-family: 'JetBrains Mono', ui-monospace, monospace;
+    }
+    .related-reads ul {
+      list-style: none; padding: 0; margin: 0;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px;
+    }
+    .related-reads li { font-size: 15px; line-height: 1.5; }
+    .related-reads a {
+      color: inherit; text-decoration: none;
+      border-bottom: 1px solid rgba(20,20,19,0.18);
+      padding-bottom: 2px; transition: border-color .15s ease;
+    }
+    .related-reads a:hover { border-color: currentColor; }
+    @media (max-width: 640px) {
+      .related-reads ul { grid-template-columns: 1fr; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .related-reads { border-top-color: rgba(255,255,255,0.12); }
+      .related-reads a { border-bottom-color: rgba(255,255,255,0.20); }
+    }
+  </style>
+
+  <footer>
+    <span>&copy; 2026 Laith Aljunaidy. MIT licensed. No telemetry.</span>
+    <div class="links">
+      <a href="/">Home</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/blog/">Blog</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+      <a href="https://pypi.org/project/uxskill/">PyPI</a>
+      <a href="https://www.npmjs.com/package/uxskill">npm</a>
+    </div>
+  </footer>
+</body>
+</html>
