@@ -316,113 +316,101 @@ h1, h2, h3, h4 {
       border-bottom: 1px solid var(--hairline);
       letter-spacing: -0.02em;
     }
-    /* Mobile drawer — language switcher block at the bottom */
-    .nav__drawer-langs {
-      margin-top: 28px;
-      padding-top: 24px;
-      border-top: 1px solid var(--hairline);
-      width: 100%;
-    }
-    .nav__drawer-langs-eyebrow {
-      font-family: var(--mono);
-      font-size: 10.5px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin: 0 0 14px;
-    }
-    .nav__drawer-langs-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px 14px;
-    }
-    .nav__drawer-langs-grid a {
-      font-family: var(--sans);
-      font-size: 15px;
-      color: var(--body);
-      padding: 6px 0;
-      text-decoration: none;
-      transition: color var(--t-fast) var(--ease-cinema);
-    }
-    .nav__drawer-langs-grid a:hover,
-    .nav__drawer-langs-grid a:focus-visible { color: var(--ink); }
-
-    /* Mobile drawer top row — language button + close X */
+    /* Mobile drawer top row — close X only */
     .nav__drawer-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
       width: 100%;
-      gap: 12px;
-      margin-bottom: 22px;
-    }
-    .nav__drawer-lang-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: 11.5px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-    /* Lang menu — ALWAYS open inside the drawer (no toggle).
-       The user explicitly said the toggle didn't open; switch to always-visible.
-       Critical: flex-shrink: 0 so the parent flex column doesn't crush this
-       to zero height. min-height: max-content keeps the grid as tall as its content. */
-    .nav__drawer-top { flex-shrink: 0; }
-    .nav__drawer-lang-menu {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4px 12px;
-      width: 100%;
-      max-height: 320px;
-      min-height: max-content;
+      margin-bottom: 18px;
       flex-shrink: 0;
-      overflow-y: auto;
-      padding: 10px;
-      margin-bottom: 22px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--hairline);
-      border-radius: 14px;
-      -webkit-overflow-scrolling: touch;
     }
-    .nav__drawer-lang-menu a {
-      display: block;
-      padding: 9px 12px;
-      color: var(--body);
-      text-decoration: none;
-      font-family: var(--sans);
-      font-size: 15px;
-      font-weight: 500;
-      letter-spacing: -0.005em;
-      border-radius: 8px;
-      border-bottom: 0;
-      transition: background-color var(--t-fast) var(--ease-cinema), color var(--t-fast) var(--ease-cinema);
-    }
-    .nav__drawer-lang-menu a:hover,
-    .nav__drawer-lang-menu a:focus-visible {
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--ink);
-    }
-    /* Override the generic .nav__drawer a (32px) rule for menu links specifically */
-    .nav__drawer .nav__drawer-lang-menu a {
-      font-family: var(--sans);
-      font-size: 15px;
-      font-variation-settings: normal;
-      padding: 9px 12px;
-      border-bottom: 0;
-    }
-    @media (max-width: 380px) {
-      .nav__drawer-lang-menu { grid-template-columns: 1fr; }
-    }
-
-    /* Close X — was absolutely positioned; now sits in the top row */
     .nav__drawer .nav__drawer-close {
       width: 44px; height: 44px;
       border-radius: 8px;
       border: 1px solid var(--hairline-2);
+      background: transparent;
+      color: var(--ink);
       display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Mobile drawer language toggle — native <details>, no JS races */
+    .nav__drawer-langs-details {
+      width: 100%;
+      margin-bottom: 14px;
+      border-radius: 14px;
+      border: 1px solid var(--hairline);
+      background: rgba(255, 255, 255, 0.03);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .nav__drawer-langs-details > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .nav__drawer-langs-details > summary::-webkit-details-marker { display: none; }
+    .nav__drawer-langs-summary-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav__drawer-langs-caret {
+      transition: transform var(--t-fast) var(--ease-cinema);
+      color: var(--muted);
+    }
+    .nav__drawer-langs-details[open] > summary .nav__drawer-langs-caret {
+      transform: rotate(180deg);
+    }
+    .nav__drawer-langs-details[open] > summary {
+      color: var(--ink);
+      border-bottom: 1px solid var(--hairline);
+    }
+    .nav__drawer-langs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px 12px;
+      padding: 10px 12px 14px;
+    }
+    .nav__drawer-langs-grid a {
+      display: block;
+      padding: 10px 8px;
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--body);
+      text-decoration: none;
+      border-radius: 8px;
+      border-bottom: 0;
+      transition: background-color var(--t-fast) var(--ease-cinema), color var(--t-fast) var(--ease-cinema);
+    }
+    .nav__drawer-langs-grid a:hover,
+    .nav__drawer-langs-grid a:focus-visible {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--ink);
+    }
+    /* Override the generic .nav__drawer a (32px font) rule for lang grid links */
+    .nav__drawer .nav__drawer-langs-grid a {
+      font-family: var(--sans);
+      font-size: 15px;
+      font-variation-settings: normal;
+      padding: 10px 8px;
+      border-bottom: 0;
+    }
+    @media (max-width: 380px) {
+      .nav__drawer-langs-grid { grid-template-columns: 1fr; }
     }
 
     /* =========================================================================
@@ -2544,50 +2532,23 @@ h1, h2, h3, h4 {
 </header>
 
 <div class="nav__drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Site menu" aria-hidden="true">
-  <!-- Drawer top row — language button next to close X for immediate access -->
+  <!-- Drawer top row — close X only. Language is in a toggleable details below. -->
   <div class="nav__drawer-top">
-    <span class="nav__drawer-lang-label" aria-hidden="true">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      <span>Language · 17</span>
-    </span>
+    <span aria-hidden="true"></span>
     <button type="button" class="nav__drawer-close" aria-label="Close menu" id="nav-drawer-close">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
   </div>
 
-  <!-- Language menu — fly-out positioned at the TOP of the drawer (no scroll required) -->
-  <div class="nav__drawer-lang-menu" id="nav-drawer-lang-menu" role="menu" aria-label="Languages">
-    <a href="/"        lang="en"    role="menuitem">English</a>
-    <a href="/zh-CN/"  lang="zh-CN" role="menuitem">简体中文</a>
-    <a href="/zh-TW/"  lang="zh-TW" role="menuitem">繁體中文</a>
-    <a href="/ja/"     lang="ja"    role="menuitem">日本語</a>
-    <a href="/ko/"     lang="ko"    role="menuitem">한국어</a>
-    <a href="/hi/"     lang="hi"    role="menuitem">हिन्दी</a>
-    <a href="/id/"     lang="id"    role="menuitem">Bahasa Indonesia</a>
-    <a href="/vi/"     lang="vi"    role="menuitem">Tiếng Việt</a>
-    <a href="/th/"     lang="th"    role="menuitem">ไทย</a>
-    <a href="/ar/"     lang="ar"    role="menuitem" dir="rtl">العربية</a>
-    <a href="/es/"     lang="es"    role="menuitem">Español</a>
-    <a href="/fr/"     lang="fr"    role="menuitem">Français</a>
-    <a href="/de/"     lang="de"    role="menuitem">Deutsch</a>
-    <a href="/pt-BR/"  lang="pt-BR" role="menuitem">Português</a>
-    <a href="/ru/"     lang="ru"    role="menuitem">Русский</a>
-    <a href="/tr/"     lang="tr"    role="menuitem">Türkçe</a>
-    <a href="/it/"     lang="it"    role="menuitem">Italiano</a>
-  </div>
-
-  <a href="/compare.html">Compare</a>
-  <a href="/about.html">About</a>
-  <a href="/roadmap.html">Roadmap</a>
-  <a href="/faq.html">FAQ</a>
-  <a href="/mcp.html">MCP</a>
-  <a href="/commands.html">Commands</a>
-  <a href="/blog/">Blog</a>
-  <a href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
-
-  <!-- Language switcher — mobile drawer surface -->
-  <div class="nav__drawer-langs">
-    <p class="nav__drawer-langs-eyebrow">Language · 17</p>
+  <!-- Language toggle — native <details>, tap-to-open, no JS races, no always-open crush -->
+  <details class="nav__drawer-langs-details" id="nav-drawer-langs">
+    <summary>
+      <span class="nav__drawer-langs-summary-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span>Language · 17</span>
+      </span>
+      <svg class="nav__drawer-langs-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+    </summary>
     <div class="nav__drawer-langs-grid">
       <a href="/"        lang="en"   >English</a>
       <a href="/zh-CN/"  lang="zh-CN">简体中文</a>
@@ -2607,7 +2568,16 @@ h1, h2, h3, h4 {
       <a href="/tr/"     lang="tr"   >Türkçe</a>
       <a href="/it/"     lang="it"   >Italiano</a>
     </div>
-  </div>
+  </details>
+
+  <a href="/compare.html">Compare</a>
+  <a href="/about.html">About</a>
+  <a href="/roadmap.html">Roadmap</a>
+  <a href="/faq.html">FAQ</a>
+  <a href="/mcp.html">MCP</a>
+  <a href="/commands.html">Commands</a>
+  <a href="/blog/">Blog</a>
+  <a href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
 </div>
 
 <main id="main">
