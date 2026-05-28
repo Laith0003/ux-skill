@@ -130,3 +130,53 @@ Other moves: <2-3 alternatives>
 | `.ux/` directory cannot be created (permissions) | Surface the path error to the user and ask for an alternative project root |
 
 For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.
+
+---
+
+## v2 Python integration
+
+`/ux-frame` IS the discovery flow. v2 makes this concrete by writing answers to `.ux/last-discovery.json` so downstream commands chain.
+
+### Run the structured discovery
+
+```bash
+python3 -m engine.cli.main discover --save=.ux/last-discovery.json
+```
+
+This walks the 10 canonical fields (project_type, audience, primary_goal, tone, must_have, forbidden, reference_brands, stack, region, success_metric) interactively.
+
+For non-interactive use, hand-edit `.ux/last-discovery.json`:
+
+```bash
+mkdir -p .ux
+cat > .ux/last-discovery.json <<'JSON'
+{
+  "answers": {
+    "project_type": "...",
+    "audience": "...",
+    "primary_goal": "...",
+    "tone": "...",
+    "must_have": "...",
+    "forbidden": "...",
+    "reference_brands": "...",
+    "stack": "...",
+    "region": "...",
+    "success_metric": "..."
+  }
+}
+JSON
+```
+
+### After framing — chain into recommendation
+
+Once the brief is complete, call the recommender:
+
+```bash
+python3 -m engine.cli.main --no-pretty recommend --brief-file=.ux/last-discovery.json > .ux/last-recommendation.json
+```
+
+The recommendation is what `/ux-design`, `/ux-component`, `/ux-system` read next.
+
+### Fallback
+
+If `python3 -m engine.cli.main` is not on PATH, prompt for the 10 fields in the chat and save them as JSON manually.

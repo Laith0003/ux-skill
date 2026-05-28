@@ -169,3 +169,57 @@ After `/ux-research --synthesize`:
 - `/ux-frame` — re-baseline the brief on what you learned
 - `/ux-workshop` — if findings open a bigger question
 - `/ux-next` — let the conductor pick
+
+---
+
+## v2 Python integration
+
+Research inputs (interviews, analytics, A/B results, support tickets, competitive sites) get synthesized into a Brief object that feeds the recommender.
+
+### Synthesize research into recommender-ready Brief
+
+After collecting and reading research artefacts, the LLM's job is to extract:
+- `audience` (specific, not generic)
+- `tone` (3-5 words from what users said matters)
+- `must_have` (from analytics + tickets — pain points fixed = required)
+- `forbidden` (from competitive sites — patterns to avoid)
+- `reference_brands` (from competitive analysis — what users praised)
+
+Write the synthesized brief:
+
+```bash
+mkdir -p .ux
+cat > .ux/last-discovery.json <<JSON
+{
+  "answers": {
+    "project_type": "<extracted>",
+    "audience": "<from interviews/analytics>",
+    "primary_goal": "<top job-to-be-done>",
+    "tone": "<from what users praised>",
+    "must_have": "<analytics pain points + tickets>",
+    "forbidden": "<from competitor anti-patterns>",
+    "reference_brands": "<from competitive praise>",
+    "stack": "<inferred or asked>",
+    "region": "<from user data>",
+    "success_metric": "<from analytics baseline>"
+  }
+}
+JSON
+```
+
+### Verify the brief produces a sensible recommendation
+
+```bash
+python3 -m engine.cli.main --no-pretty recommend --brief-file=.ux/last-discovery.json | python3 -c "
+import json, sys
+r = json.load(sys.stdin)
+for line in r.get('rationale', []):
+    print(line)
+"
+```
+
+If the recommender's rationale doesn't match what research said, the brief synthesis was wrong — iterate.
+
+### Fallback
+
+If the engine isn't available, produce the brief as a markdown document with the 10 fields filled in and recommend `/ux-discover` next.

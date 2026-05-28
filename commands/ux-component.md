@@ -152,3 +152,65 @@ After `/ux-component`:
 - `/ux-a11y` — accessibility audit
 - `/ux-design` — assemble into a fuller surface
 - `/ux-next` — let the conductor pick
+
+---
+
+## v2 Python integration — required preamble
+
+Before generating any output, the LLM running this command MUST shell to the v2 Python engine to ground the work in structured data. This is not optional — running without the preamble means generating from training-data defaults (the slop signal).
+
+### Step 1 — Load the saved discovery brief
+
+```bash
+test -f .ux/last-discovery.json && cat .ux/last-discovery.json
+```
+
+If the file doesn't exist, run `/ux-discover` first. Do NOT proceed without a complete 10-field brief.
+
+### Step 2 — Get the merged recommendation from the engine
+
+```bash
+python3 -m engine.cli.main --no-pretty recommend \
+  --brief-file=.ux/last-discovery.json > .ux/last-recommendation.json 2>/dev/null \
+  || echo "engine not installed — falling back to v1 prose-only mode"
+```
+
+Inspect the recommendation:
+```bash
+cat .ux/last-recommendation.json | python3 -c "
+import json, sys
+r = json.load(sys.stdin)
+print('STYLE:    ', (r.get('style') or {}).get('name'))
+print('PALETTE:  ', (r.get('palette') or {}).get('name'))
+print('TYPE:     ', (r.get('type_pair') or {}).get('name'))
+print('MOTION:   ', [m['id'] for m in r.get('motion', [])[:5]])
+print('COMPS:    ', [c['id'] for c in r.get('components', [])[:6]])
+print('BRANDS:   ', [b['id'] for b in r.get('brand_exemplars', [])[:5]])
+print('GUARDRAILS:', len(r.get('guardrails', [])), 'anti-pattern rules active')
+"
+```
+
+### Step 3 — Use the recommendation as hard constraints
+
+The engine's picks are not suggestions — they're constraints:
+- The picked `style.tokens` are the design vocabulary you generate from
+- The picked `palette.colors` are the only color tokens used
+- The picked `type_pair` is the only typography (display + body + mono)
+- The 35+ `guardrails` are checked-against during generation — do NOT emit code that matches any anti-pattern regex
+- The 5 `brand_exemplars` are the visual reference for taste
+
+### Step 4 — Generate output
+
+Look up the requested component name in `.ux/last-recommendation.json`'s `components` list. If present, generate using its `anatomy`, `states`, `tokens_used`, and `motion` fields as the spec. If not present, search `data/components.json` directly via `cat data/components.json | jq '.entries[] | select(.name | test("<name>"; "i"))'`. Dispatch `frontend-engineer` to build it.
+
+### Step 5 — Lint the output before reporting
+
+```bash
+python3 -m engine.cli.main --no-pretty lint <output-paths> --threshold high
+```
+
+Exit code non-zero means a high+ finding landed in your output. Fix before declaring done.
+
+### Fallback
+
+If `python3 -m engine.cli.main` is not on PATH (user hasn't installed v2 yet), fall back to v1 prose-only behavior using references/foundations/*.md as the source of taste. The output quality will be lower but the command still works.

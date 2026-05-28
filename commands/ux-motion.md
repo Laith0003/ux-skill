@@ -223,3 +223,66 @@ If the verdict is "Cut" on more than half the animations, recommend `/ux-design`
 | `--fix` requested but originating spec is unclear | Re-dispatch with explicit timing tier, easing rule, and reduced-motion expectation |
 
 For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.
+
+---
+
+## v2 Python integration — required preamble
+
+Before producing any judgment, the LLM running this command MUST shell to the v2 Python engine to ground its work in deterministic rules. The mechanical pass runs first; the taste pass runs second.
+
+### Step 1 — Run the deterministic linter
+
+```bash
+python3 -m engine.cli.main --no-pretty lint <user-supplied-path> --threshold high > /tmp/ux-lint-report.json 2>/dev/null \
+  || bash bin/ux-lint.sh <user-supplied-path>
+```
+
+The Python linter reads rules from `data/anti-patterns.json` (35 regex rules across 8 categories). It returns structured JSON with findings keyed by file:line:column.
+
+### Step 2 — Inspect findings
+
+```bash
+cat /tmp/ux-lint-report.json | python3 -c "
+import json, sys
+r = json.load(sys.stdin)
+s = r['summary']
+print(f\"scanned: {r['files_scanned']} files, {r['rules_loaded']} rules\")
+print(f\"  critical: {s.get('critical', 0)}\")
+print(f\"  high:     {s.get('high', 0)}\")
+print(f\"  medium:   {s.get('medium', 0)}\")
+print(f\"  low:      {s.get('low', 0)}\")
+print(f\"  total:    {s.get('total', 0)}\")
+for f in r['findings'][:20]:
+    print(f\"  [{f['severity']}] {f['file']}:{f['line']} {f['rule_name']} ({f['rule_id']})\")
+"
+```
+
+### Step 3 — Command-specific Python action
+
+Read `data/motion-presets.json` to get the 57 production-grade motion presets. Filter for the user's intent:
+
+```bash
+python3 -c "
+import json
+presets = json.load(open('data/motion-presets.json'))['entries']
+print(f'Total presets: {len(presets)}')
+print()
+cats = {}
+for p in presets:
+    cats.setdefault(p['category'], []).append(p)
+for cat, items in cats.items():
+    print(f'{cat}: {len(items)}')
+    for p in items[:2]:
+        print(f\"  - {p['id']}: {p.get('name')} (duration {p['tokens'].get('duration_ms')}ms, easing {p['tokens'].get('easing')})\")
+"
+```
+
+The user's brief should drive which presets you pick. Reduced-motion fallbacks are MANDATORY per each preset's `reduced_motion` field.
+
+### Step 4 — Hand back to the LLM
+
+Take the structured findings from Step 1 and any data the engine returned in Step 3, and use those AS YOUR INPUT to the LLM-side reasoning. Do NOT re-derive what the linter already proved — the regex pass is the truth on those rules. Your job is the taste-level judgment the linter cannot make.
+
+### Fallback
+
+If `python3 -m engine.cli.main` is not on PATH, fall back to `bash bin/ux-lint.sh` for the linter pass and v1 prose-only behavior for everything else.

@@ -183,3 +183,71 @@ After `/ux-case-study`:
 - `/ux-expert` — share / promote the work, surface contact info
 - `/ux-next` — let the conductor pick
 - Done — this is the wrap-up artifact
+
+---
+
+## v2 Python integration
+
+Case studies are storytelling, but the spine of the story is the deterministic data: what brief was given, what the engine recommended, what was generated, what the linter caught, what was fixed.
+
+### Step 1 — Load the chain of state
+
+```bash
+python3 -c "
+import json, os
+files = {
+    'brief':          '.ux/last-discovery.json',
+    'recommendation': '.ux/last-recommendation.json',
+    'generated':      '.ux/generated/manifest.json',
+}
+loaded = {}
+for k, f in files.items():
+    if os.path.exists(f):
+        loaded[k] = json.load(open(f))
+    else:
+        loaded[k] = None
+        print(f'WARN: {f} missing — case study will have gaps')
+print()
+print('STATE CHAIN:')
+for k, v in loaded.items():
+    print(f'  {k}: {\"present\" if v else \"missing\"}')
+"
+```
+
+### Step 2 — Mine the chain for case-study sections
+
+The case study sections write themselves from the structured data:
+
+- **Brief** -> from `.ux/last-discovery.json` (project, audience, goal, tone, constraints)
+- **Approach** -> from `.ux/last-recommendation.json` rationale (style picked, palette picked, type picked, brands referenced as exemplars, guardrails active)
+- **Execution** -> from `.ux/generated/manifest.json` (which components were emitted)
+- **Lint pass** -> from `/tmp/ux-lint-report.json` if present (findings before/after)
+
+```bash
+python3 -c "
+import json, os
+sections = []
+if os.path.exists('.ux/last-discovery.json'):
+    d = json.load(open('.ux/last-discovery.json'))['answers']
+    sections.append(('Brief', d))
+if os.path.exists('.ux/last-recommendation.json'):
+    r = json.load(open('.ux/last-recommendation.json'))
+    sections.append(('Recommendation', {
+        'style': (r.get('style') or {}).get('name'),
+        'palette': (r.get('palette') or {}).get('name'),
+        'rationale': r.get('rationale', []),
+    }))
+for name, content in sections:
+    print(f'--- {name} ---')
+    print(json.dumps(content, indent=2))
+    print()
+" 2>/dev/null || echo "No state files yet — case study will need user-supplied content"
+```
+
+### Step 3 — Write with structure
+
+Use a fixed case-study structure: Context -> Brief -> Constraints -> Approach -> Execution -> Linter findings -> Resolution -> Outcome. The Brief and Approach come from the loaded state; Context, Constraints, Resolution, Outcome are LLM-narrated.
+
+### Fallback
+
+If `.ux/` state is empty, the case study has to be retrospective: ask the user for the brief, approach, and outcome in chat, then structure the prose.

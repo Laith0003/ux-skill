@@ -208,3 +208,41 @@ After `/ux-workshop`:
 - `/ux-research` — if Game Plan reveals research gaps
 - `/ux-frame` — lock the brief from the Game Plan
 - `/ux-next` — let the conductor pick
+
+---
+
+## v2 Python integration
+
+The workshop orchestrates discovery + recommend + critique in one flow. Python wires it together.
+
+### Workshop sequence
+
+```bash
+# Phase 1 — Discovery (interactive 10-field intake)
+python3 -m engine.cli.main discover --save=.ux/last-discovery.json
+
+# Phase 2 — Generate recommendation
+python3 -m engine.cli.main --no-pretty recommend --brief-file=.ux/last-discovery.json > .ux/last-recommendation.json
+
+# Phase 3 — Show the merged system to workshop participants
+python3 -c "
+import json
+r = json.load(open('.ux/last-recommendation.json'))
+print('=' * 60)
+print(' STYLE:    ', (r.get('style') or {}).get('name'))
+print(' PALETTE:  ', (r.get('palette') or {}).get('name'))
+print(' TYPE:     ', (r.get('type_pair') or {}).get('name'))
+print(' BRANDS:   ', ', '.join(b.get('name', '?') for b in r.get('brand_exemplars', [])[:3]))
+print(' GUARDS:   ', len(r.get('guardrails', [])), 'anti-patterns active')
+print('=' * 60)
+for line in r.get('rationale', []):
+    print('  -', line)
+"
+
+# Phase 4 — Workshop critique (LLM-side; gather participant feedback)
+# Phase 5 — Update the brief if critique demands, re-run recommend, iterate
+```
+
+### After the workshop
+
+Save the final agreed brief as `.ux/workshop-final.json` for posterity. The recommendation can be re-derived from it any time.

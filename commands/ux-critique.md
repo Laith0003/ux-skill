@@ -172,3 +172,50 @@ Routing logic for "Recommended":
 | User pushes back on the strategic move | Defend it or revise — never capitulate to a vague "make it nicer" |
 
 For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.
+
+---
+
+## v2 Python integration
+
+Critique is taste-level judgment, but it should be grounded in named principles, not floating opinions. Load the relevant guidelines and anti-patterns from the engine's data layer first.
+
+### Step 1 — Load relevant UX laws + guardrails
+
+```bash
+python3 -c "
+import json
+laws = json.load(open('data/ux-guidelines.json'))['entries']
+slop = json.load(open('data/anti-patterns.json'))['entries']
+# Surface the named principles the critique should reference
+print(f'UX laws available: {len(laws)}')
+for cat in sorted(set(l['category'] for l in laws)):
+    items = [l for l in laws if l['category'] == cat]
+    print(f'  {cat}: {len(items)} principles')
+print()
+print(f'Anti-pattern rules: {len(slop)}')
+for cat in sorted(set(s['category'] for s in slop)):
+    print(f'  {cat}: {sum(1 for s in slop if s[\"category\"] == cat)} rules')
+"
+```
+
+### Step 2 — Run the linter to get the mechanical floor
+
+```bash
+python3 -m engine.cli.main --no-pretty lint <target-path> --threshold low > /tmp/ux-lint-report.json 2>/dev/null \
+  || true
+```
+
+The linter catches the rules-based slop. The critique covers everything ABOVE that floor: taste, hierarchy, density, narrative, brand fit, emotional tone — the things regex cannot judge.
+
+### Step 3 — Critique with named-principle grounding
+
+When the LLM produces the critique, every finding MUST cite either:
+- A named UX law from data/ux-guidelines.json (e.g., "Violates Hick's Law — 8 primary actions where 1 is needed")
+- A brand exemplar from data/brands/*.json (e.g., "Stripe handles this with a side-by-side code/output split")
+- A style philosophy from data/styles.json (e.g., "The 'Monochrome Precise' style would treat this differently — drop the saturation, lean on hierarchy")
+
+NO floating critique. Every point is grounded in cited material.
+
+### Fallback
+
+If `data/*.json` is missing, fall back to v1 prose-only mode using `references/laws/*.md` and `references/foundations/*.md`.

@@ -173,3 +173,53 @@ If all severities are Cosmetic only, recommend `/ux-polish` instead of `--fix` �
 | Locale file path malformed or unreadable | Surface the parse error, ask for the canonical path |
 
 For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.
+
+---
+
+## v2 Python integration
+
+Microcopy review is voice-and-clarity judgment. Python loads the discovery's tone constraints so the rewrites match the project's voice, not generic AI brightness.
+
+### Step 1 — Load the project tone from discovery
+
+```bash
+test -f .ux/last-discovery.json && python3 -c "
+import json
+d = json.load(open('.ux/last-discovery.json'))['answers']
+print('TONE:        ', d.get('tone'))
+print('AUDIENCE:    ', d.get('audience'))
+print('FORBIDDEN:   ', d.get('forbidden'))
+print('REGION:      ', d.get('region'))
+"
+```
+
+The tone field constrains every rewrite. If `tone: warm, precise, no marketing` then rewrites are warm + precise + non-marketing. No drift to AI-default cheer.
+
+### Step 2 — Check the linter for copy-specific anti-patterns
+
+```bash
+python3 -m engine.cli.main --no-pretty lint <target-path> --threshold medium 2>/dev/null \
+  | python3 -c "
+import json, sys
+r = json.load(sys.stdin)
+copy_findings = [f for f in r.get('findings', []) if f['category'] == 'Content']
+print(f'Copy-category findings: {len(copy_findings)}')
+for f in copy_findings:
+    print(f\"  [{f['severity']}] {f['file']}:{f['line']} {f['rule_name']}\")
+    print(f\"    fix: {f['fix']}\")
+" 2>/dev/null || true
+```
+
+Common slop the linter catches: 'John Doe', 'Lorem ipsum', generic 'Click here' / 'Learn more' CTAs, fake five-star testimonials, marketing-verb headlines.
+
+### Step 3 — Voice-grounded rewrites
+
+Every rewrite must:
+1. Match the discovery's `tone` field
+2. Pass the linter (no Content-category findings)
+3. Be SHORTER than the original where possible (clarity over length)
+4. Cite a UX law (e.g., 'Recognition over Recall — error message names the field, not the rule')
+
+### Fallback
+
+If `.ux/last-discovery.json` is missing, ask the user for the project tone first. Don't rewrite without it.

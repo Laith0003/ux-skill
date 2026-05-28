@@ -115,3 +115,46 @@ For path issues: see references/process/discovery-protocol.md for state file loc
 ## Next prompt
 
 This command's next prompt is itself. After any state-changing action, `/ux-next` is the way back to the conductor.
+
+---
+
+## v2 Python integration
+
+`/ux-next` reads the chain of state files in `.ux/` and suggests the next deterministic step based on what's been done.
+
+### Read state to suggest the next move
+
+```bash
+python3 -c "
+import json, os
+def has(p): return os.path.exists(p)
+state = {
+    'discovery':       has('.ux/last-discovery.json'),
+    'recommendation':  has('.ux/last-recommendation.json'),
+    'generated':       has('.ux/generated/manifest.json'),
+    'lint_report':     has('/tmp/ux-lint-report.json'),
+}
+print('STATE:', state)
+suggestion = None
+if not state['discovery']:
+    suggestion = '/ux-frame  -- start by framing the problem (10-field intake)'
+elif not state['recommendation']:
+    suggestion = '/ux-recommend  -- get the merged design system'
+elif not state['generated']:
+    suggestion = '/ux-design [brief]  -- generate frontend code using the recommendation'
+elif not state['lint_report']:
+    suggestion = '/ux-lint .  -- run the anti-slop linter on the generated code'
+else:
+    suggestion = '/ux-fix .  -- apply linter findings if any, or /ux-polish for taste-level upgrades'
+print()
+print('NEXT:', suggestion)
+"
+```
+
+### Suggest commands when state is partial or missing
+
+The suggestion logic above maps state -> next command deterministically. The LLM can layer judgment on top (e.g., 'you also might want /ux-case-study to write this up') but the base suggestion comes from Python.
+
+### Fallback
+
+If state files are missing entirely, the answer is always `/ux-frame` first.
