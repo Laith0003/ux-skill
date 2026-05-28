@@ -1,0 +1,51 @@
+{
+  "id": "tiktok",
+  "name": "TikTok",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of TikTok's design language — the short-form-video platform built on a pure black canvas with a signature cyan-and-magenta chromatic-aberration (Aqua #25F4EE + Magenta #FE2C55) reserved for the brand mark and selected moments, a video-first vertical feed taking 100% of the viewport, and a strict 'content is the entire surface' approach where chrome floats over content. The brand reads as 'youthful, kinetic, slightly glitch-aesthetic.'",
+  "design_language": {
+    "type": {
+      "display": "Proxima Nova",
+      "body": "Proxima Nova",
+      "mono": null
+    },
+    "color_primary": "#fe2c55",
+    "color_canvas": "#000000",
+    "color_ink": "#ffffff",
+    "color_accent_aqua": "#25f4ee",
+    "radius": [4, 8, 12, 24, 999],
+    "spacing": "4-based",
+    "motion_signature": "Signature is the cyan-and-magenta chromatic-aberration on the brand mark and on hero brand-mark animations — the two colors shift 4px apart at 600ms; vertical feed videos use snap-scroll behavior; heart pulse on double-tap scales to 1.4x at 300ms with red particle burst."
+  },
+  "trademark_signals": [
+    "Chromatic-aberration brand mark — the d-shaped note glyph rendered with cyan (#25F4EE) offset behind magenta (#FE2C55) — the brand's most-recognized signature",
+    "Pure black canvas (#000000) — the video-first vertical feed sits on absolute black so the content reads as the only luminous element",
+    "Vertical 9:16 video feed at full viewport height — the brand inverts the typical landscape-card pattern; video IS the page",
+    "Right-rail icon stack — like, comment, share, follow rendered as floating circular icons over video content — chrome floats, doesn't anchor",
+    "Magenta voltage (#FE2C55) for primary CTAs, heart-liked state, and brand-mark accent; aqua is reserved for the brand-mark only"
+  ],
+  "components_observed": [
+    "vertical-video-feed",
+    "right-rail-icon-stack",
+    "chromatic-brand-mark",
+    "creator-avatar-floating",
+    "comment-overlay-sheet",
+    "magenta-cta-pill",
+    "footer-tiktok-minimal"
+  ],
+  "exemplar_pages": [
+    "tiktok.com",
+    "tiktok.com/foryou",
+    "tiktok.com/explore",
+    "newsroom.tiktok.com"
+  ],
+  "ai_slop_avoided": [
+    "Don't paint backgrounds in the brand chromatic-aberration. The cyan-magenta effect is reserved for the brand mark and brand-mark animations only",
+    "Don't substitute the canvas with near-black or navy. The brand requires pure black so video content reads as the only luminous element",
+    "Don't invert to a landscape feed. Vertical 9:16 IS the brand's structural signature",
+    "Don't add a third accent color. Magenta for chrome, aqua for the mark, white for type — three colors only",
+    "Don't anchor chrome at the bottom of cards. Right-rail floating icons are the brand pattern"
+  ],
+  "source_md": "references/brands/tiktok-DESIGN.md"
+}

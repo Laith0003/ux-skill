@@ -1,0 +1,51 @@
+{
+  "id": "economist",
+  "name": "The Economist",
+  "category": "Editorial / Media",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of The Economist's design language — the British weekly newspaper of record built on a signature 1.5cm red top bar (Economist Red #E3120B), a literary slab-serif (Milo Serif) for headlines, an elegant humanist sans (Officina Sans) for ledes and metadata, and a strict editorial discipline: byline removed (every article unsigned), section eyebrows in red caps, drop caps on feature opens. The brand reads as 200-year-old global authority.",
+  "design_language": {
+    "type": {
+      "display": "Milo Serif",
+      "body": "EconomistMilo",
+      "mono": "Officina Sans Mono"
+    },
+    "color_primary": "#e3120b",
+    "color_canvas": "#ffffff",
+    "color_ink": "#121212",
+    "color_canvas_alt": "#f9f4eb",
+    "radius": [0],
+    "spacing": "4-based",
+    "motion_signature": "Almost no motion — 200ms ease-out on hover; signature is the subtle vertical-divider sweep on section dividers and the red-bar persistent header that never animates."
+  },
+  "trademark_signals": [
+    "Economist Red (#E3120B) — the signature top-bar red, used in a 1.5cm red strip running the full page width as the masthead band, and on section eyebrows + section dividers",
+    "Milo Serif slab-serif for every headline at every tier — weight 700 with -0.02em tracking, sizes 28–56px — the brand's typographic identity",
+    "No bylines — articles are unsigned (a 200-year editorial tradition); only section + date appear at the article head",
+    "Drop caps on the opening paragraph of feature articles — large red Milo Serif initial cap floats 3 lines deep",
+    "Section eyebrows in red small-caps Officina Sans — 'Britain', 'United States', 'Finance & economics', 'Science & technology' — uppercase tracking +1.5px"
+  ],
+  "components_observed": [
+    "masthead-red-bar",
+    "article-card-with-eyebrow",
+    "drop-cap-paragraph",
+    "section-eyebrow-red-caps",
+    "issue-cover-card",
+    "podcast-row-card",
+    "footer-economist-dense"
+  ],
+  "exemplar_pages": [
+    "economist.com",
+    "economist.com/leaders",
+    "economist.com/britain",
+    "economist.com/finance-and-economics"
+  ],
+  "ai_slop_avoided": [
+    "Don't add bylines. The Economist's unsigned-article tradition IS the brand discipline",
+    "Don't substitute Milo Serif with Times or Garamond. The slab character is the brand's typographic signature",
+    "Don't drop the masthead red bar. The 1.5cm red strip IS the most-recognized brand cue",
+    "Don't introduce a second chromatic color. The brand is red + black + cream/white only",
+    "Don't round corners on cards or images. The brand is strictly rectangular"
+  ],
+  "source_md": "references/brands/economist-DESIGN.md"
+}

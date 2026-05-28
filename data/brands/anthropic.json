@@ -1,0 +1,51 @@
+{
+  "id": "anthropic",
+  "name": "Anthropic",
+  "category": "AI / ML Platform",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Anthropic's corporate-research brand language — the company surface (anthropic.com) sister to the Claude product, but tuned for research papers, policy posts, and hiring rather than for trying a chat product. The brand reads as a literary technology publisher: warm putty canvas, Tiempos serif at every display tier, narrow editorial column widths, a thin red-clay accent kept almost entirely in reserve.",
+  "design_language": {
+    "type": {
+      "display": "Tiempos Headline",
+      "body": "Styrene B",
+      "mono": "JetBrains Mono"
+    },
+    "color_primary": "#191919",
+    "color_canvas": "#f0eee6",
+    "color_ink": "#191919",
+    "color_accent": "#cc785c",
+    "radius": [0, 4, 8],
+    "spacing": "8-based",
+    "motion_signature": "Almost-no-motion — quiet 200ms ease-out fades on link hovers; research-page entries reveal at a 600ms scroll-fade without translate."
+  },
+  "trademark_signals": [
+    "Warm putty canvas (#f0eee6) across every page — the brand's most-recognized chrome cue, deliberately not Claude's cream and deliberately not OpenAI's white",
+    "Tiempos Headline serif at all display tiers (weight 400, never bold) with negative letter-spacing — research-paper voice, never SaaS-marketing voice",
+    "Narrow editorial body column (~640px) and generous line-height 1.6 — the page reads as a long-form essay, not a landing page",
+    "Red-clay accent (#cc785c) appears only on inline article hyperlinks and the radial-spike Anthropic glyph; never a button fill, never a hero gradient",
+    "Square or near-square buttons (0px or 4px radius) — refuses the pill geometry every other AI brand uses"
+  ],
+  "components_observed": [
+    "research-card-bordered",
+    "essay-byline-row",
+    "radial-spike-glyph",
+    "inline-link-clay",
+    "narrow-essay-column",
+    "policy-pdf-row",
+    "footer-multi-column-dark"
+  ],
+  "exemplar_pages": [
+    "anthropic.com",
+    "anthropic.com/research",
+    "anthropic.com/news",
+    "anthropic.com/company"
+  ],
+  "ai_slop_avoided": [
+    "Don't paint the canvas pure white. The putty tint IS the corporate brand differentiator from Claude (cream) and OpenAI (white)",
+    "Don't use Tiempos at weight 700. Display weight is locked at 400 — the elegance is the typeface, not the weight",
+    "Don't fill a primary CTA in clay. The accent appears in inline links and the spike-mark only",
+    "Don't add a hero gradient, hero illustration, or hero photograph — the page IS the headline + the lead paragraph",
+    "Don't round buttons to pills. The square geometry is the corporate-research voice"
+  ],
+  "source_md": "references/brands/anthropic-DESIGN.md"
+}

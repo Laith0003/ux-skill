@@ -1,0 +1,51 @@
+{
+  "id": "apple-music",
+  "name": "Apple Music",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Apple Music's marketing design language — a light-canvas streaming service that pairs Apple's clean SF Pro typography with full-bleed album-cover-driven multi-color hero bands. The brand surface is a white canvas chrome with the album-cover artwork acting as the entire chromatic system — every page derives its color from the featured album/artist, making the brand a chameleon dressed in SF Pro.",
+  "design_language": {
+    "type": {
+      "display": "SF Pro Display",
+      "body": "SF Pro Text",
+      "mono": "SF Mono"
+    },
+    "color_primary": "#fa233b",
+    "color_canvas": "#ffffff",
+    "color_ink": "#1d1d1f",
+    "color_accent_dynamic": "album-cover-derived",
+    "radius": [8, 12, 16, 20, 24],
+    "spacing": "4-based",
+    "motion_signature": "Signature is the album-cover parallax — featured artwork shifts at 30% of scroll velocity creating a depth effect; play-button hover scales to 1.05 at 200ms ease-out; the player floats up at 400ms cubic-bezier on first paint."
+  },
+  "trademark_signals": [
+    "Album-cover-as-hero — every featured page leads with a giant full-bleed album cover (frequently 800–1200px tall) — the artwork IS the chromatic system",
+    "Apple Music red (#fa233b) for the brand mark and 'Try free' CTAs — the one fixed accent in an otherwise dynamic-color system",
+    "SF Pro Display weight 700 for hero album titles and weight 600 for artist names — the brand's typographic signature",
+    "Floating play-button — a circular red-fill button with white triangle, appearing on hover over album/track tiles — the brand's most-recognized interaction",
+    "Editorial 'For You' grid — large 2-up featured tiles + 4-up secondary + horizontal-scroll rails of playlist cards"
+  ],
+  "components_observed": [
+    "album-cover-hero-fullbleed",
+    "play-button-circular-red",
+    "track-row-with-artwork",
+    "playlist-rail-scroll",
+    "artist-portrait-card",
+    "lyrics-overlay-band",
+    "footer-light-apple"
+  ],
+  "exemplar_pages": [
+    "music.apple.com",
+    "music.apple.com/browse",
+    "apple.com/apple-music",
+    "music.apple.com/us/new"
+  ],
+  "ai_slop_avoided": [
+    "Don't paint a brand-color background. The album cover IS the chromatic system; the canvas stays white between covers",
+    "Don't drop the red (#fa233b) for the brand mark. The Apple Music red is the only fixed accent",
+    "Don't substitute SF Pro with Helvetica. The slight optical refinements of SF Pro are non-negotiable on Apple surfaces",
+    "Don't shrink album covers below 400px on hero. The brand surfaces the artwork at scale",
+    "Don't add gradient overlays on album covers. The artwork is presented as-is"
+  ],
+  "source_md": "references/brands/apple-music-DESIGN.md"
+}

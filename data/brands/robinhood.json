@@ -1,0 +1,52 @@
+{
+  "id": "robinhood",
+  "name": "Robinhood",
+  "category": "Fintech / Crypto",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Robinhood's design language — the retail-investing brand built on a near-black canvas (#0a0c0d) with a signature glow-green voltage (#00C805) reserved exclusively for market-up and primary CTAs, a strict Capsule sans family at every tier, and large tabular-figure mono numerals for portfolio values. The brand reads as 'serious trading platform for the millennial investor' — confident, dark-first, data-dense.",
+  "design_language": {
+    "type": {
+      "display": "Capsule Sans",
+      "body": "Capsule Sans",
+      "mono": "Capsule Sans Mono"
+    },
+    "color_primary": "#00c805",
+    "color_canvas": "#0a0c0d",
+    "color_ink": "#ffffff",
+    "color_canvas_light": "#ffffff",
+    "color_accent_red": "#ff5052",
+    "radius": [4, 8, 12, 16],
+    "spacing": "4-based",
+    "motion_signature": "Signature is the portfolio chart line drawing in at 800ms cubic-bezier on first paint; price ticks animate at 200ms with green/red flash on direction change; tabular-figure number transitions use slot-machine ticks for portfolio value updates (~150ms per digit)."
+  },
+  "trademark_signals": [
+    "Robinhood Green (#00C805) — the signature electric green used for market-up indicators, primary CTAs, and the brand mark — never substituted with a darker emerald or a brighter lime",
+    "Near-black canvas (#0a0c0d) — deliberately not pure black, deliberately not navy — a warm-tinted near-black that IS the brand's trading-platform chrome",
+    "Tabular-figure mono numerals on every portfolio value, every price, every percent change — the brand's quiet financial-data signal",
+    "Capsule sans (a Robinhood custom face descended from Inter) at every tier — refuses any serif, refuses any other sans family",
+    "Portfolio chart with green/red line — the chart line color flips to red on negative-percent days, green on positive, with the gradient fill below the line"
+  ],
+  "components_observed": [
+    "portfolio-chart-hero",
+    "ticker-row-with-mono",
+    "feature-card-dark",
+    "buy-sell-pill-cta",
+    "stock-detail-card",
+    "crypto-portfolio-tile",
+    "footer-robinhood-dark"
+  ],
+  "exemplar_pages": [
+    "robinhood.com",
+    "robinhood.com/us/en/about",
+    "robinhood.com/us/en/our-products",
+    "robinhood.com/us/en/legend"
+  ],
+  "ai_slop_avoided": [
+    "Don't substitute the Robinhood Green (#00C805) with a darker emerald or a brighter lime. The electric green IS the brand voltage",
+    "Don't paint the canvas pure black or navy. The warm-tinted near-black #0a0c0d is the brand chrome",
+    "Don't use proportional figures for portfolio values. Tabular figures are non-negotiable for financial UI",
+    "Don't substitute Capsule sans with Helvetica or Inter. The Capsule face is the brand's typographic signature",
+    "Don't add a third chromatic accent. Green for up + red for down + white for chrome — three colors only"
+  ],
+  "source_md": "references/brands/robinhood-DESIGN.md"
+}

@@ -1,0 +1,51 @@
+{
+  "id": "retool",
+  "name": "Retool",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Retool's design language — an internal-tool builder brand built on a warm cream canvas (#fbf6ea), GT Sectra serif at every display tier, and a signature signal-orange (#ff5d00) voltage. The brand reads as 'serious software for serious operators' — magazine-cover headlines, dashboard mockups as hero, generous use of real product screenshots.",
+  "design_language": {
+    "type": {
+      "display": "GT Sectra",
+      "body": "Inter",
+      "mono": "GT Pressura Mono"
+    },
+    "color_primary": "#ff5d00",
+    "color_canvas": "#fbf6ea",
+    "color_ink": "#171413",
+    "color_accent_amber": "#ff9533",
+    "radius": [4, 6, 8, 12],
+    "spacing": "8-based",
+    "motion_signature": "200ms ease-out on hover; signature is the dashboard-mockup scroll-reveal — built-internal-tool screenshots fade in at 500ms with a 12px translate; orange CTAs have a subtle 80ms press-down."
+  },
+  "trademark_signals": [
+    "GT Sectra serif at every display tier — magazine-cover scale headlines (72–96px) at weight 500 with -0.02em tracking — refuses the dev-tool sans-everywhere default",
+    "Warm cream canvas (#fbf6ea) — deliberately not white, deliberately not gray — pairs with serif display to create an editorial feel for a developer product",
+    "Signal-orange voltage (#ff5d00) appears only on CTAs and as the underline accent on selected display words — never a hero gradient, never a background",
+    "Dashboard-mockup-as-hero — every solutions page leads with a real Retool-built internal tool screenshot (admin panel, ops dashboard, approval queue) — the brand shows the product chrome",
+    "Customer logo wall right below hero — DoorDash, Brex, Mercury, Plaid, Marqeta — operator-brand-name credibility is the brand's second-most-visible move after the hero"
+  ],
+  "components_observed": [
+    "hero-dashboard-mockup",
+    "feature-card-cream",
+    "logo-wall-cream",
+    "customer-story-card",
+    "pricing-tier-card",
+    "code-extension-card",
+    "footer-cream-dense"
+  ],
+  "exemplar_pages": [
+    "retool.com",
+    "retool.com/solutions",
+    "retool.com/customers",
+    "retool.com/pricing"
+  ],
+  "ai_slop_avoided": [
+    "Don't substitute GT Sectra with Inter or Söhne for display. The serif at hero scale IS the brand voice",
+    "Don't paint the canvas pure white. The cream tint is the brand's editorial differentiator from every other dev tool",
+    "Don't put orange on a hero gradient or as a background. The orange is scarce — CTAs and selected underlines only",
+    "Don't replace the dashboard-mockup hero with an abstract illustration. Real internal-tool screenshots are the brand's trust signal",
+    "Don't bold the serif beyond weight 500. The brand's elegance is in the typeface, not the weight"
+  ],
+  "source_md": "references/brands/retool-DESIGN.md"
+}

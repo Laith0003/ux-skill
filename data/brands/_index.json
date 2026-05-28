@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2.1.0",
-    "entries": 92,
+    "version": "2.2.0",
+    "entries": 110,
     "last_updated": "2026-05-28",
-    "source": "ux-skill v2 — expanded brand catalog (72 -> 92)",
+    "source": "ux-skill v2 \u2014 expanded brand catalog (92 -> 110)",
     "schema_version": "1.0"
   },
   "brands": [
@@ -28,6 +28,16 @@
       "category": "Consumer / Lifestyle / Retail"
     },
     {
+      "id": "anthropic",
+      "name": "Anthropic",
+      "category": "AI / ML Platform"
+    },
+    {
+      "id": "apple-music",
+      "name": "Apple Music",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
       "id": "apple",
       "name": "Apple",
       "category": "Consumer / Lifestyle / Retail"
@@ -48,13 +58,13 @@
       "category": "Editorial / Media"
     },
     {
-      "id": "bmw",
-      "name": "BMW",
+      "id": "bmw-m",
+      "name": "BMW M",
       "category": "Automotive"
     },
     {
-      "id": "bmw-m",
-      "name": "BMW M",
+      "id": "bmw",
+      "name": "BMW",
       "category": "Automotive"
     },
     {
@@ -113,6 +123,21 @@
       "category": "Developer Tools"
     },
     {
+      "id": "dbt",
+      "name": "dbt Labs",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "dezeen",
+      "name": "Dezeen",
+      "category": "Editorial / Media"
+    },
+    {
+      "id": "economist",
+      "name": "The Economist",
+      "category": "Editorial / Media"
+    },
+    {
       "id": "elevenlabs",
       "name": "ElevenLabs",
       "category": "AI / ML Platform"
@@ -131,6 +156,16 @@
       "id": "figma",
       "name": "Figma",
       "category": "Productivity / Collaboration"
+    },
+    {
+      "id": "fivetran",
+      "name": "Fivetran",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "fly-io",
+      "name": "Fly.io",
+      "category": "Developer Tools"
     },
     {
       "id": "framer",
@@ -166,6 +201,11 @@
       "id": "ibm",
       "name": "IBM",
       "category": "Developer Tools"
+    },
+    {
+      "id": "instagram",
+      "name": "Instagram",
+      "category": "Consumer / Lifestyle / Retail"
     },
     {
       "id": "intercom",
@@ -228,6 +268,11 @@
       "category": "AI / ML Platform"
     },
     {
+      "id": "modal",
+      "name": "Modal",
+      "category": "Developer Tools"
+    },
+    {
       "id": "mongodb",
       "name": "MongoDB",
       "category": "Developer Tools"
@@ -235,6 +280,11 @@
     {
       "id": "monzo",
       "name": "Monzo",
+      "category": "Fintech / Crypto"
+    },
+    {
+      "id": "n26",
+      "name": "N26",
       "category": "Fintech / Crypto"
     },
     {
@@ -268,6 +318,11 @@
       "category": "Developer Tools"
     },
     {
+      "id": "openai",
+      "name": "OpenAI",
+      "category": "AI / ML Platform"
+    },
+    {
       "id": "opencode.ai",
       "name": "OpenCode",
       "category": "Developer Tools"
@@ -276,6 +331,11 @@
       "id": "patagonia",
       "name": "Patagonia",
       "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "perplexity",
+      "name": "Perplexity",
+      "category": "AI / ML Platform"
     },
     {
       "id": "pinterest",
@@ -300,6 +360,11 @@
     {
       "id": "posthog",
       "name": "PostHog",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "railway",
+      "name": "Railway",
       "category": "Developer Tools"
     },
     {
@@ -333,8 +398,18 @@
       "category": "Developer Tools"
     },
     {
+      "id": "retool",
+      "name": "Retool",
+      "category": "Developer Tools"
+    },
+    {
       "id": "revolut",
       "name": "Revolut",
+      "category": "Fintech / Crypto"
+    },
+    {
+      "id": "robinhood",
+      "name": "Robinhood",
       "category": "Fintech / Crypto"
     },
     {
@@ -360,6 +435,11 @@
     {
       "id": "slack",
       "name": "Slack",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "snowflake",
+      "name": "Snowflake",
       "category": "Developer Tools"
     },
     {
@@ -413,6 +493,11 @@
       "category": "Editorial / Media"
     },
     {
+      "id": "tiktok",
+      "name": "TikTok",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
       "id": "together.ai",
       "name": "Together AI",
       "category": "AI / ML Platform"
@@ -456,6 +541,11 @@
       "id": "wise",
       "name": "Wise",
       "category": "Fintech / Crypto"
+    },
+    {
+      "id": "wsj",
+      "name": "The Wall Street Journal",
+      "category": "Editorial / Media"
     },
     {
       "id": "x.ai",

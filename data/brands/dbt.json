@@ -1,0 +1,52 @@
+{
+  "id": "dbt",
+  "name": "dbt Labs",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of dbt Labs' design language — the analytics-engineering platform built on a deep navy-violet (#262a38) canvas, a signature dbt-orange (#ff694a) accent, and a hex-pixel motif (the 'dbt cube' / pixel-cluster mark) recurring across the surface. The brand reads as 'analytics engineering' — half data-warehouse-serious, half developer-tool-friendly, with the SQL editor as a recurring hero device.",
+  "design_language": {
+    "type": {
+      "display": "Söhne",
+      "body": "Söhne",
+      "mono": "Söhne Mono"
+    },
+    "color_primary": "#ff694a",
+    "color_canvas": "#fefcf7",
+    "color_canvas_dark": "#262a38",
+    "color_ink": "#0d1226",
+    "color_accent_pixel_violet": "#7a5af8",
+    "radius": [4, 8, 12, 16],
+    "spacing": "8-based",
+    "motion_signature": "300ms ease-out on hover; signature is the dbt-pixel-cube mark with a subtle 4s rotation; SQL editor hero has a syntax-highlight type-in at ~30 chars/sec on first paint."
+  },
+  "trademark_signals": [
+    "dbt-orange (#ff694a) — the warm coral-orange accent unique to dbt Labs, used on CTAs, key display words, and the brand-mark pixel cluster",
+    "Pixel-cube / dbt-cube mark — an isometric 3D cube assembled from small orange-and-violet pixels — appears in hero illustrations and as the brand glyph",
+    "Dual-canvas system: cream (#fefcf7) for marketing surfaces, navy-violet (#262a38) for product surfaces and pre-footer CTAs — the dual mode is the brand's pacing rhythm",
+    "SQL editor as recurring hero — every product page shows a real dbt SQL/Jinja code block with syntax highlighting (orange keywords, violet macros, cream identifiers)",
+    "Secondary violet (#7a5af8) — used on the pixel-cube mark and as a hover/active state on the dark surfaces"
+  ],
+  "components_observed": [
+    "sql-editor-hero",
+    "pixel-cube-illustration",
+    "feature-card-cream",
+    "feature-card-dark",
+    "pricing-tier-card",
+    "dag-lineage-diagram-card",
+    "footer-navy-dense"
+  ],
+  "exemplar_pages": [
+    "getdbt.com",
+    "getdbt.com/product",
+    "getdbt.com/pricing",
+    "getdbt.com/customers"
+  ],
+  "ai_slop_avoided": [
+    "Don't substitute the dbt-orange with a brand red or amber — the specific warm-coral #ff694a IS the brand",
+    "Don't drop the pixel-cube mark. The isometric assembled-from-pixels glyph IS the brand identity",
+    "Don't replace the SQL editor hero with an abstract illustration — the real dbt code IS the trust signal",
+    "Don't add a third accent. The brand is orange + violet (sub) + navy + cream — four colors, no more",
+    "Don't put the brand orange on a gradient. The orange is solid-fill only"
+  ],
+  "source_md": "references/brands/dbt-DESIGN.md"
+}

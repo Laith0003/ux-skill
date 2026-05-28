@@ -1,0 +1,53 @@
+{
+  "id": "openai",
+  "name": "OpenAI",
+  "category": "AI / ML Platform",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of OpenAI's design language — the AI-platform-of-record built on near-pure black canvas at top, switching to white below the fold, anchored by the Söhne family at every tier, with a tightly disciplined grid and almost no decorative chrome. The brand reads as the calm, established institution in the AI category: no gradient, no illustration, no emoji — just type, photography, and product chrome.",
+  "design_language": {
+    "type": {
+      "display": "Söhne",
+      "body": "Söhne",
+      "mono": "Söhne Mono"
+    },
+    "color_primary": "#000000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#0d0d0d",
+    "color_canvas_dark": "#000000",
+    "radius": [4, 8, 12, 24],
+    "spacing": "8-based",
+    "motion_signature": "Single hero video on loop at low contrast — no other animation. 200ms ease-out on link hovers; product mockup cards fade in over 400ms on scroll."
+  },
+  "trademark_signals": [
+    "Pure black hero band (#000) above a pure white body — the most-recognized OpenAI page-rhythm signature",
+    "Söhne at every typographic tier — display 88–128px weight 400 with tight tracking, body 16–18px weight 400 — refuses any other family",
+    "Single hero device: a full-bleed photograph (often a person, a research image, or product chrome) inside the black hero band, with the headline overlaid in white",
+    "Zero decorative chrome — no gradient, no illustration, no emoji, no inline animation — the page reads as an institution, not a startup",
+    "Strict 12-column grid with very wide column gaps — the brand is comfortable with negative space at scale"
+  ],
+  "components_observed": [
+    "hero-band-black",
+    "hero-photo-full-bleed",
+    "research-card-white-on-black",
+    "model-card-bordered",
+    "pricing-tier-card-white",
+    "footer-black-dense",
+    "api-doc-codeblock-card",
+    "chatgpt-pill-cta"
+  ],
+  "exemplar_pages": [
+    "openai.com",
+    "openai.com/index/introducing-gpt-5",
+    "openai.com/chatgpt",
+    "openai.com/api",
+    "openai.com/research"
+  ],
+  "ai_slop_avoided": [
+    "Don't introduce a brand color outside the black/white duet. There is no OpenAI green, no OpenAI blue — the brand IS the monochrome",
+    "Don't substitute Söhne for Inter or Helvetica. The wide-set Söhne x-height is the brand's typographic signature",
+    "Don't paint a hero gradient. The hero is photography on black or pure black with white type — never a color mesh",
+    "Don't add emoji. The brand reads as institutional research lab, not consumer product",
+    "Don't bold display type to 700. The brand stays at weight 400 across every display tier"
+  ],
+  "source_md": "references/brands/openai-DESIGN.md"
+}

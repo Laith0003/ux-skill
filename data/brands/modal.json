@@ -1,0 +1,51 @@
+{
+  "id": "modal",
+  "name": "Modal",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Modal's design language — a serverless-Python-for-AI platform built on a stark white canvas with a signature warm orange (#FFB949 mustard / #FF7A30 ember) accent, a grid that loves to expose its own dividers, and a 'literal command' aesthetic where the hero IS a code block running real Python.",
+  "design_language": {
+    "type": {
+      "display": "Inter",
+      "body": "Inter",
+      "mono": "IBM Plex Mono"
+    },
+    "color_primary": "#ffb949",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000",
+    "color_accent_ember": "#ff7a30",
+    "radius": [0, 4, 8],
+    "spacing": "4-based",
+    "motion_signature": "Refuses motion almost entirely — 150ms ease-out on hover, signature is the live-running code block on the homepage that types Python characters at ~30 chars/sec then logs a tensor."
+  },
+  "trademark_signals": [
+    "Warm mustard primary (#FFB949) — most-recognized brand cue, never a saturated orange, never a brand yellow",
+    "Exposed grid: vertical 1px dividers run from header to footer on the homepage, slicing the page into a 12-column grid you can see — the brand is comfortable showing its skeleton",
+    "Live Python code block as hero — the homepage runs a real Modal function (text-to-image, transcription, batch GPU inference) inside the hero, typing real Python characters in monospace",
+    "Square or near-square geometry (0px or 4px corners) — the brand refuses pill buttons",
+    "Inter at every tier with IBM Plex Mono for code — refuses any serif"
+  ],
+  "components_observed": [
+    "code-hero-live",
+    "exposed-grid-divider",
+    "feature-card-bordered",
+    "pricing-tier-card",
+    "gpu-pricing-table",
+    "docs-codeblock-card",
+    "footer-grid-light"
+  ],
+  "exemplar_pages": [
+    "modal.com",
+    "modal.com/pricing",
+    "modal.com/use-cases",
+    "modal.com/docs"
+  ],
+  "ai_slop_avoided": [
+    "Don't paint the mustard as a saturated orange or a McDonald's yellow — the specific #FFB949 is the brand",
+    "Don't round buttons to pills. Modal refuses the AI-category soft geometry",
+    "Don't substitute a faux-code mockup for the hero — the live running code IS the brand",
+    "Don't introduce a second accent. The mustard is the entire chromatic system; ember is a sub-accent only on the largest CTAs",
+    "Don't hide the exposed grid dividers — they ARE the visual signature"
+  ],
+  "source_md": "references/brands/modal-DESIGN.md"
+}

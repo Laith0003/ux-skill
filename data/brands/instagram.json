@@ -1,0 +1,52 @@
+{
+  "id": "instagram",
+  "name": "Instagram",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Instagram's design language — the photo-and-video social platform built on a white canvas (light mode) or near-black canvas (dark mode), with a signature multi-stop gradient (yellow → orange → red → magenta → purple) reserved for the brand mark and Stories ring, and a strict grotesk sans (Instagram Sans / Helvetica Neue) carrying every text tier. The brand reads as 'content is everything; chrome is invisible' — the photo grid IS the brand.",
+  "design_language": {
+    "type": {
+      "display": "Instagram Sans",
+      "body": "Instagram Sans",
+      "mono": null
+    },
+    "color_primary": "#ed1c84",
+    "color_canvas": "#ffffff",
+    "color_canvas_dark": "#000000",
+    "color_ink": "#262626",
+    "color_accent_gradient": "#fcb045 -> #fd1d1d -> #833ab4",
+    "radius": [4, 8, 12, 999],
+    "spacing": "4-based",
+    "motion_signature": "Signature is the Stories ring rotating gradient (~2s loop on unread stories); double-tap heart pulses to 1.3x scale at 300ms cubic-bezier with a small particle burst; image-grid items have no hover transform — content carries all the visual weight."
+  },
+  "trademark_signals": [
+    "Multi-stop gradient (yellow #fcb045 → orange-red #fd1d1d → magenta-purple #833ab4) reserved exclusively for the brand mark, the Stories unread-ring, and the 'Create' button — never on backgrounds, never on CTAs",
+    "Photo grid as the entire visual system — 3-column square grid for profile, 1-up square + portrait for feed — the brand IS the content",
+    "Strict white + near-black duet for chrome — buttons, labels, dividers all in monochrome — the gradient is the only color",
+    "Circular profile avatars at every scale (32px in nav, 56px in story tray, 96px in profile header) with the gradient ring as the unread-stories indicator",
+    "Heart, comment, share, save — four-icon row beneath every post, in monochrome ink, with the heart filling red on liked state"
+  ],
+  "components_observed": [
+    "feed-post-card",
+    "stories-tray-ring",
+    "story-circle-avatar",
+    "profile-grid-square",
+    "bottom-nav-icon-row",
+    "heart-icon-liked",
+    "create-button-gradient",
+    "footer-instagram-minimal"
+  ],
+  "exemplar_pages": [
+    "instagram.com",
+    "instagram.com/about",
+    "about.instagram.com"
+  ],
+  "ai_slop_avoided": [
+    "Don't paint backgrounds in the brand gradient. The gradient is reserved for the brand mark, Stories ring, and 'Create' button — period",
+    "Don't add chromatic accent colors. The brand is monochrome chrome + gradient mark — nothing else",
+    "Don't substitute Instagram Sans / Helvetica Neue with a literary face. The brand stays grotesk-clean",
+    "Don't drop the photo grid. The 3-column square grid IS the brand's structural signature",
+    "Don't add emoji as UI affordances. The heart / comment / share / save row uses outlined monochrome icons"
+  ],
+  "source_md": "references/brands/instagram-DESIGN.md"
+}

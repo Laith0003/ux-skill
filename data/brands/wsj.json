@@ -1,0 +1,53 @@
+{
+  "id": "wsj",
+  "name": "The Wall Street Journal",
+  "category": "Editorial / Media",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of The Wall Street Journal's design language — the American financial-newspaper of record built on a strict black-on-white broadsheet canvas, the Escrow display family (a sibling of the historic Cheltenham face the brand used pre-redesign), hedcut portraits (the dot-stippled portrait illustrations) as the brand's most-recognized graphic signature, and a 'C' market-data ticker at the masthead. The brand reads as 135-year-old American financial authority.",
+  "design_language": {
+    "type": {
+      "display": "Escrow",
+      "body": "Exchange",
+      "mono": "Exchange Mono"
+    },
+    "color_primary": "#000000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#0d0d0d",
+    "color_canvas_alt": "#f7f5f0",
+    "color_accent_market_up": "#0a8537",
+    "color_accent_market_down": "#c4262e",
+    "radius": [0, 2],
+    "spacing": "4-based",
+    "motion_signature": "Almost no motion — 150ms ease-out on link hovers; the only signature is the masthead market-data ticker scrolling at ~30px/s and the small market-up/market-down arrow color flashes on price changes."
+  },
+  "trademark_signals": [
+    "Hedcut portraits — the dot-stippled black-and-white portrait illustrations used as journalist headshots and op-ed author marks — the brand's most-recognized graphic signature, in continuous use since 1979",
+    "Escrow display serif at every headline tier — a Hoefler-designed face descended from Cheltenham, the WSJ's historic typeface — weight 800 for hero headlines, weight 600 for body heads",
+    "Strict black-on-white broadsheet canvas — refuses any chromatic chrome except the market-data green/red and rare 'WSJ red' (#C4262E) on the brand mark moments",
+    "Market-data ticker bar at masthead — scrolling row of ticker symbols + prices + green/red arrows, the brand's persistent financial signal",
+    "Dense headline-stacking — 3–5 stacked headlines visible above the fold with byline + section eyebrow, refusing the single-hero-story pattern"
+  ],
+  "components_observed": [
+    "hedcut-portrait-byline",
+    "masthead-ticker-bar",
+    "headline-stack-broadsheet",
+    "article-card-with-hedcut",
+    "market-data-table",
+    "opinion-author-card",
+    "footer-wsj-dense"
+  ],
+  "exemplar_pages": [
+    "wsj.com",
+    "wsj.com/business",
+    "wsj.com/opinion",
+    "wsj.com/markets"
+  ],
+  "ai_slop_avoided": [
+    "Don't drop the hedcut portrait style for author marks. The dot-stippled portrait IS the brand's most-recognized graphic asset",
+    "Don't substitute Escrow with Times or Georgia. The Hoefler-Escrow face is the brand's typographic signature",
+    "Don't add chromatic accents outside market-up green, market-down red, and the rare WSJ red brand-mark",
+    "Don't soften the broadsheet density to a single-hero layout. The brand stacks 3-5 headlines above the fold",
+    "Don't round corners. The brand stays strictly rectangular"
+  ],
+  "source_md": "references/brands/wsj-DESIGN.md"
+}

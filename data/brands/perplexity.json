@@ -1,0 +1,52 @@
+{
+  "id": "perplexity",
+  "name": "Perplexity",
+  "category": "AI / ML Platform",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Perplexity's design language — an answer-engine brand built on a near-black graphite canvas with a signature peacock-teal (#20B8CD) as the single accent, a tight FK Grotesk display family, and a search field that IS the hero. The brand reads as a technical answer engine, not a chat product: dense, sourced, slightly serious, with the source-cite ribbon as a recurring visual.",
+  "design_language": {
+    "type": {
+      "display": "FK Grotesk Neue",
+      "body": "FK Grotesk Neue",
+      "mono": "JetBrains Mono"
+    },
+    "color_primary": "#20b8cd",
+    "color_canvas": "#0f1416",
+    "color_ink": "#0f1416",
+    "color_canvas_light": "#fbfaf4",
+    "radius": [8, 12, 16, 24],
+    "spacing": "4-based",
+    "motion_signature": "200ms ease-out hover; signature is the typewriter-rate answer reveal (~25ms per token) in the answer card; source-cite ribbons fade in at 300ms with a 50ms stagger."
+  },
+  "trademark_signals": [
+    "Peacock teal (#20B8CD) as the single accent across both light and dark modes — never blue, never green, the specific cyan-leaning teal IS the brand",
+    "FK Grotesk Neue at every tier — slightly condensed grotesk with a distinctive lowercase 'a' and 'g' that reads as engineered, not editorial",
+    "Search field IS the hero — large rounded pill input with placeholder 'Ask anything' and a teal submit button — replaces the headline + sub-line + CTA pattern entirely",
+    "Source-cite ribbon — the row of favicon thumbnails of cited domains, appearing beneath every answer, the most-recognized small-detail in the system",
+    "Dual-canvas system: graphite-near-black (#0F1416) for the app surface, fbfaf4 cream for marketing surfaces — the cream marketing surface is a 2026 evolution from the older monochrome"
+  ],
+  "components_observed": [
+    "search-pill-hero",
+    "answer-card-with-cites",
+    "source-favicon-row",
+    "follow-up-pill",
+    "discover-feed-card",
+    "spaces-card",
+    "pro-upgrade-card-teal",
+    "footer-graphite"
+  ],
+  "exemplar_pages": [
+    "perplexity.ai",
+    "perplexity.ai/discover",
+    "perplexity.ai/pro",
+    "perplexity.ai/enterprise"
+  ],
+  "ai_slop_avoided": [
+    "Don't substitute the peacock teal with cyan, sky blue, or aqua — the specific #20B8CD IS the brand voltage",
+    "Don't use a traditional hero (headline + sub + CTA). The search input IS the hero on every primary marketing page",
+    "Don't substitute Inter for FK Grotesk Neue. The condensed grotesk character IS the typographic signature",
+    "Don't drop the source-cite ribbon from any answer surface — the cited domains are the brand's trust signal",
+    "Don't mix accent colors — the brand uses teal and nothing else"
+  ],
+  "source_md": "references/brands/perplexity-DESIGN.md"
+}

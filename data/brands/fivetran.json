@@ -1,0 +1,51 @@
+{
+  "id": "fivetran",
+  "name": "Fivetran",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Fivetran's design language — a managed-data-pipeline brand built on a clean white canvas with a signature deep cobalt (#0073e6) and a dense, technical surface that hosts dozens of source-connector logos on every page. The brand reads as 'mature data platform' — enterprise-clean, logo-density forward, slightly serif-tinged with Tiempos Headline for moments of voice.",
+  "design_language": {
+    "type": {
+      "display": "Tiempos Headline",
+      "body": "Inter",
+      "mono": "JetBrains Mono"
+    },
+    "color_primary": "#0073e6",
+    "color_canvas": "#ffffff",
+    "color_ink": "#0d1219",
+    "color_canvas_alt": "#f5f8fb",
+    "radius": [4, 8, 12],
+    "spacing": "8-based",
+    "motion_signature": "200ms ease-out on hover; connector logo grid loops subtly on scroll (a 4-row carousel each row drifting at 30px/s in alternating directions); CTA buttons have a subtle 100ms press-down."
+  },
+  "trademark_signals": [
+    "Connector-logo wall as recurring hero device — every product page hosts a 200+ source-logo grid (Salesforce, Stripe, NetSuite, Workday, BigQuery, Snowflake…) — the brand's most-recognized visual",
+    "Tiempos Headline serif appears at hero scale (56–72px) for the brand's voice moments — refuses the all-sans data-tool default",
+    "Deep cobalt blue (#0073e6) as the single CTA voltage — enterprise-trust blue, not consumer-bright",
+    "Pipeline-flow diagram as a secondary hero — source → Fivetran → destination, drawn with hairlines and small connector logos",
+    "Light blue-tinted off-white (#f5f8fb) for selected band backgrounds — subtle, not gray"
+  ],
+  "components_observed": [
+    "connector-logo-grid-hero",
+    "pipeline-flow-diagram",
+    "feature-card-bordered",
+    "destination-card",
+    "pricing-tier-card-enterprise",
+    "customer-logo-row",
+    "footer-dark-cobalt"
+  ],
+  "exemplar_pages": [
+    "fivetran.com",
+    "fivetran.com/connectors",
+    "fivetran.com/pricing",
+    "fivetran.com/customers"
+  ],
+  "ai_slop_avoided": [
+    "Don't drop the connector logo wall. The 200+ source logos ARE the trust signal",
+    "Don't substitute the cobalt with sky blue or navy. The specific #0073e6 IS the brand",
+    "Don't replace Tiempos Headline with Inter at hero scale. The serif is the voice moment in an otherwise all-sans surface",
+    "Don't paint a hero gradient. The brand is enterprise-clean — single accent color, no decorative chrome",
+    "Don't bold the Tiempos display past weight 500"
+  ],
+  "source_md": "references/brands/fivetran-DESIGN.md"
+}

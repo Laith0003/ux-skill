@@ -1,0 +1,51 @@
+{
+  "id": "dezeen",
+  "name": "Dezeen",
+  "category": "Editorial / Media",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Dezeen's design language — the world's most-read architecture-and-design magazine built on a strict monochrome white-and-near-black canvas, a custom serif (Dezeen Display) for every headline, and a 'photograph IS the page' approach where 4-column masonry grids of beautifully-shot architecture imagery carry the entire visual weight. The brand reads as 'design publication of record' — confident, image-forward, anti-chrome.",
+  "design_language": {
+    "type": {
+      "display": "Dezeen Display",
+      "body": "Helvetica Neue",
+      "mono": null
+    },
+    "color_primary": "#000000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#1a1a1a",
+    "color_canvas_alt": "#f5f5f5",
+    "radius": [0],
+    "spacing": "4-based",
+    "motion_signature": "Almost no motion — 150ms ease-out on hover; signature is the 4-column masonry grid loading images on scroll at 200ms fade-in stagger; image hover at 110% scale over 300ms within fixed crop frame."
+  },
+  "trademark_signals": [
+    "Photograph-as-page — 4-column masonry grid of architecture/design photography carrying ~80% of the visual surface area, every page",
+    "Dezeen Display custom serif at every headline tier — weight 500 with -0.01em tracking, sizes 24–48px — refuses the all-sans architecture-publication default",
+    "Strict black-on-white duet — no chromatic accent, no gradient, no decorative chrome; the photography supplies all color",
+    "Image hover micro-zoom — images scale to 110% within a fixed crop frame on hover, the brand's one motion signature",
+    "Square or rectangular image tiles — refuses the rounded-corner architecture-publication trend"
+  ],
+  "components_observed": [
+    "masonry-grid-4col",
+    "story-card-with-image",
+    "image-hover-zoom-frame",
+    "category-tag-pill",
+    "article-byline-row",
+    "designer-portrait-card",
+    "footer-dezeen-minimal"
+  ],
+  "exemplar_pages": [
+    "dezeen.com",
+    "dezeen.com/architecture",
+    "dezeen.com/design",
+    "dezeen.com/interiors"
+  ],
+  "ai_slop_avoided": [
+    "Don't introduce a chromatic brand accent. The brand is monochrome chrome — the photography supplies all color",
+    "Don't substitute the serif headlines with a sans face. Dezeen Display serif IS the brand voice",
+    "Don't round image corners. The brand keeps strict rectangular geometry",
+    "Don't reduce the masonry grid density. 4-column at desktop is the brand's structural signature",
+    "Don't add drop shadows on image tiles. Surface contrast and hairlines carry elevation"
+  ],
+  "source_md": "references/brands/dezeen-DESIGN.md"
+}

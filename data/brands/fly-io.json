@@ -1,0 +1,51 @@
+{
+  "id": "fly-io",
+  "name": "Fly.io",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Fly.io's design language — an edge-compute platform with a deeply contrarian brand voice (engineering blog as marketing, irreverent copy, dense long-form posts) wrapped in a hot-pink-to-violet gradient identity, monospace-rich chrome, and a near-black canvas. The brand reads like an old-internet engineering newsletter that happens to sell global infrastructure.",
+  "design_language": {
+    "type": {
+      "display": "Söhne",
+      "body": "Lora",
+      "mono": "JetBrains Mono"
+    },
+    "color_primary": "#ff007a",
+    "color_canvas": "#0a0a0f",
+    "color_ink": "#f5f5f0",
+    "color_accent_violet": "#8957ff",
+    "radius": [4, 6, 8],
+    "spacing": "4-based",
+    "motion_signature": "Almost no motion — 150ms ease-out hover; the only signature animation is the hot-pink-to-violet gradient slow-drift on the brand-mark fly balloon, ~8s cycle."
+  },
+  "trademark_signals": [
+    "Hot-pink-to-violet gradient (#ff007a → #8957ff) as the brand's voltage moment — appears on the fly-balloon mark, on selected display words, and on the rare full-bleed CTA card",
+    "Long-form serif body — Lora (or PT Serif) for body text — refuses the SaaS sans-everywhere pattern; the brand wants to feel like reading a blog post",
+    "Code-block-as-content — homepage and product pages embed 6+ real shell snippets ('fly launch', 'fly deploy', 'fly logs') in JetBrains Mono with a near-black background",
+    "Irreverent technical copy — headlines like 'Speedrun an app in 5 minutes' or 'We're not a serverless company; we're a public utility' — the voice IS the brand",
+    "Near-black canvas (#0a0a0f) with subtle warm tint — refuses pure black and refuses navy"
+  ],
+  "components_observed": [
+    "blog-post-card-bordered",
+    "shell-snippet-card",
+    "fly-balloon-gradient-mark",
+    "region-map-card",
+    "pricing-tier-card-dark",
+    "docs-codeblock-card",
+    "footer-multi-column-dark"
+  ],
+  "exemplar_pages": [
+    "fly.io",
+    "fly.io/blog",
+    "fly.io/docs",
+    "fly.io/pricing"
+  ],
+  "ai_slop_avoided": [
+    "Don't drop the serif body face. Lora / PT Serif for body IS the brand's anti-SaaS signature",
+    "Don't soften the irreverent voice. The brand actively avoids 'enterprise-grade', 'leverage', 'unlock'",
+    "Don't use a static hero illustration. The brand uses real shell snippets as visual proof",
+    "Don't substitute the pink-violet gradient with magenta-only or violet-only — both colors must be present in the gradient",
+    "Don't add corporate trust signals (Fortune 500 logos, compliance badges) above the fold. The brand earns trust through technical proof, not logos"
+  ],
+  "source_md": "references/brands/fly-io-DESIGN.md"
+}

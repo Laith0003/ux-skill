@@ -1,0 +1,53 @@
+{
+  "id": "n26",
+  "name": "N26",
+  "category": "Fintech / Crypto",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of N26's design language — the European mobile-bank brand built on a strict white-on-white canvas with a serif display (Tiempos Headline) for marketing voice, a single signature N26 cyan-mint (#2DCFA5) accent, and a relentless minimalism: real product screenshots (the floating credit card on a colored gradient background) carry the entire visual identity. The brand reads as 'European premium neobank' — Berlin-clean, slightly architectural.",
+  "design_language": {
+    "type": {
+      "display": "Tiempos Headline",
+      "body": "Inter",
+      "mono": "Inter"
+    },
+    "color_primary": "#2dcfa5",
+    "color_canvas": "#ffffff",
+    "color_ink": "#191919",
+    "color_canvas_alt": "#f5f5f5",
+    "color_accent_card_mint": "#a8e6d6",
+    "color_accent_card_coral": "#ff8d6e",
+    "radius": [4, 8, 16, 24],
+    "spacing": "8-based",
+    "motion_signature": "Signature is the floating card mockup with a subtle 4s breathing rotation (~3deg yaw); CTAs have a 100ms press-down; phone mockup screenshots fade in at 500ms on scroll."
+  },
+  "trademark_signals": [
+    "Floating credit card photograph as recurring hero device — the physical N26 card photographed on a soft pastel gradient background (mint, coral, or graphite), the brand's most-recognized commerce visual",
+    "Tiempos Headline serif at hero scale — weight 500 with -0.02em tracking, sizes 56–80px — the editorial differentiator from cleaner-but-coldernic neobanks",
+    "N26 cyan-mint (#2DCFA5) as the single CTA voltage — never blue, never green, the specific cool mint-cyan IS the brand",
+    "Pastel-card-gradient backgrounds — soft mint, coral, graphite gradients used as the background behind floating card photographs — never on body sections, only behind card visuals",
+    "Phone mockup with N26 app screenshot — the brand's product chrome with serif balance numbers and minimalist transaction rows"
+  ],
+  "components_observed": [
+    "floating-card-hero",
+    "pastel-gradient-background",
+    "phone-mockup-with-app",
+    "feature-card-bordered",
+    "pricing-tier-card",
+    "trust-badge-row",
+    "footer-n26-clean"
+  ],
+  "exemplar_pages": [
+    "n26.com",
+    "n26.com/en-eu",
+    "n26.com/en-eu/pricing",
+    "n26.com/en-eu/premium"
+  ],
+  "ai_slop_avoided": [
+    "Don't paint the body background in pastel-card colors. The pastels are reserved exclusively for the area behind floating card photographs",
+    "Don't substitute the mint (#2DCFA5) with cyan or teal. The specific cool mint-cyan IS the brand",
+    "Don't drop Tiempos Headline for display. The serif voice is N26's editorial differentiator",
+    "Don't show the card flat on a white background. The card always floats on a pastel-gradient background with a subtle breathing rotation",
+    "Don't add a second voltage color. The mint is the only chromatic CTA accent"
+  ],
+  "source_md": "references/brands/n26-DESIGN.md"
+}

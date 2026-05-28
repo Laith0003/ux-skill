@@ -1,0 +1,52 @@
+{
+  "id": "snowflake",
+  "name": "Snowflake",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Snowflake's design language — the data-cloud-platform-of-record brand built on a deep glacier-blue gradient (#29B5E8 → #11567f) and a serif display tier (Tiempos Headline) that lifts the surface out of the all-sans data-tool default. The brand reads as 'enterprise data cloud' — institutional, slightly editorial, with snowflake-pattern hex motifs and crystal-blue gradient bands as recurring chrome.",
+  "design_language": {
+    "type": {
+      "display": "Tiempos Headline",
+      "body": "Inter",
+      "mono": "JetBrains Mono"
+    },
+    "color_primary": "#29b5e8",
+    "color_canvas": "#ffffff",
+    "color_ink": "#11567f",
+    "color_canvas_dark": "#001f3f",
+    "color_accent_glacier_deep": "#11567f",
+    "radius": [4, 8, 16, 24],
+    "spacing": "8-based",
+    "motion_signature": "300ms ease-out on hover; signature is the glacier-gradient slow-drift on hero bands (~12s cycle); customer logos auto-carousel at 60s loop; hexagon snowflake-pattern fades in at 600ms on scroll."
+  },
+  "trademark_signals": [
+    "Glacier-blue gradient (#29B5E8 → #11567f) as the brand's chrome — appears on the brand mark, on hero bands, and on the pre-footer CTA — the most-recognized Snowflake signature",
+    "Tiempos Headline serif at hero scale (56–80px weight 500) — lifts the brand out of the all-sans data-platform default",
+    "Snowflake-hexagon motif — the 6-sided crystal lattice appears as background pattern, as the brand mark, and as inline content markers",
+    "Deep glacier (#11567f) for body text and selected band backgrounds — a brand-tinted dark, not pure black",
+    "Pre-footer CTA in a saturated glacier-blue band, full-bleed, with a serif headline in white"
+  ],
+  "components_observed": [
+    "hero-glacier-gradient-band",
+    "snowflake-hex-pattern-bg",
+    "feature-card-bordered",
+    "customer-logo-row",
+    "pricing-tier-card-enterprise",
+    "data-cloud-diagram-card",
+    "footer-deep-glacier"
+  ],
+  "exemplar_pages": [
+    "snowflake.com",
+    "snowflake.com/en/data-cloud/platform",
+    "snowflake.com/en/customers",
+    "snowflake.com/en/pricing"
+  ],
+  "ai_slop_avoided": [
+    "Don't paint the gradient as cyan-only or navy-only. Both endpoints (#29B5E8 light glacier and #11567f deep glacier) must be present",
+    "Don't drop the hexagon snowflake motif — it IS the brand mark and the background pattern",
+    "Don't substitute Tiempos Headline with Inter for display. The serif voice is the brand's editorial differentiator",
+    "Don't use a different accent color on CTAs — the glacier blue is the only voltage",
+    "Don't bold the Tiempos display past weight 500"
+  ],
+  "source_md": "references/brands/snowflake-DESIGN.md"
+}

@@ -1,0 +1,51 @@
+{
+  "id": "railway",
+  "name": "Railway",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Railway's design language — an infrastructure-deployment brand built on a deep midnight-violet (#13111c) canvas, monospace-heavy chrome, glowing purple/lavender voltage at button moments, and a graph-of-services hero that mirrors the actual product (deployments arranged as a node graph). The brand reads as 'the magical version of cloud' — technical, but slightly playful.",
+  "design_language": {
+    "type": {
+      "display": "Söhne",
+      "body": "Söhne",
+      "mono": "Berkeley Mono"
+    },
+    "color_primary": "#9c7dff",
+    "color_canvas": "#13111c",
+    "color_ink": "#fdfaff",
+    "color_accent_lavender": "#c4b5fd",
+    "radius": [4, 8, 12, 16],
+    "spacing": "4-based",
+    "motion_signature": "Signature is the service-graph nodes pulsing on deploy (~1.5s breathing cycle with a 8% scale variation); link hovers fade at 200ms; deploy-progress bars sweep at 400ms ease-out."
+  },
+  "trademark_signals": [
+    "Midnight-violet canvas (#13111c) — deliberately not black, deliberately not navy, a violet-tinted near-black that IS the brand chrome",
+    "Service graph as hero — the homepage shows a node graph of database, API, cron, worker, all connected with hairlines and pulsing with deploy activity",
+    "Lavender purple accent (#9c7dff) on CTAs with a subtle outer glow — the brand's voltage moment, never pure white",
+    "Berkeley Mono everywhere — service names, environment variables, deployment URLs all render in monospace, not Inter — the mono-heavy chrome IS the brand signature",
+    "Hairlines drawn in low-alpha lavender (rgba(196,181,253,0.12)) instead of gray — even the dividers carry the brand color"
+  ],
+  "components_observed": [
+    "service-graph-hero",
+    "service-node-card",
+    "deploy-log-stream-card",
+    "env-var-table-mono",
+    "pricing-tier-card-dark",
+    "metrics-chart-card",
+    "footer-violet-dense"
+  ],
+  "exemplar_pages": [
+    "railway.com",
+    "railway.com/pricing",
+    "railway.com/templates",
+    "railway.com/docs"
+  ],
+  "ai_slop_avoided": [
+    "Don't paint the canvas pure black or navy — the specific midnight-violet (#13111c) IS the brand",
+    "Don't substitute the accent with cyan, blue, or pink — the lavender purple (#9c7dff) is the only accent",
+    "Don't drop the mono chrome. Service names, env vars, deployment URLs are all monospace — this is the brand's tonal signature",
+    "Don't use a static product screenshot for the hero — the service graph is interactive and pulses with the deploy state",
+    "Don't add a second voltage moment. The lavender CTA is the only saturated color in the system"
+  ],
+  "source_md": "references/brands/railway-DESIGN.md"
+}
