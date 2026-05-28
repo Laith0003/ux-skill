@@ -4,7 +4,7 @@ A reference catalog of thirty cognitive laws that govern how users perceive, dec
 
 ## Primary source
 
-This catalog is synthesized from production design work. The canonical reference for the named laws is **[lawsofux.com](https://lawsofux.com)** by Jon Yablonski — each law there has an illustrated card, the original research citation, and worked examples. When ux-god-skill's `/ux-critique` cites a named law, link to the corresponding lawsofux.com page so readers reach the canonical card in one click.
+This catalog is synthesized from production design work. The canonical reference for the named laws is **[lawsofux.com](https://lawsofux.com)** by Jon Yablonski — each law there has an illustrated card, the original research citation, and worked examples. When ux-skill's `/ux-critique` cites a named law, link to the corresponding lawsofux.com page so readers reach the canonical card in one click.
 
 Other foundational sources cited throughout:
 

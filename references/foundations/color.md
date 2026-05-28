@@ -23,7 +23,7 @@ When the brief is open and you need to explore palettes before locking one in, t
 | OKLCH Color Picker | https://oklch.com | For palettes designed in OKLCH (the perceptual space) |
 | APCA contrast | https://www.myndex.com/APCA/ | Newer perceptual contrast standard (WCAG 3 draft) — use for forward-compat checks |
 
-ux-god-skill's `data/palettes.json` already includes 176 palettes verified for AAA contrast on body text. When you pick one of those, you've already cleared the contrast bar. When you build a new one from these tools, run it through WebAIM before shipping.
+ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA contrast on body text. When you pick one of those, you've already cleared the contrast bar. When you build a new one from these tools, run it through WebAIM before shipping.
 
 ## Principles
 

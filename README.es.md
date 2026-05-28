@@ -1,10 +1,10 @@
 [English](README.md) · [العربية](README.ar.md) · **Español** · [中文](README.zh.md)
 
-# ux-god-skill — el motor de inteligencia de diseño para Claude Code, Cursor y todas las demás herramientas de codificación con IA
+# ux-skill — el motor de inteligencia de diseño para Claude Code, Cursor y todas las demás herramientas de codificación con IA
 
 > **El plugin de UX más potente para la codificación con IA.** Un núcleo de razonamiento en Python con 11 manifiestos JSON consultables (84 estilos, 176 paletas, 70 emparejamientos tipográficos, 148 componentes, 184 sectores, 35 tipos de gráfico, 57 presets de movimiento, 112 leyes de UX, 35 reglas de antipatrones, 25 stacks tecnológicos, 72 especificaciones de marca), 22 comandos slash, 5 sub-agentes y un linter determinista anti-slop de IA. Multi-IDE: se distribuye en Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer y Roo Cline.
 
-> **El nombre de marca es `ux-god-skill`.** El nombre de paquete en PyPI / npm sigue siendo `uxskill`. El repositorio de GitHub vive en [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
+> **El nombre de marca es `ux-skill`.** El nombre de paquete en PyPI / npm sigue siendo `uxskill`. El repositorio de GitHub vive en [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
 **Sitio:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **Comparativa frente a todos los plugins de UX para Claude:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
 
@@ -21,11 +21,11 @@
 
 ---
 
-## Qué es ux-god-skill
+## Qué es ux-skill
 
-ux-god-skill es un **motor de inteligencia de diseño** para herramientas de codificación con IA. Se ejecuta como paquete de Python (`pip install uxskill`), como plugin de Claude Code y como multi-instalador para 17 IDEs. El motor ingiere un brief de proyecto (sector, audiencia, tono, imprescindibles, elementos prohibidos, stack, región) y devuelve un sistema de diseño recomendado completo: estilo, paleta, par tipográfico, presets de movimiento, componentes, marcas ejemplares para estudiar y las barreras de antipatrones que deben respetarse. La recomendación es determinista — la misma entrada produce siempre la misma salida.
+ux-skill es un **motor de inteligencia de diseño** para herramientas de codificación con IA. Se ejecuta como paquete de Python (`pip install uxskill`), como plugin de Claude Code y como multi-instalador para 17 IDEs. El motor ingiere un brief de proyecto (sector, audiencia, tono, imprescindibles, elementos prohibidos, stack, región) y devuelve un sistema de diseño recomendado completo: estilo, paleta, par tipográfico, presets de movimiento, componentes, marcas ejemplares para estudiar y las barreras de antipatrones que deben respetarse. La recomendación es determinista — la misma entrada produce siempre la misma salida.
 
-El plugin se sitúa entre tú y la herramienta de codificación con IA. Cuando le pides a Claude Code, Cursor o cualquier otro asistente de IA «construir una landing fintech», el asistente típicamente improvisa — y el resultado se identifica como generado por IA en cinco segundos (gradientes de morado a azul, tres tarjetas iguales, Inter en tamaño display, «John Doe» en los testimonios, transiciones por defecto de 300 ms, hero centrado, flechas rebotando en los CTA). ux-god-skill sustituye la improvisación por **restricciones estructuradas**: ejecutas `/ux-discover` para capturar el brief, `/ux-recommend` para elegir el sistema, `/ux-design` para generar el código y `/ux-lint` para verificar que pasa las 35 reglas deterministas anti-slop de IA antes del commit.
+El plugin se sitúa entre tú y la herramienta de codificación con IA. Cuando le pides a Claude Code, Cursor o cualquier otro asistente de IA «construir una landing fintech», el asistente típicamente improvisa — y el resultado se identifica como generado por IA en cinco segundos (gradientes de morado a azul, tres tarjetas iguales, Inter en tamaño display, «John Doe» en los testimonios, transiciones por defecto de 300 ms, hero centrado, flechas rebotando en los CTA). ux-skill sustituye la improvisación por **restricciones estructuradas**: ejecutas `/ux-discover` para capturar el brief, `/ux-recommend` para elegir el sistema, `/ux-design` para generar el código y `/ux-lint` para verificar que pasa las 35 reglas deterministas anti-slop de IA antes del commit.
 
 Este README es la referencia canónica. Cada comando, cada sub-agente, cada manifiesto de datos, cada ruta de instalación, cada especificación de marca, cada categoría de antipatrón — está todo documentado aquí. Si estás buscando un plugin de diseño para Claude Code o comparando herramientas de diseño con IA para Cursor, Windsurf o Codex, lee esto de principio a fin junto a [compare.html](https://uxskill.laithjunaidy.com/compare.html).
 
@@ -115,7 +115,7 @@ Si algún recuento devuelve 0, falta el archivo JSON — abre una issue en [gith
 
 ## Los números — comparativa en vivo frente a las 8 mejores skills de UX para Claude
 
-Los recuentos de estrellas se verificaron por última vez vía `gh api` el **2026-05-28**. ux-god-skill (Laith0003/ux-skill) es el recién llegado — somos diminutos en notoriedad, profundos en arquitectura. La comparativa de abajo es honesta: dónde perdemos, dónde ganamos.
+Los recuentos de estrellas se verificaron por última vez vía `gh api` el **2026-05-28**. ux-skill (Laith0003/ux-skill) es el recién llegado — somos diminutos en notoriedad, profundos en arquitectura. La comparativa de abajo es honesta: dónde perdemos, dónde ganamos.
 
 | Plugin | Estrellas | Arquitectura | Comandos slash | Linter (apto para CI) | Specs de marca | Componentes | Presets de movimiento | IDEs soportados |
 |---|---:|---|---:|---|---:|---:|---:|---:|
@@ -127,7 +127,7 @@ Los recuentos de estrellas se verificaron por última vez vía `gh api` el **202
 | dominikmartn/nothing-design-skill | **2 391** | Skill mono-estética | 1 | — | — | 0 | 0 | 1 |
 | Nutlope/hallmark | **2 164** | Skill de diseño anti-slop | 1 | — | — | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | Componentes MD3 + auditoría | 1 | — | — | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-god-skill)** | **14** | **Motor de Python + 11 manifiestos + 22 comandos + 5 sub-agentes + linter de CI** | **22** | **35 reglas regex** | **72** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Motor de Python + 11 manifiestos + 22 comandos + 5 sub-agentes + linter de CI** | **22** | **35 reglas regex** | **72** | **148** | **57** | **17** |
 
 ### Dónde perdemos
 
@@ -151,7 +151,7 @@ Tabla completa lado a lado en [uxskill.laithjunaidy.com/compare.html](https://ux
 ## Arquitectura — cómo encajan las piezas
 
 ```
-ux-god-skill (nombre del paquete: uxskill)
+ux-skill (nombre del paquete: uxskill)
 │
 ├── data/                              El cerebro — manifiestos JSON consultables
 │   ├── styles.json                    84 estilos de diseño + when/skip + tokens
@@ -257,7 +257,7 @@ Los comandos se agrupan en cinco categorías: **arranque e inventario**, **disco
 #### `/ux-init` — arrancar el proyecto
 
 - **Qué:** Detecta el IDE que usas (`.claude/`, `.cursor/`, `.windsurf/`, etc.), instala el artefacto correcto, verifica que el motor de Python es accesible, imprime un snapshot de estadísticas.
-- **Cuándo usar:** Primera instalación en un proyecto nuevo. Tras clonar un proyecto que usa ux-god-skill. Después de `pip install --upgrade uxskill`.
+- **Cuándo usar:** Primera instalación en un proyecto nuevo. Tras clonar un proyecto que usa ux-skill. Después de `pip install --upgrade uxskill`.
 - **Cuándo saltar:** Ya lo ejecutaste en este proyecto y nada ha cambiado.
 - **Invocación:** `/ux-init` (sin argumentos) o `uxskill init` desde la CLI.
 - **Salida:** Artefacto por IDE (ver [El instalador para 17 IDEs](#el-instalador-para-17-ides)) + directorio `.ux/` + resumen por stdout.
@@ -727,7 +727,7 @@ Lista completa en [Las 72 especificaciones DESIGN.md de marca](#las-72-especific
 
 ## Las 35 reglas anti-slop de IA — el linter
 
-ux-god-skill distribuye un linter determinista basado en regex. **Sin LLM.** **Sin API.** **Sin red.** Se ejecuta en CI en ~200 ms sobre una app típica de Next.js. Sale con código no-cero en hallazgos Critical / High cuando `--fail-on high` está activo.
+ux-skill distribuye un linter determinista basado en regex. **Sin LLM.** **Sin API.** **Sin red.** Se ejecuta en CI en ~200 ms sobre una app típica de Next.js. Sale con código no-cero en hallazgos Critical / High cuando `--fail-on high` está activo.
 
 Las reglas vienen de `data/anti-patterns.json` (v2 preferida) con fallback a `references/foundations/anti-patterns.md` (v1 bash). Se distribuyen dos binarios: `bin/ux-lint.py` (Python, rápido, extensible) y `bin/ux-lint.sh` (Bash + perl-PCRE, para entornos sin Python).
 
@@ -889,7 +889,7 @@ Clay, NVIDIA, The Verge, Vodafone, Wired
 
 ### Por qué importa esto
 
-Los otros 8 plugins populares de UX para Claude generan «minimal moderno» o «dashboard limpio» — variantes de la misma estética por defecto. ux-god-skill te permite pedir **la claridad de Linear**, **la seriedad de Stripe**, **la moderación de Apple**, **el monolito de Tesla**, **la cercanía de Notion**, **la disciplina de gradientes de Cursor**, **la densidad de pelo de Raycast**, **el editorial cálido de Claude** — y el motor saca los tokens, voz, convenciones de movimiento y signature moves correctos del brand spec.
+Los otros 8 plugins populares de UX para Claude generan «minimal moderno» o «dashboard limpio» — variantes de la misma estética por defecto. ux-skill te permite pedir **la claridad de Linear**, **la seriedad de Stripe**, **la moderación de Apple**, **el monolito de Tesla**, **la cercanía de Notion**, **la disciplina de gradientes de Cursor**, **la densidad de pelo de Raycast**, **el editorial cálido de Claude** — y el motor saca los tokens, voz, convenciones de movimiento y signature moves correctos del brand spec.
 
 ---
 
@@ -1064,7 +1064,7 @@ cat .ux/last-discovery.json
 # }
 ```
 
-Puedes entregar el JSON a tu equipo, pegarlo en un doc de Notion o meterlo en una herramienta de IA aparte. ux-god-skill también es una herramienta de intake estructurado, además de ser un motor.
+Puedes entregar el JSON a tu equipo, pegarlo en un doc de Notion o meterlo en una herramienta de IA aparte. ux-skill también es una herramienta de intake estructurado, además de ser un motor.
 
 ---
 
@@ -1072,7 +1072,7 @@ Puedes entregar el JSON a tu equipo, pegarlo en un doc de Notion o meterlo en un
 
 Tabla resumen corta. La comparativa completa lado a lado está en [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html).
 
-| Dimensión | ux-god-skill | ui-ux-pro-max | open-design | taste-skill | huashu-design | stitch-skills | nothing-design | hallmark | material-3 |
+| Dimensión | ux-skill | ui-ux-pro-max | open-design | taste-skill | huashu-design | stitch-skills | nothing-design | hallmark | material-3 |
 |---|---|---|---|---|---|---|---|---|---|
 | Comandos slash | **22** | 1 | 19 | 1 | 1 | multi | 1 | 1 | 1 |
 | Componentes | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
@@ -1159,7 +1159,7 @@ MIT. Úsalo, fórkalo, construye sobre él. Si te ahorra enviar slop de IA, ponl
 
 ### Autor
 
-**Laith Aljunaidy** — fundador en solitario de [Dot](https://thedotwallet.com), una plataforma de fidelización MENA-first. Construyendo ux-god-skill para que el frontend generado por IA deje de parecerse todo.
+**Laith Aljunaidy** — fundador en solitario de [Dot](https://thedotwallet.com), una plataforma de fidelización MENA-first. Construyendo ux-skill para que el frontend generado por IA deje de parecerse todo.
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
 - Email: laith.aljunaidy.laith@gmail.com
@@ -1178,6 +1178,6 @@ MIT. Úsalo, fórkalo, construye sobre él. Si te ahorra enviar slop de IA, ponl
 
 ---
 
-**ux-god-skill** · **v2.0.0-alpha.1** · Construido para que Claude Code, Cursor, Windsurf y todas las demás herramientas de codificación con IA produzcan frontend que no se lea como generado por IA.
+**ux-skill** · **v2.0.0-alpha.1** · Construido para que Claude Code, Cursor, Windsurf y todas las demás herramientas de codificación con IA produzcan frontend que no se lea como generado por IA.
 
 > Pon una estrella al repo en [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · Instala vía `pip install uxskill` o `npx uxskill init` · Explora la comparativa en [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html)

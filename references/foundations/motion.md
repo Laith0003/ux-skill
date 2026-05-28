@@ -4,13 +4,13 @@
 
 ## Recommended engines (first-class in `/ux-motion`)
 
-ux-god-skill's `/ux-motion` command accepts a `--engine` flag selecting one of three first-class implementations. Each one is fully supported in `data/motion-presets.json` — every preset has a snippet for all three.
+ux-skill's `/ux-motion` command accepts a `--engine` flag selecting one of three first-class implementations. Each one is fully supported in `data/motion-presets.json` — every preset has a snippet for all three.
 
 | Engine | URL | Use when |
 |---|---|---|
 | **Framer Motion** (default) | https://www.framer.com/motion/ | React projects, declarative API, ~30 KB gzipped. Best balance of power and ergonomics for most apps. |
 | **GSAP** | https://gsap.com | Cinematic scroll-pinned scenes, SVG path animation, complex timelines. The crown of web animation — every motion preset in our manifest ships with a GSAP snippet you can copy. Free for commercial use as of 2024-05 (Webflow acquisition). |
-| **CSS keyframes** | https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes | Server-rendered or no-JS surfaces. Smallest cost. ux-god-skill outputs CSS-only when the picked style or brief requires it (e.g. <code>SSR-static</code>, <code>JS-disabled-allowed</code> must-have). |
+| **CSS keyframes** | https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes | Server-rendered or no-JS surfaces. Smallest cost. ux-skill outputs CSS-only when the picked style or brief requires it (e.g. <code>SSR-static</code>, <code>JS-disabled-allowed</code> must-have). |
 
 **Invocation:**
 

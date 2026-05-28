@@ -1,10 +1,10 @@
 **English** · [العربية](README.ar.md) · [Español](README.es.md) · [中文](README.zh.md)
 
-# ux-god-skill — the design intelligence engine for Claude Code, Cursor, and every other AI coding tool
+# ux-skill — the design intelligence engine for Claude Code, Cursor, and every other AI coding tool
 
 > **The strongest UX plugin for AI coding.** A Python reasoning core with 11 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 35 anti-pattern rules, 25 tech stacks, 72 brand specs), 22 slash commands, 5 sub-agents, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
 
-> **The brand name is `ux-god-skill`.** The PyPI / npm package name stays `uxskill`. The GitHub repo lives at [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
+> **The brand name is `ux-skill`.** The PyPI / npm package name stays `uxskill`. The GitHub repo lives at [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
 **Site:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **Compare vs every Claude UX plugin:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
 
@@ -26,11 +26,11 @@
 
 ---
 
-## What is ux-god-skill
+## What is ux-skill
 
-ux-god-skill is a **design intelligence engine** for AI coding tools. It runs as a Python package (`pip install uxskill`), as a Claude Code plugin, and as a 17-IDE multi-installer. The engine ingests a project brief (industry, audience, tone, must-haves, forbidden moves, stack, region) and returns a complete recommended design system: style, palette, type pair, motion presets, components, brand exemplars to study, and the anti-pattern guardrails that must hold. The recommendation is deterministic — same input always produces the same output.
+ux-skill is a **design intelligence engine** for AI coding tools. It runs as a Python package (`pip install uxskill`), as a Claude Code plugin, and as a 17-IDE multi-installer. The engine ingests a project brief (industry, audience, tone, must-haves, forbidden moves, stack, region) and returns a complete recommended design system: style, palette, type pair, motion presets, components, brand exemplars to study, and the anti-pattern guardrails that must hold. The recommendation is deterministic — same input always produces the same output.
 
-The plugin sits between you and the AI coding tool. When you ask Claude Code, Cursor, or any other AI assistant to "build a fintech landing page," the assistant typically improvises — and the result reads as AI-generated within five seconds (purple-to-blue gradients, three equal cards, Inter at display size, "John Doe" in testimonials, 300ms default transitions, centered hero, bouncing arrow CTAs). ux-god-skill replaces improvisation with **structured constraints**: you run `/ux-discover` to capture the brief, `/ux-recommend` to pick the system, `/ux-design` to generate the code, and `/ux-lint` to verify it passes the 35 deterministic anti-AI-slop rules before commit.
+The plugin sits between you and the AI coding tool. When you ask Claude Code, Cursor, or any other AI assistant to "build a fintech landing page," the assistant typically improvises — and the result reads as AI-generated within five seconds (purple-to-blue gradients, three equal cards, Inter at display size, "John Doe" in testimonials, 300ms default transitions, centered hero, bouncing arrow CTAs). ux-skill replaces improvisation with **structured constraints**: you run `/ux-discover` to capture the brief, `/ux-recommend` to pick the system, `/ux-design` to generate the code, and `/ux-lint` to verify it passes the 35 deterministic anti-AI-slop rules before commit.
 
 This README is the canonical reference. Every command, every sub-agent, every data manifest, every install path, every brand spec, every anti-pattern category — it's all documented here. If you're shopping for a Claude Code design plugin or comparing AI design tools for Cursor, Windsurf, or Codex, read this top to bottom and the [compare.html](https://uxskill.laithjunaidy.com/compare.html) side by side.
 
@@ -120,7 +120,7 @@ If any count returns 0, the JSON file is missing — open an issue at [github.co
 
 ## The numbers — live comparison vs the top 8 Claude UX skills
 
-Star counts last verified via `gh api` on **2026-05-28**. ux-god-skill (Laith0003/ux-skill) is the newest entrant — we're tiny on awareness, deep on architecture. The comparison below is honest: where we lose, where we win.
+Star counts last verified via `gh api` on **2026-05-28**. ux-skill (Laith0003/ux-skill) is the newest entrant — we're tiny on awareness, deep on architecture. The comparison below is honest: where we lose, where we win.
 
 | Plugin | Stars | Architecture | Slash commands | Linter (CI-safe) | Brand specs | Components | Motion presets | IDEs supported |
 |---|---:|---|---:|---|---:|---:|---:|---:|
@@ -132,7 +132,7 @@ Star counts last verified via `gh api` on **2026-05-28**. ux-god-skill (Laith000
 | dominikmartn/nothing-design-skill | **2,391** | Single-aesthetic skill | 1 | — | — | 0 | 0 | 1 |
 | Nutlope/hallmark | **2,164** | Anti-slop design skill | 1 | — | — | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | MD3 components + audit | 1 | — | (MD3 only) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-god-skill)** | **14** | **Python engine + 11 manifests + 22 commands + 5 sub-agents + CI linter** | **22** | **35 regex rules** | **72** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Python engine + 11 manifests + 22 commands + 5 sub-agents + CI linter** | **22** | **35 regex rules** | **72** | **148** | **57** | **17** |
 
 ### Where we lose
 
@@ -156,7 +156,7 @@ Full table-by-table side-by-side at [uxskill.laithjunaidy.com/compare.html](http
 ## Architecture — how the pieces fit
 
 ```
-ux-god-skill (package name: uxskill)
+ux-skill (package name: uxskill)
 │
 ├── data/                              The brain — queryable JSON manifests
 │   ├── styles.json                    84 design styles + when/skip + tokens
@@ -262,7 +262,7 @@ Commands are grouped into five buckets: **bootstrap & inventory**, **discovery &
 #### `/ux-init` — bootstrap the project
 
 - **What:** Detects which IDE you're using (`.claude/`, `.cursor/`, `.windsurf/`, etc.), installs the right artifact, verifies the Python engine is reachable, prints a stats snapshot.
-- **When to use:** First time installing in a new project. After cloning a project that uses ux-god-skill. After `pip install --upgrade uxskill`.
+- **When to use:** First time installing in a new project. After cloning a project that uses ux-skill. After `pip install --upgrade uxskill`.
 - **When to skip:** You already ran it in this project and nothing changed.
 - **Invocation:** `/ux-init` (no args) or `uxskill init` from the CLI.
 - **Output:** Per-IDE artifact (see [The 17-IDE installer](#the-17-ide-installer)) + `.ux/` directory + stdout summary.
@@ -732,7 +732,7 @@ Full list in [The 72 brand DESIGN.md specs](#the-72-brand-designmd-specs--by-cat
 
 ## The 35 anti-AI-slop rules — the linter
 
-ux-god-skill ships a deterministic regex-based linter. **No LLM.** **No API.** **No network.** Runs in CI in ~200ms on a typical Next.js app. Exits non-zero on Critical / High findings when `--fail-on high` is set.
+ux-skill ships a deterministic regex-based linter. **No LLM.** **No API.** **No network.** Runs in CI in ~200ms on a typical Next.js app. Exits non-zero on Critical / High findings when `--fail-on high` is set.
 
 The rules are sourced from `data/anti-patterns.json` (v2 preferred) with a `references/foundations/anti-patterns.md` fallback (v1 bash). Two binaries ship: `bin/ux-lint.py` (Python, fast, extensible) and `bin/ux-lint.sh` (Bash + perl-PCRE, for environments without Python).
 
@@ -894,7 +894,7 @@ Clay, NVIDIA, The Verge, Vodafone, Wired
 
 ### Why this matters
 
-The other 8 popular Claude UX plugins generate "modern minimal" or "clean dashboard" — variants of the same default aesthetic. ux-god-skill lets you ask for **Linear's clarity**, **Stripe's seriousness**, **Apple's restraint**, **Tesla's monolith**, **Notion's friendliness**, **Cursor's gradient discipline**, **Raycast's hairline density**, **Claude's warm editorial** — and the engine pulls the right tokens, voice, motion conventions, and signature moves from the brand spec.
+The other 8 popular Claude UX plugins generate "modern minimal" or "clean dashboard" — variants of the same default aesthetic. ux-skill lets you ask for **Linear's clarity**, **Stripe's seriousness**, **Apple's restraint**, **Tesla's monolith**, **Notion's friendliness**, **Cursor's gradient discipline**, **Raycast's hairline density**, **Claude's warm editorial** — and the engine pulls the right tokens, voice, motion conventions, and signature moves from the brand spec.
 
 ---
 
@@ -1069,7 +1069,17 @@ cat .ux/last-discovery.json
 # }
 ```
 
-You can hand the JSON to your team, paste into a Notion doc, or feed it into a separate AI tool. ux-god-skill is also a structured intake tool in addition to being an engine.
+You can hand the JSON to your team, paste into a Notion doc, or feed it into a separate AI tool. ux-skill is also a structured intake tool in addition to being an engine.
+
+### 9. MASTER.md persistence — your design decisions, in the repo
+
+After `/ux-recommend`, persist the picked style + palette + type + motion + components + brand exemplars + guardrails as a human-readable Markdown file your team can review, diff, and version-control.
+
+```bash
+python3 -m engine.cli.main persist save --project-root .
+```
+
+Writes `.ux/design-system/MASTER.md` (YAML frontmatter + body) and `.ux/design-system/pages/<name>.md` per generated surface via `persist save-page`. Idempotent — same input produces byte-identical output, so re-running on unchanged state is a no-op in git.
 
 ---
 
@@ -1077,7 +1087,7 @@ You can hand the JSON to your team, paste into a Notion doc, or feed it into a s
 
 Short summary table. Full table-by-table comparison is at [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html).
 
-| Dimension | ux-god-skill | ui-ux-pro-max | open-design | taste-skill | huashu-design | stitch-skills | nothing-design | hallmark | material-3 |
+| Dimension | ux-skill | ui-ux-pro-max | open-design | taste-skill | huashu-design | stitch-skills | nothing-design | hallmark | material-3 |
 |---|---|---|---|---|---|---|---|---|---|
 | Slash commands | **22** | 1 | 19 | 1 | 1 | multi | 1 | 1 | 1 |
 | Components | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
@@ -1164,7 +1174,7 @@ MIT. Use it, fork it, build on it. If it saves you from shipping AI slop, star t
 
 ### Author
 
-**Laith Aljunaidy** — solo founder of [Dot](https://thedotwallet.com), a MENA-first loyalty platform. Building ux-god-skill so the AI-generated frontend doesn't all look the same.
+**Laith Aljunaidy** — solo founder of [Dot](https://thedotwallet.com), a MENA-first loyalty platform. Building ux-skill so the AI-generated frontend doesn't all look the same.
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
 - Email: laith.aljunaidy.laith@gmail.com
@@ -1183,6 +1193,6 @@ MIT. Use it, fork it, build on it. If it saves you from shipping AI slop, star t
 
 ---
 
-**ux-god-skill** · **v2.0.0-alpha.1** · Built so Claude Code, Cursor, Windsurf, and every other AI coding tool output frontend that doesn't read as AI-generated.
+**ux-skill** · **v2.0.0-alpha.1** · Built so Claude Code, Cursor, Windsurf, and every other AI coding tool output frontend that doesn't read as AI-generated.
 
 > Star the repo at [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · Install via `pip install uxskill` or `npx uxskill init` · Browse the comparison at [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html)
