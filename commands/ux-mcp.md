@@ -58,7 +58,7 @@ The server speaks stdio JSON-RPC. Logs go to **stderr only**; stdout is reserved
 | `ux_industries` | Return all 184+ entries from `data/industries.json`. Optional `category` filter. |
 | `ux_motion_presets` | Return all 57+ entries from `data/motion-presets.json`. Optional `category` filter. |
 | `ux_anti_patterns` | Return all 35+ regex rules from `data/anti-patterns.json`. Optional `severity` filter. |
-| `ux_brands` | Return all 72 brand specs from `data/brands/*.json` (Apple, Stripe, Linear, Tesla, Notion, etc.). Optional `category` filter. |
+| `ux_brands` | Return all 92 brand specs from `data/brands/*.json` (Apple, Stripe, Linear, Tesla, Notion, etc.). Optional `category` filter. |
 | `ux_landing_patterns` | Return all 24+ entries from `data/landing-patterns.json`. Optional `category` filter. |
 | `ux_persist_save` | Persist a recommendation as `.ux/design-system/MASTER.md` in a given project root. Idempotent — same input writes byte-identical bytes. |
 | `ux_persist_load` | Load `.ux/design-system/MASTER.md` back into a structured dict. |
