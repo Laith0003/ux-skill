@@ -2,7 +2,7 @@
 
 # ux-skill — le moteur d'intelligence de design pour Claude Code, Cursor et tous les autres outils de codage par IA
 
-> **Le plugin UX le plus puissant pour le codage assisté par IA.** Un noyau de raisonnement Python avec 11 manifestes JSON interrogeables (84 styles, 176 palettes, 70 appariements typographiques, 148 composants, 184 secteurs, 35 types de graphique, 57 préréglages de motion, 112 lois UX, 35 règles d'anti-patterns, 25 stacks techniques, 72 spécifications de marque), 22 commandes slash, 5 sous-agents et un linter déterministe anti-slop IA. Multi-IDE : se distribue dans Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer et Roo Cline.
+> **Le plugin UX le plus puissant pour le codage assisté par IA.** Un noyau de raisonnement Python avec 11 manifestes JSON interrogeables (84 styles, 176 palettes, 70 appariements typographiques, 148 composants, 184 secteurs, 35 types de graphique, 57 préréglages de motion, 112 lois UX, 100 règles d'anti-patterns, 25 stacks techniques, 110 spécifications de marque), 22 commandes slash, 5 sous-agents et un linter déterministe anti-slop IA. Multi-IDE : se distribue dans Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer et Roo Cline.
 
 > **Le nom de marque est `ux-skill`.** Le nom du paquet PyPI / npm reste `uxskill`. Le dépôt GitHub vit à [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
@@ -12,9 +12,9 @@
 [![Python](https://img.shields.io/badge/python-3.9%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#linstallateur-pour-17-ides)
-[![Brands](https://img.shields.io/badge/brand_specs-72-cc785c.svg)](data/brands/_index.json)
+[![Brands](https://img.shields.io/badge/brand_specs-110-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
-[![Linter](https://img.shields.io/badge/anti--patterns-51-181715.svg)](data/anti-patterns.json)
+[![Linter](https://img.shields.io/badge/anti--patterns-100-181715.svg)](data/anti-patterns.json)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -30,7 +30,7 @@
 
 ux-skill est un **moteur d'intelligence de design** pour les outils de codage par IA. Il s'exécute comme paquet Python (`pip install uxskill`), comme plugin Claude Code et comme installateur multi-IDE pour 17 environnements. Le moteur ingère un brief de projet (secteur, audience, ton, indispensables, mouvements interdits, stack, région) et renvoie un système de design recommandé complet : style, palette, paire typographique, préréglages de motion, composants, marques exemplaires à étudier et les garde-fous d'anti-patterns qui doivent tenir. La recommandation est déterministe — la même entrée produit toujours la même sortie.
 
-Le plugin se place entre vous et l'outil de codage par IA. Quand vous demandez à Claude Code, Cursor ou tout autre assistant IA de « construire une landing fintech », l'assistant improvise typiquement — et le résultat se lit comme généré par IA en cinq secondes (dégradés violet-à-bleu, trois cartes égales, Inter en taille display, « John Doe » dans les témoignages, transitions par défaut à 300 ms, hero centré, flèches rebondissantes sur les CTA). ux-skill remplace l'improvisation par des **contraintes structurées** : vous lancez `/ux-discover` pour capturer le brief, `/ux-recommend` pour choisir le système, `/ux-design` pour générer le code et `/ux-lint` pour vérifier qu'il passe les 35 règles déterministes anti-slop IA avant le commit.
+Le plugin se place entre vous et l'outil de codage par IA. Quand vous demandez à Claude Code, Cursor ou tout autre assistant IA de « construire une landing fintech », l'assistant improvise typiquement — et le résultat se lit comme généré par IA en cinq secondes (dégradés violet-à-bleu, trois cartes égales, Inter en taille display, « John Doe » dans les témoignages, transitions par défaut à 300 ms, hero centré, flèches rebondissantes sur les CTA). ux-skill remplace l'improvisation par des **contraintes structurées** : vous lancez `/ux-discover` pour capturer le brief, `/ux-recommend` pour choisir le système, `/ux-design` pour générer le code et `/ux-lint` pour vérifier qu'il passe les 100 règles déterministes anti-slop IA avant le commit.
 
 Ce README est la référence canonique. Chaque commande, chaque sous-agent, chaque manifeste de données, chaque chemin d'installation, chaque spécification de marque, chaque catégorie d'anti-pattern — tout est documenté ici. Si vous cherchez un plugin de design pour Claude Code ou comparez des outils de design par IA pour Cursor, Windsurf ou Codex, lisez ceci de bout en bout et [compare.html](https://uxskill.laithjunaidy.com/compare.html) en parallèle.
 
@@ -44,8 +44,8 @@ Ce README est la référence canonique. Chaque commande, chaque sous-agent, chaq
 4. [Les 22 commandes slash — référence détaillée](#les-22-commandes-slash--référence-détaillée)
 5. [Les 5 sous-agents](#les-5-sous-agents)
 6. [Les 11 manifestes de données](#les-11-manifestes-de-données)
-7. [Les 35 règles anti-slop IA — le linter](#les-35-règles-anti-slop-ia--le-linter)
-8. [Les 72 spécifications de marque DESIGN.md — par catégorie](#les-72-spécifications-de-marque-designmd--par-catégorie)
+7. [Les 100 règles anti-slop IA — le linter](#les-100-règles-anti-slop-ia--le-linter)
+8. [Les 110 spécifications de marque DESIGN.md — par catégorie](#les-110-spécifications-de-marque-designmd--par-catégorie)
 9. [Serveur MCP — le coup asymétrique](#serveur-mcp--le-coup-asymétrique)
 10. [L'installateur pour 17 IDEs](#linstallateur-pour-17-ides)
 11. [Cas d'usage — scénarios concrets](#cas-dusage--scénarios-concrets)
@@ -109,8 +109,8 @@ ux stats
 #     "tech-stacks": 25,
 #     "ux-guidelines": 112,
 #     "motion-presets": 57,
-#     "anti-patterns": 35,
-#     "brands": 72
+#     "anti-patterns": 100,
+#     "brands": 110
 #   }
 # }
 ```
@@ -133,7 +133,7 @@ Les compteurs d'étoiles ont été vérifiés pour la dernière fois via `gh api
 | dominikmartn/nothing-design-skill | **2 391** | Skill mono-esthétique | 1 | — | — | 0 | 0 | 1 |
 | Nutlope/hallmark | **2 164** | Skill de design anti-slop | 1 | — | — | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | Composants MD3 + audit | 1 | — | — | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Moteur Python + 11 manifestes + 22 commandes + 5 sous-agents + linter CI** | **22** | **35 règles regex** | **72** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Moteur Python + 11 manifestes + 22 commandes + 5 sous-agents + linter CI** | **22** | **100 règles regex** | **110** | **148** | **57** | **17** |
 
 ### Où nous perdons
 
@@ -145,8 +145,8 @@ Les compteurs d'étoiles ont été vérifiés pour la dernière fois via `gh api
 
 - **Bibliothèque de composants :** 148 composants documentés avec anatomie, états, tokens utilisés et specs de motion. Aucun des 8 autres ne livre de manifeste de composants.
 - **Préréglages de motion :** 57 entrées prêtes par stack (Framer Motion, GSAP, CSS) avec fallbacks reduced-motion. Aucun des autres ne livre de manifeste de motion.
-- **Linter d'anti-patterns :** 35 règles regex déterministes, tourne en CI, sort en non-zéro sur Critical/High. Aucun des autres ne livre de linter déterministe.
-- **Specs de marque :** 72 véritables specs DESIGN.md (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude et 58 autres). Aucun des autres ne livre de bibliothèque de marques.
+- **Linter d'anti-patterns :** 100 règles regex déterministes, tourne en CI, sort en non-zéro sur Critical/High. Aucun des autres ne livre de linter déterministe.
+- **Specs de marque :** 110 véritables specs DESIGN.md (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude et 96 autres). Aucun des autres ne livre de bibliothèque de marques.
 - **17 IDEs pris en charge :** même moteur, glue différente par IDE.
 - **22 commandes slash :** discovery, génération, audit, lint, polish, boucle de fix, étude de cas, atelier, copy, motion, a11y, dashboard, conductor — intégrées de bout en bout.
 
@@ -169,8 +169,8 @@ ux-skill (nom du paquet : uxskill)
 │   ├── tech-stacks.json               25 stacks (Next, Astro, SvelteKit, Blade...)
 │   ├── ux-guidelines.json             112 lois UX nommées (Hick, Fitts, Miller...)
 │   ├── motion-presets.json            57 préréglages de motion (entrée, sortie, hover...)
-│   ├── anti-patterns.json             35 règles regex (source du linter compatible CI)
-│   └── brands/*.json                  72 specs DESIGN de marque + _index.json
+│   ├── anti-patterns.json             100 règles regex (source du linter compatible CI)
+│   └── brands/*.json                  110 specs DESIGN de marque + _index.json
 │
 ├── engine/                            Python — le raisonnement
 │   ├── recommender/                   moteur de fusion à 5 recherches parallèles
@@ -246,7 +246,7 @@ ux-skill (nom du paquet : uxskill)
 3. **Fusion.** Un fusionneur déterministe classe les candidats, résout les conflits (par ex. un indispensable dark-mode force le mode de palette) et émet un système recommandé unique.
 4. **Sortie.** Un document JSON avec le style choisi, la palette choisie, la paire typographique, les 5 meilleurs préréglages motion, les 12 meilleurs composants, les 5 meilleures marques exemplaires et les 35 garde-fous d'anti-patterns actifs. Plus un bloc de justification expliquant chaque choix.
 5. **Génération.** Les commandes en aval (`/ux-design`, `/ux-component`, `/ux-system`, `/ux-dashboard`) consomment la recommandation pour générer du code réel via les sous-agents.
-6. **Vérification.** `/ux-lint` rescanne le code généré contre les 35 règles regex. Sort en non-zéro sur Critical/High en CI.
+6. **Vérification.** `/ux-lint` rescanne le code généré contre les 100 règles regex. Sort en non-zéro sur Critical/High en CI.
 
 **Python pense. HTML montre. Markdown enchaîne.**
 
@@ -363,7 +363,7 @@ Les commandes sont regroupées en cinq catégories : **amorçage et inventaire**
 
 #### `/ux-lint` — linter déterministe à base de regex (sans LLM, compatible CI)
 
-- **Quoi :** Lance 35 règles regex contre votre code. Aucun appel LLM. Sort en non-zéro sur Critical / High en CI. Source : `data/anti-patterns.json`. Les règles couvrent Couleur (6), Typographie (3), Layout (5), Motion (3), Contenu (5), A11y (6), Qualité (6), Visuel (1).
+- **Quoi :** Lance 100 règles regex contre votre code. Aucun appel LLM. Sort en non-zéro sur Critical / High en CI. Source : `data/anti-patterns.json`. Les règles couvrent A11y (23), Contenu (15), Layout (13), Typographie (10), Couleur (9), Qualité (9), Visuel (9), Motion (8), Performance (4).
 - **Quand l'utiliser :** Hook pre-commit. Porte de CI. Première passe rapide sur une grosse codebase avant de payer le coût d'`/ux-audit`. Après `/ux-design` ou `/ux-component` pour vérifier la génération.
 - **Quand passer :** Vous voulez une boucle de fix (le linter rapporte, il n'édite pas — enchaînez sur `/ux-polish --fix` ou `/ux-fix`). Vous voulez un jugement de goût (utilisez `/ux-critique`).
 - **Invocation (slash) :** `/ux-lint src/`.
@@ -709,29 +709,29 @@ Utilisé par `/ux-audit` (scoring à 6 lentilles) et `/ux-critique` (ancre de go
 
 Chaque préréglage a une variante reduced-motion. Code prêt par stack pour Framer Motion, GSAP et CSS pur.
 
-### `anti-patterns.json` — 35 règles regex
+### `anti-patterns.json` — 100 règles regex
 
 | Champ | Description |
 |---|---|
-| `entries` | 35 |
-| `keys per entry` | `id`, `name`, `severity` (high/medium/low), `category`, `detection` (type, pattern, flags, scope), `evidence_template`, `fix`, `references` |
-| `categories` | A11y (6), Couleur (6), Contenu (5), Layout (5), Motion (3), Qualité (6), Typographie (3), Visuel (1) |
+| `entries` | 100 |
+| `keys per entry` | `id`, `name`, `severity` (critical/high/medium/low), `category`, `detection` (type, pattern, flags, scope), `evidence_template`, `fix`, `references` |
+| `categories` | A11y (23), Contenu (15), Layout (13), Typographie (10), Couleur (9), Qualité (9), Visuel (9), Motion (8), Performance (4) |
 
-La liste complète des règles est dans [Les 35 règles anti-slop IA](#les-35-règles-anti-slop-ia--le-linter).
+La liste complète des règles est dans [Les 100 règles anti-slop IA](#les-100-règles-anti-slop-ia--le-linter).
 
-### `brands/*.json` — 72 specs de marque
+### `brands/*.json` — 110 specs de marque
 
 | Champ | Description |
 |---|---|
-| `entries` | 72 (plus `_index.json` qui les liste toutes) |
+| `entries` | 110 (plus `_index.json` qui les liste toutes) |
 | `keys per entry` | `id`, `name`, `category`, `voice`, `tokens` (color, type, motion), `design_principles`, `signature_moves`, `anti-moves`, `references` |
-| `categories` | Developer Tools (24), Consumer / Lifestyle / Retail (11), AI / ML Platform (9), Productivity / Collaboration (8), Automobile (8), Fintech / Crypto (7), Editorial / Media (5) |
+| `categories` | Developer Tools (36), Consumer / Lifestyle / Retail (19), Fintech / Crypto (14), Editorial / Media (13), AI / ML Platform (12), Productivity / Collaboration (8), Automobile (8) |
 
-Liste complète dans [Les 72 spécifications DESIGN.md de marque](#les-72-spécifications-de-marque-designmd--par-catégorie).
+Liste complète dans [Les 110 spécifications DESIGN.md de marque](#les-110-spécifications-de-marque-designmd--par-catégorie).
 
 ---
 
-## Les 35 règles anti-slop IA — le linter
+## Les 100 règles anti-slop IA — le linter
 
 ux-skill livre un linter déterministe à base de regex. **Pas de LLM.** **Pas d'API.** **Pas de réseau.** Tourne en CI en ~200 ms sur une app Next.js typique. Sort en non-zéro sur findings Critical / High quand `--fail-on high` est posé.
 
@@ -859,23 +859,31 @@ Recommended next: /ux-polish --fix (LLM-driven, addresses both lintable and aest
 
 ---
 
-## Les 72 spécifications de marque DESIGN.md — par catégorie
+## Les 110 spécifications de marque DESIGN.md — par catégorie
 
 Vraies marques. Vrais langages de design. Vraies specs DESIGN.md — pas des palettes génériques. Vous dites au plugin « construis une landing dans le style de Stripe » et il lit le vocabulaire de marque réel : rubrique de voix, tokens de couleur, conventions de motion, signature moves, anti-moves.
 
 Chaque marque est livrée comme JSON structuré (`data/brands/<slug>.json`) plus une référence en prose (`references/brands/<slug>.md`).
 
-### Developer Tools (24)
+### Developer Tools (36)
 
-ClickHouse, Composio, Cursor, Expo, Framer, HashiCorp, IBM, Lovable, Mintlify, MongoDB, Ollama, OpenCode, PostHog, Raycast, Replicate, Resend, Sanity, Sentry, Slack, Supabase, Superhuman, Vercel, Warp, Webflow
+ClickHouse, Composio, Cursor, Datadog, dbt Labs, Expo, Fivetran, Fly.io, Framer, HashiCorp, Honeycomb, IBM, Lovable, Mintlify, Modal, MongoDB, Neon, Ollama, OpenCode, PostHog, Railway, Raycast, Render, Replicate, Resend, Retool, Sanity, Sentry, Slack, Snowflake, Sourcegraph, Supabase, Superhuman, Vercel, Warp, Webflow
 
-### Consumer / Lifestyle / Retail (11)
+### Consumer / Lifestyle / Retail (19)
 
-Airbnb, Apple, HP, Meta, Nike, Pinterest, PlayStation, Shopify, Spotify, Starbucks, Uber
+Aesop, Airbnb, Allbirds, Apple, Apple Music, Glossier, HP, Hims & Hers, Instagram, Meta, Nike, Patagonia, Pinterest, PlayStation, Shopify, Spotify, Starbucks, TikTok, Uber
 
-### AI / ML Platform (9)
+### Fintech / Crypto (14)
 
-Claude, Cohere, ElevenLabs, MiniMax, Mistral AI, Runway, Together AI, VoltAgent, xAI
+Binance, Brex, Coinbase, Kraken, Mastercard, Mercury, Monzo, N26, Plaid, Ramp, Revolut, Robinhood, Stripe, Wise
+
+### Editorial / Media (13)
+
+Bloomberg, Clay, Dezeen, NVIDIA, Pitchfork, Substack, The Atlantic, The Economist, The New York Times, The Verge, The Wall Street Journal, Vodafone, Wired
+
+### AI / ML Platform (12)
+
+Anthropic, Claude, Cohere, ElevenLabs, MiniMax, Mistral AI, OpenAI, Perplexity, Runway, Together AI, VoltAgent, xAI
 
 ### Productivity / Collaboration (8)
 
@@ -884,14 +892,6 @@ Airtable, Cal.com, Figma, Intercom, Linear, Miro, Notion, Zapier
 ### Automobile (8)
 
 BMW, BMW M, Bugatti, Ferrari, Lamborghini, Renault, SpaceX, Tesla
-
-### Fintech / Crypto (7)
-
-Binance, Coinbase, Kraken, Mastercard, Revolut, Stripe, Wise
-
-### Editorial / Media (5)
-
-Clay, NVIDIA, The Verge, Vodafone, Wired
 
 ### Pourquoi ça compte
 
@@ -1108,8 +1108,8 @@ Table récapitulative courte. La comparaison complète côte à côte est sur [u
 | Commandes slash | **22** | 1 | 19 | 1 | 1 | multi | 1 | 1 | 1 |
 | Composants | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | Préréglages motion | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Specs de marque | **72** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Règles d'anti-patterns | **35** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Specs de marque | **110** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Règles d'anti-patterns | **100** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Linter déterministe compatible CI | **oui** | non | non | non | non | non | non | non | non |
 | IDEs pris en charge | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | Porte de discovery | **10 champs** | implicite | implicite | implicite | implicite | implicite | implicite | implicite | implicite |

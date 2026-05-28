@@ -2008,6 +2008,21 @@
     @media (max-width: 900px) {
       .lang-picker__menu { right: -16px; }
     }</style>
+  <!-- noscroll-fix -->
+  <style>
+    /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
+       and max-width: 100%; carousels that need their own horizontal scroll
+       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves —
+       overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
+    html, body {
+      overflow-x: clip;
+      max-width: 100%;
+    }
+    /* Defensive — make sure no section, image, or table forces width >100%. */
+    section, header, footer, main, article { max-width: 100vw; }
+    img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
+    table { max-width: 100%; }
+  </style>
 </head>
 <body>
 

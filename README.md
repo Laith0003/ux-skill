@@ -1108,8 +1108,8 @@ Short summary table. Full table-by-table comparison is at [uxskill.laithjunaidy.
 | Slash commands | **22** | 1 | 19 | 1 | 1 | multi | 1 | 1 | 1 |
 | Components | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | Motion presets | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Brand specs | **72** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Anti-pattern rules | **35** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Brand specs | **110** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Anti-pattern rules | **100** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | CI-safe deterministic linter | **yes** | no | no | no | no | no | no | no | no |
 | IDEs supported | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | Discovery gate | **10 fields** | implicit | implicit | implicit | implicit | implicit | implicit | implicit | implicit |

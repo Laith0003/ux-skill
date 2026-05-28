@@ -6,8 +6,8 @@
   <title>ux-skill vs the top 9 Claude UX skills — scored comparison</title>
   <meta name="description" content="Scored side-by-side: ux-skill vs ui-ux-pro-max-skill (84k), open-design (54k), taste-skill (25k), huashu-design (15k), stitch-skills, nothing-design-skill, hallmark, material-3-skill. Real data per cell. No empty dashes.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/compare.html">
-  <meta name="theme-color" content="#faf9f5">
-  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
   <meta name="robots" content="index,follow">
 
   <meta property="og:type" content="website">
@@ -26,116 +26,289 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
   <style>
+    /* =========================================================================
+       UXSKILL DOCS v3 — Saturated Cinema (dark)
+       Scene accent: rose #f472b6
+       ========================================================================= */
     :root {
-      --canvas: #faf9f5;
-      --surface: #efe9de;
-      --surface-2: #f3eee4;
-      --ink: #181715;
-      --body: #3d3d3a;
-      --muted: #6c6a64;
-      --hairline: rgba(20,20,19,0.10);
-      --primary: #cc785c;
-      --primary-active: #a9583e;
-      --primary-soft: rgba(204,120,92,0.12);
-      --win-bg: #ddebd9;
-      --win-fg: #28681c;
-      --weak-bg: #f4e5dc;
-      --weak-fg: #a4502f;
-      --neutral-bg: #ece6dc;
-      --neutral-fg: #6c6a64;
-      --strong-bg: #c8e0c2;
-      --strong-fg: #1f5713;
+      --canvas:        #07080a;
+      --surface-1:     #0d0f12;
+      --surface-2:     #14181d;
+      --surface-3:     #1c2128;
+      --ink:           #f6f7f9;
+      --body:          #c7ccd3;
+      --muted:         #8a8f96;
+      --faint:         #5a5f66;
+      --hairline:      rgba(246, 247, 249, 0.07);
+      --hairline-2:    rgba(246, 247, 249, 0.14);
+
+      --scene-glow:    #f472b6;
+      --scene-accent:  #f472b6;
+      --scene-soft:    rgba(244, 114, 182, 0.10);
+
+      /* Win/loss/neutral ramp — dark equivalents */
+      --win-bg:    rgba(16, 185, 129, 0.14);
+      --win-fg:    #34d399;
+      --weak-bg:   rgba(244, 114, 182, 0.14);
+      --weak-fg:   #f472b6;
+      --neutral-bg: rgba(246, 247, 249, 0.08);
+      --neutral-fg: var(--muted);
+      --strong-bg:  rgba(16, 185, 129, 0.20);
+      --strong-fg:  #6ee7b7;
+
+      --display:   'Bricolage Grotesque', 'Inter Tight', system-ui, sans-serif;
+      --body-face: 'Inter', system-ui, -apple-system, sans-serif;
+      --mono:      'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+      --italic-face: 'Instrument Serif', Georgia, serif;
+
+      --max-w:    1320px;
+      --gutter:   clamp(20px, 5vw, 56px);
+
+      --ease-cinema: cubic-bezier(0.16, 1, 0.3, 1);
+      --t-fast:   160ms;
+      --t-mid:    260ms;
+      --t-slow:   520ms;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { background: var(--canvas); scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      margin: 0;
       background: var(--canvas);
       color: var(--body);
+      font-family: var(--body-face);
       font-size: 16px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
-    .wrap { max-width: 1300px; margin: 0 auto; padding: 64px 24px 96px; }
+    a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--hairline-2); text-underline-offset: 3px; transition: text-decoration-color var(--t-fast) var(--ease-cinema), color var(--t-fast) var(--ease-cinema); }
+    a:hover, a:focus-visible { text-decoration-color: var(--scene-accent); }
+    a:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 3px; border-radius: 2px; }
+    button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 
-    header.top {
+    .skip-link {
+      position: absolute; top: -40px; left: 8px;
+      background: var(--surface-2); color: var(--ink);
+      padding: 12px 18px; border-radius: 8px;
+      font-family: var(--mono); font-size: 12px;
+      border: 1px solid var(--hairline-2);
+      z-index: 200;
+    }
+    .skip-link:focus { top: 8px; }
+
+    /* ===== NAV ===== */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 80;
+      padding: 14px 0;
+      transition: backdrop-filter var(--t-mid) var(--ease-cinema),
+                  background-color var(--t-mid) var(--ease-cinema),
+                  border-color var(--t-mid) var(--ease-cinema);
+      border-bottom: 1px solid transparent;
+    }
+    .nav.is-scrolled {
+      background: rgba(7, 8, 10, 0.72);
+      backdrop-filter: saturate(140%) blur(18px);
+      -webkit-backdrop-filter: saturate(140%) blur(18px);
+      border-bottom-color: var(--hairline);
+    }
+    .nav__inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 8px 0 56px;
-      border-bottom: 1px solid var(--hairline);
-      margin-bottom: 56px;
+      gap: 18px;
     }
     .wordmark {
-      display: inline-flex; align-items: baseline; gap: 4px;
-      text-decoration: none; color: var(--ink);
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 600; font-size: 28px; letter-spacing: -0.02em;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-size: 22px;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--ink);
+      display: inline-flex;
+      align-items: baseline;
+      gap: 2px;
+      text-decoration: none;
     }
-    .wordmark .dot {
-      display: inline-block; width: 6px; height: 6px;
-      border-radius: 999px; background: var(--primary);
-      transform: translateY(-3px);
+    .wordmark:hover { text-decoration: none; }
+    .wordmark__dot {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 2px;
+      background: linear-gradient(135deg, #06b6d4, #ec4899);
+      margin-left: 4px;
+      transform: translateY(-2px);
     }
-    nav.crumbs {
-      display: flex; gap: 28px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+    .nav__links { display: none; gap: 26px; align-items: center; }
+    .nav__link {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
       color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: lowercase;
+      text-decoration: none;
+      transition: color var(--t-fast) var(--ease-cinema);
     }
-    nav.crumbs a { color: var(--muted); text-decoration: none; }
-    nav.crumbs a:hover { color: var(--ink); }
-    nav.crumbs a.current { color: var(--ink); }
+    .nav__link:hover, .nav__link:focus-visible { color: var(--ink); text-decoration: none; }
+    .nav__link.is-current { color: var(--ink); }
+    .nav__link:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 6px; border-radius: 3px; }
+    .cta-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 14px; min-height: 36px;
+      border-radius: 10px;
+      background: var(--ink); color: var(--canvas);
+      font-family: var(--mono); font-size: 12px; font-weight: 500;
+      text-decoration: none;
+      transition: transform var(--t-mid) var(--ease-cinema),
+                  background-color var(--t-fast) var(--ease-cinema);
+    }
+    .cta-pill:hover, .cta-pill:focus-visible { transform: translateY(-1px); background: #ffffff; text-decoration: none; }
+    .cta-pill:active { transform: translateY(0); }
+    .cta-pill:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 4px; }
+
+    .nav__menu-btn {
+      display: inline-flex; width: 40px; height: 40px;
+      align-items: center; justify-content: center;
+      border-radius: 8px;
+      border: 1px solid var(--hairline-2);
+      color: var(--ink);
+    }
+    .nav__menu-btn:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 3px; }
+    .nav__drawer {
+      position: fixed; inset: 0;
+      z-index: 90;
+      display: flex; flex-direction: column;
+      padding: 80px var(--gutter) 40px;
+      opacity: 0; pointer-events: none;
+      transition: opacity var(--t-mid) var(--ease-cinema);
+      background-color: rgba(7, 8, 10, 0.94);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .nav__drawer.is-open { opacity: 1; pointer-events: auto; }
+    .nav__drawer a {
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'wght' 560;
+      font-size: 32px;
+      color: var(--ink);
+      padding: 14px 0;
+      border-bottom: 1px solid var(--hairline);
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+    .nav__drawer .nav__drawer-close {
+      position: absolute; top: 18px; right: var(--gutter);
+      width: 44px; height: 44px;
+      border-radius: 8px;
+      border: 1px solid var(--hairline-2);
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent; color: var(--ink);
+    }
+    @media (min-width: 768px) {
+      .nav__links { display: flex; }
+      .nav__menu-btn { display: none; }
+    }
+
+    /* ===== PAGE ===== */
+    .page {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: clamp(120px, 16vw, 168px) var(--gutter) clamp(80px, 12vw, 140px);
+    }
+
+    .crumbs {
+      display: flex; gap: 18px; flex-wrap: wrap;
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.06em;
+      text-transform: lowercase;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+    .crumbs a { color: var(--muted); text-decoration: none; }
+    .crumbs a:hover { color: var(--ink); }
+    .crumbs a.is-current { color: var(--ink); }
 
     .hero { margin-bottom: 56px; }
     .eyebrow {
-      display: inline-block;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--primary);
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: inline-flex; align-items: center; gap: 10px;
       margin-bottom: 22px;
     }
-    h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-      font-size: clamp(48px, 7vw, 80px);
+    .eyebrow::before {
+      content: ''; display: inline-block;
+      width: 22px; height: 1px;
+      background: currentColor;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--display);
+      font-weight: 600;
+      font-variation-settings: 'wdth' 88, 'opsz' 96, 'wght' 580;
+      margin: 0;
       line-height: 1.04;
-      letter-spacing: -0.025em;
+      letter-spacing: -0.028em;
       color: var(--ink);
+    }
+    h1 {
+      font-size: clamp(44px, 7vw, 76px);
+      font-variation-settings: 'wdth' 84, 'opsz' 96, 'wght' 600;
+      letter-spacing: -0.036em;
       margin-bottom: 24px;
       max-width: 960px;
     }
-    h1 .accent { font-style: italic; color: var(--primary); font-weight: 600; }
+    h1 .accent, h2 .accent, h3 .accent, .scorecard-h .accent {
+      font-family: var(--italic-face);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--scene-accent);
+      letter-spacing: -0.015em;
+    }
     .lede {
-      font-size: 19px; line-height: 1.55;
-      color: var(--body); max-width: 820px; margin-bottom: 28px;
+      font-size: 19px;
+      line-height: 1.55;
+      color: var(--body);
+      max-width: 820px;
+      margin-bottom: 28px;
     }
     .lede strong { color: var(--ink); font-weight: 600; }
     .lede code, p code, td code, th code {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 12.5px;
-      background: var(--surface);
+      background: var(--surface-2);
       padding: 1px 6px;
       border-radius: 4px;
       color: var(--ink);
+      border: 1px solid var(--hairline);
     }
 
     .star-disclosure {
-      background: var(--surface);
-      border-left: 3px solid var(--primary);
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-left: 3px solid var(--scene-accent);
       padding: 22px 26px;
       border-radius: 0 12px 12px 0;
       max-width: 820px;
       margin-bottom: 48px;
       font-size: 15.5px;
+      color: var(--body);
     }
     .star-disclosure strong { color: var(--ink); }
 
-    /* SCORECARD ----------------------------------------------------------- */
+    /* SCORECARD */
     .scorecard-section { margin-top: 32px; margin-bottom: 88px; }
     .scorecard-eye {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 11px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
@@ -143,16 +316,16 @@
       margin-bottom: 16px;
     }
     .scorecard-h {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-      font-size: clamp(32px, 4.5vw, 50px);
-      line-height: 1.06;
-      letter-spacing: -0.02em;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 86, 'opsz' 64, 'wght' 580;
+      font-weight: 600;
+      font-size: clamp(32px, 4.5vw, 52px);
+      line-height: 1.04;
+      letter-spacing: -0.028em;
       color: var(--ink);
       margin-bottom: 8px;
       max-width: 900px;
     }
-    .scorecard-h .accent { color: var(--primary); font-style: italic; font-weight: 600; }
     .scorecard-intro {
       color: var(--body);
       font-size: 17px;
@@ -161,10 +334,10 @@
     }
 
     .scorecard-wrap {
-      background: white;
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
       border-radius: 18px;
       padding: 18px;
-      box-shadow: 0 12px 40px -22px rgba(24,23,21,0.18);
       overflow-x: auto;
     }
     table.scorecard {
@@ -180,13 +353,13 @@
       border-bottom: 1px solid var(--hairline);
     }
     table.scorecard thead th {
-      background: var(--surface);
-      font-family: 'JetBrains Mono', monospace;
+      background: var(--surface-2);
+      font-family: var(--mono);
       font-size: 10.5px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--ink);
-      font-weight: 600;
+      color: var(--muted);
+      font-weight: 500;
       position: sticky;
       top: 0;
       z-index: 1;
@@ -199,7 +372,7 @@
     }
     table.scorecard td.plugin .stars {
       display: block;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 11px;
       color: var(--muted);
       font-weight: 400;
@@ -210,18 +383,19 @@
       text-align: center;
     }
     table.scorecard td.total {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 600;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 90, 'opsz' 64, 'wght' 600;
       font-size: 22px;
       letter-spacing: -0.01em;
       text-align: center;
       color: var(--ink);
     }
-    table.scorecard tr.ours td { background: rgba(204,120,92,0.06); }
-    table.scorecard tr.ours td.plugin { color: var(--primary); }
-    table.scorecard tr.ours td.total { color: var(--primary); }
+    table.scorecard tr.ours td { background: var(--scene-soft); }
+    table.scorecard tr.ours td.plugin { color: var(--scene-accent); }
+    table.scorecard tr.ours td.total { color: var(--scene-accent); }
     table.scorecard tr:last-child td { border-bottom: 0; }
 
+    /* Score ramp — dark gradient from rose (low) -> emerald (high) */
     .score {
       display: inline-flex;
       align-items: center;
@@ -232,43 +406,42 @@
       font-weight: 600;
       font-variant-numeric: tabular-nums;
       font-size: 13px;
+      border: 1px solid transparent;
     }
-    .score.s1 { background: #f7e3da; color: #993a1c; }
-    .score.s2 { background: #f5e6d5; color: #a4623b; }
-    .score.s3 { background: #ede5cf; color: #6e6238; }
-    .score.s4 { background: #d8e6c8; color: #4f6e30; }
-    .score.s5 { background: #c1dbb1; color: #2a5712; }
+    .score.s1 { background: rgba(244, 114, 182, 0.18); color: #f9a8d4; border-color: rgba(244, 114, 182, 0.24); }
+    .score.s2 { background: rgba(232, 121, 198, 0.14); color: #ec88c6; border-color: rgba(232, 121, 198, 0.20); }
+    .score.s3 { background: rgba(246, 247, 249, 0.08); color: var(--body); border-color: var(--hairline-2); }
+    .score.s4 { background: rgba(45, 212, 191, 0.16); color: #5eead4; border-color: rgba(45, 212, 191, 0.22); }
+    .score.s5 { background: rgba(16, 185, 129, 0.20); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.28); }
 
     section { margin-top: 96px; }
     h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
       font-size: clamp(28px, 4vw, 44px);
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      color: var(--ink);
+      font-variation-settings: 'wdth' 86, 'opsz' 64, 'wght' 580;
+      letter-spacing: -0.024em;
       margin-bottom: 8px;
     }
-    h2 .accent { color: var(--primary); font-style: italic; font-weight: 600; }
     h2 .stars-pill {
       display: inline-flex; align-items: center; gap: 6px;
-      background: var(--surface);
+      background: var(--surface-2);
+      border: 1px solid var(--hairline);
       padding: 4px 10px; border-radius: 999px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11.5px; color: var(--ink);
-      font-weight: 600; letter-spacing: 0.04em;
+      font-family: var(--mono);
+      font-size: 11.5px; color: var(--body);
+      font-weight: 500; letter-spacing: 0.04em;
       vertical-align: middle; margin-left: 8px;
     }
-    h2 .stars-pill .star-dot { width: 7px; height: 7px; border-radius: 999px; background: var(--primary); }
+    h2 .stars-pill .star-dot { width: 7px; height: 7px; border-radius: 999px; background: var(--scene-accent); }
     h3 {
-      font-family: 'Inter', sans-serif;
+      font-family: var(--body-face);
       font-weight: 600;
       font-size: 17px;
       color: var(--ink);
       margin: 24px 0 10px;
+      letter-spacing: -0.005em;
     }
     .sub-eye {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 11px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
@@ -276,20 +449,21 @@
       margin-bottom: 14px;
       display: block;
     }
-    p { margin-bottom: 16px; max-width: 800px; }
+    p { margin-bottom: 16px; max-width: 800px; color: var(--body); }
     p.intro { color: var(--body); margin: 12px 0 28px; max-width: 880px; font-size: 17px; }
     p.intro strong { color: var(--ink); font-weight: 600; }
+    p strong { color: var(--ink); font-weight: 600; }
 
-    /* HEAD-TO-HEAD TABLE -------------------------------------------------- */
+    /* H2H table */
     .h2h {
       width: 100%;
       border-collapse: collapse;
       font-size: 14px;
       margin-bottom: 28px;
-      background: white;
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
       border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 8px 28px -16px rgba(24,23,21,0.12);
     }
     .h2h th, .h2h td {
       padding: 14px 18px;
@@ -298,119 +472,182 @@
       vertical-align: top;
     }
     .h2h thead th {
-      background: var(--surface);
-      font-family: 'JetBrains Mono', monospace;
+      background: var(--surface-2);
+      font-family: var(--mono);
       font-size: 11px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--ink);
-      font-weight: 600;
+      color: var(--muted);
+      font-weight: 500;
     }
     .h2h tbody th {
-      background: var(--surface);
+      background: var(--surface-2);
       color: var(--ink);
       font-size: 13px;
-      font-family: 'Inter', sans-serif;
+      font-family: var(--body-face);
       font-weight: 600;
       width: 200px;
       vertical-align: top;
     }
+    .h2h tbody td { color: var(--body); }
     .h2h tr:last-child td { border-bottom: 0; }
-    .h2h tr.ours td.ours-cell { background: rgba(204,120,92,0.05); color: var(--ink); }
-    .h2h tr.ours td.ours-cell strong { color: var(--primary); }
+    .h2h tr.ours td.ours-cell { background: var(--scene-soft); color: var(--ink); }
+    .h2h tr.ours td.ours-cell strong { color: var(--scene-accent); }
     .h2h tr:hover td { background: var(--surface-2); }
-    .h2h tr.ours:hover td.ours-cell { background: rgba(204,120,92,0.10); }
+    .h2h tr.ours:hover td.ours-cell { background: rgba(244, 114, 182, 0.16); }
     .h2h .winner {
       display: inline-block;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 10.5px;
       letter-spacing: 0.10em;
       text-transform: uppercase;
-      padding: 2px 7px;
+      padding: 3px 8px;
       border-radius: 4px;
       font-weight: 600;
       margin-left: 4px;
+      border: 1px solid transparent;
     }
-    .h2h .winner.us { background: var(--strong-bg); color: var(--strong-fg); }
-    .h2h .winner.them { background: var(--weak-bg); color: var(--weak-fg); }
-    .h2h .winner.tie { background: var(--neutral-bg); color: var(--neutral-fg); }
+    .h2h .winner.us { background: var(--strong-bg); color: var(--strong-fg); border-color: rgba(16, 185, 129, 0.30); }
+    .h2h .winner.them { background: var(--weak-bg); color: var(--weak-fg); border-color: rgba(244, 114, 182, 0.30); }
+    .h2h .winner.tie { background: var(--neutral-bg); color: var(--neutral-fg); border-color: var(--hairline-2); }
 
     .honesty {
-      background: var(--surface);
-      border-left: 3px solid var(--primary);
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-left: 3px solid var(--scene-accent);
       padding: 22px 26px;
       border-radius: 0 14px 14px 0;
       margin: 24px 0;
       max-width: 940px;
     }
     .honesty .label {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 10.5px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--primary);
+      color: var(--scene-accent);
       margin-bottom: 8px;
     }
     .honesty h4 {
-      font-family: 'Inter', sans-serif;
+      font-family: var(--body-face);
       font-weight: 600;
       font-size: 17px;
       color: var(--ink);
       margin-bottom: 10px;
+      letter-spacing: -0.005em;
     }
     .honesty p { margin-bottom: 8px; max-width: none; }
     .honesty p:last-child { margin-bottom: 0; }
     .honesty strong { color: var(--ink); }
 
     .repo-link {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 12px;
       color: var(--muted);
       text-decoration: none;
       margin-left: 4px;
     }
-    .repo-link:hover { color: var(--primary); }
+    .repo-link:hover { color: var(--scene-accent); }
 
+    /* CTA */
     .cta {
       margin-top: 96px;
       padding: 56px 48px;
-      background: var(--ink);
-      color: var(--canvas);
+      background: var(--surface-1);
+      border: 1px solid var(--hairline-2);
       border-radius: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--scene-accent) 0%, transparent 60%);
     }
     @media (max-width: 720px) { .cta { padding: 40px 28px; } }
-    .cta .eyebrow { color: var(--primary); }
-    .cta h2 { color: var(--canvas); max-width: 720px; }
-    .cta p { color: rgba(250,249,245,0.78); max-width: 640px; margin-bottom: 28px; }
+    .cta .eyebrow { color: var(--scene-accent); }
+    .cta .eyebrow::before { background: currentColor; }
+    .cta h2 { color: var(--ink); max-width: 720px; }
+    .cta p { color: var(--body); max-width: 640px; margin-bottom: 28px; }
     .install-block {
-      background: rgba(250,249,245,0.06);
+      background: var(--surface-2);
+      border: 1px solid var(--hairline);
       border-radius: 12px;
       padding: 20px 24px;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 14px;
       line-height: 1.75;
-      color: var(--canvas);
+      color: var(--body);
       max-width: 720px;
     }
-    .install-block .prompt { color: var(--primary); }
-    .install-block .arg { color: rgba(250,249,245,0.6); }
+    .install-block .prompt { color: var(--scene-accent); }
+    .install-block .arg { color: var(--muted); }
     .install-block .row + .row { margin-top: 6px; }
 
-    footer {
-      margin-top: 96px;
-      padding-top: 32px;
+    /* ===== FOOTER ===== */
+    .footer {
+      padding: 88px 0 56px;
       border-top: 1px solid var(--hairline);
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      flex-wrap: wrap;
+      background: var(--surface-1);
+    }
+    .footer__inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 44px;
+    }
+    .footer__col-h {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .footer__col ul { list-style: none; padding: 0; margin: 0; }
+    .footer__col li { margin-bottom: 10px; padding: 0; }
+    .footer__link {
+      color: var(--body);
+      font-size: 13.5px;
+      text-decoration: none;
+      transition: color var(--t-fast) var(--ease-cinema);
+    }
+    .footer__link:hover, .footer__link:focus-visible { color: var(--ink); text-decoration: none; }
+    .footer__link:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 3px; border-radius: 2px; }
+    .footer__tagline {
+      margin-top: 12px;
+      font-size: 13.5px;
+      color: var(--body);
+      max-width: 320px;
+    }
+    .footer__bottom {
+      max-width: var(--max-w);
+      margin: 64px auto 0;
+      padding: 28px var(--gutter) 0;
+      display: flex; flex-wrap: wrap;
       gap: 16px;
-      font-size: 13px;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--hairline);
+      font-family: var(--mono);
+      font-size: 11.5px;
       color: var(--muted);
     }
-    footer a { color: var(--muted); text-decoration: none; }
-    footer a:hover { color: var(--ink); }
-    footer .links { display: flex; gap: 24px; }
+    @media (min-width: 720px) {
+      .footer__inner { grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr; gap: 40px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
   </style>
   <script type="application/ld+json">
   {
@@ -429,34 +666,89 @@
     "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "14", "bestRating": "5"}
   }
   </script>
+  <!-- noscroll-fix -->
+  <style>
+    /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
+       and max-width: 100%; carousels that need their own horizontal scroll
+       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves —
+       overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
+    html, body {
+      overflow-x: clip;
+      max-width: 100%;
+    }
+    /* Defensive — make sure no section, image, or table forces width >100%. */
+    section, header, footer, main, article { max-width: 100vw; }
+    img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
+    table { max-width: 100%; }
+  </style>
 </head>
 <body>
-  <div class="wrap">
-    <header class="top">
-      <a href="/" class="wordmark">ux<span class="dot"></span></a>
-      <nav class="crumbs">
-        <a href="/">Home</a>
-        <a href="/compare.html" class="current">Compare</a>
-        <a href="/blog/">Blog</a>
-        <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
-      </nav>
-    </header>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="/" class="wordmark" aria-label="uxskill home">
+      uxskill<span class="wordmark__dot" aria-hidden="true"></span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link is-current" href="/compare.html">compare</a>
+      <a class="nav__link" href="/about.html">about</a>
+      <a class="nav__link" href="/roadmap.html">roadmap</a>
+      <a class="nav__link" href="/faq.html">faq</a>
+      <a class="nav__link" href="/mcp.html">mcp</a>
+      <a class="nav__link" href="/commands.html">commands</a>
+      <a class="nav__link" href="/blog/">blog</a>
+    </nav>
+    <a href="https://github.com/Laith0003/ux-skill" class="cta-pill" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      <span>GitHub</span>
+    </a>
+    <button type="button" class="nav__menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer" id="nav-menu-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="nav__drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Site menu" aria-hidden="true">
+  <button type="button" class="nav__drawer-close" aria-label="Close menu" id="nav-drawer-close">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <a href="/compare.html">Compare</a>
+  <a href="/about.html">About</a>
+  <a href="/roadmap.html">Roadmap</a>
+  <a href="/faq.html">FAQ</a>
+  <a href="/mcp.html">MCP</a>
+  <a href="/commands.html">Commands</a>
+  <a href="/blog/">Blog</a>
+  <a href="/privacy.html">Privacy</a>
+  <a href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+</div>
+
+<main id="main">
+  <div class="page">
+    <nav class="crumbs" aria-label="Breadcrumbs">
+      <a href="/">home</a>
+      <a href="/compare.html" class="is-current">compare</a>
+      <a href="/blog/">blog</a>
+      <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+    </nav>
 
     <section class="hero">
-      <span class="eyebrow">Compare · 9 plugins · 10 dimensions · live scored · 2026</span>
+      <span class="eyebrow">Compare &middot; 9 plugins &middot; 10 dimensions &middot; live scored &middot; 2026</span>
       <h1>ux-skill scored against <span class="accent">every</span> popular Claude UX skill.</h1>
       <p class="lede">
-        Below: the master scorecard. Every plugin scored 1–5 on every dimension. No empty cells, no manufactured "we have it, they don't." Real numbers from <code>gh api</code> on 2026-05-28. We score <strong>44 of 50</strong>. The next best (ui-ux-pro-max-skill) scores 33. Everyone else is below 30.
+        Below: the master scorecard. Every plugin scored 1&ndash;5 on every dimension. No empty cells, no manufactured "we have it, they don't." Real numbers from <code>gh api</code> on 2026-05-28. We score <strong>44 of 50</strong>. The next best (ui-ux-pro-max-skill) scores 33. Everyone else is below 30.
       </p>
 
       <div class="star-disclosure">
-        <strong>Honest disclosure:</strong> ux-skill is at <strong>14 stars</strong> today — we shipped v2.0.0-alpha.1 hours ago. The leaders shipped months ago. This page is an architecture argument, not a popularity one. The scorecard is built on what's <em>in the repo</em>, not what's <em>famous</em>.
+        <strong>Honest disclosure:</strong> ux-skill is at <strong>14 stars</strong> today &mdash; we shipped v2.0.0-alpha.1 hours ago. The leaders shipped months ago. This page is an architecture argument, not a popularity one. The scorecard is built on what's <em>in the repo</em>, not what's <em>famous</em>.
       </div>
     </section>
 
-    <!-- ───────────────────────────── MASTER SCORECARD ───────────────────────────── -->
+    <!-- ───── MASTER SCORECARD ───── -->
     <section class="scorecard-section">
-      <div class="scorecard-eye">Master scorecard · 9 plugins × 10 dimensions · 1-5 each</div>
+      <div class="scorecard-eye">Master scorecard &middot; 9 plugins &times; 10 dimensions &middot; 1-5 each</div>
       <h2 class="scorecard-h">The numbers, <span class="accent">every cell filled.</span></h2>
       <p class="scorecard-intro">
         Each dimension scored 1 (absent) to 5 (best in class). Totals out of 50. Plugins ranked by total. The methodology is at the bottom of the page so you can verify or argue with the scoring.
@@ -482,7 +774,7 @@
           </thead>
           <tbody>
             <tr class="ours">
-              <td class="plugin">ux-skill (Laith0003/ux-skill)<span class="stars">14 stars · shipped today</span></td>
+              <td class="plugin">ux-skill (Laith0003/ux-skill)<span class="stars">14 stars &middot; shipped today</span></td>
               <td class="cell"><span class="score s5">5</span></td>
               <td class="cell"><span class="score s5">5</span></td>
               <td class="cell"><span class="score s5">5</span></td>
@@ -496,7 +788,7 @@
               <td class="total">46</td>
             </tr>
             <tr>
-              <td class="plugin">nextlevelbuilder/ui-ux-pro-max-skill<span class="stars">83,958 stars · 7 weeks ago</span></td>
+              <td class="plugin">nextlevelbuilder/ui-ux-pro-max-skill<span class="stars">83,958 stars &middot; 7 weeks ago</span></td>
               <td class="cell"><span class="score s5">5</span></td>
               <td class="cell"><span class="score s1">1</span></td>
               <td class="cell"><span class="score s2">2</span></td>
@@ -510,7 +802,7 @@
               <td class="total">28</td>
             </tr>
             <tr>
-              <td class="plugin">nexu-io/open-design<span class="stars">54,406 stars · today</span></td>
+              <td class="plugin">nexu-io/open-design<span class="stars">54,406 stars &middot; today</span></td>
               <td class="cell"><span class="score s4">4</span></td>
               <td class="cell"><span class="score s1">1</span></td>
               <td class="cell"><span class="score s2">2</span></td>
@@ -524,7 +816,7 @@
               <td class="total">30</td>
             </tr>
             <tr>
-              <td class="plugin">Leonxlnx/taste-skill<span class="stars">25,202 stars · 2 days ago</span></td>
+              <td class="plugin">Leonxlnx/taste-skill<span class="stars">25,202 stars &middot; 2 days ago</span></td>
               <td class="cell"><span class="score s2">2</span></td>
               <td class="cell"><span class="score s2">2</span></td>
               <td class="cell"><span class="score s3">3</span></td>
@@ -538,7 +830,7 @@
               <td class="total">25</td>
             </tr>
             <tr>
-              <td class="plugin">alchaincyf/huashu-design<span class="stars">15,455 stars · 1 wk ago</span></td>
+              <td class="plugin">alchaincyf/huashu-design<span class="stars">15,455 stars &middot; 1 wk ago</span></td>
               <td class="cell"><span class="score s3">3</span></td>
               <td class="cell"><span class="score s1">1</span></td>
               <td class="cell"><span class="score s2">2</span></td>
@@ -552,7 +844,7 @@
               <td class="total">24</td>
             </tr>
             <tr>
-              <td class="plugin">google-labs-code/stitch-skills<span class="stars">5,762 stars · 2 days ago</span></td>
+              <td class="plugin">google-labs-code/stitch-skills<span class="stars">5,762 stars &middot; 2 days ago</span></td>
               <td class="cell"><span class="score s2">2</span></td>
               <td class="cell"><span class="score s1">1</span></td>
               <td class="cell"><span class="score s2">2</span></td>
@@ -566,7 +858,7 @@
               <td class="total">22</td>
             </tr>
             <tr>
-              <td class="plugin">dominikmartn/nothing-design-skill<span class="stars">2,391 stars · 2 mo ago</span></td>
+              <td class="plugin">dominikmartn/nothing-design-skill<span class="stars">2,391 stars &middot; 2 mo ago</span></td>
               <td class="cell"><span class="score s2">2</span></td>
               <td class="cell"><span class="score s1">1</span></td>
               <td class="cell"><span class="score s1">1</span></td>
@@ -580,7 +872,7 @@
               <td class="total">17</td>
             </tr>
             <tr>
-              <td class="plugin">Nutlope/hallmark<span class="stars">2,164 stars · 2 days ago</span></td>
+              <td class="plugin">Nutlope/hallmark<span class="stars">2,164 stars &middot; 2 days ago</span></td>
               <td class="cell"><span class="score s2">2</span></td>
               <td class="cell"><span class="score s2">2</span></td>
               <td class="cell"><span class="score s2">2</span></td>
@@ -594,7 +886,7 @@
               <td class="total">23</td>
             </tr>
             <tr>
-              <td class="plugin">hamen/material-3-skill<span class="stars">955 stars · 1 wk ago</span></td>
+              <td class="plugin">hamen/material-3-skill<span class="stars">955 stars &middot; 1 wk ago</span></td>
               <td class="cell"><span class="score s2">2</span></td>
               <td class="cell"><span class="score s2">2</span></td>
               <td class="cell"><span class="score s1">1</span></td>
@@ -614,15 +906,15 @@
       <div class="honesty" style="margin-top: 24px;">
         <div class="label">Scoring methodology</div>
         <p><strong>Catalog depth</strong> = entries shipped in structured data. <strong>Linter</strong> = deterministic rule enforcement (regex, AST). <strong>Discovery</strong> = forcing-function intake before generation. <strong>Pipeline</strong> = number of chained commands. <strong>Brand specs</strong> = named brand DESIGN.md spec files. <strong>Motion</strong> = number of named motion presets. <strong>Cross-IDE</strong> = number of IDEs supported. <strong>A11y</strong> = explicit accessibility command + WCAG references. <strong>Activity</strong> = days since last push. <strong>Docs</strong> = README depth + examples + screenshots.</p>
-        <p>1 = absent / 2 = mentioned / 3 = present / 4 = mature / 5 = best-in-class. The only dimension where we score below 4 is <strong>Docs</strong> (we're at 2 — the README is being rewritten this week to match ui-ux-pro-max-skill's depth).</p>
+        <p>1 = absent / 2 = mentioned / 3 = present / 4 = mature / 5 = best-in-class. The only dimension where we score below 4 is <strong>Docs</strong> (we're at 2 &mdash; the README is being rewritten this week to match ui-ux-pro-max-skill's depth).</p>
       </div>
     </section>
 
-    <!-- ───────────────────────────── 1: UI-UX-PRO-MAX-SKILL ───────────────────────────── -->
+    <!-- ───── 1: UI-UX-PRO-MAX-SKILL ───── -->
     <section>
-      <span class="sub-eye">Head-to-head · #1 by stars</span>
+      <span class="sub-eye">Head-to-head &middot; #1 by stars</span>
       <h2>vs. <span class="accent">ui-ux-pro-max-skill</span><span class="stars-pill"><span class="star-dot"></span>83,958</span></h2>
-      <a class="repo-link" href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill" target="_blank">github.com/nextlevelbuilder/ui-ux-pro-max-skill</a>
+      <a class="repo-link" href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill" target="_blank" rel="noopener">github.com/nextlevelbuilder/ui-ux-pro-max-skill</a>
       <p class="intro">
         The market leader. Python BM25 search over CSV manifests. Single-skill plugin with an 18-IDE CLI installer. README is 25 KB. <strong>Their architecture is sound and we borrowed the recommender pattern directly.</strong> Here's the dimension-by-dimension where each of us actually does the thing.
       </p>
@@ -658,12 +950,12 @@
           <tr class="ours">
             <th>Commands shipped</th>
             <td>1 invokable skill ("ui-ux-pro-max"). The recommender + generator both live inside that single skill.</td>
-            <td class="ours-cell"><strong>22 slash commands</strong> across 4 lanes: <em>frame</em> (4) · <em>generate</em> (6) · <em>audit</em> (5) · <em>workflow</em> (7). Each chains to the next via state files.</td>
+            <td class="ours-cell"><strong>22 slash commands</strong> across 4 lanes: <em>frame</em> (4) &middot; <em>generate</em> (6) &middot; <em>audit</em> (5) &middot; <em>workflow</em> (7). Each chains to the next via state files.</td>
             <td><span class="winner us">us</span> 22x</td>
           </tr>
           <tr class="ours">
             <th>Sub-agents</th>
-            <td>None — single-skill model.</td>
+            <td>None &mdash; single-skill model.</td>
             <td class="ours-cell"><strong>5 specialized sub-agents</strong>: <code>frontend-engineer</code>, <code>motion-engineer</code>, <code>copy-writer</code>, <code>research-synthesizer</code>, <code>design-system-architect</code>. Dispatched in parallel via Task tool.</td>
             <td><span class="winner us">us</span></td>
           </tr>
@@ -689,7 +981,7 @@
             <th>GitHub momentum</th>
             <td>84k stars. Last push 7 weeks ago. ~30 open issues.</td>
             <td class="ours-cell">14 stars. Pushed today. Shipping daily. Issues at 0 (just opened).</td>
-            <td><span class="winner them">them</span> on stars · <span class="winner us">us</span> on velocity</td>
+            <td><span class="winner them">them</span> on stars &middot; <span class="winner us">us</span> on velocity</td>
           </tr>
           <tr>
             <th>README depth</th>
@@ -703,16 +995,16 @@
       <div class="honesty">
         <div class="label">Honest take</div>
         <h4>Where ui-ux-pro-max-skill is genuinely good</h4>
-        <p>The Python BM25-over-CSV recommender is the right shape and they shipped it first. The 18-IDE CLI installer is well-engineered. 84,000 stars is real signal — the market wants what they're building, even where the implementation is thin.</p>
+        <p>The Python BM25-over-CSV recommender is the right shape and they shipped it first. The 18-IDE CLI installer is well-engineered. 84,000 stars is real signal &mdash; the market wants what they're building, even where the implementation is thin.</p>
         <p><strong>Where it loses:</strong> single-skill plugin with no pipeline (1 command vs our 22). No deterministic linter (their anti-slop is prose). No structured component manifest, no motion preset library, no brand specs, no sub-agents. They built a generator; we built a workflow.</p>
       </div>
     </section>
 
-    <!-- ───────────────────────────── 2: OPEN-DESIGN ───────────────────────────── -->
+    <!-- ───── 2: OPEN-DESIGN ───── -->
     <section>
-      <span class="sub-eye">Head-to-head · #2 by stars</span>
+      <span class="sub-eye">Head-to-head &middot; #2 by stars</span>
       <h2>vs. <span class="accent">nexu-io/open-design</span><span class="stars-pill"><span class="star-dot"></span>54,406</span></h2>
-      <a class="repo-link" href="https://github.com/nexu-io/open-design" target="_blank">github.com/nexu-io/open-design</a>
+      <a class="repo-link" href="https://github.com/nexu-io/open-design" target="_blank" rel="noopener">github.com/nexu-io/open-design</a>
       <p class="intro">
         The "Claude Design alternative." Node.js project, 19 skills, 71 design systems, sandboxed preview, multi-format export (HTML/PDF/PPTX/MP4). 11 README locales. Shipped today. <strong>They position as a design <em>environment</em>; we position as a design <em>engine</em>.</strong>
       </p>
@@ -728,7 +1020,7 @@
           </tr>
           <tr class="ours">
             <th>Preview server</th>
-            <td><strong>Yes</strong> — runs locally, renders generated HTML for review.</td>
+            <td><strong>Yes</strong> &mdash; runs locally, renders generated HTML for review.</td>
             <td class="ours-cell">No preview server today. Output is files; user previews in their own dev server.</td>
             <td><span class="winner them">them</span></td>
           </tr>
@@ -759,12 +1051,12 @@
           <tr class="ours">
             <th>Brand specs</th>
             <td>Per-brand DESIGN.md files in <code>design-systems/&lt;brand&gt;/</code> as <strong>prose</strong> (Linear, Stripe, Figma observed). Read by the LLM at runtime.</td>
-            <td class="ours-cell">72 named DESIGN.md specs as <strong>both prose AND structured JSON</strong> (<code>references/brands/*.md</code> + <code>data/brands/*.json</code>). Queryable outside Claude — every engine command can read them programmatically.</td>
+            <td class="ours-cell">72 named DESIGN.md specs as <strong>both prose AND structured JSON</strong> (<code>references/brands/*.md</code> + <code>data/brands/*.json</code>). Queryable outside Claude &mdash; every engine command can read them programmatically.</td>
             <td><span class="winner us">us</span> on shape, not presence</td>
           </tr>
           <tr class="ours">
             <th>Sub-agents</th>
-            <td>None — flat skill collection.</td>
+            <td>None &mdash; flat skill collection.</td>
             <td class="ours-cell">5 specialized sub-agents (frontend, motion, copy, research, design-system).</td>
             <td><span class="winner us">us</span></td>
           </tr>
@@ -791,11 +1083,11 @@
       </div>
     </section>
 
-    <!-- ───────────────────────────── 3: TASTE-SKILL ───────────────────────────── -->
+    <!-- ───── 3: TASTE-SKILL ───── -->
     <section>
-      <span class="sub-eye">Head-to-head · #3 by stars</span>
+      <span class="sub-eye">Head-to-head &middot; #3 by stars</span>
       <h2>vs. <span class="accent">Leonxlnx/taste-skill</span><span class="stars-pill"><span class="star-dot"></span>25,202</span></h2>
-      <a class="repo-link" href="https://github.com/Leonxlnx/taste-skill" target="_blank">github.com/Leonxlnx/taste-skill</a>
+      <a class="repo-link" href="https://github.com/Leonxlnx/taste-skill" target="_blank" rel="noopener">github.com/Leonxlnx/taste-skill</a>
       <p class="intro">
         Owns the "anti-slop" brand on GitHub (25k stars earned on the phrase). Bash-driven skill with a 3-dial mental model: <code>DESIGN_VARIANCE</code> / <code>MOTION_INTENSITY</code> / <code>VISUAL_DENSITY</code>. <strong>Closest competitor on philosophy; furthest on enforcement.</strong>
       </p>
@@ -805,19 +1097,19 @@
         <tbody>
           <tr class="ours">
             <th>Anti-slop approach</th>
-            <td>Bash skill + 13 variant SKILL.md files. The 3 dials are passed to the LLM as adjustment knobs. Correction-only — they don't generate.</td>
+            <td>Bash skill + 13 variant SKILL.md files. The 3 dials are passed to the LLM as adjustment knobs. Correction-only &mdash; they don't generate.</td>
             <td class="ours-cell">100 deterministic regex rules (no LLM) + 10-field discovery enforced before generation. Generation + correction in the same engine.</td>
             <td><span class="winner us">us</span> on enforcement; <span class="winner them">them</span> on conceptual elegance</td>
           </tr>
           <tr class="ours">
             <th>Mental model</th>
-            <td><strong>3 dials</strong> — variance, motion, density. Memorable, easy to teach. Earns repeat use.</td>
+            <td><strong>3 dials</strong> &mdash; variance, motion, density. Memorable, easy to teach. Earns repeat use.</td>
             <td class="ours-cell"><strong>10-field intake + 5-parallel-search recommender</strong>. More precise, less memorable. The CLI shows the picked dials in plain English after the recommendation.</td>
             <td><span class="winner them">them</span> on memorability</td>
           </tr>
           <tr class="ours">
             <th>Output type</th>
-            <td>Correction prompts. Tells the LLM "increase variance, decrease density" — doesn't itself produce code.</td>
+            <td>Correction prompts. Tells the LLM "increase variance, decrease density" &mdash; doesn't itself produce code.</td>
             <td class="ours-cell">Generation (code), correction (linter), recommendation (engine), discovery (forcing function). Full lifecycle.</td>
             <td><span class="winner us">us</span> on scope</td>
           </tr>
@@ -869,16 +1161,16 @@
       <div class="honesty">
         <div class="label">Honest take</div>
         <h4>Where taste-skill is genuinely good</h4>
-        <p>The 3-dial mental model is clever — variance / motion / density gives users a memorable abstraction that ux-skill's deeper catalog doesn't replace. 25k stars say the philosophy resonates. They got the branding right first.</p>
+        <p>The 3-dial mental model is clever &mdash; variance / motion / density gives users a memorable abstraction that ux-skill's deeper catalog doesn't replace. 25k stars say the philosophy resonates. They got the branding right first.</p>
         <p><strong>Where it loses:</strong> bash + markdown only. No deterministic enforcement (the rules live in LLM judgment, not regex). No generation, only correction. No structured data layer. Single-skill, not a pipeline.</p>
       </div>
     </section>
 
-    <!-- ───────────────────────────── 4: HUASHU-DESIGN ───────────────────────────── -->
+    <!-- ───── 4: HUASHU-DESIGN ───── -->
     <section>
-      <span class="sub-eye">Head-to-head · #4 by stars</span>
+      <span class="sub-eye">Head-to-head &middot; #4 by stars</span>
       <h2>vs. <span class="accent">alchaincyf/huashu-design</span><span class="stars-pill"><span class="star-dot"></span>15,455</span></h2>
-      <a class="repo-link" href="https://github.com/alchaincyf/huashu-design" target="_blank">github.com/alchaincyf/huashu-design</a>
+      <a class="repo-link" href="https://github.com/alchaincyf/huashu-design" target="_blank" rel="noopener">github.com/alchaincyf/huashu-design</a>
       <p class="intro">
         Functionally the closest twin. Hi-fi prototypes, slides, animations, 20 design philosophies, 5-dimension review, MP4 export. Single 62 KB SKILL.md plus references/, scripts/, demos/, assets/. Bilingual (English + Chinese). <strong>If we shipped only one competitor analysis, this would be the one we copy hardest from.</strong>
       </p>
@@ -900,7 +1192,7 @@
           </tr>
           <tr class="ours">
             <th>MP4 / hi-fi output</th>
-            <td><strong>Yes</strong> — animated walkthroughs of generated prototypes, exportable as MP4. Premium-feeling demo.</td>
+            <td><strong>Yes</strong> &mdash; animated walkthroughs of generated prototypes, exportable as MP4. Premium-feeling demo.</td>
             <td class="ours-cell">No MP4 yet. Output is code files. v2.3 roadmap includes a motion-preview server.</td>
             <td><span class="winner them">them</span></td>
           </tr>
@@ -952,14 +1244,14 @@
       <div class="honesty">
         <div class="label">Honest take</div>
         <h4>Where huashu-design is genuinely good</h4>
-        <p>The 62 KB SKILL.md is dense and high-craft. The 20 design philosophies are well-curated. <strong>MP4 export of hi-fi prototypes is the feature ux-skill most clearly lacks</strong> — that's the v2.3 priority. Bilingual matters for adoption.</p>
+        <p>The 62 KB SKILL.md is dense and high-craft. The 20 design philosophies are well-curated. <strong>MP4 export of hi-fi prototypes is the feature ux-skill most clearly lacks</strong> &mdash; that's the v2.3 priority. Bilingual matters for adoption.</p>
         <p><strong>Where it loses:</strong> single SKILL.md means everything is prose for the LLM to interpret. No deterministic linter. 5 review dimensions vs our 35 regex rules + 112 named UX laws is a depth gap.</p>
       </div>
     </section>
 
-    <!-- ───────────────────────────── 5-8: SHORTER COMPARES ───────────────────────────── -->
+    <!-- ───── 5-8: SHORTER COMPARES ───── -->
     <section>
-      <span class="sub-eye">Head-to-head · #5–#8</span>
+      <span class="sub-eye">Head-to-head &middot; #5&ndash;#8</span>
       <h2>vs. <span class="accent">stitch-skills, nothing-design-skill, hallmark, material-3-skill</span></h2>
       <p class="intro">
         Four narrower specialists. Each owns a niche we don't fight. The table shows what they specifically do well, where we overlap, and how to pair them with ux-skill if you want both.
@@ -977,7 +1269,7 @@
           <tr class="ours">
             <th>google-labs-code/stitch-skills <span class="stars-pill" style="margin:0;"><span class="star-dot"></span>5,762</span></th>
             <td>MCP-server-wired skill library, Google-affiliated, official-flavored. Strong design provenance from the Stitch team.</td>
-            <td class="ours-cell">Pair them — use Stitch's MCP for design-system import from Figma-adjacent files, then run <code>/ux-recommend</code> on the imported result to ground it in our 998-entry catalog.</td>
+            <td class="ours-cell">Pair them &mdash; use Stitch's MCP for design-system import from Figma-adjacent files, then run <code>/ux-recommend</code> on the imported result to ground it in our 998-entry catalog.</td>
           </tr>
           <tr class="ours">
             <th>dominikmartn/nothing-design-skill <span class="stars-pill" style="margin:0;"><span class="star-dot"></span>2,391</span></th>
@@ -998,7 +1290,7 @@
       </table>
     </section>
 
-    <!-- ───────────────────────────── PROCESS ADVANTAGE ───────────────────────────── -->
+    <!-- ───── PROCESS ADVANTAGE ───── -->
     <section>
       <span class="sub-eye">Stage-by-stage view of design work</span>
       <h2>The real differentiator: the <span class="accent">pipeline</span>.</h2>
@@ -1015,21 +1307,21 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="ours"><th>Frame the problem</th><td class="ours-cell"><code>/ux-frame</code> → 10-field discovery saved to <code>.ux/last-discovery.json</code></td><td>None of the top 8 have a discrete framing step. open-design and Pro Max prompt for a brief but don't structure it.</td></tr>
-          <tr class="ours"><th>Research synthesis</th><td class="ours-cell"><code>/ux-research</code> → digests interviews/analytics/competitors into a Brief</td><td>None ship a research command. taste-skill cites their own research in docs.</td></tr>
-          <tr class="ours"><th>Pick a design system</th><td class="ours-cell"><code>/ux-recommend</code> → 5-parallel-search engine returns merged system</td><td>Pro Max BM25 over CSV. open-design picks from 71 systems. Others: ask the LLM.</td></tr>
+          <tr class="ours"><th>Frame the problem</th><td class="ours-cell"><code>/ux-frame</code> &rarr; 10-field discovery saved to <code>.ux/last-discovery.json</code></td><td>None of the top 8 have a discrete framing step. open-design and Pro Max prompt for a brief but don't structure it.</td></tr>
+          <tr class="ours"><th>Research synthesis</th><td class="ours-cell"><code>/ux-research</code> &rarr; digests interviews/analytics/competitors into a Brief</td><td>None ship a research command. taste-skill cites their own research in docs.</td></tr>
+          <tr class="ours"><th>Pick a design system</th><td class="ours-cell"><code>/ux-recommend</code> &rarr; 5-parallel-search engine returns merged system</td><td>Pro Max BM25 over CSV. open-design picks from 71 systems. Others: ask the LLM.</td></tr>
           <tr class="ours"><th>Generate frontend code</th><td class="ours-cell"><code>/ux-design</code> + <code>/ux-component</code> dispatch <code>frontend-engineer</code> agent</td><td>Pro Max + huashu + open-design all do this. Hallmark + taste-skill correct, don't generate.</td></tr>
-          <tr class="ours"><th>Build full design system</th><td class="ours-cell"><code>/ux-system</code> → emits <code>tokens.css</code> + <code>manifest.json</code></td><td>open-design (preview). Pro Max writes a <code>design-system/MASTER.md</code>.</td></tr>
-          <tr class="ours"><th>Critique (taste)</th><td class="ours-cell"><code>/ux-critique</code> → every finding cites a named UX law + brand exemplar</td><td>taste-skill, hallmark — prompt-only correction. Pro Max — no critique command.</td></tr>
-          <tr class="ours"><th>Lint (deterministic)</th><td class="ours-cell"><code>/ux-lint</code> → 35 regex rules, no LLM, CI gate</td><td>None of the top 8 ship a deterministic linter. All are LLM-judgment.</td></tr>
-          <tr class="ours"><th>A11y audit</th><td class="ours-cell"><code>/ux-a11y</code> → WCAG-grounded, cites the 8 A11y guidelines</td><td>material-3-skill does MD3 a11y. Others mention a11y in prompts.</td></tr>
+          <tr class="ours"><th>Build full design system</th><td class="ours-cell"><code>/ux-system</code> &rarr; emits <code>tokens.css</code> + <code>manifest.json</code></td><td>open-design (preview). Pro Max writes a <code>design-system/MASTER.md</code>.</td></tr>
+          <tr class="ours"><th>Critique (taste)</th><td class="ours-cell"><code>/ux-critique</code> &rarr; every finding cites a named UX law + brand exemplar</td><td>taste-skill, hallmark &mdash; prompt-only correction. Pro Max &mdash; no critique command.</td></tr>
+          <tr class="ours"><th>Lint (deterministic)</th><td class="ours-cell"><code>/ux-lint</code> &rarr; 35 regex rules, no LLM, CI gate</td><td>None of the top 8 ship a deterministic linter. All are LLM-judgment.</td></tr>
+          <tr class="ours"><th>A11y audit</th><td class="ours-cell"><code>/ux-a11y</code> &rarr; WCAG-grounded, cites the 8 A11y guidelines</td><td>material-3-skill does MD3 a11y. Others mention a11y in prompts.</td></tr>
           <tr class="ours"><th>Microcopy review</th><td class="ours-cell"><code>/ux-copy</code> dispatches <code>copy-writer</code> agent against project tone</td><td>None ship a microcopy command.</td></tr>
-          <tr class="ours"><th>Motion treatment</th><td class="ours-cell"><code>/ux-motion</code> → 57 named presets with framer/gsap/css for each</td><td>taste-skill 1 dial. huashu animations. Others: ad-hoc.</td></tr>
-          <tr class="ours"><th>Apply linter fixes</th><td class="ours-cell"><code>/ux-fix</code> → walks findings in severity order, Edit each</td><td>None ship an automated fix command.</td></tr>
-          <tr class="ours"><th>Polish iteration</th><td class="ours-cell"><code>/ux-polish</code> → linter floor + style/motion picks for taste pass</td><td>None ship a polish command.</td></tr>
-          <tr class="ours"><th>Suggest next step</th><td class="ours-cell"><code>/ux-next</code> → reads <code>.ux/last-*.json</code>, recommends next command</td><td>None ship state-aware suggestions.</td></tr>
-          <tr class="ours"><th>Write case study</th><td class="ours-cell"><code>/ux-case-study</code> → auto-fills Brief + Approach from state files</td><td>None ship a case-study command.</td></tr>
-          <tr class="ours"><th>Hand to human expert</th><td class="ours-cell"><code>/ux-expert</code> → packages handoff for consulting</td><td>None ship this.</td></tr>
+          <tr class="ours"><th>Motion treatment</th><td class="ours-cell"><code>/ux-motion</code> &rarr; 57 named presets with framer/gsap/css for each</td><td>taste-skill 1 dial. huashu animations. Others: ad-hoc.</td></tr>
+          <tr class="ours"><th>Apply linter fixes</th><td class="ours-cell"><code>/ux-fix</code> &rarr; walks findings in severity order, Edit each</td><td>None ship an automated fix command.</td></tr>
+          <tr class="ours"><th>Polish iteration</th><td class="ours-cell"><code>/ux-polish</code> &rarr; linter floor + style/motion picks for taste pass</td><td>None ship a polish command.</td></tr>
+          <tr class="ours"><th>Suggest next step</th><td class="ours-cell"><code>/ux-next</code> &rarr; reads <code>.ux/last-*.json</code>, recommends next command</td><td>None ship state-aware suggestions.</td></tr>
+          <tr class="ours"><th>Write case study</th><td class="ours-cell"><code>/ux-case-study</code> &rarr; auto-fills Brief + Approach from state files</td><td>None ship a case-study command.</td></tr>
+          <tr class="ours"><th>Hand to human expert</th><td class="ours-cell"><code>/ux-expert</code> &rarr; packages handoff for consulting</td><td>None ship this.</td></tr>
         </tbody>
       </table>
 
@@ -1041,7 +1333,7 @@
       </div>
     </section>
 
-    <!-- ───────────────────────────── WHERE WE LOSE ───────────────────────────── -->
+    <!-- ───── WHERE WE LOSE ───── -->
     <section>
       <span class="sub-eye">Honesty section</span>
       <h2>Where ux-skill <span class="accent">loses</span>.</h2>
@@ -1051,18 +1343,18 @@
         <thead><tr><th style="width:230px;">Gap</th><th>Best tool for it</th><th>Roadmap</th></tr></thead>
         <tbody>
           <tr><th>GitHub stars / awareness</th><td>ui-ux-pro-max-skill (84k). They had a 9-month head start.</td><td>This page + marketing kit + 5 blog posts are the answer.</td></tr>
-          <tr><th>Sandboxed live preview</th><td>open-design. Node.js runtime with preview server included.</td><td>v3.0 — engine ships a preview server.</td></tr>
-          <tr><th>MP4 / video walkthroughs</th><td>huashu-design. Animated MP4 export is their crown.</td><td>v2.3 — wrap motion presets into a preview-renderer for short MP4s.</td></tr>
-          <tr><th>PPTX / PDF export</th><td>open-design. Built-in.</td><td>v2.4 — bridge via WeasyPrint + python-pptx.</td></tr>
-          <tr><th>Multi-locale README</th><td>open-design (11 locales). huashu-design (bilingual).</td><td>v2.2 — Arabic + Chinese READMEs first (we have MENA design data already).</td></tr>
-          <tr><th>Material 3 specificity</th><td>material-3-skill. Single-system depth.</td><td>v2.3 — MD3 audit subcommand inside <code>/ux-a11y</code>.</td></tr>
-          <tr><th>Live Figma sync</th><td>Figma MCP (official).</td><td>v2.2 — Figma-to-data importer that writes back to our manifests.</td></tr>
+          <tr><th>Sandboxed live preview</th><td>open-design. Node.js runtime with preview server included.</td><td>v3.0 &mdash; engine ships a preview server.</td></tr>
+          <tr><th>MP4 / video walkthroughs</th><td>huashu-design. Animated MP4 export is their crown.</td><td>v2.3 &mdash; wrap motion presets into a preview-renderer for short MP4s.</td></tr>
+          <tr><th>PPTX / PDF export</th><td>open-design. Built-in.</td><td>v2.4 &mdash; bridge via WeasyPrint + python-pptx.</td></tr>
+          <tr><th>Multi-locale README</th><td>open-design (11 locales). huashu-design (bilingual).</td><td>v2.2 &mdash; Arabic + Chinese READMEs first (we have MENA design data already).</td></tr>
+          <tr><th>Material 3 specificity</th><td>material-3-skill. Single-system depth.</td><td>v2.3 &mdash; MD3 audit subcommand inside <code>/ux-a11y</code>.</td></tr>
+          <tr><th>Live Figma sync</th><td>Figma MCP (official).</td><td>v2.2 &mdash; Figma-to-data importer that writes back to our manifests.</td></tr>
           <tr><th>Brand-name SEO</th><td>taste-skill owns "anti-slop". Pro Max owns "design intelligence".</td><td>Own "design engineering" + "Python design engine" via the blog.</td></tr>
         </tbody>
       </table>
     </section>
 
-    <!-- ───────────────────────────── CTA ───────────────────────────── -->
+    <!-- ───── CTA ───── -->
     <section class="cta">
       <span class="eyebrow">Run it. Decide for yourself.</span>
       <h2>14 stars today. The scorecard says we're the deepest. <span class="accent">Test the claim.</span></h2>
@@ -1071,24 +1363,100 @@
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— or —</div>
+        <div class="row" style="margin-top:14px; opacity:0.6;">&mdash; or &mdash;</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— or —</div>
+        <div class="row" style="margin-top:14px; opacity:0.6;">&mdash; or &mdash;</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>
-
-    <footer>
-      <span>© 2026 Laith Aljunaidy. MIT. No telemetry. Stars from <code>gh api</code> on 2026-05-28.</span>
-      <div class="links">
-        <a href="/">Home</a>
-        <a href="/blog/">Blog</a>
-        <a href="/privacy.html">Privacy</a>
-        <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
-        <a href="https://pypi.org/project/uxskill/">PyPI</a>
-        <a href="https://www.npmjs.com/package/uxskill">npm</a>
-      </div>
-    </footer>
   </div>
+</main>
+
+<footer class="footer" role="contentinfo">
+  <div class="footer__inner">
+    <div class="footer__col">
+      <a href="/" class="wordmark" aria-label="uxskill home">uxskill<span class="wordmark__dot" aria-hidden="true"></span></a>
+      <p class="footer__tagline">Design intelligence for AI coding. Built so every model session ships work that does not look generated.</p>
+    </div>
+    <div class="footer__col">
+      <p class="footer__col-h">Plugin</p>
+      <ul>
+        <li><a class="footer__link" href="/about.html">About</a></li>
+        <li><a class="footer__link" href="/compare.html">Compare</a></li>
+        <li><a class="footer__link" href="/roadmap.html">Roadmap</a></li>
+        <li><a class="footer__link" href="/faq.html">FAQ</a></li>
+        <li><a class="footer__link" href="/mcp.html">MCP</a></li>
+        <li><a class="footer__link" href="/privacy.html">Privacy</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <p class="footer__col-h">Reading</p>
+      <ul>
+        <li><a class="footer__link" href="/blog/">Blog index</a></li>
+        <li><a class="footer__link" href="/blog/dark-editorial-cinema-design.html">Dark editorial cinema</a></li>
+        <li><a class="footer__link" href="/blog/best-claude-code-design-skills-2026.html">Best Claude Code design skills</a></li>
+        <li><a class="footer__link" href="/blog/anti-ai-slop-claude-skills.html">Anti AI-slop skills</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <p class="footer__col-h">Reference</p>
+      <ul>
+        <li><a class="footer__link" href="/commands.html">Commands</a></li>
+        <li><a class="footer__link" href="/blog/ai-design-fingerprints-list.html">AI design fingerprints</a></li>
+        <li><a class="footer__link" href="/blog/regex-linter-for-ai-coding.html">Regex linter for AI coding</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <p class="footer__col-h">Get it</p>
+      <ul>
+        <li><a class="footer__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a></li>
+        <li><a class="footer__link" href="https://pypi.org/project/uxskill/" rel="noopener">PyPI</a></li>
+        <li><a class="footer__link" href="https://www.npmjs.com/package/uxskill" rel="noopener">npm</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <span>MIT licensed &middot; No telemetry &middot; Stars from <code>gh api</code> on 2026-05-28</span>
+    <span>&copy; 2026 Laith Aljunaidy</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var nav = document.getElementById('nav');
+  function onScroll() {
+    if (window.scrollY > 24) nav.classList.add('is-scrolled');
+    else nav.classList.remove('is-scrolled');
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  var menuBtn = document.getElementById('nav-menu-btn');
+  var drawer = document.getElementById('nav-drawer');
+  var drawerClose = document.getElementById('nav-drawer-close');
+  function openDrawer() {
+    drawer.classList.add('is-open');
+    drawer.setAttribute('aria-hidden', 'false');
+    menuBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    drawer.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  if (menuBtn) menuBtn.addEventListener('click', openDrawer);
+  if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && drawer.classList.contains('is-open')) closeDrawer();
+  });
+  Array.prototype.forEach.call(drawer.querySelectorAll('a'), function (a) {
+    a.addEventListener('click', closeDrawer);
+  });
+})();
+</script>
+
 </body>
 </html>
