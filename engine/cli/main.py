@@ -437,16 +437,23 @@ else:
 
     @cli.command("stats")
     @click.option("--decisions", is_flag=True, help="Include decisions log stats.")
+    @click.option("--html", "html_out", is_flag=True,
+                  help="Render .ux/stats.html (a local dashboard).")
     @click.pass_context
-    def stats_cmd(ctx, decisions) -> None:
-        """Show data manifest counts (v2.1: + decisions log stats via --decisions)."""
+    def stats_cmd(ctx, decisions, html_out) -> None:
+        """Show data manifest counts (v2.1: + decisions stats / --html dashboard)."""
         payload = {"version": __version__, "counts": data_stats()}
-        if decisions:
+        if decisions or html_out:
             try:
                 from engine.decisions import stats as decision_stats
                 payload["decisions"] = decision_stats()
             except Exception as e:
                 payload["decisions_error"] = str(e)
+        if html_out:
+            from engine.decisions.stats_html import write_stats_html
+            out = write_stats_html()
+            payload["html_path"] = str(out)
+            click.echo(f"stats HTML written to {out}")
         _emit(payload, ctx.obj["pretty"])
 
     # -------- ux synthesize (v2.1) ---------------------------------------

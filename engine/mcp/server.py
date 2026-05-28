@@ -204,6 +204,38 @@ class UxImageExtractInput(BaseModel):
     )
 
 
+# v2.1 — synthesis + decisions log MCP inputs
+
+class UxSynthesizeInput(BaseModel):
+    industry: str = Field(default="", description="Industry id, e.g. fintech-payments.")
+    tone: List[str] = Field(default_factory=list, description="Tone tags.")
+    audience: List[str] = Field(default_factory=list, description="Audience tags.")
+    must_have: List[str] = Field(default_factory=list, description="Must-have tags.")
+    forbidden: List[str] = Field(default_factory=list, description="Forbidden tags.")
+    reference_brands: List[str] = Field(
+        default_factory=list,
+        description="Reference brand ids. Empty = pure synthesis. Set = brand_anchor mode.",
+    )
+    strict: bool = Field(
+        default=False,
+        description="With reference_brands: emit brand tokens verbatim (no synthesis).",
+    )
+
+
+class UxDecisionsQueryInput(BaseModel):
+    industry: Optional[str] = Field(default=None, description="Filter by industry.")
+    ui_type: Optional[str] = Field(default=None, description="Filter by ui_type.")
+    command: Optional[str] = Field(default=None,
+        description="Filter by command (recommend, design, lint, evolve, synthesize).")
+    min_score: Optional[int] = Field(default=None, description="Min lint_score filter.")
+    accepted_only: bool = Field(default=False, description="user_accepted=true only.")
+    limit: Optional[int] = Field(default=50, description="Max rows.")
+
+
+class UxDecisionsStatsInput(BaseModel):
+    pass
+
+
 # ---------------------------------------------------------------------------
 # Filter helpers
 # ---------------------------------------------------------------------------
@@ -372,6 +404,64 @@ def handle_ux_image_extract(args: Dict[str, Any]) -> Dict[str, Any]:
     return response
 
 
+# v2.1 — synthesis + decisions log handlers
+
+def handle_ux_synthesize(args: Dict[str, Any]) -> Dict[str, Any]:
+    """Synthesize a fresh design language from a brief (v2.1).
+
+    Modes: pure_synthesis (no brand) / brand_anchor (with brand) / strict_brand.
+    All offline, deterministic, no LLM.
+    """
+    payload = UxSynthesizeInput.model_validate(args or {})
+    from engine import synthesize as _synth
+    b = Brief(
+        industry=payload.industry,
+        tone=list(payload.tone),
+        audience=list(payload.audience),
+        must_have=list(payload.must_have),
+        forbidden=list(payload.forbidden),
+    )
+    # Attach v2.1 fields via duck-typed setattr
+    object.__setattr__(b, "reference_brands", list(payload.reference_brands))
+    object.__setattr__(b, "strict", payload.strict)
+    out = _synth(b)
+    # Log decision
+    try:
+        from engine.decisions import record as _rec
+        _rec({
+            "command": "synthesize",
+            "industry": payload.industry or None,
+            "mode": out.mode,
+            "picked_brand": out.anchor_brand_id,
+            "axes": out.axes,
+        })
+    except Exception:
+        pass
+    return out.to_dict()
+
+
+def handle_ux_decisions_query(args: Dict[str, Any]) -> Dict[str, Any]:
+    """Filter the decisions ledger by industry / ui_type / command / score."""
+    payload = UxDecisionsQueryInput.model_validate(args or {})
+    from engine.decisions import query
+    rows = query(
+        industry=payload.industry,
+        ui_type=payload.ui_type,
+        command=payload.command,
+        min_score=payload.min_score,
+        accepted_only=payload.accepted_only,
+        limit=payload.limit,
+    )
+    return {"count": len(rows), "rows": rows}
+
+
+def handle_ux_decisions_stats(args: Dict[str, Any]) -> Dict[str, Any]:
+    """Aggregate stats over the decisions ledger (top brands, lint score median…)."""
+    UxDecisionsStatsInput.model_validate(args or {})
+    from engine.decisions import stats as _ds
+    return _ds()
+
+
 # ---------------------------------------------------------------------------
 # Tool catalogue — single source of truth
 # ---------------------------------------------------------------------------
@@ -470,6 +560,31 @@ TOOLS: Dict[str, ToolEntry] = {
         "diagnostic hints (dominant colors, canvas polarity, matched palette + "
         "style). Pure CV — no multimodal LLM calls. Set with_recommendation=true "
         "(default) to also run the recommender on the extracted brief.",
+    ),
+    "ux_synthesize": (
+        handle_ux_synthesize,
+        UxSynthesizeInput,
+        "v2.1 — synthesize a fresh design language from a brief. Returns "
+        "axes + palette + type pair + spacing + radius + motion. Mode "
+        "auto-dispatched: pure_synthesis (no brand) / brand_anchor (with "
+        "reference_brands) / strict_brand (reference_brands + strict=true). "
+        "100% offline. Deterministic. No LLM.",
+    ),
+    "ux_decisions_query": (
+        handle_ux_decisions_query,
+        UxDecisionsQueryInput,
+        "v2.1 — filter the local decisions ledger (.ux/decisions.jsonl + "
+        "~/.uxskill/decisions.jsonl) by industry / ui_type / command / "
+        "min_score / accepted_only. The recommender re-ranks based on this "
+        "data once >= 3 prior decisions exist in the brief's bucket.",
+    ),
+    "ux_decisions_stats": (
+        handle_ux_decisions_stats,
+        UxDecisionsStatsInput,
+        "v2.1 — aggregate stats over the local decisions ledger. Returns "
+        "total decisions, by_command, by_industry, by_ui_type, by_mode, "
+        "top_brands, lint_score_median, acceptance_rate. No telemetry — "
+        "this is your install's local view of what it has learned.",
     ),
 }
 
