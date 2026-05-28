@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design para programação com IA — como montar um sistema no Claude Code — ux-skill</title>
+  <meta name="description" content="Claude Code, Cursor, Windsurf, GitHub Copilot, Cline — toda ferramenta de programação com IA cai nos mesmos oito defeitos visuais: Inter em tamanho de display, gradiente de roxo para azul, três cartões idênticos. O ux-skill bloqueia esses padrões no CI com 145 regras regex determinísticas.">
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/pt-BR/ai-coding-design-portuguese.html">
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="index,follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/pt-BR/ai-coding-design-portuguese.html">
+  <meta property="og:title" content="Design para programação com IA — como montar um sistema no Claude Code">
+  <meta property="og:description" content="145 regras regex determinísticas. 1.182 entradas de catálogo. 131 especificações de marca. 17 IDEs. Licença MIT.">
+  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/pt-BR-ai-coding-design-portuguese.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ux-skill — pt-BR ai coding design portuguese">
+  <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/pt-BR-ai-coding-design-portuguese.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Design para programação com IA — ux-skill">
+  <meta name="twitter:description" content="Pare os oito defeitos visuais que toda IA produz por padrão. 145 regras regex, sem LLM, no CI.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Design para programação com IA — como montar um sistema no Claude Code",
+    "description": "Claude Code, Cursor, Windsurf, GitHub Copilot, Cline — toda ferramenta de programação com IA cai nos mesmos oito defeitos visuais. O ux-skill bloqueia esses padrões no CI com 145 regras regex.",
+    "datePublished": "2026-05-28",
+    "dateModified": "2026-05-28",
+    "author": {
+      "@type": "Organization",
+      "name": "ux-skill",
+      "url": "https://uxskill.laithjunaidy.com/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ux-skill",
+      "url": "https://uxskill.laithjunaidy.com/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://uxskill.laithjunaidy.com/blog/pt-BR/ai-coding-design-portuguese.html"
+    },
+    "image": "https://uxskill.laithjunaidy.com/og.png",
+    "inLanguage": "pt-BR"
+  }
+  </script>
+
+  <style>
+    :root {
+      --canvas: #07080a;
+      --surface-1: #0d0f12;
+      --surface-2: #14181d;
+      --surface-3: #1c2128;
+      --ink: #f6f7f9;
+      --body: #c7ccd3;
+      --muted: #7a7972;
+      --faint: #5a5f66;
+      --hairline: rgba(255,255,255,0.08);
+      --hairline-2: rgba(255,255,255,0.14);
+      --scene-accent: #34d399;
+      --scene-soft: rgba(52,211,153,0.18);
+      --win-bg: rgba(16,185,129,0.10);
+      --win-fg: #34d399;
+      --lose-bg: rgba(244,63,94,0.10);
+      --lose-fg: #fb7185;
+      --neutral-bg: rgba(255,255,255,0.05);
+      --neutral-fg: #c7ccd3;
+      --display: 'Bricolage Grotesque', system-ui, sans-serif;
+      --body-face: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+      --serif-italic: 'Instrument Serif', Georgia, serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; background: var(--canvas); }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      font-family: var(--body-face);
+      background: var(--canvas);
+      color: var(--body);
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+    .wrap-wide { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    header.top {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8px 24px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .wordmark {
+      display: inline-flex; align-items: baseline; gap: 4px;
+      text-decoration: none; color: var(--ink);
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-weight: 620;
+      font-size: 26px; letter-spacing: -0.04em; line-height: 1;
+    }
+    .wordmark .dot {
+      display: inline-block; width: 7px; height: 7px;
+      border-radius: 2px;
+      background: linear-gradient(135deg, #06b6d4, #34d399);
+      transform: translateY(-3px);
+    }
+    nav.crumbs {
+      display: flex; gap: 28px;
+      font-family: var(--mono);
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+    nav.crumbs a { color: var(--muted); text-decoration: none; transition: color 0.16s ease; }
+    nav.crumbs a:hover { color: var(--ink); }
+    nav.crumbs a.current { color: var(--ink); }
+    nav.crumbs a:focus-visible {
+      outline: 2px solid var(--scene-accent);
+      outline-offset: 4px; border-radius: 2px;
+    }
+
+    article { padding-top: 56px; }
+    .eyebrow {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--scene-accent);
+      margin-bottom: 22px;
+    }
+    h1 {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 96, 'wght' 600;
+      font-weight: 600;
+      font-size: clamp(40px, 5.5vw, 64px);
+      line-height: 1.04; letter-spacing: -0.03em;
+      color: var(--ink); margin-bottom: 28px;
+    }
+    h1 .accent {
+      font-family: var(--serif-italic);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--scene-accent);
+      letter-spacing: -0.015em;
+    }
+    .lede {
+      font-size: 20px; line-height: 1.55; color: var(--body);
+      margin-bottom: 16px;
+    }
+    .lede strong { color: var(--ink); font-weight: 600; }
+    .byline {
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 56px; padding-bottom: 24px;
+      border-bottom: 1px solid var(--hairline);
+    }
+    h2 {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 80, 'wght' 580;
+      font-weight: 580;
+      font-size: clamp(28px, 3.2vw, 36px);
+      line-height: 1.18; letter-spacing: -0.022em;
+      color: var(--ink); margin: 64px 0 18px;
+    }
+    h2 .accent {
+      font-family: var(--serif-italic);
+      color: var(--scene-accent);
+      font-style: italic; font-weight: 400;
+    }
+    h3 {
+      font-family: var(--body-face);
+      font-weight: 600; font-size: 19px;
+      letter-spacing: -0.005em; color: var(--ink);
+      margin: 36px 0 14px;
+    }
+    p { margin-bottom: 18px; color: var(--body); }
+    p strong { color: var(--ink); font-weight: 600; }
+    em { color: var(--ink); }
+    ul, ol { margin: 0 0 22px 22px; }
+    ul li, ol li { margin-bottom: 10px; color: var(--body); }
+    ul li::marker { color: var(--scene-accent); }
+    ol li::marker { color: var(--scene-accent); font-family: var(--mono); font-size: 0.9em; }
+
+    pre.code, pre.code-block {
+      background: var(--surface-2);
+      color: var(--ink);
+      border: 1px solid var(--hairline);
+      padding: 22px 24px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 13.5px;
+      line-height: 1.65;
+      margin: 24px 0 28px;
+    }
+    pre.code .c, pre.code-block .c { color: rgba(199,204,211,0.45); font-style: italic; }
+    pre.code .k, pre.code-block .k { color: #e8b894; }
+    pre.code .s, pre.code-block .s { color: #a3e0b8; }
+    pre.code .v, pre.code-block .v { color: var(--ink); }
+    pre.code .n, pre.code-block .n { color: var(--scene-accent); }
+    code {
+      font-family: var(--mono);
+      font-size: 13px;
+      background: var(--surface-2);
+      border: 1px solid var(--hairline);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--ink);
+    }
+    a.link {
+      color: var(--scene-accent);
+      text-decoration: underline;
+      text-decoration-color: rgba(52,211,153,0.4);
+      text-underline-offset: 3px;
+      transition: color 0.16s ease, text-decoration-color 0.16s ease;
+    }
+    a.link:hover { color: var(--ink); text-decoration-color: var(--ink); }
+    a.link:focus-visible {
+      outline: 2px solid var(--scene-accent);
+      outline-offset: 2px; border-radius: 2px;
+    }
+
+    .honesty {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-left: 3px solid var(--scene-accent);
+      padding: 24px 28px;
+      border-radius: 0 14px 14px 0;
+      margin: 32px 0;
+    }
+    .honesty .label {
+      font-family: var(--mono);
+      font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--scene-accent); margin-bottom: 8px;
+    }
+    .honesty h4 {
+      font-family: var(--body-face);
+      font-weight: 600; font-size: 17px; color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .honesty p { margin-bottom: 8px; }
+    .honesty p:last-child { margin-bottom: 0; }
+
+    .cta {
+      margin-top: 96px;
+      padding: 56px 48px;
+      background: var(--surface-1);
+      color: var(--ink);
+      border: 1px solid var(--hairline-2);
+      border-radius: 22px;
+    }
+    @media (max-width: 720px) { .cta { padding: 40px 28px; } }
+    .cta .eyebrow { color: var(--scene-accent); }
+    .cta h2 { color: var(--ink); margin-top: 0; }
+    .cta p { color: var(--body); margin-bottom: 28px; }
+    .install-block {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-family: var(--mono);
+      font-size: 14px; line-height: 1.75;
+      color: var(--ink);
+    }
+    .install-block .prompt { color: var(--scene-accent); }
+    .install-block .arg { color: var(--muted); }
+    .install-block .row + .row { margin-top: 6px; }
+
+    footer {
+      max-width: 1100px;
+      margin: 96px auto 0;
+      padding: 32px 24px 0;
+      border-top: 1px solid var(--hairline);
+      display: flex; justify-content: space-between; align-items: baseline;
+      flex-wrap: wrap; gap: 16px;
+      font-size: 13px; color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; transition: color 0.16s ease; }
+    footer a:hover { color: var(--ink); }
+    footer .links { display: flex; gap: 24px; flex-wrap: wrap; }
+
+    blockquote {
+      border-left: 3px solid var(--scene-accent);
+      padding: 6px 0 6px 22px;
+      margin: 24px 0;
+      font-family: var(--serif-italic);
+      font-size: 22px; line-height: 1.45;
+      color: var(--ink); font-style: italic;
+    }
+
+    @media (max-width: 720px) {
+      header.top { flex-direction: column; align-items: flex-start; gap: 16px; }
+      nav.crumbs { gap: 18px; flex-wrap: wrap; }
+      .wrap { padding: 40px 20px 72px; }
+      h1 { font-size: clamp(34px, 7vw, 48px); }
+    }
+    @media (max-width: 480px) {
+      nav.crumbs { font-size: 10px; gap: 14px; }
+      .lede { font-size: 18px; }
+    }
+
+    .table-wrap { max-width: 1000px; margin: 32px auto 28px; overflow-x: auto; }
+    .compare-table {
+      width: 100%; border-collapse: collapse;
+      font-size: 14px;
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-radius: 14px; overflow: hidden;
+    }
+    .compare-table th, .compare-table td {
+      padding: 14px 18px; text-align: left;
+      border-bottom: 1px solid var(--hairline);
+      vertical-align: top;
+      color: var(--body);
+    }
+    .compare-table th {
+      background: var(--surface-2);
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink); font-weight: 600;
+    }
+    .compare-table td.num {
+      font-variant-numeric: tabular-nums;
+      font-weight: 500; color: var(--ink);
+      font-family: var(--mono);
+    }
+    .compare-table tr:last-child td { border-bottom: 0; }
+    .compare-table strong { color: var(--ink); }
+  </style>
+  <style>
+    html, body {
+      overflow-x: clip;
+      max-width: 100%;
+    }
+    section, header, footer, main, article { max-width: 100vw; }
+    img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
+    table { max-width: 100%; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a href="/" class="wordmark">ux<span class="dot"></span></a>
+    <nav class="crumbs">
+      <a href="/pt-BR/">Início</a>
+      <a href="/compare.html">Comparar</a>
+      <a href="/blog/" class="current">Blog</a>
+      <a href="https://github.com/Laith0003/ux-skill" rel="noopener noreferrer">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="wrap">
+    <article>
+      <span class="eyebrow">Blog &middot; Português (Brasil) &middot; 2026-05-28</span>
+      <h1>Design para programação com IA — por que toda IA entrega <span class="accent">a mesma tela</span>.</h1>
+      <p class="lede">
+        <strong>Quem já pediu para o Claude Code, Cursor, Windsurf, GitHub Copilot, Cline ou Continue gerar uma landing reconhece o resultado de primeira:</strong> Inter esticada até virar fonte de display, gradiente do roxo para o azul, três cartões iguais lado a lado, e logo abaixo do herói a frase <em>«Build something amazing»</em>. O problema não está na ferramenta. Está em todas elas terem aprendido com o mesmo conjunto de templates. O ux-skill barra esses defaults dentro do CI — sem LLM, com 145 regras regex determinísticas.
+      </p>
+      <p class="byline">By the ux-skill team &middot; ~9 min de leitura &middot; open source MIT</p>
+
+      <h2>Os oito defeitos visuais que toda IA entrega</h2>
+      <p>
+        Catalogamos a coleção inteira na <a href="/blog/ai-design-fingerprints-list.html" class="link">taxonomia das impressões digitais de design de IA</a>. Estes oito aparecem em quase toda primeira dobra gerada:
+      </p>
+      <ol>
+        <li><strong>Inter como fonte de display</strong> — uma fonte desenhada para legibilidade em tamanhos pequenos de tela, esticada para 90 px no herói. O oposto do seu caso de uso.</li>
+        <li><strong>Gradiente roxo para azul</strong> — a família <code>#7C3AED → #3B82F6</code>, sempre no fundo da primeira seção.</li>
+        <li><strong>Três cartões idênticos em linha</strong> — ícone, título de uma palavra, subtítulo de uma frase, repetidos três vezes.</li>
+        <li><strong>Fade-in-up universal</strong> — aplicado em cada filho direto de cada seção, sem distinção de papel.</li>
+        <li><strong>Tudo centralizado</strong> — herói, cartões, formulários, tudo no eixo vertical central da tela.</li>
+        <li><strong>Copy genérico</strong> — «Build something amazing», «Beautiful experiences», «Revolutionizing X», sem um único substantivo do produto.</li>
+        <li><strong>URLs de imagens de banco</strong> — placeholders genéricos no lugar de screenshots reais do produto.</li>
+        <li><strong>Sombras pesadas sobre design flat</strong> — o reflexo «precisa destacar» colide com a moda do flat e nasce uma profundidade visual confusa.</li>
+      </ol>
+      <p>
+        Nenhum desses defeitos isolado é erro grave. O problema é o pacote: os oito juntos, na mesma página, formam a digital reconhecível. Um, você dá de ombros. Quatro deles na mesma primeira dobra e você consegue até adivinhar qual ferramenta gerou o código.
+      </p>
+
+      <h2>Por que prompt não basta</h2>
+      <p>
+        A primeira reação de qualquer time é incrementar o prompt: «não use o gradiente padrão», «escolha uma fonte de display de verdade», «não enfileire três cartões iguais». Funciona durante uma mensagem. Na seguinte, a orientação se dilui, a janela de contexto cresce, e a digital volta. Direção por prompt é probabilística e decai com o comprimento da conversa.
+      </p>
+      <p>
+        O que falta é um piso determinístico — uma checagem que roda <em>depois</em> do modelo escrever, sem LLM no loop. Esse é exatamente o buraco que o ux-skill preenche: o recomendador estreita as escolhas do modelo no começo, o linter empurra de volta o que escapou no final.
+      </p>
+
+      <h3>Não dá para combater estocástico com estocástico</h3>
+      <p>
+        A ideia de «coloca um segundo LLM avaliando a saída do primeiro» volta sempre, mas avaliação por LLM tem a mesma variância da geração por LLM: depende do prompt de nota, dos exemplos few-shot, da versão do modelo do dia. No CI o que a gente precisa é de uma camada que devolve o mesmo veredito todas as vezes. Determinismo é a única força da regex, e aqui é mais que suficiente.
+      </p>
+
+      <h2>145 regras regex, sem LLM, no CI</h2>
+      <p>
+        O linter varre todo arquivo em <code>*.tsx</code>, <code>*.jsx</code>, <code>*.vue</code>, <code>*.svelte</code>, <code>*.astro</code>, <code>*.css</code>, <code>*.scss</code>, <code>*.html</code>. Aplica 145 expressões regulares com as flags <code>i</code> e <code>m</code>. Devolve JSON com ID da regra, severidade, arquivo, linha, coluna, trecho e a correção sugerida.
+      </p>
+      <pre class="code"><span class="c"># Lint local, gate padrão em high+critical</span>
+$ uxskill lint
+<span class="n">[OK]</span> Scanned 142 files in 412ms · 0 findings at threshold high
+
+<span class="c"># Subpasta + JSON</span>
+$ uxskill lint apps/web/src --json | jq '.summary'
+{
+  <span class="k">"critical"</span>: <span class="v">0</span>,
+  <span class="k">"high"</span>: <span class="v">4</span>,
+  <span class="k">"medium"</span>: <span class="v">11</span>,
+  <span class="k">"low"</span>: <span class="v">3</span>,
+  <span class="k">"total"</span>: <span class="v">18</span>
+}</pre>
+      <p>
+        Zero chamadas de LLM. A varredura média de um repositório Next.js de 200 arquivos é 380 ms a frio, 90 ms a quente. A documentação completa das regras está no <a href="/blog/regex-linter-for-ai-coding.html" class="link">guia do regex linter</a>.
+      </p>
+
+      <h2>Antes e depois, em um herói real</h2>
+      <p>
+        A seguir, um bloco de herói simplificado tirado de um starter Next.js que cai em três regras, e a versão reescrita que sai com exit 0. Mesma intenção de conversão, digital diferente.
+      </p>
+      <pre class="code"><span class="c">// Antes — 3 achados high</span>
+&lt;section className=<span class="s">"bg-gradient-to-br
+  from-purple-500 via-violet-500
+  to-blue-500 py-32"</span>&gt;
+  &lt;h1 className=<span class="s">"font-['Inter']
+    text-7xl leading-none"</span>&gt;
+    Build something amazing.
+  &lt;/h1&gt;
+  &lt;div className=<span class="s">"grid grid-cols-3 gap-6"</span>&gt;
+    &lt;Card icon=<span class="s">"Zap"</span> title=<span class="s">"Fast"</span> /&gt;
+    &lt;Card icon=<span class="s">"Shield"</span> title=<span class="s">"Safe"</span> /&gt;
+    &lt;Card icon=<span class="s">"Heart"</span> title=<span class="s">"Loved"</span> /&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+
+<span class="c">// Depois — 0 achados</span>
+&lt;section className=<span class="s">"bg-stone-50 py-28"</span>&gt;
+  &lt;h1 className=<span class="s">"font-['Fraunces']
+    text-6xl leading-[1.04]
+    tracking-tight"</span>&gt;
+    A camada de roteamento de carga
+    que seu TMS nunca entregou.
+  &lt;/h1&gt;
+  &lt;div className=<span class="s">"grid grid-cols-12 gap-6 mt-16"</span>&gt;
+    &lt;Card className=<span class="s">"col-span-7"</span>
+      title=<span class="s">"Consolidação de carga"</span> /&gt;
+    &lt;Card className=<span class="s">"col-span-5"</span>
+      title=<span class="s">"Ranking de transportadoras"</span> /&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</pre>
+      <p>
+        No «antes» disparam três regras: Inter em <code>text-7xl</code>, o gradiente canônico de IA, e o grid de três cartões iguais. No «depois» a fonte de display Fraunces se emparelha com Inter no corpo, a superfície fica plana, e o grid vira 7-e-5 assimétrico. Intenção igual, digital sumiu.
+      </p>
+
+      <blockquote>
+        O recomendador levanta o chão. O linter põe o teto. Os dois são necessários.
+      </blockquote>
+
+      <h2>Montando um sistema de design dentro do Claude Code</h2>
+      <p>
+        O Claude Code é o terreno nativo do ux-skill. A instalação a partir do marketplace cabe em duas linhas:
+      </p>
+      <pre class="code"><span class="c"># Marketplace de plugins do Claude Code</span>
+$ /plugin marketplace add Laith0003/ux-skill
+$ /plugin install ux@ux-skill</pre>
+      <p>
+        Depois da instalação, 22 comandos slash ficam disponíveis dentro da sessão do Claude Code. O <code>/ux-discover</code> coleta um brief de 10 campos via perguntas estruturadas, o <code>/ux-recommend</code> dispara cinco buscas paralelas (indústria, estilo, paleta, tipografia e movimento), e o <code>/ux-persist save</code> escreve <code>MASTER.md</code>, <code>tokens.css</code> e <code>manifest.json</code> na raiz do repositório. Com esses arquivos no disco, o Claude Code passa a usá-los como fonte em todas as sessões seguintes.
+      </p>
+      <p>
+        No Cursor o caminho é <code>.cursorrules</code> + servidor MCP via <code>uxskill init --target cursor</code>. No Windsurf, <code>.windsurfrules</code> + MCP via <code>uxskill init --target windsurf</code>. No GitHub Copilot, o ux-skill gera o <code>.github/copilot-instructions.md</code> e liga o linter em disco via <code>uxskill init --target copilot</code>.
+      </p>
+
+      <h2>Três caminhos de instalação, um motor</h2>
+      <p>
+        O mesmo pacote Python alcança os 17 IDEs da matriz de compatibilidade. Escolha o caminho mais próximo do seu editor:
+      </p>
+      <div class="table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Editor</th>
+              <th>Caminho</th>
+              <th>Comando</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Claude Code</td><td>Marketplace</td><td><code>/plugin install ux@ux-skill</code></td></tr>
+            <tr><td>Cursor</td><td><code>.cursorrules</code> + MCP</td><td><code>uxskill init --target cursor</code></td></tr>
+            <tr><td>Windsurf</td><td><code>.windsurfrules</code> + MCP</td><td><code>uxskill init --target windsurf</code></td></tr>
+            <tr><td>GitHub Copilot</td><td><code>copilot-instructions.md</code></td><td><code>uxskill init --target copilot</code></td></tr>
+            <tr><td>Cline / Continue</td><td>Servidor MCP</td><td><code>uxskill mcp-config --target cline</code></td></tr>
+            <tr><td>JetBrains AI Assistant</td><td><code>.junie/guidelines.md</code></td><td><code>uxskill init --target jetbrains</code></td></tr>
+            <tr><td>Zed</td><td>MCP stdio</td><td><code>uxskill init --target zed</code></td></tr>
+            <tr><td>Codex CLI / Aider</td><td>CLI direto</td><td><code>pip install uxskill</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Por baixo de todos: 1.182 entradas de catálogo, 145 regras, 131 especificações de marca, 22 comandos, 75 testes verdes em cada release.
+      </p>
+
+      <div class="honesty">
+        <div class="label">Escopo honesto</div>
+        <h4>As regras pegam estrutura. Não pegam gosto.</h4>
+        <p>O linter nunca vai sinalizar «essa seção tem ritmo errado» ou «esse copy soa frio». Isso é trabalho humano, ou de um LLM na hora da revisão. O que a regex <em>captura com confiança</em> é toda digital que pode ser expressa por token literal, padrão ou forma — ou seja, a maior parte dos defaults de IA, porque o modelo volta sempre ao mesmo artefato.</p>
+        <p>De propósito não rodamos um LLM-juiz no CI. Se a sua régua é «parece feito por designer», isso é code review, não lint. O ux-skill oferece o <code>ux critique</code> para esse passe — mas roda sob demanda no editor, não no CI.</p>
+      </div>
+
+      <h2>Para continuar lendo</h2>
+      <ul>
+        <li><a href="/blog/ai-design-fingerprints-list.html" class="link">As 35 impressões digitais de design que toda IA entrega por padrão</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter para programação com IA — 145 regras no CI</a></li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Ferramentas anti-slop para Claude Code — o ranking honesto</a></li>
+        <li><a href="/blog/cursor-design-plugin.html" class="link">Plugin de design para Cursor — guia de instalação</a></li>
+        <li><a href="https://github.com/Laith0003/ux-skill/blob/main/README.pt-BR.md" class="link" rel="noopener noreferrer">README (português do Brasil)</a></li>
+        <li><a href="/install/" class="link">Página de instalação</a> / <a href="/mcp.html" class="link">Configuração do MCP</a></li>
+      </ul>
+    </article>
+
+    <section class="cta">
+      <span class="eyebrow">Instalar</span>
+      <h2>17 IDEs. <span class="accent">Um motor.</span> 145 regras.</h2>
+      <p>Recomendador, linter, servidor MCP, 22 comandos, 131 especificações de marca e 1.182 entradas de catálogo são distribuídos juntos. O linter roda em sub-segundo; o resto, sob demanda. MIT, sem telemetria, sem conta.</p>
+
+      <div class="install-block">
+        <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
+        <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">— ou —</div>
+        <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">— ou —</div>
+        <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
+      </div>
+    </section>
+  </div>
+
+  <aside class="related-reads" aria-label="Leituras relacionadas">
+    <div class="related-reads-inner">
+      <h2 class="related-reads-h">Leituras relacionadas</h2>
+      <ul>
+        <li><a href="/blog/ai-design-fingerprints-list.html">35 impressões digitais de IA</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html">Regex linter — 145 regras</a></li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html">Ranking anti-slop</a></li>
+        <li><a href="/blog/cursor-design-plugin.html">Plugin de design para Cursor</a></li>
+      </ul>
+    </div>
+  </aside>
+  <style>
+    .related-reads {
+      max-width: 880px; margin: 80px auto 0 auto; padding: 32px 24px 8px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .related-reads-h {
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: #7a7972; margin-bottom: 16px;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+    }
+    .related-reads ul {
+      list-style: none; padding: 0; margin: 0;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px;
+    }
+    .related-reads li { font-size: 15px; line-height: 1.5; color: #c7ccd3; }
+    .related-reads a {
+      color: #f6f7f9; text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.18);
+      padding-bottom: 2px; transition: border-color .15s ease, color .15s ease;
+    }
+    .related-reads a:hover { border-color: currentColor; color: #f6f7f9; }
+    @media (max-width: 640px) {
+      .related-reads ul { grid-template-columns: 1fr; }
+    }
+  </style>
+
+  <footer>
+    <span>&copy; 2026 Laith Aljunaidy. MIT licensed. No telemetry.</span>
+    <div class="links">
+      <a href="/pt-BR/">Início</a>
+      <a href="/compare.html">Comparar</a>
+      <a href="/blog/">Blog</a>
+      <a href="/about.html">About</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/roadmap.html">Roadmap</a>
+      <a href="/mcp.html">MCP</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="https://github.com/Laith0003/ux-skill" rel="noopener noreferrer">GitHub</a>
+    </div>
+  </footer>
+</body>
+</html>

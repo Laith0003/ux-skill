@@ -1,39 +1,39 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI コーディング デザイン — Claude Code デザインシステムの作り方 — ux-skill</title>
-  <meta name="description" content="Claude Code、Cursor、Windsurf、GitHub Copilot、Cline — どの AI コーディングツールも同じ 8 つの視覚的デフォルトを生成します。ディスプレイに使われた Inter、紫から青のグラデーション、3 つの同じカード。ux-skill は 145 の正規表現ルールで CI 上でこのパターンをブロックします。">
-  <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ja/ai-coding-design-japanese.html">
+  <title>AI 코딩 디자인 — Claude Code 디자인 시스템을 만드는 법 — ux-skill</title>
+  <meta name="description" content="Claude Code、Cursor、Windsurf、GitHub Copilot、Cline — 모든 AI 코딩 도구가 같은 8가지 시각적 디폴트를 뱉습니다. 본문용 Inter를 90px 헤드라인으로, 보라-파랑 그라데이션, 동일한 카드 3개. ux-skill은 145개의 결정론적 정규식 규칙으로 CI에서 이를 막습니다.">
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ko/ai-coding-design-korean.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
   <meta name="robots" content="index,follow">
 
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ja/ai-coding-design-japanese.html">
-  <meta property="og:title" content="AI コーディング デザイン — Claude Code デザインシステムの作り方">
-  <meta property="og:description" content="145 個の決定論的正規表現ルール。1,182 のカタログエントリ。131 のブランド仕様。17 IDE 対応。MIT ライセンス。">
-  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/ja-ai-coding-design-japanese.png">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ko/ai-coding-design-korean.html">
+  <meta property="og:title" content="AI 코딩 디자인 — Claude Code 디자인 시스템을 만드는 법">
+  <meta property="og:description" content="145개의 결정론적 정규식 규칙. 1,182개 카탈로그. 131개 브랜드 사양. 17개 IDE. MIT 라이선스.">
+  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/ko-ai-coding-design-korean.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — ja ai coding design japanese">
-  <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/ja-ai-coding-design-japanese.png">
+  <meta property="og:image:alt" content="ux-skill — ko ai coding design korean">
+  <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/ko-ai-coding-design-korean.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AI コーディング デザイン — ux-skill">
-  <meta name="twitter:description" content="AI が毎回作る 8 つの視覚パターンを止める。145 の正規表現、LLM なし、CI で動作。">
+  <meta name="twitter:title" content="AI 코딩 디자인 — ux-skill">
+  <meta name="twitter:description" content="모든 AI가 만들어내는 8가지 시각적 디폴트를 막는다. 145개 정규식, LLM 호출 없음, CI에서 실행.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "AI コーディング デザイン — Claude Code デザインシステムの作り方",
-    "description": "Claude Code、Cursor、Windsurf、GitHub Copilot、Cline — どの AI コーディングツールも同じ 8 つの視覚的デフォルトを生成します。ux-skill は 145 の正規表現ルールで CI 上でこれをブロックします。",
+    "headline": "AI 코딩 디자인 — Claude Code 디자인 시스템을 만드는 법",
+    "description": "Claude Code、Cursor、Windsurf、GitHub Copilot、Cline — 모든 AI 코딩 도구가 같은 8가지 시각적 디폴트를 뱉습니다. ux-skill은 145개의 정규식 규칙으로 CI에서 이를 막습니다.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -48,10 +48,10 @@
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "https://uxskill.laithjunaidy.com/blog/ja/ai-coding-design-japanese.html"
+      "@id": "https://uxskill.laithjunaidy.com/blog/ko/ai-coding-design-korean.html"
     },
     "image": "https://uxskill.laithjunaidy.com/og.png",
-    "inLanguage": "ja"
+    "inLanguage": "ko"
   }
   </script>
 
@@ -67,16 +67,16 @@
       --faint: #5a5f66;
       --hairline: rgba(255,255,255,0.08);
       --hairline-2: rgba(255,255,255,0.14);
-      --scene-accent: #f59e0b;
-      --scene-soft: rgba(245,158,11,0.18);
+      --scene-accent: #22d3ee;
+      --scene-soft: rgba(34,211,238,0.18);
       --win-bg: rgba(16,185,129,0.10);
       --win-fg: #34d399;
       --lose-bg: rgba(244,63,94,0.10);
       --lose-fg: #fb7185;
       --neutral-bg: rgba(255,255,255,0.05);
       --neutral-fg: #c7ccd3;
-      --display: 'Bricolage Grotesque', 'Noto Sans JP', system-ui, sans-serif;
-      --body-face: 'Noto Sans JP', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --display: 'Bricolage Grotesque', 'Noto Sans KR', system-ui, sans-serif;
+      --body-face: 'Noto Sans KR', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
       --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
       --serif-italic: 'Instrument Serif', Georgia, serif;
     }
@@ -113,7 +113,7 @@
     .wordmark .dot {
       display: inline-block; width: 7px; height: 7px;
       border-radius: 2px;
-      background: linear-gradient(135deg, #06b6d4, #f59e0b);
+      background: linear-gradient(135deg, #06b6d4, #22d3ee);
       transform: translateY(-3px);
     }
     nav.crumbs {
@@ -142,8 +142,8 @@
       font-family: var(--display);
       font-variation-settings: 'wdth' 88, 'opsz' 96, 'wght' 600;
       font-weight: 600;
-      font-size: clamp(36px, 5.2vw, 58px);
-      line-height: 1.18; letter-spacing: -0.02em;
+      font-size: clamp(34px, 5vw, 56px);
+      line-height: 1.2; letter-spacing: -0.015em;
       color: var(--ink); margin-bottom: 28px;
     }
     h1 .accent {
@@ -170,7 +170,7 @@
       font-variation-settings: 'wdth' 88, 'opsz' 80, 'wght' 580;
       font-weight: 580;
       font-size: clamp(26px, 3vw, 34px);
-      line-height: 1.35; letter-spacing: -0.015em;
+      line-height: 1.35; letter-spacing: -0.01em;
       color: var(--ink); margin: 64px 0 18px;
     }
     h2 .accent {
@@ -221,7 +221,7 @@
     a.link {
       color: var(--scene-accent);
       text-decoration: underline;
-      text-decoration-color: rgba(245,158,11,0.4);
+      text-decoration-color: rgba(34,211,238,0.4);
       text-underline-offset: 3px;
       transition: color 0.16s ease, text-decoration-color 0.16s ease;
     }
@@ -303,7 +303,7 @@
       header.top { flex-direction: column; align-items: flex-start; gap: 16px; }
       nav.crumbs { gap: 18px; flex-wrap: wrap; }
       .wrap { padding: 40px 20px 72px; }
-      h1 { font-size: clamp(28px, 6.5vw, 40px); }
+      h1 { font-size: clamp(26px, 6.5vw, 40px); }
     }
     @media (max-width: 480px) {
       nav.crumbs { font-size: 10px; gap: 14px; }
@@ -352,62 +352,62 @@
   <header class="top">
     <a href="/" class="wordmark">ux<span class="dot"></span></a>
     <nav class="crumbs">
-      <a href="/ja/">ホーム</a>
-      <a href="/compare.html">比較</a>
-      <a href="/blog/" class="current">ブログ</a>
+      <a href="/ko/">홈</a>
+      <a href="/compare.html">비교</a>
+      <a href="/blog/" class="current">블로그</a>
       <a href="https://github.com/Laith0003/ux-skill" rel="noopener noreferrer">GitHub</a>
     </nav>
   </header>
 
   <div class="wrap">
     <article>
-      <span class="eyebrow">ブログ &middot; 日本語 &middot; 2026-05-28</span>
-      <h1>AI コーディング デザイン — なぜどの AI も <span class="accent">同じ UI</span> を作るのか。</h1>
+      <span class="eyebrow">블로그 &middot; 한국어 &middot; 2026-05-28</span>
+      <h1>AI 코딩 디자인 — 왜 모든 AI가 <span class="accent">똑같은 UI</span>를 만드는가.</h1>
       <p class="lede">
-        <strong>Claude Code、Cursor、Windsurf、GitHub Copilot、Cline、Continue にランディングページを作らせたことのある人なら、誰でもあの出力を知っています。</strong>ディスプレイサイズに引き伸ばされた Inter、紫から青へのグラデーション、横並びに置かれた同一の 3 枚のカード、そしてヒーロー直下に並ぶ「Build something amazing」のコピー。問題はツールにあるわけではありません。問題は、どのツールも同じテンプレート群から学習したという点にあります。ux-skill は、145 の決定論的な正規表現ルールでこのパターンを CI 上から取り除きます。
+        <strong>Claude Code、Cursor、Windsurf、GitHub Copilot、Cline、Continue 중 하나에 랜딩 페이지를 시켜본 사람이라면 누구나 그 결과를 알아봅니다.</strong> 본문용 Inter를 디스플레이 크기로 끌어올린 헤드라인, 보라에서 파랑으로 흐르는 그라데이션, 가로로 나란히 놓인 똑같은 카드 3개, 그리고 히어로 아래의 그 줄 — <em>「Build something amazing」</em>. 문제는 도구가 아닙니다. 모든 도구가 같은 템플릿 풀에서 학습했다는 게 문제죠. ux-skill은 정확히 그 디폴트들을 CI에서 — LLM 없이, 145개의 결정론적 정규식 규칙으로 — 막아냅니다.
       </p>
-      <p class="byline">By the ux-skill team &middot; 9 分で読了 &middot; MIT ライセンス・オープンソース</p>
+      <p class="byline">By the ux-skill team &middot; 9분 분량 &middot; MIT 오픈 소스</p>
 
-      <h2>AI が毎回作る 8 つの視覚的デフォルト</h2>
+      <h2>모든 AI가 만들어내는 8가지 시각적 디폴트</h2>
       <p>
-        私たちは <a href="/blog/ai-design-fingerprints-list.html" class="link">AI デザインのフィンガープリント分類</a> ですべての指紋を整理しました。ヒーローセクションでほぼ必ず姿を見せる、もっとも目立つ 8 つは次のとおりです。
+        전체 분류는 <a href="/blog/ai-design-fingerprints-list.html" class="link">AI 디자인 지문 분류표</a>에 정리해 두었습니다. 거의 모든 히어로 생성물에 등장하는 8가지는 다음과 같습니다.
       </p>
       <ol>
-        <li><strong>ディスプレイ書体としての Inter</strong> — 小さい画面サイズで読みやすさのために設計された書体を、ヒーローで 90px まで引き伸ばす。本来そのために作られたものではありません。</li>
-        <li><strong>紫から青のグラデーション</strong> — <code>#7C3AED → #3B82F6</code> 系のグラデーション。ファーストビューの背景に必ず登場する。</li>
-        <li><strong>横並びの同じ 3 つのカード</strong> — アイコン、一語のタイトル、一文のサブタイトル、それを 3 回繰り返すだけ。</li>
-        <li><strong>全要素への fade-in-up アニメーション</strong> — セクションの全直接子要素に同じトランジションがかかる。役割の区別がない。</li>
-        <li><strong>すべて中央揃え</strong> — ヒーロー、カード、フォーム、何もかも画面の中央に並べる。</li>
-        <li><strong>具体性のないコピー</strong> — 「Build something amazing」「Beautiful experiences」「Revolutionizing X」など、製品の名詞が一切登場しない。</li>
-        <li><strong>ストック画像の URL</strong> — 実際のプロダクトスクリーンショットの代わりに、汎用プレースホルダー画像。</li>
-        <li><strong>フラットデザインに乗った重い影</strong> — 「目立たせたい」という意図と「フラットがクール」という流行が同居して、ちぐはぐな立体感が生まれる。</li>
+        <li><strong>디스플레이용으로 쓰인 Inter</strong> — 작은 화면 크기에서의 가독성을 위해 설계된 글자체를 90px 헤드라인까지 끌어올립니다. 본래 용도의 정반대.</li>
+        <li><strong>보라-파랑 그라데이션</strong> — <code>#7C3AED → #3B82F6</code> 계열. 첫 섹션 배경의 단골손님.</li>
+        <li><strong>가로로 늘어선 동일 카드 3개</strong> — 아이콘 + 한 단어 제목 + 한 문장 부제, 세 번 반복.</li>
+        <li><strong>모든 요소에 적용된 fade-in-up</strong> — 모든 섹션의 모든 직속 자식이 같은 트랜지션을 받음. 역할 구분은 없음.</li>
+        <li><strong>가운데 정렬 일변도</strong> — 히어로, 카드, 폼, 전부 화면 정중앙 축에.</li>
+        <li><strong>일반적인 카피</strong> — 「Build something amazing」「Beautiful experiences」「Revolutionizing X」. 제품 고유 명사는 한 개도 없음.</li>
+        <li><strong>스톡 이미지 URL</strong> — 실제 제품 스크린샷이 들어가야 할 자리에 일반 플레이스홀더.</li>
+        <li><strong>플랫 디자인 위 무거운 그림자</strong> — 「눈에 띄게 하자」와 「플랫이 유행이지」가 충돌해 어딘가 어색한 입체감.</li>
       </ol>
       <p>
-        ひとつひとつのデフォルトは、それ単体で見れば誤りではありません。問題はこの 8 つが <em>同時に</em> 1 ページ上に揃ったときに、誰が見ても「これは AI が作った」と分かる指紋になることです。1 つなら肩をすくめて流せる。同じファーストビューに 4 つ並んだら、どの AI ツールが作ったかさえ言い当てられます。
+        개별로 보면 어느 것도 잘못은 아닙니다. 문제는 이 8개가 한 페이지에 <em>동시에</em> 등장할 때 누가 봐도 「이건 AI가 만든 것」이라는 지문이 된다는 점이죠. 하나라면 어깨를 으쓱하고 넘길 수 있습니다. 같은 above-the-fold에 네 개가 모이면 어떤 도구가 만들었는지까지 짚어낼 수 있습니다.
       </p>
 
-      <h2>なぜプロンプトでは足りないのか</h2>
+      <h2>왜 프롬프트만으로는 부족한가</h2>
       <p>
-        ほとんどのチームの最初の反応は、プロンプトに指示を足すことです。「デフォルトのグラデーションは使うな」「本物のディスプレイ書体を選べ」「同じカードを 3 枚並べるな」。これは 1 メッセージの間は機能します。次のメッセージで、ガイダンスは薄まり、コンテキストウィンドウは膨らみ、指紋は戻ってきます。プロンプトによる制御は確率的で、長さとともに減衰します。
+        모든 팀의 첫 반응은 프롬프트에 지시를 더하는 것입니다. 「디폴트 그라데이션 쓰지 마」「제대로 된 디스플레이 글자체 골라」「똑같은 카드 3개 늘어놓지 마」. 한 메시지 동안은 통합니다. 다음 메시지에서 지시는 희석되고, 컨텍스트 윈도우는 부풀고, 지문은 돌아옵니다. 프롬프트로 만든 통제는 확률적이고, 대화 길이와 함께 닳습니다.
       </p>
       <p>
-        必要なのは決定論的な床 — モデルが書き終わった <em>後に</em>、LLM をループに入れずに走るチェックです。これが ux-skill が埋める穴です。レコメンダーがモデルの選択肢を最初に狭め、リンターがそれでも漏れたデフォルトを叩き落とす。
-      </p>
-
-      <h3>確率的なものに確率的な対策を重ねない</h3>
-      <p>
-        「AI のアウトプットに別の AI で品質チェックを入れればよい」という案は何度も浮かびますが、AI による評価は、AI による生成と同じ揺らぎを持ちます。レーティング、Few-shot 例、その日のモデルバージョンに依存します。CI で必要なのは、毎回同じ結果を返す検出層です。決定論こそが正規表現の唯一の強みであり、それで十分です。
+        필요한 건 결정론적 바닥 — 모델이 <em>코드를 쓴 다음에</em>, 루프 안에 또 다른 LLM 없이 도는 점검입니다. ux-skill이 메우는 자리가 정확히 그 빈틈입니다. 추천기가 앞단에서 모델의 선택지를 좁히고, 린터가 뒷단에서 흘러나오는 디폴트를 쳐냅니다.
       </p>
 
-      <h2>145 の正規表現ルール、LLM なし、CI で動作</h2>
+      <h3>확률적인 문제에 확률적인 도구를 더 얹지 말 것</h3>
       <p>
-        リンターは <code>*.tsx</code>、<code>*.jsx</code>、<code>*.vue</code>、<code>*.svelte</code>、<code>*.astro</code>、<code>*.css</code>、<code>*.scss</code>、<code>*.html</code> のすべてのファイルをスキャンします。フラグ <code>i</code> と <code>m</code> で 145 の正規表現を適用し、ルール ID・重大度・ファイル・行・列・抜粋・推奨される修正を含む JSON を返します。
+        「그럼 두 번째 LLM이 첫 번째 LLM의 결과를 채점하면 되지 않나」라는 안은 꾸준히 떠오릅니다. 그러나 LLM 기반 평가는 LLM 기반 생성과 똑같은 분산을 가집니다. 채점 프롬프트, few-shot 예제, 그날 모델 버전에 따라 결과가 흔들립니다. CI에 필요한 건 매번 같은 판정을 돌려주는 층입니다. 그게 정규식의 유일한 강점이고, 그걸로 충분합니다.
       </p>
-      <pre class="code"><span class="c"># ローカルで lint、デフォルトでは high+critical をゲート</span>
+
+      <h2>145개의 정규식, LLM 호출 없음, CI에서 실행</h2>
+      <p>
+        린터는 <code>*.tsx</code>、<code>*.jsx</code>、<code>*.vue</code>、<code>*.svelte</code>、<code>*.astro</code>、<code>*.css</code>、<code>*.scss</code>、<code>*.html</code> 모든 파일을 스캔합니다. <code>i</code>와 <code>m</code> 플래그를 단 145개의 정규식을 돌리고, 규칙 ID, 심각도, 파일, 행, 열, 발췌, 제안된 수정안을 담은 JSON을 반환합니다.
+      </p>
+      <pre class="code"><span class="c"># 로컬 lint, 기본값은 high+critical 게이트</span>
 $ uxskill lint
 <span class="n">[OK]</span> Scanned 142 files in 412ms · 0 findings at threshold high
 
-<span class="c"># サブディレクトリ + JSON 出力</span>
+<span class="c"># 하위 디렉터리 + JSON 출력</span>
 $ uxskill lint apps/web/src --json | jq '.summary'
 {
   <span class="k">"critical"</span>: <span class="v">0</span>,
@@ -417,14 +417,14 @@ $ uxskill lint apps/web/src --json | jq '.summary'
   <span class="k">"total"</span>: <span class="v">18</span>
 }</pre>
       <p>
-        LLM の呼び出しはゼロ。200 ファイルの Next.js リポジトリでの平均走査時間は、コールドで 380ms、ウォームで 90ms です。ルールの完全な仕様は <a href="/blog/regex-linter-for-ai-coding.html" class="link">正規表現リンターのガイド</a> で公開しています。
+        LLM 호출 0회. 파일 200개짜리 Next.js 저장소의 평균 스캔 시간은 콜드 380ms、웜 90ms입니다. 전체 규칙 명세는 <a href="/blog/regex-linter-for-ai-coding.html" class="link">정규식 린터 가이드</a>에 공개되어 있습니다.
       </p>
 
-      <h2>実際のヒーローでのビフォーアフター</h2>
+      <h2>실제 히어로에서의 Before / After</h2>
       <p>
-        以下は、Next.js のスターターから切り出した簡略化されたヒーローブロックで、3 つのルールに引っかかります。下が exit 0 で通る書き換え版です。コンバージョンの意図は同じ、指紋は別物です。
+        아래는 Next.js 스타터에서 잘라낸 단순화된 히어로 블록입니다. 세 규칙에 걸리고, exit 0으로 통과하는 재작성본이 그 아래 있습니다. 전환 의도는 같지만, 지문은 다릅니다.
       </p>
-      <pre class="code"><span class="c">// Before — 3 件の high 検出</span>
+      <pre class="code"><span class="c">// Before — high 3건</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -439,114 +439,114 @@ $ uxskill lint apps/web/src --json | jq '.summary'
   &lt;/div&gt;
 &lt;/section&gt;
 
-<span class="c">// After — 0 件</span>
+<span class="c">// After — 0건</span>
 &lt;section className=<span class="s">"bg-stone-50 py-28"</span>&gt;
   &lt;h1 className=<span class="s">"font-['Fraunces']
     text-6xl leading-[1.04]
     tracking-tight"</span>&gt;
-    TMS が出荷しなかった
-    貨物ルーティング層。
+    당신의 TMS가 끝내 배포하지 못한
+    화물 라우팅 계층.
   &lt;/h1&gt;
   &lt;div className=<span class="s">"grid grid-cols-12 gap-6 mt-16"</span>&gt;
     &lt;Card className=<span class="s">"col-span-7"</span>
-      title=<span class="s">"貨物統合"</span> /&gt;
+      title=<span class="s">"화물 통합"</span> /&gt;
     &lt;Card className=<span class="s">"col-span-5"</span>
-      title=<span class="s">"キャリアランキング"</span> /&gt;
+      title=<span class="s">"운송사 랭킹"</span> /&gt;
   &lt;/div&gt;
 &lt;/section&gt;</pre>
       <p>
-        Before では 3 つのルールが発火します。Inter を <code>text-7xl</code> で使う、AI 定番のグラデーション、3 枚同一カードのグリッド。After では Fraunces（ディスプレイ）と Inter（ボディ）をペアにし、フラットなサーフェスを採用し、7 と 5 の非対称グリッドに切り替えています。意図は同じ、指紋はもう残っていません。
+        Before에서는 세 규칙이 발동합니다. <code>text-7xl</code>로 쓰인 Inter, AI 표준 그라데이션, 동일 카드 3개 그리드. After는 Fraunces(디스플레이)와 Inter(본문)을 짝짓고, 플랫 표면을 채택하며, 7-5 비대칭 그리드로 갈아탔습니다. 의도는 같고 지문은 사라졌습니다.
       </p>
 
       <blockquote>
-        レコメンダーが床を上げ、リンターが天井を決める。両方が必要だ。
+        추천기는 바닥을 올린다. 린터는 천장을 친다. 둘 다 필요하다.
       </blockquote>
 
-      <h2>Claude Code 用デザインシステムの組み立て方</h2>
+      <h2>Claude Code 디자인 시스템 셋업</h2>
       <p>
-        Claude Code は ux-skill のホームグラウンドです。プラグインマーケットプレイスからのインストールは 2 行で完了します。
+        Claude Code는 ux-skill의 홈그라운드입니다. 플러그인 마켓플레이스에서의 설치는 두 줄로 끝납니다.
       </p>
-      <pre class="code"><span class="c"># Claude Code のプラグインマーケットプレイス</span>
+      <pre class="code"><span class="c"># Claude Code 플러그인 마켓플레이스</span>
 $ /plugin marketplace add Laith0003/ux-skill
 $ /plugin install ux@ux-skill</pre>
       <p>
-        インストール後、22 のスラッシュコマンドが Claude Code セッションに登録されます。<code>/ux-discover</code> は 10 項目のブリーフを質問形式で集め、<code>/ux-recommend</code> は 5 つの並列検索（業界・スタイル・パレット・タイポグラフィ・モーション）を実行し、<code>/ux-persist save</code> がリポジトリのルートに <code>MASTER.md</code>、<code>tokens.css</code>、<code>manifest.json</code> を書き出します。トークンが書き出されてしまえば、Claude Code は以後のセッションでもそれを参照しながらコードを書きます。
+        설치하고 나면 Claude Code 세션에 22개의 슬래시 명령이 등록됩니다. <code>/ux-discover</code>는 10개 항목짜리 브리프를 질문 형태로 모으고, <code>/ux-recommend</code>는 5개의 병렬 검색(산업, 스타일, 팔레트, 타이포그래피, 모션)을 돌리며, <code>/ux-persist save</code>는 저장소 루트에 <code>MASTER.md</code>、<code>tokens.css</code>、<code>manifest.json</code>을 씁니다. 이 파일들이 쓰여 있으면 Claude Code는 그 뒤의 모든 세션에서 이를 참고해 코드를 짭니다.
       </p>
       <p>
-        Cursor では <code>.cursorrules</code> ファイル + MCP サーバの組み合わせです。<code>uxskill init --target cursor</code> がセットアップ全体を生成します。Windsurf では <code>.windsurfrules</code> と MCP の組み合わせで <code>uxskill init --target windsurf</code>。GitHub Copilot は <code>.github/copilot-instructions.md</code> + ディスクベースリンターで、<code>uxskill init --target copilot</code> です。
+        Cursor는 <code>.cursorrules</code> 파일 + MCP 서버 조합, 명령은 <code>uxskill init --target cursor</code>. Windsurf는 <code>.windsurfrules</code> + MCP, <code>uxskill init --target windsurf</code>. GitHub Copilot은 <code>.github/copilot-instructions.md</code> + 디스크 기반 린터, <code>uxskill init --target copilot</code>.
       </p>
 
-      <h2>3 つのインストール経路、1 つのエンジン</h2>
+      <h2>세 가지 설치 경로, 하나의 엔진</h2>
       <p>
-        同じ Python パッケージが互換マトリクスの 17 IDE 全部をカバーします。エディタに最も近いルートを選んでください:
+        같은 Python 패키지가 호환성 매트릭스의 17개 IDE 전부에 닿습니다. 편집기에 가장 가까운 경로를 고르세요:
       </p>
       <div class="table-wrap">
         <table class="compare-table">
           <thead>
             <tr>
-              <th>エディタ</th>
-              <th>ルート</th>
-              <th>コマンド</th>
+              <th>편집기</th>
+              <th>경로</th>
+              <th>명령</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td>Claude Code</td><td>マーケットプレイス</td><td><code>/plugin install ux@ux-skill</code></td></tr>
+            <tr><td>Claude Code</td><td>마켓플레이스</td><td><code>/plugin install ux@ux-skill</code></td></tr>
             <tr><td>Cursor</td><td><code>.cursorrules</code> + MCP</td><td><code>uxskill init --target cursor</code></td></tr>
             <tr><td>Windsurf</td><td><code>.windsurfrules</code> + MCP</td><td><code>uxskill init --target windsurf</code></td></tr>
             <tr><td>GitHub Copilot</td><td><code>copilot-instructions.md</code></td><td><code>uxskill init --target copilot</code></td></tr>
-            <tr><td>Cline / Continue</td><td>MCP サーバ</td><td><code>uxskill mcp-config --target cline</code></td></tr>
+            <tr><td>Cline / Continue</td><td>MCP 서버</td><td><code>uxskill mcp-config --target cline</code></td></tr>
             <tr><td>JetBrains AI Assistant</td><td><code>.junie/guidelines.md</code></td><td><code>uxskill init --target jetbrains</code></td></tr>
             <tr><td>Zed</td><td>MCP stdio</td><td><code>uxskill init --target zed</code></td></tr>
-            <tr><td>Codex CLI / Aider</td><td>直接 CLI</td><td><code>pip install uxskill</code></td></tr>
+            <tr><td>Codex CLI / Aider</td><td>직접 CLI</td><td><code>pip install uxskill</code></td></tr>
           </tbody>
         </table>
       </div>
       <p>
-        すべての下に共通するのは: 1,182 のカタログエントリ、145 のルール、131 のブランド仕様、22 のコマンド、リリースごとにグリーンになる 75 のテスト。
+        모든 경로 밑에 깔리는 건 같습니다: 1,182개 카탈로그, 145개 규칙, 131개 브랜드 사양, 22개 명령, 릴리스마다 통과하는 75개 테스트.
       </p>
 
       <div class="honesty">
-        <div class="label">正直なスコープ</div>
-        <h4>正規表現は構造を捕まえる。趣味は捕まえない。</h4>
-        <p>リンターは「このセクションのリズムが悪い」「コピーが冷たく感じる」を検出できません。それは人間か、レビュー時の LLM の仕事です。一方で、正規表現が <em>確実に</em> 捕まえるのは、リテラルトークン、パターン、形状で表現できるすべての指紋です。これが AI のデフォルトの大半を占めます。モデルは毎回同じ成果物に戻ってくるからです。</p>
-        <p>CI で LLM ジャッジを走らせるのは意図的に避けています。「デザイナーが作ったように見えるか」が基準なら、それはコードレビューであって lint ではありません。ux-skill にはエディタからオンデマンドで実行する <code>ux critique</code> もありますが、CI では走らせません。</p>
+        <div class="label">정직한 범위</div>
+        <h4>규칙은 구조를 잡는다. 취향은 못 잡는다.</h4>
+        <p>린터는 「이 섹션은 리듬이 안 맞아」나 「이 카피는 차갑게 느껴져」를 절대로 잡지 못합니다. 그건 사람의 일이거나, 리뷰 단계의 LLM이 할 일입니다. 정규식이 <em>확실히</em> 잡아내는 건 문자열 토큰, 패턴, 형태로 표현되는 모든 지문입니다. 그게 AI 디폴트의 대부분이죠. 모델은 매번 같은 산출물로 회귀하니까요.</p>
+        <p>CI에서는 의도적으로 LLM 평가자를 돌리지 않습니다. 기준이 「디자이너가 만든 것 같은가」라면, 그건 코드 리뷰지 lint가 아닙니다. ux-skill에는 그 패스를 위한 <code>ux critique</code>가 따로 있지만, 편집기에서 온디맨드로만 돌고 CI엔 들어가지 않습니다.</p>
       </div>
 
-      <h2>関連記事</h2>
+      <h2>관련 글</h2>
       <ul>
-        <li><a href="/blog/ai-design-fingerprints-list.html" class="link">AI ツールがデフォルトで吐く 35 のデザインフィンガープリント</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">AI コーディング向け正規表現リンター — CI 上の 145 ルール</a></li>
-        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Claude Code 向けアンチスロップツールの正直なランキング</a></li>
-        <li><a href="/blog/cursor-design-plugin.html" class="link">Cursor デザインプラグイン — インストールガイド</a></li>
-        <li><a href="https://github.com/Laith0003/ux-skill/blob/main/README.ja.md" class="link" rel="noopener noreferrer">README（日本語版）</a></li>
-        <li><a href="/install/" class="link">インストールページ</a> / <a href="/mcp.html" class="link">MCP セットアップ</a></li>
+        <li><a href="/blog/ai-design-fingerprints-list.html" class="link">모든 AI 도구가 기본으로 만들어내는 35가지 디자인 지문</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">AI 코딩용 정규식 린터 — CI에서 145개 규칙</a></li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Claude Code 안티-슬롭 도구 정직한 랭킹</a></li>
+        <li><a href="/blog/cursor-design-plugin.html" class="link">Cursor 디자인 플러그인 — 설치 가이드</a></li>
+        <li><a href="https://github.com/Laith0003/ux-skill/blob/main/README.ko.md" class="link" rel="noopener noreferrer">README (한국어판)</a></li>
+        <li><a href="/install/" class="link">설치 페이지</a> / <a href="/mcp.html" class="link">MCP 설정</a></li>
       </ul>
     </article>
 
     <section class="cta">
-      <span class="eyebrow">インストール</span>
-      <h2>17 IDE。<span class="accent">1 つのエンジン。</span>145 のルール。</h2>
-      <p>レコメンダー、リンター、MCP サーバ、22 のコマンド、131 のブランド仕様、1,182 のカタログエントリはすべて同梱で配布されます。リンターはサブセカンドで走り、残りはオンデマンド。MIT、テレメトリなし、アカウント不要です。</p>
+      <span class="eyebrow">설치</span>
+      <h2>17개 IDE. <span class="accent">하나의 엔진.</span> 145개 규칙.</h2>
+      <p>추천기, 린터, MCP 서버, 22개 명령, 131개 브랜드 사양, 1,182개 카탈로그를 한 묶음으로 배포합니다. 린터는 sub-second에 끝나고, 나머지는 온디맨드. MIT, 텔레메트리 없음, 계정 없음.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— または —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">— 또는 —</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— または —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">— 또는 —</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>
   </div>
 
-  <aside class="related-reads" aria-label="関連記事">
+  <aside class="related-reads" aria-label="관련 글">
     <div class="related-reads-inner">
-      <h2 class="related-reads-h">関連記事</h2>
+      <h2 class="related-reads-h">관련 글</h2>
       <ul>
-        <li><a href="/blog/ai-design-fingerprints-list.html">35 の AI デザイン指紋</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html">正規表現リンター — 145 ルール</a></li>
-        <li><a href="/blog/anti-ai-slop-claude-skills.html">アンチスロップのランキング</a></li>
-        <li><a href="/blog/cursor-design-plugin.html">Cursor デザインプラグイン</a></li>
+        <li><a href="/blog/ai-design-fingerprints-list.html">35가지 AI 디자인 지문</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html">정규식 린터 — 145개 규칙</a></li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html">안티-슬롭 랭킹</a></li>
+        <li><a href="/blog/cursor-design-plugin.html">Cursor 디자인 플러그인</a></li>
       </ul>
     </div>
   </aside>
@@ -579,9 +579,9 @@ $ /plugin install ux@ux-skill</pre>
   <footer>
     <span>&copy; 2026 Laith Aljunaidy. MIT licensed. No telemetry.</span>
     <div class="links">
-      <a href="/ja/">ホーム</a>
-      <a href="/compare.html">比較</a>
-      <a href="/blog/">ブログ</a>
+      <a href="/ko/">홈</a>
+      <a href="/compare.html">비교</a>
+      <a href="/blog/">블로그</a>
       <a href="/about.html">About</a>
       <a href="/faq.html">FAQ</a>
       <a href="/roadmap.html">Roadmap</a>
