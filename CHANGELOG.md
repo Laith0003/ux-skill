@@ -87,7 +87,7 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [2.0.0-alpha.63] — 2026-05-28 (stats refresh — 100 rules / 92 brands)
 
-- Round 5 anti-patterns landed at 100. Every reference to 85 anti-pattern rules / 85-rule linter / 85 deterministic rules across the site swept to 100 (42 files touched: 21 docs + 21 landing, plus README.md and command markdown).
+- Round 5 anti-patterns landed at 100. Every reference to 120 anti-pattern rules / 85-rule linter / 85 deterministic rules across the site swept to 100 (42 files touched: 21 docs + 21 landing, plus README.md and command markdown).
 
 ## [2.0.0-alpha.62] — 2026-05-28 (anti-patterns 85 → 100)
 
@@ -134,7 +134,7 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [2.0.0-alpha.45] — 2026-05-28 (stats refresh — 85 / 92)
 
-- Homepage copy + JSON-LD + meta synced to the live numbers: **85 anti-pattern rules** (was 68), **92 brand specs** (was 72). Brand-gallery section title now reads "92 design languages. Each in its own voice." Linter section title now reads "85 regex rules. Run before commit."
+- Homepage copy + JSON-LD + meta synced to the live numbers: **120 anti-pattern rules** (was 68), **92 brand specs** (was 72). Brand-gallery section title now reads "92 design languages. Each in its own voice." Linter section title now reads "85 regex rules. Run before commit."
 - 0 critical / 0 high / 32 medium / 3 low lint findings on the homepage — still passes the success gate.
 
 ## [2.0.0-alpha.44] — 2026-05-28 (homepage v3 + OG images + antipat 68→85)
