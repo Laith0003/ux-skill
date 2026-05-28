@@ -1,0 +1,3327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>uxskill — Mesin intelijen desain untuk coding AI. Engine Python. 998 entri.</title>
+  <meta name="description" content="Engine Python open-source yang menangkap fingerprint desain AI sebelum dirilis. 998 entri terstruktur, 22 perintah, 100 aturan anti-pola, 110 spec brand. Berjalan di Claude Code, Cursor, Windsurf, dan 14 IDE lainnya. MIT, tanpa telemetri.">
+
+  <link rel="alternate" hreflang="en" href="https://uxskill.laithjunaidy.com/">
+  <link rel="alternate" hreflang="zh-CN" href="https://uxskill.laithjunaidy.com/zh-CN/">
+  <link rel="alternate" hreflang="zh-TW" href="https://uxskill.laithjunaidy.com/zh-TW/">
+  <link rel="alternate" hreflang="ja" href="https://uxskill.laithjunaidy.com/ja/">
+  <link rel="alternate" hreflang="ko" href="https://uxskill.laithjunaidy.com/ko/">
+  <link rel="alternate" hreflang="hi" href="https://uxskill.laithjunaidy.com/hi/">
+  <link rel="alternate" hreflang="id" href="https://uxskill.laithjunaidy.com/id/">
+  <link rel="alternate" hreflang="vi" href="https://uxskill.laithjunaidy.com/vi/">
+  <link rel="alternate" hreflang="th" href="https://uxskill.laithjunaidy.com/th/">
+  <link rel="alternate" hreflang="ar" href="https://uxskill.laithjunaidy.com/ar/">
+  <link rel="alternate" hreflang="es" href="https://uxskill.laithjunaidy.com/es/">
+  <link rel="alternate" hreflang="fr" href="https://uxskill.laithjunaidy.com/fr/">
+  <link rel="alternate" hreflang="de" href="https://uxskill.laithjunaidy.com/de/">
+  <link rel="alternate" hreflang="pt-BR" href="https://uxskill.laithjunaidy.com/pt-BR/">
+  <link rel="alternate" hreflang="ru" href="https://uxskill.laithjunaidy.com/ru/">
+  <link rel="alternate" hreflang="tr" href="https://uxskill.laithjunaidy.com/tr/">
+  <link rel="alternate" hreflang="it" href="https://uxskill.laithjunaidy.com/it/">
+  <link rel="alternate" hreflang="x-default" href="https://uxskill.laithjunaidy.com/">
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/id/">
+  <meta name="robots" content="index,follow">
+
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#10b981">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+
+  <!-- Bricolage Grotesque (display, NOT Inter, NOT Cormorant), Inter (body), JetBrains Mono (mono),
+       plus brand-gallery typeface substitutes mapped to brand voice -->
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Geist:wght@300;400;500;600;700&family=Inter+Tight:wght@300;500;700&family=IBM+Plex+Sans:wght@400;600&family=Manrope:wght@400;700&family=Outfit:wght@400;600&family=Bricolage+Grotesque:wght@500;700&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@500;700&family=DM+Mono:wght@500&family=Onest:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Fontshare for General Sans + Switzer (brand-gallery substitutes for Figma + Stripe) -->
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@500,700&f[]=switzer@300,500,700&display=swap">
+
+  <meta property="og:title" content="uxskill — Design intelligence for AI coding">
+  <meta property="og:description" content="Engine Python open-source yang menangkap fingerprint desain AI sebelum dirilis. 998 entri terstruktur, 22 perintah, 100 aturan anti-pola, 110 spec brand. Berjalan di Claude Code, Cursor, Windsurf, dan 14 IDE lainnya. MIT, tanpa telemetri.">
+  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="uxskill wordmark on near-black canvas with the line: design intelligence for AI coding.">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="uxskill">
+  <meta property="og:locale" content="en_US">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="uxskill — Design intelligence for AI coding">
+  <meta name="twitter:description" content="Engine Python open-source yang menangkap fingerprint desain AI sebelum dirilis. 998 entri terstruktur, 22 perintah, 100 aturan anti-pola, 110 spec brand. Berjalan di Claude Code, Cursor, Windsurf, dan 14 IDE lainnya. MIT, tanpa telemetri.">
+  <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og-image.png">
+  <meta name="twitter:image:alt" content="uxskill wordmark on near-black canvas with the line: design intelligence for AI coding.">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Organization","name":"uxskill","url":"https://uxskill.laithjunaidy.com/","logo":"https://uxskill.laithjunaidy.com/logo.png","founder":{"@type":"Person","name":"Laith Aljunaidy","url":"https://www.linkedin.com/in/laithaljunaidy/"},"sameAs":["https://github.com/Laith0003/ux-skill","https://www.linkedin.com/in/laithaljunaidy/"]}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","name":"uxskill","url":"https://uxskill.laithjunaidy.com/","potentialAction":{"@type":"SearchAction","target":"https://uxskill.laithjunaidy.com/faq.html?q={search_term_string}","query-input":"required name=search_term_string"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"SoftwareApplication","name":"uxskill","alternateName":"ux-skill","description":"An open-source Python engine that catches AI design fingerprints before they ship. 998 structured entries across 11 manifests, 22 slash commands, 5 sub-agents, a deterministic anti-AI-slop linter with 100 regex rules, and 110 brand DESIGN.md specs. Runs in Claude Code, Cursor, Windsurf, and 14 more IDEs.","operatingSystem":"macOS, Linux, Windows","applicationCategory":"DeveloperApplication","applicationSubCategory":"DesignTool","softwareVersion":"2.0.0","license":"https://opensource.org/licenses/MIT","url":"https://github.com/Laith0003/ux-skill","downloadUrl":"https://pypi.org/project/uxskill/","author":{"@type":"Person","name":"Laith Aljunaidy","url":"https://www.linkedin.com/in/laithaljunaidy/"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["998 structured entries","22 slash commands","100 anti-pattern rules","110 brand DESIGN.md specs","17 IDE integrations","Python engine + MCP server"]}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Organization","@id":"https://uxskill.laithjunaidy.com/#org","name":"ux-skill","alternateName":"uxskill","url":"https://uxskill.laithjunaidy.com/","logo":"https://uxskill.laithjunaidy.com/og/home.png","description":"Open-source design intelligence engine for AI coding tools. Python core, MCP server, deterministic anti-AI-slop linter, 110 brand DESIGN.md specs.","foundingDate":"2026-05","founder":{"@type":"Person","name":"Laith Aljunaidy","url":"https://www.linkedin.com/in/laithaljunaidy/"},"sameAs":["https://github.com/Laith0003/ux-skill","https://pypi.org/project/uxskill/","https://www.npmjs.com/package/uxskill"]}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","@id":"https://uxskill.laithjunaidy.com/#site","url":"https://uxskill.laithjunaidy.com/","name":"ux-skill — design intelligence engine for AI coding","publisher":{"@id":"https://uxskill.laithjunaidy.com/#org"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":"https://uxskill.laithjunaidy.com/?q={search_term_string}","query-input":"required name=search_term_string"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"}]}
+  </script>
+
+  <style>
+    /* =========================================================================
+       UXSKILL HOMEPAGE v3 — Saturated Cinema
+       Color comes from media. No single accent. Per-scene palettes.
+       Display face: Bricolage Grotesque (variable, opsz + wdth + wght)
+       Body: Inter. Mono: JetBrains Mono.
+       Banned: yellow, amber, gold, mustard, ochre, cream, coral, Cormorant.
+       ========================================================================= */
+
+    :root {
+      /* Surface ladder — warm near-black, not pure */
+      --canvas:        #07080a;
+      --surface-1:     #0d0f12;
+      --surface-2:     #14181d;
+      --surface-3:     #1c2128;
+      --ink:           #f6f7f9;
+      --body:          #c7ccd3;
+      --muted:         #8a8f96;
+      --faint:         #5a5f66;
+      --hairline:      rgba(246, 247, 249, 0.07);
+      --hairline-2:    rgba(246, 247, 249, 0.14);
+
+      /* Per-scene tokens — overridden inside each [data-scene] block */
+      --scene-glow:    #06b6d4;
+      --scene-accent:  #06b6d4;
+      --scene-contrast: #f6f7f9;
+
+      /* Type */
+      --display: 'Bricolage Grotesque', 'Inter Tight', system-ui, sans-serif;
+      --body-face: 'Inter', system-ui, -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+      /* Spacing system */
+      --max-w:         1320px;
+      --max-read:      720px;
+      --section-y:     clamp(96px, 14vw, 196px);
+      --gutter:        clamp(20px, 5vw, 56px);
+
+      /* Motion */
+      --ease-cinema:   cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-snap:     cubic-bezier(0.22, 1, 0.36, 1);
+      --t-fast:        160ms;
+      --t-mid:         260ms;
+      --t-slow:        520ms;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { background: var(--canvas); scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: var(--body-face);
+      font-size: 16.5px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+      font-feature-settings: 'ss01', 'cv11';
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+
+    /* Skip link */
+    .skip-link {
+      position: absolute; top: -40px; left: 8px;
+      background: var(--surface-2); color: var(--ink);
+      padding: 12px 18px; border-radius: 8px;
+      font-family: var(--mono); font-size: 12px;
+      border: 1px solid var(--hairline-2);
+      z-index: 200;
+    }
+    .skip-link:focus { top: 8px; }
+
+    h1, h2, h3, h4 {
+      font-family: var(--display);
+      font-weight: 600;
+      font-variation-settings: 'wdth' 88, 'opsz' 96, 'wght' 580;
+      margin: 0;
+      line-height: 1.0;
+      letter-spacing: -0.028em;
+      color: var(--ink);
+    }
+    p { margin: 0; color: var(--body); }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 22px; height: 1px;
+      background: currentColor;
+    }
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* =========================================================================
+       NAVIGATION — sticky pill, scroll-state, mobile drawer
+       ========================================================================= */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 80;
+      padding: 14px 0;
+      transition: backdrop-filter var(--t-mid) var(--ease-cinema),
+                  background-color var(--t-mid) var(--ease-cinema),
+                  border-color var(--t-mid) var(--ease-cinema);
+      border-bottom: 1px solid transparent;
+    }
+    .nav.is-scrolled {
+      background: rgba(7, 8, 10, 0.72);
+      backdrop-filter: saturate(140%) blur(18px);
+      -webkit-backdrop-filter: saturate(140%) blur(18px);
+      border-bottom-color: var(--hairline);
+    }
+    .nav__inner {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 18px;
+    }
+    .wordmark {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-size: 24px;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--ink);
+      display: inline-flex;
+      align-items: baseline;
+      gap: 2px;
+    }
+    .wordmark__dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 2px;
+      background: linear-gradient(135deg, #06b6d4, #ec4899);
+      margin-left: 4px;
+      transform: translateY(-2px);
+    }
+    .nav__links { display: none; gap: 26px; align-items: center; }
+    .nav__link {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--body);
+      letter-spacing: -0.005em;
+      transition: color var(--t-fast) var(--ease-cinema);
+    }
+    .nav__link:hover, .nav__link:focus-visible { color: var(--ink); }
+    .nav__link:focus-visible {
+      outline: 2px solid var(--scene-glow);
+      outline-offset: 6px;
+      border-radius: 3px;
+    }
+    .cta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 16px;
+      min-height: 40px;
+      border-radius: 10px;
+      background: var(--ink);
+      color: var(--canvas);
+      font-family: var(--mono);
+      font-size: 12.5px;
+      font-weight: 500;
+      letter-spacing: -0.005em;
+      transition: transform var(--t-mid) var(--ease-cinema),
+                  background-color var(--t-fast) var(--ease-cinema);
+    }
+    .cta-pill:hover, .cta-pill:focus-visible {
+      transform: translateY(-1px);
+      background: #ffffff;
+    }
+    .cta-pill:active { transform: translateY(0); }
+    .cta-pill:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 4px; }
+
+    .nav__menu-btn {
+      display: inline-flex;
+      width: 40px; height: 40px;
+      align-items: center; justify-content: center;
+      border-radius: 8px;
+      border: 1px solid var(--hairline-2);
+      color: var(--ink);
+    }
+    .nav__menu-btn:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 3px; }
+
+    .nav__drawer {
+      position: fixed; inset: 0;
+      z-index: 90;
+      display: flex;
+      flex-direction: column;
+      padding: 80px var(--gutter) 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--t-mid) var(--ease-cinema);
+      background-color: rgba(7, 8, 10, 0.94);
+    }
+    .nav__drawer.is-open { opacity: 1; pointer-events: auto; }
+    .nav__drawer a {
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'wght' 560;
+      font-size: 32px;
+      color: var(--ink);
+      padding: 14px 0;
+      border-bottom: 1px solid var(--hairline);
+      letter-spacing: -0.02em;
+    }
+    .nav__drawer .nav__drawer-close {
+      position: absolute; top: 18px; right: var(--gutter);
+      width: 44px; height: 44px;
+      border-radius: 8px;
+      border: 1px solid var(--hairline-2);
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+
+    /* =========================================================================
+       HERO — full-bleed canvas backdrop + editorial 7-5 split + terminal panel
+       Scene palette: cyan/magenta noise field
+       ========================================================================= */
+    .hero[data-scene="hero"] {
+      --scene-glow:   #06b6d4;
+      --scene-accent: #ec4899;
+    }
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding-top: clamp(120px, 16vw, 200px);
+      padding-bottom: clamp(64px, 9vw, 120px);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .hero__canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      opacity: 0.85;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 30%, transparent 0%, rgba(7,8,10,0.55) 70%, var(--canvas) 95%);
+      z-index: -1;
+      pointer-events: none;
+    }
+    .hero__fade-bottom {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 28%;
+      background-image: linear-gradient(to bottom, transparent, var(--canvas));
+      z-index: -1;
+      pointer-events: none;
+    }
+    .hero__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 56px;
+      align-items: end;
+    }
+    .hero__copy {
+      max-width: 720px;
+    }
+    .hero__eyebrow-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+    .pill-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 100px;
+      background: var(--surface-2);
+      border: 1px solid var(--hairline-2);
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: -0.005em;
+      color: var(--body);
+    }
+    .pill-tag .dot-live {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.18);
+      animation: live-pulse 1800ms var(--ease-cinema) infinite;
+    }
+    @keyframes live-pulse {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.18); }
+      50%      { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.05); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pill-tag .dot-live { animation: none; }
+    }
+    .hero h1 {
+      font-size: clamp(46px, 9vw, 124px);
+      font-variation-settings: 'wdth' 84, 'opsz' 96, 'wght' 620;
+      letter-spacing: -0.038em;
+      line-height: 0.96;
+    }
+    .hero h1 .h1-shimmer {
+      color: var(--ink);
+    }
+    .hero h1 .h1-italic {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: -0.015em;
+    }
+    .hero__sub {
+      margin-top: 28px;
+      font-size: clamp(17px, 2.1vw, 21px);
+      line-height: 1.45;
+      color: var(--body);
+      max-width: 620px;
+      font-weight: 400;
+    }
+    .hero__sub strong { color: var(--ink); font-weight: 600; }
+    .hero__ctas {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 36px;
+    }
+    .cta-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 22px;
+      min-height: 48px;
+      border-radius: 10px;
+      background: var(--ink);
+      color: var(--canvas);
+      font-family: var(--mono);
+      font-size: 13.5px;
+      font-weight: 500;
+      transition: transform var(--t-mid) var(--ease-cinema),
+                  box-shadow var(--t-mid) var(--ease-cinema);
+    }
+    .cta-primary:hover, .cta-primary:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 32px -16px #ffffff40;
+    }
+    .cta-primary:active { transform: translateY(0); }
+    .cta-primary:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 4px; }
+    .cta-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 22px;
+      min-height: 48px;
+      border-radius: 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--hairline-2);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 13.5px;
+      font-weight: 500;
+      transition: transform var(--t-mid) var(--ease-cinema),
+                  background-color var(--t-fast) var(--ease-cinema),
+                  border-color var(--t-fast) var(--ease-cinema);
+    }
+    .cta-secondary:hover, .cta-secondary:focus-visible {
+      transform: translateY(-1px);
+      background: var(--surface-3);
+      border-color: var(--scene-glow);
+    }
+    .cta-secondary:active { transform: translateY(0); }
+    .cta-secondary:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 4px; }
+
+    .hero__meta {
+      margin-top: 36px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: -0.005em;
+      color: var(--muted);
+    }
+    .hero__meta .num {
+      color: var(--ink);
+      font-weight: 500;
+      margin-right: 6px;
+    }
+
+    /* Terminal panel — second column at lg+, full-width below */
+    .terminal {
+      width: 100%;
+      max-width: 580px;
+      background: #0a0c10;
+      border: 1px solid var(--hairline-2);
+      border-radius: 14px;
+      box-shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .terminal__chrome {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(20, 24, 29, 0.7);
+      border-bottom: 1px solid var(--hairline);
+    }
+    .terminal__dot {
+      width: 11px; height: 11px;
+      border-radius: 50%;
+      background: var(--surface-3);
+    }
+    .terminal__dot:nth-child(1) { background: #ff5f57; }
+    .terminal__dot:nth-child(2) { background: #67c8ef; }
+    .terminal__dot:nth-child(3) { background: #10b981; }
+    .terminal__title {
+      flex: 1;
+      text-align: center;
+      font-size: 11.5px;
+      color: var(--muted);
+      letter-spacing: -0.005em;
+    }
+    .terminal__body {
+      padding: 18px 18px 22px;
+      max-height: 480px;
+      overflow: hidden;
+      color: var(--body);
+      position: relative;
+    }
+    .terminal__line { white-space: pre-wrap; min-height: 1.4em; }
+    .terminal__line .prompt { color: #10b981; user-select: none; }
+    .terminal__line .arg { color: #06b6d4; }
+    .terminal__line .key { color: #c4b5fd; }
+    .terminal__line .ok { color: #34d399; }
+    .terminal__line .info { color: var(--muted); }
+    .terminal__line .num { color: #67e8f9; }
+    .terminal__line .red { color: #fb7185; }
+    .terminal__line .magenta { color: #ec4899; }
+    .terminal__line .ink { color: var(--ink); }
+    .terminal__line .check-svg { display: inline-flex; vertical-align: -2px; margin-right: 4px; }
+
+    .blink {
+      display: inline-block;
+      width: 7px;
+      height: 1.05em;
+      vertical-align: -2px;
+      background: var(--ink);
+      margin-left: 2px;
+      animation: blink 1100ms steps(2) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .blink { animation: none; opacity: 0.65; }
+    }
+
+    @media (min-width: 968px) {
+      .hero__grid {
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 80px;
+      }
+      .hero__copy { padding-right: 24px; }
+    }
+
+    /* =========================================================================
+       SECTION SHELL
+       ========================================================================= */
+    section {
+      position: relative;
+      padding: var(--section-y) 0;
+    }
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 56px;
+    }
+    .section-head__title {
+      font-size: clamp(36px, 5.6vw, 64px);
+      font-variation-settings: 'wdth' 86, 'opsz' 96, 'wght' 600;
+      letter-spacing: -0.032em;
+      line-height: 1.02;
+      margin-top: 18px;
+    }
+    .section-head__title .accent-italic {
+      font-style: italic;
+      color: var(--scene-accent);
+      font-variation-settings: 'wdth' 86, 'opsz' 96, 'wght' 500;
+    }
+    .section-head__lead {
+      font-size: clamp(16px, 1.8vw, 19px);
+      color: var(--body);
+      max-width: 560px;
+      margin-top: 18px;
+      line-height: 1.5;
+    }
+
+    /* =========================================================================
+       BRAND INSPECTOR — draggable rail of brand cards with hold-to-fastforward
+       Each card is a real specimen: logo + actual typeface + actual palette.
+       Click a card → inline brand inspector unfurls below it.
+       Click "Apply" → the whole page momentarily reskins to that brand.
+       ========================================================================= */
+    .brands {
+      background: linear-gradient(180deg, var(--canvas) 0%, var(--surface-1) 50%, var(--canvas) 100%);
+      overflow: hidden;
+      --scene-accent: #06b6d4;
+    }
+    .brand-rail-shell {
+      position: relative;
+      margin-top: 32px;
+    }
+    .brand-rail {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 24px clamp(16px, 5vw, 56px) 32px;
+      scroll-snap-type: x mandatory;
+      cursor: grab;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      -webkit-overflow-scrolling: touch;
+      user-select: none;
+      mask-image: linear-gradient(to right, transparent, #000 4%),
+                  linear-gradient(to left, transparent, #000 4%);
+      mask-composite: intersect;
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 4%),
+                          linear-gradient(to left, transparent, #000 4%);
+      -webkit-mask-composite: source-in;
+    }
+    .brand-rail::-webkit-scrollbar { display: none; }
+    .brand-rail.is-grabbing { cursor: grabbing; scroll-behavior: auto; }
+
+    /* Edge hold zones — touch + hold to fast-forward 2x */
+    .brand-rail-edge {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 64px;
+      height: 64px;
+      border-radius: 999px;
+      border: 1px solid var(--hairline-2);
+      background: rgba(20, 24, 29, 0.7);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ink);
+      cursor: pointer;
+      z-index: 4;
+      transition: background-color var(--t-fast) var(--ease-cinema),
+                  transform var(--t-fast) var(--ease-cinema);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .brand-rail-edge:hover { background: rgba(28, 33, 40, 0.85); }
+    .brand-rail-edge:active,
+    .brand-rail-edge.is-held { background: var(--scene-accent); color: #07080a; transform: translateY(-50%) scale(1.08); }
+    .brand-rail-edge svg { width: 22px; height: 22px; }
+    .brand-rail-edge[data-dir="prev"] { left: 8px; }
+    .brand-rail-edge[data-dir="next"] { right: 8px; }
+    @media (max-width: 640px) {
+      .brand-rail-edge { width: 52px; height: 52px; }
+    }
+    .brand-rail-hint {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 12px;
+    }
+    .brand-rail-hint kbd {
+      font-family: inherit;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--hairline);
+      border-radius: 5px;
+      padding: 2px 7px;
+      color: var(--ink);
+      font-size: 10.5px;
+    }
+
+    /* Big card — one specimen per brand */
+    .brand-card {
+      flex: 0 0 360px;
+      min-width: 360px;
+      height: 480px;
+      scroll-snap-align: center;
+      border-radius: 18px;
+      border: 1px solid var(--hairline);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: var(--brand-canvas, rgba(20, 24, 29, 0.6));
+      color: var(--brand-ink, var(--ink));
+      transition: transform var(--t-mid) var(--ease-cinema),
+                  box-shadow var(--t-mid) var(--ease-cinema),
+                  border-color var(--t-mid) var(--ease-cinema);
+      cursor: pointer;
+    }
+    .brand-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--brand-accent, var(--scene-accent));
+      box-shadow: 0 24px 60px -28px rgba(0,0,0,0.55);
+    }
+    .brand-card.is-active {
+      transform: translateY(-6px);
+      border-color: var(--brand-accent, var(--scene-accent));
+      box-shadow: 0 0 0 1px var(--brand-accent, var(--scene-accent)),
+                  0 32px 80px -28px rgba(0,0,0,0.65);
+    }
+    .brand-card__chrome {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--hairline);
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--brand-muted, var(--muted));
+    }
+    .brand-card__chrome-dots { display: flex; gap: 6px; }
+    .brand-card__chrome-dot {
+      width: 8px; height: 8px; border-radius: 999px;
+      background: var(--brand-muted, var(--muted));
+      opacity: 0.5;
+    }
+    .brand-card__chrome-dot:nth-child(1) { background: #ef4444; opacity: 0.7; }
+    .brand-card__chrome-dot:nth-child(2) { background: #f59f00; opacity: 0.7; }
+    .brand-card__chrome-dot:nth-child(3) { background: #10b981; opacity: 0.7; }
+    .brand-card__logo {
+      padding: 36px 28px 22px;
+      min-height: 90px;
+      display: flex; align-items: center;
+    }
+    .brand-card__logo img {
+      max-height: 36px;
+      max-width: 220px;
+      width: auto;
+      object-fit: contain;
+      filter: var(--brand-logo-filter, brightness(0) invert(1));
+      opacity: 0.96;
+    }
+    .brand-card__wordmark {
+      font-size: 32px;
+      letter-spacing: -0.03em;
+      color: var(--brand-ink, var(--ink));
+    }
+    .brand-card__specimen {
+      padding: 0 28px 18px;
+      flex: 1;
+    }
+    .brand-card__headline {
+      font-family: var(--brand-display, var(--display));
+      font-size: 30px;
+      line-height: 1.06;
+      letter-spacing: var(--brand-display-tracking, -0.02em);
+      font-weight: var(--brand-display-weight, 600);
+      font-style: var(--brand-display-style, normal);
+      color: var(--brand-ink, var(--ink));
+      margin-bottom: 14px;
+      max-width: 280px;
+    }
+    .brand-card__body {
+      font-family: var(--brand-body, var(--sans));
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--brand-body-color, var(--body));
+      max-width: 280px;
+    }
+    .brand-card__palette {
+      display: flex;
+      height: 36px;
+    }
+    .brand-card__palette span {
+      flex: 1; height: 100%;
+      transition: flex var(--t-mid) var(--ease-cinema);
+    }
+    .brand-card:hover .brand-card__palette span:nth-child(1) { flex: 2; }
+    .brand-card__foot {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 22px;
+      border-top: 1px solid var(--hairline);
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--brand-muted, var(--muted));
+    }
+    .brand-card__foot-name {
+      font-family: var(--sans);
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: -0.005em;
+      text-transform: none;
+      color: var(--brand-ink, var(--ink));
+    }
+    .brand-card__foot-cat {
+      font-size: 9.5px;
+    }
+    .brand-card__try {
+      position: absolute;
+      bottom: 64px; right: 22px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: var(--brand-accent, var(--scene-accent));
+      color: var(--brand-canvas, #07080a);
+      font-family: var(--sans);
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: -0.005em;
+      border: 0;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity var(--t-fast) var(--ease-cinema), transform var(--t-fast) var(--ease-cinema);
+      box-shadow: 0 8px 22px -10px rgba(0,0,0,0.5);
+    }
+    .brand-card:hover .brand-card__try,
+    .brand-card:focus-within .brand-card__try {
+      opacity: 1; transform: translateY(0);
+    }
+
+    /* Page reskin state — when "Apply this brand" is pressed, the homepage's
+       :root variables get swapped to the brand for 6 seconds. Everything fades. */
+    body.is-reskinned * {
+      transition: background-color 320ms var(--ease-cinema),
+                  color 320ms var(--ease-cinema),
+                  border-color 320ms var(--ease-cinema) !important;
+    }
+    .brand-reskin-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translateX(-50%);
+      background: var(--brand-accent, var(--scene-accent));
+      color: #07080a;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      z-index: 100;
+      opacity: 0;
+      transform: translateX(-50%) translateY(20px);
+      transition: opacity 220ms var(--ease-cinema), transform 220ms var(--ease-cinema);
+      pointer-events: none;
+      box-shadow: 0 12px 32px -10px rgba(0,0,0,0.5);
+    }
+    .brand-reskin-toast.is-on {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .brand-card__try:focus-visible {
+      outline: 2px solid var(--brand-accent, var(--scene-accent));
+      outline-offset: 3px;
+    }
+    @media (max-width: 640px) {
+      .brand-card {
+        flex: 0 0 80vw;
+        min-width: 280px;
+        height: 440px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .brand-card, .brand-card__try, .brand-reskin-toast { transition: none; }
+    }
+    .brand-tile[data-id="linear"]    .brand-tile__name { font-family: 'Inter Tight', sans-serif; font-weight: 700; letter-spacing: -0.04em; }
+    .brand-tile[data-id="vercel"]    .brand-tile__name { font-family: 'Geist', sans-serif; font-weight: 600; letter-spacing: -0.03em; }
+    .brand-tile[data-id="stripe"]    .brand-tile__name { font-family: 'Switzer', sans-serif; font-weight: 500; letter-spacing: -0.02em; }
+    .brand-tile[data-id="figma"]     .brand-tile__name { font-family: 'General Sans', sans-serif; font-weight: 700; letter-spacing: -0.025em; }
+    .brand-tile[data-id="framer"]    .brand-tile__name { font-family: 'Outfit', sans-serif; font-weight: 600; letter-spacing: -0.04em; }
+    .brand-tile[data-id="notion"]    .brand-tile__name { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-variation-settings: 'wdth' 100; letter-spacing: -0.02em; }
+    .brand-tile[data-id="supabase"]  .brand-tile__name { font-family: 'Manrope', sans-serif; font-weight: 700; letter-spacing: -0.045em; }
+    .brand-tile[data-id="posthog"]   .brand-tile__name { font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; letter-spacing: -0.015em; }
+    .brand-tile[data-id="resend"]    .brand-tile__name { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 400; letter-spacing: -0.01em; font-size: 34px; }
+    .brand-tile[data-id="raycast"]   .brand-tile__name { font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
+    .brand-tile[data-id="warp"]      .brand-tile__name { font-family: 'DM Mono', monospace; font-weight: 500; letter-spacing: -0.005em; font-size: 24px; }
+    .brand-tile[data-id="clay"]      .brand-tile__name { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-variation-settings: 'wdth' 75; letter-spacing: -0.015em; }
+    .brand-tile[data-id="spotify"]   .brand-tile__name { font-family: 'Onest', sans-serif; font-weight: 700; letter-spacing: -0.03em; }
+    .brand-tile[data-id="cursor"]    .brand-tile__name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; letter-spacing: -0.045em; }
+    .brand-tile[data-id="claude"]    .brand-tile__name { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; letter-spacing: -0.005em; font-size: 32px; }
+    .brand-tile[data-id="ferrari"]   .brand-tile__name { font-family: 'Inter Tight', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; font-size: 18px; color: #ef4444; }
+    .brand-tile[data-id="bmw-m"]     .brand-tile__name { font-family: 'Inter Tight', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: 18px; }
+    .brand-tile[data-id="apple"]     .brand-tile__name { font-family: 'SF Pro Display', 'Inter Tight', sans-serif; font-weight: 600; letter-spacing: -0.04em; }
+    .brand-tile[data-id="figma"]     .brand-tile__name { color: #a259ff; }
+    .brand-tile[data-id="linear"]    .brand-tile__name { color: #5e6ad2; }
+    .brand-tile[data-id="vercel"]    .brand-tile__name { color: #f6f7f9; }
+    .brand-tile[data-id="stripe"]    .brand-tile__name { color: #635bff; }
+    .brand-tile[data-id="framer"]    .brand-tile__name { color: #0099ff; }
+    .brand-tile[data-id="supabase"]  .brand-tile__name { color: #3ecf8e; }
+    .brand-tile[data-id="posthog"]   .brand-tile__name { color: #f6f7f9; }
+    .brand-tile[data-id="raycast"]   .brand-tile__name { color: #f6f7f9; }
+    .brand-tile[data-id="resend"]    .brand-tile__name { color: #f6f7f9; }
+    .brand-tile[data-id="warp"]      .brand-tile__name { color: #f7f5f0; }
+    .brand-tile[data-id="clay"]      .brand-tile__name { color: #f97316; }
+    .brand-tile[data-id="spotify"]   .brand-tile__name { color: #1ed760; }
+    .brand-tile[data-id="cursor"]    .brand-tile__name { color: #f6f7f9; }
+    .brand-tile[data-id="notion"]    .brand-tile__name { color: #f6f7f9; }
+    .brand-tile[data-id="claude"]    .brand-tile__name { color: #d97757; }
+    .brand-tile[data-id="apple"]     .brand-tile__name { color: #f6f7f9; }
+
+    .brands__caption {
+      max-width: 640px;
+      margin: 64px auto 0;
+      text-align: center;
+    }
+    .brands__caption-line {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 90, 'wght' 580;
+      font-size: clamp(18px, 2.4vw, 26px);
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    /* =========================================================================
+       REASONING ENGINE — 5-column fan-out
+       Scene palette: cool blues
+       ========================================================================= */
+    [data-scene="engine"] {
+      --scene-glow:   #38bdf8;
+      --scene-accent: #818cf8;
+    }
+    .engine__panel {
+      border: 1px solid var(--hairline-2);
+      border-radius: 18px;
+      background: linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2) 100%);
+      padding: 26px;
+      overflow: hidden;
+    }
+    .engine__layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    .engine__brief {
+      border: 1px dashed var(--hairline-2);
+      border-radius: 12px;
+      padding: 18px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--body);
+    }
+    .engine__brief .label {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .engine__brief .value { color: var(--ink); }
+    .engine__brief .value-row { display: flex; flex-wrap: wrap; gap: 8px 12px; margin-top: 4px; }
+    .engine__brief .tag {
+      padding: 4px 9px;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      color: #67e8f9;
+      font-size: 11.5px;
+    }
+
+    .engine__lanes {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      position: relative;
+    }
+    .engine__lane {
+      background: var(--surface-2);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 14px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      min-height: 188px;
+      position: relative;
+      overflow: hidden;
+    }
+    .engine__lane .lane-label {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+    .engine__lane .lane-result {
+      color: var(--ink);
+      font-size: 12.5px;
+      letter-spacing: -0.005em;
+    }
+    .engine__lane .lane-score {
+      position: absolute;
+      bottom: 12px; right: 12px;
+      font-size: 10.5px;
+      color: #67e8f9;
+    }
+    .engine__lane[data-state="searching"] {
+      border-color: rgba(56, 189, 248, 0.4);
+      box-shadow: 0 0 0 1px #38bdf833;
+    }
+    .engine__lane[data-state="searching"]::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -50%;
+      width: 50%; height: 2px;
+      background: linear-gradient(90deg, transparent, #38bdf8, transparent);
+      animation: scan 1400ms var(--ease-cinema) infinite;
+    }
+    @keyframes scan {
+      to { left: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .engine__lane[data-state="searching"]::before { animation: none; opacity: 0.3; }
+    }
+
+    .engine__merge {
+      margin-top: 8px;
+      padding: 18px 20px;
+      border: 1px solid rgba(129, 140, 248, 0.3);
+      border-radius: 12px;
+      background: rgba(129, 140, 248, 0.05);
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .engine__merge-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: #c4b5fd;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .engine__merge-result {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 90, 'wght' 560;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    .engine__merge-meta {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--body);
+    }
+
+    @media (min-width: 768px) {
+      .engine__layout {
+        grid-template-columns: 280px 1fr;
+        gap: 32px;
+      }
+    }
+    @media (max-width: 720px) {
+      .engine__lanes {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* =========================================================================
+       LINTER PANEL — typewriter terminal with real findings
+       Scene palette: green (success) + magenta (warn) on near-black
+       ========================================================================= */
+    [data-scene="linter"] {
+      --scene-glow:   #10b981;
+      --scene-accent: #ec4899;
+    }
+    .linter__layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+    .linter__side .linter__claim {
+      font-family: var(--display);
+      font-size: clamp(28px, 4vw, 42px);
+      font-variation-settings: 'wdth' 88, 'wght' 580;
+      letter-spacing: -0.026em;
+      line-height: 1.04;
+      color: var(--ink);
+      margin-bottom: 18px;
+    }
+    .linter__side p { margin-bottom: 14px; color: var(--body); }
+    .linter__stats {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0;
+      border-top: 1px solid var(--hairline);
+    }
+    .linter__stat {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .linter__stat:nth-child(odd) { padding-right: 18px; border-right: 1px solid var(--hairline); }
+    .linter__stat:nth-child(even) { padding-left: 18px; }
+    .linter__stat .v {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 82, 'wght' 620;
+      font-size: 36px;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--ink);
+    }
+    .linter__stat .l {
+      margin-top: 6px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .linter__terminal {
+      background: #0a0c10;
+      border: 1px solid var(--hairline-2);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.7);
+    }
+    .linter__terminal .terminal__body { max-height: 580px; overflow: auto; }
+    @media (min-width: 968px) {
+      .linter__layout {
+        grid-template-columns: 0.85fr 1.15fr;
+        gap: 56px;
+      }
+    }
+
+    /* =========================================================================
+       DEVICE MOCKUPS — Cursor, Claude Code, Windsurf
+       Scene palette: cool blue glow
+       ========================================================================= */
+    [data-scene="devices"] {
+      --scene-glow: #60a5fa;
+    }
+    .devices__rail {
+      margin-top: 36px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    .device {
+      position: relative;
+      background: var(--surface-1);
+      border: 1px solid var(--hairline-2);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform var(--t-slow) var(--ease-cinema), border-color var(--t-mid) var(--ease-cinema);
+    }
+    .device:hover {
+      transform: translateY(-4px);
+      border-color: rgba(96, 165, 250, 0.4);
+    }
+    .device__chrome {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: rgba(20, 24, 29, 0.7);
+      border-bottom: 1px solid var(--hairline);
+    }
+    .device__name {
+      flex: 1;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--muted);
+      letter-spacing: -0.005em;
+      text-align: center;
+    }
+    .device__name strong { color: var(--body); font-weight: 600; }
+    .device__sidebar-tab {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+    .device__sidebar-tab.is-active {
+      background: rgba(96, 165, 250, 0.12);
+      color: var(--ink);
+    }
+    .device__body {
+      padding: 18px 18px 22px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--body);
+    }
+    .device__cmd-row {
+      display: flex; align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(20, 24, 29, 0.5);
+      border: 1px solid var(--hairline);
+      border-radius: 8px;
+      margin-bottom: 14px;
+    }
+    .device__cmd-row .slash { color: #c4b5fd; }
+    .device__cmd-row .arg { color: var(--ink); }
+    .device__cmd-row .at { color: #67e8f9; margin-left: auto; font-size: 10.5px; }
+    .device__result {
+      padding: 12px 14px;
+      background: rgba(7, 8, 10, 0.6);
+      border-left: 2px solid #60a5fa;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 8px;
+    }
+    .device__result .lbl {
+      display: block;
+      font-size: 10.5px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+    .device__result .val {
+      color: var(--ink);
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'wght' 540;
+      font-size: 16px;
+      letter-spacing: -0.015em;
+    }
+    .device__result.is-warn { border-left-color: #ec4899; }
+    .device__result.is-warn .val { color: #ec4899; }
+    .device__result.is-ok { border-left-color: #10b981; }
+    .device__result.is-ok .val { color: #10b981; }
+
+    @media (min-width: 768px) {
+      .devices__rail {
+        grid-template-columns: 1.15fr 0.95fr 0.95fr;
+        gap: 20px;
+      }
+    }
+
+    /* =========================================================================
+       SCREENSHOT GALLERY (REAL PNG MEDIA)
+       Scene palette: emerald + soft mint
+       ========================================================================= */
+    [data-scene="shots"] {
+      --scene-accent: #10b981;
+      padding: 120px 0 80px;
+    }
+    .shots__hero {
+      margin: 56px 0 0;
+      position: relative;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      /* Scroll-pinned cinematic effect — the hero shot slides up + scales
+         as the viewport reaches it. CSS scroll-driven animation degrades
+         gracefully on browsers that don't support animation-timeline. */
+      animation: shots-zoom linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 50%;
+    }
+    @keyframes shots-zoom {
+      from { transform: translateY(40px) scale(0.96); opacity: 0.4; }
+      to   { transform: translateY(0) scale(1);       opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .shots__hero { animation: none; transform: none; opacity: 1; }
+    }
+    .shots__hero img {
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      box-shadow: 0 30px 80px -40px rgba(0,0,0,0.55),
+                  0 1px 0 0 rgba(255,255,255,0.04) inset;
+      display: block;
+    }
+    .shots__hero figcaption,
+    .shots__grid figcaption {
+      margin-top: 14px;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .shots__hero figcaption code,
+    .shots__grid figcaption code {
+      font-family: var(--mono);
+      background: rgba(255,255,255,0.06);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--ink);
+    }
+    .shots__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 56px;
+      margin-top: 80px;
+    }
+    .shots__grid figure {
+      margin: 0;
+      /* Each tile rises and reveals on scroll — staggered via :nth-child */
+      animation: shots-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 35%;
+    }
+    @keyframes shots-rise {
+      from { transform: translateY(60px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .shots__grid figure { animation: none; transform: none; opacity: 1; }
+    }
+    .shots__grid img {
+      width: 100%;
+      height: auto;
+      border-radius: 14px;
+      border: 1px solid var(--hairline);
+      box-shadow: 0 24px 60px -36px rgba(0,0,0,0.5);
+      display: block;
+    }
+    @media (min-width: 960px) {
+      .shots__grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .shots__mosaic {
+        grid-column: 1 / -1;
+      }
+    }
+
+    /* =========================================================================
+       ABSTRACT CANVAS SECTION
+       Scene palette: warm magenta + cool teal
+       ========================================================================= */
+    [data-scene="canvas"] {
+      --scene-glow: #f472b6;
+      --scene-accent: #14b8a6;
+    }
+    .scene-canvas {
+      position: relative;
+      height: clamp(420px, 56vw, 640px);
+      overflow: hidden;
+      border-top: 1px solid var(--hairline);
+      border-bottom: 1px solid var(--hairline);
+    }
+    .scene-canvas canvas {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      display: block;
+    }
+    .scene-canvas__overlay {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 38px var(--gutter);
+      background-color: rgba(7, 8, 10, 0.85);
+      background-image: linear-gradient(to top, var(--canvas), transparent);
+      pointer-events: none;
+    }
+    .scene-canvas__overlay-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+    .scene-canvas__line {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 86, 'wght' 580;
+      font-size: clamp(22px, 3.4vw, 38px);
+      letter-spacing: -0.025em;
+      line-height: 1.05;
+      color: var(--ink);
+      max-width: 720px;
+    }
+    .scene-canvas__line em {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+      font-weight: 400;
+      color: #f472b6;
+    }
+
+    /* =========================================================================
+       STATS — cinematic count-up
+       Scene palette: subtle cool/warm pairing
+       ========================================================================= */
+    [data-scene="stats"] {
+      --scene-glow: #67e8f9;
+    }
+    .stats__grid {
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--hairline);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .stat {
+      padding: 28px 24px;
+      border-right: 1px solid var(--hairline);
+      border-bottom: 1px solid var(--hairline);
+      background: var(--surface-1);
+      position: relative;
+      overflow: hidden;
+    }
+    .stat::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(103, 232, 249, 0.04) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity var(--t-slow) var(--ease-cinema);
+    }
+    .stat:hover::before { opacity: 1; }
+    .stat__v {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 80, 'opsz' 96, 'wght' 620;
+      font-size: clamp(40px, 7vw, 72px);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--ink);
+      display: block;
+    }
+    .stat__l {
+      margin-top: 14px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    @media (min-width: 720px) {
+      .stats__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (min-width: 1024px) {
+      .stats__grid { grid-template-columns: repeat(6, 1fr); }
+    }
+
+    /* =========================================================================
+       COMPETITOR SCORECARD TEASER
+       Scene palette: deep rose + electric blue
+       ========================================================================= */
+    [data-scene="compare"] {
+      --scene-glow: #f43f5e;
+    }
+    .compare__panel {
+      margin-top: 36px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      border: 1px solid var(--hairline-2);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .compare__row {
+      display: grid;
+      grid-template-columns: 1fr 100px 100px;
+      gap: 12px;
+      padding: 22px 24px;
+      border-bottom: 1px solid var(--hairline);
+      align-items: baseline;
+    }
+    .compare__row:last-child { border-bottom: 0; }
+    .compare__row.is-ours {
+      background-color: rgba(244, 63, 94, 0.08);
+      background-image: linear-gradient(to right, transparent 55%, var(--surface-1));
+    }
+    .compare__row-h {
+      background: var(--surface-2);
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .compare__name {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 90, 'wght' 580;
+      font-size: 22px;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+    }
+    .compare__name.is-them {
+      font-variation-settings: 'wdth' 90, 'wght' 500;
+      color: var(--body);
+    }
+    .compare__score {
+      font-family: var(--mono);
+      font-size: 14px;
+      color: var(--ink);
+      text-align: right;
+    }
+    .compare__score .pct {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 82, 'wght' 600;
+      font-size: 28px;
+      letter-spacing: -0.025em;
+      display: block;
+      line-height: 1;
+    }
+    .compare__row.is-ours .compare__score .pct { color: #f43f5e; }
+    .compare__row .compare__score.is-them { color: var(--muted); }
+    .compare__score-bar {
+      height: 4px;
+      border-radius: 2px;
+      background: var(--surface-3);
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .compare__score-bar > span {
+      display: block;
+      height: 100%;
+      background: var(--ink);
+      border-radius: 2px;
+      transform-origin: left center;
+      transform: scaleX(0);
+      transition: transform 1200ms var(--ease-cinema);
+    }
+    .compare__row.is-ours .compare__score-bar > span { background: #f43f5e; }
+    .compare__row.is-revealed .compare__score-bar > span { transform: scaleX(var(--score-fill, 0)); }
+
+    .compare__cta {
+      margin-top: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--ink);
+      padding: 12px 18px;
+      border: 1px solid var(--hairline-2);
+      border-radius: 10px;
+      transition: border-color var(--t-fast) var(--ease-cinema),
+                  background-color var(--t-fast) var(--ease-cinema);
+    }
+    .compare__cta:hover, .compare__cta:focus-visible {
+      border-color: #f43f5e;
+      background: rgba(244, 63, 94, 0.08);
+    }
+    .compare__cta:focus-visible { outline: 2px solid #f43f5e; outline-offset: 3px; }
+
+    /* =========================================================================
+       INSTALL — three tabs
+       Scene palette: emerald
+       ========================================================================= */
+    [data-scene="install"] {
+      --scene-glow: #34d399;
+    }
+    .install__tabs {
+      margin-top: 36px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .install__tab {
+      padding: 12px 18px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: -0.005em;
+      border-bottom: 2px solid transparent;
+      transition: color var(--t-fast) var(--ease-cinema),
+                  border-color var(--t-fast) var(--ease-cinema);
+      margin-bottom: -1px;
+    }
+    .install__tab.is-active {
+      color: var(--ink);
+      border-bottom-color: #34d399;
+    }
+    .install__tab:focus-visible { outline: 2px solid #34d399; outline-offset: 2px; border-radius: 2px; }
+    .install__pane {
+      margin-top: 28px;
+      padding: 24px 28px;
+      background: #0a0c10;
+      border: 1px solid var(--hairline-2);
+      border-radius: 12px;
+      font-family: var(--mono);
+      font-size: 14.5px;
+      color: var(--body);
+      display: none;
+      position: relative;
+    }
+    .install__pane.is-active { display: block; }
+    .install__pane .install__line { margin: 0; }
+    .install__pane .install__cmd { color: #34d399; }
+    .install__pane .install__arg { color: var(--ink); }
+    .install__pane .install__comment { color: var(--muted); display: block; margin-top: 12px; font-size: 12px; }
+    .install__copy {
+      position: absolute;
+      top: 14px; right: 14px;
+      padding: 7px 11px;
+      border-radius: 6px;
+      border: 1px solid var(--hairline-2);
+      background: var(--surface-2);
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      transition: color var(--t-fast) var(--ease-cinema),
+                  border-color var(--t-fast) var(--ease-cinema);
+    }
+    .install__copy:hover, .install__copy:focus-visible {
+      color: var(--ink);
+      border-color: var(--hairline-2);
+    }
+    .install__copy.is-copied { color: #34d399; border-color: rgba(52, 211, 153, 0.3); }
+    .install__copy:focus-visible { outline: 2px solid #34d399; outline-offset: 2px; }
+
+    /* =========================================================================
+       MCP SECTION
+       Scene palette: indigo
+       ========================================================================= */
+    [data-scene="mcp"] {
+      --scene-glow: #818cf8;
+    }
+    .mcp__panel {
+      margin-top: 36px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      align-items: center;
+      padding: 36px;
+      background-color: var(--surface-1);
+      background-image: radial-gradient(ellipse at top left, rgba(129, 140, 248, 0.12), transparent 60%);
+      border: 1px solid var(--hairline-2);
+      border-radius: 18px;
+    }
+    .mcp__head .mcp__h2 {
+      font-size: clamp(28px, 4vw, 42px);
+      font-variation-settings: 'wdth' 88, 'wght' 580;
+      letter-spacing: -0.028em;
+      line-height: 1.04;
+    }
+    .mcp__head p {
+      margin-top: 16px;
+      color: var(--body);
+      font-size: 16px;
+      max-width: 480px;
+    }
+    .mcp__tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .mcp__tool {
+      padding: 7px 11px;
+      border-radius: 6px;
+      background: var(--surface-2);
+      border: 1px solid var(--hairline);
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--body);
+      letter-spacing: -0.005em;
+    }
+    .mcp__cta {
+      margin-top: 22px;
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-size: 13px;
+      color: var(--ink);
+      padding: 12px 18px;
+      border-radius: 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--hairline-2);
+      transition: border-color var(--t-fast) var(--ease-cinema),
+                  background-color var(--t-fast) var(--ease-cinema);
+    }
+    .mcp__cta:hover, .mcp__cta:focus-visible {
+      border-color: #818cf8;
+      background: rgba(129, 140, 248, 0.08);
+    }
+    .mcp__cta:focus-visible { outline: 2px solid #818cf8; outline-offset: 3px; }
+    @media (min-width: 968px) {
+      .mcp__panel {
+        grid-template-columns: 1.1fr 0.9fr;
+      }
+    }
+
+    /* =========================================================================
+       FOOTER
+       ========================================================================= */
+    .footer {
+      padding: 88px 0 56px;
+      border-top: 1px solid var(--hairline);
+      background: var(--surface-1);
+    }
+    .footer__inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 44px;
+    }
+    .footer__col-h {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .footer__col ul {
+      list-style: none;
+      padding: 0; margin: 0;
+    }
+    .footer__col li { margin-bottom: 10px; }
+    .footer__link {
+      color: var(--body);
+      font-size: 13.5px;
+      transition: color var(--t-fast) var(--ease-cinema);
+    }
+    .footer__link:hover, .footer__link:focus-visible { color: var(--ink); }
+    .footer__link:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 3px; border-radius: 2px; }
+    .footer__tagline {
+      margin-top: 12px;
+      font-size: 13.5px;
+      color: var(--body);
+      max-width: 320px;
+    }
+    .footer__bottom {
+      margin-top: 64px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 28px;
+      border-top: 1px solid var(--hairline);
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+    @media (min-width: 720px) {
+      .footer__inner {
+        grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+        gap: 40px;
+      }
+    }
+
+    /* =========================================================================
+       UTILITIES + REVEAL
+       ========================================================================= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 580ms var(--ease-cinema), transform 580ms var(--ease-cinema);
+    }
+    .reveal.is-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal {
+        opacity: 1; transform: none;
+        transition: none;
+      }
+    }
+
+    /* Larger viewports + nav links */
+    @media (min-width: 768px) {
+      .nav__links { display: flex; }
+      .nav__menu-btn { display: none; }
+    }
+
+    /* Smaller text adjustments */
+    @media (max-width: 480px) {
+      .hero__meta { gap: 18px; }
+      .terminal { font-size: 12px; }
+      .terminal__body { padding: 14px 14px 18px; }
+    }
+
+    /* =========================================================================
+       LOCAL HELPERS — purpose-built classes that replace inline styles
+       ========================================================================= */
+    .brands__caption-em-serif {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+    }
+    .brands__caption-em-shout {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.92em;
+    }
+    .inline-code {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--scene-glow);
+      background: rgba(16, 185, 129, 0.08);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+    .inline-code--ink {
+      font-family: var(--mono);
+      font-size: 13.5px;
+      color: var(--ink);
+    }
+    .term-dot--red    { background: #ff5f57; }
+    .term-dot--blue   { background: #67c8ef; }
+    .term-dot--green  { background: #10b981; }
+
+    .device__sidebar {
+      width: 130px;
+      padding: 10px;
+      border-right: 1px solid var(--hairline);
+      background: rgba(20, 24, 29, 0.45);
+      flex-shrink: 0;
+    }
+    .device__body--inline { flex: 1; }
+    .device__strip {
+      display: flex;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .device__assist-line {
+      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.6;
+    }
+
+    .compare__col-right { text-align: right; }
+    .compare__sub-mono {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+    .compare__score-stars {
+      font-size: 13.5px;
+      color: var(--body);
+    }
+    .compare__score-stars-meta {
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .compare__pct-unit {
+      color: var(--muted);
+      font-size: 18px;
+    }
+    .compare__pct-unit--them {
+      font-size: 18px;
+    }
+  </style>
+<style>
+    /* Language picker — dropdown in the nav */
+    .lang-picker { position: relative; }
+    .lang-picker__btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent;
+      border: 1px solid var(--hairline);
+      border-radius: 999px;
+      color: var(--ink);
+      padding: 6px 12px 6px 10px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: border-color var(--t-fast) var(--ease-cinema);
+    }
+    .lang-picker__btn:hover, .lang-picker__btn[aria-expanded="true"] {
+      border-color: var(--hairline-2);
+    }
+    .lang-picker__menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 220px;
+      max-height: 360px;
+      overflow-y: auto;
+      background: rgba(15, 17, 21, 0.96);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 8px;
+      display: none;
+      z-index: 50;
+      box-shadow: 0 24px 60px -24px rgba(0,0,0,0.6);
+    }
+    .lang-picker.is-open .lang-picker__menu { display: block; }
+    .lang-picker__item {
+      display: block;
+      padding: 8px 12px;
+      color: var(--body);
+      text-decoration: none;
+      font-family: var(--sans);
+      font-size: 14px;
+      border-radius: 6px;
+      transition: background-color var(--t-fast) var(--ease-cinema), color var(--t-fast) var(--ease-cinema);
+    }
+    .lang-picker__item:hover { background: rgba(255,255,255,0.06); color: var(--ink); }
+    .lang-picker__item.is-current { color: var(--ink); background: rgba(255,255,255,0.04); }
+    @media (max-width: 900px) {
+      .lang-picker__menu { right: -16px; }
+    }</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a href="/" class="wordmark" aria-label="uxskill home">
+      uxskill<span class="wordmark__dot" aria-hidden="true"></span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="/compare.html">Compare</a>
+      <a class="nav__link" href="/about.html">About</a>
+      <a class="nav__link" href="/roadmap.html">Roadmap</a>
+      <a class="nav__link" href="/faq.html">FAQ</a>
+      <a class="nav__link" href="/mcp.html">MCP</a>
+      <a class="nav__link" href="/commands.html">Commands</a>
+      <a class="nav__link" href="/blog/">Blog</a>
+      <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+    </nav>
+    <a href="https://github.com/Laith0003/ux-skill" class="cta-pill" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      <span>Star on GitHub</span>
+    </a>
+    <button type="button" class="nav__menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer" id="nav-menu-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="nav__drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Site menu" aria-hidden="true">
+  <button type="button" class="nav__drawer-close" aria-label="Close menu" id="nav-drawer-close">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <a href="/compare.html">Compare</a>
+  <a href="/about.html">About</a>
+  <a href="/roadmap.html">Roadmap</a>
+  <a href="/faq.html">FAQ</a>
+  <a href="/mcp.html">MCP</a>
+  <a href="/blog/">Blog</a>
+  <a href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+</div>
+
+<main id="main">
+
+  <!-- ============ 1. HERO ============ -->
+  <section class="hero" data-scene="hero" aria-label="uxskill — design intelligence for AI coding">
+    <!-- Canvas-only hero: small colored dots / flow-field running live in JS.
+         The 6-second poster video (alpha.67-68) was removed at user request —
+         it showed a play icon, the text overlap, and didn't autoplay on iOS.
+         The canvas is the right call: lighter, no controls, reactive. -->
+    <canvas class="hero__canvas" id="hero-canvas" aria-hidden="true"></canvas>
+    <div class="hero__fade-bottom" aria-hidden="true"></div>
+    <div class="container">
+      <div class="hero__grid">
+        <div class="hero__copy">
+          <div class="hero__eyebrow-row">
+            <span class="pill-tag"><span class="dot-live" aria-hidden="true"></span> v2.0.0 — Pivot Python</span>
+            <span class="pill-tag">MIT, tanpa telemetri</span>
+          </div>
+          <h1 id="hero-h1">
+            <span class="h1-shimmer">Design intelligence</span><br>
+            for the model<br>
+            <span class="h1-italic">that writes your code.</span>
+          </h1>
+          <p class="hero__sub">
+            <strong>998 structured entries.</strong> A deterministic anti-slop linter. 110 brand DESIGN.md specs.
+            Loaded into Claude Code, Cursor, Windsurf, and 14 more IDEs through one command. The session sees
+            them. The session ships work that does not look generated.
+          </p>
+          <div class="hero__ctas">
+            <a href="https://pypi.org/project/uxskill/" class="cta-primary" rel="noopener">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14m-7-7l7 7 7-7"/></svg>
+              pip install uxskill
+            </a>
+            <a href="https://github.com/Laith0003/ux-skill" class="cta-secondary" rel="noopener">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M15 3h6v6M10 14L21 3M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>
+              Baca source
+            </a>
+          </div>
+          <div class="hero__meta" aria-label="Plugin facts">
+            <span><span class="num">998</span> entries</span>
+            <span><span class="num">22</span> commands</span>
+            <span><span class="num">85</span> lint rules</span>
+            <span><span class="num">92</span> brand specs</span>
+            <span><span class="num">17</span> IDEs</span>
+          </div>
+        </div>
+
+        <!-- Live terminal — types ux recommend then ux lint -->
+        <div class="terminal" id="hero-terminal" aria-label="Live terminal demo: ux recommend then ux lint">
+          <div class="terminal__chrome">
+            <span class="terminal__dot" aria-hidden="true"></span>
+            <span class="terminal__dot" aria-hidden="true"></span>
+            <span class="terminal__dot" aria-hidden="true"></span>
+            <span class="terminal__title">~/dot/landing — uxskill 2.0</span>
+          </div>
+          <div class="terminal__body" id="hero-terminal-body">
+            <!-- populated by JS -->
+            <div class="terminal__line"><span class="prompt">$</span> <span class="ink" id="hero-term-cursor"></span><span class="blink" id="hero-term-blink"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. BRAND INSPECTOR — draggable specimens ============ -->
+  <section class="brands" data-scene="brands" aria-label="Brand specs — drag, hold to fast-forward, click to apply">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">02 — Spec brand · 110 katalog</span>
+        <h2 class="section-head__title">Each card is a real specimen.<br>Click any to <em class="accent-italic">reskin this page</em>.</h2>
+        <p class="section-head__lead">
+          Drag to scroll. Hold either edge button to fast-forward at 2x. Tap a card to apply its tokens to the whole page for six seconds — the engine swaps display, body, mono, canvas, ink, and accent live so you can read this section in any of the 110 brand voices.
+        </p>
+      </div>
+    </div>
+
+    <div class="brand-rail-shell">
+      <button class="brand-rail-edge" data-dir="prev" aria-label="Previous · hold to fast-rewind" type="button">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="brand-rail" id="brand-rail" tabindex="0" aria-roledescription="carousel" aria-label="Brand specimens — 14 of 110">
+        <!-- Cards populated by JS — see BRAND_SPECIMENS below -->
+      </div>
+      <button class="brand-rail-edge" data-dir="next" aria-label="Next · hold to fast-forward" type="button">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+
+    <div class="container">
+      <p class="brand-rail-hint">
+        drag · swipe · arrow keys · or hold <kbd>◀</kbd> <kbd>▶</kbd> to fast-forward 2x
+      </p>
+    </div>
+
+    <!-- Reskin toast — appears bottom-center when a brand is applied -->
+    <div class="brand-reskin-toast" id="brand-reskin-toast" role="status" aria-live="polite"></div>
+  </section>
+
+  <!-- ============ 3. REASONING ENGINE ============ -->
+  <section data-scene="engine" aria-label="The reasoning engine — five parallel searches merged">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">03 — Mesin penalaran</span>
+        <h2 class="section-head__title">Five parallel searches.<br>One recommendation.</h2>
+        <p class="section-head__lead">
+          When the model asks for a direction, the engine fans out across style, palette, type, motion, and components in parallel — then merges by industry fit, brand voice, and anti-slop risk. No prompt-spamming, no vibes. Vector lookup over 998 entries.
+        </p>
+      </div>
+
+      <div class="engine__panel" id="engine-panel">
+        <div class="engine__layout">
+          <div class="engine__brief">
+            <span class="label">Brief in</span>
+            <span class="value">Marketing site / Developer tools / dark / editorial / cinematic</span>
+            <div class="value-row">
+              <span class="tag">forbid amber</span>
+              <span class="tag">forbid coral</span>
+              <span class="tag">media-first</span>
+              <span class="tag">a11y AA</span>
+            </div>
+          </div>
+
+          <div class="engine__lanes" id="engine-lanes">
+            <div class="engine__lane" data-state="idle" data-lane="style">
+              <p class="lane-label">Style</p>
+              <p class="lane-result" data-result>Saturated Cinema</p>
+              <span class="lane-score" data-score>0.94</span>
+            </div>
+            <div class="engine__lane" data-state="idle" data-lane="palette">
+              <p class="lane-label">Palette</p>
+              <p class="lane-result" data-result>Media-derived (no fixed)</p>
+              <span class="lane-score" data-score>0.91</span>
+            </div>
+            <div class="engine__lane" data-state="idle" data-lane="type">
+              <p class="lane-label">Type</p>
+              <p class="lane-result" data-result>Bricolage × Inter × JBM</p>
+              <span class="lane-score" data-score>0.89</span>
+            </div>
+            <div class="engine__lane" data-state="idle" data-lane="motion">
+              <p class="lane-label">Motion</p>
+              <p class="lane-result" data-result>Slide-up clip 480ms</p>
+              <span class="lane-score" data-score>0.87</span>
+            </div>
+            <div class="engine__lane" data-state="idle" data-lane="components">
+              <p class="lane-label">Components</p>
+              <p class="lane-result" data-result>12 compatible</p>
+              <span class="lane-score" data-score>0.93</span>
+            </div>
+          </div>
+
+          <div class="engine__merge">
+            <span class="engine__merge-title">Merged recommendation</span>
+            <div class="engine__merge-result">Saturated Cinema, dark canvas, scene-local palettes, Bricolage variable display, terminal-led hero.</div>
+            <div class="engine__merge-meta">5 lanes, 998 entries searched, 31ms median.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. LINTER ============ -->
+  <section data-scene="linter" aria-label="Anti-slop linter — terminal output">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">04 — Linter anti-slop</span>
+        <h2 class="section-head__title">100 regex rules.<br>Run before commit.</h2>
+        <p class="section-head__lead">
+          A deterministic Python linter that catches the design fingerprints model output reaches for by default — purple-to-blue gradients, Inter as display, three-equal cards, John-Doe placeholders, emoji as icons. JSON-queryable. CI-friendly.
+        </p>
+      </div>
+
+      <div class="linter__layout">
+        <div class="linter__side">
+          <p class="linter__claim">The page that just rendered<br>passed clean.</p>
+          <p>This homepage was generated with the recommender and audited with <code class="inline-code">ux lint docs/</code>. Zero high-severity findings. The forbidden palette never appears.</p>
+          <p>The linter is regex over content, not a model. It is fast, offline, and stable across model swaps. The same checks run inside CI on every commit.</p>
+
+          <div class="linter__stats">
+            <div class="linter__stat">
+              <div class="v">85</div>
+              <div class="l">Regex rules</div>
+            </div>
+            <div class="linter__stat">
+              <div class="v">9</div>
+              <div class="l">Categories</div>
+            </div>
+            <div class="linter__stat">
+              <div class="v">0</div>
+              <div class="l">High findings here</div>
+            </div>
+            <div class="linter__stat">
+              <div class="v">31ms</div>
+              <div class="l">Median lint time</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="linter__terminal" id="lint-terminal" aria-label="ux lint demo output">
+          <div class="terminal__chrome">
+            <span class="terminal__dot" aria-hidden="true"></span>
+            <span class="terminal__dot" aria-hidden="true"></span>
+            <span class="terminal__dot" aria-hidden="true"></span>
+            <span class="terminal__title">~/dot/landing — ux lint</span>
+          </div>
+          <div class="terminal__body" id="lint-terminal-body">
+            <div class="terminal__line"><span class="prompt">$</span> <span class="ink">ux lint</span> <span class="arg">docs/</span> <span class="key">--threshold high</span></div>
+            <div class="terminal__line"><span class="info">Scanning 14 files, 100 rules active</span></div>
+            <div class="terminal__line">&nbsp;</div>
+            <div class="terminal__line"><span class="info">docs/blog/cursor-design-plugin.html:184</span></div>
+            <div class="terminal__line"><span class="red">  medium  </span><span class="ink">inter-as-display</span><span class="info"> — Inter at 64px+</span></div>
+            <div class="terminal__line"><span class="info">  why  </span>Inter is a body face; deployed as display reads as default startup-landing fingerprint.</div>
+            <div class="terminal__line"><span class="info">  fix  </span>Pair Inter (body) with Geist, Bricolage Grotesque, or General Sans for display.</div>
+            <div class="terminal__line">&nbsp;</div>
+            <div class="terminal__line"><span class="info">docs/about.html:53</span></div>
+            <div class="terminal__line"><span class="magenta">  high    </span><span class="ink">cormorant-garamond-leak</span></div>
+            <div class="terminal__line"><span class="info">  why  </span>Cormorant Garamond was flagged in the workspace forbidden list.</div>
+            <div class="terminal__line"><span class="info">  fix  </span>Replace with Bricolage Grotesque or Instrument Serif.</div>
+            <div class="terminal__line">&nbsp;</div>
+            <div class="terminal__line"><span class="info">docs/index.html</span></div>
+            <div class="terminal__line"><span class="ok"><span class="check-svg"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>  clean — 0 findings at high+</span></div>
+            <div class="terminal__line">&nbsp;</div>
+            <div class="terminal__line"><span class="info">Total: </span><span class="num">2</span><span class="info"> findings across 13 files (1 medium, 1 high) — 31ms</span></div>
+            <div class="terminal__line"><span class="prompt">$</span> <span class="blink"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5. DEVICE MOCKUPS ============ -->
+  <section data-scene="devices" aria-label="Plugin running inside three IDEs">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">05 — Inside the editor</span>
+        <h2 class="section-head__title">Same engine.<br>Every coding agent.</h2>
+        <p class="section-head__lead">
+          The plugin packages the same recommender and the same linter for every host that speaks MCP or slash-commands. Below: the live tool inside Cursor, Claude Code, and Windsurf.
+        </p>
+      </div>
+
+      <div class="devices__rail">
+
+        <!-- Device 1 — Cursor -->
+        <article class="device" aria-label="Cursor IDE running ux-recommend">
+          <div class="device__chrome">
+            <span class="terminal__dot term-dot--red" aria-hidden="true"></span>
+            <span class="terminal__dot term-dot--blue" aria-hidden="true"></span>
+            <span class="terminal__dot term-dot--green" aria-hidden="true"></span>
+            <span class="device__name"><strong>Cursor</strong> &nbsp;·&nbsp; landing.tsx</span>
+          </div>
+          <div class="device__strip">
+            <div class="device__sidebar">
+              <span class="device__sidebar-tab is-active">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+                landing.tsx
+              </span>
+              <span class="device__sidebar-tab">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+                hero.css
+              </span>
+              <span class="device__sidebar-tab">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>
+                .ux/last
+              </span>
+            </div>
+            <div class="device__body device__body--inline">
+              <div class="device__cmd-row">
+                <span class="slash">/</span><span class="arg">ux-recommend</span>
+                <span class="at">cmd+k</span>
+              </div>
+              <div class="device__result is-ok">
+                <span class="lbl">Style</span>
+                <span class="val">Saturated Cinema</span>
+              </div>
+              <div class="device__result is-ok">
+                <span class="lbl">Type pair</span>
+                <span class="val">Bricolage × Inter × JBM</span>
+              </div>
+              <div class="device__result">
+                <span class="lbl">Motion</span>
+                <span class="val">Fade-up clip · 480ms</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Device 2 — Claude Code -->
+        <article class="device" aria-label="Claude Code running ux-design">
+          <div class="device__chrome">
+            <span class="terminal__dot term-dot--red" aria-hidden="true"></span>
+            <span class="terminal__dot term-dot--blue" aria-hidden="true"></span>
+            <span class="terminal__dot term-dot--green" aria-hidden="true"></span>
+            <span class="device__name"><strong>Claude Code</strong> &nbsp;·&nbsp; ux-skill</span>
+          </div>
+          <div class="device__body">
+            <div class="device__cmd-row">
+              <span class="slash">/</span><span class="arg">ux-design</span>
+              <span class="at">@claude</span>
+            </div>
+            <div class="device__assist-line">
+              Discovery confirmed. Loading 998 entries. Running 5-lane recommender against your brief...
+            </div>
+            <div class="device__result is-ok">
+              <span class="lbl">Discovery</span>
+              <span class="val">10/10 fields locked</span>
+            </div>
+            <div class="device__result">
+              <span class="lbl">Anti-slop guardrails</span>
+              <span class="val">85 active · 0 violations</span>
+            </div>
+            <div class="device__result is-ok">
+              <span class="lbl">Pages persisted</span>
+              <span class="val">.ux/design-system/MASTER.md</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Device 3 — Windsurf -->
+        <article class="device" aria-label="Windsurf running ux-component">
+          <div class="device__chrome">
+            <span class="terminal__dot term-dot--red" aria-hidden="true"></span>
+            <span class="terminal__dot term-dot--blue" aria-hidden="true"></span>
+            <span class="terminal__dot term-dot--green" aria-hidden="true"></span>
+            <span class="device__name"><strong>Windsurf</strong> &nbsp;·&nbsp; Cascade</span>
+          </div>
+          <div class="device__body">
+            <div class="device__cmd-row">
+              <span class="slash">/</span><span class="arg">ux-component combobox</span>
+              <span class="at">cascade</span>
+            </div>
+            <div class="device__result is-ok">
+              <span class="lbl">Component</span>
+              <span class="val">select-combobox</span>
+            </div>
+            <div class="device__result">
+              <span class="lbl">Anatomy</span>
+              <span class="val">trigger · popover · listbox · empty</span>
+            </div>
+            <div class="device__result is-warn">
+              <span class="lbl">Warning</span>
+              <span class="val">avoid rounded-full on input</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5B. SCREENSHOT GALLERY (REAL PNG MEDIA) ============ -->
+  <section data-scene="shots" aria-label="Captured screenshots — engine running in real surfaces">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">05·5 — Captured</span>
+        <h2 class="section-head__title">Screenshots from the engine.<br>Not stock. Not stylized.</h2>
+        <p class="section-head__lead">
+          Real PNG captures of the recommender output, the linter findings, and the plugin running inside Cursor and Claude Code. Every pixel is what you see after <code>pip install uxskill</code> and one command.
+        </p>
+      </div>
+      <figure class="shots__hero">
+        <img src="/screenshots/hero-canvas.png"
+             alt="ux-skill — saturated cinema abstract hero"
+             width="1600" height="1000"
+             loading="lazy" decoding="async">
+        <figcaption>The brand surface — a generative canvas behind the wordmark. Rendered on the homepage in vanilla Canvas2D; saved here as a PNG for ↗ Twitter / PH cards.</figcaption>
+      </figure>
+      <div class="shots__grid">
+        <figure>
+          <img src="/screenshots/terminal-ux-recommend.png"
+               alt="Terminal output of ux recommend against a brief — 5-lane fan-out, merged result, written to .ux/last-recommendation.json"
+               width="1600" height="1000"
+               loading="lazy" decoding="async">
+          <figcaption><code>ux recommend</code> — 5-lane fan-out, merged in 31ms.</figcaption>
+        </figure>
+        <figure>
+          <img src="/screenshots/terminal-ux-lint.png"
+               alt="Terminal output of ux lint — 3 findings (2 high, 1 medium), exit code 1, threshold high"
+               width="1600" height="1000"
+               loading="lazy" decoding="async">
+          <figcaption><code>ux lint</code> — 100 deterministic rules, real findings with file:line, severity, why, and fix.</figcaption>
+        </figure>
+        <figure>
+          <img src="/screenshots/cursor-running-ux.png"
+               alt="Cursor IDE running /ux-design — sidebar shows .ux/last-recommendation.json, editor shows generated Hero.tsx, chat shows linter result"
+               width="1600" height="1000"
+               loading="lazy" decoding="async">
+          <figcaption>Cursor running <code>/ux-design</code>. The recommendation feeds the chat; the chat writes the component.</figcaption>
+        </figure>
+        <figure>
+          <img src="/screenshots/claude-code-running-ux.png"
+               alt="Claude Code session — running ux recommend then ux design, with structured engine output and a green clean linter line"
+               width="1600" height="1000"
+               loading="lazy" decoding="async">
+          <figcaption>Claude Code session — <code>/ux-recommend</code> chained into <code>/ux-design</code>. State persists in <code>.ux/</code>.</figcaption>
+        </figure>
+        <figure class="shots__mosaic">
+          <img src="/screenshots/brand-mosaic.png"
+               alt="Brand mosaic — 4x3 grid of brand surfaces with their wordmarks rendered in their own typefaces"
+               width="1600" height="1000"
+               loading="lazy" decoding="async">
+          <figcaption>110 brand DESIGN.md specs. Each ships with typography, palette, voice. The engine pulls from any of them.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6. ABSTRACT CANVAS SECTION ============ -->
+  <section class="scene-canvas" data-scene="canvas" aria-label="Generative scene break">
+    <canvas id="abstract-canvas" aria-hidden="true"></canvas>
+    <div class="scene-canvas__overlay">
+      <div class="scene-canvas__overlay-inner">
+        <p class="scene-canvas__line">
+          Color is what the section is <em>about</em>, not what it <em>has</em>. Every fold takes its palette from its media. The page is a film, not a swatch.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7. STATS ============ -->
+  <section data-scene="stats" aria-label="By the numbers">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">07 — By the numbers</span>
+        <h2 class="section-head__title">The catalogue.<br>The surface area.</h2>
+      </div>
+      <div class="stats__grid" id="stats-grid">
+        <div class="stat reveal" data-stat data-target="998"><span class="stat__v" data-out>0</span><span class="stat__l">Structured entries</span></div>
+        <div class="stat reveal" data-stat data-target="85"><span class="stat__v" data-out>0</span><span class="stat__l">Anti-pattern rules</span></div>
+        <div class="stat reveal" data-stat data-target="92"><span class="stat__v" data-out>0</span><span class="stat__l">Brand DESIGN.md specs</span></div>
+        <div class="stat reveal" data-stat data-target="22"><span class="stat__v" data-out>0</span><span class="stat__l">Slash commands</span></div>
+        <div class="stat reveal" data-stat data-target="17"><span class="stat__v" data-out>0</span><span class="stat__l">IDE integrations</span></div>
+        <div class="stat reveal" data-stat data-target="4"><span class="stat__v" data-out>0</span><span class="stat__l">Output stacks (React, Vue, Blade, HTML)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 8. COMPETITOR SCORECARD ============ -->
+  <section data-scene="compare" aria-label="Scorecard versus competing plugins">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">08 — The scorecard</span>
+        <h2 class="section-head__title">We measured. We wrote it down.</h2>
+        <p class="section-head__lead">
+          50-point rubric across recommender depth, lint coverage, brand catalogue, MCP surface, IDE breadth, telemetry posture, and documentation. Built from <code class="inline-code--ink">gh api</code> on 2026-05-28. No empty cells, no manufactured advantages.
+        </p>
+      </div>
+
+      <div class="compare__panel" id="compare-panel">
+        <div class="compare__row compare__row-h" role="presentation">
+          <span>Plugin</span>
+          <span class="compare__col-right">Score</span>
+          <span class="compare__col-right">Stars</span>
+        </div>
+        <div class="compare__row is-ours" data-score-pct="0.88">
+          <span class="compare__name">uxskill <span class="compare__sub-mono">— this plugin</span></span>
+          <span class="compare__score"><span class="pct">44<span class="compare__pct-unit">/50</span></span><span class="compare__score-bar"><span></span></span></span>
+          <span class="compare__score compare__score-stars">14 stars<br><span class="compare__score-stars-meta">v2.0.0-alpha.1</span></span>
+        </div>
+        <div class="compare__row" data-score-pct="0.66">
+          <span class="compare__name is-them">ui-ux-pro-max-skill</span>
+          <span class="compare__score is-them"><span class="pct">33<span class="compare__pct-unit--them">/50</span></span><span class="compare__score-bar"><span></span></span></span>
+          <span class="compare__score compare__score-stars">241 stars</span>
+        </div>
+        <div class="compare__row" data-score-pct="0.56">
+          <span class="compare__name is-them">design-shotgun</span>
+          <span class="compare__score is-them"><span class="pct">28<span class="compare__pct-unit--them">/50</span></span><span class="compare__score-bar"><span></span></span></span>
+          <span class="compare__score compare__score-stars">182 stars</span>
+        </div>
+        <div class="compare__row" data-score-pct="0.50">
+          <span class="compare__name is-them">design-html</span>
+          <span class="compare__score is-them"><span class="pct">25<span class="compare__pct-unit--them">/50</span></span><span class="compare__score-bar"><span></span></span></span>
+          <span class="compare__score compare__score-stars">126 stars</span>
+        </div>
+      </div>
+
+      <a href="/compare.html" class="compare__cta">
+        See the full 50-point scorecard
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ 9. INSTALL ============ -->
+  <section data-scene="install" aria-label="Install instructions — three runtimes">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">09 — Install</span>
+        <h2 class="section-head__title">Three runtimes.<br>One engine.</h2>
+        <p class="section-head__lead">
+          Pick the runtime that fits where you live. The Python wheel is the engine. The npm shim wraps it for Cursor and Windsurf. The Claude plugin loads it natively.
+        </p>
+      </div>
+
+      <div class="install__tabs" role="tablist" aria-label="Install methods">
+        <button type="button" class="install__tab is-active" role="tab" aria-selected="true" aria-controls="install-pip" id="tab-pip" data-tab="pip">pip</button>
+        <button type="button" class="install__tab" role="tab" aria-selected="false" aria-controls="install-npm" id="tab-npm" data-tab="npm">npm</button>
+        <button type="button" class="install__tab" role="tab" aria-selected="false" aria-controls="install-claude" id="tab-claude" data-tab="claude">claude plugin</button>
+      </div>
+
+      <div class="install__pane is-active" id="install-pip" role="tabpanel" aria-labelledby="tab-pip">
+        <button type="button" class="install__copy" aria-label="Copy install command" data-copy-target="cmd-pip">copy</button>
+        <p class="install__line" id="cmd-pip">
+          <span class="install__cmd">pip install</span> <span class="install__arg">'uxskill[all]'</span>
+        </p>
+        <span class="install__comment">Includes engine, CLI, MCP server, and the full data bundle. Python 3.10+.</span>
+      </div>
+
+      <div class="install__pane" id="install-npm" role="tabpanel" aria-labelledby="tab-npm">
+        <button type="button" class="install__copy" aria-label="Copy install command" data-copy-target="cmd-npm">copy</button>
+        <p class="install__line" id="cmd-npm">
+          <span class="install__cmd">npx</span> <span class="install__arg">uxskill@latest init</span>
+        </p>
+        <span class="install__comment">Wraps the Python engine for editors that prefer Node. No global install required.</span>
+      </div>
+
+      <div class="install__pane" id="install-claude" role="tabpanel" aria-labelledby="tab-claude">
+        <button type="button" class="install__copy" aria-label="Copy install command" data-copy-target="cmd-claude">copy</button>
+        <p class="install__line" id="cmd-claude">
+          <span class="install__cmd">claude plugin install</span> <span class="install__arg">ux@ux-skill</span>
+        </p>
+        <span class="install__comment">Native install into Claude Code. Slash commands and sub-agents load on next session.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 10. MCP ============ -->
+  <section data-scene="mcp" aria-label="MCP server">
+    <div class="container">
+      <div class="mcp__panel">
+        <div class="mcp__head">
+          <span class="eyebrow">10 — MCP server</span>
+          <h2 class="mcp__h2">14 tools over stdio.<br>Any MCP host.</h2>
+          <p>The engine ships an MCP server so non-Claude hosts can drive the recommender and linter through the model-context protocol. No extra runtime; the same Python wheel exposes the tools.</p>
+          <a href="/mcp.html" class="mcp__cta">
+            Read the MCP spec
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="mcp__tools" aria-label="MCP tools exposed">
+          <span class="mcp__tool">ux_recommend</span>
+          <span class="mcp__tool">ux_lint</span>
+          <span class="mcp__tool">ux_brand_lookup</span>
+          <span class="mcp__tool">ux_palette</span>
+          <span class="mcp__tool">ux_type_pair</span>
+          <span class="mcp__tool">ux_motion</span>
+          <span class="mcp__tool">ux_components</span>
+          <span class="mcp__tool">ux_industry</span>
+          <span class="mcp__tool">ux_law</span>
+          <span class="mcp__tool">ux_audit</span>
+          <span class="mcp__tool">ux_recipe</span>
+          <span class="mcp__tool">ux_persist</span>
+          <span class="mcp__tool">ux_anti_slop_explain</span>
+          <span class="mcp__tool">ux_compare</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer" role="contentinfo">
+  <div class="container footer__inner">
+    <div class="footer__col">
+      <a href="/" class="wordmark" aria-label="uxskill home">uxskill<span class="wordmark__dot" aria-hidden="true"></span></a>
+      <p class="footer__tagline">Design intelligence for AI coding. Built so every model session ships work that does not look generated.</p>
+    </div>
+    <div class="footer__col">
+      <p class="footer__col-h">Plugin</p>
+      <ul>
+        <li><a class="footer__link" href="/about.html">About</a></li>
+        <li><a class="footer__link" href="/compare.html">Compare</a></li>
+        <li><a class="footer__link" href="/roadmap.html">Roadmap</a></li>
+        <li><a class="footer__link" href="/faq.html">FAQ</a></li>
+        <li><a class="footer__link" href="/mcp.html">MCP</a></li>
+        <li><a class="footer__link" href="/privacy.html">Privacy</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <p class="footer__col-h">Reading</p>
+      <ul>
+        <li><a class="footer__link" href="/blog/">Blog index</a></li>
+        <li><a class="footer__link" href="/blog/dark-editorial-cinema-design.html">Dark editorial cinema</a></li>
+        <li><a class="footer__link" href="/blog/best-claude-code-design-skills-2026.html">Best Claude Code design skills</a></li>
+        <li><a class="footer__link" href="/blog/anti-ai-slop-claude-skills.html">Anti AI-slop skills</a></li>
+        <li><a class="footer__link" href="/blog/ai-design-fingerprints-list.html">AI design fingerprints</a></li>
+        <li><a class="footer__link" href="/blog/regex-linter-for-ai-coding.html">Regex linter for AI coding</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <p class="footer__col-h">More posts</p>
+      <ul>
+        <li><a class="footer__link" href="/blog/cursor-design-plugin.html">Cursor design plugin</a></li>
+        <li><a class="footer__link" href="/blog/windsurf-design-rules.html">Windsurf design rules</a></li>
+        <li><a class="footer__link" href="/blog/python-design-system-generator.html">Python design generator</a></li>
+        <li><a class="footer__link" href="/blog/mcp-server-design-intelligence.html">MCP server intelligence</a></li>
+        <li><a class="footer__link" href="/blog/figma-vs-ux-skill.html">Figma vs ux-skill</a></li>
+        <li><a class="footer__link" href="/blog/vs-ui-ux-pro-max.html">vs ui-ux-pro-max</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <p class="footer__col-h">Get it</p>
+      <ul>
+        <li><a class="footer__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a></li>
+        <li><a class="footer__link" href="https://pypi.org/project/uxskill/" rel="noopener">PyPI</a></li>
+        <li><a class="footer__link" href="https://www.npmjs.com/package/uxskill" rel="noopener">npm</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer__bottom">
+    <span>MIT licensed · No telemetry · No account</span>
+    <span>&copy; 2026 Laith Aljunaidy</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* =========================================================================
+     NAV scroll state + mobile drawer
+     ========================================================================= */
+  const nav = document.getElementById('nav');
+  const onScroll = () => {
+    if (window.scrollY > 24) nav.classList.add('is-scrolled');
+    else nav.classList.remove('is-scrolled');
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const drawer = document.getElementById('nav-drawer');
+  const menuBtn = document.getElementById('nav-menu-btn');
+  const closeBtn = document.getElementById('nav-drawer-close');
+  const openDrawer = () => {
+    drawer.classList.add('is-open');
+    drawer.setAttribute('aria-hidden', 'false');
+    menuBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  };
+  const closeDrawer = () => {
+    drawer.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  };
+  if (menuBtn) menuBtn.addEventListener('click', openDrawer);
+  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+  drawer.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeDrawer));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer.classList.contains('is-open')) closeDrawer();
+  });
+
+  /* =========================================================================
+     REVEAL on scroll — generic IO observer
+     ========================================================================= */
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-in');
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -80px 0px', threshold: 0.05 });
+  document.querySelectorAll('.reveal').forEach((el) => revealObs.observe(el));
+
+  /* =========================================================================
+     HERO TERMINAL — types ux recommend then ux lint
+     ========================================================================= */
+  const termBody = document.getElementById('hero-terminal-body');
+  const termCursor = document.getElementById('hero-term-cursor');
+  const termBlink = document.getElementById('hero-term-blink');
+
+  // Script: each entry is either a string typed into the cursor line OR an html block emitted
+  const heroScript = [
+    { type: 'cmd', text: 'ux recommend --brief landing.md' },
+    { type: 'lines', html:
+      '<div class="terminal__line"><span class="info">Loading 998 entries...</span></div>' +
+      '<div class="terminal__line"><span class="info">Fanning out 5 lanes... </span><span class="ok">done</span></div>' +
+      '<div class="terminal__line">&nbsp;</div>' +
+      '<div class="terminal__line"><span class="info">style    </span><span class="ink">Saturated Cinema</span>          <span class="num">0.94</span></div>' +
+      '<div class="terminal__line"><span class="info">palette  </span><span class="ink">Media-derived</span>             <span class="num">0.91</span></div>' +
+      '<div class="terminal__line"><span class="info">type     </span><span class="ink">Bricolage × Inter × JBM</span>  <span class="num">0.89</span></div>' +
+      '<div class="terminal__line"><span class="info">motion   </span><span class="ink">Fade-up clip 480ms</span>        <span class="num">0.87</span></div>' +
+      '<div class="terminal__line"><span class="info">comps    </span><span class="ink">12 compatible</span>             <span class="num">0.93</span></div>' +
+      '<div class="terminal__line">&nbsp;</div>' +
+      '<div class="terminal__line"><span class="ok"><span class="check-svg"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>  written to .ux/last-recommendation.json</span></div>' +
+      '<div class="terminal__line">&nbsp;</div>'
+    },
+    { type: 'cmd', text: 'ux lint docs/index.html' },
+    { type: 'lines', html:
+      '<div class="terminal__line"><span class="info">100 rules · 1 file · </span><span class="ok">0 high · 0 medium</span></div>' +
+      '<div class="terminal__line"><span class="ok"><span class="check-svg"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>  clean — ship it.</span></div>' +
+      '<div class="terminal__line">&nbsp;</div>'
+    }
+  ];
+
+  const cursorLineEl = termCursor.parentElement; // the .terminal__line wrapping cursor + blink
+
+  function appendLine(html) {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    // insert before the cursor line
+    while (tmp.firstChild) {
+      termBody.insertBefore(tmp.firstChild, cursorLineEl);
+    }
+  }
+
+  function typeText(text, perChar) {
+    return new Promise((resolve) => {
+      let i = 0;
+      const step = () => {
+        if (i >= text.length) { resolve(); return; }
+        termCursor.textContent += text[i];
+        i++;
+        setTimeout(step, perChar);
+      };
+      step();
+    });
+  }
+
+  function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function clearCursorLine() {
+    termCursor.textContent = '';
+  }
+
+  async function runHeroScript() {
+    if (reduce) {
+      // static render: just dump everything at once
+      heroScript.forEach((step) => {
+        if (step.type === 'cmd') {
+          appendLine('<div class="terminal__line"><span class="prompt">$</span> <span class="ink">' + step.text + '</span></div>');
+        } else {
+          appendLine(step.html);
+        }
+      });
+      // Hide cursor blink, leave a static prompt
+      termCursor.textContent = '';
+      termBlink.style.opacity = '0.4';
+      return;
+    }
+    for (const step of heroScript) {
+      if (step.type === 'cmd') {
+        await typeText(step.text, 26);
+        await wait(420);
+        // commit the typed cursor line as a real history line, reset cursor
+        const committed = document.createElement('div');
+        committed.className = 'terminal__line';
+        committed.innerHTML = '<span class="prompt">$</span> <span class="ink">' + step.text + '</span>';
+        termBody.insertBefore(committed, cursorLineEl);
+        clearCursorLine();
+      } else {
+        appendLine(step.html);
+        await wait(560);
+      }
+    }
+    termBlink.style.opacity = '0.4';
+  }
+
+  // Run the terminal when it enters the viewport
+  const termPanel = document.getElementById('hero-terminal');
+  const termIO = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        runHeroScript();
+        termIO.unobserve(termPanel);
+      }
+    });
+  }, { threshold: 0.15 });
+  if (termPanel) termIO.observe(termPanel);
+
+  /* =========================================================================
+     BRANDS — populate track twice for seamless loop, pause on hover
+     ========================================================================= */
+  /* =========================================================================
+     BRAND INSPECTOR — draggable specimens with hold-to-fastforward + reskin
+     ========================================================================= */
+  // 14 specimens out of 110 — picked to span the design-language range
+  // (quiet Apple, loud Ferrari, editorial Resend, retro Warp, etc).
+  // Each carries the full info needed to render its specimen card AND to
+  // reskin the homepage when clicked.
+  const BRAND_SPECIMENS = [
+    { id: 'apple',    name: 'Apple',     category: 'Consumer / Lifestyle',
+      logo: 'apple.svg',
+      display: "'SF Pro Display','Inter Tight',sans-serif", weight: 600, tracking: '-0.04em',
+      body: "'SF Pro Text','Inter',sans-serif",
+      headline: 'The most personal device we make.',
+      bodyCopy: 'Type that does not announce itself. Color that disappears so the product can speak.',
+      palette: ['#1d1d1f', '#f5f5f7', '#ffffff', '#a1a1a6', '#0071e3'],
+      canvas: '#0d0d0e', ink: '#f5f5f7', muted: '#a1a1a6', accent: '#0071e3', bodyColor: '#d6d6d8' },
+    { id: 'linear',   name: 'Linear',    category: 'SaaS / Developer Tools',
+      logo: 'linear.svg',
+      display: "'Inter Tight',sans-serif", weight: 700, tracking: '-0.04em',
+      body: "'Inter',sans-serif",
+      headline: 'A new standard for modern software development.',
+      bodyCopy: 'Geometric sans, indigo, precise typography. The interface stays out of the way.',
+      palette: ['#080a13', '#1c1f2e', '#5e6ad2', '#8b94e0', '#f4f4f5'],
+      canvas: '#08090d', ink: '#f4f4f5', muted: '#8a8d9c', accent: '#5e6ad2', bodyColor: '#c8cad6' },
+    { id: 'vercel',   name: 'Vercel',    category: 'SaaS / Developer Tools',
+      logo: 'vercel.svg',
+      display: "'Geist','Inter Tight',sans-serif", weight: 600, tracking: '-0.03em',
+      body: "'Geist','Inter',sans-serif",
+      headline: 'Develop. Preview. Ship.',
+      bodyCopy: 'Pure monochrome. Triangle mark. The platform vanishes into a deploy button.',
+      palette: ['#000000', '#0a0a0a', '#171717', '#737373', '#fafafa'],
+      canvas: '#000000', ink: '#fafafa', muted: '#a3a3a3', accent: '#fafafa', bodyColor: '#d4d4d4' },
+    { id: 'stripe',   name: 'Stripe',    category: 'Fintech / Payments',
+      logo: 'stripe.svg',
+      display: "'Switzer','Inter Tight',sans-serif", weight: 500, tracking: '-0.02em',
+      body: "'Sohne','Inter',sans-serif",
+      headline: 'Financial infrastructure for the internet.',
+      bodyCopy: 'Iris purple, generous whitespace, illustrations precise as machine drawings.',
+      palette: ['#0a2540', '#635bff', '#7a73ff', '#adabff', '#f6f9fc'],
+      canvas: '#0a1a2f', ink: '#f6f9fc', muted: '#a3a8b8', accent: '#635bff', bodyColor: '#d8dde8' },
+    { id: 'figma',    name: 'Figma',     category: 'Design Tools',
+      logo: 'figma.svg',
+      display: "'General Sans','Inter Tight',sans-serif", weight: 700, tracking: '-0.025em',
+      body: "'Inter',sans-serif",
+      headline: 'Where teams design together.',
+      bodyCopy: 'Four-color mark, geometric sans, design-tool chrome. Tools are the brand.',
+      palette: ['#0a0a0c', '#a259ff', '#f24e1e', '#1abcfe', '#0acf83'],
+      canvas: '#0a0a0c', ink: '#fafafa', muted: '#9099a8', accent: '#a259ff', bodyColor: '#cfd2db' },
+    { id: 'notion',   name: 'Notion',    category: 'SaaS / Productivity',
+      logo: 'notion.svg',
+      display: "'Bricolage Grotesque','Inter Tight',sans-serif", weight: 700, tracking: '-0.02em',
+      body: "'Inter',sans-serif",
+      headline: 'One workspace. Every team.',
+      bodyCopy: 'Mono cover, editorial type, generous block padding. The page is the product.',
+      palette: ['#191919', '#2a2a2a', '#a8a29e', '#e8e6e0', '#ffffff'],
+      canvas: '#161616', ink: '#fafaf8', muted: '#a8a29e', accent: '#ffffff', bodyColor: '#d4d2cc' },
+    { id: 'spotify',  name: 'Spotify',   category: 'Consumer / Media',
+      logo: 'spotify.svg',
+      display: "'Onest','Inter Tight',sans-serif", weight: 700, tracking: '-0.03em',
+      body: "'Inter',sans-serif",
+      headline: 'Music for every moment.',
+      bodyCopy: 'Spotify green on jet black. Album art is the page. Type stays out of the way.',
+      palette: ['#040404', '#181818', '#1ed760', '#1aa34a', '#ffffff'],
+      canvas: '#040404', ink: '#ffffff', muted: '#a7a7a7', accent: '#1ed760', bodyColor: '#d4d4d4' },
+    { id: 'supabase', name: 'Supabase',  category: 'SaaS / Developer Tools',
+      logo: 'supabase.svg',
+      display: "'Manrope','Inter Tight',sans-serif", weight: 700, tracking: '-0.045em',
+      body: "'Inter',sans-serif",
+      headline: 'Build in a weekend. Scale to millions.',
+      bodyCopy: 'Emerald on near-black. Lots of code samples. The dashboard is the marketing.',
+      palette: ['#050d08', '#0d1f12', '#3ecf8e', '#71e0a8', '#f8fafc'],
+      canvas: '#050d08', ink: '#f8fafc', muted: '#94a99c', accent: '#3ecf8e', bodyColor: '#d0d6d2' },
+    { id: 'resend',   name: 'Resend',    category: 'SaaS / Developer Tools',
+      logo: 'resend.svg',
+      display: "'Instrument Serif',Georgia,serif", weight: 400, tracking: '-0.005em', italic: 'italic',
+      body: "'Inter',sans-serif",
+      headline: 'Email for developers.',
+      bodyCopy: 'A literary serif on a dev-tool. Soft cream paper. Generous line-height. Quiet.',
+      palette: ['#070707', '#1a1a1a', '#737373', '#e8e6e0', '#ffffff'],
+      canvas: '#070707', ink: '#ffffff', muted: '#a8a29e', accent: '#ffffff', bodyColor: '#d4d2cc' },
+    { id: 'anthropic', name: 'Anthropic', category: 'AI / ML',
+      logo: 'anthropic.svg',
+      display: "'Tiempos','Instrument Serif',Georgia,serif", weight: 400, tracking: '-0.01em',
+      body: "'Inter',sans-serif",
+      headline: 'Safe and beneficial AI.',
+      bodyCopy: 'Terracotta accent on warm sepia. Generous editorial type. The voice is the brand.',
+      palette: ['#1a0e08', '#2d1810', '#cc785c', '#e8b894', '#faf7f2'],
+      canvas: '#1a0e08', ink: '#faf7f2', muted: '#9a8a7a', accent: '#cc785c', bodyColor: '#d8cdc1' },
+    { id: 'openai',   name: 'OpenAI',    category: 'AI / ML',
+      logo: 'openai.svg',
+      display: "'Sohne','Inter Tight',sans-serif", weight: 500, tracking: '-0.025em',
+      body: "'Inter',sans-serif",
+      headline: 'Creating safe AGI that benefits all of humanity.',
+      bodyCopy: 'Black canvas, Söhne everywhere, the hex-petal mark. Sharp grid. No decoration.',
+      palette: ['#000000', '#0a0a0a', '#10a37f', '#9b9b9b', '#ffffff'],
+      canvas: '#000000', ink: '#ffffff', muted: '#9b9b9b', accent: '#10a37f', bodyColor: '#cfcfcf' },
+    { id: 'ferrari',  name: 'Ferrari',   category: 'Automotive / Performance',
+      logo: 'ferrari.svg',
+      display: "'Inter Tight',sans-serif", weight: 700, tracking: '0.04em',
+      body: "'Inter',sans-serif",
+      headline: 'PASSION HAS A COLOR.',
+      bodyCopy: 'Rosso Corsa on bone. Caps. Tight tracking. Numbers and torque curves do the talking.',
+      palette: ['#0f0000', '#180303', '#ff2800', '#ffe14a', '#fdf6e3'],
+      canvas: '#0f0000', ink: '#fdf6e3', muted: '#a89a8a', accent: '#ff2800', bodyColor: '#e0d4c0' },
+    { id: 'pitchfork',name: 'Pitchfork', category: 'Media / Editorial',
+      logo: null,
+      display: "'Inter Tight',sans-serif", weight: 800, tracking: '-0.04em',
+      body: "'Inter',sans-serif",
+      headline: '8.7 — Best New Music.',
+      bodyCopy: 'Industrial sans masthead, scores 0.0—10.0 at 160px, single signal red. Zine energy.',
+      palette: ['#0a0a0a', '#171717', '#ff3a3a', '#ffffff', '#e6e6e6'],
+      canvas: '#0a0a0a', ink: '#ffffff', muted: '#9a9a9a', accent: '#ff3a3a', bodyColor: '#d0d0d0' },
+    { id: 'tiktok',   name: 'TikTok',    category: 'Consumer / Media',
+      logo: 'tiktok.svg',
+      display: "'Inter Tight',sans-serif", weight: 700, tracking: '-0.025em',
+      body: "'Inter',sans-serif",
+      headline: 'Make Your Day.',
+      bodyCopy: 'Black canvas, cyan and magenta chromatic aberration. Vertical video is the page.',
+      palette: ['#000000', '#0a0a0a', '#25f4ee', '#fe2c55', '#ffffff'],
+      canvas: '#000000', ink: '#ffffff', muted: '#a7a7a7', accent: '#fe2c55', bodyColor: '#d4d4d4' },
+  ];
+
+  const rail = document.getElementById('brand-rail');
+  const reskinToast = document.getElementById('brand-reskin-toast');
+  let reskinTimer = null;
+
+  if (rail) {
+    // ----- Build cards -----
+    BRAND_SPECIMENS.forEach((b, idx) => {
+      const card = document.createElement('article');
+      card.className = 'brand-card';
+      card.dataset.id = b.id;
+      card.tabIndex = 0;
+      card.setAttribute('role', 'group');
+      card.setAttribute('aria-label', b.name + ' — ' + b.category);
+
+      // Per-card CSS variables so the card looks AS the brand looks.
+      card.style.setProperty('--brand-canvas', b.canvas);
+      card.style.setProperty('--brand-ink', b.ink);
+      card.style.setProperty('--brand-muted', b.muted);
+      card.style.setProperty('--brand-accent', b.accent);
+      card.style.setProperty('--brand-display', b.display);
+      card.style.setProperty('--brand-body', b.body);
+      card.style.setProperty('--brand-display-weight', b.weight);
+      card.style.setProperty('--brand-display-tracking', b.tracking);
+      card.style.setProperty('--brand-display-style', b.italic || 'normal');
+      card.style.setProperty('--brand-body-color', b.bodyColor || b.ink);
+      // If the brand canvas is light, invert logo back to dark
+      const canvasL = (() => {
+        const m = (b.canvas || '#000000').match(/\\#?([0-9a-fA-F]{6})/);
+        if (!m) return 0;
+        const r = parseInt(m[1].slice(0,2),16), g = parseInt(m[1].slice(2,4),16), bl = parseInt(m[1].slice(4,6),16);
+        return (r*299 + g*587 + bl*114) / 1000;
+      })();
+      if (canvasL > 160) card.style.setProperty('--brand-logo-filter', 'brightness(0)');
+
+      card.innerHTML =
+        '<header class="brand-card__chrome">' +
+          '<span class="brand-card__chrome-dots">' +
+            '<span class="brand-card__chrome-dot"></span>' +
+            '<span class="brand-card__chrome-dot"></span>' +
+            '<span class="brand-card__chrome-dot"></span>' +
+          '</span>' +
+          '<span>spec.' + b.id + '</span>' +
+        '</header>' +
+        '<div class="brand-card__logo">' +
+          (b.logo
+            ? '<img src="/logos/' + b.logo + '" alt="' + b.name + ' logo" width="220" height="36" loading="lazy" decoding="async">'
+            : '<span class="brand-card__wordmark" style="font-family:' + b.display + ';font-weight:' + b.weight + ';letter-spacing:' + b.tracking + ';">' + b.name + '</span>'
+          ) +
+        '</div>' +
+        '<div class="brand-card__specimen">' +
+          '<p class="brand-card__headline">' + b.headline + '</p>' +
+          '<p class="brand-card__body">' + b.bodyCopy + '</p>' +
+        '</div>' +
+        '<div class="brand-card__palette" aria-hidden="true">' +
+          b.palette.map(c => '<span style="background:' + c + '"></span>').join('') +
+        '</div>' +
+        '<footer class="brand-card__foot">' +
+          '<span class="brand-card__foot-name">' + b.name + '</span>' +
+          '<span class="brand-card__foot-cat">' + b.category + '</span>' +
+        '</footer>' +
+        '<button class="brand-card__try" type="button" aria-label="Apply ' + b.name + ' to the page for 6 seconds">Try on page →</button>';
+
+      // Click handler — "Apply this brand" button
+      card.querySelector('.brand-card__try').addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        applyBrand(b);
+      });
+      // Whole card clickable too (just adds is-active state)
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.brand-card.is-active').forEach(c => c.classList.remove('is-active'));
+        card.classList.add('is-active');
+      });
+
+      rail.appendChild(card);
+    });
+
+    // ----- Drag-to-scroll (pointer events for mouse + touch + pen) -----
+    let isDown = false;
+    let startX = 0;
+    let scrollX = 0;
+    let pointerId = null;
+
+    rail.addEventListener('pointerdown', (e) => {
+      // ignore drags that start on the Try button
+      if (e.target.closest('.brand-card__try')) return;
+      isDown = true;
+      pointerId = e.pointerId;
+      rail.classList.add('is-grabbing');
+      startX = e.clientX;
+      scrollX = rail.scrollLeft;
+      try { rail.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+    const endDrag = () => {
+      isDown = false;
+      rail.classList.remove('is-grabbing');
+    };
+    rail.addEventListener('pointermove', (e) => {
+      if (!isDown) return;
+      const dx = e.clientX - startX;
+      rail.scrollLeft = scrollX - dx;
+    });
+    rail.addEventListener('pointerup', endDrag);
+    rail.addEventListener('pointercancel', endDrag);
+    rail.addEventListener('pointerleave', endDrag);
+
+    // ----- Keyboard arrow keys -----
+    rail.addEventListener('keydown', (e) => {
+      const step = 380;
+      if (e.key === 'ArrowRight') { rail.scrollBy({ left: step, behavior: 'smooth' }); e.preventDefault(); }
+      if (e.key === 'ArrowLeft')  { rail.scrollBy({ left: -step, behavior: 'smooth' }); e.preventDefault(); }
+    });
+
+    // ----- Edge buttons: click = jump · press-and-hold = fast-forward 2x -----
+    const edges = document.querySelectorAll('.brand-rail-edge');
+    edges.forEach((edge) => {
+      const dir = edge.dataset.dir === 'next' ? 1 : -1;
+      let holdTimer = null;
+      let rafId = null;
+      let speed = 0;
+
+      const tick = () => {
+        rail.scrollLeft += dir * speed;
+        rafId = requestAnimationFrame(tick);
+      };
+
+      const startHold = (e) => {
+        // single click = jump one card
+        rail.scrollBy({ left: dir * 380, behavior: 'smooth' });
+        // long-press = start scrolling at 6 px/frame; ramps to 12 px/frame (2x) after 700ms
+        speed = 6;
+        edge.classList.add('is-held');
+        clearTimeout(holdTimer);
+        holdTimer = setTimeout(() => {
+          rafId = requestAnimationFrame(tick);
+          // ramp to 2x after another 700ms
+          setTimeout(() => { if (rafId) speed = 12; }, 700);
+        }, 280);
+      };
+      const stopHold = () => {
+        clearTimeout(holdTimer);
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+        speed = 0;
+        edge.classList.remove('is-held');
+      };
+
+      edge.addEventListener('pointerdown', startHold);
+      edge.addEventListener('pointerup', stopHold);
+      edge.addEventListener('pointerleave', stopHold);
+      edge.addEventListener('pointercancel', stopHold);
+      // keyboard
+      edge.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          rail.scrollBy({ left: dir * 380, behavior: 'smooth' });
+        }
+      });
+    });
+  }
+
+  /* =========================================================================
+     APPLY-BRAND — swap CSS variables on :root for 6 seconds so the whole
+     page momentarily reads in that brand's typeface + palette.
+     ========================================================================= */
+  function applyBrand(b) {
+    const root = document.documentElement;
+    const body = document.body;
+    const original = {
+      canvas: root.style.getPropertyValue('--canvas'),
+      surface1: root.style.getPropertyValue('--surface-1'),
+      ink: root.style.getPropertyValue('--ink'),
+      body: root.style.getPropertyValue('--body'),
+      muted: root.style.getPropertyValue('--muted'),
+      display: root.style.getPropertyValue('--display'),
+      sans: root.style.getPropertyValue('--sans'),
+    };
+    root.style.setProperty('--canvas', b.canvas);
+    root.style.setProperty('--surface-1', b.canvas);
+    root.style.setProperty('--ink', b.ink);
+    root.style.setProperty('--body', b.bodyColor || b.ink);
+    root.style.setProperty('--muted', b.muted);
+    root.style.setProperty('--display', b.display);
+    root.style.setProperty('--sans', b.body);
+    body.classList.add('is-reskinned');
+
+    reskinToast.style.setProperty('--brand-accent', b.accent);
+    reskinToast.textContent = 'reskinned · ' + b.name + ' · 6s';
+    reskinToast.classList.add('is-on');
+
+    if (reskinTimer) clearTimeout(reskinTimer);
+    reskinTimer = setTimeout(() => {
+      // Reset to defaults — clear inline overrides so the stylesheet defaults win
+      root.style.removeProperty('--canvas');
+      root.style.removeProperty('--surface-1');
+      root.style.removeProperty('--ink');
+      root.style.removeProperty('--body');
+      root.style.removeProperty('--muted');
+      root.style.removeProperty('--display');
+      root.style.removeProperty('--sans');
+      body.classList.remove('is-reskinned');
+      reskinToast.classList.remove('is-on');
+    }, 6000);
+  }
+
+  /* =========================================================================
+     REASONING ENGINE — sequentially activate each lane
+     ========================================================================= */
+  const enginePanel = document.getElementById('engine-panel');
+  const lanes = enginePanel ? enginePanel.querySelectorAll('.engine__lane') : [];
+  const playEngine = async () => {
+    if (reduce) {
+      lanes.forEach((l) => l.dataset.state = 'done');
+      return;
+    }
+    for (const lane of lanes) {
+      lane.dataset.state = 'searching';
+      await wait(420);
+      lane.dataset.state = 'done';
+      await wait(140);
+    }
+  };
+  const engineIO = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        playEngine();
+        engineIO.unobserve(enginePanel);
+      }
+    });
+  }, { threshold: 0.25 });
+  if (enginePanel) engineIO.observe(enginePanel);
+
+  /* =========================================================================
+     STATS — count-up on reveal
+     ========================================================================= */
+  const statEls = document.querySelectorAll('[data-stat]');
+  const animateStat = (el) => {
+    const target = parseInt(el.dataset.target, 10);
+    const out = el.querySelector('[data-out]');
+    if (reduce) { out.textContent = target.toLocaleString(); return; }
+    const duration = 1200;
+    const start = performance.now();
+    const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / duration);
+      const v = Math.round(target * easeOut(t));
+      out.textContent = v.toLocaleString();
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+  const statsIO = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        animateStat(e.target);
+        statsIO.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  statEls.forEach((el) => statsIO.observe(el));
+
+  /* =========================================================================
+     COMPARE — reveal score bars on scroll
+     ========================================================================= */
+  const compareRows = document.querySelectorAll('.compare__row[data-score-pct]');
+  const compareIO = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        const pct = parseFloat(e.target.dataset.scorePct);
+        e.target.style.setProperty('--score-fill', pct);
+        e.target.classList.add('is-revealed');
+        compareIO.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  compareRows.forEach((r) => compareIO.observe(r));
+
+  /* =========================================================================
+     INSTALL TABS
+     ========================================================================= */
+  const tabBtns = document.querySelectorAll('.install__tab');
+  const tabPanes = document.querySelectorAll('.install__pane');
+  tabBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
+      tabBtns.forEach((b) => {
+        const on = b === btn;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      tabPanes.forEach((p) => p.classList.toggle('is-active', p.id === 'install-' + tab));
+    });
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        const list = Array.from(tabBtns);
+        const i = list.indexOf(btn);
+        const next = list[(i + (e.key === 'ArrowRight' ? 1 : -1) + list.length) % list.length];
+        next.focus(); next.click();
+      }
+    });
+  });
+
+  /* =========================================================================
+     COPY BUTTONS
+     ========================================================================= */
+  document.querySelectorAll('[data-copy-target]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const id = btn.getAttribute('data-copy-target');
+      const node = document.getElementById(id);
+      if (!node) return;
+      const text = node.textContent.trim();
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (err) {
+        const r = document.createRange(); r.selectNodeContents(node);
+        const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      }
+      const prev = btn.textContent;
+      btn.classList.add('is-copied');
+      btn.textContent = 'copied';
+      setTimeout(() => {
+        btn.classList.remove('is-copied');
+        btn.textContent = prev;
+      }, 1400);
+    });
+  });
+
+  /* =========================================================================
+     HERO CANVAS — flow field of cyan/magenta particles
+     Scene palette: cyan #06b6d4 + magenta #ec4899
+     ========================================================================= */
+  function setupCanvas(canvas, render, opts = {}) {
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let raf = 0;
+    let running = false;
+    let lastT = 0;
+
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (opts.onResize) opts.onResize(rect.width, rect.height, ctx);
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const loop = (now) => {
+      const dt = Math.min(40, now - lastT); lastT = now;
+      render(ctx, canvas.getBoundingClientRect(), dt, now);
+      if (running) raf = requestAnimationFrame(loop);
+    };
+
+    const start = () => {
+      if (running || reduce) return;
+      running = true; lastT = performance.now();
+      raf = requestAnimationFrame(loop);
+    };
+    const stop = () => {
+      running = false; cancelAnimationFrame(raf);
+    };
+
+    if (reduce) {
+      // single static frame
+      render(ctx, canvas.getBoundingClientRect(), 16, 0);
+    } else {
+      const visIO = new IntersectionObserver((entries) => {
+        entries.forEach((e) => e.isIntersecting ? start() : stop());
+      }, { threshold: 0 });
+      visIO.observe(canvas);
+    }
+  }
+
+  // HERO — flow-field particles in cyan/magenta on near-black
+  (function heroCanvas() {
+    const canvas = document.getElementById('hero-canvas');
+    if (!canvas) return;
+    const N = 80;
+    const particles = [];
+    let w = 0, h = 0;
+    function init(width, height) {
+      w = width; h = height;
+      particles.length = 0;
+      for (let i = 0; i < N; i++) {
+        particles.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25,
+          r: 1.0 + Math.random() * 2.2,
+          c: Math.random() < 0.5 ? '#06b6d4' : '#ec4899',
+          a: 0.18 + Math.random() * 0.4
+        });
+      }
+    }
+    setupCanvas(canvas, (ctx, rect, dt, now) => {
+      if (!w || !h) init(rect.width, rect.height);
+      // soft trail wash — use rgba over canvas color tint
+      ctx.fillStyle = 'rgba(7, 8, 10, 0.06)';
+      ctx.fillRect(0, 0, w, h);
+      // gentle noise flow
+      const t = now * 0.00012;
+      for (const p of particles) {
+        const a1 = Math.sin(p.y * 0.003 + t) + Math.cos(p.x * 0.0028 - t);
+        p.vx += a1 * 0.012;
+        p.vy += Math.cos(p.x * 0.003 + t) * 0.012;
+        p.vx *= 0.94; p.vy *= 0.94;
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < -10) p.x = w + 10;
+        if (p.x > w + 10) p.x = -10;
+        if (p.y < -10) p.y = h + 10;
+        if (p.y > h + 10) p.y = -10;
+        ctx.globalAlpha = p.a;
+        ctx.fillStyle = p.c;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }, {
+      onResize: (width, height) => { init(width, height); }
+    });
+  })();
+
+  // ABSTRACT CANVAS SECTION — slow noise + gradient wash, teal + magenta
+  (function abstractCanvas() {
+    const canvas = document.getElementById('abstract-canvas');
+    if (!canvas) return;
+    let w = 0, h = 0;
+    const blobs = [];
+    function init(width, height) {
+      w = width; h = height;
+      blobs.length = 0;
+      const N = 5;
+      for (let i = 0; i < N; i++) {
+        blobs.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: 180 + Math.random() * 200,
+          dx: (Math.random() - 0.5) * 0.3,
+          dy: (Math.random() - 0.5) * 0.3,
+          c: i % 2 === 0 ? '#14b8a6' : '#f472b6'
+        });
+      }
+    }
+    setupCanvas(canvas, (ctx, rect, dt, now) => {
+      if (!w || !h) init(rect.width, rect.height);
+      // background tint
+      ctx.fillStyle = '#07080a';
+      ctx.fillRect(0, 0, w, h);
+      // composite
+      ctx.globalCompositeOperation = 'lighter';
+      for (const b of blobs) {
+        b.x += b.dx; b.y += b.dy;
+        if (b.x < -b.r) b.x = w + b.r;
+        if (b.x > w + b.r) b.x = -b.r;
+        if (b.y < -b.r) b.y = h + b.r;
+        if (b.y > h + b.r) b.y = -b.r;
+        const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+        g.addColorStop(0, b.c + '55');
+        g.addColorStop(0.6, b.c + '14');
+        g.addColorStop(1, b.c + '00');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, w, h);
+      }
+      ctx.globalCompositeOperation = 'source-over';
+      // film grain
+      ctx.fillStyle = 'rgba(246, 247, 249, 0.012)';
+      for (let i = 0; i < 220; i++) {
+        ctx.fillRect(Math.random() * w, Math.random() * h, 1, 1);
+      }
+    }, {
+      onResize: (width, height) => { init(width, height); }
+    });
+  })();
+
+})();
+
+  /* =========================================================================
+     LANG PICKER — open/close menu, close on outside click or Esc
+     ========================================================================= */
+  (function setupLangPicker() {
+    const picker = document.querySelector('.lang-picker');
+    const btn = document.getElementById('lang-picker-btn');
+    if (!picker || !btn) return;
+    const open = () => { picker.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true'); };
+    const close = () => { picker.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); };
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      picker.classList.contains('is-open') ? close() : open();
+    });
+    document.addEventListener('click', (e) => {
+      if (!picker.contains(e.target)) close();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,10 +1,10 @@
 [English](README.md) · [العربية](README.ar.md) · [Español](README.es.md) · **中文** · [Français](README.fr.md) · [Deutsch](README.de.md)
 
-# ux-god-skill — 为 Claude Code、Cursor 及一切 AI 编程工具打造的设计智能引擎
+# ux-skill — 为 Claude Code、Cursor 及一切 AI 编程工具打造的设计智能引擎
 
-> **AI 编程领域最强的 UX 插件。** 一个由 Python 驱动的推理内核,包含 11 份可查询的 JSON 清单(84 种风格、176 套配色、70 组字体搭配、148 个组件、184 个行业、35 种图表类型、57 个动效预设、112 条 UX 法则、35 条反模式规则、25 个技术栈、72 份品牌规范)、22 个斜杠命令、5 个子代理,以及一个确定性的反 AI-slop 静态检查器。跨 IDE 支持:可装入 Claude Code、Cursor、Windsurf、GitHub Copilot、Gemini CLI、Codex、Kiro、Cline、Continue、Aider、Zed、JetBrains AI、Pieces、Tabby、Tabnine、CodeWhisperer 以及 Roo Cline。
+> **AI 编程领域最强的 UX 插件。** 一个由 Python 驱动的推理内核,包含 11 份可查询的 JSON 清单(84 种风格、176 套配色、70 组字体搭配、148 个组件、184 个行业、35 种图表类型、57 个动效预设、112 条 UX 法则、100 条反模式规则、25 个技术栈、110 份品牌规范)、22 个斜杠命令、5 个子代理,以及一个确定性的反 AI-slop 静态检查器。跨 IDE 支持:可装入 Claude Code、Cursor、Windsurf、GitHub Copilot、Gemini CLI、Codex、Kiro、Cline、Continue、Aider、Zed、JetBrains AI、Pieces、Tabby、Tabnine、CodeWhisperer 以及 Roo Cline。
 
-> **品牌名是 `ux-god-skill`。** PyPI / npm 上的包名依旧是 `uxskill`。GitHub 仓库地址是 [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill)。
+> **品牌名是 `ux-skill`。** PyPI / npm 上的包名依旧是 `uxskill`。GitHub 仓库地址是 [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill)。
 
 **官网:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **与每一个 Claude UX 插件的对比:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
 
@@ -21,11 +21,11 @@
 
 ---
 
-## ux-god-skill 是什么
+## ux-skill 是什么
 
-ux-god-skill 是一个面向 AI 编程工具的**设计智能引擎**。它以 Python 包的形式运行(`pip install uxskill`),也作为 Claude Code 插件运行,同时提供一个面向 17 个 IDE 的多重安装器。引擎接收一份项目简报(行业、受众、调性、必备项、禁忌项、技术栈、地区),并返回一套完整的推荐设计系统:风格、配色、字体搭配、动效预设、组件、可供研习的品牌范例,以及必须坚守的反模式护栏。该推荐是确定性的——相同输入永远产出相同结果。
+ux-skill 是一个面向 AI 编程工具的**设计智能引擎**。它以 Python 包的形式运行(`pip install uxskill`),也作为 Claude Code 插件运行,同时提供一个面向 17 个 IDE 的多重安装器。引擎接收一份项目简报(行业、受众、调性、必备项、禁忌项、技术栈、地区),并返回一套完整的推荐设计系统:风格、配色、字体搭配、动效预设、组件、可供研习的品牌范例,以及必须坚守的反模式护栏。该推荐是确定性的——相同输入永远产出相同结果。
 
-这个插件位于你与 AI 编程工具之间。当你让 Claude Code、Cursor 或任何其他 AI 助手"做一个金融科技落地页"时,助手通常会即兴发挥——结果在五秒钟内就能被识别为 AI 生成(紫到蓝的渐变、三张等大的卡片、用 Inter 做超大显示字、测评里出现"John Doe"、默认 300ms 的过渡、居中 hero、CTA 上跳动的箭头)。ux-god-skill 用**结构化的约束**替代即兴:你跑 `/ux-discover` 抓取简报,跑 `/ux-recommend` 选定系统,跑 `/ux-design` 生成代码,再跑 `/ux-lint` 在提交前验证它通过 35 条确定性反 AI-slop 规则。
+这个插件位于你与 AI 编程工具之间。当你让 Claude Code、Cursor 或任何其他 AI 助手"做一个金融科技落地页"时,助手通常会即兴发挥——结果在五秒钟内就能被识别为 AI 生成(紫到蓝的渐变、三张等大的卡片、用 Inter 做超大显示字、测评里出现"John Doe"、默认 300ms 的过渡、居中 hero、CTA 上跳动的箭头)。ux-skill 用**结构化的约束**替代即兴:你跑 `/ux-discover` 抓取简报,跑 `/ux-recommend` 选定系统,跑 `/ux-design` 生成代码,再跑 `/ux-lint` 在提交前验证它通过 100 条确定性反 AI-slop 规则。
 
 这份 README 是权威参考。每一个命令、每一个子代理、每一份数据清单、每一条安装路径、每一份品牌规范、每一类反模式——全都记录在这里。如果你正在挑选 Claude Code 的设计插件,或者在为 Cursor、Windsurf 或 Codex 比较 AI 设计工具,请把这篇从头到尾读一遍,并对照 [compare.html](https://uxskill.laithjunaidy.com/compare.html)。
 
@@ -39,7 +39,7 @@ ux-god-skill 是一个面向 AI 编程工具的**设计智能引擎**。它以 P
 4. [22 个斜杠命令——详细参考](#22-个斜杠命令详细参考)
 5. [5 个子代理](#5-个子代理)
 6. [11 份数据清单](#11-份数据清单)
-7. [35 条反 AI-slop 规则——静态检查器](#35-条反-ai-slop-规则静态检查器)
+7. [100 条反 AI-slop 规则——静态检查器](#35-条反-ai-slop-规则静态检查器)
 8. [72 份 DESIGN.md 品牌规范——按类别](#72-份-designmd-品牌规范按类别)
 9. [面向 17 个 IDE 的安装器](#面向-17-个-ide-的安装器)
 10. [使用案例——具体场景](#使用案例具体场景)
@@ -115,7 +115,7 @@ ux stats
 
 ## 数据对比——与 Top 8 Claude UX 技能的实时比较
 
-Star 数最后一次通过 `gh api` 核对的时间是 **2026-05-28**。ux-god-skill(Laith0003/ux-skill)是最新入场的——我们在认知度上极小,在架构深度上极深。下面这张表是诚实的:哪里我们输,哪里我们赢。
+Star 数最后一次通过 `gh api` 核对的时间是 **2026-05-28**。ux-skill(Laith0003/ux-skill)是最新入场的——我们在认知度上极小,在架构深度上极深。下面这张表是诚实的:哪里我们输,哪里我们赢。
 
 | 插件 | Star 数 | 架构 | 斜杠命令 | 静态检查器(可上 CI) | 品牌规范 | 组件 | 动效预设 | 支持的 IDE |
 |---|---:|---|---:|---|---:|---:|---:|---:|
@@ -127,7 +127,7 @@ Star 数最后一次通过 `gh api` 核对的时间是 **2026-05-28**。ux-god-s
 | dominikmartn/nothing-design-skill | **2,391** | 单一审美 skill | 1 | — | — | 0 | 0 | 1 |
 | Nutlope/hallmark | **2,164** | 反 slop 设计 skill | 1 | — | — | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | MD3 组件 + 审查 | 1 | — | (仅 MD3) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-god-skill)** | **14** | **Python 引擎 + 11 份清单 + 22 个命令 + 5 个子代理 + CI 检查器** | **22** | **35 条正则规则** | **72** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Python 引擎 + 11 份清单 + 22 个命令 + 5 个子代理 + CI 检查器** | **22** | **100 条正则规则** | **72** | **148** | **57** | **17** |
 
 ### 我们输在哪里
 
@@ -139,7 +139,7 @@ Star 数最后一次通过 `gh api` 核对的时间是 **2026-05-28**。ux-god-s
 
 - **组件库:** 148 个带解剖结构、状态、所用 token 与动效规范的文档化组件。其他 8 个里没有任何一个发布过组件清单。
 - **动效预设:** 57 个开箱即用的栈级条目(Framer Motion、GSAP、CSS),全部带 reduced-motion 兜底。其他几家都不发布动效清单。
-- **反模式静态检查器:** 35 条确定性正则规则,能在 CI 中运行,遇 Critical/High 退出非零码。其他几家没有任何确定性检查器。
+- **反模式静态检查器:** 100 条确定性正则规则,能在 CI 中运行,遇 Critical/High 退出非零码。其他几家没有任何确定性检查器。
 - **品牌规范:** 72 份真实 DESIGN.md 规范(Apple、Stripe、Linear、Figma、Tesla、BMW、Notion、Spotify、Airbnb、Vercel、Supabase、Cursor、Raycast、Claude,以及其余 58 个)。其他几家没有品牌库。
 - **支持 17 个 IDE:** 同一个引擎,IDE 之间用不同的"胶水"对接。
 - **22 个斜杠命令:** discovery、生成、审查、lint、polish、修复循环、案例研究、工作坊、文案、动效、a11y、dashboard、conductor——彼此完全打通。
@@ -151,7 +151,7 @@ Star 数最后一次通过 `gh api` 核对的时间是 **2026-05-28**。ux-god-s
 ## 架构——各部件如何咬合
 
 ```
-ux-god-skill (包名: uxskill)
+ux-skill (包名: uxskill)
 │
 ├── data/                              大脑——可查询的 JSON 清单
 │   ├── styles.json                    84 种设计风格 + when/skip + tokens
@@ -163,7 +163,7 @@ ux-god-skill (包名: uxskill)
 │   ├── tech-stacks.json               25 个技术栈(Next、Astro、SvelteKit、Blade...)
 │   ├── ux-guidelines.json             112 条具名 UX 法则(Hick、Fitts、Miller...)
 │   ├── motion-presets.json            57 个动效预设(入场、出场、hover...)
-│   ├── anti-patterns.json             35 条正则规则(CI 安全的检查器源)
+│   ├── anti-patterns.json             100 条正则规则(CI 安全的检查器源)
 │   └── brands/*.json                  72 份 DESIGN 规范 + _index.json
 │
 ├── engine/                            Python——推理层
@@ -238,9 +238,9 @@ ux-god-skill (包名: uxskill)
    - **技术栈 → 组件兼容性 + 动效预设**(tech-stacks.json、motion-presets.json)
    - **禁忌项 + 地区 → 护栏 + 品牌范例候选**(anti-patterns.json、brands/)
 3. **合并。** 一个确定性的合并器对候选项排序、化解冲突(例如,"必备暗色模式"会强制配色模式),最终给出唯一的推荐系统。
-4. **输出。** 一份 JSON,内含选定的风格、配色、字体搭配、动效 Top 5、组件 Top 12、品牌范例 Top 5,以及全部 35 条反模式护栏的启用状态。外加一段说明,逐项解释为什么这样选。
+4. **输出。** 一份 JSON,内含选定的风格、配色、字体搭配、动效 Top 5、组件 Top 12、品牌范例 Top 5,以及全部 100 条反模式护栏的启用状态。外加一段说明,逐项解释为什么这样选。
 5. **生成。** 下游命令(`/ux-design`、`/ux-component`、`/ux-system`、`/ux-dashboard`)读取推荐结果,通过子代理生成真实代码。
-6. **验证。** `/ux-lint` 用 35 条正则规则再扫一遍生成出的代码。在 CI 中遇 Critical/High 退出非零码。
+6. **验证。** `/ux-lint` 用 100 条正则规则再扫一遍生成出的代码。在 CI 中遇 Critical/High 退出非零码。
 
 **Python 思考。HTML 展示。Markdown 串联。**
 
@@ -257,7 +257,7 @@ ux-god-skill (包名: uxskill)
 #### `/ux-init` — 给项目做初始化
 
 - **做什么:** 识别你在哪个 IDE(`.claude/`、`.cursor/`、`.windsurf/` 等),安装匹配的产物,核实 Python 引擎可达,打印一份统计快照。
-- **何时使用:** 在新项目里首次安装;克隆了使用 ux-god-skill 的项目之后;`pip install --upgrade uxskill` 之后。
+- **何时使用:** 在新项目里首次安装;克隆了使用 ux-skill 的项目之后;`pip install --upgrade uxskill` 之后。
 - **何时跳过:** 你已经在这个项目里跑过,而且没有任何变动。
 - **调用方式:** `/ux-init`(无参数)或在 CLI 里跑 `uxskill init`。
 - **输出:** 各 IDE 对应的产物(详见[面向 17 个 IDE 的安装器](#面向-17-个-ide-的安装器))+ `.ux/` 目录 + 标准输出摘要。
@@ -303,7 +303,7 @@ ux-god-skill (包名: uxskill)
     --stack=nextjs-15-app-router \
     --region=mena
   ```
-- **输出:** 写入 `.ux/last-recommendation.json` —— 选定的风格、选定的配色、选定的字体搭配、动效 Top 5、组件 Top 12、品牌范例 Top 5、35 条反模式护栏的启用状态,以及理据。
+- **输出:** 写入 `.ux/last-recommendation.json` —— 选定的风格、选定的配色、选定的字体搭配、动效 Top 5、组件 Top 12、品牌范例 Top 5、100 条反模式护栏的启用状态,以及理据。
 - **下接:** `/ux-design [简报]` → 用推荐 token 生成前端代码;`/ux-system` → 由推荐生成完整设计系统;`/ux-component <名称>` → 用推荐风格生成单个组件;`/ux-lint` → 验证生成的代码。
 
 ### 生成
@@ -357,7 +357,7 @@ ux-god-skill (包名: uxskill)
 
 #### `/ux-lint` — 基于正则的确定性检查器(无 LLM,CI 安全)
 
-- **做什么:** 对你的代码跑 35 条正则规则。无 LLM 调用。CI 中遇 Critical / High 退出非零码。源文件:`data/anti-patterns.json`。规则覆盖颜色(6)、字体(3)、布局(5)、动效(3)、内容(5)、a11y(6)、质量(6)、视觉(1)。
+- **做什么:** 对你的代码跑 100 条正则规则。无 LLM 调用。CI 中遇 Critical / High 退出非零码。源文件:`data/anti-patterns.json`。规则覆盖颜色(6)、字体(3)、布局(5)、动效(3)、内容(5)、a11y(6)、质量(6)、视觉(1)。
 - **何时使用:** 预提交钩子;CI 关卡;在花 `/ux-audit` 成本之前对大代码库做的快速首轮;在 `/ux-design` 或 `/ux-component` 之后用于验证生成。
 - **何时跳过:** 你想要修复循环(检查器只报告、不修改——请接 `/ux-polish --fix` 或 `/ux-fix`);你想要审美判断(用 `/ux-critique`)。
 - **调用方式(slash):** `/ux-lint src/`。
@@ -588,7 +588,7 @@ ux-god-skill (包名: uxskill)
 
 1. 简报 / 推荐(从 `.ux/` 加载)。
 2. 与之相关的清单切片(例如 `frontend-engineer` 拿到选定的风格 + 配色 + 组件;`motion-engineer` 拿到选定的动效预设)。
-3. 35 条反模式护栏(始终启用)。
+3. 100 条反模式护栏(始终启用)。
 4. 一个成功判据(产物必须做到什么)。
 
 子代理返回:
@@ -703,7 +703,7 @@ ux-god-skill (包名: uxskill)
 
 每个预设都有一个 reduced-motion 变体。Framer Motion、GSAP 和纯 CSS 都提供开箱可用的代码。
 
-### `anti-patterns.json` — 35 条正则规则
+### `anti-patterns.json` — 100 条正则规则
 
 | 字段 | 描述 |
 |---|---|
@@ -711,9 +711,9 @@ ux-god-skill (包名: uxskill)
 | `keys per entry` | `id`、`name`、`severity`(high/medium/low)、`category`、`detection`(type、pattern、flags、scope)、`evidence_template`、`fix`、`references` |
 | `categories` | A11y(6)、Color(6)、Content(5)、Layout(5)、Motion(3)、Quality(6)、Typography(3)、Visual(1) |
 
-完整规则清单见[35 条反 AI-slop 规则](#35-条反-ai-slop-规则静态检查器)。
+完整规则清单见[100 条反 AI-slop 规则](#35-条反-ai-slop-规则静态检查器)。
 
-### `brands/*.json` — 72 份品牌规范
+### `brands/*.json` — 110 份品牌规范
 
 | 字段 | 描述 |
 |---|---|
@@ -725,9 +725,9 @@ ux-god-skill (包名: uxskill)
 
 ---
 
-## 35 条反 AI-slop 规则——静态检查器
+## 100 条反 AI-slop 规则——静态检查器
 
-ux-god-skill 提供一个基于正则的确定性检查器。**无 LLM。** **无 API。** **无网络。** 在典型 Next.js 应用上 CI 中 ~200ms 跑完。设置 `--fail-on high` 时,遇 Critical / High 退出非零码。
+ux-skill 提供一个基于正则的确定性检查器。**无 LLM。** **无 API。** **无网络。** 在典型 Next.js 应用上 CI 中 ~200ms 跑完。设置 `--fail-on high` 时,遇 Critical / High 退出非零码。
 
 规则来自 `data/anti-patterns.json`(首选 v2),回退源为 `references/foundations/anti-patterns.md`(v1 bash)。发布两个二进制:`bin/ux-lint.py`(Python,快、可扩展)与 `bin/ux-lint.sh`(Bash + perl-PCRE,用于无 Python 的环境)。
 
@@ -889,7 +889,7 @@ Clay、NVIDIA、The Verge、Vodafone、Wired
 
 ### 为什么这件事很重要
 
-另外 8 个热门 Claude UX 插件生成的是"现代极简"或"干净仪表盘"——同一种默认美学的变体。ux-god-skill 让你能要**Linear 的清晰**、**Stripe 的严肃**、**Apple 的克制**、**Tesla 的整块感**、**Notion 的亲和**、**Cursor 的渐变纪律**、**Raycast 的发丝密度**、**Claude 的暖色 editorial**——引擎会从品牌规范里取出对应的 tokens、嗓音、动效约定与签名手法。
+另外 8 个热门 Claude UX 插件生成的是"现代极简"或"干净仪表盘"——同一种默认美学的变体。ux-skill 让你能要**Linear 的清晰**、**Stripe 的严肃**、**Apple 的克制**、**Tesla 的整块感**、**Notion 的亲和**、**Cursor 的渐变纪律**、**Raycast 的发丝密度**、**Claude 的暖色 editorial**——引擎会从品牌规范里取出对应的 tokens、嗓音、动效约定与签名手法。
 
 ---
 
@@ -1064,7 +1064,7 @@ cat .ux/last-discovery.json
 # }
 ```
 
-你可以把 JSON 交给团队,粘到 Notion 文档里,或者喂给其他 AI 工具。ux-god-skill 不止是引擎,也是一个结构化录入工具。
+你可以把 JSON 交给团队,粘到 Notion 文档里,或者喂给其他 AI 工具。ux-skill 不止是引擎,也是一个结构化录入工具。
 
 ---
 
@@ -1072,7 +1072,7 @@ cat .ux/last-discovery.json
 
 简表如下。逐列对比详见 [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html)。
 
-| 维度 | ux-god-skill | ui-ux-pro-max | open-design | taste-skill | huashu-design | stitch-skills | nothing-design | hallmark | material-3 |
+| 维度 | ux-skill | ui-ux-pro-max | open-design | taste-skill | huashu-design | stitch-skills | nothing-design | hallmark | material-3 |
 |---|---|---|---|---|---|---|---|---|---|
 | 斜杠命令 | **22** | 1 | 19 | 1 | 1 | 多 | 1 | 1 | 1 |
 | 组件 | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
@@ -1159,7 +1159,7 @@ MIT。用它、fork 它、在它之上构建。如果它帮你少出货了一份
 
 ### 作者
 
-**Laith Aljunaidy** —— [Dot](https://thedotwallet.com) 的独立创始人,Dot 是一个 MENA 优先的会员平台。我打造 ux-god-skill,是为了让 AI 生成的前端不再千篇一律。
+**Laith Aljunaidy** —— [Dot](https://thedotwallet.com) 的独立创始人,Dot 是一个 MENA 优先的会员平台。我打造 ux-skill,是为了让 AI 生成的前端不再千篇一律。
 
 - LinkedIn:[linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
 - 邮箱:laith.aljunaidy.laith@gmail.com
@@ -1178,6 +1178,6 @@ MIT。用它、fork 它、在它之上构建。如果它帮你少出货了一份
 
 ---
 
-**ux-god-skill** · **v2.0.0-alpha.1** · 为让 Claude Code、Cursor、Windsurf 以及其他 AI 编程工具产出的前端不再被一眼识别为 AI 生成而打造。
+**ux-skill** · **v2.0.0-alpha.1** · 为让 Claude Code、Cursor、Windsurf 以及其他 AI 编程工具产出的前端不再被一眼识别为 AI 生成而打造。
 
 > 给仓库点星:[github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · 通过 `pip install uxskill` 或 `npx uxskill init` 安装 · 浏览对比:[uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html)

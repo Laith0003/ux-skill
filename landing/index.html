@@ -7,6 +7,24 @@
   <title>uxskill — Design intelligence for AI coding. Python engine. 998 entries.</title>
   <meta name="description" content="An open-source Python engine that catches AI design fingerprints before they ship. 998 structured entries. 22 commands. 100 anti-pattern rules. 110 brand specs. Runs in Claude Code, Cursor, Windsurf, and 14 more IDEs. MIT, no telemetry.">
 
+  <link rel="alternate" hreflang="en" href="https://uxskill.laithjunaidy.com/">
+  <link rel="alternate" hreflang="zh-CN" href="https://uxskill.laithjunaidy.com/zh-CN/">
+  <link rel="alternate" hreflang="zh-TW" href="https://uxskill.laithjunaidy.com/zh-TW/">
+  <link rel="alternate" hreflang="ja" href="https://uxskill.laithjunaidy.com/ja/">
+  <link rel="alternate" hreflang="ko" href="https://uxskill.laithjunaidy.com/ko/">
+  <link rel="alternate" hreflang="hi" href="https://uxskill.laithjunaidy.com/hi/">
+  <link rel="alternate" hreflang="id" href="https://uxskill.laithjunaidy.com/id/">
+  <link rel="alternate" hreflang="vi" href="https://uxskill.laithjunaidy.com/vi/">
+  <link rel="alternate" hreflang="th" href="https://uxskill.laithjunaidy.com/th/">
+  <link rel="alternate" hreflang="ar" href="https://uxskill.laithjunaidy.com/ar/">
+  <link rel="alternate" hreflang="es" href="https://uxskill.laithjunaidy.com/es/">
+  <link rel="alternate" hreflang="fr" href="https://uxskill.laithjunaidy.com/fr/">
+  <link rel="alternate" hreflang="de" href="https://uxskill.laithjunaidy.com/de/">
+  <link rel="alternate" hreflang="pt-BR" href="https://uxskill.laithjunaidy.com/pt-BR/">
+  <link rel="alternate" hreflang="ru" href="https://uxskill.laithjunaidy.com/ru/">
+  <link rel="alternate" hreflang="tr" href="https://uxskill.laithjunaidy.com/tr/">
+  <link rel="alternate" hreflang="it" href="https://uxskill.laithjunaidy.com/it/">
+  <link rel="alternate" hreflang="x-default" href="https://uxskill.laithjunaidy.com/">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/">
   <meta name="robots" content="index,follow">
 
@@ -31,7 +49,7 @@
   <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@500,700&f[]=switzer@300,500,700&display=swap">
 
   <meta property="og:title" content="uxskill — Design intelligence for AI coding">
-  <meta property="og:description" content="Python engine. 998 entries. 22 commands. 100 anti-pattern rules. 110 brand specs. 17 IDEs. MIT, no telemetry.">
+  <meta property="og:description" content="An open-source Python engine that catches AI design fingerprints before they ship. 998 structured entries. 22 commands. 100 anti-pattern rules. 110 brand specs. Runs in Claude Code, Cursor, Windsurf, and 14 more IDEs. MIT, no telemetry.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -43,7 +61,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="uxskill — Design intelligence for AI coding">
-  <meta name="twitter:description" content="Python engine. 998 entries. 22 commands. 100 anti-pattern rules. 110 brand specs. 17 IDEs. MIT, no telemetry.">
+  <meta name="twitter:description" content="An open-source Python engine that catches AI design fingerprints before they ship. 998 structured entries. 22 commands. 100 anti-pattern rules. 110 brand specs. Runs in Claude Code, Cursor, Windsurf, and 14 more IDEs. MIT, no telemetry.">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og-image.png">
   <meta name="twitter:image:alt" content="uxskill wordmark on near-black canvas with the line: design intelligence for AI coding.">
 
@@ -1813,6 +1831,57 @@
       font-size: 18px;
     }
   </style>
+<style>
+    /* Language picker — dropdown in the nav */
+    .lang-picker { position: relative; }
+    .lang-picker__btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent;
+      border: 1px solid var(--hairline);
+      border-radius: 999px;
+      color: var(--ink);
+      padding: 6px 12px 6px 10px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: border-color var(--t-fast) var(--ease-cinema);
+    }
+    .lang-picker__btn:hover, .lang-picker__btn[aria-expanded="true"] {
+      border-color: var(--hairline-2);
+    }
+    .lang-picker__menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 220px;
+      max-height: 360px;
+      overflow-y: auto;
+      background: rgba(15, 17, 21, 0.96);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 8px;
+      display: none;
+      z-index: 50;
+      box-shadow: 0 24px 60px -24px rgba(0,0,0,0.6);
+    }
+    .lang-picker.is-open .lang-picker__menu { display: block; }
+    .lang-picker__item {
+      display: block;
+      padding: 8px 12px;
+      color: var(--body);
+      text-decoration: none;
+      font-family: var(--sans);
+      font-size: 14px;
+      border-radius: 6px;
+      transition: background-color var(--t-fast) var(--ease-cinema), color var(--t-fast) var(--ease-cinema);
+    }
+    .lang-picker__item:hover { background: rgba(255,255,255,0.06); color: var(--ink); }
+    .lang-picker__item.is-current { color: var(--ink); background: rgba(255,255,255,0.04); }
+    @media (max-width: 900px) {
+      .lang-picker__menu { right: -16px; }
+    }</style>
 </head>
 <body>
 
@@ -3231,6 +3300,27 @@
   })();
 
 })();
+
+  /* =========================================================================
+     LANG PICKER — open/close menu, close on outside click or Esc
+     ========================================================================= */
+  (function setupLangPicker() {
+    const picker = document.querySelector('.lang-picker');
+    const btn = document.getElementById('lang-picker-btn');
+    if (!picker || !btn) return;
+    const open = () => { picker.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true'); };
+    const close = () => { picker.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); };
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      picker.classList.contains('is-open') ? close() : open();
+    });
+    document.addEventListener('click', (e) => {
+      if (!picker.contains(e.target)) close();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+  })();
 </script>
 
 </body>

@@ -6,8 +6,8 @@
   <title>Blog — ux-skill: design intelligence engine for AI coding</title>
   <meta name="description" content="Articles on Claude Code design plugins, AI coding tools, anti-AI-slop techniques, and design system generation. From the team behind ux-skill v2.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/">
-  <meta name="theme-color" content="#faf9f5">
-  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
   <meta name="robots" content="index,follow">
 
   <meta property="og:type" content="website">
@@ -22,65 +22,160 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --canvas: #faf9f5; --surface: #efe9de; --ink: #181715;
-      --body: #3d3d3a; --muted: #6c6a64; --hairline: rgba(20,20,19,0.10);
-      --primary: #cc785c; --primary-active: #a9583e;
+      --canvas: #07080a;
+      --surface: #0f1115;
+      --surface-2: #14181d;
+      --ink: #faf9f5;
+      --body: #c8c6bf;
+      --muted: #7a7972;
+      --hairline: rgba(255,255,255,0.08);
+      --hairline-2: rgba(255,255,255,0.14);
+      --scene-accent: #10b981;
+      --display: 'Bricolage Grotesque', 'Inter Tight', system-ui, sans-serif;
+      --body-face: 'Inter', system-ui, -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --t-fast: 160ms;
+      --t-mid: 260ms;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background: var(--canvas); scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-      background: var(--canvas); color: var(--body);
-      font-size: 16px; line-height: 1.6;
+      font-family: var(--body-face);
+      background: var(--canvas);
+      color: var(--body);
+      font-size: 16.5px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
-    .wrap { max-width: 880px; margin: 0 auto; padding: 64px 24px 96px; }
+    a { color: inherit; text-decoration: none; }
+    .skip-link {
+      position: absolute; top: -40px; left: 8px;
+      background: var(--surface-2); color: var(--ink);
+      padding: 10px 16px; border-radius: 8px;
+      font-family: var(--mono); font-size: 12px;
+      border: 1px solid var(--hairline-2);
+      z-index: 200;
+    }
+    .skip-link:focus { top: 8px; }
+
+    .wrap { max-width: 880px; margin: 0 auto; padding: 18px 24px 96px; }
+
     header.top {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 8px 0 56px;
+      padding: 8px 0 22px;
+      gap: 16px;
       border-bottom: 1px solid var(--hairline);
       margin-bottom: 56px;
     }
     .wordmark {
-      display: inline-flex; align-items: baseline; gap: 4px;
-      text-decoration: none; color: var(--ink);
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 600; font-size: 28px; letter-spacing: -0.02em;
+      display: inline-flex; align-items: baseline; gap: 2px;
+      color: var(--ink);
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-size: 24px;
+      letter-spacing: -0.04em;
+      line-height: 1;
     }
     .wordmark .dot {
-      width: 6px; height: 6px; border-radius: 999px;
-      background: var(--primary); transform: translateY(-3px);
+      width: 7px; height: 7px; border-radius: 2px;
+      background: var(--scene-accent);
+      transform: translateY(-2px);
       display: inline-block;
+      margin-left: 4px;
     }
     nav.crumbs {
-      display: flex; gap: 28px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      display: flex; gap: 22px; align-items: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: lowercase;
       color: var(--muted);
     }
-    nav.crumbs a { color: var(--muted); text-decoration: none; }
-    nav.crumbs a:hover { color: var(--ink); }
+    nav.crumbs a { color: var(--muted); transition: color var(--t-fast) var(--ease); }
+    nav.crumbs a:hover, nav.crumbs a:focus-visible { color: var(--ink); }
     nav.crumbs a.current { color: var(--ink); }
+    nav.crumbs a:focus-visible { outline: 2px solid var(--scene-accent); outline-offset: 4px; border-radius: 3px; }
+
+    .menu-btn {
+      display: none;
+      width: 40px; height: 40px;
+      align-items: center; justify-content: center;
+      border-radius: 8px;
+      border: 1px solid var(--hairline-2);
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .menu-btn:focus-visible { outline: 2px solid var(--scene-accent); outline-offset: 3px; }
+    .menu-btn svg { width: 18px; height: 18px; }
+
+    .drawer {
+      position: fixed; inset: 0;
+      z-index: 90;
+      display: flex; flex-direction: column;
+      padding: 80px 24px 40px;
+      opacity: 0; pointer-events: none;
+      transition: opacity var(--t-mid) var(--ease);
+      background: rgba(7,8,10,0.96);
+      backdrop-filter: saturate(140%) blur(18px);
+    }
+    .drawer.is-open { opacity: 1; pointer-events: auto; }
+    .drawer a {
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'wght' 560;
+      font-size: 28px;
+      color: var(--ink);
+      padding: 14px 0;
+      border-bottom: 1px solid var(--hairline);
+      letter-spacing: -0.02em;
+    }
+    .drawer-close {
+      position: absolute; top: 18px; right: 24px;
+      width: 44px; height: 44px;
+      border-radius: 8px;
+      border: 1px solid var(--hairline-2);
+      background: transparent;
+      color: var(--ink);
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .drawer-close svg { width: 16px; height: 16px; }
+
+    @media (max-width: 768px) {
+      .menu-btn { display: inline-flex; }
+      nav.crumbs { display: none; }
+    }
 
     .eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--primary);
-      margin-bottom: 24px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--scene-accent);
+      margin-bottom: 22px;
       display: inline-block;
     }
     h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 84, 'opsz' 96, 'wght' 620;
       font-size: clamp(40px, 6vw, 72px);
-      line-height: 1.04;
-      letter-spacing: -0.025em;
+      line-height: 1.02;
+      letter-spacing: -0.032em;
       color: var(--ink);
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
-    h1 .accent { font-style: italic; color: var(--primary); }
+    h1 .accent {
+      color: var(--scene-accent);
+      font-style: italic;
+      font-variation-settings: 'wdth' 84, 'opsz' 96, 'wght' 580;
+    }
     .lede {
       font-size: 18px;
       line-height: 1.55;
@@ -88,6 +183,7 @@
       max-width: 720px;
       margin-bottom: 64px;
     }
+    .lede strong { color: var(--ink); font-weight: 600; }
 
     .post-list {
       list-style: none;
@@ -96,61 +192,80 @@
     }
     .post {
       padding: 24px 28px;
-      background: white;
+      background: var(--surface);
       border-radius: 14px;
       border: 1px solid var(--hairline);
-      transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
-                  box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform var(--t-mid) var(--ease),
+                  border-color var(--t-fast) var(--ease),
+                  background var(--t-fast) var(--ease);
     }
-    .post:hover {
+    .post:hover, .post:focus-within {
       transform: translateY(-2px);
-      box-shadow: 0 16px 36px -20px rgba(24,23,21,0.18);
-      border-color: rgba(204,120,92,0.4);
+      background: var(--surface-2);
+      border-color: var(--hairline-2);
     }
     .post a {
       display: block;
-      text-decoration: none;
       color: inherit;
     }
+    .post a:focus-visible {
+      outline: 2px solid var(--scene-accent);
+      outline-offset: 4px;
+      border-radius: 8px;
+    }
     .post-meta {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 11px;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
-    .post-meta .tag { color: var(--primary); }
+    .post-meta .tag { color: var(--scene-accent); }
     .post h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-      font-size: 28px;
-      line-height: 1.16;
-      letter-spacing: -0.015em;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 32, 'wght' 600;
+      font-size: 22px;
+      line-height: 1.2;
+      letter-spacing: -0.018em;
       color: var(--ink);
       margin-bottom: 10px;
     }
     .post p {
-      font-size: 15.5px;
+      font-size: 14.5px;
       color: var(--body);
       margin: 0;
+      line-height: 1.55;
     }
+    .post code {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      background: var(--surface-2);
+      border: 1px solid var(--hairline);
+      padding: 1px 5px;
+      border-radius: 4px;
+      color: var(--ink);
+    }
+    .post:hover code { background: var(--surface); }
 
-    footer {
-      margin-top: 96px;
-      padding-top: 32px;
+    footer.site {
+      max-width: 880px;
+      margin: 96px auto 0;
+      padding: 32px 24px 40px;
       border-top: 1px solid var(--hairline);
       display: flex;
       justify-content: space-between;
       align-items: baseline;
       flex-wrap: wrap;
       gap: 16px;
-      font-size: 13px;
+      font-family: var(--mono);
+      font-size: 12px;
       color: var(--muted);
     }
-    footer a { color: var(--muted); text-decoration: none; }
-    footer a:hover { color: var(--ink); }
-    footer .links { display: flex; gap: 24px; }
+    footer.site a { color: var(--muted); transition: color var(--t-fast) var(--ease); }
+    footer.site a:hover, footer.site a:focus-visible { color: var(--ink); }
+    footer.site .links { display: flex; gap: 22px; flex-wrap: wrap; }
+    @media (max-width: 560px) { footer.site { flex-direction: column; } }
   </style>
   <script type="application/ld+json">
   {
@@ -165,18 +280,33 @@
   </script>
 </head>
 <body>
+  <a class="skip-link sr-only" href="#main">Go to articles</a>
   <div class="wrap">
     <header class="top">
-      <a href="/" class="wordmark">ux<span class="dot"></span></a>
-      <nav class="crumbs">
-        <a href="/">Home</a>
-        <a href="/compare.html">Compare</a>
-        <a href="/blog/" class="current">Blog</a>
-        <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+      <a href="/" class="wordmark" aria-label="ux-skill home">uxskill<span class="dot" aria-hidden="true"></span></a>
+      <nav class="crumbs" aria-label="Primary">
+        <a href="/">home</a>
+        <a href="/compare.html">compare</a>
+        <a href="/blog/" class="current">blog</a>
+        <a href="https://github.com/Laith0003/ux-skill">github</a>
       </nav>
+      <button type="button" class="menu-btn" aria-label="Open menu" aria-controls="drawer" aria-expanded="false" id="menuBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
     </header>
 
-    <span class="eyebrow">Blog · plugin landscape · design engineering</span>
+    <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Site menu">
+      <button type="button" class="drawer-close" aria-label="Close menu" id="drawerClose">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M6 18L18 6"/></svg>
+      </button>
+      <a href="/">Home</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/blog/">Blog</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+    </div>
+
+    <main id="main">
+    <span class="eyebrow">Blog &middot; plugin landscape &middot; design engineering</span>
     <h1>Articles on AI coding's <span class="accent">design</span> problem.</h1>
     <p class="lede">
       Honest write-ups on Claude Code design plugins, AI design slop fingerprints, and
@@ -186,135 +316,161 @@
 
     <ul class="post-list">
       <li class="post"><a href="/blog/zed-design-plugin.html">
-        <div class="post-meta"><span class="tag">tutorial</span> · ~1450 words · ~7 min</div>
-        <h2>Zed design plugin — install ux-skill to stop generic AI design output</h2>
+        <div class="post-meta"><span class="tag">tutorial</span> &middot; ~1450 words &middot; ~7 min</div>
+        <h2>Zed design plugin &mdash; install ux-skill to stop generic AI design output</h2>
         <p>Zed is the high-performance Rust IDE with a first-class MCP client called the Agent Panel. Three install paths: MCP stdio server, CLI in the terminal pane, pre-commit hook. ux-skill plugs in through <code>~/.config/zed/settings.json</code>.</p>
       </a></li>
 
       <li class="post"><a href="/blog/github-copilot-design-rules.html">
-        <div class="post-meta"><span class="tag">tutorial</span> · ~1625 words · ~8 min</div>
-        <h2>GitHub Copilot design rules — how ux-skill catches AI design fingerprints in Copilot output</h2>
+        <div class="post-meta"><span class="tag">tutorial</span> &middot; ~1625 words &middot; ~8 min</div>
+        <h2>GitHub Copilot design rules &mdash; how ux-skill catches AI design fingerprints in Copilot output</h2>
         <p>Copilot ships great code completion and generic design. ux-skill generates a <code>.github/copilot-instructions.md</code> file plus a 68-rule deterministic linter that runs on disk after Copilot writes. Custom instructions raise the floor; the linter sets the ceiling.</p>
       </a></li>
 
       <li class="post"><a href="/blog/jetbrains-ai-design-system.html">
-        <div class="post-meta"><span class="tag">tutorial</span> · ~1700 words · ~8 min</div>
-        <h2>JetBrains AI Assistant design system rules — keeping IntelliJ + WebStorm generations on-brand</h2>
+        <div class="post-meta"><span class="tag">tutorial</span> &middot; ~1700 words &middot; ~8 min</div>
+        <h2>JetBrains AI Assistant design system rules &mdash; keeping IntelliJ + WebStorm generations on-brand</h2>
         <p>Works in IntelliJ, WebStorm, PyCharm, GoLand, RubyMine, RustRover. <code>.junie/guidelines.md</code> generator, tokens.css for Spring projects, Kotlin object emit for Compose, MCP server for AI Assistant.</p>
       </a></li>
 
       <li class="post"><a href="/blog/ai-design-system-cli.html">
-        <div class="post-meta"><span class="tag">technical</span> · ~1700 words · ~8 min</div>
-        <h2>AI design system CLI — the npx and pip way to generate a design system in under 60 seconds</h2>
+        <div class="post-meta"><span class="tag">technical</span> &middot; ~1700 words &middot; ~8 min</div>
+        <h2>AI design system CLI &mdash; the npx and pip way to generate a design system in under 60 seconds</h2>
         <p>Three CLI commands cover the full pipeline: <code>ux discover</code> (10-field brief), <code>ux recommend</code> (5-parallel-search), <code>ux persist save</code> (MASTER.md + tokens.css + manifest.json). Engine compute under 300 ms; brief is 100% of the human time.</p>
       </a></li>
 
       <li class="post"><a href="/blog/claude-desktop-mcp-design.html">
-        <div class="post-meta"><span class="tag">technical</span> · ~1550 words · ~8 min</div>
-        <h2>Claude Desktop + MCP design intelligence — ux-skill as a stdio server</h2>
-        <p>None of the top eight Claude design skills ship an MCP server. ux-skill v2 does — 14 tools registered, a dedicated <code>ux-mcp</code> entry point, one JSON block in <code>claude_desktop_config.json</code>. Same engine reaches Cursor, Windsurf, Cline, Continue.</p>
+        <div class="post-meta"><span class="tag">technical</span> &middot; ~1550 words &middot; ~8 min</div>
+        <h2>Claude Desktop + MCP design intelligence &mdash; ux-skill as a stdio server</h2>
+        <p>None of the top eight Claude design skills ship an MCP server. ux-skill v2 does &mdash; 14 tools registered, a dedicated <code>ux-mcp</code> entry point, one JSON block in <code>claude_desktop_config.json</code>. Same engine reaches Cursor, Windsurf, Cline, Continue.</p>
       </a></li>
 
       <li class="post"><a href="/blog/dogfooding-design-engine.html">
-        <div class="post-meta"><span class="tag">story</span> · ~1100 words · ~6 min</div>
-        <h2>Dogfooding ux-skill — bugs we found by using our own design engine</h2>
-        <p>We ran our recommender against our homepage brief. It returned Cormorant + Cream — the Claude clone. We filed two bugs against ourselves (editorial tag too narrow, calm tag coupled to luminance), fixed both, re-ran the engine, and shipped a page that passes its own linter cleanly.</p>
+        <div class="post-meta"><span class="tag">story</span> &middot; ~1100 words &middot; ~6 min</div>
+        <h2>Dogfooding ux-skill &mdash; bugs we found by using our own design engine</h2>
+        <p>We ran our recommender against our homepage brief. It returned a stark editorial scheme &mdash; the same one we'd just shipped. We filed two bugs against ourselves (editorial tag too narrow, calm tag coupled to luminance), fixed both, re-ran the engine, and shipped a page that passes its own linter cleanly.</p>
       </a></li>
 
       <li class="post"><a href="/blog/dark-editorial-cinema-design.html">
-        <div class="post-meta"><span class="tag">design</span> · ~1200 words · ~7 min</div>
-        <h2>Dark editorial cinema — the design language behind ux-skill's new homepage</h2>
-        <p>Charcoal canvas, single amber accent, Fraunces variable opsz on scroll, scroll-pinned cinema motion. The actual design choices, swatches, type config, lint result (0 findings at high), and how to recreate the system from your own brief.</p>
+        <div class="post-meta"><span class="tag">design</span> &middot; ~1200 words &middot; ~7 min</div>
+        <h2>Dark editorial cinema &mdash; the design language behind ux-skill's new homepage</h2>
+        <p>Near-black canvas, per-scene accents, Bricolage Grotesque variable on scroll, scroll-pinned cinema motion. The actual design choices, swatches, type config, lint result (0 findings at high), and how to recreate the system from your own brief.</p>
       </a></li>
 
       <li class="post"><a href="/blog/mcp-server-design-intelligence.html">
-        <div class="post-meta"><span class="tag">technical</span> · ~1300 words · ~9 min</div>
-        <h2>MCP server for design intelligence — ux-skill's 14 tools any agent can call</h2>
+        <div class="post-meta"><span class="tag">technical</span> &middot; ~1300 words &middot; ~9 min</div>
+        <h2>MCP server for design intelligence &mdash; ux-skill's 14 tools any agent can call</h2>
         <p>The Python engine, the 51-rule linter, the 998-entry catalog, all exposed as 14 Model Context Protocol tools. Real Pydantic schemas, real Claude Desktop / Cursor / Windsurf configs, real JSON-RPC payloads. The asymmetric move against single-host skills.</p>
       </a></li>
 
       <li class="post"><a href="/blog/motion-presets-framer-gsap-css.html">
-        <div class="post-meta"><span class="tag">reference</span> · ~1500 words · ~9 min</div>
-        <h2>57 motion presets for AI coding — Framer Motion, GSAP, and CSS snippets</h2>
+        <div class="post-meta"><span class="tag">reference</span> &middot; ~1500 words &middot; ~9 min</div>
+        <h2>57 motion presets for AI coding &mdash; Framer Motion, GSAP, and CSS snippets</h2>
         <p>The motion library AI coding tools never ship. 57 presets across 8 categories, each available in all three engines, with <code>prefers-reduced-motion</code> branches and performance notes. When to pick CSS vs Framer Motion vs GSAP.</p>
       </a></li>
 
       <li class="post"><a href="/blog/regex-linter-for-ai-coding.html">
-        <div class="post-meta"><span class="tag">technical</span> · ~1400 words · ~8 min</div>
-        <h2>Regex linter for AI coding — how 51 rules catch design slop in CI</h2>
+        <div class="post-meta"><span class="tag">technical</span> &middot; ~1400 words &middot; ~8 min</div>
+        <h2>Regex linter for AI coding &mdash; how 51 rules catch design slop in CI</h2>
         <p>Deterministic, sub-second, zero LLM calls. The 51 ux-skill anti-pattern rules grouped by category, a real rule walkthrough, GitHub Actions workflow, pre-commit hook config, and a before/after on a Next.js hero that fails three rules.</p>
       </a></li>
 
       <li class="post"><a href="/blog/ai-design-fingerprints-list.html">
-        <div class="post-meta"><span class="tag">reference</span> · ~2000 words · ~14 min</div>
+        <div class="post-meta"><span class="tag">reference</span> &middot; ~2000 words &middot; ~14 min</div>
         <h2>The 35 AI design fingerprints every AI coding tool ships by default</h2>
-        <p>The complete taxonomy. Inter at 90px, indigo-to-blue gradients, three equal cards, "John Doe" placeholders, fade-in-up on everything. Grouped by category — Typography, Color, Layout, Content, Motion, A11y, Quality — with detection regex, why each is slop, and the fix.</p>
+        <p>The complete taxonomy. Inter at 90px, indigo-to-blue gradients, three equal cards, generic placeholder names, fade-in-up on everything. Grouped by category &mdash; Typography, Color, Layout, Content, Motion, A11y, Quality &mdash; with detection regex, why each is slop, and the fix.</p>
       </a></li>
 
       <li class="post"><a href="/blog/claude-code-marketplace-best-plugins.html">
-        <div class="post-meta"><span class="tag">marketplace</span> · ~1400 words · ~8 min</div>
+        <div class="post-meta"><span class="tag">marketplace</span> &middot; ~1400 words &middot; ~8 min</div>
         <h2>Best Claude Code marketplace plugins for design and frontend in 2026</h2>
         <p>Ranked: 10 plugins to install for design and frontend work, with live star counts and exact <code>/plugin install</code> commands. Includes ui-ux-pro-max (84k), open-design (54k), taste-skill (25k), huashu-design (15k), ux-skill v2, stitch-skills, nothing-design-skill, hallmark, material-3-skill, and frontend-design-skill.</p>
       </a></li>
 
       <li class="post"><a href="/blog/monorepo-design-system-ai-coding.html">
-        <div class="post-meta"><span class="tag">technical</span> · ~1200 words · ~7 min</div>
-        <h2>Monorepo design system with AI coding — ux-skill's tokens.css output</h2>
+        <div class="post-meta"><span class="tag">technical</span> &middot; ~1200 words &middot; ~7 min</div>
+        <h2>Monorepo design system with AI coding &mdash; ux-skill's tokens.css output</h2>
         <p>One shared <code>tokens.css</code> + <code>manifest.json</code> across Turborepo or Nx packages. AI-generated code in every <code>apps/*</code> consumer stays on system. The linter exits non-zero on drift at PR time.</p>
       </a></li>
 
       <li class="post"><a href="/blog/figma-vs-ux-skill.html">
-        <div class="post-meta"><span class="tag">comparison</span> · ~1100 words · ~6 min</div>
-        <h2>Figma MCP vs ux-skill — design intelligence in your AI coding session</h2>
+        <div class="post-meta"><span class="tag">comparison</span> &middot; ~1100 words &middot; ~6 min</div>
+        <h2>Figma MCP vs ux-skill &mdash; design intelligence in your AI coding session</h2>
         <p>Figma MCP imports designs from a Figma file into the AI session; ux-skill generates a system from a written brief. Side-by-side table, plus the complementary workflow when you have a partial Figma file and need to extend it.</p>
       </a></li>
 
       <li class="post"><a href="/blog/windsurf-design-rules.html">
-        <div class="post-meta"><span class="tag">tutorial</span> · ~950 words · ~5 min</div>
-        <h2>Windsurf design rules — install ux-skill for Cursor-grade design output</h2>
-        <p>Windsurf has no native design rules. Cascade inherits the model's defaults — Inter at 90px, indigo gradients, three equal cards. Three install paths via <code>.windsurfrules</code> / <code>npx</code> / <code>pip</code>. Free + MIT.</p>
+        <div class="post-meta"><span class="tag">tutorial</span> &middot; ~950 words &middot; ~5 min</div>
+        <h2>Windsurf design rules &mdash; install ux-skill for Cursor-grade design output</h2>
+        <p>Windsurf has no native design rules. Cascade inherits the model's defaults &mdash; Inter at 90px, indigo gradients, three equal cards. Three install paths via <code>.windsurfrules</code> / <code>npx</code> / <code>pip</code>. Free + MIT.</p>
       </a></li>
 
       <li class="post"><a href="/blog/vs-ui-ux-pro-max.html">
-        <div class="post-meta"><span class="tag">comparison</span> · ~1200 words · ~5 min</div>
-        <h2>ui-ux-pro-max alternative: ux-skill v2 — every dimension, side by side</h2>
+        <div class="post-meta"><span class="tag">comparison</span> &middot; ~1200 words &middot; ~5 min</div>
+        <h2>ui-ux-pro-max alternative: ux-skill v2 &mdash; every dimension, side by side</h2>
         <p>The most-starred Claude UX skill on GitHub is ui-ux-pro-max-skill at 84k. ux-skill v2 borrows their recommender pattern and goes further. Honest table: 998 entries vs ~600, 100-rule linter vs none, 110 brand specs vs none.</p>
       </a></li>
 
       <li class="post"><a href="/blog/anti-ai-slop-claude-skills.html">
-        <div class="post-meta"><span class="tag">ranking</span> · ~1500 words · ~7 min</div>
-        <h2>Anti-AI-slop tools for Claude Code in 2026 — the honest ranking</h2>
+        <div class="post-meta"><span class="tag">ranking</span> &middot; ~1500 words &middot; ~7 min</div>
+        <h2>Anti-AI-slop tools for Claude Code in 2026 &mdash; the honest ranking</h2>
         <p>Every AI coding tool produces the same fingerprints: Inter as display, purple gradients, three identical cards. Ranked: Leonxlnx/taste-skill (25k stars), Nutlope/hallmark (2.1k), ux-skill v2 (100 deterministic regex rules, only one with CI-friendly enforcement).</p>
       </a></li>
 
       <li class="post"><a href="/blog/best-claude-code-design-skills-2026.html">
-        <div class="post-meta"><span class="tag">guide</span> · ~1400 words · ~6 min</div>
-        <h2>Best Claude Code skills for UX/UI design — 2026 ranking</h2>
+        <div class="post-meta"><span class="tag">guide</span> &middot; ~1400 words &middot; ~6 min</div>
+        <h2>Best Claude Code skills for UX/UI design &mdash; 2026 ranking</h2>
         <p>Ranked by live GitHub stars: ui-ux-pro-max (84k), open-design (54k), taste-skill (25k), huashu-design (15k), stitch-skills (5.7k), nothing-design-skill (2.4k), hallmark (2.1k), material-3-skill (955). Cards with architecture, scope, real fit.</p>
       </a></li>
 
       <li class="post"><a href="/blog/cursor-design-plugin.html">
-        <div class="post-meta"><span class="tag">tutorial</span> · ~900 words · ~4 min</div>
+        <div class="post-meta"><span class="tag">tutorial</span> &middot; ~900 words &middot; ~4 min</div>
         <h2>Cursor design plugin: install ux-skill to stop generic AI design output</h2>
         <p>Cursor users hit the same wall as Claude Code users. Three install paths via <code>.cursorrules</code> / <code>npx</code> / <code>pip</code>. Pairs with shadcn/ui MCP + Tailwind. Free + MIT.</p>
       </a></li>
 
       <li class="post"><a href="/blog/python-design-system-generator.html">
-        <div class="post-meta"><span class="tag">technical</span> · ~1100 words · ~5 min</div>
-        <h2>Python design system generator — ux-skill v2's 5-parallel-search engine</h2>
-        <p>How the engine merges five lanes (industry → style → palette → type → motion) into one recommendation, deterministically, in seconds. Brief in, complete design system out. 998 structured entries under the hood.</p>
+        <div class="post-meta"><span class="tag">technical</span> &middot; ~1100 words &middot; ~5 min</div>
+        <h2>Python design system generator &mdash; ux-skill v2's 5-parallel-search engine</h2>
+        <p>How the engine merges five lanes (industry &rarr; style &rarr; palette &rarr; type &rarr; motion) into one recommendation, deterministically, in seconds. Brief in, complete design system out. 998 structured entries under the hood.</p>
       </a></li>
     </ul>
-
-    <footer>
-      <span>© 2026 Laith Aljunaidy. MIT licensed. No telemetry.</span>
-      <div class="links">
-        <a href="/">Home</a>
-        <a href="/compare.html">Compare</a>
-        <a href="/privacy.html">Privacy</a>
-        <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
-      </div>
-    </footer>
+    </main>
   </div>
+
+  <footer class="site">
+    <span>&copy; 2026 Laith Aljunaidy. MIT licensed. No telemetry.</span>
+    <div class="links">
+      <a href="/">Home</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var btn = document.getElementById('menuBtn');
+      var drawer = document.getElementById('drawer');
+      var close = document.getElementById('drawerClose');
+      if (!btn || !drawer || !close) return;
+      function open() {
+        drawer.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+      function shut() {
+        drawer.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+      btn.addEventListener('click', open);
+      close.addEventListener('click', shut);
+      drawer.addEventListener('click', function (e) { if (e.target === drawer) shut(); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && drawer.classList.contains('is-open')) shut();
+      });
+    }());
+  </script>
 </body>
 </html>

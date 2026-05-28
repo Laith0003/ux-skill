@@ -6,6 +6,12 @@
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "5170"],
       "port": 5170
+    },
+    {
+      "name": "blog-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "4251", "--directory", "docs"],
+      "port": 4251
     }
   ]
 }

@@ -6,8 +6,8 @@
   <title>ux-skill roadmap — v2.0 to v3.0</title>
   <meta name="description" content="What's shipped (v2.0-alpha.24) and what's coming next: v2.1 adds 17 anti-pattern rules, v2.2 adds i18n + MCP server, v2.3 adds hi-fi prototype output.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/roadmap.html">
-  <meta name="theme-color" content="#faf9f5">
-  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
   <meta name="robots" content="index,follow">
 
   <meta property="og:type" content="website">
@@ -91,126 +91,280 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
   <style>
+    /* =========================================================================
+       UXSKILL DOCS v3 — Saturated Cinema (dark)
+       Scene accent: teal #14b8a6
+       ========================================================================= */
     :root {
-      --canvas: #faf9f5;
-      --surface: #efe9de;
-      --surface-2: #f3eee4;
-      --ink: #181715;
-      --body: #3d3d3a;
-      --muted: #6c6a64;
-      --hairline: rgba(20,20,19,0.10);
-      --primary: #cc785c;
-      --primary-active: #a9583e;
-      --primary-soft: rgba(204,120,92,0.12);
-      --shipped-bg: #ddebd9;
-      --shipped-fg: #28681c;
-      --planned-bg: #ece6dc;
-      --planned-fg: #6c6a64;
-      --wont-bg: #f4e5dc;
-      --wont-fg: #a4502f;
+      --canvas:        #07080a;
+      --surface-1:     #0d0f12;
+      --surface-2:     #14181d;
+      --surface-3:     #1c2128;
+      --ink:           #f6f7f9;
+      --body:          #c7ccd3;
+      --muted:         #8a8f96;
+      --faint:         #5a5f66;
+      --hairline:      rgba(246, 247, 249, 0.07);
+      --hairline-2:    rgba(246, 247, 249, 0.14);
+
+      --scene-glow:    #14b8a6;
+      --scene-accent:  #14b8a6;
+      --scene-soft:    rgba(20, 184, 166, 0.10);
+
+      /* Status ramps — dark equivalents */
+      --shipped-bg:   rgba(16, 185, 129, 0.14);
+      --shipped-fg:   #34d399;
+      --planned-bg:   rgba(246, 247, 249, 0.08);
+      --planned-fg:   var(--muted);
+
+      --display:   'Bricolage Grotesque', 'Inter Tight', system-ui, sans-serif;
+      --body-face: 'Inter', system-ui, -apple-system, sans-serif;
+      --mono:      'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+      --italic-face: 'Instrument Serif', Georgia, serif;
+
+      --max-w:    1320px;
+      --gutter:   clamp(20px, 5vw, 56px);
+
+      --ease-cinema: cubic-bezier(0.16, 1, 0.3, 1);
+      --t-fast:   160ms;
+      --t-mid:    260ms;
+      --t-slow:   520ms;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { background: var(--canvas); scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      margin: 0;
       background: var(--canvas);
       color: var(--body);
+      font-family: var(--body-face);
       font-size: 16px;
       line-height: 1.65;
       -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
-    .wrap { max-width: 880px; margin: 0 auto; padding: 64px 24px 96px; }
+    a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--hairline-2); text-underline-offset: 3px; transition: text-decoration-color var(--t-fast) var(--ease-cinema), color var(--t-fast) var(--ease-cinema); }
+    a:hover, a:focus-visible { text-decoration-color: var(--scene-accent); }
+    a:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 3px; border-radius: 2px; }
+    button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 
-    header.top {
+    .skip-link {
+      position: absolute; top: -40px; left: 8px;
+      background: var(--surface-2); color: var(--ink);
+      padding: 12px 18px; border-radius: 8px;
+      font-family: var(--mono); font-size: 12px;
+      border: 1px solid var(--hairline-2);
+      z-index: 200;
+    }
+    .skip-link:focus { top: 8px; }
+
+    /* ===== NAV ===== */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 80;
+      padding: 14px 0;
+      transition: backdrop-filter var(--t-mid) var(--ease-cinema),
+                  background-color var(--t-mid) var(--ease-cinema),
+                  border-color var(--t-mid) var(--ease-cinema);
+      border-bottom: 1px solid transparent;
+    }
+    .nav.is-scrolled {
+      background: rgba(7, 8, 10, 0.72);
+      backdrop-filter: saturate(140%) blur(18px);
+      -webkit-backdrop-filter: saturate(140%) blur(18px);
+      border-bottom-color: var(--hairline);
+    }
+    .nav__inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 8px 0 40px;
-      border-bottom: 1px solid var(--hairline);
-      margin-bottom: 56px;
+      gap: 18px;
     }
     .wordmark {
-      display: inline-flex; align-items: baseline; gap: 4px;
-      text-decoration: none; color: var(--ink);
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 600; font-size: 28px; letter-spacing: -0.02em;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-size: 22px;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--ink);
+      display: inline-flex;
+      align-items: baseline;
+      gap: 2px;
+      text-decoration: none;
     }
-    .wordmark .dot {
-      display: inline-block; width: 6px; height: 6px;
-      border-radius: 999px; background: var(--primary);
-      transform: translateY(-3px);
+    .wordmark:hover { text-decoration: none; }
+    .wordmark__dot {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 2px;
+      background: linear-gradient(135deg, #06b6d4, #ec4899);
+      margin-left: 4px;
+      transform: translateY(-2px);
     }
-    nav.crumbs {
-      display: flex; gap: 24px; flex-wrap: wrap;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+    .nav__links { display: none; gap: 26px; align-items: center; }
+    .nav__link {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
       color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: lowercase;
+      text-decoration: none;
+      transition: color var(--t-fast) var(--ease-cinema);
     }
-    nav.crumbs a { color: var(--muted); text-decoration: none; }
-    nav.crumbs a:hover { color: var(--ink); }
-    nav.crumbs a.current { color: var(--ink); }
+    .nav__link:hover, .nav__link:focus-visible { color: var(--ink); text-decoration: none; }
+    .nav__link.is-current { color: var(--ink); }
+    .nav__link:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 6px; border-radius: 3px; }
+    .cta-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 14px; min-height: 36px;
+      border-radius: 10px;
+      background: var(--ink); color: var(--canvas);
+      font-family: var(--mono); font-size: 12px; font-weight: 500;
+      text-decoration: none;
+      transition: transform var(--t-mid) var(--ease-cinema),
+                  background-color var(--t-fast) var(--ease-cinema);
+    }
+    .cta-pill:hover, .cta-pill:focus-visible { transform: translateY(-1px); background: #ffffff; text-decoration: none; }
+    .cta-pill:active { transform: translateY(0); }
+    .cta-pill:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 4px; }
+
+    .nav__menu-btn {
+      display: inline-flex; width: 40px; height: 40px;
+      align-items: center; justify-content: center;
+      border-radius: 8px;
+      border: 1px solid var(--hairline-2);
+      color: var(--ink);
+    }
+    .nav__menu-btn:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 3px; }
+    .nav__drawer {
+      position: fixed; inset: 0;
+      z-index: 90;
+      display: flex; flex-direction: column;
+      padding: 80px var(--gutter) 40px;
+      opacity: 0; pointer-events: none;
+      transition: opacity var(--t-mid) var(--ease-cinema);
+      background-color: rgba(7, 8, 10, 0.94);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .nav__drawer.is-open { opacity: 1; pointer-events: auto; }
+    .nav__drawer a {
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'wght' 560;
+      font-size: 32px;
+      color: var(--ink);
+      padding: 14px 0;
+      border-bottom: 1px solid var(--hairline);
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+    .nav__drawer .nav__drawer-close {
+      position: absolute; top: 18px; right: var(--gutter);
+      width: 44px; height: 44px;
+      border-radius: 8px;
+      border: 1px solid var(--hairline-2);
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent; color: var(--ink);
+    }
+    @media (min-width: 768px) {
+      .nav__links { display: flex; }
+      .nav__menu-btn { display: none; }
+    }
+
+    /* ===== PAGE ===== */
+    .page {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: clamp(120px, 16vw, 168px) var(--gutter) clamp(80px, 12vw, 140px);
+    }
+
+    .crumbs {
+      display: flex; gap: 18px; flex-wrap: wrap;
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.06em;
+      text-transform: lowercase;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+    .crumbs a { color: var(--muted); text-decoration: none; }
+    .crumbs a:hover { color: var(--ink); }
+    .crumbs a.is-current { color: var(--ink); }
 
     .eyebrow {
-      display: inline-block;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--primary);
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: inline-flex; align-items: center; gap: 10px;
       margin-bottom: 22px;
     }
-    h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-      font-size: clamp(42px, 6vw, 64px);
-      line-height: 1.05;
-      letter-spacing: -0.025em;
+    .eyebrow::before {
+      content: ''; display: inline-block;
+      width: 22px; height: 1px;
+      background: currentColor;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--display);
+      font-weight: 600;
+      font-variation-settings: 'wdth' 88, 'opsz' 96, 'wght' 580;
+      margin: 0;
+      line-height: 1.04;
+      letter-spacing: -0.028em;
       color: var(--ink);
+    }
+    h1 {
+      font-size: clamp(40px, 6vw, 64px);
+      font-variation-settings: 'wdth' 84, 'opsz' 96, 'wght' 600;
+      letter-spacing: -0.034em;
       margin-bottom: 24px;
     }
-    h1 .accent { font-style: italic; color: var(--primary); font-weight: 600; }
-    .lede {
-      font-size: 19px; line-height: 1.6;
-      color: var(--body); margin-bottom: 32px;
+    h1 .accent, h2 .accent, h3 .accent {
+      font-family: var(--italic-face);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--scene-accent);
+      letter-spacing: -0.015em;
     }
-    .lede strong { color: var(--ink); font-weight: 600; }
-    .lede code {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
-      background: var(--surface);
-      padding: 1px 6px;
-      border-radius: 4px;
-      color: var(--ink);
-    }
-
     h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-      font-size: clamp(28px, 4vw, 38px);
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-      color: var(--ink);
+      font-size: clamp(26px, 3.8vw, 38px);
+      font-variation-settings: 'wdth' 86, 'opsz' 64, 'wght' 580;
+      letter-spacing: -0.024em;
       margin: 0 0 8px;
     }
-    h2 .accent { color: var(--primary); font-style: italic; font-weight: 600; }
-    p { margin-bottom: 16px; }
-    p code, li code {
-      font-family: 'JetBrains Mono', monospace;
+    p { margin: 0 0 16px; color: var(--body); }
+    p strong { color: var(--ink); font-weight: 600; }
+    .lede {
+      font-size: 19px;
+      line-height: 1.6;
+      color: var(--body);
+      margin-bottom: 32px;
+    }
+    .lede strong { color: var(--ink); font-weight: 600; }
+    code {
+      font-family: var(--mono);
       font-size: 13px;
-      background: var(--surface);
+      background: var(--surface-2);
       padding: 1px 6px;
       border-radius: 4px;
       color: var(--ink);
+      border: 1px solid var(--hairline);
     }
-    a { color: var(--primary); text-decoration: none; }
-    a:hover { color: var(--primary-active); text-decoration: underline; }
 
+    /* Release cards */
     .release {
-      background: white;
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
       border-radius: 18px;
       padding: 32px 36px;
       margin-bottom: 28px;
-      box-shadow: 0 8px 28px -16px rgba(24,23,21,0.12);
-      border: 1px solid var(--hairline);
     }
     .release .head {
       display: flex; align-items: baseline; justify-content: space-between;
@@ -223,40 +377,38 @@
       display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
     }
     .release .version {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.14em;
       color: var(--muted);
     }
     .release .codename {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: var(--italic-face);
       font-style: italic;
       font-size: 22px;
-      font-weight: 600;
-      color: var(--primary);
+      font-weight: 400;
+      color: var(--scene-accent);
+      letter-spacing: -0.01em;
     }
     .release .status {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 10.5px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       padding: 4px 10px;
       border-radius: 999px;
       font-weight: 600;
+      border: 1px solid transparent;
     }
-    .status.shipped { background: var(--shipped-bg); color: var(--shipped-fg); }
-    .status.planned { background: var(--planned-bg); color: var(--planned-fg); }
-    .release .ship-target {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--muted);
-    }
+    .status.shipped { background: var(--shipped-bg); color: var(--shipped-fg); border-color: rgba(52, 211, 153, 0.20); }
+    .status.planned { background: var(--planned-bg); color: var(--planned-fg); border-color: var(--hairline); }
     .release h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-      font-size: 26px;
-      letter-spacing: -0.015em;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 86, 'opsz' 64, 'wght' 560;
+      font-weight: 600;
+      font-size: 24px;
+      letter-spacing: -0.022em;
       color: var(--ink);
       margin-bottom: 12px;
       line-height: 1.2;
@@ -267,16 +419,18 @@
       margin-bottom: 18px;
     }
     .release h4 {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 11px;
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--muted);
+      font-weight: 500;
       margin: 18px 0 10px;
     }
     .release ul {
       list-style: none;
       padding-left: 0;
+      margin: 0;
     }
     .release ul li {
       padding-left: 20px;
@@ -292,7 +446,7 @@
       top: 12px;
       width: 6px;
       height: 1px;
-      background: var(--primary);
+      background: var(--scene-accent);
     }
     .release ul li strong { color: var(--ink); font-weight: 600; }
     .release .vote {
@@ -300,46 +454,59 @@
       align-items: center;
       gap: 8px;
       margin-top: 20px;
-      padding: 8px 14px;
-      background: var(--surface);
+      padding: 9px 14px;
+      background: var(--surface-2);
+      border: 1px solid var(--hairline-2);
       border-radius: 8px;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--mono);
       font-size: 12px;
       color: var(--ink);
       text-decoration: none;
       letter-spacing: 0.04em;
+      transition: border-color var(--t-fast) var(--ease-cinema), background-color var(--t-fast) var(--ease-cinema);
     }
-    .release .vote:hover { background: var(--primary-soft); color: var(--primary-active); text-decoration: none; }
+    .release .vote:hover { background: var(--surface-3); border-color: var(--scene-accent); text-decoration: none; }
     .release .vote::after { content: '→'; }
 
     .release.current {
-      background: linear-gradient(180deg, rgba(204,120,92,0.04), white 30%);
-      border: 1px solid rgba(204,120,92,0.20);
+      background: linear-gradient(180deg, var(--scene-soft), var(--surface-1) 35%);
+      border-color: rgba(20, 184, 166, 0.28);
     }
 
+    /* Won't-do — inverted to surface card, scene-rose-ish but kept restrained */
     .wont-do {
-      background: var(--ink);
-      color: var(--canvas);
+      background: var(--surface-1);
+      border: 1px solid var(--hairline-2);
       border-radius: 22px;
       padding: 40px 44px;
       margin-top: 56px;
+      position: relative;
+      overflow: hidden;
     }
-    .wont-do .eyebrow {
-      color: var(--primary);
+    .wont-do::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #f472b6 0%, transparent 60%);
     }
+    .wont-do .eyebrow { color: #f472b6; }
+    .wont-do .eyebrow::before { background: currentColor; }
     .wont-do h2 {
-      color: var(--canvas);
+      color: var(--ink);
       margin-bottom: 16px;
     }
-    .wont-do h2 .accent { color: var(--primary); }
+    .wont-do h2 .accent { color: #f472b6; }
     .wont-do p {
-      color: rgba(250,249,245,0.78);
+      color: var(--body);
       max-width: 640px;
       margin-bottom: 24px;
     }
     .wont-do ul {
       list-style: none;
       padding: 0;
+      margin: 0;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
@@ -347,60 +514,147 @@
     @media (max-width: 640px) { .wont-do ul { grid-template-columns: 1fr; } }
     .wont-do ul li {
       padding: 14px 16px;
-      background: rgba(250,249,245,0.06);
+      background: var(--surface-2);
+      border: 1px solid var(--hairline);
+      border-left: 2px solid rgba(244, 114, 182, 0.5);
       border-radius: 10px;
       font-size: 14.5px;
-      color: var(--canvas);
-      border-left: 2px solid rgba(204,120,92,0.5);
+      color: var(--body);
     }
     .wont-do ul li strong {
       display: block;
-      color: white;
+      color: var(--ink);
       font-weight: 600;
       margin-bottom: 4px;
       font-size: 15px;
     }
     .wont-do ul li span {
-      color: rgba(250,249,245,0.65);
+      color: var(--muted);
       font-size: 13.5px;
     }
 
-    footer {
-      margin-top: 96px;
-      padding-top: 32px;
+    /* ===== FOOTER ===== */
+    .footer {
+      padding: 88px 0 56px;
       border-top: 1px solid var(--hairline);
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      flex-wrap: wrap;
+      background: var(--surface-1);
+    }
+    .footer__inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 44px;
+    }
+    .footer__col-h {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .footer__col ul { list-style: none; padding: 0; margin: 0; }
+    .footer__col li { margin-bottom: 10px; padding: 0; }
+    .footer__col li::before { display: none; }
+    .footer__link {
+      color: var(--body);
+      font-size: 13.5px;
+      text-decoration: none;
+      transition: color var(--t-fast) var(--ease-cinema);
+    }
+    .footer__link:hover, .footer__link:focus-visible { color: var(--ink); text-decoration: none; }
+    .footer__link:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 3px; border-radius: 2px; }
+    .footer__tagline {
+      margin-top: 12px;
+      font-size: 13.5px;
+      color: var(--body);
+      max-width: 320px;
+    }
+    .footer__bottom {
+      max-width: var(--max-w);
+      margin: 64px auto 0;
+      padding: 28px var(--gutter) 0;
+      display: flex; flex-wrap: wrap;
       gap: 16px;
-      font-size: 13px;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--hairline);
+      font-family: var(--mono);
+      font-size: 11.5px;
       color: var(--muted);
     }
-    footer a { color: var(--muted); text-decoration: none; }
-    footer a:hover { color: var(--ink); text-decoration: none; }
-    footer .links { display: flex; gap: 24px; flex-wrap: wrap; }
+    @media (min-width: 720px) {
+      .footer__inner { grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr; gap: 40px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header class="top">
-      <a href="/" class="wordmark">ux<span class="dot"></span></a>
-      <nav class="crumbs">
-        <a href="/">Home</a>
-        <a href="/compare.html">Compare</a>
-        <a href="/blog/">Blog</a>
-        <a href="/about.html">About</a>
-        <a href="/roadmap.html" class="current">Roadmap</a>
-        <a href="/faq.html">FAQ</a>
-        <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
-      </nav>
-    </header>
 
-    <span class="eyebrow">Roadmap · v2.0 → v3.0 · public · 2026–2027</span>
-    <h1>ux-skill <span class="accent">roadmap</span> — v2.0 → v3.0.</h1>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="/" class="wordmark" aria-label="uxskill home">
+      uxskill<span class="wordmark__dot" aria-hidden="true"></span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="/compare.html">compare</a>
+      <a class="nav__link" href="/about.html">about</a>
+      <a class="nav__link is-current" href="/roadmap.html">roadmap</a>
+      <a class="nav__link" href="/faq.html">faq</a>
+      <a class="nav__link" href="/mcp.html">mcp</a>
+      <a class="nav__link" href="/commands.html">commands</a>
+      <a class="nav__link" href="/blog/">blog</a>
+    </nav>
+    <a href="https://github.com/Laith0003/ux-skill" class="cta-pill" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      <span>GitHub</span>
+    </a>
+    <button type="button" class="nav__menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer" id="nav-menu-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="nav__drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Site menu" aria-hidden="true">
+  <button type="button" class="nav__drawer-close" aria-label="Close menu" id="nav-drawer-close">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <a href="/compare.html">Compare</a>
+  <a href="/about.html">About</a>
+  <a href="/roadmap.html">Roadmap</a>
+  <a href="/faq.html">FAQ</a>
+  <a href="/mcp.html">MCP</a>
+  <a href="/commands.html">Commands</a>
+  <a href="/blog/">Blog</a>
+  <a href="/privacy.html">Privacy</a>
+  <a href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+</div>
+
+<main id="main">
+  <div class="page">
+    <nav class="crumbs" aria-label="Breadcrumbs">
+      <a href="/">home</a>
+      <a href="/compare.html">compare</a>
+      <a href="/blog/">blog</a>
+      <a href="/about.html">about</a>
+      <a href="/roadmap.html" class="is-current">roadmap</a>
+      <a href="/faq.html">faq</a>
+    </nav>
+
+    <span class="eyebrow">Roadmap &middot; v2.0 &rarr; v3.0 &middot; public &middot; 2026&ndash;2027</span>
+    <h1>ux-skill <span class="accent">roadmap</span> &mdash; v2.0 to v3.0.</h1>
     <p class="lede">
-      Where we are, where we're headed, and what we will never build. Every release has a codename, a ship target, and a vote-on-this link so you can push the order of work. Dates are intent, not promise — this is a solo project with a real day job. If you want something faster, send a PR.
+      Where we are, where we're headed, and what we will never build. Every release has a codename, a ship target, and a vote-on-this link so you can push the order of work. Dates are intent, not promise &mdash; this is a solo project with a real day job. If you want something faster, send a PR.
     </p>
 
     <article class="release current">
@@ -409,7 +663,7 @@
           <span class="version">v2.0.0-alpha.24</span>
           <span class="codename">"Forcing Function"</span>
         </div>
-        <span class="status shipped">Shipped · 2026-05-28</span>
+        <span class="status shipped">Shipped &middot; 2026-05-28</span>
       </div>
       <h3>Now: the engine, the manifests, the linter, the IDE bridge.</h3>
       <p class="summary">
@@ -418,11 +672,11 @@
       <h4>What's in v2.0</h4>
       <ul>
         <li><strong>998 manifest entries</strong> across anti-patterns, generators, styles, components, brands, foundations, output formats, conditionals, processes</li>
-        <li><strong>22 slash-commands</strong> — <code>/ux-design</code>, <code>/ux-component</code>, <code>/ux-system</code>, <code>/ux-audit</code>, <code>/ux-frame</code>, <code>/ux-dashboard</code>, <code>/ux-fix</code>, <code>/ux-copy</code>, <code>/ux-motion</code>, <code>/ux-a11y</code>, and 12 more</li>
-        <li><strong>17 IDE adapters</strong> — Claude Code, Cursor, Windsurf, Copilot, Continue, Codeium, Cline, Roo Code, Aider, Cody, Tabnine, Supermaven, Zed AI, JetBrains AI, Augment, Pieces, Sourcegraph</li>
-        <li><strong>110 brand specs</strong> under <code>references/brands/</code> — Apple, Stripe, Linear, Vercel, Notion, Airbnb, Figma, Replit, Anthropic, plus 63 more</li>
-        <li><strong>100 anti-slop linter rules</strong> — gradient regex, font-pair lockout, emoji detection, default-blue trap, three-tier pricing card flag, generic hero detection, 29 more</li>
-        <li><strong>Discovery protocol</strong> — 10-field intake before any generation (banned: improvisation)</li>
+        <li><strong>22 slash-commands</strong> &mdash; <code>/ux-design</code>, <code>/ux-component</code>, <code>/ux-system</code>, <code>/ux-audit</code>, <code>/ux-frame</code>, <code>/ux-dashboard</code>, <code>/ux-fix</code>, <code>/ux-copy</code>, <code>/ux-motion</code>, <code>/ux-a11y</code>, and 12 more</li>
+        <li><strong>17 IDE adapters</strong> &mdash; Claude Code, Cursor, Windsurf, Copilot, Continue, Codeium, Cline, Roo Code, Aider, Cody, Tabnine, Supermaven, Zed AI, JetBrains AI, Augment, Pieces, Sourcegraph</li>
+        <li><strong>110 brand specs</strong> under <code>references/brands/</code> &mdash; Apple, Stripe, Linear, Vercel, Notion, Airbnb, Figma, Replit, Anthropic, plus 63 more</li>
+        <li><strong>100 anti-slop linter rules</strong> &mdash; gradient regex, font-pair lockout, emoji detection, default-blue trap, three-tier pricing card flag, generic hero detection, 29 more</li>
+        <li><strong>Discovery protocol</strong> &mdash; 10-field intake before any generation (banned: improvisation)</li>
       </ul>
       <a href="https://github.com/Laith0003/ux-skill/releases" class="vote">Read the release notes</a>
     </article>
@@ -433,7 +687,7 @@
           <span class="version">v2.1</span>
           <span class="codename">"Stoic"</span>
         </div>
-        <span class="status planned">Planned · Q3 2026</span>
+        <span class="status planned">Planned &middot; Q3 2026</span>
       </div>
       <h3>Deepen the linter. Cross-wire the manifests. Add landing-patterns.</h3>
       <p class="summary">
@@ -441,11 +695,11 @@
       </p>
       <h4>Key features</h4>
       <ul>
-        <li><strong>+17 anti-pattern rules</strong> — pulled from the May 2026 audit of 50 generic landings (grep findings: 14 purple gradients, 11 three-tier cards, 9 default-Inter pairs, 16 generic feature-icon grids)</li>
-        <li><strong><code>landing-patterns.yaml</code></strong> — 28 patterns covering hero, pricing, testimonial, FAQ, CTA, footer variants with brand-locked recommendations</li>
-        <li><strong>Cross-reference wiring</strong> — choosing a brand from the 72-pack now auto-narrows valid components, valid type pairings, and valid motion patterns</li>
-        <li><strong>Linter performance pass</strong> — drop median run from 380ms to under 80ms; parallel rule eval</li>
-        <li><strong>Per-rule disable file</strong> — <code>.uxskill.toml</code> with rule-level opt-out and explanation requirement</li>
+        <li><strong>+17 anti-pattern rules</strong> &mdash; pulled from the May 2026 audit of 50 generic landings (grep findings: 14 purple gradients, 11 three-tier cards, 9 default-Inter pairs, 16 generic feature-icon grids)</li>
+        <li><strong><code>landing-patterns.yaml</code></strong> &mdash; 28 patterns covering hero, pricing, testimonial, FAQ, CTA, footer variants with brand-locked recommendations</li>
+        <li><strong>Cross-reference wiring</strong> &mdash; choosing a brand from the 72-pack now auto-narrows valid components, valid type pairings, and valid motion patterns</li>
+        <li><strong>Linter performance pass</strong> &mdash; drop median run from 380ms to under 80ms; parallel rule eval</li>
+        <li><strong>Per-rule disable file</strong> &mdash; <code>.uxskill.toml</code> with rule-level opt-out and explanation requirement</li>
       </ul>
       <a href="https://github.com/Laith0003/ux-skill/discussions/categories/ideas" class="vote">Vote on v2.1 priorities</a>
     </article>
@@ -456,7 +710,7 @@
           <span class="version">v2.2</span>
           <span class="codename">"Polyglot"</span>
         </div>
-        <span class="status planned">Planned · Q4 2026</span>
+        <span class="status planned">Planned &middot; Q4 2026</span>
       </div>
       <h3>Localize the README. Add an MCP server. Bridge to Figma.</h3>
       <p class="summary">
@@ -464,11 +718,11 @@
       </p>
       <h4>Key features</h4>
       <ul>
-        <li><strong>README in 11 locales</strong> — English, Arabic, Spanish, Portuguese, French, German, Russian, Chinese (Simplified), Japanese, Korean, Hindi</li>
-        <li><strong>MCP server (<code>uxskill-mcp</code>)</strong> — stateful memory of prior designs across Claude Code, Cursor, Windsurf sessions; canonical brand persists per-repo</li>
-        <li><strong>Figma MCP bridge</strong> — pull tokens from a Figma file into a brand spec; one-way sync; design system import in under 30 seconds</li>
-        <li><strong>RTL pass</strong> — every command flag-tested under <code>dir="rtl"</code>; mirrored animation contracts in motion-engineer agent</li>
-        <li><strong>Brand pack #2</strong> — 28 MENA + APAC brands added to the brand library (Careem, Talabat, Noon, Aramex, GO-JEK, Grab, Lazada, +21)</li>
+        <li><strong>README in 11 locales</strong> &mdash; English, Arabic, Spanish, Portuguese, French, German, Russian, Chinese (Simplified), Japanese, Korean, Hindi</li>
+        <li><strong>MCP server (<code>uxskill-mcp</code>)</strong> &mdash; stateful memory of prior designs across Claude Code, Cursor, Windsurf sessions; canonical brand persists per-repo</li>
+        <li><strong>Figma MCP bridge</strong> &mdash; pull tokens from a Figma file into a brand spec; one-way sync; design system import in under 30 seconds</li>
+        <li><strong>RTL pass</strong> &mdash; every command flag-tested under <code>dir="rtl"</code>; mirrored animation contracts in motion-engineer agent</li>
+        <li><strong>Brand pack #2</strong> &mdash; 28 MENA + APAC brands added to the brand library (Careem, Talabat, Noon, Aramex, GO-JEK, Grab, Lazada, +21)</li>
       </ul>
       <a href="https://github.com/Laith0003/ux-skill/discussions/categories/ideas" class="vote">Vote on v2.2 priorities</a>
     </article>
@@ -479,7 +733,7 @@
           <span class="version">v2.3</span>
           <span class="codename">"Atelier"</span>
         </div>
-        <span class="status planned">Planned · Q1 2027</span>
+        <span class="status planned">Planned &middot; Q1 2027</span>
       </div>
       <h3>Hi-fi prototype output. Local preview server. Motion MP4 export.</h3>
       <p class="summary">
@@ -487,11 +741,11 @@
       </p>
       <h4>Key features</h4>
       <ul>
-        <li><strong>Hi-fi output mode</strong> — <code>/ux-design --fidelity hi</code> emits production component code in React, Vue, Svelte, vanilla TS</li>
-        <li><strong>Local preview server</strong> — <code>npx uxskill preview</code> opens <code>http://localhost:4242</code> with hot-reload of every generated artifact</li>
-        <li><strong>Motion MP4 export</strong> — every <code>/ux-motion</code> spec exports a 4-second loop MP4 + WebM for decks and docs</li>
-        <li><strong>Component library export</strong> — generated systems compile to a publishable npm package on demand</li>
-        <li><strong>Frame-accurate motion engine</strong> — sub-16ms GSAP timeline export; cubic-bezier per axis; no <code>ease-in-out</code> defaults</li>
+        <li><strong>Hi-fi output mode</strong> &mdash; <code>/ux-design --fidelity hi</code> emits production component code in React, Vue, Svelte, vanilla TS</li>
+        <li><strong>Local preview server</strong> &mdash; <code>npx uxskill preview</code> opens <code>http://localhost:4242</code> with hot-reload of every generated artifact</li>
+        <li><strong>Motion MP4 export</strong> &mdash; every <code>/ux-motion</code> spec exports a 4-second loop MP4 + WebM for decks and docs</li>
+        <li><strong>Component library export</strong> &mdash; generated systems compile to a publishable npm package on demand</li>
+        <li><strong>Frame-accurate motion engine</strong> &mdash; sub-16ms GSAP timeline export; cubic-bezier per axis; no <code>ease-in-out</code> defaults</li>
       </ul>
       <a href="https://github.com/Laith0003/ux-skill/discussions/categories/ideas" class="vote">Vote on v2.3 priorities</a>
     </article>
@@ -502,7 +756,7 @@
           <span class="version">v3.0</span>
           <span class="codename">"Mirror"</span>
         </div>
-        <span class="status planned">Planned · Q2 2027</span>
+        <span class="status planned">Planned &middot; Q2 2027</span>
       </div>
       <h3>Real-time live preview. Image-to-code reverse bridge. Multi-language gen.</h3>
       <p class="summary">
@@ -510,19 +764,19 @@
       </p>
       <h4>Key features</h4>
       <ul>
-        <li><strong>Real-time live preview</strong> — agent streams diffs; preview repaints sub-second; no file-watch latency</li>
-        <li><strong>Image-to-code bridge</strong> — paste a UI screenshot, get a brand-clean React + Tailwind rebuild with anti-pattern annotations</li>
-        <li><strong>Multi-language code gen</strong> — Swift (SwiftUI), Kotlin (Compose), Flutter, Jetpack Compose adapters</li>
-        <li><strong>Linter as language server</strong> — LSP integration so anti-pattern violations show inline in any editor that speaks LSP</li>
-        <li><strong>Public API</strong> — <code>uxskill score &lt;url&gt;</code> returns a JSON report; bring your own brand</li>
+        <li><strong>Real-time live preview</strong> &mdash; agent streams diffs; preview repaints sub-second; no file-watch latency</li>
+        <li><strong>Image-to-code bridge</strong> &mdash; paste a UI screenshot, get a brand-clean React + Tailwind rebuild with anti-pattern annotations</li>
+        <li><strong>Multi-language code gen</strong> &mdash; Swift (SwiftUI), Kotlin (Compose), Flutter, Jetpack Compose adapters</li>
+        <li><strong>Linter as language server</strong> &mdash; LSP integration so anti-pattern violations show inline in any editor that speaks LSP</li>
+        <li><strong>Public API</strong> &mdash; <code>uxskill score &lt;url&gt;</code> returns a JSON report; bring your own brand</li>
       </ul>
       <a href="https://github.com/Laith0003/ux-skill/discussions/categories/ideas" class="vote">Vote on v3.0 priorities</a>
     </article>
 
-    <section class="wont-do">
+    <section class="wont-do" id="wont-do">
       <span class="eyebrow">Won't-do list</span>
       <h2>What we will <span class="accent">never</span> build.</h2>
-      <p>Discipline shows in what you refuse. These are not "not yet" items — they are permanent no's. If a v3.5 ever ships any of these, I owe the community a public retraction.</p>
+      <p>Discipline shows in what you refuse. These are not "not yet" items &mdash; they are permanent no's. If a v3.5 ever ships any of these, I owe the community a public retraction.</p>
       <ul>
         <li>
           <strong>Hosted SaaS</strong>
@@ -558,19 +812,94 @@
         </li>
       </ul>
     </section>
-
-    <footer>
-      <span>&copy; 2026 Laith Aljunaidy. MIT. No telemetry.</span>
-      <div class="links">
-        <a href="/">Home</a>
-        <a href="/compare.html">Compare</a>
-        <a href="/about.html">About</a>
-        <a href="/faq.html">FAQ</a>
-        <a href="/blog/">Blog</a>
-        <a href="/privacy.html">Privacy</a>
-        <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
-      </div>
-    </footer>
   </div>
+</main>
+
+<footer class="footer" role="contentinfo">
+  <div class="footer__inner">
+    <div class="footer__col">
+      <a href="/" class="wordmark" aria-label="uxskill home">uxskill<span class="wordmark__dot" aria-hidden="true"></span></a>
+      <p class="footer__tagline">Design intelligence for AI coding. Built so every model session ships work that does not look generated.</p>
+    </div>
+    <div class="footer__col">
+      <p class="footer__col-h">Plugin</p>
+      <ul>
+        <li><a class="footer__link" href="/about.html">About</a></li>
+        <li><a class="footer__link" href="/compare.html">Compare</a></li>
+        <li><a class="footer__link" href="/roadmap.html">Roadmap</a></li>
+        <li><a class="footer__link" href="/faq.html">FAQ</a></li>
+        <li><a class="footer__link" href="/mcp.html">MCP</a></li>
+        <li><a class="footer__link" href="/privacy.html">Privacy</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <p class="footer__col-h">Reading</p>
+      <ul>
+        <li><a class="footer__link" href="/blog/">Blog index</a></li>
+        <li><a class="footer__link" href="/blog/dark-editorial-cinema-design.html">Dark editorial cinema</a></li>
+        <li><a class="footer__link" href="/blog/best-claude-code-design-skills-2026.html">Best Claude Code design skills</a></li>
+        <li><a class="footer__link" href="/blog/anti-ai-slop-claude-skills.html">Anti AI-slop skills</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <p class="footer__col-h">Reference</p>
+      <ul>
+        <li><a class="footer__link" href="/commands.html">Commands</a></li>
+        <li><a class="footer__link" href="/blog/ai-design-fingerprints-list.html">AI design fingerprints</a></li>
+        <li><a class="footer__link" href="/blog/regex-linter-for-ai-coding.html">Regex linter for AI coding</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <p class="footer__col-h">Get it</p>
+      <ul>
+        <li><a class="footer__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a></li>
+        <li><a class="footer__link" href="https://pypi.org/project/uxskill/" rel="noopener">PyPI</a></li>
+        <li><a class="footer__link" href="https://www.npmjs.com/package/uxskill" rel="noopener">npm</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <span>MIT licensed &middot; No telemetry &middot; No account</span>
+    <span>&copy; 2026 Laith Aljunaidy</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var nav = document.getElementById('nav');
+  function onScroll() {
+    if (window.scrollY > 24) nav.classList.add('is-scrolled');
+    else nav.classList.remove('is-scrolled');
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  var menuBtn = document.getElementById('nav-menu-btn');
+  var drawer = document.getElementById('nav-drawer');
+  var drawerClose = document.getElementById('nav-drawer-close');
+  function openDrawer() {
+    drawer.classList.add('is-open');
+    drawer.setAttribute('aria-hidden', 'false');
+    menuBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    drawer.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  if (menuBtn) menuBtn.addEventListener('click', openDrawer);
+  if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && drawer.classList.contains('is-open')) closeDrawer();
+  });
+  Array.prototype.forEach.call(drawer.querySelectorAll('a'), function (a) {
+    a.addEventListener('click', closeDrawer);
+  });
+})();
+</script>
+
 </body>
 </html>

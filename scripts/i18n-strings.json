@@ -1,0 +1,88 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "base": "docs/index.html",
+    "note": "Strings keyed by stable English text. Each translation is a flat dict; missing keys fall back to English. Code, brand names, file paths, stat numbers, and terminal text STAY in English on every language version."
+  },
+
+  "languages": {
+    "en":   { "name": "English",          "dir": "ltr", "html_lang": "en"   },
+    "zh-CN":{ "name": "简体中文",          "dir": "ltr", "html_lang": "zh-CN"},
+    "zh-TW":{ "name": "繁體中文",          "dir": "ltr", "html_lang": "zh-TW"},
+    "ja":   { "name": "日本語",            "dir": "ltr", "html_lang": "ja"   },
+    "ko":   { "name": "한국어",            "dir": "ltr", "html_lang": "ko"   },
+    "hi":   { "name": "हिन्दी",             "dir": "ltr", "html_lang": "hi"   },
+    "id":   { "name": "Bahasa Indonesia", "dir": "ltr", "html_lang": "id"   },
+    "vi":   { "name": "Tiếng Việt",       "dir": "ltr", "html_lang": "vi"   },
+    "th":   { "name": "ไทย",              "dir": "ltr", "html_lang": "th"   },
+    "ar":   { "name": "العربية",          "dir": "rtl", "html_lang": "ar"   },
+    "es":   { "name": "Español",          "dir": "ltr", "html_lang": "es"   },
+    "fr":   { "name": "Français",         "dir": "ltr", "html_lang": "fr"   },
+    "de":   { "name": "Deutsch",          "dir": "ltr", "html_lang": "de"   },
+    "pt-BR":{ "name": "Português",        "dir": "ltr", "html_lang": "pt-BR"},
+    "ru":   { "name": "Русский",          "dir": "ltr", "html_lang": "ru"   },
+    "tr":   { "name": "Türkçe",           "dir": "ltr", "html_lang": "tr"   },
+    "it":   { "name": "Italiano",         "dir": "ltr", "html_lang": "it"   }
+  },
+
+  "strings": {
+    "page_title": {
+      "en":    "uxskill — Design intelligence for AI coding. Python engine. 998 entries.",
+      "zh-CN": "uxskill — AI 编程的设计智能引擎。Python 引擎。998 条目。",
+      "zh-TW": "uxskill — AI 編程的設計智能引擎。Python 引擎。998 條目。",
+      "ja":    "uxskill — AI コーディングのためのデザインインテリジェンスエンジン。Python 製。998 エントリ。",
+      "ko":    "uxskill — AI 코딩을 위한 디자인 인텔리전스 엔진. Python 엔진. 998 항목.",
+      "hi":    "uxskill — AI कोडिंग के लिए डिज़ाइन इंटेलिजेंस इंजन। Python इंजन। 998 प्रविष्टियाँ।",
+      "id":    "uxskill — Mesin intelijen desain untuk coding AI. Engine Python. 998 entri.",
+      "vi":    "uxskill — Công cụ thiết kế thông minh cho AI coding. Engine Python. 998 mục.",
+      "th":    "uxskill — เครื่องมือออกแบบอัจฉริยะสำหรับ AI coding · Python engine · 998 รายการ",
+      "ar":    "uxskill — محرّك الذكاء التصميمي لأدوات البرمجة بالذكاء الاصطناعي · محرّك بايثون · 998 عنصرًا",
+      "es":    "uxskill — Inteligencia de diseño para coding con IA. Motor Python. 998 entradas.",
+      "fr":    "uxskill — Moteur d'intelligence de design pour le codage par IA. Python. 998 entrées.",
+      "de":    "uxskill — Design-Intelligence-Engine für KI-Coding. Python-Engine. 998 Einträge.",
+      "pt-BR": "uxskill — Inteligência de design para coding com IA. Engine Python. 998 entradas.",
+      "ru":    "uxskill — Дизайн-движок для AI-кодинга. На Python. 998 записей.",
+      "tr":    "uxskill — AI kodlama için tasarım zekası motoru. Python. 998 giriş.",
+      "it":    "uxskill — Motore di intelligenza di design per coding con AI. Python. 998 voci."
+    },
+
+    "meta_description": {
+      "en":    "An open-source Python engine that catches AI design fingerprints before they ship. 998 structured entries. 22 commands. 100 anti-pattern rules. 110 brand specs. Runs in Claude Code, Cursor, Windsurf, and 14 more IDEs. MIT, no telemetry.",
+      "zh-CN": "开源 Python 引擎,在发布前捕获 AI 设计指纹。998 条结构化数据,22 个命令,100 条反模式规则,110 个品牌规范。可在 Claude Code、Cursor、Windsurf 等 17 个 IDE 中运行。MIT 许可,无遥测。",
+      "zh-TW": "開源 Python 引擎,在發布前捕獲 AI 設計指紋。998 條結構化資料,22 個指令,100 條反模式規則,110 個品牌規範。可在 Claude Code、Cursor、Windsurf 等 17 個 IDE 中執行。MIT 授權,無遙測。",
+      "ja":    "AI のデザインフィンガープリントを出荷前に検出するオープンソースの Python エンジン。998 件の構造化エントリ、22 のコマンド、100 のアンチパターン、110 のブランド仕様。Claude Code、Cursor、Windsurf など 17 の IDE で動作。MIT、テレメトリなし。",
+      "ko":    "AI 디자인 핑거프린트를 출시 전에 잡아내는 오픈소스 Python 엔진. 998개의 구조화된 항목, 22개의 명령, 100개의 안티패턴 규칙, 110개의 브랜드 사양. Claude Code, Cursor, Windsurf 등 17개 IDE 지원. MIT, 텔레메트리 없음.",
+      "hi":    "एक ओपन-सोर्स Python इंजन जो AI डिज़ाइन फ़िंगरप्रिंट्स को रिलीज़ से पहले पकड़ता है। 998 संरचित प्रविष्टियाँ। 22 कमांड। 100 एंटी-पैटर्न नियम। 110 ब्रांड स्पेक्स। Claude Code, Cursor, Windsurf सहित 17 IDE में चलता है। MIT, कोई टेलीमेट्री नहीं।",
+      "id":    "Engine Python open-source yang menangkap fingerprint desain AI sebelum dirilis. 998 entri terstruktur, 22 perintah, 100 aturan anti-pola, 110 spec brand. Berjalan di Claude Code, Cursor, Windsurf, dan 14 IDE lainnya. MIT, tanpa telemetri.",
+      "vi":    "Engine Python mã nguồn mở phát hiện dấu vân tay thiết kế AI trước khi phát hành. 998 mục có cấu trúc, 22 lệnh, 100 quy tắc chống mẫu, 110 spec thương hiệu. Chạy trong Claude Code, Cursor, Windsurf và 14 IDE khác. MIT, không telemetry.",
+      "th":    "Python engine โอเพนซอร์สที่ตรวจจับลายเซ็นดีไซน์จาก AI ก่อนปล่อย — 998 รายการ, 22 คำสั่ง, 100 กฎ anti-pattern, 110 brand specs · ทำงานใน Claude Code, Cursor, Windsurf และอีก 14 IDE · MIT, ไม่มี telemetry",
+      "ar":    "محرّك بايثون مفتوح المصدر يلتقط بصمات تصاميم الذكاء الاصطناعي قبل الإطلاق. 998 إدخالًا منظّمًا، 22 أمرًا، 100 قاعدة لمضادّات الأنماط، 110 من مواصفات العلامات. يعمل داخل Claude Code وCursor وWindsurf و14 محرّر أكواد آخر. رخصة MIT، بدون تتبّع.",
+      "es":    "Un motor Python de código abierto que detecta huellas de diseño generadas por IA antes de publicarse. 998 entradas estructuradas, 22 comandos, 100 reglas anti-patrón, 110 specs de marca. Corre en Claude Code, Cursor, Windsurf y 14 IDEs más. MIT, sin telemetría.",
+      "fr":    "Un moteur Python open-source qui détecte les empreintes de design générées par l'IA avant publication. 998 entrées structurées, 22 commandes, 100 règles anti-pattern, 110 specs de marque. Tourne dans Claude Code, Cursor, Windsurf et 14 autres IDE. MIT, sans télémétrie.",
+      "de":    "Eine Open-Source-Python-Engine, die KI-Design-Fingerabdrücke vor dem Release erkennt. 998 strukturierte Einträge, 22 Befehle, 100 Anti-Pattern-Regeln, 110 Brand-Specs. Läuft in Claude Code, Cursor, Windsurf und 14 weiteren IDEs. MIT, ohne Telemetrie.",
+      "pt-BR": "Um engine Python open-source que detecta impressões digitais de design de IA antes do release. 998 entradas estruturadas, 22 comandos, 100 regras anti-padrão, 110 specs de marca. Roda em Claude Code, Cursor, Windsurf e mais 14 IDEs. MIT, sem telemetria.",
+      "ru":    "Open-source Python-движок, который выявляет AI-дизайн-отпечатки до релиза. 998 структурированных записей, 22 команды, 100 anti-pattern правил, 110 brand-спецификаций. Работает в Claude Code, Cursor, Windsurf и 14 других IDE. MIT, без телеметрии.",
+      "tr":    "Yayınlanmadan önce AI tasarım parmak izlerini yakalayan açık kaynak Python motoru. 998 yapılandırılmış giriş, 22 komut, 100 anti-pattern kuralı, 110 marka spec. Claude Code, Cursor, Windsurf ve 14 IDE'de çalışır. MIT, telemetri yok.",
+      "it":    "Un motore Python open-source che intercetta le impronte di design AI prima del rilascio. 998 voci strutturate, 22 comandi, 100 regole anti-pattern, 110 brand spec. Funziona in Claude Code, Cursor, Windsurf e altri 14 IDE. MIT, nessuna telemetria."
+    },
+
+    "hero_pill_1": {
+      "en":"v2.0.0 — Python pivot", "zh-CN":"v2.0.0 — Python 重构", "zh-TW":"v2.0.0 — Python 重構", "ja":"v2.0.0 — Python 移行", "ko":"v2.0.0 — Python 전환", "hi":"v2.0.0 — Python पिवट", "id":"v2.0.0 — Pivot Python", "vi":"v2.0.0 — Chuyển sang Python", "th":"v2.0.0 — เปลี่ยนเป็น Python", "ar":"v2.0.0 — التحوّل إلى بايثون", "es":"v2.0.0 — pivote a Python", "fr":"v2.0.0 — bascule Python", "de":"v2.0.0 — Python-Pivot", "pt-BR":"v2.0.0 — pivô Python", "ru":"v2.0.0 — переход на Python", "tr":"v2.0.0 — Python dönüşümü", "it":"v2.0.0 — pivot Python"
+    },
+    "hero_pill_2": {
+      "en":"MIT, no telemetry", "zh-CN":"MIT 许可,无遥测", "zh-TW":"MIT 授權,無遙測", "ja":"MIT・テレメトリなし", "ko":"MIT, 텔레메트리 없음", "hi":"MIT, कोई टेलीमेट्री नहीं", "id":"MIT, tanpa telemetri", "vi":"MIT, không telemetry", "th":"MIT · ไม่มี telemetry", "ar":"MIT · بدون تتبّع", "es":"MIT, sin telemetría", "fr":"MIT, sans télémétrie", "de":"MIT, ohne Telemetrie", "pt-BR":"MIT, sem telemetria", "ru":"MIT, без телеметрии", "tr":"MIT, telemetri yok", "it":"MIT, niente telemetria"
+    },
+
+    "section_02_eyebrow":   { "en":"02 — Brand specs · 110 catalogue", "zh-CN":"02 — 品牌规范 · 110 个目录", "zh-TW":"02 — 品牌規範 · 110 個目錄", "ja":"02 — ブランド仕様 · 110 件", "ko":"02 — 브랜드 사양 · 110개", "hi":"02 — ब्रांड स्पेक · 110 कैटलॉग", "id":"02 — Spec brand · 110 katalog", "vi":"02 — Spec thương hiệu · 110 catalog", "th":"02 — สเปกแบรนด์ · 110 รายการ", "ar":"02 — مواصفات العلامات · 110 ضمن الكتالوج", "es":"02 — Specs de marca · 110 en catálogo", "fr":"02 — Specs de marque · 110 au catalogue", "de":"02 — Brand-Specs · 110 im Katalog", "pt-BR":"02 — Specs de marca · 110 no catálogo", "ru":"02 — Brand specs · 110 в каталоге", "tr":"02 — Marka specs · 110 katalogda", "it":"02 — Spec brand · 110 in catalogo" },
+
+    "section_03_eyebrow":   { "en":"03 — The reasoning engine", "zh-CN":"03 — 推理引擎", "zh-TW":"03 — 推理引擎", "ja":"03 — 推論エンジン", "ko":"03 — 추론 엔진", "hi":"03 — रीज़निंग इंजन", "id":"03 — Mesin penalaran", "vi":"03 — Engine suy luận", "th":"03 — เครื่องมือคิดวิเคราะห์", "ar":"03 — محرّك الاستدلال", "es":"03 — Motor de razonamiento", "fr":"03 — Moteur de raisonnement", "de":"03 — Reasoning-Engine", "pt-BR":"03 — Engine de raciocínio", "ru":"03 — Reasoning-движок", "tr":"03 — Akıl yürütme motoru", "it":"03 — Motore di ragionamento" },
+
+    "section_04_eyebrow":   { "en":"04 — The anti-slop linter", "zh-CN":"04 — 反 AI 垃圾 linter", "zh-TW":"04 — 反 AI 垃圾 linter", "ja":"04 — アンチスロップ・リンター", "ko":"04 — 안티 슬롭 린터", "hi":"04 — एंटी-स्लॉप लिंटर", "id":"04 — Linter anti-slop", "vi":"04 — Linter chống slop", "th":"04 — ตัวตรวจ anti-slop", "ar":"04 — أداة الفحص المضادّة للنمط الرديء", "es":"04 — Linter anti-slop", "fr":"04 — Linter anti-slop", "de":"04 — Anti-Slop-Linter", "pt-BR":"04 — Linter anti-slop", "ru":"04 — Anti-slop линтер", "tr":"04 — Anti-slop linter", "it":"04 — Linter anti-slop" },
+
+    "cta_install":          { "en":"pip install uxskill", "zh-CN":"pip install uxskill", "zh-TW":"pip install uxskill", "ja":"pip install uxskill", "ko":"pip install uxskill", "hi":"pip install uxskill", "id":"pip install uxskill", "vi":"pip install uxskill", "th":"pip install uxskill", "ar":"pip install uxskill", "es":"pip install uxskill", "fr":"pip install uxskill", "de":"pip install uxskill", "pt-BR":"pip install uxskill", "ru":"pip install uxskill", "tr":"pip install uxskill", "it":"pip install uxskill" },
+
+    "cta_source":           { "en":"Read the source", "zh-CN":"阅读源码", "zh-TW":"閱讀原始碼", "ja":"ソースを読む", "ko":"소스 보기", "hi":"सोर्स पढ़ें", "id":"Baca source", "vi":"Đọc source", "th":"อ่านโค้ด", "ar":"اقرأ المصدر", "es":"Ver el código", "fr":"Voir la source", "de":"Quellcode lesen", "pt-BR":"Ver o código", "ru":"Открыть исходник", "tr":"Kaynağı oku", "it":"Leggi il codice" },
+
+    "lang_picker_label":    { "en":"Language", "zh-CN":"语言", "zh-TW":"語言", "ja":"言語", "ko":"언어", "hi":"भाषा", "id":"Bahasa", "vi":"Ngôn ngữ", "th":"ภาษา", "ar":"اللغة", "es":"Idioma", "fr":"Langue", "de":"Sprache", "pt-BR":"Idioma", "ru":"Язык", "tr":"Dil", "it":"Lingua" }
+  }
+}
