@@ -1,7 +1,7 @@
 {
   "_meta": {
     "version": "2.0.0",
-    "entries": 68,
+    "entries": 85,
     "last_updated": "2026-05-28",
     "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
     "schema_version": "1.0"
@@ -1442,6 +1442,365 @@
       },
       "why": "A floating back-to-top button on a page under four viewports adds permanent visual noise for a vanishingly rare interaction - signals the generator included the pattern as decoration, not need.",
       "fix": "Drop the button. If pages can grow past four viewports, gate the button on scroll position and hide it below threshold. Keyboard users have Home; mouse users have the wheel."
+    },
+    {
+      "id": "aspect-ratio-1-1-default",
+      "name": "Square aspect-ratio as default everywhere",
+      "severity": "medium",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "<img[^>]+(?:aspect-square|aspect-\\[1/1\\]|aspect-ratio\\s*:\\s*1(?:\\s*/\\s*1)?\\b)|aspect-ratio\\s*:\\s*1\\s*/\\s*1\\b",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Every image clipped to 1:1 is the Instagram-grid AI fingerprint - signals the generator picked the safest crop instead of letting content set the frame. Real editorial layouts use varied ratios (3:2, 4:5, 16:9, 21:9) to create rhythm.",
+      "fix": "Vary aspect ratio by content: 3:2 for product shots, 4:5 for portraits, 16:9 for hero or video. Reserve 1:1 for genuine grid contexts (avatars, social previews)."
+    },
+    {
+      "id": "noise-texture-overlay",
+      "name": "Repeating noise or grain texture overlay",
+      "severity": "medium",
+      "category": "Visual",
+      "detection": {
+        "type": "regex",
+        "pattern": "background(?:-image)?\\s*:[^;]*url\\([^)]*(?:noise|grain|texture|stipple|paper|fabric)[^)]*\\.(?:png|jpe?g|svg|webp)[^)]*\\)",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "A noise.png or grain.svg tiled across a hero is the 2024 generative-UI fingerprint - signals 'I added texture' without a coherent material story. Most viewers register it as visual static, not depth.",
+      "fix": "If grain is a deliberate brand choice, generate it via SVG <feTurbulence> with low baseFrequency and 4-6% opacity. Otherwise drop the texture; flatness reads more confident than fake film grain."
+    },
+    {
+      "id": "border-radius-2xl-default",
+      "name": "rounded-2xl or larger applied to everything",
+      "severity": "low",
+      "category": "Visual",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\brounded-(?:2xl|3xl)\\b|border-radius\\s*:\\s*(?:24|28|32|36|40)px\\b|border-radius\\s*:\\s*1\\.[5-9]rem\\b|border-radius\\s*:\\s*[2-3]rem\\b",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "rounded-2xl/3xl (24-32px+) on every card, button, and input is the Tailwind AI signature - signals the radius was set once and copy-pasted instead of being calibrated per element size. Buttons end up looking like pills, inputs lose definition, dense surfaces feel cartoonish.",
+      "fix": "Calibrate radius to element size: 4-8px for inputs, 8-12px for buttons, 12-16px for cards, 16-24px for marketing surfaces only. Define a 4-5 step radius scale and use the tokens."
+    },
+    {
+      "id": "transition-property-all",
+      "name": "transition: all (lazy property list)",
+      "severity": "medium",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "transition\\s*:\\s*all\\b|transition-property\\s*:\\s*all\\b|\\btransition-all\\b",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "transition: all is the lazy default that animates every property change - including layout-triggering ones like width/height/margin - causing jank and unintended motion. It also fires on properties the author never meant to transition.",
+      "fix": "List the exact properties: transition: transform 200ms ease, opacity 200ms ease. In Tailwind, prefer transition-colors, transition-opacity, transition-transform over transition-all."
+    },
+    {
+      "id": "glass-morphism-default",
+      "name": "Backdrop-blur frosted-glass on four-plus surfaces",
+      "severity": "medium",
+      "category": "Visual",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:backdrop-(?:blur|filter)|backdrop-filter\\s*:\\s*blur)[\\s\\S]{0,1500}?(?:backdrop-(?:blur|filter)|backdrop-filter\\s*:\\s*blur)[\\s\\S]{0,1500}?(?:backdrop-(?:blur|filter)|backdrop-filter\\s*:\\s*blur)[\\s\\S]{0,1500}?(?:backdrop-(?:blur|filter)|backdrop-filter\\s*:\\s*blur)",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Frosted-glass everywhere is the iOS-aesthetic AI tell - signals the generator confused 'depth' with 'blur every surface'. Four-plus backdrop-blur layers on a single page is the visual equivalent of using bold on every word.",
+      "fix": "Reserve glass for one or two surfaces that have a clear reason to feel translucent (a floating nav, a notification toast). Solid surfaces with restraint read more premium than four blurred panels."
+    },
+    {
+      "id": "letterspacing-tracking-tight-display",
+      "name": "Tight letter-spacing on heavy display heading",
+      "severity": "medium",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "letter-spacing\\s*:\\s*-0\\.0[3-9]e?m?[^;}]*[;}][^{]*font-weight\\s*:\\s*[7-9]00|font-weight\\s*:\\s*[7-9]00[^;}]*[;}][^{]*letter-spacing\\s*:\\s*-0\\.0[3-9]|\\btracking-tighter\\b[^\"']*\\bfont-(?:bold|extrabold|black)\\b|\\bfont-(?:bold|extrabold|black)\\b[^\"']*\\btracking-tighter\\b",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "tracking-tighter (-0.05em) on font-weight 800+ display is the unmistakable 'AI hero' typographic recipe - copied from every Linear-clone landing page. The combination crushes the counters and reads as default, not deliberate.",
+      "fix": "Use letter-spacing -0.01em to -0.02em on display headings, with font-weight 500-600. Reserve heavy-and-tight pairings for short brand wordmarks, not full headlines."
+    },
+    {
+      "id": "hover-only-card-actions",
+      "name": "Card actions revealed only on hover",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\.(?:card|item|tile)[^{]*\\{[^}]*\\}[\\s\\S]{0,300}?\\.(?:card|item|tile)[^:]*:hover\\s+(?:\\.[^{\\s]+|[a-z]+)[^{]*\\{[^}]*opacity\\s*:\\s*1|opacity\\s*:\\s*0[^}]*\\}[\\s\\S]{0,300}?:hover[\\s\\S]{0,100}?opacity\\s*:\\s*1",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss"
+        ]
+      },
+      "why": "Card actions hidden at opacity: 0 and revealed only on :hover are invisible to touch users, keyboard users, and anyone using assistive tech - the action does not exist for most of your audience. WCAG 2.1.1 and 1.4.13 failure.",
+      "fix": "Show card actions persistently at reduced visual weight (lower opacity, smaller scale, secondary color), or make them reachable via a visible focus-state. Hover is a progressive disclosure, never the only path."
+    },
+    {
+      "id": "aria-hidden-on-interactive",
+      "name": "aria-hidden on a focusable interactive element",
+      "severity": "critical",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:button|a|input|select|textarea)[^>]+aria-hidden\\s*=\\s*['\"]true['\"]",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "aria-hidden=\"true\" on a focusable element (button, link, input) removes it from the accessibility tree while leaving it in the tab order - keyboard users can land on a control that screen readers refuse to announce. WCAG 4.1.2 failure.",
+      "fix": "If the control is decorative, remove it from the DOM or set tabindex=\"-1\" AND aria-hidden together. If it has a function, drop the aria-hidden and give it a proper accessible name via aria-label or visible text."
+    },
+    {
+      "id": "animation-duration-too-long",
+      "name": "Micro-interaction with animation-duration over 800ms",
+      "severity": "medium",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "animation-duration\\s*:\\s*(?:[89]\\d{2}|[1-9]\\d{3,})ms\\b|animation-duration\\s*:\\s*(?:[1-9]|[1-9]\\.\\d+)s\\b|animation\\s*:[^;]*\\s(?:[89]\\d{2}|[1-9]\\d{3,})ms\\b|animation\\s*:[^;]*\\s(?:[1-9]|[1-9]\\.\\d+)s\\b",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "A hover, focus, or state-change animation longer than 800ms feels sluggish - users perceive UI under 200ms as instant, under 500ms as snappy, over 800ms as broken or laggy. Long durations on micro-interactions signal no taste decision was made.",
+      "fix": "Cap micro-interactions at 150-400ms. Reserve longer durations (800ms+) for narrative scenes, page transitions, or deliberate orchestration - never for a button hover or icon flip."
+    },
+    {
+      "id": "text-3xl-4xl-5xl-stack",
+      "name": "Tailwind text-3xl text-4xl text-5xl AI hero stack",
+      "severity": "medium",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\btext-3xl\\b[^\"]*\\bmd:text-4xl\\b[^\"]*\\blg:text-5xl\\b|\\btext-4xl\\b[^\"]*\\bmd:text-5xl\\b[^\"]*\\blg:text-6xl\\b|\\btext-5xl\\b[^\"]*\\bmd:text-6xl\\b[^\"]*\\blg:text-7xl\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "text-3xl md:text-4xl lg:text-5xl (and the 4xl/5xl/6xl shift) is the verbatim Tailwind tutorial cadence for every AI-generated hero - signals the responsive type was set by stepping through preset utilities, not by tuning the actual feel at each breakpoint.",
+      "fix": "Use clamp() for fluid type: text-[clamp(2.5rem,5vw,4.5rem)] or define a custom step in tailwind.config that jumps by content priority, not utility index."
+    },
+    {
+      "id": "grid-cols-3-1fr-default",
+      "name": "repeat(3, 1fr) as a default grid",
+      "severity": "low",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "grid-template-columns\\s*:\\s*repeat\\(\\s*3\\s*,\\s*1fr\\s*\\)|grid-template-columns\\s*:\\s*1fr\\s+1fr\\s+1fr\\s*[;}]",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "repeat(3, 1fr) with no minmax(), no auto-fit, and no asymmetric weighting is the laziest grid declaration - signals the layout was set by a generator that defaulted to 'three equal columns' without thinking about content priority or responsive behavior.",
+      "fix": "Use minmax for responsive floors: repeat(auto-fit, minmax(280px, 1fr)). For deliberate three-column layouts, weight by content: grid-template-columns: 2fr 1fr 1fr, or use named-area grids."
+    },
+    {
+      "id": "unsplash-photo-id-no-alt",
+      "name": "Unsplash photo URL with empty or missing alt",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "<img[^>]+src\\s*=\\s*['\"][^'\"]*images\\.unsplash\\.com/photo-[^'\"]+['\"](?![^>]+alt\\s*=\\s*['\"][^'\"]+['\"])",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "An images.unsplash.com/photo-* URL with no alt (or alt=\"\") is the stock-photo placeholder fingerprint - signals the generator pasted the first credible image without choosing it for the content. Screen-reader users hear nothing; the page reads as filler.",
+      "fix": "Replace with a real product or brand image and write an alt that describes the content (alt=\"Customer service team reviewing a dashboard\"). If the image stays as decoration only, set alt=\"\" deliberately AND justify why a stock photo earns a spot on the surface."
+    },
+    {
+      "id": "version-1-0-0-evergreen",
+      "name": "Hardcoded v1.0.0 in nav or footer",
+      "severity": "low",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:nav|footer|header|aside)[\\s\\S]{0,800}?\\bv?1\\.0\\.0\\b|class=['\"][^'\"]*(?:version|footer|nav)[^'\"]*['\"][^>]*>[^<]*\\bv?1\\.0\\.0\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "A static 'v1.0.0' in the nav or footer never updates with the real build - signals the generator added a version chip as decoration without wiring it to package.json or the deploy SHA. Worse, the badge stays at 1.0.0 forever and reads as stagnant.",
+      "fix": "Either pull the version from package.json at build time (Vite/Webpack define), bind it to the deploy SHA, or remove the chip entirely. A wrong version is worse than no version."
+    },
+    {
+      "id": "cta-buttons-clustered-in-hero",
+      "name": "Three-plus CTA buttons clustered in hero",
+      "severity": "medium",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "class=['\"][^'\"]*\\b(?:hero|banner)\\b[^'\"]*['\"][\\s\\S]{0,1200}?<(?:a|button)[^>]+class=['\"][^'\"]*\\bbtn\\b[^'\"]*['\"][\\s\\S]{0,400}?<(?:a|button)[^>]+class=['\"][^'\"]*\\bbtn\\b[^'\"]*['\"][\\s\\S]{0,400}?<(?:a|button)[^>]+class=['\"][^'\"]*\\bbtn\\b[^'\"]*['\"]",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Three or more CTA-styled buttons within a single hero is decision paralysis - the AI's compromise when it can't choose the primary action. Conversion research is unanimous: one primary + one secondary outperforms three competing primaries.",
+      "fix": "Pick one primary CTA. Demote the rest to text links or move them to a secondary surface. If you genuinely need three actions, restructure the hero into a comparison or a stepped layout so the primary is unambiguous."
+    },
+    {
+      "id": "numbered-placeholder-classname",
+      "name": "Numbered placeholder class names (card-1, feature-2)",
+      "severity": "low",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": "class\\s*=\\s*['\"][^'\"]*\\b(?:card|feature|item|tile|section|block|box|step|slide)-[0-9]+\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "css",
+          "scss"
+        ]
+      },
+      "why": "card-1, feature-2, step-3 are the throwaway class names a generator emits when it has no semantic for what each block actually contains - signals nobody named the content. They also defeat CSS reuse because every variant gets a unique class.",
+      "fix": "Name classes by purpose: .pricing-card, .feature-comparison, .onboarding-step. If the cards really are interchangeable, use a single .card class with modifiers (.card--featured) or data attributes (data-tier=\"pro\")."
+    },
+    {
+      "id": "target-blank-no-noopener",
+      "name": "target=\"_blank\" without rel=\"noopener noreferrer\"",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<a[^>]+target\\s*=\\s*['\"]_blank['\"](?![^>]+rel\\s*=\\s*['\"][^'\"]*(?:noopener|noreferrer))",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "target=\"_blank\" without rel=\"noopener\" lets the opened page access window.opener and rewrite the source URL - a tabnabbing vector. It also blocks the browser's tab-recycle optimization. A11y-adjacent because hijacked navigation breaks the user's mental model of where they are.",
+      "fix": "Always pair target=\"_blank\" with rel=\"noopener noreferrer\". Better: ask whether the link actually needs a new tab - in-page navigation respects user choice and back-button history."
+    },
+    {
+      "id": "loader-spinner-border-default",
+      "name": "Default CSS border-spin loader recipe",
+      "severity": "low",
+      "category": "Visual",
+      "detection": {
+        "type": "regex",
+        "pattern": "border\\s*:\\s*\\d+px\\s+solid[^;}]*[;}][^{]*border-top(?:-color)?\\s*:[^;]+;[^}]*animation\\s*:[^;]*spin|\\.(?:loader|spinner)[^{]*\\{[^}]*border-radius\\s*:\\s*50%[^}]*animation[^}]*:[^}]*spin",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss"
+        ]
+      },
+      "why": "The 4-border-color, border-top-different, animation: spin recipe is the textbook 1998 spinner that every AI generator emits for any loading state - signals the loading affordance was set by default, not designed. Modern systems use skeleton screens, progress bars, or branded indicators.",
+      "fix": "Replace with a skeleton screen for content loading, a progress indicator for known-duration tasks, or a branded SVG mark animated via transform: rotate. The bordered spinner is the loading equivalent of Lorem ipsum."
     }
   ]
 }
