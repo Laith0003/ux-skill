@@ -1,0 +1,46 @@
+{
+  "id": "sonos",
+  "name": "Sonos",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "Sonos's web presence is premium-home-audio editorial — black-and-white product photography, generous lifestyle imagery in muted earth tones, and a clean white chrome with a single dark CTA. The atmosphere is design-magazine considered: speakers placed in beautifully styled rooms (often Scandi-modern), with the chrome receding so the lifestyle moment can breathe.",
+  "design_language": {
+    "type": {
+      "display": "Saans",
+      "body": "Saans"
+    },
+    "color_primary": "#000000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000",
+    "color_muted": "#6b6b6b",
+    "radius": [0, 4, 8],
+    "spacing": "4-based",
+    "motion_signature": "Editorial fade-in reveals on scroll. Carousel cross-fade at 1.2–1.5s. Hover lifts on product cards are minimal (slight 100ms opacity dip on the price line). No spring, no scale."
+  },
+  "trademark_signals": [
+    "Lifestyle photography in muted Scandi-modern interiors — the speaker placed in styled rooms",
+    "Pure black CTA on white — minimalist primary action",
+    "Saans typography (or close substitute) — modern geometric sans with humanist warmth",
+    "Rectilinear product cards (0–8px radius) — premium hi-fi aesthetic",
+    "Color-swatch picker on speaker product pages — white / black / shadow / soft palette"
+  ],
+  "components_observed": [
+    "lifestyle-photo-hero",
+    "primary-cta-dark-rect",
+    "color-swatch-picker",
+    "product-detail-stacked",
+    "room-by-room-recommender"
+  ],
+  "exemplar_pages": [
+    "sonos.com",
+    "sonos.com/en-us/shop/era-300",
+    "sonos.com/en-us/sub"
+  ],
+  "ai_slop_avoided": [
+    "Don't add bright brand-accent colors — Sonos is monochrome chrome on muted lifestyle",
+    "Don't sharpen lifestyle photography into clinical product shots — the styled-room context is the brand",
+    "Don't soften card radii above 8px",
+    "Don't add scroll-driven motion that competes with the lifestyle photography"
+  ],
+  "source_md": "references/brands/sonos-DESIGN.md"
+}

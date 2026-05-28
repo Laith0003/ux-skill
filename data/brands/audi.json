@@ -1,0 +1,46 @@
+{
+  "id": "audi",
+  "name": "Audi",
+  "category": "Automotive",
+  "year_observed": 2026,
+  "philosophy": "Audi's web presence is German-engineering luxury — the Four Rings logo, a near-monochrome chrome with pure-white canvas and dark gray ink, and cinematic vehicle photography in muted automotive-grade lighting. The atmosphere is precision-luxury: every CTA, every section break, every photograph reads as 'designed by engineers, finished by designers.'",
+  "design_language": {
+    "type": {
+      "display": "Audi Type",
+      "body": "Audi Type"
+    },
+    "color_primary": "#bb0a30",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000",
+    "color_muted": "#6e6e6e",
+    "radius": [0, 4, 8],
+    "spacing": "4-based",
+    "motion_signature": "Cinematic editorial fade-ins (300ms ease-out). Hero photography uses slow ken-burns pans (8-second cycles). Configurator color changes use a hard 200ms crossfade rather than spring transitions. The brand reads as engineered-precision."
+  },
+  "trademark_signals": [
+    "Four Rings logo — the brand mark, pure black on white",
+    "Audi Type — the proprietary humanist sans, runs display through body",
+    "Audi Red (#bb0a30) — scarce CTA accent, signature heritage color from the racing program",
+    "Cinematic vehicle photography in muted automotive-grade lighting",
+    "Configurator-style product pages with exterior color, interior trim, wheel selection"
+  ],
+  "components_observed": [
+    "vehicle-hero-photography",
+    "configurator-color-picker",
+    "primary-cta-red-rect",
+    "model-comparison-row",
+    "footer-multi-column-dark"
+  ],
+  "exemplar_pages": [
+    "audi.com",
+    "audiusa.com",
+    "audi.com/en/models"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace Audi Type with Helvetica or Inter — the humanist German-precision proportions are signature",
+    "Don't add saturated brand-blue accents — Audi chrome is monochrome + red",
+    "Don't sanitize the cinematic photography — automotive-grade lighting is the brand",
+    "Don't soften card radii above 8px — German precision"
+  ],
+  "source_md": "references/brands/audi-DESIGN.md"
+}

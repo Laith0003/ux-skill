@@ -1,0 +1,46 @@
+{
+  "id": "oracle",
+  "name": "Oracle",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "Oracle's web presence is corporate-database institutional — bright red (#c74634) as the signature chromatic asset on the wordmark and primary CTAs, a clean white canvas, and a Roboto-family humanist sans across the chrome. The atmosphere is enterprise-formal — minimal whimsy, dense product taxonomy (database, cloud, ERP, HCM), and a layout grammar engineered for IT decision-makers rather than end-users.",
+  "design_language": {
+    "type": {
+      "display": "Oracle Sans",
+      "body": "Oracle Sans"
+    },
+    "color_primary": "#c74634",
+    "color_canvas": "#ffffff",
+    "color_ink": "#161513",
+    "color_muted": "#5c5c5c",
+    "radius": [0, 4, 8],
+    "spacing": "4-based",
+    "motion_signature": "Minimal motion vocabulary — slight 150ms ease on hover, no scroll-triggered reveals on enterprise product pages. The brand reads as serious documentation, not marketing performance."
+  },
+  "trademark_signals": [
+    "Oracle Red (#c74634) — the signature chromatic asset, used on the wordmark and primary CTAs. A specific saturated tomato-red, not a pure red",
+    "Oracle Sans / Roboto-family humanist sans — the chrome typography",
+    "Dense product taxonomy navigation — multi-level mega-menus covering Cloud, Database, Applications, Industries, Support",
+    "Rectangular product cards with 0–4px radius — the brand reads as documentation-precise rather than soft",
+    "Documentation-style chrome — headers, breadcrumbs, sidebar TOCs across most product pages"
+  ],
+  "components_observed": [
+    "primary-cta-red",
+    "product-card-rectilinear",
+    "mega-menu-multilevel",
+    "documentation-sidebar",
+    "breadcrumb-trail"
+  ],
+  "exemplar_pages": [
+    "oracle.com",
+    "oracle.com/cloud",
+    "oracle.com/database"
+  ],
+  "ai_slop_avoided": [
+    "Don't soften the rectilinear card radii — Oracle reads as documentation, not consumer SaaS",
+    "Don't replace Oracle Red with a 'warmer' coral — the specific brick-red is part of corporate recognition",
+    "Don't add character illustrations or playful mascots — Oracle's brand voice is enterprise-formal",
+    "Don't reduce the mega-menu density — the multi-level taxonomy is part of the brand's enterprise IA"
+  ],
+  "source_md": "references/brands/oracle-DESIGN.md"
+}

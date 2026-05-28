@@ -1,0 +1,47 @@
+{
+  "id": "ubisoft",
+  "name": "Ubisoft",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "Ubisoft's web presence is cinematic gaming-publisher chrome — dark canvas (#0e1318) with edge-to-edge game key art, the Ubisoft swirl logo as the brand mark, and cinematic-trailer-grade hero treatments. The atmosphere is action-blockbuster: each franchise (Assassin's Creed, Far Cry, Rainbow Six, The Division) brings its own dark-toned IP color treatment, with the Ubisoft chrome providing the connective tissue.",
+  "design_language": {
+    "type": {
+      "display": "Ubisoft Sans",
+      "body": "Ubisoft Sans"
+    },
+    "color_primary": "#0070f3",
+    "color_canvas": "#0e1318",
+    "color_canvas_light": "#ffffff",
+    "color_ink": "#ffffff",
+    "color_muted": "#8c95a0",
+    "radius": [0, 4, 8],
+    "spacing": "4-based",
+    "motion_signature": "Cinematic trailer-style motion — auto-playing video heroes with parallax depth, slow ken-burns pans on key art. Card hover triggers a hard 200ms scale + slight bloom. Carousel transitions are deliberately weighty."
+  },
+  "trademark_signals": [
+    "Dark cinematic canvas (#0e1318) — game key art is the page atmosphere",
+    "Ubisoft swirl logo — the brand mark, often white-on-dark or inverted depending on context",
+    "Franchise-driven IP color treatments — Assassin's Creed cream/red, Far Cry orange/dust, Rainbow Six tactical-gray",
+    "Cinematic auto-playing trailer heroes with mute toggle",
+    "Rectilinear game cards (0–8px radius) — the brand reads as console-game-store, not soft-SaaS"
+  ],
+  "components_observed": [
+    "cinematic-trailer-hero",
+    "game-card-rectilinear-dark",
+    "franchise-page-hero",
+    "ubisoft-connect-membership-banner",
+    "carousel-key-art"
+  ],
+  "exemplar_pages": [
+    "ubisoft.com",
+    "ubisoft.com/en-us/game/assassins-creed",
+    "ubisoft.com/en-us/game/rainbow-six-siege"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace the dark canvas with white — cinematic key art demands dark backdrop",
+    "Don't strip the franchise IP color treatments — each franchise has its own palette identity",
+    "Don't soften card radii above 8px — the brand reads as console-game-store, not soft consumer SaaS",
+    "Don't autoplay video with sound — mute is default, audio toggle is user-initiated"
+  ],
+  "source_md": "references/brands/ubisoft-DESIGN.md"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "adidas",
+  "name": "Adidas",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "Adidas's web presence is sports-and-streetwear editorial — the three-stripes wordmark, an unapologetic black-on-white chrome, athletic-action photography blended with high-fashion lookbook crops, and a single chromatic accent (often the season's signature color: lime, electric blue, or solar red). The atmosphere is performance-meets-runway: track athletes shot under stadium lighting and street-style models shot in deconstructed urban contexts share the same chrome.",
+  "design_language": {
+    "type": {
+      "display": "Adihaus DIN",
+      "body": "Adihaus DIN"
+    },
+    "color_primary": "#000000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000",
+    "color_muted": "#767677",
+    "radius": [0, 4],
+    "spacing": "4-based",
+    "motion_signature": "Athletic-grade motion — hero carousels with hard cuts at 4-second intervals, scroll-triggered headline reveals with slight directional translate, hover on product cards triggers an alternate angle crossfade. The brand reads as kinetic-controlled."
+  },
+  "trademark_signals": [
+    "Three-stripes wordmark — the brand mark, pure black on white",
+    "Adihaus DIN typography — the proprietary modern industrial sans, runs display through body",
+    "Rectilinear product cards (0–4px radius) — sportswear precision",
+    "Black-on-white chrome with single-season chromatic accent (lime, electric blue, solar red rotate)",
+    "Athletic-action photography mixed with high-fashion lookbook crops"
+  ],
+  "components_observed": [
+    "primary-cta-black-rect",
+    "product-card-rectilinear",
+    "lookbook-editorial-hero",
+    "three-stripes-pattern-band",
+    "athlete-roster-card"
+  ],
+  "exemplar_pages": [
+    "adidas.com",
+    "adidas.com/us/running",
+    "adidas.com/us/originals"
+  ],
+  "ai_slop_avoided": [
+    "Don't introduce ornate brand-blue accents — Adidas chrome is black-on-white with season accents",
+    "Don't soften card radii above 4px — sportswear precision",
+    "Don't replace Adihaus DIN with Helvetica or Inter — the modern industrial proportions are signature",
+    "Don't stylize action photography with color filters — natural lighting is the brand"
+  ],
+  "source_md": "references/brands/adidas-DESIGN.md"
+}

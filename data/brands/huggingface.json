@@ -1,0 +1,47 @@
+{
+  "id": "huggingface",
+  "name": "Hugging Face",
+  "category": "AI / ML Platform",
+  "year_observed": 2026,
+  "philosophy": "Hugging Face's web presence is the open-source AI community's home — yellow hug emoji as the brand mark, a clean white canvas, model card listings as the dominant content unit, and a developer-documentation aesthetic. The atmosphere is open-community AI: welcoming to researchers, model authors, and developers, with a tone that reads as 'GitHub for ML' rather than enterprise SaaS.",
+  "design_language": {
+    "type": {
+      "display": "Source Sans 3",
+      "body": "Source Sans 3",
+      "mono": "IBM Plex Mono"
+    },
+    "color_primary": "#ff9d00",
+    "color_canvas": "#ffffff",
+    "color_ink": "#0f0f0f",
+    "color_muted": "#6b7280",
+    "radius": [4, 8, 12, 999],
+    "spacing": "4-based",
+    "motion_signature": "Functional minimal motion — 150ms hover on links and buttons, slight card lift on hover (1.01 scale). Model card 'like' button has a satisfying scale-tick on click. No spring elsewhere."
+  },
+  "trademark_signals": [
+    "Hugging Face yellow (#ff9d00) — the brand voltage, scarce on individual elements",
+    "Hugging face emoji as the brand mark — playful, community-welcoming",
+    "Model card listing as the dominant content unit — author, model name, downloads, likes, tags",
+    "Developer-documentation aesthetic — code snippets, sidebar TOCs, version pickers",
+    "Open-source community chrome — 'Sign in with GitHub' as primary auth"
+  ],
+  "components_observed": [
+    "model-card-listing",
+    "primary-cta-yellow-pill",
+    "code-snippet-tabbed",
+    "model-likes-downloads-stats",
+    "task-filter-chips"
+  ],
+  "exemplar_pages": [
+    "huggingface.co",
+    "huggingface.co/models",
+    "huggingface.co/spaces"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace the hugging face emoji with a stylized abstract mark — it is the brand voice",
+    "Don't sanitize the community chrome ('Sign in with GitHub' is intentional)",
+    "Don't tint the yellow voltage — the specific #ff9d00 is brand",
+    "Don't strip the developer-doc aesthetic — Hugging Face reads as docs-first"
+  ],
+  "source_md": "references/brands/huggingface-DESIGN.md"
+}

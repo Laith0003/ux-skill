@@ -1,0 +1,46 @@
+{
+  "id": "snap",
+  "name": "Snap",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "Snap's web presence is camera-first augmented-reality chrome — Snap Yellow (#fffc00) as the brand voltage, a clean white canvas, and a layout grammar that puts the camera (Snapchat the app, Spectacles the hardware, AR Lenses the product) at the center. The atmosphere is youthful camera-tech: every page sells the camera as the input device for AR, social, and creativity.",
+  "design_language": {
+    "type": {
+      "display": "Avenir Next",
+      "body": "Avenir Next"
+    },
+    "color_primary": "#fffc00",
+    "color_canvas": "#ffffff",
+    "color_ink": "#0c0d10",
+    "color_muted": "#6c6f74",
+    "radius": [8, 16, 24, 999],
+    "spacing": "4-based",
+    "motion_signature": "Camera-grade motion — AR Lens previews auto-play in product mockups, hero photography may have subtle ken-burns pans (5-second cycles). Hover lift on cards (1.03 scale + 200ms ease). The motion is camera-shutter snappy."
+  },
+  "trademark_signals": [
+    "Snap Yellow (#fffc00) — the brand voltage on chrome and the ghost mascot",
+    "Snapchat ghost mascot — the iconic ghost icon, brand-mark anchor",
+    "Camera-first layout — every page leads with the camera as input",
+    "AR Lens previews — auto-playing camera-effects mockups demonstrating the product",
+    "Avenir Next typography — geometric humanist sans with personality"
+  ],
+  "components_observed": [
+    "ghost-mascot-illustration",
+    "primary-cta-yellow-pill",
+    "ar-lens-preview-card",
+    "camera-mockup-hero",
+    "spectacles-hardware-card"
+  ],
+  "exemplar_pages": [
+    "snap.com",
+    "ar.snap.com",
+    "snap.com/spectacles"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace the Snapchat ghost with a generic icon — it is brand identity",
+    "Don't tint Snap Yellow — the specific saturated #fffc00 is brand",
+    "Don't sharpen card radii below 8px — youth-tech softness",
+    "Don't sanitize the camera-first layout — AR is the brand category"
+  ],
+  "source_md": "references/brands/snap-DESIGN.md"
+}

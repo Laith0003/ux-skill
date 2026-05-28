@@ -7,6 +7,26 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.0.0-alpha.101] — 2026-05-28 (brand catalog 131 → 160)
+
+- **Brand catalog expansion**: +29 new brand specs. Total **160**.
+  Tier-1 tech: `microsoft`, `google`, `amazon`, `salesforce`, `oracle`, `linkedin`, `reddit`.
+  Gaming: `nintendo`, `ubisoft`, `ea`. Audio: `bose`, `sonos`, `jbl`.
+  Apparel: `adidas`, `puma`, `levis`. Automotive: `audi`, `volvo`, `mclaren`, `bentley`.
+  Developer tools / productivity: `huggingface`, `loom`, `asana`, `1password`, `twilio`,
+  `mailchimp`, `brave`, `duckduckgo`. Social: `snap`.
+- **Orphan MDs closed**: `uniqlo`, `youtube`, `zara` now have matching reference
+  `references/brands/<id>-DESIGN.md` files (previously specs existed without source MDs).
+- Every new brand ships paired `data/brands/<id>.json` (structured spec) +
+  `references/brands/<id>-DESIGN.md` (800+ word prose design language doc).
+- `data/brands/_index.json` rebuilt — `_meta.version` bumped to `2.4.0`,
+  `_meta.entries` updated to `160`, brand list sorted alphabetically by id.
+- `references/brands/_index.md` updated — header count `110 → 160`, category sections
+  rebuilt to include all new brands, new "Streaming / media" category added.
+- 70+ files touched in the sitewide stat sweep (`131 → 160` across hero copy, JSON-LD
+  meta, OG/Twitter cards, table cells, badges, blog body text, localized READMEs in
+  16 locales). All anchor references updated.
+
 ## [2.0.0-alpha.83] — 2026-05-28 (anti-patterns 100 → 120 + sitewide stat refresh)
 
 - **Round 6 anti-patterns**: +20 new deterministic rules. Total **120**.
@@ -75,7 +95,7 @@ project adheres to [Semantic Versioning](https://semver.org/).
   Cursor IDE mockup, Claude Code session, brand mosaic.
 - **SVG brand logos**: 25 simpleicons.org CC0 logos in docs/logos/. Brand gallery
   now renders real marks for 23 of 25 brands; styled wordmark fallback for clay/cursor.
-- **131 brand specs** confirmed (anthropic, openai, perplexity, modal, railway,
+- **160 brand specs** confirmed (anthropic, openai, perplexity, modal, railway,
   fly-io, retool, fivetran, dbt, snowflake, apple-music, instagram, tiktok,
   economist, wsj, dezeen, n26, robinhood — 18 added in round 5).
 - **Hero video built then removed** at user request — autoplay didn't fire on

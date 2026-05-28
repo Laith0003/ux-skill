@@ -34,7 +34,7 @@
         "name": "What is ux-skill?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "ux-skill is an open-source Python design engine that runs inside AI coding tools like Claude Code, Cursor, and Windsurf. It provides 22 slash-commands, 1,161 manifest entries, 131 brand specs, and a 100-rule anti-slop linter that catches the design fingerprints every LLM produces by default — purple gradients, generic SaaS cards, three-tier pricing, default-Inter typography."
+          "text": "ux-skill is an open-source Python design engine that runs inside AI coding tools like Claude Code, Cursor, and Windsurf. It provides 22 slash-commands, 1,161 manifest entries, 160 brand specs, and a 100-rule anti-slop linter that catches the design fingerprints every LLM produces by default — purple gradients, generic SaaS cards, three-tier pricing, default-Inter typography."
         }
       },
       {
@@ -151,7 +151,7 @@
       },
       {
         "@type": "Question",
-        "name": "What are the 131 brand specs?",
+        "name": "What are the 160 brand specs?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "DESIGN.md-style spec files for 72 known brand identities — Apple, Stripe, Linear, Vercel, Notion, Airbnb, Figma, Replit, Anthropic, plus 63 more. Each spec encodes that brand's allowed typography, color usage rules, motion vocabulary, and explicit anti-patterns. Pick a brand with /ux-design --brand=stripe and the recommender narrows everything accordingly."
@@ -796,7 +796,7 @@
         <li><a href="#q13">What's the anti-slop linter?</a></li>
         <li><a href="#q14">Linter in CI?</a></li>
         <li><a href="#q15">5-parallel-search recommender?</a></li>
-        <li><a href="#q16">131 brand specs?</a></li>
+        <li><a href="#q16">160 brand specs?</a></li>
         <li><a href="#q17">Generate a landing page?</a></li>
         <li><a href="#q18">Generate a dashboard?</a></li>
         <li><a href="#q19">RTL / Arabic?</a></li>
@@ -813,7 +813,7 @@
       <div class="q-num">Question 01</div>
       <h2 class="question">What is ux-skill?</h2>
       <div class="answer">
-        <p><strong>ux-skill is an open-source Python design engine that runs inside AI coding tools</strong> like Claude Code, Cursor, and Windsurf. It provides 22 slash-commands, 1,161 manifest entries across nine YAML manifests, 131 brand specs, and a 100-rule anti-slop linter.</p>
+        <p><strong>ux-skill is an open-source Python design engine that runs inside AI coding tools</strong> like Claude Code, Cursor, and Windsurf. It provides 22 slash-commands, 1,161 manifest entries across nine YAML manifests, 160 brand specs, and a 100-rule anti-slop linter.</p>
         <p>The job it's hired to do: catch the design fingerprints every LLM produces by default &mdash; purple gradients, generic SaaS cards, three-tier pricing, default-Inter typography &mdash; <em>before</em> they reach your repo.</p>
       </div>
     </section>
@@ -952,7 +952,7 @@ npx uxskill lint --staged</code></pre>
 
     <section id="q16" class="q-block">
       <div class="q-num">Question 16</div>
-      <h2 class="question">What are the 131 brand specs?</h2>
+      <h2 class="question">What are the 160 brand specs?</h2>
       <div class="answer">
         <p><strong>72 DESIGN.md-style spec files</strong> under <code>references/brands/</code>, one per known brand identity. Apple, Stripe, Linear, Vercel, Notion, Airbnb, Figma, Replit, Anthropic, plus 63 more.</p>
         <p>Each spec encodes that brand's <strong>allowed typography pairings</strong>, <strong>color usage rules</strong>, <strong>motion vocabulary</strong>, and <strong>explicit anti-patterns</strong> (e.g. Stripe brand spec forbids serif body type and warns on heavy drop shadow). Pick a brand with <code>/ux-design --brand=stripe</code> and the recommender narrows everything to brand-compliant choices.</p>

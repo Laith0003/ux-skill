@@ -1,8 +1,8 @@
-**English** · [العربية](README.ar.md) · [Español](README.es.md) · [中文](README.zh.md) · [Français](README.fr.md) · [Deutsch](README.de.md)
+**English** · [العربية](README.ar.md) · [简体中文](README.zh.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md) · [Bahasa Indonesia](README.id.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Português](README.pt-BR.md) · [Italiano](README.it.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md)
 
 # ux-skill — the design intelligence engine for Claude Code, Cursor, and every other AI coding tool
 
-> **The strongest UX plugin for AI coding.** A Python reasoning core with 11 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 145 anti-pattern rules, 25 tech stacks, 131 brand specs), 22 slash commands, 5 sub-agents, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
+> **The strongest UX plugin for AI coding.** A Python reasoning core with 11 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 145 anti-pattern rules, 25 tech stacks, 160 brand specs), 22 slash commands, 5 sub-agents, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
 
 > **The brand name is `ux-skill`.** The PyPI / npm package name stays `uxskill`. The GitHub repo lives at [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
@@ -12,7 +12,7 @@
 [![Python](https://img.shields.io/badge/python-3.9%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#the-17-ide-installer)
-[![Brands](https://img.shields.io/badge/brand_specs-131-cc785c.svg)](data/brands/_index.json)
+[![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-145-181715.svg)](data/anti-patterns.json)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
@@ -45,7 +45,7 @@ This README is the canonical reference. Every command, every sub-agent, every da
 5. [The 5 sub-agents](#the-5-sub-agents)
 6. [The 11 data manifests](#the-11-data-manifests)
 7. [The 145 anti-AI-slop rules — the linter](#the-100-anti-ai-slop-rules--the-linter)
-8. [The 131 brand DESIGN.md specs — by category](#the-110-brand-designmd-specs--by-category)
+8. [The 160 brand DESIGN.md specs — by category](#the-160-brand-designmd-specs--by-category)
 9. [MCP server — the asymmetric move](#mcp-server--the-asymmetric-move)
 10. [The 17-IDE installer](#the-17-ide-installer)
 11. [Use cases — concrete scenarios](#use-cases--concrete-scenarios)
@@ -170,7 +170,7 @@ ux-skill (package name: uxskill)
 │   ├── ux-guidelines.json             112 named UX laws (Hick, Fitts, Miller...)
 │   ├── motion-presets.json            57 motion presets (entry, exit, hover...)
 │   ├── anti-patterns.json             145 regex rules (CI-safe linter source)
-│   └── brands/*.json                  131 brand DESIGN specs + _index.json
+│   └── brands/*.json                  160 brand DESIGN specs + _index.json
 │
 ├── engine/                            Python — the reasoning
 │   ├── recommender/                   5-parallel-search merge engine
@@ -719,7 +719,7 @@ Every preset has a reduced-motion variant. Stack-ready code for Framer Motion, G
 
 The full rule list is in [The 145 anti-AI-slop rules](#the-100-anti-ai-slop-rules--the-linter).
 
-### `brands/*.json` — 131 brand specs
+### `brands/*.json` — 160 brand specs
 
 | Field | Description |
 |---|---|
@@ -727,7 +727,7 @@ The full rule list is in [The 145 anti-AI-slop rules](#the-100-anti-ai-slop-rule
 | `keys per entry` | `id`, `name`, `category`, `voice`, `tokens` (color, type, motion), `design_principles`, `signature_moves`, `anti-moves`, `references` |
 | `categories` | Developer Tools (36), Consumer / Lifestyle / Retail (19), Fintech / Crypto (14), Editorial / Media (13), AI / ML Platform (12), Productivity / Collaboration (8), Automotive (8) |
 
-Full list in [The 131 brand DESIGN.md specs](#the-110-brand-designmd-specs--by-category).
+Full list in [The 160 brand DESIGN.md specs](#the-160-brand-designmd-specs--by-category).
 
 ---
 
@@ -859,7 +859,7 @@ Recommended next: /ux-polish --fix (LLM-driven, addresses both lintable and aest
 
 ---
 
-## The 131 brand DESIGN.md specs — by category
+## The 160 brand DESIGN.md specs — by category
 
 Real brands. Real design languages. Real DESIGN.md specs — not generic palettes. Tell the plugin "build a landing in Stripe's style" and it reads the actual brand vocabulary: voice rubric, color tokens, motion conventions, signature moves, anti-moves.
 

@@ -1,0 +1,47 @@
+{
+  "id": "linkedin",
+  "name": "LinkedIn",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "LinkedIn's web interface is the professional network's chrome — LinkedIn Blue (#0a66c2) as the chromatic anchor, a clean off-white canvas (#f3f2ef), and a humanist sans (LinkedIn's Brand Sans / Source Sans Pro) running the chrome. The atmosphere is white-collar formal, card-based, and feed-dominant; the design reads as 'newspaper of work' rather than social-media-playful.",
+  "design_language": {
+    "type": {
+      "display": "LinkedIn Brand Sans",
+      "body": "Source Sans Pro"
+    },
+    "color_primary": "#0a66c2",
+    "color_canvas": "#f3f2ef",
+    "color_ink": "#000000e6",
+    "color_muted": "#00000099",
+    "radius": [4, 8, 12, 999],
+    "spacing": "4-based",
+    "motion_signature": "Functional feed-scroll motion — minimal animation, 150ms hover transitions, content lazy-loads as you scroll. Reactions (like, celebrate, support) animate with a small spring scale on press. No spring overshoot elsewhere."
+  },
+  "trademark_signals": [
+    "LinkedIn Blue (#0a66c2) — the primary chromatic asset on CTAs, links, and the wordmark",
+    "Off-white canvas (#f3f2ef) — a tinted background that distinguishes the feed from pure white, making cards stand out",
+    "Pill-shaped 'Connect' / 'Follow' buttons in LinkedIn Blue — the signature CTA shape",
+    "Card-based feed grammar — every post, every job, every announcement sits in a rounded card on the tinted canvas",
+    "Reaction picker — 6 colored emoji-style reactions (Like blue, Celebrate yellow, Support purple, Love red, Insightful amber, Funny teal)"
+  ],
+  "components_observed": [
+    "feed-post-card",
+    "primary-cta-blue-pill",
+    "secondary-cta-outline-pill",
+    "profile-header-card",
+    "reaction-picker",
+    "left-rail-profile-summary"
+  ],
+  "exemplar_pages": [
+    "linkedin.com",
+    "linkedin.com/feed",
+    "linkedin.com/in/"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace the off-white canvas with pure white — the tint is what makes cards visually 'lift'",
+    "Don't square the pill CTAs — full-radius is the brand's CTA shape",
+    "Don't replace LinkedIn Blue with a brighter consumer-blue — the specific corporate-leaning blue is part of the recognition",
+    "Don't animate the feed cards on scroll — the brand reads as serious workplace, not TikTok"
+  ],
+  "source_md": "references/brands/linkedin-DESIGN.md"
+}

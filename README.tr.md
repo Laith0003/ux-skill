@@ -2,7 +2,7 @@
 
 # ux-skill — Claude Code, Cursor ve diğer her AI coding aracı için design intelligence motoru
 
-> **AI coding için en güçlü UX plugin'i.** 11 sorgulanabilir JSON manifesti olan Python akıl yürütme çekirdeği (84 stil, 176 palet, 70 tipografik eşleşme, 148 component, 184 sektör, 35 chart tipi, 57 motion preset, 112 UX yasası, 100 anti-pattern kuralı, 25 tech stack, 131 brand specs), 22 slash komutu, 5 sub-agent ve deterministik anti-AI-slop linter. IDE'ler arası: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer ve Roo Cline'a dağıtılır.
+> **AI coding için en güçlü UX plugin'i.** 11 sorgulanabilir JSON manifesti olan Python akıl yürütme çekirdeği (84 stil, 176 palet, 70 tipografik eşleşme, 148 component, 184 sektör, 35 chart tipi, 57 motion preset, 112 UX yasası, 100 anti-pattern kuralı, 25 tech stack, 160 brand specs), 22 slash komutu, 5 sub-agent ve deterministik anti-AI-slop linter. IDE'ler arası: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer ve Roo Cline'a dağıtılır.
 
 > **Brand adı `ux-skill`.** PyPI / npm paket adı `uxskill` olarak kalır. GitHub deposu [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill) adresinde.
 
@@ -12,7 +12,7 @@
 [![Python](https://img.shields.io/badge/python-3.9%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#17-ide-yükleyicisi)
-[![Brands](https://img.shields.io/badge/brand_specs-131-cc785c.svg)](data/brands/_index.json)
+[![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-100-181715.svg)](data/anti-patterns.json)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
@@ -45,7 +45,7 @@ Bu README kanonik referans. Her komut, her sub-agent, her data manifest, her ins
 5. [5 sub-agent](#5-sub-agent)
 6. [11 data manifest'i](#11-data-manifesti)
 7. [100 anti-AI-slop kuralı — linter](#100-anti-ai-slop-kuralı--linter)
-8. [131 brand DESIGN.md spec'i — kategoriye göre](#110-brand-designmd-speci--kategoriye-göre)
+8. [160 brand DESIGN.md spec'i — kategoriye göre](#110-brand-designmd-speci--kategoriye-göre)
 9. [MCP sunucusu — asimetrik hamle](#mcp-sunucusu--asimetrik-hamle)
 10. [17 IDE yükleyicisi](#17-ide-yükleyicisi)
 11. [Kullanım senaryoları — somut senaryolar](#kullanım-senaryoları--somut-senaryolar)
@@ -170,7 +170,7 @@ ux-skill (paket adı: uxskill)
 │   ├── ux-guidelines.json             112 isimli UX yasası (Hick, Fitts, Miller...)
 │   ├── motion-presets.json            57 motion preset'i (entry, exit, hover...)
 │   ├── anti-patterns.json             100 regex kuralı (CI-safe linter kaynağı)
-│   └── brands/*.json                  131 brand DESIGN spec'i + _index.json
+│   └── brands/*.json                  160 brand DESIGN spec'i + _index.json
 │
 ├── engine/                            Python — akıl yürütme
 │   ├── recommender/                   5-paralel-arama merge motoru
@@ -719,7 +719,7 @@ Her preset'in bir reduced-motion varyantı var. Framer Motion, GSAP ve saf CSS i
 
 Tam kural listesi [100 anti-AI-slop kuralı](#100-anti-ai-slop-kuralı--linter)'nda.
 
-### `brands/*.json` — 131 brand specs'i
+### `brands/*.json` — 160 brand specs'i
 
 | Alan | Açıklama |
 |---|---|
@@ -727,7 +727,7 @@ Tam kural listesi [100 anti-AI-slop kuralı](#100-anti-ai-slop-kuralı--linter)'
 | `giriş başına anahtarlar` | `id`, `name`, `category`, `voice`, `tokens` (color, type, motion), `design_principles`, `signature_moves`, `anti-moves`, `references` |
 | `kategoriler` | Developer Tools (36), Consumer / Lifestyle / Retail (19), Fintech / Crypto (14), Editorial / Media (13), AI / ML Platform (12), Productivity / Collaboration (8), Automotive (8) |
 
-Tam liste [131 brand DESIGN.md spec'i](#110-brand-designmd-speci--kategoriye-göre)'nde.
+Tam liste [160 brand DESIGN.md spec'i](#110-brand-designmd-speci--kategoriye-göre)'nde.
 
 ---
 
@@ -859,7 +859,7 @@ src/components/Pricing.tsx:11  [high] three-equal-card-grid
 
 ---
 
-## 131 brand DESIGN.md spec'i — kategoriye göre
+## 160 brand DESIGN.md spec'i — kategoriye göre
 
 Gerçek brand'ler. Gerçek design dilleri. Gerçek DESIGN.md spec'leri — genel paletler değil. Plugin'e «Stripe'ın stilinde bir landing kur» de, ve gerçek brand sözlüğünü okur: ses rubriği, renk token'ları, motion konvansiyonları, imza hamleleri, anti-hamleleri.
 

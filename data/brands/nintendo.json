@@ -1,0 +1,46 @@
+{
+  "id": "nintendo",
+  "name": "Nintendo",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "Nintendo's web presence is the brand's signature 'family-friendly fun' translated into a card-rich UI — Nintendo Red (#e60012) as the chromatic anchor on the wordmark and CTAs, generous radii (16–24px) on character cards, and unmistakable IP-driven hero illustrations (Mario, Zelda, Pokemon) carrying the marketing weight. The atmosphere is playful, character-led, and unapologetically colorful where the IP demands it.",
+  "design_language": {
+    "type": {
+      "display": "Nintendo Display",
+      "body": "Nintendo Body"
+    },
+    "color_primary": "#e60012",
+    "color_canvas": "#ffffff",
+    "color_ink": "#1f1f1f",
+    "color_muted": "#5e5e5e",
+    "radius": [8, 16, 24, 999],
+    "spacing": "4-based",
+    "motion_signature": "Gentle scroll-triggered reveals on character cards. Hero illustrations may have idle animations (Mario waves, Pikachu blinks). Card hover triggers a soft 200ms scale-up (1.03). The brand is playful but restrained — no chaotic motion."
+  },
+  "trademark_signals": [
+    "Nintendo Red (#e60012) — the brand's signature on the wordmark and primary CTAs",
+    "Character-led hero cards — every product page leads with Mario, Zelda's Link, Pikachu, or another IP character",
+    "Generous radii (16–24px) on character cards — softness signals friendliness",
+    "Switch-shaped product cards (when the product is a game or console) — referencing the console's hardware silhouette",
+    "Bright IP-driven secondary colors — Mario red, Zelda gold, Pokemon yellow, Splatoon pink/lime — used only when the IP demands"
+  ],
+  "components_observed": [
+    "character-hero-card",
+    "primary-cta-red-pill",
+    "game-card-soft-radius",
+    "ip-driven-section-background",
+    "switch-shaped-frame"
+  ],
+  "exemplar_pages": [
+    "nintendo.com",
+    "nintendo.com/switch",
+    "nintendo.com/store"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace the character illustrations with generic 3D renders — the IP cast is the brand voice",
+    "Don't strip the IP-driven secondary colors when the IP demands them (Mario red on Mario pages)",
+    "Don't sharpen card radii to 0–4px — Nintendo's soft radii are the friendliness signal",
+    "Don't add edgy or aggressive motion — the brand is family-friendly even on Bowser pages"
+  ],
+  "source_md": "references/brands/nintendo-DESIGN.md"
+}

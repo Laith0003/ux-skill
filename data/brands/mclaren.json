@@ -1,0 +1,47 @@
+{
+  "id": "mclaren",
+  "name": "McLaren",
+  "category": "Automotive",
+  "year_observed": 2026,
+  "philosophy": "McLaren's web presence is hypercar-racing chrome — McLaren Orange (#ff8000) as the chromatic anchor, dark cinematic photography (often in racing-circuit lighting), and a layout grammar that reads as Formula 1 mission control. The atmosphere is racing-engineered: every page references aerodynamic precision, lap times, and engineering provenance.",
+  "design_language": {
+    "type": {
+      "display": "McLaren Display",
+      "body": "McLaren Sans"
+    },
+    "color_primary": "#ff8000",
+    "color_canvas": "#0a0a0a",
+    "color_canvas_light": "#ffffff",
+    "color_ink": "#ffffff",
+    "color_muted": "#8e8e93",
+    "radius": [0, 4],
+    "spacing": "4-based",
+    "motion_signature": "Racing-grade motion — auto-playing engineering-cinematic video heroes, slow ken-burns pans on still imagery (10-second cycles), hover lift on vehicle cards with a hard 200ms scale (1.04). Configurator changes use a hard cut at 150ms — racing-precision, no spring."
+  },
+  "trademark_signals": [
+    "McLaren Orange (#ff8000) — the brand's chromatic voltage, drawn from the F1 racing program",
+    "Dark cinematic canvas (#0a0a0a) with full-bleed hypercar photography",
+    "F1-racing aesthetic chrome — telemetry-style numerical readouts, lap-time-style tabular figures",
+    "Rectilinear UI (0–4px radius) — engineering precision",
+    "Carbon-fiber and racing-livery texture as occasional surface accent"
+  ],
+  "components_observed": [
+    "hypercar-hero-video",
+    "primary-cta-orange-rect",
+    "vehicle-card-dark-rectilinear",
+    "spec-telemetry-readout",
+    "configurator-livery-picker"
+  ],
+  "exemplar_pages": [
+    "mclaren.com",
+    "cars.mclaren.com",
+    "mclaren.com/racing"
+  ],
+  "ai_slop_avoided": [
+    "Don't tint McLaren Orange — the specific saturated #ff8000 is brand",
+    "Don't replace dark cinematic canvas with white — hypercar photography demands dark backdrop",
+    "Don't soften card radii above 4px — racing engineering precision",
+    "Don't sanitize the F1-mission-control aesthetic — it is the brand"
+  ],
+  "source_md": "references/brands/mclaren-DESIGN.md"
+}

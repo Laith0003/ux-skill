@@ -1,10 +1,10 @@
-# Brand library — 110 production-grade DESIGN.md files
+# Brand library — 160 production-grade DESIGN.md files
 
 When a user asks for a specific brand's aesthetic — "build me a landing in Stripe's style", "match the Notion editorial feel", "make it like Linear" — read the matching file in this directory. Every brand here has a full design system spec: colors, typography, layout, components, motion, content tone, do/don't pairs.
 
 The frontend-engineer sub-agent MUST consult the relevant brand file before producing output when the user has named a specific brand. The brand's design language overrides defaults; the plugin's anti-AI-slop discipline still applies on top.
 
-## Brands available (110)
+## Brands available (160)
 
 - [`aesop`](aesop-DESIGN.md) — Apothecary beauty heritage. Sepia canvas, Walbaum serif everywhere, text-link CTAs.
 - [`airbnb`](airbnb.md) — Travel marketplace. Warm coral accent, photography-driven, rounded UI.
@@ -135,25 +135,28 @@ Offer to:
 ## Index categories at a glance
 
 ### AI / ML platforms
-`anthropic` · `claude` · `cohere` · `elevenlabs` · `minimax` · `mistral.ai` · `openai` · `perplexity` · `runwayml` · `together.ai` · `voltagent` · `x.ai`
+`anthropic` · `claude` · `cohere` · `elevenlabs` · `huggingface` · `minimax` · `mistral.ai` · `openai` · `perplexity` · `runwayml` · `together.ai` · `voltagent` · `x.ai`
 
 ### Developer tools / infra
-`clickhouse` · `composio` · `cursor` · `datadog` · `dbt` · `expo` · `fivetran` · `fly-io` · `framer` · `hashicorp` · `honeycomb` · `ibm` · `lovable` · `mintlify` · `modal` · `mongodb` · `neon` · `ollama` · `opencode.ai` · `posthog` · `railway` · `raycast` · `render` · `replicate` · `resend` · `retool` · `sanity` · `sentry` · `slack` · `snowflake` · `sourcegraph` · `supabase` · `superhuman` · `vercel` · `warp` · `webflow`
+`1password` · `brave` · `clickhouse` · `composio` · `cursor` · `datadog` · `dbt` · `duckduckgo` · `expo` · `fivetran` · `fly-io` · `framer` · `google` · `hashicorp` · `honeycomb` · `ibm` · `lovable` · `microsoft` · `mintlify` · `modal` · `mongodb` · `neon` · `ollama` · `opencode.ai` · `oracle` · `posthog` · `railway` · `raycast` · `render` · `replicate` · `resend` · `retool` · `salesforce` · `sanity` · `sentry` · `slack` · `snowflake` · `sourcegraph` · `supabase` · `superhuman` · `twilio` · `vercel` · `warp` · `webflow`
 
 ### Fintech / crypto
 `binance` · `brex` · `coinbase` · `kraken` · `mastercard` · `mercury` · `monzo` · `n26` · `plaid` · `ramp` · `revolut` · `robinhood` · `stripe` · `wise`
 
 ### Productivity / collaboration
-`airtable` · `cal` · `figma` · `intercom` · `linear.app` · `miro` · `notion` · `zapier`
+`airtable` · `asana` · `cal` · `figma` · `intercom` · `linear.app` · `loom` · `mailchimp` · `miro` · `notion` · `zapier`
 
 ### Consumer / lifestyle / retail
-`aesop` · `airbnb` · `allbirds` · `apple` · `apple-music` · `glossier` · `hims-hers` · `hp` · `instagram` · `meta` · `nike` · `patagonia` · `pinterest` · `playstation` · `shopify` · `spotify` · `starbucks` · `tiktok` · `uber`
+`adidas` · `aesop` · `airbnb` · `allbirds` · `amazon` · `apple` · `apple-music` · `bose` · `ea` · `glossier` · `hims-hers` · `hp` · `ikea` · `instagram` · `jbl` · `levis` · `linkedin` · `meta` · `muji` · `nike` · `nintendo` · `patagonia` · `pinterest` · `playstation` · `puma` · `reddit` · `shopify` · `snap` · `sonos` · `spotify` · `starbucks` · `tiktok` · `uber` · `ubisoft` · `uniqlo` · `zara`
 
 ### Automotive
-`bmw` · `bmw-m` · `bugatti` · `ferrari` · `lamborghini` · `renault` · `spacex` · `tesla`
+`audi` · `bentley` · `bmw` · `bmw-m` · `bugatti` · `ferrari` · `lamborghini` · `mclaren` · `mercedes-benz` · `renault` · `rolls-royce` · `spacex` · `tesla` · `volvo`
 
 ### Editorial / media
 `atlantic` · `bloomberg` · `clay` · `dezeen` · `economist` · `nvidia` · `nytimes` · `pitchfork` · `substack` · `theverge` · `vodafone` · `wired` · `wsj`
+
+### Streaming / media
+`disney-plus` · `netflix` · `twitch` · `youtube`
 
 ## Updating the library
 

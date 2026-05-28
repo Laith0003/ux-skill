@@ -1,0 +1,48 @@
+{
+  "id": "reddit",
+  "name": "Reddit",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "Reddit's design is community-feed-dominant — orange (#ff4500) as the brand voltage on upvote, alien mascot Snoo as the brand character, dense list-style post feeds (or card-style depending on view mode), and a dark-mode-first chrome that signals 'this is where the internet talks to itself'. The atmosphere is community-first, message-board nostalgic, and unapologetically text-heavy.",
+  "design_language": {
+    "type": {
+      "display": "IBM Plex Sans",
+      "body": "IBM Plex Sans"
+    },
+    "color_primary": "#ff4500",
+    "color_canvas": "#0e1113",
+    "color_canvas_light": "#ffffff",
+    "color_ink": "#f2f4f5",
+    "color_muted": "#838f99",
+    "radius": [4, 8, 16],
+    "spacing": "4-based",
+    "motion_signature": "Functional minimal motion — vote button has a slight 100ms scale + color punch on click, comment expand/collapse uses 200ms ease, and the upvote arrow morphs to filled-orange on click. The animation grammar is one of the brand's most-recognized small details."
+  },
+  "trademark_signals": [
+    "Reddit Orange (#ff4500) — the brand's chromatic voltage, on the wordmark, on upvote-active state, and on premium chrome",
+    "Snoo — the alien mascot, a small white alien silhouette that appears as the wordmark prefix and in special-occasion illustrations",
+    "Upvote / downvote arrow buttons — the most recognized voting UI on the internet",
+    "Subreddit naming convention — every community is /r/<name>, rendered in monospace",
+    "Dark-mode default and light-mode mirror — both modes are well-developed; many users default to dark"
+  ],
+  "components_observed": [
+    "post-card-feed",
+    "post-card-list",
+    "upvote-downvote-stack",
+    "comment-thread-nested",
+    "subreddit-header",
+    "snoo-mascot-illustration"
+  ],
+  "exemplar_pages": [
+    "reddit.com",
+    "reddit.com/r/programming",
+    "reddit.com/user"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace Reddit Orange with a warmer red — the specific #ff4500 is part of the recognition",
+    "Don't redesign the upvote/downvote arrows to a generic thumbs-up — they are the most recognized voting UI on the internet",
+    "Don't strip the Snoo mascot — it is the brand character",
+    "Don't sanitize the dense list view — Reddit's text-density is the brand"
+  ],
+  "source_md": "references/brands/reddit-DESIGN.md"
+}

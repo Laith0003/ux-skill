@@ -1,0 +1,46 @@
+{
+  "id": "salesforce",
+  "name": "Salesforce",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "Salesforce's marketing surface is the cloud-and-character brand — Cloud Blue (#00a1e0) as the chromatic anchor, the cast of cartoon characters (Astro, Codey, Cloudy) as illustrated heroes, and a friendly humanist sans (Salesforce Sans) running everything. The atmosphere is enterprise-but-approachable; the cartoon characters are deliberately disarming on an otherwise serious B2B CRM page.",
+  "design_language": {
+    "type": {
+      "display": "Salesforce Sans",
+      "body": "Salesforce Sans"
+    },
+    "color_primary": "#00a1e0",
+    "color_canvas": "#ffffff",
+    "color_ink": "#16325c",
+    "color_muted": "#3e3e3c",
+    "radius": [4, 8, 16, 999],
+    "spacing": "4-based",
+    "motion_signature": "Gentle scroll-triggered reveals; cartoon character mascots have idle animations (gentle float, blink) on landing pages. Hover lift on cards uses a soft 200ms ease-out with a slight scale (1.02)."
+  },
+  "trademark_signals": [
+    "Salesforce Cloud Blue (#00a1e0) as the primary chromatic asset — used on CTAs, the cloud wordmark, and brand surfaces",
+    "Astro and the character cast — illustrated mascots that anchor the hero on every product page. The character voice is a key brand asset",
+    "Salesforce Sans — the proprietary friendly humanist sans, runs display through body",
+    "Pill-shaped buttons (`rounded.full`) on primary CTAs — the brand's signature CTA shape",
+    "Cloud iconography — every product is a 'cloud' (Sales Cloud, Service Cloud, Marketing Cloud) and each has its own gradient-accented cloud illustration"
+  ],
+  "components_observed": [
+    "primary-cta-blue-pill",
+    "character-hero-illustration",
+    "cloud-product-card",
+    "trailhead-badge",
+    "navigation-mega-menu"
+  ],
+  "exemplar_pages": [
+    "salesforce.com",
+    "salesforce.com/products/sales-cloud",
+    "trailhead.salesforce.com"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace the character illustrations with generic stock 3D renders — the cast is part of the brand voice",
+    "Don't pair the Cloud Blue with a second saturated accent — the blue is the brand voltage",
+    "Don't square the pill CTAs — full-pill radius is the brand's CTA shape",
+    "Don't remove the cloud iconography from product naming — every product is a cloud"
+  ],
+  "source_md": "references/brands/salesforce-DESIGN.md"
+}

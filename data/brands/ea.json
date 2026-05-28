@@ -1,0 +1,47 @@
+{
+  "id": "ea",
+  "name": "EA",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "EA's web presence is sports-and-blockbuster-gaming chrome — the EA wordmark in heavy display sans, a dark canvas (#0d0d0d) on franchise pages, and a master brand chrome that connects FIFA (now EA Sports FC), Madden, Battlefield, The Sims, and Apex Legends. The atmosphere is sports-broadcast cinematic where the IP demands and corporate-master-brand where the chrome takes over.",
+  "design_language": {
+    "type": {
+      "display": "EA Spectrum",
+      "body": "EA Spectrum"
+    },
+    "color_primary": "#ff4747",
+    "color_canvas": "#0d0d0d",
+    "color_canvas_light": "#ffffff",
+    "color_ink": "#ffffff",
+    "color_muted": "#8e8e93",
+    "radius": [0, 4, 8],
+    "spacing": "4-based",
+    "motion_signature": "Trailer-grade hero motion with slow parallax and live-action gameplay cuts. Card hover triggers a tight 150ms scale + slight bloom. EA Play membership chrome introduces a vertical accent line on hover-state for premium cards."
+  },
+  "trademark_signals": [
+    "EA wordmark in heavy display sans — pinned top-left, brand mark across franchises",
+    "Dark canvas (#0d0d0d) on franchise pages — sports-broadcast cinematic backdrop",
+    "EA Play membership chrome — premium accent bar on subscriber-only content",
+    "Franchise-specific palettes — FIFA/FC green, Madden navy, Battlefield orange, Sims plumbob green, Apex red",
+    "Rectilinear UI (0–8px radius) — the brand reads as console-game-store"
+  ],
+  "components_observed": [
+    "trailer-hero-dark",
+    "franchise-card-rectilinear",
+    "ea-play-membership-banner",
+    "live-service-status-card",
+    "platform-icon-row"
+  ],
+  "exemplar_pages": [
+    "ea.com",
+    "ea.com/games/ea-sports-fc",
+    "ea.com/games/apex-legends"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace the dark franchise canvas with light surfaces",
+    "Don't strip the franchise palettes — each game brings its own IP color identity",
+    "Don't soften card radii — EA reads as a game store, not consumer SaaS",
+    "Don't blur EA Play premium chrome into free content — the accent bar is part of the IA"
+  ],
+  "source_md": "references/brands/ea-DESIGN.md"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "loom",
+  "name": "Loom",
+  "category": "Productivity / Collaboration",
+  "year_observed": 2026,
+  "philosophy": "Loom's web presence is async-video-for-work chrome — a deep purple primary (#625df5) as the brand voltage, soft rounded cards, illustration-driven heroes featuring people in the act of recording a video. The atmosphere is friendly workplace SaaS: approachable, animated, and confident that async video is the future of work communication.",
+  "design_language": {
+    "type": {
+      "display": "Inter",
+      "body": "Inter"
+    },
+    "color_primary": "#625df5",
+    "color_canvas": "#ffffff",
+    "color_ink": "#13141c",
+    "color_muted": "#6c6e7e",
+    "radius": [8, 12, 16, 999],
+    "spacing": "4-based",
+    "motion_signature": "Friendly micro-animations — hover lift on cards (1.02 + 200ms ease), playful idle animations on hero illustrations, soft spring on button press (50ms scale down + 100ms back). Video player previews auto-play silently on hover."
+  },
+  "trademark_signals": [
+    "Loom Purple (#625df5) — the brand voltage on CTAs, the wordmark, and selected illustration accents",
+    "Soft rounded cards (12–16px radius) — friendly SaaS",
+    "Illustration-driven heroes — people in the act of recording or watching async video",
+    "Video-message thumbnail mockup — circular recorder avatar overlaid on a video frame",
+    "Inter typography across chrome — modern humanist sans"
+  ],
+  "components_observed": [
+    "video-message-thumbnail",
+    "primary-cta-purple-pill",
+    "hero-illustration-recording",
+    "feature-card-soft-radius",
+    "playback-controls"
+  ],
+  "exemplar_pages": [
+    "loom.com",
+    "loom.com/use-cases",
+    "loom.com/pricing"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace Loom Purple with a saturated tech-blue — the specific lavender-purple is brand",
+    "Don't sharpen card radii below 8px — friendly SaaS softness",
+    "Don't sanitize the recording-people illustrations to generic 3D renders",
+    "Don't strip the video-message thumbnail style — circular recorder avatar overlay is brand signature"
+  ],
+  "source_md": "references/brands/loom-DESIGN.md"
+}

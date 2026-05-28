@@ -1,0 +1,46 @@
+{
+  "id": "asana",
+  "name": "Asana",
+  "category": "Productivity / Collaboration",
+  "year_observed": 2026,
+  "philosophy": "Asana's web presence is project-management-as-flow chrome — a coral-orange primary (#fc636b), gentle dot-pattern brand mark (referencing the three-dot 'Asana' icon), and illustration-driven heroes featuring teams in motion. The atmosphere is friendly productivity SaaS: warm, optimistic, and committed to 'work without the chaos.' Cards round at 8–16px and the chrome leans into approachable enterprise.",
+  "design_language": {
+    "type": {
+      "display": "Asana Sans",
+      "body": "Asana Sans"
+    },
+    "color_primary": "#fc636b",
+    "color_canvas": "#ffffff",
+    "color_ink": "#0d1f2d",
+    "color_muted": "#6b6f76",
+    "radius": [8, 12, 16, 999],
+    "spacing": "4-based",
+    "motion_signature": "Gentle workflow-themed micro-animations — task cards have a subtle hover lift, the three-dot brand mark may pulse on landing. Carousel transitions use 300ms ease-in-out. The brand reads as friendly-productive."
+  },
+  "trademark_signals": [
+    "Asana coral (#fc636b) — the chromatic voltage on CTAs and the wordmark",
+    "Three-dot brand mark — circular triad referencing teams in coordination",
+    "Friendly illustration heroes — teams collaborating, task boards in action",
+    "Soft rounded cards (8–16px radius) — approachable enterprise",
+    "Workflow-themed visual language — gantt timelines, kanban columns, task-card mockups"
+  ],
+  "components_observed": [
+    "primary-cta-coral-pill",
+    "task-card-mockup",
+    "gantt-timeline-visualization",
+    "hero-illustration-team",
+    "feature-card-soft-radius"
+  ],
+  "exemplar_pages": [
+    "asana.com",
+    "asana.com/uses/project-management",
+    "asana.com/pricing"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace Asana coral with a saturated red — the specific warm coral is brand",
+    "Don't sharpen card radii below 8px — friendly SaaS softness",
+    "Don't strip the three-dot brand mark — it is the brand identity anchor",
+    "Don't sanitize the workflow-illustration heroes to generic enterprise stock"
+  ],
+  "source_md": "references/brands/asana-DESIGN.md"
+}

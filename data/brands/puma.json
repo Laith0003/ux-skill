@@ -1,0 +1,45 @@
+{
+  "id": "puma",
+  "name": "Puma",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "Puma's web presence is sport-and-culture chrome — the leaping cat logo, a bright-energy chromatic identity (often paired with the seasonal Forever Faster red), and a layout grammar that puts athlete-and-celebrity collaborations as the hero. The atmosphere is youth-energy more than premium-restraint; Puma reads as faster, looser, and more culture-forward than Adidas or Nike.",
+  "design_language": {
+    "type": {
+      "display": "Puma Sans",
+      "body": "Puma Sans"
+    },
+    "color_primary": "#000000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000",
+    "color_muted": "#6e6e6e",
+    "radius": [0, 4, 8],
+    "spacing": "4-based",
+    "motion_signature": "Kinetic motion — hero carousels with quick 3-second cuts, slight Ken-burns pans on still imagery, hover lift on product cards (1.03 scale + 150ms). The leaping cat occasionally jumps on idle in mascot animations."
+  },
+  "trademark_signals": [
+    "Leaping cat logo — the brand mark",
+    "'Forever Faster' Puma Red (#e21e26) — seasonal voltage on CTAs and campaign chrome",
+    "Athlete-and-celebrity collaboration heroes — Neymar, Selena Gomez, Rihanna's Fenty Puma",
+    "Wide black-on-white chrome with bright campaign-driven accents",
+    "Rectilinear product cards (0–8px radius)"
+  ],
+  "components_observed": [
+    "primary-cta-black-rect",
+    "campaign-hero-photo",
+    "athlete-collab-card",
+    "product-card-rectilinear",
+    "carousel-hard-cut"
+  ],
+  "exemplar_pages": [
+    "puma.com",
+    "puma.com/us/en/men/sport-style"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace the leaping cat with a stylized icon — it is the brand mark",
+    "Don't sanitize collaboration photography — the celebrity-as-athlete moments are the brand",
+    "Don't soften card radii above 8px — sportswear precision",
+    "Don't tint Puma Red to coral — the saturated red is the seasonal voltage"
+  ],
+  "source_md": "references/brands/puma-DESIGN.md"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "bentley",
+  "name": "Bentley",
+  "category": "Automotive",
+  "year_observed": 2026,
+  "philosophy": "Bentley's web presence is British luxury automotive — the winged 'B' wordmark, a near-monochrome dark chrome with a deep racing-green secondary accent, and editorial photography that treats the vehicle as a coachbuilt artifact rather than a transportation product. The atmosphere is heritage-bespoke; every page references handcrafted leather, marquetry, and 100+ years of British coachbuilding.",
+  "design_language": {
+    "type": {
+      "display": "Bentley Sans",
+      "body": "Bentley Sans"
+    },
+    "color_primary": "#093624",
+    "color_canvas": "#0e0e0e",
+    "color_canvas_light": "#ffffff",
+    "color_ink": "#ffffff",
+    "color_muted": "#9d9d9d",
+    "radius": [0, 4, 8],
+    "spacing": "4-based",
+    "motion_signature": "Editorial cinematic motion — slow ken-burns on hero photography (10-second cycles), considered fade-ins (400ms ease-out). Configurator changes use a soft 300ms crossfade with the wheel rim slowly rotating between selections."
+  },
+  "trademark_signals": [
+    "Winged 'B' wordmark — the brand mark, often in gold leaf or polished chrome rendering",
+    "Bentley Racing Green (#093624) — the brand's deep racing-heritage green",
+    "Editorial coachbuilding photography — leather grain close-ups, marquetry detail shots, polished wood veneers",
+    "Dark cinematic canvas with gold-and-green secondary palette",
+    "Configurator with bespoke material selections (leather color, wood veneer, embroidery thread)"
+  ],
+  "components_observed": [
+    "coachbuilt-hero-photography",
+    "bespoke-material-picker",
+    "primary-cta-green-rect",
+    "marquetry-detail-card",
+    "heritage-narrative-band"
+  ],
+  "exemplar_pages": [
+    "bentleymotors.com",
+    "bentleymotors.com/en/models/continental-gt"
+  ],
+  "ai_slop_avoided": [
+    "Don't sanitize the coachbuilding photography — the artisan detail shots are the brand",
+    "Don't replace Bentley Racing Green with a brighter forest — the specific deep green is heritage",
+    "Don't soften card radii above 8px — heritage precision",
+    "Don't strip the winged 'B' wordmark of its gold-leaf rendering on hero treatments"
+  ],
+  "source_md": "references/brands/bentley-DESIGN.md"
+}

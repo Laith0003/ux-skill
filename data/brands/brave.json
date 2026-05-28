@@ -1,0 +1,47 @@
+{
+  "id": "brave",
+  "name": "Brave",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "Brave's web presence is privacy-first browser chrome — Brave Orange (#fb542b) as the brand voltage on CTAs, dark canvas (#13141b) on the marketing surface, and a typography stack that pairs a modern display sans with a clean body. The atmosphere is privacy-as-feature: confident, slightly contrarian, and built around the message 'the web you deserve, without the surveillance.'",
+  "design_language": {
+    "type": {
+      "display": "Inter",
+      "body": "Inter"
+    },
+    "color_primary": "#fb542b",
+    "color_canvas": "#13141b",
+    "color_canvas_light": "#ffffff",
+    "color_ink": "#ffffff",
+    "color_muted": "#8c8fa0",
+    "radius": [4, 8, 12, 999],
+    "spacing": "4-based",
+    "motion_signature": "Confident product-led motion — browser screenshot mockups have subtle scroll-reveal animations, the lion brand mark has occasional idle paw gestures. Hover lift on cards (1.02 + 200ms ease). The motion is restrained-confident."
+  },
+  "trademark_signals": [
+    "Brave Orange (#fb542b) — chromatic voltage on CTAs and brand accents",
+    "Lion brand mark — the privacy-protective mascot",
+    "Dark canvas (#13141b) on marketing — privacy-as-feature aesthetic",
+    "Inter typography across chrome",
+    "Browser-mockup heroes — Brave browser screenshots with shields/privacy chrome highlighted"
+  ],
+  "components_observed": [
+    "browser-mockup-hero",
+    "primary-cta-orange-pill",
+    "feature-card-dark",
+    "lion-brand-mark",
+    "shields-privacy-callout"
+  ],
+  "exemplar_pages": [
+    "brave.com",
+    "brave.com/browser",
+    "brave.com/search"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace the dark canvas with white — privacy-as-feature brand lives on dark",
+    "Don't sanitize the lion brand mark to a generic shield",
+    "Don't tint Brave Orange to a softer coral — the specific saturated orange is brand",
+    "Don't add saturated brand-blue accents — the chrome is dark + orange"
+  ],
+  "source_md": "references/brands/brave-DESIGN.md"
+}

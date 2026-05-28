@@ -1,0 +1,46 @@
+{
+  "id": "bose",
+  "name": "Bose",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "Bose's web presence is the premium-audio brand's editorial chrome — black-and-white duotone product photography on a clean white canvas, restrained typography (Inter or Helvetica Neue), and a single accent color used only on CTAs. The atmosphere is hi-fi audio reverence; cards lean rectilinear, motion is restrained, and the product photography (headphones, speakers, soundbars) carries the prestige.",
+  "design_language": {
+    "type": {
+      "display": "Helvetica Neue",
+      "body": "Helvetica Neue"
+    },
+    "color_primary": "#1f1f1f",
+    "color_canvas": "#ffffff",
+    "color_ink": "#1c1c1c",
+    "color_muted": "#727272",
+    "radius": [0, 4, 8],
+    "spacing": "4-based",
+    "motion_signature": "Editorial fade-ins on scroll, slow crossfade carousels (1.2s), no spring or scale animations. Hover on product cards triggers a subtle color shift (background to #fafafa) but no card lift."
+  },
+  "trademark_signals": [
+    "Premium black-and-white product photography on white — the audio gear as artifact",
+    "Helvetica Neue across chrome — no proprietary face, deliberate restraint",
+    "Rectilinear cards (0–8px radius) — the brand reads as hi-fi audio, not consumer-electronics-cute",
+    "Single dark CTA color (#1f1f1f) — minimalist primary action",
+    "Editorial product detail pages — long-scroll with technical specs and audio-engineering callouts"
+  ],
+  "components_observed": [
+    "product-card-rectilinear-white",
+    "primary-cta-dark",
+    "spec-callout-grid",
+    "product-detail-hero",
+    "audio-tech-explainer-band"
+  ],
+  "exemplar_pages": [
+    "bose.com",
+    "bose.com/p/headphones",
+    "bose.com/c/speakers"
+  ],
+  "ai_slop_avoided": [
+    "Don't add bright accent colors — the brand is monochrome with dark CTAs",
+    "Don't soften card radii above 8px — Bose reads as hi-fi precision, not soft-consumer",
+    "Don't stylize product photography with color filters — pure-white seamless is the brand",
+    "Don't add motion to product cards — editorial restraint is the prestige signal"
+  ],
+  "source_md": "references/brands/bose-DESIGN.md"
+}

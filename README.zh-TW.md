@@ -2,7 +2,7 @@
 
 # ux-skill — 為 Claude Code、Cursor 及一切 AI 程式設計工具打造的設計智慧引擎
 
-> **AI 程式設計領域最強的 UX 外掛。** 一個由 Python 驅動的推理核心,包含 11 份可查詢的 JSON 清單(84 種風格、176 套配色、70 組字體搭配、148 個元件、184 個產業、35 種圖表類型、57 個動效預設、112 條 UX 法則、145 條反模式規則、25 個技術堆疊、131 份品牌規範)、22 個斜線命令、5 個子代理,以及一個確定性的反 AI-slop 程式碼檢查器。跨 IDE 支援:可安裝到 Claude Code、Cursor、Windsurf、GitHub Copilot、Gemini CLI、Codex、Kiro、Cline、Continue、Aider、Zed、JetBrains AI、Pieces、Tabby、Tabnine、CodeWhisperer 以及 Roo Cline。
+> **AI 程式設計領域最強的 UX 外掛。** 一個由 Python 驅動的推理核心,包含 11 份可查詢的 JSON 清單(84 種風格、176 套配色、70 組字體搭配、148 個元件、184 個產業、35 種圖表類型、57 個動效預設、112 條 UX 法則、145 條反模式規則、25 個技術堆疊、160 份品牌規範)、22 個斜線命令、5 個子代理,以及一個確定性的反 AI-slop 程式碼檢查器。跨 IDE 支援:可安裝到 Claude Code、Cursor、Windsurf、GitHub Copilot、Gemini CLI、Codex、Kiro、Cline、Continue、Aider、Zed、JetBrains AI、Pieces、Tabby、Tabnine、CodeWhisperer 以及 Roo Cline。
 
 > **品牌名稱是 `ux-skill`。** PyPI / npm 上的套件名稱仍然是 `uxskill`。GitHub 儲存庫位於 [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill)。
 
@@ -12,7 +12,7 @@
 [![Python](https://img.shields.io/badge/python-3.9%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#面向-17-個-ide-的安裝程式)
-[![Brands](https://img.shields.io/badge/brand_specs-131-cc785c.svg)](data/brands/_index.json)
+[![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-145-181715.svg)](data/anti-patterns.json)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
@@ -45,7 +45,7 @@ ux-skill 是一個面向 AI 程式設計工具的**設計智慧引擎**。它以
 5. [5 個子代理](#5-個子代理)
 6. [11 份資料清單](#11-份資料清單)
 7. [145 條反 AI-slop 規則——程式碼檢查器](#145-條反-ai-slop-規則程式碼檢查器)
-8. [131 份 DESIGN.md 品牌規範——按類別](#131-份-designmd-品牌規範按類別)
+8. [160 份 DESIGN.md 品牌規範——按類別](#160-份-designmd-品牌規範按類別)
 9. [MCP 伺服器——非對稱的一著](#mcp-伺服器非對稱的一著)
 10. [面向 17 個 IDE 的安裝程式](#面向-17-個-ide-的安裝程式)
 11. [使用案例——具體場景](#使用案例具體場景)
@@ -719,7 +719,7 @@ ux-skill (套件名: uxskill)
 
 完整規則清單見[145 條反 AI-slop 規則](#145-條反-ai-slop-規則程式碼檢查器)。
 
-### `brands/*.json` — 131 份品牌規範
+### `brands/*.json` — 160 份品牌規範
 
 | 欄位 | 描述 |
 |---|---|
@@ -727,7 +727,7 @@ ux-skill (套件名: uxskill)
 | `keys per entry` | `id`、`name`、`category`、`voice`、`tokens`(color、type、motion)、`design_principles`、`signature_moves`、`anti-moves`、`references` |
 | `categories` | Developer Tools(36)、Consumer / Lifestyle / Retail(19)、Fintech / Crypto(14)、Editorial / Media(13)、AI / ML Platform(12)、Productivity / Collaboration(8)、Automotive(8) |
 
-完整名單見[131 份 DESIGN.md 品牌規範](#131-份-designmd-品牌規範按類別)。
+完整名單見[160 份 DESIGN.md 品牌規範](#160-份-designmd-品牌規範按類別)。
 
 ---
 
@@ -859,7 +859,7 @@ Recommended next: /ux-polish --fix (LLM-driven, addresses both lintable and aest
 
 ---
 
-## 131 份 DESIGN.md 品牌規範——按類別
+## 160 份 DESIGN.md 品牌規範——按類別
 
 真實的品牌。真實的設計語言。真實的 DESIGN.md 規範——不是通用配色。告訴外掛「按 Stripe 的風格做個著陸頁」,它會讀取真實的品牌詞彙表:聲音量規、顏色 tokens、動效約定、招牌手法、反向手法。
 

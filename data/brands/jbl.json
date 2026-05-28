@@ -1,0 +1,47 @@
+{
+  "id": "jbl",
+  "name": "JBL",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "JBL's web presence is the bright-lifestyle-audio brand — JBL Orange (#ff5500) as the chromatic voltage, action-lifestyle photography (parties, outdoor adventures, gym workouts), and a dark canvas (#0d0d0d) anchoring the chrome. The atmosphere is high-energy consumer audio: youth-oriented, color-rich, and unapologetically loud where Bose and Sonos are quiet.",
+  "design_language": {
+    "type": {
+      "display": "JBL Sans",
+      "body": "JBL Sans"
+    },
+    "color_primary": "#ff5500",
+    "color_canvas": "#0d0d0d",
+    "color_canvas_light": "#ffffff",
+    "color_ink": "#ffffff",
+    "color_muted": "#9d9d9d",
+    "radius": [4, 8, 16, 999],
+    "spacing": "4-based",
+    "motion_signature": "High-energy motion — auto-playing lifestyle video heroes, carousel transitions at 400–600ms, hover lift on cards (1.04 scale). Speaker visualizations on product pages animate sound-wave rings outward from the speaker on idle."
+  },
+  "trademark_signals": [
+    "JBL Orange (#ff5500) — chromatic voltage on CTAs, wordmark accent, sound-wave animations",
+    "Dark canvas (#0d0d0d) — youth-oriented audio brand backdrop",
+    "Action-lifestyle photography — parties, outdoor adventures, gym workouts",
+    "Sound-wave ring animations on speaker product pages",
+    "Pill-shaped CTAs in JBL Orange — high-energy primary action"
+  ],
+  "components_observed": [
+    "lifestyle-video-hero",
+    "primary-cta-orange-pill",
+    "speaker-product-card-dark",
+    "sound-wave-ring-animation",
+    "carousel-action-photography"
+  ],
+  "exemplar_pages": [
+    "jbl.com",
+    "jbl.com/portable-speakers",
+    "jbl.com/headphones"
+  ],
+  "ai_slop_avoided": [
+    "Don't tint the JBL Orange — the specific saturated #ff5500 is brand",
+    "Don't replace dark canvas with white — youth-energy chrome lives on dark",
+    "Don't sanitize the lifestyle photography to clinical product-on-white — the action context is the brand",
+    "Don't remove the sound-wave ring animations — they are the brand's auditory-visual signature"
+  ],
+  "source_md": "references/brands/jbl-DESIGN.md"
+}

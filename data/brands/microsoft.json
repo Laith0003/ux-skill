@@ -1,0 +1,50 @@
+{
+  "id": "microsoft",
+  "name": "Microsoft",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "Microsoft's web presence is institutional-scale and product-broad — the brand's design language Fluent 2 ladders from consumer Windows to enterprise Azure to Surface hardware to Office, and the site stitches them together with a near-monochrome chrome and a single chromatic accent — Microsoft Blue (#0067c0) — used scarcely on CTAs and on the four-square logo. The atmosphere is utilitarian and corporate without feeling cold; product imagery (Surface devices, screen renders of Windows, Teams collaboration shots) carries the warmth.",
+  "design_language": {
+    "type": {
+      "display": "Segoe UI Variable Display",
+      "body": "Segoe UI Variable Text",
+      "mono": "Cascadia Code"
+    },
+    "color_primary": "#0067c0",
+    "color_canvas": "#ffffff",
+    "color_ink": "#242424",
+    "color_muted": "#616161",
+    "radius": [0, 4, 8, 12],
+    "spacing": "4-based",
+    "motion_signature": "Fluent 2 motion: gentle 250ms cubic-bezier ease-in-out on transitions, subtle scale-up (1.02) on card hover, no spring overshoots. The acrylic blur (backdrop-filter) is the system's signature material — used on flyouts, command bars, and sticky navigation."
+  },
+  "trademark_signals": [
+    "Microsoft Blue (#0067c0) as the single chromatic accent — used on primary CTAs and the four-square logo. No secondary brand color exists in the marketing chrome",
+    "Segoe UI Variable — the proprietary system font — runs display through body in a continuous weight axis. Headlines lean into the heavier display optical sizes",
+    "Fluent 2 acrylic backdrop blur on flyouts, command bars, and sticky chrome — the brand's signature material",
+    "Four-square logo (red/green/blue/yellow) as the only multi-chromatic asset in the system — used only as the brand mark, never as decoration",
+    "Card-based product grids with 4–8px radius and a soft 1px hairline border — the Fluent surface unit"
+  ],
+  "components_observed": [
+    "product-card-fluent",
+    "primary-cta-microsoft-blue",
+    "acrylic-flyout",
+    "command-bar",
+    "hero-product-render",
+    "tab-pivot",
+    "callout-flyout"
+  ],
+  "exemplar_pages": [
+    "microsoft.com",
+    "microsoft.com/surface",
+    "microsoft.com/windows",
+    "microsoft.com/microsoft-365"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace Segoe UI with Inter or a geometric sans — the humanist proportions are core to the Fluent feel",
+    "Don't make the four-square logo decorative; it is a mark, not a pattern",
+    "Don't add a second brand accent color — Microsoft Blue is the only chromatic CTA color",
+    "Don't ignore the acrylic-blur material — flat translucent overlays read as off-brand"
+  ],
+  "source_md": "references/brands/microsoft-DESIGN.md"
+}

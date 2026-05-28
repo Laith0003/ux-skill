@@ -1,0 +1,49 @@
+{
+  "id": "google",
+  "name": "Google",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "Google's web presence is the canonical Material You / Material 3 expression — paper-bright canvas, friendly geometric type (Google Sans + Roboto), saturated four-color brand palette, generous radii (16–28px), and a card-based layout grammar that treats every product feature as a small bento tile. The atmosphere is approachable, optimistic, and consumer-grade — even on enterprise Cloud pages.",
+  "design_language": {
+    "type": {
+      "display": "Google Sans Display",
+      "body": "Google Sans Text",
+      "mono": "Google Sans Code"
+    },
+    "color_primary": "#4285f4",
+    "color_canvas": "#ffffff",
+    "color_ink": "#202124",
+    "color_muted": "#5f6368",
+    "radius": [8, 16, 24, 28],
+    "spacing": "8-based",
+    "motion_signature": "Material motion — emphasized easing curves (cubic-bezier(0.2, 0, 0, 1)), 200–300ms transition baseline, container-transform morphs between states. The signature is the spring-easing emphasized curve that makes Material interactions feel grounded rather than flat."
+  },
+  "trademark_signals": [
+    "Google's four brand colors (Blue #4285f4, Red #ea4335, Yellow #fbbc04, Green #34a853) used as semantic + decorative chromatic system",
+    "Google Sans (display + body) — proprietary geometric humanist sans with friendly rounded terminals",
+    "Generous radii — cards at 16–28px, buttons at 20–28px pill or 8–12px rounded-rect. The brand reads as soft and approachable",
+    "Bento-tile layouts — small feature cards in 3-up or 4-up grids, each with an illustration + headline + short description",
+    "Material 3 surface tonal elevation — surfaces shift hue subtly with elevation rather than relying on shadow"
+  ],
+  "components_observed": [
+    "bento-feature-tile",
+    "primary-cta-blue-pill",
+    "filled-tonal-button",
+    "material-text-field",
+    "navigation-rail",
+    "fab-floating-action-button"
+  ],
+  "exemplar_pages": [
+    "google.com",
+    "store.google.com",
+    "cloud.google.com",
+    "workspace.google.com"
+  ],
+  "ai_slop_avoided": [
+    "Don't use the four brand colors as decorative gradients — they are semantic and brand-mark only",
+    "Don't replace Google Sans with Roboto for display sizes — the display variant is part of the brand",
+    "Don't sharpen card corners below 8px radius — the soft radii are the brand's friendliness signal",
+    "Don't add deep drop shadows — Material 3 uses tonal surface elevation, not shadow depth"
+  ],
+  "source_md": "references/brands/google-DESIGN.md"
+}

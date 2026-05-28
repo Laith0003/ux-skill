@@ -1,0 +1,46 @@
+{
+  "id": "mailchimp",
+  "name": "Mailchimp",
+  "category": "Productivity / Collaboration",
+  "year_observed": 2026,
+  "philosophy": "Mailchimp's web presence is the marketing-platform-with-personality chrome — Cavendish Yellow (#ffe01b) as the brand voltage, the chimp mascot Freddie as the brand character, hand-illustrated quirky heroes, and a typography stack that pairs a serif display with a clean sans body. The atmosphere is warm, weird, and deliberately small-business-friendly.",
+  "design_language": {
+    "type": {
+      "display": "Cooper Light",
+      "body": "Helvetica Neue"
+    },
+    "color_primary": "#ffe01b",
+    "color_canvas": "#ffffff",
+    "color_ink": "#241c15",
+    "color_muted": "#5e5a4f",
+    "radius": [0, 4, 8],
+    "spacing": "4-based",
+    "motion_signature": "Hand-illustrated quirky motion — Freddie the chimp blinks and gestures on idle, hand-drawn illustrations have subtle wiggle animations. Hover lift on cards is restrained. The motion is quirky-warm, never corporate-smooth."
+  },
+  "trademark_signals": [
+    "Cavendish Yellow (#ffe01b) — the brand's signature high-vis yellow on chrome",
+    "Freddie the chimp — the brand mascot, illustrated with quirky personality",
+    "Hand-illustrated heroes — quirky drawings of people, animals, and abstract scenes",
+    "Cooper Light serif display + clean sans body — distinctive type pairing",
+    "Small-business friendly tone — warm, weird, never enterprise-corporate"
+  ],
+  "components_observed": [
+    "freddie-mascot-illustration",
+    "primary-cta-yellow-rect",
+    "hand-drawn-hero",
+    "cooper-light-display-headline",
+    "feature-card-rectilinear"
+  ],
+  "exemplar_pages": [
+    "mailchimp.com",
+    "mailchimp.com/features",
+    "mailchimp.com/pricing"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace the hand-illustrated quirk with generic 3D renders — the illustration personality is brand",
+    "Don't sanitize Freddie the chimp — the mascot's quirky weirdness is brand",
+    "Don't drop the Cooper Light serif display — it is the signature pairing",
+    "Don't tint Cavendish Yellow — the specific saturated #ffe01b is brand"
+  ],
+  "source_md": "references/brands/mailchimp-DESIGN.md"
+}

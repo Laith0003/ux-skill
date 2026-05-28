@@ -1,0 +1,46 @@
+{
+  "id": "duckduckgo",
+  "name": "DuckDuckGo",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "DuckDuckGo's web presence is privacy-search-with-personality chrome — DuckDuckGo Red-Orange (#de5833) as the brand voltage, the duck mascot Dax as the brand character, and a friendly humanist chrome that softens the privacy positioning. The atmosphere is approachable privacy: the brand wants to be the friendly alternative to Google, not the contrarian alternative to Brave.",
+  "design_language": {
+    "type": {
+      "display": "Inter",
+      "body": "Inter"
+    },
+    "color_primary": "#de5833",
+    "color_canvas": "#ffffff",
+    "color_ink": "#222222",
+    "color_muted": "#6b6f76",
+    "radius": [8, 12, 16, 999],
+    "spacing": "4-based",
+    "motion_signature": "Friendly micro-animations — Dax the duck mascot may wave or blink, hover lifts on cards (1.02 scale + 200ms). Search bar focus animates with a soft expand. The motion is friendly-confident."
+  },
+  "trademark_signals": [
+    "DuckDuckGo Red-Orange (#de5833) — chromatic voltage on CTAs and Dax accent",
+    "Dax the duck mascot — the friendly brand character",
+    "White canvas with soft rounded cards (8–16px)",
+    "Search-bar-as-hero — every page leads with the search input",
+    "Privacy-friendly tone — never contrarian, always approachable"
+  ],
+  "components_observed": [
+    "search-bar-hero",
+    "dax-duck-illustration",
+    "primary-cta-orange-pill",
+    "feature-card-soft-radius",
+    "privacy-callout-band"
+  ],
+  "exemplar_pages": [
+    "duckduckgo.com",
+    "duckduckgo.com/app",
+    "spreadprivacy.com"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace Dax the duck with a generic icon — the mascot is brand voice",
+    "Don't tint DuckDuckGo Red-Orange — the specific saturated hex is brand",
+    "Don't sharpen card radii below 8px — friendly privacy is the brand",
+    "Don't drop the search-bar-as-hero on the home page"
+  ],
+  "source_md": "references/brands/duckduckgo-DESIGN.md"
+}

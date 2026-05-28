@@ -1,0 +1,48 @@
+{
+  "id": "amazon",
+  "name": "Amazon",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "Amazon's storefront is the textbook density-over-elegance e-commerce surface — Ember system font, dense product grids, yellow 'Add to Cart' as the brand voltage, conversion-engineered chrome where every pixel earns its place by lifting purchase rate. The atmosphere is utilitarian to the point of austerity; chrome is gray-on-white-on-blue, accents are amber-yellow and orange, and the product imagery does the heavy lifting.",
+  "design_language": {
+    "type": {
+      "display": "Amazon Ember",
+      "body": "Amazon Ember"
+    },
+    "color_primary": "#ff9900",
+    "color_canvas": "#ffffff",
+    "color_ink": "#0f1111",
+    "color_muted": "#565959",
+    "radius": [0, 3, 4, 8],
+    "spacing": "4-based",
+    "motion_signature": "Minimal motion — the storefront is engineered for fast load and zero distraction. Hover triggers slight underline on links and a 50ms color shift on buttons. No spring, no carousel auto-cycling beyond the homepage hero."
+  },
+  "trademark_signals": [
+    "Amazon orange-yellow CTAs (Add to Cart #ffd814, Buy Now #ffa41c) — the brand's conversion voltage. Reserved for purchase actions only",
+    "Amazon Ember system font — proprietary humanist sans, narrow proportions, runs display through body at small sizes",
+    "Dense product grids — 6+ products visible above the fold, with the famous '1-2-3 stack' of price, prime badge, rating",
+    "Navy-blue header bar (#131921) — the persistent chrome that holds search, account, cart",
+    "Star ratings as a visual language — 4.5/5 with the half-filled-star icon set in amber, review count in muted gray underneath"
+  ],
+  "components_observed": [
+    "add-to-cart-yellow",
+    "buy-now-orange",
+    "product-card-dense",
+    "navy-header-bar",
+    "search-input-with-category-dropdown",
+    "prime-badge",
+    "star-rating-row"
+  ],
+  "exemplar_pages": [
+    "amazon.com",
+    "amazon.com/dp",
+    "amazon.com/prime"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace the yellow Add-to-Cart with a brand-recolored CTA — the specific #ffd814 yellow is the conversion signal",
+    "Don't sparsify the product grid — Amazon's density is intentional, not a flaw to be 'fixed'",
+    "Don't add motion or hover transforms to product cards — the storefront optimizes for stillness",
+    "Don't replace Amazon Ember with Inter or a friendlier humanist sans — Ember's narrowness is part of the density"
+  ],
+  "source_md": "references/brands/amazon-DESIGN.md"
+}

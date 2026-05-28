@@ -1,12 +1,22 @@
 {
   "_meta": {
-    "version": "2.3.0",
-    "entries": 131,
+    "version": "2.4.0",
+    "entries": 160,
     "last_updated": "2026-05-28",
-    "source": "ux-skill v2 \u2014 expanded brand catalog (92 -> 110)",
+    "source": "ux-skill v2 — expanded brand catalog (131 -> 160)",
     "schema_version": "1.0"
   },
   "brands": [
+    {
+      "id": "1password",
+      "name": "1Password",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "adidas",
+      "name": "Adidas",
+      "category": "Consumer / Lifestyle / Retail"
+    },
     {
       "id": "aesop",
       "name": "Aesop",
@@ -33,18 +43,23 @@
       "category": "Travel / Hospitality"
     },
     {
+      "id": "amazon",
+      "name": "Amazon",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
       "id": "anthropic",
       "name": "Anthropic",
       "category": "AI / ML Platform"
     },
     {
-      "id": "apple-music",
-      "name": "Apple Music",
+      "id": "apple",
+      "name": "Apple",
       "category": "Consumer / Lifestyle / Retail"
     },
     {
-      "id": "apple",
-      "name": "Apple",
+      "id": "apple-music",
+      "name": "Apple Music",
       "category": "Consumer / Lifestyle / Retail"
     },
     {
@@ -53,9 +68,24 @@
       "category": "Developer Tools"
     },
     {
+      "id": "asana",
+      "name": "Asana",
+      "category": "Productivity / Collaboration"
+    },
+    {
       "id": "atlantic",
       "name": "The Atlantic",
       "category": "Editorial / Media"
+    },
+    {
+      "id": "audi",
+      "name": "Audi",
+      "category": "Automotive"
+    },
+    {
+      "id": "bentley",
+      "name": "Bentley",
+      "category": "Automotive"
     },
     {
       "id": "binance",
@@ -68,19 +98,29 @@
       "category": "Editorial / Media"
     },
     {
-      "id": "bmw-m",
-      "name": "BMW M",
+      "id": "bmw",
+      "name": "BMW",
       "category": "Automotive"
     },
     {
-      "id": "bmw",
-      "name": "BMW",
+      "id": "bmw-m",
+      "name": "BMW M",
       "category": "Automotive"
     },
     {
       "id": "booking-com",
       "name": "Booking.com",
       "category": "Travel / Hospitality"
+    },
+    {
+      "id": "bose",
+      "name": "Bose",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "brave",
+      "name": "Brave",
+      "category": "Developer Tools"
     },
     {
       "id": "brex",
@@ -158,6 +198,16 @@
       "category": "Streaming / Media"
     },
     {
+      "id": "duckduckgo",
+      "name": "DuckDuckGo",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "ea",
+      "name": "EA",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
       "id": "economist",
       "name": "The Economist",
       "category": "Editorial / Media"
@@ -223,6 +273,11 @@
       "category": "Consumer / Lifestyle / Retail"
     },
     {
+      "id": "google",
+      "name": "Google",
+      "category": "Developer Tools"
+    },
+    {
       "id": "hashicorp",
       "name": "HashiCorp",
       "category": "Developer Tools"
@@ -248,6 +303,11 @@
       "category": "Consumer / Lifestyle / Retail"
     },
     {
+      "id": "huggingface",
+      "name": "Hugging Face",
+      "category": "AI / ML Platform"
+    },
+    {
       "id": "ibm",
       "name": "IBM",
       "category": "Developer Tools"
@@ -268,6 +328,11 @@
       "category": "Productivity / Collaboration"
     },
     {
+      "id": "jbl",
+      "name": "JBL",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
       "id": "kraken",
       "name": "Kraken",
       "category": "Fintech / Crypto"
@@ -278,8 +343,23 @@
       "category": "Automotive"
     },
     {
+      "id": "levis",
+      "name": "Levi's",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
       "id": "linear.app",
       "name": "Linear",
+      "category": "Productivity / Collaboration"
+    },
+    {
+      "id": "linkedin",
+      "name": "LinkedIn",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "loom",
+      "name": "Loom",
       "category": "Productivity / Collaboration"
     },
     {
@@ -288,9 +368,19 @@
       "category": "Developer Tools"
     },
     {
+      "id": "mailchimp",
+      "name": "Mailchimp",
+      "category": "Productivity / Collaboration"
+    },
+    {
       "id": "mastercard",
       "name": "Mastercard",
       "category": "Fintech / Crypto"
+    },
+    {
+      "id": "mclaren",
+      "name": "McLaren",
+      "category": "Automotive"
     },
     {
       "id": "mercedes-benz",
@@ -306,6 +396,11 @@
       "id": "meta",
       "name": "Meta",
       "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "microsoft",
+      "name": "Microsoft",
+      "category": "Developer Tools"
     },
     {
       "id": "minimax",
@@ -368,6 +463,11 @@
       "category": "Consumer / Lifestyle / Retail"
     },
     {
+      "id": "nintendo",
+      "name": "Nintendo",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
       "id": "notion",
       "name": "Notion",
       "category": "Productivity / Collaboration"
@@ -400,6 +500,11 @@
     {
       "id": "opencode.ai",
       "name": "OpenCode",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "oracle",
+      "name": "Oracle",
       "category": "Developer Tools"
     },
     {
@@ -443,6 +548,11 @@
       "category": "Developer Tools"
     },
     {
+      "id": "puma",
+      "name": "Puma",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
       "id": "railway",
       "name": "Railway",
       "category": "Developer Tools"
@@ -456,6 +566,11 @@
       "id": "raycast",
       "name": "Raycast",
       "category": "Developer Tools"
+    },
+    {
+      "id": "reddit",
+      "name": "Reddit",
+      "category": "Consumer / Lifestyle / Retail"
     },
     {
       "id": "renault",
@@ -503,6 +618,11 @@
       "category": "AI / ML Platform"
     },
     {
+      "id": "salesforce",
+      "name": "Salesforce",
+      "category": "Developer Tools"
+    },
+    {
       "id": "sanity",
       "name": "Sanity",
       "category": "Developer Tools"
@@ -523,9 +643,19 @@
       "category": "Developer Tools"
     },
     {
+      "id": "snap",
+      "name": "Snap",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
       "id": "snowflake",
       "name": "Snowflake",
       "category": "Developer Tools"
+    },
+    {
+      "id": "sonos",
+      "name": "Sonos",
+      "category": "Consumer / Lifestyle / Retail"
     },
     {
       "id": "sourcegraph",
@@ -588,6 +718,11 @@
       "category": "AI / ML Platform"
     },
     {
+      "id": "twilio",
+      "name": "Twilio",
+      "category": "Developer Tools"
+    },
+    {
       "id": "twitch",
       "name": "Twitch",
       "category": "Streaming / Media"
@@ -595,6 +730,11 @@
     {
       "id": "uber",
       "name": "Uber",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "ubisoft",
+      "name": "Ubisoft",
       "category": "Consumer / Lifestyle / Retail"
     },
     {
@@ -616,6 +756,11 @@
       "id": "voltagent",
       "name": "VoltAgent",
       "category": "AI / ML Platform"
+    },
+    {
+      "id": "volvo",
+      "name": "Volvo",
+      "category": "Automotive"
     },
     {
       "id": "warp",

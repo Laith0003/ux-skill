@@ -1,0 +1,47 @@
+{
+  "id": "twilio",
+  "name": "Twilio",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "Twilio's web presence is communication-API developer chrome — Twilio Red (#f22f46) as the chromatic anchor, white canvas with developer-documentation aesthetic, and code snippets as the dominant feature visualization. The atmosphere is API-first developer-friendly: every page shows the product as code-in-action, with curl snippets and language tabs (Node, Python, Go) as the hero treatment.",
+  "design_language": {
+    "type": {
+      "display": "Inter",
+      "body": "Inter",
+      "mono": "JetBrains Mono"
+    },
+    "color_primary": "#f22f46",
+    "color_canvas": "#ffffff",
+    "color_ink": "#0d122b",
+    "color_muted": "#606b85",
+    "radius": [4, 8, 12, 999],
+    "spacing": "4-based",
+    "motion_signature": "Functional developer-grade motion — code-snippet tabs have a 150ms underline slide, hover lifts on cards are subtle (1.01 scale). API request/response chrome animates with a slight type-in effect on landing."
+  },
+  "trademark_signals": [
+    "Twilio Red (#f22f46) — chromatic voltage on CTAs and the wordmark",
+    "Code-snippet-as-hero — curl/Node/Python/Go tabs on hero",
+    "Developer-documentation aesthetic — sidebar TOCs, version pickers, code blocks",
+    "Inter typography for chrome, JetBrains Mono for code",
+    "Twilio Paste design system patterns visible in product chrome"
+  ],
+  "components_observed": [
+    "primary-cta-red-rect",
+    "code-snippet-tabbed",
+    "api-request-response-card",
+    "developer-doc-sidebar",
+    "feature-card-soft-radius"
+  ],
+  "exemplar_pages": [
+    "twilio.com",
+    "twilio.com/messaging",
+    "twilio.com/docs"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace the code-snippet hero with marketing illustration — the brand is API-first",
+    "Don't tint Twilio Red to a softer coral — the saturated red is brand",
+    "Don't sanitize the developer-documentation aesthetic — Twilio reads as devtools-first",
+    "Don't sharpen card radii below 4px — modest softness is the brand's friendliness budget"
+  ],
+  "source_md": "references/brands/twilio-DESIGN.md"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "volvo",
+  "name": "Volvo",
+  "category": "Automotive",
+  "year_observed": 2026,
+  "philosophy": "Volvo's web presence is Scandinavian-minimalist automotive — the iron-mark logo, a near-monochrome chrome with pure-white canvas and dark gray ink, and considered photography in muted Nordic palettes (forests, fjords, twilight). The atmosphere is human-centric safety + design restraint; the cars are photographed in environments that suggest the family, the journey, and the values they exist to protect.",
+  "design_language": {
+    "type": {
+      "display": "Volvo Novum",
+      "body": "Volvo Novum"
+    },
+    "color_primary": "#1f3a5c",
+    "color_canvas": "#ffffff",
+    "color_ink": "#1a1a1a",
+    "color_muted": "#707070",
+    "radius": [0, 4, 8, 16],
+    "spacing": "4-based",
+    "motion_signature": "Considered editorial motion — fade-in reveals on scroll (350ms ease-out), slow crossfade carousels (1.5s). Configurator changes use 250ms ease. The brand reads as Scandinavian-deliberate, never kinetic."
+  },
+  "trademark_signals": [
+    "Iron-mark logo (the circle with the arrow) — the brand mark",
+    "Volvo Novum — proprietary geometric humanist sans",
+    "Scandinavian-minimal chrome — pure white canvas, dark gray ink, muted-cool secondary palette",
+    "Photography in Nordic environments (forests, fjords, twilight, snow)",
+    "Configurator with model variants (sedan, wagon, SUV) and trim levels"
+  ],
+  "components_observed": [
+    "vehicle-hero-photography",
+    "configurator-trim-picker",
+    "primary-cta-rect",
+    "model-comparison-row",
+    "safety-callout-band"
+  ],
+  "exemplar_pages": [
+    "volvocars.com",
+    "volvocars.com/en/cars/xc90",
+    "volvocars.com/en/cars/ex30"
+  ],
+  "ai_slop_avoided": [
+    "Don't add saturated chromatic accents — Volvo chrome is monochrome + cool-tone secondary",
+    "Don't sanitize the Nordic photography environments — they are the brand atmosphere",
+    "Don't replace Volvo Novum with Helvetica — the geometric humanist proportions are signature",
+    "Don't add kinetic motion — Volvo reads as deliberate, not fast"
+  ],
+  "source_md": "references/brands/volvo-DESIGN.md"
+}

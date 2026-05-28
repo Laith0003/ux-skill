@@ -2,7 +2,7 @@
 
 # ux-skill — bộ máy trí tuệ thiết kế cho Claude Code, Cursor và mọi công cụ lập trình AI khác
 
-> **Plugin UX mạnh nhất cho lập trình AI.** Một lõi suy luận Python với 11 manifest JSON truy vấn được (84 phong cách, 176 bảng màu, 70 cặp typography, 148 component, 184 ngành nghề, 35 loại biểu đồ, 57 preset chuyển động, 112 quy luật UX, 145 quy tắc anti-pattern, 25 tech stack, 131 spec thương hiệu), 22 slash command, 5 sub-agent và một bộ linter chống AI-slop xác định. Liên-IDE: triển khai vào Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer và Roo Cline.
+> **Plugin UX mạnh nhất cho lập trình AI.** Một lõi suy luận Python với 11 manifest JSON truy vấn được (84 phong cách, 176 bảng màu, 70 cặp typography, 148 component, 184 ngành nghề, 35 loại biểu đồ, 57 preset chuyển động, 112 quy luật UX, 145 quy tắc anti-pattern, 25 tech stack, 160 spec thương hiệu), 22 slash command, 5 sub-agent và một bộ linter chống AI-slop xác định. Liên-IDE: triển khai vào Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer và Roo Cline.
 
 > **Tên thương hiệu là `ux-skill`.** Tên gói PyPI / npm vẫn là `uxskill`. Kho GitHub nằm tại [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
@@ -12,7 +12,7 @@
 [![Python](https://img.shields.io/badge/python-3.9%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#trình-cài-đặt-17-ide)
-[![Brands](https://img.shields.io/badge/brand_specs-131-cc785c.svg)](data/brands/_index.json)
+[![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-145-181715.svg)](data/anti-patterns.json)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
@@ -45,7 +45,7 @@ README này là tài liệu tham chiếu chính thức. Mọi command, mọi sub
 5. [5 sub-agent](#5-sub-agent)
 6. [11 data manifest](#11-data-manifest)
 7. [145 quy tắc chống AI-slop — bộ linter](#145-quy-tắc-chống-ai-slop--bộ-linter)
-8. [131 spec DESIGN.md thương hiệu — theo danh mục](#131-spec-designmd-thương-hiệu--theo-danh-mục)
+8. [160 spec DESIGN.md thương hiệu — theo danh mục](#160-spec-designmd-thương-hiệu--theo-danh-mục)
 9. [Máy chủ MCP — nước cờ bất đối xứng](#máy-chủ-mcp--nước-cờ-bất-đối-xứng)
 10. [Trình cài đặt 17 IDE](#trình-cài-đặt-17-ide)
 11. [Tình huống sử dụng — kịch bản cụ thể](#tình-huống-sử-dụng--kịch-bản-cụ-thể)
@@ -110,7 +110,7 @@ ux stats
 #     "ux-guidelines": 112,
 #     "motion-presets": 57,
 #     "anti-patterns": 145,
-#     "brands": 131
+#     "brands": 160
 #   }
 # }
 ```
@@ -133,7 +133,7 @@ Số sao được xác minh lần cuối qua `gh api` vào **2026-05-28**. ux-sk
 | dominikmartn/nothing-design-skill | **2.391** | Skill thẩm mỹ đơn nhất | 1 | — | — | 0 | 0 | 1 |
 | Nutlope/hallmark | **2.164** | Skill thiết kế anti-slop | 1 | — | — | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | Component MD3 + audit | 1 | — | (chỉ MD3) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Bộ máy Python + 11 manifest + 22 command + 5 sub-agent + linter CI** | **22** | **145 quy tắc regex** | **131** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Bộ máy Python + 11 manifest + 22 command + 5 sub-agent + linter CI** | **22** | **145 quy tắc regex** | **160** | **148** | **57** | **17** |
 
 ### Chỗ chúng tôi thua
 
@@ -146,7 +146,7 @@ Số sao được xác minh lần cuối qua `gh api` vào **2026-05-28**. ux-sk
 - **Thư viện component:** 148 component được tài liệu hóa với anatomy, state, token sử dụng, và spec chuyển động. Không có cái nào trong 8 plugin kia ship được manifest component.
 - **Preset chuyển động:** 57 entry sẵn sàng theo stack (Framer Motion, GSAP, CSS) với fallback reduced-motion. Không có ai trong số còn lại ship manifest chuyển động.
 - **Linter anti-pattern:** 145 quy tắc regex xác định, chạy trong CI, exit khác 0 ở mức Critical/High. Không có ai trong số còn lại ship một linter xác định.
-- **Spec thương hiệu:** 131 spec DESIGN.md thật (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, và 117 thương hiệu khác). Không có ai trong số còn lại ship một thư viện thương hiệu.
+- **Spec thương hiệu:** 160 spec DESIGN.md thật (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, và 146 thương hiệu khác). Không có ai trong số còn lại ship một thư viện thương hiệu.
 - **17 IDE được hỗ trợ:** cùng một bộ máy, keo dán khác nhau cho mỗi IDE.
 - **22 slash command:** discovery, generation, audit, lint, polish, vòng lặp fix, case study, workshop, copy, motion, a11y, dashboard, conductor — tích hợp đầy đủ.
 
@@ -170,7 +170,7 @@ ux-skill (tên gói: uxskill)
 │   ├── ux-guidelines.json             112 quy luật UX có tên (Hick, Fitts, Miller...)
 │   ├── motion-presets.json            57 preset chuyển động (entry, exit, hover...)
 │   ├── anti-patterns.json             145 quy tắc regex (nguồn linter CI-safe)
-│   └── brands/*.json                  131 spec DESIGN thương hiệu + _index.json
+│   └── brands/*.json                  160 spec DESIGN thương hiệu + _index.json
 │
 ├── engine/                            Python — phần suy luận
 │   ├── recommender/                   bộ máy merge 5 tìm kiếm song song
@@ -719,15 +719,15 @@ Mọi preset đều có biến thể reduced-motion. Code sẵn sàng theo stack
 
 Danh sách quy tắc đầy đủ ở [145 quy tắc chống AI-slop](#145-quy-tắc-chống-ai-slop--bộ-linter).
 
-### `brands/*.json` — 131 spec thương hiệu
+### `brands/*.json` — 160 spec thương hiệu
 
 | Trường | Mô tả |
 |---|---|
-| `entries` | 131 (cộng với `_index.json` liệt kê tất cả) |
+| `entries` | 160 (cộng với `_index.json` liệt kê tất cả) |
 | `keys per entry` | `id`, `name`, `category`, `voice`, `tokens` (color, type, motion), `design_principles`, `signature_moves`, `anti-moves`, `references` |
 | `categories` | Developer Tools (36), Consumer / Lifestyle / Retail (19), Fintech / Crypto (14), Editorial / Media (13), AI / ML Platform (12), Productivity / Collaboration (8), Automotive (8) |
 
-Danh sách đầy đủ ở [131 spec DESIGN.md thương hiệu](#131-spec-designmd-thương-hiệu--theo-danh-mục).
+Danh sách đầy đủ ở [160 spec DESIGN.md thương hiệu](#160-spec-designmd-thương-hiệu--theo-danh-mục).
 
 ---
 
@@ -859,7 +859,7 @@ Khuyến nghị kế tiếp: /ux-polish --fix (do LLM dẫn dắt, xử lý cả
 
 ---
 
-## 131 spec DESIGN.md thương hiệu — theo danh mục
+## 160 spec DESIGN.md thương hiệu — theo danh mục
 
 Thương hiệu thật. Ngôn ngữ thiết kế thật. Spec DESIGN.md thật — không phải palette chung chung. Bảo plugin "xây một landing theo phong cách Stripe" và nó đọc đúng từ vựng thương hiệu thực: rubric giọng nói, token màu, quy ước motion, nước cờ chữ ký, nước cờ kiêng kỵ.
 
@@ -1108,7 +1108,7 @@ Bảng tóm tắt ngắn. So sánh đầy đủ từng-bảng tại [uxskill.lai
 | Slash command | **22** | 1 | 19 | 1 | 1 | nhiều | 1 | 1 | 1 |
 | Component | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | Preset chuyển động | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Spec thương hiệu | **131** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Spec thương hiệu | **160** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Quy tắc anti-pattern | **145** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Linter xác định CI-safe | **có** | không | không | không | không | không | không | không | không |
 | IDE hỗ trợ | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |

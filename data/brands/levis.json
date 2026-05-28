@@ -1,0 +1,46 @@
+{
+  "id": "levis",
+  "name": "Levi's",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "Levi's web presence is American-heritage denim chrome — the red tab as the chromatic anchor, monochrome editorial photography (often black-and-white denim shots), and a layout grammar that treats every jeans-fit page as a fit guide with measurements rather than a fashion lookbook. The atmosphere is workwear-heritage modern; the 501 is a heritage product, and the chrome respects that.",
+  "design_language": {
+    "type": {
+      "display": "Levi's Heritage Serif",
+      "body": "Levi's Sans"
+    },
+    "color_primary": "#cc1f3a",
+    "color_canvas": "#ffffff",
+    "color_ink": "#1a1a1a",
+    "color_muted": "#6f6f6f",
+    "radius": [0, 4, 8],
+    "spacing": "4-based",
+    "motion_signature": "Editorial fade-ins on scroll. Hero carousels with 4-5 second slow cross-fades. The brand commits to slow, considered motion rather than kinetic energy."
+  },
+  "trademark_signals": [
+    "Levi's red tab — the brand mark on every product, often referenced in the chrome via a small red tab graphic",
+    "Heritage serif for display + sans for body — split typography signaling 'heritage modern'",
+    "Black-and-white denim editorial photography — workwear photography reverence",
+    "501-specific chrome on heritage product pages — fit guide style, not lookbook",
+    "American flag color palette restraint — red appears scarcely, never blue chrome"
+  ],
+  "components_observed": [
+    "primary-cta-red-rect",
+    "fit-guide-stacked",
+    "product-card-rectilinear",
+    "red-tab-graphic-accent",
+    "heritage-editorial-band"
+  ],
+  "exemplar_pages": [
+    "levi.com",
+    "levi.com/US/en_US/clothing/men/jeans/501",
+    "levi.com/US/en_US/category/women"
+  ],
+  "ai_slop_avoided": [
+    "Don't replace heritage serif headlines with all-sans modern — the serif is the heritage signal",
+    "Don't add bright fashion-brand chromatic accents — the chrome is heritage-restrained",
+    "Don't sanitize the workwear-photography aesthetic — denim is the artifact",
+    "Don't lose the small red tab graphic — it is the brand mark across the chrome"
+  ],
+  "source_md": "references/brands/levis-DESIGN.md"
+}
