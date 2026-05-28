@@ -1,7 +1,7 @@
 {
   "_meta": {
     "version": "2.0.0",
-    "entries": 85,
+    "entries": 100,
     "last_updated": "2026-05-28",
     "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
     "schema_version": "1.0"
@@ -1801,6 +1801,302 @@
       },
       "why": "The 4-border-color, border-top-different, animation: spin recipe is the textbook 1998 spinner that every AI generator emits for any loading state - signals the loading affordance was set by default, not designed. Modern systems use skeleton screens, progress bars, or branded indicators.",
       "fix": "Replace with a skeleton screen for content loading, a progress indicator for known-duration tasks, or a branded SVG mark animated via transform: rotate. The bordered spinner is the loading equivalent of Lorem ipsum."
+    },
+    {
+      "id": "safe-area-inset-only-bottom",
+      "name": "safe-area-inset-bottom without top/left/right siblings",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "env\\(\\s*safe-area-inset-bottom\\s*\\)(?![\\s\\S]{0,400}env\\(\\s*safe-area-inset-(?:top|left|right)\\s*\\))",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Reaching only for env(safe-area-inset-bottom) signals the dev copied the iPhone-X home-indicator fix without thinking about the notch (top), Dynamic Island, landscape mode, or rotated devices where left/right inset matters. The layout punches into hardware on three sides while pretending to be device-safe.",
+      "fix": "If the surface goes edge-to-edge, set all four insets (or `padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)` and let CSS pick the active ones). For a bottom-fixed nav, that's fine - but verify landscape with rotation doesn't expose the issue."
+    },
+    {
+      "id": "overflow-hidden-on-html",
+      "name": "overflow: hidden applied to <html>",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:^|[\\s,}>+~])html\\s*\\{[^}]*overflow(?:-[xy])?\\s*:\\s*hidden",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss"
+        ]
+      },
+      "why": "overflow: hidden on the root <html> element breaks browser scroll restoration on back-navigation, disables 'skip to content' anchor scrolling for screen-reader users, kills smooth-scroll APIs, and prevents the URL bar from collapsing on mobile. It is almost always a hack to suppress a horizontal-overflow bug that should be fixed at the source.",
+      "fix": "Find the actual overflowing child (often a 100vw image, fixed-position element, or oversized inline-block) and constrain it. If you genuinely need a scroll-lock for a modal, toggle the class on <body> via JS for the lifetime of the modal - never permanently on <html>."
+    },
+    {
+      "id": "lang-attribute-missing",
+      "name": "<html> without lang attribute",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<html(?![^>]*\\blang\\s*=)[^>]*>[\\s\\S]{0,800}?<head\\b",
+        "flags": "i",
+        "scope": [
+          "html",
+          "blade",
+          "astro",
+          "vue"
+        ]
+      },
+      "why": "<html> without a lang attribute leaves screen readers guessing which pronunciation engine to use - Arabic content gets read in English phonemes, English headings get read with Spanish stress patterns, and automatic translation breaks. WCAG 3.1.1 Level A failure.",
+      "fix": "Add lang=\"en\" (or your primary locale) to <html>. For multilingual pages, override per-section with lang=\"ar\" on RTL blocks. Pair with dir=\"rtl\" for Arabic/Hebrew layouts."
+    },
+    {
+      "id": "font-family-monospace-fallback-default",
+      "name": "font-family: monospace with no specific stack",
+      "severity": "low",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "font-family\\s*:\\s*monospace\\s*[;}!]",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Bare `font-family: monospace` (no specific stack before the generic) hands rendering to Courier New on Windows and Monaco on old Macs - ugly defaults that signal nobody picked a code face. Modern stacks lead with JetBrains Mono, Fira Code, IBM Plex Mono, or `ui-monospace` for system-matched output.",
+      "fix": "Specify the stack: `font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;`. Use `ui-monospace` first if you want the OS default code face on every platform."
+    },
+    {
+      "id": "display-table-for-layout",
+      "name": "display: table used for layout outside data tables",
+      "severity": "medium",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:^|[\\s,>+~}])(?!table[\\s,{])(?:\\.[a-zA-Z_-][\\w-]*|#[a-zA-Z_-][\\w-]*|div|section|main|aside|article|header|footer|nav|ul|ol|li|span|a|button)[^{}]*\\{[^}]*display\\s*:\\s*table\\s*[;}]",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss"
+        ]
+      },
+      "why": "`display: table` on a non-<table> element is a 2008-era IE6 hack for vertical centering before flexbox existed. It defeats wrapping, ignores gap, breaks responsive collapse, and confuses screen-reader table-navigation modes when applied to non-tabular content.",
+      "fix": "Use flexbox or grid: `display: grid; place-items: center;` for the centering case, or `display: flex; align-items: center` for one-axis. Reserve `display: table` for actual <table> elements that need CSS-controlled rendering."
+    },
+    {
+      "id": "padding-shorthand-4-vals-zero-first",
+      "name": "Verbose 4-value padding/margin where 3 would do",
+      "severity": "low",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:padding|margin)\\s*:\\s*0(?:px|rem|em)?\\s+(\\d+(?:\\.\\d+)?(?:px|rem|em|%))\\s+(\\d+(?:\\.\\d+)?(?:px|rem|em|%))\\s+\\1\\s*[;}]",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Writing `padding: 0 16px 16px 16px` when `padding: 0 16px 16px` collapses to the same result is the AI tell of a generator that copied a 4-value shorthand without simplifying. It also indicates the dev didn't run `prettier` or any formatter pass.",
+      "fix": "Use the shortest equivalent shorthand: 1 value (all sides), 2 values (vertical | horizontal), 3 values (top | horizontal | bottom). If you need different values per side, the 4-value form is fine - just don't restate the same value twice."
+    },
+    {
+      "id": "class-multiple-utility-than-token",
+      "name": "Five-plus utility classes where a token would do",
+      "severity": "low",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": "class\\s*=\\s*['\"][^'\"]*\\btext-(?:xs|sm|base|lg|xl)\\b[^'\"]*\\btext-(?:slate|gray|zinc|neutral|stone)-[0-9]{3}\\b[^'\"]*\\bfont-(?:thin|light|normal|medium|semibold|bold)\\b[^'\"]*\\bleading-[0-9]+\\b[^'\"]*\\btracking-(?:tighter|tight|normal|wide|wider|widest)\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Stacking `text-sm text-gray-500 font-medium leading-5 tracking-tight` on a single element signals every type decision was made inline by a generator that never reached for a token. The same text style appears across 30 components with subtle drift instead of being defined once as `.text-body-meta` or in a typography preset.",
+      "fix": "Extract recurring stacks to a named token: `@apply text-sm text-gray-500 font-medium leading-5 tracking-tight` on a `.text-body-meta` class, or define semantic font-utilities in tailwind.config.ts (`text: { 'body-meta': [...] }`). Inline 5-plus utility chains is a refactor target."
+    },
+    {
+      "id": "event-listener-no-passive-on-scroll",
+      "name": "addEventListener('scroll' | 'touchmove' | 'wheel') without passive",
+      "severity": "medium",
+      "category": "Performance",
+      "detection": {
+        "type": "regex",
+        "pattern": "addEventListener\\s*\\(\\s*['\"](?:scroll|touchmove|touchstart|wheel|mousewheel)['\"]\\s*,[^)]*\\)(?![^;]*\\{[^}]*passive\\s*:\\s*true)",
+        "flags": "i",
+        "scope": [
+          "ts",
+          "tsx",
+          "js",
+          "jsx",
+          "vue",
+          "html",
+          "astro"
+        ]
+      },
+      "why": "scroll, touchmove, touchstart, and wheel listeners default to passive: false, which means the browser must wait for the handler to finish before scrolling - any sync work blocks the scroll thread and creates the 'janky scroll on a fancy page' feel. Chromium flags this in DevTools as a passive-listener warning for any non-passive scroll handler.",
+      "fix": "Pass `{ passive: true }` as the third argument: `el.addEventListener('scroll', fn, { passive: true })`. Only opt out (passive: false) if you genuinely need preventDefault() to block scrolling - which is rare and usually wrong."
+    },
+    {
+      "id": "image-format-jpg-no-webp-avif",
+      "name": "<img src=\"*.jpg\"> without <picture> source AVIF/WebP",
+      "severity": "medium",
+      "category": "Performance",
+      "detection": {
+        "type": "regex",
+        "pattern": "<img\\s[^>]*src\\s*=\\s*['\"][^'\"]+\\.(?:jpg|jpeg|png)['\"][^>]*>",
+        "flags": "i",
+        "scope": [
+          "html",
+          "blade",
+          "astro",
+          "vue",
+          "tsx",
+          "jsx"
+        ]
+      },
+      "why": "A raw <img> with a .jpg or .png source ships 3-10x more bytes than the same image as AVIF or WebP. On a hero photo this is 800KB vs 80KB - directly hurts LCP, mobile data, and Core Web Vitals. The fact that <picture>+<source type=\"image/avif\"> has been universal since 2023 means this is now a generator-default tell.",
+      "fix": "Wrap in <picture> with AVIF first, WebP next, JPG fallback: <picture><source srcset=\"hero.avif\" type=\"image/avif\"><source srcset=\"hero.webp\" type=\"image/webp\"><img src=\"hero.jpg\" alt=\"...\" width=\"...\" height=\"...\"></picture>. For framework images (next/image, astro:assets), the conversion is automatic - use them."
+    },
+    {
+      "id": "font-weight-numeric-100-or-900-on-body",
+      "name": "Body or paragraph font-weight set to 100 or 900",
+      "severity": "high",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:^|[\\s,}>+~])(?:body|p|li|main|article|\\.(?:body|prose|text|content))[^{}]*\\{[^}]*font-weight\\s*:\\s*(?:100|900)\\s*[;}]",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss"
+        ]
+      },
+      "why": "Setting body or paragraph font-weight to 100 (Thin) makes long-form reading nearly impossible at any size below 24px - the strokes literally disappear on most displays. 900 (Black) is the opposite failure: every paragraph reads as shouting and tires the eye after one screen. Both extremes signal nobody actually read the text in situ.",
+      "fix": "Body weight should be 400 (Regular) or 450-500 for a slightly stronger feel. Reserve 100/200 (Thin/ExtraLight) for large hero display type only, and 800/900 (ExtraBold/Black) for short callouts or numerals - never paragraphs."
+    },
+    {
+      "id": "flex-center-center-default",
+      "name": "flex + justify-center + align-center as the default block",
+      "severity": "low",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\{[^}]*display\\s*:\\s*flex\\s*;[^}]*justify-content\\s*:\\s*center\\s*;[^}]*align-items\\s*:\\s*center\\s*;[^}]*\\}",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss"
+        ]
+      },
+      "why": "display: flex + justify-content: center + align-items: center wrapped around content is the AI's default-centering recipe - signals the layout was reached for in three lines without thinking about asymmetric balance, content priority, or whether the content actually wants to be centered. Real layouts earn their alignment.",
+      "fix": "Use `display: grid; place-items: center` if you genuinely want full centering (one line, clearer intent). Better: ask whether centering is the right move - asymmetric or top-aligned layouts almost always read more deliberate. Reserve dead-center for hero CTAs and modals."
+    },
+    {
+      "id": "transition-duration-500ms-or-longer",
+      "name": "Interactive transition-duration 500ms or longer",
+      "severity": "medium",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "transition-duration\\s*:\\s*(?:[5-9]\\d{2}|[1-9]\\d{3,})ms\\b|transition-duration\\s*:\\s*(?:0?\\.[5-9]|[1-9](?:\\.\\d+)?)s\\b|transition\\s*:[^;]*\\s(?:[5-9]\\d{2}|[1-9]\\d{3,})ms\\b|transition\\s*:[^;]*\\s(?:0?\\.[5-9]|[1-9](?:\\.\\d+)?)s\\b",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "A `transition-duration` of 500ms or more on hover, focus, or active states feels laggy - the human perception threshold for 'instant' is 100ms and for 'snappy' is 200ms. Users move the mouse 8-12 times per second; a 500ms transition means the hover state hasn't finished settling before the cursor moves on. Stretched transitions are the AI default for 'smooth.'",
+      "fix": "Cap interactive transitions at 150-300ms. Use 200ms for color/background/border hovers, 250-300ms for transform/scale, and 100-150ms for fast snap states (focus rings, active depressions). Reserve 500ms+ for scene transitions, drawer slides, and page-level state changes - never single-element hovers."
+    },
+    {
+      "id": "cursor-not-allowed-no-visual",
+      "name": "cursor: not-allowed with no visible disabled state",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\{[^}]*cursor\\s*:\\s*not-allowed\\s*;(?:(?!opacity|pointer-events|filter|background|color|border|disabled)[^}])*\\}",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss"
+        ]
+      },
+      "why": "cursor: not-allowed in a rule that has no opacity reduction, no muted color, no border tweak, and no pointer-events: none signals the disabled state was set by an AI that knew the cursor convention but never designed the actual visual. The button still looks fully active, screen reader users hear no announcement, and touch users see no change at all - the not-allowed cursor never appears.",
+      "fix": "A disabled control needs three signals: visual (opacity 0.5 + maybe muted color or removed border), behavioral (pointer-events: none, or aria-disabled='true' + handle the click), and announcement (aria-disabled on non-button elements; the disabled attribute on actual buttons does both). The cursor is the smallest of these three - never the only one."
+    },
+    {
+      "id": "screen-reader-only-without-class",
+      "name": "Skip-to-content link with no sr-only / visually-hidden class",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<a[^>]+href\\s*=\\s*['\"]#(?:main|content|main-content|skip)['\"][^>]*(?:class\\s*=\\s*['\"](?![^'\"]*(?:sr-only|visually-hidden|skip-link|screen-reader))[^'\"]*['\"])?[^>]*>\\s*(?:Skip\\s+(?:to|navigation)|Jump\\s+to)",
+        "flags": "i",
+        "scope": [
+          "html",
+          "blade",
+          "astro",
+          "vue",
+          "tsx",
+          "jsx"
+        ]
+      },
+      "why": "A 'Skip to content' link without an .sr-only / .visually-hidden / .skip-link class fallback is visually shown to all users as a stray link at the top-left of the page - signals the dev knew the accessibility convention by name but didn't apply the actual technique. The link should be visually hidden until keyboard-focused, at which point it slides into view.",
+      "fix": "Wrap with the standard sr-only pattern: <a href='#main' class='sr-only focus:not-sr-only focus:fixed focus:top-0 focus:left-0 focus:p-4 focus:bg-white focus:text-black focus:z-50'>Skip to content</a>. For Tailwind that's the canonical recipe; for custom CSS apply `position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);` then reveal on :focus."
+    },
+    {
+      "id": "pointer-events-none-on-link",
+      "name": "<a> with pointer-events: none and no aria-disabled",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<a(?![^>]*\\baria-disabled\\s*=)[^>]+(?:class\\s*=\\s*['\"][^'\"]*\\bpointer-events-none\\b[^'\"]*['\"]|style\\s*=\\s*['\"][^'\"]*pointer-events\\s*:\\s*none[^'\"]*['\"])[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "An <a> tag with pointer-events: none and no aria-disabled='true' is announced to screen readers as a fully working link, takes a position in the tab order, and gives keyboard users an Enter-key path to nothing - the click is silently swallowed. This is the AI shortcut for 'disabled link' that breaks every assistive technology user while looking fine to the designer.",
+      "fix": "If the link is permanently inactive, render a <span> with the same visual treatment instead of an <a>. If it's temporarily disabled (loading, gated state), add aria-disabled='true' AND tabindex='-1' AND a handler that returns early - or remove the href until the action becomes available."
     }
   ]
 }
