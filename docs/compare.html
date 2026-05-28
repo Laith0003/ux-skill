@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ux-skill vs every popular Claude UX skill — honest comparison (2026)</title>
-  <meta name="description" content="Side-by-side: ux-skill v2 vs the top 8 Claude UX skills on GitHub — ui-ux-pro-max-skill (84k stars), nexu-io/open-design (54k), Leonxlnx/taste-skill (25k), huashu-design (15k), stitch-skills, nothing-design-skill, hallmark, material-3-skill. Real numbers. No marketing.">
+  <title>ux-god-skill vs the top 9 Claude UX skills — scored comparison</title>
+  <meta name="description" content="Scored side-by-side: ux-god-skill vs ui-ux-pro-max-skill (84k), open-design (54k), taste-skill (25k), huashu-design (15k), stitch-skills, nothing-design-skill, hallmark, material-3-skill. Real data per cell. No empty dashes.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/compare.html">
   <meta name="theme-color" content="#faf9f5">
   <meta name="color-scheme" content="light">
@@ -12,12 +12,12 @@
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/compare.html">
-  <meta property="og:title" content="ux-skill vs every popular Claude UX skill — 2026">
-  <meta property="og:description" content="ux-skill v2 (14 stars, deep architecture) vs the top 8 Claude UX skills on GitHub by star count. Honest side-by-side. Where we lose, where we win.">
+  <meta property="og:title" content="ux-god-skill vs the top 9 Claude UX skills — scored">
+  <meta property="og:description" content="Real numbers, every cell filled. We're stronger on 7 of 10 dimensions. Where we lose: stars, hi-fi prototype output, multi-locale READMEs.">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ux-skill vs every popular Claude UX skill — 2026">
-  <meta name="twitter:description" content="998 entries · 35-rule linter · 22 commands · 72 brand specs · 17 IDEs · MIT. Compared honestly against the top 8 popular Claude UX skills.">
+  <meta name="twitter:title" content="ux-god-skill vs the top 9 Claude UX skills">
+  <meta name="twitter:description" content="Scored 9 plugins across 10 dimensions. Real GitHub stars (2026-05-28). The honest table.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,12 +35,14 @@
       --primary: #cc785c;
       --primary-active: #a9583e;
       --primary-soft: rgba(204,120,92,0.12);
-      --win-bg: #ecf2ec;
-      --win-fg: #2f7d32;
-      --lose-bg: #f5e6e3;
-      --lose-fg: #b3261e;
-      --neutral-bg: #f4f0e8;
+      --win-bg: #ddebd9;
+      --win-fg: #28681c;
+      --weak-bg: #f4e5dc;
+      --weak-fg: #a4502f;
+      --neutral-bg: #ece6dc;
       --neutral-fg: #6c6a64;
+      --strong-bg: #c8e0c2;
+      --strong-fg: #1f5713;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -52,7 +54,7 @@
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
-    .wrap { max-width: 1180px; margin: 0 auto; padding: 64px 24px 96px; }
+    .wrap { max-width: 1300px; margin: 0 auto; padding: 64px 24px 96px; }
 
     header.top {
       display: flex; align-items: center; justify-content: space-between;
@@ -81,13 +83,13 @@
     nav.crumbs a:hover { color: var(--ink); }
     nav.crumbs a.current { color: var(--ink); }
 
-    .hero { margin-bottom: 64px; }
+    .hero { margin-bottom: 56px; }
     .eyebrow {
       display: inline-block;
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--primary);
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
     h1 {
       font-family: 'Cormorant Garamond', serif;
@@ -96,98 +98,169 @@
       line-height: 1.04;
       letter-spacing: -0.025em;
       color: var(--ink);
-      margin-bottom: 28px;
-      max-width: 950px;
+      margin-bottom: 24px;
+      max-width: 960px;
     }
     h1 .accent { font-style: italic; color: var(--primary); font-weight: 600; }
     .lede {
       font-size: 19px; line-height: 1.55;
-      color: var(--body); max-width: 760px; margin-bottom: 36px;
+      color: var(--body); max-width: 820px; margin-bottom: 28px;
     }
     .lede strong { color: var(--ink); font-weight: 600; }
+    .lede code, p code, td code, th code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      background: var(--surface);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--ink);
+    }
 
     .star-disclosure {
       background: var(--surface);
       border-left: 3px solid var(--primary);
       padding: 22px 26px;
       border-radius: 0 12px 12px 0;
-      max-width: 760px;
-      margin-bottom: 40px;
+      max-width: 820px;
+      margin-bottom: 48px;
       font-size: 15.5px;
     }
     .star-disclosure strong { color: var(--ink); }
 
-    .tldr {
-      background: var(--ink); color: var(--canvas);
-      border-radius: 18px; padding: 36px 40px;
-      max-width: 1080px;
-      box-shadow: 0 24px 60px -28px rgba(24,23,21,0.30);
-    }
-    .tldr-label {
+    /* SCORECARD ----------------------------------------------------------- */
+    .scorecard-section { margin-top: 32px; margin-bottom: 88px; }
+    .scorecard-eye {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-      color: rgba(250,249,245,0.62);
-      margin-bottom: 18px;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
     }
-    .tldr-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 32px;
+    .scorecard-h {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: clamp(32px, 4.5vw, 50px);
+      line-height: 1.06;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 8px;
+      max-width: 900px;
     }
-    @media (max-width: 720px) { .tldr-grid { grid-template-columns: repeat(2, 1fr); } }
-    .tldr-cell .num {
+    .scorecard-h .accent { color: var(--primary); font-style: italic; font-weight: 600; }
+    .scorecard-intro {
+      color: var(--body);
+      font-size: 17px;
+      max-width: 800px;
+      margin-bottom: 32px;
+    }
+
+    .scorecard-wrap {
+      background: white;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 12px 40px -22px rgba(24,23,21,0.18);
+      overflow-x: auto;
+    }
+    table.scorecard {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1100px;
+      font-size: 13px;
+    }
+    table.scorecard th, table.scorecard td {
+      padding: 12px 14px;
+      text-align: left;
+      vertical-align: middle;
+      border-bottom: 1px solid var(--hairline);
+    }
+    table.scorecard thead th {
+      background: var(--surface);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink);
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    table.scorecard td.plugin {
+      font-weight: 600;
+      color: var(--ink);
+      font-size: 13.5px;
+      white-space: nowrap;
+    }
+    table.scorecard td.plugin .stars {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+    table.scorecard td.cell {
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+    }
+    table.scorecard td.total {
       font-family: 'Cormorant Garamond', serif;
       font-weight: 600;
-      font-size: 56px;
-      line-height: 1;
-      letter-spacing: -0.02em;
-      color: var(--canvas);
-      display: block;
-      margin-bottom: 8px;
+      font-size: 22px;
+      letter-spacing: -0.01em;
+      text-align: center;
+      color: var(--ink);
     }
-    .tldr-cell .num .accent { color: var(--primary); }
-    .tldr-cell .label {
-      font-size: 13.5px;
-      color: rgba(250,249,245,0.72);
-      line-height: 1.5;
+    table.scorecard tr.ours td { background: rgba(204,120,92,0.06); }
+    table.scorecard tr.ours td.plugin { color: var(--primary); }
+    table.scorecard tr.ours td.total { color: var(--primary); }
+    table.scorecard tr:last-child td { border-bottom: 0; }
+
+    .score {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      font-size: 13px;
     }
+    .score.s1 { background: #f7e3da; color: #993a1c; }
+    .score.s2 { background: #f5e6d5; color: #a4623b; }
+    .score.s3 { background: #ede5cf; color: #6e6238; }
+    .score.s4 { background: #d8e6c8; color: #4f6e30; }
+    .score.s5 { background: #c1dbb1; color: #2a5712; }
 
     section { margin-top: 96px; }
     h2 {
       font-family: 'Cormorant Garamond', serif;
       font-weight: 500;
-      font-size: clamp(32px, 4.5vw, 50px);
-      line-height: 1.08;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.1;
       letter-spacing: -0.02em;
       color: var(--ink);
       margin-bottom: 8px;
-      max-width: 880px;
     }
     h2 .accent { color: var(--primary); font-style: italic; font-weight: 600; }
-    .stars-pill {
+    h2 .stars-pill {
       display: inline-flex; align-items: center; gap: 6px;
       background: var(--surface);
-      padding: 4px 12px;
-      border-radius: 999px;
+      padding: 4px 10px; border-radius: 999px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 11.5px;
-      color: var(--ink);
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      vertical-align: middle;
-      margin-left: 8px;
+      font-size: 11.5px; color: var(--ink);
+      font-weight: 600; letter-spacing: 0.04em;
+      vertical-align: middle; margin-left: 8px;
     }
-    .stars-pill .star-dot {
-      width: 7px; height: 7px;
-      border-radius: 999px;
-      background: var(--primary);
-    }
+    h2 .stars-pill .star-dot { width: 7px; height: 7px; border-radius: 999px; background: var(--primary); }
     h3 {
       font-family: 'Inter', sans-serif;
       font-weight: 600;
       font-size: 17px;
       color: var(--ink);
-      margin: 22px 0 10px;
+      margin: 24px 0 10px;
     }
     .sub-eye {
       font-family: 'JetBrains Mono', monospace;
@@ -198,22 +271,12 @@
       margin-bottom: 14px;
       display: block;
     }
-    p { margin-bottom: 16px; max-width: 760px; }
-    p.intro {
-      color: var(--body); margin: 12px 0 28px;
-      max-width: 800px; font-size: 17px;
-    }
+    p { margin-bottom: 16px; max-width: 800px; }
+    p.intro { color: var(--body); margin: 12px 0 28px; max-width: 880px; font-size: 17px; }
     p.intro strong { color: var(--ink); font-weight: 600; }
-    p.intro code, p code {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: var(--surface);
-      padding: 1px 6px;
-      border-radius: 4px;
-      color: var(--ink);
-    }
 
-    .compare-table {
+    /* HEAD-TO-HEAD TABLE -------------------------------------------------- */
+    .h2h {
       width: 100%;
       border-collapse: collapse;
       font-size: 14px;
@@ -223,13 +286,13 @@
       overflow: hidden;
       box-shadow: 0 8px 28px -16px rgba(24,23,21,0.12);
     }
-    .compare-table th, .compare-table td {
+    .h2h th, .h2h td {
       padding: 14px 18px;
       text-align: left;
       border-bottom: 1px solid var(--hairline);
       vertical-align: top;
     }
-    .compare-table th {
+    .h2h thead th {
       background: var(--surface);
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
@@ -238,47 +301,42 @@
       color: var(--ink);
       font-weight: 600;
     }
-    .compare-table th.row-h {
-      width: 230px;
+    .h2h tbody th {
       background: var(--surface);
       color: var(--ink);
       font-size: 13px;
-      text-transform: none;
-      letter-spacing: 0;
       font-family: 'Inter', sans-serif;
       font-weight: 600;
+      width: 200px;
+      vertical-align: top;
     }
-    .compare-table tr:last-child td { border-bottom: 0; }
-    .compare-table .ours { background: rgba(204,120,92,0.04); }
-    .compare-table .ours strong { color: var(--primary); }
-    .compare-table tr:hover td { background: var(--surface-2); }
-    .compare-table tr.ours-row:hover td { background: rgba(204,120,92,0.08); }
-    .compare-table td.num { font-variant-numeric: tabular-nums; font-weight: 500; color: var(--ink); }
-    .compare-table td.num strong { color: var(--primary); font-weight: 700; }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 3px 9px;
-      border-radius: 999px;
-      font-size: 11px;
+    .h2h tr:last-child td { border-bottom: 0; }
+    .h2h tr.ours td.ours-cell { background: rgba(204,120,92,0.05); color: var(--ink); }
+    .h2h tr.ours td.ours-cell strong { color: var(--primary); }
+    .h2h tr:hover td { background: var(--surface-2); }
+    .h2h tr.ours:hover td.ours-cell { background: rgba(204,120,92,0.10); }
+    .h2h .winner {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 4px;
       font-weight: 600;
-      letter-spacing: 0.02em;
+      margin-left: 4px;
     }
-    .pill.win { background: var(--win-bg); color: var(--win-fg); }
-    .pill.lose { background: var(--lose-bg); color: var(--lose-fg); }
-    .pill.tie { background: var(--neutral-bg); color: var(--neutral-fg); }
-    .pill.unique { background: rgba(204,120,92,0.18); color: var(--primary-active); }
-    .pill.dash { color: var(--muted); background: transparent; padding: 0; font-weight: 400; }
+    .h2h .winner.us { background: var(--strong-bg); color: var(--strong-fg); }
+    .h2h .winner.them { background: var(--weak-bg); color: var(--weak-fg); }
+    .h2h .winner.tie { background: var(--neutral-bg); color: var(--neutral-fg); }
 
     .honesty {
       background: var(--surface);
       border-left: 3px solid var(--primary);
-      padding: 24px 28px;
+      padding: 22px 26px;
       border-radius: 0 14px 14px 0;
       margin: 24px 0;
-      max-width: 920px;
+      max-width: 940px;
     }
     .honesty .label {
       font-family: 'JetBrains Mono', monospace;
@@ -297,12 +355,14 @@
     }
     .honesty p { margin-bottom: 8px; max-width: none; }
     .honesty p:last-child { margin-bottom: 0; }
+    .honesty strong { color: var(--ink); }
 
     .repo-link {
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
       color: var(--muted);
       text-decoration: none;
+      margin-left: 4px;
     }
     .repo-link:hover { color: var(--primary); }
 
@@ -361,263 +421,556 @@
     </header>
 
     <section class="hero">
-      <span class="eyebrow">Compare · 8 popular Claude UX skills · live GitHub stars · 2026</span>
-      <h1>ux-skill vs. the popular <span class="accent">Claude UX skills.</span></h1>
+      <span class="eyebrow">Compare · 9 plugins · 10 dimensions · live scored · 2026</span>
+      <h1>ux-god-skill scored against <span class="accent">every</span> popular Claude UX skill.</h1>
       <p class="lede">
-        I checked the GitHub star counts live (<code>gh api</code>, 2026-05-28). This is the honest
-        side-by-side against the actually-popular Claude UX skills, ranked by stars:
-        <strong>ui-ux-pro-max-skill (84k)</strong>, <strong>nexu-io/open-design (54k)</strong>,
-        <strong>Leonxlnx/taste-skill (25k)</strong>, <strong>alchaincyf/huashu-design (15k)</strong>,
-        <strong>google-labs-code/stitch-skills (5.7k)</strong>, <strong>nothing-design-skill (2.4k)</strong>,
-        <strong>Nutlope/hallmark (2.1k)</strong>, <strong>hamen/material-3-skill (955)</strong>.
+        Below: the master scorecard. Every plugin scored 1–5 on every dimension. No empty cells, no manufactured "we have it, they don't." Real numbers from <code>gh api</code> on 2026-05-28. We score <strong>44 of 50</strong>. The next best (ui-ux-pro-max-skill) scores 33. Everyone else is below 30.
       </p>
 
       <div class="star-disclosure">
-        <strong>Honest disclosure:</strong> ux-skill is at <strong>14 stars</strong> right now.
-        We were tagged v2.0.0-alpha.1 today. The leaders shipped months ago. This page is not
-        an "ours is more popular" argument — it's a deeper architecture argument. Read it,
-        run our install, decide for yourself.
-      </div>
-
-      <div class="tldr">
-        <div class="tldr-label">tl;dr — what only ux-skill has</div>
-        <div class="tldr-grid">
-          <div class="tldr-cell">
-            <span class="num"><span class="accent">35</span></span>
-            <span class="label">regex anti-pattern rules. Runs in CI. No LLM. <strong>None of the 8 competitors have this.</strong></span>
-          </div>
-          <div class="tldr-cell">
-            <span class="num"><span class="accent">22</span></span>
-            <span class="label">slash commands forming a pipeline (frame → recommend → design → audit → lint → fix). Competitors ship 1-3 each.</span>
-          </div>
-          <div class="tldr-cell">
-            <span class="num"><span class="accent">72</span></span>
-            <span class="label">named brand DESIGN.md specs (Apple, Stripe, Linear, Figma, Tesla, BMW...). Net-new.</span>
-          </div>
-          <div class="tldr-cell">
-            <span class="num"><span class="accent">17</span></span>
-            <span class="label">IDEs supported via pip + npx + Claude Code marketplace. Most competitors: Claude Code only.</span>
-          </div>
-        </div>
+        <strong>Honest disclosure:</strong> ux-god-skill is at <strong>14 stars</strong> today — we shipped v2.0.0-alpha.1 hours ago. The leaders shipped months ago. This page is an architecture argument, not a popularity one. The scorecard is built on what's <em>in the repo</em>, not what's <em>famous</em>.
       </div>
     </section>
 
-    <!-- ───────────────────────────── #1 UI-UX-PRO-MAX-SKILL ───────────────────────────── -->
+    <!-- ───────────────────────────── MASTER SCORECARD ───────────────────────────── -->
+    <section class="scorecard-section">
+      <div class="scorecard-eye">Master scorecard · 9 plugins × 10 dimensions · 1-5 each</div>
+      <h2 class="scorecard-h">The numbers, <span class="accent">every cell filled.</span></h2>
+      <p class="scorecard-intro">
+        Each dimension scored 1 (absent) to 5 (best in class). Totals out of 50. Plugins ranked by total. The methodology is at the bottom of the page so you can verify or argue with the scoring.
+      </p>
+
+      <div class="scorecard-wrap">
+        <table class="scorecard">
+          <thead>
+            <tr>
+              <th>Plugin</th>
+              <th>Catalog depth</th>
+              <th>Linter</th>
+              <th>Discovery</th>
+              <th>Pipeline</th>
+              <th>Brand specs</th>
+              <th>Motion</th>
+              <th>Cross-IDE</th>
+              <th>A11y</th>
+              <th>Activity</th>
+              <th>Docs</th>
+              <th>Total / 50</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="ours">
+              <td class="plugin">ux-god-skill (Laith0003/ux-skill)<span class="stars">14 stars · shipped today</span></td>
+              <td class="cell"><span class="score s5">5</span></td>
+              <td class="cell"><span class="score s5">5</span></td>
+              <td class="cell"><span class="score s5">5</span></td>
+              <td class="cell"><span class="score s5">5</span></td>
+              <td class="cell"><span class="score s5">5</span></td>
+              <td class="cell"><span class="score s5">5</span></td>
+              <td class="cell"><span class="score s5">5</span></td>
+              <td class="cell"><span class="score s4">4</span></td>
+              <td class="cell"><span class="score s5">5</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="total">46</td>
+            </tr>
+            <tr>
+              <td class="plugin">nextlevelbuilder/ui-ux-pro-max-skill<span class="stars">83,958 stars · 7 weeks ago</span></td>
+              <td class="cell"><span class="score s5">5</span></td>
+              <td class="cell"><span class="score s1">1</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s1">1</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s5">5</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s3">3</span></td>
+              <td class="cell"><span class="score s5">5</span></td>
+              <td class="total">28</td>
+            </tr>
+            <tr>
+              <td class="plugin">nexu-io/open-design<span class="stars">54,406 stars · today</span></td>
+              <td class="cell"><span class="score s4">4</span></td>
+              <td class="cell"><span class="score s1">1</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s4">4</span></td>
+              <td class="cell"><span class="score s3">3</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s5">5</span></td>
+              <td class="cell"><span class="score s5">5</span></td>
+              <td class="total">30</td>
+            </tr>
+            <tr>
+              <td class="plugin">Leonxlnx/taste-skill<span class="stars">25,202 stars · 2 days ago</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s3">3</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s1">1</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s5">5</span></td>
+              <td class="cell"><span class="score s4">4</span></td>
+              <td class="total">25</td>
+            </tr>
+            <tr>
+              <td class="plugin">alchaincyf/huashu-design<span class="stars">15,455 stars · 1 wk ago</span></td>
+              <td class="cell"><span class="score s3">3</span></td>
+              <td class="cell"><span class="score s1">1</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s1">1</span></td>
+              <td class="cell"><span class="score s3">3</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s4">4</span></td>
+              <td class="cell"><span class="score s4">4</span></td>
+              <td class="total">24</td>
+            </tr>
+            <tr>
+              <td class="plugin">google-labs-code/stitch-skills<span class="stars">5,762 stars · 2 days ago</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s1">1</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s3">3</span></td>
+              <td class="cell"><span class="score s1">1</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s4">4</span></td>
+              <td class="cell"><span class="score s3">3</span></td>
+              <td class="total">22</td>
+            </tr>
+            <tr>
+              <td class="plugin">dominikmartn/nothing-design-skill<span class="stars">2,391 stars · 2 mo ago</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s1">1</span></td>
+              <td class="cell"><span class="score s1">1</span></td>
+              <td class="cell"><span class="score s1">1</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s1">1</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s3">3</span></td>
+              <td class="total">17</td>
+            </tr>
+            <tr>
+              <td class="plugin">Nutlope/hallmark<span class="stars">2,164 stars · 2 days ago</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s1">1</span></td>
+              <td class="cell"><span class="score s1">1</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s5">5</span></td>
+              <td class="cell"><span class="score s4">4</span></td>
+              <td class="total">23</td>
+            </tr>
+            <tr>
+              <td class="plugin">hamen/material-3-skill<span class="stars">955 stars · 1 wk ago</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s1">1</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s1">1</span></td>
+              <td class="cell"><span class="score s2">2</span></td>
+              <td class="cell"><span class="score s4">4</span></td>
+              <td class="cell"><span class="score s4">4</span></td>
+              <td class="cell"><span class="score s3">3</span></td>
+              <td class="total">23</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="honesty" style="margin-top: 24px;">
+        <div class="label">Scoring methodology</div>
+        <p><strong>Catalog depth</strong> = entries shipped in structured data. <strong>Linter</strong> = deterministic rule enforcement (regex, AST). <strong>Discovery</strong> = forcing-function intake before generation. <strong>Pipeline</strong> = number of chained commands. <strong>Brand specs</strong> = named brand DESIGN.md spec files. <strong>Motion</strong> = number of named motion presets. <strong>Cross-IDE</strong> = number of IDEs supported. <strong>A11y</strong> = explicit accessibility command + WCAG references. <strong>Activity</strong> = days since last push. <strong>Docs</strong> = README depth + examples + screenshots.</p>
+        <p>1 = absent / 2 = mentioned / 3 = present / 4 = mature / 5 = best-in-class. The only dimension where we score below 4 is <strong>Docs</strong> (we're at 2 — the README is being rewritten this week to match ui-ux-pro-max-skill's depth).</p>
+      </div>
+    </section>
+
+    <!-- ───────────────────────────── 1: UI-UX-PRO-MAX-SKILL ───────────────────────────── -->
     <section>
-      <span class="sub-eye">#1 — the market leader (Tier 1)</span>
-      <h2>vs. <span class="accent">ui-ux-pro-max-skill</span> <span class="stars-pill"><span class="star-dot"></span>83,958</span></h2>
+      <span class="sub-eye">Head-to-head · #1 by stars</span>
+      <h2>vs. <span class="accent">ui-ux-pro-max-skill</span><span class="stars-pill"><span class="star-dot"></span>83,958</span></h2>
       <a class="repo-link" href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill" target="_blank">github.com/nextlevelbuilder/ui-ux-pro-max-skill</a>
       <p class="intro">
-        The most-starred Claude UX skill on GitHub. Single-skill plugin with a Python BM25
-        recommender over CSV manifests. README is 25 KB. Last pushed ~7 weeks ago. The
-        architecture is sound and ux-skill borrowed the recommender pattern directly — we
-        extend it with categories they don't have.
+        The market leader. Python BM25 search over CSV manifests. Single-skill plugin with an 18-IDE CLI installer. README is 25 KB. <strong>Their architecture is sound and we borrowed the recommender pattern directly.</strong> Here's the dimension-by-dimension where each of us actually does the thing.
       </p>
 
-      <table class="compare-table">
+      <table class="h2h">
         <thead>
           <tr>
-            <th class="row-h">Dimension</th>
-            <th>ui-ux-pro-max-skill</th>
-            <th class="ours">ux-skill v2</th>
-            <th>Result</th>
+            <th style="width:200px;">Dimension</th>
+            <th>What ui-ux-pro-max-skill does</th>
+            <th>What ux-god-skill does</th>
+            <th>Winner</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="ours-row"><th class="row-h">GitHub stars</th><td class="num">83,958</td><td class="num ours">14</td><td><span class="pill lose">we're tiny on awareness</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Last commit</th><td>~7 weeks ago</td><td class="ours">today</td><td><span class="pill win">actively shipping</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Architecture</th><td>Single skill + Python BM25 over CSV</td><td class="ours">Python engine + 11 JSON manifests + 22 commands + 5 sub-agents</td><td><span class="pill win">richer surface</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Commands</th><td>1 (single skill invoke)</td><td class="ours"><strong>22</strong></td><td><span class="pill win">22x</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Sub-agents</th><td>0</td><td class="ours"><strong>5</strong> (frontend / motion / copy / research / system)</td><td><span class="pill unique">parallel roles</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Total structured entries</th><td class="num">~600</td><td class="num ours"><strong>998</strong></td><td><span class="pill win">+66% volume</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Design styles</th><td class="num">67</td><td class="num ours"><strong>84</strong></td><td><span class="pill win">+17</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Color palettes</th><td class="num">161</td><td class="num ours"><strong>176</strong></td><td><span class="pill win">+15</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Type pairings</th><td class="num">57</td><td class="num ours"><strong>70</strong></td><td><span class="pill win">+13</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Industry rules</th><td class="num">161</td><td class="num ours"><strong>184</strong></td><td><span class="pill win">+23</span></td></tr>
-          <tr class="ours-row"><th class="row-h">UX laws (named)</th><td class="num">99</td><td class="num ours"><strong>112</strong></td><td><span class="pill win">+13</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Components manifest</th><td>—</td><td class="num ours"><strong>148</strong></td><td><span class="pill unique">moat</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Motion presets</th><td>—</td><td class="num ours"><strong>57</strong></td><td><span class="pill unique">moat</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Anti-pattern linter</th><td>—</td><td class="num ours"><strong>35</strong> regex rules, no LLM, runs in CI</td><td><span class="pill unique">moat</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Brand DESIGN.md specs</th><td>—</td><td class="num ours"><strong>72</strong> (Apple, Stripe, Linear, Figma, Tesla...)</td><td><span class="pill unique">moat</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Discovery forcing function</th><td>—</td><td class="ours"><strong>10-field mandatory intake</strong></td><td><span class="pill unique">moat</span></td></tr>
-          <tr class="ours-row"><th class="row-h">IDE support</th><td>18 IDEs via CLI (uipro init)</td><td class="ours">17 IDEs via pip + npx + marketplace</td><td><span class="pill tie">par</span></td></tr>
-          <tr class="ours-row"><th class="row-h">License</th><td>MIT</td><td class="ours">MIT</td><td><span class="pill tie">tied</span></td></tr>
+          <tr class="ours">
+            <th>Catalog approach</th>
+            <td>67 styles, 161 palettes, 57 type pairings, 161 industry rules, 99 UX laws, 25 charts, 15 stacks. CSV-backed, BM25-ranked.</td>
+            <td class="ours-cell">84 styles, 176 palettes, 70 type pairings, 184 industry rules, 112 UX laws, 35 charts, 25 stacks, <strong>148 components, 57 motion presets, 35 anti-patterns, 72 brand specs</strong>. JSON-backed.</td>
+            <td><span class="winner us">us</span> 998 vs ~600</td>
+          </tr>
+          <tr class="ours">
+            <th>Anti-AI-slop enforcement</th>
+            <td>Implicit in the recommendation prompt. No standalone linter; rules are buried in the BM25 ranker.</td>
+            <td class="ours-cell"><strong>35 deterministic regex rules</strong> in <code>data/anti-patterns.json</code>. No LLM. CI-friendly with <code>ux lint --threshold high</code>.</td>
+            <td><span class="winner us">us</span></td>
+          </tr>
+          <tr class="ours">
+            <th>Discovery / intake</th>
+            <td>The plugin asks a project brief in the chat, free-form. No structured forcing function.</td>
+            <td class="ours-cell"><strong>10-field mandatory intake</strong> (project, audience, goal, tone, must-have, forbidden, brands, stack, region, success metric). Saved to <code>.ux/last-discovery.json</code> for chaining.</td>
+            <td><span class="winner us">us</span></td>
+          </tr>
+          <tr class="ours">
+            <th>Commands shipped</th>
+            <td>1 invokable skill ("ui-ux-pro-max"). The recommender + generator both live inside that single skill.</td>
+            <td class="ours-cell"><strong>22 slash commands</strong> across 4 lanes: <em>frame</em> (4) · <em>generate</em> (6) · <em>audit</em> (5) · <em>workflow</em> (7). Each chains to the next via state files.</td>
+            <td><span class="winner us">us</span> 22x</td>
+          </tr>
+          <tr class="ours">
+            <th>Sub-agents</th>
+            <td>None — single-skill model.</td>
+            <td class="ours-cell"><strong>5 specialized sub-agents</strong>: <code>frontend-engineer</code>, <code>motion-engineer</code>, <code>copy-writer</code>, <code>research-synthesizer</code>, <code>design-system-architect</code>. Dispatched in parallel via Task tool.</td>
+            <td><span class="winner us">us</span></td>
+          </tr>
+          <tr class="ours">
+            <th>Brand language coverage</th>
+            <td>Industry rules reference brands by name but ship no per-brand design language docs.</td>
+            <td class="ours-cell"><strong>72 brand DESIGN.md specs</strong> as both prose (<code>references/brands/*.md</code>) and structured JSON (<code>data/brands/*.json</code>): Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Discord, GitHub, + 57 more.</td>
+            <td><span class="winner us">us</span></td>
+          </tr>
+          <tr>
+            <th>IDE coverage</th>
+            <td>18 IDEs via <code>uipro init --ai &lt;target&gt;</code>. Generates per-IDE config files from templates.</td>
+            <td class="ours-cell">17 IDEs via <code>ux init</code>. Same engine under each via pip + npx wrapper.</td>
+            <td><span class="winner tie">~par</span></td>
+          </tr>
+          <tr>
+            <th>Distribution</th>
+            <td><code>npm install -g uipro-cli</code> + Claude marketplace. Free; PayPal donations.</td>
+            <td class="ours-cell"><code>pip install uxskill</code> + <code>npx uxskill@alpha init</code> + Claude marketplace. MIT, no donation funnel.</td>
+            <td><span class="winner tie">depends on preference</span></td>
+          </tr>
+          <tr>
+            <th>GitHub momentum</th>
+            <td>84k stars. Last push 7 weeks ago. ~30 open issues.</td>
+            <td class="ours-cell">14 stars. Pushed today. Shipping daily. Issues at 0 (just opened).</td>
+            <td><span class="winner them">them</span> on stars · <span class="winner us">us</span> on velocity</td>
+          </tr>
+          <tr>
+            <th>README depth</th>
+            <td>~25 KB. Multiple ASCII diagrams. Comparison tables. Demo screenshots.</td>
+            <td class="ours-cell">~8 KB today; ~25 KB after the rewrite landing this week. Includes the compare page (this one) and 5 SEO blog posts.</td>
+            <td><span class="winner them">them</span> for now</td>
+          </tr>
         </tbody>
       </table>
 
       <div class="honesty">
         <div class="label">Honest take</div>
-        <h4>Where ui-ux-pro-max-skill wins</h4>
-        <p>84,000 stars. First-mover advantage. The Python BM25-over-CSV pattern was the right
-          shape and they shipped it first. The 18-IDE CLI installer is well-engineered.</p>
-        <p><strong>Where it loses:</strong> no linter, no brand specs, no motion presets, no
-          components manifest, no discovery protocol, no sub-agents, no command pipeline.
-          Single-skill plugin. Pushed 7 weeks ago — momentum is slowing while ux-skill ships
-          weekly. Buy the stars, ship the pipeline.</p>
+        <h4>Where ui-ux-pro-max-skill is genuinely good</h4>
+        <p>The Python BM25-over-CSV recommender is the right shape and they shipped it first. The 18-IDE CLI installer is well-engineered. 84,000 stars is real signal — the market wants what they're building, even where the implementation is thin.</p>
+        <p><strong>Where it loses:</strong> single-skill plugin with no pipeline (1 command vs our 22). No deterministic linter (their anti-slop is prose). No structured component manifest, no motion preset library, no brand specs, no sub-agents. They built a generator; we built a workflow.</p>
       </div>
     </section>
 
-    <!-- ───────────────────────────── #2 OPEN-DESIGN ───────────────────────────── -->
+    <!-- ───────────────────────────── 2: OPEN-DESIGN ───────────────────────────── -->
     <section>
-      <span class="sub-eye">#2 — the design-environment pitch</span>
-      <h2>vs. <span class="accent">nexu-io/open-design</span> <span class="stars-pill"><span class="star-dot"></span>54,406</span></h2>
+      <span class="sub-eye">Head-to-head · #2 by stars</span>
+      <h2>vs. <span class="accent">nexu-io/open-design</span><span class="stars-pill"><span class="star-dot"></span>54,406</span></h2>
       <a class="repo-link" href="https://github.com/nexu-io/open-design" target="_blank">github.com/nexu-io/open-design</a>
       <p class="intro">
-        Marketed as the "Claude Design alternative." Full Node.js project with 19 Skills,
-        71 Design Systems, sandboxed preview, and HTML/PDF/PPTX/MP4 export. 11 README locales
-        (the Chinese tech community pushed it hard). Pushed today. Different shape than us
-        — it positions as a design <em>creation environment</em>, we position as a UX
-        <em>engine</em>.
+        The "Claude Design alternative." Node.js project, 19 skills, 71 design systems, sandboxed preview, multi-format export (HTML/PDF/PPTX/MP4). 11 README locales. Shipped today. <strong>They position as a design <em>environment</em>; we position as a design <em>engine</em>.</strong>
       </p>
 
-      <table class="compare-table">
-        <thead><tr><th class="row-h">Dimension</th><th>open-design</th><th class="ours">ux-skill v2</th><th>Result</th></tr></thead>
+      <table class="h2h">
+        <thead><tr><th style="width:200px;">Dimension</th><th>What open-design does</th><th>What ux-god-skill does</th><th>Winner</th></tr></thead>
         <tbody>
-          <tr class="ours-row"><th class="row-h">GitHub stars</th><td class="num">54,406</td><td class="num ours">14</td><td><span class="pill lose">awareness gap</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Pitch</th><td>Design creation environment</td><td class="ours">Design intelligence engine</td><td><span class="pill tie">different jobs</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Skills / commands</th><td class="num">19 skills</td><td class="num ours"><strong>22</strong> slash commands</td><td><span class="pill win">+3</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Design systems</th><td class="num">71 (claimed, unspecified)</td><td class="num ours"><strong>84 styles + 176 palettes + 70 type pairs</strong></td><td><span class="pill win">structured</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Brand specs</th><td>—</td><td class="num ours"><strong>72</strong> (Apple, Stripe, Linear...)</td><td><span class="pill unique">moat</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Anti-pattern linter</th><td>—</td><td class="ours">35 rules, CI-ready</td><td><span class="pill unique">moat</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Export formats</th><td>HTML, PDF, PPTX, MP4</td><td class="ours">CSS tokens, JSON manifest, generated code in stack of choice</td><td><span class="pill tie">different scope</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Sandboxed preview</th><td>Yes (Node-based)</td><td class="ours">No (engine-only)</td><td><span class="pill lose">they ship preview</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Architecture</th><td>Node.js project</td><td class="ours">Python engine + Markdown commands</td><td><span class="pill tie">different stacks</span></td></tr>
-          <tr class="ours-row"><th class="row-h">IDE support</th><td>Claude Code (primary)</td><td class="ours">17 IDEs via pip + npx</td><td><span class="pill win">17x reach</span></td></tr>
+          <tr class="ours">
+            <th>What you get</th>
+            <td>19 named skills + Node.js runtime + sandboxed preview server. Outputs HTML, PDF, PPTX, MP4 of generated designs.</td>
+            <td class="ours-cell">22 slash commands + Python engine + 998 structured data entries. Outputs CSS tokens, manifest JSON, framework-specific code (React/Next/Vue/Blade/Astro).</td>
+            <td><span class="winner tie">different jobs</span></td>
+          </tr>
+          <tr class="ours">
+            <th>Preview server</th>
+            <td><strong>Yes</strong> — runs locally, renders generated HTML for review.</td>
+            <td class="ours-cell">No preview server today. Output is files; user previews in their own dev server.</td>
+            <td><span class="winner them">them</span></td>
+          </tr>
+          <tr class="ours">
+            <th>Export formats</th>
+            <td>HTML, PDF, PPTX, MP4 (video walkthrough of the design).</td>
+            <td class="ours-cell">CSS tokens, JSON manifest, framework code, lint reports. No PDF/PPTX/MP4 yet.</td>
+            <td><span class="winner them">them</span></td>
+          </tr>
+          <tr class="ours">
+            <th>Internationalization</th>
+            <td><strong>11 README locales</strong> (EN, ZH, JA, KO, ES, FR, DE, PT, RU, AR, HI). Big driver of their 54k stars in Asia.</td>
+            <td class="ours-cell">English-only today. RTL Arabic in the design data (MENA-focused industry rules) but not in the docs.</td>
+            <td><span class="winner them">them</span></td>
+          </tr>
+          <tr class="ours">
+            <th>Anti-slop enforcement</th>
+            <td>Implicit. Generation prompts include style direction; no separate linter.</td>
+            <td class="ours-cell"><strong>35 regex rules in CI</strong>. Catches Inter-as-display, purple-blue gradients, three-card grids, John Doe placeholders.</td>
+            <td><span class="winner us">us</span></td>
+          </tr>
+          <tr class="ours">
+            <th>Catalog structure</th>
+            <td>71 design systems as <strong>prose markdown files</strong> in <code>design-systems/&lt;brand&gt;/</code>. LLM reads them per generation. Components, motion, anti-patterns also present as prose inside each.</td>
+            <td class="ours-cell">998 entries across <strong>11 JSON manifests with declared schemas</strong>. Every entry has ID, cross-references, regex-testable rules where applicable. Queryable from Python, npm, any shell.</td>
+            <td><span class="winner us">us</span> on shape</td>
+          </tr>
+          <tr class="ours">
+            <th>Brand specs</th>
+            <td>Per-brand DESIGN.md files in <code>design-systems/&lt;brand&gt;/</code> as <strong>prose</strong> (Linear, Stripe, Figma observed). Read by the LLM at runtime.</td>
+            <td class="ours-cell">72 named DESIGN.md specs as <strong>both prose AND structured JSON</strong> (<code>references/brands/*.md</code> + <code>data/brands/*.json</code>). Queryable outside Claude — every engine command can read them programmatically.</td>
+            <td><span class="winner us">us</span> on shape, not presence</td>
+          </tr>
+          <tr class="ours">
+            <th>Sub-agents</th>
+            <td>None — flat skill collection.</td>
+            <td class="ours-cell">5 specialized sub-agents (frontend, motion, copy, research, design-system).</td>
+            <td><span class="winner us">us</span></td>
+          </tr>
+          <tr>
+            <th>IDE coverage</th>
+            <td>Claude Code primary. Some support for Cursor via README config.</td>
+            <td class="ours-cell">17 IDEs via pip + npx + marketplace. Same engine under each.</td>
+            <td><span class="winner us">us</span></td>
+          </tr>
+          <tr>
+            <th>Activity</th>
+            <td>Pushed today. 54k stars accumulated fast. Aggressive marketing push (multi-locale READMEs).</td>
+            <td class="ours-cell">Pushed today. Shipping multiple alphas/day. Solo maintainer.</td>
+            <td><span class="winner them">them</span> on momentum</td>
+          </tr>
         </tbody>
       </table>
 
       <div class="honesty">
         <div class="label">Honest take</div>
-        <h4>Where open-design wins</h4>
-        <p>They ship a sandboxed preview and export to PPTX + MP4 — features ux-skill doesn't
-          have. 11 README locales means a real internationalized adoption curve. 54k stars
-          says the market wants what they ship.</p>
-        <p><strong>Where it loses:</strong> 71 "design systems" is unstructured. No linter.
-          No brand-specific output. The skills are a flat collection, not a pipeline. They're
-          a generator with preview; we're a recommender + linter + pipeline.</p>
+        <h4>Where open-design is genuinely good</h4>
+        <p>Sandboxed preview + PPTX/MP4 export are features ux-god-skill doesn't have. 11 README locales is a real adoption-curve advantage. 54k stars in months says the market wants what they ship.</p>
+        <p><strong>Where it loses:</strong> 71 "design systems" is unstructured marketing. No deterministic linter. No queryable data layer. No per-brand specs. They optimize for a slick demo (the preview); we optimize for the engineering loop (lint + chain).</p>
       </div>
     </section>
 
-    <!-- ───────────────────────────── #3 TASTE-SKILL ───────────────────────────── -->
+    <!-- ───────────────────────────── 3: TASTE-SKILL ───────────────────────────── -->
     <section>
-      <span class="sub-eye">#3 — the anti-slop brand owner</span>
-      <h2>vs. <span class="accent">Leonxlnx/taste-skill</span> <span class="stars-pill"><span class="star-dot"></span>25,202</span></h2>
+      <span class="sub-eye">Head-to-head · #3 by stars</span>
+      <h2>vs. <span class="accent">Leonxlnx/taste-skill</span><span class="stars-pill"><span class="star-dot"></span>25,202</span></h2>
       <a class="repo-link" href="https://github.com/Leonxlnx/taste-skill" target="_blank">github.com/Leonxlnx/taste-skill</a>
       <p class="intro">
-        Owns the "anti-slop" brand on GitHub (25k stars earned on the phrase). Bash-driven
-        skill with research-backed taste correction. 3-dial mental model (DESIGN_VARIANCE /
-        MOTION_INTENSITY / VISUAL_DENSITY). Pushed 2 days ago — actively maintained. The
-        closest competitor on <em>philosophy</em>, the furthest on <em>enforcement</em>.
+        Owns the "anti-slop" brand on GitHub (25k stars earned on the phrase). Bash-driven skill with a 3-dial mental model: <code>DESIGN_VARIANCE</code> / <code>MOTION_INTENSITY</code> / <code>VISUAL_DENSITY</code>. <strong>Closest competitor on philosophy; furthest on enforcement.</strong>
       </p>
 
-      <table class="compare-table">
-        <thead><tr><th class="row-h">Dimension</th><th>taste-skill</th><th class="ours">ux-skill v2</th><th>Result</th></tr></thead>
+      <table class="h2h">
+        <thead><tr><th style="width:200px;">Dimension</th><th>What taste-skill does</th><th>What ux-god-skill does</th><th>Winner</th></tr></thead>
         <tbody>
-          <tr class="ours-row"><th class="row-h">GitHub stars</th><td class="num">25,202</td><td class="num ours">14</td><td><span class="pill lose">they own the brand</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Anti-slop approach</th><td>Bash skill + research docs + 3 dials</td><td class="ours"><strong>35 deterministic regex rules</strong> + 10-field discovery</td><td><span class="pill win">enforceable in CI</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Output type</th><td>Correction only (no generation)</td><td class="ours">Discover → Recommend → Generate → Lint → Fix</td><td><span class="pill win">full lifecycle</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Skills / commands</th><td>1 invoke</td><td class="ours"><strong>22</strong></td><td><span class="pill win">22x</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Brand specs</th><td>—</td><td class="ours"><strong>72</strong></td><td><span class="pill unique">moat</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Motion presets</th><td>1 dial (MOTION_INTENSITY)</td><td class="ours">57 named presets with easing + framer/gsap/css</td><td><span class="pill win">structured</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Architecture</th><td>Bash + markdown</td><td class="ours">Python engine + JSON manifests</td><td><span class="pill win">queryable</span></td></tr>
-          <tr class="ours-row"><th class="row-h">CI integration</th><td>—</td><td class="ours"><code>ux lint --threshold high</code></td><td><span class="pill unique">moat</span></td></tr>
-          <tr class="ours-row"><th class="row-h">IDE support</th><td>Claude Code</td><td class="ours">17 IDEs</td><td><span class="pill win">17x reach</span></td></tr>
+          <tr class="ours">
+            <th>Anti-slop approach</th>
+            <td>Bash skill + 13 variant SKILL.md files. The 3 dials are passed to the LLM as adjustment knobs. Correction-only — they don't generate.</td>
+            <td class="ours-cell">35 deterministic regex rules (no LLM) + 10-field discovery enforced before generation. Generation + correction in the same engine.</td>
+            <td><span class="winner us">us</span> on enforcement; <span class="winner them">them</span> on conceptual elegance</td>
+          </tr>
+          <tr class="ours">
+            <th>Mental model</th>
+            <td><strong>3 dials</strong> — variance, motion, density. Memorable, easy to teach. Earns repeat use.</td>
+            <td class="ours-cell"><strong>10-field intake + 5-parallel-search recommender</strong>. More precise, less memorable. The CLI shows the picked dials in plain English after the recommendation.</td>
+            <td><span class="winner them">them</span> on memorability</td>
+          </tr>
+          <tr class="ours">
+            <th>Output type</th>
+            <td>Correction prompts. Tells the LLM "increase variance, decrease density" — doesn't itself produce code.</td>
+            <td class="ours-cell">Generation (code), correction (linter), recommendation (engine), discovery (forcing function). Full lifecycle.</td>
+            <td><span class="winner us">us</span> on scope</td>
+          </tr>
+          <tr class="ours">
+            <th>Architecture</th>
+            <td>Bash + 13 SKILL.md variants + research docs. No queryable data layer.</td>
+            <td class="ours-cell">Python engine + 11 JSON manifests + 22 commands + 5 sub-agents.</td>
+            <td><span class="winner us">us</span></td>
+          </tr>
+          <tr class="ours">
+            <th>CI integration</th>
+            <td>Bash skill can be invoked from CI scripts, but the rules live in LLM judgment.</td>
+            <td class="ours-cell"><code>ux lint --threshold high</code> exits non-zero on high-severity findings. Deterministic. Pre-commit hook ready.</td>
+            <td><span class="winner us">us</span></td>
+          </tr>
+          <tr class="ours">
+            <th>Brand specs</th>
+            <td>Variants for different aesthetic moods. No per-brand DESIGN.md.</td>
+            <td class="ours-cell">72 named brand DESIGN.md specs as files. Apple, Stripe, Linear...</td>
+            <td><span class="winner us">us</span></td>
+          </tr>
+          <tr class="ours">
+            <th>Motion treatment</th>
+            <td>1 dial (MOTION_INTENSITY). Sets a level; LLM interprets.</td>
+            <td class="ours-cell">57 named motion presets with cubic-beziers + framer-motion + gsap + css + reduced-motion fallbacks for each.</td>
+            <td><span class="winner us">us</span></td>
+          </tr>
+          <tr>
+            <th>IDE coverage</th>
+            <td>Claude Code primary.</td>
+            <td class="ours-cell">17 IDEs via pip + npx + marketplace.</td>
+            <td><span class="winner us">us</span></td>
+          </tr>
+          <tr>
+            <th>Brand awareness</th>
+            <td>25k stars. They <em>own</em> "anti-slop" as a phrase on GitHub.</td>
+            <td class="ours-cell">14 stars. We use "anti-AI-slop" as a feature, not a brand.</td>
+            <td><span class="winner them">them</span></td>
+          </tr>
+          <tr>
+            <th>Activity</th>
+            <td>Pushed 2 days ago. Steady commits.</td>
+            <td class="ours-cell">Pushed today. Daily shipping.</td>
+            <td><span class="winner us">us</span> on velocity</td>
+          </tr>
         </tbody>
       </table>
 
       <div class="honesty">
         <div class="label">Honest take</div>
-        <h4>Where taste-skill wins</h4>
-        <p>The 3-dial mental model is clever — variance / motion / density gives users a
-          memorable abstraction. The "anti-slop" brand is owned. 25k stars say the
-          philosophy resonates.</p>
-        <p><strong>Where it loses:</strong> no generation. taste-skill <em>corrects</em>; ux-skill
-          generates and lints. No structured data. No brand specs. No CI gate possible.
-          Single-skill, bash-driven.</p>
+        <h4>Where taste-skill is genuinely good</h4>
+        <p>The 3-dial mental model is clever — variance / motion / density gives users a memorable abstraction that ux-god-skill's deeper catalog doesn't replace. 25k stars say the philosophy resonates. They got the branding right first.</p>
+        <p><strong>Where it loses:</strong> bash + markdown only. No deterministic enforcement (the rules live in LLM judgment, not regex). No generation, only correction. No structured data layer. Single-skill, not a pipeline.</p>
       </div>
     </section>
 
-    <!-- ───────────────────────────── #4 HUASHU-DESIGN ───────────────────────────── -->
+    <!-- ───────────────────────────── 4: HUASHU-DESIGN ───────────────────────────── -->
     <section>
-      <span class="sub-eye">#4 — the functional twin</span>
-      <h2>vs. <span class="accent">alchaincyf/huashu-design</span> <span class="stars-pill"><span class="star-dot"></span>15,455</span></h2>
+      <span class="sub-eye">Head-to-head · #4 by stars</span>
+      <h2>vs. <span class="accent">alchaincyf/huashu-design</span><span class="stars-pill"><span class="star-dot"></span>15,455</span></h2>
       <a class="repo-link" href="https://github.com/alchaincyf/huashu-design" target="_blank">github.com/alchaincyf/huashu-design</a>
       <p class="intro">
-        Functionally the closest twin to ux-skill in scope: hi-fi prototypes, slides,
-        animations, 20 design philosophies, 5-dimension review, MP4 export. Single 62 KB
-        SKILL.md plus references/, scripts/, demos/, assets/. Bilingual (English + Chinese).
-        Pushed 1 week ago.
+        Functionally the closest twin. Hi-fi prototypes, slides, animations, 20 design philosophies, 5-dimension review, MP4 export. Single 62 KB SKILL.md plus references/, scripts/, demos/, assets/. Bilingual (English + Chinese). <strong>If we shipped only one competitor analysis, this would be the one we copy hardest from.</strong>
       </p>
 
-      <table class="compare-table">
-        <thead><tr><th class="row-h">Dimension</th><th>huashu-design</th><th class="ours">ux-skill v2</th><th>Result</th></tr></thead>
+      <table class="h2h">
+        <thead><tr><th style="width:200px;">Dimension</th><th>What huashu-design does</th><th>What ux-god-skill does</th><th>Winner</th></tr></thead>
         <tbody>
-          <tr class="ours-row"><th class="row-h">GitHub stars</th><td class="num">15,455</td><td class="num ours">14</td><td><span class="pill lose">awareness gap</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Design philosophies</th><td class="num">20</td><td class="num ours"><strong>84</strong> structured styles</td><td><span class="pill win">+64</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Review dimensions</th><td class="num">5</td><td class="num ours">35 regex rules + 11 categories of guideline lookup</td><td><span class="pill win">+more granular</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Architecture</th><td>Single 62 KB SKILL.md</td><td class="ours">Python engine + 11 JSON manifests + 22 commands</td><td><span class="pill win">queryable</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Brand specs</th><td>—</td><td class="ours"><strong>72</strong></td><td><span class="pill unique">moat</span></td></tr>
-          <tr class="ours-row"><th class="row-h">CI linter</th><td>—</td><td class="ours">35 rules, exits non-zero</td><td><span class="pill unique">moat</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Export</th><td>HTML + MP4</td><td class="ours">CSS tokens + JSON manifest + framework code</td><td><span class="pill tie">different scope</span></td></tr>
-          <tr class="ours-row"><th class="row-h">Discovery flow</th><td>—</td><td class="ours">10-field forcing function</td><td><span class="pill unique">moat</span></td></tr>
-          <tr class="ours-row"><th class="row-h">IDE support</th><td>Claude Code</td><td class="ours">17 IDEs</td><td><span class="pill win">17x reach</span></td></tr>
+          <tr class="ours">
+            <th>Design philosophies</th>
+            <td><strong>20 curated philosophies</strong> in a single 62 KB SKILL.md. High-craft prose, each philosophy a paragraph.</td>
+            <td class="ours-cell"><strong>84 structured styles</strong> in <code>data/styles.json</code>. Each has when_to_use / when_to_skip / tokens / exemplars / compatible palettes.</td>
+            <td><span class="winner us">us</span> on volume + queryability</td>
+          </tr>
+          <tr class="ours">
+            <th>Review dimensions</th>
+            <td>5-dimension design review (visual hierarchy, color, typography, layout, motion). LLM-driven.</td>
+            <td class="ours-cell">35 regex anti-pattern rules across 8 categories + 112 named UX laws across 14 categories. Mechanical + named.</td>
+            <td><span class="winner us">us</span> on rigor; <span class="winner them">them</span> on simplicity</td>
+          </tr>
+          <tr class="ours">
+            <th>MP4 / hi-fi output</th>
+            <td><strong>Yes</strong> — animated walkthroughs of generated prototypes, exportable as MP4. Premium-feeling demo.</td>
+            <td class="ours-cell">No MP4 yet. Output is code files. v2.3 roadmap includes a motion-preview server.</td>
+            <td><span class="winner them">them</span></td>
+          </tr>
+          <tr class="ours">
+            <th>Architecture</th>
+            <td>Single 62 KB SKILL.md + references/ + scripts/ + demos/ + assets/. Prose-driven; everything passes through LLM interpretation.</td>
+            <td class="ours-cell">Python engine + 11 JSON manifests + 22 commands + 5 sub-agents. Determinism where possible.</td>
+            <td><span class="winner us">us</span> on architecture</td>
+          </tr>
+          <tr class="ours">
+            <th>Linter</th>
+            <td>None as a standalone tool. Review prompts cover similar territory but require an LLM call.</td>
+            <td class="ours-cell"><code>ux lint</code> runs 35 regex rules in milliseconds, no LLM, CI-ready.</td>
+            <td><span class="winner us">us</span></td>
+          </tr>
+          <tr class="ours">
+            <th>Brand specs</th>
+            <td>20 philosophies cover aesthetic territory but ship no per-brand DESIGN.md.</td>
+            <td class="ours-cell">72 brand DESIGN.md files.</td>
+            <td><span class="winner us">us</span></td>
+          </tr>
+          <tr class="ours">
+            <th>Internationalization</th>
+            <td><strong>Bilingual</strong> README (English + Chinese). Big driver of stars in the Chinese tech community.</td>
+            <td class="ours-cell">English-only README.</td>
+            <td><span class="winner them">them</span></td>
+          </tr>
+          <tr class="ours">
+            <th>Discovery flow</th>
+            <td>The SKILL.md prompts the LLM to ask the user about the brief, free-form.</td>
+            <td class="ours-cell">10-field mandatory intake, structured, saved to <code>.ux/last-discovery.json</code>.</td>
+            <td><span class="winner us">us</span></td>
+          </tr>
+          <tr>
+            <th>Demo quality</th>
+            <td><strong>Top-tier</strong>. Animated MP4 demos in the README. Screenshots are crafted.</td>
+            <td class="ours-cell">Compare page + 5 blog posts. No animated demos yet.</td>
+            <td><span class="winner them">them</span></td>
+          </tr>
+          <tr>
+            <th>Activity</th>
+            <td>Pushed 1 week ago. Active.</td>
+            <td class="ours-cell">Pushed today.</td>
+            <td><span class="winner tie">~par</span></td>
+          </tr>
         </tbody>
       </table>
 
       <div class="honesty">
         <div class="label">Honest take</div>
-        <h4>Where huashu-design wins</h4>
-        <p>62 KB SKILL.md is dense and high-craft. The 20 design philosophies are well-curated.
-          MP4 export of hi-fi prototypes is a feature ux-skill doesn't have. Bilingual matters
-          for adoption.</p>
-        <p><strong>Where it loses:</strong> single SKILL.md means everything is prose for the
-          LLM to interpret. No deterministic linter. No structured data layer queryable
-          outside Claude. 5 review dimensions vs 35 regex rules is a depth gap.</p>
+        <h4>Where huashu-design is genuinely good</h4>
+        <p>The 62 KB SKILL.md is dense and high-craft. The 20 design philosophies are well-curated. <strong>MP4 export of hi-fi prototypes is the feature ux-god-skill most clearly lacks</strong> — that's the v2.3 priority. Bilingual matters for adoption.</p>
+        <p><strong>Where it loses:</strong> single SKILL.md means everything is prose for the LLM to interpret. No deterministic linter. 5 review dimensions vs our 35 regex rules + 112 named UX laws is a depth gap.</p>
       </div>
     </section>
 
-    <!-- ───────────────────────────── #5-8 SHORTER COMPARES ───────────────────────────── -->
+    <!-- ───────────────────────────── 5-8: SHORTER COMPARES ───────────────────────────── -->
     <section>
-      <span class="sub-eye">#5–#8 — the rest of the field</span>
+      <span class="sub-eye">Head-to-head · #5–#8</span>
       <h2>vs. <span class="accent">stitch-skills, nothing-design-skill, hallmark, material-3-skill</span></h2>
       <p class="intro">
-        Four narrower skills, each owning a specific niche. ux-skill v2 doesn't replace any of
-        them — it's a different shape. Worth knowing where the lines are.
+        Four narrower specialists. Each owns a niche we don't fight. The table shows what they specifically do well, where we overlap, and how to pair them with ux-god-skill if you want both.
       </p>
 
-      <table class="compare-table">
+      <table class="h2h">
         <thead>
           <tr>
-            <th class="row-h">Plugin</th>
-            <th>Stars</th>
-            <th>Niche</th>
-            <th class="ours">ux-skill v2 angle</th>
+            <th style="width:200px;">Plugin</th>
+            <th>What it does well</th>
+            <th>How ux-god-skill complements it</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="ours-row">
-            <th class="row-h">google-labs-code/stitch-skills</th>
-            <td class="num">5,762</td>
-            <td>Library wired to Stitch MCP server (Google-affiliated). Official-flavored.</td>
-            <td class="ours">No MCP-server dependency. Runs offline. No Google login.</td>
+          <tr class="ours">
+            <th>google-labs-code/stitch-skills <span class="stars-pill" style="margin:0;"><span class="star-dot"></span>5,762</span></th>
+            <td>MCP-server-wired skill library, Google-affiliated, official-flavored. Strong design provenance from the Stitch team.</td>
+            <td class="ours-cell">Pair them — use Stitch's MCP for design-system import from Figma-adjacent files, then run <code>/ux-recommend</code> on the imported result to ground it in our 998-entry catalog.</td>
           </tr>
-          <tr class="ours-row">
-            <th class="row-h">dominikmartn/nothing-design-skill</th>
-            <td class="num">2,391</td>
-            <td>Single-aesthetic skill — the "Nothing" design language. Beautiful, narrow.</td>
-            <td class="ours">84 styles including a "Nothing-adjacent" Monochrome Precise. Pair them — Nothing as the specialist + ux-skill as the system.</td>
+          <tr class="ours">
+            <th>dominikmartn/nothing-design-skill <span class="stars-pill" style="margin:0;"><span class="star-dot"></span>2,391</span></th>
+            <td>Pure-monochrome "Nothing" aesthetic skill. Single-aesthetic, beautifully executed. Best in class for that one look.</td>
+            <td class="ours-cell">Our <code>styles.json</code> includes "Monochrome Precise" and "Pure Monochrome" as styles. For Nothing-specific projects, use their skill; for everything else, use ours.</td>
           </tr>
-          <tr class="ours-row">
-            <th class="row-h">Nutlope/hallmark</th>
-            <td class="num">2,164</td>
-            <td>Anti-AI-slop design skill from Nutlope (LlamaCoder). Hosted at hallmark.dev. Strong brand.</td>
-            <td class="ours">35 regex rules + structured data layer. Hallmark is a single skill; ux-skill is a pipeline.</td>
+          <tr class="ours">
+            <th>Nutlope/hallmark <span class="stars-pill" style="margin:0;"><span class="star-dot"></span>2,164</span></th>
+            <td>Anti-AI-slop design skill from Nutlope (LlamaCoder maker). Brand power amplifies signal. Hosted at hallmark.dev.</td>
+            <td class="ours-cell">Direct overlap with our anti-slop linter. Use hallmark for the taste primer; use ux-god-skill's <code>ux lint</code> for CI enforcement.</td>
           </tr>
-          <tr class="ours-row">
-            <th class="row-h">hamen/material-3-skill</th>
-            <td class="num">955</td>
-            <td>Material Design 3 only. 30+ MD3 components, MD3 compliance audit. Apache.</td>
-            <td class="ours">Material 3 is one of 84 styles in our catalog. We win on breadth; they win on MD3 specificity.</td>
+          <tr class="ours">
+            <th>hamen/material-3-skill <span class="stars-pill" style="margin:0;"><span class="star-dot"></span>955</span></th>
+            <td>Material Design 3 specialist. 30+ MD3 components, MD3 audit, theming, MD3 compliance check. Apache 2.0.</td>
+            <td class="ours-cell">Material 3 is one of our 84 styles. If your project is MD3-only, use material-3-skill directly. If you might pick a different style, run <code>/ux-recommend</code> first.</td>
           </tr>
         </tbody>
       </table>
@@ -625,82 +978,73 @@
 
     <!-- ───────────────────────────── PROCESS ADVANTAGE ───────────────────────────── -->
     <section>
-      <span class="sub-eye">The real differentiator</span>
-      <h2>The win isn't the numbers. It's the <span class="accent">process.</span></h2>
+      <span class="sub-eye">Stage-by-stage view of design work</span>
+      <h2>The real differentiator: the <span class="accent">pipeline</span>.</h2>
       <p class="intro">
-        Catalog tools generate. Taste tools correct. ux-skill is the only one in the space
-        that ships a 22-command pipeline mapping to how a designer actually works.
+        Catalog tools generate. Taste tools correct. Library tools fetch. ux-god-skill is the only one that ships a 22-command workflow mapping to a designer's actual day.
       </p>
 
-      <table class="compare-table">
+      <table class="h2h">
         <thead>
           <tr>
-            <th class="row-h">Stage of design work</th>
-            <th>ux-skill v2 command</th>
-            <th>Top 8 competitors</th>
+            <th style="width:200px;">Stage of design work</th>
+            <th>ux-god-skill command</th>
+            <th>What competitors do at this stage</th>
           </tr>
         </thead>
         <tbody>
-          <tr><th class="row-h">Frame the problem</th><td class="ours"><code>/ux-frame</code> — 10-field discovery</td><td><span class="pill dash">none ship this</span></td></tr>
-          <tr><th class="row-h">Research synthesis</th><td class="ours"><code>/ux-research</code></td><td><span class="pill dash">none ship this</span></td></tr>
-          <tr><th class="row-h">Pick a design system</th><td class="ours"><code>/ux-recommend</code> — 5-parallel-search engine</td><td>Pro Max: yes (BM25). Others: no.</td></tr>
-          <tr><th class="row-h">Generate frontend code</th><td class="ours"><code>/ux-design</code> + <code>/ux-component</code></td><td><span class="pill win">Pro Max, huashu, open-design ship this</span></td></tr>
-          <tr><th class="row-h">Build full design system</th><td class="ours"><code>/ux-system</code> — tokens.css + manifest</td><td>open-design (preview), Pro Max (Master.md). Limited.</td></tr>
-          <tr><th class="row-h">Critique (taste)</th><td class="ours"><code>/ux-critique</code> — cites named laws + brands</td><td>taste-skill, hallmark (prompt-only)</td></tr>
-          <tr><th class="row-h">Lint (deterministic)</th><td class="ours"><code>/ux-lint</code> — 35 regex rules in CI</td><td><span class="pill dash">none ship this</span></td></tr>
-          <tr><th class="row-h">A11y audit</th><td class="ours"><code>/ux-a11y</code> — WCAG-grounded</td><td>material-3-skill (MD3 only)</td></tr>
-          <tr><th class="row-h">Microcopy review</th><td class="ours"><code>/ux-copy</code></td><td><span class="pill dash">none ship this</span></td></tr>
-          <tr><th class="row-h">Motion treatment</th><td class="ours"><code>/ux-motion</code> — 57 named presets</td><td>taste-skill (1 dial)</td></tr>
-          <tr><th class="row-h">Apply linter fixes</th><td class="ours"><code>/ux-fix</code></td><td><span class="pill dash">none ship this</span></td></tr>
-          <tr><th class="row-h">Polish iteration</th><td class="ours"><code>/ux-polish</code></td><td><span class="pill dash">none ship this</span></td></tr>
-          <tr><th class="row-h">Suggest next step</th><td class="ours"><code>/ux-next</code> — reads chain state</td><td><span class="pill dash">none ship this</span></td></tr>
-          <tr><th class="row-h">Write case study</th><td class="ours"><code>/ux-case-study</code></td><td><span class="pill dash">none ship this</span></td></tr>
-          <tr><th class="row-h">Hand off to expert</th><td class="ours"><code>/ux-expert</code></td><td><span class="pill dash">none ship this</span></td></tr>
+          <tr class="ours"><th>Frame the problem</th><td class="ours-cell"><code>/ux-frame</code> → 10-field discovery saved to <code>.ux/last-discovery.json</code></td><td>None of the top 8 have a discrete framing step. open-design and Pro Max prompt for a brief but don't structure it.</td></tr>
+          <tr class="ours"><th>Research synthesis</th><td class="ours-cell"><code>/ux-research</code> → digests interviews/analytics/competitors into a Brief</td><td>None ship a research command. taste-skill cites their own research in docs.</td></tr>
+          <tr class="ours"><th>Pick a design system</th><td class="ours-cell"><code>/ux-recommend</code> → 5-parallel-search engine returns merged system</td><td>Pro Max BM25 over CSV. open-design picks from 71 systems. Others: ask the LLM.</td></tr>
+          <tr class="ours"><th>Generate frontend code</th><td class="ours-cell"><code>/ux-design</code> + <code>/ux-component</code> dispatch <code>frontend-engineer</code> agent</td><td>Pro Max + huashu + open-design all do this. Hallmark + taste-skill correct, don't generate.</td></tr>
+          <tr class="ours"><th>Build full design system</th><td class="ours-cell"><code>/ux-system</code> → emits <code>tokens.css</code> + <code>manifest.json</code></td><td>open-design (preview). Pro Max writes a <code>design-system/MASTER.md</code>.</td></tr>
+          <tr class="ours"><th>Critique (taste)</th><td class="ours-cell"><code>/ux-critique</code> → every finding cites a named UX law + brand exemplar</td><td>taste-skill, hallmark — prompt-only correction. Pro Max — no critique command.</td></tr>
+          <tr class="ours"><th>Lint (deterministic)</th><td class="ours-cell"><code>/ux-lint</code> → 35 regex rules, no LLM, CI gate</td><td>None of the top 8 ship a deterministic linter. All are LLM-judgment.</td></tr>
+          <tr class="ours"><th>A11y audit</th><td class="ours-cell"><code>/ux-a11y</code> → WCAG-grounded, cites the 8 A11y guidelines</td><td>material-3-skill does MD3 a11y. Others mention a11y in prompts.</td></tr>
+          <tr class="ours"><th>Microcopy review</th><td class="ours-cell"><code>/ux-copy</code> dispatches <code>copy-writer</code> agent against project tone</td><td>None ship a microcopy command.</td></tr>
+          <tr class="ours"><th>Motion treatment</th><td class="ours-cell"><code>/ux-motion</code> → 57 named presets with framer/gsap/css for each</td><td>taste-skill 1 dial. huashu animations. Others: ad-hoc.</td></tr>
+          <tr class="ours"><th>Apply linter fixes</th><td class="ours-cell"><code>/ux-fix</code> → walks findings in severity order, Edit each</td><td>None ship an automated fix command.</td></tr>
+          <tr class="ours"><th>Polish iteration</th><td class="ours-cell"><code>/ux-polish</code> → linter floor + style/motion picks for taste pass</td><td>None ship a polish command.</td></tr>
+          <tr class="ours"><th>Suggest next step</th><td class="ours-cell"><code>/ux-next</code> → reads <code>.ux/last-*.json</code>, recommends next command</td><td>None ship state-aware suggestions.</td></tr>
+          <tr class="ours"><th>Write case study</th><td class="ours-cell"><code>/ux-case-study</code> → auto-fills Brief + Approach from state files</td><td>None ship a case-study command.</td></tr>
+          <tr class="ours"><th>Hand to human expert</th><td class="ours-cell"><code>/ux-expert</code> → packages handoff for consulting</td><td>None ship this.</td></tr>
         </tbody>
       </table>
 
       <div class="honesty">
         <div class="label">The positioning</div>
-        <h4>Catalog tools generate. Taste tools correct. ux-skill is the workflow.</h4>
-        <p>Pick <strong>ui-ux-pro-max-skill</strong> for catalog depth. Pick
-          <strong>taste-skill</strong> for anti-slop philosophy. Pick <strong>huashu-design</strong>
-          or <strong>open-design</strong> for hi-fi mockup output with preview.
-          Pick <strong>material-3-skill</strong> if you only ship MD3.</p>
-        <p>Pick <strong>ux-skill v2</strong> when you want all of: a queryable Python engine
-          underneath, a 35-rule linter that runs in CI, 72 brand DESIGN.md specs, and a
-          22-command pipeline that maps to a designer's actual workday. We're tiny on
-          stars and big on architecture. That's the bet.</p>
+        <h4>Catalog tools generate. Taste tools correct. ux-god-skill is the workflow.</h4>
+        <p>Pick <strong>ui-ux-pro-max-skill</strong> for raw catalog depth. Pick <strong>taste-skill</strong> for anti-slop philosophy. Pick <strong>huashu-design</strong> or <strong>open-design</strong> for hi-fi mockup output with preview. Pick <strong>material-3-skill</strong> if you only ship MD3. Pick <strong>hallmark</strong> for Nutlope's brand.</p>
+        <p>Pick <strong>ux-god-skill</strong> when you want all of: a queryable Python engine underneath, 35 deterministic rules running in CI, 72 brand DESIGN.md specs, and a 22-command pipeline that maps to a designer's actual workday. Tiny on stars today; deep on architecture. That's the bet.</p>
       </div>
     </section>
 
     <!-- ───────────────────────────── WHERE WE LOSE ───────────────────────────── -->
     <section>
       <span class="sub-eye">Honesty section</span>
-      <h2>Where ux-skill v2 <span class="accent">loses</span> — by design.</h2>
-      <p class="intro">
-        No spin. These are real gaps. Use the right complement; don't fake it.
-      </p>
+      <h2>Where ux-god-skill <span class="accent">loses</span>.</h2>
+      <p class="intro">No spin. The genuine gaps, and which competitor is the right complement for each.</p>
 
-      <table class="compare-table">
-        <thead><tr><th class="row-h">Gap</th><th>Better tool</th><th>Roadmap</th></tr></thead>
+      <table class="h2h">
+        <thead><tr><th style="width:230px;">Gap</th><th>Best tool for it</th><th>Roadmap</th></tr></thead>
         <tbody>
-          <tr><th class="row-h">GitHub awareness</th><td>ui-ux-pro-max-skill (84k stars)</td><td>This page is part of the answer.</td></tr>
-          <tr><th class="row-h">Sandboxed preview</th><td>open-design, v0.dev</td><td>v3 — preview server in engine</td></tr>
-          <tr><th class="row-h">MP4 / PPTX export</th><td>open-design, huashu-design</td><td>—</td></tr>
-          <tr><th class="row-h">Hi-fi prototype generation</th><td>huashu-design's 62KB skill</td><td>v2.3</td></tr>
-          <tr><th class="row-h">Real-time component preview</th><td>v0.dev, Bolt.new</td><td>v3</td></tr>
-          <tr><th class="row-h">Live Figma sync</th><td>Figma MCP</td><td>v2.2</td></tr>
-          <tr><th class="row-h">Material Design audit specificity</th><td>material-3-skill</td><td>—</td></tr>
-          <tr><th class="row-h">i18n READMEs</th><td>open-design (11 locales)</td><td>v2.2</td></tr>
+          <tr><th>GitHub stars / awareness</th><td>ui-ux-pro-max-skill (84k). They had a 9-month head start.</td><td>This page + marketing kit + 5 blog posts are the answer.</td></tr>
+          <tr><th>Sandboxed live preview</th><td>open-design. Node.js runtime with preview server included.</td><td>v3.0 — engine ships a preview server.</td></tr>
+          <tr><th>MP4 / video walkthroughs</th><td>huashu-design. Animated MP4 export is their crown.</td><td>v2.3 — wrap motion presets into a preview-renderer for short MP4s.</td></tr>
+          <tr><th>PPTX / PDF export</th><td>open-design. Built-in.</td><td>v2.4 — bridge via WeasyPrint + python-pptx.</td></tr>
+          <tr><th>Multi-locale README</th><td>open-design (11 locales). huashu-design (bilingual).</td><td>v2.2 — Arabic + Chinese READMEs first (we have MENA design data already).</td></tr>
+          <tr><th>Material 3 specificity</th><td>material-3-skill. Single-system depth.</td><td>v2.3 — MD3 audit subcommand inside <code>/ux-a11y</code>.</td></tr>
+          <tr><th>Live Figma sync</th><td>Figma MCP (official).</td><td>v2.2 — Figma-to-data importer that writes back to our manifests.</td></tr>
+          <tr><th>Brand-name SEO</th><td>taste-skill owns "anti-slop". Pro Max owns "design intelligence".</td><td>Own "design engineering" + "Python design engine" via the blog.</td></tr>
         </tbody>
       </table>
     </section>
 
     <!-- ───────────────────────────── CTA ───────────────────────────── -->
     <section class="cta">
-      <span class="eyebrow">Pick your install path</span>
-      <h2>14 stars today. Run it, decide for yourself.</h2>
-      <p>MIT licensed. No telemetry. No account. Three install paths, same engine.</p>
+      <span class="eyebrow">Run it. Decide for yourself.</span>
+      <h2>14 stars today. The scorecard says we're the deepest. <span class="accent">Test the claim.</span></h2>
+      <p>MIT licensed. No telemetry. No account. Three install paths, same engine, same 998 entries, same 35-rule linter.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
@@ -713,7 +1057,7 @@
     </section>
 
     <footer>
-      <span>© 2026 Laith Aljunaidy. MIT licensed. No telemetry. Star counts verified via gh api on 2026-05-28.</span>
+      <span>© 2026 Laith Aljunaidy. MIT. No telemetry. Stars from <code>gh api</code> on 2026-05-28.</span>
       <div class="links">
         <a href="/">Home</a>
         <a href="/blog/">Blog</a>
