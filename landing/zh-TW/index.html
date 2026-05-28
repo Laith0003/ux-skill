@@ -34,7 +34,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#987d86">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#f59e0b">
   <link rel="manifest" href="/site.webmanifest">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -158,12 +158,15 @@
       --syn-ink:       #c0c2c6;
       --syn-body:      #9a9ca0;
       --syn-muted:     #686a6e;
-      --syn-primary:   #987d86;  /* the accent that peeks through */
+      --syn-primary:   #f59e0b;  /* hot amber — used for the v3 hero numeral */
+      --syn-electric:  #06b6d4;  /* electric cyan — used for secondary accents */
       --syn-hairline:  #55575b;
 
-      /* Derived accent — used sparingly on borders, links, focus */
+      /* Derived accent — used on borders, links, focus, the giant 3.0 */
       --accent:        var(--syn-primary);
-      --accent-soft:   rgba(152, 125, 134, 0.18);
+      --accent-2:      var(--syn-electric);
+      --accent-soft:   rgba(245, 158, 11, 0.22);
+      --accent-glow:   rgba(245, 158, 11, 0.55);
 
       /* === Type === */
       --display:  'Bricolage Grotesque', system-ui, sans-serif;
@@ -505,7 +508,7 @@
       gap: var(--s-6);
       width: 100%;
     }
-    /* Ghost 3.0 numeral — sits behind everything */
+    /* Giant 3.0 numeral — sits behind the h1, DOMINANT, vivid amber gradient */
     .hero-three {
       position: absolute;
       inset: 0;
@@ -514,19 +517,27 @@
       pointer-events: none;
       z-index: 0;
       font-family: var(--display);
-      font-variation-settings: 'wdth' 80, 'opsz' 96, 'wght' 800;
-      font-size: clamp(220px, 42vw, 560px);
-      letter-spacing: -0.04em;
-      line-height: 0.85;
-      background: linear-gradient(135deg, #987d8633 0%, #f6f7f90f 100%);
-      background-size: 200% 200%;
+      font-variation-settings: 'wdth' 76, 'opsz' 96, 'wght' 900;
+      font-size: clamp(280px, 56vw, 760px);
+      letter-spacing: -0.06em;
+      line-height: 0.80;
+      background-image:
+        linear-gradient(135deg,
+          #f59e0b 0%,
+          #fbbf24 25%,
+          #f59e0b 50%,
+          #06b6d4 80%,
+          #f59e0b 100%);
+      background-size: 220% 220%;
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
-      -webkit-text-stroke: 1px #f6f7f90f;
-      filter: drop-shadow(0 0 60px #987d8619);
-      animation: hero-three-shimmer var(--t-ambient-shimmer) linear infinite;
+      -webkit-text-stroke: 2px rgba(245, 158, 11, 0.40);
+      filter: drop-shadow(0 0 80px rgba(245, 158, 11, 0.45))
+              drop-shadow(0 0 40px rgba(6, 182, 212, 0.18));
+      animation: hero-three-shimmer 11s ease-in-out infinite;
       transform: translateZ(0);
+      opacity: 0.92;
     }
     @keyframes hero-three-shimmer {
       0%   { background-position: 0% 50%; }
@@ -569,17 +580,17 @@
       text-transform: uppercase;
       color: var(--body);
     }
-    .pill-tag--live { color: var(--ink); border-color: var(--accent); }
+    .pill-tag--live { color: var(--ink); border-color: var(--accent); background: rgba(245, 158, 11, 0.06); }
     .dot-live {
-      width: 7px; height: 7px;
+      width: 8px; height: 8px;
       border-radius: 50%;
       background: var(--accent);
-      box-shadow: 0 0 0 0 rgba(152, 125, 134, 0.6);
+      box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
       animation: dot-pulse var(--t-ambient-pulse) ease-out infinite;
     }
     @keyframes dot-pulse {
-      0%   { box-shadow: 0 0 0 0 rgba(152, 125, 134, 0.6); }
-      100% { box-shadow: 0 0 0 14px rgba(152, 125, 134, 0); }
+      0%   { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+      100% { box-shadow: 0 0 0 16px rgba(245, 158, 11, 0); }
     }
     @media (prefers-reduced-motion: reduce) {
       .dot-live { animation: none; }
@@ -741,7 +752,7 @@
       background: var(--surface-1);
     }
     .brain-quote--before { border-color: var(--hairline); }
-    .brain-quote--after  { border-color: var(--accent); background: linear-gradient(180deg, #987d860f 0%, #0d0f12 100%); }
+    .brain-quote--after  { border-color: var(--accent); background: linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, #0d0f12 100%); }
     .brain-quote__label {
       font-family: var(--mono);
       font-size: 11.5px;
@@ -1531,16 +1542,16 @@
     <div class="container">
       <div class="hero__inner">
         <div class="hero__eyebrow-row">
-          <span class="pill-tag pill-tag--live"><span class="dot-live" aria-hidden="true"></span> v3.0.0 — THE BRAIN</span>
-          <span class="pill-tag">MIT 授權,無遙測</span>
-          <span class="pill-tag">Live now</span>
+          <span class="pill-tag pill-tag--live"><span class="dot-live" aria-hidden="true"></span> v3.0.0 &middot; THE BRAIN &middot; LIVE</span>
+          <span class="pill-tag">MIT &middot; no telemetry &middot; no LLM</span>
         </div>
         <h1 class="hero__h1" id="hero-h1">
-          Stop shipping AI slop.<br>
-          Start shipping <span class="accent-italic">a brain.</span>
+          The brain<br>
+          that ships<br>
+          <span class="accent-italic">design that&nbsp;doesn&rsquo;t look generated.</span>
         </h1>
         <p class="hero__sub">
-          <strong>uxskill v3.0</strong> &mdash; a 7-axis design synthesizer that compiles a novel design language per brief, learns from a local decisions ledger, and runs offline in 17 IDEs. <strong>No LLM. No telemetry. No accounts.</strong> The future of design for AI coding, here today.
+          <strong>v3.0 is here.</strong> A 7-axis synthesizer turns any brief into a fresh design language. 160 brand specs become training data, 不是模板。 The recommender re-ranks from a local decisions ledger that learns from your work. Runs in <strong>Claude Code, Cursor, Windsurf</strong> and 14 more IDEs. Same brief always ships the same output. <strong>Offline. Deterministic. No LLM in the engine.</strong>
         </p>
         <div class="hero__ctas">
           <a href="https://pypi.org/project/uxskill/" class="cta-primary" rel="noopener">
