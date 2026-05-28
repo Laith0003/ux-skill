@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cursor design plugin: install ux-skill to stop generic AI design output</title>
+  <meta name="description" content="Cursor users: install ux-skill via npx for design rules that catch AI slop fingerprints. Anti-AI-slop linter, 998 design entries, 72 brand specs. Free + MIT.">
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/cursor-design-plugin.html">
+  <meta name="theme-color" content="#faf9f5">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="index,follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/cursor-design-plugin.html">
+  <meta property="og:title" content="Cursor design plugin: install ux-skill to stop generic AI design output">
+  <meta property="og:description" content="Cursor has no native design rules. ux-skill runs as a Python engine inside Cursor and adds 998 entries + a 35-rule slop linter to every generation.">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cursor design plugin — ux-skill">
+  <meta name="twitter:description" content="Three install paths in Cursor. Anti-AI-slop linter, 998 entries, 72 brand specs. Free + MIT.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --canvas: #faf9f5;
+      --surface: #efe9de;
+      --surface-2: #f3eee4;
+      --ink: #181715;
+      --body: #3d3d3a;
+      --muted: #6c6a64;
+      --hairline: rgba(20,20,19,0.10);
+      --hairline-strong: rgba(20,20,19,0.18);
+      --primary: #cc785c;
+      --primary-active: #a9583e;
+      --primary-soft: rgba(204,120,92,0.12);
+      --win-bg: #ecf2ec;
+      --win-fg: #2f7d32;
+      --lose-bg: #f5e6e3;
+      --lose-fg: #b3261e;
+      --neutral-bg: #f4f0e8;
+      --neutral-fg: #6c6a64;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background: var(--canvas);
+      color: var(--body);
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+    .wrap-wide { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    header.top {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8px 24px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .wordmark {
+      display: inline-flex; align-items: baseline; gap: 4px;
+      text-decoration: none; color: var(--ink);
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 28px;
+      letter-spacing: -0.02em;
+    }
+    .wordmark .dot {
+      display: inline-block; width: 6px; height: 6px;
+      border-radius: 999px; background: var(--primary);
+      transform: translateY(-3px);
+    }
+    nav.crumbs {
+      display: flex; gap: 28px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+    nav.crumbs a { color: var(--muted); text-decoration: none; }
+    nav.crumbs a:hover { color: var(--ink); }
+    nav.crumbs a.current { color: var(--ink); }
+
+    article { padding-top: 56px; }
+    .eyebrow {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 22px;
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: clamp(40px, 5.5vw, 64px);
+      line-height: 1.08;
+      letter-spacing: -0.022em;
+      color: var(--ink);
+      margin-bottom: 28px;
+    }
+    h1 .accent {
+      font-style: italic;
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .lede {
+      font-size: 20px;
+      line-height: 1.55;
+      color: var(--body);
+      margin-bottom: 16px;
+    }
+    .lede strong { color: var(--ink); font-weight: 600; }
+    .byline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 56px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: clamp(28px, 3.2vw, 36px);
+      line-height: 1.18;
+      letter-spacing: -0.018em;
+      color: var(--ink);
+      margin: 64px 0 18px;
+    }
+    h2 .accent { color: var(--primary); font-style: italic; font-weight: 600; }
+    h3 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 19px;
+      letter-spacing: -0.005em;
+      color: var(--ink);
+      margin: 36px 0 14px;
+    }
+    p { margin-bottom: 18px; }
+    p strong { color: var(--ink); font-weight: 600; }
+    ul, ol { margin: 0 0 22px 22px; }
+    ul li, ol li { margin-bottom: 10px; }
+    ul li::marker { color: var(--primary); }
+
+    .install-step {
+      background: white;
+      border: 1px solid var(--hairline);
+      border-radius: 14px;
+      padding: 26px 30px;
+      margin: 20px 0;
+    }
+    .install-step .num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 500;
+      color: var(--primary);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .install-step h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 22px;
+      color: var(--ink);
+      letter-spacing: -0.015em;
+      margin: 4px 0 12px;
+    }
+    .install-step .code {
+      background: var(--ink);
+      color: var(--canvas);
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      margin: 12px 0;
+    }
+    .install-step .code .p { color: var(--primary); }
+    .install-step .code .c { color: rgba(250,249,245,0.45); }
+    .install-step .code .a { color: rgba(250,249,245,0.65); }
+
+    .before-after {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin: 28px 0;
+    }
+    @media (max-width: 720px) { .before-after { grid-template-columns: 1fr; } }
+    .ba-cell {
+      padding: 22px 26px;
+      border-radius: 12px;
+      font-size: 14.5px;
+      line-height: 1.55;
+    }
+    .ba-cell.before {
+      background: var(--lose-bg);
+      color: var(--ink);
+    }
+    .ba-cell.after {
+      background: var(--win-bg);
+      color: var(--ink);
+    }
+    .ba-cell .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--lose-fg);
+      margin-bottom: 10px;
+    }
+    .ba-cell.after .tag { color: var(--win-fg); }
+    .ba-cell ul { margin: 8px 0 0 18px; }
+    .ba-cell ul li { margin-bottom: 6px; font-size: 14px; }
+
+    .honesty {
+      background: var(--surface);
+      border-left: 3px solid var(--primary);
+      padding: 24px 28px;
+      border-radius: 0 14px 14px 0;
+      margin: 32px 0;
+    }
+    .honesty .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .honesty h4 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 17px;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .honesty p { margin-bottom: 8px; }
+    .honesty p:last-child { margin-bottom: 0; }
+
+    .cta {
+      margin-top: 96px;
+      padding: 56px 48px;
+      background: var(--ink);
+      color: var(--canvas);
+      border-radius: 22px;
+    }
+    @media (max-width: 720px) { .cta { padding: 40px 28px; } }
+    .cta .eyebrow { color: var(--primary); }
+    .cta h2 { color: var(--canvas); margin-top: 0; }
+    .cta p { color: rgba(250,249,245,0.78); margin-bottom: 28px; }
+    .install-block {
+      background: rgba(250,249,245,0.06);
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--canvas);
+    }
+    .install-block .prompt { color: var(--primary); }
+    .install-block .arg { color: rgba(250,249,245,0.6); }
+    .install-block .row + .row { margin-top: 6px; }
+
+    footer {
+      max-width: 1100px;
+      margin: 96px auto 0;
+      padding: 32px 24px 0;
+      border-top: 1px solid var(--hairline);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--ink); }
+    footer .links { display: flex; gap: 24px; }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: var(--surface);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--ink);
+    }
+    a.link {
+      color: var(--primary);
+      text-decoration: underline;
+      text-decoration-color: rgba(204,120,92,0.4);
+      text-underline-offset: 3px;
+    }
+    a.link:hover { color: var(--primary-active); text-decoration-color: var(--primary-active); }
+    blockquote {
+      border-left: 3px solid var(--primary);
+      padding: 6px 0 6px 22px;
+      margin: 24px 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      line-height: 1.45;
+      color: var(--ink);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a href="/" class="wordmark">ux<span class="dot"></span></a>
+    <nav class="crumbs">
+      <a href="/">Home</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/blog/" class="current">Blog</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="wrap">
+    <article>
+      <span class="eyebrow">Blog · Cursor · 2026-05-28</span>
+      <h1>Cursor design plugin: install ux-skill to stop <span class="accent">generic AI design output</span>.</h1>
+      <p class="lede">
+        Cursor users hit the same wall as Claude Code users — AI defaults produce a recognizable look. Most "Cursor design tooling" means installing a component library or paying for an AI service. <strong>ux-skill</strong> is a different shape: a Python engine that runs inside Cursor and adds design constraints to every generation.
+      </p>
+      <p class="byline">By the ux-skill team · 7 min read · MIT-licensed open source</p>
+
+      <h2>How Cursor handles design today</h2>
+      <p>
+        Cursor doesn't ship native design rules. The product is excellent at code, deliberately neutral on aesthetics. When you ask Cursor to "build a landing page" or "design a dashboard," the output reverts to the model's defaults: Inter at 90px, indigo-to-blue gradient, three identical cards, "John Doe" placeholders, fade-in-up motion on everything.
+      </p>
+      <p>
+        These aren't Cursor's defaults — they're the underlying model's defaults, which Cursor inherits along with the rest of the model's capabilities. Fixing them means feeding constraints in alongside the prompt: either rules in <code>.cursorrules</code>, a referenced design system, or a tool that runs alongside Cursor's generation.
+      </p>
+      <p>
+        <strong>ux-skill takes the third path.</strong> It's a Python package (<code>uxskill</code> on PyPI, also on npm as <code>uxskill</code>) that exposes a recommender, a generator, and a linter. Cursor calls it through one of three integration paths.
+      </p>
+
+      <h2>Three install paths in Cursor</h2>
+
+      <div class="install-step">
+        <div class="num">01</div>
+        <h3>The .cursorrules path (fastest)</h3>
+        <p>
+          Add ux-skill's rule pack to your project's <code>.cursorrules</code> file. The 35 anti-pattern rules and the brand-spec instructions get loaded into every Cursor prompt as system instructions. No runtime dependency.
+        </p>
+        <div class="code">
+          <span class="c"># From your project root</span><br/>
+          <span class="p">$</span> npx <span class="a">uxskill@alpha init --target cursor</span><br/>
+          <span class="c"># Generates .cursorrules with the 35 rules + brand spec references</span>
+        </div>
+        <p>Best for: existing Cursor projects where you want design rules without changing your toolchain.</p>
+      </div>
+
+      <div class="install-step">
+        <div class="num">02</div>
+        <h3>The npx wrapper path (most powerful)</h3>
+        <p>
+          Run ux-skill commands directly from Cursor's terminal pane or an integrated task. The full Python engine is wrapped behind npx, so you don't need a separate Python install. All 22 slash commands work: <code>discover</code>, <code>recommend</code>, <code>design</code>, <code>lint</code>, <code>fix</code>, <code>polish</code>.
+        </p>
+        <div class="code">
+          <span class="p">$</span> npx <span class="a">uxskill@alpha recommend</span> <span class="c"># interactive design system pick</span><br/>
+          <span class="p">$</span> npx <span class="a">uxskill@alpha lint ./src</span> <span class="c"># 35-rule anti-slop pass</span><br/>
+          <span class="p">$</span> npx <span class="a">uxskill@alpha fix ./src/components</span> <span class="c"># apply lint fixes</span>
+        </div>
+        <p>Best for: actively designing inside Cursor with the recommendation, generation, and lint lanes all available.</p>
+      </div>
+
+      <div class="install-step">
+        <div class="num">03</div>
+        <h3>The pip install path (CI-ready)</h3>
+        <p>
+          If your Cursor project already has Python tooling, install ux-skill as a dev dependency. The Python API is the most direct path; the <code>ux</code> CLI runs as a normal entry point. Add <code>ux lint --threshold high</code> to your pre-commit hook or CI pipeline for slop defense at commit time.
+        </p>
+        <div class="code">
+          <span class="p">$</span> pip install <span class="a">uxskill</span><br/>
+          <span class="p">$</span> ux lint <span class="a">./src --threshold high</span> <span class="c"># exit 1 on high-sev fingerprints</span><br/>
+          <span class="c"># In .pre-commit-config.yaml or .github/workflows/*.yml</span>
+        </div>
+        <p>Best for: production projects with a CI pipeline. The 35 regex rules become a non-zero exit code gate.</p>
+      </div>
+
+      <h2>What changes when ux-skill runs in Cursor</h2>
+      <p>
+        Same prompt — "design a landing page for a fintech neobank." Cursor without ux-skill vs Cursor with ux-skill loaded.
+      </p>
+
+      <div class="before-after">
+        <div class="ba-cell before">
+          <div class="tag">Without ux-skill</div>
+          <p><strong>The fingerprints arrive on schedule.</strong></p>
+          <ul>
+            <li>Hero with Inter at 96px / line-height 1.0</li>
+            <li><code>linear-gradient(135deg, #7C3AED, #3B82F6)</code> behind hero</li>
+            <li>Three identical pricing cards, equal heights, icon-top-left</li>
+            <li>"Beautiful banking, seamlessly" hero copy</li>
+            <li>"Get started" + "Learn more" button pair</li>
+            <li>fade-in-up 0.3s ease-out on every section</li>
+            <li>"John Doe" / "jane@example.com" placeholders</li>
+          </ul>
+        </div>
+        <div class="ba-cell after">
+          <div class="tag">With ux-skill</div>
+          <p><strong>The recommender forces a system first.</strong></p>
+          <ul>
+            <li>Recommender returns: editorial-modern + warm cream + Cormorant/Inter pair + restrained motion</li>
+            <li>Brand spec reference: Linear (if fintech-trust matches) or Stripe (if payments-focused)</li>
+            <li>Hero with Cormorant at 56-72px italic, Inter 18px body</li>
+            <li>Cream surface (#faf9f5), one accent color, no gradients</li>
+            <li>Asymmetric content layout, not three identical cards</li>
+            <li>Hierarchy-aware motion: hero opens, supporting content cascades</li>
+            <li>Linter pass: 35 rules check the output, exit 1 if a fingerprint sneaks through</li>
+          </ul>
+        </div>
+      </div>
+
+      <p>
+        The difference isn't taste-by-magic. It's <strong>constraint by structure</strong>. Cursor still generates the code; ux-skill defines the rails it can't drift off.
+      </p>
+
+      <h2>What ux-skill ships</h2>
+      <p>
+        For Cursor users, the relevant numbers are:
+      </p>
+      <ul>
+        <li><strong>998 structured entries</strong> across 11 JSON manifests — styles, palettes, type pairings, motion presets, components, industry rules, chart types, tech stacks, anti-patterns, brand specs, UX laws.</li>
+        <li><strong>35 deterministic regex rules</strong> in the anti-slop linter. No LLM judgment in the audit lane.</li>
+        <li><strong>72 brand DESIGN.md specs</strong>. Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, and 64 more.</li>
+        <li><strong>22 slash commands</strong> covering discovery, recommendation, generation, audit, polish, and handoff.</li>
+        <li><strong>5 specialized sub-agents</strong> for parallel role work.</li>
+        <li><strong>17 IDEs supported</strong>. Cursor is one of them. Windsurf, GitHub Copilot, Gemini Code Assist, Aider, Continue, Cline, Roo Code, Codex are others.</li>
+      </ul>
+
+      <h2>Pairs well with shadcn/ui MCP and Tailwind</h2>
+      <p>
+        ux-skill doesn't ship its own component library — it's a recommender + linter, not a UI kit. In Cursor, the natural pairing is:
+      </p>
+      <ol>
+        <li><strong>ux-skill</strong> picks the design system (style + palette + type + motion).</li>
+        <li><strong>shadcn/ui MCP</strong> or Tailwind UI provides the actual component snippets in that system.</li>
+        <li><strong>ux-skill's linter</strong> catches drift from the system in the generated code.</li>
+      </ol>
+      <p>
+        ux-skill is the brain; shadcn/Tailwind are the hands. The recommender produces a tokens file you can feed straight into <code>tailwind.config.js</code>, so the component library inherits the chosen palette and type ramp without manual wiring.
+      </p>
+
+      <blockquote>
+        Cursor is excellent at code. ux-skill is the constraint layer that turns "design something" into "design within these specific rules."
+      </blockquote>
+
+      <h2>What it doesn't do</h2>
+      <p>
+        Be specific about the limits:
+      </p>
+      <ul>
+        <li><strong>No live preview.</strong> ux-skill is a recommender + linter. For preview, use Cursor's normal preview workflow or pair with v0.dev / Bolt.new.</li>
+        <li><strong>No Figma sync</strong> in v2 (planned for v2.2). For Figma integration, use the Figma MCP and feed ux-skill's tokens.css back into the Figma file.</li>
+        <li><strong>Not a component library.</strong> 148 components in the catalog are descriptions of what to build, not finished snippets. Pair with shadcn/ui MCP or Tailwind UI for actual implementations.</li>
+        <li><strong>Not branded.</strong> ux-skill is 14 stars on GitHub. ui-ux-pro-max is 84k. If you need community momentum, install both and compose them.</li>
+      </ul>
+
+      <div class="honesty">
+        <div class="label">Honesty card</div>
+        <h4>About the 14-star claim</h4>
+        <p>ux-skill v2 is new (v2.0.0-alpha.1 shipped a few weeks ago) and solo-maintained. We don't have the install base ui-ux-pro-max or hallmark have. The case for installing is architecture — Python engine, 998 entries, 35-rule deterministic linter, 72 brand specs, cross-IDE distribution — not awareness.</p>
+        <p>Install it for the linter and the brand specs. If you only need a prompt-only taste primer, taste-skill (25k stars) is also reasonable. Both are MIT.</p>
+      </div>
+
+      <h2>Five minutes to working</h2>
+      <p>
+        End to end from a fresh Cursor project:
+      </p>
+      <ol>
+        <li><code>cd</code> into your project directory in Cursor's terminal.</li>
+        <li><code>npx uxskill@alpha init --target cursor</code> — writes <code>.cursorrules</code> and seeds the brand spec references.</li>
+        <li><code>npx uxskill@alpha discover</code> — answers the 10-field discovery, writes <code>.ux/last-discover.json</code>.</li>
+        <li><code>npx uxskill@alpha recommend</code> — reads discovery, returns style + palette + type + motion + components, writes <code>tokens.css</code>.</li>
+        <li>Ask Cursor to generate inside that system. The recommendation is in <code>.cursorrules</code>; the model can't drift to defaults.</li>
+        <li><code>npx uxskill@alpha lint ./src</code> — 35-rule pass. Fix any flagged lines with <code>ux fix</code>.</li>
+      </ol>
+
+      <p>
+        Total install + first generation: under five minutes. Total cost: zero. License: MIT.
+      </p>
+    </article>
+
+    <section class="cta">
+      <span class="eyebrow">Install in Cursor</span>
+      <h2>One npx command. <span class="accent">No Python required.</span></h2>
+      <p>The full ux-skill engine wraps behind npx, so Cursor users without a Python environment still get the recommender, 35-rule linter, and 72 brand specs.</p>
+
+      <div class="install-block">
+        <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init --target cursor</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">— or if Python is available —</div>
+        <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
+        <div class="row"><span class="prompt">$</span> ux lint <span class="arg">./src --threshold high</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">— or as a Claude Code skill (if you also use Claude Code) —</div>
+        <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
+        <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <span>© 2026 Laith Aljunaidy. MIT licensed. No telemetry.</span>
+    <div class="links">
+      <a href="/">Home</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/blog/">Blog</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+      <a href="https://pypi.org/project/uxskill/">PyPI</a>
+      <a href="https://www.npmjs.com/package/uxskill">npm</a>
+    </div>
+  </footer>
+</body>
+</html>
