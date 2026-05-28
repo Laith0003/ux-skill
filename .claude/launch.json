@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "ux-social",
+      "name": "uxskill-docs",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "5170"],
-      "port": 5170
+      "runtimeArgs": ["-m", "http.server", "8765", "--bind", "127.0.0.1", "--directory", "docs"],
+      "port": 8765
     }
   ]
 }
