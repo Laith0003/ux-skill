@@ -436,10 +436,141 @@ else:
     # -------- ux stats ---------------------------------------------------
 
     @cli.command("stats")
+    @click.option("--decisions", is_flag=True, help="Include decisions log stats.")
     @click.pass_context
-    def stats_cmd(ctx) -> None:
-        """Show data manifest counts."""
-        _emit({"version": __version__, "counts": data_stats()}, ctx.obj["pretty"])
+    def stats_cmd(ctx, decisions) -> None:
+        """Show data manifest counts (v2.1: + decisions log stats via --decisions)."""
+        payload = {"version": __version__, "counts": data_stats()}
+        if decisions:
+            try:
+                from engine.decisions import stats as decision_stats
+                payload["decisions"] = decision_stats()
+            except Exception as e:
+                payload["decisions_error"] = str(e)
+        _emit(payload, ctx.obj["pretty"])
+
+    # -------- ux synthesize (v2.1) ---------------------------------------
+
+    @cli.command("synthesize")
+    @click.option("--industry", default="", help="Industry id (e.g. fintech-payments).")
+    @click.option("--tone", multiple=True, help="Tone tags (repeatable, e.g. --tone bold --tone warm).")
+    @click.option("--audience", multiple=True, help="Audience tags (repeatable).")
+    @click.option("--must-have", multiple=True, help="Must-have tags (repeatable).")
+    @click.option("--forbidden", multiple=True, help="Forbidden tags (repeatable).")
+    @click.option("--brand", multiple=True, help="Reference brand(s). Sets brand-anchor mode.")
+    @click.option("--strict", is_flag=True, help="With --brand: 100% brand tokens, no synthesis.")
+    @click.option("--no-log", is_flag=True, help="Don't write to .ux/decisions.jsonl.")
+    @click.pass_context
+    def synthesize_cmd(ctx, industry, tone, audience, must_have, forbidden,
+                       brand, strict, no_log) -> None:
+        """Synthesize a fresh design language from a brief (v2.1).
+
+        Modes (auto-dispatched):
+          - --brand X --strict       → strict_brand (100% X tokens)
+          - --brand X                → brand_anchor (70% X + 30% adaptation)
+          - no --brand               → pure_synthesis (infinity space)
+        """
+        if no_log:
+            os.environ["UXSKILL_NO_LOG"] = "1"
+        from engine.recommender import Brief
+        from engine import synthesize as run_synthesize
+        # Build a Brief shim with reference_brands + strict
+        b = Brief(
+            industry=industry,
+            tone=list(tone),
+            audience=list(audience),
+            must_have=list(must_have),
+            forbidden=list(forbidden),
+        )
+        # The synthesize() function checks brief.reference_brands and brief.strict
+        # via duck-typed getattr — set them dynamically.
+        object.__setattr__(b, "reference_brands", list(brand))
+        object.__setattr__(b, "strict", strict)
+        sys_out = run_synthesize(b)
+        # Log decision
+        try:
+            from engine.decisions import record as _rec
+            _rec({
+                "command": "synthesize",
+                "industry": industry or None,
+                "mode": sys_out.mode,
+                "picked_brand": sys_out.anchor_brand_id,
+                "axes": sys_out.axes,
+            })
+        except Exception:
+            pass
+        _emit(sys_out.to_dict(), ctx.obj["pretty"])
+
+    # -------- ux evolve (v2.1) --------------------------------------------
+
+    @cli.command("evolve")
+    @click.argument("html_path", type=click.Path(exists=True))
+    @click.option("--css", "css_path", type=click.Path(exists=True), required=False,
+                  help="Optional CSS path.")
+    @click.option("--force", is_flag=True,
+                  help="Ship even if final score < 65 quality gate.")
+    @click.option("--max-rounds", default=5, type=int,
+                  help="Safety cap (default 5).")
+    @click.option("--no-log", is_flag=True,
+                  help="Don't write to .ux/decisions.jsonl.")
+    @click.pass_context
+    def evolve_cmd(ctx, html_path, css_path, force, max_rounds, no_log) -> None:
+        """Auto-iterating polish loop. Refines until score >= 90 or plateaus.
+
+        Reads <html_path> (+ optional --css). Writes:
+          - <html_path>.evolved.html
+          - <css_path>.evolved.css (if --css given)
+          - .ux/last-evolve.json (full EvolveResult)
+          - One line to .ux/decisions.jsonl (the learning signal)
+        """
+        if no_log:
+            os.environ["UXSKILL_NO_LOG"] = "1"
+        from engine import evolve as run_evolve
+
+        html = Path(html_path).read_text(encoding="utf-8", errors="ignore")
+        css = ""
+        if css_path:
+            css = Path(css_path).read_text(encoding="utf-8", errors="ignore")
+
+        # Get a fresh lint score for the input
+        report = run_lint([html_path] + ([css_path] if css_path else []))
+        result = run_evolve(
+            html=html, css=css,
+            linter_score=report.score,
+            force=force,
+            max_rounds=max_rounds,
+        )
+
+        # Persist outputs only if above gate or forced
+        out_html_path = Path(html_path).with_suffix(".evolved.html")
+        out_css_path = Path(css_path).with_suffix(".evolved.css") if css_path else None
+        if result.above_gate or result.forced:
+            out_html_path.write_text(result.final_html, encoding="utf-8")
+            if out_css_path:
+                out_css_path.write_text(result.final_css, encoding="utf-8")
+
+        # Save the full result
+        ux_dir = Path(".ux")
+        ux_dir.mkdir(parents=True, exist_ok=True)
+        (ux_dir / "last-evolve.json").write_text(
+            json.dumps(result.to_dict(), indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+
+        # Log decision
+        try:
+            from engine.decisions import record as _rec
+            _rec({
+                "command": "evolve",
+                "lint_score": result.final_score,
+                "artifact_path": str(out_html_path) if result.above_gate or result.forced else None,
+            })
+        except Exception:
+            pass
+
+        _emit(result.to_dict(), ctx.obj["pretty"])
+        # Exit code: 0 = above gate or forced; 1 = gate failed
+        sys.exit(0 if (result.above_gate or result.forced) else 1)
 
     # -------- ux version -------------------------------------------------
 
