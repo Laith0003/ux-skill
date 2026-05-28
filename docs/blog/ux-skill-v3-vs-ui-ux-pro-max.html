@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ux-skill v3.0 vs UI/UX Pro Max — engine vs atlas, scored honestly</title>
+<meta name="description" content="UI/UX Pro Max is the finished atlas of UI knowledge. ux-skill v3.0 is the engine that decides what UI should exist. Different categories. Here's where each wins and why we picked the engine path.">
+<link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ux-skill-v3-vs-ui-ux-pro-max.html">
+<meta property="og:title" content="ux-skill v3.0 vs UI/UX Pro Max — engine vs atlas">
+<meta property="og:description" content="The atlas is more complete today. The engine is the trajectory. Honest scored comparison after v3.0 launch.">
+<meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
+<meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ux-skill-v3-vs-ui-ux-pro-max.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ux-skill v3.0 vs UI/UX Pro Max — engine vs atlas, scored honestly">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"ux-skill v3.0 vs UI/UX Pro Max — engine vs atlas, scored honestly","datePublished":"2026-05-28","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/ux-skill-v3-vs-ui-ux-pro-max.html","inLanguage":"en"}
+</script>
+
+<style>
+  :root {
+    --canvas: #07080a; --surface: #0e1014; --ink: #f6f7f9; --body: #c0c3c9;
+    --muted: #8a8f96; --accent: #10b981; --hairline: rgba(255,255,255,0.08);
+    --display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--canvas); color: var(--body); font-family: var(--sans); line-height: 1.65; overflow-x: clip; }
+  a { color: var(--accent); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: clamp(20px, 4vw, 56px); }
+  header.post { margin-bottom: 48px; padding-bottom: 24px; border-bottom: 1px solid var(--hairline); }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  h1 { font-family: var(--display); font-size: clamp(32px, 5vw, 52px); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; font-weight: 600; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede { font-size: 19px; line-height: 1.55; color: var(--body); max-width: 60ch; }
+  h2 { font-family: var(--display); font-size: 28px; letter-spacing: -0.02em; color: var(--ink); margin: 56px 0 18px; }
+  h3 { font-family: var(--display); font-size: 21px; color: var(--ink); margin: 32px 0 12px; }
+  p { margin-bottom: 18px; font-size: 16.5px; max-width: 60ch; }
+  ul { margin: 0 0 18px 22px; }
+  li { margin-bottom: 8px; max-width: 60ch; }
+  code { font-family: var(--mono); font-size: 14px; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+  pre { background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; padding: 18px 22px; overflow-x: auto; margin: 18px 0; }
+  pre code { background: transparent; padding: 0; font-size: 13.5px; line-height: 1.6; color: var(--body); }
+  blockquote { border-left: 2px solid var(--accent); padding-left: 18px; margin: 28px 0; color: var(--ink); font-style: italic; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+  th { color: var(--ink); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .nav { padding: 18px 0; border-bottom: 1px solid var(--hairline); }
+  .nav__row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); }
+  .nav__brand { font-family: var(--display); font-weight: 700; font-size: 17px; color: var(--ink); }
+  .nav__link { font-family: var(--mono); font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted); }
+  footer { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--hairline); color: var(--muted); font-family: var(--mono); font-size: 11.5px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__row">
+    <a class="nav__brand" href="/">uxskill</a>
+    <a class="nav__link" href="/">Home</a>
+    <a class="nav__link" href="/brands.html">Brands</a>
+    <a class="nav__link" href="/anti-patterns.html">Anti-patterns</a>
+    <a class="nav__link" href="/blog/">Blog</a>
+    <a class="nav__link" href="/compare.html">Compare</a>
+    <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+  </div>
+</header>
+
+<div class="wrap">
+<header class="post">
+<p class="eyebrow">v3.0 — THE BRAIN · 2026-05-28</p>
+<h1>ux-skill v3.0 vs UI/UX Pro Max &mdash; <em>engine vs atlas</em>, scored honestly.</h1>
+<p class="lede">UI/UX Pro Max is the finished atlas of UI knowledge. ux-skill v3.0 is the engine that decides what UI should exist. Different categories. Here's where each wins, where the other doesn't, and why we picked the engine path.</p>
+</header>
+
+<h2>The honest framing</h2>
+<p>Both projects appear in the same search results ("Claude Code UX skill", "AI design plugin", "Cursor design system"). They're not the same thing. ChatGPT (in a review we asked it to do honestly) summed up the distinction:</p>
+<blockquote>UI UX Pro Max = finished atlas of UI knowledge. UX Skill = engine that decides what UI should exist. Atlas beats engine in immediate usefulness. Engine beats atlas in future value if built correctly.</blockquote>
+<p>That's accurate. If you install both today and use them for production work, Pro Max has more "finished surfaces" you can pull from. We won't pretend otherwise.</p>
+
+<h2>What Pro Max does best</h2>
+<ul>
+<li><strong>Breadth of finished skills.</strong> Banner design, slide design, expanded data sets — Pro Max v2.5 covers a wider net of "I need a thing, give me a thing."</li>
+<li><strong>Maturity signal.</strong> They've been at v2.x stable for months. We just hit v3.0 stable hours ago.</li>
+<li><strong>Immediate usability.</strong> If you want to install once and never think about how design happens, Pro Max ships that flow today.</li>
+<li><strong>Engineering completeness as a static system.</strong> Their atlas is internally consistent. It's done.</li>
+</ul>
+
+<h2>What v3.0 does that Pro Max doesn't</h2>
+<ul>
+<li><strong>Deterministic 7-axis synthesizer.</strong> A brief → 7 axis values → a complete novel design language per call. Pro Max picks from a catalogue. v3.0 distills from one.</li>
+<li><strong>Triple-mode dispatch.</strong> <code>strict_brand</code> / <code>brand_anchor</code> / <code>pure_synthesis</code> — three different speeds of customization, auto-dispatched from what's in the brief.</li>
+<li><strong>Decisions ledger + recommender re-rank.</strong> Every call is logged locally. The next call reads that log and biases ranking by past wins. Real closed feedback loop. Pro Max generates once and forgets.</li>
+<li><strong>Axis interaction matrix.</strong> Documented conflict resolution between competing axes (density × formality for spacing, geometry × formality for radius, etc.). Pro Max's tokens are static.</li>
+<li><strong>Quality gate at 65.</strong> <code>/ux-evolve</code> auto-iterates polish until score ≥ 90 or plateau. Refuses to ship below 65 unless <code>--force</code>. Pro Max has no such gate.</li>
+<li><strong>Responsive-by-construction layout primitives.</strong> 7 primitives using <code>auto-fit minmax(min(N, 100%), 1fr)</code> + container queries. Zero size-based <code>@media</code> queries. Bulletproof at every viewport.</li>
+<li><strong>145 deterministic anti-pattern rules.</strong> Sub-50ms scan. Pro Max has rules too but ours are individually URL-addressable at <a href="/anti-patterns.html">/anti-patterns.html</a>.</li>
+<li><strong>160 brand specs as training data.</strong> The same files Pro Max would treat as templates, we treat as vocabulary for synthesis. Same data, completely different role.</li>
+<li><strong>Zero LLM in the engine.</strong> Same brief → same output. Reproducible across machines. Pro Max's stance on LLM use varies by command.</li>
+<li><strong>18 MCP tools.</strong> Exposed over stdio for Claude Desktop, Cursor, generic agents. Pro Max doesn't ship an MCP server.</li>
+</ul>
+
+<h2>The scoring</h2>
+
+<table>
+<thead><tr><th>Dimension</th><th>UI/UX Pro Max v2.5</th><th>ux-skill v3.0</th></tr></thead>
+<tbody>
+<tr><td>Finished skill count</td><td>~25</td><td>23</td></tr>
+<tr><td>Catalogue entries</td><td>~800 (estimated)</td><td>1,182</td></tr>
+<tr><td>Brand specs</td><td>—</td><td>160</td></tr>
+<tr><td>Anti-pattern rules</td><td>~50 (estimated)</td><td>145 (deterministic)</td></tr>
+<tr><td>IDE support</td><td>Claude Code</td><td>17 IDEs</td></tr>
+<tr><td>Languages (homepage / README)</td><td>1 (en)</td><td>17 locales</td></tr>
+<tr><td>MCP server</td><td>No</td><td>18 tools</td></tr>
+<tr><td>Generative engine</td><td>Pick from catalogue</td><td>7-axis synthesizer</td></tr>
+<tr><td>Closed feedback loop</td><td>No</td><td>Decisions ledger drives re-rank</td></tr>
+<tr><td>Auto-iteration / polish loop</td><td>No</td><td><code>/ux-evolve</code> 5-round loop</td></tr>
+<tr><td>Quality gate</td><td>No</td><td>65 (force-overridable)</td></tr>
+<tr><td>Determinism guarantees</td><td>Mixed</td><td>Same brief → same output, locked</td></tr>
+<tr><td>Telemetry</td><td>—</td><td>None</td></tr>
+<tr><td>LLM dependency</td><td>Yes (varies)</td><td>None in the engine</td></tr>
+<tr><td>Local stats dashboard</td><td>No</td><td><code>uxskill stats --html</code></td></tr>
+</tbody>
+</table>
+
+<h2>Where the comparison is unfair (in their favor)</h2>
+<ul>
+<li>Pro Max has more public adoption / GitHub stars today.</li>
+<li>Pro Max has a more polished documentation site (we've been heads-down on engine work).</li>
+<li>Pro Max's "banner design" / "slide design" skills target use-cases we don't ship yet.</li>
+</ul>
+
+<h2>Where the comparison is unfair (in our favor)</h2>
+<ul>
+<li>We can synthesize a novel design language for a fictional brand. Pro Max needs the brand in its catalogue.</li>
+<li>We can learn from your local history. Pro Max can't.</li>
+<li>We work in 17 IDEs. Pro Max is Claude-Code-centric.</li>
+<li>Our engine has zero ongoing costs. Pro Max has LLM call costs per command.</li>
+</ul>
+
+<h2>Which should you install?</h2>
+<p>Both. They're complementary, not exclusive. Use Pro Max when you want "here's a finished surface, ship it." Use ux-skill when you want "here's a constraint set, generate something that meets it AND learns from feedback."</p>
+
+<p>If forced to pick one:</p>
+<ul>
+<li><strong>You ship one-off marketing pages with simple briefs</strong> → Pro Max</li>
+<li><strong>You ship products with recurring design decisions</strong> → ux-skill (the closed loop pays off after 20-30 decisions)</li>
+<li><strong>You work in something other than Claude Code</strong> → ux-skill (17 IDEs vs 1)</li>
+<li><strong>You can't have LLM costs in your generation path</strong> → ux-skill (offline + deterministic)</li>
+<li><strong>You need the longest catalogue today</strong> → Pro Max</li>
+<li><strong>You need the system to get smarter from your usage</strong> → ux-skill</li>
+</ul>
+
+<h2>The architectural argument</h2>
+<p>This blog post wasn't supposed to be marketing. We've been honest about where Pro Max wins. The real argument is structural:</p>
+<p>An atlas reaches diminishing returns. After the 200th finished surface, the user can't find the one they want because there are too many. The catalogue becomes search-hostile.</p>
+<p>An engine has no such ceiling. As you add brand specs, the synthesizer's vocabulary grows. As users log decisions, the recommender gets sharper for their bucket. Adoption compounds quality.</p>
+<p>v3.0 bets on the engine path. If we're wrong, we'll still have a respectable catalogue. If we're right, the math wins.</p>
+
+<h2>Try them side-by-side</h2>
+<pre><code># Install ux-skill v3.0
+pip install uxskill
+uxskill init
+
+# Generate a synthesized fintech dashboard
+uxskill synthesize \
+  --industry fintech-payments \
+  --tone bold --tone serious
+
+# Then install Pro Max via Claude Code marketplace and compare outputs
+# for the same brief. The differences will be visible.</code></pre>
+
+<h2>Related</h2>
+<ul>
+<li><a href="/compare.html">Full scorecard: ux-skill vs every Claude UX plugin</a></li>
+<li><a href="/blog/v3-the-brain-launch.html">The v3.0 launch — The Brain</a></li>
+<li><a href="/blog/brand-specs-training-data-not-templates.html">Brand specs are training data, not templates</a></li>
+<li><a href="/blog/closed-loop-design-system-feedback.html">What a closed-loop design system actually means</a></li>
+</ul>
+
+<footer>
+ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM in the engine · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+</footer>
+
+</div>
+</body>
+</html>
