@@ -1,0 +1,50 @@
+{
+  "id": "bloomberg",
+  "name": "Bloomberg",
+  "category": "Editorial / Media",
+  "year_observed": 2026,
+  "philosophy": "Financial-news institution using its terminal heritage as design language — black canvas, orange voltage, ticker scroll at every page, hairline-rule rhythm, tabular figures everywhere numbers appear.",
+  "design_language": {
+    "type": {
+      "display": "Bloomberg Cousine",
+      "body": "Bloomberg Inc",
+      "mono": "Bloomberg Mono"
+    },
+    "color_primary": "#fb8b1e",
+    "color_canvas": "#0a0a0a",
+    "color_ink": "#ffffff",
+    "color_accent_gradient": null,
+    "radius": [0, 2, 4, 8],
+    "spacing": "4-based",
+    "motion_signature": "180ms ease-out hover; signature continuous 60s ticker scroll at top; orange live-indicator pulse; 800ms chart line draw-on at viewport entry."
+  },
+  "trademark_signals": [
+    "Bloomberg Orange (#fb8b1e) — most-recognized accent in financial media",
+    "Ticker scrolling at top of every page — terminal-heritage UX preserved",
+    "Hairline-rule rhythm — every section, table row, byline separated by 1px lines",
+    "Tabular figures everywhere numbers appear",
+    "Serif headlines against sans body — editorial weight in a data-heavy product"
+  ],
+  "components_observed": [
+    "live-ticker-strip-orange",
+    "headline-serif-large",
+    "data-table-tabular-figures",
+    "chart-card-dark",
+    "article-byline-block-caps",
+    "subscribe-cta-orange-fill",
+    "section-grid-multi-column"
+  ],
+  "exemplar_pages": [
+    "https://www.bloomberg.com/",
+    "https://www.bloomberg.com/markets",
+    "https://www.bloomberg.com/businessweek",
+    "https://www.bloomberg.com/opinion"
+  ],
+  "ai_slop_avoided": [
+    "Don't cool the orange — it stays at full saturation",
+    "Don't add mascot characters or flat-cartoon illustrations",
+    "Don't introduce saturated rainbow gradients",
+    "Don't remove hairline rules — the grid is the brand"
+  ],
+  "source_md": "references/brands/bloomberg-DESIGN.md"
+}

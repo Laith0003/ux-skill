@@ -680,6 +680,46 @@
       </div>
     </section>
   </div>
+  <aside class="related-reads" aria-label="Related reads">
+    <div class="related-reads-inner">
+      <h2 class="related-reads-h">Related reads</h2>
+      <ul>
+        <li><a href="/blog/vs-ui-ux-pro-max.html">ui-ux-pro-max alternative</a></li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html">Anti-AI-slop tools for Claude Code</a></li>
+        <li><a href="/blog/claude-code-marketplace-best-plugins.html">Best Claude Code marketplace plugins</a></li>
+        <li><a href="/blog/figma-vs-ux-skill.html">Figma vs ux-skill</a></li>
+      </ul>
+    </div>
+  </aside>
+  <style>
+    .related-reads {
+      max-width: 880px; margin: 80px auto 0 auto; padding: 32px 24px 8px;
+      border-top: 1px solid rgba(20,20,19,0.10);
+    }
+    .related-reads-h {
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: #6c6a64; margin-bottom: 16px; font-family: 'JetBrains Mono', ui-monospace, monospace;
+    }
+    .related-reads ul {
+      list-style: none; padding: 0; margin: 0;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px;
+    }
+    .related-reads li { font-size: 15px; line-height: 1.5; }
+    .related-reads a {
+      color: inherit; text-decoration: none;
+      border-bottom: 1px solid rgba(20,20,19,0.18);
+      padding-bottom: 2px; transition: border-color .15s ease;
+    }
+    .related-reads a:hover { border-color: currentColor; }
+    @media (max-width: 640px) {
+      .related-reads ul { grid-template-columns: 1fr; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .related-reads { border-top-color: rgba(255,255,255,0.12); }
+      .related-reads a { border-bottom-color: rgba(255,255,255,0.20); }
+    }
+  </style>
+
 
   <footer>
     <span>© 2026 Laith Aljunaidy. MIT licensed. No telemetry.</span>
