@@ -197,7 +197,7 @@ def build_lang(data: dict, lang: str) -> str:
 
     # Hero pills
     if "hero_pill_1" in strings:
-        html = html.replace('v2.0.0 — Python pivot', tr("hero_pill_1", "v2.0.0 — Python pivot"), 1)
+        html = html.replace('v3.0.0 — THE BRAIN', tr("hero_pill_1", "v3.0.0 — THE BRAIN"), 1)
     if "hero_pill_2" in strings:
         html = html.replace('MIT, no telemetry', tr("hero_pill_2", "MIT, no telemetry"), 1)
 
