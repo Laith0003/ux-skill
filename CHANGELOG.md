@@ -7,6 +7,19 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.0.0-alpha.25] — 2026-05-28 (MCP server — the asymmetric move)
+
+- **New module:** `engine/mcp/` — Model Context Protocol stdio server exposing the engine as 14 tools so any MCP-capable host (Claude Desktop, Cursor, Windsurf, generic agents) can call into the recommender, linter, persistence, and the 11 data manifests without installing the full plugin.
+- **14 tools registered:** `ux_recommend`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`.
+- **New entry point:** `ux-mcp` (wired by `pyproject.toml` → `engine.mcp.server:run_server`).
+- **Optional dependency:** `pip install 'uxskill[mcp]'` pulls in `mcp>=1.0`. Base install stays slim. Module imports cleanly without the transport library; `ux-mcp` fails fast with a clear install hint if it's missing.
+- **Architecture:** transport split from handlers. Each tool is a pure `dict -> dict` Python function; the stdio wrapper is a thin async layer. Tests exercise handlers directly — no event loop, no subprocess plumbing.
+- **Asymmetric position:** none of the top 8 Claude UX skills (ui-ux-pro-max-skill, open-design, taste-skill, huashu-design, stitch, nothing-design, hallmark, material-3) ship an MCP server. They are locked inside Claude Code's plugin runtime. ux-skill is now reachable from any MCP host.
+- New command file: `commands/ux-mcp.md`.
+- New documentation page: `docs/mcp.html` (brand-matched to `compare.html`).
+- New tests: `tests/test_mcp.py` (5 tests, all passing). Total suite: 65 passing.
+- README hero TOC + new "MCP server" section between brand specs and the 17-IDE installer.
+
 ## [2.0.0-alpha.24] — 2026-05-28 (brand revert)
 
 - Reverted the brand from "ux-god-skill" back to "ux-skill" (better SEO, more humble voice).

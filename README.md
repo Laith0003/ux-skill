@@ -46,12 +46,13 @@ This README is the canonical reference. Every command, every sub-agent, every da
 6. [The 11 data manifests](#the-11-data-manifests)
 7. [The 35 anti-AI-slop rules — the linter](#the-35-anti-ai-slop-rules--the-linter)
 8. [The 72 brand DESIGN.md specs — by category](#the-72-brand-designmd-specs--by-category)
-9. [The 17-IDE installer](#the-17-ide-installer)
-10. [Use cases — concrete scenarios](#use-cases--concrete-scenarios)
-11. [Compared to alternatives](#compared-to-alternatives)
-12. [Roadmap](#roadmap)
-13. [Contributing](#contributing)
-14. [License, author, acknowledgments](#license-author-acknowledgments)
+9. [MCP server — the asymmetric move](#mcp-server--the-asymmetric-move)
+10. [The 17-IDE installer](#the-17-ide-installer)
+11. [Use cases — concrete scenarios](#use-cases--concrete-scenarios)
+12. [Compared to alternatives](#compared-to-alternatives)
+13. [Roadmap](#roadmap)
+14. [Contributing](#contributing)
+15. [License, author, acknowledgments](#license-author-acknowledgments)
 
 ---
 
@@ -895,6 +896,21 @@ Clay, NVIDIA, The Verge, Vodafone, Wired
 ### Why this matters
 
 The other 8 popular Claude UX plugins generate "modern minimal" or "clean dashboard" — variants of the same default aesthetic. ux-skill lets you ask for **Linear's clarity**, **Stripe's seriousness**, **Apple's restraint**, **Tesla's monolith**, **Notion's friendliness**, **Cursor's gradient discipline**, **Raycast's hairline density**, **Claude's warm editorial** — and the engine pulls the right tokens, voice, motion conventions, and signature moves from the brand spec.
+
+---
+
+## MCP server — the asymmetric move
+
+ux-skill ships a **Model Context Protocol server**. Run `ux-mcp` and the engine becomes a long-running stdio process that any MCP-capable host — Claude Desktop, Cursor, Windsurf, generic agents — can call into. Fourteen tools: `ux_recommend`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`. Same Python handlers the slash commands use; same data manifests; same deterministic recommender.
+
+**Why this is the asymmetric move:** none of the top eight Claude UX skills (ui-ux-pro-max-skill, open-design, taste-skill, huashu-design, stitch, nothing-design, hallmark, material-3) ship an MCP server. They are locked inside Claude Code's plugin runtime. ux-skill is reachable from any host that speaks MCP, including agents that have never heard of a Claude Code plugin.
+
+```bash
+pip install 'uxskill[mcp]'             # mcp is an opt-in extra
+ux-mcp                                  # stdio JSON-RPC server starts
+```
+
+Point your client at the `ux-mcp` binary. Full tool docs, JSON examples, and per-client config for Claude Desktop, Cursor, and Windsurf live at [docs/mcp.html](docs/mcp.html) and in `commands/ux-mcp.md`.
 
 ---
 
