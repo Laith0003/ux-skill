@@ -30,6 +30,7 @@ MANIFESTS: List[str] = [
     "ux-guidelines",
     "motion-presets",
     "anti-patterns",
+    "landing-patterns",
 ]
 
 

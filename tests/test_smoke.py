@@ -12,7 +12,7 @@ def test_manifest_list_canonical():
     expected = {
         "styles", "palettes", "type-pairs", "components", "industries",
         "chart-types", "tech-stacks", "ux-guidelines", "motion-presets",
-        "anti-patterns",
+        "anti-patterns", "landing-patterns",
     }
     assert set(MANIFESTS) == expected
 
