@@ -38,12 +38,16 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+mcp = [
+  "mcp>=1.0"
+]
 dev = [
   "pytest>=7.4",
   "pytest-cov>=4.1",
   "ruff>=0.1.9",
   "mypy>=1.7",
-  "black>=23.12"
+  "black>=23.12",
+  "mcp>=1.0"
 ]
 
 [project.urls]
@@ -55,6 +59,7 @@ Documentation = "https://uxskill.laithjunaidy.com"
 [project.scripts]
 ux = "engine.cli.main:cli"
 uxskill = "engine.cli.main:cli"
+ux-mcp = "engine.mcp.server:run_server"
 
 [tool.setuptools.packages.find]
 where = ["."]

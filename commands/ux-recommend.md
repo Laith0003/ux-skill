@@ -109,3 +109,12 @@ The recommendation lands at `.ux/last-recommendation.json` so it can chain into:
 - IS: A deterministic Python reasoning engine over structured data. Same input always returns the same output. No LLM in the recommender itself.
 - IS NOT: A code generator. It tells you WHAT to use; `/ux-design` and friends are what USE it.
 - IS NOT: A replacement for taste. The engine recommends; you decide. The brief's `forbidden` field is yours to wield.
+
+## Persisting to your project
+
+After running, save the recommendation as a MASTER.md in your project:
+
+    python3 -m engine.cli.main persist save --project-root .
+
+This creates `.ux/design-system/MASTER.md` — a human-readable Markdown
+capture of every decision. Re-runnable, version-controllable, shareable.
