@@ -3,7 +3,7 @@
 Pre-written launch copy for Hacker News, Product Hunt, Reddit, X/Twitter, LinkedIn, and Discord. Tuned to each platform's tone. **You** post — Claude never posts on your behalf.
 
 Numbers are accurate as of 2026-05-28:
-- 998 manifest entries · 120 anti-pattern rules (after round 5) · 110 brand specs
+- 998 manifest entries · 120 anti-pattern rules (after round 5) · 131 brand specs
 - 23 slash commands · 14 MCP tools · 17 IDE adapters
 - 4 install paths (pip / npx / Claude Code plugin / Cursor rules)
 - 6 language READMEs (en / ar / es / zh / fr / de)
@@ -21,10 +21,10 @@ Numbers are accurate as of 2026-05-28:
 ux-skill is an open-source Python engine that catches the AI-design fingerprints every LLM produces by default — purple-to-blue gradients, Inter at 90px, John Doe placeholders, three-equal-card hero grids, lorem ipsum, emoji-as-icons. It runs inside Claude Code, Cursor, Windsurf, GitHub Copilot, and 13 more IDEs.
 
 The architecture:
-- 1,161 entries across 11 queryable JSON manifests (styles, palettes, type pairs, components, motion presets, industries, brand specs)
+- 1,182 entries across 11 queryable JSON manifests (styles, palettes, type pairs, components, motion presets, industries, brand specs)
 - A 5-parallel-search recommender that fans out across style → palette → type → motion → components for a given brief
 - A deterministic regex linter with 120 anti-pattern rules (no LLM in the audit lane — runs in CI in <50ms)
-- 110 brand DESIGN.md specs as queryable JSON (Apple, Stripe, Linear, Notion, Vercel, Figma, Tesla, BMW, Spotify, plus 83 more)
+- 131 brand DESIGN.md specs as queryable JSON (Apple, Stripe, Linear, Notion, Vercel, Figma, Tesla, BMW, Spotify, plus 83 more)
 - An MCP server exposing 14 tools — works in Claude Desktop, Cursor, Windsurf, and generic MCP hosts. None of the top 8 Claude UX skills ship one.
 
 The reason this exists: every popular AI coding tool produces the same recognizable "AI default" UI — same gradient, same hero pattern, same Inter-everywhere typography. The closest tool (ui-ux-pro-max-skill, 84k stars) is a markdown reference. We took that idea and built it as a queryable Python engine plus a regex-based slop catcher you can run in CI.
@@ -48,7 +48,7 @@ Open to feedback — especially on the linter rule catalog and the recommender's
 
 **Description:**
 ```
-ux-skill is the strongest design plugin for AI coding tools. A Python engine with 998 manifest entries, a 120-rule anti-AI-slop linter that runs in CI, and 110 brand DESIGN.md specs (Apple, Stripe, Linear, Figma, Tesla, BMW, plus 86 more). Ships into Claude Code, Cursor, Windsurf, GitHub Copilot, and 13 more IDEs via a single npx command.
+ux-skill is the strongest design plugin for AI coding tools. A Python engine with 998 manifest entries, a 120-rule anti-AI-slop linter that runs in CI, and 131 brand DESIGN.md specs (Apple, Stripe, Linear, Figma, Tesla, BMW, plus 86 more). Ships into Claude Code, Cursor, Windsurf, GitHub Copilot, and 13 more IDEs via a single npx command.
 
 What it catches: purple-to-blue gradients, Inter at 90px, John Doe placeholders, three-equal-card heros, lorem ipsum, emoji-as-icons, and 94 more AI design fingerprints.
 
@@ -76,7 +76,7 @@ MIT, no telemetry.
 Built ux-skill over the last 3 weeks. It's a Python plugin that ships into 17 AI coding tools (Claude Code, Cursor, Windsurf, GitHub Copilot, JetBrains AI, etc) and:
 
 1. Runs a deterministic regex linter with 100 rules that catches the design fingerprints every LLM produces by default — purple-to-blue gradients, Inter at 90px, John Doe placeholders, three-equal-card heros, lorem ipsum, emoji-as-icons.
-2. Generates complete design systems via a 5-parallel-search recommender that fans out across 998 manifest entries (styles, palettes, type pairs, components, motion presets, 110 brand specs).
+2. Generates complete design systems via a 5-parallel-search recommender that fans out across 998 manifest entries (styles, palettes, type pairs, components, motion presets, 131 brand specs).
 3. Ships an MCP server with 14 tools so any MCP host (Claude Desktop, generic agents) can call into the engine.
 
 Install: `pip install uxskill` or `/plugin install ux@ux-skill` in Claude Code.
@@ -102,7 +102,7 @@ Looking for feedback on the rule catalog. What AI design fingerprints am I still
 ```
 ux-skill is a Python plugin I built to fix the "every AI-generated UI looks the same" problem. It's a 5-module Python package:
 
-- `recommender` — 5-parallel-search across 11 JSON manifests (1,161 entries total)
+- `recommender` — 5-parallel-search across 11 JSON manifests (1,182 entries total)
 - `linter` — deterministic regex linter, 100 rules, CI-friendly
 - `discovery` — 10-field protocol that forces the model to ask before generating
 - `generator` — emits tokens + manifest from a recommendation
@@ -112,7 +112,7 @@ The interesting bits:
 - Linter runs in <50ms on average — no LLM call. Each rule has a regex pattern, a severity, a why, and a fix.
 - Recommender uses a transparent scoring function (no learned weights) over manifest entries. Explainable.
 - MCP server exposes 14 tools over stdio. Works in Claude Desktop, generic MCP agents.
-- 110 brand DESIGN.md specs as queryable JSON. Apple, Stripe, Linear, Tesla, BMW, Notion, plus 86 more.
+- 131 brand DESIGN.md specs as queryable JSON. Apple, Stripe, Linear, Tesla, BMW, Notion, plus 86 more.
 
 Install: `pip install uxskill`. MIT. No telemetry. No account.
 
@@ -128,7 +128,7 @@ PyPI: https://pypi.org/project/uxskill/
 ```
 shipped ux-skill — open-source python engine that catches AI-generated UI slop in CI.
 
-120 deterministic regex rules. 110 brand specs (apple, stripe, linear, figma, tesla, bmw, +86 more). MCP server with 14 tools. ships into claude code, cursor, windsurf, github copilot.
+120 deterministic regex rules. 131 brand specs (apple, stripe, linear, figma, tesla, bmw, +86 more). MCP server with 14 tools. ships into claude code, cursor, windsurf, github copilot.
 
 pip install uxskill
 
@@ -148,7 +148,7 @@ ux-skill catches them with a deterministic linter that runs in CI. no LLM. <50ms
 2/
 the closest tool is ui-ux-pro-max-skill at 84k stars. it's a markdown reference for an LLM to read.
 
-ux-skill takes that idea and packages it as a queryable python engine + a regex slop catcher you can run in CI. plus 110 brand specs ui-ux-pro-max doesn't have.
+ux-skill takes that idea and packages it as a queryable python engine + a regex slop catcher you can run in CI. plus 131 brand specs ui-ux-pro-max doesn't have.
 ```
 
 ```
@@ -175,7 +175,7 @@ I shipped ux-skill — an open-source Python design intelligence engine for AI c
 
 The problem it solves: every popular AI coding tool produces the same UI by default. Purple-to-blue gradient, Inter at 90px, three-equal-card hero, John Doe placeholder, lorem ipsum. The fingerprints are real. A senior designer can recognize "this was generated by an AI" in about 4 seconds.
 
-ux-skill catches these fingerprints with a deterministic regex linter — 100 rules, runs in CI in under 50 milliseconds, no LLM call in the audit lane. And it generates better defaults via a 5-parallel-search recommender that fans out across 998 manifest entries (styles, palettes, type pairings, components, motion presets, 110 brand specs).
+ux-skill catches these fingerprints with a deterministic regex linter — 100 rules, runs in CI in under 50 milliseconds, no LLM call in the audit lane. And it generates better defaults via a 5-parallel-search recommender that fans out across 998 manifest entries (styles, palettes, type pairings, components, motion presets, 131 brand specs).
 
 Architecturally:
 - Python engine, packaged as `uxskill` on PyPI and `uxskill` on npm.
@@ -197,7 +197,7 @@ Site: https://uxskill.laithjunaidy.com
 
 **Short pitch (one-liner + link):**
 ```
-Open-sourced ux-skill yesterday — a Python design intelligence engine for Claude Code, Cursor, Windsurf, +14 more IDEs. 120-rule anti-AI-slop linter, 5-parallel-search recommender, 110 brand specs, MCP server with 14 tools. MIT.
+Open-sourced ux-skill yesterday — a Python design intelligence engine for Claude Code, Cursor, Windsurf, +14 more IDEs. 120-rule anti-AI-slop linter, 5-parallel-search recommender, 131 brand specs, MCP server with 14 tools. MIT.
 https://github.com/Laith0003/ux-skill
 ```
 
@@ -207,7 +207,7 @@ https://github.com/Laith0003/ux-skill
 
 **Q: "How is this different from ui-ux-pro-max-skill?"**
 ```
-ui-ux-pro-max-skill (84k stars) is a markdown reference — the LLM reads it as context. ux-skill is a Python engine — the LLM calls it as a tool. We borrowed the recommender shape from ui-ux-pro-max and added: a deterministic regex linter (100 rules, runs in CI), 110 brand DESIGN.md specs as queryable JSON (ui-ux-pro-max ships 0), an MCP server with 14 tools (ui-ux-pro-max doesn't ship one), and cross-IDE distribution via pip + npx (ui-ux-pro-max is Claude Code-only).
+ui-ux-pro-max-skill (84k stars) is a markdown reference — the LLM reads it as context. ux-skill is a Python engine — the LLM calls it as a tool. We borrowed the recommender shape from ui-ux-pro-max and added: a deterministic regex linter (100 rules, runs in CI), 131 brand DESIGN.md specs as queryable JSON (ui-ux-pro-max ships 0), an MCP server with 14 tools (ui-ux-pro-max doesn't ship one), and cross-IDE distribution via pip + npx (ui-ux-pro-max is Claude Code-only).
 
 The full scored side-by-side is at uxskill.laithjunaidy.com/compare.html.
 ```

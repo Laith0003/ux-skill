@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The anti-slop CLI for vibe coders — 120 rules, no LLM, runs in CI</title>
-  <meta name="description" content="A command-line design linter built for vibe coders. 120 deterministic regex rules, 1,161-entry catalog, zero LLM calls, sub-second on a 200-file repo. Plugs into pre-commit, GitHub Actions, Husky, Lefthook, and any shell hook.">
+  <meta name="description" content="A command-line design linter built for vibe coders. 120 deterministic regex rules, 1,182-entry catalog, zero LLM calls, sub-second on a 200-file repo. Plugs into pre-commit, GitHub Actions, Husky, Lefthook, and any shell hook.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/anti-slop-cli-vibe-coders.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/anti-slop-cli-vibe-coders.html">
   <meta property="og:title" content="The anti-slop CLI for vibe coders — 120 rules, no LLM, runs in CI">
-  <meta property="og:description" content="A command-line design linter built for the vibe-coding workflow. 120 deterministic rules, 1,161-entry catalog, sub-second runtime, MIT-licensed.">
+  <meta property="og:description" content="A command-line design linter built for the vibe-coding workflow. 120 deterministic rules, 1,182-entry catalog, sub-second runtime, MIT-licensed.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/anti-slop-cli-vibe-coders.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -33,7 +33,7 @@
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "The anti-slop CLI for vibe coders — 120 rules, no LLM, runs in CI",
-    "description": "A command-line design linter built for vibe coders. 120 deterministic regex rules, 1,161-entry catalog, zero LLM calls, sub-second on a 200-file repo.",
+    "description": "A command-line design linter built for vibe coders. 120 deterministic regex rules, 1,182-entry catalog, zero LLM calls, sub-second on a 200-file repo.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -575,7 +575,7 @@ npx uxskill@latest lint --threshold high --staged || exit 1</pre>
 
       <h2>The recommender is the upstream half</h2>
       <p>
-        The linter is the downstream half of the loop. The upstream half is <code>ux recommend</code> &mdash; five parallel lookups over a 1,161-entry catalog merged into a single structured design system. The recommender narrows the model's choices before the prompt; the linter punishes the model when the choices slip anyway.
+        The linter is the downstream half of the loop. The upstream half is <code>ux recommend</code> &mdash; five parallel lookups over a 1,182-entry catalog merged into a single structured design system. The recommender narrows the model's choices before the prompt; the linter punishes the model when the choices slip anyway.
       </p>
       <p>
         Both halves share one source-of-truth document at <code>.ux/design-system/MASTER.md</code>. Every IDE's rules file (<code>.cursorrules</code>, <code>CLAUDE.md</code>, <code>.windsurfrules</code>) is generated from that document. There is one place to look when something is wrong, one place to edit when something needs to change.
@@ -649,7 +649,7 @@ src/**/*.stories.tsx                   fade-in-up-everywhere</pre>
     <section class="cta">
       <span class="eyebrow">Install the gate</span>
       <h2>One CLI. <span class="accent">Three install paths.</span> No LLM.</h2>
-      <p>120 deterministic regex rules, a 1,161-entry catalog, 22 commands across 17 IDEs. Plugs into pre-commit, Husky, Lefthook, GitHub Actions, GitLab CI. MIT-licensed. No telemetry. No account.</p>
+      <p>120 deterministic regex rules, a 1,182-entry catalog, 22 commands across 17 IDEs. Plugs into pre-commit, Husky, Lefthook, GitHub Actions, GitLab CI. MIT-licensed. No telemetry. No account.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>

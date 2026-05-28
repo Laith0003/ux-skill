@@ -11,7 +11,7 @@ The numbers throughout this kit are real. If they shift in v2.1+, update this do
 
 **Title (76 chars, under HN's 80 limit):**
 ```
-Show HN: ux-skill – Python engine for UX in AI coding, 17 IDEs, 1,161 entries
+Show HN: ux-skill – Python engine for UX in AI coding, 17 IDEs, 1,182 entries
 ```
 
 **Self-comment (first reply — drop ~60 seconds after submission):**
@@ -62,7 +62,7 @@ ux-skill v2 — Python engine that catches the AI design fingerprints in your Cu
 I kept getting the same look out of every AI coding tool: Inter font, purple gradient, three
 cards, "John Doe" placeholders. Built a Python engine that catches those patterns
 deterministically (35 regex rules, no LLM, runs in CI) plus a 5-parallel-search recommender
-over 1,161 structured entries.
+over 1,182 structured entries.
 
 Runs in 17 IDEs (Cursor, Windsurf, Claude Code, Copilot, Gemini CLI, Codex, Cline, Continue,
 Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, Roo Cline, plus pip-only).
@@ -184,7 +184,7 @@ For lists like `hesreallyhim/awesome-claude-code`, `langgptai/awesome-claude-cod
 
 **Entry (alphabetical position):**
 ```
-- [ux-skill](https://github.com/Laith0003/ux-skill) — Design intelligence engine for AI coding. 5-parallel-search Python recommender over 1,161 structured entries (84 styles, 176 palettes, 148 components, 72 brand specs). 35-rule anti-AI-slop linter runs in CI. Cross-IDE: pip + npx, runs in 17 environments. MIT.
+- [ux-skill](https://github.com/Laith0003/ux-skill) — Design intelligence engine for AI coding. 5-parallel-search Python recommender over 1,182 structured entries (84 styles, 176 palettes, 148 components, 72 brand specs). 35-rule anti-AI-slop linter runs in CI. Cross-IDE: pip + npx, runs in 17 environments. MIT.
 ```
 
 ---
@@ -199,7 +199,7 @@ The Python engine for design choices in AI coding output
 
 **Description (260 char limit):**
 ```
-1,161 structured entries across 11 JSON manifests. 5-parallel-search recommender. 35-rule anti-AI-slop linter, no LLM. 72 real brand DESIGN.md specs (Apple, Stripe, Linear, Figma...). Runs in 17 IDEs via pip/npx. Beats UI UX Pro Max on every dimension. MIT.
+1,182 structured entries across 11 JSON manifests. 5-parallel-search recommender. 35-rule anti-AI-slop linter, no LLM. 72 real brand DESIGN.md specs (Apple, Stripe, Linear, Figma...). Runs in 17 IDEs via pip/npx. Beats UI UX Pro Max on every dimension. MIT.
 ```
 *(258 chars)*
 
@@ -207,7 +207,7 @@ The Python engine for design choices in AI coding output
 ```
 Solo founder. The first version was a markdown skill for Claude Code. v2 pivots to a Python
 engine with queryable JSON manifests — same architecture pattern as UI UX Pro Max but going
-further on every numeric dimension (1,161 entries vs ~600) and adding four categories they
+further on every numeric dimension (1,182 entries vs ~600) and adding four categories they
 don't have: a 35-rule anti-AI-slop linter, 57 motion presets, 148 components, and 72 real
 brand DESIGN.md specs.
 
@@ -238,7 +238,7 @@ For Cursor Discord, Anthropic Discord, design-tool-makers Discord:
 Hey — shipped ux-skill v2. Python engine for design choices in AI-coding output.
 
 Catches the fingerprints (Inter as display, purple gradients, three cards, John Doe) via
-35 deterministic regex rules + a 5-parallel-search recommender over 1,161 structured entries.
+35 deterministic regex rules + a 5-parallel-search recommender over 1,182 structured entries.
 
 Runs in 17 IDEs. pip install uxskill or npx uxskill@alpha init.
 
@@ -253,7 +253,7 @@ MIT, solo, no telemetry. Welcoming feedback especially on missing slop fingerpri
 
 **Subject:**
 ```
-Submission: ux-skill v2 — Python design engine for AI coding (1,161 entries, 17 IDEs, MIT)
+Submission: ux-skill v2 — Python design engine for AI coding (1,182 entries, 17 IDEs, MIT)
 ```
 
 **Body:**
@@ -273,7 +273,7 @@ JSON manifests) but extends it with categories they don't have: a regex anti-AI-
 that runs in CI, 57 motion presets, 148 components, and 72 real brand DESIGN.md specs
 (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, and 64 more).
 
-Total content: 1,161 structured entries vs UI UX Pro Max's ~600.
+Total content: 1,182 structured entries vs UI UX Pro Max's ~600.
 
 Distribution:
 • PyPI: https://pypi.org/project/uxskill/

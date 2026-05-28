@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Python design system generator — ux-skill v2's 5-parallel-search engine</title>
-  <meta name="description" content="ux-skill v2 is a Python design system generator: 5 parallel searches over 1,161 structured entries return style + palette + type + motion + components in one call. pip install.">
+  <meta name="description" content="ux-skill v2 is a Python design system generator: 5 parallel searches over 1,182 structured entries return style + palette + type + motion + components in one call. pip install.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/python-design-system-generator.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/python-design-system-generator.html">
   <meta property="og:title" content="Python design system generator — ux-skill v2's 5-parallel-search engine">
-  <meta property="og:description" content="Generate a complete design system from a brief in Python. 1,161 entries, 5 parallel searches, one recommendation. pip install uxskill.">
+  <meta property="og:description" content="Generate a complete design system from a brief in Python. 1,182 entries, 5 parallel searches, one recommendation. pip install uxskill.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/python-design-system-generator.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -22,7 +22,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Python design system generator — ux-skill v2">
-  <meta name="twitter:description" content="5 parallel searches over 1,161 entries. Style + palette + type + motion + components in one Python call.">
+  <meta name="twitter:description" content="5 parallel searches over 1,182 entries. Style + palette + type + motion + components in one Python call.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -465,7 +465,7 @@
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "Python design system generator — ux-skill v2's 5-parallel-search engine",
-    "description": "ux-skill v2 is a Python design system generator: 5 parallel searches over 1,161 structured entries return style + palette + type + motion + components in one call. pip install.",
+    "description": "ux-skill v2 is a Python design system generator: 5 parallel searches over 1,182 structured entries return style + palette + type + motion + components in one call. pip install.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {"@type": "Organization", "name": "ux-skill", "url": "https://uxskill.laithjunaidy.com/"},
@@ -530,7 +530,7 @@
 
       <h2>The architectural premise</h2>
       <p>
-        A design system recommendation isn't one decision &mdash; it's five, made in parallel and merged. The five lanes are independent enough to search separately, but interdependent enough that the merge step matters. ux-skill v2 implements this as a Python recommender with five concurrent search functions over 11 structured manifests (1,161 entries total).
+        A design system recommendation isn't one decision &mdash; it's five, made in parallel and merged. The five lanes are independent enough to search separately, but interdependent enough that the merge step matters. ux-skill v2 implements this as a Python recommender with five concurrent search functions over 11 structured manifests (1,182 entries total).
       </p>
       <p>
         The output is a single design-system object: a chosen style philosophy, a palette with named tokens, a type pairing with ramps, a motion profile, a component pick list, and brand exemplars to reference. Plus a generated <code>tokens.css</code> file you can drop into Tailwind or any CSS-vars-driven framework.
@@ -581,7 +581,7 @@
       </p>
       <ol>
         <li><strong>Cross-lane compatibility check.</strong> A neon-cyberpunk style with an editorial serif pairing fails the cross-check. The merger picks combinations the manifest has flagged as coherent.</li>
-        <li><strong>Brand spec overlay.</strong> If the brief mentions a brand by name (Apple, Stripe, Linear, Figma, Tesla, BMW&hellip;) or matches a brand's industry-tone signature, the merger overlays the brand's DESIGN.md tokens. 110 brand specs available.</li>
+        <li><strong>Brand spec overlay.</strong> If the brief mentions a brand by name (Apple, Stripe, Linear, Figma, Tesla, BMW&hellip;) or matches a brand's industry-tone signature, the merger overlays the brand's DESIGN.md tokens. 131 brand specs available.</li>
         <li><strong>Component pick.</strong> Given style + palette + type, the merger picks compatible components from the 148-entry catalog. Editorial-modern gets long-form layouts and quote pulls; dashboard-dense gets data tables and KPI cards.</li>
       </ol>
 
@@ -671,7 +671,7 @@
         The merge surfaced one specific decision worth flagging: the candidate <em>dark-minimal-mono</em> tied with <em>saturated-cinema</em> on the style score. The tiebreaker was the "technical credibility" signal &mdash; saturated-cinema's per-scene accents read more as editorial confidence than minimal-mono's restraint, so it won by 0.04 on the cross-lane compatibility score. That kind of decision is the merge step earning its keep.
       </p>
 
-      <h2>The 1,161 entries, listed</h2>
+      <h2>The 1,182 entries, listed</h2>
       <p>
         For transparency, the breakdown of the catalog:
       </p>
@@ -689,7 +689,7 @@
         <li><strong>72</strong> brand DESIGN.md specs (brands/*.md, indexed)</li>
       </ul>
       <p>
-        Total: <strong>1,161 entries</strong>. All MIT-licensed. All extensible &mdash; the manifests are plain JSON; fork-and-extend is the supported path for adding your own styles or brand specs.
+        Total: <strong>1,182 entries</strong>. All MIT-licensed. All extensible &mdash; the manifests are plain JSON; fork-and-extend is the supported path for adding your own styles or brand specs.
       </p>
 
       <h2>Why 5 lanes, not 1?</h2>
@@ -712,7 +712,7 @@
         <li><strong>Not a code generator.</strong> The recommendation is a system. To generate component code, pair with <code>/ux-design</code>, <code>/ux-component</code>, or your IDE's code-gen capability inside the recommended system.</li>
         <li><strong>Not a moodboard.</strong> The recommendation is structured, not visual. To see what it looks like, generate a sample page; for visual variants, swap palette and re-generate.</li>
         <li><strong>Not deterministic on close calls.</strong> The merge step is deterministic given the same brief, but two slightly different briefs can swap the top-2 result (as in the example above). This is a feature: the recommendation honors brief signal.</li>
-        <li><strong>Not infinite.</strong> 1,161 entries covers most working briefs, but if your brief is "1960s Soviet constructivism applied to a quantum-computing dashboard," the recommender will return a closest-fit with a confidence flag, not a custom system.</li>
+        <li><strong>Not infinite.</strong> 1,182 entries covers most working briefs, but if your brief is "1960s Soviet constructivism applied to a quantum-computing dashboard," the recommender will return a closest-fit with a confidence flag, not a custom system.</li>
       </ul>
 
       <div class="honesty">
@@ -755,8 +755,8 @@
 
     <section class="cta">
       <span class="eyebrow">pip install uxskill</span>
-      <h2>1,161 entries. <span class="accent">5 lanes.</span> One Python call.</h2>
-      <p>The Python design system generator: deterministic recommender + 120-rule linter + 110 brand specs. MIT licensed, no telemetry, no account, fits in a CI pipeline.</p>
+      <h2>1,182 entries. <span class="accent">5 lanes.</span> One Python call.</h2>
+      <p>The Python design system generator: deterministic recommender + 120-rule linter + 131 brand specs. MIT licensed, no telemetry, no account, fits in a CI pipeline.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>

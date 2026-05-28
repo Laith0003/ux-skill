@@ -75,7 +75,7 @@ project adheres to [Semantic Versioning](https://semver.org/).
   Cursor IDE mockup, Claude Code session, brand mosaic.
 - **SVG brand logos**: 25 simpleicons.org CC0 logos in docs/logos/. Brand gallery
   now renders real marks for 23 of 25 brands; styled wordmark fallback for clay/cursor.
-- **110 brand specs** confirmed (anthropic, openai, perplexity, modal, railway,
+- **131 brand specs** confirmed (anthropic, openai, perplexity, modal, railway,
   fly-io, retool, fivetran, dbt, snowflake, apple-music, instagram, tiktok,
   economist, wsj, dezeen, n26, robinhood — 18 added in round 5).
 - **Hero video built then removed** at user request — autoplay didn't fire on

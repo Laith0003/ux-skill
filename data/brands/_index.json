@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2.2.0",
-    "entries": 110,
+    "version": "2.3.0",
+    "entries": 131,
     "last_updated": "2026-05-28",
     "source": "ux-skill v2 \u2014 expanded brand catalog (92 -> 110)",
     "schema_version": "1.0"
@@ -28,6 +28,11 @@
       "category": "Consumer / Lifestyle / Retail"
     },
     {
+      "id": "aman-resorts",
+      "name": "Aman Resorts",
+      "category": "Travel / Hospitality"
+    },
+    {
       "id": "anthropic",
       "name": "Anthropic",
       "category": "AI / ML Platform"
@@ -41,6 +46,11 @@
       "id": "apple",
       "name": "Apple",
       "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "arc-browser",
+      "name": "Arc Browser",
+      "category": "Developer Tools"
     },
     {
       "id": "atlantic",
@@ -66,6 +76,11 @@
       "id": "bmw",
       "name": "BMW",
       "category": "Automotive"
+    },
+    {
+      "id": "booking-com",
+      "name": "Booking.com",
+      "category": "Travel / Hospitality"
     },
     {
       "id": "brex",
@@ -95,6 +110,11 @@
     {
       "id": "clickhouse",
       "name": "ClickHouse",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "cloudflare",
+      "name": "Cloudflare",
       "category": "Developer Tools"
     },
     {
@@ -133,6 +153,11 @@
       "category": "Editorial / Media"
     },
     {
+      "id": "disney-plus",
+      "name": "Disney+",
+      "category": "Streaming / Media"
+    },
+    {
       "id": "economist",
       "name": "The Economist",
       "category": "Editorial / Media"
@@ -143,9 +168,19 @@
       "category": "AI / ML Platform"
     },
     {
+      "id": "emirates",
+      "name": "Emirates",
+      "category": "Travel / Hospitality"
+    },
+    {
       "id": "expo",
       "name": "Expo",
       "category": "Developer Tools"
+    },
+    {
+      "id": "fenty-beauty",
+      "name": "Fenty Beauty",
+      "category": "Consumer / Lifestyle / Retail"
     },
     {
       "id": "ferrari",
@@ -168,8 +203,18 @@
       "category": "Developer Tools"
     },
     {
+      "id": "four-seasons",
+      "name": "Four Seasons",
+      "category": "Travel / Hospitality"
+    },
+    {
       "id": "framer",
       "name": "Framer",
+      "category": "Developer Tools"
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
       "category": "Developer Tools"
     },
     {
@@ -181,6 +226,11 @@
       "id": "hashicorp",
       "name": "HashiCorp",
       "category": "Developer Tools"
+    },
+    {
+      "id": "herman-miller",
+      "name": "Herman Miller",
+      "category": "Consumer / Lifestyle / Retail"
     },
     {
       "id": "hims-hers",
@@ -201,6 +251,11 @@
       "id": "ibm",
       "name": "IBM",
       "category": "Developer Tools"
+    },
+    {
+      "id": "ikea",
+      "name": "IKEA",
+      "category": "Consumer / Lifestyle / Retail"
     },
     {
       "id": "instagram",
@@ -236,6 +291,11 @@
       "id": "mastercard",
       "name": "Mastercard",
       "category": "Fintech / Crypto"
+    },
+    {
+      "id": "mercedes-benz",
+      "name": "Mercedes-Benz",
+      "category": "Automotive"
     },
     {
       "id": "mercury",
@@ -283,6 +343,11 @@
       "category": "Fintech / Crypto"
     },
     {
+      "id": "muji",
+      "name": "MUJI",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
       "id": "n26",
       "name": "N26",
       "category": "Fintech / Crypto"
@@ -291,6 +356,11 @@
       "id": "neon",
       "name": "Neon",
       "category": "Developer Tools"
+    },
+    {
+      "id": "netflix",
+      "name": "Netflix",
+      "category": "Streaming / Media"
     },
     {
       "id": "nike",
@@ -311,6 +381,11 @@
       "id": "nytimes",
       "name": "The New York Times",
       "category": "Editorial / Media"
+    },
+    {
+      "id": "obsidian",
+      "name": "Obsidian",
+      "category": "Productivity / Collaboration"
     },
     {
       "id": "ollama",
@@ -356,6 +431,11 @@
       "id": "playstation",
       "name": "PlayStation",
       "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "porsche",
+      "name": "Porsche",
+      "category": "Automotive"
     },
     {
       "id": "posthog",
@@ -411,6 +491,11 @@
       "id": "robinhood",
       "name": "Robinhood",
       "category": "Fintech / Crypto"
+    },
+    {
+      "id": "rolls-royce",
+      "name": "Rolls-Royce Motor Cars",
+      "category": "Automotive"
     },
     {
       "id": "runwayml",
@@ -503,8 +588,18 @@
       "category": "AI / ML Platform"
     },
     {
+      "id": "twitch",
+      "name": "Twitch",
+      "category": "Streaming / Media"
+    },
+    {
       "id": "uber",
       "name": "Uber",
+      "category": "Consumer / Lifestyle / Retail"
+    },
+    {
+      "id": "uniqlo",
+      "name": "UNIQLO",
       "category": "Consumer / Lifestyle / Retail"
     },
     {
@@ -553,9 +648,19 @@
       "category": "AI / ML Platform"
     },
     {
+      "id": "youtube",
+      "name": "YouTube",
+      "category": "Streaming / Media"
+    },
+    {
       "id": "zapier",
       "name": "Zapier",
       "category": "Productivity / Collaboration"
+    },
+    {
+      "id": "zara",
+      "name": "Zara",
+      "category": "Consumer / Lifestyle / Retail"
     }
   ]
 }
