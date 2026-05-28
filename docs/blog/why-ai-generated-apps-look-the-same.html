@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The centroid problem — why AI-generated design regresses to the mean</title>
+<meta name="description" content="AI builders don't fail at design — they succeed at returning the average. The mechanism behind the sameness: regression to the mean, shared scaffolding, no brief, no memory. And the deterministic way out of the centroid.">
+<link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/why-ai-generated-apps-look-the-same.html">
+<meta property="og:title" content="The centroid problem — why AI design regresses to the mean">
+<meta property="og:description" content="The sameness has a cause: models return the average of their training set. Here's the mechanism — and the deterministic fix.">
+<meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
+<meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/why-ai-generated-apps-look-the-same.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The centroid problem — why AI design regresses to the mean">
+<meta name="twitter:description" content="Why AI builders return the average: regression to the mean, shared scaffolding, no brief, no memory. The mechanism, and the way out.">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"The centroid problem — why AI-generated design regresses to the mean","datePublished":"2026-05-29","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/why-ai-generated-apps-look-the-same.html","inLanguage":"en"}
+</script>
+
+<style>
+  :root {
+    --canvas: #07080a; --surface: #0e1014; --ink: #f6f7f9; --body: #c0c3c9;
+    --muted: #8a8f96; --accent: #f59e0b; --hairline: rgba(255,255,255,0.08);
+    --display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--canvas); color: var(--body); font-family: var(--sans); line-height: 1.65; overflow-x: clip; }
+  a { color: var(--accent); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: clamp(20px, 4vw, 56px); }
+  header.post { margin-bottom: 48px; padding-bottom: 24px; border-bottom: 1px solid var(--hairline); }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  h1 { font-family: var(--display); font-size: clamp(32px, 5vw, 52px); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; font-weight: 600; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede { font-size: 19px; line-height: 1.55; color: var(--body); max-width: 60ch; }
+  h2 { font-family: var(--display); font-size: 28px; letter-spacing: -0.02em; color: var(--ink); margin: 56px 0 18px; }
+  h3 { font-family: var(--display); font-size: 21px; color: var(--ink); margin: 32px 0 12px; }
+  p { margin-bottom: 18px; font-size: 16.5px; max-width: 60ch; }
+  ul, ol { margin: 0 0 18px 22px; }
+  li { margin-bottom: 8px; max-width: 60ch; }
+  code { font-family: var(--mono); font-size: 14px; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+  pre { background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; padding: 18px 22px; overflow-x: auto; margin: 18px 0; }
+  pre code { background: transparent; padding: 0; font-size: 13.5px; line-height: 1.6; color: var(--body); }
+  blockquote { border-left: 2px solid var(--accent); padding-left: 18px; margin: 28px 0; color: var(--ink); font-style: italic; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--hairline); }
+  th { color: var(--ink); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .nav { padding: 18px 0; border-bottom: 1px solid var(--hairline); }
+  .nav__row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); }
+  .nav__brand { font-family: var(--display); font-weight: 700; font-size: 17px; color: var(--ink); }
+  .nav__link { font-family: var(--mono); font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted); }
+  footer { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--hairline); color: var(--muted); font-family: var(--mono); font-size: 11.5px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__row">
+    <a class="nav__brand" href="/">uxskill</a>
+    <a class="nav__link" href="/">Home</a>
+    <a class="nav__link" href="/brands.html">Brands</a>
+    <a class="nav__link" href="/anti-patterns.html">Anti-patterns</a>
+    <a class="nav__link" href="/blog/">Blog</a>
+    <a class="nav__link" href="/compare.html">Compare</a>
+    <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+  </div>
+</header>
+
+<div class="wrap">
+<header class="post">
+<p class="eyebrow">FIELD NOTES · 2026-05-29</p>
+<h1>The <em>centroid problem</em>:<br>why AI design regresses to the mean.</h1>
+<p class="lede">Open v0, Bolt, Lovable, Cursor, or Copilot, type a different prompt into each, and you get the same page back: Inter, a violet-to-indigo gradient, three equal cards, a centered hero, rounded-2xl everything. The sameness is not a coincidence and it is not a taste failure. It has a mechanism — the model is returning the centroid of its training set. Once you see that, the fix is obvious, and it is not "prompt better." (For the tool-by-tool version with a real export lint report, see the <a href="/blog/ai-built-website-no-slop.html">companion piece on AI-built websites</a>.)</p>
+</header>
+
+<h2>The sameness has a shape</h2>
+<p>Before the cause, the symptom. Across tools and prompts, AI-generated frontends converge on a recognizable centroid:</p>
+<ul>
+<li>Inter (or the system stack) as the only typeface, on every surface, brand or not.</li>
+<li>A violet → indigo gradient, usually <code>#6366f1 → #8b5cf6</code> or a near neighbor.</li>
+<li>Three equal cards in a row, each with an icon, a heading, and two lines of body.</li>
+<li>A centered hero: centered eyebrow, centered headline, centered subhead, centered button.</li>
+<li><code>rounded-2xl</code> on everything, a soft drop shadow, a faint glass blur.</li>
+<li>Emoji standing in for icons. Filler copy built from "leverage," "seamless," "empower."</li>
+</ul>
+<p>We catalogue these as machine-checkable rules — the visual fingerprints of generated design. The point here is simpler: this is a <em>distribution with a peak</em>, and almost everything lands on the peak.</p>
+
+<h2>Why models converge on one look</h2>
+
+<h3>1. Regression to the training mean</h3>
+<p>A generative model is, at heart, a function that returns the most probable continuation. "Most probable" for a landing page is the average of every landing page it has ever seen. The average of millions of Tailwind starter templates, dribbble shots, and shadcn demos <em>is</em> the violet-gradient, three-card, centered-hero page. The model is not being lazy. It is doing exactly what it was trained to do: return the centroid. Variance is penalized; the mean is rewarded.</p>
+
+<h3>2. Everyone shares the same scaffolding</h3>
+<p>shadcn/ui, Tailwind's default scale, and a handful of component libraries are the substrate under almost every AI builder. They are excellent — and they ship with defaults. When nobody overrides <code>--primary</code>, every app inherits the same primary. When nobody re-spaces the scale, every app breathes at the same rhythm. Shared defaults are shared identity. The tools converge because their foundations already did.</p>
+
+<h3>3. Identical briefs produce identical output</h3>
+<p>"Build me a landing page for my SaaS" carries almost no differentiating signal. A fintech dashboard and a kids' learning app submitted with that prompt are, to the model, the same request — so they get the same answer. The brief is where differentiation has to enter, and a one-line prompt has none to give.</p>
+
+<h3>4. There is no memory</h3>
+<p>Every generation starts from zero. The tool does not know what you accepted last time, what your brand actually is, or that it produced this exact hero for three other users this morning. With no memory, there is no way to move <em>away</em> from the centroid over time. Each run snaps back to the mean.</p>
+
+<blockquote>The sameness is not the model failing. It is the model succeeding at the wrong objective: return the average, with no brief to differentiate and no memory to learn from.</blockquote>
+
+<h2>Why "just prompt better" doesn't fix it</h2>
+<p>Prompt engineering can nudge a single output off the peak. Ask for "brutalist, monochrome, no gradients" and you will get something less generic — once. But three problems remain:</p>
+<ul>
+<li><strong>It is not reproducible.</strong> The same prompt next week, or in a different tool, drifts back toward the mean.</li>
+<li><strong>It gives variance, not direction.</strong> You are pushing randomly away from the centroid, not toward a coherent identity derived from your actual brand.</li>
+<li><strong>It does not compound.</strong> Nothing is learned. The next page is as generic as the first, and you re-fight the same battle every time.</li>
+</ul>
+<p>You can win individual skirmishes with prompting. You cannot win the war with it, because the pull toward the mean is structural.</p>
+
+<h2>What actually breaks the sameness</h2>
+<p>If the cause is "no brief, shared defaults, no memory, regress to the mean," the fix is the inverse of each. This is the approach ux-skill takes — deterministic, offline, no LLM in the loop:</p>
+
+<h3>Differentiate from a brief, not a prompt</h3>
+<p>Reduce the brief to seven continuous values — warmth, contrast, density, geometry, formality, motion, type personality — and a fintech dashboard and a kids' app stop being the same request. Those values then compile to a palette, a type ladder, a spacing scale, radii, and motion timings. Two different briefs produce two genuinely different systems, every time, because the math is different.</p>
+<p><a href="/blog/seven-axes-design-system-explained.html">How the 7 axes map a brief to tokens</a></p>
+
+<h3>Use real brands as training data, not templates</h3>
+<p>The trap is to ship N brand templates and let users pick one — that just moves the centroid, it doesn't remove it. Instead, 160 documented brand systems act as <em>training data</em>: the synthesizer learns the relationships between axes and tokens from them, then generates an unbounded space of new systems. When you name a brand, you get its accuracy; when you don't, you get something new that was informed by all of them.</p>
+<p><a href="/blog/brand-specs-training-data-not-templates.html">Why brand specs are training data, not templates</a></p>
+
+<h3>Lint the fingerprints out</h3>
+<p>The centroid look is enumerable, so it is checkable. A deterministic linter scans output for the violet gradient, the three-equal-card row, Inter-on-a-brand-surface, emoji icons, centered-everything, and the rest — and fails the build when it finds them. You cannot ship the average if the average does not pass the linter.</p>
+<p><a href="/blog/regex-linter-for-ai-coding.html">A regex linter for AI design slop</a> · <a href="/anti-patterns.html">Browse the anti-pattern catalogue</a></p>
+
+<h3>Close the loop so it compounds</h3>
+<p>Record which designs scored well and were accepted; let that history re-rank future recommendations. The system moves away from the mean over time instead of snapping back to it on every run. Memory is what turns one good output into a direction.</p>
+<p><a href="/blog/closed-loop-design-system-feedback.html">What closed-loop actually means</a></p>
+
+<h2>A worked contrast</h2>
+<p>Same request, two paths. The brief: a payments dashboard, tone "serious, dense, trustworthy."</p>
+<table>
+<thead><tr><th></th><th>Centroid output</th><th>Synthesized output</th></tr></thead>
+<tbody>
+<tr><td>Type</td><td>Inter, one size up for h1</td><td>Geometric display + Inter body, 1.333 ratio from high contrast</td></tr>
+<tr><td>Color</td><td>Violet → indigo gradient</td><td>Cool, low-warmth palette, single saturated accent</td></tr>
+<tr><td>Spacing</td><td>Default Tailwind scale</td><td>4px base — dense wins over formal in the interaction matrix</td></tr>
+<tr><td>Layout</td><td>Three equal cards, centered hero</td><td>Asymmetric grid, data-dense, left-anchored</td></tr>
+<tr><td>Reproducible?</td><td>Only by luck</td><td>Identical inputs → identical output, every run</td></tr>
+</tbody>
+</table>
+<p>The second column is not "more creative." It is more <em>specific</em> — derived from the brief instead of regressed from the corpus. Specificity is the opposite of sameness.</p>
+
+<h2>The point</h2>
+<p>AI builders are not bad at design. They are good at returning the average, and the average has a look. To get something that is yours, you need three things the average can't supply: a brief that differentiates, a generator that creates instead of selects, and a memory that learns. Add those and the violet gradient stops being your default.</p>
+<p>ux-skill is MIT-licensed, runs offline, ships no telemetry, and calls no model. Install it into Claude Code, Cursor, Windsurf, and 14 more tools:</p>
+<pre><code>pip install uxskill
+# or
+npx uxskill init</code></pre>
+
+<h2>Related</h2>
+<ul>
+<li><a href="/blog/ai-built-website-no-slop.html">AI-built websites: the tool-by-tool version, with a real export lint report</a></li>
+<li><a href="/blog/seven-axes-design-system-explained.html">The 7 axes of a design system</a></li>
+<li><a href="/blog/brand-specs-training-data-not-templates.html">Brand specs are training data, not templates</a></li>
+<li><a href="/blog/deterministic-design-engine-no-llm.html">A deterministic design engine, no LLM</a></li>
+<li><a href="/blog/anti-ai-slop-claude-skills.html">Killing AI slop with a Claude skill</a></li>
+<li><a href="/blog/closed-loop-design-system-feedback.html">What closed-loop actually means</a></li>
+</ul>
+
+<footer>
+ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+</footer>
+
+</div>
+</body>
+</html>
