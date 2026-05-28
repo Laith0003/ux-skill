@@ -508,6 +508,128 @@
       gap: var(--s-6);
       width: 100%;
     }
+    /* PROBLEM → SOLUTION section (v3.0.1) — multi-color, varied scene accents */
+    [data-scene="problem"] { --scene-accent: #ec4899; }
+    [data-scene="brain"]   { --scene-accent: #f59e0b; }
+    [data-scene="problem"] .section__title em,
+    [data-scene="problem"] .accent-italic,
+    [data-scene="problem"] .eyebrow { color: var(--scene-accent); }
+    [data-scene="brain"] .eyebrow { color: var(--scene-accent); }
+    .problem-card[data-card="proof"]  { --card-accent: #ec4899; }
+    .problem-card[data-card="cause"]  { --card-accent: #f59e0b; }
+    .problem-card[data-card="cost"]   { --card-accent: #06b6d4; }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: var(--s-5);
+      margin-top: var(--s-7);
+    }
+    .problem-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--hairline);
+      border-radius: var(--r-md);
+      padding: var(--s-5) var(--s-5) var(--s-6);
+      position: relative;
+      overflow: hidden;
+    }
+    .problem-card::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--card-accent);
+      box-shadow: 0 0 24px var(--card-accent);
+      opacity: 0.8;
+    }
+    .problem-card__tag {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--card-accent);
+      margin-bottom: var(--s-3);
+    }
+    .problem-card__head {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 96, 'wght' 600;
+      font-size: clamp(20px, 2.4vw, 28px);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: var(--s-4);
+    }
+    .problem-card__body {
+      color: var(--body);
+      font-size: 14.5px;
+      line-height: 1.55;
+    }
+    .problem-card__list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .problem-card__list li {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--hairline);
+      font-family: var(--mono);
+      font-size: 12.5px;
+      letter-spacing: 0.02em;
+      color: var(--body);
+    }
+    .problem-card__list li:last-child { border-bottom: 0; }
+    .problem-card__list li::before {
+      content: '';
+      display: inline-block;
+      width: 6px; height: 6px;
+      background: var(--card-accent);
+      margin-right: 10px;
+      vertical-align: middle;
+      border-radius: 1px;
+    }
+    .problem-bridge {
+      margin-top: var(--s-7);
+      text-align: center;
+      max-width: 62ch;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .problem-bridge__arrow {
+      font-size: 32px;
+      color: var(--accent);
+      margin-bottom: var(--s-3);
+      opacity: 0.75;
+    }
+    .problem-bridge__text {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 96, 'wght' 500;
+      font-size: clamp(20px, 2.8vw, 32px);
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: var(--s-4);
+    }
+    .problem-bridge__text strong {
+      color: var(--accent);
+      font-variation-settings: 'wdth' 88, 'opsz' 96, 'wght' 700;
+    }
+    .problem-bridge__cta {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* Hero canvas — flow-field of cyan / magenta / amber particles behind everything */
+    .hero__canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+
     /* Giant 3.0 numeral — sits behind the h1, DOMINANT, vivid amber gradient */
     .hero-three {
       position: absolute;
@@ -1537,6 +1659,7 @@
 
   <!-- ============ 1. HERO ============ -->
   <section class="hero" aria-label="uxskill v3.0 — The Brain">
+    <canvas class="hero__canvas" id="hero-canvas" aria-hidden="true"></canvas>
     <div class="hero-three" aria-hidden="true">3.0</div>
     <div class="hero__bottom-fade" aria-hidden="true"></div>
     <div class="container">
@@ -1585,8 +1708,60 @@
     </div>
   </section>
 
+  <!-- ============ 1.5 PROBLEM → SOLUTION (NEW v3.0.1) ============ -->
+  <section class="section section--bordered reveal" data-scene="problem" aria-labelledby="problem-h2">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">01 &middot; The problem you ship every day</span>
+        <h2 class="section__title" id="problem-h2">
+          You vibe code in Claude Code or Cursor.<br>
+          Your AI ships <span class="accent-italic">slop</span> by default.
+        </h2>
+        <p class="section__lede">
+          Ask the model to "build a fintech landing." You get the same five tells inside ten seconds. Purple-to-blue gradients. Three equal cards. Inter at display size. <strong>J&#x6f;hn D&#x6f;e</strong> in the testimonial. Bouncing arrow CTA. Centered hero. 300ms ease-in-out on every transition. The output is technically correct and visually disposable.
+        </p>
+      </div>
+
+      <div class="problem-grid">
+        <div class="problem-card" data-card="proof">
+          <div class="problem-card__tag">The fingerprint</div>
+          <div class="problem-card__head">Five tells, ten seconds.</div>
+          <ul class="problem-card__list">
+            <li>Purple &rarr; blue 135&deg; gradient</li>
+            <li>Three equal cards in a row</li>
+            <li>"L&#x6f;rem ipsum dolor sit amet"</li>
+            <li>"J&#x6f;hn D&#x6f;e" / "Jane D&#x6f;e" testimonial</li>
+            <li>Inter 96px hero, centered</li>
+          </ul>
+        </div>
+        <div class="problem-card" data-card="cause">
+          <div class="problem-card__tag">Why it happens</div>
+          <div class="problem-card__head">The model improvises.</div>
+          <p class="problem-card__body">
+            The assistant has read every design system on GitHub. It has no idea which one fits your brief. It defaults to the centroid &mdash; the average of every SaaS site it ever ingested. The result reads as generated within seconds. Your domain, your industry, your customers &mdash; none of it influences the output.
+          </p>
+        </div>
+        <div class="problem-card" data-card="cost">
+          <div class="problem-card__tag">The cost</div>
+          <div class="problem-card__head">Trust erodes on first paint.</div>
+          <p class="problem-card__body">
+            Investors flag it. Customers click away. Designers refuse to touch it. You ship faster but the shape of what you shipped is generic. A year of vibe coding leaves a portfolio that all looks the same. The velocity feels free until the brand bill comes due.
+          </p>
+        </div>
+      </div>
+
+      <div class="problem-bridge">
+        <div class="problem-bridge__arrow" aria-hidden="true">&darr;</div>
+        <p class="problem-bridge__text">
+          What if your AI assistant had a designer's brain wired up next to it &mdash; a brain that <strong>knew which design language fits your brief</strong>, refused the slop fingerprints before commit, and learned from every shipped output?
+        </p>
+        <p class="problem-bridge__cta">That's v3.0. Keep scrolling.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ 2. THE BRAIN ============ -->
-  <section class="section section--bordered reveal" aria-labelledby="brain-h2">
+  <section class="section section--bordered reveal" data-scene="brain" aria-labelledby="brain-h2">
     <div class="container">
       <div class="section__head">
         <span class="eyebrow">02 &mdash; The architecture</span>
@@ -2047,6 +2222,99 @@ tone=["bold","editorial"]</pre>
 <script>
 (function () {
   'use strict';
+
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ========== HERO CANVAS — flow-field particles, amber / cyan / magenta ========== */
+  function setupCanvas(canvas, render, opts) {
+    if (!canvas) return;
+    opts = opts || {};
+    var ctx = canvas.getContext('2d');
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var raf = 0, running = false, lastT = 0;
+    function resize() {
+      var rect = canvas.getBoundingClientRect();
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (opts.onResize) opts.onResize(rect.width, rect.height, ctx);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    function loop(now) {
+      var dt = Math.min(40, now - lastT); lastT = now;
+      render(ctx, canvas.getBoundingClientRect(), dt, now);
+      if (running) raf = requestAnimationFrame(loop);
+    }
+    function start() {
+      if (running || reduce) return;
+      running = true; lastT = performance.now();
+      raf = requestAnimationFrame(loop);
+    }
+    function stop() { running = false; cancelAnimationFrame(raf); }
+    if (reduce) {
+      render(ctx, canvas.getBoundingClientRect(), 16, 0);
+    } else if ('IntersectionObserver' in window) {
+      var visIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { e.isIntersecting ? start() : stop(); });
+      }, { threshold: 0 });
+      visIO.observe(canvas);
+    } else {
+      start();
+    }
+  }
+
+  (function heroCanvas() {
+    var canvas = document.getElementById('hero-canvas');
+    if (!canvas) return;
+    var N = 90;
+    var particles = [];
+    var w = 0, h = 0;
+    var palette = ['#f59e0b', '#06b6d4', '#ec4899'];   // amber + cyan + magenta
+    function init(width, height) {
+      w = width; h = height;
+      particles.length = 0;
+      for (var i = 0; i < N; i++) {
+        particles.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25,
+          r: 1.0 + Math.random() * 2.4,
+          c: palette[Math.floor(Math.random() * palette.length)],
+          a: 0.20 + Math.random() * 0.42
+        });
+      }
+    }
+    setupCanvas(canvas, function (ctx, rect, dt, now) {
+      if (!w || !h) init(rect.width, rect.height);
+      // soft trail wash (matches canvas color tint)
+      ctx.fillStyle = 'rgba(7, 8, 10, 0.06)';
+      ctx.fillRect(0, 0, w, h);
+      // gentle noise flow
+      var t = now * 0.00012;
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+        var a1 = Math.sin(p.y * 0.003 + t) + Math.cos(p.x * 0.0028 - t);
+        p.vx += a1 * 0.012;
+        p.vy += Math.cos(p.x * 0.003 + t) * 0.012;
+        p.vx *= 0.94; p.vy *= 0.94;
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < -10) p.x = w + 10;
+        if (p.x > w + 10) p.x = -10;
+        if (p.y < -10) p.y = h + 10;
+        if (p.y > h + 10) p.y = -10;
+        ctx.globalAlpha = p.a;
+        ctx.fillStyle = p.c;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }, {
+      onResize: function (width, height) { init(width, height); }
+    });
+  })();
 
   /* NAV scroll state + sticky CTA */
   var nav = document.getElementById('nav');
