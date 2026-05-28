@@ -219,7 +219,7 @@ def build_lang(data: dict, lang: str) -> str:
 
     # Section eyebrows
     for key, original in [
-        ("section_02_eyebrow", "02 — Brand specs · 110 catalogue"),
+        ("section_02_eyebrow", "02 — Brand specs · 160 catalogue · growing"),
         ("section_03_eyebrow", "03 — The reasoning engine"),
         ("section_04_eyebrow", "04 — The anti-slop linter"),
     ]:
