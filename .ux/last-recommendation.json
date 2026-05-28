@@ -1,0 +1,2202 @@
+{
+  "style": {
+    "id": "swiss-international",
+    "name": "Swiss International",
+    "category": "Minimalist / Swiss",
+    "philosophy": "Grid is law. Type does the heavy lifting. Decoration is failure.",
+    "when_to_use": [
+      "editorial publications",
+      "design portfolios",
+      "cultural institutions",
+      "premium consultancies"
+    ],
+    "when_to_skip": [
+      "consumer apps for casual audiences",
+      "gamified products",
+      "children's products"
+    ],
+    "tokens": {
+      "borders": "hairline (1px), pure or near-black, used as separators only",
+      "shadows": "none — depth comes from spacing, not light",
+      "type": "Helvetica/Inter at strict ratios (1.2 or 1.25), generous tracking on caps",
+      "color": "black on white, single accent at <60% saturation used 1-2% of surface area",
+      "radius": "0 — sharp corners only",
+      "motion": "linear or instant, no flourish"
+    },
+    "exemplars": [
+      "bureauborsche.com",
+      "kasper-florio.ch",
+      "experimentaljetset.nl"
+    ],
+    "compatible_palettes": [
+      "claude-warm-editorial",
+      "linear-graphite",
+      "apple-clarity",
+      "monochrome-pure",
+      "editorial-cream"
+    ],
+    "compatible_type_pairs": [
+      "cormorant-inter-jetbrains",
+      "fraunces-inter-jetbrains",
+      "young-serif-inter-jetbrains",
+      "instrument-serif-inter-jetbrains",
+      "bricolage-grotesque-inter-jetbrains"
+    ],
+    "compatible_industries": [
+      "design-studios",
+      "cultural-institutions",
+      "publishing",
+      "luxury-consulting"
+    ],
+    "ai_slop_risk": "low",
+    "notes": "The trap is mistaking minimalism for blankness — Swiss is precise placement, not empty canvas."
+  },
+  "palette": {
+    "id": "linear-graphite",
+    "name": "Linear Graphite",
+    "mode": "light",
+    "tone": [
+      "minimal",
+      "technical",
+      "precise"
+    ],
+    "colors": {
+      "canvas": "#ffffff",
+      "surface": "#f4f5f8",
+      "ink": "#0a0b0d",
+      "body": "#3f4147",
+      "muted": "#6f7178",
+      "primary": "#5e6ad2",
+      "primary_active": "#4651b8",
+      "hairline": "rgba(10,11,13,0.08)",
+      "success": "#1c8a4f",
+      "warning": "#b85900",
+      "danger": "#c52f1a"
+    },
+    "contrast": {
+      "ink_on_canvas": 20.1,
+      "body_on_canvas": 9.4,
+      "primary_on_canvas": 4.6,
+      "primary_on_dark": 4.8
+    },
+    "compatible_styles": [
+      "monochrome-precise",
+      "stripe-documentation",
+      "linear-precise-dark",
+      "raycast-command-bar",
+      "vercel-precision"
+    ],
+    "exemplars": [
+      "linear.app"
+    ]
+  },
+  "type_pair": {
+    "id": "young-serif-inter-jetbrains",
+    "name": "Young Serif × Inter × JetBrains Mono",
+    "display": {
+      "family": "Young Serif",
+      "weights": [
+        400
+      ],
+      "source": "Google Fonts",
+      "license": "OFL",
+      "url": "https://fonts.google.com/specimen/Young+Serif"
+    },
+    "body": {
+      "family": "Inter",
+      "weights": [
+        400,
+        500,
+        600
+      ],
+      "source": "Google Fonts",
+      "license": "OFL",
+      "url": "https://fonts.google.com/specimen/Inter"
+    },
+    "mono": {
+      "family": "JetBrains Mono",
+      "weights": [
+        400,
+        500
+      ],
+      "source": "Google Fonts",
+      "license": "OFL",
+      "url": "https://fonts.google.com/specimen/JetBrains+Mono"
+    },
+    "character": [
+      "chunky",
+      "confident",
+      "editorial-modern",
+      "distinctive"
+    ],
+    "compatible_styles": [],
+    "ai_slop_risk": "low",
+    "notes": "Single-weight display means you cannot build a heading hierarchy from Young Serif alone — use size only."
+  },
+  "motion": [
+    {
+      "id": "fade-up-12px",
+      "name": "Fade-Up 12px",
+      "category": "Entry",
+      "tokens": {
+        "duration_ms": 360,
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "transform_from": "translateY(12px)",
+        "transform_to": "translateY(0)",
+        "opacity_from": 0,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "{ initial: { y: 12, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { duration: 0.36, ease: [0.16, 1, 0.3, 1] } }",
+        "gsap": "gsap.from(el, { y: 12, opacity: 0, duration: 0.36, ease: 'expo.out' })",
+        "css": "@keyframes fade-up-12 { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } } .fade-up-12 { animation: fade-up-12 360ms cubic-bezier(0.16, 1, 0.3, 1) both; }"
+      },
+      "reduced_motion": "instant — fade only, no transform",
+      "performance": "transform + opacity only — GPU composited"
+    },
+    {
+      "id": "fade-in-pure",
+      "name": "Fade-In Pure",
+      "category": "Entry",
+      "tokens": {
+        "duration_ms": 200,
+        "easing": "cubic-bezier(0.4, 0.0, 0.2, 1)",
+        "opacity_from": 0,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "{ initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] } }",
+        "gsap": "gsap.from(el, { opacity: 0, duration: 0.2, ease: 'power2.inOut' })",
+        "css": "@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } } .fade-in { animation: fade-in 200ms cubic-bezier(0.4, 0.0, 0.2, 1) both; }"
+      },
+      "reduced_motion": "no change — already opacity-only, safe as-is",
+      "performance": "opacity only — GPU composited, cheapest entry"
+    },
+    {
+      "id": "fade-up-24px-slow",
+      "name": "Fade-Up 24px Slow",
+      "category": "Entry",
+      "tokens": {
+        "duration_ms": 560,
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "transform_from": "translateY(24px)",
+        "transform_to": "translateY(0)",
+        "opacity_from": 0,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "{ initial: { y: 24, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { duration: 0.56, ease: [0.16, 1, 0.3, 1] } }",
+        "gsap": "gsap.from(el, { y: 24, opacity: 0, duration: 0.56, ease: 'expo.out' })",
+        "css": "@keyframes fade-up-24 { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } } .fade-up-24 { animation: fade-up-24 560ms cubic-bezier(0.16, 1, 0.3, 1) both; }"
+      },
+      "reduced_motion": "instant — fade only at 200ms, no transform",
+      "performance": "transform + opacity only — GPU composited; use for hero-level reveals not list items"
+    },
+    {
+      "id": "slide-up-from-clip",
+      "name": "Slide-Up From Clip",
+      "category": "Entry",
+      "tokens": {
+        "duration_ms": 480,
+        "easing": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "transform_from": "translateY(100%)",
+        "transform_to": "translateY(0)",
+        "opacity_from": 1,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "{ initial: { y: '100%' }, animate: { y: 0 }, transition: { duration: 0.48, ease: [0.22, 1, 0.36, 1] } }",
+        "gsap": "gsap.from(el, { yPercent: 100, duration: 0.48, ease: 'expo.out' })",
+        "css": "@keyframes slide-up-clip { from { transform: translateY(100%); } to { transform: translateY(0); } } .slide-up-clip-parent { overflow: hidden; } .slide-up-clip { animation: slide-up-clip 480ms cubic-bezier(0.22, 1, 0.36, 1) both; }"
+      },
+      "reduced_motion": "instant — set transform to 0 immediately",
+      "performance": "transform only — GPU composited; requires parent with overflow:hidden for the mask effect"
+    },
+    {
+      "id": "scale-pop-95-100",
+      "name": "Scale-Pop 95 to 100",
+      "category": "Entry",
+      "tokens": {
+        "duration_ms": 220,
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "transform_from": "scale(0.95)",
+        "transform_to": "scale(1)",
+        "opacity_from": 0,
+        "opacity_to": 1
+      },
+      "stacks": {
+        "framer_motion": "{ initial: { scale: 0.95, opacity: 0 }, animate: { scale: 1, opacity: 1 }, transition: { duration: 0.22, ease: [0.16, 1, 0.3, 1] } }",
+        "gsap": "gsap.from(el, { scale: 0.95, opacity: 0, duration: 0.22, ease: 'expo.out' })",
+        "css": "@keyframes scale-pop { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } } .scale-pop { animation: scale-pop 220ms cubic-bezier(0.16, 1, 0.3, 1) both; transform-origin: center; }"
+      },
+      "reduced_motion": "instant — fade only, no scale",
+      "performance": "transform + opacity only — GPU composited; default for popovers, menus, tooltips"
+    }
+  ],
+  "components": [
+    {
+      "id": "mobile-bottom-nav",
+      "name": "Mobile Bottom Navigation",
+      "category": "Navigation",
+      "purpose": "Five-or-fewer thumb-reachable destinations pinned to the bottom of mobile viewports.",
+      "anatomy": [
+        "nav-bar-container",
+        "icon-buttons",
+        "active-indicator-dot",
+        "label-text",
+        "safe-area-padding"
+      ],
+      "states": [
+        "default",
+        "active",
+        "pressed",
+        "with-badge",
+        "hidden-on-scroll"
+      ],
+      "tokens_used": [
+        "surface",
+        "ink",
+        "muted",
+        "primary",
+        "hairline"
+      ],
+      "motion": [
+        "icon-scale-pop-95-100",
+        "indicator-slide-spring"
+      ],
+      "a11y": [
+        "role=navigation with aria-label",
+        "44px min touch target",
+        "aria-current=page on active"
+      ],
+      "code_refs": {
+        "react": "examples/react/BottomNav.tsx",
+        "vue": "examples/vue/BottomNav.vue",
+        "blade": "examples/blade/bottom-nav.blade.php"
+      },
+      "compatible_styles": [
+        "art-portfolio-image-first",
+        "monochrome-precise",
+        "bento-modular",
+        "neumorphism",
+        "japanese-zen",
+        "dribbble-saas-dashboard",
+        "ecommerce-minimal-luxury",
+        "swiss-international",
+        "neo-brutalism",
+        "brutalism-raw"
+      ]
+    },
+    {
+      "id": "tab-bar-underline",
+      "name": "Underline Tab Bar",
+      "category": "Navigation",
+      "purpose": "Editorial-feeling tab navigation with a sliding underline indicator under the active label.",
+      "anatomy": [
+        "tab-track",
+        "tab-labels",
+        "underline-indicator",
+        "overflow-scroll-edge-fade"
+      ],
+      "states": [
+        "default",
+        "active",
+        "hover",
+        "focus-visible",
+        "scrolled-overflow"
+      ],
+      "tokens_used": [
+        "ink",
+        "body",
+        "muted",
+        "primary",
+        "hairline"
+      ],
+      "motion": [
+        "underline-slide-spring",
+        "underline-width-morph"
+      ],
+      "a11y": [
+        "role=tablist + role=tab",
+        "arrow keys cycle",
+        "tab content is role=tabpanel"
+      ],
+      "code_refs": {
+        "react": "examples/react/UnderlineTabs.tsx",
+        "vue": "examples/vue/UnderlineTabs.vue",
+        "blade": "examples/blade/underline-tabs.blade.php"
+      },
+      "compatible_styles": [
+        "apple-liquid-glass",
+        "art-portfolio-image-first",
+        "swiss-international",
+        "monochrome-precise",
+        "editorial-magazine",
+        "editorial-warm",
+        "bento-modular",
+        "pastoral-soft-editorial",
+        "fashion-monochrome",
+        "music-album-art"
+      ]
+    },
+    {
+      "id": "select-combobox",
+      "name": "Searchable Select / Combobox",
+      "category": "Forms",
+      "purpose": "Dropdown select with type-ahead filtering, keyboard navigation, and groupable options.",
+      "anatomy": [
+        "trigger-input",
+        "chevron-icon",
+        "popover-listbox",
+        "option-rows",
+        "group-headings",
+        "empty-state"
+      ],
+      "states": [
+        "closed",
+        "open",
+        "filtering",
+        "selected",
+        "loading",
+        "no-match",
+        "disabled"
+      ],
+      "tokens_used": [
+        "surface",
+        "canvas",
+        "ink",
+        "body",
+        "muted",
+        "primary",
+        "hairline"
+      ],
+      "motion": [
+        "popover-fade-down-4px",
+        "option-highlight-fade"
+      ],
+      "a11y": [
+        "role=combobox + listbox",
+        "aria-activedescendant on focused option",
+        "Esc closes and restores prior value"
+      ],
+      "code_refs": {
+        "react": "examples/react/Combobox.tsx",
+        "vue": "examples/vue/Combobox.vue",
+        "blade": "examples/blade/combobox.blade.php"
+      },
+      "compatible_styles": [
+        "editorial-warm",
+        "newspaper-longform",
+        "apple-liquid-glass",
+        "paper-craft",
+        "ecommerce-minimal-luxury",
+        "data-journalism-rich",
+        "indie-saas-personality",
+        "swiss-international",
+        "neo-brutalism",
+        "editorial-magazine"
+      ]
+    },
+    {
+      "id": "date-picker-inline",
+      "name": "Inline Date Picker",
+      "category": "Forms",
+      "purpose": "Calendar grid for selecting a single date with month/year navigation and keyboard arrows.",
+      "anatomy": [
+        "month-year-header",
+        "prev-next-buttons",
+        "weekday-row",
+        "date-grid",
+        "today-marker",
+        "selected-marker"
+      ],
+      "states": [
+        "default",
+        "selected",
+        "today",
+        "disabled-date",
+        "out-of-month",
+        "hover-date"
+      ],
+      "tokens_used": [
+        "surface",
+        "ink",
+        "body",
+        "muted",
+        "primary",
+        "primary_active",
+        "hairline"
+      ],
+      "motion": [
+        "month-slide-on-change",
+        "date-select-scale-pop"
+      ],
+      "a11y": [
+        "grid role with proper labels",
+        "arrow keys navigate dates",
+        "screen reader announces full date on focus"
+      ],
+      "code_refs": {
+        "react": "examples/react/DatePicker.tsx",
+        "vue": "examples/vue/DatePicker.vue",
+        "blade": "examples/blade/date-picker.blade.php"
+      },
+      "compatible_styles": [
+        "apple-liquid-glass",
+        "editorial-warm",
+        "newspaper-longform",
+        "bento-modular",
+        "raycast-command-bar",
+        "paper-craft",
+        "ecommerce-minimal-luxury",
+        "calendar-time-precise",
+        "data-journalism-rich",
+        "swiss-international"
+      ]
+    },
+    {
+      "id": "button-magnetic",
+      "name": "Magnetic Button",
+      "category": "Actions",
+      "purpose": "Button that subtly tracks the cursor within its bounding radius for premium hover feel.",
+      "anatomy": [
+        "button-shell",
+        "label",
+        "leading-icon-optional",
+        "trailing-icon-optional"
+      ],
+      "states": [
+        "default",
+        "hover",
+        "magnetic-active",
+        "active",
+        "focus-visible",
+        "disabled"
+      ],
+      "tokens_used": [
+        "primary",
+        "primary_active",
+        "surface",
+        "ink",
+        "hairline"
+      ],
+      "motion": [
+        "magnetic-pointer-track",
+        "button-press-scale-98"
+      ],
+      "a11y": [
+        "pointer-only effect; keyboard focus unaffected",
+        "respects prefers-reduced-motion (disables tracking)"
+      ],
+      "code_refs": {
+        "react": "examples/react/MagneticButton.tsx",
+        "vue": "examples/vue/MagneticButton.vue",
+        "blade": "examples/blade/magnetic-button.blade.php"
+      },
+      "compatible_styles": [
+        "neumorphism",
+        "dark-mode-luxe",
+        "data-viz-dense",
+        "swiss-international",
+        "apple-liquid-glass",
+        "gradient-sunset",
+        "fintech-precise",
+        "fashion-monochrome",
+        "dribbble-saas-dashboard",
+        "ecommerce-minimal-luxury"
+      ]
+    },
+    {
+      "id": "fab-mobile",
+      "name": "Floating Action Button (Mobile)",
+      "category": "Actions",
+      "purpose": "Persistent circular action button fixed bottom-right for the primary screen action.",
+      "anatomy": [
+        "fab-circle",
+        "icon",
+        "optional-label-pill",
+        "shadow-elevation"
+      ],
+      "states": [
+        "default",
+        "pressed",
+        "extended-with-label",
+        "scrolled-collapsed",
+        "hidden-on-scroll"
+      ],
+      "tokens_used": [
+        "primary",
+        "surface",
+        "ink",
+        "hairline"
+      ],
+      "motion": [
+        "fab-scale-press",
+        "label-pill-collapse"
+      ],
+      "a11y": [
+        "aria-label required (icon-only)",
+        "44px min touch target met",
+        "z-order does not obscure critical text"
+      ],
+      "code_refs": {
+        "react": "examples/react/Fab.tsx",
+        "vue": "examples/vue/Fab.vue",
+        "blade": "examples/blade/fab.blade.php"
+      },
+      "compatible_styles": [
+        "dark-mode-luxe",
+        "fintech-precise",
+        "data-viz-dense",
+        "kids-playful-rounded",
+        "minimalist-mobile-app",
+        "calendar-time-precise",
+        "music-creation-tool",
+        "swiss-international",
+        "monochrome-precise",
+        "brutalism-raw"
+      ]
+    },
+    {
+      "id": "bento-card-tall",
+      "name": "Tall Bento Card",
+      "category": "Card Patterns",
+      "purpose": "Tall asymmetric card for bento-grid layouts, holding mixed image+text content.",
+      "anatomy": [
+        "aspect-frame",
+        "headline",
+        "supporting-text",
+        "visual-zone",
+        "footer-link"
+      ],
+      "states": [
+        "default",
+        "hover",
+        "tilted-slight",
+        "image-zoom"
+      ],
+      "tokens_used": [
+        "surface",
+        "canvas",
+        "ink",
+        "body",
+        "muted",
+        "primary",
+        "hairline"
+      ],
+      "motion": [
+        "card-tilt-on-pointer-3d",
+        "image-parallax-on-scroll"
+      ],
+      "a11y": [
+        "3D tilt respects prefers-reduced-motion",
+        "decorative visuals marked aria-hidden"
+      ],
+      "code_refs": {
+        "react": "examples/react/BentoCardTall.tsx",
+        "vue": "examples/vue/BentoCardTall.vue",
+        "blade": "examples/blade/bento-card-tall.blade.php"
+      },
+      "compatible_styles": [
+        "creator-platform-vibrant",
+        "bento-modular",
+        "pitch-deck-modern",
+        "swiss-poster",
+        "video-streaming-immersive",
+        "kids-playful-rounded",
+        "social-feed-warm",
+        "swiss-international",
+        "monochrome-precise",
+        "apple-liquid-glass"
+      ]
+    },
+    {
+      "id": "loading-page-shell",
+      "name": "Page Shell Loader",
+      "category": "States",
+      "purpose": "Full-page skeleton mimicking the upcoming layout (nav + content + sidebar) during initial load.",
+      "anatomy": [
+        "nav-skeleton",
+        "sidebar-skeleton",
+        "content-skeleton-blocks",
+        "shimmer-overlay"
+      ],
+      "states": [
+        "loading-initial",
+        "loading-content-only",
+        "fade-out-on-ready"
+      ],
+      "tokens_used": [
+        "surface",
+        "canvas",
+        "muted",
+        "hairline"
+      ],
+      "motion": [
+        "shimmer-gradient-sweep",
+        "fade-out-on-content-ready"
+      ],
+      "a11y": [
+        "aria-busy=true on root",
+        "real layout matches skeleton (no jolt on load)"
+      ],
+      "code_refs": {
+        "react": "examples/react/PageShell.tsx",
+        "vue": "examples/vue/PageShell.vue",
+        "blade": "examples/blade/page-shell.blade.php"
+      },
+      "compatible_styles": [
+        "music-album-art",
+        "monochrome-precise",
+        "saas-stripe-modern",
+        "data-viz-dense",
+        "dribbble-saas-dashboard",
+        "travel-immersive",
+        "swiss-international",
+        "brutalism-raw",
+        "editorial-magazine",
+        "newspaper-longform"
+      ]
+    },
+    {
+      "id": "heatmap-calendar",
+      "name": "Calendar Heatmap",
+      "category": "Charts",
+      "purpose": "GitHub-style yearly grid where each day-cell intensity encodes activity volume.",
+      "anatomy": [
+        "week-rows",
+        "day-cells",
+        "month-labels",
+        "weekday-labels",
+        "intensity-legend",
+        "hover-tooltip"
+      ],
+      "states": [
+        "default",
+        "cell-hovered",
+        "year-changed",
+        "loading"
+      ],
+      "tokens_used": [
+        "surface",
+        "muted",
+        "primary",
+        "primary_active",
+        "ink",
+        "hairline"
+      ],
+      "motion": [
+        "cell-stagger-fade-in-on-mount",
+        "tooltip-fade-up"
+      ],
+      "a11y": [
+        "each cell has aria-label with date and value",
+        "table view available",
+        "color-blind safe scale"
+      ],
+      "code_refs": {
+        "react": "examples/react/CalendarHeatmap.tsx",
+        "vue": "examples/vue/CalendarHeatmap.vue",
+        "blade": "examples/blade/calendar-heatmap.blade.php"
+      },
+      "compatible_styles": [
+        "bento-modular",
+        "developer-portfolio-precise",
+        "data-journalism-rich",
+        "swiss-international",
+        "solarpunk-eco",
+        "stripe-documentation",
+        "discord-chat-ui",
+        "linear-precise-dark",
+        "notion-soft-document",
+        "academic-paper"
+      ]
+    },
+    {
+      "id": "notification-preferences-matrix",
+      "name": "Notification Preferences Matrix",
+      "category": "Settings",
+      "purpose": "Grid of notification categories across delivery channels (email/push/SMS) with per-cell toggles.",
+      "anatomy": [
+        "category-rows",
+        "channel-columns",
+        "header-row",
+        "toggle-cells",
+        "all-on-off-shortcut"
+      ],
+      "states": [
+        "default",
+        "saving-cell",
+        "all-disabled-row",
+        "all-disabled-column",
+        "saved"
+      ],
+      "tokens_used": [
+        "surface",
+        "canvas",
+        "ink",
+        "body",
+        "muted",
+        "primary",
+        "hairline"
+      ],
+      "motion": [
+        "toggle-flip-fast",
+        "save-indicator-fade"
+      ],
+      "a11y": [
+        "table semantics with proper scope",
+        "each toggle labeled with category+channel",
+        "save state announced"
+      ],
+      "code_refs": {
+        "react": "examples/react/NotificationMatrix.tsx",
+        "vue": "examples/vue/NotificationMatrix.vue",
+        "blade": "examples/blade/notification-matrix.blade.php"
+      },
+      "compatible_styles": [
+        "bento-modular",
+        "neo-brutalism",
+        "arc-browser-playful",
+        "crypto-web3-precise",
+        "creator-platform-vibrant",
+        "swiss-international",
+        "editorial-warm",
+        "newspaper-longform",
+        "apple-liquid-glass",
+        "claymorphism"
+      ]
+    },
+    {
+      "id": "stat-card-with-chart-bg",
+      "name": "Stat Card with Chart Background",
+      "category": "Data Display",
+      "purpose": "Stat card where the entire background is a low-opacity sparkline or area chart of the metric.",
+      "anatomy": [
+        "background-chart",
+        "label",
+        "value",
+        "delta-pill",
+        "time-range-text"
+      ],
+      "states": [
+        "default",
+        "hover-chart-emphasized",
+        "loading",
+        "empty"
+      ],
+      "tokens_used": [
+        "surface",
+        "ink",
+        "body",
+        "muted",
+        "primary",
+        "hairline"
+      ],
+      "motion": [
+        "chart-fade-emphasize-on-hover",
+        "value-count-up"
+      ],
+      "a11y": [
+        "chart marked aria-hidden (decorative); text values are primary data",
+        "contrast verified for text over chart"
+      ],
+      "code_refs": {
+        "react": "examples/react/StatChartBg.tsx",
+        "vue": "examples/vue/StatChartBg.vue",
+        "blade": "examples/blade/stat-chart-bg.blade.php"
+      },
+      "compatible_styles": [
+        "swiss-grid-data",
+        "dribbble-saas-dashboard",
+        "data-journalism-rich",
+        "bento-modular",
+        "japanese-zen",
+        "swiss-international",
+        "monochrome-precise",
+        "editorial-magazine",
+        "newspaper-longform",
+        "neumorphism"
+      ]
+    },
+    {
+      "id": "presence-indicator-typing",
+      "name": "Typing Presence Indicator",
+      "category": "States",
+      "purpose": "Three-dot animated indicator showing another user is typing, with name and avatar.",
+      "anatomy": [
+        "avatar",
+        "name-text",
+        "dot-bouncing-trio"
+      ],
+      "states": [
+        "hidden",
+        "typing",
+        "fading-out"
+      ],
+      "tokens_used": [
+        "surface",
+        "body",
+        "muted"
+      ],
+      "motion": [
+        "dot-bounce-stagger-loop",
+        "indicator-fade-up-4px"
+      ],
+      "a11y": [
+        "aria-live=polite announces 'X is typing'",
+        "respects prefers-reduced-motion (static)"
+      ],
+      "code_refs": {
+        "react": "examples/react/TypingIndicator.tsx",
+        "vue": "examples/vue/TypingIndicator.vue",
+        "blade": "examples/blade/typing-indicator.blade.php"
+      },
+      "compatible_styles": [
+        "editorial-warm",
+        "apple-liquid-glass",
+        "japanese-zen",
+        "paper-craft",
+        "data-journalism-rich",
+        "swiss-international",
+        "monochrome-precise",
+        "neo-brutalism",
+        "editorial-magazine",
+        "newspaper-longform"
+      ]
+    }
+  ],
+  "brand_exemplars": [
+    {
+      "id": "airbnb",
+      "name": "Airbnb",
+      "category": "Consumer / Lifestyle / Retail",
+      "year_observed": 2026,
+      "philosophy": "A warm, generous consumer marketplace anchored on a clean white canvas and Airbnb Rausch (#ff385c), the single brand voltage that carries every primary CTA, search-button orb, and rating dot.",
+      "design_language": {
+        "type": {
+          "display": "Airbnb Cereal VF",
+          "body": "Airbnb Cereal VF"
+        },
+        "color_primary": "#ff385c",
+        "color_canvas": "#ffffff",
+        "color_ink": "#222222",
+        "radius": [
+          0,
+          4,
+          8,
+          14,
+          20,
+          32
+        ],
+        "spacing": "4-based"
+      },
+      "trademark_signals": [
+        "Single accent color: (#ff385c — \"Rausch\") carries every primary CTA, the search orb, the heart save state, and the brand wordmark. Used scarcely — most pages are 90% white + ink with one or two Rausch moments",
+        "Custom variable type: Airbnb Cereal VF. Display weights sit at 500–700, body at 400. Modest weight is intentional — the system trusts photography for visual heft",
+        "Three-product top nav: Homes, Experiences, Services — each with a hand-illustrated 32px icon and \"NEW\" badges on the two newer products. Active tab uses an underline rule",
+        "Pill-shaped global search bar: white surface, fully rounded, divided by 1px hairlines into Where / When / Who segments, terminated by a circular Rausch search orb",
+        "Property cards are photo-first: aspect-ratio rectangles with corner clipping, swipeable image carousel, \"Guest favorite\" floating badge top-left, heart icon top-right, then 4–5 lines of meta beneath"
+      ],
+      "components_observed": [
+        "button-pill-rausch",
+        "search-bar-pill",
+        "legal-band",
+        "date-picker-day-selected",
+        "button-tertiary-text",
+        "icon-button-circle"
+      ],
+      "exemplar_pages": [
+        "airbnb.com"
+      ],
+      "source_md": "references/brands/airbnb.md"
+    },
+    {
+      "id": "airtable",
+      "name": "Airtable",
+      "category": "Productivity / Collaboration",
+      "year_observed": 2026,
+      "philosophy": "A sober, editorial workflow-software interface anchored on white canvas and dark-ink type, where brand voltage comes from full-bleed signature cards in coral, dark green, peach, and dark navy that punctuate long-scroll explainer pages.",
+      "design_language": {
+        "type": {
+          "display": "Haas Groot Disp",
+          "body": "Haas"
+        },
+        "color_primary": "#181d26",
+        "color_canvas": "#ffffff",
+        "color_ink": "#181d26",
+        "radius": [
+          2,
+          6,
+          10,
+          12
+        ],
+        "spacing": "4-based"
+      },
+      "trademark_signals": [
+        "Primary CTA is (near-black ink) with white text and a (12px) corner — it reads as confident and final, never decorative",
+        "Secondary CTA is a button with text and a hairline outline. The two together form Airtable's signature button pair",
+        "Hero is white canvas. There is no atmospheric gradient, no mesh, no background flourish. The brand strength comes from the type and the buttons sitting in clean whitespace",
+        "Brand voltage lives in signature surface cards:, and carry full-bleed product callouts every few screens",
+        "Demo-card grids carry product UI fragments on, and other warm pastel surfaces"
+      ],
+      "components_observed": [
+        "pricing-tier-card-featured",
+        "button-pricing-pill",
+        "hero-card-dark",
+        "feature-card-tabbed",
+        "cream-callout-card",
+        "topic-filter-rail"
+      ],
+      "exemplar_pages": [
+        "airtable.com"
+      ],
+      "ai_slop_avoided": [
+        "Don't make (#1b61c9) the primary button color. It is the link color. The primary button is (#181d26, near-black). Treating link-blue as the brand action is the most common mistake when reading Airtable's CSS variables",
+        "Don't add a gradient backdrop to the hero. Airtable's hero is white, full stop. Mesh, aurora, spotlight gradients all read as \"another SaaS template\"",
+        "Don't bold display-weight type. and are intentionally weight 400 / 500"
+      ],
+      "source_md": "references/brands/airtable.md"
+    },
+    {
+      "id": "apple",
+      "name": "Apple",
+      "category": "Consumer / Lifestyle / Retail",
+      "year_observed": 2026,
+      "philosophy": "A photography-first interface that turns marketing into a museum gallery.",
+      "design_language": {
+        "type": {
+          "display": "SF Pro Display",
+          "body": "SF Pro Text"
+        },
+        "color_primary": "#0066cc",
+        "color_canvas": "#ffffff",
+        "color_ink": "#1d1d1f",
+        "radius": [
+          0,
+          5,
+          8,
+          11,
+          18
+        ],
+        "spacing": "4-based"
+      },
+      "trademark_signals": [
+        "Photography-first presentation; UI recedes so the product can speak",
+        "Alternating full-bleed tile sections: white/parchment ↔ near-black, with the color change itself acting as the section divider",
+        "Single blue accent (#0066cc) carries every interactive element. No second brand color exists",
+        "Two button grammars: tiny blue pill CTAs and compact utility rects",
+        "SF Pro Display + SF Pro Text — negative letter-spacing at display sizes for the signature \"Apple tight\" headline feel"
+      ],
+      "components_observed": [
+        "product-tile-dark-2",
+        "product-tile-dark-3",
+        "button-secondary-pill",
+        "button-store-hero",
+        "product-tile-light",
+        "product-tile-parchment"
+      ],
+      "exemplar_pages": [
+        "apple.com",
+        "apple.com/iphone",
+        "apple.com/mac"
+      ],
+      "ai_slop_avoided": [
+        "Don't introduce a second accent color; every \"click me\" signal is (Action Blue)",
+        "Don't add shadows to cards, buttons, or text",
+        "Don't use gradients as decorative backgrounds; atmosphere comes from photography"
+      ],
+      "source_md": "references/brands/apple.md"
+    },
+    {
+      "id": "bmw",
+      "name": "BMW",
+      "category": "Automotive",
+      "year_observed": 2026,
+      "philosophy": "BMW's corporate site — distinct from BMW M's motorsport-bombastic variant, this is a measured and settled corporate-automotive interface.",
+      "design_language": {
+        "type": {
+          "display": "BMW Type Next Latin",
+          "body": "BMW Type Next Latin"
+        },
+        "color_primary": "#1c69d4",
+        "color_canvas": "#ffffff",
+        "color_ink": "#262626",
+        "radius": [
+          0,
+          2,
+          4,
+          8,
+          12
+        ],
+        "spacing": "4-based"
+      },
+      "trademark_signals": [
+        "Light is the base surface; dark navy appears only inside hero bands — page rhythm relies on contrast",
+        "BMW corporate blue (#1c69d4) acts as the single primary action color",
+        "BMW Type Next Latin: weight 700 display against weight 300 body is the signature",
+        "Buttons are rectangular, 0px radius — corporate dialect, distinct from M's sportier radii",
+        "Model cards run as 4-up or 5-up grids with no hairline border or only minimal border — just white plate + photo + title"
+      ],
+      "components_observed": [
+        "configurator-option-tile-selected",
+        "hero-band-dark",
+        "hero-photo-band",
+        "feature-photo-card",
+        "configurator-option-tile",
+        "cta-band-photo"
+      ],
+      "exemplar_pages": [
+        "bmw.com"
+      ],
+      "ai_slop_avoided": [
+        "Don't add a brand color other than blue",
+        "Don't use pill or rounded buttons",
+        "Don't drop display weight to 500"
+      ],
+      "source_md": "references/brands/bmw.md"
+    },
+    {
+      "id": "bmw-m",
+      "name": "BMW M",
+      "category": "Automotive",
+      "year_observed": 2026,
+      "philosophy": "A motorsport-engineering interface anchored on a near-black canvas with white BMW Type Next Latin display headlines in confident UPPERCASE.",
+      "design_language": {
+        "type": {
+          "display": "BMWTypeNextLatin",
+          "body": "BMWTypeNextLatin Light"
+        },
+        "color_primary": "#ffffff",
+        "color_canvas": "#000000",
+        "color_ink": "#ffffff",
+        "radius": [
+          0,
+          2,
+          4,
+          6
+        ],
+        "spacing": "4-based"
+      },
+      "trademark_signals": [
+        "Near-pure black canvas (#000) with white type. The system inverts almost nothing — there is no light-mode marketing surface",
+        "Display headlines in UPPERCASE BMW Type Next Latin at weight 700. Sub-heads stay sentence-case at lighter weight",
+        "M tricolor ( / / ) used as 4px brand-stripe dividers, M-wordmark accents, and motorsport chrome — never as buttons or fills",
+        "Photography fills entire bands edge-to-edge. Cars are always the visual subject; UI chrome backs off to small white labels overlaid on photography",
+        "Buttons are flat with (0px) corners and uppercase letterspaced labels. The \"industrial precision\" rectangular silhouette IS the brand"
+      ],
+      "components_observed": [
+        "hero-photo-band",
+        "feature-photo-card",
+        "cta-band-photo",
+        "carousel-arrow",
+        "button-primary-outline",
+        "button-on-light"
+      ],
+      "exemplar_pages": [
+        "bmw.com/en/m.html"
+      ],
+      "ai_slop_avoided": [
+        "Don't introduce a brand color outside the M tricolor ( / / ) and the heritage",
+        "Don't bold body type. Body stays at 300 (Light)",
+        "Don't use rounded buttons. The rectangular silhouette IS the brand. Rounded corners read as consumer-tech, not motorsport"
+      ],
+      "source_md": "references/brands/bmw-m.md"
+    }
+  ],
+  "guardrails": [
+    {
+      "id": "inter-as-display",
+      "name": "Inter used as display font",
+      "severity": "high",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "font-family:\\s*['\"]?Inter['\"]?[^;}]*[;}][^{]*(?:font-size:\\s*([4-9]\\d|\\d{3,})px|\\btext-(5xl|6xl|7xl|8xl|9xl)\\b)",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Inter is a body font tuned for screen legibility at small sizes; deployed as display it reads as the default startup-landing fingerprint.",
+      "fix": "Pair Inter (body) with a distinctive display face: Geist, Satoshi, Cabinet Grotesk, General Sans, Outfit, or a brand-specific variable sans."
+    },
+    {
+      "id": "purple-to-blue-gradient",
+      "name": "Default purple-to-blue AI gradient",
+      "severity": "high",
+      "category": "Color",
+      "detection": {
+        "type": "regex",
+        "pattern": "bg-gradient-to-[a-z]+\\s+from-(purple|violet|fuchsia|indigo)-(400|500|600)\\s+(?:via-[a-z]+-[0-9]+\\s+)?to-(blue|sky|cyan)-(400|500|600)|linear-gradient\\([^)]*#(7c3aed|8b5cf6|a855f7|6366f1)[^)]*#(3b82f6|2563eb|0ea5e9)[^)]*\\)",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Purple-to-blue gradient on white is the strongest visual fingerprint of unconstrained model output and reads as template-marketplace AI slop.",
+      "fix": "Use a single restrained accent (Emerald, Electric Blue, Deep Rose, Amber) against neutrals; keep gradient hue spread under 60 degrees if used at all."
+    },
+    {
+      "id": "three-equal-card-grid",
+      "name": "Three equal cards in a row",
+      "severity": "high",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:grid-cols-3|grid-template-columns:\\s*repeat\\(\\s*3\\s*,\\s*(?:1fr|minmax))[^>]*>(?:\\s*<[^/][^>]*class=\"[^\"]*(?:card|feature)[^\"]*\"[^>]*>[\\s\\S]*?</[^>]+>\\s*){3}",
+        "flags": "im",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Three equal cards with three icons and three short paragraphs is the safest default the generator reaches for and the strongest layout fingerprint in AI-generated marketing surfaces.",
+      "fix": "Use asymmetric layouts: bento grids, 2-and-1 splits, 4 with one spanning width. Vary card size by content priority."
+    },
+    {
+      "id": "fake-name-john-doe",
+      "name": "Generic placeholder names",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\b(?:John\\s+Doe|Jane\\s+Doe|John\\s+Smith|Jane\\s+Smith|Sarah\\s+Chan|Test\\s+User|Demo\\s+User|Foo\\s+Bar)\\b|\\b(?:john\\.doe|jane\\.doe|test\\.user)@(?:example|test|demo)\\.com\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "ts",
+          "js",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "John/Jane Doe and their cousins signal that nobody thought about who would actually use the product - immediate AI-generated-tutorial vibe.",
+      "fix": "Use plausible names that fit the target market: Maya Iqbal, Adam Levin, Wen Zhang, Layla Haddad. Match region for regional products."
+    },
+    {
+      "id": "lorem-ipsum-leak",
+      "name": "Lorem ipsum in shipping code",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\b(?:Lorem\\s+ipsum|lorem\\s+ipsum\\s+dolor|consectetur\\s+adipiscing|sed\\s+do\\s+eiusmod)\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "ts",
+          "js",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md",
+          "css",
+          "scss"
+        ]
+      },
+      "why": "Lorem ipsum in production source code is unshipped placeholder content - the most obvious draft-state leak.",
+      "fix": "Write real copy that makes a specific claim about the product. If you can't write it yet, mark the block with TODO and a content owner."
+    },
+    {
+      "id": "emoji-in-ui",
+      "name": "Emoji used as UI element",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:button|a|h[1-6]|span|div|p|li)[^>]*>[^<]*(?:[\\U0001F300-\\U0001F9FF]|[\\U0001F600-\\U0001F64F]|[\\U0001F680-\\U0001F6FF]|[\\u2600-\\u26FF]|[\\u2700-\\u27BF])",
+        "flags": "u",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Emojis render inconsistently across platforms, ignore brand color, and signal informality where SVG icons signal craft.",
+      "fix": "Inline SVG from Lucide, Feather, Phosphor, or Heroicons at 1.5-2px stroke with currentColor. Whitelist U+2713 check and U+2318 command only."
+    },
+    {
+      "id": "centered-everything-hero",
+      "name": "Centered hero composition",
+      "severity": "medium",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:section|div|header)[^>]*class=\"[^\"]*\\b(?:hero|banner)\\b[^\"]*\"[^>]*>[\\s\\S]{0,800}?<h1[^>]*class=\"[^\"]*\\b(?:text-center|items-center\\s+justify-center)\\b[^\"]*\"|<(?:section|div)[^>]*class=\"[^\"]*\\b(?:hero|banner)\\b[^\"]*\\bflex\\b[^\"]*\\bitems-center\\b[^\"]*\\bjustify-center\\b[^\"]*\\btext-center\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Centered headline + centered subtitle + centered button stack is the laziest hero composition and signals the generator picked it when it couldn't find a better layout.",
+      "fix": "Use left-aligned hero with editorial 7-5 or 8-4 grid split; let the imagery earn its own column."
+    },
+    {
+      "id": "gradient-text-rainbow",
+      "name": "Multi-stop gradient text",
+      "severity": "medium",
+      "category": "Color",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:bg-clip-text|background-clip:\\s*text)[^\"';]*(?:bg-gradient-to-[a-z]+\\s+from-[a-z]+-[0-9]+\\s+via-[a-z]+-[0-9]+\\s+to-[a-z]+-[0-9]+|linear-gradient\\([^)]*,[^)]*,[^)]*,[^)]*\\))",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Three-stop rainbow text on a hero word is the strongest 'AI hero' tell after the purple-to-blue gradient.",
+      "fix": "Use a single solid color for headlines. If gradient text is essential, two stops in analogous hues at modest saturation."
+    },
+    {
+      "id": "card-glow-purple-shadow",
+      "name": "Purple glow shadow on cards",
+      "severity": "medium",
+      "category": "Color",
+      "detection": {
+        "type": "regex",
+        "pattern": "box-shadow:[^;]*rgba?\\(\\s*(?:12[0-9]|13[0-9]|14[0-9])\\s*,\\s*(?:5[0-9]|6[0-9]|7[0-9])\\s*,\\s*(?:2[0-9]\\d|2[3-5]\\d)|shadow-(?:purple|violet|fuchsia|indigo)-(?:400|500|600)",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Purple-tinted shadows on cards are the second-strongest 'AI premium' fingerprint after the gradient itself.",
+      "fix": "Use neutral diffusion shadow: shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)]. Color comes from the surface, not the shadow."
+    },
+    {
+      "id": "timing-300ms-default",
+      "name": "Default 300ms transition timing",
+      "severity": "low",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:transition(?:-duration)?|animation-duration):\\s*300ms\\b|duration-300\\b|\\bduration:\\s*0\\.3s\\b",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "300ms is the editor default - using it everywhere signals zero motion intent and reads as laziness to anyone who tunes animation curves.",
+      "fix": "Micro-interactions 150-220ms, complex transitions 250-400ms, exit 60-70% of entry. Pick durations that match the feel, not the default."
+    },
+    {
+      "id": "cubic-bezier-material-only",
+      "name": "Material default easing everywhere",
+      "severity": "low",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "cubic-bezier\\(\\s*0?\\.4\\s*,\\s*0\\s*,\\s*0?\\.2\\s*,\\s*1\\s*\\)",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "cubic-bezier(0.4, 0, 0.2, 1) is Material Design's default standard ease - using it as the only curve signals no taste decision was made.",
+      "fix": "Use cubic-bezier(0.16, 1, 0.3, 1) for premium exits, cubic-bezier(0.34, 1.56, 0.64, 1) for playful overshoot, or spring physics."
+    },
+    {
+      "id": "font-system-only",
+      "name": "System font stack with no chosen typeface",
+      "severity": "low",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "font-family:\\s*(?:-apple-system|BlinkMacSystemFont)(?:\\s*,\\s*(?:BlinkMacSystemFont|'?Segoe UI'?|Roboto|Oxygen|Ubuntu|Cantarell|'?Helvetica Neue'?|sans-serif|system-ui))*\\s*;",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Falling back to the system stack alone with no chosen typeface gives up the chance to have any typographic identity.",
+      "fix": "Pick a real face: Geist, Inter, Satoshi, IBM Plex Sans, Cabinet Grotesk, or the brand's variable. System stack is the absolute last fallback."
+    },
+    {
+      "id": "icon-emoji-stamp",
+      "name": "Emoji used as icon stamp",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "class=\"[^\"]*(?:icon|stamp|badge|achievement|reward)[^\"]*\"[^>]*>\\s*(?:[\\U0001F300-\\U0001F9FF]|[\\u2600-\\u27BF]|[\\U0001F600-\\U0001F6FF])",
+        "flags": "u",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Emoji where an SVG icon belongs breaks brand color, scales poorly, and renders differently on every OS.",
+      "fix": "Inline SVG icon with currentColor and a consistent stroke width across the surface."
+    },
+    {
+      "id": "pill-rounded-full-everywhere",
+      "name": "rounded-full applied to everything",
+      "severity": "low",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "<button[^>]*class=\"[^\"]*\\brounded-full\\b[^\"]*\"[^>]*>(?![^<]*(?:×|close|menu|search))|<(?:input|textarea)[^>]*class=\"[^\"]*\\brounded-full\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "rounded-full on every button and input is the iOS-tutorial fingerprint - signals the radius decision was skipped entirely.",
+      "fix": "rounded-full for pills, avatars, icon buttons only. Use rounded-md or rounded-lg for primary buttons; rounded-xl or rounded-2xl for cards."
+    },
+    {
+      "id": "hero-text-arbitrary-90px",
+      "name": "Arbitrary hero font size",
+      "severity": "medium",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "text-\\[(?:9[0-9]|1[0-9]{2})px\\]|font-size:\\s*(?:9[0-9]|1[0-9]{2})px\\b",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Arbitrary px values like text-[90px] or text-[112px] bypass the type scale and signal the size was picked by eye, not by system.",
+      "fix": "Extend the Tailwind theme scale or use clamp() for fluid hero typography. text-6xl/text-7xl/text-8xl exist for a reason."
+    },
+    {
+      "id": "blur-bg-only-decoration",
+      "name": "Backdrop blur with no glass surface",
+      "severity": "low",
+      "category": "Visual",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:backdrop-blur(?:-(?:sm|md|lg|xl|2xl|3xl))?|backdrop-filter:\\s*blur\\([^)]+\\))(?![^\"';]*(?:bg-white/[0-9]|bg-black/[0-9]|bg-[a-z]+-[0-9]+/[0-9]|background:[^;]*rgba))",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Backdrop blur applied without a translucent surface behind it is GPU work for zero visual benefit - decoration, not design.",
+      "fix": "Pair backdrop-blur with a translucent fill: bg-white/70 or bg-zinc-950/60. Otherwise remove the blur entirely."
+    },
+    {
+      "id": "avatar-stack-overlapping",
+      "name": "Generic overlapping avatar stack",
+      "severity": "medium",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "class=\"[^\"]*-space-x-[0-9]+[^\"]*\"[^>]*>(?:\\s*<(?:img|div)[^>]*class=\"[^\"]*(?:avatar|rounded-full)[^\"]*\"[^>]*/?>\\s*){3,}",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Three overlapping circular avatars in the nav as 'our team' or 'join 10k users' is a content-marketing template tell.",
+      "fix": "Use real customer logos, named testimonials with quotes, or specific signal (Used by 312 engineering teams at Series-A companies)."
+    },
+    {
+      "id": "testimonial-fake-five-stars",
+      "name": "Hardcoded five-star testimonial",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:\\u2605{5}|★{5}|⭐{5}|\\*{5})|<(?:span|div|p)[^>]*class=\"[^\"]*stars?[^\"]*\"[^>]*>\\s*(?:\\u2605|★){4,}",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "Five hardcoded stars next to a fake quote is the lowest-trust pattern on the web; users have learned to discount it on sight.",
+      "fix": "Show real, named, attributable testimonials with company affiliation and a specific outcome. No star count unless aggregated from a real review system."
+    },
+    {
+      "id": "cta-arrow-rightward-bouncing",
+      "name": "Bouncing arrow on CTA",
+      "severity": "medium",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:button|a)[^>]*>[^<]*(?:→|->|&rarr;|&#8594;)[^<]*</(?:button|a)>|class=\"[^\"]*\\banimate-bounce\\b[^\"]*\"[^>]*>\\s*(?:→|→|&rarr;|<svg)",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Bouncing arrow on a CTA is the desperate-attention pattern that signals the copy itself isn't doing the work.",
+      "fix": "Let the CTA copy carry the action (Start a 14-day trial, Read the deployment guide). If you need an arrow, use a static SVG that nudges 2-4px on hover."
+    },
+    {
+      "id": "nav-equal-hamburger-desktop",
+      "name": "Hamburger menu on desktop",
+      "severity": "low",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:button|div)[^>]*(?:aria-label=\"(?:menu|navigation|hamburger)\"|class=\"[^\"]*\\b(?:hamburger|menu-toggle)\\b[^\"]*\")[^>]*>(?![\\s\\S]*?(?:md:hidden|lg:hidden|hidden\\s+md:|hidden\\s+lg:))",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Hamburger on a wide viewport hides nav from users for no reason; signals the responsive breakpoint was skipped.",
+      "fix": "Show inline nav on md: and up; hide the hamburger above that breakpoint with md:hidden."
+    },
+    {
+      "id": "tailwind-color-named-vague",
+      "name": "Named Tailwind colors with no semantic token",
+      "severity": "low",
+      "category": "Color",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\b(?:bg|text|border|ring|from|to|via)-(?:blue|red|green|yellow|purple|pink|indigo|orange)-(?:400|500|600)\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "css"
+        ]
+      },
+      "why": "Raw bg-blue-500 / bg-purple-500 with no semantic token (primary, success, danger) signals the color system was never designed.",
+      "fix": "Define semantic tokens in tailwind.config or CSS custom properties: bg-primary, text-success, ring-accent. Map them once."
+    },
+    {
+      "id": "inline-style-attribute",
+      "name": "Inline style attribute",
+      "severity": "medium",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:div|span|p|section|article|h[1-6]|button|a|img)[^>]*\\sstyle=\"[^\"]+\"",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Inline style= attributes bypass the design system, defeat caching, and signal the styling decision was made ad hoc.",
+      "fix": "Use Tailwind utilities, a CSS class, or a styled component. Reserve inline style for runtime-computed values (animated translate, dynamic CSS vars) only."
+    },
+    {
+      "id": "console-log-leak",
+      "name": "console.log in component code",
+      "severity": "high",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": "console\\.(?:log|warn|debug|info)\\s*\\(",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "ts",
+          "js",
+          "vue",
+          "astro"
+        ]
+      },
+      "why": "console.log shipped to production leaks state to anyone with DevTools open and signals the build didn't go through a real review.",
+      "fix": "Remove debug logs before shipping. If you need structured logging, use a logger module that's tree-shaken out of production builds."
+    },
+    {
+      "id": "todo-fixme-comment",
+      "name": "TODO or FIXME in shipping code",
+      "severity": "low",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?://|/\\*|<!--|\\{/\\*)\\s*(?:TODO|FIXME|XXX|HACK|WIP|REFACTOR)\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "ts",
+          "js",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "css",
+          "scss"
+        ]
+      },
+      "why": "TODO/FIXME in shipping code is an unresolved promise to the reader and a draft-state leak.",
+      "fix": "Resolve the TODO before merge, or move it to the issue tracker with a specific owner and date."
+    },
+    {
+      "id": "any-type-leak",
+      "name": "TypeScript any type",
+      "severity": "medium",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": ":\\s*any(?:\\s*[;,)=\\]>]|\\s*$)|<any[,>]|as\\s+any\\b",
+        "flags": "",
+        "scope": [
+          "ts",
+          "tsx"
+        ]
+      },
+      "why": "any defeats the type system and signals the type was never figured out - the code is JavaScript pretending to be TypeScript.",
+      "fix": "Use unknown for genuinely unknown shapes and narrow with type guards. Use a specific interface or generic for everything else."
+    },
+    {
+      "id": "inline-svg-no-aria",
+      "name": "SVG without aria-label or aria-hidden",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<svg(?![^>]*\\baria-label=)(?![^>]*\\baria-labelledby=)(?![^>]*\\baria-hidden=)(?![^>]*\\brole=\"presentation\")[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "SVG with no aria-label and no aria-hidden is announced by screen readers as 'graphic' with no context - failure of WCAG 1.1.1.",
+      "fix": "Decorative SVG gets aria-hidden=\"true\". Informative SVG gets aria-label=\"description\" or aria-labelledby pointing to a title element."
+    },
+    {
+      "id": "button-no-type",
+      "name": "Button missing type attribute",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<button(?![^>]*\\btype=)[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "A <button> inside a <form> without type=\"button\" defaults to type=\"submit\" and silently submits the form on every click.",
+      "fix": "Always set type=\"button\" or type=\"submit\" explicitly. The default is a footgun, not a feature."
+    },
+    {
+      "id": "img-no-alt",
+      "name": "Image missing alt attribute",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<img(?![^>]*\\balt=)[^>]*/?>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Missing alt breaks screen readers, SEO image indexing, and the broken-image fallback all at once - WCAG 1.1.1 failure.",
+      "fix": "Every <img> gets alt. Decorative images get alt=\"\" (empty). Informative images get a description a screen reader user would need."
+    },
+    {
+      "id": "link-onclick-no-href",
+      "name": "Anchor with onClick but no href",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<a(?![^>]*\\bhref=)[^>]*\\b(?:onClick|onclick)=",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "An <a> without href is not focusable by default and is invisible to assistive tech - it looks like a link but behaves like a button.",
+      "fix": "Use <button> for actions. Use <a href=\"...\"> for navigation. Never an anchor without href as a click target."
+    },
+    {
+      "id": "heading-skip-h1-h3",
+      "name": "Skipped heading level",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<h1[^>]*>[\\s\\S]*?</h1>[\\s\\S]*?<h3[^>]*>(?![\\s\\S]*?<h2)|<h2[^>]*>[\\s\\S]*?</h2>[\\s\\S]*?<h4[^>]*>(?![\\s\\S]*?<h3)|<h3[^>]*>(?:(?!<h[12]).)*?</h3>",
+        "flags": "is",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Heading hierarchy gaps (h1 then h3, or h3 with no h1/h2 preceding) break the screen-reader landmark tree and the SEO outline.",
+      "fix": "h1 once per page; nest h2/h3/h4 in order. If you need a small visual heading without a logical level, use a styled <p> instead."
+    },
+    {
+      "id": "shadcn-default-everywhere",
+      "name": "Default shadcn token block unmodified",
+      "severity": "low",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": "--background:\\s*0\\s+0%\\s+100%[\\s\\S]{0,200}--foreground:\\s*222\\.2\\s+84%\\s+4\\.9%|--primary:\\s*222\\.2\\s+47\\.4%\\s+11\\.2%|--radius:\\s*0\\.5rem;",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss"
+        ]
+      },
+      "why": "The default shadcn HSL token block with --radius 0.5rem is recognizable in two seconds by anyone who has shipped one shadcn app.",
+      "fix": "Customize tokens at init: swap slate for zinc/stone, shift primary to a brand hue, set --radius to 0.625rem or 0.75rem."
+    },
+    {
+      "id": "gradient-mesh-purple-pink",
+      "name": "Purple-pink mesh gradient hero",
+      "severity": "medium",
+      "category": "Color",
+      "detection": {
+        "type": "regex",
+        "pattern": "radial-gradient\\([^)]*#(?:a855f7|c084fc|d946ef|e879f9|ec4899|f472b6)[^)]*\\)|conic-gradient\\([^)]*(?:purple|fuchsia|pink|violet)[^)]*\\)|bg-gradient-to-[a-z]+\\s+from-(?:purple|fuchsia|violet)-(?:400|500|600)\\s+to-(?:pink|rose|fuchsia)-(?:400|500|600)",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Purple-to-pink mesh gradient is the second-most fingerprinted AI-hero pattern after blue-to-purple - 'I generated a landing page' aesthetic.",
+      "fix": "Single accent against neutral canvas. If a hero needs depth, layer subtle noise or a single low-saturation analogous gradient under 60deg hue spread."
+    },
+    {
+      "id": "dark-text-on-dark-card",
+      "name": "Low-contrast text on card",
+      "severity": "high",
+      "category": "Color",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:bg-zinc-(?:[89]00|950)|bg-slate-(?:[89]00|950)|bg-gray-(?:[89]00|950)|bg-black|background:\\s*#0[0-9a-f]{5})[^\"';]*(?:text-zinc-(?:[5-7]00)|text-slate-(?:[5-7]00)|text-gray-(?:[5-7]00)|color:\\s*#[4-6][0-9a-f]{5})",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Dark text token (zinc-500/600/700) on a dark surface fails WCAG AA 4.5:1 contrast and signals the dark mode pairing was never tested.",
+      "fix": "Test contrast on both themes. On dark surfaces use text-zinc-100 to text-zinc-300; reserve 500-700 for tertiary captions on light surfaces."
+    },
+    {
+      "id": "arbitrary-z-index-9999",
+      "name": "Lazy z-index value",
+      "severity": "medium",
+      "category": "Quality",
+      "detection": {
+        "type": "regex",
+        "pattern": "z-index:\\s*(?:9999+|99999+|2147483647)\\b|\\bz-\\[(?:9999+|99999+)\\]",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "z-index: 9999 is the 'I gave up on the stacking system' value - signals there's no z-scale token map and stacking bugs are coming.",
+      "fix": "Define a z-scale token set (z-base: 0, z-dropdown: 10, z-sticky: 20, z-modal: 50, z-toast: 60). Use the tokens, never a raw 9999."
+    },
+    {
+      "id": "infinite-scroll-no-pagination",
+      "name": "Infinite scroll without keyboard fallback",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:IntersectionObserver|useInfiniteScroll|InfiniteScroll|on(?:Scroll|EndReached))[\\s\\S]{0,500}?(?:loadMore|fetchMore|loadNext)(?![\\s\\S]{0,800}?<button[^>]*>(?:Load|Show|More))",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "ts",
+          "js",
+          "vue"
+        ]
+      },
+      "why": "Pure infinite scroll with no Load more button locks out keyboard users and breaks back-button history - WCAG 2.4 failure plus a usability one.",
+      "fix": "Ship infinite scroll AND a visible Load more button. The button is the keyboard path; the observer is the convenience layer."
+    },
+    {
+      "id": "viewport-no-zoom",
+      "name": "Viewport blocks pinch-zoom",
+      "severity": "critical",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<meta[^>]+viewport[^>]+user-scalable\\s*=\\s*['\"]?no",
+        "flags": "i",
+        "scope": [
+          "html",
+          "blade",
+          "astro",
+          "vue",
+          "tsx",
+          "jsx"
+        ]
+      },
+      "why": "user-scalable=no blocks pinch-zoom for low-vision users on touch devices - a WCAG 1.4.4 failure that locks out anyone who needs to enlarge text.",
+      "fix": "Remove user-scalable=no entirely, or set it to yes. Default viewport: <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">."
+    },
+    {
+      "id": "outline-none-no-focus-visible",
+      "name": "outline removed without focus-visible replacement",
+      "severity": "critical",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "outline\\s*:\\s*(?:none|0)\\s*;(?![^}]*:focus-visible)",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "outline: none removes the only keyboard focus indicator and leaves keyboard users with no signal of focus state - a WCAG 2.4.7 failure.",
+      "fix": "Pair outline: none with a :focus-visible rule that restores a visible ring: :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }."
+    },
+    {
+      "id": "placeholder-as-label",
+      "name": "Input placeholder used as the only label",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<input(?![^>]*\\baria-label=)(?![^>]*\\baria-labelledby=)[^>]+placeholder=",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Placeholders disappear on focus, sit at low contrast by default, and are not announced consistently by assistive tech - using one as the only label fails WCAG 3.3.2.",
+      "fix": "Always pair <input> with a <label for=\"id\"> or aria-label. Placeholder is for an optional hint, never the field name."
+    },
+    {
+      "id": "div-onclick-no-role",
+      "name": "Click handler on <div> without role or tabindex",
+      "severity": "critical",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<div[^>]+onClick=(?![^>]+role\\s*=\\s*['\"]button)",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "A <div onClick> is invisible to keyboard users and assistive tech - the action exists only for mouse users, a WCAG 2.1.1 and 4.1.2 failure.",
+      "fix": "Use <button onClick> for actions. If you must keep the <div>, add role=\"button\" tabindex=\"0\" and an onKeyDown handler for Enter and Space."
+    },
+    {
+      "id": "anchor-no-href-as-button",
+      "name": "Anchor styled as button without href",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<a[^>]+class=['\"][^'\"]*btn[^'\"]*['\"](?![^>]+href)",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "An <a class=\"btn\"> without href is not focusable, not in the tab order, and not announced as a link - looks like a button but behaves like nothing.",
+      "fix": "Use <button> for actions, <a href=\"...\"> for navigation. If the destination is unknown until runtime, render a button or set href=\"#\" with preventDefault."
+    },
+    {
+      "id": "h-screen-no-dvh-fallback",
+      "name": "100vh without 100dvh fallback for mobile",
+      "severity": "high",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:height\\s*:\\s*100vh|class=[^>]*h-screen)(?![^}]*100dvh)",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "100vh on mobile includes the browser chrome that retracts on scroll, so the layout jumps as the address bar collapses - dynamic viewport units (dvh) fix this.",
+      "fix": "Use height: 100dvh or h-[100dvh] as the primary, with h-screen / 100vh as the legacy fallback for browsers that lack dvh."
+    },
+    {
+      "id": "title-case-headlines",
+      "name": "Title Case On Display Headings",
+      "severity": "medium",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "<h[12][^>]*>\\s*(?:[A-Z][a-z]+\\s+){3,}",
+        "flags": "",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Marketing-style Title Case on every headline dates the design to a 2014 SaaS template and slows reading. Sentence case scales better and reads faster.",
+      "fix": "Default to sentence case for headlines. Reserve title case for proper nouns and brand names, or for an explicit editorial decision."
+    },
+    {
+      "id": "filler-marketing-verbs",
+      "name": "Filler marketing verb in headline",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "<h[1-3][^>]*>[^<]*(?:Elevate|Seamless|Unleash|Revolutionize|Empower|Supercharge|Transform)[^<]*<",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "Elevate, Seamless, Unleash, Revolutionize, Empower, Supercharge, Transform - the unmistakable fingerprint of unedited marketing copy generated without a real product in mind.",
+      "fix": "Name the specific action and the specific outcome. Cut the verb if it isn't carrying weight. The reader knows what the product does only if you say what the product does."
+    },
+    {
+      "id": "generic-cta-text",
+      "name": "Generic CTA text (Click here, Learn more)",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:a|button)[^>]*>\\s*(?:Click here|Learn more|Get started)\\s*</(?:a|button)>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Click here / Learn more / Get started reveals nothing about the destination and fails screen-reader scan-by-link - users hear a list of identical labels with no context.",
+      "fix": "Name the specific action: Read pricing, Start free trial, View dashboard, Open API docs. The link text should make sense out of context."
+    },
+    {
+      "id": "round-number-stats",
+      "name": "Round number marketing stat",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:99\\.99%|99\\.9%|10x faster|100% guaranteed|10x more)",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "99.99%, 10x faster, 100% guaranteed - the suspiciously round numbers AI invents to sound credible. Real measurements are messy and specific.",
+      "fix": "Use the real number you measured: 99.93% uptime over Q1, 4.2x faster median build, refunded 218 of 244 reported issues. Specificity is the signal."
+    },
+    {
+      "id": "display-bold-700",
+      "name": "Display heading at 700+ font-weight",
+      "severity": "medium",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "font-weight\\s*:\\s*(?:700|bolder)[^}]*font-size\\s*:\\s*(?:[3-9]\\d|\\d{3,})",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Display fonts at 700 weight read dense and visually muddy. Most display faces are drawn to sing at 500-600; 700+ is for body emphasis, not headlines.",
+      "fix": "Use font-weight 500 or 600 on display headings. Reserve 700+ for body emphasis (bold inline text, table totals, primary CTA labels)."
+    },
+    {
+      "id": "all-caps-large",
+      "name": "ALL CAPS at body-text size or larger",
+      "severity": "medium",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "text-transform\\s*:\\s*uppercase[^}]*font-size\\s*:\\s*(?:[2-9]\\d|\\d{3,})",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "ALL CAPS reading speed is 13-20% slower than mixed case because word shape is lost. At 14px or larger it actively impedes reading.",
+      "fix": "Reserve uppercase for eyebrows, labels, and badges under 14px. Use sentence case for anything readers need to read, not just scan."
+    },
+    {
+      "id": "cursor-pointer-non-interactive",
+      "name": "cursor:pointer on non-interactive element",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:div|span)[^>]+(?:class=[^>]+cursor-pointer|style=[^>]+cursor\\s*:\\s*pointer)",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "A <div> or <span> with cursor: pointer promises clickable behavior to sighted mouse users while keyboard and screen-reader users get nothing - a hidden interaction.",
+      "fix": "If it clicks, make it a <button> or <a href>. If you keep the <div>, add role and tabindex and a keydown handler - the cursor change is the smallest signal a real control owes."
+    },
+    {
+      "id": "animating-layout-properties",
+      "name": "Transition on a layout property",
+      "severity": "high",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "transition[^;]*:\\s*[^;]*(?:width|height|top|left|margin|padding)[^;]*;",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Animating width, height, top, left, margin, padding triggers layout and paint on every frame - the dropped-frame jank pattern that makes the UI feel cheap.",
+      "fix": "Animate transform (translate, scale) and opacity only. Use scale instead of width, translate instead of top/left. The compositor thanks you."
+    },
+    {
+      "id": "img-no-dimensions",
+      "name": "Image without width and height attributes",
+      "severity": "high",
+      "category": "Performance",
+      "detection": {
+        "type": "regex",
+        "pattern": "<img(?![^>]+\\bwidth=)[^>]+>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "An <img> without width and height attributes causes Cumulative Layout Shift as the image loads and the page reflows - the single biggest CLS regression on most sites.",
+      "fix": "Always set width and height (the intrinsic pixel dimensions) on every <img>, even when styled with CSS. The browser uses them to reserve space."
+    },
+    {
+      "id": "lone-emoji-as-icon",
+      "name": "Lone emoji used as functional icon",
+      "severity": "high",
+      "category": "Visual",
+      "detection": {
+        "type": "regex",
+        "pattern": ">[\\u2700-\\u27BF\\U0001F300-\\U0001F9FF](?:</)",
+        "flags": "u",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "A bare emoji standing in for an icon renders inconsistently across platforms, ignores brand color, and is announced unpredictably by screen readers.",
+      "fix": "Use inline SVG (Lucide, Feather, Phosphor, Heroicons) at 1.5-2px stroke with currentColor. Add aria-label when the icon carries meaning."
+    }
+  ],
+  "rationale": [
+    "Industry: SaaS — Developer Tools",
+    "Style: Swiss International",
+    "Palette: Linear Graphite",
+    "Type pair: Young Serif × Inter × JetBrains Mono",
+    "Motion presets considered: 5",
+    "Compatible components: 12",
+    "Guardrails active: 51 anti-pattern rules"
+  ]
+}

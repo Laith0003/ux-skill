@@ -27,3 +27,14 @@ htmlcov/
 node_modules/
 npm-debug.log*
 ruvector.db
+# Engine state (project-local) — usually gitignored
+# EXCEPTION: the homepage's own dogfood proof is committed
+!.ux/design-system/MASTER.md
+!.ux/last-discovery.json
+!.ux/last-recommendation.json
+
+# Homepage dogfood proof — committed despite the .ux/ rule above
+!.ux/design-system/MASTER.md
+!.ux/last-discovery.json
+!.ux/last-recommendation.json
+!.ux/design-system/
