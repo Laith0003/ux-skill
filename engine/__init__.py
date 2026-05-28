@@ -2,6 +2,17 @@
 
 Public surface:
     from engine import recommend, lint, discover, generate
+    from engine import save_master, save_page, load_master, list_pages
 """
 
 __version__ = "2.0.0-alpha.1"
+
+from engine.persist import save_master, save_page, load_master, list_pages
+
+__all__ = [
+    "__version__",
+    "save_master",
+    "save_page",
+    "load_master",
+    "list_pages",
+]

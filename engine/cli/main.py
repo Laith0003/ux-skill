@@ -2,14 +2,18 @@
 
 Subcommands
 -----------
-``ux init``           -- detect IDEs and install for all
-``ux install <ide>``  -- install for a specific IDE
-``ux recommend``      -- run the 5-parallel-search engine
-``ux lint``           -- run the anti-AI-slop linter
-``ux discover``       -- run the 10-field discovery flow
-``ux generate``       -- emit tokens + manifest from a recommendation
-``ux stats``          -- show data manifest counts
-``ux version``        -- print version
+``ux init``             -- detect IDEs and install for all
+``ux install <ide>``    -- install for a specific IDE
+``ux recommend``        -- run the 5-parallel-search engine
+``ux lint``             -- run the anti-AI-slop linter
+``ux discover``         -- run the 10-field discovery flow
+``ux generate``         -- emit tokens + manifest from a recommendation
+``ux persist save``     -- write MASTER.md from a recommendation + brief
+``ux persist save-page``-- write a per-page .md from a brief + output
+``ux persist load``     -- read MASTER.md back as JSON
+``ux persist list``     -- list page names persisted under pages/
+``ux stats``            -- show data manifest counts
+``ux version``          -- print version
 """
 from __future__ import annotations
 
@@ -37,6 +41,7 @@ from engine.linter import lint as run_lint
 from engine.discovery import FIELDS, DiscoveryState, next_question, record, is_complete, serialize
 from engine.generator import generate as run_generate
 from engine.installer import install as run_install, detect_ides, SUPPORTED
+from engine.persist import save_master, save_page, load_master, list_pages
 
 
 def _emit(payload, pretty: bool) -> None:
@@ -229,6 +234,98 @@ else:
         rec = run_recommend(brief)
         bundle = run_generate(rec, brief, out_dir)
         _emit(bundle.to_dict(), ctx.obj["pretty"])
+
+    # -------- ux persist -------------------------------------------------
+
+    @cli.group("persist")
+    @click.pass_context
+    def persist_grp(ctx) -> None:
+        """Write/read MASTER.md and per-page state under .ux/design-system/."""
+
+    def _load_recommendation_dict(rec_path: Optional[str], brief_obj: Brief) -> dict:
+        if rec_path and Path(rec_path).exists():
+            return json.loads(Path(rec_path).read_text(encoding="utf-8"))
+        rec = run_recommend(brief_obj)
+        return rec.to_dict()
+
+    def _load_brief_dict(brief_path: Optional[str]) -> dict:
+        if not brief_path:
+            return {}
+        path = Path(brief_path)
+        if not path.exists():
+            return {}
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        # Discovery files wrap answers under "answers"; recommend briefs are flat.
+        if isinstance(payload, dict) and "answers" in payload and isinstance(payload["answers"], dict):
+            return dict(payload["answers"])
+        return payload if isinstance(payload, dict) else {}
+
+    def _brief_dict_to_dataclass(brief_dict: dict) -> Brief:
+        keep = {
+            "project_type", "industry", "audience", "tone",
+            "must_have", "forbidden", "stack", "region",
+        }
+        kwargs = {k: v for k, v in brief_dict.items() if k in keep}
+        # Defensive: Brief expects list fields as lists.
+        for list_field in ("audience", "tone", "must_have", "forbidden"):
+            value = kwargs.get(list_field)
+            if isinstance(value, str):
+                kwargs[list_field] = [v.strip() for v in value.split(",") if v.strip()]
+        return Brief(**kwargs)
+
+    @persist_grp.command("save")
+    @click.option("--project-root", default=".", help="Project root that owns the .ux/ directory.")
+    @click.option("--from-recommendation", "from_recommendation",
+                  default=".ux/last-recommendation.json",
+                  help="Path to a recommendation JSON.")
+    @click.option("--from-brief", "from_brief",
+                  default=".ux/last-discovery.json",
+                  help="Path to a discovery JSON (or any brief dict).")
+    @click.pass_context
+    def persist_save_cmd(ctx, project_root, from_recommendation, from_brief) -> None:
+        """Write MASTER.md from a saved recommendation + brief."""
+        brief_dict = _load_brief_dict(from_brief)
+        brief_obj = _brief_dict_to_dataclass(brief_dict)
+        rec_dict = _load_recommendation_dict(from_recommendation, brief_obj)
+        path = save_master(project_root, rec_dict, brief_dict)
+        _emit({"path": path}, ctx.obj["pretty"])
+
+    @persist_grp.command("save-page")
+    @click.argument("name")
+    @click.option("--project-root", default=".")
+    @click.option("--from-brief", "from_brief", default=".ux/last-discovery.json")
+    @click.option("--from-output", "from_output", default="",
+                  help="Path to a generator output JSON (manifest.json or bundle.to_dict()).")
+    @click.pass_context
+    def persist_save_page_cmd(ctx, name, project_root, from_brief, from_output) -> None:
+        """Write .ux/design-system/pages/<name>.md."""
+        brief_dict = _load_brief_dict(from_brief)
+        output: dict = {}
+        if from_output and Path(from_output).exists():
+            payload = json.loads(Path(from_output).read_text(encoding="utf-8"))
+            if isinstance(payload, dict):
+                output = payload
+        path = save_page(project_root, name, brief_dict, output)
+        _emit({"path": path}, ctx.obj["pretty"])
+
+    @persist_grp.command("load")
+    @click.option("--project-root", default=".")
+    @click.pass_context
+    def persist_load_cmd(ctx, project_root) -> None:
+        """Read MASTER.md back as JSON."""
+        data = load_master(project_root)
+        if data is None:
+            _emit({"path": None, "error": "no MASTER.md at this project root"}, ctx.obj["pretty"])
+            sys.exit(1)
+        _emit(data, ctx.obj["pretty"])
+
+    @persist_grp.command("list")
+    @click.option("--project-root", default=".")
+    @click.pass_context
+    def persist_list_cmd(ctx, project_root) -> None:
+        """List page names persisted under pages/."""
+        names = list_pages(project_root)
+        _emit({"pages": names, "count": len(names)}, ctx.obj["pretty"])
 
     # -------- ux stats ---------------------------------------------------
 
