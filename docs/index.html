@@ -336,6 +336,8 @@
     }
     .nav__links {
       display: flex; gap: 22px;
+      margin-right: auto;   /* group brand+links left; push Star + lang-picker into a tight right group */
+      margin-left: 14px;    /* breathing room between the wordmark and the first link */
       font-size: 14px;
       color: var(--body);
     }
@@ -2418,7 +2420,7 @@ tone=["bold","editorial"]</pre>
     </div>
     <div class="footer__bottom">
       <span>MIT licensed &middot; No telemetry &middot; No account</span>
-      <span>v3.0.0 &middot; 2026</span>
+      <span><a href="/privacy.html">Privacy</a> &middot; v3.0.0 &middot; 2026</span>
     </div>
   </div>
 </footer>

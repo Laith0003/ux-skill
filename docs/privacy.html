@@ -12,7 +12,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacy policy — ux-skill</title>
-  <meta name="description" content="Privacy policy for ux-skill. The plugin runs entirely on your machine and collects nothing. The landing page is a static GitHub Pages file with no analytics, no tracking, no cookies.">
+  <meta name="description" content="Privacy policy for ux-skill. The tool runs offline and collects nothing. This website uses Google Analytics 4 for aggregate traffic (analytics cookies, approximate location) — no personal data, no advertising, no selling.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/privacy.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -21,7 +21,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/privacy.html">
   <meta property="og:title" content="Privacy policy — ux-skill">
-  <meta property="og:description" content="The plugin runs entirely on your machine. No telemetry, no analytics, no cookies, no account.">
+  <meta property="og:description" content="The ux-skill tool runs offline with no telemetry. This website uses Google Analytics 4 for aggregate traffic — no personal data, no advertising, no selling.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -29,7 +29,7 @@
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/home.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Privacy policy — ux-skill">
-  <meta name="twitter:description" content="No telemetry. No analytics. No cookies. No account.">
+  <meta name="twitter:description" content="The tool: no telemetry, offline. This website: Google Analytics 4 for aggregate traffic only — no personal data, no ads.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -713,9 +713,9 @@
     <a href="/" class="back-link">back to ux-skill</a>
     <span class="eyebrow">Legal</span>
     <h1>Privacy policy</h1>
-    <p class="updated">Last updated: 2026-05-24</p>
+    <p class="updated">Last updated: 2026-05-29</p>
 
-    <p class="lead">The <span class="ink">ux-skill</span> plugin runs entirely on your machine. It does not phone home. It does not collect telemetry. It has no account system. The landing page is a static file served by GitHub Pages with no analytics, no tracking pixels, and no cookies from this domain.</p>
+    <p class="lead">The <span class="ink">ux-skill</span> tool runs entirely on your machine. It does not phone home. It does not collect telemetry. It has no account system &mdash; nothing you design ever leaves your computer. This <span class="ink">website</span> is a separate thing: a static site on GitHub Pages that uses Google Analytics to count visitors in aggregate (it sets analytics cookies and reads an approximate location). It never collects personal data and is not linked to any advertising.</p>
 
     <p>The long version is below.</p>
 
@@ -749,21 +749,22 @@
 
     <h3>What loads when you visit</h3>
     <ul>
-      <li>The HTML file itself from GitHub's CDN.</li>
-      <li>A small amount of JavaScript bundled into that file (Tailwind CSS, Alpine.js, and GSAP libraries delivered via public CDNs).</li>
-      <li>Webfonts from Google Fonts (Bricolage Grotesque, Inter, JetBrains Mono). Google receives your IP for font delivery per Google's own <a href="https://policies.google.com/privacy">privacy policy</a>.</li>
+      <li>The HTML file itself from GitHub's CDN, with inline CSS and a small amount of self-contained JavaScript.</li>
+      <li>Webfonts from Google Fonts (Bricolage Grotesque, Inter, JetBrains Mono, IBM Plex Sans Arabic). Google receives your IP for font delivery per Google's own <a href="https://policies.google.com/privacy">privacy policy</a>.</li>
+      <li>Google Analytics 4 (<code>gtag.js</code>) from <code>googletagmanager.com</code> — see "Analytics" below.</li>
     </ul>
 
-    <h3>What we explicitly do NOT use</h3>
+    <h3>Analytics</h3>
+    <p>This website uses <span class="ink">Google Analytics 4</span> (Measurement ID <code>G-Z371T0DBW5</code>) to understand aggregate traffic &mdash; how many people visit, which pages and locales they read, and where they arrive from. With Google's "Enhanced Measurement" enabled, GA4 also records page views, scroll depth, outbound link clicks (for example to the GitHub repo), site search, file downloads, form interactions, and video engagement. From the request, Google derives an <span class="ink">approximate location</span> (country / city from IP &mdash; the full IP address is not stored by GA4), plus device, browser, operating system, and language. We only ever read this in <span class="ink">aggregate</span> &mdash; trends, never individuals.</p>
+    <p>GA4 sets first-party cookies (<code>_ga</code>, <code>_ga_&lt;id&gt;</code>) to tell visits apart; they expire after up to two years. You can opt out with the <a href="https://tools.google.com/dlpage/gaoptout">Google Analytics Opt-out Browser Add-on</a>, by blocking cookies or analytics in your browser, or with any content blocker &mdash; the site works fully without them.</p>
+
+    <h3>What we still do NOT do</h3>
     <ul>
-      <li>No Google Analytics.</li>
-      <li>No Plausible / Fathom / Umami / Heap / Mixpanel / any analytics.</li>
-      <li>No tracking pixels.</li>
-      <li>No cookies set by <code>uxskill.laithjunaidy.com</code>.</li>
-      <li>No third-party tracking scripts.</li>
-      <li>No A/B testing infrastructure.</li>
-      <li>No marketing-attribution tools.</li>
-      <li>No advertising or retargeting scripts.</li>
+      <li>No advertising, remarketing, or retargeting &mdash; the site is not linked to Google Ads.</li>
+      <li>No tracking pixels, no third-party marketing scripts, no cross-site tracking.</li>
+      <li>No selling, renting, or sharing of visitor data with anyone beyond the processors named here.</li>
+      <li>No personal data &mdash; no accounts, names, or emails, and GA4 is not configured to capture personally identifying information.</li>
+      <li>No A/B testing or marketing-attribution tooling.</li>
     </ul>
 
     <h3>What GitHub Pages may log</h3>
@@ -777,14 +778,15 @@
     <p>If you are a rights-holder and believe a brand reference misrepresents your brand or includes content that should be removed, email <a href="mailto:laith.aljunaidy.laith@gmail.com">laith.aljunaidy.laith@gmail.com</a> and it will be addressed within 5 business days.</p>
 
     <h2>Cookies</h2>
-    <p>The landing page sets <span class="ink">zero cookies</span>. GitHub Pages may use cookies for its own operation; we do not set, read, or store any.</p>
+    <p>This website sets <span class="ink">Google Analytics first-party cookies</span> (<code>_ga</code> and <code>_ga_&lt;id&gt;</code>) to distinguish visits for aggregate reporting. They last up to two years and are analytics cookies, not advertising cookies. Block or delete them any time in your browser, use a content blocker, or install the <a href="https://tools.google.com/dlpage/gaoptout">Google Analytics Opt-out Add-on</a> &mdash; the site works fully without them. GitHub Pages may also use its own operational cookies, which we neither set nor read.</p>
 
     <h2>Children's privacy</h2>
     <p>This service is not directed at children under 13. We do not knowingly collect data from anyone, including minors.</p>
 
     <h2>Your data subject rights (GDPR, CCPA, etc.)</h2>
     <p><span class="ink">The plugin:</span> there is no personal data on our side to access, correct, port, or delete. We do not have any.</p>
-    <p><span class="ink">The landing page:</span> there is no account, no profile, no stored data on our side. The only data flowing related to you is the brief server-side access log GitHub keeps, which is out of our control.</p>
+    <p><span class="ink">The website:</span> there is no account, no profile, and no personally identifying data on our side. The only visitor data is the <span class="ink">aggregate</span> Google Analytics reporting described above (no individual profiles), plus the server-side access log GitHub keeps, which is out of our control. You can remove yourself from analytics entirely with the <a href="https://tools.google.com/dlpage/gaoptout">Google Analytics Opt-out Add-on</a> or by blocking cookies.</p>
+    <p>If you are in the EU / EEA / UK and your jurisdiction requires prior consent for analytics cookies, treat your browser and content-blocker settings as your control until a consent banner is in place. We do not process data for advertising.</p>
     <p>Specific requests: <a href="mailto:laith.aljunaidy.laith@gmail.com">laith.aljunaidy.laith@gmail.com</a>.</p>
 
     <h2>Changes</h2>
