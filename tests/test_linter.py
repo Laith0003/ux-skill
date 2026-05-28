@@ -87,3 +87,66 @@ def test_lint_severity_threshold(tmp_path: Path):
         report = lint([str(tmp_path)], severity_threshold=threshold)
         # clean file means no findings AT OR ABOVE the threshold
         assert report.exit_code == 0, f"clean file failed at threshold {threshold!r}"
+
+
+# ---------- v2.1: lint score ----------
+
+def test_lint_score_clean_file_is_100(tmp_path: Path):
+    """A clean file scores 100."""
+    f = tmp_path / "clean.html"
+    f.write_text("<main><h1>Hello world</h1></main>", encoding="utf-8")
+    report = lint([str(tmp_path)])
+    assert report.score == 100, f"clean file should score 100, got {report.score}"
+
+
+def test_lint_score_drops_with_findings(tmp_path: Path):
+    """A file with AI-slop fingerprints drops below 100."""
+    f = tmp_path / "slop.html"
+    f.write_text(
+        '<div style="background:linear-gradient(135deg,#8b5cf6,#3b82f6)">'
+        '<p>Lorem ipsum dolor sit amet.</p>'
+        '<span>Sign in as John Doe</span>'
+        '</div>',
+        encoding="utf-8",
+    )
+    report = lint([str(tmp_path)])
+    assert report.score < 100, f"slop file should drop below 100, got {report.score}"
+
+
+def test_lint_score_in_report_dict(tmp_path: Path):
+    """to_dict() exposes the score so the CLI + MCP can read it."""
+    f = tmp_path / "clean.html"
+    f.write_text("<main><h1>Hello</h1></main>", encoding="utf-8")
+    payload = lint([str(tmp_path)]).to_dict()
+    assert "score" in payload
+    assert payload["score"] == 100
+
+
+def test_lint_score_bounded_0_to_100(tmp_path: Path):
+    """Even a catastrophically bad file scores >= 0."""
+    f = tmp_path / "catastrophe.html"
+    bad_body = "\n".join([
+        "<div style='background:linear-gradient(135deg,#8b5cf6,#3b82f6)'>",
+        "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>",
+        "<span>John Doe · jane.doe@example.com</span>",
+        "<button>Click here</button>",
+        "<img src='https://via.placeholder.com/300' alt='image'>",
+        "<p>Elevate your business with our next-generation AI-powered solution.</p>",
+        "</div>",
+    ])
+    f.write_text(bad_body, encoding="utf-8")
+    report = lint([str(tmp_path)])
+    assert 0 <= report.score <= 100, f"score out of bounds: {report.score}"
+
+
+def test_compute_score_pure_function():
+    """compute_score is callable directly with synthetic findings."""
+    from engine.linter import compute_score, Finding
+    fakes = [
+        Finding("r1", "n1", "high", "C", "f", 1, 1, "x", "fix"),
+        Finding("r2", "n2", "medium", "C", "f", 1, 1, "x", "fix"),
+    ]
+    # 100 - (10 + 4) = 86
+    assert compute_score(fakes, files_scanned=1) == 86
+    # 100 - 14/2 = 93
+    assert compute_score(fakes, files_scanned=2) == 93

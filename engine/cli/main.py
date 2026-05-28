@@ -197,10 +197,35 @@ else:
     @click.option("--threshold", default="high",
                   type=click.Choice(["low", "medium", "high", "critical"]),
                   help="Lowest severity that causes a non-zero exit.")
+    @click.option("--score-only", is_flag=True,
+                  help="Print only the 0-100 score (for shell pipes / CI).")
+    @click.option("--no-log", is_flag=True,
+                  help="Don't write to .ux/decisions.jsonl for this call.")
     @click.pass_context
-    def lint_cmd(ctx, paths, threshold) -> None:
-        """Run the anti-AI-slop linter."""
+    def lint_cmd(ctx, paths, threshold, score_only, no_log) -> None:
+        """Run the anti-AI-slop linter (v2.1: returns 0-100 quality score)."""
+        if no_log:
+            os.environ["UXSKILL_NO_LOG"] = "1"
         report = run_lint(paths or ["."], severity_threshold=threshold)
+
+        # v2.1 — write decision record so the recommender can learn.
+        try:
+            from engine.decisions import record as _record_decision
+            from engine.linter.core import SEVERITY_RANK
+            counts = report.counts()
+            _record_decision({
+                "command": "lint",
+                "lint_score": report.score,
+                "lint_high": counts.get("high", 0),
+                "lint_med": counts.get("medium", 0),
+                "lint_low": counts.get("low", 0),
+            })
+        except Exception:
+            pass  # ledger never blocks the command
+
+        if score_only:
+            click.echo(str(report.score))
+            sys.exit(report.exit_code)
         _emit(report.to_dict(), ctx.obj["pretty"])
         sys.exit(report.exit_code)
 

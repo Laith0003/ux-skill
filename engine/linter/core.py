@@ -21,12 +21,36 @@ from engine.data_loader import load
 
 
 SEVERITY_RANK = {"low": 0, "medium": 1, "high": 2, "critical": 3}
+# Severity weights for the 0-100 quality score (higher penalty = bigger drop).
+# Tuned so a clean file scores 100, a file with a few mediums scores ~80,
+# a file with multiple highs scores < 50 (triggers the v2.1 quality gate).
+SEVERITY_WEIGHT = {"low": 1, "medium": 4, "high": 10, "critical": 20}
 DEFAULT_GLOBS = (
     "*.html", "*.htm", "*.css", "*.scss",
     "*.jsx", "*.tsx", "*.js", "*.ts",
     "*.vue", "*.svelte", "*.astro",
     "*.blade.php", "*.php",
 )
+
+
+def compute_score(findings: List["Finding"], files_scanned: int = 1) -> int:
+    """Compute a 0-100 quality score from a list of findings.
+
+    Formula: start at 100, subtract severity-weighted penalties, normalized
+    per file scanned so a big repo isn't auto-penalized vs a single file.
+
+        score = max(0, 100 - sum(SEVERITY_WEIGHT[f.severity]) / max(files, 1))
+
+    A clean file = 100. A file with 5 mediums = 80. A file with 5 highs = 50.
+    Compounding violations drop the score quickly; the v2.1 gate trips at 65.
+    """
+    if not findings:
+        return 100
+    total_penalty = 0
+    for f in findings:
+        total_penalty += SEVERITY_WEIGHT.get(f.severity, 4)
+    per_file = total_penalty / max(files_scanned, 1)
+    return max(0, min(100, int(round(100 - per_file))))
 
 
 @dataclass
@@ -51,12 +75,14 @@ class LintReport:
     files_scanned: int = 0
     rules_loaded: int = 0
     exit_code: int = 0
+    score: int = 100   # v2.1 — 0-100 quality score, severity-weighted
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             "files_scanned": self.files_scanned,
             "rules_loaded": self.rules_loaded,
             "exit_code": self.exit_code,
+            "score": self.score,
             "findings": [f.to_dict() for f in self.findings],
             "summary": self.counts(),
         }
@@ -167,9 +193,11 @@ def lint(
                 ))
 
     fatal = any(SEVERITY_RANK.get(f.severity, 0) >= threshold for f in findings)
+    score = compute_score(findings, files_scanned)
     return LintReport(
         findings=findings,
         files_scanned=files_scanned,
         rules_loaded=len(rules),
         exit_code=1 if fatal else 0,
+        score=score,
     )
