@@ -1,0 +1,49 @@
+{
+  "id": "render",
+  "name": "Render",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "A cloud-platform surface that intentionally rejects AWS-blue defaults — deep aubergine purple over warm cream, paced like a magazine spread.",
+  "design_language": {
+    "type": {
+      "display": "Söhne",
+      "body": "Inter",
+      "mono": "IBM Plex Mono"
+    },
+    "color_primary": "#5a2d8c",
+    "color_canvas": "#fdf4e7",
+    "color_ink": "#231f29",
+    "color_accent_gradient": null,
+    "radius": [4, 8, 12, 16, 24],
+    "spacing": "4-based",
+    "motion_signature": "200ms ease-in-out hover darken on CTAs; slow horizontal scroll-reveal on long feature scrollytells."
+  },
+  "trademark_signals": [
+    "Cream-and-aubergine pairing distinguishes Render from every blue/cyan cloud competitor",
+    "Italic weight-500 wordmark — the italic detail is the personality",
+    "Trusted-by logo strip lives on cream, never on dark",
+    "Middle pricing tier always sits on aubergine ground — one tier highlighted, never multiple",
+    "Cream-to-cream gradient fade at hero footer, never cream-to-purple"
+  ],
+  "components_observed": [
+    "hero-band-cream",
+    "feature-band-aubergine",
+    "pricing-table-three-tier",
+    "code-snippet-card-dark",
+    "service-card-grid",
+    "terminal-stream-block"
+  ],
+  "exemplar_pages": [
+    "https://render.com/",
+    "https://render.com/pricing",
+    "https://render.com/docs",
+    "https://render.com/blog"
+  ],
+  "ai_slop_avoided": [
+    "Don't introduce cobalt/cyan — purple is the only voltage",
+    "Don't render 3D cloud illustrations or floating geometry",
+    "Don't switch to dark mode on the marketing surface",
+    "Don't render headlines heavier than weight 500"
+  ],
+  "source_md": "references/brands/render-DESIGN.md"
+}

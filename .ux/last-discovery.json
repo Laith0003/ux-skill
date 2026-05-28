@@ -7,23 +7,34 @@
     "AI coding tool users (Cursor, Claude Code, Windsurf)"
   ],
   "tone": [
-    "editorial",
     "cinematic",
+    "saturated",
     "confident",
-    "precise",
-    "dark"
+    "alive",
+    "media-first"
   ],
   "must_have": [
+    "full-bleed-video-hero",
+    "saturated-cinema-palette",
+    "device-mockups",
+    "brand-wordmark-gallery-in-motion",
+    "abstract-canvas-motion",
+    "real-terminal-recording",
+    "scroll-triggered-color-shift",
     "dark-mode",
     "mobile-first-responsive",
-    "a11y-AA",
-    "no-cormorant-no-coral-no-cream",
-    "fraunces-variable-display",
-    "inter-tight-body",
-    "scroll-pinned-scenes",
-    "single-amber-accent"
+    "a11y-AA"
   ],
   "forbidden": [
+    "yellow",
+    "amber",
+    "#f59f00",
+    "gold",
+    "mustard",
+    "ochre",
+    "fraunces-amber",
+    "charcoal-and-amber",
+    "single-amber-accent",
     "claude",
     "claude-warm-editorial",
     "claude-com-clone",
@@ -39,15 +50,20 @@
     "john-doe",
     "lorem-ipsum",
     "emoji-in-ui",
-    "marketing-verbs"
+    "marketing-verbs",
+    "static-hero-no-media",
+    "boring-typography",
+    "single-accent-color"
   ],
   "reference_brands": [
     "linear",
     "vercel",
     "stripe-docs",
-    "the-browser-company"
+    "rauno",
+    "framer",
+    "arc-browser"
   ],
   "stack": "vanilla-html-css-js",
   "region": "global",
-  "success_metric": "0 high-severity ux-lint findings on the generated HTML + reads as distinctly NOT Claude-derived to a critical viewer"
+  "success_metric": "0 high-severity ux-lint findings + every fold has motion + no yellow/amber anywhere + at least 4 distinct media types on the page (terminal recording, brand gallery, device mockups, abstract canvas)"
 }

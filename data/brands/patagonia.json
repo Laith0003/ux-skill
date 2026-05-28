@@ -1,0 +1,49 @@
+{
+  "id": "patagonia",
+  "name": "Patagonia",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "A heritage outdoor brand whose digital surface reads like a paper field journal that learned to do e-commerce — sand-cream canvas, alpine red accents, serif display, refusal of digital-marketing tropes.",
+  "design_language": {
+    "type": {
+      "display": "Chronicle Display",
+      "body": "Whitney",
+      "mono": null
+    },
+    "color_primary": "#a02530",
+    "color_canvas": "#f7f3ec",
+    "color_ink": "#1a1a1a",
+    "color_accent_gradient": null,
+    "radius": [0, 2, 4],
+    "spacing": "4-based",
+    "motion_signature": "Almost none — 150ms ease-out fades on hover/image-load. Animation that draws attention is anti-brand."
+  },
+  "trademark_signals": [
+    "Serif display headlines in a sea of athletic-brand geometric sans",
+    "Photo credits visible on every editorial image — photographer + location, always",
+    "Worn Wear repair stories given the same hero treatment as new products",
+    "Activism content sits on the same nav level as e-commerce",
+    "Square buttons with zero radius — anti-tech geometry"
+  ],
+  "components_observed": [
+    "field-journal-article-card",
+    "product-card-grid-4up",
+    "activist-quote-block",
+    "materials-spec-table",
+    "cta-button-red-fill",
+    "repair-story-card"
+  ],
+  "exemplar_pages": [
+    "https://www.patagonia.com/home/",
+    "https://www.patagonia.com/stories/",
+    "https://wornwear.patagonia.com/",
+    "https://www.patagonia.com/activism/"
+  ],
+  "ai_slop_avoided": [
+    "Don't use airbrushed/perfect outdoor photography — grain is the aesthetic",
+    "Don't add urgency banners or countdown timers",
+    "Don't render animated 3D product showcases",
+    "Don't introduce saturated rainbow gradients"
+  ],
+  "source_md": "references/brands/patagonia-DESIGN.md"
+}

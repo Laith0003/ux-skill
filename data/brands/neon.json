@@ -1,0 +1,49 @@
+{
+  "id": "neon",
+  "name": "Neon",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "A serverless Postgres console rendered as a quietly-confident developer-tools brand — graphite canvas, electric green voltage, branching diagrams as the real hero.",
+  "design_language": {
+    "type": {
+      "display": "Inter Display",
+      "body": "Inter",
+      "mono": "JetBrains Mono"
+    },
+    "color_primary": "#00e599",
+    "color_canvas": "#0c0d0d",
+    "color_ink": "#f5f7f4",
+    "color_accent_gradient": null,
+    "radius": [4, 8, 12, 16],
+    "spacing": "8-based",
+    "motion_signature": "Sub-300ms ease-out fades; signature green branch-arrow that animates from the wordmark on CTA hover."
+  },
+  "trademark_signals": [
+    "Green-on-graphite is the entire brand voltage — no second accent on marketing",
+    "Branch-diagram visuals (Postgres branching) used as actual product chrome, never illustration",
+    "Mono inline in body callouts — code lives at sentence level",
+    "Pricing rows show hover-glow with a 1px green underline, not a row fill",
+    "Lowercase wordmark with single green dot accent"
+  ],
+  "components_observed": [
+    "code-block-graphite",
+    "branch-diagram",
+    "pricing-table-three-tier-dark",
+    "nav-pill-bar",
+    "cta-button-green-fill",
+    "terminal-output-card"
+  ],
+  "exemplar_pages": [
+    "https://neon.com/",
+    "https://neon.com/docs/introduction",
+    "https://neon.com/pricing",
+    "https://neon.com/branching"
+  ],
+  "ai_slop_avoided": [
+    "Don't introduce purple/blue gradients on the hero",
+    "Don't use 3D illustrations or rendered geometry",
+    "Don't apply drop shadows to cards on the graphite canvas",
+    "Don't render a light-mode hero on the homepage"
+  ],
+  "source_md": "references/brands/neon-DESIGN.md"
+}

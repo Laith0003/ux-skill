@@ -1,0 +1,49 @@
+{
+  "id": "sourcegraph",
+  "name": "Sourcegraph",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "Code-search and AI coding assistant rendered with the inside-of-a-compiler aesthetic — slate near-black, electric cyan-blue voltage, violet for Cody, half the homepage is real syntax-highlighted code.",
+  "design_language": {
+    "type": {
+      "display": "PolySans",
+      "body": "Inter",
+      "mono": "IBM Plex Mono"
+    },
+    "color_primary": "#00cbec",
+    "color_canvas": "#0f111a",
+    "color_ink": "#f5f6fa",
+    "color_accent_gradient": null,
+    "radius": [4, 8, 12, 16],
+    "spacing": "8-based",
+    "motion_signature": "180ms ease-out hover; signature cyan gradient-line tracing under the wordmark on load; syntax-highlight pulse on code mockup reveal."
+  },
+  "trademark_signals": [
+    "Cyan-blue (#00cbec) is the unwavering brand voltage",
+    "Violet reserved for Cody (AI assistant) feature pages — a sub-brand color",
+    "Code-search mockup as homepage hero — real product UI as marketing artifact",
+    "Wordmark uses custom S with search-magnifier dot accent",
+    "Dark-canvas customer logo strip with 1px hairlines between"
+  ],
+  "components_observed": [
+    "code-search-mockup-card",
+    "cody-chat-panel",
+    "pricing-table-three-tier-dark",
+    "category-tab-cyan-active",
+    "cta-button-cyan-fill",
+    "repository-graph-visual"
+  ],
+  "exemplar_pages": [
+    "https://sourcegraph.com/",
+    "https://sourcegraph.com/cody",
+    "https://sourcegraph.com/pricing",
+    "https://sourcegraph.com/code-search"
+  ],
+  "ai_slop_avoided": [
+    "Don't render a light-mode marketing surface",
+    "Don't add mascot characters or anthropomorphize Cody",
+    "Don't use 3D rendered code visualizations",
+    "Don't add saturated rainbow gradients to syntax themes"
+  ],
+  "source_md": "references/brands/sourcegraph-DESIGN.md"
+}

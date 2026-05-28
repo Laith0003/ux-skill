@@ -1,7 +1,7 @@
 {
   "_meta": {
     "version": "2.0.0",
-    "entries": 51,
+    "entries": 68,
     "last_updated": "2026-05-28",
     "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
     "schema_version": "1.0"
@@ -299,7 +299,7 @@
       "category": "Layout",
       "detection": {
         "type": "regex",
-        "pattern": "<button[^>]*class=\"[^\"]*\\brounded-full\\b[^\"]*\"[^>]*>(?![^<]*(?:×|close|menu|search))|<(?:input|textarea)[^>]*class=\"[^\"]*\\brounded-full\\b",
+        "pattern": "<button[^>]*class=\"[^\"]*\\brounded-full\\b[^\"]*\"[^>]*>(?![^<]*(?:\u00d7|close|menu|search))|<(?:input|textarea)[^>]*class=\"[^\"]*\\brounded-full\\b",
         "flags": "i",
         "scope": [
           "tsx",
@@ -383,7 +383,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "(?:\\u2605{5}|★{5}|⭐{5}|\\*{5})|<(?:span|div|p)[^>]*class=\"[^\"]*stars?[^\"]*\"[^>]*>\\s*(?:\\u2605|★){4,}",
+        "pattern": "(?:\\u2605{5}|\u2605{5}|\u2b50{5}|\\*{5})|<(?:span|div|p)[^>]*class=\"[^\"]*stars?[^\"]*\"[^>]*>\\s*(?:\\u2605|\u2605){4,}",
         "flags": "i",
         "scope": [
           "tsx",
@@ -405,7 +405,7 @@
       "category": "Motion",
       "detection": {
         "type": "regex",
-        "pattern": "<(?:button|a)[^>]*>[^<]*(?:→|->|&rarr;|&#8594;)[^<]*</(?:button|a)>|class=\"[^\"]*\\banimate-bounce\\b[^\"]*\"[^>]*>\\s*(?:→|→|&rarr;|<svg)",
+        "pattern": "<(?:button|a)[^>]*>[^<]*(?:\u2192|->|&rarr;|&#8594;)[^<]*</(?:button|a)>|class=\"[^\"]*\\banimate-bounce\\b[^\"]*\"[^>]*>\\s*(?:\u2192|\u2192|&rarr;|<svg)",
         "flags": "i",
         "scope": [
           "tsx",
@@ -1090,6 +1090,358 @@
       },
       "why": "A bare emoji standing in for an icon renders inconsistently across platforms, ignores brand color, and is announced unpredictably by screen readers.",
       "fix": "Use inline SVG (Lucide, Feather, Phosphor, Heroicons) at 1.5-2px stroke with currentColor. Add aria-label when the icon carries meaning."
+    },
+    {
+      "id": "chrome-y-multi-stop-gradient",
+      "name": "Chrome-y multi-stop gradient",
+      "severity": "high",
+      "category": "Color",
+      "detection": {
+        "type": "regex",
+        "pattern": "linear-gradient\\([^)]+,[^)]+,[^)]+,[^)]+,",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Three-plus color stops in a linear-gradient is the v0 / Cursor / generic-AI default; reads as chrome-y template output rather than a deliberate brand decision.",
+      "fix": "Use a two-stop gradient (or a single solid) with hue spread under 60 degrees. If depth is needed, layer a low-opacity overlay instead of stacking stops."
+    },
+    {
+      "id": "box-shadow-multilayer-default",
+      "name": "Five-plus box-shadow layers stacked",
+      "severity": "medium",
+      "category": "Visual",
+      "detection": {
+        "type": "regex",
+        "pattern": "box-shadow:\\s*([^,;]+,[^,;]+,[^,;]+,[^,;]+,[^,;]+,)",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Stacking five or more shadow layers is the AI's idea of premium depth; reads as visual bloat and chews the GPU on paint.",
+      "fix": "Use one ambient diffusion shadow (e.g. 0 20px 40px -15px rgba(0,0,0,0.08)) and at most one tight contact shadow. Depth comes from contrast, not layer count."
+    },
+    {
+      "id": "fixed-height-text-block",
+      "name": "Pixel height on a text container",
+      "severity": "medium",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:p|div|span)[^{]*\\{[^}]*height\\s*:\\s*\\d+px[^}]*color",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss"
+        ]
+      },
+      "why": "Fixing a pixel height on a container that also styles text breaks reflow at every other zoom level and font scale - the layout is one breakpoint away from clipping.",
+      "fix": "Use min-height for floor protection, line-height + padding for vertical rhythm, and let content determine height. Never lock text height in px."
+    },
+    {
+      "id": "scale-1-1-on-card-hover",
+      "name": "Over-the-top hover scale",
+      "severity": "low",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": ":hover[^{]*\\{[^}]*transform[^;]*scale\\(1\\.[1-9]\\d*\\)",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss"
+        ]
+      },
+      "why": "scale(1.1) or higher on hover reads as amateur - it shouts when a 1-2 percent nudge or a shadow lift would be more confident.",
+      "fix": "Use scale(1.01) to scale(1.03), or replace the scale with a translateY(-2px) plus shadow shift. Restraint reads premium."
+    },
+    {
+      "id": "dynamic-island-glow-everywhere",
+      "name": "Dynamic Island inner glow on cards",
+      "severity": "medium",
+      "category": "Visual",
+      "detection": {
+        "type": "regex",
+        "pattern": "box-shadow:\\s*inset[^;]+blur",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "iOS Dynamic Island's inner-glow + blur recipe is being copied as the default on every card and pill - reads as the 2024 AI-marketing-template tell.",
+      "fix": "If you want depth, use a single outer diffusion shadow tuned to the surface. Reserve inset glows for a deliberate metallic or pill-style accent, not every surface."
+    },
+    {
+      "id": "glass-without-fallback",
+      "name": "backdrop-filter blur without background fallback",
+      "severity": "medium",
+      "category": "Color",
+      "detection": {
+        "type": "regex",
+        "pattern": "backdrop-filter\\s*:\\s*blur[^;]+;(?![^}]*background)",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "backdrop-filter is unsupported on Firefox and older Safari - without a translucent background fallback, the surface renders fully transparent and content underneath bleeds through.",
+      "fix": "Always pair backdrop-filter: blur with a background-color (e.g. background: rgba(255,255,255,0.7)). The bg is the fallback; the blur is the upgrade."
+    },
+    {
+      "id": "placeholder-as-pricing",
+      "name": "Default AI pricing tier amounts",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\$(?:9|19|29|49|99|199)/(?:mo|month)",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "$9 / $19 / $29 / $49 / $99 / $199 are the prices AI reaches for when no real pricing exists - unconvincing placeholders that signal nobody priced the product.",
+      "fix": "Use the real price you charge, with the real currency and the real billing cadence. If pricing isn't set yet, mark the tier as TBD with an owner, not a placeholder."
+    },
+    {
+      "id": "trust-badge-no-source",
+      "name": "Unsourced trust-by claim",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:Trusted by|Used by|Loved by|Joined by)\\s+\\d+",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "Trusted by 1000+ teams / Used by Fortune 500 / Loved by 50k developers - unsourced trust claims that signal the generator invented the number to fill space.",
+      "fix": "Name the actual companies, link to the actual case studies, or show the actual review aggregate. Specificity beats magnitude every time."
+    },
+    {
+      "id": "timestamp-just-now",
+      "name": "Fake just-now timestamp in static markup",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": ">\\s*(?:Just now|Moments ago|seconds ago|few seconds ago)\\s*<",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Just now / moments ago in static HTML is a fake activity signal - it stays Just now forever and signals nobody wired the real time-ago helper.",
+      "fix": "Render real timestamps via a time-ago helper bound to a real source (Date.now, server time, last_event_at). If the surface is static, use a real date string instead."
+    },
+    {
+      "id": "gradient-on-text-rainbow",
+      "name": "Rainbow gradient on display text",
+      "severity": "high",
+      "category": "Color",
+      "detection": {
+        "type": "regex",
+        "pattern": "background-clip\\s*:\\s*text[^;]*;\\s*background[^;]*linear-gradient",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "background-clip: text on a multi-stop linear-gradient is the AI hero's chrome-y rainbow word - the loudest signal that no taste decision was made on color.",
+      "fix": "Use one solid color on display text. If gradient text is essential, two stops in analogous hues at modest saturation, never three-plus rainbow stops."
+    },
+    {
+      "id": "emoji-bullet-marker",
+      "name": "Emoji at start of list item",
+      "severity": "high",
+      "category": "Visual",
+      "detection": {
+        "type": "regex",
+        "pattern": "<li[^>]*>\\s*[\\U0001F300-\\U0001F9FF\\u2600-\\u2712\\u2714-\\u27BF]",
+        "flags": "u",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "An emoji at the start of every list item is the AI signature - check marks, sparkles, rockets, party poppers used as bullet markers signal a generator that confused decoration with hierarchy.",
+      "fix": "Use the native list disc, an SVG check icon, or a numeric counter. Reserve the U+2713 check and U+2318 command as allowed dingbats."
+    },
+    {
+      "id": "animated-grain-noise-no-perf-class",
+      "name": "Animated grain or noise without GPU hint",
+      "severity": "low",
+      "category": "Performance",
+      "detection": {
+        "type": "regex",
+        "pattern": "animation\\s*:[^;]*(?:grain|noise|stipple|dither)[^;]*;(?![^}]*will-change)",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss"
+        ]
+      },
+      "why": "Animated grain or noise without a will-change or transform hint forces a CPU repaint every frame and causes paint thrashing on low-end devices.",
+      "fix": "Add will-change: transform or compose the noise via an SVG <feTurbulence> overlay on a transformed layer. Or drop the animation - static grain reads the same and costs nothing."
+    },
+    {
+      "id": "fake-line-of-code-count",
+      "name": "Unsourced large-number marketing claim",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:saved|generated|reduced|increased)\\s+\\d{1,3}(?:[,.]?\\d{3})+\\s+(?:hours|lines|users|teams)",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "We saved 10,000 hours / Generated 1,000,000 lines of code / Reduced 50,000 tickets - large round numbers with no citation that signal the magnitude was invented to sound impressive.",
+      "fix": "Use the real measured number with the real source: 'In Q1 2026, customers saved 4,217 support hours (mean across 38 teams)'. Real numbers are messy and specific."
+    },
+    {
+      "id": "before-after-100-percent",
+      "name": "Magnitude-default before-after claim",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:0 to 100|100% (?:guaranteed|effective|accurate|certain))",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "md"
+        ]
+      },
+      "why": "0 to 100 / 100% guaranteed / 100% effective are the magnitude-by-default phrases AI reaches for - readers have learned to discount them.",
+      "fix": "Quote the real spread: 'from 14 manual steps to 3 automated'. If you can't measure it, don't claim it."
+    },
+    {
+      "id": "logo-cloud-no-real-logos",
+      "name": "Logo cloud image with empty alt",
+      "severity": "medium",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:trusted-by|logo-cloud|companies)[^{]*\\{[^}]*<img[^>]+alt=\\\"\\\"",
+        "flags": "im",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "An <img> inside a Trusted by / logo-cloud section with alt=\"\" is an unsourced trust claim with no machine-readable company name - the logo is decorative even when the surface is selling credibility.",
+      "fix": "Set alt to the real company name (alt=\"Stripe\"), and only use the logo if you have permission. If you don't have permission, you don't have the trust signal."
+    },
+    {
+      "id": "tooltip-on-required-info",
+      "name": "Load-bearing copy hidden in a title attribute",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "title=\\\"[A-Z][^\\\"]{60,}\\\"",
+        "flags": "",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "A title attribute carrying 60+ characters of real content is hover-only - invisible on touch, inconsistently announced by screen readers, undiscoverable on keyboard. The information is effectively missing for most users.",
+      "fix": "Move the content into the visible flow or into an aria-describedby popover that is reachable by keyboard and touch. Reserve title for one-line, optional clarifications."
+    },
+    {
+      "id": "scroll-to-top-button-everywhere",
+      "name": "Fixed scroll-to-top button on short pages",
+      "severity": "low",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "position\\s*:\\s*fixed[^}]*bottom\\s*:[^;]+;[^}]*scroll",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "A floating back-to-top button on a page under four viewports adds permanent visual noise for a vanishingly rare interaction - signals the generator included the pattern as decoration, not need.",
+      "fix": "Drop the button. If pages can grow past four viewports, gate the button on scroll position and hide it below threshold. Keyboard users have Home; mouse users have the wheel."
     }
   ]
 }

@@ -1,0 +1,49 @@
+{
+  "id": "datadog",
+  "name": "Datadog",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "Institutional observability brand with personality — purple-on-white with a serif display, anchored by the Bark dog-mascot illustration system.",
+  "design_language": {
+    "type": {
+      "display": "Tiempos Headline",
+      "body": "Söhne",
+      "mono": "Söhne Mono"
+    },
+    "color_primary": "#632ca6",
+    "color_canvas": "#ffffff",
+    "color_ink": "#1c1d26",
+    "color_accent_gradient": null,
+    "radius": [4, 8, 12, 16],
+    "spacing": "8-based",
+    "motion_signature": "180ms ease-out hover; signature mascot blink/wag micro-animation and slow chart-line draw-on in dashboard mockups."
+  },
+  "trademark_signals": [
+    "Bark the dog mascot appears in nearly every hero band — the only literal mascot surviving in dev-observability",
+    "Purple with a single bark-orange accent — no other secondary on marketing",
+    "Serif display headlines in an industry of geometric sans — the brand differentiator",
+    "Five-tier pricing tables signaling enterprise depth",
+    "Dashboard mockups carry real product chrome, never abstract data viz"
+  ],
+  "components_observed": [
+    "hero-band-with-mascot",
+    "dashboard-screenshot-card",
+    "pricing-table-five-tier",
+    "category-tab-purple-active",
+    "cta-band-purple-fill",
+    "customer-logo-strip-mono"
+  ],
+  "exemplar_pages": [
+    "https://www.datadoghq.com/",
+    "https://www.datadoghq.com/pricing/",
+    "https://www.datadoghq.com/dash/",
+    "https://www.datadoghq.com/product/"
+  ],
+  "ai_slop_avoided": [
+    "Don't render a dark-mode hero",
+    "Don't add a second mascot — Bark stands alone",
+    "Don't switch to geometric-sans display — the serif is the brand voice",
+    "Don't use saturated rainbow data viz in screenshots"
+  ],
+  "source_md": "references/brands/datadog-DESIGN.md"
+}

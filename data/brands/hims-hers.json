@@ -1,0 +1,49 @@
+{
+  "id": "hims-hers",
+  "name": "Hims & Hers",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "Modern wellness that intentionally rejects clinical-blue medical defaults — warm-bone canvas, sage/tan sub-brand accents, considered consumer-wellness aesthetic.",
+  "design_language": {
+    "type": {
+      "display": "GT Super Display",
+      "body": "Söhne",
+      "mono": "IBM Plex Mono"
+    },
+    "color_primary": "#3b5b4c",
+    "color_canvas": "#f5f0e8",
+    "color_ink": "#1c1c1c",
+    "color_accent_gradient": null,
+    "radius": [4, 8, 12, 9999],
+    "spacing": "8-based",
+    "motion_signature": "180ms ease-out hover; signature 220ms soft fade-in on quiz step content; slide-up bottom-sheet on add-to-care-plan."
+  },
+  "trademark_signals": [
+    "Two sub-brand accent system — sage (Hers) and tan (Hims) flip on a single token, share everything else",
+    "Quiz/intake flows treated as the marketing moment — the funnel is the brand",
+    "Real provider photography with credentials — no stock medical imagery",
+    "Monthly price chip on every product — subscription cadence foregrounded",
+    "Pill-shape full-radius CTAs — soft, never square"
+  ],
+  "components_observed": [
+    "product-card-considered",
+    "quiz-step-card",
+    "care-plan-summary-card",
+    "before-after-photo-band",
+    "cta-button-pill-sage",
+    "provider-bio-card"
+  ],
+  "exemplar_pages": [
+    "https://www.hims.com/",
+    "https://www.forhers.com/",
+    "https://www.hims.com/products",
+    "https://www.forhers.com/skin"
+  ],
+  "ai_slop_avoided": [
+    "Don't use clinical/medical blue palettes",
+    "Don't add urgency banners ('selling fast')",
+    "Don't render anonymized doctor avatars — real or none",
+    "Don't introduce saturated rainbow gradients"
+  ],
+  "source_md": "references/brands/hims-hers-DESIGN.md"
+}

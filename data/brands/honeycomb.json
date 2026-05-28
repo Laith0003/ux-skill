@@ -1,0 +1,49 @@
+{
+  "id": "honeycomb",
+  "name": "Honeycomb",
+  "category": "Developer Tools",
+  "year_observed": 2026,
+  "philosophy": "Distributed-systems observability rendered as a smart magazine — honey-amber on midnight teal, literal hexagon dividers, technical-but-warm voice.",
+  "design_language": {
+    "type": {
+      "display": "Söhne Breit",
+      "body": "Söhne",
+      "mono": "Söhne Mono"
+    },
+    "color_primary": "#ffc53d",
+    "color_canvas": "#0d2330",
+    "color_ink": "#fbf6e9",
+    "color_accent_gradient": null,
+    "radius": [4, 8, 12, 16],
+    "spacing": "8-based",
+    "motion_signature": "220ms ease-out hover with honey-amber CTA glow ring; hex-divider 600ms stagger on scroll-in."
+  },
+  "trademark_signals": [
+    "Honey-amber on midnight-teal — the dominant wasp-colors pairing",
+    "Literal hexagon shape used as section dividers and icon containers",
+    "BubbleUp and Canvas product-feature visuals get full-bleed treatment",
+    "Customer quotes set larger than body copy — testimonials carry editorial weight",
+    "Mono inline in body for span names, attributes, query syntax"
+  ],
+  "components_observed": [
+    "hero-band-midnight-teal",
+    "hex-divider",
+    "code-block-dark",
+    "bubbleup-callout-card",
+    "pricing-tier-three-column-dark",
+    "customer-quote-card-honey"
+  ],
+  "exemplar_pages": [
+    "https://www.honeycomb.io/",
+    "https://www.honeycomb.io/pricing",
+    "https://www.honeycomb.io/blog",
+    "https://www.honeycomb.io/product"
+  ],
+  "ai_slop_avoided": [
+    "Don't use purple/violet — the dev-observability cliche",
+    "Don't introduce mascot characters — the brand is the hexagon",
+    "Don't render a light-mode hero",
+    "Don't use saturated rainbow data viz"
+  ],
+  "source_md": "references/brands/honeycomb-DESIGN.md"
+}

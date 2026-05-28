@@ -1,0 +1,49 @@
+{
+  "id": "allbirds",
+  "name": "Allbirds",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "Warm-minimalism e-commerce — ivory canvas, sage and terracotta worn-material accents, serif-display literary voice, product photography on textured paper.",
+  "design_language": {
+    "type": {
+      "display": "Tiempos",
+      "body": "Söhne",
+      "mono": null
+    },
+    "color_primary": "#1a1a1a",
+    "color_canvas": "#f7f3ed",
+    "color_ink": "#1a1a1a",
+    "color_accent_gradient": null,
+    "radius": [0, 4, 8],
+    "spacing": "8-based",
+    "motion_signature": "180ms ease-out hover; signature 600ms slow scale-down on product photo hover; slide-up add-to-bag confirmation, no modal."
+  },
+  "trademark_signals": [
+    "Carbon footprint number displayed on every product like a price — serif numerals",
+    "Material-name eyebrow caps (Tree, Wool, SugarCane) — signature taxonomy",
+    "Product photography on textured/paper backgrounds, never plain white",
+    "Serif headlines in apparel — most footwear is geometric sans",
+    "Sage-bone surface for filter bands — never pure white"
+  ],
+  "components_observed": [
+    "product-card-portrait",
+    "material-story-band",
+    "sustainability-spec-card",
+    "category-filter-bar-mono",
+    "cta-button-soft-black-fill",
+    "quote-band-cream"
+  ],
+  "exemplar_pages": [
+    "https://www.allbirds.com/",
+    "https://www.allbirds.com/pages/our-materials",
+    "https://www.allbirds.com/pages/sustainability",
+    "https://www.allbirds.com/collections/mens-shoes"
+  ],
+  "ai_slop_avoided": [
+    "Don't add countdown timers or sale-urgency banners",
+    "Don't render product 3D rotations or AR chrome on PDP",
+    "Don't use bold-weight display headlines",
+    "Don't introduce saturated brand colors — every accent reads worn"
+  ],
+  "source_md": "references/brands/allbirds-DESIGN.md"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "glossier",
+  "name": "Glossier",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "Matured millennial-pink editorial — pink is now a surface band, not a button. Magazine-weight serif display, true-black CTAs, navigation set in all-caps tight tracking.",
+  "design_language": {
+    "type": {
+      "display": "Glossier Display",
+      "body": "Glossier Sans",
+      "mono": null
+    },
+    "color_primary": "#000000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000",
+    "color_accent_gradient": null,
+    "radius": [0, 4, 8],
+    "spacing": "4-based",
+    "motion_signature": "220ms ease-out hover; signature slow color-tone wash on button hover; 600ms ease-in-out horizontal carousel glides."
+  },
+  "trademark_signals": [
+    "Pink as surface band, never as button — the maturity move",
+    "Serif display in beauty (an industry of geometric sans)",
+    "All-caps tight-tracked navigation — magazine masthead",
+    "True-black CTAs on white — refuses the brand-tone-button trap",
+    "Product names set in serif at large size, treated as editorial headlines"
+  ],
+  "components_observed": [
+    "pink-band-tinted",
+    "product-card-clean-white",
+    "editorial-essay-card",
+    "shade-swatch-row",
+    "cta-button-black-fill",
+    "customer-photo-grid-ugc"
+  ],
+  "exemplar_pages": [
+    "https://www.glossier.com/",
+    "https://www.glossier.com/products/you",
+    "https://www.glossier.com/pages/about",
+    "https://www.glossier.com/collections/all"
+  ],
+  "ai_slop_avoided": [
+    "Don't render pink buttons — pink is surface only",
+    "Don't add countdown timers or scarcity chrome",
+    "Don't use influencer-style photography — real customers on UGC",
+    "Don't introduce saturated rainbow gradients"
+  ],
+  "source_md": "references/brands/glossier-DESIGN.md"
+}
