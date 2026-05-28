@@ -29,9 +29,19 @@ POSTS = {
     "jetbrains-ai-design-system": "JetBrains AI design system",
     "ai-design-system-cli": "AI design system CLI",
     "claude-desktop-mcp-design": "Claude Desktop MCP design intelligence",
+    "vibe-coding-design-system": "Vibe coding + ux-skill",
+    "ai-built-website-no-slop": "AI-built websites in 2026",
+    "anti-slop-cli-vibe-coders": "Anti-slop CLI for vibe coders",
+    "ja/vibe-coding-design": "Vibe coding (日本語)",
+    "zh-CN/vibe-coding-shipping-real-design": "Vibe coding (简体中文)",
+    "ko/ai-coding-design-rules": "AI coding design rules (한국어)",
 }
 
 # Each post maps to 4 related posts.
+# NOTE: locale-prefixed slugs (e.g. "ja/vibe-coding-design") are listed here so
+# they appear as RELATED-READ TARGETS from English posts, but the inject() loop
+# below uses path.stem which strips the directory — so locale posts themselves
+# are hand-managed (each ships with its own <aside class="related-reads"> block).
 RELATIONS = {
     "vs-ui-ux-pro-max": ["anti-ai-slop-claude-skills", "best-claude-code-design-skills-2026",
                          "claude-code-marketplace-best-plugins", "figma-vs-ux-skill"],
@@ -73,6 +83,18 @@ RELATIONS = {
                              "regex-linter-for-ai-coding", "dogfooding-design-engine"],
     "claude-desktop-mcp-design": ["mcp-server-design-intelligence", "ai-design-system-cli",
                                   "cursor-design-plugin", "anti-ai-slop-claude-skills"],
+    "vibe-coding-design-system": ["ai-design-fingerprints-list", "regex-linter-for-ai-coding",
+                                  "anti-ai-slop-claude-skills", "python-design-system-generator"],
+    "ai-built-website-no-slop": ["vibe-coding-design-system", "anti-ai-slop-claude-skills",
+                                 "ai-design-fingerprints-list", "cursor-design-plugin"],
+    "anti-slop-cli-vibe-coders": ["regex-linter-for-ai-coding", "vibe-coding-design-system",
+                                  "python-design-system-generator", "anti-ai-slop-claude-skills"],
+    "ja/vibe-coding-design": ["vibe-coding-design-system", "ai-design-fingerprints-list",
+                              "regex-linter-for-ai-coding", "cursor-design-plugin"],
+    "zh-CN/vibe-coding-shipping-real-design": ["vibe-coding-design-system", "ai-design-fingerprints-list",
+                                               "regex-linter-for-ai-coding", "cursor-design-plugin"],
+    "ko/ai-coding-design-rules": ["vibe-coding-design-system", "ai-design-fingerprints-list",
+                                  "regex-linter-for-ai-coding", "cursor-design-plugin"],
 }
 
 

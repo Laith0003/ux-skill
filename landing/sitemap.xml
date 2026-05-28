@@ -157,6 +157,42 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://uxskill.laithjunaidy.com/blog/vibe-coding-design-system.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://uxskill.laithjunaidy.com/blog/ai-built-website-no-slop.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://uxskill.laithjunaidy.com/blog/anti-slop-cli-vibe-coders.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://uxskill.laithjunaidy.com/blog/ja/vibe-coding-design.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://uxskill.laithjunaidy.com/blog/zh-CN/vibe-coding-shipping-real-design.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://uxskill.laithjunaidy.com/blog/ko/ai-coding-design-rules.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://uxskill.laithjunaidy.com/commands.html</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>weekly</changefreq>
