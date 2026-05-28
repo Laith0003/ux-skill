@@ -615,6 +615,84 @@
       </div>
     </section>
 
+    <!-- ───────────────────────────── TASTE-SKILL (the anti-slop brand) ───────────────────────────── -->
+    <section>
+      <span class="sub-eye">Section 2.5 / 6 — the anti-slop brand</span>
+      <h2>vs. <span class="accent">leonxlnx/taste-skill</span></h2>
+      <p class="intro">
+        leonxlnx/taste-skill owns the "anti-slop" brand on GitHub (25k+ stars). It ships 13
+        variant SKILL.md files with a 3-dial mental model (DESIGN_VARIANCE / MOTION_INTENSITY
+        / VISUAL_DENSITY). Shell + markdown only. The variants are flavors, not a pipeline.
+        This is the closest competitor on <em>philosophy</em>, the furthest on <em>architecture</em>.
+      </p>
+
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="row-h">Dimension</th>
+            <th>taste-skill (leonxlnx)</th>
+            <th class="ours">ux-skill v2</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="ours-row">
+            <th class="row-h">Anti-slop philosophy</th>
+            <td>13 variant SKILL.md flavors</td>
+            <td class="ours">35 deterministic regex rules</td>
+            <td><span class="pill win">enforceable</span></td>
+          </tr>
+          <tr class="ours-row">
+            <th class="row-h">Architecture</th>
+            <td>Shell + markdown variants</td>
+            <td class="ours">Python engine + 11 JSON manifests</td>
+            <td><span class="pill win">queryable</span></td>
+          </tr>
+          <tr class="ours-row">
+            <th class="row-h">Process commands</th>
+            <td>1 (invoke a variant)</td>
+            <td class="ours">22 (discover → recommend → design → audit → lint → fix → polish → case-study)</td>
+            <td><span class="pill win">full lifecycle</span></td>
+          </tr>
+          <tr class="ours-row">
+            <th class="row-h">Sub-agents</th>
+            <td>—</td>
+            <td class="ours">5 (frontend / motion / copy / research / system)</td>
+            <td><span class="pill unique">parallel roles</span></td>
+          </tr>
+          <tr class="ours-row">
+            <th class="row-h">Brand specs</th>
+            <td>—</td>
+            <td class="ours">72 (Apple, Stripe, Linear, Figma...)</td>
+            <td><span class="pill unique">moat</span></td>
+          </tr>
+          <tr class="ours-row">
+            <th class="row-h">Cross-IDE</th>
+            <td>Claude Code only</td>
+            <td class="ours">17 IDEs via pip + npx</td>
+            <td><span class="pill win">17x reach</span></td>
+          </tr>
+          <tr class="ours-row">
+            <th class="row-h">GitHub stars</th>
+            <td>~25k</td>
+            <td class="ours">growing</td>
+            <td><span class="pill tie">they're ahead on awareness</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="honesty">
+        <div class="label">Honesty card</div>
+        <h4>Where taste-skill is genuinely good</h4>
+        <p>The 3-dial model (variance / motion / density) is a clean abstraction — it gives
+          users a memorable mental model that ux-skill's 998-entry catalog doesn't replace.
+          Their 25k stars are earned: the brand discipline ("anti-slop") was theirs first.</p>
+        <p>Where they lose: 13 variants is the entire surface area. No discovery, no
+          recommend → generate → lint pipeline, no brand specs, no cross-IDE. Single-shot
+          taste primer with branded flavors.</p>
+      </div>
+    </section>
+
     <!-- ───────────────────────────── DESIGN-TASTE / GPT-TASTE ───────────────────────────── -->
     <section>
       <span class="sub-eye">Section 3 / 6 — the taste-prompt crowd</span>
@@ -879,6 +957,134 @@
           recommendation layer above it.</p>
         <p>That's why we built the 17-IDE installer: ux-skill runs <em>inside</em> Cursor,
           Windsurf, Aider, and the rest. Use it alongside, not instead of, the specialists.</p>
+      </div>
+    </section>
+
+    <!-- ───────────────────────────── PROCESS ADVANTAGE ───────────────────────────── -->
+    <section>
+      <span class="sub-eye">The real differentiator</span>
+      <h2>The win isn't the numbers. It's the <span class="accent">process.</span></h2>
+      <p class="intro">
+        Every catalog can be matched. Every taste prompt can be rewritten. The defensible
+        moat isn't the count — it's the chain. ux-skill is the only plugin in this space
+        that maps to a designer's actual day.
+      </p>
+
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="row-h">Stage of work</th>
+            <th>ux-skill v2 command</th>
+            <th>Catalog tools (Pro Max etc.)</th>
+            <th>Taste tools (frontend-design, taste-skill, gpt-taste)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th class="row-h">Frame the problem</th>
+            <td class="ours"><code>/ux-frame</code> → 10-field discovery</td>
+            <td><span class="pill dash">—</span></td>
+            <td><span class="pill dash">—</span></td>
+          </tr>
+          <tr>
+            <th class="row-h">Research synthesis</th>
+            <td class="ours"><code>/ux-research</code></td>
+            <td><span class="pill dash">—</span></td>
+            <td><span class="pill dash">—</span></td>
+          </tr>
+          <tr>
+            <th class="row-h">Pick a system</th>
+            <td class="ours"><code>/ux-recommend</code> → 5-parallel-search</td>
+            <td>generate-from-prompt (no pick step)</td>
+            <td><span class="pill dash">—</span></td>
+          </tr>
+          <tr>
+            <th class="row-h">Generate code</th>
+            <td class="ours"><code>/ux-design</code> or <code>/ux-component</code></td>
+            <td><span class="pill win">primary job</span></td>
+            <td><span class="pill win">primary job</span></td>
+          </tr>
+          <tr>
+            <th class="row-h">Generate a design system</th>
+            <td class="ours"><code>/ux-system</code> → tokens.css + manifest</td>
+            <td>some include this</td>
+            <td><span class="pill dash">—</span></td>
+          </tr>
+          <tr>
+            <th class="row-h">Critique (taste)</th>
+            <td class="ours"><code>/ux-critique</code> → cites named laws + brands</td>
+            <td><span class="pill dash">—</span></td>
+            <td>baked into the prompt</td>
+          </tr>
+          <tr>
+            <th class="row-h">Lint (deterministic)</th>
+            <td class="ours"><code>/ux-lint</code> → 35 regex rules in CI</td>
+            <td><span class="pill dash">—</span></td>
+            <td><span class="pill dash">—</span></td>
+          </tr>
+          <tr>
+            <th class="row-h">Audit (a11y)</th>
+            <td class="ours"><code>/ux-a11y</code> → WCAG-grounded</td>
+            <td><span class="pill dash">—</span></td>
+            <td><span class="pill dash">—</span></td>
+          </tr>
+          <tr>
+            <th class="row-h">Microcopy review</th>
+            <td class="ours"><code>/ux-copy</code></td>
+            <td><span class="pill dash">—</span></td>
+            <td><span class="pill dash">—</span></td>
+          </tr>
+          <tr>
+            <th class="row-h">Motion treatment</th>
+            <td class="ours"><code>/ux-motion</code> → 57 named presets</td>
+            <td>one of 5 search lanes</td>
+            <td>generic prose</td>
+          </tr>
+          <tr>
+            <th class="row-h">Apply fixes</th>
+            <td class="ours"><code>/ux-fix</code></td>
+            <td><span class="pill dash">—</span></td>
+            <td><span class="pill dash">—</span></td>
+          </tr>
+          <tr>
+            <th class="row-h">Polish iteration</th>
+            <td class="ours"><code>/ux-polish</code></td>
+            <td><span class="pill dash">—</span></td>
+            <td><span class="pill dash">—</span></td>
+          </tr>
+          <tr>
+            <th class="row-h">Suggest next step</th>
+            <td class="ours"><code>/ux-next</code> → reads state, recommends</td>
+            <td><span class="pill dash">—</span></td>
+            <td><span class="pill dash">—</span></td>
+          </tr>
+          <tr>
+            <th class="row-h">Write case study</th>
+            <td class="ours"><code>/ux-case-study</code> → auto-fills from state</td>
+            <td><span class="pill dash">—</span></td>
+            <td><span class="pill dash">—</span></td>
+          </tr>
+          <tr>
+            <th class="row-h">Hand to human expert</th>
+            <td class="ours"><code>/ux-expert</code> → packaged handoff</td>
+            <td><span class="pill dash">—</span></td>
+            <td><span class="pill dash">—</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="honesty">
+        <div class="label">The real positioning</div>
+        <h4>Catalog tools are generators. Taste tools are primers. ux-skill is the workflow.</h4>
+        <p>UI UX Pro Max is the best <strong>catalog</strong> in the space. Anthropic's
+          frontend-design and leonxlnx/taste-skill own <strong>taste</strong>. But neither
+          ships a process — they hand you a recommendation or a vibe and you're alone with
+          the rest of the work.</p>
+        <p>ux-skill ships the <strong>22-command pipeline</strong> that maps to how a designer
+          actually works: frame → research → recommend → design → critique → lint → audit →
+          fix → polish → ship → handoff → write up. Every command chains to the next via
+          <code>.ux/last-*.json</code> state files. The engine is the spine; the commands are
+          the day.</p>
       </div>
     </section>
 
