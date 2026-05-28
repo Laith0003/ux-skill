@@ -2733,6 +2733,25 @@
       "ru": "Лицензия MIT &middot; Без телеметрии &middot; Без аккаунта",
       "tr": "MIT lisansı &middot; Telemetri yok &middot; Hesap yok",
       "it": "Licenza MIT &middot; Senza telemetria &middot; Senza account"
+    },
+    "cta_see_it_work": {
+      "en": "See it work",
+      "zh-CN": "看看效果",
+      "zh-TW": "看看效果",
+      "ja": "動作を見る",
+      "ko": "작동 보기",
+      "hi": "इसे काम करते देखें",
+      "id": "Lihat cara kerjanya",
+      "vi": "Xem nó hoạt động",
+      "th": "ดูการทำงาน",
+      "ar": "شاهده يعمل",
+      "es": "Míralo en acción",
+      "fr": "Voir en action",
+      "de": "In Aktion sehen",
+      "pt-BR": "Veja em ação",
+      "ru": "Посмотреть в действии",
+      "tr": "Nasıl çalıştığını gör",
+      "it": "Guardalo in azione"
     }
   }
 }

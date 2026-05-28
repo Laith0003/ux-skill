@@ -217,6 +217,27 @@ def build_lang(data: dict, lang: str) -> str:
             # translated. Without this, only the first occurrence swapped.
             html = html.replace(en, target)
 
+    # Hero h1 — the English markup splits the sentence across <br> + an accent
+    # span, so the per-key generic swap can't translate the second clause (the
+    # hero_h1_line3 key's en never matches the split markup, leaving "design
+    # that doesn't look generated." in English on every locale). Rebuild the
+    # whole h1 inner per locale from the three line keys. English keeps its
+    # hand-tuned 3-line markup untouched.
+    if lang != "en":
+        l1 = tr("hero_h1_line1", "The brain")
+        l2 = tr("hero_h1_line2", "that ships")
+        l3 = tr("hero_h1_line3", "design that&nbsp;doesn&rsquo;t look generated.")
+        new_h1 = (
+            '<h1 class="hero__h1" id="hero-h1">\n'
+            f'          {l1} {l2}<br>\n'
+            f'          <span class="accent-italic">{l3}</span>\n'
+            '        </h1>'
+        )
+        html = re.sub(
+            r'<h1 class="hero__h1" id="hero-h1">.*?</h1>',
+            lambda _m: new_h1, html, count=1, flags=re.DOTALL,
+        )
+
     # Section eyebrows
     for key, original in [
         ("section_02_eyebrow", "02 — Brand specs · 160 catalogue · growing"),
@@ -228,11 +249,13 @@ def build_lang(data: dict, lang: str) -> str:
 
     # CTAs (hero)
     if "cta_install" in strings:
-        html = html.replace('              pip install uxskill\n            </a>',
-                            f'              {tr("cta_install", "pip install uxskill")}\n            </a>', 1)
-    if "cta_source" in strings:
-        html = html.replace('              Read the source\n            </a>',
-                            f'              {tr("cta_source", "Read the source")}\n            </a>', 1)
+        html = html.replace('            pip install uxskill\n          </a>',
+                            f'            {tr("cta_install", "pip install uxskill")}\n          </a>', 1)
+    # Hero secondary CTA — "See it work" replaced the old "Read the source"
+    # (cta_source) but no key tracked it, so it stayed English on every locale.
+    if "cta_see_it_work" in strings:
+        html = html.replace('            See it work\n          </a>',
+                            f'            {tr("cta_see_it_work", "See it work")}\n          </a>', 1)
 
     # 5. Inject lang-picker CSS + nav element + picker JS
     picker_label = tr("lang_picker_label", "Language")
