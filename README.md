@@ -14,21 +14,23 @@
 
 ---
 
-## Quick compare — against every other UX/UI plugin
+## Quick compare — vs. the top 8 popular Claude UX skills on GitHub
 
-| Plugin | Architecture | Total entries | Linter | Brand specs | IDEs | License |
-|---|---|---:|---|---:|---:|---|
-| **ux-skill v2** | **Python engine + 11 JSON manifests + 22 commands + 5 sub-agents** | **998** | **35 regex rules, CI-friendly** | **72** | **17** | **MIT** |
-| UI UX Pro Max | Python recommender | ~600 | — | — | 18 | MIT |
-| anthropic-skills:frontend-design | Markdown prose, 1 SKILL.md | — | — | — | 1 | MIT |
-| design-taste-frontend (gpt-taste) | Single prompt | — | — | — | 1 | MIT |
-| stitch-design-taste | Single prompt | — | — | — | 1 | MIT |
-| design-html / design-shotgun | Single prompt | — | — | — | 1 | MIT |
-| heroui-react | Component library | — | — | (one lib) | 1 | MIT |
-| shadcn-ui MCP | Component fetcher | — | — | (one lib) | 1 | MIT |
-| Figma MCP | Live design import | — | — | — | 1 | proprietary |
+Star counts verified via `gh api` on 2026-05-28. ux-skill is at **14 stars** (we shipped v2 today). We're tiny on awareness, deep on architecture.
 
-**Full comparison page:** [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html) — side-by-side against 13 plugins across every dimension, with an honest "where we lose" section.
+| Plugin | Stars | Architecture | Commands | Linter | Brand specs | IDEs |
+|---|---:|---|---:|---|---:|---:|
+| nextlevelbuilder/ui-ux-pro-max-skill | **83,958** | Python BM25 + CSV, single skill | 1 | — | — | 18 |
+| nexu-io/open-design | **54,406** | Node.js + 19 skills + preview | 19 | — | — | 1 |
+| Leonxlnx/taste-skill | **25,202** | Bash + research-backed taste | 1 | — | — | 1 |
+| alchaincyf/huashu-design | **15,455** | Single 62KB SKILL.md + scripts | 1 | — | — | 1 |
+| google-labs-code/stitch-skills | **5,762** | MCP-wired skill library | multi | — | — | 1 |
+| dominikmartn/nothing-design-skill | **2,391** | Single-aesthetic skill | 1 | — | — | 1 |
+| Nutlope/hallmark | **2,164** | Anti-slop design skill | 1 | — | — | 1 |
+| hamen/material-3-skill | **955** | MD3 components + audit | 1 | — | (MD3) | 1 |
+| **Laith0003/ux-skill** | **14** | **Python engine + 11 manifests + 22 commands + 5 sub-agents** | **22** | **35 regex rules, CI** | **72** | **17** |
+
+**Full side-by-side:** [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html) — every dimension table by table against each of the 8 popular Claude UX skills, with an honest "where we lose" section and a 15-row process advantage map.
 
 ## What v2 is
 
