@@ -1,0 +1,53 @@
+{
+  "id": "rolls-royce",
+  "name": "Rolls-Royce Motor Cars",
+  "category": "Automotive",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Rolls-Royce Motor Cars — the British ultra-luxury house at the apex of automotive prestige, where bespoke commissions average several million pounds and 'car' is the wrong word for the object on display. Canvas is bone-cream (#f5f1e9) or velvet-black (#0a0a0a) depending on whether the section showcases craft (cream) or product (black). Type runs a refined serif (Riviera Nights / custom Trajan-adjacent display serif) at editorial scale, paired with a precise grotesk body. The signature is the Spirit of Ecstasy hood ornament — the silver Eleanor Thornton sculpture rendered in delicate line art on every page. Photography is gallery-grade: hand-stitched leather close-ups, starlight-headliner-roof shots, marquetry inlay macro photography. The voice is 'effortless mastery' — never claims, never promotes, always implies.",
+  "design_language": {
+    "type": {
+      "display": "Riviera Nights",
+      "body": "Riviera Nights",
+      "mono": null
+    },
+    "color_primary": "#1a1a1a",
+    "color_canvas": "#f5f1e9",
+    "color_canvas_velvet": "#0a0a0a",
+    "color_ink": "#1a1a1a",
+    "color_accent": "#7a6035",
+    "radius": [0, 2],
+    "spacing": "8-based",
+    "motion_signature": "Almost-zero motion. Hero photography cross-fades over 3 seconds — the slowest in the automotive category. The Spirit of Ecstasy ornament has a subtle hover-shimmer that takes 1.2s to complete — barely perceptible. The brand voice is 'time is the ultimate luxury' — motion would imply hurry."
+  },
+  "trademark_signals": [
+    "Bone-cream canvas (#f5f1e9) with serif typography at editorial scale — refusing the modernist-grotesk convention every other automotive brand has adopted",
+    "Spirit of Ecstasy ornament rendered in delicate silver line art — appears on every page as a quiet sub-mark, never large, never animated",
+    "Roman-inscriptional display serif (Riviera Nights / Trajan-adjacent) at 60–120px — the typeface IS the brand voice; sans-serif would read as Mercedes off-brand",
+    "Macro-photography of craft details — hand-stitched leather seams, marquetry inlay, starlight-headliner LEDs, monogrammed treadplates — bespoke craft IS the visual content",
+    "'Effortless' as a recurring word in the voice — paired with quiet observations about silence, weight, hand-finishing — never feature lists, never spec sheets"
+  ],
+  "components_observed": [
+    "spirit-of-ecstasy-line-art",
+    "macro-craft-photography",
+    "bespoke-commission-card",
+    "starlight-headliner-hero",
+    "monogram-customization-tool",
+    "phantom-extended-wheelbase-spec",
+    "button-text-link-thin",
+    "footer-goodwood-corporate"
+  ],
+  "exemplar_pages": [
+    "rolls-roycemotorcars.com",
+    "rolls-roycemotorcars.com/en_US/showroom/phantom.html",
+    "rolls-roycemotorcars.com/en_US/bespoke.html",
+    "rolls-roycemotorcars.com/en_US/inspiration"
+  ],
+  "ai_slop_avoided": [
+    "Don't substitute the display serif with a modern grotesk. The Roman-inscriptional serif IS the brand voice — sans reads as Mercedes/Porsche, off-brand for Rolls-Royce",
+    "Don't paint accent moments with saturated color. The palette is bone-cream + ink + restrained gold; saturated colors read as off-brand",
+    "Don't show interior shots populated by people. The brand photographs the empty cabin — the unoccupied luxury is the promise",
+    "Don't write feature-bullet marketing copy. Every product description is atmospheric prose about silence, weight, leather, marquetry — never spec sheets",
+    "Don't drop the Spirit of Ecstasy. Even in minimalist layouts, the silver line-art ornament appears somewhere — its absence reads as off-brand"
+  ],
+  "source_md": "references/brands/rolls-royce-DESIGN.md"
+}
