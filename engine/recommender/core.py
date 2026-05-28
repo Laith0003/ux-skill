@@ -86,20 +86,70 @@ def _score(entry: Dict[str, Any], brief: Brief) -> float:
         elif isinstance(value, dict):
             score += sum(1.0 for v in value.values() if isinstance(v, str) and v in tags)
 
+    # Forbidden filter (v2.1 fix — task #52)
+    # Apply -100 penalty if entry matches anything in brief.forbidden.
+    # Check id, category, AND every typography family name nested in
+    # display/body/mono blocks (type-pairs use this shape).
+    entry_id = entry.get("id", "")
+    entry_cat = entry.get("category", "")
+    type_fams = []
+    for block_key in ("display", "body", "mono"):
+        block = entry.get(block_key)
+        if isinstance(block, dict):
+            fam = block.get("family")
+            if fam:
+                type_fams.append(fam.lower().replace(" ", "-"))
+                type_fams.append(fam.lower())
+    name_lower = (entry.get("name") or "").lower()
+
     for forbidden in brief.forbidden:
-        if forbidden == entry.get("id") or forbidden == entry.get("category"):
+        fbd = forbidden.lower()
+        if fbd == entry_id.lower() or fbd == entry_cat.lower():
             return -100.0
+        if fbd in name_lower:
+            return -100.0
+        for fam in type_fams:
+            if fbd in fam:
+                return -100.0
 
     return score
 
 
 def _lane_industry(brief: Brief) -> Dict[str, Any]:
+    """Find the industry entry matching the brief.
+
+    v2.1 fix (task #53) — falls back through three matching strategies
+    instead of bouncing to score-all on unknown industry IDs:
+      1. exact id match
+      2. fuzzy match: brief.industry substring in entry.id / name / category
+      3. tag-score (the original fallback)
+    """
     data = load("industries")
     entries = data.get("entries", [])
-    if brief.industry:
+    if not entries:
+        return {}
+
+    target = (brief.industry or "").strip().lower()
+
+    # Strategy 1: exact id match
+    if target:
         for e in entries:
-            if e.get("id") == brief.industry:
+            if (e.get("id") or "").lower() == target:
                 return e
+
+        # Strategy 2: fuzzy substring match on id / name / category
+        for e in entries:
+            haystack = " ".join([
+                (e.get("id") or "").lower(),
+                (e.get("name") or "").lower(),
+                (e.get("category") or "").lower(),
+            ])
+            if target in haystack or any(
+                tok in haystack for tok in target.replace("-", " ").split() if len(tok) > 2
+            ):
+                return e
+
+    # Strategy 3: tag-score fallback (original behavior)
     ranked = sorted(entries, key=lambda e: _score(e, brief), reverse=True)
     return ranked[0] if ranked else {}
 
