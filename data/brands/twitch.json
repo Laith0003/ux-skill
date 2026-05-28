@@ -1,0 +1,54 @@
+{
+  "id": "twitch",
+  "name": "Twitch",
+  "category": "Streaming / Media",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Twitch — Amazon's live-streaming platform built for gamers, vtubers, IRL streamers, and the parasocial chat economy. Canvas is deep purple-tinted black (#0e0e10) — distinguishably more purple than Netflix's true black or YouTube's pure black. The signature is Twitch purple (#9146ff) — used at full saturation on the wordmark, on every primary CTA, on the 'Following', 'Subscribe', and 'Cheer' buttons. Type runs Inter (Twitch transitioned from Roobert to Inter as the system face) at modest scale. The interface is dominated by the chat sidebar and the channel grid — every stream is rendered with the streamer's webcam in the corner of game footage, and the chat scrolls live with subscriber-only badges, emote spam, and channel-points redemptions.",
+  "design_language": {
+    "type": {
+      "display": "Inter",
+      "body": "Inter",
+      "mono": "JetBrains Mono"
+    },
+    "color_primary": "#9146ff",
+    "color_canvas": "#0e0e10",
+    "color_canvas_card": "#1f1f23",
+    "color_ink": "#efeff1",
+    "color_muted": "#adadb8",
+    "color_accent": "#bf94ff",
+    "radius": [4, 8, 12, 999],
+    "spacing": "4-based",
+    "motion_signature": "Real-time chat scroll — message bubbles slide up at variable cadence (sometimes 1/sec, sometimes 20/sec during hype moments). Subscriber-baked emote animations loop infinitely. Sub-Hype-Train celebration overlays cascade purple confetti for 5 seconds on viewer milestone events. Channel-points-redemption notifications float in from the right with a 600ms cubic-bezier slide."
+  },
+  "trademark_signals": [
+    "Deep purple-tinted black canvas (#0e0e10) — the purple tint distinguishes Twitch from Netflix's true black and YouTube's pure black",
+    "Twitch purple (#9146ff) — a vivid, near-Brand-saturated purple — used on every CTA, every primary button, the wordmark, and the speech-balloon glyph",
+    "Speech-balloon glyph — the Twitch wordmark's accent shape — the small purple-violet chat-bubble emerging from the 'T' — refusing to be decorative; always live to the chat-driven brand",
+    "Live-stream tile with streamer webcam in corner — every game thumbnail composes the gameplay full-frame with the streamer's face-cam overlaid in a circular thumbnail in one corner — the parasocial brand promise",
+    "Chat-sidebar UI dominance — every channel page is split: video on the left (60–70%), chat on the right (30–40%) — the chat is not optional; it IS the platform's voltage"
+  ],
+  "components_observed": [
+    "live-stream-tile-with-webcam",
+    "chat-sidebar-scrolling",
+    "speech-balloon-glyph",
+    "subscribe-button-purple",
+    "channel-category-card",
+    "emote-grid-keyboard",
+    "hype-train-overlay-purple",
+    "button-primary-twitch-purple"
+  ],
+  "exemplar_pages": [
+    "twitch.tv",
+    "twitch.tv/directory",
+    "twitch.tv/p/about",
+    "blog.twitch.tv"
+  ],
+  "ai_slop_avoided": [
+    "Don't drop the chat sidebar. Twitch's brand voltage IS the live-chat — a video-only layout reads as YouTube/Netflix, not Twitch",
+    "Don't tint the purple. The brand purple (#9146ff) is the recognized voltage; muting or saturating breaks the brand",
+    "Don't paint the canvas in true black. The purple-tint (#0e0e10) is the brand-defining differentiator from competitors' true blacks",
+    "Don't strip the streamer webcam overlay from thumbnails. The face-cam-in-corner composition IS the parasocial brand promise",
+    "Don't substitute Inter with a serif. Twitch's typographic voice is grotesk-utility — serifs read as off-brand prestige-tv"
+  ],
+  "source_md": "references/brands/twitch-DESIGN.md"
+}

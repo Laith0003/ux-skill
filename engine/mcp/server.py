@@ -194,6 +194,16 @@ class UxStatsInput(BaseModel):
     pass
 
 
+class UxImageExtractInput(BaseModel):
+    path: str = Field(
+        description="Absolute or relative path to a design image (PNG/JPG/WebP/etc.).",
+    )
+    with_recommendation: bool = Field(
+        default=True,
+        description="If true, run the recommender on the extracted brief and include the result.",
+    )
+
+
 # ---------------------------------------------------------------------------
 # Filter helpers
 # ---------------------------------------------------------------------------
@@ -326,6 +336,42 @@ def handle_ux_stats(args: Dict[str, Any]) -> Dict[str, Any]:
     return {"version": __version__, "counts": stats()}
 
 
+def handle_ux_image_extract(args: Dict[str, Any]) -> Dict[str, Any]:
+    """Extract a synthetic Brief from a design image and (optionally) recommend.
+
+    Pure-CV pipeline via Pillow — no multimodal LLM calls. Returns the brief,
+    the raw extraction hints (dominant colors, canvas polarity, type polarity,
+    matched palette + style), and (if requested) the merged recommendation.
+    """
+    payload = UxImageExtractInput.model_validate(args or {})
+    try:
+        from engine.image_extract import image_to_brief
+    except ImportError as exc:  # pragma: no cover - environment specific
+        return {"error": "Pillow not installed", "hint": str(exc)}
+
+    try:
+        result = image_to_brief(payload.path)
+    except RuntimeError as exc:
+        return {"error": str(exc)}
+    except FileNotFoundError as exc:
+        return {"error": str(exc)}
+
+    response: Dict[str, Any] = {
+        "image": payload.path,
+        "brief": result["brief"],
+        "hints": result["hints"],
+    }
+    if payload.with_recommendation:
+        brief_kwargs = {
+            k: v for k, v in result["brief"].items()
+            if k in {"project_type", "industry", "audience", "tone",
+                     "must_have", "forbidden", "stack", "region"}
+        }
+        rec = recommend(Brief(**brief_kwargs))
+        response["recommendation"] = rec.to_dict()
+    return response
+
+
 # ---------------------------------------------------------------------------
 # Tool catalogue — single source of truth
 # ---------------------------------------------------------------------------
@@ -416,6 +462,14 @@ TOOLS: Dict[str, ToolEntry] = {
         UxStatsInput,
         "Return the engine version and per-manifest entry counts. Useful as "
         "a health check.",
+    ),
+    "ux_image_extract": (
+        handle_ux_image_extract,
+        UxImageExtractInput,
+        "Read a design image (PNG/JPG/WebP) and return a synthetic Brief plus "
+        "diagnostic hints (dominant colors, canvas polarity, matched palette + "
+        "style). Pure CV — no multimodal LLM calls. Set with_recommendation=true "
+        "(default) to also run the recommender on the extracted brief.",
     ),
 }
 

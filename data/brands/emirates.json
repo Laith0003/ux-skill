@@ -1,0 +1,53 @@
+{
+  "id": "emirates",
+  "name": "Emirates",
+  "category": "Travel / Hospitality",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Emirates — the Dubai-headquartered flag carrier whose brand identity is the cinematic A380 first-class experience translated into web language. Canvas is warm cream or deep desert-night-black. The signature palette is the Emirates red (#d71920) and gold trim. Type runs a custom Arabic-Latin co-typesetting system — the brand often shows Arabic naskh and Latin grotesk side-by-side at matched scale, a quiet declaration of the UAE origin. Photography is cinematic luxury aviation: A380 cabin interiors with onboard showers, first-class suites with sliding doors, business-class bars at 40,000 feet. The brand voice is 'fly better than business class' — gold trim, marble lavatories, chef-prepared meals — never apologetic about the luxury.",
+  "design_language": {
+    "type": {
+      "display": "Emirates Sans",
+      "body": "Emirates Sans",
+      "mono": null
+    },
+    "color_primary": "#d71920",
+    "color_canvas": "#fdf9f3",
+    "color_canvas_dark": "#1a1a1a",
+    "color_ink": "#1a1a1a",
+    "color_accent": "#c9a55c",
+    "radius": [4, 8, 16],
+    "spacing": "8-based",
+    "motion_signature": "Cinematic A380 cabin footage as hero — slow tracking shots through first-class suites, champagne pours, lounge bars at altitude. Cross-fades at 1.5s — slower than budget carriers, faster than ultra-luxury hotels. Hover lifts product tiles 4px with a soft shadow."
+  },
+  "trademark_signals": [
+    "Emirates red (#d71920) on the wordmark and on the primary CTA — the iconic logotype with the 'wing' calligraphic flourish",
+    "Gold accent (#c9a55c) on first-class and business-class imagery — trim lines on seat-frame photography, on tier-tab dividers, on the wordmark sub-line",
+    "Arabic-Latin co-typesetting — destination names appearing in both Arabic naskh and Latin grotesk on hero pages, refusing English-only globalization",
+    "A380 cabin photography as primary visual — onboard showers, first-class suites with sliding doors, the lounge bar at altitude — cinematic luxury aviation imagery",
+    "Globe-with-routes hero device — the Emirates network shown as a world-globe with red flight arcs radiating from Dubai (DXB) — the brand IS the Dubai hub"
+  ],
+  "components_observed": [
+    "a380-cabin-cinematic-hero",
+    "destination-card-bilingual",
+    "globe-routes-network-viz",
+    "fare-class-tier-tabs",
+    "onboard-experience-gallery",
+    "booking-search-bar-warm",
+    "button-primary-emirates-red",
+    "footer-dubai-headquarters"
+  ],
+  "exemplar_pages": [
+    "emirates.com",
+    "emirates.com/english",
+    "emirates.com/experience",
+    "emirates.com/business"
+  ],
+  "ai_slop_avoided": [
+    "Don't drop the Arabic typography on global pages. The bilingual presence is the brand's UAE-origin declaration; English-only reads as deracinated",
+    "Don't substitute Emirates red with a brighter or pinker variant. The red is locked at #d71920 — any shift is off-brand",
+    "Don't show economy-class as primary imagery. The brand's voltage is first-class and business-class luxury; leading with economy reads as off-brand budget-carrier",
+    "Don't strip the gold trim. The gold-on-red palette is the recognized Emirates lockup; using only red reads as 'generic airline brand'",
+    "Don't render the route network as a flat map. The brand uses a 3D globe with radiating arcs from Dubai — flat 2D maps lose the 'Dubai is the hub' message"
+  ],
+  "source_md": "references/brands/emirates-DESIGN.md"
+}

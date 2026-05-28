@@ -1,0 +1,53 @@
+{
+  "id": "porsche",
+  "name": "Porsche",
+  "category": "Automotive",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Porsche's brand language — the Stuttgart sports-car house whose visual discipline is the opposite of every other German luxury automaker. Canvas is pure white or dark race-track-black. Type runs the proprietary Porsche Next typeface — a precise, modernist grotesk with subtle aperture variations — at every text tier. The signature is Porsche red (#d5001c) — historically reserved for the 911 GT badging, used scarcely on configurator highlights, on the wordmark in select moments, and on the iconic horse-and-shield crest. Photography is cinematic motorsport: cars at speed on Alpine roads, paddock close-ups of the 911 chassis, design-team studio portraits. The voice is engineering-first — every page reads like a Le Mans technical manual translated into web layout.",
+  "design_language": {
+    "type": {
+      "display": "Porsche Next",
+      "body": "Porsche Next",
+      "mono": "Porsche Next Mono"
+    },
+    "color_primary": "#d5001c",
+    "color_canvas": "#ffffff",
+    "color_canvas_dark": "#000000",
+    "color_ink": "#0a0e10",
+    "color_accent": "#c8b063",
+    "radius": [0, 2, 4],
+    "spacing": "8-based",
+    "motion_signature": "Cinematic motorsport. Hero videos auto-play silent: 911s carving through Pyrenees passes, slow-motion engine-bay close-ups, paddock pit-stops. Cross-fades at 1.2s — fast enough to feel kinetic but slower than Tesla's quick cuts. Hover lifts product tiles 6px with a sharp shadow (engineering precision, not soft luxury). Configurator color-changes animate the car body via 800ms color-tween."
+  },
+  "trademark_signals": [
+    "Porsche Next at every tier — the proprietary grotesk that reads as engineering-document, not fashion-magazine — refusing the serif-luxury convention",
+    "Porsche red (#d5001c) reserved for the 911 GT badging, the horse-and-shield crest, and rare configurator highlights — never used as a section background, never as a CTA fill on standard product pages",
+    "Stuttgart horse-and-shield crest — the gold-and-red coat-of-arms emblem — appears at the top of every page as a sub-mark beneath the 'PORSCHE' wordmark",
+    "Cinematic motorsport photography — 911s on Alpine roads, paddock close-ups, engine-bay portraits — refusing the polished-on-white showroom convention every other luxury brand uses",
+    "Engineering-document copy — every product page describes lateral-G performance figures, lap times, kilowatt outputs, drag coefficients — Porsche-spec, never marketing-spec"
+  ],
+  "components_observed": [
+    "cinematic-car-hero-video",
+    "configurator-3d-spinner",
+    "spec-sheet-engineering-table",
+    "lap-time-callout-card",
+    "model-comparison-grid-precise",
+    "horse-shield-crest-mark",
+    "button-primary-thin-rule",
+    "footer-stuttgart-corporate"
+  ],
+  "exemplar_pages": [
+    "porsche.com",
+    "porsche.com/usa",
+    "porsche.com/911",
+    "porsche.com/motorsport"
+  ],
+  "ai_slop_avoided": [
+    "Don't substitute Porsche Next with a fashion-serif. The proprietary grotesk IS the engineering voice — Garamond reads as Ferrari, off-brand for Porsche",
+    "Don't paint the canvas in luxury cream. Porsche is white-or-black; cream reads as Ferrari/Rolls-Royce off-brand",
+    "Don't show cars on white turntable. Porsche photography is in-motion, on-track, in-paddock — static showroom shots read as 'generic luxury auto'",
+    "Don't drop the lap-time / spec-sheet. The engineering data IS the brand's voltage — feature-bullet marketing copy reads as off-brand",
+    "Don't decorate with Porsche red. The red is reserved for GT badging and the crest; using it on every accent moment dilutes the brand restraint"
+  ],
+  "source_md": "references/brands/porsche-DESIGN.md"
+}

@@ -343,6 +343,71 @@ else:
         names = list_pages(project_root)
         _emit({"pages": names, "count": len(names)}, ctx.obj["pretty"])
 
+    # -------- ux image-extract -------------------------------------------
+
+    @cli.command("image-extract")
+    @click.argument("path", type=click.Path(exists=True, dir_okay=False))
+    @click.option("--with-recommendation/--no-recommendation", default=True,
+                  help="Also run the recommender on the extracted brief (default true).")
+    @click.option("--save", type=click.Path(),
+                  default=".ux/last-image-extract.json",
+                  help="Path to write the JSON result; pass empty string to skip.")
+    @click.pass_context
+    def image_extract_cmd(ctx, path, with_recommendation, save) -> None:
+        """Read a design image, return brief + hints + (optional) recommendation.
+
+        Pure CV pipeline — Pillow only. Extracts the dominant 5 colors via
+        MAXCOVERAGE quantization, decides light vs dark canvas from average
+        luminance, guesses serif vs sans-serif from edge-filter response,
+        and matches the result against the v2 palettes + styles manifests.
+        """
+        try:
+            from engine.image_extract import image_to_brief
+        except ImportError as exc:
+            _emit({"error": "Pillow not installed", "hint": str(exc)},
+                  ctx.obj["pretty"])
+            sys.exit(2)
+
+        try:
+            result = image_to_brief(path)
+        except RuntimeError as exc:
+            _emit({"error": str(exc)}, ctx.obj["pretty"])
+            sys.exit(2)
+        except FileNotFoundError as exc:
+            _emit({"error": str(exc)}, ctx.obj["pretty"])
+            sys.exit(1)
+
+        if with_recommendation:
+            brief_kwargs = {
+                k: v for k, v in result["brief"].items()
+                if k in {"project_type", "industry", "audience", "tone",
+                         "must_have", "forbidden", "stack", "region"}
+            }
+            rec = run_recommend(Brief(**brief_kwargs))
+            result["recommendation"] = rec.to_dict()
+
+        # Strip the embedded matched_palette / matched_style dicts from the
+        # top-level dump — they are also surfaced via hints + recommendation,
+        # and duplicating them inflates the JSON unnecessarily.
+        payload = {
+            "image": path,
+            "brief": result["brief"],
+            "hints": result["hints"],
+        }
+        if "recommendation" in result:
+            payload["recommendation"] = result["recommendation"]
+
+        if save:
+            save_path = Path(save)
+            save_path.parent.mkdir(parents=True, exist_ok=True)
+            save_path.write_text(
+                json.dumps(payload, indent=2, ensure_ascii=False),
+                encoding="utf-8",
+            )
+            payload["saved_to"] = str(save_path)
+
+        _emit(payload, ctx.obj["pretty"])
+
     # -------- ux stats ---------------------------------------------------
 
     @cli.command("stats")

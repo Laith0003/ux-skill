@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Showcase — designs built with ux-skill</title>
+  <meta name="description" content="A hand-picked gallery of designs and pages built with the ux-skill engine. Recommended palette, recommended style, recommended type pair — and the resulting interface. Submit your own via GitHub Issues.">
+
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/showcase.html">
+  <meta name="robots" content="index,follow">
+
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <meta property="og:title" content="Showcase — designs built with ux-skill">
+  <meta property="og:description" content="A hand-picked gallery of designs and pages built with the ux-skill engine. The recommendation, the result, side by side.">
+  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og-image.png">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/showcase.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="uxskill">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Showcase — designs built with ux-skill">
+  <meta name="twitter:description" content="The recommendation, the result, side by side. A hand-picked gallery of work shipped with the ux-skill engine.">
+  <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og-image.png">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"CollectionPage","name":"ux-skill showcase","url":"https://uxskill.laithjunaidy.com/showcase.html","isPartOf":{"@type":"WebSite","name":"uxskill","url":"https://uxskill.laithjunaidy.com/"},"about":"Designs built with the ux-skill engine — recommended palette, style, type pair, and the resulting interface."}
+  </script>
+
+  <style>
+    /* =========================================================================
+       SHOWCASE — extends the Saturated Cinema homepage system.
+       No yellow, no amber, no gold, no cream, no coral, no Cormorant.
+       ========================================================================= */
+
+    :root {
+      --canvas:        #07080a;
+      --surface-1:     #0d0f12;
+      --surface-2:     #14181d;
+      --surface-3:     #1c2128;
+      --ink:           #f6f7f9;
+      --body:          #c7ccd3;
+      --muted:         #8a8f96;
+      --faint:         #5a5f66;
+      --hairline:      rgba(246, 247, 249, 0.07);
+      --hairline-2:    rgba(246, 247, 249, 0.14);
+
+      --scene-glow:    #06b6d4;
+      --scene-accent:  #06b6d4;
+
+      --display: 'Bricolage Grotesque', 'Inter Tight', system-ui, sans-serif;
+      --body-face: 'Inter', system-ui, -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+      --max-w:         1320px;
+      --max-read:      720px;
+      --section-y:     clamp(96px, 14vw, 196px);
+      --gutter:        clamp(20px, 5vw, 56px);
+
+      --ease-cinema:   cubic-bezier(0.16, 1, 0.3, 1);
+      --t-fast:        160ms;
+      --t-mid:         260ms;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html {
+      background: var(--canvas);
+      scroll-behavior: smooth;
+      overflow-x: clip;
+      -webkit-text-size-adjust: 100%;
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: var(--body-face);
+      font-size: 16.5px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: clip;
+      max-width: 100%;
+    }
+    section, header, footer { max-width: 100vw; overflow-x: clip; }
+    img, video, canvas, svg { max-width: 100%; height: auto; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+
+    .skip-link {
+      position: absolute; top: -100px; left: 14px;
+      background: var(--ink); color: var(--canvas);
+      padding: 10px 14px; border-radius: 6px;
+      font-family: var(--mono); font-size: 12px;
+      z-index: 100;
+    }
+    .skip-link:focus { top: 14px; outline: 2px solid var(--scene-glow); outline-offset: 2px; }
+
+    h1, h2, h3, h4 {
+      font-family: var(--display);
+      font-weight: 600;
+      font-variation-settings: 'wdth' 88, 'opsz' 96, 'wght' 580;
+      margin: 0;
+      line-height: 1.0;
+      letter-spacing: -0.028em;
+      color: var(--ink);
+    }
+    p { margin: 0; color: var(--body); }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 22px; height: 1px;
+      background: currentColor;
+    }
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== NAV ============================================================ */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 80;
+      padding: 14px 0;
+      transition: backdrop-filter var(--t-mid) var(--ease-cinema),
+                  background-color var(--t-mid) var(--ease-cinema),
+                  border-color var(--t-mid) var(--ease-cinema);
+      border-bottom: 1px solid transparent;
+    }
+    .nav.is-scrolled {
+      background: rgba(7, 8, 10, 0.72);
+      backdrop-filter: saturate(140%) blur(18px);
+      -webkit-backdrop-filter: saturate(140%) blur(18px);
+      border-bottom-color: var(--hairline);
+    }
+    .nav__inner {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 18px;
+    }
+    .wordmark {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-size: 24px;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--ink);
+      display: inline-flex;
+      align-items: baseline;
+      gap: 2px;
+    }
+    .wordmark__dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 2px;
+      background: linear-gradient(135deg, #06b6d4, #ec4899);
+      margin-left: 4px;
+      transform: translateY(-2px);
+    }
+    .nav__links { display: none; gap: 26px; align-items: center; }
+    .nav__link {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--body);
+      letter-spacing: -0.005em;
+      transition: color var(--t-fast) var(--ease-cinema);
+    }
+    .nav__link:hover, .nav__link:focus-visible { color: var(--ink); }
+    .nav__link:focus-visible {
+      outline: 2px solid var(--scene-glow);
+      outline-offset: 6px;
+      border-radius: 3px;
+    }
+    .cta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 16px;
+      min-height: 40px;
+      border-radius: 10px;
+      background: var(--ink);
+      color: var(--canvas);
+      font-family: var(--mono);
+      font-size: 12.5px;
+      font-weight: 500;
+      letter-spacing: -0.005em;
+      transition: transform var(--t-mid) var(--ease-cinema),
+                  background-color var(--t-fast) var(--ease-cinema);
+    }
+    .cta-pill:hover, .cta-pill:focus-visible {
+      transform: translateY(-1px);
+      background: #ffffff;
+    }
+    .cta-pill:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 4px; }
+    @media (min-width: 880px) {
+      .nav__links { display: flex; }
+    }
+
+    /* ===== HERO =========================================================== */
+    .hero {
+      padding: clamp(140px, 22vw, 220px) 0 clamp(56px, 8vw, 96px);
+      position: relative;
+    }
+    .hero__inner {
+      max-width: 920px;
+    }
+    .hero h1 {
+      font-size: clamp(48px, 8vw, 96px);
+      font-variation-settings: 'wdth' 84, 'opsz' 96, 'wght' 620;
+      margin: 18px 0 22px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, #06b6d4 0%, #ec4899 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero__lead {
+      font-size: clamp(17px, 2vw, 22px);
+      color: var(--body);
+      max-width: 640px;
+      line-height: 1.5;
+    }
+    .hero__meta {
+      margin-top: 36px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px 28px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .hero__meta strong { color: var(--ink); font-weight: 500; }
+
+    /* ===== GALLERY GRID =================================================== */
+    .gallery {
+      padding: clamp(48px, 8vw, 96px) 0;
+    }
+    .gallery__head {
+      max-width: 720px;
+      margin-bottom: 56px;
+    }
+    .gallery__head h2 {
+      font-size: clamp(32px, 5vw, 52px);
+      margin: 14px 0 18px;
+    }
+    .gallery__head p {
+      font-size: 17px;
+      color: var(--body);
+    }
+    .gallery__grid {
+      display: grid;
+      gap: 28px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 720px) {
+      .gallery__grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (min-width: 1080px) {
+      .gallery__grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: transform var(--t-mid) var(--ease-cinema),
+                  border-color var(--t-mid) var(--ease-cinema);
+    }
+    .card:hover, .card:focus-within {
+      transform: translateY(-2px);
+      border-color: var(--hairline-2);
+    }
+    .card__media {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      background: var(--surface-2);
+      overflow: hidden;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .card__media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+    .card__media-fallback {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(6, 182, 212, 0.18) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(236, 72, 153, 0.18) 0%, transparent 50%),
+        var(--surface-2);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .card__body {
+      padding: 22px 22px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+    }
+    .card__eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .card__title {
+      font-size: 22px;
+      font-variation-settings: 'wdth' 90, 'opsz' 32, 'wght' 580;
+      line-height: 1.15;
+    }
+    .card__desc {
+      color: var(--body);
+      font-size: 14.5px;
+      line-height: 1.5;
+    }
+    .card__chips {
+      margin-top: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding-top: 10px;
+      border-top: 1px solid var(--hairline);
+    }
+    .chip {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      padding: 4px 8px;
+      border: 1px solid var(--hairline-2);
+      border-radius: 6px;
+      background: var(--surface-2);
+    }
+    .card__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--ink);
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      align-self: flex-start;
+      transition: border-color var(--t-fast) var(--ease-cinema);
+    }
+    .card__link:hover, .card__link:focus-visible {
+      border-bottom-color: var(--scene-accent);
+    }
+    .card__link:focus-visible {
+      outline: 2px solid var(--scene-accent);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+
+    /* ===== CTA — SUBMIT =================================================== */
+    .submit {
+      padding: clamp(64px, 10vw, 128px) 0;
+      border-top: 1px solid var(--hairline);
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(6, 182, 212, 0.08) 0%, transparent 60%),
+        var(--canvas);
+    }
+    .submit__inner {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .submit h2 {
+      font-size: clamp(32px, 5vw, 48px);
+      margin: 14px 0 18px;
+    }
+    .submit p {
+      font-size: 17px;
+      max-width: 580px;
+      margin: 0 auto 32px;
+    }
+    .submit__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 20px;
+      min-height: 48px;
+      border-radius: 10px;
+      background: var(--ink);
+      color: var(--canvas);
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 500;
+      transition: transform var(--t-mid) var(--ease-cinema),
+                  background-color var(--t-fast) var(--ease-cinema);
+    }
+    .submit__cta:hover, .submit__cta:focus-visible {
+      transform: translateY(-1px);
+      background: #ffffff;
+    }
+    .submit__cta:focus-visible { outline: 2px solid var(--scene-glow); outline-offset: 4px; }
+    .submit__second {
+      display: block;
+      margin-top: 18px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .submit__second a {
+      color: var(--body);
+      border-bottom: 1px solid var(--hairline-2);
+      transition: color var(--t-fast) var(--ease-cinema);
+    }
+    .submit__second a:hover, .submit__second a:focus-visible { color: var(--ink); }
+
+    /* ===== FOOTER ========================================================= */
+    .footer {
+      border-top: 1px solid var(--hairline);
+      padding: 56px 0 44px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .footer__inner {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .footer__line {
+      display: flex; flex-wrap: wrap; gap: 18px;
+      align-items: center; justify-content: space-between;
+    }
+    .footer__nav {
+      display: flex; flex-wrap: wrap; gap: 14px 22px;
+    }
+    .footer__link {
+      color: var(--body);
+      border-bottom: 1px solid transparent;
+      transition: color var(--t-fast) var(--ease-cinema),
+                  border-color var(--t-fast) var(--ease-cinema);
+    }
+    .footer__link:hover, .footer__link:focus-visible {
+      color: var(--ink);
+      border-bottom-color: var(--hairline-2);
+    }
+  </style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a href="/" class="wordmark" aria-label="uxskill home">
+      uxskill<span class="wordmark__dot" aria-hidden="true"></span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="/compare.html">Compare</a>
+      <a class="nav__link" href="/about.html">About</a>
+      <a class="nav__link" href="/roadmap.html">Roadmap</a>
+      <a class="nav__link" href="/faq.html">FAQ</a>
+      <a class="nav__link" href="/mcp.html">MCP</a>
+      <a class="nav__link" href="/commands.html">Commands</a>
+      <a class="nav__link" href="/blog/">Blog</a>
+    </nav>
+    <a href="https://github.com/Laith0003/ux-skill" class="cta-pill" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="GitHub"><title>GitHub</title><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      <span>Star on GitHub</span>
+    </a>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" aria-label="Showcase intro">
+    <div class="container">
+      <div class="hero__inner">
+        <span class="eyebrow">Showcase &middot; hand-picked dogfood &middot; 2026</span>
+        <h1>The engine&apos;s reads,<br>side by side with the <em>resulting interface</em>.</h1>
+        <p class="hero__lead">
+          A curated gallery of pages the ux-skill engine helped build. The recommendation on one side; the shipped interface on the other. Nothing here was bolted on after the fact &mdash; the palette, the type pair, the motion preset all came out of the 5-parallel-search recommender.
+        </p>
+        <div class="hero__meta" aria-label="Showcase stats">
+          <span><strong>12</strong> examples</span>
+          <span><strong>11</strong> manifests behind each</span>
+          <span><strong>0</strong> stock photos</span>
+          <span><strong>0</strong> generic templates</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GALLERY ============ -->
+  <section class="gallery" aria-label="Showcase gallery">
+    <div class="container">
+      <div class="gallery__head">
+        <span class="eyebrow">01 &middot; The gallery</span>
+        <h2>Twelve pages.<br>Twelve recommendations.</h2>
+        <p>Every card below shows the engine&apos;s pick (style + palette + type pair) and a screenshot or link to the resulting interface. The first four are the docs site itself &mdash; built on its own engine. The next eight are mini case studies from briefs the recommender has been run on.</p>
+      </div>
+
+      <ul class="gallery__grid" role="list">
+
+        <!-- 1. Homepage itself -->
+        <li class="card">
+          <div class="card__media">
+            <img src="/og/home.png" alt="Saturated Cinema homepage hero with the ux-skill wordmark on near-black canvas" width="1200" height="750" loading="lazy">
+          </div>
+          <div class="card__body">
+            <span class="card__eyebrow">Dogfood &middot; Homepage</span>
+            <h3 class="card__title">uxskill.laithjunaidy.com</h3>
+            <p class="card__desc">Saturated Cinema scenes. Each section owns its color. Bricolage Grotesque display. No yellow, no Cormorant, no purple-to-blue gradient. The engine ate its own cooking.</p>
+            <div class="card__chips" aria-label="Engine picks">
+              <span class="chip">style: editorial-cinema</span>
+              <span class="chip">palette: cinema-night</span>
+              <span class="chip">type: bricolage-inter-jbm</span>
+            </div>
+            <a href="/" class="card__link">
+              See the page
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" role="img" aria-label="Arrow"><title>Arrow</title><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </li>
+
+        <!-- 2. Compare page -->
+        <li class="card">
+          <div class="card__media">
+            <img src="/og/compare.png" alt="Compare page scorecard tile comparing ux-skill against eight Claude UX skills" width="1200" height="750" loading="lazy">
+          </div>
+          <div class="card__body">
+            <span class="card__eyebrow">Dogfood &middot; Compare</span>
+            <h3 class="card__title">/compare.html</h3>
+            <p class="card__desc">The 50-point scorecard. Dense, comparison-heavy, table-led. The engine picked Monochrome Precise over Editorial Magazine for this surface because the job is reading, not feeling.</p>
+            <div class="card__chips" aria-label="Engine picks">
+              <span class="chip">style: monochrome-precise</span>
+              <span class="chip">palette: linear-graphite</span>
+              <span class="chip">type: bricolage-inter-jbm</span>
+            </div>
+            <a href="/compare.html" class="card__link">
+              Read the scorecard
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" role="img" aria-label="Arrow"><title>Arrow</title><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </li>
+
+        <!-- 3. Editorial section -->
+        <li class="card">
+          <div class="card__media">
+            <img src="/og/editorial.png" alt="Editorial section with magazine-style headlines and photographic plates" width="1200" height="750" loading="lazy">
+          </div>
+          <div class="card__body">
+            <span class="card__eyebrow">Dogfood &middot; Editorial</span>
+            <h3 class="card__title">/editorial/</h3>
+            <p class="card__desc">The long-read surface. Magazine grid, wide-tracked display, photographic plates instead of icons. The recommendation flipped from Monochrome Precise to Editorial Cinema because the brief tags shifted to warm, literary, ambient.</p>
+            <div class="card__chips" aria-label="Engine picks">
+              <span class="chip">style: editorial-cinema</span>
+              <span class="chip">palette: dark-mode-luxe</span>
+              <span class="chip">type: fraunces-inter-jbm</span>
+            </div>
+            <a href="/editorial/" class="card__link">
+              See the editorial wing
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" role="img" aria-label="Arrow"><title>Arrow</title><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </li>
+
+        <!-- 4. Brand inspector -->
+        <li class="card">
+          <div class="card__media">
+            <img src="/screenshots/brand-mosaic.png" alt="Brand inspector mosaic showing eight brand voice cards" width="1200" height="750" loading="lazy">
+          </div>
+          <div class="card__body">
+            <span class="card__eyebrow">Dogfood &middot; Brand inspector</span>
+            <h3 class="card__title">Brand gallery on the homepage</h3>
+            <p class="card__desc">110 brand DESIGN.md specs visualised as a card mosaic, each card rendered in that brand&apos;s actual voice and palette. The engine reads `data/brands/*.json`; the page paints what it reads.</p>
+            <div class="card__chips" aria-label="Engine picks">
+              <span class="chip">style: gallery-mosaic</span>
+              <span class="chip">palette: per-card</span>
+              <span class="chip">type: per-brand</span>
+            </div>
+            <a href="/#brand-gallery" class="card__link">
+              Browse the brands
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" role="img" aria-label="Arrow"><title>Arrow</title><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </li>
+
+        <!-- 5. Mini case study: fintech neobank dashboard -->
+        <li class="card">
+          <div class="card__media" aria-hidden="true">
+            <div class="card__media-fallback">brief &middot; fintech &middot; dashboard</div>
+          </div>
+          <div class="card__body">
+            <span class="card__eyebrow">Case study &middot; Fintech dashboard</span>
+            <h3 class="card__title">Neobank, trader audience, MENA</h3>
+            <p class="card__desc">Brief: precise, trustworthy, dense. The engine recommended Monochrome Precise + Linear Graphite + Bricolage display. Forbidden tags pulled Cormorant and purple-to-blue out of the running before the lanes started.</p>
+            <div class="card__chips" aria-label="Engine picks">
+              <span class="chip">style: monochrome-precise</span>
+              <span class="chip">palette: linear-graphite</span>
+              <span class="chip">type: bricolage-inter-jbm</span>
+            </div>
+            <a href="/commands.html#ux-recommend" class="card__link">
+              See the command
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" role="img" aria-label="Arrow"><title>Arrow</title><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </li>
+
+        <!-- 6. Mini case study: editorial publication -->
+        <li class="card">
+          <div class="card__media" aria-hidden="true">
+            <div class="card__media-fallback">brief &middot; editorial &middot; long-form</div>
+          </div>
+          <div class="card__body">
+            <span class="card__eyebrow">Case study &middot; Editorial publication</span>
+            <h3 class="card__title">Long-read magazine, literary tone</h3>
+            <p class="card__desc">Brief: warm, literary, slow. The engine routed to Editorial Cinema + a dark-mode palette built around deep blues and ink reds. The recommendation came back without Cormorant because the forbidden list named it explicitly.</p>
+            <div class="card__chips" aria-label="Engine picks">
+              <span class="chip">style: editorial-cinema</span>
+              <span class="chip">palette: dark-mode-luxe</span>
+              <span class="chip">type: fraunces-inter-jbm</span>
+            </div>
+            <a href="/commands.html#ux-design" class="card__link">
+              See the workflow
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" role="img" aria-label="Arrow"><title>Arrow</title><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </li>
+
+        <!-- 7. Mini case study: SaaS dev tools landing -->
+        <li class="card">
+          <div class="card__media" aria-hidden="true">
+            <div class="card__media-fallback">brief &middot; dev tools &middot; landing</div>
+          </div>
+          <div class="card__body">
+            <span class="card__eyebrow">Case study &middot; Dev tools landing</span>
+            <h3 class="card__title">Saturated Cinema, developer audience</h3>
+            <p class="card__desc">Brief: cinematic, saturated, opinionated. The engine returned Editorial Cinema with the per-scene color discipline that drives this site itself &mdash; one accent per section, never a single brand color across the whole canvas.</p>
+            <div class="card__chips" aria-label="Engine picks">
+              <span class="chip">style: editorial-cinema</span>
+              <span class="chip">palette: per-scene</span>
+              <span class="chip">type: bricolage-inter-jbm</span>
+            </div>
+            <a href="/blog/ai-coding-design-rules-2026.html" class="card__link">
+              Read the writeup
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" role="img" aria-label="Arrow"><title>Arrow</title><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </li>
+
+        <!-- 8. Mini case study: cultural institution -->
+        <li class="card">
+          <div class="card__media" aria-hidden="true">
+            <div class="card__media-fallback">brief &middot; museum &middot; portfolio</div>
+          </div>
+          <div class="card__body">
+            <span class="card__eyebrow">Case study &middot; Cultural institution</span>
+            <h3 class="card__title">Museum portfolio, Swiss tradition</h3>
+            <p class="card__desc">Brief: precise, calm, archival. Swiss International came back from the recommender with a near-pure-white palette, hairline rules, and a serif body face matched to the long-read context.</p>
+            <div class="card__chips" aria-label="Engine picks">
+              <span class="chip">style: swiss-international</span>
+              <span class="chip">palette: editorial-warm</span>
+              <span class="chip">type: instrument-serif-inter</span>
+            </div>
+            <a href="/commands.html#ux-recommend" class="card__link">
+              See the workflow
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" role="img" aria-label="Arrow"><title>Arrow</title><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </li>
+
+        <!-- 9. Mini case study: image-to-code example -->
+        <li class="card">
+          <div class="card__media">
+            <img src="/screenshots/cursor-running-ux.png" alt="Cursor editor running the ux-skill recommend command in a terminal pane" width="1200" height="750" loading="lazy">
+          </div>
+          <div class="card__body">
+            <span class="card__eyebrow">Case study &middot; Image-to-code</span>
+            <h3 class="card__title">From editor screenshot &rarr; system</h3>
+            <p class="card__desc">Hand the engine the Cursor screenshot. The pipeline reads it as dark canvas, syntax-accent dominant, and returns Monokai + Dark Mode Luxe as the closest match. Pure CV, no multimodal LLM.</p>
+            <div class="card__chips" aria-label="Engine picks">
+              <span class="chip">style: dark-mode-luxe</span>
+              <span class="chip">palette: dark-monokai</span>
+              <span class="chip">command: /ux-image-to-code</span>
+            </div>
+            <a href="/commands.html#ux-image-to-code" class="card__link">
+              Open the command
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" role="img" aria-label="Arrow"><title>Arrow</title><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </li>
+
+        <!-- 10. Mini case study: docs / commands page -->
+        <li class="card">
+          <div class="card__media" aria-hidden="true">
+            <div class="card__media-fallback">brief &middot; docs &middot; reference</div>
+          </div>
+          <div class="card__body">
+            <span class="card__eyebrow">Case study &middot; Docs reference</span>
+            <h3 class="card__title">Commands index, dense reference UI</h3>
+            <p class="card__desc">Brief: dense, technical, browseable. The recommender chose Stripe Documentation as the style anchor &mdash; the rare case where the palette and type pair stay constant across surfaces but the layout density flexes.</p>
+            <div class="card__chips" aria-label="Engine picks">
+              <span class="chip">style: stripe-documentation</span>
+              <span class="chip">palette: stripe-indigo</span>
+              <span class="chip">type: bricolage-inter-jbm</span>
+            </div>
+            <a href="/commands.html" class="card__link">
+              See the docs page
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" role="img" aria-label="Arrow"><title>Arrow</title><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </li>
+
+        <!-- 11. Mini case study: B2B saas marketing -->
+        <li class="card">
+          <div class="card__media" aria-hidden="true">
+            <div class="card__media-fallback">brief &middot; b2b saas &middot; marketing</div>
+          </div>
+          <div class="card__body">
+            <span class="card__eyebrow">Case study &middot; B2B SaaS marketing</span>
+            <h3 class="card__title">Calm, confident, founder-led</h3>
+            <p class="card__desc">Brief: confident, founder-voice, calm. The engine returned a near-Linear pick &mdash; graphite palette, geometric sans, restrained motion. The rationale lines explicitly cite the founder-led tone over conventional B2B blue.</p>
+            <div class="card__chips" aria-label="Engine picks">
+              <span class="chip">style: linear-precise-dark</span>
+              <span class="chip">palette: linear-graphite</span>
+              <span class="chip">type: geist-inter-jbm</span>
+            </div>
+            <a href="/blog/best-claude-code-design-skills-2026.html" class="card__link">
+              Read the writeup
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" role="img" aria-label="Arrow"><title>Arrow</title><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </li>
+
+        <!-- 12. Mini case study: design system docs -->
+        <li class="card">
+          <div class="card__media" aria-hidden="true">
+            <div class="card__media-fallback">brief &middot; design system &middot; reference</div>
+          </div>
+          <div class="card__body">
+            <span class="card__eyebrow">Case study &middot; Design system docs</span>
+            <h3 class="card__title">Internal DS reference, monochrome</h3>
+            <p class="card__desc">Brief: precise, monochrome, RTL-friendly. The engine kept Cormorant out, surfaced an Inter+IBM Plex stack, and recommended a hairline-only border vocabulary the linter then enforces on every change.</p>
+            <div class="card__chips" aria-label="Engine picks">
+              <span class="chip">style: monochrome-precise</span>
+              <span class="chip">palette: monochrome-cool</span>
+              <span class="chip">type: ibm-plex-inter</span>
+            </div>
+            <a href="/blog/python-design-system-generator.html" class="card__link">
+              Read the writeup
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" role="img" aria-label="Arrow"><title>Arrow</title><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ SUBMIT CTA ============ -->
+  <section class="submit" aria-label="Submit your example">
+    <div class="container">
+      <div class="submit__inner">
+        <span class="eyebrow">02 &middot; Your turn</span>
+        <h2>Built something with the engine?</h2>
+        <p>
+          Open a GitHub issue using the showcase template. Include the recommendation JSON, a screenshot or two, and what you kept versus overrode. The gallery is hand-picked &mdash; the entries with a story attached are the ones that land.
+        </p>
+        <a href="https://github.com/Laith0003/ux-skill/issues/new?template=showcase.md&labels=showcase&title=%5Bshowcase%5D+" class="submit__cta" rel="noopener">
+          Submit your example on GitHub
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" role="img" aria-label="External link"><title>External link</title><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+        </a>
+        <span class="submit__second">
+          Or peek at the template &mdash; <a href="https://github.com/Laith0003/ux-skill/blob/main/.github/ISSUE_TEMPLATE/showcase.md" rel="noopener">/.github/ISSUE_TEMPLATE/showcase.md</a>
+        </span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer" role="contentinfo">
+  <div class="container footer__inner">
+    <div class="footer__line">
+      <a href="/" class="wordmark" aria-label="uxskill home">uxskill<span class="wordmark__dot" aria-hidden="true"></span></a>
+      <nav class="footer__nav" aria-label="Footer">
+        <a class="footer__link" href="/">Home</a>
+        <a class="footer__link" href="/compare.html">Compare</a>
+        <a class="footer__link" href="/commands.html">Commands</a>
+        <a class="footer__link" href="/mcp.html">MCP</a>
+        <a class="footer__link" href="/faq.html">FAQ</a>
+        <a class="footer__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+    <div class="footer__line">
+      <span>MIT licensed &middot; No telemetry &middot; No account</span>
+      <span>&copy; 2026 Laith Aljunaidy</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll state
+  (function () {
+    var nav = document.getElementById('nav');
+    if (!nav) return;
+    var threshold = 16;
+    function update() {
+      if (window.scrollY > threshold) {
+        nav.classList.add('is-scrolled');
+      } else {
+        nav.classList.remove('is-scrolled');
+      }
+    }
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+  })();
+</script>
+
+</body>
+</html>

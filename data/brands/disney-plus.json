@@ -1,0 +1,53 @@
+{
+  "id": "disney-plus",
+  "name": "Disney+",
+  "category": "Streaming / Media",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Disney+ — the family streaming service whose visual language is the deep-galaxy royal blue (#01153e) that distinguishes it from Netflix's cinema-black and HBO Max's neon-purple. Canvas is a deep navy with subtle starfield gradient. The signature is the Disney+ wordmark — Disney's iconic 'Walt Disney' Waltograph script joined to a sans-serif '+' lockup. Type runs a precise grotesk (Inter / Source Sans / proprietary Disney face) for the chrome, but every poster-art tile uses the original title-treatment fonts from Star Wars, Marvel, Pixar, etc. — the cross-franchise typography zoo IS the brand's promise. The hero is a brand-tier row organizing content by franchise — Disney / Pixar / Marvel / Star Wars / National Geographic — never by genre.",
+  "design_language": {
+    "type": {
+      "display": "Inter",
+      "body": "Inter",
+      "mono": null
+    },
+    "color_primary": "#01153e",
+    "color_canvas": "#01153e",
+    "color_canvas_deep": "#0a1d3f",
+    "color_ink": "#ffffff",
+    "color_accent": "#0072d2",
+    "radius": [4, 8, 12, 16],
+    "spacing": "8-based",
+    "motion_signature": "Magical-realm immersion. Cold-start animation: stars twinkle across deep blue, then the Disney+ wordmark resolves with the iconic Walt Disney signature flourish. Poster tiles on row-hover lift 1.08x with a 250ms cubic-bezier. Franchise-tile transitions to franchise-page use a magical-portal effect — a brief zoom-in to the franchise color world (red for Marvel, blue for Disney, yellow for Pixar)."
+  },
+  "trademark_signals": [
+    "Deep galaxy-blue canvas (#01153e) — the brand's most-recognized differentiator from Netflix-black or HBO-purple",
+    "Walt Disney + '+' wordmark lockup — Waltograph script joined to a precise sans '+' — never broken apart",
+    "Five-franchise brand-tier row at top of every page — Disney / Pixar / Marvel / Star Wars / National Geographic — each tile uses the franchise's own brand colors (Marvel red, Pixar yellow, etc.) — the only place where multiple chromatic accents are permitted",
+    "Original title-treatment typography on poster art — every Star Wars title uses the Aurebesh-adjacent face, every Marvel title uses the comic-book sans, every Pixar title uses Pixar's title-card style — cross-franchise type zoo as feature",
+    "Family-safe content cropping — every poster art frames protagonists with clean, vibrant edges — no dark/edgy/violent compositions, refusing the 'prestige TV' visual code"
+  ],
+  "components_observed": [
+    "galaxy-blue-canvas",
+    "wordmark-disney-plus-lockup",
+    "franchise-brand-tier-row",
+    "poster-tile-with-original-typography",
+    "magical-portal-transition",
+    "billboard-feature-hero",
+    "watchlist-add-button-blue",
+    "footer-deep-navy-multi-language"
+  ],
+  "exemplar_pages": [
+    "disneyplus.com",
+    "disneyplus.com/welcome",
+    "disneyplus.com/brand/disney",
+    "disneyplus.com/brand/star-wars"
+  ],
+  "ai_slop_avoided": [
+    "Don't paint the canvas pure black. The galaxy-blue is the brand's defining differentiator — black reads as Netflix, purple reads as HBO Max",
+    "Don't replace the Walt Disney script in the wordmark with a sans-serif. The handwritten Disney signature IS the brand's century of equity",
+    "Don't drop the five-franchise brand-tier row. The cross-franchise organization is the brand's content promise — without it, Disney+ reads as 'generic family streaming'",
+    "Don't crop poster art with prestige-TV dark/edgy compositions. The brand is family-safe vibrant — moody compositions read as off-brand",
+    "Don't standardize poster typography. The cross-franchise type zoo (Star Wars / Marvel / Pixar fonts) is the brand's variety statement"
+  ],
+  "source_md": "references/brands/disney-plus-DESIGN.md"
+}

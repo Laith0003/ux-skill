@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 編程的設計規則——為什麼每個 AI 寫出來的網站都長得一樣 — ux-skill</title>
+  <meta name="description" content="Cursor、Claude Code、Cline、Windsurf——每個 AI 編程工具都掉進同一組預設。90px Inter、紫到藍漸層、三張一樣的卡片。ux-skill 用 120 條確定性正則規則在 CI 中擋住預設值,不呼叫 LLM、不耗 token。">
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/zh-TW/ai-coding-design-zh-tw.html">
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="index,follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/zh-TW/ai-coding-design-zh-tw.html">
+  <meta property="og:title" content="AI 編程的設計規則——為什麼每個 AI 寫出來的網站都長得一樣">
+  <meta property="og:description" content="120 條確定性規則、998 條目錄、22 個指令、17 個 IDE。Claude Code 與 Cursor 都能用。">
+  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/zh-tw-ai-coding-design.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ux-skill — zh-tw-ai-coding-design">
+  <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/zh-tw-ai-coding-design.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI 編程的設計規則——ux-skill 為繁體中文工程師">
+  <meta name="twitter:description" content="120 條規則、998 條目錄、22 個指令、17 個 IDE。MIT 授權,無遙測。">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "AI 編程的設計規則——為什麼每個 AI 寫出來的網站都長得一樣",
+    "description": "Cursor、Claude Code、Cline、Windsurf——每個 AI 編程工具都掉進同一組預設。ux-skill 用 120 條確定性正則規則在 CI 中擋住預設值。",
+    "datePublished": "2026-05-28",
+    "dateModified": "2026-05-28",
+    "author": {
+      "@type": "Organization",
+      "name": "ux-skill",
+      "url": "https://uxskill.laithjunaidy.com/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ux-skill",
+      "url": "https://uxskill.laithjunaidy.com/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://uxskill.laithjunaidy.com/blog/zh-TW/ai-coding-design-zh-tw.html"
+    },
+    "image": "https://uxskill.laithjunaidy.com/og.png",
+    "inLanguage": "zh-TW"
+  }
+  </script>
+
+  <style>
+    :root {
+      --canvas: #07080a;
+      --surface-1: #0d0f12;
+      --surface-2: #14181d;
+      --surface-3: #1c2128;
+      --ink: #f6f7f9;
+      --body: #c7ccd3;
+      --muted: #7a7972;
+      --faint: #5a5f66;
+      --hairline: rgba(255,255,255,0.08);
+      --hairline-2: rgba(255,255,255,0.14);
+      --scene-accent: #f472b6;
+      --scene-soft: rgba(244,114,182,0.18);
+      --win-bg: rgba(16,185,129,0.10);
+      --win-fg: #34d399;
+      --lose-bg: rgba(244,63,94,0.10);
+      --lose-fg: #fb7185;
+      --neutral-bg: rgba(255,255,255,0.05);
+      --neutral-fg: #c7ccd3;
+      --display: 'Bricolage Grotesque', 'Noto Sans TC', system-ui, sans-serif;
+      --body-face: 'Noto Sans TC', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+      --serif-italic: 'Instrument Serif', Georgia, serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; background: var(--canvas); }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      font-family: var(--body-face);
+      background: var(--canvas);
+      color: var(--body);
+      font-size: 16px;
+      line-height: 1.85;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+    .wrap-wide { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    header.top {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8px 24px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .wordmark {
+      display: inline-flex; align-items: baseline; gap: 4px;
+      text-decoration: none; color: var(--ink);
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-weight: 620;
+      font-size: 26px; letter-spacing: -0.04em; line-height: 1;
+    }
+    .wordmark .dot {
+      display: inline-block; width: 7px; height: 7px;
+      border-radius: 2px;
+      background: var(--scene-accent);
+      transform: translateY(-3px);
+    }
+    nav.crumbs {
+      display: flex; gap: 28px;
+      font-family: var(--mono);
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+    nav.crumbs a { color: var(--muted); text-decoration: none; transition: color 0.16s ease; }
+    nav.crumbs a:hover { color: var(--ink); }
+    nav.crumbs a.current { color: var(--ink); }
+    nav.crumbs a:focus-visible {
+      outline: 2px solid var(--scene-accent);
+      outline-offset: 4px; border-radius: 2px;
+    }
+
+    article { padding-top: 56px; }
+    .eyebrow {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--scene-accent);
+      margin-bottom: 22px;
+    }
+    h1 {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: clamp(30px, 4.6vw, 50px);
+      line-height: 1.32; letter-spacing: -0.005em;
+      color: var(--ink); margin-bottom: 28px;
+    }
+    h1 .accent { color: var(--scene-accent); }
+    .lede {
+      font-size: 18px; line-height: 1.85; color: var(--body);
+      margin-bottom: 16px;
+    }
+    .lede strong { color: var(--ink); font-weight: 700; }
+    .byline {
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 56px; padding-bottom: 24px;
+      border-bottom: 1px solid var(--hairline);
+    }
+    h2 {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: clamp(22px, 2.8vw, 28px);
+      line-height: 1.45; letter-spacing: 0;
+      color: var(--ink); margin: 64px 0 18px;
+    }
+    h2 .accent { color: var(--scene-accent); }
+    h3 {
+      font-family: var(--body-face);
+      font-weight: 700; font-size: 18px;
+      color: var(--ink);
+      margin: 36px 0 14px;
+    }
+    h4 {
+      font-family: var(--body-face);
+      font-weight: 700; font-size: 16px;
+      color: var(--ink);
+    }
+    p { margin-bottom: 18px; color: var(--body); }
+    p strong { color: var(--ink); font-weight: 700; }
+    em { color: var(--ink); }
+    ul, ol { margin: 0 0 22px 22px; }
+    ul li, ol li { margin-bottom: 10px; color: var(--body); }
+    ul li::marker { color: var(--scene-accent); }
+    ol li::marker { color: var(--scene-accent); font-family: var(--mono); font-size: 0.9em; }
+
+    pre.code, pre.code-block {
+      background: var(--surface-2);
+      color: var(--ink);
+      border: 1px solid var(--hairline);
+      padding: 22px 24px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 13.5px;
+      line-height: 1.65;
+      margin: 24px 0 28px;
+    }
+    pre.code .c, pre.code-block .c { color: rgba(250,249,245,0.45); font-style: italic; }
+    pre.code .k, pre.code-block .k { color: #e8b894; }
+    pre.code .s, pre.code-block .s { color: #a3e0b8; }
+    pre.code .v, pre.code-block .v { color: var(--ink); }
+    pre.code .n, pre.code-block .n { color: var(--scene-accent); }
+    code {
+      font-family: var(--mono);
+      font-size: 13px;
+      background: var(--surface-2);
+      border: 1px solid var(--hairline);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--ink);
+    }
+    a.link {
+      color: var(--scene-accent);
+      text-decoration: underline;
+      text-decoration-color: rgba(244,114,182,0.45);
+      text-underline-offset: 3px;
+      transition: color 0.16s ease, text-decoration-color 0.16s ease;
+    }
+    a.link:hover { color: var(--ink); text-decoration-color: var(--ink); }
+    a.link:focus-visible {
+      outline: 2px solid var(--scene-accent);
+      outline-offset: 2px; border-radius: 2px;
+    }
+
+    .honesty {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-left: 3px solid var(--scene-accent);
+      padding: 24px 28px;
+      border-radius: 0 14px 14px 0;
+      margin: 32px 0;
+    }
+    .honesty .label {
+      font-family: var(--mono);
+      font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--scene-accent); margin-bottom: 8px;
+    }
+    .honesty h4 {
+      font-family: var(--body-face);
+      font-weight: 700; font-size: 16px; color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .honesty p { margin-bottom: 8px; }
+    .honesty p:last-child { margin-bottom: 0; }
+
+    .cta {
+      margin-top: 96px;
+      padding: 56px 48px;
+      background: var(--surface-1);
+      color: var(--ink);
+      border: 1px solid var(--hairline-2);
+      border-radius: 22px;
+    }
+    @media (max-width: 720px) { .cta { padding: 40px 28px; } }
+    .cta .eyebrow { color: var(--scene-accent); }
+    .cta h2 { color: var(--ink); margin-top: 0; }
+    .cta p { color: var(--body); margin-bottom: 28px; }
+    .install-block {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-family: var(--mono);
+      font-size: 14px; line-height: 1.75;
+      color: var(--ink);
+    }
+    .install-block .prompt { color: var(--scene-accent); }
+    .install-block .arg { color: var(--muted); }
+    .install-block .row + .row { margin-top: 6px; }
+
+    footer.site {
+      max-width: 1100px;
+      margin: 96px auto 0;
+      padding: 32px 24px 0;
+      border-top: 1px solid var(--hairline);
+      display: flex; justify-content: space-between; align-items: baseline;
+      flex-wrap: wrap; gap: 16px;
+      font-size: 13px; color: var(--muted);
+    }
+    footer.site a { color: var(--muted); text-decoration: none; transition: color 0.16s ease; }
+    footer.site a:hover { color: var(--ink); }
+    footer.site .links { display: flex; gap: 24px; flex-wrap: wrap; }
+
+    blockquote {
+      border-left: 3px solid var(--scene-accent);
+      padding: 6px 0 6px 22px;
+      margin: 24px 0;
+      font-family: var(--body-face);
+      font-weight: 500;
+      font-size: 19px; line-height: 1.75;
+      color: var(--ink);
+    }
+
+    @media (max-width: 720px) {
+      header.top { flex-direction: column; align-items: flex-start; gap: 16px; }
+      nav.crumbs { gap: 18px; flex-wrap: wrap; }
+      .wrap { padding: 40px 20px 72px; }
+      h1 { font-size: clamp(26px, 6vw, 38px); }
+    }
+    @media (max-width: 480px) {
+      nav.crumbs { font-size: 10px; gap: 14px; }
+      .lede { font-size: 16px; }
+    }
+
+    .table-wrap { max-width: 1000px; margin: 32px auto 28px; overflow-x: auto; }
+    .compare-table {
+      width: 100%; border-collapse: collapse;
+      font-size: 14px;
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-radius: 14px; overflow: hidden;
+    }
+    .compare-table th, .compare-table td {
+      padding: 14px 18px; text-align: left;
+      border-bottom: 1px solid var(--hairline);
+      vertical-align: top;
+      color: var(--body);
+    }
+    .compare-table th {
+      background: var(--surface-2);
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink); font-weight: 600;
+    }
+    .compare-table td.num {
+      font-variant-numeric: tabular-nums;
+      font-weight: 500; color: var(--ink);
+      font-family: var(--mono);
+    }
+    .compare-table tr:last-child td { border-bottom: 0; }
+    .compare-table strong { color: var(--ink); }
+  </style>
+  <!-- noscroll-fix -->
+  <style>
+    html, body { overflow-x: clip; max-width: 100%; }
+    section, header, footer, main, article { max-width: 100vw; }
+    img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
+    table { max-width: 100%; }
+  </style>
+  <!-- force-dark-theme: applied -->
+</head>
+<body>
+  <header class="top">
+    <a href="/" class="wordmark">ux<span class="dot"></span></a>
+    <nav class="crumbs">
+      <a href="/">Home</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/blog/" class="current">Blog</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="wrap">
+    <article>
+      <span class="eyebrow">Blog · 繁體中文 · 2026-05-28</span>
+      <h1>AI 編程的<span class="accent">設計規則</span>——為什麼每個 AI 寫出來的網站都長得一樣。</h1>
+      <p class="lede">
+        <strong>Cursor、Claude Code、Cline、Windsurf——每個 AI 編程工具都掉進同一組預設。</strong>90px Inter、紫到藍漸層、三張一模一樣的卡片。換 model 也一樣,輸出幾乎沒變。ux-skill 是一個 MIT 授權的 Python 開源引擎,用 120 條確定性正則規則在 CI 中擋下預設值。不呼叫 LLM,不耗 token,沒有遙測。
+      </p>
+      <p class="byline">ux-skill 團隊 · 10 分鐘閱讀 · MIT 授權</p>
+
+      <h2>為什麼每個 AI 都寫出一樣的網站</h2>
+      <p>
+        這不是 model 能力的問題。Claude Sonnet、GPT-4、DeepSeek、Gemini——只要 brief 寫得清楚,任何一個 model 都能寫出很好的 UI。問題在於沒人給 brief。「做一個 SaaS landing page」這種句子,model 就回到訓練資料的平均值——那個平均值看起來就像「2023 年的 startup landing page」。
+      </p>
+      <p>
+        三股力量讓預設輸出收斂。第一,訓練語料偏向流行來源——Vercel、Linear、Stripe、Tailwind UI、shadcn——這些都共享同一套美學。第二,使用者的 prompt 太短——「build a hero section」沒給出任何具體資訊。第三,沒有 gating——當 model 第一百次吐出同一個漸層時,沒有任何機制能擋下。
+      </p>
+      <p>
+        三股之中,前兩股難以修正——你動不了 model 的訓練語料,而每次寫 500 字 prompt 的紀律也不可能在整個團隊裡推行。第三股——gating——是機器層級的問題。這正是 ux-skill 解決的部分。
+      </p>
+
+      <h2>每個工具都出貨的八個預設</h2>
+      <p>
+        我們把同一份 brief——「fintech 編輯型產品的 hero,深色佈景,沉穩語氣」——丟給八個不同的 AI 編程工具(Cursor、Claude Code、Windsurf、GitHub Copilot、Cline、Continue、Codex、Aider)。八個之中,七個產出的程式碼至少命中下面八項中的五項:
+      </p>
+      <ol>
+        <li><strong>把 Inter 當顯示字體</strong>——Inter 是 body 字體,專為小字最佳化;放大到 90px 當標題,讀起來就是「startup-landing」指紋。</li>
+        <li><strong>紫到藍漸層</strong>——同樣的兩個 hex 顏色,SaaS-startup AI 輸出幾乎人人都用。</li>
+        <li><strong>橫排三張一樣的卡片</strong>——features 區塊,gap-6,每張都是圖示-標題-段落。</li>
+        <li><strong>通用 CTA 文案</strong>——「Get started」、「Learn more」、「Click here」。<code>generic-cta-text</code> 規則會抓到。</li>
+        <li><strong>所有元素都套 fade-in-up</strong>——hero、features、footer 用同一條 motion;角色完全不區分。</li>
+        <li><strong>空洞的行銷動詞</strong>——標題裡那種填充用的 marketing verb。<code>filler-marketing-verbs</code> 規則會抓到。</li>
+        <li><strong>留底名稱</strong>——通用的 dummy 人名與 stub 段落,從 staging 漏到 production。</li>
+        <li><strong>所有東西都置中</strong>——不管內容是什麼都是對稱排版;沒有不對稱或 bento 構圖。</li>
+      </ol>
+      <p>
+        完整清單在 <a href="/blog/ai-design-fingerprints-list.html" class="link">35 條 AI 設計指紋一文</a>——每條都附偵測正則、「為什麼」與「修法」。重點在於:選哪個 IDE 對輸出影響很小。改變設計文法才會真正改變輸出。
+      </p>
+
+      <h2>ux-skill 的回應——確定性的那一層</h2>
+      <p>
+        ux-skill 是 MIT 授權的 Python 套件,附 CLI 與 MCP server。同一份引擎、同一份 998 條目錄、同一個 120 條規則的 linter,三種安裝方式覆蓋 17 個 IDE:
+      </p>
+      <ol>
+        <li><strong>Claude Code 外掛</strong>——<code>/plugin marketplace add Laith0003/ux-skill; /plugin install ux@ux-skill</code></li>
+        <li><strong>Python 套件</strong>——<code>pip install uxskill</code>,任何能 shell-out 的 IDE 都能用:Cursor、Windsurf、Continue、Cline、JetBrains、Aider、Zed、Codex</li>
+        <li><strong>MCP server</strong>——<code>npx uxskill@alpha mcp</code>,可接到任何 MCP client</li>
+      </ol>
+      <p>
+        引擎有三個主要動作。一,<code>uxskill discover</code> 跑 10 欄位的 discovery protocol,擷取有結構的 brief(不允許隨機發揮——discovery protocol 是硬性需求)。二,<code>uxskill recommend</code> 在 998 條目錄上跑五路平行搜尋,回傳一份解算完的設計系統(色票、字體配對、motion、間距網格、元件清單)。三,<code>uxskill lint</code> 用 120 條正則跑程式碼。乾淨就 exit 0,有 finding 達 threshold 就 exit 1。
+      </p>
+
+      <h2>一條真的規則——Inter 當顯示字體</h2>
+      <p>
+        這是 120 條中的第一條,直接從 <code>data/anti-patterns.json</code> 拿出來。severity 是 <code>high</code>:
+      </p>
+      <pre class="code"><span class="c">// 120 條規則之 1</span>
+{
+  <span class="k">"id"</span>: <span class="s">"inter-as-display"</span>,
+  <span class="k">"severity"</span>: <span class="s">"high"</span>,
+  <span class="k">"category"</span>: <span class="s">"Typography"</span>,
+  <span class="k">"detection"</span>: {
+    <span class="k">"type"</span>: <span class="s">"regex"</span>,
+    <span class="k">"pattern"</span>: <span class="s">"font-family:\s*['\"]?Inter['\"]?[^;}]*[;}][^{]*(?:font-size:\s*([4-9]\d|\d{3,})px|\btext-(5xl|6xl|7xl|8xl|9xl)\b)"</span>,
+    <span class="k">"scope"</span>: [<span class="s">"css"</span>, <span class="s">"scss"</span>, <span class="s">"tsx"</span>, <span class="s">"jsx"</span>, <span class="s">"vue"</span>, <span class="s">"html"</span>]
+  },
+  <span class="k">"why"</span>: <span class="s">"Inter 是專為小字最佳化的 body 字體;
+          當顯示字體用會讀出 startup-landing 指紋。"</span>,
+  <span class="k">"fix"</span>: <span class="s">"把 Inter (body) 配上一個有特色的 display face:
+          Geist、Satoshi、Cabinet Grotesk、General Sans、Outfit。"</span>
+}</pre>
+      <p>
+        正則找的是 <code>font-family: Inter</code>,且同一個區塊裡有 40px 以上的 font-size 或 Tailwind <code>text-5xl</code>(或更大)的 class。<code>scope</code> 限制規則只跑在相關副檔名上。同一條規則在 CSS、SCSS、TSX、JSX、Vue、Astro、Blade 都通用。
+      </p>
+
+      <h2>在 CI 中跑——GitHub Actions</h2>
+      <p>
+        一個 workflow 檔案,每個 PR push 都會被 linter 擋住。整個 repo 平均跑 380ms(冷)、90ms(熱)。不呼叫 LLM、不耗 token。
+      </p>
+      <pre class="code"><span class="c"># .github/workflows/ux-lint.yml</span>
+<span class="k">name</span>: <span class="s">ux-lint</span>
+
+<span class="k">on</span>:
+  <span class="k">pull_request</span>:
+    <span class="k">paths</span>:
+      - <span class="s">'**/*.{tsx,jsx,vue,css,scss,html,astro,blade}'</span>
+
+<span class="k">jobs</span>:
+  <span class="k">lint</span>:
+    <span class="k">runs-on</span>: <span class="s">ubuntu-latest</span>
+    <span class="k">steps</span>:
+      - <span class="k">uses</span>: <span class="s">actions/checkout@v4</span>
+      - <span class="k">uses</span>: <span class="s">actions/setup-python@v5</span>
+        <span class="k">with</span>: { <span class="k">python-version</span>: <span class="s">'3.11'</span> }
+      - <span class="k">run</span>: <span class="s">pip install uxskill</span>
+      - <span class="k">run</span>: <span class="s">uxskill lint --threshold high</span></pre>
+
+      <h2>998 條目錄裡有什麼</h2>
+      <div class="table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr><th>類別</th><th>條數</th><th>內容</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>產業</td><td class="num">161</td><td>從 logistics 到 legaltech,每個產業各有預設語氣 profile 與 pattern 組合。</td></tr>
+            <tr><td>風格</td><td class="num">50</td><td>編輯電影、瑞士簡約、暖系野獸派、mid-mod、neo-pop 等。</td></tr>
+            <tr><td>色票</td><td class="num">161</td><td>色彩系統——hue、saturation、contrast、dark-mode 處理。</td></tr>
+            <tr><td>字體配對</td><td class="num">57</td><td>display + body 組合,針對螢幕清晰度驗證過。</td></tr>
+            <tr><td>Motion preset</td><td class="num">57</td><td>Framer Motion、GSAP、CSS 三套,每套附 <code>prefers-reduced-motion</code> 分支。</td></tr>
+            <tr><td>元件</td><td class="num">182</td><td>從卡片到對話框到儀表板,附構圖規則。</td></tr>
+            <tr><td>品牌規範</td><td class="num">110</td><td>Stripe、Airbnb、Vercel 等真實品牌的文法。</td></tr>
+            <tr><td>Anti-pattern</td><td class="num">120</td><td>linter 的 120 條規則。同一份 JSON,兩個 consumer。</td></tr>
+            <tr><td>其他分類</td><td class="num">120</td><td>密度 profile、voice register、RTL delta。</td></tr>
+            <tr><td><strong>總計</strong></td><td class="num"><strong>998</strong></td><td>一棵 JSON。recommender、linter、MCP server 共讀。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <blockquote>
+        在 AI 寫的程式碼裡,linter 是唯一確定性的那一層。其他每個檢查都是機率。
+      </blockquote>
+
+      <h2>為什麼用正則,不用 LLM-judge</h2>
+      <p>
+        常見的替代方案是「用一個 LLM 當 judge」——叫 Claude 或 GPT 評分輸出,信它的分數,分低就重試。這個做法在大量使用時會出現三個複合問題。
+      </p>
+      <p>
+        一,不確定性。同一段輸入,judge model 不同次跑會給不同分數。CI fail 變 flake,貢獻者學會重試而不是修正,訊號崩潰。
+      </p>
+      <p>
+        二,昂貴。每次 PR push 都耗 token,每次 retry 都讓帳單翻倍。每週 200 個 PR 的 repo 在 diff 上跑 LLM judge,是花錢買 compute 去確認一條正則 12 毫秒內就能抓到的東西。
+      </p>
+      <p>
+        三,藏掉規則。judge 失敗時,作者收到的是散文。正則失敗時,作者收到的是一個可以對照自己程式碼學習的 pattern。前者催生申訴文化,後者催生熟練文化。
+      </p>
+
+      <h2>誠實的星數比較</h2>
+      <p>
+        bolt-on 類別中三個認真的開源專案。GitHub stars 為 2026-05-28 即時數據:
+      </p>
+      <div class="table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr><th>專案</th><th>Stars</th><th>recommender</th><th>linter</th><th>MCP</th><th>目錄</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>ui-ux-pro-max</strong></td><td class="num">84k</td><td>有</td><td>無</td><td>無</td><td class="num">~600</td></tr>
+            <tr><td><strong>taste-skill</strong></td><td class="num">25k</td><td>有</td><td>無</td><td>無</td><td class="num">~480</td></tr>
+            <tr><td><strong>ux-skill</strong></td><td class="num">14</td><td>有</td><td>120 條</td><td>14 個 tool</td><td class="num">998</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        ux-skill 在 stars 上最小(14),在功能面最大。998 條目錄、120 條正則規則在 CI 中以 non-zero exit 觸發、14-tool MCP server 跨 17 個 IDE、22 個指令、110 條品牌規範作為參考文法、75 個測試。ui-ux-pro-max 與 taste-skill 都只出貨 recommender。ux-skill 同時出貨 recommender + linter + MCP。這是不對稱的下棋。
+      </p>
+
+      <div class="honesty">
+        <div class="label">誠實的範圍</div>
+        <h4>正則抓的是結構性指紋,不是品味。</h4>
+        <p>linter 永遠不會講「這個區塊節奏不對」或「這段文案讀起來太冷」。那需要人類或一個 model。但正則確實會抓到所有有 literal token、pattern 或形狀的指紋——AI 預設大多都是這類,因為 model 一再回到同一個 artifact。</p>
+        <p>我們刻意不在 CI 跑 LLM-judge。如果你的標準是「看起來像 designer 做的」——那是 code review,不是 lint。ux-skill 有出貨 <code>/ux-critique</code> 做品味檢查,但那是在 IDE 中跑,不是 CI。</p>
+      </div>
+
+      <h2>下一步讀什麼</h2>
+      <p>
+        想看完整的 120 條規則 manifest 加上一個真的 Next.js hero 的 before/after,讀 <a href="/blog/regex-linter-for-ai-coding.html" class="link">regex linter 一文</a>。想看完整 taxonomy 與每條規則的偵測正則,讀 <a href="/blog/ai-design-fingerprints-list.html" class="link">35 條 AI 設計指紋一文</a>。想看 2026 年 AI 編程工具的設計品質完整排名,讀 <a href="/blog/anti-ai-slop-claude-skills.html" class="link">anti-AI-slop ranking 一文</a>。
+      </p>
+
+      <h2>相關閱讀</h2>
+      <ul>
+        <li><a href="/blog/ai-design-fingerprints-list.html" class="link">35 條 AI 設計指紋——完整 taxonomy</a></li>
+        <li><a href="/blog/vibe-coding-design-system.html" class="link">Vibe coding + ux-skill</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter——120 條規則在 CI</a></li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Anti-AI-slop tools 誠實排名</a></li>
+      </ul>
+    </article>
+
+    <section class="cta">
+      <span class="eyebrow">安裝</span>
+      <h2>一個套件。<span class="accent">三種安裝路徑。</span>120 條規則。</h2>
+      <p>Recommender、linter、MCP server、22 個指令、110 條品牌規範——全都打包在一起。Linter 在 sub-second 內跑完,其餘隨選使用。MIT 授權、無遙測、無需帳號。</p>
+
+      <div class="install-block">
+        <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
+        <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">— 或 —</div>
+        <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">— 或 —</div>
+        <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
+      </div>
+    </section>
+  </div>
+  <aside class="related-reads" aria-label="Related reads">
+    <div class="related-reads-inner">
+      <h2 class="related-reads-h">Related reads</h2>
+      <ul>
+        <li><a href="/blog/ai-design-fingerprints-list.html">35 AI design fingerprints</a></li>
+        <li><a href="/blog/vibe-coding-design-system.html">Vibe coding + ux-skill</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html">Regex linter for AI coding</a></li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html">Anti-AI-slop tools for Claude Code</a></li>
+      </ul>
+    </div>
+  </aside>
+  <style>
+    .related-reads {
+      max-width: 880px; margin: 80px auto 0 auto; padding: 32px 24px 8px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .related-reads-h {
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: #7a7972; margin-bottom: 16px;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+    }
+    .related-reads ul {
+      list-style: none; padding: 0; margin: 0;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px;
+    }
+    .related-reads li { font-size: 15px; line-height: 1.5; color: #c7ccd3; }
+    .related-reads a {
+      color: #f6f7f9; text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.18);
+      padding-bottom: 2px; transition: border-color .15s ease, color .15s ease;
+    }
+    .related-reads a:hover { border-color: currentColor; color: #ffffff; }
+    @media (max-width: 640px) {
+      .related-reads ul { grid-template-columns: 1fr; }
+    }
+  </style>
+
+
+  <footer class="site">
+    <span>&copy; 2026 Laith Aljunaidy. MIT licensed. No telemetry.</span>
+    <div class="links">
+      <a href="/">Home</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/blog/">Blog</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/roadmap.html">Roadmap</a>
+      <a href="/mcp.html">MCP</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+    </div>
+  </footer>
+</body>
+</html>

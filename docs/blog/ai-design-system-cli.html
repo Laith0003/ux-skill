@@ -525,7 +525,7 @@ Recommendation saved to .ux/last-recommendation.json</pre>
         The output is also a JSON file: <code>.ux/last-recommendation.json</code>. Every score has a sub-score breakdown explaining which manifest entries fed it. The recommender is fully <a href="/blog/python-design-system-generator.html" class="link">documented in the engine post</a>.
       </p>
       <p>
-        On a 2023 MacBook Air, the recommender pass against all 998 entries averages 140 to 220 milliseconds. There is no LLM call in the recommender lane &mdash; the scoring is JSON-on-disk and a few hundred dictionary lookups.
+        On a 2023 MacBook Air, the recommender pass against all 1,161 entries averages 140 to 220 milliseconds. There is no LLM call in the recommender lane &mdash; the scoring is JSON-on-disk and a few hundred dictionary lookups.
       </p>
 
       <h2>Step 3 &mdash; <code>ux persist save</code> (writes MASTER.md)</h2>
@@ -569,7 +569,7 @@ Recommendation saved to .ux/last-recommendation.json</pre>
 
       <ol class="step-list">
         <li><strong>Type the brief</strong> &mdash; about 90 seconds. The bottleneck. Concrete answers cost cognition; you cannot offload this step.</li>
-        <li><strong>Run the recommender</strong> &mdash; 140 to 220 milliseconds. Five parallel searches over 998 entries, merged, scored, returned.</li>
+        <li><strong>Run the recommender</strong> &mdash; 140 to 220 milliseconds. Five parallel searches over 1,161 entries, merged, scored, returned.</li>
         <li><strong>Run persist save</strong> &mdash; under 80 milliseconds. Three files written: MASTER.md, tokens.css, manifest.json.</li>
         <li><strong>Total CLI compute</strong> &mdash; under 300 milliseconds. The brief is 100% of the human time; the engine is rounding error.</li>
       </ol>

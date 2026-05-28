@@ -1,0 +1,53 @@
+{
+  "id": "netflix",
+  "name": "Netflix",
+  "category": "Streaming / Media",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Netflix — the streaming entertainment brand whose visual language is the world's most-copied dark-canvas content grid. Canvas is true cinema-black (#141414) — the deepest dark in the streaming category. The signature is Netflix red (#e50914) — a pure red used only on the wordmark, on the play-button overlay, and on the primary 'Sign In' / 'Sign Up' CTA. Type runs the custom Netflix Sans (a precise grotesk with subtle aperture tweaks) at modest scale — the brand voice is 'content is the hero, chrome stays invisible'. The signature visual is the horizontal-scroll row of poster-art tiles: each row is a curated category ('Continue Watching', 'Top 10', 'Because you watched...') of poster-art rectangles, the brand-defining UI pattern in the streaming category.",
+  "design_language": {
+    "type": {
+      "display": "Netflix Sans",
+      "body": "Netflix Sans",
+      "mono": null
+    },
+    "color_primary": "#e50914",
+    "color_canvas": "#141414",
+    "color_canvas_deep": "#000000",
+    "color_ink": "#ffffff",
+    "color_muted": "#777777",
+    "radius": [2, 4, 6],
+    "spacing": "8-based",
+    "motion_signature": "Hero auto-plays muted clip — typically 30 seconds of a featured show with slow camera moves and atmospheric music. Poster-art tiles on row-hover lift 1.08x scale with a 200ms ease-out and reveal hover-preview (auto-play 6-second clip). The signature 'TUDUM' sonic mnemonic — the brand's audio motif — plays on app cold-start."
+  },
+  "trademark_signals": [
+    "True cinema-black canvas (#141414) — the deepest dark in the streaming category — never a gray, never a navy",
+    "Netflix red (#e50914) — pure red, used only on the wordmark, on play-button overlays, on the 'Sign In' CTA — never as a section background or category divider",
+    "Horizontal-scroll poster-art rows — each row is a category title ('Top 10', 'Trending', 'Because you watched...') above a horizontal-scroll strip of poster-art rectangles — the brand-defining UI pattern",
+    "Auto-playing hero clip — top-of-app or top-of-page video that runs muted with subtle volume-control affordance — refusing the static-photograph hero every other streaming service uses",
+    "Custom Netflix Sans typography — a grotesk with extremely subtle aperture variations that distinguish it from generic Inter / Helvetica"
+  ],
+  "components_observed": [
+    "hero-auto-play-video",
+    "poster-row-horizontal-scroll",
+    "poster-tile-rectangular",
+    "top-10-ranked-row",
+    "billboard-card-feature",
+    "play-button-circular-red",
+    "button-primary-netflix-red",
+    "footer-dark-multi-language"
+  ],
+  "exemplar_pages": [
+    "netflix.com",
+    "netflix.com/browse",
+    "netflix.com/tudum",
+    "about.netflix.com"
+  ],
+  "ai_slop_avoided": [
+    "Don't lighten the canvas. #141414 is the brand-defining dark; even slight gray tinting reads as Hulu / HBO Max / generic streaming",
+    "Don't tint the red. Pure #e50914 — any pinkening or muting drops the urgency",
+    "Don't substitute the poster-art rows with featured-cards. The horizontal-scroll category-titled row IS the brand's UI signature",
+    "Don't pause the hero clip. The auto-playing muted video IS the streaming-hero moment — static images read as off-brand pre-2015 cable network",
+    "Don't introduce a secondary chromatic accent. Black + white + red is the trinity; teal/yellow/blue accents read as off-brand"
+  ],
+  "source_md": "references/brands/netflix-DESIGN.md"
+}

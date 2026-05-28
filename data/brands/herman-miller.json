@@ -1,0 +1,52 @@
+{
+  "id": "herman-miller",
+  "name": "Herman Miller",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Herman Miller's brand language — the American modernist furniture house responsible for the Eames Lounge, the Aeron chair, and a century of design-museum-permanent-collection objects. Canvas is warm gallery-white (#faf9f6) or a deep editorial near-black for hero immersion. Type runs a thoughtful serif (Söhne Mono or proprietary modernist serif) at editorial scale paired with a precise grotesk for body. Photography is fine-art product-as-sculpture — single chair in a vast gallery space, side-light, no styling props. The voice is museum-curator: object name, year, designer, materials — written as exhibition wall labels, not as e-commerce descriptions.",
+  "design_language": {
+    "type": {
+      "display": "Söhne",
+      "body": "Söhne",
+      "mono": "Söhne Mono"
+    },
+    "color_primary": "#000000",
+    "color_canvas": "#faf9f6",
+    "color_ink": "#1a1a1a",
+    "color_accent": "#a0532a",
+    "radius": [0, 2, 4],
+    "spacing": "8-based",
+    "motion_signature": "Gallery-pacing. Hero images cross-fade slowly (~2s) — never quick. Product detail pages reveal product specs (designer, year, materials) with a slow 600ms cascade. Hover on product tiles fades a thin hairline border in over 300ms — no scale, no shadow lift. The brand voice is museum, not e-commerce."
+  },
+  "trademark_signals": [
+    "Gallery-white canvas (#faf9f6) with single product staged in vast negative space — Aeron chair occupying 30% of the viewport with 70% empty floor — the absence IS the editorial",
+    "Exhibition-label product captions — 'Aeron Chair, 1994, by Bill Stumpf and Don Chadwick' set in monospaced type beneath the photograph — museum, not catalog",
+    "Designer-credit type — every product page leads with the designer's name and the year of design, treating each chair as a historical artifact",
+    "Editorial long-form essays about chair manufacturing, materials science, and ergonomic research — written as cultural-magazine features, not as marketing copy",
+    "Single-image hero with low-saturation studio lighting — never multi-product collages, never lifestyle staging with people"
+  ],
+  "components_observed": [
+    "single-product-gallery-hero",
+    "exhibition-label-caption",
+    "designer-credit-block",
+    "essay-long-form-text",
+    "materials-science-spec-table",
+    "color-variant-swatch-row",
+    "button-text-link-thin",
+    "footer-museum-style-monochrome"
+  ],
+  "exemplar_pages": [
+    "hermanmiller.com",
+    "hermanmiller.com/products",
+    "hermanmiller.com/stories",
+    "hermanmiller.com/designers"
+  ],
+  "ai_slop_avoided": [
+    "Don't add lifestyle staging. Herman Miller photography is the single object on white floor in vast space — adding a person, a coffee mug, a rug breaks the gallery voice",
+    "Don't drop the designer credit. The product IS the designer's signature — removing the name reads as off-brand commercial",
+    "Don't increase product-tile density. The brand reads at 1-up or 2-up tile grids; 4-up reads as e-commerce, not museum",
+    "Don't introduce saturated colors. The brand is monochrome-on-gallery-white with the occasional warm-rust accent for upholstery shots; saturated CTAs read as off-brand",
+    "Don't shorten copy to marketing-bullet length. Product descriptions are full editorial paragraphs about the chair's history, materials, and design intent"
+  ],
+  "source_md": "references/brands/herman-miller-DESIGN.md"
+}

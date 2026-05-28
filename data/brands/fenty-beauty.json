@@ -1,0 +1,53 @@
+{
+  "id": "fenty-beauty",
+  "name": "Fenty Beauty",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Fenty Beauty's brand language — Rihanna's inclusive beauty empire that redrew the cosmetics industry around radical shade range. Canvas is pure black (#0a0a0a) or near-black with deep saturated ink. Type runs a precise grotesk display (Söhne / Inter / proprietary all-caps face) often paired with an italic serif accent. The voice is luxurious, club-night, unapologetically Black and unapologetically Caribbean — gold filigree on black, full-bleed product hero shots, model casting that spans every Pantone of human skin. The signature 50-shade Pro Filt'r foundation grid IS the brand — it appears on hero, product, and editorial pages as a strip of swatches that demonstrates the brand's core promise visually before any copy lands.",
+  "design_language": {
+    "type": {
+      "display": "Söhne",
+      "body": "Söhne",
+      "mono": null
+    },
+    "color_primary": "#d4af37",
+    "color_canvas": "#0a0a0a",
+    "color_canvas_warm": "#1a0f0a",
+    "color_ink": "#ffffff",
+    "color_accent": "#c41e3a",
+    "radius": [0, 4, 8],
+    "spacing": "8-based",
+    "motion_signature": "Hero video plays product close-ups — gloss bottles tilting under spotlight, foundation pumps swirling. Shade swatches reveal sequentially on scroll (~80ms cascade between swatches). Hover on product tiles raises a subtle gold-stroke border over 200ms. The brand voice is 'spotlight reveal' — every motion implies a magazine cover shoot."
+  },
+  "trademark_signals": [
+    "50-shade foundation grid — a horizontal strip of swatches from the lightest to the deepest in the Pro Filt'r range — used as the brand-promise visual on every page, before any copy",
+    "Pure-black canvas with gold filigree accent — the gold (#d4af37) appears only on the wordmark, on category dividers, and on inline 'NEW' tags — luxury without saturation overload",
+    "Editorial model casting that spans the entire skin-tone spectrum — every model imagery moment shows multiple skin tones together, not as 'diversity feature' but as default",
+    "All-caps display typography with wide letter-spacing on hero headlines — 'FENTY ICON' set at 80px with +4% tracking reads as fashion-week-poster, not e-commerce-hero",
+    "Product photography on jet-black with gold-accent rim-light — every gloss bottle, every powder palette shot with the same studio setup so the product catalog reads as a unified hero gallery"
+  ],
+  "components_observed": [
+    "shade-strip-50-swatch",
+    "product-hero-black-with-gold-rim",
+    "model-multi-tone-editorial-grid",
+    "all-caps-tracked-headline",
+    "shade-finder-quiz-card",
+    "button-primary-gold-on-black",
+    "category-divider-gold-rule",
+    "footer-dark-with-gold-wordmark"
+  ],
+  "exemplar_pages": [
+    "fentybeauty.com",
+    "fentybeauty.com/foundation",
+    "fentybeauty.com/lip",
+    "fentybeauty.com/about"
+  ],
+  "ai_slop_avoided": [
+    "Don't drop the 50-shade strip. The brand-promise visualization is the single most copyable Fenty asset — a generic 'inclusive beauty' line without the swatch strip reads as imitation, not Fenty",
+    "Don't paint the canvas in cream/beige. The pure-black canvas IS the luxury voltage; pale-pink or cream canvas (Glossier's territory) reads as a different brand entirely",
+    "Don't saturate the gold. The gold (#d4af37) is muted-warm, never bright-yellow; bright yellow reads as commercial, not editorial",
+    "Don't soften the all-caps typography. The display tier is locked at +2 to +4% tracking — too-tight reads as off-brand",
+    "Don't homogenize model casting. Single-model imagery loses the brand's defining message; every model moment should show range"
+  ],
+  "source_md": "references/brands/fenty-beauty-DESIGN.md"
+}

@@ -14,7 +14,7 @@ Public surface
 --------------
 ``run_server()``  -- launch the stdio MCP server (requires ``pip install mcp``)
 ``TOOLS``         -- dict mapping tool name to (handler, input_model, description)
-``handle_*``      -- the 14 pure handler functions
+``handle_*``      -- the 15 pure handler functions
 """
 from engine.mcp.server import (
     run_server,
@@ -34,6 +34,7 @@ from engine.mcp.server import (
     handle_ux_persist_save,
     handle_ux_persist_load,
     handle_ux_stats,
+    handle_ux_image_extract,
 )
 
 __all__ = [
@@ -54,4 +55,5 @@ __all__ = [
     "handle_ux_persist_save",
     "handle_ux_persist_load",
     "handle_ux_stats",
+    "handle_ux_image_extract",
 ]

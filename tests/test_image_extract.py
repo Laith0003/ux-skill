@@ -167,6 +167,10 @@ def test_image_to_brief_returns_brief_and_hints(tmp_path):
     assert "dark" in brief_dict["tone"]
     assert "dark-mode" in brief_dict["must_have"]
 
+    # Default forbidden list includes the project-wide taste guardrails.
+    assert "cormorant" in brief_dict["forbidden"]
+    assert "yellow" in brief_dict["forbidden"]
+
     # Hints carry the diagnostic surface.
     hints = result["hints"]
     assert hints["canvas_polarity"] == "dark"

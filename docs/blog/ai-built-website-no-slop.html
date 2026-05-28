@@ -490,14 +490,14 @@
 
       <h2>How ux-skill plugs into the IDE class</h2>
       <p>
-        ux-skill is a Python package with three install paths: <code>pip install uxskill</code>, <code>npx uxskill@alpha</code>, or the Claude Code plugin (<code>/plugin install ux@ux-skill</code>). After install, the engine exposes 22 commands across 17 IDEs and ships 120 deterministic regex rules over a 998-entry catalog.
+        ux-skill is a Python package with three install paths: <code>pip install uxskill</code>, <code>npx uxskill@alpha</code>, or the Claude Code plugin (<code>/plugin install ux@ux-skill</code>). After install, the engine exposes 22 commands across 17 IDEs and ships 120 deterministic regex rules over a 1,161-entry catalog.
       </p>
       <p>
         The flow inside Claude Code, Cursor, Cline, Continue, Windsurf, Aider, Codex, or Roo Code is the same four steps:
       </p>
       <ol>
         <li><code>ux discover</code> &mdash; 10-field intake. Project type, audience, tone, must-haves, forbidden list, references, density, motion budget, accessibility floor.</li>
-        <li><code>ux recommend</code> &mdash; five parallel lookups over the 998-entry catalog merge into one structured system. Output: <code>tokens.css</code> and <code>manifest.json</code> at the repo root, plus a per-IDE rules file (<code>.cursorrules</code>, <code>CLAUDE.md</code>, <code>.windsurfrules</code>, etc).</li>
+        <li><code>ux recommend</code> &mdash; five parallel lookups over the 1,161-entry catalog merge into one structured system. Output: <code>tokens.css</code> and <code>manifest.json</code> at the repo root, plus a per-IDE rules file (<code>.cursorrules</code>, <code>CLAUDE.md</code>, <code>.windsurfrules</code>, etc).</li>
         <li>Any vibe-coding prompt &mdash; the model reads the rules file as part of its context window and writes against your tokens instead of its defaults.</li>
         <li><code>ux lint</code> &mdash; the gate. 120 regex rules over the generated code. Zero LLM cost. Exits non-zero on any high or critical finding. Plugs into pre-commit, GitHub Actions, GitLab CI, Husky, or any shell hook.</li>
       </ol>
@@ -638,7 +638,7 @@ $ uvx pre-commit install   <span class="c"># or husky, or the GitHub Action</spa
     <section class="cta">
       <span class="eyebrow">Install the rules layer</span>
       <h2>Same prompt. Same builder. <span class="accent">Different output.</span></h2>
-      <p>120 deterministic regex rules, a 998-entry catalog, 22 commands across 17 IDEs. Drops in next to v0, Lovable, Bolt, Replit Agent, or Tempo &mdash; whichever shipped the first draft. MIT-licensed. No telemetry. No account.</p>
+      <p>120 deterministic regex rules, a 1,161-entry catalog, 22 commands across 17 IDEs. Drops in next to v0, Lovable, Bolt, Replit Agent, or Tempo &mdash; whichever shipped the first draft. MIT-licensed. No telemetry. No account.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>

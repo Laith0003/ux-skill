@@ -1,0 +1,53 @@
+{
+  "id": "four-seasons",
+  "name": "Four Seasons",
+  "category": "Travel / Hospitality",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Four Seasons Hotels and Resorts — the Canadian-founded ultra-luxury hospitality brand that built its empire on service consistency across 100+ properties worldwide. Canvas is warm parchment-ivory (#f7f3eb) or velvet-black for evening-mode landing pages. Type runs a refined serif (Trajan / Cormorant / a custom display serif) at editorial scale — never sans-serif at hero. Photography is travel-magazine grade: cinematic full-bleed property shots with golden-hour light, infinity pools photographed from drone height, lobby chandeliers in candlelit warmth. The voice is whispered luxury — never loud, never claiming, always implying. The wordmark sits at the top in a serif lockup that resembles a luxury watch dial more than a hotel sign.",
+  "design_language": {
+    "type": {
+      "display": "Trajan Pro",
+      "body": "Trajan Pro",
+      "mono": null
+    },
+    "color_primary": "#1a1a1a",
+    "color_canvas": "#f7f3eb",
+    "color_canvas_velvet": "#0e0e0e",
+    "color_ink": "#1a1a1a",
+    "color_accent": "#a07f4b",
+    "radius": [0, 2, 4],
+    "spacing": "8-based",
+    "motion_signature": "Cinematic full-bleed. Hero videos auto-play silent: drone shots of resort properties, gentle pans across infinity pools, candlelit lobby reveals. Cross-fades are slow (~2s) — luxury is measured by how long the brand can hold a single image. Hover states change opacity faintly, no scale, no shadow."
+  },
+  "trademark_signals": [
+    "Parchment-ivory canvas (#f7f3eb) with serif typography at every tier — the brand voice is 'old-world luxury' rendered in modern web layout",
+    "Trajan / custom-serif wordmark — refusing the modern grotesk convention every other hotel chain has adopted",
+    "Full-bleed cinematic property photography — golden-hour drone shots, infinity pools, candlelit interiors — the photography IS the brand voltage",
+    "Whispered luxury voice — copy reads 'A sanctuary above the city' rather than 'Book now and save 20%'",
+    "Property-page hero with property-name in serif at 80–120px, followed by a single landscape photo — refusing the multi-photo grid every other booking site uses"
+  ],
+  "components_observed": [
+    "cinematic-property-hero",
+    "property-name-serif-lockup",
+    "destination-card-editorial",
+    "experience-tile-double-image",
+    "concierge-cta-text-link",
+    "booking-search-bar-thin",
+    "button-secondary-thin-rule",
+    "footer-multi-language-elegant"
+  ],
+  "exemplar_pages": [
+    "fourseasons.com",
+    "fourseasons.com/maldives",
+    "fourseasons.com/dining",
+    "fourseasons.com/private-retreats"
+  ],
+  "ai_slop_avoided": [
+    "Don't substitute Trajan with a modern grotesk. The Roman-inscriptional serif IS the brand voice — sans-serif reads as 'modern boutique hotel', not 'global ultra-luxury'",
+    "Don't add bright accent colors. The brand is parchment + ink + restrained gold; saturated CTAs read as deals-site, not luxury hospitality",
+    "Don't use multi-photo property grids. Each property gets a cinematic single-photo hero; collages read as off-brand",
+    "Don't write marketing-bullet copy. Property descriptions are atmospheric long paragraphs about light, ocean, dining, terrace — never feature lists",
+    "Don't show booking-discount stickers. Promotional pricing is off-brand; the brand never competes on price"
+  ],
+  "source_md": "references/brands/four-seasons-DESIGN.md"
+}

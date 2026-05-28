@@ -72,7 +72,7 @@
   {"@context":"https://schema.org","@type":"WebSite","name":"uxskill","url":"https://uxskill.laithjunaidy.com/","potentialAction":{"@type":"SearchAction","target":"https://uxskill.laithjunaidy.com/faq.html?q={search_term_string}","query-input":"required name=search_term_string"}}
   </script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"SoftwareApplication","name":"uxskill","alternateName":"ux-skill","description":"An open-source Python engine that catches AI design fingerprints before they ship. 998 structured entries across 11 manifests, 22 slash commands, 5 sub-agents, a deterministic anti-AI-slop linter with 120 regex rules, and 110 brand DESIGN.md specs. Runs in Claude Code, Cursor, Windsurf, and 14 more IDEs.","operatingSystem":"macOS, Linux, Windows","applicationCategory":"DeveloperApplication","applicationSubCategory":"DesignTool","softwareVersion":"2.0.0","license":"https://opensource.org/licenses/MIT","url":"https://github.com/Laith0003/ux-skill","downloadUrl":"https://pypi.org/project/uxskill/","author":{"@type":"Person","name":"Laith Aljunaidy","url":"https://www.linkedin.com/in/laithaljunaidy/"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["998 structured entries","22 slash commands","120 anti-pattern rules","110 brand DESIGN.md specs","17 IDE integrations","Python engine + MCP server"]}
+  {"@context":"https://schema.org","@type":"SoftwareApplication","name":"uxskill","alternateName":"ux-skill","description":"An open-source Python engine that catches AI design fingerprints before they ship. 1,161 structured entries across 11 manifests, 22 slash commands, 5 sub-agents, a deterministic anti-AI-slop linter with 120 regex rules, and 110 brand DESIGN.md specs. Runs in Claude Code, Cursor, Windsurf, and 14 more IDEs.","operatingSystem":"macOS, Linux, Windows","applicationCategory":"DeveloperApplication","applicationSubCategory":"DesignTool","softwareVersion":"2.0.0","license":"https://opensource.org/licenses/MIT","url":"https://github.com/Laith0003/ux-skill","downloadUrl":"https://pypi.org/project/uxskill/","author":{"@type":"Person","name":"Laith Aljunaidy","url":"https://www.linkedin.com/in/laithaljunaidy/"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["1,161 structured entries","22 slash commands","120 anti-pattern rules","110 brand DESIGN.md specs","17 IDE integrations","Python engine + MCP server"]}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Organization","@id":"https://uxskill.laithjunaidy.com/#org","name":"ux-skill","alternateName":"uxskill","url":"https://uxskill.laithjunaidy.com/","logo":"https://uxskill.laithjunaidy.com/og/home.png","description":"Open-source design intelligence engine for AI coding tools. Python core, MCP server, deterministic anti-AI-slop linter, 110 brand DESIGN.md specs.","foundingDate":"2026-05","founder":{"@type":"Person","name":"Laith Aljunaidy","url":"https://www.linkedin.com/in/laithaljunaidy/"},"sameAs":["https://github.com/Laith0003/ux-skill","https://pypi.org/project/uxskill/","https://www.npmjs.com/package/uxskill"]}
@@ -341,8 +341,68 @@ h1, h2, h3, h4 {
     }
     .nav__drawer-langs-grid a:hover,
     .nav__drawer-langs-grid a:focus-visible { color: var(--ink); }
+
+    /* Mobile drawer top row — language button + close X */
+    .nav__drawer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+    .nav__drawer-lang-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: 1px solid var(--hairline-2);
+      border-radius: 999px;
+      color: var(--ink);
+      padding: 9px 14px 9px 12px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: background-color var(--t-fast) var(--ease-cinema),
+                  border-color var(--t-fast) var(--ease-cinema);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .nav__drawer-lang-btn:hover,
+    .nav__drawer-lang-btn[aria-expanded="true"] {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--ink);
+    }
+    .nav__drawer-lang-menu {
+      display: none;
+      width: 100%;
+      max-height: 260px;
+      overflow-y: auto;
+      padding: 6px;
+      margin-bottom: 18px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--hairline);
+      border-radius: 14px;
+    }
+    .nav__drawer-lang-menu.is-open { display: block; }
+    .nav__drawer-lang-menu a {
+      display: block;
+      padding: 10px 14px;
+      color: var(--body);
+      text-decoration: none;
+      font-family: var(--sans);
+      font-size: 16px;
+      border-radius: 8px;
+      transition: background-color var(--t-fast) var(--ease-cinema), color var(--t-fast) var(--ease-cinema);
+    }
+    .nav__drawer-lang-menu a:hover,
+    .nav__drawer-lang-menu a:focus-visible {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--ink);
+    }
+
+    /* Close X — was absolutely positioned; now sits in the top row */
     .nav__drawer .nav__drawer-close {
-      position: absolute; top: 18px; right: var(--gutter);
       width: 44px; height: 44px;
       border-radius: 8px;
       border: 1px solid var(--hairline-2);
@@ -2468,9 +2528,39 @@ h1, h2, h3, h4 {
 </header>
 
 <div class="nav__drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Site menu" aria-hidden="true">
-  <button type="button" class="nav__drawer-close" aria-label="Close menu" id="nav-drawer-close">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
-  </button>
+  <!-- Drawer top row — language button next to close X for immediate access -->
+  <div class="nav__drawer-top">
+    <button type="button" class="nav__drawer-lang-btn" id="nav-drawer-lang-btn" aria-haspopup="true" aria-expanded="false" aria-controls="nav-drawer-lang-menu" aria-label="Change language · 17 available">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <span>EN · Language</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <button type="button" class="nav__drawer-close" aria-label="Close menu" id="nav-drawer-close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <!-- Language menu — fly-out positioned at the TOP of the drawer (no scroll required) -->
+  <div class="nav__drawer-lang-menu" id="nav-drawer-lang-menu" role="menu" aria-label="Languages">
+    <a href="/"        lang="en"    role="menuitem">English</a>
+    <a href="/zh-CN/"  lang="zh-CN" role="menuitem">简体中文</a>
+    <a href="/zh-TW/"  lang="zh-TW" role="menuitem">繁體中文</a>
+    <a href="/ja/"     lang="ja"    role="menuitem">日本語</a>
+    <a href="/ko/"     lang="ko"    role="menuitem">한국어</a>
+    <a href="/hi/"     lang="hi"    role="menuitem">हिन्दी</a>
+    <a href="/id/"     lang="id"    role="menuitem">Bahasa Indonesia</a>
+    <a href="/vi/"     lang="vi"    role="menuitem">Tiếng Việt</a>
+    <a href="/th/"     lang="th"    role="menuitem">ไทย</a>
+    <a href="/ar/"     lang="ar"    role="menuitem" dir="rtl">العربية</a>
+    <a href="/es/"     lang="es"    role="menuitem">Español</a>
+    <a href="/fr/"     lang="fr"    role="menuitem">Français</a>
+    <a href="/de/"     lang="de"    role="menuitem">Deutsch</a>
+    <a href="/pt-BR/"  lang="pt-BR" role="menuitem">Português</a>
+    <a href="/ru/"     lang="ru"    role="menuitem">Русский</a>
+    <a href="/tr/"     lang="tr"    role="menuitem">Türkçe</a>
+    <a href="/it/"     lang="it"    role="menuitem">Italiano</a>
+  </div>
+
   <a href="/compare.html">Compare</a>
   <a href="/about.html">About</a>
   <a href="/roadmap.html">Roadmap</a>
@@ -2528,7 +2618,7 @@ h1, h2, h3, h4 {
             <span class="h1-italic">that writes your code.</span>
           </h1>
           <p class="hero__sub">
-            <strong>998 structured entries.</strong> A deterministic anti-slop linter. 110 brand DESIGN.md specs.
+            <strong>1,161 structured entries.</strong> A deterministic anti-slop linter. 110 brand DESIGN.md specs.
             Loaded into Claude Code, Cursor, Windsurf, and 14 more IDEs through one command. The session sees
             them. The session ships work that does not look generated.
           </p>
@@ -2543,7 +2633,7 @@ h1, h2, h3, h4 {
             </a>
           </div>
           <div class="hero__meta" aria-label="Plugin facts">
-            <span><span class="num">998</span> entries</span>
+            <span><span class="num">1,161</span> entries</span>
             <span><span class="num">22</span> commands</span>
             <span><span class="num">120</span> lint rules</span>
             <span><span class="num">110</span> brand specs</span>
@@ -2657,7 +2747,7 @@ h1, h2, h3, h4 {
           <div class="engine__merge">
             <span class="engine__merge-title">Merged recommendation</span>
             <div class="engine__merge-result">Saturated Cinema, dark canvas, scene-local palettes, Bricolage variable display, terminal-led hero.</div>
-            <div class="engine__merge-meta">5 lanes, 998 entries searched, 31ms median.</div>
+            <div class="engine__merge-meta">5 lanes, 1,161 entries searched, 31ms median.</div>
           </div>
         </div>
       </div>
@@ -2754,7 +2844,7 @@ h1, h2, h3, h4 {
                 <span class="at">@claude</span>
               </div>
               <div class="device__assist-line">
-                Discovery confirmed. Loading 998 entries. Merging 5 lanes against your brief.
+                Discovery confirmed. Loading 1,161 entries. Merging 5 lanes against your brief.
               </div>
               <div class="device__result is-ok">
                 <span class="lbl">Discovery</span>
@@ -3113,6 +3203,17 @@ h1, h2, h3, h4 {
     if (e.key === 'Escape' && drawer.classList.contains('is-open')) closeDrawer();
   });
 
+  // Drawer language switcher — toggle menu visibility, close drawer on lang pick
+  const drawerLangBtn = document.getElementById('nav-drawer-lang-btn');
+  const drawerLangMenu = document.getElementById('nav-drawer-lang-menu');
+  if (drawerLangBtn && drawerLangMenu) {
+    drawerLangBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = drawerLangMenu.classList.toggle('is-open');
+      drawerLangBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+
   /* =========================================================================
      REVEAL on scroll — generic IO observer
      ========================================================================= */
@@ -3137,7 +3238,7 @@ h1, h2, h3, h4 {
   const heroScript = [
     { type: 'cmd', text: 'ux recommend --brief landing.md' },
     { type: 'lines', html:
-      '<div class="terminal__line"><span class="info">Loading 998 entries...</span></div>' +
+      '<div class="terminal__line"><span class="info">Loading 1,161 entries...</span></div>' +
       '<div class="terminal__line"><span class="info">Fanning out 5 lanes... </span><span class="ok">done</span></div>' +
       '<div class="terminal__line">&nbsp;</div>' +
       '<div class="terminal__line"><span class="info">style    </span><span class="ink">Saturated Cinema</span>          <span class="num">0.94</span></div>' +

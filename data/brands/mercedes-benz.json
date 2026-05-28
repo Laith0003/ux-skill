@@ -1,0 +1,54 @@
+{
+  "id": "mercedes-benz",
+  "name": "Mercedes-Benz",
+  "category": "Automotive",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Mercedes-Benz — the Stuttgart luxury automotive house whose brand language has been the engineering-to-art template for a century. Canvas is graphite-cool dark (#1a1d24) on flagship product pages, or warm cream-white on heritage and editorial pages. Type runs Corporate A — the proprietary Mercedes grotesk — at every text tier, paired with the iconic three-pointed-star mark. The signature is the three-pointed star itself, treated with absolute discipline: chrome silver on dark backgrounds, ink on light. Photography is studio-grade luxury: S-Class sedans photographed under dramatic side-light, EQ-line electric vehicles in architectural settings, AMG performance cars on race tracks. The voice is 'Das Beste oder nichts' — the best or nothing — translated as quiet engineering confidence, never bombast.",
+  "design_language": {
+    "type": {
+      "display": "Corporate A",
+      "body": "Corporate A",
+      "mono": null
+    },
+    "color_primary": "#00adef",
+    "color_canvas": "#1a1d24",
+    "color_canvas_light": "#ffffff",
+    "color_ink": "#1a1d24",
+    "color_ink_dark": "#ffffff",
+    "color_accent": "#c0c0c0",
+    "radius": [0, 4, 8],
+    "spacing": "8-based",
+    "motion_signature": "Cinematic luxury. Hero videos auto-play silent with slow tracking shots — S-Class sedans gliding past architecture, EQ-line vehicles in showroom-light. Cross-fades 1.5s. The three-pointed-star mark spins slowly (~6s loop) on configurator pages as a brand-affirmation motif. Hover transitions are subtle — opacity changes, never scale lift."
+  },
+  "trademark_signals": [
+    "Three-pointed star mark — the most-recognized automotive logo on the planet — chrome silver on dark, ink-on-light, never tinted, never restyled",
+    "Mercedes blue (#00adef) — the electric-line accent reserved for EQ (electric vehicle) sub-brand pages and EV configurator highlights — never as the primary CTA on AMG or S-Class pages",
+    "Dual canvas — graphite-cool dark for flagship product, warm cream-white for heritage and corporate editorial — the brand chooses canvas by content type, never mixes within a page",
+    "Cinematic studio photography — S-Class sedans under dramatic side-light, EQ vehicles in architectural settings, AMG cars on race tracks — never lifestyle staging with families",
+    "Corporate A grotesk at every tier — the proprietary face that reads as 'engineering institution', refusing the serif-luxury convention of Rolls-Royce or Bentley"
+  ],
+  "components_observed": [
+    "cinematic-vehicle-hero",
+    "three-pointed-star-mark",
+    "configurator-3d-rotate",
+    "model-class-tier-card",
+    "amg-performance-callout",
+    "eq-electric-sub-brand-page",
+    "button-primary-thin-rule-dark",
+    "footer-stuttgart-corporate"
+  ],
+  "exemplar_pages": [
+    "mercedes-benz.com",
+    "mercedes-benz.com/en",
+    "mercedes-benz.com/eq",
+    "mercedes-amg.com"
+  ],
+  "ai_slop_avoided": [
+    "Don't tint the three-pointed star. The mark is chrome silver on dark, ink on light — applying brand-blue or any chromatic fill to the star breaks a century of equity",
+    "Don't paint AMG pages in EQ blue. The Mercedes blue (#00adef) is reserved for EQ electric-vehicle sub-brand surfaces only",
+    "Don't substitute Corporate A with a fashion serif. The grotesk IS the engineering voice — serif reads as Rolls-Royce off-brand",
+    "Don't show vehicles with people inside. Mercedes hero photography is product-led, often with the cabin empty — refusing the family-lifestyle convention",
+    "Don't strip the chrome on the wordmark. The 'Mercedes-Benz' wordmark with the dotted-rule between the words is the recognized lockup"
+  ],
+  "source_md": "references/brands/mercedes-benz-DESIGN.md"
+}

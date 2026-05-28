@@ -29,7 +29,7 @@ def test_server_imports():
     assert callable(run_server)
     assert isinstance(TOOLS, dict)
     assert isinstance(MCP_AVAILABLE, bool)
-    # All 14 tools are registered.
+    # All 15 tools are registered.
     expected_tools = {
         "ux_recommend",
         "ux_lint",
@@ -45,6 +45,7 @@ def test_server_imports():
         "ux_persist_save",
         "ux_persist_load",
         "ux_stats",
+        "ux_image_extract",
     }
     assert set(TOOLS.keys()) == expected_tools, (
         f"missing: {expected_tools - set(TOOLS.keys())}; "

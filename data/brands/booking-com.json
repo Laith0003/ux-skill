@@ -1,0 +1,53 @@
+{
+  "id": "booking-com",
+  "name": "Booking.com",
+  "category": "Travel / Hospitality",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Booking.com — the Amsterdam-based travel-booking behemoth whose brand discipline is the opposite of luxury hospitality: dense, data-rich, urgency-driven, and unapologetically transactional. Canvas is pure white with crisp ink. The signature is the Booking.com blue (#003580) used at full saturation on the navigation, on the primary 'Search' CTA, and on the wordmark — a deep cobalt that reads as 'trustworthy financial institution' more than 'travel'. Type runs a precise grotesk (Booking Sans / Roboto / system grotesk) at modest scale. The brand voltage is the urgency overlay — '5 people are looking at this property', 'Last booked 2 hours ago' — micro-copy interventions that turn search results into a high-pressure auction floor.",
+  "design_language": {
+    "type": {
+      "display": "Booking Sans",
+      "body": "Booking Sans",
+      "mono": null
+    },
+    "color_primary": "#003580",
+    "color_canvas": "#ffffff",
+    "color_ink": "#1a1a1a",
+    "color_accent": "#febb02",
+    "color_urgency": "#e21c3c",
+    "radius": [2, 4, 8],
+    "spacing": "4-based",
+    "motion_signature": "Urgency-driven. 'Booked X hours ago' counters update in real-time via subtle 200ms cross-fade. 'Limited rooms' badges pulse red over a 1.2s ease-in-out loop. Hover on property tile fades a 1px blue border in over 150ms. The brand voice is 'transactional pressure', never 'leisurely browse'."
+  },
+  "trademark_signals": [
+    "Booking.com blue (#003580) — a deep cobalt that reads as 'banking' rather than 'travel' — used at full saturation on every nav bar, every primary CTA, and the wordmark itself",
+    "Yellow secondary accent (#febb02) — used on the 'Genius' loyalty-program badge, on the 'Booking value' score sticker, and on the Genius tier-circles — never as a primary CTA fill",
+    "Urgency overlay micro-copy — 'Last booked 4 hours ago', 'Only 2 rooms left at this price', '17 people are looking right now' — overlaid on every property card",
+    "10-out-of-10 review-score lozenge — the iconic Booking review-score badge with the number, the 'Excellent' label, and the review count — appears on every property hero",
+    "Dense property-result grid — 4-up at desktop with map, list, filters, and pagination all visible simultaneously — refusing the 'curated 3-hero' convention of luxury booking sites"
+  ],
+  "components_observed": [
+    "search-bar-hero-dense",
+    "property-result-card-with-urgency",
+    "review-score-lozenge",
+    "urgency-banner-red",
+    "filter-sidebar-dense",
+    "genius-loyalty-tier-badge",
+    "map-and-list-split-view",
+    "button-primary-blue"
+  ],
+  "exemplar_pages": [
+    "booking.com",
+    "booking.com/searchresults.html",
+    "booking.com/genius.html",
+    "booking.com/help"
+  ],
+  "ai_slop_avoided": [
+    "Don't drop the urgency micro-copy. The 'X people are looking' overlays ARE the brand's voltage — without them, Booking reads as a generic travel site",
+    "Don't soften the cobalt blue. The deep #003580 is the trust-anchor color; lightening to a friendlier blue reads as 'travel boutique' off-brand",
+    "Don't curate the result grid. The brand reads as dense — 20+ properties visible above the fold; 3-hero curation reads as luxury, not Booking",
+    "Don't hide the review-score lozenge. The 10-out-of-10 badge with the 'Excellent' label is the most copyable Booking asset — never make it small",
+    "Don't paint accent moments yellow. The yellow is reserved for Genius loyalty and review-value stickers — using it on CTAs reads as off-brand"
+  ],
+  "source_md": "references/brands/booking-com-DESIGN.md"
+}

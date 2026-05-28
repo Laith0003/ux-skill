@@ -1,0 +1,53 @@
+{
+  "id": "aman-resorts",
+  "name": "Aman Resorts",
+  "category": "Travel / Hospitality",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Aman Resorts — the Singapore-founded ultra-luxury collection of 30+ properties known internally as 'the world's most discreet hotel brand'. Where Four Seasons whispers, Aman is nearly silent. Canvas is bone-white (#f4f0e8) or deep monsoon-black. Type is a restrained serif (custom Aman Serif / Garamond) at modest sizes — refusing the 80px display headlines that every other luxury brand has adopted. Photography is meditative travel-photography — no people, no smiles, no tables-with-wine; instead, single tatami rooms at dawn, fog over a Bhutanese valley, water-lily ponds at dusk. The brand voice is 'sanctuary' — a word Aman uses in every property description. The chrome is so reduced it nearly disappears, treating each property as a privately-owned retreat the visitor is being granted access to.",
+  "design_language": {
+    "type": {
+      "display": "Garamond",
+      "body": "Garamond",
+      "mono": null
+    },
+    "color_primary": "#1a1a1a",
+    "color_canvas": "#f4f0e8",
+    "color_canvas_dark": "#0a0a0a",
+    "color_ink": "#1a1a1a",
+    "color_accent": "#8b6f47",
+    "radius": [0],
+    "spacing": "8-based",
+    "motion_signature": "Meditative. Hero images cross-fade extremely slowly — 4–6 seconds between frames. No motion-graphics, no parallax. Hover states do nothing visible. The brand's signature is its absence of motion — silence as luxury."
+  },
+  "trademark_signals": [
+    "Bone-white canvas (#f4f0e8) with serif typography at modest sizes — refusing every luxury-brand convention of large display headlines",
+    "People-free photography — every Aman image is the empty room at dawn, the misty valley, the meditation pavilion before guests arrive — never staged with humans",
+    "'Aman' in lowercase or sentence-case serif lockup — the wordmark never shouts, never bolds, never goes all-caps",
+    "Property-name as koan — 'Amanjiwo', 'Amankora', 'Amanyangyun' — each name combines 'Aman' (Sanskrit: peace) with a regional word — the brand voice IS the naming",
+    "Long-form single-column property essays — 200+ words of contemplative description before any photo grid or booking CTA — luxury through patience"
+  ],
+  "components_observed": [
+    "empty-room-hero",
+    "property-essay-narrow-column",
+    "destination-list-serif-restrained",
+    "single-image-photo-block",
+    "experience-card-poetic",
+    "booking-text-link-only",
+    "no-cta-just-narrative",
+    "footer-minimal-typography"
+  ],
+  "exemplar_pages": [
+    "aman.com",
+    "aman.com/hotels",
+    "aman.com/journal",
+    "aman.com/services"
+  ],
+  "ai_slop_avoided": [
+    "Don't add people to photography. Aman's people-free imagery IS the brand promise — 'this is your sanctuary, not a populated resort'",
+    "Don't increase display headline sizes. Type stays modest (24–40px max at hero); 80px display tier reads as off-brand 'modern luxury hotel'",
+    "Don't add a prominent CTA. Aman's CTAs are text-links or absent entirely; the brand never urges, never converts — it invites",
+    "Don't substitute the Aman serif with a sans-serif. The brand voice is contemplative-old-world; grotesk reads as Asian-boutique-hotel, not Aman",
+    "Don't show resort amenities as feature bullets. Property descriptions are atmospheric prose — pools, dining, spa all woven into a single contemplative narrative"
+  ],
+  "source_md": "references/brands/aman-resorts-DESIGN.md"
+}

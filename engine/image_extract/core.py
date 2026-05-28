@@ -469,13 +469,21 @@ def image_to_brief(path: str) -> Dict[str, Any]:
     seen: set = set()
     deduped_tone = [t for t in tone if not (t in seen or seen.add(t))]
 
+    # Project-level forbidden defaults — taste guardrails the engine
+    # should respect even when the image gives no signal either way.
+    # Yellow/amber/gold/cream/coral are banned palettes; Cormorant is
+    # the banned display face.
+    default_forbidden = [
+        "yellow", "amber", "gold", "cream", "coral", "cormorant",
+    ]
+
     brief = {
         "project_type": "",
         "industry": "",
         "audience": [],
         "tone": deduped_tone,
         "must_have": must_have,
-        "forbidden": [],
+        "forbidden": default_forbidden,
         "stack": "",
         "region": "",
     }

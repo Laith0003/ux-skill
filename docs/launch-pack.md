@@ -21,7 +21,7 @@ Numbers are accurate as of 2026-05-28:
 ux-skill is an open-source Python engine that catches the AI-design fingerprints every LLM produces by default — purple-to-blue gradients, Inter at 90px, John Doe placeholders, three-equal-card hero grids, lorem ipsum, emoji-as-icons. It runs inside Claude Code, Cursor, Windsurf, GitHub Copilot, and 13 more IDEs.
 
 The architecture:
-- 998 entries across 11 queryable JSON manifests (styles, palettes, type pairs, components, motion presets, industries, brand specs)
+- 1,161 entries across 11 queryable JSON manifests (styles, palettes, type pairs, components, motion presets, industries, brand specs)
 - A 5-parallel-search recommender that fans out across style → palette → type → motion → components for a given brief
 - A deterministic regex linter with 120 anti-pattern rules (no LLM in the audit lane — runs in CI in <50ms)
 - 110 brand DESIGN.md specs as queryable JSON (Apple, Stripe, Linear, Notion, Vercel, Figma, Tesla, BMW, Spotify, plus 83 more)
@@ -102,7 +102,7 @@ Looking for feedback on the rule catalog. What AI design fingerprints am I still
 ```
 ux-skill is a Python plugin I built to fix the "every AI-generated UI looks the same" problem. It's a 5-module Python package:
 
-- `recommender` — 5-parallel-search across 11 JSON manifests (998 entries total)
+- `recommender` — 5-parallel-search across 11 JSON manifests (1,161 entries total)
 - `linter` — deterministic regex linter, 100 rules, CI-friendly
 - `discovery` — 10-field protocol that forces the model to ask before generating
 - `generator` — emits tokens + manifest from a recommendation

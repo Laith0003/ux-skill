@@ -1,0 +1,54 @@
+{
+  "id": "youtube",
+  "name": "YouTube",
+  "category": "Streaming / Media",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of YouTube — the world's video-hosting platform whose interface is the most-viewed brand surface on the internet. Canvas is light-mode-white or dark-mode near-black — both rendered as default options at user choice. The signature is the YouTube red (#ff0000) used only on the play-button glyph, the wordmark, and the 'Subscribe' button. Type runs Roboto (the Google default) at modest scale. The interface is dominated by the video-thumbnail grid: 3-up at desktop, each thumbnail with a 16:9 aspect ratio, duration badge in the corner, channel avatar circle, and a 2-line title. The brand voice is 'the channel is the brand' — YouTube itself stays invisible while creator content carries every visual moment.",
+  "design_language": {
+    "type": {
+      "display": "Roboto",
+      "body": "Roboto",
+      "mono": "Roboto Mono"
+    },
+    "color_primary": "#ff0000",
+    "color_canvas": "#ffffff",
+    "color_canvas_dark": "#0f0f0f",
+    "color_ink": "#0f0f0f",
+    "color_ink_dark": "#f1f1f1",
+    "color_muted": "#606060",
+    "radius": [4, 8, 12, 24],
+    "spacing": "8-based",
+    "motion_signature": "Hover on video thumbnail auto-plays a 6-second muted preview at 1x scale (no transform). Subscribe-button toggle animates with a satisfying 120ms color-fill from red to gray. The play-button overlay scales 1.1x on hover at 100ms ease-out. Page transitions are fast: under 200ms. The brand voice is 'utility motion' — never decorative, always responsive."
+  },
+  "trademark_signals": [
+    "Play-button rectangle — the red rounded-rectangle with the white triangle — the most-recognized streaming-platform glyph on the internet",
+    "Video-thumbnail grid at 3-up desktop with 16:9 thumbnails, duration badge bottom-right, channel avatar circle, 2-line title, channel name, view count, time-since-upload",
+    "Dual canvas (light + dark) as a user-preference — both ship as default options; the brand renders identically in both modes",
+    "Roboto at every text tier — refusing custom typography in favor of Google's house grotesk",
+    "Circular channel avatars — every channel identity rendered as a 32px or 88px circle, never a square, never a banner — the channel-avatar circle IS the creator's identity unit"
+  ],
+  "components_observed": [
+    "video-thumbnail-tile",
+    "play-button-red-rounded-rect",
+    "channel-avatar-circle",
+    "subscribe-button-red",
+    "video-grid-3-up",
+    "search-bar-rounded-pill",
+    "navigation-rail-icon",
+    "footer-google-corporate"
+  ],
+  "exemplar_pages": [
+    "youtube.com",
+    "youtube.com/feed/trending",
+    "youtube.com/about",
+    "studio.youtube.com"
+  ],
+  "ai_slop_avoided": [
+    "Don't substitute the play-button rounded-rect with a circular play button. The rounded-rect-with-triangle is the brand's most-recognized glyph",
+    "Don't drop the duration badge from thumbnails. The bottom-right time-overlay is a recognized YouTube affordance",
+    "Don't replace Roboto with a custom face. YouTube's typographic restraint IS the brand voice — custom typography reads as off-brand",
+    "Don't restyle channel avatars to squares or banners. The 32px or 88px circular avatar is the creator-identity unit",
+    "Don't paint the canvas with brand red. YouTube red is reserved for the play-button glyph and the 'Subscribe' button — using it as a section background reads as off-brand"
+  ],
+  "source_md": "references/brands/youtube-DESIGN.md"
+}
