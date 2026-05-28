@@ -5,7 +5,7 @@ Public surface:
     from engine import save_master, save_page, load_master, list_pages
 """
 
-__version__ = "2.0.0-alpha.1"
+__version__ = "2.0.0"
 
 from engine.persist import save_master, save_page, load_master, list_pages
 

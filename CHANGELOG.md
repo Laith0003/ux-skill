@@ -7,6 +7,42 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.0.0] — 2026-05-28 — STABLE
+
+First stable release. Cuts the long alpha tail (alpha.1 → alpha.101).
+
+**Status at v2.0.0:**
+
+- **160 brand DESIGN specs** — paired JSON + prose MD. Apple, Stripe, Linear, Vercel,
+  Ferrari, BMW M, Anthropic, OpenAI, Cursor, Microsoft, Google, Amazon, Salesforce,
+  IKEA, Muji, Uniqlo, Aesop, Patagonia, McLaren, Audi, Bentley, Ubisoft, Nintendo,
+  Bose, Sonos, Mailchimp, 1Password, Brave, DuckDuckGo, HuggingFace + 130 more.
+- **145 deterministic anti-pattern rules** — categories: A11y, Content, Quality,
+  Typography. Severity-weighted. Sub-50ms scan on 10K-line projects. No LLM.
+- **1,182 total entries** across 11 manifests — styles (84), palettes (176), type
+  pairs (70), components (148), industries (184), chart types (35), motion presets
+  (57), UX laws (112), anti-patterns (145), tech stacks (25), brand specs (160).
+- **22 slash commands** + **5 sub-agents** + **15 MCP tools** over stdio.
+- **17 IDE integrations** — Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini
+  CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby,
+  Tabnine, CodeWhisperer, Roo Cline.
+- **17 localized homepages + READMEs** — full prose translation across en, ar,
+  zh-CN, zh-TW, ja, ko, hi, id, vi, th, es, fr, de, pt-BR, ru, tr, it.
+- **Browseable catalogues** at `/anti-patterns.html` (all 145 rules searchable +
+  category-filterable) and `/brands.html` (all 160 brands w/ swatches + spec link).
+- **JSON-LD structured data** sitewide — Organization, WebSite, SoftwareApplication,
+  FAQPage, BreadcrumbList, ItemList.
+- **MIT license · no telemetry · no account · no paywall.**
+
+What's coming in v2.1.0 (in active development): the intelligence loop —
+`.ux/decisions.jsonl` ledger, lint score 0-100, recommend re-rank from decisions,
+`/ux-evolve` auto-loop, deterministic 7-axis synthesizer (strict-brand / brand-anchor
+/ pure-synthesis modes), `/ux-system` full-system generation, layout synthesizer with
+responsive validation. Fully offline. No LLM. Pure self-learning from the local
+decisions log.
+
+---
+
 ## [2.0.0-alpha.101] — 2026-05-28 (brand catalog 131 → 160)
 
 - **Brand catalog expansion**: +29 new brand specs. Total **160**.
