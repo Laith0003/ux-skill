@@ -56,6 +56,15 @@
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"SoftwareApplication","name":"uxskill","alternateName":"ux-skill","description":"An open-source Python engine that catches AI design fingerprints before they ship. 998 structured entries across 11 manifests, 22 slash commands, 5 sub-agents, a deterministic anti-AI-slop linter with 85 regex rules, and 92 brand DESIGN.md specs. Runs in Claude Code, Cursor, Windsurf, and 14 more IDEs.","operatingSystem":"macOS, Linux, Windows","applicationCategory":"DeveloperApplication","applicationSubCategory":"DesignTool","softwareVersion":"2.0.0","license":"https://opensource.org/licenses/MIT","url":"https://github.com/Laith0003/ux-skill","downloadUrl":"https://pypi.org/project/uxskill/","author":{"@type":"Person","name":"Laith Aljunaidy","url":"https://www.linkedin.com/in/laithaljunaidy/"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["998 structured entries","22 slash commands","85 anti-pattern rules","92 brand DESIGN.md specs","17 IDE integrations","Python engine + MCP server"]}
   </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Organization","@id":"https://uxskill.laithjunaidy.com/#org","name":"ux-skill","alternateName":"uxskill","url":"https://uxskill.laithjunaidy.com/","logo":"https://uxskill.laithjunaidy.com/og/home.png","description":"Open-source design intelligence engine for AI coding tools. Python core, MCP server, deterministic anti-AI-slop linter, 92 brand DESIGN.md specs.","foundingDate":"2026-05","founder":{"@type":"Person","name":"Laith Aljunaidy","url":"https://www.linkedin.com/in/laithaljunaidy/"},"sameAs":["https://github.com/Laith0003/ux-skill","https://pypi.org/project/uxskill/","https://www.npmjs.com/package/uxskill"]}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","@id":"https://uxskill.laithjunaidy.com/#site","url":"https://uxskill.laithjunaidy.com/","name":"ux-skill — design intelligence engine for AI coding","publisher":{"@id":"https://uxskill.laithjunaidy.com/#org"},"inLanguage":"en","potentialAction":{"@type":"SearchAction","target":"https://uxskill.laithjunaidy.com/?q={search_term_string}","query-input":"required name=search_term_string"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"}]}
+  </script>
 
   <style>
     /* =========================================================================
@@ -831,10 +840,13 @@
       gap: 28px;
       align-items: start;
     }
-    .linter__side h3 {
+    .linter__side .linter__claim {
+      font-family: var(--display);
       font-size: clamp(28px, 4vw, 42px);
       font-variation-settings: 'wdth' 88, 'wght' 580;
       letter-spacing: -0.026em;
+      line-height: 1.04;
+      color: var(--ink);
       margin-bottom: 18px;
     }
     .linter__side p { margin-bottom: 14px; color: var(--body); }
@@ -1697,7 +1709,7 @@
 
       <div class="linter__layout">
         <div class="linter__side">
-          <h3>The page that just rendered<br>passed clean.</h3>
+          <p class="linter__claim">The page that just rendered<br>passed clean.</p>
           <p>This homepage was generated with the recommender and audited with <code class="inline-code">ux lint docs/</code>. Zero high-severity findings. The forbidden palette never appears.</p>
           <p>The linter is regex over content, not a model. It is fast, offline, and stable across model swaps. The same checks run inside CI on every commit.</p>
 
