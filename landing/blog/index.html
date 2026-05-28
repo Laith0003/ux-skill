@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — ux-skill: design intelligence engine for AI coding</title>
+  <meta name="description" content="Articles on Claude Code design plugins, AI coding tools, anti-AI-slop techniques, and design system generation. From the team behind ux-skill v2.">
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/">
+  <meta name="theme-color" content="#faf9f5">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="index,follow">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/">
+  <meta property="og:title" content="Blog — ux-skill">
+  <meta property="og:description" content="Articles on Claude Code design plugins, AI coding tools, anti-AI-slop, design system generation.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --canvas: #faf9f5; --surface: #efe9de; --ink: #181715;
+      --body: #3d3d3a; --muted: #6c6a64; --hairline: rgba(20,20,19,0.10);
+      --primary: #cc785c; --primary-active: #a9583e;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background: var(--canvas); color: var(--body);
+      font-size: 16px; line-height: 1.6;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 64px 24px 96px; }
+    header.top {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 0 56px;
+      border-bottom: 1px solid var(--hairline);
+      margin-bottom: 56px;
+    }
+    .wordmark {
+      display: inline-flex; align-items: baseline; gap: 4px;
+      text-decoration: none; color: var(--ink);
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600; font-size: 28px; letter-spacing: -0.02em;
+    }
+    .wordmark .dot {
+      width: 6px; height: 6px; border-radius: 999px;
+      background: var(--primary); transform: translateY(-3px);
+      display: inline-block;
+    }
+    nav.crumbs {
+      display: flex; gap: 28px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--muted);
+    }
+    nav.crumbs a { color: var(--muted); text-decoration: none; }
+    nav.crumbs a:hover { color: var(--ink); }
+    nav.crumbs a.current { color: var(--ink); }
+
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 24px;
+      display: inline-block;
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: clamp(40px, 6vw, 72px);
+      line-height: 1.04;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+    h1 .accent { font-style: italic; color: var(--primary); }
+    .lede {
+      font-size: 18px;
+      line-height: 1.55;
+      color: var(--body);
+      max-width: 720px;
+      margin-bottom: 64px;
+    }
+
+    .post-list {
+      list-style: none;
+      display: flex; flex-direction: column;
+      gap: 14px;
+    }
+    .post {
+      padding: 24px 28px;
+      background: white;
+      border-radius: 14px;
+      border: 1px solid var(--hairline);
+      transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .post:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px -20px rgba(24,23,21,0.18);
+      border-color: rgba(204,120,92,0.4);
+    }
+    .post a {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+    .post-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .post-meta .tag { color: var(--primary); }
+    .post h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: 28px;
+      line-height: 1.16;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .post p {
+      font-size: 15.5px;
+      color: var(--body);
+      margin: 0;
+    }
+
+    footer {
+      margin-top: 96px;
+      padding-top: 32px;
+      border-top: 1px solid var(--hairline);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--ink); }
+    footer .links { display: flex; gap: 24px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <a href="/" class="wordmark">ux<span class="dot"></span></a>
+      <nav class="crumbs">
+        <a href="/">Home</a>
+        <a href="/compare.html">Compare</a>
+        <a href="/blog/" class="current">Blog</a>
+        <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+      </nav>
+    </header>
+
+    <span class="eyebrow">Blog · plugin landscape · design engineering</span>
+    <h1>Articles on AI coding's <span class="accent">design</span> problem.</h1>
+    <p class="lede">
+      Honest write-ups on Claude Code design plugins, AI design slop fingerprints, and
+      what a Python-engine pivot looks like. Posts compare against real GitHub competitors
+      and cite live star counts.
+    </p>
+
+    <ul class="post-list">
+      <li class="post"><a href="/blog/vs-ui-ux-pro-max.html">
+        <div class="post-meta"><span class="tag">comparison</span> · ~1200 words · ~5 min</div>
+        <h2>ui-ux-pro-max alternative: ux-skill v2 — every dimension, side by side</h2>
+        <p>The most-starred Claude UX skill on GitHub is ui-ux-pro-max-skill at 84k. ux-skill v2 borrows their recommender pattern and goes further. Honest table: 998 entries vs ~600, 35-rule linter vs none, 72 brand specs vs none.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/anti-ai-slop-claude-skills.html">
+        <div class="post-meta"><span class="tag">ranking</span> · ~1500 words · ~7 min</div>
+        <h2>Anti-AI-slop tools for Claude Code in 2026 — the honest ranking</h2>
+        <p>Every AI coding tool produces the same fingerprints: Inter as display, purple gradients, three identical cards. Ranked: Leonxlnx/taste-skill (25k stars), Nutlope/hallmark (2.1k), ux-skill v2 (35 deterministic regex rules, only one with CI-friendly enforcement).</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/best-claude-code-design-skills-2026.html">
+        <div class="post-meta"><span class="tag">guide</span> · ~1400 words · ~6 min</div>
+        <h2>Best Claude Code skills for UX/UI design — 2026 ranking</h2>
+        <p>Ranked by live GitHub stars: ui-ux-pro-max (84k), open-design (54k), taste-skill (25k), huashu-design (15k), stitch-skills (5.7k), nothing-design-skill (2.4k), hallmark (2.1k), material-3-skill (955). Cards with architecture, scope, real fit.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/cursor-design-plugin.html">
+        <div class="post-meta"><span class="tag">tutorial</span> · ~900 words · ~4 min</div>
+        <h2>Cursor design plugin: install ux-skill to stop generic AI design output</h2>
+        <p>Cursor users hit the same wall as Claude Code users. Three install paths via <code>.cursorrules</code> / <code>npx</code> / <code>pip</code>. Pairs with shadcn/ui MCP + Tailwind. Free + MIT.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/python-design-system-generator.html">
+        <div class="post-meta"><span class="tag">technical</span> · ~1100 words · ~5 min</div>
+        <h2>Python design system generator — ux-skill v2's 5-parallel-search engine</h2>
+        <p>How the engine merges five lanes (industry → style → palette → type → motion) into one recommendation, deterministically, in seconds. Brief in, complete design system out. 998 structured entries under the hood.</p>
+      </a></li>
+    </ul>
+
+    <footer>
+      <span>© 2026 Laith Aljunaidy. MIT licensed. No telemetry.</span>
+      <div class="links">
+        <a href="/">Home</a>
+        <a href="/compare.html">Compare</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
