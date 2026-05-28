@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Slop CLI——120 条规则,无 LLM,在 CI 中运行 — ux-skill</title>
+  <meta name="description" content="一个为 AI 编码工作流设计的确定性命令行设计 linter。120 条正则规则,无 LLM 调用,跨 Claude Code、Cursor、Windsurf、Cline、Continue。JSON 输出,退出码契约,GitHub Actions 配方。">
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/zh-CN/anti-ai-slop-cli-china.html">
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="index,follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/zh-CN/anti-ai-slop-cli-china.html">
+  <meta property="og:title" content="AI Slop CLI——120 条规则,无 LLM,在 CI 中运行">
+  <meta property="og:description" content="确定性设计 linter,120 条正则,1,182 条目录,131 个品牌规范,22 条命令,17 个 IDE。MIT 许可。">
+  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/zh-CN-anti-ai-slop-cli-china.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ux-skill — zh-CN anti ai slop cli china">
+  <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/zh-CN-anti-ai-slop-cli-china.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Anti-AI-Slop CLI — 120 条规则,在 CI 中卡住 AI 默认值">
+  <meta name="twitter:description" content="给 Cursor、Claude Code、Windsurf、Cline 用的确定性 linter。无 LLM,sub-second,MIT。">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "AI Slop CLI——120 条规则,无 LLM,在 CI 中运行",
+    "description": "一个为 AI 编码工作流设计的确定性命令行设计 linter。120 条正则规则,无 LLM 调用,跨 Claude Code、Cursor、Windsurf、Cline、Continue。",
+    "datePublished": "2026-05-28",
+    "dateModified": "2026-05-28",
+    "author": {
+      "@type": "Organization",
+      "name": "ux-skill",
+      "url": "https://uxskill.laithjunaidy.com/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ux-skill",
+      "url": "https://uxskill.laithjunaidy.com/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://uxskill.laithjunaidy.com/blog/zh-CN/anti-ai-slop-cli-china.html"
+    },
+    "image": "https://uxskill.laithjunaidy.com/og.png",
+    "inLanguage": "zh-CN"
+  }
+  </script>
+
+  <style>
+    :root {
+      --canvas: #07080a;
+      --surface-1: #0d0f12;
+      --surface-2: #14181d;
+      --surface-3: #1c2128;
+      --ink: #f6f7f9;
+      --body: #c7ccd3;
+      --muted: #7a7972;
+      --faint: #5a5f66;
+      --hairline: rgba(255,255,255,0.08);
+      --hairline-2: rgba(255,255,255,0.14);
+      --scene-accent: #06b6d4;
+      --scene-soft: rgba(6,182,212,0.18);
+      --win-bg: rgba(16,185,129,0.10);
+      --win-fg: #34d399;
+      --lose-bg: rgba(244,63,94,0.10);
+      --lose-fg: #fb7185;
+      --neutral-bg: rgba(255,255,255,0.05);
+      --neutral-fg: #c7ccd3;
+      --display: 'Bricolage Grotesque', 'Noto Sans SC', system-ui, sans-serif;
+      --body-face: 'Noto Sans SC', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+      --serif-italic: 'Instrument Serif', Georgia, serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; background: var(--canvas); }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      font-family: var(--body-face);
+      background: var(--canvas);
+      color: var(--body);
+      font-size: 16px;
+      line-height: 1.85;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+    .wrap-wide { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    header.top {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8px 24px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .wordmark {
+      display: inline-flex; align-items: baseline; gap: 4px;
+      text-decoration: none; color: var(--ink);
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-weight: 620;
+      font-size: 26px; letter-spacing: -0.04em; line-height: 1;
+    }
+    .wordmark .dot {
+      display: inline-block; width: 7px; height: 7px;
+      border-radius: 2px;
+      background: linear-gradient(135deg, #06b6d4, #14b8a6);
+      transform: translateY(-3px);
+    }
+    nav.crumbs {
+      display: flex; gap: 28px;
+      font-family: var(--mono);
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+    nav.crumbs a { color: var(--muted); text-decoration: none; transition: color 0.16s ease; }
+    nav.crumbs a:hover { color: var(--ink); }
+    nav.crumbs a.current { color: var(--ink); }
+    nav.crumbs a:focus-visible {
+      outline: 2px solid var(--scene-accent);
+      outline-offset: 4px; border-radius: 2px;
+    }
+
+    article { padding-top: 56px; }
+    .eyebrow {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--scene-accent);
+      margin-bottom: 22px;
+    }
+    h1 {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 96, 'wght' 600;
+      font-weight: 600;
+      font-size: clamp(34px, 5vw, 54px);
+      line-height: 1.18; letter-spacing: -0.02em;
+      color: var(--ink); margin-bottom: 28px;
+    }
+    h1 .accent {
+      font-family: var(--serif-italic);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--scene-accent);
+      letter-spacing: -0.015em;
+    }
+    .lede {
+      font-size: 18px; line-height: 1.85; color: var(--body);
+      margin-bottom: 16px;
+    }
+    .lede strong { color: var(--ink); font-weight: 600; }
+    .byline {
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 56px; padding-bottom: 24px;
+      border-bottom: 1px solid var(--hairline);
+    }
+    h2 {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 80, 'wght' 580;
+      font-weight: 580;
+      font-size: clamp(22px, 2.8vw, 30px);
+      line-height: 1.35; letter-spacing: -0.012em;
+      color: var(--ink); margin: 64px 0 18px;
+    }
+    h2 .accent {
+      font-family: var(--serif-italic);
+      color: var(--scene-accent);
+      font-style: italic; font-weight: 400;
+    }
+    h3 {
+      font-family: var(--body-face);
+      font-weight: 600; font-size: 18px;
+      letter-spacing: -0.005em; color: var(--ink);
+      margin: 36px 0 14px;
+    }
+    p { margin-bottom: 18px; color: var(--body); }
+    p strong { color: var(--ink); font-weight: 600; }
+    em { color: var(--ink); font-style: normal; }
+    ul, ol { margin: 0 0 22px 22px; }
+    ul li, ol li { margin-bottom: 10px; color: var(--body); }
+    ul li::marker { color: var(--scene-accent); }
+    ol li::marker { color: var(--scene-accent); font-family: var(--mono); font-size: 0.9em; }
+
+    pre.code, pre.code-block {
+      background: var(--surface-2);
+      color: var(--ink);
+      border: 1px solid var(--hairline);
+      padding: 22px 24px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.65;
+      margin: 24px 0 28px;
+    }
+    pre.code .c, pre.code-block .c { color: rgba(199,204,211,0.45); font-style: italic; }
+    pre.code .k, pre.code-block .k { color: #e8b894; }
+    pre.code .s, pre.code-block .s { color: #a3e0b8; }
+    pre.code .v, pre.code-block .v { color: var(--ink); }
+    pre.code .n, pre.code-block .n { color: var(--scene-accent); }
+    code {
+      font-family: var(--mono);
+      font-size: 13px;
+      background: var(--surface-2);
+      border: 1px solid var(--hairline);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--ink);
+    }
+    a.link {
+      color: var(--scene-accent);
+      text-decoration: underline;
+      text-decoration-color: rgba(6,182,212,0.4);
+      text-underline-offset: 3px;
+      transition: color 0.16s ease, text-decoration-color 0.16s ease;
+    }
+    a.link:hover { color: var(--ink); text-decoration-color: var(--ink); }
+    a.link:focus-visible {
+      outline: 2px solid var(--scene-accent);
+      outline-offset: 2px; border-radius: 2px;
+    }
+
+    .honesty {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-left: 3px solid var(--scene-accent);
+      padding: 24px 28px;
+      border-radius: 0 14px 14px 0;
+      margin: 32px 0;
+    }
+    .honesty .label {
+      font-family: var(--mono);
+      font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--scene-accent); margin-bottom: 8px;
+    }
+    .honesty h4 {
+      font-family: var(--body-face);
+      font-weight: 600; font-size: 17px; color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .honesty p { margin-bottom: 8px; }
+    .honesty p:last-child { margin-bottom: 0; }
+
+    .cta {
+      margin-top: 96px;
+      padding: 56px 48px;
+      background: var(--surface-1);
+      color: var(--ink);
+      border: 1px solid var(--hairline-2);
+      border-radius: 22px;
+    }
+    @media (max-width: 720px) { .cta { padding: 40px 28px; } }
+    .cta .eyebrow { color: var(--scene-accent); }
+    .cta h2 { color: var(--ink); margin-top: 0; }
+    .cta p { color: var(--body); margin-bottom: 28px; }
+    .install-block {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-family: var(--mono);
+      font-size: 14px; line-height: 1.75;
+      color: var(--ink);
+    }
+    .install-block .prompt { color: var(--scene-accent); }
+    .install-block .arg { color: var(--muted); }
+    .install-block .row + .row { margin-top: 6px; }
+
+    footer {
+      max-width: 1100px;
+      margin: 96px auto 0;
+      padding: 32px 24px 0;
+      border-top: 1px solid var(--hairline);
+      display: flex; justify-content: space-between; align-items: baseline;
+      flex-wrap: wrap; gap: 16px;
+      font-size: 13px; color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; transition: color 0.16s ease; }
+    footer a:hover { color: var(--ink); }
+    footer .links { display: flex; gap: 24px; flex-wrap: wrap; }
+
+    blockquote {
+      border-left: 3px solid var(--scene-accent);
+      padding: 6px 0 6px 22px;
+      margin: 24px 0;
+      font-family: var(--serif-italic);
+      font-size: 22px; line-height: 1.65;
+      color: var(--ink); font-style: italic;
+    }
+
+    @media (max-width: 720px) {
+      header.top { flex-direction: column; align-items: flex-start; gap: 16px; }
+      nav.crumbs { gap: 18px; flex-wrap: wrap; }
+      .wrap { padding: 40px 20px 72px; }
+      h1 { font-size: clamp(28px, 6vw, 40px); }
+    }
+    @media (max-width: 480px) {
+      nav.crumbs { font-size: 10px; gap: 14px; }
+      .lede { font-size: 16px; }
+    }
+
+    .table-wrap { max-width: 1000px; margin: 32px auto 28px; overflow-x: auto; }
+    .compare-table {
+      width: 100%; border-collapse: collapse;
+      font-size: 14px;
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-radius: 14px; overflow: hidden;
+    }
+    .compare-table th, .compare-table td {
+      padding: 14px 18px; text-align: left;
+      border-bottom: 1px solid var(--hairline);
+      vertical-align: top;
+      color: var(--body);
+    }
+    .compare-table th {
+      background: var(--surface-2);
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink); font-weight: 600;
+    }
+    .compare-table td.num {
+      font-variant-numeric: tabular-nums;
+      font-weight: 500; color: var(--ink);
+      font-family: var(--mono);
+    }
+    .compare-table tr:last-child td { border-bottom: 0; }
+    .compare-table strong { color: var(--ink); }
+  </style>
+  <!-- noscroll-fix -->
+  <style>
+    html, body {
+      overflow-x: clip;
+      max-width: 100%;
+    }
+    section, header, footer, main, article { max-width: 100vw; }
+    img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
+    table { max-width: 100%; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a href="/" class="wordmark">ux<span class="dot"></span></a>
+    <nav class="crumbs">
+      <a href="/">Home</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/blog/" class="current">Blog</a>
+      <a href="https://github.com/Laith0003/ux-skill" rel="noopener noreferrer">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="wrap">
+    <article>
+      <span class="eyebrow">Blog &middot; 简体中文 &middot; 2026-05-28</span>
+      <h1>AI Slop CLI——120 条规则,<br>无 LLM,在 <span class="accent">CI 中运行</span></h1>
+      <p class="lede">
+        <strong>每个 AI 编码工具都会在第一次生成时落入同样的视觉默认值——头部用 Inter 90px、紫到蓝渐变、三张完全相同的卡片。</strong>解决方法不是问大模型「这个设计够好吗」——那是非确定性的。解决方法是一个在 CI 中跑的确定性 linter:120 条正则规则,扫描磁盘上的代码,无 LLM 调用,无 token 预算,sub-second。这就是 ux-skill 的 lint 子命令。
+      </p>
+      <p class="byline">By the ux-skill team &middot; 8 min read &middot; MIT-licensed open source</p>
+
+      <h2>为什么用正则,而不是 LLM 当裁判</h2>
+      <p>
+        如果把「设计是否合格」交给另一个 LLM 判定,你会撞上三个互相放大的问题。
+      </p>
+      <p>
+        <strong>它是不确定的。</strong>同一个输入,裁判模型的结论会在多次运行中漂移。CI 失败变成 flaky test,贡献者学会重试而不是修复,信号崩塌。
+      </p>
+      <p>
+        <strong>它是昂贵的。</strong>每个 PR 推送都消耗 token。每次重试都让账单翻倍。一个每周 200 个 PR 的仓库,运行 LLM 设计评判器在 diff 上,实际是在用计算资源确认正则可以在 12 毫秒内捕获的同样问题。
+      </p>
+      <p>
+        <strong>它隐藏了规则。</strong>当裁判失败一个 PR,作者得到的是散文。当正则失败一个 PR,作者得到的是可以在自己代码中匹配并学习的模式。前者制造的是申诉文化,后者制造的是熟练文化。
+      </p>
+
+      <h2>120 条规则覆盖什么</h2>
+      <p>
+        从仓库的 <code>data/anti-patterns.json</code> 拉取。每条规则有一个 <code>id</code>、严重程度(<code>low | medium | high | critical</code>)、类别、带文件后缀作用域的正则、一行 <em>why</em> 和一行 <em>fix</em>。
+      </p>
+      <div class="table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>类别</th>
+              <th>数量</th>
+              <th>覆盖范围</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>无障碍</td><td class="num">28</td><td>缺失 alt 文本、仅颜色的状态、低对比度配对、点击目标小于 44px、无焦点样式、装饰性 SVG 无 <code>aria-hidden</code>。</td></tr>
+            <tr><td>内容</td><td class="num">18</td><td>「John Doe」占位符、「L&#111;rem ipsum」、「Beautiful experiences」、「Revolutionizing X」、通用图床 URL、emoji 标题。</td></tr>
+            <tr><td>排印</td><td class="num">16</td><td>Inter 当显示字体、90px 字号 + 1.0 行高、全大写正文、纯无衬线字栈、100 字重发丝线、无 font-feature-settings。</td></tr>
+            <tr><td>色彩</td><td class="num">14</td><td>紫到蓝渐变(<code>#7C3AED → #3B82F6</code> 家族)、600/400 默认配对、白底霓虹光晕、三种靛色。</td></tr>
+            <tr><td>布局</td><td class="num">14</td><td>三张同款卡一排、「Hero + 三栏 + CTA」模板、全宽渐变 Hero、所有元素居中对齐。</td></tr>
+            <tr><td>质量</td><td class="num">14</td><td>生产组件上的 inline style、<code>!important</code> 覆盖、应该用 token 处却写死像素值、无用 import。</td></tr>
+            <tr><td>动效</td><td class="num">10</td><td>所有元素都 fade-in-up、无 <code>prefers-reduced-motion</code> 分支、悬停超过 500ms、自动播放轮播。</td></tr>
+            <tr><td>视觉</td><td class="num">4</td><td>扁平设计上的阴影、模糊背板无降级。</td></tr>
+            <tr><td>性能</td><td class="num">2</td><td>动画 <code>top/left/width/height</code> 而不是 <code>transform</code>。</td></tr>
+            <tr><td><strong>合计</strong></td><td class="num"><strong>120</strong></td><td>覆盖九大类。每条规则在 <a href="/blog/ai-design-fingerprints-list.html" class="link">指纹清单</a> 中有完整解释。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>本地一行运行</h2>
+      <pre class="code"><span class="c"># 默认:在 high+critical 上 gate,扫描当前目录</span>
+$ uxskill lint
+<span class="n">[OK]</span> Scanned 142 files in 412ms · 0 findings at threshold high
+
+<span class="c"># 降低到 medium</span>
+$ uxskill lint --threshold medium
+
+<span class="c"># 扫描子目录</span>
+$ uxskill lint apps/web/src --threshold high
+
+<span class="c"># JSON 输出,管道给 jq</span>
+$ uxskill lint --json | jq '.findings | length'</pre>
+      <p>
+        典型的失败长这样:
+      </p>
+      <pre class="code">$ uxskill lint apps/web/src
+<span class="n">[FAIL]</span> 4 findings at threshold high · exit 1
+
+  high  inter-as-display          src/components/Hero.tsx:18
+                                  Inter 用作显示字体
+                                  fix: 给 Inter(正文)配 Geist / Satoshi / Cabinet Grotesk
+
+  high  purple-to-blue-gradient   src/styles/hero.css:42
+                                  默认的紫到蓝 AI 渐变
+                                  fix: 单一克制的强调色(Emerald、Electric Blue、Deep Rose)
+
+  high  three-equal-card-grid     src/pages/index.tsx:96
+                                  一排三张同款卡
+                                  fix: 不对称布局(bento、7-and-5、四张含一张跨列)</pre>
+      <p>
+        无 LLM 调用。200 文件 Next.js 仓库的平均耗时:冷启动 380ms,热启动 90ms。
+      </p>
+
+      <h2>GitHub Actions 工作流</h2>
+      <p>
+        放到 <code>.github/workflows/ux-lint.yml</code>,每个 PR push 都会被 linter 阻塞。Python 安装是最贵的一步,大约 6 秒;lint 本身在大多数仓库上 sub-second。
+      </p>
+      <pre class="code"><span class="c"># .github/workflows/ux-lint.yml</span>
+<span class="k">name</span>: <span class="s">ux-lint</span>
+
+<span class="k">on</span>:
+  <span class="k">pull_request</span>:
+    <span class="k">paths</span>: [<span class="s">'**/*.{tsx,jsx,vue,css,scss,html}'</span>]
+
+<span class="k">jobs</span>:
+  <span class="k">lint</span>:
+    <span class="k">runs-on</span>: <span class="s">ubuntu-latest</span>
+    <span class="k">steps</span>:
+      - <span class="k">uses</span>: <span class="s">actions/checkout@v4</span>
+      - <span class="k">uses</span>: <span class="s">actions/setup-python@v5</span>
+        <span class="k">with</span>: { <span class="k">python-version</span>: <span class="s">'3.11'</span> }
+      - <span class="k">run</span>: <span class="s">pip install uxskill</span>
+      - <span class="k">run</span>: <span class="s">uxskill lint --threshold high</span></pre>
+
+      <h2>pre-commit hook(在 push 之前就拦下来)</h2>
+      <pre class="code"><span class="c"># .pre-commit-config.yaml</span>
+<span class="k">repos</span>:
+  - <span class="k">repo</span>: <span class="s">local</span>
+    <span class="k">hooks</span>:
+      - <span class="k">id</span>: <span class="s">uxskill-lint</span>
+        <span class="k">name</span>: <span class="s">ux-skill 反模式 lint</span>
+        <span class="k">entry</span>: <span class="s">uxskill lint --threshold high --staged</span>
+        <span class="k">language</span>: <span class="s">python</span>
+        <span class="k">additional_dependencies</span>: [<span class="s">uxskill</span>]
+        <span class="k">files</span>: <span class="s">\.(tsx|jsx|vue|css|scss|html)$</span>
+        <span class="k">pass_filenames</span>: <span class="s">true</span></pre>
+      <p>
+        仅扫描 staged 文件,平均运行时间在 200ms 以下。diff 在离开笔记本之前就被拦下来。
+      </p>
+
+      <blockquote>
+        Linter 是 AI 辅助代码库中唯一的确定性表层。其他所有检查都是概率性的。
+      </blockquote>
+
+      <h2>和推荐器配对</h2>
+      <p>
+        单独的 linter 是被动的——它捕获已经存在的代码中的 slop。完整的 ux-skill 循环既预防又被动:
+      </p>
+      <ol>
+        <li><code>/ux-frame</code> —— 10 字段发现简报(forcing function)。</li>
+        <li><code>/ux-recommend</code> —— <a href="/blog/python-design-system-generator.html" class="link">Python 推荐器</a> 跑 5 个并行检索并返回一个系统。</li>
+        <li><code>/ux-design</code> —— 在系统上生成界面。</li>
+        <li><code>/ux-lint</code> —— 用 120 条正则规则给输出加门。</li>
+        <li><code>/ux-fix</code> —— 自动修补 linter 能解决的问题(Inter → Fraunces、靛色渐变 → 单一强调色、三卡 → 不对称)。</li>
+      </ol>
+      <p>
+        步骤 1-3 降低模型产出 slop 的频率。步骤 4-5 捕获漏网的。推荐器抬高地板;linter 设定天花板。
+      </p>
+
+      <div class="honesty">
+        <div class="label">诚实范围</div>
+        <h4>正则捕获结构性指纹,不捕获品味。</h4>
+        <p>linter 永远不会捕获「这一节的节奏不对」或「这段文案太冷」。这些需要人或模型。正则<em>能</em>捕获的,是每一个有字面 token、模式或形状的指纹——这覆盖了 AI 默认值的大部分,因为模型每次都会伸手去拿同一件工件。</p>
+        <p>我们刻意不在 CI 里跑 LLM 裁判。如果你的标准是「看起来像设计师做的」,那是 code review,不是 lint。ux-skill 提供 <code>/ux-critique</code> 用于品味检查——但它在编辑器里按需运行,不在 CI 里。</p>
+      </div>
+
+      <h2>跨 IDE 分发</h2>
+      <p>
+        同一个 Python 包,每一个能跑 Python 或 shell 出去的 IDE:Claude Code、Cursor、Windsurf、Copilot、Gemini Code Assist、Aider、Continue、Cline、Roo Code、Codex,以及另外七个。<a href="/blog/windsurf-design-rules.html" class="link">Windsurf 安装</a> · <a href="/blog/cursor-design-plugin.html" class="link">Cursor 安装</a>。
+      </p>
+
+      <h2>相关阅读</h2>
+      <ul>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">AI 编码的正则 linter——120 条规则在 CI 中</a>。</li>
+        <li><a href="/blog/ai-design-fingerprints-list.html" class="link">每个 AI 编码工具默认产出的 35 个设计指纹</a>。</li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Claude Code 的反 AI slop 工具——诚实排名</a>。</li>
+        <li><a href="/blog/anti-slop-cli-vibe-coders.html" class="link">vibe coders 的反 slop CLI——pre-commit 配方</a>。</li>
+      </ul>
+    </article>
+
+    <section class="cta">
+      <span class="eyebrow">安装</span>
+      <h2>120 条规则,<span class="accent">无 LLM。</span>在 CI 中运行。</h2>
+      <p>推荐器、linter、MCP 服务器、22 条命令、131 个品牌规范、1,182 条目录,一起发布。linter sub-second,其余按需。MIT 许可,无遥测,无账户。</p>
+
+      <div class="install-block">
+        <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
+        <div class="row"><span class="prompt">$</span> uxskill lint --threshold <span class="arg">high</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">— or —</div>
+        <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
+        <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
+      </div>
+    </section>
+  </div>
+
+  <aside class="related-reads" aria-label="Related reads">
+    <div class="related-reads-inner">
+      <h2 class="related-reads-h">Related reads</h2>
+      <ul>
+        <li><a href="/blog/regex-linter-for-ai-coding.html">正则 linter — 120 条规则</a></li>
+        <li><a href="/blog/ai-design-fingerprints-list.html">35 个 AI 设计指纹</a></li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html">反 AI slop 工具排名</a></li>
+        <li><a href="/blog/anti-slop-cli-vibe-coders.html">反 slop CLI for vibe coders</a></li>
+      </ul>
+    </div>
+  </aside>
+  <style>
+    .related-reads {
+      max-width: 880px; margin: 80px auto 0 auto; padding: 32px 24px 8px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .related-reads-h {
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: #7a7972; margin-bottom: 16px;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+    }
+    .related-reads ul {
+      list-style: none; padding: 0; margin: 0;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px;
+    }
+    .related-reads li { font-size: 15px; line-height: 1.5; color: #c7ccd3; }
+    .related-reads a {
+      color: #f6f7f9; text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.18);
+      padding-bottom: 2px; transition: border-color .15s ease, color .15s ease;
+    }
+    .related-reads a:hover { border-color: currentColor; color: #f6f7f9; }
+    @media (max-width: 640px) {
+      .related-reads ul { grid-template-columns: 1fr; }
+    }
+  </style>
+
+  <footer>
+    <span>&copy; 2026 Laith Aljunaidy. MIT licensed. No telemetry.</span>
+    <div class="links">
+      <a href="/">Home</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/blog/">Blog</a>
+      <a href="/about.html">About</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/roadmap.html">Roadmap</a>
+      <a href="/mcp.html">MCP</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="https://github.com/Laith0003/ux-skill" rel="noopener noreferrer">GitHub</a>
+    </div>
+  </footer>
+</body>
+</html>

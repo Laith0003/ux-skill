@@ -201,6 +201,22 @@ def build_lang(data: dict, lang: str) -> str:
     if "hero_pill_2" in strings:
         html = html.replace('MIT, no telemetry', tr("hero_pill_2", "MIT, no telemetry"), 1)
 
+    # GENERIC_SWAP_SENTINEL — sweep EVERY string key whose english source
+    # appears in the template. Order matters; do the longest matches first so
+    # short keys don't partially match inside a longer key's output.
+    keys_by_length = sorted(strings.keys(), key=lambda k: -len(strings[k].get("en") or ""))
+    for key in keys_by_length:
+        bag = strings.get(key, {})
+        en = bag.get("en")
+        target = bag.get(lang, en)
+        if not en or not target or en == target:
+            continue
+        if en in html:
+            # Swap ALL occurrences so the same English phrase that appears in
+            # twitter:title, og:title, hero h1, and footer tagline all become
+            # translated. Without this, only the first occurrence swapped.
+            html = html.replace(en, target)
+
     # Section eyebrows
     for key, original in [
         ("section_02_eyebrow", "02 — Brand specs · 110 catalogue"),
