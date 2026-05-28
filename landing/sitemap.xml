@@ -127,6 +127,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://uxskill.laithjunaidy.com/commands.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://uxskill.laithjunaidy.com/privacy.html</loc>
     <lastmod>2026-05-24</lastmod>
     <changefreq>yearly</changefreq>

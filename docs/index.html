@@ -275,7 +275,7 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity var(--t-mid) var(--ease-cinema);
-      backdrop-filter: blur(20px); background: rgba(7, 8, 10, 0.94);
+      background-color: rgba(7, 8, 10, 0.94);
     }
     .nav__drawer.is-open { opacity: 1; pointer-events: auto; }
     .nav__drawer a {
@@ -745,7 +745,7 @@
       position: relative;
       overflow: hidden;
     }
-    .engine__lane h4 {
+    .engine__lane .lane-label {
       font-family: var(--mono);
       font-size: 10.5px;
       font-weight: 500;
@@ -996,7 +996,7 @@
 
     @media (min-width: 768px) {
       .devices__rail {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: 1.15fr 0.95fr 0.95fr;
         gap: 20px;
       }
     }
@@ -1099,7 +1099,7 @@
       text-transform: uppercase;
     }
     @media (min-width: 720px) {
-      .stats__grid { grid-template-columns: repeat(3, 1fr); }
+      .stats__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
     @media (min-width: 1024px) {
       .stats__grid { grid-template-columns: repeat(6, 1fr); }
@@ -1525,6 +1525,7 @@
       <a class="nav__link" href="/roadmap.html">Roadmap</a>
       <a class="nav__link" href="/faq.html">FAQ</a>
       <a class="nav__link" href="/mcp.html">MCP</a>
+      <a class="nav__link" href="/commands.html">Commands</a>
       <a class="nav__link" href="/blog/">Blog</a>
       <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
     </nav>
@@ -1660,27 +1661,27 @@
 
           <div class="engine__lanes" id="engine-lanes">
             <div class="engine__lane" data-state="idle" data-lane="style">
-              <h4>Style</h4>
+              <p class="lane-label">Style</p>
               <p class="lane-result" data-result>Saturated Cinema</p>
               <span class="lane-score" data-score>0.94</span>
             </div>
             <div class="engine__lane" data-state="idle" data-lane="palette">
-              <h4>Palette</h4>
+              <p class="lane-label">Palette</p>
               <p class="lane-result" data-result>Media-derived (no fixed)</p>
               <span class="lane-score" data-score>0.91</span>
             </div>
             <div class="engine__lane" data-state="idle" data-lane="type">
-              <h4>Type</h4>
+              <p class="lane-label">Type</p>
               <p class="lane-result" data-result>Bricolage × Inter × JBM</p>
               <span class="lane-score" data-score>0.89</span>
             </div>
             <div class="engine__lane" data-state="idle" data-lane="motion">
-              <h4>Motion</h4>
+              <p class="lane-label">Motion</p>
               <p class="lane-result" data-result>Slide-up clip 480ms</p>
               <span class="lane-score" data-score>0.87</span>
             </div>
             <div class="engine__lane" data-state="idle" data-lane="components">
-              <h4>Components</h4>
+              <p class="lane-label">Components</p>
               <p class="lane-result" data-result>12 compatible</p>
               <span class="lane-score" data-score>0.93</span>
             </div>
