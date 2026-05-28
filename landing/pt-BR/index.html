@@ -509,12 +509,17 @@
       width: 100%;
     }
     /* PROBLEM → SOLUTION section (v3.0.1) — multi-color, varied scene accents */
-    [data-scene="problem"] { --scene-accent: #ec4899; }
-    [data-scene="brain"]   { --scene-accent: #f59e0b; }
-    [data-scene="problem"] .section__title em,
-    [data-scene="problem"] .accent-italic,
-    [data-scene="problem"] .eyebrow { color: var(--scene-accent); }
-    [data-scene="brain"] .eyebrow { color: var(--scene-accent); }
+    [data-scene="problem"]  { --scene-accent: #ec4899; }   /* magenta */
+    [data-scene="brain"]    { --scene-accent: #f59e0b; }   /* amber   */
+    [data-scene="axes"]     { --scene-accent: #06b6d4; }   /* cyan    */
+    [data-scene="modes"]    { --scene-accent: #a78bfa; }   /* violet  */
+    [data-scene="loop"]     { --scene-accent: #10b981; }   /* emerald */
+    [data-scene="dogfood"]  { --scene-accent: #fb7185; }   /* rose    */
+    [data-scene="pillars"]  { --scene-accent: #818cf8; }   /* indigo  */
+    [data-scene="audience"] { --scene-accent: #f97316; }   /* orange  */
+    [data-scene] .eyebrow,
+    [data-scene] .section__title em,
+    [data-scene] .accent-italic { color: var(--scene-accent); }
     .problem-card[data-card="proof"]  { --card-accent: #ec4899; }
     .problem-card[data-card="cause"]  { --card-accent: #f59e0b; }
     .problem-card[data-card="cost"]   { --card-accent: #06b6d4; }
@@ -1796,7 +1801,7 @@
   </section>
 
   <!-- ============ 3. THE 7 AXES ============ -->
-  <section class="section reveal" aria-labelledby="axes-h2">
+  <section class="section reveal" data-scene="axes" aria-labelledby="axes-h2">
     <div class="container">
       <div class="section__head">
         <span class="eyebrow">03 &mdash; The 7 axes</span>
@@ -1857,7 +1862,7 @@
   </section>
 
   <!-- ============ 4. THREE MODES ============ -->
-  <section class="section section--bordered reveal" aria-labelledby="modes-h2">
+  <section class="section section--bordered reveal" data-scene="modes" aria-labelledby="modes-h2">
     <div class="container">
       <div class="section__head">
         <span class="eyebrow">04 &mdash; The three modes</span>
@@ -1906,7 +1911,7 @@ tone=["bold","editorial"]</pre>
   </section>
 
   <!-- ============ 5. THE LOOP ============ -->
-  <section class="section reveal" aria-labelledby="loop-h2">
+  <section class="section reveal" data-scene="loop" aria-labelledby="loop-h2">
     <div class="container">
       <div class="section__head">
         <span class="eyebrow">05 &mdash; The intelligence loop</span>
@@ -1939,7 +1944,7 @@ tone=["bold","editorial"]</pre>
   </section>
 
   <!-- ============ 6. DOGFOOD CALLOUT ============ -->
-  <section class="dogfood reveal" aria-labelledby="dogfood-h2">
+  <section class="dogfood reveal" data-scene="dogfood" aria-labelledby="dogfood-h2">
     <div class="container">
       <div class="section__head">
         <span class="eyebrow">06 &mdash; The dogfood</span>
@@ -2038,7 +2043,7 @@ tone=["bold","editorial"]</pre>
   </section>
 
   <!-- ============ 7. WHY THIS IS THE FUTURE ============ -->
-  <section class="section reveal" aria-labelledby="pillars-h2">
+  <section class="section reveal" data-scene="pillars" aria-labelledby="pillars-h2">
     <div class="container">
       <div class="section__head">
         <span class="eyebrow">07 &mdash; Why this is the floor</span>
@@ -2075,7 +2080,7 @@ tone=["bold","editorial"]</pre>
   </section>
 
   <!-- ============ 8. FOR VIBE CODERS ============ -->
-  <section class="audience reveal" aria-labelledby="audience-h2">
+  <section class="audience reveal" data-scene="audience" aria-labelledby="audience-h2">
     <div class="container">
       <div class="audience__inner">
         <div class="audience__copy">
