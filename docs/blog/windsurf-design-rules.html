@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Windsurf design rules — install ux-skill for Cursor-grade design output</title>
-  <meta name="description" content="Windsurf has no native design rules. Install ux-skill via .windsurfrules + npx to add 85 anti-slop rules, 998 design entries, and 92 brand specs to every Cascade prompt. Free + MIT.">
+  <meta name="description" content="Windsurf has no native design rules. Install ux-skill via .windsurfrules + npx to add 100 anti-slop rules, 998 design entries, and 92 brand specs to every Cascade prompt. Free + MIT.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/windsurf-design-rules.html">
   <meta name="theme-color" content="#faf9f5">
   <meta name="color-scheme" content="light">
@@ -33,7 +33,7 @@
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "Windsurf design rules — install ux-skill for Cursor-grade design output",
-    "description": "Windsurf has no native design rules. Install ux-skill via .windsurfrules + npx to add 85 anti-slop rules, 998 design entries, and 92 brand specs to every Cascade prompt.",
+    "description": "Windsurf has no native design rules. Install ux-skill via .windsurfrules + npx to add 100 anti-slop rules, 998 design entries, and 92 brand specs to every Cascade prompt.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -338,7 +338,7 @@
         <div class="num">01</div>
         <h3>The .windsurfrules path (fastest)</h3>
         <p>
-          Generate ux-skill's rule pack into <code>.windsurfrules</code> at project root. The 85 anti-pattern rules plus brand-spec references become system context that Cascade sees on every prompt. No runtime dependency.
+          Generate ux-skill's rule pack into <code>.windsurfrules</code> at project root. The 100 anti-pattern rules plus brand-spec references become system context that Cascade sees on every prompt. No runtime dependency.
         </p>
         <div class="code">
           <span class="c"># From your project root</span><br/>
@@ -356,7 +356,7 @@
         </p>
         <div class="code">
           <span class="p">$</span> npx <span class="a">uxskill@alpha recommend</span> <span class="c"># interactive design system pick</span><br/>
-          <span class="p">$</span> npx <span class="a">uxskill@alpha lint ./src</span> <span class="c"># 85-rule anti-slop pass</span><br/>
+          <span class="p">$</span> npx <span class="a">uxskill@alpha lint ./src</span> <span class="c"># 100-rule anti-slop pass</span><br/>
           <span class="p">$</span> npx <span class="a">uxskill@alpha fix ./src/components</span> <span class="c"># apply lint fixes</span>
         </div>
         <p>Best for: actively designing inside Windsurf with the recommender, generator, and lint lanes all available.</p>
@@ -419,7 +419,7 @@
         Cascade is Windsurf's agent loop — it generates, refines, and iterates without a human in every turn. That means the model's defaults compound. If turn 1 ships Inter at 90px, turn 2 inherits Inter at 90px and adds more on top. By turn 5 the entire codebase has the same fingerprint.
       </p>
       <p>
-        A rules file in <code>.windsurfrules</code> is read on every turn. The 85 anti-pattern rules and the brand spec references stay in context across the whole Cascade run. The constraints don't drift; the defaults can't compound.
+        A rules file in <code>.windsurfrules</code> is read on every turn. The 100 anti-pattern rules and the brand spec references stay in context across the whole Cascade run. The constraints don't drift; the defaults can't compound.
       </p>
 
       <h2>What ux-skill ships</h2>
@@ -428,7 +428,7 @@
       </p>
       <ul>
         <li><strong>998 structured entries</strong> across 11 JSON manifests — styles, palettes, type pairings, motion presets, components, industry rules, chart types, tech stacks, anti-patterns, brand specs, UX laws.</li>
-        <li><strong>85 deterministic regex rules</strong> in the anti-slop linter. No LLM judgment in the audit lane.</li>
+        <li><strong>100 deterministic regex rules</strong> in the anti-slop linter. No LLM judgment in the audit lane.</li>
         <li><strong>92 brand DESIGN.md specs</strong>. Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, and 84 more.</li>
         <li><strong>22 slash commands</strong> covering discovery, recommendation, generation, audit, polish, and handoff.</li>
         <li><strong>5 specialized sub-agents</strong> for parallel role work.</li>
@@ -463,7 +463,7 @@
       <div class="honesty">
         <div class="label">Honesty card</div>
         <h4>About the 14-star claim</h4>
-        <p>ux-skill v2 is new (v2.0.0-alpha.1 shipped a few weeks ago) and solo-maintained. We don't have the install base ui-ux-pro-max or hallmark have. The case for installing is architecture — Python engine, 998 entries, 85-rule deterministic linter, 92 brand specs, cross-IDE distribution — not awareness.</p>
+        <p>ux-skill v2 is new (v2.0.0-alpha.1 shipped a few weeks ago) and solo-maintained. We don't have the install base ui-ux-pro-max or hallmark have. The case for installing is architecture — Python engine, 998 entries, 100-rule deterministic linter, 92 brand specs, cross-IDE distribution — not awareness.</p>
         <p>Install it for the linter and the brand specs. If you only need a prompt-only taste primer, taste-skill (25k stars) is also reasonable. Both are MIT.</p>
       </div>
 
@@ -477,7 +477,7 @@
         <li><code>npx uxskill@alpha discover</code> — answers the 10-field discovery, writes <code>.ux/last-discover.json</code>.</li>
         <li><code>npx uxskill@alpha recommend</code> — reads discovery, returns style + palette + type + motion + components, writes <code>tokens.css</code>.</li>
         <li>Open Cascade. Ask it to generate inside that system. The recommendation is in <code>.windsurfrules</code>; Cascade can't drift to defaults.</li>
-        <li><code>npx uxskill@alpha lint ./src</code> — 85-rule pass. Fix any flagged lines with <code>ux fix</code>.</li>
+        <li><code>npx uxskill@alpha lint ./src</code> — 100-rule pass. Fix any flagged lines with <code>ux fix</code>.</li>
       </ol>
 
       <p>
@@ -500,7 +500,7 @@
     <section class="cta">
       <span class="eyebrow">Install in Windsurf</span>
       <h2>One npx command. <span class="accent">No Python required.</span></h2>
-      <p>The full ux-skill engine wraps behind npx, so Windsurf users without a Python environment still get the recommender, 85-rule linter, and 92 brand specs.</p>
+      <p>The full ux-skill engine wraps behind npx, so Windsurf users without a Python environment still get the recommender, 100-rule linter, and 92 brand specs.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init --target windsurf</span></div>
