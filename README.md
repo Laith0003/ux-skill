@@ -2,7 +2,7 @@
 
 # ux-skill — the design intelligence engine for Claude Code, Cursor, and every other AI coding tool
 
-> **The strongest UX plugin for AI coding.** A Python reasoning core with 11 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 145 anti-pattern rules, 25 tech stacks, 160 brand specs), 22 slash commands, 5 sub-agents, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
+> **v3.0.0 stable — THE BRAIN.** The strongest UX plugin for AI coding. A Python reasoning core with a deterministic 7-axis synthesizer, 11 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 145 anti-pattern rules, 25 tech stacks, 160 brand specs), 23 slash commands, 5 sub-agents, 18 MCP tools, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
 
 > **The brand name is `ux-skill`.** The PyPI / npm package name stays `uxskill`. The GitHub repo lives at [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
@@ -16,6 +16,7 @@
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-145-181715.svg)](data/anti-patterns.json)
+[![Tests](https://img.shields.io/badge/tests-223_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -31,7 +32,7 @@
 
 ux-skill is a **design intelligence engine** for AI coding tools. It runs as a Python package (`pip install uxskill`), as a Claude Code plugin, and as a 17-IDE multi-installer. The engine ingests a project brief (industry, audience, tone, must-haves, forbidden moves, stack, region) and returns a complete recommended design system: style, palette, type pair, motion presets, components, brand exemplars to study, and the anti-pattern guardrails that must hold. The recommendation is deterministic — same input always produces the same output.
 
-The plugin sits between you and the AI coding tool. When you ask Claude Code, Cursor, or any other AI assistant to "build a fintech landing page," the assistant typically improvises — and the result reads as AI-generated within five seconds (purple-to-blue gradients, three equal cards, Inter at display size, "John Doe" in testimonials, 300ms default transitions, centered hero, bouncing arrow CTAs). ux-skill replaces improvisation with **structured constraints**: you run `/ux-discover` to capture the brief, `/ux-recommend` to pick the system, `/ux-design` to generate the code, and `/ux-lint` to verify it passes the 100 deterministic anti-AI-slop rules before commit.
+The plugin sits between you and the AI coding tool. When you ask Claude Code, Cursor, or any other AI assistant to "build a fintech landing page," the assistant typically improvises — and the result reads as AI-generated within five seconds (purple-to-blue gradients, three equal cards, Inter at display size, "John Doe" in testimonials, 300ms default transitions, centered hero, bouncing arrow CTAs). ux-skill replaces improvisation with **structured constraints**: you run `/ux-discover` to capture the brief, `/ux-recommend` to pick the system, `/ux-design` to generate the code, and `/ux-lint` to verify it passes the 145 deterministic anti-AI-slop rules before commit.
 
 This README is the canonical reference. Every command, every sub-agent, every data manifest, every install path, every brand spec, every anti-pattern category — it's all documented here. If you're shopping for a Claude Code design plugin or comparing AI design tools for Cursor, Windsurf, or Codex, read this top to bottom and the [compare.html](https://uxskill.laithjunaidy.com/compare.html) side by side.
 
@@ -45,7 +46,7 @@ This README is the canonical reference. Every command, every sub-agent, every da
 4. [The 22 slash commands — detailed reference](#the-22-slash-commands--detailed-reference)
 5. [The 5 sub-agents](#the-5-sub-agents)
 6. [The 11 data manifests](#the-11-data-manifests)
-7. [The 145 anti-AI-slop rules — the linter](#the-100-anti-ai-slop-rules--the-linter)
+7. [The 145 anti-AI-slop rules — the linter](#the-145-anti-ai-slop-rules--the-linter)
 8. [The 160 brand DESIGN.md specs — by category](#the-160-brand-designmd-specs--by-category)
 9. [MCP server — the asymmetric move](#mcp-server--the-asymmetric-move)
 10. [The 17-IDE installer](#the-17-ide-installer)
@@ -99,7 +100,7 @@ npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-a
 ```bash
 ux stats
 # {
-#   "version": "2.0.0-alpha.1",
+#   "version": "3.0.0-stable",
 #   "counts": {
 #     "styles": 84,
 #     "palettes": 176,
@@ -110,8 +111,8 @@ ux stats
 #     "tech-stacks": 25,
 #     "ux-guidelines": 112,
 #     "motion-presets": 57,
-#     "anti-patterns": 100,
-#     "brands": 110
+#     "anti-patterns": 145,
+#     "brands": 160
 #   }
 # }
 ```
@@ -134,7 +135,7 @@ Star counts last verified via `gh api` on **2026-05-28**. ux-skill (Laith0003/ux
 | dominikmartn/nothing-design-skill | **2,391** | Single-aesthetic skill | 1 | — | — | 0 | 0 | 1 |
 | Nutlope/hallmark | **2,164** | Anti-slop design skill | 1 | — | — | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | MD3 components + audit | 1 | — | (MD3 only) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Python engine + 11 manifests + 22 commands + 5 sub-agents + CI linter** | **22** | **145 regex rules** | **110** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Python engine + 11 manifests + 22 commands + 5 sub-agents + CI linter** | **22** | **145 regex rules** | **160** | **148** | **57** | **17** |
 
 ### Where we lose
 
@@ -147,7 +148,7 @@ Star counts last verified via `gh api` on **2026-05-28**. ux-skill (Laith0003/ux
 - **Component library:** 148 documented components with anatomy, states, tokens used, and motion specs. None of the other 8 ship a component manifest.
 - **Motion presets:** 57 stack-ready entries (Framer Motion, GSAP, CSS) with reduced-motion fallbacks. None of the others ship a motion manifest.
 - **Anti-pattern linter:** 145 deterministic regex rules, runs in CI, exits non-zero on Critical/High. None of the others ship a deterministic linter.
-- **Brand specs:** 110 real DESIGN.md specs (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, and 96 more). None of the others ship a brand library.
+- **Brand specs:** 160 real DESIGN.md specs (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, and 96 more). None of the others ship a brand library.
 - **17 IDEs supported:** same engine, different glue per IDE.
 - **22 slash commands:** discovery, generation, audit, lint, polish, fix loop, case-study, workshop, copy, motion, a11y, dashboard, conductor — fully integrated.
 
@@ -714,17 +715,17 @@ Every preset has a reduced-motion variant. Stack-ready code for Framer Motion, G
 
 | Field | Description |
 |---|---|
-| `entries` | 100 |
+| `entries` | 145 |
 | `keys per entry` | `id`, `name`, `severity` (critical/high/medium/low), `category`, `detection` (type, pattern, flags, scope), `evidence_template`, `fix`, `references` |
 | `categories` | A11y (23), Content (15), Layout (13), Typography (10), Color (9), Quality (9), Visual (9), Motion (8), Performance (4) |
 
-The full rule list is in [The 145 anti-AI-slop rules](#the-100-anti-ai-slop-rules--the-linter).
+The full rule list is in [The 145 anti-AI-slop rules](#the-145-anti-ai-slop-rules--the-linter).
 
 ### `brands/*.json` — 160 brand specs
 
 | Field | Description |
 |---|---|
-| `entries` | 110 (plus `_index.json` listing all) |
+| `entries` | 160 (plus `_index.json` listing all) |
 | `keys per entry` | `id`, `name`, `category`, `voice`, `tokens` (color, type, motion), `design_principles`, `signature_moves`, `anti-moves`, `references` |
 | `categories` | Developer Tools (36), Consumer / Lifestyle / Retail (19), Fintech / Crypto (14), Editorial / Media (13), AI / ML Platform (12), Productivity / Collaboration (8), Automotive (8) |
 
@@ -1109,8 +1110,8 @@ Short summary table. Full table-by-table comparison is at [uxskill.laithjunaidy.
 | Slash commands | **22** | 1 | 19 | 1 | 1 | multi | 1 | 1 | 1 |
 | Components | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | Motion presets | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Brand specs | **110** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Anti-pattern rules | **100** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Brand specs | **160** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Anti-pattern rules | **145** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | CI-safe deterministic linter | **yes** | no | no | no | no | no | no | no | no |
 | IDEs supported | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | Discovery gate | **10 fields** | implicit | implicit | implicit | implicit | implicit | implicit | implicit | implicit |
@@ -1210,6 +1211,6 @@ MIT. Use it, fork it, build on it. If it saves you from shipping AI slop, star t
 
 ---
 
-**ux-skill** · **v2.0.0-alpha.1** · Built so Claude Code, Cursor, Windsurf, and every other AI coding tool output frontend that doesn't read as AI-generated.
+**ux-skill** · **v3.0.0-stable** · Built so Claude Code, Cursor, Windsurf, and every other AI coding tool output frontend that doesn't read as AI-generated.
 
 > Star the repo at [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · Install via `pip install uxskill` or `npx uxskill init` · Browse the comparison at [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html)

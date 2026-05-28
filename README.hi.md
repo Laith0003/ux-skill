@@ -15,6 +15,7 @@
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-145-181715.svg)](data/anti-patterns.json)
+[![Tests](https://img.shields.io/badge/tests-223_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -98,7 +99,7 @@ npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-a
 ```bash
 ux stats
 # {
-#   "version": "2.0.0-alpha.1",
+#   "version": "3.0.0-stable",
 #   "counts": {
 #     "styles": 84,
 #     "palettes": 176,
@@ -1209,6 +1210,6 @@ MIT। इसे उपयोग करें, फ़ोर्क करें, 
 
 ---
 
-**ux-skill** · **v2.0.0-alpha.1** · इसलिए बनाया गया ताकि Claude Code, Cursor, Windsurf, और हर दूसरा AI कोडिंग टूल फ़्रंटएंड आउटपुट करे जो AI-जनरेटेड के रूप में न पढ़ा जाए।
+**ux-skill** · **v3.0.0-stable** · इसलिए बनाया गया ताकि Claude Code, Cursor, Windsurf, और हर दूसरा AI कोडिंग टूल फ़्रंटएंड आउटपुट करे जो AI-जनरेटेड के रूप में न पढ़ा जाए।
 
 > [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) पर रेपो को स्टार करें · `pip install uxskill` या `npx uxskill init` के ज़रिए इंस्टॉल करें · [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html) पर तुलना देखें

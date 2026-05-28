@@ -15,6 +15,7 @@
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-145-181715.svg)](data/anti-patterns.json)
+[![Tests](https://img.shields.io/badge/tests-223_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -30,7 +31,7 @@
 
 ux-skill 是一個面向 AI 程式設計工具的**設計智慧引擎**。它以 Python 套件的形式運行(`pip install uxskill`),也作為 Claude Code 外掛運行,同時提供一個面向 17 個 IDE 的多重安裝程式。引擎接收一份專案簡報(產業、受眾、語氣、必備項、禁忌項、技術堆疊、地區),並回傳一套完整的推薦設計系統:風格、配色、字體搭配、動效預設、元件、可供研習的品牌範例,以及必須堅守的反模式護欄。該推薦是確定性的——相同輸入永遠產出相同結果。
 
-這個外掛位於你與 AI 程式設計工具之間。當你讓 Claude Code、Cursor 或任何其他 AI 助理「做一個金融科技著陸頁」時,助理通常會即興發揮——結果在五秒鐘內就能被識別為 AI 生成(紫到藍的漸層、三張等大的卡片、用 Inter 做超大顯示字、推薦語裡出現「John Doe」、預設 300ms 的轉場、置中 hero、CTA 上跳動的箭頭)。ux-skill 用**結構化的約束**替代即興:你跑 `/ux-discover` 擷取簡報,跑 `/ux-recommend` 選定系統,跑 `/ux-design` 生成程式碼,再跑 `/ux-lint` 在提交前驗證它通過 100 條確定性反 AI-slop 規則。
+這個外掛位於你與 AI 程式設計工具之間。當你讓 Claude Code、Cursor 或任何其他 AI 助理「做一個金融科技著陸頁」時,助理通常會即興發揮——結果在五秒鐘內就能被識別為 AI 生成(紫到藍的漸層、三張等大的卡片、用 Inter 做超大顯示字、推薦語裡出現「John Doe」、預設 300ms 的轉場、置中 hero、CTA 上跳動的箭頭)。ux-skill 用**結構化的約束**替代即興:你跑 `/ux-discover` 擷取簡報,跑 `/ux-recommend` 選定系統,跑 `/ux-design` 生成程式碼,再跑 `/ux-lint` 在提交前驗證它通過 145 條確定性反 AI-slop 規則。
 
 這份 README 是權威參考。每一個命令、每一個子代理、每一份資料清單、每一條安裝路徑、每一份品牌規範、每一類反模式——全都記錄在這裡。如果你正在挑選 Claude Code 的設計外掛,或者在為 Cursor、Windsurf 或 Codex 比較 AI 設計工具,請把這篇從頭到尾讀一遍,並對照 [compare.html](https://uxskill.laithjunaidy.com/compare.html)。
 
@@ -98,7 +99,7 @@ npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-a
 ```bash
 ux stats
 # {
-#   "version": "2.0.0-alpha.1",
+#   "version": "3.0.0-stable",
 #   "counts": {
 #     "styles": 84,
 #     "palettes": 176,
@@ -109,8 +110,8 @@ ux stats
 #     "tech-stacks": 25,
 #     "ux-guidelines": 112,
 #     "motion-presets": 57,
-#     "anti-patterns": 100,
-#     "brands": 110
+#     "anti-patterns": 145,
+#     "brands": 160
 #   }
 # }
 ```
@@ -133,7 +134,7 @@ Star 數最後一次透過 `gh api` 核對的時間是 **2026-05-28**。ux-skill
 | dominikmartn/nothing-design-skill | **2,391** | 單一美學 skill | 1 | — | — | 0 | 0 | 1 |
 | Nutlope/hallmark | **2,164** | 反 slop 設計 skill | 1 | — | — | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | MD3 元件 + 稽核 | 1 | — | (僅 MD3) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Python 引擎 + 11 份清單 + 22 個命令 + 5 個子代理 + CI 檢查器** | **22** | **145 條 regex 規則** | **110** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Python 引擎 + 11 份清單 + 22 個命令 + 5 個子代理 + CI 檢查器** | **22** | **145 條 regex 規則** | **160** | **148** | **57** | **17** |
 
 ### 我們輸在哪裡
 
@@ -146,7 +147,7 @@ Star 數最後一次透過 `gh api` 核對的時間是 **2026-05-28**。ux-skill
 - **元件庫:** 148 個帶解剖結構、狀態、所用 token 與動效規範的文件化元件。其他 8 個裡沒有任何一個發布過元件清單。
 - **動效預設:** 57 個開箱即用的堆疊層級項目(Framer Motion、GSAP、CSS),全部帶 reduced-motion 後援。其他幾家都不發布動效清單。
 - **反模式程式碼檢查器:** 145 條確定性 regex 規則,能在 CI 中執行,遇 Critical/High 結束非零碼。其他幾家沒有任何確定性檢查器。
-- **品牌規範:** 110 份真實 DESIGN.md 規範(Apple、Stripe、Linear、Figma、Tesla、BMW、Notion、Spotify、Airbnb、Vercel、Supabase、Cursor、Raycast、Claude,以及其餘 96 個)。其他幾家沒有品牌庫。
+- **品牌規範:** 160 份真實 DESIGN.md 規範(Apple、Stripe、Linear、Figma、Tesla、BMW、Notion、Spotify、Airbnb、Vercel、Supabase、Cursor、Raycast、Claude,以及其餘 96 個)。其他幾家沒有品牌庫。
 - **支援 17 個 IDE:** 同一個引擎,IDE 之間用不同的「膠水」對接。
 - **22 個斜線命令:** discovery、生成、稽核、lint、polish、修復循環、案例研究、工作坊、文案、動效、a11y、dashboard、conductor——彼此完全打通。
 
@@ -170,7 +171,7 @@ ux-skill (套件名: uxskill)
 │   ├── ux-guidelines.json             112 條具名 UX 法則(Hick、Fitts、Miller...)
 │   ├── motion-presets.json            57 個動效預設(進場、出場、hover...)
 │   ├── anti-patterns.json             145 條 regex 規則(CI 安全的檢查器來源)
-│   └── brands/*.json                  110 份 DESIGN 規範 + _index.json
+│   └── brands/*.json                  160 份 DESIGN 規範 + _index.json
 │
 ├── engine/                            Python——推理層
 │   ├── recommender/                   五路平行檢索的合併引擎
@@ -713,7 +714,7 @@ ux-skill (套件名: uxskill)
 
 | 欄位 | 描述 |
 |---|---|
-| `entries` | 100 |
+| `entries` | 145 |
 | `keys per entry` | `id`、`name`、`severity`(critical/high/medium/low)、`category`、`detection`(type、pattern、flags、scope)、`evidence_template`、`fix`、`references` |
 | `categories` | A11y(23)、Content(15)、Layout(13)、Typography(10)、Color(9)、Quality(9)、Visual(9)、Motion(8)、Performance(4) |
 
@@ -723,7 +724,7 @@ ux-skill (套件名: uxskill)
 
 | 欄位 | 描述 |
 |---|---|
-| `entries` | 110(再加一份 `_index.json` 列出全部) |
+| `entries` | 160(再加一份 `_index.json` 列出全部) |
 | `keys per entry` | `id`、`name`、`category`、`voice`、`tokens`(color、type、motion)、`design_principles`、`signature_moves`、`anti-moves`、`references` |
 | `categories` | Developer Tools(36)、Consumer / Lifestyle / Retail(19)、Fintech / Crypto(14)、Editorial / Media(13)、AI / ML Platform(12)、Productivity / Collaboration(8)、Automotive(8) |
 
@@ -1108,8 +1109,8 @@ python3 -m engine.cli.main persist save --project-root .
 | 斜線命令 | **22** | 1 | 19 | 1 | 1 | 多 | 1 | 1 | 1 |
 | 元件 | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | 動效預設 | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 品牌規範 | **110** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 反模式規則 | **100** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 品牌規範 | **160** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 反模式規則 | **145** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | CI 安全的確定性檢查器 | **是** | 否 | 否 | 否 | 否 | 否 | 否 | 否 | 否 |
 | 支援的 IDE | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | Discovery 關卡 | **10 欄位** | 隱式 | 隱式 | 隱式 | 隱式 | 隱式 | 隱式 | 隱式 | 隱式 |
@@ -1209,6 +1210,6 @@ MIT。用它、fork 它、在它之上建構。如果它幫你少出貨了一份
 
 ---
 
-**ux-skill** · **v2.0.0-alpha.1** · 為讓 Claude Code、Cursor、Windsurf 以及其他 AI 程式設計工具產出的前端不再被一眼識別為 AI 生成而打造。
+**ux-skill** · **v3.0.0-stable** · 為讓 Claude Code、Cursor、Windsurf 以及其他 AI 程式設計工具產出的前端不再被一眼識別為 AI 生成而打造。
 
 > 給儲存庫點個 star:[github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · 透過 `pip install uxskill` 或 `npx uxskill init` 安裝 · 在 [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html) 瀏覽對照

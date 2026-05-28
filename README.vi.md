@@ -15,6 +15,7 @@
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-145-181715.svg)](data/anti-patterns.json)
+[![Tests](https://img.shields.io/badge/tests-223_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -98,7 +99,7 @@ npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-a
 ```bash
 ux stats
 # {
-#   "version": "2.0.0-alpha.1",
+#   "version": "3.0.0-stable",
 #   "counts": {
 #     "styles": 84,
 #     "palettes": 176,
@@ -1209,6 +1210,6 @@ MIT. Hãy dùng, fork, xây dựng dựa trên. Nếu nó cứu bạn khỏi vi�
 
 ---
 
-**ux-skill** · **v2.0.0-alpha.1** · Được xây để Claude Code, Cursor, Windsurf, và mọi công cụ lập trình AI khác xuất ra frontend không đọc lên như AI tạo.
+**ux-skill** · **v3.0.0-stable** · Được xây để Claude Code, Cursor, Windsurf, và mọi công cụ lập trình AI khác xuất ra frontend không đọc lên như AI tạo.
 
 > Gắn sao repo tại [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · Cài qua `pip install uxskill` hoặc `npx uxskill init` · Xem so sánh tại [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html)

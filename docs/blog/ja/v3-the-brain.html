@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ux-skill v3.0 — The Brain をリリース。ブランド仕様はもうテンプレートではなく、訓練データです。</title>
+  <meta name="description" content="v2 はカタログから選んでいた。v3 はカタログから蒸留する。同じ 160 のブランド仕様、まったく違う役割。7 軸シンセサイザー、決定ログ、閉じたフィードバックループ。">
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ja/v3-the-brain.html">
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="index,follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ja/v3-the-brain.html">
+  <meta property="og:title" content="ux-skill v3.0 — The Brain をリリース。ブランド仕様はテンプレートではなく訓練データに。">
+  <meta property="og:description" content="v2 はカタログから選んでいた。v3 はそこから蒸留する。同じ 1,182 件のエントリで、エンジンの役割が完全に変わった。">
+  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/ja-v3-the-brain.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ux-skill v3.0 — The Brain">
+  <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/ja-v3-the-brain.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ux-skill v3.0 — The Brain">
+  <meta name="twitter:description" content="閉じたフィードバックループを持つ、決定論的な生成デザインコンパイラ。7 軸、3 モード、1 つの判定ロジック。完全オフライン、LLM 呼び出しゼロ。">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "ux-skill v3.0 — The Brain をリリース。ブランド仕様はもうテンプレートではなく、訓練データです。",
+    "description": "v2 はカタログから選んでいた。v3 はそこから蒸留する。7 軸シンセサイザー、決定ログ、閉じたフィードバックループの解説。",
+    "datePublished": "2026-05-28",
+    "dateModified": "2026-05-28",
+    "author": {
+      "@type": "Organization",
+      "name": "ux-skill",
+      "url": "https://uxskill.laithjunaidy.com/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ux-skill",
+      "url": "https://uxskill.laithjunaidy.com/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://uxskill.laithjunaidy.com/blog/ja/v3-the-brain.html"
+    },
+    "image": "https://uxskill.laithjunaidy.com/og/ja-v3-the-brain.png",
+    "inLanguage": "ja"
+  }
+  </script>
+
+  <style>
+    :root {
+      --canvas: #07080a;
+      --surface-1: #0f1115;
+      --surface-2: #14181d;
+      --surface-3: #1c2128;
+      --ink: #f6f7f9;
+      --body: #c7ccd3;
+      --muted: #7a7972;
+      --faint: #5a5f66;
+      --hairline: rgba(255,255,255,0.08);
+      --hairline-2: rgba(255,255,255,0.14);
+      --scene-accent: #f59e0b;
+      --scene-soft: rgba(245,158,11,0.18);
+      --win-bg: rgba(16,185,129,0.10);
+      --win-fg: #34d399;
+      --lose-bg: rgba(244,63,94,0.10);
+      --lose-fg: #fb7185;
+      --neutral-bg: rgba(255,255,255,0.05);
+      --neutral-fg: #c7ccd3;
+      --display: 'Bricolage Grotesque', 'Noto Sans JP', system-ui, sans-serif;
+      --body-face: 'Noto Sans JP', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+      --serif-italic: 'Instrument Serif', Georgia, serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; background: var(--canvas); }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      font-family: var(--body-face);
+      background: var(--canvas);
+      color: var(--body);
+      font-size: 16px;
+      line-height: 1.85;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+    header.top {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8px 24px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .wordmark {
+      display: inline-flex; align-items: baseline; gap: 4px;
+      text-decoration: none; color: var(--ink);
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-weight: 620;
+      font-size: 26px; letter-spacing: -0.04em; line-height: 1;
+    }
+    .wordmark .dot {
+      display: inline-block; width: 7px; height: 7px;
+      border-radius: 2px;
+      background: var(--scene-accent);
+      transform: translateY(-3px);
+    }
+    nav.crumbs {
+      display: flex; gap: 28px;
+      font-family: var(--mono);
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+    nav.crumbs a { color: var(--muted); text-decoration: none; transition: color 0.16s ease; }
+    nav.crumbs a:hover { color: var(--ink); }
+    nav.crumbs a.current { color: var(--ink); }
+
+    article { padding-top: 56px; }
+    .eyebrow {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--scene-accent);
+      margin-bottom: 22px;
+    }
+    h1 {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 96, 'wght' 600;
+      font-weight: 600;
+      font-size: clamp(34px, 4.8vw, 54px);
+      line-height: 1.18; letter-spacing: -0.01em;
+      color: var(--ink); margin-bottom: 28px;
+    }
+    h1 .accent {
+      font-family: var(--serif-italic);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--scene-accent);
+    }
+    .lede {
+      font-size: 18px; line-height: 1.85; color: var(--body);
+      margin-bottom: 16px;
+    }
+    .lede strong { color: var(--ink); font-weight: 600; }
+    .byline {
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 56px; padding-bottom: 24px;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .hero-quote {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 86, 'opsz' 96, 'wght' 600;
+      font-size: clamp(28px, 4.2vw, 46px);
+      line-height: 1.4; letter-spacing: -0.005em;
+      color: var(--ink);
+      padding: 56px 0 64px;
+      border-top: 1px solid var(--hairline);
+      border-bottom: 1px solid var(--hairline);
+      margin: 48px 0 56px;
+    }
+    .hero-quote .accent {
+      color: var(--scene-accent);
+      font-family: var(--serif-italic);
+      font-style: italic;
+      font-weight: 400;
+    }
+    h2 {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 80, 'wght' 580;
+      font-weight: 580;
+      font-size: clamp(24px, 2.8vw, 32px);
+      line-height: 1.4; letter-spacing: -0.005em;
+      color: var(--ink); margin: 64px 0 18px;
+    }
+    h2 .accent {
+      font-family: var(--serif-italic);
+      color: var(--scene-accent);
+      font-style: italic; font-weight: 400;
+    }
+    h3 {
+      font-family: var(--body-face);
+      font-weight: 600; font-size: 18px;
+      color: var(--ink);
+      margin: 36px 0 14px;
+    }
+    p { margin-bottom: 18px; color: var(--body); }
+    p strong { color: var(--ink); font-weight: 600; }
+    em { color: var(--ink); font-style: normal; font-weight: 500; }
+    ul, ol { margin: 0 0 22px 22px; }
+    ul li, ol li { margin-bottom: 10px; color: var(--body); }
+    ul li::marker { color: var(--scene-accent); }
+    ol li::marker { color: var(--scene-accent); font-family: var(--mono); font-size: 0.9em; }
+
+    pre.code {
+      background: var(--surface-2);
+      color: var(--ink);
+      border: 1px solid var(--hairline);
+      padding: 22px 24px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 13.5px;
+      line-height: 1.65;
+      margin: 24px 0 28px;
+    }
+    pre.code .c { color: rgba(250,249,245,0.45); font-style: italic; }
+    pre.code .k { color: #e8b894; }
+    pre.code .s { color: #a3e0b8; }
+    pre.code .n { color: var(--scene-accent); }
+    code {
+      font-family: var(--mono);
+      font-size: 13px;
+      background: var(--surface-2);
+      border: 1px solid var(--hairline);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--ink);
+    }
+    a.link {
+      color: var(--scene-accent);
+      text-decoration: underline;
+      text-decoration-color: rgba(245,158,11,0.4);
+      text-underline-offset: 3px;
+    }
+    a.link:hover { color: var(--ink); }
+
+    .honesty {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-left: 3px solid var(--scene-accent);
+      padding: 24px 28px;
+      border-radius: 0 14px 14px 0;
+      margin: 32px 0;
+    }
+    .honesty .label {
+      font-family: var(--mono);
+      font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--scene-accent); margin-bottom: 8px;
+    }
+    .honesty h4 {
+      font-weight: 600; font-size: 17px; color: var(--ink);
+      margin-bottom: 10px;
+    }
+
+    .axis-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0 32px;
+      font-size: 14px;
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .axis-table th, .axis-table td {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--hairline);
+      vertical-align: top;
+    }
+    .axis-table th {
+      background: var(--surface-2);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .axis-table tr:last-child td { border-bottom: none; }
+    .axis-table .axis-name { color: var(--ink); font-weight: 600; font-family: var(--mono); font-size: 13px; }
+
+    .conflict-card {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-left: 3px solid var(--scene-accent);
+      border-radius: 0 14px 14px 0;
+      padding: 20px 24px;
+      margin: 18px 0;
+    }
+    .conflict-card .input {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--scene-accent);
+      margin-bottom: 8px;
+    }
+    .conflict-card .outcome {
+      color: var(--ink);
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+    .conflict-card .reason {
+      font-size: 14.5px;
+      color: var(--body);
+      margin: 0;
+    }
+
+    .mode-card {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-radius: 14px;
+      padding: 22px 26px;
+      margin: 16px 0;
+    }
+    .mode-card .mode-name {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--scene-accent);
+      margin-bottom: 8px;
+    }
+    .mode-card h4 {
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));
+      gap: 12px;
+      margin: 32px 0;
+    }
+    .stat {
+      background: var(--surface-1);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 18px 16px;
+      text-align: center;
+    }
+    .stat .n {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 80, 'wght' 600;
+      font-size: 28px;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat .l {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .cta {
+      margin-top: 96px;
+      padding: 56px 48px;
+      background: var(--surface-1);
+      color: var(--ink);
+      border: 1px solid var(--hairline-2);
+      border-radius: 22px;
+    }
+    @media (max-width: 720px) { .cta { padding: 40px 28px; } }
+    .cta .eyebrow { color: var(--scene-accent); }
+    .cta h2 { color: var(--ink); margin-top: 0; }
+
+    .install-block {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-family: var(--mono);
+      font-size: 14px; line-height: 1.75;
+      color: var(--ink);
+    }
+    .install-block .prompt { color: var(--scene-accent); }
+    .install-block .arg { color: var(--muted); }
+    .install-block .row + .row { margin-top: 6px; }
+
+    footer {
+      max-width: 1100px;
+      margin: 96px auto 0;
+      padding: 32px 24px 0;
+      border-top: 1px solid var(--hairline);
+      display: flex; justify-content: space-between; align-items: baseline;
+      flex-wrap: wrap; gap: 16px;
+      font-size: 13px; color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--ink); }
+    footer .links { display: flex; gap: 24px; flex-wrap: wrap; }
+
+    blockquote {
+      border-left: 3px solid var(--scene-accent);
+      padding: 6px 0 6px 22px;
+      margin: 24px 0;
+      font-size: 19px; line-height: 1.7;
+      color: var(--ink);
+    }
+
+    .locale-row {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .locale-row a { color: var(--muted); text-decoration: none; }
+    .locale-row a.current { color: var(--scene-accent); }
+    .locale-row a:hover { color: var(--ink); }
+
+    @media (max-width: 720px) {
+      header.top { flex-direction: column; align-items: flex-start; gap: 16px; }
+      nav.crumbs { gap: 18px; flex-wrap: wrap; }
+      .wrap { padding: 40px 20px 72px; }
+    }
+  </style>
+  <style>
+    html, body { overflow-x: clip; max-width: 100%; }
+    section, header, footer, main, article { max-width: 100vw; }
+    img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
+    table { max-width: 100%; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a href="/" class="wordmark">ux<span class="dot"></span></a>
+    <nav class="crumbs">
+      <a href="/">Home</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/blog/" class="current">Blog</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="wrap">
+    <article>
+      <span class="eyebrow">Launch · v3.0.0 · 2026-05-28</span>
+      <h1>ux-skill v3.0 &mdash; <span class="accent">The Brain</span> をリリース。ブランド仕様はもうテンプレートではなく、訓練データです。</h1>
+      <p class="lede">
+        <strong>v2 はカタログから選んでいた。v3 はそこから蒸留する。</strong>同じ 160 のブランド仕様、まったく違う役割です。これまでのリコメンダーは 1,182 件のエントリを採点して最も近い候補を返していました。新しいシンセサイザーはそれらを<em>語彙</em>として読み、ブリーフから新しいデザイン言語をコンパイルします。呼び出すたびに、その呼び出し以前には存在しなかったシステムが返ってきます。
+      </p>
+      <p class="byline">ux-skill チーム &middot; 12 分で読了 &middot; MIT ライセンスのオープンソース</p>
+
+      <div class="locale-row" aria-label="Languages">
+        <a href="/blog/v3-the-brain-launch.html">EN</a>
+        <a href="/blog/ja/v3-the-brain.html" class="current">JA</a>
+        <a href="/blog/zh-CN/v3-the-brain.html">ZH-CN</a>
+        <a href="/blog/ar/v3-the-brain.html">AR</a>
+        <a href="/blog/es/v3-the-brain.html">ES</a>
+        <a href="/blog/de/v3-the-brain.html">DE</a>
+      </div>
+
+      <div class="hero-quote">
+        ブランド仕様は<span class="accent">訓練データ</span>、<br>テンプレートではない。
+      </div>
+
+      <h2>一段落でいう、今回のシフト</h2>
+      <p>
+        v2 は<em>リコメンダー</em>でした。ブリーフを渡せば、整備済みのカタログ &mdash; 84 のスタイル、176 のパレット、160 のブランド仕様、70 のタイプペア &mdash; から最も近い候補を返す。出力は常にデータベースの 1 行でした。v3 はカタログをすべて維持したまま、その役割を反転させます。1,182 件のエントリは、いまや<em>エンジンが蒸留する語彙</em>です。ブリーフはもう 1 行を引き当てるのではなく、7 つの軸の値にコンパイルされ、その値が新しいトークンを合成する。カタログは「軽やかで企業的なもの」がどんな形をしているかをエンジンに教え、エンジンはこれまで世に出たことのない「軽やかで企業的」な新しいシステムを生成します。データは同じ。役割はまったく違います。
+      </p>
+
+      <h2>v2 で壊れていて、v3 が<span class="accent">直す</span>もの</h2>
+      <p>
+        実際のバグが 3 つ、設計上の穴が 1 つあります。どれも騒がしいバグではなく、もっともらしい出力が返ってきて、私たちもそのまま出荷していた静かな種類のものです。アップグレード仕様を書こうとして外部レビューに正面から向き合わされて、ようやく気付きました。
+      </p>
+
+      <h3>1. ファイルシステム順のタイブレークによる擬似的な決定論</h3>
+      <p>
+        リコメンダー内部のいくつかのソートは、類似度で候補を採点し、同点は Python の <code>os.listdir</code> が返す順序で割っていました。macOS ではアルファベット順、Linux ではファイルシステムジャーナルへの挿入順。新規クローンと長く使ったクローンでは、タイブレークの結果がひっくり返り得ました。私たちはエンジンを決定論的だと言っていました。同点までは決定論的だったのです。同点になった瞬間からは、OS が偶然憶えていた順序に従っていました。
+      </p>
+      <p>
+        v3 はすべてのソートに、ブランド ID のアルファベット順という明示的なタイブレークを焼き付けました。同じブリーフ、同じ軸、同じ出力 &mdash; マシン、ファイルシステム、Python バージョンを越えて。シンセサイザーを 3 つの一時ディレクトリ上で 200 回回し、バイトレベルで出力が一致することを断言するテストが入っています。
+      </p>
+
+      <h3>2. 偶然で解決していた軸の衝突</h3>
+      <p>
+        v2 では、ブリーフが反対方向に引く 2 つのタグ &mdash; たとえば <em>dense</em> と <em>corporate</em> &mdash; を持っていたとき、リコメンダーのスコアラーはどこかの隠れた係数で片方を重く扱い、出力はその係数が偶然有利にしたタグへ寄っていました。文書化されたルールはなく、結果を後から説明することはできても、事前に予測することはできませんでした。
+      </p>
+      <p>
+        v3 はこれを<strong>軸の相互作用マトリックス</strong>に持ち上げました。文書化されたすべての衝突に、明示的な解決と理由が付いています。density と formality は spacing をめぐって争います &mdash; 密なブリーフでは density が勝ち(Bloomberg 流)、軽やかなブリーフでは formality が勝ちます(ラグジュアリー)。マトリックスはテスト済みで、読めて、コミットされています。
+      </p>
+
+      <h3>3. エバリュエーターはシンセサイザー自身の宿題を採点していた</h3>
+      <p>
+        いちばん恥ずかしいのはこれで、気付けたのは <em>ChatGPT が v2.1 仕様の外部レビューで指摘した</em>からです。彼らが<strong>自己参照ドリフト (self-referential drift)</strong> と呼んだ問題でした。フローは綺麗に見えました。シンセサイザーがブリーフからシステムをコンパイルし、続いて <code>score_tone_match</code> がそのシステムとブリーフのトーンの一致度を評価する。問題は、<code>score_tone_match</code> がシンセサイザーと同じロジックでブリーフから軸を導き、それからシンセサイザーの軸を自分が導いた軸と比較していたことです。比較の両側が同じ関数を通っていました。当然スコアは良かった。シンセサイザーは自分のルーブリックで自分自身を採点していたのです。
+      </p>
+      <p>
+        v3 はこれを切り離します。<code>score_tone_match</code> はいま、シンセサイザーの軸ロジックに一切触れない独立したマッピングを通して、合成出力とブリーフの<em>生のトーンタグ</em> &mdash; <code>warm</code>、<code>bold</code>、<code>minimal</code> といった文字列 &mdash; を直接比較します。両者がもう互いをカンニングできなくなりました。この指摘は外部レビューに負っており、ここに記録として書いておきます。
+      </p>
+
+      <h3>4. 決定ログは書き捨て &mdash; 一度も読まれなかった</h3>
+      <p>
+        v2 はリコメンドのたびに <code>.ux/decisions.jsonl</code> へ 1 行書いていましたが、読み返すものは何もありませんでした。私たち自身のデバッグ用のログファイルで、フィードバック信号ではなかったのです。リコメンダーは 1 回目も 1,000 回目も同じように振る舞いました。学習は存在せず、リポジトリには記憶があるのにエンジンはそれを無視していました。
+      </p>
+      <p>
+        v3 はそのループを閉じます。台帳にはロックされたスキーマ (<code>_v: 1</code>) があり、リコメンダーは同じ <code>(industry, ui_type)</code> バケットの過去の勝者で候補を再ランクし、十分にスコアが高く<em>かつ</em>ユーザーが実際に出荷した決定だけが再ランクに数えられます。脳はようやく自分の履歴に目を持ちました。全体は第 6 節で歩きます。
+      </p>
+
+      <h2>7 軸の<span class="accent">シンセサイザー</span></h2>
+      <p>
+        v3 の中心は、ブリーフを 7 つの数値軸にマッピングし、その 7 軸を完全なデザインシステムにマッピングする決定論的な関数です。軸は魔法ではありません &mdash; それぞれが文書化されたレンジを持つ正規化スカラーで、特定のトークン束を指しています。カタログから 1 行選ぶのではなく軸の上で動かす意味は、カタログ内の実在ブランドが使っていない組み合わせも含めて、空間内の任意の組み合わせに到達できることです。カタログは空間の<em>形</em>を定義し、シンセサイザーはその内部のどこへでも着地できます。
+      </p>
+
+      <table class="axis-table">
+        <thead>
+          <tr>
+            <th>軸</th>
+            <th>何を測るか</th>
+            <th>マッピング先</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="axis-name">warmth</td>
+            <td>パレットの色温度 &mdash; クールなチャコールから温かなシエンナまで</td>
+            <td>パレットの色相系、アクセントの彩度カーブ</td>
+          </tr>
+          <tr>
+            <td class="axis-name">contrast</td>
+            <td>視覚的な強弱 &mdash; quiet / balanced / loud</td>
+            <td>タイプスケール比 (1.200 / 1.250 / 1.333)、影の深さ、アクセントの強さ</td>
+          </tr>
+          <tr>
+            <td class="axis-name">density</td>
+            <td>1 ビューポートあたりの情報密度 &mdash; airy から dense まで</td>
+            <td>スペーシングスケールのベース (4/8/12/16px)、行間の倍率</td>
+          </tr>
+          <tr>
+            <td class="axis-name">geometry</td>
+            <td>エッジの人格 &mdash; sharp / balanced / soft</td>
+            <td>radius スケール (2/8/18px)、角のトポロジー、ボーダーの太さ</td>
+          </tr>
+          <tr>
+            <td class="axis-name">formality</td>
+            <td>トーンのレジスタ &mdash; playful / balanced / corporate</td>
+            <td>タイプ重量カーブ、トラッキング、caption から hero までの幅</td>
+          </tr>
+          <tr>
+            <td class="axis-name">motion</td>
+            <td>アニメーションの予算 &mdash; restrained / balanced / cinematic</td>
+            <td>デュレーションのランプ (120/240/420ms)、イージング系、スクロール挙動</td>
+          </tr>
+          <tr>
+            <td class="axis-name">type_personality</td>
+            <td>書体の声 &mdash; humanist / neutral / geometric / expressive</td>
+            <td>ディスプレイ書体ファミリー、ウェイトのはしご、イタリック戦略</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        Python のエントリーポイントは、ひとつのサンプルに収まる程度に小さいです。ブリーフを渡せば、軸の値、選ばれたパレット、タイプ設定、スペーシングスケール、radius スケール、モーションプリセットが付随した合成済みシステムが返ってきます。
+      </p>
+
+      <pre class="code"><span class="c"># ブリーフからシステムへ、1 回の呼び出しで</span>
+<span class="k">from</span> engine.synthesizer <span class="k">import</span> synthesize
+
+brief = Brief(
+  industry=<span class="s">"fintech-payments"</span>,
+  tone=[<span class="s">"bold"</span>, <span class="s">"serious"</span>],
+  audience=[<span class="s">"merchants"</span>, <span class="s">"developers"</span>],
+)
+
+sys = synthesize(brief)
+<span class="c"># sys.mode == "pure_synthesis"</span>
+<span class="c"># sys.axes == {warmth: 0.32, contrast: 0.72, density: 0.58, ...}</span>
+<span class="c"># sys.palette, sys.type, sys.spacing, sys.radius, sys.motion</span></pre>
+
+      <p>
+        同じブリーフが入れば、同じ軸が、同じトークンが出ます。常に。シンセサイザーには乱数シードがありません &mdash; シードする乱数がないからです。
+      </p>
+
+      <h2>3 つのモード、<span class="accent">1 つの判定ロジック</span></h2>
+      <p>
+        シンセサイザーはブリーフの中身に基づいて 3 つのモードを自動振り分けします。ほとんどの用途で、モードを手で選ぶフラグはありません &mdash; ブリーフの形が決めます。ロジックは意図的にシンプルで、リファレンスブランドと strict フラグの有無が経路を決定します。
+      </p>
+
+      <div class="mode-card">
+        <div class="mode-name">strict_brand &middot; 最速</div>
+        <h4>100% 指定ブランド</h4>
+        <p><code>reference_brands=[stripe]</code> に <code>strict=True</code> を付けると、Stripe の仕様がそのまま返ります。解釈もミキシングも合成もなし。ブランドが既に存在し、仕様が権威で、ブリーフはトークンだけが欲しい &mdash; そんな場面のための経路です。Figma ファイルと文書化されたシステムがあり、即興しないコードが必要なときに選ぶ道です。</p>
+      </div>
+
+      <div class="mode-card">
+        <div class="mode-name">brand_anchor &middot; 70 / 30</div>
+        <h4>ブランドに錨を下ろし、ブリーフに合わせて軸で調整</h4>
+        <p><code>reference_brands=[stripe]</code> を <code>strict=True</code> なしで指定すると、70% の Stripe トークンと、軸の近さで選んだ 4 つの兄弟ブランドから 30% の軸由来デルタが融合されます。出力は紛れもなく Stripe のままで、ブリーフのトーンへ少しだけ曲がります &mdash; コンシューマー機能向けにはより遊びのある Stripe、エンタープライズダッシュボード向けにはよりフォーマルな Stripe。錨となるブランドはあらゆる衝突を生き残ります。</p>
+      </div>
+
+      <div class="mode-card">
+        <div class="mode-name">pure_synthesis &middot; 無限空間</div>
+        <h4>ブランド未指定 &mdash; 呼び出しごとに新しい言語</h4>
+        <p>ブリーフに <code>reference_brands</code> がない場合、シンセサイザーはブリーフから 7 軸を採点し、カタログの中から軸距離で最も近い 8 つの実例を見つけ、それらの共通構造を蒸留し、新鮮なパレット + タイプ + スペーシング + radius + モーション一式を出します。異なるブリーフは同じ空間の異なる領域に着地し、すべての出力は内部的に一貫していて、自分自身として識別可能です。</p>
+      </div>
+
+      <p>CLI からは 3 つの経路はこう見えます:</p>
+
+      <pre class="code"><span class="c"># strict — 100% そのブランド</span>
+$ uxskill synthesize <span class="n">--brand</span> stripe <span class="n">--strict</span>
+
+<span class="c"># anchor — 70/30</span>
+$ uxskill synthesize <span class="n">--brand</span> stripe
+
+<span class="c"># pure synthesis — ブランドなし</span>
+$ uxskill synthesize <span class="n">--industry</span> fintech-payments <span class="n">--tone</span> bold</pre>
+
+      <p>1 つのシンセサイザー、1 つの判定ロジック、3 つの出力の人格。ユーザーは実装を切り替えません &mdash; ブリーフ自身が経路を選びます。</p>
+
+      <h2>軸の<span class="accent">相互作用マトリックス</span></h2>
+      <p>
+        軸は同じトークンを引っ張り合います。<em>density</em> はタイトな間隔を望み、<em>formality</em> はラグジュアリーな佇まいのために寛大な間隔を求める。<em>geometry</em> は編集的な切れ味のために鋭角を欲し、<em>formality</em> は金融ダッシュボードのために柔らかな角を求める。v2 ではどちらの係数が偶然大きいかで決まっていました。v3 では文書化された衝突それぞれに、宣言された結果と、それが指し示すデザイン流派があります &mdash; 名前が付いているので、読んで反対することもできます。
+      </p>
+
+      <p>代表的な 4 ケース、いずれもテストフィクスチャとしてコミット済みです:</p>
+
+      <div class="conflict-card">
+        <div class="input">dense + corporate</div>
+        <div class="outcome">spacing スケールのベース: 4px</div>
+        <p class="reason">density が勝つ。Bloomberg 流の答えです。密なデータダッシュボードを企業的なレジスタで求めるブリーフでは、情報密度が最高の徳 &mdash; formality は密度における可読性に頭を下げます。</p>
+      </div>
+
+      <div class="conflict-card">
+        <div class="input">airy + corporate</div>
+        <div class="outcome">spacing スケールのベース: 12px</div>
+        <p class="reason">formality が勝つ。ラグジュアリー金融の答えです。airy + corporate はプレミアムバンキング、プライベートウェルス、エグゼクティブダッシュボードのブリーフ &mdash; 要素間の空間そのものがシリアスさのメッセージです。</p>
+      </div>
+
+      <div class="conflict-card">
+        <div class="input">sharp + corporate</div>
+        <div class="outcome">radius スケール: 2px</div>
+        <p class="reason">geometry が勝つ。NYT 流の答えです。sharp + corporate は編集的なブリーフ &mdash; 直角と 2px の極小 radius は、組織的で、考え抜かれた、ブロードシート紙の読みになります。</p>
+      </div>
+
+      <div class="conflict-card">
+        <div class="input">soft + playful</div>
+        <div class="outcome">radius スケール: 18px</div>
+        <p class="reason">両軸が揃います。Glossier 流の答えです。柔らかなジオメトリと遊び心のあるレジスタは、寛大な丸めへ収束します &mdash; 18px は矩形が小石として読まれ始める閾値です。</p>
+      </div>
+
+      <p>
+        なぜこれが重要か。v2 では、同じブリーフがその月にスコアラーで勝った係数次第で 4px にも 12px にも着地し得ました。v3 では <code>dense + corporate</code> は常に 4px、<code>airy + corporate</code> は常に 12px です。ルールは読めて、テスト可能で、議論可能です。ある解決に同意できないなら、マトリックスに対して issue を立てればいい &mdash; 議論は趣味の話になり、隠れた定数の話ではなくなります。
+      </p>
+
+      <h2>脳が<span class="accent">学習する</span></h2>
+      <p>
+        ここがプロジェクトにとって本当に新しい部分です &mdash; エンジンはあなたのローカルの決定から学習します。仕組みは小さく、決定論的で、完全にオフラインです。テレメトリも、アカウントも、クラウド同期もありません。あなたのインストールはあなたのインストールから学ぶ。リポジトリが違えば、違う脳が育ちます。
+      </p>
+
+      <h3>台帳</h3>
+      <p>
+        すべての <code>/ux-recommend</code> と <code>/ux-synthesize</code> の呼び出しは、<code>.ux/decisions.jsonl</code> に 1 行を書き込みます。スキーマは <code>_v: 1</code> でロックされています:
+      </p>
+
+      <pre class="code">{
+  <span class="k">"_v"</span>: <span class="s">1</span>,
+  <span class="k">"ts"</span>: <span class="s">"2026-05-28T14:22:09Z"</span>,
+  <span class="k">"frame"</span>: { <span class="k">"industry"</span>: <span class="s">"fintech-payments"</span>, <span class="k">"ui_type"</span>: <span class="s">"dashboard"</span>, ... },
+  <span class="k">"system"</span>: { <span class="k">"style_id"</span>: <span class="s">"editorial-calm-dark"</span>, <span class="k">"palette_id"</span>: <span class="s">"charcoal-amber"</span>, ... },
+  <span class="k">"axes"</span>: { <span class="k">"warmth"</span>: <span class="s">0.31</span>, <span class="k">"contrast"</span>: <span class="s">0.72</span>, ... },
+  <span class="k">"lint_score"</span>: <span class="s">88</span>,
+  <span class="k">"user_accepted"</span>: <span class="s">true</span>
+}</pre>
+
+      <h3>再ランク</h3>
+      <p>
+        次の呼び出しでは、リコメンダーは過去のエントリを <code>(industry, ui_type)</code> でグループ化します。各候補は、同じバケットの先行例にマッチすれば <strong>+5 のブースト</strong>を受けます。<code>lint_score &gt;= 80</code> かつ <code>user_accepted = true</code> の先行例だけが算入されます &mdash; 拒否された出力からは学びません。バケットには、いかなる再ランクも発動する前に、最低 3 件の有効な先行例が必要です。それ以下なら、エンジンはコールドスタートで動き、新規インストールと同じ振る舞いをします。
+      </p>
+
+      <h3>保証</h3>
+      <p>
+        ここで明言できる保証は狭く、声に出して言っておく価値があります。<strong>決定論は保たれます。</strong>同じブリーフ + 同じ台帳は、常に同じ出力を返します。+5 のブーストはタイブレークの前に適用され、ブランド ID のアルファベット順という規則はその下層でなお勝ちます。<strong>コールドスタートは安全です。</strong>新しいリポジトリは、他のすべての新しいリポジトリと同じ振る舞いをします。<strong>学習はローカルです。</strong>あなたの決定はマシンを離れません。
+      </p>
+
+      <p>あなたのインストールが何を学んだかは、いつでも確認できます:</p>
+
+      <pre class="code">$ uxskill stats <span class="n">--html</span>
+<span class="n">[OK]</span> Wrote .ux/stats.html
+<span class="n">[OK]</span> Open in browser to see your install's learned priors</pre>
+
+      <p>
+        HTML ダッシュボードは、バケットごとの決定件数、平均 lint スコア、最頻パレット、軸の分布を表示します。これが自己学習の目に見える証拠です &mdash; あなたが出荷を続けるにつれ、インストールの趣味プロファイルが時間とともに濃くなっていくのが見えます。何ひとつサーバー上にはありません。あなたのリポジトリの中、平文の JSONL と生成された HTML ビューにあります。
+      </p>
+
+      <h2>/ux-evolve <span class="accent">オートループ</span></h2>
+      <p>
+        v3 の新しいコマンドが <code>/ux-evolve</code> です。これまでポリッシュループは手作業でした &mdash; lint を実行し、findings を読み、直して、もう一度 lint。Evolve はそのループを閉じます。アーティファクトと目標スコアを渡せば、lint を走らせ、6 回の冪等なポリッシュパスを適用し、再 lint し、目標で止まるか、プラトーで止まるか、5 ラウンドの上限で止まります。
+      </p>
+
+      <p>1 ラウンドの形:</p>
+
+      <ol>
+        <li><strong>Lint</strong> &mdash; A11y、コンテンツ、品質、タイポグラフィにまたがる 145 の決定論的正規表現ルール。0 から 100 までのスコアと、findings のリストを返します。</li>
+        <li><strong>Polish</strong> &mdash; 重大度の高い findings から先に直す 6 つのパス。冪等です: ポリッシュ済みの出力に再適用しても no-op になります。</li>
+        <li><strong>Re-lint</strong> &mdash; ポリッシュされたアーティファクトを採点します。</li>
+        <li><strong>Decide</strong> &mdash; 新しいスコアが 90 以上なら止まる。前ラウンドからのデルタが 5 未満(プラトー)なら止まる。5 ラウンド目なら止まる。それ以外はループ。</li>
+      </ol>
+
+      <p>
+        <strong>品質ゲート</strong>は 65 で硬く固定されています。最終スコアが 65 を下回ったら、エンジンは <code>--force</code> なしではアーティファクトの出荷を拒否します。理由はこうです: 65 以下の出力は AI の slop と認識できるレベルで、自分のエンジンが静かに slop を吐くのを許せないからです。ユーザーはゲートをオーバーライドできますが、オーバーライドは明示的で、決定台帳にも記録されます。
+      </p>
+
+      <p>
+        具体例: あるフィンテックダッシュボードのスキャフォルドが最初の lint で 72 点 &mdash; ほとんどはフォーカスステートの欠如、いくつかの低コントラストラベル、ディスプレイサイズの Inter という finding。ラウンド 1 でフォーカスステートをポリッシュして 81 点。ラウンド 2 でコントラストを直して 86 点。ラウンド 3 で Inter をブリーフ本来のディスプレイ書体に差し替え、caption サイズをリバランスして &mdash; 91 点、目標到達、ループ終了。3 ラウンド、拒否なし、出荷。
+      </p>
+
+      <h2>作ら<span class="accent">なかった</span>もの(と、その理由)</h2>
+      <p>
+        v2.1 のマキシマリスト仕様にはあったが、v3 には入れなかったものがいくつかあります。どれを、なぜ入れなかったかを言うことが、スコープについて正直に話す唯一の方法です。
+      </p>
+
+      <h3>LLM をループに入れない</h3>
+      <p>
+        マキシマリスト案には LLM 判定の主観的美学軸がありました &mdash; 「このシステムは編集的に感じるかモデルに聞く」。原則として却下しました。エンジンの全要点は決定論です: 同じブリーフ、同じ出力、明朝出社して驚くことなし。シンセサイザーに LLM が入ると、すべての呼び出しが再現不可能になります。v3 は LLM を 0 回呼びます。シンセサイザーは JSON 上の純粋な Python、リンターは正規表現、エバリュエーターはルールベースです。
+      </p>
+
+      <h3>複数候補の遺伝的変異なし</h3>
+      <p>
+        案には遺伝的アルゴリズムのステップもありました &mdash; 呼び出しごとに N 個の候補を出し、変異させ、採点し、最適個体を返す。ブランチで試しました。出力は<em>悪く</em>なりました。変異がノイズを入れ、ポリッシュループがそれを取り除く羽目になったからです。v3 は単一アーティファクトの合成と、ポリッシュループを採用しています。候補は 1 つ、冪等なパスが 6 つ。結果も上、コードも小さい。
+      </p>
+
+      <h3>コマンドのリネームなし</h3>
+      <p>
+        案は <code>/ux-recommend</code> を <code>/generate:ui</code> に、<code>/ux-polish</code> を <code>/mutate:ui</code> にリネームしていました。私たちは既存の 22 コマンドをすべて元の名前で残し、<code>/ux-evolve</code> を 23 番目として追加しました。v2 から v3 へのインストールが、誰の筋肉記憶もシェルエイリアスも壊さないようにしたかったからです。
+      </p>
+
+      <h3>「無限の空間のためにカタログを焼く」もなし</h3>
+      <p>
+        案の最大主義的バージョンは、カタログは負債だ &mdash; シンセサイザーは自力でデザイン空間全体に到達できるから、1,182 件のエントリは捨てるべきだ &mdash; と言っていました。私たちはすべてのエントリを残しました。カタログこそが、シンセサイザーに空間の<em>形</em>を教えるものです &mdash; 実例がなければ軸に錨はなく、出力は漂い始めます。v3 はカタログを語彙として読み、v3 はその語彙を必要としています。
+      </p>
+
+      <p>
+        これらは趣味の判断です。優先順位が違えば反対する人もいる、それで構わない。やらなかったこと、その理由を記録に残すのがプロジェクトに対する義理です。
+      </p>
+
+      <h2>v3 の<span class="accent">数字</span></h2>
+
+      <div class="stats-row">
+        <div class="stat"><div class="n">23</div><div class="l">Commands</div></div>
+        <div class="stat"><div class="n">18</div><div class="l">MCP tools</div></div>
+        <div class="stat"><div class="n">1,182</div><div class="l">Entries</div></div>
+        <div class="stat"><div class="n">145</div><div class="l">Anti-patterns</div></div>
+        <div class="stat"><div class="n">160</div><div class="l">Brand specs</div></div>
+        <div class="stat"><div class="n">17</div><div class="l">IDEs</div></div>
+        <div class="stat"><div class="n">17</div><div class="l">Locales</div></div>
+        <div class="stat"><div class="n">223</div><div class="l">Tests pass</div></div>
+      </div>
+
+      <p>
+        既存の 22 スラッシュコマンドは元の名前のまま、23 番目として <code>/ux-evolve</code>。15 の MCP ツールはそのまま、3 つの新規 &mdash; <code>ux_synthesize</code>、<code>ux_decisions_query</code>、<code>ux_decisions_stats</code> &mdash; を追加し、シンセサイザーを駆動したり、脳が学んだものを照会したりしたいエージェントに提供します。カタログとリンターは触っていません。17 IDE のインストーラーも触っていません。17 の現地化されたホームページと README も変更なし。v3 は表層では足し算、コアでは書き直しです。
+      </p>
+
+      <blockquote>
+        v2 はカタログから選ぶリコメンダーでした。v3 はそこから蒸留するコンパイラです。同じデータが、逆の仕事をしています。
+      </blockquote>
+
+      <h2>60 秒でインストール</h2>
+      <p>
+        v3 は v2 と同じ 3 経路 &mdash; pip、npm、IDE プラグインマーケットプレイス &mdash; で出荷されます。init ステップは IDE を自動検出し、適切な設定ファイルを正しい場所に書き出します。synthesize ステップはブリーフ、もしくは industry + tone のペアを取り、完全なデザインシステムを現在のリポジトリの <code>.ux/last-system.json</code> に返します。
+      </p>
+
+      <pre class="code">$ pip install uxskill
+$ uxskill init                     <span class="c"># IDE を自動検出</span>
+$ uxskill synthesize <span class="n">--industry</span> fintech-payments <span class="n">--tone</span> bold
+
+<span class="n">[OK]</span> Mode: pure_synthesis
+<span class="n">[OK]</span> Axes: warmth=0.31, contrast=0.74, density=0.58, geometry=0.42, ...
+<span class="n">[OK]</span> Wrote .ux/last-system.json (palette, type, spacing, radius, motion)
+<span class="n">[OK]</span> Wrote .ux/decisions.jsonl (1 entry, schema _v: 1)</pre>
+
+      <p>
+        サポート対象のすべての IDE で同じインストールパス: Claude Code、Cursor、Windsurf、GitHub Copilot、Gemini CLI、Codex、Kiro、Cline、Continue、Aider、Zed、JetBrains AI、Pieces、Tabby、Tabnine、CodeWhisperer、Roo Cline。MCP stdio サーバーがすべての真実の源です。
+      </p>
+
+      <div class="honesty">
+        <div class="label">スコープを正直に</div>
+        <h4>v3 は基盤であって、完成された終点ではありません。</h4>
+        <p>7 軸シンセサイザーは私たちが証拠を公開している仕事です。8 番目と 9 番目の軸 (saturation_strategy、surface_depth) はスケッチ済みで未出荷 &mdash; dark / light の分割やグラデーション戦略を深めるものになります。決定台帳は今日はリコメンダーの再ランクだけが消費しています。エバリュエーターと lint スコアラーが台帳を読み始めるのは v3.1 を見込んでいます。私たちが却下したマキシマリスト案も消えていません &mdash; いくつかは、後で、それが効くことを証明できたら入ってくるでしょう。</p>
+        <p>もし出力が満足できないブリーフを見つけたら、もしくはマトリックスの解決があなたの趣味と合わないなら、issue を立ててください。マトリックスはコミットされ、テストはコミットされ、脳はあなたのリポジトリにあります。議論は、これからは読める基盤の上で行われます。</p>
+      </div>
+
+      <h2>あなたにとって、何が変わるか</h2>
+      <p>
+        v2 にいた人へ: 何も壊れません。すでに使っている 22 コマンドはこれまでどおりに動きます。lint は同じ速さで走ります。MCP サーバーは 18 のうち 15 のツールを元の名前で公開し、3 つの新ツールを追加します。アップグレードしても <code>/ux-synthesize</code> や <code>/ux-evolve</code> を呼ばないなら、毎日のワークフローはまったく動きません。
+      </p>
+      <p>
+        エンジンが<em>レコメンドする</em>のではなく<em>生成する</em>のを待っていた人へ: それが v3 です。シンセサイザーが新しい中心。<code>/ux-recommend</code> は今も動き、台帳から再ランクします。<code>/ux-evolve</code> はポリッシュループを閉じます。ブランド仕様は訓練データであり、テンプレートではありません。同じ 1,182 件のエントリが、まったく違う仕事をしています。
+      </p>
+      <p>
+        v3 を The Brain と名付けたのは、それが作り上げられたものだからです &mdash; 閉じたフィードバックループを持つ、制約付き生成デザインコンパイラ。完全にオフライン。LLM は 0 回呼ぶ。同じブリーフ、同じ軸、同じ出力。違うブリーフ、違う領域、無限の出力。あなたのインストールはあなたのリポジトリから学ぶ。違うリポジトリは違う脳を作る。すべては MIT で、普通のマシンで sub-300ms、pip でインストールできます。
+      </p>
+      <p>
+        気になっているブリーフで走らせてみてください。返ってきたものを見てください。出力があなたの趣味と合わないなら issue を立ててください &mdash; 衝突はマトリックスに入り、ルールは名付けられ、次のインストールはより良く振る舞います。それが脳の複利のかかり方です。
+      </p>
+
+    </article>
+
+    <section class="cta">
+      <span class="eyebrow">あなたのプロジェクトで走らせる</span>
+      <h2>1 つのエンジン、<span class="accent">3 つのインストール経路</span>。</h2>
+      <p>v3 を駆動するシンセサイザーは、リンターとリコメンダーと同じパッケージで出荷されます。145 のアンチパターン。160 のブランド仕様。1,182 のエントリ。17 の IDE。MIT、テレメトリなし、アカウント不要。</p>
+
+      <div class="install-block">
+        <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
+        <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; もしくは &mdash;</div>
+        <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; もしくは &mdash;</div>
+        <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@latest init</span></div>
+      </div>
+
+      <p style="margin-top: 28px; font-size: 14px;">
+        GitHub のソース: <a class="link" href="https://github.com/Laith0003/ux-skill">Laith0003/ux-skill</a> &middot;
+        npm: <a class="link" href="https://www.npmjs.com/package/uxskill">uxskill</a> &middot;
+        PyPI: <a class="link" href="https://pypi.org/project/uxskill/">uxskill</a> &middot;
+        Docs: <a class="link" href="https://uxskill.laithjunaidy.com/">uxskill.laithjunaidy.com</a>
+      </p>
+    </section>
+  </div>
+
+  <footer>
+    <span>&copy; 2026 Laith Aljunaidy &middot; MIT licensed &middot; テレメトリなし</span>
+    <div class="links">
+      <a href="/">Home</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/blog/">Blog</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+    </div>
+  </footer>
+</body>
+</html>
