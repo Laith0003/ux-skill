@@ -122,7 +122,7 @@
         "name": "Does it collect any telemetry or data?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. Zero. The CLI does not phone home. No usage events, no error reporting, no anonymous IDs. The only network calls are to PyPI for the install itself."
+          "text": "The tool: no. Zero. The CLI does not phone home — no usage events, error reporting, anonymous IDs, or install pings. The only network calls are to PyPI for the install. The marketing website (uxskill.laithjunaidy.com) is separate and uses privacy-respecting Google Analytics for aggregate traffic only — no personal data, no advertising; see the privacy policy."
         }
       },
       {
@@ -1178,8 +1178,9 @@
       <div class="q-num">Question 11</div>
       <h2 class="question">Does it collect any telemetry or data?</h2>
       <div class="answer">
-        <p><strong>No. Zero.</strong> The CLI does not phone home. No usage events, no error reporting, no anonymous IDs, no install pings. The only network calls are to PyPI for the package install and to your local AI coding tool for the prompt itself.</p>
-        <p>This is checked in the linter's own CI: any new network call introduced in a PR has to be justified and is rejected by default. Telemetry-free is a non-negotiable design constraint.</p>
+        <p><strong>The tool: no. Zero.</strong> The CLI does not phone home. No usage events, no error reporting, no anonymous IDs, no install pings. The only network calls are to PyPI for the package install and to your local AI coding tool for the prompt itself.</p>
+        <p>This is checked in the linter's own CI: any new network call introduced in a PR has to be justified and is rejected by default. Telemetry-free is a non-negotiable design constraint for the tool.</p>
+        <p><strong>This marketing website is separate:</strong> uxskill.laithjunaidy.com uses privacy-respecting Google Analytics for aggregate traffic only — no personal data, no advertising, no selling. Full detail in the <a href="/privacy.html">privacy policy</a>.</p>
       </div>
     </section>
 
