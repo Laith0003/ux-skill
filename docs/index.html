@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>uxskill — Design intelligence for AI coding. Python engine. 998 entries.</title>
-  <meta name="description" content="An open-source Python engine that catches AI design fingerprints before they ship. 998 structured entries. 22 commands. 68 anti-pattern rules. 72 brand specs. Runs in Claude Code, Cursor, Windsurf, and 14 more IDEs. MIT, no telemetry.">
+  <meta name="description" content="An open-source Python engine that catches AI design fingerprints before they ship. 998 structured entries. 22 commands. 85 anti-pattern rules. 92 brand specs. Runs in Claude Code, Cursor, Windsurf, and 14 more IDEs. MIT, no telemetry.">
 
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/">
   <meta name="robots" content="index,follow">
@@ -31,7 +31,7 @@
   <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@500,700&f[]=switzer@300,500,700&display=swap">
 
   <meta property="og:title" content="uxskill — Design intelligence for AI coding">
-  <meta property="og:description" content="Python engine. 998 entries. 22 commands. 68 anti-pattern rules. 72 brand specs. 17 IDEs. MIT, no telemetry.">
+  <meta property="og:description" content="Python engine. 998 entries. 22 commands. 85 anti-pattern rules. 92 brand specs. 17 IDEs. MIT, no telemetry.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -43,7 +43,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="uxskill — Design intelligence for AI coding">
-  <meta name="twitter:description" content="Python engine. 998 entries. 22 commands. 68 anti-pattern rules. 72 brand specs. 17 IDEs. MIT, no telemetry.">
+  <meta name="twitter:description" content="Python engine. 998 entries. 22 commands. 85 anti-pattern rules. 92 brand specs. 17 IDEs. MIT, no telemetry.">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og-image.png">
   <meta name="twitter:image:alt" content="uxskill wordmark on near-black canvas with the line: design intelligence for AI coding.">
 
@@ -54,7 +54,7 @@
   {"@context":"https://schema.org","@type":"WebSite","name":"uxskill","url":"https://uxskill.laithjunaidy.com/","potentialAction":{"@type":"SearchAction","target":"https://uxskill.laithjunaidy.com/faq.html?q={search_term_string}","query-input":"required name=search_term_string"}}
   </script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"SoftwareApplication","name":"uxskill","alternateName":"ux-skill","description":"An open-source Python engine that catches AI design fingerprints before they ship. 998 structured entries across 11 manifests, 22 slash commands, 5 sub-agents, a deterministic anti-AI-slop linter with 68 regex rules, and 72 brand DESIGN.md specs. Runs in Claude Code, Cursor, Windsurf, and 14 more IDEs.","operatingSystem":"macOS, Linux, Windows","applicationCategory":"DeveloperApplication","applicationSubCategory":"DesignTool","softwareVersion":"2.0.0","license":"https://opensource.org/licenses/MIT","url":"https://github.com/Laith0003/ux-skill","downloadUrl":"https://pypi.org/project/uxskill/","author":{"@type":"Person","name":"Laith Aljunaidy","url":"https://www.linkedin.com/in/laithaljunaidy/"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["998 structured entries","22 slash commands","68 anti-pattern rules","72 brand DESIGN.md specs","17 IDE integrations","Python engine + MCP server"]}
+  {"@context":"https://schema.org","@type":"SoftwareApplication","name":"uxskill","alternateName":"ux-skill","description":"An open-source Python engine that catches AI design fingerprints before they ship. 998 structured entries across 11 manifests, 22 slash commands, 5 sub-agents, a deterministic anti-AI-slop linter with 85 regex rules, and 92 brand DESIGN.md specs. Runs in Claude Code, Cursor, Windsurf, and 14 more IDEs.","operatingSystem":"macOS, Linux, Windows","applicationCategory":"DeveloperApplication","applicationSubCategory":"DesignTool","softwareVersion":"2.0.0","license":"https://opensource.org/licenses/MIT","url":"https://github.com/Laith0003/ux-skill","downloadUrl":"https://pypi.org/project/uxskill/","author":{"@type":"Person","name":"Laith Aljunaidy","url":"https://www.linkedin.com/in/laithaljunaidy/"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["998 structured entries","22 slash commands","85 anti-pattern rules","92 brand DESIGN.md specs","17 IDE integrations","Python engine + MCP server"]}
   </script>
 
   <style>
@@ -1423,6 +1423,79 @@
       .terminal { font-size: 12px; }
       .terminal__body { padding: 14px 14px 18px; }
     }
+
+    /* =========================================================================
+       LOCAL HELPERS — purpose-built classes that replace inline styles
+       ========================================================================= */
+    .brands__caption-em-serif {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+    }
+    .brands__caption-em-shout {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.92em;
+    }
+    .inline-code {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--scene-glow);
+      background: rgba(16, 185, 129, 0.08);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+    .inline-code--ink {
+      font-family: var(--mono);
+      font-size: 13.5px;
+      color: var(--ink);
+    }
+    .term-dot--red    { background: #ff5f57; }
+    .term-dot--blue   { background: #67c8ef; }
+    .term-dot--green  { background: #10b981; }
+
+    .device__sidebar {
+      width: 130px;
+      padding: 10px;
+      border-right: 1px solid var(--hairline);
+      background: rgba(20, 24, 29, 0.45);
+      flex-shrink: 0;
+    }
+    .device__body--inline { flex: 1; }
+    .device__strip {
+      display: flex;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .device__assist-line {
+      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.6;
+    }
+
+    .compare__col-right { text-align: right; }
+    .compare__sub-mono {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+    .compare__score-stars {
+      font-size: 13.5px;
+      color: var(--body);
+    }
+    .compare__score-stars-meta {
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .compare__pct-unit {
+      color: var(--muted);
+      font-size: 18px;
+    }
+    .compare__pct-unit--them {
+      font-size: 18px;
+    }
   </style>
 </head>
 <body>
@@ -1485,7 +1558,7 @@
             <span class="h1-italic">that writes your code.</span>
           </h1>
           <p class="hero__sub">
-            <strong>998 structured entries.</strong> A deterministic anti-slop linter. 72 brand DESIGN.md specs.
+            <strong>998 structured entries.</strong> A deterministic anti-slop linter. 92 brand DESIGN.md specs.
             Loaded into Claude Code, Cursor, Windsurf, and 14 more IDEs through one command. The session sees
             them. The session ships work that does not look generated.
           </p>
@@ -1530,7 +1603,7 @@
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">02 — Brand specs</span>
-        <h2 class="section-head__title">72 design languages.<br>Each in its own voice.</h2>
+        <h2 class="section-head__title">92 design languages.<br>Each in its own voice.</h2>
         <p class="section-head__lead">
           Every brand DESIGN.md ships with its typography, palette, and trademark signals. Below: a fraction of the catalogue, rendered in the typeface mapped to each brand. Hover to pause.
         </p>
@@ -1545,7 +1618,7 @@
 
     <div class="container">
       <p class="brands__caption">
-        <span class="brands__caption-line">From <em style="font-family:'Instrument Serif',Georgia,serif;font-style:italic;">a quiet Apple</em> to <em style="font-family:'Inter Tight',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">a loud BMW M</em> — the engine knows what to ask of itself for each.</span>
+        <span class="brands__caption-line">From <em class="brands__caption-em-serif">a quiet Apple</em> to <em class="brands__caption-em-shout">a loud BMW M</em> — the engine knows what to ask of itself for each.</span>
       </p>
     </div>
   </section>
@@ -1617,7 +1690,7 @@
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">04 — The anti-slop linter</span>
-        <h2 class="section-head__title">68 regex rules.<br>Run before commit.</h2>
+        <h2 class="section-head__title">85 regex rules.<br>Run before commit.</h2>
         <p class="section-head__lead">
           A deterministic Python linter that catches the design fingerprints model output reaches for by default — purple-to-blue gradients, Inter as display, three-equal cards, John-Doe placeholders, emoji as icons. JSON-queryable. CI-friendly.
         </p>
@@ -1626,7 +1699,7 @@
       <div class="linter__layout">
         <div class="linter__side">
           <h3>The page that just rendered<br>passed clean.</h3>
-          <p>This homepage was generated with the recommender and audited with <code style="font-family:var(--mono);font-size:13px;color:var(--scene-glow);background:rgba(16,185,129,0.08);padding:1px 6px;border-radius:4px;">ux lint docs/</code>. Zero high-severity findings. The forbidden palette never appears.</p>
+          <p>This homepage was generated with the recommender and audited with <code class="inline-code">ux lint docs/</code>. Zero high-severity findings. The forbidden palette never appears.</p>
           <p>The linter is regex over content, not a model. It is fast, offline, and stable across model swaps. The same checks run inside CI on every commit.</p>
 
           <div class="linter__stats">
@@ -1658,7 +1731,7 @@
           </div>
           <div class="terminal__body" id="lint-terminal-body">
             <div class="terminal__line"><span class="prompt">$</span> <span class="ink">ux lint</span> <span class="arg">docs/</span> <span class="key">--threshold high</span></div>
-            <div class="terminal__line"><span class="info">Scanning 14 files, 68 rules active</span></div>
+            <div class="terminal__line"><span class="info">Scanning 14 files, 85 rules active</span></div>
             <div class="terminal__line">&nbsp;</div>
             <div class="terminal__line"><span class="info">docs/blog/cursor-design-plugin.html:184</span></div>
             <div class="terminal__line"><span class="red">  medium  </span><span class="ink">inter-as-display</span><span class="info"> — Inter at 64px+</span></div>
@@ -1697,13 +1770,13 @@
         <!-- Device 1 — Cursor -->
         <article class="device" aria-label="Cursor IDE running ux-recommend">
           <div class="device__chrome">
-            <span class="terminal__dot" style="background:#ff5f57" aria-hidden="true"></span>
-            <span class="terminal__dot" style="background:#67c8ef" aria-hidden="true"></span>
-            <span class="terminal__dot" style="background:#10b981" aria-hidden="true"></span>
+            <span class="terminal__dot term-dot--red" aria-hidden="true"></span>
+            <span class="terminal__dot term-dot--blue" aria-hidden="true"></span>
+            <span class="terminal__dot term-dot--green" aria-hidden="true"></span>
             <span class="device__name"><strong>Cursor</strong> &nbsp;·&nbsp; landing.tsx</span>
           </div>
-          <div style="display:flex;border-bottom:1px solid var(--hairline);">
-            <div style="width:130px;padding:10px;border-right:1px solid var(--hairline);background:rgba(20,24,29,0.45);">
+          <div class="device__strip">
+            <div class="device__sidebar">
               <span class="device__sidebar-tab is-active">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
                 landing.tsx
@@ -1717,7 +1790,7 @@
                 .ux/last
               </span>
             </div>
-            <div class="device__body" style="flex:1;">
+            <div class="device__body device__body--inline">
               <div class="device__cmd-row">
                 <span class="slash">/</span><span class="arg">ux-recommend</span>
                 <span class="at">cmd+k</span>
@@ -1741,9 +1814,9 @@
         <!-- Device 2 — Claude Code -->
         <article class="device" aria-label="Claude Code running ux-design">
           <div class="device__chrome">
-            <span class="terminal__dot" style="background:#ff5f57" aria-hidden="true"></span>
-            <span class="terminal__dot" style="background:#67c8ef" aria-hidden="true"></span>
-            <span class="terminal__dot" style="background:#10b981" aria-hidden="true"></span>
+            <span class="terminal__dot term-dot--red" aria-hidden="true"></span>
+            <span class="terminal__dot term-dot--blue" aria-hidden="true"></span>
+            <span class="terminal__dot term-dot--green" aria-hidden="true"></span>
             <span class="device__name"><strong>Claude Code</strong> &nbsp;·&nbsp; ux-skill</span>
           </div>
           <div class="device__body">
@@ -1751,7 +1824,7 @@
               <span class="slash">/</span><span class="arg">ux-design</span>
               <span class="at">@claude</span>
             </div>
-            <div style="margin-bottom:14px;color:var(--muted);font-size:11.5px;line-height:1.6;">
+            <div class="device__assist-line">
               Discovery confirmed. Loading 998 entries. Running 5-lane recommender against your brief...
             </div>
             <div class="device__result is-ok">
@@ -1772,9 +1845,9 @@
         <!-- Device 3 — Windsurf -->
         <article class="device" aria-label="Windsurf running ux-component">
           <div class="device__chrome">
-            <span class="terminal__dot" style="background:#ff5f57" aria-hidden="true"></span>
-            <span class="terminal__dot" style="background:#67c8ef" aria-hidden="true"></span>
-            <span class="terminal__dot" style="background:#10b981" aria-hidden="true"></span>
+            <span class="terminal__dot term-dot--red" aria-hidden="true"></span>
+            <span class="terminal__dot term-dot--blue" aria-hidden="true"></span>
+            <span class="terminal__dot term-dot--green" aria-hidden="true"></span>
             <span class="device__name"><strong>Windsurf</strong> &nbsp;·&nbsp; Cascade</span>
           </div>
           <div class="device__body">
@@ -1838,7 +1911,7 @@
         <span class="eyebrow">08 — The scorecard</span>
         <h2 class="section-head__title">We measured. We wrote it down.</h2>
         <p class="section-head__lead">
-          50-point rubric across recommender depth, lint coverage, brand catalogue, MCP surface, IDE breadth, telemetry posture, and documentation. Built from <code style="font-family:var(--mono);font-size:13.5px;color:var(--ink);">gh api</code> on 2026-05-28. No empty cells, no manufactured advantages.
+          50-point rubric across recommender depth, lint coverage, brand catalogue, MCP surface, IDE breadth, telemetry posture, and documentation. Built from <code class="inline-code--ink">gh api</code> on 2026-05-28. No empty cells, no manufactured advantages.
         </p>
       </div>
 
@@ -2086,7 +2159,7 @@
     },
     { type: 'cmd', text: 'ux lint docs/index.html' },
     { type: 'lines', html:
-      '<div class="terminal__line"><span class="info">68 rules · 1 file · </span><span class="ok">0 high · 0 medium</span></div>' +
+      '<div class="terminal__line"><span class="info">85 rules · 1 file · </span><span class="ok">0 high · 0 medium</span></div>' +
       '<div class="terminal__line"><span class="ok"><span class="check-svg"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>  clean — ship it.</span></div>' +
       '<div class="terminal__line">&nbsp;</div>'
     }
