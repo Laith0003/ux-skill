@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "ux-skill",
-  "description": "Design intelligence engine for AI coding. v2 ships a Python-backed reasoning core (5-parallel-search recommender) over 11 queryable JSON manifests: 84 styles, 176 palettes, 70 type pairs, 148 components, 184 industries, 112 named UX laws, 57 motion presets, 35 anti-pattern regex rules, 72 brand specs. Cross-IDE — runs in 17 environments. Plus 22 slash commands and 5 sub-agents. Anti-AI-slop by default.",
+  "description": "Design intelligence engine for AI coding. v3.0 — THE BRAIN. A 7-axis synthesizer (warmth/contrast/density/geometry/formality/motion/type_personality) compiles a novel design language per brief. Three auto-dispatched modes: strict_brand / brand_anchor / pure_synthesis. Brand specs are training data, not templates. A local decisions ledger re-ranks the recommender from past wins. 1,182 structured entries across 11 manifests, 23 slash commands, 5 sub-agents, 18 MCP tools, 145 deterministic anti-pattern rules, 160 brand DESIGN specs. Runs in Claude Code, Cursor, Windsurf, and 14 more IDEs. Offline. Deterministic. No LLM. No telemetry.",
   "owner": {
     "name": "Laith Aljunaidy",
     "email": "laith.aljunaidy.laith@gmail.com",
@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "ux",
-      "description": "v2.0 Python pivot. 22 callable slash commands (recommend, init, stats, discover, frame, audit, critique, a11y, copy, motion, polish, design, system, dashboard, component, fix, case-study, next, expert, research, workshop, lint), 5 specialized sub-agents, Python-backed 5-parallel-search recommender, 11 queryable JSON manifests (998 entries total), 35-rule anti-AI-slop linter, mandatory 10-field discovery protocol, 72 brand DESIGN.md specs, cross-IDE distribution to 17 environments (Claude Code, Cursor, Windsurf, Copilot, Gemini, Codex, Cline, Continue, Aider, Zed, etc.). pip install uxskill or npx uxskill init.",
+      "description": "v3.0 — THE BRAIN. 23 callable slash commands (recommend, init, stats, discover, frame, audit, critique, a11y, copy, motion, polish, design, system, dashboard, component, fix, case-study, next, expert, research, workshop, lint, evolve), 5 specialized sub-agents, 18 MCP tools, Python-backed 7-axis synthesizer with triple-mode dispatch (strict_brand / brand_anchor / pure_synthesis), 11 queryable JSON manifests (1,182 entries total), 145-rule deterministic anti-AI-slop linter with 0-100 quality scoring, mandatory 10-field discovery protocol, 160 brand DESIGN.md specs as training data (not templates), local decisions ledger that re-ranks the recommender from past wins, cross-IDE distribution to 17 environments (Claude Code, Cursor, Windsurf, Copilot, Gemini, Codex, Cline, Continue, Aider, Zed, JetBrains, etc.). Offline. Deterministic. No LLM. pip install uxskill or npx uxskill init.",
       "author": {
         "name": "Laith Aljunaidy",
         "email": "laith.aljunaidy.laith@gmail.com",
