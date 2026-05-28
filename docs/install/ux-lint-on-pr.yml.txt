@@ -1,0 +1,95 @@
+name: ux-skill PR lint
+
+# Runs the ux-skill 120-rule anti-AI-slop linter on every pull request.
+# Posts a comment with findings + fails the build on Critical/High.
+#
+# To use this in YOUR repo, copy this file to .github/workflows/.
+# Pip pulls uxskill from PyPI — no other setup needed.
+
+on:
+  pull_request:
+    branches: [main, master]
+    paths:
+      - '**.html'
+      - '**.css'
+      - '**.tsx'
+      - '**.jsx'
+      - '**.vue'
+      - '**.svelte'
+
+jobs:
+  ux-lint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      BASE_REF: ${{ github.base_ref }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install uxskill
+        run: pip install uxskill
+
+      - name: Run ux lint
+        id: lint
+        run: |
+          CHANGED_FILES=$(git diff --name-only "origin/${BASE_REF}"...HEAD -- '*.html' '*.css' '*.tsx' '*.jsx' '*.vue' '*.svelte' | tr '\n' ' ')
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "no_changes=true" >> "$GITHUB_OUTPUT"
+            echo "No UI files changed; skipping."
+            exit 0
+          fi
+          echo "Linting: $CHANGED_FILES"
+          # shellcheck disable=SC2086
+          ux lint $CHANGED_FILES --threshold high > lint-output.json || true
+          cat lint-output.json
+
+      - name: Comment on PR with findings
+        if: steps.lint.outputs.no_changes != 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let data;
+            try {
+              data = JSON.parse(fs.readFileSync('lint-output.json', 'utf8'));
+            } catch (e) {
+              return;
+            }
+            const s = data.summary || {};
+            const findings = data.findings || [];
+            const total = (s.critical || 0) + (s.high || 0) + (s.medium || 0) + (s.low || 0);
+            if (total === 0) {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `## ux-skill lint: clean\n\n0 findings across ${data.files_scanned || 0} files. ${data.rules_loaded || 0} rules active.`
+              });
+              return;
+            }
+            const top = findings.slice(0, 10).map(f => {
+              return `- **${f.severity.toUpperCase()}** \`${f.rule_id}\` — \`${f.file}:${f.line}\`\n  ${f.why || ''}\n  fix: ${f.fix || ''}`;
+            }).join('\n');
+            const body = `## ux-skill lint findings\n\n${s.critical || 0} critical · ${s.high || 0} high · ${s.medium || 0} medium · ${s.low || 0} low\n\n${findings.length > 10 ? `Top 10 of ${findings.length} findings:\n\n` : ''}${top}\n\n*Engine: [uxskill](https://github.com/Laith0003/ux-skill) · ${data.rules_loaded || 0} anti-pattern rules · deterministic regex linter*`;
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+      - name: Fail on Critical/High
+        if: steps.lint.outputs.no_changes != 'true'
+        run: |
+          CHANGED_FILES=$(git diff --name-only "origin/${BASE_REF}"...HEAD -- '*.html' '*.css' '*.tsx' '*.jsx' '*.vue' '*.svelte' | tr '\n' ' ')
+          # shellcheck disable=SC2086
+          ux lint $CHANGED_FILES --threshold high
