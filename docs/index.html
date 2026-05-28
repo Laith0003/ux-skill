@@ -1389,6 +1389,57 @@
     html[dir="rtl"] .nav__inner { direction: rtl; }
     html[dir="rtl"] .eyebrow::before { margin-right: 0; margin-left: 10px; }
   </style>
+<style>
+    /* Language picker — dropdown in the nav */
+    .lang-picker { position: relative; }
+    .lang-picker__btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent;
+      border: 1px solid var(--hairline);
+      border-radius: 999px;
+      color: var(--ink);
+      padding: 6px 12px 6px 10px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: border-color var(--t-fast) var(--ease-cinema);
+    }
+    .lang-picker__btn:hover, .lang-picker__btn[aria-expanded="true"] {
+      border-color: var(--hairline-2);
+    }
+    .lang-picker__menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 220px;
+      max-height: 360px;
+      overflow-y: auto;
+      background: rgba(15, 17, 21, 0.96);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 8px;
+      display: none;
+      z-index: 50;
+      box-shadow: 0 24px 60px -24px rgba(0,0,0,0.6);
+    }
+    .lang-picker.is-open .lang-picker__menu { display: block; }
+    .lang-picker__item {
+      display: block;
+      padding: 8px 12px;
+      color: var(--body);
+      text-decoration: none;
+      font-family: var(--sans);
+      font-size: 14px;
+      border-radius: 6px;
+      transition: background-color var(--t-fast) var(--ease-cinema), color var(--t-fast) var(--ease-cinema);
+    }
+    .lang-picker__item:hover { background: rgba(255,255,255,0.06); color: var(--ink); }
+    .lang-picker__item.is-current { color: var(--ink); background: rgba(255,255,255,0.04); }
+    @media (max-width: 900px) {
+      .lang-picker__menu { right: -16px; }
+    }</style>
 </head>
 <body>
 
@@ -1468,7 +1519,7 @@
 <div class="sticky-cta" id="sticky-cta" aria-hidden="true">
   <code>pip install uxskill</code>
   <span class="sticky-cta__sep" aria-hidden="true"></span>
-  <a href="https://github.com/Laith0003/ux-skill" class="sticky-cta__btn" rel="noopener">Star on GitHub</a>
+  <a class="sticky-cta__btn" href="https://github.com/Laith0003/ux-skill" rel="noopener">Star on GitHub</a>
 </div>
 
 <main id="main">
@@ -1480,7 +1531,7 @@
     <div class="container">
       <div class="hero__inner">
         <div class="hero__eyebrow-row">
-          <span class="pill-tag pill-tag--live"><span class="dot-live" aria-hidden="true"></span> v3.0.0 &mdash; THE BRAIN</span>
+          <span class="pill-tag pill-tag--live"><span class="dot-live" aria-hidden="true"></span> v3.0.0 — THE BRAIN</span>
           <span class="pill-tag">MIT, no telemetry</span>
           <span class="pill-tag">Live now</span>
         </div>
@@ -1636,7 +1687,7 @@
       <div class="modes-grid">
         <div class="mode-card">
           <span class="mode-card__index">Mode 01 &middot; fastest</span>
-          <h3 class="mode-card__title">strict_brand</h3>
+          <div class="mode-card__title" role="heading" aria-level="3">strict_brand</div>
           <p class="mode-card__ratio">100% named brand &middot; verbatim</p>
           <p class="mode-card__body">
             Anchor on a named brand with <code>strict=True</code>. 100% Stripe tokens, no axis adaptation. Fastest path. For when you know exactly what you want and the brief is "give me Stripe."
@@ -1646,7 +1697,7 @@ strict=True</pre>
         </div>
         <div class="mode-card">
           <span class="mode-card__index">Mode 02 &middot; the sweet spot</span>
-          <h3 class="mode-card__title">brand_anchor</h3>
+          <div class="mode-card__title" role="heading" aria-level="3">brand_anchor</div>
           <p class="mode-card__ratio">70% named &middot; 30% axis adaptation</p>
           <p class="mode-card__body">
             Anchor on a named brand, then bend it toward the brief's axis values using four sibling brands as additional vocabulary. The variation that still smells like Stripe but feels like yours.
@@ -1656,7 +1707,7 @@ tone=["warm","editorial"]</pre>
         </div>
         <div class="mode-card">
           <span class="mode-card__index">Mode 03 &middot; infinity space</span>
-          <h3 class="mode-card__title">pure_synthesis</h3>
+          <div class="mode-card__title" role="heading" aria-level="3">pure_synthesis</div>
           <p class="mode-card__ratio">0% named &middot; 100% axes</p>
           <p class="mode-card__body">
             No brand named. The synthesizer picks 8 axis-matching exemplars from the catalogue and distills them into a novel design language. No single brand copied; their shared vocabulary harvested.
@@ -1789,7 +1840,7 @@ tone=["bold","editorial"]</pre>
               <span class="dogfood-component__num">07</span>
             </div>
             <p class="dogfood-component__body">This card uses the literal token values from the synthesize() call: canvas #424448, ink #c0c2c6, body #9a9ca0, primary #987d86. Radius 7px. Spacing scale 4-8-12-20-32-52-84.</p>
-            <a href="#install" class="dogfood-component__btn">View token output</a>
+            <a class="dogfood-component__btn" href="#install">View token output</a>
           </div>
         </div>
       </div>
@@ -1814,21 +1865,21 @@ tone=["bold","editorial"]</pre>
       <div class="pillars">
         <div class="pillar">
           <span class="pillar__num">01</span>
-          <h3 class="pillar__title">Offline.</h3>
+          <div class="pillar__title" role="heading" aria-level="3">Offline.</div>
           <p class="pillar__body">
             Runs on a plane. No API key. No vendor lock-in. The 1,182 entries, 145 rules, 160 brand specs, and the synthesizer all live inside the Python wheel. Air-gapped repos can ship it.
           </p>
         </div>
         <div class="pillar">
           <span class="pillar__num">02</span>
-          <h3 class="pillar__title">Deterministic.</h3>
+          <div class="pillar__title" role="heading" aria-level="3">Deterministic.</div>
           <p class="pillar__body">
             Same brief always produces the same tokens. Every sort has an explicit tiebreaker. Reproducible across machines, file systems, Python versions. Diffing two synth runs is meaningful.
           </p>
         </div>
         <div class="pillar">
           <span class="pillar__num">03</span>
-          <h3 class="pillar__title">Self-learning.</h3>
+          <div class="pillar__title" role="heading" aria-level="3">Self-learning.</div>
           <p class="pillar__body">
             Every call writes to <code>.ux/decisions.jsonl</code>. The recommender re-ranks future candidates from your past wins. No telemetry. Your install gets sharper for your work, not aggregate slop.
           </p>
@@ -1855,7 +1906,16 @@ tone=["bold","editorial"]</pre>
           </p>
         </div>
         <div class="audience__photo">
-          <img src="/editorial/editorial-apple-designer-at-screen.jpg" alt="A maker at a screen, four in the morning. The session writes the JSX. The shape gets earned." loading="lazy">
+          <picture>
+            <source srcset="/editorial/editorial-apple-designer-at-screen.webp" type="image/webp">
+            <img
+              src="/editorial/editorial-apple-designer-at-screen.webp"
+              alt="A maker at a screen, four in the morning. The session writes the JSX. The shape gets earned."
+              width="1800"
+              height="1100"
+              loading="lazy"
+              decoding="async">
+          </picture>
         </div>
       </div>
     </div>
@@ -1996,7 +2056,7 @@ tone=["bold","editorial"]</pre>
       }
     }
   }
-  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('scroll', onScroll, { passive: true }) /* opts: { passive: true } */;
   onScroll();
 
   /* Mobile drawer */
@@ -2067,6 +2127,27 @@ tone=["bold","editorial"]</pre>
   });
 
 })();
+
+  /* =========================================================================
+     LANG PICKER — open/close menu, close on outside click or Esc
+     ========================================================================= */
+  (function setupLangPicker() {
+    const picker = document.querySelector('.lang-picker');
+    const btn = document.getElementById('lang-picker-btn');
+    if (!picker || !btn) return;
+    const open = () => { picker.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true'); };
+    const close = () => { picker.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); };
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      picker.classList.contains('is-open') ? close() : open();
+    });
+    document.addEventListener('click', (e) => {
+      if (!picker.contains(e.target)) close();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+  })();
 </script>
 
 </body>
