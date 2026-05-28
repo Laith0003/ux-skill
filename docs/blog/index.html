@@ -322,10 +322,40 @@
 
     <ul class="post-list">
       <!-- v3.0 — THE BRAIN launch (2026-05-28) -->
-      <li class="post"><a href="/blog/v3-the-brain-launch.html">
-        <div class="post-meta"><span class="tag">launch</span> &middot; v3.0 &middot; ~3,200 words &middot; ~14 min</div>
+      <li class="post" style="border-color: rgba(34,211,238,0.30); background: linear-gradient(180deg, rgba(34,211,238,0.06), var(--surface));"><a href="/blog/v3-the-brain-launch.html">
+        <div class="post-meta"><span class="tag" style="color: #22d3ee;">launch</span> &middot; v3.0 &middot; ~3,300 words &middot; ~12 min</div>
         <h2>ux-skill v3.0 &mdash; we shipped The Brain. Brand specs are training data now, not templates.</h2>
-        <p>The biggest architectural shift since v1. 7-axis synthesizer. Triple-mode dispatch (strict_brand / brand_anchor / pure_synthesis). Axis interaction matrix. Decisions ledger drives recommender re-rank. 100% offline. Deterministic. No LLM ever called.</p>
+        <p>The biggest architectural shift since v1. 7-axis synthesizer. Triple-mode dispatch (<code>strict_brand</code> / <code>brand_anchor</code> / <code>pure_synthesis</code>). Axis interaction matrix with four documented conflicts. Decisions ledger closes the feedback loop. New <code>/ux-evolve</code> auto-loop with a 65 quality gate. Fully offline. No LLM ever called.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/ja/v3-the-brain.html">
+        <div class="post-meta"><span class="tag">日本語 &middot; launch v3.0</span> &middot; ~10,900 chars &middot; ~12 min</div>
+        <h2>ux-skill v3.0 &mdash; The Brain をリリース。ブランド仕様はテンプレートではなく訓練データに。</h2>
+        <p>v2 はカタログから選んでいた。v3 はそこから蒸留する。7 軸シンセサイザー、3 つの自動振り分けモード、軸の相互作用マトリックス、決定台帳による閉じたフィードバックループ、そして品質ゲート 65 を持つ新しい <code>/ux-evolve</code> オートループ。</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/zh-CN/v3-the-brain.html">
+        <div class="post-meta"><span class="tag">简体中文 &middot; launch v3.0</span> &middot; ~8,400 chars &middot; ~12 min</div>
+        <h2>ux-skill v3.0 &mdash; 我们发布了 The Brain。品牌规范现在是训练数据,不是模板。</h2>
+        <p>v2 从目录里挑,v3 从目录里蒸馏。七轴合成器、三种自动分发模式、轴的相互作用矩阵、闭合反馈回路的决策账本,以及质量门禁卡在 65 的新 <code>/ux-evolve</code> 自动循环。</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/ar/v3-the-brain.html">
+        <div class="post-meta"><span class="tag">العربية &middot; launch v3.0</span> &middot; ~14,900 chars &middot; ~12 min</div>
+        <h2 dir="rtl" style="text-align: right;">ux-skill v3.0 &mdash; أطلقنا The Brain. مواصفات العلامات صارت بيانات تدريب لا قوالب.</h2>
+        <p dir="rtl" style="text-align: right;">في v2 كنّا نختار من الكتالوج. في v3 نُقطّر منه. مُولِّد بسبعة محاور، ثلاثة أوضاع تلقائيّة، مصفوفة تفاعُل المحاور، سِجلّ قرارات يُغلِق حلقة التغذية الراجعة، وحلقة <code>/ux-evolve</code> الجديدة ببوّابة جودة عند 65.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/es/v3-the-brain.html">
+        <div class="post-meta"><span class="tag">Español &middot; launch v3.0</span> &middot; ~3,500 words &middot; ~12 min</div>
+        <h2>ux-skill v3.0 &mdash; lanzamos The Brain. Las brand specs ahora son datos de entrenamiento, no plantillas.</h2>
+        <p>v2 elegía del catálogo. v3 destila de él. El sintetizador de 7 ejes, los tres modos auto-despachados, la matriz de interacción de ejes, el log de decisiones que cierra el bucle de retroalimentación, y el nuevo auto-loop <code>/ux-evolve</code> con un quality gate en 65.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/de/v3-the-brain.html">
+        <div class="post-meta"><span class="tag">Deutsch &middot; launch v3.0</span> &middot; ~3,100 words &middot; ~12 min</div>
+        <h2>ux-skill v3.0 &mdash; wir haben The Brain veröffentlicht. Brand-Specs sind jetzt Trainingsdaten, keine Vorlagen.</h2>
+        <p>v2 hat aus dem Katalog gewählt. v3 destilliert daraus. Der 7-Achsen-Synthesizer, die drei automatisch gewählten Modi, die Achsen-Interaktionsmatrix, das Entscheidungs-Ledger als geschlossene Rückkopplungsschleife und der neue <code>/ux-evolve</code>-Auto-Loop mit Quality-Gate bei 65.</p>
       </a></li>
 
       <li class="post"><a href="/blog/brand-specs-training-data-not-templates.html">
@@ -338,6 +368,24 @@
         <div class="post-meta"><span class="tag">architecture</span> &middot; v3.0 &middot; ~2,200 words</div>
         <h2>A deterministic design engine that learns offline &mdash; how v3.0 avoids the LLM trap</h2>
         <p>Same brief always produces the same output. Reproducible across machines. Yet the system genuinely learns from its own decisions log over time. The math behind a generative system without an LLM call in the engine.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/closed-loop-design-system-feedback.html">
+        <div class="post-meta"><span class="tag">architecture</span> &middot; v3.0 &middot; ~2,100 words</div>
+        <h2>What a closed-loop design system actually means &mdash; ux-skill v3.0 explained</h2>
+        <p>Most AI design tools generate once and forget. v3.0 writes every recommendation, every lint score, every accept/reject to a local ledger. The recommender reads that ledger and re-ranks. The feedback loop is closed for real.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/seven-axes-design-system-explained.html">
+        <div class="post-meta"><span class="tag">deep dive</span> &middot; v3.0 &middot; ~2,400 words</div>
+        <h2>The 7 axes of a design system &mdash; how v3.0 maps a brief to tokens</h2>
+        <p>warmth &middot; contrast &middot; density &middot; geometry &middot; formality &middot; motion &middot; type_personality. The seven continuous axes that v3.0's synthesizer derives from your brief and compiles to palette, type, spacing, radius, motion tokens. With the actual math.</p>
+      </a></li>
+
+      <li class="post"><a href="/blog/ux-skill-v3-vs-ui-ux-pro-max.html">
+        <div class="post-meta"><span class="tag">comparison</span> &middot; v3.0 &middot; ~2,000 words</div>
+        <h2>ux-skill v3.0 vs UI/UX Pro Max &mdash; engine vs atlas, scored honestly</h2>
+        <p>UI/UX Pro Max is the finished atlas of UI knowledge. ux-skill v3.0 is the engine that decides what UI should exist. Different categories. Where each wins, where the other doesn't, and why we picked the engine path.</p>
       </a></li>
 
       <li class="post"><a href="/blog/vibe-coding-design-system.html">
