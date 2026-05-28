@@ -5,7 +5,7 @@ from engine.discovery import FIELDS, DiscoveryState, is_complete, next_question,
 
 
 def test_version_string():
-    assert __version__.startswith("2."), f"unexpected version: {__version__}"
+    assert __version__.startswith("3."), f"unexpected version: {__version__}"
 
 
 def test_manifest_list_canonical():

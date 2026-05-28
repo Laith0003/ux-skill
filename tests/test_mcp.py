@@ -137,7 +137,7 @@ def test_ux_stats_returns_dict():
     assert "version" in result
     assert "counts" in result
     assert isinstance(result["counts"], dict)
-    assert result["version"].startswith("2.")
+    assert result["version"].startswith("3.")
     # Canonical manifests are present in the counts dict.
     for manifest in ("styles", "palettes", "type-pairs", "components", "brands"):
         assert manifest in result["counts"], f"missing manifest count: {manifest}"
