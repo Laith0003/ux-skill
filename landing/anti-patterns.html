@@ -97,11 +97,19 @@
   @media (max-width: 640px) {
     .grid { grid-template-columns: 1fr; }
   }
+
+    /* Arabic typography — IBM Plex Sans Arabic for the whole Arabic page (v3.0.4 sweep) */
+    html[lang="ar"] body,
+    html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3, html[lang="ar"] h4,
+    html[lang="ar"] p, html[lang="ar"] li, html[lang="ar"] a, html[lang="ar"] button,
+    html[lang="ar"] .pill-tag, html[lang="ar"] .eyebrow, html[lang="ar"] .nav__link,
+    html[lang="ar"] .wordmark { font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif !important; font-variation-settings: normal; }
+    html[lang="ar"] code, html[lang="ar"] pre { font-family: 'JetBrains Mono', ui-monospace, monospace !important; }
 </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- Bricolage Grotesque (display, variable), Inter (body), JetBrains Mono (mono) -->
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style id="unified-nav-css">
     /* ============================================================
        UNIFIED SITE NAV (v3.0.3)

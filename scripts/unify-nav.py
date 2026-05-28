@@ -27,8 +27,10 @@ LANDING = ROOT / "landing"
 # Single Google Fonts URL used everywhere.
 CANONICAL_FONTS = """  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Bricolage Grotesque (display, variable), Inter (body), JetBrains Mono (mono) -->
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">"""
+  <!-- Bricolage Grotesque (display), Inter (body Latin), JetBrains Mono (mono),
+       Instrument Serif (italic accents), IBM Plex Sans Arabic (mandatory for ar locale —
+       see tests/test_arabic_typography.py for the regression guard). -->
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">"""
 
 # Canonical nav CSS block. Self-contained — defines its own fallback custom
 # properties via @supports-style declarations so it does not depend on the
