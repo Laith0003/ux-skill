@@ -82,7 +82,7 @@
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is ux-skill?","acceptedAnswer":{"@type":"Answer","text":"ux-skill is an open-source Python engine that loads design intelligence into AI coding tools. It has 1,182 structured entries across 11 manifests (styles, palettes, typography, components, industries, brand specs, anti-patterns, motion presets, UX laws), 22 slash commands, 5 sub-agents, and a deterministic anti-AI-slop linter. It runs in Claude Code, Cursor, Windsurf, and 14 more IDEs through one install command."}},{"@type":"Question","name":"How is ux-skill different from other Claude UX plugins?","acceptedAnswer":{"@type":"Answer","text":"ux-skill is the only design plugin with a deterministic regex linter (145 rules catching AI slop before commit), 160 real brand DESIGN specs (Apple, Linear, Vercel, Stripe, Ferrari, Anthropic full palettes/typography/voice), and a Python recommender that ships across 17 IDEs — not just Claude Code. Most competitors are Markdown-only style guides. ux-skill is a queryable engine with an MCP server."}},{"@type":"Question","name":"Which IDEs does ux-skill support?","acceptedAnswer":{"@type":"Answer","text":"17 IDEs: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, Roo Cline. Install via pip install uxskill, npx uxskill, or the Claude Code marketplace."}},{"@type":"Question","name":"Is ux-skill free?","acceptedAnswer":{"@type":"Answer","text":"Yes. MIT license. No telemetry. No paywall. No accounts. The Python engine, all 11 data manifests, the MCP server, and the linter are open-source on GitHub at github.com/Laith0003/ux-skill."}},{"@type":"Question","name":"How does the anti-AI-slop linter work?","acceptedAnswer":{"@type":"Answer","text":"The linter is a deterministic regex scanner (no LLM, no API calls, sub-50ms on 10K-line projects). It loads 145 rules from data/anti-patterns.json — each rule has a regex, severity, and a fix suggestion. Run uxskill lint or wire it as a pre-commit or CI step. Catches placeholder text leaks, generic GPT marketing copy, default Tailwind palettes, missing alt text, A11y skips, and 115 more."}},{"@type":"Question","name":"What is the MCP server for?","acceptedAnswer":{"@type":"Answer","text":"ux-skill exposes 18 MCP (Model Context Protocol) tools over stdio. Any MCP-capable client (Claude Desktop, Cursor, generic agents) can call ux_recommend, ux_synthesize, ux_lint, ux_decisions_query, and 14 more without installing the Python plugin. The handlers are pure dict-to-dict callables so they work whether or not the mcp package is installed."}}]}
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is ux-skill?","acceptedAnswer":{"@type":"Answer","text":"ux-skill is an open-source Python engine that loads design intelligence into AI coding tools. It has 1,182 structured entries across 11 manifests (styles, palettes, typography, components, industries, brand specs, anti-patterns, motion presets, UX laws), 22 slash commands, 5 sub-agents, and a deterministic anti-AI-slop linter. It runs in Claude Code, Cursor, Windsurf, and 14 more IDEs through one install command."}},{"@type":"Question","name":"How is ux-skill different from other Claude UX plugins?","acceptedAnswer":{"@type":"Answer","text":"ux-skill is the only design plugin with a deterministic regex linter (145 rules catching AI slop before commit), 160 real brand DESIGN specs (Apple, Linear, Vercel, Stripe, Ferrari, Anthropic full palettes/typography/voice), and a Python recommender das liefert across 17 IDEs — not just Claude Code. Most competitors are Markdown-only style guides. ux-skill is a queryable engine with an MCP server."}},{"@type":"Question","name":"Which IDEs does ux-skill support?","acceptedAnswer":{"@type":"Answer","text":"17 IDEs: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, Roo Cline. Install via pip install uxskill, npx uxskill, or the Claude Code marketplace."}},{"@type":"Question","name":"Is ux-skill free?","acceptedAnswer":{"@type":"Answer","text":"Yes. MIT license. No telemetry. No paywall. No accounts. The Python engine, all 11 data manifests, the MCP server, and the linter are open-source on GitHub at github.com/Laith0003/ux-skill."}},{"@type":"Question","name":"How does the anti-AI-slop linter work?","acceptedAnswer":{"@type":"Answer","text":"The linter is a deterministic regex scanner (no LLM, no API calls, sub-50ms on 10K-line projects). It loads 145 rules from data/anti-patterns.json — each rule has a regex, severity, and a fix suggestion. Run uxskill lint or wire it as a pre-commit or CI step. Catches placeholder text leaks, generic GPT marketing copy, default Tailwind palettes, missing alt text, A11y skips, and 115 more."}},{"@type":"Question","name":"What is the MCP server for?","acceptedAnswer":{"@type":"Answer","text":"ux-skill exposes 18 MCP (Model Context Protocol) tools over stdio. Any MCP-capable client (Claude Desktop, Cursor, generic agents) can call ux_recommend, ux_synthesize, ux_lint, ux_decisions_query, and 14 more without installing the Python plugin. The handlers are pure dict-to-dict callables so they work whether or not the mcp package is installed."}}]}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"ItemList","name":"17 AI coding IDEs supported by ux-skill","itemListElement":[{"@type":"ListItem","position":1,"name":"Claude Code"},{"@type":"ListItem","position":2,"name":"Cursor"},{"@type":"ListItem","position":3,"name":"Windsurf"},{"@type":"ListItem","position":4,"name":"GitHub Copilot"},{"@type":"ListItem","position":5,"name":"Gemini CLI"},{"@type":"ListItem","position":6,"name":"Codex"},{"@type":"ListItem","position":7,"name":"Kiro"},{"@type":"ListItem","position":8,"name":"Cline"},{"@type":"ListItem","position":9,"name":"Continue"},{"@type":"ListItem","position":10,"name":"Aider"},{"@type":"ListItem","position":11,"name":"Zed"},{"@type":"ListItem","position":12,"name":"JetBrains AI"},{"@type":"ListItem","position":13,"name":"Pieces"},{"@type":"ListItem","position":14,"name":"Tabby"},{"@type":"ListItem","position":15,"name":"Tabnine"},{"@type":"ListItem","position":16,"name":"CodeWhisperer"},{"@type":"ListItem","position":17,"name":"Roo Cline"}]}
@@ -135,7 +135,7 @@
        UXSKILL HOMEPAGE v3.0 — focused dogfood landing
        Synthesized tokens (above) are loaded into CSS custom properties.
        Global page stays Dark Saturated Cinema for legibility.
-       Synthesized palette is the accent + the dogfood callout.
+       Synthetisierte Palette is the accent + the dogfood callout.
        Banned: yellow, amber, gold, mustard, ochre, cream, coral, Cormorant.
        ========================================================================= */
 
@@ -200,7 +200,7 @@
       --r-xl: 17px;
       --r-pill: 999px;
 
-      /* === Motion (synthesized — kinetic, spring-soft) === */
+      /* === Bewegung (synthesized — kinetic, spring-soft) === */
       --t-fast: 96ms;
       --t-mid:  160ms;
       --t-slow: 288ms;
@@ -1092,7 +1092,7 @@
 
     /* =========================================================================
        DOGFOOD CALLOUT — the killer move
-       Synthesized palette rendered AS the brain emitted it.
+       Synthetisierte Palette rendered AS the brain emitted it.
        ========================================================================= */
     .dogfood {
       position: relative;
@@ -1588,14 +1588,14 @@
       uxskill<span class="wordmark__dot" aria-hidden="true"></span>
     </a>
     <nav class="nav__links" aria-label="Primary">
-      <a class="nav__link" href="/brands.html">Brands</a>
-      <a class="nav__link" href="/anti-patterns.html">Anti-patterns</a>
+      <a class="nav__link" href="/brands.html">Marken</a>
+      <a class="nav__link" href="/anti-patterns.html">Anti-Patterns</a>
       <a class="nav__link" href="/commands.html">Befehle</a>
       <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
     </nav>
     <a href="https://github.com/Laith0003/ux-skill" class="nav__cta" rel="noopener">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-      <span>Auf GitHub starren</span>
+      <span>Star auf GitHub</span>
     </a>
     <button type="button" class="nav__menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer" id="nav-menu-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
@@ -1641,8 +1641,8 @@
     </div>
   </details>
 
-  <a href="/brands.html">Brands</a>
-  <a href="/anti-patterns.html">Anti-patterns</a>
+  <a href="/brands.html">Marken</a>
+  <a href="/anti-patterns.html">Anti-Patterns</a>
   <a href="/commands.html">Befehle</a>
   <a href="/mcp.html">MCP</a>
   <a href="/compare.html">Vergleich</a>
@@ -1657,7 +1657,7 @@
 <div class="sticky-cta" id="sticky-cta" aria-hidden="true">
   <code>pip install uxskill</code>
   <span class="sticky-cta__sep" aria-hidden="true"></span>
-  <a class="sticky-cta__btn" href="https://github.com/Laith0003/ux-skill" rel="noopener">Auf GitHub starren</a>
+  <a class="sticky-cta__btn" href="https://github.com/Laith0003/ux-skill" rel="noopener">Star auf GitHub</a>
 </div>
 
 <main id="main">
@@ -1671,15 +1671,15 @@
       <div class="hero__inner">
         <div class="hero__eyebrow-row">
           <span class="pill-tag pill-tag--live"><span class="dot-live" aria-hidden="true"></span> v3.0.0 &middot; THE BRAIN &middot; LIVE</span>
-          <span class="pill-tag">MIT &middot; no telemetry &middot; no LLM</span>
+          <span class="pill-tag">MIT &middot; ohne Telemetrie &middot; ohne LLM</span>
         </div>
         <h1 class="hero__h1" id="hero-h1">
-          The brain<br>
-          that ships<br>
-          <span class="accent-italic">design that&nbsp;doesn&rsquo;t look generated.</span>
+          Das Gehirn<br>
+          das liefert<br>
+          <span class="accent-italic">Design, das nicht generiert wirkt.</span>
         </h1>
         <p class="hero__sub">
-          <strong>v3.0 is here.</strong> A 7-axis synthesizer turns any brief into a fresh design language. 160 brand specs become training data, keine Templates. The recommender re-ranks from a local decisions ledger that learns from your work. Runs in <strong>Claude Code, Cursor, Windsurf</strong> and 14 more IDEs. Same brief always ships the same output. <strong>Offline. Deterministic. No LLM in the engine.</strong>
+          <strong>v3.0 ist da.</strong> Ein 7-Achsen-Synthesizer macht aus jedem Brief eine frische Designsprache. 160 Brand-Specs werden zu Trainingsdaten, nicht zu Vorlagen. Der Recommender ranked aus einem lokalen Decisions-Ledger neu, das von deiner Arbeit lernt. Läuft in <strong>Claude Code, Cursor, Windsurf</strong> und 14 weiteren IDEs. Derselbe Brief liefert immer dasselbe Ergebnis. <strong>Offline. Deterministisch. Kein LLM im Motor.</strong>
         </p>
         <div class="hero__ctas">
           <a href="https://pypi.org/project/uxskill/" class="cta-primary" rel="noopener">
@@ -1698,7 +1698,7 @@
           </div>
           <div class="hero__stat">
             <div class="hero__stat-num">160</div>
-            <div class="hero__stat-label">Brand-DESIGN.md-Specs</div>
+            <div class="hero__stat-label">Marken-DESIGN.md-Specs</div>
           </div>
           <div class="hero__stat">
             <div class="hero__stat-num">145</div>
@@ -1717,40 +1717,40 @@
   <section class="section section--bordered reveal" data-scene="problem" aria-labelledby="problem-h2">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow">01 &middot; The problem you ship every day</span>
+        <span class="eyebrow">01 &middot; Das Problem, das du täglich auslieferst</span>
         <h2 class="section__title" id="problem-h2">
-          You vibe code in Claude Code or Cursor.<br>
-          Your AI ships <span class="accent-italic">slop</span> by default.
+          Du vibest in Claude Code oder Cursor.<br>
+          Deine KI liefert standardmäßig <span class="accent-italic">Slop</span>.
         </h2>
         <p class="section__lede">
-          Ask the model to "build a fintech landing." You get the same five tells inside ten seconds. Purple-to-blue gradients. Three equal cards. Inter at display size. <strong>J&#x6f;hn D&#x6f;e</strong> in the testimonial. Bouncing arrow CTA. Centered hero. 300ms ease-in-out on every transition. The output is technically correct and visually disposable.
+          Bitte das Modell um „build a fintech landing." In zehn Sekunden siehst du dieselben fünf Spuren. Lila-zu-Blau-Verlauf. Drei gleiche Karten. Inter in Display-Größe. <strong>J&#x6f;hn D&#x6f;e</strong> im Testimonial. Hüpfender Pfeil-CTA. Zentrierter Hero. 300ms ease-in-out auf jeder Transition. Das Ergebnis ist technisch korrekt und visuell Wegwerfware.
         </p>
       </div>
 
       <div class="problem-grid">
         <div class="problem-card" data-card="proof">
-          <div class="problem-card__tag">The fingerprint</div>
-          <div class="problem-card__head">Five tells, ten seconds.</div>
+          <div class="problem-card__tag">Der Fingerabdruck</div>
+          <div class="problem-card__head">Fünf Spuren, zehn Sekunden.</div>
           <ul class="problem-card__list">
-            <li>Purple &rarr; blue 135&deg; gradient</li>
-            <li>Three equal cards in a row</li>
+            <li>Lila &rarr; blauer 135&deg;-Verlauf</li>
+            <li>Drei gleiche Karten in einer Reihe</li>
             <li>"L&#x6f;rem ipsum dolor sit amet"</li>
-            <li>"J&#x6f;hn D&#x6f;e" / "Jane D&#x6f;e" testimonial</li>
-            <li>Inter 96px hero, centered</li>
+            <li>Testimonial von „J&#x6f;hn D&#x6f;e" / „Jane D&#x6f;e"</li>
+            <li>Inter 96px Hero, zentriert</li>
           </ul>
         </div>
         <div class="problem-card" data-card="cause">
-          <div class="problem-card__tag">Why it happens</div>
-          <div class="problem-card__head">The model improvises.</div>
+          <div class="problem-card__tag">Warum es passiert</div>
+          <div class="problem-card__head">Das Modell improvisiert.</div>
           <p class="problem-card__body">
-            The assistant has read every design system on GitHub. It has no idea which one fits your brief. It defaults to the centroid &mdash; the average of every SaaS site it ever ingested. The result reads as generated within seconds. Your domain, your industry, your customers &mdash; none of it influences the output.
+            Der Assistent hat jedes Designsystem auf GitHub gelesen. Er hat keine Ahnung, welches zu deinem Brief passt. Er landet per Default beim Centroid &mdash; dem Durchschnitt jeder SaaS-Seite, die er je gefressen hat. Das Ergebnis liest sich in Sekunden als generiert. Deine Domain, deine Branche, deine Kunden &mdash; nichts davon beeinflusst die Ausgabe.
           </p>
         </div>
         <div class="problem-card" data-card="cost">
-          <div class="problem-card__tag">The cost</div>
-          <div class="problem-card__head">Trust erodes on first paint.</div>
+          <div class="problem-card__tag">Der Preis</div>
+          <div class="problem-card__head">Vertrauen bröckelt beim ersten Paint.</div>
           <p class="problem-card__body">
-            Investors flag it. Customers click away. Designers refuse to touch it. You ship faster but the shape of what you shipped is generic. A year of vibe coding leaves a portfolio that all looks the same. The velocity feels free until the brand bill comes due.
+            Investoren merken es. Kunden klicken weg. Designer weigern sich, es anzufassen. Du lieferst schneller, aber die Form dessen, was du geliefert hast, ist generisch. Ein Jahr Vibe Coding hinterlässt ein Portfolio, das überall gleich aussieht. Die Geschwindigkeit fühlt sich kostenlos an, bis die Brand-Rechnung kommt.
           </p>
         </div>
       </div>
@@ -1758,9 +1758,9 @@
       <div class="problem-bridge">
         <div class="problem-bridge__arrow" aria-hidden="true">&darr;</div>
         <p class="problem-bridge__text">
-          What if your AI assistant had a designer's brain wired up next to it &mdash; a brain that <strong>knew which design language fits your brief</strong>, refused the slop fingerprints before commit, and learned from every shipped output?
+          Was, wenn dein KI-Assistent neben sich das Gehirn eines Designers hätte &mdash; ein Gehirn, das <strong>weiß, welche Designsprache zu deinem Brief passt</strong>, Slop-Fingerabdrücke vor dem Commit ablehnt und aus jeder ausgelieferten Ausgabe lernt?
         </p>
-        <p class="problem-bridge__cta">That's v3.0. Keep scrolling.</p>
+        <p class="problem-bridge__cta">Das ist v3.0. Weiterscrollen.</p>
       </div>
     </div>
   </section>
@@ -1769,31 +1769,31 @@
   <section class="section section--bordered reveal" data-scene="brain" aria-labelledby="brain-h2">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow">02 &mdash; The architecture</span>
+        <span class="eyebrow">02 &mdash; Die Architektur</span>
         <h2 class="section__title" id="brain-h2">
           Brand-Specs sind Trainingsdaten,<br>
-          <span class="accent-italic">keine Templates.</span>
+          <span class="accent-italic">keine Vorlagen.</span>
         </h2>
         <p class="section__lead">
-          The catalogue used to be a menu. Pick Stripe, get Stripe-flavored tokens. v3.0 turns that on its head: the 160 brand specs become vocabulary the engine distills from. Output is novel every call.
+          Der Katalog war früher ein Menü. Wähl Stripe, bekomm Stripe-artige Tokens. v3.0 dreht das um: Die 160 Brand-Specs werden zum Vokabular, aus dem die Engine destilliert. Die Ausgabe ist bei jedem Aufruf neu.
         </p>
       </div>
 
       <div class="brain-quote-row">
         <div class="brain-quote brain-quote--before">
-          <span class="brain-quote__label">Before v3 &middot; the catalogue picks</span>
-          <p class="brain-quote__line">Recommender returns a brand specimen.</p>
+          <span class="brain-quote__label">Vor v3 &middot; der Katalog wählt</span>
+          <p class="brain-quote__line">Der Recommender liefert ein Brand-Exemplar.</p>
           <p class="brain-quote__body">
             <code>match_brand(brief) &rarr; stripe</code><br>
-            You ship Stripe tokens. Or you fork them. Either way, the system has nothing new to say.
+            Du lieferst Stripe-Tokens. Oder forkst sie. So oder so hat das System nichts Neues zu sagen.
           </p>
         </div>
         <div class="brain-quote brain-quote--after">
-          <span class="brain-quote__label">After v3 &middot; the brain distills</span>
-          <p class="brain-quote__line">Synthesizer compiles a fresh design language.</p>
+          <span class="brain-quote__label">Nach v3 &middot; das Gehirn destilliert</span>
+          <p class="brain-quote__line">Der Synthesizer kompiliert eine frische Designsprache.</p>
           <p class="brain-quote__body">
             <code>synthesize(brief) &rarr; novel tokens</code><br>
-            Same brief, same output, every time. Different brief, different system. The catalogue is now the corpus.
+            Gleicher Brief, gleiches Ergebnis, jedes Mal. Anderer Brief, anderes System. Der Katalog ist jetzt der Korpus.
           </p>
         </div>
       </div>
@@ -1804,58 +1804,58 @@
   <section class="section reveal" data-scene="axes" aria-labelledby="axes-h2">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow">03 &mdash; The 7 axes</span>
+        <span class="eyebrow">03 &mdash; Die 7 Achsen</span>
         <h2 class="section__title" id="axes-h2">
-          Seven values.<br>
-          One design language.
+          Sieben Werte.<br>
+          Eine Designsprache.
         </h2>
         <p class="section__lead">
-          Briefs map deterministically to seven axis values. Axis values compile to palette, type, spacing, radius, and motion tokens. Same brief always yields the same output.
+          Briefs werden deterministisch auf sieben Achsenwerte abgebildet. Achsenwerte kompilieren zu Palette-, Typo-, Spacing-, Radius- und Bewegung-Tokens. Gleicher Brief liefert immer dasselbe Ergebnis.
         </p>
       </div>
 
       <div class="axes-band">
         <div class="axis-card axis-card--v40">
-          <div class="axis-card__head"><span class="axis-card__name">Warmth</span><span class="axis-card__num">0.40</span></div>
+          <div class="axis-card__head"><span class="axis-card__name">Wärme</span><span class="axis-card__num">0.40</span></div>
           <div class="axis-card__rail"></div>
-          <div class="axis-card__ends"><span>Cool</span><span>Warm</span></div>
-          <div class="axis-card__compiles">compiles to <code>--canvas, --ink</code></div>
+          <div class="axis-card__ends"><span>Kühl</span><span>Warm</span></div>
+          <div class="axis-card__compiles">kompiliert zu <code>--canvas, --ink</code></div>
         </div>
         <div class="axis-card axis-card--v100">
-          <div class="axis-card__head"><span class="axis-card__name">Contrast</span><span class="axis-card__num">1.00</span></div>
+          <div class="axis-card__head"><span class="axis-card__name">Kontrast</span><span class="axis-card__num">1.00</span></div>
           <div class="axis-card__rail"></div>
-          <div class="axis-card__ends"><span>Quiet</span><span>Loud</span></div>
-          <div class="axis-card__compiles">compiles to <code>scale ratio, weights</code></div>
+          <div class="axis-card__ends"><span>Leise</span><span>Laut</span></div>
+          <div class="axis-card__compiles">kompiliert zu <code>scale ratio, weights</code></div>
         </div>
         <div class="axis-card axis-card--v70">
-          <div class="axis-card__head"><span class="axis-card__name">Density</span><span class="axis-card__num">0.70</span></div>
+          <div class="axis-card__head"><span class="axis-card__name">Dichte</span><span class="axis-card__num">0.70</span></div>
           <div class="axis-card__rail"></div>
-          <div class="axis-card__ends"><span>Airy</span><span>Dense</span></div>
-          <div class="axis-card__compiles">compiles to <code>--s-1..--s-7</code></div>
+          <div class="axis-card__ends"><span>Luftig</span><span>Dicht</span></div>
+          <div class="axis-card__compiles">kompiliert zu <code>--s-1..--s-7</code></div>
         </div>
         <div class="axis-card axis-card--v30">
-          <div class="axis-card__head"><span class="axis-card__name">Geometry</span><span class="axis-card__num">0.30</span></div>
+          <div class="axis-card__head"><span class="axis-card__name">Geometrie</span><span class="axis-card__num">0.30</span></div>
           <div class="axis-card__rail"></div>
-          <div class="axis-card__ends"><span>Sharp</span><span>Soft</span></div>
-          <div class="axis-card__compiles">compiles to <code>--r-sm..--r-xl</code></div>
+          <div class="axis-card__ends"><span>Scharf</span><span>Weich</span></div>
+          <div class="axis-card__compiles">kompiliert zu <code>--r-sm..--r-xl</code></div>
         </div>
         <div class="axis-card axis-card--v60">
-          <div class="axis-card__head"><span class="axis-card__name">Formality</span><span class="axis-card__num">0.60</span></div>
+          <div class="axis-card__head"><span class="axis-card__name">Formalität</span><span class="axis-card__num">0.60</span></div>
           <div class="axis-card__rail"></div>
-          <div class="axis-card__ends"><span>Casual</span><span>Formal</span></div>
-          <div class="axis-card__compiles">compiles to <code>tracking, line-height</code></div>
+          <div class="axis-card__ends"><span>Lässig</span><span>Formell</span></div>
+          <div class="axis-card__compiles">kompiliert zu <code>tracking, line-height</code></div>
         </div>
         <div class="axis-card axis-card--v75">
-          <div class="axis-card__head"><span class="axis-card__name">Motion</span><span class="axis-card__num">0.75</span></div>
+          <div class="axis-card__head"><span class="axis-card__name">Bewegung</span><span class="axis-card__num">0.75</span></div>
           <div class="axis-card__rail"></div>
-          <div class="axis-card__ends"><span>Still</span><span>Kinetic</span></div>
-          <div class="axis-card__compiles">compiles to <code>--ease, --t-fast</code></div>
+          <div class="axis-card__ends"><span>Statisch</span><span>Kinetisch</span></div>
+          <div class="axis-card__compiles">kompiliert zu <code>--ease, --t-fast</code></div>
         </div>
         <div class="axis-card axis-card--v80">
-          <div class="axis-card__head"><span class="axis-card__name">Type personality</span><span class="axis-card__num">0.80</span></div>
+          <div class="axis-card__head"><span class="axis-card__name">Type-Persönlichkeit</span><span class="axis-card__num">0.80</span></div>
           <div class="axis-card__rail"></div>
-          <div class="axis-card__ends"><span>Neutral</span><span>Humanist</span></div>
-          <div class="axis-card__compiles">compiles to <code>display, body pair</code></div>
+          <div class="axis-card__ends"><span>Neutral</span><span>Humanistisch</span></div>
+          <div class="axis-card__compiles">kompiliert zu <code>display, body pair</code></div>
         </div>
       </div>
     </div>
@@ -1865,43 +1865,43 @@
   <section class="section section--bordered reveal" data-scene="modes" aria-labelledby="modes-h2">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow">04 &mdash; The three modes</span>
+        <span class="eyebrow">04 &mdash; Die drei Modi</span>
         <h2 class="section__title" id="modes-h2">
-          Three modes.<br>
-          <span class="accent-italic">Auto-dispatched.</span>
+          Drei Modi.<br>
+          <span class="accent-italic">Automatisch dispatched.</span>
         </h2>
         <p class="section__lead">
-          The synthesizer picks its own mode based on whether you anchored to a named brand. Strict for exact replication, anchor for guided variation, pure for infinity space.
+          Der Synthesizer wählt seinen Modus selbst, je nachdem, ob du an eine benannte Marke geankert hast. Strict für exakte Replikation, Anchor für geführte Variation, Pure für Infinity Space.
         </p>
       </div>
 
       <div class="modes-grid">
         <div class="mode-card">
-          <span class="mode-card__index">Mode 01 &middot; fastest</span>
+          <span class="mode-card__index">Modus 01 &middot; am schnellsten</span>
           <div class="mode-card__title" role="heading" aria-level="3">strict_brand</div>
-          <p class="mode-card__ratio">100% named brand &middot; verbatim</p>
+          <p class="mode-card__ratio">100% benannte Marke &middot; wortwörtlich</p>
           <p class="mode-card__body">
-            Anchor on a named brand with <code>strict=True</code>. 100% Stripe tokens, no axis adaptation. Fastest path. For when you know exactly what you want and the brief is "give me Stripe."
+            Anker auf eine benannte Marke mit <code>strict=True</code>. 100% Stripe-Tokens, keine Achsen-Anpassung. Schnellster Weg. Für wenn du genau weißt, was du willst, und der Brief lautet „give me Stripe."
           </p>
           <pre class="mode-card__example">reference_brands=["stripe"]
 strict=True</pre>
         </div>
         <div class="mode-card">
-          <span class="mode-card__index">Mode 02 &middot; the sweet spot</span>
+          <span class="mode-card__index">Modus 02 &middot; der Sweet Spot</span>
           <div class="mode-card__title" role="heading" aria-level="3">brand_anchor</div>
-          <p class="mode-card__ratio">70% named &middot; 30% axis adaptation</p>
+          <p class="mode-card__ratio">70% benannt &middot; 30% Achsen-Anpassung</p>
           <p class="mode-card__body">
-            Anchor on a named brand, then bend it toward the brief's axis values using four sibling brands as additional vocabulary. The variation that still smells like Stripe but feels like yours.
+            Verankere eine benannte Marke und biege sie mit vier Schwestermarken als zusätzlichem Vokabular in Richtung der Achsenwerte des Briefs. Die Variation, die noch nach Stripe riecht, sich aber wie deine anfühlt.
           </p>
           <pre class="mode-card__example">reference_brands=["stripe"]
 tone=["warm","editorial"]</pre>
         </div>
         <div class="mode-card">
-          <span class="mode-card__index">Mode 03 &middot; infinity space</span>
+          <span class="mode-card__index">Modus 03 &middot; Infinity Space</span>
           <div class="mode-card__title" role="heading" aria-level="3">pure_synthesis</div>
-          <p class="mode-card__ratio">0% named &middot; 100% axes</p>
+          <p class="mode-card__ratio">0% benannt &middot; 100% Achsen</p>
           <p class="mode-card__body">
-            No brand named. The synthesizer picks 8 axis-matching exemplars from the catalogue and distills them into a novel design language. No single brand copied; their shared vocabulary harvested.
+            Keine Marke benannt. Der Synthesizer wählt 8 achsen-passende Exemplare aus dem Katalog und destilliert sie zu einer frischen Designsprache. Keine einzelne Marke kopiert; ihr gemeinsames Vokabular geerntet.
           </p>
           <pre class="mode-card__example">industry="developer-tools"
 tone=["bold","editorial"]</pre>
@@ -1914,13 +1914,13 @@ tone=["bold","editorial"]</pre>
   <section class="section reveal" data-scene="loop" aria-labelledby="loop-h2">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow">05 &mdash; The intelligence loop</span>
+        <span class="eyebrow">05 &mdash; Die Intelligence-Loop</span>
         <h2 class="section__title" id="loop-h2">
-          The brain learns<br>
-          <span class="accent-italic">from itself.</span>
+          Das Gehirn lernt<br>
+          <span class="accent-italic">aus sich selbst.</span>
         </h2>
         <p class="section__lead">
-          Every call writes to <code>.ux/decisions.jsonl</code>. The recommender re-ranks future candidates by your past wins in the same industry plus UI-type bucket. Cold-start safe. Local only.
+          Jeder Aufruf schreibt nach <code>.ux/decisions.jsonl</code>. Der Recommender ranked künftige Kandidaten anhand deiner vergangenen Erfolge im selben Branche- + UI-Type-Bucket neu. Cold-Start-sicher. Nur lokal.
         </p>
       </div>
 
@@ -1937,7 +1937,7 @@ tone=["bold","editorial"]</pre>
           <div class="loop-node">re-rank</div>
         </div>
         <p class="loop-caption">
-          <strong>The intelligence loop is now closed.</strong> Only decisions with lint_score &ge; 80 and user_accepted = true count toward future re-ranking. Your install gets sharper for the work you actually ship.
+          <strong>Die Intelligence-Loop ist jetzt geschlossen.</strong> Nur Entscheidungen mit lint_score &ge; 80 und user_accepted = true zählen fürs künftige Re-Ranking. Deine Installation wird schärfer für die Arbeit, die du tatsächlich auslieferst.
         </p>
       </div>
     </div>
@@ -1947,31 +1947,31 @@ tone=["bold","editorial"]</pre>
   <section class="dogfood reveal" data-scene="dogfood" aria-labelledby="dogfood-h2">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow">06 &mdash; The dogfood</span>
+        <span class="eyebrow">06 &mdash; Das Dogfood</span>
         <h2 class="section__title" id="dogfood-h2">
-          This page was synthesized<br>
-          <span class="accent-italic">by v3.0 itself.</span>
+          Diese Seite wurde<br>
+          <span class="accent-italic">von v3.0 selbst synthetisiert.</span>
         </h2>
         <p class="section__lead">
-          We ran the synthesizer on a brief that describes this page. The tokens it emitted power what you are reading right now. The brain ships its own marketing.
+          Wir haben den Synthesizer auf einen Brief losgelassen, der diese Seite beschreibt. Die ausgegebenen Tokens treiben das an, was du gerade liest. Das Gehirn liefert sein eigenes Marketing.
         </p>
       </div>
 
       <div class="dogfood__grid">
         <div class="dogfood-block">
-          <span class="dogfood-block__label">The brief</span>
+          <span class="dogfood-block__label">Der Brief</span>
           <pre class="dogfood-brief"><span class="k">industry</span>      = "developer-tools"
 <span class="k">tone</span>          = ["bold", "editorial",
                  "kinetic", "humanist"]
 <span class="k">audience</span>      = ["vibe-coder", "ai-builder"]
 <span class="k">must_have</span>     = ["dark-mode"]
 <span class="k">forbidden</span>     = ["playful", "rounded"]</pre>
-          <span class="dogfood-block__label">Mode dispatched</span>
+          <span class="dogfood-block__label">Dispatchter Modus</span>
           <p class="text-mono-sm">pure_synthesis</p>
         </div>
 
         <div class="dogfood-block">
-          <span class="dogfood-block__label">The 7 axis values</span>
+          <span class="dogfood-block__label">Die 7 Achsenwerte</span>
           <div class="dogfood-axes">
             <span>warmth</span><b>0.40</b>
             <span>contrast</span><b>1.00</b>
@@ -1981,7 +1981,7 @@ tone=["bold","editorial"]</pre>
             <span>motion</span><b>0.75</b>
             <span>type_personality</span><b>0.80</b>
           </div>
-          <span class="dogfood-block__label">Source exemplars (8)</span>
+          <span class="dogfood-block__label">Quell-Exemplare (8)</span>
           <p class="text-mono-xs">
             audi, bentley, bmw, bmw-m, bugatti,<br>
             ferrari, lamborghini, mclaren
@@ -1989,7 +1989,7 @@ tone=["bold","editorial"]</pre>
         </div>
 
         <div class="dogfood-block">
-          <span class="dogfood-block__label">Synthesized palette</span>
+          <span class="dogfood-block__label">Synthetisierte Palette</span>
           <div class="dogfood-swatches">
             <div class="swatch">
               <div class="swatch__chip swatch__chip--canvas"></div>
@@ -2015,29 +2015,29 @@ tone=["bold","editorial"]</pre>
         </div>
 
         <div class="dogfood-block">
-          <span class="dogfood-block__label">Synthesized type pair</span>
+          <span class="dogfood-block__label">Synthetisiertes Type-Paar</span>
           <div class="dogfood-type">
             <p class="dogfood-type__display">Bricolage Grotesque</p>
-            <p class="dogfood-type__body">Inter for body. Both ship via Google Fonts. The display face here on this page is exactly what came out of the synthesizer.</p>
-            <p class="dogfood-type__caption">JetBrains Mono &middot; for code &middot; ratio 1.333</p>
+            <p class="dogfood-type__body">Inter für Body. Beide kommen über Google Fonts. Die Display-Face auf dieser Seite ist genau die, die der Synthesizer ausgegeben hat.</p>
+            <p class="dogfood-type__caption">JetBrains Mono &middot; für Code &middot; Ratio 1.333</p>
           </div>
         </div>
 
         <div class="dogfood-block col-span-all">
-          <span class="dogfood-block__label">Mini-component &mdash; rendered in the synthesized palette as the brain emitted it</span>
+          <span class="dogfood-block__label">Mini-Komponente &mdash; in der synthetisierten Palette gerendert, wie das Gehirn sie ausgegeben hat</span>
           <div class="dogfood-component">
             <div class="dogfood-component__row">
-              <span class="dogfood-component__h">Card title</span>
+              <span class="dogfood-component__h">Karten-Titel</span>
               <span class="dogfood-component__num">07</span>
             </div>
-            <p class="dogfood-component__body">This card uses the literal token values from the synthesize() call: canvas #424448, ink #c0c2c6, body #9a9ca0, primary #987d86. Radius 7px. Spacing scale 4-8-12-20-32-52-84.</p>
-            <a class="dogfood-component__btn" href="#install">View token output</a>
+            <p class="dogfood-component__body">Diese Karte nutzt die wörtlichen Token-Werte aus dem synthesize()-Aufruf: canvas #424448, ink #c0c2c6, body #9a9ca0, primary #987d86. Radius 7px. Spacing-Skala 4-8-12-20-32-52-84.</p>
+            <a class="dogfood-component__btn" href="#install">Token-Ausgabe ansehen</a>
           </div>
         </div>
       </div>
 
       <p class="dogfood__caption">
-        <strong>These are the actual tokens that powered this page.</strong> The brain ships its own marketing. The brief and output are in the HTML source as a comment at the top of the file.
+        <strong>Das sind die tatsächlichen Tokens, die diese Seite antreiben.</strong> Das Gehirn liefert sein eigenes Marketing. Brief und Ausgabe stehen als Kommentar oben im HTML-Quelltext.
       </p>
     </div>
   </section>
@@ -2046,10 +2046,10 @@ tone=["bold","editorial"]</pre>
   <section class="section reveal" data-scene="pillars" aria-labelledby="pillars-h2">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow">07 &mdash; Why this is the floor</span>
+        <span class="eyebrow">07 &mdash; Warum das die Grundlinie ist</span>
         <h2 class="section__title" id="pillars-h2">
-          Three properties.<br>
-          <span class="accent-italic">No competitor has all three.</span>
+          Drei Eigenschaften.<br>
+          <span class="accent-italic">Kein Konkurrent hat alle drei.</span>
         </h2>
       </div>
 
@@ -2058,21 +2058,21 @@ tone=["bold","editorial"]</pre>
           <span class="pillar__num">01</span>
           <div class="pillar__title" role="heading" aria-level="3">Offline.</div>
           <p class="pillar__body">
-            Runs on a plane. No API key. No vendor lock-in. The 1,182 entries, 145 rules, 160 brand specs, and the synthesizer all live inside the Python wheel. Air-gapped repos can ship it.
+            Läuft im Flugzeug. Kein API-Key. Kein Vendor Lock-in. Die 1.182 Einträge, 145 Regeln, 160 Brand-Specs und der Synthesizer leben alle im Python-Wheel. Air-Gapped-Repos können es ausliefern.
           </p>
         </div>
         <div class="pillar">
           <span class="pillar__num">02</span>
-          <div class="pillar__title" role="heading" aria-level="3">Deterministic.</div>
+          <div class="pillar__title" role="heading" aria-level="3">Deterministisch.</div>
           <p class="pillar__body">
-            Same brief always produces the same tokens. Every sort has an explicit tiebreaker. Reproducible across machines, file systems, Python versions. Diffing two synth runs is meaningful.
+            Gleicher Brief liefert immer dieselben Tokens. Jede Sortierung hat einen expliziten Tiebreaker. Reproduzierbar über Maschinen, Dateisysteme und Python-Versionen hinweg. Zwei Synth-Läufe zu diffen ist bedeutungsvoll.
           </p>
         </div>
         <div class="pillar">
           <span class="pillar__num">03</span>
-          <div class="pillar__title" role="heading" aria-level="3">Self-learning.</div>
+          <div class="pillar__title" role="heading" aria-level="3">Selbstlernend.</div>
           <p class="pillar__body">
-            Every call writes to <code>.ux/decisions.jsonl</code>. The recommender re-ranks future candidates from your past wins. No telemetry. Your install gets sharper for your work, not aggregate slop.
+            Jeder Aufruf schreibt nach <code>.ux/decisions.jsonl</code>. Der Recommender ranked künftige Kandidaten aus deinen vergangenen Erfolgen neu. Keine Telemetrie. Deine Installation wird schärfer für deine Arbeit, nicht für aggregierten Slop.
           </p>
         </div>
       </div>
@@ -2084,16 +2084,16 @@ tone=["bold","editorial"]</pre>
     <div class="container">
       <div class="audience__inner">
         <div class="audience__copy">
-          <span class="eyebrow">08 &mdash; For vibe coders</span>
+          <span class="eyebrow">08 &mdash; Für Vibe Coder</span>
           <h2 class="section__title" id="audience-h2">
-            If you ship by feel,<br>
-            <span class="accent-italic">the brain is your floor.</span>
+            Wenn du nach Gefühl auslieferst,<br>
+            <span class="accent-italic">ist das Gehirn dein Boden.</span>
           </h2>
           <p class="section__lead">
-            You prompt an assistant. It returns code. The CSS is generic. The hierarchy is flat. The palette is the default Tailwind ten. You ship anyway, because the alternative is hand-tuning a thousand tokens.
+            Du promptest einen Assistenten. Er liefert Code. Das CSS ist generisch. Die Hierarchie ist flach. Die Palette sind die zehn Tailwind-Defaults. Du lieferst trotzdem &mdash; die Alternative wäre, tausend Tokens händisch zu tunen.
           </p>
           <p class="audience__copy-body">
-            uxskill sits between you and the assistant. The brief becomes a synthesized design language before code is written. The linter catches the slop before commit. The ledger remembers what worked. You stay vibe; the floor stays high.
+            uxskill sitzt zwischen dir und dem Assistenten. Der Brief wird zur synthetisierten Designsprache, bevor Code geschrieben wird. Der Linter erwischt Slop vor dem Commit. Das Ledger merkt sich, was funktioniert hat. Du bleibst Vibe; der Boden bleibt hoch.
           </p>
         </div>
         <div class="audience__photo">
@@ -2116,31 +2116,31 @@ tone=["bold","editorial"]</pre>
   <section class="section section--bordered reveal" aria-labelledby="proof-h2">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow">09 &mdash; The catalogue</span>
+        <span class="eyebrow">09 &mdash; Der Katalog</span>
         <h2 class="section__title" id="proof-h2">
-          1,182 entries.<br>
-          <span class="accent-italic">Browse the corpus.</span>
+          1.182 Einträge.<br>
+          <span class="accent-italic">Stöbere im Korpus.</span>
         </h2>
       </div>
 
       <div class="proof-grid">
         <a href="/brands.html" class="proof-card">
           <div class="proof-card__num">160</div>
-          <span class="proof-card__head">Brand-DESIGN.md-Specs</span>
-          <p class="proof-card__body">Apple, Stripe, Linear, Vercel, Ferrari, Anthropic. Full palettes, typography, voice. JSON for queries, prose for context.</p>
-          <span class="proof-card__link">Browse brands &middot;</span>
+          <span class="proof-card__head">Marken-DESIGN.md-Specs</span>
+          <p class="proof-card__body">Apple, Stripe, Linear, Vercel, Ferrari, Anthropic. Vollständige Paletten, Typografie, Voice. JSON für Queries, Prosa für Kontext.</p>
+          <span class="proof-card__link">Marken durchstöbern &middot;</span>
         </a>
         <a href="/anti-patterns.html" class="proof-card">
           <div class="proof-card__num">145</div>
           <span class="proof-card__head">Anti-Pattern-Regeln</span>
-          <p class="proof-card__body">Deterministic regex. Sub-50ms scan on 10K lines. Catches placeholder text, default Tailwind palettes, A11y skips, marketing buzzwords.</p>
-          <span class="proof-card__link">Browse rules &middot;</span>
+          <p class="proof-card__body">Deterministisches Regex. Scan unter 50ms auf 10K Zeilen. Erwischt Platzhalter-Text, Default-Tailwind-Paletten, A11y-Skips, Marketing-Buzzwords.</p>
+          <span class="proof-card__link">Regeln durchstöbern &middot;</span>
         </a>
         <a href="/blog/v3-the-brain-launch.html" class="proof-card">
           <div class="proof-card__num">3.0</div>
-          <span class="proof-card__head">Read the launch post</span>
-          <p class="proof-card__body">The full architecture writeup. Why brand specs became training data. Why the synthesizer is deterministic. Why the ledger closes the loop.</p>
-          <span class="proof-card__link">Read the launch &middot;</span>
+          <span class="proof-card__head">Launch-Post lesen</span>
+          <p class="proof-card__body">Das komplette Architektur-Writeup. Warum Brand-Specs zu Trainingsdaten wurden. Warum der Synthesizer deterministisch ist. Warum das Ledger den Loop schließt.</p>
+          <span class="proof-card__link">Launch lesen &middot;</span>
         </a>
       </div>
     </div>
@@ -2150,27 +2150,27 @@ tone=["bold","editorial"]</pre>
   <section class="final reveal" id="install" aria-labelledby="final-h2">
     <div class="container">
       <h2 class="final__title" id="final-h2">
-        Install in 60 seconds.
+        In 60 Sekunden installiert.
       </h2>
       <p class="final__lead">
-        Pick the runtime that fits where you live. The Python wheel is the engine; the npm wrapper invokes it from Node hosts; the Claude marketplace installs the slash commands and sub-agents directly.
+        Wähle die Runtime, die zu deiner Umgebung passt. Das Python-Wheel ist der Motor; der npm-Wrapper ruft es aus Node-Hosts auf; der Claude-Marketplace installiert Slash-Befehle und Sub-Agents direkt.
       </p>
       <div class="final__install">
         <div class="final__line">
           <span><code>$</code> <code>pip install uxskill</code></span>
-          <button type="button" class="final__copy-btn" data-copy="pip install uxskill">Copy</button>
+          <button type="button" class="final__copy-btn" data-copy="pip install uxskill">Kopieren</button>
         </div>
         <div class="final__line">
           <span><code>$</code> <code>npx uxskill init</code></span>
-          <button type="button" class="final__copy-btn" data-copy="npx uxskill init">Copy</button>
+          <button type="button" class="final__copy-btn" data-copy="npx uxskill init">Kopieren</button>
         </div>
         <div class="final__line">
           <span><code>$</code> <code>claude plugin install uxskill</code></span>
-          <button type="button" class="final__copy-btn" data-copy="claude plugin install uxskill">Copy</button>
+          <button type="button" class="final__copy-btn" data-copy="claude plugin install uxskill">Kopieren</button>
         </div>
       </div>
       <p class="final__sub">
-        Open source &middot; MIT &middot; No telemetry &middot; No LLM &middot; <a href="https://github.com/Laith0003/ux-skill" rel="noopener">Auf GitHub starren</a>
+        Open Source &middot; MIT &middot; Ohne Telemetrie &middot; Ohne LLM &middot; <a href="https://github.com/Laith0003/ux-skill" rel="noopener">Star auf GitHub</a>
       </p>
     </div>
   </section>
@@ -2186,23 +2186,23 @@ tone=["bold","editorial"]</pre>
           uxskill<span class="wordmark__dot" aria-hidden="true"></span>
         </a>
         <p class="footer__caption">
-          Design intelligence for AI coding. Built so every model session ships work die nicht generiert aussieht.
+          Design-Intelligence für KI-Coding. Gebaut, damit jede Modell-Session Arbeit liefert, die nicht generiert aussieht.
         </p>
       </div>
       <div class="footer__col">
-        <span class="footer__col-head">The plugin</span>
+        <span class="footer__col-head">Das Plugin</span>
         <ul>
-          <li><a href="/brands.html">Brand specs &middot; 160</a></li>
-          <li><a href="/anti-patterns.html">Anti-patterns &middot; 145</a></li>
-          <li><a href="/commands.html">Slash commands &middot; 23</a></li>
-          <li><a href="/mcp.html">MCP server &middot; 18 tools</a></li>
+          <li><a href="/brands.html">Brand-Specs &middot; 160</a></li>
+          <li><a href="/anti-patterns.html">Anti-Patterns &middot; 145</a></li>
+          <li><a href="/commands.html">Slash-Befehle &middot; 23</a></li>
+          <li><a href="/mcp.html">MCP-Server &middot; 18 Tools</a></li>
         </ul>
       </div>
       <div class="footer__col">
         <span class="footer__col-head">Lesestoff</span>
         <ul>
-          <li><a href="/blog/v3-the-brain-launch.html">v3.0 The Brain &middot; launch</a></li>
-          <li><a href="/blog/">All posts</a></li>
+          <li><a href="/blog/v3-the-brain-launch.html">v3.0 The Brain &middot; Launch</a></li>
+          <li><a href="/blog/">Alle Beiträge</a></li>
           <li><a href="/roadmap.html">Roadmap</a></li>
           <li><a href="/faq.html">FAQ</a></li>
         </ul>
@@ -2212,13 +2212,13 @@ tone=["bold","editorial"]</pre>
         <ul>
           <li><a href="https://pypi.org/project/uxskill/" rel="noopener">PyPI</a></li>
           <li><a href="https://www.npmjs.com/package/uxskill" rel="noopener">npm</a></li>
-          <li><a href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub source</a></li>
+          <li><a href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub-Quelle</a></li>
           <li><a href="/about.html">Über</a></li>
         </ul>
       </div>
     </div>
     <div class="footer__bottom">
-      <span>MIT licensed &middot; No telemetry &middot; No account</span>
+      <span>MIT-Lizenz &middot; Ohne Telemetrie &middot; Ohne Account</span>
       <span>v3.0.0 &middot; 2026</span>
     </div>
   </div>
@@ -2381,7 +2381,7 @@ tone=["bold","editorial"]</pre>
     document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('is-in'); });
   }
 
-  /* Copy buttons */
+  /* Kopieren buttons */
   document.querySelectorAll('[data-copy]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var text = btn.getAttribute('data-copy');

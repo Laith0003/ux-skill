@@ -82,7 +82,7 @@
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is ux-skill?","acceptedAnswer":{"@type":"Answer","text":"ux-skill is an open-source Python engine that loads design intelligence into AI coding tools. It has 1,182 structured entries across 11 manifests (styles, palettes, typography, components, industries, brand specs, anti-patterns, motion presets, UX laws), 22 slash commands, 5 sub-agents, and a deterministic anti-AI-slop linter. It runs in Claude Code, Cursor, Windsurf, and 14 more IDEs through one install command."}},{"@type":"Question","name":"How is ux-skill different from other Claude UX plugins?","acceptedAnswer":{"@type":"Answer","text":"ux-skill is the only design plugin with a deterministic regex linter (145 rules catching AI slop before commit), 160 real brand DESIGN specs (Apple, Linear, Vercel, Stripe, Ferrari, Anthropic full palettes/typography/voice), and a Python recommender that ships across 17 IDEs — not just Claude Code. Most competitors are Markdown-only style guides. ux-skill is a queryable engine with an MCP server."}},{"@type":"Question","name":"Which IDEs does ux-skill support?","acceptedAnswer":{"@type":"Answer","text":"17 IDEs: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, Roo Cline. Install via pip install uxskill, npx uxskill, or the Claude Code marketplace."}},{"@type":"Question","name":"Is ux-skill free?","acceptedAnswer":{"@type":"Answer","text":"Yes. MIT license. No telemetry. No paywall. No accounts. The Python engine, all 11 data manifests, the MCP server, and the linter are open-source on GitHub at github.com/Laith0003/ux-skill."}},{"@type":"Question","name":"How does the anti-AI-slop linter work?","acceptedAnswer":{"@type":"Answer","text":"The linter is a deterministic regex scanner (no LLM, no API calls, sub-50ms on 10K-line projects). It loads 145 rules from data/anti-patterns.json — each rule has a regex, severity, and a fix suggestion. Run uxskill lint or wire it as a pre-commit or CI step. Catches placeholder text leaks, generic GPT marketing copy, default Tailwind palettes, missing alt text, A11y skips, and 115 more."}},{"@type":"Question","name":"What is the MCP server for?","acceptedAnswer":{"@type":"Answer","text":"ux-skill exposes 18 MCP (Model Context Protocol) tools over stdio. Any MCP-capable client (Claude Desktop, Cursor, generic agents) can call ux_recommend, ux_synthesize, ux_lint, ux_decisions_query, and 14 more without installing the Python plugin. The handlers are pure dict-to-dict callables so they work whether or not the mcp package is installed."}}]}
+  {"@context":"https://schema.org","@type":"常见问题Page","mainEntity":[{"@type":"Question","name":"What is ux-skill?","acceptedAnswer":{"@type":"Answer","text":"ux-skill is an open-source Python engine that loads design intelligence into AI coding tools. It has 1,182 structured entries across 11 manifests (styles, palettes, typography, components, industries, brand specs, anti-patterns, motion presets, UX laws), 22 slash commands, 5 sub-agents, and a deterministic anti-AI-slop linter. It runs in Claude Code, Cursor, Windsurf, and 14 more IDEs through one install command."}},{"@type":"Question","name":"How is ux-skill different from other Claude UX plugins?","acceptedAnswer":{"@type":"Answer","text":"ux-skill is the only design plugin with a deterministic regex linter (145 rules catching AI slop before commit), 160 real brand DESIGN specs (Apple, Linear, Vercel, Stripe, Ferrari, Anthropic full palettes/typography/voice), and a Python recommender 出品 across 17 IDEs — not just Claude Code. Most competitors are Markdown-only style guides. ux-skill is a queryable engine with an MCP server."}},{"@type":"Question","name":"Which IDEs does ux-skill support?","acceptedAnswer":{"@type":"Answer","text":"17 IDEs: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, Roo Cline. Install via pip install uxskill, npx uxskill, or the Claude Code marketplace."}},{"@type":"Question","name":"Is ux-skill free?","acceptedAnswer":{"@type":"Answer","text":"Yes. MIT license. No telemetry. No paywall. No accounts. The Python engine, all 11 data manifests, the MCP server, and the linter are open-source on GitHub at github.com/Laith0003/ux-skill."}},{"@type":"Question","name":"How does the anti-AI-slop linter work?","acceptedAnswer":{"@type":"Answer","text":"The linter is a deterministic regex scanner (no LLM, no API calls, sub-50ms on 10K-line projects). It loads 145 rules from data/anti-patterns.json — each rule has a regex, severity, and a fix suggestion. Run uxskill lint or wire it as a pre-commit or CI step. Catches placeholder text leaks, generic GPT marketing copy, default Tailwind palettes, missing alt text, A11y skips, and 115 more."}},{"@type":"Question","name":"What is the MCP server for?","acceptedAnswer":{"@type":"Answer","text":"ux-skill exposes 18 MCP (Model Context Protocol) tools over stdio. Any MCP-capable client (Claude Desktop, Cursor, generic agents) can call ux_recommend, ux_synthesize, ux_lint, ux_decisions_query, and 14 more without installing the Python plugin. The handlers are pure dict-to-dict callables so they work whether or not the mcp package is installed."}}]}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"ItemList","name":"17 AI coding IDEs supported by ux-skill","itemListElement":[{"@type":"ListItem","position":1,"name":"Claude Code"},{"@type":"ListItem","position":2,"name":"Cursor"},{"@type":"ListItem","position":3,"name":"Windsurf"},{"@type":"ListItem","position":4,"name":"GitHub Copilot"},{"@type":"ListItem","position":5,"name":"Gemini CLI"},{"@type":"ListItem","position":6,"name":"Codex"},{"@type":"ListItem","position":7,"name":"Kiro"},{"@type":"ListItem","position":8,"name":"Cline"},{"@type":"ListItem","position":9,"name":"Continue"},{"@type":"ListItem","position":10,"name":"Aider"},{"@type":"ListItem","position":11,"name":"Zed"},{"@type":"ListItem","position":12,"name":"JetBrains AI"},{"@type":"ListItem","position":13,"name":"Pieces"},{"@type":"ListItem","position":14,"name":"Tabby"},{"@type":"ListItem","position":15,"name":"Tabnine"},{"@type":"ListItem","position":16,"name":"CodeWhisperer"},{"@type":"ListItem","position":17,"name":"Roo Cline"}]}
@@ -135,7 +135,7 @@
        UXSKILL HOMEPAGE v3.0 — focused dogfood landing
        Synthesized tokens (above) are loaded into CSS custom properties.
        Global page stays Dark Saturated Cinema for legibility.
-       Synthesized palette is the accent + the dogfood callout.
+       合成的调色板 is the accent + the dogfood callout.
        Banned: yellow, amber, gold, mustard, ochre, cream, coral, Cormorant.
        ========================================================================= */
 
@@ -200,7 +200,7 @@
       --r-xl: 17px;
       --r-pill: 999px;
 
-      /* === Motion (synthesized — kinetic, spring-soft) === */
+      /* === 动效 (synthesized — kinetic, spring-soft) === */
       --t-fast: 96ms;
       --t-mid:  160ms;
       --t-slow: 288ms;
@@ -1092,7 +1092,7 @@
 
     /* =========================================================================
        DOGFOOD CALLOUT — the killer move
-       Synthesized palette rendered AS the brain emitted it.
+       合成的调色板 rendered AS the brain emitted it.
        ========================================================================= */
     .dogfood {
       position: relative;
@@ -1588,14 +1588,14 @@
       uxskill<span class="wordmark__dot" aria-hidden="true"></span>
     </a>
     <nav class="nav__links" aria-label="Primary">
-      <a class="nav__link" href="/brands.html">Brands</a>
-      <a class="nav__link" href="/anti-patterns.html">Anti-patterns</a>
+      <a class="nav__link" href="/brands.html">品牌</a>
+      <a class="nav__link" href="/anti-patterns.html">反模式</a>
       <a class="nav__link" href="/commands.html">命令</a>
       <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
     </nav>
     <a href="https://github.com/Laith0003/ux-skill" class="nav__cta" rel="noopener">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-      <span>在 GitHub 上 Star</span>
+      <span>在 GitHub 加星</span>
     </a>
     <button type="button" class="nav__menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer" id="nav-menu-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
@@ -1641,13 +1641,13 @@
     </div>
   </details>
 
-  <a href="/brands.html">Brands</a>
-  <a href="/anti-patterns.html">Anti-patterns</a>
+  <a href="/brands.html">品牌</a>
+  <a href="/anti-patterns.html">反模式</a>
   <a href="/commands.html">命令</a>
   <a href="/mcp.html">MCP</a>
   <a href="/compare.html">对比</a>
   <a href="/blog/">博客</a>
-  <a href="/faq.html">FAQ</a>
+  <a href="/faq.html">常见问题</a>
   <a href="/about.html">关于</a>
   <a href="/roadmap.html">路线图</a>
   <a href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
@@ -1657,7 +1657,7 @@
 <div class="sticky-cta" id="sticky-cta" aria-hidden="true">
   <code>pip install uxskill</code>
   <span class="sticky-cta__sep" aria-hidden="true"></span>
-  <a class="sticky-cta__btn" href="https://github.com/Laith0003/ux-skill" rel="noopener">在 GitHub 上 Star</a>
+  <a class="sticky-cta__btn" href="https://github.com/Laith0003/ux-skill" rel="noopener">在 GitHub 加星</a>
 </div>
 
 <main id="main">
@@ -1670,16 +1670,16 @@
     <div class="container">
       <div class="hero__inner">
         <div class="hero__eyebrow-row">
-          <span class="pill-tag pill-tag--live"><span class="dot-live" aria-hidden="true"></span> v3.0.0 &middot; THE BRAIN &middot; LIVE</span>
-          <span class="pill-tag">MIT &middot; no telemetry &middot; no LLM</span>
+          <span class="pill-tag pill-tag--live"><span class="dot-live" aria-hidden="true"></span> v3.0.0 &middot; THE BRAIN &middot; 上线中</span>
+          <span class="pill-tag">MIT &middot; 无遥测 &middot; 无 LLM</span>
         </div>
         <h1 class="hero__h1" id="hero-h1">
-          The brain<br>
-          that ships<br>
-          <span class="accent-italic">design that&nbsp;doesn&rsquo;t look generated.</span>
+          这个大脑<br>
+          出品<br>
+          <span class="accent-italic">看不出 AI 生成痕迹的设计。</span>
         </h1>
         <p class="hero__sub">
-          <strong>v3.0 is here.</strong> A 7-axis synthesizer turns any brief into a fresh design language. 160 brand specs become training data, 不是模板。 The recommender re-ranks from a local decisions ledger that learns from your work. Runs in <strong>Claude Code, Cursor, Windsurf</strong> and 14 more IDEs. Same brief always ships the same output. <strong>Offline. Deterministic. No LLM in the engine.</strong>
+          <strong>v3.0 来了。</strong>7 轴合成器把任何 brief 编译成全新的设计语言。160 个品牌规范成为训练数据,而不是模板。推荐器基于本地决策账本重新排序,从你的工作中学习。在 <strong>Claude Code、Cursor、Windsurf</strong> 以及另外 14 个 IDE 中运行。同样的 brief 永远输出同样的结果。<strong>离线。确定性。引擎中没有 LLM。</strong>
         </p>
         <div class="hero__ctas">
           <a href="https://pypi.org/project/uxskill/" class="cta-primary" rel="noopener">
@@ -1717,40 +1717,40 @@
   <section class="section section--bordered reveal" data-scene="problem" aria-labelledby="problem-h2">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow">01 &middot; The problem you ship every day</span>
+        <span class="eyebrow">01 &middot; 你每天都在出货的问题</span>
         <h2 class="section__title" id="problem-h2">
-          You vibe code in Claude Code or Cursor.<br>
-          Your AI ships <span class="accent-italic">slop</span> by default.
+          你在 Claude Code 或 Cursor 里 vibe coding。<br>
+          你的 AI 默认输出 <span class="accent-italic">劣质成品</span>。
         </h2>
         <p class="section__lede">
-          Ask the model to "build a fintech landing." You get the same five tells inside ten seconds. Purple-to-blue gradients. Three equal cards. Inter at display size. <strong>J&#x6f;hn D&#x6f;e</strong> in the testimonial. Bouncing arrow CTA. Centered hero. 300ms ease-in-out on every transition. The output is technically correct and visually disposable.
+          让模型「写一个金融科技 landing」。十秒内你就能认出同样的五个特征。紫到蓝的渐变。三张等宽卡片。Inter 大字号标题。<strong>J&#x6f;hn D&#x6f;e</strong> 出现在客户证言里。一个弹跳箭头 CTA。居中的 hero。所有过渡都是 300ms ease-in-out。技术上没错,视觉上一次性。
         </p>
       </div>
 
       <div class="problem-grid">
         <div class="problem-card" data-card="proof">
-          <div class="problem-card__tag">The fingerprint</div>
-          <div class="problem-card__head">Five tells, ten seconds.</div>
+          <div class="problem-card__tag">指纹</div>
+          <div class="problem-card__head">五个特征,十秒内识破。</div>
           <ul class="problem-card__list">
-            <li>Purple &rarr; blue 135&deg; gradient</li>
-            <li>Three equal cards in a row</li>
+            <li>紫 &rarr; 蓝 135&deg; 渐变</li>
+            <li>一排三张等宽卡片</li>
             <li>"L&#x6f;rem ipsum dolor sit amet"</li>
-            <li>"J&#x6f;hn D&#x6f;e" / "Jane D&#x6f;e" testimonial</li>
-            <li>Inter 96px hero, centered</li>
+            <li>「J&#x6f;hn D&#x6f;e」/「Jane D&#x6f;e」客户证言</li>
+            <li>Inter 96px hero,居中</li>
           </ul>
         </div>
         <div class="problem-card" data-card="cause">
-          <div class="problem-card__tag">Why it happens</div>
-          <div class="problem-card__head">The model improvises.</div>
+          <div class="problem-card__tag">为什么会这样</div>
+          <div class="problem-card__head">模型在即兴发挥。</div>
           <p class="problem-card__body">
-            The assistant has read every design system on GitHub. It has no idea which one fits your brief. It defaults to the centroid &mdash; the average of every SaaS site it ever ingested. The result reads as generated within seconds. Your domain, your industry, your customers &mdash; none of it influences the output.
+            助手读过 GitHub 上的所有设计系统。它根本不知道哪一个适合你的 brief。它直接落到那个质心 &mdash; 它见过的所有 SaaS 站点的平均值。结果几秒内就显出 AI 的痕迹。你的领域、你的行业、你的客户 &mdash; 通通没有影响到输出。
           </p>
         </div>
         <div class="problem-card" data-card="cost">
-          <div class="problem-card__tag">The cost</div>
-          <div class="problem-card__head">Trust erodes on first paint.</div>
+          <div class="problem-card__tag">代价</div>
+          <div class="problem-card__head">信任在第一帧就开始流失。</div>
           <p class="problem-card__body">
-            Investors flag it. Customers click away. Designers refuse to touch it. You ship faster but the shape of what you shipped is generic. A year of vibe coding leaves a portfolio that all looks the same. The velocity feels free until the brand bill comes due.
+            投资人会指出来。客户会点走。设计师拒绝接手。你出货更快,但你出的东西形状是通用的。一年的 vibe coding 留下一个看起来都一样的作品集。那份速度看起来免费,直到品牌的账单到来。
           </p>
         </div>
       </div>
@@ -1758,9 +1758,9 @@
       <div class="problem-bridge">
         <div class="problem-bridge__arrow" aria-hidden="true">&darr;</div>
         <p class="problem-bridge__text">
-          What if your AI assistant had a designer's brain wired up next to it &mdash; a brain that <strong>knew which design language fits your brief</strong>, refused the slop fingerprints before commit, and learned from every shipped output?
+          如果你的 AI 助手旁边接了一个设计师的大脑会怎样 &mdash; 一个 <strong>知道哪种设计语言契合你的 brief</strong>、在 commit 前拒绝那些劣质指纹、并从每次出货中学习的大脑?
         </p>
-        <p class="problem-bridge__cta">That's v3.0. Keep scrolling.</p>
+        <p class="problem-bridge__cta">那就是 v3.0。继续往下滑。</p>
       </div>
     </div>
   </section>
@@ -1769,31 +1769,31 @@
   <section class="section section--bordered reveal" data-scene="brain" aria-labelledby="brain-h2">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow">02 &mdash; The architecture</span>
+        <span class="eyebrow">02 &mdash; 架构</span>
         <h2 class="section__title" id="brain-h2">
           品牌规范是训练数据,<br>
           <span class="accent-italic">不是模板。</span>
         </h2>
         <p class="section__lead">
-          The catalogue used to be a menu. Pick Stripe, get Stripe-flavored tokens. v3.0 turns that on its head: the 160 brand specs become vocabulary the engine distills from. Output is novel every call.
+          目录以前是菜单。选 Stripe,就拿 Stripe 风味的 tokens。v3.0 把这个翻转过来:160 个品牌规范变成引擎用来萃取的词汇表。每次调用输出都是新的。
         </p>
       </div>
 
       <div class="brain-quote-row">
         <div class="brain-quote brain-quote--before">
-          <span class="brain-quote__label">Before v3 &middot; the catalogue picks</span>
-          <p class="brain-quote__line">Recommender returns a brand specimen.</p>
+          <span class="brain-quote__label">v3 之前 &middot; 目录在挑选</span>
+          <p class="brain-quote__line">推荐器返回一个品牌样本。</p>
           <p class="brain-quote__body">
             <code>match_brand(brief) &rarr; stripe</code><br>
-            You ship Stripe tokens. Or you fork them. Either way, the system has nothing new to say.
+            你出 Stripe 的 tokens。或者你 fork 一份。无论哪种,系统都没有新东西可说。
           </p>
         </div>
         <div class="brain-quote brain-quote--after">
-          <span class="brain-quote__label">After v3 &middot; the brain distills</span>
-          <p class="brain-quote__line">Synthesizer compiles a fresh design language.</p>
+          <span class="brain-quote__label">v3 之后 &middot; 大脑在萃取</span>
+          <p class="brain-quote__line">合成器编译出全新的设计语言。</p>
           <p class="brain-quote__body">
             <code>synthesize(brief) &rarr; novel tokens</code><br>
-            Same brief, same output, every time. Different brief, different system. The catalogue is now the corpus.
+            同样的 brief,同样的 output,每次都一样。不同的 brief,不同的系统。目录现在变成了语料库。
           </p>
         </div>
       </div>
@@ -1804,58 +1804,58 @@
   <section class="section reveal" data-scene="axes" aria-labelledby="axes-h2">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow">03 &mdash; The 7 axes</span>
+        <span class="eyebrow">03 &mdash; 七个轴</span>
         <h2 class="section__title" id="axes-h2">
-          Seven values.<br>
-          One design language.
+          七个数值。<br>
+          一种设计语言。
         </h2>
         <p class="section__lead">
-          Briefs map deterministically to seven axis values. Axis values compile to palette, type, spacing, radius, and motion tokens. Same brief always yields the same output.
+          brief 确定性地映射到七个轴值。轴值编译成调色板、字体、间距、圆角和动效 tokens。同样的 brief 永远产生同样的输出。
         </p>
       </div>
 
       <div class="axes-band">
         <div class="axis-card axis-card--v40">
-          <div class="axis-card__head"><span class="axis-card__name">Warmth</span><span class="axis-card__num">0.40</span></div>
+          <div class="axis-card__head"><span class="axis-card__name">暖度</span><span class="axis-card__num">0.40</span></div>
           <div class="axis-card__rail"></div>
-          <div class="axis-card__ends"><span>Cool</span><span>Warm</span></div>
-          <div class="axis-card__compiles">compiles to <code>--canvas, --ink</code></div>
+          <div class="axis-card__ends"><span>冷</span><span>暖</span></div>
+          <div class="axis-card__compiles">编译为 <code>--canvas, --ink</code></div>
         </div>
         <div class="axis-card axis-card--v100">
-          <div class="axis-card__head"><span class="axis-card__name">Contrast</span><span class="axis-card__num">1.00</span></div>
+          <div class="axis-card__head"><span class="axis-card__name">对比度</span><span class="axis-card__num">1.00</span></div>
           <div class="axis-card__rail"></div>
-          <div class="axis-card__ends"><span>Quiet</span><span>Loud</span></div>
-          <div class="axis-card__compiles">compiles to <code>scale ratio, weights</code></div>
+          <div class="axis-card__ends"><span>安静</span><span>大声</span></div>
+          <div class="axis-card__compiles">编译为 <code>scale ratio, weights</code></div>
         </div>
         <div class="axis-card axis-card--v70">
-          <div class="axis-card__head"><span class="axis-card__name">Density</span><span class="axis-card__num">0.70</span></div>
+          <div class="axis-card__head"><span class="axis-card__name">密度</span><span class="axis-card__num">0.70</span></div>
           <div class="axis-card__rail"></div>
-          <div class="axis-card__ends"><span>Airy</span><span>Dense</span></div>
-          <div class="axis-card__compiles">compiles to <code>--s-1..--s-7</code></div>
+          <div class="axis-card__ends"><span>通透</span><span>密集</span></div>
+          <div class="axis-card__compiles">编译为 <code>--s-1..--s-7</code></div>
         </div>
         <div class="axis-card axis-card--v30">
-          <div class="axis-card__head"><span class="axis-card__name">Geometry</span><span class="axis-card__num">0.30</span></div>
+          <div class="axis-card__head"><span class="axis-card__name">几何形态</span><span class="axis-card__num">0.30</span></div>
           <div class="axis-card__rail"></div>
-          <div class="axis-card__ends"><span>Sharp</span><span>Soft</span></div>
-          <div class="axis-card__compiles">compiles to <code>--r-sm..--r-xl</code></div>
+          <div class="axis-card__ends"><span>锐利</span><span>柔和</span></div>
+          <div class="axis-card__compiles">编译为 <code>--r-sm..--r-xl</code></div>
         </div>
         <div class="axis-card axis-card--v60">
-          <div class="axis-card__head"><span class="axis-card__name">Formality</span><span class="axis-card__num">0.60</span></div>
+          <div class="axis-card__head"><span class="axis-card__name">正式度</span><span class="axis-card__num">0.60</span></div>
           <div class="axis-card__rail"></div>
-          <div class="axis-card__ends"><span>Casual</span><span>Formal</span></div>
-          <div class="axis-card__compiles">compiles to <code>tracking, line-height</code></div>
+          <div class="axis-card__ends"><span>随性</span><span>正式</span></div>
+          <div class="axis-card__compiles">编译为 <code>tracking, line-height</code></div>
         </div>
         <div class="axis-card axis-card--v75">
-          <div class="axis-card__head"><span class="axis-card__name">Motion</span><span class="axis-card__num">0.75</span></div>
+          <div class="axis-card__head"><span class="axis-card__name">动效</span><span class="axis-card__num">0.75</span></div>
           <div class="axis-card__rail"></div>
-          <div class="axis-card__ends"><span>Still</span><span>Kinetic</span></div>
-          <div class="axis-card__compiles">compiles to <code>--ease, --t-fast</code></div>
+          <div class="axis-card__ends"><span>静止</span><span>动感</span></div>
+          <div class="axis-card__compiles">编译为 <code>--ease, --t-fast</code></div>
         </div>
         <div class="axis-card axis-card--v80">
-          <div class="axis-card__head"><span class="axis-card__name">Type personality</span><span class="axis-card__num">0.80</span></div>
+          <div class="axis-card__head"><span class="axis-card__name">字体性格</span><span class="axis-card__num">0.80</span></div>
           <div class="axis-card__rail"></div>
-          <div class="axis-card__ends"><span>Neutral</span><span>Humanist</span></div>
-          <div class="axis-card__compiles">compiles to <code>display, body pair</code></div>
+          <div class="axis-card__ends"><span>中性</span><span>人文</span></div>
+          <div class="axis-card__compiles">编译为 <code>display, body pair</code></div>
         </div>
       </div>
     </div>
@@ -1865,43 +1865,43 @@
   <section class="section section--bordered reveal" data-scene="modes" aria-labelledby="modes-h2">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow">04 &mdash; The three modes</span>
+        <span class="eyebrow">04 &mdash; 三种模式</span>
         <h2 class="section__title" id="modes-h2">
-          Three modes.<br>
-          <span class="accent-italic">Auto-dispatched.</span>
+          三种模式。<br>
+          <span class="accent-italic">自动调度。</span>
         </h2>
         <p class="section__lead">
-          The synthesizer picks its own mode based on whether you anchored to a named brand. Strict for exact replication, anchor for guided variation, pure for infinity space.
+          合成器根据你是否锚定到某个具名品牌,自己选择模式。Strict 用于精确复刻,Anchor 用于引导式变化,Pure 用于无限空间。
         </p>
       </div>
 
       <div class="modes-grid">
         <div class="mode-card">
-          <span class="mode-card__index">Mode 01 &middot; fastest</span>
+          <span class="mode-card__index">模式 01 &middot; 最快</span>
           <div class="mode-card__title" role="heading" aria-level="3">strict_brand</div>
-          <p class="mode-card__ratio">100% named brand &middot; verbatim</p>
+          <p class="mode-card__ratio">100% 命名品牌 &middot; 原样</p>
           <p class="mode-card__body">
-            Anchor on a named brand with <code>strict=True</code>. 100% Stripe tokens, no axis adaptation. Fastest path. For when you know exactly what you want and the brief is "give me Stripe."
+            用 <code>strict=True</code> 锚定到一个命名品牌。100% Stripe tokens,不做任何轴适配。最快路径。当你确切知道要什么、brief 就是「给我 Stripe」的时候用。
           </p>
           <pre class="mode-card__example">reference_brands=["stripe"]
 strict=True</pre>
         </div>
         <div class="mode-card">
-          <span class="mode-card__index">Mode 02 &middot; the sweet spot</span>
+          <span class="mode-card__index">模式 02 &middot; 甜蜜点</span>
           <div class="mode-card__title" role="heading" aria-level="3">brand_anchor</div>
-          <p class="mode-card__ratio">70% named &middot; 30% axis adaptation</p>
+          <p class="mode-card__ratio">70% 命名 &middot; 30% 轴适配</p>
           <p class="mode-card__body">
-            Anchor on a named brand, then bend it toward the brief's axis values using four sibling brands as additional vocabulary. The variation that still smells like Stripe but feels like yours.
+            先锚定一个命名品牌,再用四个同族品牌作为额外词汇,把它朝 brief 的轴值弯过去。仍带着 Stripe 味道,但已经像你自己的变体。
           </p>
           <pre class="mode-card__example">reference_brands=["stripe"]
 tone=["warm","editorial"]</pre>
         </div>
         <div class="mode-card">
-          <span class="mode-card__index">Mode 03 &middot; infinity space</span>
+          <span class="mode-card__index">模式 03 &middot; 无限空间</span>
           <div class="mode-card__title" role="heading" aria-level="3">pure_synthesis</div>
-          <p class="mode-card__ratio">0% named &middot; 100% axes</p>
+          <p class="mode-card__ratio">0% 命名 &middot; 100% 轴</p>
           <p class="mode-card__body">
-            No brand named. The synthesizer picks 8 axis-matching exemplars from the catalogue and distills them into a novel design language. No single brand copied; their shared vocabulary harvested.
+            不指定品牌。合成器从目录中挑选 8 个与轴值匹配的样本,把它们萃取成全新的设计语言。没有复制任何单一品牌;只采集了它们共享的词汇。
           </p>
           <pre class="mode-card__example">industry="developer-tools"
 tone=["bold","editorial"]</pre>
@@ -1914,13 +1914,13 @@ tone=["bold","editorial"]</pre>
   <section class="section reveal" data-scene="loop" aria-labelledby="loop-h2">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow">05 &mdash; The intelligence loop</span>
+        <span class="eyebrow">05 &mdash; 智能循环</span>
         <h2 class="section__title" id="loop-h2">
-          The brain learns<br>
-          <span class="accent-italic">from itself.</span>
+          大脑从<br>
+          <span class="accent-italic">自己学习。</span>
         </h2>
         <p class="section__lead">
-          Every call writes to <code>.ux/decisions.jsonl</code>. The recommender re-ranks future candidates by your past wins in the same industry plus UI-type bucket. Cold-start safe. Local only.
+          每次调用都写入 <code>.ux/decisions.jsonl</code>。推荐器根据你在同一行业 + UI 类型 bucket 中过去胜出的记录,重新排序未来的候选。冷启动安全。仅本地。
         </p>
       </div>
 
@@ -1937,7 +1937,7 @@ tone=["bold","editorial"]</pre>
           <div class="loop-node">re-rank</div>
         </div>
         <p class="loop-caption">
-          <strong>The intelligence loop is now closed.</strong> Only decisions with lint_score &ge; 80 and user_accepted = true count toward future re-ranking. Your install gets sharper for the work you actually ship.
+          <strong>智能循环已经闭合。</strong>只有 lint_score &ge; 80 且 user_accepted = true 的决策才会计入未来重排序。你的安装会随着你真正出货的工作越变越锋利。
         </p>
       </div>
     </div>
@@ -1947,31 +1947,31 @@ tone=["bold","editorial"]</pre>
   <section class="dogfood reveal" data-scene="dogfood" aria-labelledby="dogfood-h2">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow">06 &mdash; The dogfood</span>
+        <span class="eyebrow">06 &mdash; 自食其狗粮</span>
         <h2 class="section__title" id="dogfood-h2">
-          This page was synthesized<br>
-          <span class="accent-italic">by v3.0 itself.</span>
+          这一页是<br>
+          <span class="accent-italic">v3.0 自己合成的。</span>
         </h2>
         <p class="section__lead">
-          We ran the synthesizer on a brief that describes this page. The tokens it emitted power what you are reading right now. The brain ships its own marketing.
+          我们用一个描述这页本身的 brief 跑了合成器。它发出的 tokens 驱动着你现在正在读的一切。大脑自己出自己的市场材料。
         </p>
       </div>
 
       <div class="dogfood__grid">
         <div class="dogfood-block">
-          <span class="dogfood-block__label">The brief</span>
+          <span class="dogfood-block__label">brief</span>
           <pre class="dogfood-brief"><span class="k">industry</span>      = "developer-tools"
 <span class="k">tone</span>          = ["bold", "editorial",
                  "kinetic", "humanist"]
 <span class="k">audience</span>      = ["vibe-coder", "ai-builder"]
 <span class="k">must_have</span>     = ["dark-mode"]
 <span class="k">forbidden</span>     = ["playful", "rounded"]</pre>
-          <span class="dogfood-block__label">Mode dispatched</span>
+          <span class="dogfood-block__label">调度的模式</span>
           <p class="text-mono-sm">pure_synthesis</p>
         </div>
 
         <div class="dogfood-block">
-          <span class="dogfood-block__label">The 7 axis values</span>
+          <span class="dogfood-block__label">七个轴值</span>
           <div class="dogfood-axes">
             <span>warmth</span><b>0.40</b>
             <span>contrast</span><b>1.00</b>
@@ -1981,7 +1981,7 @@ tone=["bold","editorial"]</pre>
             <span>motion</span><b>0.75</b>
             <span>type_personality</span><b>0.80</b>
           </div>
-          <span class="dogfood-block__label">Source exemplars (8)</span>
+          <span class="dogfood-block__label">源样本 (8)</span>
           <p class="text-mono-xs">
             audi, bentley, bmw, bmw-m, bugatti,<br>
             ferrari, lamborghini, mclaren
@@ -1989,7 +1989,7 @@ tone=["bold","editorial"]</pre>
         </div>
 
         <div class="dogfood-block">
-          <span class="dogfood-block__label">Synthesized palette</span>
+          <span class="dogfood-block__label">合成的调色板</span>
           <div class="dogfood-swatches">
             <div class="swatch">
               <div class="swatch__chip swatch__chip--canvas"></div>
@@ -2015,29 +2015,29 @@ tone=["bold","editorial"]</pre>
         </div>
 
         <div class="dogfood-block">
-          <span class="dogfood-block__label">Synthesized type pair</span>
+          <span class="dogfood-block__label">合成的字体配对</span>
           <div class="dogfood-type">
             <p class="dogfood-type__display">Bricolage Grotesque</p>
-            <p class="dogfood-type__body">Inter for body. Both ship via Google Fonts. The display face here on this page is exactly what came out of the synthesizer.</p>
-            <p class="dogfood-type__caption">JetBrains Mono &middot; for code &middot; ratio 1.333</p>
+            <p class="dogfood-type__body">正文用 Inter。两者都通过 Google Fonts 加载。这一页上的展示字体正是合成器输出的那一款。</p>
+            <p class="dogfood-type__caption">JetBrains Mono &middot; 用于代码 &middot; 比率 1.333</p>
           </div>
         </div>
 
         <div class="dogfood-block col-span-all">
-          <span class="dogfood-block__label">Mini-component &mdash; rendered in the synthesized palette as the brain emitted it</span>
+          <span class="dogfood-block__label">迷你组件 &mdash; 用大脑发出的合成调色板渲染</span>
           <div class="dogfood-component">
             <div class="dogfood-component__row">
-              <span class="dogfood-component__h">Card title</span>
+              <span class="dogfood-component__h">卡片标题</span>
               <span class="dogfood-component__num">07</span>
             </div>
-            <p class="dogfood-component__body">This card uses the literal token values from the synthesize() call: canvas #424448, ink #c0c2c6, body #9a9ca0, primary #987d86. Radius 7px. Spacing scale 4-8-12-20-32-52-84.</p>
-            <a class="dogfood-component__btn" href="#install">View token output</a>
+            <p class="dogfood-component__body">这张卡片使用 synthesize() 调用产出的字面 token 值:canvas #424448、ink #c0c2c6、body #9a9ca0、primary #987d86。圆角 7px。间距 4-8-12-20-32-52-84。</p>
+            <a class="dogfood-component__btn" href="#install">查看 token 输出</a>
           </div>
         </div>
       </div>
 
       <p class="dogfood__caption">
-        <strong>These are the actual tokens that powered this page.</strong> The brain ships its own marketing. The brief and output are in the HTML source as a comment at the top of the file.
+        <strong>这些就是驱动这一页的实际 tokens。</strong>大脑自己出自己的市场材料。brief 和 output 都在 HTML 源码顶端的注释里。
       </p>
     </div>
   </section>
@@ -2046,33 +2046,33 @@ tone=["bold","editorial"]</pre>
   <section class="section reveal" data-scene="pillars" aria-labelledby="pillars-h2">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow">07 &mdash; Why this is the floor</span>
+        <span class="eyebrow">07 &mdash; 为什么这就是底线</span>
         <h2 class="section__title" id="pillars-h2">
-          Three properties.<br>
-          <span class="accent-italic">No competitor has all three.</span>
+          三个属性。<br>
+          <span class="accent-italic">没有竞品同时拥有这三项。</span>
         </h2>
       </div>
 
       <div class="pillars">
         <div class="pillar">
           <span class="pillar__num">01</span>
-          <div class="pillar__title" role="heading" aria-level="3">Offline.</div>
+          <div class="pillar__title" role="heading" aria-level="3">离线。</div>
           <p class="pillar__body">
-            Runs on a plane. No API key. No vendor lock-in. The 1,182 entries, 145 rules, 160 brand specs, and the synthesizer all live inside the Python wheel. Air-gapped repos can ship it.
+            在飞机上能跑。无需 API key。无供应商锁定。1,182 条条目、145 条规则、160 个品牌规范和合成器都装在那个 Python wheel 里。隔离网络的 repo 都能 ship。
           </p>
         </div>
         <div class="pillar">
           <span class="pillar__num">02</span>
-          <div class="pillar__title" role="heading" aria-level="3">Deterministic.</div>
+          <div class="pillar__title" role="heading" aria-level="3">确定性。</div>
           <p class="pillar__body">
-            Same brief always produces the same tokens. Every sort has an explicit tiebreaker. Reproducible across machines, file systems, Python versions. Diffing two synth runs is meaningful.
+            同样的 brief 永远产生同样的 tokens。每个排序都有显式的 tiebreaker。跨机器、跨文件系统、跨 Python 版本都可复现。对两次 synth 运行做 diff 是有意义的。
           </p>
         </div>
         <div class="pillar">
           <span class="pillar__num">03</span>
-          <div class="pillar__title" role="heading" aria-level="3">Self-learning.</div>
+          <div class="pillar__title" role="heading" aria-level="3">自我学习。</div>
           <p class="pillar__body">
-            Every call writes to <code>.ux/decisions.jsonl</code>. The recommender re-ranks future candidates from your past wins. No telemetry. Your install gets sharper for your work, not aggregate slop.
+            每次调用都写入 <code>.ux/decisions.jsonl</code>。推荐器根据你过去的胜出记录,重新排序未来的候选。无遥测。你的安装为你自己的工作变得更锋利,而不是为整体的 slop。
           </p>
         </div>
       </div>
@@ -2084,16 +2084,16 @@ tone=["bold","editorial"]</pre>
     <div class="container">
       <div class="audience__inner">
         <div class="audience__copy">
-          <span class="eyebrow">08 &mdash; For vibe coders</span>
+          <span class="eyebrow">08 &mdash; 给 vibe coders</span>
           <h2 class="section__title" id="audience-h2">
-            If you ship by feel,<br>
-            <span class="accent-italic">the brain is your floor.</span>
+            如果你凭感觉出货,<br>
+            <span class="accent-italic">大脑就是你的底线。</span>
           </h2>
           <p class="section__lead">
-            You prompt an assistant. It returns code. The CSS is generic. The hierarchy is flat. The palette is the default Tailwind ten. You ship anyway, because the alternative is hand-tuning a thousand tokens.
+            你给助手发 prompt。它返回代码。CSS 是通用的。层级是扁平的。调色板是 Tailwind 默认的那十色。你还是 ship 了,因为另一个选项是手动调一千个 tokens。
           </p>
           <p class="audience__copy-body">
-            uxskill sits between you and the assistant. The brief becomes a synthesized design language before code is written. The linter catches the slop before commit. The ledger remembers what worked. You stay vibe; the floor stays high.
+            uxskill 介于你和助手之间。在写代码之前,brief 就变成一套合成的设计语言。linter 在 commit 前抓住 slop。ledger 记得什么有效。你保持 vibe,底线保持高。
           </p>
         </div>
         <div class="audience__photo">
@@ -2116,10 +2116,10 @@ tone=["bold","editorial"]</pre>
   <section class="section section--bordered reveal" aria-labelledby="proof-h2">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow">09 &mdash; The catalogue</span>
+        <span class="eyebrow">09 &mdash; 目录</span>
         <h2 class="section__title" id="proof-h2">
-          1,182 entries.<br>
-          <span class="accent-italic">Browse the corpus.</span>
+          1,182 条条目。<br>
+          <span class="accent-italic">浏览语料库。</span>
         </h2>
       </div>
 
@@ -2127,20 +2127,20 @@ tone=["bold","editorial"]</pre>
         <a href="/brands.html" class="proof-card">
           <div class="proof-card__num">160</div>
           <span class="proof-card__head">品牌 DESIGN.md 规范</span>
-          <p class="proof-card__body">Apple, Stripe, Linear, Vercel, Ferrari, Anthropic. Full palettes, typography, voice. JSON for queries, prose for context.</p>
-          <span class="proof-card__link">Browse brands &middot;</span>
+          <p class="proof-card__body">Apple、Stripe、Linear、Vercel、Ferrari、Anthropic。完整调色板、字体、品牌嗓音。JSON 供查询,散文供上下文。</p>
+          <span class="proof-card__link">浏览品牌 &middot;</span>
         </a>
         <a href="/anti-patterns.html" class="proof-card">
           <div class="proof-card__num">145</div>
           <span class="proof-card__head">反模式规则</span>
-          <p class="proof-card__body">Deterministic regex. Sub-50ms scan on 10K lines. Catches placeholder text, default Tailwind palettes, A11y skips, marketing buzzwords.</p>
-          <span class="proof-card__link">Browse rules &middot;</span>
+          <p class="proof-card__body">确定性正则。一万行扫描小于 50ms。抓占位文本、Tailwind 默认调色板、A11y 跳过、营销 buzzword。</p>
+          <span class="proof-card__link">浏览规则 &middot;</span>
         </a>
         <a href="/blog/v3-the-brain-launch.html" class="proof-card">
           <div class="proof-card__num">3.0</div>
-          <span class="proof-card__head">Read the launch post</span>
-          <p class="proof-card__body">The full architecture writeup. Why brand specs became training data. Why the synthesizer is deterministic. Why the ledger closes the loop.</p>
-          <span class="proof-card__link">Read the launch &middot;</span>
+          <span class="proof-card__head">读发布博文</span>
+          <p class="proof-card__body">完整的架构说明。为什么品牌规范变成了训练数据。为什么合成器是确定性的。为什么 ledger 把循环闭合。</p>
+          <span class="proof-card__link">阅读发布 &middot;</span>
         </a>
       </div>
     </div>
@@ -2150,27 +2150,27 @@ tone=["bold","editorial"]</pre>
   <section class="final reveal" id="install" aria-labelledby="final-h2">
     <div class="container">
       <h2 class="final__title" id="final-h2">
-        Install in 60 seconds.
+        60 秒内安装。
       </h2>
       <p class="final__lead">
-        Pick the runtime that fits where you live. The Python wheel is the engine; the npm wrapper invokes it from Node hosts; the Claude marketplace installs the slash commands and sub-agents directly.
+        挑一个适合你常住环境的 runtime。Python wheel 是引擎;npm wrapper 从 Node 宿主调用它;Claude marketplace 直接安装 slash commands 和 sub-agents。
       </p>
       <div class="final__install">
         <div class="final__line">
           <span><code>$</code> <code>pip install uxskill</code></span>
-          <button type="button" class="final__copy-btn" data-copy="pip install uxskill">Copy</button>
+          <button type="button" class="final__copy-btn" data-copy="pip install uxskill">复制</button>
         </div>
         <div class="final__line">
           <span><code>$</code> <code>npx uxskill init</code></span>
-          <button type="button" class="final__copy-btn" data-copy="npx uxskill init">Copy</button>
+          <button type="button" class="final__copy-btn" data-copy="npx uxskill init">复制</button>
         </div>
         <div class="final__line">
           <span><code>$</code> <code>claude plugin install uxskill</code></span>
-          <button type="button" class="final__copy-btn" data-copy="claude plugin install uxskill">Copy</button>
+          <button type="button" class="final__copy-btn" data-copy="claude plugin install uxskill">复制</button>
         </div>
       </div>
       <p class="final__sub">
-        Open source &middot; MIT &middot; No telemetry &middot; No LLM &middot; <a href="https://github.com/Laith0003/ux-skill" rel="noopener">在 GitHub 上 Star</a>
+        开源 &middot; MIT &middot; 无遥测 &middot; 无 LLM &middot; <a href="https://github.com/Laith0003/ux-skill" rel="noopener">在 GitHub 加星</a>
       </p>
     </div>
   </section>
@@ -2186,25 +2186,25 @@ tone=["bold","editorial"]</pre>
           uxskill<span class="wordmark__dot" aria-hidden="true"></span>
         </a>
         <p class="footer__caption">
-          Design intelligence for AI coding. Built so every model session ships work 的大脑。
+          AI 编程的设计智能。让每一次模型会话交付的作品都不像 AI 生成。
         </p>
       </div>
       <div class="footer__col">
-        <span class="footer__col-head">The plugin</span>
+        <span class="footer__col-head">插件</span>
         <ul>
-          <li><a href="/brands.html">Brand specs &middot; 160</a></li>
-          <li><a href="/anti-patterns.html">Anti-patterns &middot; 145</a></li>
-          <li><a href="/commands.html">Slash commands &middot; 23</a></li>
-          <li><a href="/mcp.html">MCP server &middot; 18 tools</a></li>
+          <li><a href="/brands.html">品牌规范 &middot; 160</a></li>
+          <li><a href="/anti-patterns.html">反模式 &middot; 145</a></li>
+          <li><a href="/commands.html">斜杠命令 &middot; 23</a></li>
+          <li><a href="/mcp.html">MCP 服务器 &middot; 18 个工具</a></li>
         </ul>
       </div>
       <div class="footer__col">
         <span class="footer__col-head">阅读</span>
         <ul>
-          <li><a href="/blog/v3-the-brain-launch.html">v3.0 The Brain &middot; launch</a></li>
-          <li><a href="/blog/">All posts</a></li>
+          <li><a href="/blog/v3-the-brain-launch.html">v3.0 The Brain &middot; 发布</a></li>
+          <li><a href="/blog/">全部文章</a></li>
           <li><a href="/roadmap.html">路线图</a></li>
-          <li><a href="/faq.html">FAQ</a></li>
+          <li><a href="/faq.html">常见问题</a></li>
         </ul>
       </div>
       <div class="footer__col">
@@ -2212,13 +2212,13 @@ tone=["bold","editorial"]</pre>
         <ul>
           <li><a href="https://pypi.org/project/uxskill/" rel="noopener">PyPI</a></li>
           <li><a href="https://www.npmjs.com/package/uxskill" rel="noopener">npm</a></li>
-          <li><a href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub source</a></li>
+          <li><a href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub 源码</a></li>
           <li><a href="/about.html">关于</a></li>
         </ul>
       </div>
     </div>
     <div class="footer__bottom">
-      <span>MIT licensed &middot; No telemetry &middot; No account</span>
+      <span>MIT 许可 &middot; 无遥测 &middot; 无账号</span>
       <span>v3.0.0 &middot; 2026</span>
     </div>
   </div>
@@ -2381,7 +2381,7 @@ tone=["bold","editorial"]</pre>
     document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('is-in'); });
   }
 
-  /* Copy buttons */
+  /* 复制 buttons */
   document.querySelectorAll('[data-copy]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var text = btn.getAttribute('data-copy');
