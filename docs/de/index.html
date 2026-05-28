@@ -1576,6 +1576,96 @@
     html[lang="ar"] code,
     html[lang="ar"] pre,
     html[lang="ar"] .mono { font-family: var(--mono); }
+
+    /* =========================================================================
+       ACTS — three weighted movements with deliberate density contrast.
+       The 9 numbered sections stay in DOM order; CSS groups them visually into
+       Act I (the problem), Act II (the brain — the tall act that breathes), and
+       Act III (adopt). Within Act II, anchors PEAK (more air, full scale) and
+       supporting beats COMPRESS + demote their eyebrow/title so the eye reads
+       peaks and valleys instead of nine equal plateaus.
+
+       Specificity note: section[data-weight] is (0,1,1) so it beats the
+       single-class section paddings (.dogfood / .audience / .final = 0,1,0)
+       regardless of source order — the dogfood PEAK in particular must win.
+       ========================================================================= */
+
+    /* Act I — the problem: tense, tight. Compressed vertical rhythm, but the
+       eyebrow + title stay at full scale because this is the opening hook. */
+    section[data-weight="open"] {
+      padding-block: clamp(72px, 9vw, 132px);
+    }
+
+    /* Act II PEAKS — architecture (02), modes (04), dogfood (06).
+       These breathe: this is the page's hero act. Full eyebrow + title scale. */
+    section[data-weight="peak"] {
+      padding-block: clamp(128px, 18vw, 248px);
+    }
+
+    /* Act II SUPPORTING BEATS — axes (03), loop (05), why-floor (07).
+       Tighter padding so they sit in the valleys between the peaks, with a
+       demoted (smaller, dimmer) eyebrow and a slightly smaller title. */
+    section[data-weight="beat"] {
+      padding-block: clamp(64px, 8vw, 116px);
+    }
+    section[data-weight="beat"] .section__head {
+      margin-bottom: var(--s-5);
+    }
+    section[data-weight="beat"] .eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      opacity: 0.72;
+    }
+    section[data-weight="beat"] .eyebrow::before {
+      width: 14px;
+    }
+    section[data-weight="beat"] .section__title {
+      font-size: clamp(30px, 4vw, 52px);
+      font-variation-settings: 'wdth' 90, 'opsz' 96, 'wght' 520;
+    }
+
+    /* =========================================================================
+       ACT DIVIDERS — language-neutral ghost roman numerals that read as
+       chapter breaks between the three movements. Numeral-only (no translatable
+       text), aria-hidden, static (NOT .reveal — they must never depend on JS).
+       Monochrome ghost via existing tokens; no gradient, no new color. The
+       act-opening sections already carry a top hairline, so the divider adds
+       none of its own to avoid doubling the line.
+       ========================================================================= */
+    .act-divider {
+      position: relative;
+      display: grid;
+      place-items: center;
+      padding-block: clamp(40px, 7vw, 96px) 0;
+      pointer-events: none;
+      user-select: none;
+    }
+    .act-divider__num {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 70, 'opsz' 96, 'wght' 800;
+      font-size: clamp(72px, 13vw, 168px);
+      line-height: 0.8;
+      letter-spacing: 0.04em;
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(246, 247, 249, 0.22);
+      text-stroke: 1.5px rgba(246, 247, 249, 0.22);
+      opacity: 0.92;
+    }
+    /* Faint baseline tick under the numeral — a quiet chapter mark, not a
+       full-width rule (the next section owns the structural hairline). */
+    .act-divider__num::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: clamp(-22px, -2.4vw, -14px);
+      width: 40px;
+      height: 1px;
+      transform: translateX(-50%);
+      background: var(--hairline-2);
+    }
+    @supports not ((-webkit-text-stroke: 1px #000) or (text-stroke: 1px #000)) {
+      .act-divider__num { color: var(--faint); opacity: 0.5; }
+    }
   </style>
 <style>
     /* Sprache picker — dropdown in the nav */
@@ -1763,8 +1853,11 @@
     </div>
   </section>
 
+  <!-- ============ ACT I — THE PROBLEM ============ -->
+  <div class="act-divider act-divider--1" aria-hidden="true"><span class="act-divider__num">I</span></div>
+
   <!-- ============ 1.5 PROBLEM → SOLUTION (NEW v3.0.1) ============ -->
-  <section class="section section--bordered reveal" data-scene="problem" aria-labelledby="problem-h2">
+  <section class="section section--bordered reveal" data-scene="problem" data-weight="open" aria-labelledby="problem-h2">
     <div class="container">
       <div class="section__head">
         <span class="eyebrow">01 &middot; Das Problem, das du täglich auslieferst</span>
@@ -1815,8 +1908,11 @@
     </div>
   </section>
 
+  <!-- ============ ACT II — THE BRAIN ============ -->
+  <div class="act-divider act-divider--2" aria-hidden="true"><span class="act-divider__num">II</span></div>
+
   <!-- ============ 2. THE BRAIN ============ -->
-  <section class="section section--bordered reveal" data-scene="brain" aria-labelledby="brain-h2">
+  <section class="section section--bordered reveal" data-scene="brain" data-weight="peak" aria-labelledby="brain-h2">
     <div class="container">
       <div class="section__head">
         <span class="eyebrow">02 &mdash; Die Architektur</span>
@@ -1851,7 +1947,7 @@
   </section>
 
   <!-- ============ 3. THE 7 AXES ============ -->
-  <section class="section reveal" data-scene="axes" aria-labelledby="axes-h2">
+  <section class="section reveal" data-scene="axes" data-weight="beat" aria-labelledby="axes-h2">
     <div class="container">
       <div class="section__head">
         <span class="eyebrow">03 &mdash; Die 7 Achsen</span>
@@ -1912,7 +2008,7 @@
   </section>
 
   <!-- ============ 4. THREE MODES ============ -->
-  <section class="section section--bordered reveal" data-scene="modes" aria-labelledby="modes-h2">
+  <section class="section section--bordered reveal" data-scene="modes" data-weight="peak" aria-labelledby="modes-h2">
     <div class="container">
       <div class="section__head">
         <span class="eyebrow">04 &mdash; Die drei Modi</span>
@@ -1961,7 +2057,7 @@ tone=["bold","editorial"]</pre>
   </section>
 
   <!-- ============ 5. THE LOOP ============ -->
-  <section class="section reveal" data-scene="loop" aria-labelledby="loop-h2">
+  <section class="section reveal" data-scene="loop" data-weight="beat" aria-labelledby="loop-h2">
     <div class="container">
       <div class="section__head">
         <span class="eyebrow">05 &mdash; Die Intelligence-Loop</span>
@@ -1994,7 +2090,7 @@ tone=["bold","editorial"]</pre>
   </section>
 
   <!-- ============ 6. DOGFOOD CALLOUT ============ -->
-  <section class="dogfood reveal" id="dogfood" data-scene="dogfood" aria-labelledby="dogfood-h2">
+  <section class="dogfood reveal" id="dogfood" data-scene="dogfood" data-weight="peak" aria-labelledby="dogfood-h2">
     <div class="container">
       <div class="section__head">
         <span class="eyebrow">06 &mdash; Das Dogfood</span>
@@ -2093,7 +2189,7 @@ tone=["bold","editorial"]</pre>
   </section>
 
   <!-- ============ 7. WHY THIS IS THE FUTURE ============ -->
-  <section class="section reveal" data-scene="pillars" aria-labelledby="pillars-h2">
+  <section class="section reveal" data-scene="pillars" data-weight="beat" aria-labelledby="pillars-h2">
     <div class="container">
       <div class="section__head">
         <span class="eyebrow">07 &mdash; Warum das die Grundlinie ist</span>
@@ -2128,6 +2224,9 @@ tone=["bold","editorial"]</pre>
       </div>
     </div>
   </section>
+
+  <!-- ============ ACT III — ADOPT ============ -->
+  <div class="act-divider act-divider--3" aria-hidden="true"><span class="act-divider__num">III</span></div>
 
   <!-- ============ 8. FOR VIBE CODERS ============ -->
   <section class="audience reveal" data-scene="audience" aria-labelledby="audience-h2">
