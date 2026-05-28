@@ -1,0 +1,38 @@
+# GitHub Linguist hints — keep language stats reflecting the actual engine code
+# (Python). The HTML files below are dogfood landing / demo / reference showcase
+# pages, not source. The bash linter is a v1 fallback superseded by engine/linter.
+
+# Marketing & landing pages — documentation, not source
+landing/** linguist-documentation
+docs/index.html linguist-documentation
+docs/privacy.html linguist-documentation
+
+# Social card mockups — generated artwork
+docs/launch/social/** linguist-documentation
+landing/launch/** linguist-documentation
+
+# Marketing copy
+docs/launch/** linguist-documentation
+
+# Demo files — showcase / examples
+demo/** linguist-documentation
+
+# Reference HTML — live demos of design principles, not source
+references/** linguist-documentation
+
+# v1 bash linter — kept for fallback compatibility; v2 default is bin/ux-lint.py
+bin/ux-lint.sh linguist-vendored
+bin/state.sh linguist-vendored
+
+# Git/launch/IDE config — auto-generated or third-party patterns
+.claude-flow/** linguist-vendored
+.claude/** linguist-vendored
+.github/ISSUE_TEMPLATE/** linguist-documentation
+
+# Lock files / build artefacts (defensive — none currently in repo)
+*.db linguist-generated
+*.rvf linguist-generated
+*.lock linguist-generated
+dist/** linguist-generated
+build/** linguist-generated
+*.egg-info/** linguist-generated
