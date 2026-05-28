@@ -40,8 +40,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Bricolage Grotesque (display, variable), Inter (body), JetBrains Mono (mono) -->
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Bricolage Grotesque (display, variable), Inter (body Latin), JetBrains Mono (mono),
+       IBM Plex Sans Arabic (Arabic support — applied via :lang(ar) selector below).
+       NEVER ship an Arabic page without IBM Plex Sans Arabic. Browser default is unusable. -->
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <meta property="og:title" content="uxskill v3.0 — The Brain. 7-axis design synthesizer for AI coding.">
   <meta property="og:description" content="v3.0.0 estável — The Brain. 1.182 entradas estruturadas + 160 specs de marca + 145 regras anti-padrão alimentam um sintetizador de 7 eixos que compila uma linguagem de design nova por brief. O recomendador re-ranqueia a partir de um ledger local de decisões que você pode ver. Roda em Claude Code, Cursor, Windsurf e mais 14 IDEs. Offline. Determinístico. Sem LLM. Sem telemetria.">
@@ -171,6 +173,9 @@
       /* === Type === */
       --display:  'Bricolage Grotesque', system-ui, sans-serif;
       --body-face:'Inter', system-ui, -apple-system, sans-serif;
+      /* Arabic stack — applied via :lang(ar) selectors below. IBM Plex Sans Arabic is the only acceptable Arabic face on this site. */
+      --display-ar: 'IBM Plex Sans Arabic', 'Bricolage Grotesque', system-ui, sans-serif;
+      --body-ar:    'IBM Plex Sans Arabic', 'Inter', system-ui, sans-serif;
       --mono:     'JetBrains Mono', ui-monospace, monospace;
 
       /* Synthesized type scale (ratio=1.333) */
@@ -1526,6 +1531,41 @@
     /* RTL — drawer + nav layout flip */
     html[dir="rtl"] .nav__inner { direction: rtl; }
     html[dir="rtl"] .eyebrow::before { margin-right: 0; margin-left: 10px; }
+
+    /* ====== ARABIC TYPOGRAPHY ======
+       IBM Plex Sans Arabic for the WHOLE Arabic page. Display + body + UI.
+       JetBrains Mono stays for code (it's Latin-only by design).
+       Never let the browser fall back to OS default Arabic — it's unusable. */
+    html[lang="ar"] body,
+    html[lang="ar"] .hero__sub,
+    html[lang="ar"] .section__lead,
+    html[lang="ar"] .section__lede,
+    html[lang="ar"] p,
+    html[lang="ar"] li,
+    html[lang="ar"] button,
+    html[lang="ar"] a,
+    html[lang="ar"] .pill-tag,
+    html[lang="ar"] .eyebrow,
+    html[lang="ar"] .nav__link {
+      font-family: var(--body-ar);
+    }
+    html[lang="ar"] h1,
+    html[lang="ar"] h2,
+    html[lang="ar"] h3,
+    html[lang="ar"] h4,
+    html[lang="ar"] .hero__h1,
+    html[lang="ar"] .section__title,
+    html[lang="ar"] .wordmark,
+    html[lang="ar"] .problem-card__head,
+    html[lang="ar"] .problem-bridge__text {
+      font-family: var(--display-ar);
+      /* Bricolage variable-axis settings don't apply to Plex — let it render natural */
+      font-variation-settings: normal;
+      letter-spacing: -0.01em;
+    }
+    html[lang="ar"] code,
+    html[lang="ar"] pre,
+    html[lang="ar"] .mono { font-family: var(--mono); }
   </style>
 <style>
     /* Idioma picker — dropdown in the nav */
