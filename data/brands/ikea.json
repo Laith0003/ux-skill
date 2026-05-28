@@ -1,0 +1,53 @@
+{
+  "id": "ikea",
+  "name": "IKEA",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of IKEA's brand language — the Swedish flat-pack democracy. Canvas is pure white. The brand-asset trinity is the IKEA blue (#0058a3), the IKEA yellow (#ffdb00), and the wordmark lockup of the two used together at full saturation on the navigation. Type runs a custom geometric grotesk (Noto IKEA / Verdana) at a precise scale. Photography is room-staging — fully furnished rooms with real-looking models, kids, dogs, breakfast tables — never product-on-white. The voice is 'practical, democratic, Swedish' — a meatball-and-flatpack-instructions sensibility wrapped in clean editorial scale.",
+  "design_language": {
+    "type": {
+      "display": "Noto IKEA",
+      "body": "Noto IKEA",
+      "mono": null
+    },
+    "color_primary": "#0058a3",
+    "color_accent": "#ffdb00",
+    "color_canvas": "#ffffff",
+    "color_ink": "#111111",
+    "color_canvas_warm": "#f5f0e8",
+    "radius": [4, 8, 16],
+    "spacing": "8-based",
+    "motion_signature": "Carousel-driven motion. Room-photograph carousels auto-advance every 6 seconds with a slow 800ms cross-fade. Hover on product tiles raises a 4px soft shadow over 200ms. CTA buttons have a hover background-darken from #0058a3 to #003e72 over 150ms. Page transitions are flat fades — no kinetic scroll-fanfare."
+  },
+  "trademark_signals": [
+    "IKEA blue (#0058a3) + IKEA yellow (#ffdb00) lockup on the navigation — the most recognizable brand-color pair in retail, used at full saturation on the brand mark",
+    "Room-staging photography — never product-on-white; always a fully-furnished room with real-looking inhabitants — children eating cereal, parents reading, dogs sleeping",
+    "Pricing in a tag-shape with a yellow background — the iconic IKEA price tag — used on product cards and circulars",
+    "Inspirational-tag taxonomy — products grouped by 'lifestyle vibe' (e.g., 'Small spaces', 'Smart storage') rather than purely by function — the catalog reads as lifestyle advice",
+    "Dense product-grid catalog pages with low-cost shipping callouts in the yellow tag — the price is the brand voltage"
+  ],
+  "components_observed": [
+    "room-staging-hero-carousel",
+    "product-tile-with-yellow-price-tag",
+    "inspirational-category-tile",
+    "low-price-callout-yellow",
+    "button-primary-ikea-blue",
+    "button-secondary-outline",
+    "footer-multi-column-blue",
+    "navigation-blue-bar"
+  ],
+  "exemplar_pages": [
+    "ikea.com",
+    "ikea.com/us",
+    "ikea.com/se",
+    "ikea.com/global"
+  ],
+  "ai_slop_avoided": [
+    "Don't show product-on-white photography. IKEA photography is always in-context — a room, a kitchen, a kids' bedroom with kids in it",
+    "Don't make the IKEA yellow into a secondary accent. The yellow is reserved for price tags and the wordmark — using it as a section background is off-brand",
+    "Don't lighten the IKEA blue. The brand blue is locked at #0058a3 and is the only acceptable navigation-bar fill",
+    "Don't substitute Noto IKEA / Verdana with a fashion-editorial serif. The brand voice is geometric-grotesk practical, not magazine-editorial",
+    "Don't drop the price visibility. IKEA's brand voltage IS the low price; hiding it or rendering it small reads as off-brand"
+  ],
+  "source_md": "references/brands/ikea-DESIGN.md"
+}

@@ -1,0 +1,52 @@
+{
+  "id": "zara",
+  "name": "Zara",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of Zara's brand language — the Spanish fast-fashion editorial that refuses every e-commerce convention. Canvas is pure white. Type runs an oversized custom serif (Söhne-adjacent or a proprietary modern serif) at hero scale — sometimes 200–400px display headlines that fill the entire viewport. Product photography is editorial fashion-magazine grade: cinematic crops, off-center compositions, models in motion-blurred poses, oversized garments swept by wind. The chrome is so minimal it nearly disappears — no nav bars over imagery, no sticky CTAs, no labels. The site reads as Vogue, not as a department store.",
+  "design_language": {
+    "type": {
+      "display": "Zara Serif",
+      "body": "Zara Sans",
+      "mono": null
+    },
+    "color_primary": "#000000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000",
+    "color_muted": "#999999",
+    "radius": [0],
+    "spacing": "8-based",
+    "motion_signature": "Cinematic. Hero videos play silent and loop — models walking, garments swirling, slow tracking shots. Display headlines fade in over 1.2s on scroll. Product grids reveal one tile at a time as you scroll, each at 600ms ease-out. The brand voice is 'fashion film', not 'e-commerce app'."
+  },
+  "trademark_signals": [
+    "Display-tier headlines at 200–400px filling the entire viewport — Zara is the brand where the typography itself is the hero",
+    "Editorial fashion-magazine photography — off-center crops, motion-blur, oversized garments, wind-swept staging — never product-on-white",
+    "Invisible navigation — the nav bar dissolves until hover, models and garments command 100% of the visual space",
+    "Zero-radius geometry — every card, button, and tile uses 0px corners — the brand refuses the soft-modern radius convention",
+    "Massive negative space — sections are 200–400px tall blocks of pure white between editorial moments — the gap IS the pacing"
+  ],
+  "components_observed": [
+    "viewport-display-headline",
+    "fashion-video-hero",
+    "editorial-product-card-borderless",
+    "off-center-photography-tile",
+    "minimal-nav-disappearing",
+    "size-picker-bottom-sheet",
+    "button-text-link-thin",
+    "footer-monochrome-minimal"
+  ],
+  "exemplar_pages": [
+    "zara.com",
+    "zara.com/us",
+    "zara.com/ww",
+    "zara.com/men"
+  ],
+  "ai_slop_avoided": [
+    "Don't add hover lift or shadow on product tiles. Zara refuses every conventional product-card UI affordance — the chrome must stay invisible",
+    "Don't reduce display headlines below 80px. The oversized-typography moment IS the brand voice — 48px reads as off-brand",
+    "Don't render photography in flat-light catalog style. Zara photography is cinematic — editorial crops, motion, atmosphere",
+    "Don't round corners. Zara is a 0px-radius brand; soft rounded geometry breaks the editorial-fashion mood",
+    "Don't show price prominently. Price appears at the smallest possible scale — secondary to the image — refusing the convention that price IS the value prop"
+  ],
+  "source_md": "references/brands/zara-DESIGN.md"
+}

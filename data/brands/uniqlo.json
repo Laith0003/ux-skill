@@ -1,0 +1,52 @@
+{
+  "id": "uniqlo",
+  "name": "UNIQLO",
+  "category": "Consumer / Lifestyle / Retail",
+  "year_observed": 2026,
+  "philosophy": "An inspired interpretation of UNIQLO's brand language — the Japanese basics retailer founded on 'LifeWear' as a philosophy. Canvas is pure white. The signature is the UNIQLO red (#ff0000) used as a single chromatic asset on the wordmark, on price callouts, and on the rare hero CTA — a true #ff0000, not a brand-tinted variant. Type runs a dual Japanese-Latin system: Helvetica Neue Bold (Latin) and the proprietary UNIQLO Japanese face (Japanese), often locked side-by-side on the same page in a kana-and-latin co-typesetting that announces the brand's Tokyo origin. Photography is hyper-real flat-light fashion — models against pure white or against urban Tokyo backdrops — no styling theatrics, no cinematic grading.",
+  "design_language": {
+    "type": {
+      "display": "Helvetica Neue Bold",
+      "body": "Helvetica Neue",
+      "mono": null
+    },
+    "color_primary": "#ff0000",
+    "color_canvas": "#ffffff",
+    "color_ink": "#000000",
+    "color_muted": "#7a7a7a",
+    "radius": [0, 4],
+    "spacing": "4-based",
+    "motion_signature": "Flat-light still photography is the visual anchor — motion is rare. Hero image carousels cross-fade slowly (~1.2s). Product tiles have zero hover transform. The only signature motion is the red-block dropdown animation in the mega-menu — a hard 200ms slide-down, no easing flourish."
+  },
+  "trademark_signals": [
+    "UNIQLO red (#ff0000) — pure red, not a tinted variant — used on the wordmark, on price-cut callouts, and on the rare hero CTA — never as a section background",
+    "Kana-and-Latin co-typesetting — Japanese characters and Latin headlines on the same page at matched scale, announcing the Tokyo origin",
+    "Flat-light fashion photography — every model shot on pure-white or pure-black background under flat soft light, no cinematic grading, no styling props — the garment is the point",
+    "Dense category-grid pages — 4-up product tiles with image + name + price, often 40-50 tiles per page, refusing the 'curated 6-product hero' convention",
+    "'LifeWear' editorial pages — long-scroll magazine-format features documenting fabric science, designer collaborations, and seasonal collections — written as essays, not as marketing"
+  ],
+  "components_observed": [
+    "product-tile-flat-white",
+    "category-grid-dense",
+    "price-cut-red-callout",
+    "lifewear-editorial-spread",
+    "designer-collab-hero",
+    "size-color-picker-grid",
+    "button-primary-red",
+    "footer-store-locator-jp"
+  ],
+  "exemplar_pages": [
+    "uniqlo.com",
+    "uniqlo.com/us",
+    "uniqlo.com/jp",
+    "uniqlo.com/lifewear"
+  ],
+  "ai_slop_avoided": [
+    "Don't tint the UNIQLO red. It is pure #ff0000 — any pinkening, muting, or warmth shifts off-brand",
+    "Don't style fashion photography with mood lighting or color grading. The brand is flat-light, hyper-real, no styling — the garment is the only signal",
+    "Don't drop the Japanese characters on global pages. The kana presence is part of the brand's Tokyo authenticity",
+    "Don't curate-down the product grid to 6 tiles. UNIQLO category pages are dense, catalog-style, and embrace abundance",
+    "Don't introduce a chromatic accent. Black + white + red is the trinity; teal/blue/green accents read as off-brand"
+  ],
+  "source_md": "references/brands/uniqlo-DESIGN.md"
+}
