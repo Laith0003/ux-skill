@@ -13,6 +13,24 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://uxskill.laithjunaidy.com/about.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://uxskill.laithjunaidy.com/roadmap.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://uxskill.laithjunaidy.com/faq.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://uxskill.laithjunaidy.com/blog/</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>weekly</changefreq>

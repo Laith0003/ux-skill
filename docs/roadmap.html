@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ux-skill roadmap — v2.0 to v3.0</title>
+  <meta name="description" content="What's shipped (v2.0-alpha.24) and what's coming next: v2.1 adds 17 anti-pattern rules, v2.2 adds i18n + MCP server, v2.3 adds hi-fi prototype output.">
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/roadmap.html">
+  <meta name="theme-color" content="#faf9f5">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="index,follow">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/roadmap.html">
+  <meta property="og:title" content="ux-skill roadmap — v2.0 to v3.0">
+  <meta property="og:description" content="Now: v2.0.0-alpha.24 (998 entries, 22 commands). Next: v2.1, v2.2, v2.3, v3.0 — and an explicit won't-do list.">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ux-skill roadmap — v2.0 to v3.0">
+  <meta name="twitter:description" content="Public roadmap with codenames, ship targets, and an explicit list of what we will never build.">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "ux-skill release roadmap",
+    "url": "https://uxskill.laithjunaidy.com/roadmap.html",
+    "description": "Public release roadmap for the ux-skill open-source design engine, from v2.0 through v3.0.",
+    "itemListOrder": "https://schema.org/ItemListOrderAscending",
+    "numberOfItems": 5,
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@type": "SoftwareApplication",
+          "name": "ux-skill v2.0.0-alpha.24",
+          "softwareVersion": "2.0.0-alpha.24",
+          "datePublished": "2026-05-28",
+          "description": "Shipped: 998 manifest entries, 22 slash-commands, 35 anti-slop linter rules, 17 IDE adapters, 72 brand specs."
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "item": {
+          "@type": "SoftwareApplication",
+          "name": "ux-skill v2.1 (Stoic)",
+          "softwareVersion": "2.1.0",
+          "description": "17 additional anti-pattern rules, landing-patterns manifest, cross-reference wiring between manifests. Q3 2026."
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@type": "SoftwareApplication",
+          "name": "ux-skill v2.2 (Polyglot)",
+          "softwareVersion": "2.2.0",
+          "description": "README localized to 11 locales, MCP server for cross-tool memory, Figma MCP bridge. Q4 2026."
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "item": {
+          "@type": "SoftwareApplication",
+          "name": "ux-skill v2.3 (Atelier)",
+          "softwareVersion": "2.3.0",
+          "description": "Hi-fi prototype output mode, local preview server, MP4 export of motion specs. Q1 2027."
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 5,
+        "item": {
+          "@type": "SoftwareApplication",
+          "name": "ux-skill v3.0 (Mirror)",
+          "softwareVersion": "3.0.0",
+          "description": "Real-time live preview, image-to-code reverse bridge, multi-language code generation (Swift, Kotlin, Flutter). Q2 2027."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --canvas: #faf9f5;
+      --surface: #efe9de;
+      --surface-2: #f3eee4;
+      --ink: #181715;
+      --body: #3d3d3a;
+      --muted: #6c6a64;
+      --hairline: rgba(20,20,19,0.10);
+      --primary: #cc785c;
+      --primary-active: #a9583e;
+      --primary-soft: rgba(204,120,92,0.12);
+      --shipped-bg: #ddebd9;
+      --shipped-fg: #28681c;
+      --planned-bg: #ece6dc;
+      --planned-fg: #6c6a64;
+      --wont-bg: #f4e5dc;
+      --wont-fg: #a4502f;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background: var(--canvas);
+      color: var(--body);
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 64px 24px 96px; }
+
+    header.top {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 0 40px;
+      border-bottom: 1px solid var(--hairline);
+      margin-bottom: 56px;
+    }
+    .wordmark {
+      display: inline-flex; align-items: baseline; gap: 4px;
+      text-decoration: none; color: var(--ink);
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600; font-size: 28px; letter-spacing: -0.02em;
+    }
+    .wordmark .dot {
+      display: inline-block; width: 6px; height: 6px;
+      border-radius: 999px; background: var(--primary);
+      transform: translateY(-3px);
+    }
+    nav.crumbs {
+      display: flex; gap: 24px; flex-wrap: wrap;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+    nav.crumbs a { color: var(--muted); text-decoration: none; }
+    nav.crumbs a:hover { color: var(--ink); }
+    nav.crumbs a.current { color: var(--ink); }
+
+    .eyebrow {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 22px;
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: clamp(42px, 6vw, 64px);
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 24px;
+    }
+    h1 .accent { font-style: italic; color: var(--primary); font-weight: 600; }
+    .lede {
+      font-size: 19px; line-height: 1.6;
+      color: var(--body); margin-bottom: 32px;
+    }
+    .lede strong { color: var(--ink); font-weight: 600; }
+    .lede code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      background: var(--surface);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--ink);
+    }
+
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: clamp(28px, 4vw, 38px);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin: 0 0 8px;
+    }
+    h2 .accent { color: var(--primary); font-style: italic; font-weight: 600; }
+    p { margin-bottom: 16px; }
+    p code, li code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: var(--surface);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--ink);
+    }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { color: var(--primary-active); text-decoration: underline; }
+
+    .release {
+      background: white;
+      border-radius: 18px;
+      padding: 32px 36px;
+      margin-bottom: 28px;
+      box-shadow: 0 8px 28px -16px rgba(24,23,21,0.12);
+      border: 1px solid var(--hairline);
+    }
+    .release .head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .release .head .meta {
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    .release .version {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+    }
+    .release .codename {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .release .status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .status.shipped { background: var(--shipped-bg); color: var(--shipped-fg); }
+    .status.planned { background: var(--planned-bg); color: var(--planned-fg); }
+    .release .ship-target {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .release h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: 26px;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .release .summary {
+      font-size: 16px;
+      color: var(--body);
+      margin-bottom: 18px;
+    }
+    .release h4 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 18px 0 10px;
+    }
+    .release ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .release ul li {
+      padding-left: 20px;
+      position: relative;
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: var(--body);
+    }
+    .release ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 6px;
+      height: 1px;
+      background: var(--primary);
+    }
+    .release ul li strong { color: var(--ink); font-weight: 600; }
+    .release .vote {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      padding: 8px 14px;
+      background: var(--surface);
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+    .release .vote:hover { background: var(--primary-soft); color: var(--primary-active); text-decoration: none; }
+    .release .vote::after { content: '→'; }
+
+    .release.current {
+      background: linear-gradient(180deg, rgba(204,120,92,0.04), white 30%);
+      border: 1px solid rgba(204,120,92,0.20);
+    }
+
+    .wont-do {
+      background: var(--ink);
+      color: var(--canvas);
+      border-radius: 22px;
+      padding: 40px 44px;
+      margin-top: 56px;
+    }
+    .wont-do .eyebrow {
+      color: var(--primary);
+    }
+    .wont-do h2 {
+      color: var(--canvas);
+      margin-bottom: 16px;
+    }
+    .wont-do h2 .accent { color: var(--primary); }
+    .wont-do p {
+      color: rgba(250,249,245,0.78);
+      max-width: 640px;
+      margin-bottom: 24px;
+    }
+    .wont-do ul {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 640px) { .wont-do ul { grid-template-columns: 1fr; } }
+    .wont-do ul li {
+      padding: 14px 16px;
+      background: rgba(250,249,245,0.06);
+      border-radius: 10px;
+      font-size: 14.5px;
+      color: var(--canvas);
+      border-left: 2px solid rgba(204,120,92,0.5);
+    }
+    .wont-do ul li strong {
+      display: block;
+      color: white;
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+    .wont-do ul li span {
+      color: rgba(250,249,245,0.65);
+      font-size: 13.5px;
+    }
+
+    footer {
+      margin-top: 96px;
+      padding-top: 32px;
+      border-top: 1px solid var(--hairline);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--ink); text-decoration: none; }
+    footer .links { display: flex; gap: 24px; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <a href="/" class="wordmark">ux<span class="dot"></span></a>
+      <nav class="crumbs">
+        <a href="/">Home</a>
+        <a href="/compare.html">Compare</a>
+        <a href="/blog/">Blog</a>
+        <a href="/about.html">About</a>
+        <a href="/roadmap.html" class="current">Roadmap</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+      </nav>
+    </header>
+
+    <span class="eyebrow">Roadmap · v2.0 → v3.0 · public · 2026–2027</span>
+    <h1>ux-skill <span class="accent">roadmap</span> — v2.0 → v3.0.</h1>
+    <p class="lede">
+      Where we are, where we're headed, and what we will never build. Every release has a codename, a ship target, and a vote-on-this link so you can push the order of work. Dates are intent, not promise — this is a solo project with a real day job. If you want something faster, send a PR.
+    </p>
+
+    <article class="release current">
+      <div class="head">
+        <div class="meta">
+          <span class="version">v2.0.0-alpha.24</span>
+          <span class="codename">"Forcing Function"</span>
+        </div>
+        <span class="status shipped">Shipped · 2026-05-28</span>
+      </div>
+      <h3>Now: the engine, the manifests, the linter, the IDE bridge.</h3>
+      <p class="summary">
+        Everything ux-skill is named after. The Python engine reads nine manifests, the 5-parallel-search recommender returns a structured plan, the 22 slash-commands run inside Claude Code / Cursor / Windsurf / 14 other adapters, and the anti-slop linter blocks 35 fingerprints from ever reaching <code>git add</code>.
+      </p>
+      <h4>What's in v2.0</h4>
+      <ul>
+        <li><strong>998 manifest entries</strong> across anti-patterns, generators, styles, components, brands, foundations, output formats, conditionals, processes</li>
+        <li><strong>22 slash-commands</strong> — <code>/ux-design</code>, <code>/ux-component</code>, <code>/ux-system</code>, <code>/ux-audit</code>, <code>/ux-frame</code>, <code>/ux-dashboard</code>, <code>/ux-fix</code>, <code>/ux-copy</code>, <code>/ux-motion</code>, <code>/ux-a11y</code>, and 12 more</li>
+        <li><strong>17 IDE adapters</strong> — Claude Code, Cursor, Windsurf, Copilot, Continue, Codeium, Cline, Roo Code, Aider, Cody, Tabnine, Supermaven, Zed AI, JetBrains AI, Augment, Pieces, Sourcegraph</li>
+        <li><strong>72 brand specs</strong> under <code>references/brands/</code> — Apple, Stripe, Linear, Vercel, Notion, Airbnb, Figma, Replit, Anthropic, plus 63 more</li>
+        <li><strong>35 anti-slop linter rules</strong> — gradient regex, font-pair lockout, emoji detection, default-blue trap, three-tier pricing card flag, generic hero detection, 29 more</li>
+        <li><strong>Discovery protocol</strong> — 10-field intake before any generation (banned: improvisation)</li>
+      </ul>
+      <a href="https://github.com/Laith0003/ux-skill/releases" class="vote">Read the release notes</a>
+    </article>
+
+    <article class="release">
+      <div class="head">
+        <div class="meta">
+          <span class="version">v2.1</span>
+          <span class="codename">"Stoic"</span>
+        </div>
+        <span class="status planned">Planned · Q3 2026</span>
+      </div>
+      <h3>Deepen the linter. Cross-wire the manifests. Add landing-patterns.</h3>
+      <p class="summary">
+        v2.0 ships with 35 rules. v2.1 doubles down: 17 more rules pulled directly from the audit of the 50 landing pages I shipped this year that the model defaulted into something generic. Plus a new <code>landing-patterns.yaml</code> manifest with the 28 patterns we keep needing (hero variants, pricing variants, testimonial variants) and cross-reference wiring so a chosen brand auto-narrows the available components.
+      </p>
+      <h4>Key features</h4>
+      <ul>
+        <li><strong>+17 anti-pattern rules</strong> — pulled from the May 2026 audit of 50 generic landings (grep findings: 14 purple gradients, 11 three-tier cards, 9 default-Inter pairs, 16 generic feature-icon grids)</li>
+        <li><strong><code>landing-patterns.yaml</code></strong> — 28 patterns covering hero, pricing, testimonial, FAQ, CTA, footer variants with brand-locked recommendations</li>
+        <li><strong>Cross-reference wiring</strong> — choosing a brand from the 72-pack now auto-narrows valid components, valid type pairings, and valid motion patterns</li>
+        <li><strong>Linter performance pass</strong> — drop median run from 380ms to under 80ms; parallel rule eval</li>
+        <li><strong>Per-rule disable file</strong> — <code>.uxskill.toml</code> with rule-level opt-out and explanation requirement</li>
+      </ul>
+      <a href="https://github.com/Laith0003/ux-skill/discussions/categories/ideas" class="vote">Vote on v2.1 priorities</a>
+    </article>
+
+    <article class="release">
+      <div class="head">
+        <div class="meta">
+          <span class="version">v2.2</span>
+          <span class="codename">"Polyglot"</span>
+        </div>
+        <span class="status planned">Planned · Q4 2026</span>
+      </div>
+      <h3>Localize the README. Add an MCP server. Bridge to Figma.</h3>
+      <p class="summary">
+        Open-design hit 54k stars partly because the README ships in 11 locales. ux-skill is currently English-only and that's a real disadvantage in MENA, China, Japan, Korea, Brazil. v2.2 fixes that. It also adds an MCP server so cross-tool memory (Cursor remembers what Claude Code generated yesterday) is real, and a Figma MCP bridge so design-token import becomes one command.
+      </p>
+      <h4>Key features</h4>
+      <ul>
+        <li><strong>README in 11 locales</strong> — English, Arabic, Spanish, Portuguese, French, German, Russian, Chinese (Simplified), Japanese, Korean, Hindi</li>
+        <li><strong>MCP server (<code>uxskill-mcp</code>)</strong> — stateful memory of prior designs across Claude Code, Cursor, Windsurf sessions; canonical brand persists per-repo</li>
+        <li><strong>Figma MCP bridge</strong> — pull tokens from a Figma file into a brand spec; one-way sync; design system import in under 30 seconds</li>
+        <li><strong>RTL pass</strong> — every command flag-tested under <code>dir="rtl"</code>; mirrored animation contracts in motion-engineer agent</li>
+        <li><strong>Brand pack #2</strong> — 28 MENA + APAC brands added to the brand library (Careem, Talabat, Noon, Aramex, GO-JEK, Grab, Lazada, +21)</li>
+      </ul>
+      <a href="https://github.com/Laith0003/ux-skill/discussions/categories/ideas" class="vote">Vote on v2.2 priorities</a>
+    </article>
+
+    <article class="release">
+      <div class="head">
+        <div class="meta">
+          <span class="version">v2.3</span>
+          <span class="codename">"Atelier"</span>
+        </div>
+        <span class="status planned">Planned · Q1 2027</span>
+      </div>
+      <h3>Hi-fi prototype output. Local preview server. Motion MP4 export.</h3>
+      <p class="summary">
+        huashu-design ships hi-fi prototype output and that's the only dimension where they outscore us. v2.3 closes it. We add a hi-fi mode that emits real component code (React, Vue, Svelte, vanilla) with frame-accurate motion specs, a local preview server on <code>:4242</code> that watches and re-renders, and MP4 export of every motion spec so you can drop it in a deck.
+      </p>
+      <h4>Key features</h4>
+      <ul>
+        <li><strong>Hi-fi output mode</strong> — <code>/ux-design --fidelity hi</code> emits production component code in React, Vue, Svelte, vanilla TS</li>
+        <li><strong>Local preview server</strong> — <code>npx uxskill preview</code> opens <code>http://localhost:4242</code> with hot-reload of every generated artifact</li>
+        <li><strong>Motion MP4 export</strong> — every <code>/ux-motion</code> spec exports a 4-second loop MP4 + WebM for decks and docs</li>
+        <li><strong>Component library export</strong> — generated systems compile to a publishable npm package on demand</li>
+        <li><strong>Frame-accurate motion engine</strong> — sub-16ms GSAP timeline export; cubic-bezier per axis; no <code>ease-in-out</code> defaults</li>
+      </ul>
+      <a href="https://github.com/Laith0003/ux-skill/discussions/categories/ideas" class="vote">Vote on v2.3 priorities</a>
+    </article>
+
+    <article class="release">
+      <div class="head">
+        <div class="meta">
+          <span class="version">v3.0</span>
+          <span class="codename">"Mirror"</span>
+        </div>
+        <span class="status planned">Planned · Q2 2027</span>
+      </div>
+      <h3>Real-time live preview. Image-to-code reverse bridge. Multi-language gen.</h3>
+      <p class="summary">
+        The 1.0 of the next phase. Real-time means the preview server is no longer file-watched; the AI agent streams component diffs into the open browser tab as it generates. Image-to-code closes the loop: paste a screenshot of someone else's UI, get a ux-skill-clean rebuild of it (with the slop detected and removed). Multi-language adds Swift, Kotlin, and Flutter generators so the same brand spec lints native too.
+      </p>
+      <h4>Key features</h4>
+      <ul>
+        <li><strong>Real-time live preview</strong> — agent streams diffs; preview repaints sub-second; no file-watch latency</li>
+        <li><strong>Image-to-code bridge</strong> — paste a UI screenshot, get a brand-clean React + Tailwind rebuild with anti-pattern annotations</li>
+        <li><strong>Multi-language code gen</strong> — Swift (SwiftUI), Kotlin (Compose), Flutter, Jetpack Compose adapters</li>
+        <li><strong>Linter as language server</strong> — LSP integration so anti-pattern violations show inline in any editor that speaks LSP</li>
+        <li><strong>Public API</strong> — <code>uxskill score &lt;url&gt;</code> returns a JSON report; bring your own brand</li>
+      </ul>
+      <a href="https://github.com/Laith0003/ux-skill/discussions/categories/ideas" class="vote">Vote on v3.0 priorities</a>
+    </article>
+
+    <section class="wont-do">
+      <span class="eyebrow">Won't-do list</span>
+      <h2>What we will <span class="accent">never</span> build.</h2>
+      <p>Discipline shows in what you refuse. These are not "not yet" items — they are permanent no's. If a v3.5 ever ships any of these, I owe the community a public retraction.</p>
+      <ul>
+        <li>
+          <strong>Hosted SaaS</strong>
+          <span>The whole point is that the engine runs on your machine. No remote server, no quota, no rate limit.</span>
+        </li>
+        <li>
+          <strong>Paid tiers</strong>
+          <span>No Pro plan, no premium brand pack, no commercial license. The manifest must stay open.</span>
+        </li>
+        <li>
+          <strong>Account system</strong>
+          <span>Nothing to sign up for. Ever. The CLI does not authenticate against any service.</span>
+        </li>
+        <li>
+          <strong>Telemetry</strong>
+          <span>No usage events, no error reporting, no anonymous IDs. Bug reports come from humans via GitHub.</span>
+        </li>
+        <li>
+          <strong>AI image generation</strong>
+          <span>ux-skill recommends; it does not synthesize. We will not call Midjourney or DALL-E from the CLI.</span>
+        </li>
+        <li>
+          <strong>Video generation</strong>
+          <span>Same. We may export specs to MP4 (v2.3) but we will never generate video content via a model.</span>
+        </li>
+        <li>
+          <strong>Built-in analytics</strong>
+          <span>We don't measure user behavior in your repo. The linter reports what's there; that's the only signal.</span>
+        </li>
+        <li>
+          <strong>Vendor-specific lock-in</strong>
+          <span>No "ux-skill only works in Claude Code." Every adapter ships at parity. Cursor and Windsurf are not second-class.</span>
+        </li>
+      </ul>
+    </section>
+
+    <footer>
+      <span>&copy; 2026 Laith Aljunaidy. MIT. No telemetry.</span>
+      <div class="links">
+        <a href="/">Home</a>
+        <a href="/compare.html">Compare</a>
+        <a href="/about.html">About</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="/blog/">Blog</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
