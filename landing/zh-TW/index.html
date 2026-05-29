@@ -1535,61 +1535,44 @@
     /* =========================================================================
        Reveal on scroll
        ========================================================================= */
-    /* FALLBACK (Safari/Firefox/older — no scroll-driven support): one-shot
-       IntersectionObserver reveal. The JS only runs this when view() is absent. */
-    .reveal {
-      opacity: 0;
-      transform: translateY(44px);
-      transition: opacity 450ms var(--ease-cinema),
-                  transform 450ms var(--ease-cinema);
-    }
-    .reveal.is-in { opacity: 1; transform: translateY(0); }
-    .reveal .container > * {
-      transform: translateY(34px);
-      transition: transform 450ms var(--ease-cinema);
-    }
-    .reveal.is-in .container > * { transform: translateY(0); }
-    .reveal.is-in .container > *:nth-child(1) { transition-delay: 90ms; }
-    .reveal.is-in .container > *:nth-child(2) { transition-delay: 210ms; }
-    .reveal.is-in .container > *:nth-child(3) { transition-delay: 330ms; }
-    .reveal.is-in .container > *:nth-child(n+4) { transition-delay: 450ms; }
+    /* SECTION REVEAL — time-based one-shot. An IntersectionObserver adds .is-in
+       when a section enters the focal zone; a keyframe animation then plays at its
+       OWN pace (faster than the scroll), so each section reads as a confident,
+       deliberate entrance rather than a soft scroll-tracked drift. Content cascades
+       in via per-child animation-delay. Single path — no scroll-driven branch. */
 
-    /* PRIMARY (modern browsers): SCROLL-DRIVEN reveal. 動效 is tied to scroll
-       position via animation-timeline:view(), so it's paced by how fast you
-       scroll — it can never be "too fast" or finish off-screen, and it plays for
-       every section as it travels up through the viewport. Content cascades via
-       staggered animation-ranges. */
-    @supports (animation-timeline: view()) {
-      @media (prefers-reduced-motion: no-preference) {
-        .reveal {
-          opacity: 1; transform: none; transition: none;
-          animation: reveal-rise linear both;
-          animation-timeline: view();
-          animation-range: entry 0% cover 38%;
-        }
-        .reveal .container > * {
-          transition: none;
-          animation: reveal-child linear both;
-          animation-timeline: view();
-          animation-range: entry 5% cover 42%;
-        }
-        .reveal .container > *:nth-child(2) { animation-range: entry 11% cover 47%; }
-        .reveal .container > *:nth-child(3) { animation-range: entry 17% cover 52%; }
-        .reveal .container > *:nth-child(n+4) { animation-range: entry 23% cover 57%; }
+    /* Default (no JS, or reduced motion): everything visible, no motion. */
+    .reveal,
+    .reveal .container > * { opacity: 1; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      /* Hidden pre-reveal state — armed ONLY after JS adds .js-reveal to <html>,
+         so a JS failure can never leave the page blank. */
+      html.js-reveal .reveal { opacity: 0; }
+      html.js-reveal .reveal .container > * { opacity: 0; }
+
+      html.js-reveal .reveal.is-in {
+        animation: reveal-rise 740ms cubic-bezier(0.16, 1, 0.3, 1) both;
       }
+      html.js-reveal .reveal.is-in .container > * {
+        animation: reveal-child 680ms cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+      html.js-reveal .reveal.is-in .container > *:nth-child(1) { animation-delay: 60ms; }
+      html.js-reveal .reveal.is-in .container > *:nth-child(2) { animation-delay: 170ms; }
+      html.js-reveal .reveal.is-in .container > *:nth-child(3) { animation-delay: 280ms; }
+      html.js-reveal .reveal.is-in .container > *:nth-child(4) { animation-delay: 390ms; }
+      html.js-reveal .reveal.is-in .container > *:nth-child(n+5) { animation-delay: 480ms; }
     }
+
+    /* Bold travel + opacity on the whole block; a lighter scale+rise cascade on the
+       content for layered depth. Both stay under 800ms (linter-safe). */
     @keyframes reveal-rise {
-      from { opacity: 0; transform: translateY(56px); }
+      from { opacity: 0; transform: translateY(88px); }
       to   { opacity: 1; transform: translateY(0); }
     }
     @keyframes reveal-child {
-      from { transform: translateY(40px); }
-      to   { transform: translateY(0); }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .reveal { opacity: 1; transform: none; transition: none; animation: none; }
-      .reveal .container > * { transform: none; transition: none; animation: none; }
+      from { opacity: 0; transform: translateY(26px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     /* RTL — drawer + nav layout flip */
@@ -2610,13 +2593,13 @@ tone=["bold","editorial"]</pre>
     if (e.key === 'Escape' && drawer && drawer.classList.contains('is-open')) closeDrawer();
   });
 
-  /* Reveal on scroll. Modern browsers use the scroll-DRIVEN CSS (animation-timeline:
-     view()) — no JS needed, and we must NOT toggle .is-in or it fights the scroll
-     animation. Only the fallback path (no scroll-driven support) uses the observer. */
-  var __viewTL = !!(window.CSS && CSS.supports && CSS.supports('animation-timeline', 'view()'));
-  if (__viewTL) {
-    /* scroll-driven CSS handles it */
-  } else if ('IntersectionObserver' in window) {
+  /* Section reveal — time-based one-shot. The observer ALWAYS runs (no scroll-driven
+     branch): a time-based keyframe gives each section its own motion, which reads far
+     stronger than a scroll-tracked tween. Arming the hidden pre-state via a class on
+     <html> means a JS failure never blanks the page; the reveal fires once the section
+     reaches the focal zone (top crosses 80% of the viewport) so the eye is on it. */
+  if ('IntersectionObserver' in window) {
+    document.documentElement.classList.add('js-reveal');
     var obs = new IntersectionObserver(function(entries){
       entries.forEach(function(e){
         if (e.isIntersecting) {
@@ -2624,11 +2607,11 @@ tone=["bold","editorial"]</pre>
           obs.unobserve(e.target);
         }
       });
-    }, { rootMargin: '0px 0px -80px 0px', threshold: 0.05 });
+    }, { rootMargin: '0px 0px -20% 0px', threshold: 0 });
     document.querySelectorAll('.reveal').forEach(function(el){ obs.observe(el); });
-  } else {
-    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('is-in'); });
   }
+  /* No IntersectionObserver: .js-reveal is never added, so every .reveal stays at its
+     visible default — content is never hidden. */
 
   /* Stat count-up on scroll-in (Attention). Reduced-motion or no-IO leaves the
      HTML's final value untouched. Compositor-cheap: textContent + tabular-nums,
