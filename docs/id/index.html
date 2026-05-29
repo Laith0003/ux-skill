@@ -461,7 +461,12 @@
       z-index: 70;
       display: inline-flex;
       align-items: center;
+      flex-wrap: nowrap;
       gap: 10px;
+      /* size to content (NOT the 50%-of-viewport shrink-to-fit that left:50%
+         imposes on a positioned auto-width box) and never exceed the viewport */
+      width: max-content;
+      max-width: calc(100vw - 20px);
       padding: 8px 12px 8px 16px;
       background: rgba(13, 15, 18, 0.92);
       backdrop-filter: saturate(150%) blur(18px);
@@ -483,6 +488,7 @@
       font-family: var(--mono);
       font-size: 12px;
       color: var(--ink);
+      white-space: nowrap;
     }
     .sticky-cta__sep {
       width: 1px; height: 18px;
@@ -490,6 +496,8 @@
     }
     .sticky-cta__btn {
       display: inline-flex; align-items: center; gap: 6px;
+      flex-shrink: 0;
+      white-space: nowrap;
       padding: 4px 10px;
       border: 1px solid var(--accent);
       border-radius: var(--r-pill);
@@ -503,7 +511,9 @@
       background: var(--accent-soft);
     }
     @media (max-width: 560px) {
+      .sticky-cta { bottom: 16px; gap: 8px; padding: 7px 10px 7px 12px; }
       .sticky-cta code { font-size: 11px; }
+      .sticky-cta__btn { font-size: 10px; letter-spacing: 0.04em; padding: 4px 8px; }
     }
 
     /* =========================================================================
