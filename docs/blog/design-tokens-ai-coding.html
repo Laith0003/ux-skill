@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z371T0DBW5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Z371T0DBW5');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design tokens are the missing layer in AI coding</title>
+<meta name="description" content="AI coding tools generate components but skip the token layer — so colors, spacing, and type are improvised per file and drift instantly. Why tokens are the fix, and how a brief that compiles to tokens keeps AI output consistent and on-brand.">
+<link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/design-tokens-ai-coding.html">
+<meta property="og:title" content="Design tokens are the missing layer in AI coding">
+<meta property="og:description" content="AI coding tools generate components but skip the token layer, so every screen improvises its own colors and spacing. A brief that compiles to tokens is the fix.">
+<meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
+<meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/design-tokens-ai-coding.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Design tokens are the missing layer in AI coding">
+<meta name="twitter:description" content="AI coding tools generate components but skip the token layer. A brief that compiles to tokens keeps the output consistent and on-brand.">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"Design tokens are the missing layer in AI coding","datePublished":"2026-05-29","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/design-tokens-ai-coding.html","inLanguage":"en"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://uxskill.laithjunaidy.com/blog/"},{"@type":"ListItem","position":3,"name":"Design tokens are the missing layer in AI coding","item":"https://uxskill.laithjunaidy.com/blog/design-tokens-ai-coding.html"}]}
+</script>
+
+<style>
+  :root {
+    --canvas: #07080a; --surface: #0e1014; --ink: #f6f7f9; --body: #c0c3c9;
+    --muted: #8a8f96; --accent: #f59e0b; --hairline: rgba(255,255,255,0.08);
+    --display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--canvas); color: var(--body); font-family: var(--sans); line-height: 1.65; overflow-x: clip; }
+  a { color: var(--accent); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: clamp(20px, 4vw, 56px); }
+  header.post { margin-bottom: 48px; padding-bottom: 24px; border-bottom: 1px solid var(--hairline); }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  h1 { font-family: var(--display); font-size: clamp(32px, 5vw, 52px); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; font-weight: 600; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede { font-size: 19px; line-height: 1.55; color: var(--body); max-width: 60ch; }
+  h2 { font-family: var(--display); font-size: 28px; letter-spacing: -0.02em; color: var(--ink); margin: 56px 0 18px; }
+  h3 { font-family: var(--display); font-size: 21px; color: var(--ink); margin: 32px 0 12px; }
+  p { margin-bottom: 18px; font-size: 16.5px; max-width: 60ch; }
+  ul, ol { margin: 0 0 18px 22px; }
+  li { margin-bottom: 8px; max-width: 60ch; }
+  code { font-family: var(--mono); font-size: 14px; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+  pre { background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; padding: 18px 22px; overflow-x: auto; margin: 18px 0; }
+  pre code { background: transparent; padding: 0; font-size: 13.5px; line-height: 1.6; color: var(--body); }
+  blockquote { border-left: 2px solid var(--accent); padding-left: 18px; margin: 28px 0; color: var(--ink); font-style: italic; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--hairline); }
+  th { color: var(--ink); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .nav { padding: 18px 0; border-bottom: 1px solid var(--hairline); }
+  .nav__row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); }
+  .nav__brand { font-family: var(--display); font-weight: 700; font-size: 17px; color: var(--ink); }
+  .nav__link { font-family: var(--mono); font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted); }
+  footer { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--hairline); color: var(--muted); font-family: var(--mono); font-size: 11.5px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__row">
+    <a class="nav__brand" href="/">uxskill</a>
+    <a class="nav__link" href="/">Home</a>
+    <a class="nav__link" href="/brands.html">Brands</a>
+    <a class="nav__link" href="/anti-patterns.html">Anti-patterns</a>
+    <a class="nav__link" href="/blog/">Blog</a>
+    <a class="nav__link" href="/compare.html">Compare</a>
+    <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+  </div>
+</header>
+
+<div class="wrap">
+<header class="post">
+<p class="eyebrow">FIELD NOTES · 2026-05-29</p>
+<h1>Design tokens are the <em>missing layer</em><br>in AI coding.</h1>
+<p class="lede">AI coding tools are good at components. Ask for a card, a form, a settings page, and you get working markup in seconds. But watch what happens to the values inside: a hex picked here, a 13px there, a one-off radius on this card and a different one on the next. The model writes literal numbers straight into each file, with nothing shared between them. There is no token layer, so every screen improvises its own — and the whole thing drifts the moment you have more than one.</p>
+</header>
+
+<h2>What the model actually emits</h2>
+<p>A design token is a named decision — <code>--color-fg-muted</code>, <code>--space-3</code>, <code>--radius-md</code> — referenced everywhere instead of repeated. It is the layer that keeps a hundred components agreeing on the same gray, the same step in the spacing scale, the same corner. It is also exactly the layer an AI coding tool skips.</p>
+<p>The reason is structural. The model generates one component at a time, and for each one it picks the most probable literal value in context. Probable is not the same as consistent. The gray it reaches for in a header is close to, but not the same as, the gray in a sidebar two prompts later. The padding on a button is a plausible number, and so is the slightly different number on the input beside it. Each file is locally reasonable; nothing is globally aligned.</p>
+<blockquote>The output isn't wrong file by file — it is inconsistent file to file. Without a shared layer to point at, the model re-decides every value from scratch, and re-deciding is where the drift comes from.</blockquote>
+
+<h2>Improvised values drift; tokens hold</h2>
+<p>Put the two side by side and the difference is concrete. On the left is what generation tends to produce: a literal value, freshly chosen, in each file. On the right is the same decision expressed once, as a token every component consumes.</p>
+<table>
+<thead><tr><th>layer</th><th>improvised, per file</th><th>one token, shared</th></tr></thead>
+<tbody>
+<tr><td>color</td><td><code>#6b7280</code> here, <code>#6e7681</code> there</td><td><code>--color-fg-muted</code></td></tr>
+<tr><td>spacing</td><td><code>13px</code>, then <code>15px</code>, then <code>14px</code></td><td><code>--space-3</code> on a 4px step</td></tr>
+<tr><td>type</td><td><code>15px/1.45</code> reset on each block</td><td><code>--text-body</code> from one scale</td></tr>
+<tr><td>radius</td><td><code>6px</code> on one card, <code>10px</code> on the next</td><td><code>--radius-md</code></td></tr>
+<tr><td>motion</td><td>a fresh <code>220ms</code> guess each time</td><td><code>--ease-quick</code></td></tr>
+</tbody>
+</table>
+<p>The left column is not ugly. Any single row would pass review. But three screens in, the muted grays no longer match, the spacing has four values where it should have one step, and the radii read as an accident. Nobody chose the inconsistency — it accumulated, because there was no layer to make the choice once.</p>
+
+<h2>The fix is a layer the generated code must consume</h2>
+<p>You cannot prompt your way out of this by asking for more consistency. The model will still re-decide each value. The fix is to give it a layer to reference instead of a blank to fill — a set of tokens defined up front, with the instruction that components read from them and never inline a raw value. Generation against tokens is a different shape of problem: the model picks <em>which token</em> applies, not <em>what number</em> to invent. The same gray flows through every component because they all point at the same name.</p>
+<p>That only works if the tokens are real and complete before the first component is written. A half-defined layer — three colors and no spacing scale — invites the model to improvise the gaps, and the drift returns through the back door. The layer has to cover the decisions that actually vary: a color ramp, a spacing scale, a type scale, a radius set, and a motion set. Define those once and the output stays consistent, and stays rebrandable, because changing the brand means editing one layer rather than hunting literals across forty files.</p>
+
+<h2>Where ux-skill produces the layer</h2>
+<p>This is the gap ux-skill fills. Instead of leaving the token layer to chance, it compiles a project brief into a concrete token set, deterministically, with no model in the loop. A brief — surface, industry, tone — resolves through a fixed pipeline into a recommended design system: a style, a palette, a type pairing, and a spacing scale driven by the density of the surface.</p>
+<ol>
+<li><strong>The recommender outputs a token set.</strong> Style plus palette plus a type pair plus a density-driven spacing base come back as named values, not prose — the layer the generated code is meant to consume.</li>
+<li><strong><code>/ux-system</code> proposes a starter system.</strong> For a project with no tokens yet, it stands up the full layer — color ramp, spacing, type scale, radius, motion — so components have something real to reference from the first file.</li>
+<li><strong>The linter flags off-token literals.</strong> A regex pass reads the output before you commit and catches the tells of improvisation: a raw hex where a variable belongs, a magic spacing number outside the scale, a one-off radius. Each finding names the line and the fix.</li>
+</ol>
+<p>Run the same brief next week, on another machine, and the token set comes back identical. That is the point of taking the model out of the loop: the layer that everything else depends on stops being a guess.</p>
+
+<h2>Token-driven versus improvised</h2>
+<p>The contrast is the whole argument. Improvised output is a pile of locally plausible numbers that never agree across files, so the surface drifts and a rebrand is a search-and-replace through the codebase. Token-driven output routes every component through one named layer, so the surface stays consistent by construction and a rebrand is an edit to that layer alone. Same components, same AI coding tool — the difference is whether there is a layer underneath for the generated code to point at.</p>
+<pre><code>pip install uxskill
+# then, in your AI coding tool:
+# /ux-system     — propose a starter token layer for a project with none
+# /ux-recommend  — brief in, deterministic token set out</code></pre>
+
+<h2>Related</h2>
+<ul>
+<li><a href="/blog/seven-axes-design-system-explained.html">The 7 axes a brief compiles to</a></li>
+<li><a href="/blog/deterministic-design-engine-no-llm.html">A deterministic engine, no LLM</a></li>
+<li><a href="/blog/shadcn-ui-looks-generic.html">Make shadcn yours with a brief</a></li>
+<li><a href="/brands.html">160 brand specs</a></li>
+</ul>
+
+<footer>
+ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+</footer>
+
+</div>
+</body>
+</html>
