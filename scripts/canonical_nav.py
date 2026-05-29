@@ -34,21 +34,21 @@ LOCALES = [
 ]
 
 # Primary links shown in the desktop bar (quick access). Labels localize per page.
+# All pages live directly in the desktop bar (no desktop hamburger). The drawer
+# is mobile-only and mirrors the same set.
 LINKS = [
     ("/brands.html", "Brands"),
     ("/anti-patterns.html", "Anti-patterns"),
     ("/commands.html", "Commands"),
     ("/blog/", "Blog"),
     ("/compare.html", "Compare"),
-]
-# Full page set in the drawer — so every page is reachable from the nav.
-DRAWER_LINKS = LINKS + [
     ("/mcp.html", "MCP"),
+    ("/showcase.html", "Showcase"),
     ("/faq.html", "FAQ"),
     ("/about.html", "About"),
     ("/roadmap.html", "Roadmap"),
-    ("/showcase.html", "Showcase"),
 ]
+DRAWER_LINKS = LINKS
 REPO = "https://github.com/Laith0003/ux-skill"
 
 NAV_CSS = """
@@ -58,7 +58,7 @@ NAV_CSS = """
     border-block-end:1px solid rgba(255,255,255,0.08);font-family:'Inter',system-ui,sans-serif}
   .usknav__brand{font-family:'Bricolage Grotesque','Inter',sans-serif;font-weight:700;font-size:17px;
     color:#f6f7f9;text-decoration:none;letter-spacing:-0.01em;margin-inline-end:auto;padding:6px 2px}
-  .usknav__links{display:flex;align-items:center;gap:clamp(12px,2vw,26px)}
+  .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
     padding-block:8px;transition:color 140ms ease}
@@ -77,7 +77,7 @@ NAV_CSS = """
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
     color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
-  .usknav__burger{display:inline-flex;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
+  .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
   .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
@@ -177,7 +177,7 @@ def preview_page():
 </head>
 <body>
 {nav_html()}
-<div class="sample">Canonical nav. Tab to see focus rings. The menu button (always visible) opens a drawer with all 10 pages, languages, and the Star, with focus trapped + Escape to close. Globe = language menu. Narrow the window to collapse the bar links into the drawer.</div>
+<div class="sample">Canonical nav. All 10 pages sit in the bar on desktop (no hamburger). Tab to see focus rings. Globe = language menu (17 locales). Narrow the window below ~1100px to collapse the links into a hamburger + drawer.</div>
 <script>{NAV_JS}</script>
 </body>
 </html>'''

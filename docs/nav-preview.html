@@ -14,7 +14,7 @@
     border-block-end:1px solid rgba(255,255,255,0.08);font-family:'Inter',system-ui,sans-serif}
   .usknav__brand{font-family:'Bricolage Grotesque','Inter',sans-serif;font-weight:700;font-size:17px;
     color:#f6f7f9;text-decoration:none;letter-spacing:-0.01em;margin-inline-end:auto;padding:6px 2px}
-  .usknav__links{display:flex;align-items:center;gap:clamp(12px,2vw,26px)}
+  .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
     padding-block:8px;transition:color 140ms ease}
@@ -33,7 +33,7 @@
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
     color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
-  .usknav__burger{display:inline-flex;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
+  .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
   .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
@@ -70,6 +70,11 @@
     <a class="usknav__link" href="/commands.html">Commands</a>
     <a class="usknav__link" href="/blog/">Blog</a>
     <a class="usknav__link" href="/compare.html">Compare</a>
+    <a class="usknav__link" href="/mcp.html">MCP</a>
+    <a class="usknav__link" href="/showcase.html">Showcase</a>
+    <a class="usknav__link" href="/faq.html">FAQ</a>
+    <a class="usknav__link" href="/about.html">About</a>
+    <a class="usknav__link" href="/roadmap.html">Roadmap</a>
   </nav>
   <details class="usknav__langs">
     <summary aria-label="Choose language"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
@@ -108,10 +113,10 @@
       <a href="/blog/">Blog</a>
       <a href="/compare.html">Compare</a>
       <a href="/mcp.html">MCP</a>
+      <a href="/showcase.html">Showcase</a>
       <a href="/faq.html">FAQ</a>
       <a href="/about.html">About</a>
       <a href="/roadmap.html">Roadmap</a>
-      <a href="/showcase.html">Showcase</a>
   </nav>
   <a class="usknav__star usknav__drawer-star" href="https://github.com/Laith0003/ux-skill" rel="noopener">Star on GitHub</a>
   <div class="usknav__drawer-langlabel">Language</div>
@@ -135,7 +140,7 @@
       <a href="/it/" lang="it">Italiano</a>
   </div>
 </div>
-<div class="sample">Canonical nav. Tab to see focus rings. The menu button (always visible) opens a drawer with all 10 pages, languages, and the Star, with focus trapped + Escape to close. Globe = language menu. Narrow the window to collapse the bar links into the drawer.</div>
+<div class="sample">Canonical nav. All 10 pages sit in the bar on desktop (no hamburger). Tab to see focus rings. Globe = language menu (17 locales). Narrow the window below ~1100px to collapse the links into a hamburger + drawer.</div>
 <script>(function(){var d=document.getElementById('usknav-drawer');var b=document.querySelector('.usknav__burger');if(!d||!b)return;var c=d.querySelector('.usknav__drawer-close');function F(){return d.querySelectorAll('a[href],button:not([disabled])');}function set(v){d.classList.toggle('is-open',v);b.setAttribute('aria-expanded',v?'true':'false');document.body.style.overflow=v?'hidden':'';if(v){var f=c||F()[0];if(f)f.focus();}else{b.focus();}}b.addEventListener('click',function(){set(true);});if(c)c.addEventListener('click',function(){set(false);});d.addEventListener('click',function(e){if(e.target.tagName==='A')set(false);});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&d.classList.contains('is-open'))set(false);if(e.key==='Tab'&&d.classList.contains('is-open')){var f=F();if(!f.length)return;var a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus();}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus();}}});var L=document.querySelector('.usknav__langs');if(L){document.addEventListener('click',function(e){if(L.open&&!L.contains(e.target))L.open=false;});L.addEventListener('keydown',function(e){if(e.key==='Escape')L.open=false;});}})();</script>
 </body>
 </html>
