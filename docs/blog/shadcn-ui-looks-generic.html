@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z371T0DBW5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Z371T0DBW5');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Everything built with shadcn/ui looks the same — and how to break out</title>
+<meta name="description" content="shadcn/ui gives you great unstyled components, but every AI build ships the same zinc-and-violet defaults. Why the sameness happens — and how a structured design brief makes shadcn unmistakably yours.">
+<link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/shadcn-ui-looks-generic.html">
+<meta property="og:title" content="Everything built with shadcn/ui looks the same">
+<meta property="og:description" content="shadcn/ui ships unstyled primitives. AI fills them with the same defaults every time. A structured brief makes the same components render as a distinct brand.">
+<meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
+<meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/shadcn-ui-looks-generic.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Everything built with shadcn/ui looks the same">
+<meta name="twitter:description" content="shadcn ships unstyled primitives; AI fills them with the same defaults. A brief that resolves to tokens is the fix.">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"Everything built with shadcn/ui looks the same — and how to break out","datePublished":"2026-05-29","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/shadcn-ui-looks-generic.html","inLanguage":"en"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://uxskill.laithjunaidy.com/blog/"},{"@type":"ListItem","position":3,"name":"Everything built with shadcn/ui looks the same — and how to break out","item":"https://uxskill.laithjunaidy.com/blog/shadcn-ui-looks-generic.html"}]}
+</script>
+
+<style>
+  :root {
+    --canvas: #07080a; --surface: #0e1014; --ink: #f6f7f9; --body: #c0c3c9;
+    --muted: #8a8f96; --accent: #f59e0b; --hairline: rgba(255,255,255,0.08);
+    --display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--canvas); color: var(--body); font-family: var(--sans); line-height: 1.65; overflow-x: clip; }
+  a { color: var(--accent); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: clamp(20px, 4vw, 56px); }
+  header.post { margin-bottom: 48px; padding-bottom: 24px; border-bottom: 1px solid var(--hairline); }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  h1 { font-family: var(--display); font-size: clamp(32px, 5vw, 52px); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; font-weight: 600; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede { font-size: 19px; line-height: 1.55; color: var(--body); max-width: 60ch; }
+  h2 { font-family: var(--display); font-size: 28px; letter-spacing: -0.02em; color: var(--ink); margin: 56px 0 18px; }
+  h3 { font-family: var(--display); font-size: 21px; color: var(--ink); margin: 32px 0 12px; }
+  p { margin-bottom: 18px; font-size: 16.5px; max-width: 60ch; }
+  ul, ol { margin: 0 0 18px 22px; }
+  li { margin-bottom: 8px; max-width: 60ch; }
+  code { font-family: var(--mono); font-size: 14px; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+  pre { background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; padding: 18px 22px; overflow-x: auto; margin: 18px 0; }
+  pre code { background: transparent; padding: 0; font-size: 13.5px; line-height: 1.6; color: var(--body); }
+  blockquote { border-left: 2px solid var(--accent); padding-left: 18px; margin: 28px 0; color: var(--ink); font-style: italic; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--hairline); }
+  th { color: var(--ink); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .nav { padding: 18px 0; border-bottom: 1px solid var(--hairline); }
+  .nav__row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); }
+  .nav__brand { font-family: var(--display); font-weight: 700; font-size: 17px; color: var(--ink); }
+  .nav__link { font-family: var(--mono); font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted); }
+  footer { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--hairline); color: var(--muted); font-family: var(--mono); font-size: 11.5px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__row">
+    <a class="nav__brand" href="/">uxskill</a>
+    <a class="nav__link" href="/">Home</a>
+    <a class="nav__link" href="/brands.html">Brands</a>
+    <a class="nav__link" href="/anti-patterns.html">Anti-patterns</a>
+    <a class="nav__link" href="/blog/">Blog</a>
+    <a class="nav__link" href="/compare.html">Compare</a>
+    <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+  </div>
+</header>
+
+<div class="wrap">
+<header class="post">
+<p class="eyebrow">FIELD NOTES · 2026-05-29</p>
+<h1>Everything built with shadcn/ui <em>looks the same</em>,<br>and how to break out.</h1>
+<p class="lede">shadcn/ui is the best thing to happen to React UI in years. You own the component code, it sits on Radix for behaviour, and nothing is locked behind a theme prop. That is exactly why every shadcn app looks like every other shadcn app: the components ship unstyled, an AI fills the styling, and it reaches for the same defaults every single time. The library is not the problem. The missing brief is.</p>
+</header>
+
+<h2>Unstyled is the feature, not the bug</h2>
+<p>shadcn/ui does something deliberate that most libraries don't: it gives you primitives, not a finished skin. A Button is structure and behaviour with a set of CSS variables left open for you to fill. That is the whole pitch — copy the code in, make it yours.</p>
+<p>The trouble starts at "make it yours." When a person skips that step, the variables keep their starter values. An AI does worse than skip it: asked to pick, it picks the most probable styling it has seen — and that is the one in ten thousand tutorials and starter repos. A thousand independent apps converge on one face.</p>
+
+<h2>The defaults everyone ships</h2>
+<p>The convergence is specific enough to list. Almost every AI-built shadcn surface arrives wearing the same five:</p>
+<ul>
+<li>The zinc neutral ramp, untouched, from background to border to muted text.</li>
+<li>A violet primary — the accent the starter ships and nothing overrides.</li>
+<li>Inter at the default weights, pressed into service for both body and headings.</li>
+<li>The stock border-radius and the same soft card shadow on every surface.</li>
+<li>And, on the marketing page that wraps it, the purple-to-blue hero gradient that has become the universal sign of generated work.</li>
+</ul>
+<p>None of these is wrong on its own. Together, unchanged, they are a fingerprint. A reader can't name it, but they have seen it five hundred times — so the product reads as a template before the first word.</p>
+<blockquote>The components are identical by design — that is the point of a shared library. What was supposed to differ is the styling layer on top. When that layer is left at its defaults, the only thing left to tell two apps apart is their logo.</blockquote>
+
+<h2>Why the model reaches for the same paint</h2>
+<p>This is regression to the training centroid, the <a href="/blog/why-ai-generated-apps-look-the-same.html">same mechanism behind every AI design tell</a>. A model asked to style an open variable returns the average of what it has seen, and the average shadcn project uses zinc, violet, Inter, and the stock radius. The safest token is the most common token, so an unconstrained build lands dead in the middle of the distribution — the centroid everyone else also shipped.</p>
+<p>The cure is not a different library or a better prompt adjective. It is a constraint with enough resolution to push the output off the average and land it somewhere specific. That constraint is a brief.</p>
+
+<h2>A brief that resolves to tokens</h2>
+<p>ux-skill compiles a project description into seven continuous values — <a href="/blog/seven-axes-design-system-explained.html">the seven axes a brief becomes</a>: warmth, contrast, density, geometry, formality, motion, and type personality. Those numbers are not vibes; each one resolves to concrete CSS variables, which is exactly the layer shadcn leaves open. Fill the variables from a brief and the same components render as a brand.</p>
+<table>
+<thead><tr><th>open variable</th><th>shadcn default</th><th>brief-driven token</th></tr></thead>
+<tbody>
+<tr><td>neutral ramp</td><td>zinc, untouched</td><td>warmth-shifted gray tuned to the brand</td></tr>
+<tr><td>primary accent</td><td>violet</td><td>one restrained accent picked for the industry</td></tr>
+<tr><td>type pair</td><td>Inter for everything</td><td>a display + body pairing from 65 vetted pairs</td></tr>
+<tr><td>spacing base</td><td>one airy default</td><td>set by the density axis — 4px dense, 12px airy</td></tr>
+<tr><td>radius scale</td><td>stock rounding</td><td>set by the geometry axis — sharp to soft</td></tr>
+<tr><td>motion</td><td>library default</td><td>a timing preset chosen from the motion axis</td></tr>
+</tbody>
+</table>
+<p>Same Radix behaviour, same component code, same accessibility — a different surface, because the layer that was supposed to carry the brand finally does.</p>
+
+<h2>How the engine picks, and how it stays honest</h2>
+<p>The recommender is deterministic. It runs offline, with no model in the loop, through a fixed pipeline: the industry seeds the axes, the axes filter to a compatible style, the style narrows to a palette, a type pair, a motion preset, and the shadcn components that fit. Run the same brief on a different machine next week and the tokens come back identical — which is the opposite of asking a model to "make it pop" and getting a new look every time.</p>
+<ol>
+<li><strong>Industry seed.</strong> A documented industry sets starting values across the seven axes; an unknown one starts neutral.</li>
+<li><strong>Style and palette.</strong> The axes pick a style, the style narrows to a palette — so the neutral ramp and accent are chosen, not defaulted to zinc and violet.</li>
+<li><strong>Type pair.</strong> A display-and-body pairing replaces Inter-for-everything, so headings stop reading as body text scaled up.</li>
+<li><strong>Density and geometry.</strong> The density axis sets the spacing base; the geometry axis sets the radius scale — the two tokens that most separate one shadcn app from the next.</li>
+<li><strong>Components.</strong> Only the shadcn primitives that fit the style come back, pre-wired to the resolved variables.</li>
+</ol>
+<p>Then a regex linter reads the output before you commit. It carries the known shadcn fingerprints as hard rules: the untouched default look, the literal Tailwind purple-to-blue gradient class string, a violet-to-blue hex pair in a raw gradient, Inter deployed as a display face, and warm gray mixed with cool gray in one project. Each finding names the line and the fix, so the tell never reaches a reviewer. The catalogue behind it is the <a href="/anti-patterns.html">anti-pattern catalogue</a>, and the exemplars it steers toward are the <a href="/brands.html">160 brand specs</a> — real systems, not templates.</p>
+
+<h2>The point</h2>
+<p>shadcn/ui handed you the one thing every other library kept locked: the styling layer. AI builds look the same because they hand that layer straight back, filled with the defaults. Give the engine a brief, let it resolve to tokens, and the linter catch the fingerprints — and the same components that made everyone look alike become the thing that makes you look like no one else.</p>
+<pre><code>pip install uxskill
+# then, in your AI coding tool:
+# /ux-recommend  — brief in, deterministic tokens out (or /ux-system for a full starter system)</code></pre>
+
+<h2>Related</h2>
+<ul>
+<li><a href="/blog/why-ai-generated-apps-look-the-same.html">The centroid problem</a></li>
+<li><a href="/blog/seven-axes-design-system-explained.html">The 7 axes a brief compiles to</a></li>
+<li><a href="/blog/regex-linter-for-ai-coding.html">The anti-slop linter</a></li>
+<li><a href="/anti-patterns.html">The anti-pattern catalogue</a></li>
+<li><a href="/brands.html">160 brand specs</a></li>
+</ul>
+
+<footer>
+ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+</footer>
+
+</div>
+</body>
+</html>
