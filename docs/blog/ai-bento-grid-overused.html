@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z371T0DBW5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Z371T0DBW5');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why every AI UI reaches for the bento grid</title>
+<meta name="description" content="The bento grid went from Apple keynote device to AI default in two years. Now every generated feature section is the same rounded mosaic of mismatched tiles. Why it happens, when bento is right, and when it is just decoration.">
+<link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ai-bento-grid-overused.html">
+<meta property="og:title" content="Why every AI UI reaches for the bento grid">
+<meta property="og:description" content="Bento became the AI default for feature sections because the training data is full of it and it looks busy-therefore-designed. The fix: let content hierarchy choose the layout.">
+<meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
+<meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ai-bento-grid-overused.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Why every AI UI reaches for the bento grid">
+<meta name="twitter:description" content="Bento is a content-fit decision, not a default. Why AI reaches for it anyway, and when the mosaic is just decoration.">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"Why every AI UI reaches for the bento grid","datePublished":"2026-05-29","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/ai-bento-grid-overused.html","inLanguage":"en"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://uxskill.laithjunaidy.com/blog/"},{"@type":"ListItem","position":3,"name":"Why every AI UI reaches for the bento grid","item":"https://uxskill.laithjunaidy.com/blog/ai-bento-grid-overused.html"}]}
+</script>
+
+<style>
+  :root {
+    --canvas: #07080a; --surface: #0e1014; --ink: #f6f7f9; --body: #c0c3c9;
+    --muted: #8a8f96; --accent: #f59e0b; --hairline: rgba(255,255,255,0.08);
+    --display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--canvas); color: var(--body); font-family: var(--sans); line-height: 1.65; overflow-x: clip; }
+  a { color: var(--accent); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: clamp(20px, 4vw, 56px); }
+  header.post { margin-bottom: 48px; padding-bottom: 24px; border-bottom: 1px solid var(--hairline); }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  h1 { font-family: var(--display); font-size: clamp(32px, 5vw, 52px); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; font-weight: 600; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede { font-size: 19px; line-height: 1.55; color: var(--body); max-width: 60ch; }
+  h2 { font-family: var(--display); font-size: 28px; letter-spacing: -0.02em; color: var(--ink); margin: 56px 0 18px; }
+  h3 { font-family: var(--display); font-size: 21px; color: var(--ink); margin: 32px 0 12px; }
+  p { margin-bottom: 18px; font-size: 16.5px; max-width: 60ch; }
+  ul, ol { margin: 0 0 18px 22px; }
+  li { margin-bottom: 8px; max-width: 60ch; }
+  code { font-family: var(--mono); font-size: 14px; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+  pre { background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; padding: 18px 22px; overflow-x: auto; margin: 18px 0; }
+  pre code { background: transparent; padding: 0; font-size: 13.5px; line-height: 1.6; color: var(--body); }
+  blockquote { border-left: 2px solid var(--accent); padding-left: 18px; margin: 28px 0; color: var(--ink); font-style: italic; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--hairline); }
+  th { color: var(--ink); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .nav { padding: 18px 0; border-bottom: 1px solid var(--hairline); }
+  .nav__row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); }
+  .nav__brand { font-family: var(--display); font-weight: 700; font-size: 17px; color: var(--ink); }
+  .nav__link { font-family: var(--mono); font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted); }
+  footer { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--hairline); color: var(--muted); font-family: var(--mono); font-size: 11.5px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__row">
+    <a class="nav__brand" href="/">uxskill</a>
+    <a class="nav__link" href="/">Home</a>
+    <a class="nav__link" href="/brands.html">Brands</a>
+    <a class="nav__link" href="/anti-patterns.html">Anti-patterns</a>
+    <a class="nav__link" href="/blog/">Blog</a>
+    <a class="nav__link" href="/compare.html">Compare</a>
+    <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+  </div>
+</header>
+
+<div class="wrap">
+<header class="post">
+<p class="eyebrow">FIELD NOTES · 2026-05-29</p>
+<h1>Why every AI UI reaches for <em>the bento grid</em>.</h1>
+<p class="lede">In about two years the bento grid went from an Apple keynote device to the reflex an AI builder reaches for the moment you say "feature section." You know the look: a mosaic of rounded tiles in mismatched sizes, one big, two medium, three small, arranged like a lunchbox. It can be the right call. Most of the time it is not — it is six equal ideas crammed into unequal boxes, variety with no reason behind it.</p>
+</header>
+
+<h2>Where the reflex comes from</h2>
+<p>Apple popularized the modern bento layout, and the design web copied it hard. Tailwind's marketing examples lean on it; component galleries are full of it; landing-page templates ship it as the default "features" block. So the screenshots a model learns from are saturated with bento. When you ask for a feature section, the most-represented answer in the training data is a mosaic of tiles, and that is what comes back.</p>
+<p>There is a second pull, and it is the more honest one. A bento grid <em>looks</em> designed. Uneven tiles read as deliberate composition; a plain list reads as something you did not finish. Faced with a blank section, reaching for the mosaic is the safe move that signals effort. The model has the same incentive a junior designer does: produce something that looks considered, fast.</p>
+<blockquote>The bento grid is what AI reaches for when it wants to look like it made a layout decision without actually having to make one.</blockquote>
+
+<h2>Bento is a content-fit decision, not a default</h2>
+<p>The grid was never the point. The point is weight. A real bento works because the tiles carry genuinely different things at genuinely different sizes: a headline metric in the big cell, a small chart beside it, a one-line quote, a product image, a short stat. The sizes map to importance, and the mix of content types is what makes the asymmetry read as composition instead of clutter.</p>
+<p>Most generated bento has none of that. It is six feature blurbs — same icon-title-sentence shape, same informational weight — poured into a big-medium-small template. The tiles differ in size; the content does not. The eye expects the large cell to matter more, finds another tagline, and the whole thing quietly registers as decoration. That is the tell: visual variety with no informational reason for it.</p>
+
+<h2>When it works, and when it is just decoration</h2>
+<table>
+<thead><tr><th>signal</th><th>bento is right</th><th>bento is decoration</th></tr></thead>
+<tbody>
+<tr><td>tile content</td><td>a stat, a chart, a quote, an image</td><td>six near-identical blurbs</td></tr>
+<tr><td>weight</td><td>one idea clearly dominates</td><td>all items are peers</td></tr>
+<tr><td>cell size</td><td>maps to importance</td><td>random big / medium / small</td></tr>
+<tr><td>if you delete a tile</td><td>the grid rebalances meaningfully</td><td>nothing changes but the count</td></tr>
+<tr><td>better as a list?</td><td>no, the mix needs a plane</td><td>yes, a rhythm would read cleaner</td></tr>
+</tbody>
+</table>
+<p>The deletion test is the fast one. If you can pull any tile out and the section reads the same, the sizes were never carrying meaning, and a simple rhythm — equal cards, or a clean list with strong type — will beat the fake mosaic every time.</p>
+
+<h2>Let hierarchy choose the layout</h2>
+<p>The fix is not "stop using bento." It is to choose the layout from the content, not from the trend. Lay out what you actually have and read the weights first:</p>
+<ul>
+<li>Items are genuine peers, same shape, same weight → a rhythm or a list. Equal cells, consistent spacing, one strong type scale. Honest and scannable.</li>
+<li>One item clearly dominates and the rest support it → a hero plus a secondary row. Two weights, not five.</li>
+<li>Three or more genuinely different content types at different importances → that is the case bento was built for. Use it.</li>
+</ul>
+<p>Reserve the mosaic for real weight differences, and it stops being a tic and goes back to being a tool. The work is the read, not the grid.</p>
+
+<h2>How ux-skill handles it</h2>
+<p>This is exactly the kind of trend-default the engine is built to resist. The components manifest carries bento alongside its alternatives — rhythm grids, hero-plus-secondary, list-with-emphasis — so a feature section has more than one answer to reach for. The landing-pattern manifest does the same at the section level, pairing each pattern with when it fits and when it does not.</p>
+<p>The <a href="/blog/seven-axes-design-system-explained.html">layout synthesizer</a> then maps content weights to cell sizes. Feed it items with real differences and it returns a bento with the big cell on the thing that matters; feed it peers and it returns a rhythm, because there is nothing for the asymmetry to express. And the linter closes the loop: it flags variance with no informational backing — uneven tiles holding even content — as decoration-only, the same way it flags a chrome gradient or a shadow standing in for depth.</p>
+<p>Same brief, run again next week, on another machine: the same call. Deterministic, offline, no model guessing in the loop.</p>
+
+<h2>The point</h2>
+<p>Every AI UI reaches for the bento grid because the training data is full of it and a mosaic is the cheapest way to look like a layout happened. But bento is a content-fit decision, not a default. Read the weights. If the items are peers, give them a rhythm. If one dominates, give it the room. Save the lunchbox for the meal that actually has different dishes on it.</p>
+<pre><code>pip install uxskill
+# then, in your AI coding tool:
+# /ux-design     — layout chosen from content weights, not the trend
+# /ux-recommend  — bento plus alternatives, with the linter watching for decoration</code></pre>
+
+<h2>Related</h2>
+<ul>
+<li><a href="/blog/why-ai-generated-apps-look-the-same.html">The centroid problem</a></li>
+<li><a href="/blog/ai-dashboard-design-generic.html">The dashboard density failure</a></li>
+<li><a href="/blog/seven-axes-design-system-explained.html">The 7 axes</a></li>
+<li><a href="/anti-patterns.html">The anti-pattern catalogue</a></li>
+</ul>
+
+<footer>
+ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+</footer>
+
+</div>
+</body>
+</html>

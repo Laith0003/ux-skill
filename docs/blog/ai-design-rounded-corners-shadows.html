@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z371T0DBW5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Z371T0DBW5');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why AI design defaults to rounded-2xl and soft shadows</title>
+<meta name="description" content="Big border radius, soft drop shadows on every card, a faint gradient border. AI-generated UI has a texture, and it is the same texture every time. Why the models reach for it, and how to set radius and elevation with intent.">
+<link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ai-design-rounded-corners-shadows.html">
+<meta property="og:title" content="Why AI design has the same surface texture every time">
+<meta property="og:description" content="Big corner radius, a soft diffuse shadow on every card, a 1px translucent border. The shadcn-default texture is an AI tell. The mechanism, and the fix.">
+<meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
+<meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ai-design-rounded-corners-shadows.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Why AI design has the same surface texture every time">
+<meta name="twitter:description" content="Big radius plus a soft drop shadow on every card is an AI fingerprint. Here is why the models reach for it — and how to set radius and elevation with intent.">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"Why AI design defaults to rounded-2xl and soft shadows","datePublished":"2026-05-29","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/ai-design-rounded-corners-shadows.html","inLanguage":"en"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://uxskill.laithjunaidy.com/blog/"},{"@type":"ListItem","position":3,"name":"Why AI design defaults to rounded-2xl and soft shadows","item":"https://uxskill.laithjunaidy.com/blog/ai-design-rounded-corners-shadows.html"}]}
+</script>
+
+<style>
+  :root {
+    --canvas: #07080a; --surface: #0e1014; --ink: #f6f7f9; --body: #c0c3c9;
+    --muted: #8a8f96; --accent: #f59e0b; --hairline: rgba(255,255,255,0.08);
+    --display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--canvas); color: var(--body); font-family: var(--sans); line-height: 1.65; overflow-x: clip; }
+  a { color: var(--accent); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: clamp(20px, 4vw, 56px); }
+  header.post { margin-bottom: 48px; padding-bottom: 24px; border-bottom: 1px solid var(--hairline); }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  h1 { font-family: var(--display); font-size: clamp(32px, 5vw, 52px); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; font-weight: 600; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede { font-size: 19px; line-height: 1.55; color: var(--body); max-width: 60ch; }
+  h2 { font-family: var(--display); font-size: 28px; letter-spacing: -0.02em; color: var(--ink); margin: 56px 0 18px; }
+  h3 { font-family: var(--display); font-size: 21px; color: var(--ink); margin: 32px 0 12px; }
+  p { margin-bottom: 18px; font-size: 16.5px; max-width: 60ch; }
+  ul, ol { margin: 0 0 18px 22px; }
+  li { margin-bottom: 8px; max-width: 60ch; }
+  code { font-family: var(--mono); font-size: 14px; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+  pre { background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; padding: 18px 22px; overflow-x: auto; margin: 18px 0; }
+  pre code { background: transparent; padding: 0; font-size: 13.5px; line-height: 1.6; color: var(--body); }
+  blockquote { border-left: 2px solid var(--accent); padding-left: 18px; margin: 28px 0; color: var(--ink); font-style: italic; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--hairline); }
+  th { color: var(--ink); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .nav { padding: 18px 0; border-bottom: 1px solid var(--hairline); }
+  .nav__row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); }
+  .nav__brand { font-family: var(--display); font-weight: 700; font-size: 17px; color: var(--ink); }
+  .nav__link { font-family: var(--mono); font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted); }
+  footer { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--hairline); color: var(--muted); font-family: var(--mono); font-size: 11.5px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__row">
+    <a class="nav__brand" href="/">uxskill</a>
+    <a class="nav__link" href="/">Home</a>
+    <a class="nav__link" href="/brands.html">Brands</a>
+    <a class="nav__link" href="/anti-patterns.html">Anti-patterns</a>
+    <a class="nav__link" href="/blog/">Blog</a>
+    <a class="nav__link" href="/compare.html">Compare</a>
+    <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+  </div>
+</header>
+
+<div class="wrap">
+<header class="post">
+<p class="eyebrow">FIELD NOTES · 2026-05-29</p>
+<h1>Why AI design has <em>the same surface texture</em> every time.</h1>
+<p class="lede">Look at a screen an unsupervised model produced and you can feel it before you can name it: every card has a big corner radius, a soft diffuse shadow underneath, a 1px translucent border, and now and then a faint gradient along the edge. It is a texture, and it is the same texture every time. The surface is not wrong, exactly. It is generic — soft and weightless, the look of a thing that was averaged rather than designed.</p>
+</header>
+
+<h2>The texture is a fingerprint</h2>
+<p>Three traits show up together so reliably that spotting one lets you predict the rest:</p>
+<ul>
+<li>A large corner radius on everything — buttons, inputs, cards, modals, the whole surface rounded to the same generous curve.</li>
+<li>A soft, diffuse drop shadow under every card, low opacity and a wide blur, applied whether or not the element is meant to float.</li>
+<li>A 1px translucent border, often paired with a faint gradient stroke, sitting on top of the shadow as a second depth cue doing the same job.</li>
+</ul>
+<p>None of these is a crime on its own. Stacked on every element at once, they read as a single material — pillowy, frosted, and indistinguishable from the last ten interfaces a model generated. The texture is the tell, the way the violet gradient is a tell.</p>
+
+<h2>Where the texture comes from</h2>
+<p>It is the same mechanism behind every slop signature: the model regresses to the centroid of its training data, and for component surfaces that centroid is sharply defined.</p>
+<p><strong>The framework defaults set the curve.</strong> shadcn/ui and the Tailwind ecosystem ship a card with a rounded corner and a soft shadow as the out-of-the-box look. When a model is asked for "a card" with no spec, the path of least resistance is the default the docs themselves render. The default becomes the answer, and the answer becomes a habit.</p>
+<p><strong>The popular-shot aesthetic reinforces it.</strong> The glassmorphism wave on Dribbble — frosted panels, soft glows, gentle rounding — photographs beautifully in a thumbnail. The model learned that this surface correlates with "polished," so when it plays it safe, it reaches for the soft, rounded, shadowed card.</p>
+<blockquote>The soft card is safe precisely because it is average. Nothing about it is a decision — radius, elevation, and border were all inherited from the default, so the surface belongs to no brand and no density.</blockquote>
+
+<h2>Why soft and weightless reads as generic</h2>
+<p>Radius and elevation are not cosmetic. They carry meaning, and the default throws that meaning away.</p>
+<p>Corner radius sits on a spectrum. A sharp radius reads precise, editorial, instrument-like — the surface of a tool you trust with real work. A large radius reads friendly, approachable, consumer — the surface of an app you hand to anyone. The default picks the friendly end for everything, so a fintech ledger and a kids' game wear the same soft corners, and neither says anything specific.</p>
+<p>Elevation is worse. A drop shadow is supposed to mean one thing: this layer is above that layer. A menu floats over the page; a dialog floats over the menu. When every card carries the same shadow, depth stops being information and becomes decoration — the surface looks busy and floaty while telling you nothing about what is actually on top.</p>
+
+<h2>Radius and elevation as decisions</h2>
+<p>The fix is to treat both as tokens tied to brand and density, not as inherited defaults. ux-skill encodes them in the style and components manifests, where each style carries its own radius scale and shadow set rather than one global softness.</p>
+<table>
+<thead><tr><th>style</th><th>radius</th><th>elevation intent</th></tr></thead>
+<tbody>
+<tr><td>Editorial / instrument</td><td>2&ndash;4px</td><td>Hairline borders, no shadow; depth from layout, not glow</td></tr>
+<tr><td>Standard app</td><td>8&ndash;12px</td><td>One quiet shadow reserved for true overlays (menu, dialog)</td></tr>
+<tr><td>Consumer / friendly</td><td>16&ndash;20px</td><td>Soft shadow on cards that genuinely lift; flat surfaces stay flat</td></tr>
+</tbody>
+</table>
+<p>The density axis drives the radius directly. Push density high for a data-dense surface and the synthesizer pulls the radius down toward the sharp, instrument end — soft 20px corners waste pixels and blur the grid a cockpit needs. Pull density low for an airy marketing page and the radius can open up, because the surface has room to feel friendly. Radius is not a constant you pick once; it falls out of how dense the surface is meant to be.</p>
+<p>Elevation gets the same treatment: shadows map to real z-layering. A token exists for the overlay tier and is spent only there. A flat card stays flat. A border and a shadow never stack to do the same job twice, because that is two depth cues for one layer — the redundancy that makes the default surface feel padded.</p>
+
+<h2>What the linter flags</h2>
+<p>The discipline is encoded, not left to a taste reminder. The anti-slop linter ships rules aimed at exactly this texture.</p>
+<p>One rule matches the big-radius default in its utility-class form and its raw-value form, and flags it as the generic-card tell — radius applied as a default instead of chosen. Another catches shadow-only depth: a multi-layer stacked drop shadow doing decorative work, the soft glow under every card. A third catches the colored card glow, and the glassmorphism rule fires when frosted blur is layered across the whole surface with no real depth behind it. Run <code>uxskill lint</code> and the inherited texture gets caught before it ships, the same way the purple gradient does.</p>
+
+<h2>A card brief, compiled</h2>
+<p>You ask for: <code>surface=card, industry=fintech, tone=["serious", "precise"]</code>.</p>
+<ol>
+<li>Density resolves high (the "precise" tone plus a fintech seed) &rarr; the radius scale drops to a sharp <code>4px</code>, not the inherited soft corner.</li>
+<li>Elevation resolves to borders: a single hairline separates the card from the canvas, and the shadow token is held back for overlays only.</li>
+<li>The faint gradient stroke is dropped — one border does the separation, so a second decorative edge is redundant.</li>
+<li>A consumer brief, run instead, opens the radius to <code>16px</code> and allows one soft shadow on cards that actually lift, while flat regions stay flat.</li>
+</ol>
+<p>Same request, run again next week, on a different machine: identical output. Deterministic, offline, no LLM in the engine.</p>
+
+<h2>The point</h2>
+<p>AI surfaces share a texture because radius and elevation were inherited from the framework default instead of chosen. Set them with intent — radius tied to brand and density, elevation mapped to real z-layering — and the surface stops reading as the average of every card a model has seen. Sharp can mean precise. Large can mean friendly. A shadow can mean above. The default means none of those, which is why it means generic.</p>
+<pre><code>pip install uxskill
+# then, in your AI coding tool:
+# /ux-recommend  — radius and elevation set by brand + density, not defaults</code></pre>
+
+<h2>Related</h2>
+<ul>
+<li><a href="/blog/why-ai-uses-purple-gradients.html">The purple-gradient tell</a></li>
+<li><a href="/blog/why-ai-uses-inter-font.html">The Inter tell</a></li>
+<li><a href="/blog/ai-design-fingerprints-list.html">The full list of AI design tells</a></li>
+<li><a href="/anti-patterns.html">The anti-pattern catalogue</a></li>
+</ul>
+
+<footer>
+ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+</footer>
+
+</div>
+</body>
+</html>
