@@ -1535,31 +1535,61 @@
     /* =========================================================================
        Reveal on scroll
        ========================================================================= */
+    /* FALLBACK (Safari/Firefox/older — no scroll-driven support): one-shot
+       IntersectionObserver reveal. The JS only runs this when view() is absent. */
     .reveal {
       opacity: 0;
-      transform: translateY(32px);
-      transition: opacity 400ms var(--ease-cinema),
-                  transform 400ms var(--ease-cinema);
+      transform: translateY(44px);
+      transition: opacity 450ms var(--ease-cinema),
+                  transform 450ms var(--ease-cinema);
     }
-    .reveal.is-in {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    /* Staggered child cascade — section content rises in sequence as the section
-       reveals. Transform-only so it layers with the section fade without
-       double-fading; sections without a .container still get the section reveal. */
+    .reveal.is-in { opacity: 1; transform: translateY(0); }
     .reveal .container > * {
-      transform: translateY(26px);
-      transition: transform 400ms var(--ease-cinema);
+      transform: translateY(34px);
+      transition: transform 450ms var(--ease-cinema);
     }
     .reveal.is-in .container > * { transform: translateY(0); }
-    .reveal.is-in .container > *:nth-child(1) { transition-delay: 80ms; }
-    .reveal.is-in .container > *:nth-child(2) { transition-delay: 180ms; }
-    .reveal.is-in .container > *:nth-child(3) { transition-delay: 280ms; }
-    .reveal.is-in .container > *:nth-child(n+4) { transition-delay: 370ms; }
+    .reveal.is-in .container > *:nth-child(1) { transition-delay: 90ms; }
+    .reveal.is-in .container > *:nth-child(2) { transition-delay: 210ms; }
+    .reveal.is-in .container > *:nth-child(3) { transition-delay: 330ms; }
+    .reveal.is-in .container > *:nth-child(n+4) { transition-delay: 450ms; }
+
+    /* PRIMARY (modern browsers): SCROLL-DRIVEN reveal. モーション is tied to scroll
+       position via animation-timeline:view(), so it's paced by how fast you
+       scroll — it can never be "too fast" or finish off-screen, and it plays for
+       every section as it travels up through the viewport. Content cascades via
+       staggered animation-ranges. */
+    @supports (animation-timeline: view()) {
+      @media (prefers-reduced-motion: no-preference) {
+        .reveal {
+          opacity: 1; transform: none; transition: none;
+          animation: reveal-rise linear both;
+          animation-timeline: view();
+          animation-range: entry 0% cover 38%;
+        }
+        .reveal .container > * {
+          transition: none;
+          animation: reveal-child linear both;
+          animation-timeline: view();
+          animation-range: entry 5% cover 42%;
+        }
+        .reveal .container > *:nth-child(2) { animation-range: entry 11% cover 47%; }
+        .reveal .container > *:nth-child(3) { animation-range: entry 17% cover 52%; }
+        .reveal .container > *:nth-child(n+4) { animation-range: entry 23% cover 57%; }
+      }
+    }
+    @keyframes reveal-rise {
+      from { opacity: 0; transform: translateY(56px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes reveal-child {
+      from { transform: translateY(40px); }
+      to   { transform: translateY(0); }
+    }
+
     @media (prefers-reduced-motion: reduce) {
-      .reveal { opacity: 1; transform: none; transition: none; }
-      .reveal .container > * { transform: none; transition: none; }
+      .reveal { opacity: 1; transform: none; transition: none; animation: none; }
+      .reveal .container > * { transform: none; transition: none; animation: none; }
     }
 
     /* RTL — drawer + nav layout flip */
@@ -2580,8 +2610,13 @@ tone=["bold","editorial"]</pre>
     if (e.key === 'Escape' && drawer && drawer.classList.contains('is-open')) closeDrawer();
   });
 
-  /* Reveal on scroll */
-  if ('IntersectionObserver' in window) {
+  /* Reveal on scroll. Modern browsers use the scroll-DRIVEN CSS (animation-timeline:
+     view()) — no JS needed, and we must NOT toggle .is-in or it fights the scroll
+     animation. Only the fallback path (no scroll-driven support) uses the observer. */
+  var __viewTL = !!(window.CSS && CSS.supports && CSS.supports('animation-timeline', 'view()'));
+  if (__viewTL) {
+    /* scroll-driven CSS handles it */
+  } else if ('IntersectionObserver' in window) {
     var obs = new IntersectionObserver(function(entries){
       entries.forEach(function(e){
         if (e.isIntersecting) {
