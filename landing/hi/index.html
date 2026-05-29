@@ -1552,26 +1552,27 @@
       html.js-reveal .reveal .container > * { opacity: 0; }
 
       html.js-reveal .reveal.is-in {
-        animation: reveal-rise 740ms cubic-bezier(0.16, 1, 0.3, 1) both;
+        animation: reveal-rise 760ms cubic-bezier(0.16, 1, 0.3, 1) both;
       }
       html.js-reveal .reveal.is-in .container > * {
-        animation: reveal-child 680ms cubic-bezier(0.16, 1, 0.3, 1) both;
+        animation: reveal-child 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
       }
-      html.js-reveal .reveal.is-in .container > *:nth-child(1) { animation-delay: 60ms; }
-      html.js-reveal .reveal.is-in .container > *:nth-child(2) { animation-delay: 170ms; }
-      html.js-reveal .reveal.is-in .container > *:nth-child(3) { animation-delay: 280ms; }
-      html.js-reveal .reveal.is-in .container > *:nth-child(4) { animation-delay: 390ms; }
-      html.js-reveal .reveal.is-in .container > *:nth-child(n+5) { animation-delay: 480ms; }
+      html.js-reveal .reveal.is-in .container > *:nth-child(1) { animation-delay: 70ms; }
+      html.js-reveal .reveal.is-in .container > *:nth-child(2) { animation-delay: 190ms; }
+      html.js-reveal .reveal.is-in .container > *:nth-child(3) { animation-delay: 310ms; }
+      html.js-reveal .reveal.is-in .container > *:nth-child(4) { animation-delay: 430ms; }
+      html.js-reveal .reveal.is-in .container > *:nth-child(n+5) { animation-delay: 540ms; }
     }
 
-    /* Bold travel + opacity on the whole block; a lighter scale+rise cascade on the
-       content for layered depth. Both stay under 800ms (linter-safe). */
+    /* Bold travel + opacity on the whole block; a stronger scale+rise cascade on the
+       content for layered depth (each block grows in from 0.94). Both stay under
+       800ms (linter-safe). */
     @keyframes reveal-rise {
-      from { opacity: 0; transform: translateY(88px); }
+      from { opacity: 0; transform: translateY(120px); }
       to   { opacity: 1; transform: translateY(0); }
     }
     @keyframes reveal-child {
-      from { opacity: 0; transform: translateY(26px) scale(0.98); }
+      from { opacity: 0; transform: translateY(44px) scale(0.94); }
       to   { opacity: 1; transform: translateY(0) scale(1); }
     }
 
