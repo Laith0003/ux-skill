@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z371T0DBW5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Z371T0DBW5');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why AI design uses the same icons every time</title>
+<meta name="description" content="The same Heroicons and Lucide set at one weight on every section, or worse, emoji as icons. AI has an icon tell too. Why it happens, and how to pick and use icons with intent.">
+<link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ai-icon-design-generic.html">
+<meta property="og:title" content="Why AI design uses the same icons every time">
+<meta property="og:description" content="A small set of default icon libraries at uniform weight, one icon per feature, or emoji standing in for icons. The icon tell, and the fix.">
+<meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
+<meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ai-icon-design-generic.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Why AI design uses the same icons every time">
+<meta name="twitter:description" content="The icon tell: one default set at one weight, glued to every heading. Here's the mechanism and the fix.">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"Why AI design uses the same icons every time","datePublished":"2026-05-29","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/ai-icon-design-generic.html","inLanguage":"en"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://uxskill.laithjunaidy.com/blog/"},{"@type":"ListItem","position":3,"name":"Why AI design uses the same icons every time","item":"https://uxskill.laithjunaidy.com/blog/ai-icon-design-generic.html"}]}
+</script>
+
+<style>
+  :root {
+    --canvas: #07080a; --surface: #0e1014; --ink: #f6f7f9; --body: #c0c3c9;
+    --muted: #8a8f96; --accent: #f59e0b; --hairline: rgba(255,255,255,0.08);
+    --display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--canvas); color: var(--body); font-family: var(--sans); line-height: 1.65; overflow-x: clip; }
+  a { color: var(--accent); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: clamp(20px, 4vw, 56px); }
+  header.post { margin-bottom: 48px; padding-bottom: 24px; border-bottom: 1px solid var(--hairline); }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  h1 { font-family: var(--display); font-size: clamp(32px, 5vw, 52px); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; font-weight: 600; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede { font-size: 19px; line-height: 1.55; color: var(--body); max-width: 60ch; }
+  h2 { font-family: var(--display); font-size: 28px; letter-spacing: -0.02em; color: var(--ink); margin: 56px 0 18px; }
+  h3 { font-family: var(--display); font-size: 21px; color: var(--ink); margin: 32px 0 12px; }
+  p { margin-bottom: 18px; font-size: 16.5px; max-width: 60ch; }
+  ul, ol { margin: 0 0 18px 22px; }
+  li { margin-bottom: 8px; max-width: 60ch; }
+  code { font-family: var(--mono); font-size: 14px; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+  pre { background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; padding: 18px 22px; overflow-x: auto; margin: 18px 0; }
+  pre code { background: transparent; padding: 0; font-size: 13.5px; line-height: 1.6; color: var(--body); }
+  blockquote { border-left: 2px solid var(--accent); padding-left: 18px; margin: 28px 0; color: var(--ink); font-style: italic; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--hairline); }
+  th { color: var(--ink); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .nav { padding: 18px 0; border-bottom: 1px solid var(--hairline); }
+  .nav__row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); }
+  .nav__brand { font-family: var(--display); font-weight: 700; font-size: 17px; color: var(--ink); }
+  .nav__link { font-family: var(--mono); font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted); }
+  footer { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--hairline); color: var(--muted); font-family: var(--mono); font-size: 11.5px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__row">
+    <a class="nav__brand" href="/">uxskill</a>
+    <a class="nav__link" href="/">Home</a>
+    <a class="nav__link" href="/brands.html">Brands</a>
+    <a class="nav__link" href="/anti-patterns.html">Anti-patterns</a>
+    <a class="nav__link" href="/blog/">Blog</a>
+    <a class="nav__link" href="/compare.html">Compare</a>
+    <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+  </div>
+</header>
+
+<div class="wrap">
+<header class="post">
+<p class="eyebrow">FIELD NOTES · 2026-05-29</p>
+<h1>Why AI design uses <em>the same icons</em> every time.</h1>
+<p class="lede">Ask an AI builder for a feature section and the icons arrive on autopilot: the same Heroicons or Lucide set, every glyph at one stroke weight, one icon bolted to each heading whether it earns its place or not. The unlucky version skips the library entirely and drops emoji in as icons. None of it is an icon decision. It is the centroid plus convenience, and it reads as a placeholder someone forgot to replace.</p>
+</header>
+
+<h2>The icon tell</h2>
+<p>Iconography has a fingerprint as legible as the font choice. A few patterns show up in nearly every generated interface:</p>
+<ul>
+<li>One library, picked by popularity — Heroicons or Lucide — at a single 1.5px or 2px stroke, never tuned to the brand.</li>
+<li>An icon per feature card, decorative rather than functional, so the eye learns to skip them.</li>
+<li>The same dozen shapes recycled across unrelated products: a generic bolt for speed, a shield for security, a rocket for launch.</li>
+<li>Worst case, emoji standing in for UI icons — a rocket glyph, a sparkle, a checkmark face — pasted straight into a button or a list.</li>
+</ul>
+<p>The first three are merely generic. The last is the one that costs you, and it costs you twice.</p>
+
+<h2>Why it ships</h2>
+<p>The model reaches for whatever it has seen most. Heroicons and Lucide dominate the open component demos it trained on, so they are the path of least resistance — the icon-shaped point at the center of the distribution. Gluing one icon to every heading is the same reflex: a template fills a slot, and an empty slot feels wrong, so it gets filled regardless of whether the icon adds meaning.</p>
+<p>Emoji are a different failure with the same root. They are zero-effort — already in the text stream, no import, no SVG. So when a quick mock needs a visual marker, an emoji lands there. The trouble is that an emoji is not a UI asset. It is a font glyph the operating system renders, and that has consequences.</p>
+<blockquote>An emoji icon is the one design choice that looks different on every device you ship to. You drew nothing. You handed the rendering to Apple, Google, and Microsoft, and they each answer differently.</blockquote>
+<p>On Apple platforms it is a glossy full-color picture; on Android, a flatter Material shape; on older Windows, a hollow outline or a blank box. Your "icon" is three icons you never approved. It also reads as unfinished — a placeholder marker, the kind you leave in a draft and mean to swap. Worse, screen readers announce the emoji's full Unicode name aloud, which is rarely the label you wanted, so the accessibility story breaks alongside the visual one.</p>
+
+<h2>The fix: pick a family, use it with intent</h2>
+<p>Two moves cover most of the gap. First, choose an icon family whose weight matches the brand instead of accepting the default. A serious, dense product wants a thinner, sharper set; a warm consumer product can carry a rounded, filled one. Heroicons, Lucide, and Phosphor each ship multiple weights — the point is that the weight is a decision, made once, and held across the interface.</p>
+<p>Second, use icons sparingly. An icon should mark an action or a category the user navigates by, not garnish a heading. Most marketing sections read better with no icon at all than with a decorative one per row. When you do use them, keep the stroke weight and the optical size consistent, and never mix two libraries — two stroke languages in one screen is its own tell.</p>
+<table>
+<thead><tr><th>the icon tell</th><th>why it ships</th><th>the fix</th></tr></thead>
+<tbody>
+<tr><td>Default library at one weight</td><td>Most-seen set, lowest friction</td><td>Pick a family whose weight fits the brand</td></tr>
+<tr><td>One icon per heading</td><td>A template slot that feels wrong empty</td><td>Use icons only where they aid navigation</td></tr>
+<tr><td>Two libraries mixed</td><td>Grabbed whatever was nearest</td><td>One family, one stroke weight, throughout</td></tr>
+<tr><td>Emoji as a UI icon</td><td>Zero-effort, already in the text</td><td>Real SVG icon with a label; never an emoji</td></tr>
+</tbody>
+</table>
+<p>And the non-negotiable: no emoji as interface icons, ever. They render differently per platform, read as a placeholder, and break for assistive tech. If a visual marker is worth shipping, it is worth a real SVG you control.</p>
+
+<h2>How ux-skill keeps it honest</h2>
+<p>Three parts of the engine pull against the default. The components manifest carries icon guidance per component — what an icon is for in a button, a nav item, an empty state, and where it does not belong — so the recommendation is "use a marked action icon here," not "drop a bolt on each card." The 72 brand specs show how real brands handle iconography: which family, which weight, how restrained, so you can match a reference instead of inheriting the centroid. And the anti-slop linter flags emoji used as icons directly — a glyph inside a button, a list item, or a class named <code>icon</code> trips a high-severity rule, the same way it flags a violet gradient or Inter set at display size.</p>
+<p>The effect is that the icon question gets answered on purpose. Same brief, run again next week, on a different machine: identical guidance. Deterministic, offline, no model in the loop.</p>
+
+<h2>The point</h2>
+<p>Generated interfaces use the same icons because the model defaults to the most-seen library, fills every slot on reflex, and treats emoji as a free substitute. Decide the family by brand weight, use icons only where they carry meaning, hold one stroke language across the screen, and keep emoji out of the UI entirely. The icons stop being a tell and start being a system.</p>
+<pre><code>pip install uxskill
+# then, in your AI coding tool:
+# /ux-recommend  — icon guidance per component; or `uxskill lint` to catch emoji-as-icon</code></pre>
+
+<h2>Related</h2>
+<ul>
+<li><a href="/blog/why-ai-uses-inter-font.html">The Inter tell</a></li>
+<li><a href="/blog/ai-design-fingerprints-list.html">The full list of AI design tells</a></li>
+<li><a href="/blog/why-ai-generated-apps-look-the-same.html">The centroid problem</a></li>
+<li><a href="/anti-patterns.html">The anti-pattern catalogue</a></li>
+</ul>
+
+<footer>
+ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z371T0DBW5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Z371T0DBW5');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why AI-generated UIs get spacing wrong</title>
+<meta name="description" content="AI applies the same uniform padding everywhere and calls it done. No rhythm, no scale, density mismatched to the surface. Why generated layouts feel flat, and how a real spacing system fixes it.">
+<link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ai-design-spacing-whitespace.html">
+<meta property="og:title" content="Why AI-generated UIs get spacing wrong">
+<meta property="og:description" content="Uniform padding is the safe centroid. Real layouts have rhythm, a spacing scale, and density matched to the surface. Here's the mechanism and the fix.">
+<meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
+<meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ai-design-spacing-whitespace.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Why AI-generated UIs get spacing wrong">
+<meta name="twitter:description" content="AI spaces everything the same. Rhythm, a 4px scale, and density-matched white space are the fix.">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"Why AI-generated UIs get spacing wrong","datePublished":"2026-05-29","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/ai-design-spacing-whitespace.html","inLanguage":"en"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://uxskill.laithjunaidy.com/blog/"},{"@type":"ListItem","position":3,"name":"Why AI-generated UIs get spacing wrong","item":"https://uxskill.laithjunaidy.com/blog/ai-design-spacing-whitespace.html"}]}
+</script>
+
+<style>
+  :root {
+    --canvas: #07080a; --surface: #0e1014; --ink: #f6f7f9; --body: #c0c3c9;
+    --muted: #8a8f96; --accent: #f59e0b; --hairline: rgba(255,255,255,0.08);
+    --display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--canvas); color: var(--body); font-family: var(--sans); line-height: 1.65; overflow-x: clip; }
+  a { color: var(--accent); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: clamp(20px, 4vw, 56px); }
+  header.post { margin-bottom: 48px; padding-bottom: 24px; border-bottom: 1px solid var(--hairline); }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  h1 { font-family: var(--display); font-size: clamp(32px, 5vw, 52px); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; font-weight: 600; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede { font-size: 19px; line-height: 1.55; color: var(--body); max-width: 60ch; }
+  h2 { font-family: var(--display); font-size: 28px; letter-spacing: -0.02em; color: var(--ink); margin: 56px 0 18px; }
+  h3 { font-family: var(--display); font-size: 21px; color: var(--ink); margin: 32px 0 12px; }
+  p { margin-bottom: 18px; font-size: 16.5px; max-width: 60ch; }
+  ul, ol { margin: 0 0 18px 22px; }
+  li { margin-bottom: 8px; max-width: 60ch; }
+  code { font-family: var(--mono); font-size: 14px; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+  pre { background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; padding: 18px 22px; overflow-x: auto; margin: 18px 0; }
+  pre code { background: transparent; padding: 0; font-size: 13.5px; line-height: 1.6; color: var(--body); }
+  blockquote { border-left: 2px solid var(--accent); padding-left: 18px; margin: 28px 0; color: var(--ink); font-style: italic; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--hairline); }
+  th { color: var(--ink); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .nav { padding: 18px 0; border-bottom: 1px solid var(--hairline); }
+  .nav__row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); }
+  .nav__brand { font-family: var(--display); font-weight: 700; font-size: 17px; color: var(--ink); }
+  .nav__link { font-family: var(--mono); font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted); }
+  footer { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--hairline); color: var(--muted); font-family: var(--mono); font-size: 11.5px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__row">
+    <a class="nav__brand" href="/">uxskill</a>
+    <a class="nav__link" href="/">Home</a>
+    <a class="nav__link" href="/brands.html">Brands</a>
+    <a class="nav__link" href="/anti-patterns.html">Anti-patterns</a>
+    <a class="nav__link" href="/blog/">Blog</a>
+    <a class="nav__link" href="/compare.html">Compare</a>
+    <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+  </div>
+</header>
+
+<div class="wrap">
+<header class="post">
+<p class="eyebrow">FIELD NOTES · 2026-05-29</p>
+<h1>Why AI-generated UIs <em>get spacing wrong</em>.</h1>
+<p class="lede">Look closely at a generated layout and the gaps are all the same. Sixteen pixels between the heading and the body, sixteen between the cards, sixteen inside them. It reads as competent and lands as lifeless, because spacing is the part of a design that carries rhythm, and the model has flattened it to a single value. The fix is not bigger gaps or smaller ones. It is a scale, a vertical rhythm, and a density matched to what the surface is actually for.</p>
+</header>
+
+<h2>One value, everywhere</h2>
+<p>The tell is uniformity. A real layout uses a handful of distinct spacing steps, and the choice between them is meaningful: a section break gets more room than a paragraph break, a card's inner padding differs from the gap between cards, a label sits closer to its field than to the next group. Generated output collapses all of those decisions into one number, usually 16 or 24, applied to almost everything.</p>
+<p>It happens for the same reason every other generated default happens. Across the training corpus, a mid-range gap is the value least likely to look broken in any single context. It is the safe centroid. Pick 16px between most things and nothing visibly collides and nothing visibly floats — so the model picks 16px between most things. The output passes a glance and fails a second look.</p>
+
+<h2>Spacing is rhythm, not residue</h2>
+<p>Good spacing is read the way a reader feels paragraphs and stanzas: as grouping. Elements that belong together sit close; elements that don't get air between them. That contrast is the whole point — proximity tells the eye what is one thing and what is two. When every gap is equal, the grouping signal is gone, and a screen of unrelated parts reads as one undifferentiated wall.</p>
+<blockquote>Uniform spacing isn't ugly. It's flat — every relationship on the screen is given the same weight, so the eye gets no help deciding what goes with what.</blockquote>
+<p>This is why generated layouts feel oddly tiring. The work of parsing the hierarchy, which intentional spacing should do for you, gets pushed back onto the viewer. White space is not the empty bit left over after the content is placed. It is a tool, and the absence of variation in it is a design failure, not a neutral choice.</p>
+
+<h2>A scale, in steps of four</h2>
+<p>The cure starts with constraint. Instead of arbitrary gaps, a real system defines a small set of steps and uses only those: 4, 8, 12, 16, 24, 32, 48, 64. Multiples of a 4px base, so every measurement lines up on a shared grid and nothing is one or two pixels off from its neighbour. A scale does two things at once — it removes the stray off-grid values that make a layout feel unaligned, and it forces each gap to be a deliberate pick from a known set rather than whatever the moment suggested.</p>
+<p>Vertical rhythm is the second half. Section margins, heading spacing, and paragraph spacing should all be drawn from the same scale, so the page has a consistent beat down its length. A heading separated from its body by one step, sections separated by three or four — the steps differ on purpose, and because they come from one scale the differences feel composed rather than random.</p>
+
+<h2>Density is the axis underneath it</h2>
+<p>Here is the part the uniform-16px default cannot get right even in principle: the correct base depends on the surface. A marketing page should breathe — it has one message and a lot of room. A dashboard should be tight — its job is to fit a lot of legible information in front of someone scanning it all day. Same spacing scale, different base step, because the two surfaces sit at opposite ends of a <em>density</em> axis.</p>
+<p>ux-skill treats density as a first-class, continuous dial, and it drives the spacing base directly:</p>
+<table>
+<thead><tr><th>surface</th><th>density</th><th>spacing base</th></tr></thead>
+<tbody>
+<tr><td>marketing / landing</td><td>low</td><td>12px (airy)</td></tr>
+<tr><td>standard app</td><td>medium</td><td>6–8px</td></tr>
+<tr><td>dashboard / data tool</td><td>high</td><td>4px (tight)</td></tr>
+</tbody>
+</table>
+<p>The base step is not a cosmetic knob. It cascades: a 4px base pulls in line-height, compresses the type scale, and tightens control targets and row heights so the whole surface reads as one coherent density. A 12px base does the reverse. Set the density once and the entire spacing system resolves to fit the surface, instead of a single gap value applied blind to a page and a cockpit alike.</p>
+
+<h2>What the engine emits</h2>
+<p>When you describe a project, the synthesizer compiles density into a concrete spacing scale rather than leaving it to taste at generation time. You ask for <code>surface=dashboard, tone=["serious", "dense"]</code> and it resolves:</p>
+<ol>
+<li>Density resolves high, so the <strong>spacing base is 4px</strong> and the scale steps tighten to match.</li>
+<li>Section, heading, and paragraph spacing are emitted as named steps off that base, so the vertical rhythm is built in, not improvised per component.</li>
+<li>The linter then guards it: every off-scale value — a stray <code>13px</code> gap, a <code>23px</code> margin — is flagged as a stray, because off-grid spacing is the fingerprint of the no-system default.</li>
+</ol>
+<p>The same request, run again next week on a different machine, returns the same scale. Deterministic, offline, no model in the loop — so the spacing rhythm is a property of the system, not a roll of the dice.</p>
+
+<h2>The point</h2>
+<p>Generated layouts feel flat because the model applies one safe gap to every relationship on the screen, and a single value cannot encode rhythm or match a surface's density. Give the brief a spacing scale tied to a density axis, draw the vertical rhythm from that one scale, and treat white space as something you spend deliberately rather than something left over. The layout stops reading as a competent draft and starts reading as a designed thing.</p>
+<pre><code>pip install uxskill
+# then, in your AI coding tool:
+# /ux-recommend  — density-resolved spacing scale, deterministic</code></pre>
+
+<h2>Related</h2>
+<ul>
+<li><a href="/blog/ai-dashboard-design-generic.html">The density failure</a></li>
+<li><a href="/blog/design-tokens-ai-coding.html">The token layer</a></li>
+<li><a href="/blog/why-ai-generated-apps-look-the-same.html">The centroid problem</a></li>
+<li><a href="/anti-patterns.html">The anti-pattern catalogue</a></li>
+</ul>
+
+<footer>
+ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+</footer>
+
+</div>
+</body>
+</html>
