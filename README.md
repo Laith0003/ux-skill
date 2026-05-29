@@ -934,7 +934,7 @@ The other 8 popular Claude UX plugins generate "modern minimal" or "clean dashbo
 
 ## MCP server — the asymmetric move
 
-ux-skill ships a **Model Context Protocol server**. Run `ux-mcp` and the engine becomes a long-running stdio process that any MCP-capable host — Claude Desktop, Cursor, Windsurf, generic agents — can call into. Eighteen tools: `ux_recommend`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`. Same Python handlers the slash commands use; same data manifests; same deterministic recommender.
+ux-skill ships a **Model Context Protocol server**. Run `ux-mcp` and the engine becomes a long-running stdio process that any MCP-capable host — Claude Desktop, Cursor, Windsurf, generic agents — can call into. Eighteen tools: `ux_recommend`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`, `ux_image_extract`, `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`. Same Python handlers the slash commands use; same data manifests; same deterministic recommender.
 
 **Why this is the asymmetric move:** none of the top eight Claude UX skills (ui-ux-pro-max-skill, open-design, taste-skill, huashu-design, stitch, nothing-design, hallmark, material-3) ship an MCP server. They are locked inside Claude Code's plugin runtime. ux-skill is reachable from any host that speaks MCP, including agents that have never heard of a Claude Code plugin.
 

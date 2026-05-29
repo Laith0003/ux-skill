@@ -562,7 +562,7 @@
         <div class="num">01</div>
         <h3>The MCP server path (recommended)</h3>
         <p>
-          Zed's Agent Panel reads its MCP server list from <code>~/.config/zed/settings.json</code> under the <code>context_servers</code> key. Add ux-skill as a stdio server pointing at the <code>ux-mcp</code> entry point and the 14 tools become available to the agent.
+          Zed's Agent Panel reads its MCP server list from <code>~/.config/zed/settings.json</code> under the <code>context_servers</code> key. Add ux-skill as a stdio server pointing at the <code>ux-mcp</code> entry point and the 18 tools become available to the agent.
         </p>
         <div class="code">
           <span class="c">// ~/.config/zed/settings.json</span><br/>
@@ -655,7 +655,7 @@
         Other IDEs have project-rule files (Cursor's <code>.cursorrules</code>, Windsurf's <code>.windsurfrules</code>, Copilot's <code>.copilotrules</code>). Zed does not lean on a project-rule file the same way. It leans on the Agent Panel's MCP client, which means the cleanest design extension is the MCP server, not a static rules file.
       </p>
       <p>
-        ux-skill v2 publishes 14 MCP tools. The Agent Panel sees all 14 the moment Zed starts. The recommender (<code>ux_recommend</code>) and the linter (<code>ux_lint</code>) are the two most commonly invoked; the rest cover catalog reads and persistence.
+        ux-skill v2 publishes 18 MCP tools. The Agent Panel sees all 14 the moment Zed starts. The recommender (<code>ux_recommend</code>) and the linter (<code>ux_lint</code>) are the two most commonly invoked; the rest cover catalog reads and persistence.
       </p>
 
       <h2>What ux-skill ships</h2>
@@ -666,7 +666,7 @@
         <li><strong>959 structured entries</strong> across 11 JSON manifests &mdash; styles (84), palettes (176), type pairs (70), motion presets (57), components (148), industries (184), chart types (35), tech stacks (25), anti-patterns (68), UX guidelines (112).</li>
         <li><strong>68 deterministic regex rules</strong> in the anti-slop linter. No LLM judgment in the audit lane.</li>
         <li><strong>160 brand DESIGN.md specs</strong>. Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, plus 84 more.</li>
-        <li><strong>14 MCP tools</strong> registered, all reachable from Zed's Agent Panel through one config block.</li>
+        <li><strong>18 MCP tools</strong> registered, all reachable from Zed's Agent Panel through one config block.</li>
         <li><strong>22 slash commands</strong> when used alongside Claude Code on the same project.</li>
       </ul>
 
@@ -701,7 +701,7 @@
       <div class="honesty">
         <div class="label">Honesty card</div>
         <h4>About the 14-star claim</h4>
-        <p>ux-skill v2 is new (v2.0.0-alpha.1 shipped recently) and solo-maintained. We do not have the install base ui-ux-pro-max-skill has. The case for installing in Zed is architecture &mdash; an MCP server with 14 tools, a 145-rule deterministic linter, 160 brand specs, cross-IDE distribution &mdash; not awareness.</p>
+        <p>ux-skill v2 is new (v2.0.0-alpha.1 shipped recently) and solo-maintained. We do not have the install base ui-ux-pro-max-skill has. The case for installing in Zed is architecture &mdash; an MCP server with 18 tools, a 145-rule deterministic linter, 160 brand specs, cross-IDE distribution &mdash; not awareness.</p>
           <p>Install it for the MCP server and the linter. If you only need a prompt-only taste primer, taste-skill (25,359 stars) is also reasonable. Both are MIT.</p>
       </div>
 
@@ -726,7 +726,7 @@
     <section class="cta">
       <span class="eyebrow">Install in Zed</span>
       <h2>One MCP block. <span class="accent">No extension required.</span></h2>
-      <p>Zed's Agent Panel is one of the cleanest MCP host implementations available. ux-skill ships an MCP server with 14 tools; one paste into <code>~/.config/zed/settings.json</code> and the engine is live.</p>
+      <p>Zed's Agent Panel is one of the cleanest MCP host implementations available. ux-skill ships an MCP server with 18 tools; one paste into <code>~/.config/zed/settings.json</code> and the engine is live.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> pipx install <span class="arg">uxskill</span></div>

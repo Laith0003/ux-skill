@@ -1,6 +1,6 @@
 ---
 name: ux-mcp
-description: Run the ux-skill engine as a Model Context Protocol server over stdio. Exposes 14 tools (recommender, linter, MASTER.md persistence, and the 11 data manifests) so ANY MCP-capable client — Claude Desktop, Cursor, Windsurf, generic agents — can query the engine without installing the full plugin.
+description: Run the ux-skill engine as a Model Context Protocol server over stdio. Exposes 18 tools (recommender, linter, MASTER.md persistence, and the 11 data manifests) so ANY MCP-capable client — Claude Desktop, Cursor, Windsurf, generic agents — can query the engine without installing the full plugin.
 allowed-tools: Bash
 disable-model-invocation: false
 ---
