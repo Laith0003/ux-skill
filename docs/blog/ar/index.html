@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z371T0DBW5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Z371T0DBW5');
+</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المدوّنة · العربية · ux-skill</title>
+  <meta name="description" content="المدوّنة (العربية) · ux-skill. Posts available in العربية, with the full archive in English.">
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ar/">
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="index,follow">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ar/">
+  <meta property="og:title" content="Blog — ux-skill">
+  <meta property="og:description" content="Articles on Claude Code design plugins, AI coding tools, anti-AI-slop, design system generation.">
+  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/blog-index.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ux-skill — blog-index">
+  <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/blog-index.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Bricolage Grotesque (display, variable), Inter (body), JetBrains Mono (mono) -->
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --canvas: #07080a;
+      --surface: #0f1115;
+      --surface-2: #14181d;
+      --ink: #f6f7f9;
+      --body: #c8c6bf;
+      --muted: #7a7972;
+      --hairline: rgba(255,255,255,0.08);
+      --hairline-2: rgba(255,255,255,0.14);
+      --scene-accent: #10b981;
+      --display: 'Bricolage Grotesque', 'Inter Tight', system-ui, sans-serif;
+      --body-face: 'Inter', system-ui, -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --t-fast: 160ms;
+      --t-mid: 260ms;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background: var(--canvas); scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      font-family: var(--body-face);
+      background: var(--canvas);
+      color: var(--body);
+      font-size: 16.5px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 18px 24px 96px; }
+
+    header.top {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 0 22px;
+      gap: 16px;
+      border-bottom: 1px solid var(--hairline);
+      margin-bottom: 56px;
+    }
+    .wordmark {
+      display: inline-flex; align-items: baseline; gap: 2px;
+      color: var(--ink);
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-size: 24px;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    .wordmark .dot {
+      width: 7px; height: 7px; border-radius: 2px;
+      background: var(--scene-accent);
+      transform: translateY(-2px);
+      display: inline-block;
+      margin-left: 4px;
+    }
+    nav.crumbs {
+      display: flex; gap: 22px; align-items: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: lowercase;
+      color: var(--muted);
+    }
+    nav.crumbs a { color: var(--muted); transition: color var(--t-fast) var(--ease); }
+    nav.crumbs a:hover, nav.crumbs a:focus-visible { color: var(--ink); }
+    nav.crumbs a.current { color: var(--ink); }
+    nav.crumbs a:focus-visible { outline: 2px solid var(--scene-accent); outline-offset: 4px; border-radius: 3px; }
+
+    .menu-btn {
+      display: none;
+      width: 40px; height: 40px;
+      align-items: center; justify-content: center;
+      border-radius: 8px;
+      border: 1px solid var(--hairline-2);
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .menu-btn:focus-visible { outline: 2px solid var(--scene-accent); outline-offset: 3px; }
+    .menu-btn svg { width: 18px; height: 18px; }
+
+    .drawer {
+      position: fixed; inset: 0;
+      z-index: 90;
+      display: flex; flex-direction: column;
+      padding: 80px 24px 40px;
+      opacity: 0; pointer-events: none;
+      transition: opacity var(--t-mid) var(--ease);
+      background: rgba(7,8,10,0.96);
+      backdrop-filter: saturate(140%) blur(18px);
+    }
+    .drawer.is-open { opacity: 1; pointer-events: auto; }
+    .drawer a {
+      display: block;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'wght' 560;
+      font-size: 28px;
+      color: var(--ink);
+      padding: 14px 0;
+      border-bottom: 1px solid var(--hairline);
+      letter-spacing: -0.02em;
+    }
+    .drawer-close {
+      position: absolute; top: 18px; right: 24px;
+      width: 44px; height: 44px;
+      border-radius: 8px;
+      border: 1px solid var(--hairline-2);
+      background: transparent;
+      color: var(--ink);
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .drawer-close svg { width: 16px; height: 16px; }
+
+    @media (max-width: 768px) {
+      .menu-btn { display: inline-flex; }
+      nav.crumbs { display: none; }
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--scene-accent);
+      margin-bottom: 22px;
+      display: inline-block;
+    }
+    h1 {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 84, 'opsz' 96, 'wght' 620;
+      font-size: clamp(40px, 6vw, 72px);
+      line-height: 1.02;
+      letter-spacing: -0.032em;
+      color: var(--ink);
+      margin-bottom: 18px;
+    }
+    h1 .accent {
+      color: var(--scene-accent);
+      font-style: italic;
+      font-variation-settings: 'wdth' 84, 'opsz' 96, 'wght' 580;
+    }
+    .lede {
+      font-size: 18px;
+      line-height: 1.55;
+      color: var(--body);
+      max-width: 720px;
+      margin-bottom: 64px;
+    }
+    .lede strong { color: var(--ink); font-weight: 600; }
+
+    .post-list {
+      list-style: none;
+      display: flex; flex-direction: column;
+      gap: 14px;
+    }
+    .post {
+      padding: 24px 28px;
+      background: var(--surface);
+      border-radius: 14px;
+      border: 1px solid var(--hairline);
+      transition: transform var(--t-mid) var(--ease),
+                  border-color var(--t-fast) var(--ease),
+                  background var(--t-fast) var(--ease);
+    }
+    .post:hover, .post:focus-within {
+      transform: translateY(-2px);
+      background: var(--surface-2);
+      border-color: var(--hairline-2);
+    }
+    .post a {
+      display: block;
+      color: inherit;
+    }
+    .post a:focus-visible {
+      outline: 2px solid var(--scene-accent);
+      outline-offset: 4px;
+      border-radius: 8px;
+    }
+    .post-meta {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .post-meta .tag { color: var(--scene-accent); }
+    .post h2 {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 32, 'wght' 600;
+      font-size: 22px;
+      line-height: 1.2;
+      letter-spacing: -0.018em;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .post p {
+      font-size: 14.5px;
+      color: var(--body);
+      margin: 0;
+      line-height: 1.55;
+    }
+    .post code {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      background: var(--surface-2);
+      border: 1px solid var(--hairline);
+      padding: 1px 5px;
+      border-radius: 4px;
+      color: var(--ink);
+    }
+    .post:hover code { background: var(--surface); }
+
+    footer.site {
+      max-width: 880px;
+      margin: 96px auto 0;
+      padding: 32px 24px 40px;
+      border-top: 1px solid var(--hairline);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    footer.site a { color: var(--muted); transition: color var(--t-fast) var(--ease); }
+    footer.site a:hover, footer.site a:focus-visible { color: var(--ink); }
+    footer.site .links { display: flex; gap: 22px; flex-wrap: wrap; }
+    @media (max-width: 560px) { footer.site { flex-direction: column; } }
+  
+    /* Arabic typography — IBM Plex Sans Arabic for the whole Arabic page (v3.0.4 sweep) */
+    html[lang="ar"] body,
+    html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3, html[lang="ar"] h4,
+    html[lang="ar"] p, html[lang="ar"] li, html[lang="ar"] a, html[lang="ar"] button,
+    html[lang="ar"] .pill-tag, html[lang="ar"] .eyebrow, html[lang="ar"] .nav__link,
+    html[lang="ar"] .wordmark { font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif !important; font-variation-settings: normal; }
+    html[lang="ar"] code, html[lang="ar"] pre { font-family: 'JetBrains Mono', ui-monospace, monospace !important; }
+</style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "ux-skill blog",
+    "description": "Long-form SEO writing about design intelligence, anti-AI-slop tooling, Claude Code skills, and Python design system engineering.",
+    "url": "https://uxskill.laithjunaidy.com/blog/",
+    "publisher": {"@type": "Organization", "name": "ux-skill", "url": "https://uxskill.laithjunaidy.com/"},
+    "inLanguage": "en"
+  }
+  </script>
+  <!-- noscroll-fix -->
+  <style>
+    /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
+       and max-width: 100%; carousels that need their own horizontal scroll
+       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves —
+       overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
+    html, body {
+      overflow-x: clip;
+      max-width: 100%;
+    }
+    /* Defensive — make sure no section, image, or table forces width >100%. */
+    section, header, footer, main, article { max-width: 100vw; }
+    img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
+    table { max-width: 100%; }
+  </style>
+  <!-- force-dark-theme: applied -->
+  <style id="unified-nav-css">
+    /* ============================================================
+       UNIFIED SITE NAV (v3.0.3)
+       Canonical source: docs/index.html
+       ============================================================ */
+    :root {
+      --nav-t-fast: 160ms;
+      --nav-t-mid: 280ms;
+      --nav-ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --nav-r-pill: 999px;
+      --nav-r-md: 8px;
+      --nav-gutter: clamp(20px, 4vw, 48px);
+      --nav-max-w: 1180px;
+      --nav-canvas: #07080a;
+      --nav-ink: #f6f7f9;
+      --nav-body: #c7ccd3;
+      --nav-muted: #8a8f96;
+      --nav-hairline: rgba(246, 247, 249, 0.07);
+      --nav-hairline-2: rgba(246, 247, 249, 0.14);
+      --nav-accent-fallback: #f59e0b;
+      --nav-display: 'Bricolage Grotesque', 'Inter Tight', system-ui, sans-serif;
+      --nav-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+      --nav-body-face: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    /* All canonical nav rules are prefixed with #nav or #nav-drawer
+       so they always win against page-local .nav / .wordmark / .nav__link
+       rules left over in the page CSS (specificity (0,1,1,0) > (0,0,1,0)). */
+
+    #nav.nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 80;
+      padding: 14px 0;
+      transition: backdrop-filter var(--nav-t-mid) var(--nav-ease),
+                  background-color var(--nav-t-mid) var(--nav-ease),
+                  border-color var(--nav-t-mid) var(--nav-ease);
+      border-bottom: 1px solid transparent;
+    }
+    #nav.nav.is-scrolled {
+      background: rgba(7, 8, 10, 0.72);
+      backdrop-filter: saturate(140%) blur(18px);
+      -webkit-backdrop-filter: saturate(140%) blur(18px);
+      border-bottom-color: var(--hairline, var(--nav-hairline));
+    }
+    #nav .nav__inner {
+      max-width: var(--max-w, var(--nav-max-w));
+      margin: 0 auto;
+      padding: 0 var(--gutter, var(--nav-gutter));
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 18px;
+    }
+    #nav .wordmark {
+      font-family: var(--display, var(--nav-display));
+      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
+      font-size: 24px;
+      letter-spacing: -0.025em;
+      line-height: 1;
+      color: var(--ink, var(--nav-ink));
+      display: inline-flex;
+      align-items: baseline;
+      gap: 4px;
+      text-decoration: none;
+      text-transform: none;
+    }
+    #nav .wordmark:hover { text-decoration: none; }
+    #nav .wordmark__dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 2px;
+      background: var(--accent, var(--nav-accent-fallback));
+      transform: none;
+      margin-left: 0;
+    }
+    #nav .nav__links {
+      display: flex; gap: 22px;
+      align-items: center;
+    }
+    #nav .nav__link {
+      font-family: var(--mono, var(--nav-mono));
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted, var(--nav-muted));
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: color var(--nav-t-fast) var(--nav-ease);
+    }
+    #nav .nav__link:hover,
+    #nav .nav__link:focus-visible { color: var(--ink, var(--nav-ink)); text-decoration: none; }
+    #nav .nav__link.is-current { color: var(--ink, var(--nav-ink)); }
+    #nav .nav__cta,
+    #nav .cta-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 14px;
+      min-height: 0;
+      background: transparent;
+      border: 1px solid var(--hairline-2, var(--nav-hairline-2));
+      border-radius: var(--r-pill, var(--nav-r-pill));
+      font-family: var(--mono, var(--nav-mono));
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink, var(--nav-ink));
+      text-decoration: none;
+      transition: border-color var(--nav-t-fast) var(--nav-ease),
+                  background-color var(--nav-t-fast) var(--nav-ease),
+                  transform var(--nav-t-fast) var(--nav-ease);
+    }
+    #nav .nav__cta:hover,
+    #nav .cta-pill:hover {
+      border-color: var(--accent, var(--nav-accent-fallback));
+      background: transparent;
+      transform: none;
+    }
+    #nav .nav__menu-btn {
+      display: none;
+      width: 38px; height: 38px;
+      align-items: center; justify-content: center;
+      border: 1px solid var(--hairline, var(--nav-hairline));
+      border-radius: var(--r-md, var(--nav-r-md));
+      color: var(--ink, var(--nav-ink));
+      background: transparent;
+      cursor: pointer;
+    }
+    @media (max-width: 880px) {
+      #nav .nav__links { display: none; }
+      #nav .nav__cta, #nav .cta-pill { display: none; }
+      #nav .nav__menu-btn { display: inline-flex; }
+    }
+
+    #nav-drawer.nav__drawer {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      inset: auto;
+      z-index: 90;
+      background: var(--canvas, var(--nav-canvas));
+      padding: 22px var(--gutter, var(--nav-gutter)) 44px;
+      display: flex; flex-direction: column; gap: 18px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-8px);
+      transition: opacity var(--nav-t-mid) var(--nav-ease),
+                  transform var(--nav-t-mid) var(--nav-ease);
+      overflow-y: auto;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+    #nav-drawer.nav__drawer.is-open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    #nav-drawer a {
+      font-family: var(--display, var(--nav-display));
+      font-variation-settings: 'wdth' 90, 'opsz' 80, 'wght' 540;
+      font-size: 28px;
+      letter-spacing: -0.015em;
+      color: var(--ink, var(--nav-ink));
+      text-decoration: none;
+      padding: 6px 0;
+      border-bottom: none;
+      display: block;
+    }
+    #nav-drawer .nav__drawer-top {
+      position: static;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 4px;
+    }
+    #nav-drawer .nav__drawer-close {
+      position: static;
+      width: 38px; height: 38px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border: 1px solid var(--hairline, var(--nav-hairline));
+      border-radius: var(--r-md, var(--nav-r-md));
+      color: var(--ink, var(--nav-ink));
+      background: transparent;
+      cursor: pointer;
+    }
+    #nav-drawer .nav__drawer-langs-details summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 0;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--hairline, var(--nav-hairline));
+      border-bottom: 1px solid var(--hairline, var(--nav-hairline));
+      font-family: var(--mono, var(--nav-mono));
+      font-size: 12px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--muted, var(--nav-muted));
+    }
+    #nav-drawer .nav__drawer-langs-details summary::-webkit-details-marker { display: none; }
+    #nav-drawer .nav__drawer-langs-summary-label { display: inline-flex; align-items: center; gap: 10px; }
+    #nav-drawer .nav__drawer-langs-caret { transition: transform var(--nav-t-mid) var(--nav-ease); }
+    #nav-drawer .nav__drawer-langs-details[open] .nav__drawer-langs-caret { transform: rotate(180deg); }
+    #nav-drawer .nav__drawer-langs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 24px;
+      padding: 16px 0;
+    }
+    #nav-drawer .nav__drawer-langs-grid a {
+      font-family: var(--body-face, var(--nav-body-face));
+      font-size: 14px;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--body, var(--nav-body));
+      padding: 4px 0;
+      border-bottom: none;
+    }
+    #nav-drawer .nav__drawer-langs-grid a:hover { color: var(--ink, var(--nav-ink)); }
+
+    /* RTL — nav inner flips */
+    html[dir="rtl"] #nav .nav__inner { direction: rtl; }
+
+    /* Defensive — when the fixed .nav is present, give layouts that
+       previously assumed an inline header (.wrap on blog/index,
+       .top/.toolbar on the catalogue pages) enough headroom so
+       content isn't hidden behind the nav. */
+    .wrap > main:first-of-type { padding-top: clamp(56px, 8vw, 80px); }
+    body > section.top:first-of-type,
+    body > .top:first-of-type { padding-top: clamp(96px, 12vw, 128px); }
+    body > section.toolbar { top: 64px; }
+  </style>
+<link rel="alternate" hreflang="en" href="https://uxskill.laithjunaidy.com/blog/ar/">
+<link rel="alternate" hreflang="ar" href="https://uxskill.laithjunaidy.com/blog/ar/">
+<link rel="alternate" hreflang="de" href="https://uxskill.laithjunaidy.com/blog/de/">
+<link rel="alternate" hreflang="es" href="https://uxskill.laithjunaidy.com/blog/es/">
+<link rel="alternate" hreflang="fr" href="https://uxskill.laithjunaidy.com/blog/fr/">
+<link rel="alternate" hreflang="hi" href="https://uxskill.laithjunaidy.com/blog/hi/">
+<link rel="alternate" hreflang="it" href="https://uxskill.laithjunaidy.com/blog/it/">
+<link rel="alternate" hreflang="ja" href="https://uxskill.laithjunaidy.com/blog/ja/">
+<link rel="alternate" hreflang="ko" href="https://uxskill.laithjunaidy.com/blog/ko/">
+<link rel="alternate" hreflang="pt-BR" href="https://uxskill.laithjunaidy.com/blog/pt-BR/">
+<link rel="alternate" hreflang="vi" href="https://uxskill.laithjunaidy.com/blog/vi/">
+<link rel="alternate" hreflang="zh-CN" href="https://uxskill.laithjunaidy.com/blog/zh-CN/">
+<link rel="alternate" hreflang="zh-TW" href="https://uxskill.laithjunaidy.com/blog/zh-TW/">
+<link rel="alternate" hreflang="x-default" href="https://uxskill.laithjunaidy.com/blog/ar/">
+</head>
+<body>
+  <a class="skip-link sr-only" href="#main">Go to articles</a>
+  <div class="wrap">
+    <header class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="/" class="wordmark" aria-label="uxskill home">
+      uxskill<span class="wordmark__dot" aria-hidden="true"></span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="/brands.html">Brands</a>
+      <a class="nav__link" href="/anti-patterns.html">Anti-patterns</a>
+      <a class="nav__link" href="/commands.html">Commands</a>
+      <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+    </nav>
+    <a href="https://github.com/Laith0003/ux-skill" class="nav__cta" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      <span>Star on GitHub</span>
+    </a>
+    <button type="button" class="nav__menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer" id="nav-menu-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="nav__drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Site menu" aria-hidden="true">
+  <div class="nav__drawer-top">
+    <span aria-hidden="true"></span>
+    <button type="button" class="nav__drawer-close" aria-label="Close menu" id="nav-drawer-close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <details class="nav__drawer-langs-details" id="nav-drawer-langs">
+    <summary>
+      <span class="nav__drawer-langs-summary-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span>Language &middot; 17</span>
+      </span>
+      <svg class="nav__drawer-langs-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+    </summary>
+    <div class="nav__drawer-langs-grid">
+      <a href="/"        lang="en"   >English</a>
+      <a href="/zh-CN/"  lang="zh-CN">&#31616;&#20307;&#20013;&#25991;</a>
+      <a href="/zh-TW/"  lang="zh-TW">&#32321;&#39636;&#20013;&#25991;</a>
+      <a href="/ja/"     lang="ja"   >&#26085;&#26412;&#35486;</a>
+      <a href="/ko/"     lang="ko"   >&#54620;&#44397;&#50612;</a>
+      <a href="/hi/"     lang="hi"   >&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</a>
+      <a href="/id/"     lang="id"   >Bahasa</a>
+      <a href="/vi/"     lang="vi"   >Ti&#7871;ng Vi&#7879;t</a>
+      <a href="/th/"     lang="th"   >&#3652;&#3607;&#3618;</a>
+      <a href="/ar/"     lang="ar"   dir="rtl">&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</a>
+      <a href="/es/"     lang="es"   >Espa&ntilde;ol</a>
+      <a href="/fr/"     lang="fr"   >Fran&ccedil;ais</a>
+      <a href="/de/"     lang="de"   >Deutsch</a>
+      <a href="/pt-BR/"  lang="pt-BR">Portugu&ecirc;s</a>
+      <a href="/ru/"     lang="ru"   >&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;</a>
+      <a href="/tr/"     lang="tr"   >T&uuml;rk&ccedil;e</a>
+      <a href="/it/"     lang="it"   >Italiano</a>
+    </div>
+  </details>
+
+  <a href="/brands.html">Brands</a>
+  <a href="/anti-patterns.html">Anti-patterns</a>
+  <a href="/commands.html">Commands</a>
+  <a href="/mcp.html">MCP</a>
+  <a href="/compare.html">Compare</a>
+  <a href="/blog/">Blog</a>
+  <a href="/faq.html">FAQ</a>
+  <a href="/about.html">About</a>
+  <a href="/roadmap.html">Roadmap</a>
+  <a href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+</div>
+
+    <main id="main">
+    <span class="eyebrow">المدوّنة &middot; العربية</span>
+    <h1>المدوّنة</h1>
+    <p class="lede"><a href="/blog/">Read the full blog in English &rarr;</a></p>
+
+    <ul class="post-list">
+      <li class="post"><a href="/blog/ar/ai-coding-design-arabic.html">
+        <div class="post-meta"><span class="tag">المدوّنة</span> &middot; العربية</div>
+        <h2>تصميم برمجة الذكاء الاصطناعي — كيف تبني نظام تصميم لـ Claude Code</h2>
+      </a></li>
+
+      <li class="post"><a href="/blog/ar/v3-the-brain.html">
+        <div class="post-meta"><span class="tag">المدوّنة</span> &middot; العربية</div>
+        <h2>ux-skill v3.0 — أطلقنا The Brain. مواصفات العلامات التجارية صارت بيانات تدريب، لا قوالب.</h2>
+      </a></li>
+    </ul>
+    </main>
+  </div>
+
+  <footer class="site">
+    <span>&copy; 2026 Laith Aljunaidy. MIT licensed. No telemetry.</span>
+    <div class="links">
+      <a href="/">Home</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var btn = document.getElementById('menuBtn');
+      var drawer = document.getElementById('drawer');
+      var close = document.getElementById('drawerClose');
+      if (!btn || !drawer || !close) return;
+      function open() {
+        drawer.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+      function shut() {
+        drawer.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+      btn.addEventListener('click', open);
+      close.addEventListener('click', shut);
+      drawer.addEventListener('click', function (e) { if (e.target === drawer) shut(); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && drawer.classList.contains('is-open')) shut();
+      });
+    }());
+  </script>
+  <script id="unified-nav-js">
+  (function () {
+    var nav = document.getElementById('nav');
+    function onScroll() {
+      var y = window.scrollY;
+      if (!nav) return;
+      if (y > 24) nav.classList.add('is-scrolled');
+      else nav.classList.remove('is-scrolled');
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    var drawer = document.getElementById('nav-drawer');
+    var menuBtn = document.getElementById('nav-menu-btn');
+    var closeBtn = document.getElementById('nav-drawer-close');
+    function openDrawer() {
+      if (!drawer || !menuBtn) return;
+      drawer.classList.add('is-open');
+      drawer.setAttribute('aria-hidden', 'false');
+      menuBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer() {
+      if (!drawer || !menuBtn) return;
+      drawer.classList.remove('is-open');
+      drawer.setAttribute('aria-hidden', 'true');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+    if (menuBtn) menuBtn.addEventListener('click', openDrawer);
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+    if (drawer) drawer.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', closeDrawer); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && drawer && drawer.classList.contains('is-open')) closeDrawer();
+    });
+  })();
+  </script>
+</body>
+</html>
