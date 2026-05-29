@@ -17,10 +17,26 @@ import re, sys, os, glob
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import canonical_nav as CN
 
-# Optional per-locale label overrides (English label -> localized). Only fill in
-# what we are confident about; anything missing stays English (proper nouns like
-# MCP stay English anyway). Reuses existing site translations where known.
-LABELS_BY_LOCALE = {}
+# Per-locale label map (English label -> localized), loaded from the site's own
+# i18n-strings.json so we reuse existing translations (no invention). Labels with
+# no translation (MCP, Showcase) stay English.
+def _load_labels():
+    import json
+    try:
+        d = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'i18n-strings.json'), encoding='utf-8'))
+    except Exception:
+        return {}
+    labels = {l for _, l in CN.LINKS}
+    by = {}
+    for v in d.get('strings', {}).values():
+        if isinstance(v, dict) and v.get('en') in labels:
+            en = v['en']
+            for loc, val in v.items():
+                if loc != 'en' and isinstance(val, str) and val:
+                    by.setdefault(loc, {})[en] = val
+    return by
+
+LABELS_BY_LOCALE = _load_labels()
 
 def _strip_balanced_div(s, open_substr):
     """Remove the <div ...> ... </div> that begins at open_substr, matching nesting."""
