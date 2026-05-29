@@ -843,6 +843,7 @@
       line-height: 1;
       letter-spacing: -0.02em;
       color: var(--ink);
+      font-variant-numeric: tabular-nums;  /* fixed-width digits so the count-up doesn't jitter layout */
     }
     .hero__stat-label {
       font-family: var(--mono);
@@ -2580,6 +2581,38 @@ tone=["bold","editorial"]</pre>
   } else {
     document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('is-in'); });
   }
+
+  /* Stat count-up on scroll-in (Attention). Reduced-motion or no-IO leaves the
+     HTML's final value untouched. Compositor-cheap: textContent + tabular-nums,
+     no layout thrash. Meaning: draws the eye to the proof numbers. */
+  (function () {
+    var nums = document.querySelectorAll('.hero__stat-num');
+    if (!nums.length) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !('IntersectionObserver' in window)) return;  // keep final values
+    function run(el, target) {
+      var dur = 1100, start = null;
+      function step(ts) {
+        if (start === null) start = ts;
+        var p = Math.min((ts - start) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 3);  // ease-out cubic
+        el.textContent = Math.round(eased * target).toLocaleString('en-US');
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = target.toLocaleString('en-US');
+      }
+      requestAnimationFrame(step);
+    }
+    var sObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        var target = parseInt((el.textContent || '').replace(/[^0-9]/g, ''), 10);
+        sObs.unobserve(el);
+        if (!isNaN(target)) { el.textContent = '0'; run(el, target); }
+      });
+    }, { threshold: 0.4 });
+    nums.forEach(function (el) { sObs.observe(el); });
+  })();
 
   /* Kopyala buttons */
   document.querySelectorAll('[data-copy]').forEach(function(btn){
