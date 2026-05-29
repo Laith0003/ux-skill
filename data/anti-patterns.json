@@ -3097,6 +3097,44 @@
       },
       "why": "CSS @import serializes downloads: the browser must fetch and parse the parent stylesheet before it even discovers the import, delaying first paint, and it cannot be preloaded the way a <link> can.",
       "fix": "Replace @import with <link rel=\"stylesheet\"> in the head (or bundle at build time); use <link rel=\"preload\"> for critical fonts and CSS."
+    },
+    {
+      "id": "href-empty-hash",
+      "name": "Dead link: href=\"#\" placeholder",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "href\\s*=\\s*[\"\\']#[\"\\']",
+        "flags": "i",
+        "scope": [
+          "html",
+          "jsx",
+          "tsx",
+          "vue"
+        ]
+      },
+      "why": "An anchor with href=\"#\" is a placeholder. It jumps the page to the top and announces a real destination to assistive tech that does not exist. It is a classic sign of unfinished, generated, or copy-pasted markup.",
+      "fix": "Point the link at a real URL, or use <button type=\"button\"> if it triggers an action. For an in-page target use href=\"#section-id\", never a bare #."
+    },
+    {
+      "id": "href-javascript-void",
+      "name": "Dead link: javascript: URL as href",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "href\\s*=\\s*[\"\\']javascript:",
+        "flags": "i",
+        "scope": [
+          "html",
+          "jsx",
+          "tsx",
+          "vue"
+        ]
+      },
+      "why": "href=\"javascript:void(0)\" and similar javascript: URLs are dead links used as click targets. They break open-in-new-tab, middle-click, and keyboard behavior, and read as a placeholder tell.",
+      "fix": "Use a real href for navigation, or a <button type=\"button\"> for actions. Never a javascript: URL as a link destination."
     }
   ]
 }
