@@ -3059,6 +3059,44 @@
       },
       "why": "'Unlock the potential' / 'unleash your creativity' / 'reach new heights' / 'take it to the next level' / 'the future is here' is the strongest cluster of LinkedIn-thinkpiece phrases in any landing page - immediate AI-generated marketing copy tell.",
       "fix": "Describe what the user can do that they could not do before: 'lint AI-generated code in 50ms', 'install in three IDEs from one command'. Specifics beat 'unlock' every time."
+    },
+    {
+      "id": "text-align-justify-web",
+      "name": "Justified body text on the web",
+      "severity": "low",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "text-align:\\s*justify",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ]
+      },
+      "why": "Browsers justify by stretching word-spacing, opening uneven 'rivers' of whitespace and hurting readability — CSS has none of the hyphenation or microtypography a print justifier relies on.",
+      "fix": "Use text-align: left (or start) for body copy. If justification is a hard brand requirement, pair it with hyphens: auto and test at the real line length."
+    },
+    {
+      "id": "css-import-render-blocking",
+      "name": "@import in CSS (render-blocking)",
+      "severity": "medium",
+      "category": "Performance",
+      "detection": {
+        "type": "regex",
+        "pattern": "@import\\s+(?:url\\(|['\"])",
+        "flags": "i",
+        "scope": [
+          "css",
+          "html"
+        ]
+      },
+      "why": "CSS @import serializes downloads: the browser must fetch and parse the parent stylesheet before it even discovers the import, delaying first paint, and it cannot be preloaded the way a <link> can.",
+      "fix": "Replace @import with <link rel=\"stylesheet\"> in the head (or bundle at build time); use <link rel=\"preload\"> for critical fonts and CSS."
     }
   ]
 }
