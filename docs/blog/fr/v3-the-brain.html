@@ -384,7 +384,9 @@
     img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
     table { max-width: 100%; }
   </style>
-<style id="usknav-css">  .usknav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:18px;
+<style id="usknav-css">  .sr-only,.skip-link:not(:focus){position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .skip-link:focus{position:fixed;top:8px;inset-inline-start:8px;width:auto;height:auto;clip:auto;padding:8px 14px;background:#f59e0b;color:#07080a;border-radius:6px;z-index:200;font-family:'Inter',system-ui,sans-serif;font-size:13px}
+  .usknav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:18px;
     padding:0 clamp(16px,4vw,48px);block-size:56px;background:rgba(7,8,10,0.86);
     backdrop-filter:saturate(150%) blur(14px);-webkit-backdrop-filter:saturate(150%) blur(14px);
     border-block-end:1px solid rgba(255,255,255,0.08);font-family:'Inter',system-ui,sans-serif}
@@ -437,18 +439,20 @@
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
 </head>
 <body>
+  
+
   <header class="usknav" aria-label="Site navigation">
   <a class="usknav__brand" href="/">uxskill</a>
   <nav class="usknav__links" aria-label="Primary">
     <a class="usknav__link" href="/brands.html">Marques</a>
     <a class="usknav__link" href="/anti-patterns.html">Anti-patterns</a>
     <a class="usknav__link" href="/commands.html">Commandes</a>
-    <a class="usknav__link" href="/blog/">Blog</a>
-    <a class="usknav__link" href="/compare.html">Comparer</a>
     <a class="usknav__link" href="/mcp.html">MCP</a>
+    <a class="usknav__link" href="/compare.html">Comparer</a>
     <a class="usknav__link" href="/showcase.html">Showcase</a>
-    <a class="usknav__link" href="/faq.html">FAQ</a>
+    <a class="usknav__link" href="/blog/">Blog</a>
     <a class="usknav__link" href="/about.html">À propos</a>
+    <a class="usknav__link" href="/faq.html">FAQ</a>
     <a class="usknav__link" href="/roadmap.html">Feuille de route</a>
   </nav>
   <details class="usknav__langs">
@@ -485,12 +489,12 @@
     <a href="/brands.html">Marques</a>
       <a href="/anti-patterns.html">Anti-patterns</a>
       <a href="/commands.html">Commandes</a>
-      <a href="/blog/">Blog</a>
-      <a href="/compare.html">Comparer</a>
       <a href="/mcp.html">MCP</a>
+      <a href="/compare.html">Comparer</a>
       <a href="/showcase.html">Showcase</a>
-      <a href="/faq.html">FAQ</a>
+      <a href="/blog/">Blog</a>
       <a href="/about.html">À propos</a>
+      <a href="/faq.html">FAQ</a>
       <a href="/roadmap.html">Feuille de route</a>
   </nav>
   <a class="usknav__star usknav__drawer-star" href="https://github.com/Laith0003/ux-skill" rel="noopener">Star on GitHub</a>
@@ -515,8 +519,7 @@
       <a href="/it/" lang="it">Italiano</a>
   </div>
 </div>
-
-  <div class="wrap">
+<div class="wrap">
     <article>
       <span class="eyebrow">Sortie &middot; v3.0.0 &middot; 2026-05-28</span>
       <h1>ux-skill v3.0 &mdash; on a livré <span class="accent">The Brain</span>. Les brand specs sont des données d'entraînement, plus des templates.</h1>

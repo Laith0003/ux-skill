@@ -60,28 +60,38 @@ def locale_of(path):
 
 def transform(path):
     s = open(path, encoding='utf-8').read()
-    if 'class="usknav"' in s:
-        return 'skip (already applied)'
-    if '<header' not in s:
+    reapply = 'class="usknav"' in s
+    if not reapply and '<header' not in s:
         return 'skip (no header)'
     loc = locale_of(path)
     labels = LABELS_BY_LOCALE.get(loc) if loc else None
     nav = CN.nav_html(labels)
-    # 1) replace the first <header>...</header> with a marker
-    s2, n = re.subn(r'<header\b[^>]*>.*?</header>', '\x00NAV\x00', s, count=1, flags=re.S)
-    if n != 1:
-        return 'skip (header regex miss)'
-    # 2) remove a rich-nav drawer div that followed the header (balanced match)
-    s2 = _strip_balanced_div(s2, '<div class="nav__drawer"')
-    # 2b) remove any standalone breadcrumb nav some rich pages carry in the body
-    s2 = re.sub(r'<nav class="crumbs"[^>]*>.*?</nav>\s*', '', s2, flags=re.S)
-    # 3) drop in canonical nav
-    s2 = s2.replace('\x00NAV\x00', nav, 1)
-    # 4) inject CSS + JS once
-    s2 = s2.replace('</head>', f'<style id="usknav-css">{CN.NAV_CSS}</style>\n</head>', 1)
-    s2 = s2.replace('</body>', f'<script id="usknav-js">{CN.NAV_JS}</script>\n</body>', 1)
-    open(path, 'w', encoding='utf-8').write(s2)
-    return f'applied{" ["+loc+"]" if loc else ""}'
+    if reapply:
+        # remove the existing canonical nav entirely (header + drawer + css + js)
+        s = re.sub(r'<header class="usknav".*?</header>\s*', '', s, count=1, flags=re.S)
+        s = _strip_balanced_div(s, '<div class="usknav__drawer"')
+        s = re.sub(r'<style id="usknav-css">.*?</style>\s*', '', s, flags=re.S)
+        s = re.sub(r'<script id="usknav-js">.*?</script>\s*', '', s, flags=re.S)
+    else:
+        # first time: remove the legacy header + its drawer + any standalone crumb nav
+        s, n = re.subn(r'<header\b[^>]*>.*?</header>\s*', '', s, count=1, flags=re.S)
+        if n != 1:
+            return 'skip (header regex miss)'
+        s = _strip_balanced_div(s, '<div class="nav__drawer"')
+        s = re.sub(r'<nav class="crumbs"[^>]*>.*?</nav>\s*', '', s, flags=re.S)
+    # inject the nav as a direct <body> child, AFTER a leading skip-link if present,
+    # so it is always full-width (never trapped inside a .wrap container).
+    m = re.search(r'<body[^>]*>\s*(?:<a\b[^>]*class="[^"]*skip-link[^"]*"[^>]*>.*?</a>\s*)?', s, re.S)
+    if not m:
+        return 'skip (no body)'
+    s = s[:m.end()] + nav + '\n' + s[m.end():]
+    # (re-)inject CSS + JS
+    if 'id="usknav-css"' not in s:
+        s = s.replace('</head>', f'<style id="usknav-css">{CN.NAV_CSS}</style>\n</head>', 1)
+    if 'id="usknav-js"' not in s:
+        s = s.replace('</body>', f'<script id="usknav-js">{CN.NAV_JS}</script>\n</body>', 1)
+    open(path, 'w', encoding='utf-8').write(s)
+    return ('reapplied' if reapply else 'applied') + (f' [{loc}]' if loc else '')
 
 def main(argv):
     files = []

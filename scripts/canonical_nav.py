@@ -35,23 +35,27 @@ LOCALES = [
 
 # Primary links shown in the desktop bar (quick access). Labels localize per page.
 # All pages live directly in the desktop bar (no desktop hamburger). The drawer
-# is mobile-only and mirrors the same set.
+# is mobile-only and mirrors the same set. Order is by purpose, most-central first:
+# catalogues (the substance) -> how to use -> how it compares/what it makes ->
+# read -> project info. Not arbitrary.
 LINKS = [
-    ("/brands.html", "Brands"),
-    ("/anti-patterns.html", "Anti-patterns"),
-    ("/commands.html", "Commands"),
-    ("/blog/", "Blog"),
-    ("/compare.html", "Compare"),
-    ("/mcp.html", "MCP"),
-    ("/showcase.html", "Showcase"),
-    ("/faq.html", "FAQ"),
-    ("/about.html", "About"),
-    ("/roadmap.html", "Roadmap"),
+    ("/brands.html", "Brands"),          # catalogue: 160 brand specs
+    ("/anti-patterns.html", "Anti-patterns"),  # catalogue: the linter rules
+    ("/commands.html", "Commands"),      # use it: the slash commands
+    ("/mcp.html", "MCP"),                # use it: the MCP server
+    ("/compare.html", "Compare"),        # convince: vs competitors
+    ("/showcase.html", "Showcase"),      # convince: what it produces
+    ("/blog/", "Blog"),                  # read
+    ("/about.html", "About"),            # project info
+    ("/faq.html", "FAQ"),                # project info
+    ("/roadmap.html", "Roadmap"),        # project info
 ]
 DRAWER_LINKS = LINKS
 REPO = "https://github.com/Laith0003/ux-skill"
 
 NAV_CSS = """
+  .sr-only,.skip-link:not(:focus){position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .skip-link:focus{position:fixed;top:8px;inset-inline-start:8px;width:auto;height:auto;clip:auto;padding:8px 14px;background:#f59e0b;color:#07080a;border-radius:6px;z-index:200;font-family:'Inter',system-ui,sans-serif;font-size:13px}
   .usknav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:18px;
     padding:0 clamp(16px,4vw,48px);block-size:56px;background:rgba(7,8,10,0.86);
     backdrop-filter:saturate(150%) blur(14px);-webkit-backdrop-filter:saturate(150%) blur(14px);

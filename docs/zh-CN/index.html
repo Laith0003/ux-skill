@@ -1783,7 +1783,9 @@
     @media (max-width: 900px) {
       .lang-picker__menu { right: -16px; }
     }</style>
-<style id="usknav-css">  .usknav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:18px;
+<style id="usknav-css">  .sr-only,.skip-link:not(:focus){position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .skip-link:focus{position:fixed;top:8px;inset-inline-start:8px;width:auto;height:auto;clip:auto;padding:8px 14px;background:#f59e0b;color:#07080a;border-radius:6px;z-index:200;font-family:'Inter',system-ui,sans-serif;font-size:13px}
+  .usknav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:18px;
     padding:0 clamp(16px,4vw,48px);block-size:56px;background:rgba(7,8,10,0.86);
     backdrop-filter:saturate(150%) blur(14px);-webkit-backdrop-filter:saturate(150%) blur(14px);
     border-block-end:1px solid rgba(255,255,255,0.08);font-family:'Inter',system-ui,sans-serif}
@@ -1837,19 +1839,18 @@
 </head>
 <body>
 
-<!-- ============ NAV ============ -->
 <header class="usknav" aria-label="Site navigation">
   <a class="usknav__brand" href="/">uxskill</a>
   <nav class="usknav__links" aria-label="Primary">
     <a class="usknav__link" href="/brands.html">品牌</a>
     <a class="usknav__link" href="/anti-patterns.html">反模式</a>
     <a class="usknav__link" href="/commands.html">命令</a>
-    <a class="usknav__link" href="/blog/">博客</a>
-    <a class="usknav__link" href="/compare.html">对比</a>
     <a class="usknav__link" href="/mcp.html">MCP</a>
+    <a class="usknav__link" href="/compare.html">对比</a>
     <a class="usknav__link" href="/showcase.html">Showcase</a>
-    <a class="usknav__link" href="/faq.html">常见问题</a>
+    <a class="usknav__link" href="/blog/">博客</a>
     <a class="usknav__link" href="/about.html">关于</a>
+    <a class="usknav__link" href="/faq.html">常见问题</a>
     <a class="usknav__link" href="/roadmap.html">路线图</a>
   </nav>
   <details class="usknav__langs">
@@ -1886,12 +1887,12 @@
     <a href="/brands.html">品牌</a>
       <a href="/anti-patterns.html">反模式</a>
       <a href="/commands.html">命令</a>
-      <a href="/blog/">博客</a>
-      <a href="/compare.html">对比</a>
       <a href="/mcp.html">MCP</a>
+      <a href="/compare.html">对比</a>
       <a href="/showcase.html">Showcase</a>
-      <a href="/faq.html">常见问题</a>
+      <a href="/blog/">博客</a>
       <a href="/about.html">关于</a>
+      <a href="/faq.html">常见问题</a>
       <a href="/roadmap.html">路线图</a>
   </nav>
   <a class="usknav__star usknav__drawer-star" href="https://github.com/Laith0003/ux-skill" rel="noopener">Star on GitHub</a>
@@ -1916,6 +1917,8 @@
       <a href="/it/" lang="it">Italiano</a>
   </div>
 </div>
+<!-- ============ NAV ============ -->
+
 
 <!-- Mobile drawer -->
 
