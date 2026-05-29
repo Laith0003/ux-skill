@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nav component test</title>
+<style>
+  body { margin:0; background:#07080a; min-height:200vh; font-family:'Inter',system-ui,sans-serif; }
+  .sample { padding: 120px 24px; color:#8a8f96; max-width:720px; margin:0 auto; }
+
+  /* ============ CANONICAL NAV (.usknav) — self-contained, namespaced,
+     hardcoded dark-cinema colors so it is identical on every page regardless
+     of that page's token names. No external CSS/token dependency. ============ */
+  .usknav { position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; gap: 18px;
+    padding: 0 clamp(16px, 4vw, 48px); block-size: 56px;
+    background: rgba(7,8,10,0.86); backdrop-filter: saturate(150%) blur(14px);
+    -webkit-backdrop-filter: saturate(150%) blur(14px);
+    border-block-end: 1px solid rgba(255,255,255,0.08);
+    font-family: 'Inter', system-ui, sans-serif; }
+  .usknav__brand { font-family:'Bricolage Grotesque','Inter',sans-serif; font-weight:700;
+    font-size:17px; color:#f6f7f9; text-decoration:none; letter-spacing:-0.01em; margin-inline-end:auto; }
+  .usknav__links { display:flex; align-items:center; gap:clamp(12px,2vw,26px); }
+  .usknav__link { font-family:ui-monospace,'JetBrains Mono',monospace; font-size:11.5px;
+    letter-spacing:0.08em; text-transform:uppercase; color:#8a8f96; text-decoration:none;
+    white-space:nowrap; transition: color 140ms ease; }
+  .usknav__link:hover, .usknav__link[aria-current="page"] { color:#f6f7f9; }
+  .usknav__star { display:inline-flex; align-items:center; gap:6px; white-space:nowrap;
+    font-family:ui-monospace,'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.06em;
+    text-transform:uppercase; color:#f59e0b; text-decoration:none;
+    border:1px solid #f59e0b; border-radius:999px; padding:5px 12px; transition: background-color 140ms ease; }
+  .usknav__star:hover { background:rgba(245,158,11,0.12); }
+  .usknav__burger { display:none; background:none; border:0; cursor:pointer; padding:6px; color:#f6f7f9; }
+  .usknav__burger svg { display:block; }
+
+  .usknav__drawer { position:fixed; inset:0; z-index:120; background:#050608;
+    display:flex; flex-direction:column; padding:20px clamp(16px,5vw,40px) 40px;
+    transform:translateX(100%); transition: transform 240ms cubic-bezier(0.16,1,0.3,1);
+    overflow-y:auto; visibility:hidden; }
+  .usknav__drawer.is-open { transform:translateX(0); visibility:visible; }
+  .usknav__drawer-top { display:flex; justify-content:space-between; align-items:center;
+    block-size:56px; border-block-end:1px solid rgba(255,255,255,0.1); margin-block-end:24px; }
+  .usknav__drawer-close { background:none; border:0; cursor:pointer; color:#f6f7f9; padding:6px; }
+  .usknav__drawer a { font-family:'Bricolage Grotesque','Inter',sans-serif; font-size:clamp(28px,7vw,40px);
+    color:#f6f7f9; text-decoration:none; padding:10px 0; border-block-end:1px solid rgba(255,255,255,0.06); }
+  .usknav__drawer a:hover { color:#f59e0b; }
+
+  @media (max-width: 760px) {
+    .usknav__links, .usknav__star { display:none; }
+    .usknav__burger { display:inline-flex; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .usknav__drawer { transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="usknav" aria-label="Site navigation">
+  <a class="usknav__brand" href="/">uxskill</a>
+  <nav class="usknav__links" aria-label="Primary">
+    <a class="usknav__link" href="/brands.html">Brands</a>
+    <a class="usknav__link" href="/anti-patterns.html">Anti-patterns</a>
+    <a class="usknav__link" href="/commands.html">Commands</a>
+    <a class="usknav__link" href="/blog/">Blog</a>
+    <a class="usknav__link" href="/compare.html">Compare</a>
+    <a class="usknav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+  </nav>
+  <a class="usknav__star" href="https://github.com/Laith0003/ux-skill" rel="noopener">Star on GitHub</a>
+  <button class="usknav__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="usknav-drawer">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+</header>
+
+<div class="usknav__drawer" id="usknav-drawer" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="usknav__drawer-top">
+    <a class="usknav__brand" href="/">uxskill</a>
+    <button class="usknav__drawer-close" type="button" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <a href="/brands.html">Brands</a>
+  <a href="/anti-patterns.html">Anti-patterns</a>
+  <a href="/commands.html">Commands</a>
+  <a href="/blog/">Blog</a>
+  <a href="/compare.html">Compare</a>
+  <a href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+</div>
+
+<div class="sample">Scroll content. The bar should stick to the top. On a narrow viewport the links collapse to a hamburger that opens the drawer.</div>
+
+<script>
+(function(){
+  var d=document.getElementById('usknav-drawer');
+  var open=document.querySelector('.usknav__burger');
+  var close=document.querySelector('.usknav__drawer-close');
+  if(!d||!open) return;
+  function set(o){ d.classList.toggle('is-open',o); open.setAttribute('aria-expanded',o?'true':'false'); document.body.style.overflow=o?'hidden':''; }
+  open.addEventListener('click',function(){set(true);});
+  if(close) close.addEventListener('click',function(){set(false);});
+  d.addEventListener('click',function(e){ if(e.target.tagName==='A') set(false); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') set(false); });
+})();
+</script>
+</body>
+</html>
