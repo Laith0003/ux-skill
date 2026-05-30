@@ -55,9 +55,9 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 **Why**: Stack determines syntax, RSC boundaries, dependency verification rules, motion library defaults.
 
 ### 7. Imagery sources
-**Ask**: "Imagery — real product screenshots, hero images, brand photos? Or custom inline-SVG placeholders (avoid shipping `picsum.photos` — fine for local prototyping only)? Or describe specific images you want generated (e.g., 'a moody close-up of someone's hands on a laptop in a cafe')?"
+**Ask**: "Imagery — real product screenshots, hero images, brand photos? If you don't have assets, we'll source curated, on-brand stock (Unsplash/Pexels) matched to the brand — not random/generic stock, and not an abstract SVG standing in for a real image. Or describe specific images you want generated (e.g., 'a moody close-up of someone's hands on a laptop in a cafe')?"
 
-**Why**: Imagery is mandatory (text-only walls are banned). Where the imagery comes from determines whether to call for assets, use placeholders, or describe an image-as-content plan.
+**Why**: Imagery is mandatory and real (text-only walls are banned). Where the imagery comes from determines whether to call for client assets, source curated stock by temperature, or describe an image-as-content plan.
 
 ### 8. Must-have patterns
 **Ask**: "Any specific patterns you MUST have? Terminal mockup in hero, bento grid, interactive product demo, before/after slider, kinetic typography, animated data viz? Or pick freely from the arsenal?"

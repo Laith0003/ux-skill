@@ -23,6 +23,7 @@ normalize + render half: signals dict -> BrandProfile -> markdown. Python 3.9+.
 from __future__ import annotations
 
 import colorsys
+import re
 from dataclasses import dataclass, field, asdict
 from typing import Any, Dict, List, Optional
 
@@ -213,6 +214,104 @@ def render_md(p: BrandProfile) -> str:
         "",
     ]
     return "\n".join(lines)
+
+
+# Voice words too generic to seed an image search with.
+_VOICE_STOP = {
+    "the", "and", "for", "with", "our", "your", "this", "that", "are", "but",
+    "not", "you", "all", "can", "out", "use", "who", "how", "why", "its",
+    "a", "an", "of", "to", "is", "it", "we", "be", "or", "on", "in", "as",
+}
+_TOKEN_RE_VOICE = re.compile(r"[a-z]+")
+# Type-jargon from a logo-style read that does not help an IMAGE search.
+_TYPE_NOISE = {
+    "sans", "serif", "wordmark", "letterform", "letterforms", "typeface",
+    "font", "type", "display", "weight", "italic", "uppercase", "lowercase",
+    "grotesk", "grotesque", "slab", "mono",
+}
+
+
+# Hue family -> a color word usable in an image search query.
+_FAMILY_SEARCH_WORD = {
+    "red": "warm red", "orange": "warm amber", "yellow": "golden",
+    "green": "deep green", "teal": "teal", "blue": "cool blue",
+    "violet": "violet", "magenta": "magenta", "neutral": "monochrome",
+}
+
+# 7-axis temperature -> mood words for curated stock search. Each axis contributes
+# at most one word, chosen by whether the axis reads low or high. Deterministic.
+_AXIS_SEARCH_WORDS = {
+    "warmth":           ("cool toned", "warm toned"),
+    "contrast":         ("soft light", "high contrast"),
+    "density":          ("minimal negative space", "rich detailed"),
+    "geometry":         ("angular geometric", "soft organic"),
+    "formality":        ("candid casual", "polished editorial"),
+    "motion":           ("still calm", "dynamic motion"),
+    "type_personality": ("technical precise", "editorial human"),
+}
+
+
+def image_search_terms(profile: "BrandProfile",
+                       temperature: Optional[Dict[str, Any]] = None) -> List[str]:
+    """Deterministic, on-brand search-term suggestions for sourcing curated stock.
+
+    Per canonical rule 8 (imagery is mandatory and real): use the client's own
+    assets first, then fill with curated Unsplash/Pexels chosen to match the brand
+    and the 7-axis temperature. This helper turns the brand (name / hue family /
+    voice) plus an optional ``temperature`` (the synthesizer's 7 axes, each 0..1)
+    into concrete search phrases a sourcing step can run. It does NOT fetch
+    anything -- the engine never calls the network. Same input -> same output.
+
+    ``temperature`` accepts either a dict of axis->value (0..1) or an object with
+    an ``.axes`` attribute (e.g. a synthesized system). Unknown shapes are ignored.
+    """
+    terms: List[str] = []
+
+    def _add(t: str) -> None:
+        t = (t or "").strip()
+        if t and t not in terms:
+            terms.append(t)
+
+    # Brand-led terms: voice + logo-style descriptors, then a brand-color word.
+    # (The logo's letterform personality is brand voice expressed as type, so it
+    #  is a legitimate, deterministic source of mood words for sourcing imagery.)
+    descriptor_src = " ".join([
+        (getattr(profile, "voice", "") or ""),
+        (getattr(profile, "logo_style", "") or ""),
+    ]).strip().lower()
+    for word in _TOKEN_RE_VOICE.findall(descriptor_src):
+        if word not in _VOICE_STOP and word not in _TYPE_NOISE and len(word) > 2:
+            _add(word)
+
+    fam = (getattr(profile, "primary_family", "") or "").strip().lower()
+    if fam and fam not in ("", "unknown"):
+        _add("%s palette" % _FAMILY_SEARCH_WORD.get(fam, fam))
+
+    # Temperature-led mood terms (the 7-axis read).
+    axes: Dict[str, Any] = {}
+    if isinstance(temperature, dict):
+        axes = temperature
+    elif temperature is not None and hasattr(temperature, "axes"):
+        maybe = getattr(temperature, "axes")
+        if isinstance(maybe, dict):
+            axes = maybe
+    for axis, (low_word, high_word) in _AXIS_SEARCH_WORDS.items():
+        if axis in axes:
+            try:
+                v = float(axes[axis])
+            except (TypeError, ValueError):
+                continue
+            _add(high_word if v >= 0.5 else low_word)
+
+    # Always anchor on real, on-brand photography rather than generic stock.
+    had_specific = bool(terms)
+    _add("authentic product photography")
+    if not had_specific:
+        # Nothing brand- or temperature-specific landed; still give a usable,
+        # non-generic baseline keyed to "real, on-brand."
+        _add("real environment editorial")
+
+    return terms
 
 
 def anchor_recommendation(recommendation: Dict[str, Any], profile: BrandProfile) -> Dict[str, Any]:

@@ -134,8 +134,8 @@ For any landing page or public-facing surface, read `references/foundations/seo.
 - NEVER use purple/blue AI gradients. Single high-contrast accent, saturation < 80%.
 - NEVER use generic names ("John Doe", "Acme", "Nexus") in placeholder content.
 - NEVER use pure black (`#000`). Use Zinc-950, Charcoal, or Off-Black.
-- NEVER use Unsplash URLs. Use `picsum.photos/seed/<descriptive-seed>/W/H` or real assets.
-- NEVER ship a text-only wall — always include intentional imagery.
+- Imagery is mandatory and REAL: client assets first, then curated Unsplash/Pexels chosen to match the brand + 7-axis temperature (`engine.brand.image_search_terms` suggests on-brand search terms). Pick the best per slot; treat them so they read as deliberate. An abstract SVG is NOT a substitute for a real product/site image. Ban only random/generic stock and auto-rotating placeholder services.
+- NEVER ship a text-only wall — always include intentional, real imagery.
 - NEVER use emoji as icons. Prioritize **Google Material Symbols** (load via Google Fonts: `Material+Symbols+Outlined` / `Rounded` / `Sharp`, styled with `font-variation-settings`). Phosphor / Radix / Lucide are acceptable secondary choices when an icon doesn't exist in Material Symbols.
 - NEVER ship 3-equal-cards layouts. Use 2-col zig-zag, asymmetric, or horizontal scroll.
 - NEVER animate `width`/`height`/`top`/`left`. Use `transform` and `opacity` only.

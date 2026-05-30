@@ -1,5 +1,5 @@
 """Brand extraction tests — color from the logo, type from the logo style."""
-from engine.brand import build_profile, render_md, hue_family
+from engine.brand import build_profile, render_md, hue_family, image_search_terms
 
 
 # Real signals captured from instantskiphire.com (the dogfood ground truth):
@@ -66,6 +66,51 @@ def test_render_md_carries_the_anchor():
     assert "Instant Skip Hire" in md
     assert "MUST use this brand" in md
     assert "fails the brand-fidelity gate" in md
+
+
+def test_image_search_terms_are_on_brand_and_real():
+    """P3: deterministic search-term suggestions for sourcing curated stock.
+
+    Imagery is mandatory and REAL (rule 8): client assets first, then curated
+    Unsplash/Pexels chosen to match the brand. This helper feeds that sourcing
+    step -- it must be brand-led and anchor on real photography, never picsum."""
+    p = build_profile(SKIPHIRE_SIGNALS)
+    terms = image_search_terms(p)
+    assert isinstance(terms, list) and terms
+    joined = " ".join(terms).lower()
+    # Brand hue (amber/orange) seeds a color word.
+    assert "amber" in joined
+    # Voice descriptors from the logo style carry through (friendly / sturdy).
+    assert "friendly" in terms or "sturdy" in terms
+    # Anchors on real photography, never a placeholder service.
+    assert any("photography" in t for t in terms)
+    assert "picsum" not in joined and "placeholder" not in joined
+
+
+def test_image_search_terms_factor_in_temperature():
+    """The 7-axis temperature shifts the mood words deterministically."""
+    p = build_profile(SKIPHIRE_SIGNALS)
+    warm = image_search_terms(p, temperature={"warmth": 0.9, "formality": 0.9})
+    cool = image_search_terms(p, temperature={"warmth": 0.1, "formality": 0.1})
+    assert "warm toned" in warm and "polished editorial" in warm
+    assert "cool toned" in cool and "candid casual" in cool
+    assert warm != cool
+
+
+def test_image_search_terms_deterministic_and_dedup():
+    p = build_profile(SKIPHIRE_SIGNALS)
+    a = image_search_terms(p, temperature={"warmth": 0.8})
+    b = image_search_terms(p, temperature={"warmth": 0.8})
+    assert a == b                       # same input -> same output
+    assert len(a) == len(set(a))        # no duplicates
+
+
+def test_image_search_terms_handle_empty_profile():
+    """No brand signal still yields a usable, non-generic real-imagery baseline."""
+    p = build_profile({})
+    terms = image_search_terms(p)
+    assert terms
+    assert any("photography" in t or "editorial" in t for t in terms)
 
 
 def test_anchor_recommendation_overrides_palette_with_brand():

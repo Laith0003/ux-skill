@@ -18,7 +18,7 @@ Treat each ban as a hard rule unless a brief explicitly overrides it. The goal i
 
 5. **Content is a design surface.** "John Doe" + "Acme Corp" + `99.99%` is content slop and ruins the design regardless of layout quality. Treat placeholder content with the same care as the layout that holds it.
 
-6. **Imagery is mandatory.** A text-only wall reads as a memo, not a product. Every layout accommodates imagery — never avoids it. Source disciplined placeholders when real assets aren't available.
+6. **Imagery is mandatory and real.** A text-only wall reads as a memo, not a product. Every layout accommodates imagery — never avoids it. Use the client's own assets first; fill the gaps with curated Unsplash/Pexels chosen to match the brand and the 7-axis temperature, then treat them so they read as deliberate. An abstract SVG is NOT a substitute for a real product or site image. Only *random/generic* stock (and the auto-rotating placeholder services) is banned — real photography, chosen on purpose, is the goal.
 
 7. **Convention over cleverness on navigation.** Logo top-left. Nav top or left. Search is a magnifying glass. Innovate when you know you have a better idea; otherwise honor convention so the user can scan.
 
@@ -130,13 +130,13 @@ The single fastest way to mark output as AI-generated. The design can be perfect
 | "example@example.com", "user@email.com" | Realistic, contextual emails |
 | "Acme", "Nexus", "SmartFlow", "Zenith", "Stellar", "Vertex", "Apex" | Contextual brand names. A fintech is "Ledgerine" or "Tash"; a CRM is "Patio" or "Greta" |
 | Round / suspicious numbers: "99.99%", "50%", "1234567", "$10,000" | Organic, messy data: "47.2%", "63%", "$8,247.30", "+1 (312) 847-1928" |
-| Default Lucide / Heroicons egg avatars | Distinct SVG initials with intentional styling, or real/licensed photos. (Seeded `picsum.photos` for local prototyping only — never ship it; the linter flags it HIGH.) |
+| Default Lucide / Heroicons egg avatars | Real/licensed photos, or distinct SVG initials with intentional styling. When you need a stand-in face, source a curated, on-brand portrait (Unsplash/Pexels) rather than an auto-rotating placeholder; the linter flags *random/unseeded* services HIGH. |
 | Lorem ipsum, "Your text here", "Placeholder content" | Generate realistic content based on the brief. If a mockup exists, extract text from it |
 | Filler verbs: "Elevate", "Seamless", "Unleash", "Next-Gen", "Empower", "Revolutionize", "Transform", "Leverage", "Robust" | Concrete verbs naming what the product actually does: "Send", "Settle", "Track", "Decide", "Ship", "Deploy", "Query" |
 | AI copywriting clichés: "delve", "blazingly fast", "game-changer", "world-class", "industry-leading", "innovative" | Specific numbers and named outcomes. "75ms latency" beats "blazing fast"; "98% of category leaders" beats "trusted by leaders" |
 | Generic "Get Started" / "Learn More" as the only CTA | Specific verbs naming what happens next: "Run the demo", "See the dashboard", "Open account", "Start free", "Deploy", "Run a query" |
-| Unsplash URLs | Real/licensed imagery or a custom inline-SVG placeholder. Apply CSS filters (grayscale, mix-blend-luminosity, opacity-90, contrast-125) so they read as deliberate. (Seeded `picsum.photos` is a local-prototyping stand-in only — do not ship it.) |
-| Stock photography of teams laughing at laptops, businessmen pointing at charts, isometric workers | Custom imagery, real product UI, abstract editorial photography, or no photo at all |
+| Random/generic stock (teams laughing at laptops, the first Unsplash hit) | Client assets first, then curated Unsplash/Pexels chosen to match the brand + 7-axis temperature — pick the best per slot, don't paste the first credible photo. Treat them (grayscale, mix-blend-luminosity, opacity-90, contrast-125) so they read as deliberate. A real, chosen photo beats an abstract SVG, which is not a substitute for a product/site image. |
+| Generic/clichéd stock (teams laughing at laptops, businessmen pointing at charts, isometric workers) | Custom imagery, real product UI, or real editorial photography curated to the brand. The cliché is the ban — not photography itself; every surface still carries real imagery |
 | Generic testimonial copy ("This product changed my life", "Amazing tool!") | Quantified, named testimonials: "We cut p99 from 380ms to 90ms. — Name, role, company" |
 | Customer quotes without a name, role, or company | Name + role + company at minimum. Quotes with no attribution read as fabricated |
 | Compliance badge logos in original full color | Single-color or grayscale, all logos at uniform optical weight |
@@ -212,7 +212,7 @@ The single fastest way to mark output as AI-generated. The design can be perfect
 | Mixed icon styles (filled + outline at the same hierarchy level) | One icon family, one stroke weight, one fill state at any given level |
 | Mixing icon families (Lucide + Heroicons + Phosphor in the same project) | One family, committed |
 | Stroke-width inconsistency (mixing 1.5 + 2.0 in the same surface) | Pick one stroke and stick with it |
-| No imagery anywhere (text walls of cards) | Imagery is mandatory. Real product UI when available; otherwise a custom inline-SVG illustration (descriptive, on-brand). Seeded `picsum.photos` is acceptable only as a local prototyping stand-in, never in shipped output |
+| No imagery anywhere (text walls of cards) | Imagery is mandatory and real. Real product UI when available; otherwise curated, on-brand stock (Unsplash/Pexels) chosen by temperature. A descriptive inline-SVG illustration can support a section but is NOT a substitute for the real product/site image. Random/unseeded placeholder services never ship |
 | Stock-photo placeholder divs as "image here" markers | Real imagery or hand-styled SVG/CSS placeholders. Stock-placeholder divs ship as the final shippable mistake |
 | Random radius values across components (4, 8, 12, 16, 24px on the same page) | Token: `rounded-sm` / `md` / `lg` / `2xl` / `[2.5rem]` — pick a scale, commit |
 | Toasts that steal focus | `aria-live="polite"` toasts. Never grab focus |
@@ -278,7 +278,7 @@ Run before shipping any UI output. Severity tags indicate the failure mode if vi
 - [ ] `prefers-reduced-motion` respected
 - [ ] No GSAP + motion library in the same component tree
 - [ ] No scroll-jacking
-- [ ] Imagery is present and intentional (no text-only walls)
+- [ ] Imagery is present, real, and intentional (no text-only walls; no abstract SVG as a stand-in for a real product/site image)
 - [ ] Icons are one consistent family at consistent stroke width
 - [ ] No customer logos in original full color
 - [ ] No hover-only critical interactions
@@ -295,7 +295,7 @@ Run before shipping any UI output. Severity tags indicate the failure mode if vi
 - [ ] Body type at 16-18px minimum on marketing
 - [ ] Single accent color, < 80% saturation in restrained styles
 - [ ] Spacing on 4/8 rhythm
-- [ ] No Unsplash URLs
+- [ ] Imagery is real and chosen: client assets first, then curated Unsplash/Pexels by temperature — no random/generic stock, no abstract SVG standing in for a real product image
 - [ ] One icon family at consistent stroke width
 - [ ] Eyebrow labels tracked (+0.05em to +0.10em)
 - [ ] Corner radii consistent (2-3 values max across the page)

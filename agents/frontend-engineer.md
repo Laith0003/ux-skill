@@ -99,13 +99,13 @@ Every interactive component MUST implement:
 - **Error state** — clear inline error, near the source, with a recovery path
 - **Tactile press** — `:active` uses `-translate-y-[1px]` or `scale-[0.98]`
 
-### 4b. Mandatory imagery
+### 4b. Mandatory imagery (real)
 
-Every design MUST include intentional imagery. Text-only walls are forbidden.
-- **Source for placeholders**: `https://picsum.photos/seed/<descriptive-seed>/W/H` — use seeds that match the content (e.g., `seed/cafe-counter/1600/900`, `seed/jordan-souk/1200/800`).
-- **Source for real assets**: brand-provided when available.
-- **Banned**: Unsplash URLs (broken/unreliable), Lucide user-egg avatars as people avatars (use seeded picsum instead).
-- **Treatment**: full-bleed product shots, inline contextual photos, editorial image+headline juxtapositions, soft-edge lifestyle images, irregular image grids. See arsenal "Imagery patterns" section.
+Every design MUST include intentional, REAL imagery. Text-only walls are forbidden, and an abstract SVG is NOT a substitute for a real product/site image.
+- **Client assets first**: brand-provided screenshots / photos whenever available.
+- **Then curated stock**: fill gaps with Unsplash/Pexels chosen to match the brand + 7-axis temperature. The calling command can pass on-brand search terms from `engine.brand.image_search_terms(profile, temperature)`. Pick the best image per slot — never paste the first credible hit.
+- **Banned**: *random/generic* stock and auto-rotating placeholder services (random/unseeded `picsum.photos`, `via.placeholder.com`, `placekitten.com`); the laughing-team / pointing-at-charts cliché; Lucide user-egg avatars as people avatars (use a real or curated portrait, or styled SVG initials).
+- **Treatment**: full-bleed product shots, inline contextual photos, editorial image+headline juxtapositions, soft-edge lifestyle images, irregular image grids. Apply CSS treatment (grayscale, mix-blend, contrast) so curated stock reads as deliberate. See arsenal "Imagery patterns" section.
 - **Performance**: `loading="lazy"` on below-the-fold images; declare `width`/`height` to prevent CLS.
 
 ### 4c. Icons
@@ -157,7 +157,7 @@ Placeholder content has to be GOOD, or it tells the AI tell:
 - Names: invent unique, plausible ones (not "John Doe", "Jane Smith", "Sarah Chan")
 - Brands: invent contextual names (not "Acme", "Nexus", "SmartFlow", "Zenith")
 - Numbers: organic and messy (`47.2%`, not `50%`; `+1 (312) 847-1928`, not `1234567`)
-- Avatars: unique stylings or `picsum.photos/seed/<random>/200/200` — NEVER Lucide user icons as avatars
+- Avatars: real or curated on-brand portraits, or distinct styled SVG initials — NEVER Lucide user-egg icons, and never a random/unseeded placeholder service
 - Filler words banned: "Elevate", "Seamless", "Unleash", "Next-Gen", "Revolutionize"
 
 ### 10. Bento layouts (when applicable)

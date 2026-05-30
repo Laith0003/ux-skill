@@ -4,12 +4,14 @@ Public surface:
     build_profile(signals) -> BrandProfile
     render_md(profile) -> str
     hue_family(hex) -> str
+    image_search_terms(profile, temperature=None) -> list[str]
 """
 from engine.brand.extract import (
     BrandProfile, build_profile, render_md, hue_family, anchor_recommendation,
+    image_search_terms,
 )
 
 __all__ = [
     "BrandProfile", "build_profile", "render_md", "hue_family",
-    "anchor_recommendation",
+    "anchor_recommendation", "image_search_terms",
 ]

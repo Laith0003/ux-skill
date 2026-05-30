@@ -112,7 +112,7 @@ Write to `.ux/last-component.json`:
 
 - All four interaction states (default / hover / active / disabled) — non-negotiable.
 - Loading + error + empty states wherever the component can hit them.
-- Mandatory imagery if visual (avatars, product shots, illustrations) — use `picsum.photos/seed/<descriptive-seed>/W/H`.
+- Mandatory imagery if visual (avatars, product shots, illustrations) — real and on-brand: client assets first, then curated Unsplash/Pexels chosen to match the brand + temperature. No random/generic stock; no abstract SVG standing in for a real product/site image.
 - Google Material Symbols as icon default. Phosphor / Lucide / Radix acceptable secondary.
 - Inter is allowed. Do not ban it.
 - No scroll progress paths or scroll-tied SVG line drawing.

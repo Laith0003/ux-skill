@@ -52,7 +52,7 @@ Scan the surface for these specific tells. Each found tell is a Critical or High
 - **Stock filler copy**: "Welcome to our amazing platform that helps you achieve your goals." Lorem with thesaurus.
 - **Filler words**: "leverage," "empower," "seamless," "robust," "unlock," "delight," "elevate." Voice slop.
 - **Generic icons**: Heroicons or Lucide used without intent — every section has an icon, every icon is the same weight. Real surfaces use icons sparingly and deliberately.
-- **Unsplash URLs**: `images.unsplash.com/photo-...`. AI-default imagery. Replace with `picsum.photos/seed/<descriptive>` or real assets.
+- **Random/generic stock**: the first `images.unsplash.com/photo-...` hit pasted in without choosing it, or a random/unseeded placeholder service. Replace with client assets, or curated Unsplash/Pexels chosen to match the brand + 7-axis temperature and treated so it reads as deliberate. An abstract SVG is not a substitute for a real product/site image.
 
 #### Interaction slop
 - **Missing states**: only happy-path UI. No hover, no focus, no disabled, no loading, no empty, no error.
@@ -190,7 +190,7 @@ If Critical count > 5 OR a purple-blue gradient is found as the primary visual, 
 - Never approve a surface with a purple-blue gradient as the primary visual. That is the strongest AI-slop tell.
 - Never approve a centered hero when `DESIGN_VARIANCE > 4`. Force asymmetry.
 - Never replace one Inter with another generic sans. If Inter is wrong, the answer is a typeface with character, not "Inter but different."
-- Never accept Unsplash URLs or `picsum.photos` without a seed. Seeded picsum is a placeholder with intent; raw unsplash is a tell.
+- Never accept random/generic stock or a random/unseeded placeholder service (the linter flags these). Curated Unsplash/Pexels chosen to match the brand + temperature is acceptable; the first unchosen hit, or a rotating placeholder, is the tell. An abstract SVG is not a substitute for a real product/site image.
 - Never approve a surface with no interaction states. Hover, focus, disabled, loading, empty, error — at minimum.
 
 ## Failure modes
