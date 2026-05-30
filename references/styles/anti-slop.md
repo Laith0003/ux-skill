@@ -130,12 +130,12 @@ The single fastest way to mark output as AI-generated. The design can be perfect
 | "example@example.com", "user@email.com" | Realistic, contextual emails |
 | "Acme", "Nexus", "SmartFlow", "Zenith", "Stellar", "Vertex", "Apex" | Contextual brand names. A fintech is "Ledgerine" or "Tash"; a CRM is "Patio" or "Greta" |
 | Round / suspicious numbers: "99.99%", "50%", "1234567", "$10,000" | Organic, messy data: "47.2%", "63%", "$8,247.30", "+1 (312) 847-1928" |
-| Default Lucide / Heroicons egg avatars | Photo placeholders via `picsum.photos/seed/<descriptive-seed>/200/200`, or distinct SVG initials with intentional styling |
+| Default Lucide / Heroicons egg avatars | Distinct SVG initials with intentional styling, or real/licensed photos. (Seeded `picsum.photos` for local prototyping only — never ship it; the linter flags it HIGH.) |
 | Lorem ipsum, "Your text here", "Placeholder content" | Generate realistic content based on the brief. If a mockup exists, extract text from it |
 | Filler verbs: "Elevate", "Seamless", "Unleash", "Next-Gen", "Empower", "Revolutionize", "Transform", "Leverage", "Robust" | Concrete verbs naming what the product actually does: "Send", "Settle", "Track", "Decide", "Ship", "Deploy", "Query" |
 | AI copywriting clichés: "delve", "blazingly fast", "game-changer", "world-class", "industry-leading", "innovative" | Specific numbers and named outcomes. "75ms latency" beats "blazing fast"; "98% of category leaders" beats "trusted by leaders" |
 | Generic "Get Started" / "Learn More" as the only CTA | Specific verbs naming what happens next: "Run the demo", "See the dashboard", "Open account", "Start free", "Deploy", "Run a query" |
-| Unsplash URLs | `picsum.photos/seed/<descriptive-seed>/W/H` for placeholders, or hand-picked stock. Apply CSS filters (grayscale, mix-blend-luminosity, opacity-90, contrast-125) so they read as deliberate |
+| Unsplash URLs | Real/licensed imagery or a custom inline-SVG placeholder. Apply CSS filters (grayscale, mix-blend-luminosity, opacity-90, contrast-125) so they read as deliberate. (Seeded `picsum.photos` is a local-prototyping stand-in only — do not ship it.) |
 | Stock photography of teams laughing at laptops, businessmen pointing at charts, isometric workers | Custom imagery, real product UI, abstract editorial photography, or no photo at all |
 | Generic testimonial copy ("This product changed my life", "Amazing tool!") | Quantified, named testimonials: "We cut p99 from 380ms to 90ms. — Name, role, company" |
 | Customer quotes without a name, role, or company | Name + role + company at minimum. Quotes with no attribution read as fabricated |
@@ -212,7 +212,7 @@ The single fastest way to mark output as AI-generated. The design can be perfect
 | Mixed icon styles (filled + outline at the same hierarchy level) | One icon family, one stroke weight, one fill state at any given level |
 | Mixing icon families (Lucide + Heroicons + Phosphor in the same project) | One family, committed |
 | Stroke-width inconsistency (mixing 1.5 + 2.0 in the same surface) | Pick one stroke and stick with it |
-| No imagery anywhere (text walls of cards) | Imagery is mandatory. Real product UI when available; otherwise `picsum.photos/seed/<descriptive-seed>/W/H` with sophisticated CSS filters so they read as deliberate, not stock |
+| No imagery anywhere (text walls of cards) | Imagery is mandatory. Real product UI when available; otherwise a custom inline-SVG illustration (descriptive, on-brand). Seeded `picsum.photos` is acceptable only as a local prototyping stand-in, never in shipped output |
 | Stock-photo placeholder divs as "image here" markers | Real imagery or hand-styled SVG/CSS placeholders. Stock-placeholder divs ship as the final shippable mistake |
 | Random radius values across components (4, 8, 12, 16, 24px on the same page) | Token: `rounded-sm` / `md` / `lg` / `2xl` / `[2.5rem]` — pick a scale, commit |
 | Toasts that steal focus | `aria-live="polite"` toasts. Never grab focus |

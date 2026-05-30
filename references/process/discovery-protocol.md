@@ -55,7 +55,7 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 **Why**: Stack determines syntax, RSC boundaries, dependency verification rules, motion library defaults.
 
 ### 7. Imagery sources
-**Ask**: "Imagery — real product screenshots, hero images, brand photos? Or use `picsum.photos` placeholders? Or describe specific images you want generated (e.g., 'a moody close-up of someone's hands on a laptop in a cafe')?"
+**Ask**: "Imagery — real product screenshots, hero images, brand photos? Or custom inline-SVG placeholders (avoid shipping `picsum.photos` — fine for local prototyping only)? Or describe specific images you want generated (e.g., 'a moody close-up of someone's hands on a laptop in a cafe')?"
 
 **Why**: Imagery is mandatory (text-only walls are banned). Where the imagery comes from determines whether to call for assets, use placeholders, or describe an image-as-content plan.
 

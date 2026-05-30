@@ -532,7 +532,7 @@ Imagery is part of the design, not a nice-to-have. Every layout must accommodate
 ### Full-bleed product image
 **Use when**: showcasing the actual product / app screen. Anchor every major section with one.
 **What it is**: A single edge-to-edge image (or container-width) running full bleed between text blocks. No frame, no shadow, no caption chrome — let the image speak.
-**Source**: `picsum.photos/seed/<descriptive-seed>/1600/900` for placeholders, or real product screenshots when available.
+**Source**: real product screenshots when available, or a custom inline-SVG placeholder. (Seeded `picsum.photos` for local prototyping only — the linter flags shipped picsum.)
 
 ### Inline contextual image
 **Use when**: illustrating a feature, a moment, a person.
