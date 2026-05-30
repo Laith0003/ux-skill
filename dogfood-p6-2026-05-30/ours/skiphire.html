@@ -183,19 +183,26 @@
     color: #fff;
     border-bottom: 1px solid rgba(255,255,255,0.08);
   }
+  /* Utility topbar: secondary chrome, NOT sticky -- it sits at the top of the page
+     (outside the sticky <header>) and scrolls away. Only the nav row stays pinned. */
   .topbar { background: var(--green-2); color: var(--on-dark-soft); font-size: 0.8rem; }
   .topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 8px; }
   .topbar .trust { display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .topbar .stars { color: var(--amber); letter-spacing: 1px; }
   .topbar .sep { opacity: 0.4; }
   .topbar a { color: #fff; display: inline-flex; align-items: center; gap: 7px; font-weight: 600; }
-  /* Mobile topbar: a divider-separated inline row wraps raggedly on a phone.
-     Reflow BY DESIGN -- stars centered on their own line, each claim centered on
-     its own line, dividers dropped. Composed, not crammed. */
-  @media (max-width: 560px) {
-    .topbar .wrap { justify-content: center; }
-    .topbar .trust { flex-direction: column; gap: 4px; text-align: center; }
-    .topbar .sep { display: none; }
+  /* Mobile topbar: stay COMPACT -- ONE short centered line, never a tall stack. Below
+     600px the email link drops, the bar centers, the font shrinks, and the "|" dividers
+     become middots. All three claims at 0.72rem need the full 320px content box at 360px
+     (a zero-margin squeeze that wraps to two lines = a tall bar), so on phones we keep the
+     stars + the single strongest claim ("Rated Excellent") and the two weaker claims
+     return >= 600px. Result: one short line that never wraps and never balloons the header. */
+  @media (max-width: 600px) {
+    .topbar { font-size: 0.72rem; }
+    .topbar .wrap { justify-content: center; padding-block: 6px; }
+    .topbar .trust { flex-wrap: nowrap; gap: 7px; text-align: center; line-height: 1.2; }
+    .topbar .opt { display: none; }                        /* drop weaker claims + their dividers on phones */
+    .topbar .email-link { display: none; }                 /* the email belongs to the nav region, not the trust line */
   }
   .navrow { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
   .brand { display: inline-flex; align-items: center; gap: 12px; }
@@ -212,11 +219,13 @@
   .nav-actions { display: flex; align-items: center; gap: 12px; }
   @media (max-width: 900px) { .nav-links { display: none; } }
   @media (max-width: 560px) {
-    .topbar .email-link { display: none; }
     .brand .wm span { display: none; }
-    /* size the bar to fit one row at 360: smaller wordmark + logo, tighter gaps,
-       shorter vertical padding so the header stays <= ~72px tall and one row */
-    .navrow { padding-block: 9px; gap: 10px; }
+    /* Size the sticky nav to ONE slim row (~60px, well under the 72px target): smaller
+       logo + tighter gaps, shorter row padding, and a shorter nav CTA (the hero CTA keeps
+       its taller padding; only the nav button slims) so the row height is driven to ~60px
+       rather than the 56px button forcing a 74px bar. */
+    .navrow { padding-block: 8px; gap: 10px; }
+    .navrow .nav-actions .btn { padding-block: 11px; }
     .brand { gap: 10px; }
     .brand img { width: 40px; height: 40px; }
     .brand .wm b { font-size: 1rem; }
@@ -499,23 +508,27 @@
 <a href="#quote" class="skip-link">Skip to quote form</a>
 
 <!-- ============================ HEADER ============================ -->
-<header class="site-header">
-  <div class="topbar">
-    <div class="wrap">
-      <span class="trust">
-        <span class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-        <span>Rated Excellent</span>
-        <span class="sep" aria-hidden="true">|</span>
-        <span>Same Day Delivery</span>
-        <span class="sep" aria-hidden="true">|</span>
-        <span>UK Wide Coverage</span>
-      </span>
-      <a class="email-link" href="mailto:sales@instantskiphire.com">
-        <svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-        sales@instantskiphire.com
-      </a>
-    </div>
+<!-- Utility topbar: NON-sticky, sits at the very top and scrolls away. Lives OUTSIDE
+     the sticky <header> on purpose -- a sticky element is bounded by its containing block,
+     so keeping the bar inside the sticky header both bloats the sticky-header budget and
+     unsticks the nav once the header box scrolls past. Only the nav row stays pinned. -->
+<div class="topbar">
+  <div class="wrap">
+    <span class="trust">
+      <span class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+      <span>Rated Excellent</span>
+      <span class="sep opt" aria-hidden="true">|</span>
+      <span class="opt">Same Day Delivery</span>
+      <span class="sep opt" aria-hidden="true">|</span>
+      <span class="opt">UK Wide Coverage</span>
+    </span>
+    <a class="email-link" href="mailto:sales@instantskiphire.com">
+      <svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+      sales@instantskiphire.com
+    </a>
   </div>
+</div>
+<header class="site-header">
   <div class="wrap">
     <div class="navrow">
       <a class="brand" href="https://instantskiphire.com/" aria-label="Instant Skip Hire home">
