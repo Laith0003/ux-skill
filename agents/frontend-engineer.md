@@ -141,14 +141,19 @@ Every design MUST include intentional, REAL imagery. Text-only walls are forbidd
 - 2-line H1 maximum (concise headline + supporting line)
 - Wide containers — `max-w-5xl` to `max-w-6xl` for marketing surfaces
 
-### 6a. Responsive gate (MANDATORY — verify before returning)
+### 6a. Responsive gate (MANDATORY — verify before returning; cross-ref `references/foundations/component-behaviors.md`)
 
-This is as hard a gate as anything in this file. Build mobile-first, then BEFORE you return the code, verify at 390px that:
+This is as hard a gate as anything in this file. Build mobile-first, then BEFORE you return the code, verify at **360px AND 390px** that:
 
 - **(a) there is no horizontal scroll** — `document.documentElement.scrollWidth <= window.innerWidth`, and
-- **(b) every multi-column block has stacked** to a single column.
+- **(b) every multi-column block has stacked** to a single column, and
+- **(c) the nav is ONE row and NO short label wrapped.** The header/nav (`.navrow` / `.site-header`) stays a single row; the brand wordmark and every button/CTA label sit on ONE line. `scrollWidth` alone does NOT catch this — a nav that wraps to two rows, or a wordmark that splits mid-name, still reports `scrollWidth == innerWidth`. A wrapping nav, a wordmark that breaks across lines, or a two-line button label is a CRITICAL fail (the user's standing rule: a nav/label that wraps on mobile must ALWAYS be reported and fixed).
 
-Fix until both are clean. Horizontal scroll on a phone is the single most common shipped defect and a CRITICAL fail — do not declare done while it exists. If you have a headless DOM available (the calling command runs the responsive gate in `/ux-design` Step 5), trust its numbers; if not, trace every section's mobile breakpoint by hand and confirm no fixed multi-column grid, no `100vw`, and no off-canvas absolute element remains.
+How to keep (c) clean while building:
+- Put `white-space: nowrap` on the brand wordmark AND on every short button/CTA label (a 2-3 word label must never wrap — see `anti-slop.md`). Wrap a bare label text node in its own `<span class="btn-label">` so it is one nowrap unit and is measurable.
+- `nowrap` ALONE can convert a wrap into horizontal scroll — at 360px usable width is only ~320px. So pair it with a size-to-fit: shrink the wordmark `font-size` on a mobile breakpoint and tighten the nav gaps; if the full wordmark still cannot fit beside the logo + the primary CTA, **drop to the logomark alone** (hide the words, keep the icon) — NEVER let it become two lines. Then confirm BOTH (a) `scrollWidth <= innerWidth` AND (c) the label is one line; the no-wrap signal alone is not enough.
+
+Fix until all three are clean. Horizontal scroll and a wrapping nav/label are both the single most common shipped defects and CRITICAL fails — do not declare done while either exists. If you have a headless DOM available (the calling command runs the wrap-aware responsive gate in `/ux-design` Step 5), trust its numbers; if not, trace every section's mobile breakpoint by hand and confirm no fixed multi-column grid, no `100vw`, no off-canvas absolute element, and that the nav bar and every short label hold one line at 360px.
 
 ### 6b. Imagery as backdrop + no repeated icons (cross-ref `anti-slop.md`)
 

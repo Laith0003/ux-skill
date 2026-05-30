@@ -42,6 +42,8 @@ Mobile is not the small version of the desktop — it is where most of the traff
 
 6. **Never repeat one icon across differentiated items.** Every skip size, every plan, every sector rendered with the same box/grid/check icon reads as the generator giving up. If you cannot source a DISTINCT, meaningful icon per item, drop the icons there entirely and differentiate with TYPOGRAPHY (scale, weight, the number itself), color, or layout. A repeated icon is worse than no icon — it actively says "these are the same" about things you are claiming are different.
 
+7. **Short labels never wrap to a second line.** The brand wordmark, every button/CTA label, and nav links are short, fixed phrases — they must stay on ONE line at 360px. Wrapping a 2-3 word label ("Instant Skip / Hire", "Get a / quote") is the textbook *break-by-accident*: the box got too narrow and the browser improvised, and it reads as broken. `white-space: nowrap` them and size them to fit (shrink the wordmark font on mobile, tighten gaps); if the full wordmark still cannot fit beside the logo + the primary CTA, drop to the **logomark alone** (hide the words, keep the icon) — never two lines. This is invisible to a horizontal-scroll check: a nav that wraps to two rows still reports `scrollWidth == innerWidth`, so it must be verified directly (the wordmark's and each label's rendered height stays at one line: `scrollHeight <= 1.4 * lineHeight`). Note `nowrap` alone can trade the wrap for horizontal scroll — pair it with a size-to-fit and confirm both.
+
 ---
 
 ## Forbidden — visual & CSS
@@ -284,6 +286,7 @@ Run before shipping any UI output. Severity tags indicate the failure mode if vi
 - [ ] All four interaction states present (loading, empty, error, success/default)
 - [ ] No `h-screen` on mobile hero
 - [ ] No horizontal scroll at 360–390px (`scrollWidth <= innerWidth`) — verified, not assumed
+- [ ] Nav stays ONE row at 360px and NO short label wraps — brand wordmark, button/CTA labels, nav links each on one line (`scrollHeight <= 1.4 * lineHeight`); verified directly, since `scrollWidth` alone misses a wrapped nav
 - [ ] No literal placeholder token shipped (`{TODO_FILL...}`, `{{ var }}`, "lorem ipsum")
 - [ ] No pure `#000` text or background
 - [ ] No 3-equal-cards feature row

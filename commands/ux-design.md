@@ -284,7 +284,13 @@ python3 -m engine.cli.main --no-pretty lint <output-paths> --threshold high
 
 Exit code non-zero means a high+ finding landed in your output. Fix before declaring done.
 
-**Responsive gate — HARD, as hard as the brand gate.** Render the output at 390px in a headless DOM and assert there is NO horizontal scroll (`document.documentElement.scrollWidth <= window.innerWidth`) AND that the hero / any 2-col sections have stacked to a single column. Horizontal scroll on mobile is a CRITICAL fail and the single most common shipped defect — **do not declare done while it exists.** Run it at 390px AND 360px.
+**Responsive gate — HARD, as hard as the brand gate. This is WRAP-AWARE, not scroll-only.** Run at **390px AND 360px** in a headless DOM and assert ALL THREE:
+
+- **(a) No horizontal scroll** — `document.documentElement.scrollWidth <= window.innerWidth`. The page never scrolls sideways on a phone.
+- **(b) One-row bars did not wrap** — the sticky header/nav (`.navrow` / `.site-header`) stays a single row. `scrollWidth` alone MISSES this: a nav that wrapped to two rows still reports `scrollWidth == innerWidth`, so it sails through a scroll-only gate. Detect the wrap directly: a designated one-row bar's `offsetHeight` exceeds ~1.6x its single-row content height, OR its flex children span more than one distinct row (compare child vertical centers, not raw `offsetTop`, since `align-items:center` shifts each child). The **utility/announcement topbar is NOT a strict one-row bar** — its intended mobile state is centered stacked lines (see component-behaviors.md). Check it for "not ragged" instead: its `|` dividers are hidden on mobile and each claim sits on its own line by design, never wrapping mid-phrase with dangling dividers.
+- **(c) No short inline label wrapped** — for the brand wordmark and every button/CTA label, assert it is on ONE line: `el.scrollHeight <= 1.4 * lineHeight`. (Measure the label element itself, not its button wrapper — a chip/icon inside the button inflates the button's `scrollHeight` and gives a false positive. Wrap a bare label text node in its own `<span>` so it is measurable. Resolve `line-height:normal` to `fontSize * 1.2`.)
+
+**A wrapping nav, a wordmark that splits mid-name, or a button/CTA label on two lines is a CRITICAL fail — always report it and fix it before declaring done.** This is the user's standing instruction: a nav/label that wraps on mobile must ALWAYS be reported and fixed. Horizontal scroll is also CRITICAL. None of the three is a nice-to-have.
 
 Use whatever headless browser is on hand. Playwright is the cleanest:
 
@@ -300,24 +306,40 @@ with sync_playwright() as p:
         pg = b.new_page(viewport={"width": w, "height": 900}, device_scale_factor=2)
         pg.goto(url); pg.wait_for_timeout(400)
         m = pg.evaluate("""() => {
+          const lh = el => { const c = getComputedStyle(el); let l = parseFloat(c.lineHeight);
+            return isFinite(l) ? l : parseFloat(c.fontSize) * 1.2; };
+          // (a) horizontal scroll + the offending nodes
           const overflow = [...document.querySelectorAll('*')]
             .filter(e => e.getBoundingClientRect().right > window.innerWidth + 1)
             .slice(0, 8).map(e => e.tagName.toLowerCase() + (e.className ? '.' + String(e.className).trim().split(/\\s+/)[0] : ''));
-          const hero = document.querySelector('.hero .grid, [class*="hero"] [class*="grid"], main section:first-of-type .grid');
-          const cols = hero ? getComputedStyle(hero).gridTemplateColumns.split(' ').length : null;
-          return { iw: window.innerWidth, sw: document.documentElement.scrollWidth, overflow, heroCols: cols };
+          // (b) one-row bars: height-ratio is the robust signal; row-count via child CENTERS
+          const barWrapped = sel => { const bar = document.querySelector(sel); if (!bar) return null;
+            const kids = [...bar.children].filter(c => c.offsetParent !== null);
+            const single = kids.length ? Math.max(...kids.map(c => c.offsetHeight)) : bar.offsetHeight;
+            const rows = new Set(kids.map(c => { const r = c.getBoundingClientRect(); return Math.round(r.top + r.height / 2); })).size;
+            return { h: bar.offsetHeight, single, ratio: +(bar.offsetHeight / single).toFixed(2),
+                     wrapped: bar.offsetHeight > 1.6 * single || rows > 1 }; };
+          // (c) short labels on ONE line (measure the label, not its button)
+          const labelWrapped = sel => { const el = document.querySelector(sel); if (!el) return null;
+            return { sh: el.scrollHeight, lh: +lh(el).toFixed(1),
+                     ratio: +(el.scrollHeight / lh(el)).toFixed(2), wrapped: el.scrollHeight > 1.4 * lh(el) }; };
+          const labels = ['.brand .wm b', '.nav-actions .btn .btn-label', '.hero a.btn .btn-label']
+            .map(s => ({ sel: s, r: labelWrapped(s) })).filter(x => x.r);
+          return { iw: window.innerWidth, sw: document.documentElement.scrollWidth, overflow,
+                   nav: barWrapped('.navrow'), labels };
         }""")
         hscroll = m["sw"] > m["iw"]
-        stacked = (m["heroCols"] is None) or (m["heroCols"] == 1)
-        print(f"[{w}px] innerWidth={m['iw']} scrollWidth={m['sw']} h-scroll={hscroll} heroCols={m['heroCols']} stacked={stacked}")
+        navwrap = m["nav"] and m["nav"]["wrapped"]
+        labelwrap = [x["sel"] for x in m["labels"] if x["r"]["wrapped"]]
+        print(f"[{w}px] iw={m['iw']} sw={m['sw']} h-scroll={hscroll} nav={m['nav']} labelWraps={labelwrap or 'none'}")
         if m["overflow"]: print(f"        overflowing: {m['overflow']}")
-        if hscroll or not stacked: fail = True
+        if hscroll or navwrap or labelwrap: fail = True
     b.close()
 sys.exit(1 if fail else 0)
 PY
 ```
 
-If Playwright is not installed, the same three signals (`window.innerWidth`, `document.documentElement.scrollWidth`, and the hero container's computed `grid-template-columns` track count) can be read through any headless-DOM tool you have — a headless-Chrome eval, or an MCP browser-preview that supports a viewport resize + a JS eval. Always read `window.innerWidth` first and confirm it is ~390/360 before trusting the scroll number; on failure, the `overflow` list above names the offending nodes so you can fix the specific block (almost always a fixed multi-column grid or a `100vw` element).
+If Playwright is not installed, read the SAME signals through any headless-DOM tool you have — a headless-Chrome eval, or an **MCP browser-preview that supports a viewport resize + a JS eval** (the cleanest fallback: resize to 360/390, then eval the measurement function above). Always read `window.innerWidth` first and confirm it is ~390/360 before trusting any number. **Headless screenshots are unreliable in this toolchain, but a DOM eval of `scrollWidth` / bar heights / label `scrollHeight` is reliable.** The honest backstop for the composed-vs-hollow judgment (and for anything the eval cannot prove) is to DEPLOY the iteration and eyeball it on a real phone — an un-eyeballed mobile layout is unverified. On a (b)/(c) failure the bar height and the per-label ratios name exactly what wrapped; on an (a) failure the `overflow` list names the offending nodes (almost always a fixed multi-column grid or a `100vw` element).
 
 **If a brand was extracted, also run the brand-fidelity HARD FLOOR** — an off-brand page fails no matter how good it looks (it must use the brand primary, carry the logo, and ship real imagery):
 
