@@ -2723,9 +2723,9 @@ tone=["bold","editorial"]</pre>
       var cls = (a.className && a.className.toString) ? a.className.toString() : '';
       if (a.classList && a.classList.contains('lang-picker__item')) {
         send('language_switch', { language: a.getAttribute('lang') || a.textContent.trim() });
-      } else if (/github\.com/.test(href)) {
+      } else if (/^https:\/\/github\.com\//.test(href)) {
         send('github_click', { placement: a.closest('.nav') ? 'nav' : (a.closest('footer') ? 'footer' : 'body'), link_url: href });
-      } else if (/pypi\.org/.test(href) || /\bcta-primary\b/.test(cls)) {
+      } else if (/^https:\/\/pypi\.org\//.test(href) || /\bcta-primary\b/.test(cls)) {
         send('install_cta_click', { link_url: href });
       } else if (href === '#dogfood' || /\bcta-secondary\b/.test(cls)) {
         send('see_it_work_click', {});
