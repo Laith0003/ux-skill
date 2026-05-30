@@ -180,13 +180,32 @@ test -f .ux/last-discovery.json && cat .ux/last-discovery.json
 
 If the file doesn't exist, run `/ux-discover` first. Do NOT proceed without a complete 10-field brief.
 
+### Step 1.5 — Brand extraction (when a reference URL or screenshot exists)
+
+If the brief names a reference site/URL or provides a screenshot, the output MUST look like THEM, not the house style. Extract the brand FIRST — canonical rules in `references/process/brand-extraction.md`. The engine is offline, so YOU capture the signals; the engine normalizes + enforces.
+
+1. **Capture the signals.** Open the URL / read the screenshot and **sample the logo pixels** for the dominant non-neutral color (the brand primary comes from the LOGO, not the most-painted CSS), read the logo's letterform style, and collect 2–3 secondary colors, the fonts, any real imagery URLs, and the voice. Write `.ux/brand-signals.json`:
+   `{"name":"…","logo":{"src":"…","alt":"…"},"logo_colors":[{"hex":"#…"}],"brand_colors":[{"hex":"#…"}],"logo_type_style":"…","fonts":{"h1":"…","body":"…"},"imagery":["…"],"voice":"…"}`
+2. **Build the anchor:**
+   ```bash
+   python3 -m engine.cli.main brand --signals-file .ux/brand-signals.json --out .ux
+   ```
+   Writes `.ux/brand.json` (travels through the engine) and `.ux/brand.md` (the human-readable anchor).
+3. **CONFIRM before locking (do not skip).** Show the user the extracted `brand.md` — primary color, type direction, logo — in one short message and get a yes. A wrong auto-read (clay instead of amber) poisons the entire build; the 5-second check is the guardrail. If they correct it, edit `.ux/brand-signals.json` and re-run step 2.
+
+If there is NO reference brand, skip this step (pure synthesis from the brief).
+
 ### Step 2 — Get the merged recommendation from the engine
 
 ```bash
+# If a brand was extracted (Step 1.5), pass it so the palette + type anchor to THEM.
+BRAND=""; [ -f .ux/brand.json ] && BRAND="--brand-file=.ux/brand.json"
 python3 -m engine.cli.main --no-pretty recommend \
-  --brief-file=.ux/last-discovery.json > .ux/last-recommendation.json 2>/dev/null \
+  --brief-file=.ux/last-discovery.json $BRAND > .ux/last-recommendation.json 2>/dev/null \
   || echo "engine not installed — falling back to v1 prose-only mode"
 ```
+
+When `--brand-file` is passed, the recommendation's `palette.colors.primary` is the brand color (from the logo), and it carries `brand` + `type_directive` blocks — the build uses THOSE, not the engine's default pick.
 
 Inspect the recommendation:
 ```bash
@@ -244,13 +263,33 @@ The engine's picks are not suggestions — they're constraints:
 
 Dispatch the `frontend-engineer` sub-agent (Task tool) with the recommendation passed in as creative-direction context. Generate the page/component as requested by the brief, using ONLY the picked style + palette + type + motion presets + components.
 
-### Step 5 — Lint the output before reporting
+**If a brand was extracted (Step 1.5):** paste the full `.ux/brand.md` into the sub-agent prompt and state that the brand is a HARD ANCHOR — use the client's logo, the brand primary color (the recommendation's palette is already anchored to it), and type matching the logo style; never fall back to the house style or a rejected default font. **Preserve the client's existing human copy verbatim** unless the brief explicitly asks for a rewrite.
+
+### Step 5 — Lint + brand-fidelity gate before reporting
 
 ```bash
 python3 -m engine.cli.main --no-pretty lint <output-paths> --threshold high
 ```
 
 Exit code non-zero means a high+ finding landed in your output. Fix before declaring done.
+
+**If a brand was extracted, also run the brand-fidelity HARD FLOOR** — an off-brand page fails no matter how good it looks (it must use the brand primary, carry the logo, and ship real imagery):
+
+```bash
+python3 -c "
+import json, sys
+from engine.evaluator import evaluate
+from engine.brand.extract import BrandProfile
+b = json.load(open('.ux/brand.json'))
+prof = BrandProfile(**{k: v for k, v in b.items() if k in BrandProfile.__dataclass_fields__})
+ev = evaluate(html=open('<output.html>').read(), brand_profile=prof)
+print('brand_fidelity', ev.brand_fidelity, '| imagery', ev.imagery, '| passed', ev.brand_passed)
+[print(' -', n) for n in ev.notes if 'BRAND FLOOR' in n]
+sys.exit(0 if ev.brand_passed else 1)
+"
+```
+
+Exit `1` = the output dropped the brand primary/logo or shipped no real imagery. Fix it (use the brand color, carry the logo, add real images) and re-run. **Do not declare done while the brand gate fails.**
 
 ### Fallback
 

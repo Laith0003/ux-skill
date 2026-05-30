@@ -47,13 +47,15 @@ Default search order if user says "the last one":
 ### 2. Run the loop
 
 ```bash
-uxskill evolve <html_path> [--css <css_path>] [--force] [--max-rounds 5]
+uxskill evolve <html_path> [--css <css_path>] [--force] [--max-rounds 5] [--brand-file .ux/brand.json]
 ```
 
 This writes:
 - `<artifact>.evolved.html` and `<artifact>.evolved.css` (the refined output)
 - `.ux/last-evolve.json` (the full EvolveResult with rounds + scores)
 - One line to `.ux/decisions.jsonl` (the learning signal)
+
+**If the surface is a brand redesign, pass `--brand-file .ux/brand.json`.** The brand-fidelity HARD FLOOR then applies at every exit: an off-brand page (dropped the brand primary/logo, or shipped no real imagery) reports `above_gate=false` + `stopped_reason=gate_failed` no matter how high the composite score, and `uxskill evolve` exits `1`. Polishing cannot fix brand drift — fix the source (use the brand color, carry the logo, add real imagery) and regenerate.
 
 ### 3. Report
 

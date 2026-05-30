@@ -58,15 +58,37 @@ mechanisms — but also got the brand wrong (navy, not amber) and ships no revie
 ux-skill's win is to combine richness with brand-accuracy AND deterministic
 enforcement.
 
-## How the pieces fit
+## How the pieces fit (the LIVE pipeline)
 
-- Capture (I/O / vision): read the live DOM + sample the logo pixels + read the logo
-  style. Deterministic where possible (color); vision where required (logo letterform
-  style).
-- `engine/brand/` normalizes captured signals into a `BrandProfile` -> `brand.md`.
-- Generation (`/ux-design` + frontend-engineer) consumes brand.md as a hard anchor and
-  expands the page-level section sequence with completeness + icons + imagery.
-- The linter/rating add `brand_fidelity` (scored + hard floor).
+Wired end-to-end, not aspirational. The flow when a reference brand exists:
+
+1. **Capture** (I/O / vision -- the caller, NOT the engine, which is offline): read the
+   live DOM, SAMPLE THE LOGO PIXELS for the dominant non-neutral color, read the logo's
+   letterform style. Write `.ux/brand-signals.json`.
+2. **Normalize + anchor:** `uxskill brand --signals-file .ux/brand-signals.json --out .ux`
+   -> `engine/brand/build_profile` -> writes `.ux/brand.json` (the travelling
+   `BrandProfile`) + `.ux/brand.md` (human-readable). CONFIRM the read before locking.
+3. **Recommend:** `uxskill recommend --brand-file .ux/brand.json` -> `Brief.brand` ->
+   `anchor_recommendation` overrides the palette primary/accent with the brand color and
+   attaches `brand` + `type_directive`.
+4. **Synthesize:** `--brand-file` -> `synthesize()` `_stamp_client_brand` overlays the
+   client primary/type on the synthesized system (composes with the reference_brands
+   exemplar modes; does not replace them).
+5. **Generate:** `/ux-design` pastes `brand.md` into the frontend-engineer prompt as a
+   HARD ANCHOR; the agent uses the logo + brand color + logo-style type, PRESERVES the
+   client's human copy verbatim, and expands the page sequence with real imagery.
+6. **Gate:** `evaluate(..., brand_profile=...)` reports `brand_fidelity` + `imagery` and
+   applies a HARD FLOOR (`brand_passed`) -- off-brand drift fails regardless of the
+   7-axis composite. `uxskill evolve --brand-file` honors the floor at every exit
+   (exit 1 = gate_failed). The linter's `imagery-mandatory` rule is the live text-wall
+   backstop.
+
+Integration points (for maintainers): `engine/evaluator/core.py` (floor),
+`engine/evolve/core.py` (loop gate), `engine/recommender/core.py` (anchor),
+`engine/synthesizer/core.py` (`_stamp_client_brand`), `engine/cli/main.py`
+(`brand` subcommand + `--brand-file`), `commands/ux-design.md` (Steps 1.5/2/4/5),
+`agents/frontend-engineer.md` + `agents/copy-writer.md` (consume + copy-preserve).
+Tests: `tests/test_brand.py`, `tests/test_brand_wiring.py`, `tests/test_cli_brand.py`.
 
 ## Standing rule for maintainers
 
