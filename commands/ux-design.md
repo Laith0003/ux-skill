@@ -48,9 +48,11 @@ NEVER proceed to step 2 without the wow moment field populated. If the user says
 
 ### 2. Read the references
 
-Before writing a single line of code, read both:
+Before writing a single line of code, read:
 - `references/styles/anti-slop.md` — the ban list. Internalize every forbidden pattern.
 - `references/styles/arsenal.md` — the high-end pattern library. Pick 2-4 patterns that fit the brief.
+- `references/foundations/wow.md` — derive the **WOW LAYER**: 2-3 coordinated signature moments (one hero moment + a motion signature + an optional section moment) from the brand temperature + industry + goal. The page must do something a visitor remembers, not just be clean — derived + varied to THIS brand, never a stamped recipe.
+- `references/foundations/responsive.md` + `references/foundations/component-behaviors.md` — mobile-first mechanics + per-component responsive contracts. The build is verified at 360px (no horizontal scroll, no wrapping nav/wordmark/label, sticky chrome <= ~96px).
 
 These are non-negotiable. The output's distinction from generic AI output IS the value of this command.
 

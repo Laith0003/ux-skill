@@ -69,10 +69,10 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 
 **Why**: Personal taste overrides the standard ban list. A user who hates gradients should not get the one "approved gradient" the arsenal allows.
 
-### 10. The wow moment
-**Ask**: "What's the ONE thing this design must do that lifts it above generic? Something a visitor would remember 24h later. A specific feature, motion, interaction, visual moment, or content beat."
+### 10. The wow moment (optional — the model derives one if you don't give it)
+**Ask**: "Anything specific this design must do that a visitor remembers 24h later — a feature, motion, interaction, or visual moment? If not, I'll derive one."
 
-**Why**: This is the most important question. Without an answer, the plugin produces a clean Apple-feel landing — competent and forgettable. With an answer, every other decision is in service of the wow moment.
+**Why**: A merely-clean page is the floor — competent and forgettable. The fix is NOT to demand a wow moment from the user (older guidance said "wow can only come from the user" — that is overturned). The model **derives a wow layer** — 2-3 coordinated signature moments — from `brand temperature + industry + goal`, per `references/foundations/wow.md`. A user-supplied moment refines or overrides that layer; absent one, the model composes its own and never falls back to forgettable.
 
 ---
 
@@ -93,7 +93,7 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 2. **Group into 2–3 messages.** First message: brand + references + audience (the highest-leverage trio). Second message: style + voice + stack. Third message: imagery + must-haves + avoid-list + wow.
 3. **Never dump all 10 at once.** That's a form, not a conversation.
 4. **Use multiple choice where natural** (style direction, stack), and free-form where it matters (wow moment, audience, avoid-list).
-5. **Accept "your call" / "you decide" on any single field** but require the wow moment.
+5. **Accept "your call" / "you decide" on any field, including the wow moment** — if it isn't given, the model derives the wow layer (`references/foundations/wow.md`); never ship a forgettable default.
 
 ---
 
