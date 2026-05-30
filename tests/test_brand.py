@@ -1,7 +1,7 @@
 """Brand extraction tests — color from the logo, type from the logo style."""
 from engine.brand import (
-    build_profile, render_md, hue_family, image_search_terms, score_brand_fidelity,
-    score_imagery,
+    build_profile, render_md, parse_brand_md, hue_family, image_search_terms,
+    score_brand_fidelity, score_imagery,
 )
 
 
@@ -64,11 +64,139 @@ def test_falls_back_to_css_when_no_logo_colors():
 
 
 def test_render_md_carries_the_anchor():
+    """render_md emits a VALID open-standard brand.md AND keeps our gate anchor.
+
+    The format conforms to thebrandmd/brand.md (frontmatter + the three H2
+    layers), while a single anchor line keeps both enforcement substrings so the
+    file still reads as our brand-fidelity gate note (our moat)."""
     md = render_md(build_profile(SKIPHIRE_SIGNALS))
+    # Our moat: the brand primary, the name, and BOTH gate substrings survive.
     assert "#f0890f" in md
     assert "Instant Skip Hire" in md
-    assert "MUST use this brand" in md
-    assert "fails the brand-fidelity gate" in md
+    assert "MUST use this" in md
+    assert "brand-fidelity gate" in md
+    # Standard shape: YAML frontmatter + the three ordered H2 layers + Colors H3.
+    assert md.lstrip().startswith("---")
+    assert "name: Instant Skip Hire" in md
+    assert "## Strategy" in md
+    assert "## Voice" in md
+    assert "## Visual" in md
+    assert "### Colors" in md
+
+
+def test_render_md_is_a_valid_standard_brand_md():
+    """(a) The rendered file conforms to the open standard's required structure."""
+    md = render_md(build_profile(SKIPHIRE_SIGNALS))
+    # Frontmatter keys the spec requires.
+    assert "name:" in md and "tagline:" in md and "version:" in md and "language:" in md
+    # The H2 layers appear in the spec's order: Strategy -> Voice -> Visual.
+    assert md.index("## Strategy") < md.index("## Voice") < md.index("## Visual")
+    # Colors carries the primary hex and a "colors to avoid" line.
+    assert "#f0890f" in md
+    assert "avoid" in md.lower()
+    # The gate anchor warning is a single line carrying both enforcement phrases.
+    anchor = [ln for ln in md.splitlines() if "MUST use this" in ln]
+    assert len(anchor) == 1 and "brand-fidelity gate" in anchor[0]
+
+
+def test_parse_brand_md_round_trips_render():
+    """(b) parse_brand_md(render_md(build_profile(...))) recovers primary + name."""
+    p = parse_brand_md(render_md(build_profile(SKIPHIRE_SIGNALS)))
+    assert p.primary == "#f0890f"           # primary survives the round-trip
+    assert p.name == "Instant Skip Hire"    # name survives via frontmatter
+    assert "#1c3829" in p.secondary         # green stays secondary, not avoided
+    assert p.primary_source == "brand-md"   # provenance marked on the input side
+
+
+def test_parse_brand_md_minimal_handwritten():
+    """(c) A hand-written minimal standard brand.md parses (case-insensitive hex)."""
+    md = (
+        "---\n"
+        "name: Northwind\n"
+        "tagline: Built to last\n"
+        "version: 1\n"
+        "language: en\n"
+        "---\n\n"
+        "# Northwind\n\n"
+        "## Visual\n\n"
+        "### Colors\n\n"
+        "- Primary: #0F172A\n"
+    )
+    p = parse_brand_md(md)
+    assert p.primary == "#0f172a"           # #0F172A normalized to lowercase
+    assert p.name == "Northwind"
+    assert p.tagline == "Built to last"
+    assert p.primary_source == "brand-md"
+
+
+def test_parse_brand_md_is_robust_to_empty():
+    """parse_brand_md never throws on sparse / empty input."""
+    assert parse_brand_md("").primary == ""
+    assert parse_brand_md("just some text, no frontmatter, no sections").name == ""
+    # Frontmatter only, no Visual layer: name parses, colors stay empty.
+    p = parse_brand_md("---\nname: Bare\nversion: 1\n---\n# Bare\n")
+    assert p.name == "Bare" and p.primary == "" and p.secondary == []
+
+
+def test_colors_to_avoid_lists_house_colors_for_amber_brand():
+    """(d) The amber brand's colors_to_avoid carries the engine house clay."""
+    p = build_profile(SKIPHIRE_SIGNALS)
+    assert "#cc785c" in p.colors_to_avoid   # clay (Claude house) -- never for this brand
+    assert "#5e6ad2" in p.colors_to_avoid   # blurple (Linear house)
+    assert p.primary not in p.colors_to_avoid
+
+
+def test_colors_to_avoid_skips_house_color_equal_to_primary():
+    """A brand whose primary IS a house color does not list its own primary to avoid."""
+    p = build_profile({"logo_colors": [{"hex": "#cc785c"}]})
+    assert p.primary == "#cc785c"
+    assert "#cc785c" not in p.colors_to_avoid   # cannot avoid your own primary
+    assert "#5e6ad2" in p.colors_to_avoid       # the other house color still listed
+
+
+def test_render_and_build_are_deterministic_with_new_fields():
+    """(e) build_profile + render_md stay byte-stable with the richer fields."""
+    a = build_profile(SKIPHIRE_SIGNALS)
+    b = build_profile(SKIPHIRE_SIGNALS)
+    assert a.to_dict() == b.to_dict()
+    assert render_md(a) == render_md(b)
+    # And a full round-trip is stable too.
+    assert parse_brand_md(render_md(a)).to_dict() == parse_brand_md(render_md(b)).to_dict()
+
+
+def test_parse_brand_md_recovers_typography_and_tonal():
+    """A standard brand.md with real fonts + a We Say/We Never Say table parses."""
+    md = (
+        "---\nname: Voicey\nversion: 1\nlanguage: en\n---\n\n"
+        "# Voicey\n\n"
+        "## Voice\n\n"
+        "### Tonal Rules\n\n"
+        "- Lead with the verb.\n\n"
+        "| We Say | We Never Say |\n"
+        "| --- | --- |\n"
+        "| 50 points added. | Congratulations! |\n\n"
+        "## Visual\n\n"
+        "### Typography\n\n"
+        "- **Display:** Cabinet Grotesk -- weight 700. Usage: headings.\n"
+        "- **Body:** Public Sans -- weight regular. Usage: body.\n"
+    )
+    p = parse_brand_md(md)
+    assert p.fonts.get("display") == "Cabinet Grotesk"
+    assert p.fonts.get("body") == "Public Sans"
+    assert p.tonal.get("rules") == ["Lead with the verb."]
+    assert p.tonal.get("we_say") == ["50 points added."]
+    assert p.tonal.get("we_never_say") == ["Congratulations!"]
+
+
+def test_parse_brand_md_rejects_default_display_font():
+    """A default font in the Display slot is rejected (rule 4), not preserved."""
+    md = (
+        "---\nname: Defaulty\nversion: 1\n---\n\n# Defaulty\n\n"
+        "## Visual\n\n### Typography\n\n"
+        "- **Display:** Inter -- weight 700.\n"
+    )
+    p = parse_brand_md(md)
+    assert p.fonts.get("display", "") == ""   # Inter is a default; not kept
 
 
 def test_image_search_terms_are_on_brand_and_real():
