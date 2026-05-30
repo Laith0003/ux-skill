@@ -2803,12 +2803,12 @@
     },
     {
       "id": "imagery-mandatory-missing",
-      "name": "Page with no imagery (text-wall of cards)",
+      "name": "Page with no real imagery (icon-only text-wall)",
       "severity": "high",
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\A(?=[\\s\\S]*<body\\b)(?![\\s\\S]*(?:<img\\b|<picture\\b|<svg\\b|<video\\b|url\\([^)]*\\.(?:png|jpe?g|webp|avif|gif)))[\\s\\S]{0,80}",
+        "pattern": "\\A(?=[\\s\\S]*<body\\b)(?![\\s\\S]*(?:<img\\b|<picture\\b|<video\\b|<svg\\b[^>]*(?:\\s(?:width|height)\\s*=\\s*[\"']?\\s*[1-9]\\d{2,}|viewBox\\s*=\\s*[\"']\\s*[-\\d.]+\\s+[-\\d.]+\\s+[1-9]\\d{2,})|url\\([^)]*\\.(?:png|jpe?g|webp|avif|gif)))[\\s\\S]{0,80}",
         "flags": "i",
         "scope": [
           "html",
@@ -2816,7 +2816,7 @@
           "astro"
         ]
       },
-      "why": "Imagery is mandatory and real. A full rendered page (has a <body>) that ships with zero imagery - no <img>, no <picture>, no <svg>, no <video>, no real background photo - is a text-wall of cards that reads as a memo, not a product. The single biggest richness failure. (Scoped to full documents; component fragments without a <body> are exempt.)",
+      "why": "Imagery is mandatory and real. A full rendered page (has a <body>) whose only visuals are icon-sized SVGs (sub-100px, a tiny viewBox) - or that ships no imagery at all - is a text-wall of cards that reads as a memo, not a product. Icons are not imagery; a meaningful illustration (>=100px or a large viewBox), a real <img>/<picture>/<video>, or a real background photo is. The single biggest richness failure. (Scoped to full documents; component fragments without a <body> are exempt.)",
       "fix": "Add real imagery: the client's own product UI/screenshots first, then curated Unsplash/Pexels chosen to match the brand and temperature. An abstract SVG illustration can support a section but is not a substitute for a real product/site image. Anchor major sections with imagery; never ship a text-only wall."
     },
     {

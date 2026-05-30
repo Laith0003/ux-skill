@@ -268,3 +268,71 @@ def score_brand_fidelity(html_text: str, profile: BrandProfile) -> Dict[str, Any
     passed = not (has_primary and (not primary_ok or not logo_ok))
 
     return {"score": score, "passed": passed, "findings": findings}
+
+
+# --- Imagery presence (richness) -- a SIBLING to brand fidelity --------------
+# A full page must carry REAL imagery: a raster <img>/<picture>/<video>, a real
+# background photo, or a SUBSTANTIAL inline SVG illustration. Icon-sized SVGs
+# (Lucide/Heroicons-style, sub-100px / tiny viewBox) do NOT count -- a wall of
+# cards with only tiny icons is still a text-wall. This is deliberately NOT folded
+# into score_brand_fidelity's weighted score: a page can honor the brand's
+# color/logo/type perfectly and still ship as a text-wall. Imagery presence is
+# *richness*, not brand-honoring -- keep the two scores honest by keeping them
+# separate. (The data/anti-patterns.json `imagery-mandatory-missing` rule is the
+# live linter backstop; this is the structural check P7 wiring will call.)
+
+_FULLPAGE_RE = re.compile(r"<(?:body|html)\b", re.IGNORECASE)
+_REAL_IMG_RE = re.compile(r"<(?:img|picture|video)\b", re.IGNORECASE)
+_REAL_BG_RE = re.compile(
+    r"url\(\s*['\"]?[^)'\"]+\.(?:png|jpe?g|webp|avif|gif)", re.IGNORECASE)
+_SVG_OPEN_RE = re.compile(r"<svg\b[^>]*>", re.IGNORECASE)
+_SVG_DIM_RE = re.compile(
+    r"\s(?:width|height)\s*=\s*['\"]?\s*([1-9]\d{2,})", re.IGNORECASE)
+_SVG_VIEWBOX_RE = re.compile(
+    r"viewBox\s*=\s*['\"]\s*[-\d.]+\s+[-\d.]+\s+([\d.]+)\s+([\d.]+)", re.IGNORECASE)
+_ICON_PX = 100  # below this an inline SVG reads as an icon, not as imagery
+
+
+def _svg_is_illustration(open_tag: str) -> bool:
+    """True if an <svg> open tag is illustration-scale (>= _ICON_PX), not an icon."""
+    if _SVG_DIM_RE.search(open_tag):
+        return True
+    m = _SVG_VIEWBOX_RE.search(open_tag)
+    if m:
+        try:
+            return float(m.group(1)) >= _ICON_PX or float(m.group(2)) >= _ICON_PX
+        except ValueError:
+            return False
+    return False
+
+
+def score_imagery(html_text: str) -> Dict[str, Any]:
+    """Does a FULL page carry real imagery, or is it a text-wall? Deterministic.
+
+    Returns ``{ok, kind, score, detail}`` with ``kind`` in {fragment, image,
+    bg-photo, illustration-svg, icons-only, none}. Component fragments (no
+    <body>/<html>) are exempt (ok=True) -- not every partial needs art. Icons are
+    NOT imagery: a page whose only visuals are sub-100px SVGs fails.
+    """
+    html = html_text or ""
+    if not _FULLPAGE_RE.search(html):
+        return {"ok": True, "kind": "fragment", "score": 100,
+                "detail": "Component fragment (no <body>); imagery check not applicable."}
+    if _REAL_IMG_RE.search(html):
+        return {"ok": True, "kind": "image", "score": 100,
+                "detail": "Page carries a real image / picture / video."}
+    if _REAL_BG_RE.search(html):
+        return {"ok": True, "kind": "bg-photo", "score": 100,
+                "detail": "Page carries a real background photo."}
+    svgs = _SVG_OPEN_RE.findall(html)
+    if any(_svg_is_illustration(tag) for tag in svgs):
+        return {"ok": True, "kind": "illustration-svg", "score": 100,
+                "detail": "Page carries a substantial inline SVG illustration."}
+    if svgs:
+        return {"ok": False, "kind": "icons-only", "score": 0,
+                "detail": ("Only icon-sized inline SVGs (< %dpx) and no real image -- a "
+                           "wall of cards with tiny icons still reads as a text-wall. Add "
+                           "real imagery (client assets first, then curated stock)." % _ICON_PX)}
+    return {"ok": False, "kind": "none", "score": 0,
+            "detail": ("Page ships zero imagery -- no image, picture/video, real background "
+                       "photo, or illustration. The biggest richness failure.")}

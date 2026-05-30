@@ -69,6 +69,17 @@ def test_swap_placeholder_urls():
     assert changed is True
 
 
+def test_swap_strips_unseeded_picsum_keeps_seeded():
+    """Random (unseeded) picsum is stripped; a SEEDED picsum is stable curated
+    stock and must survive -- consistent with the anti-patterns.json picsum stance."""
+    html = ('<img src="https://picsum.photos/1600/900">'
+            '<img src="https://picsum.photos/seed/cafe-counter/1600/900">')
+    new, changed = polish_swap_placeholder_urls(html)
+    assert changed is True
+    assert "picsum.photos/1600/900" not in new                      # random stripped
+    assert "picsum.photos/seed/cafe-counter/1600/900" in new        # seeded preserved
+
+
 def test_normalize_spacing_snaps_close_values():
     """7px → 8px (close to scale step)."""
     css = ".a { padding: 7px; gap: 25px; }"

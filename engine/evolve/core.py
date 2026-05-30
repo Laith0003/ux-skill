@@ -104,8 +104,17 @@ def polish_replace_generic_ctas(html: str) -> Tuple[str, bool]:
 
 
 def polish_swap_placeholder_urls(html: str) -> Tuple[str, bool]:
-    """Swap via.placeholder.com / placehold.co URLs for inert data URIs."""
-    pattern = r"https?://(?:via\.placeholder|placeholder|placehold\.co|placekitten|picsum\.photos)[^\s\"'<>]*"
+    """Swap generic placeholder URLs for inert data URIs.
+
+    Strips via.placeholder / placehold.co / placekitten and RANDOM (unseeded)
+    picsum.photos. A seeded picsum (picsum.photos/seed/...) is stable and on the
+    curated-stock path, so it is preserved -- consistent with the
+    data/anti-patterns.json picsum stance.
+    """
+    pattern = (
+        r"https?://(?:via\.placeholder|placeholder|placehold\.co|placekitten)[^\s\"'<>]*"
+        r"|https?://picsum\.photos/(?!seed/)[^\s\"'<>]*"
+    )
     new = re.sub(pattern, "data:image/svg+xml;base64,PHN2Zy8+", html)
     return new, new != html
 

@@ -1,6 +1,7 @@
 """Brand extraction tests — color from the logo, type from the logo style."""
 from engine.brand import (
     build_profile, render_md, hue_family, image_search_terms, score_brand_fidelity,
+    score_imagery,
 )
 
 
@@ -216,3 +217,58 @@ def test_brand_fidelity_is_deterministic():
     a = score_brand_fidelity(_FAITHFUL_HTML, p)
     b = score_brand_fidelity(_FAITHFUL_HTML, p)
     assert a == b
+
+
+# --- imagery presence (richness -- a SIBLING to brand fidelity, not in its score) ---
+
+def test_imagery_real_image_passes():
+    html = ('<!doctype html><html><body><main>'
+            '<img src="/hero.avif" alt="a commercial skip" width="800" height="600">'
+            '</main></body></html>')
+    r = score_imagery(html)
+    assert r["ok"] is True and r["kind"] == "image"
+
+
+def test_imagery_substantial_svg_passes():
+    """A real inline SVG illustration (large viewBox) counts as imagery."""
+    html = ('<!doctype html><html><body><main>'
+            '<svg viewBox="0 0 480 320"><path d="M0 0h480v320H0z"/></svg>'
+            '</main></body></html>')
+    r = score_imagery(html)
+    assert r["ok"] is True and r["kind"] == "illustration-svg"
+
+
+def test_imagery_icon_only_page_fails():
+    """Icons are NOT imagery: a wall of cards with only 24px SVGs is a text-wall."""
+    html = ('<!doctype html><html><body><main><h1>Skips</h1>'
+            '<div class="card"><svg viewBox="0 0 24 24" width="24" height="24">'
+            '<path d="M3 7h18"/></svg>Fast</div></main></body></html>')
+    r = score_imagery(html)
+    assert r["ok"] is False and r["kind"] == "icons-only"
+
+
+def test_imagery_background_photo_passes():
+    html = ('<!doctype html><html><body>'
+            '<section style="background:url(/yard.jpg) center"><h1>Skips</h1></section>'
+            '</body></html>')
+    r = score_imagery(html)
+    assert r["ok"] is True and r["kind"] == "bg-photo"
+
+
+def test_imagery_text_wall_fails():
+    html = ('<!doctype html><html><body><main><h1>Skips</h1>'
+            '<div class="card">A</div><div class="card">B</div></main></body></html>')
+    r = score_imagery(html)
+    assert r["ok"] is False and r["kind"] == "none"
+
+
+def test_imagery_fragment_is_exempt():
+    """Component fragments (no <body>) are not penalized -- not every partial needs art."""
+    r = score_imagery('<section class="pricing"><h2>Pro</h2><p>Real copy.</p></section>')
+    assert r["ok"] is True and r["kind"] == "fragment"
+
+
+def test_imagery_is_deterministic():
+    html = ('<!doctype html><html><body>'
+            '<img src="/x.png" alt="x" width="400" height="300"></body></html>')
+    assert score_imagery(html) == score_imagery(html)
