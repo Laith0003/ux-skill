@@ -287,10 +287,13 @@ Exit code non-zero means a high+ finding landed in your output. Fix before decla
 **Responsive gate — HARD, as hard as the brand gate. This is WRAP-AWARE, not scroll-only.** Run at **390px AND 360px** in a headless DOM and assert ALL THREE:
 
 - **(a) No horizontal scroll** — `document.documentElement.scrollWidth <= window.innerWidth`. The page never scrolls sideways on a phone.
-- **(b) One-row bars did not wrap** — the sticky header/nav (`.navrow` / `.site-header`) stays a single row. `scrollWidth` alone MISSES this: a nav that wrapped to two rows still reports `scrollWidth == innerWidth`, so it sails through a scroll-only gate. Detect the wrap directly: a designated one-row bar's `offsetHeight` exceeds ~1.6x its single-row content height, OR its flex children span more than one distinct row (compare child vertical centers, not raw `offsetTop`, since `align-items:center` shifts each child). The **utility/announcement topbar is NOT a strict one-row bar** — its intended mobile state is centered stacked lines (see component-behaviors.md). Check it for "not ragged" instead: its `|` dividers are hidden on mobile and each claim sits on its own line by design, never wrapping mid-phrase with dangling dividers.
+- **(b) The header/nav stayed one row** — the sticky header/primary nav bar stays a single row. `scrollWidth` alone MISSES this: a nav that wrapped to two rows still reports `scrollWidth == innerWidth`, so it sails through a scroll-only gate. Detect the wrap directly: the bar's `offsetHeight` exceeds ~1.6x its single-row content height, OR its flex children span more than one distinct row (compare child vertical centers, not raw `offsetTop`, since `align-items:center` shifts each child). The **utility/announcement topbar is NOT a strict one-row bar** — its intended mobile state is centered stacked lines (see component-behaviors.md). Check it for "not ragged" instead: its `|` dividers are hidden on mobile and each claim sits on its own line by design, never wrapping mid-phrase with dangling dividers.
 - **(c) No short inline label wrapped** — for the brand wordmark and every button/CTA label, assert it is on ONE line: `el.scrollHeight <= 1.4 * lineHeight`. (Measure the label element itself, not its button wrapper — a chip/icon inside the button inflates the button's `scrollHeight` and gives a false positive. Wrap a bare label text node in its own `<span>` so it is measurable. Resolve `line-height:normal` to `fontSize * 1.2`.)
+- **(d) Header-bar children do not collide/overlap** — `nowrap` (the fix for (c)) does not always cause horizontal scroll; inside a flex bar it can instead make the wordmark **overlap the CTA** while `scrollWidth == innerWidth` AND each label still measures one line — so (a), (b), and (c) ALL pass on a visibly-broken bar (observed). Catch it directly: no two of the header bar's one-row children's rects may intersect, i.e. each child's `right` must stay within the next child's `left` (and within the bar's content box). When the wordmark cannot fit beside the logo + CTA without colliding, the fix is to shrink it or **collapse to the logomark** (hide the words) — never overlap, never two lines.
 
-**A wrapping nav, a wordmark that splits mid-name, or a button/CTA label on two lines is a CRITICAL fail — always report it and fix it before declaring done.** This is the user's standing instruction: a nav/label that wraps on mobile must ALWAYS be reported and fixed. Horizontal scroll is also CRITICAL. None of the three is a nice-to-have.
+**Point the three selectors at the page under test — they are named-per-page, NOT auto-detected.** The snippet has three constants at the top — `NAV_ROW`, `WORDMARK`, `LABELS` — defaulted to this page's (skiphire) real values as a worked example. Set them to the page you are checking: the *innermost* nav row (NOT the whole `<header>` — the utility/announcement topbar is intentionally a separate, stackable bar, so policing the whole header false-flags it as "wrapped"), the brand wordmark element, and the *isolated* label spans (a label that has been wrapped in its own `<span>` away from any icon/chip). Do NOT replace these with generic `header [class*=nav]` / "first link in header" structural guesses — that was tried and it mis-resolves the whole header instead of the nav row and the topbar mailto link instead of the wordmark, producing a false-positive storm. The operator running this gate just built the page and can read its markup; aiming three selectors is the contract. **Non-resolution is LOUD, not silent:** if any target resolves nothing, the snippet prints a `WARNING` and the gate is DEGRADED to horizontal-scroll-only — which is exactly the blind spot this gate exists to close, so treat a degraded run as unverified until the selectors are fixed. Any button without an isolated label span is reported "unmeasured" (never false-flagged by measuring button+chip) — wrap its label in a span or eyeball it.
+
+**A wrapping nav, a wordmark that splits mid-name or overlaps the CTA, or a button/CTA label on two lines is a CRITICAL fail — always report it and fix it before declaring done.** This is the user's standing instruction: a nav/label that wraps on mobile must ALWAYS be reported and fixed. Horizontal scroll is also CRITICAL. None of these is a nice-to-have.
 
 Use whatever headless browser is on hand. Playwright is the cleanest:
 
@@ -306,34 +309,69 @@ with sync_playwright() as p:
         pg = b.new_page(viewport={"width": w, "height": 900}, device_scale_factor=2)
         pg.goto(url); pg.wait_for_timeout(400)
         m = pg.evaluate("""() => {
+          // ===== SET THESE THREE TO THE PAGE UNDER TEST (do NOT auto-detect — see note) =====
+          // Values below are this page's (skiphire) real selectors, as a worked example.
+          const NAV_ROW = '.navrow';                         // the innermost nav row (NOT the whole header — the topbar may intentionally stack)
+          const WORDMARK = '.brand .wm b';                   // the brand wordmark text element
+          const LABELS = '.btn .btn-label';                  // ISOLATED label spans only (a label wrapped away from its icon/chip)
+          // ================================================================================
           const lh = el => { const c = getComputedStyle(el); let l = parseFloat(c.lineHeight);
             return isFinite(l) ? l : parseFloat(c.fontSize) * 1.2; };
+          const vis = el => el && el.offsetParent !== null && el.getBoundingClientRect().width > 0;
+          const navBar = document.querySelector(NAV_ROW);
           // (a) horizontal scroll + the offending nodes
           const overflow = [...document.querySelectorAll('*')]
             .filter(e => e.getBoundingClientRect().right > window.innerWidth + 1)
             .slice(0, 8).map(e => e.tagName.toLowerCase() + (e.className ? '.' + String(e.className).trim().split(/\\s+/)[0] : ''));
-          // (b) one-row bars: height-ratio is the robust signal; row-count via child CENTERS
-          const barWrapped = sel => { const bar = document.querySelector(sel); if (!bar) return null;
-            const kids = [...bar.children].filter(c => c.offsetParent !== null);
+          // (b) the nav row is ONE row: height-ratio is robust; row-count via child CENTERS
+          const barWrapped = bar => { if (!bar) return null;
+            const kids = [...bar.children].filter(vis);
             const single = kids.length ? Math.max(...kids.map(c => c.offsetHeight)) : bar.offsetHeight;
             const rows = new Set(kids.map(c => { const r = c.getBoundingClientRect(); return Math.round(r.top + r.height / 2); })).size;
             return { h: bar.offsetHeight, single, ratio: +(bar.offsetHeight / single).toFixed(2),
                      wrapped: bar.offsetHeight > 1.6 * single || rows > 1 }; };
-          // (c) short labels on ONE line (measure the label, not its button)
-          const labelWrapped = sel => { const el = document.querySelector(sel); if (!el) return null;
+          // (c) short labels on ONE line — wordmark + each ISOLATED label span. Never measure a
+          //     button that contains an icon/chip (its scrollHeight is box height, a false wrap):
+          //     such a label is reported "unmeasured — wrap it in a span or eyeball it".
+          const labelWrapped = el => { if (!el) return null;
             return { sh: el.scrollHeight, lh: +lh(el).toFixed(1),
                      ratio: +(el.scrollHeight / lh(el)).toFixed(2), wrapped: el.scrollHeight > 1.4 * lh(el) }; };
-          const labels = ['.brand .wm b', '.nav-actions .btn .btn-label', '.hero a.btn .btn-label']
-            .map(s => ({ sel: s, r: labelWrapped(s) })).filter(x => x.r);
+          const wmEl = document.querySelector(WORDMARK);
+          const labelEls = [...document.querySelectorAll(LABELS)].filter(vis);
+          const labels = [{ sel: 'wordmark', r: labelWrapped(wmEl) },
+                          ...labelEls.map((el, i) => ({ sel: 'label[' + i + ']:' + (el.textContent || '').trim().slice(0, 16), r: labelWrapped(el) }))]
+                         .filter(x => x.r);
+          // (d) NAV-ROW children must not overlap — nowrap can make the wordmark overlap the CTA
+          //     while (a)/(b)/(c) all pass. Scoped to NAV_ROW so the intentionally-stacked topbar
+          //     is not flagged. This is the only check that catches the overlap class of bug.
+          let collide = null;
+          if (navBar) { const kids = [...navBar.querySelectorAll('*')].filter(vis)
+              .filter(k => (k.textContent || '').trim() || k.querySelector('img,svg'));
+            const boxes = kids.map(k => k.getBoundingClientRect());
+            for (let i = 0; i < boxes.length && !collide; i++)
+              for (let j = i + 1; j < boxes.length; j++) {
+                const a = boxes[i], b = boxes[j];
+                if (kids[i].contains(kids[j]) || kids[j].contains(kids[i])) continue;  // skip ancestor/descendant
+                const ox = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+                const oy = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+                if (ox > 2 && oy > 2) { collide = 'nav children overlap'; break; }
+              } }
           return { iw: window.innerWidth, sw: document.documentElement.scrollWidth, overflow,
-                   nav: barWrapped('.navrow'), labels };
+                   navFound: !!navBar, nav: barWrapped(navBar), wmFound: !!wmEl, labelCount: labelEls.length,
+                   labels, collide };
         }""")
         hscroll = m["sw"] > m["iw"]
         navwrap = m["nav"] and m["nav"]["wrapped"]
         labelwrap = [x["sel"] for x in m["labels"] if x["r"]["wrapped"]]
-        print(f"[{w}px] iw={m['iw']} sw={m['sw']} h-scroll={hscroll} nav={m['nav']} labelWraps={labelwrap or 'none'}")
+        collide = bool(m["collide"])
+        degraded = (not m["navFound"]) or (not m["wmFound"]) or (m["labelCount"] == 0)
+        print(f"[{w}px] iw={m['iw']} sw={m['sw']} h-scroll={hscroll} navFound={m['navFound']} nav={m['nav']}")
+        print(f"        wmFound={m['wmFound']} labelSpans={m['labelCount']} labelWraps={labelwrap or 'none'} collide={m['collide'] or 'none'}")
         if m["overflow"]: print(f"        overflowing: {m['overflow']}")
-        if hscroll or navwrap or labelwrap: fail = True
+        if degraded:
+            print("        WARNING: a target (NAV_ROW / WORDMARK / LABELS) resolved nothing — point it at THIS page's elements. "
+                  "The gate is DEGRADED (h-scroll-only) until it does; any button without an isolated label span is unmeasured — eyeball it.")
+        if hscroll or navwrap or labelwrap or collide: fail = True
     b.close()
 sys.exit(1 if fail else 0)
 PY
