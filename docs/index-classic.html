@@ -4159,15 +4159,6 @@ h1, h2, h3, h4 {
   function applyBrand(b) {
     const root = document.documentElement;
     const body = document.body;
-    const original = {
-      canvas: root.style.getPropertyValue('--canvas'),
-      surface1: root.style.getPropertyValue('--surface-1'),
-      ink: root.style.getPropertyValue('--ink'),
-      body: root.style.getPropertyValue('--body'),
-      muted: root.style.getPropertyValue('--muted'),
-      display: root.style.getPropertyValue('--display'),
-      sans: root.style.getPropertyValue('--sans'),
-    };
     root.style.setProperty('--canvas', b.canvas);
     root.style.setProperty('--surface-1', b.canvas);
     root.style.setProperty('--ink', b.ink);
