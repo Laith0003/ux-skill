@@ -36,7 +36,9 @@ jobs:
         with:
           languages: ${{ matrix.language }}
           build-mode: none
-          queries: security-and-quality
+          # security-focused: the security tab surfaces security issues, not
+          # code-quality lint (the repo has its own linter + test suite for that).
+          queries: security-extended
 
       - name: Analyze
         uses: github/codeql-action/analyze@v3

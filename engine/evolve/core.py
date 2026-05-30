@@ -146,7 +146,7 @@ def polish_fontweight_bold(css: str) -> Tuple[str, bool]:
     """font-weight: bold → font-weight: 700 (numeric)."""
     new = re.sub(r"font-weight\s*:\s*bold", "font-weight: 700", css,
                  flags=re.IGNORECASE)
-    return new, new != html_or_css_safeguard(new) is False or new != new
+    return new, new != css
 
 
 def _polish_pass(html: str, css: str) -> Tuple[str, str, List[str]]:
