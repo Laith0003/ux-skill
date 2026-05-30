@@ -71,6 +71,7 @@ Call the Task tool with `subagent_type: "frontend-engineer"`. Pass the agent:
 - The brief (verbatim from the user)
 - Your dial values
 - The 2-4 arsenal patterns you picked
+- **The page-level section sequence** selected for the brief's goal (see the v2 Python integration step below). Instruct the sub-agent to expand the ENTIRE ordered sequence, map all source content into it (every sector -> a pill, every size -> a card, every benefit -> a checklist item — do not trim), give every card/pill/stat a relevant inline SVG icon, and ship the goal's conversion mechanisms.
 - The full content of `references/styles/anti-slop.md` (paste into the prompt — do not assume the sub-agent has read it)
 - The target stack
 - An instruction to return:
@@ -201,6 +202,34 @@ print('BRANDS:   ', [b['id'] for b in r.get('brand_exemplars', [])[:5]])
 print('GUARDRAILS:', len(r.get('guardrails', [])), 'anti-pattern rules active')
 "
 ```
+
+### Step 2.5 — Select the page-level section sequence (richness)
+
+A recommendation gives you the *vocabulary* (style/palette/type). The page
+*skeleton* — what sections appear and in what order — comes from the page-sequence
+selector. Pick one by the brief's goal so the output is RICH and COMPLETE, not a
+hero + three cards.
+
+```bash
+python3 -c "
+import json
+from engine.page_sequence import select_sequence
+brief = json.load(open('.ux/last-discovery.json'))
+goal = brief.get('goal') or brief.get('primary_goal') or brief.get('product_type') or ''
+query = goal or (str(brief.get('product_type','')) + ' ' + str(brief.get('audience','')))
+seq = select_sequence(query) or select_sequence(json.dumps(brief))
+print(json.dumps(seq, indent=2) if seq else 'no sequence matched')
+" 2>/dev/null
+```
+
+Then EXPAND the whole sequence in the build (this is non-negotiable for richness):
+
+- Render EVERY section in `section_sequence`, in order — do not trim to the few you find easiest.
+- Map ALL source content into it: every sector -> a Category pill, every size/package -> an Item card, every benefit -> a Value card or checklist item. Completeness over neatness — one source item, one element.
+- Give EVERY card, pill, and stat a relevant inline SVG icon (Lucide-style, `currentColor`, 1.5–2px stroke). Never emoji, and never a numbered-placeholder generic glyph.
+- Include the `conversion_mechanisms` the goal needs even if the source page lacked them. For `lead-gen-service` that means an inline hero form, a proof/stats bar, trust signals, and a visible phone affordance.
+
+Pass the selected sequence to the frontend-engineer sub-agent as the page skeleton.
 
 ### Step 3 — Use the recommendation as hard constraints
 

@@ -16,8 +16,9 @@ You implement high-end frontend code from a brief + creative direction passed by
 2. The user's verbatim brief
 3. Three dial values: `DESIGN_VARIANCE`, `MOTION_INTENSITY`, `VISUAL_DENSITY` (1–10 each)
 4. 2–4 named arsenal patterns to apply
-5. The full content of `references/styles/anti-slop.md` (you do not need to re-read it — it's in your prompt)
-6. The target stack
+5. **The page-level section sequence** selected for the brief's goal (from `data/page-sequences.json` via `engine.page_sequence.select_sequence`): an ordered `section_sequence`, a `cta_placement`, and the `conversion_mechanisms` the goal needs. This is the page skeleton — see "Expand the full page sequence" below. If a full-page build is requested and no sequence was passed, ask the calling command for it rather than improvising a hero + three cards.
+6. The full content of `references/styles/anti-slop.md` (you do not need to re-read it — it's in your prompt)
+7. The target stack
 
 ## What you return
 
@@ -62,6 +63,19 @@ SEO is non-negotiable for public-web outputs. Components, dashboards, and other 
 If unsure, ask the calling command for the stack — don't guess past what's in the brief.
 
 ## Discipline
+
+### 0. Expand the full page sequence (richness)
+
+When the calling command passes a page-level section sequence (a full-page build),
+that sequence is the page skeleton. Build the WHOLE thing — do not collapse it to a
+hero plus a few cards.
+
+- **Render every section** in `section_sequence`, in the given order. For `lead-gen-service` that is: Hero (with inline quote/contact form) -> Proof/stats bar -> Value cards -> Category pills -> Item cards -> Split feature rows -> Coverage -> Social proof / pull-quote -> CTA band -> Rich footer.
+- **Map ALL source content into it.** Every sector the brief lists becomes a Category pill; every size/package becomes an Item card; every benefit becomes a Value card or a checklist item. Completeness over neatness — one source item, one element. Do not trim a long list down to a tidy three.
+- **Every card, pill, and stat gets a relevant inline SVG icon** (Lucide-style, `currentColor`, 1.5–2px stroke) that fits what it represents. No emoji. No generic lightbulb/rocket clichés. (Note: an inline SVG *icon* per item is required and good; an abstract SVG is NOT a substitute for a real product/site image — see 4b.)
+- **Ship the goal's conversion mechanisms** even if the source page lacked them. For `lead-gen-service`: an inline form in the hero, a proof/stats bar, trust signals, and a visible phone affordance.
+
+A sparse page that ignores the sequence is a richness failure — return the full expansion.
 
 ### 1. Verify dependencies before importing
 
