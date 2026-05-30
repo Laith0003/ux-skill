@@ -144,6 +144,49 @@ else:
 
     # -------- ux recommend -----------------------------------------------
 
+    def _load_brand_dict(path):
+        """Load a brand.json (a BrandProfile dict) for --brand-file. None if absent.
+
+        Accepts a bare profile dict or a wrapper {"brand": {...}}.
+        """
+        if not path:
+            return None
+        payload = json.loads(Path(path).read_text(encoding="utf-8"))
+        if isinstance(payload, dict) and isinstance(payload.get("brand"), dict):
+            return payload["brand"]
+        return payload if isinstance(payload, dict) else None
+
+    @cli.command("brand")
+    @click.option("--signals-file", type=click.Path(exists=True), required=True,
+                  help="JSON of captured brand signals (logo_colors, logo, fonts, voice, imagery).")
+    @click.option("--out", default=".ux", help="Output dir for brand.md + brand.json (default .ux).")
+    @click.pass_context
+    def brand_cmd(ctx, signals_file, out) -> None:
+        """Build brand.md + brand.json from captured brand signals.
+
+        The CALLER captures the signals (sample the logo pixels, read the wordmark
+        style) -- the engine stays offline. This normalizes them into a travelling
+        BrandProfile: writes <out>/brand.json (fed to --brand-file on recommend /
+        synthesize / evolve) and <out>/brand.md (the human-readable anchor to paste
+        into the frontend-engineer prompt).
+        """
+        from engine.brand import build_profile, render_md
+        signals = json.loads(Path(signals_file).read_text(encoding="utf-8"))
+        profile = build_profile(signals)
+        out_dir = Path(out)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / "brand.json").write_text(
+            json.dumps(profile.to_dict(), indent=2, ensure_ascii=False), encoding="utf-8")
+        (out_dir / "brand.md").write_text(render_md(profile), encoding="utf-8")
+        _emit({
+            "brand_json": str(out_dir / "brand.json"),
+            "brand_md": str(out_dir / "brand.md"),
+            "name": profile.name,
+            "primary": profile.primary,
+            "primary_source": profile.primary_source,
+            "display_source": profile.fonts.get("display_source"),
+        }, ctx.obj["pretty"])
+
     @cli.command("recommend")
     @click.option("--project-type", default="")
     @click.option("--industry", default="")
@@ -154,9 +197,11 @@ else:
     @click.option("--stack", default="")
     @click.option("--region", default="")
     @click.option("--brief-file", type=click.Path(exists=True), help="JSON brief file.")
+    @click.option("--brand-file", type=click.Path(exists=True),
+                  help="brand.json from `uxskill brand` -- anchors palette/type to the client brand.")
     @click.pass_context
     def recommend_cmd(ctx, project_type, industry, audience, tone, must_have, forbidden,
-                      stack, region, brief_file) -> None:
+                      stack, region, brief_file, brand_file) -> None:
         """Run the 5-parallel-search recommender."""
         if brief_file:
             payload = json.loads(Path(brief_file).read_text(encoding="utf-8"))
@@ -187,6 +232,8 @@ else:
                 stack=stack,
                 region=region,
             )
+        if brand_file:
+            brief.brand = _load_brand_dict(brand_file)
         rec = run_recommend(brief)
         _emit(rec.to_dict(), ctx.obj["pretty"])
 
@@ -465,11 +512,13 @@ else:
     @click.option("--must-have", multiple=True, help="Must-have tags (repeatable).")
     @click.option("--forbidden", multiple=True, help="Forbidden tags (repeatable).")
     @click.option("--brand", multiple=True, help="Reference brand(s). Sets brand-anchor mode.")
+    @click.option("--brand-file", type=click.Path(exists=True),
+                  help="Extracted client brand.json -- stamps the client's primary/type over the synthesis.")
     @click.option("--strict", is_flag=True, help="With --brand: 100% brand tokens, no synthesis.")
     @click.option("--no-log", is_flag=True, help="Don't write to .ux/decisions.jsonl.")
     @click.pass_context
     def synthesize_cmd(ctx, industry, tone, audience, must_have, forbidden,
-                       brand, strict, no_log) -> None:
+                       brand, brand_file, strict, no_log) -> None:
         """Synthesize a fresh design language from a brief (v2.1).
 
         Modes (auto-dispatched):
@@ -493,6 +542,8 @@ else:
         # via duck-typed getattr — set them dynamically.
         object.__setattr__(b, "reference_brands", list(brand))
         object.__setattr__(b, "strict", strict)
+        if brand_file:
+            b.brand = _load_brand_dict(brand_file)
         sys_out = run_synthesize(b)
         # Log decision
         try:
@@ -520,8 +571,10 @@ else:
                   help="Safety cap (default 5).")
     @click.option("--no-log", is_flag=True,
                   help="Don't write to .ux/decisions.jsonl.")
+    @click.option("--brand-file", type=click.Path(exists=True),
+                  help="Extracted client brand.json -- enforces the brand hard floor in the loop.")
     @click.pass_context
-    def evolve_cmd(ctx, html_path, css_path, force, max_rounds, no_log) -> None:
+    def evolve_cmd(ctx, html_path, css_path, force, max_rounds, no_log, brand_file) -> None:
         """Auto-iterating polish loop. Refines until score >= 90 or plateaus.
 
         Reads <html_path> (+ optional --css). Writes:
@@ -546,6 +599,7 @@ else:
             linter_score=report.score,
             force=force,
             max_rounds=max_rounds,
+            brand_profile=_load_brand_dict(brand_file),
         )
 
         # Persist outputs only if above gate or forced
