@@ -127,7 +127,7 @@ This lets `/ux-next` and downstream commands pick up where you left off.
 
 ## SEO is mandatory for public-web outputs
 
-For any landing page or public-facing surface, read `references/foundations/seo.md` and require the frontend-engineer to ship the full SEO foundation (head surface, OG + Twitter, JSON-LD, semantic HTML, image discipline, CWV targets). Surface this requirement in your dispatch prompt. The output is incomplete without it. Use sensible placeholder values (`{TODO_FILL}` for canonical, og:image URL, etc.) when the brief doesn't supply them — let the user patch before deploy.
+For any landing page or public-facing surface, read `references/foundations/seo.md` and require the frontend-engineer to ship the full SEO foundation (head surface, OG + Twitter, JSON-LD, semantic HTML, image discipline, CWV targets). Surface this requirement in your dispatch prompt. The output is incomplete without it. Derive sensible real values from the brief + source when the brief doesn't supply them (canonical/og:url from the source URL, og:image from a real CDN image the page references). **Never let the frontend-engineer ship a literal `{TODO_FILL...}` token inside the rendered markup** — the linter flags it HIGH and it is a draft-state leak. Where a value is genuinely absent (no phone, no OG image), OMIT that element gracefully (drop the `<meta>` / the affordance); surface any "you should patch this" note to the user OUTSIDE the code, never as a placeholder in the HTML.
 
 ## Hard rules (non-negotiable)
 
@@ -138,6 +138,9 @@ For any landing page or public-facing surface, read `references/foundations/seo.
 - NEVER ship a text-only wall — always include intentional, real imagery.
 - NEVER use emoji as icons. Prioritize **Google Material Symbols** (load via Google Fonts: `Material+Symbols+Outlined` / `Rounded` / `Sharp`, styled with `font-variation-settings`). Phosphor / Radix / Lucide are acceptable secondary choices when an icon doesn't exist in Material Symbols.
 - NEVER ship 3-equal-cards layouts. Use 2-col zig-zag, asymmetric, or horizontal scroll.
+- NEVER ship horizontal scroll on mobile. Every layout works at 360–390px with `scrollWidth <= innerWidth`; every multi-column block collapses to one column at ≤640px. This is verified in Step 5, not assumed.
+- NEVER ship a literal placeholder token (`{TODO_FILL...}`, `{{ var }}`, "lorem ipsum") in the rendered markup. Fill known values; OMIT genuinely-absent elements; never print the token.
+- NEVER repeat one icon across differentiated items (every skip size with the same box icon). Distinct icon per item, or none + typographic differentiation.
 - NEVER animate `width`/`height`/`top`/`left`. Use `transform` and `opacity` only.
 - NEVER skip empty/loading/error states.
 - NEVER use serif fonts on dashboards.
@@ -280,6 +283,41 @@ python3 -m engine.cli.main --no-pretty lint <output-paths> --threshold high
 ```
 
 Exit code non-zero means a high+ finding landed in your output. Fix before declaring done.
+
+**Responsive gate — HARD, as hard as the brand gate.** Render the output at 390px in a headless DOM and assert there is NO horizontal scroll (`document.documentElement.scrollWidth <= window.innerWidth`) AND that the hero / any 2-col sections have stacked to a single column. Horizontal scroll on mobile is a CRITICAL fail and the single most common shipped defect — **do not declare done while it exists.** Run it at 390px AND 360px.
+
+Use whatever headless browser is on hand. Playwright is the cleanest:
+
+```bash
+python3 - "$OUTPUT_HTML" <<'PY'
+import sys, pathlib
+from playwright.sync_api import sync_playwright   # pip install playwright && playwright install chromium
+url = pathlib.Path(sys.argv[1]).resolve().as_uri()
+fail = False
+with sync_playwright() as p:
+    b = p.chromium.launch()
+    for w in (390, 360):
+        pg = b.new_page(viewport={"width": w, "height": 900}, device_scale_factor=2)
+        pg.goto(url); pg.wait_for_timeout(400)
+        m = pg.evaluate("""() => {
+          const overflow = [...document.querySelectorAll('*')]
+            .filter(e => e.getBoundingClientRect().right > window.innerWidth + 1)
+            .slice(0, 8).map(e => e.tagName.toLowerCase() + (e.className ? '.' + String(e.className).trim().split(/\\s+/)[0] : ''));
+          const hero = document.querySelector('.hero .grid, [class*="hero"] [class*="grid"], main section:first-of-type .grid');
+          const cols = hero ? getComputedStyle(hero).gridTemplateColumns.split(' ').length : null;
+          return { iw: window.innerWidth, sw: document.documentElement.scrollWidth, overflow, heroCols: cols };
+        }""")
+        hscroll = m["sw"] > m["iw"]
+        stacked = (m["heroCols"] is None) or (m["heroCols"] == 1)
+        print(f"[{w}px] innerWidth={m['iw']} scrollWidth={m['sw']} h-scroll={hscroll} heroCols={m['heroCols']} stacked={stacked}")
+        if m["overflow"]: print(f"        overflowing: {m['overflow']}")
+        if hscroll or not stacked: fail = True
+    b.close()
+sys.exit(1 if fail else 0)
+PY
+```
+
+If Playwright is not installed, the same three signals (`window.innerWidth`, `document.documentElement.scrollWidth`, and the hero container's computed `grid-template-columns` track count) can be read through any headless-DOM tool you have — a headless-Chrome eval, or an MCP browser-preview that supports a viewport resize + a JS eval. Always read `window.innerWidth` first and confirm it is ~390/360 before trusting the scroll number; on failure, the `overflow` list above names the offending nodes so you can fix the specific block (almost always a fixed multi-column grid or a `100vw` element).
 
 **If a brand was extracted, also run the brand-fidelity HARD FLOOR** — an off-brand page fails no matter how good it looks (it must use the brand primary, carry the logo, and ship real imagery):
 

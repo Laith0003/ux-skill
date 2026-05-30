@@ -1,8 +1,8 @@
 {
   "_meta": {
     "version": "2.0.0",
-    "entries": 150,
-    "last_updated": "2026-05-30",
+    "entries": 152,
+    "last_updated": "2026-05-31",
     "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
     "schema_version": "1.0"
   },
@@ -3153,6 +3153,50 @@
       },
       "why": "href=\"javascript:void(0)\" and similar javascript: URLs are dead links used as click targets. They break open-in-new-tab, middle-click, and keyboard behavior, and read as a placeholder tell.",
       "fix": "Use a real href for navigation, or a <button type=\"button\"> for actions. Never a javascript: URL as a link destination."
+    },
+    {
+      "id": "placeholder-token-shipped",
+      "name": "Literal placeholder token left in shipped markup",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\{TODO_FILL|\\{\\{[^}]*(?:TODO|FILL|[A-Z]{3,}_)[^}]*\\}\\}|lorem\\s+ipsum",
+        "flags": "i",
+        "scope": [
+          "html",
+          "blade",
+          "astro",
+          "jsx",
+          "tsx",
+          "vue"
+        ]
+      },
+      "why": "A literal {TODO_FILL...} token, a placeholder-shaped {{ ... }} mustache, or lorem ipsum rendered in the actual UI is a draft-state leak - the rawest sign that generated output shipped without being finished. (Legitimate template bindings like {{ user.name }} are NOT flagged; only placeholder-shaped tokens are.)",
+      "fix": "Fill the value where it is known (canonical/og:url from the source URL, og:image from a real CDN image). Where a value is genuinely absent (no phone, no OG image), OMIT that element gracefully - drop the meta tag or the affordance. Never print the token; keep any patch-this note outside the shipped markup."
+    },
+    {
+      "id": "full-viewport-width-overflow",
+      "name": "Full viewport width causes horizontal scroll",
+      "severity": "medium",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:^|[^-\\w])(?:min-)?width\\s*:\\s*100vw|\\bw-screen\\b",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss",
+          "html",
+          "blade",
+          "astro",
+          "jsx",
+          "tsx",
+          "vue"
+        ]
+      },
+      "why": "width: 100vw (and min-width: 100vw / Tailwind w-screen) is the viewport width INCLUDING the scrollbar gutter, so a full-bleed element set this way overflows the document by the scrollbar width and produces horizontal scroll on the very platforms that have a visible scrollbar. (max-width: 100vw is a legitimate ceiling and is NOT flagged.)",
+      "fix": "Size full-bleed surfaces to 100% of the container, or use the full-bleed margin trick (margin-inline: calc(50% - 50vw)) which accounts for the scrollbar. Never set the element's own width or min-width to 100vw."
     }
   ]
 }

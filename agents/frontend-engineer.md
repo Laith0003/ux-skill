@@ -49,7 +49,7 @@ For any landing page, marketing surface, blog post, or other public-facing page,
 - `<html lang>` set; `dir` set if RTL
 - Performance: preload critical fonts, preconnect to CDNs, defer non-critical CSS, inline critical CSS for the fold
 
-If the brief doesn't supply specific values for SEO surface (canonical URL, OG image URL, organization name, etc.), use sensible defaults derived from the brand identity + the user's brief — or surface placeholders as `{TODO_FILL}` so the user can patch them before deploy.
+If the brief doesn't supply specific values for SEO surface (canonical URL, OG image URL, organization name, etc.), use sensible defaults derived from the brand identity + the user's brief. **Never ship a literal `{TODO_FILL...}` token in the rendered markup** — it is a draft-state leak and the linter flags it HIGH. Derive a real value where you can (canonical/og:url from the source URL, og:image from a real CDN image the page already references); where a value is genuinely absent (no phone, no OG image), OMIT that element entirely (drop the `<meta>` / the affordance) rather than printing the placeholder. A `{TODO_FILL}` is only acceptable in an internal note to the user OUTSIDE the code block, never inside the shipped HTML.
 
 SEO is non-negotiable for public-web outputs. Components, dashboards, and other behind-auth surfaces don't need the full surface (no canonical, no OG cards) but still get semantic HTML + image discipline.
 
@@ -131,13 +131,29 @@ Every design MUST include intentional, REAL imagery. Text-only walls are forbidd
 
 ### 6. Layout rules
 
-- Mobile-first; asymmetric layouts collapse to single column < 768px
+- Mobile-first; build the phone layout first, then layer up
+- Every multi-column block collapses to ONE column at ≤640px — hero text + form, image + text, card rows, stat bars. Never let a fixed `Nfr Mfr` grid (or an inline-`style` grid you cannot media-query) survive to mobile
+- Nothing escapes its container: no absolutely-positioned element bleeds outside its parent on small screens; size full-bleed surfaces to `100%`/the container, NEVER `width: 100vw` (it overflows by the scrollbar width)
 - Container max widths: `max-w-7xl` or `max-w-[1400px]`
 - Never `h-screen` for hero; use `min-h-[100dvh]`
 - Grid for structure, never `w-[calc(33%-1rem)]` flex-math
 - AIDA reading order on landing pages: Attention (hero) → Interest (value props) → Desire (proof) → Action (CTA)
 - 2-line H1 maximum (concise headline + supporting line)
 - Wide containers — `max-w-5xl` to `max-w-6xl` for marketing surfaces
+
+### 6a. Responsive gate (MANDATORY — verify before returning)
+
+This is as hard a gate as anything in this file. Build mobile-first, then BEFORE you return the code, verify at 390px that:
+
+- **(a) there is no horizontal scroll** — `document.documentElement.scrollWidth <= window.innerWidth`, and
+- **(b) every multi-column block has stacked** to a single column.
+
+Fix until both are clean. Horizontal scroll on a phone is the single most common shipped defect and a CRITICAL fail — do not declare done while it exists. If you have a headless DOM available (the calling command runs the responsive gate in `/ux-design` Step 5), trust its numbers; if not, trace every section's mobile breakpoint by hand and confirm no fixed multi-column grid, no `100vw`, and no off-canvas absolute element remains.
+
+### 6b. Imagery as backdrop + no repeated icons (cross-ref `anti-slop.md`)
+
+- **Imagery as backdrop, not just an icon.** Where depth helps — hero, location/coverage cards, feature tiles — use a REAL image as the section or card background with text overlaid and a readable scrim. A flat card with one lone centered icon, where a backdrop image would carry it, is a slop tell. (The per-item inline-SVG icon in lists from section 0 still applies; this is about sections and feature/coverage cards reading as empty.)
+- **Never repeat one icon across differentiated items.** Do not render every skip size / plan / sector with the same box/check/grid glyph. If you cannot source a DISTINCT, meaningful icon per item, drop the icons there and differentiate with TYPOGRAPHY (scale, weight, the number/value itself), color, or layout. A repeated icon is worse than no icon — it says "these are identical" about things you claim are different.
 
 ### 7. Typography
 

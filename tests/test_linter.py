@@ -271,3 +271,47 @@ def test_component_fragment_not_flagged_imagery_mandatory(tmp_path):
         encoding="utf-8")
     ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
     assert "imagery-mandatory-missing" not in ids
+
+
+# --- Responsive gate (dogfood P6): placeholder-token-shipped (both-direction) ---
+
+def test_placeholder_token_shipped_flags_todo_fill(tmp_path):
+    """A literal {TODO_FILL...} left in shipped markup is a draft-state leak — must fire HIGH."""
+    f = tmp_path / "leak.html"
+    f.write_text(
+        '<header><a class="nav-phone" href="tel:{TODO_FILL}">'
+        '<span>{TODO_FILL: phone}</span></a></header>',
+        encoding="utf-8")
+    findings = lint([str(f)]).to_dict()["findings"]
+    hit = [x for x in findings if x["rule_id"] == "placeholder-token-shipped"]
+    assert hit, "literal {TODO_FILL} placeholder did not fire"
+    assert hit[0]["severity"] == "high"
+
+
+def test_placeholder_token_shipped_ignores_real_template_binding(tmp_path):
+    """A legitimate Vue/Blade {{ binding }} is NOT a placeholder — must NOT fire."""
+    f = tmp_path / "ok.vue"
+    f.write_text(
+        '<template><span>{{ user.name }}</span>'
+        '<p>{{ price | currency }}</p><div>{{ item.title }}</div></template>',
+        encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert "placeholder-token-shipped" not in ids
+
+
+# --- Responsive gate (dogfood P6): full-viewport-width-overflow (both-direction) ---
+
+def test_full_viewport_width_flags_100vw(tmp_path):
+    """width: 100vw overflows by the scrollbar width -> horizontal scroll. Must fire."""
+    f = tmp_path / "overflow.css"
+    f.write_text(".hero { width: 100vw; }\n.bar { min-width: 100vw; }", encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert "full-viewport-width-overflow" in ids
+
+
+def test_full_viewport_width_ignores_max_width_100vw(tmp_path):
+    """max-width: 100vw is a legitimate ceiling, not an overflow source — must NOT fire."""
+    f = tmp_path / "ok.css"
+    f.write_text(".hero { max-width: 100vw; }\n.bar { width: 100%; }", encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert "full-viewport-width-overflow" not in ids

@@ -26,6 +26,24 @@ Treat each ban as a hard rule unless a brief explicitly overrides it. The goal i
 
 ---
 
+## Responsive / mobile-first (non-negotiable)
+
+Mobile is not the small version of the desktop — it is where most of the traffic lives and where the defects ship. The failures below recur on every unconstrained build because the generator designs at desktop width and never re-checks the phone. They are not taste calls; they are correctness.
+
+1. **Mobile-first, and verify it.** Every layout MUST work at 360–390px with ZERO horizontal scroll. Horizontal scroll on mobile is a CRITICAL fail — the single most common shipped defect. ALWAYS verify it before declaring done: render the output at 390px and assert `document.documentElement.scrollWidth <= window.innerWidth`. If it overflows, it is not finished, no matter how good the desktop view looks.
+
+2. **Every multi-column block collapses to one column at ≤640px.** Hero text + form, image + text, card rows, stat bars — all of them. A fixed multi-column grid that overflows on a phone is never acceptable. Set the single-column breakpoint explicitly; never let a `1.05fr 0.95fr` (or any `Nfr Mfr`) survive to mobile, and never define the columns in an inline `style` you cannot media-query.
+
+3. **Nothing escapes its container.** No absolutely-positioned element may bleed outside its parent or "pop out" on small screens. Decorative glows, off-canvas art, and oversized media are all clipped or contained — a `width: 100vw` block overflows by the scrollbar width and is banned; size to `100%`/the container, not the viewport.
+
+4. **Never ship a literal placeholder token.** `{TODO_FILL...}`, `{{ var }}` mustache left in markup, "lorem ipsum" — none of these reach the rendered UI. If a value is genuinely absent (no phone number, no OG image), OMIT that element gracefully — drop the affordance, don't print the token. A visible `{TODO_FILL: phone}` in a sticky header is the rawest draft-state leak there is.
+
+5. **Imagery as backdrop, not just an icon.** Where it adds depth — hero, location/coverage cards, feature tiles — use a REAL image as the section or card background with text overlaid and a readable scrim, not a flat card with one lone icon. A single centered icon on a bare card is a slop tell precisely where a backdrop image would have carried the surface. (The icon-per-item rule for lists still holds; this is about sections and feature/coverage cards that read as empty without imagery.)
+
+6. **Never repeat one icon across differentiated items.** Every skip size, every plan, every sector rendered with the same box/grid/check icon reads as the generator giving up. If you cannot source a DISTINCT, meaningful icon per item, drop the icons there entirely and differentiate with TYPOGRAPHY (scale, weight, the number itself), color, or layout. A repeated icon is worse than no icon — it actively says "these are the same" about things you are claiming are different.
+
+---
+
 ## Forbidden — visual & CSS
 
 | Don't | Do instead |
@@ -265,6 +283,8 @@ Run before shipping any UI output. Severity tags indicate the failure mode if vi
 - [ ] No emojis anywhere (code, markup, UI, alt text, microcopy)
 - [ ] All four interaction states present (loading, empty, error, success/default)
 - [ ] No `h-screen` on mobile hero
+- [ ] No horizontal scroll at 360–390px (`scrollWidth <= innerWidth`) — verified, not assumed
+- [ ] No literal placeholder token shipped (`{TODO_FILL...}`, `{{ var }}`, "lorem ipsum")
 - [ ] No pure `#000` text or background
 - [ ] No 3-equal-cards feature row
 - [ ] No "SECTION 01" / "QUESTION 05" / decorative meta-labels
@@ -272,6 +292,9 @@ Run before shipping any UI output. Severity tags indicate the failure mode if vi
 
 ### High (must fix before review)
 - [ ] H1 ≤ 2-3 lines max
+- [ ] Every multi-column block (hero, image+text, card rows, stat bars) collapses to one column at ≤640px
+- [ ] Sections/feature/coverage cards use a real backdrop image where depth is needed, not a lone icon on a bare card
+- [ ] No single icon repeated across differentiated items (distinct icon per item, or none + typographic differentiation)
 - [ ] No serif on dashboards or software UIs
 - [ ] Centered hero only when DESIGN_VARIANCE ≤ 4 or by intentional choice
 - [ ] All animations on `transform` + `opacity` only
