@@ -5,13 +5,15 @@ Public surface:
     render_md(profile) -> str
     hue_family(hex) -> str
     image_search_terms(profile, temperature=None) -> list[str]
+    score_brand_fidelity(html_text, profile) -> dict
 """
 from engine.brand.extract import (
     BrandProfile, build_profile, render_md, hue_family, anchor_recommendation,
     image_search_terms,
 )
+from engine.brand.fidelity import score_brand_fidelity
 
 __all__ = [
     "BrandProfile", "build_profile", "render_md", "hue_family",
-    "anchor_recommendation", "image_search_terms",
+    "anchor_recommendation", "image_search_terms", "score_brand_fidelity",
 ]

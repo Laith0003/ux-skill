@@ -1,8 +1,8 @@
 {
   "_meta": {
     "version": "2.0.0",
-    "entries": 145,
-    "last_updated": "2026-05-28",
+    "entries": 150,
+    "last_updated": "2026-05-30",
     "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
     "schema_version": "1.0"
   },
@@ -2777,12 +2777,12 @@
     },
     {
       "id": "picsum-photos-seed",
-      "name": "picsum.photos lorem-picsum placeholder",
+      "name": "Random (unseeded) picsum.photos placeholder",
       "severity": "high",
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "(?:^|[\\s\"'(=])(?:https?:)?//picsum\\.photos/",
+        "pattern": "(?:^|[\\s\"'(=])(?:https?:)?//picsum\\.photos/(?!seed/)",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2798,8 +2798,26 @@
           "md"
         ]
       },
-      "why": "picsum.photos serves random rotating Lorem Picsum stock images - the design never settles, and the same hero photo on a Stripe-like landing page is an instant tell that the visuals were never chosen.",
-      "fix": "Commission, license, or generate the real image. If you need a stable placeholder, generate one once and self-host it under /assets so it stops drifting between deploys."
+      "why": "A random/unseeded picsum.photos URL serves a different rotating image on every load - the design never settles, and the visual was clearly never chosen. (Imagery is mandatory and real: client assets first, then curated stock chosen on purpose. A seeded picsum.photos/seed/... URL is stable and not flagged here.)",
+      "fix": "Use the client's own asset, or curated Unsplash/Pexels chosen to match the brand and temperature. An abstract SVG is not a substitute for a real product/site image. If you truly need a stand-in, use a stable seeded picsum (picsum.photos/seed/<descriptive>/W/H) and replace it before ship."
+    },
+    {
+      "id": "imagery-mandatory-missing",
+      "name": "Page with no imagery (text-wall of cards)",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\A(?=[\\s\\S]*<body\\b)(?![\\s\\S]*(?:<img\\b|<picture\\b|<svg\\b|<video\\b|url\\([^)]*\\.(?:png|jpe?g|webp|avif|gif)))[\\s\\S]{0,80}",
+        "flags": "i",
+        "scope": [
+          "html",
+          "blade",
+          "astro"
+        ]
+      },
+      "why": "Imagery is mandatory and real. A full rendered page (has a <body>) that ships with zero imagery - no <img>, no <picture>, no <svg>, no <video>, no real background photo - is a text-wall of cards that reads as a memo, not a product. The single biggest richness failure. (Scoped to full documents; component fragments without a <body> are exempt.)",
+      "fix": "Add real imagery: the client's own product UI/screenshots first, then curated Unsplash/Pexels chosen to match the brand and temperature. An abstract SVG illustration can support a section but is not a substitute for a real product/site image. Anchor major sections with imagery; never ship a text-only wall."
     },
     {
       "id": "generic-alt-image-photo-icon",

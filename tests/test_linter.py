@@ -185,3 +185,75 @@ def test_blur_without_fallback_still_flagged(tmp_path):
     f.write_text('.x { backdrop-filter: blur(10px); }', encoding="utf-8")
     ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
     assert "blur-bg-only-decoration" in ids
+
+
+# --- P4: picsum rule narrowed to random/unseeded only (both-direction) ---
+
+def test_random_picsum_still_flagged(tmp_path):
+    """A random/unseeded picsum URL is the tell — must fire."""
+    f = tmp_path / "rnd.html"
+    f.write_text(
+        '<body><section><img src="https://picsum.photos/200/300" alt="x">'
+        '</section></body>',
+        encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert "picsum-photos-seed" in ids
+
+
+def test_seeded_picsum_not_flagged(tmp_path):
+    """A SEEDED picsum URL is stable and on the curated path — must NOT fire."""
+    f = tmp_path / "seeded.html"
+    f.write_text(
+        '<body><section><img src="https://picsum.photos/seed/cafe-counter/1600/900"'
+        ' alt="cafe"></section></body>',
+        encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert "picsum-photos-seed" not in ids
+
+
+# --- P4: imagery-mandatory (no imagery on a full page) (both-direction) ---
+
+def test_text_wall_page_flags_imagery_mandatory(tmp_path):
+    """A full page (<body>) with zero imagery is a text-wall — must fire HIGH."""
+    f = tmp_path / "wall.html"
+    f.write_text(
+        '<!doctype html><html><body><main><section><h1>Skips</h1>'
+        '<div class="card">A</div><div class="card">B</div>'
+        '</section></main></body></html>',
+        encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert "imagery-mandatory-missing" in ids
+
+
+def test_page_with_img_not_flagged_imagery_mandatory(tmp_path):
+    """A page that ships a real <img> must NOT fire the imagery rule."""
+    f = tmp_path / "withimg.html"
+    f.write_text(
+        '<!doctype html><html><body><main><section><h1>Skips</h1>'
+        '<img src="/hero.avif" alt="a commercial skip" width="800" height="600">'
+        '</section></main></body></html>',
+        encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert "imagery-mandatory-missing" not in ids
+
+
+def test_page_with_inline_svg_not_flagged_imagery_mandatory(tmp_path):
+    """Meaningful inline SVG counts as imagery for the text-wall backstop."""
+    f = tmp_path / "withsvg.html"
+    f.write_text(
+        '<!doctype html><html><body><main><section><h1>Skips</h1>'
+        '<svg viewBox="0 0 24 24"><path d="M3 7h18v10H3z"/></svg>'
+        '</section></main></body></html>',
+        encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert "imagery-mandatory-missing" not in ids
+
+
+def test_component_fragment_not_flagged_imagery_mandatory(tmp_path):
+    """A component fragment (no <body>) is exempt — not every partial needs art."""
+    f = tmp_path / "card.html"
+    f.write_text(
+        '<section class="pricing"><h2>Pro</h2><p>Real copy here.</p></section>',
+        encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert "imagery-mandatory-missing" not in ids

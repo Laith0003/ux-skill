@@ -1,5 +1,7 @@
 """Brand extraction tests — color from the logo, type from the logo style."""
-from engine.brand import build_profile, render_md, hue_family, image_search_terms
+from engine.brand import (
+    build_profile, render_md, hue_family, image_search_terms, score_brand_fidelity,
+)
 
 
 # Real signals captured from instantskiphire.com (the dogfood ground truth):
@@ -129,3 +131,88 @@ def test_anchor_recommendation_overrides_palette_with_brand():
     assert out["brand"]["logo"]["url"].endswith(".avif")
     assert out["type_directive"]["reject_defaults"] is True
     assert "rounded" in out["type_directive"]["match_logo_style"]
+
+
+# --- P4: brand_fidelity scoring (scored + hard floor) ---
+
+# A faithful build: brand amber #f0890f drives the palette/CTA, the wordmark is in
+# the header, and the type matches the logo style (no Roboto Flex fallback).
+_FAITHFUL_HTML = """<!doctype html><html lang="en"><head>
+<title>Instant Skip Hire</title>
+<style>
+  :root { --primary: #f0890f; --ink: #14110d; }
+  .cta { background: #F0890F; color: #fff; }
+  h1, .display { font-family: "Cabinet Grotesk", system-ui, sans-serif; }
+  body { font-family: "Public Sans", system-ui, sans-serif; }
+</style></head><body>
+<header><a class="logo" href="/">Instant Skip Hire</a></header>
+<main>
+  <section class="hero"><h1>Book a commercial skip today</h1>
+  <button class="cta">Get a quote</button></section>
+</main></body></html>"""
+
+# A drifting build: clay #cc785c (Claude house color) as primary, NO logo/wordmark,
+# and the rejected Roboto Flex default brought back as the display face.
+_DRIFTED_HTML = """<!doctype html><html><head>
+<style>
+  :root { --primary: #cc785c; }
+  .cta { background: #cc785c; }
+  h1 { font-family: "Roboto Flex", system-ui, sans-serif; }
+</style></head><body>
+<main><section><h1>Skips</h1><button class="cta">Get started</button></section></main>
+</body></html>"""
+
+
+def test_brand_fidelity_passes_for_on_brand_page():
+    """Amber #f0890f used + logo referenced -> passes, high score."""
+    p = build_profile(SKIPHIRE_SIGNALS)
+    r = score_brand_fidelity(_FAITHFUL_HTML, p)
+    assert r["passed"] is True
+    assert r["score"] >= 90
+    by = {f["check"]: f for f in r["findings"]}
+    assert by["primary_used"]["ok"] is True
+    assert by["logo_present"]["ok"] is True
+    assert by["no_house_drift"]["ok"] is True
+
+
+def test_brand_fidelity_fails_hard_floor_on_house_color_no_logo():
+    """Clay #cc785c as primary with no logo -> hard floor: passed=False."""
+    p = build_profile(SKIPHIRE_SIGNALS)
+    r = score_brand_fidelity(_DRIFTED_HTML, p)
+    assert r["passed"] is False                       # hard floor, regardless of score
+    by = {f["check"]: f for f in r["findings"]}
+    assert by["primary_used"]["ok"] is False          # brand amber missing
+    assert by["logo_present"]["ok"] is False          # no wordmark
+    assert by["no_house_drift"]["ok"] is False        # clay leaked in
+    assert by["type_matches"]["ok"] is False          # Roboto Flex came back
+
+
+def test_brand_fidelity_hard_floor_logo_present_but_primary_missing():
+    """Even with the logo, dropping the brand primary trips the hard floor."""
+    p = build_profile(SKIPHIRE_SIGNALS)
+    html = ('<body><header><a class="logo">Instant Skip Hire</a></header>'
+            '<main><section><h1 style="color:#222">Skips</h1>'
+            '<img src="/x.avif" alt="a skip" width="8" height="6"></section></main></body>')
+    r = score_brand_fidelity(html, p)
+    assert r["passed"] is False
+    by = {f["check"]: f for f in r["findings"]}
+    assert by["logo_present"]["ok"] is True
+    assert by["primary_used"]["ok"] is False
+
+
+def test_brand_fidelity_case_insensitive_primary():
+    """The brand hex matches regardless of case (#f0890f vs #F0890F)."""
+    p = build_profile(SKIPHIRE_SIGNALS)
+    html = ('<body><header><a class="logo">Instant Skip Hire</a></header>'
+            '<main><section style="background:#F0890F"><h1>Skips</h1></section></main></body>')
+    r = score_brand_fidelity(html, p)
+    by = {f["check"]: f for f in r["findings"]}
+    assert by["primary_used"]["ok"] is True
+    assert r["passed"] is True
+
+
+def test_brand_fidelity_is_deterministic():
+    p = build_profile(SKIPHIRE_SIGNALS)
+    a = score_brand_fidelity(_FAITHFUL_HTML, p)
+    b = score_brand_fidelity(_FAITHFUL_HTML, p)
+    assert a == b
