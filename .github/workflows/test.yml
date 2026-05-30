@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+# Least privilege: every job here only checks out and runs tests.
+permissions:
+  contents: read
+
 jobs:
   python-tests:
     runs-on: ubuntu-latest
