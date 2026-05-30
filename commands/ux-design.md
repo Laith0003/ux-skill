@@ -180,7 +180,15 @@ test -f .ux/last-discovery.json && cat .ux/last-discovery.json
 
 If the file doesn't exist, run `/ux-discover` first. Do NOT proceed without a complete 10-field brief.
 
-### Step 1.5 — Brand extraction (when a reference URL or screenshot exists)
+### Step 1.5 — Brand: ingest an existing brand.md FIRST, else extract
+
+**Input-first.** Before anything else, check if the project already has a `brand.md` (repo root, or walk up the directory tree) — the open standard (thebrandmd/brand.md). If so, **consume it** instead of extracting; it is the authoritative anchor:
+
+```bash
+python3 -m engine.cli.main brand --from-brand-md ./brand.md --out .ux
+```
+
+This parses the standard brand.md into `.ux/brand.json` (travels through the engine) + a normalized `.ux/brand.md`. Use it as the HARD ANCHOR exactly as an extracted brand below. Only if there is NO existing brand.md do you extract from the URL/screenshot (the steps below).
 
 If the brief names a reference site/URL or provides a screenshot, the output MUST look like THEM, not the house style. Extract the brand FIRST — canonical rules in `references/process/brand-extraction.md`. The engine is offline, so YOU capture the signals; the engine normalizes + enforces.
 

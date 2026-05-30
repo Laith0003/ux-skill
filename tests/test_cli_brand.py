@@ -54,6 +54,40 @@ def test_brand_cmd_writes_brand_md_and_json(tmp_path):
     assert json.loads((tmp_path / "brand.json").read_text(encoding="utf-8"))["primary"] == "#f0890f"
 
 
+def test_brand_cmd_ingests_an_existing_brand_md(tmp_path):
+    """`brand --from-brand-md` parses a standard brand.md and writes brand.json."""
+    bmd = tmp_path / "brand.md"
+    bmd.write_text(
+        "---\n"
+        "name: Northwind Trading\n"
+        "tagline: Built to last\n"
+        "version: 1\n"
+        "language: en\n"
+        "---\n\n"
+        "# Northwind Trading\n\n"
+        "## Visual\n\n"
+        "### Colors\n\n"
+        "- **Primary:** `#0F172A` -- drives the palette.\n"
+        "- **Secondary:** `#3B82F6`\n",
+        encoding="utf-8")
+    r = _run(["brand", "--from-brand-md", str(bmd), "--out", str(tmp_path / ".ux")], tmp_path)
+    assert r.returncode == 0, r.stderr
+    out = json.loads(r.stdout)
+    assert out["primary"] == "#0f172a"            # parsed + lowercased
+    assert out["primary_source"] == "brand-md"    # ingested, not extracted
+    bj = json.loads((tmp_path / ".ux" / "brand.json").read_text(encoding="utf-8"))
+    assert bj["primary"] == "#0f172a"
+    assert bj["name"] == "Northwind Trading"
+    assert "#3b82f6" in bj["secondary"]
+
+
+def test_brand_cmd_errors_when_no_input_given(tmp_path):
+    """Neither --signals-file nor --from-brand-md -> a clear usage error."""
+    r = _run(["brand", "--out", str(tmp_path / ".ux")], tmp_path)
+    assert r.returncode != 0
+    assert "signals-file" in r.stderr and "from-brand-md" in r.stderr
+
+
 def test_recommend_brand_file_anchors_palette(tmp_path):
     bj = tmp_path / "brand.json"
     bj.write_text(json.dumps(_PROFILE), encoding="utf-8")

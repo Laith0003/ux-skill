@@ -157,22 +157,40 @@ else:
         return payload if isinstance(payload, dict) else None
 
     @cli.command("brand")
-    @click.option("--signals-file", type=click.Path(exists=True), required=True,
+    @click.option("--signals-file", type=click.Path(exists=True), required=False,
                   help="JSON of captured brand signals (logo_colors, logo, fonts, voice, imagery).")
+    @click.option("--from-brand-md", "from_brand_md", type=click.Path(exists=True), required=False,
+                  help="An EXISTING open-standard brand.md to ingest (instead of extracting).")
     @click.option("--out", default=".ux", help="Output dir for brand.md + brand.json (default .ux).")
     @click.pass_context
-    def brand_cmd(ctx, signals_file, out) -> None:
-        """Build brand.md + brand.json from captured brand signals.
+    def brand_cmd(ctx, signals_file, from_brand_md, out) -> None:
+        """Build brand.md + brand.json from captured signals OR an existing brand.md.
 
-        The CALLER captures the signals (sample the logo pixels, read the wordmark
-        style) -- the engine stays offline. This normalizes them into a travelling
-        BrandProfile: writes <out>/brand.json (fed to --brand-file on recommend /
-        synthesize / evolve) and <out>/brand.md (the human-readable anchor to paste
-        into the frontend-engineer prompt).
+        Two mutually-exclusive inputs:
+          --signals-file <f>   : the CALLER captures signals (sample the logo pixels,
+                                 read the wordmark style; the engine stays offline) and
+                                 this EXTRACTS a BrandProfile from them.
+          --from-brand-md <f>  : INGEST a project's existing open-standard brand.md
+                                 (thebrandmd/brand.md) as the authoritative anchor --
+                                 no extraction.
+
+        Either way it writes <out>/brand.json (fed to --brand-file on recommend /
+        synthesize / evolve) and a normalized <out>/brand.md (the human-readable anchor
+        to paste into the frontend-engineer prompt).
         """
-        from engine.brand import build_profile, render_md
-        signals = json.loads(Path(signals_file).read_text(encoding="utf-8"))
-        profile = build_profile(signals)
+        from engine.brand import build_profile, render_md, parse_brand_md
+        if from_brand_md and signals_file:
+            raise click.UsageError(
+                "Pass only one of --signals-file (extract) or --from-brand-md (ingest), not both.")
+        if from_brand_md:
+            profile = parse_brand_md(Path(from_brand_md).read_text(encoding="utf-8"))
+        elif signals_file:
+            signals = json.loads(Path(signals_file).read_text(encoding="utf-8"))
+            profile = build_profile(signals)
+        else:
+            raise click.UsageError(
+                "Provide --signals-file <captured signals> to extract, or "
+                "--from-brand-md <brand.md> to ingest an existing standard brand.md.")
         out_dir = Path(out)
         out_dir.mkdir(parents=True, exist_ok=True)
         (out_dir / "brand.json").write_text(
@@ -181,6 +199,7 @@ else:
         _emit({
             "brand_json": str(out_dir / "brand.json"),
             "brand_md": str(out_dir / "brand.md"),
+            "source": profile.primary_source,
             "name": profile.name,
             "primary": profile.primary,
             "primary_source": profile.primary_source,
