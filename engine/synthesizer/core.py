@@ -391,6 +391,43 @@ def _synthesize_from_vocab(vocab: Vocabulary, axes: AxisValues, mode: str,
 # Public entry
 # ---------------------------------------------------------------------------
 
+def _stamp_client_brand(system: SynthesizedSystem, brand: Any) -> SynthesizedSystem:
+    """Override the synthesized palette primary/accent + display type with an
+    EXTRACTED client BrandProfile (rule 2). Distinct from the reference_brands
+    exemplar modes (which pull known specs like Stripe); this stamps the actual
+    client's amber/logo/font over whatever was synthesized. Neutrals, spacing and
+    motion are left untouched. Deterministic.
+    """
+    from engine.brand.extract import BrandProfile
+    prof = brand if isinstance(brand, BrandProfile) else None
+    if prof is None and isinstance(brand, dict):
+        try:
+            prof = BrandProfile(**{k: v for k, v in brand.items()
+                                   if k in BrandProfile.__dataclass_fields__})
+        except TypeError:
+            prof = None
+    if prof is None or not (prof.primary or prof.name):
+        return system
+    pal = dict(system.palette or {})
+    if prof.primary:
+        pal["primary"] = prof.primary
+        pal["accent"] = prof.primary
+    if prof.secondary:
+        pal["secondary"] = prof.secondary[0]
+    system.palette = pal
+    tp = dict(system.type_pair or {})
+    if prof.fonts.get("display"):
+        tp["display"] = prof.fonts["display"]
+    elif prof.logo_style:
+        tp["display_directive"] = ("match the logo style: %s (reject default fonts)"
+                                    % prof.logo_style)
+    system.type_pair = tp
+    system.rationale = list(system.rationale or []) + [
+        "Client-brand anchor: palette primary %s + type from the logo, overriding "
+        "the synthesized pick." % (prof.primary or "n/a")]
+    return system
+
+
 def synthesize(brief: Any) -> SynthesizedSystem:
     """Synthesize a fresh design language from a Brief.
 
@@ -414,7 +451,15 @@ def synthesize(brief: Any) -> SynthesizedSystem:
     axes = compute_axes(brief)
 
     if reference_brands and strict:
-        return _strict_brand_mode(reference_brands[0], axes)
-    if reference_brands:
-        return _brand_anchor_mode(reference_brands, axes)
-    return _pure_synthesis_mode(axes)
+        system = _strict_brand_mode(reference_brands[0], axes)
+    elif reference_brands:
+        system = _brand_anchor_mode(reference_brands, axes)
+    else:
+        system = _pure_synthesis_mode(axes)
+
+    # Extracted-client-brand anchor: a final, deterministic stamp on top of the
+    # mode output (composes with, does not replace, the exemplar modes above).
+    brand = g("brand", None)
+    if brand:
+        system = _stamp_client_brand(system, brand)
+    return system

@@ -200,16 +200,22 @@ def evolve(html: str, css: str,
            linter_score: int = 100,
            force: bool = False,
            max_rounds: int = MAX_ROUNDS,
+           brand_profile: Optional[Any] = None,
            ) -> EvolveResult:
     """Run the lint→polish→re-lint loop until convergence.
 
     Polish passes are all deterministic. Same input → same trajectory.
+
+    When ``brand_profile`` is supplied, the brand-fidelity HARD FLOOR is honored
+    at every exit: an off-brand page never reports ``above_gate=True`` no matter
+    how high its composite design score is (canonical rule 7).
     """
     rounds: List[EvolveRound] = []
     prev_score: Optional[int] = None
     initial_eval = evaluate(
         html=html, css=css, synth_system=synth_system,
         brief_axes=brief_axes, linter_score=linter_score,
+        brand_profile=brand_profile,
     )
     initial_score = initial_eval.composite
 
@@ -217,6 +223,7 @@ def evolve(html: str, css: str,
         ev = evaluate(
             html=html, css=css, synth_system=synth_system,
             brief_axes=brief_axes, linter_score=linter_score,
+            brand_profile=brand_profile,
         )
         delta = (ev.composite - prev_score) if prev_score is not None else 0
         round_rec = EvolveRound(
@@ -227,8 +234,10 @@ def evolve(html: str, css: str,
             polishes_applied=[],
         )
 
-        # Stop on target hit
-        if ev.composite >= TARGET_SCORE:
+        # Stop on target hit -- but ONLY if the brand floor also holds. An
+        # off-brand page that scores 90+ must not early-return as a win; it falls
+        # through, polishes (which won't fix brand drift), and ends gate_failed.
+        if ev.composite >= TARGET_SCORE and ev.brand_passed:
             rounds.append(round_rec)
             return EvolveResult(
                 initial_score=initial_score,
@@ -244,7 +253,7 @@ def evolve(html: str, css: str,
         # Stop on plateau (after round 2 so the first delta counts)
         if prev_score is not None and abs(delta) < PLATEAU_DELTA:
             rounds.append(round_rec)
-            above_gate = ev.composite >= QUALITY_GATE
+            above_gate = ev.composite >= QUALITY_GATE and ev.brand_passed
             return EvolveResult(
                 initial_score=initial_score,
                 final_score=ev.composite,
@@ -262,7 +271,7 @@ def evolve(html: str, css: str,
         rounds.append(round_rec)
         if not applied:
             # Nothing to polish. We're done.
-            above_gate = ev.composite >= QUALITY_GATE
+            above_gate = ev.composite >= QUALITY_GATE and ev.brand_passed
             return EvolveResult(
                 initial_score=initial_score,
                 final_score=ev.composite,
@@ -280,8 +289,9 @@ def evolve(html: str, css: str,
     final_eval = evaluate(
         html=html, css=css, synth_system=synth_system,
         brief_axes=brief_axes, linter_score=linter_score,
+        brand_profile=brand_profile,
     )
-    above_gate = final_eval.composite >= QUALITY_GATE
+    above_gate = final_eval.composite >= QUALITY_GATE and final_eval.brand_passed
     return EvolveResult(
         initial_score=initial_score,
         final_score=final_eval.composite,

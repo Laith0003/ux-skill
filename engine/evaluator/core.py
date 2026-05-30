@@ -10,6 +10,9 @@ import re
 from dataclasses import dataclass, field, asdict
 from typing import Any, Dict, List, Optional, Tuple  # Tuple used by _TAG_EXPECTATIONS
 
+from engine.brand import score_brand_fidelity, score_imagery
+from engine.brand.extract import BrandProfile
+
 
 THRESHOLD = 65          # minimum auto-accept composite score
 AXES: Tuple[str, ...] = (
@@ -34,11 +37,27 @@ class Evaluation:
     usability_readability: int = 0
     tone_match: int = 0
     uniqueness: int = 0
+    brand_fidelity: int = 100        # 100 when no brand profile supplied (n/a)
+    imagery: int = 100               # 100 when no brand profile supplied (n/a)
+    brand_passed: bool = True        # the hard floor: False = off-brand drift
     above_threshold: bool = False
     notes: List[str] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
+
+
+def _as_profile(x: Any) -> Optional[BrandProfile]:
+    """Normalize a brand input (a BrandProfile or its dict) to a BrandProfile/None."""
+    if x is None or isinstance(x, BrandProfile):
+        return x
+    if isinstance(x, dict):
+        fields = set(BrandProfile.__dataclass_fields__)
+        try:
+            return BrandProfile(**{k: v for k, v in x.items() if k in fields})
+        except TypeError:
+            return None
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -285,6 +304,7 @@ def evaluate(html: str = "", css: str = "",
              linter_score: int = 100,
              spacing_scale: Optional[List[int]] = None,
              prior_decisions: Optional[List[Dict[str, Any]]] = None,
+             brand_profile: Optional[Any] = None,
              ) -> Evaluation:
     """Run all 7 axis scorers, return an Evaluation.
 
@@ -312,7 +332,9 @@ def evaluate(html: str = "", css: str = "",
     tm_score = score_tone_match(synth_axes, brief_axes or {}, brief_tags=brief_tags)
     un_score = score_uniqueness(synth_axes, palette, prior_decisions)
 
-    # Composite is the mean of the 7 axes
+    # Composite is the mean of the 7 DESIGN axes. Brand fidelity is deliberately
+    # NOT folded in -- it is a separate reported dimension + a hard floor, because
+    # brand-honoring is not the same thing as design quality (rule 7).
     composite = int(round(
         (linter_score + h_score + lc_score + sp_score + rd_score + tm_score + un_score) / 7
     ))
@@ -331,6 +353,26 @@ def evaluate(html: str = "", css: str = "",
     if tm_score < 60:
         notes.append("tone mismatch — output doesn't match the brief's axes")
 
+    # Brand fidelity + imagery: reported dimensions AND a HARD FLOOR (rule 7).
+    # Active only when a brand profile is supplied; with none, every value below
+    # is the default (100 / passed) and behavior is identical to the 7-axis path.
+    brand_fidelity = 100
+    imagery = 100
+    brand_passed = True
+    prof = _as_profile(brand_profile)
+    if prof is not None and (prof.primary or prof.name or prof.logo):
+        fid = score_brand_fidelity(html, prof)
+        img = score_imagery(html)
+        brand_fidelity = fid["score"]
+        imagery = img["score"]
+        if not fid["passed"]:
+            brand_passed = False
+            notes.append("BRAND FLOOR — output drifts off-brand: missing the brand "
+                         "primary color or logo")
+        if not img["ok"]:
+            brand_passed = False
+            notes.append("BRAND FLOOR — imagery: %s" % img["detail"])
+
     return Evaluation(
         composite=composite,
         linter_score=linter_score,
@@ -340,6 +382,9 @@ def evaluate(html: str = "", css: str = "",
         usability_readability=rd_score,
         tone_match=tm_score,
         uniqueness=un_score,
-        above_threshold=composite >= THRESHOLD,
+        brand_fidelity=brand_fidelity,
+        imagery=imagery,
+        brand_passed=brand_passed,
+        above_threshold=(composite >= THRESHOLD) and brand_passed,
         notes=notes,
     )

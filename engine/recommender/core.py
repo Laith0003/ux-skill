@@ -50,6 +50,7 @@ class Brief:
     forbidden: List[str] = field(default_factory=list)  # ["brutalism", "purple-gradients"]
     stack: str = ""                     # tech-stacks.json id
     region: str = ""                    # "mena" | "us" | "eu" | "apac"
+    brand: Optional[Dict[str, Any]] = None  # extracted BrandProfile dict; anchors palette/type
 
 
 @dataclass
@@ -61,6 +62,8 @@ class Recommendation:
     components: List[Dict[str, Any]] = field(default_factory=list)
     brand_exemplars: List[Dict[str, Any]] = field(default_factory=list)
     guardrails: List[Dict[str, Any]] = field(default_factory=list)
+    brand: Optional[Dict[str, Any]] = None           # set when brand-anchored (rule 2)
+    type_directive: Optional[Dict[str, Any]] = None  # logo-style type directive
     rationale: List[str] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -460,7 +463,7 @@ def recommend(brief: Brief) -> Recommendation:
         rationale.append(f"Compatible components: {len(components)}")
     rationale.append(f"Guardrails active: {len(guardrails)} anti-pattern rules")
 
-    return Recommendation(
+    rec = Recommendation(
         style=style or None,
         palette=palette or None,
         type_pair=type_pair or None,
@@ -470,3 +473,24 @@ def recommend(brief: Brief) -> Recommendation:
         guardrails=guardrails,
         rationale=rationale,
     )
+
+    # Brand anchor (rule 2): if the brief carries an EXTRACTED brand profile, the
+    # client's logo + primary color OVERRIDE the engine's palette/type pick, so
+    # generation uses THEIR brand instead of the house style. Deterministic; only
+    # active when brief.brand is set (no brand -> byte-identical to before).
+    if getattr(brief, "brand", None):
+        from engine.brand import anchor_recommendation
+        from engine.brand.extract import BrandProfile
+        raw = brief.brand
+        prof = raw if isinstance(raw, BrandProfile) else BrandProfile(
+            **{k: v for k, v in raw.items() if k in BrandProfile.__dataclass_fields__})
+        if prof.primary or prof.name or prof.logo:
+            anchored = anchor_recommendation(rec.to_dict(), prof)
+            rec.palette = anchored.get("palette")
+            rec.brand = anchored.get("brand")
+            rec.type_directive = anchored.get("type_directive")
+            rec.rationale.append(
+                "Brand-anchored to %s — palette primary %s from the logo (not the "
+                "engine pick); type matches the logo style."
+                % (prof.name or "the source brand", prof.primary or "n/a"))
+    return rec
