@@ -341,7 +341,7 @@
       "category": "Visual",
       "detection": {
         "type": "regex",
-        "pattern": "(?:backdrop-blur(?:-(?:sm|md|lg|xl|2xl|3xl))?|backdrop-filter:\\s*blur\\([^)]+\\))(?![^\"';]*(?:bg-white/[0-9]|bg-black/[0-9]|bg-[a-z]+-[0-9]+/[0-9]|background:[^;]*rgba))",
+        "pattern": "(?:backdrop-blur(?:-(?:sm|md|lg|xl|2xl|3xl))?|backdrop-filter:\\s*blur\\([^)]+\\))(?![^\"}]*(?:bg-white/[0-9]|bg-black/[0-9]|bg-[a-z]+-[0-9]+/[0-9]|background:[^;]*rgba|background-color:[^;]*rgba))",
         "flags": "i",
         "scope": [
           "css",
@@ -2063,7 +2063,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<a[^>]+href\\s*=\\s*['\"]#(?:main|content|main-content|skip)['\"][^>]*(?:class\\s*=\\s*['\"](?![^'\"]*(?:sr-only|visually-hidden|skip-link|screen-reader))[^'\"]*['\"])?[^>]*>\\s*(?:Skip\\s+(?:to|navigation)|Jump\\s+to)",
+        "pattern": "<a\\b(?=[^>]*href\\s*=\\s*['\"]#(?:main|content|main-content|skip)['\"])(?![^>]*\\bclass\\s*=\\s*['\"][^'\"]*(?:sr-only|visually-hidden|skip-link|screen-reader))[^>]*>\\s*(?:Skip\\s+(?:to|navigation)|Jump\\s+to)",
         "flags": "i",
         "scope": [
           "html",

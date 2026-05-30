@@ -150,3 +150,38 @@ def test_compute_score_pure_function():
     assert compute_score(fakes, files_scanned=1) == 86
     # 100 - 14/2 = 93
     assert compute_score(fakes, files_scanned=2) == 93
+
+
+# --- Linter precision (dogfood fix): two rules flagged correct, conformant code.
+# --- Both-direction tests: correct code must NOT flag; real violations MUST flag.
+
+def test_skip_link_with_class_not_flagged(tmp_path):
+    f = tmp_path / "ok.html"
+    f.write_text(
+        '<a class="skip-link" href="#main">Skip to content</a>\n'
+        '<a href="#main" class="skip-link">Skip to content</a>',
+        encoding="utf-8")
+    findings = lint([str(f)]).to_dict()["findings"]
+    assert not [x for x in findings if x["rule_id"] == "screen-reader-only-without-class"]
+
+
+def test_skip_link_without_class_still_flagged(tmp_path):
+    f = tmp_path / "bad.html"
+    f.write_text('<a href="#main">Skip to content</a>', encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert "screen-reader-only-without-class" in ids
+
+
+def test_glass_blur_with_fallback_not_flagged(tmp_path):
+    f = tmp_path / "ok.css"
+    f.write_text('.h { backdrop-filter: blur(10px); background: rgba(255,255,255,0.82); }',
+                 encoding="utf-8")
+    findings = lint([str(f)]).to_dict()["findings"]
+    assert not [x for x in findings if x["rule_id"] == "blur-bg-only-decoration"]
+
+
+def test_blur_without_fallback_still_flagged(tmp_path):
+    f = tmp_path / "bad.css"
+    f.write_text('.x { backdrop-filter: blur(10px); }', encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert "blur-bg-only-decoration" in ids
