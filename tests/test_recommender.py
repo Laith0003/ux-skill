@@ -76,3 +76,43 @@ def test_industry_fuzzy_match_does_not_return_unrelated():
     assert "fintech" not in industry_line.lower(), (
         f"Unknown-industry fallback returned an unrelated industry: {industry_line!r}"
     )
+
+
+# --- Anti-slop palette guardrail (dogfood fix: forbidden=purple must work, and
+# --- the engine must not DEFAULT to AI blurple). Both-direction tests.
+
+def test_palette_slop_band_detection():
+    from engine.recommender.core import _primary_in_slop_band
+    assert _primary_in_slop_band({"colors": {"primary": "#5e6ad2"}}) is True   # blurple
+    assert _primary_in_slop_band({"colors": {"primary": "#cc785c"}}) is False  # clay
+    assert _primary_in_slop_band({"colors": {"primary": "#0a0b0d"}}) is False  # near-black
+
+
+def test_palette_color_penalty_default_deprioritizes_blurple():
+    from engine.recommender.core import _palette_color_penalty
+    assert _palette_color_penalty({"colors": {"primary": "#5e6ad2"}}, Brief()) == -8.0
+
+
+def test_palette_color_penalty_forbidden_purple_excludes_blurple():
+    from engine.recommender.core import _palette_color_penalty
+    p = _palette_color_penalty(
+        {"colors": {"primary": "#5e6ad2"}},
+        Brief(forbidden=["purple", "purple-gradients"]),
+    )
+    assert p == -100.0
+
+
+def test_palette_color_penalty_leaves_non_slop_alone():
+    from engine.recommender.core import _palette_color_penalty
+    assert _palette_color_penalty(
+        {"colors": {"primary": "#cc785c"}}, Brief(forbidden=["purple"])
+    ) == 0.0
+
+
+def test_recommend_forbidding_purple_avoids_blurple_primary():
+    from engine.recommender.core import _primary_in_slop_band
+    rec = recommend(Brief(industry="construction-pm",
+                          forbidden=["purple", "purple-gradients", "inter"]))
+    assert rec.palette is not None
+    assert not _primary_in_slop_band(rec.palette), \
+        "recommender returned a blue-violet primary despite forbidden=purple"

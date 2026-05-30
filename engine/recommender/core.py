@@ -23,6 +23,7 @@ Public surface
 """
 from __future__ import annotations
 
+import colorsys
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field, asdict
 from typing import Any, Dict, List, Optional, Tuple
@@ -115,6 +116,68 @@ def _score(entry: Dict[str, Any], brief: Brief) -> float:
     return score
 
 
+# ---------------------------------------------------------------------------
+# Anti-slop palette guardrail (dogfood fix)
+# ---------------------------------------------------------------------------
+# AI design defaults to a blue-indigo-violet "blurple" primary (the #5e6ad2
+# zone). We de-prioritize that band by default and hard-exclude it when the
+# brief forbids purple/violet. The whole zone is treated as one region so the
+# blue/violet boundary (#5e6ad2 reads as ~234deg "blue" by strict bins) cannot
+# slip the filter when a user forbids "purple".
+_SLOP_HUE_LO = 215.0
+_SLOP_HUE_HI = 295.0
+_SLOP_FORBID_WORDS = {
+    "purple", "purples", "purple-gradient", "purple-gradients",
+    "violet", "indigo", "blurple", "blue-gradient", "blue-gradients",
+}
+
+
+def _hex_to_hsv(hexstr):
+    """Parse '#rrggbb' (or '#rgb') into (hue_degrees, saturation, value)."""
+    if not isinstance(hexstr, str):
+        return None
+    s = hexstr.strip().lstrip("#")
+    if len(s) == 3:
+        s = "".join(c * 2 for c in s)
+    if len(s) != 6:
+        return None
+    try:
+        r = int(s[0:2], 16) / 255.0
+        g = int(s[2:4], 16) / 255.0
+        b = int(s[4:6], 16) / 255.0
+    except ValueError:
+        return None
+    h, sat, val = colorsys.rgb_to_hsv(r, g, b)
+    return (h * 360.0, sat, val)
+
+
+def _primary_in_slop_band(entry: Dict[str, Any]) -> bool:
+    """True if a palette's primary sits in the blue-violet AI-slop zone."""
+    colors = entry.get("colors") or {}
+    hsv = _hex_to_hsv(colors.get("primary"))
+    if not hsv:
+        return False
+    hue, sat, val = hsv
+    return _SLOP_HUE_LO <= hue <= _SLOP_HUE_HI and sat >= 0.30 and val >= 0.30
+
+
+def _palette_color_penalty(entry: Dict[str, Any], brief: Brief) -> float:
+    """Anti-slop-by-default guardrail for palette primaries.
+
+    Returns -100 (hard exclude) when the brief forbids purple/violet and this
+    palette's primary is in the slop band; -8 (mild, always-on) for any
+    slop-band primary so the engine never *defaults* to AI blurple; 0 otherwise.
+    A brief that genuinely wants blurple omits the forbid, and the mild penalty
+    is easily out-scored by a strong tag or compatibility match.
+    """
+    if not _primary_in_slop_band(entry):
+        return 0.0
+    forbid = {str(f).lower().strip() for f in (brief.forbidden or [])}
+    if forbid & _SLOP_FORBID_WORDS:
+        return -100.0
+    return -8.0
+
+
 def _lane_industry(brief: Brief) -> Dict[str, Any]:
     """Find the industry entry matching the brief.
 
@@ -181,7 +244,7 @@ def _lane_palette(brief: Brief, style: Dict[str, Any]) -> Dict[str, Any]:
     data = load("palettes")
     entries = data.get("entries", [])
     compatible = set(style.get("compatible_palettes", []))
-    scored = [(e, _score(e, brief)) for e in entries]
+    scored = [(e, _score(e, brief) + _palette_color_penalty(e, brief)) for e in entries]
     valid = [(e, s) for (e, s) in scored if s > -50]
     # v3.0: bump entries that won in prior similar decisions
     valid = _rerank_from_decisions(valid, brief, key="picked_palette")
