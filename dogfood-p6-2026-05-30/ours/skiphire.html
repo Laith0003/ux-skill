@@ -157,9 +157,13 @@
     font: inherit; font-weight: 700; font-size: 1rem;
     border: 0; border-radius: var(--r-pill); cursor: pointer;
     padding: 15px 26px; line-height: 1; text-align: center;
+    /* short button labels never wrap to a second line -- the label stays a
+       single-line pill at every width; size to fit, never break the words */
+    white-space: nowrap;
     transition: transform 0.18s var(--ease-out), background-color 0.18s var(--ease-out), box-shadow 0.18s var(--ease-out);
     will-change: transform;
   }
+  .btn .btn-label { white-space: nowrap; }
   .btn:active { transform: translateY(1px) scale(0.99); }
   .btn-primary { background: var(--amber); color: #1c1206; box-shadow: var(--shadow-amber); }
   .btn-primary:hover { background: var(--amber-deep); }
@@ -185,18 +189,45 @@
   .topbar .stars { color: var(--amber); letter-spacing: 1px; }
   .topbar .sep { opacity: 0.4; }
   .topbar a { color: #fff; display: inline-flex; align-items: center; gap: 7px; font-weight: 600; }
+  /* Mobile topbar: a divider-separated inline row wraps raggedly on a phone.
+     Reflow BY DESIGN -- stars centered on their own line, each claim centered on
+     its own line, dividers dropped. Composed, not crammed. */
+  @media (max-width: 560px) {
+    .topbar .wrap { justify-content: center; }
+    .topbar .trust { flex-direction: column; gap: 4px; text-align: center; }
+    .topbar .sep { display: none; }
+  }
   .navrow { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
   .brand { display: inline-flex; align-items: center; gap: 12px; }
   .brand img { width: 46px; height: 46px; border-radius: 12px; background: #fff; padding: 5px; }
   .brand .wm { display: flex; flex-direction: column; line-height: 1; }
-  .brand .wm b { font-weight: 800; font-size: 1.12rem; letter-spacing: -0.02em; }
-  .brand .wm span { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: #8fd29a; margin-top: 3px; }
+  /* the wordmark is a fixed short phrase -- it stays on ONE line at every width.
+     nowrap + size-to-fit on mobile; if it ever cannot fit beside logo + CTA the
+     mobile rules below collapse to the logomark -- it NEVER splits to two lines. */
+  .brand .wm b { font-weight: 800; font-size: 1.12rem; letter-spacing: -0.02em; white-space: nowrap; }
+  .brand .wm span { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: #8fd29a; margin-top: 3px; white-space: nowrap; }
   .nav-links { display: flex; align-items: center; gap: 26px; }
   .nav-links a { font-weight: 600; font-size: 0.95rem; color: rgba(255,255,255,0.86); transition: color 0.15s; }
   .nav-links a:hover { color: #fff; }
   .nav-actions { display: flex; align-items: center; gap: 12px; }
   @media (max-width: 900px) { .nav-links { display: none; } }
-  @media (max-width: 560px) { .topbar .email-link { display: none; } .brand .wm span { display: none; } }
+  @media (max-width: 560px) {
+    .topbar .email-link { display: none; }
+    .brand .wm span { display: none; }
+    /* size the bar to fit one row at 360: smaller wordmark + logo, tighter gaps,
+       shorter vertical padding so the header stays <= ~72px tall and one row */
+    .navrow { padding-block: 9px; gap: 10px; }
+    .brand { gap: 10px; }
+    .brand img { width: 40px; height: 40px; }
+    .brand .wm b { font-size: 1rem; }
+  }
+  /* Phones: the full "Instant Skip Hire" wordmark needs ~393px of viewport to sit
+     beside the logo + the primary CTA without colliding. Below that it would
+     either collide or be forced to two lines -- both are break-by-accident. So on
+     phones we collapse to the logomark alone (keep the brand icon, drop the words),
+     which is the canonical mobile nav: logo + one primary CTA. The full wordmark
+     returns on tablet/desktop where it fits cleanly. */
+  @media (max-width: 420px) { .brand .wm { display: none; } }
 
   /* Reveal --------------------------------------------------------------- */
   .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out); }
@@ -389,7 +420,16 @@
   .cov-thumb { width: 120px; height: 78px; flex: none; border-radius: 12px; overflow: hidden; }
   .cov-thumb img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.06); }
   @media (max-width: 760px) { .cov-grid { grid-template-columns: 1fr; } }
-  @media (max-width: 520px) { .cov-cards { grid-template-columns: 1fr 1fr; } .cov-card.cov-wide { flex-direction: column; align-items: flex-start; } .cov-thumb { width: 100%; height: 120px; } }
+  /* Mobile coverage: 3 nation cards in a 2-col grid leave a dead empty cell
+     beside Wales -- the gappy/hollow read. Single column removes the dead cell
+     and the cards stay compact. The wide "one site or many" panel puts its image
+     FULL-WIDTH ABOVE the text with balanced padding -- composed, not hollow. */
+  @media (max-width: 520px) {
+    .cov-cards { grid-template-columns: 1fr; gap: 12px; }
+    .cov-card { min-height: 132px; }
+    .cov-card.cov-wide { flex-direction: column; align-items: stretch; min-height: 0; gap: 14px; padding: 16px; text-align: left; }
+    .cov-thumb { width: 100%; height: 150px; }
+  }
 
   /* Social proof / pull-quote ------------------------------------------- */
   .pull { background: var(--green); color: #fff; }
@@ -489,7 +529,7 @@
         <a href="#coverage">Coverage</a>
       </nav>
       <div class="nav-actions">
-        <a class="btn btn-primary" href="#quote">Get a quote <span class="chip" aria-hidden="true"><svg aria-hidden="true" class="ico" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a>
+        <a class="btn btn-primary" href="#quote"><span class="btn-label">Get a quote</span> <span class="chip" aria-hidden="true"><svg aria-hidden="true" class="ico" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a>
       </div>
     </div>
   </div>
@@ -509,7 +549,7 @@
             <span class="hbadge"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 12h6"/></svg> No commission or mark-ups</span>
             <span class="hbadge"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18"/><path d="M3 6h18"/><path d="M3 18h18"/></svg> One-off or ongoing contracts</span>
           </div>
-          <a class="btn btn-primary" href="#quote">Skip Hire Quote <span class="chip" aria-hidden="true"><svg aria-hidden="true" class="ico" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a>
+          <a class="btn btn-primary" href="#quote"><span class="btn-label">Skip Hire Quote</span> <span class="chip" aria-hidden="true"><svg aria-hidden="true" class="ico" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a>
         </div>
 
         <div class="hero-media reveal">
