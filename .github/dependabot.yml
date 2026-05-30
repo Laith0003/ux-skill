@@ -1,0 +1,31 @@
+version: 2
+updates:
+  # Python engine dependencies declared in pyproject.toml
+  # (click, rich, pydantic, tomli, and the optional mcp extra).
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+
+  # Keep the GitHub Actions used by test.yml + codeql.yml current
+  # (actions/checkout, actions/setup-python, github/codeql-action).
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "github-actions"
+
+  # The npm CLI wrapper (bin/uxskill.mjs). No runtime deps today; this keeps
+  # any future additions patched.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
