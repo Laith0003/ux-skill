@@ -84,6 +84,7 @@ Do:
 
 - Use specific designer language: hierarchy, rhythm, weight, density, voice, affordance, contrast, balance.
 - Reference the audience explicitly when judgment depends on it.
+- When a client brand is on file (`.ux/brand.json` exists), name brand drift as a miss — a wrong or absent brand primary, a missing logo, house-style colors (clay `#cc785c` / blurple `#5e6ad2`), or a text-wall with no real imagery reads as "this doesn't feel like them," and that's a real miss however clean the surface is. Say it as opinion, not a score (see `references/process/brand-extraction.md`).
 - Stand behind the move. If the user pushes back, defend it or revise — do not capitulate.
 
 ### 5. Persist state

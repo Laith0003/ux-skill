@@ -138,6 +138,8 @@ The result chains naturally into the rest of the pipeline:
 - `/ux-system` — generates a full design system from the recommendation.
 - `/ux-component <name>` — generates one component using the matched style.
 
+**Brand anchor.** The uploaded image/screenshot IS the brand source — when you want the generated code to match the source's identity rather than the house style, extract the brand from it first (`uxskill brand --signals-file .ux/brand-signals.json --out .ux`, capturing the logo color/type from the image) so the build inherits the source's primary color, logo, and logo-style type. Then any downstream `recommend`/`synthesize`/`/ux-design` call takes `--brand-file .ux/brand.json` and pastes `.ux/brand.md` as a hard anchor, and the output clears the brand-fidelity floor. The CV `hints` here are color/polarity only; the travelling brand carries the logo + type intent the recommender enforces. See `references/process/brand-extraction.md`.
+
 ## Limitations (read these)
 
 This is a HEURISTIC pipeline, not a vision model. Be honest about what it can and cannot tell you:

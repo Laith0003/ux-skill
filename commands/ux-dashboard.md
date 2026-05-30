@@ -209,6 +209,8 @@ The engine's picks are not suggestions — they're constraints:
 
 Filter `components` from the recommendation for dashboard-specific patterns (`category: Data Display`, `Charts & Viz`). Build a dashboard grid using the picked palette in dark mode (force `mode=dark` if not already set in the recommendation). Dispatch `frontend-engineer` with chart-types.json picks scoped to the data the user described.
 
+**Brand anchor.** If `.ux/brand.json` exists (a client brand extracted via `/ux-design` Step 1.5 or from a reference URL/screenshot), pass `--brand-file .ux/brand.json` to the Step 2 `recommend` call AND paste `.ux/brand.md` into the `frontend-engineer` prompt as a HARD ANCHOR. Dark mode still holds for dashboards, but the brand primary — not the house pick — is the accent on every state color, the logo sits in the chrome, and type matches the logo style; the dashboard must clear the brand-fidelity floor. See `references/process/brand-extraction.md`.
+
 ### Step 5 — Lint the output before reporting
 
 ```bash

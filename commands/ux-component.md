@@ -203,6 +203,8 @@ The engine's picks are not suggestions — they're constraints:
 
 Look up the requested component name in `.ux/last-recommendation.json`'s `components` list. If present, generate using its `anatomy`, `states`, `tokens_used`, and `motion` fields as the spec. If not present, search `data/components.json` directly via `cat data/components.json | jq '.entries[] | select(.name | test("<name>"; "i"))'`. Dispatch `frontend-engineer` to build it.
 
+**Brand anchor.** If `.ux/brand.json` exists (a client brand extracted via `/ux-design` Step 1.5 or from a reference URL/screenshot), pass `--brand-file .ux/brand.json` to the Step 2 `recommend` call AND paste `.ux/brand.md` into the `frontend-engineer` prompt as a HARD ANCHOR: the component must use the brand primary color, the logo where one belongs, and logo-style type — and ship real imagery when it carries visuals — or it fails the brand-fidelity floor. A house-style component for a client brand is wrong no matter how clean. See `references/process/brand-extraction.md`.
+
 ### Step 5 — Lint the output before reporting
 
 ```bash

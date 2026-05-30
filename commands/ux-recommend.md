@@ -56,6 +56,14 @@ python3 -m engine.cli.main discover           # 10 questions, mandatory
 python3 -m engine.cli.main recommend --brief-file .ux/last-discovery.json
 ```
 
+### Anchored to an extracted client brand
+
+```bash
+python3 -m engine.cli.main recommend --brief-file .ux/last-discovery.json --brand-file .ux/brand.json
+```
+
+When `--brand-file` points at an extracted client brand (from `/ux-design` Step 1.5 or `references/process/brand-extraction.md`), the recommendation's `palette.colors.primary` becomes the brand color (sampled from the logo, not the most-painted CSS), and it carries `brand` + `type_directive` blocks so the build anchors palette + type to THEM, not the engine's default pick. Without it, the recommender chooses freely from the manifests.
+
 ### Direct Python (in scripts or other commands)
 
 ```python

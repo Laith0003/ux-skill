@@ -192,6 +192,7 @@ If Critical count > 5 OR a purple-blue gradient is found as the primary visual, 
 - Never replace one Inter with another generic sans. If Inter is wrong, the answer is a typeface with character, not "Inter but different."
 - Never accept random/generic stock or a random/unseeded placeholder service (the linter flags these). Curated Unsplash/Pexels chosen to match the brand + temperature is acceptable; the first unchosen hit, or a rotating placeholder, is the tell. An abstract SVG is not a substitute for a real product/site image.
 - Never approve a surface with no interaction states. Hover, focus, disabled, loading, empty, error — at minimum.
+- If `.ux/brand.json` exists, also judge BRAND FIDELITY: run `evaluate(html, brand_profile=...)` (or read it from a prior `uxskill evolve --brand-file` run) for `brand_fidelity` + `imagery` + `brand_passed`. Treat off-brand drift — wrong or absent brand primary, missing logo, house-style colors (clay `#cc785c` / blurple `#5e6ad2`), or a text-wall with no real imagery — as a **Critical** slop tell: a surface that ignores the client's brand fails no matter how polished. See `references/process/brand-extraction.md`.
 
 ## Failure modes
 

@@ -70,6 +70,7 @@ Downstream code uses semantic only. Raw is the architect's private workshop.
 
 ### 2. Color: one accent, restrained saturation
 
+- **Client brand is the token source of truth.** If a `.ux/brand.md` is passed (an extracted client brand), the system's color + type tokens MUST derive from it — the accent/primary comes from the logo, the type matches the logo style — not the engine's house style or a default font. The brand anchors the tokens; everything below is how you build the rest of the scale around it.
 - **Neutral base**: pick warm (Zinc, Stone) OR cool (Slate, Gray) — never both
 - **One accent color max.** No second "secondary" accent. If the brand needs two, push back to the brief.
 - **Accent saturation < 80%.** Highly saturated accents look generic; mute them.

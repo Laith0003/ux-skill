@@ -87,6 +87,8 @@ For each finding, assign severity:
 
 Group findings by lens. Within each lens, sort Critical → Cosmetic.
 
+**Brand fidelity (when a client brand is on file).** If `.ux/brand.json` exists, also judge BRAND FIDELITY: run `evaluate(html, brand_profile=...)` (or read it from a prior `uxskill evolve --brand-file` run) for `brand_fidelity` + `imagery` + `brand_passed`. Treat off-brand drift — wrong or absent brand primary, missing logo, house-style colors (clay `#cc785c` / blurple `#5e6ad2`), or a text-wall with no real imagery — as a **Critical** finding under DISCOVER: a surface that ignores the client's brand fails no matter how polished. See `references/process/brand-extraction.md`.
+
 ### 5. Format the output
 
 Use the Polaris-style report template per `references/output/polaris-style.md`. Skeleton:
