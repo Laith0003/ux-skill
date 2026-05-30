@@ -66,3 +66,21 @@ def test_render_md_carries_the_anchor():
     assert "Instant Skip Hire" in md
     assert "MUST use this brand" in md
     assert "fails the brand-fidelity gate" in md
+
+
+def test_anchor_recommendation_overrides_palette_with_brand():
+    """P2: a recommendation's palette is overridden by the extracted brand; the
+    engine's blurple loses to the brand amber, neutrals stay, logo+type carry."""
+    from engine.brand import build_profile, anchor_recommendation
+    p = build_profile(SKIPHIRE_SIGNALS)
+    rec = {"palette": {"id": "linear-graphite",
+                       "colors": {"primary": "#5e6ad2", "accent": "#5e6ad2", "ink": "#0a0b0d"}},
+           "style": {"id": "monochrome-precise"}}
+    out = anchor_recommendation(rec, p)
+    assert out["palette"]["colors"]["primary"] == "#f0890f"   # brand amber wins
+    assert out["palette"]["colors"]["accent"] == "#f0890f"
+    assert out["palette"]["colors"]["ink"] == "#0a0b0d"        # neutral role preserved
+    assert out["palette"]["brand_anchored"] is True
+    assert out["brand"]["logo"]["url"].endswith(".avif")
+    assert out["type_directive"]["reject_defaults"] is True
+    assert "rounded" in out["type_directive"]["match_logo_style"]

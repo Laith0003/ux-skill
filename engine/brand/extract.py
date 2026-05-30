@@ -213,3 +213,40 @@ def render_md(p: BrandProfile) -> str:
         "",
     ]
     return "\n".join(lines)
+
+
+def anchor_recommendation(recommendation: Dict[str, Any], profile: BrandProfile) -> Dict[str, Any]:
+    """Override a recommendation's palette + type with the extracted brand, so
+    generation uses THEIR colors / logo / type instead of the engine's pick.
+
+    The palette's neutral roles and structure stay; the brand hues replace the
+    primary/accent and the brand's logo + type personality are attached as hard
+    directives for the build step. This is how brand.md 'anchors' generation
+    (rule 2 in references/process/brand-extraction.md).
+    """
+    rec = dict(recommendation)
+    pal = dict(rec.get("palette") or {})
+    colors = dict(pal.get("colors") or {})
+    if profile.primary:
+        colors["primary"] = profile.primary
+        colors["accent"] = profile.primary          # the brand color drives the CTA
+    if profile.secondary:
+        colors["secondary"] = profile.secondary[0]
+    if colors:
+        pal["colors"] = colors
+    pal["brand_anchored"] = True
+    rec["palette"] = pal
+    rec["brand"] = {
+        "name": profile.name,
+        "logo": profile.logo,
+        "primary": profile.primary,
+        "primary_family": profile.primary_family,
+        "secondary": profile.secondary,
+    }
+    rec["type_directive"] = {
+        "match_logo_style": profile.logo_style,
+        "reject_defaults": True,
+        "display": profile.fonts.get("display"),
+        "display_source": profile.fonts.get("display_source"),
+    }
+    return rec

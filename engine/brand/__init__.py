@@ -5,6 +5,11 @@ Public surface:
     render_md(profile) -> str
     hue_family(hex) -> str
 """
-from engine.brand.extract import BrandProfile, build_profile, render_md, hue_family
+from engine.brand.extract import (
+    BrandProfile, build_profile, render_md, hue_family, anchor_recommendation,
+)
 
-__all__ = ["BrandProfile", "build_profile", "render_md", "hue_family"]
+__all__ = [
+    "BrandProfile", "build_profile", "render_md", "hue_family",
+    "anchor_recommendation",
+]
