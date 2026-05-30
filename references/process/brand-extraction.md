@@ -8,13 +8,13 @@ up — never like a ux-skill or Claude template.
 This file is canonical. `/ux-design`, `/ux-discover`, the frontend-engineer agent,
 and the linter/rating all read these rules. They are enforced, not advisory.
 
-**Open-standard interop.** The travelling `brand.md` now conforms to the open
-brand.md standard (thebrandmd/brand.md): `render_md` emits a valid spec file
-(YAML frontmatter + the Strategy / Voice / Visual layers) while keeping our
-one-line brand-fidelity-gate anchor. It is also INPUT — a project's existing
-`brand.md` is consumed as the authoritative anchor (`uxskill brand
---from-brand-md ./brand.md`, parsed by `engine.brand.parse_brand_md`) instead of
-re-extracting. Our auto-extraction + the brand-fidelity hard floor are unchanged.
+The travelling `brand.md` is a portable markdown file — YAML frontmatter plus
+Strategy / Voice / Visual sections (a shape compatible with the common `brand.md`
+convention; cf. thebrandmd/brand.md) — carrying our one-line brand-fidelity-gate
+anchor on top. It works as input too: a project's existing `brand.md` is consumed
+as the authoritative anchor (`uxskill brand --from-brand-md ./brand.md`, parsed by
+`engine.brand.parse_brand_md`) instead of re-extracting. Auto-extraction + the
+brand-fidelity hard floor are unchanged.
 
 ## The 9 rules
 

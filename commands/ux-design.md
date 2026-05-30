@@ -182,7 +182,7 @@ If the file doesn't exist, run `/ux-discover` first. Do NOT proceed without a co
 
 ### Step 1.5 — Brand: ingest an existing brand.md FIRST, else extract
 
-**Input-first.** Before anything else, check if the project already has a `brand.md` (repo root, or walk up the directory tree) — the open standard (thebrandmd/brand.md). If so, **consume it** instead of extracting; it is the authoritative anchor:
+**Input-first.** Before anything else, check if the project already has a `brand.md` (repo root, or walk up the directory tree) — the common `brand.md` convention. If so, **consume it** instead of extracting; it is the authoritative anchor:
 
 ```bash
 python3 -m engine.cli.main brand --from-brand-md ./brand.md --out .ux
