@@ -7,8 +7,11 @@ defined behavior as the viewport narrows. The rule across all of them is the sam
 ## The distinction (read this first)
 
 **Reflow by design** = the narrow state is composed and intentional. A row of rating +
-claims becomes the stars centered with each claim on its own line. A 2-column section
-splits to 1 column with the image on top. It looks like someone *chose* it.
+claims collapses to one compact centered line (stars + claims separated by middots), or
+shows fewer claims. A 2-column section splits to 1 column with the image on top. It looks
+like someone *chose* it. (Reflow that makes the block TALLER is not automatically good --
+stacking a claims row into four centered lines is "composed" but it bloats a sticky header;
+see the topbar contract and the sticky-header budget below.)
 
 **Break by accident** = the narrow state looks broken. A brand wordmark splits mid-name
 ("Instant / Skip / Hire" stacked because the box got too narrow). Nav links wrap to a
@@ -41,15 +44,42 @@ stays sane (<= ~64-72px).
 mid-name; a phone number + label + CTA crammed so the bar becomes 2-3 rows tall; a
 `{TODO_FILL: phone}` rendered literally.
 
+**Sticky-header budget (mobile).** Total sticky/fixed top chrome should be ~one row:
+target `<= 64-72px`, hard ceiling `~96px`. Only the primary nav + its single CTA persist on
+scroll. A decorative/utility bar (ratings, announcement) is NOT sticky -- it sits at the top
+and scrolls away (see the topbar contract). A tall sticky header crushes the viewport and is a
+failure, not a style choice -- if the summed height of everything that stays pinned exceeds the
+ceiling, cut what sticks (drop bars out of the sticky container, shrink padding) until only the
+nav row remains. Keep the sticky element wrapping the nav ALONE: a sticky element is bounded by
+its containing block, so a utility bar left inside the sticky `<header>` both inflates the
+budget AND lets the nav unstick once that box scrolls past.
+
 ## Utility / announcement topbar (ratings, trust claims)
 
 **Desktop:** claims inline, divider-separated ("***** Rated Excellent | Same Day | UK Wide").
-**Mobile contract:** reflow to **clean centered stacked lines**, or a horizontal scroller, or
-simply **show fewer** (top 1-2). The stars centered with each claim on its own line is a good,
-intentional reflow.
+**Mobile contract -- stay COMPACT.** This bar is secondary chrome; on a phone it must stay
+roughly **one line tall**, in priority order:
+1. **One condensed centered line** -- the stars then the claims in small text separated by
+   middots ("***** Rated Excellent | Same Day Delivery | UK Wide Coverage"), `|` dividers
+   swapped for middots, smaller font. This is the default.
+2. **Show fewer** -- if one line is still cramped at 360px, keep the stars + the single
+   strongest claim and drop the rest on mobile (bring them back at a wider breakpoint).
+3. **Horizontal scroller** -- claims in a single `overflow-x: auto` row.
+
+Stacking claims to their own lines is acceptable **only for 1-2 short items**, and **NEVER**
+when it makes the header tall -- four centered lines of stars + claims is the exact failure
+this contract exists to prevent (it produces a ~150px+ block). Prefer one compact line or
+fewer claims over stacking.
+
+**This bar is NOT sticky.** It sits at the very top and **scrolls away** -- only the primary
+nav stays pinned (see the Nav sticky-header budget). Leaving it inside a sticky `<header>` both
+blows the sticky-header budget and breaks the nav's stickiness (a sticky element is bounded by
+its containing block).
+
 **Accidental break to kill:** claims wrapping mid-phrase into 2.5 ragged lines with dangling
-"|" dividers. If three claims won't fit cleanly on one line, they go to their own lines
-*by design* (centered) or you drop the third on mobile -- you never let them wrap raggedly.
+"|" dividers; or claims stacked into a tall multi-line block that bloats the header. If three
+claims won't fit cleanly on one compact line, drop the weaker ones on mobile -- you never let
+them wrap raggedly and you never let the bar grow tall.
 
 ## Hero
 
@@ -105,6 +135,9 @@ sections). Legible spacing, not a cramped 4-column grid squeezed into 360px.
   text+icon pairs that overflow the bar.
 - **Do** stack 2-column sections with the image on top; **don't** ship a side-by-side that
   overflows.
-- **Do** reflow a claims bar to centered lines or show fewer; **don't** let claims wrap
+- **Do** collapse a claims bar to ONE compact line (middot-separated) or show fewer, and keep
+  it non-sticky; **don't** stack it into a tall multi-line block, and **don't** let claims wrap
   raggedly mid-phrase.
+- **Do** keep mobile sticky chrome to ~one row (`<= 72px`, ceiling `~96px`) -- only the nav +
+  CTA persist; **don't** pin a tall header or leave decorative bars in the sticky container.
 - **Do** omit an absent value's element entirely; **don't** render a placeholder token.

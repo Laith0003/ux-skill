@@ -284,16 +284,17 @@ python3 -m engine.cli.main --no-pretty lint <output-paths> --threshold high
 
 Exit code non-zero means a high+ finding landed in your output. Fix before declaring done.
 
-**Responsive gate — HARD, as hard as the brand gate. This is WRAP-AWARE, not scroll-only.** Run at **390px AND 360px** in a headless DOM and assert ALL THREE:
+**Responsive gate — HARD, as hard as the brand gate. This is WRAP-AWARE and HEIGHT-AWARE, not scroll-only.** Run at **390px AND 360px** in a headless DOM and assert ALL of (a)–(e):
 
 - **(a) No horizontal scroll** — `document.documentElement.scrollWidth <= window.innerWidth`. The page never scrolls sideways on a phone.
-- **(b) The header/nav stayed one row** — the sticky header/primary nav bar stays a single row. `scrollWidth` alone MISSES this: a nav that wrapped to two rows still reports `scrollWidth == innerWidth`, so it sails through a scroll-only gate. Detect the wrap directly: the bar's `offsetHeight` exceeds ~1.6x its single-row content height, OR its flex children span more than one distinct row (compare child vertical centers, not raw `offsetTop`, since `align-items:center` shifts each child). The **utility/announcement topbar is NOT a strict one-row bar** — its intended mobile state is centered stacked lines (see component-behaviors.md). Check it for "not ragged" instead: its `|` dividers are hidden on mobile and each claim sits on its own line by design, never wrapping mid-phrase with dangling dividers.
+- **(b) The header/nav stayed one row** — the sticky header/primary nav bar stays a single row. `scrollWidth` alone MISSES this: a nav that wrapped to two rows still reports `scrollWidth == innerWidth`, so it sails through a scroll-only gate. Detect the wrap directly: the bar's `offsetHeight` exceeds ~1.6x its single-row content height, OR its flex children span more than one distinct row (compare child vertical centers, not raw `offsetTop`, since `align-items:center` shifts each child). The **utility/announcement topbar is NOT a strict one-row bar** — but its intended mobile state is now ONE compact centered line (middot-separated claims), or fewer claims, and it is **non-sticky** (see component-behaviors.md). Check it for "not ragged AND not tall": its `|` dividers are hidden on mobile, it does not wrap mid-phrase with dangling dividers, and it does not balloon into a tall stacked block. (A topbar collapsed to one line passes the strict one-row check too; the stacked-lines escape hatch is reserved for 1–2 short items and must never make the header tall — its height is policed by (e).)
 - **(c) No short inline label wrapped** — for the brand wordmark and every button/CTA label, assert it is on ONE line: `el.scrollHeight <= 1.4 * lineHeight`. (Measure the label element itself, not its button wrapper — a chip/icon inside the button inflates the button's `scrollHeight` and gives a false positive. Wrap a bare label text node in its own `<span>` so it is measurable. Resolve `line-height:normal` to `fontSize * 1.2`.)
 - **(d) Header-bar children do not collide/overlap** — `nowrap` (the fix for (c)) does not always cause horizontal scroll; inside a flex bar it can instead make the wordmark **overlap the CTA** while `scrollWidth == innerWidth` AND each label still measures one line — so (a), (b), and (c) ALL pass on a visibly-broken bar (observed). Catch it directly: no two of the header bar's one-row children's rects may intersect, i.e. each child's `right` must stay within the next child's `left` (and within the bar's content box). When the wordmark cannot fit beside the logo + CTA without colliding, the fix is to shrink it or **collapse to the logomark** (hide the words) — never overlap, never two lines.
+- **(e) The sticky/fixed top chrome is not too tall** — sum the `offsetHeight` of every **top-anchored** `position:sticky` / `position:fixed` element, **de-duped for nesting** (drop any element contained by another in the set; count the OUTERMOST only, so a sticky child inside a sticky parent is not double-counted). "Top-anchored" means it pins at the top: computed `position` is sticky/fixed AND computed `top` ≈ 0. **Do NOT also require resting `getBoundingClientRect().top` ≈ 0** — when a non-sticky utility bar sits ABOVE a `sticky; top:0` header, that header's rest `rect.top` equals the bar's height (e.g. ~26px), so a rest-rect check would wrongly EXCLUDE the very header this gate exists to measure. A bottom-fixed bar (`bottom:0`, so `top:auto`) yields `NaN` for `top` and is excluded; a `top:80px` side rail is excluded by `|top| > 1`. **FAIL if the sum exceeds ~96px (hard ceiling) OR > ~20% of `window.innerHeight`.** This is the bug observed on a real phone: a tall sticky header (~168px — a utility bar stacked to four centered lines, pinned together with the nav) crushes the viewport and reads as broken. The page TARGET is ≤72px (one nav row); the 96px is the absolute gate ceiling. An over-tall sticky header is a failure — report it and fix it (drop decorative bars out of the sticky container so only the nav stays pinned, trim padding) before declaring done. Note: a sticky element is bounded by its containing block, so the correct fix is to keep the sticky wrapper around the nav ALONE — a utility bar left inside the sticky `<header>` both inflates this number AND lets the nav unstick once the header box scrolls past.
 
-**Point the three selectors at the page under test — they are named-per-page, NOT auto-detected.** The snippet has three constants at the top — `NAV_ROW`, `WORDMARK`, `LABELS` — defaulted to this page's (skiphire) real values as a worked example. Set them to the page you are checking: the *innermost* nav row (NOT the whole `<header>` — the utility/announcement topbar is intentionally a separate, stackable bar, so policing the whole header false-flags it as "wrapped"), the brand wordmark element, and the *isolated* label spans (a label that has been wrapped in its own `<span>` away from any icon/chip). Do NOT replace these with generic `header [class*=nav]` / "first link in header" structural guesses — that was tried and it mis-resolves the whole header instead of the nav row and the topbar mailto link instead of the wordmark, producing a false-positive storm. The operator running this gate just built the page and can read its markup; aiming three selectors is the contract. **Non-resolution is LOUD, not silent:** if any target resolves nothing, the snippet prints a `WARNING` and the gate is DEGRADED to horizontal-scroll-only — which is exactly the blind spot this gate exists to close, so treat a degraded run as unverified until the selectors are fixed. Any button without an isolated label span is reported "unmeasured" (never false-flagged by measuring button+chip) — wrap its label in a span or eyeball it.
+**Point the three selectors at the page under test — they are named-per-page, NOT auto-detected.** The snippet has three constants at the top — `NAV_ROW`, `WORDMARK`, `LABELS` — defaulted to this page's (skiphire) real values as a worked example. Set them to the page you are checking: the *innermost* nav row (NOT the whole `<header>` — the utility/announcement topbar is a separate bar, so policing the whole header false-flags it as "wrapped"), the brand wordmark element, and the *isolated* label spans (a label that has been wrapped in its own `<span>` away from any icon/chip). The sticky-height check (e) needs NO selector — it auto-discovers every top-anchored sticky/fixed element. Do NOT replace these with generic `header [class*=nav]` / "first link in header" structural guesses — that was tried and it mis-resolves the whole header instead of the nav row and the topbar mailto link instead of the wordmark, producing a false-positive storm. The operator running this gate just built the page and can read its markup; aiming three selectors is the contract. **Non-resolution is LOUD, not silent:** if any target resolves nothing, the snippet prints a `WARNING` and the gate is DEGRADED to horizontal-scroll-only — which is exactly the blind spot this gate exists to close, so treat a degraded run as unverified until the selectors are fixed. Any button without an isolated label span is reported "unmeasured" (never false-flagged by measuring button+chip) — wrap its label in a span or eyeball it.
 
-**A wrapping nav, a wordmark that splits mid-name or overlaps the CTA, or a button/CTA label on two lines is a CRITICAL fail — always report it and fix it before declaring done.** This is the user's standing instruction: a nav/label that wraps on mobile must ALWAYS be reported and fixed. Horizontal scroll is also CRITICAL. None of these is a nice-to-have.
+**A wrapping nav, a wordmark that splits mid-name or overlaps the CTA, a button/CTA label on two lines, OR an over-tall sticky header (sticky/fixed top chrome > ~96px) is a CRITICAL fail — always report it and fix it before declaring done.** This is the user's standing instruction: a nav/label that wraps on mobile, or a tall sticky header that crushes the viewport, must ALWAYS be reported and fixed. Horizontal scroll is also CRITICAL. None of these is a nice-to-have.
 
 Use whatever headless browser is on hand. Playwright is the cleanest:
 
@@ -356,28 +357,54 @@ with sync_playwright() as p:
                 const oy = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
                 if (ox > 2 && oy > 2) { collide = 'nav children overlap'; break; }
               } }
-          return { iw: window.innerWidth, sw: document.documentElement.scrollWidth, overflow,
+          // (e) sticky-header height budget — sum offsetHeight of every TOP-ANCHORED
+          //     sticky/fixed element, de-duped for nesting (outermost only). Auto-discovered,
+          //     no selector. A tall sticky header (utility bar stacked + pinned with the nav)
+          //     crushes the viewport — the exact on-phone bug this catches.
+          const sticky = [...document.querySelectorAll('*')].filter(el => {
+            const c = getComputedStyle(el);
+            if (c.position !== 'sticky' && c.position !== 'fixed') return false;
+            if (!vis(el)) return false;
+            // Top-anchored = pins at the top: computed `top` ~ 0. Do NOT also require
+            // rect.top ~ 0 at rest — a `sticky; top:0` header sitting below a scroll-away
+            // utility bar has rest rect.top ~ (bar height), and that check would wrongly
+            // EXCLUDE the very header this gate exists to measure. A bottom-fixed bar
+            // (top:auto) yields NaN here and is excluded; a `top:80px` rail is excluded.
+            const top = parseFloat(c.top);
+            return isFinite(top) && Math.abs(top) <= 1;
+          });
+          const outermost = sticky.filter(el => !sticky.some(o => o !== el && o.contains(el)));
+          const stickyEls = outermost.map(el => ({
+            tag: el.tagName.toLowerCase() + (el.className ? '.' + String(el.className).trim().split(/\\s+/)[0] : ''),
+            h: el.offsetHeight }));
+          const stickyTotal = stickyEls.reduce((s, e) => s + e.h, 0);
+          return { iw: window.innerWidth, ih: window.innerHeight, sw: document.documentElement.scrollWidth, overflow,
                    navFound: !!navBar, nav: barWrapped(navBar), wmFound: !!wmEl, labelCount: labelEls.length,
-                   labels, collide };
+                   labels, collide, stickyEls, stickyTotal };
         }""")
         hscroll = m["sw"] > m["iw"]
         navwrap = m["nav"] and m["nav"]["wrapped"]
         labelwrap = [x["sel"] for x in m["labels"] if x["r"]["wrapped"]]
         collide = bool(m["collide"])
+        # (e) sticky-header height: hard ceiling 96px OR > 20% of innerHeight
+        sticky_total = m["stickyTotal"]
+        sticky_tall = sticky_total > 96 or sticky_total > 0.20 * m["ih"]
         degraded = (not m["navFound"]) or (not m["wmFound"]) or (m["labelCount"] == 0)
         print(f"[{w}px] iw={m['iw']} sw={m['sw']} h-scroll={hscroll} navFound={m['navFound']} nav={m['nav']}")
         print(f"        wmFound={m['wmFound']} labelSpans={m['labelCount']} labelWraps={labelwrap or 'none'} collide={m['collide'] or 'none'}")
+        print(f"        sticky-chrome={sticky_total}px (ceiling 96, target <=72) too-tall={sticky_tall} parts={m['stickyEls']}")
         if m["overflow"]: print(f"        overflowing: {m['overflow']}")
         if degraded:
             print("        WARNING: a target (NAV_ROW / WORDMARK / LABELS) resolved nothing — point it at THIS page's elements. "
-                  "The gate is DEGRADED (h-scroll-only) until it does; any button without an isolated label span is unmeasured — eyeball it.")
-        if hscroll or navwrap or labelwrap or collide: fail = True
+                  "The gate is DEGRADED (h-scroll-only for a/b/c/d; the sticky-height check (e) still runs) until it does; "
+                  "any button without an isolated label span is unmeasured — eyeball it.")
+        if hscroll or navwrap or labelwrap or collide or sticky_tall: fail = True
     b.close()
 sys.exit(1 if fail else 0)
 PY
 ```
 
-If Playwright is not installed, read the SAME signals through any headless-DOM tool you have — a headless-Chrome eval, or an **MCP browser-preview that supports a viewport resize + a JS eval** (the cleanest fallback: resize to 360/390, then eval the measurement function above). Always read `window.innerWidth` first and confirm it is ~390/360 before trusting any number. **Headless screenshots are unreliable in this toolchain, but a DOM eval of `scrollWidth` / bar heights / label `scrollHeight` is reliable.** The honest backstop for the composed-vs-hollow judgment (and for anything the eval cannot prove) is to DEPLOY the iteration and eyeball it on a real phone — an un-eyeballed mobile layout is unverified. On a (b)/(c) failure the bar height and the per-label ratios name exactly what wrapped; on an (a) failure the `overflow` list names the offending nodes (almost always a fixed multi-column grid or a `100vw` element).
+If Playwright is not installed, read the SAME signals through any headless-DOM tool you have — a headless-Chrome eval, or an **MCP browser-preview that supports a viewport resize + a JS eval** (the cleanest fallback: resize to 360/390, then eval the measurement function above). Always read `window.innerWidth` first and confirm it is ~390/360 before trusting any number. **Headless screenshots are unreliable in this toolchain, but a DOM eval of `scrollWidth` / bar heights / label `scrollHeight` / summed sticky `offsetHeight` is reliable.** The honest backstop for the composed-vs-hollow judgment (and for anything the eval cannot prove) is to DEPLOY the iteration and eyeball it on a real phone — an un-eyeballed mobile layout is unverified. On a (b)/(c) failure the bar height and the per-label ratios name exactly what wrapped; on an (a) failure the `overflow` list names the offending nodes (almost always a fixed multi-column grid or a `100vw` element); on an (e) failure the `parts` list names which sticky element(s) sum over the ceiling (almost always a utility/announcement bar pinned together with the nav — move it OUT of the sticky container). For (e), also confirm the nav actually STAYS pinned after the topbar is unstuck: `scrollTo(0,600)` then assert the nav's `getBoundingClientRect().top` ≈ 0 (stuck) while the former topbar's `bottom < 0` (scrolled away) — a height-at-rest measurement alone does not prove the nav still sticks.
 
 **If a brand was extracted, also run the brand-fidelity HARD FLOOR** — an off-brand page fails no matter how good it looks (it must use the brand primary, carry the logo, and ship real imagery):
 

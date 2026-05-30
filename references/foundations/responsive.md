@@ -20,12 +20,20 @@ is not finished.
 5. **Touch targets >= 44x44px.** Fingers are not cursors. Links, buttons, and form controls
    need real hit area and spacing on mobile.
 6. **Reflow by DESIGN, never break by ACCIDENT** (the distinction that matters most).
-   Intentional reflow is good: a row of claims becoming centered stacked lines, a 2-column
-   section becoming 1 column with the image on top. Accidental break is the failure: a brand
+   Intentional reflow is good: a row of claims collapsing to one compact centered line (or
+   showing fewer), a 2-column section becoming 1 column with the image on top. Accidental break
+   is the failure: a brand
    wordmark splitting mid-name, nav items wrapping into ragged multiple rows, a label
    clipping, content overflowing its card. Same mechanism ("it wrapped") -- opposite
    outcomes. **The test:** does the narrow state look composed and intended, or does it look
    like it fell apart? Engineer the intended narrow state; never let the browser improvise it.
+7. **Sticky chrome budget.** Fixed/sticky top chrome on mobile must stay minimal -- ideally a
+   single `~64px` bar, hard ceiling `~96px`. A tall sticky header is a failure: it crushes the
+   viewport and reads as broken. Only what MUST persist sticks (the primary nav + its CTA);
+   decorative/utility bars (ratings, announcements) are NOT sticky -- they scroll away. Note
+   that "reflow by design" is not a license to grow: stacking a claims row into four centered
+   lines is composed but it bloats the header -- keep secondary bars to one compact line and
+   out of the sticky container.
 
 ## The horizontal-scroll killers (memorize these -- they cause ~all of it)
 
@@ -71,9 +79,14 @@ is not finished.
    anything else.
 2. **scrollWidth alone misses WRAP.** A nav that wrapped to 3 rows still reports
    `scrollWidth == innerWidth`. Also check: do the children of a bar that should be one row
-   share an `offsetTop` (if not, it wrapped)? Is the sticky header a sane height (<= ~96px)?
-   Did any short label/wordmark split across lines?
-3. Headless screenshots are unreliable in this toolchain. **Deploy the iteration and look on a
+   share an `offsetTop` (if not, it wrapped)? Did any short label/wordmark split across lines?
+3. **Measure the sticky-chrome height.** Sum the `offsetHeight` of every top-anchored
+   `position:sticky`/`position:fixed` element (de-dupe nesting -- count the outermost only).
+   It must be `<= ~96px` (hard ceiling) and ideally `<= ~72px` (one row). Greater than that, or
+   greater than ~20% of `innerHeight`, is a FAIL -- a tall sticky header is the failure, not a
+   style choice. Fix by dropping decorative bars out of the sticky container and trimming
+   padding until only the nav row stays pinned.
+4. Headless screenshots are unreliable in this toolchain. **Deploy the iteration and look on a
    real phone.** An un-eyeballed mobile layout is unverified -- treat "I think it's fine" as
    "it is broken until seen."
 
@@ -87,6 +100,8 @@ is not finished.
 - **Do** constrain every image with `max-width: 100%`; **don't** ever use `width: 100vw`.
 - **Do** make the reflowed state look intentional; **don't** accept a layout that merely
   "doesn't crash" on mobile.
+- **Do** keep mobile sticky chrome to one ~64px bar (ceiling ~96px) -- only the nav + CTA
+  persist; **don't** pin a tall header or leave a decorative/utility bar in the sticky container.
 
 ## Patterns
 
