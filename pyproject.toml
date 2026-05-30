@@ -33,7 +33,7 @@ classifiers = [
 dependencies = [
   "click>=8.1",
   "rich>=13.0",
-  "pydantic>=2.5",
+  "pydantic>=2.13.4",
   "tomli>=2.0;python_version<'3.11'"
 ]
 
