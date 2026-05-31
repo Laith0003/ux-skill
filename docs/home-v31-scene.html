@@ -97,7 +97,7 @@
   .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}
 
   /* ===== site footer (lifted from index.html, tokens resolved to literals; amber dot is intentional chrome) ===== */
   .container{max-width:1320px;margin:0 auto;padding:0 clamp(20px,5vw,56px);position:relative;z-index:1}
@@ -267,51 +267,27 @@
   .fade-up{opacity:0;transform:translateY(44px);transition:opacity .9s ease,transform 1s cubic-bezier(.16,.7,.2,1)}
   .fade-up.in{opacity:1;transform:none}
 
-  /* ===== SCROLL-PIN: how section — desktop only ===== */
-  .pin-wrap{position:relative;height:600vh}/* 6 screens = 1 intro + 5 steps */
-  .pin-inner{position:sticky;top:56px;height:calc(100vh - 56px);display:flex;align-items:stretch;overflow:hidden}
-  .pin-left{flex:1;display:flex;align-items:center;justify-content:center;padding:clamp(24px,4vw,60px)}
-  .pin-right{flex:1;display:flex;flex-direction:column;justify-content:center;padding:clamp(24px,4vw,60px) clamp(24px,5vw,72px)}
-  .pin-left{background:rgba(0,0,0,.04);border-right:1px solid rgba(0,0,0,.06)}
-  /* tokens.css frame */
-  .tok-frame{width:100%;max-width:420px;border-radius:14px;background:#0e1016;overflow:hidden;box-shadow:0 32px 80px -24px rgba(0,0,0,.36)}
-  .tok-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;background:#15171f;font-family:var(--mono);font-size:10px;color:#717783}
-  .tok-dot{width:8px;height:8px;border-radius:50%;background:#2a2f3a;flex:none}
-  .tok-title{margin-left:6px}
-  .tok-body{padding:16px 18px;display:flex;flex-direction:column;gap:9px;min-height:260px}
-  .tok-row{display:flex;gap:10px;font-family:var(--mono);font-size:12px;opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease}
-  .tok-k{color:#717783;flex:none}
-  .tok-v{font-weight:500}
-  .tok-light{color:#f6f7f9}.tok-dark{color:#a6abb3}.tok-num{color:#22d3ee}.tok-accent{color:#5b9cff}.tok-str{color:#3ddc97}
-  .tok-pass .tok-k{color:#3ddc97}
-  /* reveal rows by step */
-  .pin-inner[data-step="0"] .tok-s1,.pin-inner[data-step="1"] .tok-s1,.pin-inner[data-step="1"] .tok-s2,
-  .pin-inner[data-step="2"] .tok-s1,.pin-inner[data-step="2"] .tok-s2,.pin-inner[data-step="2"] .tok-s3,
-  .pin-inner[data-step="3"] .tok-s1,.pin-inner[data-step="3"] .tok-s2,.pin-inner[data-step="3"] .tok-s3,.pin-inner[data-step="3"] .tok-s4,
-  .pin-inner[data-step="4"] .tok-s1,.pin-inner[data-step="4"] .tok-s2,.pin-inner[data-step="4"] .tok-s3,.pin-inner[data-step="4"] .tok-s4,.pin-inner[data-step="4"] .tok-s5
-  {opacity:1;transform:none}
-  /* steps */
-  .pin-head{margin-bottom:32px}
-  .pin-title{font-family:var(--disp);font-weight:800;font-size:clamp(1.6rem,2.8vw,2.4rem);color:var(--lite-ink);margin:0 0 10px;line-height:1.06;letter-spacing:-.025em}
-  .pin-title em{color:var(--blue-d);font-style:italic;font-weight:400}
-  .pin-sub{font-family:var(--disp);font-weight:500;font-size:clamp(1rem,1.6vw,1.25rem);color:var(--lite-body);margin:0;line-height:1.3}
-  .pin-sub em{color:var(--blue-d);font-style:italic}
-  .pin-steps{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0;max-width:420px}
-  .pstep{display:flex;gap:20px;padding:18px 0;border-bottom:1px solid rgba(0,0,0,.07);opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease;pointer-events:none}
-  .pstep.active{opacity:1;transform:none;pointer-events:auto}
-  .ps-num{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--blue-d);font-weight:500;padding-top:3px;flex:none;width:28px}
-  .pstep strong{display:block;font-family:var(--disp);font-size:1.05rem;color:var(--lite-ink);margin-bottom:5px}
-  .pstep p{margin:0;font-size:14px;color:var(--lite-body);line-height:1.5}
-  .pin-dots{display:flex;gap:8px;margin-top:20px}
-  .pdot{width:6px;height:6px;border-radius:50%;background:rgba(0,0,0,.15);}.pdot{transition:background .3s ease;}
+  /* ===== SCROLL-PIN: full-viewport beats, one at a time ===== */
+  .pin-wrap{position:relative;height:700vh}/* 7 beats × 100vh */
+  .pin-inner{position:sticky;top:0;height:100svh;overflow:hidden}
+  /* each beat: absolute, full-size, centered, hidden by default */
+  .pbeat{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 clamp(24px,8vw,160px);gap:clamp(14px,2vh,28px);opacity:0;transform:translateY(28px) scale(.97);transition:opacity .6s cubic-bezier(.16,.7,.2,1),transform .7s cubic-bezier(.16,.7,.2,1);pointer-events:none}
+  .pbeat.active{opacity:1;transform:none;pointer-events:auto}
+  .pbeat-eye{justify-content:center;margin-bottom:4px}
+  .pbeat-num{font-family:var(--mono);font-size:clamp(11px,1.2vw,13px);letter-spacing:.18em;color:var(--blue-d);font-weight:500}
+  .pbeat-title{font-family:var(--disp);font-weight:800;font-size:clamp(2.4rem,6vw,4.8rem);color:var(--lite-ink);margin:0;line-height:1.0;letter-spacing:-.03em;max-width:14ch}
+  .pbeat-title em{color:var(--blue-d);font-style:italic;font-weight:400}
+  .pbeat-sub{font-size:clamp(16px,2vw,20px);color:var(--lite-body);margin:0;max-width:44ch;line-height:1.55}
+  .pbeat-sub em{color:var(--blue-d);font-style:italic}
+  .pin-dots{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;gap:10px}
+  .pdot{width:7px;height:7px;border-radius:50%;background:rgba(0,0,0,.15);}
+  .pdot{transition:background .35s ease;}
   .pdot.on{background:var(--blue-d)}
-  /* Mobile: no pin — steps stack normally */
+  /* Mobile: static stacked beats */
   @media(max-width:819px){
     .pin-wrap{height:auto}
-    .pin-inner{position:static;height:auto;flex-direction:column}
-    .pin-left{border-right:none;border-bottom:1px solid rgba(0,0,0,.06)}
-    .pstep{opacity:1;transform:none}
-    .tok-row{opacity:1;transform:none}
+    .pin-inner{position:static;height:auto}
+    .pbeat{position:static;opacity:1;transform:none;padding-block:clamp(60px,12vh,100px);transition:none;}
   }
 
   /* ===== chat beat — one-by-one reveal ===== */
@@ -566,43 +542,44 @@
 
   <!-- ============ BEAT 4 — HOW IT WORKS (dark) ============ -->
   <div class="zone zone--lite" data-bg="light"><span class="zone__bloom" aria-hidden="true" data-bloom="how"></span><section class="sec" id="how" style="padding-block:0">
-    <!-- SCROLL-PIN: desktop only. 6×100vh tall so scroll walks the 5 steps. Mobile stacks. -->
+    <!-- SCROLL-PIN: 7 beats (title + 5 steps), each full-viewport, large centered. Mobile stacks. -->
     <div class="pin-wrap" id="pinWrap">
-      <div class="pin-inner" id="pinInner">
-        <div class="pin-left">
-          <!-- tokens.css browser frame — layers revealed as steps advance -->
-          <div class="tok-frame" aria-label="system.tokens.css output building step by step">
-            <div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div>
-            <div class="tok-body">
-              <div class="tok-row tok-s1"><span class="tok-k">--canvas:</span><span class="tok-v tok-light">#f6f7f9</span></div>
-              <div class="tok-row tok-s1"><span class="tok-k">--ink:</span><span class="tok-v tok-dark">#10131a</span></div>
-              <div class="tok-row tok-s2"><span class="tok-k">--warmth:</span><span class="tok-v tok-num">0.28</span></div>
-              <div class="tok-row tok-s2"><span class="tok-k">--contrast:</span><span class="tok-v tok-num">0.91</span></div>
-              <div class="tok-row tok-s2"><span class="tok-k">--density:</span><span class="tok-v tok-num">0.44</span></div>
-              <div class="tok-row tok-s3"><span class="tok-k">--accent:</span><span class="tok-v tok-accent">#5b9cff</span></div>
-              <div class="tok-row tok-s3"><span class="tok-k">--radius:</span><span class="tok-v tok-num">10px</span></div>
-              <div class="tok-row tok-s4"><span class="tok-k">--display:</span><span class="tok-v tok-str">'Bricolage Grotesque'</span></div>
-              <div class="tok-row tok-s4"><span class="tok-k">--body:</span><span class="tok-v tok-str">'Inter'</span></div>
-              <div class="tok-row tok-s5"><span class="tok-k">/* lint: 0 slop */</span></div>
-              <div class="tok-row tok-s5 tok-pass"><span class="tok-k">/* mobile: verified ok */</span></div>
-            </div>
-          </div>
+      <div class="pin-inner" id="pinInner" data-step="0">
+        <!-- beat 0: the title -->
+        <div class="pbeat" data-beat="0">
+          <span class="eyebrow pbeat-eye"><span class="dot c-blue"></span>One sequence, not scattered cards</span>
+          <h2 class="pbeat-title">It compiles a design language. <em>Not a template.</em></h2>
+          <p class="pbeat-sub">Five deterministic steps, <em>start to ship.</em></p>
         </div>
-        <div class="pin-right">
-          <!-- big title lives inside the pin panel, not floating above -->
-          <div class="pin-head">
-            <span class="eyebrow" style="justify-content:flex-start;margin-bottom:14px"><span class="dot c-blue"></span>One sequence, not scattered cards</span>
-            <h2 class="pin-title">It compiles a design language. <em>Not a template.</em></h2>
-            <p class="pin-sub">Five deterministic steps, <em>start to ship.</em></p>
-          </div>
-          <ol class="pin-steps">
-            <li class="pstep" data-step="0"><span class="ps-num">01</span><div><strong>Read the brief</strong><p>Industry, audience, mood — parsed into a structured intake, no guesswork.</p></div></li>
-            <li class="pstep" data-step="1"><span class="ps-num">02</span><div><strong>Set seven axes</strong><p>Warmth, contrast, density, geometry, formality, motion, type — tuned, then emitted as tokens.</p></div></li>
-            <li class="pstep" data-step="2"><span class="ps-num">03</span><div><strong>Anchor to your brand</strong><p>Primary pulled from your logo's pixels — not the nearest CSS named colour.</p></div></li>
-            <li class="pstep" data-step="3"><span class="ps-num">04</span><div><strong>Lint 152 anti-patterns</strong><p>Gradient headers, three equal cards, filler verbs — fails the build here.</p></div></li>
-            <li class="pstep" data-step="4"><span class="ps-num">05</span><div><strong>Verify mobile, for real</strong><p>Rendered at true 360/390px in headless Chrome. Horizontal scroll fails, not your users.</p></div></li>
-          </ol>
-          <div class="pin-dots" aria-hidden="true"><span class="pdot" data-dot="0"></span><span class="pdot" data-dot="1"></span><span class="pdot" data-dot="2"></span><span class="pdot" data-dot="3"></span><span class="pdot" data-dot="4"></span></div>
+        <!-- beats 1-5: each step full-screen -->
+        <div class="pbeat" data-beat="1">
+          <span class="pbeat-num">01</span>
+          <h3 class="pbeat-title">Read the brief.</h3>
+          <p class="pbeat-sub">Industry, audience, mood &mdash; parsed into a structured intake, no guesswork.</p>
+        </div>
+        <div class="pbeat" data-beat="2">
+          <span class="pbeat-num">02</span>
+          <h3 class="pbeat-title">Set seven axes.</h3>
+          <p class="pbeat-sub">Warmth, contrast, density, geometry, formality, motion, type &mdash; tuned, then emitted as tokens.</p>
+        </div>
+        <div class="pbeat" data-beat="3">
+          <span class="pbeat-num">03</span>
+          <h3 class="pbeat-title">Anchor to your brand.</h3>
+          <p class="pbeat-sub">Primary pulled from your logo&rsquo;s pixels &mdash; not the nearest CSS named colour.</p>
+        </div>
+        <div class="pbeat" data-beat="4">
+          <span class="pbeat-num">04</span>
+          <h3 class="pbeat-title">Lint 152 anti-patterns.</h3>
+          <p class="pbeat-sub">Gradient headers, three equal cards, filler verbs &mdash; fails the build here.</p>
+        </div>
+        <div class="pbeat" data-beat="5">
+          <span class="pbeat-num">05</span>
+          <h3 class="pbeat-title">Verify mobile, for real.</h3>
+          <p class="pbeat-sub">Rendered at true 360/390px in headless Chrome. Horizontal scroll fails, not your users.</p>
+        </div>
+        <!-- progress indicator -->
+        <div class="pin-dots" aria-hidden="true">
+          <span class="pdot" data-dot="0"></span><span class="pdot" data-dot="1"></span><span class="pdot" data-dot="2"></span><span class="pdot" data-dot="3"></span><span class="pdot" data-dot="4"></span><span class="pdot" data-dot="5"></span>
         </div>
       </div>
     </div>
@@ -819,29 +796,27 @@
     to.observe(sticky);
   })();
 
-  /* ----- scroll-pin: desktop only ----- */
+  /* ----- scroll-pin: 7 full-viewport beats (title + 5 steps), desktop only ----- */
   (function(){
     var wrap=document.getElementById('pinWrap'), inner=document.getElementById('pinInner');
     if(!wrap||!inner)return;
-    var STEPS=5, cur=-1;
-    function setStep(s){
-      if(s===cur)return; cur=s;
-      inner.setAttribute('data-step',s);
-      wrap.querySelectorAll('.pstep').forEach(function(el){el.classList.toggle('active',+el.getAttribute('data-step')===s);});
-      wrap.querySelectorAll('.pdot').forEach(function(el){el.classList.toggle('on',+el.getAttribute('data-dot')===s);});
+    var BEATS=6, cur=-1;
+    function setBeat(b){
+      if(b===cur)return; cur=b;
+      wrap.querySelectorAll('.pbeat').forEach(function(el){el.classList.toggle('active',+el.getAttribute('data-beat')===b);});
+      wrap.querySelectorAll('.pdot').forEach(function(el){el.classList.toggle('on',+el.getAttribute('data-dot')===b);});
     }
     function onScroll2(){
-      if(window.innerWidth<820){setStep(0);return;}
-      var r=wrap.getBoundingClientRect(), navH=56;
-      var scrolled=-(r.top-navH), total=r.height-window.innerHeight+navH;
-      if(scrolled<0){setStep(0);return;}
-      if(scrolled>=total){setStep(STEPS-1);return;}
-      var step=Math.min(STEPS-1,Math.floor((scrolled/total)*STEPS));
-      setStep(step);
+      if(window.innerWidth<820){setBeat(0);return;}
+      var r=wrap.getBoundingClientRect();
+      var scrolled=-r.top, total=r.height-window.innerHeight;
+      if(scrolled<0){setBeat(0);return;}
+      if(scrolled>=total){setBeat(BEATS-1);return;}
+      setBeat(Math.min(BEATS-1,Math.floor((scrolled/total)*BEATS)));
     }
     window.addEventListener('scroll',onScroll2,{passive:true});
     window.addEventListener('resize',onScroll2);
-    onScroll2(); setStep(0);
+    onScroll2(); setBeat(0);
   })();
 })();
 </script>
