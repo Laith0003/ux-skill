@@ -105,8 +105,7 @@
   .footer__inner{display:grid;gap:52px;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr))}
   .footer__col-head{display:block;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8a8f96;font-weight:400;margin-bottom:12px}
   .footer__col ul{list-style:none;padding:0;margin:0;display:grid;gap:8px}
-  .footer__col a{color:#c7ccd3;font-size:14px}
-  .footer__col a{outline:none}
+  .footer__col a{color:#c7ccd3;font-size:14px;transition:color 96ms cubic-bezier(0.16,1,0.3,1);}
   .footer__col a:hover{color:#f6f7f9}
   .footer__caption{margin-top:12px;color:#8a8f96;font-size:13px;max-width:28ch}
   .footer__bottom{margin-top:52px;padding-top:20px;border-top:1px solid rgba(246,247,249,0.07);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;letter-spacing:0.10em;color:#8a8f96}
@@ -219,6 +218,28 @@
   .badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;margin-top:16px}
   .zone--lite .badge{color:#6a7283} .zone--dark .badge{color:#9aa3b2}
   .badge b{color:var(--green);font-weight:500}
+
+  /* ===== TURN interstitial — dark beat, empty pause then wiring reveal ===== */
+  .turn-void{min-height:22vh}
+  .wiring{width:100%;max-width:680px;margin:0 auto clamp(40px,6vh,80px)}
+  .wiring svg{width:100%;height:auto;overflow:visible}
+  /* wire paths draw in via stroke-dashoffset — driven by IntersectionObserver */
+  .wire{fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .wire-c{stroke:var(--cyan);stroke-width:1.6}
+  .wire-b{stroke:var(--blue);stroke-width:1.4}
+  .wire-g{stroke:var(--green);stroke-width:1.2}
+  .wnode{opacity:0;transition:opacity .35s ease}
+  .wiring.wired .wnode{opacity:1}
+  @media(prefers-reduced-motion:no-preference){
+    .wire{stroke-dasharray:var(--len,400);stroke-dashoffset:var(--len,400);transition:stroke-dashoffset 0s}
+    .wiring.wired .wire{stroke-dashoffset:0;transition:stroke-dashoffset .9s cubic-bezier(.4,0,.2,1)}
+    .wiring.wired .wire-b{transition-delay:.18s}
+    .wiring.wired .wire-g{transition-delay:.36s}
+    .wiring.wired .wnode{transition-delay:.6s}
+  }
+  /* fade-up between white beats */
+  .fade-up{opacity:0;transform:translateY(44px);transition:opacity .9s ease,transform 1s cubic-bezier(.16,.7,.2,1)}
+  .fade-up.in{opacity:1;transform:none}
 
   /* ===== chat beat — one-by-one reveal ===== */
   .chat{max-width:760px;margin:clamp(44px,7vh,90px) auto 0;display:flex;flex-direction:column;gap:16px}
@@ -441,9 +462,34 @@
   <!-- ============ BEAT 3 — THE TURN (dark) ============ -->
   <div class="zone zone--dark" data-bg="dark"><span class="zone__bloom" aria-hidden="true" data-bloom="turn"></span><section class="sec" id="turn">
     <div class="wrap">
+      <!-- empty void: scroll through darkness before the wiring reveals -->
+      <div class="turn-void"></div>
+      <!-- wiring animation: SVG circuit connecting nodes, draws in on scroll-enter -->
+      <div class="wiring rev" aria-hidden="true">
+        <svg viewBox="0 0 680 220" role="presentation">
+          <!-- horizontal spine -->
+          <path class="wire wire-c" d="M40 110 H200" style="--len:160"/>
+          <path class="wire wire-c" d="M260 110 H420" style="--len:160"/>
+          <path class="wire wire-c" d="M480 110 H640" style="--len:160"/>
+          <!-- vertical branches -->
+          <path class="wire wire-b" d="M200 110 V50 H260 V110" style="--len:200"/>
+          <path class="wire wire-b" d="M420 110 V170 H480 V110" style="--len:200"/>
+          <!-- diagonal pulse lines -->
+          <path class="wire wire-g" d="M120 110 L160 70 L200 110" style="--len:120"/>
+          <path class="wire wire-g" d="M480 110 L520 150 L560 110" style="--len:120"/>
+          <!-- nodes -->
+          <circle class="wnode" cx="40" cy="110" r="5" fill="#22d3ee"/>
+          <circle class="wnode" cx="200" cy="110" r="7" fill="#5b9cff" style="transition-delay:.55s"/>
+          <circle class="wnode" cx="340" cy="110" r="9" fill="#22d3ee" style="transition-delay:.65s"/>
+          <circle class="wnode" cx="480" cy="110" r="7" fill="#5b9cff" style="transition-delay:.75s"/>
+          <circle class="wnode" cx="640" cy="110" r="5" fill="#3ddc97" style="transition-delay:.85s"/>
+          <circle class="wnode" cx="230" cy="50" r="4" fill="#2dd4bf" style="transition-delay:.7s"/>
+          <circle class="wnode" cx="450" cy="170" r="4" fill="#2dd4bf" style="transition-delay:.8s"/>
+        </svg>
+      </div>
       <div class="rev head">
         <span class="eyebrow"><span class="dot c-cyan"></span>The turn</span>
-        <h2 class="lead">What if the model had a <em>designer's brain</em> wired in?</h2>
+        <h2 class="lead">What if the model had a <em>designer&rsquo;s brain</em> wired in?</h2>
         <p class="sub">Not a bigger model. A deterministic layer that sits in front of it and <b class="t-ink">compiles a design language</b> &mdash; warmth, contrast, geometry, type &mdash; instead of reaching for the nearest template. Same brief, same system, every time.</p>
       </div>
     </div>
@@ -497,9 +543,9 @@
   <!-- ============ BEAT 5 — PROOF IT'S REAL (light) ============ -->
   <div class="zone zone--lite" data-bg="light"><span class="zone__bloom" aria-hidden="true" data-bloom="proof"></span><section class="sec" id="proof">
     <div class="wrap">
-      <div class="rev head">
+      <div class="fade-up head">
         <span class="eyebrow"><span class="dot c-green"></span>Training data, not templates</span>
-        <h2 class="lead">1,243 entries. <em>Distilled, never pasted.</em></h2>
+        <h2 class="lead">160 real brand specs &mdash; <em>as words, not stamps.</em></h2>
       </div>
       <div class="zig zig--rev rev">
         <div class="ztxt">
@@ -543,11 +589,11 @@
   </section></div>
 
   <!-- ============ BEAT 6 — WHERE IT RUNS (dark) ============ -->
-  <div class="zone zone--dark" data-bg="dark"><span class="zone__bloom" aria-hidden="true" data-bloom="runs"></span><section class="sec" id="runs">
+  <div class="zone zone--lite" data-bg="light"><span class="zone__bloom" aria-hidden="true" data-bloom="runs"></span><section class="sec" id="runs">
     <div class="wrap">
-      <div class="rev head">
+      <div class="fade-up head">
         <span class="eyebrow"><span class="dot c-teal"></span>Built for your stack</span>
-        <h2 class="lead">17 IDEs. <em>One install.</em></h2>
+        <h2 class="lead">The same engine, the same brand-true output, <em>everywhere.</em></h2>
       </div>
       <div class="zig rev">
         <div class="ztxt">
@@ -681,10 +727,10 @@
      fill:backwards means items are visible by default if the API is missing — nothing can hide. */
   function staggerIn(t){if(reduce||!t.children.length)return;for(var k=0;k<t.children.length;k++){try{t.children[k].animate([{opacity:0,transform:'translateY(20px)'},{opacity:1,transform:'translateY(0)'}],{duration:560,delay:k*70,easing:'cubic-bezier(.16,.7,.2,1)',fill:'backwards'});}catch(_){}}}
   if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var t=e.target;t.classList.add('in');if(t.hasAttribute('data-stagger'))staggerIn(t);io.unobserve(t);}});},{threshold:.16});
-    document.querySelectorAll('.rev,.msg,[data-stagger]').forEach(function(el){io.observe(el);});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var t=e.target;t.classList.add('in');if(t.classList.contains('wiring'))t.classList.add('wired');if(t.hasAttribute('data-stagger'))staggerIn(t);io.unobserve(t);}});},{threshold:.16});
+    document.querySelectorAll('.rev,.msg,.fade-up,.wiring,[data-stagger]').forEach(function(el){io.observe(el);});
   } else {
-    document.querySelectorAll('.rev,.msg').forEach(function(el){el.classList.add('in');});
+    document.querySelectorAll('.rev,.msg,.fade-up,.wiring').forEach(function(el){el.classList.add('in');if(el.classList.contains('wiring'))el.classList.add('wired');});
   }
   measure(); paintBg();
 })();
