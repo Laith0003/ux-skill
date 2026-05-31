@@ -90,6 +90,15 @@ full-width below the copy.
 **Accidental break to kill:** a fixed 2-column hero where the text and form sit side by side
 and overflow the viewport.
 
+**Form-in-hero: the form IS the primary CTA.** When the quote/contact form lives in the
+hero, do NOT also place a separate hero button that merely scrolls to that same form -- a
+CTA must point to an action that is NOT already on the screen, so a button targeting the
+visible in-hero form is a dead, redundant control (it "just takes you to the form that's
+right there"). The form is the call-to-action; let the headline + lede lead into it. A CTA
+in the nav or a LATER section pointing back to the hero form is correct -- there the form is
+off-screen. If you do want a button beside an in-hero form, give it a real job (focus the
+first field), never a scroll-to-self.
+
 ## Card grid (value cards, item cards, coverage tiles)
 
 **Mobile contract:** reflow column count with `auto-fit minmax`, ending at 1 column on phones
