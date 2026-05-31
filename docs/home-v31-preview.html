@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>uxskill v3.1 — hero + dissolve preview</title>
+<title>uxskill v3.1 — homepage preview</title>
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#07080a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,120 +14,169 @@
     --canvas:#07080a; --ink:#f4f5f7; --body:#a6abb3; --muted:#6c727c;
     --amber:#f59e0b; --blue:#5b9cff; --pink:#ff5b8a; --green:#3ddc97;
     --hair:rgba(255,255,255,.10); --hair-2:rgba(255,255,255,.06);
-    --p:0; /* hero scroll progress 0..1, set by JS */
+    --p:0;
     --disp:Bricolage Grotesque,system-ui,sans-serif;
     --sans:Inter,system-ui,sans-serif;
     --mono:JetBrains Mono,ui-monospace,monospace;
   }
   *,*::before,*::after{box-sizing:border-box}
-  html{-webkit-text-size-adjust:100%}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
   body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--sans);
     line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
   canvas,img,svg{display:block;max-width:100%}
   a{color:inherit;text-decoration:none}
   .wrap{width:100%;max-width:1180px;margin:0 auto;padding-inline:clamp(16px,5vw,44px)}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--muted);
+    text-transform:uppercase;display:inline-flex;align-items:center;gap:12px}
+  .eyebrow::before{content:"";width:30px;height:1px;background:var(--muted)}
+  .num{font-family:var(--disp);font-weight:800;line-height:.8;letter-spacing:-.04em;
+    font-size:clamp(7rem,22vw,17rem);color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.07);
+    position:absolute;pointer-events:none;user-select:none;z-index:0}
 
-  /* ---------- nav (the only sticky chrome; one compact bar) ---------- */
+  .rev{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+  .rev.in{opacity:1;transform:none}
+
   .nav{position:sticky;top:0;z-index:50;height:60px;display:flex;align-items:center;
     backdrop-filter:blur(10px);background:rgba(7,8,10,.72);border-bottom:1px solid var(--hair-2)}
   .nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
   .brand{display:flex;align-items:center;gap:9px;font-weight:600;letter-spacing:-.01em}
-  .brand i{width:11px;height:11px;border-radius:50%;background:var(--amber);
-    box-shadow:0 0 14px rgba(245,158,11,.7);flex:none}
+  .brand i{width:11px;height:11px;border-radius:50%;background:var(--amber);box-shadow:0 0 14px rgba(245,158,11,.7);flex:none}
   .nav__links{display:flex;gap:26px;font-size:13px;color:var(--body);min-width:0}
   .nav__links a:hover{color:var(--ink)}
-  @media(max-width:820px){.nav__links{display:none}}
-  .star{font-family:var(--mono);font-size:12px;border:1px solid var(--amber);
-    color:var(--amber);padding:8px 14px;border-radius:999px;white-space:nowrap}
+  @media(max-width:860px){.nav__links{display:none}}
+  .star{font-family:var(--mono);font-size:12px;border:1px solid var(--amber);color:var(--amber);
+    padding:8px 14px;border-radius:999px;white-space:nowrap}
+  .star:hover{background:rgba(245,158,11,.12)}
 
   /* ---------- hero ---------- */
-  .hero{position:relative;min-height:104svh;overflow:hidden;isolation:isolate;
-    display:flex;align-items:center}
+  .hero{position:relative;min-height:104svh;overflow:hidden;isolation:isolate;display:flex;align-items:center}
   .hero__dots{position:absolute;inset:0;z-index:0;width:100%;height:100%}
-  /* the dark->lit colourful bloom: fades IN with scroll progress */
   .hero__bloom{position:absolute;inset:0;z-index:1;opacity:var(--p);pointer-events:none;
     background:
-      radial-gradient(70% 55% at 50% 62%, rgba(245,158,11,.30), transparent 70%),
-      radial-gradient(60% 50% at 22% 40%, rgba(255,91,138,.24), transparent 72%),
-      radial-gradient(64% 52% at 80% 44%, rgba(91,156,255,.22), transparent 72%),
-      radial-gradient(50% 40% at 60% 80%, rgba(61,220,151,.16), transparent 75%)}
-  .three{position:absolute;z-index:1;left:50%;top:48%;translate:-50% -50%;
-    font-family:var(--disp);font-weight:800;font-size:clamp(11rem,40vw,30rem);
-    line-height:.8;letter-spacing:-.04em;pointer-events:none;
-    background:linear-gradient(168deg,#c9d24b 4%,var(--amber) 52%,#b06a12 96%);
+      radial-gradient(82% 62% at 50% 58%, rgba(245,158,11,.34), transparent 72%),
+      radial-gradient(64% 54% at 24% 40%, rgba(255,91,138,.22), transparent 74%)}
+  /* mix: starts DIMMED, ignites to vivid colour as you scroll out */
+  .three{position:absolute;z-index:1;left:50%;top:50%;translate:-50% -50%;
+    font-family:var(--disp);font-weight:800;font-size:clamp(13rem,52vw,40rem);
+    line-height:.78;letter-spacing:-.05em;pointer-events:none;
+    background:linear-gradient(166deg,#cfd84e 2%,var(--amber) 50%,#a85f0e 98%);
     -webkit-background-clip:text;background-clip:text;color:transparent;
-    opacity:calc(.5 - var(--p)*.5);scale:calc(1 + var(--p)*.09);
-    filter:drop-shadow(0 30px 90px rgba(245,158,11,.16))}
-  .hero__content{position:relative;z-index:2;width:100%;text-align:center;
-    padding-block:clamp(84px,16vh,150px);
-    opacity:calc(1 - var(--p)*1.25);translate:0 calc(var(--p)*-26px)}
-  /* legibility scrim: darkens the 3.1 behind the copy, keeps it visible at the edges */
-  .hero__content::before{content:"";position:absolute;z-index:-1;inset:-5% -8%;pointer-events:none;
-    background:radial-gradient(58% 54% at 50% 44%,rgba(7,8,10,.74),rgba(7,8,10,.36) 58%,transparent 82%)}
-  .pills{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:26px}
+    opacity:clamp(.28,calc(.28 + var(--p)*1.05),.95);
+    scale:calc(1 + var(--p)*.14);
+    filter:drop-shadow(0 30px 90px rgba(245,158,11,calc(.08 + var(--p)*.22)))}
+  .hero__content{position:relative;z-index:2;width:100%;text-align:center;padding-block:clamp(58px,11vh,116px)}
+  .hero__content::before{content:"";position:absolute;z-index:-1;inset:-6% -8%;pointer-events:none;
+    background:radial-gradient(56% 56% at 50% 46%,rgba(7,8,10,.72),rgba(7,8,10,.30) 58%,transparent 82%)}
+  .hero__fade{opacity:calc(1 - var(--p)*1.3);translate:0 calc(var(--p)*-26px)}
+  .pills{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:24px}
   .pill{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--body);
     border:1px solid var(--hair);border-radius:999px;padding:7px 14px;background:rgba(255,255,255,.02)}
   .pill b{color:var(--ink);font-weight:500}
   .pill .d{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--amber);
     margin-right:7px;vertical-align:middle;box-shadow:0 0 10px rgba(245,158,11,.8)}
-  h1{font-family:var(--disp);font-weight:800;letter-spacing:-.03em;line-height:.98;
-    margin:0 auto;max-width:14ch;font-size:clamp(2.3rem,8.4vw,5.6rem)}
-  h1 .accent{display:block;font-weight:400;font-style:italic;
-    font-size:.92em;color:var(--body);letter-spacing:-.02em}
+  h1{font-family:var(--disp);font-weight:800;letter-spacing:-.035em;line-height:.96;
+    margin:0 auto;max-width:13ch;font-size:clamp(2.75rem,10.6vw,6.4rem)}
+  h1 .accent{font-weight:400;font-style:italic;color:var(--body);letter-spacing:-.02em}
   .lede{margin:22px auto 0;max-width:46ch;color:var(--body);font-size:clamp(15px,2vw,18px)}
   .lede b{color:var(--ink);font-weight:500}
   .cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:30px}
   .btn{font-family:var(--mono);font-size:13.5px;border-radius:999px;padding:13px 20px;
-    display:inline-flex;align-items:center;gap:9px;border:1px solid var(--hair)}
+    display:inline-flex;align-items:center;gap:9px;border:1px solid var(--hair);transition:.18s}
   .btn--key{background:var(--ink);color:#0a0b0d;border-color:var(--ink);font-weight:500}
-  .btn--ghost{color:var(--ink)}
+  .btn--key:hover{transform:translateY(-1px)} .btn--ghost:hover{border-color:var(--ink)}
   .btn .ar{opacity:.7}
-  .stats{display:grid;gap:14px 8px;margin:46px auto 0;max-width:660px;
-    grid-template-columns:repeat(4,1fr)}
-  @media(max-width:560px){
-    .stats{grid-template-columns:repeat(2,1fr);max-width:340px}
-    .three{top:57%;font-size:clamp(8rem,46vw,15rem);opacity:calc(.3 - var(--p)*.3)}
-  }
-  .stat .n{font-family:var(--disp);font-weight:700;font-size:clamp(1.7rem,5vw,2.4rem);
-    letter-spacing:-.02em;line-height:1}
-  .stat .l{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;color:var(--muted);
-    margin-top:6px;text-transform:uppercase}
-  /* IDE / brand marks arranged AROUND the hero (desktop only; reflow = hidden on small) */
+  .stats{display:grid;gap:14px 8px;margin:46px auto 0;max-width:660px;grid-template-columns:repeat(4,1fr)}
+  @media(max-width:560px){.stats{grid-template-columns:repeat(2,1fr);max-width:340px}
+    .three{top:56%;font-size:clamp(11rem,68vw,22rem);opacity:clamp(.2,calc(.2 + var(--p)*.85),.82)}}
+  .stat .n{font-family:var(--disp);font-weight:700;font-size:clamp(1.7rem,5vw,2.4rem);letter-spacing:-.02em;line-height:1}
+  .stat .l{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;color:var(--muted);margin-top:6px;text-transform:uppercase}
   .orbit{position:absolute;inset:0;z-index:1;pointer-events:none}
   .mk{position:absolute;font-family:var(--mono);font-size:12px;color:var(--body);
-    border:1px solid var(--hair-2);border-radius:999px;padding:6px 12px;
-    background:rgba(255,255,255,.02);opacity:calc(.8 - var(--p)*.8);
-    translate:0 calc(var(--p)*var(--dir,18px))}
+    border:1px solid var(--hair-2);border-radius:999px;padding:6px 12px;background:rgba(255,255,255,.02);
+    opacity:calc(.8 - var(--p)*.8);translate:0 calc(var(--p)*var(--dir,18px))}
   .mk .dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:7px;vertical-align:middle}
-  .mk.a{top:17%;left:7%;--dir:-22px} .mk.b{top:26%;right:8%;--dir:-14px}
-  .mk.c{top:54%;left:5%;--dir:20px} .mk.d{top:63%;right:6%;--dir:24px}
-  .mk.e{top:80%;left:14%;--dir:30px} .mk.f{top:78%;right:15%;--dir:28px}
+  .mk.a{top:16%;left:6%;--dir:-22px}.mk.b{top:25%;right:7%;--dir:-14px}.mk.c{top:55%;left:4%;--dir:20px}
+  .mk.d{top:64%;right:5%;--dir:24px}.mk.e{top:81%;left:13%;--dir:30px}.mk.f{top:79%;right:14%;--dir:28px}
   @media(max-width:860px){.orbit{display:none}}
-
-  /* the "how it works" line that RESOLVES IN as the hero dissolves */
-  .how{position:absolute;z-index:2;left:0;right:0;bottom:clamp(40px,12vh,120px);
-    text-align:center;padding-inline:clamp(16px,5vw,44px);
-    opacity:clamp(0,calc((var(--p) - .5) * 2.6),1);
-    translate:0 calc((1 - clamp(0,calc((var(--p) - .5) * 2.6),1)) * 30px)}
-  .how__eye{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--muted);
-    display:inline-flex;align-items:center;gap:12px;text-transform:uppercase}
-  .how__eye::before{content:"";width:34px;height:1px;background:var(--muted)}
+  .how{position:absolute;z-index:2;left:0;right:0;bottom:clamp(34px,10vh,104px);text-align:center;
+    padding-inline:clamp(16px,5vw,44px);opacity:clamp(0,calc((var(--p) - .5)*2.6),1);
+    translate:0 calc((1 - clamp(0,calc((var(--p) - .5)*2.6),1))*30px)}
+  .how::before{content:"";position:absolute;z-index:-1;inset:-60% -10%;pointer-events:none;
+    background:radial-gradient(60% 130% at 50% 60%,rgba(7,8,10,.66),transparent 78%)}
   .how__line{font-family:var(--disp);font-weight:500;letter-spacing:-.02em;
     font-size:clamp(1.4rem,4.4vw,2.7rem);max-width:20ch;margin:16px auto 0;line-height:1.1}
   .how__line em{font-style:italic;font-weight:400;color:var(--amber)}
 
-  /* ---------- next section (so the page actually continues / has scroll room) ---------- */
-  .after{position:relative;z-index:3;background:
-      linear-gradient(180deg,#120b06 0%,#0c0d11 40%,var(--canvas) 100%);
-    border-top:1px solid var(--hair-2);padding-block:clamp(70px,12vh,140px)}
-  .after .wrap{display:grid;gap:18px;max-width:760px;text-align:center}
-  .after h2{font-family:var(--disp);font-weight:700;font-size:clamp(1.8rem,5vw,3rem);
-    letter-spacing:-.02em;margin:0;line-height:1.04}
-  .after p{color:var(--body);margin:0 auto;max-width:54ch}
-  .note{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.05em;margin-top:8px}
+  /* ---------- shared section ---------- */
+  .sec{position:relative;overflow:hidden;border-top:1px solid var(--hair-2);padding-block:clamp(76px,12vh,150px)}
+  .sec__head{position:relative;z-index:1;max-width:760px}
+  .sec h2{font-family:var(--disp);font-weight:700;letter-spacing:-.025em;line-height:1.03;
+    font-size:clamp(2rem,5.6vw,3.4rem);margin:16px 0 0}
+  .sec h2 em{font-style:italic;font-weight:400;color:var(--amber)}
+  .sec p.sub{color:var(--body);margin:16px 0 0;max-width:52ch;font-size:clamp(15px,2vw,17px)}
+
+  /* 01 stepper */
+  .steps{display:flex;flex-wrap:wrap;gap:8px;margin:42px 0 22px;position:relative;z-index:1}
+  .step{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--body);
+    border:1px solid var(--hair);border-radius:999px;padding:10px 16px;background:rgba(255,255,255,.02);
+    cursor:pointer;transition:.18s;min-width:0}
+  .step[aria-selected=true]{background:var(--ink);color:#0a0b0d;border-color:var(--ink);font-weight:500}
+  .step .i{color:var(--amber);margin-right:8px} .step[aria-selected=true] .i{color:#0a0b0d}
+  .panels{position:relative;z-index:1}
+  .panel{display:none;border:1px solid var(--hair);border-radius:16px;
+    background:rgba(255,255,255,.02);overflow:hidden}
+  .panel.is-active{display:block}
+  .panel__bar{display:flex;align-items:center;gap:7px;padding:13px 16px;border-bottom:1px solid var(--hair-2)}
+  .panel__bar i{width:10px;height:10px;border-radius:50%}
+  .panel__bar i:nth-child(1){background:#ff5f57}.panel__bar i:nth-child(2){background:#febc2e}.panel__bar i:nth-child(3){background:#28c840}
+  .panel__bar span{font-family:var(--mono);font-size:11px;color:var(--muted);margin-left:8px}
+  .panel__body{padding:clamp(18px,4vw,32px);font-family:var(--mono);font-size:clamp(12px,1.6vw,14px);
+    line-height:1.7;min-height:150px;white-space:pre-wrap;overflow-wrap:anywhere}
+  .panel__body .c{color:var(--green)}.panel__body .k{color:var(--amber)}.panel__body .m{color:var(--muted)}
+  .panel__body b{color:var(--ink);font-weight:500}
+  .swatches{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
+  .swatches span{width:30px;height:30px;border-radius:7px;border:1px solid var(--hair-2)}
+
+  /* 02 corpus */
+  .grid{display:grid;gap:12px;margin-top:44px;position:relative;z-index:1;
+    grid-template-columns:repeat(auto-fit,minmax(min(100%,168px),1fr))}
+  .card{border:1px solid var(--hair-2);border-radius:14px;padding:20px 18px;
+    background:rgba(255,255,255,.025);transition:.2s}
+  .card:hover{border-color:var(--hair);transform:translateY(-2px)}
+  .card .n{font-family:var(--disp);font-weight:700;font-size:clamp(1.8rem,4vw,2.5rem);letter-spacing:-.02em;line-height:1}
+  .card .l{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);margin-top:6px;text-transform:uppercase}
+  .card .bar{height:4px;border-radius:3px;margin-top:14px;opacity:.85}
+
+  /* 03 feature + radar */
+  .feat{display:grid;gap:clamp(28px,5vw,64px);align-items:center;margin-top:44px;position:relative;z-index:1;grid-template-columns:1fr}
+  @media(min-width:900px){.feat{grid-template-columns:1.05fr .95fr}}
+  .feat__pts{display:grid;gap:22px}
+  .feat__pt h3{font-family:var(--disp);font-weight:600;font-size:clamp(1.15rem,2.4vw,1.5rem);margin:0 0 6px;letter-spacing:-.01em}
+  .feat__pt p{color:var(--body);margin:0;font-size:15px}
+  .feat__pt .tag{font-family:var(--mono);font-size:10.5px;color:var(--amber);letter-spacing:.06em}
+  .radar{width:100%;max-width:440px;margin-inline:auto;filter:drop-shadow(0 20px 60px rgba(245,158,11,.12))}
+
+  /* closer */
+  .closer{position:relative;overflow:hidden;text-align:center;border-top:1px solid var(--hair-2);padding-block:clamp(90px,16vh,180px)}
+  .closer__bloom{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.9;
+    background:radial-gradient(66% 72% at 50% 58%,rgba(245,158,11,.24),transparent 64%),
+      radial-gradient(56% 62% at 74% 42%,rgba(255,91,138,.16),transparent 68%)}
+  .closer__h{position:relative;z-index:1;font-family:var(--disp);font-weight:800;letter-spacing:-.035em;
+    line-height:.98;font-size:clamp(2.6rem,9vw,6rem);margin:0 auto;max-width:14ch;
+    background:linear-gradient(96deg,#fff 0%,var(--amber) 38%,var(--pink) 64%,var(--blue) 100%);
+    background-size:220% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 9s linear infinite}
+  @keyframes flow{to{background-position:220% center}}
+  .closer .cta{margin-top:34px;justify-content:center}
+  .install{position:relative;z-index:1;font-family:var(--mono);font-size:13px;color:var(--body);
+    display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center;margin-top:22px}
+  .install b{color:var(--ink);font-weight:500}
+  .foot{border-top:1px solid var(--hair-2);padding-block:30px;text-align:center;
+    font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em}
 
   @media(prefers-reduced-motion:reduce){
-    .three,.hero__content,.mk,.how{transition:none}
+    html{scroll-behavior:auto}
+    .rev{transition:none;opacity:1;transform:none}
+    .closer__h{animation:none;background-position:0 center}
   }
 </style>
 </head>
@@ -136,37 +185,37 @@
     <div class="wrap">
       <a class="brand" href="/"><i></i> uxskill</a>
       <nav class="nav__links">
-        <a href="#">Brands</a><a href="#">Anti-patterns</a><a href="#">Commands</a>
-        <a href="#">MCP</a><a href="#">Compare</a><a href="#">Docs</a>
+        <a href="#how">How it works</a><a href="#corpus">Corpus</a><a href="#new">New in 3.1</a>
+        <a href="#">Compare</a><a href="#">Docs</a>
       </nav>
       <a class="star" href="https://github.com/Laith0003/ux-skill">Star on GitHub</a>
     </div>
   </header>
 
+  <!-- ===== HERO ===== -->
   <section class="hero" id="hero">
     <canvas class="hero__dots" aria-hidden="true"></canvas>
     <div class="hero__bloom" aria-hidden="true"></div>
     <div class="three" aria-hidden="true">3.1</div>
     <div class="orbit" aria-hidden="true">
-      <span class="mk a"><span class="dot" style="background:var(--amber)"></span>Claude Code</span>
-      <span class="mk b"><span class="dot" style="background:var(--blue)"></span>Cursor</span>
-      <span class="mk c"><span class="dot" style="background:var(--pink)"></span>Windsurf</span>
-      <span class="mk d"><span class="dot" style="background:var(--green)"></span>Stripe</span>
-      <span class="mk e"><span class="dot" style="background:var(--blue)"></span>Linear</span>
-      <span class="mk f"><span class="dot" style="background:var(--amber)"></span>Vercel</span>
+      <span class="mk a"><span class="dot" style="background:#f59e0b"></span>Claude Code</span>
+      <span class="mk b"><span class="dot" style="background:#5b9cff"></span>Cursor</span>
+      <span class="mk c"><span class="dot" style="background:#ff5b8a"></span>Windsurf</span>
+      <span class="mk d"><span class="dot" style="background:#3ddc97"></span>Stripe</span>
+      <span class="mk e"><span class="dot" style="background:#5b9cff"></span>Linear</span>
+      <span class="mk f"><span class="dot" style="background:#f59e0b"></span>Vercel</span>
     </div>
-
     <div class="hero__content">
-      <div class="wrap">
+      <div class="wrap hero__fade">
         <div class="pills">
           <span class="pill"><span class="d"></span><b>v3.1.0</b>&nbsp;·&nbsp;THE BRAIN&nbsp;·&nbsp;LIVE</span>
           <span class="pill">MIT&nbsp;·&nbsp;NO TELEMETRY&nbsp;·&nbsp;NO LLM</span>
         </div>
-        <h1>The brain that ships design that<span class="accent">doesn't look generated.</span></h1>
+        <h1>The brain that ships design that <span class="accent">doesn't look generated.</span></h1>
         <p class="lede">A 7-axis synthesizer turns any brief into a fresh design language, <b>anchored to your brand</b> and gated against the mobile breakage everyone ships.</p>
         <div class="cta">
           <a class="btn btn--key" href="#"><span class="ar">&#8595;</span> pip install uxskill</a>
-          <a class="btn btn--ghost" href="#">See it work <span class="ar">&#8594;</span></a>
+          <a class="btn btn--ghost" href="#how">See it work <span class="ar">&#8594;</span></a>
         </div>
         <div class="stats">
           <div class="stat"><div class="n">1,243</div><div class="l">Structured entries</div></div>
@@ -176,20 +225,154 @@
         </div>
       </div>
     </div>
-
     <div class="how">
-      <span class="how__eye">How it works</span>
+      <span class="eyebrow">How it works</span>
       <h2 class="how__line">A 7-axis synthesizer turns a brief into a <em>fresh design language.</em></h2>
     </div>
   </section>
 
-  <section class="after">
+  <!-- ===== 01 HOW IT WORKS ===== -->
+  <section class="sec" id="how">
+    <div class="num" style="top:-2.2rem;right:-1rem">01</div>
     <div class="wrap">
-      <h2>From brief to brand-true frontend, deterministically.</h2>
-      <p>Recommend a system, synthesize a language, lint 152 anti-patterns, verify mobile for real, evolve to a score. The rest of the page builds out from here.</p>
-      <div class="note">[preview] hero + scroll-dissolve only — remaining sections pending approval of this direction</div>
+      <div class="sec__head rev">
+        <span class="eyebrow">01 — How it works</span>
+        <h2>Brief in. Brand-true page out. <em>No model in the loop.</em></h2>
+        <p class="sub">Five deterministic steps. The same brief always compiles the same system — and you can read every decision.</p>
+      </div>
+      <div class="steps rev" role="tablist" aria-label="Pipeline">
+        <button class="step" role="tab" aria-selected="true"  data-s="0"><span class="i">01</span>Discover</button>
+        <button class="step" role="tab" aria-selected="false" data-s="1"><span class="i">02</span>Recommend</button>
+        <button class="step" role="tab" aria-selected="false" data-s="2"><span class="i">03</span>Synthesize</button>
+        <button class="step" role="tab" aria-selected="false" data-s="3"><span class="i">04</span>Lint</button>
+        <button class="step" role="tab" aria-selected="false" data-s="4"><span class="i">05</span>Verify</button>
+      </div>
+      <div class="panels rev">
+        <div class="panel is-active" data-p="0">
+          <div class="panel__bar"><i></i><i></i><i></i><span>uxskill discover</span></div>
+          <div class="panel__body"><span class="m"># 10-field intake, improvisation banned</span>
+<span class="c">&#10003;</span> brief locked: <b>industry</b>, <b>brand</b>, references, wow
+<span class="m"># the wow is named as ONE concrete moment</span></div>
+        </div>
+        <div class="panel" data-p="1">
+          <div class="panel__bar"><i></i><i></i><i></i><span>uxskill recommend</span></div>
+          <div class="panel__body"><span class="m"># 5 parallel lanes &#8594; one system</span>
+style <span class="k">Saturated Cinema</span> &middot; palette <span class="k">multi-hue</span>
+type  <span class="k">Bricolage / Inter / JetBrains Mono</span>
+<span class="c">&#10003;</span> anchored to your brand primary</div>
+        </div>
+        <div class="panel" data-p="2">
+          <div class="panel__bar"><i></i><i></i><i></i><span>uxskill synthesize</span></div>
+          <div class="panel__body"><span class="m"># 7-axis design language, compiled</span>
+warmth <b>.40</b>  contrast <b>1.0</b>  density <b>.70</b>
+motion <b>.75</b>  type_personality <b>.80</b>
+<div class="swatches"><span style="background:#07080a"></span><span style="background:#f59e0b"></span><span style="background:#ff5b8a"></span><span style="background:#5b9cff"></span><span style="background:#3ddc97"></span></div></div>
+        </div>
+        <div class="panel" data-p="3">
+          <div class="panel__bar"><i></i><i></i><i></i><span>uxskill lint --threshold high</span></div>
+          <div class="panel__body"><span class="m"># 152 deterministic regex rules, no LLM</span>
+scanned 1 file &middot; <span class="c">0 high</span> &middot; sub-50ms
+<span class="m"># AI-slop caught before commit</span></div>
+        </div>
+        <div class="panel" data-p="4">
+          <div class="panel__bar"><i></i><i></i><i></i><span>node verify-responsive.mjs 360,390</span></div>
+          <div class="panel__body"><span class="m"># real headless Chrome, true viewports</span>
+360px scrollWidth=360 <span class="c">ok</span> &middot; sticky 60px
+390px scrollWidth=390 <span class="c">ok</span>
+<span class="c">&#10003;</span> VERIFIED clean &middot; exit 0</div>
+        </div>
+      </div>
     </div>
   </section>
+
+  <!-- ===== 02 CORPUS ===== -->
+  <section class="sec" id="corpus">
+    <div class="num" style="top:-2.2rem;left:-1rem">02</div>
+    <div class="wrap">
+      <div class="sec__head rev">
+        <span class="eyebrow">02 — Training data, not templates</span>
+        <h2>1,243 entries the engine <em>reasons over.</em></h2>
+        <p class="sub">Real brand specs, palettes, type pairings, motion presets and anti-pattern rules — queried, never pasted.</p>
+      </div>
+      <div class="grid rev">
+        <div class="card"><div class="n">176</div><div class="l">Palettes</div><div class="bar" style="background:#f59e0b"></div></div>
+        <div class="card"><div class="n">184</div><div class="l">Industries</div><div class="bar" style="background:#5b9cff"></div></div>
+        <div class="card"><div class="n">160</div><div class="l">Brand specs</div><div class="bar" style="background:#ff5b8a"></div></div>
+        <div class="card"><div class="n">152</div><div class="l">Anti-patterns</div><div class="bar" style="background:#3ddc97"></div></div>
+        <div class="card"><div class="n">148</div><div class="l">Components</div><div class="bar" style="background:#f59e0b"></div></div>
+        <div class="card"><div class="n">112</div><div class="l">UX laws</div><div class="bar" style="background:#5b9cff"></div></div>
+        <div class="card"><div class="n">84</div><div class="l">Styles</div><div class="bar" style="background:#ff5b8a"></div></div>
+        <div class="card"><div class="n">70</div><div class="l">Type pairs</div><div class="bar" style="background:#3ddc97"></div></div>
+        <div class="card"><div class="n">57</div><div class="l">Motion presets</div><div class="bar" style="background:#f59e0b"></div></div>
+        <div class="card"><div class="n">40</div><div class="l">Landing patterns</div><div class="bar" style="background:#5b9cff"></div></div>
+        <div class="card"><div class="n">35</div><div class="l">Chart types</div><div class="bar" style="background:#ff5b8a"></div></div>
+        <div class="card"><div class="n">25</div><div class="l">Tech stacks</div><div class="bar" style="background:#3ddc97"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 03 NEW IN 3.1 ===== -->
+  <section class="sec" id="new">
+    <div class="num" style="top:-2.2rem;right:-1rem">03</div>
+    <div class="wrap">
+      <div class="sec__head rev">
+        <span class="eyebrow">03 — New in 3.1</span>
+        <h2>Brand-true. And it <em>survives a phone.</em></h2>
+      </div>
+      <div class="feat">
+        <div class="feat__pts rev">
+          <div class="feat__pt">
+            <div class="tag">ANCHORED</div>
+            <h3>The primary comes from your logo's pixels.</h3>
+            <p>Default fonts are rejected for your logo's letterform. A brand-fidelity hard floor fails any output that drops your colour, logo or real imagery — no house-style drift.</p>
+          </div>
+          <div class="feat__pt">
+            <div class="tag">GATED</div>
+            <h3>Mobile verified for real, not asserted.</h3>
+            <p>A headless render at true 360/390 viewports fails horizontal scroll, a wrapping nav or wordmark, and an over-tall sticky header. A gate that can't render says so — never a false green.</p>
+          </div>
+          <div class="feat__pt">
+            <div class="tag">DERIVED</div>
+            <h3>It reaches for a wow moment.</h3>
+            <p>The engine derives a 2&#8211;3-moment wow layer from the brief instead of shipping flat. The page you're reading is the dogfood.</p>
+          </div>
+        </div>
+        <div class="rev">
+          <svg class="radar" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="7-axis design synthesizer radar">
+            <g stroke="rgba(255,255,255,.10)" stroke-width="1">
+              <polygon points="160,30 272,95 272,225 160,290 48,225 48,95"/>
+              <polygon points="160,76 232,118 232,202 160,244 88,202 88,118"/>
+              <polygon points="160,118 200,141 200,179 160,202 120,179 120,141"/>
+            </g>
+            <g stroke="rgba(255,255,255,.07)"><path d="M160 30V290M48 95L272 225M272 95L48 225"/></g>
+            <polygon points="160,52 250,128 238,214 150,250 70,196 78,120" fill="rgba(245,158,11,.16)" stroke="#f59e0b" stroke-width="2"/>
+            <g fill="#f59e0b">
+              <circle cx="160" cy="52" r="4"/><circle cx="250" cy="128" r="4"/><circle cx="238" cy="214" r="4"/>
+              <circle cx="150" cy="250" r="4"/><circle cx="70" cy="196" r="4"/><circle cx="78" cy="120" r="4"/>
+            </g>
+            <g fill="#6c727c" font-family="JetBrains Mono,monospace" font-size="10" text-anchor="middle">
+              <text x="160" y="20">warmth</text><text x="288" y="92">contrast</text><text x="288" y="236">density</text>
+              <text x="160" y="308">geometry</text><text x="32" y="236">formality</text><text x="30" y="92">motion</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CLOSER ===== -->
+  <section class="closer">
+    <div class="closer__bloom" aria-hidden="true"></div>
+    <div class="wrap">
+      <h2 class="closer__h rev">Stop shipping the centroid.</h2>
+      <div class="cta rev">
+        <a class="btn btn--key" href="#"><span class="ar">&#8595;</span> pip install uxskill</a>
+        <a class="btn btn--ghost" href="https://github.com/Laith0003/ux-skill">Star on GitHub <span class="ar">&#8594;</span></a>
+      </div>
+      <div class="install rev"><span><b>pip</b> install uxskill</span><span><b>npx</b> uxskill init</span><span><b>Claude Code</b> marketplace</span></div>
+    </div>
+  </section>
+  <footer class="foot">[preview] uxskill v3.1 homepage — hero &middot; how-it-works &middot; corpus &middot; new-in-3.1 &middot; closer</footer>
 
 <script>
 (function(){
@@ -197,57 +380,48 @@
       cv=document.querySelector('.hero__dots'), ctx=cv.getContext('2d');
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var small=matchMedia('(max-width: 480px)').matches;
-  var animate=!reduce && !small;               // heavy particle math only on capable, larger screens
+  var animate=!reduce && !small;
   var COLORS=['#f59e0b','#5b9cff','#ff5b8a','#3ddc97','#e8eaed'];
   var DPR=Math.min(window.devicePixelRatio||1,2), W=0, H=0, dots=[], p=0;
-
-  function build(){
-    dots=[]; if(!animate) return;
-    var n=Math.max(40,Math.min(150,Math.round(W*H/9500)));
-    for(var i=0;i<n;i++){
-      var a=Math.random()*Math.PI*2;
-      dots.push({x:Math.random()*W,y:Math.random()*H,ang:a,
-        dist:30+Math.random()*Math.max(W,H)*0.9,r:0.7+Math.random()*1.9,
-        c:COLORS[(Math.random()*COLORS.length)|0],tw:Math.random()*Math.PI*2});
-    }
-  }
-  function resize(){
-    W=cv.clientWidth; H=cv.clientHeight;
-    cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
-    ctx.setTransform(DPR,0,0,DPR,0,0); build();
-  }
-  function frame(){
-    ctx.clearRect(0,0,W,H);
-    if(animate){
-      for(var i=0;i<dots.length;i++){
-        var d=dots[i];
-        var sx=d.x+Math.cos(d.ang)*d.dist*p*0.92;
-        var sy=d.y+Math.sin(d.ang)*d.dist*p*0.92;
-        d.tw+=0.018;
-        var al=(1-p*0.85)*(0.45+0.45*Math.sin(d.tw)); if(al<0)al=0;
-        ctx.globalAlpha=al; ctx.fillStyle=d.c;
-        ctx.beginPath(); ctx.arc(sx,sy,d.r,0,6.2832); ctx.fill();
-      }
-      ctx.globalAlpha=1;
-    }
-    requestAnimationFrame(frame);
-  }
-  function onScroll(){
-    var span=hero.offsetHeight*0.82;            // dissolve completes over first ~82% of hero scroll
-    var sc=Math.min(Math.max(window.scrollY,0),span);
-    p= span>0 ? sc/span : 0;
-    root.style.setProperty('--p', p.toFixed(3));
-  }
+  function build(){ dots=[];
+    var n=animate ? Math.max(40,Math.min(150,Math.round(W*H/9500))) : (small?24:38);
+    for(var i=0;i<n;i++){ var a=Math.random()*Math.PI*2;
+      dots.push({x:Math.random()*W,y:Math.random()*H,
+        vx:(Math.random()-0.5)*0.22, vy:(Math.random()-0.5)*0.22,   /* gentle drift */
+        ang:a,dist:30+Math.random()*Math.max(W,H)*0.9,
+        r:0.7+Math.random()*1.9,c:COLORS[(Math.random()*COLORS.length)|0],tw:Math.random()*Math.PI*2}); } }
+  function resize(){ W=cv.clientWidth; H=cv.clientHeight; cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0); build(); if(!animate) drawStatic(); }
+  function drawStatic(){ ctx.clearRect(0,0,W,H);
+    for(var i=0;i<dots.length;i++){ var d=dots[i]; ctx.globalAlpha=0.5; ctx.fillStyle=d.c;
+      ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,6.2832); ctx.fill(); } ctx.globalAlpha=1; }
+  function frame(){ ctx.clearRect(0,0,W,H);
+    for(var i=0;i<dots.length;i++){ var d=dots[i];
+      d.x+=d.vx; d.y+=d.vy;                              /* continuous float */
+      if(d.x<-4)d.x=W+4; else if(d.x>W+4)d.x=-4;
+      if(d.y<-4)d.y=H+4; else if(d.y>H+4)d.y=-4;
+      var sx=d.x+Math.cos(d.ang)*d.dist*p*0.92, sy=d.y+Math.sin(d.ang)*d.dist*p*0.92;
+      d.tw+=0.018; var al=(1-p*0.82)*(0.45+0.45*Math.sin(d.tw)); if(al<0)al=0;
+      ctx.globalAlpha=al; ctx.fillStyle=d.c; ctx.beginPath(); ctx.arc(sx,sy,d.r,0,6.2832); ctx.fill(); }
+    ctx.globalAlpha=1; requestAnimationFrame(frame); }
+  function onScroll(){ var span=hero.offsetHeight*0.82, sc=Math.min(Math.max(window.scrollY,0),span);
+    p= span>0 ? sc/span : 0; root.style.setProperty('--p', p.toFixed(3)); }
   window.addEventListener('scroll',onScroll,{passive:true});
   window.addEventListener('resize',function(){resize();onScroll();});
-  resize(); onScroll();
-  if(animate) requestAnimationFrame(frame);
-  else {                                        // static dot field for reduced-motion / small screens
-    var n=small?26:40;
-    for(var i=0;i<n;i++){ ctx.globalAlpha=0.5; ctx.fillStyle=COLORS[i%COLORS.length];
-      ctx.beginPath(); ctx.arc(Math.random()*W,Math.random()*H,1.2,0,6.2832); ctx.fill(); }
-    ctx.globalAlpha=1;
-  }
+  resize(); onScroll(); if(animate) requestAnimationFrame(frame);
+
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.16});
+  document.querySelectorAll('.rev').forEach(function(el){io.observe(el);});
+
+  var panels=document.querySelectorAll('.panel');
+  document.querySelectorAll('.step').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.step').forEach(function(x){x.setAttribute('aria-selected','false');});
+      b.setAttribute('aria-selected','true');
+      var s=b.getAttribute('data-s');
+      panels.forEach(function(pn){ if(pn.getAttribute('data-p')===s) pn.classList.add('is-active'); else pn.classList.remove('is-active'); });
+    });
+  });
 })();
 </script>
 </body>
