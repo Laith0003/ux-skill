@@ -109,6 +109,10 @@
     --maxw: 1200px;
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     --ease-in:  cubic-bezier(0.4, 0, 1, 1);
+    /* the wow layer speaks ONE motion language: every coordinated moment (hero line
+       reveal, section fade-ups, the composite card hover) uses this single curve so
+       they read as one design, not three unrelated effects. */
+    --ease-wow: cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   *, *::before, *::after { box-sizing: border-box; }
@@ -239,9 +243,40 @@
   @media (max-width: 420px) { .brand .wm { display: none; } }
 
   /* Reveal --------------------------------------------------------------- */
-  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out); }
+  /* SECTION MOMENT (a): blocks fade up 12px on entry, one motion language (--ease-wow),
+     fired ONCE by IntersectionObserver. Grouped items inside a revealed block can carry a
+     small per-child --i stagger (capped in JS so a 12-item band never animates for ~1s). */
+  .reveal { opacity: 0; transform: translateY(12px); transition: opacity 0.52s var(--ease-wow), transform 0.52s var(--ease-wow); }
   .reveal.in { opacity: 1; transform: none; }
-  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+  /* Grouped grids stagger their CHILDREN (not the block): the container reveals instantly,
+     each child rises 12px on a per-item --i delay. JS sets --i and HARD-CAPS the index so a
+     long band can never animate for ~1s. Used on the 4 value cards + the skip-size grid only;
+     the 12-pill band stays a single block fade (no per-child stagger). */
+  .reveal[data-stagger] { opacity: 1; transform: none; transition: none; }
+  .reveal[data-stagger] > * { opacity: 0; transform: translateY(12px); transition: opacity 0.52s var(--ease-wow), transform 0.52s var(--ease-wow); transition-delay: calc(var(--i, 0) * 80ms); }
+  .reveal[data-stagger].in > * { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal.in,
+    .reveal[data-stagger] > *, .reveal[data-stagger].in > * { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* HERO MOMENT (dominant): kinetic headline reveal on LOAD (not scroll). The H1 lines
+     are block-level spans that rise + fade, staggered, with the amber line landing LAST as
+     the punctuation; the lede + form arrive a beat later. transform applies because the
+     lines are display:block (inline transforms are ignored). The form NEVER gates use:
+     opacity:0 is still clickable, JS clears it on load, and a failsafe + reduced-motion
+     path force it visible immediately. */
+  .hero-line { display: block; }
+  .hero-load { opacity: 0; transform: translateY(16px); }
+  .hero-lit .hero-load { opacity: 1; transform: none; transition: opacity 0.52s var(--ease-wow), transform 0.52s var(--ease-wow); transition-delay: var(--d, 0ms); }
+  @media (max-width: 640px) {
+    /* phones: lighter + shorter so the headline never feels slow on a small screen */
+    .hero-load { transform: translateY(10px); }
+    .hero-lit .hero-load { transition-duration: 0.4s; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-load, .hero-lit .hero-load { opacity: 1; transform: none; transition: none; }
+  }
 
   /* Hero ----------------------------------------------------------------- */
   /* Hero sits on a real UK construction/skip photo with a dark green-to-ink scrim
@@ -340,8 +375,16 @@
 
   /* Value cards (asymmetric: 1 feature + 3) ------------------------------ */
   .values { display: grid; grid-template-columns: 1.4fr 1fr 1fr; grid-auto-rows: 1fr; gap: 16px; }
-  .vcard { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: 26px; box-shadow: var(--shadow-card); transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out); }
-  .vcard:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+  /* SECTION MOMENT (b): ONE composite hover, pointer-only. Border brightens to amber +
+     the card lifts + its icon nudges, all on the same curve/duration so it reads as a
+     single motion, not three. Touch devices get no hover transform (no stuck states). */
+  .vcard { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: 26px; box-shadow: var(--shadow-card); transition: transform 0.2s var(--ease-wow), box-shadow 0.2s var(--ease-wow), border-color 0.2s var(--ease-wow); }
+  .vcard .vico { transition: transform 0.2s var(--ease-wow); }
+  @media (hover: hover) and (pointer: fine) {
+    .vcard:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); border-color: rgba(240,137,15,0.45); }
+    .vcard:hover .vico { transform: translateY(-3px); }
+    .vcard.feature:hover { border-color: rgba(240,137,15,0.55); }
+  }
   .vcard .vico { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: var(--amber-tint); color: var(--amber-press); margin-bottom: 16px; }
   .vcard .vico .ico { width: 26px; height: 26px; }
   .vcard h3 { margin-bottom: 8px; }
@@ -372,10 +415,17 @@
      are identical". Differentiation is now TYPOGRAPHIC -- the yardage is the
      dominant, brand-weighted visual element on each card. */
   .items { display: grid; grid-template-columns: repeat(auto-fill, minmax(248px, 1fr)); gap: 16px; }
-  .item { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: 24px 22px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 10px; transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out); position: relative; overflow: hidden; }
-  .item::after { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--amber); transform: scaleX(0); transform-origin: left; transition: transform 0.24s var(--ease-out); }
-  .item:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
-  .item:hover::after { transform: scaleX(1); }
+  /* SECTION MOMENT (b), skip-size variant: ONE composite hover -- the amber top bar wipes
+     in, the border brightens, and the yardage (the card's hero element) nudges up ~3px, all
+     on --ease-wow at the same ~200ms. Pointer-only so touch never gets a stuck state. */
+  .item { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: 24px 22px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 10px; transition: transform 0.2s var(--ease-wow), box-shadow 0.2s var(--ease-wow), border-color 0.2s var(--ease-wow); position: relative; overflow: hidden; }
+  .item::after { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--amber); transform: scaleX(0); transform-origin: left; transition: transform 0.2s var(--ease-wow); }
+  .item .yards { transition: transform 0.2s var(--ease-wow); }
+  @media (hover: hover) and (pointer: fine) {
+    .item:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); border-color: rgba(240,137,15,0.45); }
+    .item:hover::after { transform: scaleX(1); }
+    .item:hover .yards { transform: translateY(-3px); }
+  }
   .item .top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
   /* the yardage: large, tabular, brand-weighted -- the card's hero element */
   .item .yards { font-size: clamp(2rem, 4.4vw, 2.6rem); font-weight: 800; line-height: 1; letter-spacing: -0.03em; color: var(--amber-deep); font-variant-numeric: tabular-nums; }
@@ -412,9 +462,23 @@
   /* Each nation card carries a REAL backdrop photo (city/landscape per nation)
      with a dark scrim, label + text overlaid -- not a lone pin on a flat card. */
   .cov-card { position: relative; isolation: isolate; overflow: hidden; border-radius: var(--r-md); padding: 20px 18px; min-height: 168px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; justify-content: flex-end; color: #fff; }
-  .cov-card::before { content: ""; position: absolute; inset: 0; z-index: -2; background-size: cover; background-position: center; transition: transform 0.4s var(--ease-out); }
+  .cov-card::before { content: ""; position: absolute; inset: 0; z-index: -2; background-size: cover; background-position: center; transition: transform 0.4s var(--ease-wow); }
   .cov-card::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgb(15 28 20 / 0.30) 0%, rgb(15 28 20 / 0.86) 100%); }
-  .cov-card:hover::before { transform: scale(1.05); }
+  .cov-card .ico { transition: transform 0.2s var(--ease-wow); }
+  /* SECTION MOMENT (b), coverage variant: ONE composite hover -- the backdrop photo scales
+     up (scrim "brightens") and the pin nudges up ~3px, together. Pointer-only. */
+  @media (hover: hover) and (pointer: fine) {
+    .cov-card:hover::before { transform: scale(1.05); }
+    .cov-card:hover .ico { transform: translateY(-3px); }
+  }
+  /* Reduced motion: the composite hover LOSES its transform entirely (not just an instant
+     tween -- no displacement at all). Border/scrim colour feedback still reads, but nothing
+     moves. The global rule above only zeroes durations; this removes the transform itself. */
+  @media (prefers-reduced-motion: reduce) {
+    .vcard:hover, .vcard:hover .vico,
+    .item:hover, .item:hover .yards, .item:hover::after,
+    .cov-card:hover .ico, .cov-card:hover::before { transform: none !important; }
+  }
   .cov-eng::before  { background-image: url("https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=640&q=70&auto=format&fit=crop"); }
   .cov-scot::before { background-image: url("https://images.unsplash.com/photo-1506377585622-bedcbb027afc?w=640&q=70&auto=format&fit=crop"); }
   .cov-wal::before  { background-image: url("https://images.unsplash.com/photo-1551801841-ecad875a5142?w=640&q=70&auto=format&fit=crop"); }
@@ -502,7 +566,7 @@
   .skip-link { position: absolute; left: -999px; top: 0; background: var(--amber); color: #1c1206; padding: 10px 16px; border-radius: 0 0 8px 0; z-index: 100; font-weight: 700; }
   .skip-link:focus { left: 0; }
 </style>
-<noscript><style>.reveal{opacity:1 !important;transform:none !important}</style></noscript>
+<noscript><style>.reveal,.reveal[data-stagger]>*,.hero-load{opacity:1 !important;transform:none !important}</style></noscript>
 </head>
 <body>
 <a href="#quote" class="skip-link">Skip to quote form</a>
@@ -553,19 +617,19 @@
   <section class="hero" aria-labelledby="hero-h1">
     <div class="wrap">
       <div class="grid">
-        <div class="hero-copy reveal">
-          <span class="eyebrow">Commercial skip hire &amp; trade waste</span>
-          <h1 id="hero-h1">Commercial Skip Hire &amp;<br><span class="amber-word">Trade Waste Accounts</span></h1>
-          <p class="lede">Commercial waste solutions without the middleman. We connect your business directly with trusted local skip hire companies across the UK.</p>
-          <div class="badges">
+        <div class="hero-copy">
+          <span class="eyebrow hero-load" style="--d:0ms">Commercial skip hire &amp; trade waste</span>
+          <h1 id="hero-h1"><span class="hero-line hero-load" style="--d:80ms">Commercial Skip Hire &amp;</span><span class="hero-line hero-load amber-word" style="--d:160ms">Trade Waste Accounts</span></h1>
+          <p class="lede hero-load" style="--d:300ms">Commercial waste solutions without the middleman. We connect your business directly with trusted local skip hire companies across the UK.</p>
+          <div class="badges hero-load" style="--d:360ms">
             <span class="hbadge"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Completely free to use</span>
             <span class="hbadge"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 12h6"/></svg> No commission or mark-ups</span>
             <span class="hbadge"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18"/><path d="M3 6h18"/><path d="M3 18h18"/></svg> One-off or ongoing contracts</span>
           </div>
-          <a class="btn btn-primary" href="#quote"><span class="btn-label">Skip Hire Quote</span> <span class="chip" aria-hidden="true"><svg aria-hidden="true" class="ico" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a>
+          <a class="btn btn-primary hero-load" style="--d:420ms" href="#quote"><span class="btn-label">Skip Hire Quote</span> <span class="chip" aria-hidden="true"><svg aria-hidden="true" class="ico" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a>
         </div>
 
-        <div class="hero-media reveal">
+        <div class="hero-media hero-load" style="--d:300ms">
           <!-- Quote / contact form: the conversion path, in the hero -->
           <div class="quote-card" id="quote">
             <div class="qhead">
@@ -687,7 +751,7 @@
         <span class="eyebrow">Why businesses choose us</span>
         <h2 id="why-h2">Why Businesses Choose Instant Skip Hire</h2>
       </div>
-      <div class="values reveal">
+      <div class="values reveal" data-stagger>
         <article class="vcard feature">
           <span class="vico" aria-hidden="true"><svg aria-hidden="true" class="ico" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10V5l-8-3z"/><path d="m9 12 2 2 4-4"/></svg></span>
           <h3>No Added Fees or Commission</h3>
@@ -751,7 +815,7 @@
         <h2 id="sizes-h2">Every skip size, matched to your project</h2>
         <p>Depending on your project requirements, suppliers within our network can provide:</p>
       </div>
-      <div class="items reveal">
+      <div class="items reveal" data-stagger>
         <article class="item">
           <div class="yards">2&ndash;3<span class="yd">cubic yards</span></div>
           <h3>Mini skips</h3>
@@ -1011,24 +1075,106 @@
 </footer>
 
 <script>
-  // Scroll reveal (transform + opacity only; respects reduced-motion via CSS).
-  // Failsafe: content is NEVER permanently hidden -- if IO is unavailable or never
+  var REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // HERO MOMENT: kinetic headline reveal, fires ONCE on LOAD (not scroll). We add
+  // .hero-lit so the staggered per-line transition-delays run. The form is usable
+  // immediately: its start opacity is 0 but it is fully interactive, and this flips it
+  // visible on the first frame after parse (we do NOT wait on the hero photo). Reduced
+  // motion => the CSS media-query fallback leaves everything final-state visible; the
+  // no-JS case is covered by the <noscript> rule in <head> (it forces .hero-load visible),
+  // never by this setTimeout (which is itself JS). Failsafe below is the JS-on backstop.
+  (function () {
+    var hero = document.querySelector('.hero');
+    if (!hero) return;
+    function lite() { hero.classList.add('hero-lit'); }
+    if (REDUCE) { lite(); return; }
+    // next frame after the DOM is parsed -- not window.load, so the photo never gates it
+    requestAnimationFrame(function () { requestAnimationFrame(lite); });
+    // failsafe: never leave hero content stuck hidden
+    setTimeout(lite, 1200);
+  })();
+
+  // SECTION MOMENT (a): scroll reveal (transform + opacity only). Grouped grids tagged
+  // [data-stagger] get a per-child --i delay, HARD-CAPPED so a long band can't animate for
+  // ~1s. Failsafe: content is NEVER permanently hidden -- if IO is unavailable or never
   // fires, a timeout reveals everything. Reduced-motion users get it immediately.
   (function () {
     var els = document.querySelectorAll('.reveal');
+    var STAGGER_CAP = 4; // max staggered index -> at 80ms/step the band finishes by ~320ms
+    // pre-assign capped --i to children of staggered containers
+    document.querySelectorAll('.reveal[data-stagger]').forEach(function (box) {
+      var kids = box.children, i;
+      for (i = 0; i < kids.length; i++) {
+        kids[i].style.setProperty('--i', String(Math.min(i, STAGGER_CAP)));
+      }
+    });
     function revealAll() { els.forEach(function (el) { el.classList.add('in'); }); }
-    if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      revealAll();
-      return;
-    }
+    if (!('IntersectionObserver' in window) || REDUCE) { revealAll(); return; }
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
     els.forEach(function (el) { io.observe(el); });
-    // safety net: anything still hidden after 1.4s is shown regardless
-    setTimeout(revealAll, 1400);
+    setTimeout(revealAll, 1400); // safety net
+  })();
+
+  // MOTION SIGNATURE: proof-stat counters tick up from 0 on entry (IntersectionObserver,
+  // fire ONCE). The leading number is parsed from the HTML and the rest is preserved as a
+  // suffix ("3 nations" -> 0..3 + " nations"); a value with no leading digit ("Same day")
+  // is skipped and just revealed. tabular-nums on .stat b means ZERO layout shift while
+  // counting. The global reduced-motion CSS only kills transitions, NOT this rAF loop, so
+  // we gate it here and write the final value instantly when reduced motion is requested.
+  (function () {
+    var nums = Array.prototype.slice.call(document.querySelectorAll('.stat b'));
+    if (!nums.length) return;
+    var parsed = nums.map(function (el) {
+      var raw = el.textContent;
+      var m = raw.match(/^\s*(\d[\d,]*)(.*)$/); // leading integer + remainder
+      if (!m) return { el: el, target: null };
+      return { el: el, target: parseInt(m[1].replace(/,/g, ''), 10), suffix: m[2] };
+    });
+    function render(p, val) { p.el.textContent = String(val) + p.suffix; }
+    function finalAll() { parsed.forEach(function (p) { if (p.target !== null) render(p, p.target); }); }
+    if (REDUCE || !('IntersectionObserver' in window)) { return; } // HTML already holds finals
+
+    var DUR = 1200; // easeOut count-up, within 1000-1500ms
+    function run(p) {
+      if (p.target === null) return;          // non-numeric stat -> leave as-is
+      if (p.target === 0) { render(p, 0); return; } // 0% -> no-op, no animation needed
+      var start = null;
+      function step(ts) {
+        if (start === null) start = ts;
+        var t = Math.min((ts - start) / DUR, 1);
+        var eased = 1 - Math.pow(1 - t, 3); // cubic easeOut
+        render(p, Math.round(p.target * eased));
+        if (t < 1) requestAnimationFrame(step); else render(p, p.target);
+      }
+      requestAnimationFrame(step);
+    }
+    // zero them only when we're actually going to animate (so no-JS keeps the finals)
+    parsed.forEach(function (p) { if (p.target && p.target > 0) render(p, 0); });
+    var seen = false;
+    var io = new IntersectionObserver(function (entries) {
+      if (seen) return;
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].isIntersecting) {
+          seen = true;
+          parsed.forEach(run);
+          io.disconnect();
+          break;
+        }
+      }
+    }, { threshold: 0.4 });
+    var bar = document.querySelector('.proof .grid');
+    if (bar) io.observe(bar); else { finalAll(); }
+    // Long failsafe ONLY for a pathological "IO supported but never fires" case. It must NOT
+    // pre-empt a normal reader who lingers on the hero before scrolling to the proof bar (the
+    // common mobile path -- the stacked hero pushes the bar far below the fold), or the
+    // count-up would already be done when they arrive. IO-unsupported is handled by the early
+    // return above (the HTML keeps its final values), so this window can be generous.
+    setTimeout(function () { if (!seen) { seen = true; finalAll(); } }, 8000); // safety net
   })();
 
   // Quote form: validate -> loading -> success. Specific, named field errors.
