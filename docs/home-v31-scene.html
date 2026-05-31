@@ -238,7 +238,8 @@
   /* ===== SCROLL-PIN: how section — desktop only ===== */
   .pin-wrap{position:relative;height:600vh}/* 6 screens = 1 intro + 5 steps */
   .pin-inner{position:sticky;top:56px;height:calc(100vh - 56px);display:flex;align-items:stretch;overflow:hidden}
-  .pin-left,.pin-right{flex:1;display:flex;align-items:center;justify-content:center;padding:clamp(24px,4vw,60px)}
+  .pin-left{flex:1;display:flex;align-items:center;justify-content:center;padding:clamp(24px,4vw,60px)}
+  .pin-right{flex:1;display:flex;flex-direction:column;justify-content:center;padding:clamp(24px,4vw,60px) clamp(24px,5vw,72px)}
   .pin-left{background:rgba(0,0,0,.04);border-right:1px solid rgba(0,0,0,.06)}
   /* tokens.css frame */
   .tok-frame{width:100%;max-width:420px;border-radius:14px;background:#0e1016;overflow:hidden;box-shadow:0 32px 80px -24px rgba(0,0,0,.36)}
@@ -258,8 +259,11 @@
   .pin-inner[data-step="4"] .tok-s1,.pin-inner[data-step="4"] .tok-s2,.pin-inner[data-step="4"] .tok-s3,.pin-inner[data-step="4"] .tok-s4,.pin-inner[data-step="4"] .tok-s5
   {opacity:1;transform:none}
   /* steps */
-  .pin-label{font-family:var(--disp);font-weight:600;font-size:clamp(1.1rem,2vw,1.5rem);color:var(--lite-ink);margin:0 0 28px;line-height:1.2}
-  .pin-label em{color:var(--blue-d);font-style:italic}
+  .pin-head{margin-bottom:32px}
+  .pin-title{font-family:var(--disp);font-weight:800;font-size:clamp(1.6rem,2.8vw,2.4rem);color:var(--lite-ink);margin:0 0 10px;line-height:1.06;letter-spacing:-.025em}
+  .pin-title em{color:var(--blue-d);font-style:italic;font-weight:400}
+  .pin-sub{font-family:var(--disp);font-weight:500;font-size:clamp(1rem,1.6vw,1.25rem);color:var(--lite-body);margin:0;line-height:1.3}
+  .pin-sub em{color:var(--blue-d);font-style:italic}
   .pin-steps{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0;max-width:420px}
   .pstep{display:flex;gap:20px;padding:18px 0;border-bottom:1px solid rgba(0,0,0,.07);opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease;pointer-events:none}
   .pstep.active{opacity:1;transform:none;pointer-events:auto}
@@ -533,13 +537,7 @@
   </section></div>
 
   <!-- ============ BEAT 4 — HOW IT WORKS (dark) ============ -->
-  <div class="zone zone--lite" data-bg="light"><span class="zone__bloom" aria-hidden="true" data-bloom="how"></span><section class="sec" id="how">
-    <div class="wrap">
-      <div class="rev head">
-        <span class="eyebrow"><span class="dot c-blue"></span>One sequence, not scattered cards</span>
-        <h2 class="lead" style="color:var(--lite-ink)">It compiles a design language. <em style="color:var(--blue-d)">Not a template.</em></h2>
-      </div>
-    </div>
+  <div class="zone zone--lite" data-bg="light"><span class="zone__bloom" aria-hidden="true" data-bloom="how"></span><section class="sec" id="how" style="padding-block:0">
     <!-- SCROLL-PIN: desktop only. 6×100vh tall so scroll walks the 5 steps. Mobile stacks. -->
     <div class="pin-wrap" id="pinWrap">
       <div class="pin-inner" id="pinInner">
@@ -563,7 +561,12 @@
           </div>
         </div>
         <div class="pin-right">
-          <p class="pin-label">Five deterministic steps, <em>start to ship.</em></p>
+          <!-- big title lives inside the pin panel, not floating above -->
+          <div class="pin-head">
+            <span class="eyebrow" style="justify-content:flex-start;margin-bottom:14px"><span class="dot c-blue"></span>One sequence, not scattered cards</span>
+            <h2 class="pin-title">It compiles a design language. <em>Not a template.</em></h2>
+            <p class="pin-sub">Five deterministic steps, <em>start to ship.</em></p>
+          </div>
           <ol class="pin-steps">
             <li class="pstep" data-step="0"><span class="ps-num">01</span><div><strong>Read the brief</strong><p>Industry, audience, mood — parsed into a structured intake, no guesswork.</p></div></li>
             <li class="pstep" data-step="1"><span class="ps-num">02</span><div><strong>Set seven axes</strong><p>Warmth, contrast, density, geometry, formality, motion, type — tuned, then emitted as tokens.</p></div></li>
