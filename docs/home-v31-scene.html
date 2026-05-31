@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>uxskill v3.1 — cinematic scene (feel check)</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#07080a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --canvas:#07080a; --ink:#f4f5f7; --body:#a6abb3; --muted:#6c727c;
+    --amber:#f59e0b; --blue:#5b9cff; --pink:#ff5b8a; --green:#3ddc97;
+    --hair:rgba(255,255,255,.10);
+    --p:0;
+    --disp:Bricolage Grotesque,system-ui,sans-serif;
+    --sans:Inter,system-ui,sans-serif; --mono:JetBrains Mono,ui-monospace,monospace;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--sans);line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  canvas,svg,img{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  .wrap{width:100%;max-width:1120px;margin:0 auto;padding-inline:clamp(18px,5vw,44px)}
+
+  .nav{position:sticky;top:0;z-index:60;height:60px;display:flex;align-items:center;background:transparent;transition:background .45s,border-color .45s;border-bottom:1px solid transparent}
+  .nav.lit{background:rgba(250,244,234,.72);backdrop-filter:blur(10px);border-bottom-color:rgba(0,0,0,.08)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:600;color:var(--ink);transition:color .45s}
+  .brand i{width:11px;height:11px;border-radius:50%;background:var(--amber);box-shadow:0 0 14px rgba(245,158,11,.7)}
+  .star{font-family:var(--mono);font-size:12px;border:1px solid var(--amber);color:var(--amber);padding:8px 14px;border-radius:999px;white-space:nowrap;transition:color .45s,border-color .45s}
+  .nav.lit .brand{color:#16110a} .nav.lit .star{border-color:#b9770a;color:#9a6206}
+
+  /* ===== ACT 1: hero (dark). dots + 3.1 live INSIDE the hero (absolute, NOT fixed => gate-safe) ===== */
+  .hero{position:relative;min-height:124svh;overflow:hidden;display:flex;align-items:flex-start;justify-content:center;text-align:center;padding-top:13svh}
+  .hero__dots{position:absolute;inset:0;z-index:0;width:100%;height:100%;opacity:calc(1 - var(--p)*.5)}
+  .three{position:absolute;z-index:0;left:50%;top:50%;translate:-50% -50%;font-family:var(--disp);font-weight:800;
+    font-size:clamp(13rem,54vw,42rem);line-height:.76;letter-spacing:-.05em;pointer-events:none;
+    background:linear-gradient(166deg,#cfd84e 2%,var(--amber) 50%,#a85f0e 98%);-webkit-background-clip:text;background-clip:text;color:transparent;
+    opacity:clamp(.26,calc(.26 + var(--p)*1.15),.97);scale:calc(1 + var(--p)*.18);filter:drop-shadow(0 30px 90px rgba(245,158,11,calc(.06+var(--p)*.24)))}
+  @media(max-width:560px){.three{font-size:clamp(11rem,72vw,22rem);opacity:clamp(.2,calc(.2 + var(--p)*.95),.82)}}
+  .hero__in{position:relative;z-index:1;opacity:calc(1 - var(--p)*1.5);translate:0 calc(var(--p)*-28px)}
+  .hero__in::before{content:"";position:absolute;z-index:-1;inset:-8% -8%;background:radial-gradient(56% 54% at 50% 44%,rgba(7,8,10,.74),rgba(7,8,10,.3) 58%,transparent 82%)}
+  .pills{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:24px}
+  .pill{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--body);border:1px solid var(--hair);border-radius:999px;padding:7px 14px}
+  .pill .d{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--amber);margin-right:7px;vertical-align:middle;box-shadow:0 0 10px rgba(245,158,11,.8)}
+  h1{font-family:var(--disp);font-weight:800;letter-spacing:-.035em;line-height:.96;margin:0 auto;max-width:13ch;font-size:clamp(2.75rem,10.6vw,6.4rem)}
+  h1 .ac{font-weight:400;font-style:italic;color:var(--body)}
+  .lede{margin:22px auto 0;max-width:44ch;color:var(--body);font-size:clamp(15px,2vw,18px)}
+  .lede b{color:var(--ink);font-weight:500}
+  .cue{margin-top:38px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+  .cue span{display:block;margin-top:8px;font-size:18px;animation:bob 1.8s ease-in-out infinite}
+  @keyframes bob{50%{transform:translateY(6px)}}
+
+  /* ===== the DISSOLVE: a tall transition where the dark hero gives way to the lit scene (gate-safe absolute bg) ===== */
+  .scene{position:relative;min-height:118svh;display:flex;align-items:center;padding-block:clamp(70px,13vh,130px);color:#1c140a;overflow:hidden;
+    margin-top:-1px}
+  .scene__bg{position:absolute;inset:0;z-index:0;background:
+      linear-gradient(180deg,#07080a 0%,#221a12 12%,#7a5a2f 30%, #e9b877 58%, #f7ecd6 100%)}
+  .scene__bg::after{content:"";position:absolute;inset:0;mix-blend-mode:screen;opacity:.5;background:
+      radial-gradient(40% 30% at 24% 60%, rgba(255,91,138,.5), transparent 70%),
+      radial-gradient(42% 32% at 80% 40%, rgba(245,158,11,.55), transparent 70%)}
+  .scene__grid{position:relative;z-index:1;display:grid;gap:clamp(28px,5vw,56px);align-items:center;grid-template-columns:1fr}
+  @media(min-width:920px){.scene__grid{grid-template-columns:1.02fr .98fr}}
+  .scene__eye{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:#9a3b2a;text-transform:uppercase;display:inline-flex;align-items:center;gap:12px}
+  .scene__eye::before{content:"";width:30px;height:1px;background:#9a3b2a}
+  .scene h2{font-family:var(--disp);font-weight:800;letter-spacing:-.03em;line-height:.98;margin:16px 0 0;font-size:clamp(2.4rem,7vw,4.6rem)}
+  .scene h2 .ac{font-style:italic;font-weight:400;color:#8a3a1f}
+  .scene p{margin:18px 0 0;max-width:42ch;color:#5a4631;font-size:clamp(15px,2vw,17px)}
+  .scene p b{color:#2a1f10;font-weight:600}
+  .spec{filter:drop-shadow(0 40px 80px rgba(70,35,0,.4));transform:rotate(-1.4deg)}
+  @media(max-width:560px){.spec{transform:none}}
+
+  .outro{position:relative;min-height:74svh;display:flex;align-items:center;justify-content:center;text-align:center;
+    background:linear-gradient(180deg,#f7ecd6 0%,#caa05f 8%,#3a2c16 30%,#06070a 70%)}
+  .outro h2{position:relative;z-index:1;font-family:var(--disp);font-weight:700;font-size:clamp(1.9rem,5vw,3.1rem);letter-spacing:-.02em;max-width:18ch;margin:0 auto;line-height:1.05;color:var(--ink)}
+  .outro h2 em{font-style:italic;color:var(--amber)}
+  .outro .note{position:absolute;bottom:18px;left:0;right:0;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em;padding-inline:16px}
+
+  @media(prefers-reduced-motion:reduce){.cue span{animation:none}}
+</style>
+</head>
+<body>
+  <header class="nav" id="nav">
+    <div class="wrap">
+      <a class="brand" href="/"><i></i> uxskill</a>
+      <a class="star" href="https://github.com/Laith0003/ux-skill">Star on GitHub</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="hero">
+      <canvas class="hero__dots" aria-hidden="true"></canvas>
+      <div class="three" aria-hidden="true">3.1</div>
+      <div class="wrap hero__in">
+        <div class="pills">
+          <span class="pill"><span class="d"></span>v3.1.0&nbsp;·&nbsp;THE BRAIN&nbsp;·&nbsp;LIVE</span>
+          <span class="pill">MIT&nbsp;·&nbsp;NO TELEMETRY&nbsp;·&nbsp;NO LLM</span>
+        </div>
+        <h1>The brain that ships design that <span class="ac">doesn't look generated.</span></h1>
+        <p class="lede">A 7-axis synthesizer turns any brief into a fresh design language, <b>anchored to your brand</b>.</p>
+        <div class="cue">Scroll<span>&#8595;</span></div>
+      </div>
+    </section>
+
+    <section class="scene" id="scene">
+      <div class="scene__bg" aria-hidden="true"></div>
+      <div class="wrap">
+        <div class="scene__grid">
+          <div>
+            <span class="scene__eye">01 — The problem you ship every day</span>
+            <h2>Your AI ships <span class="ac">slop</span> by default.</h2>
+            <p>Ask the model to "build a fintech landing." You get the same five tells inside ten seconds &mdash; the <b>average of every site it ever ingested</b>. Your domain, your brand, none of it survives.</p>
+          </div>
+          <!-- specimen: a generic AI page caught in the act, drawn as SVG (real imagery, zero slop tokens) -->
+          <svg class="spec" viewBox="0 0 460 360" role="img" aria-label="A generic AI-generated landing page exhibiting five slop tells" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="slopgrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#6d54ff"/><stop offset="1" stop-color="#3aa0ff"/>
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="460" height="360" rx="14" fill="#0d0f15" stroke="rgba(0,0,0,.2)"/>
+            <rect x="0" y="0" width="460" height="26" rx="14" fill="#171a22"/>
+            <circle cx="18" cy="13" r="4" fill="#3a3f4b"/><circle cx="32" cy="13" r="4" fill="#3a3f4b"/><circle cx="46" cy="13" r="4" fill="#3a3f4b"/>
+            <rect x="20" y="44" width="420" height="92" rx="8" fill="url(#slopgrad)"/>
+            <rect x="170" y="82" width="120" height="14" rx="5" fill="#ffffff" opacity=".88"/>
+            <rect x="20" y="150" width="130" height="74" rx="8" fill="#1b1f29" stroke="#262b37"/>
+            <rect x="165" y="150" width="130" height="74" rx="8" fill="#1b1f29" stroke="#262b37"/>
+            <rect x="310" y="150" width="130" height="74" rx="8" fill="#1b1f29" stroke="#262b37"/>
+            <rect x="20" y="244" width="300" height="9" rx="4" fill="#2b313d"/>
+            <rect x="20" y="262" width="360" height="9" rx="4" fill="#2b313d"/>
+            <rect x="20" y="280" width="240" height="9" rx="4" fill="#2b313d"/>
+            <circle cx="34" cy="318" r="12" fill="#222834"/>
+            <rect x="54" y="312" width="120" height="9" rx="4" fill="#2b313d"/>
+            <!-- red-flag pins (labels, not slop) -->
+            <g font-family="JetBrains Mono,monospace" font-size="10" fill="#fff">
+              <rect x="246" y="40" width="150" height="20" rx="5" fill="#c5402b"/><text x="254" y="54">purple&#8594;blue gradient</text>
+              <rect x="300" y="176" width="150" height="20" rx="5" fill="#c5402b"/><text x="308" y="190">three equal cards</text>
+              <rect x="18" y="300" width="150" height="20" rx="5" fill="#c5402b"/><text x="26" y="314">greeked body + stock quote</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="outro">
+      <h2>What if the model had a designer's brain <em>wired in next to it?</em></h2>
+      <div class="note">[feel check] hero &middot; dark&#8594;light dissolve &middot; one cinematic scene &mdash; the rest follows once this feels right</div>
+    </section>
+  </main>
+
+<script>
+(function(){
+  var root=document.documentElement, hero=document.getElementById('hero'), scene=document.getElementById('scene'),
+      cv=document.querySelector('.hero__dots'), ctx=cv.getContext('2d'), nav=document.getElementById('nav');
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches, small=matchMedia('(max-width:480px)').matches;
+  var animate=!reduce && !small;
+  var COLORS=['#f59e0b','#5b9cff','#ff5b8a','#3ddc97','#e8eaed'];
+  var DPR=Math.min(window.devicePixelRatio||1,2), W=0,H=0, dots=[], p=0;
+  function build(){dots=[];var n=animate?Math.max(40,Math.min(150,Math.round(W*H/9500))):(small?22:36);
+    for(var i=0;i<n;i++){var a=Math.random()*Math.PI*2;
+      dots.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,
+        ang:a,dist:30+Math.random()*Math.max(W,H)*.9,r:.7+Math.random()*1.9,c:COLORS[(Math.random()*COLORS.length)|0],tw:Math.random()*6.28});}}
+  function resize(){W=cv.clientWidth;H=cv.clientHeight;cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);build();if(!animate)stat();}
+  function stat(){ctx.clearRect(0,0,W,H);for(var i=0;i<dots.length;i++){var d=dots[i];ctx.globalAlpha=.5;ctx.fillStyle=d.c;ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,6.2832);ctx.fill();}ctx.globalAlpha=1;}
+  function frame(){ctx.clearRect(0,0,W,H);
+    for(var i=0;i<dots.length;i++){var d=dots[i];d.x+=d.vx;d.y+=d.vy;
+      if(d.x<-4)d.x=W+4;else if(d.x>W+4)d.x=-4; if(d.y<-4)d.y=H+4;else if(d.y>H+4)d.y=-4;
+      var sx=d.x+Math.cos(d.ang)*d.dist*p*0.95, sy=d.y+Math.sin(d.ang)*d.dist*p*0.95;
+      d.tw+=0.018; var al=(1-p*0.9)*(0.45+0.45*Math.sin(d.tw)); if(al<0)al=0;
+      ctx.globalAlpha=al;ctx.fillStyle=d.c;ctx.beginPath();ctx.arc(sx,sy,d.r,0,6.2832);ctx.fill();}
+    ctx.globalAlpha=1;requestAnimationFrame(frame);}
+  function onScroll(){var span=window.innerHeight*1.15;p=Math.min(Math.max(window.scrollY,0),span)/span;root.style.setProperty('--p',p.toFixed(3));}
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',function(){resize();onScroll();});
+  resize();onScroll(); if(animate)requestAnimationFrame(frame);
+  // nav flips to "lit" while the bright scene owns the viewport
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){es.forEach(function(e){nav.classList.toggle('lit',e.isIntersecting&&e.intersectionRatio>0.5);});},{threshold:[0,.5,1]}).observe(scene);
+  }
+})();
+</script>
+</body>
+</html>
