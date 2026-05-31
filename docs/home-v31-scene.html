@@ -3,98 +3,159 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>uxskill v3.1 — cinematic scene (feel check)</title>
+<title>uxskill v3.1 — The design brain for AI coding</title>
+<meta name="description" content="uxskill v3.1 is a deterministic design-intelligence engine for AI coding. A 7-axis synthesizer compiles a fresh design language per brief, anchored to your brand and gated against mobile breakage. Runs in Claude Code, Cursor, Windsurf and 14 more IDEs. Offline. No LLM. No telemetry.">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#07080a">
+<meta name="theme-color" content="#06070a">
+<meta property="og:title" content="uxskill v3.1 — The design brain for AI coding">
+<meta property="og:description" content="A 7-axis synthesizer that compiles a fresh design language per brief, anchored to your brand. Runs in 17 AI coding IDEs. Offline, deterministic, no LLM.">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --canvas:#07080a; --ink:#f4f5f7; --body:#a6abb3; --muted:#6c727c;
-    --amber:#f59e0b; --blue:#5b9cff; --pink:#ff5b8a; --green:#3ddc97;
-    --hair:rgba(255,255,255,.10);
+    --black:#06070a; --ink:#f4f5f7; --body:#a6abb3; --muted:#717783;
+    --lite:#f6f7f9; --lite-ink:#11131a; --lite-body:#565d6b; --lite-line:rgba(0,0,0,.10);
+    --blue:#5b9cff; --pink:#ff5b8a; --green:#3ddc97; --violet:#9d7bff;
+    --hair:rgba(255,255,255,.11); --hair-2:rgba(255,255,255,.06);
     --p:0;
-    --disp:Bricolage Grotesque,system-ui,sans-serif;
-    --sans:Inter,system-ui,sans-serif; --mono:JetBrains Mono,ui-monospace,monospace;
+    --disp:Bricolage Grotesque,system-ui,sans-serif; --sans:Inter,system-ui,sans-serif; --mono:JetBrains Mono,ui-monospace,monospace;
   }
   *,*::before,*::after{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
-  body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--sans);line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--black);color:var(--ink);font-family:var(--sans);line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased}
   canvas,svg,img{display:block;max-width:100%}
   a{color:inherit;text-decoration:none}
-  .wrap{width:100%;max-width:1120px;margin:0 auto;padding-inline:clamp(18px,5vw,44px)}
+  .wrap{width:100%;max-width:1140px;margin:0 auto;padding-inline:clamp(18px,5vw,46px)}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;display:inline-flex;align-items:center;gap:13px}
+  .eyebrow::before{content:"";width:30px;height:1px;background:currentColor;opacity:.5}
+  .rev{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+  .rev.in{opacity:1;transform:none}
 
-  .nav{position:sticky;top:0;z-index:60;height:60px;display:flex;align-items:center;background:transparent;transition:background .45s,border-color .45s;border-bottom:1px solid transparent}
-  .nav.lit{background:rgba(250,244,234,.72);backdrop-filter:blur(10px);border-bottom-color:rgba(0,0,0,.08)}
+  /* nav — monochrome, flips to a light bar over light sections (monochrome accents) */
+  .nav{position:sticky;top:0;z-index:70;height:62px;display:flex;align-items:center;border-bottom:1px solid transparent;background:rgba(6,7,10,.55);backdrop-filter:blur(10px)}
+  .nav.lit{background:rgba(246,247,249,.8);border-bottom-color:var(--lite-line)}
   .nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
-  .brand{display:flex;align-items:center;gap:9px;font-weight:600;color:var(--ink);transition:color .45s}
-  .brand i{width:11px;height:11px;border-radius:50%;background:var(--amber);box-shadow:0 0 14px rgba(245,158,11,.7)}
-  .star{font-family:var(--mono);font-size:12px;border:1px solid var(--amber);color:var(--amber);padding:8px 14px;border-radius:999px;white-space:nowrap;transition:color .45s,border-color .45s}
-  .nav.lit .brand{color:#16110a} .nav.lit .star{border-color:#b9770a;color:#9a6206}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:600;color:var(--ink)}
+  .brand i{width:11px;height:11px;border-radius:50%;background:conic-gradient(from 0deg,var(--blue),var(--pink),var(--green),var(--violet),var(--blue))}
+  .nav.lit .brand{color:var(--lite-ink)}
+  .nlinks{display:flex;gap:24px;font-size:13px;color:var(--body)} .nav.lit .nlinks{color:var(--lite-body)}
+  @media(max-width:820px){.nlinks{display:none}}
+  .star{font-family:var(--mono);font-size:12px;border:1px solid var(--hair);color:var(--ink);padding:8px 15px;border-radius:999px;white-space:nowrap}
+  .nav.lit .star{border-color:var(--lite-ink);color:var(--lite-ink)}
 
-  /* ===== ACT 1: hero (dark). dots + 3.1 live INSIDE the hero (absolute, NOT fixed => gate-safe) ===== */
-  .hero{position:relative;min-height:124svh;overflow:hidden;display:flex;align-items:flex-start;justify-content:center;text-align:center;padding-top:13svh}
-  .hero__dots{position:absolute;inset:0;z-index:0;width:100%;height:100%;opacity:calc(1 - var(--p)*.5)}
-  .three{position:absolute;z-index:0;left:50%;top:50%;translate:-50% -50%;font-family:var(--disp);font-weight:800;
-    font-size:clamp(13rem,54vw,42rem);line-height:.76;letter-spacing:-.05em;pointer-events:none;
-    background:linear-gradient(166deg,#cfd84e 2%,var(--amber) 50%,#a85f0e 98%);-webkit-background-clip:text;background-clip:text;color:transparent;
-    opacity:clamp(.26,calc(.26 + var(--p)*1.15),.97);scale:calc(1 + var(--p)*.18);filter:drop-shadow(0 30px 90px rgba(245,158,11,calc(.06+var(--p)*.24)))}
-  @media(max-width:560px){.three{font-size:clamp(11rem,72vw,22rem);opacity:clamp(.2,calc(.2 + var(--p)*.95),.82)}}
-  .hero__in{position:relative;z-index:1;opacity:calc(1 - var(--p)*1.5);translate:0 calc(var(--p)*-28px)}
-  .hero__in::before{content:"";position:absolute;z-index:-1;inset:-8% -8%;background:radial-gradient(56% 54% at 50% 44%,rgba(7,8,10,.74),rgba(7,8,10,.3) 58%,transparent 82%)}
+  /* ===== HERO (black) -> dissolves to FULL WHITE; the 3.1 glows hard then disappears ===== */
+  .hero{position:relative;min-height:150svh;overflow:hidden;text-align:center}
+  .hero__sticky{position:relative;height:100svh;display:flex;align-items:center;justify-content:center}
+  .hero__dots{position:absolute;inset:0;z-index:0;width:100%;height:100%;opacity:calc(1 - var(--p)*1.1)}
+  .three{position:absolute;z-index:1;left:50%;top:50%;translate:-50% -50%;font-family:var(--disp);font-weight:800;
+    font-size:clamp(13rem,54vw,42rem);line-height:.76;letter-spacing:-.05em;pointer-events:none;color:#fff;
+    /* glows HARD as you scroll, then fades into the white */
+    opacity:clamp(0, calc(.3 + var(--p)*1.7 - (var(--p)*var(--p))*2.0), 1);
+    scale:calc(1 + var(--p)*.34);
+    text-shadow:0 0 calc(8px + var(--p)*90px) rgba(255,255,255,calc(.15 + var(--p)*.85)), 0 0 calc(4px + var(--p)*40px) rgba(157,123,255,calc(var(--p)*.7))}
+  @media(max-width:560px){.three{font-size:clamp(11rem,72vw,22rem)}}
+  .hero__white{position:absolute;inset:0;z-index:2;background:var(--lite);opacity:clamp(0,calc((var(--p)-.62)*3.4),1);pointer-events:none}
+  .hero__c{position:relative;z-index:1;opacity:calc(1 - var(--p)*1.9);translate:0 calc(var(--p)*-26px)}
+  .hero__c::before{content:"";position:absolute;z-index:-1;inset:-8% -8%;background:radial-gradient(circle at 50% 46%,rgba(6,7,10,.7),transparent 70%)}
   .pills{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:24px}
-  .pill{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--body);border:1px solid var(--hair);border-radius:999px;padding:7px 14px}
-  .pill .d{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--amber);margin-right:7px;vertical-align:middle;box-shadow:0 0 10px rgba(245,158,11,.8)}
-  h1{font-family:var(--disp);font-weight:800;letter-spacing:-.035em;line-height:.96;margin:0 auto;max-width:13ch;font-size:clamp(2.75rem,10.6vw,6.4rem)}
+  .pill{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;color:var(--body);border:1px solid var(--hair);border-radius:999px;padding:7px 14px}
+  .pill .d{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:7px;vertical-align:middle;box-shadow:0 0 9px var(--green)}
+  h1{font-family:var(--disp);font-weight:800;letter-spacing:-.035em;line-height:.95;margin:0 auto;max-width:13ch;font-size:clamp(2.7rem,10.4vw,6.3rem)}
   h1 .ac{font-weight:400;font-style:italic;color:var(--body)}
   .lede{margin:22px auto 0;max-width:44ch;color:var(--body);font-size:clamp(15px,2vw,18px)}
   .lede b{color:var(--ink);font-weight:500}
-  .cue{margin-top:38px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
-  .cue span{display:block;margin-top:8px;font-size:18px;animation:bob 1.8s ease-in-out infinite}
+  .cue{margin-top:34px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
+  .cue span{display:block;margin-top:8px;font-size:17px;animation:bob 1.8s ease-in-out infinite}
   @keyframes bob{50%{transform:translateY(6px)}}
 
-  /* ===== the DISSOLVE: a tall transition where the dark hero gives way to the lit scene (gate-safe absolute bg) ===== */
-  .scene{position:relative;min-height:118svh;display:flex;align-items:center;padding-block:clamp(70px,13vh,130px);color:#1c140a;overflow:hidden;
-    margin-top:-1px}
-  .scene__bg{position:absolute;inset:0;z-index:0;background:
-      linear-gradient(180deg,#07080a 0%,#221a12 12%,#7a5a2f 30%, #e9b877 58%, #f7ecd6 100%)}
-  .scene__bg::after{content:"";position:absolute;inset:0;mix-blend-mode:screen;opacity:.5;background:
-      radial-gradient(40% 30% at 24% 60%, rgba(255,91,138,.5), transparent 70%),
-      radial-gradient(42% 32% at 80% 40%, rgba(245,158,11,.55), transparent 70%)}
-  .scene__grid{position:relative;z-index:1;display:grid;gap:clamp(28px,5vw,56px);align-items:center;grid-template-columns:1fr}
-  @media(min-width:920px){.scene__grid{grid-template-columns:1.02fr .98fr}}
-  .scene__eye{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:#9a3b2a;text-transform:uppercase;display:inline-flex;align-items:center;gap:12px}
-  .scene__eye::before{content:"";width:30px;height:1px;background:#9a3b2a}
-  .scene h2{font-family:var(--disp);font-weight:800;letter-spacing:-.03em;line-height:.98;margin:16px 0 0;font-size:clamp(2.4rem,7vw,4.6rem)}
-  .scene h2 .ac{font-style:italic;font-weight:400;color:#8a3a1f}
-  .scene p{margin:18px 0 0;max-width:42ch;color:#5a4631;font-size:clamp(15px,2vw,17px)}
-  .scene p b{color:#2a1f10;font-weight:600}
-  .spec{filter:drop-shadow(0 40px 80px rgba(70,35,0,.4));transform:rotate(-1.4deg)}
-  @media(max-width:560px){.spec{transform:none}}
+  /* ===== LIGHT sections ===== */
+  .light{position:relative;background:var(--lite);color:var(--lite-ink)}
+  .light .eyebrow{color:#8a93a3}
+  .sec{padding-block:clamp(80px,13vh,150px)}
+  .h2{font-family:var(--disp);font-weight:700;letter-spacing:-.025em;line-height:1.02;font-size:clamp(2.1rem,5.6vw,3.7rem);margin:18px 0 0;max-width:18ch}
+  .h2.center{margin-inline:auto;text-align:center}
+  .h2 .ac{font-style:italic;font-weight:400}
+  .sub{margin:18px auto 0;max-width:52ch;color:var(--lite-body);font-size:clamp(15px,2vw,17px)}
+  .center-head{text-align:center}
 
-  .outro{position:relative;min-height:74svh;display:flex;align-items:center;justify-content:center;text-align:center;
-    background:linear-gradient(180deg,#f7ecd6 0%,#caa05f 8%,#3a2c16 30%,#06070a 70%)}
-  .outro h2{position:relative;z-index:1;font-family:var(--disp);font-weight:700;font-size:clamp(1.9rem,5vw,3.1rem);letter-spacing:-.02em;max-width:18ch;margin:0 auto;line-height:1.05;color:var(--ink)}
-  .outro h2 em{font-style:italic;color:var(--amber)}
-  .outro .note{position:absolute;bottom:18px;left:0;right:0;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em;padding-inline:16px}
+  /* editorial + big product card */
+  .bigcard{margin-top:48px;border-radius:18px;background:#fff;border:1px solid var(--lite-line);box-shadow:0 50px 90px -50px rgba(20,30,60,.4);overflow:hidden}
+  .bigcard__bar{height:34px;background:#eef0f3;display:flex;align-items:center;gap:7px;padding-inline:14px;border-bottom:1px solid var(--lite-line)}
+  .bigcard__bar i{width:9px;height:9px;border-radius:50%;background:#c9ccd3}
+  .bigcard__body{padding:clamp(20px,4vw,40px);display:grid;gap:18px;grid-template-columns:1fr;align-items:center}
+  @media(min-width:760px){.bigcard__body{grid-template-columns:1fr 1fr}}
+  .swatches{display:flex;gap:8px;flex-wrap:wrap}
+  .swatches span{width:46px;height:46px;border-radius:10px;border:1px solid var(--lite-line)}
+  .tok{font-family:var(--mono);font-size:12.5px;color:#3a4151;line-height:2}
+  .tok b{color:#11131a} .tok .g{color:#1a9f6a}
 
-  @media(prefers-reduced-motion:reduce){.cue span{animation:none}}
+  /* opposite / pair cards with UI elements */
+  .pair{display:grid;gap:22px;margin-top:46px;grid-template-columns:1fr}
+  @media(min-width:780px){.pair{grid-template-columns:1fr 1fr}}
+  .pcard{border-radius:16px;background:#eef0f3;border:1px solid var(--lite-line);padding:0;overflow:hidden}
+  .pcard__ui{height:230px;display:flex;align-items:center;justify-content:center;padding:24px;position:relative}
+  .pcard__t{padding:22px 24px 26px}
+  .pcard__t h3{font-family:var(--disp);font-weight:600;font-size:clamp(1.3rem,2.6vw,1.7rem);margin:0;letter-spacing:-.01em}
+  .pcard__t p{margin:8px 0 0;color:var(--lite-body);font-size:14.5px;max-width:34ch}
+  .chip{background:#fff;border:1px solid var(--lite-line);border-radius:10px;padding:11px 14px;font-family:var(--mono);font-size:12.5px;color:#3a4151;display:flex;align-items:center;gap:10px;box-shadow:0 14px 30px -16px rgba(20,30,60,.4)}
+  .chip .go{margin-left:auto;width:26px;height:26px;border-radius:50%;background:#11131a;color:#fff;display:grid;place-items:center;font-size:13px}
+  .mini{width:100%;max-width:300px;border-radius:12px;background:#fff;border:1px solid var(--lite-line);padding:14px;box-shadow:0 18px 40px -22px rgba(20,30,60,.45)}
+  .mini .row{height:9px;border-radius:5px;background:#e3e6eb;margin:7px 0}
+  .mini .row.s{width:60%} .mini .ok{color:#1a9f6a;font-family:var(--mono);font-size:11px;margin-top:10px}
+
+  /* logos grid (SVG marks for the IDEs uxskill runs in) */
+  .logos{margin-top:42px;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))}
+  .logo{display:flex;align-items:center;gap:11px;padding:16px 18px;border-radius:13px;background:#fff;border:1px solid var(--lite-line)}
+  .logo svg{width:26px;height:26px;flex:none}
+  .logo span{font-size:13.5px;font-weight:500;color:#11131a}
+
+  /* ===== DARK chat section — messages reveal one-by-one on scroll ===== */
+  .dark2{position:relative;background:var(--black);color:var(--ink);overflow:hidden}
+  .chat{max-width:780px;margin:48px auto 0;display:flex;flex-direction:column;gap:16px}
+  .msg{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s cubic-bezier(.2,.7,.2,1)}
+  .msg.in{opacity:1;transform:none}
+  .bub{border-radius:16px;padding:18px 22px;font-size:clamp(15px,2vw,18px);line-height:1.45;max-width:88%}
+  .msg.you .bub{background:#14161d;border:1px solid var(--hair);margin-left:auto}
+  .msg.sk{display:flex;gap:12px;align-items:flex-start}
+  .msg.sk .av{width:34px;height:34px;border-radius:50%;flex:none;background:conic-gradient(from 0deg,var(--blue),var(--pink),var(--green),var(--violet),var(--blue))}
+  .msg.sk .bub{background:#fff;color:#11131a;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .msg.sk .tag{font-family:var(--mono);font-size:11px;color:#1a9f6a;margin-left:auto;white-space:nowrap}
+
+  /* ===== final DARK info ===== */
+  .stats{display:grid;gap:16px 10px;margin-top:46px;grid-template-columns:repeat(4,1fr);max-width:760px}
+  @media(max-width:560px){.stats{grid-template-columns:repeat(2,1fr);max-width:360px;margin-inline:auto}}
+  .stat .n{font-family:var(--disp);font-weight:700;font-size:clamp(1.9rem,5vw,2.8rem);letter-spacing:-.02em;line-height:1}
+  .stat .l{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);margin-top:6px;text-transform:uppercase}
+  .floor{display:grid;gap:14px;margin-top:46px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+  .fcard{border:1px solid var(--hair-2);border-radius:14px;padding:24px;background:rgba(255,255,255,.02)}
+  .fcard b{font-family:var(--disp);font-weight:600;font-size:1.15rem;display:block;margin-bottom:6px}
+  .fcard p{margin:0;color:var(--body);font-size:14.5px}
+  .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:40px}
+  .btn{font-family:var(--mono);font-size:13.5px;border-radius:999px;padding:14px 22px;display:inline-flex;align-items:center;gap:9px;border:1px solid var(--hair)}
+  .btn--key{background:var(--ink);color:#0a0b0d;border-color:var(--ink);font-weight:500}
+  .foot{border-top:1px solid var(--hair-2);padding-block:28px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em}
+
+  @media(prefers-reduced-motion:reduce){.cue span{animation:none}.rev,.msg{transition:none;opacity:1;transform:none}}
 </style>
 </head>
 <body>
   <header class="nav" id="nav">
     <div class="wrap">
       <a class="brand" href="/"><i></i> uxskill</a>
+      <nav class="nlinks"><a href="#how">How it works</a><a href="#stack">Stack</a><a href="#why">Why</a><a href="#install">Install</a></nav>
       <a class="star" href="https://github.com/Laith0003/ux-skill">Star on GitHub</a>
     </div>
   </header>
 
-  <main>
-    <section class="hero" id="hero">
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero__sticky">
       <canvas class="hero__dots" aria-hidden="true"></canvas>
       <div class="three" aria-hidden="true">3.1</div>
-      <div class="wrap hero__in">
+      <div class="hero__white" aria-hidden="true"></div>
+      <div class="wrap hero__c">
         <div class="pills">
           <span class="pill"><span class="d"></span>v3.1.0&nbsp;·&nbsp;THE BRAIN&nbsp;·&nbsp;LIVE</span>
           <span class="pill">MIT&nbsp;·&nbsp;NO TELEMETRY&nbsp;·&nbsp;NO LLM</span>
@@ -103,82 +164,161 @@
         <p class="lede">A 7-axis synthesizer turns any brief into a fresh design language, <b>anchored to your brand</b>.</p>
         <div class="cue">Scroll<span>&#8595;</span></div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="scene" id="scene">
-      <div class="scene__bg" aria-hidden="true"></div>
+  <!-- LIGHT: editorial + big product card -->
+  <div class="light">
+    <section class="sec" id="how">
       <div class="wrap">
-        <div class="scene__grid">
-          <div>
-            <span class="scene__eye">01 — The problem you ship every day</span>
-            <h2>Your AI ships <span class="ac">slop</span> by default.</h2>
-            <p>Ask the model to "build a fintech landing." You get the same five tells inside ten seconds &mdash; the <b>average of every site it ever ingested</b>. Your domain, your brand, none of it survives.</p>
+        <div class="center-head rev">
+          <span class="eyebrow">The design brain for AI coding</span>
+          <h2 class="h2 center">It compiles a design language. <span class="ac">Not a template.</span></h2>
+          <p class="sub">Give it a brief. A 7-axis synthesizer picks warmth, contrast, density, geometry, formality, motion and type — then emits real tokens, anchored to your brand. The same brief always yields the same system.</p>
+        </div>
+        <div class="bigcard rev">
+          <div class="bigcard__bar"><i></i><i></i><i></i></div>
+          <div class="bigcard__body">
+            <div>
+              <svg viewBox="0 0 340 300" role="img" aria-label="A 7-axis design language compiled from one brief: warmth, contrast, density, geometry, formality, motion and type personality" style="width:100%;max-width:360px;margin-inline:auto">
+                <g fill="none" stroke="rgba(0,0,0,.12)"><polygon points="170,30 264,75 287,177 222,258 118,258 53,177 76,75"/><polygon points="170,90 217,113 231,164 196,204 144,204 102,164 117,113"/></g>
+                <g stroke="rgba(0,0,0,.08)"><path d="M170 150 170 30M170 150 264 75M170 150 287 177M170 150 222 258M170 150 118 258M170 150 53 177M170 150 76 75"/></g>
+                <polygon points="170,54 226,105 287,177 196,204 134,225 59,175 90,86" fill="rgba(91,156,255,.18)" stroke="#5b9cff" stroke-width="2"/>
+                <g fill="#5b9cff"><circle cx="170" cy="54" r="3.5"/><circle cx="226" cy="105" r="3.5"/><circle cx="287" cy="177" r="3.5"/><circle cx="196" cy="204" r="3.5"/><circle cx="134" cy="225" r="3.5"/><circle cx="59" cy="175" r="3.5"/><circle cx="90" cy="86" r="3.5"/></g>
+                <g fill="#8a93a3" font-family="JetBrains Mono,monospace" font-size="9" text-anchor="middle"><text x="170" y="22">warmth</text><text x="284" y="68">contrast</text><text x="312" y="180">density</text><text x="226" y="276">geometry</text><text x="114" y="276">formality</text><text x="30" y="180">motion</text><text x="62" y="66">type</text></g>
+              </svg>
+            </div>
+            <div>
+              <div class="swatches"><span style="background:#0b0c10"></span><span style="background:#5b9cff"></span><span style="background:#ff5b8a"></span><span style="background:#3ddc97"></span><span style="background:#9d7bff"></span><span style="background:#f6f7f9"></span></div>
+              <div class="tok" style="margin-top:12px"><b>--canvas</b> #0b0c10 &middot; <b>--accent</b> #5b9cff<br><b>--radius</b> 12px &middot; <b>--ease</b> spring-soft</div>
+            </div>
           </div>
-          <!-- specimen: a generic AI page caught in the act, drawn as SVG (real imagery, zero slop tokens) -->
-          <svg class="spec" viewBox="0 0 460 360" role="img" aria-label="A generic AI-generated landing page exhibiting five slop tells" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="slopgrad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#6d54ff"/><stop offset="1" stop-color="#3aa0ff"/>
-              </linearGradient>
-            </defs>
-            <rect x="0" y="0" width="460" height="360" rx="14" fill="#0d0f15" stroke="rgba(0,0,0,.2)"/>
-            <rect x="0" y="0" width="460" height="26" rx="14" fill="#171a22"/>
-            <circle cx="18" cy="13" r="4" fill="#3a3f4b"/><circle cx="32" cy="13" r="4" fill="#3a3f4b"/><circle cx="46" cy="13" r="4" fill="#3a3f4b"/>
-            <rect x="20" y="44" width="420" height="92" rx="8" fill="url(#slopgrad)"/>
-            <rect x="170" y="82" width="120" height="14" rx="5" fill="#ffffff" opacity=".88"/>
-            <rect x="20" y="150" width="130" height="74" rx="8" fill="#1b1f29" stroke="#262b37"/>
-            <rect x="165" y="150" width="130" height="74" rx="8" fill="#1b1f29" stroke="#262b37"/>
-            <rect x="310" y="150" width="130" height="74" rx="8" fill="#1b1f29" stroke="#262b37"/>
-            <rect x="20" y="244" width="300" height="9" rx="4" fill="#2b313d"/>
-            <rect x="20" y="262" width="360" height="9" rx="4" fill="#2b313d"/>
-            <rect x="20" y="280" width="240" height="9" rx="4" fill="#2b313d"/>
-            <circle cx="34" cy="318" r="12" fill="#222834"/>
-            <rect x="54" y="312" width="120" height="9" rx="4" fill="#2b313d"/>
-            <!-- red-flag pins (labels, not slop) -->
-            <g font-family="JetBrains Mono,monospace" font-size="10" fill="#fff">
-              <rect x="246" y="40" width="150" height="20" rx="5" fill="#c5402b"/><text x="254" y="54">purple&#8594;blue gradient</text>
-              <rect x="300" y="176" width="150" height="20" rx="5" fill="#c5402b"/><text x="308" y="190">three equal cards</text>
-              <rect x="18" y="300" width="150" height="20" rx="5" fill="#c5402b"/><text x="26" y="314">greeked body + stock quote</text>
-            </g>
-          </svg>
         </div>
       </div>
     </section>
 
-    <section class="outro">
-      <h2>What if the model had a designer's brain <em>wired in next to it?</em></h2>
-      <div class="note">[feel check] hero &middot; dark&#8594;light dissolve &middot; one cinematic scene &mdash; the rest follows once this feels right</div>
+    <!-- LIGHT: opposite pair cards with UI -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="center-head rev"><span class="eyebrow">Two passes, one engine</span><h2 class="h2 center">Recommend, then <span class="ac">verify.</span></h2></div>
+        <div class="pair">
+          <div class="pcard rev">
+            <div class="pcard__ui"><div class="chip">build me a fintech dashboard<span class="go">&#8593;</span></div></div>
+            <div class="pcard__t"><h3>Recommend</h3><p>Five parallel lanes merge into one system — style, palette, type, motion, components — ranked by a local decisions ledger.</p></div>
+          </div>
+          <div class="pcard rev">
+            <div class="pcard__ui"><div class="mini"><div class="row"></div><div class="row s"></div><div class="row"></div><div class="row s"></div><div class="ok">&#10003; 360px verified &middot; 0 h-scroll &middot; 152 rules &middot; 0 high</div></div></div>
+            <div class="pcard__t"><h3>Verify</h3><p>The output is linted against 152 anti-patterns and rendered at real mobile viewports — slop and horizontal scroll caught before commit.</p></div>
+          </div>
+        </div>
+      </div>
     </section>
-  </main>
+
+    <!-- LIGHT: logo grid (SVG marks) -->
+    <section class="sec" id="stack">
+      <div class="wrap">
+        <div class="center-head rev"><span class="eyebrow">Runs in your stack</span><h2 class="h2 center">One install. <span class="ac">Seventeen IDEs.</span></h2></div>
+        <div class="logos rev">
+          <div class="logo"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="#11131a" stroke-width="1.7"><path d="M12 3v18M3 12h18M6 6l12 12M18 6L6 18"/></svg><span>Claude Code</span></div>
+          <div class="logo"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="#111"><path d="M12 2 21 7v10l-9 5-9-5V7z" opacity=".15"/><path d="M12 2 21 7l-9 5-9-5z"/></svg><span>Cursor</span></div>
+          <div class="logo"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="1.8"><path d="M3 14c3 3 6 3 9 0s6-3 9 0M3 9c3 3 6 3 9 0s6-3 9 0"/></svg><span>Windsurf</span></div>
+          <div class="logo"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.7"><circle cx="9" cy="11" r="2.4"/><circle cx="15" cy="11" r="2.4"/><path d="M4 13c0-4 3-7 8-7s8 3 8 7v3c0 1-1 2-2 2H6c-1 0-2-1-2-2z"/></svg><span>GitHub Copilot</span></div>
+          <div class="logo"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="#4285f4"><path d="M12 2c.6 5 4 8.4 9 9-5 .6-8.4 4-9 9-.6-5-4-8.4-9-9 5-.6 8.4-4 9-9z"/></svg><span>Gemini CLI</span></div>
+          <div class="logo"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18M3 12h18"/></svg><span>Codex</span></div>
+          <div class="logo"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M5 7h14L7 17h12"/></svg><span>Zed</span></div>
+          <div class="logo"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" fill="#111"/><path d="M7 17h6" stroke="#fff" stroke-width="2"/></svg><span>JetBrains AI</span></div>
+          <div class="logo"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 14l3-4 3 3 2-3"/></svg><span>Cline</span></div>
+          <div class="logo"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8"><path d="M5 5l7 7-7 7M13 19h6"/></svg><span>Continue</span></div>
+          <div class="logo"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M9 12l2 2 4-4"/></svg><span>Aider</span></div>
+          <div class="logo"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="#111"><path d="M4 18 12 4l8 14H4z" opacity=".2"/><path d="M8 18 12 11l4 7H8z"/></svg><span>Tabnine</span></div>
+        </div>
+        <p class="sub center-head" style="margin-top:22px">Plus Kiro, Pieces, Tabby, CodeWhisperer, Roo Cline. Marks are representative — swap in exact brand assets at promote.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- DARK: chat, messages reveal one-by-one -->
+  <div class="dark2"><section class="sec" id="why">
+    <div class="wrap">
+      <div class="center-head rev"><span class="eyebrow" style="color:var(--muted)">Talk to it like a designer</span><h2 class="h2 center">Tell it what to build. <span class="ac" style="color:var(--body)">It pushes back like taste.</span></h2></div>
+      <div class="chat">
+        <div class="msg you"><div class="bub">Build a pricing page for my SaaS. Make it look premium.</div></div>
+        <div class="msg sk"><div class="av"></div><div class="bub">Pulled your brand: primary from your logo, not the CSS green. Rejecting Inter-as-display. <span class="tag">brand locked &#10003;</span></div></div>
+        <div class="msg you"><div class="bub">Cool. Three tiers, the middle one highlighted.</div></div>
+        <div class="msg sk"><div class="av"></div><div class="bub">Done — but not three equal cards. Asymmetric, the middle tier lifted. Linted: 0 slop. <span class="tag">152 rules &#10003;</span></div></div>
+        <div class="msg you"><div class="bub">Ship it.</div></div>
+        <div class="msg sk"><div class="av"></div><div class="bub">Rendered at 360 + 390px first. No horizontal scroll, sticky header 60px. <span class="tag">mobile verified &#10003;</span></div></div>
+      </div>
+    </div>
+  </section></div>
+
+  <!-- LIGHT: opposite product cards (how it works) -->
+  <div class="light"><section class="sec">
+    <div class="wrap">
+      <div class="center-head rev"><span class="eyebrow">Training data, not templates</span><h2 class="h2 center">160 real brands. <span class="ac">Distilled, never pasted.</span></h2></div>
+      <div class="pair">
+        <div class="pcard rev">
+          <div class="pcard__ui"><div class="swatches"><span style="background:#000"></span><span style="background:#635bff"></span><span style="background:#0a2540"></span><span style="background:#ff5b8a"></span></div></div>
+          <div class="pcard__t"><h3>The corpus is vocabulary</h3><p>Stripe, Linear, Vercel, Ferrari, Anthropic — 160 brand specs become the words the engine reasons from, so output is novel every call.</p></div>
+        </div>
+        <div class="pcard rev">
+          <div class="pcard__ui"><div class="chip" style="font-size:11.5px">styles 84 &middot; palettes 176 &middot; motion 57<span class="go">&#8594;</span></div></div>
+          <div class="pcard__t"><h3>1,243 entries, queryable</h3><p>Every style, palette, type pair, component and rule has an ID and cross-references. Queryable from Python, npm, any shell — never a wall of prose.</p></div>
+        </div>
+      </div>
+    </div>
+  </section></div>
+
+  <!-- BACK TO BLACK: deeper info -->
+  <section class="sec" id="install">
+    <div class="wrap">
+      <div class="center-head rev"><span class="eyebrow" style="color:var(--muted)">Why this is the floor</span><h2 class="h2 center">Three properties. <span class="ac" style="color:var(--body)">No competitor has all three.</span></h2></div>
+      <div class="stats rev">
+        <div class="stat"><div class="n">1,243</div><div class="l">Structured entries</div></div>
+        <div class="stat"><div class="n">160</div><div class="l">Brand specs</div></div>
+        <div class="stat"><div class="n">152</div><div class="l">Anti-pattern rules</div></div>
+        <div class="stat"><div class="n">17</div><div class="l">IDE integrations</div></div>
+      </div>
+      <div class="floor rev">
+        <div class="fcard"><b>Deterministic</b><p>Same brief, same system. No model in the engine, no telemetry, runs on a plane.</p></div>
+        <div class="fcard"><b>Brand-true</b><p>Primary from your logo's pixels; a fidelity hard floor fails any off-brand output.</p></div>
+        <div class="fcard"><b>Mobile-gated</b><p>Rendered at real 360/390px viewports — horizontal scroll fails the build, not your users.</p></div>
+      </div>
+      <div class="cta rev">
+        <a class="btn btn--key" href="#"><span style="opacity:.7">&#8595;</span> pip install uxskill</a>
+        <a class="btn" href="https://github.com/Laith0003/ux-skill">Star on GitHub <span style="opacity:.7">&#8594;</span></a>
+      </div>
+    </div>
+  </section>
+  <footer class="foot">[preview] uxskill v3.1 &middot; black &#8594; white &#8594; black &middot; offline, deterministic, no LLM, no telemetry</footer>
 
 <script>
 (function(){
-  var root=document.documentElement, hero=document.getElementById('hero'), scene=document.getElementById('scene'),
-      cv=document.querySelector('.hero__dots'), ctx=cv.getContext('2d'), nav=document.getElementById('nav');
+  var root=document.documentElement, hero=document.getElementById('hero'), nav=document.getElementById('nav'),
+      cv=document.querySelector('.hero__dots'), ctx=cv.getContext('2d');
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches, small=matchMedia('(max-width:480px)').matches;
-  var animate=!reduce && !small;
-  var COLORS=['#f59e0b','#5b9cff','#ff5b8a','#3ddc97','#e8eaed'];
-  var DPR=Math.min(window.devicePixelRatio||1,2), W=0,H=0, dots=[], p=0;
-  function build(){dots=[];var n=animate?Math.max(40,Math.min(150,Math.round(W*H/9500))):(small?22:36);
-    for(var i=0;i<n;i++){var a=Math.random()*Math.PI*2;
-      dots.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,
-        ang:a,dist:30+Math.random()*Math.max(W,H)*.9,r:.7+Math.random()*1.9,c:COLORS[(Math.random()*COLORS.length)|0],tw:Math.random()*6.28});}}
-  function resize(){W=cv.clientWidth;H=cv.clientHeight;cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);build();if(!animate)stat();}
-  function stat(){ctx.clearRect(0,0,W,H);for(var i=0;i<dots.length;i++){var d=dots[i];ctx.globalAlpha=.5;ctx.fillStyle=d.c;ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,6.2832);ctx.fill();}ctx.globalAlpha=1;}
-  function frame(){ctx.clearRect(0,0,W,H);
-    for(var i=0;i<dots.length;i++){var d=dots[i];d.x+=d.vx;d.y+=d.vy;
-      if(d.x<-4)d.x=W+4;else if(d.x>W+4)d.x=-4; if(d.y<-4)d.y=H+4;else if(d.y>H+4)d.y=-4;
-      var sx=d.x+Math.cos(d.ang)*d.dist*p*0.95, sy=d.y+Math.sin(d.ang)*d.dist*p*0.95;
-      d.tw+=0.018; var al=(1-p*0.9)*(0.45+0.45*Math.sin(d.tw)); if(al<0)al=0;
-      ctx.globalAlpha=al;ctx.fillStyle=d.c;ctx.beginPath();ctx.arc(sx,sy,d.r,0,6.2832);ctx.fill();}
-    ctx.globalAlpha=1;requestAnimationFrame(frame);}
-  function onScroll(){var span=window.innerHeight*1.15;p=Math.min(Math.max(window.scrollY,0),span)/span;root.style.setProperty('--p',p.toFixed(3));}
-  window.addEventListener('scroll',onScroll,{passive:true});
-  window.addEventListener('resize',function(){resize();onScroll();});
-  resize();onScroll(); if(animate)requestAnimationFrame(frame);
-  // nav flips to "lit" while the bright scene owns the viewport
+  var animate=!reduce&&!small;
+  var COLORS=['#5b9cff','#ff5b8a','#3ddc97','#9d7bff','#e8eaed'];
+  var DPR=Math.min(window.devicePixelRatio||1,2),W=0,H=0,dots=[],p=0;
+  function build(){dots=[];var n=animate?Math.max(40,Math.min(150,Math.round(W*H/9500))):(small?20:34);
+    for(var i=0;i<n;i++){var a=Math.random()*Math.PI*2;dots.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,ang:a,dist:30+Math.random()*Math.max(W,H)*.9,r:.7+Math.random()*1.9,c:COLORS[(Math.random()*COLORS.length)|0],tw:Math.random()*6.28});}}
+  function resize(){W=cv.clientWidth;H=cv.clientHeight;cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);build();if(!animate)st();}
+  function st(){ctx.clearRect(0,0,W,H);for(var i=0;i<dots.length;i++){var d=dots[i];ctx.globalAlpha=.5;ctx.fillStyle=d.c;ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,6.2832);ctx.fill();}ctx.globalAlpha=1;}
+  function frame(){ctx.clearRect(0,0,W,H);for(var i=0;i<dots.length;i++){var d=dots[i];d.x+=d.vx;d.y+=d.vy;
+    if(d.x<-4)d.x=W+4;else if(d.x>W+4)d.x=-4;if(d.y<-4)d.y=H+4;else if(d.y>H+4)d.y=-4;
+    var sx=d.x+Math.cos(d.ang)*d.dist*p*1.05,sy=d.y+Math.sin(d.ang)*d.dist*p*1.05;
+    d.tw+=0.018;var al=(1-p*1.05)*(0.45+0.45*Math.sin(d.tw));if(al<0)al=0;
+    ctx.globalAlpha=al;ctx.fillStyle=d.c;ctx.beginPath();ctx.arc(sx,sy,d.r,0,6.2832);ctx.fill();}ctx.globalAlpha=1;requestAnimationFrame(frame);}
+  function onScroll(){var span=window.innerHeight*1.18;p=Math.min(Math.max(window.scrollY,0),span)/span;root.style.setProperty('--p',p.toFixed(3));}
+  window.addEventListener('scroll',onScroll,{passive:true});window.addEventListener('resize',function(){resize();onScroll();});
+  resize();onScroll();if(animate)requestAnimationFrame(frame);
+  // reveal-on-scroll for sections + chat (messages appear one-by-one)
   if('IntersectionObserver' in window){
-    new IntersectionObserver(function(es){es.forEach(function(e){nav.classList.toggle('lit',e.isIntersecting&&e.intersectionRatio>0.5);});},{threshold:[0,.5,1]}).observe(scene);
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.18});
+    document.querySelectorAll('.rev,.msg').forEach(function(el){io.observe(el);});
+    // nav flips lit while a light block owns the top of the viewport
+    var lo=new IntersectionObserver(function(es){es.forEach(function(e){nav.classList.toggle('lit',e.isIntersecting);});},{rootMargin:'-55px 0px -45% 0px'});
+    document.querySelectorAll('.light').forEach(function(el){lo.observe(el);});
   }
 })();
 </script>
