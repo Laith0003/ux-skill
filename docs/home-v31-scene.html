@@ -331,17 +331,23 @@
   }
 
   /* ===== chat beat — one-by-one reveal ===== */
-  .chat{max-width:760px;margin:clamp(44px,7vh,90px) auto 0;display:flex;flex-direction:column;gap:16px}
-  .msg{opacity:0;transform:translateY(32px);transition:opacity .6s cubic-bezier(.16,.7,.2,1) .05s, transform .65s cubic-bezier(.16,.7,.2,1);margin-bottom:65vh}
-  .msg.in{opacity:1;transform:none}
+  /* chat pin: 4 messages × 110vh = 440vh tall; sticky panel reveals one at a time */
+  .chat-pin{position:relative;height:440vh}
+  .chat-sticky{position:sticky;top:0;height:100svh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .chat{position:relative;max-width:640px;width:100%;margin:0 auto;padding-inline:clamp(16px,4vw,40px)}
+  .cmsg{position:absolute;width:100%;opacity:0;transform:translateY(28px) scale(.97);transition:opacity .6s cubic-bezier(.16,.7,.2,1),transform .65s cubic-bezier(.16,.7,.2,1);pointer-events:none;display:flex;flex-direction:column;gap:0}
+  .cmsg.active{opacity:1;transform:none;pointer-events:auto}
+  .cmsg.active{transition:opacity .6s ease,transform .65s ease;}
+  /* mobile: no pin, stack normally */
+  @media(max-width:640px){.chat-pin{height:auto}.chat-sticky{position:static;height:auto}.cmsg{position:static;opacity:1;transform:none}}
   .bub{border-radius:16px;padding:18px 22px;font-size:clamp(15px,2vw,18px);line-height:1.45;max-width:86%;min-width:0}
-  .zone--lite .msg.you .bub{background:#fff;border:1px solid var(--lite-line);margin-left:auto;color:var(--lite-ink)}
-  .zone--dark .msg.you .bub{background:#14161d;border:1px solid var(--hair);margin-left:auto}
-  .msg.sk{display:flex;gap:13px;align-items:flex-start}
-  .msg.sk .av{width:34px;height:34px;border-radius:50%;flex:none;background:conic-gradient(from 0deg,var(--blue),var(--teal),var(--green),var(--cyan),var(--blue))}
-  .msg.sk .bub{background:#0a0b10;color:#eef0f4;display:flex;align-items:center;gap:14px;flex-wrap:wrap;border:1px solid rgba(255,255,255,.06)}
-  .msg.sk .bub em{font-style:italic;color:var(--blue)}
-  .msg.sk .tag{font-family:var(--mono);font-size:11px;color:var(--green);margin-left:auto;white-space:nowrap}
+  .zone--lite .msg.you .bub,.zone--lite .cmsg.you .bub{background:#fff;border:1px solid var(--lite-line);margin-left:auto;color:var(--lite-ink)}
+  .zone--dark .msg.you .bub,.zone--dark .cmsg.you .bub{background:#14161d;border:1px solid var(--hair);margin-left:auto}
+  .msg.sk,.cmsg.sk{display:flex;gap:13px;align-items:flex-start}
+  .msg.sk .av,.cmsg.sk .av{width:34px;height:34px;border-radius:50%;flex:none;background:conic-gradient(from 0deg,var(--blue),var(--teal),var(--green),var(--cyan),var(--blue))}
+  .msg.sk .bub,.cmsg.sk .bub{background:#0a0b10;color:#eef0f4;display:flex;align-items:center;gap:14px;flex-wrap:wrap;border:1px solid rgba(255,255,255,.06)}
+  .msg.sk .bub em,.cmsg.sk .bub em{font-style:italic;color:var(--blue)}
+  .msg.sk .tag,.cmsg.sk .tag{font-family:var(--mono);font-size:11px;color:var(--green);margin-left:auto;white-space:nowrap}
 
   /* ===== the slop specimen (beat 2) ===== */
   .specimen{margin-top:clamp(40px,6vh,72px);position:relative}
@@ -538,12 +544,16 @@
         </figcaption>
       </figure>
 
-      <!-- the conversation: one-by-one reveal -->
-      <div class="chat">
-        <div class="msg you"><div class="bub">Build me a fintech landing page.</div></div>
-        <div class="msg sk"><div class="av"></div><div class="bub">You get exactly that specimen: the same soft gradient, three equal cards, a "John&nbsp;Doe" quote, Inter at 96px. <span class="tag">the slop</span></div></div>
-        <div class="msg you"><div class="bub">Right. I want it to look like <em>us</em> &mdash; not everyone.</div></div>
-        <div class="msg sk"><div class="av"></div><div class="bub">That is the whole job. Read on. <span class="tag">the turn &#8595;</span></div></div>
+      <!-- chat: pinned — scroll reveals one message at a time -->
+      <div class="chat-pin" id="chatPin">
+        <div class="chat-sticky" id="chatSticky">
+          <div class="chat" id="chatInner">
+            <div class="cmsg you" data-cm="0"><div class="bub">Build me a fintech landing page.</div></div>
+            <div class="cmsg sk" data-cm="1"><div class="av"></div><div class="bub">You get exactly that specimen: the same soft gradient, three equal cards, a "John&nbsp;Doe" quote, Inter at 96px. <span class="tag">the slop</span></div></div>
+            <div class="cmsg you" data-cm="2"><div class="bub">Right. I want it to look like <em>us</em> &mdash; not everyone.</div></div>
+            <div class="cmsg sk" data-cm="3"><div class="av"></div><div class="bub">That is the whole job. Read on. <span class="tag">the turn &#8595;</span></div></div>
+          </div>
+        </div>
       </div>
     </div>
   </section></div>
@@ -835,6 +845,27 @@
     window.addEventListener('scroll',onScroll2,{passive:true});
     window.addEventListener('resize',onScroll2);
     onScroll2(); setBeat(0);
+  /* ----- chat pin: 4 messages, one at a time ----- */
+  (function(){
+    var cp=document.getElementById('chatPin'), ci=document.getElementById('chatInner');
+    if(!cp||!ci)return;
+    var MSGS=4, curM=-1;
+    function setMsg(m){
+      if(m===curM)return; curM=m;
+      ci.querySelectorAll('.cmsg').forEach(function(el){el.classList.toggle('active',+el.getAttribute('data-cm')===m);});
+    }
+    function onScrollC(){
+      if(window.innerWidth<640){setMsg(0);return;}
+      var r=cp.getBoundingClientRect();
+      var scrolled=-r.top, total=r.height-window.innerHeight;
+      if(scrolled<0){setMsg(0);return;}
+      if(scrolled>=total){setMsg(MSGS-1);return;}
+      setMsg(Math.min(MSGS-1,Math.floor((scrolled/total)*MSGS)));
+    }
+    window.addEventListener('scroll',onScrollC,{passive:true});
+    window.addEventListener('resize',onScrollC);
+    onScrollC(); setMsg(0);
+  })();
   })();
 })();
 </script>
