@@ -98,6 +98,42 @@ Integration points (for maintainers): `engine/evaluator/core.py` (floor),
 `agents/frontend-engineer.md` + `agents/copy-writer.md` (consume + copy-preserve).
 Tests: `tests/test_brand.py`, `tests/test_brand_wiring.py`, `tests/test_cli_brand.py`.
 
+## Redesign: ingest + preserve the existing site (do not reinvent)
+
+When the target is an EXISTING site, extraction is not only color/type/logo. Capture, and
+PRESERVE, what already works -- a redesign improves a site, it does not replace it with a
+generic one:
+
+- **Navigation / sitemap.** Read the real nav and map the WHOLE of it (every link + key
+  page), even if the current menu is imperfect -- the rebuilt nav carries the same
+  destinations; it does not invent a sparse new set. (The v3.1 dogfood dropped the real
+  site's nav and shipped a bare one. Don't.)
+- **The existing signature.** Detect the one device that already makes the site memorable
+  -- a big version-number hero with animated dots, a signature interaction, a hero
+  composition -- and KEEP or evolve it. Replacing a working signature with a generic trope
+  (a terminal hero, a stock pattern) is a downgrade. (The v3.1 dogfood threw away a strong
+  big-number hero for a generic terminal and came out worse than the page it replaced.)
+- **Human copy + IA.** Preserve the real headlines/body and the section order that works;
+  improve the structure and craft around them.
+
+Default to PRESERVE-AND-IMPROVE. Reinvent only the parts that are actually broken.
+
+## Right-size the claim: an assist in a loop, not an autopilot
+
+Be honest about what the skill is. Run cold and autonomous, its output is a starting point,
+not a finished site -- a real dogfood came back 4/10, worse than a careful human pass. The
+skill is strongest as an ASSIST inside a loop: build -> RENDER + verify
+(`scripts/verify-responsive.mjs`) -> human eyeball on a real device -> fix -> bank the
+lesson. The loop IS the product; pretending it is "give it a URL, get a great site" sets up
+exactly the disappointment that framing caused.
+
+Two rules that follow:
+- **Gates report only what they VERIFIED.** A check that could not render has not verified
+  -- it must say DEGRADED/UNVERIFIED, never green. A false green (claiming "no horizontal
+  scroll" on a page that scrolls) is worse than no gate. See responsive.md's honesty contract.
+- **The human eye owns taste.** Beauty, "feel," and "does this look right" are judged by a
+  person looking at the rendered screenshots / the deployed page -- never asserted by the engine.
+
 ## Standing rule for maintainers
 
 When the user gives notes for this skill: challenge assumptions, verify against the
