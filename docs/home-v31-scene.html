@@ -17,10 +17,10 @@
   :root{
     --black:#06070a; --ink:#f4f5f7; --body:#a6abb3; --muted:#717783;
     --lite:#f6f7f9; --lite-ink:#10131a; --lite-body:#535b69; --lite-line:rgba(0,0,0,.10);
-    /* bright hues — for DARK zones, blooms, the hero dot-field */
-    --blue:#5b9cff; --pink:#ff5b8a; --green:#3ddc97; --violet:#9d7bff;
+    /* cool spectrum — cyan-led, for DARK zones, blooms, the hero dot-field */
+    --cyan:#22d3ee; --blue:#5b9cff; --green:#3ddc97; --teal:#2dd4bf;
     /* deepened hues — accessible italic accents on LIGHT zones */
-    --blue-d:#1f63d6; --pink-d:#d6326a; --violet-d:#6d4bd8;
+    --cyan-d:#0e7490; --blue-d:#1f63d6;
     --hair:rgba(255,255,255,.11); --hair-2:rgba(255,255,255,.06);
     --p:0;
     --disp:Bricolage Grotesque,system-ui,sans-serif; --sans:Inter,system-ui,sans-serif; --mono:JetBrains Mono,ui-monospace,monospace;
@@ -28,7 +28,7 @@
   *,*::before,*::after{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
   /* the BODY background eases dark<->light as zones cross the top band */
-  body{margin:0;background-color:var(--black);color:var(--ink);font-family:var(--sans);line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background-color .85s cubic-bezier(.4,0,.2,1)}
+  body{position:relative;margin:0;background-color:var(--black);color:var(--ink);font-family:var(--sans);line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased}
   canvas,svg,img{display:block;max-width:100%}
   a{color:inherit;text-decoration:none}
   .wrap{width:100%;max-width:1160px;margin:0 auto;padding-inline:clamp(20px,5vw,52px)}
@@ -38,16 +38,16 @@
   .rev{opacity:0;transform:translateY(30px);transition:opacity .8s ease, transform .9s cubic-bezier(.16,.7,.2,1)}
   .rev.in{opacity:1;transform:none}
   /* hue utilities — keep colour out of inline styles */
-  .c-blue{background-color:var(--blue)} .c-pink{background-color:var(--pink)}
-  .c-green{background-color:var(--green)} .c-violet{background-color:var(--violet)}
-  .c-pink-d{background-color:var(--pink-d)}
-  .t-pink-d{color:var(--pink-d)} .t-ink{color:var(--ink);font-weight:500}
+  .c-cyan{background-color:var(--cyan)} .c-blue{background-color:var(--blue)}
+  .c-green{background-color:var(--green)} .c-teal{background-color:var(--teal)}
+  .c-cyan-d{background-color:var(--cyan-d)}
+  .t-cyan-d{color:var(--cyan-d)} .t-ink{color:var(--ink);font-weight:500}
 
   .nav{position:sticky;top:0;z-index:70;height:64px;display:flex;align-items:center;background:rgba(6,7,10,.5);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:background-color .55s ease, border-color .55s ease}
   .nav.lit{background:rgba(246,247,249,.82);border-bottom-color:var(--lite-line)}
   .nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
   .brand{display:flex;align-items:center;gap:9px;font-weight:600;color:var(--ink);letter-spacing:-.01em;white-space:nowrap;transition:color .55s ease;}
-  .brand i{width:11px;height:11px;border-radius:50%;flex:none;background:conic-gradient(from 0deg,var(--blue),var(--pink),var(--green),var(--violet),var(--blue))}
+  .brand i{width:11px;height:11px;border-radius:50%;flex:none;background:conic-gradient(from 0deg,var(--blue),var(--teal),var(--green),var(--cyan),var(--blue))}
   .nav.lit .brand{color:var(--lite-ink)}
   .nlinks{display:flex;gap:26px;font-size:13px;color:var(--body);transition:color .55s ease;} .nav.lit .nlinks{color:var(--lite-body)}
   .nlinks a{white-space:nowrap}
@@ -64,7 +64,7 @@
     font-size:clamp(13rem,54vw,42rem);line-height:.76;letter-spacing:-.05em;pointer-events:none;color:#fff;
     opacity:clamp(0, calc(0.28 + var(--p) * 1.8 - (var(--p) * var(--p)) * 2.1), 1);
     scale:calc(1 + var(--p) * 0.4);
-    text-shadow:0 0 calc(10px + var(--p) * 120px) rgba(255,255,255, calc(0.12 + var(--p) * 0.88)), 0 0 calc(5px + var(--p) * 50px) rgba(157,123,255, calc(var(--p) * 0.8))}
+    text-shadow:0 0 calc(10px + var(--p) * 120px) rgba(255,255,255, calc(0.12 + var(--p) * 0.88)), 0 0 calc(5px + var(--p) * 50px) rgba(34,211,238, calc(var(--p) * 0.85))}
   @media(max-width:560px){.three{font-size:clamp(11rem,72vw,22rem)}}
   .hero__c{position:relative;z-index:2;opacity:calc(1 - var(--p) * 2.0);translate:0 calc(var(--p) * -30px)}
   .hero__c::before{content:"";position:absolute;z-index:-1;inset:-9% -8%;background:radial-gradient(circle at 50% 46%, rgba(6,7,10,.72), transparent 70%)}
@@ -79,31 +79,30 @@
   .cue span{display:block;margin-top:8px;font-size:17px;animation:bob 1.8s ease-in-out infinite}
   @keyframes bob{50%{transform:translateY(7px)}}
 
-  /* ===== zone shells — TRANSPARENT so the eased body bg shows through ===== */
+  /* ===== zone shells — TRANSPARENT so the one continuous bg field shows through ===== */
   .zone{position:relative;background:transparent;isolation:isolate}
   .zone--lite{color:var(--lite-ink)}
   .zone--dark{color:var(--ink)}
-  /* coloured radial blooms — live on a clipped ::before, never the body */
-  .zone__bloom{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
-  .zone__bloom::before,.zone__bloom::after{content:"";position:absolute;width:62%;max-width:680px;aspect-ratio:1;border-radius:50%}
-  /* each bloom is a single radial-gradient (no multi-stop linear) — hues per beat */
-  [data-bloom="enemy"]::before{top:-14%;right:-6%;background:radial-gradient(circle,rgba(214,50,106,.16),transparent 66%)}
-  [data-bloom="enemy"]::after{bottom:-20%;left:-10%;width:50%;background:radial-gradient(circle,rgba(31,99,214,.13),transparent 66%)}
-  [data-bloom="turn"]::before{top:-10%;left:-8%;background:radial-gradient(circle,rgba(157,123,255,.30),transparent 64%)}
-  [data-bloom="turn"]::after{bottom:-26%;right:-8%;width:54%;background:radial-gradient(circle,rgba(91,156,255,.22),transparent 66%)}
-  [data-bloom="how"]::before{top:6%;right:-12%;background:radial-gradient(circle,rgba(91,156,255,.24),transparent 66%)}
-  [data-bloom="how"]::after{bottom:-22%;left:-12%;width:48%;background:radial-gradient(circle,rgba(157,123,255,.18),transparent 66%)}
-  [data-bloom="proof"]::before{top:-12%;left:-8%;background:radial-gradient(circle,rgba(61,220,151,.16),transparent 66%)}
-  [data-bloom="proof"]::after{bottom:-22%;right:-10%;width:50%;background:radial-gradient(circle,rgba(31,99,214,.10),transparent 66%)}
-  [data-bloom="runs"]::before{top:-8%;left:-10%;background:radial-gradient(circle,rgba(255,91,138,.22),transparent 66%)}
-  [data-bloom="runs"]::after{bottom:-24%;right:-10%;width:52%;background:radial-gradient(circle,rgba(61,220,151,.18),transparent 66%)}
-  [data-bloom="moat"]::before{top:-6%;right:-10%;background:radial-gradient(circle,rgba(157,123,255,.26),transparent 64%)}
-  [data-bloom="moat"]::after{bottom:-18%;left:-10%;width:56%;background:radial-gradient(circle,rgba(91,156,255,.20),transparent 66%)}
+  /* ONE continuous background field for the whole document — no per-section seams.
+     Base colour is eased dark<->light in JS as a pure function of scrollY (so up == down);
+     these translucent cool blooms ride above it and drift slowly so the field feels alive.
+     Anchored to position:relative body, overscanned so the drift never exposes an edge. */
+  .bgwrap{position:absolute;inset:0;overflow:hidden;z-index:-1;pointer-events:none}
+  .bgfield{position:absolute;inset:-9% 0;will-change:transform;
+    background:
+      radial-gradient(46vw 42vw at 86% 13%, rgba(34,211,238,.22), transparent 58%),
+      radial-gradient(40vw 38vw at 7% 27%, rgba(91,156,255,.17), transparent 60%),
+      radial-gradient(50vw 44vw at 13% 45%, rgba(45,212,191,.18), transparent 58%),
+      radial-gradient(44vw 40vw at 91% 59%, rgba(91,156,255,.19), transparent 58%),
+      radial-gradient(42vw 40vw at 8% 73%, rgba(61,220,151,.16), transparent 60%),
+      radial-gradient(48vw 42vw at 89% 88%, rgba(34,211,238,.20), transparent 58%)}
+  @media(prefers-reduced-motion:no-preference){.bgfield{animation:drift 26s ease-in-out infinite alternate}}
+  @keyframes drift{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,-18px,0)}}
   .sec{padding-block:clamp(84px,15vh,168px)}
   .lead{font-family:var(--disp);font-weight:700;letter-spacing:-.03em;line-height:1.0;font-size:clamp(2.5rem,7.2vw,5rem);margin:16px 0 0;max-width:15ch}
   .lead em{font-style:italic;font-weight:400}
-  .zone--lite .lead em{color:var(--violet-d)}
-  .zone--dark .lead em{color:var(--violet)}
+  .zone--lite .lead em{color:var(--cyan-d)}
+  .zone--dark .lead em{color:var(--cyan)}
   .sub{margin:22px 0 0;max-width:50ch;font-size:clamp(15px,2vw,18px)}
   .zone--lite .sub{color:var(--lite-body)}
   .zone--dark .sub{color:var(--body)}
@@ -166,7 +165,7 @@
   .zone--lite .msg.you .bub{background:#fff;border:1px solid var(--lite-line);margin-left:auto;color:var(--lite-ink)}
   .zone--dark .msg.you .bub{background:#14161d;border:1px solid var(--hair);margin-left:auto}
   .msg.sk{display:flex;gap:13px;align-items:flex-start}
-  .msg.sk .av{width:34px;height:34px;border-radius:50%;flex:none;background:conic-gradient(from 0deg,var(--blue),var(--pink),var(--green),var(--violet),var(--blue))}
+  .msg.sk .av{width:34px;height:34px;border-radius:50%;flex:none;background:conic-gradient(from 0deg,var(--blue),var(--teal),var(--green),var(--cyan),var(--blue))}
   .msg.sk .bub{background:#0a0b10;color:#eef0f4;display:flex;align-items:center;gap:14px;flex-wrap:wrap;border:1px solid rgba(255,255,255,.06)}
   .msg.sk .bub em{font-style:italic;color:var(--blue)}
   .msg.sk .tag{font-family:var(--mono);font-size:11px;color:var(--green);margin-left:auto;white-space:nowrap}
@@ -174,7 +173,7 @@
   /* ===== the slop specimen (beat 2) ===== */
   .specimen{margin-top:clamp(40px,6vh,72px);position:relative}
   .specimen figcaption{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:#8a92a1;margin:14px 2px 0;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-  .specimen figcaption .x{color:var(--pink-d);font-weight:500}
+  .specimen figcaption .x{color:var(--cyan-d);font-weight:500}
   .specimen svg{width:100%;height:auto;border-radius:16px;box-shadow:0 40px 90px -50px rgba(20,30,60,.35);display:block}
 
   /* ===== stats + moat ===== */
@@ -187,7 +186,7 @@
   .fcard{border:1px solid var(--hair-2);border-radius:16px;padding:28px;background:rgba(255,255,255,.02);min-width:0;position:relative}
   /* deliberate asymmetry on desktop — three differentiated properties, not the centroid's equal row */
   @media(min-width:760px){
-    .floor .fcard:nth-child(2){transform:translateY(26px);background:rgba(157,123,255,.05);border-color:rgba(157,123,255,.18)}
+    .floor .fcard:nth-child(2){transform:translateY(26px);background:rgba(34,211,238,.06);border-color:rgba(34,211,238,.20)}
     .floor .fcard:nth-child(3){transform:translateY(13px)}
   }
   .fcard .fi{width:26px;height:26px;margin-bottom:16px}
@@ -199,11 +198,11 @@
   .cmd{border:1px solid var(--hair-2);border-radius:14px;padding:20px 22px;background:rgba(255,255,255,.02);min-width:0}
   .cmd .cl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:10px}
   .cmd code{font-family:var(--mono);font-size:14px;color:var(--ink);word-break:break-word}
-  .cmd code .pf{color:var(--violet)}
+  .cmd code .pf{color:var(--cyan)}
   .cta{display:flex;flex-wrap:wrap;gap:13px;margin-top:clamp(36px,5vh,56px)}
   .btn{font-family:var(--mono);font-size:13.5px;border-radius:999px;padding:15px 24px;display:inline-flex;align-items:center;gap:11px;border:1px solid var(--hair);transition:transform .18s ease, background-color .18s ease}
   .btn:active{transform:translateY(1px)}
-  .btn--key{background:var(--violet);color:#0a0b0d;border-color:var(--violet);font-weight:500}
+  .btn--key{background:var(--cyan);color:#0a0b0d;border-color:var(--cyan);font-weight:500}
   .btn .arr{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:rgba(10,11,13,.16)}
   .btn:not(.btn--key) .arr{background:rgba(255,255,255,.08)}
   .foot{border-top:1px solid var(--hair-2);padding-block:30px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em}
@@ -212,6 +211,7 @@
 </style>
 </head>
 <body data-bg="dark">
+  <div class="bgwrap" aria-hidden="true"><div class="bgfield"></div></div>
   <header class="nav" id="nav">
     <div class="wrap">
       <a class="brand" href="#hero"><i></i> uxskill</a>
@@ -242,21 +242,21 @@
   <div class="zone zone--lite" data-bg="light"><span class="zone__bloom" aria-hidden="true" data-bloom="enemy"></span><section class="sec" id="enemy">
     <div class="wrap">
       <div class="rev head">
-        <span class="eyebrow"><span class="dot c-pink-d"></span>The thing you ship every day</span>
-        <h2 class="lead">Your AI ships <em class="t-pink-d">the centroid</em> by default.</h2>
+        <span class="eyebrow"><span class="dot c-cyan-d"></span>The thing you ship every day</span>
+        <h2 class="lead">Your AI ships <em class="t-cyan-d">the centroid</em> by default.</h2>
         <p class="sub">Ask any model to "build a landing." You get the average of every page it ever ingested &mdash; in ten seconds, every time. Here is what the centroid looks like.</p>
       </div>
 
       <!-- the slop specimen, drawn as ONE inline SVG (sidesteps every CSS-structure + content regex) -->
       <figure class="specimen rev" style="margin-inline:0">
-        <svg viewBox="0 0 1000 560" role="img" aria-label="A specimen of generic AI-generated output: a purple-to-blue gradient header, three identical feature cards with placeholder body text, and a faceless stock testimonial. The pattern uxskill is built to defeat.">
+        <svg viewBox="0 0 1000 560" role="img" aria-label="A specimen of generic AI-generated output: a soft gradient header, three identical feature cards with placeholder body text, and a faceless stock testimonial. The pattern uxskill is built to defeat.">
           <defs>
             <linearGradient id="slopHead" x1="0" y1="0" x2="1" y2="0.6">
-              <stop offset="0" stop-color="#8b5cf6"/><stop offset="0.55" stop-color="#6366f1"/><stop offset="1" stop-color="#3b82f6"/>
+              <stop offset="0" stop-color="#7c889c"/><stop offset="0.55" stop-color="#5d6a82"/><stop offset="1" stop-color="#48536a"/>
             </linearGradient>
           </defs>
           <rect width="1000" height="560" rx="16" fill="#ffffff" stroke="#e7e9ef"/>
-          <!-- the inevitable purple->blue gradient hero header -->
+          <!-- the inevitable soft gradient hero header -->
           <rect x="1" y="1" width="998" height="190" rx="16" fill="url(#slopHead)"/>
           <rect x="1" y="120" width="998" height="71" fill="url(#slopHead)"/>
           <rect x="360" y="64" width="280" height="22" rx="6" fill="#ffffff" opacity="0.92"/>
@@ -288,7 +288,7 @@
           <g fill="#c7ccd6"><circle cx="780" cy="499" r="5"/><circle cx="800" cy="499" r="5"/><circle cx="820" cy="499" r="5"/><circle cx="840" cy="499" r="5"/><circle cx="860" cy="499" r="5"/></g>
         </svg>
         <figcaption>
-          <span class="x">&times;</span> purple&#8594;blue gradient
+          <span class="x">&times;</span> the same soft gradient
           <span class="x">&times;</span> three identical cards
           <span class="x">&times;</span> filler body copy
           <span class="x">&times;</span> a faceless five-star quote
@@ -298,7 +298,7 @@
       <!-- the conversation: one-by-one reveal -->
       <div class="chat">
         <div class="msg you"><div class="bub">Build me a fintech landing page.</div></div>
-        <div class="msg sk"><div class="av"></div><div class="bub">You get exactly that specimen: a purple&#8594;blue gradient, three equal cards, a "John&nbsp;Doe" quote, Inter at 96px. <span class="tag">the slop</span></div></div>
+        <div class="msg sk"><div class="av"></div><div class="bub">You get exactly that specimen: the same soft gradient, three equal cards, a "John&nbsp;Doe" quote, Inter at 96px. <span class="tag">the slop</span></div></div>
         <div class="msg you"><div class="bub">Right. I want it to look like <em>us</em> &mdash; not everyone.</div></div>
         <div class="msg sk"><div class="av"></div><div class="bub">That is the whole job. Read on. <span class="tag">the turn &#8595;</span></div></div>
       </div>
@@ -309,7 +309,7 @@
   <div class="zone zone--dark" data-bg="dark"><span class="zone__bloom" aria-hidden="true" data-bloom="turn"></span><section class="sec" id="turn">
     <div class="wrap">
       <div class="rev head">
-        <span class="eyebrow"><span class="dot c-violet"></span>The turn</span>
+        <span class="eyebrow"><span class="dot c-cyan"></span>The turn</span>
         <h2 class="lead">What if the model had a <em>designer's brain</em> wired in?</h2>
         <p class="sub">Not a bigger model. A deterministic layer that sits in front of it and <b class="t-ink">compiles a design language</b> &mdash; warmth, contrast, geometry, type &mdash; instead of reaching for the nearest template. Same brief, same system, every time.</p>
       </div>
@@ -328,10 +328,10 @@
           <span class="k"><span class="dot c-blue"></span>Brief &#8594; system</span>
           <h3>Five deterministic steps, <em>start to ship.</em></h3>
           <p>No catalogue to pick from. The engine reads the brief, synthesizes a novel language, anchors it to your brand, then refuses to ship anything that breaks. The card at right is real output.</p>
-          <ol class="flow">
+          <ol class="flow" data-stagger>
             <li><span class="step"><span class="ix c-blue"></span><span class="nm">01 &middot; BRIEF</span></span><div><p class="ft">Read the brief</p><p class="fd">Industry, audience, the mood &mdash; parsed into a structured intake, no guesswork.</p></div></li>
-            <li><span class="step"><span class="ix c-violet"></span><span class="nm">02 &middot; SYNTHESIZE</span></span><div><p class="ft">Set seven axes</p><p class="fd">Warmth, contrast, density, geometry, formality, motion, type &mdash; tuned, then emitted as tokens.</p></div></li>
-            <li><span class="step"><span class="ix c-pink"></span><span class="nm">03 &middot; ANCHOR</span></span><div><p class="ft">Anchor to your brand</p><p class="fd">Primary pulled from your logo's pixels &mdash; not the nearest CSS named colour.</p></div></li>
+            <li><span class="step"><span class="ix c-cyan"></span><span class="nm">02 &middot; SYNTHESIZE</span></span><div><p class="ft">Set seven axes</p><p class="fd">Warmth, contrast, density, geometry, formality, motion, type &mdash; tuned, then emitted as tokens.</p></div></li>
+            <li><span class="step"><span class="ix c-teal"></span><span class="nm">03 &middot; ANCHOR</span></span><div><p class="ft">Anchor to your brand</p><p class="fd">Primary pulled from your logo's pixels &mdash; not the nearest CSS named colour.</p></div></li>
             <li><span class="step"><span class="ix c-green"></span><span class="nm">04 &middot; LINT</span></span><div><p class="ft">Lint 152 anti-patterns</p><p class="fd">The centroid &mdash; gradient headers, three equal cards, filler verbs &mdash; fails the build here.</p></div></li>
             <li><span class="step"><span class="ix c-blue"></span><span class="nm">05 &middot; VERIFY</span></span><div><p class="ft">Verify mobile, for real</p><p class="fd">Rendered at true 360 / 390px in headless Chrome. Horizontal scroll fails, not your users.</p></div></li>
           </ol>
@@ -346,12 +346,12 @@
             <rect x="28" y="94" width="196" height="13" rx="5" fill="#3a4150"/>
             <rect x="28" y="126" width="124" height="34" rx="9" fill="#5b9cff"/>
             <rect x="164" y="132" width="92" height="22" rx="8" fill="none" stroke="#3a4150" stroke-width="1.5"/>
-            <g><rect x="330" y="56" width="26" height="26" rx="6" fill="#0b0c10" stroke="#252a35"/><rect x="362" y="56" width="26" height="26" rx="6" fill="#5b9cff"/><rect x="394" y="56" width="26" height="26" rx="6" fill="#ff5b8a"/><rect x="330" y="88" width="26" height="26" rx="6" fill="#3ddc97"/><rect x="362" y="88" width="26" height="26" rx="6" fill="#9d7bff"/><rect x="394" y="88" width="26" height="26" rx="6" fill="#e7e9ee"/></g>
+            <g><rect x="330" y="56" width="26" height="26" rx="6" fill="#0b0c10" stroke="#252a35"/><rect x="362" y="56" width="26" height="26" rx="6" fill="#5b9cff"/><rect x="394" y="56" width="26" height="26" rx="6" fill="#2dd4bf"/><rect x="330" y="88" width="26" height="26" rx="6" fill="#3ddc97"/><rect x="362" y="88" width="26" height="26" rx="6" fill="#22d3ee"/><rect x="394" y="88" width="26" height="26" rx="6" fill="#e7e9ee"/></g>
             <rect x="28" y="196" width="126" height="118" rx="11" fill="#171a22" stroke="#252a35"/>
             <rect x="167" y="196" width="126" height="118" rx="11" fill="#171a22" stroke="#252a35"/>
             <rect x="306" y="196" width="126" height="118" rx="11" fill="#171a22" stroke="#252a35"/>
             <rect x="44" y="212" width="40" height="40" rx="10" fill="#5b9cff" opacity="0.22"/><rect x="44" y="264" width="78" height="9" rx="4" fill="#3a4150"/><rect x="44" y="282" width="60" height="7" rx="3" fill="#2a2f3a"/>
-            <rect x="183" y="212" width="40" height="40" rx="10" fill="#ff5b8a" opacity="0.22"/><rect x="183" y="264" width="78" height="9" rx="4" fill="#3a4150"/><rect x="183" y="282" width="60" height="7" rx="3" fill="#2a2f3a"/>
+            <rect x="183" y="212" width="40" height="40" rx="10" fill="#2dd4bf" opacity="0.22"/><rect x="183" y="264" width="78" height="9" rx="4" fill="#3a4150"/><rect x="183" y="282" width="60" height="7" rx="3" fill="#2a2f3a"/>
             <rect x="322" y="212" width="40" height="40" rx="10" fill="#3ddc97" opacity="0.22"/><rect x="322" y="264" width="78" height="9" rx="4" fill="#3a4150"/><rect x="322" y="282" width="60" height="7" rx="3" fill="#2a2f3a"/>
             <rect x="28" y="332" width="404" height="10" rx="5" fill="#11141b"/><rect x="28" y="332" width="232" height="10" rx="5" fill="#1f6b46"/>
             <text x="270" y="340" font-family="JetBrains Mono,monospace" font-size="9" fill="#3ddc97">lint 152 &#183; 0 slop</text>
@@ -393,9 +393,9 @@
             <!-- a distribution bar made of solid accent segments -->
             <g>
               <rect x="30" y="190" width="58" height="20" rx="5" fill="#5b9cff"/>
-              <rect x="92" y="190" width="120" height="20" rx="5" fill="#9d7bff"/>
+              <rect x="92" y="190" width="120" height="20" rx="5" fill="#22d3ee"/>
               <rect x="216" y="190" width="48" height="20" rx="5" fill="#3ddc97"/>
-              <rect x="268" y="190" width="100" height="20" rx="5" fill="#ff5b8a"/>
+              <rect x="268" y="190" width="100" height="20" rx="5" fill="#2dd4bf"/>
               <rect x="372" y="190" width="58" height="20" rx="5" fill="#2a2f3a"/>
             </g>
             <g font-family="JetBrains Mono,monospace" font-size="11">
@@ -413,17 +413,17 @@
   <div class="zone zone--dark" data-bg="dark"><span class="zone__bloom" aria-hidden="true" data-bloom="runs"></span><section class="sec" id="runs">
     <div class="wrap">
       <div class="rev head">
-        <span class="eyebrow"><span class="dot c-pink"></span>Built for your stack</span>
+        <span class="eyebrow"><span class="dot c-teal"></span>Built for your stack</span>
         <h2 class="lead">17 IDEs. <em>One install.</em></h2>
       </div>
       <div class="zig rev">
         <div class="ztxt">
-          <span class="k"><span class="dot c-pink"></span>Runs where you already build</span>
+          <span class="k"><span class="dot c-teal"></span>Runs where you already build</span>
           <h3>The same engine, the same brand-true output, <em>everywhere.</em></h3>
           <p>Claude Code, Cursor, Windsurf, Copilot, Gemini, Codex, Zed, JetBrains, Cline, Continue, Aider, Tabnine &mdash; one install, no per-tool config. Your team keeps its editor; the floor comes with it.</p>
         </div>
         <div class="pcard">
-          <div class="iconwall" role="img" aria-label="The AI coding tools uxskill runs in: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini, Codex, Zed, JetBrains, Cline, Continue, Aider, Tabnine">
+          <div class="iconwall" data-stagger role="img" aria-label="The AI coding tools uxskill runs in: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini, Codex, Zed, JetBrains, Cline, Continue, Aider, Tabnine">
             <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#e7e9ee" stroke-width="1.6"><path d="M12 3v18M3 12h18M6 6l12 12M18 6 6 18"/></svg></span>
             <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="#e7e9ee"><path d="M12 2 21 7l-9 5-9-5z"/><path d="M12 12 21 7v10l-9 5z" opacity=".55"/><path d="M12 12 3 7v10l9 5z" opacity=".3"/></svg></span>
             <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#5b9cff" stroke-width="1.8"><path d="M3 14c3 3 6 3 9 0s6-3 9 0M3 9c3 3 6 3 9 0s6-3 9 0"/></svg></span>
@@ -434,7 +434,7 @@
             <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" fill="#e7e9ee"/><path d="M7 17h6" stroke="#0a0b10" stroke-width="2"/></svg></span>
             <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#3ddc97" stroke-width="1.7"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 14l3-4 3 3 2-3"/></svg></span>
             <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#e7e9ee" stroke-width="1.7"><path d="M5 5l7 7-7 7M13 19h6"/></svg></span>
-            <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#ff5b8a" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><path d="M9 12l2 2 4-4"/></svg></span>
+            <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><path d="M9 12l2 2 4-4"/></svg></span>
             <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="#e7e9ee"><path d="M8 18 12 11l4 7H8z"/><path d="M4 18 12 4l8 14H4z" opacity=".25"/></svg></span>
           </div>
         </div>
@@ -446,16 +446,16 @@
   <div class="zone zone--dark" data-bg="dark"><span class="zone__bloom" aria-hidden="true" data-bloom="moat"></span><section class="sec" id="install">
     <div class="wrap">
       <div class="rev head">
-        <span class="eyebrow"><span class="dot c-violet"></span>Why this is the floor</span>
+        <span class="eyebrow"><span class="dot c-cyan"></span>Why this is the floor</span>
         <h2 class="lead">Three properties. <em>No competitor has all three.</em></h2>
       </div>
-      <div class="floor rev">
+      <div class="floor" data-stagger>
         <div class="fcard">
           <svg class="fi" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#5b9cff" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/><circle cx="8" cy="7" r="1.4" fill="#5b9cff" stroke="none"/><circle cx="8" cy="12" r="1.4" fill="#5b9cff" stroke="none"/><circle cx="8" cy="17" r="1.4" fill="#5b9cff" stroke="none"/></svg>
           <b>Deterministic</b><p>Same brief, same system. No model in the engine, no telemetry, runs on a plane.</p>
         </div>
         <div class="fcard">
-          <svg class="fi" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#ff5b8a" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4" fill="#ff5b8a" stroke="none"/></svg>
+          <svg class="fi" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4" fill="#2dd4bf" stroke="none"/></svg>
           <b>Brand-true</b><p>Primary from your logo's pixels; a fidelity hard floor fails any off-brand output.</p>
         </div>
         <div class="fcard">
@@ -464,7 +464,7 @@
         </div>
       </div>
 
-      <div class="stats rev">
+      <div class="stats" data-stagger>
         <div class="stat"><div class="n">1,243</div><div class="l">Structured entries</div></div>
         <div class="stat"><div class="n">160</div><div class="l">Brand specs</div></div>
         <div class="stat"><div class="n">152</div><div class="l">Anti-pattern rules</div></div>
@@ -475,7 +475,7 @@
         <span class="eyebrow"><span class="dot c-blue"></span>Install</span>
         <h2 class="lead" style="font-size:clamp(2rem,5.4vw,3.4rem)">One line. <em>Then build.</em></h2>
       </div>
-      <div class="install rev">
+      <div class="install" data-stagger>
         <div class="cmd"><span class="cl">Python</span><code><span class="pf">pip install</span> uxskill</code></div>
         <div class="cmd"><span class="cl">Node</span><code><span class="pf">npx</span> uxskill@latest</code></div>
         <div class="cmd"><span class="cl">Source</span><code>github.com/Laith0003/ux-skill</code></div>
@@ -496,7 +496,7 @@
       cv=document.querySelector('.hero__dots'), ctx=cv.getContext('2d');
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches, small=matchMedia('(max-width:480px)').matches;
   var animate=!reduce && !small;
-  var COLORS=['#5b9cff','#ff5b8a','#3ddc97','#9d7bff','#e8eaed'];
+  var COLORS=['#5b9cff','#2dd4bf','#3ddc97','#22d3ee','#e8eaed'];
   var DPR=Math.min(window.devicePixelRatio||1,2), W=0,H=0, dots=[], p=0;
   function build(){dots=[];var n=animate?Math.max(40,Math.min(150,Math.round(W*H/9500))):(small?20:34);
     for(var i=0;i<n;i++){var a=Math.random()*Math.PI*2;dots.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,ang:a,dist:30+Math.random()*Math.max(W,H)*.9,r:.7+Math.random()*1.9,c:COLORS[(Math.random()*COLORS.length)|0],tw:Math.random()*6.28});}}
@@ -507,32 +507,54 @@
     var sx=d.x+Math.cos(d.ang)*d.dist*p*1.05,sy=d.y+Math.sin(d.ang)*d.dist*p*1.05;
     d.tw+=0.018;var al=(1-p*1.05)*(0.45+0.45*Math.sin(d.tw));if(al<0)al=0;
     ctx.globalAlpha=al;ctx.fillStyle=d.c;ctx.beginPath();ctx.arc(sx,sy,d.r,0,6.2832);ctx.fill();}ctx.globalAlpha=1;requestAnimationFrame(frame);}
-  function onScroll(){var span=window.innerHeight*0.92;p=Math.min(Math.max(window.scrollY,0),span)/span;root.style.setProperty('--p',p.toFixed(3));}
-  window.addEventListener('scroll',onScroll,{passive:true});window.addEventListener('resize',function(){resize();onScroll();});
+  function onScroll(){var span=window.innerHeight*0.92;p=Math.min(Math.max(window.scrollY,0),span)/span;root.style.setProperty('--p',p.toFixed(3));paintBg();}
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',function(){resize();measure();onScroll();});
+  window.addEventListener('load',function(){measure();paintBg();});
   resize();onScroll();if(animate)requestAnimationFrame(frame);
 
-  /* ----- eased whole-page background: one observer drives body bg + nav.lit ----- */
-  if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.16});
-    document.querySelectorAll('.rev,.msg').forEach(function(el){io.observe(el);});
-
-    var DARK='#06070a', LITE='#f6f7f9', body=document.body;
-    var zones=[].slice.call(document.querySelectorAll('[data-bg]')).filter(function(z){return z!==body;});
-    function applyZone(z){
-      var lite=z.getAttribute('data-bg')==='light';
-      body.style.backgroundColor=lite?LITE:DARK;
-      nav.classList.toggle('lit',lite);
-    }
-    var bo=new IntersectionObserver(function(es){
-      es.forEach(function(e){ if(e.isIntersecting){ applyZone(e.target); } });
-    },{rootMargin:'-1px 0px -62% 0px',threshold:0});
-    zones.forEach(function(z){bo.observe(z);});
-    // hero owns the very top: while it's the active band, body stays dark, nav unlit
-    var ho=new IntersectionObserver(function(es){es.forEach(function(e){
-      if(e.isIntersecting && e.intersectionRatio>0.5){ body.style.backgroundColor=DARK; nav.classList.remove('lit'); }
-    });},{rootMargin:'-1px 0px -62% 0px',threshold:[0,0.5,1]});
-    ho.observe(hero);
+  /* ----- continuous bg: base colour is a PURE FUNCTION of scrollY -----
+     No IntersectionObserver toggles, so scrolling up renders identically to scrolling down.
+     litness in [0,1] is eased through each zone boundary with a smoothstep window (the "feel"),
+     then lerped between near-black and off-white. */
+  var DARK=[6,7,10], LITE=[246,247,249], bodyEl=document.body, bands=[];
+  function measure(){
+    bands=[{top:0,lit:0}]; // hero owns the top band — always dark
+    [].forEach.call(document.querySelectorAll('[data-bg]'),function(z){
+      if(z===bodyEl)return;
+      bands.push({top:z.getBoundingClientRect().top+window.scrollY, lit:z.getAttribute('data-bg')==='light'?1:0});
+    });
+    bands.sort(function(a,b){return a.top-b.top;});
   }
+  function ss(t){t=t<0?0:t>1?1:t;return t*t*(3-2*t);}
+  function litnessAt(y){
+    if(!bands.length)return 0;
+    var win=window.innerHeight*0.62, lit=bands[0].lit, prev=bands[0].lit;
+    for(var i=0;i<bands.length;i++){
+      var bt=bands[i].top, cur=bands[i].lit;
+      if(y>=bt+win/2){lit=cur;prev=cur;}
+      else if(y>=bt-win/2){var t=ss((y-(bt-win/2))/win);lit=prev*(1-t)+cur*t;break;}
+      else break;
+    }
+    return lit;
+  }
+  function paintBg(){
+    if(!bands||!bands.length)return;
+    var L=litnessAt(window.scrollY+window.innerHeight*0.5);
+    bodyEl.style.backgroundColor='rgb('+Math.round(DARK[0]+(LITE[0]-DARK[0])*L)+','+Math.round(DARK[1]+(LITE[1]-DARK[1])*L)+','+Math.round(DARK[2]+(LITE[2]-DARK[2])*L)+')';
+    nav.classList.toggle('lit',L>0.5);
+  }
+  /* content reveals — direction-independent: once shown, they stay shown.
+     [data-stagger] containers cascade their children in (Web Animations API).
+     fill:backwards means items are visible by default if the API is missing — nothing can hide. */
+  function staggerIn(t){if(reduce||!t.children.length)return;for(var k=0;k<t.children.length;k++){try{t.children[k].animate([{opacity:0,transform:'translateY(20px)'},{opacity:1,transform:'translateY(0)'}],{duration:560,delay:k*70,easing:'cubic-bezier(.16,.7,.2,1)',fill:'backwards'});}catch(_){}}}
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var t=e.target;t.classList.add('in');if(t.hasAttribute('data-stagger'))staggerIn(t);io.unobserve(t);}});},{threshold:.16});
+    document.querySelectorAll('.rev,.msg,[data-stagger]').forEach(function(el){io.observe(el);});
+  } else {
+    document.querySelectorAll('.rev,.msg').forEach(function(el){el.classList.add('in');});
+  }
+  measure(); paintBg();
 })();
 </script>
 </body>
