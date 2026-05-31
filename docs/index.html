@@ -393,7 +393,7 @@
 
   /* ===== chat beat — one-by-one reveal ===== */
   /* chat pin: 4 messages × 110vh = 440vh tall; sticky panel reveals one at a time */
-  .chat-pin{position:relative;height:440vh}
+  .chat-pin{position:relative;height:440vh;scroll-snap-align:end}
   .chat-sticky{position:sticky;top:0;height:100svh;display:flex;align-items:center;justify-content:center;overflow:hidden}
   .chat{position:relative;max-width:640px;width:100%;margin:0 auto;padding-inline:clamp(16px,4vw,40px)}
   .cmsg{position:absolute;width:100%;opacity:0;transform:translateY(28px) scale(.97);transition:opacity .6s cubic-bezier(.16,.7,.2,1),transform .65s cubic-bezier(.16,.7,.2,1);pointer-events:none;display:flex;flex-direction:column;gap:0}
