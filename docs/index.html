@@ -101,9 +101,17 @@
   .usknav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:18px;
     padding:0 clamp(16px,4vw,48px);block-size:56px;background:rgba(7,8,10,0.86);
     backdrop-filter:saturate(150%) blur(14px);-webkit-backdrop-filter:saturate(150%) blur(14px);
-    border-block-end:1px solid rgba(255,255,255,0.08);font-family:'Inter',system-ui,sans-serif}
+    border-block-end:1px solid rgba(255,255,255,0.08);font-family:'Inter',system-ui,sans-serif;
+    transition:background .55s ease,border-color .55s ease}
+  /* light nav — activates over white zones */
+  .usknav.lit{background:rgba(246,247,249,0.88);border-block-end-color:rgba(0,0,0,0.10)}
+  .usknav.lit .usknav__brand{color:#10131a}
+  .usknav.lit .usknav__link{color:#535b69}
+  .usknav.lit .usknav__link:hover,.usknav.lit .usknav__link[aria-current="page"]{color:#10131a}
+  .usknav.lit .usknav__langs>summary{color:#535b69}
+  .usknav.lit .usknav__langs>summary:hover{color:#10131a}
   .usknav__brand{font-family:'Bricolage Grotesque','Inter',sans-serif;font-weight:700;font-size:17px;
-    color:#f6f7f9;text-decoration:none;letter-spacing:-0.01em;margin-inline-end:auto;padding:6px 2px}
+    color:#f6f7f9;text-decoration:none;letter-spacing:-0.01em;margin-inline-end:auto;padding:6px 2px;transition:color .55s ease}
   .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
@@ -843,10 +851,12 @@
     }
     return lit;
   }
+  var navEl=document.querySelector('.usknav');
   function paintBg(){
     if(!bands||!bands.length)return;
     var L=litnessAt(window.scrollY+window.innerHeight*0.5);
     bodyEl.style.backgroundColor='rgb('+Math.round(DARK[0]+(LITE[0]-DARK[0])*L)+','+Math.round(DARK[1]+(LITE[1]-DARK[1])*L)+','+Math.round(DARK[2]+(LITE[2]-DARK[2])*L)+')';
+    if(navEl)navEl.classList.toggle('lit',L>0.5);
   }
   /* content reveals — direction-independent: once shown, they stay shown.
      [data-stagger] containers cascade their children in (Web Animations API).
