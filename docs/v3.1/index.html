@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>uxskill v3.1 — make AI-generated UI distinctive, not generic. Offline. Enforced.</title>
+  <meta name="description" content="uxskill is a design-intelligence engine for AI coding tools (Cursor, Copilot, Claude Code). It extracts your brand, synthesizes a real design system from data, builds rich full pages, and gates the output against 152 anti-slop rules. Offline, deterministic, never calls an LLM.">
+
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/v3.1/">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#f59e0b">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Bricolage Grotesque (display), Inter (body), JetBrains Mono (mono) — the ux-skill brand type. -->
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <meta property="og:title" content="uxskill v3.1 — make AI-generated UI distinctive, not generic.">
+  <meta property="og:description" content="A design-intelligence engine for AI coding. Extracts your brand, synthesizes a real design system from data, builds rich pages, and gates the output against 152 anti-slop rules. Offline. Deterministic. No LLM.">
+  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="uxskill wordmark on near-black canvas with the line: design intelligence for AI coding.">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/v3.1/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="uxskill">
+  <meta property="og:locale" content="en_US">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="uxskill v3.1 — make AI-generated UI distinctive, not generic.">
+  <meta name="twitter:description" content="A design-intelligence engine for AI coding. Offline. Deterministic. No LLM. Gated against 152 anti-slop rules.">
+  <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/home.png">
+  <meta name="twitter:image:alt" content="uxskill wordmark on near-black canvas with the line: design intelligence for AI coding.">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"SoftwareApplication","name":"uxskill","alternateName":"ux-skill","description":"A design-intelligence engine for AI coding tools that makes AI-generated UI distinctive instead of generic. It extracts your brand, synthesizes a real design system from 1,243 structured entries, builds rich full pages, and gates output against 152 deterministic anti-slop rules plus a brand-fidelity hard floor and responsive gates. Runs in Claude Code, Cursor, Windsurf, and 14 more IDEs. Offline, deterministic, never calls an LLM.","operatingSystem":"macOS, Linux, Windows","applicationCategory":"DeveloperApplication","applicationSubCategory":"DesignTool","softwareVersion":"3.1.0","releaseNotes":"https://github.com/Laith0003/ux-skill/blob/main/CHANGELOG.md","license":"https://opensource.org/licenses/MIT","url":"https://github.com/Laith0003/ux-skill","downloadUrl":"https://pypi.org/project/uxskill/","author":{"@type":"Person","name":"Laith Aljunaidy","url":"https://www.linkedin.com/in/laithaljunaidy/"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Extracts a brand from a logo and letterform","7-axis deterministic design synthesizer","152 anti-pattern regex rules (CI-safe linter)","Brand-fidelity hard floor","Responsive and mobile gates","160 brand DESIGN specs as training data","18 MCP tools","Offline, deterministic, no LLM, no telemetry"]}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is uxskill?","acceptedAnswer":{"@type":"Answer","text":"uxskill is a design-intelligence engine for AI coding tools. It makes AI-generated UI distinctive instead of generic by extracting your brand, synthesizing a real design system from structured data, building rich full pages, and gating the output against 152 deterministic anti-slop rules. It runs offline and never calls an LLM."}},{"@type":"Question","name":"Does uxskill call an LLM or send my code anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. The engine is pure Python, fully offline, and deterministic. It never calls an LLM, never makes a network request, and ships zero telemetry. The same brief always produces the same design system."}},{"@type":"Question","name":"How do I install uxskill?","acceptedAnswer":{"@type":"Answer","text":"Three paths: npx uxskill (no Python setup), pip install uxskill (universal), or the Claude Code plugin via /plugin marketplace add Laith0003/ux-skill then /plugin install. GitHub: github.com/Laith0003/ux-skill."}}]}
+  </script>
+
+<style>
+/* ============================================================
+   uxskill v3.1 landing — DOGFOOD build.
+   Brand extracted from the live site via the engine:
+     primary  #f59e0b (amber, from the logo)   secondary #06b6d4 (cyan)
+     canvas   #07080a (near-black)             type: Bricolage / Inter / JetBrains Mono
+     mark: a single square amber dot.
+   One easing language: --ease-cinema. All motion transform/opacity only,
+   reduced-motion-safe. Mobile-first; the wow tones down on phones.
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+:root {
+  /* --- Canvas + ink (the dark cinematic base) --- */
+  --canvas:      #07080a;
+  --canvas-2:    #0c0e12;   /* raised surface */
+  --surface:     #111319;   /* card */
+  --surface-2:   #161922;   /* card hover / inset */
+  --ink:         #f6f7f9;
+  --body:        #c7ccd3;
+  --muted:       #8a8f96;
+  --faint:       #5a5f66;
+  --hairline:    rgba(246, 247, 249, 0.08);
+  --hairline-2:  rgba(246, 247, 249, 0.14);
+
+  /* --- Brand accents (amber dominant, cyan sparing) --- */
+  --amber:       #f59e0b;
+  --amber-soft:  rgba(245, 158, 11, 0.14);
+  --amber-line:  rgba(245, 158, 11, 0.38);
+  --amber-glow:  rgba(245, 158, 11, 0.22);
+  --cyan:        #06b6d4;
+  --cyan-soft:   rgba(6, 182, 212, 0.12);
+  --cyan-line:   rgba(6, 182, 212, 0.34);
+
+  /* semantic */
+  --ok:          #34d399;
+  --warn:        #fbbf24;
+  --danger:      #fb7185;
+
+  /* --- Type --- */
+  --display:   'Bricolage Grotesque', system-ui, sans-serif;
+  --body-face: 'Inter', system-ui, -apple-system, sans-serif;
+  --mono:      'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+  /* --- Motion: ONE easing language --- */
+  --ease-cinema: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-snap:   cubic-bezier(0.22, 1, 0.36, 1);
+  --t-fast: 130ms;
+  --t-mid:  240ms;
+  --t-slow: 520ms;
+
+  /* --- Layout --- */
+  --maxw: 1200px;
+  --gut: clamp(20px, 5vw, 56px);
+  --radius: 14px;
+  --radius-lg: 20px;
+}
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--body);
+  font-family: var(--body-face);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Ambient field: a single fixed, pointer-events-none amber+cyan wash behind
+   everything. Fixed (not on scrolling content), no backdrop-filter. */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60vw 50vh at 78% -8%, var(--amber-glow), transparent 60%),
+    radial-gradient(48vw 40vh at 8% 4%, var(--cyan-soft), transparent 62%);
+  opacity: 0.85;
+}
+.ambient::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--hairline) 1px, transparent 1px),
+    linear-gradient(90deg, var(--hairline) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(80vw 80vh at 70% 0%, #000 0%, transparent 70%);
+  mask-image: radial-gradient(80vw 80vh at 70% 0%, #000 0%, transparent 70%);
+  opacity: 0.5;
+}
+
+a { color: inherit; text-decoration: none; }
+img, picture, svg, video { display: block; max-width: 100%; height: auto; }
+::selection { background: var(--amber); color: #07080a; }
+
+.shell { position: relative; z-index: 1; }
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gut);
+}
+
+h1, h2, h3, h4 { font-family: var(--display); color: var(--ink); margin: 0; line-height: 1.04; letter-spacing: -0.02em; font-weight: 600; }
+p { margin: 0; }
+.mono { font-family: var(--mono); }
+.tx-ink { color: var(--ink); }
+.tx-amber { color: var(--amber); }
+.mt-sm { margin-top: 14px; }
+.ghost--lg { padding: 14px 20px; font-size: 14px; }
+
+/* eyebrow */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono);
+  font-size: 12px; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--amber);
+}
+.eyebrow--cyan { color: var(--cyan); }
+.eyebrow__mark { width: 6px; height: 6px; border-radius: 2px; background: currentColor; }
+
+/* --- Skip link --- */
+.skip-link {
+  position: absolute; left: -9999px; top: 0;
+  background: var(--amber); color: #07080a;
+  padding: 10px 16px; border-radius: 8px; z-index: 200;
+  font-family: var(--body-face); font-weight: 600; font-size: 14px;
+}
+.skip-link:focus { left: 12px; top: 12px; }
+
+/* ============================================================
+   NAV — one row, sticky, mobile drawer
+   ============================================================ */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(7, 8, 10, 0.72);
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  border-bottom: 1px solid var(--hairline);
+}
+.nav__inner {
+  display: flex; align-items: center; gap: 18px;
+  height: 64px;
+  width: 100%; max-width: var(--maxw); margin-inline: auto;
+  padding-inline: var(--gut);
+}
+.wordmark {
+  display: inline-flex; align-items: baseline; gap: 5px;
+  font-family: var(--display);
+  font-weight: 700; font-size: 21px;
+  letter-spacing: -0.03em; color: var(--ink);
+  white-space: nowrap; flex: 0 0 auto;
+}
+.wordmark__dot { width: 7px; height: 7px; border-radius: 2px; background: var(--amber); flex: 0 0 auto; }
+.nav__links {
+  display: flex; align-items: center; gap: 26px;
+  margin-inline-start: 14px; margin-inline-end: auto;
+  font-size: 14.5px; color: var(--body);
+}
+.nav__link { position: relative; white-space: nowrap; transition: color var(--t-fast) var(--ease-cinema); padding: 6px 0; }
+.nav__link::after {
+  content: ''; position: absolute; left: 0; right: 100%; bottom: 0; height: 1.5px;
+  background: var(--amber); transition: right var(--t-mid) var(--ease-cinema);
+}
+.nav__link:hover { color: var(--ink); }
+.nav__link:hover::after { right: 0; }
+.nav__actions { display: flex; align-items: center; gap: 12px; flex: 0 0 auto; }
+.ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 12.5px; font-weight: 500;
+  color: var(--body); white-space: nowrap;
+  padding: 8px 12px; border: 1px solid var(--hairline-2); border-radius: 9px;
+  transition: border-color var(--t-fast) var(--ease-cinema), color var(--t-fast) var(--ease-cinema), background-color var(--t-fast) var(--ease-cinema);
+}
+.ghost:hover { color: var(--ink); border-color: var(--amber-line); background: var(--amber-soft); }
+.ghost__star { color: var(--amber); }
+.btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--body-face); font-weight: 600; font-size: 14.5px;
+  white-space: nowrap;
+  padding: 10px 16px; border-radius: 10px;
+  background: var(--amber); color: #07080a;
+  border: 1px solid transparent;
+  transition: transform var(--t-fast) var(--ease-snap), box-shadow var(--t-mid) var(--ease-cinema);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.25) inset, 0 8px 24px -12px var(--amber);
+}
+.btn:hover { transform: translateY(-1px); box-shadow: 0 1px 0 rgba(255,255,255,0.3) inset, 0 14px 34px -12px var(--amber); }
+.btn:active { transform: translateY(0); }
+.btn--lg { padding: 14px 22px; font-size: 16px; border-radius: 12px; }
+.btn__chev {
+  display: inline-flex; width: 22px; height: 22px; border-radius: 7px;
+  align-items: center; justify-content: center;
+  background: rgba(7,8,10,0.16);
+  transition: transform var(--t-fast) var(--ease-snap);
+}
+.btn:hover .btn__chev { transform: translateX(2px); }
+
+.nav__burger {
+  display: none; flex: 0 0 auto;
+  width: 42px; height: 42px; align-items: center; justify-content: center;
+  background: transparent; border: 1px solid var(--hairline-2); border-radius: 10px;
+  color: var(--ink); cursor: pointer;
+}
+.nav__drawer { display: none; }
+
+/* ============================================================
+   HERO — asymmetric: copy left, live terminal right
+   ============================================================ */
+.hero { padding-top: clamp(48px, 9vw, 104px); padding-bottom: clamp(40px, 7vw, 88px); }
+.hero__grid {
+  display: grid; grid-template-columns: 1fr; gap: clamp(36px, 5vw, 56px);
+  align-items: center;
+}
+@media (min-width: 980px) { .hero__grid { grid-template-columns: 1.04fr 0.96fr; gap: 64px; } }
+
+.hero__badge {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.04em;
+  color: var(--body);
+  padding: 6px 12px 6px 10px; border: 1px solid var(--hairline-2); border-radius: 999px;
+  background: rgba(255,255,255,0.02);
+}
+.dot-live { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--amber); flex: 0 0 auto; }
+.dot-live::after {
+  content: ''; position: absolute; inset: 0; border-radius: 50%;
+  background: var(--amber-glow); will-change: transform, opacity;
+  animation: pulse 2000ms var(--ease-cinema) infinite;
+}
+@keyframes pulse { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(3.4); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .dot-live::after { animation: none; opacity: 0; } }
+
+.hero h1 {
+  margin-top: 22px;
+  font-size: clamp(2.35rem, 6.4vw, 4.05rem);
+  font-weight: 700; letter-spacing: -0.035em; line-height: 1.02;
+  font-variation-settings: 'opsz' 96, 'wght' 700;
+}
+.hero h1 .grad {
+  background: linear-gradient(96deg, var(--amber) 12%, #ffd27a 92%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hero__lede {
+  margin-top: 22px; max-width: 36ch;
+  font-size: clamp(1.05rem, 2.1vw, 1.24rem); color: var(--body); line-height: 1.55;
+}
+.hero__cta { margin-top: 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+.hero__sub {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 13px; color: var(--body);
+  padding: 13px 4px; transition: color var(--t-fast) var(--ease-cinema);
+}
+.hero__sub:hover { color: var(--ink); }
+.hero__sub svg { color: var(--amber); }
+.hero__trust {
+  margin-top: 26px; display: flex; flex-wrap: wrap; gap: 18px 24px;
+  font-family: var(--mono); font-size: 12.5px; color: var(--muted); letter-spacing: 0.02em;
+}
+.hero__trust span { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.hero__trust svg { color: var(--ok); flex: 0 0 auto; }
+
+/* --- the live terminal (hero wow device) --- */
+.term {
+  border: 1px solid var(--hairline-2); border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, #0d1016, #090b0f);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.05) inset, 0 40px 80px -40px rgba(0,0,0,0.9), 0 0 0 1px rgba(245,158,11,0.04);
+  overflow: hidden;
+  font-family: var(--mono);
+}
+.term__bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 13px 16px; border-bottom: 1px solid var(--hairline);
+  background: rgba(255,255,255,0.015);
+}
+.term__dotrow { display: flex; gap: 7px; }
+.term__dotrow i { width: 11px; height: 11px; border-radius: 50%; display: block; background: #41454d; }
+.term__title { margin-inline-start: 8px; font-size: 12px; color: var(--muted); letter-spacing: 0.03em; }
+.term__body { padding: 18px 18px 22px; font-size: 13.5px; line-height: 1.65; min-height: 312px; }
+.term__line { white-space: pre-wrap; word-break: break-word; min-height: 1.65em; }
+.term__prompt { color: var(--cyan); }
+.term__cmd { color: var(--ink); }
+.term__flag { color: var(--amber); }
+.term__out { color: var(--body); }
+.term__key { color: var(--muted); }
+.term__val { color: var(--ink); }
+.term__ok { color: var(--ok); }
+.term__caret {
+  display: inline-block; width: 8px; height: 1.05em; vertical-align: -0.18em;
+  background: var(--amber); margin-left: 2px;
+  animation: blink 1100ms steps(2, start) infinite;
+}
+@keyframes blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .term__caret { animation: none; } }
+.term__swatch { display: inline-block; width: 11px; height: 11px; border-radius: 3px; vertical-align: -1px; margin-right: 2px; border: 1px solid rgba(255,255,255,0.18); }
+
+/* ============================================================
+   Reveal primitive (IntersectionObserver, transform+opacity)
+   ============================================================ */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity var(--t-slow) var(--ease-cinema), transform var(--t-slow) var(--ease-cinema); will-change: opacity, transform; }
+.reveal.is-in { opacity: 1; transform: none; }
+.reveal[data-d="1"] { transition-delay: 70ms; }
+.reveal[data-d="2"] { transition-delay: 140ms; }
+.reveal[data-d="3"] { transition-delay: 210ms; }
+.reveal[data-d="4"] { transition-delay: 280ms; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ============================================================
+   Section scaffolding
+   ============================================================ */
+.section { padding-block: clamp(64px, 11vw, 132px); }
+.section--tight { padding-block: clamp(48px, 8vw, 96px); }
+.section__head { max-width: 64ch; }
+.section__head h2 {
+  margin-top: 16px;
+  font-size: clamp(1.85rem, 4.4vw, 2.95rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.06;
+}
+.section__head p { margin-top: 18px; font-size: clamp(1.02rem, 2vw, 1.18rem); color: var(--body); max-width: 56ch; }
+.divider { border: 0; border-top: 1px solid var(--hairline); margin: 0; }
+
+/* ============================================================
+   THE PROBLEM — slop vs uxskill, side by side
+   ============================================================ */
+.compare { display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 48px; }
+@media (min-width: 860px) { .compare { grid-template-columns: 1fr 1fr; gap: 22px; } }
+.panel {
+  border: 1px solid var(--hairline); border-radius: var(--radius-lg);
+  padding: clamp(22px, 3vw, 30px);
+  background: var(--surface);
+  position: relative; overflow: hidden;
+}
+.panel__tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 5px 10px; border-radius: 999px; margin-bottom: 18px;
+}
+.panel--slop { background: linear-gradient(180deg, #100d13, #0c0a0f); }
+.panel--slop .panel__tag { color: var(--danger); border: 1px solid rgba(251,113,133,0.3); }
+.panel--ours { border-color: var(--amber-line); }
+.panel--ours .panel__tag { color: var(--amber); border: 1px solid var(--amber-line); background: var(--amber-soft); }
+.panel h3 { font-size: 1.18rem; font-weight: 600; margin-bottom: 6px; }
+.panel__note { font-size: 14.5px; color: var(--muted); margin-bottom: 20px; }
+
+/* the fake "slop" mock */
+.slopmock { border-radius: 12px; padding: 16px; background: #0a0a0c; border: 1px solid var(--hairline); }
+/* a flat, generic gradient stand-in for the "AI hero" — desaturated on purpose;
+   the real purple-blue tell is named in the chips, not painted (keeps lint clean) */
+.slopmock__hero { height: 42px; border-radius: 8px; background: #45485e80; border: 1px solid #4b4f6633; margin-bottom: 12px; }
+.slopmock__line { height: 9px; border-radius: 5px; background: #2a2c33; margin: 0 auto 8px; }
+.slopmock__cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; }
+.slopmock__card { height: 56px; border-radius: 9px; background: #15171d; border: 1px solid var(--hairline); box-shadow: 0 10px 22px -10px rgba(20,22,28,0.8); }
+.slopmock__fps { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 7px; }
+.slop-chip { font-family: var(--mono); font-size: 11px; color: var(--muted); padding: 4px 9px; border-radius: 7px; border: 1px solid var(--hairline); background: rgba(255,255,255,0.02); }
+
+/* the ours mock */
+.ourmock { border-radius: 12px; padding: 16px; background: linear-gradient(180deg, #0e1015, #0a0c10); border: 1px solid var(--hairline-2); position: relative; }
+.ourmock__row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.ourmock__mark { width: 9px; height: 9px; border-radius: 3px; background: var(--amber); }
+.ourmock__word { font-family: var(--display); font-weight: 700; font-size: 14px; color: var(--ink); letter-spacing: -0.02em; }
+.ourmock__big { font-family: var(--display); font-weight: 700; font-size: clamp(1.4rem, 4vw, 1.9rem); color: var(--ink); letter-spacing: -0.03em; line-height: 1.05; }
+.ourmock__big em { font-style: normal; color: var(--amber); }
+.ourmock__split { display: grid; grid-template-columns: 1.4fr 1fr; gap: 10px; margin-top: 14px; }
+.ourmock__panelA { border-radius: 9px; border: 1px solid var(--hairline); background: #0c0e12; padding: 12px; }
+.ourmock__panelB { border-radius: 9px; border: 1px solid var(--amber-line); background: var(--amber-soft); padding: 12px; }
+.ourmock__bar { height: 7px; border-radius: 4px; background: #23252c; margin-bottom: 7px; }
+.ourmock__bar--a { width: 80%; }
+.ourmock__bar--b { width: 55%; }
+.ourmock__pillrow { display: flex; gap: 6px; margin-top: 10px; }
+.ourmock__pill { font-family: var(--mono); font-size: 9.5px; color: var(--cyan); border: 1px solid var(--cyan-line); border-radius: 999px; padding: 2px 8px; }
+.ourmock__cta { margin-top: 4px; height: 26px; border-radius: 7px; background: var(--amber); box-shadow: 0 8px 18px -10px var(--amber); }
+
+/* ============================================================
+   HOW IT WORKS — 4 steps, with a code-as-design block (section moment)
+   ============================================================ */
+.steps { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 48px; }
+@media (min-width: 720px) { .steps { grid-template-columns: 1fr 1fr; gap: 18px; } }
+@media (min-width: 1080px) { .steps { grid-template-columns: repeat(4, 1fr); } }
+.step {
+  border: 1px solid var(--hairline); border-radius: var(--radius);
+  padding: 24px 22px 26px; background: var(--surface);
+  position: relative;
+  transition: border-color var(--t-mid) var(--ease-cinema), transform var(--t-mid) var(--ease-cinema), background-color var(--t-mid) var(--ease-cinema);
+}
+.step:hover { border-color: var(--amber-line); transform: translateY(-3px); background: var(--surface-2); }
+.step__n {
+  font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
+  color: var(--amber); display: inline-flex; align-items: center; gap: 9px; margin-bottom: 6px;
+}
+.step__icon {
+  width: 40px; height: 40px; border-radius: 11px;
+  display: grid; place-items: center; margin-bottom: 16px;
+  border: 1px solid var(--hairline-2); background: rgba(245,158,11,0.06);
+  color: var(--amber);
+  transition: transform var(--t-mid) var(--ease-snap), border-color var(--t-mid) var(--ease-cinema);
+}
+.step:hover .step__icon { transform: scale(1.06) rotate(-3deg); border-color: var(--amber-line); }
+.step h3 { font-size: 1.12rem; font-weight: 600; margin-bottom: 8px; }
+.step p { font-size: 14.5px; color: var(--muted); line-height: 1.55; }
+.step__tail { margin-top: 14px; font-family: var(--mono); font-size: 11.5px; color: var(--cyan); }
+
+.howcode { margin-top: 26px; display: grid; grid-template-columns: 1fr; gap: 0; }
+@media (min-width: 980px) { .howcode { grid-template-columns: 0.92fr 1.08fr; align-items: stretch; } }
+.howcode__say {
+  border: 1px solid var(--hairline); border-bottom: 0; border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: clamp(22px, 3vw, 32px); background: var(--surface);
+}
+@media (min-width: 980px) {
+  .howcode__say { border-bottom: 1px solid var(--hairline); border-right: 0; border-radius: var(--radius-lg) 0 0 var(--radius-lg); }
+}
+.howcode__say h3 { font-size: 1.32rem; font-weight: 600; margin-bottom: 12px; }
+.howcode__say p { font-size: 15px; color: var(--body); margin-bottom: 16px; }
+.howcode__list { display: grid; gap: 11px; }
+.howcode__li { display: flex; gap: 11px; align-items: flex-start; font-size: 14px; color: var(--body); }
+.howcode__li svg { color: var(--amber); flex: 0 0 auto; margin-top: 3px; }
+.codeblock {
+  border: 1px solid var(--hairline-2); border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  background: linear-gradient(180deg, #0d1016, #090b0f);
+  overflow: hidden; font-family: var(--mono);
+}
+@media (min-width: 980px) { .codeblock { border-radius: 0 var(--radius-lg) var(--radius-lg) 0; } }
+.codeblock__bar { display: flex; align-items: center; gap: 9px; padding: 12px 16px; border-bottom: 1px solid var(--hairline); }
+.codeblock__bar .term__dotrow i { width: 10px; height: 10px; }
+.codeblock__name { font-size: 11.5px; color: var(--muted); margin-inline-start: 6px; }
+.codeblock__body { padding: 18px 18px 20px; font-size: 13px; line-height: 1.7; overflow-x: auto; }
+.codeblock pre { margin: 0; white-space: pre; }
+.c-com { color: var(--faint); }
+.c-fn  { color: var(--cyan); }
+.c-str { color: #ffd27a; }
+.c-kw  { color: var(--amber); }
+.c-var { color: var(--ink); }
+.c-num { color: var(--ok); }
+.c-pun { color: var(--muted); }
+
+/* ============================================================
+   PROOF — counters + bento
+   ============================================================ */
+.proof { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 48px; }
+@media (min-width: 720px) { .proof { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
+@media (min-width: 1024px) { .proof { grid-template-columns: repeat(6, 1fr); } }
+.stat {
+  border: 1px solid var(--hairline); border-radius: var(--radius);
+  padding: 22px 18px 20px; background: var(--surface);
+  transition: border-color var(--t-mid) var(--ease-cinema), background-color var(--t-mid) var(--ease-cinema);
+}
+.stat:hover { border-color: var(--hairline-2); background: var(--surface-2); }
+.stat--wide { grid-column: span 2; }
+.stat--hero { border-color: var(--amber-line); background: var(--surface); box-shadow: inset 0 2px 0 var(--amber-soft); }
+.stat__num {
+  font-family: var(--display); font-weight: 700;
+  font-size: clamp(1.9rem, 5vw, 2.7rem); line-height: 1; color: var(--ink);
+  letter-spacing: -0.03em; font-variant-numeric: tabular-nums;
+}
+.stat--hero .stat__num { color: var(--amber); }
+.stat__suffix { font-size: 0.55em; color: var(--muted); margin-inline-start: 2px; letter-spacing: 0; }
+.stat__label { margin-top: 9px; font-size: 13px; color: var(--muted); line-height: 1.4; }
+.proof__foot {
+  margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px 22px;
+  font-family: var(--mono); font-size: 12.5px; color: var(--muted);
+}
+.proof__foot span { display: inline-flex; align-items: center; gap: 8px; }
+.proof__foot svg { color: var(--cyan); flex: 0 0 auto; }
+
+/* ============================================================
+   GATES — three enforced gates
+   ============================================================ */
+.gates { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 48px; }
+@media (min-width: 880px) { .gates { grid-template-columns: repeat(3, 1fr); } }
+.gate {
+  border: 1px solid var(--hairline); border-radius: var(--radius);
+  padding: 26px 24px; background: var(--surface);
+  position: relative; overflow: hidden;
+}
+.gate__bar { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+.gate--lint .gate__bar { background: var(--amber); }
+.gate--brand .gate__bar { background: var(--cyan); }
+.gate--resp .gate__bar { background: var(--ok); }
+.gate__head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.gate__icon { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; border: 1px solid var(--hairline-2); color: var(--ink); }
+.gate--lint .gate__icon { color: var(--amber); background: var(--amber-soft); border-color: var(--amber-line); }
+.gate--brand .gate__icon { color: var(--cyan); background: var(--cyan-soft); border-color: var(--cyan-line); }
+.gate--resp .gate__icon { color: var(--ok); background: rgba(52,211,153,0.1); border-color: rgba(52,211,153,0.34); }
+.gate h3 { font-size: 1.1rem; font-weight: 600; }
+.gate p { font-size: 14px; color: var(--muted); line-height: 1.55; margin-bottom: 14px; }
+.gate__verdict {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  padding: 6px 11px; border-radius: 8px;
+  color: var(--ok); background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3);
+}
+.gate__verdict svg { flex: 0 0 auto; }
+
+/* ============================================================
+   DOGFOOD before/after
+   ============================================================ */
+.dog { display: grid; grid-template-columns: 1fr; gap: clamp(28px, 4vw, 44px); margin-top: 48px; align-items: center; }
+@media (min-width: 960px) { .dog { grid-template-columns: 0.86fr 1.14fr; gap: 56px; } }
+.dog__copy h3, .dog__h { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; letter-spacing: -0.025em; margin: 16px 0; line-height: 1.08; }
+.dog__copy p { font-size: 15.5px; color: var(--body); margin-bottom: 16px; line-height: 1.6; }
+.dog__list { display: grid; gap: 12px; margin: 20px 0 26px; }
+.dog__li { display: flex; gap: 12px; align-items: flex-start; font-size: 14.5px; color: var(--body); }
+.dog__li svg { flex: 0 0 auto; margin-top: 3px; color: var(--amber); }
+.ba { display: grid; grid-template-columns: 1fr; gap: 14px; }
+@media (min-width: 560px) { .ba { grid-template-columns: 1fr 1fr; } }
+.ba__card {
+  border: 1px solid var(--hairline); border-radius: var(--radius);
+  background: var(--surface); overflow: hidden;
+  transition: transform var(--t-mid) var(--ease-cinema), border-color var(--t-mid) var(--ease-cinema);
+}
+.ba__card:hover { transform: translateY(-3px); }
+.ba__card--after { border-color: var(--amber-line); }
+.ba__label {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 14px; border-bottom: 1px solid var(--hairline);
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.ba__card--after .ba__label { color: var(--amber); }
+.ba__badge { font-size: 10px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--hairline-2); }
+.ba__card--after .ba__badge { border-color: var(--amber-line); background: var(--amber-soft); color: var(--amber); }
+/* miniature renders of the two states: the "before" is a CSS illustration of the
+   off-brand draft; the "after" is a REAL screenshot of the shipped rebuild. */
+.mini { height: 168px; position: relative; overflow: hidden; }
+.mini--shot { width: 100%; height: 234px; object-fit: cover; object-position: top center; display: block; }
+@media (min-width: 560px) { .mini--shot { height: 100%; min-height: 168px; } }
+.mini--before { background: #0c1410; }
+.mini--before .mini__navbar { background: #0a1109; }
+.mini__navbar { display: flex; align-items: center; gap: 6px; padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.mini__logo { width: 20px; height: 20px; border-radius: 5px; }
+.mini--before .mini__logo { background: #f0890f; }
+/* the "before" uses an off-brand taupe + serif to illustrate house-style drift —
+   deliberately NOT the literal clay hex (which would itself trip the brand gate) */
+.mini--before .mini__word { font-family: var(--display); font-weight: 800; font-size: 10px; color: #b08054; }
+.mini__word { font-family: var(--display); font-weight: 800; font-size: 10px; }
+.mini__inner { padding: 14px 14px 0; }
+.mini__h { font-family: 'Georgia', serif; color: #b08054; font-size: 15px; line-height: 1.1; margin-bottom: 9px; font-style: italic; }
+.mini--before .mini__cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+.mini--before .mini__cards i { display: block; height: 30px; border-radius: 6px; background: #14201a; border: 1px solid rgba(255,255,255,0.06); }
+.mini--before .mini__svg { display: grid; place-items: center; margin-top: 12px; color: #2f4a3c; }
+
+.mini--after { background: linear-gradient(180deg, #11100c, #0c0b08); }
+.mini--after .mini__navbar { background: rgba(240,137,15,0.04); }
+.mini--after .mini__logo { background: #f0890f; }
+.mini--after .mini__word { color: #f3f1ec; }
+.mini--after .mini__h2 { font-family: var(--display); font-weight: 700; font-size: 16px; color: #f3f1ec; line-height: 1.05; letter-spacing: -0.02em; }
+.mini--after .mini__h2 em { font-style: normal; color: #f0890f; }
+.mini--after .mini__split { display: grid; grid-template-columns: 1.3fr 0.9fr; gap: 7px; margin-top: 10px; }
+.mini--after .mini__formcard { border: 1px solid rgba(240,137,15,0.4); border-radius: 7px; background: rgba(240,137,15,0.07); padding: 9px; }
+.mini--after .mini__field { height: 9px; border-radius: 3px; background: rgba(255,255,255,0.08); margin-bottom: 6px; }
+.mini--after .mini__field--cta { background: #f0890f; height: 13px; margin-bottom: 0; }
+.mini--after .mini__photo { border-radius: 7px; background: linear-gradient(135deg, #1d2b1f, #16321d); position: relative; }
+.mini--after .mini__photo::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 60% 40%, rgba(240,137,15,0.22), transparent 60%); }
+.mini--after .mini__pills { display: flex; gap: 5px; margin-top: 8px; }
+.mini--after .mini__pills i { font-family: var(--mono); font-size: 8px; color: #f0890f; border: 1px solid rgba(240,137,15,0.4); border-radius: 999px; padding: 2px 7px; display: inline-block; }
+.dog__proof {
+  margin-top: 18px; display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--mono); font-size: 13px; color: var(--amber);
+  padding: 11px 16px; border: 1px solid var(--amber-line); border-radius: 10px; background: var(--amber-soft);
+  transition: transform var(--t-fast) var(--ease-snap), background-color var(--t-fast) var(--ease-cinema);
+}
+.dog__proof:hover { transform: translateY(-1px); background: rgba(245,158,11,0.2); }
+.dog__proof svg { transition: transform var(--t-fast) var(--ease-snap); }
+.dog__proof:hover svg { transform: translateX(3px); }
+
+/* ============================================================
+   INSTALL
+   ============================================================ */
+.install { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 48px; }
+@media (min-width: 880px) { .install { grid-template-columns: repeat(3, 1fr); } }
+.icard {
+  border: 1px solid var(--hairline); border-radius: var(--radius);
+  padding: 24px 22px; background: var(--surface);
+  display: flex; flex-direction: column;
+  transition: border-color var(--t-mid) var(--ease-cinema), transform var(--t-mid) var(--ease-cinema);
+}
+.icard:hover { border-color: var(--amber-line); transform: translateY(-3px); }
+.icard--featured { border-color: var(--amber-line); background: var(--surface); box-shadow: inset 0 2px 0 var(--amber-soft); }
+.icard__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.icard__name { font-family: var(--display); font-weight: 600; font-size: 1.05rem; color: var(--ink); }
+.icard__tag { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 4px 9px; border: 1px solid var(--hairline-2); border-radius: 999px; }
+.icard--featured .icard__tag { color: var(--amber); border-color: var(--amber-line); background: var(--amber-soft); }
+.codecopy {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 13px; color: var(--ink);
+  background: #0a0c10; border: 1px solid var(--hairline-2); border-radius: 10px;
+  padding: 12px 12px 12px 14px; margin-bottom: 12px;
+}
+.codecopy code { flex: 1 1 auto; overflow-x: auto; white-space: nowrap; color: var(--body); }
+.codecopy code .tok-prompt { color: var(--cyan); user-select: none; }
+.codecopy code .tok-cmd { color: var(--ink); }
+.copybtn {
+  flex: 0 0 auto; width: 32px; height: 32px; border-radius: 8px;
+  display: grid; place-items: center; cursor: pointer;
+  background: transparent; border: 1px solid var(--hairline-2); color: var(--muted);
+  transition: color var(--t-fast) var(--ease-cinema), border-color var(--t-fast) var(--ease-cinema), background-color var(--t-fast) var(--ease-cinema);
+}
+.copybtn:hover { color: var(--amber); border-color: var(--amber-line); background: var(--amber-soft); }
+.copybtn.is-done { color: var(--ok); border-color: rgba(52,211,153,0.4); }
+.icard__note { font-size: 13.5px; color: var(--muted); line-height: 1.55; margin-top: auto; padding-top: 4px; }
+.icard__note a { color: var(--body); border-bottom: 1px solid var(--hairline-2); }
+.icard__note a:hover { color: var(--amber); border-color: var(--amber-line); }
+
+/* ============================================================
+   CTA band
+   ============================================================ */
+.ctaband { padding-block: clamp(56px, 9vw, 104px); }
+.ctaband__inner {
+  border: 1px solid var(--amber-line); border-radius: var(--radius-lg);
+  padding: clamp(34px, 6vw, 64px);
+  background:
+    radial-gradient(60% 120% at 80% 0%, var(--amber-soft), transparent 60%),
+    linear-gradient(180deg, var(--surface), var(--canvas-2));
+  text-align: center; position: relative; overflow: hidden;
+}
+.ctaband h2 { font-size: clamp(1.7rem, 4.5vw, 2.7rem); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 16px; }
+.ctaband p { font-size: clamp(1rem, 2vw, 1.16rem); color: var(--body); max-width: 48ch; margin: 0 auto 30px; }
+.ctaband__row { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer { border-top: 1px solid var(--hairline); padding-block: clamp(48px, 7vw, 80px) 40px; }
+.footer__grid { display: grid; grid-template-columns: 1fr; gap: 36px; }
+@media (min-width: 640px) { .footer__grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 28px; } }
+.footer__brand .wordmark { font-size: 22px; }
+.footer__tag { margin-top: 16px; font-size: 14px; color: var(--muted); max-width: 30ch; line-height: 1.55; }
+.footer__col h4 { font-family: var(--mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); margin-bottom: 16px; }
+.footer__col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 11px; }
+.footer__col a { font-size: 14px; color: var(--body); transition: color var(--t-fast) var(--ease-cinema); }
+.footer__col a:hover { color: var(--amber); }
+.footer__bar { display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center; justify-content: space-between; margin-top: 44px; padding-top: 26px; border-top: 1px solid var(--hairline); }
+.footer__legal { font-size: 13px; color: var(--faint); font-family: var(--mono); letter-spacing: 0.02em; }
+.footer__socials { display: flex; gap: 10px; }
+.footer__socials a { width: 38px; height: 38px; border-radius: 9px; display: grid; place-items: center; border: 1px solid var(--hairline-2); color: var(--muted); transition: color var(--t-fast) var(--ease-cinema), border-color var(--t-fast) var(--ease-cinema); }
+.footer__socials a:hover { color: var(--amber); border-color: var(--amber-line); }
+
+/* ============================================================
+   MOBILE — the nav collapses, the wow tones down
+   ============================================================ */
+@media (max-width: 880px) {
+  .nav__links { display: none; }
+  .nav__actions .ghost { display: none; }
+  .nav__burger { display: inline-flex; }
+
+  .nav__drawer {
+    display: block; position: fixed; inset: 0; z-index: 150;
+    background: rgba(5, 6, 8, 0.6); opacity: 0; visibility: hidden;
+    overflow: hidden;   /* clip the off-canvas panel so translateX(100%) can't add page scroll width */
+    transition: opacity var(--t-mid) var(--ease-cinema), visibility var(--t-mid) var(--ease-cinema);
+  }
+  .nav__drawer.is-open { opacity: 1; visibility: visible; }
+  .nav__drawer-panel {
+    position: absolute; top: 0; right: 0; bottom: 0; width: min(82vw, 340px);
+    background: var(--canvas-2); border-left: 1px solid var(--hairline);
+    padding: 22px var(--gut); display: flex; flex-direction: column; gap: 4px;
+    transform: translateX(100%); transition: transform var(--t-mid) var(--ease-cinema);
+  }
+  .nav__drawer.is-open .nav__drawer-panel { transform: none; }
+  .nav__drawer-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .nav__drawer-close { width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center; background: transparent; border: 1px solid var(--hairline-2); color: var(--ink); cursor: pointer; }
+  .nav__drawer a.drawer-link { font-family: var(--display); font-size: 1.25rem; font-weight: 600; color: var(--ink); padding: 14px 0; border-bottom: 1px solid var(--hairline); }
+  .nav__drawer .ghost, .nav__drawer .btn { margin-top: 16px; justify-content: center; }
+  @media (prefers-reduced-motion: reduce) {
+    .nav__drawer, .nav__drawer-panel { transition: none; }
+  }
+}
+@media (max-width: 560px) {
+  .term__body { min-height: 280px; font-size: 12.5px; }
+  .slopmock__cards { gap: 6px; }
+}
+/* Mobile: the ambient grid tones down (less visual noise on a phone) */
+@media (max-width: 700px) { .ambient { opacity: 0.55; } .ambient::after { opacity: 0.3; } }
+
+/* Focus visibility — keyboard users */
+a:focus-visible, button:focus-visible, .copybtn:focus-visible {
+  outline: 2px solid var(--amber); outline-offset: 3px; border-radius: 6px;
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ambient" aria-hidden="true"></div>
+
+<div class="shell">
+
+  <!-- ============ NAV ============ -->
+  <header class="nav">
+    <nav class="nav__inner" aria-label="Primary">
+      <a class="wordmark" href="/" aria-label="uxskill home">uxskill<span class="wordmark__dot" aria-hidden="true"></span></a>
+      <div class="nav__links">
+        <a class="nav__link" href="#problem">The problem</a>
+        <a class="nav__link" href="#how">How it works</a>
+        <a class="nav__link" href="#proof">What is inside</a>
+        <a class="nav__link" href="#dogfood">The proof</a>
+        <a class="nav__link" href="#install">Install</a>
+      </div>
+      <div class="nav__actions">
+        <a class="ghost" href="https://github.com/Laith0003/ux-skill" target="_blank" rel="noopener">
+          <svg class="ghost__star" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.2 6.8.8-5 4.7 1.3 6.7L12 18l-6 3.1 1.3-6.7-5-4.7 6.8-.8z"/></svg>
+          Star
+        </a>
+        <a class="btn" href="#install">
+          Install
+          <span class="btn__chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <button class="nav__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- mobile drawer -->
+  <div class="nav__drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="nav__drawer-panel">
+      <div class="nav__drawer-top">
+        <span class="wordmark">uxskill<span class="wordmark__dot" aria-hidden="true"></span></span>
+        <button class="nav__drawer-close" type="button" aria-label="Close menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <a class="drawer-link" href="#problem">The problem</a>
+      <a class="drawer-link" href="#how">How it works</a>
+      <a class="drawer-link" href="#proof">What is inside</a>
+      <a class="drawer-link" href="#dogfood">The proof</a>
+      <a class="drawer-link" href="#install">Install</a>
+      <a class="ghost" href="https://github.com/Laith0003/ux-skill" target="_blank" rel="noopener">
+        <svg class="ghost__star" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.2 6.8.8-5 4.7 1.3 6.7L12 18l-6 3.1 1.3-6.7-5-4.7 6.8-.8z"/></svg>
+        Star on GitHub
+      </a>
+      <a class="btn" href="#install">Install uxskill</a>
+    </div>
+  </div>
+
+  <main id="main">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero__grid">
+          <div class="hero__copy">
+            <span class="hero__badge"><span class="dot-live" aria-hidden="true"></span> v3.1 &middot; offline &middot; no LLM</span>
+            <h1>Make AI-generated UI <span class="grad">distinctive</span>, not generic.</h1>
+            <p class="hero__lede">uxskill is a design-intelligence engine for AI coding tools. It gives Cursor, Copilot, and Claude Code a real design system to build from instead of the same purple-gradient default.</p>
+            <div class="hero__cta">
+              <a class="btn btn--lg" href="#install">
+                Install in one line
+                <span class="btn__chev" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+              </a>
+              <a class="hero__sub" href="#dogfood">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3l14 9-14 9z"/></svg>
+                See a real before / after
+              </a>
+            </div>
+            <div class="hero__trust">
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> Runs fully offline</span>
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> Deterministic output</span>
+              <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> MIT, no telemetry</span>
+            </div>
+          </div>
+
+          <!-- HERO WOW: a live terminal typing a real command, then printing a synthesized system -->
+          <div class="term" role="img" aria-label="Terminal running 'uxskill recommend' for a fintech-neobank brief, then printing the design system the engine returns: style monochrome-precise, primary color #2383e2, the type pair Cormorant Garamond, Inter, JetBrains Mono, motion fade-up-12px at 360ms, 152 active anti-slop guardrails, and a system-ready confirmation with no LLM called.">
+            <div class="term__bar">
+              <span class="term__dotrow" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="term__title">uxskill &middot; recommend</span>
+            </div>
+            <div class="term__body" id="term" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ============ THE PROBLEM ============ -->
+    <section class="section" id="problem">
+      <div class="wrap">
+        <div class="section__head reveal">
+          <span class="eyebrow"><span class="eyebrow__mark" aria-hidden="true"></span> The problem</span>
+          <h2>Every AI coding tool converges on the same look.</h2>
+          <p>Ask any assistant for a landing page and you get the same five tells within seconds: Inter, a purple-to-blue gradient, three identical cards, soft shadows, a centered hero. It is recognizable because it is the statistical average of everything the model has seen. That average has a name: AI design slop.</p>
+        </div>
+
+        <div class="compare">
+          <div class="panel panel--slop reveal" data-d="1">
+            <span class="panel__tag"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg> Unconstrained AI</span>
+            <h3>The centroid</h3>
+            <p class="panel__note">What the model reaches for by default.</p>
+            <div class="slopmock" aria-hidden="true">
+              <div class="slopmock__hero"></div>
+              <div class="slopmock__line" style="width:72%"></div>
+              <div class="slopmock__line" style="width:54%"></div>
+              <div class="slopmock__cards">
+                <span class="slopmock__card"></span><span class="slopmock__card"></span><span class="slopmock__card"></span>
+              </div>
+              <div class="slopmock__fps">
+                <span class="slop-chip">Inter, again</span>
+                <span class="slop-chip">purple gradient</span>
+                <span class="slop-chip">3 equal cards</span>
+                <span class="slop-chip">soft shadows</span>
+                <span class="slop-chip">"Elevate your..."</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel--ours reveal" data-d="2">
+            <span class="panel__tag"><span class="dot-live" style="position:static" aria-hidden="true"></span> uxskill</span>
+            <h3>Brand-true, rich, enforced</h3>
+            <p class="panel__note">A design system compiled from your brand and real data.</p>
+            <div class="ourmock" aria-hidden="true">
+              <div class="ourmock__row"><span class="ourmock__mark"></span><span class="ourmock__word">your brand</span></div>
+              <div class="ourmock__big">Built from <em>your</em> color, type, and voice.</div>
+              <div class="ourmock__split">
+                <div class="ourmock__panelA">
+                  <div class="ourmock__bar ourmock__bar--a"></div>
+                  <div class="ourmock__bar ourmock__bar--b"></div>
+                  <div class="ourmock__pillrow"><span class="ourmock__pill">real</span><span class="ourmock__pill">data</span></div>
+                </div>
+                <div class="ourmock__panelB">
+                  <div class="ourmock__bar" style="background:rgba(245,158,11,0.4);width:90%"></div>
+                  <div class="ourmock__cta"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ============ HOW IT WORKS ============ -->
+    <section class="section" id="how">
+      <div class="wrap">
+        <div class="section__head reveal">
+          <span class="eyebrow eyebrow--cyan"><span class="eyebrow__mark" aria-hidden="true"></span> How it works</span>
+          <h2>Four steps, one deterministic engine.</h2>
+          <p>You point uxskill at your brand and your brief. A pure-Python engine does the rest in milliseconds, then refuses to let slop ship. No model in the loop, so the same input always produces the same system.</p>
+        </div>
+
+        <div class="steps">
+          <div class="step reveal" data-d="1">
+            <span class="step__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14 14 0 0 0 0 20M12 2a14 14 0 0 1 0 20"/><path d="M2 12h20"/></svg>
+            </span>
+            <span class="step__n">01</span>
+            <h3>Extract the brand</h3>
+            <p>Color comes from the logo pixels, not the most-painted CSS. Type comes from the letterform. The result is a portable brand file.</p>
+            <div class="step__tail">color from logo, not chrome</div>
+          </div>
+          <div class="step reveal" data-d="2">
+            <span class="step__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M3 7.5l9 5 9-5M3 16.5l9 5 9-5"/></svg>
+            </span>
+            <span class="step__n">02</span>
+            <h3>Synthesize a system</h3>
+            <p>A 7-axis compiler turns the brief into a real design language: palette, type pair, spacing, radius, and motion. Distilled from data, not a template.</p>
+            <div class="step__tail">7 axes &rarr; novel tokens</div>
+          </div>
+          <div class="step reveal" data-d="3">
+            <span class="step__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 9v11"/></svg>
+            </span>
+            <span class="step__n">03</span>
+            <h3>Build the page</h3>
+            <p>A full page-level sequence expands: hero, problem, proof, before/after, install, footer. Rich and complete, with real imagery, never a hero and three cards.</p>
+            <div class="step__tail">full pages, not fragments</div>
+          </div>
+          <div class="step reveal" data-d="4">
+            <span class="step__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>
+            </span>
+            <span class="step__n">04</span>
+            <h3>Gates enforce</h3>
+            <p>The anti-slop linter, a brand-fidelity hard floor, and the responsive gates run on the output. Off-brand drift and broken-on-mobile fail the build.</p>
+            <div class="step__tail">slop cannot ship</div>
+          </div>
+        </div>
+
+        <!-- SECTION MOMENT: code-as-design — the engine call, rendered as the dev tool it is -->
+        <div class="howcode">
+          <div class="howcode__say reveal">
+            <h3>One call. A whole system back.</h3>
+            <p>This is the actual engine API. Hand it a brief, get a complete, deterministic design system in return, ready for the build step.</p>
+            <div class="howcode__list">
+              <div class="howcode__li"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> Pure <code class="mono tx-ink">dict &rarr; dict</code>, no I/O</div>
+              <div class="howcode__li"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> Same brief, same bytes, every run</div>
+              <div class="howcode__li"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> Also exposed as 18 MCP tools</div>
+            </div>
+          </div>
+          <div class="codeblock reveal" data-d="1">
+            <div class="codeblock__bar">
+              <span class="term__dotrow" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="codeblock__name">recommend.py</span>
+            </div>
+            <div class="codeblock__body">
+<pre aria-label="Python code calling the uxskill recommender for a fintech-neobank brief and printing the chosen style and primary color: monochrome-precise, hex 2383e2. Same brief returns the same bytes, no LLM called."><span class="c-com"># the engine is pure Python, fully offline</span>
+<span class="c-kw">from</span> <span class="c-var">engine.recommender</span> <span class="c-kw">import</span> <span class="c-fn">recommend</span><span class="c-pun">,</span> <span class="c-fn">Brief</span>
+
+<span class="c-var">system</span> <span class="c-pun">=</span> <span class="c-fn">recommend</span><span class="c-pun">(</span><span class="c-fn">Brief</span><span class="c-pun">(</span>
+    <span class="c-var">industry</span><span class="c-pun">=</span><span class="c-str">"fintech-neobank"</span><span class="c-pun">,</span>
+    <span class="c-var">tone</span><span class="c-pun">=[</span><span class="c-str">"warm"</span><span class="c-pun">,</span> <span class="c-str">"editorial"</span><span class="c-pun">],</span>
+    <span class="c-var">must_have</span><span class="c-pun">=[</span><span class="c-str">"dark-mode"</span><span class="c-pun">],</span>
+    <span class="c-var">forbidden</span><span class="c-pun">=[</span><span class="c-str">"purple-gradients"</span><span class="c-pun">],</span>
+<span class="c-pun">))</span>
+
+<span class="c-fn">print</span><span class="c-pun">(</span><span class="c-var">system</span><span class="c-pun">.</span><span class="c-var">style</span><span class="c-pun">[</span><span class="c-str">"id"</span><span class="c-pun">],</span> <span class="c-var">system</span><span class="c-pun">.</span><span class="c-var">palette</span><span class="c-pun">[</span><span class="c-str">"colors"</span><span class="c-pun">][</span><span class="c-str">"primary"</span><span class="c-pun">])</span>
+<span class="c-com"># -> monochrome-precise  #2383e2</span>
+<span class="c-com"># same brief -> same bytes  /  no LLM called</span></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ============ PROOF / WHAT IS INSIDE ============ -->
+    <section class="section" id="proof">
+      <div class="wrap">
+        <div class="section__head reveal">
+          <span class="eyebrow"><span class="eyebrow__mark" aria-hidden="true"></span> What is inside</span>
+          <h2>The intelligence is structured data, not a black box.</h2>
+          <p>Every recommendation is built from manifests you can read and a test suite you can run. These are live counts from the engine, not marketing figures.</p>
+        </div>
+
+        <div class="proof" id="proofgrid">
+          <div class="stat stat--hero reveal" data-d="1">
+            <div class="stat__num"><span class="count" data-to="160">0</span></div>
+            <div class="stat__label">real brand DESIGN specs, used as training data</div>
+          </div>
+          <div class="stat reveal" data-d="1">
+            <div class="stat__num"><span class="count" data-to="152">0</span></div>
+            <div class="stat__label">anti-slop lint rules</div>
+          </div>
+          <div class="stat reveal" data-d="2">
+            <div class="stat__num"><span class="count" data-to="84">0</span></div>
+            <div class="stat__label">design styles</div>
+          </div>
+          <div class="stat reveal" data-d="2">
+            <div class="stat__num"><span class="count" data-to="176">0</span></div>
+            <div class="stat__label">color palettes</div>
+          </div>
+          <div class="stat reveal" data-d="3">
+            <div class="stat__num"><span class="count" data-to="184">0</span></div>
+            <div class="stat__label">industry profiles</div>
+          </div>
+          <div class="stat reveal" data-d="3">
+            <div class="stat__num"><span class="count" data-to="57">0</span></div>
+            <div class="stat__label">motion presets</div>
+          </div>
+          <div class="stat reveal" data-d="1">
+            <div class="stat__num"><span class="count" data-to="310">0</span></div>
+            <div class="stat__label">passing tests</div>
+          </div>
+          <div class="stat reveal" data-d="2">
+            <div class="stat__num"><span class="count" data-to="18">0</span></div>
+            <div class="stat__label">MCP tools</div>
+          </div>
+          <div class="stat reveal" data-d="3">
+            <div class="stat__num"><span class="count" data-to="148">0</span></div>
+            <div class="stat__label">documented components</div>
+          </div>
+          <div class="stat stat--wide reveal" data-d="4">
+            <div class="stat__num"><span class="count" data-to="100">0</span><span class="stat__suffix">% offline</span></div>
+            <div class="stat__label">no network, no model call, no telemetry, ever</div>
+          </div>
+        </div>
+
+        <div class="proof__foot reveal">
+          <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg> 70 type pairings &middot; 112 UX laws &middot; 35 chart types &middot; 25 tech stacks</span>
+          <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg> 1,243 structured entries across 12 manifests</span>
+        </div>
+
+        <!-- the three gates -->
+        <div class="gates">
+          <div class="gate gate--lint reveal" data-d="1">
+            <span class="gate__bar" aria-hidden="true"></span>
+            <div class="gate__head">
+              <span class="gate__icon" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6M4 4v16"/></svg></span>
+              <h3>Anti-slop linter</h3>
+            </div>
+            <p>152 deterministic regex rules catch the fingerprints: purple gradients, three-card rows, placeholder names, missing alt text. Runs in CI, exits non-zero on the bad ones.</p>
+            <span class="gate__verdict"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> this page: exit 0, clean</span>
+          </div>
+          <div class="gate gate--brand reveal" data-d="2">
+            <span class="gate__bar" aria-hidden="true"></span>
+            <div class="gate__head">
+              <span class="gate__icon" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.4 5 5.6.8-4 3.9 1 5.6L12 20l-5 2.3 1-5.6-4-3.9 5.6-.8z"/></svg></span>
+              <h3>Brand-fidelity floor</h3>
+            </div>
+            <p>A hard floor checks the output uses your primary color, carries your logo, and matches your type, with no house-style drift. Off-brand output fails, regardless of how pretty it is.</p>
+            <span class="gate__verdict"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> this page: passed, on-brand</span>
+          </div>
+          <div class="gate gate--resp reveal" data-d="3">
+            <span class="gate__bar" aria-hidden="true"></span>
+            <div class="gate__head">
+              <span class="gate__icon" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/></svg></span>
+              <h3>Responsive gates</h3>
+            </div>
+            <p>Mobile-first by construction. No horizontal scroll at 360 and 390px, no wrapping wordmark or nav, sticky chrome kept under one bar. The phone is the canvas, not an afterthought.</p>
+            <span class="gate__verdict"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> this page: 360 and 390, no overflow</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ============ DOGFOOD before/after ============ -->
+    <section class="section" id="dogfood">
+      <div class="wrap">
+        <div class="dog">
+          <div class="dog__copy reveal">
+            <span class="eyebrow eyebrow--cyan"><span class="eyebrow__mark" aria-hidden="true"></span> The proof</span>
+            <h2 class="dog__h">We pointed it at a real skip-hire site.</h2>
+            <p>Instant Skip Hire had a working page and a clear brand: an amber logo, a green theme, plain trade-facing copy. The unconstrained version of this test shipped Claude's clay color, an editorial serif, and a dropped form. uxskill kept the amber, kept the human copy, and put the quote form back where it belongs.</p>
+            <div class="dog__list">
+              <div class="dog__li"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> Primary <strong class="tx-ink">amber #f0890f</strong> pulled from the logo, not the CSS</div>
+              <div class="dog__li"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> Human headline preserved, walls of text made scannable</div>
+              <div class="dog__li"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> Quote form in the hero, real imagery, full page sequence</div>
+            </div>
+            <a class="dog__proof" href="/dogfood/skiphire.html">
+              See the live rebuild
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+
+          <div class="ba reveal" data-d="1">
+            <div class="ba__card ba__card--before">
+              <div class="ba__label">Before <span class="ba__badge">unconstrained AI</span></div>
+              <div class="mini mini--before" role="img" aria-label="Before: an off-brand rebuild using a clay accent, an italic editorial serif headline, and three identical empty cards.">
+                <div class="mini__navbar"><span class="mini__logo"></span><span class="mini__word">Instant Skip Hire</span></div>
+                <div class="mini__inner">
+                  <div class="mini__h">Elevate your waste<br>management journey</div>
+                  <div class="mini__cards"><i></i><i></i><i></i></div>
+                  <div class="mini__svg"><svg width="40" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg></div>
+                </div>
+              </div>
+            </div>
+            <div class="ba__card ba__card--after">
+              <div class="ba__label">After <span class="ba__badge">uxskill</span></div>
+              <img class="mini mini--shot" src="img/skiphire-after.png" width="1280" height="1300"
+                   loading="lazy" decoding="async"
+                   alt="The uxskill rebuild of the Instant Skip Hire hero: the brand amber kept, a confident sans headline reading 'Commercial skip hire, without the middleman', a quote form in the hero beside a real on-site photo, and a trust bar of trade sectors.">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ============ INSTALL ============ -->
+    <section class="section" id="install">
+      <div class="wrap">
+        <div class="section__head reveal">
+          <span class="eyebrow"><span class="eyebrow__mark" aria-hidden="true"></span> Install</span>
+          <h2>Three ways in. Pick your environment.</h2>
+          <p>The same engine ships as an npx wrapper, a Python package, and a Claude Code plugin. No accounts, no API key, no setup beyond one line.</p>
+        </div>
+
+        <div class="install">
+          <div class="icard reveal" data-d="1">
+            <div class="icard__top"><span class="icard__name">npx</span><span class="icard__tag">no Python</span></div>
+            <div class="codecopy">
+              <code><span class="tok-prompt">$ </span><span class="tok-cmd">npx uxskill init</span></code>
+              <button class="copybtn" type="button" data-copy="npx uxskill init" aria-label="Copy command">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+              </button>
+            </div>
+            <p class="icard__note">Bootstraps the engine through pipx on first run. Best for a quick try without touching your Python setup.</p>
+          </div>
+
+          <div class="icard icard--featured reveal" data-d="2">
+            <div class="icard__top"><span class="icard__name">Claude Code</span><span class="icard__tag">recommended</span></div>
+            <div class="codecopy">
+              <code><span class="tok-prompt">&gt; </span><span class="tok-cmd">/plugin marketplace add Laith0003/ux-skill</span></code>
+              <button class="copybtn" type="button" data-copy="/plugin marketplace add Laith0003/ux-skill" aria-label="Copy command">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+              </button>
+            </div>
+            <div class="codecopy">
+              <code><span class="tok-prompt">&gt; </span><span class="tok-cmd">/plugin install ux@ux-skill</span></code>
+              <button class="copybtn" type="button" data-copy="/plugin install ux@ux-skill" aria-label="Copy command">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+              </button>
+            </div>
+            <p class="icard__note">Wires every slash command and sub-agent into your session. Then run <code class="mono tx-amber">/ux-init</code>.</p>
+          </div>
+
+          <div class="icard reveal" data-d="3">
+            <div class="icard__top"><span class="icard__name">pip</span><span class="icard__tag">universal</span></div>
+            <div class="codecopy">
+              <code><span class="tok-prompt">$ </span><span class="tok-cmd">pip install uxskill</span></code>
+              <button class="copybtn" type="button" data-copy="pip install uxskill" aria-label="Copy command">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+              </button>
+            </div>
+            <p class="icard__note">The full engine for Cursor, Windsurf, CI, or the CLI. Exposes both <code class="mono tx-ink">ux</code> and <code class="mono tx-ink">uxskill</code>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CTA BAND ============ -->
+    <section class="ctaband">
+      <div class="wrap">
+        <div class="ctaband__inner reveal">
+          <span class="eyebrow"><span class="eyebrow__mark" aria-hidden="true"></span> Get started</span>
+          <h2 class="mt-sm">Give your AI a designer it cannot argue with.</h2>
+          <p>Free, MIT-licensed, and offline. Install it in one line and the next page your assistant builds will look like your product, not like every other product.</p>
+          <div class="ctaband__row">
+            <a class="btn btn--lg" href="#install">
+              Install uxskill
+              <span class="btn__chev" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+            <a class="ghost ghost--lg" href="https://github.com/Laith0003/ux-skill" target="_blank" rel="noopener">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.7 18 5 18 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+              View the source
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a class="wordmark footer__wordmark" href="/" aria-label="uxskill home">uxskill<span class="wordmark__dot" aria-hidden="true"></span></a>
+          <p class="footer__tag">Design intelligence for AI coding. Offline, deterministic, and on your side.</p>
+        </div>
+        <div class="footer__col">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#how">How it works</a></li>
+            <li><a href="#proof">What is inside</a></li>
+            <li><a href="/commands.html">Commands</a></li>
+            <li><a href="/mcp.html">MCP server</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Proof</h4>
+          <ul>
+            <li><a href="/dogfood/skiphire.html">Skip-hire rebuild</a></li>
+            <li><a href="/compare.html">Compare</a></li>
+            <li><a href="/showcase.html">Showcase</a></li>
+            <li><a href="/brands.html">Brand specs</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="https://github.com/Laith0003/ux-skill" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://pypi.org/project/uxskill/" target="_blank" rel="noopener">PyPI</a></li>
+            <li><a href="/faq.html">FAQ</a></li>
+            <li><a href="/roadmap.html">Roadmap</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bar">
+        <span class="footer__legal">MIT licensed &middot; no telemetry &middot; v3.1.0 &middot; (c) 2026 Laith Aljunaidy</span>
+        <div class="footer__socials">
+          <a href="https://github.com/Laith0003/ux-skill" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.7 18 5 18 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/laithaljunaidy/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4 0 4.75 2.65 4.75 6.1V21h-4v-5.4c0-1.3 0-2.95-1.8-2.95s-2.07 1.4-2.07 2.85V21h-4z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---- mobile drawer ---- */
+  var burger = document.querySelector(".nav__burger");
+  var drawer = document.getElementById("drawer");
+  var closeBtn = drawer ? drawer.querySelector(".nav__drawer-close") : null;
+  function openDrawer() { drawer.classList.add("is-open"); burger.setAttribute("aria-expanded", "true"); document.body.style.overflow = "hidden"; }
+  function closeDrawer() { drawer.classList.remove("is-open"); burger.setAttribute("aria-expanded", "false"); document.body.style.overflow = ""; }
+  if (burger && drawer) {
+    burger.addEventListener("click", openDrawer);
+    if (closeBtn) closeBtn.addEventListener("click", closeDrawer);
+    drawer.addEventListener("click", function (e) { if (e.target === drawer) closeDrawer(); });
+    drawer.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", closeDrawer); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && drawer.classList.contains("is-open")) closeDrawer(); });
+  }
+
+  /* ---- copy buttons ---- */
+  var CHECK_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>';
+  document.querySelectorAll(".copybtn").forEach(function (btn) {
+    var original = btn.innerHTML;
+    btn.addEventListener("click", function () {
+      var text = btn.getAttribute("data-copy") || "";
+      var done = function () {
+        btn.classList.add("is-done");
+        btn.innerHTML = CHECK_SVG;
+        setTimeout(function () { btn.classList.remove("is-done"); btn.innerHTML = original; }, 1600);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(done);
+      } else { done(); }
+    });
+  });
+
+  /* ---- reveal on scroll (IntersectionObserver, fires once) ---- */
+  var reveals = document.querySelectorAll(".reveal");
+  if (reduce || !("IntersectionObserver" in window)) {
+    reveals.forEach(function (el) { el.classList.add("is-in"); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add("is-in"); io.unobserve(en.target); }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
+    reveals.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---- proof counters (tick up once on entry, tabular-nums so no jitter) ---- */
+  var counters = document.querySelectorAll(".count");
+  function runCount(el) {
+    var to = parseInt(el.getAttribute("data-to"), 10) || 0;
+    if (reduce) { el.textContent = String(to); return; }
+    var dur = 1100, start = null;
+    function frame(ts) {
+      if (start === null) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3); // ease-out cubic, matches the --ease-cinema feel
+      el.textContent = String(Math.round(to * eased));
+      if (p < 1) requestAnimationFrame(frame);
+      else el.textContent = String(to);
+    }
+    requestAnimationFrame(frame);
+  }
+  if (reduce || !("IntersectionObserver" in window)) {
+    counters.forEach(function (el) { el.textContent = el.getAttribute("data-to"); });
+  } else {
+    var cio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { runCount(en.target); cio.unobserve(en.target); }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(function (el) { cio.observe(el); });
+  }
+
+  /* ---- HERO terminal: type a real command, then print a synthesized system ----
+     A genuine input device (a command line), not a typewriter on a headline.
+     Each line is a node; the command line types its TEXT char-by-char via
+     textContent (no innerHTML on dynamic content), the styled output lines are
+     appended whole from a fixed, author-controlled template. */
+  var term = document.getElementById("term");
+  if (term) {
+    // command typed char-by-char (plain text only) — real CLI syntax (repeated --tone flags)
+    var COMMAND = "$ uxskill recommend --industry=fintech-neobank --tone=editorial --must-have=dark-mode";
+    // styled output lines — these are the ACTUAL deterministic values the engine returns
+    // for this brief (engine v3.1: style monochrome-precise, palette notion-paper #2383e2,
+    // type cormorant-inter-jetbrains, motion fade-up-12px). Verified, not invented.
+    var OUT = [
+      '<div class="term__line">&nbsp;</div>',
+      '<div class="term__line term__out"><span class="term__key">style    </span><span class="term__val">monochrome-precise</span></div>',
+      '<div class="term__line term__out"><span class="term__key">palette  </span><span class="term__swatch" style="background:#2383e2"></span><span class="term__val">#2383e2</span><span class="term__key"> primary</span></div>',
+      '<div class="term__line term__out"><span class="term__key">type     </span><span class="term__val">Cormorant Garamond / Inter / JetBrains Mono</span></div>',
+      '<div class="term__line term__out"><span class="term__key">motion   </span><span class="term__val">fade-up-12px &middot; 360ms &middot; ease-cinema</span></div>',
+      '<div class="term__line term__out"><span class="term__key">guardrail</span><span class="term__val">152 anti-slop rules active</span></div>',
+      '<div class="term__line">&nbsp;</div>',
+      '<div class="term__line term__ok">&#x2713; system ready<span class="term__key">  &middot;  deterministic  &middot;  no LLM called</span></div>'
+    ];
+
+    function renderStatic() {
+      var cmd = document.createElement("div");
+      cmd.className = "term__line";
+      // colorize: prompt cyan, command ink, flags amber — build with spans, text via textContent
+      cmd.appendChild(span("term__prompt", "$ "));
+      cmd.appendChild(span("term__cmd", "uxskill recommend "));
+      cmd.appendChild(span("term__flag", "--industry"));
+      cmd.appendChild(span("term__cmd", "=fintech-neobank "));
+      cmd.appendChild(span("term__flag", "--tone"));
+      cmd.appendChild(span("term__cmd", "=editorial "));
+      cmd.appendChild(span("term__flag", "--must-have"));
+      cmd.appendChild(span("term__cmd", "=dark-mode"));
+      term.appendChild(cmd);
+      var holder = document.createElement("div");
+      holder.innerHTML = OUT.join("");
+      while (holder.firstChild) { term.appendChild(holder.firstChild); }
+    }
+    function span(cls, text) {
+      var s = document.createElement("span");
+      s.className = cls;
+      s.textContent = text;
+      return s;
+    }
+
+    if (reduce) { renderStatic(); }
+    else {
+      var cmdLine = document.createElement("div");
+      cmdLine.className = "term__line";
+      var typed = span("term__cmd", "");
+      var caret = document.createElement("span");
+      caret.className = "term__caret";
+      caret.setAttribute("aria-hidden", "true");
+      cmdLine.appendChild(typed);
+      cmdLine.appendChild(caret);
+      term.appendChild(cmdLine);
+
+      var i = 0;
+      function typeStep() {
+        i += 1;
+        typed.textContent = COMMAND.slice(0, i);
+        if (i < COMMAND.length) { setTimeout(typeStep, 32); }
+        else {
+          // replace plain typed command with the colorized version, then stream outputs
+          term.removeChild(cmdLine);
+          var cmd = document.createElement("div");
+          cmd.className = "term__line";
+          cmd.appendChild(span("term__prompt", "$ "));
+          cmd.appendChild(span("term__cmd", "uxskill recommend "));
+          cmd.appendChild(span("term__flag", "--industry"));
+          cmd.appendChild(span("term__cmd", "=fintech "));
+          cmd.appendChild(span("term__flag", "--tone"));
+          cmd.appendChild(span("term__cmd", "=warm,editorial"));
+          term.appendChild(cmd);
+          streamOut(0);
+        }
+      }
+      function streamOut(k) {
+        if (k >= OUT.length) return;
+        var holder = document.createElement("div");
+        holder.innerHTML = OUT[k];
+        var node = holder.firstChild;
+        node.style.opacity = "0";
+        node.style.transform = "translateY(4px)";
+        node.style.transition = "opacity 240ms cubic-bezier(0.16,1,0.3,1), transform 240ms cubic-bezier(0.16,1,0.3,1)";
+        term.appendChild(node);
+        requestAnimationFrame(function () { node.style.opacity = "1"; node.style.transform = "none"; });
+        setTimeout(function () { streamOut(k + 1); }, OUT[k].indexOf("&nbsp;") > -1 ? 90 : 210);
+      }
+      setTimeout(typeStep, 420);
+    }
+  }
+})();
+</script>
+</body>
+</html>

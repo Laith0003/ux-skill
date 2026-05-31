@@ -2,25 +2,34 @@
 
 # ux-skill — the design intelligence engine for Claude Code, Cursor, and every other AI coding tool
 
-> **v3.0.0 stable — THE BRAIN.** The strongest UX plugin for AI coding. A Python reasoning core with a deterministic 7-axis synthesizer, 11 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 145 anti-pattern rules, 25 tech stacks, 160 brand specs), 23 slash commands, 5 sub-agents, 18 MCP tools, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
+> **v3.1.0 — THE BRAIN, now brand-true + responsive.** The strongest UX plugin for AI coding. A Python reasoning core with a deterministic 7-axis synthesizer, 11 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 152 anti-pattern rules, 25 tech stacks, 160 brand specs), 23 slash commands, 5 sub-agents, 18 MCP tools, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
 
 > **The brand name is `ux-skill`.** The PyPI / npm package name stays `uxskill`. The GitHub repo lives at [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
 **Site:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **Compare vs every Claude UX plugin:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
 
-[![Version](https://img.shields.io/badge/version-3.0.0-stable-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
+[![Version](https://img.shields.io/badge/version-3.1.0-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Python](https://img.shields.io/badge/python-3.9%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#the-17-ide-installer)
 [![README languages](https://img.shields.io/badge/README-17_languages-cc785c.svg)](#)
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
-[![Linter](https://img.shields.io/badge/anti--patterns-145-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-223_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Linter](https://img.shields.io/badge/anti--patterns-152-181715.svg)](data/anti-patterns.json)
+[![Tests](https://img.shields.io/badge/tests-310_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
 [![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
+
+### New in v3.1 — brand-true, responsive, alive
+
+- **Brand fidelity is enforced, not hoped.** The primary color is read from the LOGO's pixels (not the most-painted CSS); default fonts are rejected for the logo's letterform style. The extracted brand travels `recommend` -> `synthesize`, and a **hard floor** in `evaluate` FAILS any output that drops the brand color/logo or ships no real imagery. Two-way interop with the open `brand.md` convention (render + ingest).
+- **Mobile-first, gated.** New craft foundations (`responsive.md`, `component-behaviors.md`) plus a wrap-aware gate that fails on horizontal scroll, a wrapping nav/wordmark/button label, or an over-tall sticky header.
+- **The wow layer.** The engine derives 2-3 coordinated signature moments per page — the "wow can only come from the user" doctrine is overturned.
+- **Sharper linter** (152 rules): imagery-mandatory + icon-only detection, placeholder-token and `100vw` rules; seeded picsum kept, random stripped.
+
+Tests **310 passing**. Offline. Deterministic. No LLM ever called. Full notes in [CHANGELOG.md](CHANGELOG.md).
 
 ### What's new in v3
 
