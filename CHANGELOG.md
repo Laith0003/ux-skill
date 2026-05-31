@@ -7,6 +7,35 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [3.1.0] - 2026-05-31 - **BRAND-TRUE, RESPONSIVE, ALIVE**
+
+ux-skill now honors the client's brand, holds up on mobile, and reaches for a wow
+moment - all enforced, not hoped.
+
+### Brand fidelity (a redesign looks like the client, not the engine)
+- Brand extraction: the primary comes from the LOGO's pixels (not the most-painted
+  CSS); default fonts (Roboto/Inter/system) are rejected for the logo's letterform style.
+- The extracted brand travels the pipeline: `recommend`/`synthesize` anchor palette +
+  type to it; `evaluate` adds a brand-fidelity HARD FLOOR - dropping the brand color/logo
+  or shipping no real imagery FAILS regardless of design score.
+- Two-way interop with the open `brand.md` convention: `render_md` emits a valid file;
+  an existing one is ingested as the anchor (`uxskill brand --from-brand-md`).
+
+### Responsive / mobile-first (enforced)
+- New craft foundations: `responsive.md` + `component-behaviors.md`.
+- A wrap-aware mobile gate: fails on horizontal scroll, a wrapping nav/wordmark/button
+  label, or an over-tall sticky header (> ~96px).
+
+### Richness + the wow layer
+- Page-level section sequences for completeness; `wow.md` - the model DERIVES a
+  2-3-moment wow layer (the "wow can only come from the user" doctrine is overturned).
+
+### Linter / imagery
+- Imagery-mandatory + icon-only detection; placeholder-token + `100vw` rules; seeded
+  picsum kept, random stripped.
+
+Tests: 248 -> 310. Fully offline, deterministic, no LLM ever called.
+
 ## [3.0.0] — 2026-05-28 — **THE BRAIN**
 
 The biggest architectural shift in ux-skill's history. Brand specs are no
