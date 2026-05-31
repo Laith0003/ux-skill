@@ -222,7 +222,7 @@
   /* scroll-snap: proximity = only snaps when close, doesn't hijack the whole page */
   /* vertical full-screen snap — CSS Tricks pattern */
   html{scroll-snap-type:y mandatory;scroll-behavior:auto}
-  #turnZone{scroll-snap-align:start;scroll-snap-stop:always;height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  #turnZone{scroll-snap-align:start;scroll-snap-stop:always;height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
   .turn-scene{height:100%;display:contents}/* scene is the zone itself */
   .turn-sticky{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(20px,3vh,40px);padding:0 clamp(20px,6vw,80px);width:100%}
   .turn-wiring{opacity:0}
@@ -334,7 +334,7 @@
 
   /* ===== chat beat — one-by-one reveal ===== */
   .chat{max-width:760px;margin:clamp(44px,7vh,90px) auto 0;display:flex;flex-direction:column;gap:16px}
-  .msg{opacity:0;transform:translateY(22px);transition:opacity .6s ease, transform .6s cubic-bezier(.16,.7,.2,1)}
+  .msg{opacity:0;transform:translateY(28px);transition:opacity .65s ease, transform .7s cubic-bezier(.16,.7,.2,1);margin-bottom:clamp(40px,8vh,80px)}
   .msg.in{opacity:1;transform:none}
   .bub{border-radius:16px;padding:18px 22px;font-size:clamp(15px,2vw,18px);line-height:1.45;max-width:86%;min-width:0}
   .zone--lite .msg.you .bub{background:#fff;border:1px solid var(--lite-line);margin-left:auto;color:var(--lite-ink)}
@@ -793,7 +793,10 @@
   function staggerIn(t){if(reduce||!t.children.length)return;for(var k=0;k<t.children.length;k++){try{t.children[k].animate([{opacity:0,transform:'translateY(20px)'},{opacity:1,transform:'translateY(0)'}],{duration:560,delay:k*70,easing:'cubic-bezier(.16,.7,.2,1)',fill:'backwards'});}catch(_){}}}
   if('IntersectionObserver' in window){
     var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var t=e.target;t.classList.add('in');if(t.classList.contains('wiring'))t.classList.add('wired');if(t.hasAttribute('data-stagger'))staggerIn(t);io.unobserve(t);}});},{threshold:.16});
-    document.querySelectorAll('.rev,.msg,.fade-up,.wiring,[data-stagger]').forEach(function(el){io.observe(el);});
+    document.querySelectorAll('.rev,.fade-up,.wiring,[data-stagger]').forEach(function(el){io.observe(el);});
+    /* Chat messages: high threshold so each reveals one at a time */
+    var msgIo=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');msgIo.unobserve(e.target);}});},{threshold:.65,rootMargin:'0px 0px -10% 0px'});
+    document.querySelectorAll('.msg').forEach(function(el){msgIo.observe(el);});
   } else {
     document.querySelectorAll('.rev,.msg,.fade-up,.wiring').forEach(function(el){el.classList.add('in');if(el.classList.contains('wiring'))el.classList.add('wired');});
   }
@@ -805,19 +808,18 @@
     var sticky=document.getElementById('turnSticky');
     if(!scene||!sticky)return;
     var fired=false;
-    /* fire after snap: use scrollend if available, fallback to IO at 0.9 threshold */
-    var fired=false;
-    function activate(){if(!fired){fired=true;setTimeout(function(){scene.classList.add('turn-in');},80);}}
-    if('onscrollend' in window){
-      window.addEventListener('scrollend',function(){
-        var r=sticky.getBoundingClientRect();
-        if(r.top>=-4&&r.top<=80)activate();
-      },{passive:true});
+    function activate(){if(!fired){fired=true;setTimeout(function(){scene.classList.add('turn-in');},60);}}
+    /* SNAP-ONLY trigger: fire on scrollend (snap completed), not on scroll */
+    window.addEventListener('scrollend',function(){
+      if(fired)return;
+      var r=document.getElementById('turnZone').getBoundingClientRect();
+      if(r.top>=-8&&r.top<=8)activate();
+    },{passive:true});
+    /* Fallback for browsers without scrollend: fire when 95% in view */
+    if(!('onscrollend' in window)){
+      var io2=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)activate();});},{threshold:.95});
+      io2.observe(document.getElementById('turnZone'));
     }
-    var to=new IntersectionObserver(function(es){
-      es.forEach(function(e){if(e.isIntersecting){activate();to.unobserve(sticky);}});
-    },{threshold:.9});
-    to.observe(sticky);
   })();
 
   /* ----- scroll-pin: 7 full-viewport beats (title + 5 steps), desktop only ----- */
