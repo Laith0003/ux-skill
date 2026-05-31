@@ -220,7 +220,7 @@
 
   /* ===== TURN — cinematic snap section ===== */
   /* scroll-snap: proximity = only snaps when close, doesn't hijack the whole page */
-  html{scroll-snap-type:y mandatory}
+  html{scroll-snap-type:y proximity}
   #turnZone{height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;scroll-snap-align:start;scroll-snap-stop:always}
   .turn-scene{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;text-align:center}
   .turn-sticky{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(20px,3vh,40px);padding:0 clamp(20px,6vw,80px);width:100%;margin-inline:auto}
