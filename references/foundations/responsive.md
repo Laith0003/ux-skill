@@ -72,23 +72,33 @@ is not finished.
 - `100vh` is wrong on mobile (it ignores the browser chrome, causing jump/cutoff) -> use
   `100svh` or `100dvh` for full-height sections.
 
-## Verify -- this is mandatory, not optional
+## Verify -- this is mandatory, and it must be REAL
 
-1. Measure at **360 AND 390px**: `document.documentElement.scrollWidth <= window.innerWidth`.
-   If it's greater, there is horizontal scroll -- find the offending node and fix it before
-   anything else.
-2. **scrollWidth alone misses WRAP.** A nav that wrapped to 3 rows still reports
-   `scrollWidth == innerWidth`. Also check: do the children of a bar that should be one row
-   share an `offsetTop` (if not, it wrapped)? Did any short label/wordmark split across lines?
-3. **Measure the sticky-chrome height.** Sum the `offsetHeight` of every top-anchored
-   `position:sticky`/`position:fixed` element (de-dupe nesting -- count the outermost only).
-   It must be `<= ~96px` (hard ceiling) and ideally `<= ~72px` (one row). Greater than that, or
-   greater than ~20% of `innerHeight`, is a FAIL -- a tall sticky header is the failure, not a
-   style choice. Fix by dropping decorative bars out of the sticky container and trimming
-   padding until only the nav row stays pinned.
-4. Headless screenshots are unreliable in this toolchain. **Deploy the iteration and look on a
-   real phone.** An un-eyeballed mobile layout is unverified -- treat "I think it's fine" as
-   "it is broken until seen."
+A gate that cannot render has NOT verified. The recurring failure was a check that reported
+"green" on a page that horizontally scrolled on a real phone -- a false green is worse than
+no gate. So verification renders the page for real and is honest when it can't.
+
+**Run the real verifier** (headless Chrome, true mobile viewports, measured -- not guessed):
+```bash
+node scripts/verify-responsive.mjs <file-or-url> 360,390 <out-dir>
+```
+It sets a TRUE device viewport (via the DevTools Emulation domain, self-calibrated so a lying
+viewport is caught), measures `document.documentElement.scrollWidth` vs the device width,
+sums the sticky-chrome height, and **writes a screenshot per width so the output can be SEEN**.
+
+Honesty contract (the whole point):
+- **exit 0** = VERIFIED clean.
+- **exit 1** = VERIFIED and FAILED -- a real defect: the page renders wider than the device
+  (horizontal scroll; usual cause a fixed min-width wider than the device, sometimes a bad
+  `<meta name="viewport">`), or the sticky chrome exceeds `~96px`. Fix the named cause.
+- **exit 2** = DEGRADED / UNVERIFIED -- no Chrome, or the viewport could not be trusted. You
+  have NOT verified. Eyeball on a real device; **never claim passed.**
+
+What the verifier cannot judge: WRAP of a short label/wordmark (a wrapped nav reads
+`scrollWidth == innerWidth`) and the *feel* of the page. So also: open the screenshots it
+wrote and LOOK, and deploy + eyeball on a real phone. An un-seen mobile layout is unverified
+-- treat "I think it's fine" as "it is broken until seen." A green from a verifier that
+DEGRADED is not a green.
 
 ## Do / Don't
 
