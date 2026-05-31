@@ -280,9 +280,9 @@
 
   /* ===== TURN — cinematic snap section ===== */
   /* scroll-snap: proximity = only snaps when close, doesn't hijack the whole page */
-  html{scroll-snap-type:y proximity}
-  #turnZone{height:180svh;position:relative;scroll-snap-align:start;scroll-snap-stop:always}
-  .turn-scene{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;text-align:center}
+  html{scroll-snap-type:y mandatory}
+  #turnZone{height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;scroll-snap-align:start;scroll-snap-stop:always}
+  .turn-scene{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;text-align:center}
   .turn-sticky{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(20px,3vh,40px);padding:0 clamp(20px,6vw,80px);width:100%;margin-inline:auto}
   .turn-wiring{opacity:0}
   .turn-body{opacity:0;transform:scale(.82) translateY(60px)}
@@ -652,7 +652,7 @@
   </div>
 
   <!-- ============ BEAT 4 — HOW IT WORKS (dark) ============ -->
-  <div class="zone zone--lite" data-bg="light"><span class="zone__bloom" aria-hidden="true" data-bloom="how"></span><section class="sec" id="how" style="padding-block:0">
+  <div class="zone zone--lite" data-bg="light" style="scroll-snap-align:start"><span class="zone__bloom" aria-hidden="true" data-bloom="how"></span><section class="sec" id="how" style="padding-block:0">
     <!-- SCROLL-PIN: 7 beats (title + 5 steps), each full-viewport, large centered. Mobile stacks. -->
     <div class="pin-wrap" id="pinWrap">
       <div class="pin-inner" id="pinInner" data-step="0">
