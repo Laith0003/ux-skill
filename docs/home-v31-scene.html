@@ -271,8 +271,8 @@
   .pin-wrap{position:relative;height:1400vh}/* 6 beats × ~233vh — deliberate scroll dwell */
   .pin-inner{position:sticky;top:0;height:100svh;overflow:hidden}
   /* each beat: absolute, full-size, centered, hidden by default */
-  .pbeat{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 clamp(24px,8vw,160px);gap:clamp(14px,2vh,28px);opacity:0;transform:translateY(48px) scale(.9);transition:opacity 1.4s cubic-bezier(.16,.7,.2,1),transform 1.5s cubic-bezier(.16,.7,.2,1);pointer-events:none}
-  .pbeat.active{opacity:1;transform:none;pointer-events:auto;transition:opacity .22s ease,transform .22s ease;}
+  .pbeat{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 clamp(24px,8vw,160px);gap:clamp(14px,2vh,28px);opacity:0;transform:translateY(22px) scale(.97);transition:opacity .55s cubic-bezier(.16,.7,.2,1),transform .6s cubic-bezier(.16,.7,.2,1);pointer-events:none}
+  .pbeat.active{opacity:1;transform:none;pointer-events:auto;transition:opacity .18s ease,transform .18s ease;}
   .pbeat-eye{justify-content:center;margin-bottom:4px}
   .pbeat-num{font-family:var(--mono);font-size:clamp(11px,1.2vw,13px);letter-spacing:.18em;color:var(--blue-d);font-weight:500}
   .pbeat-title{font-family:var(--disp);font-weight:800;font-size:clamp(2.4rem,6vw,4.8rem);color:var(--lite-ink);margin:0;line-height:1.0;letter-spacing:-.03em;max-width:14ch}
