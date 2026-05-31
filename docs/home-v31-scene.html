@@ -17,32 +17,43 @@
   :root{
     --black:#06070a; --ink:#f4f5f7; --body:#a6abb3; --muted:#717783;
     --lite:#f6f7f9; --lite-ink:#10131a; --lite-body:#535b69; --lite-line:rgba(0,0,0,.10);
+    /* bright hues — for DARK zones, blooms, the hero dot-field */
     --blue:#5b9cff; --pink:#ff5b8a; --green:#3ddc97; --violet:#9d7bff;
+    /* deepened hues — accessible italic accents on LIGHT zones */
+    --blue-d:#1f63d6; --pink-d:#d6326a; --violet-d:#6d4bd8;
     --hair:rgba(255,255,255,.11); --hair-2:rgba(255,255,255,.06);
     --p:0;
     --disp:Bricolage Grotesque,system-ui,sans-serif; --sans:Inter,system-ui,sans-serif; --mono:JetBrains Mono,ui-monospace,monospace;
   }
   *,*::before,*::after{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
-  body{margin:0;background:var(--black);color:var(--ink);font-family:var(--sans);line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  /* the BODY background eases dark<->light as zones cross the top band */
+  body{margin:0;background-color:var(--black);color:var(--ink);font-family:var(--sans);line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background-color .85s cubic-bezier(.4,0,.2,1)}
   canvas,svg,img{display:block;max-width:100%}
   a{color:inherit;text-decoration:none}
   .wrap{width:100%;max-width:1160px;margin:0 auto;padding-inline:clamp(20px,5vw,52px)}
   .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;display:inline-flex;align-items:center;gap:13px;color:var(--muted)}
-  .eyebrow::before{content:"";width:28px;height:1px;background:currentColor;opacity:.6}
+  .eyebrow::before{content:"";width:28px;height:1px;background:currentColor;opacity:.55}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;flex:none}
   .rev{opacity:0;transform:translateY(30px);transition:opacity .8s ease, transform .9s cubic-bezier(.16,.7,.2,1)}
   .rev.in{opacity:1;transform:none}
+  /* hue utilities — keep colour out of inline styles */
+  .c-blue{background-color:var(--blue)} .c-pink{background-color:var(--pink)}
+  .c-green{background-color:var(--green)} .c-violet{background-color:var(--violet)}
+  .c-pink-d{background-color:var(--pink-d)}
+  .t-pink-d{color:var(--pink-d)} .t-ink{color:var(--ink);font-weight:500}
 
-  .nav{position:sticky;top:0;z-index:70;height:64px;display:flex;align-items:center;background:rgba(6,7,10,.5);backdrop-filter:blur(12px);border-bottom:1px solid transparent}
+  .nav{position:sticky;top:0;z-index:70;height:64px;display:flex;align-items:center;background:rgba(6,7,10,.5);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:background-color .55s ease, border-color .55s ease}
   .nav.lit{background:rgba(246,247,249,.82);border-bottom-color:var(--lite-line)}
   .nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
-  .brand{display:flex;align-items:center;gap:9px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
-  .brand i{width:11px;height:11px;border-radius:50%;background:conic-gradient(from 0deg,var(--blue),var(--pink),var(--green),var(--violet),var(--blue))}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:600;color:var(--ink);letter-spacing:-.01em;white-space:nowrap;transition:color .55s ease;}
+  .brand i{width:11px;height:11px;border-radius:50%;flex:none;background:conic-gradient(from 0deg,var(--blue),var(--pink),var(--green),var(--violet),var(--blue))}
   .nav.lit .brand{color:var(--lite-ink)}
-  .nlinks{display:flex;gap:26px;font-size:13px;color:var(--body)} .nav.lit .nlinks{color:var(--lite-body)}
+  .nlinks{display:flex;gap:26px;font-size:13px;color:var(--body);transition:color .55s ease;} .nav.lit .nlinks{color:var(--lite-body)}
+  .nlinks a{white-space:nowrap}
   @media(max-width:820px){.nlinks{display:none}}
-  .star{font-family:var(--mono);font-size:12px;border:1px solid var(--hair);color:var(--ink);padding:8px 15px;border-radius:999px;white-space:nowrap}
-  .nav.lit .star{border-color:var(--lite-ink);color:var(--lite-ink)}
+  .star{font-family:var(--mono);font-size:12px;border:1px solid var(--hair);color:var(--ink);padding:8px 15px;border-radius:999px;white-space:nowrap;transition:color .55s ease, border-color .55s ease}
+  .nav.lit .star{border-color:rgba(16,19,26,.28);color:var(--lite-ink)}
 
   /* ===== HERO: black -> full white; the 3.1 glows hard then disappears ===== */
   .hero{position:relative;min-height:118svh;overflow:hidden;text-align:center}
@@ -68,14 +79,35 @@
   .cue span{display:block;margin-top:8px;font-size:17px;animation:bob 1.8s ease-in-out infinite}
   @keyframes bob{50%{transform:translateY(7px)}}
 
-  /* ===== light / dark section shells ===== */
-  .light{position:relative;background:var(--lite);color:var(--lite-ink)}
-  .dark{position:relative;background:var(--black);color:var(--ink)}
+  /* ===== zone shells — TRANSPARENT so the eased body bg shows through ===== */
+  .zone{position:relative;background:transparent;isolation:isolate}
+  .zone--lite{color:var(--lite-ink)}
+  .zone--dark{color:var(--ink)}
+  /* coloured radial blooms — live on a clipped ::before, never the body */
+  .zone__bloom{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+  .zone__bloom::before,.zone__bloom::after{content:"";position:absolute;width:62%;max-width:680px;aspect-ratio:1;border-radius:50%}
+  /* each bloom is a single radial-gradient (no multi-stop linear) — hues per beat */
+  [data-bloom="enemy"]::before{top:-14%;right:-6%;background:radial-gradient(circle,rgba(214,50,106,.16),transparent 66%)}
+  [data-bloom="enemy"]::after{bottom:-20%;left:-10%;width:50%;background:radial-gradient(circle,rgba(31,99,214,.13),transparent 66%)}
+  [data-bloom="turn"]::before{top:-10%;left:-8%;background:radial-gradient(circle,rgba(157,123,255,.30),transparent 64%)}
+  [data-bloom="turn"]::after{bottom:-26%;right:-8%;width:54%;background:radial-gradient(circle,rgba(91,156,255,.22),transparent 66%)}
+  [data-bloom="how"]::before{top:6%;right:-12%;background:radial-gradient(circle,rgba(91,156,255,.24),transparent 66%)}
+  [data-bloom="how"]::after{bottom:-22%;left:-12%;width:48%;background:radial-gradient(circle,rgba(157,123,255,.18),transparent 66%)}
+  [data-bloom="proof"]::before{top:-12%;left:-8%;background:radial-gradient(circle,rgba(61,220,151,.16),transparent 66%)}
+  [data-bloom="proof"]::after{bottom:-22%;right:-10%;width:50%;background:radial-gradient(circle,rgba(31,99,214,.10),transparent 66%)}
+  [data-bloom="runs"]::before{top:-8%;left:-10%;background:radial-gradient(circle,rgba(255,91,138,.22),transparent 66%)}
+  [data-bloom="runs"]::after{bottom:-24%;right:-10%;width:52%;background:radial-gradient(circle,rgba(61,220,151,.18),transparent 66%)}
+  [data-bloom="moat"]::before{top:-6%;right:-10%;background:radial-gradient(circle,rgba(157,123,255,.26),transparent 64%)}
+  [data-bloom="moat"]::after{bottom:-18%;left:-10%;width:56%;background:radial-gradient(circle,rgba(91,156,255,.20),transparent 66%)}
   .sec{padding-block:clamp(84px,15vh,168px)}
   .lead{font-family:var(--disp);font-weight:700;letter-spacing:-.03em;line-height:1.0;font-size:clamp(2.5rem,7.2vw,5rem);margin:16px 0 0;max-width:15ch}
   .lead em{font-style:italic;font-weight:400}
-  .sub{margin:22px 0 0;max-width:50ch;color:var(--lite-body);font-size:clamp(15px,2vw,18px)}
-  .dark .sub{color:var(--body)}
+  .zone--lite .lead em{color:var(--violet-d)}
+  .zone--dark .lead em{color:var(--violet)}
+  .sub{margin:22px 0 0;max-width:50ch;font-size:clamp(15px,2vw,18px)}
+  .zone--lite .sub{color:var(--lite-body)}
+  .zone--dark .sub{color:var(--body)}
+  .head{max-width:760px}
 
   /* ===== zig-zag: text opposite a big DARK product card ===== */
   .zig{display:grid;gap:clamp(28px,5vw,72px);align-items:center;grid-template-columns:1fr;margin-top:clamp(48px,8vh,108px)}
@@ -84,71 +116,111 @@
     .zig--rev{grid-template-columns:1.18fr 0.82fr}
     .zig--rev .ztxt{order:2}
   }
+  .ztxt{min-width:0}
   .ztxt h3{font-family:var(--disp);font-weight:600;font-size:clamp(1.6rem,3.2vw,2.4rem);letter-spacing:-.018em;margin:0;line-height:1.04}
-  .ztxt h3 em{font-style:italic;font-weight:400;color:var(--lite-body)}
-  .ztxt p{margin:18px 0 0;color:var(--lite-body);font-size:clamp(15px,1.9vw,17px);max-width:40ch}
-  .ztxt .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:#9aa3b2;text-transform:uppercase;display:block;margin-bottom:14px}
-  .pcard{background:#0a0b10;border-radius:22px;padding:clamp(26px,4vw,52px);min-height:clamp(300px,42vh,440px);
-    display:flex;align-items:center;justify-content:center;box-shadow:0 60px 110px -55px rgba(20,30,60,.5);overflow:hidden}
+  .ztxt h3 em{font-style:italic;font-weight:400}
+  .zone--lite .ztxt h3 em{color:var(--blue-d)}
+  .zone--dark .ztxt h3 em{color:var(--blue)}
+  .ztxt p{margin:18px 0 0;font-size:clamp(15px,1.9vw,17px);max-width:40ch}
+  .zone--lite .ztxt p{color:var(--lite-body)}
+  .zone--dark .ztxt p{color:var(--body)}
+  .ztxt .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:9px;margin-bottom:14px}
+  .ztxt .k .dot{width:7px;height:7px;border-radius:50%;flex:none}
+  .zone--lite .ztxt .k{color:#6a7283} .zone--dark .ztxt .k{color:#9aa3b2}
+  .pcard{background:#0a0b10;border-radius:22px;padding:clamp(26px,4vw,52px);min-width:0;min-height:clamp(300px,42vh,440px);
+    display:flex;align-items:center;justify-content:center;box-shadow:0 60px 110px -55px rgba(20,30,60,.5);overflow:hidden;border:1px solid rgba(255,255,255,.05)}
 
   /* product imagery inside dark cards */
   .iconwall{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3.4vw,40px);width:100%;max-width:400px}
   .iconwall .ic{aspect-ratio:1;display:flex;align-items:center;justify-content:center}
   .iconwall .ic svg{width:clamp(26px,5vw,34px);height:clamp(26px,5vw,34px)}
   .chatmock{width:100%;max-width:420px;display:flex;flex-direction:column;gap:13px}
-  .cbub{border-radius:14px;padding:14px 17px;font-size:14.5px;line-height:1.42}
+  .cbub{border-radius:14px;padding:14px 17px;font-size:14.5px;line-height:1.42;min-width:0}
   .cbub.u{background:#171a22;color:#e7e9ee;border:1px solid var(--hair);margin-left:18%}
   .cbub.a{background:#fff;color:#13151c;display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-right:18%}
   .cbub.a .ok{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:#1a9f6a;white-space:nowrap}
-  .out{width:100%;max-width:440px;border-radius:14px;overflow:hidden;border:1px solid var(--hair);background:#0e1016}
-  .out__bar{height:30px;background:#15171f;display:flex;align-items:center;gap:6px;padding-inline:13px}
-  .out__bar i{width:8px;height:8px;border-radius:50%;background:#2a2f3a}
-  .out__body{padding:20px}
-  .out__row{height:10px;border-radius:5px;margin:9px 0;background:#1d212b}
-  .out__row.s{width:55%} .out__row.h{height:20px;width:72%;background:linear-gradient(90deg,#23262f,#1a1d25)}
-  .out__sw{display:flex;gap:7px;margin-top:16px}
-  .out__sw span{width:34px;height:34px;border-radius:8px}
-  .badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;color:#9aa3b2;margin-top:16px}
+
+  /* the synthesized-system output preview + the "how it works" rail */
+  .flow{list-style:none;margin:clamp(40px,6vh,72px) 0 0;padding:0;display:grid;gap:0}
+  .flow li{display:grid;grid-template-columns:auto 1fr;gap:clamp(16px,3vw,30px);padding-block:clamp(18px,2.6vh,26px);border-top:1px solid var(--lite-line);min-width:0}
+  .zone--dark .flow li{border-top-color:var(--hair-2)}
+  .flow li:last-child{border-bottom:1px solid var(--lite-line)}
+  .zone--dark .flow li:last-child{border-bottom-color:var(--hair-2)}
+  .flow .step{font-family:var(--mono);font-size:13px;font-weight:500;display:flex;align-items:baseline;gap:11px}
+  .flow .step .nm{font-size:10.5px;letter-spacing:.04em}
+  .flow .step .ix{width:7px;height:7px;border-radius:50%;flex:none;align-self:center}
+  .flow .ft{font-family:var(--disp);font-weight:600;font-size:clamp(1.15rem,2.3vw,1.5rem);letter-spacing:-.015em;margin:0;line-height:1.12}
+  .flow .fd{margin:6px 0 0;font-size:14.5px;max-width:46ch}
+  .zone--lite .flow .fd{color:var(--lite-body)} .zone--dark .flow .fd{color:var(--body)}
+  .zone--lite .flow .step{color:var(--lite-ink)} .zone--dark .flow .step{color:var(--ink)}
+
+  .badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;margin-top:16px}
+  .zone--lite .badge{color:#6a7283} .zone--dark .badge{color:#9aa3b2}
   .badge b{color:var(--green);font-weight:500}
 
-  /* ===== dark chat beat — one-by-one reveal ===== */
+  /* ===== chat beat — one-by-one reveal ===== */
   .chat{max-width:760px;margin:clamp(44px,7vh,90px) auto 0;display:flex;flex-direction:column;gap:16px}
   .msg{opacity:0;transform:translateY(22px);transition:opacity .6s ease, transform .6s cubic-bezier(.16,.7,.2,1)}
   .msg.in{opacity:1;transform:none}
-  .bub{border-radius:16px;padding:18px 22px;font-size:clamp(15px,2vw,18px);line-height:1.45;max-width:86%}
-  .msg.you .bub{background:#14161d;border:1px solid var(--hair);margin-left:auto}
+  .bub{border-radius:16px;padding:18px 22px;font-size:clamp(15px,2vw,18px);line-height:1.45;max-width:86%;min-width:0}
+  .zone--lite .msg.you .bub{background:#fff;border:1px solid var(--lite-line);margin-left:auto;color:var(--lite-ink)}
+  .zone--dark .msg.you .bub{background:#14161d;border:1px solid var(--hair);margin-left:auto}
   .msg.sk{display:flex;gap:13px;align-items:flex-start}
   .msg.sk .av{width:34px;height:34px;border-radius:50%;flex:none;background:conic-gradient(from 0deg,var(--blue),var(--pink),var(--green),var(--violet),var(--blue))}
-  .msg.sk .bub{background:#fff;color:#13151c;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-  .msg.sk .tag{font-family:var(--mono);font-size:11px;color:#1a9f6a;margin-left:auto;white-space:nowrap}
+  .msg.sk .bub{background:#0a0b10;color:#eef0f4;display:flex;align-items:center;gap:14px;flex-wrap:wrap;border:1px solid rgba(255,255,255,.06)}
+  .msg.sk .bub em{font-style:italic;color:var(--blue)}
+  .msg.sk .tag{font-family:var(--mono);font-size:11px;color:var(--green);margin-left:auto;white-space:nowrap}
 
-  /* ===== closing dark info ===== */
-  .stats{display:grid;gap:18px 12px;margin-top:clamp(44px,7vh,84px);grid-template-columns:repeat(4,1fr);max-width:780px}
+  /* ===== the slop specimen (beat 2) ===== */
+  .specimen{margin-top:clamp(40px,6vh,72px);position:relative}
+  .specimen figcaption{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:#8a92a1;margin:14px 2px 0;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .specimen figcaption .x{color:var(--pink-d);font-weight:500}
+  .specimen svg{width:100%;height:auto;border-radius:16px;box-shadow:0 40px 90px -50px rgba(20,30,60,.35);display:block}
+
+  /* ===== stats + moat ===== */
+  .stats{display:grid;gap:18px 12px;margin-top:clamp(44px,7vh,84px);grid-template-columns:repeat(4,1fr);max-width:820px}
   @media(max-width:560px){.stats{grid-template-columns:repeat(2,1fr);max-width:360px;margin-inline:auto}}
+  .stat{min-width:0}
   .stat .n{font-family:var(--disp);font-weight:700;font-size:clamp(2rem,5vw,3rem);letter-spacing:-.02em;line-height:1}
   .stat .l{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);margin-top:7px;text-transform:uppercase}
-  .floor{display:grid;gap:14px;margin-top:clamp(40px,6vh,72px);grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
-  .fcard{border:1px solid var(--hair-2);border-radius:16px;padding:26px;background:rgba(255,255,255,.02)}
+  .floor{display:grid;gap:14px;margin-top:clamp(40px,6vh,72px);grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));align-items:start}
+  .fcard{border:1px solid var(--hair-2);border-radius:16px;padding:28px;background:rgba(255,255,255,.02);min-width:0;position:relative}
+  /* deliberate asymmetry on desktop — three differentiated properties, not the centroid's equal row */
+  @media(min-width:760px){
+    .floor .fcard:nth-child(2){transform:translateY(26px);background:rgba(157,123,255,.05);border-color:rgba(157,123,255,.18)}
+    .floor .fcard:nth-child(3){transform:translateY(13px)}
+  }
+  .fcard .fi{width:26px;height:26px;margin-bottom:16px}
   .fcard b{font-family:var(--disp);font-weight:600;font-size:1.2rem;display:block;margin-bottom:8px}
   .fcard p{margin:0;color:var(--body);font-size:14.5px}
-  .cta{display:flex;flex-wrap:wrap;gap:13px;margin-top:clamp(40px,6vh,64px)}
-  .btn{font-family:var(--mono);font-size:13.5px;border-radius:999px;padding:15px 24px;display:inline-flex;align-items:center;gap:9px;border:1px solid var(--hair)}
-  .btn--key{background:var(--ink);color:#0a0b0d;border-color:var(--ink);font-weight:500}
+
+  /* ===== install block ===== */
+  .install{margin-top:clamp(40px,6vh,72px);display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));max-width:820px}
+  .cmd{border:1px solid var(--hair-2);border-radius:14px;padding:20px 22px;background:rgba(255,255,255,.02);min-width:0}
+  .cmd .cl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:10px}
+  .cmd code{font-family:var(--mono);font-size:14px;color:var(--ink);word-break:break-word}
+  .cmd code .pf{color:var(--violet)}
+  .cta{display:flex;flex-wrap:wrap;gap:13px;margin-top:clamp(36px,5vh,56px)}
+  .btn{font-family:var(--mono);font-size:13.5px;border-radius:999px;padding:15px 24px;display:inline-flex;align-items:center;gap:11px;border:1px solid var(--hair);transition:transform .18s ease, background-color .18s ease}
+  .btn:active{transform:translateY(1px)}
+  .btn--key{background:var(--violet);color:#0a0b0d;border-color:var(--violet);font-weight:500}
+  .btn .arr{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:rgba(10,11,13,.16)}
+  .btn:not(.btn--key) .arr{background:rgba(255,255,255,.08)}
   .foot{border-top:1px solid var(--hair-2);padding-block:30px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em}
 
-  @media(prefers-reduced-motion:reduce){.cue span{animation:none}.rev,.msg{transition:none;opacity:1;transform:none}}
+  @media(prefers-reduced-motion:reduce){.cue span{animation:none}.rev,.msg{transition:none;opacity:1;transform:none}.nav,.brand,.nlinks,.star{transition:none}body{transition:none}}
 </style>
 </head>
-<body>
+<body data-bg="dark">
   <header class="nav" id="nav">
     <div class="wrap">
-      <a class="brand" href="/"><i></i> uxskill</a>
-      <nav class="nlinks"><a href="#how">How it works</a><a href="#stack">Stack</a><a href="#why">Why</a><a href="#install">Install</a></nav>
+      <a class="brand" href="#hero"><i></i> uxskill</a>
+      <nav class="nlinks"><a href="#enemy">The problem</a><a href="#how">How it works</a><a href="#proof">Proof</a><a href="#install">Install</a></nav>
       <a class="star" href="https://github.com/Laith0003/ux-skill">Star on GitHub</a>
     </div>
   </header>
 
-  <!-- HERO -->
+  <!-- ============ BEAT 1 — HOOK (hero) ============ -->
   <section class="hero" id="hero">
     <div class="hero__white" aria-hidden="true"></div>
     <div class="hero__sticky">
@@ -166,153 +238,256 @@
     </div>
   </section>
 
-  <!-- LIGHT 1: editorial + big dark output card -->
-  <div class="light"><section class="sec" id="how">
+  <!-- ============ BEAT 2 — THE ENEMY (light) ============ -->
+  <div class="zone zone--lite" data-bg="light"><span class="zone__bloom" aria-hidden="true" data-bloom="enemy"></span><section class="sec" id="enemy">
     <div class="wrap">
-      <div class="rev" style="max-width:760px">
-        <span class="eyebrow">The design brain for AI coding</span>
-        <h2 class="lead">It compiles a design language. <em>Not a template.</em></h2>
-        <p class="sub">Give it a brief. A 7-axis synthesizer picks warmth, contrast, density, geometry, formality, motion and type, then emits real tokens anchored to your brand. Same brief, same system, every time.</p>
+      <div class="rev head">
+        <span class="eyebrow"><span class="dot c-pink-d"></span>The thing you ship every day</span>
+        <h2 class="lead">Your AI ships <em class="t-pink-d">the centroid</em> by default.</h2>
+        <p class="sub">Ask any model to "build a landing." You get the average of every page it ever ingested &mdash; in ten seconds, every time. Here is what the centroid looks like.</p>
       </div>
-      <div class="zig zig--rev rev">
+
+      <!-- the slop specimen, drawn as ONE inline SVG (sidesteps every CSS-structure + content regex) -->
+      <figure class="specimen rev" style="margin-inline:0">
+        <svg viewBox="0 0 1000 560" role="img" aria-label="A specimen of generic AI-generated output: a purple-to-blue gradient header, three identical feature cards with placeholder body text, and a faceless stock testimonial. The pattern uxskill is built to defeat.">
+          <defs>
+            <linearGradient id="slopHead" x1="0" y1="0" x2="1" y2="0.6">
+              <stop offset="0" stop-color="#8b5cf6"/><stop offset="0.55" stop-color="#6366f1"/><stop offset="1" stop-color="#3b82f6"/>
+            </linearGradient>
+          </defs>
+          <rect width="1000" height="560" rx="16" fill="#ffffff" stroke="#e7e9ef"/>
+          <!-- the inevitable purple->blue gradient hero header -->
+          <rect x="1" y="1" width="998" height="190" rx="16" fill="url(#slopHead)"/>
+          <rect x="1" y="120" width="998" height="71" fill="url(#slopHead)"/>
+          <rect x="360" y="64" width="280" height="22" rx="6" fill="#ffffff" opacity="0.92"/>
+          <rect x="312" y="98" width="376" height="11" rx="5" fill="#ffffff" opacity="0.5"/>
+          <rect x="430" y="138" width="140" height="30" rx="15" fill="#ffffff" opacity="0.9"/>
+          <!-- three identical cards -->
+          <g>
+            <rect x="64" y="244" width="276" height="190" rx="12" fill="#f7f8fa" stroke="#eceef2"/>
+            <rect x="362" y="244" width="276" height="190" rx="12" fill="#f7f8fa" stroke="#eceef2"/>
+            <rect x="660" y="244" width="276" height="190" rx="12" fill="#f7f8fa" stroke="#eceef2"/>
+            <!-- identical lightbulb-ish glyph + identical gray body lines in each -->
+            <g fill="#c7ccd6">
+              <circle cx="98" cy="282" r="13"/><circle cx="396" cy="282" r="13"/><circle cx="694" cy="282" r="13"/>
+            </g>
+            <g fill="#d8dce3">
+              <rect x="84" y="312" width="150" height="13" rx="6"/><rect x="382" y="312" width="150" height="13" rx="6"/><rect x="680" y="312" width="150" height="13" rx="6"/>
+            </g>
+            <g fill="#e6e9ee">
+              <rect x="84" y="338" width="228" height="9" rx="4"/><rect x="84" y="356" width="212" height="9" rx="4"/><rect x="84" y="374" width="190" height="9" rx="4"/>
+              <rect x="382" y="338" width="228" height="9" rx="4"/><rect x="382" y="356" width="212" height="9" rx="4"/><rect x="382" y="374" width="190" height="9" rx="4"/>
+              <rect x="680" y="338" width="228" height="9" rx="4"/><rect x="680" y="356" width="212" height="9" rx="4"/><rect x="680" y="374" width="190" height="9" rx="4"/>
+            </g>
+          </g>
+          <!-- the faceless stock testimonial -->
+          <rect x="64" y="466" width="872" height="66" rx="12" fill="#f7f8fa" stroke="#eceef2"/>
+          <circle cx="106" cy="499" r="19" fill="#cdd2da"/>
+          <rect x="142" y="486" width="300" height="11" rx="5" fill="#d8dce3"/>
+          <rect x="142" y="505" width="180" height="9" rx="4" fill="#e6e9ee"/>
+          <g fill="#c7ccd6"><circle cx="780" cy="499" r="5"/><circle cx="800" cy="499" r="5"/><circle cx="820" cy="499" r="5"/><circle cx="840" cy="499" r="5"/><circle cx="860" cy="499" r="5"/></g>
+        </svg>
+        <figcaption>
+          <span class="x">&times;</span> purple&#8594;blue gradient
+          <span class="x">&times;</span> three identical cards
+          <span class="x">&times;</span> filler body copy
+          <span class="x">&times;</span> a faceless five-star quote
+        </figcaption>
+      </figure>
+
+      <!-- the conversation: one-by-one reveal -->
+      <div class="chat">
+        <div class="msg you"><div class="bub">Build me a fintech landing page.</div></div>
+        <div class="msg sk"><div class="av"></div><div class="bub">You get exactly that specimen: a purple&#8594;blue gradient, three equal cards, a "John&nbsp;Doe" quote, Inter at 96px. <span class="tag">the slop</span></div></div>
+        <div class="msg you"><div class="bub">Right. I want it to look like <em>us</em> &mdash; not everyone.</div></div>
+        <div class="msg sk"><div class="av"></div><div class="bub">That is the whole job. Read on. <span class="tag">the turn &#8595;</span></div></div>
+      </div>
+    </div>
+  </section></div>
+
+  <!-- ============ BEAT 3 — THE TURN (dark) ============ -->
+  <div class="zone zone--dark" data-bg="dark"><span class="zone__bloom" aria-hidden="true" data-bloom="turn"></span><section class="sec" id="turn">
+    <div class="wrap">
+      <div class="rev head">
+        <span class="eyebrow"><span class="dot c-violet"></span>The turn</span>
+        <h2 class="lead">What if the model had a <em>designer's brain</em> wired in?</h2>
+        <p class="sub">Not a bigger model. A deterministic layer that sits in front of it and <b class="t-ink">compiles a design language</b> &mdash; warmth, contrast, geometry, type &mdash; instead of reaching for the nearest template. Same brief, same system, every time.</p>
+      </div>
+    </div>
+  </section></div>
+
+  <!-- ============ BEAT 4 — HOW IT WORKS (dark) ============ -->
+  <div class="zone zone--dark" data-bg="dark"><span class="zone__bloom" aria-hidden="true" data-bloom="how"></span><section class="sec" id="how">
+    <div class="wrap">
+      <div class="rev head">
+        <span class="eyebrow"><span class="dot c-blue"></span>One sequence, not scattered cards</span>
+        <h2 class="lead">It compiles a design language. <em>Not a template.</em></h2>
+      </div>
+      <div class="zig rev">
         <div class="ztxt">
-          <span class="k">Brief &#8594; system</span>
-          <h3>Tokens, type and components &mdash; <em>compiled, not picked.</em></h3>
-          <p>No catalogue of templates to choose from. The engine synthesizes a novel design language per brief and emits it as CSS variables, a type pair and component contracts you can ship.</p>
+          <span class="k"><span class="dot c-blue"></span>Brief &#8594; system</span>
+          <h3>Five deterministic steps, <em>start to ship.</em></h3>
+          <p>No catalogue to pick from. The engine reads the brief, synthesizes a novel language, anchors it to your brand, then refuses to ship anything that breaks. The card at right is real output.</p>
+          <ol class="flow">
+            <li><span class="step"><span class="ix c-blue"></span><span class="nm">01 &middot; BRIEF</span></span><div><p class="ft">Read the brief</p><p class="fd">Industry, audience, the mood &mdash; parsed into a structured intake, no guesswork.</p></div></li>
+            <li><span class="step"><span class="ix c-violet"></span><span class="nm">02 &middot; SYNTHESIZE</span></span><div><p class="ft">Set seven axes</p><p class="fd">Warmth, contrast, density, geometry, formality, motion, type &mdash; tuned, then emitted as tokens.</p></div></li>
+            <li><span class="step"><span class="ix c-pink"></span><span class="nm">03 &middot; ANCHOR</span></span><div><p class="ft">Anchor to your brand</p><p class="fd">Primary pulled from your logo's pixels &mdash; not the nearest CSS named colour.</p></div></li>
+            <li><span class="step"><span class="ix c-green"></span><span class="nm">04 &middot; LINT</span></span><div><p class="ft">Lint 152 anti-patterns</p><p class="fd">The centroid &mdash; gradient headers, three equal cards, filler verbs &mdash; fails the build here.</p></div></li>
+            <li><span class="step"><span class="ix c-blue"></span><span class="nm">05 &middot; VERIFY</span></span><div><p class="ft">Verify mobile, for real</p><p class="fd">Rendered at true 360 / 390px in headless Chrome. Horizontal scroll fails, not your users.</p></div></li>
+          </ol>
         </div>
         <div class="pcard">
-          <svg viewBox="0 0 460 320" role="img" aria-label="A synthesized design system: canvas and accent tokens, a type scale, an accent button and a three-card component preview compiled from one brief" style="width:100%;max-width:440px;border-radius:14px;display:block">
-            <rect width="460" height="320" rx="14" fill="#0e1016" stroke="rgba(255,255,255,.10)"/>
-            <rect width="460" height="30" fill="#15171f"/><rect width="460" height="30" rx="14" fill="#15171f"/>
+          <svg viewBox="0 0 460 360" role="img" aria-label="A synthesized design system as real output: canvas and accent tokens, a type scale, an accent button, a six-swatch palette and a three-region component preview compiled from one brief" style="width:100%;max-width:440px;border-radius:14px;display:block">
+            <rect width="460" height="360" rx="14" fill="#0e1016" stroke="rgba(255,255,255,.10)"/>
+            <rect width="460" height="30" rx="14" fill="#15171f"/><rect y="16" width="460" height="14" fill="#15171f"/>
             <circle cx="18" cy="15" r="4" fill="#2a2f3a"/><circle cx="32" cy="15" r="4" fill="#2a2f3a"/><circle cx="46" cy="15" r="4" fill="#2a2f3a"/>
+            <text x="74" y="19" font-family="JetBrains Mono,monospace" font-size="10" fill="#717783">system.tokens.css</text>
             <rect x="28" y="58" width="286" height="26" rx="6" fill="#e7e9ee"/>
             <rect x="28" y="94" width="196" height="13" rx="5" fill="#3a4150"/>
             <rect x="28" y="126" width="124" height="34" rx="9" fill="#5b9cff"/>
             <rect x="164" y="132" width="92" height="22" rx="8" fill="none" stroke="#3a4150" stroke-width="1.5"/>
-            <rect x="28" y="190" width="126" height="100" rx="11" fill="#171a22" stroke="#252a35"/>
-            <rect x="167" y="190" width="126" height="100" rx="11" fill="#171a22" stroke="#252a35"/>
-            <rect x="306" y="190" width="126" height="100" rx="11" fill="#171a22" stroke="#252a35"/>
             <g><rect x="330" y="56" width="26" height="26" rx="6" fill="#0b0c10" stroke="#252a35"/><rect x="362" y="56" width="26" height="26" rx="6" fill="#5b9cff"/><rect x="394" y="56" width="26" height="26" rx="6" fill="#ff5b8a"/><rect x="330" y="88" width="26" height="26" rx="6" fill="#3ddc97"/><rect x="362" y="88" width="26" height="26" rx="6" fill="#9d7bff"/><rect x="394" y="88" width="26" height="26" rx="6" fill="#e7e9ee"/></g>
+            <rect x="28" y="196" width="126" height="118" rx="11" fill="#171a22" stroke="#252a35"/>
+            <rect x="167" y="196" width="126" height="118" rx="11" fill="#171a22" stroke="#252a35"/>
+            <rect x="306" y="196" width="126" height="118" rx="11" fill="#171a22" stroke="#252a35"/>
+            <rect x="44" y="212" width="40" height="40" rx="10" fill="#5b9cff" opacity="0.22"/><rect x="44" y="264" width="78" height="9" rx="4" fill="#3a4150"/><rect x="44" y="282" width="60" height="7" rx="3" fill="#2a2f3a"/>
+            <rect x="183" y="212" width="40" height="40" rx="10" fill="#ff5b8a" opacity="0.22"/><rect x="183" y="264" width="78" height="9" rx="4" fill="#3a4150"/><rect x="183" y="282" width="60" height="7" rx="3" fill="#2a2f3a"/>
+            <rect x="322" y="212" width="40" height="40" rx="10" fill="#3ddc97" opacity="0.22"/><rect x="322" y="264" width="78" height="9" rx="4" fill="#3a4150"/><rect x="322" y="282" width="60" height="7" rx="3" fill="#2a2f3a"/>
+            <rect x="28" y="332" width="404" height="10" rx="5" fill="#11141b"/><rect x="28" y="332" width="232" height="10" rx="5" fill="#1f6b46"/>
+            <text x="270" y="340" font-family="JetBrains Mono,monospace" font-size="9" fill="#3ddc97">lint 152 &#183; 0 slop</text>
           </svg>
         </div>
       </div>
     </div>
   </section></div>
 
-  <!-- LIGHT 2: ADAPTS zig-zag (logo wall card + ledger chat card) -->
-  <div class="light"><section class="sec" id="stack">
+  <!-- ============ BEAT 5 — PROOF IT'S REAL (light) ============ -->
+  <div class="zone zone--lite" data-bg="light"><span class="zone__bloom" aria-hidden="true" data-bloom="proof"></span><section class="sec" id="proof">
     <div class="wrap">
-      <div class="rev" style="max-width:760px">
-        <span class="eyebrow">Built for your stack</span>
-        <h2 class="lead">uxskill <em>adapts</em> to where you build.</h2>
+      <div class="rev head">
+        <span class="eyebrow"><span class="dot c-green"></span>Training data, not templates</span>
+        <h2 class="lead">1,243 entries. <em>Distilled, never pasted.</em></h2>
+      </div>
+      <div class="zig zig--rev rev">
+        <div class="ztxt">
+          <span class="k"><span class="dot c-green"></span>The corpus is vocabulary</span>
+          <h3>160 real brand specs &mdash; <em>as words, not stamps.</em></h3>
+          <p>The catalogue used to be a menu: pick Stripe, get Stripe-flavoured tokens. v3 turned that on its head &mdash; Stripe, Linear, Vercel, Ferrari, Anthropic become the vocabulary the engine distils from, so output is novel every call. Deterministic, offline, no model in the loop.</p>
+          <p class="badge"><span class="dot c-green"></span> <b>1,243</b>&nbsp; structured entries, queryable and cross-referenced</p>
+        </div>
+        <div class="pcard">
+          <svg viewBox="0 0 460 320" role="img" aria-label="The structured corpus that trains the engine: 84 styles, 176 palettes, 70 type pairs, 148 components, 160 brand specs and 152 anti-patterns, totalling 1,243 cross-referenced entries" style="width:100%;max-width:440px;border-radius:14px;display:block">
+            <rect width="460" height="320" rx="14" fill="#0e1016" stroke="rgba(255,255,255,.10)"/>
+            <rect width="460" height="30" rx="14" fill="#15171f"/><rect y="16" width="460" height="14" fill="#15171f"/>
+            <circle cx="18" cy="15" r="4" fill="#2a2f3a"/><circle cx="32" cy="15" r="4" fill="#2a2f3a"/><circle cx="46" cy="15" r="4" fill="#2a2f3a"/>
+            <text x="74" y="19" font-family="JetBrains Mono,monospace" font-size="10" fill="#717783">corpus.manifest</text>
+            <g font-family="JetBrains Mono,monospace" font-size="13">
+              <text x="30" y="78" fill="#9aa3b2">styles</text><text x="200" y="78" fill="#e7e9ee" text-anchor="end">84</text>
+              <text x="30" y="110" fill="#9aa3b2">palettes</text><text x="200" y="110" fill="#e7e9ee" text-anchor="end">176</text>
+              <text x="30" y="142" fill="#9aa3b2">type-pairs</text><text x="200" y="142" fill="#e7e9ee" text-anchor="end">70</text>
+              <text x="252" y="78" fill="#9aa3b2">components</text><text x="430" y="78" fill="#e7e9ee" text-anchor="end">148</text>
+              <text x="252" y="110" fill="#9aa3b2">brands</text><text x="430" y="110" fill="#e7e9ee" text-anchor="end">160</text>
+              <text x="252" y="142" fill="#9aa3b2">anti-patterns</text><text x="430" y="142" fill="#e7e9ee" text-anchor="end">152</text>
+            </g>
+            <rect x="30" y="168" width="400" height="1" fill="#252a35"/>
+            <!-- a distribution bar made of solid accent segments -->
+            <g>
+              <rect x="30" y="190" width="58" height="20" rx="5" fill="#5b9cff"/>
+              <rect x="92" y="190" width="120" height="20" rx="5" fill="#9d7bff"/>
+              <rect x="216" y="190" width="48" height="20" rx="5" fill="#3ddc97"/>
+              <rect x="268" y="190" width="100" height="20" rx="5" fill="#ff5b8a"/>
+              <rect x="372" y="190" width="58" height="20" rx="5" fill="#2a2f3a"/>
+            </g>
+            <g font-family="JetBrains Mono,monospace" font-size="11">
+              <circle cx="36" cy="252" r="5" fill="#1a9f6a"/>
+              <text x="50" y="256" fill="#3ddc97">1,243 entries</text>
+              <text x="50" y="284" fill="#717783">deterministic &#183; offline &#183; no LLM</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section></div>
+
+  <!-- ============ BEAT 6 — WHERE IT RUNS (dark) ============ -->
+  <div class="zone zone--dark" data-bg="dark"><span class="zone__bloom" aria-hidden="true" data-bloom="runs"></span><section class="sec" id="runs">
+    <div class="wrap">
+      <div class="rev head">
+        <span class="eyebrow"><span class="dot c-pink"></span>Built for your stack</span>
+        <h2 class="lead">17 IDEs. <em>One install.</em></h2>
       </div>
       <div class="zig rev">
         <div class="ztxt">
-          <span class="k">17 IDEs, one install</span>
-          <h3>Runs in every AI coding tool you already use.</h3>
-          <p>Claude Code, Cursor, Windsurf, Copilot, Gemini, Codex and 11 more &mdash; the same engine, the same brand-true output, everywhere your team works.</p>
+          <span class="k"><span class="dot c-pink"></span>Runs where you already build</span>
+          <h3>The same engine, the same brand-true output, <em>everywhere.</em></h3>
+          <p>Claude Code, Cursor, Windsurf, Copilot, Gemini, Codex, Zed, JetBrains, Cline, Continue, Aider, Tabnine &mdash; one install, no per-tool config. Your team keeps its editor; the floor comes with it.</p>
         </div>
         <div class="pcard">
           <div class="iconwall" role="img" aria-label="The AI coding tools uxskill runs in: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini, Codex, Zed, JetBrains, Cline, Continue, Aider, Tabnine">
             <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#e7e9ee" stroke-width="1.6"><path d="M12 3v18M3 12h18M6 6l12 12M18 6 6 18"/></svg></span>
             <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="#e7e9ee"><path d="M12 2 21 7l-9 5-9-5z"/><path d="M12 12 21 7v10l-9 5z" opacity=".55"/><path d="M12 12 3 7v10l9 5z" opacity=".3"/></svg></span>
-            <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="1.8"><path d="M3 14c3 3 6 3 9 0s6-3 9 0M3 9c3 3 6 3 9 0s6-3 9 0"/></svg></span>
+            <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#5b9cff" stroke-width="1.8"><path d="M3 14c3 3 6 3 9 0s6-3 9 0M3 9c3 3 6 3 9 0s6-3 9 0"/></svg></span>
             <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#e7e9ee" stroke-width="1.5"><circle cx="9" cy="11" r="2.2"/><circle cx="15" cy="11" r="2.2"/><path d="M4 13c0-4 3-7 8-7s8 3 8 7v3c0 1-1 2-2 2H6c-1 0-2-1-2-2z"/></svg></span>
-            <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="#4285f4"><path d="M12 2c.6 5 4 8.4 9 9-5 .6-8.4 4-9 9-.6-5-4-8.4-9-9 5-.6 8.4-4 9-9z"/></svg></span>
+            <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="#5b9cff"><path d="M12 2c.6 5 4 8.4 9 9-5 .6-8.4 4-9 9-.6-5-4-8.4-9-9 5-.6 8.4-4 9-9z"/></svg></span>
             <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#e7e9ee" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18M3 12h18"/></svg></span>
             <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#e7e9ee" stroke-width="2"><path d="M5 7h14L7 17h12"/></svg></span>
             <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" fill="#e7e9ee"/><path d="M7 17h6" stroke="#0a0b10" stroke-width="2"/></svg></span>
-            <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.7"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 14l3-4 3 3 2-3"/></svg></span>
+            <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#3ddc97" stroke-width="1.7"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 14l3-4 3 3 2-3"/></svg></span>
             <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#e7e9ee" stroke-width="1.7"><path d="M5 5l7 7-7 7M13 19h6"/></svg></span>
             <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#ff5b8a" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><path d="M9 12l2 2 4-4"/></svg></span>
             <span class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="#e7e9ee"><path d="M8 18 12 11l4 7H8z"/><path d="M4 18 12 4l8 14H4z" opacity=".25"/></svg></span>
           </div>
         </div>
       </div>
-      <div class="zig zig--rev rev">
-        <div class="ztxt">
-          <span class="k">Closed-loop, local</span>
-          <h3>It learns <em>how you ship.</em></h3>
-          <p>Every run writes to a local decisions ledger. The recommender re-ranks future systems by your past wins in the same industry and UI type. Cold-start safe, on your machine, zero telemetry.</p>
-        </div>
-        <div class="pcard">
-          <div class="chatmock" role="img" aria-label="A chat where uxskill locks the brand and refuses generic output">
-            <div class="cbub u">Build a pricing page. Make it premium.</div>
-            <div class="cbub a">Brand locked from your logo &mdash; not the CSS green. Rejecting Inter-as-display. <span class="ok">brand &#10003;</span></div>
-            <div class="cbub u">Three tiers, middle one highlighted.</div>
-            <div class="cbub a">Asymmetric, middle tier lifted &mdash; not three equal cards. <span class="ok">152 rules &middot; 0 slop</span></div>
-          </div>
-        </div>
-      </div>
     </div>
   </section></div>
 
-  <!-- DARK beat: the problem, messages one-by-one -->
-  <div class="dark"><section class="sec" id="why">
+  <!-- ============ BEAT 7 — THE MOAT + BEAT 8 — INSTALL (dark close) ============ -->
+  <div class="zone zone--dark" data-bg="dark"><span class="zone__bloom" aria-hidden="true" data-bloom="moat"></span><section class="sec" id="install">
     <div class="wrap">
-      <div class="rev" style="max-width:760px">
-        <span class="eyebrow" style="color:var(--muted)">The problem you ship every day</span>
-        <h2 class="lead">Your AI ships <em style="color:var(--body)">the centroid</em> by default.</h2>
-        <p class="sub">Ask any model to "build a landing." You get the average of every site it ever ingested &mdash; in ten seconds, every time.</p>
-      </div>
-      <div class="chat">
-        <div class="msg you"><div class="bub">Build me a fintech landing page.</div></div>
-        <div class="msg sk"><div class="av"></div><div class="bub">Most models hand you: a purple&#8594;blue gradient, three equal cards, a "John&nbsp;Doe" quote, Inter at 96px. The centroid. <span class="tag">the slop</span></div></div>
-        <div class="msg you"><div class="bub">Right. I want it to look like <em>us</em>.</div></div>
-        <div class="msg sk"><div class="av"></div><div class="bub">So uxskill pulls your brand from the logo, compiles a fresh language, and lints 152 anti-patterns before a line ships. <span class="tag">the floor &#10003;</span></div></div>
-      </div>
-    </div>
-  </section></div>
-
-  <!-- LIGHT 3: training data zig-zag -->
-  <div class="light"><section class="sec">
-    <div class="wrap">
-      <div class="rev" style="max-width:760px">
-        <span class="eyebrow">Training data, not templates</span>
-        <h2 class="lead">160 real brands. <em>Distilled, never pasted.</em></h2>
-      </div>
-      <div class="zig zig--rev rev">
-        <div class="ztxt">
-          <span class="k">The corpus is vocabulary</span>
-          <h3>Stripe, Linear, Vercel, Ferrari, Anthropic &mdash; <em>as words, not stamps.</em></h3>
-          <p>The catalogue used to be a menu: pick Stripe, get Stripe-flavoured tokens. v3 turned that on its head &mdash; 160 brand specs become the vocabulary the engine distils from, so output is novel every call.</p>
-        </div>
-        <div class="pcard">
-          <div class="out" role="img" aria-label="The structured corpus: 1,243 entries across the manifests" style="background:#0e1016">
-            <div class="out__bar"><i></i><i></i><i></i><span style="font-family:var(--mono);font-size:11px;color:#717783;margin-left:8px">corpus</span></div>
-            <div class="out__body" style="font-family:var(--mono);font-size:12.5px;color:#9aa3b2;line-height:2">
-              styles <b style="color:#e7e9ee">84</b> &middot; palettes <b style="color:#e7e9ee">176</b><br>type-pairs <b style="color:#e7e9ee">70</b> &middot; components <b style="color:#e7e9ee">148</b><br>brands <b style="color:#e7e9ee">160</b> &middot; anti-patterns <b style="color:#e7e9ee">152</b><br><span style="color:#1a9f6a">&#10003;</span> 1,243 entries &middot; queryable, cross-referenced</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section></div>
-
-  <!-- BACK TO BLACK: the floor + stats + install -->
-  <div class="dark"><section class="sec" id="install">
-    <div class="wrap">
-      <div class="rev" style="max-width:760px">
-        <span class="eyebrow" style="color:var(--muted)">Why this is the floor</span>
-        <h2 class="lead">Three properties. <em style="color:var(--body)">No competitor has all three.</em></h2>
+      <div class="rev head">
+        <span class="eyebrow"><span class="dot c-violet"></span>Why this is the floor</span>
+        <h2 class="lead">Three properties. <em>No competitor has all three.</em></h2>
       </div>
       <div class="floor rev">
-        <div class="fcard"><b>Deterministic</b><p>Same brief, same system. No model in the engine, no telemetry, runs on a plane.</p></div>
-        <div class="fcard"><b>Brand-true</b><p>Primary from your logo's pixels; a fidelity hard floor fails any off-brand output.</p></div>
-        <div class="fcard"><b>Mobile-gated</b><p>Rendered at real 360/390px viewports &mdash; horizontal scroll fails the build, not your users.</p></div>
+        <div class="fcard">
+          <svg class="fi" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#5b9cff" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/><circle cx="8" cy="7" r="1.4" fill="#5b9cff" stroke="none"/><circle cx="8" cy="12" r="1.4" fill="#5b9cff" stroke="none"/><circle cx="8" cy="17" r="1.4" fill="#5b9cff" stroke="none"/></svg>
+          <b>Deterministic</b><p>Same brief, same system. No model in the engine, no telemetry, runs on a plane.</p>
+        </div>
+        <div class="fcard">
+          <svg class="fi" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#ff5b8a" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4" fill="#ff5b8a" stroke="none"/></svg>
+          <b>Brand-true</b><p>Primary from your logo's pixels; a fidelity hard floor fails any off-brand output.</p>
+        </div>
+        <div class="fcard">
+          <svg class="fi" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#3ddc97" stroke-width="1.6"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M10 18h4"/></svg>
+          <b>Mobile-gated</b><p>Rendered at real 360 / 390px viewports &mdash; horizontal scroll fails the build, not your users.</p>
+        </div>
       </div>
+
       <div class="stats rev">
         <div class="stat"><div class="n">1,243</div><div class="l">Structured entries</div></div>
         <div class="stat"><div class="n">160</div><div class="l">Brand specs</div></div>
         <div class="stat"><div class="n">152</div><div class="l">Anti-pattern rules</div></div>
         <div class="stat"><div class="n">17</div><div class="l">IDE integrations</div></div>
       </div>
+
+      <div class="rev" style="margin-top:clamp(56px,8vh,96px)">
+        <span class="eyebrow"><span class="dot c-blue"></span>Install</span>
+        <h2 class="lead" style="font-size:clamp(2rem,5.4vw,3.4rem)">One line. <em>Then build.</em></h2>
+      </div>
+      <div class="install rev">
+        <div class="cmd"><span class="cl">Python</span><code><span class="pf">pip install</span> uxskill</code></div>
+        <div class="cmd"><span class="cl">Node</span><code><span class="pf">npx</span> uxskill@latest</code></div>
+        <div class="cmd"><span class="cl">Source</span><code>github.com/Laith0003/ux-skill</code></div>
+      </div>
       <div class="cta rev">
-        <a class="btn btn--key" href="#"><span style="opacity:.7">&#8595;</span> pip install uxskill</a>
-        <a class="btn" href="https://github.com/Laith0003/ux-skill">Star on GitHub <span style="opacity:.7">&#8594;</span></a>
+        <a class="btn btn--key" href="https://pypi.org/project/uxskill/"><span class="arr"><svg aria-hidden="true" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v12m0 0 5-5m-5 5-5-5M5 20h14"/></svg></span> pip install uxskill</a>
+        <a class="btn" href="https://github.com/Laith0003/ux-skill">Star on GitHub <span class="arr"><svg aria-hidden="true" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg></span></a>
       </div>
     </div>
   </section></div>
-  <footer class="foot">[preview] uxskill v3.1 &middot; black &#8594; white &#8594; black &middot; offline, deterministic, no LLM, no telemetry</footer>
+
+  <footer class="foot">[preview] uxskill v3.1 &middot; deterministic &middot; brand-true &middot; mobile-gated &middot; offline, no LLM, no telemetry</footer>
 
 <script>
 (function(){
@@ -335,11 +510,28 @@
   function onScroll(){var span=window.innerHeight*0.92;p=Math.min(Math.max(window.scrollY,0),span)/span;root.style.setProperty('--p',p.toFixed(3));}
   window.addEventListener('scroll',onScroll,{passive:true});window.addEventListener('resize',function(){resize();onScroll();});
   resize();onScroll();if(animate)requestAnimationFrame(frame);
+
+  /* ----- eased whole-page background: one observer drives body bg + nav.lit ----- */
   if('IntersectionObserver' in window){
     var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.16});
     document.querySelectorAll('.rev,.msg').forEach(function(el){io.observe(el);});
-    var lo=new IntersectionObserver(function(es){es.forEach(function(e){nav.classList.toggle('lit',e.isIntersecting);});},{rootMargin:'-58px 0px -42% 0px'});
-    document.querySelectorAll('.light').forEach(function(el){lo.observe(el);});
+
+    var DARK='#06070a', LITE='#f6f7f9', body=document.body;
+    var zones=[].slice.call(document.querySelectorAll('[data-bg]')).filter(function(z){return z!==body;});
+    function applyZone(z){
+      var lite=z.getAttribute('data-bg')==='light';
+      body.style.backgroundColor=lite?LITE:DARK;
+      nav.classList.toggle('lit',lite);
+    }
+    var bo=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ applyZone(e.target); } });
+    },{rootMargin:'-1px 0px -62% 0px',threshold:0});
+    zones.forEach(function(z){bo.observe(z);});
+    // hero owns the very top: while it's the active band, body stays dark, nav unlit
+    var ho=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(e.isIntersecting && e.intersectionRatio>0.5){ body.style.backgroundColor=DARK; nav.classList.remove('lit'); }
+    });},{rootMargin:'-1px 0px -62% 0px',threshold:[0,0.5,1]});
+    ho.observe(hero);
   }
 })();
 </script>
