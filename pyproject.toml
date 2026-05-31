@@ -49,7 +49,7 @@ dev = [
   "pytest-cov>=4.1",
   "ruff>=0.1.9",
   "mypy>=1.7",
-  "black>=23.12",
+  "black>=25.11.0",
   # MCP transport is optional in dev too — guarded by Python version so
   # CI's 3.9 matrix entry can still install dev deps for non-MCP testing.
   "mcp>=1.0; python_version >= '3.10'"
