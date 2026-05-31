@@ -230,7 +230,7 @@ Bottom: `pip install uxskill · github.com/Laith0003/ux-skill`
 |---|---|
 | Slash commands | 23 |
 | MCP tools | 18 |
-| Structured entries | 1,182 |
+| Structured entries | 1,243 |
 | Anti-pattern rules | 145 |
 | Brand DESIGN specs | 160 |
 | IDEs supported | 17 |

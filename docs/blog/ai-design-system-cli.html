@@ -655,14 +655,14 @@ motion        restrained-supportive        (score 0.79 / 57 entries)
 
 components    nav, hero, feature-strip, social-proof, demo-form, footer
 brand_refs    Linear, Stripe, Vercel
-guardrails    145 anti-patterns &middot; threshold high
+guardrails    152 anti-patterns &middot; threshold high
 
 Recommendation saved to .ux/last-recommendation.json</pre>
       <p>
         The output is also a JSON file: <code>.ux/last-recommendation.json</code>. Every score has a sub-score breakdown explaining which manifest entries fed it. The recommender is fully <a href="/blog/python-design-system-generator.html" class="link">documented in the engine post</a>.
       </p>
       <p>
-        On a 2023 MacBook Air, the recommender pass against all 1,182 entries averages 140 to 220 milliseconds. There is no LLM call in the recommender lane &mdash; the scoring is JSON-on-disk and a few hundred dictionary lookups.
+        On a 2023 MacBook Air, the recommender pass against all 1,243 entries averages 140 to 220 milliseconds. There is no LLM call in the recommender lane &mdash; the scoring is JSON-on-disk and a few hundred dictionary lookups.
       </p>
 
       <h2>Step 3 &mdash; <code>ux persist save</code> (writes MASTER.md)</h2>
@@ -706,7 +706,7 @@ Recommendation saved to .ux/last-recommendation.json</pre>
 
       <ol class="step-list">
         <li><strong>Type the brief</strong> &mdash; about 90 seconds. The bottleneck. Concrete answers cost cognition; you cannot offload this step.</li>
-        <li><strong>Run the recommender</strong> &mdash; 140 to 220 milliseconds. Five parallel searches over 1,182 entries, merged, scored, returned.</li>
+        <li><strong>Run the recommender</strong> &mdash; 140 to 220 milliseconds. Five parallel searches over 1,243 entries, merged, scored, returned.</li>
         <li><strong>Run persist save</strong> &mdash; under 80 milliseconds. Three files written: MASTER.md, tokens.css, manifest.json.</li>
         <li><strong>Total CLI compute</strong> &mdash; under 300 milliseconds. The brief is 100% of the human time; the engine is rounding error.</li>
       </ol>
@@ -798,9 +798,9 @@ Recommendation saved to .ux/last-recommendation.json</pre>
 
       <h2>Real numbers</h2>
       <ul>
-        <li><strong>959 structured entries</strong> across 11 JSON manifests. Styles (84), palettes (176), type pairs (70), motion presets (57), components (148), industries (184), chart types (35), tech stacks (25), anti-patterns (68), UX guidelines (112).</li>
+        <li><strong>959 structured entries</strong> across 12 JSON manifests. Styles (84), palettes (176), type pairs (70), motion presets (57), components (148), industries (184), chart types (35), tech stacks (25), anti-patterns (68), UX guidelines (112).</li>
         <li><strong>160 brand DESIGN.md specs</strong>. Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, plus 84 more.</li>
-        <li><strong>22 slash commands</strong> when installed as a Claude Code plugin. The same engine functions all run through the CLI subcommands.</li>
+        <li><strong>25 slash commands</strong> when installed as a Claude Code plugin. The same engine functions all run through the CLI subcommands.</li>
         <li><strong>18 MCP tools</strong> when run as a stdio server. The CLI and the MCP layer share the recommender, the linter, and the persist machinery.</li>
         <li><strong>14 GitHub stars</strong> on Laith0003/ux-skill at the time of writing. Smaller than ui-ux-pro-max-skill (84,005) and taste-skill (25,359). The CLI shape is the bet.</li>
       </ul>

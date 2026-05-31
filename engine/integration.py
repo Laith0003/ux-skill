@@ -1,6 +1,6 @@
 """Cross-reference wiring — Phase 1B integration.
 
-After data agents fill the 11 manifests, this script walks them and fills
+After data agents fill the 12 manifests, this script walks them and fills
 the `compatible_*` arrays based on tag overlap heuristics. Idempotent —
 safe to re-run as data grows.
 

@@ -617,7 +617,7 @@
       <span class="eyebrow">Launch · v3.0.0 · 2026-05-28</span>
       <h1>ux-skill v3.0 — we shipped <span class="accent">The Brain</span>. Brand specs are training data now, not templates.</h1>
       <p class="lede">
-        <strong>v2 picked from the catalogue. v3 distills from it.</strong> Same 160 brand specs, completely different role. The recommender used to score 1,182 entries and return the highest-similarity match. The synthesizer now reads those entries as <em>vocabulary</em> and compiles a novel design language from a brief. Every call returns a system that did not exist before the call.
+        <strong>v2 picked from the catalogue. v3 distills from it.</strong> Same 160 brand specs, completely different role. The recommender used to score 1,243 entries and return the highest-similarity match. The synthesizer now reads those entries as <em>vocabulary</em> and compiles a novel design language from a brief. Every call returns a system that did not exist before the call.
       </p>
       <p class="byline">By the ux-skill team · 12 min read · MIT-licensed open source</p>
 
@@ -637,7 +637,7 @@
 
       <h2>The shift in one paragraph</h2>
       <p>
-        v2 was a <em>recommender</em>. You gave it a brief and it returned the closest match from a curated catalogue — 84 styles, 176 palettes, 160 brand specs, 70 type pairs. The output was always a row from the database. v3 keeps the entire catalogue but flips its purpose: those 1,182 entries are now the <em>vocabulary the engine distills from</em>. A brief no longer pulls a row — it gets compiled into seven axis values, and those values synthesize fresh tokens. The catalogue teaches the engine what airy-and-corporate looks like; the engine generates a new airy-and-corporate system that has never shipped before. Same data. Completely different role.
+        v2 was a <em>recommender</em>. You gave it a brief and it returned the closest match from a curated catalogue — 84 styles, 176 palettes, 160 brand specs, 70 type pairs. The output was always a row from the database. v3 keeps the entire catalogue but flips its purpose: those 1,243 entries are now the <em>vocabulary the engine distills from</em>. A brief no longer pulls a row — it gets compiled into seven axis values, and those values synthesize fresh tokens. The catalogue teaches the engine what airy-and-corporate looks like; the engine generates a new airy-and-corporate system that has never shipped before. Same data. Completely different role.
       </p>
 
       <h2>What broke in v2 that v3 <span class="accent">fixes</span></h2>
@@ -922,7 +922,7 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
 
       <h3>No "burn the catalogue for infinite space"</h3>
       <p>
-        The most maximalist version of the proposal said the catalogue was a liability &mdash; that the synthesizer could reach the entire design space on its own and the 1,182 entries should go. We kept every entry. The catalogue is what teaches the synthesizer the <em>shape</em> of the space &mdash; without exemplars the axes have no anchors, and the output gets unmoored. v3 reads the catalogue as vocabulary; v3 needs the vocabulary.
+        The most maximalist version of the proposal said the catalogue was a liability &mdash; that the synthesizer could reach the entire design space on its own and the 1,243 entries should go. We kept every entry. The catalogue is what teaches the synthesizer the <em>shape</em> of the space &mdash; without exemplars the axes have no anchors, and the output gets unmoored. v3 reads the catalogue as vocabulary; v3 needs the vocabulary.
       </p>
 
       <p>
@@ -934,7 +934,7 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
       <div class="stats-row">
         <div class="stat"><div class="n">23</div><div class="l">Commands</div></div>
         <div class="stat"><div class="n">18</div><div class="l">MCP tools</div></div>
-        <div class="stat"><div class="n">1,182</div><div class="l">Entries</div></div>
+        <div class="stat"><div class="n">1,243</div><div class="l">Entries</div></div>
         <div class="stat"><div class="n">145</div><div class="l">Anti-patterns</div></div>
         <div class="stat"><div class="n">160</div><div class="l">Brand specs</div></div>
         <div class="stat"><div class="n">17</div><div class="l">IDEs</div></div>
@@ -977,10 +977,10 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
 
       <h2>What changes for you</h2>
       <p>
-        If you were on v2: nothing breaks. The 22 commands you already use behave the same way. The lint runs at the same speed. The MCP server exposes 15 of the 18 tools at their old names plus three new ones. If you upgrade and never call <code>/ux-synthesize</code> or <code>/ux-evolve</code>, your daily workflow does not move at all.
+        If you were on v2: nothing breaks. The 25 commands you already use behave the same way. The lint runs at the same speed. The MCP server exposes 15 of the 18 tools at their old names plus three new ones. If you upgrade and never call <code>/ux-synthesize</code> or <code>/ux-evolve</code>, your daily workflow does not move at all.
       </p>
       <p>
-        If you were waiting for the engine to <em>generate</em> rather than <em>recommend</em>: that is what v3 is. The synthesizer is the new center; <code>/ux-recommend</code> still works and now re-ranks from your ledger; <code>/ux-evolve</code> closes the polish loop. Brand specs are training data now, not templates. The same 1,182 entries are doing a completely different job.
+        If you were waiting for the engine to <em>generate</em> rather than <em>recommend</em>: that is what v3 is. The synthesizer is the new center; <code>/ux-recommend</code> still works and now re-ranks from your ledger; <code>/ux-evolve</code> closes the polish loop. Brand specs are training data now, not templates. The same 1,243 entries are doing a completely different job.
       </p>
       <p>
         We named v3 The Brain because that is what got built &mdash; a constrained generative design compiler with a closed feedback loop. It is fully offline. It calls zero LLMs. Same brief, same axes, same output. Different briefs, different regions, infinite outputs. Your install learns from your repo. Different repos build different brains. The whole thing is MIT, sub-300ms on a normal machine, and pip-installable.
@@ -994,7 +994,7 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
     <section class="cta">
       <span class="eyebrow">Run it on your project</span>
       <h2>One engine. <span class="accent">Three install paths.</span></h2>
-      <p>The synthesizer that powers v3 ships in the same package as the linter and the recommender. 145 anti-patterns. 160 brand specs. 1,182 entries. 17 IDEs. MIT, no telemetry, no account.</p>
+      <p>The synthesizer that powers v3 ships in the same package as the linter and the recommender. 152 anti-patterns. 160 brand specs. 1,243 entries. 17 IDEs. MIT, no telemetry, no account.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>

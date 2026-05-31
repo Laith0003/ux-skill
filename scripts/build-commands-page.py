@@ -1,4 +1,4 @@
-"""Build docs/commands.html — a reference page for all 23 slash commands.
+"""Build docs/commands.html — a reference page for all 25 slash commands.
 
 Pulls the frontmatter (`name`, `description`) and the first "When to use" / "When to skip"
 sections out of each commands/*.md file and renders them into a single HTML page that:
@@ -81,7 +81,7 @@ HEAD = """<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ux-skill commands — 23 slash commands referenced</title>
+  <title>ux-skill commands — 25 slash commands referenced</title>
   <meta name="description" content="Complete reference for the 23 ux-skill slash commands available in Claude Code, Cursor, Windsurf, and 14 more IDEs. Each command's purpose, triggers, and source link.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/commands.html">
   <meta name="theme-color" content="#07080a">
@@ -90,7 +90,7 @@ HEAD = """<!DOCTYPE html>
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/commands.html">
-  <meta property="og:title" content="ux-skill commands — 23 slash commands referenced">
+  <meta property="og:title" content="ux-skill commands — 25 slash commands referenced">
   <meta property="og:description" content="One reference page for every ux-skill command. /ux-recommend, /ux-lint, /ux-design, /ux-component, +19 more.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
   <meta property="og:image:width" content="1200">
@@ -564,10 +564,10 @@ __JSONLD__
       <a href="/commands.html" class="is-current">commands</a>
     </nav>
 
-    <span class="eyebrow">Reference &middot; 23 commands</span>
+    <span class="eyebrow">Reference &middot; 25 commands</span>
     <h1>Every slash command, <span class="accent">documented</span>.</h1>
     <p class="lede">
-      ux-skill ships 23 slash commands across discovery, recommendation, generation,
+      ux-skill ships 25 slash commands across discovery, recommendation, generation,
       quality, and workflow. Each one runs the Python engine under the hood and chains
       into the next via <code>.ux/last-*.json</code> state files. Click any name to jump
       to its summary or follow the source link for the full markdown.

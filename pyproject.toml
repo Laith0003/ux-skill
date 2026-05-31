@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "uxskill"
 version = "3.1.0"
-description = "Design intelligence engine for AI coding assistants. Deterministic anti-AI-slop linter (145 rules), mandatory discovery, 5-parallel-search recommender, 1,182 entries across 11 manifests, 160 brand DESIGN specs, MCP server. Runs in Claude Code, Cursor, Windsurf, and 14 more IDEs."
+description = "Design intelligence engine for AI coding assistants. Deterministic anti-AI-slop linter (152 rules), mandatory discovery, 5-parallel-search recommender, 1,243 entries across 12 manifests, 160 brand DESIGN specs, MCP server. Runs in Claude Code, Cursor, Windsurf, and 14 more IDEs."
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }

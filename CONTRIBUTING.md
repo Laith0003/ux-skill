@@ -38,7 +38,7 @@ Thanks for your interest. This plugin is opinionated by design — its value com
 
 ## Development
 
-The plugin is a Python engine (`engine/`), 11 queryable JSON manifests (`data/`), 23 slash command markdown files (`commands/`), 5 sub-agent definitions (`agents/`), 92 brand DESIGN.md specs (`references/brands/`), an MCP server (`engine/mcp/`), and the static docs site (`docs/` + `landing/`).
+The plugin is a Python engine (`engine/`), 12 queryable JSON manifests (`data/`), 25 slash command markdown files (`commands/`), 5 sub-agent definitions (`agents/`), 92 brand DESIGN.md specs (`references/brands/`), an MCP server (`engine/mcp/`), and the static docs site (`docs/` + `landing/`).
 
 Local dev:
 

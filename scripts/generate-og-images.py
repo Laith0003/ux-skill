@@ -55,7 +55,7 @@ PAGES = {
     "jetbrains-ai-design-system": ("Integration", "JetBrains AI\ndesign system rules", "IntelliJ + WebStorm · 85-rule linter"),
     "ai-design-system-cli":       ("Tooling", "AI design system CLI", "10-field discovery · 60-second MASTER.md"),
     "claude-desktop-mcp-design":  ("MCP", "Claude Desktop + MCP\ndesign intelligence", "ux-skill as stdio server · 14 tools"),
-    "commands":                   ("Reference", "Every slash command,\ndocumented", "23 commands · discovery -> recommend -> generate -> lint"),
+    "commands":                   ("Reference", "Every slash command,\ndocumented", "25 commands · discovery -> recommend -> generate -> lint"),
 }
 
 

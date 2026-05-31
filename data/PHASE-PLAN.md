@@ -50,7 +50,7 @@ Living tracker for the architecture pivot from "markdown an LLM reads" to
 ## Release plan
 
 - **v2.0.0-alpha.1** (this commit) — schemas + skeleton + first batch of data
-- **v2.0.0-alpha.2** — all 11 manifests filled to target numbers
+- **v2.0.0-alpha.2** — all 12 manifests filled to target numbers
 - **v2.0.0-beta.1** — Python engine works end-to-end (`ux recommend` returns a system)
 - **v2.0.0-rc.1** — multi-IDE installer works for top 5 IDEs
 - **v2.0.0** — all 17 IDEs supported, docs updated, landing v3

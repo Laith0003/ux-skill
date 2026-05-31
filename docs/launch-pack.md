@@ -3,8 +3,8 @@
 Pre-written launch copy for Hacker News, Product Hunt, Reddit, X/Twitter, LinkedIn, and Discord. Tuned to each platform's tone. **You** post — Claude never posts on your behalf.
 
 Numbers are accurate as of 2026-05-28:
-- 998 manifest entries · 145 anti-pattern rules (after round 5) · 160 brand specs
-- 23 slash commands · 14 MCP tools · 17 IDE adapters
+- 998 manifest entries · 152 anti-pattern rules (after round 5) · 160 brand specs
+- 25 slash commands · 14 MCP tools · 17 IDE adapters
 - 4 install paths (pip / npx / Claude Code plugin / Cursor rules)
 - 6 language READMEs (en / ar / es / zh / fr / de)
 - 75 tests · 0 high lint findings on the homepage
@@ -21,9 +21,9 @@ Numbers are accurate as of 2026-05-28:
 ux-skill is an open-source Python engine that catches the AI-design fingerprints every LLM produces by default — purple-to-blue gradients, Inter at 90px, John Doe placeholders, three-equal-card hero grids, lorem ipsum, emoji-as-icons. It runs inside Claude Code, Cursor, Windsurf, GitHub Copilot, and 13 more IDEs.
 
 The architecture:
-- 1,182 entries across 11 queryable JSON manifests (styles, palettes, type pairs, components, motion presets, industries, brand specs)
+- 1,243 entries across 12 queryable JSON manifests (styles, palettes, type pairs, components, motion presets, industries, brand specs)
 - A 5-parallel-search recommender that fans out across style → palette → type → motion → components for a given brief
-- A deterministic regex linter with 145 anti-pattern rules (no LLM in the audit lane — runs in CI in <50ms)
+- A deterministic regex linter with 152 anti-pattern rules (no LLM in the audit lane — runs in CI in <50ms)
 - 160 brand DESIGN.md specs as queryable JSON (Apple, Stripe, Linear, Notion, Vercel, Figma, Tesla, BMW, Spotify, plus 112 more)
 - An MCP server exposing 14 tools — works in Claude Desktop, Cursor, Windsurf, and generic MCP hosts. None of the top 8 Claude UX skills ship one.
 
@@ -102,7 +102,7 @@ Looking for feedback on the rule catalog. What AI design fingerprints am I still
 ```
 ux-skill is a Python plugin I built to fix the "every AI-generated UI looks the same" problem. It's a 5-module Python package:
 
-- `recommender` — 5-parallel-search across 11 JSON manifests (1,182 entries total)
+- `recommender` — 5-parallel-search across 12 JSON manifests (1,243 entries total)
 - `linter` — deterministic regex linter, 100 rules, CI-friendly
 - `discovery` — 10-field protocol that forces the model to ask before generating
 - `generator` — emits tokens + manifest from a recommendation
@@ -179,7 +179,7 @@ ux-skill catches these fingerprints with a deterministic regex linter — 100 ru
 
 Architecturally:
 - Python engine, packaged as `uxskill` on PyPI and `uxskill` on npm.
-- 23 slash commands across discovery, recommendation, generation, quality, and workflow.
+- 25 slash commands across discovery, recommendation, generation, quality, and workflow.
 - An MCP server with 14 tools — works in Claude Desktop, Cursor, Windsurf, and any MCP-capable host.
 - Adapters for 17 IDEs (Claude Code, Cursor, Windsurf, GitHub Copilot, JetBrains AI, Zed, Aider, Cline, Continue, Codex, Gemini CLI, Pieces, Tabby, Tabnine, CodeWhisperer, Kiro, Roo Cline).
 
@@ -214,7 +214,7 @@ The full scored side-by-side is at uxskill.laithjunaidy.com/compare.html.
 
 **Q: "What does the recommender actually return?"**
 ```
-A JSON document with a picked style, picked palette, picked type pair, top 5 motion presets, top 12 compatible components, top 5 brand exemplars, and all 145 anti-pattern guardrails active. Plus a rationale block explaining each pick.
+A JSON document with a picked style, picked palette, picked type pair, top 5 motion presets, top 12 compatible components, top 5 brand exemplars, and all 152 anti-pattern guardrails active. Plus a rationale block explaining each pick.
 
 Output goes to .ux/last-recommendation.json. The /ux-design and /ux-component commands chain off that file — the same recommendation flows through your whole workflow.
 ```

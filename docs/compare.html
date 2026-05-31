@@ -662,7 +662,7 @@
     "name": "ux-skill",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Cross-platform (CLI + IDE plugin)",
-    "description": "Open-source design intelligence engine: 1,182 structured entries, 68-rule anti-AI-slop linter, 5-parallel-search recommender, MCP server. Pip + npx + Claude Code plugin.",
+    "description": "Open-source design intelligence engine: 1,243 structured entries, 68-rule anti-AI-slop linter, 5-parallel-search recommender, MCP server. Pip + npx + Claude Code plugin.",
     "softwareVersion": "3.0.0",
     "downloadUrl": "https://pypi.org/project/uxskill/",
     "url": "https://uxskill.laithjunaidy.com/",
@@ -1254,13 +1254,13 @@
           <tr class="ours">
             <th>Catalog approach</th>
             <td>67 styles, 161 palettes, 57 type pairings, 161 industry rules, 99 UX laws, 25 charts, 15 stacks. CSV-backed, BM25-ranked.</td>
-            <td class="ours-cell">84 styles, 176 palettes, 70 type pairings, 184 industry rules, 112 UX laws, 35 charts, 25 stacks, <strong>148 components, 57 motion presets, 145 anti-patterns, 160 brand specs</strong>. JSON-backed.</td>
-            <td><span class="winner us">us</span> 1,182 vs ~600</td>
+            <td class="ours-cell">84 styles, 176 palettes, 70 type pairings, 184 industry rules, 112 UX laws, 35 charts, 25 stacks, <strong>148 components, 57 motion presets, 152 anti-patterns, 160 brand specs</strong>. JSON-backed.</td>
+            <td><span class="winner us">us</span> 1,243 vs ~600</td>
           </tr>
           <tr class="ours">
             <th>Anti-AI-slop enforcement</th>
             <td>Implicit in the recommendation prompt. No standalone linter; rules are buried in the BM25 ranker.</td>
-            <td class="ours-cell"><strong>145 deterministic regex rules</strong> in <code>data/anti-patterns.json</code>. No LLM. CI-friendly with <code>ux lint --threshold high</code>.</td>
+            <td class="ours-cell"><strong>152 deterministic regex rules</strong> in <code>data/anti-patterns.json</code>. No LLM. CI-friendly with <code>ux lint --threshold high</code>.</td>
             <td><span class="winner us">us</span></td>
           </tr>
           <tr class="ours">
@@ -1272,7 +1272,7 @@
           <tr class="ours">
             <th>Commands shipped</th>
             <td>1 invokable skill ("ui-ux-pro-max"). The recommender + generator both live inside that single skill.</td>
-            <td class="ours-cell"><strong>22 slash commands</strong> across 4 lanes: <em>frame</em> (4) &middot; <em>generate</em> (6) &middot; <em>audit</em> (5) &middot; <em>workflow</em> (7). Each chains to the next via state files.</td>
+            <td class="ours-cell"><strong>25 slash commands</strong> across 4 lanes: <em>frame</em> (4) &middot; <em>generate</em> (6) &middot; <em>audit</em> (5) &middot; <em>workflow</em> (7). Each chains to the next via state files.</td>
             <td><span class="winner us">us</span> 22x</td>
           </tr>
           <tr class="ours">
@@ -1337,7 +1337,7 @@
           <tr class="ours">
             <th>What you get</th>
             <td>19 named skills + Node.js runtime + sandboxed preview server. Outputs HTML, PDF, PPTX, MP4 of generated designs.</td>
-            <td class="ours-cell">22 slash commands + Python engine + 1,182 structured data entries. Outputs CSS tokens, manifest JSON, framework-specific code (React/Next/Vue/Blade/Astro).</td>
+            <td class="ours-cell">25 slash commands + Python engine + 1,243 structured data entries. Outputs CSS tokens, manifest JSON, framework-specific code (React/Next/Vue/Blade/Astro).</td>
             <td><span class="winner tie">different jobs</span></td>
           </tr>
           <tr class="ours">
@@ -1367,7 +1367,7 @@
           <tr class="ours">
             <th>Catalog structure</th>
             <td>71 design systems as <strong>prose markdown files</strong> in <code>design-systems/&lt;brand&gt;/</code>. LLM reads them per generation. Components, motion, anti-patterns also present as prose inside each.</td>
-            <td class="ours-cell">1,182 entries across <strong>11 JSON manifests with declared schemas</strong>. Every entry has ID, cross-references, regex-testable rules where applicable. Queryable from Python, npm, any shell.</td>
+            <td class="ours-cell">1,243 entries across <strong>12 JSON manifests with declared schemas</strong>. Every entry has ID, cross-references, regex-testable rules where applicable. Queryable from Python, npm, any shell.</td>
             <td><span class="winner us">us</span> on shape</td>
           </tr>
           <tr class="ours">
@@ -1420,7 +1420,7 @@
           <tr class="ours">
             <th>Anti-slop approach</th>
             <td>Bash skill + 13 variant SKILL.md files. The 3 dials are passed to the LLM as adjustment knobs. Correction-only &mdash; they don't generate.</td>
-            <td class="ours-cell">145 deterministic regex rules (no LLM) + 10-field discovery enforced before generation. Generation + correction in the same engine.</td>
+            <td class="ours-cell">152 deterministic regex rules (no LLM) + 10-field discovery enforced before generation. Generation + correction in the same engine.</td>
             <td><span class="winner us">us</span> on enforcement; <span class="winner them">them</span> on conceptual elegance</td>
           </tr>
           <tr class="ours">
@@ -1438,7 +1438,7 @@
           <tr class="ours">
             <th>Architecture</th>
             <td>Bash + 13 SKILL.md variants + research docs. No queryable data layer.</td>
-            <td class="ours-cell">Python engine + 11 JSON manifests + 22 commands + 5 sub-agents.</td>
+            <td class="ours-cell">Python engine + 12 JSON manifests + 25 commands + 5 sub-agents.</td>
             <td><span class="winner us">us</span></td>
           </tr>
           <tr class="ours">
@@ -1521,7 +1521,7 @@
           <tr class="ours">
             <th>Architecture</th>
             <td>Single 62 KB SKILL.md + references/ + scripts/ + demos/ + assets/. Prose-driven; everything passes through LLM interpretation.</td>
-            <td class="ours-cell">Python engine + 11 JSON manifests + 22 commands + 5 sub-agents. Determinism where possible.</td>
+            <td class="ours-cell">Python engine + 12 JSON manifests + 25 commands + 5 sub-agents. Determinism where possible.</td>
             <td><span class="winner us">us</span> on architecture</td>
           </tr>
           <tr class="ours">
@@ -1591,7 +1591,7 @@
           <tr class="ours">
             <th>google-labs-code/stitch-skills <span class="stars-pill" style="margin:0;"><span class="star-dot"></span>5,762</span></th>
             <td>MCP-server-wired skill library, Google-affiliated, official-flavored. Strong design provenance from the Stitch team.</td>
-            <td class="ours-cell">Pair them &mdash; use Stitch's MCP for design-system import from Figma-adjacent files, then run <code>/ux-recommend</code> on the imported result to ground it in our 1,182-entry catalog.</td>
+            <td class="ours-cell">Pair them &mdash; use Stitch's MCP for design-system import from Figma-adjacent files, then run <code>/ux-recommend</code> on the imported result to ground it in our 1,243-entry catalog.</td>
           </tr>
           <tr class="ours">
             <th>dominikmartn/nothing-design-skill <span class="stars-pill" style="margin:0;"><span class="star-dot"></span>2,391</span></th>
@@ -1651,7 +1651,7 @@
         <div class="label">The positioning</div>
         <h4>Catalog tools generate. Taste tools correct. ux-skill is the workflow.</h4>
         <p>Pick <strong>ui-ux-pro-max-skill</strong> for raw catalog depth. Pick <strong>taste-skill</strong> for anti-slop philosophy. Pick <strong>huashu-design</strong> or <strong>open-design</strong> for hi-fi mockup output with preview. Pick <strong>material-3-skill</strong> if you only ship MD3. Pick <strong>hallmark</strong> for Nutlope's brand.</p>
-        <p>Pick <strong>ux-skill</strong> when you want all of: a queryable Python engine underneath, 145 deterministic rules running in CI, 160 brand DESIGN.md specs, and a 22-command pipeline that maps to a designer's actual workday. Tiny on stars today; deep on architecture. That's the bet.</p>
+        <p>Pick <strong>ux-skill</strong> when you want all of: a queryable Python engine underneath, 152 deterministic rules running in CI, 160 brand DESIGN.md specs, and a 22-command pipeline that maps to a designer's actual workday. Tiny on stars today; deep on architecture. That's the bet.</p>
       </div>
     </section>
 
@@ -1680,7 +1680,7 @@
     <section class="cta">
       <span class="eyebrow">Run it. Decide for yourself.</span>
       <h2>14 stars today. The scorecard says we're the deepest. <span class="accent">Test the claim.</span></h2>
-      <p>MIT licensed. No telemetry. No account. Three install paths, same engine, same 1,182 entries, same 145-rule linter.</p>
+      <p>MIT licensed. No telemetry. No account. Three install paths, same engine, same 1,243 entries, same 152-rule linter.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>

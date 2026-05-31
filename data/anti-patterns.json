@@ -2563,7 +2563,7 @@
         ]
       },
       "why": "'Cutting-edge' is the laziest tech adjective in marketing copy - empty signal that means 'we don't want to commit to a specific claim'. Skipped by anyone reading critically.",
-      "fix": "Replace with a concrete capability: 'ships in under 50ms', 'covers 145 anti-patterns', 'runs inside Cursor and Windsurf'. Specifics beat adjectives."
+      "fix": "Replace with a concrete capability: 'ships in under 50ms', 'covers 152 anti-patterns', 'runs inside Cursor and Windsurf'. Specifics beat adjectives."
     },
     {
       "id": "marketing-buzz-best-in-class",

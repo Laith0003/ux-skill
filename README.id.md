@@ -2,13 +2,13 @@
 
 # ux-skill — mesin design intelligence untuk Claude Code, Cursor, dan setiap tool coding AI lainnya
 
-> **v3.0.0 stable — THE BRAIN.** Plugin UX terkuat untuk coding AI. Inti reasoning Python dengan 11 manifest JSON yang bisa di-query (84 style, 176 palette, 70 pasangan tipografi, 148 komponen, 184 industri, 35 tipe chart, 57 preset motion, 112 hukum UX, 145 aturan anti-pattern, 25 tech stack, 160 spec brand), 22 slash command, 5 sub-agent, dan linter deterministik anti-AI-slop. Lintas IDE: tersedia di Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, dan Roo Cline.
+> **v3.1.0 stable — THE BRAIN.** Plugin UX terkuat untuk coding AI. Inti reasoning Python dengan 12 manifest JSON yang bisa di-query (84 style, 176 palette, 70 pasangan tipografi, 148 komponen, 184 industri, 35 tipe chart, 57 preset motion, 112 hukum UX, 152 aturan anti-pattern, 25 tech stack, 160 spec brand), 25 slash command, 5 sub-agent, dan linter deterministik anti-AI-slop. Lintas IDE: tersedia di Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, dan Roo Cline.
 
 > **Nama brand-nya adalah `ux-skill`.** Nama paket PyPI / npm tetap `uxskill`. Repo GitHub ada di [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
 **Situs:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **Bandingkan dengan setiap plugin UX Claude:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
 
-[![Version](https://img.shields.io/badge/version-3.0.0-stable-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
+[![Version](https://img.shields.io/badge/version-3.1.0-stable-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Python](https://img.shields.io/badge/python-3.9%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#installer-17-ide)
@@ -45,7 +45,7 @@ Detail lengkap di [CHANGELOG.md](CHANGELOG.md#300--2026-05-28--the-brain).
 
 ux-skill adalah **mesin design intelligence** untuk tool coding AI. Berjalan sebagai paket Python (`pip install uxskill`), sebagai plugin Claude Code, dan sebagai multi-installer 17 IDE. Mesinnya menerima brief proyek (industri, audiens, tone, must-have, hal yang dilarang, stack, region) dan mengembalikan sistem design rekomendasi lengkap: style, palette, pasangan tipografi, preset motion, komponen, brand teladan untuk dipelajari, dan guardrail anti-pattern yang harus dipertahankan. Rekomendasinya deterministik — input yang sama selalu menghasilkan output yang sama.
 
-Plugin ini duduk di antara kamu dan tool coding AI. Ketika kamu meminta Claude Code, Cursor, atau asisten AI lainnya untuk "buat landing page fintech," asisten biasanya berimprovisasi — dan hasilnya terbaca sebagai buatan AI dalam lima detik (gradien ungu-ke-biru, tiga card sama besar, Inter di ukuran display, "John Doe" di testimonial, transisi default 300ms, hero centered, panah CTA yang bouncing). ux-skill mengganti improvisasi dengan **batasan terstruktur**: kamu jalankan `/ux-discover` untuk menangkap brief, `/ux-recommend` untuk memilih sistem, `/ux-design` untuk menghasilkan code, dan `/ux-lint` untuk memverifikasi bahwa hasilnya lolos 145 aturan deterministik anti-AI-slop sebelum commit.
+Plugin ini duduk di antara kamu dan tool coding AI. Ketika kamu meminta Claude Code, Cursor, atau asisten AI lainnya untuk "buat landing page fintech," asisten biasanya berimprovisasi — dan hasilnya terbaca sebagai buatan AI dalam lima detik (gradien ungu-ke-biru, tiga card sama besar, Inter di ukuran display, "John Doe" di testimonial, transisi default 300ms, hero centered, panah CTA yang bouncing). ux-skill mengganti improvisasi dengan **batasan terstruktur**: kamu jalankan `/ux-discover` untuk menangkap brief, `/ux-recommend` untuk memilih sistem, `/ux-design` untuk menghasilkan code, dan `/ux-lint` untuk memverifikasi bahwa hasilnya lolos 152 aturan deterministik anti-AI-slop sebelum commit.
 
 README ini adalah referensi kanonis. Setiap command, setiap sub-agent, setiap data manifest, setiap path install, setiap brand spec, setiap kategori anti-pattern — semuanya didokumentasikan di sini. Jika kamu sedang mencari plugin design untuk Claude Code atau membandingkan tool design AI untuk Cursor, Windsurf, atau Codex, baca ini dari atas ke bawah bersama [compare.html](https://uxskill.laithjunaidy.com/compare.html).
 
@@ -57,10 +57,10 @@ README ini adalah referensi kanonis. Setiap command, setiap sub-agent, setiap da
 2. [Install cepat](#install-cepat)
 3. [Angka — perbandingan live dengan 8 skill UX Claude teratas](#angka--perbandingan-live-dengan-8-skill-ux-claude-teratas)
 4. [Arsitektur — bagaimana semuanya cocok](#arsitektur--bagaimana-semuanya-cocok)
-5. [22 slash command — referensi detail](#22-slash-command--referensi-detail)
+5. [25 slash command — referensi detail](#22-slash-command--referensi-detail)
 6. [5 sub-agent](#5-sub-agent)
-7. [11 data manifest](#11-data-manifest)
-8. [145 aturan anti-AI-slop — linter](#145-aturan-anti-ai-slop--linter)
+7. [12 data manifest](#11-data-manifest)
+8. [152 aturan anti-AI-slop — linter](#145-aturan-anti-ai-slop--linter)
 9. [160 spec brand DESIGN.md — per kategori](#160-spec-brand-designmd--per-kategori)
 10. [Server MCP — langkah asimetris](#server-mcp--langkah-asimetris)
 11. [Installer 17 IDE](#installer-17-ide)
@@ -74,7 +74,7 @@ README ini adalah referensi kanonis. Setiap command, setiap sub-agent, setiap da
 
 ## Otak — apa itu v3.0
 
-v3.0.0 adalah pergeseran arsitektur terbesar dalam sejarah ux-skill. Recommender tidak lagi mengambil template dari katalog — engine **mensintesis** bahasa desain segar per brief. Brief yang sama selalu menghasilkan output yang sama (sepenuhnya deterministik), tetapi setiap brief berbeda mendapat sistem barunya sendiri. Brand specs bukan lagi template; mereka adalah data pelatihan tempat engine belajar kosakata. Sistem memiliki mata pada sejarahnya sendiri, menutup loop umpan balik secara lokal, dan tidak pernah memanggil LLM.
+v3.1.0 adalah pergeseran arsitektur terbesar dalam sejarah ux-skill. Recommender tidak lagi mengambil template dari katalog — engine **mensintesis** bahasa desain segar per brief. Brief yang sama selalu menghasilkan output yang sama (sepenuhnya deterministik), tetapi setiap brief berbeda mendapat sistem barunya sendiri. Brand specs bukan lagi template; mereka adalah data pelatihan tempat engine belajar kosakata. Sistem memiliki mata pada sejarahnya sendiri, menutup loop umpan balik secara lokal, dan tidak pernah memanggil LLM.
 
 Compiler adalah **synthesizer deterministik 7-sumbu** — warmth, contrast, density, geometry, formality, motion, type_personality. Setiap brief dipetakan ke nilai sumbu; nilai sumbu dikompilasi ke palette + tipografi + spacing + radius + motion segar. Skala tipografi modular memilih rasio dari contrast (1.200 quiet / 1.250 balanced / 1.333 loud). Primitif layout responsif sejak dirancang (`auto-fit minmax(min(N, 100%), 1fr)` + container queries). Layout rusak tak bisa dipancarkan karena tak bisa direpresentasikan.
 
@@ -97,7 +97,7 @@ Kalau kamu hidup di Claude Code, install via marketplace plugin:
 /plugin install ux@ux-skill
 ```
 
-Itu menghubungkan semua 22 slash command dan 5 sub-agent ke sesi Claude Code kamu. Setelah install, jalankan `/ux-init` untuk setup direktori state `.ux/` per proyek dan verifikasi bahwa engine Python bisa dijangkau.
+Itu menghubungkan semua 25 slash command dan 5 sub-agent ke sesi Claude Code kamu. Setelah install, jalankan `/ux-init` untuk setup direktori state `.ux/` per proyek dan verifikasi bahwa engine Python bisa dijangkau.
 
 ### Jalur 2 — pip (universal)
 
@@ -126,7 +126,7 @@ npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-a
 ```bash
 ux stats
 # {
-#   "version": "3.0.0-stable",
+#   "version": "3.1.0-stable",
 #   "counts": {
 #     "styles": 84,
 #     "palettes": 176,
@@ -161,7 +161,7 @@ Hitungan star terakhir diverifikasi via `gh api` pada **2026-05-28**. ux-skill (
 | dominikmartn/nothing-design-skill | **2.391** | Skill satu-estetika | 1 | — | — | 0 | 0 | 1 |
 | Nutlope/hallmark | **2.164** | Skill design anti-slop | 1 | — | — | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | Komponen MD3 + audit | 1 | — | (MD3 saja) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Engine Python + 11 manifest + 22 command + 5 sub-agent + CI linter** | **22** | **145 aturan regex** | **160** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Engine Python + 12 manifest + 25 command + 5 sub-agent + CI linter** | **22** | **152 aturan regex** | **160** | **148** | **57** | **17** |
 
 ### Di mana kami kalah
 
@@ -173,10 +173,10 @@ Hitungan star terakhir diverifikasi via `gh api` pada **2026-05-28**. ux-skill (
 
 - **Library komponen:** 148 komponen yang didokumentasikan dengan anatomi, state, token yang dipakai, dan spec motion. Tidak ada dari 8 yang lain mengirim manifest komponen.
 - **Preset motion:** 57 entri siap-stack (Framer Motion, GSAP, CSS) dengan fallback reduced-motion. Tidak ada dari yang lain mengirim manifest motion.
-- **Linter anti-pattern:** 145 aturan regex deterministik, berjalan di CI, exit non-zero pada Critical/High. Tidak ada dari yang lain mengirim linter deterministik.
+- **Linter anti-pattern:** 152 aturan regex deterministik, berjalan di CI, exit non-zero pada Critical/High. Tidak ada dari yang lain mengirim linter deterministik.
 - **Brand spec:** 160 spec DESIGN.md asli (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, dan 96 lainnya). Tidak ada dari yang lain mengirim library brand.
 - **17 IDE didukung:** engine yang sama, perekat berbeda per IDE.
-- **22 slash command:** discovery, generation, audit, lint, polish, fix loop, case-study, workshop, copy, motion, a11y, dashboard, conductor — terintegrasi sepenuhnya.
+- **25 slash command:** discovery, generation, audit, lint, polish, fix loop, case-study, workshop, copy, motion, a11y, dashboard, conductor — terintegrasi sepenuhnya.
 
 Tabel side-by-side lengkap per tabel ada di [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html).
 
@@ -197,7 +197,7 @@ ux-skill (nama paket: uxskill)
 │   ├── tech-stacks.json               25 stack (Next, Astro, SvelteKit, Blade...)
 │   ├── ux-guidelines.json             112 hukum UX bernama (Hick, Fitts, Miller...)
 │   ├── motion-presets.json            57 preset motion (entry, exit, hover...)
-│   ├── anti-patterns.json             145 aturan regex (sumber linter CI-safe)
+│   ├── anti-patterns.json             152 aturan regex (sumber linter CI-safe)
 │   └── brands/*.json                  160 spec DESIGN brand + _index.json
 │
 ├── engine/                            Python — penalarannya
@@ -210,7 +210,7 @@ ux-skill (nama paket: uxskill)
 │   ├── installer/                     multi-installer 17 IDE
 │   └── cli/                           entry point `ux` / `uxskill`
 │
-├── commands/                          22 slash command Claude Code (.md)
+├── commands/                          25 slash command Claude Code (.md)
 │   ├── ux-init.md                     bootstrap
 │   ├── ux-stats.md                    snapshot inventaris
 │   ├── ux-discover.md                 intake 10-field (gate)
@@ -274,15 +274,15 @@ ux-skill (nama paket: uxskill)
    - **Stack → kompatibilitas komponen + preset motion** (tech-stacks.json, motion-presets.json)
    - **Forbidden + region → guardrail + shortlist brand teladan** (anti-patterns.json, brands/)
 3. **Merge.** Merger deterministik me-rangking kandidat, menyelesaikan konflik (mis. must-have dark-mode memaksa mode palette), dan menghasilkan satu sistem rekomendasi.
-4. **Output.** Dokumen JSON dengan style yang dipilih, palette, pasangan tipografi, top 5 preset motion, top 12 komponen, top 5 brand teladan, dan semua 145 guardrail anti-pattern aktif. Plus blok rasional yang menjelaskan setiap pilihan.
+4. **Output.** Dokumen JSON dengan style yang dipilih, palette, pasangan tipografi, top 5 preset motion, top 12 komponen, top 5 brand teladan, dan semua 152 guardrail anti-pattern aktif. Plus blok rasional yang menjelaskan setiap pilihan.
 5. **Generasi.** Command hilir (`/ux-design`, `/ux-component`, `/ux-system`, `/ux-dashboard`) mengonsumsi rekomendasi untuk menghasilkan code aktual via sub-agent.
-6. **Verifikasi.** `/ux-lint` me-rescan code yang dihasilkan terhadap 145 aturan regex. Exit non-zero pada Critical/High di CI.
+6. **Verifikasi.** `/ux-lint` me-rescan code yang dihasilkan terhadap 152 aturan regex. Exit non-zero pada Critical/High di CI.
 
 **Python berpikir. HTML menampilkan. Markdown merantai.**
 
 ---
 
-## 22 slash command — referensi detail
+## 25 slash command — referensi detail
 
 Setiap command dikirim sebagai file `.md` di bawah `commands/` dengan `description`, `allowed-tools`, `triggers`, `when to use`, `when to skip`, `input`, `process`, dan `output state file`. Deskripsi di bawah dipadatkan; source lengkap adalah spec kanonis.
 
@@ -301,7 +301,7 @@ Command dikelompokkan ke dalam lima ember: **bootstrap & inventaris**, **discove
 
 #### `/ux-stats` — cetak inventaris data
 
-- **Apa:** Mencetak versi + hitungan entri untuk 11 data manifest, jadi kamu bisa verifikasi apa yang terinstall.
+- **Apa:** Mencetak versi + hitungan entri untuk 12 data manifest, jadi kamu bisa verifikasi apa yang terinstall.
 - **Kapan dipakai:** Setelah install. Setelah upgrade. Saat `/ux-recommend` mengembalikan pilihan yang mengejutkan dan kamu curiga manifest tidak lengkap.
 - **Kapan dilewati:** Tidak pernah — ini command read-only 50ms.
 - **Pemanggilan:** `/ux-stats` atau `uxskill stats`.
@@ -321,7 +321,7 @@ Command dikelompokkan ke dalam lima ember: **bootstrap & inventaris**, **discove
 
 #### `/ux-recommend` — engine flagship 5-pencarian-paralel
 
-- **Apa:** Menjalankan 5-pencarian-paralel engine Python di 11 manifest dan mengembalikan satu sistem design yang sudah digabungkan. Industri → Style → Palette → Tipografi → Motion + Komponen + Brand teladan + Guardrail.
+- **Apa:** Menjalankan 5-pencarian-paralel engine Python di 12 manifest dan mengembalikan satu sistem design yang sudah digabungkan. Industri → Style → Palette → Tipografi → Motion + Komponen + Brand teladan + Guardrail.
 - **Kapan dipakai:** Memulai proyek baru dari nol. Mem-pivot produk yang terlihat lelah. Pre-flight sebelum `/ux-design` atau `/ux-component` apa pun.
 - **Kapan dilewati:** Kamu sudah jalankan `/ux-discover` dan simpan brief — `/ux-recommend` otomatis di alur itu. Kamu sedang memperbaiki satu bug (pakai `/ux-fix`). Kamu hanya perlu lint (pakai `/ux-lint`).
 - **Pemanggilan (Claude Code):**
@@ -339,7 +339,7 @@ Command dikelompokkan ke dalam lima ember: **bootstrap & inventaris**, **discove
     --stack=nextjs-15-app-router \
     --region=mena
   ```
-- **Output:** Menulis `.ux/last-recommendation.json` — style terpilih, palette terpilih, pasangan tipografi terpilih, top 5 preset motion, top 12 komponen, top 5 brand teladan, semua 145 guardrail anti-pattern aktif, plus rasional.
+- **Output:** Menulis `.ux/last-recommendation.json` — style terpilih, palette terpilih, pasangan tipografi terpilih, top 5 preset motion, top 12 komponen, top 5 brand teladan, semua 152 guardrail anti-pattern aktif, plus rasional.
 - **Merantai ke:** `/ux-design [brief]` → code frontend memakai token yang direkomendasikan. `/ux-system` → sistem design lengkap dari rekomendasi. `/ux-component <nama>` → satu komponen memakai style yang direkomendasikan. `/ux-lint` → verifikasi code yang dihasilkan.
 
 ### Generasi
@@ -393,7 +393,7 @@ Command dikelompokkan ke dalam lima ember: **bootstrap & inventaris**, **discove
 
 #### `/ux-lint` — linter berbasis regex deterministik (tanpa LLM, CI-safe)
 
-- **Apa:** Menjalankan 145 aturan regex terhadap code kamu. Tidak ada panggilan LLM. Exit non-zero pada Critical / High di CI. Sumber: `data/anti-patterns.json`. Aturan mencakup A11y (23), Content (15), Layout (13), Typography (10), Color (9), Quality (9), Visual (9), Motion (8), Performance (4).
+- **Apa:** Menjalankan 152 aturan regex terhadap code kamu. Tidak ada panggilan LLM. Exit non-zero pada Critical / High di CI. Sumber: `data/anti-patterns.json`. Aturan mencakup A11y (23), Content (15), Layout (13), Typography (10), Color (9), Quality (9), Visual (9), Motion (8), Performance (4).
 - **Kapan dipakai:** Hook pre-commit. Gate CI. Pass pertama yang cepat di codebase besar sebelum bayar biaya `/ux-audit`. Setelah `/ux-design` atau `/ux-component` untuk verifikasi generasi.
 - **Kapan dilewati:** Kamu mau fix loop (linter melapor, tidak mengedit — rantai ke `/ux-polish --fix` atau `/ux-fix`). Kamu mau penilaian selera (pakai `/ux-critique`).
 - **Pemanggilan (slash):** `/ux-lint src/`.
@@ -624,7 +624,7 @@ Saat sebuah command mengirim sub-agent, ia melewatkan:
 
 1. Brief / rekomendasi (di-load dari `.ux/`).
 2. Slice manifest yang relevan (mis. `frontend-engineer` dapat style + palette + komponen yang dipilih; `motion-engineer` dapat preset motion yang dipilih).
-3. 145 guardrail anti-pattern (selalu aktif).
+3. 152 guardrail anti-pattern (selalu aktif).
 4. Kriteria sukses (apa yang harus dilakukan artifact).
 
 Sub-agent mengembalikan:
@@ -637,7 +637,7 @@ Command pemanggil kemudian menjalankan `/ux-lint` otomatis sebelum menyatakan se
 
 ---
 
-## 11 data manifest
+## 12 data manifest
 
 Lapisan data adalah otaknya. Setiap command membaca darinya; engine bergabung melintasinya; linter memindai terhadapnya. Semua file ada di bawah `data/` dan membungkus entri mereka di `{_meta, entries}` untuk versioning skema.
 
@@ -739,15 +739,15 @@ Dipakai oleh `/ux-audit` (scoring 6-lensa) dan `/ux-critique` (jangkar selera).
 
 Setiap preset punya varian reduced-motion. Code siap-stack untuk Framer Motion, GSAP, dan CSS murni.
 
-### `anti-patterns.json` — 145 aturan regex
+### `anti-patterns.json` — 152 aturan regex
 
 | Field | Deskripsi |
 |---|---|
-| `entries` | 145 |
+| `entries` | 152 |
 | `key per entri` | `id`, `name`, `severity` (critical/high/medium/low), `category`, `detection` (type, pattern, flags, scope), `evidence_template`, `fix`, `references` |
 | `kategori` | A11y (23), Content (15), Layout (13), Typography (10), Color (9), Quality (9), Visual (9), Motion (8), Performance (4) |
 
-Daftar aturan lengkap ada di [145 aturan anti-AI-slop](#145-aturan-anti-ai-slop--linter).
+Daftar aturan lengkap ada di [152 aturan anti-AI-slop](#145-aturan-anti-ai-slop--linter).
 
 ### `brands/*.json` — 160 spec brand
 
@@ -761,7 +761,7 @@ Daftar lengkap di [160 spec brand DESIGN.md](#160-spec-brand-designmd--per-kateg
 
 ---
 
-## 145 aturan anti-AI-slop — linter
+## 152 aturan anti-AI-slop — linter
 
 ux-skill mengirim linter deterministik berbasis regex. **Tanpa LLM.** **Tanpa API.** **Tanpa jaringan.** Berjalan di CI dalam ~200ms pada app Next.js tipikal. Exit non-zero pada temuan Critical / High saat `--fail-on high` di-set.
 
@@ -879,7 +879,7 @@ src/components/Hero.tsx:24  [high]   purple-to-blue-gradient
   bukti: bg-gradient-to-br from-purple-500 to-blue-500
   fix: ganti dengan gradien primary palette yang direkomendasikan atau hapus gradien
 
-src/components/Pricing.tsx:11  [high] three-equal-card-grid
+src/components/Pricing.tsx:12  [high] three-equal-card-grid
   bukti: grid grid-cols-3 gap-6 (3 child Card sama besar)
   fix: fiturkan satu card; apit dengan dua card yang penekanannya dikurangi
 
@@ -950,7 +950,7 @@ Arahkan client kamu ke binary `ux-mcp`. Dokumentasi tool lengkap, contoh JSON, d
 
 | IDE / Tool | Sinyal deteksi | Artifact terinstall |
 |---|---|---|
-| Claude Code | `.claude/` atau `CLAUDE.md` | Manifest plugin di `.claude-plugin/plugin.json` + semua 22 command + semua 5 sub-agent |
+| Claude Code | `.claude/` atau `CLAUDE.md` | Manifest plugin di `.claude-plugin/plugin.json` + semua 25 command + semua 5 sub-agent |
 | Cursor | `.cursor/` atau `.cursorrules` | Header prompt `.cursorrules` yang menunjuk ke engine |
 | Windsurf | `.windsurf/` atau `.windsurfrules` | `.windsurfrules` dengan header prompt yang sama |
 | GitHub Copilot | `.github/copilot-instructions.md` atau `.vscode/` | `.github/copilot-instructions.md` |
@@ -1239,6 +1239,6 @@ MIT. Pakai, fork, bangun di atasnya. Kalau menyelamatkan kamu dari nge-ship AI s
 
 ---
 
-**ux-skill** · **v3.0.0-stable** · Dibangun supaya Claude Code, Cursor, Windsurf, dan setiap tool coding AI lain mengeluarkan frontend yang tidak terbaca seperti AI-generated.
+**ux-skill** · **v3.1.0-stable** · Dibangun supaya Claude Code, Cursor, Windsurf, dan setiap tool coding AI lain mengeluarkan frontend yang tidak terbaca seperti AI-generated.
 
 > Beri star repo di [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · Install via `pip install uxskill` atau `npx uxskill init` · Telusuri perbandingan di [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html)

@@ -263,7 +263,7 @@
 <p>We rejected this. Three reasons:</p>
 <ul>
 <li><strong>Speed.</strong> The catalogue is fixed JSON. Reading 160 specs is microseconds. Synthesizing every token from scratch with no grounding would require an LLM call per generation — slow, expensive, non-deterministic.</li>
-<li><strong>Linter compatibility.</strong> The 145 anti-pattern rules grade outputs by matching against curated bad / good examples drawn from the same brand catalogue. If we burn the catalogue, we burn the linter's reference.</li>
+<li><strong>Linter compatibility.</strong> The 152 anti-pattern rules grade outputs by matching against curated bad / good examples drawn from the same brand catalogue. If we burn the catalogue, we burn the linter's reference.</li>
 <li><strong>Determinism.</strong> The same brief should produce the same output. Infinity-space LLM generation can't guarantee that. The synthesizer can.</li>
 </ul>
 <p>Instead, v3 achieves infinity by making the COMBINATIONS of finite vocabulary continuous. The catalogue stays. The output is still novel. Best of both.</p>
@@ -282,7 +282,7 @@ uxskill synthesize --brand stripe --strict # strict_brand (100% Stripe)</code></
 <ul>
 <li><a href="/blog/make-ai-output-on-brand.html">How to make AI coding tools output on-brand UI</a></li>
 <li><a href="/blog/v3-the-brain-launch.html">The full v3.0 launch post — The Brain</a></li>
-<li><a href="/anti-patterns.html">The 145 anti-pattern rules — the linter catalogue</a></li>
+<li><a href="/anti-patterns.html">The 152 anti-pattern rules — the linter catalogue</a></li>
 <li><a href="/brands.html">The 160-brand catalogue — what the synthesizer learns from</a></li>
 <li><a href="/blog/anti-ai-slop-claude-skills.html">Anti AI-slop in Claude Code — the linter explained</a></li>
 </ul>

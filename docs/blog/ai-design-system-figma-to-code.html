@@ -12,7 +12,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>From Figma to code without losing the design system — ux-skill is the bridge</title>
-  <meta name="description" content="Figma to code without design-system drift. The handoff problem in 2026, why Figma MCP and AI coding tools miss tokens, and how ux-skill's 1,182-entry catalog plus 145-rule linter keeps the system intact from Figma file to Cursor and Claude Code.">
+  <meta name="description" content="Figma to code without design-system drift. The handoff problem in 2026, why Figma MCP and AI coding tools miss tokens, and how ux-skill's 1,243-entry catalog plus 145-rule linter keeps the system intact from Figma file to Cursor and Claude Code.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ai-design-system-figma-to-code.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -21,7 +21,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ai-design-system-figma-to-code.html">
   <meta property="og:title" content="From Figma to code without losing the design system">
-  <meta property="og:description" content="Figma MCP imports the file, AI tools write the components, and the system drifts in the middle. ux-skill is the bridge: 1,182 entries, 145 rules, 22 commands, 17 IDEs.">
+  <meta property="og:description" content="Figma MCP imports the file, AI tools write the components, and the system drifts in the middle. ux-skill is the bridge: 1,243 entries, 145 rules, 25 commands, 17 IDEs.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/ai-design-system-figma-to-code.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -30,7 +30,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Figma to code without losing the design system — ux-skill is the bridge">
-  <meta name="twitter:description" content="Figma MCP imports designs. AI tools write code. The tokens drift in between. 1,182 entries, 145 deterministic rules, one tokens.css both sides agree on.">
+  <meta name="twitter:description" content="Figma MCP imports designs. AI tools write code. The tokens drift in between. 1,243 entries, 145 deterministic rules, one tokens.css both sides agree on.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,7 +41,7 @@
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "From Figma to code without losing the design system — ux-skill is the bridge",
-    "description": "Figma MCP imports designs. AI tools write code. The system drifts in the middle. ux-skill closes the loop with a 1,182-entry catalog, 145 deterministic rules, and a single tokens.css both sides agree on.",
+    "description": "Figma MCP imports designs. AI tools write code. The system drifts in the middle. ux-skill closes the loop with a 1,243-entry catalog, 145 deterministic rules, and a single tokens.css both sides agree on.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -526,7 +526,7 @@
       <span class="eyebrow">Blog · Design Systems · 2026-05-28</span>
       <h1>From Figma to code without losing the <span class="accent">design system</span>.</h1>
       <p class="lede">
-        <strong>The Figma file has the tokens. The AI session does not.</strong> Figma MCP imports a frame; Cursor and Claude Code write the components; the design system drifts somewhere in the middle. ux-skill is the bridge — one <code>tokens.css</code> both sides agree on, a 1,182-entry catalog the recommender draws from, and 145 deterministic rules that catch drift before it merges.
+        <strong>The Figma file has the tokens. The AI session does not.</strong> Figma MCP imports a frame; Cursor and Claude Code write the components; the design system drifts somewhere in the middle. ux-skill is the bridge — one <code>tokens.css</code> both sides agree on, a 1,243-entry catalog the recommender draws from, and 145 deterministic rules that catch drift before it merges.
       </p>
       <p class="byline">By the ux-skill team · 10 min read · MIT-licensed open source</p>
 
@@ -543,7 +543,7 @@
 
       <h2>How the bridge actually works</h2>
       <p>
-        ux-skill ships a Python engine (998 catalog entries, 145 anti-pattern rules, 160 brand specs, 22 commands across 17 IDEs), an MCP server (18 tools), and a CLI (<code>uxskill discover</code>, <code>uxskill recommend</code>, <code>uxskill design</code>, <code>uxskill lint</code>, <code>uxskill fix</code>). The bridge between Figma and code is four files the engine reads and writes:
+        ux-skill ships a Python engine (998 catalog entries, 152 anti-pattern rules, 160 brand specs, 25 commands across 17 IDEs), an MCP server (18 tools), and a CLI (<code>uxskill discover</code>, <code>uxskill recommend</code>, <code>uxskill design</code>, <code>uxskill lint</code>, <code>uxskill fix</code>). The bridge between Figma and code is four files the engine reads and writes:
       </p>
       <div class="table-wrap">
         <table class="compare-table">
@@ -664,7 +664,7 @@
 
       <h2>The 998 catalog entries — what's in there</h2>
       <p>
-        The recommender's catalog is the most-asked-about piece. Pulled from <code>data/registry.json</code>, the 1,182 entries are partitioned across nine lanes the engine searches in parallel:
+        The recommender's catalog is the most-asked-about piece. Pulled from <code>data/registry.json</code>, the 1,243 entries are partitioned across nine lanes the engine searches in parallel:
       </p>
       <div class="table-wrap">
         <table class="compare-table">
@@ -696,7 +696,7 @@
       <ol>
         <li><strong>Export Figma variables</strong> to <code>tokens.css</code>. Run as a CI job on the Figma file's update webhook, or as a manual command before a sprint kickoff.</li>
         <li><strong>Run <code>uxskill discover</code></strong> against the brief that already exists (the product spec, the design intent doc). 10 fields, no improvisation — the discovery protocol is in <a href="/blog/python-design-system-generator.html" class="link">references/process/discovery-protocol.md</a>.</li>
-        <li><strong>Run <code>uxskill recommend</code></strong>. Five parallel searches over the 1,182 entries return one resolved system. The <code>MASTER.md</code> writes itself.</li>
+        <li><strong>Run <code>uxskill recommend</code></strong>. Five parallel searches over the 1,243 entries return one resolved system. The <code>MASTER.md</code> writes itself.</li>
         <li><strong>Run <code>uxskill lint</code></strong> in pre-commit and CI. The 145 rules gate every push. The Figma file's tokens are present; the AI session honoured them; the linter confirms it.</li>
       </ol>
 
@@ -736,7 +736,7 @@
 
       <h2>What this means for shipping</h2>
       <p>
-        The handoff between design and code is the place every system erodes. The Figma MCP and the AI coding tools each solve half the problem; ux-skill closes the gap. One <code>tokens.css</code> both sides agree on. One 1,182-entry catalog the recommender draws from. One 145-rule lint that catches the drift before merge. 22 commands across 17 IDEs that surface the same engine wherever you write code.
+        The handoff between design and code is the place every system erodes. The Figma MCP and the AI coding tools each solve half the problem; ux-skill closes the gap. One <code>tokens.css</code> both sides agree on. One 1,243-entry catalog the recommender draws from. One 145-rule lint that catches the drift before merge. 25 commands across 17 IDEs that surface the same engine wherever you write code.
       </p>
       <p>
         14 GitHub stars at the time of writing. That's the floor we're starting from — for comparison, ui-ux-pro-max sits at 84k and taste-skill at 25k. The asymmetric move is not the star count; it's that ux-skill is the only one of the three that runs in CI as a non-zero exit. The other two ship recommenders. ux-skill ships a recommender, a linter, an MCP server, and the bridge between them.
@@ -754,8 +754,8 @@
 
     <section class="cta">
       <span class="eyebrow">Install the bridge</span>
-      <h2>One package. <span class="accent">Three install paths.</span> 1,182 entries.</h2>
-      <p>The recommender, the linter, the MCP server, the 22 commands across 17 IDEs, and the 160 brand specs ship together. The linter runs sub-second; the rest runs on demand. MIT licensed, no telemetry, no account.</p>
+      <h2>One package. <span class="accent">Three install paths.</span> 1,243 entries.</h2>
+      <p>The recommender, the linter, the MCP server, the 25 commands across 17 IDEs, and the 160 brand specs ship together. The linter runs sub-second; the rest runs on demand. MIT licensed, no telemetry, no account.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
