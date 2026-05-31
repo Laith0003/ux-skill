@@ -56,7 +56,7 @@
     scale:calc(1 + var(--p)*.34);
     text-shadow:0 0 calc(8px + var(--p)*90px) rgba(255,255,255,calc(.15 + var(--p)*.85)), 0 0 calc(4px + var(--p)*40px) rgba(157,123,255,calc(var(--p)*.7))}
   @media(max-width:560px){.three{font-size:clamp(11rem,72vw,22rem)}}
-  .hero__white{position:absolute;inset:0;z-index:2;background:var(--lite);opacity:clamp(0,calc((var(--p)-.62)*3.4),1);pointer-events:none}
+  .hero__white{position:absolute;inset:0;z-index:2;background:var(--lite);opacity:clamp(0, calc((var(--p) - 0.62) * 3.4), 1);pointer-events:none}
   .hero__c{position:relative;z-index:1;opacity:calc(1 - var(--p)*1.9);translate:0 calc(var(--p)*-26px)}
   .hero__c::before{content:"";position:absolute;z-index:-1;inset:-8% -8%;background:radial-gradient(circle at 50% 46%,rgba(6,7,10,.7),transparent 70%)}
   .pills{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:24px}
@@ -294,6 +294,7 @@
 
 <script>
 (function(){
+  if('scrollRestoration' in history){history.scrollRestoration='manual';}
   var root=document.documentElement, hero=document.getElementById('hero'), nav=document.getElementById('nav'),
       cv=document.querySelector('.hero__dots'), ctx=cv.getContext('2d');
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches, small=matchMedia('(max-width:480px)').matches;
