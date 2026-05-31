@@ -219,6 +219,9 @@
   .badge b{color:var(--green);font-weight:500}
 
   /* ===== TURN — cinematic snap section ===== */
+  /* scroll-snap: proximity = only snaps when close, doesn't hijack the whole page */
+  html{scroll-snap-type:y proximity}
+  #turnZone{scroll-snap-align:start;scroll-snap-stop:always}
   /* 400vh tall: long dwell for cinematic entrance */
   .turn-scene{height:400vh;position:relative}
   .turn-sticky{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(20px,3vh,40px);padding:0 clamp(20px,6vw,80px);overflow:hidden}
@@ -231,6 +234,8 @@
     .turn-scene.turn-in .turn-body{animation:tBodyIn 2.2s cubic-bezier(.05,.7,.1,1) 1.0s forwards}
     @keyframes tWireIn{to{opacity:1}}
     @keyframes tBodyIn{to{opacity:1;transform:scale(1) translateY(0)}}
+    .turn-scene.turn-in .turn-lead{animation:tGlow 2.6s cubic-bezier(.05,.7,.1,1) 1.6s both}
+    @keyframes tGlow{0%{text-shadow:0 0 0 rgba(34,211,238,0)}50%{text-shadow:0 0 80px rgba(34,211,238,.55),0 0 160px rgba(34,211,238,.22)}100%{text-shadow:0 0 24px rgba(34,211,238,.12)}}
   }
   @media(prefers-reduced-motion:reduce){
     .turn-wiring,.turn-body{opacity:1;transform:none}
@@ -290,12 +295,14 @@
   .tok-v{font-weight:500}
   .tok-light{color:#f6f7f9}.tok-dark{color:#a6abb3}.tok-num{color:#22d3ee}.tok-accent{color:#5b9cff}.tok-str{color:#3ddc97}
   .tok-pass{color:#3ddc97}
-  /* 2-col beats: tokens left, step text right */
-  .pbeat--split{flex-direction:row;padding:0;text-align:left;gap:0}
-  .pb-left{flex:1;display:flex;align-items:center;justify-content:center;padding:clamp(24px,5vw,72px);background:rgba(0,0,0,.04);border-right:1px solid rgba(0,0,0,.07)}
-  .pb-right{flex:1;display:flex;flex-direction:column;justify-content:center;padding:clamp(24px,4vw,72px);gap:14px;overflow:hidden}
-  .pb-right .pbeat-num{margin-bottom:4px}
+  /* 2-col beats: contained in max-width wrap, no edge-to-edge bg */
+  .pbeat--split{flex-direction:column;padding:0;text-align:left;gap:0}
+  .pb-wrap{display:flex;flex-direction:row;width:100%;max-width:1160px;margin:0 auto;padding-inline:clamp(20px,5vw,52px);gap:clamp(32px,5vw,72px);align-items:center}
+  .pb-left{flex:1;display:flex;align-items:center;justify-content:center}
+  .pb-right{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px}
+  .pb-right .pbeat-num{margin-bottom:2px}
   .pb-right .pbeat-title{font-size:clamp(1.8rem,3.6vw,3rem);max-width:none}
+  @media(max-width:819px){.pb-wrap{flex-direction:column}.pb-right{text-align:center;align-items:center}}
   .pb-right .pbeat-sub{font-size:clamp(15px,1.8vw,18px);max-width:38ch}
   /* mobile: stack split beats */
   @media(max-width:819px){
@@ -576,11 +583,11 @@
           <p class="pbeat-sub">Five deterministic steps, <em>start to ship.</em></p>
         </div>
         <!-- beats 1-5: 2-col — tokens window left, step text right -->
-        <div class="pbeat pbeat--split" data-beat="1"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">/* reading brief... */</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--industry:</span><span class="tok-v tok-str">'fintech'</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--audience:</span><span class="tok-v tok-str">'design-engineers'</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--mood:</span><span class="tok-v tok-str">'precise, calm'</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">01</span><h3 class="pbeat-title">Read the brief.</h3><p class="pbeat-sub">Industry, audience, mood &mdash; parsed into a structured intake, no guesswork.</p></div></div>
-        <div class="pbeat pbeat--split" data-beat="2"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">/* synthesizing axes... */</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--warmth:</span><span class="tok-v tok-num">0.28</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--contrast:</span><span class="tok-v tok-num">0.91</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--density:</span><span class="tok-v tok-num">0.44</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--formality:</span><span class="tok-v tok-num">0.78</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">02</span><h3 class="pbeat-title">Set seven axes.</h3><p class="pbeat-sub">Warmth, contrast, density, geometry, formality, motion, type &mdash; tuned, then emitted as tokens.</p></div></div>
-        <div class="pbeat pbeat--split" data-beat="3"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">/* anchoring brand... */</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--canvas:</span><span class="tok-v tok-light">#f6f7f9</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--ink:</span><span class="tok-v tok-dark">#10131a</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--accent:</span><span class="tok-v tok-accent">#5b9cff</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--radius:</span><span class="tok-v tok-num">10px</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">03</span><h3 class="pbeat-title">Anchor to your brand.</h3><p class="pbeat-sub">Primary pulled from your logo&rsquo;s pixels &mdash; not the nearest CSS named colour.</p></div></div>
-        <div class="pbeat pbeat--split" data-beat="4"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--display:</span><span class="tok-v tok-str">'Bricolage Grotesque'</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--body-font:</span><span class="tok-v tok-str">'Inter'</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">/* linting 152 rules... */</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k tok-pass">/* 0 violations */</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">04</span><h3 class="pbeat-title">Lint 152 anti-patterns.</h3><p class="pbeat-sub">Gradient headers, three equal cards, filler verbs &mdash; fails the build here.</p></div></div>
-        <div class="pbeat pbeat--split" data-beat="5"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">/* verifying 360px... */</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k tok-pass">/* h-scroll: none */</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k tok-pass">/* sticky: 56px ok */</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k tok-pass">/* verified ok */</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">05</span><h3 class="pbeat-title">Verify mobile, for real.</h3><p class="pbeat-sub">Rendered at true 360/390px in headless Chrome. Horizontal scroll fails, not your users.</p></div></div>
+        <div class="pbeat pbeat--split" data-beat="1"><div class="pb-wrap"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">/* reading brief... */</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--industry:</span><span class="tok-v tok-str">'fintech'</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--audience:</span><span class="tok-v tok-str">'design-engineers'</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--mood:</span><span class="tok-v tok-str">'precise, calm'</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">01</span><h3 class="pbeat-title">Read the brief.</h3><p class="pbeat-sub">Industry, audience, mood &mdash; parsed into a structured intake, no guesswork.</p></div></div></div>
+        <div class="pbeat pbeat--split" data-beat="2"><div class="pb-wrap"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">/* synthesizing axes... */</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--warmth:</span><span class="tok-v tok-num">0.28</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--contrast:</span><span class="tok-v tok-num">0.91</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--density:</span><span class="tok-v tok-num">0.44</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--formality:</span><span class="tok-v tok-num">0.78</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">02</span><h3 class="pbeat-title">Set seven axes.</h3><p class="pbeat-sub">Warmth, contrast, density, geometry, formality, motion, type &mdash; tuned, then emitted as tokens.</p></div></div></div>
+        <div class="pbeat pbeat--split" data-beat="3"><div class="pb-wrap"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">/* anchoring brand... */</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--canvas:</span><span class="tok-v tok-light">#f6f7f9</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--ink:</span><span class="tok-v tok-dark">#10131a</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--accent:</span><span class="tok-v tok-accent">#5b9cff</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--radius:</span><span class="tok-v tok-num">10px</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">03</span><h3 class="pbeat-title">Anchor to your brand.</h3><p class="pbeat-sub">Primary pulled from your logo&rsquo;s pixels &mdash; not the nearest CSS named colour.</p></div></div></div>
+        <div class="pbeat pbeat--split" data-beat="4"><div class="pb-wrap"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--display:</span><span class="tok-v tok-str">'Bricolage Grotesque'</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">--body-font:</span><span class="tok-v tok-str">'Inter'</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">/* linting 152 rules... */</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k tok-pass">/* 0 violations */</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">04</span><h3 class="pbeat-title">Lint 152 anti-patterns.</h3><p class="pbeat-sub">Gradient headers, three equal cards, filler verbs &mdash; fails the build here.</p></div></div></div>
+        <div class="pbeat pbeat--split" data-beat="5"><div class="pb-wrap"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k">/* verifying 360px... */</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k tok-pass">/* h-scroll: none */</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k tok-pass">/* sticky: 56px ok */</span></div><div class="tok-row" style="opacity:1;transform:none"><span class="tok-k tok-pass">/* verified ok */</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">05</span><h3 class="pbeat-title">Verify mobile, for real.</h3><p class="pbeat-sub">Rendered at true 360/390px in headless Chrome. Horizontal scroll fails, not your users.</p></div></div></div>
         <!-- progress indicator -->
         <div class="pin-dots" aria-hidden="true">
           <span class="pdot" data-dot="0"></span><span class="pdot" data-dot="1"></span><span class="pdot" data-dot="2"></span><span class="pdot" data-dot="3"></span><span class="pdot" data-dot="4"></span><span class="pdot" data-dot="5"></span>
@@ -787,16 +794,18 @@
     var sticky=document.getElementById('turnSticky');
     if(!scene||!sticky)return;
     var fired=false;
+    /* fire after snap: use scrollend if available, fallback to IO at 0.9 threshold */
+    var fired=false;
+    function activate(){if(!fired){fired=true;setTimeout(function(){scene.classList.add('turn-in');},80);}}
+    if('onscrollend' in window){
+      window.addEventListener('scrollend',function(){
+        var r=sticky.getBoundingClientRect();
+        if(r.top>=-4&&r.top<=80)activate();
+      },{passive:true});
+    }
     var to=new IntersectionObserver(function(es){
-      es.forEach(function(e){
-        if(e.isIntersecting&&!fired){
-          fired=true;
-          /* small delay so browser has settled on the sticky position */
-          setTimeout(function(){scene.classList.add('turn-in');},180);
-          to.unobserve(sticky);
-        }
-      });
-    },{threshold:.4});
+      es.forEach(function(e){if(e.isIntersecting){activate();to.unobserve(sticky);}});
+    },{threshold:.9});
     to.observe(sticky);
   })();
 
