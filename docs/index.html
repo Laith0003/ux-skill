@@ -804,7 +804,7 @@
 
 <script>
 (function(){
-  if('scrollRestoration' in history){history.scrollRestoration='manual';}
+  if('scrollRestoration' in history){history.scrollRestoration='manual';}window.scrollTo(0,0);
   var root=document.documentElement, hero=document.getElementById('hero'),
       cv=document.querySelector('.hero__dots'), ctx=cv.getContext('2d');
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches, small=matchMedia('(max-width:480px)').matches;
