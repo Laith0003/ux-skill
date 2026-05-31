@@ -165,18 +165,12 @@
   .zone--dark .sub{color:var(--body)}
   .head{max-width:760px;margin-inline:auto;text-align:center}
 
-  /* zig-zag: 2-col on desktop — image | text OR text | image */
-  .zig{display:grid;gap:clamp(28px,5vw,64px);align-items:center;grid-template-columns:1fr;margin-top:clamp(48px,8vh,108px)}
+  /* zig-zag -> single CENTERED column: prose on top (DOM order), product visual centered below */
+  .zig{display:grid;gap:clamp(28px,5vw,56px);justify-items:center;grid-template-columns:1fr;margin-top:clamp(48px,8vh,108px)}
   @media(min-width:900px){
-    .zig{grid-template-columns:1.1fr 0.9fr}
-    .zig .ztxt{order:2}
-    .zig .pcard{order:1}
-    .zig--rev{grid-template-columns:0.9fr 1.1fr}
-    .zig--rev .ztxt{order:1}
-    .zig--rev .pcard{order:2}
+    .zig,.zig--rev{grid-template-columns:1fr}
   }
-  .ztxt{min-width:0;max-width:560px;text-align:left}
-  @media(max-width:899px){.ztxt{margin-inline:auto;text-align:center}}
+  .ztxt{min-width:0;max-width:640px;margin-inline:auto;text-align:center}
   .ztxt h3{font-family:var(--disp);font-weight:600;font-size:clamp(1.6rem,3.2vw,2.4rem);letter-spacing:-.018em;margin:0;line-height:1.04}
   .ztxt h3 em{font-style:italic;font-weight:400}
   .zone--lite .ztxt h3 em{color:var(--blue-d)}
@@ -635,7 +629,6 @@
     <div class="wrap">
       <div class="fade-up head">
         <span class="eyebrow"><span class="dot c-teal"></span>Built for your stack</span>
-        <h2 class="lead">The same engine, the same brand-true output, <em>everywhere.</em></h2>
       </div>
       <div class="zig rev">
         <div class="ztxt">
