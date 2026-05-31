@@ -65,20 +65,22 @@ This README is the canonical reference. Every command, every sub-agent, every da
 
 1. [The Brain — what v3.0 is](#the-brain--what-v30-is)
 2. [Quick install](#quick-install)
-3. [The numbers — live comparison vs the top 8 Claude UX skills](#the-numbers--live-comparison-vs-the-top-8-claude-ux-skills)
-4. [Architecture — how the pieces fit](#architecture--how-the-pieces-fit)
-5. [The 25 slash commands — detailed reference](#the-23-slash-commands--detailed-reference)
-6. [The 5 sub-agents](#the-5-sub-agents)
-7. [The 11 data manifests](#the-11-data-manifests)
-8. [The 152 anti-AI-slop rules — the linter](#the-152-anti-ai-slop-rules--the-linter)
-9. [The 160 brand DESIGN.md specs — by category](#the-160-brand-designmd-specs--by-category)
-10. [MCP server — the asymmetric move](#mcp-server--the-asymmetric-move)
-11. [The 17-IDE installer](#the-17-ide-installer)
-12. [Use cases — concrete scenarios](#use-cases--concrete-scenarios)
-13. [Compared to alternatives](#compared-to-alternatives)
-14. [Roadmap](#roadmap)
-15. [Contributing](#contributing)
-16. [License, author, acknowledgments](#license-author-acknowledgments)
+3. [Using with Codex](#using-with-codex)
+4. [Compatibility matrix](#compatibility-matrix)
+5. [The numbers — live comparison vs the top 8 Claude UX skills](#the-numbers--live-comparison-vs-the-top-8-claude-ux-skills)
+6. [Architecture — how the pieces fit](#architecture--how-the-pieces-fit)
+7. [The 25 slash commands — detailed reference](#the-23-slash-commands--detailed-reference)
+8. [The 5 sub-agents](#the-5-sub-agents)
+9. [The 11 data manifests](#the-11-data-manifests)
+10. [The 152 anti-AI-slop rules — the linter](#the-152-anti-ai-slop-rules--the-linter)
+11. [The 160 brand DESIGN.md specs — by category](#the-160-brand-designmd-specs--by-category)
+12. [MCP server — the asymmetric move](#mcp-server--the-asymmetric-move)
+13. [The 17-IDE installer](#the-17-ide-installer)
+14. [Use cases — concrete scenarios](#use-cases--concrete-scenarios)
+15. [Compared to alternatives](#compared-to-alternatives)
+16. [Roadmap](#roadmap)
+17. [Contributing](#contributing)
+18. [License, author, acknowledgments](#license-author-acknowledgments)
 
 ---
 
@@ -96,7 +98,7 @@ The **decisions ledger** (`.ux/decisions.jsonl`, schema `_v: 1` locked) closes t
 
 ## Quick install
 
-Three install paths. Pick the one that matches your environment.
+Four install paths. Pick the one that matches your environment.
 
 ### Path 1 — Claude Code marketplace (canonical)
 
@@ -131,6 +133,30 @@ npx uxskill init                  # downloads pipx + uxskill on first run
 npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-app-router
 ```
 
+### Path 4 — Codex skill
+
+Codex loads skills from `~/.codex/skills/<skill-name>/SKILL.md`. Clone the repo
+there and install the Python engine for CLI access:
+
+```bash
+mkdir -p ~/.codex/skills
+git clone https://github.com/Laith0003/ux-skill.git ~/.codex/skills/ux-skill
+pip install uxskill
+```
+
+For local development from a checkout, use a symlink instead:
+
+```bash
+mkdir -p ~/.codex/skills
+ln -s /path/to/ux-skill ~/.codex/skills/ux-skill
+pip install -e /path/to/ux-skill
+```
+
+The root [`SKILL.md`](SKILL.md) is the Codex entrypoint. It preserves the same
+guidance, data manifests, brand references, linter, CLI, and MCP server. Claude
+Code plugin files remain in `.claude-plugin/`, `commands/`, `agents/`, and
+`.claude/`.
+
 ### Verify install
 
 ```bash
@@ -154,6 +180,75 @@ ux stats
 ```
 
 If any count returns 0, the JSON file is missing — open an issue at [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues).
+
+---
+
+## Using with Codex
+
+Codex does not execute Claude Code slash commands directly. Use the Codex skill
+as a translation layer: ask Codex for the equivalent workflow, and it will read
+the matching file in `commands/`, run the `uxskill` CLI or MCP tool where
+possible, and produce the same output shape.
+
+### Codex prompts for Claude slash commands
+
+| Claude Code command | Codex prompt example | Deterministic command when available |
+|---|---|---|
+| `/ux-init` | "Use ux-skill to bootstrap this project for Codex, verify the install, and report changed files." | `uxskill init && uxskill stats` |
+| `/ux-discover` | "Use ux-skill discovery. Ask the 10 required brief questions and save `.ux/last-discovery.json`." | `uxskill discover` |
+| `/ux-recommend` | "Use ux-skill to recommend a design system from `.ux/last-discovery.json` and summarize tokens, components, motion, brands, and guardrails." | `uxskill recommend --brief-file .ux/last-discovery.json` |
+| `/ux-audit` | "Use ux-skill to audit this page/screenshot/file with the six-lens report from `commands/ux-audit.md`." | Use the command spec plus optional MCP/context; no single CLI audit command yet |
+| `/ux-stats` | "Run ux-skill stats and summarize the manifest counts." | `uxskill stats` |
+
+### MCP-enabled Codex
+
+Install the optional MCP dependencies, then point Codex at the stdio server:
+
+```bash
+pip install 'uxskill[mcp]'
+```
+
+Example `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.uxskill]
+command = "ux-mcp"
+args = []
+startup_timeout_sec = 30
+```
+
+With MCP enabled, Codex can call the same deterministic server used by other
+MCP hosts for recommendation, linting, manifest lookup, synthesis, stats, image
+extraction, persisted design-system state, and decisions-ledger queries.
+
+### Unsupported Claude-only features
+
+These are preserved for Claude Code but are not native Codex features:
+
+- Slash command invocation syntax (`/ux-*`). Codex uses natural-language prompts
+  plus CLI/MCP calls.
+- Claude Code `Task` dispatch to named sub-agents. Codex can read `agents/*.md`
+  as role guidance, but it does not run Claude sub-agents directly.
+- Claude marketplace installation from `.claude-plugin/marketplace.json`.
+- `.claude/launch.json`, which is only a Claude/plugin development helper.
+
+The command docs, sub-agent role specs, anti-slop references, brand references,
+Python engine, CLI, and MCP server are shared assets and should stay in sync
+across Claude Code and Codex.
+
+## Compatibility matrix
+
+| Capability | Claude Code plugin | Codex skill | MCP-enabled Codex |
+|---|---:|---:|---:|
+| Install path | `.claude-plugin/plugin.json` via marketplace | `~/.codex/skills/ux-skill/SKILL.md` | Skill plus `~/.codex/config.toml` MCP server |
+| UX guidance and references | Yes | Yes | Yes |
+| Claude slash commands | Native `/ux-*` | Translated to prompts | Translated to prompts |
+| Claude sub-agents | Native dispatch | Read as role specs | Read as role specs |
+| Python CLI (`uxskill`) | Yes | Yes | Yes |
+| Anti-slop linter | Yes | Yes | Yes |
+| Brand references | Yes | Yes | Yes |
+| MCP tools | Available to MCP hosts | Configurable | Native tool calls through `ux-mcp` |
+| Claude marketplace metadata | Yes | Preserved, not used | Preserved, not used |
 
 ---
 
