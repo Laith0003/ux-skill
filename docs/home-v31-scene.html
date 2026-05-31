@@ -220,9 +220,7 @@
 
   /* ===== TURN — cinematic snap section ===== */
   /* scroll-snap: proximity = only snaps when close, doesn't hijack the whole page */
-  /* vertical full-screen snap — CSS Tricks pattern */
-  html{scroll-snap-type:y mandatory;scroll-behavior:auto}
-  #turnZone{scroll-snap-align:start;scroll-snap-stop:always;height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  #turnZone{height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
   .turn-scene{height:100%;display:contents}/* scene is the zone itself */
   .turn-sticky{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(20px,3vh,40px);padding:0 clamp(20px,6vw,80px);width:100%}
   .turn-wiring{opacity:0}
@@ -274,7 +272,7 @@
 
   /* ===== SCROLL-PIN: full-viewport beats, one at a time ===== */
   .pin-wrap{position:relative;height:1400vh}/* 6 beats × ~233vh — deliberate scroll dwell */
-  .pin-inner{position:sticky;top:0;height:100svh;overflow:hidden;scroll-snap-align:start}
+  .pin-inner{position:sticky;top:0;height:100svh;overflow:hidden}
   /* each beat: absolute, full-size, centered, hidden by default */
   .pbeat{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 clamp(24px,8vw,160px);gap:clamp(14px,2vh,28px);opacity:0;transform:translateY(22px) scale(.97);transition:opacity .55s cubic-bezier(.16,.7,.2,1),transform .6s cubic-bezier(.16,.7,.2,1);pointer-events:none}
   .pbeat.active{opacity:1;transform:none;pointer-events:auto;transition:opacity .18s ease,transform .18s ease;}
@@ -808,18 +806,24 @@
     var sticky=document.getElementById('turnSticky');
     if(!scene||!sticky)return;
     var fired=false;
-    function activate(){if(!fired){fired=true;setTimeout(function(){scene.classList.add('turn-in');},60);}}
-    /* SNAP-ONLY trigger: fire on scrollend (snap completed), not on scroll */
-    window.addEventListener('scrollend',function(){
+    var zone=document.getElementById('turnZone');
+    function activate(){if(!fired){fired=true;scene.classList.add('turn-in');}}
+    /* JS snap: when scroll slows near the turn zone, nudge it flush then fire animation */
+    var snapT;
+    window.addEventListener('scroll',function(){
+      clearTimeout(snapT);
       if(fired)return;
-      var r=document.getElementById('turnZone').getBoundingClientRect();
-      if(r.top>=-8&&r.top<=8)activate();
+      snapT=setTimeout(function(){
+        var r=zone.getBoundingClientRect();
+        var nav=56, top=r.top-nav;
+        if(top>window.innerHeight*-0.55&&top<window.innerHeight*0.55&&Math.abs(top)>4){
+          window.scrollTo({top:window.scrollY+top,behavior:'smooth'});
+          setTimeout(activate,420);
+        } else if(Math.abs(top)<=4){
+          activate();
+        }
+      },100);
     },{passive:true});
-    /* Fallback for browsers without scrollend: fire when 95% in view */
-    if(!('onscrollend' in window)){
-      var io2=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)activate();});},{threshold:.95});
-      io2.observe(document.getElementById('turnZone'));
-    }
   })();
 
   /* ----- scroll-pin: 7 full-viewport beats (title + 5 steps), desktop only ----- */
