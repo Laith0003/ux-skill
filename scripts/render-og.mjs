@@ -41,7 +41,8 @@ function makeCdp(wsUrl) {
   await cdp.send('Emulation.setDeviceMetricsOverride', { width: 1200, height: 630, deviceScaleFactor: 2, mobile: false }, sid);
   await cdp.send('Page.navigate', { url: SRC }, sid);
   await cdp.wait('Page.loadEventFired'); await sleep(2600); // fonts + glow settle
-  const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', clip: { x: 0, y: 0, width: 1200, height: 630, scale: 2 } }, sid);
+  // deviceScaleFactor:2 already gives 2x (2400x1260); clip scale:1 avoids compounding past Twitter's 4096 cap.
+  const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', clip: { x: 0, y: 0, width: 1200, height: 630, scale: 1 } }, sid);
   writeFileSync(OUT, Buffer.from(data, 'base64'));
   console.log('wrote', OUT, '(' + Math.round(Buffer.from(data, 'base64').length / 1024) + ' KB)');
   chrome.kill(); process.exit(0);
