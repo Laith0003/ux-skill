@@ -175,6 +175,18 @@ def build_lang(data: dict, lang: str) -> str:
         html, count=1
     )
 
+    # 3b. og:url -> the locale URL; add og:locale (Facebook locale form)
+    html = re.sub(r'<meta property="og:url" content="[^"]*">',
+                  f'<meta property="og:url" content="{canonical}">', html, count=1)
+    OG_LOCALE = {"en": "en_US", "de": "de_DE", "es": "es_ES", "fr": "fr_FR",
+                 "it": "it_IT", "pt-BR": "pt_BR", "ru": "ru_RU", "tr": "tr_TR",
+                 "zh-CN": "zh_CN", "zh-TW": "zh_TW", "ja": "ja_JP", "ko": "ko_KR",
+                 "hi": "hi_IN", "id": "id_ID", "vi": "vi_VN", "th": "th_TH", "ar": "ar_AR"}
+    ogl = OG_LOCALE.get(lang, "en_US")
+    if 'property="og:locale"' not in html:
+        html = re.sub(r'(<meta property="og:url" content="[^"]*">)',
+                      rf'\1\n<meta property="og:locale" content="{ogl}">', html, count=1)
+
     # 4. Swap strings — title, description, hero pills, eyebrows, CTAs
     def tr(key: str, fallback_en_default: str) -> str:
         bag = strings.get(key, {})
@@ -195,11 +207,7 @@ def build_lang(data: dict, lang: str) -> str:
         html = re.sub(r'<meta name="twitter:description" content="[^"]*">',
                       f'<meta name="twitter:description" content="{desc}">', html, count=1)
 
-    # Hero pills
-    if "hero_pill_1" in strings:
-        html = html.replace('v3.0.0 — THE BRAIN', tr("hero_pill_1", "v3.0.0 — THE BRAIN"), 1)
-    if "hero_pill_2" in strings:
-        html = html.replace('MIT, no telemetry', tr("hero_pill_2", "MIT, no telemetry"), 1)
+    # (v3.1: hero pills are handled by the generic full-phrase swap below.)
 
     # GENERIC_SWAP_SENTINEL — sweep EVERY string key whose english source
     # appears in the template. Order matters; do the longest matches first so
@@ -217,74 +225,15 @@ def build_lang(data: dict, lang: str) -> str:
             # translated. Without this, only the first occurrence swapped.
             html = html.replace(en, target)
 
-    # Hero h1 — the English markup splits the sentence across <br> + an accent
-    # span, so the per-key generic swap can't translate the second clause (the
-    # hero_h1_line3 key's en never matches the split markup, leaving "design
-    # that doesn't look generated." in English on every locale). Rebuild the
-    # whole h1 inner per locale from the three line keys. English keeps its
-    # hand-tuned 3-line markup untouched.
-    if lang != "en":
-        l1 = tr("hero_h1_line1", "The brain")
-        l2 = tr("hero_h1_line2", "that ships")
-        l3 = tr("hero_h1_line3", "design that&nbsp;doesn&rsquo;t look generated.")
-        new_h1 = (
-            '<h1 class="hero__h1" id="hero-h1">\n'
-            f'          {l1} {l2}<br>\n'
-            f'          <span class="accent-italic">{l3}</span>\n'
-            '        </h1>'
-        )
-        html = re.sub(
-            r'<h1 class="hero__h1" id="hero-h1">.*?</h1>',
-            lambda _m: new_h1, html, count=1, flags=re.DOTALL,
-        )
+    # (v3.1: the hero h1, section eyebrows, and hero CTAs are all single-phrase
+    #  markup now, so the generic full-phrase swap above handles them. The old
+    #  hand-tuned 3-line h1 rebuild + hardcoded pill/eyebrow/CTA replacements
+    #  were keyed to retired markup and have been removed.)
 
-    # Section eyebrows
-    for key, original in [
-        ("section_02_eyebrow", "02 — Brand specs · 160 catalogue · growing"),
-        ("section_03_eyebrow", "03 — The reasoning engine"),
-        ("section_04_eyebrow", "04 — The anti-slop linter"),
-    ]:
-        if key in strings:
-            html = html.replace(original, tr(key, original), 1)
-
-    # CTAs (hero)
-    if "cta_install" in strings:
-        html = html.replace('            pip install uxskill\n          </a>',
-                            f'            {tr("cta_install", "pip install uxskill")}\n          </a>', 1)
-    # Hero secondary CTA — "See it work" replaced the old "Read the source"
-    # (cta_source) but no key tracked it, so it stayed English on every locale.
-    if "cta_see_it_work" in strings:
-        html = html.replace('            See it work\n          </a>',
-                            f'            {tr("cta_see_it_work", "See it work")}\n          </a>', 1)
-
-    # 5. Inject lang-picker CSS + nav element + picker JS
-    picker_label = tr("lang_picker_label", "Language")
-    picker_html = lang_picker_html(langs, lang, picker_label)
-
-    # CSS: add before the closing </style> in the LAST big style block (the page styles).
-    # The hero canvas style block is around the top; the nav styles end mid-file.
-    # Simpler: just append a new <style> right before </head>.
-    if "lang-picker__btn {" not in html:
-        html = html.replace('</head>', f'<style>{PICKER_CSS}</style>\n</head>', 1)
-
-    # Picker in the nav — insert before the hamburger button.
-    # docs/index.html doubles as BOTH the source template and the en output, and
-    # base_html() re-reads it each iteration — so the en pass (first in the dict)
-    # bakes its own picker into the base, and every later locale would inherit
-    # en's picker via a naive "if not present" guard. Strip any existing picker
-    # first, then inject the locale-correct one. Idempotent across run count and
-    # language order.
-    html = re.sub(
-        r'\s*<div class="lang-picker">.*?(?=' + re.escape(NAV_BTN_MARKER) + ')',
-        '', html, count=1, flags=re.DOTALL)
-    html = html.replace(NAV_BTN_MARKER, picker_html + "\n    " + NAV_BTN_MARKER, 1)
-
-    # Picker JS — append before the closing </script> of the homepage's main script.
-    # Find the last </script> and inject right before.
-    if "setupLangPicker" not in html:
-        last_script_close = html.rfind('</script>')
-        if last_script_close != -1:
-            html = html[:last_script_close] + PICKER_JS + "\n" + html[last_script_close:]
+    # 5. (v3.1: the homepage ships its own .usknav__langs globe picker with
+    #  absolute /<locale>/ hrefs that resolve correctly from every page, so no
+    #  picker injection is needed. The old .lang-picker CSS/HTML/JS injection
+    #  was keyed to retired markup and has been removed.)
 
     return html
 
@@ -311,10 +260,12 @@ def main() -> None:
     langs = data["languages"]
     print(f"Building i18n homepages for {len(langs)} languages\n")
     for lang in langs:
+        if lang == "en":
+            continue  # the root docs/index.html IS the English source — never rewrite it
         html = build_lang(data, lang)
         write_lang(html, lang)
         size_kb = len(html) // 1024
-        print(f"  ok  {lang:6}  →  /{lang if lang != 'en' else ''}/  ({size_kb} KB)")
+        print(f"  ok  {lang:6}  →  /{lang}/  ({size_kb} KB)")
     print(f"\nDone. {len(langs)} locales written under docs/ + landing/.")
 
 

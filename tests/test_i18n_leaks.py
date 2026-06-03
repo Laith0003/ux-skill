@@ -23,16 +23,25 @@ import pytest
 
 ROOT = Path(__file__).resolve().parent.parent
 
-# A representative RTL + LTR + CJK locale. The build is uniform across locales,
-# so these three are a sufficient tripwire.
-LOCALES = ["ar", "de", "ja"]
+# All 16 localized homepages are checked — the v3.1 build is uniform, but a
+# wide net catches a single locale that silently fell back to English.
+LOCALES = ["ar", "de", "es", "fr", "hi", "id", "it", "ja", "ko", "pt-BR",
+           "ru", "th", "tr", "vi", "zh-CN", "zh-TW"]
 
-# UI copy that MUST be translated on locale pages (verbatim English = a leak).
+# Distinctive v3.1 homepage BODY copy that must be translated on every locale
+# (verbatim English here = an untranslated section = a leak). Nav/CTA terms a
+# translator may legitimately keep in English (e.g. "Star on GitHub", "Showcase")
+# are deliberately NOT listed — these strings are prose with no reason to stay English.
 MUST_NOT_LEAK = [
-    "See it work",                 # hero secondary CTA
-    "design that",                 # hero h1 second clause (white line)
-    "doesn&rsquo;t look generated",  # hero h1 accent clause
-    "Read the source",             # retired CTA — must not reappear
+    "Your AI ships",                      # enemy section h2
+    "What if the model had a",            # the turn
+    "Runs where you already build",       # runs section kicker
+    "Why this is the floor",              # moat eyebrow
+    "The corpus is vocabulary",           # proof kicker
+    "Same brief, same system",            # moat card 1 body
+    "as words, not stamps",               # proof h3
+    "One sequence, not scattered cards",  # how-it-works eyebrow
+    "Ask any model to",                   # enemy sub
 ]
 
 
