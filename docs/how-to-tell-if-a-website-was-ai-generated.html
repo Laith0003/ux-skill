@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z371T0DBW5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Z371T0DBW5');
+</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to tell if a website was AI generated: 9 visible signs</title>
+  <meta name="description" content="A practical checklist for spotting an AI-generated website or UI by eye, no code access needed: the purple gradient, three identical cards, Inter everywhere, stock-photo hero, and six more reliable tells.">
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/how-to-tell-if-a-website-was-ai-generated.html">
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="index,follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/how-to-tell-if-a-website-was-ai-generated.html">
+  <meta property="og:title" content="How to tell if a website was AI generated: 9 visible signs">
+  <meta property="og:description" content="Nine reliable tells for spotting AI-generated UI by eye, plus how to confirm it in 30 seconds and what to do if the site is yours.">
+  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og-image.png?v=31">
+  <meta property="og:image:width" content="2400">
+  <meta property="og:image:height" content="1260">
+  <meta property="og:image:alt" content="uxskill: how to tell if a website was AI generated">
+  <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og-image.png?v=31">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to tell if a website was AI generated">
+  <meta name="twitter:description" content="The purple gradient, three identical cards, Inter everywhere, and six more tells that give away machine-generated UI.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --canvas: #07080a;
+      --surface: #0f1115;
+      --surface-2: #14181d;
+      --surface-3: #1c2128;
+      --code-bg: #0d0f13;
+      --ink: #f6f7f9;
+      --body: #c8c6bf;
+      --muted: #7a7972;
+      --hairline: rgba(255,255,255,0.08);
+      --hairline-2: rgba(255,255,255,0.14);
+
+      --scene-accent: #f59e0b;
+      --scene-soft: rgba(245,158,11,0.14);
+
+      --syntax-string: #a3e0b8;
+      --syntax-comment: rgba(246, 247, 249, 0.45);
+
+      --display: 'Bricolage Grotesque', 'Inter Tight', system-ui, sans-serif;
+      --body-face: 'Inter', system-ui, -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --t-fast: 160ms;
+      --t-mid: 260ms;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; background: var(--canvas); }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      font-family: var(--body-face);
+      background: var(--canvas);
+      color: var(--body);
+      font-size: 16.5px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+    .wrap-wide { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .wrap-article { padding: 64px 0 0; }
+
+    article { padding-top: 0; }
+    .eyebrow {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--scene-accent);
+      margin-bottom: 22px;
+    }
+    h1, h2, h3, h4 {
+      font-family: var(--display);
+      color: var(--ink);
+      margin: 0;
+    }
+    h1 {
+      font-variation-settings: 'wdth' 86, 'opsz' 96, 'wght' 620;
+      font-size: clamp(38px, 5.2vw, 60px);
+      line-height: 1.06;
+      letter-spacing: -0.028em;
+      margin-bottom: 28px;
+    }
+    h1 .accent {
+      color: var(--scene-accent);
+      font-style: italic;
+      font-variation-settings: 'wdth' 86, 'opsz' 96, 'wght' 580;
+    }
+    .lede {
+      font-size: 19px;
+      line-height: 1.55;
+      color: var(--body);
+      margin-bottom: 16px;
+    }
+    .lede strong { color: var(--ink); font-weight: 600; }
+    .byline {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 48px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    h2 {
+      font-variation-settings: 'wdth' 88, 'opsz' 64, 'wght' 580;
+      font-size: clamp(26px, 3vw, 34px);
+      line-height: 1.16;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin: 56px 0 16px;
+    }
+    h2 .accent { color: var(--scene-accent); }
+    h3 {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 32, 'wght' 600;
+      font-size: 19px;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin: 32px 0 12px;
+    }
+    p { margin-bottom: 18px; color: var(--body); }
+    p strong { color: var(--ink); font-weight: 600; }
+    ul, ol { margin: 0 0 22px 22px; color: var(--body); }
+    ul li, ol li { margin-bottom: 10px; }
+    ul li::marker { color: var(--scene-accent); }
+
+    .answer-box {
+      background: var(--surface-2);
+      border: 1px solid var(--scene-accent);
+      border-radius: 16px;
+      padding: 26px 30px;
+      margin: 8px 0 36px;
+    }
+    .answer-box .label {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--scene-accent);
+      margin-bottom: 10px;
+    }
+    .answer-box p { color: var(--ink); margin-bottom: 0; font-size: 17px; line-height: 1.55; }
+
+    .sign-card {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin: 20px 0;
+      border: 1px solid var(--hairline);
+      position: relative;
+    }
+    .sign-card .num {
+      position: absolute;
+      top: 26px;
+      right: 32px;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 86, 'opsz' 96, 'wght' 620;
+      font-size: 40px;
+      color: var(--scene-accent);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      opacity: 0.85;
+    }
+    .sign-card h3 {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 620;
+      font-size: 22px;
+      color: var(--ink);
+      letter-spacing: -0.018em;
+      margin: 0 0 10px;
+      max-width: 82%;
+    }
+    .sign-card p { margin-bottom: 12px; }
+    .sign-card p:last-child { margin-bottom: 0; }
+    .sign-card .tell {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--syntax-string);
+      letter-spacing: 0.04em;
+    }
+    .sign-card .tell b { color: var(--ink); font-weight: 600; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 28px 0;
+      font-size: 14.5px;
+    }
+    th, td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--hairline);
+      vertical-align: top;
+    }
+    th {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--hairline-2);
+    }
+    td { color: var(--body); }
+    td strong { color: var(--ink); }
+
+    .honesty {
+      background: var(--surface);
+      border-left: 3px solid var(--scene-accent);
+      padding: 24px 28px;
+      border-radius: 0 14px 14px 0;
+      margin: 32px 0;
+    }
+    .honesty .label {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--scene-accent);
+      margin-bottom: 10px;
+    }
+    .honesty h4 {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 600;
+      font-size: 18px;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .honesty p { margin-bottom: 8px; }
+    .honesty p:last-child { margin-bottom: 0; }
+
+    .cta {
+      margin-top: 88px;
+      padding: 56px 48px;
+      background: var(--surface);
+      border: 1px solid var(--hairline-2);
+      color: var(--ink);
+      border-radius: 22px;
+    }
+    @media (max-width: 720px) { .cta { padding: 40px 28px; } }
+    .cta .eyebrow { color: var(--scene-accent); }
+    .cta h2 { color: var(--ink); margin-top: 0; margin-bottom: 16px; }
+    .cta h2 .accent { color: var(--scene-accent); font-style: italic; }
+    .cta p { color: var(--body); margin-bottom: 28px; }
+    .install-block {
+      background: var(--code-bg);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--ink);
+    }
+    .install-block .prompt { color: var(--scene-accent); }
+    .install-block .arg { color: var(--syntax-string); }
+    .install-block .row + .row { margin-top: 6px; }
+    .install-block .row-divider { margin-top: 14px; color: var(--muted); }
+
+    code {
+      font-family: var(--mono);
+      font-size: 13px;
+      background: var(--surface-2);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--ink);
+      border: 1px solid var(--hairline);
+    }
+    .sign-card code { background: var(--surface-3); }
+    a.link {
+      color: var(--scene-accent);
+      text-decoration: underline;
+      text-decoration-color: rgba(245,158,11,0.4);
+      text-underline-offset: 3px;
+    }
+    a.link:hover { text-decoration-color: var(--scene-accent); }
+
+    .related-reads {
+      max-width: 880px; margin: 80px auto 0 auto; padding: 32px 24px 8px;
+      border-top: 1px solid var(--hairline);
+    }
+    .related-reads-h {
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 18px;
+    }
+    .related-reads ul {
+      list-style: none; padding: 0; margin: 0;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px;
+    }
+    .related-reads li { font-size: 15px; line-height: 1.5; }
+    .related-reads a {
+      color: var(--body);
+      border-bottom: 1px solid var(--hairline-2);
+      padding-bottom: 2px;
+      transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+    }
+    .related-reads a:hover { border-color: var(--scene-accent); color: var(--ink); }
+    @media (max-width: 640px) { .related-reads ul { grid-template-columns: 1fr; } }
+
+    footer.site {
+      max-width: 1100px;
+      margin: 96px auto 0;
+      padding: 32px 24px 40px;
+      border-top: 1px solid var(--hairline);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    footer.site a { color: var(--muted); transition: color var(--t-fast) var(--ease); }
+    footer.site a:hover, footer.site a:focus-visible { color: var(--ink); }
+    footer.site .links { display: flex; gap: 22px; flex-wrap: wrap; }
+    @media (max-width: 560px) { footer.site { flex-direction: column; } }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How to tell if a website was AI generated: 9 visible signs",
+    "description": "A practical checklist for spotting an AI-generated website or UI by eye, no code access needed: the purple gradient, three identical cards, Inter everywhere, stock-photo hero, and six more reliable tells.",
+    "datePublished": "2026-06-04",
+    "dateModified": "2026-06-04",
+    "author": {"@type": "Organization", "name": "uxskill", "url": "https://uxskill.laithjunaidy.com/"},
+    "publisher": {"@type": "Organization", "name": "uxskill", "url": "https://uxskill.laithjunaidy.com/", "logo": {"@type": "ImageObject", "url": "https://uxskill.laithjunaidy.com/logo.png"}},
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://uxskill.laithjunaidy.com/how-to-tell-if-a-website-was-ai-generated.html"},
+    "url": "https://uxskill.laithjunaidy.com/how-to-tell-if-a-website-was-ai-generated.html",
+    "keywords": "how to tell if a website was AI generated, how to tell if a UI was AI generated, AI generated website signs, AI design tells, detect AI UI",
+    "articleSection": "Guide"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How can you tell if a website was generated by AI?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Look for a cluster of default choices that no human deliberately picks together: a violet-to-indigo gradient, three feature cards of identical weight, Inter as the only typeface, an emoji used as an icon, a stock-photo or generated hero, and a three-tier pricing table with the middle plan highlighted. One tell is a coincidence. Four or more appearing together means a model produced the layout with no human art direction on top."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is purple gradient always a sign of AI?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. A purple gradient is a deliberate brand choice for some companies. It is a tell only when it appears with no brand reason and alongside other defaults, because the violet-to-indigo blend is the single most common color decision large language models reach for when given no palette."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can you confirm AI-generated design without seeing the code?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, to a high confidence. The visible signs are enough for a judgment by eye. To confirm, open the page source or developer tools and check the font stack, the gradient stops, and whether spacing values are arbitrary numbers rather than a consistent scale. A regex linter such as uxskill can score the same fingerprints automatically against the markup."
+        }
+      }
+    ]
+  }
+  </script>
+  <!-- noscroll-fix -->
+  <style>
+    html, body {
+      overflow-x: clip;
+      max-width: 100%;
+    }
+    section, header, footer, main, article { max-width: 100vw; }
+    img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
+    table { max-width: 100%; }
+  </style>
+<style id="usknav-css">  .sr-only,.skip-link:not(:focus){position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .skip-link:focus{position:fixed;top:8px;inset-inline-start:8px;width:auto;height:auto;clip:auto;padding:8px 14px;background:#f59e0b;color:#07080a;border-radius:6px;z-index:200;font-family:'Inter',system-ui,sans-serif;font-size:13px}
+  .usknav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:18px;
+    padding:0 clamp(16px,4vw,48px);block-size:56px;background:rgba(7,8,10,0.86);
+    backdrop-filter:saturate(150%) blur(14px);-webkit-backdrop-filter:saturate(150%) blur(14px);
+    border-block-end:1px solid rgba(255,255,255,0.08);font-family:'Inter',system-ui,sans-serif}
+  .usknav__brand{font-family:'Bricolage Grotesque','Inter',sans-serif;font-weight:700;font-size:17px;
+    color:#f6f7f9;text-decoration:none;letter-spacing:-0.01em;margin-inline-end:auto;padding:6px 2px}
+  .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
+  .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
+    text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
+    padding-block:8px;transition:color 140ms ease}
+  .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
+  .usknav__langs{position:relative}
+  .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
+    color:#8a8f96;padding:8px 6px;transition:color 140ms ease;min-block-size:24px}
+  .usknav__langs>summary::-webkit-details-marker{display:none}
+  .usknav__langs>summary:hover{color:#f6f7f9}
+  .usknav__langs-menu{position:absolute;top:calc(100% + 8px);inset-inline-end:0;min-inline-size:184px;
+    max-block-size:60vh;overflow-y:auto;background:#0e1014;border:1px solid rgba(255,255,255,0.1);
+    border-radius:10px;padding:6px;display:grid;gap:1px;box-shadow:0 20px 40px -20px rgba(0,0,0,0.6);z-index:130}
+  .usknav__langs-menu a{font-family:'Inter',sans-serif;font-size:12.5px;color:#c0c3c9;text-decoration:none;padding:7px 10px;border-radius:6px}
+  .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
+  .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+    font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+  .usknav__star:hover{background:rgba(245,158,11,0.12)}
+  .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
+  .usknav__burger svg{display:block}
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+    padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
+    transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
+  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
+    border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
+  .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
+  .usknav__drawer-links{display:flex;flex-direction:column}
+  .usknav__drawer-links a{font-family:'Bricolage Grotesque','Inter',sans-serif;font-size:clamp(22px,5.5vw,32px);
+    color:#f6f7f9;text-decoration:none;padding:8px 0;border-block-end:1px solid rgba(255,255,255,0.06)}
+  .usknav__drawer-links a:hover{color:#f59e0b}
+  .usknav__drawer-star{margin-block-start:20px;align-self:flex-start}
+  .usknav__drawer-langlabel{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;
+    letter-spacing:0.1em;text-transform:uppercase;color:#8a8f96;margin:24px 0 10px}
+  .usknav__drawer-langs{display:flex;flex-wrap:wrap;gap:10px 18px}
+  .usknav__drawer-langs a{font-family:'Inter',sans-serif;font-size:13px;color:#8a8f96;text-decoration:none;padding:4px 0}
+  .usknav__drawer-langs a:hover{color:#f6f7f9}
+  .usknav__brand:focus-visible,.usknav__link:focus-visible,.usknav__langs>summary:focus-visible,
+  .usknav__star:focus-visible,.usknav__burger:focus-visible,.usknav__drawer-close:focus-visible,
+  .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
+    outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
+  @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+</head>
+<body>
+  <a class="skip-link sr-only" href="#main">Go to content</a>
+<header class="usknav" aria-label="Site navigation">
+  <a class="usknav__brand" href="/">uxskill</a>
+  <nav class="usknav__links" aria-label="Primary">
+    <a class="usknav__link" href="/brands.html">Brands</a>
+    <a class="usknav__link" href="/anti-patterns.html">Anti-patterns</a>
+    <a class="usknav__link" href="/commands.html">Commands</a>
+    <a class="usknav__link" href="/mcp.html">MCP</a>
+    <a class="usknav__link" href="/compare.html">Compare</a>
+    <a class="usknav__link" href="/showcase.html">Showcase</a>
+    <a class="usknav__link" href="/blog/">Blog</a>
+    <a class="usknav__link" href="/about.html">About</a>
+    <a class="usknav__link" href="/faq.html">FAQ</a>
+    <a class="usknav__link" href="/roadmap.html">Roadmap</a>
+  </nav>
+  <details class="usknav__langs">
+    <summary aria-label="Choose language"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+    <div class="usknav__langs-menu">
+      <a href="/" lang="en">English</a>
+      <a href="/zh-CN/" lang="zh-CN">简体中文</a>
+      <a href="/zh-TW/" lang="zh-TW">繁體中文</a>
+      <a href="/ja/" lang="ja">日本語</a>
+      <a href="/ko/" lang="ko">한국어</a>
+      <a href="/hi/" lang="hi">हिन्दी</a>
+      <a href="/id/" lang="id">Bahasa Indonesia</a>
+      <a href="/vi/" lang="vi">Tiếng Việt</a>
+      <a href="/th/" lang="th">ไทย</a>
+      <a href="/ar/" lang="ar" dir="rtl">العربية</a>
+      <a href="/es/" lang="es">Español</a>
+      <a href="/fr/" lang="fr">Français</a>
+      <a href="/de/" lang="de">Deutsch</a>
+      <a href="/pt-BR/" lang="pt-BR">Português</a>
+      <a href="/ru/" lang="ru">Русский</a>
+      <a href="/tr/" lang="tr">Türkçe</a>
+      <a href="/it/" lang="it">Italiano</a>
+    </div>
+  </details>
+  <a class="usknav__star" href="https://github.com/Laith0003/ux-skill" rel="noopener">Star on GitHub</a>
+  <button class="usknav__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="usknav-drawer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+</header>
+<div class="usknav__drawer" id="usknav-drawer" role="dialog" aria-modal="true" aria-label="Site menu">
+  <div class="usknav__drawer-top">
+    <a class="usknav__brand" href="/">uxskill</a>
+    <button class="usknav__drawer-close" type="button" aria-label="Close menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <nav class="usknav__drawer-links" aria-label="All pages">
+    <a href="/brands.html">Brands</a>
+      <a href="/anti-patterns.html">Anti-patterns</a>
+      <a href="/commands.html">Commands</a>
+      <a href="/mcp.html">MCP</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/showcase.html">Showcase</a>
+      <a href="/blog/">Blog</a>
+      <a href="/about.html">About</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/roadmap.html">Roadmap</a>
+  </nav>
+  <a class="usknav__star usknav__drawer-star" href="https://github.com/Laith0003/ux-skill" rel="noopener">Star on GitHub</a>
+  <div class="usknav__drawer-langlabel">Language</div>
+  <div class="usknav__drawer-langs">
+      <a href="/" lang="en">English</a>
+      <a href="/zh-CN/" lang="zh-CN">简体中文</a>
+      <a href="/zh-TW/" lang="zh-TW">繁體中文</a>
+      <a href="/ja/" lang="ja">日本語</a>
+      <a href="/ko/" lang="ko">한국어</a>
+      <a href="/hi/" lang="hi">हिन्दी</a>
+      <a href="/id/" lang="id">Bahasa Indonesia</a>
+      <a href="/vi/" lang="vi">Tiếng Việt</a>
+      <a href="/th/" lang="th">ไทย</a>
+      <a href="/ar/" lang="ar" dir="rtl">العربية</a>
+      <a href="/es/" lang="es">Español</a>
+      <a href="/fr/" lang="fr">Français</a>
+      <a href="/de/" lang="de">Deutsch</a>
+      <a href="/pt-BR/" lang="pt-BR">Português</a>
+      <a href="/ru/" lang="ru">Русский</a>
+      <a href="/tr/" lang="tr">Türkçe</a>
+      <a href="/it/" lang="it">Italiano</a>
+  </div>
+</div>
+
+  <main id="main">
+  <div class="wrap wrap-article">
+    <article>
+      <span class="eyebrow">Guide</span>
+      <h1>How to tell if a website was <span class="accent">AI generated</span>.</h1>
+      <p class="lede">
+        Machine-generated interfaces share a fingerprint. Once you know what to look at, you can call it from across the room. <strong>Here are the nine signs that give it away, ranked from most to least reliable, plus how to confirm in thirty seconds.</strong>
+      </p>
+      <p class="byline">From the uxskill team &middot; 6 min read &middot; MIT-licensed open source</p>
+
+      <div class="answer-box">
+        <div class="label">The short answer</div>
+        <p>A website was almost certainly AI generated when several default choices appear together that no human picks on purpose at the same time: a violet-to-indigo gradient, three feature cards of equal weight, Inter as the only font, an emoji used as an icon, and a three-tier pricing table with the middle plan highlighted. One of these is a coincidence. Four or more is a confession.</p>
+      </div>
+
+      <p>
+        The reason this works is structural, not anecdotal. A large language model asked to build a page with no design direction does not invent. It returns to the center of its training distribution and emits the most statistically common version of every decision. Different prompts, different models, and different days converge on the same look because they are all averaging the same web. The result is a house style nobody chose and everybody recognizes once it is named.
+      </p>
+      <p>
+        That convergence is exactly what makes detection possible. Below are the tells in the order a designer actually notices them. You do not need the source code for the first six.
+      </p>
+    </article>
+  </div>
+
+  <div class="wrap-wide">
+
+    <div class="sign-card">
+      <span class="num">01</span>
+      <h3>The violet-to-indigo gradient</h3>
+      <p>The single strongest signal. A diagonal blend from roughly <code>#7c3aed</code> to <code>#6366f1</code>, used on the hero, the primary button, or a glowing background blob. It is the default accent a model reaches for when no palette is given, because purple reads as premium and indigo reads as technical, and the training data is saturated with both.</p>
+      <p class="tell"><b>Tell:</b> a purple gradient with no brand reason behind it. A company whose logo is purple gets a pass. A generic dashboard whose only color is this gradient does not.</p>
+    </div>
+
+    <div class="sign-card">
+      <span class="num">02</span>
+      <h3>Three identical feature cards</h3>
+      <p>A row of exactly three cards, equal width, equal height, each with an icon on top, a short heading, and two lines of body text. Real content is lopsided because real features are not equally important. A perfectly balanced trio is a layout the model reached for, not a hierarchy a human decided.</p>
+      <p class="tell"><b>Tell:</b> three is the magic number. Watch for the same pattern repeated as a three-step "how it works" and a three-tier pricing block on the same page.</p>
+    </div>
+
+    <div class="sign-card">
+      <span class="num">03</span>
+      <h3>Inter, and only Inter</h3>
+      <p>One neutral sans-serif doing every job, from the 64-pixel headline to the footer fine print, with no contrast between display and body. Inter is the most common answer, with Roboto and system-ui close behind. Human typography almost always pairs a character face for headings with a workhorse for text. A page set entirely in one geometric sans was typeset by a model.</p>
+      <p class="tell"><b>Tell:</b> open the page and ask what the headline font is. If the answer is "the same as the paragraph," that is the sign.</p>
+    </div>
+
+    <div class="sign-card">
+      <span class="num">04</span>
+      <h3>An emoji standing in for an icon</h3>
+      <p>A rocket for "launch," a lightning bolt for "fast," a lock for "secure," dropped inline as a literal emoji character rather than a drawn icon. Models reach for emoji because they are zero-effort and universally available. No design system of any quality ships emoji as iconography, so their presence is a strong negative signal on its own.</p>
+      <p class="tell"><b>Tell:</b> if the "icons" render slightly differently across your phone and your laptop, they are emoji, not SVG.</p>
+    </div>
+
+    <div class="sign-card">
+      <span class="num">05</span>
+      <h3>The three-tier pricing table, middle plan highlighted</h3>
+      <p>Three plans side by side, the center one lifted with a colored border and a "Most popular" ribbon. This is a genuine pattern, which is what makes it useful as a tell: the model reproduces the cliche version exactly, with evenly spaced features and a checkmark list that reads as filler rather than a real decision about what each tier withholds.</p>
+      <p class="tell"><b>Tell:</b> read the feature list. If the differences between tiers feel arbitrary, the table was generated to fit the shape, not to price a product.</p>
+    </div>
+
+    <div class="sign-card">
+      <span class="num">06</span>
+      <h3>A stock or generated hero with a dark scrim</h3>
+      <p>A wide, glossy, slightly-too-perfect photograph behind the headline, dimmed with a semi-transparent black overlay so the white text stays legible. The scrim is the tell more than the photo. It is the reflex move for guaranteeing contrast over an image the model did not choose for any specific reason.</p>
+      <p class="tell"><b>Tell:</b> ask whether the hero image could be swapped for any other image in the same category with zero loss. If yes, no human selected it.</p>
+    </div>
+
+    <div class="sign-card">
+      <span class="num">07</span>
+      <h3>Soft shadows and uniform rounded corners everywhere</h3>
+      <p>Every card, button, input, and image shares the same border radius and the same diffuse drop shadow, producing a soft, floating, weightless surface with no visual hierarchy. Real interfaces vary radius and elevation to signal importance. A page where everything has the same gentle pillow treatment was styled by a default, not a system.</p>
+      <p class="tell"><b>Tell:</b> there is no flat element anywhere and nothing has a hard edge. Sameness is the signal.</p>
+    </div>
+
+    <div class="sign-card">
+      <span class="num">08</span>
+      <h3>Centered everything, generous and even padding</h3>
+      <p>Headline centered, subhead centered, buttons centered, every section a centered column with symmetrical breathing room top and bottom. Centered layouts are safe, which is why the model defaults to them. Confident design uses asymmetry, an offset grid, or a strong left edge to create tension. Relentless centering reads as a layout with no point of view.</p>
+      <p class="tell"><b>Tell:</b> scroll the whole page. If your eye never has to move left or right because everything sits on the centerline, that is the pattern.</p>
+    </div>
+
+    <div class="sign-card">
+      <span class="num">09</span>
+      <h3>Copy that says nothing in a confident voice</h3>
+      <p>Headlines like "Transform your workflow" and "Built for modern teams," subheads that promise to "unlock your potential" and "supercharge productivity." The grammar is clean and the claims are empty because the model wrote toward the average of all marketing copy. Specific products use specific words. Generic uplift language is the verbal version of the purple gradient.</p>
+      <p class="tell"><b>Tell:</b> try to name the actual product feature from the headline. If you cannot, the copy was generated to sound like a landing page rather than to describe one.</p>
+    </div>
+
+    <div class="wrap">
+    <article>
+
+      <h2>How to weigh the signals</h2>
+      <p>
+        No single tell is proof. Plenty of human-built sites use Inter, and plenty of real companies own a purple brand. Detection is about clustering, not any one sign. Zero or one of the nine is likely a deliberate choice. Two or three suggests AI-assisted work that was lightly edited. Four or more on one page is the centroid look in full, almost certainly generated with no art direction on top.
+      </p>
+
+      <h2>Confirm it in thirty seconds</h2>
+      <p>
+        If you want certainty rather than a confident guess, open the page source or developer tools and check three things. They take longer to fake than to leave at default, so they rarely lie.
+      </p>
+      <ol>
+        <li><strong>The font stack.</strong> Inspect the headline and the body. If the <code>font-family</code> is identical on both and it is Inter, Roboto, or bare <code>system-ui</code>, that is one mark.</li>
+        <li><strong>The gradient stops.</strong> Search the CSS for <code>linear-gradient</code>. Violet and indigo hex values in the 270-to-250 hue range with no matching brand color elsewhere is a second mark.</li>
+        <li><strong>The spacing values.</strong> Look at margins and padding. A real design system uses a consistent scale such as 4, 8, 16, 24, 32. Arbitrary one-off numbers like <code>23px</code> and <code>37px</code> scattered around suggest output assembled without a token system.</li>
+      </ol>
+      <p>
+        For whole codebases rather than single pages, the same fingerprints can be scored automatically. <a class="link" href="/blog/ai-design-fingerprints-list.html">The full list of 35 AI design fingerprints</a> documents each pattern as a rule, and <a class="link" href="/anti-patterns.html">the anti-patterns catalog</a> shows the 152 the uxskill linter checks against the markup, with a non-zero exit code when too many appear.
+      </p>
+
+      <div class="honesty">
+        <div class="label">The honest caveat</div>
+        <h4>This detects the absence of direction, not the use of a tool</h4>
+        <p>None of these signs mean AI touched the project. They mean nobody overrode the defaults. A skilled person using Cursor or Claude Code produces work with none of these tells, because they brought taste and a brand to the prompt. The fingerprint is the look of generation left unedited, and the goal is not to avoid AI but to make sure the output carries a decision a human would defend. See <a class="link" href="/blog/why-ai-generated-apps-look-the-same.html">why generated apps regress to the same mean</a> for the mechanism behind every tell on this page.</p>
+      </div>
+
+    </article>
+
+    <section class="cta">
+      <span class="eyebrow">Stop shipping the centroid look</span>
+      <h2>Catch the fingerprints <span class="accent">before they ship.</span></h2>
+      <p>uxskill is an open-source design engine for AI coding. It anchors output to your brand, then lints it against 152 anti-pattern rules so the purple gradient and the three identical cards never reach production. Offline, deterministic, no telemetry, MIT licensed.</p>
+
+      <div class="install-block">
+        <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
+        <div class="row row-divider">then, in your editor</div>
+        <div class="row"><span class="prompt">$</span> <span class="arg">/ux-audit</span> &lt;path-to-your-page&gt;</div>
+      </div>
+      <p style="margin-top:24px;margin-bottom:0;font-family:var(--mono);font-size:12.5px;color:var(--muted);">
+        Repository: <a class="link" href="https://github.com/Laith0003/ux-skill">github.com/Laith0003/ux-skill</a>
+      </p>
+    </section>
+    </div>
+  </div>
+
+  <aside class="related-reads" aria-label="Related reads">
+    <h2 class="related-reads-h">Related reads</h2>
+    <ul>
+      <li><a href="/blog/ai-design-fingerprints-list.html">The 35 AI design fingerprints, as rules</a></li>
+      <li><a href="/blog/why-ai-generated-apps-look-the-same.html">Why AI-generated apps look the same</a></li>
+      <li><a href="/blog/why-ai-uses-purple-gradients.html">Why AI reaches for purple gradients</a></li>
+      <li><a href="/blog/ai-ui-design-review-checklist.html">A pre-ship review checklist for AI UI</a></li>
+    </ul>
+  </aside>
+  </main>
+
+  <footer class="site">
+    <span>&copy; 2026 Laith Aljunaidy. MIT licensed. No telemetry.</span>
+    <div class="links">
+      <a href="/">Home</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/blog/">Blog</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+      <a href="https://pypi.org/project/uxskill/">PyPI</a>
+      <a href="https://www.npmjs.com/package/uxskill">npm</a>
+    </div>
+  </footer>
+
+<script id="usknav-js">(function(){var d=document.getElementById('usknav-drawer');var b=document.querySelector('.usknav__burger');if(!d||!b)return;var c=d.querySelector('.usknav__drawer-close');function F(){return d.querySelectorAll('a[href],button:not([disabled])');}function set(v){d.classList.toggle('is-open',v);b.setAttribute('aria-expanded',v?'true':'false');document.body.style.overflow=v?'hidden':'';if(v){var f=c||F()[0];if(f)f.focus();}else{b.focus();}}b.addEventListener('click',function(){set(true);});if(c)c.addEventListener('click',function(){set(false);});d.addEventListener('click',function(e){if(e.target.tagName==='A')set(false);});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&d.classList.contains('is-open'))set(false);if(e.key==='Tab'&&d.classList.contains('is-open')){var f=F();if(!f.length)return;var a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus();}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus();}}});var L=document.querySelector('.usknav__langs');if(L){document.addEventListener('click',function(e){if(L.open&&!L.contains(e.target))L.open=false;});L.addEventListener('keydown',function(e){if(e.key==='Escape')L.open=false;});}})();</script>
+</body>
+</html>
