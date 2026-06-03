@@ -397,10 +397,10 @@
   /* chat pin: 4 messages × 110vh = 440vh tall; sticky panel reveals one at a time */
   .chat-pin{position:relative;height:440vh}
   .chat-sticky{position:sticky;top:0;height:100svh;display:flex;align-items:center;justify-content:center;overflow:hidden}
-  .chat{position:relative;max-width:640px;width:100%;margin:0 auto;padding-inline:clamp(16px,4vw,40px)}
-  .cmsg{position:absolute;width:100%;opacity:0;transform:translateY(28px) scale(.97);transition:opacity .6s cubic-bezier(.16,.7,.2,1),transform .65s cubic-bezier(.16,.7,.2,1);pointer-events:none;display:flex;flex-direction:column;gap:0}
-  .cmsg.active{opacity:1;transform:none;pointer-events:auto}
-  .cmsg.active{transition:opacity .6s ease,transform .65s ease;}
+  .chat{max-width:600px;width:100%;margin:0 auto;padding-inline:clamp(16px,4vw,40px);display:flex;flex-direction:column;gap:18px;justify-content:center}
+  /* messages STACK — each fades up and stays; slots pre-occupy space so nothing reflows */
+  .cmsg{opacity:0;transform:translateY(28px);transition:opacity .6s cubic-bezier(.16,.7,.2,1),transform .65s cubic-bezier(.16,.7,.2,1)}
+  .cmsg.active{opacity:1;transform:none}
   /* mobile: no pin, stack normally */
   @media(max-width:640px){.chat-pin{height:auto}.chat-sticky{position:static;height:auto}.cmsg{position:static;opacity:1;transform:none}}
   .bub{border-radius:16px;padding:18px 22px;font-size:clamp(15px,2vw,18px);line-height:1.45;max-width:86%;min-width:0}
@@ -932,7 +932,7 @@
     var MSGS=4, curM=-1;
     function setMsg(m){
       if(m===curM)return; curM=m;
-      ci.querySelectorAll('.cmsg').forEach(function(el){el.classList.toggle('active',+el.getAttribute('data-cm')===m);});
+      ci.querySelectorAll('.cmsg').forEach(function(el){el.classList.toggle('active',+el.getAttribute('data-cm')<=m);});
     }
     function onScrollC(){
       if(window.innerWidth<640){setMsg(0);return;}
