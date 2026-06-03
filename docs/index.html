@@ -336,10 +336,10 @@
   .fade-up.in{opacity:1;transform:none}
 
   /* ===== SCROLL-PIN: full-viewport beats, one at a time ===== */
-  .pin-wrap{position:relative;height:420vh}/* 6 beats × ~70vh each */
+  .pin-wrap{position:relative;height:560vh}/* 6 beats — min-dwell timer paces reading */
   .pin-inner{position:sticky;top:0;height:100svh;overflow:hidden}
   /* each beat: absolute, full-size, centered, hidden by default */
-  .pbeat{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 clamp(24px,8vw,160px);gap:clamp(14px,2vh,28px);opacity:0;transform:translateY(22px) scale(.97);transition:opacity .55s cubic-bezier(.16,.7,.2,1),transform .6s cubic-bezier(.16,.7,.2,1);pointer-events:none}
+  .pbeat{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 clamp(24px,8vw,160px);gap:clamp(14px,2vh,28px);opacity:0;transform:translateY(22px) scale(.97);transition:opacity .7s cubic-bezier(.16,.7,.2,1),transform .8s cubic-bezier(.16,.7,.2,1);pointer-events:none}
   .pbeat.active{opacity:1;transform:none;pointer-events:auto;transition:opacity .18s ease,transform .18s ease;}
   .pbeat-eye{justify-content:center;margin-bottom:4px}
   .pbeat-num{font-family:var(--mono);font-size:clamp(11px,1.2vw,13px);letter-spacing:.18em;color:var(--blue-d);font-weight:500}
@@ -912,23 +912,28 @@
   (function(){
     var wrap=document.getElementById('pinWrap'), inner=document.getElementById('pinInner');
     if(!wrap||!inner)return;
-    var BEATS=6, cur=-1;
-    function setBeat(b){
-      if(b===cur)return; cur=b;
+    var BEATS=6, cur=-1, target=0, lastAdv=0, DWELL=950;
+    function applyBeat(b){
       wrap.querySelectorAll('.pbeat').forEach(function(el){el.classList.toggle('active',+el.getAttribute('data-beat')===b);});
       wrap.querySelectorAll('.pdot').forEach(function(el){el.classList.toggle('on',+el.getAttribute('data-dot')===b);});
     }
-    function onScroll2(){
-      if(window.innerWidth<820){setBeat(0);return;}
+    function computeTarget(){
+      if(window.innerWidth<820){target=0;return;}
       var r=wrap.getBoundingClientRect();
       var scrolled=-r.top, total=r.height-window.innerHeight;
-      if(scrolled<0){setBeat(0);return;}
-      if(scrolled>=total){setBeat(BEATS-1);return;}
-      setBeat(Math.min(BEATS-1,Math.floor((scrolled/total)*BEATS)));
+      if(scrolled<0)target=0;
+      else if(scrolled>=total)target=BEATS-1;
+      else target=Math.min(BEATS-1,Math.floor((scrolled/total)*BEATS));
     }
-    window.addEventListener('scroll',onScroll2,{passive:true});
-    window.addEventListener('resize',onScroll2);
-    onScroll2(); setBeat(0);
+    /* min-dwell timer: advance at most one beat per DWELL ms so each is readable
+       even on a fast flick. rAF keeps converging to the scroll target — no lock, no desync. */
+    function tick(ts){
+      if(cur!==target && (ts-lastAdv)>=DWELL){ cur+=(target>cur?1:-1); applyBeat(cur); lastAdv=ts; }
+      requestAnimationFrame(tick);
+    }
+    window.addEventListener('scroll',computeTarget,{passive:true});
+    window.addEventListener('resize',computeTarget);
+    computeTarget(); cur=0; applyBeat(0); requestAnimationFrame(tick);
   /* ----- chat pin: 4 messages, one at a time ----- */
   (function(){
     var cp=document.getElementById('chatPin'), ci=document.getElementById('chatInner');
