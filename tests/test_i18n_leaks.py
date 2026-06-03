@@ -51,7 +51,9 @@ def test_homepage_has_no_english_ui_leaks(locale):
 
 
 def test_english_homepage_keeps_its_copy():
-    """Sanity: the fixes must NOT have stripped the English source page."""
+    """Sanity: the English source page must keep real homepage copy. The v3.1
+    redesign replaced the old hero CTA ("See it work"), so assert two stable
+    current strings: the tagline and the centroid concept."""
     html = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
-    assert "See it work" in html
-    assert "design that" in html
+    assert "Stop your AI code looking generated" in html
+    assert "the centroid" in html
