@@ -38,7 +38,16 @@ jobs:
           build-mode: none
           # security-focused: the security tab surfaces security issues, not
           # code-quality lint (the repo has its own linter + test suite for that).
-          queries: security-extended
+          # paths-ignore scopes the scan to shipped product code (engine/, bin/).
+          # scripts/ are local, dev-only build helpers that drive a headless
+          # Chrome over the loopback debug port; CodeQL's js/file-access-to-http
+          # flags the Chrome-written port file flowing into a 127.0.0.1 fetch,
+          # a false positive for local-only tooling, not an attack surface.
+          config: |
+            queries:
+              - uses: security-extended
+            paths-ignore:
+              - scripts
 
       - name: Analyze
         uses: github/codeql-action/analyze@v3
