@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- OG/Twitter card source — 1200x630. Rendered to docs/og-image.png via scripts/render-og.mjs -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--black:#06070a;--ink:#f4f5f7;--body:#a6abb3;--muted:#717783;--cyan:#22d3ee;--blue:#5b9cff;--green:#3ddc97}
+  html,body{width:1200px;height:630px;overflow:hidden}
+  .card{position:relative;width:1200px;height:630px;background:var(--black);
+    font-family:'Inter',system-ui,sans-serif;color:var(--ink);overflow:hidden;
+    /* cool blooms — cyan top-right, blue lower-left */
+    background-image:
+      radial-gradient(640px 520px at 88% -8%, rgba(34,211,238,0.20), transparent 62%),
+      radial-gradient(520px 480px at 4% 116%, rgba(91,156,255,0.16), transparent 60%)}
+  /* faint dot grid */
+  .grid{position:absolute;inset:0;opacity:.5;
+    background-image:radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1.4px);
+    background-size:26px 26px;mask-image:linear-gradient(180deg,transparent,#000 30%,#000 70%,transparent)}
+  /* giant signature 3.1 bleeding off the right edge */
+  .three{position:absolute;right:-42px;top:50%;transform:translateY(-50%);
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:520px;line-height:.7;
+    letter-spacing:-.05em;color:#fff;opacity:.96;
+    text-shadow:0 0 90px rgba(34,211,238,0.55),0 0 180px rgba(34,211,238,0.28)}
+  .three em{font-style:normal;color:var(--cyan)}
+  /* left content stack */
+  .inner{position:relative;z-index:2;height:100%;padding:62px 64px;display:flex;flex-direction:column;justify-content:space-between}
+  .top{display:flex;align-items:center;gap:11px}
+  .brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:30px;letter-spacing:-.02em;color:#fff}
+  .dot{width:13px;height:13px;border-radius:50%;
+    background:conic-gradient(from 0deg,var(--blue),var(--green),var(--cyan),var(--blue));box-shadow:0 0 16px rgba(34,211,238,.6)}
+  .tag{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--muted)}
+  .mid{max-width:760px}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:15px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--green);margin-bottom:22px;display:flex;align-items:center;gap:12px}
+  .eyebrow::before{content:"";width:30px;height:1px;background:var(--green);opacity:.7}
+  h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:74px;line-height:.99;
+    letter-spacing:-.035em;color:#fff;max-width:14ch}
+  h1 i{font-style:italic;font-weight:400;color:var(--cyan)}
+  .sub{margin-top:26px;font-size:23px;line-height:1.5;color:var(--body);max-width:34ch}
+  .sub b{color:var(--ink);font-weight:500}
+  .stats{display:flex;align-items:center;gap:0;font-family:'JetBrains Mono',monospace;font-size:16.5px;color:var(--muted)}
+  .stats span{padding-right:18px;margin-right:18px;border-right:1px solid rgba(255,255,255,.14)}
+  .stats span:last-child{border-right:0;margin-right:0;padding-right:0}
+  .stats b{color:var(--cyan);font-weight:500}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="grid"></div>
+  <div class="three">3<em>.</em>1</div>
+  <div class="inner">
+    <div class="top">
+      <span class="dot"></span><span class="brand">uxskill</span>
+      <span class="tag">deterministic · offline · no LLM</span>
+    </div>
+    <div class="mid">
+      <div class="eyebrow">The design brain for AI coding</div>
+      <h1>Stop your AI code looking <i>generated.</i></h1>
+      <p class="sub">A deterministic engine that compiles a real design language per brief &mdash; <b>Cursor, Claude Code, Copilot</b> &#43; 14 more IDEs.</p>
+    </div>
+    <div class="stats">
+      <span><b>1,243</b> entries</span>
+      <span><b>160</b> brand specs</span>
+      <span><b>152</b> anti-patterns</span>
+      <span><b>17</b> IDEs</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>
