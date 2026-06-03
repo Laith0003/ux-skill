@@ -195,7 +195,9 @@
   h1 .ac{font-weight:400;font-style:italic;color:var(--body)}
   .lede{margin:24px auto 0;max-width:46ch;color:var(--body);font-size:clamp(15px,2vw,18px)}
   .lede b{color:var(--ink);font-weight:500}
-  .cue{margin-top:38px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
+  /* hero CTA — compact above-the-fold capture; reuses .cta/.btn/.btn--key, tighter spacing for the centered hero */
+  .hero__cta{margin-top:24px}
+  .cue{margin-top:28px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
   .cue span{display:block;margin-top:8px;font-size:17px;animation:bob 1.8s ease-in-out infinite}
   @keyframes bob{50%{transform:translateY(7px)}}
 
@@ -544,7 +546,11 @@
           <span class="pill">MIT&nbsp;·&nbsp;NO TELEMETRY&nbsp;·&nbsp;NO LLM</span>
         </div>
         <h1>The brain that ships design that <span class="ac">doesn't look generated.</span></h1>
-        <p class="lede">A 7-axis synthesizer turns any brief into a fresh design language, <b>anchored to your brand</b>.</p>
+        <p class="lede">A 7-axis synthesizer turns any brief into a fresh design language, <b>anchored to your brand</b>. Free, MIT, runs in 17 AI coding tools.</p>
+        <div class="cta hero__cta">
+          <a class="btn btn--key" href="https://pypi.org/project/uxskill/"><span class="arr"><svg aria-hidden="true" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v12m0 0 5-5m-5 5-5-5M5 20h14"/></svg></span> pip install uxskill</a>
+          <a class="btn" href="https://github.com/Laith0003/ux-skill" rel="noopener">Star on GitHub <span class="arr"><svg aria-hidden="true" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg></span></a>
+        </div>
         <div class="cue">Scroll<span>&#8595;</span></div>
       </div>
     </div>
@@ -561,49 +567,47 @@
 
       <!-- the slop specimen, drawn as ONE inline SVG (sidesteps every CSS-structure + content regex) -->
       <figure class="specimen rev" style="margin-inline:0">
-        <svg viewBox="0 0 1000 560" role="img" aria-label="A specimen of generic AI-generated output: a soft gradient header, three identical feature cards with placeholder body text, and a faceless stock testimonial. The pattern uxskill is built to defeat.">
+        <!-- wireframe of the typical AI design-tool landing: centered gradient hero, stat strip, identical-card grid -->
+        <svg viewBox="0 0 1000 632" role="img" aria-label="A wireframe of the typical AI-generated design-tool landing page: a centered hero with a blue-to-orange gradient and two buttons, a strip of stat cards, and two rows of three identical feature cards. The centroid layout uxskill is built to defeat.">
           <defs>
-            <linearGradient id="slopHead" x1="0" y1="0" x2="1" y2="0.6">
-              <stop offset="0" stop-color="#7c889c"/><stop offset="0.55" stop-color="#5d6a82"/><stop offset="1" stop-color="#48536a"/>
+            <linearGradient id="slopHead" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1000" y2="210">
+              <stop offset="0" stop-color="#2f6bd6"/><stop offset="0.52" stop-color="#7a4fd0"/><stop offset="1" stop-color="#ec7a2c"/>
             </linearGradient>
           </defs>
-          <rect width="1000" height="560" rx="16" fill="#ffffff" stroke="#e7e9ef"/>
-          <!-- the inevitable soft gradient hero header -->
-          <rect x="1" y="1" width="998" height="190" rx="16" fill="url(#slopHead)"/>
-          <rect x="1" y="120" width="998" height="71" fill="url(#slopHead)"/>
-          <rect x="360" y="64" width="280" height="22" rx="6" fill="#ffffff" opacity="0.92"/>
-          <rect x="312" y="98" width="376" height="11" rx="5" fill="#ffffff" opacity="0.5"/>
-          <rect x="430" y="138" width="140" height="30" rx="15" fill="#ffffff" opacity="0.9"/>
-          <!-- three identical cards -->
+          <rect width="1000" height="632" rx="16" fill="#0b0e16" stroke="#e7e9ef"/>
+          <!-- the inevitable centered gradient hero -->
+          <rect x="1" y="1" width="998" height="206" rx="16" fill="url(#slopHead)" opacity="0.92"/>
+          <rect x="1" y="150" width="998" height="57" fill="url(#slopHead)" opacity="0.92"/>
+          <rect x="350" y="52" width="300" height="22" rx="6" fill="#ffffff" opacity="0.92"/>
+          <rect x="318" y="82" width="364" height="22" rx="6" fill="#ffffff" opacity="0.74"/>
+          <rect x="372" y="118" width="256" height="10" rx="5" fill="#ffffff" opacity="0.45"/>
+          <rect x="398" y="150" width="112" height="30" rx="15" fill="#ffffff" opacity="0.92"/>
+          <rect x="522" y="150" width="112" height="30" rx="15" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="1.5"/>
+          <!-- stat strip — 6 identical mini-cards -->
           <g>
-            <rect x="64" y="244" width="276" height="190" rx="12" fill="#f7f8fa" stroke="#eceef2"/>
-            <rect x="362" y="244" width="276" height="190" rx="12" fill="#f7f8fa" stroke="#eceef2"/>
-            <rect x="660" y="244" width="276" height="190" rx="12" fill="#f7f8fa" stroke="#eceef2"/>
-            <!-- identical lightbulb-ish glyph + identical gray body lines in each -->
-            <g fill="#c7ccd6">
-              <circle cx="98" cy="282" r="13"/><circle cx="396" cy="282" r="13"/><circle cx="694" cy="282" r="13"/>
+            <g fill="#141a28" stroke="#232a3a">
+              <rect x="64" y="224" width="135" height="54" rx="10"/><rect x="211" y="224" width="135" height="54" rx="10"/><rect x="358" y="224" width="135" height="54" rx="10"/><rect x="505" y="224" width="135" height="54" rx="10"/><rect x="652" y="224" width="135" height="54" rx="10"/><rect x="799" y="224" width="135" height="54" rx="10"/>
             </g>
-            <g fill="#d8dce3">
-              <rect x="84" y="312" width="150" height="13" rx="6"/><rect x="382" y="312" width="150" height="13" rx="6"/><rect x="680" y="312" width="150" height="13" rx="6"/>
-            </g>
-            <g fill="#e6e9ee">
-              <rect x="84" y="338" width="228" height="9" rx="4"/><rect x="84" y="356" width="212" height="9" rx="4"/><rect x="84" y="374" width="190" height="9" rx="4"/>
-              <rect x="382" y="338" width="228" height="9" rx="4"/><rect x="382" y="356" width="212" height="9" rx="4"/><rect x="382" y="374" width="190" height="9" rx="4"/>
-              <rect x="680" y="338" width="228" height="9" rx="4"/><rect x="680" y="356" width="212" height="9" rx="4"/><rect x="680" y="374" width="190" height="9" rx="4"/>
-            </g>
+            <g fill="#4a86e8" opacity="0.75"><rect x="82" y="238" width="38" height="14" rx="4"/><rect x="229" y="238" width="38" height="14" rx="4"/><rect x="376" y="238" width="38" height="14" rx="4"/><rect x="523" y="238" width="38" height="14" rx="4"/><rect x="670" y="238" width="38" height="14" rx="4"/><rect x="817" y="238" width="38" height="14" rx="4"/></g>
+            <g fill="#5b6577"><rect x="82" y="258" width="74" height="7" rx="3"/><rect x="229" y="258" width="74" height="7" rx="3"/><rect x="376" y="258" width="74" height="7" rx="3"/><rect x="523" y="258" width="74" height="7" rx="3"/><rect x="670" y="258" width="74" height="7" rx="3"/><rect x="817" y="258" width="74" height="7" rx="3"/></g>
           </g>
-          <!-- the faceless stock testimonial -->
-          <rect x="64" y="466" width="872" height="66" rx="12" fill="#f7f8fa" stroke="#eceef2"/>
-          <circle cx="106" cy="499" r="19" fill="#cdd2da"/>
-          <rect x="142" y="486" width="300" height="11" rx="5" fill="#d8dce3"/>
-          <rect x="142" y="505" width="180" height="9" rx="4" fill="#e6e9ee"/>
-          <g fill="#c7ccd6"><circle cx="780" cy="499" r="5"/><circle cx="800" cy="499" r="5"/><circle cx="820" cy="499" r="5"/><circle cx="840" cy="499" r="5"/><circle cx="860" cy="499" r="5"/></g>
+          <!-- centered section heading -->
+          <rect x="350" y="300" width="300" height="16" rx="6" fill="#cfd5e0" opacity="0.82"/>
+          <rect x="330" y="324" width="340" height="9" rx="4" fill="#5b6577"/>
+          <!-- two rows of three identical feature cards -->
+          <g fill="#141a28" stroke="#232a3a">
+            <rect x="64" y="356" width="276" height="118" rx="12"/><rect x="362" y="356" width="276" height="118" rx="12"/><rect x="660" y="356" width="276" height="118" rx="12"/>
+            <rect x="64" y="490" width="276" height="118" rx="12"/><rect x="362" y="490" width="276" height="118" rx="12"/><rect x="660" y="490" width="276" height="118" rx="12"/>
+          </g>
+          <g fill="#4a86e8" opacity="0.28"><circle cx="98" cy="390" r="13"/><circle cx="396" cy="390" r="13"/><circle cx="694" cy="390" r="13"/><circle cx="98" cy="524" r="13"/><circle cx="396" cy="524" r="13"/><circle cx="694" cy="524" r="13"/></g>
+          <g fill="#cfd5e0" opacity="0.6"><rect x="84" y="414" width="150" height="12" rx="5"/><rect x="382" y="414" width="150" height="12" rx="5"/><rect x="680" y="414" width="150" height="12" rx="5"/><rect x="84" y="548" width="150" height="12" rx="5"/><rect x="382" y="548" width="150" height="12" rx="5"/><rect x="680" y="548" width="150" height="12" rx="5"/></g>
+          <g fill="#2a3346"><rect x="84" y="436" width="228" height="8" rx="4"/><rect x="84" y="452" width="196" height="8" rx="4"/><rect x="382" y="436" width="228" height="8" rx="4"/><rect x="382" y="452" width="196" height="8" rx="4"/><rect x="680" y="436" width="228" height="8" rx="4"/><rect x="680" y="452" width="196" height="8" rx="4"/><rect x="84" y="570" width="228" height="8" rx="4"/><rect x="84" y="586" width="196" height="8" rx="4"/><rect x="382" y="570" width="228" height="8" rx="4"/><rect x="382" y="586" width="196" height="8" rx="4"/><rect x="680" y="570" width="228" height="8" rx="4"/><rect x="680" y="586" width="196" height="8" rx="4"/></g>
         </svg>
         <figcaption>
-          <span class="x">&times;</span> the same soft gradient
-          <span class="x">&times;</span> three identical cards
-          <span class="x">&times;</span> filler body copy
-          <span class="x">&times;</span> a faceless five-star quote
+          <span class="x">&times;</span> centered hero
+          <span class="x">&times;</span> the blue&#8594;orange gradient
+          <span class="x">&times;</span> a stat strip
+          <span class="x">&times;</span> three equal cards, twice
         </figcaption>
       </figure>
 
@@ -612,7 +616,7 @@
         <div class="chat-sticky" id="chatSticky">
           <div class="chat" id="chatInner">
             <div class="cmsg you" data-cm="0"><div class="bub">Build me a fintech landing page.</div></div>
-            <div class="cmsg sk" data-cm="1"><div class="av"></div><div class="bub">You get exactly that specimen: the same soft gradient, three equal cards, a "John&nbsp;Doe" quote, Inter at 96px. <span class="tag">the slop</span></div></div>
+            <div class="cmsg sk" data-cm="1"><div class="av"></div><div class="bub">You get exactly that specimen &mdash; centered hero, a gradient, a stat strip, three equal cards. Every tool ships the same one. <span class="tag">the slop</span></div></div>
             <div class="cmsg you" data-cm="2"><div class="bub">Right. I want it to look like <em>us</em> &mdash; not everyone.</div></div>
             <div class="cmsg sk" data-cm="3"><div class="av"></div><div class="bub">That is the whole job. Read on. <span class="tag">the turn &#8595;</span></div></div>
           </div>
