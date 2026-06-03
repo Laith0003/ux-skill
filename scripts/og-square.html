@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Square (1:1) brand/logo card — the 3.1 mark centered. Rendered to docs/og-square.png via:
+     node scripts/render-og.mjs scripts/og-square.html docs/og-square.png 1200 1200 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--black:#06070a;--ink:#f4f5f7;--muted:#717783;--cyan:#22d3ee;--blue:#5b9cff;--green:#3ddc97}
+  html,body{width:1200px;height:1200px;overflow:hidden}
+  .card{position:relative;width:1200px;height:1200px;background:var(--black);
+    font-family:'JetBrains Mono',monospace;color:var(--ink);overflow:hidden;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:42px;
+    /* centered cyan bloom + a lower-left blue wash */
+    background-image:
+      radial-gradient(660px 660px at 50% 46%, rgba(34,211,238,0.20), transparent 62%),
+      radial-gradient(720px 600px at 6% 112%, rgba(91,156,255,0.12), transparent 60%)}
+  /* faint dot grid, masked to a soft center circle */
+  .grid{position:absolute;inset:0;opacity:.55;
+    background-image:radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1.4px);
+    background-size:30px 30px;
+    -webkit-mask-image:radial-gradient(circle at 50% 46%, #000 36%, transparent 76%);
+    mask-image:radial-gradient(circle at 50% 46%, #000 36%, transparent 76%)}
+  /* the signature mark */
+  .three{position:relative;z-index:2;
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:520px;line-height:.78;
+    letter-spacing:-.05em;color:#fff;
+    text-shadow:0 0 110px rgba(34,211,238,0.5),0 0 220px rgba(34,211,238,0.28)}
+  .three em{font-style:normal;color:var(--cyan)}
+  /* wordmark lockup */
+  .lockup{position:relative;z-index:2;display:flex;align-items:center;gap:18px}
+  .dot{width:24px;height:24px;border-radius:50%;
+    background:conic-gradient(from 0deg,var(--blue),var(--green),var(--cyan),var(--blue));
+    box-shadow:0 0 26px rgba(34,211,238,.6)}
+  .brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:74px;
+    letter-spacing:-.02em;color:#fff}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="grid"></div>
+  <div class="three">3<em>.</em>1</div>
+  <div class="lockup"><span class="dot"></span><span class="brand">uxskill</span></div>
+</div>
+</body>
+</html>

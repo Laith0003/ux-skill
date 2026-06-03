@@ -5,8 +5,10 @@ import { mkdtempSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-const SRC = 'file://' + join(process.cwd(), 'scripts/og-card.html');
-const OUT = join(process.cwd(), 'docs/og-image.png');
+// Args: [srcHtml] [outPng] [width] [height] — default to the 1200x630 landscape OG card.
+const SRC = 'file://' + join(process.cwd(), process.argv[2] || 'scripts/og-card.html');
+const OUT = join(process.cwd(), process.argv[3] || 'docs/og-image.png');
+const W = parseInt(process.argv[4] || '1200', 10), H = parseInt(process.argv[5] || '630', 10);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const CHROME = ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   '/Applications/Chromium.app/Contents/MacOS/Chromium'].find((p) => existsSync(p));
@@ -38,11 +40,11 @@ function makeCdp(wsUrl) {
   const { targetId } = await cdp.send('Target.createTarget', { url: 'about:blank' });
   const { sessionId: sid } = await cdp.send('Target.attachToTarget', { targetId, flatten: true });
   await cdp.send('Page.enable', {}, sid);
-  await cdp.send('Emulation.setDeviceMetricsOverride', { width: 1200, height: 630, deviceScaleFactor: 2, mobile: false }, sid);
+  await cdp.send('Emulation.setDeviceMetricsOverride', { width: W, height: H, deviceScaleFactor: 2, mobile: false }, sid);
   await cdp.send('Page.navigate', { url: SRC }, sid);
   await cdp.wait('Page.loadEventFired'); await sleep(2600); // fonts + glow settle
   // deviceScaleFactor:2 already gives 2x (2400x1260); clip scale:1 avoids compounding past Twitter's 4096 cap.
-  const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', clip: { x: 0, y: 0, width: 1200, height: 630, scale: 1 } }, sid);
+  const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', clip: { x: 0, y: 0, width: W, height: H, scale: 1 } }, sid);
   writeFileSync(OUT, Buffer.from(data, 'base64'));
   console.log('wrote', OUT, '(' + Math.round(Buffer.from(data, 'base64').length / 1024) + ' KB)');
   chrome.kill(); process.exit(0);
