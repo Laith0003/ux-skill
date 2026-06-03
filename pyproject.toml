@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68.0", "wheel"]
+requires = ["setuptools>=82.0.1", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -33,7 +33,7 @@ classifiers = [
 dependencies = [
   "click>=8.1",
   "rich>=13.0",
-  "pydantic>=2.5",
+  "pydantic>=2.13.4",
   "tomli>=2.0;python_version<'3.11'"
 ]
 
@@ -45,11 +45,11 @@ mcp = [
   "mcp>=1.0; python_version >= '3.10'"
 ]
 dev = [
-  "pytest>=7.4",
+  "pytest>=8.4.2",
   "pytest-cov>=4.1",
   "ruff>=0.1.9",
-  "mypy>=1.7",
-  "black>=23.12",
+  "mypy>=1.19.1",
+  "black>=25.11.0",
   # MCP transport is optional in dev too — guarded by Python version so
   # CI's 3.9 matrix entry can still install dev deps for non-MCP testing.
   "mcp>=1.0; python_version >= '3.10'"
