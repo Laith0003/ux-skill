@@ -162,6 +162,24 @@ def build_lang(data: dict, lang: str) -> str:
     else:
         html = re.sub(r'<html lang="[^"]*">', f'<html lang="{info["html_lang"]}">', html, count=1)
 
+    # 1b. Arabic needs a real Arabic webfont — the browser default Arabic face is
+    #     unusable (v3.0 shipped without it and the user complained). Load IBM
+    #     Plex Sans Arabic and apply it to body + headings under html[lang="ar"].
+    if lang == "ar":
+        html = html.replace("&display=swap",
+            "&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap", 1)
+        ar_css = (
+            "<style>"
+            "html[lang=\"ar\"] body{font-family:'IBM Plex Sans Arabic','Inter',system-ui,sans-serif}"
+            "html[lang=\"ar\"] h1,html[lang=\"ar\"] h2,html[lang=\"ar\"] h3,"
+            "html[lang=\"ar\"] .lead,html[lang=\"ar\"] .lede,html[lang=\"ar\"] .sub,"
+            "html[lang=\"ar\"] .turn-lead,html[lang=\"ar\"] .turn-sub,"
+            "html[lang=\"ar\"] .pbeat-title,html[lang=\"ar\"] .pbeat-sub,"
+            "html[lang=\"ar\"] .k,html[lang=\"ar\"] .eyebrow,html[lang=\"ar\"] .bub,html[lang=\"ar\"] .pill"
+            "{font-family:'IBM Plex Sans Arabic','Bricolage Grotesque',sans-serif}"
+            "</style>")
+        html = html.replace("</head>", ar_css + "\n</head>", 1)
+
     # 2. Inject hreflang block right before canonical
     hreflang = hreflang_block(langs, lang)
     if "hreflang=" not in html:
