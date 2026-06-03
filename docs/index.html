@@ -9,11 +9,15 @@
 <meta property="og:title" content="uxskill — Stop your AI code looking generated">
 <meta property="og:description" content="A 7-axis synthesizer that compiles a fresh design language per brief, anchored to your brand. Runs in 17 AI coding IDEs. Offline, deterministic, no LLM.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://uxskill.laithjunaidy.com/">
+<meta property="og:site_name" content="uxskill">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/">
 <meta property="og:image" content="https://uxskill.laithjunaidy.com/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image:secure_url" content="https://uxskill.laithjunaidy.com/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1260">
 <meta property="og:image:alt" content="The giant 3.1 numeral glowing cyan on near-black, beside the line: Stop your AI code looking generated.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="uxskill v3.1 — The Brain, brand-true. 7-axis design synthesizer for AI coding.">
@@ -256,7 +260,8 @@
 
   /* product imagery inside dark cards */
   .iconwall{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3.4vw,40px);width:100%;max-width:400px;margin-inline:auto}
-  .iconwall .ic{aspect-ratio:1;display:flex;align-items:center;justify-content:center}
+  .iconwall .ic{aspect-ratio:1;display:flex;align-items:center;justify-content:center;color:var(--body);transition:color .25s cubic-bezier(.16,1,.3,1);}
+  .iconwall .ic:hover{color:var(--ink)}
   .iconwall .ic svg{width:clamp(30px,5.5vw,40px);height:clamp(30px,5.5vw,40px);opacity:.92}
   .chatmock{width:100%;max-width:420px;display:flex;flex-direction:column;gap:13px}
   .cbub{border-radius:14px;padding:14px 17px;font-size:14.5px;line-height:1.42;min-width:0}
@@ -414,11 +419,10 @@
   .msg.sk .bub em,.cmsg.sk .bub em{font-style:italic;color:var(--blue)}
   .msg.sk .tag,.cmsg.sk .tag{font-family:var(--mono);font-size:11px;color:var(--green);margin-left:auto;white-space:nowrap}
 
-  /* ===== the slop specimen (beat 2) ===== */
-  .specimen{margin-top:clamp(40px,6vh,72px);position:relative}
-  .specimen figcaption{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:#8a92a1;margin:14px 2px 0;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-  .specimen figcaption .x{color:var(--cyan-d);font-weight:500}
-  .specimen svg{width:100%;height:auto;border-radius:16px;box-shadow:0 40px 90px -50px rgba(20,30,60,.35);display:block}
+  /* ===== the slop specimen — now rendered inside the chat bubble (beat 2) ===== */
+  .cmsg.sk .bub--spec{flex-direction:column;align-items:stretch;gap:11px;padding:12px}
+  .bub--spec .specsvg{width:100%;height:auto;max-height:40vh;border-radius:10px;display:block;box-shadow:0 30px 70px -45px rgba(0,0,0,.6)}
+  .bub--spec .tag{align-self:flex-end;margin-left:0}
 
   /* ===== stats + moat ===== */
   .stats{display:grid;gap:18px 12px;margin:clamp(44px,7vh,84px) auto 0;grid-template-columns:repeat(4,1fr);max-width:820px}
@@ -565,58 +569,12 @@
         <p class="sub">Ask any model to "build a landing." You get the average of every page it ever ingested &mdash; in ten seconds, every time. Here is what the centroid looks like.</p>
       </div>
 
-      <!-- the slop specimen, drawn as ONE inline SVG (sidesteps every CSS-structure + content regex) -->
-      <figure class="specimen rev" style="margin-inline:0">
-        <!-- wireframe of the typical AI design-tool landing: centered gradient hero, stat strip, identical-card grid -->
-        <svg viewBox="0 0 1000 632" role="img" aria-label="A wireframe of the typical AI-generated design-tool landing page: a centered hero with a blue-to-orange gradient and two buttons, a strip of stat cards, and two rows of three identical feature cards. The centroid layout uxskill is built to defeat.">
-          <defs>
-            <linearGradient id="slopHead" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1000" y2="210">
-              <stop offset="0" stop-color="#2f6bd6"/><stop offset="0.52" stop-color="#7a4fd0"/><stop offset="1" stop-color="#ec7a2c"/>
-            </linearGradient>
-          </defs>
-          <rect width="1000" height="632" rx="16" fill="#0b0e16" stroke="#e7e9ef"/>
-          <!-- the inevitable centered gradient hero -->
-          <rect x="1" y="1" width="998" height="206" rx="16" fill="url(#slopHead)" opacity="0.92"/>
-          <rect x="1" y="150" width="998" height="57" fill="url(#slopHead)" opacity="0.92"/>
-          <rect x="350" y="52" width="300" height="22" rx="6" fill="#ffffff" opacity="0.92"/>
-          <rect x="318" y="82" width="364" height="22" rx="6" fill="#ffffff" opacity="0.74"/>
-          <rect x="372" y="118" width="256" height="10" rx="5" fill="#ffffff" opacity="0.45"/>
-          <rect x="398" y="150" width="112" height="30" rx="15" fill="#ffffff" opacity="0.92"/>
-          <rect x="522" y="150" width="112" height="30" rx="15" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="1.5"/>
-          <!-- stat strip — 6 identical mini-cards -->
-          <g>
-            <g fill="#141a28" stroke="#232a3a">
-              <rect x="64" y="224" width="135" height="54" rx="10"/><rect x="211" y="224" width="135" height="54" rx="10"/><rect x="358" y="224" width="135" height="54" rx="10"/><rect x="505" y="224" width="135" height="54" rx="10"/><rect x="652" y="224" width="135" height="54" rx="10"/><rect x="799" y="224" width="135" height="54" rx="10"/>
-            </g>
-            <g fill="#4a86e8" opacity="0.75"><rect x="82" y="238" width="38" height="14" rx="4"/><rect x="229" y="238" width="38" height="14" rx="4"/><rect x="376" y="238" width="38" height="14" rx="4"/><rect x="523" y="238" width="38" height="14" rx="4"/><rect x="670" y="238" width="38" height="14" rx="4"/><rect x="817" y="238" width="38" height="14" rx="4"/></g>
-            <g fill="#5b6577"><rect x="82" y="258" width="74" height="7" rx="3"/><rect x="229" y="258" width="74" height="7" rx="3"/><rect x="376" y="258" width="74" height="7" rx="3"/><rect x="523" y="258" width="74" height="7" rx="3"/><rect x="670" y="258" width="74" height="7" rx="3"/><rect x="817" y="258" width="74" height="7" rx="3"/></g>
-          </g>
-          <!-- centered section heading -->
-          <rect x="350" y="300" width="300" height="16" rx="6" fill="#cfd5e0" opacity="0.82"/>
-          <rect x="330" y="324" width="340" height="9" rx="4" fill="#5b6577"/>
-          <!-- two rows of three identical feature cards -->
-          <g fill="#141a28" stroke="#232a3a">
-            <rect x="64" y="356" width="276" height="118" rx="12"/><rect x="362" y="356" width="276" height="118" rx="12"/><rect x="660" y="356" width="276" height="118" rx="12"/>
-            <rect x="64" y="490" width="276" height="118" rx="12"/><rect x="362" y="490" width="276" height="118" rx="12"/><rect x="660" y="490" width="276" height="118" rx="12"/>
-          </g>
-          <g fill="#4a86e8" opacity="0.28"><circle cx="98" cy="390" r="13"/><circle cx="396" cy="390" r="13"/><circle cx="694" cy="390" r="13"/><circle cx="98" cy="524" r="13"/><circle cx="396" cy="524" r="13"/><circle cx="694" cy="524" r="13"/></g>
-          <g fill="#cfd5e0" opacity="0.6"><rect x="84" y="414" width="150" height="12" rx="5"/><rect x="382" y="414" width="150" height="12" rx="5"/><rect x="680" y="414" width="150" height="12" rx="5"/><rect x="84" y="548" width="150" height="12" rx="5"/><rect x="382" y="548" width="150" height="12" rx="5"/><rect x="680" y="548" width="150" height="12" rx="5"/></g>
-          <g fill="#2a3346"><rect x="84" y="436" width="228" height="8" rx="4"/><rect x="84" y="452" width="196" height="8" rx="4"/><rect x="382" y="436" width="228" height="8" rx="4"/><rect x="382" y="452" width="196" height="8" rx="4"/><rect x="680" y="436" width="228" height="8" rx="4"/><rect x="680" y="452" width="196" height="8" rx="4"/><rect x="84" y="570" width="228" height="8" rx="4"/><rect x="84" y="586" width="196" height="8" rx="4"/><rect x="382" y="570" width="228" height="8" rx="4"/><rect x="382" y="586" width="196" height="8" rx="4"/><rect x="680" y="570" width="228" height="8" rx="4"/><rect x="680" y="586" width="196" height="8" rx="4"/></g>
-        </svg>
-        <figcaption>
-          <span class="x">&times;</span> centered hero
-          <span class="x">&times;</span> the blue&#8594;orange gradient
-          <span class="x">&times;</span> a stat strip
-          <span class="x">&times;</span> three equal cards, twice
-        </figcaption>
-      </figure>
-
       <!-- chat: pinned — scroll reveals one message at a time -->
       <div class="chat-pin" id="chatPin">
         <div class="chat-sticky" id="chatSticky">
           <div class="chat" id="chatInner">
             <div class="cmsg you" data-cm="0"><div class="bub">Build me a fintech landing page.</div></div>
-            <div class="cmsg sk" data-cm="1"><div class="av"></div><div class="bub">You get exactly that specimen &mdash; centered hero, a gradient, a stat strip, three equal cards. Every tool ships the same one. <span class="tag">the slop</span></div></div>
+            <div class="cmsg sk" data-cm="1"><div class="av"></div><div class="bub bub--spec"><svg class="specsvg" viewBox="0 0 1000 632" role="img" aria-label="A wireframe of the typical AI-generated design-tool landing page: a centered hero with a blue-to-orange gradient and two buttons, a strip of stat cards, and two rows of three identical feature cards. The centroid layout uxskill is built to defeat."><defs><linearGradient id="slopHead" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1000" y2="210"><stop offset="0" stop-color="#2f6bd6"/><stop offset="0.52" stop-color="#7a4fd0"/><stop offset="1" stop-color="#ec7a2c"/></linearGradient></defs><rect width="1000" height="632" rx="16" fill="#0b0e16" stroke="#e7e9ef"/><rect x="1" y="1" width="998" height="206" rx="16" fill="url(#slopHead)" opacity="0.92"/><rect x="1" y="150" width="998" height="57" fill="url(#slopHead)" opacity="0.92"/><rect x="350" y="52" width="300" height="22" rx="6" fill="#ffffff" opacity="0.92"/><rect x="318" y="82" width="364" height="22" rx="6" fill="#ffffff" opacity="0.74"/><rect x="372" y="118" width="256" height="10" rx="5" fill="#ffffff" opacity="0.45"/><rect x="398" y="150" width="112" height="30" rx="15" fill="#ffffff" opacity="0.92"/><rect x="522" y="150" width="112" height="30" rx="15" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="1.5"/><g><g fill="#141a28" stroke="#232a3a"><rect x="64" y="224" width="135" height="54" rx="10"/><rect x="211" y="224" width="135" height="54" rx="10"/><rect x="358" y="224" width="135" height="54" rx="10"/><rect x="505" y="224" width="135" height="54" rx="10"/><rect x="652" y="224" width="135" height="54" rx="10"/><rect x="799" y="224" width="135" height="54" rx="10"/></g><g fill="#4a86e8" opacity="0.75"><rect x="82" y="238" width="38" height="14" rx="4"/><rect x="229" y="238" width="38" height="14" rx="4"/><rect x="376" y="238" width="38" height="14" rx="4"/><rect x="523" y="238" width="38" height="14" rx="4"/><rect x="670" y="238" width="38" height="14" rx="4"/><rect x="817" y="238" width="38" height="14" rx="4"/></g><g fill="#5b6577"><rect x="82" y="258" width="74" height="7" rx="3"/><rect x="229" y="258" width="74" height="7" rx="3"/><rect x="376" y="258" width="74" height="7" rx="3"/><rect x="523" y="258" width="74" height="7" rx="3"/><rect x="670" y="258" width="74" height="7" rx="3"/><rect x="817" y="258" width="74" height="7" rx="3"/></g></g><rect x="350" y="300" width="300" height="16" rx="6" fill="#cfd5e0" opacity="0.82"/><rect x="330" y="324" width="340" height="9" rx="4" fill="#5b6577"/><g fill="#141a28" stroke="#232a3a"><rect x="64" y="356" width="276" height="118" rx="12"/><rect x="362" y="356" width="276" height="118" rx="12"/><rect x="660" y="356" width="276" height="118" rx="12"/><rect x="64" y="490" width="276" height="118" rx="12"/><rect x="362" y="490" width="276" height="118" rx="12"/><rect x="660" y="490" width="276" height="118" rx="12"/></g><g fill="#4a86e8" opacity="0.28"><circle cx="98" cy="390" r="13"/><circle cx="396" cy="390" r="13"/><circle cx="694" cy="390" r="13"/><circle cx="98" cy="524" r="13"/><circle cx="396" cy="524" r="13"/><circle cx="694" cy="524" r="13"/></g><g fill="#cfd5e0" opacity="0.6"><rect x="84" y="414" width="150" height="12" rx="5"/><rect x="382" y="414" width="150" height="12" rx="5"/><rect x="680" y="414" width="150" height="12" rx="5"/><rect x="84" y="548" width="150" height="12" rx="5"/><rect x="382" y="548" width="150" height="12" rx="5"/><rect x="680" y="548" width="150" height="12" rx="5"/></g><g fill="#2a3346"><rect x="84" y="436" width="228" height="8" rx="4"/><rect x="84" y="452" width="196" height="8" rx="4"/><rect x="382" y="436" width="228" height="8" rx="4"/><rect x="382" y="452" width="196" height="8" rx="4"/><rect x="680" y="436" width="228" height="8" rx="4"/><rect x="680" y="452" width="196" height="8" rx="4"/><rect x="84" y="570" width="228" height="8" rx="4"/><rect x="84" y="586" width="196" height="8" rx="4"/><rect x="382" y="570" width="228" height="8" rx="4"/><rect x="382" y="586" width="196" height="8" rx="4"/><rect x="680" y="570" width="228" height="8" rx="4"/><rect x="680" y="586" width="196" height="8" rx="4"/></g></svg><span class="tag">the slop</span></div></div>
             <div class="cmsg you" data-cm="2"><div class="bub">Right. I want it to look like <em>us</em> &mdash; not everyone.</div></div>
             <div class="cmsg sk" data-cm="3"><div class="av"></div><div class="bub">That is the whole job. Read on. <span class="tag">the turn &#8595;</span></div></div>
           </div>
