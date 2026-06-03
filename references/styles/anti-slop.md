@@ -160,6 +160,7 @@ The single fastest way to mark output as AI-generated. The design can be perfect
 | Generic testimonial copy ("This product changed my life", "Amazing tool!") | Quantified, named testimonials: "We cut p99 from 380ms to 90ms. — Name, role, company" |
 | Customer quotes without a name, role, or company | Name + role + company at minimum. Quotes with no attribution read as fabricated |
 | Compliance badge logos in original full color | Single-color or grayscale, all logos at uniform optical weight |
+| Fabricated / hand-drawn / abstract brand logos (an invented glyph standing in for Cursor, Stripe, Claude, etc.) | The REAL single-path SVG from `references/logos/` (or fetched from `cdn.simpleicons.org/<slug>` / the brand's own kit), `fill="currentColor"`. An approximated brand mark is an instant credibility leak |
 | Stat callouts that are visibly invented ("99.99% uptime!") | Real numbers or organic-looking ones (47.2%, 280K, $8,247.30). Round numbers in stats read as marketing |
 | Hyperbolic adjective stacks ("powerful, intelligent, transformative, seamless") | Signal of weakness in the underlying claim. Replace adjectives with specifics |
 | Vague benefit copy ("faster", "easier", "smarter") | Specific numbers and named outcomes |
