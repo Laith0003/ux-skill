@@ -11,7 +11,7 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Slop CLI——145 条规则,无 LLM,在 CI 中运行 — ux-skill</title>
+  <title>AI Slop CLI,145 条规则,无 LLM,在 CI 中运行 · ux-skill</title>
   <meta name="description" content="一个为 AI 编码工作流设计的确定性命令行设计 linter。145 条正则规则,无 LLM 调用,跨 Claude Code、Cursor、Windsurf、Cline、Continue。JSON 输出,退出码契约,GitHub Actions 配方。">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/zh-CN/anti-ai-slop-cli-china.html">
   <meta name="theme-color" content="#07080a">
@@ -20,16 +20,16 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/zh-CN/anti-ai-slop-cli-china.html">
-  <meta property="og:title" content="AI Slop CLI——145 条规则,无 LLM,在 CI 中运行">
+  <meta property="og:title" content="AI Slop CLI,145 条规则,无 LLM,在 CI 中运行">
   <meta property="og:description" content="确定性设计 linter,145 条正则,1,243 条目录,131 个品牌规范,22 条命令,17 个 IDE。MIT 许可。">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/zh-CN-anti-ai-slop-cli-china.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — zh-CN anti ai slop cli china">
+  <meta property="og:image:alt" content="ux-skill · zh-CN anti ai slop cli china">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/zh-CN-anti-ai-slop-cli-china.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Anti-AI-Slop CLI — 145 条规则,在 CI 中卡住 AI 默认值">
+  <meta name="twitter:title" content="Anti-AI-Slop CLI,145 条规则,在 CI 中卡住 AI 默认值">
   <meta name="twitter:description" content="给 Cursor、Claude Code、Windsurf、Cline 用的确定性 linter。无 LLM,sub-second,MIT。">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,7 +40,7 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "AI Slop CLI——145 条规则,无 LLM,在 CI 中运行",
+    "headline": "AI Slop CLI,145 条规则,无 LLM,在 CI 中运行",
     "description": "一个为 AI 编码工作流设计的确定性命令行设计 linter。145 条正则规则,无 LLM 调用,跨 Claude Code、Cursor、Windsurf、Cline、Continue。",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
@@ -500,9 +500,9 @@
 <div class="wrap">
     <article>
       <span class="eyebrow">Blog &middot; 简体中文 &middot; 2026-05-28</span>
-      <h1>AI Slop CLI——145 条规则,<br>无 LLM,在 <span class="accent">CI 中运行</span></h1>
+      <h1>AI Slop CLI,145 条规则,<br>无 LLM,在 <span class="accent">CI 中运行</span></h1>
       <p class="lede">
-        <strong>每个 AI 编码工具都会在第一次生成时落入同样的视觉默认值——头部用 Inter 90px、紫到蓝渐变、三张完全相同的卡片。</strong>解决方法不是问大模型「这个设计够好吗」——那是非确定性的。解决方法是一个在 CI 中跑的确定性 linter:145 条正则规则,扫描磁盘上的代码,无 LLM 调用,无 token 预算,sub-second。这就是 ux-skill 的 lint 子命令。
+        <strong>每个 AI 编码工具都会在第一次生成时落入同样的视觉默认值,头部用 Inter 90px、紫到蓝渐变、三张完全相同的卡片。</strong>解决方法不是问大模型「这个设计够好吗」,那是非确定性的。解决方法是一个在 CI 中跑的确定性 linter:145 条正则规则,扫描磁盘上的代码,无 LLM 调用,无 token 预算,sub-second。这就是 ux-skill 的 lint 子命令。
       </p>
       <p class="byline">By the ux-skill team &middot; 8 min read &middot; MIT-licensed open source</p>
 
@@ -625,14 +625,14 @@ $ uxskill lint --json | jq '.findings | length'</pre>
 
       <h2>和推荐器配对</h2>
       <p>
-        单独的 linter 是被动的——它捕获已经存在的代码中的 slop。完整的 ux-skill 循环既预防又被动:
+        单独的 linter 是被动的,它捕获已经存在的代码中的 slop。完整的 ux-skill 循环既预防又被动:
       </p>
       <ol>
-        <li><code>/ux-frame</code> —— 10 字段发现简报(forcing function)。</li>
-        <li><code>/ux-recommend</code> —— <a href="/blog/python-design-system-generator.html" class="link">Python 推荐器</a> 跑 5 个并行检索并返回一个系统。</li>
-        <li><code>/ux-design</code> —— 在系统上生成界面。</li>
-        <li><code>/ux-lint</code> —— 用 145 条正则规则给输出加门。</li>
-        <li><code>/ux-fix</code> —— 自动修补 linter 能解决的问题(Inter → Fraunces、靛色渐变 → 单一强调色、三卡 → 不对称)。</li>
+        <li><code>/ux-frame</code>:10 字段发现简报(forcing function)。</li>
+        <li><code>/ux-recommend</code>:<a href="/blog/python-design-system-generator.html" class="link">Python 推荐器</a> 跑 5 个并行检索并返回一个系统。</li>
+        <li><code>/ux-design</code>:在系统上生成界面。</li>
+        <li><code>/ux-lint</code>:用 145 条正则规则给输出加门。</li>
+        <li><code>/ux-fix</code>:自动修补 linter 能解决的问题(Inter → Fraunces、靛色渐变 → 单一强调色、三卡 → 不对称)。</li>
       </ol>
       <p>
         步骤 1-3 降低模型产出 slop 的频率。步骤 4-5 捕获漏网的。推荐器抬高地板;linter 设定天花板。
@@ -641,8 +641,8 @@ $ uxskill lint --json | jq '.findings | length'</pre>
       <div class="honesty">
         <div class="label">诚实范围</div>
         <h4>正则捕获结构性指纹,不捕获品味。</h4>
-        <p>linter 永远不会捕获「这一节的节奏不对」或「这段文案太冷」。这些需要人或模型。正则<em>能</em>捕获的,是每一个有字面 token、模式或形状的指纹——这覆盖了 AI 默认值的大部分,因为模型每次都会伸手去拿同一件工件。</p>
-        <p>我们刻意不在 CI 里跑 LLM 裁判。如果你的标准是「看起来像设计师做的」,那是 code review,不是 lint。ux-skill 提供 <code>/ux-critique</code> 用于品味检查——但它在编辑器里按需运行,不在 CI 里。</p>
+        <p>linter 永远不会捕获「这一节的节奏不对」或「这段文案太冷」。这些需要人或模型。正则<em>能</em>捕获的,是每一个有字面 token、模式或形状的指纹,这覆盖了 AI 默认值的大部分,因为模型每次都会伸手去拿同一件工件。</p>
+        <p>我们刻意不在 CI 里跑 LLM 裁判。如果你的标准是「看起来像设计师做的」,那是 code review,不是 lint。ux-skill 提供 <code>/ux-critique</code> 用于品味检查,但它在编辑器里按需运行,不在 CI 里。</p>
       </div>
 
       <h2>跨 IDE 分发</h2>
@@ -652,10 +652,10 @@ $ uxskill lint --json | jq '.findings | length'</pre>
 
       <h2>相关阅读</h2>
       <ul>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">AI 编码的正则 linter——145 条规则在 CI 中</a>。</li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">AI 编码的正则 linter,145 条规则在 CI 中</a>。</li>
         <li><a href="/blog/ai-design-fingerprints-list.html" class="link">每个 AI 编码工具默认产出的 35 个设计指纹</a>。</li>
-        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Claude Code 的反 AI slop 工具——诚实排名</a>。</li>
-        <li><a href="/blog/anti-slop-cli-vibe-coders.html" class="link">vibe coders 的反 slop CLI——pre-commit 配方</a>。</li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Claude Code 的反 AI slop 工具,诚实排名</a>。</li>
+        <li><a href="/blog/anti-slop-cli-vibe-coders.html" class="link">vibe coders 的反 slop CLI,pre-commit 配方</a>。</li>
       </ul>
     </article>
 
@@ -667,7 +667,7 @@ $ uxskill lint --json | jq '.findings | length'</pre>
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
         <div class="row"><span class="prompt">$</span> uxskill lint --threshold <span class="arg">high</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— or —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">· or ·</div>
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
       </div>
@@ -678,7 +678,7 @@ $ uxskill lint --json | jq '.findings | length'</pre>
     <div class="related-reads-inner">
       <h2 class="related-reads-h">Related reads</h2>
       <ul>
-        <li><a href="/blog/regex-linter-for-ai-coding.html">正则 linter — 145 条规则</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html">正则 linter,145 条规则</a></li>
         <li><a href="/blog/ai-design-fingerprints-list.html">35 个 AI 设计指纹</a></li>
         <li><a href="/blog/anti-ai-slop-claude-skills.html">反 AI slop 工具排名</a></li>
         <li><a href="/blog/anti-slop-cli-vibe-coders.html">反 slop CLI for vibe coders</a></li>

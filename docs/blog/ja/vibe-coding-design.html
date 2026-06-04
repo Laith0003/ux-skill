@@ -11,7 +11,7 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>「Vibe coding」でAIが書いたUIが毎回同じに見える本当の理由 — ux-skill</title>
+  <title>「Vibe coding」でAIが書いたUIが毎回同じに見える本当の理由 · ux-skill</title>
   <meta name="description" content="バイブコーディングは速い。だが出力は毎回同じに見える。Claude Code、Cursor、Cline、Windsurfが踏む既定値を、100ルールの正規表現リンターで止める方法。LLM呼び出しなし、CIで動く。">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ja/vibe-coding-design.html">
   <meta name="theme-color" content="#07080a">
@@ -25,11 +25,11 @@
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/ja-vibe-coding-design.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — ja-vibe-coding-design">
+  <meta property="og:image:alt" content="ux-skill · ja-vibe-coding-design">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/ja-vibe-coding-design.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="バイブコーディングと ux-skill — 速さは保ち、既定値を捨てる">
+  <meta name="twitter:title" content="バイブコーディングと ux-skill,速さは保ち、既定値を捨てる">
   <meta name="twitter:description" content="100ルール、998件のカタログ、22コマンド、17のIDE。Claude Code、Cursor、Cline、Windsurfで使えるAIスロップ対策。">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -506,18 +506,18 @@
 
       <h2>「Vibe coding」とは結局なんなのか</h2>
       <p>
-        この言葉は2026年2月の<em>X</em>のスレッドで半分冗談として広まり、4月にはVCのエッセイの表紙に載った。真面目に定義し直すと、「意図を自然言語で書き、モデルが実装を形にし、人間の仕事はタイピングからレビューへ移る」開発スタイルだ。Andrej Karpathyの最初の定式化は、はっきりこう言っていた——あなたはコードを書かない、コードを操縦するのだ、と。
+        この言葉は2026年2月の<em>X</em>のスレッドで半分冗談として広まり、4月にはVCのエッセイの表紙に載った。真面目に定義し直すと、「意図を自然言語で書き、モデルが実装を形にし、人間の仕事はタイピングからレビューへ移る」開発スタイルだ。Andrej Karpathyの最初の定式化は、はっきりこう言っていた,あなたはコードを書かない、コードを操縦するのだ、と。
       </p>
       <p>
         フロントエンドの仕事では、このバイブは非常に切れ味がいい。一回のプロンプトでヒーロー、ナビ、サインアップが動く形で出てくる。CursorやClaude Codeのセッションでは、アイデアから動くページまでのラウンドトリップは、いまや時間ではなく分で測られる。
       </p>
       <p>
-        そのトレードオフは、センスだ。モデルには自前の好みがある——2021〜2024年の狭いスタートアップランディング美学に偏重した学習データから焼き付けられた好みだ。押し返す何かがなければ、バイブはいつも同じ場所に着地する。
+        そのトレードオフは、センスだ。モデルには自前の好みがある,2021〜2024年の狭いスタートアップランディング美学に偏重した学習データから焼き付けられた好みだ。押し返す何かがなければ、バイブはいつも同じ場所に着地する。
       </p>
 
       <h2>AIの「指紋」、ひとつの段落で説明する</h2>
       <p>
-        ボディフェイスが88〜96ピクセル前後のディスプレイサイズに引き伸ばされている。インディゴからバイオレットを通って青の終端まで広がる多段階グラデーションが白の上に乗っている。ヒーローの下に同一のカードが3つ、3カラムグリッドで並ぶ——小さなアイコン、一語のタイトル、一文のサブタイトル。プロダクト固有の名詞が入るべき場所にプレースホルダーのコピーが入っている。Windowsの ClearType で破綻するヘアラインの100ウェイト本文。すべてのセクションのすべての直接子要素に同じフェードインアップが付いている。
+        ボディフェイスが88〜96ピクセル前後のディスプレイサイズに引き伸ばされている。インディゴからバイオレットを通って青の終端まで広がる多段階グラデーションが白の上に乗っている。ヒーローの下に同一のカードが3つ、3カラムグリッドで並ぶ,小さなアイコン、一語のタイトル、一文のサブタイトル。プロダクト固有の名詞が入るべき場所にプレースホルダーのコピーが入っている。Windowsの ClearType で破綻するヘアラインの100ウェイト本文。すべてのセクションのすべての直接子要素に同じフェードインアップが付いている。
       </p>
       <p>
         個別に見れば、どれも間違いではない。指紋になるのは「組み合わせ」だ。1つを見て肩をすくめる。同じ折りに4つ見えた時点で、どのツールが生成したか分かる。
@@ -531,12 +531,12 @@
         とっさの対処は、プロンプトにテキストを足すことだ。「既定のグラデーションを使うな」「セリフのディスプレイフェースを使え」「同一カードを3つ並べるな」。これは1画面では効く。次のプロンプトでは忘れる。プロンプトだけのステアリングは確率的で、コンテキスト長とともに減衰する。
       </p>
       <p>
-        必要なのは決定論的な床——モデルが書いた後で毎回走り、ループの中にLLMを置かないチェックだ。これがux-skillが埋めるギャップだ。レコメンダーが先にモデルの選択肢を絞り、リンターが、既定値がすり抜けたときにモデルを罰する。
+        必要なのは決定論的な床,モデルが書いた後で毎回走り、ループの中にLLMを置かないチェックだ。これがux-skillが埋めるギャップだ。レコメンダーが先にモデルの選択肢を絞り、リンターが、既定値がすり抜けたときにモデルを罰する。
       </p>
 
       <h2>ux-skillがバイブの流れに入る位置</h2>
       <p>
-        パッケージは単体のPythonモジュールで、インストール経路は3つ——Claude Codeプラグイン、<code>pip install uxskill</code>、または<code>npx uxskill</code>。導入後、エンジンは17のIDEで動く22のコマンドを公開する。よく使う4つでバイブのループを端から端までカバーできる。
+        パッケージは単体のPythonモジュールで、インストール経路は3つ,Claude Codeプラグイン、<code>pip install uxskill</code>、または<code>npx uxskill</code>。導入後、エンジンは17のIDEで動く22のコマンドを公開する。よく使う4つでバイブのループを端から端までカバーできる。
       </p>
 
       <div class="table-wrap">
@@ -550,9 +550,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td><strong>1. ブリーフ</strong></td><td><code>ux discover</code></td><td>10項目の強制問診——プロジェクト種別、対象、トーン、必須、禁忌、参照。</td><td><code>.ux/last-discovery.json</code></td></tr>
-            <tr><td><strong>2. システム</strong></td><td><code>ux recommend</code></td><td>998件のカタログに対して並列5検索——業界、スタイル、パレット、書体、モーション——をマージして1つのシステムに統合。</td><td><code>tokens.css</code> &middot; <code>manifest.json</code></td></tr>
-            <tr><td><strong>3. 生成</strong></td><td>任意のバイブコーディングツール</td><td>Cursor、Claude Code、Cline、Codex、Windsurf、Aider——プロンプトを発したものが、そのトークンに対して書く。</td><td>リポジトリ内のコンポーネントコード</td></tr>
+            <tr><td><strong>1. ブリーフ</strong></td><td><code>ux discover</code></td><td>10項目の強制問診:プロジェクト種別、対象、トーン、必須、禁忌、参照。</td><td><code>.ux/last-discovery.json</code></td></tr>
+            <tr><td><strong>2. システム</strong></td><td><code>ux recommend</code></td><td>998件のカタログに対して並列5検索:業界、スタイル、パレット、書体、モーション:をマージして1つのシステムに統合。</td><td><code>tokens.css</code> &middot; <code>manifest.json</code></td></tr>
+            <tr><td><strong>3. 生成</strong></td><td>任意のバイブコーディングツール</td><td>Cursor、Claude Code、Cline、Codex、Windsurf、Aider:プロンプトを発したものが、そのトークンに対して書く。</td><td>リポジトリ内のコンポーネントコード</td></tr>
             <tr><td><strong>4. ゲート</strong></td><td><code>ux lint</code></td><td>生成コードに対して100の決定論的正規表現ルール。LLMコストはゼロ。highまたはcritical所見が出た時点で非ゼロ終了。</td><td>JSON所見 &middot; CI失敗</td></tr>
           </tbody>
         </table>
@@ -567,7 +567,7 @@
         バイブコーディングで最も大きな効きを持つたった1手は、最初のプロンプトを書く前にブリーフを書くこと。モデルは制約を必要とし、人間は委任する前に選択肢と向き合う必要がある。
       </p>
       <p>
-        <code>ux discover</code>はインタラクティブなプロンプトで、10のフィールドを順に問う。順序は固定——プロジェクト種別、対象、主目的、3〜5語のトーン、必須、禁忌リスト、ブランドの参照、密度、モーション予算、アクセシビリティの床。実際に効くのは「禁忌」フィールドだ。ここで、避けたい既定値を名指しする。
+        <code>ux discover</code>はインタラクティブなプロンプトで、10のフィールドを順に問う。順序は固定,プロジェクト種別、対象、主目的、3〜5語のトーン、必須、禁忌リスト、ブランドの参照、密度、モーション予算、アクセシビリティの床。実際に効くのは「禁忌」フィールドだ。ここで、避けたい既定値を名指しする。
       </p>
       <pre class="code"><span class="c">$ ux discover</span>
 
@@ -594,7 +594,7 @@
         現在のリントカタログは100エントリで、v2.0.0時点の35から増えた。各ルールは正規表現と、重大度(<code>low</code>、<code>medium</code>、<code>high</code>、<code>critical</code>)、カテゴリ(Typography、Color、Layout、Content、Motion、A11y、Quality、Visual、Performance)、一行の理由、一行の修正提案を持つ。
       </p>
       <p>
-        最も重大度の高いエントリは、AIの指紋に直接マップする——本文書体のディスプレイ転用、白上の広域グラデーション、3カード均等パターン、プレースホルダー名のリーク、絵文字アイコンのスタンプ、見出しのマーケティング動詞、インラインスタイル属性、ヒーロー画像の alt 欠落、ピンチズームを止めるビューポートタグ。どれもLLM呼び出しを必要としない。すべてミリ秒単位で動く。
+        最も重大度の高いエントリは、AIの指紋に直接マップする,本文書体のディスプレイ転用、白上の広域グラデーション、3カード均等パターン、プレースホルダー名のリーク、絵文字アイコンのスタンプ、見出しのマーケティング動詞、インラインスタイル属性、ヒーロー画像の alt 欠落、ピンチズームを止めるビューポートタグ。どれもLLM呼び出しを必要としない。すべてミリ秒単位で動く。
       </p>
       <p>
         完全な分類は<a href="/blog/ai-design-fingerprints-list.html" class="link">AIデザイン指紋リスト</a>に、エンジニアリングの解説は<a href="/blog/regex-linter-for-ai-coding.html" class="link">正規表現リンターの記事</a>にある。同じエンジン、2つの角度。
@@ -605,7 +605,7 @@
         Claude Code、Cursor、Windsurf、Cline、Continue、Codex、Aider、Roo Codeのいずれかにux-skillを入れると、ワークフローは次の流れになる。
       </p>
       <ol>
-        <li>プロンプトを書く。モデルにはデザインシステムが文脈として渡っている(各IDEは<code>tokens.css</code>+<code>manifest.json</code>と、エンジンが書き出したIDE別ルールファイル——<code>.cursorrules</code>、<code>CLAUDE.md</code>、<code>.windsurfrules</code>——を読む)。</li>
+        <li>プロンプトを書く。モデルにはデザインシステムが文脈として渡っている(各IDEは<code>tokens.css</code>+<code>manifest.json</code>と、エンジンが書き出したIDE別ルールファイル,<code>.cursorrules</code>、<code>CLAUDE.md</code>、<code>.windsurfrules</code>,を読む)。</li>
         <li>モデルは既定値ではなく、ブランド固有のトークンでコードを書く。</li>
         <li>ファイルを保存する。pre-commitフックがリントを実行する。差分にhighの所見が含まれていれば、コミットはルールID、行、修正提案とともに中止される。</li>
         <li>モデルに修正を頼む。コンテキストウィンドウにはルールIDが入っている。修正は数秒で着く。</li>
@@ -638,7 +638,7 @@
       <div class="honesty">
         <div class="label">正直な適用範囲</div>
         <h4>正規表現が捕まえるのは構造的指紋、センスではない。</h4>
-        <p>リントが「このセクションのリズムは違う」「コピーが冷たく読める」と判定することはない。それはレビューの仕事だ。正規表現が確実に捕まえるのは、リテラルなトークン、クラス名、16進値、DOMの形を持つすべての指紋——つまりAIの既定値の大半だ。なぜならモデルは毎回同じアーティファクトに手を伸ばすからだ。</p>
+        <p>リントが「このセクションのリズムは違う」「コピーが冷たく読める」と判定することはない。それはレビューの仕事だ。正規表現が確実に捕まえるのは、リテラルなトークン、クラス名、16進値、DOMの形を持つすべての指紋,つまりAIの既定値の大半だ。なぜならモデルは毎回同じアーティファクトに手を伸ばすからだ。</p>
         <p>リントの上にセンスのパスを置きたければ、同じパッケージに<code>/ux-critique</code>が同梱されていて、エディタ内で要求時に動く。これを意図的にCIで走らせないのは、CIが決定論的な床のためにある場所だからだ。</p>
       </div>
 
@@ -656,7 +656,7 @@
 
       <h2>バイブは速度。ルールは床。</h2>
       <p>
-        2026年の興味深い議論は、バイブコーディングが勝つかどうかではない——千行以下のタスクではすでに勝っている。興味深い議論は、その出力がインターネット上のあらゆる他のバイブコーディングのページと同じに見え続けるか、それともチームが床を敷くかだ。
+        2026年の興味深い議論は、バイブコーディングが勝つかどうかではない,千行以下のタスクではすでに勝っている。興味深い議論は、その出力がインターネット上のあらゆる他のバイブコーディングのページと同じに見え続けるか、それともチームが床を敷くかだ。
       </p>
       <p>
         ux-skillはその床だ。100ルール、998件のカタログエントリ、110のブランド仕様、22のコマンド、17のIDE、エンジン下の75のテスト。MITライセンス。テレメトリなし。レコメンダーがモデルの中央値を引き上げ、リンターが床を定める。バイブはあなたのものだ。
@@ -664,10 +664,10 @@
 
       <h2>関連記事</h2>
       <ul>
-        <li><a href="/blog/ai-design-fingerprints-list.html" class="link">AIデザイン指紋リスト</a> &mdash; 分類学そのもの。</li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">AIコーディング向け正規表現リンター</a> &mdash; エンジニアリングの内側。</li>
-        <li><a href="/blog/vibe-coding-design-system.html" class="link">バイブコーディングは本物——だがAIは同じ既定値を出す</a> &mdash; 英語版。</li>
-        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Claude Code向けアンチAIスロップツール</a> &mdash; 正直なランキング。</li>
+        <li><a href="/blog/ai-design-fingerprints-list.html" class="link">AIデザイン指紋リスト</a>,分類学そのもの。</li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">AIコーディング向け正規表現リンター</a>,エンジニアリングの内側。</li>
+        <li><a href="/blog/vibe-coding-design-system.html" class="link">バイブコーディングは本物,だがAIは同じ既定値を出す</a>,英語版。</li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Claude Code向けアンチAIスロップツール</a>,正直なランキング。</li>
       </ul>
     </article>
 
@@ -679,9 +679,9 @@
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; または &mdash;</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">· または ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; または &mdash;</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">· または ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>
