@@ -11,7 +11,7 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Monorepo design system with AI coding — ux-skill's tokens.css output</title>
+  <title>Monorepo design system with AI coding · ux-skill's tokens.css output</title>
   <meta name="description" content="How ux-skill's generated tokens.css + manifest.json plug into a Turborepo or Nx monorepo. Share one design system across web, mobile, and admin packages. Free + MIT.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/monorepo-design-system-ai-coding.html">
   <meta name="theme-color" content="#07080a">
@@ -20,12 +20,12 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/monorepo-design-system-ai-coding.html">
-  <meta property="og:title" content="Monorepo design system with AI coding — ux-skill's tokens.css output">
+  <meta property="og:title" content="Monorepo design system with AI coding · ux-skill's tokens.css output">
   <meta property="og:description" content="One shared tokens.css + manifest.json across Turborepo/Nx packages. AI-generated code stays on-system in every app.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/monorepo-design-system-ai-coding.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — monorepo-design-system-ai-coding">
+  <meta property="og:image:alt" content="ux-skill · monorepo-design-system-ai-coding">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/monorepo-design-system-ai-coding.png">
 
   <meta name="twitter:card" content="summary_large_image">
@@ -40,7 +40,7 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Monorepo design system with AI coding — ux-skill's tokens.css output",
+    "headline": "Monorepo design system with AI coding · ux-skill's tokens.css output",
     "description": "How ux-skill's generated tokens.css and manifest.json plug into a Turborepo or Nx monorepo. Share one design system across web, mobile, and admin packages.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
@@ -62,7 +62,7 @@
   }
   </script>
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "Monorepo design system with AI coding — ux-skill's tokens.css output", "item": "https://uxskill.laithjunaidy.com/blog/monorepo-design-system-ai-coding.html"}]}
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "Monorepo design system with AI coding · ux-skill's tokens.css output", "item": "https://uxskill.laithjunaidy.com/blog/monorepo-design-system-ai-coding.html"}]}
 </script>
 
   <style>
@@ -379,13 +379,13 @@
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
        and max-width: 100%; carousels that need their own horizontal scroll
-       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves —
+       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves:
        overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
     html, body {
       overflow-x: clip;
       max-width: 100%;
     }
-    /* Defensive — make sure no section, image, or table forces width >100%. */
+    /* Defensive: make sure no section, image, or table forces width >100%. */
     section, header, footer, main, article { max-width: 100vw; }
     img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
     table { max-width: 100%; }
@@ -530,7 +530,7 @@
 <div class="wrap">
     <article>
       <span class="eyebrow">Blog · Monorepo · 2026-05-28</span>
-      <h1>Monorepo design system with AI coding — ux-skill's <span class="accent">tokens.css output</span>.</h1>
+      <h1>Monorepo design system with AI coding, ux-skill's <span class="accent">tokens.css output</span>.</h1>
       <p class="lede">
         A design system in a monorepo lives in one package and is consumed by everyone else. Turborepo and Nx make the wiring easy; what breaks is when AI-generated code in <code>apps/web</code>, <code>apps/admin</code>, and <code>apps/mobile</code> all drift from the shared system independently. <strong>ux-skill</strong> generates a <code>tokens.css</code> plus a <code>manifest.json</code> that lives in the shared package and gets enforced by a linter in every consumer app.
       </p>
@@ -541,7 +541,7 @@
         A typical Turborepo or Nx setup has three or more app packages and one design-system package. The design system exports tokens (colors, spacing, type), components (Button, Card, Input), and primitives (CSS variables, Tailwind preset). The apps import them and ship.
       </p>
       <p>
-        That works fine for human-written code. With AI-generated code, the dynamic changes. Every <code>apps/*</code> package becomes a place where a Cursor agent, Claude Code skill, or Cascade run can produce drift — Inter at 90px in <code>apps/admin</code>, indigo gradient in <code>apps/web</code>, three equal cards in <code>apps/mobile</code> — even when <code>packages/design-system</code> defines none of those.
+        That works fine for human-written code. With AI-generated code, the dynamic changes. Every <code>apps/*</code> package becomes a place where a Cursor agent, Claude Code skill, or Cascade run can produce drift (Inter at 90px in <code>apps/admin</code>, indigo gradient in <code>apps/web</code>, three equal cards in <code>apps/mobile</code>) even when <code>packages/design-system</code> defines none of those.
       </p>
       <p>
         The shared package can't fix this alone because the design system is what to use, not what not to use. The not-to-use list is the 152 anti-pattern rules. Those rules need to run in every package that ships AI-generated code.
@@ -609,7 +609,7 @@
 
       <h3>2. manifest.json</h3>
       <p>
-        A structured description of the system. ux-skill's linter reads this in every consumer package and uses it to detect drift — "this file imports <code>tokens.css</code> but uses a raw <code>bg-purple-500</code> Tailwind class that isn't mapped to any semantic token."
+        A structured description of the system. ux-skill's linter reads this in every consumer package and uses it to detect drift: "this file imports <code>tokens.css</code> but uses a raw <code>bg-purple-500</code> Tailwind class that isn't mapped to any semantic token."
       </p>
       <pre class="code-block"><span class="c">// packages/design-system/manifest.json</span>
 {
@@ -689,7 +689,7 @@
 };</pre>
 
       <p>
-        Now <code>apps/web</code>, <code>apps/admin</code>, and <code>apps/mobile</code> share the palette, the type ramp, the radius scale, and the motion tokens. AI-generated code that uses <code>bg-brand</code> or <code>text-display-xl</code> stays on system. AI-generated code that uses raw <code>bg-purple-500</code> drifts — and gets caught by the linter.
+        Now <code>apps/web</code>, <code>apps/admin</code>, and <code>apps/mobile</code> share the palette, the type ramp, the radius scale, and the motion tokens. AI-generated code that uses <code>bg-brand</code> or <code>text-display-xl</code> stays on system. AI-generated code that uses raw <code>bg-purple-500</code> drifts, and gets caught by the linter.
       </p>
 
       <h2>The linter as the enforcement boundary</h2>
@@ -761,7 +761,7 @@
 }</pre>
 
       <p>
-        Same idea — the design-system package is the source of truth for tokens and the manifest; every app gets a design-lint target that reads the same manifest.
+        Same idea: the design-system package is the source of truth for tokens and the manifest; every app gets a design-lint target that reads the same manifest.
       </p>
 
       <h2>End-to-end install in a fresh Turborepo</h2>
@@ -815,12 +815,12 @@
 
       <h2>Why a manifest beats a config file</h2>
       <p>
-        The design-system package could ship a plain config — a list of allowed colors, allowed fonts, allowed radii. But a config alone doesn't carry the "why" or the "fix" for each rule. The manifest does both:
+        The design-system package could ship a plain config: a list of allowed colors, allowed fonts, allowed radii. But a config alone doesn't carry the "why" or the "fix" for each rule. The manifest does both:
       </p>
       <ul>
         <li>The <code>system</code> block tells the AI tool what style, palette, type, and motion to generate <strong>within</strong>.</li>
         <li>The <code>tokens</code> block tells the AI tool which CSS variables exist and are safe to reference.</li>
-        <li>The <code>forbidden</code> block tells the linter what to flag — with named rule IDs that map to <a href="/blog/ai-design-fingerprints-list.html" class="link">the 35-fingerprint taxonomy</a>.</li>
+        <li>The <code>forbidden</code> block tells the linter what to flag, with named rule IDs that map to <a href="/blog/ai-design-fingerprints-list.html" class="link">the 35-fingerprint taxonomy</a>.</li>
         <li>The <code>lint.scope</code> block tells the linter which files to scan in which app.</li>
       </ul>
       <p>
@@ -854,19 +854,19 @@
         <div class="label">Honesty card</div>
         <h4>The manifest contract works when every app respects it.</h4>
         <p>If one app skips the lint task, the contract breaks. The fix is to make the lint task non-optional: put it in <code>turbo.json</code> as a dependency of <code>build</code>, or wire it into your branch protection rules. AI-generated drift is fast to produce and slow to clean up; the gate has to be at PR time.</p>
-        <p>Also: ux-skill is 14 stars and v2 is alpha. If you need a battle-tested token system in a monorepo today, Style Dictionary or Tokens Studio are mature options. ux-skill's edge is the linter — token systems without enforcement are documents nobody reads.</p>
+        <p>Also: ux-skill is 14 stars and v2 is alpha. If you need a battle-tested token system in a monorepo today, Style Dictionary or Tokens Studio are mature options. ux-skill's edge is the linter: token systems without enforcement are documents nobody reads.</p>
       </div>
 
       <h2>Related reading</h2>
       <ul>
         <li><a href="/blog/python-design-system-generator.html" class="link">How the Python recommender produces tokens.css</a></li>
-        <li><a href="/blog/ai-design-fingerprints-list.html" class="link">The 35 AI design fingerprints — full taxonomy</a></li>
-        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Anti-AI-slop tools — honest ranking</a></li>
-        <li><a href="/blog/cursor-design-plugin.html" class="link">Cursor design plugin — same engine in a single-app context</a></li>
+        <li><a href="/blog/ai-design-fingerprints-list.html" class="link">The 35 AI design fingerprints · full taxonomy</a></li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Anti-AI-slop tools · honest ranking</a></li>
+        <li><a href="/blog/cursor-design-plugin.html" class="link">Cursor design plugin · same engine in a single-app context</a></li>
         <li><a href="/compare.html" class="link">Compare ux-skill v2 against the field</a></li>
-        <li><a href="/about.html" class="link">About ux-skill — the project and the maker</a></li>
-        <li><a href="/faq.html" class="link">FAQ — Turborepo, Nx, and monorepo integration</a></li>
-        <li><a href="/roadmap.html" class="link">Roadmap — multi-package linter improvements</a></li>
+        <li><a href="/about.html" class="link">About ux-skill · the project and the maker</a></li>
+        <li><a href="/faq.html" class="link">FAQ · Turborepo, Nx, and monorepo integration</a></li>
+        <li><a href="/roadmap.html" class="link">Roadmap · multi-package linter improvements</a></li>
       </ul>
     </article>
 
@@ -879,10 +879,10 @@
         <div class="row"><span class="prompt">$</span> pnpm add -DW <span class="arg">uxskill</span></div>
         <div class="row"><span class="prompt">$</span> cd <span class="arg">packages/design-system</span></div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha recommend</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— or via pip —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">or via pip</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
         <div class="row"><span class="prompt">$</span> ux lint <span class="arg">./apps/web --manifest ./packages/design-system/manifest.json</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— or as a Claude Code skill —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">or as a Claude Code skill</div>
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
       </div>

@@ -11,22 +11,22 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The centroid problem — why AI-generated design regresses to the mean</title>
-<meta name="description" content="AI builders don't fail at design — they succeed at returning the average. The mechanism behind the sameness: regression to the mean, shared scaffolding, no brief, no memory. And the deterministic way out of the centroid.">
+<title>The centroid problem · why AI-generated design regresses to the mean</title>
+<meta name="description" content="AI builders don't fail at design; they succeed at returning the average. The mechanism behind the sameness: regression to the mean, shared scaffolding, no brief, no memory. And the deterministic way out of the centroid.">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/why-ai-generated-apps-look-the-same.html">
-<meta property="og:title" content="The centroid problem — why AI design regresses to the mean">
-<meta property="og:description" content="The sameness has a cause: models return the average of their training set. Here's the mechanism — and the deterministic fix.">
+<meta property="og:title" content="The centroid problem · why AI design regresses to the mean">
+<meta property="og:description" content="The sameness has a cause: models return the average of their training set. Here's the mechanism, and the deterministic fix.">
 <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/why-ai-generated-apps-look-the-same.html">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="The centroid problem — why AI design regresses to the mean">
+<meta name="twitter:title" content="The centroid problem · why AI design regresses to the mean">
 <meta name="twitter:description" content="Why AI builders return the average: regression to the mean, shared scaffolding, no brief, no memory. The mechanism, and the way out.">
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","headline":"The centroid problem — why AI-generated design regresses to the mean","datePublished":"2026-05-29","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/why-ai-generated-apps-look-the-same.html","inLanguage":"en"}
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"The centroid problem · why AI-generated design regresses to the mean","datePublished":"2026-05-29","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/why-ai-generated-apps-look-the-same.html","inLanguage":"en"}
 </script>
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "The centroid problem — why AI-generated design regresses to the mean", "item": "https://uxskill.laithjunaidy.com/blog/why-ai-generated-apps-look-the-same.html"}]}
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "The centroid problem · why AI-generated design regresses to the mean", "item": "https://uxskill.laithjunaidy.com/blog/why-ai-generated-apps-look-the-same.html"}]}
 </script>
 
 <style>
@@ -205,7 +205,7 @@
 <header class="post">
 <p class="eyebrow">FIELD NOTES · 2026-05-29</p>
 <h1>The <em>centroid problem</em>:<br>why AI design regresses to the mean.</h1>
-<p class="lede">Open v0, Bolt, Lovable, Cursor, or Copilot, type a different prompt into each, and you get the same page back: Inter, a violet-to-indigo gradient, three equal cards, a centered hero, rounded-2xl everything. The sameness is not a coincidence and it is not a taste failure. It has a mechanism — the model is returning the centroid of its training set. Once you see that, the fix is obvious, and it is not "prompt better." (For the tool-by-tool version with a real export lint report, see the <a href="/blog/ai-built-website-no-slop.html">companion piece on AI-built websites</a>.)</p>
+<p class="lede">Open v0, Bolt, Lovable, Cursor, or Copilot, type a different prompt into each, and you get the same page back: Inter, a violet-to-indigo gradient, three equal cards, a centered hero, rounded-2xl everything. The sameness is not a coincidence and it is not a taste failure. It has a mechanism: the model is returning the centroid of its training set. Once you see that, the fix is obvious, and it is not "prompt better." (For the tool-by-tool version with a real export lint report, see the <a href="/blog/ai-built-website-no-slop.html">companion piece on AI-built websites</a>.)</p>
 </header>
 
 <h2>The sameness has a shape</h2>
@@ -218,7 +218,7 @@
 <li><code>rounded-2xl</code> on everything, a soft drop shadow, a faint glass blur.</li>
 <li>Emoji standing in for icons. Filler copy built from "leverage," "seamless," "empower."</li>
 </ul>
-<p>We catalogue these as machine-checkable rules — the visual fingerprints of generated design. The point here is simpler: this is a <em>distribution with a peak</em>, and almost everything lands on the peak.</p>
+<p>We catalogue these as machine-checkable rules: the visual fingerprints of generated design. The point here is simpler: this is a <em>distribution with a peak</em>, and almost everything lands on the peak.</p>
 
 <h2>Why models converge on one look</h2>
 
@@ -226,10 +226,10 @@
 <p>A generative model is, at heart, a function that returns the most probable continuation. "Most probable" for a landing page is the average of every landing page it has ever seen. The average of millions of Tailwind starter templates, dribbble shots, and shadcn demos <em>is</em> the violet-gradient, three-card, centered-hero page. The model is not being lazy. It is doing exactly what it was trained to do: return the centroid. Variance is penalized; the mean is rewarded.</p>
 
 <h3>2. Everyone shares the same scaffolding</h3>
-<p>shadcn/ui, Tailwind's default scale, and a handful of component libraries are the substrate under almost every AI builder. They are excellent — and they ship with defaults. When nobody overrides <code>--primary</code>, every app inherits the same primary. When nobody re-spaces the scale, every app breathes at the same rhythm. Shared defaults are shared identity. The tools converge because their foundations already did.</p>
+<p>shadcn/ui, Tailwind's default scale, and a handful of component libraries are the substrate under almost every AI builder. They are excellent, and they ship with defaults. When nobody overrides <code>--primary</code>, every app inherits the same primary. When nobody re-spaces the scale, every app breathes at the same rhythm. Shared defaults are shared identity. The tools converge because their foundations already did.</p>
 
 <h3>3. Identical briefs produce identical output</h3>
-<p>"Build me a landing page for my SaaS" carries almost no differentiating signal. A fintech dashboard and a kids' learning app submitted with that prompt are, to the model, the same request — so they get the same answer. The brief is where differentiation has to enter, and a one-line prompt has none to give.</p>
+<p>"Build me a landing page for my SaaS" carries almost no differentiating signal. A fintech dashboard and a kids' learning app submitted with that prompt are, to the model, the same request, so they get the same answer. The brief is where differentiation has to enter, and a one-line prompt has none to give.</p>
 
 <h3>4. There is no memory</h3>
 <p>Every generation starts from zero. The tool does not know what you accepted last time, what your brand actually is, or that it produced this exact hero for three other users this morning. With no memory, there is no way to move <em>away</em> from the centroid over time. Each run snaps back to the mean.</p>
@@ -237,7 +237,7 @@
 <blockquote>The sameness is not the model failing. It is the model succeeding at the wrong objective: return the average, with no brief to differentiate and no memory to learn from.</blockquote>
 
 <h2>Why "just prompt better" doesn't fix it</h2>
-<p>Prompt engineering can nudge a single output off the peak. Ask for "brutalist, monochrome, no gradients" and you will get something less generic — once. But three problems remain:</p>
+<p>Prompt engineering can nudge a single output off the peak. Ask for "brutalist, monochrome, no gradients" and you will get something less generic, once. But three problems remain:</p>
 <ul>
 <li><strong>It is not reproducible.</strong> The same prompt next week, or in a different tool, drifts back toward the mean.</li>
 <li><strong>It gives variance, not direction.</strong> You are pushing randomly away from the centroid, not toward a coherent identity derived from your actual brand.</li>
@@ -246,18 +246,18 @@
 <p>You can win individual skirmishes with prompting. You cannot win the war with it, because the pull toward the mean is structural.</p>
 
 <h2>What actually breaks the sameness</h2>
-<p>If the cause is "no brief, shared defaults, no memory, regress to the mean," the fix is the inverse of each. This is the approach ux-skill takes — deterministic, offline, no LLM in the loop:</p>
+<p>If the cause is "no brief, shared defaults, no memory, regress to the mean," the fix is the inverse of each. This is the approach ux-skill takes, deterministic, offline, no LLM in the loop:</p>
 
 <h3>Differentiate from a brief, not a prompt</h3>
-<p>Reduce the brief to seven continuous values — warmth, contrast, density, geometry, formality, motion, type personality — and a fintech dashboard and a kids' app stop being the same request. Those values then compile to a palette, a type ladder, a spacing scale, radii, and motion timings. Two different briefs produce two genuinely different systems, every time, because the math is different.</p>
+<p>Reduce the brief to seven continuous values (warmth, contrast, density, geometry, formality, motion, type personality) and a fintech dashboard and a kids' app stop being the same request. Those values then compile to a palette, a type ladder, a spacing scale, radii, and motion timings. Two different briefs produce two genuinely different systems, every time, because the math is different.</p>
 <p><a href="/blog/seven-axes-design-system-explained.html">How the 7 axes map a brief to tokens</a></p>
 
 <h3>Use real brands as training data, not templates</h3>
-<p>The trap is to ship N brand templates and let users pick one — that just moves the centroid, it doesn't remove it. Instead, 160 documented brand systems act as <em>training data</em>: the synthesizer learns the relationships between axes and tokens from them, then generates an unbounded space of new systems. When you name a brand, you get its accuracy; when you don't, you get something new that was informed by all of them.</p>
+<p>The trap is to ship N brand templates and let users pick one: that just moves the centroid, it doesn't remove it. Instead, 160 documented brand systems act as <em>training data</em>: the synthesizer learns the relationships between axes and tokens from them, then generates an unbounded space of new systems. When you name a brand, you get its accuracy; when you don't, you get something new that was informed by all of them.</p>
 <p><a href="/blog/brand-specs-training-data-not-templates.html">Why brand specs are training data, not templates</a></p>
 
 <h3>Lint the fingerprints out</h3>
-<p>The centroid look is enumerable, so it is checkable. A deterministic linter scans output for the violet gradient, the three-equal-card row, Inter-on-a-brand-surface, emoji icons, centered-everything, and the rest — and fails the build when it finds them. You cannot ship the average if the average does not pass the linter.</p>
+<p>The centroid look is enumerable, so it is checkable. A deterministic linter scans output for the violet gradient, the three-equal-card row, Inter-on-a-brand-surface, emoji icons, centered-everything, and the rest, and fails the build when it finds them. You cannot ship the average if the average does not pass the linter.</p>
 <p><a href="/blog/regex-linter-for-ai-coding.html">A regex linter for AI design slop</a> · <a href="/anti-patterns.html">Browse the anti-pattern catalogue</a></p>
 
 <h3>Close the loop so it compounds</h3>
@@ -271,12 +271,12 @@
 <tbody>
 <tr><td>Type</td><td>Inter, one size up for h1</td><td>Geometric display + Inter body, 1.333 ratio from high contrast</td></tr>
 <tr><td>Color</td><td>Violet → indigo gradient</td><td>Cool, low-warmth palette, single saturated accent</td></tr>
-<tr><td>Spacing</td><td>Default Tailwind scale</td><td>4px base — dense wins over formal in the interaction matrix</td></tr>
+<tr><td>Spacing</td><td>Default Tailwind scale</td><td>4px base: dense wins over formal in the interaction matrix</td></tr>
 <tr><td>Layout</td><td>Three equal cards, centered hero</td><td>Asymmetric grid, data-dense, left-anchored</td></tr>
 <tr><td>Reproducible?</td><td>Only by luck</td><td>Identical inputs → identical output, every run</td></tr>
 </tbody>
 </table>
-<p>The second column is not "more creative." It is more <em>specific</em> — derived from the brief instead of regressed from the corpus. Specificity is the opposite of sameness.</p>
+<p>The second column is not "more creative." It is more <em>specific</em>, derived from the brief instead of regressed from the corpus. Specificity is the opposite of sameness.</p>
 
 <h2>The point</h2>
 <p>AI builders are not bad at design. They are good at returning the average, and the average has a look. To get something that is yours, you need three things the average can't supply: a brief that differentiates, a generator that creates instead of selects, and a memory that learns. Add those and the violet gradient stops being your default.</p>
@@ -300,7 +300,7 @@ npx uxskill init</code></pre>
 </ul>
 
 <footer>
-ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+ux-skill v3.0 · THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
 </footer>
 
 </div>

@@ -11,8 +11,8 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Why AI-generated dashboards all look the same — and the density fix</title>
-<meta name="description" content="Sidebar, top bar, four stat cards, one line chart, a table — every AI-generated dashboard ships the same layout at the wrong density. Why it happens, and how a density-aware brief fixes it.">
+<title>Why AI-generated dashboards all look the same · and the density fix</title>
+<meta name="description" content="Sidebar, top bar, four stat cards, one line chart, a table: every AI-generated dashboard ships the same layout at the wrong density. Why it happens, and how a density-aware brief fixes it.">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ai-dashboard-design-generic.html">
 <meta property="og:title" content="Why AI-generated dashboards all look the same">
 <meta property="og:description" content="The dashboard centroid is a density failure: AI ships landing-page spacing on data-dense surfaces. The density axis is the fix.">
@@ -23,10 +23,10 @@
 <meta name="twitter:description" content="The dashboard centroid is a density failure. Here's the mechanism and the fix.">
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","headline":"Why AI-generated dashboards all look the same — and the density fix","datePublished":"2026-05-29","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/ai-dashboard-design-generic.html","inLanguage":"en"}
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"Why AI-generated dashboards all look the same · and the density fix","datePublished":"2026-05-29","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/ai-dashboard-design-generic.html","inLanguage":"en"}
 </script>
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "Why AI-generated dashboards all look the same — and the density fix", "item": "https://uxskill.laithjunaidy.com/blog/ai-dashboard-design-generic.html"}]}
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "Why AI-generated dashboards all look the same · and the density fix", "item": "https://uxskill.laithjunaidy.com/blog/ai-dashboard-design-generic.html"}]}
 </script>
 
 <style>
@@ -205,14 +205,14 @@
 <header class="post">
 <p class="eyebrow">FIELD NOTES · 2026-05-29</p>
 <h1>Why AI dashboards <em>all look the same</em>,<br>and the density fix.</h1>
-<p class="lede">Ask any AI builder for a dashboard and you get the same screen: a left sidebar, a top bar, four stat cards in a row, one line chart, and a table — all in shadcn defaults with a violet accent and the same generous spacing. The layout isn't the real problem. The density is. AI ships landing-page spacing onto data-dense surfaces, and that single mistake is why every generated dashboard feels like a toy.</p>
+<p class="lede">Ask any AI builder for a dashboard and you get the same screen: a left sidebar, a top bar, four stat cards in a row, one line chart, and a table, all in shadcn defaults with a violet accent and the same generous spacing. The layout isn't the real problem. The density is. AI ships landing-page spacing onto data-dense surfaces, and that single mistake is why every generated dashboard feels like a toy.</p>
 </header>
 
 <h2>The dashboard centroid</h2>
 <p>Landing pages converge on a recognizable look; dashboards have their own centroid, and it is even tighter:</p>
 <ul>
 <li>Left sidebar with icon + label nav, a top bar with a search and an avatar.</li>
-<li>A row of four stat cards — big number, tiny label, a +/- delta in green or red.</li>
+<li>A row of four stat cards: big number, tiny label, a +/- delta in green or red.</li>
 <li>Exactly one line chart, usually spanning the full width, regardless of whether the data is a trend.</li>
 <li>A table below it with default row height and zebra striping.</li>
 <li>The same airy padding everywhere, a violet primary, and a soft shadow on every card.</li>
@@ -220,26 +220,26 @@
 <p>It is competent. It is also instantly forgettable, and it wastes most of the screen.</p>
 
 <h2>The real failure is density, not layout</h2>
-<p>A landing page should breathe — it has one job and a lot of room to do it. A dashboard is the opposite: its job is to put a lot of legible information in front of someone who scans it fifty times a day. That is a <em>density</em> problem, and it is the one thing the generated default gets wrong every time.</p>
-<p>Think of a spectrum from <strong>art gallery</strong> (one object, vast negative space) to <strong>cockpit</strong> (every inch carries a reading). Marketing sites live near the gallery end. Dashboards live near the cockpit end. The model, trained mostly on marketing and component-demo screenshots, applies gallery spacing to a cockpit surface — 16–24px gaps where 4–8px would serve, oversized cards, one chart where six small multiples belong.</p>
-<blockquote>The generated dashboard isn't ugly. It's under-dense — it shows a tenth of what the space could hold, so it reads as a prototype, not a tool.</blockquote>
+<p>A landing page should breathe: it has one job and a lot of room to do it. A dashboard is the opposite: its job is to put a lot of legible information in front of someone who scans it fifty times a day. That is a <em>density</em> problem, and it is the one thing the generated default gets wrong every time.</p>
+<p>Think of a spectrum from <strong>art gallery</strong> (one object, vast negative space) to <strong>cockpit</strong> (every inch carries a reading). Marketing sites live near the gallery end. Dashboards live near the cockpit end. The model, trained mostly on marketing and component-demo screenshots, applies gallery spacing to a cockpit surface: 16-24px gaps where 4-8px would serve, oversized cards, one chart where six small multiples belong.</p>
+<blockquote>The generated dashboard isn't ugly. It's under-dense: it shows a tenth of what the space could hold, so it reads as a prototype, not a tool.</blockquote>
 
 <h2>The density axis</h2>
-<p>ux-skill treats density as a first-class, continuous axis — one of <a href="/blog/seven-axes-design-system-explained.html">the seven a brief compiles to</a>. For a dashboard you push it high, and the synthesizer changes concrete tokens:</p>
+<p>ux-skill treats density as a first-class, continuous axis, one of <a href="/blog/seven-axes-design-system-explained.html">the seven a brief compiles to</a>. For a dashboard you push it high, and the synthesizer changes concrete tokens:</p>
 <table>
 <thead><tr><th>density</th><th>formality</th><th>spacing base</th><th>feel</th></tr></thead>
 <tbody>
 <tr><td>&gt; 0.65</td><td>any</td><td>4px</td><td>Bloomberg / cockpit</td></tr>
 <tr><td>&lt; 0.4</td><td>&gt; 0.7</td><td>12px</td><td>luxury / airy</td></tr>
-<tr><td>else</td><td>any</td><td>6–8px</td><td>standard app</td></tr>
+<tr><td>else</td><td>any</td><td>6-8px</td><td>standard app</td></tr>
 </tbody>
 </table>
-<p>A 4px base does not just shrink gaps — it cascades: tighter line-height, a compressed type scale, smaller control targets, and row heights tuned for scanning. The result holds three to five times the information of the generated default in the same viewport, without feeling cramped, because the rhythm is intentional rather than residual.</p>
+<p>A 4px base does not just shrink gaps; it cascades: tighter line-height, a compressed type scale, smaller control targets, and row heights tuned for scanning. The result holds three to five times the information of the generated default in the same viewport, without feeling cramped, because the rhythm is intentional rather than residual.</p>
 <p>The <code>VISUAL_DENSITY</code> dial makes this explicit: 1 is an art gallery, 10 is a cockpit. Landing pages default low; dashboards default to 8. Set it once and every token downstream follows.</p>
 
 <h2>Stop defaulting to the line chart</h2>
-<p>The other dashboard tell is chart monoculture: one line chart for everything. A trend over time is a line. A part-to-whole is not — it is a stacked bar or a treemap. A distribution is a histogram. A correlation is a scatter. ux-skill's catalogue carries 35 chart types keyed to data shape, so the recommendation matches what the metric actually is instead of reaching for the default. Picking the right encoding does more for legibility than any amount of styling.</p>
-<p>While you are at it: kill the gradient fills under the line, drop the drop-shadows on data cards, and let a single semantic accent carry state (up, down, warning). Decoration on data is noise — the anti-pattern linter flags chrome-y gradients and shadow-only depth for exactly this reason.</p>
+<p>The other dashboard tell is chart monoculture: one line chart for everything. A trend over time is a line. A part-to-whole is not: it is a stacked bar or a treemap. A distribution is a histogram. A correlation is a scatter. ux-skill's catalogue carries 35 chart types keyed to data shape, so the recommendation matches what the metric actually is instead of reaching for the default. Picking the right encoding does more for legibility than any amount of styling.</p>
+<p>While you are at it: kill the gradient fills under the line, drop the drop-shadows on data cards, and let a single semantic accent carry state (up, down, warning). Decoration on data is noise: the anti-pattern linter flags chrome-y gradients and shadow-only depth for exactly this reason.</p>
 
 <h2>A dashboard brief, compiled</h2>
 <p>You ask for: <code>surface=dashboard, industry=analytics, tone=["serious", "dense"]</code>.</p>
@@ -247,27 +247,27 @@
 <li>Density resolves high (the "dense" tone plus an analytics industry seed) → <strong>4px spacing base</strong>.</li>
 <li>Type scale compresses to a 1.2 ratio → headings sit close to body, no marketing-size jumps.</li>
 <li>Palette goes near-monochrome with one semantic accent set (success / warning / danger) reserved for data state, not decoration.</li>
-<li>Radius drops to 2–4px — sharp, instrument-like, not the soft <code>rounded-2xl</code> card.</li>
+<li>Radius drops to 2-4px: sharp, instrument-like, not the soft <code>rounded-2xl</code> card.</li>
 <li>Charts are recommended per metric from the 35-type catalogue, not defaulted to a line.</li>
 </ol>
 <p>Same request, run again next week, on a different machine: identical output. Deterministic, offline, no LLM in the engine.</p>
 
 <h2>The point</h2>
-<p>Generated dashboards look the same because the model applies marketing spacing to an instrument. Fix the density — make it an explicit axis the brief controls — and the rest (charts, color, radius) falls in line. A dashboard should read like a cockpit you trust, not a landing page with a table glued on.</p>
+<p>Generated dashboards look the same because the model applies marketing spacing to an instrument. Fix the density (make it an explicit axis the brief controls) and the rest (charts, color, radius) falls in line. A dashboard should read like a cockpit you trust, not a landing page with a table glued on.</p>
 <pre><code>pip install uxskill
 # then, in your AI coding tool:
-# /ux-dashboard  — density-aware, chart-matched, deterministic</code></pre>
+# /ux-dashboard  : density-aware, chart-matched, deterministic</code></pre>
 
 <h2>Related</h2>
 <ul>
 <li><a href="/blog/seven-axes-design-system-explained.html">The 7 axes of a design system</a></li>
-<li><a href="/blog/why-ai-generated-apps-look-the-same.html">The centroid problem — why AI design regresses to the mean</a></li>
+<li><a href="/blog/why-ai-generated-apps-look-the-same.html">The centroid problem · why AI design regresses to the mean</a></li>
 <li><a href="/blog/deterministic-design-engine-no-llm.html">A deterministic design engine, no LLM</a></li>
 <li><a href="/anti-patterns.html">The anti-pattern catalogue</a></li>
 </ul>
 
 <footer>
-ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+ux-skill v3.0 · THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
 </footer>
 
 </div>

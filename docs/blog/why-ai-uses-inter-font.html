@@ -12,7 +12,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Why AI design always defaults to Inter</title>
-<meta name="description" content="Inter is a great typeface — and the instant tell that a UI was AI-generated. Why the models reach for it every time, when Inter is actually right, and how to pick type with intent instead.">
+<meta name="description" content="Inter is a great typeface, and the instant tell that a UI was AI-generated. Why the models reach for it every time, when Inter is actually right, and how to pick type with intent instead.">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/why-ai-uses-inter-font.html">
 <meta property="og:title" content="Why AI design always defaults to Inter">
 <meta property="og:description" content="Inter is excellent, and it is also the strongest type tell that a UI was AI-generated. The mechanism behind it, and how to pick type with intent.">
@@ -20,7 +20,7 @@
 <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/why-ai-uses-inter-font.html">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Why AI design always defaults to Inter">
-<meta name="twitter:description" content="Inter is a great typeface and a dead giveaway of AI output. Here is why the models reach for it — and the fix.">
+<meta name="twitter:description" content="Inter is a great typeface and a dead giveaway of AI output. Here is why the models reach for it, and the fix.">
 
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BlogPosting","headline":"Why AI design always defaults to Inter","datePublished":"2026-05-29","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/why-ai-uses-inter-font.html","inLanguage":"en"}
@@ -205,49 +205,49 @@
 <header class="post">
 <p class="eyebrow">FIELD NOTES · 2026-05-29</p>
 <h1>Why AI design always reaches for <em>the same typeface</em>.</h1>
-<p class="lede">Ask a model to design anything and the body text comes back in Inter, with the system font stack as backup. It is a fine instinct — Inter is one of the best screen typefaces ever drawn. But it shows up on the luxury landing page, the children's app, the editorial magazine, and the bank dashboard, all identical, and that is the tell. Not that the type is bad. That no type decision was made.</p>
+<p class="lede">Ask a model to design anything and the body text comes back in Inter, with the system font stack as backup. It is a fine instinct: Inter is one of the best screen typefaces ever drawn. But it shows up on the luxury landing page, the children's app, the editorial magazine, and the bank dashboard, all identical, and that is the tell. Not that the type is bad. That no type decision was made.</p>
 </header>
 
 <h2>The default has a cause, not a taste</h2>
 <p>A model does not pick a typeface the way a designer does. It predicts the most probable next token, and for "the font of a modern web app" the most probable answer is overwhelmingly one name. Three forces stack the deck.</p>
 <p><strong>The reference UIs all use it.</strong> Tailwind UI ships its examples in it. Vercel's own properties set their interface in it. shadcn's starter, copied into thousands of repositories, inherits it by default. The screenshots a model learned "good app design" from are, disproportionately, set in this one face.</p>
 <p><strong>The component-demo corpus reinforces it.</strong> The dribbble shots and template marketplaces that read as "clean and modern" lean on the same neutral grotesque, because it photographs as competent in a thumbnail. The model absorbed the correlation: this shape equals polished.</p>
-<p><strong>The fallback is the safest string in CSS.</strong> When nothing is specified, the path of least resistance is the native system stack — the one beginning with <code>-apple-system</code> that every boilerplate carries. So even the "no font chosen" case resolves to a known, beige default.</p>
-<blockquote>Inter is safe precisely because it is everywhere. A model minimizing risk regresses to the most common choice in its training data — and for interface type, that choice is Inter.</blockquote>
+<p><strong>The fallback is the safest string in CSS.</strong> When nothing is specified, the path of least resistance is the native system stack, the one beginning with <code>-apple-system</code> that every boilerplate carries. So even the "no font chosen" case resolves to a known, beige default.</p>
+<blockquote>Inter is safe precisely because it is everywhere. A model minimizing risk regresses to the most common choice in its training data, and for interface type, that choice is Inter.</blockquote>
 
 <h2>When Inter is exactly right</h2>
-<p>None of this is an argument against the typeface. Inter was drawn for screens, at small sizes, with a tall x-height, open apertures, and tabular figures that line up in a column. For a dense, utilitarian interface — a trading terminal, an admin panel, a settings screen full of numbers — it is close to the correct answer, and reaching for it there is good engineering, not laziness.</p>
+<p>None of this is an argument against the typeface. Inter was drawn for screens, at small sizes, with a tall x-height, open apertures, and tabular figures that line up in a column. For a dense, utilitarian interface (a trading terminal, an admin panel, a settings screen full of numbers) it is close to the correct answer, and reaching for it there is good engineering, not laziness.</p>
 <p>The failure is not the face. It is using one face for every voice. A typeface carries tone the way a speaking voice does, and a single neutral grotesque has exactly one register: efficient. Apply it to a surface whose job is warmth, authority, play, or craft, and the type contradicts the brief in silence.</p>
 
 <h2>The tell is the absence of a decision</h2>
-<p>Here is the same project across surfaces. The column that matters is the last one — what a considered pairing would do instead.</p>
+<p>Here is the same project across surfaces. The column that matters is the last one: what a considered pairing would do instead.</p>
 <table>
 <thead><tr><th>surface</th><th>Inter the right call?</th><th>a pairing with intent</th></tr></thead>
 <tbody>
-<tr><td>Analytics dashboard</td><td>Yes — dense, numeric, scanned often</td><td>Inter body with tabular figures, a mono for codes</td></tr>
-<tr><td>Editorial / long read</td><td>No — needs reading rhythm</td><td>A serif text face for body, a grotesque for labels</td></tr>
-<tr><td>Luxury / fashion brand</td><td>No — needs restraint and air</td><td>A high-contrast didone display over a quiet humanist body</td></tr>
-<tr><td>Playful consumer app</td><td>Rarely — too neutral to have a voice</td><td>A rounded sans paired with a friendly geometric</td></tr>
-<tr><td>Developer tool</td><td>Often — utilitarian fits</td><td>A grotesque display with a strong mono for code</td></tr>
+<tr><td>Analytics dashboard</td><td>Yes: dense, numeric, scanned often</td><td>Inter body with tabular figures, a mono for codes</td></tr>
+<tr><td>Editorial / long read</td><td>No: needs reading rhythm</td><td>A serif text face for body, a grotesque for labels</td></tr>
+<tr><td>Luxury / fashion brand</td><td>No: needs restraint and air</td><td>A high-contrast didone display over a quiet humanist body</td></tr>
+<tr><td>Playful consumer app</td><td>Rarely: too neutral to have a voice</td><td>A rounded sans paired with a friendly geometric</td></tr>
+<tr><td>Developer tool</td><td>Often: utilitarian fits</td><td>A grotesque display with a strong mono for code</td></tr>
 </tbody>
 </table>
 <p>Notice that Inter survives in two of five rows, and even there it earns its place by doing a specific job rather than by being the default. The point is not to ban it. The point is to choose it on purpose, the same way you would choose any of the others.</p>
 
 <h2>What a real type decision looks like</h2>
-<p>Three moves separate a chosen system from a defaulted one. First, <strong>a pair, not a single face</strong>: a display for headings with character, a body for reading comfort, and usually a mono for code and figures. Second, <strong>pairing contrast</strong> — the two faces should differ enough to create hierarchy on their own, so a humanist body wants a more structured or higher-contrast display rather than a near-twin. Third, <strong>a real reference</strong>: not "modern and clean" but "set type the way this specific brand does," because brands solved this problem with constraints the average never had.</p>
+<p>Three moves separate a chosen system from a defaulted one. First, <strong>a pair, not a single face</strong>: a display for headings with character, a body for reading comfort, and usually a mono for code and figures. Second, <strong>pairing contrast</strong>: the two faces should differ enough to create hierarchy on their own, so a humanist body wants a more structured or higher-contrast display rather than a near-twin. Third, <strong>a real reference</strong>: not "modern and clean" but "set type the way this specific brand does," because brands solved this problem with constraints the average never had.</p>
 
 <h2>How ux-skill picks type with intent</h2>
 <p>This is encoded in the engine, not left to a reminder in a prompt.</p>
-<p>The <strong>type-pair manifest</strong> carries more than 65 curated pairings, each a display, body, and mono chosen to work together and tagged by the voice it serves — editorial, brutalist, luxury, technical, playful. When the engine recommends type, it draws from that library, so the starting point is a pairing made on purpose rather than the single most common face.</p>
-<p>The <strong>typography axis</strong> turns the brief into the choice. A high-density, technical surface resolves toward a tight grotesque and a strong mono; a formal, low-density brand resolves toward contrast and air; an editorial surface resolves toward a text serif with a grotesque for furniture. Same request next week, same machine or another, returns the same pairing — deterministic, offline, no model in the loop.</p>
+<p>The <strong>type-pair manifest</strong> carries more than 65 curated pairings, each a display, body, and mono chosen to work together and tagged by the voice it serves: editorial, brutalist, luxury, technical, playful. When the engine recommends type, it draws from that library, so the starting point is a pairing made on purpose rather than the single most common face.</p>
+<p>The <strong>typography axis</strong> turns the brief into the choice. A high-density, technical surface resolves toward a tight grotesque and a strong mono; a formal, low-density brand resolves toward contrast and air; an editorial surface resolves toward a text serif with a grotesque for furniture. Same request next week, same machine or another, returns the same pairing: deterministic, offline, no model in the loop.</p>
 <p>And the <strong>brand specs</strong> encode how real companies actually set type, so the reference is a specific system rather than the mean of all of them. Stripe runs a custom grotesque tuned for its product and reserves weight for hierarchy. Linear sets a near-monochrome interface in a tight neutral sans and lets spacing do the talking. Ferrari pairs an assertive display with restraint everywhere else. Anthropic builds on a warm, readable text face rather than the standard interface grotesque. None of them ships the same font as everyone else, because type is where a brand's voice is most audible.</p>
 <p>The <strong>linter closes the loop</strong>. One rule flags a single neutral sans used as the only typeface on a surface whose voice asks for more, and the companion rule catches the bare system-font stack standing in for a real choice. So the face a model defaults to is the face the engine asks you to justify before it ships.</p>
 
 <h2>The escape, in one line</h2>
-<p>Pick a pair, not a face. Let the surface's voice — editorial, luxury, technical, playful — choose the display, and let the body face serve reading. Keep Inter for the dense, numeric screens it was actually drawn for, and reference how a real brand sets type instead of the average of all of them. Do that and the default has nothing left to pull you back toward.</p>
+<p>Pick a pair, not a face. Let the surface's voice (editorial, luxury, technical, playful) choose the display, and let the body face serve reading. Keep Inter for the dense, numeric screens it was actually drawn for, and reference how a real brand sets type instead of the average of all of them. Do that and the default has nothing left to pull you back toward.</p>
 <pre><code>pip install uxskill
 # then, in your AI coding tool:
-# /ux-recommend  — pulls a type pair from 65+ curated pairings, matched to your voice</code></pre>
+# /ux-recommend  : pulls a type pair from 65+ curated pairings, matched to your voice</code></pre>
 
 <h2>Related</h2>
 <ul>
@@ -258,7 +258,7 @@
 </ul>
 
 <footer>
-ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+ux-skill v3.0 · THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
 </footer>
 
 </div>

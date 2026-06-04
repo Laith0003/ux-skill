@@ -11,7 +11,7 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JetBrains AI Assistant design system rules — keeping IntelliJ + WebStorm generations on-brand</title>
+  <title>JetBrains AI Assistant design system rules · keeping IntelliJ + WebStorm generations on-brand</title>
   <meta name="description" content="Wire ux-skill into JetBrains AI Assistant. Custom instructions, tokens.css for Spring or Kotlin, the .ux/ state directory, and the recommender output for IntelliJ.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/jetbrains-ai-design-system.html">
   <meta name="theme-color" content="#07080a">
@@ -20,16 +20,16 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/jetbrains-ai-design-system.html">
-  <meta property="og:title" content="JetBrains AI Assistant design system rules — IntelliJ + WebStorm on-brand">
+  <meta property="og:title" content="JetBrains AI Assistant design system rules · IntelliJ + WebStorm on-brand">
   <meta property="og:description" content="JetBrains AI defaults to generic Tailwind for frontend code, generic Material for Compose. ux-skill adds 68 deterministic regex rules and a 10-field recommender.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/jetbrains-ai-design-system.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — jetbrains-ai-design-system">
+  <meta property="og:image:alt" content="ux-skill · jetbrains-ai-design-system">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/jetbrains-ai-design-system.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="JetBrains AI design system — ux-skill">
+  <meta name="twitter:title" content="JetBrains AI design system · ux-skill">
   <meta name="twitter:description" content="The custom instructions surface, the .ux/ state directory, and a real tokens.css for a Spring or Kotlin project.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,7 +40,7 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "JetBrains AI Assistant design system rules — keeping IntelliJ + WebStorm generations on-brand",
+    "headline": "JetBrains AI Assistant design system rules · keeping IntelliJ + WebStorm generations on-brand",
     "description": "Wire ux-skill into JetBrains AI Assistant. Custom instructions, tokens.css for Spring or Kotlin, the .ux/ state directory, and the recommender output for IntelliJ.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
@@ -53,7 +53,7 @@
   }
   </script>
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "JetBrains AI Assistant design system rules — keeping IntelliJ + WebStorm generations on-brand", "item": "https://uxskill.laithjunaidy.com/blog/jetbrains-ai-design-system.html"}]}
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "JetBrains AI Assistant design system rules · keeping IntelliJ + WebStorm generations on-brand", "item": "https://uxskill.laithjunaidy.com/blog/jetbrains-ai-design-system.html"}]}
 </script>
 
   <style>
@@ -354,13 +354,13 @@
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
        and max-width: 100%; carousels that need their own horizontal scroll
-       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves —
+       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves:
        overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
     html, body {
       overflow-x: clip;
       max-width: 100%;
     }
-    /* Defensive — make sure no section, image, or table forces width >100%. */
+    /* Defensive: make sure no section, image, or table forces width >100%. */
     section, header, footer, main, article { max-width: 100vw; }
     img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
     table { max-width: 100%; }
@@ -505,15 +505,15 @@
 <div class="wrap">
     <article>
       <span class="eyebrow">Blog &middot; JetBrains &middot; 2026-05-28</span>
-      <h1>JetBrains AI Assistant design rules &mdash; keeping IntelliJ and <span class="accent">WebStorm generations on-brand</span>.</h1>
+      <h1>JetBrains AI Assistant design rules, keeping IntelliJ and <span class="accent">WebStorm generations on-brand</span>.</h1>
       <p class="lede">
-        <strong>JetBrains AI Assistant ships in IntelliJ, WebStorm, PyCharm, GoLand, RubyMine, and the rest of the suite.</strong> It is excellent at refactoring and code completion. On design tasks, it reverts to the same model defaults every other AI surface produces &mdash; Inter as display, the canonical purple-to-blue gradient, three identical cards. ux-skill wires into JetBrains AI through the custom instructions surface and a CLI-driven linter that runs in the integrated terminal.
+        <strong>JetBrains AI Assistant ships in IntelliJ, WebStorm, PyCharm, GoLand, RubyMine, and the rest of the suite.</strong> It is excellent at refactoring and code completion. On design tasks, it reverts to the same model defaults every other AI surface produces: Inter as display, the canonical purple-to-blue gradient, three identical cards. ux-skill wires into JetBrains AI through the custom instructions surface and a CLI-driven linter that runs in the integrated terminal.
       </p>
       <p class="byline">By the ux-skill team &middot; 8 min read &middot; MIT-licensed open source</p>
 
       <h2>Why JetBrains projects hit the design problem</h2>
       <p>
-        A typical JetBrains project is backend-led: a Spring Boot API in IntelliJ, a Kotlin service, a Python data pipeline in PyCharm, a Go service in GoLand. The frontend often sits adjacent as a small Next.js or Vue app generated quickly to expose the API. That frontend is where AI Assistant lands its defaults &mdash; because it is treated as the boilerplate part of the job.
+        A typical JetBrains project is backend-led: a Spring Boot API in IntelliJ, a Kotlin service, a Python data pipeline in PyCharm, a Go service in GoLand. The frontend often sits adjacent as a small Next.js or Vue app generated quickly to expose the API. That frontend is where AI Assistant lands its defaults, because it is treated as the boilerplate part of the job.
       </p>
       <p>
         The result is consistent across teams: a backend whose architecture took weeks of design thinking and a frontend whose visual choices took ten minutes. The frontend ends up looking like every other AI-generated frontend, because no one budgeted the cognition for the brief.
@@ -538,7 +538,7 @@
 
       <h2>The .ux state directory is the source of truth</h2>
       <p>
-        Every ux-skill install writes into one directory: <code>.ux/</code> at the project root. JetBrains AI reads files in this directory the same way it reads <code>src/</code> &mdash; through the workspace context window.
+        Every ux-skill install writes into one directory: <code>.ux/</code> at the project root. JetBrains AI reads files in this directory the same way it reads <code>src/</code>: through the workspace context window.
       </p>
 
       <div class="table-wrap">
@@ -586,7 +586,7 @@
       </div>
 
       <p>
-        Commit <code>.ux/</code> and <code>.junie/</code>. The next JetBrains AI session reads them on startup. The state is repo-local, version-controlled, and deterministic &mdash; same brief, same files.
+        Commit <code>.ux/</code> and <code>.junie/</code>. The next JetBrains AI session reads them on startup. The state is repo-local, version-controlled, and deterministic: same brief, same files.
       </p>
 
       <h2>The tokens.css that lands in a Spring project</h2>
@@ -594,7 +594,7 @@
         A concrete example. Run discovery for a Spring Boot admin dashboard, audience is internal ops at a logistics company, tone is precise and technical, reference brands are Linear and Stripe, region is MENA, dark mode required. The recommender returns editorial-precise + cool-neutral + Fraunces-Inter + restrained motion. The persist save step writes this <code>tokens.css</code>:
       </p>
       <pre class="code"><span class="c">/* .ux/design-system/tokens.css */</span>
-<span class="c">/* Generated by ux-skill v2.0.0-alpha.1 &mdash; 2026-05-28 */</span>
+<span class="c">/* Generated by ux-skill v2.0.0-alpha.1: 2026-05-28 */</span>
 
 <span class="k">:root</span> {
   <span class="c">/* Surface */</span>
@@ -663,7 +663,7 @@ Recommendation saved to .ux/last-recommendation.json</pre>
         Two-hundred milliseconds, no LLM call. The components list reflects an internal admin dashboard (data-table, drawer, command-palette) rather than a marketing landing page (hero, social-proof, feature-strip). The recommender scores against the brief's <code>project_type</code> field, which was "app-dashboard."
       </p>
 
-      <h2>The Kotlin angle &mdash; Compose Multiplatform projects</h2>
+      <h2>The Kotlin angle: Compose Multiplatform projects</h2>
       <p>
         Kotlin projects in IntelliJ that target Compose for Web or Compose Multiplatform consume tokens differently. Instead of CSS, ux-skill emits a Kotlin-friendly token object. The same recommendation translates to:
       </p>
@@ -690,7 +690,7 @@ Recommendation saved to .ux/last-recommendation.json</pre>
 
       <h2>Three install paths in JetBrains</h2>
 
-      <h3>Path A &mdash; pip install plus integrated terminal</h3>
+      <h3>Path A: pip install plus integrated terminal</h3>
       <p>
         Open IntelliJ's terminal pane. Install ux-skill globally:
       </p>
@@ -703,7 +703,7 @@ $ ux persist save --project-root .</pre>
         JetBrains AI reads <code>.junie/guidelines.md</code> on the next session. The linter runs from the same terminal whenever you want to gate a generation.
       </p>
 
-      <h3>Path B &mdash; pre-commit hook</h3>
+      <h3>Path B: pre-commit hook</h3>
       <p>
         If your JetBrains project uses pre-commit (most modern Kotlin or Spring repos do), register ux-skill as a hook so the linter runs before any commit:
       </p>
@@ -717,7 +717,7 @@ repos:
         additional_dependencies: [<span class="s">uxskill</span>]
         files: <span class="s">\.(tsx|jsx|vue|css|scss|html)$</span></pre>
 
-      <h3>Path C &mdash; MCP server for the agent</h3>
+      <h3>Path C: MCP server for the agent</h3>
       <p>
         JetBrains AI Assistant gained MCP support in 2025. Wire ux-skill as a stdio MCP server through the AI Assistant settings:
       </p>
@@ -736,7 +736,7 @@ repos:
         IntelliJ is the IDE that already understood "treat your project as a domain model." ux-skill brings that mindset to the design surface.
       </blockquote>
 
-      <h2>Compose, Spring, or pure frontend &mdash; same engine</h2>
+      <h2>Compose, Spring, or pure frontend: same engine</h2>
       <p>
         ux-skill ships 25 tech-stack entries in <code>data/tech-stacks.json</code>. The relevant subset for JetBrains projects:
       </p>
@@ -786,7 +786,7 @@ repos:
         <div class="label">Honesty card</div>
         <h4>A JetBrains plugin is on the roadmap.</h4>
         <p>The current integration is CLI plus MCP. A native JetBrains Marketplace plugin would let us surface the recommender inside the AI Assistant chat without leaving the IDE. That is on the roadmap for v2.3 but not shipped yet.</p>
-        <p>The CLI plus MCP approach covers the full functionality today &mdash; you just live in the integrated terminal more than you might in a plugin-first world. That terminal is fast and right there.</p>
+        <p>The CLI plus MCP approach covers the full functionality today, you just live in the integrated terminal more than you might in a plugin-first world. That terminal is fast and right there.</p>
       </div>
 
       <h2>Five minutes to working</h2>
@@ -795,10 +795,10 @@ repos:
       </p>
       <ol>
         <li><code>pipx install uxskill</code> in IntelliJ's integrated terminal.</li>
-        <li><code>uxskill init --target jetbrains</code> &mdash; writes <code>.junie/guidelines.md</code>.</li>
-        <li><code>uxskill discover</code> &mdash; 10-field interactive brief.</li>
-        <li><code>uxskill recommend</code> &mdash; 5-parallel-search merge, about 200 ms.</li>
-        <li><code>uxskill persist save --project-root .</code> &mdash; writes MASTER.md, tokens.css, manifest.json.</li>
+        <li><code>uxskill init --target jetbrains</code>: writes <code>.junie/guidelines.md</code>.</li>
+        <li><code>uxskill discover</code>: 10-field interactive brief.</li>
+        <li><code>uxskill recommend</code>: 5-parallel-search merge, about 200 ms.</li>
+        <li><code>uxskill persist save --project-root .</code>: writes MASTER.md, tokens.css, manifest.json.</li>
         <li>Restart AI Assistant. It reads the guidelines and the MASTER.md on the next prompt.</li>
         <li>Generate visual code. Run <code>uxskill lint src/</code> to catch drift.</li>
       </ol>
@@ -816,9 +816,9 @@ repos:
         <div class="row"><span class="prompt">$</span> pipx install <span class="arg">uxskill</span></div>
         <div class="row"><span class="prompt">$</span> uxskill <span class="arg">init --target jetbrains</span></div>
         <div class="row"><span class="prompt">$</span> uxskill <span class="arg">lint src/ --threshold high</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; or via npx if Python is not installed &mdash;</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">or via npx if Python is not installed</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init --target jetbrains</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; or as a Claude Code plugin alongside JetBrains &mdash;</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">or as a Claude Code plugin alongside JetBrains</div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
       </div>
     </section>
