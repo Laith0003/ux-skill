@@ -11,8 +11,8 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ux-skill MCP server — the design intelligence MCP for Claude Desktop, Cursor, Windsurf, any agent</title>
-  <meta name="description" content="ux-skill ships a Model Context Protocol server exposing 18 tools — the 5-parallel-search recommender, the 152-rule anti-AI-slop linter, and the 11 data manifests — over stdio. Any MCP-capable host can call into the engine. None of the top 8 Claude UX skills ship one.">
+  <title>ux-skill MCP server · the design intelligence MCP for Claude Desktop, Cursor, Windsurf, any agent</title>
+  <meta name="description" content="ux-skill ships a Model Context Protocol server exposing 18 tools (the 5-parallel-search recommender, the 152-rule anti-AI-slop linter, and the 11 data manifests) over stdio. Any MCP-capable host can call into the engine. None of the top 8 Claude UX skills ship one.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/mcp.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -20,16 +20,16 @@
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/mcp.html">
-  <meta property="og:title" content="ux-skill MCP server — design intelligence for any MCP host">
+  <meta property="og:title" content="ux-skill MCP server · design intelligence for any MCP host">
   <meta property="og:description" content="18 tools over stdio. Claude Desktop, Cursor, Windsurf, generic agents. None of the top 8 Claude UX skills ship an MCP server. ux-skill does.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/mcp.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — mcp">
+  <meta property="og:image:alt" content="ux-skill · mcp">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/mcp.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ux-skill MCP server — design intelligence MCP">
+  <meta name="twitter:title" content="ux-skill MCP server · design intelligence MCP">
   <meta name="twitter:description" content="18 tools. stdio transport. pip install 'uxskill[mcp]'. The asymmetric move.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,7 +39,7 @@
 
   <style>
     /* =========================================================================
-       UXSKILL DOCS v3 — Saturated Cinema (dark)
+       UXSKILL DOCS v3: Saturated Cinema (dark)
        Scene accent: emerald #10b981
        ========================================================================= */
     :root {
@@ -58,7 +58,7 @@
       --scene-accent:  #10b981;
       --scene-soft:    rgba(16, 185, 129, 0.10);
 
-      /* Win/loss ramp — dark equivalents */
+      /* Win/loss ramp: dark equivalents */
       --win-bg:    rgba(16, 185, 129, 0.14);
       --win-fg:    #34d399;
       --weak-bg:   rgba(244, 114, 182, 0.14);
@@ -605,7 +605,7 @@
       }
     }
   
-    /* Arabic typography — IBM Plex Sans Arabic for the whole Arabic page (v3.0.4 sweep) */
+    /* Arabic typography: IBM Plex Sans Arabic for the whole Arabic page (v3.0.4 sweep) */
     html[lang="ar"] body,
     html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3, html[lang="ar"] h4,
     html[lang="ar"] p, html[lang="ar"] li, html[lang="ar"] a, html[lang="ar"] button,
@@ -620,7 +620,7 @@
     "name": "ux-mcp",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Cross-platform (MCP stdio server)",
-    "description": "Model Context Protocol server exposing the ux-skill engine as 18 tools — works in Claude Desktop, Cursor, Windsurf, and any MCP-capable host. ux_recommend, ux_lint, 11 manifest readers, persistence, stats.",
+    "description": "Model Context Protocol server exposing the ux-skill engine as 18 tools. Works in Claude Desktop, Cursor, Windsurf, and any MCP-capable host. ux_recommend, ux_lint, 11 manifest readers, persistence, stats.",
     "softwareVersion": "2.0.0-alpha.39",
     "downloadUrl": "https://pypi.org/project/uxskill/",
     "url": "https://uxskill.laithjunaidy.com/mcp.html",
@@ -629,11 +629,11 @@
     "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
     "featureList": [
       "18 MCP tools over stdio",
-      "ux_recommend — 5-parallel-search reasoning",
-      "ux_lint — deterministic regex linter",
+      "ux_recommend: 5-parallel-search reasoning",
+      "ux_lint: deterministic regex linter",
       "11 manifest readers (styles, palettes, type-pairs, components, industries, motion, anti-patterns, brands, landing-patterns, etc.)",
-      "ux_persist_save / ux_persist_load — design system persistence",
-      "ux_stats — engine telemetry"
+      "ux_persist_save / ux_persist_load: design system persistence",
+      "ux_stats: engine telemetry"
     ]
   }
   </script>
@@ -641,13 +641,13 @@
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
        and max-width: 100%; carousels that need their own horizontal scroll
-       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves —
+       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves:
        overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
     html, body {
       overflow-x: clip;
       max-width: 100%;
     }
-    /* Defensive — make sure no section, image, or table forces width >100%. */
+    /* Defensive: make sure no section, image, or table forces width >100%. */
     section, header, footer, main, article { max-width: 100vw; }
     img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
     table { max-width: 100%; }
@@ -866,10 +866,10 @@
     }
     #nav-drawer .nav__drawer-langs-grid a:hover { color: var(--ink, var(--nav-ink)); }
 
-    /* RTL — nav inner flips */
+    /* RTL: nav inner flips */
     html[dir="rtl"] #nav .nav__inner { direction: rtl; }
 
-    /* Defensive — when the fixed .nav is present, give layouts that
+    /* Defensive: when the fixed .nav is present, give layouts that
        previously assumed an inline header (.wrap on blog/index,
        .top/.toolbar on the catalogue pages) enough headroom so
        content isn't hidden behind the nav. */
@@ -1026,18 +1026,18 @@
       <span class="eyebrow">MCP server &middot; stdio &middot; 18 tools &middot; 2026</span>
       <h1>Design intelligence over <span class="accent">Model Context Protocol</span>.</h1>
       <p class="lede">
-        ux-skill ships a Model Context Protocol server. <strong>Any MCP-capable host</strong> &mdash; Claude Desktop, Cursor, Windsurf, generic agents &mdash; can call the recommender, the linter, and all eleven data manifests over stdio. No plugin install, no IDE lock-in, just a long-running daemon and 18 tools.
+        ux-skill ships a Model Context Protocol server. <strong>Any MCP-capable host</strong> (Claude Desktop, Cursor, Windsurf, generic agents) can call the recommender, the linter, and all eleven data manifests over stdio. No plugin install, no IDE lock-in, just a long-running daemon and 18 tools.
       </p>
 
       <figure class="docfig">
         <img src="/screenshots/cursor-running-ux.png" width="1600" height="1000" alt="Cursor calling the uxskill MCP tools over stdio: the recommender and linter invoked from inside the editor without a plugin install." loading="lazy">
-        <figcaption>One MCP daemon, 18 tools, any compatible host &mdash; here, answering from inside Cursor.</figcaption>
+        <figcaption>One MCP daemon, 18 tools, any compatible host. Here, answering from inside Cursor.</figcaption>
       </figure>
 
       <div class="pitch">
         <div class="label">Why this exists</div>
         <p>
-          Reaching design intelligence used to mean installing a plugin into the specific tool the plugin was written for. Claude Code plugins stay in Claude Code. Cursor rules stay in Cursor. The same recommender, the same linter, the same brand specs had to be re-wired for every host. The MCP server collapses that. <strong>One process. One protocol. Every host that speaks MCP gets the engine, identically.</strong> The recommender is deterministic, the linter is regex-grounded, and both come straight out of the same Python package as the slash commands &mdash; so an agent in a fresh repo can ask for the same Stripe-grade landing or fintech-dashboard system that a Claude Code session can.
+          Reaching design intelligence used to mean installing a plugin into the specific tool the plugin was written for. Claude Code plugins stay in Claude Code. Cursor rules stay in Cursor. The same recommender, the same linter, the same brand specs had to be re-wired for every host. The MCP server collapses that. <strong>One process. One protocol. Every host that speaks MCP gets the engine, identically.</strong> The recommender is deterministic, the linter is regex-grounded, and both come straight out of the same Python package as the slash commands, so an agent in a fresh repo can ask for the same Stripe-grade landing or fintech-dashboard system that a Claude Code session can.
         </p>
       </div>
     </section>
@@ -1046,7 +1046,7 @@
     <section>
       <span class="sub-eye">The asymmetric position</span>
       <h2>None of the top eight ship one. <span class="accent">We do.</span></h2>
-      <p class="intro">The competition is locked inside Claude Code's plugin runtime. The MCP server makes ux-skill reachable from <strong>any</strong> agent &mdash; even agents that have never heard of a Claude Code plugin.</p>
+      <p class="intro">The competition is locked inside Claude Code's plugin runtime. The MCP server makes ux-skill reachable from <strong>any</strong> agent, even agents that have never heard of a Claude Code plugin.</p>
 
       <table class="h2h">
         <thead><tr><th>Plugin</th><th>MCP server</th><th>Effective reach</th></tr></thead>
@@ -1082,22 +1082,22 @@
         <tbody>
           <tr><td class="tname"><code>ux_recommend</code></td><td>Run the 5-parallel-search recommender over a brief. Returns style, palette, type pair, motion presets, components, brand exemplars, anti-pattern guardrails, and a rationale line per lane.</td></tr>
           <tr><td class="tname"><code>ux_lint</code></td><td>Run the 152-rule anti-AI-slop regex linter over file paths. Returns findings with rule id, severity, file, line, excerpt, and fix.</td></tr>
-          <tr><td class="tname"><code>ux_styles</code></td><td>Return all 84+ entries from <code>data/styles.json</code> &mdash; design philosophies with tokens.</td></tr>
+          <tr><td class="tname"><code>ux_styles</code></td><td>Return all 84+ entries from <code>data/styles.json</code>: design philosophies with tokens.</td></tr>
           <tr><td class="tname"><code>ux_palettes</code></td><td>Return 176+ entries from <code>data/palettes.json</code>. Optional <code>mode</code> filter (<code>light</code> / <code>dark</code>).</td></tr>
-          <tr><td class="tname"><code>ux_type_pairs</code></td><td>Return 70+ entries from <code>data/type-pairs.json</code> &mdash; display + body + mono pairings.</td></tr>
+          <tr><td class="tname"><code>ux_type_pairs</code></td><td>Return 70+ entries from <code>data/type-pairs.json</code>: display + body + mono pairings.</td></tr>
           <tr><td class="tname"><code>ux_components</code></td><td>Return 148+ entries from <code>data/components.json</code>. Optional <code>category</code> filter.</td></tr>
           <tr><td class="tname"><code>ux_industries</code></td><td>Return 184+ entries from <code>data/industries.json</code> with style/palette/type biases per domain.</td></tr>
           <tr><td class="tname"><code>ux_motion_presets</code></td><td>Return 57+ entries from <code>data/motion-presets.json</code> with easing, duration, stagger tokens.</td></tr>
           <tr><td class="tname"><code>ux_anti_patterns</code></td><td>Return 35+ entries from <code>data/anti-patterns.json</code> (the regex rules that drive the linter). Optional <code>severity</code> filter.</td></tr>
           <tr><td class="tname"><code>ux_brands</code></td><td>Return 160 brand specs from <code>data/brands/*.json</code> (Apple, Stripe, Linear, Tesla, Notion, etc.). Optional <code>category</code> filter.</td></tr>
-          <tr><td class="tname"><code>ux_landing_patterns</code></td><td>Return 24+ entries from <code>data/landing-patterns.json</code> &mdash; proven landing-page section patterns.</td></tr>
-          <tr><td class="tname"><code>ux_persist_save</code></td><td>Write a recommendation as <code>.ux/design-system/MASTER.md</code> in the given project root. Idempotent &mdash; same input writes byte-identical bytes.</td></tr>
+          <tr><td class="tname"><code>ux_landing_patterns</code></td><td>Return 24+ entries from <code>data/landing-patterns.json</code>: proven landing-page section patterns.</td></tr>
+          <tr><td class="tname"><code>ux_persist_save</code></td><td>Write a recommendation as <code>.ux/design-system/MASTER.md</code> in the given project root. Idempotent: same input writes byte-identical bytes.</td></tr>
           <tr><td class="tname"><code>ux_persist_load</code></td><td>Load <code>.ux/design-system/MASTER.md</code> back into a structured dict, or report not-found.</td></tr>
           <tr><td class="tname"><code>ux_stats</code></td><td>Return the engine version and per-manifest entry counts. Useful as a health probe.</td></tr>
-          <tr><td class="tname"><code>ux_image_extract</code></td><td>Read a design image (PNG/JPG/WebP) and return a synthetic brief plus diagnostics &mdash; dominant colors, canvas polarity, matched palette and style. Pure CV, no multimodal LLM.</td></tr>
-          <tr><td class="tname"><code>ux_synthesize</code></td><td>Synthesize a fresh design language from a brief &mdash; axes, palette, type pair, spacing, radius, motion. Mode auto-dispatched (pure synthesis / brand anchor / strict brand). Offline and deterministic.</td></tr>
+          <tr><td class="tname"><code>ux_image_extract</code></td><td>Read a design image (PNG/JPG/WebP) and return a synthetic brief plus diagnostics: dominant colors, canvas polarity, matched palette and style. Pure CV, no multimodal LLM.</td></tr>
+          <tr><td class="tname"><code>ux_synthesize</code></td><td>Synthesize a fresh design language from a brief: axes, palette, type pair, spacing, radius, motion. Mode auto-dispatched (pure synthesis / brand anchor / strict brand). Offline and deterministic.</td></tr>
           <tr><td class="tname"><code>ux_decisions_query</code></td><td>Filter the local decisions ledger by industry, ui_type, command, min score, or accepted-only. The recommender re-ranks on this once a brief&rsquo;s bucket has enough prior decisions.</td></tr>
-          <tr><td class="tname"><code>ux_decisions_stats</code></td><td>Aggregate stats over the local decisions ledger &mdash; totals by command, industry, ui_type, mode, top brands, median lint score, acceptance rate. No telemetry; your install&rsquo;s local view.</td></tr>
+          <tr><td class="tname"><code>ux_decisions_stats</code></td><td>Aggregate stats over the local decisions ledger: totals by command, industry, ui_type, mode, top brands, median lint score, acceptance rate. No telemetry; your install&rsquo;s local view.</td></tr>
         </tbody>
       </table>
     </section>
@@ -1107,7 +1107,7 @@
       <span class="sub-eye">Example calls</span>
       <h2>What it <span class="accent">actually does</span>.</h2>
 
-      <h3>ux_recommend &mdash; get a complete system from a brief</h3>
+      <h3>ux_recommend: get a complete system from a brief</h3>
 <pre class="code"><span class="c">// Input</span>
 {
   <span class="k">"brief"</span>: {
@@ -1129,7 +1129,7 @@
   <span class="k">"motion"</span>: [ ... <span class="c">/* top 5 presets compatible with style */</span> ],
   <span class="k">"components"</span>: [ ... <span class="c">/* top 12 compatible components */</span> ],
   <span class="k">"brand_exemplars"</span>: [ ... <span class="c">/* top 5 brands to study */</span> ],
-  <span class="k">"guardrails"</span>: [ ... <span class="c">/* all 152 anti-pattern rules — always-on */</span> ],
+  <span class="k">"guardrails"</span>: [ ... <span class="c">/* all 152 anti-pattern rules: always-on */</span> ],
   <span class="k">"rationale"</span>: [
     <span class="s">"Industry: Fintech Neobank"</span>,
     <span class="s">"Style: Monochrome Precise"</span>,
@@ -1138,7 +1138,7 @@
   ]
 }</pre>
 
-      <h3>ux_lint &mdash; anti-slop regex sweep across paths</h3>
+      <h3>ux_lint: anti-slop regex sweep across paths</h3>
 <pre class="code"><span class="c">// Input</span>
 { <span class="k">"paths"</span>: [<span class="s">"./app"</span>, <span class="s">"./components"</span>], <span class="k">"threshold"</span>: <span class="s">"high"</span> }
 
@@ -1161,7 +1161,7 @@
   <span class="k">"summary"</span>: { <span class="k">"critical"</span>: 0, <span class="k">"high"</span>: 4, <span class="k">"medium"</span>: 7, <span class="k">"low"</span>: 12, <span class="k">"total"</span>: 23 }
 }</pre>
 
-      <h3>ux_stats &mdash; engine health probe</h3>
+      <h3>ux_stats: engine health probe</h3>
 <pre class="code"><span class="c">// Input: {} ; Output:</span>
 {
   <span class="k">"version"</span>: <span class="s">"2.0.0-alpha.1"</span>,
@@ -1244,7 +1244,7 @@
       <p>The 18 tools are pure <code>dict -&gt; dict</code> Python functions in <code>engine.mcp.server</code>. The MCP stdio transport is an optional dependency that lazy-imports inside <code>run_server()</code>. Three consequences fall out:</p>
       <ul>
         <li>The <code>engine.mcp</code> module imports cleanly whether or not the <code>mcp</code> Python package is installed.</li>
-        <li>Tests exercise the handlers directly &mdash; no async event loop, no subprocess plumbing in the test suite.</li>
+        <li>Tests exercise the handlers directly: no async event loop, no subprocess plumbing in the test suite.</li>
         <li><code>ux-mcp</code> fails fast with a clear <code>pip install</code> hint if the transport library is missing.</li>
       </ul>
       <p>One source of truth, one entry point, every host.</p>
@@ -1259,7 +1259,7 @@
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">'uxskill[mcp]'</span></div>
         <div class="row"><span class="prompt">$</span> ux-mcp <span class="arg"># starts the stdio server</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.6;">&mdash; then point your MCP host at <code>ux-mcp</code> &mdash;</div>
+        <div class="row" style="margin-top:14px; opacity:0.6;">then point your MCP host at <code>ux-mcp</code></div>
       </div>
     </section>
   </div>

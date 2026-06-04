@@ -11,8 +11,8 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Design AI coding — come costruire un design system con Claude Code — ux-skill</title>
-  <meta name="description" content="Claude Code, Cursor, Windsurf, GitHub Copilot, Cline — ogni strumento di AI coding cade negli stessi otto difetti visivi: Inter usato come display, gradiente da viola a blu, tre card identiche. ux-skill blocca questi pattern nella CI con 145 regole regex deterministiche.">
+  <title>Design AI coding · come costruire un design system con Claude Code · ux-skill</title>
+  <meta name="description" content="Claude Code, Cursor, Windsurf, GitHub Copilot, Cline, ogni strumento di AI coding cade negli stessi otto difetti visivi: Inter usato come display, gradiente da viola a blu, tre card identiche. ux-skill blocca questi pattern nella CI con 145 regole regex deterministiche.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/it/ai-coding-design-italian.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -20,16 +20,16 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/it/ai-coding-design-italian.html">
-  <meta property="og:title" content="Design AI coding — come costruire un design system con Claude Code">
+  <meta property="og:title" content="Design AI coding · come costruire un design system con Claude Code">
   <meta property="og:description" content="145 regole regex deterministiche. 1.182 voci di catalogo. 131 specifiche di brand. 17 IDE. Licenza MIT.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/it-ai-coding-design-italian.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — it ai coding design italian">
+  <meta property="og:image:alt" content="ux-skill · it ai coding design italian">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/it-ai-coding-design-italian.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Design AI coding — ux-skill">
+  <meta name="twitter:title" content="Design AI coding · ux-skill">
   <meta name="twitter:description" content="Ferma gli otto difetti visivi che ogni AI produce per default. 145 regole regex, niente LLM, dentro la CI.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,8 +40,8 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Design AI coding — come costruire un design system con Claude Code",
-    "description": "Claude Code, Cursor, Windsurf, GitHub Copilot, Cline — ogni strumento di AI coding cade negli stessi otto difetti visivi. ux-skill li blocca nella CI con 145 regole regex.",
+    "headline": "Design AI coding · come costruire un design system con Claude Code",
+    "description": "Claude Code, Cursor, Windsurf, GitHub Copilot, Cline, ogni strumento di AI coding cade negli stessi otto difetti visivi. ux-skill li blocca nella CI con 145 regole regex.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -494,9 +494,9 @@
 <div class="wrap">
     <article>
       <span class="eyebrow">Blog &middot; Italiano &middot; 2026-05-28</span>
-      <h1>Design AI coding — perché ogni AI tira fuori <span class="accent">la stessa interfaccia</span>.</h1>
+      <h1>Design AI coding · perché ogni AI tira fuori <span class="accent">la stessa interfaccia</span>.</h1>
       <p class="lede">
-        <strong>Chiunque abbia chiesto a Claude Code, Cursor, Windsurf, GitHub Copilot, Cline o Continue di generare una landing riconosce l'output al primo sguardo:</strong> Inter tirato a dimensioni da display, gradiente dal viola al blu, tre card identiche in fila, e sotto l'hero la solita frase <em>«Build something amazing»</em>. Il problema non è lo strumento. Il problema è che tutti questi strumenti hanno imparato dallo stesso bacino di template. ux-skill blocca esattamente quei default dentro la CI — senza LLM in mezzo, con 145 regole regex deterministiche.
+        <strong>Chiunque abbia chiesto a Claude Code, Cursor, Windsurf, GitHub Copilot, Cline o Continue di generare una landing riconosce l'output al primo sguardo:</strong> Inter tirato a dimensioni da display, gradiente dal viola al blu, tre card identiche in fila, e sotto l'hero la solita frase <em>«Build something amazing»</em>. Il problema non è lo strumento. Il problema è che tutti questi strumenti hanno imparato dallo stesso bacino di template. ux-skill blocca esattamente quei default dentro la CI, senza LLM in mezzo, con 145 regole regex deterministiche.
       </p>
       <p class="byline">By the ux-skill team &middot; ~9 min di lettura &middot; open source con licenza MIT</p>
 
@@ -505,14 +505,14 @@
         Abbiamo catalogato l'intera collezione nella <a href="/blog/ai-design-fingerprints-list.html" class="link">tassonomia delle impronte di design AI</a>. Questi otto compaiono praticamente in ogni hero generato:
       </p>
       <ol>
-        <li><strong>Inter usato come font da display</strong> — un font disegnato per leggibilità su dimensioni piccole, tirato fino a 90 px nell'hero. L'esatto contrario del suo caso d'uso.</li>
-        <li><strong>Gradiente dal viola al blu</strong> — la famiglia <code>#7C3AED → #3B82F6</code>, immancabile come sfondo della prima sezione.</li>
-        <li><strong>Tre card identiche in linea</strong> — icona, titolo di una parola, sottotitolo di una frase, ripetuti tre volte.</li>
-        <li><strong>Fade-in-up universale</strong> — applicato a ogni figlio diretto di ogni sezione, senza distinzione di ruolo.</li>
-        <li><strong>Tutto centrato</strong> — hero, card, form, tutto sull'asse verticale centrale della pagina.</li>
-        <li><strong>Copy generico</strong> — «Build something amazing», «Beautiful experiences», «Revolutionizing X», zero nomi specifici del prodotto.</li>
-        <li><strong>URL di stock photo</strong> — placeholder generici al posto di vere schermate del prodotto.</li>
-        <li><strong>Ombre pesanti su un design flat</strong> — il riflesso «deve risaltare» incontra la moda del flat, e ne esce una profondità visiva confusa.</li>
+        <li><strong>Inter usato come font da display</strong>, un font disegnato per leggibilità su dimensioni piccole, tirato fino a 90 px nell'hero. L'esatto contrario del suo caso d'uso.</li>
+        <li><strong>Gradiente dal viola al blu</strong>, la famiglia <code>#7C3AED → #3B82F6</code>, immancabile come sfondo della prima sezione.</li>
+        <li><strong>Tre card identiche in linea</strong>, icona, titolo di una parola, sottotitolo di una frase, ripetuti tre volte.</li>
+        <li><strong>Fade-in-up universale</strong>, applicato a ogni figlio diretto di ogni sezione, senza distinzione di ruolo.</li>
+        <li><strong>Tutto centrato</strong>, hero, card, form, tutto sull'asse verticale centrale della pagina.</li>
+        <li><strong>Copy generico</strong>, «Build something amazing», «Beautiful experiences», «Revolutionizing X», zero nomi specifici del prodotto.</li>
+        <li><strong>URL di stock photo</strong>, placeholder generici al posto di vere schermate del prodotto.</li>
+        <li><strong>Ombre pesanti su un design flat</strong>, il riflesso «deve risaltare» incontra la moda del flat, e ne esce una profondità visiva confusa.</li>
       </ol>
       <p>
         Ogni difetto preso da solo non è un errore. È la combinazione, gli otto contemporaneamente sulla stessa pagina, a produrre l'impronta riconoscibile. Uno passa con un'alzata di spalle. Quattro nello stesso above-the-fold e si può tirare a indovinare quale tool li ha generati.
@@ -523,7 +523,7 @@
         La prima reazione di ogni team è infilare istruzioni nel prompt: «niente gradiente di default», «scegli un font da display vero», «non ripetere tre card uguali». Regge per un messaggio. Al successivo, l'indicazione si diluisce, la finestra di contesto si gonfia, e l'impronta riemerge. Guidare via prompt è probabilistico e perde forza con la lunghezza della conversazione.
       </p>
       <p>
-        Quello che serve è un fondo deterministico — un controllo che gira <em>dopo</em> che il modello ha scritto, senza un altro LLM nel loop. È esattamente il buco che ux-skill riempie. Il recommender restringe a monte le scelte del modello; il linter rimanda indietro a valle quello che è passato lo stesso.
+        Quello che serve è un fondo deterministico, un controllo che gira <em>dopo</em> che il modello ha scritto, senza un altro LLM nel loop. È esattamente il buco che ux-skill riempie. Il recommender restringe a monte le scelte del modello; il linter rimanda indietro a valle quello che è passato lo stesso.
       </p>
 
       <h3>Non rispondere allo stocastico con altro stocastico</h3>
@@ -556,7 +556,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         Qui sotto un blocco hero semplificato preso da uno starter Next.js, che cade in tre regole, e la versione riscritta che esce con exit 0. Stessa intenzione di conversione, impronta diversa.
       </p>
-      <pre class="code"><span class="c">// Prima — 3 finding high</span>
+      <pre class="code"><span class="c">// Prima: 3 finding high</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -571,7 +571,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
   &lt;/div&gt;
 &lt;/section&gt;
 
-<span class="c">// Dopo — 0 finding</span>
+<span class="c">// Dopo: 0 finding</span>
 &lt;section className=<span class="s">"bg-stone-50 py-28"</span>&gt;
   &lt;h1 className=<span class="s">"font-['Fraunces']
     text-6xl leading-[1.04]
@@ -640,16 +640,16 @@ $ /plugin install ux@ux-skill</pre>
       <div class="honesty">
         <div class="label">Perimetro onesto</div>
         <h4>Le regole prendono la struttura. Non prendono il gusto.</h4>
-        <p>Il linter non segnalerà mai «questa sezione ha un ritmo sbagliato» o «questo copy suona freddo». Quello è lavoro di una persona, o di un LLM in fase di review. Quello che la regex <em>cattura in modo affidabile</em> è ogni impronta esprimibile come token letterale, pattern o forma — vale a dire la maggior parte dei default dell'AI, perché il modello torna sempre allo stesso artefatto.</p>
+        <p>Il linter non segnalerà mai «questa sezione ha un ritmo sbagliato» o «questo copy suona freddo». Quello è lavoro di una persona, o di un LLM in fase di review. Quello che la regex <em>cattura in modo affidabile</em> è ogni impronta esprimibile come token letterale, pattern o forma, vale a dire la maggior parte dei default dell'AI, perché il modello torna sempre allo stesso artefatto.</p>
         <p>Non facciamo girare un LLM-giudice nella CI, intenzionalmente. Se il tuo metro è «sembra fatto da un designer», quella è una code review, non un lint. ux-skill mette a disposizione <code>ux critique</code> per quel passaggio, ma gira on demand nell'editor, non nella CI.</p>
       </div>
 
       <h2>Letture correlate</h2>
       <ul>
         <li><a href="/blog/ai-design-fingerprints-list.html" class="link">Le 35 impronte di design che ogni tool AI consegna per default</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter per AI coding — 145 regole nella CI</a></li>
-        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Tool anti-slop per Claude Code — la classifica onesta</a></li>
-        <li><a href="/blog/cursor-design-plugin.html" class="link">Plugin di design per Cursor — guida all'installazione</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter per AI coding · 145 regole nella CI</a></li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Tool anti-slop per Claude Code · la classifica onesta</a></li>
+        <li><a href="/blog/cursor-design-plugin.html" class="link">Plugin di design per Cursor · guida all'installazione</a></li>
         <li><a href="https://github.com/Laith0003/ux-skill/blob/main/README.it.md" class="link" rel="noopener noreferrer">README (versione italiana)</a></li>
         <li><a href="/install/" class="link">Pagina di installazione</a> / <a href="/mcp.html" class="link">Setup MCP</a></li>
       </ul>
@@ -663,9 +663,9 @@ $ /plugin install ux@ux-skill</pre>
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— oppure —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">· oppure ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— oppure —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">· oppure ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>
@@ -676,7 +676,7 @@ $ /plugin install ux@ux-skill</pre>
       <h2 class="related-reads-h">Letture correlate</h2>
       <ul>
         <li><a href="/blog/ai-design-fingerprints-list.html">35 impronte di design AI</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html">Regex linter — 145 regole</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html">Regex linter · 145 regole</a></li>
         <li><a href="/blog/anti-ai-slop-claude-skills.html">Classifica anti-slop</a></li>
         <li><a href="/blog/cursor-design-plugin.html">Plugin di design per Cursor</a></li>
       </ul>

@@ -1,4 +1,4 @@
-# v3.0 Social Launch Playbook — copy, paste, post
+# v3.0 Social Launch Playbook: copy, paste, post
 
 **Status:** ready to ship. **Action:** copy each block, paste to the platform, post.
 
@@ -12,12 +12,12 @@ URLs in posts:
 
 ---
 
-## Day 0 — Launch hour (post all these within 60 min of each other)
+## Day 0: Launch hour (post all these within 60 min of each other)
 
-### POST 1 — X / Twitter (single tweet, 280 chars max)
+### POST 1: X / Twitter (single tweet, 280 chars max)
 
 ```
-ux-skill v3.0 — THE BRAIN — ships today.
+ux-skill v3.0 · THE BRAIN ships today.
 
 Brand specs are training data now, not templates. A 7-axis synthesizer compiles a novel design language per brief. Recommender re-ranks from a local decisions ledger.
 
@@ -28,10 +28,10 @@ pip install uxskill
 https://uxskill.laithjunaidy.com
 ```
 
-### POST 2 — LinkedIn (long-form, ~1200 chars)
+### POST 2: LinkedIn (long-form, ~1200 chars)
 
 ```
-After 3 months of work I'm shipping ux-skill v3.0 today — THE BRAIN.
+After 3 months of work I'm shipping ux-skill v3.0 today: THE BRAIN.
 
 It's a design intelligence engine for AI coding tools (Claude Code, Cursor, Windsurf + 14 more IDEs). The shift in v3.0: brand specs are no longer templates the recommender picks from. They're training data for a 7-axis synthesizer that compiles a novel design language per brief.
 
@@ -59,26 +59,26 @@ Install: pip install uxskill
 #AICoding #DesignSystems #OpenSource #ClaudeCode #Cursor
 ```
 
-### POST 3 — HN (Show HN) — submit as a new "Show HN" post
+### POST 3: HN (Show HN), submit as a new "Show HN" post
 
-**Title:** `Show HN: ux-skill v3.0 — deterministic 7-axis design synthesizer for AI coding`
+**Title:** `Show HN: ux-skill v3.0, deterministic 7-axis design synthesizer for AI coding`
 
 **URL:** `https://uxskill.laithjunaidy.com`
 
 **Text field:** (paste this)
 
 ```
-Hi HN — Laith here. I shipped v3.0 of ux-skill, an open-source design intelligence engine for AI coding tools (Claude Code, Cursor, Windsurf + 14 more IDEs).
+Hi HN, Laith here. I shipped v3.0 of ux-skill, an open-source design intelligence engine for AI coding tools (Claude Code, Cursor, Windsurf + 14 more IDEs).
 
-The architectural shift in v3.0: brand specs are no longer templates the recommender picks from — they're training data the engine distills into a fresh design language per brief.
+The architectural shift in v3.0: brand specs are no longer templates the recommender picks from. They're training data the engine distills into a fresh design language per brief.
 
 Concrete pieces:
 
 - 7-axis synthesizer (warmth/contrast/density/geometry/formality/motion/type_personality). Briefs map deterministically to axis values, axis values compile to palette + type + spacing + radius + motion tokens. Same brief → same output, always.
 - Three modes, auto-dispatched: strict_brand (100% named brand), brand_anchor (70/30 named + adapted), pure_synthesis (no brand, infinity space from 8 axis-matching exemplars).
-- Axis interaction matrix — explicit conflict resolution for when axes compete for one token (dense + corporate → 4px Bloomberg-style; airy + corporate → 12px luxury; sharp + corporate → 2px NYT; soft + playful → 18px Glossier).
+- Axis interaction matrix: explicit conflict resolution for when axes compete for one token (dense + corporate → 4px Bloomberg-style; airy + corporate → 12px luxury; sharp + corporate → 2px NYT; soft + playful → 18px Glossier).
 - Decisions ledger drives recommender re-rank. Every call writes one JSONL line to .ux/decisions.jsonl (schema locked at _v: 1). The recommender reads this on the next call and bumps candidates that previously shipped clean (lint_score >= 80 AND user_accepted = true). Cold-start safe (>=3 priors per bucket).
-- /ux-evolve auto-loop — lint → polish → re-lint until score >= 90 or plateau. 6 idempotent polish passes. Quality gate at 65.
+- /ux-evolve auto-loop: lint → polish → re-lint until score >= 90 or plateau. 6 idempotent polish passes. Quality gate at 65.
 - 145 deterministic anti-pattern rules (severity-weighted, sub-50ms scan).
 - 160 brand DESIGN specs (Apple, Stripe, Linear, Ferrari, Anthropic, ...).
 - Offline. No LLM in the engine. No telemetry. No network.
@@ -92,12 +92,12 @@ npm: npx uxskill init
 Happy to answer questions about the synthesizer math, the decisions ledger schema, why we rejected LLM-judged subjective aesthetic axes (ChatGPT pushed hard for these in review; we went deterministic), or anything else.
 ```
 
-### POST 4 — Reddit r/ClaudeAI
+### POST 4: Reddit r/ClaudeAI
 
-**Title:** `Just shipped v3.0 of ux-skill — a deterministic design synthesizer for Claude Code`
+**Title:** `Just shipped v3.0 of ux-skill, a deterministic design synthesizer for Claude Code`
 
 ```
-The big architectural shift: brand specs (Apple, Stripe, Linear, etc.) are no longer templates the recommender copies — they're training data the engine distills into a fresh design language per brief.
+The big architectural shift: brand specs (Apple, Stripe, Linear, etc.) are no longer templates the recommender copies. They're training data the engine distills into a fresh design language per brief.
 
 How it works:
 
@@ -123,9 +123,9 @@ Install: pip install uxskill or /plugin install ux@ux-skill
 Would love feedback on the axis interaction matrix (the documented conflict resolution between axes that compete for one token).
 ```
 
-### POST 5 — Reddit r/cursor
+### POST 5: Reddit r/cursor
 
-**Title:** `v3.0 of a design intelligence engine that also runs in Cursor — looking for early feedback`
+**Title:** `v3.0 of a design intelligence engine that also runs in Cursor, looking for early feedback`
 
 ```
 I shipped v3.0 of ux-skill today. It runs in Cursor through the standard Python install (pip install uxskill, then `uxskill init` auto-wires .cursorrules).
@@ -149,12 +149,12 @@ Install: pip install uxskill && uxskill init
 MIT. 223 tests pass. Looking for honest feedback before announcing more broadly.
 ```
 
-### POST 6 — Reddit r/webdev
+### POST 6: Reddit r/webdev
 
 **Title:** `Shipped a 145-rule deterministic linter that catches AI-generated design fingerprints before commit`
 
 ```
-This is part of ux-skill v3.0. The linter is a standalone regex scanner — no LLM, no API calls, runs in under 50ms on a 10K-line project.
+This is part of ux-skill v3.0. The linter is a standalone regex scanner: no LLM, no API calls, runs in under 50ms on a 10K-line project.
 
 What it catches:
 - Purple → blue 135° gradients (the #1 AI-generated tell)
@@ -182,12 +182,12 @@ MIT. 223 tests pass.
 
 ---
 
-## Day 1 (24 hours after launch) — second-wave posts
+## Day 1 (24 hours after launch): second-wave posts
 
-### POST 7 — X thread (7 tweets, post as thread)
+### POST 7: X thread (7 tweets, post as thread)
 
 ```
-1/ ux-skill v3.0 — THE BRAIN is live.
+1/ ux-skill v3.0 · THE BRAIN is live.
 
 The biggest architectural shift since v1: brand specs aren't templates anymore. They're training data.
 
@@ -207,9 +207,9 @@ Same brief → same output. Always.
 ```
 3/ Three modes, auto-dispatched:
 
-→ strict_brand — 100% named brand tokens (fastest)
-→ brand_anchor — 70% named + 30% axis-adapted (custom but fast)
-→ pure_synthesis — 8 axis-matching brands distilled (infinity space)
+→ strict_brand: 100% named brand tokens (fastest)
+→ brand_anchor: 70% named + 30% axis-adapted (custom but fast)
+→ pure_synthesis: 8 axis-matching brands distilled (infinity space)
 
 The brief decides. You don't have to.
 ```
@@ -252,7 +252,7 @@ GitHub: https://github.com/Laith0003/ux-skill
 Launch post: https://uxskill.laithjunaidy.com/blog/v3-the-brain-launch.html
 ```
 
-### POST 8 — LinkedIn (Day 1 follow-up, post 24 hours after Day 0)
+### POST 8: LinkedIn (Day 1 follow-up, post 24 hours after Day 0)
 
 ```
 24 hours since v3.0 of ux-skill shipped. A short technical breakdown of the part I'm proudest of: the axis interaction matrix.
@@ -263,13 +263,13 @@ Before v3.0, whichever axis the primitive consulted first won implicitly. The ou
 
 v3.0 documents the conflicts explicitly:
 
-→ dense + corporate (Bloomberg-school) → 4px spacing — density wins
-→ airy + corporate (luxury) → 12px spacing — formality wins
-→ sharp + corporate (NYT) → 2px radius — geometry wins outright
-→ soft + playful (Glossier) → 18px radius — geometry wins outright
+→ dense + corporate (Bloomberg-school) → 4px spacing: density wins
+→ airy + corporate (luxury) → 12px spacing: formality wins
+→ sharp + corporate (NYT) → 2px radius: geometry wins outright
+→ soft + playful (Glossier) → 18px radius: geometry wins outright
 → high motion + corporate → kinetic timings dampened by 25%
 
-The matrix lives in engine/synthesizer/interactions.py. Each function is tested against the named real-world archetype. Adding a new conflict requires registering the function name in a DOCUMENTED_INTERACTIONS tuple — silent ad-hoc rules are blocked by the test suite.
+The matrix lives in engine/synthesizer/interactions.py. Each function is tested against the named real-world archetype. Adding a new conflict requires registering the function name in a DOCUMENTED_INTERACTIONS tuple. Silent ad-hoc rules are blocked by the test suite.
 
 Why does this matter? It removes ambiguity. The same brief now produces predictable output regardless of which primitive's code path runs first. Reproducible across machines, filesystems, Python versions.
 
@@ -281,12 +281,12 @@ MIT. Free.
 
 ---
 
-## Day 2-3 — niche deep-dives
+## Day 2-3: niche deep-dives
 
-### POST 9 — Mastodon (Day 2)
+### POST 9: Mastodon (Day 2)
 
 ```
-ux-skill v3.0 — for the design + dev folks on the Fediverse.
+ux-skill v3.0, for the design + dev folks on the Fediverse.
 
 It's a Python design engine for AI coding tools. The thing I think you'll care about:
 
@@ -297,7 +297,7 @@ Same brief → same output. No LLM in the engine. Local decisions ledger learns 
 https://uxskill.laithjunaidy.com
 ```
 
-### POST 10 — Bluesky (Day 2)
+### POST 10: Bluesky (Day 2)
 
 ```
 shipped a design engine for AI coding tools that runs without any LLM in the generation path
@@ -309,14 +309,14 @@ pip install uxskill
 https://github.com/Laith0003/ux-skill
 ```
 
-### POST 11 — Product Hunt (Day 2 or 3 — schedule for a Tuesday-Thursday for best traffic)
+### POST 11: Product Hunt (Day 2 or 3, schedule for a Tuesday-Thursday for best traffic)
 
-**Tagline:** `Design intelligence for AI coding — a 7-axis synthesizer + closed feedback loop`
+**Tagline:** `Design intelligence for AI coding: a 7-axis synthesizer + closed feedback loop`
 
 **Description:**
 
 ```
-ux-skill v3.0 — THE BRAIN — is an open-source design intelligence engine for AI coding tools (Claude Code, Cursor, Windsurf + 14 more IDEs).
+ux-skill v3.0 · THE BRAIN is an open-source design intelligence engine for AI coding tools (Claude Code, Cursor, Windsurf + 14 more IDEs).
 
 Built different:
 • 7-axis design synthesizer (warmth/contrast/density/geometry/formality/motion/type_personality)
@@ -331,7 +331,7 @@ Built different:
 
 NO LLM in the engine. NO telemetry. MIT licensed.
 
-The trick: brand specs become training data for the synthesizer (not templates it copies from). Output is novel every call but grounded in real brand vocabulary. Same brief always produces the same output — reproducible across machines.
+The trick: brand specs become training data for the synthesizer (not templates it copies from). Output is novel every call but grounded in real brand vocabulary. Same brief always produces the same output. Reproducible across machines.
 
 If you ship products via Claude Code or Cursor, ux-skill is the layer between you and the assistant that catches AI design slop before commit AND learns from your local work history over time.
 
@@ -340,9 +340,9 @@ pip install uxskill
 
 ---
 
-## Day 7 — momentum post
+## Day 7: momentum post
 
-### POST 12 — X / Twitter (Day 7 retrospective)
+### POST 12: X / Twitter (Day 7 retrospective)
 
 ```
 One week since ux-skill v3.0 shipped. Quick numbers:
@@ -364,7 +364,7 @@ https://github.com/Laith0003/ux-skill
 
 ---
 
-## Hashtag pool — use 3-5 per platform
+## Hashtag pool: use 3-5 per platform
 
 | Platform | Recommended |
 |---|---|
@@ -402,12 +402,12 @@ What I can do is keep the posts updated as numbers move (star count, test count,
 
 ## Pre-flight checklist (run before Day 0)
 
-- [ ] Homepage screenshot ready (1200×630 OG image — already exists at /og/home.png)
-- [ ] GitHub release notes published (DONE — https://github.com/Laith0003/ux-skill/releases/tag/v3.0.0)
-- [ ] PyPI page shows v3.0.0 (TODO — needs `pip publish`)
-- [ ] npm page shows v3.0.0 (TODO — needs `npm publish`)
+- [ ] Homepage screenshot ready (1200×630 OG image, already exists at /og/home.png)
+- [ ] GitHub release notes published (DONE, https://github.com/Laith0003/ux-skill/releases/tag/v3.0.0)
+- [ ] PyPI page shows v3.0.0 (TODO, needs `pip publish`)
+- [ ] npm page shows v3.0.0 (TODO, needs `npm publish`)
 - [ ] CHANGELOG.md top entry is v3.0.0 (DONE)
-- [ ] README.md hero says "v3.0.0 stable — THE BRAIN" (DONE)
-- [ ] Verify uxskill.laithjunaidy.com loads (DONE — Cloudflare CDN cached)
+- [ ] README.md hero says "v3.0.0 stable · THE BRAIN" (DONE)
+- [ ] Verify uxskill.laithjunaidy.com loads (DONE, Cloudflare CDN cached)
 
-Last two TODOs (PyPI + npm publish) need YOUR sign-off per Standing Rule #9 — I'll prep the commands when you say apply.
+Last two TODOs (PyPI + npm publish) need YOUR sign-off per Standing Rule #9. I'll prep the commands when you say apply.

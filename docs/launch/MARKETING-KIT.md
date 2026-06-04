@@ -1,4 +1,4 @@
-# Marketing kit — paste-ready blurbs for every channel
+# Marketing kit: paste-ready blurbs for every channel
 
 Copy any block below verbatim. Channels are ranked from highest-leverage (HN, awesome-lists,
 Reddit r/ClaudeAI) to lower-leverage but still worth doing (LinkedIn, niche communities).
@@ -7,20 +7,20 @@ The numbers throughout this kit are real. If they shift in v2.1+, update this do
 
 ---
 
-## Hacker News — Show HN (use after karma builds; needs >7 days of regular HN activity)
+## Hacker News: Show HN (use after karma builds; needs >7 days of regular HN activity)
 
 **Title (76 chars, under HN's 80 limit):**
 ```
-Show HN: ux-skill – Python engine for UX in AI coding, 17 IDEs, 1,243 entries
+Show HN: ux-skill, a Python engine for UX in AI coding, 17 IDEs, 1,243 entries
 ```
 
-**Self-comment (first reply — drop ~60 seconds after submission):**
+**Self-comment (first reply, drop ~60 seconds after submission):**
 ```
 Solo founder. v2.0.0-alpha.1 shipped today.
 
 Background: every popular Claude UX skill on GitHub today is either a catalog
-(ui-ux-pro-max-skill — 84k stars, BM25 over CSV), an environment (nexu-io/open-design — 54k,
-Node + preview), or a taste primer (Leonxlnx/taste-skill — 25k, anti-slop). I borrowed the
+(ui-ux-pro-max-skill, 84k stars, BM25 over CSV), an environment (nexu-io/open-design, 54k,
+Node + preview), or a taste primer (Leonxlnx/taste-skill, 25k, anti-slop). I borrowed the
 recommender pattern from Pro Max and extended in four directions none of them ship:
 
   - 35 deterministic regex anti-pattern rules (no LLM, runs in CI)
@@ -32,7 +32,7 @@ Plus 998 total entries across 12 JSON manifests, a 22-command pipeline (frame �
 design → audit → lint → fix → polish → case-study), 5 sub-agents, and a 10-field mandatory
 discovery before any generation.
 
-Cross-IDE — runs in 17 environments via `pip install uxskill` or `npx uxskill init`. Same
+Cross-IDE: runs in 17 environments via `pip install uxskill` or `npx uxskill init`. Same
 Python engine under each. MIT, no telemetry, no account.
 
 Honest disclosure: we're at 14 stars vs 84k for the leader. This is an architecture argument,
@@ -54,7 +54,7 @@ Looking for: the 36th AI design fingerprint I missed in the linter. Reply with o
 
 **Title:**
 ```
-ux-skill v2 — Python engine that catches the AI design fingerprints in your Cursor/Claude/Windsurf output
+ux-skill v2, a Python engine that catches the AI design fingerprints in your Cursor/Claude/Windsurf output
 ```
 
 **Body:**
@@ -85,7 +85,7 @@ MIT, no telemetry, solo open-source. Feedback welcome.
 
 ---
 
-## Twitter / X — thread
+## Twitter / X: thread
 
 **Tweet 1:**
 ```
@@ -147,7 +147,7 @@ repo: https://github.com/Laith0003/ux-skill
 ## LinkedIn post
 
 ```
-Released ux-skill v2 — a Python design-intelligence engine for AI coding.
+Released ux-skill v2, a Python design-intelligence engine for AI coding.
 
 The problem: every AI coding tool (Claude Code, Cursor, Windsurf, Copilot, …) tends to produce the same look. Inter as display. Purple-to-blue gradients. Three identical cards in every hero. "John Doe" placeholders. The fingerprints are remarkably consistent across tools because the defaults are.
 
@@ -164,9 +164,9 @@ The numbers, vs. the closest comparable competitor (UI UX Pro Max):
 • 148 components (they have none structured)
 • 57 motion presets (they have none)
 • 35 anti-pattern regex rules (they have no linter)
-• 72 real brand DESIGN.md specs — Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, and 59 more (they have no brand layer)
+• 72 real brand DESIGN.md specs: Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, and 59 more (they have no brand layer)
 
-Cross-IDE — runs in 17 environments via pip install uxskill or npx uxskill init. MIT licensed, no telemetry, no account.
+Cross-IDE: runs in 17 environments via pip install uxskill or npx uxskill init. MIT licensed, no telemetry, no account.
 
 Side-by-side compare page (13 plugins, every dimension, honest "where we lose" section):
 https://uxskill.laithjunaidy.com/compare.html
@@ -178,18 +178,18 @@ Repo: https://github.com/Laith0003/ux-skill
 
 ---
 
-## Awesome-list PR — entry to add
+## Awesome-list PR: entry to add
 
 For lists like `hesreallyhim/awesome-claude-code`, `langgptai/awesome-claude-code`, `klaufel/awesome-design-systems`:
 
 **Entry (alphabetical position):**
 ```
-- [ux-skill](https://github.com/Laith0003/ux-skill) — Design intelligence engine for AI coding. 5-parallel-search Python recommender over 1,243 structured entries (84 styles, 176 palettes, 148 components, 72 brand specs). 35-rule anti-AI-slop linter runs in CI. Cross-IDE: pip + npx, runs in 17 environments. MIT.
+- [ux-skill](https://github.com/Laith0003/ux-skill): Design intelligence engine for AI coding. 5-parallel-search Python recommender over 1,243 structured entries (84 styles, 176 palettes, 148 components, 72 brand specs). 35-rule anti-AI-slop linter runs in CI. Cross-IDE: pip + npx, runs in 17 environments. MIT.
 ```
 
 ---
 
-## Product Hunt — copy
+## Product Hunt: copy
 
 **Tagline (60 char limit):**
 ```
@@ -206,13 +206,13 @@ The Python engine for design choices in AI coding output
 **First comment:**
 ```
 Solo founder. The first version was a markdown skill for Claude Code. v2 pivots to a Python
-engine with queryable JSON manifests — same architecture pattern as UI UX Pro Max but going
+engine with queryable JSON manifests, the same architecture pattern as UI UX Pro Max but going
 further on every numeric dimension (1,243 entries vs ~600) and adding four categories they
 don't have: a 35-rule anti-AI-slop linter, 57 motion presets, 148 components, and 72 real
 brand DESIGN.md specs.
 
 The engine runs deterministic (regex + lookup), so same input always gives same output. The
-linter runs in CI with no LLM call — wire it into pre-commit hooks to block AI fingerprints
+linter runs in CI with no LLM call. Wire it into pre-commit hooks to block AI fingerprints
 before they reach a PR.
 
 Compare page (the honest side-by-side vs 13 other UX plugins, including a "where we lose"
@@ -230,12 +230,12 @@ Looking for: design fingerprints I missed in the 35-rule linter. Reply with one 
 
 ---
 
-## Discord communities — bot/community post
+## Discord communities: bot/community post
 
 For Cursor Discord, Anthropic Discord, design-tool-makers Discord:
 
 ```
-Hey — shipped ux-skill v2. Python engine for design choices in AI-coding output.
+Hey, shipped ux-skill v2. Python engine for design choices in AI-coding output.
 
 Catches the fingerprints (Inter as display, purple gradients, three cards, John Doe) via
 35 deterministic regex rules + a 5-parallel-search recommender over 1,243 structured entries.
@@ -249,21 +249,21 @@ MIT, solo, no telemetry. Welcoming feedback especially on missing slop fingerpri
 
 ---
 
-## Email outreach — for newsletter pickups (TLDR, BetaList, Console.dev)
+## Email outreach: for newsletter pickups (TLDR, BetaList, Console.dev)
 
 **Subject:**
 ```
-Submission: ux-skill v2 — Python design engine for AI coding (1,243 entries, 17 IDEs, MIT)
+Submission: ux-skill v2, a Python design engine for AI coding (1,243 entries, 17 IDEs, MIT)
 ```
 
 **Body:**
 ```
-Hi —
+Hi,
 
 Submitting ux-skill v2.0.0-alpha.1 for consideration. Short pitch and the public links below.
 
 The shape: every AI coding tool (Claude Code, Cursor, Windsurf, Copilot, etc.) tends to
-produce the same defaults — Inter font, purple gradients, three identical cards, fake
+produce the same defaults: Inter font, purple gradients, three identical cards, fake
 placeholder names. ux-skill is a Python design-intelligence engine that catches those
 patterns deterministically and recommends a deliberate alternative based on industry,
 audience, tone, and constraints.
@@ -297,16 +297,16 @@ Laith
 
 ---
 
-## Channel priority — where to spend time first
+## Channel priority: where to spend time first
 
-1. **HN Show HN** (highest leverage, needs karma — 7+ days of normal HN activity first)
+1. **HN Show HN** (highest leverage, needs karma, 7+ days of normal HN activity first)
 2. **Twitter thread** (5 tweets above, post Tuesday 9am ET)
 3. **Reddit r/ClaudeAI + r/cursor** (one post each, 24h apart)
 4. **awesome-claude-code PR** (use the entry text above)
-5. **Discord — Cursor + Anthropic + design-tool Discords** (the bot-friendly version)
+5. **Discord: Cursor + Anthropic + design-tool Discords** (the bot-friendly version)
 6. **Product Hunt** (schedule for Tuesday/Wednesday 12:01 AM PST)
-7. **LinkedIn** (post above — Tuesday-Thursday business hours)
-8. **Newsletter outreach** (the email template — TLDR Developer, Console.dev, BetaList)
+7. **LinkedIn** (post above, Tuesday-Thursday business hours)
+8. **Newsletter outreach** (the email template: TLDR Developer, Console.dev, BetaList)
 
 Realistic outcome over 2-4 weeks if executed:
 - ~500-2000 GitHub stars

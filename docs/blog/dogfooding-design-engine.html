@@ -11,7 +11,7 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dogfooding ux-skill — bugs we found by using our own design engine</title>
+  <title>Dogfooding ux-skill · bugs we found by using our own design engine</title>
   <meta name="description" content="We ran ux-skill on its own homepage brief. The engine returned the Claude clone. Two bugs filed against ourselves, both fixed, and the page that now passes its own linter cleanly.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/dogfooding-design-engine.html">
   <meta name="theme-color" content="#07080a">
@@ -20,12 +20,12 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/dogfooding-design-engine.html">
-  <meta property="og:title" content="Dogfooding ux-skill — bugs we found by using our own design engine">
+  <meta property="og:title" content="Dogfooding ux-skill · bugs we found by using our own design engine">
   <meta property="og:description" content="The engine returned Cormorant + Cream. We recognized it as the Claude clone aesthetic. Filed two bugs, fixed both, redesigned the homepage. The whole war story.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/dogfooding-design-engine.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — dogfooding-design-engine">
+  <meta property="og:image:alt" content="ux-skill · dogfooding-design-engine">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/dogfooding-design-engine.png">
 
   <meta name="twitter:card" content="summary_large_image">
@@ -40,7 +40,7 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Dogfooding ux-skill — bugs we found by using our own design engine",
+    "headline": "Dogfooding ux-skill · bugs we found by using our own design engine",
     "description": "We ran ux-skill on its own homepage brief. The engine returned the Claude clone. Two bugs filed against ourselves, both fixed.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
@@ -62,7 +62,7 @@
   }
   </script>
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "Dogfooding ux-skill — bugs we found by using our own design engine", "item": "https://uxskill.laithjunaidy.com/blog/dogfooding-design-engine.html"}]}
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "Dogfooding ux-skill · bugs we found by using our own design engine", "item": "https://uxskill.laithjunaidy.com/blog/dogfooding-design-engine.html"}]}
 </script>
 
   <style>
@@ -364,13 +364,13 @@
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
        and max-width: 100%; carousels that need their own horizontal scroll
-       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves —
+       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves:
        overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
     html, body {
       overflow-x: clip;
       max-width: 100%;
     }
-    /* Defensive — make sure no section, image, or table forces width >100%. */
+    /* Defensive: make sure no section, image, or table forces width >100%. */
     section, header, footer, main, article { max-width: 100vw; }
     img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
     table { max-width: 100%; }
@@ -515,15 +515,15 @@
 <div class="wrap">
     <article>
       <span class="eyebrow">Blog · Story · 2026-05-28</span>
-      <h1>Dogfooding ux-skill — bugs we found by <span class="accent">using our own engine</span>.</h1>
+      <h1>Dogfooding ux-skill: bugs we found by <span class="accent">using our own engine</span>.</h1>
       <p class="lede">
-        <strong>You don't really know your tool until you build with it.</strong> Two weeks ago we needed a new homepage. We did the obvious thing — we ran our own recommender against our own brief. The system it returned was Cormorant Garamond on cream, with a warm sienna accent. Which is, almost exactly, the claude.ai landing. Our engine had recommended the Claude clone. Here's the war story, the two bugs we filed against ourselves, and the homepage that now passes its own linter cleanly.
+        <strong>You don't really know your tool until you build with it.</strong> Two weeks ago we needed a new homepage. We did the obvious thing: we ran our own recommender against our own brief. The system it returned was Cormorant Garamond on cream, with a warm sienna accent. Which is, almost exactly, the claude.ai landing. Our engine had recommended the Claude clone. Here's the war story, the two bugs we filed against ourselves, and the homepage that now passes its own linter cleanly.
       </p>
       <p class="byline">By the ux-skill team · 6 min read · MIT-licensed open source</p>
 
       <h2>The setup</h2>
       <p>
-        The old <code>uxskill.laithjunaidy.com</code> was a workmanlike cream-canvas page — Cormorant for display, Inter for body, a single warm sienna accent at <code>#ec4899</code>. It got the job done for the alpha launch. By week three we'd seen a half-dozen tools in the same category ship pages with the same shape: warm cream, serif display, single warm accent. The visual language had become its own fingerprint — the Claude-tool aesthetic — and we were sitting inside it.
+        The old <code>uxskill.laithjunaidy.com</code> was a workmanlike cream-canvas page: Cormorant for display, Inter for body, a single warm sienna accent at <code>#ec4899</code>. It got the job done for the alpha launch. By week three we'd seen a half-dozen tools in the same category ship pages with the same shape: warm cream, serif display, single warm accent. The visual language had become its own fingerprint (the Claude-tool aesthetic) and we were sitting inside it.
       </p>
       <p>
         Our project's stated reason for existing is to catch AI fingerprints. We needed to mean it on our own surface. So we ran the discovery protocol on ourselves.
@@ -545,12 +545,12 @@
   <span class="k">"region"</span>: <span class="s">"global"</span>
 }</pre>
       <p>
-        We deliberately left "calm" and "editorial" in <code>tone</code> because both are true — and because we wanted to see if the engine would handle the tension between "editorial" and "cinematic" (which lean different directions).
+        We deliberately left "calm" and "editorial" in <code>tone</code> because both are true, and because we wanted to see if the engine would handle the tension between "editorial" and "cinematic" (which lean different directions).
       </p>
 
-      <h2>The first run — and the cold realization</h2>
+      <h2>The first run, and the cold realization</h2>
       <p>
-        We ran <code>/ux-recommend</code>. Five parallel searches — industry, style, palette, type, motion — composed into a system. Twelve seconds later, the engine returned:
+        We ran <code>/ux-recommend</code>. Five parallel searches (industry, style, palette, type, motion) composed into a system. Twelve seconds later, the engine returned:
       </p>
       <pre class="code">$ uxskill recommend --frame .ux/last-frame.json
 
@@ -561,42 +561,42 @@
   motion:    fade-up-12px, lift-2px
   brand:     none applied</pre>
       <p>
-        Cream and sienna. Cormorant. The same surface as the old homepage. The same surface as claude.ai. The recommender had looked at our brief — "editorial, calm, developer tool" — and reached for the highest-similarity match, which happened to be the dominant aesthetic in the AI-tools cohort.
+        Cream and sienna. Cormorant. The same surface as the old homepage. The same surface as claude.ai. The recommender had looked at our brief ("editorial, calm, developer tool") and reached for the highest-similarity match, which happened to be the dominant aesthetic in the AI-tools cohort.
       </p>
       <p>
-        The recommendation wasn't wrong on its face. Cormorant on cream is a legitimate editorial pairing. But it was wrong for <em>us</em>, because it fingerprinted us as part of a cluster we explicitly exist to dilute. The forcing question wasn't "is this a nice system?" — it was "would a careful viewer recognize this as just another Claude-tool landing?" Yes, they would.
+        The recommendation wasn't wrong on its face. Cormorant on cream is a legitimate editorial pairing. But it was wrong for <em>us</em>, because it fingerprinted us as part of a cluster we explicitly exist to dilute. The forcing question wasn't "is this a nice system?" It was "would a careful viewer recognize this as just another Claude-tool landing?" Yes, they would.
       </p>
       <p>
         So we filed two bugs against ourselves.
       </p>
 
-      <h2>Bug 1 — editorial-industry tag over-weighted Cormorant</h2>
+      <h2>Bug 1: editorial-industry tag over-weighted Cormorant</h2>
 
       <div class="bug-card">
         <div class="bug-id">ux-skill #engine-67</div>
         <h4>The "editorial" tone tag biases Cormorant over Fraunces</h4>
         <p>
-          Tracing the recommender's lane on the <em>type</em> search: with <code>tone: editorial</code> in the brief, the type-pair scorer added a <code>+0.18</code> bonus to any pair where the display face was a humanist garalde serif (Cormorant, Sabon, Adobe Garamond). Fraunces — which is a contemporary variable revival with a <code>SOFT</code> axis — was tagged as "geometric-revival serif" in the type manifest, missing the editorial bonus entirely. Result: Cormorant ranked first by 0.21, even though Fraunces had a higher score on every other dimension (variable axes, modern proof, multi-script support).
+          Tracing the recommender's lane on the <em>type</em> search: with <code>tone: editorial</code> in the brief, the type-pair scorer added a <code>+0.18</code> bonus to any pair where the display face was a humanist garalde serif (Cormorant, Sabon, Adobe Garamond). Fraunces, which is a contemporary variable revival with a <code>SOFT</code> axis, was tagged as "geometric-revival serif" in the type manifest, missing the editorial bonus entirely. Result: Cormorant ranked first by 0.21, even though Fraunces had a higher score on every other dimension (variable axes, modern proof, multi-script support).
         </p>
         <p>
           <strong>Why it matters:</strong> "editorial" in 2026 should not collapse to 1990s book-design serifs. The tone tag was too narrow.
         </p>
         <div class="fix">
           <span class="label">Fix</span>
-          Added a <code>contemporary-editorial</code> sub-tag to the type-pair manifest. Fraunces, Recoleta, Migra, and Tobias all carry it. The recommender now branches on the <em>cinematic / contemporary</em> signal in the brief — if either is present alongside <code>editorial</code>, the contemporary tag carries the bonus instead. Cormorant still ranks first for pure heritage-editorial briefs (the project is for a print magazine, a literary publication, a foundation).
+          Added a <code>contemporary-editorial</code> sub-tag to the type-pair manifest. Fraunces, Recoleta, Migra, and Tobias all carry it. The recommender now branches on the <em>cinematic / contemporary</em> signal in the brief: if either is present alongside <code>editorial</code>, the contemporary tag carries the bonus instead. Cormorant still ranks first for pure heritage-editorial briefs (the project is for a print magazine, a literary publication, a foundation).
         </div>
       </div>
 
-      <h2>Bug 2 — palette scorer preferred cream over near-black for "calm"</h2>
+      <h2>Bug 2: palette scorer preferred cream over near-black for "calm"</h2>
 
       <div class="bug-card">
         <div class="bug-id">ux-skill #engine-68</div>
         <h4>"Calm" routed to warm-cream palettes, ignoring near-black charcoal options</h4>
         <p>
-          The palette scorer treated <code>tone: calm</code> as a near-synonym for "warm pastels" — cream, ivory, sand, oat. It correctly excluded the "loud" cluster (neon, deep saturation, high contrast) but it also excluded the "calm dark" cluster — charcoal canvases with restrained accents, the language of nighttime cinema, art-house posters, late-issue Apple keynotes. Those palettes exist in the manifest (<code>charcoal-amber</code>, <code>obsidian-mint</code>, <code>graphite-citrine</code>) but the <code>calm</code> tag was binary-coded as "light canvas required."
+          The palette scorer treated <code>tone: calm</code> as a near-synonym for "warm pastels": cream, ivory, sand, oat. It correctly excluded the "loud" cluster (neon, deep saturation, high contrast) but it also excluded the "calm dark" cluster of charcoal canvases with restrained accents, the language of nighttime cinema, art-house posters, late-issue Apple keynotes. Those palettes exist in the manifest (<code>charcoal-amber</code>, <code>obsidian-mint</code>, <code>graphite-citrine</code>) but the <code>calm</code> tag was binary-coded as "light canvas required."
         </p>
         <p>
-          <strong>Why it matters:</strong> calm is not a function of luminance. A dark canvas can be calmer than a cream one — particularly with editorial pacing and a single restrained accent.
+          <strong>Why it matters:</strong> calm is not a function of luminance. A dark canvas can be calmer than a cream one, particularly with editorial pacing and a single restrained accent.
         </p>
         <div class="fix">
           <span class="label">Fix</span>
@@ -604,7 +604,7 @@
         </div>
       </div>
 
-      <h2>The second run — after both fixes</h2>
+      <h2>The second run, after both fixes</h2>
       <p>
         We re-ran the recommender with the two manifest patches in. The output:
       </p>
@@ -630,7 +630,7 @@
 $ uxskill lint docs/index.html --threshold medium
 <span class="n">[OK]</span> Scanned 1 file in 41ms · 0 findings at threshold medium</pre>
       <p>
-        Zero findings at <code>high</code>, zero at <code>medium</code>, one at <code>low</code> (a decorative SVG missing <code>aria-hidden</code> — suppressed inline with a documented exemption since the SVG is the brand mark and is announced by the surrounding <code>aria-label</code>). The page passes its own linter.
+        Zero findings at <code>high</code>, zero at <code>medium</code>, one at <code>low</code> (a decorative SVG missing <code>aria-hidden</code>, suppressed inline with a documented exemption since the SVG is the brand mark and is announced by the surrounding <code>aria-label</code>). The page passes its own linter.
       </p>
 
       <blockquote>
@@ -641,22 +641,22 @@ $ uxskill lint docs/index.html --threshold medium
 
       <h3>1. The brief is the bug</h3>
       <p>
-        Both bugs were tagging-and-scoring bugs in the manifests. The recommender code was fine. What was wrong was how we'd taxonomized <em>editorial</em> and <em>calm</em> — too narrow on the first, too coupled to luminance on the second. Most ux-skill bugs in the next six months will probably look the same shape: the engine ran fine, but the tags it ran over were lazy. The manifest curation is the real product surface.
+        Both bugs were tagging-and-scoring bugs in the manifests. The recommender code was fine. What was wrong was how we'd taxonomized <em>editorial</em> and <em>calm</em>: too narrow on the first, too coupled to luminance on the second. Most ux-skill bugs in the next six months will probably look the same shape: the engine ran fine, but the tags it ran over were lazy. The manifest curation is the real product surface.
       </p>
 
       <h3>2. The recommender needs a "fingerprint check" pass</h3>
       <p>
-        Even with both bugs fixed, the engine could still return a recommendation that — on its own merits — is fine but, in 2026, fingerprints as "AI tool." We're prototyping a post-recommendation step: after the system is composed, the recommender checks the chosen style and palette against a manifest of <em>current category clusters</em> (AI tools, fintech, productivity, etc.) and surfaces a flag if the composition matches the dominant pattern of the chosen industry. Tracked on <a href="/roadmap.html" class="link">the roadmap</a>.
+        Even with both bugs fixed, the engine could still return a recommendation that, on its own merits, is fine but, in 2026, fingerprints as "AI tool." We're prototyping a post-recommendation step: after the system is composed, the recommender checks the chosen style and palette against a manifest of <em>current category clusters</em> (AI tools, fintech, productivity, etc.) and surfaces a flag if the composition matches the dominant pattern of the chosen industry. Tracked on <a href="/roadmap.html" class="link">the roadmap</a>.
       </p>
 
       <h3>3. The forbidden field is not enough</h3>
       <p>
-        Our brief had <code>forbidden: ["inter-as-display", "purple-to-blue-gradient", "three-equal-cards"]</code>. The recommender obeyed all three. But it still returned a system that read as derivative — because the AI fingerprint isn't only the three loud defaults, it's also the quieter cluster of "what every Claude-adjacent tool looks like right now." We need a way to express "don't look like the current cohort." That's what the post-recommendation flag is for.
+        Our brief had <code>forbidden: ["inter-as-display", "purple-to-blue-gradient", "three-equal-cards"]</code>. The recommender obeyed all three. But it still returned a system that read as derivative, because the AI fingerprint isn't only the three loud defaults, it's also the quieter cluster of "what every Claude-adjacent tool looks like right now." We need a way to express "don't look like the current cohort." That's what the post-recommendation flag is for.
       </p>
 
       <h2>The next dogfood pass</h2>
       <p>
-        We're running the same exercise on the comparison page, the FAQ, the about page, and the roadmap — every public surface gets the new brief, the new recommender, and the linter. Anything that doesn't pass gets a bug filed and a fix landed. The blog posts are intentionally being held on the old Cormorant + cream brand for reading consistency across the existing ten, but the rest of the site converges on the new language.
+        We're running the same exercise on the comparison page, the FAQ, the about page, and the roadmap. Every public surface gets the new brief, the new recommender, and the linter. Anything that doesn't pass gets a bug filed and a fix landed. The blog posts are intentionally being held on the old Cormorant + cream brand for reading consistency across the existing ten, but the rest of the site converges on the new language.
       </p>
       <p>
         We'll write up the comparison page and roadmap re-skin separately once they ship.
@@ -665,26 +665,26 @@ $ uxskill lint docs/index.html --threshold medium
       <div class="honesty">
         <div class="label">Honest scope</div>
         <h4>Two bugs is one snapshot. There are more.</h4>
-        <p>The recommender's tagging assumptions came from our own taste, and our taste has blind spots. We expect to find more bugs as we run the engine on more briefs. We file them publicly when we find them, and we fix them in the manifests — not the code — so the fixes are auditable as diffs to JSON, not as changes to recommendation logic.</p>
+        <p>The recommender's tagging assumptions came from our own taste, and our taste has blind spots. We expect to find more bugs as we run the engine on more briefs. We file them publicly when we find them, and we fix them in the manifests (not the code) so the fixes are auditable as diffs to JSON, not as changes to recommendation logic.</p>
         <p>If you find a bug in the manifest tagging (a tag that's too narrow, a coupling that's too tight, a missing facet), the project is open. <a href="https://github.com/Laith0003/ux-skill/issues" class="link">File an issue</a>, ideally with a brief that reproduces.</p>
       </div>
 
       <h2>What we'd tell another small team</h2>
       <p>
-        If you ship a design tool — a recommender, a linter, a generator — the only honest test is whether your own surfaces use it. The first time we ran our engine on our own homepage we found two bugs in 12 minutes. The second time we ran it (after the fixes) it returned a system we wouldn't have invented on taste alone, and the page that came out of it is stronger than the one before.
+        If you ship a design tool (a recommender, a linter, a generator) the only honest test is whether your own surfaces use it. The first time we ran our engine on our own homepage we found two bugs in 12 minutes. The second time we ran it (after the fixes) it returned a system we wouldn't have invented on taste alone, and the page that came out of it is stronger than the one before.
       </p>
       <p>
-        That's the case for dogfooding in this category. Not "we use our tool because the marketing is convenient" — but "we use our tool because the engine sees patterns we miss, and the only way to catch the bugs in the engine is to be the user with the strongest feedback loop."
+        That's the case for dogfooding in this category. Not "we use our tool because the marketing is convenient," but "we use our tool because the engine sees patterns we miss, and the only way to catch the bugs in the engine is to be the user with the strongest feedback loop."
       </p>
 
       <h2>Related reading</h2>
       <ul>
-        <li><a href="/blog/dark-editorial-cinema-design.html" class="link">Dark editorial cinema — the language the engine landed on, post-fix</a>.</li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter for AI coding — the 51 rules the homepage now passes</a>.</li>
-        <li><a href="/blog/python-design-system-generator.html" class="link">Python design system generator — how the recommender composes a system</a>.</li>
-        <li><a href="/blog/motion-presets-framer-gsap-css.html" class="link">57 motion presets — including the scroll-pin-hold the new homepage uses</a>.</li>
-        <li><a href="/about.html" class="link">About — the project and the maker</a>.</li>
-        <li><a href="/roadmap.html" class="link">Roadmap — the post-recommendation fingerprint check is on it</a>.</li>
+        <li><a href="/blog/dark-editorial-cinema-design.html" class="link">Dark editorial cinema: the language the engine landed on, post-fix</a>.</li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter for AI coding: the 51 rules the homepage now passes</a>.</li>
+        <li><a href="/blog/python-design-system-generator.html" class="link">Python design system generator: how the recommender composes a system</a>.</li>
+        <li><a href="/blog/motion-presets-framer-gsap-css.html" class="link">57 motion presets: including the scroll-pin-hold the new homepage uses</a>.</li>
+        <li><a href="/about.html" class="link">About: the project and the maker</a>.</li>
+        <li><a href="/roadmap.html" class="link">Roadmap: the post-recommendation fingerprint check is on it</a>.</li>
       </ul>
     </article>
 
@@ -696,9 +696,9 @@ $ uxskill lint docs/index.html --threshold medium
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— or —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">or</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— or —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">or</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

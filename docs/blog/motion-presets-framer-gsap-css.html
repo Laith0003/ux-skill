@@ -11,8 +11,8 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>57 motion presets for AI coding — Framer Motion, GSAP, and CSS snippets</title>
-  <meta name="description" content="A queryable motion library — 57 presets, each with Framer Motion / GSAP / CSS snippets, prefers-reduced-motion handling, and performance notes. Pick the right engine per surface.">
+  <title>57 motion presets for AI coding · Framer Motion, GSAP, and CSS snippets</title>
+  <meta name="description" content="A queryable motion library: 57 presets, each with Framer Motion / GSAP / CSS snippets, prefers-reduced-motion handling, and performance notes. Pick the right engine per surface.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/motion-presets-framer-gsap-css.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -20,16 +20,16 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/motion-presets-framer-gsap-css.html">
-  <meta property="og:title" content="57 motion presets for AI coding — Framer Motion, GSAP, and CSS snippets">
+  <meta property="og:title" content="57 motion presets for AI coding · Framer Motion, GSAP, and CSS snippets">
   <meta property="og:description" content="The motion library AI coding tools never ship. Real snippets for the three dominant engines, with reduced-motion branches.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/motion-presets-framer-gsap-css.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — motion-presets-framer-gsap-css">
+  <meta property="og:image:alt" content="ux-skill · motion-presets-framer-gsap-css">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/motion-presets-framer-gsap-css.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="57 motion presets — Framer Motion, GSAP, CSS">
+  <meta name="twitter:title" content="57 motion presets · Framer Motion, GSAP, CSS">
   <meta name="twitter:description" content="Same preset, three engines, real snippets. Reduced-motion handling baked in. When to pick each engine.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,8 +40,8 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "57 motion presets for AI coding — Framer Motion, GSAP, and CSS snippets",
-    "description": "A queryable motion library — 57 presets, each with Framer Motion / GSAP / CSS snippets, prefers-reduced-motion handling, and performance notes.",
+    "headline": "57 motion presets for AI coding · Framer Motion, GSAP, and CSS snippets",
+    "description": "A queryable motion library: 57 presets, each with Framer Motion / GSAP / CSS snippets, prefers-reduced-motion handling, and performance notes.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -62,7 +62,7 @@
   }
   </script>
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "57 motion presets for AI coding — Framer Motion, GSAP, and CSS snippets", "item": "https://uxskill.laithjunaidy.com/blog/motion-presets-framer-gsap-css.html"}]}
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "57 motion presets for AI coding · Framer Motion, GSAP, and CSS snippets", "item": "https://uxskill.laithjunaidy.com/blog/motion-presets-framer-gsap-css.html"}]}
 </script>
 
   <style>
@@ -406,13 +406,13 @@
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
        and max-width: 100%; carousels that need their own horizontal scroll
-       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves —
+       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves:
        overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
     html, body {
       overflow-x: clip;
       max-width: 100%;
     }
-    /* Defensive — make sure no section, image, or table forces width >100%. */
+    /* Defensive: make sure no section, image, or table forces width >100%. */
     section, header, footer, main, article { max-width: 100vw; }
     img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
     table { max-width: 100%; }
@@ -557,9 +557,9 @@
 <div class="wrap">
     <article>
       <span class="eyebrow">Blog · Reference · 2026-05-28</span>
-      <h1>57 motion presets for AI coding — Framer Motion, GSAP, <span class="accent">and CSS</span>.</h1>
+      <h1>57 motion presets for AI coding: Framer Motion, GSAP, <span class="accent">and CSS</span>.</h1>
       <p class="lede">
-        <strong>Most AI coding tools have one motion default: fade-in-up, 600ms, on everything.</strong> That's the slop. ux-skill's motion manifest ships 57 named presets, each available as Framer Motion config, GSAP call, and raw CSS — with explicit <code>prefers-reduced-motion</code> branches and performance notes. Same intent, three engines, queryable as data. Here's the tour.
+        <strong>Most AI coding tools have one motion default: fade-in-up, 600ms, on everything.</strong> That's the slop. ux-skill's motion manifest ships 57 named presets, each available as Framer Motion config, GSAP call, and raw CSS, with explicit <code>prefers-reduced-motion</code> branches and performance notes. Same intent, three engines, queryable as data. Here's the tour.
       </p>
       <p class="byline">By the ux-skill team · 9 min read · MIT-licensed open source</p>
 
@@ -567,7 +567,7 @@
       <p>
         Pulled from <code>data/motion-presets.json</code>. Every preset has an <code>id</code>, a <code>name</code>, a category, an engine-agnostic <code>tokens</code> block (duration, easing, transform), and three engine-specific snippets ready to paste. Plus a reduced-motion branch and a performance note.
       </p>
-      <pre class="code"><span class="c">// data/motion-presets.json — entries[0]</span>
+      <pre class="code"><span class="c">// data/motion-presets.json: entries[0]</span>
 {
   <span class="k">"id"</span>: <span class="s">"fade-up-12px"</span>,
   <span class="k">"name"</span>: <span class="s">"Fade-Up 12px"</span>,
@@ -585,16 +585,16 @@
     <span class="k">"gsap"</span>: <span class="s">"gsap.from(el, { y: 12, opacity: 0, duration: 0.36, ease: 'expo.out' })"</span>,
     <span class="k">"css"</span>: <span class="s">"@keyframes fade-up-12 { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } } .fade-up-12 { animation: fade-up-12 360ms cubic-bezier(0.16, 1, 0.3, 1) both; }"</span>
   },
-  <span class="k">"reduced_motion"</span>: <span class="s">"instant — fade only, no transform"</span>,
-  <span class="k">"performance"</span>: <span class="s">"transform + opacity only — GPU composited"</span>
+  <span class="k">"reduced_motion"</span>: <span class="s">"instant: fade only, no transform"</span>,
+  <span class="k">"performance"</span>: <span class="s">"transform + opacity only: GPU composited"</span>
 }</pre>
       <p>
-        The <code>tokens</code> block is engine-agnostic and durable: when someone wants to add a fourth engine (Motion One, Anime.js, JS Web Animations API) the work is generating new snippets from those same tokens — not redoing the intent.
+        The <code>tokens</code> block is engine-agnostic and durable: when someone wants to add a fourth engine (Motion One, Anime.js, JS Web Animations API) the work is generating new snippets from those same tokens, not redoing the intent.
       </p>
 
       <h2>The 57 presets at a glance</h2>
       <p>
-        Eight categories, 57 entries. The breakdown matches the way a real product surface needs motion — not just entry animations.
+        Eight categories, 57 entries. The breakdown matches the way a real product surface needs motion, not just entry animations.
       </p>
       <div class="wrap-wide">
         <div class="table-wrap">
@@ -621,7 +621,7 @@
         </div>
       </div>
 
-      <h2>One preset, three engines — fade-up-12px</h2>
+      <h2>One preset, three engines: fade-up-12px</h2>
       <p>
         Here's the most-used Entry preset in all three forms, with the reduced-motion branch:
       </p>
@@ -668,7 +668,7 @@ gsap.from(el, {
   animation: fade-up-12 <span class="n">360ms</span> <span class="s">cubic-bezier(0.16, 1, 0.3, 1)</span> both;
 }
 
-<span class="c">/* Reduced motion — fade only, no transform */</span>
+<span class="c">/* Reduced motion: fade only, no transform */</span>
 <span class="k">@media</span> (prefers-reduced-motion: reduce) {
   <span class="k">.fade-up-12</span> {
     animation: <span class="s">fade-in-200ms</span> linear both;
@@ -681,9 +681,9 @@ gsap.from(el, {
         Every preset declares a <code>reduced_motion</code> contract. Three categories of behavior, depending on what the motion is doing:
       </p>
       <ul>
-        <li><strong>"no change"</strong> — the preset is already opacity-only or covers a state transition that the user expects. Keep as is.</li>
-        <li><strong>"instant — fade only, no transform"</strong> — keep the opacity arc, drop the transform. The semantics survive; the velocity doesn't.</li>
-        <li><strong>"omit — render final state immediately"</strong> — for decorative attention-grabbers like <code>pulse-soft</code> and <code>glow-cycle</code>, the motion is dropped entirely.</li>
+        <li><strong>"no change"</strong>: the preset is already opacity-only or covers a state transition that the user expects. Keep as is.</li>
+        <li><strong>"instant: fade only, no transform"</strong>: keep the opacity arc, drop the transform. The semantics survive; the velocity doesn't.</li>
+        <li><strong>"omit: render final state immediately"</strong>: for decorative attention-grabbers like <code>pulse-soft</code> and <code>glow-cycle</code>, the motion is dropped entirely.</li>
       </ul>
       <p>
         The linter has a rule (<code>fade-in-up-no-reduced-motion</code>) that fires on any animation using <code>translate</code> without a <code>@media (prefers-reduced-motion: reduce)</code> branch nearby. <a href="/blog/regex-linter-for-ai-coding.html" class="link">The linter's 51 rules</a> includes four motion-category rules; this is the one that catches the AI default most often.
@@ -693,19 +693,19 @@ gsap.from(el, {
 
       <div class="engine-pick">
         <h4>Pick CSS when</h4>
-        <p>The motion is declarative, doesn't need to be controlled by state, and the duration is under 1.2 seconds. CSS keyframes are the cheapest to ship (no JS, no library, no runtime cost) and the most performant — the browser runs them on the compositor thread. Use CSS for Entry animations, Hover lifts, Press states, basic Attention, and most Exit animations.</p>
+        <p>The motion is declarative, doesn't need to be controlled by state, and the duration is under 1.2 seconds. CSS keyframes are the cheapest to ship (no JS, no library, no runtime cost) and the most performant: the browser runs them on the compositor thread. Use CSS for Entry animations, Hover lifts, Press states, basic Attention, and most Exit animations.</p>
         <p><strong>Bytes shipped:</strong> zero. <strong>Composite cost:</strong> minimal. <strong>Control surface:</strong> minimal.</p>
       </div>
 
       <div class="engine-pick">
         <h4>Pick Framer Motion when</h4>
-        <p>The animation is bound to React state — a route change, a tab switch, a drawer open, a layout shift. Framer Motion's <code>AnimatePresence</code> and <code>layoutId</code> patterns are unmatched for component-tree animations. Also pick it when you need gestures (drag, hover with imperative control) or layout animations (FLIP).</p>
+        <p>The animation is bound to React state: a route change, a tab switch, a drawer open, a layout shift. Framer Motion's <code>AnimatePresence</code> and <code>layoutId</code> patterns are unmatched for component-tree animations. Also pick it when you need gestures (drag, hover with imperative control) or layout animations (FLIP).</p>
         <p><strong>Bytes shipped:</strong> ~35KB gzipped (tree-shakeable). <strong>Composite cost:</strong> low. <strong>Control surface:</strong> deep React integration.</p>
       </div>
 
       <div class="engine-pick">
         <h4>Pick GSAP when</h4>
-        <p>The animation is a timeline — multiple elements with overlapping cues, scroll-driven scrubbing, complex easing, or staggers. GSAP's ScrollTrigger is the canonical tool for scroll-pinned cinema (the <code>scroll-pin-hold</code> preset). It's also the right pick when the motion needs to run outside React (vanilla JS, Svelte, Astro islands).</p>
+        <p>The animation is a timeline: multiple elements with overlapping cues, scroll-driven scrubbing, complex easing, or staggers. GSAP's ScrollTrigger is the canonical tool for scroll-pinned cinema (the <code>scroll-pin-hold</code> preset). It's also the right pick when the motion needs to run outside React (vanilla JS, Svelte, Astro islands).</p>
         <p><strong>Bytes shipped:</strong> ~40KB gzipped core, +15KB ScrollTrigger. <strong>Composite cost:</strong> moderate (runs on rAF). <strong>Control surface:</strong> timeline-first.</p>
       </div>
 
@@ -714,21 +714,21 @@ gsap.from(el, {
         For most product surfaces, the right split is: <strong>CSS for 70% of the motion</strong> (entry, hover, press, simple transitions), <strong>Framer Motion for 20%</strong> (route, drawer, layout), <strong>GSAP for 10%</strong> (scroll cinema, complex timelines). If your codebase is 90% Framer Motion, you're probably paying React-tree-traversal costs for animations CSS would do for free.
       </p>
 
-      <h2>Performance — only animate cheap properties</h2>
+      <h2>Performance: only animate cheap properties</h2>
       <p>
-        Every preset's <code>performance</code> field documents which properties get animated. The shortlist of cheap ones — properties the browser can composite without layout or paint:
+        Every preset's <code>performance</code> field documents which properties get animated. The shortlist of cheap ones, properties the browser can composite without layout or paint:
       </p>
       <ul>
-        <li><code>transform</code> — translate, scale, rotate, skew. Free.</li>
-        <li><code>opacity</code> — free.</li>
-        <li><code>filter</code> — moderate cost; <code>blur</code> is heavy.</li>
+        <li><code>transform</code>: translate, scale, rotate, skew. Free.</li>
+        <li><code>opacity</code>: free.</li>
+        <li><code>filter</code>: moderate cost; <code>blur</code> is heavy.</li>
       </ul>
       <p>
-        The shortlist of expensive ones — anything that triggers layout:
+        The shortlist of expensive ones, anything that triggers layout:
       </p>
       <ul>
-        <li><code>top</code>, <code>left</code>, <code>width</code>, <code>height</code>, <code>margin</code>, <code>padding</code> — all expensive. The linter (<code>animate-layout-property</code>) catches these.</li>
-        <li><code>box-shadow</code> — moderate; consider <code>filter: drop-shadow</code> on the parent.</li>
+        <li><code>top</code>, <code>left</code>, <code>width</code>, <code>height</code>, <code>margin</code>, <code>padding</code>: all expensive. The linter (<code>animate-layout-property</code>) catches these.</li>
+        <li><code>box-shadow</code>: moderate; consider <code>filter: drop-shadow</code> on the parent.</li>
       </ul>
       <p>
         Every preset in the manifest is built from cheap properties. If you need an expensive animation, you build it yourself and document why.
@@ -755,13 +755,13 @@ const preset = <span class="k">await</span> mcp.call(<span class="s">"ux_motion_
 
       <h2>The scroll-pin-hold story</h2>
       <p>
-        Two of the 57 presets do real cinema work — and they're worth a dedicated section because the AI default is to scroll the page like a Word document and the cinema language is what actually feels modern in 2026.
+        Two of the 57 presets do real cinema work, and they're worth a dedicated section because the AI default is to scroll the page like a Word document and the cinema language is what actually feels modern in 2026.
       </p>
       <p>
         <code>scroll-pin-hold</code> pins the section to the viewport for the duration of its scroll budget, runs an inner timeline scrubbed to scroll position, and releases on exit. <code>parallax-depth-3</code> defines three depth layers (background 0.4x, mid 1x, foreground 1.6x of scroll velocity) so the section reads as a 3D camera move.
       </p>
       <p>
-        Both are GSAP + ScrollTrigger presets — CSS scroll-driven animations are landing in browsers but the spec is still moving, and Framer Motion's <code>useScroll</code> doesn't pin natively. Until the platform stabilizes, GSAP is the cleanest path.
+        Both are GSAP + ScrollTrigger presets. CSS scroll-driven animations are landing in browsers but the spec is still moving, and Framer Motion's <code>useScroll</code> doesn't pin natively. Until the platform stabilizes, GSAP is the cleanest path.
       </p>
       <p>
         The new <a href="/blog/dark-editorial-cinema-design.html" class="link">dark editorial cinema homepage</a> uses both presets on every major section.
@@ -774,13 +774,13 @@ const preset = <span class="k">await</span> mcp.call(<span class="s">"ux_motion_
       <div class="honesty">
         <div class="label">Honesty card</div>
         <h4>57 presets is not "every animation ever."</h4>
-        <p>For bespoke product moments — a custom data viz, a branded loader, a one-off marketing micro-interaction — you'll still write motion yourself. The manifest covers the 90% case where the motion is recognizable across the industry, and the goal is to use the right one instead of inventing a worse one. The remaining 10% is where the brand earns its identity, and that's the right place to spend effort.</p>
+        <p>For bespoke product moments (a custom data viz, a branded loader, a one-off marketing micro-interaction) you'll still write motion yourself. The manifest covers the 90% case where the motion is recognizable across the industry, and the goal is to use the right one instead of inventing a worse one. The remaining 10% is where the brand earns its identity, and that's the right place to spend effort.</p>
         <p>The Framer Motion snippets target v11+. The GSAP snippets target v3+. The CSS snippets are evergreen.</p>
       </div>
 
       <h2>How motion plugs into the rest of the engine</h2>
       <p>
-        The recommender doesn't ship motion in isolation. When you run <code>/ux-recommend</code> against a brief, the response includes a curated motion subset — typically 4 to 7 presets — picked to match the style and tone. A "calm editorial" recommendation pulls <code>fade-up-12px</code>, <code>scroll-pin-hold</code>, and <code>lift-2px</code>. An "operational density" recommendation pulls <code>state-flip</code>, <code>row-highlight</code>, and <code>success-tick</code>. The presets are the same; the curation is the design call.
+        The recommender doesn't ship motion in isolation. When you run <code>/ux-recommend</code> against a brief, the response includes a curated motion subset (typically 4 to 7 presets) picked to match the style and tone. A "calm editorial" recommendation pulls <code>fade-up-12px</code>, <code>scroll-pin-hold</code>, and <code>lift-2px</code>. An "operational density" recommendation pulls <code>state-flip</code>, <code>row-highlight</code>, and <code>success-tick</code>. The presets are the same; the curation is the design call.
       </p>
       <p>
         <a href="/blog/python-design-system-generator.html" class="link">More on how the recommender composes a system</a>, including which manifests it pulls from.
@@ -788,26 +788,26 @@ const preset = <span class="k">await</span> mcp.call(<span class="s">"ux_motion_
 
       <h2>Related reading</h2>
       <ul>
-        <li><a href="/blog/ai-design-fingerprints-list.html" class="link">The 51 AI design fingerprints — including the motion fingerprints</a>.</li>
-        <li><a href="/blog/best-claude-code-design-skills-2026.html" class="link">Best Claude Code design skills — which ones ship motion libraries</a>.</li>
-        <li><a href="/blog/dark-editorial-cinema-design.html" class="link">Dark editorial cinema — scroll-pin-hold in production</a>.</li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter — including the four motion rules</a>.</li>
-        <li><a href="/mcp.html" class="link">MCP — calling motion presets from any host</a>.</li>
-        <li><a href="/compare.html" class="link">Compare — ui-ux-pro-max doesn't ship a motion library</a>.</li>
+        <li><a href="/blog/ai-design-fingerprints-list.html" class="link">The 51 AI design fingerprints, including the motion fingerprints</a>.</li>
+        <li><a href="/blog/best-claude-code-design-skills-2026.html" class="link">Best Claude Code design skills: which ones ship motion libraries</a>.</li>
+        <li><a href="/blog/dark-editorial-cinema-design.html" class="link">Dark editorial cinema: scroll-pin-hold in production</a>.</li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter: including the four motion rules</a>.</li>
+        <li><a href="/mcp.html" class="link">MCP: calling motion presets from any host</a>.</li>
+        <li><a href="/compare.html" class="link">Compare: ui-ux-pro-max doesn't ship a motion library</a>.</li>
       </ul>
     </article>
 
     <section class="cta">
       <span class="eyebrow">Install the engine</span>
       <h2>One library. <span class="accent">Three engines.</span> 57 presets.</h2>
-      <p>Same manifest powers the CLI, the MCP server, and the recommender — every preset available as Framer Motion, GSAP, and CSS. Reduced-motion handling included. MIT, no telemetry, no account.</p>
+      <p>Same manifest powers the CLI, the MCP server, and the recommender: every preset available as Framer Motion, GSAP, and CSS. Reduced-motion handling included. MIT, no telemetry, no account.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— or —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">or</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— or —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">or</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>
