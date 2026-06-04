@@ -1,4 +1,4 @@
-"""Generate docs/anti-patterns.html — a browseable, searchable reference
+"""Generate docs/anti-patterns.html: a browseable, searchable reference
 page for every rule in data/anti-patterns.json.
 
 High-value because:
@@ -14,6 +14,14 @@ from pathlib import Path
 import json
 import html
 import re
+
+
+def sanitize_dashes(s):
+    """Strip em/en dashes from rendered rule text (no-AI-tell house rule).
+    em-dash -> colon; en-dash (numeric range) -> hyphen."""
+    s = re.sub(r'\s*—\s*', ': ', s)
+    s = re.sub(r'\s*–\s*', '-', s)
+    return s
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -58,9 +66,9 @@ def render_rule_card(rule):
     # Real schema uses "detection.regex" + "why" + "fix"; legacy uses
     # "description", "why_bad", "example_bad", "example_good".
     detection = rule.get("detection") or {}
-    desc = html.escape(str(rule.get("description") or rule.get("detection_summary") or ""))
-    why = html.escape(str(rule.get("why_bad") or rule.get("why", "")))
-    fix = html.escape(str(rule.get("fix", "")))
+    desc = sanitize_dashes(html.escape(str(rule.get("description") or rule.get("detection_summary") or "")))
+    why = sanitize_dashes(html.escape(str(rule.get("why_bad") or rule.get("why", ""))))
+    fix = sanitize_dashes(html.escape(str(rule.get("fix", ""))))
     bad = (
         rule.get("example_bad")
         or (detection.get("example_bad") if isinstance(detection, dict) else "")
@@ -135,21 +143,21 @@ def build_html(rules, version):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{total} anti-pattern rules — the ux-skill linter catalogue</title>
+<title>{total} anti-pattern rules · the ux-skill linter catalogue</title>
 <meta name="description" content="The complete catalogue of {total} AI design-slop fingerprints caught by the ux-skill linter. {high} high, {med} medium, {low} low severity. Each rule includes regex, why it's bad, and the fix.">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/anti-patterns.html">
 <link rel="alternate" hreflang="en" href="https://uxskill.laithjunaidy.com/anti-patterns.html">
-<meta property="og:title" content="{total} anti-pattern rules — the ux-skill linter catalogue">
+<meta property="og:title" content="{total} anti-pattern rules · the ux-skill linter catalogue">
 <meta property="og:description" content="Every fingerprint of AI-generated design slop, named and indexed. Browse {total} rules from the deterministic linter that runs in &lt;50ms.">
 <meta property="og:url" content="https://uxskill.laithjunaidy.com/anti-patterns.html">
 <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{total} anti-pattern rules — the ux-skill linter">
+<meta name="twitter:title" content="{total} anti-pattern rules · the ux-skill linter">
 <meta name="twitter:description" content="The complete linter catalogue. {high} high · {med} medium · {low} low severity.">
 <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 
 <script type="application/ld+json">
-{{"@context":"https://schema.org","@type":"WebPage","name":"{total} anti-pattern rules — ux-skill linter","url":"https://uxskill.laithjunaidy.com/anti-patterns.html","description":"Browseable index of every AI-design-slop fingerprint caught by the ux-skill deterministic linter.","isPartOf":{{"@type":"WebSite","name":"ux-skill","url":"https://uxskill.laithjunaidy.com/"}}}}
+{{"@context":"https://schema.org","@type":"WebPage","name":"{total} anti-pattern rules · ux-skill linter","url":"https://uxskill.laithjunaidy.com/anti-patterns.html","description":"Browseable index of every AI-design-slop fingerprint caught by the ux-skill deterministic linter.","isPartOf":{{"@type":"WebSite","name":"ux-skill","url":"https://uxskill.laithjunaidy.com/"}}}}
 </script>
 <script type="application/ld+json">
 {{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"}},{{"@type":"ListItem","position":2,"name":"Anti-pattern rules","item":"https://uxskill.laithjunaidy.com/anti-patterns.html"}}]}}
@@ -250,7 +258,7 @@ def build_html(rules, version):
     <p class="top__eyebrow">Linter catalogue · v{html.escape(str(version)) if version else ""}</p>
     <h1 class="top__title">{total} fingerprints of <em>AI design slop.</em></h1>
     <p class="top__lead">
-      Every rule in <code>data/anti-patterns.json</code>, browseable. Run the linter (<code>uxskill lint</code>) and it scans your HTML/CSS/JS for these regex patterns in &lt;50&#x20;ms — no LLM, no API call, no telemetry. Each rule names the fingerprint, explains why it's slop, and tells the AI session what to ship instead.
+      Every rule in <code>data/anti-patterns.json</code>, browseable. Run the linter (<code>uxskill lint</code>) and it scans your HTML/CSS/JS for these regex patterns in &lt;50&#x20;ms: no LLM, no API call, no telemetry. Each rule names the fingerprint, explains why it's slop, and tells the AI session what to ship instead.
     </p>
     <div class="top__stats">
       <span class="top__stat"><b>{total}</b> rules total</span>

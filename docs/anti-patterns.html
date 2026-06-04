@@ -11,21 +11,21 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>152 anti-pattern rules — the ux-skill linter catalogue</title>
+<title>152 anti-pattern rules · the ux-skill linter catalogue</title>
 <meta name="description" content="The complete catalogue of 145 AI design-slop fingerprints caught by the ux-skill linter. 50 high, 63 medium, 26 low severity. Each rule includes regex, why it's bad, and the fix.">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/anti-patterns.html">
 <link rel="alternate" hreflang="en" href="https://uxskill.laithjunaidy.com/anti-patterns.html">
-<meta property="og:title" content="152 anti-pattern rules — the ux-skill linter catalogue">
+<meta property="og:title" content="152 anti-pattern rules · the ux-skill linter catalogue">
 <meta property="og:description" content="Every fingerprint of AI-generated design slop, named and indexed. Browse 152 rules from the deterministic linter that runs in &lt;50ms.">
 <meta property="og:url" content="https://uxskill.laithjunaidy.com/anti-patterns.html">
 <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="152 anti-pattern rules — the ux-skill linter">
+<meta name="twitter:title" content="152 anti-pattern rules · the ux-skill linter">
 <meta name="twitter:description" content="The complete linter catalogue. 50 high · 63 medium · 26 low severity.">
 <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","name":"152 anti-pattern rules — ux-skill linter","url":"https://uxskill.laithjunaidy.com/anti-patterns.html","description":"Browseable index of every AI-design-slop fingerprint caught by the ux-skill deterministic linter.","isPartOf":{"@type":"WebSite","name":"ux-skill","url":"https://uxskill.laithjunaidy.com/"}}
+{"@context":"https://schema.org","@type":"WebPage","name":"152 anti-pattern rules · ux-skill linter","url":"https://uxskill.laithjunaidy.com/anti-patterns.html","description":"Browseable index of every AI-design-slop fingerprint caught by the ux-skill deterministic linter.","isPartOf":{"@type":"WebSite","name":"ux-skill","url":"https://uxskill.laithjunaidy.com/"}}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"},{"@type":"ListItem","position":2,"name":"Anti-pattern rules","item":"https://uxskill.laithjunaidy.com/anti-patterns.html"}]}
@@ -106,7 +106,7 @@
     .grid { grid-template-columns: 1fr; }
   }
 
-    /* Arabic typography — IBM Plex Sans Arabic for the whole Arabic page (v3.0.4 sweep) */
+    /* Arabic typography: IBM Plex Sans Arabic for the whole Arabic page (v3.0.4 sweep) */
     html[lang="ar"] body,
     html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3, html[lang="ar"] h4,
     html[lang="ar"] p, html[lang="ar"] li, html[lang="ar"] a, html[lang="ar"] button,
@@ -332,10 +332,10 @@
     }
     #nav-drawer .nav__drawer-langs-grid a:hover { color: var(--ink, var(--nav-ink)); }
 
-    /* RTL — nav inner flips */
+    /* RTL: nav inner flips */
     html[dir="rtl"] #nav .nav__inner { direction: rtl; }
 
-    /* Defensive — when the fixed .nav is present, give layouts that
+    /* Defensive: when the fixed .nav is present, give layouts that
        previously assumed an inline header (.wrap on blog/index,
        .top/.toolbar on the catalogue pages) enough headroom so
        content isn't hidden behind the nav. */
@@ -488,7 +488,7 @@
     <p class="top__eyebrow">Linter catalogue · v3.0.0</p>
     <h1 class="top__title">145 fingerprints of <em>AI design slop.</em></h1>
     <p class="top__lead">
-      Every rule in <code>data/anti-patterns.json</code>, browseable. Run the linter (<code>uxskill lint</code>) and it scans your HTML/CSS/JS for these regex patterns in &lt;50&#x20;ms — no LLM, no API call, no telemetry. Each rule names the fingerprint, explains why it's slop, and tells the AI session what to ship instead.
+      Every rule in <code>data/anti-patterns.json</code>, browseable. Run the linter (<code>uxskill lint</code>) and it scans your HTML/CSS/JS for these regex patterns in &lt;50&#x20;ms: no LLM, no API call, no telemetry. Each rule names the fingerprint, explains why it's slop, and tells the AI session what to ship instead.
     </p>
     <div class="top__stats">
       <span class="top__stat"><b>145</b> rules total</span>

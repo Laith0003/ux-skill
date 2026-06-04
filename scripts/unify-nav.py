@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-v3.0.3 — unify nav + fonts across all standalone HTML pages.
+v3.0.3 - unify nav + fonts across all standalone HTML pages.
 
 The canonical source is docs/index.html. This script rewrites the
 font-loading block, the .nav CSS block, the <header class="nav"> markup,
@@ -28,11 +28,11 @@ LANDING = ROOT / "landing"
 CANONICAL_FONTS = """  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- Bricolage Grotesque (display), Inter (body Latin), JetBrains Mono (mono),
-       Instrument Serif (italic accents), IBM Plex Sans Arabic (mandatory for ar locale —
+       Instrument Serif (italic accents), IBM Plex Sans Arabic (mandatory for ar locale - 
        see tests/test_arabic_typography.py for the regression guard). -->
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">"""
 
-# Canonical nav CSS block. Self-contained — defines its own fallback custom
+# Canonical nav CSS block. Self-contained - defines its own fallback custom
 # properties via @supports-style declarations so it does not depend on the
 # host page already defining --t-fast, --t-mid, --ease-cinema, --r-pill,
 # --r-md, --gutter, --max-w. The host page's --accent is preserved.
@@ -250,10 +250,10 @@ CANONICAL_NAV_CSS = """  <style id="unified-nav-css">
     }
     #nav-drawer .nav__drawer-langs-grid a:hover { color: var(--ink, var(--nav-ink)); }
 
-    /* RTL — nav inner flips */
+    /* RTL: nav inner flips */
     html[dir="rtl"] #nav .nav__inner { direction: rtl; }
 
-    /* Defensive — when the fixed .nav is present, give layouts that
+    /* Defensive: when the fixed .nav is present, give layouts that
        previously assumed an inline header (.wrap on blog/index,
        .top/.toolbar on the catalogue pages) enough headroom so
        content isn't hidden behind the nav. */
@@ -394,7 +394,7 @@ def replace_font_block(html: str) -> str:
     )
     if pattern.search(html):
         return pattern.sub(CANONICAL_FONTS.rstrip(), html, count=1)
-    # No fonts loaded — inject before </head>.
+    # No fonts loaded - inject before </head>.
     return html.replace("</head>", CANONICAL_FONTS + "\n</head>", 1)
 
 
@@ -402,7 +402,7 @@ def remove_existing_nav_css(html: str) -> str:
     """Remove the page-local .nav / .wordmark / .nav__drawer / .cta-pill /
     .nav__menu-btn / .menu-btn / .drawer / .lang-picker rules from the page CSS.
 
-    We don't try to surgically extract individual rules — too brittle. Instead,
+    We don't try to surgically extract individual rules - too brittle. Instead,
     if a previous run injected <style id="unified-nav-css">, we delete it so
     the script is idempotent.
     """
@@ -438,10 +438,10 @@ def replace_header_block(html: str) -> str:
     if header_pattern.search(html):
         return header_pattern.sub(CANONICAL_NAV_HTML, html, count=1)
 
-    # Variant 2: brands.html / anti-patterns.html style — simple header.nav block
+    # Variant 2: brands.html / anti-patterns.html style - simple header.nav block
     # (already covered by Variant 1 since they also use <header class="nav">).
 
-    # Variant 3: blog/index.html — <header class="top"> ... </header> + .drawer div
+    # Variant 3: blog/index.html - <header class="top"> ... </header> + .drawer div
     top_pattern = re.compile(
         r"<header class=\"top\">.*?</header>"
         r"(?:\s*<div class=\"drawer\"[^>]*>.*?</div>)?",
@@ -522,7 +522,7 @@ def main():
                 )
                 touched.append(str(landing_path.relative_to(ROOT)) + " (new)")
         else:
-            print(f"SKIP — missing: {docs_path}")
+            print(f"SKIP - missing: {docs_path}")
 
     print(f"\nTouched {len(touched)} files:")
     for t in touched:

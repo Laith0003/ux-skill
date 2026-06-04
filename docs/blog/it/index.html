@@ -20,12 +20,12 @@
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/it/">
-  <meta property="og:title" content="Blog — ux-skill">
+  <meta property="og:title" content="Blog · ux-skill">
   <meta property="og:description" content="Articles on Claude Code design plugins, AI coding tools, anti-AI-slop, design system generation.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/blog-index.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — blog-index">
+  <meta property="og:image:alt" content="ux-skill · blog-index">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/blog-index.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -266,7 +266,7 @@
     footer.site .links { display: flex; gap: 22px; flex-wrap: wrap; }
     @media (max-width: 560px) { footer.site { flex-direction: column; } }
   
-    /* Arabic typography — IBM Plex Sans Arabic for the whole Arabic page (v3.0.4 sweep) */
+    /* Arabic typography: IBM Plex Sans Arabic for the whole Arabic page (v3.0.4 sweep) */
     html[lang="ar"] body,
     html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3, html[lang="ar"] h4,
     html[lang="ar"] p, html[lang="ar"] li, html[lang="ar"] a, html[lang="ar"] button,
@@ -289,13 +289,13 @@
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
        and max-width: 100%; carousels that need their own horizontal scroll
-       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves —
+       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves: 
        overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
     html, body {
       overflow-x: clip;
       max-width: 100%;
     }
-    /* Defensive — make sure no section, image, or table forces width >100%. */
+    /* Defensive: make sure no section, image, or table forces width >100%. */
     section, header, footer, main, article { max-width: 100vw; }
     img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
     table { max-width: 100%; }
@@ -515,10 +515,10 @@
     }
     #nav-drawer .nav__drawer-langs-grid a:hover { color: var(--ink, var(--nav-ink)); }
 
-    /* RTL — nav inner flips */
+    /* RTL: nav inner flips */
     html[dir="rtl"] #nav .nav__inner { direction: rtl; }
 
-    /* Defensive — when the fixed .nav is present, give layouts that
+    /* Defensive: when the fixed .nav is present, give layouts that
        previously assumed an inline header (.wrap on blog/index,
        .top/.toolbar on the catalogue pages) enough headroom so
        content isn't hidden behind the nav. */
@@ -689,7 +689,7 @@
     <ul class="post-list">
       <li class="post"><a href="/blog/it/ai-coding-design-italian.html">
         <div class="post-meta"><span class="tag">Blog</span> &middot; Italiano</div>
-        <h2>Design AI coding — come costruire un design system con Claude Code</h2>
+        <h2>Design AI coding: come costruire un design system con Claude Code</h2>
       </a></li>
     </ul>
     </main>
