@@ -1,6 +1,5 @@
 {
   "name": "ux",
-  "displayName": "UX — the design intelligence plugin for Claude Code",
   "description": "Design intelligence engine for AI coding. v3 ships THE BRAIN: a deterministic 7-axis synthesizer (warmth, contrast, density, geometry, formality, motion, type_personality) that compiles a novel design language per brief — no LLM calls, fully offline, closed-loop learning via a local decisions ledger. 1,243 structured entries, 160 real brand specs treated as training data, 152 anti-pattern rules, 25 slash commands, 18 MCP tools (incl. ux_synthesize, ux_decisions_query, ux_decisions_stats), 5 sub-agents. Three auto-dispatched modes: strict_brand (100% reference brand tokens), brand_anchor (70/30 blend), pure_synthesis (8 axis-distilled exemplars). /ux-evolve runs lint→polish→re-lint to score ≥ 90. Cross-IDE via pip/npx — runs in 17 environments including Claude Code, Cursor, Windsurf, Copilot, Gemini CLI, Codex, Cline, Continue, Aider, Zed. Anti-AI-slop by default. 0 telemetry.",
   "version": "3.1.0",
   "author": {
