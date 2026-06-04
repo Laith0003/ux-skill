@@ -44,7 +44,7 @@
   </url>
   <url>
     <loc>https://uxskill.laithjunaidy.com/blog/</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -255,6 +255,12 @@
   <url>
     <loc>https://uxskill.laithjunaidy.com/blog/python-design-system-generator.html</loc>
     <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://uxskill.laithjunaidy.com/blog/redesign-existing-website-with-ux-skill.html</loc>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

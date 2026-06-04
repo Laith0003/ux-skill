@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z371T0DBW5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Z371T0DBW5');
+</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to redesign an existing website with AI — the ux-skill workflow (Skip Hire case study)</title>
+  <meta name="description" content="Point ux-skill at a site you already run. It reads the brand off the live page, anchors a design system to it, rebuilds the page, and fails the build if the output drifts off-brand or into AI-slop. The exact command order, install to ship, with a real before-and-after.">
+  <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/redesign-existing-website-with-ux-skill.html">
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="index,follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/redesign-existing-website-with-ux-skill.html">
+  <meta property="og:title" content="How to redesign an existing website with AI — the ux-skill workflow">
+  <meta property="og:description" content="Extract your brand from the live page, anchor a design system to it, rebuild, and gate against AI-slop. The full command order with a real skip-hire before-and-after.">
+  <meta property="og:image" content="https://uxskill.laithjunaidy.com/blog/skiphire-redesign.png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="860">
+  <meta property="og:image:alt" content="The ux-skill redesign of a UK commercial skip-hire page — brand-true amber on dark green, a construction-site hero, and a quote form.">
+  <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/blog/skiphire-redesign.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Redesign an existing website with AI — the ux-skill workflow">
+  <meta name="twitter:description" content="Install to ship: ux-init, ux-audit, ux-discover, ux-recommend, ux-design, ux-evolve, ux-lint. Brand-true, gated against slop. Skip Hire case study.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "How to redesign an existing website with AI — the ux-skill workflow (Skip Hire case study)",
+    "description": "Point ux-skill at a site you already run. It reads the brand off the live page, anchors a design system to it, rebuilds the page, and fails the build if the output drifts off-brand or into AI-slop.",
+    "datePublished": "2026-06-04",
+    "dateModified": "2026-06-04",
+    "author": {"@type": "Organization", "name": "ux-skill", "url": "https://uxskill.laithjunaidy.com/"},
+    "publisher": {"@type": "Organization", "name": "ux-skill", "url": "https://uxskill.laithjunaidy.com/"},
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://uxskill.laithjunaidy.com/blog/redesign-existing-website-with-ux-skill.html"},
+    "url": "https://uxskill.laithjunaidy.com/blog/redesign-existing-website-with-ux-skill.html",
+    "image": "https://uxskill.laithjunaidy.com/blog/skiphire-redesign.png",
+    "keywords": "redesign existing website AI, AI website redesign, brand-true design, ux-skill workflow, Claude Code design plugin, redesign site with AI, AI redesign tool",
+    "articleSection": "Tutorial"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Redesign an existing website with ux-skill",
+    "description": "Install ux-skill and run the command sequence that extracts your brand, anchors a design system to it, rebuilds the page, and gates the result against AI-slop.",
+    "totalTime": "PT30M",
+    "tool": [{"@type": "HowToTool", "name": "Claude Code, Cursor, or any of 17 AI coding tools"}, {"@type": "HowToTool", "name": "ux-skill (pip install uxskill)"}],
+    "step": [
+      {"@type": "HowToStep", "name": "Install ux-skill", "text": "Add the marketplace and install the plugin in Claude Code (/plugin marketplace add Laith0003/ux-skill, then /plugin install ux@ux-skill), or install the CLI with pip install uxskill or npx uxskill@latest."},
+      {"@type": "HowToStep", "name": "Bootstrap with /ux-init", "text": "Run /ux-init to detect your IDE, install the artifacts, and validate the engine."},
+      {"@type": "HowToStep", "name": "Audit the current page", "text": "Run /ux-audit on your live URL to get a baseline of what is broken."},
+      {"@type": "HowToStep", "name": "Discover the brief", "text": "Run /ux-discover and answer the 10-field intake: audience, goal, tone, must-haves, forbidden list."},
+      {"@type": "HowToStep", "name": "Recommend a brand-anchored system", "text": "Run /ux-recommend to get a design system anchored to your brand's logo color and letterform."},
+      {"@type": "HowToStep", "name": "Rebuild with /ux-design", "text": "Run /ux-design to generate the production page inside the recommended system, brand-true."},
+      {"@type": "HowToStep", "name": "Evolve to a passing score", "text": "Run /ux-evolve to lint, polish, and re-lint until the deterministic score clears 90; run /ux-a11y and /ux-motion."},
+      {"@type": "HowToStep", "name": "Gate against AI-slop", "text": "Run /ux-lint; the 152-rule anti-slop linter must report 0 high before you ship."}
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --canvas: #07080a;
+      --surface-1: #0f1115;
+      --surface-2: #14181d;
+      --surface-3: #1c2128;
+      --ink: #f4f2ec;
+      --body: #c8c6bf;
+      --muted: #7a7972;
+      --faint: #5a5f66;
+      --hairline: rgba(255,255,255,0.08);
+      --hairline-2: rgba(255,255,255,0.14);
+      --scene-accent: #06b6d4;
+      --scene-soft: #06b6d426;
+      --win-bg: rgba(16,185,129,0.10);
+      --win-fg: #34d399;
+      --lose-bg: rgba(244,63,94,0.10);
+      --lose-fg: #fb7185;
+      --neutral-bg: rgba(255,255,255,0.05);
+      --neutral-fg: #c8c6bf;
+      --display: 'Bricolage Grotesque', system-ui, sans-serif;
+      --body-face: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+      --serif-italic: 'Instrument Serif', Georgia, serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; background: var(--canvas); }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      font-family: var(--body-face);
+      background: var(--canvas);
+      color: var(--body);
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+
+    article { padding-top: 56px; }
+    .eyebrow {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--scene-accent);
+      margin-bottom: 22px;
+    }
+    h1 {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 96, 'wght' 600;
+      font-weight: 600;
+      font-size: clamp(40px, 5.5vw, 64px);
+      line-height: 1.04; letter-spacing: -0.03em;
+      color: var(--ink); margin-bottom: 28px;
+    }
+    h1 .accent, h2 .accent {
+      font-family: var(--serif-italic);
+      font-style: italic; font-weight: 400;
+      color: var(--scene-accent); letter-spacing: -0.015em;
+    }
+    .lede { font-size: 20px; line-height: 1.55; color: var(--body); margin-bottom: 16px; }
+    .lede strong { color: var(--ink); font-weight: 600; }
+    .byline {
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 56px; padding-bottom: 24px;
+      border-bottom: 1px solid var(--hairline);
+    }
+    h2 {
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 88, 'opsz' 80, 'wght' 580;
+      font-weight: 580;
+      font-size: clamp(28px, 3.2vw, 36px);
+      line-height: 1.18; letter-spacing: -0.022em;
+      color: var(--ink); margin: 64px 0 18px;
+    }
+    h3 { font-family: var(--body-face); font-weight: 600; font-size: 19px; letter-spacing: -0.005em; color: var(--ink); margin: 36px 0 14px; }
+    p { margin-bottom: 18px; color: var(--body); }
+    p strong { color: var(--ink); font-weight: 600; }
+    em { color: var(--ink); }
+    ul, ol { margin: 0 0 22px 22px; }
+    ul li, ol li { margin-bottom: 10px; color: var(--body); }
+    ul li::marker { color: var(--scene-accent); }
+    ol li::marker { color: var(--scene-accent); font-family: var(--mono); font-size: 0.9em; }
+
+    pre.code {
+      background: var(--surface-2); color: var(--ink);
+      border: 1px solid var(--hairline); padding: 22px 24px; border-radius: 12px;
+      overflow-x: auto; font-family: var(--mono); font-size: 13.5px; line-height: 1.65; margin: 24px 0 28px;
+    }
+    pre.code .c { color: rgba(250,249,245,0.45); font-style: italic; }
+    pre.code .n { color: var(--scene-accent); }
+    code {
+      font-family: var(--mono); font-size: 13px;
+      background: var(--surface-2); border: 1px solid var(--hairline);
+      padding: 1px 6px; border-radius: 4px; color: var(--ink);
+    }
+    a.link {
+      color: var(--scene-accent); text-decoration: underline;
+      text-decoration-color: #06b6d466; text-underline-offset: 3px;
+      transition: color 0.16s ease, text-decoration-color 0.16s ease;
+    }
+    a.link:hover { color: var(--ink); text-decoration-color: var(--ink); }
+    a.link:focus-visible { outline: 2px solid var(--scene-accent); outline-offset: 2px; border-radius: 2px; }
+
+    .shot { margin: 36px 0 10px; }
+    .shot img { width: 100%; height: auto; display: block; border-radius: 14px; border: 1px solid var(--hairline-2); }
+    .shot figcaption { font-size: 14px; line-height: 1.55; color: var(--muted); margin-top: 14px; }
+
+    .honesty {
+      background: var(--surface-1); border: 1px solid var(--hairline);
+      border-left: 3px solid var(--scene-accent); padding: 24px 28px;
+      border-radius: 0 14px 14px 0; margin: 32px 0;
+    }
+    .honesty .label { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--scene-accent); margin-bottom: 8px; }
+    .honesty h4 { font-family: var(--body-face); font-weight: 600; font-size: 17px; color: var(--ink); margin-bottom: 10px; }
+    .honesty p { margin-bottom: 8px; }
+    .honesty p:last-child { margin-bottom: 0; }
+
+    .cta { margin-top: 96px; padding: 56px 48px; background: var(--surface-1); color: var(--ink); border: 1px solid var(--hairline-2); border-radius: 22px; }
+    @media (max-width: 720px) { .cta { padding: 40px 28px; } }
+    .cta .eyebrow { color: var(--scene-accent); }
+    .cta h2 { color: var(--ink); margin-top: 0; }
+    .cta p { color: var(--body); margin-bottom: 28px; }
+    .install-block { background: var(--canvas); border: 1px solid var(--hairline); border-radius: 12px; padding: 20px 24px; font-family: var(--mono); font-size: 14px; line-height: 1.75; color: var(--ink); }
+    .install-block .prompt { color: var(--scene-accent); }
+    .install-block .arg { color: var(--muted); }
+    .install-block .row + .row { margin-top: 6px; }
+
+    blockquote { border-left: 3px solid var(--scene-accent); padding: 6px 0 6px 22px; margin: 24px 0; font-family: var(--serif-italic); font-size: 22px; line-height: 1.45; color: var(--ink); font-style: italic; }
+
+    footer { max-width: 1100px; margin: 96px auto 0; padding: 32px 24px 0; border-top: 1px solid var(--hairline); display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 16px; font-size: 13px; color: var(--muted); }
+    footer a { color: var(--muted); text-decoration: none; transition: color 0.16s ease; }
+    footer a:hover { color: var(--ink); }
+    footer .links { display: flex; gap: 24px; flex-wrap: wrap; }
+
+    .table-wrap { max-width: 1000px; margin: 32px auto 28px; overflow-x: auto; }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; background: var(--surface-1); border: 1px solid var(--hairline); border-radius: 14px; overflow: hidden; }
+    .compare-table th, .compare-table td { padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--hairline); vertical-align: top; color: var(--body); }
+    .compare-table th { background: var(--surface-2); font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); font-weight: 600; }
+    .compare-table td.num { font-variant-numeric: tabular-nums; font-weight: 500; color: var(--ink); font-family: var(--mono); }
+    .compare-table tr:last-child td { border-bottom: 0; }
+    .compare-table strong { color: var(--ink); }
+
+    .step-list { counter-reset: step; list-style: none; margin-left: 0; }
+    .step-list li { counter-increment: step; padding: 18px 0 18px 70px; border-bottom: 1px solid var(--hairline); position: relative; color: var(--body); }
+    .step-list li::before { content: counter(step, decimal-leading-zero); position: absolute; left: 0; top: 20px; font-family: var(--display); font-variation-settings: 'wdth' 84, 'opsz' 96, 'wght' 620; font-weight: 620; font-size: 32px; color: var(--scene-accent); line-height: 1; }
+    .step-list li:last-child { border-bottom: 0; }
+    .step-list li strong { color: var(--ink); }
+
+    @media (max-width: 720px) { .wrap { padding: 40px 20px 72px; } h1 { font-size: clamp(34px, 7vw, 48px); } }
+    @media (max-width: 480px) { .lede { font-size: 18px; } }
+  </style>
+  <style>
+    html, body { overflow-x: clip; max-width: 100%; }
+    section, header, footer, main, article { max-width: 100vw; }
+    img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
+    table { max-width: 100%; }
+  </style>
+  <link rel="alternate" hreflang="en" href="https://uxskill.laithjunaidy.com/blog/redesign-existing-website-with-ux-skill.html">
+  <link rel="alternate" hreflang="x-default" href="https://uxskill.laithjunaidy.com/blog/redesign-existing-website-with-ux-skill.html">
+<style id="usknav-css">  .sr-only,.skip-link:not(:focus){position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .skip-link:focus{position:fixed;top:8px;inset-inline-start:8px;width:auto;height:auto;clip:auto;padding:8px 14px;background:#f59e0b;color:#07080a;border-radius:6px;z-index:200;font-family:'Inter',system-ui,sans-serif;font-size:13px}
+  .usknav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:18px;
+    padding:0 clamp(16px,4vw,48px);block-size:56px;background:rgba(7,8,10,0.86);
+    backdrop-filter:saturate(150%) blur(14px);-webkit-backdrop-filter:saturate(150%) blur(14px);
+    border-block-end:1px solid rgba(255,255,255,0.08);font-family:'Inter',system-ui,sans-serif}
+  .usknav__brand{font-family:'Bricolage Grotesque','Inter',sans-serif;font-weight:700;font-size:17px;
+    color:#f6f7f9;text-decoration:none;letter-spacing:-0.01em;margin-inline-end:auto;padding:6px 2px}
+  .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
+  .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
+    text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
+    padding-block:8px;transition:color 140ms ease;}
+  .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
+  .usknav__langs{position:relative}
+  .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
+    color:#8a8f96;padding:8px 6px;transition:color 140ms ease;min-block-size:24px}
+  .usknav__langs>summary::-webkit-details-marker{display:none}
+  .usknav__langs>summary:hover{color:#f6f7f9}
+  .usknav__langs-menu{position:absolute;top:calc(100% + 8px);inset-inline-end:0;min-inline-size:184px;
+    max-block-size:60vh;overflow-y:auto;background:#0e1014;border:1px solid rgba(255,255,255,0.1);
+    border-radius:10px;padding:6px;display:grid;gap:1px;box-shadow:0 20px 40px -20px rgba(0,0,0,0.6);z-index:130}
+  .usknav__langs-menu a{font-family:'Inter',sans-serif;font-size:12.5px;color:#c0c3c9;text-decoration:none;padding:7px 10px;border-radius:6px}
+  .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
+  .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+    font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease;}
+  .usknav__star:hover{background:rgba(245,158,11,0.12)}
+  .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
+  .usknav__burger svg{display:block}
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:none;flex-direction:column;
+    padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
+    transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
+  .usknav__drawer.is-open{display:flex;transform:translateX(0);visibility:visible}
+  .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
+    border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
+  .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
+  .usknav__drawer-links{display:flex;flex-direction:column}
+  .usknav__drawer-links a{font-family:'Bricolage Grotesque','Inter',sans-serif;font-size:clamp(22px,5.5vw,32px);
+    color:#f6f7f9;text-decoration:none;padding:8px 0;border-block-end:1px solid rgba(255,255,255,0.06)}
+  .usknav__drawer-links a:hover{color:#f59e0b}
+  .usknav__drawer-star{margin-block-start:20px;align-self:flex-start}
+  .usknav__drawer-langlabel{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;
+    letter-spacing:0.1em;text-transform:uppercase;color:#8a8f96;margin:24px 0 10px}
+  .usknav__drawer-langs{display:flex;flex-wrap:wrap;gap:10px 18px}
+  .usknav__drawer-langs a{font-family:'Inter',sans-serif;font-size:13px;color:#8a8f96;text-decoration:none;padding:4px 0}
+  .usknav__drawer-langs a:hover{color:#f6f7f9}
+  .usknav__brand:focus-visible,.usknav__link:focus-visible,.usknav__langs>summary:focus-visible,
+  .usknav__star:focus-visible,.usknav__burger:focus-visible,.usknav__drawer-close:focus-visible,
+  .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
+    outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
+  @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+</head>
+<body>
+<header class="usknav" aria-label="Site navigation">
+  <a class="usknav__brand" href="/">uxskill</a>
+  <nav class="usknav__links" aria-label="Primary">
+    <a class="usknav__link" href="/brands.html">Brands</a>
+    <a class="usknav__link" href="/anti-patterns.html">Anti-patterns</a>
+    <a class="usknav__link" href="/commands.html">Commands</a>
+    <a class="usknav__link" href="/mcp.html">MCP</a>
+    <a class="usknav__link" href="/compare.html">Compare</a>
+    <a class="usknav__link" href="/showcase.html">Showcase</a>
+    <a class="usknav__link" href="/blog/" aria-current="page">Blog</a>
+    <a class="usknav__link" href="/about.html">About</a>
+    <a class="usknav__link" href="/faq.html">FAQ</a>
+    <a class="usknav__link" href="/roadmap.html">Roadmap</a>
+  </nav>
+  <details class="usknav__langs">
+    <summary aria-label="Choose language"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+    <div class="usknav__langs-menu">
+      <a href="/" lang="en">English</a>
+      <a href="/zh-CN/" lang="zh-CN">简体中文</a>
+      <a href="/zh-TW/" lang="zh-TW">繁體中文</a>
+      <a href="/ja/" lang="ja">日本語</a>
+      <a href="/ko/" lang="ko">한국어</a>
+      <a href="/hi/" lang="hi">हिन्दी</a>
+      <a href="/id/" lang="id">Bahasa Indonesia</a>
+      <a href="/vi/" lang="vi">Tiếng Việt</a>
+      <a href="/th/" lang="th">ไทย</a>
+      <a href="/ar/" lang="ar" dir="rtl">العربية</a>
+      <a href="/es/" lang="es">Español</a>
+      <a href="/fr/" lang="fr">Français</a>
+      <a href="/de/" lang="de">Deutsch</a>
+      <a href="/pt-BR/" lang="pt-BR">Português</a>
+      <a href="/ru/" lang="ru">Русский</a>
+      <a href="/tr/" lang="tr">Türkçe</a>
+      <a href="/it/" lang="it">Italiano</a>
+    </div>
+  </details>
+  <a class="usknav__star" href="https://github.com/Laith0003/ux-skill" rel="noopener">Star on GitHub</a>
+  <button class="usknav__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="usknav-drawer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+</header>
+<div class="usknav__drawer" id="usknav-drawer" role="dialog" aria-modal="true" aria-label="Site menu">
+  <div class="usknav__drawer-top">
+    <a class="usknav__brand" href="/">uxskill</a>
+    <button class="usknav__drawer-close" type="button" aria-label="Close menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <nav class="usknav__drawer-links" aria-label="All pages">
+    <a href="/brands.html">Brands</a>
+      <a href="/anti-patterns.html">Anti-patterns</a>
+      <a href="/commands.html">Commands</a>
+      <a href="/mcp.html">MCP</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/showcase.html">Showcase</a>
+      <a href="/blog/">Blog</a>
+      <a href="/about.html">About</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/roadmap.html">Roadmap</a>
+  </nav>
+  <a class="usknav__star usknav__drawer-star" href="https://github.com/Laith0003/ux-skill" rel="noopener">Star on GitHub</a>
+  <div class="usknav__drawer-langlabel">Language</div>
+  <div class="usknav__drawer-langs">
+      <a href="/" lang="en">English</a>
+      <a href="/zh-CN/" lang="zh-CN">简体中文</a>
+      <a href="/ja/" lang="ja">日本語</a>
+      <a href="/ar/" lang="ar" dir="rtl">العربية</a>
+      <a href="/es/" lang="es">Español</a>
+      <a href="/fr/" lang="fr">Français</a>
+      <a href="/de/" lang="de">Deutsch</a>
+      <a href="/pt-BR/" lang="pt-BR">Português</a>
+  </div>
+</div>
+<div class="wrap">
+    <article>
+      <span class="eyebrow">Blog &middot; Tutorial &middot; 2026-06-04</span>
+      <h1>Redesign an existing website with AI &mdash; the full ux-skill workflow, from install to a <span class="accent">brand-true result</span>.</h1>
+      <p class="lede">
+        <strong>You don't need a blank page.</strong> Point ux-skill at a site you already run. It reads the brand off the live page, anchors a design system to it, rebuilds the page, and <em>fails the build</em> if the output drifts off-brand or into AI-slop. Here is the exact command order &mdash; install to ship &mdash; with a real before-and-after: a UK commercial skip-hire lead-gen page.
+      </p>
+      <p class="byline">By the ux-skill team &middot; 9 min read &middot; MIT-licensed open source</p>
+
+      <h2>The mental model</h2>
+      <p>Most "AI redesign" tools do one thing: hand you a page that looks nicer than yours. The trouble is that <em>nicer</em> almost always means <em>generic</em> &mdash; the same centered hero, the same blue-to-purple gradient, the same three identical cards every model was trained to ship. You trade your brand for the average of the internet.</p>
+      <p>ux-skill inverts that. The pipeline is four moves: <strong>extract your brand</strong> from the live page, <strong>pick a design system anchored to it</strong>, <strong>rebuild the page</strong> inside that system, and <strong>gate the result</strong> against both off-brand drift and a 152-rule anti-slop linter. The output is meant to read as <em>your site, leveled up</em> &mdash; not a template wearing your logo.</p>
+      <p>It runs offline, calls no LLM in the engine, and is deterministic: the same brief produces the same system, byte for byte. The AI does the building; the engine sets and enforces the constraints.</p>
+
+      <h2>Step 0 &mdash; install ux-skill</h2>
+      <p>Three install paths, one engine. If you live in Claude Code, the plugin gives you the <code>/ux-*</code> slash commands. If you want the CLI in CI or a Python/Node project, use pip or npx.</p>
+      <div class="table-wrap">
+        <table class="compare-table">
+          <thead><tr><th>Where you work</th><th>Install</th><th>You get</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Claude Code</strong></td><td><code>/plugin install ux@ux-skill</code></td><td>25 slash commands, 5 sub-agents, 18 MCP tools</td></tr>
+            <tr><td><strong>Any Python project</strong></td><td><code>pip install uxskill</code></td><td>The <code>uxskill</code> CLI + engine</td></tr>
+            <tr><td><strong>Node / no Python</strong></td><td><code>npx uxskill@latest</code></td><td>Same engine, self-contained runtime</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Inside Claude Code, the plugin install is two lines:</p>
+      <pre class="code"><span class="c"># add the marketplace, then install the plugin</span>
+/plugin marketplace add Laith0003/ux-skill
+/plugin install ux@ux-skill</pre>
+      <p>The commands register on the next session. (On an older Claude Code build that tries SSH for a bare <code>owner/repo</code>, add the marketplace with the full HTTPS URL instead: <code>/plugin marketplace add https://github.com/Laith0003/ux-skill</code>.)</p>
+
+      <h2>The command order, at a glance</h2>
+      <p>For an existing site the order matters &mdash; each command writes state into <code>.ux/</code> that the next one reads. Run them top to bottom:</p>
+      <ol class="step-list">
+        <li><strong><code>/ux-init</code></strong> &mdash; bootstrap ux-skill in the project. Detects your IDE, installs the artifacts, validates the Python engine, prints a stats snapshot of the manifests.</li>
+        <li><strong><code>/ux-audit &lt;your-url&gt;</code></strong> &mdash; a six-lens review of the page you have <em>now</em>. This is your baseline: where the hierarchy fails, which AI-slop tells are already present, what to fix against.</li>
+        <li><strong><code>/ux-discover</code></strong> &mdash; the 10-field intake. Audience, primary goal, tone, must-haves, and a forbidden list. The brief is the contract; everything downstream keys off it.</li>
+        <li><strong><code>/ux-recommend</code></strong> &mdash; the 5-parallel-search engine returns a complete design system <em>anchored to your brand</em>: palette from your logo's pixels, type pair, components, motion, plus the active anti-slop guardrails.</li>
+        <li><strong><code>/ux-design</code></strong> &mdash; rebuild the page against that system. The frontend-engineer sub-agent generates production HTML/CSS, brand-true, using the real content your audit captured.</li>
+        <li><strong><code>/ux-evolve</code></strong> &mdash; the auto-loop: lint &rarr; polish &rarr; re-lint until the deterministic score clears <strong>90</strong>. No hand-tuning.</li>
+        <li><strong><code>/ux-a11y</code> + <code>/ux-motion</code></strong> &mdash; a WCAG 2.1 AA audit and a motion pass (timing, easing, reduced-motion). The things a screenshot hides.</li>
+        <li><strong><code>/ux-lint</code></strong> &mdash; the final gate. The 152-rule anti-slop linter must report <strong>0 high</strong> before you ship.</li>
+      </ol>
+      <p>Two shortcuts worth knowing: <code>/ux-image-to-code</code> turns a screenshot of any page into a brief (useful when you can't point at a live URL), and <code>/ux-critique</code> gives a fast, opinionated taste call instead of a full audit.</p>
+
+      <h2>Why brand extraction is the whole game</h2>
+      <p>The step that separates a redesign from a re-skin is the brand anchor inside <code>/ux-recommend</code>. The engine reads your existing page &mdash; the logo's actual pixels, the heading font, the dominant accent &mdash; and pins the new system's primary color and letterform to <em>them</em>. A <strong>brand-fidelity hard floor</strong> then fails any generated output that drops your color or logo, or that drifts toward the tool's own house style.</p>
+      <p>That floor is the reason ux-skill can't quietly hand you a generic page: if the result doesn't carry your brand, it doesn't pass. Which brings us to the proof.</p>
+
+      <h2>Case study &mdash; Instant Skip Hire</h2>
+      <p>We ran the exact workflow above against a real UK lead-gen page: the commercial skip-hire page at instantskiphire.com. No design brief from the client &mdash; just the live URL.</p>
+      <figure class="shot">
+        <img src="/blog/skiphire-redesign.png" width="1280" height="860" alt="The ux-skill redesign of the Instant Skip Hire commercial page: dark green navigation, an amber accent, a construction-site hero photo, and a quote-request form on the right." loading="lazy">
+        <figcaption>The rebuilt page &mdash; brand-true amber on the company's own green, a real lead-capture form, generated end to end by the workflow above. <a href="/dogfood/skiphire.html" class="link">View the full page &rarr;</a></figcaption>
+      </figure>
+      <p>What the engine did, unprompted:</p>
+      <ul>
+        <li><strong>Read the brand off the page.</strong> Primary = <code>#f0890f</code> (amber), pulled from the logo's pixels &mdash; not the green chrome, not the tool's house color. Source confirmed: <code>logo</code>.</li>
+        <li><strong>Picked a lead-gen-service system</strong> and rebuilt the full sequence: nav, a hero on a real construction photo, an above-the-fold quote form, sectors, coverage, social proof, footer.</li>
+        <li><strong>Kept the copy real.</strong> The verbatim headline (<em>Commercial Skip Hire &amp; Trade Waste Accounts</em>) and the page's actual service lists carried straight through &mdash; no lorem, no invented claims.</li>
+      </ul>
+      <p>And the gates, on the first build:</p>
+      <div class="table-wrap">
+        <table class="compare-table">
+          <thead><tr><th>Gate</th><th>Result</th><th>What it means</th></tr></thead>
+          <tbody>
+            <tr><td>Brand fidelity</td><td class="num">100 / 100</td><td>Primary color + logo present; zero house-style drift</td></tr>
+            <tr><td>Imagery</td><td class="num">100 / 100</td><td>Real photography, not a placeholder service</td></tr>
+            <tr><td>Anti-slop lint</td><td class="num">0 high</td><td>Passes <code>--threshold high</code>: no gradient hero, no three-up cards, no filler verbs</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The result reads as <em>Instant Skip Hire, leveled up</em> &mdash; the same business, sharper. That is the bar: a redesign your customers recognize as <em>yours</em>, not one they have seen on a hundred other sites.</p>
+
+      <blockquote>The brand is what makes a redesign hard. The engine extracts it, then refuses to ship without it.</blockquote>
+
+      <div class="honesty">
+        <div class="label">Honesty card</div>
+        <h4>The gate is the product, not the prompt.</h4>
+        <p>Any model can generate a nicer-looking page. What is asymmetric here is the refusal: the brand-fidelity hard floor and the 152-rule linter <em>fail the build</em> when the output drops your brand or reaches for the generic centroid. ux-skill is less "make it pretty" and more "you may not ship slop."</p>
+        <p>It is not magic. A vague brief still yields a vague system &mdash; <code>/ux-discover</code> is a forcing function for a reason. And the AI still writes the markup; the engine sets the rails and checks the result on the way back.</p>
+      </div>
+
+      <h2>From here</h2>
+      <p>Once the page passes, commit <code>.ux/design-system/MASTER.md</code> alongside it. Every future Claude Code or Cursor session reads that file first, so the next feature you build lands inside the same system instead of drifting back to the average. Re-run <code>/ux-lint</code> in CI to catch regressions. The redesign is not a one-shot &mdash; it is a floor your codebase keeps.</p>
+    </article>
+
+    <section class="cta">
+      <span class="eyebrow">Redesign your site</span>
+      <h2>Point it at your page. <span class="accent">Ship a brand-true rebuild.</span></h2>
+      <p>Free, MIT, offline. Install the plugin in Claude Code, or the CLI via pip or npx, and run the workflow above.</p>
+      <div class="install-block">
+        <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
+        <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; or the CLI &mdash;</div>
+        <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
+      </div>
+    </section>
+  </div>
+
+  <aside class="related-reads" aria-label="Related reads">
+    <div class="related-reads-inner">
+      <h2 class="related-reads-h">Related reads</h2>
+      <ul>
+        <li><a href="/blog/ai-design-system-cli.html">AI design system CLI</a></li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html">Anti-AI-slop Claude skills</a></li>
+        <li><a href="/blog/ai-built-website-no-slop.html">Ship an AI-built site with no slop</a></li>
+        <li><a href="/blog/brand-specs-training-data-not-templates.html">Brand specs as training data, not templates</a></li>
+      </ul>
+    </div>
+  </aside>
+  <style>
+    .related-reads { max-width: 880px; margin: 80px auto 0 auto; padding: 32px 24px 8px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .related-reads-h { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #7a7972; margin-bottom: 16px; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    .related-reads ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px; }
+    .related-reads li { font-size: 15px; line-height: 1.5; color: #c8c6bf; }
+    .related-reads a { color: #c8c6bf; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.18); padding-bottom: 2px; transition: border-color .15s ease, color .15s ease; }
+    .related-reads a:hover { border-color: currentColor; color: #f6f7f9; }
+    @media (max-width: 640px) { .related-reads ul { grid-template-columns: 1fr; } }
+  </style>
+
+  <footer>
+    <span>&copy; 2026 Laith Aljunaidy. MIT licensed. No telemetry.</span>
+    <div class="links">
+      <a href="/">Home</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/blog/">Blog</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="https://github.com/Laith0003/ux-skill">GitHub</a>
+      <a href="https://pypi.org/project/uxskill/">PyPI</a>
+      <a href="https://www.npmjs.com/package/uxskill">npm</a>
+    </div>
+  </footer>
+<script id="usknav-js">(function(){var d=document.getElementById('usknav-drawer');var b=document.querySelector('.usknav__burger');if(!d||!b)return;var c=d.querySelector('.usknav__drawer-close');function F(){return d.querySelectorAll('a[href],button:not([disabled])');}function set(v){d.classList.toggle('is-open',v);b.setAttribute('aria-expanded',v?'true':'false');document.body.style.overflow=v?'hidden':'';if(v){var f=c||F()[0];if(f)f.focus();}else{b.focus();}}b.addEventListener('click',function(){set(true);});if(c)c.addEventListener('click',function(){set(false);});d.addEventListener('click',function(e){if(e.target.tagName==='A')set(false);});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&d.classList.contains('is-open'))set(false);if(e.key==='Tab'&&d.classList.contains('is-open')){var f=F();if(!f.length)return;var a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus();}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus();}}});var L=document.querySelector('.usknav__langs');if(L){document.addEventListener('click',function(e){if(L.open&&!L.contains(e.target))L.open=false;});L.addEventListener('keydown',function(e){if(e.key==='Escape')L.open=false;});}})();</script>
+</body>
+</html>
