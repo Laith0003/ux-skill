@@ -12,7 +12,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Why v0, Bolt, and Lovable all ship the same look</title>
-<meta name="description" content="Prompt-to-app builders like v0, Bolt, and Lovable generate fast — and converge on the same gradient hero, three-card row, and violet accent. The mechanism behind the sameness, and how to get a custom design out of them.">
+<meta name="description" content="Prompt-to-app builders like v0, Bolt, and Lovable generate fast, and converge on the same gradient hero, three-card row, and violet accent. The mechanism behind the sameness, and how to get a custom design out of them.">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ai-app-builders-generic-design.html">
 <meta property="og:title" content="Why v0, Bolt, and Lovable all ship the same look">
 <meta property="og:description" content="Prompt-to-app builders converge on one centroid: a gradient hero, three equal cards, a violet accent. The mechanism, and how a structured brief breaks it.">
@@ -20,7 +20,7 @@
 <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ai-app-builders-generic-design.html">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Why v0, Bolt, and Lovable all ship the same look">
-<meta name="twitter:description" content="Why prompt-to-app builders converge — and how to feed them structure instead of adjectives.">
+<meta name="twitter:description" content="Why prompt-to-app builders converge, and how to feed them structure instead of adjectives.">
 
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BlogPosting","headline":"Why v0, Bolt, and Lovable all ship the same look","datePublished":"2026-05-29","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/ai-app-builders-generic-design.html","inLanguage":"en"}
@@ -205,7 +205,7 @@
 <header class="post">
 <p class="eyebrow">FIELD NOTES · 2026-05-29</p>
 <h1>Why v0, Bolt, and Lovable <em>all ship the same look</em>.</h1>
-<p class="lede">Prompt-to-app builders are genuinely fast. Describe an app and v0, Bolt, or Lovable hands you a running screen in seconds. Then you notice every screen rhymes: a centered hero over a soft gradient, three equal feature cards, a violet primary, Inter, the same airy spacing on a marketing page and a settings panel. The speed is real. So is the sameness — and re-prompting your way out of it rarely works.</p>
+<p class="lede">Prompt-to-app builders are genuinely fast. Describe an app and v0, Bolt, or Lovable hands you a running screen in seconds. Then you notice every screen rhymes: a centered hero over a soft gradient, three equal feature cards, a violet primary, Inter, the same airy spacing on a marketing page and a settings panel. The speed is real. So is the sameness, and re-prompting your way out of it rarely works.</p>
 </header>
 
 <h2>The same screen, every time</h2>
@@ -215,16 +215,16 @@
 <li>Three equal cards in a row for features, each with a small icon, a short title, and two lines of body.</li>
 <li>A violet or indigo primary, the same one you have seen on a hundred other generated apps.</li>
 <li>Inter for everything, set at the same large display sizes the demos use.</li>
-<li>Generous, uniform spacing — the same padding on a hero and on a dense table, because nothing told the model they differ.</li>
+<li>Generous, uniform spacing: the same padding on a hero and on a dense table, because nothing told the model they differ.</li>
 </ul>
 <p>It looks plausible, which is exactly the trap. Plausible is the target the builder is optimizing for, and plausible has a single most-likely shape.</p>
 
 <h2>Why plausible means identical</h2>
-<p>A prompt-to-app builder is graded, implicitly, on two things: the code runs, and the result looks like a real app. Both pressures point at the center of the training distribution. The most defensible output for an underspecified request is the most common one — the average of every hero, card row, and palette the model has seen. That average is the centroid, and regression to it is what optimizing for "looks right" does when the brief is a sentence. Tailwind and shadcn defaults sharpen it further: a known set of utilities and a known palette is the path of least resistance, so the convergence is baked into the materials too.</p>
-<blockquote>An empty brief has a most-likely answer, and every builder returns it. Sameness is not a failure of imagination — it is the correct response to a request that carries no constraints.</blockquote>
+<p>A prompt-to-app builder is graded, implicitly, on two things: the code runs, and the result looks like a real app. Both pressures point at the center of the training distribution. The most defensible output for an underspecified request is the most common one: the average of every hero, card row, and palette the model has seen. That average is the centroid, and regression to it is what optimizing for "looks right" does when the brief is a sentence. Tailwind and shadcn defaults sharpen it further: a known set of utilities and a known palette is the path of least resistance, so the convergence is baked into the materials too.</p>
+<blockquote>An empty brief has a most-likely answer, and every builder returns it. Sameness is not a failure of imagination. It is the correct response to a request that carries no constraints.</blockquote>
 
 <h2>Why "make it more unique" does not work</h2>
-<p>The reflex is to argue with the output: make it more beautiful, more premium, more unique, less generic. This mostly fails, and for a concrete reason. An adjective is not a constraint the model can satisfy deterministically — it is a vibe with its own centroid. "More unique" resolves to a slightly different draw from the same distribution: swap the violet for a teal, bump a radius, add a blur behind the hero. The vocabulary is unchanged because nothing pinned it down. You are re-rolling the dice, not loading them.</p>
+<p>The reflex is to argue with the output: make it more beautiful, more premium, more unique, less generic. This mostly fails, and for a concrete reason. An adjective is not a constraint the model can satisfy deterministically. It is a vibe with its own centroid. "More unique" resolves to a slightly different draw from the same distribution: swap the violet for a teal, bump a radius, add a blur behind the hero. The vocabulary is unchanged because nothing pinned it down. You are re-rolling the dice, not loading them.</p>
 <table>
 <thead><tr><th>you say</th><th>what the model does</th><th>result</th></tr></thead>
 <tbody>
@@ -237,18 +237,18 @@
 <p>The fix is not a better adjective. It is structure: concrete tokens the generated code has to use, supplied before the first generation instead of negotiated after it.</p>
 
 <h2>Feed it tokens, not adjectives</h2>
-<p>A brief beats a vibe when it resolves to specifics: a named palette, a type pair, a density target, a radius, motion presets, and component choices. Those are values the model can apply without guessing. ux-skill produces exactly that brief — you run a short discovery intake and the engine returns a complete system drawn from its data manifests, which you paste into v0, Bolt, or Lovable as the constraint. The builder fills it in instead of inventing it.</p>
-<p>The engine is deterministic and offline, with no model inside it: the same brief maps to the same system every time, on any machine, because the recommendation is a lookup over fixed data, not a generation. That is the property the builders lack — a stable source of constraints they can be made to obey.</p>
-<p>Density is the token that most exposes the gap. Builder output defaults to landing-page spacing everywhere, because marketing screens dominate the training data and nothing in the prompt says a settings table is not a hero — so app surfaces feel under-dense, holding a fraction of what the viewport could carry. ux-skill treats density as a first-class dial: set it high and the spacing base tightens, the type scale compresses, and radii sharpen together, so the result reads like a tool rather than a brochure with inputs glued on.</p>
+<p>A brief beats a vibe when it resolves to specifics: a named palette, a type pair, a density target, a radius, motion presets, and component choices. Those are values the model can apply without guessing. ux-skill produces exactly that brief: you run a short discovery intake and the engine returns a complete system drawn from its data manifests, which you paste into v0, Bolt, or Lovable as the constraint. The builder fills it in instead of inventing it.</p>
+<p>The engine is deterministic and offline, with no model inside it: the same brief maps to the same system every time, on any machine, because the recommendation is a lookup over fixed data, not a generation. That is the property the builders lack: a stable source of constraints they can be made to obey.</p>
+<p>Density is the token that most exposes the gap. Builder output defaults to landing-page spacing everywhere, because marketing screens dominate the training data and nothing in the prompt says a settings table is not a hero, so app surfaces feel under-dense, holding a fraction of what the viewport could carry. ux-skill treats density as a first-class dial: set it high and the spacing base tightens, the type scale compresses, and radii sharpen together, so the result reads like a tool rather than a brochure with inputs glued on.</p>
 
 <h2>The linter catches the centroid tells</h2>
-<p>The give-aways are mechanical, so they can be checked mechanically. ux-skill ships a regex linter that flags the exact signatures of a centroid render: a violet-to-blue gradient, a row of three equal feature cards, a default named palette used for primary, marketing filler in headings, the same generic call-to-action text. Run it over what a builder generated and the tells surface as findings with line numbers and fixes, scored to a number you can gate on. Generate with a structured brief, lint the result, fix what it flags — and the output stops looking like every other generated app, because it was never asked to be average.</p>
+<p>The give-aways are mechanical, so they can be checked mechanically. ux-skill ships a regex linter that flags the exact signatures of a centroid render: a violet-to-blue gradient, a row of three equal feature cards, a default named palette used for primary, marketing filler in headings, the same generic call-to-action text. Run it over what a builder generated and the tells surface as findings with line numbers and fixes, scored to a number you can gate on. Generate with a structured brief, lint the result, fix what it flags, and the output stops looking like every other generated app, because it was never asked to be average.</p>
 
 <h2>The point</h2>
-<p>v0, Bolt, and Lovable converge because an empty brief has one most-likely answer, and adjectives cannot pull them off it. Supply structure instead — a deterministic system of real tokens the generated code must use, plus a linter to catch the drift — and the same fast builders produce something that is actually yours.</p>
+<p>v0, Bolt, and Lovable converge because an empty brief has one most-likely answer, and adjectives cannot pull them off it. Supply structure instead (a deterministic system of real tokens the generated code must use, plus a linter to catch the drift) and the same fast builders produce something that is actually yours.</p>
 <pre><code>pip install uxskill
 # then, in your AI coding tool:
-# /ux-recommend  — a complete system from a brief, deterministic and offline</code></pre>
+# /ux-recommend  : a complete system from a brief, deterministic and offline</code></pre>
 
 <h2>Related</h2>
 <ul>
@@ -259,7 +259,7 @@
 </ul>
 
 <footer>
-ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+ux-skill v3.0 · THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
 </footer>
 
 </div>

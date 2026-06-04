@@ -20,7 +20,7 @@
 <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ai-ui-design-review-checklist.html">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="A pre-ship design review checklist for AI-generated UI">
-<meta name="twitter:description" content="Catch AI design slop before it ships. The tell and the fix for each layer — palette, type, layout, spacing, states, a11y, motion.">
+<meta name="twitter:description" content="Catch AI design slop before it ships. The tell and the fix for each layer: palette, type, layout, spacing, states, a11y, motion.">
 
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BlogPosting","headline":"A pre-ship design review checklist for AI-generated UI","datePublished":"2026-05-29","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/ai-ui-design-review-checklist.html","inLanguage":"en"}
@@ -205,22 +205,22 @@
 <header class="post">
 <p class="eyebrow">FIELD NOTES · 2026-05-29</p>
 <h1>A pre-ship review checklist for <em>AI-generated UI</em>.</h1>
-<p class="lede">AI output passes a glance and fails a review. It looks plausible for three seconds because it lands on the training centroid — the average of every screenshot the model saw — and the average is competent, generic, and exactly what your competitor also shipped last week. A glance can't catch that. A checklist can. Here is the one I run before anything goes out, organized by the layer it lives in, with the tell and the fix for each.</p>
+<p class="lede">AI output passes a glance and fails a review. It looks plausible for three seconds because it lands on the training centroid (the average of every screenshot the model saw), and the average is competent, generic, and exactly what your competitor also shipped last week. A glance can't catch that. A checklist can. Here is the one I run before anything goes out, organized by the layer it lives in, with the tell and the fix for each.</p>
 </header>
 
 <h2>Why it passes a glance and fails a review</h2>
-<p>A glance reads silhouette: is there a hero, a nav, some cards, a footer? AI nails the silhouette every time, because the silhouette is the centroid. A review reads the layers underneath — saturation, type variety, spacing rhythm, the states you only see when you interact. That is where the regression to the mean shows: one violet accent, a single sans for everything, three equal cards, the soft default corner, and not a single hover or empty state in sight. None of it is broken. All of it is forgettable. The checklist below works one layer at a time, because that is where the tells hide.</p>
-<blockquote>Generated UI is rarely wrong. It is average — and average is a tell, because the centroid is a place a thousand other people also landed.</blockquote>
+<p>A glance reads silhouette: is there a hero, a nav, some cards, a footer? AI nails the silhouette every time, because the silhouette is the centroid. A review reads the layers underneath: saturation, type variety, spacing rhythm, the states you only see when you interact. That is where the regression to the mean shows: one violet accent, a single sans for everything, three equal cards, the soft default corner, and not a single hover or empty state in sight. None of it is broken. All of it is forgettable. The checklist below works one layer at a time, because that is where the tells hide.</p>
+<blockquote>Generated UI is rarely wrong. It is average, and average is a tell, because the centroid is a place a thousand other people also landed.</blockquote>
 
 <h2>The checklist</h2>
 <p>Run it top to bottom on the surface you are about to ship. Each row is one layer: what to look for, and what to do when you find it.</p>
 <table>
 <thead><tr><th>layer</th><th>the tell</th><th>the fix</th></tr></thead>
 <tbody>
-<tr><td>Palette</td><td>Two or three competing accents; saturation pinned near maximum; color used for decoration.</td><td>One accent. Pull saturation under 80 percent so it reads as ink, not neon. Reserve color for meaning — success, warning, danger — never for flair.</td></tr>
-<tr><td>Typography</td><td>One sans for headings and body; the default UI face doing every job at every size.</td><td>A voice-matched pair — a display face with character against a workhorse body. Variety in the type, not just the size ramp.</td></tr>
-<tr><td>Layout</td><td>Three equal cards in a row; a centered hero by reflex; symmetry as the only move; variance near zero.</td><td>Push asymmetry above that flat baseline. Break the equal-thirds grid. Earn the centered hero or drop it — most surfaces read better off-axis.</td></tr>
-<tr><td>Density and spacing</td><td>One airy gap value everywhere, regardless of surface; spacing that drifted in rather than being chosen.</td><td>A real rhythm on a 4-based scale. Match density to the surface — tight for a tool, generous for a landing page — and keep the steps consistent.</td></tr>
+<tr><td>Palette</td><td>Two or three competing accents; saturation pinned near maximum; color used for decoration.</td><td>One accent. Pull saturation under 80 percent so it reads as ink, not neon. Reserve color for meaning (success, warning, danger), never for flair.</td></tr>
+<tr><td>Typography</td><td>One sans for headings and body; the default UI face doing every job at every size.</td><td>A voice-matched pair: a display face with character against a workhorse body. Variety in the type, not just the size ramp.</td></tr>
+<tr><td>Layout</td><td>Three equal cards in a row; a centered hero by reflex; symmetry as the only move; variance near zero.</td><td>Push asymmetry above that flat baseline. Break the equal-thirds grid. Earn the centered hero or drop it. Most surfaces read better off-axis.</td></tr>
+<tr><td>Density and spacing</td><td>One airy gap value everywhere, regardless of surface; spacing that drifted in rather than being chosen.</td><td>A real rhythm on a 4-based scale. Match density to the surface (tight for a tool, generous for a landing page) and keep the steps consistent.</td></tr>
 <tr><td>Radius and elevation</td><td>The same oversized default corner on every box; a soft drop-shadow on everything to fake depth.</td><td>Radius from a token, sized to the component, not one rounded default reused everywhere. Let hairlines and surface contrast carry depth; spend shadow sparingly.</td></tr>
 <tr><td>States</td><td>Only the resting state exists. No hover, no focus, no disabled, no loading, no empty, no error.</td><td>Design all seven. The empty and error states are where a product earns trust, and they are the first thing AI skips.</td></tr>
 <tr><td>Accessibility</td><td>Body text under 4.5:1; focus rings stripped; inputs labelled by placeholder; motion that ignores the reduced-motion setting.</td><td>Hold 4.5:1 on text. Keep a visible focus ring. Give every field a real label. Honor <code>prefers-reduced-motion</code>.</td></tr>
@@ -229,17 +229,17 @@
 </table>
 
 <h2>Most of this is mechanically checkable</h2>
-<p>Read that list again and notice how much of it is not a taste call at all. Saturation over a threshold, a single font family across every selector, three equal cards in a grid, the default corner radius, a stripped focus outline, a 300ms duration, a transition on width or height — every one of those is a pattern a regular expression can find. You do not need judgment to catch them; you need a floor.</p>
-<p>That floor is what ux-skill's anti-slop linter is: a few hundred regex rules, each tied to a specific tell, each carrying the fix. It reads your markup and CSS as raw text and flags the centroid signatures — the violet-to-blue gradient, the emoji standing in for an icon, the placeholder name, the layout transition, the missing alt text — scored out of 100 so a clean surface lands near the top and a slop-heavy one drops fast. Run it with <code>uxskill lint</code>. It is deterministic and offline, so the same file scores the same every time, on any machine.</p>
-<p>What the regex floor cannot judge is the rest: whether the asymmetry is composed or just uneven, whether the type pairing has a voice, whether the density actually fits the surface. That is the taste layer, and it is what <code>/ux-audit</code> is for — a structured read of the surface against the parts a pattern match will never see. The split is deliberate. Let the linter own everything mechanical so the review time goes where only a person helps.</p>
+<p>Read that list again and notice how much of it is not a taste call at all. Saturation over a threshold, a single font family across every selector, three equal cards in a grid, the default corner radius, a stripped focus outline, a 300ms duration, a transition on width or height. Every one of those is a pattern a regular expression can find. You do not need judgment to catch them; you need a floor.</p>
+<p>That floor is what ux-skill's anti-slop linter is: a few hundred regex rules, each tied to a specific tell, each carrying the fix. It reads your markup and CSS as raw text and flags the centroid signatures (the violet-to-blue gradient, the emoji standing in for an icon, the placeholder name, the layout transition, the missing alt text), scored out of 100 so a clean surface lands near the top and a slop-heavy one drops fast. Run it with <code>uxskill lint</code>. It is deterministic and offline, so the same file scores the same every time, on any machine.</p>
+<p>What the regex floor cannot judge is the rest: whether the asymmetry is composed or just uneven, whether the type pairing has a voice, whether the density actually fits the surface. That is the taste layer, and it is what <code>/ux-audit</code> is for: a structured read of the surface against the parts a pattern match will never see. The split is deliberate. Let the linter own everything mechanical so the review time goes where only a person helps.</p>
 
 <h2>How to run it</h2>
 <p>Use the checklist as a gate, not a vibe. Lint first to clear the mechanical floor, fix what it flags, then spend the human pass on composition, voice, and fit. The order matters: there is no point debating whether the hero composition sings while the focus rings are still missing and half the states do not exist.</p>
-<p>One pass, eight layers, every time. The tells are consistent because the centroid is consistent — which is the good news. A predictable failure is a checkable one.</p>
+<p>One pass, eight layers, every time. The tells are consistent because the centroid is consistent, which is the good news. A predictable failure is a checkable one.</p>
 <pre><code>pip install uxskill
 # then, before you ship:
-#   uxskill lint   — the mechanical floor (the regex rules above)
-#   /ux-audit      — the taste layer a regex can't reach</code></pre>
+#   uxskill lint   : the mechanical floor (the regex rules above)
+#   /ux-audit      : the taste layer a regex can't reach</code></pre>
 
 <h2>Related</h2>
 <ul>
@@ -250,7 +250,7 @@
 </ul>
 
 <footer>
-ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+ux-skill v3.0 · THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
 </footer>
 
 </div>

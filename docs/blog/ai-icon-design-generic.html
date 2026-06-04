@@ -211,22 +211,22 @@
 <h2>The icon tell</h2>
 <p>Iconography has a fingerprint as legible as the font choice. A few patterns show up in nearly every generated interface:</p>
 <ul>
-<li>One library, picked by popularity — Heroicons or Lucide — at a single 1.5px or 2px stroke, never tuned to the brand.</li>
+<li>One library, picked by popularity (Heroicons or Lucide) at a single 1.5px or 2px stroke, never tuned to the brand.</li>
 <li>An icon per feature card, decorative rather than functional, so the eye learns to skip them.</li>
 <li>The same dozen shapes recycled across unrelated products: a generic bolt for speed, a shield for security, a rocket for launch.</li>
-<li>Worst case, emoji standing in for UI icons — a rocket glyph, a sparkle, a checkmark face — pasted straight into a button or a list.</li>
+<li>Worst case, emoji standing in for UI icons (a rocket glyph, a sparkle, a checkmark face) pasted straight into a button or a list.</li>
 </ul>
 <p>The first three are merely generic. The last is the one that costs you, and it costs you twice.</p>
 
 <h2>Why it ships</h2>
-<p>The model reaches for whatever it has seen most. Heroicons and Lucide dominate the open component demos it trained on, so they are the path of least resistance — the icon-shaped point at the center of the distribution. Gluing one icon to every heading is the same reflex: a template fills a slot, and an empty slot feels wrong, so it gets filled regardless of whether the icon adds meaning.</p>
-<p>Emoji are a different failure with the same root. They are zero-effort — already in the text stream, no import, no SVG. So when a quick mock needs a visual marker, an emoji lands there. The trouble is that an emoji is not a UI asset. It is a font glyph the operating system renders, and that has consequences.</p>
+<p>The model reaches for whatever it has seen most. Heroicons and Lucide dominate the open component demos it trained on, so they are the path of least resistance: the icon-shaped point at the center of the distribution. Gluing one icon to every heading is the same reflex: a template fills a slot, and an empty slot feels wrong, so it gets filled regardless of whether the icon adds meaning.</p>
+<p>Emoji are a different failure with the same root. They are zero-effort: already in the text stream, no import, no SVG. So when a quick mock needs a visual marker, an emoji lands there. The trouble is that an emoji is not a UI asset. It is a font glyph the operating system renders, and that has consequences.</p>
 <blockquote>An emoji icon is the one design choice that looks different on every device you ship to. You drew nothing. You handed the rendering to Apple, Google, and Microsoft, and they each answer differently.</blockquote>
-<p>On Apple platforms it is a glossy full-color picture; on Android, a flatter Material shape; on older Windows, a hollow outline or a blank box. Your "icon" is three icons you never approved. It also reads as unfinished — a placeholder marker, the kind you leave in a draft and mean to swap. Worse, screen readers announce the emoji's full Unicode name aloud, which is rarely the label you wanted, so the accessibility story breaks alongside the visual one.</p>
+<p>On Apple platforms it is a glossy full-color picture; on Android, a flatter Material shape; on older Windows, a hollow outline or a blank box. Your "icon" is three icons you never approved. It also reads as unfinished: a placeholder marker, the kind you leave in a draft and mean to swap. Worse, screen readers announce the emoji's full Unicode name aloud, which is rarely the label you wanted, so the accessibility story breaks alongside the visual one.</p>
 
 <h2>The fix: pick a family, use it with intent</h2>
-<p>Two moves cover most of the gap. First, choose an icon family whose weight matches the brand instead of accepting the default. A serious, dense product wants a thinner, sharper set; a warm consumer product can carry a rounded, filled one. Heroicons, Lucide, and Phosphor each ship multiple weights — the point is that the weight is a decision, made once, and held across the interface.</p>
-<p>Second, use icons sparingly. An icon should mark an action or a category the user navigates by, not garnish a heading. Most marketing sections read better with no icon at all than with a decorative one per row. When you do use them, keep the stroke weight and the optical size consistent, and never mix two libraries — two stroke languages in one screen is its own tell.</p>
+<p>Two moves cover most of the gap. First, choose an icon family whose weight matches the brand instead of accepting the default. A serious, dense product wants a thinner, sharper set; a warm consumer product can carry a rounded, filled one. Heroicons, Lucide, and Phosphor each ship multiple weights. The point is that the weight is a decision, made once, and held across the interface.</p>
+<p>Second, use icons sparingly. An icon should mark an action or a category the user navigates by, not garnish a heading. Most marketing sections read better with no icon at all than with a decorative one per row. When you do use them, keep the stroke weight and the optical size consistent, and never mix two libraries. Two stroke languages in one screen is its own tell.</p>
 <table>
 <thead><tr><th>the icon tell</th><th>why it ships</th><th>the fix</th></tr></thead>
 <tbody>
@@ -239,14 +239,14 @@
 <p>And the non-negotiable: no emoji as interface icons, ever. They render differently per platform, read as a placeholder, and break for assistive tech. If a visual marker is worth shipping, it is worth a real SVG you control.</p>
 
 <h2>How ux-skill keeps it honest</h2>
-<p>Three parts of the engine pull against the default. The components manifest carries icon guidance per component — what an icon is for in a button, a nav item, an empty state, and where it does not belong — so the recommendation is "use a marked action icon here," not "drop a bolt on each card." The 72 brand specs show how real brands handle iconography: which family, which weight, how restrained, so you can match a reference instead of inheriting the centroid. And the anti-slop linter flags emoji used as icons directly — a glyph inside a button, a list item, or a class named <code>icon</code> trips a high-severity rule, the same way it flags a violet gradient or Inter set at display size.</p>
+<p>Three parts of the engine pull against the default. The components manifest carries icon guidance per component (what an icon is for in a button, a nav item, an empty state, and where it does not belong) so the recommendation is "use a marked action icon here," not "drop a bolt on each card." The 72 brand specs show how real brands handle iconography: which family, which weight, how restrained, so you can match a reference instead of inheriting the centroid. And the anti-slop linter flags emoji used as icons directly: a glyph inside a button, a list item, or a class named <code>icon</code> trips a high-severity rule, the same way it flags a violet gradient or Inter set at display size.</p>
 <p>The effect is that the icon question gets answered on purpose. Same brief, run again next week, on a different machine: identical guidance. Deterministic, offline, no model in the loop.</p>
 
 <h2>The point</h2>
 <p>Generated interfaces use the same icons because the model defaults to the most-seen library, fills every slot on reflex, and treats emoji as a free substitute. Decide the family by brand weight, use icons only where they carry meaning, hold one stroke language across the screen, and keep emoji out of the UI entirely. The icons stop being a tell and start being a system.</p>
 <pre><code>pip install uxskill
 # then, in your AI coding tool:
-# /ux-recommend  — icon guidance per component; or `uxskill lint` to catch emoji-as-icon</code></pre>
+# /ux-recommend  : icon guidance per component; or `uxskill lint` to catch emoji-as-icon</code></pre>
 
 <h2>Related</h2>
 <ul>
@@ -257,7 +257,7 @@
 </ul>
 
 <footer>
-ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+ux-skill v3.0 · THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
 </footer>
 
 </div>

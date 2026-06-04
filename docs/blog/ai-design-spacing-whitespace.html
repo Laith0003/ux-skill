@@ -210,25 +210,25 @@
 
 <h2>One value, everywhere</h2>
 <p>The tell is uniformity. A real layout uses a handful of distinct spacing steps, and the choice between them is meaningful: a section break gets more room than a paragraph break, a card's inner padding differs from the gap between cards, a label sits closer to its field than to the next group. Generated output collapses all of those decisions into one number, usually 16 or 24, applied to almost everything.</p>
-<p>It happens for the same reason every other generated default happens. Across the training corpus, a mid-range gap is the value least likely to look broken in any single context. It is the safe centroid. Pick 16px between most things and nothing visibly collides and nothing visibly floats — so the model picks 16px between most things. The output passes a glance and fails a second look.</p>
+<p>It happens for the same reason every other generated default happens. Across the training corpus, a mid-range gap is the value least likely to look broken in any single context. It is the safe centroid. Pick 16px between most things and nothing visibly collides and nothing visibly floats. So the model picks 16px between most things. The output passes a glance and fails a second look.</p>
 
 <h2>Spacing is rhythm, not residue</h2>
-<p>Good spacing is read the way a reader feels paragraphs and stanzas: as grouping. Elements that belong together sit close; elements that don't get air between them. That contrast is the whole point — proximity tells the eye what is one thing and what is two. When every gap is equal, the grouping signal is gone, and a screen of unrelated parts reads as one undifferentiated wall.</p>
-<blockquote>Uniform spacing isn't ugly. It's flat — every relationship on the screen is given the same weight, so the eye gets no help deciding what goes with what.</blockquote>
+<p>Good spacing is read the way a reader feels paragraphs and stanzas: as grouping. Elements that belong together sit close; elements that don't get air between them. That contrast is the whole point: proximity tells the eye what is one thing and what is two. When every gap is equal, the grouping signal is gone, and a screen of unrelated parts reads as one undifferentiated wall.</p>
+<blockquote>Uniform spacing isn't ugly. It's flat: every relationship on the screen is given the same weight, so the eye gets no help deciding what goes with what.</blockquote>
 <p>This is why generated layouts feel oddly tiring. The work of parsing the hierarchy, which intentional spacing should do for you, gets pushed back onto the viewer. White space is not the empty bit left over after the content is placed. It is a tool, and the absence of variation in it is a design failure, not a neutral choice.</p>
 
 <h2>A scale, in steps of four</h2>
-<p>The cure starts with constraint. Instead of arbitrary gaps, a real system defines a small set of steps and uses only those: 4, 8, 12, 16, 24, 32, 48, 64. Multiples of a 4px base, so every measurement lines up on a shared grid and nothing is one or two pixels off from its neighbour. A scale does two things at once — it removes the stray off-grid values that make a layout feel unaligned, and it forces each gap to be a deliberate pick from a known set rather than whatever the moment suggested.</p>
-<p>Vertical rhythm is the second half. Section margins, heading spacing, and paragraph spacing should all be drawn from the same scale, so the page has a consistent beat down its length. A heading separated from its body by one step, sections separated by three or four — the steps differ on purpose, and because they come from one scale the differences feel composed rather than random.</p>
+<p>The cure starts with constraint. Instead of arbitrary gaps, a real system defines a small set of steps and uses only those: 4, 8, 12, 16, 24, 32, 48, 64. Multiples of a 4px base, so every measurement lines up on a shared grid and nothing is one or two pixels off from its neighbour. A scale does two things at once: it removes the stray off-grid values that make a layout feel unaligned, and it forces each gap to be a deliberate pick from a known set rather than whatever the moment suggested.</p>
+<p>Vertical rhythm is the second half. Section margins, heading spacing, and paragraph spacing should all be drawn from the same scale, so the page has a consistent beat down its length. A heading separated from its body by one step, sections separated by three or four. The steps differ on purpose, and because they come from one scale the differences feel composed rather than random.</p>
 
 <h2>Density is the axis underneath it</h2>
-<p>Here is the part the uniform-16px default cannot get right even in principle: the correct base depends on the surface. A marketing page should breathe — it has one message and a lot of room. A dashboard should be tight — its job is to fit a lot of legible information in front of someone scanning it all day. Same spacing scale, different base step, because the two surfaces sit at opposite ends of a <em>density</em> axis.</p>
+<p>Here is the part the uniform-16px default cannot get right even in principle: the correct base depends on the surface. A marketing page should breathe. It has one message and a lot of room. A dashboard should be tight. Its job is to fit a lot of legible information in front of someone scanning it all day. Same spacing scale, different base step, because the two surfaces sit at opposite ends of a <em>density</em> axis.</p>
 <p>ux-skill treats density as a first-class, continuous dial, and it drives the spacing base directly:</p>
 <table>
 <thead><tr><th>surface</th><th>density</th><th>spacing base</th></tr></thead>
 <tbody>
 <tr><td>marketing / landing</td><td>low</td><td>12px (airy)</td></tr>
-<tr><td>standard app</td><td>medium</td><td>6–8px</td></tr>
+<tr><td>standard app</td><td>medium</td><td>6-8px</td></tr>
 <tr><td>dashboard / data tool</td><td>high</td><td>4px (tight)</td></tr>
 </tbody>
 </table>
@@ -239,15 +239,15 @@
 <ol>
 <li>Density resolves high, so the <strong>spacing base is 4px</strong> and the scale steps tighten to match.</li>
 <li>Section, heading, and paragraph spacing are emitted as named steps off that base, so the vertical rhythm is built in, not improvised per component.</li>
-<li>The linter then guards it: every off-scale value — a stray <code>13px</code> gap, a <code>23px</code> margin — is flagged as a stray, because off-grid spacing is the fingerprint of the no-system default.</li>
+<li>The linter then guards it: every off-scale value (a stray <code>13px</code> gap, a <code>23px</code> margin) is flagged as a stray, because off-grid spacing is the fingerprint of the no-system default.</li>
 </ol>
-<p>The same request, run again next week on a different machine, returns the same scale. Deterministic, offline, no model in the loop — so the spacing rhythm is a property of the system, not a roll of the dice.</p>
+<p>The same request, run again next week on a different machine, returns the same scale. Deterministic, offline, no model in the loop, so the spacing rhythm is a property of the system, not a roll of the dice.</p>
 
 <h2>The point</h2>
 <p>Generated layouts feel flat because the model applies one safe gap to every relationship on the screen, and a single value cannot encode rhythm or match a surface's density. Give the brief a spacing scale tied to a density axis, draw the vertical rhythm from that one scale, and treat white space as something you spend deliberately rather than something left over. The layout stops reading as a competent draft and starts reading as a designed thing.</p>
 <pre><code>pip install uxskill
 # then, in your AI coding tool:
-# /ux-recommend  — density-resolved spacing scale, deterministic</code></pre>
+# /ux-recommend  : density-resolved spacing scale, deterministic</code></pre>
 
 <h2>Related</h2>
 <ul>
@@ -258,7 +258,7 @@
 </ul>
 
 <footer>
-ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+ux-skill v3.0 · THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
 </footer>
 
 </div>

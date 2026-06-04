@@ -479,7 +479,7 @@
       overflow-x: clip;
       max-width: 100%;
     }
-    /* Defensive — make sure no section, image, or table forces width >100%. */
+    /* Defensive: make sure no section, image, or table forces width >100%. */
     section, header, footer, main, article { max-width: 100vw; }
     img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
     table { max-width: 100%; }
@@ -643,7 +643,7 @@
       <span class="eyebrow">Blog &middot; Cursor &middot; 2026-05-28</span>
       <h1>Cursor design plugin: install ux-skill to stop <span class="accent">generic AI design output</span>.</h1>
       <p class="lede">
-        Cursor users hit the same wall as Claude Code users &mdash; AI defaults produce a recognizable look. Most "Cursor design tooling" means installing a component library or paying for an AI service. <strong>ux-skill</strong> is a different shape: a Python engine that runs inside Cursor and adds design constraints to every generation.
+        Cursor users hit the same wall as Claude Code users. AI defaults produce a recognizable look. Most "Cursor design tooling" means installing a component library or paying for an AI service. <strong>ux-skill</strong> is a different shape: a Python engine that runs inside Cursor and adds design constraints to every generation.
       </p>
       <p class="byline">By the ux-skill team &middot; 7 min read &middot; MIT-licensed open source</p>
 
@@ -652,7 +652,7 @@
         Cursor doesn't ship native design rules. The product is excellent at code, deliberately neutral on aesthetics. When you ask Cursor to "build a landing page" or "design a dashboard," the output reverts to the model's defaults: Inter at 90px, indigo-to-blue gradient, three identical cards, placeholder testimonials like "Maya Iqbal, CEO," fade-in-up motion on everything.
       </p>
       <p>
-        These aren't Cursor's defaults &mdash; they're the underlying model's defaults, which Cursor inherits along with the rest of the model's capabilities. Fixing them means feeding constraints in alongside the prompt: either rules in <code>.cursorrules</code>, a referenced design system, or a tool that runs alongside Cursor's generation.
+        These aren't Cursor's defaults. They're the underlying model's defaults, which Cursor inherits along with the rest of the model's capabilities. Fixing them means feeding constraints in alongside the prompt: either rules in <code>.cursorrules</code>, a referenced design system, or a tool that runs alongside Cursor's generation.
       </p>
       <p>
         <strong>ux-skill takes the third path.</strong> It's a Python package (<code>uxskill</code> on PyPI, also on npm as <code>uxskill</code>) that exposes a recommender, a generator, and a linter. Cursor calls it through one of three integration paths.
@@ -704,7 +704,7 @@
 
       <h2>What changes when ux-skill runs in Cursor</h2>
       <p>
-        Same prompt &mdash; "design a landing page for a fintech neobank." Cursor without ux-skill vs Cursor with ux-skill loaded.
+        Same prompt: "design a landing page for a fintech neobank." Cursor without ux-skill vs Cursor with ux-skill loaded.
       </p>
 
       <div class="before-after">
@@ -745,7 +745,7 @@
         For Cursor users, the relevant numbers are:
       </p>
       <ul>
-        <li><strong>1,243 structured entries</strong> across 12 JSON manifests &mdash; styles, palettes, type pairings, motion presets, components, industry rules, chart types, tech stacks, anti-patterns, brand specs, UX laws.</li>
+        <li><strong>1,243 structured entries</strong> across 12 JSON manifests: styles, palettes, type pairings, motion presets, components, industry rules, chart types, tech stacks, anti-patterns, brand specs, UX laws.</li>
         <li><strong>145 deterministic regex rules</strong> in the anti-slop linter. No LLM judgment in the audit lane.</li>
         <li><strong>160 brand DESIGN.md specs</strong>. Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, and 84 more.</li>
         <li><strong>25 slash commands</strong> covering discovery, recommendation, generation, audit, polish, and handoff.</li>
@@ -755,7 +755,7 @@
 
       <h2>Pairs well with shadcn/ui MCP and Tailwind</h2>
       <p>
-        ux-skill doesn't ship its own component library &mdash; it's a recommender + linter, not a UI kit. In Cursor, the natural pairing is:
+        ux-skill doesn't ship its own component library. It's a recommender + linter, not a UI kit. In Cursor, the natural pairing is:
       </p>
       <ol>
         <li><strong>ux-skill</strong> picks the design system (style + palette + type + motion).</li>
@@ -784,7 +784,7 @@
       <div class="honesty">
         <div class="label">Honesty card</div>
         <h4>About the 14-star claim</h4>
-        <p>ux-skill v2 is new (v2.0.0-alpha.1 shipped a few weeks ago) and solo-maintained. We don't have the install base ui-ux-pro-max or hallmark have. The case for installing is architecture &mdash; Python engine, 1,243 entries, 145-rule deterministic linter, 160 brand specs, cross-IDE distribution &mdash; not awareness.</p>
+        <p>ux-skill v2 is new (v2.0.0-alpha.1 shipped a few weeks ago) and solo-maintained. We don't have the install base ui-ux-pro-max or hallmark have. The case for installing is architecture (Python engine, 1,243 entries, 145-rule deterministic linter, 160 brand specs, cross-IDE distribution), not awareness.</p>
         <p>Install it for the linter and the brand specs. If you only need a prompt-only taste primer, taste-skill (25k stars) is also reasonable. Both are MIT.</p>
       </div>
 
@@ -794,11 +794,11 @@
       </p>
       <ol>
         <li><code>cd</code> into your project directory in Cursor's terminal.</li>
-        <li><code>npx uxskill@alpha init --target cursor</code> &mdash; writes <code>.cursorrules</code> and seeds the brand spec references.</li>
-        <li><code>npx uxskill@alpha discover</code> &mdash; answers the 10-field discovery, writes <code>.ux/last-discover.json</code>.</li>
-        <li><code>npx uxskill@alpha recommend</code> &mdash; reads discovery, returns style + palette + type + motion + components, writes <code>tokens.css</code>.</li>
+        <li><code>npx uxskill@alpha init --target cursor</code>: writes <code>.cursorrules</code> and seeds the brand spec references.</li>
+        <li><code>npx uxskill@alpha discover</code>: answers the 10-field discovery, writes <code>.ux/last-discover.json</code>.</li>
+        <li><code>npx uxskill@alpha recommend</code>: reads discovery, returns style + palette + type + motion + components, writes <code>tokens.css</code>.</li>
         <li>Ask Cursor to generate inside that system. The recommendation is in <code>.cursorrules</code>; the model can't drift to defaults.</li>
-        <li><code>npx uxskill@alpha lint ./src</code> &mdash; 145-rule pass. Fix any flagged lines with <code>ux fix</code>.</li>
+        <li><code>npx uxskill@alpha lint ./src</code>: 145-rule pass. Fix any flagged lines with <code>ux fix</code>.</li>
       </ol>
 
       <p>
@@ -814,10 +814,10 @@
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init --target cursor</span></div>
-        <div class="row row-divider">&mdash; or if Python is available &mdash;</div>
+        <div class="row row-divider">or if Python is available</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
         <div class="row"><span class="prompt">$</span> ux lint <span class="arg">./src --threshold high</span></div>
-        <div class="row row-divider">&mdash; or as a Claude Code skill (if you also use Claude Code) &mdash;</div>
+        <div class="row row-divider">or as a Claude Code skill (if you also use Claude Code)</div>
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
       </div>

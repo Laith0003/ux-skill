@@ -209,9 +209,9 @@
 </header>
 
 <h2>Why the look passes and the operability does not</h2>
-<p>An AI model is trained to produce something that resembles good UI. Its reward is visual plausibility: does this look like the screenshots in the training set. Accessibility is, almost by definition, the part of an interface that is invisible in a screenshot. Contrast ratios, focus order, accessible names, the difference between a <code>&lt;button&gt;</code> and a styled <code>&lt;div&gt;</code> — none of it changes a single pixel of the rendered frame. So the optimization target never sees it, and the model has no pressure to get it right.</p>
+<p>An AI model is trained to produce something that resembles good UI. Its reward is visual plausibility: does this look like the screenshots in the training set. Accessibility is, almost by definition, the part of an interface that is invisible in a screenshot. Contrast ratios, focus order, accessible names, the difference between a <code>&lt;button&gt;</code> and a styled <code>&lt;div&gt;</code>. None of it changes a single pixel of the rendered frame. So the optimization target never sees it, and the model has no pressure to get it right.</p>
 <p>The result is consistent. Not random bugs, but the same short list of failures, over and over, because they are the failures that cost nothing in the one metric the model was graded on.</p>
-<blockquote>The interface isn't inaccessible by accident. It's inaccessible because nothing in how it was generated rewarded operability — only the look.</blockquote>
+<blockquote>The interface isn't inaccessible by accident. It's inaccessible because nothing in how it was generated rewarded operability, only the look.</blockquote>
 
 <h2>The recurring seven</h2>
 <p>Here is the set that shows up across tools, with the mechanism for each and the fix. Every one of these is mechanical: a fixed rule, decidable from the markup or the tokens, no judgment call required.</p>
@@ -221,7 +221,7 @@
 <tr><td>Gray-on-white body text under 4.5:1</td><td>Light gray reads as "refined" in a thumbnail; the ratio is invisible</td><td>Enforce 4.5:1 (AA) for body, 3:1 for large text, as a token constraint</td></tr>
 <tr><td><code>outline: none</code> with no replacement</td><td>The default ring looks untidy in a static frame, so it gets removed</td><td>Pair every reset with a visible <code>:focus-visible</code> style</td></tr>
 <tr><td>Icon-only control, no accessible name</td><td>The glyph carries meaning visually; a screen reader gets silence</td><td>Add an <code>aria-label</code>, or visually-hidden text</td></tr>
-<tr><td>Clickable <code>&lt;div&gt;</code> / <code>&lt;span&gt;</code></td><td>A div styles identically and the click handler "works" with a mouse</td><td>Use a real <code>&lt;button&gt;</code> — focus, Enter, Space come free</td></tr>
+<tr><td>Clickable <code>&lt;div&gt;</code> / <code>&lt;span&gt;</code></td><td>A div styles identically and the click handler "works" with a mouse</td><td>Use a real <code>&lt;button&gt;</code>: focus, Enter, Space come free</td></tr>
 <tr><td>Placeholder used as the label</td><td>It looks cleaner with one less line of text</td><td>Keep a real <code>&lt;label&gt;</code> bound to the input</td></tr>
 <tr><td>Color as the only state signal</td><td>Red-for-error photographs fine</td><td>Add text or an icon so state survives color blindness</td></tr>
 <tr><td>Motion with no reduced-motion guard</td><td>The animation is the demo; the guard is invisible</td><td>Wrap it in <code>prefers-reduced-motion</code></td></tr>
@@ -235,30 +235,30 @@
 
 &lt;!-- what it should be: same look, actually a control --&gt;
 &lt;button type="button" onclick="save()"&gt;Save&lt;/button&gt;</code></pre>
-<p>The first one is not keyboard-focusable, does not fire on Enter or Space, and announces nothing useful to assistive tech. The second gets all of that from the platform for free. The visual difference is zero — which is precisely why the model, graded on the visual, reaches for the div. The same logic produces the placeholder-as-label and the icon button with no name: in each case the accessible version and the broken version look the same, so the look-optimizer is indifferent between them and picks whichever was more common in its training data.</p>
+<p>The first one is not keyboard-focusable, does not fire on Enter or Space, and announces nothing useful to assistive tech. The second gets all of that from the platform for free. The visual difference is zero, which is precisely why the model, graded on the visual, reaches for the div. The same logic produces the placeholder-as-label and the icon button with no name: in each case the accessible version and the broken version look the same, so the look-optimizer is indifferent between them and picks whichever was more common in its training data.</p>
 
 <h2>The fix is to stop treating a11y as an audit</h2>
-<p>The usual response is a manual review at the end: someone tabs through the page, runs a contrast checker, files tickets. That does not scale and it does not survive the next regeneration — the model has no memory of the audit and reproduces the same defects on the next prompt.</p>
-<p>The opening is that almost every one of these defects is <em>decidable from the source</em>. You do not need to render the page or ask a human. Low contrast is arithmetic on two color tokens. A reset focus ring with no replacement is a pattern in the stylesheet. An icon button with no name, a clickable div, a placeholder standing in for a label — each is a fixed shape in the markup. So you check them the way you check syntax: deterministically, on every change, before commit.</p>
+<p>The usual response is a manual review at the end: someone tabs through the page, runs a contrast checker, files tickets. That does not scale and it does not survive the next regeneration. The model has no memory of the audit and reproduces the same defects on the next prompt.</p>
+<p>The opening is that almost every one of these defects is <em>decidable from the source</em>. You do not need to render the page or ask a human. Low contrast is arithmetic on two color tokens. A reset focus ring with no replacement is a pattern in the stylesheet. An icon button with no name, a clickable div, a placeholder standing in for a label: each is a fixed shape in the markup. So you check them the way you check syntax: deterministically, on every change, before commit.</p>
 
 <h2>How ux-skill encodes it</h2>
 <p>ux-skill treats these as mechanical constraints, not advice. The anti-slop linter ships rules for exactly this failure class, and it scans source text, so it fires on the markup before anything renders:</p>
 <ul>
-<li><code>outline-none-no-focus-visible</code> (critical) — a killed focus ring with no <code>:focus-visible</code> replacement in the same block.</li>
-<li><code>div-onclick-no-role</code> and <code>onclick-on-non-button</code> (critical) — a click handler on a non-interactive element.</li>
-<li><code>placeholder-as-label</code> (high) — an input leaning on its placeholder for a name.</li>
-<li><code>inline-svg-no-aria</code> (high) — an inline icon with no label and no <code>aria-hidden</code>.</li>
+<li><code>outline-none-no-focus-visible</code> (critical): a killed focus ring with no <code>:focus-visible</code> replacement in the same block.</li>
+<li><code>div-onclick-no-role</code> and <code>onclick-on-non-button</code> (critical): a click handler on a non-interactive element.</li>
+<li><code>placeholder-as-label</code> (high): an input leaning on its placeholder for a name.</li>
+<li><code>inline-svg-no-aria</code> (high): an inline icon with no label and no <code>aria-hidden</code>.</li>
 <li>reduced-motion and contrast checks that read the tokens, not the render.</li>
 </ul>
-<p>Those rules are not freestanding opinions; they are the operable side of the UX-laws manifest, which carries the principles (a control must be reachable, a name must be programmatic, state must not rely on color alone) that the rules enforce. The manifest says what good means; the linter makes it decidable. And <code>/ux-a11y</code> runs the focused pass — contrast, focus, names, reduced motion — and hands back the specific line and the specific fix, not a vague "improve accessibility."</p>
-<p>The point is the loop, not any single rule. Because the checks are deterministic and offline, they run on every regeneration. The model can keep producing the plausible-but-broken default; the gate catches it every time, in the same place, with the same fix — so the defect never reaches the commit.</p>
+<p>Those rules are not freestanding opinions; they are the operable side of the UX-laws manifest, which carries the principles (a control must be reachable, a name must be programmatic, state must not rely on color alone) that the rules enforce. The manifest says what good means; the linter makes it decidable. And <code>/ux-a11y</code> runs the focused pass (contrast, focus, names, reduced motion) and hands back the specific line and the specific fix, not a vague "improve accessibility."</p>
+<p>The point is the loop, not any single rule. Because the checks are deterministic and offline, they run on every regeneration. The model can keep producing the plausible-but-broken default; the gate catches it every time, in the same place, with the same fix, so the defect never reaches the commit.</p>
 
 <h2>The point</h2>
-<p>AI-generated UI fails on accessibility because it was optimized for how a screen looks, and accessibility is the part of a screen you cannot see in a picture. The answer is not a bigger manual audit. It is to treat the recurring defects as what they are — fixed, decidable rules — and check them mechanically, on every change, so a screenshot-shaped optimizer can never quietly ship a keyboard trap again.</p>
+<p>AI-generated UI fails on accessibility because it was optimized for how a screen looks, and accessibility is the part of a screen you cannot see in a picture. The answer is not a bigger manual audit. It is to treat the recurring defects as what they are (fixed, decidable rules) and check them mechanically, on every change, so a screenshot-shaped optimizer can never quietly ship a keyboard trap again.</p>
 <pre><code>pip install uxskill
 # then, in your AI coding tool:
-# /ux-a11y      — contrast, focus, names, reduced motion, per line
-# uxskill lint  — the same checks, on every commit</code></pre>
+# /ux-a11y      : contrast, focus, names, reduced motion, per line
+# uxskill lint  : the same checks, on every commit</code></pre>
 
 <h2>Related</h2>
 <ul>
@@ -269,7 +269,7 @@
 </ul>
 
 <footer>
-ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+ux-skill v3.0 · THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
 </footer>
 
 </div>

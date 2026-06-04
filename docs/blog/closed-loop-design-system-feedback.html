@@ -11,22 +11,22 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>What a closed-loop design system actually means — ux-skill v3.0 explained</title>
+<title>What a closed-loop design system actually means · ux-skill v3.0 explained</title>
 <meta name="description" content="Most "AI design tools" generate once and forget. ux-skill v3.0 writes every recommendation, every lint score, every accept/reject to a local ledger. The recommender reads that ledger and re-ranks. The feedback loop is closed for real.">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/closed-loop-design-system-feedback.html">
-<meta property="og:title" content="What a closed-loop design system actually means — ux-skill v3.0">
+<meta property="og:title" content="What a closed-loop design system actually means · ux-skill v3.0">
 <meta property="og:description" content="Most AI design tools generate once and forget. v3.0 writes every decision to a local ledger and re-ranks future calls. Real feedback loop, offline.">
 <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/closed-loop-design-system-feedback.html">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="A real closed-loop design system — ux-skill v3.0">
+<meta name="twitter:title" content="A real closed-loop design system · ux-skill v3.0">
 <meta name="twitter:description" content="Every recommendation logged. Every lint score logged. The recommender reads the log and re-ranks. The loop is actually closed.">
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","headline":"What a closed-loop design system actually means — ux-skill v3.0 explained","datePublished":"2026-05-28","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/closed-loop-design-system-feedback.html","inLanguage":"en"}
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"What a closed-loop design system actually means · ux-skill v3.0 explained","datePublished":"2026-05-28","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/closed-loop-design-system-feedback.html","inLanguage":"en"}
 </script>
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "What a closed-loop design system actually means — ux-skill v3.0 explained", "item": "https://uxskill.laithjunaidy.com/blog/closed-loop-design-system-feedback.html"}]}
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "What a closed-loop design system actually means · ux-skill v3.0 explained", "item": "https://uxskill.laithjunaidy.com/blog/closed-loop-design-system-feedback.html"}]}
 </script>
 
 <style>
@@ -200,7 +200,7 @@
 </div>
 <div class="wrap">
 <header class="post">
-<p class="eyebrow">v3.0 — THE BRAIN · 2026-05-28</p>
+<p class="eyebrow">v3.0 · THE BRAIN · 2026-05-28</p>
 <h1>What a <em>closed-loop</em> design system<br>actually means.</h1>
 <p class="lede">Most "AI design tools" generate once and forget. ux-skill v3.0 writes every recommendation, every lint score, every accept/reject signal to a local ledger. The recommender reads that ledger on the next call and re-ranks. The feedback loop is closed for real.</p>
 </header>
@@ -210,10 +210,10 @@
 <p>That's not a closed loop. That's a notification system with extra steps.</p>
 <p>A real closed loop has FOUR pieces:</p>
 <ol>
-<li>A <strong>signal</strong> — the system did something specific and measurable</li>
-<li>A <strong>memory</strong> — that signal is recorded persistently and queryable</li>
-<li>A <strong>read path</strong> — the system queries the memory on the next decision</li>
-<li>A <strong>bias</strong> — the read result actually changes the next output</li>
+<li>A <strong>signal</strong>: the system did something specific and measurable</li>
+<li>A <strong>memory</strong>: that signal is recorded persistently and queryable</li>
+<li>A <strong>read path</strong>: the system queries the memory on the next decision</li>
+<li>A <strong>bias</strong>: the read result actually changes the next output</li>
 </ol>
 <p>Most "AI design tools" have piece 1. Some have 2. Almost none have 3 and 4.</p>
 
@@ -250,7 +250,7 @@
 
 <h2>How to see what your install has learned</h2>
 <pre><code>uxskill stats --decisions    # JSON aggregate
-uxskill stats --html         # writes .ux/stats.html — open in browser</code></pre>
+uxskill stats --html         # writes .ux/stats.html: open in browser</code></pre>
 <p>The HTML dashboard shows: total decisions, lint score median, by-command breakdown, top brands picked, by-industry distribution, accept rate. <strong>This is YOUR install's data.</strong> No global aggregate. No leaderboard. Just what your work has produced.</p>
 
 <h2>What we deliberately don't track</h2>
@@ -282,7 +282,7 @@ uxskill synthesize --industry fintech-payments --tone bold
 # Lint it (writes decision)
 uxskill lint . --score-only
 
-# Generate again — same brief
+# Generate again, same brief
 # After 3+ accepted+lint-clean decisions, the bias kicks in
 uxskill synthesize --industry fintech-payments --tone bold
 
@@ -292,14 +292,14 @@ open .ux/stats.html</code></pre>
 
 <h2>Related reads</h2>
 <ul>
-<li><a href="/blog/v3-the-brain-launch.html">The full v3.0 launch — The Brain</a></li>
+<li><a href="/blog/v3-the-brain-launch.html">The full v3.0 launch · The Brain</a></li>
 <li><a href="/blog/brand-specs-training-data-not-templates.html">Brand specs are training data, not templates</a></li>
 <li><a href="/blog/deterministic-design-engine-no-llm.html">A deterministic design engine that learns offline</a></li>
 <li><a href="/blog/regex-linter-for-ai-coding.html">The deterministic linter</a></li>
 </ul>
 
 <footer>
-ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+ux-skill v3.0 · THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
 </footer>
 
 </div>

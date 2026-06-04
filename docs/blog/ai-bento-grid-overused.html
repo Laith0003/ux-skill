@@ -205,7 +205,7 @@
 <header class="post">
 <p class="eyebrow">FIELD NOTES · 2026-05-29</p>
 <h1>Why every AI UI reaches for <em>the bento grid</em>.</h1>
-<p class="lede">In about two years the bento grid went from an Apple keynote device to the reflex an AI builder reaches for the moment you say "feature section." You know the look: a mosaic of rounded tiles in mismatched sizes, one big, two medium, three small, arranged like a lunchbox. It can be the right call. Most of the time it is not — it is six equal ideas crammed into unequal boxes, variety with no reason behind it.</p>
+<p class="lede">In about two years the bento grid went from an Apple keynote device to the reflex an AI builder reaches for the moment you say "feature section." You know the look: a mosaic of rounded tiles in mismatched sizes, one big, two medium, three small, arranged like a lunchbox. It can be the right call. Most of the time it is not. It is six equal ideas crammed into unequal boxes, variety with no reason behind it.</p>
 </header>
 
 <h2>Where the reflex comes from</h2>
@@ -215,7 +215,7 @@
 
 <h2>Bento is a content-fit decision, not a default</h2>
 <p>The grid was never the point. The point is weight. A real bento works because the tiles carry genuinely different things at genuinely different sizes: a headline metric in the big cell, a small chart beside it, a one-line quote, a product image, a short stat. The sizes map to importance, and the mix of content types is what makes the asymmetry read as composition instead of clutter.</p>
-<p>Most generated bento has none of that. It is six feature blurbs — same icon-title-sentence shape, same informational weight — poured into a big-medium-small template. The tiles differ in size; the content does not. The eye expects the large cell to matter more, finds another tagline, and the whole thing quietly registers as decoration. That is the tell: visual variety with no informational reason for it.</p>
+<p>Most generated bento has none of that. It is six feature blurbs (same icon-title-sentence shape, same informational weight) poured into a big-medium-small template. The tiles differ in size; the content does not. The eye expects the large cell to matter more, finds another tagline, and the whole thing quietly registers as decoration. That is the tell: visual variety with no informational reason for it.</p>
 
 <h2>When it works, and when it is just decoration</h2>
 <table>
@@ -228,7 +228,7 @@
 <tr><td>better as a list?</td><td>no, the mix needs a plane</td><td>yes, a rhythm would read cleaner</td></tr>
 </tbody>
 </table>
-<p>The deletion test is the fast one. If you can pull any tile out and the section reads the same, the sizes were never carrying meaning, and a simple rhythm — equal cards, or a clean list with strong type — will beat the fake mosaic every time.</p>
+<p>The deletion test is the fast one. If you can pull any tile out and the section reads the same, the sizes were never carrying meaning, and a simple rhythm (equal cards, or a clean list with strong type) will beat the fake mosaic every time.</p>
 
 <h2>Let hierarchy choose the layout</h2>
 <p>The fix is not "stop using bento." It is to choose the layout from the content, not from the trend. Lay out what you actually have and read the weights first:</p>
@@ -240,16 +240,16 @@
 <p>Reserve the mosaic for real weight differences, and it stops being a tic and goes back to being a tool. The work is the read, not the grid.</p>
 
 <h2>How ux-skill handles it</h2>
-<p>This is exactly the kind of trend-default the engine is built to resist. The components manifest carries bento alongside its alternatives — rhythm grids, hero-plus-secondary, list-with-emphasis — so a feature section has more than one answer to reach for. The landing-pattern manifest does the same at the section level, pairing each pattern with when it fits and when it does not.</p>
-<p>The <a href="/blog/seven-axes-design-system-explained.html">layout synthesizer</a> then maps content weights to cell sizes. Feed it items with real differences and it returns a bento with the big cell on the thing that matters; feed it peers and it returns a rhythm, because there is nothing for the asymmetry to express. And the linter closes the loop: it flags variance with no informational backing — uneven tiles holding even content — as decoration-only, the same way it flags a chrome gradient or a shadow standing in for depth.</p>
+<p>This is exactly the kind of trend-default the engine is built to resist. The components manifest carries bento alongside its alternatives (rhythm grids, hero-plus-secondary, list-with-emphasis) so a feature section has more than one answer to reach for. The landing-pattern manifest does the same at the section level, pairing each pattern with when it fits and when it does not.</p>
+<p>The <a href="/blog/seven-axes-design-system-explained.html">layout synthesizer</a> then maps content weights to cell sizes. Feed it items with real differences and it returns a bento with the big cell on the thing that matters; feed it peers and it returns a rhythm, because there is nothing for the asymmetry to express. And the linter closes the loop: it flags variance with no informational backing (uneven tiles holding even content) as decoration-only, the same way it flags a chrome gradient or a shadow standing in for depth.</p>
 <p>Same brief, run again next week, on another machine: the same call. Deterministic, offline, no model guessing in the loop.</p>
 
 <h2>The point</h2>
 <p>Every AI UI reaches for the bento grid because the training data is full of it and a mosaic is the cheapest way to look like a layout happened. But bento is a content-fit decision, not a default. Read the weights. If the items are peers, give them a rhythm. If one dominates, give it the room. Save the lunchbox for the meal that actually has different dishes on it.</p>
 <pre><code>pip install uxskill
 # then, in your AI coding tool:
-# /ux-design     — layout chosen from content weights, not the trend
-# /ux-recommend  — bento plus alternatives, with the linter watching for decoration</code></pre>
+# /ux-design     : layout chosen from content weights, not the trend
+# /ux-recommend  : bento plus alternatives, with the linter watching for decoration</code></pre>
 
 <h2>Related</h2>
 <ul>
@@ -260,7 +260,7 @@
 </ul>
 
 <footer>
-ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+ux-skill v3.0 · THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
 </footer>
 
 </div>
