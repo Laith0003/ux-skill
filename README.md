@@ -10,6 +10,10 @@ pip install uxskill
 
 **[Star ux-skill on GitHub](https://github.com/Laith0003/ux-skill)** if this is useful — it is the single cheapest way to help the project. New here? Start with the [60-second tour](#quick-install) or see it live at [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com).
 
+![Before: generic stock-photo hero, soft violet gradient, no brand identity. After: real construction-site photo under a dark scrim, editorial headline with an amber accent, and a quote-request form built into the hero. Same prompt, different output when ux-skill supplies the constraints.](https://raw.githubusercontent.com/Laith0003/ux-skill/main/docs/blog/skiphire-redesign.png)
+
+*Before: generic stock-photo SEO slop. After: real construction-photo hero under a dark scrim, editorial headline with an amber accent, quote form in the hero. Same AI coding tool, same prompt, different result when ux-skill supplies the constraints.*
+
 > **v3.1.0 — THE BRAIN, now brand-true + responsive.** The strongest UX plugin for AI coding. A Python reasoning core with a deterministic 7-axis synthesizer, 12 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 152 anti-pattern rules, 25 tech stacks, 160 brand specs), 25 slash commands, 5 sub-agents, 18 MCP tools, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
 
 > **The brand name is `ux-skill`.** The PyPI / npm package name stays `uxskill`. The GitHub repo lives at [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).

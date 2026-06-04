@@ -20,7 +20,7 @@
   </url>
   <url>
     <loc>https://uxskill.laithjunaidy.com/commands.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -98,7 +98,7 @@
   </url>
   <url>
     <loc>https://uxskill.laithjunaidy.com/blog/ai-design-system-cli.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -170,7 +170,7 @@
   </url>
   <url>
     <loc>https://uxskill.laithjunaidy.com/blog/claude-desktop-mcp-design.html</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -188,7 +188,7 @@
   </url>
   <url>
     <loc>https://uxskill.laithjunaidy.com/blog/dark-editorial-cinema-design.html</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -206,7 +206,7 @@
   </url>
   <url>
     <loc>https://uxskill.laithjunaidy.com/blog/dogfooding-design-engine.html</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -218,13 +218,13 @@
   </url>
   <url>
     <loc>https://uxskill.laithjunaidy.com/blog/github-copilot-design-rules.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://uxskill.laithjunaidy.com/blog/jetbrains-ai-design-system.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -236,19 +236,19 @@
   </url>
   <url>
     <loc>https://uxskill.laithjunaidy.com/blog/mcp-server-design-intelligence.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://uxskill.laithjunaidy.com/blog/monorepo-design-system-ai-coding.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://uxskill.laithjunaidy.com/blog/motion-presets-framer-gsap-css.html</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -266,7 +266,7 @@
   </url>
   <url>
     <loc>https://uxskill.laithjunaidy.com/blog/regex-linter-for-ai-coding.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -297,6 +297,12 @@
   <url>
     <loc>https://uxskill.laithjunaidy.com/blog/ux-skill-v3-vs-ui-ux-pro-max.html</loc>
     <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://uxskill.laithjunaidy.com/blog/v0-bolt-lovable-design-quality.html</loc>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -350,7 +356,7 @@
   </url>
   <url>
     <loc>https://uxskill.laithjunaidy.com/blog/zed-design-plugin.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -477,6 +483,12 @@
   <url>
     <loc>https://uxskill.laithjunaidy.com/roadmap.html</loc>
     <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://uxskill.laithjunaidy.com/what-is-ai-slop.html</loc>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

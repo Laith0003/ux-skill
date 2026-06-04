@@ -12,7 +12,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ux-skill vs the top 9 Claude UX skills — scored comparison</title>
-  <meta name="description" content="Scored side-by-side: ux-skill vs ui-ux-pro-max-skill (84k), open-design (54k), taste-skill (25k), huashu-design (15k), stitch-skills, nothing-design-skill, hallmark, material-3-skill. Real data per cell. No empty dashes.">
+  <meta name="description" content="ux-skill vs 9 Claude UX plugins on catalog, linter, discovery, pipeline, brand specs, motion, cross-IDE, a11y, activity, and docs. Real data, all cells filled.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/compare.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -916,6 +916,9 @@
 <script type="application/ld+json">
 {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Compare", "item": "https://uxskill.laithjunaidy.com/compare.html"}]}
 </script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How were the scores in each cell determined?","acceptedAnswer":{"@type":"Answer","text":"Each cell is scored 1 (absent or broken) to 5 (best in class) against a concrete rubric for that dimension. For catalog depth the score reflects the number of queryable brand and pattern entries. For the linter it reflects whether rules fire deterministically on real output, how many rules exist, and whether severity levels are assigned. Stars are pulled live from gh api and frozen at the date shown. No cell is left blank and no dimension was chosen to flatter ux-skill."}},{"@type":"Question","name":"Why does ux-skill score lower on GitHub stars than the top competitors?","acceptedAnswer":{"@type":"Answer","text":"ui-ux-pro-max-skill launched roughly nine months before ux-skill reached v3.0.0-stable. Stars accumulate with time and distribution; the scorecard measures what is inside the repo, not how long it has been visible. The star gap is real and acknowledged in the disclosure box at the top of this page."}},{"@type":"Question","name":"Does ux-skill work in IDEs other than Claude Code?","acceptedAnswer":{"@type":"Answer","text":"Yes. The plugin is listed as compatible with 17 AI coding environments including Cursor, Windsurf, Zed, JetBrains AI, GitHub Copilot, and VS Code with Continue. The MCP server path works in any host that speaks the Model Context Protocol. The CLI (pip install uxskill) is IDE-agnostic."}},{"@type":"Question","name":"What makes the ux-skill linter different from running a generic CSS linter?","acceptedAnswer":{"@type":"Answer","text":"Generic CSS linters catch invalid syntax and property typos. The ux-skill linter catches AI-slop fingerprints: valid CSS that still reads as generated because it matches the centroid of training data. Examples include a violet-to-indigo gradient with no brand rationale, Inter as the only typeface when a display family would add character, or three feature cards at identical visual weight. These are correct code that is wrong design. No generic linter catches them."}},{"@type":"Question","name":"Is the scorecard updated as competing plugins ship new features?","acceptedAnswer":{"@type":"Answer","text":"Star counts are refreshed each release cycle from gh api; the date frozen is shown in the footer. Feature scores are reviewed when a competing plugin ships a significant release. If a rival ships a deterministic linter or a 100+ brand spec catalogue, those cells will move. The methodology is documented at the bottom of this page so you can verify any cell independently."}}]}
+</script>
 <style id="usknav-css">  .sr-only,.skip-link:not(:focus){position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   .skip-link:focus{position:fixed;top:8px;inset-inline-start:8px;width:auto;height:auto;clip:auto;padding:8px 14px;background:#f59e0b;color:#07080a;border-radius:6px;z-index:200;font-family:'Inter',system-ui,sans-serif;font-size:13px}
   .usknav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:18px;
@@ -1060,7 +1063,7 @@
       <span class="eyebrow">Compare &middot; 9 plugins &middot; 10 dimensions &middot; live scored &middot; 2026</span>
       <h1>ux-skill scored against <span class="accent">every</span> popular Claude UX skill.</h1>
       <p class="lede">
-        Below: the master scorecard. Every plugin scored 1&ndash;5 on every dimension. No empty cells, no manufactured "we have it, they don't." Real numbers from <code>gh api</code> on 2026-05-28. We score <strong>44 of 50</strong>. The next best (ui-ux-pro-max-skill) scores 33. Everyone else is below 30.
+        Below: the master scorecard. Every plugin scored 1&ndash;5 on every dimension. No empty cells, no manufactured "we have it, they don't." Real numbers from <code>gh api</code> on 2026-05-28. We score <strong>44 of 50</strong>. The next best (ui-ux-pro-max-skill) scores 33. Everyone else is below 30. The core dimension separating ux-skill from every competitor is deterministic <a href="/what-is-ai-slop.html" style="color:var(--scene-accent);text-underline-offset:3px;">anti-AI-slop</a> enforcement.
       </p>
 
       <div class="star-disclosure">
@@ -1674,6 +1677,33 @@
           <tr><th>Brand-name SEO</th><td>taste-skill owns "anti-slop". Pro Max owns "design intelligence".</td><td>Own "design engineering" + "Python design engine" via the blog.</td></tr>
         </tbody>
       </table>
+    </section>
+
+    <!-- ───── FAQ ───── -->
+    <section class="faq-section" aria-labelledby="faq-heading" style="max-width:860px;margin:0 auto 72px;padding:0 var(--gutter);">
+      <h2 id="faq-heading" style="font-family:var(--display);font-size:clamp(26px,3.5vw,40px);font-weight:700;letter-spacing:-0.02em;color:var(--ink);margin-bottom:32px;">Common questions about this comparison</h2>
+      <dl style="display:grid;gap:0;">
+        <div style="border-top:1px solid var(--hairline);padding:22px 0;">
+          <dt style="font-family:var(--display);font-size:17px;font-weight:600;color:var(--ink);margin-bottom:10px;">How were the scores in each cell determined?</dt>
+          <dd style="color:var(--body);font-size:15.5px;line-height:1.65;margin:0;">Each cell is scored 1 (absent or broken) to 5 (best in class) against a concrete rubric for that dimension. For catalog depth the score reflects the number of queryable brand and pattern entries. For the linter it reflects whether rules fire deterministically on real output, how many rules exist, and whether severity levels are assigned. Stars are pulled live from <code style="font-family:var(--mono);font-size:13px;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:3px;">gh api</code> and frozen at the date shown. No cell is left blank and no dimension was chosen to flatter ux-skill.</dd>
+        </div>
+        <div style="border-top:1px solid var(--hairline);padding:22px 0;">
+          <dt style="font-family:var(--display);font-size:17px;font-weight:600;color:var(--ink);margin-bottom:10px;">Why does ux-skill score lower on GitHub stars than the top competitors?</dt>
+          <dd style="color:var(--body);font-size:15.5px;line-height:1.65;margin:0;">ui-ux-pro-max-skill launched roughly nine months before ux-skill reached v3.0.0-stable. Stars accumulate with time and distribution; the scorecard measures what is inside the repo, not how long it has been visible. The star gap is real and acknowledged in the disclosure box at the top of this page.</dd>
+        </div>
+        <div style="border-top:1px solid var(--hairline);padding:22px 0;">
+          <dt style="font-family:var(--display);font-size:17px;font-weight:600;color:var(--ink);margin-bottom:10px;">Does ux-skill work in IDEs other than Claude Code?</dt>
+          <dd style="color:var(--body);font-size:15.5px;line-height:1.65;margin:0;">Yes. The plugin is listed as compatible with 17 AI coding environments including Cursor, Windsurf, Zed, JetBrains AI, GitHub Copilot, and VS Code with Continue. The MCP server path works in any host that speaks the Model Context Protocol. The CLI (<code style="font-family:var(--mono);font-size:13px;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:3px;">pip install uxskill</code>) is IDE-agnostic.</dd>
+        </div>
+        <div style="border-top:1px solid var(--hairline);padding:22px 0;">
+          <dt style="font-family:var(--display);font-size:17px;font-weight:600;color:var(--ink);margin-bottom:10px;">What makes the ux-skill linter different from running a generic CSS linter?</dt>
+          <dd style="color:var(--body);font-size:15.5px;line-height:1.65;margin:0;">Generic CSS linters catch invalid syntax and property typos. The ux-skill linter catches <a href="/anti-patterns.html" style="color:var(--scene-accent);">AI-slop fingerprints</a>: valid CSS that still reads as generated because it matches the centroid of training data. Examples include a violet-to-indigo gradient with no brand rationale, Inter as the only typeface when a display family would add character, or three feature cards at identical visual weight. These are correct code that is wrong design. No generic linter catches them.</dd>
+        </div>
+        <div style="border-top:1px solid var(--hairline);padding:22px 0;">
+          <dt style="font-family:var(--display);font-size:17px;font-weight:600;color:var(--ink);margin-bottom:10px;">Is the scorecard updated as competing plugins ship new features?</dt>
+          <dd style="color:var(--body);font-size:15.5px;line-height:1.65;margin:0;">Star counts are refreshed each release cycle from <code style="font-family:var(--mono);font-size:13px;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:3px;">gh api</code>; the date frozen is shown in the footer. Feature scores are reviewed when a competing plugin ships a significant release. If a rival ships a deterministic linter or a 100+ brand spec catalogue, those cells will move. The methodology is documented at the bottom of this page so you can verify any cell independently.</dd>
+        </div>
+      </dl>
     </section>
 
     <!-- ───── CTA ───── -->

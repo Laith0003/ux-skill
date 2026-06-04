@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z371T0DBW5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Z371T0DBW5');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>v0 vs Bolt vs Lovable: design quality compared</title>
+<meta name="description" content="An honest design-quality comparison of v0, Bolt, and Lovable: default palette, typography, layout tells, customization ceiling, and the shared weakness all three exhibit.">
+<link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/v0-bolt-lovable-design-quality.html">
+<meta property="og:title" content="v0 vs Bolt vs Lovable: design quality compared">
+<meta property="og:description" content="An honest design-quality comparison of v0, Bolt, and Lovable: default palette, typography, layout tells, customization ceiling, and the shared weakness all three exhibit.">
+<meta property="og:image" content="https://uxskill.laithjunaidy.com/og-image.png?v=31">
+<meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/v0-bolt-lovable-design-quality.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="v0 vs Bolt vs Lovable: design quality compared">
+<meta name="twitter:description" content="An honest comparison: default palette, type, layout tells, customization ceiling, and the shared centroid weakness all three builders exhibit.">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"v0 vs Bolt vs Lovable: design quality compared","datePublished":"2026-06-04","dateModified":"2026-06-04","author":{"@type":"Organization","name":"uxskill","url":"https://uxskill.laithjunaidy.com/"},"publisher":{"@type":"Organization","name":"uxskill","url":"https://uxskill.laithjunaidy.com/"},"image":"https://uxskill.laithjunaidy.com/og-image.png?v=31","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/v0-bolt-lovable-design-quality.html","inLanguage":"en","keywords":"v0 vs Bolt vs Lovable, AI app builder design quality, prompt to app design comparison, v0 design, Bolt design, Lovable design"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://uxskill.laithjunaidy.com/blog/"},{"@type":"ListItem","position":3,"name":"v0 vs Bolt vs Lovable: design quality compared","item":"https://uxskill.laithjunaidy.com/blog/v0-bolt-lovable-design-quality.html"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Which AI app builder produces the best design quality: v0, Bolt, or Lovable?","acceptedAnswer":{"@type":"Answer","text":"All three produce similar default output because they share the same centroid: a violet or indigo primary, Inter or a neutral sans-serif, rounded cards, and marketing-page spacing. v0 has the highest customization ceiling because it generates clean component code you can modify directly. Bolt is the fastest for full-stack scaffolding. Lovable has the most opinionated preset styles. None of them consistently escapes the centroid without structured design constraints supplied before generation."}},{"@type":"Question","name":"Why does output from v0, Bolt, and Lovable look the same?","acceptedAnswer":{"@type":"Answer","text":"All three builders are language-model-based and face the same convergence problem: an underspecified prompt has one most-likely answer, and that answer is the centroid of the training distribution. They also rely on overlapping tooling  -  Tailwind and shadcn/ui  -  whose defaults (violet primary, rounded cards, Inter) narrow the output corridor further. The result is not a flaw in any one tool; it is the correct behavior for a system optimizing for 'plausible UI' with no further constraints."}},{"@type":"Question","name":"How do I get v0, Bolt, or Lovable to produce a custom design?","acceptedAnswer":{"@type":"Answer","text":"Supply concrete design constraints before generation: a specific hex palette, a named typeface pair, a density target, a border radius, and component vocabulary. Adjectives like 'premium' or 'unique' do not work because the model resolves them to their own centroid. A structured design brief  -  the kind uxskill generates from a project intake  -  gives the builder values it can satisfy without guessing, which breaks the regression to the mean before the first line of code is written."}},{"@type":"Question","name":"Does uxskill work with v0, Bolt, and Lovable?","acceptedAnswer":{"@type":"Answer","text":"Yes. uxskill generates a structured constraint block from a project brief: a palette, type pair, density, radius, and motion presets. You paste that block into v0, Bolt, or Lovable as the design specification, and the builder fills it in instead of inventing its own defaults. After generation, uxskill's 152-rule linter scores the output for centroid fingerprints. The combination of upfront constraints and post-generation linting removes the dependency on hope and re-prompting."}}]}
+</script>
+
+<style>
+  :root {
+    --canvas: #07080a; --surface: #0e1014; --ink: #f6f7f9; --body: #c0c3c9;
+    --muted: #8a8f96; --accent: #f59e0b; --hairline: rgba(255,255,255,0.08);
+    --hairline-2: rgba(255,255,255,0.14);
+    --display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--canvas); color: var(--body); font-family: var(--sans); line-height: 1.65; overflow-x: clip; }
+  a { color: var(--accent); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: clamp(20px, 4vw, 56px); }
+  header.post { margin-bottom: 48px; padding-bottom: 24px; border-bottom: 1px solid var(--hairline); }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  h1 { font-family: var(--display); font-size: clamp(32px, 5vw, 52px); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; font-weight: 600; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede { font-size: 19px; line-height: 1.55; color: var(--body); max-width: 60ch; }
+  h2 { font-family: var(--display); font-size: 28px; letter-spacing: -0.02em; color: var(--ink); margin: 56px 0 18px; }
+  h3 { font-family: var(--display); font-size: 21px; color: var(--ink); margin: 32px 0 12px; }
+  p { margin-bottom: 18px; font-size: 16.5px; max-width: 60ch; }
+  ul, ol { margin: 0 0 18px 22px; }
+  li { margin-bottom: 8px; max-width: 60ch; }
+  code { font-family: var(--mono); font-size: 14px; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+  pre { background: var(--surface); border: 1px solid var(--hairline); border-radius: 10px; padding: 18px 22px; overflow-x: auto; margin: 18px 0; }
+  pre code { background: transparent; padding: 0; font-size: 13.5px; line-height: 1.6; color: var(--body); }
+  blockquote { border-left: 2px solid var(--accent); padding-left: 18px; margin: 28px 0; color: var(--ink); font-style: italic; font-size: 17px; line-height: 1.55; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0 28px; font-size: 14.5px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+  th { color: var(--ink); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 1px solid var(--hairline-2); }
+  td { color: var(--body); }
+  td strong { color: var(--ink); }
+  .answer-box {
+    background: rgba(245,158,11,0.08);
+    border: 1px solid var(--accent);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin: 8px 0 28px;
+  }
+  .answer-box .label {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .answer-box p { color: var(--ink); margin-bottom: 0; font-size: 16.5px; line-height: 1.55; max-width: none; }
+  .honesty {
+    background: var(--surface);
+    border-left: 3px solid var(--accent);
+    padding: 22px 26px;
+    border-radius: 0 12px 12px 0;
+    margin: 32px 0;
+  }
+  .honesty .label {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .honesty p { margin-bottom: 8px; }
+  .honesty p:last-child { margin-bottom: 0; }
+  .faq-block { margin-top: 56px; border-top: 1px solid var(--hairline); padding-top: 40px; }
+  .faq-block h2 { margin-top: 0; }
+  .faq-item { border-bottom: 1px solid var(--hairline); padding: 24px 0; }
+  .faq-item:first-of-type { padding-top: 0; }
+  .faq-item h3 { font-family: var(--display); font-size: 18px; color: var(--ink); margin: 0 0 12px; letter-spacing: -0.01em; }
+  .faq-item p { margin-bottom: 0; max-width: 60ch; }
+  .docfig { margin: 28px 0; border: 1px solid var(--hairline); border-radius: 12px; overflow: hidden; background: #0b0d12; }
+  .docfig img { display: block; width: 100%; height: auto; }
+  .docfig figcaption { margin: 0; padding: 10px 16px; font-size: 13px; line-height: 1.5; color: var(--muted); border-top: 1px solid var(--hairline); font-family: var(--sans); }
+  footer { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--hairline); color: var(--muted); font-family: var(--mono); font-size: 11.5px; text-align: center; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style id="usknav-css">  .sr-only,.skip-link:not(:focus){position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .skip-link:focus{position:fixed;top:8px;inset-inline-start:8px;width:auto;height:auto;clip:auto;padding:8px 14px;background:#f59e0b;color:#07080a;border-radius:6px;z-index:200;font-family:'Inter',system-ui,sans-serif;font-size:13px}
+  .usknav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:18px;
+    padding:0 clamp(16px,4vw,48px);block-size:56px;background:rgba(7,8,10,0.86);
+    backdrop-filter:saturate(150%) blur(14px);-webkit-backdrop-filter:saturate(150%) blur(14px);
+    border-block-end:1px solid rgba(255,255,255,0.08);font-family:'Inter',system-ui,sans-serif}
+  .usknav__brand{font-family:'Bricolage Grotesque','Inter',sans-serif;font-weight:700;font-size:17px;
+    color:#f6f7f9;text-decoration:none;letter-spacing:-0.01em;margin-inline-end:auto;padding:6px 2px}
+  .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
+  .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
+    text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
+    padding-block:8px;transition:color 140ms ease}
+  .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
+  .usknav__langs{position:relative}
+  .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
+    color:#8a8f96;padding:8px 6px;transition:color 140ms ease;min-block-size:24px}
+  .usknav__langs>summary::-webkit-details-marker{display:none}
+  .usknav__langs>summary:hover{color:#f6f7f9}
+  .usknav__langs-menu{position:absolute;top:calc(100% + 8px);inset-inline-end:0;min-inline-size:184px;
+    max-block-size:60vh;overflow-y:auto;background:#0e1014;border:1px solid rgba(255,255,255,0.1);
+    border-radius:10px;padding:6px;display:grid;gap:1px;box-shadow:0 20px 40px -20px rgba(0,0,0,0.6);z-index:130}
+  .usknav__langs-menu a{font-family:'Inter',sans-serif;font-size:12.5px;color:#c0c3c9;text-decoration:none;padding:7px 10px;border-radius:6px}
+  .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
+  .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+    font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+  .usknav__star:hover{background:rgba(245,158,11,0.12)}
+  .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
+  .usknav__burger svg{display:block}
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+    padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
+    transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
+  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
+    border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
+  .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
+  .usknav__drawer-links{display:flex;flex-direction:column}
+  .usknav__drawer-links a{font-family:'Bricolage Grotesque','Inter',sans-serif;font-size:clamp(22px,5.5vw,32px);
+    color:#f6f7f9;text-decoration:none;padding:8px 0;border-block-end:1px solid rgba(255,255,255,0.06)}
+  .usknav__drawer-links a:hover{color:#f59e0b}
+  .usknav__drawer-star{margin-block-start:20px;align-self:flex-start}
+  .usknav__drawer-langlabel{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;
+    letter-spacing:0.1em;text-transform:uppercase;color:#8a8f96;margin:24px 0 10px}
+  .usknav__drawer-langs{display:flex;flex-wrap:wrap;gap:10px 18px}
+  .usknav__drawer-langs a{font-family:'Inter',sans-serif;font-size:13px;color:#8a8f96;text-decoration:none;padding:4px 0}
+  .usknav__drawer-langs a:hover{color:#f6f7f9}
+  .usknav__brand:focus-visible,.usknav__link:focus-visible,.usknav__langs>summary:focus-visible,
+  .usknav__star:focus-visible,.usknav__burger:focus-visible,.usknav__drawer-close:focus-visible,
+  .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
+    outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
+  @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+</head>
+<body>
+<a class="skip-link sr-only" href="#main">Go to content</a>
+<header class="usknav" aria-label="Site navigation">
+  <a class="usknav__brand" href="/">uxskill</a>
+  <nav class="usknav__links" aria-label="Primary">
+    <a class="usknav__link" href="/brands.html">Brands</a>
+    <a class="usknav__link" href="/anti-patterns.html">Anti-patterns</a>
+    <a class="usknav__link" href="/commands.html">Commands</a>
+    <a class="usknav__link" href="/mcp.html">MCP</a>
+    <a class="usknav__link" href="/compare.html">Compare</a>
+    <a class="usknav__link" href="/showcase.html">Showcase</a>
+    <a class="usknav__link" href="/blog/">Blog</a>
+    <a class="usknav__link" href="/about.html">About</a>
+    <a class="usknav__link" href="/faq.html">FAQ</a>
+    <a class="usknav__link" href="/roadmap.html">Roadmap</a>
+  </nav>
+  <details class="usknav__langs">
+    <summary aria-label="Choose language"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+    <div class="usknav__langs-menu">
+      <a href="/" lang="en">English</a>
+      <a href="/zh-CN/" lang="zh-CN">&#31616;&#20307;&#20013;&#25991;</a>
+      <a href="/zh-TW/" lang="zh-TW">&#32321;&#39636;&#20013;&#25991;</a>
+      <a href="/ja/" lang="ja">&#26085;&#26412;&#35486;</a>
+      <a href="/ko/" lang="ko">&#54620;&#44397;&#50612;</a>
+      <a href="/hi/" lang="hi">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</a>
+      <a href="/id/" lang="id">Bahasa Indonesia</a>
+      <a href="/vi/" lang="vi">Ti&#7871;ng Vi&#7879;t</a>
+      <a href="/th/" lang="th">&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618;</a>
+      <a href="/ar/" lang="ar" dir="rtl">&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</a>
+      <a href="/es/" lang="es">Espa&#241;ol</a>
+      <a href="/fr/" lang="fr">Fran&#231;ais</a>
+      <a href="/de/" lang="de">Deutsch</a>
+      <a href="/pt-BR/" lang="pt-BR">Portugu&#234;s</a>
+      <a href="/ru/" lang="ru">&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;</a>
+      <a href="/tr/" lang="tr">T&#252;rk&#231;e</a>
+      <a href="/it/" lang="it">Italiano</a>
+    </div>
+  </details>
+  <a class="usknav__star" href="https://github.com/Laith0003/ux-skill" rel="noopener">Star on GitHub</a>
+  <button class="usknav__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="usknav-drawer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+</header>
+<div class="usknav__drawer" id="usknav-drawer" role="dialog" aria-modal="true" aria-label="Site menu">
+  <div class="usknav__drawer-top">
+    <a class="usknav__brand" href="/">uxskill</a>
+    <button class="usknav__drawer-close" type="button" aria-label="Close menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <nav class="usknav__drawer-links" aria-label="All pages">
+    <a href="/brands.html">Brands</a>
+      <a href="/anti-patterns.html">Anti-patterns</a>
+      <a href="/commands.html">Commands</a>
+      <a href="/mcp.html">MCP</a>
+      <a href="/compare.html">Compare</a>
+      <a href="/showcase.html">Showcase</a>
+      <a href="/blog/">Blog</a>
+      <a href="/about.html">About</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/roadmap.html">Roadmap</a>
+  </nav>
+  <a class="usknav__star usknav__drawer-star" href="https://github.com/Laith0003/ux-skill" rel="noopener">Star on GitHub</a>
+  <div class="usknav__drawer-langlabel">Language</div>
+  <div class="usknav__drawer-langs">
+      <a href="/" lang="en">English</a>
+      <a href="/zh-CN/" lang="zh-CN">&#31616;&#20307;&#20013;&#25991;</a>
+      <a href="/zh-TW/" lang="zh-TW">&#32321;&#39636;&#20013;&#25991;</a>
+      <a href="/ja/" lang="ja">&#26085;&#26412;&#35486;</a>
+      <a href="/ko/" lang="ko">&#54620;&#44397;&#50612;</a>
+      <a href="/hi/" lang="hi">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</a>
+      <a href="/id/" lang="id">Bahasa Indonesia</a>
+      <a href="/vi/" lang="vi">Ti&#7871;ng Vi&#7879;t</a>
+      <a href="/th/" lang="th">&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618;</a>
+      <a href="/ar/" lang="ar" dir="rtl">&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</a>
+      <a href="/es/" lang="es">Espa&#241;ol</a>
+      <a href="/fr/" lang="fr">Fran&#231;ais</a>
+      <a href="/de/" lang="de">Deutsch</a>
+      <a href="/pt-BR/" lang="pt-BR">Portugu&#234;s</a>
+      <a href="/ru/" lang="ru">&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;</a>
+      <a href="/tr/" lang="tr">T&#252;rk&#231;e</a>
+      <a href="/it/" lang="it">Italiano</a>
+  </div>
+</div>
+
+<main id="main">
+<div class="wrap">
+<header class="post">
+<p class="eyebrow">COMPARISON &middot; 2026-06-04</p>
+<h1>v0 vs Bolt vs Lovable: <em>design quality compared</em>.</h1>
+<p class="lede">All three AI app builders are genuinely fast. Describe a screen and you have running code in under a minute. The problem surfaces on day two: every screen looks like it came from the same session. This comparison examines what each builder actually produces by default, where they differ in customization ceiling, and why all three converge on the same visual vocabulary  -  along with what breaks the pattern.</p>
+</header>
+
+<div class="answer-box">
+  <div class="label">Short answer</div>
+  <p>v0, Bolt, and Lovable each produce distinct default aesthetics, but all three regress to the same centroid on an underspecified prompt: a violet or indigo primary, neutral sans-serif type, rounded cards, and marketing-page spacing applied universally. v0 has the highest customization ceiling because it generates modifiable component code. Bolt is fastest for full-stack scaffolding. Lovable has the most opinionated preset styles. None of the three consistently escapes the centroid without design constraints supplied before generation.</p>
+</div>
+
+<h2>What this comparison covers</h2>
+<p>
+  This is a design-quality comparison, not a feature comparison. It covers the visual output each builder produces by default, the specific tells that make that output recognizable, and how far each can be pushed with structured design direction. It does not compare pricing, deployment, backend support, or developer experience  -  those are well-covered elsewhere.
+</p>
+<p>
+  The criteria are practical and observable: what the default palette is, what typeface appears without instruction, what layout patterns the builder reaches for, how the output reads after five seconds of visual attention, and how well the builder responds to specific design constraints.
+</p>
+
+<h2>The criteria table</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Criterion</th>
+      <th>v0</th>
+      <th>Bolt</th>
+      <th>Lovable</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Default primary color</strong></td>
+      <td>Violet (<code>#7c3aed</code> range, shadcn default)</td>
+      <td>Indigo-to-violet gradient, slightly cooler hue</td>
+      <td>Variable preset palette; often teal or violet depending on prompt</td>
+    </tr>
+    <tr>
+      <td><strong>Default typeface</strong></td>
+      <td>Inter (shadcn default), occasionally Geist</td>
+      <td>Inter or system-ui, rarely deviating without instruction</td>
+      <td>Inter or a neutral geometric; sometimes DM Sans unprompted</td>
+    </tr>
+    <tr>
+      <td><strong>Default layout</strong></td>
+      <td>Centered hero, three-card feature row, marketing spacing</td>
+      <td>Centered hero, generous padding, section-per-feature pattern</td>
+      <td>More opinionated: sidebar or dashboard layout appears earlier; still centered hero for landing pages</td>
+    </tr>
+    <tr>
+      <td><strong>Border radius</strong></td>
+      <td>8-12px on cards, 6px on inputs (shadcn defaults)</td>
+      <td>Similar to v0; rounded throughout</td>
+      <td>Slightly softer, 12-16px common; more consistently applied</td>
+    </tr>
+    <tr>
+      <td><strong>Icon approach</strong></td>
+      <td>Lucide React (good default  -  drawn SVG, not emoji)</td>
+      <td>Lucide or Hero Icons; occasionally falls back to emoji on complex prompts</td>
+      <td>Lucide or similar; rarely uses emoji as icons</td>
+    </tr>
+    <tr>
+      <td><strong>Five-second impression</strong></td>
+      <td>Clean, component-precise, distinctly shadcn-toned</td>
+      <td>Clean, fast, leans toward startup-generic</td>
+      <td>More polished default presentation; heavier use of gradients and blurs</td>
+    </tr>
+    <tr>
+      <td><strong>Customization ceiling</strong></td>
+      <td>High: generates modifiable React component code you edit directly</td>
+      <td>Medium-high: Bolt lets you modify files, but the default scaffold pushes back</td>
+      <td>Medium: preset style system is opinionated; overriding it takes explicit instruction</td>
+    </tr>
+    <tr>
+      <td><strong>Response to specific tokens</strong></td>
+      <td>Strong: named hex values and typefaces are respected in the output</td>
+      <td>Good: specific tokens are honored but the layout shell may not change</td>
+      <td>Variable: palette tokens work well; type pairing requires persistence</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Where they genuinely differ</h2>
+
+<h3>v0: the component builder</h3>
+<p>
+  v0's output is closest to raw component code. Vercel built it to generate React components that drop into a Next.js project, and the output reflects that intent: individual components are well-structured, prop interfaces are clean, and the shadcn/ui foundation means the baseline quality is high. The trade-off is that the aesthetic vocabulary is narrow: everything reads as shadcn, which means it reads as a specific palette and radius system that signals "this was built with v0" to anyone who has seen the defaults.
+</p>
+<p>
+  The ceiling for customization is the highest of the three because the code is modifiable and the component boundaries are clear. You can change the palette at the token level and it propagates. The problem is that you need to know what to change it to.
+</p>
+
+<h3>Bolt: the scaffold builder</h3>
+<p>
+  Bolt is optimized for speed of full-stack scaffolding, and the output reflects that priority. Landing pages come out fast and hold together, but the visual vocabulary is the most generic of the three: the layout, spacing, and color choices default to the lowest-common-denominator version of "professional web app." It is harder to tell a Bolt output from a random Tailwind starter than it is with v0 or Lovable. That genericity is a design weakness but a practical feature: the output offends nobody and integrates easily into an existing project.
+</p>
+
+<h3>Lovable: the polished preset</h3>
+<p>
+  Lovable has the most distinctive default aesthetic of the three  -  it has stronger opinions about gradient usage, shadow weight, and component proportion. That makes the first impression slightly better than v0 or Bolt without any extra prompting. The downside is that the opinionated defaults are harder to override: the style system has internal coherence, so a targeted change sometimes produces inconsistency rather than the intended correction. Working with Lovable's defaults is easier than against them.
+</p>
+
+<h2>The shared centroid problem</h2>
+<p>
+  All three differences above are real, but they operate within a narrow band. The centroid for all three builders is the same because the underlying cause is structural, not tool-specific. Each uses a language model; each uses Tailwind and shadcn or equivalent component defaults; each is evaluated, implicitly, on whether the output "looks like a real app." The most defensible answer to "looks like a real app" on an underspecified prompt is the statistical average of all real apps, which is the centroid: violet primary, neutral sans, rounded cards, centered hero, marketing spacing.
+</p>
+
+<blockquote>An empty brief has one most-likely answer. All three builders return it. The difference between them is in which version of the same centroid they default to, not whether they escape it.</blockquote>
+
+<p>
+  The pattern is visible in their specific defaults: all three use Inter or a functionally equivalent neutral sans; all three use a violet-to-indigo or similar "premium-technical" primary; all three produce three-card feature sections for an underspecified feature set; all three apply marketing-page spacing to application surfaces that warrant denser layout. See <a href="/blog/ai-app-builders-generic-design.html">why AI app builders ship the same look</a> for the mechanism in full.
+</p>
+
+<h2>What the output looks like in practice</h2>
+<p>
+  The skiphire redesign below shows the difference between unguided generation and generation with a structured brief. The "before" side is a real example of what AI coding tools produce without design direction: a generic stock photo under a dark scrim, centered headline in a neutral sans, a "Get a Quote" CTA button in the default primary color. Functional, forgettable, and immediately recognizable as generated.
+</p>
+
+<figure class="docfig">
+  <img src="/blog/skiphire-redesign.png" width="1600" height="900" alt="Before: a generic stock-photo hero with dark scrim, neutral sans headline, and default violet CTA. After: a real construction-site photograph, editorial headline with an amber accent color, and a quote form built directly into the hero section." loading="lazy">
+  <figcaption>Before: generic stock-photo hero with default palette and centered neutral type. After: real construction-site photograph, editorial headline with a specific amber accent (<code>#f59e0b</code>), quote form built into the hero. Same AI coding tool; the difference is a structured constraint brief supplied before generation.</figcaption>
+</figure>
+
+<p>
+  The "after" is not a different tool or a longer prompt. It is the same generation with a constraint brief supplied first: a specific palette (<code>#07080a</code> canvas, <code>#f59e0b</code> amber accent), a display-and-body type pair instead of Inter alone, a real photograph chosen for the context rather than a stock placeholder, and an explicit instruction to put the quote form inside the hero rather than below it. Each of those choices came from a structured brief, not from re-prompting.
+</p>
+<p>
+  v0, Bolt, and Lovable each would have produced the "before" by default. With the same constraint brief, each produces something closer to the "after." The brief is the differentiator, not the builder.
+</p>
+
+<h2>How to break the centroid with any of the three</h2>
+<p>
+  The fix is front-loading constraints, not back-loading corrections. Editing after generation means arguing with defaults that have already propagated through the component tree. Supplying constraints before generation means the builder never reaches for its defaults.
+</p>
+<p>
+  Concrete constraints that work across all three builders:
+</p>
+<ul>
+  <li><strong>Palette with hex values.</strong> "Use <code>#0a0b0d</code> as the canvas, <code>#f59e0b</code> as the accent, and <code>#c8c6bf</code> for body text" is a constraint the model can satisfy. "Dark and warm" is not  -  it resolves to its own centroid (dark navy, orange-ish accent, still Inter).</li>
+  <li><strong>A named type pair.</strong> "Bricolage Grotesque for display headings, Inter for body text, no other typefaces" is unambiguous. "Editorial feel" is not.</li>
+  <li><strong>A density target.</strong> "Compact: 4px base, 16px component padding, 32px section gaps" prevents marketing-page spacing from landing on an application surface.</li>
+  <li><strong>A radius decision.</strong> "2px radius throughout, no soft cards" is a constraint. "Sharp and modern" is an adjective that resolves to teal-on-dark-navy with 8px radius.</li>
+  <li><strong>Component vocabulary.</strong> "Lucide icons, no emoji, no shadows, flat surfaces only" removes three centroid defaults in one instruction.</li>
+</ul>
+<p>
+  uxskill's <a href="/">design brief pipeline</a> generates this constraint block from a structured intake: industry, audience, density preference, tone, and forbidden moves. The output is a paste-ready brief you supply to v0, Bolt, or Lovable before the first generation. After generation, the <a href="/anti-patterns.html">152-rule linter</a> checks the output for centroid fingerprints with a non-zero exit code on too many hits, so corrections are targeted rather than visual.
+</p>
+
+<div class="honesty">
+  <div class="label">What this comparison cannot tell you</div>
+  <p>Design quality is one dimension of a builder choice. v0, Bolt, and Lovable also differ substantially on deployment workflow, database integration, authentication support, team collaboration, and pricing. This comparison says nothing about those dimensions. If design quality is the deciding factor, the honest answer is that all three are roughly equivalent on default output, v0 has the highest ceiling for customization, and none of them consistently produce distinctive work without structured constraints. That last point applies equally to Claude Code, Cursor, and every other AI coding tool.</p>
+</div>
+
+<section class="faq-block">
+  <h2>Common questions</h2>
+
+  <div class="faq-item">
+    <h3>Which AI app builder produces the best design quality: v0, Bolt, or Lovable?</h3>
+    <p>All three produce similar default output because they share the same centroid: a violet or indigo primary, Inter or a neutral sans-serif, rounded cards, and marketing-page spacing. v0 has the highest customization ceiling because it generates clean component code you can modify directly. Bolt is fastest for full-stack scaffolding. Lovable has the most opinionated preset styles. None consistently escapes the centroid without structured design constraints supplied before generation.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Why does output from v0, Bolt, and Lovable look the same?</h3>
+    <p>All three are language-model-based and face the same convergence problem: an underspecified prompt has one most-likely answer, the centroid of the training distribution. They also rely on overlapping tooling  -  Tailwind and shadcn/ui  -  whose defaults (violet primary, rounded cards, Inter) narrow the output corridor further. This is not a flaw in any one tool; it is the correct behavior for a system optimizing for "plausible UI" with no further constraints.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>How do I get v0, Bolt, or Lovable to produce a custom design?</h3>
+    <p>Supply concrete design constraints before generation: a specific hex palette, a named typeface pair, a density target, a border radius, and component vocabulary. Adjectives like "premium" or "unique" do not work because the model resolves them to their own centroid. A structured design brief gives the builder values it can satisfy without guessing, which breaks the regression to the mean before the first line of code is written.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Does uxskill work with v0, Bolt, and Lovable?</h3>
+    <p>Yes. uxskill generates a structured constraint block from a project brief: a palette, type pair, density, radius, and motion presets. You paste that block into v0, Bolt, or Lovable as the design specification, and the builder fills it in instead of inventing its own defaults. After generation, uxskill's 152-rule linter scores the output for centroid fingerprints. The combination of upfront constraints and post-generation linting removes the dependency on re-prompting.</p>
+  </div>
+</section>
+
+<h2>Related reading</h2>
+<ul>
+  <li><a href="/blog/why-ai-generated-apps-look-the-same.html">Why AI-generated apps all look the same</a>  -  the centroid problem explained in full</li>
+  <li><a href="/blog/ai-app-builders-generic-design.html">Why v0, Bolt, and Lovable ship the same look</a>  -  the mechanism behind convergence</li>
+  <li><a href="/what-is-ai-slop.html">What is AI slop?</a>  -  the definition and nine visible signs</li>
+  <li><a href="/anti-patterns.html">The 152 anti-pattern rules</a>  -  the linter reference</li>
+</ul>
+
+<footer>
+ux-skill v3.1.0 · THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+</footer>
+
+</div>
+</main>
+<script id="usknav-js">(function(){var d=document.getElementById('usknav-drawer');var b=document.querySelector('.usknav__burger');if(!d||!b)return;var c=d.querySelector('.usknav__drawer-close');function F(){return d.querySelectorAll('a[href],button:not([disabled])');}function set(v){d.classList.toggle('is-open',v);b.setAttribute('aria-expanded',v?'true':'false');document.body.style.overflow=v?'hidden':'';if(v){var f=c||F()[0];if(f)f.focus();}else{b.focus();}}b.addEventListener('click',function(){set(true);});if(c)c.addEventListener('click',function(){set(false);});d.addEventListener('click',function(e){if(e.target.tagName==='A')set(false);});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&d.classList.contains('is-open'))set(false);if(e.key==='Tab'&&d.classList.contains('is-open')){var f=F();if(!f.length)return;var a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus();}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus();}}});var L=document.querySelector('.usknav__langs');if(L){document.addEventListener('click',function(e){if(L.open&&!L.contains(e.target))L.open=false;});L.addEventListener('keydown',function(e){if(e.key==='Escape')L.open=false;});}})();</script>
+</body>
+</html>
