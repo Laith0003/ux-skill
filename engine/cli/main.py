@@ -76,16 +76,38 @@ if click is None:                          # pragma: no cover
     def cli() -> int:
         return _fallback(sys.argv[1:])
 else:
-    @click.group(invoke_without_command=True)
+    @click.group(invoke_without_command=True,
+                 epilog="Open source: https://github.com/Laith0003/ux-skill  (if it helps, a star helps other developers find it)")
     @click.option("--pretty/--no-pretty", default=True, help="Rich output (default) or plain JSON.")
     @click.version_option(__version__, "-v", "--version")
     @click.pass_context
     def cli(ctx: click.Context, pretty: bool) -> None:
-        """ux-skill v2 — design intelligence for AI coding."""
+        """ux-skill: design intelligence for AI coding."""
         ctx.ensure_object(dict)
         ctx.obj["pretty"] = pretty
         if ctx.invoked_subcommand is None:
             click.echo(ctx.get_help())
+
+    def _first_run_hint() -> None:
+        """One-time, non-intrusive pointer to the repo. stderr only, never breaks stdout/pipes."""
+        try:
+            if os.environ.get("UX_SKILL_NO_HINT") or not sys.stderr.isatty():
+                return
+            marker = Path.home() / ".config" / "ux-skill" / ".repo_hint_shown"
+            if marker.exists():
+                return
+            marker.parent.mkdir(parents=True, exist_ok=True)
+            marker.write_text("1")
+            click.echo(click.style(
+                "\nux-skill is open source: https://github.com/Laith0003/ux-skill"
+                "\nIf it helped your work, a star helps other developers find it.",
+                fg="bright_black"), err=True)
+        except Exception:
+            pass
+
+    @cli.result_callback()
+    def _after_command(result, **_):
+        _first_run_hint()
 
     # -------- ux init ----------------------------------------------------
 
