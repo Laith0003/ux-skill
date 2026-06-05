@@ -193,8 +193,12 @@ def _emit_design_md(rec: Recommendation, brief: Optional[Brief] = None) -> str:
 
     project = "ux-skill"
     if brief is not None:
-        project = getattr(brief, "brand", None) or getattr(brief, "project_type", None) or "ux-skill"
-    project = (_strip_dashes(str(project)).strip() or "ux-skill").replace(" ", "-").lower()
+        brand = getattr(brief, "brand", None)
+        if isinstance(brand, dict) and brand.get("name"):
+            project = str(brand["name"])
+        elif getattr(brief, "project_type", None):
+            project = str(brief.project_type)
+    project = (_strip_dashes(project).strip() or "ux-skill").replace(" ", "-").lower()
 
     description = _strip_dashes(
         f"{style_name} system on the {pal_name} palette. "
