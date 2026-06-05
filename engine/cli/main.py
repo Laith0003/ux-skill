@@ -40,7 +40,7 @@ from engine.data_loader import stats as data_stats, load
 from engine.recommender import recommend as run_recommend, Brief
 from engine.linter import lint as run_lint
 from engine.discovery import FIELDS, DiscoveryState, next_question, record, is_complete, serialize
-from engine.generator import generate as run_generate
+from engine.generator import generate as run_generate, design_md as run_design_md
 from engine.installer import install as run_install, detect_ides, SUPPORTED
 from engine.persist import save_master, save_page, load_master, list_pages
 
@@ -369,6 +369,22 @@ else:
         rec = run_recommend(brief)
         bundle = run_generate(rec, brief, out_dir)
         _emit(bundle.to_dict(), ctx.obj["pretty"])
+
+    # -------- ux design-md ----------------------------------------------
+
+    @cli.command("design-md")
+    @click.option("--brief-file", type=click.Path(exists=True), required=False)
+    @click.option("--out", default="./DESIGN.md", help="Where to write the DESIGN.md.")
+    @click.pass_context
+    def design_md_cmd(ctx, brief_file, out) -> None:
+        """Emit a DESIGN.md (Google Stitch / awesome-design-md standard) from a recommendation."""
+        if brief_file:
+            brief = Brief(**json.loads(Path(brief_file).read_text(encoding="utf-8")))
+        else:
+            brief = Brief()
+        rec = run_recommend(brief)
+        result = run_design_md(rec, brief, out)
+        _emit(result, ctx.obj["pretty"])
 
     # -------- ux persist -------------------------------------------------
 
