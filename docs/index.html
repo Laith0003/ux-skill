@@ -94,7 +94,7 @@
   .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;display:flex;justify-content:center;align-items:center;gap:13px;color:var(--muted)}
   .eyebrow::before{content:"";width:28px;height:1px;background:currentColor;opacity:.55}
   .eyebrow .dot{width:7px;height:7px;border-radius:50%;flex:none}
-  .rev{opacity:0;transform:translateY(30px);transition:opacity .8s ease, transform .9s cubic-bezier(.16,.7,.2,1)}
+  .rev{opacity:0;transform:translateY(30px);transition:opacity .45s ease, transform .5s cubic-bezier(.16,.7,.2,1)}
   .rev.in{opacity:1;transform:none}
   /* hue utilities — keep colour out of inline styles */
   .c-cyan{background-color:var(--cyan)} .c-blue{background-color:var(--blue)}
@@ -302,7 +302,7 @@
   .turn-eyebrow{justify-content:center}
   /* cinematic entrance — JS adds .turn-in after ~0.4s dwell */
   @media(prefers-reduced-motion:no-preference){
-    .turn-scene.turn-in .turn-wiring{animation:tWireIn 1.4s cubic-bezier(.16,.7,.2,1) .2s forwards}
+    .turn-scene.turn-in .turn-wiring{animation:tWireIn .8s cubic-bezier(.16,.7,.2,1) .2s forwards}
     .turn-scene.turn-in .turn-body{animation:tBodyIn 2.2s cubic-bezier(.05,.7,.1,1) 1.0s forwards}
     @keyframes tWireIn{to{opacity:1}}
     @keyframes tBodyIn{to{opacity:1;transform:scale(1) translateY(0)}}
@@ -335,20 +335,20 @@
   .wiring.wired .wnode{opacity:1}
   @media(prefers-reduced-motion:no-preference){
     .wire{stroke-dasharray:var(--len,400);stroke-dashoffset:var(--len,400);transition:stroke-dashoffset 0s}
-    .wiring.wired .wire{stroke-dashoffset:0;transition:stroke-dashoffset .9s cubic-bezier(.4,0,.2,1)}
+    .wiring.wired .wire{stroke-dashoffset:0;transition:stroke-dashoffset .55s cubic-bezier(.16,1,.3,1)}
     .wiring.wired .wire-b{transition-delay:.18s}
     .wiring.wired .wire-g{transition-delay:.36s}
     .wiring.wired .wnode{transition-delay:.6s}
   }
   /* fade-up between white beats */
-  .fade-up{opacity:0;transform:translateY(44px);transition:opacity .9s ease,transform 1s cubic-bezier(.16,.7,.2,1)}
+  .fade-up{opacity:0;transform:translateY(44px);transition:opacity .5s ease,transform .55s cubic-bezier(.16,.7,.2,1)}
   .fade-up.in{opacity:1;transform:none}
 
   /* ===== SCROLL-PIN: full-viewport beats, one at a time ===== */
   .pin-wrap{position:relative;height:560vh}/* 6 beats — min-dwell timer paces reading */
   .pin-inner{position:sticky;top:0;height:100svh;overflow:hidden}
   /* each beat: absolute, full-size, centered, hidden by default */
-  .pbeat{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 clamp(24px,8vw,160px);gap:clamp(14px,2vh,28px);opacity:0;transform:translateY(22px) scale(.97);transition:opacity .7s cubic-bezier(.16,.7,.2,1),transform .8s cubic-bezier(.16,.7,.2,1);pointer-events:none}
+  .pbeat{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 clamp(24px,8vw,160px);gap:clamp(14px,2vh,28px);opacity:0;transform:translateY(22px) scale(.97);transition:opacity .45s cubic-bezier(.16,.7,.2,1),transform .5s cubic-bezier(.16,.7,.2,1);pointer-events:none}
   .pbeat.active{opacity:1;transform:none;pointer-events:auto;transition:opacity .18s ease,transform .18s ease;}
   .pbeat-eye{justify-content:center;margin-bottom:4px}
   .pbeat-num{font-family:var(--mono);font-size:clamp(11px,1.2vw,13px);letter-spacing:.18em;color:var(--blue-d);font-weight:500}
@@ -410,7 +410,7 @@
   .chat-sticky{position:sticky;top:0;height:100svh;display:flex;align-items:center;justify-content:center;overflow:hidden}
   .chat{max-width:600px;width:100%;margin:0 auto;padding-inline:clamp(16px,4vw,40px);display:flex;flex-direction:column;gap:18px;justify-content:center}
   /* messages STACK — each fades up and stays; slots pre-occupy space so nothing reflows */
-  .cmsg{opacity:0;transform:translateY(28px);transition:opacity .6s cubic-bezier(.16,.7,.2,1),transform .65s cubic-bezier(.16,.7,.2,1)}
+  .cmsg{opacity:0;transform:translateY(28px);transition:opacity .45s cubic-bezier(.16,.7,.2,1),transform .45s cubic-bezier(.16,.7,.2,1)}
   .cmsg.active{opacity:1;transform:none}
   /* mobile: no pin, stack normally */
   @media(max-width:640px){.chat-pin{height:auto}.chat-sticky{position:static;height:auto}.cmsg{position:static;opacity:1;transform:none}}
