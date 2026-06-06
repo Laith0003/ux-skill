@@ -46,6 +46,10 @@ The 10 required fields are:
 
 NEVER proceed to step 2 without the wow moment field populated. If the user says "anything's fine", push back: "Give me one concrete moment, even tiny — something a visitor would remember."
 
+### 1b. DESIGN.md is the visual contract
+
+If a `DESIGN.md` exists in the project root, read it FIRST and treat it as the source of truth for the visual system (colors, typography, spacing, rounded, components). Match it exactly. If none exists, after discovery emit one for this project with `ux design-md` (the Google Stitch / awesome-design-md standard) and treat it as the contract the generated UI must satisfy.
+
 ### 2. Read the references
 
 Before writing a single line of code, read:
