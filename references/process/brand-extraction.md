@@ -76,9 +76,13 @@ Wired end-to-end, not aspirational. The flow when a reference brand exists:
 2. **Normalize + anchor:** `uxskill brand --signals-file .ux/brand-signals.json --out .ux`
    -> `engine/brand/build_profile` -> writes `.ux/brand.json` (the travelling
    `BrandProfile`) + `.ux/brand.md` (human-readable). CONFIRM the read before locking.
-3. **Recommend:** `uxskill recommend --brand-file .ux/brand.json` -> `Brief.brand` ->
-   `anchor_recommendation` overrides the palette primary/accent with the brand color and
-   attaches `brand` + `type_directive`.
+3. **Recommend:** `uxskill recommend --brand-file .ux/brand.json --brand-url <site>` ->
+   `Brief.brand` -> `anchor_recommendation` overrides the palette primary/accent with the
+   brand color and attaches `brand` + `type_directive`. Pass `--brand-url` even when you
+   capture: it arms the **capture gate**. If a URL is given but no brand was captured (you
+   skipped steps 1-2), `recommend` returns a loud `warnings[]` entry instead of silently
+   shipping the house palette as `brand: None`. A raw `WebFetch` of a JS-rendered site is an
+   empty shell and is never a substitute for the rendered-DOM capture in step 1.
 4. **Synthesize:** `--brand-file` -> `synthesize()` `_stamp_client_brand` overlays the
    client primary/type on the synthesized system (composes with the reference_brands
    exemplar modes; does not replace them).

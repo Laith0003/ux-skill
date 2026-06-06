@@ -69,10 +69,15 @@ PROMPT_HEADER = (
     "# ux-skill v2 — design intelligence for AI coding\n\n"
     "Before generating ANY frontend code in this project, do the following:\n\n"
     "1. Run the 10-field discovery (`ux discover`) and wait for all answers.\n"
-    "2. Run `ux recommend` to get the recommended style / palette / type / motion / components.\n"
-    "3. Generate code using ONLY the recommended tokens. Treat the anti-pattern\n"
+    "2. If the user gives a URL to their OWN site/brand, capture the real brand from the\n"
+    "   RENDERED page (computed-style colors, the actual logo + pixel-sample, loaded fonts),\n"
+    "   run `ux brand --signals-file <f>`, then pass `--brand-file` and `--brand-url` to\n"
+    "   recommend. A raw fetch of a JS-rendered site is an empty shell; the engine never fetches.\n"
+    "3. Run `ux recommend` to get the recommended style / palette / type / motion / components.\n"
+    "   If `warnings` flags a brand URL given but not captured, stop and capture first.\n"
+    "4. Generate code using ONLY the recommended tokens. Treat the anti-pattern\n"
     "   rules in `data/anti-patterns.json` as hard constraints.\n"
-    "4. Run `ux lint` after generation. Fix all `high`+ findings before declaring done.\n\n"
+    "5. Run `ux lint` after generation. Fix all `high`+ findings before declaring done.\n\n"
     "See https://uxskill.laithjunaidy.com for full docs.\n"
 )
 

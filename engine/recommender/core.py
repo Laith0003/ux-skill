@@ -51,6 +51,7 @@ class Brief:
     stack: str = ""                     # tech-stacks.json id
     region: str = ""                    # "mena" | "us" | "eu" | "apac"
     brand: Optional[Dict[str, Any]] = None  # extracted BrandProfile dict; anchors palette/type
+    brand_url: str = ""                 # existing site/brand URL, if any; arms the capture gate
 
 
 @dataclass
@@ -65,6 +66,7 @@ class Recommendation:
     brand: Optional[Dict[str, Any]] = None           # set when brand-anchored (rule 2)
     type_directive: Optional[Dict[str, Any]] = None  # logo-style type directive
     rationale: List[str] = field(default_factory=list)
+    warnings: List[str] = field(default_factory=list)  # loud non-fatal flags (e.g. brand URL given, not captured)
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -493,4 +495,20 @@ def recommend(brief: Brief) -> Recommendation:
                 "Brand-anchored to %s — palette primary %s from the logo (not the "
                 "engine pick); type matches the logo style."
                 % (prof.name or "the source brand", prof.primary or "n/a"))
+
+    # Capture gate (dogfood fix): a brand/site URL was supplied but no brand was
+    # captured into the brief (the agent skipped `ux brand` + --brand-file). The
+    # engine never fetches URLs (offline by design, and raw-HTML of a JS-rendered
+    # site is an empty shell anyway), so rather than silently shipping the house
+    # palette as `brand: None`, fail LOUD so the miss is visible and actionable.
+    if getattr(brief, "brand_url", "") and not rec.brand:
+        msg = (
+            "A brand/site URL was provided (%s) but no brand was captured. "
+            "Capture it from the RENDERED page (computed-style colors, the actual "
+            "logo asset + pixel-sample, loaded fonts), run `ux brand --signals-file`, "
+            "then pass `--brand-file` to recommend. The engine does not fetch URLs."
+            % brief.brand_url
+        )
+        rec.warnings.append(msg)
+        rec.rationale.append("WARNING: " + msg)
     return rec
