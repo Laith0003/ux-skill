@@ -66,7 +66,10 @@ DETECT_SIGNATURES: Dict[str, List[str]] = {
 
 
 PROMPT_HEADER = (
-    "# ux-skill v2 — design intelligence for AI coding\n\n"
+    "# ux-skill: design intelligence for AI coding\n\n"
+    "If a DESIGN.md exists in the project root, read it FIRST and treat it as the\n"
+    "source of truth for the visual system (colors, typography, spacing, rounded,\n"
+    "components). Match it exactly.\n\n"
     "Before generating ANY frontend code in this project, do the following:\n\n"
     "1. Run the 10-field discovery (`ux discover`) and wait for all answers.\n"
     "2. If the user gives a URL to their OWN site/brand, capture the real brand from the\n"
@@ -75,9 +78,11 @@ PROMPT_HEADER = (
     "   recommend. A raw fetch of a JS-rendered site is an empty shell; the engine never fetches.\n"
     "3. Run `ux recommend` to get the recommended style / palette / type / motion / components.\n"
     "   If `warnings` flags a brand URL given but not captured, stop and capture first.\n"
-    "4. Generate code using ONLY the recommended tokens. Treat the anti-pattern\n"
+    "4. Run `ux design-md` to write a portable DESIGN.md (the Google Stitch / awesome-design-md\n"
+    "   standard) capturing that system, then treat it as the visual contract for this project.\n"
+    "5. Generate code using ONLY the recommended tokens. Treat the anti-pattern\n"
     "   rules in `data/anti-patterns.json` as hard constraints.\n"
-    "5. Run `ux lint` after generation. Fix all `high`+ findings before declaring done.\n\n"
+    "6. Run `ux lint` after generation. Fix all `high`+ findings before declaring done.\n\n"
     "See https://uxskill.laithjunaidy.com for full docs.\n"
 )
 
