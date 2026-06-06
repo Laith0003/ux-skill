@@ -9,7 +9,7 @@ For each language defined in i18n-strings.json:
   4. Inject a <link rel="alternate" hreflang="..."> for every language.
   5. Add a language picker dropdown to the nav (top-right).
   6. Mark canonical to the lang-specific URL.
-  7. Write to docs/<lang>/index.html and landing/<lang>/index.html.
+  7. Write to docs/<lang>/index.html.
 
 Re-run the script whenever docs/index.html or i18n-strings.json changes.
 """
@@ -22,7 +22,6 @@ ROOT = Path(__file__).resolve().parent.parent
 BASE = ROOT / "docs" / "index.html"
 STRINGS = ROOT / "scripts" / "i18n-strings.json"
 DOCS_OUT = ROOT / "docs"
-LANDING_OUT = ROOT / "landing"
 
 
 def load_strings():
@@ -261,16 +260,11 @@ def write_lang(html: str, lang: str) -> None:
         # English IS the root index.html — we keep the root file as-is and just
         # rewrite it with hreflang + lang picker added.
         out_docs = DOCS_OUT / "index.html"
-        out_landing = LANDING_OUT / "index.html"
     else:
         sub_docs = DOCS_OUT / lang
-        sub_landing = LANDING_OUT / lang
         sub_docs.mkdir(parents=True, exist_ok=True)
-        sub_landing.mkdir(parents=True, exist_ok=True)
         out_docs = sub_docs / "index.html"
-        out_landing = sub_landing / "index.html"
     out_docs.write_text(html, encoding="utf-8")
-    out_landing.write_text(html, encoding="utf-8")
 
 
 def main() -> None:
@@ -284,7 +278,7 @@ def main() -> None:
         write_lang(html, lang)
         size_kb = len(html) // 1024
         print(f"  ok  {lang:6}  →  /{lang}/  ({size_kb} KB)")
-    print(f"\nDone. {len(langs)} locales written under docs/ + landing/.")
+    print(f"\nDone. {len(langs)} locales written under docs/.")
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ Measurement ID G-Z371T0DBW5 — property "Organization" (256942753), web stream
 at the GA side (page_view, scroll, outbound click, site search, file download,
 form interaction, video), so the standard tag below is all the page needs.
 
-Walks docs/ and landing/ for *.html and inserts the tag immediately after the
+Walks docs/ for *.html and inserts the tag immediately after the
 opening <head> on every page that doesn't already carry the Measurement ID.
 Idempotent — the ID guard means re-runs are safe, and locale homepages that the
 i18n build regenerates from docs/index.html inherit it from the base.
@@ -42,7 +42,7 @@ def inject(html: str) -> str | None:
 def main() -> None:
     written = skipped = nohead = 0
     targets = []
-    for base in ("docs", "landing"):
+    for base in ("docs",):
         d = ROOT / base
         if d.exists():
             targets.extend(sorted(d.rglob("*.html")))

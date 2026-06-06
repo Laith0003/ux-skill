@@ -19,7 +19,6 @@ import re
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "data" / "anti-patterns.json"
 OUT = ROOT / "docs" / "anti-patterns.html"
-LANDING_OUT = ROOT / "landing" / "anti-patterns.html"
 
 
 SEVERITY_ORDER = {"high": 0, "medium": 1, "low": 2}
@@ -322,8 +321,7 @@ def main():
     rules, version = load_rules()
     out_html = build_html(rules, version)
     OUT.write_text(out_html, encoding="utf-8")
-    LANDING_OUT.write_text(out_html, encoding="utf-8")
-    print(f"ok  {len(rules)} rules  →  docs/anti-patterns.html + landing/anti-patterns.html")
+    print(f"ok  {len(rules)} rules  →  docs/anti-patterns.html")
 
 
 if __name__ == "__main__":

@@ -9,8 +9,6 @@ other public page so the entire site shares one header.
 
 Page-local accents, page-local CSS for non-nav surfaces, page-local
 content (hero, cards, tables, blog list) are preserved verbatim.
-
-Mirrors docs/<page>.html to landing/<page>.html after each rewrite.
 """
 
 import re
@@ -18,7 +16,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
-LANDING = ROOT / "landing"
 
 # ============================================================
 # CANONICAL FRAGMENTS
@@ -500,27 +497,9 @@ def main():
     touched = []
     for rel in PAGES:
         docs_path = DOCS / rel
-        landing_path = LANDING / rel
         if docs_path.exists():
             if unify_page(docs_path):
                 touched.append(str(docs_path.relative_to(ROOT)))
-            # Mirror to landing/
-            if landing_path.exists():
-                # Reuse the just-rewritten docs version as the landing source
-                # to guarantee parity.
-                landing_path.write_text(
-                    docs_path.read_text(encoding="utf-8"),
-                    encoding="utf-8",
-                )
-                touched.append(str(landing_path.relative_to(ROOT)))
-            else:
-                # If the landing mirror is missing entirely, write it.
-                landing_path.parent.mkdir(parents=True, exist_ok=True)
-                landing_path.write_text(
-                    docs_path.read_text(encoding="utf-8"),
-                    encoding="utf-8",
-                )
-                touched.append(str(landing_path.relative_to(ROOT)) + " (new)")
         else:
             print(f"SKIP — missing: {docs_path}")
 

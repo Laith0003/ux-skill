@@ -72,21 +72,14 @@ def inject(path: Path, slug: str) -> tuple[bool, str]:
 
 def main() -> None:
     docs_count = 0
-    land_count = 0
     for rel, slug in PAGE_TO_SLUG.items():
         p_docs = ROOT / rel
-        p_landing = ROOT / rel.replace("docs/", "landing/", 1)
         if p_docs.exists():
             ok, msg = inject(p_docs, slug)
             print(("OK   " if ok else "skip "), rel, "—", msg)
             if ok:
                 docs_count += 1
-        if p_landing.exists():
-            ok, msg = inject(p_landing, slug)
-            print(("OK   " if ok else "skip "), rel.replace("docs/", "landing/", 1), "—", msg)
-            if ok:
-                land_count += 1
-    print(f"\nDone: {docs_count} docs/ pages updated, {land_count} landing/ pages updated.")
+    print(f"\nDone: {docs_count} docs/ pages updated.")
 
 
 if __name__ == "__main__":

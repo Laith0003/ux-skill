@@ -16,7 +16,6 @@ import html
 ROOT = Path(__file__).resolve().parent.parent
 COMMANDS_DIR = ROOT / "commands"
 DOCS_OUT = ROOT / "docs" / "commands.html"
-LANDING_OUT = ROOT / "landing" / "commands.html"
 
 
 def parse_command(path: Path) -> dict:
@@ -723,9 +722,7 @@ def main() -> None:
         .replace("__BODY__", body)
     )
     DOCS_OUT.write_text(out, encoding="utf-8")
-    LANDING_OUT.write_text(out, encoding="utf-8")
     print(f"Wrote {DOCS_OUT}  ({len(out) // 1024} KB)")
-    print(f"Wrote {LANDING_OUT}  ({len(out) // 1024} KB)")
 
 
 if __name__ == "__main__":
