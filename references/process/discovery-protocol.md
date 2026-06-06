@@ -133,7 +133,7 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 ## Hard rules for the discovery phase
 
 - **Never assume.** If a field is ambiguous, ask. The cost of one clarification message is far lower than the cost of regenerating a misaligned design.
-- **Never proceed without the wow moment.** Without it, you're producing default work. Push back if the user says "anything's fine" — ask for a concrete moment, even a tiny one ("the way the headline reveals on first scroll", "the brand-mark dot pulsing once on load").
+- **Never ship a forgettable surface, but you do not need the user to supply the wow.** If they give a concrete moment, use it. If they say "anything's fine," DERIVE the wow layer (2-3 coordinated signature moments from brand temperature + industry + goal, per `references/foundations/wow.md`); never fall back to a default.
 - **Never substitute defaults for missing answers.** If the user skips a field, ask again or surface that you'll proceed with a default and what that default is, so they can intervene.
 - **Always echo back the brief** before generating. Two sentences max: "Here's what I'm building. Stop me if any of this is wrong."
 
@@ -143,4 +143,4 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 
 The plugin's premise is that default model output has measurable, predictable failure modes. The biggest failure mode is **generating without enough constraint to make the output specific to the user's intent**. Asking 5–10 questions takes 2 minutes; it saves a generation that would have been 80% right and 100% rejected.
 
-Apple-clean is not enough. Apple-clean is the floor, not the ceiling. The wow moment is what lifts a clean design into a memorable one — and the wow moment can only come from the user, not from the model.
+Apple-clean is not enough. Apple-clean is the floor, not the ceiling. The wow moment is what lifts a clean design into a memorable one, and when the user does not supply one, the model derives it (per `references/foundations/wow.md`), never settling for a forgettable default.
