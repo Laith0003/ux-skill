@@ -31,7 +31,7 @@ classifiers = [
   "Topic :: Software Development :: Libraries :: Python Modules"
 ]
 dependencies = [
-  "click>=8.1",
+  "click>=8.1.8",
   "rich>=13.0",
   "pydantic>=2.13.4",
   "tomli>=2.0;python_version<'3.11'"
