@@ -6,7 +6,6 @@ are skipped. Re-runs are safe.
 
 Applies to:
   docs/**/*.html
-  landing/**/*.html
 """
 from pathlib import Path
 import re
@@ -46,7 +45,7 @@ def inject(path: Path) -> tuple[bool, str]:
 def main() -> None:
     count_ok = 0
     count_skip = 0
-    for root_dir in (ROOT / "docs", ROOT / "landing"):
+    for root_dir in (ROOT / "docs",):
         for p in root_dir.rglob("*.html"):
             ok, msg = inject(p)
             rel = p.relative_to(ROOT)

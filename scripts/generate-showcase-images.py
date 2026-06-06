@@ -13,8 +13,6 @@ Outputs (1600x1000, ~2x density for retina):
   docs/screenshots/terminal-ux-lint.png       — Linter scan output
   docs/screenshots/brand-mosaic.png           — Brand gallery mosaic
   docs/screenshots/hero-canvas.png            — Abstract hero scene
-
-Mirrored to landing/screenshots/.
 """
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -24,9 +22,7 @@ import random
 
 ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs" / "screenshots"
-LANDING = ROOT / "landing" / "screenshots"
 DOCS.mkdir(parents=True, exist_ok=True)
-LANDING.mkdir(parents=True, exist_ok=True)
 
 
 # Saturated Cinema palette (matches v3 homepage)
@@ -70,7 +66,6 @@ def _font(size: int, mono: bool = False) -> ImageFont.FreeTypeFont:
 def _save(img: Image.Image, name: str) -> None:
     out = DOCS / name
     img.save(out, "PNG", optimize=True)
-    img.save(LANDING / name, "PNG", optimize=True)
     print(f"OK  {name}  ({out.stat().st_size // 1024} KB)")
 
 

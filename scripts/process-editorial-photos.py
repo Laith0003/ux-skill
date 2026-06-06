@@ -6,7 +6,7 @@ Steps per photo:
   - Save at JPEG quality 78 (~80-120 KB target)
   - Generate a tiny 24px-wide blur placeholder (for LQIP / blur-up loading)
 
-Outputs (mirrored to landing/editorial/):
+Outputs:
   docs/editorial/editorial-<n>.jpg          full (~100 KB each)
   docs/editorial/editorial-<n>-tiny.jpg     LQIP (~1 KB each)
 
@@ -20,7 +20,6 @@ import io
 
 ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs" / "editorial"
-LANDING = ROOT / "landing" / "editorial"
 
 
 def darken_gradient(img: Image.Image) -> Image.Image:
@@ -47,7 +46,6 @@ def process_one(src: Path) -> None:
     # Save optimized
     out = DOCS / src.name
     img.save(out, "JPEG", quality=78, optimize=True, progressive=True)
-    (LANDING / src.name).write_bytes(out.read_bytes())
     # Tiny LQIP — 24 wide, blurred
     tiny = img.copy()
     tiny.thumbnail((24, 24 * img.height // img.width), Image.LANCZOS)
@@ -55,7 +53,6 @@ def process_one(src: Path) -> None:
     tiny_name = src.stem + "-tiny.jpg"
     tiny_out = DOCS / tiny_name
     tiny.save(tiny_out, "JPEG", quality=60, optimize=True)
-    (LANDING / tiny_name).write_bytes(tiny_out.read_bytes())
     kb_main = out.stat().st_size // 1024
     kb_tiny = tiny_out.stat().st_size // 1024
     print(f"  ok  {src.name:24s}  {kb_main:>4} KB  + lqip {kb_tiny} KB")

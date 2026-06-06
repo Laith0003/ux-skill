@@ -22,8 +22,6 @@ import textwrap
 ROOT = Path(__file__).resolve().parent.parent
 OUT_DIR = ROOT / "docs" / "og"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
-LANDING_OUT_DIR = ROOT / "landing" / "og"
-LANDING_OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
 # slug -> (eyebrow, title, optional subtitle)
@@ -172,10 +170,9 @@ def generate_one(slug: str, eyebrow: str, title: str, subtitle: str) -> Path:
     _draw_footer(d, w, h)
     # thin hairline divider at the very bottom
     d.rectangle((60, h - 30, w - 60, h - 29), fill=(40, 38, 34))
-    # save to docs/og + landing/og
+    # save to docs/og
     out = OUT_DIR / f"{slug}.png"
     img.save(out, "PNG", optimize=True)
-    img.save(LANDING_OUT_DIR / f"{slug}.png", "PNG", optimize=True)
     return out
 
 
@@ -184,7 +181,7 @@ def main() -> None:
     for slug, (eb, title, sub) in PAGES.items():
         p = generate_one(slug, eb, title, sub)
         print(f"OK  {p.name}  ({Path(p).stat().st_size // 1024} KB)")
-    print(f"\nDone. {len(PAGES)} PNGs written to docs/og/ and landing/og/.")
+    print(f"\nDone. {len(PAGES)} PNGs written to docs/og/.")
 
 
 if __name__ == "__main__":

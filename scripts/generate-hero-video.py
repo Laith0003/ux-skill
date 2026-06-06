@@ -24,10 +24,8 @@ import subprocess
 ROOT = Path(__file__).resolve().parent.parent
 FRAMES_DIR = ROOT / ".build" / "hero-frames"
 OUT_DIR = ROOT / "docs" / "media"
-LANDING_OUT = ROOT / "landing" / "media"
 FRAMES_DIR.mkdir(parents=True, exist_ok=True)
 OUT_DIR.mkdir(parents=True, exist_ok=True)
-LANDING_OUT.mkdir(parents=True, exist_ok=True)
 
 W, H = 1920, 1080
 FPS = 30
@@ -184,7 +182,6 @@ def encode_mp4() -> None:
         str(out),
     ]
     subprocess.run(cmd, check=True, capture_output=True)
-    shutil.copy(out, LANDING_OUT / "hero-loop.mp4")
     sz = out.stat().st_size // 1024
     print(f"  mp4 ok ({sz} KB)")
 
@@ -205,7 +202,6 @@ def encode_webm() -> None:
         str(out),
     ]
     subprocess.run(cmd, check=True, capture_output=True)
-    shutil.copy(out, LANDING_OUT / "hero-loop.webm")
     sz = out.stat().st_size // 1024
     print(f"  webm ok ({sz} KB)")
 
@@ -215,7 +211,6 @@ def make_poster() -> None:
     poster_frame = TOTAL_FRAMES // 2
     img = render_frame(poster_frame)
     img.save(OUT_DIR / "hero-loop.jpg", "JPEG", quality=82, optimize=True)
-    img.save(LANDING_OUT / "hero-loop.jpg", "JPEG", quality=82, optimize=True)
     print(f"  poster ok ({(OUT_DIR / 'hero-loop.jpg').stat().st_size // 1024} KB)")
 
 

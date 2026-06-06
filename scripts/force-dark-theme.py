@@ -150,7 +150,7 @@ def patch(path: Path) -> tuple[bool, int]:
 
 def main() -> None:
     targets = []
-    for root_dir in (ROOT / "docs", ROOT / "landing"):
+    for root_dir in (ROOT / "docs",):
         targets.extend(root_dir.rglob("*.html"))
     targets.sort()
     print(f"Scanning {len(targets)} HTML files\n")

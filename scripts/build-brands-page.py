@@ -18,7 +18,6 @@ ROOT = Path(__file__).resolve().parent.parent
 INDEX = ROOT / "data" / "brands" / "_index.json"
 BRANDS_DIR = ROOT / "data" / "brands"
 OUT = ROOT / "docs" / "brands.html"
-LANDING_OUT = ROOT / "landing" / "brands.html"
 
 
 def load_index():
@@ -298,8 +297,7 @@ def main():
     brands, version = load_index()
     out_html = build_html(brands, version)
     OUT.write_text(out_html, encoding="utf-8")
-    LANDING_OUT.write_text(out_html, encoding="utf-8")
-    print(f"ok  {len(brands)} brands  →  docs/brands.html + landing/brands.html")
+    print(f"ok  {len(brands)} brands  →  docs/brands.html")
 
 
 if __name__ == "__main__":
