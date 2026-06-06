@@ -27,6 +27,8 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 
 **Brand library shortcut**: If the user names a brand from the catalog at `references/brands/_index.md` (72 brands across AI, fintech, dev tools, productivity, consumer, automotive, editorial), read the matching `references/brands/<brand>.md` file and pass its full DESIGN.md spec verbatim to the frontend-engineer sub-agent. The brand becomes the visual ground truth; the plugin's anti-slop + SEO discipline applies on top.
 
+**Existing-site capture gate (mandatory)**: If the user gives a URL to their OWN existing site or brand, that URL is authoritative and arms a hard gate, you MUST capture the real brand from the **rendered** page before any recommendation. See `references/process/brand-extraction.md`. Do NOT rely on a raw `WebFetch` of the HTML: modern sites are JS-rendered, so a raw fetch returns an empty shell with no colors, fonts, or logo, which is exactly how a build ships the wrong accent and a placeholder logo while believing it read the brand. Capture computed-style colors, the actual logo asset (and pixel-sample it), and the loaded font families; run `ux brand --signals-file <signals.json>`; then pass the resulting `brand.json` via `--brand-file` to `ux recommend`, and pass the URL itself via `--brand-url`. If you skip capture, the recommender returns a loud `warnings[]` entry instead of silently shipping the house palette.
+
 ### 2. Reference inspirations
 **Ask**: "Drop 3–5 URLs or screenshots of designs you LIKE. Not for features — for the aesthetic feel. The bar for taste."
 
@@ -119,7 +121,7 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
      }
    }
    ```
-2. **Read the brand identity file** if one was provided, and any reference URLs (via WebFetch). Synthesize what they share.
+2. **Capture the brand, do not just read it.** If a brand identity *file* was provided, read it. If a URL to the user's OWN site/brand was provided, run the capture gate in `references/process/brand-extraction.md` (rendered-DOM colors + logo pixels + loaded fonts -> `ux brand --signals-file` -> `--brand-file`) and pass the URL via `--brand-url`. For *reference-inspiration* URLs (field 2), study the rendered page for aesthetic intent. A raw `WebFetch` of a JS-rendered site is an empty shell, never treat it as the brand source of truth.
 3. **Set the three dials** based on the style direction + audience + density signals from the references:
    - `DESIGN_VARIANCE` (1 perfect symmetry → 10 artsy chaos)
    - `MOTION_INTENSITY` (1 static → 10 cinematic)
@@ -136,6 +138,7 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 - **Never ship a forgettable surface, but you do not need the user to supply the wow.** If they give a concrete moment, use it. If they say "anything's fine," DERIVE the wow layer (2-3 coordinated signature moments from brand temperature + industry + goal, per `references/foundations/wow.md`); never fall back to a default.
 - **Never substitute defaults for missing answers.** If the user skips a field, ask again or surface that you'll proceed with a default and what that default is, so they can intervene.
 - **Always echo back the brief** before generating. Two sentences max: "Here's what I'm building. Stop me if any of this is wrong."
+- **If the user gave their own site/brand URL, capturing it is mandatory, not optional.** The extracted brand overrides the engine's palette/type pick. Skipping capture is the single biggest avoidable failure (shipping the house accent + a placeholder logo). The recommender's `--brand-url` gate surfaces the miss after the fact; the fix is to capture first.
 
 ---
 

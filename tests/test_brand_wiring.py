@@ -80,6 +80,31 @@ def test_recommend_brand_anchor_overrides_palette():
     assert (rec.type_directive or {}).get("reject_defaults") is True
 
 
+def test_recommend_brand_url_without_capture_warns():
+    """A site/brand URL supplied but no brand captured -> LOUD warning, never a
+    silent brand:None (the dogfood failure mode rebuilt as an enforced guard)."""
+    rec = recommend(Brief(project_type="landing", tone=["bold"],
+                          brand_url="https://example.com"))
+    assert rec.brand is None
+    assert any("no brand was captured" in w.lower() for w in rec.warnings)
+    assert any(w.startswith("WARNING:") for w in rec.rationale)
+
+
+def test_recommend_brand_url_with_capture_no_warning():
+    """URL supplied AND brand captured -> anchored, no capture warning."""
+    rec = recommend(Brief(project_type="landing", tone=["bold"],
+                          brand_url="https://example.com", brand=_profile().to_dict()))
+    assert (rec.brand or {}).get("name") == "Instant Skip Hire"
+    assert not any("no brand was captured" in w.lower() for w in rec.warnings)
+
+
+def test_recommend_no_brand_url_no_capture_warning():
+    """No URL -> no capture warning, warnings stays empty (back-compat)."""
+    rec = recommend(Brief(project_type="landing", tone=["bold"]))
+    assert rec.brand is None
+    assert rec.warnings == []
+
+
 def test_recommend_no_brand_leaves_fields_none():
     rec = recommend(Brief(project_type="landing", tone=["bold"]))
     assert rec.brand is None and rec.type_directive is None

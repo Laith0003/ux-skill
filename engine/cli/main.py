@@ -240,9 +240,13 @@ else:
     @click.option("--brief-file", type=click.Path(exists=True), help="JSON brief file.")
     @click.option("--brand-file", type=click.Path(exists=True),
                   help="brand.json from `uxskill brand` -- anchors palette/type to the client brand.")
+    @click.option("--brand-url", default="",
+                  help="Existing site/brand URL. Arms the capture gate: if set but no brand is "
+                       "captured (--brand-file), recommend warns loudly instead of silently "
+                       "shipping the house palette as brand:None.")
     @click.pass_context
     def recommend_cmd(ctx, project_type, industry, audience, tone, must_have, forbidden,
-                      stack, region, brief_file, brand_file) -> None:
+                      stack, region, brief_file, brand_file, brand_url) -> None:
         """Run the 5-parallel-search recommender."""
         if brief_file:
             payload = json.loads(Path(brief_file).read_text(encoding="utf-8"))
@@ -275,6 +279,8 @@ else:
             )
         if brand_file:
             brief.brand = _load_brand_dict(brand_file)
+        if brand_url:
+            brief.brand_url = brand_url
         rec = run_recommend(brief)
         _emit(rec.to_dict(), ctx.obj["pretty"])
 
