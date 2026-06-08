@@ -11,7 +11,7 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ux-skill roadmap — v2.0 to v3.0</title>
+  <title>ux-skill roadmap · v2.0 to v3.0</title>
   <meta name="description" content="What's shipped (v2.0-alpha.24) and what's coming next: v2.1 adds 17 anti-pattern rules, v2.2 adds i18n + MCP server, v2.3 adds hi-fi prototype output.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/roadmap.html">
   <meta name="theme-color" content="#07080a">
@@ -20,16 +20,16 @@
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/roadmap.html">
-  <meta property="og:title" content="ux-skill roadmap — v2.0 to v3.0">
-  <meta property="og:description" content="Now: v2.0.0-alpha.24 (1,243 entries, 25 commands). Next: v2.1, v2.2, v2.3, v3.0 — and an explicit won't-do list.">
+  <meta property="og:title" content="ux-skill roadmap · v2.0 to v3.0">
+  <meta property="og:description" content="Now: v2.0.0-alpha.24 (1,243 entries, 25 commands). Next: v2.1, v2.2, v2.3, v3.0, and an explicit won't-do list.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/roadmap.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — roadmap">
+  <meta property="og:image:alt" content="ux-skill · roadmap">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/roadmap.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ux-skill roadmap — v2.0 to v3.0">
+  <meta name="twitter:title" content="ux-skill roadmap · v2.0 to v3.0">
   <meta name="twitter:description" content="Public roadmap with codenames, ship targets, and an explicit list of what we will never build.">
 
   <script type="application/ld+json">
@@ -104,7 +104,7 @@
 
   <style>
     /* =========================================================================
-       UXSKILL DOCS v3 — Saturated Cinema (dark)
+       UXSKILL DOCS v3: Saturated Cinema (dark)
        Scene accent: teal #14b8a6
        ========================================================================= */
     :root {
@@ -123,7 +123,7 @@
       --scene-accent:  #14b8a6;
       --scene-soft:    rgba(20, 184, 166, 0.10);
 
-      /* Status ramps — dark equivalents */
+      /* Status ramps: dark equivalents */
       --shipped-bg:   rgba(16, 185, 129, 0.14);
       --shipped-fg:   #34d399;
       --planned-bg:   rgba(246, 247, 249, 0.08);
@@ -471,7 +471,7 @@
       border-color: rgba(20, 184, 166, 0.28);
     }
 
-    /* Won't-do — inverted to surface card, scene-rose-ish but kept restrained */
+    /* Won't-do: inverted to surface card, scene-rose-ish but kept restrained */
     .wont-do {
       background: var(--surface-1);
       border: 1px solid var(--hairline-2);
@@ -594,7 +594,7 @@
       }
     }
   
-    /* Arabic typography — IBM Plex Sans Arabic for the whole Arabic page (v3.0.4 sweep) */
+    /* Arabic typography: IBM Plex Sans Arabic for the whole Arabic page (v3.0.4 sweep) */
     html[lang="ar"] body,
     html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3, html[lang="ar"] h4,
     html[lang="ar"] p, html[lang="ar"] li, html[lang="ar"] a, html[lang="ar"] button,
@@ -606,13 +606,13 @@
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
        and max-width: 100%; carousels that need their own horizontal scroll
-       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves —
+       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves:
        overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
     html, body {
       overflow-x: clip;
       max-width: 100%;
     }
-    /* Defensive — make sure no section, image, or table forces width >100%. */
+    /* Defensive: make sure no section, image, or table forces width >100%. */
     section, header, footer, main, article { max-width: 100vw; }
     img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
     table { max-width: 100%; }
@@ -831,10 +831,10 @@
     }
     #nav-drawer .nav__drawer-langs-grid a:hover { color: var(--ink, var(--nav-ink)); }
 
-    /* RTL — nav inner flips */
+    /* RTL: nav inner flips */
     html[dir="rtl"] #nav .nav__inner { direction: rtl; }
 
-    /* Defensive — when the fixed .nav is present, give layouts that
+    /* Defensive: when the fixed .nav is present, give layouts that
        previously assumed an inline header (.wrap on blog/index,
        .top/.toolbar on the catalogue pages) enough headroom so
        content isn't hidden behind the nav. */
@@ -986,10 +986,10 @@
 </div>
 <main id="main">
   <div class="page">
-    <span class="eyebrow">Roadmap &middot; v2.0 &rarr; v3.0 &middot; public &middot; 2026&ndash;2027</span>
-    <h1>ux-skill <span class="accent">roadmap</span> &mdash; v2.0 to v3.0.</h1>
+    <span class="eyebrow">Roadmap &middot; v2.0 &rarr; v3.0 &middot; public &middot; 2026-2027</span>
+    <h1>ux-skill <span class="accent">roadmap</span> · v2.0 to v3.0.</h1>
     <p class="lede">
-      Where we are, where we're headed, and what we will never build. Every release has a codename, a ship target, and a vote-on-this link so you can push the order of work. Dates are intent, not promise &mdash; this is a solo project with a real day job. If you want something faster, send a PR.
+      Where we are, where we're headed, and what we will never build. Every release has a codename, a ship target, and a vote-on-this link so you can push the order of work. Dates are intent, not promise. This is a solo project with a real day job. If you want something faster, send a PR.
     </p>
 
     <article class="release current">
@@ -1007,11 +1007,11 @@
       <h4>What's in v2.0</h4>
       <ul>
         <li><strong>998 manifest entries</strong> across anti-patterns, generators, styles, components, brands, foundations, output formats, conditionals, processes</li>
-        <li><strong>22 slash-commands</strong> &mdash; <code>/ux-design</code>, <code>/ux-component</code>, <code>/ux-system</code>, <code>/ux-audit</code>, <code>/ux-frame</code>, <code>/ux-dashboard</code>, <code>/ux-fix</code>, <code>/ux-copy</code>, <code>/ux-motion</code>, <code>/ux-a11y</code>, and 12 more</li>
-        <li><strong>17 IDE adapters</strong> &mdash; Claude Code, Cursor, Windsurf, Copilot, Continue, Codeium, Cline, Roo Code, Aider, Cody, Tabnine, Supermaven, Zed AI, JetBrains AI, Augment, Pieces, Sourcegraph</li>
-        <li><strong>160 brand specs</strong> under <code>references/brands/</code> &mdash; Apple, Stripe, Linear, Vercel, Notion, Airbnb, Figma, Replit, Anthropic, plus 63 more</li>
-        <li><strong>100 anti-slop linter rules</strong> &mdash; gradient regex, font-pair lockout, emoji detection, default-blue trap, three-tier pricing card flag, generic hero detection, 29 more</li>
-        <li><strong>Discovery protocol</strong> &mdash; 10-field intake before any generation (banned: improvisation)</li>
+        <li><strong>22 slash-commands</strong>: <code>/ux-design</code>, <code>/ux-component</code>, <code>/ux-system</code>, <code>/ux-audit</code>, <code>/ux-frame</code>, <code>/ux-dashboard</code>, <code>/ux-fix</code>, <code>/ux-copy</code>, <code>/ux-motion</code>, <code>/ux-a11y</code>, and 12 more</li>
+        <li><strong>17 IDE adapters</strong>: Claude Code, Cursor, Windsurf, Copilot, Continue, Codeium, Cline, Roo Code, Aider, Cody, Tabnine, Supermaven, Zed AI, JetBrains AI, Augment, Pieces, Sourcegraph</li>
+        <li><strong>160 brand specs</strong> under <code>references/brands/</code>: Apple, Stripe, Linear, Vercel, Notion, Airbnb, Figma, Replit, Anthropic, plus 63 more</li>
+        <li><strong>100 anti-slop linter rules</strong>: gradient regex, font-pair lockout, emoji detection, default-blue trap, three-tier pricing card flag, generic hero detection, 29 more</li>
+        <li><strong>Discovery protocol</strong>: 10-field intake before any generation (banned: improvisation)</li>
       </ul>
       <a href="https://github.com/Laith0003/ux-skill/releases" class="vote">Read the release notes</a>
     </article>
@@ -1030,11 +1030,11 @@
       </p>
       <h4>Key features</h4>
       <ul>
-        <li><strong>+17 anti-pattern rules</strong> &mdash; pulled from the May 2026 audit of 50 generic landings (grep findings: 14 purple gradients, 11 three-tier cards, 9 default-Inter pairs, 16 generic feature-icon grids)</li>
-        <li><strong><code>landing-patterns.yaml</code></strong> &mdash; 28 patterns covering hero, pricing, testimonial, FAQ, CTA, footer variants with brand-locked recommendations</li>
-        <li><strong>Cross-reference wiring</strong> &mdash; choosing a brand from the 72-pack now auto-narrows valid components, valid type pairings, and valid motion patterns</li>
-        <li><strong>Linter performance pass</strong> &mdash; drop median run from 380ms to under 80ms; parallel rule eval</li>
-        <li><strong>Per-rule disable file</strong> &mdash; <code>.uxskill.toml</code> with rule-level opt-out and explanation requirement</li>
+        <li><strong>+17 anti-pattern rules</strong>: pulled from the May 2026 audit of 50 generic landings (grep findings: 14 purple gradients, 11 three-tier cards, 9 default-Inter pairs, 16 generic feature-icon grids)</li>
+        <li><strong><code>landing-patterns.yaml</code></strong>: 28 patterns covering hero, pricing, testimonial, FAQ, CTA, footer variants with brand-locked recommendations</li>
+        <li><strong>Cross-reference wiring</strong>: choosing a brand from the 72-pack now auto-narrows valid components, valid type pairings, and valid motion patterns</li>
+        <li><strong>Linter performance pass</strong>: drop median run from 380ms to under 80ms; parallel rule eval</li>
+        <li><strong>Per-rule disable file</strong>: <code>.uxskill.toml</code> with rule-level opt-out and explanation requirement</li>
       </ul>
       <a href="https://github.com/Laith0003/ux-skill/discussions/categories/ideas" class="vote">Vote on v2.1 priorities</a>
     </article>
@@ -1053,11 +1053,11 @@
       </p>
       <h4>Key features</h4>
       <ul>
-        <li><strong>README in 11 locales</strong> &mdash; English, Arabic, Spanish, Portuguese, French, German, Russian, Chinese (Simplified), Japanese, Korean, Hindi</li>
-        <li><strong>MCP server (<code>uxskill-mcp</code>)</strong> &mdash; stateful memory of prior designs across Claude Code, Cursor, Windsurf sessions; canonical brand persists per-repo</li>
-        <li><strong>Figma MCP bridge</strong> &mdash; pull tokens from a Figma file into a brand spec; one-way sync; design system import in under 30 seconds</li>
-        <li><strong>RTL pass</strong> &mdash; every command flag-tested under <code>dir="rtl"</code>; mirrored animation contracts in motion-engineer agent</li>
-        <li><strong>Brand pack #2</strong> &mdash; 28 MENA + APAC brands added to the brand library (Careem, Talabat, Noon, Aramex, GO-JEK, Grab, Lazada, +21)</li>
+        <li><strong>README in 11 locales</strong>: English, Arabic, Spanish, Portuguese, French, German, Russian, Chinese (Simplified), Japanese, Korean, Hindi</li>
+        <li><strong>MCP server (<code>uxskill-mcp</code>)</strong>: stateful memory of prior designs across Claude Code, Cursor, Windsurf sessions; canonical brand persists per-repo</li>
+        <li><strong>Figma MCP bridge</strong>: pull tokens from a Figma file into a brand spec; one-way sync; design system import in under 30 seconds</li>
+        <li><strong>RTL pass</strong>: every command flag-tested under <code>dir="rtl"</code>; mirrored animation contracts in motion-engineer agent</li>
+        <li><strong>Brand pack #2</strong>: 28 MENA + APAC brands added to the brand library (Careem, Talabat, Noon, Aramex, GO-JEK, Grab, Lazada, +21)</li>
       </ul>
       <a href="https://github.com/Laith0003/ux-skill/discussions/categories/ideas" class="vote">Vote on v2.2 priorities</a>
     </article>
@@ -1076,11 +1076,11 @@
       </p>
       <h4>Key features</h4>
       <ul>
-        <li><strong>Hi-fi output mode</strong> &mdash; <code>/ux-design --fidelity hi</code> emits production component code in React, Vue, Svelte, vanilla TS</li>
-        <li><strong>Local preview server</strong> &mdash; <code>npx uxskill preview</code> opens <code>http://localhost:4242</code> with hot-reload of every generated artifact</li>
-        <li><strong>Motion MP4 export</strong> &mdash; every <code>/ux-motion</code> spec exports a 4-second loop MP4 + WebM for decks and docs</li>
-        <li><strong>Component library export</strong> &mdash; generated systems compile to a publishable npm package on demand</li>
-        <li><strong>Frame-accurate motion engine</strong> &mdash; sub-16ms GSAP timeline export; cubic-bezier per axis; no <code>ease-in-out</code> defaults</li>
+        <li><strong>Hi-fi output mode</strong>: <code>/ux-design --fidelity hi</code> emits production component code in React, Vue, Svelte, vanilla TS</li>
+        <li><strong>Local preview server</strong>: <code>npx uxskill preview</code> opens <code>http://localhost:4242</code> with hot-reload of every generated artifact</li>
+        <li><strong>Motion MP4 export</strong>: every <code>/ux-motion</code> spec exports a 4-second loop MP4 + WebM for decks and docs</li>
+        <li><strong>Component library export</strong>: generated systems compile to a publishable npm package on demand</li>
+        <li><strong>Frame-accurate motion engine</strong>: sub-16ms GSAP timeline export; cubic-bezier per axis; no <code>ease-in-out</code> defaults</li>
       </ul>
       <a href="https://github.com/Laith0003/ux-skill/discussions/categories/ideas" class="vote">Vote on v2.3 priorities</a>
     </article>
@@ -1099,11 +1099,11 @@
       </p>
       <h4>Key features</h4>
       <ul>
-        <li><strong>Real-time live preview</strong> &mdash; agent streams diffs; preview repaints sub-second; no file-watch latency</li>
-        <li><strong>Image-to-code bridge</strong> &mdash; paste a UI screenshot, get a brand-clean React + Tailwind rebuild with anti-pattern annotations</li>
-        <li><strong>Multi-language code gen</strong> &mdash; Swift (SwiftUI), Kotlin (Compose), Flutter, Jetpack Compose adapters</li>
-        <li><strong>Linter as language server</strong> &mdash; LSP integration so anti-pattern violations show inline in any editor that speaks LSP</li>
-        <li><strong>Public API</strong> &mdash; <code>uxskill score &lt;url&gt;</code> returns a JSON report; bring your own brand</li>
+        <li><strong>Real-time live preview</strong>: agent streams diffs; preview repaints sub-second; no file-watch latency</li>
+        <li><strong>Image-to-code bridge</strong>: paste a UI screenshot, get a brand-clean React + Tailwind rebuild with anti-pattern annotations</li>
+        <li><strong>Multi-language code gen</strong>: Swift (SwiftUI), Kotlin (Compose), Flutter, Jetpack Compose adapters</li>
+        <li><strong>Linter as language server</strong>: LSP integration so anti-pattern violations show inline in any editor that speaks LSP</li>
+        <li><strong>Public API</strong>: <code>uxskill score &lt;url&gt;</code> returns a JSON report; bring your own brand</li>
       </ul>
       <a href="https://github.com/Laith0003/ux-skill/discussions/categories/ideas" class="vote">Vote on v3.0 priorities</a>
     </article>
@@ -1111,7 +1111,7 @@
     <section class="wont-do" id="wont-do">
       <span class="eyebrow">Won't-do list</span>
       <h2>What we will <span class="accent">never</span> build.</h2>
-      <p>Discipline shows in what you refuse. These are not "not yet" items &mdash; they are permanent no's. If a v3.5 ever ships any of these, I owe the community a public retraction.</p>
+      <p>Discipline shows in what you refuse. These are not "not yet" items. They are permanent no's. If a v3.5 ever ships any of these, I owe the community a public retraction.</p>
       <ul>
         <li>
           <strong>Hosted SaaS</strong>

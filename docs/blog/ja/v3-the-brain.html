@@ -11,7 +11,7 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ux-skill v3.0 — The Brain をリリース。ブランド仕様はもうテンプレートではなく、訓練データです。</title>
+  <title>ux-skill v3.0 · The Brain をリリース。ブランド仕様はもうテンプレートではなく、訓練データです。</title>
   <meta name="description" content="v2 はカタログから選んでいた。v3 はカタログから蒸留する。同じ 160 のブランド仕様、まったく違う役割。7 軸シンセサイザー、決定ログ、閉じたフィードバックループ。">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ja/v3-the-brain.html">
   <meta name="theme-color" content="#07080a">
@@ -20,16 +20,16 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ja/v3-the-brain.html">
-  <meta property="og:title" content="ux-skill v3.0 — The Brain をリリース。ブランド仕様はテンプレートではなく訓練データに。">
+  <meta property="og:title" content="ux-skill v3.0 · The Brain をリリース。ブランド仕様はテンプレートではなく訓練データに。">
   <meta property="og:description" content="v2 はカタログから選んでいた。v3 はそこから蒸留する。同じ 1,243 件のエントリで、エンジンの役割が完全に変わった。">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/ja-v3-the-brain.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill v3.0 — The Brain">
+  <meta property="og:image:alt" content="ux-skill v3.0 · The Brain">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/ja-v3-the-brain.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ux-skill v3.0 — The Brain">
+  <meta name="twitter:title" content="ux-skill v3.0 · The Brain">
   <meta name="twitter:description" content="閉じたフィードバックループを持つ、決定論的な生成デザインコンパイラ。7 軸、3 モード、1 つの判定ロジック。完全オフライン、LLM 呼び出しゼロ。">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,7 +40,7 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "ux-skill v3.0 — The Brain をリリース。ブランド仕様はもうテンプレートではなく、訓練データです。",
+    "headline": "ux-skill v3.0 · The Brain をリリース。ブランド仕様はもうテンプレートではなく、訓練データです。",
     "description": "v2 はカタログから選んでいた。v3 はそこから蒸留する。7 軸シンセサイザー、決定ログ、閉じたフィードバックループの解説。",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
@@ -456,7 +456,7 @@
   .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
-    padding-block:8px;transition:color 140ms ease}
+    padding-block:8px;transition:color 140ms ease;}
   .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
   .usknav__langs{position:relative}
   .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
@@ -470,14 +470,14 @@
   .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
   .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease;}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
   .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
-  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:none;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
     transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
-  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer.is-open{display:flex;transform:translateX(0);visibility:visible}
   .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
     border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
   .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
@@ -497,7 +497,7 @@
   .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
 </head>
 <body>
   
@@ -584,7 +584,7 @@
 <div class="wrap">
     <article>
       <span class="eyebrow">Launch · v3.0.0 · 2026-05-28</span>
-      <h1>ux-skill v3.0 &mdash; <span class="accent">The Brain</span> をリリース。ブランド仕様はもうテンプレートではなく、訓練データです。</h1>
+      <h1>ux-skill v3.0 · <span class="accent">The Brain</span> をリリース。ブランド仕様はもうテンプレートではなく、訓練データです。</h1>
       <p class="lede">
         <strong>v2 はカタログから選んでいた。v3 はそこから蒸留する。</strong>同じ 160 のブランド仕様、まったく違う役割です。これまでのリコメンダーは 1,243 件のエントリを採点して最も近い候補を返していました。新しいシンセサイザーはそれらを<em>語彙</em>として読み、ブリーフから新しいデザイン言語をコンパイルします。呼び出すたびに、その呼び出し以前には存在しなかったシステムが返ってきます。
       </p>
@@ -606,7 +606,7 @@
 
       <h2>一段落でいう、今回のシフト</h2>
       <p>
-        v2 は<em>リコメンダー</em>でした。ブリーフを渡せば、整備済みのカタログ &mdash; 84 のスタイル、176 のパレット、160 のブランド仕様、70 のタイプペア &mdash; から最も近い候補を返す。出力は常にデータベースの 1 行でした。v3 はカタログをすべて維持したまま、その役割を反転させます。1,243 件のエントリは、いまや<em>エンジンが蒸留する語彙</em>です。ブリーフはもう 1 行を引き当てるのではなく、7 つの軸の値にコンパイルされ、その値が新しいトークンを合成する。カタログは「軽やかで企業的なもの」がどんな形をしているかをエンジンに教え、エンジンはこれまで世に出たことのない「軽やかで企業的」な新しいシステムを生成します。データは同じ。役割はまったく違います。
+        v2 は<em>リコメンダー</em>でした。ブリーフを渡せば、整備済みのカタログ,84 のスタイル、176 のパレット、160 のブランド仕様、70 のタイプペア,から最も近い候補を返す。出力は常にデータベースの 1 行でした。v3 はカタログをすべて維持したまま、その役割を反転させます。1,243 件のエントリは、いまや<em>エンジンが蒸留する語彙</em>です。ブリーフはもう 1 行を引き当てるのではなく、7 つの軸の値にコンパイルされ、その値が新しいトークンを合成する。カタログは「軽やかで企業的なもの」がどんな形をしているかをエンジンに教え、エンジンはこれまで世に出たことのない「軽やかで企業的」な新しいシステムを生成します。データは同じ。役割はまったく違います。
       </p>
 
       <h2>v2 で壊れていて、v3 が<span class="accent">直す</span>もの</h2>
@@ -619,15 +619,15 @@
         リコメンダー内部のいくつかのソートは、類似度で候補を採点し、同点は Python の <code>os.listdir</code> が返す順序で割っていました。macOS ではアルファベット順、Linux ではファイルシステムジャーナルへの挿入順。新規クローンと長く使ったクローンでは、タイブレークの結果がひっくり返り得ました。私たちはエンジンを決定論的だと言っていました。同点までは決定論的だったのです。同点になった瞬間からは、OS が偶然憶えていた順序に従っていました。
       </p>
       <p>
-        v3 はすべてのソートに、ブランド ID のアルファベット順という明示的なタイブレークを焼き付けました。同じブリーフ、同じ軸、同じ出力 &mdash; マシン、ファイルシステム、Python バージョンを越えて。シンセサイザーを 3 つの一時ディレクトリ上で 200 回回し、バイトレベルで出力が一致することを断言するテストが入っています。
+        v3 はすべてのソートに、ブランド ID のアルファベット順という明示的なタイブレークを焼き付けました。同じブリーフ、同じ軸、同じ出力,マシン、ファイルシステム、Python バージョンを越えて。シンセサイザーを 3 つの一時ディレクトリ上で 200 回回し、バイトレベルで出力が一致することを断言するテストが入っています。
       </p>
 
       <h3>2. 偶然で解決していた軸の衝突</h3>
       <p>
-        v2 では、ブリーフが反対方向に引く 2 つのタグ &mdash; たとえば <em>dense</em> と <em>corporate</em> &mdash; を持っていたとき、リコメンダーのスコアラーはどこかの隠れた係数で片方を重く扱い、出力はその係数が偶然有利にしたタグへ寄っていました。文書化されたルールはなく、結果を後から説明することはできても、事前に予測することはできませんでした。
+        v2 では、ブリーフが反対方向に引く 2 つのタグ,たとえば <em>dense</em> と <em>corporate</em>,を持っていたとき、リコメンダーのスコアラーはどこかの隠れた係数で片方を重く扱い、出力はその係数が偶然有利にしたタグへ寄っていました。文書化されたルールはなく、結果を後から説明することはできても、事前に予測することはできませんでした。
       </p>
       <p>
-        v3 はこれを<strong>軸の相互作用マトリックス</strong>に持ち上げました。文書化されたすべての衝突に、明示的な解決と理由が付いています。density と formality は spacing をめぐって争います &mdash; 密なブリーフでは density が勝ち(Bloomberg 流)、軽やかなブリーフでは formality が勝ちます(ラグジュアリー)。マトリックスはテスト済みで、読めて、コミットされています。
+        v3 はこれを<strong>軸の相互作用マトリックス</strong>に持ち上げました。文書化されたすべての衝突に、明示的な解決と理由が付いています。density と formality は spacing をめぐって争います,密なブリーフでは density が勝ち(Bloomberg 流)、軽やかなブリーフでは formality が勝ちます(ラグジュアリー)。マトリックスはテスト済みで、読めて、コミットされています。
       </p>
 
       <h3>3. エバリュエーターはシンセサイザー自身の宿題を採点していた</h3>
@@ -635,10 +635,10 @@
         いちばん恥ずかしいのはこれで、気付けたのは <em>ChatGPT が v2.1 仕様の外部レビューで指摘した</em>からです。彼らが<strong>自己参照ドリフト (self-referential drift)</strong> と呼んだ問題でした。フローは綺麗に見えました。シンセサイザーがブリーフからシステムをコンパイルし、続いて <code>score_tone_match</code> がそのシステムとブリーフのトーンの一致度を評価する。問題は、<code>score_tone_match</code> がシンセサイザーと同じロジックでブリーフから軸を導き、それからシンセサイザーの軸を自分が導いた軸と比較していたことです。比較の両側が同じ関数を通っていました。当然スコアは良かった。シンセサイザーは自分のルーブリックで自分自身を採点していたのです。
       </p>
       <p>
-        v3 はこれを切り離します。<code>score_tone_match</code> はいま、シンセサイザーの軸ロジックに一切触れない独立したマッピングを通して、合成出力とブリーフの<em>生のトーンタグ</em> &mdash; <code>warm</code>、<code>bold</code>、<code>minimal</code> といった文字列 &mdash; を直接比較します。両者がもう互いをカンニングできなくなりました。この指摘は外部レビューに負っており、ここに記録として書いておきます。
+        v3 はこれを切り離します。<code>score_tone_match</code> はいま、シンセサイザーの軸ロジックに一切触れない独立したマッピングを通して、合成出力とブリーフの<em>生のトーンタグ</em>,<code>warm</code>、<code>bold</code>、<code>minimal</code> といった文字列,を直接比較します。両者がもう互いをカンニングできなくなりました。この指摘は外部レビューに負っており、ここに記録として書いておきます。
       </p>
 
-      <h3>4. 決定ログは書き捨て &mdash; 一度も読まれなかった</h3>
+      <h3>4. 決定ログは書き捨て,一度も読まれなかった</h3>
       <p>
         v2 はリコメンドのたびに <code>.ux/decisions.jsonl</code> へ 1 行書いていましたが、読み返すものは何もありませんでした。私たち自身のデバッグ用のログファイルで、フィードバック信号ではなかったのです。リコメンダーは 1 回目も 1,000 回目も同じように振る舞いました。学習は存在せず、リポジトリには記憶があるのにエンジンはそれを無視していました。
       </p>
@@ -648,7 +648,7 @@
 
       <h2>7 軸の<span class="accent">シンセサイザー</span></h2>
       <p>
-        v3 の中心は、ブリーフを 7 つの数値軸にマッピングし、その 7 軸を完全なデザインシステムにマッピングする決定論的な関数です。軸は魔法ではありません &mdash; それぞれが文書化されたレンジを持つ正規化スカラーで、特定のトークン束を指しています。カタログから 1 行選ぶのではなく軸の上で動かす意味は、カタログ内の実在ブランドが使っていない組み合わせも含めて、空間内の任意の組み合わせに到達できることです。カタログは空間の<em>形</em>を定義し、シンセサイザーはその内部のどこへでも着地できます。
+        v3 の中心は、ブリーフを 7 つの数値軸にマッピングし、その 7 軸を完全なデザインシステムにマッピングする決定論的な関数です。軸は魔法ではありません,それぞれが文書化されたレンジを持つ正規化スカラーで、特定のトークン束を指しています。カタログから 1 行選ぶのではなく軸の上で動かす意味は、カタログ内の実在ブランドが使っていない組み合わせも含めて、空間内の任意の組み合わせに到達できることです。カタログは空間の<em>形</em>を定義し、シンセサイザーはその内部のどこへでも着地できます。
       </p>
 
       <table class="axis-table">
@@ -662,37 +662,37 @@
         <tbody>
           <tr>
             <td class="axis-name">warmth</td>
-            <td>パレットの色温度 &mdash; クールなチャコールから温かなシエンナまで</td>
+            <td>パレットの色温度:クールなチャコールから温かなシエンナまで</td>
             <td>パレットの色相系、アクセントの彩度カーブ</td>
           </tr>
           <tr>
             <td class="axis-name">contrast</td>
-            <td>視覚的な強弱 &mdash; quiet / balanced / loud</td>
+            <td>視覚的な強弱:quiet / balanced / loud</td>
             <td>タイプスケール比 (1.200 / 1.250 / 1.333)、影の深さ、アクセントの強さ</td>
           </tr>
           <tr>
             <td class="axis-name">density</td>
-            <td>1 ビューポートあたりの情報密度 &mdash; airy から dense まで</td>
+            <td>1 ビューポートあたりの情報密度:airy から dense まで</td>
             <td>スペーシングスケールのベース (4/8/12/16px)、行間の倍率</td>
           </tr>
           <tr>
             <td class="axis-name">geometry</td>
-            <td>エッジの人格 &mdash; sharp / balanced / soft</td>
+            <td>エッジの人格:sharp / balanced / soft</td>
             <td>radius スケール (2/8/18px)、角のトポロジー、ボーダーの太さ</td>
           </tr>
           <tr>
             <td class="axis-name">formality</td>
-            <td>トーンのレジスタ &mdash; playful / balanced / corporate</td>
+            <td>トーンのレジスタ:playful / balanced / corporate</td>
             <td>タイプ重量カーブ、トラッキング、caption から hero までの幅</td>
           </tr>
           <tr>
             <td class="axis-name">motion</td>
-            <td>アニメーションの予算 &mdash; restrained / balanced / cinematic</td>
+            <td>アニメーションの予算:restrained / balanced / cinematic</td>
             <td>デュレーションのランプ (120/240/420ms)、イージング系、スクロール挙動</td>
           </tr>
           <tr>
             <td class="axis-name">type_personality</td>
-            <td>書体の声 &mdash; humanist / neutral / geometric / expressive</td>
+            <td>書体の声:humanist / neutral / geometric / expressive</td>
             <td>ディスプレイ書体ファミリー、ウェイトのはしご、イタリック戦略</td>
           </tr>
         </tbody>
@@ -717,48 +717,48 @@ sys = synthesize(brief)
 <span class="c"># sys.palette, sys.type, sys.spacing, sys.radius, sys.motion</span></pre>
 
       <p>
-        同じブリーフが入れば、同じ軸が、同じトークンが出ます。常に。シンセサイザーには乱数シードがありません &mdash; シードする乱数がないからです。
+        同じブリーフが入れば、同じ軸が、同じトークンが出ます。常に。シンセサイザーには乱数シードがありません,シードする乱数がないからです。
       </p>
 
       <h2>3 つのモード、<span class="accent">1 つの判定ロジック</span></h2>
       <p>
-        シンセサイザーはブリーフの中身に基づいて 3 つのモードを自動振り分けします。ほとんどの用途で、モードを手で選ぶフラグはありません &mdash; ブリーフの形が決めます。ロジックは意図的にシンプルで、リファレンスブランドと strict フラグの有無が経路を決定します。
+        シンセサイザーはブリーフの中身に基づいて 3 つのモードを自動振り分けします。ほとんどの用途で、モードを手で選ぶフラグはありません,ブリーフの形が決めます。ロジックは意図的にシンプルで、リファレンスブランドと strict フラグの有無が経路を決定します。
       </p>
 
       <div class="mode-card">
         <div class="mode-name">strict_brand &middot; 最速</div>
         <h4>100% 指定ブランド</h4>
-        <p><code>reference_brands=[stripe]</code> に <code>strict=True</code> を付けると、Stripe の仕様がそのまま返ります。解釈もミキシングも合成もなし。ブランドが既に存在し、仕様が権威で、ブリーフはトークンだけが欲しい &mdash; そんな場面のための経路です。Figma ファイルと文書化されたシステムがあり、即興しないコードが必要なときに選ぶ道です。</p>
+        <p><code>reference_brands=[stripe]</code> に <code>strict=True</code> を付けると、Stripe の仕様がそのまま返ります。解釈もミキシングも合成もなし。ブランドが既に存在し、仕様が権威で、ブリーフはトークンだけが欲しい,そんな場面のための経路です。Figma ファイルと文書化されたシステムがあり、即興しないコードが必要なときに選ぶ道です。</p>
       </div>
 
       <div class="mode-card">
         <div class="mode-name">brand_anchor &middot; 70 / 30</div>
         <h4>ブランドに錨を下ろし、ブリーフに合わせて軸で調整</h4>
-        <p><code>reference_brands=[stripe]</code> を <code>strict=True</code> なしで指定すると、70% の Stripe トークンと、軸の近さで選んだ 4 つの兄弟ブランドから 30% の軸由来デルタが融合されます。出力は紛れもなく Stripe のままで、ブリーフのトーンへ少しだけ曲がります &mdash; コンシューマー機能向けにはより遊びのある Stripe、エンタープライズダッシュボード向けにはよりフォーマルな Stripe。錨となるブランドはあらゆる衝突を生き残ります。</p>
+        <p><code>reference_brands=[stripe]</code> を <code>strict=True</code> なしで指定すると、70% の Stripe トークンと、軸の近さで選んだ 4 つの兄弟ブランドから 30% の軸由来デルタが融合されます。出力は紛れもなく Stripe のままで、ブリーフのトーンへ少しだけ曲がります,コンシューマー機能向けにはより遊びのある Stripe、エンタープライズダッシュボード向けにはよりフォーマルな Stripe。錨となるブランドはあらゆる衝突を生き残ります。</p>
       </div>
 
       <div class="mode-card">
         <div class="mode-name">pure_synthesis &middot; 無限空間</div>
-        <h4>ブランド未指定 &mdash; 呼び出しごとに新しい言語</h4>
+        <h4>ブランド未指定,呼び出しごとに新しい言語</h4>
         <p>ブリーフに <code>reference_brands</code> がない場合、シンセサイザーはブリーフから 7 軸を採点し、カタログの中から軸距離で最も近い 8 つの実例を見つけ、それらの共通構造を蒸留し、新鮮なパレット + タイプ + スペーシング + radius + モーション一式を出します。異なるブリーフは同じ空間の異なる領域に着地し、すべての出力は内部的に一貫していて、自分自身として識別可能です。</p>
       </div>
 
       <p>CLI からは 3 つの経路はこう見えます:</p>
 
-      <pre class="code"><span class="c"># strict — 100% そのブランド</span>
+      <pre class="code"><span class="c"># strict: 100% そのブランド</span>
 $ uxskill synthesize <span class="n">--brand</span> stripe <span class="n">--strict</span>
 
-<span class="c"># anchor — 70/30</span>
+<span class="c"># anchor: 70/30</span>
 $ uxskill synthesize <span class="n">--brand</span> stripe
 
-<span class="c"># pure synthesis — ブランドなし</span>
+<span class="c"># pure synthesis: ブランドなし</span>
 $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span class="n">--tone</span> bold</pre>
 
-      <p>1 つのシンセサイザー、1 つの判定ロジック、3 つの出力の人格。ユーザーは実装を切り替えません &mdash; ブリーフ自身が経路を選びます。</p>
+      <p>1 つのシンセサイザー、1 つの判定ロジック、3 つの出力の人格。ユーザーは実装を切り替えません,ブリーフ自身が経路を選びます。</p>
 
       <h2>軸の<span class="accent">相互作用マトリックス</span></h2>
       <p>
-        軸は同じトークンを引っ張り合います。<em>density</em> はタイトな間隔を望み、<em>formality</em> はラグジュアリーな佇まいのために寛大な間隔を求める。<em>geometry</em> は編集的な切れ味のために鋭角を欲し、<em>formality</em> は金融ダッシュボードのために柔らかな角を求める。v2 ではどちらの係数が偶然大きいかで決まっていました。v3 では文書化された衝突それぞれに、宣言された結果と、それが指し示すデザイン流派があります &mdash; 名前が付いているので、読んで反対することもできます。
+        軸は同じトークンを引っ張り合います。<em>density</em> はタイトな間隔を望み、<em>formality</em> はラグジュアリーな佇まいのために寛大な間隔を求める。<em>geometry</em> は編集的な切れ味のために鋭角を欲し、<em>formality</em> は金融ダッシュボードのために柔らかな角を求める。v2 ではどちらの係数が偶然大きいかで決まっていました。v3 では文書化された衝突それぞれに、宣言された結果と、それが指し示すデザイン流派があります,名前が付いているので、読んで反対することもできます。
       </p>
 
       <p>代表的な 4 ケース、いずれもテストフィクスチャとしてコミット済みです:</p>
@@ -766,34 +766,34 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
       <div class="conflict-card">
         <div class="input">dense + corporate</div>
         <div class="outcome">spacing スケールのベース: 4px</div>
-        <p class="reason">density が勝つ。Bloomberg 流の答えです。密なデータダッシュボードを企業的なレジスタで求めるブリーフでは、情報密度が最高の徳 &mdash; formality は密度における可読性に頭を下げます。</p>
+        <p class="reason">density が勝つ。Bloomberg 流の答えです。密なデータダッシュボードを企業的なレジスタで求めるブリーフでは、情報密度が最高の徳,formality は密度における可読性に頭を下げます。</p>
       </div>
 
       <div class="conflict-card">
         <div class="input">airy + corporate</div>
         <div class="outcome">spacing スケールのベース: 12px</div>
-        <p class="reason">formality が勝つ。ラグジュアリー金融の答えです。airy + corporate はプレミアムバンキング、プライベートウェルス、エグゼクティブダッシュボードのブリーフ &mdash; 要素間の空間そのものがシリアスさのメッセージです。</p>
+        <p class="reason">formality が勝つ。ラグジュアリー金融の答えです。airy + corporate はプレミアムバンキング、プライベートウェルス、エグゼクティブダッシュボードのブリーフ,要素間の空間そのものがシリアスさのメッセージです。</p>
       </div>
 
       <div class="conflict-card">
         <div class="input">sharp + corporate</div>
         <div class="outcome">radius スケール: 2px</div>
-        <p class="reason">geometry が勝つ。NYT 流の答えです。sharp + corporate は編集的なブリーフ &mdash; 直角と 2px の極小 radius は、組織的で、考え抜かれた、ブロードシート紙の読みになります。</p>
+        <p class="reason">geometry が勝つ。NYT 流の答えです。sharp + corporate は編集的なブリーフ,直角と 2px の極小 radius は、組織的で、考え抜かれた、ブロードシート紙の読みになります。</p>
       </div>
 
       <div class="conflict-card">
         <div class="input">soft + playful</div>
         <div class="outcome">radius スケール: 18px</div>
-        <p class="reason">両軸が揃います。Glossier 流の答えです。柔らかなジオメトリと遊び心のあるレジスタは、寛大な丸めへ収束します &mdash; 18px は矩形が小石として読まれ始める閾値です。</p>
+        <p class="reason">両軸が揃います。Glossier 流の答えです。柔らかなジオメトリと遊び心のあるレジスタは、寛大な丸めへ収束します,18px は矩形が小石として読まれ始める閾値です。</p>
       </div>
 
       <p>
-        なぜこれが重要か。v2 では、同じブリーフがその月にスコアラーで勝った係数次第で 4px にも 12px にも着地し得ました。v3 では <code>dense + corporate</code> は常に 4px、<code>airy + corporate</code> は常に 12px です。ルールは読めて、テスト可能で、議論可能です。ある解決に同意できないなら、マトリックスに対して issue を立てればいい &mdash; 議論は趣味の話になり、隠れた定数の話ではなくなります。
+        なぜこれが重要か。v2 では、同じブリーフがその月にスコアラーで勝った係数次第で 4px にも 12px にも着地し得ました。v3 では <code>dense + corporate</code> は常に 4px、<code>airy + corporate</code> は常に 12px です。ルールは読めて、テスト可能で、議論可能です。ある解決に同意できないなら、マトリックスに対して issue を立てればいい,議論は趣味の話になり、隠れた定数の話ではなくなります。
       </p>
 
       <h2>脳が<span class="accent">学習する</span></h2>
       <p>
-        ここがプロジェクトにとって本当に新しい部分です &mdash; エンジンはあなたのローカルの決定から学習します。仕組みは小さく、決定論的で、完全にオフラインです。テレメトリも、アカウントも、クラウド同期もありません。あなたのインストールはあなたのインストールから学ぶ。リポジトリが違えば、違う脳が育ちます。
+        ここがプロジェクトにとって本当に新しい部分です,エンジンはあなたのローカルの決定から学習します。仕組みは小さく、決定論的で、完全にオフラインです。テレメトリも、アカウントも、クラウド同期もありません。あなたのインストールはあなたのインストールから学ぶ。リポジトリが違えば、違う脳が育ちます。
       </p>
 
       <h3>台帳</h3>
@@ -813,7 +813,7 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
 
       <h3>再ランク</h3>
       <p>
-        次の呼び出しでは、リコメンダーは過去のエントリを <code>(industry, ui_type)</code> でグループ化します。各候補は、同じバケットの先行例にマッチすれば <strong>+5 のブースト</strong>を受けます。<code>lint_score &gt;= 80</code> かつ <code>user_accepted = true</code> の先行例だけが算入されます &mdash; 拒否された出力からは学びません。バケットには、いかなる再ランクも発動する前に、最低 3 件の有効な先行例が必要です。それ以下なら、エンジンはコールドスタートで動き、新規インストールと同じ振る舞いをします。
+        次の呼び出しでは、リコメンダーは過去のエントリを <code>(industry, ui_type)</code> でグループ化します。各候補は、同じバケットの先行例にマッチすれば <strong>+5 のブースト</strong>を受けます。<code>lint_score &gt;= 80</code> かつ <code>user_accepted = true</code> の先行例だけが算入されます,拒否された出力からは学びません。バケットには、いかなる再ランクも発動する前に、最低 3 件の有効な先行例が必要です。それ以下なら、エンジンはコールドスタートで動き、新規インストールと同じ振る舞いをします。
       </p>
 
       <h3>保証</h3>
@@ -828,21 +828,21 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
 <span class="n">[OK]</span> Open in browser to see your install's learned priors</pre>
 
       <p>
-        HTML ダッシュボードは、バケットごとの決定件数、平均 lint スコア、最頻パレット、軸の分布を表示します。これが自己学習の目に見える証拠です &mdash; あなたが出荷を続けるにつれ、インストールの趣味プロファイルが時間とともに濃くなっていくのが見えます。何ひとつサーバー上にはありません。あなたのリポジトリの中、平文の JSONL と生成された HTML ビューにあります。
+        HTML ダッシュボードは、バケットごとの決定件数、平均 lint スコア、最頻パレット、軸の分布を表示します。これが自己学習の目に見える証拠です,あなたが出荷を続けるにつれ、インストールの趣味プロファイルが時間とともに濃くなっていくのが見えます。何ひとつサーバー上にはありません。あなたのリポジトリの中、平文の JSONL と生成された HTML ビューにあります。
       </p>
 
       <h2>/ux-evolve <span class="accent">オートループ</span></h2>
       <p>
-        v3 の新しいコマンドが <code>/ux-evolve</code> です。これまでポリッシュループは手作業でした &mdash; lint を実行し、findings を読み、直して、もう一度 lint。Evolve はそのループを閉じます。アーティファクトと目標スコアを渡せば、lint を走らせ、6 回の冪等なポリッシュパスを適用し、再 lint し、目標で止まるか、プラトーで止まるか、5 ラウンドの上限で止まります。
+        v3 の新しいコマンドが <code>/ux-evolve</code> です。これまでポリッシュループは手作業でした,lint を実行し、findings を読み、直して、もう一度 lint。Evolve はそのループを閉じます。アーティファクトと目標スコアを渡せば、lint を走らせ、6 回の冪等なポリッシュパスを適用し、再 lint し、目標で止まるか、プラトーで止まるか、5 ラウンドの上限で止まります。
       </p>
 
       <p>1 ラウンドの形:</p>
 
       <ol>
-        <li><strong>Lint</strong> &mdash; A11y、コンテンツ、品質、タイポグラフィにまたがる 145 の決定論的正規表現ルール。0 から 100 までのスコアと、findings のリストを返します。</li>
-        <li><strong>Polish</strong> &mdash; 重大度の高い findings から先に直す 6 つのパス。冪等です: ポリッシュ済みの出力に再適用しても no-op になります。</li>
-        <li><strong>Re-lint</strong> &mdash; ポリッシュされたアーティファクトを採点します。</li>
-        <li><strong>Decide</strong> &mdash; 新しいスコアが 90 以上なら止まる。前ラウンドからのデルタが 5 未満(プラトー)なら止まる。5 ラウンド目なら止まる。それ以外はループ。</li>
+        <li><strong>Lint</strong>:A11y、コンテンツ、品質、タイポグラフィにまたがる 145 の決定論的正規表現ルール。0 から 100 までのスコアと、findings のリストを返します。</li>
+        <li><strong>Polish</strong>:重大度の高い findings から先に直す 6 つのパス。冪等です: ポリッシュ済みの出力に再適用しても no-op になります。</li>
+        <li><strong>Re-lint</strong>:ポリッシュされたアーティファクトを採点します。</li>
+        <li><strong>Decide</strong>:新しいスコアが 90 以上なら止まる。前ラウンドからのデルタが 5 未満(プラトー)なら止まる。5 ラウンド目なら止まる。それ以外はループ。</li>
       </ol>
 
       <p>
@@ -850,7 +850,7 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
       </p>
 
       <p>
-        具体例: あるフィンテックダッシュボードのスキャフォルドが最初の lint で 72 点 &mdash; ほとんどはフォーカスステートの欠如、いくつかの低コントラストラベル、ディスプレイサイズの Inter という finding。ラウンド 1 でフォーカスステートをポリッシュして 81 点。ラウンド 2 でコントラストを直して 86 点。ラウンド 3 で Inter をブリーフ本来のディスプレイ書体に差し替え、caption サイズをリバランスして &mdash; 91 点、目標到達、ループ終了。3 ラウンド、拒否なし、出荷。
+        具体例: あるフィンテックダッシュボードのスキャフォルドが最初の lint で 72 点,ほとんどはフォーカスステートの欠如、いくつかの低コントラストラベル、ディスプレイサイズの Inter という finding。ラウンド 1 でフォーカスステートをポリッシュして 81 点。ラウンド 2 でコントラストを直して 86 点。ラウンド 3 で Inter をブリーフ本来のディスプレイ書体に差し替え、caption サイズをリバランスして,91 点、目標到達、ループ終了。3 ラウンド、拒否なし、出荷。
       </p>
 
       <h2>作ら<span class="accent">なかった</span>もの(と、その理由)</h2>
@@ -860,12 +860,12 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
 
       <h3>LLM をループに入れない</h3>
       <p>
-        マキシマリスト案には LLM 判定の主観的美学軸がありました &mdash; 「このシステムは編集的に感じるかモデルに聞く」。原則として却下しました。エンジンの全要点は決定論です: 同じブリーフ、同じ出力、明朝出社して驚くことなし。シンセサイザーに LLM が入ると、すべての呼び出しが再現不可能になります。v3 は LLM を 0 回呼びます。シンセサイザーは JSON 上の純粋な Python、リンターは正規表現、エバリュエーターはルールベースです。
+        マキシマリスト案には LLM 判定の主観的美学軸がありました,「このシステムは編集的に感じるかモデルに聞く」。原則として却下しました。エンジンの全要点は決定論です: 同じブリーフ、同じ出力、明朝出社して驚くことなし。シンセサイザーに LLM が入ると、すべての呼び出しが再現不可能になります。v3 は LLM を 0 回呼びます。シンセサイザーは JSON 上の純粋な Python、リンターは正規表現、エバリュエーターはルールベースです。
       </p>
 
       <h3>複数候補の遺伝的変異なし</h3>
       <p>
-        案には遺伝的アルゴリズムのステップもありました &mdash; 呼び出しごとに N 個の候補を出し、変異させ、採点し、最適個体を返す。ブランチで試しました。出力は<em>悪く</em>なりました。変異がノイズを入れ、ポリッシュループがそれを取り除く羽目になったからです。v3 は単一アーティファクトの合成と、ポリッシュループを採用しています。候補は 1 つ、冪等なパスが 6 つ。結果も上、コードも小さい。
+        案には遺伝的アルゴリズムのステップもありました,呼び出しごとに N 個の候補を出し、変異させ、採点し、最適個体を返す。ブランチで試しました。出力は<em>悪く</em>なりました。変異がノイズを入れ、ポリッシュループがそれを取り除く羽目になったからです。v3 は単一アーティファクトの合成と、ポリッシュループを採用しています。候補は 1 つ、冪等なパスが 6 つ。結果も上、コードも小さい。
       </p>
 
       <h3>コマンドのリネームなし</h3>
@@ -875,7 +875,7 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
 
       <h3>「無限の空間のためにカタログを焼く」もなし</h3>
       <p>
-        案の最大主義的バージョンは、カタログは負債だ &mdash; シンセサイザーは自力でデザイン空間全体に到達できるから、1,243 件のエントリは捨てるべきだ &mdash; と言っていました。私たちはすべてのエントリを残しました。カタログこそが、シンセサイザーに空間の<em>形</em>を教えるものです &mdash; 実例がなければ軸に錨はなく、出力は漂い始めます。v3 はカタログを語彙として読み、v3 はその語彙を必要としています。
+        案の最大主義的バージョンは、カタログは負債だ,シンセサイザーは自力でデザイン空間全体に到達できるから、1,243 件のエントリは捨てるべきだ,と言っていました。私たちはすべてのエントリを残しました。カタログこそが、シンセサイザーに空間の<em>形</em>を教えるものです,実例がなければ軸に錨はなく、出力は漂い始めます。v3 はカタログを語彙として読み、v3 はその語彙を必要としています。
       </p>
 
       <p>
@@ -896,7 +896,7 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
       </div>
 
       <p>
-        既存の 22 スラッシュコマンドは元の名前のまま、23 番目として <code>/ux-evolve</code>。15 の MCP ツールはそのまま、3 つの新規 &mdash; <code>ux_synthesize</code>、<code>ux_decisions_query</code>、<code>ux_decisions_stats</code> &mdash; を追加し、シンセサイザーを駆動したり、脳が学んだものを照会したりしたいエージェントに提供します。カタログとリンターは触っていません。17 IDE のインストーラーも触っていません。17 の現地化されたホームページと README も変更なし。v3 は表層では足し算、コアでは書き直しです。
+        既存の 22 スラッシュコマンドは元の名前のまま、23 番目として <code>/ux-evolve</code>。15 の MCP ツールはそのまま、3 つの新規,<code>ux_synthesize</code>、<code>ux_decisions_query</code>、<code>ux_decisions_stats</code>,を追加し、シンセサイザーを駆動したり、脳が学んだものを照会したりしたいエージェントに提供します。カタログとリンターは触っていません。17 IDE のインストーラーも触っていません。17 の現地化されたホームページと README も変更なし。v3 は表層では足し算、コアでは書き直しです。
       </p>
 
       <blockquote>
@@ -905,7 +905,7 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
 
       <h2>60 秒でインストール</h2>
       <p>
-        v3 は v2 と同じ 3 経路 &mdash; pip、npm、IDE プラグインマーケットプレイス &mdash; で出荷されます。init ステップは IDE を自動検出し、適切な設定ファイルを正しい場所に書き出します。synthesize ステップはブリーフ、もしくは industry + tone のペアを取り、完全なデザインシステムを現在のリポジトリの <code>.ux/last-system.json</code> に返します。
+        v3 は v2 と同じ 3 経路,pip、npm、IDE プラグインマーケットプレイス,で出荷されます。init ステップは IDE を自動検出し、適切な設定ファイルを正しい場所に書き出します。synthesize ステップはブリーフ、もしくは industry + tone のペアを取り、完全なデザインシステムを現在のリポジトリの <code>.ux/last-system.json</code> に返します。
       </p>
 
       <pre class="code">$ pip install uxskill
@@ -924,7 +924,7 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
       <div class="honesty">
         <div class="label">スコープを正直に</div>
         <h4>v3 は基盤であって、完成された終点ではありません。</h4>
-        <p>7 軸シンセサイザーは私たちが証拠を公開している仕事です。8 番目と 9 番目の軸 (saturation_strategy、surface_depth) はスケッチ済みで未出荷 &mdash; dark / light の分割やグラデーション戦略を深めるものになります。決定台帳は今日はリコメンダーの再ランクだけが消費しています。エバリュエーターと lint スコアラーが台帳を読み始めるのは v3.1 を見込んでいます。私たちが却下したマキシマリスト案も消えていません &mdash; いくつかは、後で、それが効くことを証明できたら入ってくるでしょう。</p>
+        <p>7 軸シンセサイザーは私たちが証拠を公開している仕事です。8 番目と 9 番目の軸 (saturation_strategy、surface_depth) はスケッチ済みで未出荷,dark / light の分割やグラデーション戦略を深めるものになります。決定台帳は今日はリコメンダーの再ランクだけが消費しています。エバリュエーターと lint スコアラーが台帳を読み始めるのは v3.1 を見込んでいます。私たちが却下したマキシマリスト案も消えていません,いくつかは、後で、それが効くことを証明できたら入ってくるでしょう。</p>
         <p>もし出力が満足できないブリーフを見つけたら、もしくはマトリックスの解決があなたの趣味と合わないなら、issue を立ててください。マトリックスはコミットされ、テストはコミットされ、脳はあなたのリポジトリにあります。議論は、これからは読める基盤の上で行われます。</p>
       </div>
 
@@ -936,10 +936,10 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
         エンジンが<em>レコメンドする</em>のではなく<em>生成する</em>のを待っていた人へ: それが v3 です。シンセサイザーが新しい中心。<code>/ux-recommend</code> は今も動き、台帳から再ランクします。<code>/ux-evolve</code> はポリッシュループを閉じます。ブランド仕様は訓練データであり、テンプレートではありません。同じ 1,243 件のエントリが、まったく違う仕事をしています。
       </p>
       <p>
-        v3 を The Brain と名付けたのは、それが作り上げられたものだからです &mdash; 閉じたフィードバックループを持つ、制約付き生成デザインコンパイラ。完全にオフライン。LLM は 0 回呼ぶ。同じブリーフ、同じ軸、同じ出力。違うブリーフ、違う領域、無限の出力。あなたのインストールはあなたのリポジトリから学ぶ。違うリポジトリは違う脳を作る。すべては MIT で、普通のマシンで sub-300ms、pip でインストールできます。
+        v3 を The Brain と名付けたのは、それが作り上げられたものだからです,閉じたフィードバックループを持つ、制約付き生成デザインコンパイラ。完全にオフライン。LLM は 0 回呼ぶ。同じブリーフ、同じ軸、同じ出力。違うブリーフ、違う領域、無限の出力。あなたのインストールはあなたのリポジトリから学ぶ。違うリポジトリは違う脳を作る。すべては MIT で、普通のマシンで sub-300ms、pip でインストールできます。
       </p>
       <p>
-        気になっているブリーフで走らせてみてください。返ってきたものを見てください。出力があなたの趣味と合わないなら issue を立ててください &mdash; 衝突はマトリックスに入り、ルールは名付けられ、次のインストールはより良く振る舞います。それが脳の複利のかかり方です。
+        気になっているブリーフで走らせてみてください。返ってきたものを見てください。出力があなたの趣味と合わないなら issue を立ててください,衝突はマトリックスに入り、ルールは名付けられ、次のインストールはより良く振る舞います。それが脳の複利のかかり方です。
       </p>
 
     </article>
@@ -952,9 +952,9 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; もしくは &mdash;</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">· もしくは ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; もしくは &mdash;</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">· もしくは ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@latest init</span></div>
       </div>
 

@@ -11,10 +11,10 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The 7 axes of a design system — how ux-skill v3.0 maps a brief to tokens</title>
-<meta name="description" content="warmth · contrast · density · geometry · formality · motion · type_personality — the seven continuous axes that v3.0's synthesizer derives from your brief and compiles to palette, type, spacing, radius, motion tokens.">
+<title>The 7 axes of a design system · how ux-skill v3.0 maps a brief to tokens</title>
+<meta name="description" content="warmth · contrast · density · geometry · formality · motion · type_personality: the seven continuous axes that v3.0's synthesizer derives from your brief and compiles to palette, type, spacing, radius, motion tokens.">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/seven-axes-design-system-explained.html">
-<meta property="og:title" content="The 7 axes of a design system — ux-skill v3.0">
+<meta property="og:title" content="The 7 axes of a design system · ux-skill v3.0">
 <meta property="og:description" content="warmth · contrast · density · geometry · formality · motion · type_personality. The seven continuous axes that compile a brief into a complete token system.">
 <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/seven-axes-design-system-explained.html">
@@ -23,7 +23,10 @@
 <meta name="twitter:description" content="warmth · contrast · density · geometry · formality · motion · type_personality. The math behind v3.0's synthesizer.">
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","headline":"The 7 axes of a design system — how ux-skill v3.0 maps a brief to tokens","datePublished":"2026-05-28","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/seven-axes-design-system-explained.html","inLanguage":"en"}
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"The 7 axes of a design system · how ux-skill v3.0 maps a brief to tokens","datePublished":"2026-05-28","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/seven-axes-design-system-explained.html","inLanguage":"en"}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "The 7 axes of a design system · how ux-skill v3.0 maps a brief to tokens", "item": "https://uxskill.laithjunaidy.com/blog/seven-axes-design-system-explained.html"}]}
 </script>
 
 <style>
@@ -72,7 +75,7 @@
   .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
-    padding-block:8px;transition:color 140ms ease}
+    padding-block:8px;transition:color 140ms ease;}
   .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
   .usknav__langs{position:relative}
   .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
@@ -86,14 +89,14 @@
   .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
   .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease;}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
   .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
-  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:none;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
     transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
-  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer.is-open{display:flex;transform:translateX(0);visibility:visible}
   .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
     border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
   .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
@@ -113,7 +116,7 @@
   .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
 </head>
 <body>
 
@@ -200,7 +203,7 @@
 </div>
 <div class="wrap">
 <header class="post">
-<p class="eyebrow">v3.0 — THE BRAIN · 2026-05-28</p>
+<p class="eyebrow">v3.0 · THE BRAIN · 2026-05-28</p>
 <h1>The <em>7 axes</em> of a design system,<br>and how a brief maps to all of them.</h1>
 <p class="lede">v3.0 introduces a 7-axis synthesizer. Every brief becomes seven continuous values. Those values then compile to palette, type ladder, spacing scale, radius scale, and motion timing. Here's what each axis measures, where it comes from, and how it lands as code.</p>
 </header>
@@ -357,14 +360,14 @@ uxskill synthesize \
 <h2>Related</h2>
 <ul>
 <li><a href="/blog/design-tokens-ai-coding.html">Design tokens are the missing layer in AI coding</a></li>
-<li><a href="/blog/v3-the-brain-launch.html">The v3.0 launch — The Brain</a></li>
+<li><a href="/blog/v3-the-brain-launch.html">The v3.0 launch · The Brain</a></li>
 <li><a href="/blog/brand-specs-training-data-not-templates.html">Brand specs are training data</a></li>
 <li><a href="/blog/deterministic-design-engine-no-llm.html">A deterministic design engine</a></li>
 <li><a href="/blog/closed-loop-design-system-feedback.html">What closed-loop actually means</a></li>
 </ul>
 
 <footer>
-ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+ux-skill v3.0 · THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
 </footer>
 
 </div>

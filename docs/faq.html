@@ -11,7 +11,7 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ux-skill FAQ — 25 questions, answered straight</title>
+  <title>ux-skill FAQ · 25 questions, answered straight</title>
   <meta name="description" content="Common questions about ux-skill: how it differs from ui-ux-pro-max-skill, how it runs in Cursor, what the linter catches, pricing, license, and more.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/faq.html">
   <meta name="theme-color" content="#07080a">
@@ -20,16 +20,16 @@
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/faq.html">
-  <meta property="og:title" content="ux-skill FAQ — 25 questions, answered straight">
+  <meta property="og:title" content="ux-skill FAQ · 25 questions, answered straight">
   <meta property="og:description" content="How ux-skill differs from ui-ux-pro-max, how it runs in Cursor and Windsurf, what the linter catches, license, telemetry, and more.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/faq.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — faq">
+  <meta property="og:image:alt" content="ux-skill · faq">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/faq.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ux-skill FAQ — 25 questions, answered straight">
+  <meta name="twitter:title" content="ux-skill FAQ · 25 questions, answered straight">
   <meta name="twitter:description" content="25 questions covering install, comparison, linter, brands, RTL, dark mode, license, and contribution.">
 
   <script type="application/ld+json">
@@ -42,7 +42,7 @@
         "name": "What is ux-skill?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "ux-skill is an open-source Python design engine that runs inside AI coding tools like Claude Code, Cursor, and Windsurf. It provides 22 slash-commands, 1,161 manifest entries, 160 brand specs, and a 100-rule anti-slop linter that catches the design fingerprints every LLM produces by default — purple gradients, generic SaaS cards, three-tier pricing, default-Inter typography."
+          "text": "ux-skill is an open-source Python design engine that runs inside AI coding tools like Claude Code, Cursor, and Windsurf. It provides 22 slash-commands, 1,161 manifest entries, 160 brand specs, and a 100-rule anti-slop linter that catches the design fingerprints every LLM produces by default: purple gradients, generic SaaS cards, three-tier pricing, default-Inter typography."
         }
       },
       {
@@ -50,7 +50,7 @@
         "name": "How is ux-skill different from ui-ux-pro-max-skill?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "ui-ux-pro-max-skill is a single-purpose recommender at 84k stars — it scores intent against a catalog and returns a structured plan. ux-skill borrows that recommender pattern and adds three things it does not have: a 100-rule anti-slop linter that runs in CI, a 72-brand spec library, and cross-IDE adapters for 17 editors. The scored compare table is at /compare.html."
+          "text": "ui-ux-pro-max-skill is a single-purpose recommender at 84k stars. It scores intent against a catalog and returns a structured plan. ux-skill borrows that recommender pattern and adds three things it does not have: a 100-rule anti-slop linter that runs in CI, a 72-brand spec library, and cross-IDE adapters for 17 editors. The scored compare table is at /compare.html."
         }
       },
       {
@@ -66,7 +66,7 @@
         "name": "How is ux-skill different from open-design?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "open-design (nexu-io, 54k stars) is a Figma-style design tool with a preview server and a README in 11 locales. ux-skill is a code-side enforcement layer — it sits in your editor, lints your output, and refuses anti-patterns before they hit your repo. They are complementary, not competing. open-design wins on preview UX; ux-skill wins on shipping discipline."
+          "text": "open-design (nexu-io, 54k stars) is a Figma-style design tool with a preview server and a README in 11 locales. ux-skill is a code-side enforcement layer. It sits in your editor, lints your output, and refuses anti-patterns before they hit your repo. They are complementary, not competing. open-design wins on preview UX; ux-skill wins on shipping discipline."
         }
       },
       {
@@ -122,7 +122,7 @@
         "name": "Does it collect any telemetry or data?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "The tool: no. Zero. The CLI does not phone home — no usage events, error reporting, anonymous IDs, or install pings. The only network calls are to PyPI for the install. The marketing website (uxskill.laithjunaidy.com) is separate and uses privacy-respecting Google Analytics for aggregate traffic only — no personal data, no advertising; see the privacy policy."
+          "text": "The tool: no. Zero. The CLI does not phone home: no usage events, error reporting, anonymous IDs, or install pings. The only network calls are to PyPI for the install. The marketing website (uxskill.laithjunaidy.com) is separate and uses privacy-respecting Google Analytics for aggregate traffic only. No personal data, no advertising; see the privacy policy."
         }
       },
       {
@@ -130,7 +130,7 @@
         "name": "What is a design fingerprint and why does ux-skill catch them?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "A design fingerprint is a pattern so common in AI-generated code that it functions as a watermark — purple-to-blue gradients, three-column pricing cards, default Inter type, generic Lucide icons in feature grids. The model isn't broken; it's averaging across millions of training screenshots. ux-skill catches them by giving the model 35 explicit refusals and 998 manifest entries to choose from instead."
+          "text": "A design fingerprint is a pattern so common in AI-generated code that it functions as a watermark: purple-to-blue gradients, three-column pricing cards, default Inter type, generic Lucide icons in feature grids. The model isn't broken; it's averaging across millions of training screenshots. ux-skill catches them by giving the model 35 explicit refusals and 998 manifest entries to choose from instead."
         }
       },
       {
@@ -154,7 +154,7 @@
         "name": "What is the 5-parallel-search recommender?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "When you run /ux-design, ux-skill kicks off five parallel searches across the manifest — brand-fit, style-fit, component-fit, motion-fit, anti-pattern-fit. Results are scored, merged, and returned as a single structured plan with explicit refusals. The pattern comes from ui-ux-pro-max-skill; ux-skill adds the anti-pattern dimension on top."
+          "text": "When you run /ux-design, ux-skill kicks off five parallel searches across the manifest: brand-fit, style-fit, component-fit, motion-fit, anti-pattern-fit. Results are scored, merged, and returned as a single structured plan with explicit refusals. The pattern comes from ui-ux-pro-max-skill; ux-skill adds the anti-pattern dimension on top."
         }
       },
       {
@@ -162,7 +162,7 @@
         "name": "What are the 160 brand specs?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "DESIGN.md-style spec files for 72 known brand identities — Apple, Stripe, Linear, Vercel, Notion, Airbnb, Figma, Replit, Anthropic, plus 63 more. Each spec encodes that brand's allowed typography, color usage rules, motion vocabulary, and explicit anti-patterns. Pick a brand with /ux-design --brand=stripe and the recommender narrows everything accordingly."
+          "text": "DESIGN.md-style spec files for 72 known brand identities: Apple, Stripe, Linear, Vercel, Notion, Airbnb, Figma, Replit, Anthropic, plus 63 more. Each spec encodes that brand's allowed typography, color usage rules, motion vocabulary, and explicit anti-patterns. Pick a brand with /ux-design --brand=stripe and the recommender narrows everything accordingly."
         }
       },
       {
@@ -170,7 +170,7 @@
         "name": "How do I generate a landing page with ux-skill?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Run /ux-design landing in your editor. ux-skill triggers the discovery protocol — 10 fields of intent (audience, primary action, brand voice, motion appetite, RTL, dark mode, stack, +3) — then returns a structured plan with the recommended hero variant, pricing structure, social proof pattern, and explicit anti-patterns to avoid. Then you generate the code with that plan as context."
+          "text": "Run /ux-design landing in your editor. ux-skill triggers the discovery protocol: 10 fields of intent (audience, primary action, brand voice, motion appetite, RTL, dark mode, stack, +3), then returns a structured plan with the recommended hero variant, pricing structure, social proof pattern, and explicit anti-patterns to avoid. Then you generate the code with that plan as context."
         }
       },
       {
@@ -178,7 +178,7 @@
         "name": "How do I generate a dashboard?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Same flow with /ux-dashboard. The discovery protocol shifts to dashboard-specific fields — primary metric, density preference, table-vs-chart bias, refresh model, role hierarchy, status taxonomy. Recommender returns layout, info architecture, chart-type per data shape, and a list of dashboard anti-patterns (sparkline-bingo, KPI-card-overload, generic-icon-grid)."
+          "text": "Same flow with /ux-dashboard. The discovery protocol shifts to dashboard-specific fields: primary metric, density preference, table-vs-chart bias, refresh model, role hierarchy, status taxonomy. Recommender returns layout, info architecture, chart-type per data shape, and a list of dashboard anti-patterns (sparkline-bingo, KPI-card-overload, generic-icon-grid)."
         }
       },
       {
@@ -194,7 +194,7 @@
         "name": "Can it handle dark mode?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. Every brand spec encodes both a light and a dark variant. Dark mode is not an inverted-light fallback — each brand has explicit dark tokens, dark motion rules, and dark anti-patterns (#000-on-#000 contrast traps, neon overuse, glow-as-default)."
+          "text": "Yes. Every brand spec encodes both a light and a dark variant. Dark mode is not an inverted-light fallback. Each brand has explicit dark tokens, dark motion rules, and dark anti-patterns (#000-on-#000 contrast traps, neon overuse, glow-as-default)."
         }
       },
       {
@@ -202,7 +202,7 @@
         "name": "What stacks does it support?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Generation output supports React + Tailwind, Vue + Tailwind, Svelte, vanilla HTML/CSS, and Astro out of the box. The linter is stack-agnostic — it lints the rendered output, not the source framework. v3.0 adds Swift, Kotlin, and Flutter generators."
+          "text": "Generation output supports React + Tailwind, Vue + Tailwind, Svelte, vanilla HTML/CSS, and Astro out of the box. The linter is stack-agnostic. It lints the rendered output, not the source framework. v3.0 adds Swift, Kotlin, and Flutter generators."
         }
       },
       {
@@ -234,7 +234,7 @@
         "name": "How do I get help or report a bug?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "File an issue at github.com/Laith0003/ux-skill/issues. Real bugs get triaged within a week. For questions, use GitHub Discussions. There is no Discord, no Slack, no email support queue — the open repo is the only channel and that's intentional."
+          "text": "File an issue at github.com/Laith0003/ux-skill/issues. Real bugs get triaged within a week. For questions, use GitHub Discussions. There is no Discord, no Slack, no email support queue. The open repo is the only channel and that's intentional."
         }
       }
     ]
@@ -248,7 +248,7 @@
 
   <style>
     /* =========================================================================
-       UXSKILL DOCS v3 — Saturated Cinema (dark)
+       UXSKILL DOCS v3: Saturated Cinema (dark)
        Scene accent: indigo #818cf8
        ========================================================================= */
     :root {
@@ -592,7 +592,7 @@
     }
     .answer pre code { background: transparent; padding: 0; color: inherit; border: 0; }
 
-    /* CTA — dark on dark via surface, with scene-accent border */
+    /* CTA: dark on dark via surface, with scene-accent border */
     .cta {
       margin-top: 72px;
       padding: 40px 44px;
@@ -714,7 +714,7 @@
       }
     }
   
-    /* Arabic typography — IBM Plex Sans Arabic for the whole Arabic page (v3.0.4 sweep) */
+    /* Arabic typography: IBM Plex Sans Arabic for the whole Arabic page (v3.0.4 sweep) */
     html[lang="ar"] body,
     html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3, html[lang="ar"] h4,
     html[lang="ar"] p, html[lang="ar"] li, html[lang="ar"] a, html[lang="ar"] button,
@@ -726,13 +726,13 @@
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
        and max-width: 100%; carousels that need their own horizontal scroll
-       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves —
+       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves:
        overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
     html, body {
       overflow-x: clip;
       max-width: 100%;
     }
-    /* Defensive — make sure no section, image, or table forces width >100%. */
+    /* Defensive: make sure no section, image, or table forces width >100%. */
     section, header, footer, main, article { max-width: 100vw; }
     img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
     table { max-width: 100%; }
@@ -951,10 +951,10 @@
     }
     #nav-drawer .nav__drawer-langs-grid a:hover { color: var(--ink, var(--nav-ink)); }
 
-    /* RTL — nav inner flips */
+    /* RTL: nav inner flips */
     html[dir="rtl"] #nav .nav__inner { direction: rtl; }
 
-    /* Defensive — when the fixed .nav is present, give layouts that
+    /* Defensive: when the fixed .nav is present, give layouts that
        previously assumed an inline header (.wrap on blog/index,
        .top/.toolbar on the catalogue pages) enough headroom so
        content isn't hidden behind the nav. */
@@ -1107,7 +1107,7 @@
 <main id="main">
   <div class="page">
     <span class="eyebrow">FAQ &middot; 25 questions &middot; straight answers &middot; no marketing</span>
-    <h1>ux-skill FAQ &mdash; 25 questions, answered <span class="accent">straight</span>.</h1>
+    <h1>ux-skill FAQ · 25 questions, answered <span class="accent">straight</span>.</h1>
     <p class="lede">
       Common questions about install, comparison to other plugins, the linter, brand specs, RTL, dark mode, license, and contribution. Two-to-four sentences each. If something is missing, file it at <a href="https://github.com/Laith0003/ux-skill/issues">github.com/Laith0003/ux-skill/issues</a> and the next pass will include it.
     </p>
@@ -1148,7 +1148,7 @@
       <h2 class="question">What is ux-skill?</h2>
       <div class="answer">
         <p><strong>ux-skill is an open-source Python design engine that runs inside AI coding tools</strong> like Claude Code, Cursor, and Windsurf. It provides 22 slash-commands, 1,161 manifest entries across nine YAML manifests, 160 brand specs, and a 100-rule anti-slop linter.</p>
-        <p>The job it's hired to do: catch the design fingerprints every LLM produces by default &mdash; purple gradients, generic SaaS cards, three-tier pricing, default-Inter typography &mdash; <em>before</em> they reach your repo.</p>
+        <p>The job it's hired to do: catch the design fingerprints every LLM produces by default (purple gradients, generic SaaS cards, three-tier pricing, default-Inter typography) <em>before</em> they reach your repo.</p>
       </div>
     </section>
 
@@ -1156,8 +1156,8 @@
       <div class="q-num">Question 02</div>
       <h2 class="question">How is ux-skill different from ui-ux-pro-max-skill?</h2>
       <div class="answer">
-        <p><strong>ui-ux-pro-max-skill</strong> (nextlevelbuilder, 84k stars) is a single-purpose recommender &mdash; it scores intent against a catalog and returns a structured plan. It's the canonical recommender pattern in the ecosystem.</p>
-        <p>ux-skill borrows that pattern and adds three things it does not have: <strong>a 100-rule anti-slop linter</strong> that runs in CI, <strong>a 72-brand spec library</strong>, and <strong>cross-IDE adapters for 17 editors</strong>. The scored side-by-side is at <a href="/compare.html">/compare.html</a> &mdash; we score 44/50, ui-ux-pro-max scores 28/50.</p>
+        <p><strong>ui-ux-pro-max-skill</strong> (nextlevelbuilder, 84k stars) is a single-purpose recommender. It scores intent against a catalog and returns a structured plan. It's the canonical recommender pattern in the ecosystem.</p>
+        <p>ux-skill borrows that pattern and adds three things it does not have: <strong>a 100-rule anti-slop linter</strong> that runs in CI, <strong>a 72-brand spec library</strong>, and <strong>cross-IDE adapters for 17 editors</strong>. The scored side-by-side is at <a href="/compare.html">/compare.html</a>. We score 44/50, ui-ux-pro-max scores 28/50.</p>
       </div>
     </section>
 
@@ -1165,7 +1165,7 @@
       <div class="q-num">Question 03</div>
       <h2 class="question">How is ux-skill different from Leonxlnx/taste-skill?</h2>
       <div class="answer">
-        <p><strong>taste-skill</strong> is one 50KB SKILL.md with the strongest anti-slop voice in the ecosystem. As a single prompt artifact it is exceptional &mdash; it refuses purple, refuses centered heroes, refuses generic feature grids in language clearer than most design briefs.</p>
+        <p><strong>taste-skill</strong> is one 50KB SKILL.md with the strongest anti-slop voice in the ecosystem. As a single prompt artifact it is exceptional: it refuses purple, refuses centered heroes, refuses generic feature grids in language clearer than most design briefs.</p>
         <p>ux-skill takes that principle and explodes it into a system: <strong>35 enforceable linter rules</strong>, a 1,243-entry manifest, 22 slash-commands, and a runtime CLI. taste-skill is a great prompt; ux-skill is a great prompt + the infrastructure to enforce it across an engineering workflow.</p>
       </div>
     </section>
@@ -1175,7 +1175,7 @@
       <h2 class="question">How is ux-skill different from open-design?</h2>
       <div class="answer">
         <p><strong>open-design</strong> (nexu-io, 54k stars) is closer to a Figma-style design tool with a preview server and a README localized into 11 locales. Their strength is the preview UX and the multi-locale onboarding.</p>
-        <p>ux-skill is a code-side enforcement layer. It does not have a preview tool today (v2.3 adds one) and it ships English-only today (v2.2 adds 11 locales). They're complementary, not competing &mdash; open-design wins on preview, ux-skill wins on shipping discipline and CI integration.</p>
+        <p>ux-skill is a code-side enforcement layer. It does not have a preview tool today (v2.3 adds one) and it ships English-only today (v2.2 adds 11 locales). They're complementary, not competing: open-design wins on preview, ux-skill wins on shipping discipline and CI integration.</p>
       </div>
     </section>
 
@@ -1183,7 +1183,7 @@
       <div class="q-num">Question 05</div>
       <h2 class="question">Does ux-skill work in Cursor?</h2>
       <div class="answer">
-        <p><strong>Yes &mdash; Cursor is a first-class adapter</strong>, shipped at parity with Claude Code. After <code>npx uxskill@alpha init</code>, the 22 slash-commands appear in Cursor's command palette and behave identically.</p>
+        <p><strong>Yes: Cursor is a first-class adapter</strong>, shipped at parity with Claude Code. After <code>npx uxskill@alpha init</code>, the 22 slash-commands appear in Cursor's command palette and behave identically.</p>
         <p>There is no vendor lock-in to Anthropic. The manifest layer is editor-agnostic; only the thin adapter shim wires up commands to the editor's surface.</p>
       </div>
     </section>
@@ -1201,8 +1201,8 @@
       <div class="q-num">Question 07</div>
       <h2 class="question">Does ux-skill work in GitHub Copilot?</h2>
       <div class="answer">
-        <p><strong>Yes, via the Copilot Chat adapter.</strong> Copilot's command surface is more limited than Claude Code or Cursor, but the core commands work &mdash; <code>/ux-design</code>, <code>/ux-component</code>, <code>/ux-audit</code>, <code>/ux-fix</code>.</p>
-        <p>The anti-slop linter is a separate CLI binary (<code>npx uxskill lint</code>) and runs independently of which editor you use &mdash; so even on Copilot, your CI still catches the fingerprints.</p>
+        <p><strong>Yes, via the Copilot Chat adapter.</strong> Copilot's command surface is more limited than Claude Code or Cursor, but the core commands work: <code>/ux-design</code>, <code>/ux-component</code>, <code>/ux-audit</code>, <code>/ux-fix</code>.</p>
+        <p>The anti-slop linter is a separate CLI binary (<code>npx uxskill lint</code>) and runs independently of which editor you use, so even on Copilot, your CI still catches the fingerprints.</p>
       </div>
     </section>
 
@@ -1221,7 +1221,7 @@
       <h2 class="question">Is it free?</h2>
       <div class="answer">
         <p><strong>Yes. Permanently.</strong> There is no paid tier, no Pro plan, no premium brand pack, no commercial-use surcharge. The <a href="/roadmap.html#wont-do">roadmap explicitly forbids ever charging</a>.</p>
-        <p>"Free" includes commercial use &mdash; the MIT license lets you ship ux-skill inside a paid product, charge customers for that product, and never pay or attribute upstream.</p>
+        <p>"Free" includes commercial use: the MIT license lets you ship ux-skill inside a paid product, charge customers for that product, and never pay or attribute upstream.</p>
       </div>
     </section>
 
@@ -1240,7 +1240,7 @@
       <div class="answer">
         <p><strong>The tool: no. Zero.</strong> The CLI does not phone home. No usage events, no error reporting, no anonymous IDs, no install pings. The only network calls are to PyPI for the package install and to your local AI coding tool for the prompt itself.</p>
         <p>This is checked in the linter's own CI: any new network call introduced in a PR has to be justified and is rejected by default. Telemetry-free is a non-negotiable design constraint for the tool.</p>
-        <p><strong>This marketing website is separate:</strong> uxskill.laithjunaidy.com uses privacy-respecting Google Analytics for aggregate traffic only — no personal data, no advertising, no selling. Full detail in the <a href="/privacy.html">privacy policy</a>.</p>
+        <p><strong>This marketing website is separate:</strong> uxskill.laithjunaidy.com uses privacy-respecting Google Analytics for aggregate traffic only. No personal data, no advertising, no selling. Full detail in the <a href="/privacy.html">privacy policy</a>.</p>
       </div>
     </section>
 
@@ -1249,7 +1249,7 @@
       <h2 class="question">What's a "design fingerprint" and why does ux-skill catch them?</h2>
       <div class="answer">
         <p><strong>A design fingerprint is a pattern so common in AI-generated UI that it functions as a watermark.</strong> Purple-to-blue gradients in hero backgrounds. Three-column pricing cards. Default Inter typography paired with itself. Lucide icons in feature grids. Centered single-column landing layouts.</p>
-        <p>The model isn't broken &mdash; it's averaging across millions of training screenshots. ux-skill catches the fingerprints by giving the model 35 explicit refusals up front and 998 manifest entries to choose from instead. The default attractor gets blocked; the model has to commit.</p>
+        <p>The model isn't broken. It's averaging across millions of training screenshots. ux-skill catches the fingerprints by giving the model 35 explicit refusals up front and 998 manifest entries to choose from instead. The default attractor gets blocked; the model has to commit.</p>
       </div>
     </section>
 
@@ -1266,7 +1266,7 @@
       <div class="q-num">Question 14</div>
       <h2 class="question">Can I run the linter in CI?</h2>
       <div class="answer">
-        <p><strong>Yes &mdash; that's the primary use case.</strong> The linter is a standalone CLI that exits non-zero on any error-severity violation, so it slots into any CI pipeline without configuration.</p>
+        <p><strong>Yes: that's the primary use case.</strong> The linter is a standalone CLI that exits non-zero on any error-severity violation, so it slots into any CI pipeline without configuration.</p>
         <pre><code># GitHub Actions
 - run: npx uxskill lint --ci
 
@@ -1280,8 +1280,8 @@ npx uxskill lint --staged</code></pre>
       <div class="q-num">Question 15</div>
       <h2 class="question">What's the 5-parallel-search recommender?</h2>
       <div class="answer">
-        <p>When you run <code>/ux-design</code>, ux-skill kicks off <strong>five parallel searches across the manifest</strong> &mdash; brand-fit, style-fit, component-fit, motion-fit, anti-pattern-fit. Each returns scored matches; results are merged and returned as a single structured plan with explicit refusals attached.</p>
-        <p>The pattern comes from ui-ux-pro-max-skill. ux-skill adds the fifth dimension &mdash; anti-pattern-fit &mdash; so the plan tells the model what to avoid, not just what to choose.</p>
+        <p>When you run <code>/ux-design</code>, ux-skill kicks off <strong>five parallel searches across the manifest</strong>: brand-fit, style-fit, component-fit, motion-fit, anti-pattern-fit. Each returns scored matches; results are merged and returned as a single structured plan with explicit refusals attached.</p>
+        <p>The pattern comes from ui-ux-pro-max-skill. ux-skill adds the fifth dimension (anti-pattern-fit) so the plan tells the model what to avoid, not just what to choose.</p>
       </div>
     </section>
 
@@ -1298,7 +1298,7 @@ npx uxskill lint --staged</code></pre>
       <div class="q-num">Question 17</div>
       <h2 class="question">How do I generate a landing page with ux-skill?</h2>
       <div class="answer">
-        <p>Run <code>/ux-design landing</code> in your editor. ux-skill first triggers the <strong>discovery protocol</strong> &mdash; 10 fields of intent (audience, primary action, brand voice, motion appetite, RTL, dark mode, stack, success metric, scope, time budget). Improvisation is banned; the model cannot skip the protocol.</p>
+        <p>Run <code>/ux-design landing</code> in your editor. ux-skill first triggers the <strong>discovery protocol</strong>: 10 fields of intent (audience, primary action, brand voice, motion appetite, RTL, dark mode, stack, success metric, scope, time budget). Improvisation is banned; the model cannot skip the protocol.</p>
         <p>Once the 10 fields are filled, the recommender returns a structured plan: recommended hero variant, pricing structure, social proof pattern, motion vocabulary, and an explicit list of anti-patterns to avoid. The model then generates code with that plan as its context.</p>
       </div>
     </section>
@@ -1307,7 +1307,7 @@ npx uxskill lint --staged</code></pre>
       <div class="q-num">Question 18</div>
       <h2 class="question">How do I generate a dashboard?</h2>
       <div class="answer">
-        <p>Same flow with <code>/ux-dashboard</code>. The discovery protocol shifts to dashboard-specific fields &mdash; primary metric, density preference, table-vs-chart bias, refresh model, role hierarchy, status taxonomy.</p>
+        <p>Same flow with <code>/ux-dashboard</code>. The discovery protocol shifts to dashboard-specific fields: primary metric, density preference, table-vs-chart bias, refresh model, role hierarchy, status taxonomy.</p>
         <p>The recommender returns layout, information architecture, chart-type per data shape (e.g. for share-of-volume it picks stacked area, not pie), and a list of dashboard anti-patterns: sparkline-bingo, KPI-card-overload, generic-icon-grid, default-blue-everywhere.</p>
       </div>
     </section>
@@ -1316,7 +1316,7 @@ npx uxskill lint --staged</code></pre>
       <div class="q-num">Question 19</div>
       <h2 class="question">Can ux-skill design for RTL / Arabic?</h2>
       <div class="answer">
-        <p><strong>Yes &mdash; RTL is a first-class field in the discovery protocol.</strong> When set, the recommender returns RTL-aware layouts, mirrored animation contracts (a right-to-left slide-in becomes left-to-right), locale-correct number formatting, and font choices that have full Arabic glyph coverage.</p>
+        <p><strong>Yes: RTL is a first-class field in the discovery protocol.</strong> When set, the recommender returns RTL-aware layouts, mirrored animation contracts (a right-to-left slide-in becomes left-to-right), locale-correct number formatting, and font choices that have full Arabic glyph coverage.</p>
         <p>This is dogfood: ux-skill's maker runs Dot, a MENA-first product where Arabic is the primary locale. The MENA brand pack (Careem, Talabat, Noon, Aramex, +24) ships in v2.2.</p>
       </div>
     </section>
@@ -1325,7 +1325,7 @@ npx uxskill lint --staged</code></pre>
       <div class="q-num">Question 20</div>
       <h2 class="question">Can it handle dark mode?</h2>
       <div class="answer">
-        <p><strong>Yes.</strong> Every brand spec encodes both a light and a dark variant. Dark mode is not an inverted-light fallback &mdash; each brand has explicit dark tokens, dark motion rules, and dark anti-patterns.</p>
+        <p><strong>Yes.</strong> Every brand spec encodes both a light and a dark variant. Dark mode is not an inverted-light fallback. Each brand has explicit dark tokens, dark motion rules, and dark anti-patterns.</p>
         <p>The dark anti-patterns block the usual traps: <strong>#000-on-#000 contrast traps</strong>, <strong>neon overuse</strong>, <strong>glow-as-default</strong>, <strong>"just invert the lightness" color picks</strong>. Switch contexts mid-design with <code>/ux-design --theme=dark</code>.</p>
       </div>
     </section>
@@ -1335,7 +1335,7 @@ npx uxskill lint --staged</code></pre>
       <h2 class="question">What stacks does it support?</h2>
       <div class="answer">
         <p>Generation output supports <strong>React + Tailwind, Vue + Tailwind, Svelte, vanilla HTML/CSS, and Astro</strong> out of the box. Pass the stack as a flag: <code>/ux-design --stack=svelte</code>.</p>
-        <p>The anti-slop linter is stack-agnostic &mdash; it lints the rendered HTML/CSS output, not the source framework &mdash; so it works on any stack including ones not in the generator list. Swift, Kotlin, and Flutter generators are planned for v3.0.</p>
+        <p>The anti-slop linter is stack-agnostic (it lints the rendered HTML/CSS output, not the source framework) so it works on any stack including ones not in the generator list. Swift, Kotlin, and Flutter generators are planned for v3.0.</p>
       </div>
     </section>
 
@@ -1353,7 +1353,7 @@ npx uxskill lint --staged</code></pre>
       <h2 class="question">Can I add my own brand DESIGN.md spec?</h2>
       <div class="answer">
         <p><strong>Yes.</strong> Add a <code>DESIGN.md</code> under <code>references/brands/&lt;your-brand&gt;/</code> following the schema in the existing 72 specs (color tokens, type pairings, motion vocabulary, anti-patterns, dark variant).</p>
-        <p>The recommender picks it up automatically. If your brand is general-purpose enough to help others, send a PR &mdash; the brand library grows by community contribution after the initial 72.</p>
+        <p>The recommender picks it up automatically. If your brand is general-purpose enough to help others, send a PR. The brand library grows by community contribution after the initial 72.</p>
       </div>
     </section>
 
@@ -1361,7 +1361,7 @@ npx uxskill lint --staged</code></pre>
       <div class="q-num">Question 24</div>
       <h2 class="question">Who built ux-skill?</h2>
       <div class="answer">
-        <p><strong>Laith Aljunaidy</strong>, solo founder of <a href="https://thedotwallet.com">Dot</a> &mdash; a MENA-first loyalty platform live at thedotwallet.com. ux-skill is the design discipline that runs every Dot screen, packaged so other builders can install it.</p>
+        <p><strong>Laith Aljunaidy</strong>, solo founder of <a href="https://thedotwallet.com">Dot</a>, a MENA-first loyalty platform live at thedotwallet.com. ux-skill is the design discipline that runs every Dot screen, packaged so other builders can install it.</p>
         <p>Full story at <a href="/about.html">/about.html</a>. The short version: he was tired of opening a fresh Claude Code session and shipping landing pages with purple-to-blue gradients that the model wrote first.</p>
       </div>
     </section>
@@ -1371,14 +1371,14 @@ npx uxskill lint --staged</code></pre>
       <h2 class="question">How do I get help or report a bug?</h2>
       <div class="answer">
         <p><strong>File an issue at <a href="https://github.com/Laith0003/ux-skill/issues">github.com/Laith0003/ux-skill/issues</a>.</strong> Real bugs get triaged within a week. For open-ended questions, use <a href="https://github.com/Laith0003/ux-skill/discussions">GitHub Discussions</a>.</p>
-        <p>There is <strong>no Discord, no Slack, no Telegram, no email support queue.</strong> The open repo is the only channel and that's intentional &mdash; every reply lives in the open so the next person with the same question finds it via search.</p>
+        <p>There is <strong>no Discord, no Slack, no Telegram, no email support queue.</strong> The open repo is the only channel and that's intentional. Every reply lives in the open so the next person with the same question finds it via search.</p>
       </div>
     </section>
 
     <section class="cta">
       <span class="eyebrow">Still curious?</span>
       <h2 class="cta-h">Install in 40 seconds, or read the <span class="accent">compare</span> table.</h2>
-      <p>The compare table is where most people land &mdash; scored ux-skill against the top 9 plugins on 10 dimensions, every cell filled with real data. The install is a single npx command.</p>
+      <p>The compare table is where most people land. It scores ux-skill against the top 9 plugins on 10 dimensions, every cell filled with real data. The install is a single npx command.</p>
       <div class="row">
         <a href="https://github.com/Laith0003/ux-skill#install">Install ux-skill</a>
         <a href="/compare.html" class="secondary">See the compare table</a>

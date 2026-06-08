@@ -11,8 +11,8 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Everything built with shadcn/ui looks the same — and how to break out</title>
-<meta name="description" content="shadcn/ui gives you great unstyled components, but every AI build ships the same zinc-and-violet defaults. Why the sameness happens — and how a structured design brief makes shadcn unmistakably yours.">
+<title>Everything built with shadcn/ui looks the same · and how to break out</title>
+<meta name="description" content="shadcn/ui gives you great unstyled components, but every AI build ships the same zinc-and-violet defaults. Why the sameness happens, and how a structured design brief makes shadcn unmistakably yours.">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/shadcn-ui-looks-generic.html">
 <meta property="og:title" content="Everything built with shadcn/ui looks the same">
 <meta property="og:description" content="shadcn/ui ships unstyled primitives. AI fills them with the same defaults every time. A structured brief makes the same components render as a distinct brand.">
@@ -23,10 +23,10 @@
 <meta name="twitter:description" content="shadcn ships unstyled primitives; AI fills them with the same defaults. A brief that resolves to tokens is the fix.">
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","headline":"Everything built with shadcn/ui looks the same — and how to break out","datePublished":"2026-05-29","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/shadcn-ui-looks-generic.html","inLanguage":"en"}
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"Everything built with shadcn/ui looks the same · and how to break out","datePublished":"2026-05-29","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/shadcn-ui-looks-generic.html","inLanguage":"en"}
 </script>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://uxskill.laithjunaidy.com/blog/"},{"@type":"ListItem","position":3,"name":"Everything built with shadcn/ui looks the same — and how to break out","item":"https://uxskill.laithjunaidy.com/blog/shadcn-ui-looks-generic.html"}]}
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://uxskill.laithjunaidy.com/blog/"},{"@type":"ListItem","position":3,"name":"Everything built with shadcn/ui looks the same · and how to break out","item":"https://uxskill.laithjunaidy.com/blog/shadcn-ui-looks-generic.html"}]}
 </script>
 
 <style>
@@ -75,7 +75,7 @@
   .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
-    padding-block:8px;transition:color 140ms ease}
+    padding-block:8px;transition:color 140ms ease;}
   .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
   .usknav__langs{position:relative}
   .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
@@ -89,14 +89,14 @@
   .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
   .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease;}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
   .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
-  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:none;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
     transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
-  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer.is-open{display:flex;transform:translateX(0);visibility:visible}
   .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
     border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
   .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
@@ -116,7 +116,7 @@
   .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
 </head>
 <body>
 
@@ -209,56 +209,56 @@
 </header>
 
 <h2>Unstyled is the feature, not the bug</h2>
-<p>shadcn/ui does something deliberate that most libraries don't: it gives you primitives, not a finished skin. A Button is structure and behaviour with a set of CSS variables left open for you to fill. That is the whole pitch — copy the code in, make it yours.</p>
-<p>The trouble starts at "make it yours." When a person skips that step, the variables keep their starter values. An AI does worse than skip it: asked to pick, it picks the most probable styling it has seen — and that is the one in ten thousand tutorials and starter repos. A thousand independent apps converge on one face.</p>
+<p>shadcn/ui does something deliberate that most libraries don't: it gives you primitives, not a finished skin. A Button is structure and behaviour with a set of CSS variables left open for you to fill. That is the whole pitch: copy the code in, make it yours.</p>
+<p>The trouble starts at "make it yours." When a person skips that step, the variables keep their starter values. An AI does worse than skip it: asked to pick, it picks the most probable styling it has seen, and that is the one in ten thousand tutorials and starter repos. A thousand independent apps converge on one face.</p>
 
 <h2>The defaults everyone ships</h2>
 <p>The convergence is specific enough to list. Almost every AI-built shadcn surface arrives wearing the same five:</p>
 <ul>
 <li>The zinc neutral ramp, untouched, from background to border to muted text.</li>
-<li>A violet primary — the accent the starter ships and nothing overrides.</li>
+<li>A violet primary: the accent the starter ships and nothing overrides.</li>
 <li>Inter at the default weights, pressed into service for both body and headings.</li>
 <li>The stock border-radius and the same soft card shadow on every surface.</li>
 <li>And, on the marketing page that wraps it, the purple-to-blue hero gradient that has become the universal sign of generated work.</li>
 </ul>
-<p>None of these is wrong on its own. Together, unchanged, they are a fingerprint. A reader can't name it, but they have seen it five hundred times — so the product reads as a template before the first word.</p>
-<blockquote>The components are identical by design — that is the point of a shared library. What was supposed to differ is the styling layer on top. When that layer is left at its defaults, the only thing left to tell two apps apart is their logo.</blockquote>
+<p>None of these is wrong on its own. Together, unchanged, they are a fingerprint. A reader can't name it, but they have seen it five hundred times, so the product reads as a template before the first word.</p>
+<blockquote>The components are identical by design: that is the point of a shared library. What was supposed to differ is the styling layer on top. When that layer is left at its defaults, the only thing left to tell two apps apart is their logo.</blockquote>
 
 <h2>Why the model reaches for the same paint</h2>
-<p>This is regression to the training centroid, the <a href="/blog/why-ai-generated-apps-look-the-same.html">same mechanism behind every AI design tell</a>. A model asked to style an open variable returns the average of what it has seen, and the average shadcn project uses zinc, violet, Inter, and the stock radius. The safest token is the most common token, so an unconstrained build lands dead in the middle of the distribution — the centroid everyone else also shipped.</p>
+<p>This is regression to the training centroid, the <a href="/blog/why-ai-generated-apps-look-the-same.html">same mechanism behind every AI design tell</a>. A model asked to style an open variable returns the average of what it has seen, and the average shadcn project uses zinc, violet, Inter, and the stock radius. The safest token is the most common token, so an unconstrained build lands dead in the middle of the distribution: the centroid everyone else also shipped.</p>
 <p>The cure is not a different library or a better prompt adjective. It is a constraint with enough resolution to push the output off the average and land it somewhere specific. That constraint is a brief.</p>
 
 <h2>A brief that resolves to tokens</h2>
-<p>ux-skill compiles a project description into seven continuous values — <a href="/blog/seven-axes-design-system-explained.html">the seven axes a brief becomes</a>: warmth, contrast, density, geometry, formality, motion, and type personality. Those numbers are not vibes; each one resolves to concrete CSS variables, which is exactly the layer shadcn leaves open. Fill the variables from a brief and the same components render as a brand.</p>
+<p>ux-skill compiles a project description into seven continuous values, <a href="/blog/seven-axes-design-system-explained.html">the seven axes a brief becomes</a>: warmth, contrast, density, geometry, formality, motion, and type personality. Those numbers are not vibes; each one resolves to concrete CSS variables, which is exactly the layer shadcn leaves open. Fill the variables from a brief and the same components render as a brand.</p>
 <table>
 <thead><tr><th>open variable</th><th>shadcn default</th><th>brief-driven token</th></tr></thead>
 <tbody>
 <tr><td>neutral ramp</td><td>zinc, untouched</td><td>warmth-shifted gray tuned to the brand</td></tr>
 <tr><td>primary accent</td><td>violet</td><td>one restrained accent picked for the industry</td></tr>
 <tr><td>type pair</td><td>Inter for everything</td><td>a display + body pairing from 65 vetted pairs</td></tr>
-<tr><td>spacing base</td><td>one airy default</td><td>set by the density axis — 4px dense, 12px airy</td></tr>
-<tr><td>radius scale</td><td>stock rounding</td><td>set by the geometry axis — sharp to soft</td></tr>
+<tr><td>spacing base</td><td>one airy default</td><td>set by the density axis: 4px dense, 12px airy</td></tr>
+<tr><td>radius scale</td><td>stock rounding</td><td>set by the geometry axis: sharp to soft</td></tr>
 <tr><td>motion</td><td>library default</td><td>a timing preset chosen from the motion axis</td></tr>
 </tbody>
 </table>
-<p>Same Radix behaviour, same component code, same accessibility — a different surface, because the layer that was supposed to carry the brand finally does.</p>
+<p>Same Radix behaviour, same component code, same accessibility, but a different surface, because the layer that was supposed to carry the brand finally does.</p>
 
 <h2>How the engine picks, and how it stays honest</h2>
-<p>The recommender is deterministic. It runs offline, with no model in the loop, through a fixed pipeline: the industry seeds the axes, the axes filter to a compatible style, the style narrows to a palette, a type pair, a motion preset, and the shadcn components that fit. Run the same brief on a different machine next week and the tokens come back identical — which is the opposite of asking a model to "make it pop" and getting a new look every time.</p>
+<p>The recommender is deterministic. It runs offline, with no model in the loop, through a fixed pipeline: the industry seeds the axes, the axes filter to a compatible style, the style narrows to a palette, a type pair, a motion preset, and the shadcn components that fit. Run the same brief on a different machine next week and the tokens come back identical, which is the opposite of asking a model to "make it pop" and getting a new look every time.</p>
 <ol>
 <li><strong>Industry seed.</strong> A documented industry sets starting values across the seven axes; an unknown one starts neutral.</li>
-<li><strong>Style and palette.</strong> The axes pick a style, the style narrows to a palette — so the neutral ramp and accent are chosen, not defaulted to zinc and violet.</li>
+<li><strong>Style and palette.</strong> The axes pick a style, the style narrows to a palette, so the neutral ramp and accent are chosen, not defaulted to zinc and violet.</li>
 <li><strong>Type pair.</strong> A display-and-body pairing replaces Inter-for-everything, so headings stop reading as body text scaled up.</li>
-<li><strong>Density and geometry.</strong> The density axis sets the spacing base; the geometry axis sets the radius scale — the two tokens that most separate one shadcn app from the next.</li>
+<li><strong>Density and geometry.</strong> The density axis sets the spacing base; the geometry axis sets the radius scale, the two tokens that most separate one shadcn app from the next.</li>
 <li><strong>Components.</strong> Only the shadcn primitives that fit the style come back, pre-wired to the resolved variables.</li>
 </ol>
-<p>Then a regex linter reads the output before you commit. It carries the known shadcn fingerprints as hard rules: the untouched default look, the literal Tailwind purple-to-blue gradient class string, a violet-to-blue hex pair in a raw gradient, Inter deployed as a display face, and warm gray mixed with cool gray in one project. Each finding names the line and the fix, so the tell never reaches a reviewer. The catalogue behind it is the <a href="/anti-patterns.html">anti-pattern catalogue</a>, and the exemplars it steers toward are the <a href="/brands.html">160 brand specs</a> — real systems, not templates.</p>
+<p>Then a regex linter reads the output before you commit. It carries the known shadcn fingerprints as hard rules: the untouched default look, the literal Tailwind purple-to-blue gradient class string, a violet-to-blue hex pair in a raw gradient, Inter deployed as a display face, and warm gray mixed with cool gray in one project. Each finding names the line and the fix, so the tell never reaches a reviewer. The catalogue behind it is the <a href="/anti-patterns.html">anti-pattern catalogue</a>, and the exemplars it steers toward are the <a href="/brands.html">160 brand specs</a>: real systems, not templates.</p>
 
 <h2>The point</h2>
-<p>shadcn/ui handed you the one thing every other library kept locked: the styling layer. AI builds look the same because they hand that layer straight back, filled with the defaults. Give the engine a brief, let it resolve to tokens, and the linter catch the fingerprints — and the same components that made everyone look alike become the thing that makes you look like no one else.</p>
+<p>shadcn/ui handed you the one thing every other library kept locked: the styling layer. AI builds look the same because they hand that layer straight back, filled with the defaults. Give the engine a brief, let it resolve to tokens, and the linter catch the fingerprints, and the same components that made everyone look alike become the thing that makes you look like no one else.</p>
 <pre><code>pip install uxskill
 # then, in your AI coding tool:
-# /ux-recommend  — brief in, deterministic tokens out (or /ux-system for a full starter system)</code></pre>
+# /ux-recommend  : brief in, deterministic tokens out (or /ux-system for a full starter system)</code></pre>
 
 <h2>Related</h2>
 <ul>
@@ -270,7 +270,7 @@
 </ul>
 
 <footer>
-ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+ux-skill v3.0 · THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
 </footer>
 
 </div>

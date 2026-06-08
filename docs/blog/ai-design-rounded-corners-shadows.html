@@ -20,7 +20,7 @@
 <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ai-design-rounded-corners-shadows.html">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Why AI design has the same surface texture every time">
-<meta name="twitter:description" content="Big radius plus a soft drop shadow on every card is an AI fingerprint. Here is why the models reach for it — and how to set radius and elevation with intent.">
+<meta name="twitter:description" content="Big radius plus a soft drop shadow on every card is an AI fingerprint. Here is why the models reach for it, and how to set radius and elevation with intent.">
 
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BlogPosting","headline":"Why AI design defaults to rounded-2xl and soft shadows","datePublished":"2026-05-29","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/ai-design-rounded-corners-shadows.html","inLanguage":"en"}
@@ -75,7 +75,7 @@
   .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
-    padding-block:8px;transition:color 140ms ease}
+    padding-block:8px;transition:color 140ms ease;}
   .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
   .usknav__langs{position:relative}
   .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
@@ -89,14 +89,14 @@
   .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
   .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease;}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
   .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
-  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:none;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
     transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
-  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer.is-open{display:flex;transform:translateX(0);visibility:visible}
   .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
     border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
   .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
@@ -116,7 +116,7 @@
   .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
 </head>
 <body>
 
@@ -205,61 +205,61 @@
 <header class="post">
 <p class="eyebrow">FIELD NOTES · 2026-05-29</p>
 <h1>Why AI design has <em>the same surface texture</em> every time.</h1>
-<p class="lede">Look at a screen an unsupervised model produced and you can feel it before you can name it: every card has a big corner radius, a soft diffuse shadow underneath, a 1px translucent border, and now and then a faint gradient along the edge. It is a texture, and it is the same texture every time. The surface is not wrong, exactly. It is generic — soft and weightless, the look of a thing that was averaged rather than designed.</p>
+<p class="lede">Look at a screen an unsupervised model produced and you can feel it before you can name it: every card has a big corner radius, a soft diffuse shadow underneath, a 1px translucent border, and now and then a faint gradient along the edge. It is a texture, and it is the same texture every time. The surface is not wrong, exactly. It is generic: soft and weightless, the look of a thing that was averaged rather than designed.</p>
 </header>
 
 <h2>The texture is a fingerprint</h2>
 <p>Three traits show up together so reliably that spotting one lets you predict the rest:</p>
 <ul>
-<li>A large corner radius on everything — buttons, inputs, cards, modals, the whole surface rounded to the same generous curve.</li>
+<li>A large corner radius on everything: buttons, inputs, cards, modals, the whole surface rounded to the same generous curve.</li>
 <li>A soft, diffuse drop shadow under every card, low opacity and a wide blur, applied whether or not the element is meant to float.</li>
 <li>A 1px translucent border, often paired with a faint gradient stroke, sitting on top of the shadow as a second depth cue doing the same job.</li>
 </ul>
-<p>None of these is a crime on its own. Stacked on every element at once, they read as a single material — pillowy, frosted, and indistinguishable from the last ten interfaces a model generated. The texture is the tell, the way the violet gradient is a tell.</p>
+<p>None of these is a crime on its own. Stacked on every element at once, they read as a single material: pillowy, frosted, and indistinguishable from the last ten interfaces a model generated. The texture is the tell, the way the violet gradient is a tell.</p>
 
 <h2>Where the texture comes from</h2>
 <p>It is the same mechanism behind every slop signature: the model regresses to the centroid of its training data, and for component surfaces that centroid is sharply defined.</p>
 <p><strong>The framework defaults set the curve.</strong> shadcn/ui and the Tailwind ecosystem ship a card with a rounded corner and a soft shadow as the out-of-the-box look. When a model is asked for "a card" with no spec, the path of least resistance is the default the docs themselves render. The default becomes the answer, and the answer becomes a habit.</p>
-<p><strong>The popular-shot aesthetic reinforces it.</strong> The glassmorphism wave on Dribbble — frosted panels, soft glows, gentle rounding — photographs beautifully in a thumbnail. The model learned that this surface correlates with "polished," so when it plays it safe, it reaches for the soft, rounded, shadowed card.</p>
-<blockquote>The soft card is safe precisely because it is average. Nothing about it is a decision — radius, elevation, and border were all inherited from the default, so the surface belongs to no brand and no density.</blockquote>
+<p><strong>The popular-shot aesthetic reinforces it.</strong> The glassmorphism wave on Dribbble (frosted panels, soft glows, gentle rounding) photographs beautifully in a thumbnail. The model learned that this surface correlates with "polished," so when it plays it safe, it reaches for the soft, rounded, shadowed card.</p>
+<blockquote>The soft card is safe precisely because it is average. Nothing about it is a decision: radius, elevation, and border were all inherited from the default, so the surface belongs to no brand and no density.</blockquote>
 
 <h2>Why soft and weightless reads as generic</h2>
 <p>Radius and elevation are not cosmetic. They carry meaning, and the default throws that meaning away.</p>
-<p>Corner radius sits on a spectrum. A sharp radius reads precise, editorial, instrument-like — the surface of a tool you trust with real work. A large radius reads friendly, approachable, consumer — the surface of an app you hand to anyone. The default picks the friendly end for everything, so a fintech ledger and a kids' game wear the same soft corners, and neither says anything specific.</p>
-<p>Elevation is worse. A drop shadow is supposed to mean one thing: this layer is above that layer. A menu floats over the page; a dialog floats over the menu. When every card carries the same shadow, depth stops being information and becomes decoration — the surface looks busy and floaty while telling you nothing about what is actually on top.</p>
+<p>Corner radius sits on a spectrum. A sharp radius reads precise, editorial, instrument-like: the surface of a tool you trust with real work. A large radius reads friendly, approachable, consumer: the surface of an app you hand to anyone. The default picks the friendly end for everything, so a fintech ledger and a kids' game wear the same soft corners, and neither says anything specific.</p>
+<p>Elevation is worse. A drop shadow is supposed to mean one thing: this layer is above that layer. A menu floats over the page; a dialog floats over the menu. When every card carries the same shadow, depth stops being information and becomes decoration: the surface looks busy and floaty while telling you nothing about what is actually on top.</p>
 
 <h2>Radius and elevation as decisions</h2>
 <p>The fix is to treat both as tokens tied to brand and density, not as inherited defaults. ux-skill encodes them in the style and components manifests, where each style carries its own radius scale and shadow set rather than one global softness.</p>
 <table>
 <thead><tr><th>style</th><th>radius</th><th>elevation intent</th></tr></thead>
 <tbody>
-<tr><td>Editorial / instrument</td><td>2&ndash;4px</td><td>Hairline borders, no shadow; depth from layout, not glow</td></tr>
-<tr><td>Standard app</td><td>8&ndash;12px</td><td>One quiet shadow reserved for true overlays (menu, dialog)</td></tr>
-<tr><td>Consumer / friendly</td><td>16&ndash;20px</td><td>Soft shadow on cards that genuinely lift; flat surfaces stay flat</td></tr>
+<tr><td>Editorial / instrument</td><td>2-4px</td><td>Hairline borders, no shadow; depth from layout, not glow</td></tr>
+<tr><td>Standard app</td><td>8-12px</td><td>One quiet shadow reserved for true overlays (menu, dialog)</td></tr>
+<tr><td>Consumer / friendly</td><td>16-20px</td><td>Soft shadow on cards that genuinely lift; flat surfaces stay flat</td></tr>
 </tbody>
 </table>
-<p>The density axis drives the radius directly. Push density high for a data-dense surface and the synthesizer pulls the radius down toward the sharp, instrument end — soft 20px corners waste pixels and blur the grid a cockpit needs. Pull density low for an airy marketing page and the radius can open up, because the surface has room to feel friendly. Radius is not a constant you pick once; it falls out of how dense the surface is meant to be.</p>
-<p>Elevation gets the same treatment: shadows map to real z-layering. A token exists for the overlay tier and is spent only there. A flat card stays flat. A border and a shadow never stack to do the same job twice, because that is two depth cues for one layer — the redundancy that makes the default surface feel padded.</p>
+<p>The density axis drives the radius directly. Push density high for a data-dense surface and the synthesizer pulls the radius down toward the sharp, instrument end: soft 20px corners waste pixels and blur the grid a cockpit needs. Pull density low for an airy marketing page and the radius can open up, because the surface has room to feel friendly. Radius is not a constant you pick once; it falls out of how dense the surface is meant to be.</p>
+<p>Elevation gets the same treatment: shadows map to real z-layering. A token exists for the overlay tier and is spent only there. A flat card stays flat. A border and a shadow never stack to do the same job twice, because that is two depth cues for one layer: the redundancy that makes the default surface feel padded.</p>
 
 <h2>What the linter flags</h2>
 <p>The discipline is encoded, not left to a taste reminder. The anti-slop linter ships rules aimed at exactly this texture.</p>
-<p>One rule matches the big-radius default in its utility-class form and its raw-value form, and flags it as the generic-card tell — radius applied as a default instead of chosen. Another catches shadow-only depth: a multi-layer stacked drop shadow doing decorative work, the soft glow under every card. A third catches the colored card glow, and the glassmorphism rule fires when frosted blur is layered across the whole surface with no real depth behind it. Run <code>uxskill lint</code> and the inherited texture gets caught before it ships, the same way the purple gradient does.</p>
+<p>One rule matches the big-radius default in its utility-class form and its raw-value form, and flags it as the generic-card tell: radius applied as a default instead of chosen. Another catches shadow-only depth: a multi-layer stacked drop shadow doing decorative work, the soft glow under every card. A third catches the colored card glow, and the glassmorphism rule fires when frosted blur is layered across the whole surface with no real depth behind it. Run <code>uxskill lint</code> and the inherited texture gets caught before it ships, the same way the purple gradient does.</p>
 
 <h2>A card brief, compiled</h2>
 <p>You ask for: <code>surface=card, industry=fintech, tone=["serious", "precise"]</code>.</p>
 <ol>
 <li>Density resolves high (the "precise" tone plus a fintech seed) &rarr; the radius scale drops to a sharp <code>4px</code>, not the inherited soft corner.</li>
 <li>Elevation resolves to borders: a single hairline separates the card from the canvas, and the shadow token is held back for overlays only.</li>
-<li>The faint gradient stroke is dropped — one border does the separation, so a second decorative edge is redundant.</li>
+<li>The faint gradient stroke is dropped: one border does the separation, so a second decorative edge is redundant.</li>
 <li>A consumer brief, run instead, opens the radius to <code>16px</code> and allows one soft shadow on cards that actually lift, while flat regions stay flat.</li>
 </ol>
 <p>Same request, run again next week, on a different machine: identical output. Deterministic, offline, no LLM in the engine.</p>
 
 <h2>The point</h2>
-<p>AI surfaces share a texture because radius and elevation were inherited from the framework default instead of chosen. Set them with intent — radius tied to brand and density, elevation mapped to real z-layering — and the surface stops reading as the average of every card a model has seen. Sharp can mean precise. Large can mean friendly. A shadow can mean above. The default means none of those, which is why it means generic.</p>
+<p>AI surfaces share a texture because radius and elevation were inherited from the framework default instead of chosen. Set them with intent (radius tied to brand and density, elevation mapped to real z-layering) and the surface stops reading as the average of every card a model has seen. Sharp can mean precise. Large can mean friendly. A shadow can mean above. The default means none of those, which is why it means generic.</p>
 <pre><code>pip install uxskill
 # then, in your AI coding tool:
-# /ux-recommend  — radius and elevation set by brand + density, not defaults</code></pre>
+# /ux-recommend  : radius and elevation set by brand + density, not defaults</code></pre>
 
 <h2>Related</h2>
 <ul>
@@ -270,7 +270,7 @@
 </ul>
 
 <footer>
-ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+ux-skill v3.0 · THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
 </footer>
 
 </div>

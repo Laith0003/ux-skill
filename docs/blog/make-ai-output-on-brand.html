@@ -15,7 +15,7 @@
 <meta name="description" content="AI defaults to the generic centroid because it has no brand to obey. The fix is structure: a brief that compiles to concrete tokens plus real brand references, fed to the tool and checked on commit. A practical setup.">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/make-ai-output-on-brand.html">
 <meta property="og:title" content="How to make AI coding tools output on-brand UI">
-<meta property="og:description" content="An empty brief has one most-likely render: the centroid. Give the tool structure it must consume — tokens plus real brand references — then check the output mechanically.">
+<meta property="og:description" content="An empty brief has one most-likely render: the centroid. Give the tool structure it must consume (tokens plus real brand references) then check the output mechanically.">
 <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/make-ai-output-on-brand.html">
 <meta name="twitter:card" content="summary_large_image">
@@ -75,7 +75,7 @@
   .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
-    padding-block:8px;transition:color 140ms ease}
+    padding-block:8px;transition:color 140ms ease;}
   .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
   .usknav__langs{position:relative}
   .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
@@ -89,14 +89,14 @@
   .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
   .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease;}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
   .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
-  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:none;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
     transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
-  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer.is-open{display:flex;transform:translateX(0);visibility:visible}
   .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
     border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
   .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
@@ -116,7 +116,7 @@
   .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
 </head>
 <body>
 
@@ -205,30 +205,30 @@
 <header class="post">
 <p class="eyebrow">FIELD NOTES · 2026-05-29</p>
 <h1>How to make AI coding tools<br><em>output on-brand UI.</em></h1>
-<p class="lede">Ask Cursor, Copilot, or Claude for a settings page and you get a perfectly competent screen that looks like nothing in particular. The reason is simple: you gave it no brand to obey, so it rendered the most likely thing — the centroid of its training data. Re-prompting "more like our brand" does not help, because the model has no fixed constraint to hold onto. The fix is structure: hand it tokens it must consume and real brand references it can imitate, then verify the output mechanically.</p>
+<p class="lede">Ask Cursor, Copilot, or Claude for a settings page and you get a perfectly competent screen that looks like nothing in particular. The reason is simple: you gave it no brand to obey, so it rendered the most likely thing: the centroid of its training data. Re-prompting "more like our brand" does not help, because the model has no fixed constraint to hold onto. The fix is structure: hand it tokens it must consume and real brand references it can imitate, then verify the output mechanically.</p>
 </header>
 
 <h2>Why the output is off-brand</h2>
-<p>A language model predicts the most probable next token given everything before it. When the brief is empty — "build me a pricing page" — the most probable design is whatever appeared most often in training: shadcn defaults, a violet primary, Inter at every size, soft shadows, generous padding. That is not a bug. It is the model doing exactly what it was asked, against a prompt that specified nothing. The centroid is the rational answer to a question with no constraints.</p>
+<p>A language model predicts the most probable next token given everything before it. When the brief is empty ("build me a pricing page") the most probable design is whatever appeared most often in training: shadcn defaults, a violet primary, Inter at every size, soft shadows, generous padding. That is not a bug. It is the model doing exactly what it was asked, against a prompt that specified nothing. The centroid is the rational answer to a question with no constraints.</p>
 <p>Adjectives do not fix this. "Make it feel premium and modern" maps to a thousand renders the model has seen, so it averages them and you land back near the middle. "More like our brand" is worse: the model has no record of your brand, no fixed point to converge on, so it nudges in a random direction and you re-roll forever. The problem is not the model's taste. It is the absence of a hard target.</p>
-<blockquote>An adjective is a probability cloud. A token is a coordinate. You cannot move a model toward a cloud — you move it toward a coordinate.</blockquote>
+<blockquote>An adjective is a probability cloud. A token is a coordinate. You cannot move a model toward a cloud. You move it toward a coordinate.</blockquote>
 
 <h2>The fix is structure, not better adjectives</h2>
 <p>To pull output off the centroid you give the tool two things it cannot average away: concrete tokens it must consume, and real brand references it can imitate.</p>
-<p>By tokens I mean numbers and named choices, not vibes: a palette ramp with actual hex stops, a type pair with named families and a scale ratio, a spacing base, a radius scale, motion presets with durations and curves, and an explicit set of component choices. A token is unambiguous — there is one #0b3d2e, one 1.2 ratio, one 6px base — so the model has nothing to drift toward. References do the rest: pointing at how Stripe sets a near-mono palette with a single saturated accent, how Linear runs tight type and short motion, or how your own product already handles color, gives the model a fixed pattern to copy instead of a mean to regress to.</p>
+<p>By tokens I mean numbers and named choices, not vibes: a palette ramp with actual hex stops, a type pair with named families and a scale ratio, a spacing base, a radius scale, motion presets with durations and curves, and an explicit set of component choices. A token is unambiguous (there is one #0b3d2e, one 1.2 ratio, one 6px base) so the model has nothing to drift toward. References do the rest: pointing at how Stripe sets a near-mono palette with a single saturated accent, how Linear runs tight type and short motion, or how your own product already handles color, gives the model a fixed pattern to copy instead of a mean to regress to.</p>
 <table>
 <thead><tr><th>signal in the brief</th><th>what AI ships</th><th>on-brand token instead</th></tr></thead>
 <tbody>
 <tr><td>"clean and modern"</td><td>shadcn default, violet primary</td><td>palette ramp seeded #0b3d2e, one accent</td></tr>
 <tr><td>"good typography"</td><td>Inter at every size, 1.5 scale</td><td>Söhne / Tiempos pair, 1.2 ratio</td></tr>
-<tr><td>"some breathing room"</td><td>16–24px gaps, soft shadow</td><td>8px base, hairline borders, no shadow</td></tr>
+<tr><td>"some breathing room"</td><td>16-24px gaps, soft shadow</td><td>8px base, hairline borders, no shadow</td></tr>
 <tr><td>"feels polished"</td><td>pillowy radius, 300ms ease on all</td><td>4px radius, 160ms on transform only</td></tr>
 </tbody>
 </table>
 <p>Notice the shape of each fix: the left column is a wish, the right is a measurement. The whole move is converting wishes into measurements before the model ever runs.</p>
 
 <h2>Capture the brand once, as tokens</h2>
-<p>Do this work a single time and reuse it. Write the brand down as a small, flat token file — the same shape a design system uses — so it can be pasted into any tool and read by a check later.</p>
+<p>Do this work a single time and reuse it. Write the brand down as a small, flat token file (the same shape a design system uses) so it can be pasted into any tool and read by a check later.</p>
 <pre><code>brand:
   palette:   { canvas: "#0b0c0e", ink: "#f4f5f7", accent: "#e8852b" }
   type_pair: { display: "Söhne", body: "Inter", scale: 1.200 }
@@ -239,24 +239,24 @@
 <p>The <code>forbidden</code> list matters as much as the values. Half of staying on-brand is naming the defaults you refuse, so the tool has an explicit no rather than an implied one.</p>
 
 <h2>Feed it as a hard constraint</h2>
-<p>Tokens only work if they arrive as rules, not suggestions. Put the token file in context — a rules file the tool reads on every request, or the top of the prompt — and phrase it as obligation: "Use only these values. Do not introduce a color, family, radius, or duration outside this set." Then ask for the surface. The model still does the creative assembly, but every primitive it reaches for is one you chose, so the result reads as yours instead of as the average.</p>
-<p>This is where references earn their keep. "Lay it out the way Linear lays out a settings page — tight rows, left-aligned labels, one accent for the active state" gives the model a concrete arrangement to copy. Real brand names work because the model has genuinely seen them; invented ones do nothing.</p>
+<p>Tokens only work if they arrive as rules, not suggestions. Put the token file in context (a rules file the tool reads on every request, or the top of the prompt) and phrase it as obligation: "Use only these values. Do not introduce a color, family, radius, or duration outside this set." Then ask for the surface. The model still does the creative assembly, but every primitive it reaches for is one you chose, so the result reads as yours instead of as the average.</p>
+<p>This is where references earn their keep. "Lay it out the way Linear lays out a settings page: tight rows, left-aligned labels, one accent for the active state" gives the model a concrete arrangement to copy. Real brand names work because the model has genuinely seen them; invented ones do nothing.</p>
 
 <h2>Lint for drift on the way in</h2>
-<p>The last step is the one most teams skip: check the output mechanically before it lands. A model under a tight brief still slips — it reaches for a stray <code>#8b5cf6</code> or a default radius when unsure. A regex linter on commit catches exactly that class of error: the off-token literal no human notices in review.</p>
+<p>The last step is the one most teams skip: check the output mechanically before it lands. A model under a tight brief still slips: it reaches for a stray <code>#8b5cf6</code> or a default radius when unsure. A regex linter on commit catches exactly that class of error: the off-token literal no human notices in review.</p>
 <ul>
 <li><strong>Off-token color.</strong> Any hex or named color not in the palette ramp is flagged. Drift shows up as a literal that should never have appeared.</li>
-<li><strong>Default palette.</strong> The known shadcn violet and the Tailwind <code>500</code> ladder are matched directly — the tells that mean "no brand was applied."</li>
-<li><strong>Centered-hero and stock layout.</strong> The centered-everything hero, the three-equal-card row, the soft-shadow card — the structural fingerprints of the centroid get caught by pattern, not by eye.</li>
+<li><strong>Default palette.</strong> The known shadcn violet and the Tailwind <code>500</code> ladder are matched directly: the tells that mean "no brand was applied."</li>
+<li><strong>Centered-hero and stock layout.</strong> The centered-everything hero, the three-equal-card row, the soft-shadow card: the structural fingerprints of the centroid get caught by pattern, not by eye.</li>
 </ul>
 <p>Run it on commit and drift cannot accumulate. The brief sets the target; the linter holds the line.</p>
 
 <h2>How ux-skill wires this together</h2>
-<p>The four steps map onto four parts of the tool. The deterministic recommender takes a brief and returns a full token system — palette, type pair, density, radius, motion — so you are not inventing values by hand; the same brief returns the same system, offline. <code>/ux-system</code> proposes a starter system for a project that has none, which becomes your captured brand. The <a href="/brands.html">160 brand specs</a> are the reference library the model imitates — real palettes and type stacks, not invented ones. The linter is the commit-time check, scanning for off-token literals and stock layouts so on-brand is enforced, not hoped for.</p>
+<p>The four steps map onto four parts of the tool. The deterministic recommender takes a brief and returns a full token system (palette, type pair, density, radius, motion) so you are not inventing values by hand; the same brief returns the same system, offline. <code>/ux-system</code> proposes a starter system for a project that has none, which becomes your captured brand. The <a href="/brands.html">160 brand specs</a> are the reference library the model imitates: real palettes and type stacks, not invented ones. The linter is the commit-time check, scanning for off-token literals and stock layouts so on-brand is enforced, not hoped for.</p>
 <p>Brief in, tokens out, references attached, drift caught. The model keeps the creative assembly; you keep the constraints.</p>
 <pre><code>pip install uxskill
-# /ux-recommend  — brief in, a full token system out (deterministic)
-# /ux-system     — propose a starter system, then capture it as your brand</code></pre>
+# /ux-recommend  : brief in, a full token system out (deterministic)
+# /ux-system     : propose a starter system, then capture it as your brand</code></pre>
 
 <h2>Related</h2>
 <ul>
@@ -267,7 +267,7 @@
 </ul>
 
 <footer>
-ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+ux-skill v3.0 · THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
 </footer>
 
 </div>

@@ -25,11 +25,11 @@
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/cursor-design-plugin.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — cursor-design-plugin">
+  <meta property="og:image:alt" content="ux-skill · cursor-design-plugin">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/cursor-design-plugin.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cursor design plugin — ux-skill">
+  <meta name="twitter:title" content="Cursor design plugin · ux-skill">
   <meta name="twitter:description" content="Three install paths in Cursor. Anti-AI-slop linter, 1,243 entries, 160 brand specs. Free + MIT.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -466,17 +466,20 @@
     "articleSection": "Integration"
   }
   </script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "Cursor design plugin: install ux-skill to stop generic AI design output", "item": "https://uxskill.laithjunaidy.com/blog/cursor-design-plugin.html"}]}
+</script>
   <!-- noscroll-fix -->
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
        and max-width: 100%; carousels that need their own horizontal scroll
-       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves —
+       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves:
        overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
     html, body {
       overflow-x: clip;
       max-width: 100%;
     }
-    /* Defensive — make sure no section, image, or table forces width >100%. */
+    /* Defensive: make sure no section, image, or table forces width >100%. */
     section, header, footer, main, article { max-width: 100vw; }
     img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
     table { max-width: 100%; }
@@ -498,7 +501,7 @@
   .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
-    padding-block:8px;transition:color 140ms ease}
+    padding-block:8px;transition:color 140ms ease;}
   .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
   .usknav__langs{position:relative}
   .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
@@ -512,14 +515,14 @@
   .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
   .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease;}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
   .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
-  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:none;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
     transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
-  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer.is-open{display:flex;transform:translateX(0);visibility:visible}
   .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
     border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
   .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
@@ -539,7 +542,7 @@
   .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
 </head>
 <body>
   <a class="skip-link sr-only" href="#main">Go to article</a>
@@ -640,7 +643,7 @@
       <span class="eyebrow">Blog &middot; Cursor &middot; 2026-05-28</span>
       <h1>Cursor design plugin: install ux-skill to stop <span class="accent">generic AI design output</span>.</h1>
       <p class="lede">
-        Cursor users hit the same wall as Claude Code users &mdash; AI defaults produce a recognizable look. Most "Cursor design tooling" means installing a component library or paying for an AI service. <strong>ux-skill</strong> is a different shape: a Python engine that runs inside Cursor and adds design constraints to every generation.
+        Cursor users hit the same wall as Claude Code users. AI defaults produce a recognizable look. Most "Cursor design tooling" means installing a component library or paying for an AI service. <strong>ux-skill</strong> is a different shape: a Python engine that runs inside Cursor and adds design constraints to every generation.
       </p>
       <p class="byline">By the ux-skill team &middot; 7 min read &middot; MIT-licensed open source</p>
 
@@ -649,7 +652,7 @@
         Cursor doesn't ship native design rules. The product is excellent at code, deliberately neutral on aesthetics. When you ask Cursor to "build a landing page" or "design a dashboard," the output reverts to the model's defaults: Inter at 90px, indigo-to-blue gradient, three identical cards, placeholder testimonials like "Maya Iqbal, CEO," fade-in-up motion on everything.
       </p>
       <p>
-        These aren't Cursor's defaults &mdash; they're the underlying model's defaults, which Cursor inherits along with the rest of the model's capabilities. Fixing them means feeding constraints in alongside the prompt: either rules in <code>.cursorrules</code>, a referenced design system, or a tool that runs alongside Cursor's generation.
+        These aren't Cursor's defaults. They're the underlying model's defaults, which Cursor inherits along with the rest of the model's capabilities. Fixing them means feeding constraints in alongside the prompt: either rules in <code>.cursorrules</code>, a referenced design system, or a tool that runs alongside Cursor's generation.
       </p>
       <p>
         <strong>ux-skill takes the third path.</strong> It's a Python package (<code>uxskill</code> on PyPI, also on npm as <code>uxskill</code>) that exposes a recommender, a generator, and a linter. Cursor calls it through one of three integration paths.
@@ -701,7 +704,7 @@
 
       <h2>What changes when ux-skill runs in Cursor</h2>
       <p>
-        Same prompt &mdash; "design a landing page for a fintech neobank." Cursor without ux-skill vs Cursor with ux-skill loaded.
+        Same prompt: "design a landing page for a fintech neobank." Cursor without ux-skill vs Cursor with ux-skill loaded.
       </p>
 
       <div class="before-after">
@@ -742,7 +745,7 @@
         For Cursor users, the relevant numbers are:
       </p>
       <ul>
-        <li><strong>1,243 structured entries</strong> across 12 JSON manifests &mdash; styles, palettes, type pairings, motion presets, components, industry rules, chart types, tech stacks, anti-patterns, brand specs, UX laws.</li>
+        <li><strong>1,243 structured entries</strong> across 12 JSON manifests: styles, palettes, type pairings, motion presets, components, industry rules, chart types, tech stacks, anti-patterns, brand specs, UX laws.</li>
         <li><strong>145 deterministic regex rules</strong> in the anti-slop linter. No LLM judgment in the audit lane.</li>
         <li><strong>160 brand DESIGN.md specs</strong>. Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, and 84 more.</li>
         <li><strong>25 slash commands</strong> covering discovery, recommendation, generation, audit, polish, and handoff.</li>
@@ -752,7 +755,7 @@
 
       <h2>Pairs well with shadcn/ui MCP and Tailwind</h2>
       <p>
-        ux-skill doesn't ship its own component library &mdash; it's a recommender + linter, not a UI kit. In Cursor, the natural pairing is:
+        ux-skill doesn't ship its own component library. It's a recommender + linter, not a UI kit. In Cursor, the natural pairing is:
       </p>
       <ol>
         <li><strong>ux-skill</strong> picks the design system (style + palette + type + motion).</li>
@@ -781,7 +784,7 @@
       <div class="honesty">
         <div class="label">Honesty card</div>
         <h4>About the 14-star claim</h4>
-        <p>ux-skill v2 is new (v2.0.0-alpha.1 shipped a few weeks ago) and solo-maintained. We don't have the install base ui-ux-pro-max or hallmark have. The case for installing is architecture &mdash; Python engine, 1,243 entries, 145-rule deterministic linter, 160 brand specs, cross-IDE distribution &mdash; not awareness.</p>
+        <p>ux-skill v2 is new (v2.0.0-alpha.1 shipped a few weeks ago) and solo-maintained. We don't have the install base ui-ux-pro-max or hallmark have. The case for installing is architecture (Python engine, 1,243 entries, 145-rule deterministic linter, 160 brand specs, cross-IDE distribution), not awareness.</p>
         <p>Install it for the linter and the brand specs. If you only need a prompt-only taste primer, taste-skill (25k stars) is also reasonable. Both are MIT.</p>
       </div>
 
@@ -791,15 +794,16 @@
       </p>
       <ol>
         <li><code>cd</code> into your project directory in Cursor's terminal.</li>
-        <li><code>npx uxskill@alpha init --target cursor</code> &mdash; writes <code>.cursorrules</code> and seeds the brand spec references.</li>
-        <li><code>npx uxskill@alpha discover</code> &mdash; answers the 10-field discovery, writes <code>.ux/last-discover.json</code>.</li>
-        <li><code>npx uxskill@alpha recommend</code> &mdash; reads discovery, returns style + palette + type + motion + components, writes <code>tokens.css</code>.</li>
+        <li><code>npx uxskill@alpha init --target cursor</code>: writes <code>.cursorrules</code> and seeds the brand spec references.</li>
+        <li><code>npx uxskill@alpha discover</code>: answers the 10-field discovery, writes <code>.ux/last-discover.json</code>.</li>
+        <li><code>npx uxskill@alpha recommend</code>: reads discovery, returns style + palette + type + motion + components, writes <code>tokens.css</code>.</li>
         <li>Ask Cursor to generate inside that system. The recommendation is in <code>.cursorrules</code>; the model can't drift to defaults.</li>
-        <li><code>npx uxskill@alpha lint ./src</code> &mdash; 145-rule pass. Fix any flagged lines with <code>ux fix</code>.</li>
+        <li><code>npx uxskill@alpha lint ./src</code>: 145-rule pass. Fix any flagged lines with <code>ux fix</code>.</li>
       </ol>
 
       <p>
         Total install + first generation: under five minutes. Total cost: zero. License: MIT.
+        If you also use Claude Code, the same engine and commands work there without any extra config. See the full walkthrough at <a class="link" href="/how-to-add-a-design-system-to-claude-code.html">how to add a design system to Claude Code and Cursor</a>.
       </p>
     </article>
 
@@ -810,10 +814,10 @@
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init --target cursor</span></div>
-        <div class="row row-divider">&mdash; or if Python is available &mdash;</div>
+        <div class="row row-divider">or if Python is available</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
         <div class="row"><span class="prompt">$</span> ux lint <span class="arg">./src --threshold high</span></div>
-        <div class="row row-divider">&mdash; or as a Claude Code skill (if you also use Claude Code) &mdash;</div>
+        <div class="row row-divider">or as a Claude Code skill (if you also use Claude Code)</div>
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
       </div>

@@ -1,4 +1,4 @@
-"""Build docs/commands.html — a reference page for all 25 slash commands.
+"""Build docs/commands.html: a reference page for all 25 slash commands.
 
 Pulls the frontmatter (`name`, `description`) and the first "When to use" / "When to skip"
 sections out of each commands/*.md file and renders them into a single HTML page that:
@@ -11,6 +11,14 @@ sections out of each commands/*.md file and renders them into a single HTML page
 from pathlib import Path
 import re
 import html
+
+
+def sanitize_dashes(s):
+    """Strip em/en dashes from rendered command text (no-AI-tell house rule).
+    em-dash -> colon; en-dash (numeric range) -> hyphen."""
+    s = re.sub(r'\s*—\s*', ': ', s)
+    s = re.sub(r'\s*–\s*', '-', s)
+    return s
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -61,8 +69,8 @@ def collect() -> list:
 def render_command_card(cmd: dict) -> str:
     name = html.escape(cmd["name"])
     slug = html.escape(cmd["slug"])
-    desc = html.escape(cmd["description"])
-    intro = html.escape(cmd["body_intro"])
+    desc = sanitize_dashes(html.escape(cmd["description"]))
+    intro = sanitize_dashes(html.escape(cmd["body_intro"]))
     anchor = slug
     return f"""    <article class="cmd" id="{anchor}">
       <header class="cmd-h">
@@ -80,7 +88,7 @@ HEAD = """<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ux-skill commands — 25 slash commands referenced</title>
+  <title>ux-skill commands · 25 slash commands referenced</title>
   <meta name="description" content="Complete reference for the 23 ux-skill slash commands available in Claude Code, Cursor, Windsurf, and 14 more IDEs. Each command's purpose, triggers, and source link.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/commands.html">
   <meta name="theme-color" content="#07080a">
@@ -89,7 +97,7 @@ HEAD = """<!DOCTYPE html>
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/commands.html">
-  <meta property="og:title" content="ux-skill commands — 25 slash commands referenced">
+  <meta property="og:title" content="ux-skill commands · 25 slash commands referenced">
   <meta property="og:description" content="One reference page for every ux-skill command. /ux-recommend, /ux-lint, /ux-design, /ux-component, +19 more.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
   <meta property="og:image:width" content="1200">
@@ -103,7 +111,7 @@ HEAD = """<!DOCTYPE html>
 
   <style>
     /* =========================================================================
-       UXSKILL DOCS v3 — Saturated Cinema (dark)
+       UXSKILL DOCS v3: Saturated Cinema (dark)
        Scene accent: magenta #ec4899
        ========================================================================= */
     :root {

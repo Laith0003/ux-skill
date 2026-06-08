@@ -11,8 +11,8 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IA coding design — construire un système de design pour Claude Code — ux-skill</title>
-  <meta name="description" content="Claude Code, Cursor, Windsurf, GitHub Copilot, Cline — chaque outil d'IA de programmation produit les mêmes huit défauts visuels. Inter en typographie display, dégradé violet vers bleu, trois cartes identiques. ux-skill bloque ces motifs dans la CI avec 145 règles regex déterministes.">
+  <title>IA coding design · construire un système de design pour Claude Code · ux-skill</title>
+  <meta name="description" content="Claude Code, Cursor, Windsurf, GitHub Copilot, Cline, chaque outil d'IA de programmation produit les mêmes huit défauts visuels. Inter en typographie display, dégradé violet vers bleu, trois cartes identiques. ux-skill bloque ces motifs dans la CI avec 145 règles regex déterministes.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/fr/ia-coding-design-francais.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -20,16 +20,16 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/fr/ia-coding-design-francais.html">
-  <meta property="og:title" content="IA coding design — construire un système de design pour Claude Code">
+  <meta property="og:title" content="IA coding design · construire un système de design pour Claude Code">
   <meta property="og:description" content="145 règles regex déterministes. 1 182 entrées de catalogue. 160 spécifications de marque. 17 IDE. Licence MIT.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/fr-ia-coding-design-francais.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — fr ia coding design francais">
+  <meta property="og:image:alt" content="ux-skill · fr ia coding design francais">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/fr-ia-coding-design-francais.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="IA coding design — ux-skill">
+  <meta name="twitter:title" content="IA coding design · ux-skill">
   <meta name="twitter:description" content="Arrêter les huit défauts visuels que toute IA produit par défaut. 145 règles regex, sans LLM, dans la CI.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,8 +40,8 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "IA coding design — construire un système de design pour Claude Code",
-    "description": "Claude Code, Cursor, Windsurf, GitHub Copilot, Cline — chaque outil d'IA de programmation produit les mêmes huit défauts visuels. ux-skill bloque ces motifs dans la CI avec 145 règles regex.",
+    "headline": "IA coding design · construire un système de design pour Claude Code",
+    "description": "Claude Code, Cursor, Windsurf, GitHub Copilot, Cline, chaque outil d'IA de programmation produit les mêmes huit défauts visuels. ux-skill bloque ces motifs dans la CI avec 145 règles regex.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -366,7 +366,7 @@
   .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
-    padding-block:8px;transition:color 140ms ease}
+    padding-block:8px;transition:color 140ms ease;}
   .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
   .usknav__langs{position:relative}
   .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
@@ -380,14 +380,14 @@
   .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
   .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease;}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
   .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
-  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:none;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
     transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
-  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer.is-open{display:flex;transform:translateX(0);visibility:visible}
   .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
     border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
   .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
@@ -407,7 +407,7 @@
   .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
 </head>
 <body>
   
@@ -494,9 +494,9 @@
 <div class="wrap">
     <article>
       <span class="eyebrow">Blog &middot; Français &middot; 2026-05-28</span>
-      <h1>IA coding design — pourquoi chaque IA fabrique <span class="accent">la même interface</span>.</h1>
+      <h1>IA coding design · pourquoi chaque IA fabrique <span class="accent">la même interface</span>.</h1>
       <p class="lede">
-        <strong>Quiconque a demandé à Claude Code, Cursor, Windsurf, GitHub Copilot, Cline ou Continue de générer une landing reconnaît le rendu :</strong> Inter étirée à des tailles d'affichage, un dégradé du violet au bleu, trois cartes identiques alignées, et sous le héros la formule <em>« Build something amazing »</em>. Le problème ne vient pas de l'outil. Il vient de ce que tous les outils ont appris sur le même corpus de modèles. ux-skill bloque exactement ces défauts dans la CI — sans LLM, avec 145 règles regex déterministes.
+        <strong>Quiconque a demandé à Claude Code, Cursor, Windsurf, GitHub Copilot, Cline ou Continue de générer une landing reconnaît le rendu :</strong> Inter étirée à des tailles d'affichage, un dégradé du violet au bleu, trois cartes identiques alignées, et sous le héros la formule <em>« Build something amazing »</em>. Le problème ne vient pas de l'outil. Il vient de ce que tous les outils ont appris sur le même corpus de modèles. ux-skill bloque exactement ces défauts dans la CI, sans LLM, avec 145 règles regex déterministes.
       </p>
       <p class="byline">By the ux-skill team &middot; 9 min de lecture &middot; open source MIT</p>
 
@@ -505,14 +505,14 @@
         Nous avons catalogué l'ensemble des empreintes dans la <a href="/blog/ai-design-fingerprints-list.html" class="link">taxonomie des empreintes de design IA</a>. Les huit ci-dessous reviennent dans presque chaque héros généré.
       </p>
       <ol>
-        <li><strong>Inter en typographie d'affichage</strong> — un caractère dessiné pour la lisibilité à petite taille d'écran, porté à 90 px dans le héros. L'inverse de son usage prévu.</li>
-        <li><strong>Dégradé violet vers bleu</strong> — la famille <code>#7C3AED → #3B82F6</code>, utilisée en fond de la première section.</li>
-        <li><strong>Trois cartes identiques en ligne</strong> — icône, titre d'un mot, sous-titre d'une phrase, répétés trois fois.</li>
-        <li><strong>Animation fade-in-up universelle</strong> — appliquée à chaque enfant direct de chaque section, sans différenciation de rôle.</li>
-        <li><strong>Axe centré partout</strong> — héros, cartes, formulaires, tout est posé sur l'axe vertical central.</li>
-        <li><strong>Copie générique</strong> — « Build something amazing », « Beautiful experiences », « Revolutionizing X », sans un seul substantif du produit.</li>
-        <li><strong>URL d'images de stock</strong> — placeholders génériques au lieu de captures réelles du produit.</li>
-        <li><strong>Ombres lourdes sur du flat</strong> — le réflexe « se démarquer » se cogne à la mode du flat, et l'on obtient un volume bancal.</li>
+        <li><strong>Inter en typographie d'affichage</strong>, un caractère dessiné pour la lisibilité à petite taille d'écran, porté à 90 px dans le héros. L'inverse de son usage prévu.</li>
+        <li><strong>Dégradé violet vers bleu</strong>, la famille <code>#7C3AED → #3B82F6</code>, utilisée en fond de la première section.</li>
+        <li><strong>Trois cartes identiques en ligne</strong>, icône, titre d'un mot, sous-titre d'une phrase, répétés trois fois.</li>
+        <li><strong>Animation fade-in-up universelle</strong>, appliquée à chaque enfant direct de chaque section, sans différenciation de rôle.</li>
+        <li><strong>Axe centré partout</strong>, héros, cartes, formulaires, tout est posé sur l'axe vertical central.</li>
+        <li><strong>Copie générique</strong>, « Build something amazing », « Beautiful experiences », « Revolutionizing X », sans un seul substantif du produit.</li>
+        <li><strong>URL d'images de stock</strong>, placeholders génériques au lieu de captures réelles du produit.</li>
+        <li><strong>Ombres lourdes sur du flat</strong>, le réflexe « se démarquer » se cogne à la mode du flat, et l'on obtient un volume bancal.</li>
       </ol>
       <p>
         Chaque défaut pris isolément n'est pas une faute. C'est la combinaison des huit, posés simultanément sur la même page, qui produit l'empreinte reconnaissable. Un seul défaut fait hausser les épaules ; quatre dans le même above-the-fold permettent de deviner quel outil l'a généré.
@@ -523,7 +523,7 @@
         La première réaction de toute équipe consiste à ajouter des instructions au prompt : « n'utilise pas le dégradé par défaut », « mets une vraie typographie display », « ne pose pas trois cartes identiques ». Cela tient un message. Au suivant, la consigne se dilue, la fenêtre de contexte gonfle, et l'empreinte revient. La conduite par prompt est probabiliste, et elle se dégrade avec la longueur.
       </p>
       <p>
-        Ce qu'il faut, c'est un plancher déterministe — un contrôle qui s'exécute <em>après</em> le modèle, sans LLM dans la boucle. C'est précisément le trou que comble ux-skill. Le recommandeur restreint en amont les choix du modèle ; le linter sanctionne en aval les défauts qui passent malgré tout.
+        Ce qu'il faut, c'est un plancher déterministe, un contrôle qui s'exécute <em>après</em> le modèle, sans LLM dans la boucle. C'est précisément le trou que comble ux-skill. Le recommandeur restreint en amont les choix du modèle ; le linter sanctionne en aval les défauts qui passent malgré tout.
       </p>
 
       <h3>Ne pas répondre au stochastique par du stochastique</h3>
@@ -556,7 +556,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         Voici un bloc héros simplifié, tiré d'un starter Next.js, qui échoue à trois règles, et sa réécriture qui sort en exit 0. Même intention commerciale, empreinte différente.
       </p>
-      <pre class="code"><span class="c">// Avant — 3 détections high</span>
+      <pre class="code"><span class="c">// Avant: 3 détections high</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -571,7 +571,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
   &lt;/div&gt;
 &lt;/section&gt;
 
-<span class="c">// Après — 0 détection</span>
+<span class="c">// Après: 0 détection</span>
 &lt;section className=<span class="s">"bg-stone-50 py-28"</span>&gt;
   &lt;h1 className=<span class="s">"font-['Fraunces']
     text-6xl leading-[1.04]
@@ -640,16 +640,16 @@ $ /plugin install ux@ux-skill</pre>
       <div class="honesty">
         <div class="label">Périmètre honnête</div>
         <h4>Les règles attrapent la structure. Pas le goût.</h4>
-        <p>Le linter ne signalera jamais « cette section a un mauvais rythme » ni « cette copie sonne froide ». Cela relève d'une revue humaine ou d'un LLM critique. En revanche, la regex attrape <em>de façon fiable</em> toute empreinte exprimable par un token littéral, un motif ou une forme — c'est-à-dire l'essentiel des défauts d'IA, parce que le modèle revient toujours au même artefact.</p>
-        <p>Nous évitons délibérément de faire tourner un juge LLM en CI. Si votre étalon est « ça ressemble à du travail de designer », alors c'est de la revue de code, pas du lint. ux-skill fournit <code>ux critique</code> pour ce passage — mais à la demande dans l'éditeur, pas en CI.</p>
+        <p>Le linter ne signalera jamais « cette section a un mauvais rythme » ni « cette copie sonne froide ». Cela relève d'une revue humaine ou d'un LLM critique. En revanche, la regex attrape <em>de façon fiable</em> toute empreinte exprimable par un token littéral, un motif ou une forme, c'est-à-dire l'essentiel des défauts d'IA, parce que le modèle revient toujours au même artefact.</p>
+        <p>Nous évitons délibérément de faire tourner un juge LLM en CI. Si votre étalon est « ça ressemble à du travail de designer », alors c'est de la revue de code, pas du lint. ux-skill fournit <code>ux critique</code> pour ce passage, mais à la demande dans l'éditeur, pas en CI.</p>
       </div>
 
       <h2>Pour aller plus loin</h2>
       <ul>
         <li><a href="/blog/ai-design-fingerprints-list.html" class="link">Les 35 empreintes de design que toute IA expédie par défaut</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Linter regex pour IA coding — 145 règles en CI</a></li>
-        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Outils anti-slop pour Claude Code — le classement honnête</a></li>
-        <li><a href="/blog/cursor-design-plugin.html" class="link">Plugin de design pour Cursor — guide d'installation</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Linter regex pour IA coding · 145 règles en CI</a></li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Outils anti-slop pour Claude Code · le classement honnête</a></li>
+        <li><a href="/blog/cursor-design-plugin.html" class="link">Plugin de design pour Cursor · guide d'installation</a></li>
         <li><a href="https://github.com/Laith0003/ux-skill/blob/main/README.fr.md" class="link" rel="noopener noreferrer">README (version française)</a></li>
         <li><a href="/install/" class="link">Page d'installation</a> / <a href="/mcp.html" class="link">Configuration MCP</a></li>
       </ul>
@@ -663,9 +663,9 @@ $ /plugin install ux@ux-skill</pre>
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— ou —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">· ou ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— ou —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">· ou ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>
@@ -676,7 +676,7 @@ $ /plugin install ux@ux-skill</pre>
       <h2 class="related-reads-h">Pour aller plus loin</h2>
       <ul>
         <li><a href="/blog/ai-design-fingerprints-list.html">35 empreintes de design IA</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html">Linter regex — 145 règles</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html">Linter regex · 145 règles</a></li>
         <li><a href="/blog/anti-ai-slop-claude-skills.html">Classement anti-slop</a></li>
         <li><a href="/blog/cursor-design-plugin.html">Plugin de design pour Cursor</a></li>
       </ul>

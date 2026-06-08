@@ -15,7 +15,7 @@
 <meta name="description" content="Centered headline, one-line subhead, two buttons (a filled primary and a ghost secondary), a faint gradient backdrop, a dashboard screenshot below. AI ships the same hero every time. The mechanism, and how to break the template.">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ai-landing-page-hero-generic.html">
 <meta property="og:title" content="Every AI landing-page hero is the same">
-<meta property="og:description" content="Centered H1, one-line subhead, a filled button next to a ghost one, a soft gradient, a screenshot in a tilted frame. The hero centroid — and how to break it.">
+<meta property="og:description" content="Centered H1, one-line subhead, a filled button next to a ghost one, a soft gradient, a screenshot in a tilted frame. The hero centroid, and how to break it.">
 <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ai-landing-page-hero-generic.html">
 <meta name="twitter:card" content="summary_large_image">
@@ -75,7 +75,7 @@
   .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
-    padding-block:8px;transition:color 140ms ease}
+    padding-block:8px;transition:color 140ms ease;}
   .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
   .usknav__langs{position:relative}
   .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
@@ -89,14 +89,14 @@
   .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
   .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease;}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
   .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
-  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:none;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
     transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
-  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer.is-open{display:flex;transform:translateX(0);visibility:visible}
   .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
     border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
   .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
@@ -116,7 +116,7 @@
   .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
 </head>
 <body>
 
@@ -205,14 +205,14 @@
 <header class="post">
 <p class="eyebrow">FIELD NOTES · 2026-05-29</p>
 <h1>Every AI landing-page hero <em>is the same hero</em>.</h1>
-<p class="lede">Ask any AI for a landing page and the top of the screen is already decided: a centered headline, a centered one-line subhead, a filled primary button sitting next to a ghost secondary, a soft gradient or faint grid behind it, and a product screenshot tucked into a tilted browser frame just below. It is competent, it is safe, and it is the same hero you have seen a thousand times — because it is the average of a thousand heroes the model trained on.</p>
+<p class="lede">Ask any AI for a landing page and the top of the screen is already decided: a centered headline, a centered one-line subhead, a filled primary button sitting next to a ghost secondary, a soft gradient or faint grid behind it, and a product screenshot tucked into a tilted browser frame just below. It is competent, it is safe, and it is the same hero you have seen a thousand times, because it is the average of a thousand heroes the model trained on.</p>
 </header>
 
 <h2>The hero centroid</h2>
 <p>Landing pages converge on a recognizable shape, and the hero converges hardest of all. Ask five different AI tools and you get five copies of one arrangement:</p>
 <ul>
 <li>A centered H1, two or three lines, often with one word in a gradient or a brighter weight.</li>
-<li>A centered subhead directly under it — one sentence, muted, explaining what the H1 just said.</li>
+<li>A centered subhead directly under it: one sentence, muted, explaining what the H1 just said.</li>
 <li>Two buttons side by side: a filled primary and a ghost or outline secondary, both the same size.</li>
 <li>A backdrop that fades from one tint to another, or a faint dot-grid, doing nothing but filling space.</li>
 <li>A product screenshot in a tilted, perspective browser frame, floating below the buttons.</li>
@@ -220,48 +220,48 @@
 <p>None of it is wrong. All of it is forgettable. The hero is the one place a brand can land a punch, and the generated default spends it on an arrangement that says nothing about the product.</p>
 
 <h2>Why the model ships it every time</h2>
-<p>This is the centroid problem in its purest form. The hero is the most-screenshotted section of the most-screenshotted page on the web, so the training data for "landing page" is saturated with this exact composition. When a model predicts the most probable hero, it returns the densest point in that cloud — dead center, two buttons, a gradient, a screenshot. The average of every SaaS hero <em>is</em> a centered SaaS hero.</p>
+<p>This is the centroid problem in its purest form. The hero is the most-screenshotted section of the most-screenshotted page on the web, so the training data for "landing page" is saturated with this exact composition. When a model predicts the most probable hero, it returns the densest point in that cloud: dead center, two buttons, a gradient, a screenshot. The average of every SaaS hero <em>is</em> a centered SaaS hero.</p>
 <p>The dual button is the same instinct applied to intent. The model has seen "primary plus secondary" so many times that it treats two CTAs as the default, even when the page has exactly one thing it wants you to do. The tilted screenshot is a learned flourish: it reads as "modern SaaS" because it was modern SaaS, in 2021, on the pages everyone copied.</p>
-<blockquote>The generated hero is not ugly. It is the visual equivalent of clearing your throat — technically a sound, but not yet anything worth hearing.</blockquote>
+<blockquote>The generated hero is not ugly. It is the visual equivalent of clearing your throat: technically a sound, but not yet anything worth hearing.</blockquote>
 
 <h2>The four moves that break the template</h2>
 <p>Breaking out of the centroid is structural, not cosmetic. You do not fix a generic hero by swapping the gradient; you fix it by changing the arrangement, the intent, and what carries the brand. Four moves do most of the work:</p>
 <table>
 <thead><tr><th>slop hero element</th><th>why it ships</th><th>stronger choice</th></tr></thead>
 <tbody>
-<tr><td>Centered H1 + subhead</td><td>Densest point in training data</td><td>Asymmetric split — copy left, proof right</td></tr>
+<tr><td>Centered H1 + subhead</td><td>Densest point in training data</td><td>Asymmetric split: copy left, proof right</td></tr>
 <tr><td>Filled + ghost button pair</td><td>"Primary + secondary" learned as default</td><td>One confident CTA; demote the second to a text link</td></tr>
 <tr><td>Soft gradient / dot-grid backdrop</td><td>Fills space without a decision</td><td>Type and a real image carry the brand</td></tr>
-<tr><td>Screenshot in a tilted frame</td><td>Copied "modern SaaS" flourish</td><td>A genuine wow moment — live demo, motion, or a bold crop</td></tr>
+<tr><td>Screenshot in a tilted frame</td><td>Copied "modern SaaS" flourish</td><td>A genuine wow moment: live demo, motion, or a bold crop</td></tr>
 </tbody>
 </table>
-<p>Asymmetry is the biggest single lever. A centered hero treats both halves of the viewport as equal; an editorial or split hero gives the headline a side and the proof a side, and the page reads as designed rather than defaulted. The CTA is second: two equal-weight buttons split attention, where one confident button directs it. The backdrop and the frame are third and fourth — stop asking decoration to do the brand's job, and put that weight on type, a real image, and one moment a visitor remembers.</p>
+<p>Asymmetry is the biggest single lever. A centered hero treats both halves of the viewport as equal; an editorial or split hero gives the headline a side and the proof a side, and the page reads as designed rather than defaulted. The CTA is second: two equal-weight buttons split attention, where one confident button directs it. The backdrop and the frame are third and fourth: stop asking decoration to do the brand's job, and put that weight on type, a real image, and one moment a visitor remembers.</p>
 
 <h2>How the engine forces it</h2>
 <p>ux-skill treats the hero as a layout decision the brief drives, not a template it reaches for. Three parts of the engine push against the centroid directly:</p>
 <ol>
-<li>The <strong>layout synthesizer</strong> reads a variance signal from the brief, and above a threshold it forces an asymmetric hero — the centered arrangement is taken off the table when the brand wants to stand out, not blended in.</li>
+<li>The <strong>layout synthesizer</strong> reads a variance signal from the brief, and above a threshold it forces an asymmetric hero. The centered arrangement is taken off the table when the brand wants to stand out, not blended in.</li>
 <li>The <strong>anti-slop linter</strong> flags the centered-hero composition and the filled-plus-ghost dual-button default as patterns, so they surface in review instead of shipping silently. It is the same pass that catches gradient text and decorative shadows.</li>
-<li>The <strong>landing-pattern manifest</strong> carries real alternatives keyed to brand and industry — <code>split</code>, <code>editorial</code>, <code>terminal</code>, <code>bento</code> — so the recommendation is "here is a hero that fits you," not "here is the hero everyone gets."</li>
+<li>The <strong>landing-pattern manifest</strong> carries real alternatives keyed to brand and industry (<code>split</code>, <code>editorial</code>, <code>terminal</code>, <code>bento</code>), so the recommendation is "here is a hero that fits you," not "here is the hero everyone gets."</li>
 </ol>
-<p>Run the same brief next week, on a different machine, and the engine returns the same hero — deterministic, offline, no model in the loop. The variance is derived from the brand, not sampled at random.</p>
+<p>Run the same brief next week, on a different machine, and the engine returns the same hero: deterministic, offline, no model in the loop. The variance is derived from the brand, not sampled at random.</p>
 
 <h2>A hero brief, compiled</h2>
-<p>You ask for a landing page with a brief that scores high on distinctiveness — a developer tool with a sharp, technical voice. The engine does not center it:</p>
+<p>You ask for a landing page with a brief that scores high on distinctiveness: a developer tool with a sharp, technical voice. The engine does not center it:</p>
 <ol>
-<li>Variance reads high, so the synthesizer drops the centered default and resolves to a <code>split</code> hero — copy and CTA on one side, a live terminal on the other.</li>
+<li>Variance reads high, so the synthesizer drops the centered default and resolves to a <code>split</code> hero: copy and CTA on one side, a live terminal on the other.</li>
 <li>The dual-button default collapses to one primary action; the secondary path becomes a quiet inline link, so attention has a single target.</li>
-<li>The gradient backdrop is dropped — the type scale and a real product surface carry the weight, with one semantic accent reserved for the CTA.</li>
+<li>The gradient backdrop is dropped: the type scale and a real product surface carry the weight, with one semantic accent reserved for the CTA.</li>
 <li>The tilted screenshot frame is replaced by the actual interface, shown straight, because a real artifact beats a flattering angle on a fake one.</li>
 </ol>
 <p>The result still reads as a hero. It just reads as <em>this</em> product's hero, which is the entire point.</p>
 
 <h2>The point</h2>
-<p>AI ships the same hero because the hero is the densest point in its training data, and predicting the most probable composition lands you dead center every time. Break it where it actually breaks: asymmetry over symmetry, one confident CTA over two timid ones, type and a real image over a backdrop that decides nothing, and one genuine moment over a stock arrangement. The first screen is the one place a brand gets to make a first impression — do not spend it on the average.</p>
+<p>AI ships the same hero because the hero is the densest point in its training data, and predicting the most probable composition lands you dead center every time. Break it where it actually breaks: asymmetry over symmetry, one confident CTA over two timid ones, type and a real image over a backdrop that decides nothing, and one genuine moment over a stock arrangement. The first screen is the one place a brand gets to make a first impression. Do not spend it on the average.</p>
 <pre><code>pip install uxskill
 # then, in your AI coding tool:
-# /ux-design     — asymmetry forced above the variance threshold
-# /ux-recommend  — a hero pattern keyed to your brand, not the centroid</code></pre>
+# /ux-design     : asymmetry forced above the variance threshold
+# /ux-recommend  : a hero pattern keyed to your brand, not the centroid</code></pre>
 
 <h2>Related</h2>
 <ul>
@@ -272,7 +272,7 @@
 </ul>
 
 <footer>
-ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+ux-skill v3.0 · THE BRAIN · MIT · no telemetry · no LLM · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
 </footer>
 
 </div>

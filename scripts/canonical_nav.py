@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Canonical site nav component for ux-skill docs — single source of truth.
+Canonical site nav component for ux-skill docs - single source of truth.
 
 One identical nav on every page: a sticky bar (brand + primary links + language
 globe + Star CTA + always-visible menu button) that opens a drawer with EVERY
@@ -16,7 +16,7 @@ A11y: focus-visible rings on every control (>=3:1 amber), drawer focus trap +
 return-focus + Escape, aria-hidden on decorative icons, aria-expanded on the
 button, >=24px tap targets, prefers-reduced-motion honored.
 
-Link set: no separate plain "GitHub" link — the Star pill is the GitHub link.
+Link set: no separate plain "GitHub" link - the Star pill is the GitHub link.
 """
 from __future__ import annotations
 
@@ -172,7 +172,7 @@ def preview_page():
 <meta charset="utf-8">
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nav preview — uxskill</title>
+<title>Nav preview · uxskill</title>
 <style>
   body{{margin:0;background:#07080a;min-height:220vh;font-family:'Inter',system-ui,sans-serif}}
   .sample{{padding:120px 24px;color:#8a8f96;max-width:720px;margin:0 auto;line-height:1.6}}

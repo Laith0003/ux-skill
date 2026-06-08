@@ -25,11 +25,11 @@
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/github-copilot-design-rules.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — github-copilot-design-rules">
+  <meta property="og:image:alt" content="ux-skill · github-copilot-design-rules">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/github-copilot-design-rules.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="GitHub Copilot design rules — ux-skill">
+  <meta name="twitter:title" content="GitHub Copilot design rules · ux-skill">
   <meta name="twitter:description" content="The .copilotrules file plus a 145-rule deterministic linter. Stop generic Copilot design output without changing your IDE.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,6 +52,9 @@
     "articleSection": "Integration"
   }
   </script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "GitHub Copilot design rules: how ux-skill catches AI design fingerprints in Copilot output", "item": "https://uxskill.laithjunaidy.com/blog/github-copilot-design-rules.html"}]}
+</script>
 
   <style>
     :root {
@@ -345,13 +348,13 @@
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
        and max-width: 100%; carousels that need their own horizontal scroll
-       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves —
+       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves:
        overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
     html, body {
       overflow-x: clip;
       max-width: 100%;
     }
-    /* Defensive — make sure no section, image, or table forces width >100%. */
+    /* Defensive: make sure no section, image, or table forces width >100%. */
     section, header, footer, main, article { max-width: 100vw; }
     img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
     table { max-width: 100%; }
@@ -368,7 +371,7 @@
   .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
-    padding-block:8px;transition:color 140ms ease}
+    padding-block:8px;transition:color 140ms ease;}
   .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
   .usknav__langs{position:relative}
   .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
@@ -382,14 +385,14 @@
   .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
   .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease;}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
   .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
-  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:none;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
     transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
-  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer.is-open{display:flex;transform:translateX(0);visibility:visible}
   .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
     border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
   .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
@@ -409,7 +412,7 @@
   .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
 </head>
 <body>
   
@@ -507,7 +510,7 @@
         Copilot is excellent at code completion. It was trained on the bulk of public code on GitHub, which means it has seen every variation of every common pattern. When you ask Copilot to design a landing page, it reaches for the median of what its training data showed: Inter as display, the canonical purple-to-blue gradient, three identical pricing cards, and the "Get started"/"Learn more" CTA pair.
       </p>
       <p>
-        This is not a bug. Copilot is doing exactly what it was designed to do &mdash; predict the most probable continuation of the prompt. The problem is that "most probable" on design tasks converges to a recognizable look that ships everywhere. We catalog that look in detail in the <a href="/blog/ai-design-fingerprints-list.html" class="link">AI design fingerprints post</a>.
+        This is not a bug. Copilot is doing exactly what it was designed to do: predict the most probable continuation of the prompt. The problem is that "most probable" on design tasks converges to a recognizable look that ships everywhere. We catalog that look in detail in the <a href="/blog/ai-design-fingerprints-list.html" class="link">AI design fingerprints post</a>.
       </p>
       <p>
         Copilot has two extension points worth knowing: a custom-instructions surface (per repo) and a code-completion stream that is consumable by external tools. ux-skill plugs into both.
@@ -531,8 +534,8 @@ $ uxskill init --target copilot
       <p>
         Here is the file ux-skill generates for a Next.js project after running discovery for a B2B logistics platform:
       </p>
-      <pre class="code"><span class="c"># Copilot instructions &mdash; logistics-platform</span>
-<span class="c"># Generated by ux-skill v2.0.0-alpha.1 &mdash; 2026-05-28</span>
+      <pre class="code"><span class="c"># Copilot instructions: logistics-platform</span>
+<span class="c"># Generated by ux-skill v2.0.0-alpha.1: 2026-05-28</span>
 
 This project uses the editorial-precise design system at .ux/design-system/MASTER.md.
 Read that file before generating any visual code.
@@ -550,7 +553,7 @@ Hard constraints for every generation:
    Use a 7-and-5 split, a bento grid, or a 4-with-one-spanning pattern.
 
 4. Motion: hierarchy-aware. Hero opens; supporting content cascades. Differentiate
-   by role &mdash; do NOT fade-in-up every direct child. Respect prefers-reduced-motion.
+   by role: do NOT fade-in-up every direct child. Respect prefers-reduced-motion.
 
 5. Copy: no marketing verbs (Elevate, Seamless, Unleash, Revolutionize, Empower,
    Supercharge, Transform) in headlines. No generic CTAs (Click here, Learn more).
@@ -659,7 +662,7 @@ $ uxskill lint src/components/Hero.tsx --threshold high
         Two ways to wire ux-skill into a Copilot workflow. Pick one or both.
       </p>
 
-      <h3>Path A &mdash; instructions file plus local linter</h3>
+      <h3>Path A: instructions file plus local linter</h3>
       <pre class="code">$ pip install uxskill
 $ uxskill init --target copilot   <span class="c"># writes .github/copilot-instructions.md</span>
 $ uxskill discover                <span class="c"># 10-field brief, saves to .ux/last-discovery.json</span>
@@ -672,7 +675,7 @@ $ uxskill lint src/ --threshold high</pre>
         The instructions file biases Copilot during generation. The linter catches drift after. Both run locally; neither requires a Copilot API key or any GitHub-side configuration.
       </p>
 
-      <h3>Path B &mdash; GitHub Actions gate</h3>
+      <h3>Path B: GitHub Actions gate</h3>
       <p>
         For repos where you want a non-negotiable design floor, wire the linter into GitHub Actions. Every PR push runs the linter; high-severity findings block the merge.
       </p>
@@ -730,11 +733,11 @@ jobs:
         End to end from a fresh checkout, Copilot already configured:
       </p>
       <ol>
-        <li><code>pip install uxskill</code> &mdash; about 6 seconds.</li>
-        <li><code>uxskill init --target copilot</code> &mdash; writes <code>.github/copilot-instructions.md</code> and the <code>.ux/</code> directory.</li>
-        <li><code>uxskill discover</code> &mdash; 10-field interactive brief, about 90 seconds typing.</li>
-        <li><code>uxskill recommend</code> &mdash; about 200 milliseconds.</li>
-        <li><code>uxskill persist save --project-root .</code> &mdash; writes MASTER.md, tokens.css, manifest.json.</li>
+        <li><code>pip install uxskill</code>: about 6 seconds.</li>
+        <li><code>uxskill init --target copilot</code>: writes <code>.github/copilot-instructions.md</code> and the <code>.ux/</code> directory.</li>
+        <li><code>uxskill discover</code>: 10-field interactive brief, about 90 seconds typing.</li>
+        <li><code>uxskill recommend</code>: about 200 milliseconds.</li>
+        <li><code>uxskill persist save --project-root .</code>: writes MASTER.md, tokens.css, manifest.json.</li>
         <li>Commit those files. Copilot reads them on the next completion.</li>
         <li>Run <code>uxskill lint src/</code> after any significant generation. Block on high or critical.</li>
       </ol>
@@ -766,9 +769,9 @@ jobs:
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
         <div class="row"><span class="prompt">$</span> uxskill <span class="arg">init --target copilot</span></div>
         <div class="row"><span class="prompt">$</span> uxskill <span class="arg">lint src/ --threshold high</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; or via npx &mdash;</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">or via npx</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init --target copilot</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; or as a Claude Code plugin alongside Copilot &mdash;</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">or as a Claude Code plugin alongside Copilot</div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
       </div>
     </section>

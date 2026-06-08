@@ -11,8 +11,8 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KI-Coding Design — wie man ein Cursor-AI-Designsystem baut — ux-skill</title>
-  <meta name="description" content="Claude Code, Cursor, Windsurf, GitHub Copilot, Cline — jedes KI-Coding-Werkzeug liefert dieselben acht visuellen Defaults: Inter als Display-Schrift, Verlauf von Lila nach Blau, drei identische Karten. ux-skill blockiert diese Muster in der CI mit 145 deterministischen Regex-Regeln.">
+  <title>KI-Coding Design · wie man ein Cursor-AI-Designsystem baut · ux-skill</title>
+  <meta name="description" content="Claude Code, Cursor, Windsurf, GitHub Copilot, Cline, jedes KI-Coding-Werkzeug liefert dieselben acht visuellen Defaults: Inter als Display-Schrift, Verlauf von Lila nach Blau, drei identische Karten. ux-skill blockiert diese Muster in der CI mit 145 deterministischen Regex-Regeln.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/de/ki-coding-design-deutsch.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -20,16 +20,16 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/de/ki-coding-design-deutsch.html">
-  <meta property="og:title" content="KI-Coding Design — wie man ein Cursor-AI-Designsystem baut">
+  <meta property="og:title" content="KI-Coding Design · wie man ein Cursor-AI-Designsystem baut">
   <meta property="og:description" content="145 deterministische Regex-Regeln. 1.182 Katalogeinträge. 131 Markenspezifikationen. 17 IDEs. MIT-Lizenz.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/de-ki-coding-design-deutsch.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — de ki coding design deutsch">
+  <meta property="og:image:alt" content="ux-skill · de ki coding design deutsch">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/de-ki-coding-design-deutsch.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="KI-Coding Design — ux-skill">
+  <meta name="twitter:title" content="KI-Coding Design · ux-skill">
   <meta name="twitter:description" content="Acht visuelle Defaults, die jedes KI-Tool ausspuckt, in der CI gestoppt. 145 Regex-Regeln, kein LLM.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,8 +40,8 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "KI-Coding Design — wie man ein Cursor-AI-Designsystem baut",
-    "description": "Claude Code, Cursor, Windsurf, GitHub Copilot, Cline — jedes KI-Coding-Werkzeug liefert dieselben acht visuellen Defaults. ux-skill blockiert sie in der CI mit 145 Regex-Regeln.",
+    "headline": "KI-Coding Design · wie man ein Cursor-AI-Designsystem baut",
+    "description": "Claude Code, Cursor, Windsurf, GitHub Copilot, Cline, jedes KI-Coding-Werkzeug liefert dieselben acht visuellen Defaults. ux-skill blockiert sie in der CI mit 145 Regex-Regeln.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -366,7 +366,7 @@
   .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
-    padding-block:8px;transition:color 140ms ease}
+    padding-block:8px;transition:color 140ms ease;}
   .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
   .usknav__langs{position:relative}
   .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
@@ -380,14 +380,14 @@
   .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
   .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease;}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
   .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
-  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:none;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
     transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
-  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer.is-open{display:flex;transform:translateX(0);visibility:visible}
   .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
     border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
   .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
@@ -407,7 +407,7 @@
   .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
 </head>
 <body>
   
@@ -494,9 +494,9 @@
 <div class="wrap">
     <article>
       <span class="eyebrow">Blog &middot; Deutsch &middot; 2026-05-28</span>
-      <h1>KI-Coding Design — warum jede KI <span class="accent">dasselbe Interface</span> baut.</h1>
+      <h1>KI-Coding Design · warum jede KI <span class="accent">dasselbe Interface</span> baut.</h1>
       <p class="lede">
-        <strong>Jeder, der Claude Code, Cursor, Windsurf, GitHub Copilot, Cline oder Continue einmal um eine Landing-Page gebeten hat, kennt das Ergebnis:</strong> Inter in Display-Größen hochgezogen, ein Verlauf von Lila nach Blau, drei identische Karten nebeneinander, und unter dem Hero die Zeile <em>„Build something amazing"</em>. Das Problem liegt nicht am Werkzeug. Das Problem ist, dass alle Werkzeuge aus demselben Topf an Templates gelernt haben. ux-skill blockiert genau diese Defaults in der CI — mit 145 deterministischen Regex-Regeln, ohne LLM.
+        <strong>Jeder, der Claude Code, Cursor, Windsurf, GitHub Copilot, Cline oder Continue einmal um eine Landing-Page gebeten hat, kennt das Ergebnis:</strong> Inter in Display-Größen hochgezogen, ein Verlauf von Lila nach Blau, drei identische Karten nebeneinander, und unter dem Hero die Zeile <em>„Build something amazing"</em>. Das Problem liegt nicht am Werkzeug. Das Problem ist, dass alle Werkzeuge aus demselben Topf an Templates gelernt haben. ux-skill blockiert genau diese Defaults in der CI, mit 145 deterministischen Regex-Regeln, ohne LLM.
       </p>
       <p class="byline">By the ux-skill team &middot; 9 min Lesezeit &middot; MIT-lizenzierte Open Source</p>
 
@@ -505,14 +505,14 @@
         Wir haben die ganze Sammlung in der <a href="/blog/ai-design-fingerprints-list.html" class="link">Taxonomie der KI-Design-Fingerprints</a> katalogisiert. Diese acht tauchen in nahezu jedem generierten Hero auf:
       </p>
       <ol>
-        <li><strong>Inter als Display-Schrift</strong> — eine Schrift, die für kleine Bildschirmgrößen entworfen wurde, im Hero auf 90 px hochgedreht. Das Gegenteil ihres Anwendungsfalls.</li>
-        <li><strong>Lila-zu-Blau-Verlauf</strong> — die Familie <code>#7C3AED → #3B82F6</code>, fast immer als Hintergrund der ersten Section.</li>
-        <li><strong>Drei identische Karten in einer Reihe</strong> — Icon, einwortiger Titel, einsatziger Untertitel, dreimal wiederholt.</li>
-        <li><strong>Universelles Fade-in-up</strong> — auf jedes direkte Kind jeder Section angewendet, ohne semantische Unterscheidung.</li>
-        <li><strong>Alles zentriert</strong> — Hero, Karten, Formulare, alles säulengleich in der Bildmitte.</li>
-        <li><strong>Generische Copy</strong> — „Build something amazing", „Beautiful experiences", „Revolutionizing X", keinerlei Produktnomen.</li>
-        <li><strong>Stock-Bild-URLs</strong> — generische Platzhalter statt echter Produkt-Screenshots.</li>
-        <li><strong>Schwere Schatten auf flachem Design</strong> — die Reflexe „muss auffallen" und „Flat ist Mode" treffen aufeinander, das Ergebnis ist visuell uneins.</li>
+        <li><strong>Inter als Display-Schrift</strong>, eine Schrift, die für kleine Bildschirmgrößen entworfen wurde, im Hero auf 90 px hochgedreht. Das Gegenteil ihres Anwendungsfalls.</li>
+        <li><strong>Lila-zu-Blau-Verlauf</strong>, die Familie <code>#7C3AED → #3B82F6</code>, fast immer als Hintergrund der ersten Section.</li>
+        <li><strong>Drei identische Karten in einer Reihe</strong>, Icon, einwortiger Titel, einsatziger Untertitel, dreimal wiederholt.</li>
+        <li><strong>Universelles Fade-in-up</strong>, auf jedes direkte Kind jeder Section angewendet, ohne semantische Unterscheidung.</li>
+        <li><strong>Alles zentriert</strong>, Hero, Karten, Formulare, alles säulengleich in der Bildmitte.</li>
+        <li><strong>Generische Copy</strong>, „Build something amazing", „Beautiful experiences", „Revolutionizing X", keinerlei Produktnomen.</li>
+        <li><strong>Stock-Bild-URLs</strong>, generische Platzhalter statt echter Produkt-Screenshots.</li>
+        <li><strong>Schwere Schatten auf flachem Design</strong>, die Reflexe „muss auffallen" und „Flat ist Mode" treffen aufeinander, das Ergebnis ist visuell uneins.</li>
       </ol>
       <p>
         Jeder einzelne Default ist für sich genommen kein Fehler. Erst die Kombination aus allen acht macht den Fingerprint erkennbar. Einer allein lässt einen die Schultern zucken; vier auf derselben Above-the-fold sagen einem genau, welches Tool das gebaut hat.
@@ -523,12 +523,12 @@
         Die erste Reaktion in jedem Team ist, dem Prompt zusätzliche Anweisungen mitzugeben: „Nimm nicht den Default-Verlauf", „Wähl eine echte Display-Schrift", „Pack nicht drei gleiche Karten nebeneinander". Das hält für eine Nachricht. In der nächsten verdünnt sich die Leitlinie, das Kontextfenster wächst, der Fingerprint kommt zurück. Steuerung über Prompts ist probabilistisch und verliert mit der Länge an Wirkung.
       </p>
       <p>
-        Was es braucht, ist ein deterministischer Boden — eine Prüfung, die <em>nach</em> dem Modell läuft, ohne LLM in der Schleife. Diese Lücke füllt ux-skill. Der Empfehler engt die Auswahl des Modells im Vorfeld ein, der Linter ahndet Verstöße im Nachgang.
+        Was es braucht, ist ein deterministischer Boden, eine Prüfung, die <em>nach</em> dem Modell läuft, ohne LLM in der Schleife. Diese Lücke füllt ux-skill. Der Empfehler engt die Auswahl des Modells im Vorfeld ein, der Linter ahndet Verstöße im Nachgang.
       </p>
 
       <h3>Auf Stochastik nicht mit Stochastik antworten</h3>
       <p>
-        Der Gedanke, „dann lassen wir eben ein zweites LLM den Output bewerten", taucht immer wieder auf. Aber LLM-basierte Bewertung schwankt genauso wie LLM-basierte Generierung. Sie hängt vom Rating-Prompt, von Few-shot-Beispielen, von der heutigen Modellversion ab. In der CI brauchen wir eine Schicht, die jedes Mal dasselbe Urteil zurückgibt. Determinismus ist die einzige Stärke der Regex — und sie reicht.
+        Der Gedanke, „dann lassen wir eben ein zweites LLM den Output bewerten", taucht immer wieder auf. Aber LLM-basierte Bewertung schwankt genauso wie LLM-basierte Generierung. Sie hängt vom Rating-Prompt, von Few-shot-Beispielen, von der heutigen Modellversion ab. In der CI brauchen wir eine Schicht, die jedes Mal dasselbe Urteil zurückgibt. Determinismus ist die einzige Stärke der Regex, und sie reicht.
       </p>
 
       <h2>145 Regex-Regeln, kein LLM, in der CI</h2>
@@ -556,7 +556,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         Unten steht ein vereinfachter Hero-Block aus einem Next.js-Starter, der drei Regeln verletzt, und die umgeschriebene Variante, die mit Exit-Code 0 durchläuft. Gleiche Konversionsabsicht, anderer Fingerprint.
       </p>
-      <pre class="code"><span class="c">// Vorher — 3 High-Findings</span>
+      <pre class="code"><span class="c">// Vorher: 3 High-Findings</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -571,7 +571,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
   &lt;/div&gt;
 &lt;/section&gt;
 
-<span class="c">// Nachher — 0 Findings</span>
+<span class="c">// Nachher: 0 Findings</span>
 &lt;section className=<span class="s">"bg-stone-50 py-28"</span>&gt;
   &lt;h1 className=<span class="s">"font-['Fraunces']
     text-6xl leading-[1.04]
@@ -609,7 +609,7 @@ $ uxskill mcp-config --target cursor
 <span class="c"># tokens.css             ← OKLCH-Palette, Typo-Skala</span>
 <span class="c"># MASTER.md              ← Designsystem-Single-Source</span></pre>
       <p>
-        Nach dem Setup kann Composer im Editor auf 14 ux-skill-Tools zugreifen: <code>discover_brief</code>, <code>recommend_design</code>, <code>lint_codebase</code>, <code>get_brand_spec</code>, und so weiter. Die Designentscheidungen landen direkt im Repo, nicht im Chatverlauf — und damit auch in jeder zukünftigen Cursor-Session.
+        Nach dem Setup kann Composer im Editor auf 14 ux-skill-Tools zugreifen: <code>discover_brief</code>, <code>recommend_design</code>, <code>lint_codebase</code>, <code>get_brand_spec</code>, und so weiter. Die Designentscheidungen landen direkt im Repo, nicht im Chatverlauf, und damit auch in jeder zukünftigen Cursor-Session.
       </p>
 
       <h2>Drei Installationspfade, eine Engine</h2>
@@ -644,16 +644,16 @@ $ uxskill mcp-config --target cursor
       <div class="honesty">
         <div class="label">Ehrlicher Scope</div>
         <h4>Die Regeln fangen Struktur. Sie fangen keinen Geschmack.</h4>
-        <p>Der Linter wird nie melden „dieser Abschnitt hat den falschen Rhythmus" oder „diese Copy klingt kalt". Das ist die Aufgabe eines Menschen oder eines Review-LLM. Was die Regex dagegen <em>zuverlässig</em> einfängt, ist jeder Fingerprint, der sich als literaler Token, Muster oder Form ausdrücken lässt — also der Großteil aller KI-Defaults, weil das Modell immer wieder zum selben Artefakt zurückkehrt.</p>
-        <p>Wir lassen bewusst keinen LLM-Judge in der CI laufen. Wenn dein Maßstab „sieht aus wie von einem Designer gemacht" ist, dann ist das Code-Review, kein Lint. ux-skill stellt <code>ux critique</code> für diesen Durchlauf bereit — aber im Editor auf Abruf, nicht in der CI.</p>
+        <p>Der Linter wird nie melden „dieser Abschnitt hat den falschen Rhythmus" oder „diese Copy klingt kalt". Das ist die Aufgabe eines Menschen oder eines Review-LLM. Was die Regex dagegen <em>zuverlässig</em> einfängt, ist jeder Fingerprint, der sich als literaler Token, Muster oder Form ausdrücken lässt, also der Großteil aller KI-Defaults, weil das Modell immer wieder zum selben Artefakt zurückkehrt.</p>
+        <p>Wir lassen bewusst keinen LLM-Judge in der CI laufen. Wenn dein Maßstab „sieht aus wie von einem Designer gemacht" ist, dann ist das Code-Review, kein Lint. ux-skill stellt <code>ux critique</code> für diesen Durchlauf bereit, aber im Editor auf Abruf, nicht in der CI.</p>
       </div>
 
       <h2>Weiterführende Artikel</h2>
       <ul>
         <li><a href="/blog/ai-design-fingerprints-list.html" class="link">Die 35 Design-Fingerprints, die jede KI standardmäßig ausspielt</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex-Linter für KI-Coding — 145 Regeln in der CI</a></li>
-        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Anti-Slop-Werkzeuge für Claude Code — das ehrliche Ranking</a></li>
-        <li><a href="/blog/cursor-design-plugin.html" class="link">Cursor-Designplugin — Installationsanleitung</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex-Linter für KI-Coding · 145 Regeln in der CI</a></li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Anti-Slop-Werkzeuge für Claude Code · das ehrliche Ranking</a></li>
+        <li><a href="/blog/cursor-design-plugin.html" class="link">Cursor-Designplugin · Installationsanleitung</a></li>
         <li><a href="https://github.com/Laith0003/ux-skill/blob/main/README.de.md" class="link" rel="noopener noreferrer">README (deutsche Version)</a></li>
         <li><a href="/install/" class="link">Installationsseite</a> / <a href="/mcp.html" class="link">MCP-Setup</a></li>
       </ul>
@@ -667,9 +667,9 @@ $ uxskill mcp-config --target cursor
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— oder —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">· oder ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— oder —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">· oder ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>
@@ -680,7 +680,7 @@ $ uxskill mcp-config --target cursor
       <h2 class="related-reads-h">Weiterführende Artikel</h2>
       <ul>
         <li><a href="/blog/ai-design-fingerprints-list.html">35 KI-Design-Fingerprints</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html">Regex-Linter — 145 Regeln</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html">Regex-Linter · 145 Regeln</a></li>
         <li><a href="/blog/anti-ai-slop-claude-skills.html">Anti-Slop-Ranking</a></li>
         <li><a href="/blog/cursor-design-plugin.html">Cursor-Designplugin</a></li>
       </ul>
