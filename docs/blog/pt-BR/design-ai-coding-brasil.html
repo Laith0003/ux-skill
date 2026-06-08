@@ -11,8 +11,8 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Regras de design para AI coding — por que toda IA produz a mesma UI? — ux-skill</title>
-  <meta name="description" content="Cursor, Claude Code, Cline, Windsurf — toda ferramenta de AI coding cai nos mesmos padrões padrão. Inter 90px, gradiente roxo-azul, três cards iguais. ux-skill é um engine Python open source com 145 regras determinísticas que barram slop no CI — sem chamada de LLM, sem token gasto.">
+  <title>Regras de design para AI coding, por que toda IA produz a mesma UI? · ux-skill</title>
+  <meta name="description" content="Cursor, Claude Code, Cline, Windsurf, toda ferramenta de AI coding cai nos mesmos padrões padrão. Inter 90px, gradiente roxo-azul, três cards iguais. ux-skill é um engine Python open source com 145 regras determinísticas que barram slop no CI, sem chamada de LLM, sem token gasto.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/pt-BR/design-ai-coding-brasil.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -20,16 +20,16 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/pt-BR/design-ai-coding-brasil.html">
-  <meta property="og:title" content="Regras de design para AI coding — por que toda IA produz a mesma UI?">
+  <meta property="og:title" content="Regras de design para AI coding, por que toda IA produz a mesma UI?">
   <meta property="og:description" content="ux-skill é um engine Python open source. 145 regras, 998 entradas no catálogo, 22 comandos, 17 IDEs. Claude Code e Cursor.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/pt-br-design-ai-coding-brasil.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — pt-br-design-ai-coding-brasil">
+  <meta property="og:image:alt" content="ux-skill · pt-br-design-ai-coding-brasil">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/pt-br-design-ai-coding-brasil.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Regras de design para AI coding — ux-skill, Português">
+  <meta name="twitter:title" content="Regras de design para AI coding · ux-skill, Português">
   <meta name="twitter:description" content="145 regras determinísticas, 998 entradas, 22 comandos, 17 IDEs. Engine Python, MIT, sem telemetria.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,8 +40,8 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Regras de design para AI coding — por que toda IA produz a mesma UI?",
-    "description": "Cursor, Claude Code, Cline, Windsurf — toda ferramenta de AI coding cai nos mesmos padrões. ux-skill barra slop no CI com 145 regras determinísticas.",
+    "headline": "Regras de design para AI coding, por que toda IA produz a mesma UI?",
+    "description": "Cursor, Claude Code, Cline, Windsurf, toda ferramenta de AI coding cai nos mesmos padrões. ux-skill barra slop no CI com 145 regras determinísticas.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -370,7 +370,7 @@
   .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
-    padding-block:8px;transition:color 140ms ease}
+    padding-block:8px;transition:color 140ms ease;}
   .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
   .usknav__langs{position:relative}
   .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
@@ -384,14 +384,14 @@
   .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
   .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease;}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
   .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
-  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:none;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
     transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
-  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer.is-open{display:flex;transform:translateX(0);visibility:visible}
   .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
     border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
   .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
@@ -411,7 +411,7 @@
   .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
 </head>
 <body>
   
@@ -498,55 +498,55 @@
 <div class="wrap">
     <article>
       <span class="eyebrow">Blog · Português · 2026-05-28</span>
-      <h1>Regras de design para AI coding — por que toda IA produz a <span class="accent">mesma UI</span>?</h1>
+      <h1>Regras de design para AI coding, por que toda IA produz a <span class="accent">mesma UI</span>?</h1>
       <p class="lede">
-        <strong>Cursor, Claude Code, Cline, Windsurf — toda ferramenta de AI coding cai no mesmo conjunto de padrões.</strong> Inter 90px no título, gradiente roxo-azul, três cards iguais lado a lado. Troca o modelo — a saída praticamente não muda. ux-skill é um engine Python open source (licença MIT) com 145 regras determinísticas que barram slop no CI. Sem chamada de LLM, sem token gasto, sem telemetria.
+        <strong>Cursor, Claude Code, Cline, Windsurf, toda ferramenta de AI coding cai no mesmo conjunto de padrões.</strong> Inter 90px no título, gradiente roxo-azul, três cards iguais lado a lado. Troca o modelo, a saída praticamente não muda. ux-skill é um engine Python open source (licença MIT) com 145 regras determinísticas que barram slop no CI. Sem chamada de LLM, sem token gasto, sem telemetria.
       </p>
       <p class="byline">Equipe ux-skill · 13 min de leitura · Licença MIT</p>
 
       <h2>Por que toda IA escreve a mesma UI</h2>
       <p>
-        Não é limitação do modelo. Claude Sonnet, GPT-4, DeepSeek, Gemini — qualquer modelo grande consegue escrever UI muito boa se receber o briefing certo. O problema é que ninguém entrega briefing. "Construa uma landing page de SaaS" leva o modelo a regredir para a média do dataset de treinamento — e essa média parece uma landing page de startup de 2023.
+        Não é limitação do modelo. Claude Sonnet, GPT-4, DeepSeek, Gemini, qualquer modelo grande consegue escrever UI muito boa se receber o briefing certo. O problema é que ninguém entrega briefing. "Construa uma landing page de SaaS" leva o modelo a regredir para a média do dataset de treinamento, e essa média parece uma landing page de startup de 2023.
       </p>
       <p>
-        Três forças combinadas reforçam essa impressão digital. Primeira, o corpus de treinamento dos modelos pesa para fontes populares — Vercel, Linear, Stripe, Tailwind UI, shadcn — e todas elas compartilham a mesma estética. Segunda, o prompt do usuário é curto demais — "build a hero section" não produz nada específico. Terceira, não há gating — nada barra o modelo quando ele entrega o mesmo gradiente velho pela centésima vez.
+        Três forças combinadas reforçam essa impressão digital. Primeira, o corpus de treinamento dos modelos pesa para fontes populares, Vercel, Linear, Stripe, Tailwind UI, shadcn, e todas elas compartilham a mesma estética. Segunda, o prompt do usuário é curto demais, "build a hero section" não produz nada específico. Terceira, não há gating, nada barra o modelo quando ele entrega o mesmo gradiente velho pela centésima vez.
       </p>
       <p>
-        Das três forças, duas são difíceis de corrigir — você não controla o corpus de treinamento, e o hábito de escrever prompts de 500 palavras não se sustenta num time inteiro. A terceira — gating — é um problema de nível mecânico. É exatamente isso que ux-skill resolve.
+        Das três forças, duas são difíceis de corrigir, você não controla o corpus de treinamento, e o hábito de escrever prompts de 500 palavras não se sustenta num time inteiro. A terceira, gating, é um problema de nível mecânico. É exatamente isso que ux-skill resolve.
       </p>
 
       <h2>Os oito padrões que toda ferramenta entrega</h2>
       <p>
-        Rodamos o mesmo briefing — "hero para produto fintech editorial, tema escuro, voz calma" — em oito ferramentas diferentes de AI coding (Cursor, Claude Code, Windsurf, GitHub Copilot, Cline, Continue, Codex, Aider). Sete das oito produziram saídas com pelo menos cinco dos oito padrões abaixo:
+        Rodamos o mesmo briefing, "hero para produto fintech editorial, tema escuro, voz calma", em oito ferramentas diferentes de AI coding (Cursor, Claude Code, Windsurf, GitHub Copilot, Cline, Continue, Codex, Aider). Sete das oito produziram saídas com pelo menos cinco dos oito padrões abaixo:
       </p>
       <ol>
-        <li><strong>Inter como fonte de display</strong> — Inter é uma fonte body ajustada para tamanhos pequenos; usada a 90px como título, lê como impressão digital de startup-landing.</li>
-        <li><strong>Gradiente roxo-para-azul</strong> — os mesmos dois códigos hex em todo lugar, sinal quase universal de saída AI de SaaS-startup.</li>
-        <li><strong>Três cards iguais em uma linha</strong> — bloco de features, gap-6, sempre ícone-título-parágrafo.</li>
-        <li><strong>CTA genérica</strong> — "Get started", "Learn more", "Click here". A regra <code>generic-cta-text</code> captura.</li>
-        <li><strong>Fade-in-up em cada filho direto</strong> — mesmo perfil de movimento em hero, features e footer; nenhuma diferenciação por papel.</li>
-        <li><strong>Verbos vazios de marketing</strong> — verbos de marketing genéricos nos títulos. A regra <code>filler-marketing-verbs</code> captura.</li>
-        <li><strong>Nomes de placeholder</strong> — nomes dummy genéricos e parágrafos stub que vazam de staging para produção.</li>
-        <li><strong>Eixo de tudo-no-centro</strong> — layout simétrico independentemente do conteúdo; nenhuma composição assimétrica ou bento.</li>
+        <li><strong>Inter como fonte de display</strong>: Inter é uma fonte body ajustada para tamanhos pequenos; usada a 90px como título, lê como impressão digital de startup-landing.</li>
+        <li><strong>Gradiente roxo-para-azul</strong>: os mesmos dois códigos hex em todo lugar, sinal quase universal de saída AI de SaaS-startup.</li>
+        <li><strong>Três cards iguais em uma linha</strong>: bloco de features, gap-6, sempre ícone-título-parágrafo.</li>
+        <li><strong>CTA genérica</strong>: "Get started", "Learn more", "Click here". A regra <code>generic-cta-text</code> captura.</li>
+        <li><strong>Fade-in-up em cada filho direto</strong>: mesmo perfil de movimento em hero, features e footer; nenhuma diferenciação por papel.</li>
+        <li><strong>Verbos vazios de marketing</strong>: verbos de marketing genéricos nos títulos. A regra <code>filler-marketing-verbs</code> captura.</li>
+        <li><strong>Nomes de placeholder</strong>: nomes dummy genéricos e parágrafos stub que vazam de staging para produção.</li>
+        <li><strong>Eixo de tudo-no-centro</strong>: layout simétrico independentemente do conteúdo; nenhuma composição assimétrica ou bento.</li>
       </ol>
       <p>
-        A lista completa está em <a href="/blog/ai-design-fingerprints-list.html" class="link">35 impressões digitais de design AI</a> — cada regra com regex de detecção, o "porquê" e o "como corrigir". O ponto que vale repetir: trocar o IDE não muda a saída de forma significativa. Trocar a gramática de design muda.
+        A lista completa está em <a href="/blog/ai-design-fingerprints-list.html" class="link">35 impressões digitais de design AI</a>, cada regra com regex de detecção, o "porquê" e o "como corrigir". O ponto que vale repetir: trocar o IDE não muda a saída de forma significativa. Trocar a gramática de design muda.
       </p>
 
-      <h2>ux-skill — a camada determinística</h2>
+      <h2>ux-skill, a camada determinística</h2>
       <p>
         ux-skill é um pacote Python open source (MIT), com CLI e servidor MCP. Um mesmo engine, um mesmo catálogo de 998 entradas, um mesmo linter de 145 regras. Três caminhos de instalação cobrem 17 IDEs:
       </p>
       <ol>
-        <li><strong>Plugin do Claude Code</strong> — <code>/plugin marketplace add Laith0003/ux-skill; /plugin install ux@ux-skill</code></li>
-        <li><strong>Pacote Python</strong> — <code>pip install uxskill</code>, em qualquer IDE que rode shell: Cursor, Windsurf, Continue, Cline, JetBrains, Aider, Zed, Codex</li>
-        <li><strong>Servidor MCP</strong> — <code>npx uxskill@alpha mcp</code>, plugável em qualquer cliente MCP</li>
+        <li><strong>Plugin do Claude Code</strong>: <code>/plugin marketplace add Laith0003/ux-skill; /plugin install ux@ux-skill</code></li>
+        <li><strong>Pacote Python</strong>: <code>pip install uxskill</code>, em qualquer IDE que rode shell: Cursor, Windsurf, Continue, Cline, JetBrains, Aider, Zed, Codex</li>
+        <li><strong>Servidor MCP</strong>: <code>npx uxskill@alpha mcp</code>, plugável em qualquer cliente MCP</li>
       </ol>
       <p>
-        O engine tem três ações principais. Um — <code>uxskill discover</code> roda o protocolo de discovery de 10 campos para capturar um briefing estruturado (sem improvisação — o discovery protocol é requisito rígido). Dois — <code>uxskill recommend</code> roda cinco buscas paralelas sobre as 998 entradas do catálogo e devolve um sistema de design resolvido (paleta, par de fontes, motion, grid de espaçamento, lista de componentes). Três — <code>uxskill lint</code> roda as 145 regras regex no código. Exit 0 se limpo, exit 1 se houver finding no threshold.
+        O engine tem três ações principais. Um, <code>uxskill discover</code> roda o protocolo de discovery de 10 campos para capturar um briefing estruturado (sem improvisação, o discovery protocol é requisito rígido). Dois, <code>uxskill recommend</code> roda cinco buscas paralelas sobre as 998 entradas do catálogo e devolve um sistema de design resolvido (paleta, par de fontes, motion, grid de espaçamento, lista de componentes). Três, <code>uxskill lint</code> roda as 145 regras regex no código. Exit 0 se limpo, exit 1 se houver finding no threshold.
       </p>
 
-      <h2>Uma regra real — Inter como display</h2>
+      <h2>Uma regra real, Inter como display</h2>
       <p>
         Essa é a regra número um do manifesto de 145, direto do <code>data/anti-patterns.json</code>. Severidade <code>high</code>:
       </p>
@@ -569,7 +569,7 @@
         O regex procura <code>font-family: Inter</code> e, no mesmo bloco, font-size a partir de 40px ou classe Tailwind <code>text-5xl</code> (ou maior). O campo <code>scope</code> limita a regra às extensões relevantes. Uma única regra funciona em CSS, SCSS, TSX, JSX, Vue, Astro, Blade.
       </p>
 
-      <h2>Rodando no CI — GitHub Actions</h2>
+      <h2>Rodando no CI, GitHub Actions</h2>
       <p>
         Um arquivo de workflow, cada PR push é barrado pelo linter se houver finding no threshold. Média no repo todo: 380ms (cold), 90ms (warm). Sem chamada de LLM. Sem token gasto.
       </p>
@@ -600,9 +600,9 @@
           <tbody>
             <tr><td>Indústrias</td><td class="num">161</td><td>De logística a legaltech; cada uma com perfil de voz padrão e set de padrões.</td></tr>
             <tr><td>Estilos</td><td class="num">50</td><td>Editorial cinema, swiss minimal, brutalist warm, mid-mod, neo-pop.</td></tr>
-            <tr><td>Paletas</td><td class="num">161</td><td>Sistemas de cor — hue, saturação, contraste, tratamento dark-mode.</td></tr>
+            <tr><td>Paletas</td><td class="num">161</td><td>Sistemas de cor: hue, saturação, contraste, tratamento dark-mode.</td></tr>
             <tr><td>Pares de fonte</td><td class="num">57</td><td>Combinações display + body, validadas para renderização em tela.</td></tr>
-            <tr><td>Motion presets</td><td class="num">57</td><td>Framer Motion, GSAP, CSS — com ramos <code>prefers-reduced-motion</code>.</td></tr>
+            <tr><td>Motion presets</td><td class="num">57</td><td>Framer Motion, GSAP, CSS: com ramos <code>prefers-reduced-motion</code>.</td></tr>
             <tr><td>Componentes</td><td class="num">182</td><td>De cards a dialogs a dashboards, com regras de composição.</td></tr>
             <tr><td>Brand specs</td><td class="num">110</td><td>Gramática de marcas reais como Stripe, Airbnb, Vercel.</td></tr>
             <tr><td>Anti-patterns</td><td class="num">145</td><td>As 145 regras do linter. Mesmo JSON, dois consumidores.</td></tr>
@@ -618,19 +618,19 @@
 
       <h2>Por que regex, e não um LLM-juiz</h2>
       <p>
-        A alternativa comum é usar um LLM como "juiz" — pedir ao Claude ou ao GPT para avaliar a saída, aceitar a nota, reexecutar quando baixa. Esse caminho tem três problemas que se acumulam com o uso.
+        A alternativa comum é usar um LLM como "juiz", pedir ao Claude ou ao GPT para avaliar a saída, aceitar a nota, reexecutar quando baixa. Esse caminho tem três problemas que se acumulam com o uso.
       </p>
       <p>
-        Um — não é determinístico. Para o mesmo input, o juiz dá notas diferentes entre execuções. Falhas de CI viram flakes, contribuidores aprendem a reexecutar em vez de corrigir, o sinal colapsa.
+        Um, não é determinístico. Para o mesmo input, o juiz dá notas diferentes entre execuções. Falhas de CI viram flakes, contribuidores aprendem a reexecutar em vez de corrigir, o sinal colapsa.
       </p>
       <p>
-        Dois — é caro. Cada PR push gasta token. Cada retry dobra a conta. Um repo de 200 PRs por semana rodando juiz de LLM no diff está pagando por compute para confirmar o que um regex captura em 12 milissegundos.
+        Dois, é caro. Cada PR push gasta token. Cada retry dobra a conta. Um repo de 200 PRs por semana rodando juiz de LLM no diff está pagando por compute para confirmar o que um regex captura em 12 milissegundos.
       </p>
       <p>
-        Três — esconde a regra. Quando o juiz reprova um PR, o autor recebe prosa. Quando o regex reprova, o autor recebe um padrão concreto contra o qual comparar o próprio código e aprender. O primeiro cria cultura de apelação; o segundo cria cultura de fluência.
+        Três, esconde a regra. Quando o juiz reprova um PR, o autor recebe prosa. Quando o regex reprova, o autor recebe um padrão concreto contra o qual comparar o próprio código e aprender. O primeiro cria cultura de apelação; o segundo cria cultura de fluência.
       </p>
 
-      <h2>A comparação honesta — estrelas no GitHub</h2>
+      <h2>A comparação honesta, estrelas no GitHub</h2>
       <p>
         Três projetos open source sérios na categoria bolt-on. Estrelas em 2026-05-28:
       </p>
@@ -652,17 +652,17 @@
 
       <h2>Onde isso encaixa no time brasileiro de produto</h2>
       <p>
-        Times de produto no Brasil que usam Cursor ou Claude Code têm o mesmo problema: a velocidade de codar com IA é real, mas o output regride para o mesmo conjunto de fingerprints SaaS-startup. O linter no CI corta esse caminho. Cada PR que sobe com Inter a 90px, com o gradiente roxo-azul, com os três cards padrão — falha o exit code. O time aprende a gramática da casa porque cada erro vem com a regra concreta e o fix sugerido, não com uma descrição vaga.
+        Times de produto no Brasil que usam Cursor ou Claude Code têm o mesmo problema: a velocidade de codar com IA é real, mas o output regride para o mesmo conjunto de fingerprints SaaS-startup. O linter no CI corta esse caminho. Cada PR que sobe com Inter a 90px, com o gradiente roxo-azul, com os três cards padrão, falha o exit code. O time aprende a gramática da casa porque cada erro vem com a regra concreta e o fix sugerido, não com uma descrição vaga.
       </p>
       <p>
-        Para times que escrevem em português, há um benefício adicional: as regras de marketing-verb são em inglês porque o corpus de treinamento dos modelos é em inglês, mas o engine não impede que o conteúdo final seja em português. Você ganha o filtro contra o vocabulário de marketing dos modelos sem perder a voz da sua marca. As 160 brand specs incluem várias marcas que operam em mercados não-anglófonos com gramática própria — a referência funciona.
+        Para times que escrevem em português, há um benefício adicional: as regras de marketing-verb são em inglês porque o corpus de treinamento dos modelos é em inglês, mas o engine não impede que o conteúdo final seja em português. Você ganha o filtro contra o vocabulário de marketing dos modelos sem perder a voz da sua marca. As 160 brand specs incluem várias marcas que operam em mercados não-anglófonos com gramática própria, a referência funciona.
       </p>
 
       <div class="honesty">
         <div class="label">Escopo honesto</div>
         <h4>Regex captura impressões digitais estruturais, não taste.</h4>
-        <p>O linter nunca vai dizer "este bloco está no ritmo errado" ou "este copy está frio". Para isso, é preciso um humano ou um modelo. O que o regex captura é toda impressão digital com token, padrão ou forma literal — e essa é a maior parte dos defaults da IA, porque o modelo volta ao mesmo artefato a cada vez.</p>
-        <p>Não rodamos LLM-juiz no CI de propósito. Se o seu critério é "parece feito por designer" — isso é code review, não lint. ux-skill entrega <code>/ux-critique</code> para o passe de taste — mas roda no IDE, sob demanda, e não no CI.</p>
+        <p>O linter nunca vai dizer "este bloco está no ritmo errado" ou "este copy está frio". Para isso, é preciso um humano ou um modelo. O que o regex captura é toda impressão digital com token, padrão ou forma literal, e essa é a maior parte dos defaults da IA, porque o modelo volta ao mesmo artefato a cada vez.</p>
+        <p>Não rodamos LLM-juiz no CI de propósito. Se o seu critério é "parece feito por designer", isso é code review, não lint. ux-skill entrega <code>/ux-critique</code> para o passe de taste, mas roda no IDE, sob demanda, e não no CI.</p>
       </div>
 
       <h2>O que ler em seguida</h2>
@@ -672,24 +672,24 @@
 
       <h2>Leituras relacionadas</h2>
       <ul>
-        <li><a href="/blog/vibe-coding-design-system.html" class="link">Vibe coding + ux-skill — o post em inglês com exemplo completo</a></li>
+        <li><a href="/blog/vibe-coding-design-system.html" class="link">Vibe coding + ux-skill, o post em inglês com exemplo completo</a></li>
         <li><a href="/blog/ai-design-fingerprints-list.html" class="link">35 impressões digitais de design AI</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter — 145 regras no CI</a></li>
-        <li><a href="/blog/cursor-design-plugin.html" class="link">Cursor design plugin — install do bolt-on para Cursor</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter, 145 regras no CI</a></li>
+        <li><a href="/blog/cursor-design-plugin.html" class="link">Cursor design plugin, install do bolt-on para Cursor</a></li>
       </ul>
     </article>
 
     <section class="cta">
       <span class="eyebrow">Instalar</span>
       <h2>Um pacote. <span class="accent">Três caminhos.</span> 145 regras.</h2>
-      <p>Recommender, linter, servidor MCP, 22 comandos, 160 brand specs — tudo junto. Linter em sub-segundo, o resto sob demanda. Licença MIT, sem telemetria, sem conta.</p>
+      <p>Recommender, linter, servidor MCP, 22 comandos, 160 brand specs, tudo junto. Linter em sub-segundo, o resto sob demanda. Licença MIT, sem telemetria, sem conta.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— ou —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">· ou ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— ou —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">· ou ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

@@ -1,6 +1,6 @@
-# Show HN — paste-ready
+# Show HN: paste-ready
 
-> Post Tuesday or Wednesday 8–11 AM ET. Post the first comment as an OP reply within 60 seconds of submitting.
+> Post Tuesday or Wednesday 8-11 AM ET. Post the first comment as an OP reply within 60 seconds of submitting.
 
 ---
 
@@ -26,21 +26,21 @@ Leave the body blank. URL-only Show HN posts perform better; the comment carries
 
 ---
 
-## First comment — post immediately as your own reply
+## First comment: post immediately as your own reply
 
 > Markdown-light works on HN (paragraph breaks via blank line; lists need blank line above + dash-space prefix; code blocks use four-space indent).
 
 ```
-I'm Laith, a solo founder shipping a MENA loyalty platform. I kept hitting the same wall: I'd ask Claude Code to build me a landing, and what came back was clean — but it had the same fingerprints every time. Same fonts, same gradients, same "John Doe."
+I'm Laith, a solo founder shipping a MENA loyalty platform. I kept hitting the same wall: I'd ask Claude Code to build me a landing, and what came back was clean, but it had the same fingerprints every time. Same fonts, same gradients, same "John Doe."
 
 So I started cataloguing them. There are now:
 
-- 30 deterministic anti-patterns with regex/DOM detection. The /ux-lint command runs them without an LLM and exits non-zero on Critical/High — wire it into your CI.
+- 30 deterministic anti-patterns with regex/DOM detection. The /ux-lint command runs them without an LLM and exits non-zero on Critical/High. Wire it into your CI.
 - 37 motion principles synthesized from Emil Kowalski's design-engineering work (Sonner/Vaul author).
-- 72 brand DESIGN.md specs — Apple, Stripe, Linear, Figma, Tesla, BMW, Coinbase, Notion, Airbnb, Spotify, etc. Tell the plugin "build me a landing in Stripe's style" and it reads the actual brand language, not a generic default.
+- 72 brand DESIGN.md specs: Apple, Stripe, Linear, Figma, Tesla, BMW, Coinbase, Notion, Airbnb, Spotify, etc. Tell the plugin "build me a landing in Stripe's style" and it reads the actual brand language, not a generic default.
 - 18 slash commands across Frame / Audit / Generate / Apply.
 - 5 sub-agents dispatched in parallel (frontend-engineer, motion-engineer, copy-writer, research-synthesizer, design-system-architect).
-- A discovery protocol that runs a mandatory 10-field intake before generating anything. Push back on "anything's fine" — there's no improvisation.
+- A discovery protocol that runs a mandatory 10-field intake before generating anything. Push back on "anything's fine". There's no improvisation.
 
 Some of what the linter catches:
 
@@ -58,7 +58,7 @@ Install in any Claude Code session:
     /plugin marketplace add https://github.com/Laith0003/ux-skill.git
     /plugin install ux@ux-skill
 
-Then /ux-design "a SaaS landing for X" — the plugin asks ten discovery questions, then dispatches the frontend-engineer with the bans + arsenal + brand spec loaded.
+Then run /ux-design "a SaaS landing for X". The plugin asks ten discovery questions, then dispatches the frontend-engineer with the bans + arsenal + brand spec loaded.
 
 Open to critique. Especially interested in fingerprints I missed and brand specs I should add to the library.
 
@@ -72,9 +72,9 @@ Landing (dogfooded by the plugin itself): https://uxskill.laithjunaidy.com
 
 **Minute 0:** submit with the title + URL above. Don't fill the body field.
 
-**Minute 1:** post the first comment above as a reply to your own submission. Don't edit it after posting — HN penalizes edits within the first 10 minutes.
+**Minute 1:** post the first comment above as a reply to your own submission. Don't edit it after posting. HN penalizes edits within the first 10 minutes.
 
-**Minutes 2–60:** watch for comments. Reply to every one within 15 minutes. HN engagement signals push you up the rank.
+**Minutes 2-60:** watch for comments. Reply to every one within 15 minutes. HN engagement signals push you up the rank.
 
 **Reply patterns that work:**
 - Critical comment: concede the point, add nuance, link to where you address it (or commit to addressing it).
@@ -83,10 +83,10 @@ Landing (dogfooded by the plugin itself): https://uxskill.laithjunaidy.com
 - "How is this different from X?": one-line factual comparison + link to the README's comparison section if X is a known competitor.
 
 **What NOT to do:**
-- Don't say "we" — you're solo.
+- Don't say "we". You're solo.
 - Don't claim "strongest", "best", "revolutionary".
 - Don't argue with downvotes; the more you defend, the more you sink.
-- Don't link out to your own other content (Twitter thread, etc.) — HN sees that as karma farming.
+- Don't link out to your own other content (Twitter thread, etc.). HN sees that as karma farming.
 - Don't post twice if the first one flops. One shot.
 
 ---

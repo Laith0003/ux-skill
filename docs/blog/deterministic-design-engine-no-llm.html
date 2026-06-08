@@ -11,10 +11,10 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A deterministic design engine that learns offline — how ux-skill v3.0 avoids the LLM trap</title>
+<title>A deterministic design engine that learns offline · how ux-skill v3.0 avoids the LLM trap</title>
 <meta name="description" content="ux-skill v3.0 is a generative design system that runs without ever calling an LLM. Same brief → same output. Reproducible across machines. Learns from its own decisions log offline. Here's how the math holds.">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/deterministic-design-engine-no-llm.html">
-<meta property="og:title" content="A deterministic design engine that learns offline — ux-skill v3.0">
+<meta property="og:title" content="A deterministic design engine that learns offline · ux-skill v3.0">
 <meta property="og:description" content="No LLM in the loop. Same brief → same output. Reproducible. Yet it learns from its own decisions ledger. Here's the math.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/deterministic-design-engine-no-llm.html">
@@ -24,7 +24,10 @@
 <meta name="twitter:description" content="No LLM in the loop. Same brief → same output. Yet it learns over time from local decisions log.">
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","headline":"A deterministic design engine that learns offline — how ux-skill v3.0 avoids the LLM trap","datePublished":"2026-05-28","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/deterministic-design-engine-no-llm.html","inLanguage":"en"}
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"A deterministic design engine that learns offline · how ux-skill v3.0 avoids the LLM trap","datePublished":"2026-05-28","author":{"@type":"Person","name":"Laith Aljunaidy"},"publisher":{"@type":"Organization","name":"ux-skill"},"image":"https://uxskill.laithjunaidy.com/og/home.png","mainEntityOfPage":"https://uxskill.laithjunaidy.com/blog/deterministic-design-engine-no-llm.html","inLanguage":"en"}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "A deterministic design engine that learns offline · how ux-skill v3.0 avoids the LLM trap", "item": "https://uxskill.laithjunaidy.com/blog/deterministic-design-engine-no-llm.html"}]}
 </script>
 
 <style>
@@ -75,7 +78,7 @@
   .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
-    padding-block:8px;transition:color 140ms ease}
+    padding-block:8px;transition:color 140ms ease;}
   .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
   .usknav__langs{position:relative}
   .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
@@ -89,14 +92,14 @@
   .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
   .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease;}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
   .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
-  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:none;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
     transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
-  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer.is-open{display:flex;transform:translateX(0);visibility:visible}
   .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
     border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
   .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
@@ -116,7 +119,7 @@
   .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
 </head>
 <body>
 
@@ -203,7 +206,7 @@
 </div>
 <div class="wrap">
 <header>
-<p class="eyebrow">v3.0 — THE BRAIN · 2026-05-28</p>
+<p class="eyebrow">v3.0 · THE BRAIN · 2026-05-28</p>
 <h1>A design engine that <em>learns offline</em>,<br>and never calls an LLM.</h1>
 <p class="lede">Every other "generative design" tool reaches for an API. ux-skill v3.0 doesn't. Same brief always produces the same output. Reproducible across machines. Yet the system genuinely learns from its own decisions log over time. Here's how the math holds.</p>
 </header>
@@ -211,19 +214,19 @@
 <h2>Why no LLM in the loop</h2>
 <p>An LLM in the generation path means:</p>
 <ul>
-<li><strong>Non-determinism</strong> — same prompt, slightly different output today vs. yesterday</li>
-<li><strong>Cost</strong> — every <code>uxskill synthesize</code> call costs money</li>
-<li><strong>Latency</strong> — network roundtrip, ~1–3 seconds per call</li>
-<li><strong>Rate limits</strong> — your CI breaks when you hit the cap</li>
-<li><strong>Vendor lock-in</strong> — your "design engine" is actually OpenAI's or Anthropic's</li>
-<li><strong>Privacy</strong> — your brief content goes to a third party</li>
+<li><strong>Non-determinism</strong>: same prompt, slightly different output today vs. yesterday</li>
+<li><strong>Cost</strong>: every <code>uxskill synthesize</code> call costs money</li>
+<li><strong>Latency</strong>: network roundtrip, ~1-3 seconds per call</li>
+<li><strong>Rate limits</strong>: your CI breaks when you hit the cap</li>
+<li><strong>Vendor lock-in</strong>: your "design engine" is actually OpenAI's or Anthropic's</li>
+<li><strong>Privacy</strong>: your brief content goes to a third party</li>
 </ul>
 <p>v3.0 has none of this. <code>uxskill synthesize</code> finishes in single-digit milliseconds. No network. No API key required. Works offline on a plane.</p>
 
 <h2>How a "generative" engine works without an LLM</h2>
 <p>The trick is in the layers:</p>
 
-<h3>Layer 1 — Brief to axes (pure math)</h3>
+<h3>Layer 1: Brief to axes (pure math)</h3>
 <p>Industry has a 7-axis seed dictionary. Tone tags push axes by ±0.10 to ±0.30. Forbidden tags clamp axes. All deterministic dict lookups + float adds. ~50 microseconds.</p>
 <pre><code>brief = Brief(industry="fintech-payments", tone=["bold", "serious"])
 axes = compute_axes(brief)
@@ -231,15 +234,15 @@ axes = compute_axes(brief)
 #            geometry=0.4, formality=0.95, motion=0.55,
 #            type_personality=0.4)</code></pre>
 
-<h3>Layer 2 — Axes to exemplars (sorting)</h3>
+<h3>Layer 2: Axes to exemplars (sorting)</h3>
 <p>Compute 7-D Euclidean distance from the brief's axes to each brand's category-seed axes. Sort by distance. Tie-break by brand id alphabetically (deterministic). Top 8 win.</p>
 <pre><code>exemplars = pick_exemplars_by_axes(axes, n=8)
 # [{"id": "stripe", ...}, {"id": "linear", ...}, {"id": "datadog", ...}, ...]</code></pre>
 
-<h3>Layer 3 — Exemplars to vocabulary (extraction)</h3>
+<h3>Layer 3: Exemplars to vocabulary (extraction)</h3>
 <p>For each chosen exemplar, pull palette anchors, type stack, radius signal, spacing signal. Combine into a Vocabulary. Pure dict access. No NLP.</p>
 
-<h3>Layer 4 — Vocabulary + axes to tokens (math)</h3>
+<h3>Layer 4: Vocabulary + axes to tokens (math)</h3>
 <p>Weighted RGB mixing of palette anchors + warmth-shift = canvas / ink / primary hex codes. Modular scale at ratio 1.2/1.25/1.333 = size ladder. Spacing base picked from <code>interactions.spacing_base_for(axes)</code> (the documented conflict-resolution matrix). All deterministic.</p>
 
 <h2>Where determinism could leak (and why it doesn't)</h2>
@@ -249,7 +252,7 @@ axes = compute_axes(brief)
 
 <p>If <code>compute_axes()</code> hashed differently across Python versions, the axis values would drift. We use plain dict adds, no hashing.</p>
 
-<p>If two brands had identical 7-D distance AND identical id (impossible — ids are unique), we'd still be deterministic because of the unique id constraint.</p>
+<p>If two brands had identical 7-D distance AND identical id (impossible: ids are unique), we'd still be deterministic because of the unique id constraint.</p>
 
 <h2>How does it "learn" then?</h2>
 <p>The decisions ledger. Every call appends one JSONL line to <code>.ux/decisions.jsonl</code>:</p>
@@ -293,14 +296,14 @@ uxskill evolve out.html       # auto-loop to score 90+</code></pre>
 
 <h2>Related</h2>
 <ul>
-<li><a href="/blog/v3-the-brain-launch.html">The full v3.0 launch — The Brain</a></li>
+<li><a href="/blog/v3-the-brain-launch.html">The full v3.0 launch · The Brain</a></li>
 <li><a href="/blog/brand-specs-training-data-not-templates.html">Brand specs are training data, not templates</a></li>
 <li><a href="/blog/regex-linter-for-ai-coding.html">A 145-rule deterministic linter that catches AI design slop</a></li>
 <li><a href="/anti-patterns.html">All 145 linter rules</a></li>
 </ul>
 
 <footer>
-ux-skill v3.0 — THE BRAIN · MIT · no telemetry · no LLM in the engine · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
+ux-skill v3.0 · THE BRAIN · MIT · no telemetry · no LLM in the engine · <a href="/">home</a> · <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
 </footer>
 
 </div>

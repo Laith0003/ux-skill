@@ -11,7 +11,7 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Regex linter for AI coding — how 51 rules catch design slop in CI</title>
+  <title>Regex linter for AI coding · how 51 rules catch design slop in CI</title>
   <meta name="description" content="A deterministic regex linter that catches AI design fingerprints in CI without any LLM call. 51 ux-skill rules, GitHub Actions workflow, pre-commit hook, before/after on a real page.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/regex-linter-for-ai-coding.html">
   <meta name="theme-color" content="#07080a">
@@ -20,17 +20,17 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/regex-linter-for-ai-coding.html">
-  <meta property="og:title" content="Regex linter for AI coding — how 51 rules catch design slop in CI">
+  <meta property="og:title" content="Regex linter for AI coding · how 51 rules catch design slop in CI">
   <meta property="og:description" content="No LLM, no prompt, no agents. 51 regex rules over generated code, runs in CI as a non-zero exit. The deterministic floor under every AI design recommendation.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/regex-linter-for-ai-coding.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — regex-linter-for-ai-coding">
+  <meta property="og:image:alt" content="ux-skill · regex-linter-for-ai-coding">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/regex-linter-for-ai-coding.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Regex linter for AI coding — 51 rules, deterministic, CI-ready">
-  <meta name="twitter:description" content="The AI design fingerprints — Inter at 90px, purple-to-blue gradients, three equal cards — caught by regex in milliseconds before they ship.">
+  <meta name="twitter:title" content="Regex linter for AI coding · 51 rules, deterministic, CI-ready">
+  <meta name="twitter:description" content="The AI design fingerprints (Inter at 90px, purple-to-blue gradients, three equal cards) caught by regex in milliseconds before they ship.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,7 +40,7 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Regex linter for AI coding — how 51 rules catch design slop in CI",
+    "headline": "Regex linter for AI coding · how 51 rules catch design slop in CI",
     "description": "A deterministic regex linter that catches AI design fingerprints in CI without any LLM call. 51 ux-skill rules, GitHub Actions workflow, pre-commit hook, before/after on a real page.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
@@ -61,6 +61,9 @@
     "image": "https://uxskill.laithjunaidy.com/og.png"
   }
   </script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "Regex linter for AI coding · how 51 rules catch design slop in CI", "item": "https://uxskill.laithjunaidy.com/blog/regex-linter-for-ai-coding.html"}]}
+</script>
 
   <style>
     :root {
@@ -375,13 +378,13 @@
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
        and max-width: 100%; carousels that need their own horizontal scroll
-       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves —
+       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves:
        overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
     html, body {
       overflow-x: clip;
       max-width: 100%;
     }
-    /* Defensive — make sure no section, image, or table forces width >100%. */
+    /* Defensive: make sure no section, image, or table forces width >100%. */
     section, header, footer, main, article { max-width: 100vw; }
     img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
     table { max-width: 100%; }
@@ -398,7 +401,7 @@
   .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
-    padding-block:8px;transition:color 140ms ease}
+    padding-block:8px;transition:color 140ms ease;}
   .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
   .usknav__langs{position:relative}
   .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
@@ -412,14 +415,14 @@
   .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
   .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease;}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
   .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
-  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:none;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
     transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
-  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer.is-open{display:flex;transform:translateX(0);visibility:visible}
   .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
     border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
   .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
@@ -439,7 +442,7 @@
   .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
 </head>
 <body>
   
@@ -526,9 +529,9 @@
 <div class="wrap">
     <article>
       <span class="eyebrow">Blog · Technical · 2026-05-28</span>
-      <h1>Regex linter for AI coding — 51 rules that catch design <span class="accent">slop in CI</span>.</h1>
+      <h1>Regex linter for AI coding: 51 rules that catch design <span class="accent">slop in CI</span>.</h1>
       <p class="lede">
-        <strong>Recommenders ask the model to do the right thing. Linters punish the model when it doesn't.</strong> ux-skill ships both — but only the linter runs in your CI on every push. Here's how 51 regex rules catch the recognizable fingerprints of AI design output before they merge, with no LLM call, no prompt, and no token budget.
+        <strong>Recommenders ask the model to do the right thing. Linters punish the model when it doesn't.</strong> ux-skill ships both, but only the linter runs in your CI on every push. Here's how 51 regex rules catch the recognizable fingerprints of AI design output before they merge, with no LLM call, no prompt, and no token budget.
       </p>
       <p class="byline">By the ux-skill team · 8 min read · MIT-licensed open source</p>
 
@@ -546,7 +549,7 @@
         <strong>It hides the rule.</strong> When the judge fails a PR, the author gets prose. When a regex fails a PR, the author gets a pattern they can match against their own code and learn from. The first creates a culture of appeals; the second creates a culture of fluency.
       </p>
       <p>
-        The 51 rules are documented in <a href="/blog/ai-design-fingerprints-list.html" class="link">the AI design fingerprints taxonomy</a> — every regex paired with the why and the fix. The linter is the executable form of that taxonomy.
+        The 51 rules are documented in <a href="/blog/ai-design-fingerprints-list.html" class="link">the AI design fingerprints taxonomy</a>, every regex paired with the why and the fix. The linter is the executable form of that taxonomy.
       </p>
 
       <h2>What the 51 rules cover</h2>
@@ -579,9 +582,9 @@
 
       <h2>An actual rule, end to end</h2>
       <p>
-        Here's the canonical fingerprint — <strong>Inter used as a display font</strong> — verbatim from the manifest, severity <code>high</code>:
+        Here's the canonical fingerprint, <strong>Inter used as a display font</strong>, verbatim from the manifest, severity <code>high</code>:
       </p>
-      <pre class="code"><span class="c">// data/anti-patterns.json — entries[0]</span>
+      <pre class="code"><span class="c">// data/anti-patterns.json: entries[0]</span>
 {
   <span class="k">"id"</span>: <span class="s">"inter-as-display"</span>,
   <span class="k">"name"</span>: <span class="s">"Inter used as display font"</span>,
@@ -747,24 +750,24 @@ $ uxskill lint --json | jq '.findings | length'</pre>
 
       <h2>How it pairs with the recommender</h2>
       <p>
-        The linter alone is reactive — it catches slop in code that already exists. The full ux-skill loop is preventative <em>and</em> reactive:
+        The linter alone is reactive: it catches slop in code that already exists. The full ux-skill loop is preventative <em>and</em> reactive:
       </p>
       <ol>
-        <li><code>/ux-frame</code> — 10-field discovery brief (the forcing function).</li>
-        <li><code>/ux-recommend</code> — the <a href="/blog/python-design-system-generator.html" class="link">Python recommender</a> runs five parallel searches and returns a system.</li>
-        <li><code>/ux-design</code> — generate the surface against that system.</li>
-        <li><code>/ux-lint</code> — gate the output with the 51 regex rules.</li>
-        <li><code>/ux-fix</code> — auto-patch the findings the regex can resolve (Inter → Fraunces, indigo gradient → single accent, three-card → bento).</li>
+        <li><code>/ux-frame</code>: 10-field discovery brief (the forcing function).</li>
+        <li><code>/ux-recommend</code>: the <a href="/blog/python-design-system-generator.html" class="link">Python recommender</a> runs five parallel searches and returns a system.</li>
+        <li><code>/ux-design</code>: generate the surface against that system.</li>
+        <li><code>/ux-lint</code>: gate the output with the 51 regex rules.</li>
+        <li><code>/ux-fix</code>: auto-patch the findings the regex can resolve (Inter → Fraunces, indigo gradient → single accent, three-card → bento).</li>
       </ol>
       <p>
-        Steps 1–3 reduce the rate at which the model produces slop. Steps 4–5 catch what slipped through. The recommender raises the floor; the linter sets the ceiling.
+        Steps 1-3 reduce the rate at which the model produces slop. Steps 4-5 catch what slipped through. The recommender raises the floor; the linter sets the ceiling.
       </p>
 
       <div class="honesty">
         <div class="label">Honest scope</div>
         <h4>Regex catches structural fingerprints, not taste.</h4>
-        <p>The linter will never catch "this section is the wrong rhythm" or "the copy reads cold." Those need a human or a model. What regex <em>does</em> catch is every fingerprint that has a literal token, pattern, or shape — which is most of the AI defaults, because the model reaches for the same artifact every time.</p>
-        <p>We deliberately don't run an LLM judge in CI. If your bar is "looks like a designer made it," that's a code review, not a lint. ux-skill ships <code>/ux-critique</code> for the taste pass — but that runs in your editor on demand, not in CI.</p>
+        <p>The linter will never catch "this section is the wrong rhythm" or "the copy reads cold." Those need a human or a model. What regex <em>does</em> catch is every fingerprint that has a literal token, pattern, or shape, which is most of the AI defaults, because the model reaches for the same artifact every time.</p>
+        <p>We deliberately don't run an LLM judge in CI. If your bar is "looks like a designer made it," that's a code review, not a lint. ux-skill ships <code>/ux-critique</code> for the taste pass, but that runs in your editor on demand, not in CI.</p>
       </div>
 
       <h2>Cross-IDE distribution</h2>
@@ -772,19 +775,19 @@ $ uxskill lint --json | jq '.findings | length'</pre>
         Same Python package, every IDE that runs Python or shells out to it: Claude Code, Cursor, Windsurf, Copilot, Gemini Code Assist, Aider, Continue, Cline, Roo Code, Codex, plus seven more. <a href="/blog/windsurf-design-rules.html" class="link">Windsurf install walkthrough</a> · <a href="/blog/cursor-design-plugin.html" class="link">Cursor install walkthrough</a>.
       </p>
       <p>
-        If you want the linter without ux-skill's recommender and brand library, the <code>uxskill lint</code> subcommand is self-contained — install <code>uxskill</code>, point at the directory, get the report. No model, no API key, no telemetry.
+        If you want the linter without ux-skill's recommender and brand library, the <code>uxskill lint</code> subcommand is self-contained: install <code>uxskill</code>, point at the directory, get the report. No model, no API key, no telemetry.
       </p>
 
       <h2>Related reading</h2>
       <ul>
         <li><a href="/blog/ai-ui-design-review-checklist.html" class="link">A pre-ship design review checklist for AI UI</a></li>
-        <li><a href="/blog/ai-generated-ui-accessibility.html" class="link">The accessibility holes in AI-generated UI</a> &mdash; the a11y defects the linter catches on commit.</li>
-        <li><a href="/blog/ai-design-fingerprints-list.html" class="link">The 51 AI design fingerprints every AI coding tool ships by default</a> — the human-readable form of the manifest.</li>
-        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Anti-AI-slop tools for Claude Code in 2026 — the honest ranking</a> — where the regex linter fits.</li>
-        <li><a href="/blog/dogfooding-design-engine.html" class="link">Dogfooding ux-skill — bugs we found by using our own engine</a> — the story of the homepage that failed its own lint.</li>
-        <li><a href="/mcp.html" class="link">MCP server — the same engine inside Claude Desktop, Cursor, Windsurf</a>.</li>
-        <li><a href="/roadmap.html" class="link">Roadmap — what's coming after the v2.1 rule additions</a>.</li>
-        <li><a href="/faq.html" class="link">FAQ — how the linter behaves on monorepos and Tailwind</a>.</li>
+        <li><a href="/blog/ai-generated-ui-accessibility.html" class="link">The accessibility holes in AI-generated UI</a>, the a11y defects the linter catches on commit.</li>
+        <li><a href="/blog/ai-design-fingerprints-list.html" class="link">The 51 AI design fingerprints every AI coding tool ships by default</a>, the human-readable form of the manifest.</li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Anti-AI-slop tools for Claude Code in 2026: the honest ranking</a>, where the regex linter fits.</li>
+        <li><a href="/blog/dogfooding-design-engine.html" class="link">Dogfooding ux-skill: bugs we found by using our own engine</a>, the story of the homepage that failed its own lint.</li>
+        <li><a href="/mcp.html" class="link">MCP server: the same engine inside Claude Desktop, Cursor, Windsurf</a>.</li>
+        <li><a href="/roadmap.html" class="link">Roadmap: what's coming after the v2.1 rule additions</a>.</li>
+        <li><a href="/faq.html" class="link">FAQ: how the linter behaves on monorepos and Tailwind</a>.</li>
       </ul>
     </article>
 
@@ -796,9 +799,9 @@ $ uxskill lint --json | jq '.findings | length'</pre>
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— or —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">or</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— or —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">or</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

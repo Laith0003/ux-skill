@@ -11,8 +11,8 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chống "AI slop" trong thiết kế web — engine Python mã nguồn mở cho người Việt — ux-skill</title>
-  <meta name="description" content="Claude Code, Cursor, Cline, Windsurf đều rơi vào cùng một bộ mặc định. Inter 90px, gradient tím-xanh, ba thẻ giống nhau. ux-skill là engine Python mã nguồn mở với 145 quy tắc deterministic chặn slop trong CI — không gọi LLM, không tốn token.">
+  <title>Chống "AI slop" trong thiết kế web, engine Python mã nguồn mở cho người Việt · ux-skill</title>
+  <meta name="description" content="Claude Code, Cursor, Cline, Windsurf đều rơi vào cùng một bộ mặc định. Inter 90px, gradient tím-xanh, ba thẻ giống nhau. ux-skill là engine Python mã nguồn mở với 145 quy tắc deterministic chặn slop trong CI, không gọi LLM, không tốn token.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/vi/anti-ai-slop-vietnam.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -20,16 +20,16 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/vi/anti-ai-slop-vietnam.html">
-  <meta property="og:title" content="Chống AI slop trong thiết kế web — cho người Việt dùng AI coding">
+  <meta property="og:title" content="Chống AI slop trong thiết kế web, cho người Việt dùng AI coding">
   <meta property="og:description" content="ux-skill là engine Python mã nguồn mở. 145 quy tắc, 998 mục trong catalog, 22 lệnh, 17 IDE. Claude Code và Cursor đều dùng được.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/vi-anti-ai-slop-vietnam.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — vi-anti-ai-slop-vietnam">
+  <meta property="og:image:alt" content="ux-skill · vi-anti-ai-slop-vietnam">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/vi-anti-ai-slop-vietnam.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Chống AI slop trong thiết kế web — ux-skill cho người Việt">
+  <meta name="twitter:title" content="Chống AI slop trong thiết kế web · ux-skill cho người Việt">
   <meta name="twitter:description" content="145 quy tắc deterministic, 998 mục, 22 lệnh, 17 IDE. Engine Python, MIT, không telemetry.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,7 +40,7 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Chống AI slop trong thiết kế web — engine Python mã nguồn mở cho người Việt",
+    "headline": "Chống AI slop trong thiết kế web, engine Python mã nguồn mở cho người Việt",
     "description": "Claude Code, Cursor, Cline, Windsurf đều rơi vào cùng một bộ mặc định. ux-skill chặn slop trong CI với 145 quy tắc deterministic.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
@@ -370,7 +370,7 @@
   .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
-    padding-block:8px;transition:color 140ms ease}
+    padding-block:8px;transition:color 140ms ease;}
   .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
   .usknav__langs{position:relative}
   .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
@@ -384,14 +384,14 @@
   .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
   .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease;}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
   .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
-  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:none;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
     transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
-  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer.is-open{display:flex;transform:translateX(0);visibility:visible}
   .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
     border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
   .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
@@ -411,7 +411,7 @@
   .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
 </head>
 <body>
   
@@ -498,60 +498,60 @@
 <div class="wrap">
     <article>
       <span class="eyebrow">Blog · Tiếng Việt · 2026-05-28</span>
-      <h1>Chống "AI slop" trong thiết kế web — engine Python mã nguồn mở cho <span class="accent">người Việt</span>.</h1>
+      <h1>Chống "AI slop" trong thiết kế web, engine Python mã nguồn mở cho <span class="accent">người Việt</span>.</h1>
       <p class="lede">
-        <strong>Cursor, Claude Code, Cline, Windsurf đều rơi vào cùng một bộ mặc định.</strong> Inter 90px làm chữ tiêu đề, gradient tím-xanh, ba thẻ giống nhau xếp ngang. Bạn đổi model — kết quả gần như không thay đổi. ux-skill là một engine Python mã nguồn mở (MIT) với 145 quy tắc deterministic chặn slop ngay trong CI. Không gọi LLM, không tốn token, không có telemetry.
+        <strong>Cursor, Claude Code, Cline, Windsurf đều rơi vào cùng một bộ mặc định.</strong> Inter 90px làm chữ tiêu đề, gradient tím-xanh, ba thẻ giống nhau xếp ngang. Bạn đổi model, kết quả gần như không thay đổi. ux-skill là một engine Python mã nguồn mở (MIT) với 145 quy tắc deterministic chặn slop ngay trong CI. Không gọi LLM, không tốn token, không có telemetry.
       </p>
       <p class="byline">Đội ux-skill · 11 phút đọc · Giấy phép MIT, mã nguồn mở</p>
 
       <h2>"AI slop" trong thiết kế nghĩa là gì</h2>
       <p>
-        Cụm từ "AI slop" dùng cho mọi loại nội dung AI tạo ra mà thiếu điểm nhìn — văn bản nhạt, hình ảnh rập khuôn, mã nguồn copy-paste. Trong thiết kế web, slop có một bộ vân tay rất rõ ràng. Mỗi AI coding tool thử nghiệm ra mặc định gần như giống hệt: cùng kiểu chữ, cùng gradient, cùng layout, cùng văn phong CTA. Khi mở mười trang AI tạo từ mười tool khác nhau, bạn không phân biệt được trang nào là Claude Code và trang nào là Cursor.
+        Cụm từ "AI slop" dùng cho mọi loại nội dung AI tạo ra mà thiếu điểm nhìn, văn bản nhạt, hình ảnh rập khuôn, mã nguồn copy-paste. Trong thiết kế web, slop có một bộ vân tay rất rõ ràng. Mỗi AI coding tool thử nghiệm ra mặc định gần như giống hệt: cùng kiểu chữ, cùng gradient, cùng layout, cùng văn phong CTA. Khi mở mười trang AI tạo từ mười tool khác nhau, bạn không phân biệt được trang nào là Claude Code và trang nào là Cursor.
       </p>
       <p>
-        Đây không phải hạn chế của model. Claude Sonnet, GPT-4, DeepSeek, Gemini — tất cả đều có thể viết UI rất tốt nếu nhận đúng brief. Vấn đề ở chỗ không ai đưa brief. "Tạo một trang landing page SaaS" thì model quay về trung bình của tập dữ liệu huấn luyện — mà trung bình đó trông giống startup-landing-page-2023.
+        Đây không phải hạn chế của model. Claude Sonnet, GPT-4, DeepSeek, Gemini, tất cả đều có thể viết UI rất tốt nếu nhận đúng brief. Vấn đề ở chỗ không ai đưa brief. "Tạo một trang landing page SaaS" thì model quay về trung bình của tập dữ liệu huấn luyện, mà trung bình đó trông giống startup-landing-page-2023.
       </p>
 
       <h2>Ba lực dồn đến cùng một dấu vân tay</h2>
       <p>
-        Ba thứ làm cho mặc định AI hội tụ. Một, tập dữ liệu huấn luyện model nặng về các nguồn phổ biến — Vercel, Linear, Stripe, Tailwind UI, shadcn — và tất cả chia sẻ chung một thẩm mỹ. Hai, prompt của người dùng quá ngắn — "build a hero section" không cho ra gì cụ thể. Ba, không có gating — không gì chặn model khi nó ship ra cùng gradient cũ lần thứ một trăm.
+        Ba thứ làm cho mặc định AI hội tụ. Một, tập dữ liệu huấn luyện model nặng về các nguồn phổ biến, Vercel, Linear, Stripe, Tailwind UI, shadcn, và tất cả chia sẻ chung một thẩm mỹ. Hai, prompt của người dùng quá ngắn, "build a hero section" không cho ra gì cụ thể. Ba, không có gating, không gì chặn model khi nó ship ra cùng gradient cũ lần thứ một trăm.
       </p>
       <p>
-        Trong ba lực này, hai cái khó sửa — tập huấn luyện thì bạn không đổi được, và việc viết prompt 500 từ mỗi lần không thành thói quen của team được. Lực thứ ba — gating — là vấn đề ở cấp máy móc. Đó chính là chỗ ux-skill giải quyết.
+        Trong ba lực này, hai cái khó sửa, tập huấn luyện thì bạn không đổi được, và việc viết prompt 500 từ mỗi lần không thành thói quen của team được. Lực thứ ba, gating, là vấn đề ở cấp máy móc. Đó chính là chỗ ux-skill giải quyết.
       </p>
 
       <h2>Tám mặc định mà mọi tool đều ship</h2>
       <p>
-        Chúng tôi chạy cùng một brief — "hero cho sản phẩm fintech editorial, theme tối, giọng văn điềm tĩnh" — qua tám AI coding tool khác nhau. Bảy trong tám tool trả về output có ít nhất năm trong tám mặc định sau:
+        Chúng tôi chạy cùng một brief, "hero cho sản phẩm fintech editorial, theme tối, giọng văn điềm tĩnh", qua tám AI coding tool khác nhau. Bảy trong tám tool trả về output có ít nhất năm trong tám mặc định sau:
       </p>
       <ol>
-        <li><strong>Inter làm font tiêu đề</strong> — Inter được thiết kế cho kích thước nhỏ; dùng làm tiêu đề 90px tạo ra dấu vân tay startup-landing.</li>
-        <li><strong>Gradient tím-sang-xanh</strong> — cùng hai mã hex ở khắp nơi, gần như là dấu hiệu phổ quát của output AI SaaS-startup.</li>
-        <li><strong>Ba thẻ giống nhau xếp ngang</strong> — khối tính năng, gap-6, mỗi lần là biểu tượng-tiêu đề-đoạn văn.</li>
-        <li><strong>CTA chung chung</strong> — "Get started", "Learn more", "Click here". Quy tắc <code>generic-cta-text</code> bắt được.</li>
-        <li><strong>Fade-in-up trên mọi phần tử</strong> — cùng hồ sơ chuyển động trên hero, features, footer; không phân biệt vai trò.</li>
-        <li><strong>Động từ marketing rỗng</strong> — filler verbs trong tiêu đề. Quy tắc <code>filler-marketing-verbs</code> bắt được.</li>
-        <li><strong>Tên giữ chỗ</strong> — tên dummy chung chung và đoạn văn stub lọt từ staging ra production.</li>
-        <li><strong>Trục căn-giữa-tất-cả</strong> — layout đối xứng bất kể nội dung; không có bố cục bất đối xứng hay bento.</li>
+        <li><strong>Inter làm font tiêu đề</strong>: Inter được thiết kế cho kích thước nhỏ; dùng làm tiêu đề 90px tạo ra dấu vân tay startup-landing.</li>
+        <li><strong>Gradient tím-sang-xanh</strong>: cùng hai mã hex ở khắp nơi, gần như là dấu hiệu phổ quát của output AI SaaS-startup.</li>
+        <li><strong>Ba thẻ giống nhau xếp ngang</strong>: khối tính năng, gap-6, mỗi lần là biểu tượng-tiêu đề-đoạn văn.</li>
+        <li><strong>CTA chung chung</strong>: "Get started", "Learn more", "Click here". Quy tắc <code>generic-cta-text</code> bắt được.</li>
+        <li><strong>Fade-in-up trên mọi phần tử</strong>: cùng hồ sơ chuyển động trên hero, features, footer; không phân biệt vai trò.</li>
+        <li><strong>Động từ marketing rỗng</strong>: filler verbs trong tiêu đề. Quy tắc <code>filler-marketing-verbs</code> bắt được.</li>
+        <li><strong>Tên giữ chỗ</strong>: tên dummy chung chung và đoạn văn stub lọt từ staging ra production.</li>
+        <li><strong>Trục căn-giữa-tất-cả</strong>: layout đối xứng bất kể nội dung; không có bố cục bất đối xứng hay bento.</li>
       </ol>
       <p>
-        Danh sách đầy đủ ở <a href="/blog/ai-design-fingerprints-list.html" class="link">bài 35 dấu vân tay thiết kế AI</a> — mỗi quy tắc đi kèm regex phát hiện, "tại sao" và "cách sửa". Bài học cần nhắc lại ở đây: chọn IDE không thay đổi output đáng kể. Thay đổi văn phạm thiết kế mới thay đổi output.
+        Danh sách đầy đủ ở <a href="/blog/ai-design-fingerprints-list.html" class="link">bài 35 dấu vân tay thiết kế AI</a>, mỗi quy tắc đi kèm regex phát hiện, "tại sao" và "cách sửa". Bài học cần nhắc lại ở đây: chọn IDE không thay đổi output đáng kể. Thay đổi văn phạm thiết kế mới thay đổi output.
       </p>
 
-      <h2>ux-skill — engine Python cho người Việt làm web</h2>
+      <h2>ux-skill, engine Python cho người Việt làm web</h2>
       <p>
         ux-skill là một package Python mã nguồn mở (MIT), kèm CLI và MCP server. Cùng một engine, cùng catalog 998 mục, cùng linter 145 quy tắc, ba đường cài đặt phủ 17 IDE:
       </p>
       <ol>
-        <li><strong>Plugin Claude Code</strong> — <code>/plugin marketplace add Laith0003/ux-skill; /plugin install ux@ux-skill</code></li>
-        <li><strong>Python package</strong> — <code>pip install uxskill</code>, dùng được trong bất kỳ IDE nào có thể shell-out: Cursor, Windsurf, Continue, Cline, JetBrains, Aider, Zed, Codex</li>
-        <li><strong>MCP server</strong> — <code>npx uxskill@alpha mcp</code>, plug vào mọi MCP client</li>
+        <li><strong>Plugin Claude Code</strong>: <code>/plugin marketplace add Laith0003/ux-skill; /plugin install ux@ux-skill</code></li>
+        <li><strong>Python package</strong>: <code>pip install uxskill</code>, dùng được trong bất kỳ IDE nào có thể shell-out: Cursor, Windsurf, Continue, Cline, JetBrains, Aider, Zed, Codex</li>
+        <li><strong>MCP server</strong>: <code>npx uxskill@alpha mcp</code>, plug vào mọi MCP client</li>
       </ol>
       <p>
-        Engine có ba hành động chính. Một — <code>uxskill discover</code> chạy giao thức 10 trường để bắt brief có cấu trúc (không có chỗ ngẫu hứng — discovery protocol là yêu cầu cứng). Hai — <code>uxskill recommend</code> chạy năm tìm kiếm song song trên 998 mục catalog và trả về một hệ thống thiết kế đã giải quyết (bảng màu, cặp typeface, motion, lưới spacing, danh sách component). Ba — <code>uxskill lint</code> chạy 145 quy tắc regex trên code. Exit 0 nếu sạch, exit 1 nếu có finding ở threshold.
+        Engine có ba hành động chính. Một, <code>uxskill discover</code> chạy giao thức 10 trường để bắt brief có cấu trúc (không có chỗ ngẫu hứng, discovery protocol là yêu cầu cứng). Hai, <code>uxskill recommend</code> chạy năm tìm kiếm song song trên 998 mục catalog và trả về một hệ thống thiết kế đã giải quyết (bảng màu, cặp typeface, motion, lưới spacing, danh sách component). Ba, <code>uxskill lint</code> chạy 145 quy tắc regex trên code. Exit 0 nếu sạch, exit 1 nếu có finding ở threshold.
       </p>
 
-      <h2>Một quy tắc thật — Inter làm font tiêu đề</h2>
+      <h2>Một quy tắc thật, Inter làm font tiêu đề</h2>
       <p>
         Đây là quy tắc số một trong manifest 145, lấy trực tiếp từ <code>data/anti-patterns.json</code>. Severity là <code>high</code>:
       </p>
@@ -574,7 +574,7 @@
         Regex tìm <code>font-family: Inter</code> và trong cùng block có font-size từ 40px trở lên hoặc class Tailwind <code>text-5xl</code> (hoặc lớn hơn). Trường <code>scope</code> giới hạn quy tắc trên các đuôi file phù hợp. Một quy tắc duy nhất hoạt động trên CSS, SCSS, TSX, JSX, Vue, Astro, Blade.
       </p>
 
-      <h2>Chạy trong CI — GitHub Actions</h2>
+      <h2>Chạy trong CI, GitHub Actions</h2>
       <p>
         Một file workflow, mỗi PR push đều bị linter chặn nếu có finding ở threshold. Trung bình toàn repo: 380ms (cold), 90ms (warm). Không gọi LLM. Không tốn token.
       </p>
@@ -607,7 +607,7 @@
             <tr><td>Phong cách</td><td class="num">50</td><td>Editorial cinema, swiss minimal, brutalist warm, mid-mod, neo-pop.</td></tr>
             <tr><td>Bảng màu</td><td class="num">161</td><td>Hệ màu với hue, saturation, contrast, xử lý dark-mode.</td></tr>
             <tr><td>Cặp typeface</td><td class="num">57</td><td>Display + body đã kiểm tra cho khả năng đọc trên màn hình.</td></tr>
-            <tr><td>Motion presets</td><td class="num">57</td><td>Framer Motion, GSAP, CSS — đi kèm nhánh <code>prefers-reduced-motion</code>.</td></tr>
+            <tr><td>Motion presets</td><td class="num">57</td><td>Framer Motion, GSAP, CSS: đi kèm nhánh <code>prefers-reduced-motion</code>.</td></tr>
             <tr><td>Component</td><td class="num">182</td><td>Card, dialog, dashboard, mọi pattern với quy tắc kết hợp.</td></tr>
             <tr><td>Brand spec</td><td class="num">110</td><td>Văn phạm của các brand thật như Stripe, Airbnb, Vercel.</td></tr>
             <tr><td>Anti-patterns</td><td class="num">145</td><td>145 quy tắc linter. Cùng JSON, hai consumer.</td></tr>
@@ -623,19 +623,19 @@
 
       <h2>Lý do tại sao regex, không phải LLM-judge</h2>
       <p>
-        Phương án thay thế thông dụng là dùng một LLM (Claude, GPT) làm "judge" — hỏi model đánh giá output, lấy điểm số, retry nếu thấp. Cách này có ba vấn đề chồng nhau khi dùng nhiều.
+        Phương án thay thế thông dụng là dùng một LLM (Claude, GPT) làm "judge", hỏi model đánh giá output, lấy điểm số, retry nếu thấp. Cách này có ba vấn đề chồng nhau khi dùng nhiều.
       </p>
       <p>
-        Một — không deterministic. Cùng input, judge model trả về điểm khác nhau giữa các lần chạy. CI fail thành flake, người đóng góp học cách retry thay vì sửa, tín hiệu sụp đổ.
+        Một, không deterministic. Cùng input, judge model trả về điểm khác nhau giữa các lần chạy. CI fail thành flake, người đóng góp học cách retry thay vì sửa, tín hiệu sụp đổ.
       </p>
       <p>
-        Hai — đắt. Mỗi PR push tốn token. Mỗi retry nhân đôi hóa đơn. Một repo 200 PR mỗi tuần chạy LLM-judge trên diff là đang trả tiền compute để xác nhận thứ mà regex bắt được trong 12 mili-giây.
+        Hai, đắt. Mỗi PR push tốn token. Mỗi retry nhân đôi hóa đơn. Một repo 200 PR mỗi tuần chạy LLM-judge trên diff là đang trả tiền compute để xác nhận thứ mà regex bắt được trong 12 mili-giây.
       </p>
       <p>
-        Ba — che giấu quy tắc. Khi judge fail PR, tác giả nhận được văn xuôi. Khi regex fail PR, tác giả nhận được một pattern cụ thể có thể so với code của mình và học từ đó. Cái thứ nhất tạo văn hóa kháng cáo, cái thứ hai tạo văn hóa thành thạo.
+        Ba, che giấu quy tắc. Khi judge fail PR, tác giả nhận được văn xuôi. Khi regex fail PR, tác giả nhận được một pattern cụ thể có thể so với code của mình và học từ đó. Cái thứ nhất tạo văn hóa kháng cáo, cái thứ hai tạo văn hóa thành thạo.
       </p>
 
-      <h2>Bảng so sánh — bolt-on category</h2>
+      <h2>Bảng so sánh, bolt-on category</h2>
       <p>
         Có ba dự án mã nguồn mở nghiêm túc trong danh mục bolt-on. Số star tính đến 2026-05-28:
       </p>
@@ -658,35 +658,35 @@
       <div class="honesty">
         <div class="label">Phạm vi trung thực</div>
         <h4>Regex bắt dấu vân tay cấu trúc, không bắt taste.</h4>
-        <p>Linter sẽ không bao giờ nói "section này sai nhịp" hoặc "copy này đọc lạnh". Cần con người hoặc một model cho việc đó. Cái mà regex thật sự bắt là mọi dấu vân tay có token, pattern hoặc hình dạng theo nghĩa đen — và đó là phần lớn các mặc định AI, vì model luôn quay về cùng một artifact.</p>
-        <p>Chúng tôi cố ý không chạy LLM-judge trong CI. Nếu chuẩn mực của bạn là "trông như designer làm" — đó là code review, không phải lint. ux-skill ship lệnh <code>/ux-critique</code> cho lượt taste — nhưng nó chạy trong IDE, không phải CI.</p>
+        <p>Linter sẽ không bao giờ nói "section này sai nhịp" hoặc "copy này đọc lạnh". Cần con người hoặc một model cho việc đó. Cái mà regex thật sự bắt là mọi dấu vân tay có token, pattern hoặc hình dạng theo nghĩa đen, và đó là phần lớn các mặc định AI, vì model luôn quay về cùng một artifact.</p>
+        <p>Chúng tôi cố ý không chạy LLM-judge trong CI. Nếu chuẩn mực của bạn là "trông như designer làm", đó là code review, không phải lint. ux-skill ship lệnh <code>/ux-critique</code> cho lượt taste, nhưng nó chạy trong IDE, không phải CI.</p>
       </div>
 
       <h2>Đọc tiếp gì</h2>
       <p>
-        Nếu muốn xem manifest 145 quy tắc đầy đủ kèm before/after trên một Next.js hero thật, đọc <a href="/blog/regex-linter-for-ai-coding.html" class="link">bài regex linter</a>. Nếu muốn taxonomy đầy đủ — mỗi quy tắc đi kèm detection regex, đọc <a href="/blog/ai-design-fingerprints-list.html" class="link">bài 35 dấu vân tay thiết kế AI</a>. Nếu muốn xếp hạng toàn cảnh AI coding tool 2026 cho chất lượng thiết kế, đọc <a href="/blog/anti-ai-slop-claude-skills.html" class="link">bài anti-AI-slop ranking</a>.
+        Nếu muốn xem manifest 145 quy tắc đầy đủ kèm before/after trên một Next.js hero thật, đọc <a href="/blog/regex-linter-for-ai-coding.html" class="link">bài regex linter</a>. Nếu muốn taxonomy đầy đủ, mỗi quy tắc đi kèm detection regex, đọc <a href="/blog/ai-design-fingerprints-list.html" class="link">bài 35 dấu vân tay thiết kế AI</a>. Nếu muốn xếp hạng toàn cảnh AI coding tool 2026 cho chất lượng thiết kế, đọc <a href="/blog/anti-ai-slop-claude-skills.html" class="link">bài anti-AI-slop ranking</a>.
       </p>
 
       <h2>Bài đọc liên quan</h2>
       <ul>
-        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Anti-AI-slop tools cho Claude Code — xếp hạng trung thực</a></li>
-        <li><a href="/blog/vibe-coding-design-system.html" class="link">Vibe coding + ux-skill</a> — bài tiếng Anh kèm minh họa.</li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Anti-AI-slop tools cho Claude Code, xếp hạng trung thực</a></li>
+        <li><a href="/blog/vibe-coding-design-system.html" class="link">Vibe coding + ux-skill</a>, bài tiếng Anh kèm minh họa.</li>
         <li><a href="/blog/ai-design-fingerprints-list.html" class="link">35 dấu vân tay thiết kế AI</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter cho AI coding — 145 quy tắc trong CI</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter cho AI coding, 145 quy tắc trong CI</a></li>
       </ul>
     </article>
 
     <section class="cta">
       <span class="eyebrow">Cài đặt</span>
       <h2>Một package. <span class="accent">Ba đường cài.</span> 145 quy tắc.</h2>
-      <p>Recommender, linter, MCP server, 22 lệnh, 160 brand specs — tất cả trong một. Linter sub-second, phần còn lại on demand. Giấy phép MIT, không telemetry, không cần account.</p>
+      <p>Recommender, linter, MCP server, 22 lệnh, 160 brand specs, tất cả trong một. Linter sub-second, phần còn lại on demand. Giấy phép MIT, không telemetry, không cần account.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— hoặc —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">· hoặc ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— hoặc —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">· hoặc ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

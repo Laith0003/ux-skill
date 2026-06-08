@@ -1,12 +1,12 @@
-# Anthropic plugin marketplace — submission (CORRECTED)
+# Anthropic plugin marketplace: submission (CORRECTED)
 
-> **2026-05-24 correction:** the original guidance to PR `anthropics/claude-plugins-official` was wrong. That repo is curated by Anthropic with **no application process** — third-party PRs are auto-closed. The correct path is the community marketplace via the in-app submission form.
+> **2026-05-24 correction:** the original guidance to PR `anthropics/claude-plugins-official` was wrong. That repo is curated by Anthropic with **no application process**, so third-party PRs are auto-closed. The correct path is the community marketplace via the in-app submission form.
 
 ---
 
 ## TL;DR
 
-Submit through the in-app form at **[claude.ai/settings/plugins/submit](https://claude.ai/settings/plugins/submit)** (or the equivalent on platform.claude.com). Approved plugins land in **`anthropics/claude-plugins-community`** — the public community catalog that users add with:
+Submit through the in-app form at **[claude.ai/settings/plugins/submit](https://claude.ai/settings/plugins/submit)** (or the equivalent on platform.claude.com). Approved plugins land in **`anthropics/claude-plugins-community`**, the public community catalog that users add with:
 
 ```
 /plugin marketplace add anthropics/claude-plugins-community
@@ -27,7 +27,7 @@ Then install ours via:
 | `claude-plugins-official` | Anthropic, at their discretion | No application process. PRs are auto-closed. Anthropic picks plugins to feature. |
 | **`claude-plugins-community`** | The submission pipeline + automated safety screening | **The in-app form is the canonical path.** Approved plugins are pinned to a specific commit SHA, and CI bumps the pin automatically on new commits. |
 
-The previous PR (`anthropics/claude-plugins-official#2010`) was opened against the wrong repo and got auto-closed within seconds. No harm done — the plugin's discoverability path is still the community marketplace, which is what reaches every Claude Code user once the catalog syncs nightly.
+The previous PR (`anthropics/claude-plugins-official#2010`) was opened against the wrong repo and got auto-closed within seconds. No harm done. The plugin's discoverability path is still the community marketplace, which is what reaches every Claude Code user once the catalog syncs nightly.
 
 ---
 
@@ -88,8 +88,8 @@ This stays a valid fallback even after the community catalog merge.
 Once we're in `claude-plugins-community`:
 
 - Every Claude Code user can install with two short commands
-- The catalog is the canonical third-party source — users browse it from inside Claude Code
+- The catalog is the canonical third-party source, browsable from inside Claude Code
 - Each new commit we push automatically updates the pinned SHA in the catalog (no manual PRs needed after the first approval)
 - It's the highest-leverage passive-discovery channel that exists for Claude Code plugins
 
-The original PR's intent — "passive discovery for every Claude Code user, forever" — is achieved by the community route, just via the in-app form rather than a GitHub PR.
+The original PR's intent ("passive discovery for every Claude Code user, forever") is achieved by the community route, just via the in-app form rather than a GitHub PR.

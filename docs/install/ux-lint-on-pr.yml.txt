@@ -4,7 +4,7 @@ name: ux-skill PR lint
 # Posts a comment with findings + fails the build on Critical/High.
 #
 # To use this in YOUR repo, copy this file to .github/workflows/.
-# Pip pulls uxskill from PyPI — no other setup needed.
+# Pip pulls uxskill from PyPI. No other setup needed.
 
 on:
   pull_request:
@@ -77,7 +77,7 @@ jobs:
               return;
             }
             const top = findings.slice(0, 10).map(f => {
-              return `- **${f.severity.toUpperCase()}** \`${f.rule_id}\` — \`${f.file}:${f.line}\`\n  ${f.why || ''}\n  fix: ${f.fix || ''}`;
+              return `- **${f.severity.toUpperCase()}** \`${f.rule_id}\` · \`${f.file}:${f.line}\`\n  ${f.why || ''}\n  fix: ${f.fix || ''}`;
             }).join('\n');
             const body = `## ux-skill lint findings\n\n${s.critical || 0} critical · ${s.high || 0} high · ${s.medium || 0} medium · ${s.low || 0} low\n\n${findings.length > 10 ? `Top 10 of ${findings.length} findings:\n\n` : ''}${top}\n\n*Engine: [uxskill](https://github.com/Laith0003/ux-skill) · ${data.rules_loaded || 0} anti-pattern rules · deterministic regex linter*`;
             await github.rest.issues.createComment({

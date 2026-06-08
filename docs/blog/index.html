@@ -11,7 +11,7 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog — ux-skill: design intelligence engine for AI coding</title>
+  <title>Blog · ux-skill: design intelligence engine for AI coding</title>
   <meta name="description" content="Articles on Claude Code design plugins, AI coding tools, anti-AI-slop techniques, and design system generation. From the team behind ux-skill v2.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/">
   <meta name="theme-color" content="#07080a">
@@ -20,12 +20,12 @@
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/">
-  <meta property="og:title" content="Blog — ux-skill">
+  <meta property="og:title" content="Blog · ux-skill">
   <meta property="og:description" content="Articles on Claude Code design plugins, AI coding tools, anti-AI-slop, design system generation.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/blog-index.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — blog-index">
+  <meta property="og:image:alt" content="ux-skill · blog-index">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/blog-index.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -269,7 +269,7 @@
     footer.site .links { display: flex; gap: 22px; flex-wrap: wrap; }
     @media (max-width: 560px) { footer.site { flex-direction: column; } }
   
-    /* Arabic typography — IBM Plex Sans Arabic for the whole Arabic page (v3.0.4 sweep) */
+    /* Arabic typography: IBM Plex Sans Arabic for the whole Arabic page (v3.0.4 sweep) */
     html[lang="ar"] body,
     html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3, html[lang="ar"] h4,
     html[lang="ar"] p, html[lang="ar"] li, html[lang="ar"] a, html[lang="ar"] button,
@@ -292,13 +292,13 @@
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
        and max-width: 100%; carousels that need their own horizontal scroll
-       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves —
+       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves: 
        overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
     html, body {
       overflow-x: clip;
       max-width: 100%;
     }
-    /* Defensive — make sure no section, image, or table forces width >100%. */
+    /* Defensive: make sure no section, image, or table forces width >100%. */
     section, header, footer, main, article { max-width: 100vw; }
     img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
     table { max-width: 100%; }
@@ -518,10 +518,10 @@
     }
     #nav-drawer .nav__drawer-langs-grid a:hover { color: var(--ink, var(--nav-ink)); }
 
-    /* RTL — nav inner flips */
+    /* RTL: nav inner flips */
     html[dir="rtl"] #nav .nav__inner { direction: rtl; }
 
-    /* Defensive — when the fixed .nav is present, give layouts that
+    /* Defensive: when the fixed .nav is present, give layouts that
        previously assumed an inline header (.wrap on blog/index,
        .top/.toolbar on the catalogue pages) enough headroom so
        content isn't hidden behind the nav. */
@@ -555,7 +555,7 @@
   .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
-    padding-block:8px;transition:color 140ms ease}
+    padding-block:8px;transition:color 140ms ease;}
   .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
   .usknav__langs{position:relative}
   .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
@@ -569,14 +569,14 @@
   .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
   .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease;}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
   .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
-  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:none;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
     transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
-  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer.is-open{display:flex;transform:translateX(0);visibility:visible}
   .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
     border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
   .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
@@ -596,7 +596,7 @@
   .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
 </head>
 <body>
   <a class="skip-link sr-only" href="#main">Go to articles</a>
@@ -694,18 +694,18 @@
     </p>
 
     <ul class="post-list">
-      <!-- v3.0 — THE BRAIN launch (2026-05-28) -->
+      <!-- v3.0 · THE BRAIN launch (2026-05-28) -->
       <li class="post" style="border-color: rgba(34,211,238,0.30); background: linear-gradient(180deg, rgba(34,211,238,0.06), var(--surface));"><a href="/blog/v3-the-brain-launch.html">
         <div class="post-meta"><span class="tag" style="color: #22d3ee;">launch</span> &middot; v3.0 &middot; ~3,300 words &middot; ~12 min</div>
-        <h2>ux-skill v3.0 &mdash; we shipped The Brain. Brand specs are training data now, not templates.</h2>
+        <h2>ux-skill v3.0: we shipped The Brain. Brand specs are training data now, not templates.</h2>
         <p>The biggest architectural shift since v1. 7-axis synthesizer. Triple-mode dispatch (<code>strict_brand</code> / <code>brand_anchor</code> / <code>pure_synthesis</code>). Axis interaction matrix with four documented conflicts. Decisions ledger closes the feedback loop. New <code>/ux-evolve</code> auto-loop with a 65 quality gate. Fully offline. No LLM ever called.</p>
       </a></li>
 
       <!-- Tutorial: redesign an existing site, install to ship (2026-06-04) -->
       <li class="post"><a href="/blog/redesign-existing-website-with-ux-skill.html">
         <div class="post-meta"><span class="tag">tutorial</span> &middot; ~2,200 words &middot; ~9 min</div>
-        <h2>Redesign an existing website with AI &mdash; the full ux-skill workflow, install to brand-true result</h2>
-        <p>Point ux-skill at a site you already run. It reads the brand off the live page, anchors a design system to it, rebuilds the page, and fails the build if the output drifts off-brand or into AI-slop. The exact command order &mdash; <code>/ux-init</code> through <code>/ux-evolve</code> &mdash; with a real before-and-after: a UK commercial skip-hire lead-gen page that cleared the brand-fidelity gate at 100 with 0 high-severity lint.</p>
+        <h2>Redesign an existing website with AI: the full ux-skill workflow, install to brand-true result</h2>
+        <p>Point ux-skill at a site you already run. It reads the brand off the live page, anchors a design system to it, rebuilds the page, and fails the build if the output drifts off-brand or into AI-slop. The exact command order: <code>/ux-init</code> through <code>/ux-evolve</code>: with a real before-and-after: a UK commercial skip-hire lead-gen page that cleared the brand-fidelity gate at 100 with 0 high-severity lint.</p>
       </a></li>
 
       <!-- Layout: responsive by construction (2026-06-04) -->
@@ -725,39 +725,39 @@
       <!-- v3.0 quickstart (the 5-minute path) -->
       <li class="post"><a href="/blog/v3-quickstart-five-minutes.html">
         <div class="post-meta"><span class="tag">guide</span> &middot; ~1500 words &middot; ~7 min</div>
-        <h2>ux-skill v3.0 in 5 minutes &mdash; install, synthesize, evolve, ship</h2>
-        <p>The fast path through The Brain. Install, synthesize a fresh design language for your brief, run the evolve loop, check your local stats, and ship &mdash; fully offline, no LLM ever called.</p>
+        <h2>ux-skill v3.0 in 5 minutes: install, synthesize, evolve, ship</h2>
+        <p>The fast path through The Brain. Install, synthesize a fresh design language for your brief, run the evolve loop, check your local stats, and ship: fully offline, no LLM ever called.</p>
       </a></li>
 
       <!-- AI design sameness round (2026-05-29) -->
       <li class="post"><a href="/blog/shadcn-ui-looks-generic.html">
         <div class="post-meta"><span class="tag">field notes</span> &middot; ~900 words &middot; ~5 min</div>
-        <h2>Everything built with shadcn/ui looks the same &mdash; and how to break out</h2>
-        <p>shadcn/ui ships unstyled primitives; AI fills them with the same zinc/violet/Inter defaults. The components aren&rsquo;t the problem &mdash; the missing brief is. A structured brief that compiles to concrete tokens makes the same components render as a distinct brand.</p>
+        <h2>Everything built with shadcn/ui looks the same: and how to break out</h2>
+        <p>shadcn/ui ships unstyled primitives; AI fills them with the same zinc/violet/Inter defaults. The components aren&rsquo;t the problem: the missing brief is. A structured brief that compiles to concrete tokens makes the same components render as a distinct brand.</p>
       </a></li>
 
       <li class="post"><a href="/blog/ai-app-builders-generic-design.html">
         <div class="post-meta"><span class="tag">field notes</span> &middot; ~900 words &middot; ~5 min</div>
         <h2>Why v0, Bolt, and Lovable all ship the same look</h2>
-        <p>Prompt-to-app builders converge on one centroid because an empty brief has a single most-likely render, and adjectives only re-roll the same vocabulary. The fix is structure &mdash; deterministic tokens and an anti-slop linter &mdash; not better prompts.</p>
+        <p>Prompt-to-app builders converge on one centroid because an empty brief has a single most-likely render, and adjectives only re-roll the same vocabulary. The fix is structure: deterministic tokens and an anti-slop linter: not better prompts.</p>
       </a></li>
 
       <li class="post"><a href="/blog/why-ai-uses-purple-gradients.html">
         <div class="post-meta"><span class="tag">field notes</span> &middot; ~900 words &middot; ~5 min</div>
         <h2>Why AI always reaches for the purple gradient</h2>
-        <p>The violet-to-blue gradient is the strongest AI-design tell. Why the models default to it &mdash; frozen SaaS fashion, Tailwind&rsquo;s indigo, thumbnail-friendly templates &mdash; and how to escape the centroid: one accent under 80% saturation, semantic color, real brand palettes.</p>
+        <p>The violet-to-blue gradient is the strongest AI-design tell. Why the models default to it: frozen SaaS fashion, Tailwind&rsquo;s indigo, thumbnail-friendly templates: and how to escape the centroid: one accent under 80% saturation, semantic color, real brand palettes.</p>
       </a></li>
 
       <li class="post"><a href="/blog/why-ai-uses-inter-font.html">
         <div class="post-meta"><span class="tag">field notes</span> &middot; ~900 words &middot; ~5 min</div>
         <h2>Why AI design always defaults to Inter</h2>
-        <p>AI reaches for Inter because it&rsquo;s the default of nearly every reference UI it trained on &mdash; Tailwind UI, Vercel, shadcn. The tell isn&rsquo;t that Inter is bad; it&rsquo;s one neutral grotesque used for every voice. Pick type for the surface instead.</p>
+        <p>AI reaches for Inter because it&rsquo;s the default of nearly every reference UI it trained on: Tailwind UI, Vercel, shadcn. The tell isn&rsquo;t that Inter is bad; it&rsquo;s one neutral grotesque used for every voice. Pick type for the surface instead.</p>
       </a></li>
 
       <li class="post"><a href="/blog/ai-generated-ui-accessibility.html">
         <div class="post-meta"><span class="tag">field notes</span> &middot; ~950 words &middot; ~5 min</div>
         <h2>The accessibility holes in AI-generated UI</h2>
-        <p>AI optimizes for how a UI looks, not whether it works &mdash; so it ships low-contrast text, removed focus rings, and icon-only buttons with no label. The defects are invisible in a screenshot and mechanical to catch on commit.</p>
+        <p>AI optimizes for how a UI looks, not whether it works: so it ships low-contrast text, removed focus rings, and icon-only buttons with no label. The defects are invisible in a screenshot and mechanical to catch on commit.</p>
       </a></li>
 
       <li class="post"><a href="/blog/design-tokens-ai-coding.html">
@@ -787,7 +787,7 @@
       <li class="post"><a href="/blog/ai-ui-design-review-checklist.html">
         <div class="post-meta"><span class="tag">field notes</span> &middot; ~1,000 words &middot; ~6 min</div>
         <h2>A pre-ship design review checklist for AI-generated UI</h2>
-        <p>AI output passes a glance and fails a review. A layer-by-layer checklist &mdash; palette, type, layout, density, radius, states, accessibility, motion &mdash; with the tell and the fix for each. Most of it is mechanically checkable.</p>
+        <p>AI output passes a glance and fails a review. A layer-by-layer checklist: palette, type, layout, density, radius, states, accessibility, motion: with the tell and the fix for each. Most of it is mechanically checkable.</p>
       </a></li>
 
       <li class="post"><a href="/blog/make-ai-output-on-brand.html">
@@ -810,97 +810,97 @@
 
       <li class="post"><a href="/blog/ja/v3-the-brain.html">
         <div class="post-meta"><span class="tag">日本語 &middot; launch v3.0</span> &middot; ~10,900 chars &middot; ~12 min</div>
-        <h2>ux-skill v3.0 &mdash; The Brain をリリース。ブランド仕様はテンプレートではなく訓練データに。</h2>
+        <h2>ux-skill v3.0: The Brain をリリース。ブランド仕様はテンプレートではなく訓練データに。</h2>
         <p>v2 はカタログから選んでいた。v3 はそこから蒸留する。7 軸シンセサイザー、3 つの自動振り分けモード、軸の相互作用マトリックス、決定台帳による閉じたフィードバックループ、そして品質ゲート 65 を持つ新しい <code>/ux-evolve</code> オートループ。</p>
       </a></li>
 
       <li class="post"><a href="/blog/zh-CN/v3-the-brain.html">
         <div class="post-meta"><span class="tag">简体中文 &middot; launch v3.0</span> &middot; ~8,400 chars &middot; ~12 min</div>
-        <h2>ux-skill v3.0 &mdash; 我们发布了 The Brain。品牌规范现在是训练数据,不是模板。</h2>
+        <h2>ux-skill v3.0: 我们发布了 The Brain。品牌规范现在是训练数据,不是模板。</h2>
         <p>v2 从目录里挑,v3 从目录里蒸馏。七轴合成器、三种自动分发模式、轴的相互作用矩阵、闭合反馈回路的决策账本,以及质量门禁卡在 65 的新 <code>/ux-evolve</code> 自动循环。</p>
       </a></li>
 
       <li class="post"><a href="/blog/ar/v3-the-brain.html">
         <div class="post-meta"><span class="tag">العربية &middot; launch v3.0</span> &middot; ~14,900 chars &middot; ~12 min</div>
-        <h2 dir="rtl" style="text-align: right;">ux-skill v3.0 &mdash; أطلقنا The Brain. مواصفات العلامات صارت بيانات تدريب لا قوالب.</h2>
+        <h2 dir="rtl" style="text-align: right;">ux-skill v3.0: أطلقنا The Brain. مواصفات العلامات صارت بيانات تدريب لا قوالب.</h2>
         <p dir="rtl" style="text-align: right;">في v2 كنّا نختار من الكتالوج. في v3 نُقطّر منه. مُولِّد بسبعة محاور، ثلاثة أوضاع تلقائيّة، مصفوفة تفاعُل المحاور، سِجلّ قرارات يُغلِق حلقة التغذية الراجعة، وحلقة <code>/ux-evolve</code> الجديدة ببوّابة جودة عند 65.</p>
       </a></li>
 
       <li class="post"><a href="/blog/es/v3-the-brain.html">
         <div class="post-meta"><span class="tag">Español &middot; launch v3.0</span> &middot; ~3,500 words &middot; ~12 min</div>
-        <h2>ux-skill v3.0 &mdash; lanzamos The Brain. Las brand specs ahora son datos de entrenamiento, no plantillas.</h2>
+        <h2>ux-skill v3.0: lanzamos The Brain. Las brand specs ahora son datos de entrenamiento, no plantillas.</h2>
         <p>v2 elegía del catálogo. v3 destila de él. El sintetizador de 7 ejes, los tres modos auto-despachados, la matriz de interacción de ejes, el log de decisiones que cierra el bucle de retroalimentación, y el nuevo auto-loop <code>/ux-evolve</code> con un quality gate en 65.</p>
       </a></li>
 
       <li class="post"><a href="/blog/de/v3-the-brain.html">
         <div class="post-meta"><span class="tag">Deutsch &middot; launch v3.0</span> &middot; ~3,100 words &middot; ~12 min</div>
-        <h2>ux-skill v3.0 &mdash; wir haben The Brain veröffentlicht. Brand-Specs sind jetzt Trainingsdaten, keine Vorlagen.</h2>
+        <h2>ux-skill v3.0: wir haben The Brain veröffentlicht. Brand-Specs sind jetzt Trainingsdaten, keine Vorlagen.</h2>
         <p>v2 hat aus dem Katalog gewählt. v3 destilliert daraus. Der 7-Achsen-Synthesizer, die drei automatisch gewählten Modi, die Achsen-Interaktionsmatrix, das Entscheidungs-Ledger als geschlossene Rückkopplungsschleife und der neue <code>/ux-evolve</code>-Auto-Loop mit Quality-Gate bei 65.</p>
       </a></li>
 
       <li class="post"><a href="/blog/fr/v3-the-brain.html">
         <div class="post-meta"><span class="tag">Français &middot; launch v3.0</span> &middot; ~3,300 words &middot; ~12 min</div>
-        <h2>ux-skill v3.0 &mdash; on a livré The Brain. Les brand specs sont des données d'entraînement, plus des templates.</h2>
+        <h2>ux-skill v3.0: on a livré The Brain. Les brand specs sont des données d'entraînement, plus des templates.</h2>
         <p>v2 piochait dans le catalogue. v3 le distille. Le synthétiseur à 7 axes, les trois modes auto-dispatchés, la matrice d'interaction des axes, le journal de décisions qui boucle la rétroaction, et la nouvelle boucle automatique <code>/ux-evolve</code> avec un seuil qualité à 65.</p>
       </a></li>
 
       <li class="post"><a href="/blog/why-ai-generated-apps-look-the-same.html">
         <div class="post-meta"><span class="tag">field notes</span> &middot; v3.0 &middot; ~1,400 words</div>
-        <h2>The centroid problem &mdash; why AI-generated design regresses to the mean</h2>
-        <p>v0, Bolt, Lovable, Cursor, Copilot all converge on one look because the model returns the average of its training set. The four forces behind the sameness &mdash; regression to the mean, shared scaffolding, identical briefs, no memory &mdash; and the deterministic way out of the centroid.</p>
+        <h2>The centroid problem: why AI-generated design regresses to the mean</h2>
+        <p>v0, Bolt, Lovable, Cursor, Copilot all converge on one look because the model returns the average of its training set. The four forces behind the sameness: regression to the mean, shared scaffolding, identical briefs, no memory: and the deterministic way out of the centroid.</p>
       </a></li>
 
       <li class="post"><a href="/blog/ai-dashboard-design-generic.html">
         <div class="post-meta"><span class="tag">field notes</span> &middot; v3.0 &middot; ~1,300 words</div>
-        <h2>Why AI-generated dashboards all look the same &mdash; and the density fix</h2>
-        <p>Sidebar, top bar, four stat cards, one line chart, a table &mdash; every AI dashboard ships the same layout at the wrong density. The real failure is gallery spacing on a cockpit surface; the density axis (4px base, compressed scale, the right chart per metric) is the fix.</p>
+        <h2>Why AI-generated dashboards all look the same: and the density fix</h2>
+        <p>Sidebar, top bar, four stat cards, one line chart, a table: every AI dashboard ships the same layout at the wrong density. The real failure is gallery spacing on a cockpit surface; the density axis (4px base, compressed scale, the right chart per metric) is the fix.</p>
       </a></li>
 
       <li class="post"><a href="/blog/brand-specs-training-data-not-templates.html">
         <div class="post-meta"><span class="tag">reframe</span> &middot; v3.0 &middot; ~2,400 words</div>
-        <h2>Brand specs are training data, not templates &mdash; the v3.0 reframe</h2>
+        <h2>Brand specs are training data, not templates: the v3.0 reframe</h2>
         <p>The 160-brand catalogue used to be a pool the recommender picked from. v3.0 makes it the vocabulary a 7-axis synthesizer distills into novel design languages per brief. Same files. Different role. Three modes auto-dispatched by what's in the brief.</p>
       </a></li>
 
       <li class="post"><a href="/blog/deterministic-design-engine-no-llm.html">
         <div class="post-meta"><span class="tag">architecture</span> &middot; v3.0 &middot; ~2,200 words</div>
-        <h2>A deterministic design engine that learns offline &mdash; how v3.0 avoids the LLM trap</h2>
+        <h2>A deterministic design engine that learns offline: how v3.0 avoids the LLM trap</h2>
         <p>Same brief always produces the same output. Reproducible across machines. Yet the system genuinely learns from its own decisions log over time. The math behind a generative system without an LLM call in the engine.</p>
       </a></li>
 
       <li class="post"><a href="/blog/closed-loop-design-system-feedback.html">
         <div class="post-meta"><span class="tag">architecture</span> &middot; v3.0 &middot; ~2,100 words</div>
-        <h2>What a closed-loop design system actually means &mdash; ux-skill v3.0 explained</h2>
+        <h2>What a closed-loop design system actually means: ux-skill v3.0 explained</h2>
         <p>Most AI design tools generate once and forget. v3.0 writes every recommendation, every lint score, every accept/reject to a local ledger. The recommender reads that ledger and re-ranks. The feedback loop is closed for real.</p>
       </a></li>
 
       <li class="post"><a href="/blog/seven-axes-design-system-explained.html">
         <div class="post-meta"><span class="tag">deep dive</span> &middot; v3.0 &middot; ~2,400 words</div>
-        <h2>The 7 axes of a design system &mdash; how v3.0 maps a brief to tokens</h2>
+        <h2>The 7 axes of a design system: how v3.0 maps a brief to tokens</h2>
         <p>warmth &middot; contrast &middot; density &middot; geometry &middot; formality &middot; motion &middot; type_personality. The seven continuous axes that v3.0's synthesizer derives from your brief and compiles to palette, type, spacing, radius, motion tokens. With the actual math.</p>
       </a></li>
 
       <li class="post"><a href="/blog/ux-skill-v3-vs-ui-ux-pro-max.html">
         <div class="post-meta"><span class="tag">comparison</span> &middot; v3.0 &middot; ~2,000 words</div>
-        <h2>ux-skill v3.0 vs UI/UX Pro Max &mdash; engine vs atlas, scored honestly</h2>
+        <h2>ux-skill v3.0 vs UI/UX Pro Max: engine vs atlas, scored honestly</h2>
         <p>UI/UX Pro Max is the finished atlas of UI knowledge. ux-skill v3.0 is the engine that decides what UI should exist. Different categories. Where each wins, where the other doesn't, and why we picked the engine path.</p>
       </a></li>
 
       <li class="post"><a href="/blog/vibe-coding-design-system.html">
         <div class="post-meta"><span class="tag">practice</span> &middot; ~1650 words &middot; ~7 min</div>
-        <h2>Vibe coding is real &mdash; but your AI still ships the same defaults</h2>
+        <h2>Vibe coding is real: but your AI still ships the same defaults</h2>
         <p>The honest take on vibe coding in 2026: the velocity is real, the fingerprint is recognizable. <code>ux discover</code> is the brief, <code>ux recommend</code> narrows the model's choices, <code>ux lint</code> sets the deterministic floor with 145 regex rules over a 1,243-entry catalog.</p>
       </a></li>
 
       <li class="post"><a href="/blog/ai-built-website-no-slop.html">
         <div class="post-meta"><span class="tag">comparison</span> &middot; ~2100 words &middot; ~10 min</div>
-        <h2>AI-built websites in 2026 &mdash; why every one looks the same and how to fix it</h2>
+        <h2>AI-built websites in 2026: why every one looks the same and how to fix it</h2>
         <p>Vercel v0, Lovable, Bolt.new, Replit Agent, Tempo, and Claude Code all default to the same UI patterns. The shared fingerprint, the three convergent forces, and the export-then-lint workflow that closes the loop. With a real 200-line v0 export lint report.</p>
       </a></li>
 
       <li class="post"><a href="/blog/anti-slop-cli-vibe-coders.html">
         <div class="post-meta"><span class="tag">technical</span> &middot; ~1900 words &middot; ~9 min</div>
-        <h2>The anti-slop CLI for vibe coders &mdash; 145 rules, no LLM, runs in CI</h2>
+        <h2>The anti-slop CLI for vibe coders: 145 rules, no LLM, runs in CI</h2>
         <p>A deterministic command-line design linter built for the vibe-coding workflow. JSON output, exit-code contract, pre-commit + GitHub Actions + GitLab CI + Husky + Lefthook recipes. Measured numbers: 18ms staged-diff, 96ms warm full repo, 412ms cold.</p>
       </a></li>
 
@@ -912,80 +912,80 @@
 
       <li class="post"><a href="/blog/zh-CN/vibe-coding-shipping-real-design.html">
         <div class="post-meta"><span class="tag">简体中文</span> &middot; ~4200 chars &middot; ~7 min</div>
-        <h2>用「Vibe Coding」做出真正能交付的设计 &mdash; 而不是 AI 默认的紫蓝渐变</h2>
+        <h2>用「Vibe Coding」做出真正能交付的设计: 而不是 AI 默认的紫蓝渐变</h2>
         <p>Vibe coding 的速度是真的,但 AI 默认输出的紫蓝渐变、三张同款卡片、Inter 当显示字体也是真的。用 ux-skill 的 100 条确定性正则规则、998 条目录,在 CI 中卡住默认值。</p>
       </a></li>
 
       <li class="post"><a href="/blog/ko/ai-coding-design-rules.html">
         <div class="post-meta"><span class="tag">한국어</span> &middot; ~4700 chars &middot; ~7 min</div>
-        <h2>AI 코딩 시대의 디자인 규칙 &mdash; 왜 모든 AI가 같은 UI를 만드는가</h2>
+        <h2>AI 코딩 시대의 디자인 규칙: 왜 모든 AI가 같은 UI를 만드는가</h2>
         <p>Claude Code, Cursor, Cline, Windsurf가 모두 같은 디폴트를 답습합니다. 본문 서체를 90px 헤드라인으로, 보라-파랑 그라데이션, 3개의 동일 카드 그리드. ux-skill은 100개의 결정론적 정규식 규칙으로 이를 CI에서 막습니다.</p>
       </a></li>
 
       <li class="post"><a href="/blog/zed-design-plugin.html">
         <div class="post-meta"><span class="tag">tutorial</span> &middot; ~1450 words &middot; ~7 min</div>
-        <h2>Zed design plugin &mdash; install ux-skill to stop generic AI design output</h2>
+        <h2>Zed design plugin: install ux-skill to stop generic AI design output</h2>
         <p>Zed is the high-performance Rust IDE with a first-class MCP client called the Agent Panel. Three install paths: MCP stdio server, CLI in the terminal pane, pre-commit hook. ux-skill plugs in through <code>~/.config/zed/settings.json</code>.</p>
       </a></li>
 
       <li class="post"><a href="/blog/github-copilot-design-rules.html">
         <div class="post-meta"><span class="tag">tutorial</span> &middot; ~1625 words &middot; ~8 min</div>
-        <h2>GitHub Copilot design rules &mdash; how ux-skill catches AI design fingerprints in Copilot output</h2>
+        <h2>GitHub Copilot design rules: how ux-skill catches AI design fingerprints in Copilot output</h2>
         <p>Copilot ships great code completion and generic design. ux-skill generates a <code>.github/copilot-instructions.md</code> file plus a 68-rule deterministic linter that runs on disk after Copilot writes. Custom instructions raise the floor; the linter sets the ceiling.</p>
       </a></li>
 
       <li class="post"><a href="/blog/jetbrains-ai-design-system.html">
         <div class="post-meta"><span class="tag">tutorial</span> &middot; ~1700 words &middot; ~8 min</div>
-        <h2>JetBrains AI Assistant design system rules &mdash; keeping IntelliJ + WebStorm generations on-brand</h2>
+        <h2>JetBrains AI Assistant design system rules: keeping IntelliJ + WebStorm generations on-brand</h2>
         <p>Works in IntelliJ, WebStorm, PyCharm, GoLand, RubyMine, RustRover. <code>.junie/guidelines.md</code> generator, tokens.css for Spring projects, Kotlin object emit for Compose, MCP server for AI Assistant.</p>
       </a></li>
 
       <li class="post"><a href="/blog/ai-design-system-cli.html">
         <div class="post-meta"><span class="tag">technical</span> &middot; ~1700 words &middot; ~8 min</div>
-        <h2>AI design system CLI &mdash; the npx and pip way to generate a design system in under 60 seconds</h2>
+        <h2>AI design system CLI: the npx and pip way to generate a design system in under 60 seconds</h2>
         <p>Three CLI commands cover the full pipeline: <code>ux discover</code> (10-field brief), <code>ux recommend</code> (5-parallel-search), <code>ux persist save</code> (MASTER.md + tokens.css + manifest.json). Engine compute under 300 ms; brief is 100% of the human time.</p>
       </a></li>
 
       <li class="post"><a href="/blog/claude-desktop-mcp-design.html">
         <div class="post-meta"><span class="tag">technical</span> &middot; ~1550 words &middot; ~8 min</div>
-        <h2>Claude Desktop + MCP design intelligence &mdash; ux-skill as a stdio server</h2>
-        <p>None of the top eight Claude design skills ship an MCP server. ux-skill v2 does &mdash; 18 tools registered, a dedicated <code>ux-mcp</code> entry point, one JSON block in <code>claude_desktop_config.json</code>. Same engine reaches Cursor, Windsurf, Cline, Continue.</p>
+        <h2>Claude Desktop + MCP design intelligence: ux-skill as a stdio server</h2>
+        <p>None of the top eight Claude design skills ship an MCP server. ux-skill v2 does: 18 tools registered, a dedicated <code>ux-mcp</code> entry point, one JSON block in <code>claude_desktop_config.json</code>. Same engine reaches Cursor, Windsurf, Cline, Continue.</p>
       </a></li>
 
       <li class="post"><a href="/blog/dogfooding-design-engine.html">
         <div class="post-meta"><span class="tag">story</span> &middot; ~1100 words &middot; ~6 min</div>
-        <h2>Dogfooding ux-skill &mdash; bugs we found by using our own design engine</h2>
-        <p>We ran our recommender against our homepage brief. It returned a stark editorial scheme &mdash; the same one we'd just shipped. We filed two bugs against ourselves (editorial tag too narrow, calm tag coupled to luminance), fixed both, re-ran the engine, and shipped a page that passes its own linter cleanly.</p>
+        <h2>Dogfooding ux-skill: bugs we found by using our own design engine</h2>
+        <p>We ran our recommender against our homepage brief. It returned a stark editorial scheme: the same one we'd just shipped. We filed two bugs against ourselves (editorial tag too narrow, calm tag coupled to luminance), fixed both, re-ran the engine, and shipped a page that passes its own linter cleanly.</p>
       </a></li>
 
       <li class="post"><a href="/blog/dark-editorial-cinema-design.html">
         <div class="post-meta"><span class="tag">design</span> &middot; ~1200 words &middot; ~7 min</div>
-        <h2>Dark editorial cinema &mdash; the design language behind ux-skill's new homepage</h2>
+        <h2>Dark editorial cinema: the design language behind ux-skill's new homepage</h2>
         <p>Near-black canvas, per-scene accents, Bricolage Grotesque variable on scroll, scroll-pinned cinema motion. The actual design choices, swatches, type config, lint result (0 findings at high), and how to recreate the system from your own brief.</p>
       </a></li>
 
       <li class="post"><a href="/blog/mcp-server-design-intelligence.html">
         <div class="post-meta"><span class="tag">technical</span> &middot; ~1300 words &middot; ~9 min</div>
-        <h2>MCP server for design intelligence &mdash; ux-skill's 18 tools any agent can call</h2>
+        <h2>MCP server for design intelligence: ux-skill's 18 tools any agent can call</h2>
         <p>The Python engine, the 51-rule linter, the 1,243-entry catalog, all exposed as 14 Model Context Protocol tools. Real Pydantic schemas, real Claude Desktop / Cursor / Windsurf configs, real JSON-RPC payloads. The asymmetric move against single-host skills.</p>
       </a></li>
 
       <li class="post"><a href="/blog/motion-presets-framer-gsap-css.html">
         <div class="post-meta"><span class="tag">reference</span> &middot; ~1500 words &middot; ~9 min</div>
-        <h2>57 motion presets for AI coding &mdash; Framer Motion, GSAP, and CSS snippets</h2>
+        <h2>57 motion presets for AI coding: Framer Motion, GSAP, and CSS snippets</h2>
         <p>The motion library AI coding tools never ship. 57 presets across 8 categories, each available in all three engines, with <code>prefers-reduced-motion</code> branches and performance notes. When to pick CSS vs Framer Motion vs GSAP.</p>
       </a></li>
 
       <li class="post"><a href="/blog/regex-linter-for-ai-coding.html">
         <div class="post-meta"><span class="tag">technical</span> &middot; ~1400 words &middot; ~8 min</div>
-        <h2>Regex linter for AI coding &mdash; how 51 rules catch design slop in CI</h2>
+        <h2>Regex linter for AI coding: how 51 rules catch design slop in CI</h2>
         <p>Deterministic, sub-second, zero LLM calls. The 51 ux-skill anti-pattern rules grouped by category, a real rule walkthrough, GitHub Actions workflow, pre-commit hook config, and a before/after on a Next.js hero that fails three rules.</p>
       </a></li>
 
       <li class="post"><a href="/blog/ai-design-fingerprints-list.html">
         <div class="post-meta"><span class="tag">reference</span> &middot; ~2000 words &middot; ~14 min</div>
         <h2>The 35 AI design fingerprints every AI coding tool ships by default</h2>
-        <p>The complete taxonomy. Inter at 90px, indigo-to-blue gradients, three equal cards, generic placeholder names, fade-in-up on everything. Grouped by category &mdash; Typography, Color, Layout, Content, Motion, A11y, Quality &mdash; with detection regex, why each is slop, and the fix.</p>
+        <p>The complete taxonomy. Inter at 90px, indigo-to-blue gradients, three equal cards, generic placeholder names, fade-in-up on everything. Grouped by category: Typography, Color, Layout, Content, Motion, A11y, Quality: with detection regex, why each is slop, and the fix.</p>
       </a></li>
 
       <li class="post"><a href="/blog/claude-code-marketplace-best-plugins.html">
@@ -996,37 +996,37 @@
 
       <li class="post"><a href="/blog/monorepo-design-system-ai-coding.html">
         <div class="post-meta"><span class="tag">technical</span> &middot; ~1200 words &middot; ~7 min</div>
-        <h2>Monorepo design system with AI coding &mdash; ux-skill's tokens.css output</h2>
+        <h2>Monorepo design system with AI coding: ux-skill's tokens.css output</h2>
         <p>One shared <code>tokens.css</code> + <code>manifest.json</code> across Turborepo or Nx packages. AI-generated code in every <code>apps/*</code> consumer stays on system. The linter exits non-zero on drift at PR time.</p>
       </a></li>
 
       <li class="post"><a href="/blog/figma-vs-ux-skill.html">
         <div class="post-meta"><span class="tag">comparison</span> &middot; ~1100 words &middot; ~6 min</div>
-        <h2>Figma MCP vs ux-skill &mdash; design intelligence in your AI coding session</h2>
+        <h2>Figma MCP vs ux-skill: design intelligence in your AI coding session</h2>
         <p>Figma MCP imports designs from a Figma file into the AI session; ux-skill generates a system from a written brief. Side-by-side table, plus the complementary workflow when you have a partial Figma file and need to extend it.</p>
       </a></li>
 
       <li class="post"><a href="/blog/windsurf-design-rules.html">
         <div class="post-meta"><span class="tag">tutorial</span> &middot; ~950 words &middot; ~5 min</div>
-        <h2>Windsurf design rules &mdash; install ux-skill for Cursor-grade design output</h2>
-        <p>Windsurf has no native design rules. Cascade inherits the model's defaults &mdash; Inter at 90px, indigo gradients, three equal cards. Three install paths via <code>.windsurfrules</code> / <code>npx</code> / <code>pip</code>. Free + MIT.</p>
+        <h2>Windsurf design rules: install ux-skill for Cursor-grade design output</h2>
+        <p>Windsurf has no native design rules. Cascade inherits the model's defaults: Inter at 90px, indigo gradients, three equal cards. Three install paths via <code>.windsurfrules</code> / <code>npx</code> / <code>pip</code>. Free + MIT.</p>
       </a></li>
 
       <li class="post"><a href="/blog/vs-ui-ux-pro-max.html">
         <div class="post-meta"><span class="tag">comparison</span> &middot; ~1200 words &middot; ~5 min</div>
-        <h2>ui-ux-pro-max alternative: ux-skill v2 &mdash; every dimension, side by side</h2>
+        <h2>ui-ux-pro-max alternative: ux-skill v2: every dimension, side by side</h2>
         <p>The most-starred Claude UX skill on GitHub is ui-ux-pro-max-skill at 84k. ux-skill v2 borrows their recommender pattern and goes further. Honest table: 1,243 entries vs ~600, 145-rule linter vs none, 160 brand specs vs none.</p>
       </a></li>
 
       <li class="post"><a href="/blog/anti-ai-slop-claude-skills.html">
         <div class="post-meta"><span class="tag">ranking</span> &middot; ~1500 words &middot; ~7 min</div>
-        <h2>Anti-AI-slop tools for Claude Code in 2026 &mdash; the honest ranking</h2>
+        <h2>Anti-AI-slop tools for Claude Code in 2026: the honest ranking</h2>
         <p>Every AI coding tool produces the same fingerprints: Inter as display, purple gradients, three identical cards. Ranked: Leonxlnx/taste-skill (25k stars), Nutlope/hallmark (2.1k), ux-skill v2 (145 deterministic regex rules, only one with CI-friendly enforcement).</p>
       </a></li>
 
       <li class="post"><a href="/blog/best-claude-code-design-skills-2026.html">
         <div class="post-meta"><span class="tag">guide</span> &middot; ~1400 words &middot; ~6 min</div>
-        <h2>Best Claude Code skills for UX/UI design &mdash; 2026 ranking</h2>
+        <h2>Best Claude Code skills for UX/UI design: 2026 ranking</h2>
         <p>Ranked by live GitHub stars: ui-ux-pro-max (84k), open-design (54k), taste-skill (25k), huashu-design (15k), stitch-skills (5.7k), nothing-design-skill (2.4k), hallmark (2.1k), material-3-skill (955). Cards with architecture, scope, real fit.</p>
       </a></li>
 
@@ -1038,7 +1038,7 @@
 
       <li class="post"><a href="/blog/python-design-system-generator.html">
         <div class="post-meta"><span class="tag">technical</span> &middot; ~1100 words &middot; ~5 min</div>
-        <h2>Python design system generator &mdash; ux-skill v2's 5-parallel-search engine</h2>
+        <h2>Python design system generator: ux-skill v2's 5-parallel-search engine</h2>
         <p>How the engine merges five lanes (industry &rarr; style &rarr; palette &rarr; type &rarr; motion) into one recommendation, deterministically, in seconds. Brief in, complete design system out. 1,243 structured entries under the hood.</p>
       </a></li>
 
@@ -1046,7 +1046,7 @@
       <li class="post"><a href="/blog/best-ai-coding-tools-2026-design-quality.html">
         <div class="post-meta"><span class="tag">comparison</span> &middot; ~2900 words &middot; ~13 min</div>
         <h2>Best AI coding tools for design-quality output in 2026</h2>
-        <p>Cursor, Windsurf, Claude Code, GitHub Copilot, Cline, Continue, and Codex &mdash; ranked by what they actually produce for design-quality frontends. The eight shared defaults, the bolt-on that fixes them, and the 17 IDEs ux-skill ships into.</p>
+        <p>Cursor, Windsurf, Claude Code, GitHub Copilot, Cline, Continue, and Codex: ranked by what they actually produce for design-quality frontends. The eight shared defaults, the bolt-on that fixes them, and the 17 IDEs ux-skill ships into.</p>
       </a></li>
 
       <li class="post"><a href="/blog/ai-design-system-figma-to-code.html">
@@ -1058,7 +1058,7 @@
       <li class="post" style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.04);"><div style="padding: 4px 0;">
         <div class="post-meta" style="color: var(--scene-accent); margin-bottom: 6px;">more languages</div>
         <h2 style="font-size: 18px; margin-bottom: 6px;">Read in your language</h2>
-        <p>Long-form SEO writing in twelve locales &mdash; same depth, native prose. Topics: what ux-skill does, how to install for Claude Code / Cursor / Windsurf, why the anti-AI-slop linter matters.</p>
+        <p>Long-form SEO writing in twelve locales: same depth, native prose. Topics: what ux-skill does, how to install for Claude Code / Cursor / Windsurf, why the anti-AI-slop linter matters.</p>
         <p class="blog-langs">Each locale has its own blog index:
           <a href="/blog/ar/">العربية</a> &middot;
           <a href="/blog/zh-CN/">简体中文</a> &middot;
@@ -1077,49 +1077,49 @@
 
       <li class="post"><a href="/blog/ja/ai-coding-design-japanese.html">
         <div class="post-meta"><span class="tag">日本語</span> &middot; ~2000 words &middot; ~9 min</div>
-        <h2>AI コーディング デザイン &mdash; Claude Code デザインシステムの作り方</h2>
+        <h2>AI コーディング デザイン: Claude Code デザインシステムの作り方</h2>
         <p>Claude Code、Cursor、Windsurf、GitHub Copilot、Cline が踏む 8 つの視覚的デフォルト。Inter を 90px の見出しに、紫から青のグラデーション、3 つの同じカード。ux-skill は 145 の決定論的正規表現ルールで CI 上でこれを止めます。</p>
       </a></li>
 
       <li class="post"><a href="/blog/de/ki-coding-design-deutsch.html">
         <div class="post-meta"><span class="tag">Deutsch</span> &middot; ~2000 words &middot; ~9 min</div>
-        <h2>KI-Coding Design &mdash; wie man ein Cursor-AI-Designsystem baut</h2>
+        <h2>KI-Coding Design: wie man ein Cursor-AI-Designsystem baut</h2>
         <p>Jedes KI-Coding-Werkzeug liefert dieselben acht visuellen Defaults. Inter als Display-Schrift, Verlauf von Lila nach Blau, drei identische Karten. ux-skill blockiert sie in der CI mit 145 deterministischen Regex-Regeln.</p>
       </a></li>
 
       <li class="post"><a href="/blog/fr/ia-coding-design-francais.html">
         <div class="post-meta"><span class="tag">Français</span> &middot; ~2000 words &middot; ~9 min</div>
-        <h2>IA coding design &mdash; construire un système de design pour Claude Code</h2>
+        <h2>IA coding design: construire un système de design pour Claude Code</h2>
         <p>Chaque outil d'IA de programmation produit les mêmes huit défauts visuels. Inter en typographie display, dégradé violet vers bleu, trois cartes identiques. ux-skill bloque ces motifs dans la CI avec 145 règles regex déterministes.</p>
       </a></li>
 
       <li class="post"><a href="/blog/zh-CN/ai-coding-design-chinese.html">
         <div class="post-meta"><span class="tag">简体中文</span> &middot; ~2000 words &middot; ~9 min</div>
-        <h2>AI 编程设计 &mdash; 用 ux-skill 给 Cursor 设计系统兜底</h2>
+        <h2>AI 编程设计: 用 ux-skill 给 Cursor 设计系统兜底</h2>
         <p>任何 AI 编程工具都会输出同样八个视觉默认值:Inter 当显示字、紫到蓝渐变、三张一模一样的卡。ux-skill 用 145 条确定性正则规则,在 CI 上拦住这些模式。</p>
       </a></li>
 
       <li class="post"><a href="/blog/ko/ai-coding-design-korean.html">
         <div class="post-meta"><span class="tag">한국어</span> &middot; ~2000 words &middot; ~9 min</div>
-        <h2>AI 코딩 디자인 &mdash; Claude Code 디자인 시스템을 만드는 법</h2>
+        <h2>AI 코딩 디자인: Claude Code 디자인 시스템을 만드는 법</h2>
         <p>모든 AI 코딩 도구가 같은 8가지 시각적 디폴트를 뱉습니다. 본문용 Inter를 90px 헤드라인으로, 보라-파랑 그라데이션, 동일한 카드 3개. ux-skill은 145개의 결정론적 정규식 규칙으로 CI에서 이를 막습니다.</p>
       </a></li>
 
       <li class="post"><a href="/blog/ar/ai-coding-design-arabic.html">
         <div class="post-meta"><span class="tag">العربية</span> &middot; ~2000 words &middot; ~9 min</div>
-        <h2 dir="rtl" style="text-align: right;">تصميم برمجة الذكاء الاصطناعي &mdash; كيف تبني نظام تصميم لـ Claude Code</h2>
+        <h2 dir="rtl" style="text-align: right;">تصميم برمجة الذكاء الاصطناعي: كيف تبني نظام تصميم لـ Claude Code</h2>
         <p dir="rtl" style="text-align: right;">كل أداة برمجة بالذكاء الاصطناعي تنتج نفس الافتراضات الثمانية البصرية: خط Inter في حجم العنوان، تدرّج من البنفسجي إلى الأزرق، ثلاث بطاقات متطابقة. يوقف ux-skill هذه الأنماط في الـ CI عبر 145 قاعدة Regex حتمية.</p>
       </a></li>
 
       <li class="post"><a href="/blog/pt-BR/ai-coding-design-portuguese.html">
         <div class="post-meta"><span class="tag">Português (BR)</span> &middot; ~2000 words &middot; ~9 min</div>
-        <h2>Design para programação com IA &mdash; como montar um sistema no Claude Code</h2>
+        <h2>Design para programação com IA: como montar um sistema no Claude Code</h2>
         <p>Toda ferramenta de programação com IA cai nos mesmos oito defeitos visuais: Inter em tamanho de display, gradiente roxo para azul, três cartões idênticos. O ux-skill bloqueia esses padrões no CI com 145 regras regex determinísticas.</p>
       </a></li>
 
       <li class="post"><a href="/blog/it/ai-coding-design-italian.html">
         <div class="post-meta"><span class="tag">Italiano</span> &middot; ~2000 words &middot; ~9 min</div>
-        <h2>Design AI coding &mdash; come costruire un design system con Claude Code</h2>
+        <h2>Design AI coding: come costruire un design system con Claude Code</h2>
         <p>Ogni strumento di AI coding cade negli stessi otto difetti visivi: Inter usato come display, gradiente da viola a blu, tre card identiche. ux-skill blocca questi pattern nella CI con 145 regole regex deterministiche.</p>
       </a></li>
     </ul>

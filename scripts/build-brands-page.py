@@ -1,4 +1,4 @@
-"""Generate docs/brands.html — browseable, searchable catalogue of every
+"""Generate docs/brands.html: browseable, searchable catalogue of every
 brand spec in data/brands/_index.json.
 
 High-value because:
@@ -12,6 +12,16 @@ Re-run after data/brands/_index.json changes.
 from pathlib import Path
 import json
 import html
+import re
+
+
+def sanitize_dashes(s):
+    """Strip em/en dashes from rendered prose (no-AI-tell house rule).
+    em-dash -> comma; en-dash (numeric range) -> hyphen. Applied to brand
+    spec text so a rebuild never reintroduces dashes into docs/brands.html."""
+    s = re.sub(r'\s*—\s*', ', ', s)
+    s = re.sub(r'\s*–\s*', '-', s)
+    return s
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -66,9 +76,9 @@ def render_card(brand_idx, spec):
     if spec:
         p = spec.get("philosophy") or spec.get("essence")
         if p:
-            philosophy = html.escape(str(p))
+            philosophy = sanitize_dashes(html.escape(str(p)))
     swatches = render_swatches(spec.get("design_language", {})) if spec else ""
-    # Only emit the DESIGN.md link if the file actually exists on disk —
+    # Only emit the DESIGN.md link if the file actually exists on disk.
     # 72 of 160 brands historically had no DESIGN.md and the link 404'd.
     md_path = ROOT / "references" / "brands" / f"{bid}-DESIGN.md"
     if md_path.exists():
@@ -84,7 +94,7 @@ def render_card(brand_idx, spec):
         <h3 class="br-name">{name}</h3>
       </header>
       {swatches}
-      <p class="br-phil">{philosophy or '<em class="br-phil-empty">DESIGN.md only — no structured spec yet.</em>'}</p>
+      <p class="br-phil">{philosophy or '<em class="br-phil-empty">DESIGN.md only, no structured spec yet.</em>'}</p>
       <div class="br-links">
         {json_link}
         {md_link}
@@ -117,15 +127,15 @@ def build_html(brands, version):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{total} brand DESIGN specs — the ux-skill catalogue</title>
+<title>{total} brand DESIGN specs · the ux-skill catalogue</title>
 <meta name="description" content="The complete catalogue of {total} brand specs in ux-skill. Each one is a queryable JSON + a prose DESIGN.md: palette, typography, philosophy, components, anti-patterns to avoid. Apple, Stripe, Linear, Vercel, Ferrari, Anthropic, and {total - 6} more.">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/brands.html">
-<meta property="og:title" content="{total} brand DESIGN specs — ux-skill catalogue">
+<meta property="og:title" content="{total} brand DESIGN specs · ux-skill catalogue">
 <meta property="og:description" content="Apple, Stripe, Linear, Vercel, Ferrari, Anthropic, plus {total - 6} more. Each brand is a structured spec.json + prose DESIGN.md.">
 <meta property="og:url" content="https://uxskill.laithjunaidy.com/brands.html">
 <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{total} brand specs — ux-skill catalogue">
+<meta name="twitter:title" content="{total} brand specs · ux-skill catalogue">
 <meta name="twitter:description" content="The complete catalogue. Searchable + filterable + linkable.">
 <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 
@@ -227,7 +237,7 @@ def build_html(brands, version):
     <p class="top__eyebrow">Brand catalogue · v{html.escape(str(version)) if version else ""}</p>
     <h1 class="top__title">{total} brand <em>DESIGN.md</em> specs.</h1>
     <p class="top__lead">
-      The recommender doesn't guess. Each brand is a queryable <code>spec.json</code> and a prose <code>DESIGN.md</code> — palette, typography, philosophy, components observed, voice do's-don'ts, anti-patterns to avoid. The AI session pulls the whole spec, not a slogan. Apple, Stripe, Linear, Vercel, Ferrari, Anthropic, and {total - 6} more.
+      The recommender doesn't guess. Each brand is a queryable <code>spec.json</code> and a prose <code>DESIGN.md</code>: palette, typography, philosophy, components observed, voice do's-don'ts, anti-patterns to avoid. The AI session pulls the whole spec, not a slogan. Apple, Stripe, Linear, Vercel, Ferrari, Anthropic, and {total - 6} more.
     </p>
     <div class="top__stats">
       <span class="top__stat"><b>{total}</b> brand specs</span>

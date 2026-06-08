@@ -11,8 +11,8 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI 編程的設計規則——為什麼每個 AI 寫出來的網站都長得一樣 — ux-skill</title>
-  <meta name="description" content="Cursor、Claude Code、Cline、Windsurf——每個 AI 編程工具都掉進同一組預設。90px Inter、紫到藍漸層、三張一樣的卡片。ux-skill 用 145 條確定性正則規則在 CI 中擋住預設值,不呼叫 LLM、不耗 token。">
+  <title>AI 編程的設計規則,為什麼每個 AI 寫出來的網站都長得一樣 · ux-skill</title>
+  <meta name="description" content="Cursor、Claude Code、Cline、Windsurf,每個 AI 編程工具都掉進同一組預設。90px Inter、紫到藍漸層、三張一樣的卡片。ux-skill 用 145 條確定性正則規則在 CI 中擋住預設值,不呼叫 LLM、不耗 token。">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/zh-TW/ai-coding-design-zh-tw.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -20,16 +20,16 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/zh-TW/ai-coding-design-zh-tw.html">
-  <meta property="og:title" content="AI 編程的設計規則——為什麼每個 AI 寫出來的網站都長得一樣">
+  <meta property="og:title" content="AI 編程的設計規則,為什麼每個 AI 寫出來的網站都長得一樣">
   <meta property="og:description" content="145 條確定性規則、998 條目錄、22 個指令、17 個 IDE。Claude Code 與 Cursor 都能用。">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/zh-tw-ai-coding-design.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — zh-tw-ai-coding-design">
+  <meta property="og:image:alt" content="ux-skill · zh-tw-ai-coding-design">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/zh-tw-ai-coding-design.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AI 編程的設計規則——ux-skill 為繁體中文工程師">
+  <meta name="twitter:title" content="AI 編程的設計規則 · ux-skill 為繁體中文工程師">
   <meta name="twitter:description" content="145 條規則、998 條目錄、22 個指令、17 個 IDE。MIT 授權,無遙測。">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,8 +40,8 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "AI 編程的設計規則——為什麼每個 AI 寫出來的網站都長得一樣",
-    "description": "Cursor、Claude Code、Cline、Windsurf——每個 AI 編程工具都掉進同一組預設。ux-skill 用 145 條確定性正則規則在 CI 中擋住預設值。",
+    "headline": "AI 編程的設計規則,為什麼每個 AI 寫出來的網站都長得一樣",
+    "description": "Cursor、Claude Code、Cline、Windsurf,每個 AI 編程工具都掉進同一組預設。ux-skill 用 145 條確定性正則規則在 CI 中擋住預設值。",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -359,7 +359,7 @@
   .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
   .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
-    padding-block:8px;transition:color 140ms ease}
+    padding-block:8px;transition:color 140ms ease;}
   .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
   .usknav__langs{position:relative}
   .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
@@ -373,14 +373,14 @@
   .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
   .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
     font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
+    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease;}
   .usknav__star:hover{background:rgba(245,158,11,0.12)}
   .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
   .usknav__burger svg{display:block}
-  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
+  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:none;flex-direction:column;
     padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
     transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
-  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
+  .usknav__drawer.is-open{display:flex;transform:translateX(0);visibility:visible}
   .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
     border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
   .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
@@ -400,7 +400,7 @@
   .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
+  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
 </head>
 <body>
   
@@ -487,55 +487,55 @@
 <div class="wrap">
     <article>
       <span class="eyebrow">Blog · 繁體中文 · 2026-05-28</span>
-      <h1>AI 編程的<span class="accent">設計規則</span>——為什麼每個 AI 寫出來的網站都長得一樣。</h1>
+      <h1>AI 編程的<span class="accent">設計規則</span>,為什麼每個 AI 寫出來的網站都長得一樣。</h1>
       <p class="lede">
-        <strong>Cursor、Claude Code、Cline、Windsurf——每個 AI 編程工具都掉進同一組預設。</strong>90px Inter、紫到藍漸層、三張一模一樣的卡片。換 model 也一樣,輸出幾乎沒變。ux-skill 是一個 MIT 授權的 Python 開源引擎,用 145 條確定性正則規則在 CI 中擋下預設值。不呼叫 LLM,不耗 token,沒有遙測。
+        <strong>Cursor、Claude Code、Cline、Windsurf,每個 AI 編程工具都掉進同一組預設。</strong>90px Inter、紫到藍漸層、三張一模一樣的卡片。換 model 也一樣,輸出幾乎沒變。ux-skill 是一個 MIT 授權的 Python 開源引擎,用 145 條確定性正則規則在 CI 中擋下預設值。不呼叫 LLM,不耗 token,沒有遙測。
       </p>
       <p class="byline">ux-skill 團隊 · 10 分鐘閱讀 · MIT 授權</p>
 
       <h2>為什麼每個 AI 都寫出一樣的網站</h2>
       <p>
-        這不是 model 能力的問題。Claude Sonnet、GPT-4、DeepSeek、Gemini——只要 brief 寫得清楚,任何一個 model 都能寫出很好的 UI。問題在於沒人給 brief。「做一個 SaaS landing page」這種句子,model 就回到訓練資料的平均值——那個平均值看起來就像「2023 年的 startup landing page」。
+        這不是 model 能力的問題。Claude Sonnet、GPT-4、DeepSeek、Gemini,只要 brief 寫得清楚,任何一個 model 都能寫出很好的 UI。問題在於沒人給 brief。「做一個 SaaS landing page」這種句子,model 就回到訓練資料的平均值,那個平均值看起來就像「2023 年的 startup landing page」。
       </p>
       <p>
-        三股力量讓預設輸出收斂。第一,訓練語料偏向流行來源——Vercel、Linear、Stripe、Tailwind UI、shadcn——這些都共享同一套美學。第二,使用者的 prompt 太短——「build a hero section」沒給出任何具體資訊。第三,沒有 gating——當 model 第一百次吐出同一個漸層時,沒有任何機制能擋下。
+        三股力量讓預設輸出收斂。第一,訓練語料偏向流行來源,Vercel、Linear、Stripe、Tailwind UI、shadcn,這些都共享同一套美學。第二,使用者的 prompt 太短,「build a hero section」沒給出任何具體資訊。第三,沒有 gating,當 model 第一百次吐出同一個漸層時,沒有任何機制能擋下。
       </p>
       <p>
-        三股之中,前兩股難以修正——你動不了 model 的訓練語料,而每次寫 500 字 prompt 的紀律也不可能在整個團隊裡推行。第三股——gating——是機器層級的問題。這正是 ux-skill 解決的部分。
+        三股之中,前兩股難以修正,你動不了 model 的訓練語料,而每次寫 500 字 prompt 的紀律也不可能在整個團隊裡推行。第三股,gating,是機器層級的問題。這正是 ux-skill 解決的部分。
       </p>
 
       <h2>每個工具都出貨的八個預設</h2>
       <p>
-        我們把同一份 brief——「fintech 編輯型產品的 hero,深色佈景,沉穩語氣」——丟給八個不同的 AI 編程工具(Cursor、Claude Code、Windsurf、GitHub Copilot、Cline、Continue、Codex、Aider)。八個之中,七個產出的程式碼至少命中下面八項中的五項:
+        我們把同一份 brief,「fintech 編輯型產品的 hero,深色佈景,沉穩語氣」,丟給八個不同的 AI 編程工具(Cursor、Claude Code、Windsurf、GitHub Copilot、Cline、Continue、Codex、Aider)。八個之中,七個產出的程式碼至少命中下面八項中的五項:
       </p>
       <ol>
-        <li><strong>把 Inter 當顯示字體</strong>——Inter 是 body 字體,專為小字最佳化;放大到 90px 當標題,讀起來就是「startup-landing」指紋。</li>
-        <li><strong>紫到藍漸層</strong>——同樣的兩個 hex 顏色,SaaS-startup AI 輸出幾乎人人都用。</li>
-        <li><strong>橫排三張一樣的卡片</strong>——features 區塊,gap-6,每張都是圖示-標題-段落。</li>
-        <li><strong>通用 CTA 文案</strong>——「Get started」、「Learn more」、「Click here」。<code>generic-cta-text</code> 規則會抓到。</li>
-        <li><strong>所有元素都套 fade-in-up</strong>——hero、features、footer 用同一條 motion;角色完全不區分。</li>
-        <li><strong>空洞的行銷動詞</strong>——標題裡那種填充用的 marketing verb。<code>filler-marketing-verbs</code> 規則會抓到。</li>
-        <li><strong>留底名稱</strong>——通用的 dummy 人名與 stub 段落,從 staging 漏到 production。</li>
-        <li><strong>所有東西都置中</strong>——不管內容是什麼都是對稱排版;沒有不對稱或 bento 構圖。</li>
+        <li><strong>把 Inter 當顯示字體</strong>:Inter 是 body 字體,專為小字最佳化;放大到 90px 當標題,讀起來就是「startup-landing」指紋。</li>
+        <li><strong>紫到藍漸層</strong>:同樣的兩個 hex 顏色,SaaS-startup AI 輸出幾乎人人都用。</li>
+        <li><strong>橫排三張一樣的卡片</strong>:features 區塊,gap-6,每張都是圖示-標題-段落。</li>
+        <li><strong>通用 CTA 文案</strong>:「Get started」、「Learn more」、「Click here」。<code>generic-cta-text</code> 規則會抓到。</li>
+        <li><strong>所有元素都套 fade-in-up</strong>:hero、features、footer 用同一條 motion;角色完全不區分。</li>
+        <li><strong>空洞的行銷動詞</strong>:標題裡那種填充用的 marketing verb。<code>filler-marketing-verbs</code> 規則會抓到。</li>
+        <li><strong>留底名稱</strong>:通用的 dummy 人名與 stub 段落,從 staging 漏到 production。</li>
+        <li><strong>所有東西都置中</strong>:不管內容是什麼都是對稱排版;沒有不對稱或 bento 構圖。</li>
       </ol>
       <p>
-        完整清單在 <a href="/blog/ai-design-fingerprints-list.html" class="link">35 條 AI 設計指紋一文</a>——每條都附偵測正則、「為什麼」與「修法」。重點在於:選哪個 IDE 對輸出影響很小。改變設計文法才會真正改變輸出。
+        完整清單在 <a href="/blog/ai-design-fingerprints-list.html" class="link">35 條 AI 設計指紋一文</a>,每條都附偵測正則、「為什麼」與「修法」。重點在於:選哪個 IDE 對輸出影響很小。改變設計文法才會真正改變輸出。
       </p>
 
-      <h2>ux-skill 的回應——確定性的那一層</h2>
+      <h2>ux-skill 的回應,確定性的那一層</h2>
       <p>
         ux-skill 是 MIT 授權的 Python 套件,附 CLI 與 MCP server。同一份引擎、同一份 998 條目錄、同一個 145 條規則的 linter,三種安裝方式覆蓋 17 個 IDE:
       </p>
       <ol>
-        <li><strong>Claude Code 外掛</strong>——<code>/plugin marketplace add Laith0003/ux-skill; /plugin install ux@ux-skill</code></li>
-        <li><strong>Python 套件</strong>——<code>pip install uxskill</code>,任何能 shell-out 的 IDE 都能用:Cursor、Windsurf、Continue、Cline、JetBrains、Aider、Zed、Codex</li>
-        <li><strong>MCP server</strong>——<code>npx uxskill@alpha mcp</code>,可接到任何 MCP client</li>
+        <li><strong>Claude Code 外掛</strong>:<code>/plugin marketplace add Laith0003/ux-skill; /plugin install ux@ux-skill</code></li>
+        <li><strong>Python 套件</strong>:<code>pip install uxskill</code>,任何能 shell-out 的 IDE 都能用:Cursor、Windsurf、Continue、Cline、JetBrains、Aider、Zed、Codex</li>
+        <li><strong>MCP server</strong>:<code>npx uxskill@alpha mcp</code>,可接到任何 MCP client</li>
       </ol>
       <p>
-        引擎有三個主要動作。一,<code>uxskill discover</code> 跑 10 欄位的 discovery protocol,擷取有結構的 brief(不允許隨機發揮——discovery protocol 是硬性需求)。二,<code>uxskill recommend</code> 在 998 條目錄上跑五路平行搜尋,回傳一份解算完的設計系統(色票、字體配對、motion、間距網格、元件清單)。三,<code>uxskill lint</code> 用 145 條正則跑程式碼。乾淨就 exit 0,有 finding 達 threshold 就 exit 1。
+        引擎有三個主要動作。一,<code>uxskill discover</code> 跑 10 欄位的 discovery protocol,擷取有結構的 brief(不允許隨機發揮,discovery protocol 是硬性需求)。二,<code>uxskill recommend</code> 在 998 條目錄上跑五路平行搜尋,回傳一份解算完的設計系統(色票、字體配對、motion、間距網格、元件清單)。三,<code>uxskill lint</code> 用 145 條正則跑程式碼。乾淨就 exit 0,有 finding 達 threshold 就 exit 1。
       </p>
 
-      <h2>一條真的規則——Inter 當顯示字體</h2>
+      <h2>一條真的規則,Inter 當顯示字體</h2>
       <p>
         這是 145 條中的第一條,直接從 <code>data/anti-patterns.json</code> 拿出來。severity 是 <code>high</code>:
       </p>
@@ -558,7 +558,7 @@
         正則找的是 <code>font-family: Inter</code>,且同一個區塊裡有 40px 以上的 font-size 或 Tailwind <code>text-5xl</code>(或更大)的 class。<code>scope</code> 限制規則只跑在相關副檔名上。同一條規則在 CSS、SCSS、TSX、JSX、Vue、Astro、Blade 都通用。
       </p>
 
-      <h2>在 CI 中跑——GitHub Actions</h2>
+      <h2>在 CI 中跑,GitHub Actions</h2>
       <p>
         一個 workflow 檔案,每個 PR push 都會被 linter 擋住。整個 repo 平均跑 380ms(冷)、90ms(熱)。不呼叫 LLM、不耗 token。
       </p>
@@ -589,7 +589,7 @@
           <tbody>
             <tr><td>產業</td><td class="num">161</td><td>從 logistics 到 legaltech,每個產業各有預設語氣 profile 與 pattern 組合。</td></tr>
             <tr><td>風格</td><td class="num">50</td><td>編輯電影、瑞士簡約、暖系野獸派、mid-mod、neo-pop 等。</td></tr>
-            <tr><td>色票</td><td class="num">161</td><td>色彩系統——hue、saturation、contrast、dark-mode 處理。</td></tr>
+            <tr><td>色票</td><td class="num">161</td><td>色彩系統:hue、saturation、contrast、dark-mode 處理。</td></tr>
             <tr><td>字體配對</td><td class="num">57</td><td>display + body 組合,針對螢幕清晰度驗證過。</td></tr>
             <tr><td>Motion preset</td><td class="num">57</td><td>Framer Motion、GSAP、CSS 三套,每套附 <code>prefers-reduced-motion</code> 分支。</td></tr>
             <tr><td>元件</td><td class="num">182</td><td>從卡片到對話框到儀表板,附構圖規則。</td></tr>
@@ -607,7 +607,7 @@
 
       <h2>為什麼用正則,不用 LLM-judge</h2>
       <p>
-        常見的替代方案是「用一個 LLM 當 judge」——叫 Claude 或 GPT 評分輸出,信它的分數,分低就重試。這個做法在大量使用時會出現三個複合問題。
+        常見的替代方案是「用一個 LLM 當 judge」,叫 Claude 或 GPT 評分輸出,信它的分數,分低就重試。這個做法在大量使用時會出現三個複合問題。
       </p>
       <p>
         一,不確定性。同一段輸入,judge model 不同次跑會給不同分數。CI fail 變 flake,貢獻者學會重試而不是修正,訊號崩潰。
@@ -642,8 +642,8 @@
       <div class="honesty">
         <div class="label">誠實的範圍</div>
         <h4>正則抓的是結構性指紋,不是品味。</h4>
-        <p>linter 永遠不會講「這個區塊節奏不對」或「這段文案讀起來太冷」。那需要人類或一個 model。但正則確實會抓到所有有 literal token、pattern 或形狀的指紋——AI 預設大多都是這類,因為 model 一再回到同一個 artifact。</p>
-        <p>我們刻意不在 CI 跑 LLM-judge。如果你的標準是「看起來像 designer 做的」——那是 code review,不是 lint。ux-skill 有出貨 <code>/ux-critique</code> 做品味檢查,但那是在 IDE 中跑,不是 CI。</p>
+        <p>linter 永遠不會講「這個區塊節奏不對」或「這段文案讀起來太冷」。那需要人類或一個 model。但正則確實會抓到所有有 literal token、pattern 或形狀的指紋,AI 預設大多都是這類,因為 model 一再回到同一個 artifact。</p>
+        <p>我們刻意不在 CI 跑 LLM-judge。如果你的標準是「看起來像 designer 做的」,那是 code review,不是 lint。ux-skill 有出貨 <code>/ux-critique</code> 做品味檢查,但那是在 IDE 中跑,不是 CI。</p>
       </div>
 
       <h2>下一步讀什麼</h2>
@@ -653,9 +653,9 @@
 
       <h2>相關閱讀</h2>
       <ul>
-        <li><a href="/blog/ai-design-fingerprints-list.html" class="link">35 條 AI 設計指紋——完整 taxonomy</a></li>
+        <li><a href="/blog/ai-design-fingerprints-list.html" class="link">35 條 AI 設計指紋,完整 taxonomy</a></li>
         <li><a href="/blog/vibe-coding-design-system.html" class="link">Vibe coding + ux-skill</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter——145 條規則在 CI</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter,145 條規則在 CI</a></li>
         <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Anti-AI-slop tools 誠實排名</a></li>
       </ul>
     </article>
@@ -663,14 +663,14 @@
     <section class="cta">
       <span class="eyebrow">安裝</span>
       <h2>一個套件。<span class="accent">三種安裝路徑。</span>145 條規則。</h2>
-      <p>Recommender、linter、MCP server、22 個指令、110 條品牌規範——全都打包在一起。Linter 在 sub-second 內跑完,其餘隨選使用。MIT 授權、無遙測、無需帳號。</p>
+      <p>Recommender、linter、MCP server、22 個指令、110 條品牌規範,全都打包在一起。Linter 在 sub-second 內跑完,其餘隨選使用。MIT 授權、無遙測、無需帳號。</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— 或 —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">· 或 ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— 或 —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">· 或 ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>
