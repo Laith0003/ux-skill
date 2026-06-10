@@ -1,7 +1,4 @@
-<!doctype html><html lang="en" data-theme="light"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Almanac -- ux-skill design system preview</title><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>/* Almanac -- ux-skill generated tokens. Accessible by construction (WCAG AA). */
+<!doctype html><html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Almanac design system preview</title><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"><style>/* Almanac -- ux-skill generated tokens. Accessible by construction (WCAG AA). */
 /* Do not edit by hand: re-generate with `ux system-pack`. */
 :root {
   --color-canvas: #fffff6;
@@ -36,44 +33,1105 @@
   --motion-ease: cubic-bezier(0.2,0,0,1);
 }
 
-.btn { font-family: var(--font-body); font-weight: 600; font-size: 15px; padding: 10px 18px;
-  border-radius: var(--radius-md); border: 0; cursor: pointer; transition: background var(--motion-base) var(--motion-ease); }
-.btn--primary { background: var(--color-primary); color: var(--color-on-primary); }
-.btn--primary:hover { background: var(--color-primary-active); }
-.btn--secondary { background: var(--color-surface); color: var(--color-ink); border: 1px solid var(--color-border); }
-.card { background: var(--color-surface); border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg); padding: var(--space-lg); color: var(--color-body); }
-.input { width: 100%; background: var(--color-canvas); color: var(--color-ink); font-family: var(--font-body);
-  border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 10px 14px; }
-.input:focus { outline: 2px solid var(--color-primary); outline-offset: 1px; }
+/* ============================================================
+   Component library. Driven entirely by design tokens.
+   No literal colors or font families. Translucent shades and
+   focus rings use color-mix so they work regardless of the
+   token color format (hex, hsl, or oklch).
+   ============================================================ */
 
-* { box-sizing: border-box; }
-body { margin:0; background:var(--color-canvas); color:var(--color-body); font-family:var(--font-body); }
-.wrap { max-width:880px; margin:0 auto; padding:48px 24px 80px; }
-h1 { font-family:var(--font-display); color:var(--color-ink); font-size:clamp(40px,7vw,64px); line-height:1.05; letter-spacing:-1.5px; margin:0 0 12px; }
-.lede { font-size:18px; line-height:1.6; max-width:60ch; color:var(--color-body); }
-.muted { color:var(--color-muted); }
-.row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
-.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
-.eyebrow { font:600 12px var(--font-mono); letter-spacing:.12em; text-transform:uppercase; color:var(--color-primary); }
-section { margin-top:48px; }
-label { display:block; font:600 13px var(--font-body); color:var(--color-ink); margin-bottom:6px; }
-</style></head><body><div class="wrap">
-<div class="eyebrow">ux-skill - accessible by construction</div>
-<h1>Almanac</h1>
-<p class="lede">A warm editorial system on cream paper with a tall display face.</p>
-<section><div class="row"><span style="font:600 12px var(--font-body);color:var(--color-success);border:1px solid var(--color-success);padding:4px 10px;border-radius:999px">success</span><span style="font:600 12px var(--font-body);color:var(--color-warning);border:1px solid var(--color-warning);padding:4px 10px;border-radius:999px">warning</span><span style="font:600 12px var(--font-body);color:var(--color-danger);border:1px solid var(--color-danger);padding:4px 10px;border-radius:999px">danger</span><span style="font:600 12px var(--font-body);color:var(--color-info);border:1px solid var(--color-info);padding:4px 10px;border-radius:999px">info</span></div></section>
-<section><div class="row">
-  <button class="btn btn--primary">Primary action</button>
-  <button class="btn btn--secondary">Secondary</button>
-  <a href="#" style="color:var(--color-primary);font:600 15px var(--font-body)">Text link</a>
-</div></section>
-<section class="grid">
-  <div class="card"><h3 style="font-family:var(--font-display);color:var(--color-ink);margin:0 0 8px">Card title</h3>
-    <p style="margin:0;line-height:1.6">Body copy sits at AA contrast on the surface tier. Almanac reads like print. Warm cream paper, a tall display face, generous line height, and</p></div>
-  <div class="card"><label for="e">Email</label><input id="e" class="input" placeholder="you@studio.com">
-    <p style="color:var(--color-danger);font:500 12px var(--font-body);margin:8px 0 0">Enter a valid email address.</p></div>
-</section>
-<section><div class="eyebrow" style="margin-bottom:14px">Palette</div><div class="row"><div style="flex:1;min-width:84px"><div style="height:52px;border-radius:10px;background:#fffff6;border:1px solid var(--color-border)"></div><div style="font:500 11px var(--font-mono);color:var(--color-muted);margin-top:6px">canvas</div><div style="font:500 11px var(--font-mono);color:var(--color-body)">#fffff6</div></div><div style="flex:1;min-width:84px"><div style="height:52px;border-radius:10px;background:#f8f8ee;border:1px solid var(--color-border)"></div><div style="font:500 11px var(--font-mono);color:var(--color-muted);margin-top:6px">surface</div><div style="font:500 11px var(--font-mono);color:var(--color-body)">#f8f8ee</div></div><div style="flex:1;min-width:84px"><div style="height:52px;border-radius:10px;background:#3e2a0a;border:1px solid var(--color-border)"></div><div style="font:500 11px var(--font-mono);color:var(--color-muted);margin-top:6px">ink</div><div style="font:500 11px var(--font-mono);color:var(--color-body)">#3e2a0a</div></div><div style="flex:1;min-width:84px"><div style="height:52px;border-radius:10px;background:#706147;border:1px solid var(--color-border)"></div><div style="font:500 11px var(--font-mono);color:var(--color-muted);margin-top:6px">body</div><div style="font:500 11px var(--font-mono);color:var(--color-body)">#706147</div></div><div style="flex:1;min-width:84px"><div style="height:52px;border-radius:10px;background:#7b7465;border:1px solid var(--color-border)"></div><div style="font:500 11px var(--font-mono);color:var(--color-muted);margin-top:6px">muted</div><div style="font:500 11px var(--font-mono);color:var(--color-body)">#7b7465</div></div><div style="flex:1;min-width:84px"><div style="height:52px;border-radius:10px;background:#703307;border:1px solid var(--color-border)"></div><div style="font:500 11px var(--font-mono);color:var(--color-muted);margin-top:6px">primary</div><div style="font:500 11px var(--font-mono);color:var(--color-body)">#703307</div></div><div style="flex:1;min-width:84px"><div style="height:52px;border-radius:10px;background:#18874f;border:1px solid var(--color-border)"></div><div style="font:500 11px var(--font-mono);color:var(--color-muted);margin-top:6px">success</div><div style="font:500 11px var(--font-mono);color:var(--color-body)">#18874f</div></div><div style="flex:1;min-width:84px"><div style="height:52px;border-radius:10px;background:#95711b;border:1px solid var(--color-border)"></div><div style="font:500 11px var(--font-mono);color:var(--color-muted);margin-top:6px">warning</div><div style="font:500 11px var(--font-mono);color:var(--color-body)">#95711b</div></div><div style="flex:1;min-width:84px"><div style="height:52px;border-radius:10px;background:#bf3722;border:1px solid var(--color-border)"></div><div style="font:500 11px var(--font-mono);color:var(--color-muted);margin-top:6px">danger</div><div style="font:500 11px var(--font-mono);color:var(--color-body)">#bf3722</div></div><div style="flex:1;min-width:84px"><div style="height:52px;border-radius:10px;background:#226bbf;border:1px solid var(--color-border)"></div><div style="font:500 11px var(--font-mono);color:var(--color-muted);margin-top:6px">info</div><div style="font:500 11px var(--font-mono);color:var(--color-body)">#226bbf</div></div></div></section>
-<section><p class="muted" style="font:400 13px var(--font-mono)">Generated by ux-skill. Deterministic, offline, free.</p></section>
-</div></body></html>
+/* Base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-body);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0 0 var(--space-sm);
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  font-weight: 650;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: clamp(40px, 6vw, 64px);
+}
+
+h2 {
+  font-size: clamp(28px, 4vw, 40px);
+}
+
+h3 {
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+
+h4 {
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0 0 var(--space-md);
+  max-width: 65ch;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--motion-base) var(--motion-ease);
+}
+
+a:hover {
+  color: var(--color-primary-active);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: none;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 38%, transparent);
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.muted {
+  color: var(--color-muted);
+}
+
+/* Layout */
+.container {
+  width: 100%;
+  max-width: 1080px;
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+}
+
+.stack > * + * {
+  margin-top: var(--space-md);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-md);
+}
+
+.divider {
+  height: 1px;
+  border: 0;
+  margin-block: var(--space-lg);
+  background: var(--color-border);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 11px 18px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background var(--motion-base) var(--motion-ease),
+    border-color var(--motion-base) var(--motion-ease),
+    box-shadow var(--motion-base) var(--motion-ease),
+    transform var(--motion-base) var(--motion-ease);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 38%, transparent);
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-active);
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border-color: var(--color-border);
+}
+
+.btn-secondary:hover {
+  border-color: color-mix(in srgb, var(--color-ink) 28%, transparent);
+  background: var(--color-elevated);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-body);
+}
+
+.btn-ghost:hover {
+  background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+  color: var(--color-ink);
+}
+
+.btn-danger {
+  background: var(--color-danger);
+  color: var(--color-on-primary);
+}
+
+.btn-danger:hover {
+  background: color-mix(in srgb, var(--color-danger) 88%, var(--color-ink));
+}
+
+.btn-danger:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-danger) 38%, transparent);
+}
+
+.btn-sm {
+  padding: 7px 12px;
+  font-size: 13px;
+  border-radius: var(--radius-sm);
+}
+
+.btn-lg {
+  padding: 15px 26px;
+  font-size: 17px;
+}
+
+/* Card */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+
+.card-elevated {
+  background: var(--color-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow:
+    0 1px 2px color-mix(in srgb, var(--color-ink) 6%, transparent),
+    0 18px 40px color-mix(in srgb, var(--color-ink) 8%, transparent);
+}
+
+.card-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.card-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  margin: 0 0 var(--space-xs);
+}
+
+.card-body {
+  color: var(--color-body);
+  margin: 0;
+}
+
+.card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Form */
+.field {
+  display: block;
+  margin-bottom: var(--space-md);
+}
+
+.field-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: var(--space-xs);
+}
+
+.input,
+.select,
+.textarea {
+  display: block;
+  width: 100%;
+  padding: 11px 13px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--color-ink);
+  background: var(--color-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition:
+    border-color var(--motion-base) var(--motion-ease),
+    box-shadow var(--motion-base) var(--motion-ease);
+}
+
+.textarea {
+  min-height: 112px;
+  resize: vertical;
+}
+
+.select {
+  appearance: none;
+  cursor: pointer;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--color-muted);
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 26%, transparent);
+}
+
+.field-help {
+  display: block;
+  font-size: 13px;
+  color: var(--color-muted);
+  margin-top: var(--space-xs);
+  min-height: 1.2em;
+}
+
+.field-error .input,
+.field-error .select,
+.field-error .textarea {
+  border-color: var(--color-danger);
+}
+
+.field-error .input:focus,
+.field-error .select:focus,
+.field-error .textarea:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-danger) 26%, transparent);
+}
+
+.field-error .field-help {
+  color: var(--color-danger);
+}
+
+/* Badges and chips */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xxs);
+  padding: 3px 11px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-pill);
+  background: transparent;
+}
+
+.badge-success {
+  color: var(--color-success);
+}
+
+.badge-warning {
+  color: var(--color-warning);
+}
+
+.badge-danger {
+  color: var(--color-danger);
+}
+
+.badge-info {
+  color: var(--color-info);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xxs);
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-body);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: currentColor;
+  flex: none;
+}
+
+/* Stat tile */
+.stat {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  margin: var(--space-xs) 0 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xxs);
+  margin-top: var(--space-xs);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+}
+
+.stat-up {
+  color: var(--color-success);
+}
+
+.stat-down {
+  color: var(--color-danger);
+}
+
+/* Toggle (checkbox driven, no script) */
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--color-body);
+  user-select: none;
+}
+
+.switch input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.switch-track {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  flex: none;
+  background: var(--color-border);
+  border-radius: var(--radius-pill);
+  transition: background var(--motion-base) var(--motion-ease);
+}
+
+.switch-track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background: var(--color-elevated);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-ink) 20%, transparent);
+  transition: transform var(--motion-base) var(--motion-ease);
+}
+
+.switch input:checked + .switch-track {
+  background: var(--color-primary);
+}
+
+.switch input:checked + .switch-track::after {
+  transform: translateX(18px);
+}
+
+.switch input:focus-visible + .switch-track {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 38%, transparent);
+}
+
+/* Nav */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-block: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.nav-brand {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.nav-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-muted);
+  white-space: nowrap;
+  transition: color var(--motion-base) var(--motion-ease);
+}
+
+.nav-link:hover {
+  color: var(--color-ink);
+}
+
+.nav-link:focus-visible {
+  outline: none;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 38%, transparent);
+}
+
+/* Table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table th {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--color-muted);
+  padding: var(--space-sm) var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table td {
+  padding: var(--space-sm) var(--space-sm);
+  color: var(--color-body);
+  border-bottom: 1px solid var(--color-border);
+  font-variant-numeric: tabular-nums;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table tbody tr {
+  transition: background var(--motion-base) var(--motion-ease);
+}
+
+.table tbody tr:hover {
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+}
+
+.table td:first-child {
+  color: var(--color-ink);
+  font-weight: 500;
+  font-variant-numeric: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+
+
+/* ============================================================
+   Showcase layout only. All classes prefixed sh- so they never
+   collide with the component library above. Token driven.
+   ============================================================ */
+
+.sh-hero {
+  padding-block: var(--space-xxxl) var(--space-xxl);
+}
+
+.sh-hero-lead {
+  max-width: 640px;
+}
+
+.sh-hero-sub {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--color-body);
+  margin-block: var(--space-md) var(--space-lg);
+}
+
+.sh-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xxl);
+}
+
+.sh-mock-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.sh-mock-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin: 0;
+}
+
+.sh-mock-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.sh-section {
+  padding-block: var(--space-xxl);
+  border-top: 1px solid var(--color-border);
+}
+
+.sh-section-h {
+  margin-bottom: var(--space-xl);
+  max-width: 56ch;
+}
+
+.sh-section-h .eyebrow {
+  margin-bottom: var(--space-sm);
+}
+
+.sh-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+.sh-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-xs);
+  height: 132px;
+  padding-top: var(--space-sm);
+}
+
+.sh-bar {
+  flex: 1;
+  min-height: 6px;
+  background: var(--color-primary);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  transition: opacity var(--motion-base) var(--motion-ease);
+}
+
+.sh-bar.alt {
+  background: var(--color-info);
+}
+
+.sh-bars:hover .sh-bar {
+  opacity: 0.55;
+}
+
+.sh-bars .sh-bar:hover {
+  opacity: 1;
+}
+
+.sh-bars-h {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin: 0 0 var(--space-sm);
+}
+
+.sh-type-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-block: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sh-type-row:last-child {
+  border-bottom: 0;
+}
+
+.sh-type-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  white-space: nowrap;
+  flex: none;
+}
+
+.sh-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.sh-sw {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+.sh-sw-chip {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.sh-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.sh-check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.sh-check-label {
+  flex: 1;
+  font-size: 14px;
+  color: var(--color-ink);
+}
+
+.sh-cta {
+  text-align: center;
+  padding: var(--space-xxl) var(--space-lg);
+}
+
+.sh-cta h2 {
+  margin-bottom: var(--space-sm);
+}
+
+.sh-cta-sub {
+  margin: 0 auto var(--space-lg);
+  color: var(--color-body);
+  font-size: 17px;
+}
+
+@media (max-width: 680px) {
+  .sh-cols {
+    grid-template-columns: 1fr;
+  }
+
+  .sh-mock-stats {
+    grid-template-columns: 1fr;
+  }
+}
+@media(max-width:620px){.nav{flex-wrap:wrap;row-gap:10px}.nav-links{flex-wrap:wrap;gap:16px}.table{font-size:13px}.table th,.table td{padding:8px 9px}}</style></head><body>
+<nav class="nav container">
+  <span class="nav-brand">Almanac</span>
+  <div class="nav-links">
+    <a class="nav-link" href="#overview">Overview</a>
+    <a class="nav-link" href="#components">Components</a>
+    <a class="nav-link" href="#tokens">Tokens</a>
+    <a class="btn btn-primary btn-sm" href="#start">Get started</a>
+  </div>
+</nav>
+
+<main class="container">
+
+  <!-- Hero with dashboard mockup -->
+  <section class="sh-hero" id="overview">
+    <div class="sh-hero-lead">
+      <span class="eyebrow">Design system</span>
+      <h1>Almanac</h1>
+      <p class="sh-hero-sub">A warm editorial system on cream paper with a tall display face.</p>
+      <div class="sh-hero-actions">
+        <a class="btn btn-primary btn-lg" href="#start">Primary action</a>
+        <a class="btn btn-secondary btn-lg" href="#components">Documentation</a>
+      </div>
+    </div>
+
+    <div class="card-elevated" role="figure" aria-label="Product dashboard preview">
+      <div class="sh-mock-head">
+        <p class="sh-mock-title">Overview</p>
+        <span class="badge badge-success"><span class="dot"></span>Live</span>
+      </div>
+
+      <div class="sh-mock-stats">
+        <div class="stat">
+          <p class="stat-label">Revenue</p>
+          <p class="stat-value">$284.6K</p>
+          <span class="stat-delta stat-up">+4.2% this month</span>
+        </div>
+        <div class="stat">
+          <p class="stat-label">Active users</p>
+          <p class="stat-value">24,812</p>
+          <span class="stat-delta stat-up">+1.8% this week</span>
+        </div>
+        <div class="stat">
+          <p class="stat-label">Latency</p>
+          <p class="stat-value">128 ms</p>
+          <span class="stat-delta stat-down">+6 ms p95</span>
+        </div>
+      </div>
+
+      <div class="sh-bars" role="img" aria-label="Revenue trend across the last nine weeks">
+        <span class="sh-bar" style="height:38%"></span>
+        <span class="sh-bar" style="height:54%"></span>
+        <span class="sh-bar" style="height:47%"></span>
+        <span class="sh-bar alt" style="height:71%"></span>
+        <span class="sh-bar" style="height:63%"></span>
+        <span class="sh-bar" style="height:82%"></span>
+        <span class="sh-bar" style="height:58%"></span>
+        <span class="sh-bar alt" style="height:94%"></span>
+        <span class="sh-bar" style="height:76%"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Foundations -->
+  <section class="sh-section" id="tokens">
+    <div class="sh-section-h">
+      <span class="eyebrow">Foundations</span>
+      <h2>Color and type</h2>
+      <p class="muted">The primitives every component draws from. Tokens stay consistent across light and dark, so contrast holds wherever a surface lands.</p>
+    </div>
+
+    <div class="sh-cols">
+      <div class="card">
+        <p class="card-eyebrow">Palette</p>
+        <h3 class="card-title">Color tokens</h3>
+        <p class="card-body muted">Semantic roles, not raw values. Swap the source and every surface updates.</p>
+        <div class="stack">
+          <div class="sh-swatches"><div class="sh-sw"><div class="sh-sw-chip" style="background:#fffff6"></div><span>canvas</span><span>#fffff6</span></div><div class="sh-sw"><div class="sh-sw-chip" style="background:#f8f8ee"></div><span>surface</span><span>#f8f8ee</span></div><div class="sh-sw"><div class="sh-sw-chip" style="background:#3e2a0a"></div><span>ink</span><span>#3e2a0a</span></div><div class="sh-sw"><div class="sh-sw-chip" style="background:#706147"></div><span>body</span><span>#706147</span></div><div class="sh-sw"><div class="sh-sw-chip" style="background:#703307"></div><span>primary</span><span>#703307</span></div><div class="sh-sw"><div class="sh-sw-chip" style="background:#18874f"></div><span>success</span><span>#18874f</span></div><div class="sh-sw"><div class="sh-sw-chip" style="background:#95711b"></div><span>warning</span><span>#95711b</span></div><div class="sh-sw"><div class="sh-sw-chip" style="background:#bf3722"></div><span>danger</span><span>#bf3722</span></div><div class="sh-sw"><div class="sh-sw-chip" style="background:#226bbf"></div><span>info</span><span>#226bbf</span></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="card-eyebrow">Typography</p>
+        <h3 class="card-title">Type scale</h3>
+        <p class="card-body muted">One display family, one body family, one mono for figures and labels.</p>
+        <div class="stack">
+          <div class="sh-type-row"><span style="font-family:var(--font-display);font-size:34px;color:var(--color-ink);letter-spacing:-.02em">Display</span><span class="sh-type-meta">Bricolage Grotesque</span></div><div class="sh-type-row"><span style="font-family:var(--font-body);font-size:17px;color:var(--color-ink)">The quick brown fox</span><span class="sh-type-meta">Inter</span></div><div class="sh-type-row"><span style="font-family:var(--font-mono);font-size:14px;color:var(--color-body)">const tokens = system;</span><span class="sh-type-meta">JetBrains Mono</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Component gallery -->
+  <section class="sh-section" id="components">
+    <div class="sh-section-h">
+      <span class="eyebrow">Components</span>
+      <h2>Built to compose</h2>
+      <p class="muted">Buttons, forms, badges, and data, each with real hover, focus, disabled, and error states wired in.</p>
+    </div>
+
+    <div class="stack">
+
+      <div class="row">
+        <button class="btn btn-primary" type="button">Primary</button>
+        <button class="btn btn-secondary" type="button">Secondary</button>
+        <button class="btn btn-ghost" type="button">Ghost</button>
+        <button class="btn btn-danger" type="button">Delete</button>
+        <button class="btn btn-secondary btn-sm" type="button">Small</button>
+        <button class="btn btn-primary btn-lg" type="button">Large</button>
+        <button class="btn btn-secondary" type="button" disabled>Disabled</button>
+      </div>
+
+      <div class="card">
+        <p class="card-eyebrow">Form</p>
+        <h3 class="card-title">Invite a teammate</h3>
+        <form>
+          <div class="field">
+            <label class="field-label" for="sh-email">Work email</label>
+            <input class="input" id="sh-email" type="email" name="email" placeholder="you@studio.com" autocomplete="email">
+            <span class="field-help">We send one invite. No follow up.</span>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="sh-role">Role</label>
+            <select class="select" id="sh-role" name="role">
+              <option>Can view</option>
+              <option>Can edit</option>
+              <option>Admin</option>
+            </select>
+            <span class="field-help">Roles change anytime from settings.</span>
+          </div>
+
+          <div class="field field-error">
+            <label class="field-label" for="sh-email-2">Billing email</label>
+            <input class="input" id="sh-email-2" type="email" name="billing" value="ana@studio" aria-invalid="true" aria-describedby="sh-email-2-help">
+            <span class="field-help" id="sh-email-2-help">Enter a valid email address.</span>
+          </div>
+
+          <button class="btn btn-primary" type="button">Send invite</button>
+        </form>
+      </div>
+
+      <div class="row">
+        <span class="badge badge-success"><span class="dot"></span>Active</span>
+        <span class="badge badge-warning"><span class="dot"></span>Pending</span>
+        <span class="badge badge-danger"><span class="dot"></span>Failed</span>
+        <span class="badge badge-info"><span class="dot"></span>Queued</span>
+        <span class="chip">Production</span>
+        <span class="chip">us-east-2</span>
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="switch-track"></span>
+          Email notifications
+        </label>
+      </div>
+
+      <div class="grid">
+        <div class="stat">
+          <p class="stat-label">Sessions</p>
+          <p class="stat-value">18,402</p>
+          <span class="stat-delta stat-up">+3.1%</span>
+        </div>
+        <div class="stat">
+          <p class="stat-label">Conversion</p>
+          <p class="stat-value">3.74%</p>
+          <span class="stat-delta stat-up">+0.4 pt</span>
+        </div>
+        <div class="stat">
+          <p class="stat-label">Refunds</p>
+          <p class="stat-value">$1,284</p>
+          <span class="stat-delta stat-down">+2.6%</span>
+        </div>
+        <div class="stat">
+          <p class="stat-label">Uptime</p>
+          <p class="stat-value">99.94%</p>
+          <span class="stat-delta">30 day</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="card-eyebrow">Traffic</p>
+        <h3 class="card-title">Top sources</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Source</th>
+              <th scope="col">Sessions</th>
+              <th scope="col">Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Organic search</td>
+              <td>9,847</td>
+              <td>4.12%</td>
+            </tr>
+            <tr>
+              <td>Direct</td>
+              <td>5,231</td>
+              <td>3.68%</td>
+            </tr>
+            <tr>
+              <td>Referral</td>
+              <td>2,094</td>
+              <td>5.27%</td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td>1,230</td>
+              <td>6.41%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Patterns: dashboard composition -->
+  <section class="sh-section" id="patterns">
+    <div class="sh-section-h">
+      <span class="eyebrow">Patterns</span>
+      <h2>Composed in context</h2>
+      <p class="muted">The same primitives assembled into a working surface: metrics, a regional breakdown, and the day's open tasks.</p>
+    </div>
+
+    <div class="stack">
+      <div class="grid">
+        <div class="stat">
+          <p class="stat-label">Revenue</p>
+          <p class="stat-value">$48.2K</p>
+          <span class="stat-delta stat-up">+5.7% today</span>
+        </div>
+        <div class="stat">
+          <p class="stat-label">New accounts</p>
+          <p class="stat-value">312</p>
+          <span class="stat-delta stat-up">+9 vs avg</span>
+        </div>
+        <div class="stat">
+          <p class="stat-label">Open tickets</p>
+          <p class="stat-value">27</p>
+          <span class="stat-delta stat-down">+4 since 9am</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="sh-bars-h">Sessions by region</p>
+        <div class="sh-bars" role="img" aria-label="Sessions across eight regions">
+          <span class="sh-bar" style="height:88%"></span>
+          <span class="sh-bar" style="height:62%"></span>
+          <span class="sh-bar alt" style="height:74%"></span>
+          <span class="sh-bar" style="height:41%"></span>
+          <span class="sh-bar" style="height:57%"></span>
+          <span class="sh-bar alt" style="height:33%"></span>
+          <span class="sh-bar" style="height:49%"></span>
+          <span class="sh-bar" style="height:28%"></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="sh-bars-h">Today</p>
+        <div class="sh-checklist">
+          <div class="sh-check">
+            <span class="dot" style="color: var(--color-success)"></span>
+            <span class="sh-check-label">Approve the September billing run</span>
+            <span class="chip">Done</span>
+          </div>
+          <div class="sh-check">
+            <span class="dot" style="color: var(--color-warning)"></span>
+            <span class="sh-check-label">Review 3 flagged refund requests</span>
+            <span class="chip">In review</span>
+          </div>
+          <div class="sh-check">
+            <span class="dot" style="color: var(--color-info)"></span>
+            <span class="sh-check-label">Publish the v2 onboarding flow</span>
+            <span class="chip">Queued</span>
+          </div>
+          <div class="sh-check">
+            <span class="dot" style="color: var(--color-danger)"></span>
+            <span class="sh-check-label">Investigate the latency spike on us-east-2</span>
+            <span class="chip">Blocked</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="sh-section" id="start">
+    <div class="card-elevated sh-cta">
+      <h2>Build with this system</h2>
+      <p class="sh-cta-sub">Every token, component, and pattern is ready to drop into your next surface.</p>
+      <a class="btn btn-primary btn-lg" href="#overview">Download the system</a>
+    </div>
+  </section>
+
+</main>
+</body></html>
