@@ -72,7 +72,7 @@ def test_tokens_css_has_custom_properties_and_components(tmp_path):
     pack_system(s, "Dev", "d", "c", str(tmp_path))
     css = (tmp_path / "dev" / "css" / "tokens.css").read_text(encoding="utf-8")
     assert "--color-canvas:" in css and "--color-primary:" in css
-    assert ".btn--primary" in css and ".card" in css
+    assert ".btn-primary" in css and ".card" in css
 
 
 def test_preview_html_applies_tokens(tmp_path):
