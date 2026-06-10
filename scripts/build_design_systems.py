@@ -110,6 +110,31 @@ def _zip_folder(folder: Path, zip_path: Path) -> None:
                 z.write(f, f.relative_to(folder.parent))
 
 
+_CHROME = None
+
+
+def _chrome():
+    """Extract (styles, font-links, body-open+nav, footer+scripts) from the site
+    chrome once, so every generated page stays visually consistent with the site."""
+    global _CHROME
+    if _CHROME is None:
+        import re
+        brands = Path("docs/brands.html").read_text(encoding="utf-8")
+        head = brands[:brands.index("</head>")]
+        styles = "\n".join(re.findall(r"<style[^>]*>.*?</style>", head, re.DOTALL))
+        # Drop brands.html page-specific rules (.br-*): dead weight on our pages,
+        # plus a stray `.br-search:focus{outline:none}` the linter flags critical.
+        # The shared chrome (tokens, usknav, footer) has no .br- selectors.
+        styles = re.sub(r'[^{}]*\.br-[^{}]*\{[^}]*\}', '', styles)
+        _CHROME = (
+            styles,
+            "\n".join(re.findall(r'<link[^>]+(?:fonts\.googleapis|fonts\.gstatic|preconnect)[^>]*>', head)),
+            brands[brands.index("</head>") + len("</head>"):brands.index('<section class="top">')],
+            brands[brands.index("<footer"):],
+        )
+    return _CHROME
+
+
 _GALLERY_CSS = """<style id="ds-gallery">
 .ds-wrap{max-width:1120px;margin:0 auto;padding:0 24px}
 .ds-hero{padding:72px 0 28px}
@@ -137,6 +162,10 @@ _GALLERY_CSS = """<style id="ds-gallery">
 .dsx__acts a{font:600 12px system-ui,sans-serif;color:#c2c6d0;text-decoration:none;white-space:nowrap}
 .dsx__acts a:hover{color:#fff}
 .dsx__acts a.dl{color:#fff}
+.dsx{position:relative}
+.dsx__name a{color:inherit;text-decoration:none}
+.dsx__name a::after{content:"";position:absolute;inset:0;z-index:1}
+.dsx__acts a{position:relative;z-index:2}
 .ds-how{padding:40px 0 80px;border-top:1px solid rgba(255,255,255,.08);margin-top:40px}
 .ds-how h2{font-size:24px;letter-spacing:-.01em;margin:0 0 12px}
 .ds-how p{font-size:15px;line-height:1.6;opacity:.78;max-width:62ch;margin:0 0 16px}
@@ -159,7 +188,7 @@ def _card(s):
         f'--p:{p["primary"]};--op:{p["on_primary"]}">'
         f'<div class="dsx__live">'
         f'<div class="dsx__eyebrow">{s["display_font"]} &middot; {s["theme"]}</div>'
-        f'<h3 class="dsx__name">{s["name"]}</h3>'
+        f'<h3 class="dsx__name"><a href="/design-systems/{s["slug"]}/">{s["name"]}</a></h3>'
         f'<p class="dsx__desc">{s["description"]}</p>'
         f'<div class="dsx__sw">{_swatch_spans(s["swatches"])}</div>'
         f'<div class="dsx__demo"><span class="dsx__btn">Primary</span>'
@@ -170,21 +199,14 @@ def _card(s):
         f'stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" '
         f'aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>AA {s["contrast"]["ink_on_canvas"]}:1</span>'
         f'<span class="dsx__acts">'
-        f'<a href="design-systems/{s["slug"]}/preview.html" target="_blank" rel="noopener">Preview</a>'
-        f'<a href="design-systems/{s["slug"]}/DESIGN.md">DESIGN.md</a>'
-        f'<a class="dl" href="design-systems/{s["slug"]}.zip" download>Download</a>'
+        f'<a href="/design-systems/{s["slug"]}/">View system</a>'
+        f'<a class="dl" href="/design-systems/{s["slug"]}.zip" download>Download</a>'
         f'</span></div></article>'
     )
 
 
 def build_gallery(systems):
-    import re
-    brands = Path("docs/brands.html").read_text(encoding="utf-8")
-    head = brands[:brands.index("</head>")]
-    styles = "\n".join(re.findall(r"<style[^>]*>.*?</style>", head, re.DOTALL))
-    fonts = "\n".join(re.findall(r'<link[^>]+(?:fonts\.googleapis|fonts\.gstatic|preconnect)[^>]*>', head))
-    nav = brands[brands.index("</head>") + len("</head>"):brands.index('<section class="top">')]
-    tail = brands[brands.index("<footer"):]
+    styles, fonts, nav, tail = _chrome()
 
     n = len(systems)
     jsonld = json.dumps({
@@ -249,6 +271,135 @@ def build_gallery(systems):
     return len(page)
 
 
+_DETAIL_CSS = """<style id="ds-detail">
+.dd-wrap{max-width:920px;margin:0 auto;padding:0 24px}
+.dd-back{display:inline-flex;align-items:center;gap:7px;font:600 13px ui-monospace,monospace;color:var(--accent,#e8c33a);text-decoration:none;margin-top:40px}
+.dd-hero{padding:22px 0 8px}
+.dd-tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.dd-tags span{font:600 11px ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#c2c6d0;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:4px 11px}
+.dd-name{font-size:clamp(40px,7vw,66px);line-height:1.02;letter-spacing:-.025em;margin:0 0 14px}
+.dd-desc{font-size:19px;line-height:1.55;opacity:.82;max-width:60ch;margin:0 0 22px}
+.dd-hero__actions{display:flex;gap:12px;flex-wrap:wrap}
+.dd-cta{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;padding:12px 22px;border-radius:10px;text-decoration:none;background:var(--accent,#e8c33a);color:#0a0b0d}
+.dd-cta--ghost{background:transparent;color:inherit;border:1px solid rgba(255,255,255,.18)}
+.dd-sec{padding:38px 0;border-top:1px solid rgba(255,255,255,.08)}
+.dd-label{font:600 12px ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--accent,#e8c33a);margin:0 0 20px}
+.dd-frame{border:1px solid rgba(255,255,255,.12);border-radius:14px;overflow:hidden;background:#000;height:560px}
+.dd-frame iframe{width:100%;height:100%;border:0;display:block}
+.dd-concept p{font-size:18px;line-height:1.7;max-width:64ch;opacity:.9;margin:0}
+.dd-pal{display:flex;flex-direction:column;gap:1px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+.dd-pal__row{display:grid;grid-template-columns:44px 1.1fr 1fr 1.7fr auto;align-items:center;gap:14px;padding:11px 14px;background:rgba(255,255,255,.02)}
+.dd-pal__sw{width:32px;height:32px;border-radius:8px;border:1px solid rgba(255,255,255,.14)}
+.dd-pal__name{font-weight:600;font-size:14px}
+.dd-pal__hex{font:500 13px ui-monospace,monospace;opacity:.75}
+.dd-pal__role{font-size:13px;opacity:.6}
+.dd-pal__cr{font:600 12px ui-monospace,monospace;color:#86c79b;justify-self:end}
+.dd-type__row{padding:18px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.dd-type__lbl{font:600 11px ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;opacity:.5}
+.dd-type__big{font-size:54px;line-height:1.1;letter-spacing:-.02em;margin:6px 0 2px}
+.dd-type__line{font-size:18px;opacity:.8;margin:0}
+.dd-a11y{display:flex;flex-direction:column;gap:1px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+.dd-a11y__row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:16px;padding:12px 14px;background:rgba(255,255,255,.02);font-size:14px}
+.dd-a11y__row b{font:600 14px ui-monospace,monospace}
+.dd-pass{font:600 11px ui-monospace,monospace;color:#0a0b0d;background:#86c79b;border-radius:6px;padding:3px 8px}
+.dd-files{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.dd-file{display:inline-flex;align-items:center;gap:8px;font:600 13px system-ui,sans-serif;text-decoration:none;color:#e8e9ee;border:1px solid rgba(255,255,255,.14);border-radius:9px;padding:9px 14px}
+.dd-file:hover{border-color:rgba(255,255,255,.32)}
+.dd-code{font:500 12.5px ui-monospace,monospace;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:18px;overflow:auto;max-height:440px;line-height:1.55;color:#d6d8de;white-space:pre}
+.dd-how2 p{font-size:16px;line-height:1.7;opacity:.85;max-width:62ch}
+.dd-how2 code{font:500 13px ui-monospace,monospace;background:rgba(255,255,255,.07);padding:2px 6px;border-radius:5px}
+.dd-nav{display:flex;justify-content:space-between;gap:16px;padding:34px 0 80px;font-weight:600;flex-wrap:wrap}
+.dd-nav a{color:var(--accent,#e8c33a);text-decoration:none}
+.usknav__drawer{display:none}
+.usknav__drawer.is-open{display:flex;flex-direction:column}
+@media (max-width:640px){.dd-pal__row{grid-template-columns:36px 1fr auto;gap:10px}.dd-pal__hex,.dd-pal__role{display:none}.dd-frame{height:460px}}
+</style>"""
+
+
+def build_detail_page(row, prev_row, next_row):
+    import html as _html
+    styles, fonts, nav, tail = _chrome()
+    slug, name = row["slug"], row["name"]
+    folder = OUT / slug
+    meta = json.loads((folder / "metadata.json").read_text(encoding="utf-8"))
+    dmd = _html.escape((folder / "DESIGN.md").read_text(encoding="utf-8"))
+    sysfonts = "".join(f'<link href="{f["cssImport"]}" rel="stylesheet">'
+                       for f in meta.get("fonts", []) if f.get("cssImport"))
+    tags = "".join(f"<span>{t}</span>" for t in meta.get("tags", []))
+    pal_rows = "".join(
+        f'<div class="dd-pal__row"><span class="dd-pal__sw" style="background:{c["value"]}"></span>'
+        f'<span class="dd-pal__name">{c["name"]}</span><code class="dd-pal__hex">{c["value"]}</code>'
+        f'<span class="dd-pal__role">{c.get("role", "")}</span>'
+        f'<span class="dd-pal__cr">{c.get("contrastOnCanvas", "")}:1</span></div>'
+        for c in meta.get("palette", []))
+    type_rows = "".join(
+        f'<div class="dd-type__row" style="font-family:&#39;{f["name"]}&#39;,system-ui">'
+        f'<div class="dd-type__lbl">{f.get("usage", "")} / {f["name"]}</div>'
+        f'<div class="dd-type__big">Ag 1234</div>'
+        f'<p class="dd-type__line">The quick brown fox jumps over the lazy dog.</p></div>'
+        for f in meta.get("fonts", []))
+    a11y_rows = "".join(
+        f'<div class="dd-a11y__row"><span>{k.replace("_", " ")}</span><b>{v}:1</b>'
+        f'<span class="dd-pass">{"AA" if v >= 4.5 else "AA large"}</span></div>'
+        for k, v in meta.get("accessibility", {}).get("ratios", {}).items())
+    file_links = "".join(
+        f'<a class="dd-file" href="/design-systems/{slug}/{path}">{label}</a>'
+        for label, path in [("DESIGN.md", "DESIGN.md"), ("tokens.css", "css/tokens.css"),
+                            ("metadata.json", "metadata.json"), ("preview.html", "preview.html")])
+    prev_link = (f'<a href="/design-systems/{prev_row["slug"]}/">&larr; {prev_row["name"]}</a>'
+                 if prev_row else "<span></span>")
+    next_link = (f'<a href="/design-systems/{next_row["slug"]}/">{next_row["name"]} &rarr;</a>'
+                 if next_row else "<span></span>")
+    jsonld = json.dumps({
+        "@context": "https://schema.org", "@type": "CreativeWork", "name": f"{name} design system",
+        "abstract": meta.get("description", ""), "isAccessibleForFree": True,
+        "url": f"https://uxskill.laithjunaidy.com/design-systems/{slug}/",
+        "license": "https://opensource.org/licenses/MIT", "keywords": ", ".join(meta.get("tags", [])),
+    }, ensure_ascii=False)
+    head_out = (
+        '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
+        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+        f'<title>{name}: a free design system | ux-skill</title>\n'
+        f'<meta name="description" content="{name}: {meta.get("description", "")} A free, accessible design '
+        'system generated by ux-skill. Download the DESIGN.md, tokens, and a live preview. WCAG AA, MIT.">\n'
+        f'<link rel="canonical" href="https://uxskill.laithjunaidy.com/design-systems/{slug}/">\n'
+        f'<meta property="og:type" content="website">\n<meta property="og:title" content="{name}: a free design system">\n'
+        f'<meta property="og:description" content="{meta.get("description", "")}">\n'
+        f'<meta property="og:url" content="https://uxskill.laithjunaidy.com/design-systems/{slug}/">\n'
+        '<meta name="twitter:card" content="summary_large_image">\n'
+        f'{fonts}\n{sysfonts}\n{styles}\n{_DETAIL_CSS}\n'
+        f'<script type="application/ld+json">{jsonld}</script>\n</head>'
+    )
+    main_html = (
+        '<main class="dd"><div class="dd-wrap">'
+        '<a class="dd-back" href="/design-systems.html">&larr; All design systems</a>'
+        f'<header class="dd-hero"><div class="dd-tags">{tags}</div>'
+        f'<h1 class="dd-name">{name}</h1><p class="dd-desc">{meta.get("description", "")}</p>'
+        '<div class="dd-hero__actions">'
+        f'<a class="dd-cta" href="/design-systems/{slug}.zip" download>Download system</a>'
+        f'<a class="dd-cta dd-cta--ghost" href="/design-systems/{slug}/preview.html" target="_blank" rel="noopener">Open full preview</a>'
+        '</div></header>'
+        '<section class="dd-sec"><div class="dd-label">Live preview</div>'
+        f'<div class="dd-frame"><iframe src="/design-systems/{slug}/preview.html" title="{name} preview" loading="lazy"></iframe></div></section>'
+        f'<section class="dd-sec dd-concept"><div class="dd-label">Concept</div><p>{meta.get("concept", "")}</p></section>'
+        f'<section class="dd-sec"><div class="dd-label">Palette / {len(meta.get("palette", []))} tokens</div><div class="dd-pal">{pal_rows}</div></section>'
+        f'<section class="dd-sec"><div class="dd-label">Typography</div><div class="dd-type">{type_rows}</div></section>'
+        f'<section class="dd-sec"><div class="dd-label">Accessibility / WCAG AA by construction</div><div class="dd-a11y">{a11y_rows}</div></section>'
+        f'<section class="dd-sec"><div class="dd-label">Files</div><div class="dd-files">{file_links}'
+        f'<a class="dd-file" href="/design-systems/{slug}.zip" download>Download all (zip)</a></div>'
+        f'<pre class="dd-code">{dmd}</pre></section>'
+        '<section class="dd-sec dd-how2"><div class="dd-label">How to use</div>'
+        '<p>Download the folder and point your coding agent (Claude Code, Cursor, Codex) at '
+        '<code>DESIGN.md</code>. Load <code>css/tokens.css</code> for the variables and open '
+        '<code>preview.html</code> to see it applied. Generated by the ux-skill engine: deterministic, '
+        'offline, never calls an LLM. Free under MIT.</p></section>'
+        f'<nav class="dd-nav">{prev_link}<a href="/design-systems.html">All systems</a>{next_link}</nav>'
+        '</div></main>'
+    )
+    (folder / "index.html").write_text(head_out + nav + main_html + tail, encoding="utf-8")
+    return slug
+
+
 def main() -> None:
     if OUT.exists():
         shutil.rmtree(OUT)
@@ -279,6 +430,10 @@ def main() -> None:
     print(f"\nWrote {len(index)} systems + index.json to {OUT}/")
     size = build_gallery(index)
     print(f"Wrote docs/design-systems.html ({size} bytes)")
+    for i, row in enumerate(index):
+        build_detail_page(row, index[i - 1] if i > 0 else None,
+                          index[i + 1] if i < len(index) - 1 else None)
+    print(f"Wrote {len(index)} detail pages (design-systems/<slug>/index.html)")
 
 
 if __name__ == "__main__":

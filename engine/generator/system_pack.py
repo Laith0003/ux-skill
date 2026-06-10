@@ -281,8 +281,8 @@ def _design_md(system: Any, pal: Dict[str, str], name: str, description: str, co
 def _preview_html(system: Any, pal: Dict[str, str], name: str, description: str, concept: str) -> str:
     tp = dict(getattr(system, "type_pair", None) or system.get("type_pair", {}))
     display, body_f, mono = tp.get("display", "Georgia"), tp.get("body", "system-ui"), tp.get("mono", "ui-monospace")
-    links = "".join(f'<link href="{u}" rel="stylesheet">'
-                    for u in {_gfont_import(display), _gfont_import(body_f), _gfont_import(mono)} if u)
+    _urls = [u for u in (_gfont_import(display), _gfont_import(body_f), _gfont_import(mono)) if u]
+    links = "".join(f'<link href="{u}" rel="stylesheet">' for u in dict.fromkeys(_urls))
     swatches = "".join(
         f'<div style="flex:1;min-width:84px"><div style="height:52px;border-radius:10px;'
         f'background:{pal[k]};border:1px solid var(--color-border)"></div>'
