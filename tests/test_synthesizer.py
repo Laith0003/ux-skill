@@ -258,3 +258,49 @@ def test_brand_anchor_palette_differs_from_strict():
     # Different modes
     assert sys_a.mode == "brand_anchor"
     assert sys_s.mode == "strict_brand"
+
+
+# ---------- Accessibility: every synthesized palette passes WCAG ----------
+
+def _luminance(hex_str: str) -> float:
+    h = hex_str.lstrip("#")
+    if len(h) == 3:
+        h = "".join(c * 2 for c in h)
+    r, g, b = (int(h[i:i + 2], 16) / 255.0 for i in (0, 2, 4))
+    lin = lambda c: c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+    return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b)
+
+
+def _contrast(a: str, b: str) -> float:
+    la, lb = _luminance(a), _luminance(b)
+    hi, lo = max(la, lb), min(la, lb)
+    return (hi + 0.05) / (lo + 0.05)
+
+
+# A spread across industries, tones, and BOTH brand modes — light and dark
+# polarity must both come out accessible. (Regression: the synthesizer used to
+# average light+dark canvases into mid-gray, tanking contrast to ~1.5:1.)
+@pytest.mark.parametrize("brief", [
+    _Brief(industry="fintech-payments", tone=["bold", "precise"]),
+    _Brief(industry="luxury", tone=["refined", "minimal"]),
+    _Brief(industry="healthcare", tone=["calm", "soft"]),
+    _Brief(industry="gaming", tone=["loud", "kinetic"]),
+    _Brief(industry="editorial-media", tone=["warm", "editorial"]),
+    _Brief(industry="developer-tools", tone=["technical"]),
+    _Brief(industry="ecommerce", tone=["playful"]),
+    _Brief(industry="crypto", tone=["bold"]),
+    _Brief(reference_brands=["stripe"]),
+    _Brief(reference_brands=["spotify"]),
+    _Brief(reference_brands=["notion"], industry="saas"),
+    _Brief(),  # empty brief — defaults must still be accessible
+])
+def test_every_synthesized_palette_meets_wcag_aa(brief):
+    """Accessible by construction: body + muted >= 4.5:1, ink >= 7:1 vs canvas."""
+    palette = synthesize(brief).palette
+    canvas = palette["canvas"]
+    assert _contrast(palette["ink"], canvas) >= 7.0, \
+        f"ink {palette['ink']} on {canvas} = {_contrast(palette['ink'], canvas):.2f}:1"
+    assert _contrast(palette["body"], canvas) >= 4.5, \
+        f"body {palette['body']} on {canvas} = {_contrast(palette['body'], canvas):.2f}:1"
+    assert _contrast(palette["muted"], canvas) >= 4.5, \
+        f"muted {palette['muted']} on {canvas} = {_contrast(palette['muted'], canvas):.2f}:1"

@@ -128,46 +128,188 @@ def _warmth_shift(rgb: tuple, warmth: float) -> tuple:
 
 
 # ---------------------------------------------------------------------------
+# WCAG contrast + HSL (accessible-by-construction palettes)
+# ---------------------------------------------------------------------------
+
+def _relative_luminance(rgb: tuple) -> float:
+    """WCAG relative luminance (same formula as engine/image_extract)."""
+    def lin(c: float) -> float:
+        c = c / 255.0
+        return c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+    r, g, b = rgb
+    return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b)
+
+
+def _contrast_ratio(rgb1: tuple, rgb2: tuple) -> float:
+    """WCAG contrast ratio between two RGB tuples (1.0 .. 21.0)."""
+    l1, l2 = _relative_luminance(rgb1), _relative_luminance(rgb2)
+    hi, lo = max(l1, l2), min(l1, l2)
+    return (hi + 0.05) / (lo + 0.05)
+
+
+def _rgb_to_hsl(rgb: tuple) -> tuple:
+    r, g, b = [c / 255.0 for c in rgb]
+    mx, mn = max(r, g, b), min(r, g, b)
+    l = (mx + mn) / 2.0
+    if mx == mn:
+        return (0.0, 0.0, l)
+    d = mx - mn
+    s = d / (2 - mx - mn) if l > 0.5 else d / (mx + mn)
+    if mx == r:
+        h = (g - b) / d + (6 if g < b else 0)
+    elif mx == g:
+        h = (b - r) / d + 2
+    else:
+        h = (r - g) / d + 4
+    return (h / 6.0, s, l)
+
+
+def _hsl_to_rgb(hsl: tuple) -> tuple:
+    h, s, l = hsl
+    if s == 0:
+        v = l * 255.0
+        return (v, v, v)
+
+    def hue2rgb(p: float, q: float, t: float) -> float:
+        if t < 0:
+            t += 1
+        if t > 1:
+            t -= 1
+        if t < 1 / 6:
+            return p + (q - p) * 6 * t
+        if t < 1 / 2:
+            return q
+        if t < 2 / 3:
+            return p + (q - p) * (2 / 3 - t) * 6
+        return p
+    q = l * (1 + s) if l < 0.5 else l + s - l * s
+    p = 2 * l - q
+    return (hue2rgb(p, q, h + 1 / 3) * 255.0,
+            hue2rgb(p, q, h) * 255.0,
+            hue2rgb(p, q, h - 1 / 3) * 255.0)
+
+
+def _set_lightness(hex_str: str, target_l: float) -> str:
+    """Set HSL lightness to target while preserving hue + saturation.
+
+    Crisps a dull/mid canvas to a clean near-white or near-black WITHOUT
+    flattening its character (a warm cream stays cream, just brighter).
+    """
+    rgb = _hex_to_rgb(hex_str)
+    if rgb is None:
+        return hex_str
+    h, s, _ = _rgb_to_hsl(rgb)
+    return _rgb_to_hex(_hsl_to_rgb((h, s, target_l)))
+
+
+def _enforce_contrast(fg_hex: str, bg_hex: str, target: float) -> str:
+    """Push a foreground tone toward black/white (away from bg), preserving hue,
+    until its contrast ratio vs bg meets ``target``. Minimal push = most hue kept.
+    """
+    fg = _hex_to_rgb(fg_hex)
+    bg = _hex_to_rgb(bg_hex)
+    if fg is None or bg is None:
+        return fg_hex
+    if _contrast_ratio(fg, bg) >= target:
+        return fg_hex
+    toward = (0.0, 0.0, 0.0) if _relative_luminance(bg) > 0.5 else (255.0, 255.0, 255.0)
+    lo, hi, best = 0.0, 1.0, toward
+    for _ in range(22):
+        t = (lo + hi) / 2.0
+        cand = tuple(fg[i] + (toward[i] - fg[i]) * t for i in range(3))
+        if _contrast_ratio(cand, bg) >= target:
+            best, hi = cand, t   # met it — try to keep more of the original hue
+        else:
+            lo = t
+    return _rgb_to_hex(best)
+
+
+# ---------------------------------------------------------------------------
 # Synthesis primitives
 # ---------------------------------------------------------------------------
 
 def _synthesize_palette(vocab: Vocabulary, axes: AxisValues) -> Dict[str, str]:
-    """Synthesize a fresh 6-color palette by axis-weighted mixing."""
-    # Gather palette anchors from the vocabulary
+    """Synthesize a fresh 6-color palette — accessible by construction.
+
+    Three guarantees, in order:
+      1. ONE coherent light/dark polarity. We never average a light canvas with
+         a dark one (that regressed to mid-gray and tanked contrast). We cluster
+         the pool by luminance, take the majority side, and mix only within it.
+      2. A crisp base. Canvas + ink lightness are pulled to clean extremes while
+         keeping hue, so a warm cream stays cream (just brighter), not muddy gray.
+      3. WCAG-enforced text. ink / body / muted are pushed (hue-preserving) until
+         each meets its contrast floor vs canvas; the accent stays visible too.
+    Every emitted palette passes AA. Deterministic: same vocab+axes → same hexes.
+    """
     canvas_pool = [p.get("canvas") for p in vocab.palettes if p.get("canvas")]
     ink_pool = [p.get("ink") for p in vocab.palettes if p.get("ink")]
-    primary_pool = [p.get("primary") or p.get("accent") for p in vocab.palettes if p.get("primary") or p.get("accent")]
+    primary_pool = [p.get("primary") or p.get("accent")
+                    for p in vocab.palettes if p.get("primary") or p.get("accent")]
 
-    # Defaults if vocabulary thin
-    if not canvas_pool:
-        canvas_pool = ["#0a0a0a" if axes.contrast > 0.5 else "#f6f7f9"]
-    if not ink_pool:
-        ink_pool = ["#f6f7f9" if axes.contrast > 0.5 else "#0a0a0a"]
-    if not primary_pool:
-        primary_pool = ["#06b6d4"] if axes.warmth < 0.5 else ["#f97316"]
+    def _lum(hx):
+        rgb = _hex_to_rgb(hx)
+        return _relative_luminance(rgb) if rgb else None
 
-    # Pure mix
-    canvas = _mix_colors(canvas_pool, None) or canvas_pool[0]
-    ink = _mix_colors(ink_pool, None) or ink_pool[0]
-    primary = _mix_colors(primary_pool, None) or primary_pool[0]
+    # --- 1. Coherent polarity: cluster canvases, take the majority side ---
+    canvas_lit = [(c, _lum(c)) for c in canvas_pool]
+    canvas_lit = [(c, l) for c, l in canvas_lit if l is not None]
+    lights = [c for c, l in canvas_lit if l >= 0.5]
+    darks = [c for c, l in canvas_lit if l < 0.5]
+    if not canvas_lit:
+        light_mode = axes.contrast <= 0.5
+        canvas_src = ["#f7f7f5"] if light_mode else ["#0b0b0d"]
+    else:
+        light_mode = len(lights) >= len(darks)
+        canvas_src = lights if light_mode else darks
 
-    # Warmth-shift
-    canvas_rgb = _hex_to_rgb(canvas)
-    ink_rgb = _hex_to_rgb(ink)
-    primary_rgb = _hex_to_rgb(primary)
-    if canvas_rgb:
-        canvas = _rgb_to_hex(_warmth_shift(canvas_rgb, axes.warmth))
-    if ink_rgb:
-        ink = _rgb_to_hex(_warmth_shift(ink_rgb, axes.warmth))
-    if primary_rgb:
-        primary = _rgb_to_hex(_warmth_shift(primary_rgb, axes.warmth))
+    # Ink takes the OPPOSITE polarity from its own pool.
+    ink_lit = [(c, _lum(c)) for c in ink_pool]
+    ink_src = [c for c, l in ink_lit if l is not None and (l < 0.5) == light_mode]
+    if not ink_src:
+        ink_src = ["#0b0b0d"] if light_mode else ["#f4f4f2"]
 
-    # Derived: muted = blend of canvas + ink at 70/30
-    muted = _mix_colors([canvas, ink], [0.7, 0.3]) or "#808080"
-    # Body = blend of canvas + ink at 30/70
-    body = _mix_colors([canvas, ink], [0.3, 0.7]) or "#404040"
-    # Hairline = 80/20 toward canvas; slight tint
-    hairline = _mix_colors([canvas, ink], [0.85, 0.15]) or "#cccccc"
+    # --- 2. Mix within the chosen polarity (no muddy cross-polarity averaging) ---
+    canvas = _mix_colors(canvas_src, None) or canvas_src[0]
+    ink = _mix_colors(ink_src, None) or ink_src[0]
+    primary = _mix_colors(primary_pool, None) or ("#06b6d4" if axes.warmth < 0.5 else "#f97316")
+
+    # Warmth-shift for hue character (lightness is re-set next, hue survives).
+    for name, hexv in (("canvas", canvas), ("ink", ink), ("primary", primary)):
+        rgb = _hex_to_rgb(hexv)
+        if rgb:
+            shifted = _rgb_to_hex(_warmth_shift(rgb, axes.warmth))
+            if name == "canvas":
+                canvas = shifted
+            elif name == "ink":
+                ink = shifted
+            else:
+                primary = shifted
+
+    # Crisp the base: only when a light canvas is too dull or a dark one too pale.
+    cl = _lum(canvas)
+    if cl is not None:
+        if light_mode and cl < 0.74:
+            canvas = _set_lightness(canvas, 0.95)
+        elif not light_mode and cl > 0.10:
+            canvas = _set_lightness(canvas, 0.05)
+    ink = _set_lightness(ink, 0.14 if light_mode else 0.95)
+
+    # Keep the accent vivid — an averaged primary turns to mud and reads cheap.
+    # Floor its saturation (bolder briefs punch harder), preserving hue + lightness.
+    prgb = _hex_to_rgb(primary)
+    if prgb:
+        ph, ps, pl = _rgb_to_hsl(prgb)
+        primary = _rgb_to_hex(_hsl_to_rgb((ph, max(ps, 0.42 + 0.28 * axes.contrast), pl)))
+
+    # --- 3. Derive secondary tones, then GUARANTEE accessibility vs canvas ---
+    muted = _mix_colors([canvas, ink], [0.52, 0.48]) or "#808080"
+    body = _mix_colors([canvas, ink], [0.26, 0.74]) or "#404040"
+    hairline = _mix_colors([canvas, ink], [0.86, 0.14]) or "#cccccc"
+
+    ink = _enforce_contrast(ink, canvas, 7.5)       # headings / strongest text
+    body = _enforce_contrast(body, canvas, 5.5)     # paragraph text (comfortable AA)
+    muted = _enforce_contrast(muted, canvas, 4.6)   # secondary text (AA floor + margin)
+    primary = _enforce_contrast(primary, canvas, 3.0)  # accent stays visible
 
     return {
         "canvas": canvas,
