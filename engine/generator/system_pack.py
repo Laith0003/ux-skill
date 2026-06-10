@@ -1406,7 +1406,7 @@ def _preview_html(system: Any, pal: Dict[str, str], name: str, description: str,
     return (
         f'<!doctype html><html lang="en" data-theme="{pal["_theme"]}"><head><meta charset="utf-8">'
         f'<meta name="viewport" content="width=device-width, initial-scale=1">'
-        f'<title>{name} design system preview</title>{links}'
+        f'<meta name="generator" content="ux-skill"><title>{name} design system preview</title>{links}'
         f'<style>{_tokens_css(system, pal, name)}\n{_PREVIEW_CSS}{_PREVIEW_MOBILE}</style></head>'
         f'<body>{inner}</body></html>'
     )
