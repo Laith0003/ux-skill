@@ -1,0 +1,155 @@
+{
+  "name": "Marigold",
+  "description": "A sunlit system: pale gold canvas, warm rust accent.",
+  "theme": "light",
+  "concept": "Marigold is cheerful and tactile. A sunlit pale-gold canvas, a warm rust accent, and rounded, friendly type. For commerce, consumer apps, and brands that want to feel approachable and warm.",
+  "palette": [
+    {
+      "name": "Canvas",
+      "token": "canvas",
+      "value": "#ffffeb",
+      "role": "Page and app background",
+      "contrastOnCanvas": 1.0
+    },
+    {
+      "name": "Surface",
+      "token": "surface",
+      "value": "#f8f8e3",
+      "role": "Cards, panels, and form fields",
+      "contrastOnCanvas": 1.06
+    },
+    {
+      "name": "Elevated",
+      "token": "elevated",
+      "value": "#efeeda",
+      "role": "Modals, popovers, and the highest tier",
+      "contrastOnCanvas": 1.16
+    },
+    {
+      "name": "Border",
+      "token": "border",
+      "value": "#e1dfca",
+      "role": "Hairline dividers and outlines",
+      "contrastOnCanvas": 1.33
+    },
+    {
+      "name": "Ink",
+      "token": "ink",
+      "value": "#352912",
+      "role": "Headlines and primary foreground",
+      "contrastOnCanvas": 14.05
+    },
+    {
+      "name": "Body",
+      "token": "body",
+      "value": "#6a614a",
+      "role": "Paragraph and reading text",
+      "contrastOnCanvas": 6.07
+    },
+    {
+      "name": "Muted",
+      "token": "muted",
+      "value": "#797464",
+      "role": "Secondary text, captions, and hints",
+      "contrastOnCanvas": 4.62
+    },
+    {
+      "name": "Primary",
+      "token": "primary",
+      "value": "#873a23",
+      "role": "Primary action, focus, and accent",
+      "contrastOnCanvas": 7.8
+    },
+    {
+      "name": "Primary Active",
+      "token": "primary_active",
+      "value": "#672c1b",
+      "role": "Pressed and active state of the accent",
+      "contrastOnCanvas": 10.63
+    },
+    {
+      "name": "On Primary",
+      "token": "on_primary",
+      "value": "#ffffff",
+      "role": "Text and icons on the accent",
+      "contrastOnCanvas": 1.01
+    },
+    {
+      "name": "Success",
+      "token": "success",
+      "value": "#18874f",
+      "role": "Success, positive metrics, and confirmation",
+      "contrastOnCanvas": 4.5
+    },
+    {
+      "name": "Warning",
+      "token": "warning",
+      "value": "#95701a",
+      "role": "Warning and caution",
+      "contrastOnCanvas": 4.5
+    },
+    {
+      "name": "Danger",
+      "token": "danger",
+      "value": "#bf3722",
+      "role": "Error, destructive, and critical signal",
+      "contrastOnCanvas": 5.48
+    },
+    {
+      "name": "Info",
+      "token": "info",
+      "value": "#226bbf",
+      "role": "Information and neutral data",
+      "contrastOnCanvas": 5.29
+    }
+  ],
+  "fonts": [
+    {
+      "name": "Bricolage Grotesque",
+      "provider": "Google Fonts",
+      "usage": "Display headlines and UI labels",
+      "cssImport": "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&display=swap"
+    },
+    {
+      "name": "Inter",
+      "provider": "Google Fonts",
+      "usage": "Body and reading text",
+      "cssImport": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    },
+    {
+      "name": "JetBrains Mono",
+      "provider": "Google Fonts",
+      "usage": "Metrics, code, and tabular data",
+      "cssImport": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    }
+  ],
+  "tags": [
+    "Light",
+    "Playful",
+    "Warm",
+    "Accessible"
+  ],
+  "accessibility": {
+    "ratios": {
+      "ink_on_canvas": 14.05,
+      "body_on_canvas": 6.07,
+      "muted_on_canvas": 4.62,
+      "primary_on_canvas": 7.8,
+      "on_primary_on_primary": 7.9,
+      "body_on_surface": 5.71
+    },
+    "wcag_aa_text": true,
+    "note": "Every text pair meets WCAG AA. Accessible by construction (ux-skill synthesizer)."
+  },
+  "axes": {
+    "warmth": 1.0,
+    "contrast": 0.6,
+    "density": 0.55,
+    "geometry": 0.55,
+    "formality": 0.15,
+    "motion": 0.65,
+    "type_personality": 0.65
+  },
+  "generator": "ux-skill synthesizer (deterministic, offline, never calls an LLM)",
+  "license": "Free to use. Generated, not curated."
+}

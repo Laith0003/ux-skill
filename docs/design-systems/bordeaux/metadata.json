@@ -1,0 +1,155 @@
+{
+  "name": "Bordeaux",
+  "description": "A restrained luxury system: deep wine on warm cream.",
+  "theme": "light",
+  "concept": "Bordeaux is unhurried. A deep wine accent sits on warm cream, the type is quiet and well-set, and nothing shouts. For luxury, hospitality, and considered brands that earn attention rather than demand it.",
+  "palette": [
+    {
+      "name": "Canvas",
+      "token": "canvas",
+      "value": "#fdf9f3",
+      "role": "Page and app background",
+      "contrastOnCanvas": 1.0
+    },
+    {
+      "name": "Surface",
+      "token": "surface",
+      "value": "#f5f2ec",
+      "role": "Cards, panels, and form fields",
+      "contrastOnCanvas": 1.07
+    },
+    {
+      "name": "Elevated",
+      "token": "elevated",
+      "value": "#ece8e2",
+      "role": "Modals, popovers, and the highest tier",
+      "contrastOnCanvas": 1.16
+    },
+    {
+      "name": "Border",
+      "token": "border",
+      "value": "#ddd9d4",
+      "role": "Hairline dividers and outlines",
+      "contrastOnCanvas": 1.34
+    },
+    {
+      "name": "Ink",
+      "token": "ink",
+      "value": "#262422",
+      "role": "Headlines and primary foreground",
+      "contrastOnCanvas": 14.74
+    },
+    {
+      "name": "Body",
+      "token": "body",
+      "value": "#5e5b58",
+      "role": "Paragraph and reading text",
+      "contrastOnCanvas": 6.43
+    },
+    {
+      "name": "Muted",
+      "token": "muted",
+      "value": "#74726e",
+      "role": "Secondary text, captions, and hints",
+      "contrastOnCanvas": 4.58
+    },
+    {
+      "name": "Primary",
+      "token": "primary",
+      "value": "#721e44",
+      "role": "Primary action, focus, and accent",
+      "contrastOnCanvas": 10.09
+    },
+    {
+      "name": "Primary Active",
+      "token": "primary_active",
+      "value": "#521531",
+      "role": "Pressed and active state of the accent",
+      "contrastOnCanvas": 13.26
+    },
+    {
+      "name": "On Primary",
+      "token": "on_primary",
+      "value": "#ffffff",
+      "role": "Text and icons on the accent",
+      "contrastOnCanvas": 1.05
+    },
+    {
+      "name": "Success",
+      "token": "success",
+      "value": "#18844d",
+      "role": "Success, positive metrics, and confirmation",
+      "contrastOnCanvas": 4.5
+    },
+    {
+      "name": "Warning",
+      "token": "warning",
+      "value": "#926e1a",
+      "role": "Warning and caution",
+      "contrastOnCanvas": 4.48
+    },
+    {
+      "name": "Danger",
+      "token": "danger",
+      "value": "#bf3722",
+      "role": "Error, destructive, and critical signal",
+      "contrastOnCanvas": 5.29
+    },
+    {
+      "name": "Info",
+      "token": "info",
+      "value": "#226bbf",
+      "role": "Information and neutral data",
+      "contrastOnCanvas": 5.1
+    }
+  ],
+  "fonts": [
+    {
+      "name": "Bricolage Grotesque",
+      "provider": "Google Fonts",
+      "usage": "Display headlines and UI labels",
+      "cssImport": "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&display=swap"
+    },
+    {
+      "name": "Inter",
+      "provider": "Google Fonts",
+      "usage": "Body and reading text",
+      "cssImport": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    },
+    {
+      "name": "JetBrains Mono",
+      "provider": "Google Fonts",
+      "usage": "Metrics, code, and tabular data",
+      "cssImport": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    }
+  ],
+  "tags": [
+    "Light",
+    "Luxury",
+    "Minimal",
+    "Accessible"
+  ],
+  "accessibility": {
+    "ratios": {
+      "ink_on_canvas": 14.74,
+      "body_on_canvas": 6.43,
+      "muted_on_canvas": 4.58,
+      "primary_on_canvas": 10.09,
+      "on_primary_on_primary": 10.58,
+      "body_on_surface": 6.04
+    },
+    "wcag_aa_text": true,
+    "note": "Every text pair meets WCAG AA. Accessible by construction (ux-skill synthesizer)."
+  },
+  "axes": {
+    "warmth": 0.55,
+    "contrast": 0.6,
+    "density": 0.0,
+    "geometry": 0.55,
+    "formality": 0.75,
+    "motion": 0.4,
+    "type_personality": 0.75
+  },
+  "generator": "ux-skill synthesizer (deterministic, offline, never calls an LLM)",
+  "license": "Free to use. Generated, not curated."
+}

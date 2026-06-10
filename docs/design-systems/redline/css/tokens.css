@@ -1,0 +1,45 @@
+/* Redline -- ux-skill generated tokens. Accessible by construction (WCAG AA). */
+/* Do not edit by hand: re-generate with `ux system-pack`. */
+:root {
+  --color-canvas: #080808;
+  --color-surface: #101010;
+  --color-elevated: #1b1b1b;
+  --color-border: #2b2b2b;
+  --color-ink: #f2f2f2;
+  --color-body: #b5b5b5;
+  --color-muted: #797979;
+  --color-primary: #dd3e59;
+  --color-primary-active: #ce2441;
+  --color-on-primary: #0a0a0c;
+  --color-success: #5ede9e;
+  --color-warning: #deb85e;
+  --color-danger: #de6f5e;
+  --color-info: #5e9ade;
+  --font-display: "Inter", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 20px;
+  --space-lg: 32px;
+  --space-xl: 52px;
+  --space-xxl: 84px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+  --motion-base: 140ms;
+  --motion-ease: cubic-bezier(0.2,0,0,1);
+}
+
+.btn { font-family: var(--font-body); font-weight: 600; font-size: 15px; padding: 10px 18px;
+  border-radius: var(--radius-md); border: 0; cursor: pointer; transition: background var(--motion-base) var(--motion-ease); }
+.btn--primary { background: var(--color-primary); color: var(--color-on-primary); }
+.btn--primary:hover { background: var(--color-primary-active); }
+.btn--secondary { background: var(--color-surface); color: var(--color-ink); border: 1px solid var(--color-border); }
+.card { background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: var(--space-lg); color: var(--color-body); }
+.input { width: 100%; background: var(--color-canvas); color: var(--color-ink); font-family: var(--font-body);
+  border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 10px 14px; }
+.input:focus { outline: 2px solid var(--color-primary); outline-offset: 1px; }

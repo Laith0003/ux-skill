@@ -1,0 +1,545 @@
+{
+  "systems": [
+    {
+      "slug": "pulsar",
+      "name": "Pulsar",
+      "theme": "dark",
+      "description": "A deep-space dark system where an electric magenta carries every action.",
+      "display_font": "Inter Tight",
+      "body_font": "Inter",
+      "tags": [
+        "Dark",
+        "Vivid",
+        "Data",
+        "Accessible"
+      ],
+      "palette": {
+        "canvas": "#00040c",
+        "surface": "#080c15",
+        "elevated": "#12171f",
+        "border": "#222830",
+        "ink": "#e5f1ff",
+        "body": "#a9b3c0",
+        "muted": "#707883",
+        "primary": "#db3291",
+        "primary_active": "#c2227c",
+        "on_primary": "#0a0a0c",
+        "success": "#5ede9e",
+        "warning": "#deb85e",
+        "danger": "#de6f5e",
+        "info": "#5e9ade"
+      },
+      "swatches": [
+        "#00040c",
+        "#080c15",
+        "#e5f1ff",
+        "#a9b3c0",
+        "#db3291",
+        "#5ede9e",
+        "#deb85e",
+        "#de6f5e",
+        "#5e9ade"
+      ],
+      "primary": "#db3291",
+      "canvas": "#00040c",
+      "ink": "#e5f1ff",
+      "contrast": {
+        "ink_on_canvas": 17.95,
+        "body_on_canvas": 9.68,
+        "muted_on_canvas": 4.6,
+        "primary_on_canvas": 4.77,
+        "on_primary_on_primary": 4.59,
+        "body_on_surface": 9.22
+      },
+      "wcag_aa": true,
+      "zip": "pulsar.zip",
+      "files": [
+        "DESIGN.md",
+        "metadata.json",
+        "css/tokens.css",
+        "preview.html"
+      ]
+    },
+    {
+      "slug": "redline",
+      "name": "Redline",
+      "theme": "dark",
+      "description": "A high-energy near-black system with a crimson edge.",
+      "display_font": "Inter",
+      "body_font": "Inter",
+      "tags": [
+        "Dark",
+        "Bold",
+        "Kinetic",
+        "Accessible"
+      ],
+      "palette": {
+        "canvas": "#080808",
+        "surface": "#101010",
+        "elevated": "#1b1b1b",
+        "border": "#2b2b2b",
+        "ink": "#f2f2f2",
+        "body": "#b5b5b5",
+        "muted": "#797979",
+        "primary": "#dd3e59",
+        "primary_active": "#ce2441",
+        "on_primary": "#0a0a0c",
+        "success": "#5ede9e",
+        "warning": "#deb85e",
+        "danger": "#de6f5e",
+        "info": "#5e9ade"
+      },
+      "swatches": [
+        "#080808",
+        "#101010",
+        "#f2f2f2",
+        "#b5b5b5",
+        "#dd3e59",
+        "#5ede9e",
+        "#deb85e",
+        "#de6f5e",
+        "#5e9ade"
+      ],
+      "primary": "#dd3e59",
+      "canvas": "#080808",
+      "ink": "#f2f2f2",
+      "contrast": {
+        "ink_on_canvas": 17.89,
+        "body_on_canvas": 9.77,
+        "muted_on_canvas": 4.6,
+        "primary_on_canvas": 4.68,
+        "on_primary_on_primary": 4.62,
+        "body_on_surface": 9.28
+      },
+      "wcag_aa": true,
+      "zip": "redline.zip",
+      "files": [
+        "DESIGN.md",
+        "metadata.json",
+        "css/tokens.css",
+        "preview.html"
+      ]
+    },
+    {
+      "slug": "almanac",
+      "name": "Almanac",
+      "theme": "light",
+      "description": "A warm editorial system on cream paper with a tall display face.",
+      "display_font": "Bricolage Grotesque",
+      "body_font": "Inter",
+      "tags": [
+        "Light",
+        "Editorial",
+        "Warm",
+        "Accessible"
+      ],
+      "palette": {
+        "canvas": "#fffff6",
+        "surface": "#f8f8ee",
+        "elevated": "#f0eee3",
+        "border": "#e2dfd3",
+        "ink": "#3e2a0a",
+        "body": "#706147",
+        "muted": "#7b7465",
+        "primary": "#703307",
+        "primary_active": "#4a2205",
+        "on_primary": "#ffffff",
+        "success": "#18874f",
+        "warning": "#95711b",
+        "danger": "#bf3722",
+        "info": "#226bbf"
+      },
+      "swatches": [
+        "#fffff6",
+        "#f8f8ee",
+        "#3e2a0a",
+        "#706147",
+        "#703307",
+        "#18874f",
+        "#95711b",
+        "#bf3722",
+        "#226bbf"
+      ],
+      "primary": "#703307",
+      "canvas": "#fffff6",
+      "ink": "#3e2a0a",
+      "contrast": {
+        "ink_on_canvas": 13.56,
+        "body_on_canvas": 5.99,
+        "muted_on_canvas": 4.61,
+        "primary_on_canvas": 9.65,
+        "on_primary_on_primary": 9.7,
+        "body_on_surface": 5.63
+      },
+      "wcag_aa": true,
+      "zip": "almanac.zip",
+      "files": [
+        "DESIGN.md",
+        "metadata.json",
+        "css/tokens.css",
+        "preview.html"
+      ]
+    },
+    {
+      "slug": "bordeaux",
+      "name": "Bordeaux",
+      "theme": "light",
+      "description": "A restrained luxury system: deep wine on warm cream.",
+      "display_font": "Bricolage Grotesque",
+      "body_font": "Inter",
+      "tags": [
+        "Light",
+        "Luxury",
+        "Minimal",
+        "Accessible"
+      ],
+      "palette": {
+        "canvas": "#fdf9f3",
+        "surface": "#f5f2ec",
+        "elevated": "#ece8e2",
+        "border": "#ddd9d4",
+        "ink": "#262422",
+        "body": "#5e5b58",
+        "muted": "#74726e",
+        "primary": "#721e44",
+        "primary_active": "#521531",
+        "on_primary": "#ffffff",
+        "success": "#18844d",
+        "warning": "#926e1a",
+        "danger": "#bf3722",
+        "info": "#226bbf"
+      },
+      "swatches": [
+        "#fdf9f3",
+        "#f5f2ec",
+        "#262422",
+        "#5e5b58",
+        "#721e44",
+        "#18844d",
+        "#926e1a",
+        "#bf3722",
+        "#226bbf"
+      ],
+      "primary": "#721e44",
+      "canvas": "#fdf9f3",
+      "ink": "#262422",
+      "contrast": {
+        "ink_on_canvas": 14.74,
+        "body_on_canvas": 6.43,
+        "muted_on_canvas": 4.58,
+        "primary_on_canvas": 10.09,
+        "on_primary_on_primary": 10.58,
+        "body_on_surface": 6.04
+      },
+      "wcag_aa": true,
+      "zip": "bordeaux.zip",
+      "files": [
+        "DESIGN.md",
+        "metadata.json",
+        "css/tokens.css",
+        "preview.html"
+      ]
+    },
+    {
+      "slug": "marigold",
+      "name": "Marigold",
+      "theme": "light",
+      "description": "A sunlit system: pale gold canvas, warm rust accent.",
+      "display_font": "Bricolage Grotesque",
+      "body_font": "Inter",
+      "tags": [
+        "Light",
+        "Playful",
+        "Warm",
+        "Accessible"
+      ],
+      "palette": {
+        "canvas": "#ffffeb",
+        "surface": "#f8f8e3",
+        "elevated": "#efeeda",
+        "border": "#e1dfca",
+        "ink": "#352912",
+        "body": "#6a614a",
+        "muted": "#797464",
+        "primary": "#873a23",
+        "primary_active": "#672c1b",
+        "on_primary": "#ffffff",
+        "success": "#18874f",
+        "warning": "#95701a",
+        "danger": "#bf3722",
+        "info": "#226bbf"
+      },
+      "swatches": [
+        "#ffffeb",
+        "#f8f8e3",
+        "#352912",
+        "#6a614a",
+        "#873a23",
+        "#18874f",
+        "#95701a",
+        "#bf3722",
+        "#226bbf"
+      ],
+      "primary": "#873a23",
+      "canvas": "#ffffeb",
+      "ink": "#352912",
+      "contrast": {
+        "ink_on_canvas": 14.05,
+        "body_on_canvas": 6.07,
+        "muted_on_canvas": 4.62,
+        "primary_on_canvas": 7.8,
+        "on_primary_on_primary": 7.9,
+        "body_on_surface": 5.71
+      },
+      "wcag_aa": true,
+      "zip": "marigold.zip",
+      "files": [
+        "DESIGN.md",
+        "metadata.json",
+        "css/tokens.css",
+        "preview.html"
+      ]
+    },
+    {
+      "slug": "quartz",
+      "name": "Quartz",
+      "theme": "light",
+      "description": "A crisp, trustworthy SaaS system in cool white.",
+      "display_font": "Inter",
+      "body_font": "Inter",
+      "tags": [
+        "Light",
+        "Clean",
+        "SaaS",
+        "Accessible"
+      ],
+      "palette": {
+        "canvas": "#f8fafd",
+        "surface": "#f0f2f6",
+        "elevated": "#e6e9ed",
+        "border": "#d6d9de",
+        "ink": "#18212f",
+        "body": "#525965",
+        "muted": "#6e7379",
+        "primary": "#ba376d",
+        "primary_active": "#9b2e5b",
+        "on_primary": "#ffffff",
+        "success": "#18844e",
+        "warning": "#926e1a",
+        "danger": "#bf3722",
+        "info": "#226bbf"
+      },
+      "swatches": [
+        "#f8fafd",
+        "#f0f2f6",
+        "#18212f",
+        "#525965",
+        "#ba376d",
+        "#18844e",
+        "#926e1a",
+        "#bf3722",
+        "#226bbf"
+      ],
+      "primary": "#ba376d",
+      "canvas": "#f8fafd",
+      "ink": "#18212f",
+      "contrast": {
+        "ink_on_canvas": 15.48,
+        "body_on_canvas": 6.75,
+        "muted_on_canvas": 4.57,
+        "primary_on_canvas": 5.21,
+        "on_primary_on_primary": 5.45,
+        "body_on_surface": 6.3
+      },
+      "wcag_aa": true,
+      "zip": "quartz.zip",
+      "files": [
+        "DESIGN.md",
+        "metadata.json",
+        "css/tokens.css",
+        "preview.html"
+      ]
+    },
+    {
+      "slug": "ledger",
+      "name": "Ledger",
+      "theme": "light",
+      "description": "A precise fintech system with tight type and a decisive accent.",
+      "display_font": "Inter Tight",
+      "body_font": "Inter",
+      "tags": [
+        "Light",
+        "Fintech",
+        "Precise",
+        "Accessible"
+      ],
+      "palette": {
+        "canvas": "#f6f8fc",
+        "surface": "#eef0f5",
+        "elevated": "#e4e7ec",
+        "border": "#d4d8de",
+        "ink": "#162132",
+        "body": "#505967",
+        "muted": "#6c7179",
+        "primary": "#d22d2d",
+        "primary_active": "#b02626",
+        "on_primary": "#ffffff",
+        "success": "#17834d",
+        "warning": "#906d1a",
+        "danger": "#bf3722",
+        "info": "#226bbf"
+      },
+      "swatches": [
+        "#f6f8fc",
+        "#eef0f5",
+        "#162132",
+        "#505967",
+        "#d22d2d",
+        "#17834d",
+        "#906d1a",
+        "#bf3722",
+        "#226bbf"
+      ],
+      "primary": "#d22d2d",
+      "canvas": "#f6f8fc",
+      "ink": "#162132",
+      "contrast": {
+        "ink_on_canvas": 15.22,
+        "body_on_canvas": 6.66,
+        "muted_on_canvas": 4.62,
+        "primary_on_canvas": 4.76,
+        "on_primary_on_primary": 5.06,
+        "body_on_surface": 6.21
+      },
+      "wcag_aa": true,
+      "zip": "ledger.zip",
+      "files": [
+        "DESIGN.md",
+        "metadata.json",
+        "css/tokens.css",
+        "preview.html"
+      ]
+    },
+    {
+      "slug": "cedar",
+      "name": "Cedar",
+      "theme": "light",
+      "description": "A grounded system with a forest-green accent on warm white.",
+      "display_font": "Inter",
+      "body_font": "Inter",
+      "tags": [
+        "Light",
+        "Natural",
+        "Calm",
+        "Accessible"
+      ],
+      "palette": {
+        "canvas": "#fbf8f3",
+        "surface": "#f3f1ec",
+        "elevated": "#eae7e2",
+        "border": "#dbd8d4",
+        "ink": "#242424",
+        "body": "#5c5b5a",
+        "muted": "#72716f",
+        "primary": "#1f6f4b",
+        "primary_active": "#164f35",
+        "on_primary": "#ffffff",
+        "success": "#17834d",
+        "warning": "#916d1a",
+        "danger": "#bf3722",
+        "info": "#226bbf"
+      },
+      "swatches": [
+        "#fbf8f3",
+        "#f3f1ec",
+        "#242424",
+        "#5c5b5a",
+        "#1f6f4b",
+        "#17834d",
+        "#916d1a",
+        "#bf3722",
+        "#226bbf"
+      ],
+      "primary": "#1f6f4b",
+      "canvas": "#fbf8f3",
+      "ink": "#242424",
+      "contrast": {
+        "ink_on_canvas": 14.65,
+        "body_on_canvas": 6.4,
+        "muted_on_canvas": 4.6,
+        "primary_on_canvas": 5.77,
+        "on_primary_on_primary": 6.12,
+        "body_on_surface": 6.0
+      },
+      "wcag_aa": true,
+      "zip": "cedar.zip",
+      "files": [
+        "DESIGN.md",
+        "metadata.json",
+        "css/tokens.css",
+        "preview.html"
+      ]
+    },
+    {
+      "slug": "iris",
+      "name": "Iris",
+      "theme": "light",
+      "description": "A composed system: deep indigo on warm white.",
+      "display_font": "Inter",
+      "body_font": "Inter",
+      "tags": [
+        "Light",
+        "Composed",
+        "Fintech",
+        "Accessible"
+      ],
+      "palette": {
+        "canvas": "#fcfbf8",
+        "surface": "#f4f3f1",
+        "elevated": "#eaeae8",
+        "border": "#dadbda",
+        "ink": "#19232f",
+        "body": "#545b63",
+        "muted": "#707377",
+        "primary": "#432581",
+        "primary_active": "#331c61",
+        "on_primary": "#ffffff",
+        "success": "#18854e",
+        "warning": "#936f1a",
+        "danger": "#bf3722",
+        "info": "#226bbf"
+      },
+      "swatches": [
+        "#fcfbf8",
+        "#f4f3f1",
+        "#19232f",
+        "#545b63",
+        "#432581",
+        "#18854e",
+        "#936f1a",
+        "#bf3722",
+        "#226bbf"
+      ],
+      "primary": "#432581",
+      "canvas": "#fcfbf8",
+      "ink": "#19232f",
+      "contrast": {
+        "ink_on_canvas": 15.34,
+        "body_on_canvas": 6.65,
+        "muted_on_canvas": 4.6,
+        "primary_on_canvas": 11.15,
+        "on_primary_on_primary": 11.54,
+        "body_on_surface": 6.2
+      },
+      "wcag_aa": true,
+      "zip": "iris.zip",
+      "files": [
+        "DESIGN.md",
+        "metadata.json",
+        "css/tokens.css",
+        "preview.html"
+      ]
+    }
+  ],
+  "count": 9
+}
