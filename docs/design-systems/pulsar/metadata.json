@@ -1,0 +1,155 @@
+{
+  "name": "Pulsar",
+  "description": "A deep-space dark system where an electric magenta carries every action.",
+  "theme": "dark",
+  "concept": "Pulsar treats the screen as a near-black void and lets a single electric magenta do the signalling. Hairline borders draw the structure, mono type handles the numbers, and the canvas stays out of the way so data reads as light. Built for crypto, trading, and AI surfaces.",
+  "palette": [
+    {
+      "name": "Canvas",
+      "token": "canvas",
+      "value": "#00040c",
+      "role": "Page and app background",
+      "contrastOnCanvas": 1.0
+    },
+    {
+      "name": "Surface",
+      "token": "surface",
+      "value": "#080c15",
+      "role": "Cards, panels, and form fields",
+      "contrastOnCanvas": 1.05
+    },
+    {
+      "name": "Elevated",
+      "token": "elevated",
+      "value": "#12171f",
+      "role": "Modals, popovers, and the highest tier",
+      "contrastOnCanvas": 1.14
+    },
+    {
+      "name": "Border",
+      "token": "border",
+      "value": "#222830",
+      "role": "Hairline dividers and outlines",
+      "contrastOnCanvas": 1.38
+    },
+    {
+      "name": "Ink",
+      "token": "ink",
+      "value": "#e5f1ff",
+      "role": "Headlines and primary foreground",
+      "contrastOnCanvas": 17.95
+    },
+    {
+      "name": "Body",
+      "token": "body",
+      "value": "#a9b3c0",
+      "role": "Paragraph and reading text",
+      "contrastOnCanvas": 9.68
+    },
+    {
+      "name": "Muted",
+      "token": "muted",
+      "value": "#707883",
+      "role": "Secondary text, captions, and hints",
+      "contrastOnCanvas": 4.6
+    },
+    {
+      "name": "Primary",
+      "token": "primary",
+      "value": "#db3291",
+      "role": "Primary action, focus, and accent",
+      "contrastOnCanvas": 4.77
+    },
+    {
+      "name": "Primary Active",
+      "token": "primary_active",
+      "value": "#c2227c",
+      "role": "Pressed and active state of the accent",
+      "contrastOnCanvas": 3.73
+    },
+    {
+      "name": "On Primary",
+      "token": "on_primary",
+      "value": "#0a0a0c",
+      "role": "Text and icons on the accent",
+      "contrastOnCanvas": 1.04
+    },
+    {
+      "name": "Success",
+      "token": "success",
+      "value": "#5ede9e",
+      "role": "Success, positive metrics, and confirmation",
+      "contrastOnCanvas": 12.14
+    },
+    {
+      "name": "Warning",
+      "token": "warning",
+      "value": "#deb85e",
+      "role": "Warning and caution",
+      "contrastOnCanvas": 10.88
+    },
+    {
+      "name": "Danger",
+      "token": "danger",
+      "value": "#de6f5e",
+      "role": "Error, destructive, and critical signal",
+      "contrastOnCanvas": 6.4
+    },
+    {
+      "name": "Info",
+      "token": "info",
+      "value": "#5e9ade",
+      "role": "Information and neutral data",
+      "contrastOnCanvas": 6.99
+    }
+  ],
+  "fonts": [
+    {
+      "name": "Inter Tight",
+      "provider": "Google Fonts",
+      "usage": "Display headlines and UI labels",
+      "cssImport": "https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&display=swap"
+    },
+    {
+      "name": "Inter",
+      "provider": "Google Fonts",
+      "usage": "Body and reading text",
+      "cssImport": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    },
+    {
+      "name": "JetBrains Mono",
+      "provider": "Google Fonts",
+      "usage": "Metrics, code, and tabular data",
+      "cssImport": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    }
+  ],
+  "tags": [
+    "Dark",
+    "Vivid",
+    "Data",
+    "Accessible"
+  ],
+  "accessibility": {
+    "ratios": {
+      "ink_on_canvas": 17.95,
+      "body_on_canvas": 9.68,
+      "muted_on_canvas": 4.6,
+      "primary_on_canvas": 4.77,
+      "on_primary_on_primary": 4.59,
+      "body_on_surface": 9.22
+    },
+    "wcag_aa_text": true,
+    "note": "Every text pair meets WCAG AA. Accessible by construction (ux-skill synthesizer)."
+  },
+  "axes": {
+    "warmth": 0.25,
+    "contrast": 1.0,
+    "density": 0.7,
+    "geometry": 0.3,
+    "formality": 0.55,
+    "motion": 0.8,
+    "type_personality": 0.3
+  },
+  "generator": "ux-skill synthesizer (deterministic, offline, never calls an LLM)",
+  "license": "Free to use. Generated, not curated."
+}

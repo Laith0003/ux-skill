@@ -1,0 +1,149 @@
+{
+  "name": "Redline",
+  "description": "A high-energy near-black system with a crimson edge.",
+  "theme": "dark",
+  "concept": "Redline runs hot. A crimson accent cuts across a true near-black field, type stays tight and confident, and motion is quick. Made for gaming, launches, and any interface that should feel kinetic without losing its footing.",
+  "palette": [
+    {
+      "name": "Canvas",
+      "token": "canvas",
+      "value": "#080808",
+      "role": "Page and app background",
+      "contrastOnCanvas": 1.0
+    },
+    {
+      "name": "Surface",
+      "token": "surface",
+      "value": "#101010",
+      "role": "Cards, panels, and form fields",
+      "contrastOnCanvas": 1.05
+    },
+    {
+      "name": "Elevated",
+      "token": "elevated",
+      "value": "#1b1b1b",
+      "role": "Modals, popovers, and the highest tier",
+      "contrastOnCanvas": 1.16
+    },
+    {
+      "name": "Border",
+      "token": "border",
+      "value": "#2b2b2b",
+      "role": "Hairline dividers and outlines",
+      "contrastOnCanvas": 1.41
+    },
+    {
+      "name": "Ink",
+      "token": "ink",
+      "value": "#f2f2f2",
+      "role": "Headlines and primary foreground",
+      "contrastOnCanvas": 17.89
+    },
+    {
+      "name": "Body",
+      "token": "body",
+      "value": "#b5b5b5",
+      "role": "Paragraph and reading text",
+      "contrastOnCanvas": 9.77
+    },
+    {
+      "name": "Muted",
+      "token": "muted",
+      "value": "#797979",
+      "role": "Secondary text, captions, and hints",
+      "contrastOnCanvas": 4.6
+    },
+    {
+      "name": "Primary",
+      "token": "primary",
+      "value": "#dd3e59",
+      "role": "Primary action, focus, and accent",
+      "contrastOnCanvas": 4.68
+    },
+    {
+      "name": "Primary Active",
+      "token": "primary_active",
+      "value": "#ce2441",
+      "role": "Pressed and active state of the accent",
+      "contrastOnCanvas": 3.77
+    },
+    {
+      "name": "On Primary",
+      "token": "on_primary",
+      "value": "#0a0a0c",
+      "role": "Text and icons on the accent",
+      "contrastOnCanvas": 1.01
+    },
+    {
+      "name": "Success",
+      "token": "success",
+      "value": "#5ede9e",
+      "role": "Success, positive metrics, and confirmation",
+      "contrastOnCanvas": 11.84
+    },
+    {
+      "name": "Warning",
+      "token": "warning",
+      "value": "#deb85e",
+      "role": "Warning and caution",
+      "contrastOnCanvas": 10.61
+    },
+    {
+      "name": "Danger",
+      "token": "danger",
+      "value": "#de6f5e",
+      "role": "Error, destructive, and critical signal",
+      "contrastOnCanvas": 6.24
+    },
+    {
+      "name": "Info",
+      "token": "info",
+      "value": "#5e9ade",
+      "role": "Information and neutral data",
+      "contrastOnCanvas": 6.82
+    }
+  ],
+  "fonts": [
+    {
+      "name": "Inter",
+      "provider": "Google Fonts",
+      "usage": "Display headlines and UI labels",
+      "cssImport": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    },
+    {
+      "name": "JetBrains Mono",
+      "provider": "Google Fonts",
+      "usage": "Metrics, code, and tabular data",
+      "cssImport": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    }
+  ],
+  "tags": [
+    "Dark",
+    "Bold",
+    "Kinetic",
+    "Accessible"
+  ],
+  "accessibility": {
+    "ratios": {
+      "ink_on_canvas": 17.89,
+      "body_on_canvas": 9.77,
+      "muted_on_canvas": 4.6,
+      "primary_on_canvas": 4.68,
+      "on_primary_on_primary": 4.62,
+      "body_on_surface": 9.28
+    },
+    "wcag_aa_text": true,
+    "note": "Every text pair meets WCAG AA. Accessible by construction (ux-skill synthesizer)."
+  },
+  "axes": {
+    "warmth": 0.5,
+    "contrast": 1.0,
+    "density": 0.8,
+    "geometry": 0.35,
+    "formality": 0.3,
+    "motion": 1.0,
+    "type_personality": 0.45
+  },
+  "generator": "ux-skill synthesizer (deterministic, offline, never calls an LLM)",
+  "license": "Free to use. Generated, not curated."
+}
