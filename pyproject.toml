@@ -45,7 +45,7 @@ mcp = [
   "mcp>=1.0; python_version >= '3.10'"
 ]
 dev = [
-  "pytest>=8.4.2",
+  "pytest>=9.1.1",
   "pytest-cov>=7.1.0",
   "ruff>=0.15.16",
   "mypy>=1.19.1",
