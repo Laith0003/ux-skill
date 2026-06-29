@@ -52,6 +52,17 @@ jobs:
           sys.exit(1 if errors else 0)
           PY
 
+  ga-tag-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Every docs/*.html must carry the GA4 tag
+        # Static site, no server-side includes: the analytics tag is inline per
+        # page. This fails the build if any page ships without it (the homepage
+        # itself was once missing it, silently undercounting GA). To fix locally:
+        #   python scripts/ensure-ga.py
+        run: python scripts/ensure-ga.py --check
+
   emoji-scan:
     runs-on: ubuntu-latest
     steps:
