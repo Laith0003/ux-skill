@@ -38,3 +38,6 @@ ruvector.db
 !.ux/last-discovery.json
 !.ux/last-recommendation.json
 !.ux/design-system/
+
+# Local-only Claude vault pointer (not part of the public repo)
+/CLAUDE.md
