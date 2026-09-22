@@ -11,7 +11,7 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ux-skill vs the top 9 Claude UX skills — scored comparison</title>
+  <title>ux-skill vs the top 9 Claude UX skills, scored comparison</title>
   <meta name="description" content="ux-skill vs 9 Claude UX plugins on catalog, linter, discovery, pipeline, brand specs, motion, cross-IDE, a11y, activity, and docs. Real data, all cells filled.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/compare.html">
   <meta name="theme-color" content="#07080a">
@@ -20,12 +20,12 @@
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/compare.html">
-  <meta property="og:title" content="ux-skill vs the top 9 Claude UX skills — scored">
+  <meta property="og:title" content="ux-skill vs the top 9 Claude UX skills, scored">
   <meta property="og:description" content="Real numbers, every cell filled. We're stronger on 7 of 10 dimensions. Where we lose: stars, hi-fi prototype output, multi-locale READMEs.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/compare.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — compare">
+  <meta property="og:image:alt" content="ux-skill, compare">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/compare.png">
 
   <meta name="twitter:card" content="summary_large_image">
@@ -39,7 +39,7 @@
 
   <style>
     /* =========================================================================
-       UXSKILL DOCS v3 — Saturated Cinema (dark)
+       UXSKILL DOCS v3, Saturated Cinema (dark)
        Scene accent: rose #f472b6
        ========================================================================= */
     :root {
@@ -58,7 +58,7 @@
       --scene-accent:  #f472b6;
       --scene-soft:    rgba(244, 114, 182, 0.10);
 
-      /* Win/loss/neutral ramp — dark equivalents */
+      /* Win/loss/neutral ramp, dark equivalents */
       --win-bg:    rgba(16, 185, 129, 0.14);
       --win-fg:    #34d399;
       --weak-bg:   rgba(244, 114, 182, 0.14);
@@ -393,7 +393,7 @@
     table.scorecard tr.ours td.total { color: var(--scene-accent); }
     table.scorecard tr:last-child td { border-bottom: 0; }
 
-    /* Score ramp — dark gradient from rose (low) -> emerald (high) */
+    /* Score ramp, dark gradient from rose (low) -> emerald (high) */
     .score {
       display: inline-flex;
       align-items: center;
@@ -647,7 +647,7 @@
       }
     }
   
-    /* Arabic typography — IBM Plex Sans Arabic for the whole Arabic page (v3.0.4 sweep) */
+    /* Arabic typography, IBM Plex Sans Arabic for the whole Arabic page (v3.0.4 sweep) */
     html[lang="ar"] body,
     html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3, html[lang="ar"] h4,
     html[lang="ar"] p, html[lang="ar"] li, html[lang="ar"] a, html[lang="ar"] button,
@@ -676,13 +676,12 @@
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
        and max-width: 100%; carousels that need their own horizontal scroll
-       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves —
-       overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
+       (e.g. .brand-rail) opt in by setting overflow-x: auto on themselves,        overflow-x:clip on the parent does NOT prevent inner overflow scrolling. */
     html, body {
       overflow-x: clip;
       max-width: 100%;
     }
-    /* Defensive — make sure no section, image, or table forces width >100%. */
+    /* Defensive, make sure no section, image, or table forces width >100%. */
     section, header, footer, main, article { max-width: 100vw; }
     img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
     table { max-width: 100%; }
@@ -901,10 +900,10 @@
     }
     #nav-drawer .nav__drawer-langs-grid a:hover { color: var(--ink, var(--nav-ink)); }
 
-    /* RTL — nav inner flips */
+    /* RTL, nav inner flips */
     html[dir="rtl"] #nav .nav__inner { direction: rtl; }
 
-    /* Defensive — when the fixed .nav is present, give layouts that
+    /* Defensive, when the fixed .nav is present, give layouts that
        previously assumed an inline header (.wrap on blog/index,
        .top/.toolbar on the catalogue pages) enough headroom so
        content isn't hidden behind the nav. */
@@ -1073,7 +1072,7 @@
       </figure>
 
       <div class="star-disclosure">
-        <strong>Honest disclosure:</strong> ux-skill is at <strong>14 stars</strong> today &mdash; we shipped v3.0.0-stable hours ago. The leaders shipped months ago. This page is an architecture argument, not a popularity one. The scorecard is built on what's <em>in the repo</em>, not what's <em>famous</em>.
+        <strong>Honest disclosure:</strong> ux-skill is at <strong>14 stars</strong> today, we shipped v3.0.0-stable hours ago. The leaders shipped months ago. This page is an architecture argument, not a popularity one. The scorecard is built on what's <em>in the repo</em>, not what's <em>famous</em>.
       </div>
 
       <p style="font-size:14px;color:var(--muted);margin-top:18px;">Comparing the AI app builders themselves (v0, Bolt, Lovable) rather than design plugins? See <a href="/blog/v0-bolt-lovable-design-quality.html" style="color:var(--scene-accent);text-underline-offset:3px;">v0 vs Bolt vs Lovable: design quality compared</a>.</p>
@@ -1239,7 +1238,7 @@
       <div class="honesty" style="margin-top: 24px;">
         <div class="label">Scoring methodology</div>
         <p><strong>Catalog depth</strong> = entries shipped in structured data. <strong>Linter</strong> = deterministic rule enforcement (regex, AST). <strong>Discovery</strong> = forcing-function intake before generation. <strong>Pipeline</strong> = number of chained commands. <strong>Brand specs</strong> = named brand DESIGN.md spec files. <strong>Motion</strong> = number of named motion presets. <strong>Cross-IDE</strong> = number of IDEs supported. <strong>A11y</strong> = explicit accessibility command + WCAG references. <strong>Activity</strong> = days since last push. <strong>Docs</strong> = README depth + examples + screenshots.</p>
-        <p>1 = absent / 2 = mentioned / 3 = present / 4 = mature / 5 = best-in-class. The only dimension where we score below 4 is <strong>Docs</strong> (we're at 2 &mdash; the README is being rewritten this week to match ui-ux-pro-max-skill's depth).</p>
+        <p>1 = absent / 2 = mentioned / 3 = present / 4 = mature / 5 = best-in-class. The only dimension where we score below 4 is <strong>Docs</strong> (we're at 2, the README is being rewritten this week to match ui-ux-pro-max-skill's depth).</p>
       </div>
     </section>
 
@@ -1288,7 +1287,7 @@
           </tr>
           <tr class="ours">
             <th>Sub-agents</th>
-            <td>None &mdash; single-skill model.</td>
+            <td>None, single-skill model.</td>
             <td class="ours-cell"><strong>5 specialized sub-agents</strong>: <code>frontend-engineer</code>, <code>motion-engineer</code>, <code>copy-writer</code>, <code>research-synthesizer</code>, <code>design-system-architect</code>. Dispatched in parallel via Task tool.</td>
             <td><span class="winner us">us</span></td>
           </tr>
@@ -1328,7 +1327,7 @@
       <div class="honesty">
         <div class="label">Honest take</div>
         <h4>Where ui-ux-pro-max-skill is genuinely good</h4>
-        <p>The Python BM25-over-CSV recommender is the right shape and they shipped it first. The 18-IDE CLI installer is well-engineered. 84,000 stars is real signal &mdash; the market wants what they're building, even where the implementation is thin.</p>
+        <p>The Python BM25-over-CSV recommender is the right shape and they shipped it first. The 18-IDE CLI installer is well-engineered. 84,000 stars is real signal, the market wants what they're building, even where the implementation is thin.</p>
         <p><strong>Where it loses:</strong> single-skill plugin with no pipeline (1 command vs our 22). No deterministic linter (their anti-slop is prose). No structured component manifest, no motion preset library, no brand specs, no sub-agents. They built a generator; we built a workflow.</p>
       </div>
     </section>
@@ -1353,7 +1352,7 @@
           </tr>
           <tr class="ours">
             <th>Preview server</th>
-            <td><strong>Yes</strong> &mdash; runs locally, renders generated HTML for review.</td>
+            <td><strong>Yes</strong>, runs locally, renders generated HTML for review.</td>
             <td class="ours-cell">No preview server today. Output is files; user previews in their own dev server.</td>
             <td><span class="winner them">them</span></td>
           </tr>
@@ -1384,12 +1383,12 @@
           <tr class="ours">
             <th>Brand specs</th>
             <td>Per-brand DESIGN.md files in <code>design-systems/&lt;brand&gt;/</code> as <strong>prose</strong> (Linear, Stripe, Figma observed). Read by the LLM at runtime.</td>
-            <td class="ours-cell">72 named DESIGN.md specs as <strong>both prose AND structured JSON</strong> (<code>references/brands/*.md</code> + <code>data/brands/*.json</code>). Queryable outside Claude &mdash; every engine command can read them programmatically.</td>
+            <td class="ours-cell">72 named DESIGN.md specs as <strong>both prose AND structured JSON</strong> (<code>references/brands/*.md</code> + <code>data/brands/*.json</code>). Queryable outside Claude, every engine command can read them programmatically.</td>
             <td><span class="winner us">us</span> on shape, not presence</td>
           </tr>
           <tr class="ours">
             <th>Sub-agents</th>
-            <td>None &mdash; flat skill collection.</td>
+            <td>None, flat skill collection.</td>
             <td class="ours-cell">5 specialized sub-agents (frontend, motion, copy, research, design-system).</td>
             <td><span class="winner us">us</span></td>
           </tr>
@@ -1430,19 +1429,19 @@
         <tbody>
           <tr class="ours">
             <th>Anti-slop approach</th>
-            <td>Bash skill + 13 variant SKILL.md files. The 3 dials are passed to the LLM as adjustment knobs. Correction-only &mdash; they don't generate.</td>
+            <td>Bash skill + 13 variant SKILL.md files. The 3 dials are passed to the LLM as adjustment knobs. Correction-only, they don't generate.</td>
             <td class="ours-cell">152 deterministic regex rules (no LLM) + 10-field discovery enforced before generation. Generation + correction in the same engine.</td>
             <td><span class="winner us">us</span> on enforcement; <span class="winner them">them</span> on conceptual elegance</td>
           </tr>
           <tr class="ours">
             <th>Mental model</th>
-            <td><strong>3 dials</strong> &mdash; variance, motion, density. Memorable, easy to teach. Earns repeat use.</td>
+            <td><strong>3 dials</strong>, variance, motion, density. Memorable, easy to teach. Earns repeat use.</td>
             <td class="ours-cell"><strong>10-field intake + 5-parallel-search recommender</strong>. More precise, less memorable. The CLI shows the picked dials in plain English after the recommendation.</td>
             <td><span class="winner them">them</span> on memorability</td>
           </tr>
           <tr class="ours">
             <th>Output type</th>
-            <td>Correction prompts. Tells the LLM "increase variance, decrease density" &mdash; doesn't itself produce code.</td>
+            <td>Correction prompts. Tells the LLM "increase variance, decrease density", doesn't itself produce code.</td>
             <td class="ours-cell">Generation (code), correction (linter), recommendation (engine), discovery (forcing function). Full lifecycle.</td>
             <td><span class="winner us">us</span> on scope</td>
           </tr>
@@ -1494,7 +1493,7 @@
       <div class="honesty">
         <div class="label">Honest take</div>
         <h4>Where taste-skill is genuinely good</h4>
-        <p>The 3-dial mental model is clever &mdash; variance / motion / density gives users a memorable abstraction that ux-skill's deeper catalog doesn't replace. 25k stars say the philosophy resonates. They got the branding right first.</p>
+        <p>The 3-dial mental model is clever, variance / motion / density gives users a memorable abstraction that ux-skill's deeper catalog doesn't replace. 25k stars say the philosophy resonates. They got the branding right first.</p>
         <p><strong>Where it loses:</strong> bash + markdown only. No deterministic enforcement (the rules live in LLM judgment, not regex). No generation, only correction. No structured data layer. Single-skill, not a pipeline.</p>
       </div>
     </section>
@@ -1525,7 +1524,7 @@
           </tr>
           <tr class="ours">
             <th>MP4 / hi-fi output</th>
-            <td><strong>Yes</strong> &mdash; animated walkthroughs of generated prototypes, exportable as MP4. Premium-feeling demo.</td>
+            <td><strong>Yes</strong>, animated walkthroughs of generated prototypes, exportable as MP4. Premium-feeling demo.</td>
             <td class="ours-cell">No MP4 yet. Output is code files. v2.3 roadmap includes a motion-preview server.</td>
             <td><span class="winner them">them</span></td>
           </tr>
@@ -1577,7 +1576,7 @@
       <div class="honesty">
         <div class="label">Honest take</div>
         <h4>Where huashu-design is genuinely good</h4>
-        <p>The 62 KB SKILL.md is dense and high-craft. The 20 design philosophies are well-curated. <strong>MP4 export of hi-fi prototypes is the feature ux-skill most clearly lacks</strong> &mdash; that's the v2.3 priority. Bilingual matters for adoption.</p>
+        <p>The 62 KB SKILL.md is dense and high-craft. The 20 design philosophies are well-curated. <strong>MP4 export of hi-fi prototypes is the feature ux-skill most clearly lacks</strong>, that's the v2.3 priority. Bilingual matters for adoption.</p>
         <p><strong>Where it loses:</strong> single SKILL.md means everything is prose for the LLM to interpret. No deterministic linter. 5 review dimensions vs our 35 regex rules + 112 named UX laws is a depth gap.</p>
       </div>
     </section>
@@ -1602,7 +1601,7 @@
           <tr class="ours">
             <th>google-labs-code/stitch-skills <span class="stars-pill" style="margin:0;"><span class="star-dot"></span>5,762</span></th>
             <td>MCP-server-wired skill library, Google-affiliated, official-flavored. Strong design provenance from the Stitch team.</td>
-            <td class="ours-cell">Pair them &mdash; use Stitch's MCP for design-system import from Figma-adjacent files, then run <code>/ux-recommend</code> on the imported result to ground it in our 1,243-entry catalog.</td>
+            <td class="ours-cell">Pair them, use Stitch's MCP for design-system import from Figma-adjacent files, then run <code>/ux-recommend</code> on the imported result to ground it in our 1,243-entry catalog.</td>
           </tr>
           <tr class="ours">
             <th>dominikmartn/nothing-design-skill <span class="stars-pill" style="margin:0;"><span class="star-dot"></span>2,391</span></th>
@@ -1645,7 +1644,7 @@
           <tr class="ours"><th>Pick a design system</th><td class="ours-cell"><code>/ux-recommend</code> &rarr; 5-parallel-search engine returns merged system</td><td>Pro Max BM25 over CSV. open-design picks from 71 systems. Others: ask the LLM.</td></tr>
           <tr class="ours"><th>Generate frontend code</th><td class="ours-cell"><code>/ux-design</code> + <code>/ux-component</code> dispatch <code>frontend-engineer</code> agent</td><td>Pro Max + huashu + open-design all do this. Hallmark + taste-skill correct, don't generate.</td></tr>
           <tr class="ours"><th>Build full design system</th><td class="ours-cell"><code>/ux-system</code> &rarr; emits <code>tokens.css</code> + <code>manifest.json</code></td><td>open-design (preview). Pro Max writes a <code>design-system/MASTER.md</code>.</td></tr>
-          <tr class="ours"><th>Critique (taste)</th><td class="ours-cell"><code>/ux-critique</code> &rarr; every finding cites a named UX law + brand exemplar</td><td>taste-skill, hallmark &mdash; prompt-only correction. Pro Max &mdash; no critique command.</td></tr>
+          <tr class="ours"><th>Critique (taste)</th><td class="ours-cell"><code>/ux-critique</code> &rarr; every finding cites a named UX law + brand exemplar</td><td>taste-skill, hallmark, prompt-only correction. Pro Max, no critique command.</td></tr>
           <tr class="ours"><th>Lint (deterministic)</th><td class="ours-cell"><code>/ux-lint</code> &rarr; 35 regex rules, no LLM, CI gate</td><td>None of the top 8 ship a deterministic linter. All are LLM-judgment.</td></tr>
           <tr class="ours"><th>A11y audit</th><td class="ours-cell"><code>/ux-a11y</code> &rarr; WCAG-grounded, cites the 8 A11y guidelines</td><td>material-3-skill does MD3 a11y. Others mention a11y in prompts.</td></tr>
           <tr class="ours"><th>Microcopy review</th><td class="ours-cell"><code>/ux-copy</code> dispatches <code>copy-writer</code> agent against project tone</td><td>None ship a microcopy command.</td></tr>
@@ -1676,12 +1675,12 @@
         <thead><tr><th style="width:230px;">Gap</th><th>Best tool for it</th><th>Roadmap</th></tr></thead>
         <tbody>
           <tr><th>GitHub stars / awareness</th><td>ui-ux-pro-max-skill (84k). They had a 9-month head start.</td><td>This page + marketing kit + 5 blog posts are the answer.</td></tr>
-          <tr><th>Sandboxed live preview</th><td>open-design. Node.js runtime with preview server included.</td><td>v3.0 &mdash; engine ships a preview server.</td></tr>
-          <tr><th>MP4 / video walkthroughs</th><td>huashu-design. Animated MP4 export is their crown.</td><td>v2.3 &mdash; wrap motion presets into a preview-renderer for short MP4s.</td></tr>
-          <tr><th>PPTX / PDF export</th><td>open-design. Built-in.</td><td>v2.4 &mdash; bridge via WeasyPrint + python-pptx.</td></tr>
-          <tr><th>Multi-locale README</th><td>open-design (11 locales). huashu-design (bilingual).</td><td>v2.2 &mdash; Arabic + Chinese READMEs first (we have MENA design data already).</td></tr>
-          <tr><th>Material 3 specificity</th><td>material-3-skill. Single-system depth.</td><td>v2.3 &mdash; MD3 audit subcommand inside <code>/ux-a11y</code>.</td></tr>
-          <tr><th>Live Figma sync</th><td>Figma MCP (official).</td><td>v2.2 &mdash; Figma-to-data importer that writes back to our manifests.</td></tr>
+          <tr><th>Sandboxed live preview</th><td>open-design. Node.js runtime with preview server included.</td><td>v3.0, engine ships a preview server.</td></tr>
+          <tr><th>MP4 / video walkthroughs</th><td>huashu-design. Animated MP4 export is their crown.</td><td>v2.3, wrap motion presets into a preview-renderer for short MP4s.</td></tr>
+          <tr><th>PPTX / PDF export</th><td>open-design. Built-in.</td><td>v2.4, bridge via WeasyPrint + python-pptx.</td></tr>
+          <tr><th>Multi-locale README</th><td>open-design (11 locales). huashu-design (bilingual).</td><td>v2.2, Arabic + Chinese READMEs first (we have MENA design data already).</td></tr>
+          <tr><th>Material 3 specificity</th><td>material-3-skill. Single-system depth.</td><td>v2.3, MD3 audit subcommand inside <code>/ux-a11y</code>.</td></tr>
+          <tr><th>Live Figma sync</th><td>Figma MCP (official).</td><td>v2.2, Figma-to-data importer that writes back to our manifests.</td></tr>
           <tr><th>Brand-name SEO</th><td>taste-skill owns "anti-slop". Pro Max owns "design intelligence".</td><td>Own "design engineering" + "Python design engine" via the blog.</td></tr>
         </tbody>
       </table>
@@ -1723,9 +1722,9 @@
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.6;">&mdash; or &mdash;</div>
+        <div class="row" style="margin-top:14px; opacity:0.6;">, or, </div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.6;">&mdash; or &mdash;</div>
+        <div class="row" style="margin-top:14px; opacity:0.6;">, or, </div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

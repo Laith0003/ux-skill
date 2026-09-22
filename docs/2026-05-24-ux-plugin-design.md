@@ -1,24 +1,24 @@
-# `ux` plugin — design spec (v2, expanded)
+# `ux` plugin: design spec (v2, expanded)
 
 **Date**: 2026-05-24
 **Created by**: Laith Aljunaidy
-**Status**: v2 spec — major scope expansion, pending user review
+**Status**: v2 spec, major scope expansion, pending user review
 **Artifact**: Anthropic-style plugin with multiple slash commands, sub-agents, and shared reference files
-**Canonical location**: TBD — proposed `~/.claude/plugins/ux/` once shipped; design lives at `/Users/laithaljunaidy/Documents/Dot/Claude/ux-plugin/`
+**Canonical location**: TBD, proposed `~/.claude/plugins/ux/` once shipped; design lives at `/Users/laithaljunaidy/Documents/Dot/Claude/ux-plugin/`
 
 ---
 
 ## 1. Goal
 
-Build the strongest UX plugin ever made — a comprehensive UX intelligence platform that:
+Build the strongest UX plugin ever made, a comprehensive UX intelligence platform that:
 
 - Exposes **17 callable slash commands** across four groups (Frame / Audit / Generate / Apply).
 - Dispatches **5 sub-agents** in parallel for heavy work (ruflo-shaped: frontend-engineer, motion-engineer, copy-writer, research-synthesizer, design-system-architect).
 - Replaces and improves on **six** existing skills: `design-review`, `design-critique`, `accessibility-review`, `ux-copy`, `gpt-taste`, `design-taste-frontend`.
-- Conducts a **next-prompt workflow** — every command ends by naming the most useful next command.
-- Reads as the **canon** — informed by Norman, Krug, Gothelf/Seiden, Klein, Eyal, Kocienda, Wheeler, Laws of UX, SAP AppHaus design thinking, and the awwwards-grade frontend bar.
+- Conducts a **next-prompt workflow**, every command ends by naming the most useful next command.
+- Reads as the **canon**, informed by Norman, Krug, Gothelf/Seiden, Klein, Eyal, Kocienda, Wheeler, Laws of UX, SAP AppHaus design thinking, and the awwwards-grade frontend bar.
 - Outputs in two house styles: **Polaris-foundations** for review reports, **Wfrah-editorial** for case studies.
-- Is **cross-system** — usable on any project, any stack.
+- Is **cross-system**, usable on any project, any stack.
 - Surfaces a **"UX expert in real life"** CTA pointing to Laith's contact info.
 
 Non-goal: become a Dot-specific UX expert. Dot work continues through the Rami persona.
@@ -43,7 +43,7 @@ Plugin gives us real `/ux-*` commands, bundled references, sub-agents the comman
 
 ### 3.1 Commands (17, grouped by purpose)
 
-#### GROUP 1 — FRAME (discovery & strategy)
+#### GROUP 1: FRAME (discovery & strategy)
 
 | Command | Purpose |
 |---|---|
@@ -51,7 +51,7 @@ Plugin gives us real `/ux-*` commands, bundled references, sub-agents the comman
 | `/ux-research` | User research planning. Interview scripts, survey design, recruitment screener. Built on Klein's *UX for Lean Startups* methodology. |
 | `/ux-workshop` | Run a design thinking workshop following SAP AppHaus / Geo2024 flow: Exploration Exercise → Heat Map → Stakeholder Mapping → Remember the Future → Game Plan. Output: structured workshop artifact. |
 
-#### GROUP 2 — AUDIT (review)
+#### GROUP 2: AUDIT (review)
 
 | Command | Purpose |
 |---|---|
@@ -62,7 +62,7 @@ Plugin gives us real `/ux-*` commands, bundled references, sub-agents the comman
 | `/ux-motion` | Animation rubric: timing, easing, meaning, reduced-motion, performance. |
 | `/ux-polish` | Cosmetic pass: spacing rhythm, hierarchy, AI-slop detection. Absorbs `design-review`. |
 
-#### GROUP 3 — GENERATE (creative output)
+#### GROUP 3: GENERATE (creative output)
 
 | Command | Purpose |
 |---|---|
@@ -71,7 +71,7 @@ Plugin gives us real `/ux-*` commands, bundled references, sub-agents the comman
 | `/ux-dashboard` | Specialized dashboard generation. Data density, monospace tabular numbers, sparkline patterns, anti-card-overuse, semantic state colors. |
 | `/ux-component` | Generate a single component (button / modal / navbar / sidebar / card / table / form / chart) from spec, in the target stack. |
 
-#### GROUP 4 — APPLY (action)
+#### GROUP 4: APPLY (action)
 
 | Command | Purpose |
 |---|---|
@@ -110,7 +110,7 @@ references/
 ├── laws/
 │   ├── norman.md            # affordances, signifiers, mapping, feedback, mental models, gulfs, 7 stages, error design
 │   ├── krug.md              # 3 laws, scanning, billboard test, omit needless words, mindless choices, common courtesy
-│   └── laws-of-ux.md        # all 30 laws — definition / when-it-applies / violation pattern / fix example
+│   └── laws-of-ux.md        # all 30 laws, definition / when-it-applies / violation pattern / fix example
 ├── process/
 │   ├── lean-ux-gothelf.md   # Gothelf & Seiden: hypothesis-driven, MVPs, collaborative design, feedback loops
 │   ├── lean-ux-klein.md     # Klein: research methods for startups, interview techniques, MVP testing
@@ -125,8 +125,8 @@ references/
 │   ├── polaris-style.md     # the house style for review reports: principles / do-don't / examples / tokens / checklist
 │   └── case-study-style.md  # Wfrah editorial format: numbered (A)–(G) sections, two-tone body emphasis, ultra-wide type
 ├── conditional/
-│   ├── habit-design.md      # Eyal Hook model — only invoked for retention/onboarding surfaces
-│   └── brand-system.md      # Wheeler + logo guide — only invoked for brand/identity surfaces
+│   ├── habit-design.md      # Eyal Hook model, only invoked for retention/onboarding surfaces
+│   └── brand-system.md      # Wheeler + logo guide, only invoked for brand/identity surfaces
 └── creator/
     └── about.md             # Laith's bio, contact info, "UX expert in real life" CTA
 ```
@@ -135,10 +135,10 @@ references/
 
 - Static curated awwwards exemplars list is in v1 (lightweight); deep per-site analysis defers to v2.
 - Motion philosophy split (Kowalski / Krehel / Tompkins) lives as a section inside `foundations/motion.md`; standalone files defer to v2.
-- `conditional/habit-design.md` and `conditional/brand-system.md` exist but are stubs in v1 — only filled out in v3.
-- AI-tools integration (the medium-muz.li article) — survey + reference defer to v3.
-- Multi-language / RTL deep cut — v2.
-- Telemetry / analytics for which commands get used — v3.
+- `conditional/habit-design.md` and `conditional/brand-system.md` exist but are stubs in v1, only filled out in v3.
+- AI-tools integration (the medium-muz.li article), survey + reference defer to v3.
+- Multi-language / RTL deep cut, v2.
+- Telemetry / analytics for which commands get used, v3.
 
 ---
 
@@ -155,11 +155,11 @@ Other moves:  /ux-copy           (3 copy issues)
               /ux-next           (let me decide for you)
 ```
 
-The `--fix` flag is available on every review command (`/ux-audit`, `/ux-copy`, `/ux-a11y`, `/ux-motion`, `/ux-polish`). When passed, the command runs the review then immediately enters the fix loop on its own findings — same loop as the standalone `/ux-fix` command, scoped to that command's lens.
+The `--fix` flag is available on every review command (`/ux-audit`, `/ux-copy`, `/ux-a11y`, `/ux-motion`, `/ux-polish`). When passed, the command runs the review then immediately enters the fix loop on its own findings, same loop as the standalone `/ux-fix` command, scoped to that command's lens.
 
 `/ux-next` is the meta-command: reads the freshest reports from `.ux/` and decides. Always present in the conductor block as an escape hatch.
 
-**State persistence**: each command writes a small JSON to `.ux/` in the target project — `last-audit.json`, `last-design.json`, etc. — so `/ux-fix` and `/ux-next` can chain and the conductor has data to base its recommendation on.
+**State persistence**: each command writes a small JSON to `.ux/` in the target project, `last-audit.json`, `last-design.json`, etc., so `/ux-fix` and `/ux-next` can chain and the conductor has data to base its recommendation on.
 
 ---
 
@@ -178,7 +178,7 @@ sub-agents: [optional list of agents this command may dispatch]
 <plain-language triggers>
 
 ## Input
-<what the user gives — URL, file, screenshot, snippet, free description>
+<what the user gives, URL, file, screenshot, snippet, free description>
 
 ## Process
 1. <step>
@@ -189,7 +189,7 @@ sub-agents: [optional list of agents this command may dispatch]
 <which agents, with what prompts, parallel or serial>
 
 ## Output
-<structured format — see references/output/polaris-style.md or case-study-style.md>
+<structured format, see references/output/polaris-style.md or case-study-style.md>
 
 ## State persisted
 <path under .ux/ and JSON shape>
@@ -216,20 +216,20 @@ Fix: <specific actionable change>
 
 - **Severity**: Critical / High / Medium / Cosmetic
 - **Lens**: FRAME / DISCOVER / SCAN / ACT / READ / RECOVER (plus MOTION when run by `/ux-motion`, plus STYLE for `/ux-polish`)
-- **Principle**: cite source — "Hick's Law", "Krug: Omit Needless Words", "Norman: missing feedback", "WCAG 1.4.3 contrast"
-- **Fix**: specific — "Rename 'Submit' → 'Pay $24.99'" not "improve clarity"
+- **Principle**: cite source, "Hick's Law", "Krug: Omit Needless Words", "Norman: missing feedback", "WCAG 1.4.3 contrast"
+- **Fix**: specific, "Rename 'Submit' → 'Pay $24.99'" not "improve clarity"
 
 Reports end with: severity counts, top-3 must-fix-now, ship-readiness verdict, conductor block.
 
 ### 6.2 Wfrah-editorial style (case studies via `/ux-case-study`)
 
-Inspired by the wfrah platform case study format. **Used ONLY by `/ux-case-study` and `/ux-audit` PDF report outputs — NOT for general design outputs like landings, dashboards, or components.**
+Inspired by the wfrah platform case study format. **Used ONLY by `/ux-case-study` and `/ux-audit` PDF report outputs, NOT for general design outputs like landings, dashboards, or components.**
 
 - Numbered section codes: (A) About, (B) Mission, (C) Outcomes, (D) Impact, (E) Market, (F) Chance, (G) Target Audience
-- Editorial typography: ultra-wide containers, large display headlines, body text with **two-tone emphasis** — important phrases in solid black, context phrases in gray
+- Editorial typography: ultra-wide containers, large display headlines, body text with **two-tone emphasis**, important phrases in solid black, context phrases in gray
 - Clean horizontal divider lines between sections
 - Generous white space, no chrome decoration
-- **Pure monochrome (black + white + grays)** — this rule applies ONLY to case-study and PDF-report outputs. Landings, dashboards, and components generated by `/ux-design`, `/ux-dashboard`, `/ux-component` are FREE to use brand accent colors.
+- **Pure monochrome (black + white + grays)**: this rule applies ONLY to case-study and PDF-report outputs. Landings, dashboards, and components generated by `/ux-design`, `/ux-dashboard`, `/ux-component` are FREE to use brand accent colors.
 - Optional bilingual support (English + Arabic) if the project is MENA-targeted
 
 The bar for **non-PDF** design outputs (landings, dashboards, etc.) is [acmomento.com](https://www.acmomento.com): Apple-clean monochrome-leaning with prominent imagery, full-width modular sections, generous white space, but brand accents allowed.
@@ -250,12 +250,12 @@ The bar for **non-PDF** design outputs (landings, dashboards, etc.) is [acmoment
 
 Run in order. Each lens sources from canon:
 
-1. **FRAME** (Lean UX) — Who, outcome, hypothesis? *Sources: `process/lean-ux-gothelf.md`, `process/lean-ux-klein.md`*
-2. **DISCOVER** (Norman) — Can a first-timer figure out what to do? Gulfs of execution & evaluation. *Source: `laws/norman.md`*
-3. **SCAN** (Krug) — 5-second billboard test. Scan-not-read. *Source: `laws/krug.md`*
-4. **ACT** (Laws of UX + Norman) — Action cycle integrity. Cognitive-load: Fitts, Hick, Miller, Jakob, Tesler, Postel. *Sources: `laws/laws-of-ux.md`, `laws/norman.md`*
-5. **READ** (microcopy) — Voice, error specificity, empty/loading/success, CTAs. *Source: `foundations/copy.md`*
-6. **RECOVER** (Norman error design + a11y) — Errors caught with a specific path. WCAG 2.1 AA. *Sources: `laws/norman.md`, `foundations/accessibility.md`*
+1. **FRAME** (Lean UX), Who, outcome, hypothesis? *Sources: `process/lean-ux-gothelf.md`, `process/lean-ux-klein.md`*
+2. **DISCOVER** (Norman), Can a first-timer figure out what to do? Gulfs of execution & evaluation. *Source: `laws/norman.md`*
+3. **SCAN** (Krug), 5-second billboard test. Scan-not-read. *Source: `laws/krug.md`*
+4. **ACT** (Laws of UX + Norman), Action cycle integrity. Cognitive-load: Fitts, Hick, Miller, Jakob, Tesler, Postel. *Sources: `laws/laws-of-ux.md`, `laws/norman.md`*
+5. **READ** (microcopy), Voice, error specificity, empty/loading/success, CTAs. *Source: `foundations/copy.md`*
+6. **RECOVER** (Norman error design + a11y), Errors caught with a specific path. WCAG 2.1 AA. *Sources: `laws/norman.md`, `foundations/accessibility.md`*
 
 `/ux-motion` and `/ux-polish` add their own lenses (MOTION, STYLE) when invoked directly; they aren't in the default audit pass so audits stay fast.
 
@@ -271,7 +271,7 @@ Every `references/foundations/*.md` follows the same shape:
 > <One-sentence promise: what this foundation buys the product.>
 
 ## Principles
-1. <Principle name> — <one-line definition + why it matters>
+1. <Principle name> - <one-line definition + why it matters>
 2. ...
 
 ## Do / Don't
@@ -305,7 +305,7 @@ Every `references/foundations/*.md` follows the same shape:
 
 ---
 
-## 10. Absorbed-skills map (proves nothing is lost — now 6 skills)
+## 10. Absorbed-skills map (proves nothing is lost: now 6 skills)
 
 | Existing skill | Where it lives in `ux` plugin |
 |---|---|
@@ -318,9 +318,9 @@ Every `references/foundations/*.md` follows the same shape:
 
 ---
 
-### 6.3 Self-contained knowledge — no external skill references
+### 6.3 Self-contained knowledge: no external skill references
 
-All knowledge from absorbed skills (`design-review`, `design-critique`, `accessibility-review`, `ux-copy`, `gpt-taste`, `design-taste-frontend`, `ui-ux-pro-max`, `frontend-design`, etc.) is **distilled and embedded directly** into the `ux` plugin's reference files. The plugin does NOT depend on, link to, or cite the source skills in user-facing output. A user installing only `ux` gets the full capability — no other plugin required, no external paths to maintain.
+All knowledge from absorbed skills (`design-review`, `design-critique`, `accessibility-review`, `ux-copy`, `gpt-taste`, `design-taste-frontend`, `ui-ux-pro-max`, `frontend-design`, etc.) is **distilled and embedded directly** into the `ux` plugin's reference files. The plugin does NOT depend on, link to, or cite the source skills in user-facing output. A user installing only `ux` gets the full capability, no other plugin required, no external paths to maintain.
 
 ---
 
@@ -341,7 +341,7 @@ All knowledge from absorbed skills (`design-review`, `design-critique`, `accessi
 | awwwards categories | curated exemplars in `references/styles/exemplars.md` |
 | Eyal, *Hooked* | DEFERRED stub at `references/conditional/habit-design.md`; filled in v3 |
 | Wheeler, *Designing Brand Identity* + great-logos guide | DEFERRED stub at `references/conditional/brand-system.md`; filled in v3 |
-| Good to Great / Zero to One / Profit First | OUT OF SCOPE — strategy/business, not UX |
+| Good to Great / Zero to One / Profit First | OUT OF SCOPE, strategy/business, not UX |
 
 ---
 
@@ -375,26 +375,26 @@ Embedded in plugin README and surfaced by `/ux-expert` when a user asks for a re
 
 The order below minimizes blocking dependencies. Steps 2–4 can run in parallel with sub-agents.
 
-1. **Plugin scaffolding** — `plugin.json`, directory layout, README with creator credit.
-2. **House styles** (`references/output/polaris-style.md` + `case-study-style.md`) — write FIRST since every command depends on them.
-3. **Foundations** (`references/foundations/*` — 10 files) — parallel write via research sub-agents, each grounded in canon.
-4. **Laws** (`references/laws/*` — 3 files) — parallel.
-5. **Process** (`references/process/*` — 4 files) — parallel.
-6. **Styles** (`references/styles/*` — 4 files) — depends on having read `gpt-taste` and `design-taste-frontend` source.
-7. **Sub-agent definitions** (`agents/*` — 5 files).
+1. **Plugin scaffolding**, `plugin.json`, directory layout, README with creator credit.
+2. **House styles** (`references/output/polaris-style.md` + `case-study-style.md`), write FIRST since every command depends on them.
+3. **Foundations** (`references/foundations/*`, 10 files), parallel write via research sub-agents, each grounded in canon.
+4. **Laws** (`references/laws/*`, 3 files), parallel.
+5. **Process** (`references/process/*`, 4 files), parallel.
+6. **Styles** (`references/styles/*`, 4 files), depends on having read `gpt-taste` and `design-taste-frontend` source.
+7. **Sub-agent definitions** (`agents/*`, 5 files).
 8. **Commands in dependency order**:
    - `/ux-frame` (other commands read its output)
    - `/ux-audit` (uses frame, defines the lens vocabulary)
-   - `/ux-research`, `/ux-workshop` (parallel — FRAME group complete)
-   - `/ux-copy`, `/ux-a11y`, `/ux-motion`, `/ux-polish`, `/ux-critique` (parallel — AUDIT group complete)
-   - `/ux-design`, `/ux-system`, `/ux-dashboard`, `/ux-component` (parallel — GENERATE group complete)
+   - `/ux-research`, `/ux-workshop` (parallel, FRAME group complete)
+   - `/ux-copy`, `/ux-a11y`, `/ux-motion`, `/ux-polish`, `/ux-critique` (parallel, AUDIT group complete)
+   - `/ux-design`, `/ux-system`, `/ux-dashboard`, `/ux-component` (parallel, GENERATE group complete)
    - `/ux-fix`, `/ux-case-study`, `/ux-next`, `/ux-expert` (APPLY group + utilities)
 9. **State persistence layer** (`.ux/last-*.json` schema and read/write helpers).
 10. **End-to-end test on 3 real surfaces**:
     - A reward-loyalty Blade view (proves Laravel/Blade/Alpine support)
     - A generic React landing page (proves React/Framer support)
     - A Shopify product page or a fresh-from-scratch dashboard (proves cross-system claim)
-11. **Plugin install verification** — loads cleanly in Claude Code, all 16 commands appear in `/help`.
+11. **Plugin install verification**, loads cleanly in Claude Code, all 16 commands appear in `/help`.
 12. **README + install instructions + the `/ux-expert` CTA**.
 
 ---

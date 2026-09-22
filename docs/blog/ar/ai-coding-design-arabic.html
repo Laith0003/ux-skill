@@ -11,8 +11,8 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تصميم برمجة الذكاء الاصطناعي — كيف تبني نظام تصميم لـ Claude Code — ux-skill</title>
-  <meta name="description" content="Claude Code، Cursor، Windsurf، GitHub Copilot، Cline — كل أداة برمجة بالذكاء الاصطناعي تنتج نفس الافتراضات الثمانية البصرية: خط Inter في حجم العنوان، تدرّج من البنفسجي إلى الأزرق، ثلاث بطاقات متطابقة. يوقف ux-skill هذه الأنماط في الـ CI عبر 145 قاعدة Regex حتمية.">
+  <title>تصميم برمجة الذكاء الاصطناعي, كيف تبني نظام تصميم لـ Claude Code, ux-skill</title>
+  <meta name="description" content="Claude Code، Cursor، Windsurf، GitHub Copilot، Cline, كل أداة برمجة بالذكاء الاصطناعي تنتج نفس الافتراضات الثمانية البصرية: خط Inter في حجم العنوان، تدرّج من البنفسجي إلى الأزرق، ثلاث بطاقات متطابقة. يوقف ux-skill هذه الأنماط في الـ CI عبر 145 قاعدة Regex حتمية.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ar/ai-coding-design-arabic.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -20,16 +20,16 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ar/ai-coding-design-arabic.html">
-  <meta property="og:title" content="تصميم برمجة الذكاء الاصطناعي — كيف تبني نظام تصميم لـ Claude Code">
+  <meta property="og:title" content="تصميم برمجة الذكاء الاصطناعي, كيف تبني نظام تصميم لـ Claude Code">
   <meta property="og:description" content="145 قاعدة Regex حتمية. 1٬182 مدخلًا في الكتالوج. 160 مواصفة علامة تجارية. 17 بيئة تطوير. رخصة MIT.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/ar-ai-coding-design-arabic.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — ar ai coding design arabic">
+  <meta property="og:image:alt" content="ux-skill, ar ai coding design arabic">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/ar-ai-coding-design-arabic.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="تصميم برمجة الذكاء الاصطناعي — ux-skill">
+  <meta name="twitter:title" content="تصميم برمجة الذكاء الاصطناعي, ux-skill">
   <meta name="twitter:description" content="أوقف الافتراضات البصرية الثمانية التي ينتجها كل ذكاء اصطناعي. 145 قاعدة Regex، بلا LLM، داخل الـ CI.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,8 +40,8 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "تصميم برمجة الذكاء الاصطناعي — كيف تبني نظام تصميم لـ Claude Code",
-    "description": "كل أداة برمجة بالذكاء الاصطناعي — Claude Code، Cursor، Windsurf، GitHub Copilot، Cline — تنتج نفس الافتراضات الثمانية البصرية. يوقف ux-skill هذه الأنماط في الـ CI عبر 145 قاعدة Regex.",
+    "headline": "تصميم برمجة الذكاء الاصطناعي, كيف تبني نظام تصميم لـ Claude Code",
+    "description": "كل أداة برمجة بالذكاء الاصطناعي, Claude Code، Cursor، Windsurf، GitHub Copilot، Cline, تنتج نفس الافتراضات الثمانية البصرية. يوقف ux-skill هذه الأنماط في الـ CI عبر 145 قاعدة Regex.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -501,7 +501,7 @@
 <div class="wrap">
     <article>
       <span class="eyebrow">المدونة &middot; العربية &middot; 2026-05-28</span>
-      <h1>تصميم برمجة الذكاء الاصطناعي — لماذا تنتج كل أداة <span class="accent">نفس الواجهة</span>؟</h1>
+      <h1>تصميم برمجة الذكاء الاصطناعي: لماذا تنتج كل أداة <span class="accent">نفس الواجهة</span>؟</h1>
       <p class="lede">
         <strong>من طلب يومًا من Claude Code أو Cursor أو Windsurf أو GitHub Copilot أو Cline أو Continue بناء صفحة هبوط، يعرف الناتج بمجرد رؤيته:</strong> خط Inter مرفوع إلى أحجام العناوين، تدرّج من البنفسجي إلى الأزرق في الخلفية، ثلاث بطاقات متطابقة جنبًا إلى جنب، وسطر <em>«Build something amazing»</em> أسفل الـ hero. المشكلة ليست في الأداة. المشكلة أن كل هذه الأدوات تعلّمت من نفس المجموعة من القوالب. يوقف ux-skill هذه الافتراضات داخل الـ CI، دون استدعاء أي LLM، عبر 145 قاعدة Regex حتمية.
       </p>
@@ -512,14 +512,14 @@
         وثّقنا المجموعة الكاملة في <a href="/blog/ai-design-fingerprints-list.html" class="link">تصنيف بصمات تصميم الذكاء الاصطناعي</a>. أما الثمانية الأكثر بروزًا فتظهر تقريبًا في كل قسم hero يُولِّد:
       </p>
       <ol>
-        <li><strong>استخدام Inter كخط عرض</strong> — خط مُصمَّم أصلًا لوضوح القراءة على الأحجام الصغيرة، مرفوع إلى 90px في الـ hero. عكس استعماله المقصود تمامًا.</li>
-        <li><strong>تدرّج من البنفسجي إلى الأزرق</strong> — عائلة <code>#7C3AED → #3B82F6</code>، تُستخدم كخلفية للقسم الأول.</li>
-        <li><strong>ثلاث بطاقات متطابقة في صفٍّ واحد</strong> — أيقونة وعنوان من كلمة وسطر فرعي، مكررة ثلاث مرات.</li>
-        <li><strong>حركة fade-in-up شاملة</strong> — تطبّق على كل ابن مباشر لكل قسم، دون أي تفريق حسب الدور.</li>
-        <li><strong>توسيط كل شيء</strong> — الـ hero والبطاقات والنماذج، كلها على المحور المركزي للشاشة.</li>
-        <li><strong>نسخ نص عامة</strong> — «Build something amazing» و«Beautiful experiences» و«Revolutionizing X»، دون أي اسم مرتبط بالمنتج.</li>
-        <li><strong>روابط صور من بنوك الصور</strong> — صور عامة بدل لقطات شاشة فعلية للمنتج.</li>
-        <li><strong>ظلال ثقيلة فوق تصميم مسطّح</strong> — يصطدم انعكاس «يجب أن يلفت النظر» بصرعة «الـ flat» فيخرج عمق بصري متناقض.</li>
+        <li><strong>استخدام Inter كخط عرض</strong>, خط مُصمَّم أصلًا لوضوح القراءة على الأحجام الصغيرة، مرفوع إلى 90px في الـ hero. عكس استعماله المقصود تمامًا.</li>
+        <li><strong>تدرّج من البنفسجي إلى الأزرق</strong>, عائلة <code>#7C3AED → #3B82F6</code>، تُستخدم كخلفية للقسم الأول.</li>
+        <li><strong>ثلاث بطاقات متطابقة في صفٍّ واحد</strong>, أيقونة وعنوان من كلمة وسطر فرعي، مكررة ثلاث مرات.</li>
+        <li><strong>حركة fade-in-up شاملة</strong>, تطبّق على كل ابن مباشر لكل قسم، دون أي تفريق حسب الدور.</li>
+        <li><strong>توسيط كل شيء</strong>, الـ hero والبطاقات والنماذج، كلها على المحور المركزي للشاشة.</li>
+        <li><strong>نسخ نص عامة</strong>, «Build something amazing» و«Beautiful experiences» و«Revolutionizing X»، دون أي اسم مرتبط بالمنتج.</li>
+        <li><strong>روابط صور من بنوك الصور</strong>, صور عامة بدل لقطات شاشة فعلية للمنتج.</li>
+        <li><strong>ظلال ثقيلة فوق تصميم مسطّح</strong>, يصطدم انعكاس «يجب أن يلفت النظر» بصرعة «الـ flat» فيخرج عمق بصري متناقض.</li>
       </ol>
       <p>
         أي افتراض من هؤلاء بمفرده ليس خطأً. المشكلة أن وجود الثمانية <em>في نفس الصفحة</em> يخلق بصمة يعرفها أي شخص لأول نظرة. واحد منها يمر، أربعة منها في نفس above-the-fold يُمكِّنانك من تخمين الأداة التي ولّدت الكود.
@@ -530,7 +530,7 @@
         ردّة الفعل الأولى لأي فريق هي إضافة تعليمات إلى الـ prompt: «لا تستخدم التدرّج الافتراضي»، «اختر خط عرض حقيقيًا»، «لا تضع ثلاث بطاقات متطابقة». ينجح هذا في رسالة واحدة. ثم تخفّ التعليمات في الرسالة التالية، يتضخّم الـ context window، وتعود البصمة. التوجيه بالـ prompt احتمالي بطبيعته، ويذوب مع طول المحادثة.
       </p>
       <p>
-        المطلوب أرضية حتمية — فحص يعمل <em>بعد</em> أن يكتب النموذج، دون LLM في الحلقة. هذه هي الفجوة التي يسدّها ux-skill. يضيّق المُوصي خيارات النموذج من الأمام، ويوقف الـ linter ما يفلت من الافتراضات من الخلف.
+        المطلوب أرضية حتمية, فحص يعمل <em>بعد</em> أن يكتب النموذج، دون LLM في الحلقة. هذه هي الفجوة التي يسدّها ux-skill. يضيّق المُوصي خيارات النموذج من الأمام، ويوقف الـ linter ما يفلت من الافتراضات من الخلف.
       </p>
 
       <h3>لا تردّ على الاحتمالي باحتمالي آخر</h3>
@@ -563,7 +563,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         فيما يلي كتلة hero مبسّطة من قالب Next.js افتراضي تسقط في ثلاث قواعد، يليها بديل يُعيد كتابتها يخرج بـ exit 0. نفس نية التحويل، بصمة مختلفة.
       </p>
-      <pre class="code"><span class="c">// قبل — 3 نتائج high</span>
+      <pre class="code"><span class="c">// قبل, 3 نتائج high</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -578,7 +578,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
   &lt;/div&gt;
 &lt;/section&gt;
 
-<span class="c">// بعد — 0 نتائج</span>
+<span class="c">// بعد, 0 نتائج</span>
 &lt;section className=<span class="s">"bg-stone-50 py-28"</span>&gt;
   &lt;h1 className=<span class="s">"font-['Fraunces']
     text-6xl leading-[1.04]
@@ -647,16 +647,16 @@ $ /plugin install ux@ux-skill</pre>
       <div class="honesty">
         <div class="label">نطاق صريح</div>
         <h4>القواعد تمسك بالبنية، لا بالذوق.</h4>
-        <p>لن يلتقط الـ linter يومًا «هذا القسم إيقاعه سيئ» أو «هذه الجملة تبدو باردة». هذه مهمة الإنسان أو نموذج لغوي في مراجعة لاحقة. أما البصمات التي يمكن وصفها برموز نصّية أو أنماط أو أشكال، فالـ Regex يلتقطها بثبات — وهذه تشكّل معظم افتراضات الذكاء الاصطناعي، لأن النموذج يعود إلى نفس الإنتاج كل مرة.</p>
+        <p>لن يلتقط الـ linter يومًا «هذا القسم إيقاعه سيئ» أو «هذه الجملة تبدو باردة». هذه مهمة الإنسان أو نموذج لغوي في مراجعة لاحقة. أما البصمات التي يمكن وصفها برموز نصّية أو أنماط أو أشكال، فالـ Regex يلتقطها بثبات, وهذه تشكّل معظم افتراضات الذكاء الاصطناعي، لأن النموذج يعود إلى نفس الإنتاج كل مرة.</p>
         <p>اخترنا عن قصد ألّا نشغّل قاضي LLM في الـ CI. إن كان المقياس «هل يبدو من صنع مصمّم؟» فهذه مراجعة كود، لا lint. يوفّر ux-skill أمر <code>ux critique</code> لتلك المرحلة، لكنه يعمل عند الطلب من المحرّر، لا من الـ CI.</p>
       </div>
 
       <h2>قراءات ذات صلة</h2>
       <ul>
         <li><a href="/blog/ai-design-fingerprints-list.html" class="link">الـ 35 بصمة تصميم تصدّرها كل أداة ذكاء اصطناعي افتراضيًا</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter للبرمجة بالذكاء الاصطناعي — 145 قاعدة في الـ CI</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter للبرمجة بالذكاء الاصطناعي, 145 قاعدة في الـ CI</a></li>
         <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">ترتيب أدوات مكافحة slop لـ Claude Code بصراحة</a></li>
-        <li><a href="/blog/cursor-design-plugin.html" class="link">إضافة التصميم لـ Cursor — دليل التثبيت</a></li>
+        <li><a href="/blog/cursor-design-plugin.html" class="link">إضافة التصميم لـ Cursor, دليل التثبيت</a></li>
         <li><a href="https://github.com/Laith0003/ux-skill/blob/main/README.ar.md" class="link" rel="noopener noreferrer">README (النسخة العربية)</a></li>
         <li><a href="/install/" class="link">صفحة التثبيت</a> / <a href="/mcp.html" class="link">إعداد MCP</a></li>
       </ul>
@@ -670,9 +670,9 @@ $ /plugin install ux@ux-skill</pre>
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— or —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— or —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>
@@ -683,7 +683,7 @@ $ /plugin install ux@ux-skill</pre>
       <h2 class="related-reads-h">قراءات ذات صلة</h2>
       <ul>
         <li><a href="/blog/ai-design-fingerprints-list.html">الـ 35 بصمة تصميم</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html">Regex linter — 145 قاعدة</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html">Regex linter, 145 قاعدة</a></li>
         <li><a href="/blog/anti-ai-slop-claude-skills.html">ترتيب أدوات مكافحة slop</a></li>
         <li><a href="/blog/cursor-design-plugin.html">إضافة Cursor</a></li>
       </ul>

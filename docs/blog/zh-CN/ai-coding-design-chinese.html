@@ -11,8 +11,8 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI 编程设计 — 用 ux-skill 给 Cursor 设计系统兜底 — ux-skill</title>
-  <meta name="description" content="Claude Code、Cursor、Windsurf、GitHub Copilot、Cline — 任何 AI 编程工具都会输出同样八个视觉默认值:把 Inter 拉到 90px 当显示字、紫到蓝渐变、三张一模一样的卡。ux-skill 用 145 条确定性正则规则,在 CI 上拦住这些模式。">
+  <title>AI 编程设计, 用 ux-skill 给 Cursor 设计系统兜底, ux-skill</title>
+  <meta name="description" content="Claude Code、Cursor、Windsurf、GitHub Copilot、Cline, 任何 AI 编程工具都会输出同样八个视觉默认值:把 Inter 拉到 90px 当显示字、紫到蓝渐变、三张一模一样的卡。ux-skill 用 145 条确定性正则规则,在 CI 上拦住这些模式。">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/zh-CN/ai-coding-design-chinese.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -20,16 +20,16 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/zh-CN/ai-coding-design-chinese.html">
-  <meta property="og:title" content="AI 编程设计 — 用 ux-skill 给 Cursor 设计系统兜底">
+  <meta property="og:title" content="AI 编程设计, 用 ux-skill 给 Cursor 设计系统兜底">
   <meta property="og:description" content="145 条确定性正则规则。1,243 条目录条目。131 条品牌规范。17 个 IDE。MIT 开源。">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/zh-CN-ai-coding-design-chinese.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — zh-CN ai coding design chinese">
+  <meta property="og:image:alt" content="ux-skill, zh-CN ai coding design chinese">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/zh-CN-ai-coding-design-chinese.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AI 编程设计 — ux-skill">
+  <meta name="twitter:title" content="AI 编程设计, ux-skill">
   <meta name="twitter:description" content="拦截每个 AI 工具的八个视觉默认值。145 条正则、不调 LLM、跑在 CI 上。">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,8 +40,8 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "AI 编程设计 — 用 ux-skill 给 Cursor 设计系统兜底",
-    "description": "Claude Code、Cursor、Windsurf、GitHub Copilot、Cline — 每个 AI 编程工具都会落到同样八个视觉默认值。ux-skill 在 CI 上用 145 条正则规则拦住它们。",
+    "headline": "AI 编程设计, 用 ux-skill 给 Cursor 设计系统兜底",
+    "description": "Claude Code、Cursor、Windsurf、GitHub Copilot、Cline, 每个 AI 编程工具都会落到同样八个视觉默认值。ux-skill 在 CI 上用 145 条正则规则拦住它们。",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -494,7 +494,7 @@
 <div class="wrap">
     <article>
       <span class="eyebrow">博客 &middot; 简体中文 &middot; 2026-05-28</span>
-      <h1>AI 编程设计 — 为什么每个 AI 都做出<span class="accent">同一个 UI</span>。</h1>
+      <h1>AI 编程设计: 为什么每个 AI 都做出<span class="accent">同一个 UI</span>。</h1>
       <p class="lede">
         <strong>任何一个让 Claude Code、Cursor、Windsurf、GitHub Copilot、Cline 或 Continue 生成过 landing page 的人,都见过那种结果:</strong>Inter 被拉到 90px 当显示字、紫到蓝的渐变铺底、横向并排三张一模一样的卡,Hero 下面那行 <em>「Build something amazing」</em>。问题不在工具,问题在所有这些工具都是用同一批模板训练出来的。ux-skill 用 145 条确定性正则规则,在 CI 上拦下这些默认产物。
       </p>
@@ -505,14 +505,14 @@
         我们把所有指纹都整理在了 <a href="/blog/ai-design-fingerprints-list.html" class="link">AI 设计指纹分类</a> 里。下面这八个,几乎在每个 Hero 里都出现:
       </p>
       <ol>
-        <li><strong>把 Inter 当显示字</strong> — Inter 是为屏幕小字号易读性而设计的,被拉到 90px 当大标题用,正好和它的设计意图反着来。</li>
-        <li><strong>紫到蓝的渐变</strong> — <code>#7C3AED → #3B82F6</code> 这一族,用作第一屏的背景底色。</li>
-        <li><strong>横向三张同款卡片</strong> — 图标、单词标题、一句话副标题,重复三遍。</li>
-        <li><strong>全员 fade-in-up</strong> — 每个 section 的每个直接子元素都套同一个动画,角色完全不区分。</li>
-        <li><strong>所有内容居中</strong> — Hero、卡片、表单,全在视觉中轴上。</li>
-        <li><strong>泛泛的文案</strong> — 「Build something amazing」「Beautiful experiences」「Revolutionizing X」,一个产品相关的名词都没有。</li>
-        <li><strong>占位图 URL</strong> — 用通用占位图代替真实的产品截图。</li>
-        <li><strong>扁平设计上压重阴影</strong> — 「要醒目」和「扁平最潮」这两种本能撞在一起,得到一种说不清的立体感。</li>
+        <li><strong>把 Inter 当显示字</strong>, Inter 是为屏幕小字号易读性而设计的,被拉到 90px 当大标题用,正好和它的设计意图反着来。</li>
+        <li><strong>紫到蓝的渐变</strong> - <code>#7C3AED → #3B82F6</code> 这一族,用作第一屏的背景底色。</li>
+        <li><strong>横向三张同款卡片</strong>, 图标、单词标题、一句话副标题,重复三遍。</li>
+        <li><strong>全员 fade-in-up</strong>, 每个 section 的每个直接子元素都套同一个动画,角色完全不区分。</li>
+        <li><strong>所有内容居中</strong>, Hero、卡片、表单,全在视觉中轴上。</li>
+        <li><strong>泛泛的文案</strong>, 「Build something amazing」「Beautiful experiences」「Revolutionizing X」,一个产品相关的名词都没有。</li>
+        <li><strong>占位图 URL</strong>, 用通用占位图代替真实的产品截图。</li>
+        <li><strong>扁平设计上压重阴影</strong>, 「要醒目」和「扁平最潮」这两种本能撞在一起,得到一种说不清的立体感。</li>
       </ol>
       <p>
         单独看每个默认值都不是错。问题是这八个同时出现在一张页面上时,任何人都能一眼认出「这是 AI 写的」。一个,你可以耸耸肩放过去;在同一个 above-the-fold 里凑齐四个,你甚至能猜出是哪个工具生成的。
@@ -523,7 +523,7 @@
         每个团队的第一反应都是给 prompt 加约束:「别用默认渐变」「换一款真正的显示字」「别再放三张同款卡」。这一条消息内有效;到下一条,引导被稀释,上下文窗口变大,指纹又回来了。靠 prompt 引导是概率性的,而且随对话长度衰减。
       </p>
       <p>
-        我们真正需要的是确定性的兜底 — 一道在模型 <em>写完之后</em> 跑、回路里不再夹一个 LLM 的检查。这正是 ux-skill 填上的那块缺口:推荐器在前面收窄模型的选项,linter 在后面把漏过来的默认值打回去。
+        我们真正需要的是确定性的兜底, 一道在模型 <em>写完之后</em> 跑、回路里不再夹一个 LLM 的检查。这正是 ux-skill 填上的那块缺口:推荐器在前面收窄模型的选项,linter 在后面把漏过来的默认值打回去。
       </p>
 
       <h3>不要用随机性对抗随机性</h3>
@@ -556,7 +556,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         下面是一段从 Next.js 起始模板里截出来的简化 Hero,会命中三条规则;下方是改写后能以 exit 0 通过的版本。同样的转化意图,完全不同的指纹。
       </p>
-      <pre class="code"><span class="c">// 改写前 — 命中 3 条 high</span>
+      <pre class="code"><span class="c">// 改写前, 命中 3 条 high</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -571,7 +571,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
   &lt;/div&gt;
 &lt;/section&gt;
 
-<span class="c">// 改写后 — 0 命中</span>
+<span class="c">// 改写后, 0 命中</span>
 &lt;section className=<span class="s">"bg-stone-50 py-28"</span>&gt;
   &lt;h1 className=<span class="s">"font-['Fraunces']
     text-6xl leading-[1.04]
@@ -609,7 +609,7 @@ $ uxskill mcp-config --target cursor
 <span class="c"># tokens.css             ← OKLCH 调色板、字号刻度</span>
 <span class="c"># MASTER.md              ← 设计系统单一事实来源</span></pre>
       <p>
-        接好之后,Cursor Composer 可以直接调用 14 个 ux-skill 工具:<code>discover_brief</code>、<code>recommend_design</code>、<code>lint_codebase</code>、<code>get_brand_spec</code> 等等。设计决策不再只活在聊天里,而是落到仓库里的真实文件 — 之后每一次 Cursor 会话也都跟着这些文件走。
+        接好之后,Cursor Composer 可以直接调用 14 个 ux-skill 工具:<code>discover_brief</code>、<code>recommend_design</code>、<code>lint_codebase</code>、<code>get_brand_spec</code> 等等。设计决策不再只活在聊天里,而是落到仓库里的真实文件, 之后每一次 Cursor 会话也都跟着这些文件走。
       </p>
 
       <h2>三条安装路径,一个引擎</h2>
@@ -644,16 +644,16 @@ $ uxskill mcp-config --target cursor
       <div class="honesty">
         <div class="label">坦白的边界</div>
         <h4>规则只接得住结构,接不住品味。</h4>
-        <p>linter 永远不会报「这一段节奏不对」「这句文案冷冰冰的」。那是人来做的事,或者是评审用的 LLM 来做的事。但凡能用字面 token、模式、形状表达的指纹,正则都能 <em>稳稳地</em> 接住 — 这恰恰是 AI 默认行为里的绝大部分,因为模型每次都跑回同一种产物。</p>
-        <p>我们故意不在 CI 上跑 LLM 评委。如果你的标准是「看起来像设计师做的」,那就是 code review,不是 lint。ux-skill 提供 <code>ux critique</code> 来做这一步 — 但只在编辑器里按需运行,不进 CI。</p>
+        <p>linter 永远不会报「这一段节奏不对」「这句文案冷冰冰的」。那是人来做的事,或者是评审用的 LLM 来做的事。但凡能用字面 token、模式、形状表达的指纹,正则都能 <em>稳稳地</em> 接住, 这恰恰是 AI 默认行为里的绝大部分,因为模型每次都跑回同一种产物。</p>
+        <p>我们故意不在 CI 上跑 LLM 评委。如果你的标准是「看起来像设计师做的」,那就是 code review,不是 lint。ux-skill 提供 <code>ux critique</code> 来做这一步, 但只在编辑器里按需运行,不进 CI。</p>
       </div>
 
       <h2>延伸阅读</h2>
       <ul>
         <li><a href="/blog/ai-design-fingerprints-list.html" class="link">每个 AI 工具默认会出的 35 条设计指纹</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">AI 编程用的正则 linter — CI 上的 145 条规则</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">AI 编程用的正则 linter, CI 上的 145 条规则</a></li>
         <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Claude Code 反 slop 工具的诚实排名</a></li>
-        <li><a href="/blog/cursor-design-plugin.html" class="link">Cursor 设计插件 — 安装指南</a></li>
+        <li><a href="/blog/cursor-design-plugin.html" class="link">Cursor 设计插件, 安装指南</a></li>
         <li><a href="https://github.com/Laith0003/ux-skill/blob/main/README.zh-CN.md" class="link" rel="noopener noreferrer">README (简体中文)</a></li>
         <li><a href="/install/" class="link">安装页</a> / <a href="/mcp.html" class="link">MCP 配置</a></li>
       </ul>
@@ -667,9 +667,9 @@ $ uxskill mcp-config --target cursor
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— 或 —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">, 或, </div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— 或 —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">, 或, </div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>
@@ -680,7 +680,7 @@ $ uxskill mcp-config --target cursor
       <h2 class="related-reads-h">相关阅读</h2>
       <ul>
         <li><a href="/blog/ai-design-fingerprints-list.html">35 条 AI 设计指纹</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html">正则 linter — 145 条规则</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html">正则 linter, 145 条规则</a></li>
         <li><a href="/blog/anti-ai-slop-claude-skills.html">反 slop 排名</a></li>
         <li><a href="/blog/cursor-design-plugin.html">Cursor 设计插件</a></li>
       </ul>

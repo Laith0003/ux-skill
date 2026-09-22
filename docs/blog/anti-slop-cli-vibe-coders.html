@@ -11,7 +11,7 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The anti-slop CLI for vibe coders — 145 rules, no LLM, runs in CI</title>
+  <title>The anti-slop CLI for vibe coders, 145 rules, no LLM, runs in CI</title>
   <meta name="description" content="A command-line design linter built for vibe coders. 145 deterministic regex rules, 1,243-entry catalog, zero LLM calls, sub-second on a 200-file repo. Plugs into pre-commit, GitHub Actions, Husky, Lefthook, and any shell hook.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/anti-slop-cli-vibe-coders.html">
   <meta name="theme-color" content="#07080a">
@@ -20,16 +20,16 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/anti-slop-cli-vibe-coders.html">
-  <meta property="og:title" content="The anti-slop CLI for vibe coders — 145 rules, no LLM, runs in CI">
+  <meta property="og:title" content="The anti-slop CLI for vibe coders, 145 rules, no LLM, runs in CI">
   <meta property="og:description" content="A command-line design linter built for the vibe-coding workflow. 145 deterministic rules, 1,243-entry catalog, sub-second runtime, MIT-licensed.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/anti-slop-cli-vibe-coders.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — anti-slop-cli-vibe-coders">
+  <meta property="og:image:alt" content="ux-skill, anti-slop-cli-vibe-coders">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/anti-slop-cli-vibe-coders.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="The anti-slop CLI for vibe coders — 145 rules, no LLM">
+  <meta name="twitter:title" content="The anti-slop CLI for vibe coders, 145 rules, no LLM">
   <meta name="twitter:description" content="A deterministic command-line design linter for the vibe-coding workflow. Runs in CI. Costs nothing per check.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,7 +40,7 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "The anti-slop CLI for vibe coders — 145 rules, no LLM, runs in CI",
+    "headline": "The anti-slop CLI for vibe coders, 145 rules, no LLM, runs in CI",
     "description": "A command-line design linter built for vibe coders. 145 deterministic regex rules, 1,243-entry catalog, zero LLM calls, sub-second on a 200-file repo.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
@@ -63,7 +63,7 @@
   }
   </script>
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "The anti-slop CLI for vibe coders — 145 rules, no LLM, runs in CI", "item": "https://uxskill.laithjunaidy.com/blog/anti-slop-cli-vibe-coders.html"}]}
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "The anti-slop CLI for vibe coders, 145 rules, no LLM, runs in CI", "item": "https://uxskill.laithjunaidy.com/blog/anti-slop-cli-vibe-coders.html"}]}
 </script>
 
   <style>
@@ -508,15 +508,15 @@
 <div class="wrap">
     <article>
       <span class="eyebrow">Blog &middot; CLI &middot; 2026-05-28</span>
-      <h1>The anti-slop CLI for vibe coders &mdash; <span class="accent">145 rules, no LLM</span>, runs in CI.</h1>
+      <h1>The anti-slop CLI for vibe coders: <span class="accent">145 rules, no LLM</span>, runs in CI.</h1>
       <p class="lede">
-        <strong>The vibe coder's tool belt is a hand-rolled set of CLI primitives.</strong> Cursor, Claude Code, Cline, Aider, Codex &mdash; the model writes; the developer reviews. The missing piece is a deterministic gate that catches the AI design fingerprint before it merges. Not an LLM judge. Not a SaaS dashboard. A command-line linter that runs in milliseconds, plugs into pre-commit, and exits non-zero on a finding. Here is the engineering write-up.
+        <strong>The vibe coder's tool belt is a hand-rolled set of CLI primitives.</strong> Cursor, Claude Code, Cline, Aider, Codex, the model writes; the developer reviews. The missing piece is a deterministic gate that catches the AI design fingerprint before it merges. Not an LLM judge. Not a SaaS dashboard. A command-line linter that runs in milliseconds, plugs into pre-commit, and exits non-zero on a finding. Here is the engineering write-up.
       </p>
       <p class="byline">By the ux-skill team &middot; 8 min read &middot; MIT-licensed open source</p>
 
       <h2>Why a CLI is the right shape for vibe coding</h2>
       <p>
-        Vibe coding sits inside an existing developer toolchain: git, a package manager, an IDE that shells out, a hook runner. The toolchain is text in and text out. A SaaS dashboard or a Figma plugin is the wrong shape &mdash; it sits next to the toolchain instead of inside it. Anything that interrupts the keyboard-only loop costs more than the time the loop saved.
+        Vibe coding sits inside an existing developer toolchain: git, a package manager, an IDE that shells out, a hook runner. The toolchain is text in and text out. A SaaS dashboard or a Figma plugin is the wrong shape, it sits next to the toolchain instead of inside it. Anything that interrupts the keyboard-only loop costs more than the time the loop saved.
       </p>
       <p>
         The CLI shape gets four things for free: composability with shell pipelines, native pre-commit integration, native CI integration, and no auth handshake. A command that reads files and exits non-zero is the most boring API surface on a developer laptop, which is exactly why it is the right one.
@@ -527,36 +527,36 @@
 
       <h2>The architecture in one paragraph</h2>
       <p>
-        The package is a Python wheel published to PyPI under the name <code>uxskill</code>, with an npm wrapper that vendors a self-contained Python runtime so JavaScript teams without Python tooling still get the same CLI. Inside, the engine loads <code>data/anti-patterns.json</code> &mdash; 100 entries today, each a regex with a severity, category, scope, and fix string. The scanner walks the target directory, filters by file extension against each rule's scope, runs each regex against the matching files, and emits a structured findings array. The CLI prints the array as a JSON document or a human-readable list. Findings at or above the threshold cause a non-zero exit.
+        The package is a Python wheel published to PyPI under the name <code>uxskill</code>, with an npm wrapper that vendors a self-contained Python runtime so JavaScript teams without Python tooling still get the same CLI. Inside, the engine loads <code>data/anti-patterns.json</code>, 100 entries today, each a regex with a severity, category, scope, and fix string. The scanner walks the target directory, filters by file extension against each rule's scope, runs each regex against the matching files, and emits a structured findings array. The CLI prints the array as a JSON document or a human-readable list. Findings at or above the threshold cause a non-zero exit.
       </p>
       <p>
-        Nothing about the architecture is novel. The engineering work is in the catalog, the test suite, and the cross-IDE distribution &mdash; not in the runner. 75 unit tests cover the rule loader, the scope filter, the regex compiler, the threshold gate, and the JSON output format. Every release ships a green test matrix on Python 3.10, 3.11, 3.12, and 3.13.
+        Nothing about the architecture is novel. The engineering work is in the catalog, the test suite, and the cross-IDE distribution, not in the runner. 75 unit tests cover the rule loader, the scope filter, the regex compiler, the threshold gate, and the JSON output format. Every release ships a green test matrix on Python 3.10, 3.11, 3.12, and 3.13.
       </p>
 
       <h2>The command surface</h2>
       <p>
         The lint subcommand is the most-used. Three modes cover every real use case:
       </p>
-      <pre class="code"><span class="c"># Mode 1 — default: scan ./, threshold high, exit non-zero on findings</span>
+      <pre class="code"><span class="c"># Mode 1, default: scan ./, threshold high, exit non-zero on findings</span>
 $ uxskill lint
 <span class="n">[OK]</span> Scanned 142 files in 412ms · 0 findings at threshold high
 
-<span class="c"># Mode 2 — scan a subtree, lower the threshold</span>
+<span class="c"># Mode 2, scan a subtree, lower the threshold</span>
 $ uxskill lint apps/web/src --threshold medium
 
-<span class="c"># Mode 3 — JSON output, scan only staged files (used by pre-commit)</span>
+<span class="c"># Mode 3, JSON output, scan only staged files (used by pre-commit)</span>
 $ uxskill lint --json --staged | jq '.findings | length'</pre>
 
       <p>
         Flags that matter day to day:
       </p>
       <ul>
-        <li><code>--threshold &lt;low|medium|high|critical&gt;</code> &mdash; only count findings at or above this severity. Default is <code>high</code>.</li>
-        <li><code>--json</code> &mdash; emit a JSON document instead of human-readable output. Used by CI and editor plugins.</li>
-        <li><code>--staged</code> &mdash; scan only files staged in git. The right mode for pre-commit.</li>
-        <li><code>--rules &lt;id,id,id&gt;</code> &mdash; restrict the scan to a comma-separated list of rule ids. Useful for targeted CI jobs.</li>
-        <li><code>--ignore &lt;id,id&gt;</code> &mdash; suppress specific rule ids. Each ignore should land with a comment in the repo's <code>.uxskillignore</code> file explaining why.</li>
-        <li><code>--report &lt;path&gt;</code> &mdash; write the JSON report to a file. Used by CI artifact upload.</li>
+        <li><code>--threshold &lt;low|medium|high|critical&gt;</code>, only count findings at or above this severity. Default is <code>high</code>.</li>
+        <li><code>--json</code>, emit a JSON document instead of human-readable output. Used by CI and editor plugins.</li>
+        <li><code>--staged</code>, scan only files staged in git. The right mode for pre-commit.</li>
+        <li><code>--rules &lt;id,id,id&gt;</code>, restrict the scan to a comma-separated list of rule ids. Useful for targeted CI jobs.</li>
+        <li><code>--ignore &lt;id,id&gt;</code>, suppress specific rule ids. Each ignore should land with a comment in the repo's <code>.uxskillignore</code> file explaining why.</li>
+        <li><code>--report &lt;path&gt;</code>, write the JSON report to a file. Used by CI artifact upload.</li>
       </ul>
 
       <h2>The JSON shape</h2>
@@ -583,7 +583,7 @@ $ uxskill lint --json --staged | jq '.findings | length'</pre>
 }</pre>
 
       <p>
-        Every field is documented in <code>docs/schema/findings.md</code>. The schema is versioned via the <code>schema_version</code> field in <code>data/anti-patterns.json</code> &mdash; consumers can pin to a major version and trust that minor versions are additive.
+        Every field is documented in <code>docs/schema/findings.md</code>. The schema is versioned via the <code>schema_version</code> field in <code>data/anti-patterns.json</code>, consumers can pin to a major version and trust that minor versions are additive.
       </p>
 
       <h2>Pre-commit, GitHub Actions, GitLab CI, Husky, Lefthook</h2>
@@ -676,7 +676,7 @@ npx uxskill@latest lint --threshold high --staged || exit 1</pre>
         </table>
       </div>
       <p>
-        The pre-commit path is the one developers feel. Eighteen milliseconds for the staged-diff case is comfortably under the perceptual threshold &mdash; the hook is invisible.
+        The pre-commit path is the one developers feel. Eighteen milliseconds for the staged-diff case is comfortably under the perceptual threshold, the hook is invisible.
       </p>
 
       <blockquote>
@@ -714,7 +714,7 @@ npx uxskill@latest lint --threshold high --staged || exit 1</pre>
 
       <h2>The recommender is the upstream half</h2>
       <p>
-        The linter is the downstream half of the loop. The upstream half is <code>ux recommend</code> &mdash; five parallel lookups over a 1,243-entry catalog merged into a single structured design system. The recommender narrows the model's choices before the prompt; the linter punishes the model when the choices slip anyway.
+        The linter is the downstream half of the loop. The upstream half is <code>ux recommend</code>, five parallel lookups over a 1,243-entry catalog merged into a single structured design system. The recommender narrows the model's choices before the prompt; the linter punishes the model when the choices slip anyway.
       </p>
       <p>
         Both halves share one source-of-truth document at <code>.ux/design-system/MASTER.md</code>. Every IDE's rules file (<code>.cursorrules</code>, <code>CLAUDE.md</code>, <code>.windsurfrules</code>) is generated from that document. There is one place to look when something is wrong, one place to edit when something needs to change.
@@ -726,8 +726,8 @@ npx uxskill@latest lint --threshold high --staged || exit 1</pre>
       <div class="honesty">
         <div class="label">Honest scope</div>
         <h4>The CLI is the floor, not the ceiling.</h4>
-        <p>The linter catches structural fingerprints &mdash; literal tokens, class names, hex values, DOM shapes. It does not catch "the section rhythm is wrong" or "the copy reads cold." Those need a review pass, by a human or a stronger model. The CLI is the deterministic floor; <code>/ux-critique</code> ships in the same package for the taste pass.</p>
-        <p>The reason the CLI never calls an LLM is the same reason a unit test never calls an LLM. Reproducibility is the entire value proposition. If the lint result depends on a model's mood, the lint is no longer a lint &mdash; it is a recommendation, and recommendations belong in a different layer.</p>
+        <p>The linter catches structural fingerprints, literal tokens, class names, hex values, DOM shapes. It does not catch "the section rhythm is wrong" or "the copy reads cold." Those need a review pass, by a human or a stronger model. The CLI is the deterministic floor; <code>/ux-critique</code> ships in the same package for the taste pass.</p>
+        <p>The reason the CLI never calls an LLM is the same reason a unit test never calls an LLM. Reproducibility is the entire value proposition. If the lint result depends on a model's mood, the lint is no longer a lint, it is a recommendation, and recommendations belong in a different layer.</p>
       </div>
 
       <h2>What lives in <code>.uxskillignore</code></h2>
@@ -753,11 +753,11 @@ src/**/*.stories.tsx                   fade-in-up-everywhere</pre>
         The CLI is one package; every IDE that shells out reaches the same engine. Specifically:
       </p>
       <ul>
-        <li><strong>Claude Code &mdash;</strong> <code>/plugin install ux@ux-skill</code>; slash commands map to the CLI subcommands.</li>
-        <li><strong>Cursor &mdash;</strong> <code>npx uxskill@alpha init</code>; emits <code>.cursorrules</code> and registers a pre-commit hook.</li>
-        <li><strong>Windsurf &mdash;</strong> same npx initializer; emits <code>.windsurfrules</code>.</li>
-        <li><strong>Cline &middot; Continue &middot; Aider &middot; Codex &middot; Roo Code &mdash;</strong> read whatever rules file is at the repo root. The CLI emits all three formats from the same recommendation.</li>
-        <li><strong>JetBrains &middot; Zed &middot; GitHub Copilot &middot; Gemini Code Assist &mdash;</strong> same story. The CLI does not care which editor is on the other side of the file.</li>
+        <li><strong>Claude Code, </strong> <code>/plugin install ux@ux-skill</code>; slash commands map to the CLI subcommands.</li>
+        <li><strong>Cursor, </strong> <code>npx uxskill@alpha init</code>; emits <code>.cursorrules</code> and registers a pre-commit hook.</li>
+        <li><strong>Windsurf, </strong> same npx initializer; emits <code>.windsurfrules</code>.</li>
+        <li><strong>Cline &middot; Continue &middot; Aider &middot; Codex &middot; Roo Code, </strong> read whatever rules file is at the repo root. The CLI emits all three formats from the same recommendation.</li>
+        <li><strong>JetBrains &middot; Zed &middot; GitHub Copilot &middot; Gemini Code Assist, </strong> same story. The CLI does not care which editor is on the other side of the file.</li>
       </ul>
       <p>
         Walkthroughs for each:
@@ -770,7 +770,7 @@ src/**/*.stories.tsx                   fade-in-up-everywhere</pre>
 
       <h2>The vibe coder's tool belt, one slot at a time</h2>
       <p>
-        Every serious vibe coder ends up with the same five things in their belt by month two: a strong IDE (Cursor or Claude Code), a hook runner (pre-commit, Husky, or Lefthook), an LLM router (Aider, Continue, or Codex), an MCP server or two (sequential thinking, GitHub, filesystem), and a deterministic gate for the output. ux-skill is built for the last slot &mdash; the gate.
+        Every serious vibe coder ends up with the same five things in their belt by month two: a strong IDE (Cursor or Claude Code), a hook runner (pre-commit, Husky, or Lefthook), an LLM router (Aider, Continue, or Codex), an MCP server or two (sequential thinking, GitHub, filesystem), and a deterministic gate for the output. ux-skill is built for the last slot, the gate.
       </p>
       <p>
         14 stars on GitHub at time of writing, against 84k for the largest competitor in the marketplace. The fight is not for the headline number, it is for the slot. Once the gate is in the belt, the rest of the loop compounds.
@@ -778,10 +778,10 @@ src/**/*.stories.tsx                   fade-in-up-everywhere</pre>
 
       <h2>Related reading</h2>
       <ul>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter for AI coding</a> &mdash; the engineering write-up on the rule format itself.</li>
-        <li><a href="/blog/vibe-coding-design-system.html" class="link">Vibe coding is real &mdash; but your AI still ships the same defaults</a> &mdash; the workflow framing.</li>
-        <li><a href="/blog/python-design-system-generator.html" class="link">Python design system generator</a> &mdash; the upstream half of the loop.</li>
-        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Anti-AI-slop tools for Claude Code</a> &mdash; where ux-skill sits in the toolset.</li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter for AI coding</a>, the engineering write-up on the rule format itself.</li>
+        <li><a href="/blog/vibe-coding-design-system.html" class="link">Vibe coding is real, but your AI still ships the same defaults</a>, the workflow framing.</li>
+        <li><a href="/blog/python-design-system-generator.html" class="link">Python design system generator</a>, the upstream half of the loop.</li>
+        <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Anti-AI-slop tools for Claude Code</a>, where ux-skill sits in the toolset.</li>
       </ul>
     </article>
 
@@ -793,9 +793,9 @@ src/**/*.stories.tsx                   fade-in-up-everywhere</pre>
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; or &mdash;</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">&mdash; or &mdash;</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

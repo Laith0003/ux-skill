@@ -11,8 +11,8 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI コーディング デザイン — Claude Code デザインシステムの作り方 — ux-skill</title>
-  <meta name="description" content="Claude Code、Cursor、Windsurf、GitHub Copilot、Cline — どの AI コーディングツールも同じ 8 つの視覚的デフォルトを生成します。ディスプレイに使われた Inter、紫から青のグラデーション、3 つの同じカード。ux-skill は 145 の正規表現ルールで CI 上でこのパターンをブロックします。">
+  <title>AI コーディング デザイン, Claude Code デザインシステムの作り方, ux-skill</title>
+  <meta name="description" content="Claude Code、Cursor、Windsurf、GitHub Copilot、Cline, どの AI コーディングツールも同じ 8 つの視覚的デフォルトを生成します。ディスプレイに使われた Inter、紫から青のグラデーション、3 つの同じカード。ux-skill は 145 の正規表現ルールで CI 上でこのパターンをブロックします。">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ja/ai-coding-design-japanese.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -20,16 +20,16 @@
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ja/ai-coding-design-japanese.html">
-  <meta property="og:title" content="AI コーディング デザイン — Claude Code デザインシステムの作り方">
+  <meta property="og:title" content="AI コーディング デザイン, Claude Code デザインシステムの作り方">
   <meta property="og:description" content="145 個の決定論的正規表現ルール。1,243 のカタログエントリ。160 のブランド仕様。17 IDE 対応。MIT ライセンス。">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/ja-ai-coding-design-japanese.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — ja ai coding design japanese">
+  <meta property="og:image:alt" content="ux-skill, ja ai coding design japanese">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/ja-ai-coding-design-japanese.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AI コーディング デザイン — ux-skill">
+  <meta name="twitter:title" content="AI コーディング デザイン, ux-skill">
   <meta name="twitter:description" content="AI が毎回作る 8 つの視覚パターンを止める。145 の正規表現、LLM なし、CI で動作。">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,8 +40,8 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "AI コーディング デザイン — Claude Code デザインシステムの作り方",
-    "description": "Claude Code、Cursor、Windsurf、GitHub Copilot、Cline — どの AI コーディングツールも同じ 8 つの視覚的デフォルトを生成します。ux-skill は 145 の正規表現ルールで CI 上でこれをブロックします。",
+    "headline": "AI コーディング デザイン, Claude Code デザインシステムの作り方",
+    "description": "Claude Code、Cursor、Windsurf、GitHub Copilot、Cline, どの AI コーディングツールも同じ 8 つの視覚的デフォルトを生成します。ux-skill は 145 の正規表現ルールで CI 上でこれをブロックします。",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "author": {
@@ -494,7 +494,7 @@
 <div class="wrap">
     <article>
       <span class="eyebrow">ブログ &middot; 日本語 &middot; 2026-05-28</span>
-      <h1>AI コーディング デザイン — なぜどの AI も <span class="accent">同じ UI</span> を作るのか。</h1>
+      <h1>AI コーディング デザイン: なぜどの AI も <span class="accent">同じ UI</span> を作るのか。</h1>
       <p class="lede">
         <strong>Claude Code、Cursor、Windsurf、GitHub Copilot、Cline、Continue にランディングページを作らせたことのある人なら、誰でもあの出力を知っています。</strong>ディスプレイサイズに引き伸ばされた Inter、紫から青へのグラデーション、横並びに置かれた同一の 3 枚のカード、そしてヒーロー直下に並ぶ「Build something amazing」のコピー。問題はツールにあるわけではありません。問題は、どのツールも同じテンプレート群から学習したという点にあります。ux-skill は、145 の決定論的な正規表現ルールでこのパターンを CI 上から取り除きます。
       </p>
@@ -505,14 +505,14 @@
         私たちは <a href="/blog/ai-design-fingerprints-list.html" class="link">AI デザインのフィンガープリント分類</a> ですべての指紋を整理しました。ヒーローセクションでほぼ必ず姿を見せる、もっとも目立つ 8 つは次のとおりです。
       </p>
       <ol>
-        <li><strong>ディスプレイ書体としての Inter</strong> — 小さい画面サイズで読みやすさのために設計された書体を、ヒーローで 90px まで引き伸ばす。本来そのために作られたものではありません。</li>
-        <li><strong>紫から青のグラデーション</strong> — <code>#7C3AED → #3B82F6</code> 系のグラデーション。ファーストビューの背景に必ず登場する。</li>
-        <li><strong>横並びの同じ 3 つのカード</strong> — アイコン、一語のタイトル、一文のサブタイトル、それを 3 回繰り返すだけ。</li>
-        <li><strong>全要素への fade-in-up アニメーション</strong> — セクションの全直接子要素に同じトランジションがかかる。役割の区別がない。</li>
-        <li><strong>すべて中央揃え</strong> — ヒーロー、カード、フォーム、何もかも画面の中央に並べる。</li>
-        <li><strong>具体性のないコピー</strong> — 「Build something amazing」「Beautiful experiences」「Revolutionizing X」など、製品の名詞が一切登場しない。</li>
-        <li><strong>ストック画像の URL</strong> — 実際のプロダクトスクリーンショットの代わりに、汎用プレースホルダー画像。</li>
-        <li><strong>フラットデザインに乗った重い影</strong> — 「目立たせたい」という意図と「フラットがクール」という流行が同居して、ちぐはぐな立体感が生まれる。</li>
+        <li><strong>ディスプレイ書体としての Inter</strong>, 小さい画面サイズで読みやすさのために設計された書体を、ヒーローで 90px まで引き伸ばす。本来そのために作られたものではありません。</li>
+        <li><strong>紫から青のグラデーション</strong> - <code>#7C3AED → #3B82F6</code> 系のグラデーション。ファーストビューの背景に必ず登場する。</li>
+        <li><strong>横並びの同じ 3 つのカード</strong>, アイコン、一語のタイトル、一文のサブタイトル、それを 3 回繰り返すだけ。</li>
+        <li><strong>全要素への fade-in-up アニメーション</strong>, セクションの全直接子要素に同じトランジションがかかる。役割の区別がない。</li>
+        <li><strong>すべて中央揃え</strong>, ヒーロー、カード、フォーム、何もかも画面の中央に並べる。</li>
+        <li><strong>具体性のないコピー</strong>, 「Build something amazing」「Beautiful experiences」「Revolutionizing X」など、製品の名詞が一切登場しない。</li>
+        <li><strong>ストック画像の URL</strong>, 実際のプロダクトスクリーンショットの代わりに、汎用プレースホルダー画像。</li>
+        <li><strong>フラットデザインに乗った重い影</strong>, 「目立たせたい」という意図と「フラットがクール」という流行が同居して、ちぐはぐな立体感が生まれる。</li>
       </ol>
       <p>
         ひとつひとつのデフォルトは、それ単体で見れば誤りではありません。問題はこの 8 つが <em>同時に</em> 1 ページ上に揃ったときに、誰が見ても「これは AI が作った」と分かる指紋になることです。1 つなら肩をすくめて流せる。同じファーストビューに 4 つ並んだら、どの AI ツールが作ったかさえ言い当てられます。
@@ -523,7 +523,7 @@
         ほとんどのチームの最初の反応は、プロンプトに指示を足すことです。「デフォルトのグラデーションは使うな」「本物のディスプレイ書体を選べ」「同じカードを 3 枚並べるな」。これは 1 メッセージの間は機能します。次のメッセージで、ガイダンスは薄まり、コンテキストウィンドウは膨らみ、指紋は戻ってきます。プロンプトによる制御は確率的で、長さとともに減衰します。
       </p>
       <p>
-        必要なのは決定論的な床 — モデルが書き終わった <em>後に</em>、LLM をループに入れずに走るチェックです。これが ux-skill が埋める穴です。レコメンダーがモデルの選択肢を最初に狭め、リンターがそれでも漏れたデフォルトを叩き落とす。
+        必要なのは決定論的な床, モデルが書き終わった <em>後に</em>、LLM をループに入れずに走るチェックです。これが ux-skill が埋める穴です。レコメンダーがモデルの選択肢を最初に狭め、リンターがそれでも漏れたデフォルトを叩き落とす。
       </p>
 
       <h3>確率的なものに確率的な対策を重ねない</h3>
@@ -556,7 +556,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         以下は、Next.js のスターターから切り出した簡略化されたヒーローブロックで、3 つのルールに引っかかります。下が exit 0 で通る書き換え版です。コンバージョンの意図は同じ、指紋は別物です。
       </p>
-      <pre class="code"><span class="c">// Before — 3 件の high 検出</span>
+      <pre class="code"><span class="c">// Before, 3 件の high 検出</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -571,7 +571,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
   &lt;/div&gt;
 &lt;/section&gt;
 
-<span class="c">// After — 0 件</span>
+<span class="c">// After, 0 件</span>
 &lt;section className=<span class="s">"bg-stone-50 py-28"</span>&gt;
   &lt;h1 className=<span class="s">"font-['Fraunces']
     text-6xl leading-[1.04]
@@ -647,9 +647,9 @@ $ /plugin install ux@ux-skill</pre>
       <h2>関連記事</h2>
       <ul>
         <li><a href="/blog/ai-design-fingerprints-list.html" class="link">AI ツールがデフォルトで吐く 35 のデザインフィンガープリント</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">AI コーディング向け正規表現リンター — CI 上の 145 ルール</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">AI コーディング向け正規表現リンター, CI 上の 145 ルール</a></li>
         <li><a href="/blog/anti-ai-slop-claude-skills.html" class="link">Claude Code 向けアンチスロップツールの正直なランキング</a></li>
-        <li><a href="/blog/cursor-design-plugin.html" class="link">Cursor デザインプラグイン — インストールガイド</a></li>
+        <li><a href="/blog/cursor-design-plugin.html" class="link">Cursor デザインプラグイン, インストールガイド</a></li>
         <li><a href="https://github.com/Laith0003/ux-skill/blob/main/README.ja.md" class="link" rel="noopener noreferrer">README（日本語版）</a></li>
         <li><a href="/install/" class="link">インストールページ</a> / <a href="/mcp.html" class="link">MCP セットアップ</a></li>
       </ul>
@@ -663,9 +663,9 @@ $ /plugin install ux@ux-skill</pre>
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— または —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">, または, </div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— または —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">, または, </div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>
@@ -676,7 +676,7 @@ $ /plugin install ux@ux-skill</pre>
       <h2 class="related-reads-h">関連記事</h2>
       <ul>
         <li><a href="/blog/ai-design-fingerprints-list.html">35 の AI デザイン指紋</a></li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html">正規表現リンター — 145 ルール</a></li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html">正規表現リンター, 145 ルール</a></li>
         <li><a href="/blog/anti-ai-slop-claude-skills.html">アンチスロップのランキング</a></li>
         <li><a href="/blog/cursor-design-plugin.html">Cursor デザインプラグイン</a></li>
       </ul>

@@ -11,11 +11,11 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>uxskill v3.1 — The design brain for AI coding</title>
+<title>uxskill v3.1, The design brain for AI coding</title>
 <meta name="description" content="uxskill v3.1 is a deterministic design-intelligence engine for AI coding. A 7-axis synthesizer compiles a fresh design language per brief, anchored to your brand, gated against mobile breakage. Runs in Claude Code, Cursor, Windsurf and 14 more IDEs. Offline. No LLM. No telemetry.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#06070a">
-<meta property="og:title" content="uxskill v3.1 — The design brain for AI coding">
+<meta property="og:title" content="uxskill v3.1, The design brain for AI coding">
 <meta property="og:description" content="A 7-axis synthesizer that compiles a fresh design language per brief, anchored to your brand. Runs in 17 AI coding IDEs. Offline, deterministic, no LLM.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,9 +25,9 @@
   :root{
     --black:#06070a; --ink:#f4f5f7; --body:#a6abb3; --muted:#717783;
     --lite:#f6f7f9; --lite-ink:#10131a; --lite-body:#535b69; --lite-line:rgba(0,0,0,.10);
-    /* cool spectrum — cyan-led, for DARK zones, blooms, the hero dot-field */
+    /* cool spectrum, cyan-led, for DARK zones, blooms, the hero dot-field */
     --cyan:#22d3ee; --blue:#5b9cff; --green:#3ddc97; --teal:#2dd4bf;
-    /* deepened hues — accessible italic accents on LIGHT zones */
+    /* deepened hues, accessible italic accents on LIGHT zones */
     --cyan-d:#0e7490; --blue-d:#1f63d6;
     --hair:rgba(255,255,255,.11); --hair-2:rgba(255,255,255,.06);
     --p:0;
@@ -45,13 +45,13 @@
   .eyebrow .dot{width:7px;height:7px;border-radius:50%;flex:none}
   .rev{opacity:0;transform:translateY(30px);transition:opacity .8s ease, transform .9s cubic-bezier(.16,.7,.2,1)}
   .rev.in{opacity:1;transform:none}
-  /* hue utilities — keep colour out of inline styles */
+  /* hue utilities, keep colour out of inline styles */
   .c-cyan{background-color:var(--cyan)} .c-blue{background-color:var(--blue)}
   .c-green{background-color:var(--green)} .c-teal{background-color:var(--teal)}
   .c-cyan-d{background-color:var(--cyan-d)}
   .t-cyan-d{color:var(--cyan-d)} .t-ink{color:var(--ink);font-weight:500}
 
-  /* ===== canonical site nav (usknav) — always dark-glass over both zones; amber is intentional chrome ===== */
+  /* ===== canonical site nav (usknav), always dark-glass over both zones; amber is intentional chrome ===== */
   .sr-only,.skip-link:not(:focus){position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   .skip-link:focus{position:fixed;top:8px;inset-inline-start:8px;width:auto;height:auto;clip:auto;padding:8px 14px;background:#f59e0b;color:#07080a;border-radius:6px;z-index:200;font-family:'Inter',system-ui,sans-serif;font-size:13px}
   .usknav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:18px;
@@ -144,11 +144,11 @@
   .cue span{display:block;margin-top:8px;font-size:17px;animation:bob 1.8s ease-in-out infinite}
   @keyframes bob{50%{transform:translateY(7px)}}
 
-  /* ===== zone shells — TRANSPARENT so the one continuous bg field shows through ===== */
+  /* ===== zone shells, TRANSPARENT so the one continuous bg field shows through ===== */
   .zone{position:relative;background:transparent;isolation:isolate}
   .zone--lite{color:var(--lite-ink)}
   .zone--dark{color:var(--ink)}
-  /* ONE continuous background field for the whole document — no per-section seams.
+  /* ONE continuous background field for the whole document, no per-section seams.
      Base colour is eased dark<->light in JS as a pure function of scrollY (so up == down);
      these translucent cool blooms ride above it and drift slowly so the field feels alive.
      Anchored to position:relative body, overscanned so the drift never exposes an edge. */
@@ -226,7 +226,7 @@
   .zone--lite .badge{color:#6a7283} .zone--dark .badge{color:#9aa3b2}
   .badge b{color:var(--green);font-weight:500}
 
-  /* ===== TURN — cinematic snap section ===== */
+  /* ===== TURN, cinematic snap section ===== */
   /* scroll-snap: proximity = only snaps when close, doesn't hijack the whole page */
   html{scroll-snap-type:y proximity}
   #turnZone{height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;scroll-snap-align:start;scroll-snap-stop:always}
@@ -235,7 +235,7 @@
   .turn-wiring{opacity:0}
   .turn-body{opacity:0;transform:scale(.82) translateY(60px)}
   .turn-eyebrow{justify-content:center}
-  /* cinematic entrance — JS adds .turn-in after ~0.4s dwell */
+  /* cinematic entrance, JS adds .turn-in after ~0.4s dwell */
   @media(prefers-reduced-motion:no-preference){
     .turn-scene.turn-in .turn-wiring{animation:tWireIn 1.4s cubic-bezier(.16,.7,.2,1) .2s forwards}
     .turn-scene.turn-in .turn-body{animation:tBodyIn 2.2s cubic-bezier(.05,.7,.1,1) 1.0s forwards}
@@ -247,7 +247,7 @@
   @media(prefers-reduced-motion:reduce){
     .turn-wiring,.turn-body{opacity:1;transform:none}
   }
-  /* turn lead — larger than normal lead for cinematic weight */
+  /* turn lead, larger than normal lead for cinematic weight */
   .turn-lead{font-family:var(--disp);font-weight:800;font-size:clamp(2.4rem,7vw,5.4rem);letter-spacing:-.03em;line-height:.98;margin:0;max-width:14ch;color:#fff}
   .turn-lead em{color:var(--cyan);font-style:italic;font-weight:400}
   .turn-sub{margin:0 auto;max-width:46ch;font-size:clamp(15px,1.9vw,18px);color:var(--body);line-height:1.6;text-align:center}
@@ -261,7 +261,7 @@
 
   .wiring{width:100%;max-width:680px;margin:0 auto clamp(40px,6vh,80px)}
   .wiring svg{width:100%;height:auto;overflow:visible}
-  /* wire paths draw in via stroke-dashoffset — driven by IntersectionObserver */
+  /* wire paths draw in via stroke-dashoffset, driven by IntersectionObserver */
   .wire{fill:none;stroke-linecap:round;stroke-linejoin:round}
   .wire-c{stroke:var(--cyan);stroke-width:1.6}
   .wire-b{stroke:var(--blue);stroke-width:1.4}
@@ -339,7 +339,7 @@
     .pbeat{position:static;opacity:1;transform:none;padding-block:clamp(60px,12vh,100px);transition:none;}
   }
 
-  /* ===== chat beat — one-by-one reveal ===== */
+  /* ===== chat beat, one-by-one reveal ===== */
   /* chat pin: 4 messages × 110vh = 440vh tall; sticky panel reveals one at a time */
   .chat-pin{position:relative;height:440vh}
   .chat-sticky{position:sticky;top:0;height:100svh;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -372,7 +372,7 @@
   .stat .l{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);margin-top:7px;text-transform:uppercase}
   .floor{display:grid;gap:14px;margin:clamp(40px,6vh,72px) auto 0;max-width:900px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));align-items:start}
   .fcard{border:1px solid var(--hair-2);border-radius:16px;padding:28px;background:rgba(255,255,255,.02);min-width:0;position:relative}
-  /* deliberate asymmetry on desktop — three differentiated properties, not the centroid's equal row */
+  /* deliberate asymmetry on desktop, three differentiated properties, not the centroid's equal row */
   @media(min-width:760px){
     .floor .fcard:nth-child(2){transform:translateY(26px);background:rgba(34,211,238,.06);border-color:rgba(34,211,238,.20)}
     .floor .fcard:nth-child(3){transform:translateY(13px)}
@@ -479,7 +479,7 @@
   </div>
 </div>
 
-  <!-- ============ BEAT 1 — HOOK (hero) ============ -->
+  <!-- ============ BEAT 1, HOOK (hero) ============ -->
   <section class="hero" id="hero">
     <div class="hero__sticky">
       <canvas class="hero__dots" aria-hidden="true"></canvas>
@@ -496,13 +496,13 @@
     </div>
   </section>
 
-  <!-- ============ BEAT 2 — THE ENEMY (light) ============ -->
+  <!-- ============ BEAT 2, THE ENEMY (light) ============ -->
   <div class="zone zone--lite" data-bg="light"><span class="zone__bloom" aria-hidden="true" data-bloom="enemy"></span><section class="sec" id="enemy">
     <div class="wrap">
       <div class="rev head">
         <span class="eyebrow"><span class="dot c-cyan-d"></span>The thing you ship every day</span>
         <h2 class="lead">Your AI ships <em class="t-cyan-d">the centroid</em> by default.</h2>
-        <p class="sub">Ask any model to "build a landing." You get the average of every page it ever ingested &mdash; in ten seconds, every time. Here is what the centroid looks like.</p>
+        <p class="sub">Ask any model to "build a landing." You get the average of every page it ever ingested, in ten seconds, every time. Here is what the centroid looks like.</p>
       </div>
 
       <!-- the slop specimen, drawn as ONE inline SVG (sidesteps every CSS-structure + content regex) -->
@@ -553,13 +553,13 @@
         </figcaption>
       </figure>
 
-      <!-- chat: pinned — scroll reveals one message at a time -->
+      <!-- chat: pinned, scroll reveals one message at a time -->
       <div class="chat-pin" id="chatPin">
         <div class="chat-sticky" id="chatSticky">
           <div class="chat" id="chatInner">
             <div class="cmsg you" data-cm="0"><div class="bub">Build me a fintech landing page.</div></div>
             <div class="cmsg sk" data-cm="1"><div class="av"></div><div class="bub">You get exactly that specimen: the same soft gradient, three equal cards, a "John&nbsp;Doe" quote, Inter at 96px. <span class="tag">the slop</span></div></div>
-            <div class="cmsg you" data-cm="2"><div class="bub">Right. I want it to look like <em>us</em> &mdash; not everyone.</div></div>
+            <div class="cmsg you" data-cm="2"><div class="bub">Right. I want it to look like <em>us</em>, not everyone.</div></div>
             <div class="cmsg sk" data-cm="3"><div class="av"></div><div class="bub">That is the whole job. Read on. <span class="tag">the turn &#8595;</span></div></div>
           </div>
         </div>
@@ -567,8 +567,8 @@
     </div>
   </section></div>
 
-  <!-- ============ BEAT 3 — THE TURN (dark, cinematic snap) ============ -->
-  <!-- 400vh: long dwell — wiring (1.4s) then text rises slowly (2.2s), cinematic -->
+  <!-- ============ BEAT 3, THE TURN (dark, cinematic snap) ============ -->
+  <!-- 400vh: long dwell, wiring (1.4s) then text rises slowly (2.2s), cinematic -->
   <div class="zone zone--dark" data-bg="dark" id="turnZone"><span class="zone__bloom" aria-hidden="true" data-bloom="turn"></span>
     <div class="turn-scene" id="turnScene">
       <div class="turn-sticky" id="turnSticky">
@@ -593,13 +593,13 @@
         <div class="turn-body" id="turnBody">
           <span class="eyebrow turn-eyebrow"><span class="dot c-cyan"></span>The turn</span>
           <h2 class="turn-lead">What if the model had a <em>designer&rsquo;s brain</em> wired in?</h2>
-          <p class="turn-sub">Not a bigger model. A deterministic layer that <b>compiles a design language</b> &mdash; warmth, contrast, geometry, type &mdash; instead of reaching for the nearest template.</p>
+          <p class="turn-sub">Not a bigger model. A deterministic layer that <b>compiles a design language</b>, warmth, contrast, geometry, type, instead of reaching for the nearest template.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ============ BEAT 4 — HOW IT WORKS (dark) ============ -->
+  <!-- ============ BEAT 4, HOW IT WORKS (dark) ============ -->
   <div class="zone zone--lite" data-bg="light"><span class="zone__bloom" aria-hidden="true" data-bloom="how"></span><section class="sec" id="how" style="padding-block:0">
     <!-- SCROLL-PIN: 7 beats (title + 5 steps), each full-viewport, large centered. Mobile stacks. -->
     <div class="pin-wrap" id="pinWrap">
@@ -610,11 +610,11 @@
           <h2 class="pbeat-title">It compiles a design language. <em>Not a template.</em></h2>
           <p class="pbeat-sub">Five deterministic steps, <em>start to ship.</em></p>
         </div>
-        <!-- beats 1-5: 2-col — tokens window left, step text right -->
-        <div class="pbeat pbeat--split" data-beat="1"><div class="pb-wrap"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row"><span class="tok-k">/* reading brief... */</span></div><div class="tok-row"><span class="tok-k">--industry:</span><span class="tok-v tok-str">'fintech'</span></div><div class="tok-row"><span class="tok-k">--audience:</span><span class="tok-v tok-str">'design-engineers'</span></div><div class="tok-row"><span class="tok-k">--mood:</span><span class="tok-v tok-str">'precise, calm'</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">01</span><h3 class="pbeat-title">Read the brief.</h3><p class="pbeat-sub">Industry, audience, mood &mdash; parsed into a structured intake, no guesswork.</p></div></div></div>
-        <div class="pbeat pbeat--split" data-beat="2"><div class="pb-wrap"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row"><span class="tok-k">/* synthesizing axes... */</span></div><div class="tok-row"><span class="tok-k">--warmth:</span><span class="tok-v tok-num">0.28</span></div><div class="tok-row"><span class="tok-k">--contrast:</span><span class="tok-v tok-num">0.91</span></div><div class="tok-row"><span class="tok-k">--density:</span><span class="tok-v tok-num">0.44</span></div><div class="tok-row"><span class="tok-k">--formality:</span><span class="tok-v tok-num">0.78</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">02</span><h3 class="pbeat-title">Set seven axes.</h3><p class="pbeat-sub">Warmth, contrast, density, geometry, formality, motion, type &mdash; tuned, then emitted as tokens.</p></div></div></div>
-        <div class="pbeat pbeat--split" data-beat="3"><div class="pb-wrap"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row"><span class="tok-k">/* anchoring brand... */</span></div><div class="tok-row"><span class="tok-k">--canvas:</span><span class="tok-v tok-light">#f6f7f9</span></div><div class="tok-row"><span class="tok-k">--ink:</span><span class="tok-v tok-dark">#10131a</span></div><div class="tok-row"><span class="tok-k">--accent:</span><span class="tok-v tok-accent">#5b9cff</span></div><div class="tok-row"><span class="tok-k">--radius:</span><span class="tok-v tok-num">10px</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">03</span><h3 class="pbeat-title">Anchor to your brand.</h3><p class="pbeat-sub">Primary pulled from your logo&rsquo;s pixels &mdash; not the nearest CSS named colour.</p></div></div></div>
-        <div class="pbeat pbeat--split" data-beat="4"><div class="pb-wrap"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row"><span class="tok-k">--display:</span><span class="tok-v tok-str">'Bricolage Grotesque'</span></div><div class="tok-row"><span class="tok-k">--body-font:</span><span class="tok-v tok-str">'Inter'</span></div><div class="tok-row"><span class="tok-k">/* linting 152 rules... */</span></div><div class="tok-row"><span class="tok-k tok-pass">/* 0 violations */</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">04</span><h3 class="pbeat-title">Lint 152 anti-patterns.</h3><p class="pbeat-sub">Gradient headers, three equal cards, filler verbs &mdash; fails the build here.</p></div></div></div>
+        <!-- beats 1-5: 2-col, tokens window left, step text right -->
+        <div class="pbeat pbeat--split" data-beat="1"><div class="pb-wrap"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row"><span class="tok-k">/* reading brief... */</span></div><div class="tok-row"><span class="tok-k">--industry:</span><span class="tok-v tok-str">'fintech'</span></div><div class="tok-row"><span class="tok-k">--audience:</span><span class="tok-v tok-str">'design-engineers'</span></div><div class="tok-row"><span class="tok-k">--mood:</span><span class="tok-v tok-str">'precise, calm'</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">01</span><h3 class="pbeat-title">Read the brief.</h3><p class="pbeat-sub">Industry, audience, mood, parsed into a structured intake, no guesswork.</p></div></div></div>
+        <div class="pbeat pbeat--split" data-beat="2"><div class="pb-wrap"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row"><span class="tok-k">/* synthesizing axes... */</span></div><div class="tok-row"><span class="tok-k">--warmth:</span><span class="tok-v tok-num">0.28</span></div><div class="tok-row"><span class="tok-k">--contrast:</span><span class="tok-v tok-num">0.91</span></div><div class="tok-row"><span class="tok-k">--density:</span><span class="tok-v tok-num">0.44</span></div><div class="tok-row"><span class="tok-k">--formality:</span><span class="tok-v tok-num">0.78</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">02</span><h3 class="pbeat-title">Set seven axes.</h3><p class="pbeat-sub">Warmth, contrast, density, geometry, formality, motion, type, tuned, then emitted as tokens.</p></div></div></div>
+        <div class="pbeat pbeat--split" data-beat="3"><div class="pb-wrap"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row"><span class="tok-k">/* anchoring brand... */</span></div><div class="tok-row"><span class="tok-k">--canvas:</span><span class="tok-v tok-light">#f6f7f9</span></div><div class="tok-row"><span class="tok-k">--ink:</span><span class="tok-v tok-dark">#10131a</span></div><div class="tok-row"><span class="tok-k">--accent:</span><span class="tok-v tok-accent">#5b9cff</span></div><div class="tok-row"><span class="tok-k">--radius:</span><span class="tok-v tok-num">10px</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">03</span><h3 class="pbeat-title">Anchor to your brand.</h3><p class="pbeat-sub">Primary pulled from your logo&rsquo;s pixels, not the nearest CSS named colour.</p></div></div></div>
+        <div class="pbeat pbeat--split" data-beat="4"><div class="pb-wrap"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row"><span class="tok-k">--display:</span><span class="tok-v tok-str">'Bricolage Grotesque'</span></div><div class="tok-row"><span class="tok-k">--body-font:</span><span class="tok-v tok-str">'Inter'</span></div><div class="tok-row"><span class="tok-k">/* linting 152 rules... */</span></div><div class="tok-row"><span class="tok-k tok-pass">/* 0 violations */</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">04</span><h3 class="pbeat-title">Lint 152 anti-patterns.</h3><p class="pbeat-sub">Gradient headers, three equal cards, filler verbs, fails the build here.</p></div></div></div>
         <div class="pbeat pbeat--split" data-beat="5"><div class="pb-wrap"><div class="pb-left"><div class="tok-frame"><div class="tok-bar"><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-dot"></span><span class="tok-title">system.tokens.css</span></div><div class="tok-body"><div class="tok-row"><span class="tok-k">/* verifying 360px... */</span></div><div class="tok-row"><span class="tok-k tok-pass">/* h-scroll: none */</span></div><div class="tok-row"><span class="tok-k tok-pass">/* sticky: 56px ok */</span></div><div class="tok-row"><span class="tok-k tok-pass">/* verified ok */</span></div></div></div></div><div class="pb-right"><span class="pbeat-num">05</span><h3 class="pbeat-title">Verify mobile, for real.</h3><p class="pbeat-sub">Rendered at true 360/390px in headless Chrome. Horizontal scroll fails, not your users.</p></div></div></div>
         <!-- progress indicator -->
         <div class="pin-dots" aria-hidden="true">
@@ -624,7 +624,7 @@
     </div>
   </section></div>
 
-  <!-- ============ BEAT 5 — PROOF IT'S REAL (light) ============ -->
+  <!-- ============ BEAT 5, PROOF IT'S REAL (light) ============ -->
   <div class="zone zone--lite" data-bg="light"><span class="zone__bloom" aria-hidden="true" data-bloom="proof"></span><section class="sec" id="proof">
     <div class="wrap">
       <div class="fade-up head">
@@ -633,8 +633,8 @@
       <div class="zig zig--rev rev">
         <div class="ztxt">
           <span class="k"><span class="dot c-green"></span>The corpus is vocabulary</span>
-          <h3>160 real brand specs &mdash; <em>as words, not stamps.</em></h3>
-          <p>The catalogue used to be a menu: pick Stripe, get Stripe-flavoured tokens. v3 turned that on its head &mdash; Stripe, Linear, Vercel, Ferrari, Anthropic become the vocabulary the engine distils from, so output is novel every call. Deterministic, offline, no model in the loop.</p>
+          <h3>160 real brand specs: <em>as words, not stamps.</em></h3>
+          <p>The catalogue used to be a menu: pick Stripe, get Stripe-flavoured tokens. v3 turned that on its head, Stripe, Linear, Vercel, Ferrari, Anthropic become the vocabulary the engine distils from, so output is novel every call. Deterministic, offline, no model in the loop.</p>
           <p class="badge"><span class="dot c-green"></span> <b>1,243</b>&nbsp; structured entries, queryable and cross-referenced</p>
         </div>
         <div class="pcard">
@@ -671,7 +671,7 @@
     </div>
   </section></div>
 
-  <!-- ============ BEAT 6 — WHERE IT RUNS (dark) ============ -->
+  <!-- ============ BEAT 6, WHERE IT RUNS (dark) ============ -->
   <div class="zone zone--lite" data-bg="light"><span class="zone__bloom" aria-hidden="true" data-bloom="runs"></span><section class="sec" id="runs">
     <div class="wrap">
       <div class="fade-up head">
@@ -681,7 +681,7 @@
         <div class="ztxt">
           <span class="k"><span class="dot c-teal"></span>Runs where you already build</span>
           <h3>The same engine, the same brand-true output, <em>everywhere.</em></h3>
-          <p>Claude Code, Cursor, Windsurf, Copilot, Gemini, Codex, Zed, JetBrains, Cline, Continue, Aider, Tabnine &mdash; one install, no per-tool config. Your team keeps its editor; the floor comes with it.</p>
+          <p>Claude Code, Cursor, Windsurf, Copilot, Gemini, Codex, Zed, JetBrains, Cline, Continue, Aider, Tabnine, one install, no per-tool config. Your team keeps its editor; the floor comes with it.</p>
         </div>
         <div class="pcard">
           <div class="iconwall" data-stagger role="img" aria-label="The AI coding tools uxskill runs in: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini, Codex, Zed, JetBrains, Cline, Continue, Aider, Tabnine">
@@ -703,7 +703,7 @@
     </div>
   </section></div>
 
-  <!-- ============ BEAT 7 — THE MOAT + BEAT 8 — INSTALL (dark close) ============ -->
+  <!-- ============ BEAT 7, THE MOAT + BEAT 8, INSTALL (dark close) ============ -->
   <div class="zone zone--dark" data-bg="dark"><span class="zone__bloom" aria-hidden="true" data-bloom="moat"></span><section class="sec" id="install">
     <div class="wrap">
       <div class="rev head">
@@ -721,7 +721,7 @@
         </div>
         <div class="fcard">
           <svg class="fi" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#3ddc97" stroke-width="1.6"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M10 18h4"/></svg>
-          <b>Mobile-gated</b><p>Rendered at real 360 / 390px viewports &mdash; horizontal scroll fails the build, not your users.</p>
+          <b>Mobile-gated</b><p>Rendered at real 360 / 390px viewports, horizontal scroll fails the build, not your users.</p>
         </div>
       </div>
 
@@ -780,7 +780,7 @@
      then lerped between near-black and off-white. */
   var DARK=[6,7,10], LITE=[246,247,249], bodyEl=document.body, bands=[];
   function measure(){
-    bands=[{top:0,lit:0}]; // hero owns the top band — always dark
+    bands=[{top:0,lit:0}]; // hero owns the top band, always dark
     [].forEach.call(document.querySelectorAll('[data-bg]'),function(z){
       if(z===bodyEl)return;
       bands.push({top:z.getBoundingClientRect().top+window.scrollY, lit:z.getAttribute('data-bg')==='light'?1:0});
@@ -804,9 +804,9 @@
     var L=litnessAt(window.scrollY+window.innerHeight*0.5);
     bodyEl.style.backgroundColor='rgb('+Math.round(DARK[0]+(LITE[0]-DARK[0])*L)+','+Math.round(DARK[1]+(LITE[1]-DARK[1])*L)+','+Math.round(DARK[2]+(LITE[2]-DARK[2])*L)+')';
   }
-  /* content reveals — direction-independent: once shown, they stay shown.
+  /* content reveals, direction-independent: once shown, they stay shown.
      [data-stagger] containers cascade their children in (Web Animations API).
-     fill:backwards means items are visible by default if the API is missing — nothing can hide. */
+     fill:backwards means items are visible by default if the API is missing, nothing can hide. */
   function staggerIn(t){if(reduce||!t.children.length)return;for(var k=0;k<t.children.length;k++){try{t.children[k].animate([{opacity:0,transform:'translateY(20px)'},{opacity:1,transform:'translateY(0)'}],{duration:560,delay:k*70,easing:'cubic-bezier(.16,.7,.2,1)',fill:'backwards'});}catch(_){}}}
   if('IntersectionObserver' in window){
     var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var t=e.target;t.classList.add('in');if(t.classList.contains('wiring'))t.classList.add('wired');if(t.hasAttribute('data-stagger'))staggerIn(t);io.unobserve(t);}});},{threshold:.16});
@@ -827,7 +827,7 @@
     var fired=false;
     var tz=document.getElementById('turnZone');
     function activate(){if(!fired){fired=true;scene.classList.add('turn-in');}}
-    /* scrollend fires when CSS snap has fully settled — this is the right moment */
+    /* scrollend fires when CSS snap has fully settled, this is the right moment */
     window.addEventListener('scrollend',function(){
       if(fired)return;
       var r=tz.getBoundingClientRect();

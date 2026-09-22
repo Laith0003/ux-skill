@@ -1,8 +1,8 @@
 [English](README.md) · [العربية](README.ar.md) · [简体中文](README.zh.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md) · [Bahasa Indonesia](README.id.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Français](README.fr.md) · **Deutsch** · [Español](README.es.md) · [Português](README.pt-BR.md) · [Italiano](README.it.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md)
 
-# ux-skill — die Design-Intelligence-Engine für Claude Code, Cursor und alle anderen KI-Coding-Werkzeuge
+# ux-skill: die Design-Intelligence-Engine für Claude Code, Cursor und alle anderen KI-Coding-Werkzeuge
 
-> **v3.1.0 stable — THE BRAIN.** Das stärkste UX-Plugin für KI-Coding. Ein Python-Reasoning-Kern mit 12 abfragbaren JSON-Manifesten (84 Styles, 176 Paletten, 70 Typographie-Paarungen, 148 Komponenten, 184 Branchen, 35 Diagrammtypen, 57 Motion-Presets, 112 UX-Gesetze, 152 Anti-Pattern-Regeln, 25 Tech-Stacks, 160 Brand-Specs), 25 Slash-Befehle, 5 Sub-Agents und ein deterministischer Anti-KI-Slop-Linter. Cross-IDE: ausgeliefert für Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer und Roo Cline.
+> **v3.1.0 stable, THE BRAIN.** Das stärkste UX-Plugin für KI-Coding. Ein Python-Reasoning-Kern mit 12 abfragbaren JSON-Manifesten (84 Styles, 176 Paletten, 70 Typographie-Paarungen, 148 Komponenten, 184 Branchen, 35 Diagrammtypen, 57 Motion-Presets, 112 UX-Gesetze, 152 Anti-Pattern-Regeln, 25 Tech-Stacks, 160 Brand-Specs), 25 Slash-Befehle, 5 Sub-Agents und ein deterministischer Anti-KI-Slop-Linter. Cross-IDE: ausgeliefert für Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer und Roo Cline.
 
 > **Der Markenname lautet `ux-skill`.** Der PyPI- / npm-Paketname bleibt `uxskill`. Das GitHub-Repository liegt unter [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
@@ -23,14 +23,14 @@
 
 ### Was ist neu in v3
 
-- **Brand Specs werden zu Trainingsdaten, nicht Templates.** Die 160 Brand Specs sind kein Katalog mehr, aus dem der Recommender wählt — sie sind Vokabular, das der Synthesizer destilliert. Die Ausgabe ist bei jedem Aufruf neu.
+- **Brand Specs werden zu Trainingsdaten, nicht Templates.** Die 160 Brand Specs sind kein Katalog mehr, aus dem der Recommender wählt, sie sind Vokabular, das der Synthesizer destilliert. Die Ausgabe ist bei jedem Aufruf neu.
 - **7-Achsen-Synthesizer** (warmth, contrast, density, geometry, formality, motion, type_personality). Der Brief wird deterministisch auf Achsenwerte gemappt; Achsenwerte kompilieren zu frischen Palette-, Typografie-, Spacing-, Radius- und Motion-Tokens.
-- **Drei automatisch dispatchierte Modi** — `strict_brand` (100 % einer Marke), `brand_anchor` (70 % einer Marke + 30 % achsenadaptiert aus Geschwistermarken), `pure_synthesis` (keine Marke genannt — Destillation aus 8 achsenpassenden Beispielen).
+- **Drei automatisch dispatchierte Modi**: `strict_brand` (100 % einer Marke), `brand_anchor` (70 % einer Marke + 30 % achsenadaptiert aus Geschwistermarken), `pure_synthesis` (keine Marke genannt, Destillation aus 8 achsenpassenden Beispielen).
 - **Decisions-Ledger steuert das Recommender-Re-Ranking.** `.ux/decisions.jsonl` re-rankt Kandidaten nach vergangenen Erfolgen im selben `(industry, ui_type)`-Bucket. Cold-Start-sicher. Zählt nur Entscheidungen mit `lint_score >= 80` + `user_accepted = true`.
-- **Achseninteraktions-Matrix** — explizite Konfliktauflösung zwischen konkurrierenden Achsen (dense + corporate → 4px, airy + corporate → 12px, soft + playful → 18px Radius). Keine stillen Ad-hoc-Regeln mehr.
-- **Automatische `/ux-evolve`-Schleife** — lint → polish → re-lint, bis Score ≥ 90, Plateau oder 5 Runden. Quality Gate bei 65.
+- **Achseninteraktions-Matrix**: explizite Konfliktauflösung zwischen konkurrierenden Achsen (dense + corporate → 4px, airy + corporate → 12px, soft + playful → 18px Radius). Keine stillen Ad-hoc-Regeln mehr.
+- **Automatische `/ux-evolve`-Schleife**: lint → polish → re-lint, bis Score ≥ 90, Plateau oder 5 Runden. Quality Gate bei 65.
 - **3 neue MCP-Tools** (15 → 18): `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`.
-- **Lokales Stats-Dashboard** — `uxskill stats --html` schreibt `.ux/stats.html`, das zeigt, was DEINE Installation gelernt hat. Keine Telemetrie, keine globale Aggregation.
+- **Lokales Stats-Dashboard**: `uxskill stats --html` schreibt `.ux/stats.html`, das zeigt, was DEINE Installation gelernt hat. Keine Telemetrie, keine globale Aggregation.
 - **223 Tests bestehen.** Offline. Deterministisch. Niemals ein LLM-Aufruf.
 
 Vollständige Details in [CHANGELOG.md](CHANGELOG.md#300--2026-05-28--the-brain).
@@ -43,28 +43,28 @@ Vollständige Details in [CHANGELOG.md](CHANGELOG.md#300--2026-05-28--the-brain)
 
 ## Was ist ux-skill
 
-ux-skill ist eine **Design-Intelligence-Engine** für KI-Coding-Werkzeuge. Sie läuft als Python-Paket (`pip install uxskill`), als Claude-Code-Plugin und als Multi-Installer für 17 IDEs. Die Engine nimmt ein Projekt-Brief entgegen (Branche, Zielgruppe, Tonalität, Must-haves, verbotene Mittel, Stack, Region) und liefert ein vollständiges empfohlenes Designsystem zurück: Style, Palette, Typographie-Paar, Motion-Presets, Komponenten, exemplarische Marken zum Studieren und die Anti-Pattern-Leitplanken, die einzuhalten sind. Die Empfehlung ist deterministisch — dieselbe Eingabe erzeugt stets dieselbe Ausgabe.
+ux-skill ist eine **Design-Intelligence-Engine** für KI-Coding-Werkzeuge. Sie läuft als Python-Paket (`pip install uxskill`), als Claude-Code-Plugin und als Multi-Installer für 17 IDEs. Die Engine nimmt ein Projekt-Brief entgegen (Branche, Zielgruppe, Tonalität, Must-haves, verbotene Mittel, Stack, Region) und liefert ein vollständiges empfohlenes Designsystem zurück: Style, Palette, Typographie-Paar, Motion-Presets, Komponenten, exemplarische Marken zum Studieren und die Anti-Pattern-Leitplanken, die einzuhalten sind. Die Empfehlung ist deterministisch, dieselbe Eingabe erzeugt stets dieselbe Ausgabe.
 
-Das Plugin sitzt zwischen Ihnen und dem KI-Coding-Werkzeug. Wenn Sie Claude Code, Cursor oder einen anderen KI-Assistenten bitten, „eine Fintech-Landingpage zu bauen", improvisiert der Assistent typischerweise — und das Ergebnis wirkt innerhalb von fünf Sekunden KI-generiert (Violett-zu-Blau-Verläufe, drei gleiche Karten, Inter in Display-Größe, „John Doe" in den Testimonials, 300-ms-Standardübergänge, zentrierter Hero, hüpfende Pfeil-CTAs). ux-skill ersetzt Improvisation durch **strukturierte Einschränkungen**: Sie führen `/ux-discover` aus, um das Brief zu erfassen, `/ux-recommend`, um das System zu wählen, `/ux-design`, um den Code zu generieren, und `/ux-lint`, um vor dem Commit zu prüfen, dass er die 152 deterministischen Anti-KI-Slop-Regeln besteht.
+Das Plugin sitzt zwischen Ihnen und dem KI-Coding-Werkzeug. Wenn Sie Claude Code, Cursor oder einen anderen KI-Assistenten bitten, „eine Fintech-Landingpage zu bauen", improvisiert der Assistent typischerweise, und das Ergebnis wirkt innerhalb von fünf Sekunden KI-generiert (Violett-zu-Blau-Verläufe, drei gleiche Karten, Inter in Display-Größe, „John Doe" in den Testimonials, 300-ms-Standardübergänge, zentrierter Hero, hüpfende Pfeil-CTAs). ux-skill ersetzt Improvisation durch **strukturierte Einschränkungen**: Sie führen `/ux-discover` aus, um das Brief zu erfassen, `/ux-recommend`, um das System zu wählen, `/ux-design`, um den Code zu generieren, und `/ux-lint`, um vor dem Commit zu prüfen, dass er die 152 deterministischen Anti-KI-Slop-Regeln besteht.
 
-Diese README ist die kanonische Referenz. Jeder Befehl, jeder Sub-Agent, jedes Datenmanifest, jeder Installationspfad, jede Brand-Spec, jede Anti-Pattern-Kategorie — alles ist hier dokumentiert. Wenn Sie nach einem Design-Plugin für Claude Code suchen oder KI-Design-Werkzeuge für Cursor, Windsurf oder Codex vergleichen, lesen Sie dies von oben bis unten und [compare.html](https://uxskill.laithjunaidy.com/compare.html) parallel dazu.
+Diese README ist die kanonische Referenz. Jeder Befehl, jeder Sub-Agent, jedes Datenmanifest, jeder Installationspfad, jede Brand-Spec, jede Anti-Pattern-Kategorie, alles ist hier dokumentiert. Wenn Sie nach einem Design-Plugin für Claude Code suchen oder KI-Design-Werkzeuge für Cursor, Windsurf oder Codex vergleichen, lesen Sie dies von oben bis unten und [compare.html](https://uxskill.laithjunaidy.com/compare.html) parallel dazu.
 
 ---
 
 ## Inhaltsverzeichnis
 
-1. [Das Gehirn — was v3.0 ist](#das-gehirn--was-v30-ist)
+1. [Das Gehirn, was v3.0 ist](#das-gehirn-was-v30-ist)
 2. [Schnellinstallation](#schnellinstallation)
-3. [Die Zahlen — Live-Vergleich gegen die Top-8-Claude-UX-Skills](#die-zahlen--live-vergleich-gegen-die-top-8-claude-ux-skills)
-4. [Architektur — wie die Teile ineinandergreifen](#architektur--wie-die-teile-ineinandergreifen)
-5. [Die 25 Slash-Befehle — detaillierte Referenz](#die-22-slash-befehle--detaillierte-referenz)
+3. [Die Zahlen, Live-Vergleich gegen die Top-8-Claude-UX-Skills](#die-zahlen-live-vergleich-gegen-die-top-8-claude-ux-skills)
+4. [Architektur, wie die Teile ineinandergreifen](#architektur-wie-die-teile-ineinandergreifen)
+5. [Die 25 Slash-Befehle, detaillierte Referenz](#die-25-slash-befehle-detaillierte-referenz)
 6. [Die 5 Sub-Agents](#die-5-sub-agents)
-7. [Die 12 Datenmanifeste](#die-11-datenmanifeste)
-8. [Die 152 Anti-KI-Slop-Regeln — der Linter](#die-152-anti-ki-slop-regeln--der-linter)
-9. [Die 160 Brand-DESIGN.md-Specs — nach Kategorie](#die-160-brand-designmd-specs--nach-kategorie)
-10. [MCP-Server — der asymmetrische Zug](#mcp-server--der-asymmetrische-zug)
+7. [Die 12 Datenmanifeste](#die-12-datenmanifeste)
+8. [Die 152 Anti-KI-Slop-Regeln, der Linter](#die-152-anti-ki-slop-regeln-der-linter)
+9. [Die 160 Brand-DESIGN.md-Specs, nach Kategorie](#die-160-brand-designmd-specs-nach-kategorie)
+10. [MCP-Server, der asymmetrische Zug](#mcp-server-der-asymmetrische-zug)
 11. [Der Installer für 17 IDEs](#der-installer-für-17-ides)
-12. [Anwendungsfälle — konkrete Szenarien](#anwendungsfälle--konkrete-szenarien)
+12. [Anwendungsfälle, konkrete Szenarien](#anwendungsfälle-konkrete-szenarien)
 13. [Im Vergleich zu Alternativen](#im-vergleich-zu-alternativen)
 14. [Roadmap](#roadmap)
 15. [Beitragen](#beitragen)
@@ -72,15 +72,15 @@ Diese README ist die kanonische Referenz. Jeder Befehl, jeder Sub-Agent, jedes D
 
 ---
 
-## Das Gehirn — was v3.0 ist
+## Das Gehirn: was v3.0 ist
 
-v3.1.0 ist die größte architektonische Umstellung in der Geschichte von ux-skill. Der Recommender wählt nicht mehr Templates aus einem Katalog — die Engine **synthetisiert** pro Brief eine frische Designsprache. Derselbe Brief liefert immer dieselbe Ausgabe (vollständig deterministisch), aber jeder unterschiedliche Brief bekommt sein eigenes neues System. Brand Specs sind keine Templates mehr; sie sind Trainingsdaten, aus denen die Engine das Vokabular lernt. Das System hat Augen auf seine eigene Historie, schließt die Feedback-Schleife lokal und ruft niemals ein LLM auf.
+v3.1.0 ist die größte architektonische Umstellung in der Geschichte von ux-skill. Der Recommender wählt nicht mehr Templates aus einem Katalog, die Engine **synthetisiert** pro Brief eine frische Designsprache. Derselbe Brief liefert immer dieselbe Ausgabe (vollständig deterministisch), aber jeder unterschiedliche Brief bekommt sein eigenes neues System. Brand Specs sind keine Templates mehr; sie sind Trainingsdaten, aus denen die Engine das Vokabular lernt. Das System hat Augen auf seine eigene Historie, schließt die Feedback-Schleife lokal und ruft niemals ein LLM auf.
 
-Der Compiler ist ein **deterministischer 7-Achsen-Synthesizer** — warmth, contrast, density, geometry, formality, motion, type_personality. Jeder Brief mappt auf Achsenwerte; Achsenwerte kompilieren zu frischen Palette-, Typografie-, Spacing-, Radius- und Motion-Tokens. Modulare Typoskalen wählen ihr Verhältnis aus dem Contrast (1.200 quiet / 1.250 balanced / 1.333 loud). Layout-Primitives sind responsive by construction (`auto-fit minmax(min(N, 100%), 1fr)` + Container-Queries). Kaputte Layouts können nicht emittiert werden, weil sie nicht repräsentierbar sind.
+Der Compiler ist ein **deterministischer 7-Achsen-Synthesizer**, warmth, contrast, density, geometry, formality, motion, type_personality. Jeder Brief mappt auf Achsenwerte; Achsenwerte kompilieren zu frischen Palette-, Typografie-, Spacing-, Radius- und Motion-Tokens. Modulare Typoskalen wählen ihr Verhältnis aus dem Contrast (1.200 quiet / 1.250 balanced / 1.333 loud). Layout-Primitives sind responsive by construction (`auto-fit minmax(min(N, 100%), 1fr)` + Container-Queries). Kaputte Layouts können nicht emittiert werden, weil sie nicht repräsentierbar sind.
 
-Es gibt drei automatisch dispatchierte Modi: `strict_brand` (`reference_brands=[stripe] strict=True` → 100 % Stripe-Tokens, schnellster Weg); `brand_anchor` (`reference_brands=[stripe]` → 70 % Stripe + 30 % achsenadaptiert aus 4 Geschwistermarken); und `pure_synthesis` (keine Marke genannt → unendlicher Raum, 8 achsenpassende Beispiele zu einer neuen Designsprache destilliert). Konkurrierende Achsen werden durch eine dokumentierte **Achseninteraktions-Matrix** aufgelöst — dense + corporate kompiliert zu 4px (density gewinnt, Bloomberg-Schule), airy + corporate zu 12px (formality gewinnt, Luxus), soft + playful zu 18px Radius, sharp + corporate zu 2px. Keine stillen Ad-hoc-Regeln in der Implementierung.
+Es gibt drei automatisch dispatchierte Modi: `strict_brand` (`reference_brands=[stripe] strict=True` → 100 % Stripe-Tokens, schnellster Weg); `brand_anchor` (`reference_brands=[stripe]` → 70 % Stripe + 30 % achsenadaptiert aus 4 Geschwistermarken); und `pure_synthesis` (keine Marke genannt → unendlicher Raum, 8 achsenpassende Beispiele zu einer neuen Designsprache destilliert). Konkurrierende Achsen werden durch eine dokumentierte **Achseninteraktions-Matrix** aufgelöst, dense + corporate kompiliert zu 4px (density gewinnt, Bloomberg-Schule), airy + corporate zu 12px (formality gewinnt, Luxus), soft + playful zu 18px Radius, sharp + corporate zu 2px. Keine stillen Ad-hoc-Regeln in der Implementierung.
 
-Das **Decisions-Ledger** (`.ux/decisions.jsonl`, Schema `_v: 1` gesperrt) schließt die Feedback-Schleife. Der Recommender re-rankt nun Kandidaten nach vergangenen Erfolgen im selben `(industry, ui_type)`-Bucket. Cold-Start-sicher — er überspringt das Re-Ranking unter 3 Priors. Es zählen nur Entscheidungen mit `lint_score >= 80` UND `user_accepted = true`. Plus `/ux-evolve` läuft lint → polish → re-lint, bis Score ≥ 90, Plateau oder 5 Runden, mit einem Quality Gate bei 65, unter dem die Ausgabe ohne `--force` verweigert wird. Ergebnis: Jede Installation wird auf ihrem eigenen Korpus klüger, jeder Lauf ist über Maschinen reproduzierbar, und die Engine bleibt vollständig offline.
+Das **Decisions-Ledger** (`.ux/decisions.jsonl`, Schema `_v: 1` gesperrt) schließt die Feedback-Schleife. Der Recommender re-rankt nun Kandidaten nach vergangenen Erfolgen im selben `(industry, ui_type)`-Bucket. Cold-Start-sicher, er überspringt das Re-Ranking unter 3 Priors. Es zählen nur Entscheidungen mit `lint_score >= 80` UND `user_accepted = true`. Plus `/ux-evolve` läuft lint → polish → re-lint, bis Score ≥ 90, Plateau oder 5 Runden, mit einem Quality Gate bei 65, unter dem die Ausgabe ohne `--force` verweigert wird. Ergebnis: Jede Installation wird auf ihrem eigenen Korpus klüger, jeder Lauf ist über Maschinen reproduzierbar, und die Engine bleibt vollständig offline.
 
 ---
 
@@ -88,7 +88,7 @@ Das **Decisions-Ledger** (`.ux/decisions.jsonl`, Schema `_v: 1` gesperrt) schlie
 
 Drei Installationswege. Wählen Sie den, der zu Ihrer Umgebung passt.
 
-### Weg 1 — Claude-Code-Marketplace (kanonisch)
+### Weg 1: Claude-Code-Marketplace (kanonisch)
 
 Wenn Sie in Claude Code arbeiten, installieren Sie über den Plugin-Marketplace:
 
@@ -99,7 +99,7 @@ Wenn Sie in Claude Code arbeiten, installieren Sie über den Plugin-Marketplace:
 
 Damit werden alle 25 Slash-Befehle und 5 Sub-Agents in Ihre Claude-Code-Session eingebunden. Nach der Installation führen Sie `/ux-init` aus, um das projektspezifische Zustandsverzeichnis `.ux/` einzurichten und zu prüfen, dass die Python-Engine erreichbar ist.
 
-### Weg 2 — pip (universell)
+### Weg 2: pip (universell)
 
 Wenn Sie außerhalb von Claude Code arbeiten (Cursor, Windsurf, CLI, CI), installieren Sie das Python-Paket:
 
@@ -110,9 +110,9 @@ uxskill stats                      # gibt die Manifest-Zähler aus, um die Insta
 uxskill lint .                     # startet den Linter gegen das aktuelle Verzeichnis
 ```
 
-Das Paket stellt sowohl `ux` als auch `uxskill` als CLI-Entrypoints bereit — beide sind dasselbe Binary.
+Das Paket stellt sowohl `ux` als auch `uxskill` als CLI-Entrypoints bereit, beide sind dasselbe Binary.
 
-### Weg 3 — npx (kein Python erforderlich)
+### Weg 3: npx (kein Python erforderlich)
 
 Wenn Sie Python nicht direkt verwalten möchten, bootstrappt der npx-Wrapper alles über `pipx`:
 
@@ -143,29 +143,29 @@ ux stats
 # }
 ```
 
-Wenn ein Zähler 0 zurückgibt, fehlt die JSON-Datei — öffnen Sie ein Issue unter [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues).
+Wenn ein Zähler 0 zurückgibt, fehlt die JSON-Datei, öffnen Sie ein Issue unter [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues).
 
 ---
 
-## Die Zahlen — Live-Vergleich gegen die Top-8-Claude-UX-Skills
+## Die Zahlen: Live-Vergleich gegen die Top-8-Claude-UX-Skills
 
-Die Sternzahlen wurden zuletzt am **2026-05-28** über `gh api` verifiziert. ux-skill (Laith0003/ux-skill) ist der jüngste Neuzugang — wir sind klein in Bekanntheit, tief in Architektur. Der Vergleich unten ist ehrlich: wo wir verlieren, wo wir gewinnen.
+Die Sternzahlen wurden zuletzt am **2026-05-28** über `gh api` verifiziert. ux-skill (Laith0003/ux-skill) ist der jüngste Neuzugang, wir sind klein in Bekanntheit, tief in Architektur. Der Vergleich unten ist ehrlich: wo wir verlieren, wo wir gewinnen.
 
 | Plugin | Sterne | Architektur | Slash-Befehle | Linter (CI-fähig) | Brand-Specs | Komponenten | Motion-Presets | Unterstützte IDEs |
 |---|---:|---|---:|---|---:|---:|---:|---:|
-| nextlevelbuilder/ui-ux-pro-max-skill | **83.958** | Python BM25 + CSV, einzelne Skill | 1 | — | — | 0 | 0 | 18 |
-| nexu-io/open-design | **54.406** | Node.js + 19 Skills + Preview | 19 | — | — | 0 | 0 | 1 |
-| Leonxlnx/taste-skill | **25.202** | Bash + forschungsgestützter Geschmack | 1 | — | — | 0 | 0 | 1 |
-| alchaincyf/huashu-design | **15.455** | Einzige 62-KB-SKILL.md + Skripte | 1 | — | — | 0 | 0 | 1 |
-| google-labs-code/stitch-skills | **5.762** | MCP-verdrahtete Skill-Bibliothek | multi | — | — | 0 | 0 | 1 |
-| dominikmartn/nothing-design-skill | **2.391** | Mono-ästhetische Skill | 1 | — | — | 0 | 0 | 1 |
-| Nutlope/hallmark | **2.164** | Anti-Slop-Design-Skill | 1 | — | — | 0 | 0 | 1 |
-| hamen/material-3-skill | **955** | MD3-Komponenten + Audit | 1 | — | — | 0 | 0 | 1 |
+| nextlevelbuilder/ui-ux-pro-max-skill | **83.958** | Python BM25 + CSV, einzelne Skill | 1 | - |, | 0 | 0 | 18 |
+| nexu-io/open-design | **54.406** | Node.js + 19 Skills + Preview | 19 | - |, | 0 | 0 | 1 |
+| Leonxlnx/taste-skill | **25.202** | Bash + forschungsgestützter Geschmack | 1 | - |, | 0 | 0 | 1 |
+| alchaincyf/huashu-design | **15.455** | Einzige 62-KB-SKILL.md + Skripte | 1 | - |, | 0 | 0 | 1 |
+| google-labs-code/stitch-skills | **5.762** | MCP-verdrahtete Skill-Bibliothek | multi | - |, | 0 | 0 | 1 |
+| dominikmartn/nothing-design-skill | **2.391** | Mono-ästhetische Skill | 1 | - |, | 0 | 0 | 1 |
+| Nutlope/hallmark | **2.164** | Anti-Slop-Design-Skill | 1 | - |, | 0 | 0 | 1 |
+| hamen/material-3-skill | **955** | MD3-Komponenten + Audit | 1 | - |, | 0 | 0 | 1 |
 | **Laith0003/ux-skill (ux-skill)** | **14** | **Python-Engine + 12 Manifeste + 25 Befehle + 5 Sub-Agents + CI-Linter** | **22** | **152 Regex-Regeln** | **160** | **148** | **57** | **17** |
 
 ### Wo wir verlieren
 
-- **Bekanntheit.** Sie haben Hunderttausende Sterne. Wir haben 14. Setzen Sie einen Stern — das ist die günstigste Form der Unterstützung.
+- **Bekanntheit.** Sie haben Hunderttausende Sterne. Wir haben 14. Setzen Sie einen Stern, das ist die günstigste Form der Unterstützung.
 - **Markenwiedererkennung.** ui-ux-pro-max und open-design haben einen Vorsprung, der sich in Monaten misst, nicht in Tagen.
 - **Marketing-Politur.** Sie haben Screenshots, Demo-Videos und eine auffindbare Landingpage. Wir haben eine gründliche README und eine schlanke Landingpage.
 
@@ -176,18 +176,18 @@ Die Sternzahlen wurden zuletzt am **2026-05-28** über `gh api` verifiziert. ux-
 - **Anti-Pattern-Linter:** 152 deterministische Regex-Regeln, läuft in CI, beendet mit Non-Zero bei Critical/High. Keine der anderen liefert einen deterministischen Linter.
 - **Brand-Specs:** 160 echte DESIGN.md-Specs (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude und 96 weitere). Keine der anderen liefert eine Markenbibliothek.
 - **17 unterstützte IDEs:** dieselbe Engine, anderer Klebstoff je IDE.
-- **25 Slash-Befehle:** Discovery, Generierung, Audit, Lint, Polish, Fix-Schleife, Case-Study, Workshop, Copy, Motion, A11y, Dashboard, Conductor — vollständig integriert.
+- **25 Slash-Befehle:** Discovery, Generierung, Audit, Lint, Polish, Fix-Schleife, Case-Study, Workshop, Copy, Motion, A11y, Dashboard, Conductor, vollständig integriert.
 
 Vollständige Tabelle Seite an Seite unter [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html).
 
 ---
 
-## Architektur — wie die Teile ineinandergreifen
+## Architektur: wie die Teile ineinandergreifen
 
 ```
 ux-skill (Paketname: uxskill)
 │
-├── data/                              Das Gehirn — abfragbare JSON-Manifeste
+├── data/                              Das Gehirn, abfragbare JSON-Manifeste
 │   ├── styles.json                    84 Design-Styles + when/skip + Tokens
 │   ├── palettes.json                  176 Paletten (hell/dunkel, Kontrast verifiziert)
 │   ├── type-pairs.json                70 display × body × mono Tripel
@@ -200,9 +200,9 @@ ux-skill (Paketname: uxskill)
 │   ├── anti-patterns.json             152 Regex-Regeln (CI-fähige Linter-Quelle)
 │   └── brands/*.json                  160 Brand-DESIGN-Specs + _index.json
 │
-├── engine/                            Python — das Reasoning
-│   ├── synthesizer/                   v3 — deterministischer 7-Achsen-Compiler
-│   ├── decisions/                     v3 — .ux/decisions.jsonl-Ledger + Recommender-Re-Ranking
+├── engine/                            Python, das Reasoning
+│   ├── synthesizer/                   v3, deterministischer 7-Achsen-Compiler
+│   ├── decisions/                     v3, .ux/decisions.jsonl-Ledger + Recommender-Re-Ranking
 │   ├── recommender/                   5-parallele-Suche-Merge-Engine
 │   ├── linter/                        Deterministischer Anti-Slop-Scanner
 │   ├── discovery/                     10-Felder-Zwangsprotokoll
@@ -214,7 +214,7 @@ ux-skill (Paketname: uxskill)
 │   ├── ux-init.md                     Bootstrap
 │   ├── ux-stats.md                    Inventar-Schnappschuss
 │   ├── ux-discover.md                 10-Felder-Intake (Tor)
-│   ├── ux-recommend.md                FLAGSCHIFF — 5 parallele Suchen
+│   ├── ux-recommend.md                FLAGSCHIFF, 5 parallele Suchen
 │   ├── ux-lint.md                     deterministischer Linter
 │   ├── ux-design.md                   generiert Frontend-Code
 │   ├── ux-component.md                generiert eine Komponente
@@ -266,7 +266,7 @@ ux-skill (Paketname: uxskill)
 
 ### Wie die Engine tatsächlich arbeitet
 
-1. **Eingabe.** Sie geben ein Brief an — entweder interaktiv über `/ux-discover` (10 Felder) oder nicht-interaktiv über Flags an `ux recommend`.
+1. **Eingabe.** Sie geben ein Brief an, entweder interaktiv über `/ux-discover` (10 Felder) oder nicht-interaktiv über Flags an `ux recommend`.
 2. **5 parallele Suchen.** Die Engine führt fünf Lookups gleichzeitig über die Manifeste aus:
    - **Branche → empfohlene_Styles** (industries.json)
    - **Style → Palette- + Typographie- + Motion-Kompatibilität** (styles.json)
@@ -282,7 +282,7 @@ ux-skill (Paketname: uxskill)
 
 ---
 
-## Die 25 Slash-Befehle — detaillierte Referenz
+## Die 25 Slash-Befehle: detaillierte Referenz
 
 Jeder Befehl wird als `.md`-Datei unter `commands/` ausgeliefert, mit `description`, `allowed-tools`, `triggers`, `when to use`, `when to skip`, `input`, `process` und `output state file`. Die untenstehenden Beschreibungen sind verdichtet; die vollständige Quelle ist die kanonische Spezifikation.
 
@@ -290,7 +290,7 @@ Die Befehle sind in fünf Eimer gruppiert: **Bootstrap & Inventar**, **Discovery
 
 ### Bootstrap & Inventar
 
-#### `/ux-init` — das Projekt bootstrappen
+#### `/ux-init`: das Projekt bootstrappen
 
 - **Was:** Erkennt, welche IDE Sie verwenden (`.claude/`, `.cursor/`, `.windsurf/` usw.), installiert das passende Artefakt, prüft, dass die Python-Engine erreichbar ist, gibt einen Statistik-Schnappschuss aus.
 - **Wann verwenden:** Erste Installation in einem neuen Projekt. Nach dem Klonen eines Projekts, das ux-skill nutzt. Nach `pip install --upgrade uxskill`.
@@ -299,18 +299,18 @@ Die Befehle sind in fünf Eimer gruppiert: **Bootstrap & Inventar**, **Discovery
 - **Ausgabe:** IDE-spezifisches Artefakt (siehe [Der Installer für 17 IDEs](#der-installer-für-17-ides)) + `.ux/`-Verzeichnis + stdout-Zusammenfassung.
 - **Verkettet mit:** als Nächstes `/ux-discover`.
 
-#### `/ux-stats` — das Dateninventar ausgeben
+#### `/ux-stats`: das Dateninventar ausgeben
 
 - **Was:** Gibt Version + Eintragszähler für die 12 Datenmanifeste aus, damit Sie prüfen können, was installiert ist.
 - **Wann verwenden:** Nach der Installation. Nach einem Upgrade. Wenn `/ux-recommend` überraschende Auswahlen liefert und Sie unvollständige Manifeste vermuten.
-- **Wann überspringen:** Nie — es ist ein 50-ms-Nur-Lese-Befehl.
+- **Wann überspringen:** Nie, es ist ein 50-ms-Nur-Lese-Befehl.
 - **Aufruf:** `/ux-stats` oder `uxskill stats`.
 - **Ausgabe:** JSON nach stdout (siehe [Installation verifizieren](#installation-verifizieren) oben).
 - **Verkettet mit:** Nur Diagnose; speist nichts nachgelagert.
 
 ### Discovery & Empfehlung
 
-#### `/ux-discover` — die Zwangsfunktion (10-Felder-Intake)
+#### `/ux-discover`: die Zwangsfunktion (10-Felder-Intake)
 
 - **Was:** Der verpflichtende 10-Felder-Intake, durch den jedes Projekt vor einem Generierungsbefehl gehen muss. Projekttyp, Zielgruppe, Hauptziel, Tonalität, Must-haves, Verbotenes, Referenzmarken, Stack, Region, Erfolgsmetrik. **Keine Improvisation.** Verbotene Phrasen („modern", „clean") zwingen den Nutzer zu konkreten Angaben.
 - **Wann verwenden:** Vor jedem `/ux-design`, `/ux-component`, `/ux-system` oder `/ux-dashboard`. Immer wenn ein früheres Brief veraltet ist.
@@ -319,11 +319,11 @@ Die Befehle sind in fünf Eimer gruppiert: **Bootstrap & Inventar**, **Discovery
 - **Ausgabe:** Schreibt `.ux/last-discovery.json` (das 10-Felder-Brief).
 - **Verkettet mit:** `/ux-recommend` → nutzt die Discovery, um Style + Palette + Typographie + Motion + Komponenten zu wählen. `/ux-design [zusätzliches Brief]` → erzeugt Frontend-Code, verankert in der Empfehlung. `/ux-component <Name>` → erzeugt eine Komponente, ausgerichtet an den entdeckten Einschränkungen.
 
-#### `/ux-recommend` — die Flaggschiff-5-parallele-Such-Engine
+#### `/ux-recommend`: die Flaggschiff-5-parallele-Such-Engine
 
 - **Was:** Führt die 5 parallelen Suchen der Python-Engine über die 12 Manifeste aus und liefert ein zusammengeführtes Designsystem zurück. Branche → Style → Palette → Typographie → Motion + Komponenten + exemplarische Marken + Leitplanken.
 - **Wann verwenden:** Ein neues Projekt aus dem Nichts starten. Ein müde aussehendes Produkt pivotieren. Pre-Flight vor jedem `/ux-design` oder `/ux-component`.
-- **Wann überspringen:** Sie haben `/ux-discover` bereits ausgeführt und ein Brief gespeichert — `/ux-recommend` ist in diesem Flow automatisch. Sie beheben einen Bug (verwenden Sie `/ux-fix`). Sie benötigen nur den Linter (verwenden Sie `/ux-lint`).
+- **Wann überspringen:** Sie haben `/ux-discover` bereits ausgeführt und ein Brief gespeichert, `/ux-recommend` ist in diesem Flow automatisch. Sie beheben einen Bug (verwenden Sie `/ux-fix`). Sie benötigen nur den Linter (verwenden Sie `/ux-lint`).
 - **Aufruf (Claude Code):**
   ```
   /ux-recommend
@@ -339,50 +339,50 @@ Die Befehle sind in fünf Eimer gruppiert: **Bootstrap & Inventar**, **Discovery
     --stack=nextjs-15-app-router \
     --region=mena
   ```
-- **Ausgabe:** Schreibt `.ux/last-recommendation.json` — gewählter Style, gewählte Palette, gewähltes Typographie-Paar, 5 beste Motion-Presets, 12 beste Komponenten, 5 beste exemplarische Marken, alle 35 aktiven Anti-Pattern-Leitplanken, plus Begründung.
+- **Ausgabe:** Schreibt `.ux/last-recommendation.json`, gewählter Style, gewählte Palette, gewähltes Typographie-Paar, 5 beste Motion-Presets, 12 beste Komponenten, 5 beste exemplarische Marken, alle 35 aktiven Anti-Pattern-Leitplanken, plus Begründung.
 - **Verkettet mit:** `/ux-design [Brief]` → Frontend-Code mit den empfohlenen Tokens. `/ux-system` → vollständiges Designsystem aus der Empfehlung. `/ux-component <Name>` → eine Komponente im empfohlenen Style. `/ux-lint` → den generierten Code verifizieren.
 
 ### Generierung
 
-#### `/ux-design` — eine schöne, Anti-Slop-Oberfläche aus einem Brief generieren
+#### `/ux-design`: eine schöne, Anti-Slop-Oberfläche aus einem Brief generieren
 
 - **Was:** Generiert ein vollständiges, produktionsreifes Frontend-Artefakt (Landing, Marketing-Site, App-Shell) aus dem Discovery-Brief + der Empfehlung. Entsendet `frontend-engineer` mit kreativer Richtung aus den Anti-Slop- und Arsenal-Referenzen.
-- **Wann verwenden:** „Designe ein", „bau mir ein", „generiere eine Landingpage", „erstelle ein Dashboard", „mach eine Komponente" — jede freiformatige visuelle Deliverable-Anfrage.
+- **Wann verwenden:** „Designe ein", „bau mir ein", „generiere eine Landingpage", „erstelle ein Dashboard", „mach eine Komponente", jede freiformatige visuelle Deliverable-Anfrage.
 - **Wann überspringen:** Sie wollen einen Review, kein Build (verwenden Sie `/ux-audit` oder `/ux-critique`). Sie wollen nur eine Komponente (verwenden Sie `/ux-component`). Backend- oder Infrastrukturarbeit.
 - **Aufruf:** `/ux-design generiere eine Fintech-Landing für eine MENA-Neobank, warme Editorial-Tonalität, Dark-Mode AA, keine Violett-Verläufe`.
 - **Ausgabe:** Generierter Code (HTML / Blade / JSX / Vue / Astro), plus `.ux/last-design.json`.
 - **Verkettet mit:** `/ux-lint` → gegen Leitplanken verifizieren. `/ux-polish` → kosmetischer Durchgang. `/ux-a11y` → Accessibility-Audit. `/ux-copy` → Microcopy-Review. `/ux-fix` → Findings als atomare Commits anwenden.
 
-#### `/ux-component` — eine Komponente generieren
+#### `/ux-component`: eine Komponente generieren
 
 - **Was:** Erzeugt eine einzelne, produktionsreife Komponente (Button, Modal, Navbar, Sidebar, Card, Tabelle, Formular, Chart) aus einer Spezifikation. Alle vier Interaktionszustände, barrierefrei, markentreu. Sucht die Komponente zuerst in `.ux/last-recommendation.json`, fällt zurück auf eine direkte Manifestabfrage.
-- **Wann verwenden:** Jede Anfrage nach einem einzelnen Element — „bau einen Button", „erstelle eine Pricing-Card", „mach ein Modal", „füge eine Navbar hinzu", „designe eine Sidebar", „ich brauche eine Datentabelle", „bau ein Formular", „mach eine Chart-Komponente".
+- **Wann verwenden:** Jede Anfrage nach einem einzelnen Element, „bau einen Button", „erstelle eine Pricing-Card", „mach ein Modal", „füge eine Navbar hinzu", „designe eine Sidebar", „ich brauche eine Datentabelle", „bau ein Formular", „mach eine Chart-Komponente".
 - **Wann überspringen:** Vollständige Seite oder Multi-Sektionen-Oberfläche (verwenden Sie `/ux-design`). Backend oder Infrastruktur.
 - **Aufruf:** `/ux-component pricing-card-trio --brief="fintech, dunkel, Monospace-Zahlen"`.
 - **Ausgabe:** Generierter Komponentencode, plus `.ux/last-component.json`.
 - **Verkettet mit:** `/ux-lint` → verifizieren. `/ux-polish` → straffen.
 
-#### `/ux-system` — ein vollständiges Starter-Designsystem generieren
+#### `/ux-system`: ein vollständiges Starter-Designsystem generieren
 
-- **Was:** Schlägt ein vollständiges Starter-Designsystem für ein Projekt vor, das noch keines hat — Tokens (Farbe, Typographie, Raum, Motion, Radius, Schatten), Foundation-Dokumente, Komponentenverträge, Dark-Mode-Paarungen, Theme-Switcher. Entsendet `design-system-architect`.
+- **Was:** Schlägt ein vollständiges Starter-Designsystem für ein Projekt vor, das noch keines hat, Tokens (Farbe, Typographie, Raum, Motion, Radius, Schatten), Foundation-Dokumente, Komponentenverträge, Dark-Mode-Paarungen, Theme-Switcher. Entsendet `design-system-architect`.
 - **Wann verwenden:** „Wir haben kein Designsystem", „bau uns ein System", „schlag Tokens vor", „was sollte unser Theme sein", „richte unser DS ein".
-- **Wann überspringen:** Das Projekt hat bereits ein Designsystem — verwenden Sie stattdessen `/ux-component` gegen das bestehende System. Backend oder Infrastruktur.
+- **Wann überspringen:** Das Projekt hat bereits ein Designsystem, verwenden Sie stattdessen `/ux-component` gegen das bestehende System. Backend oder Infrastruktur.
 - **Aufruf:** `/ux-system` (führt zuerst Discovery aus, falls nicht bereits hinterlegt).
 - **Ausgabe:** `tokens.json`, `foundations.md`, `components/*.md`-Verträge, optionale Tailwind- / vanilla- / SCSS-Emission. Schreibt `.ux/last-system.json` für den Verkettungskontext.
 - **Verkettet mit:** `/ux-component` → gegen das neue System bauen. `/ux-design` → eine Oberfläche mit den neuen Tokens generieren.
 
-#### `/ux-dashboard` — spezialisierte Dashboard-Generierung
+#### `/ux-dashboard`: spezialisierte Dashboard-Generierung
 
-- **Was:** Dashboard mit Datendichte-Disziplin — Bento-Layout, tabellarische Monospace-Ziffern, Sparkline-Patterns, Anti-Card-Überdosis, semantische Statusfarben, sparsame Motion. Keine Marketing-Landing mit aufgeklebten Charts.
+- **Was:** Dashboard mit Datendichte-Disziplin, Bento-Layout, tabellarische Monospace-Ziffern, Sparkline-Patterns, Anti-Card-Überdosis, semantische Statusfarben, sparsame Motion. Keine Marketing-Landing mit aufgeklebten Charts.
 - **Wann verwenden:** „Bau ein Dashboard", „designe das Admin-Panel", „mach eine Metrics-Seite", „Operator-Konsole", „Analytics-Ansicht", „KPI-Board", „Monitoring-Bildschirm".
 - **Wann überspringen:** Marketing-Landingpage mit Statistiken (verwenden Sie `/ux-design`). Nur ein Widget (verwenden Sie `/ux-component`). Backend oder Infrastruktur.
 - **Aufruf:** `/ux-dashboard`.
 - **Ausgabe:** Generierter Dashboard-Code + `.ux/last-dashboard.json`.
 - **Verkettet mit:** `/ux-lint`, `/ux-audit`, `/ux-a11y`.
 
-#### `/ux-motion` — Motion-Behandlung
+#### `/ux-motion`: Motion-Behandlung
 
-- **Was:** Generiert die Motion-Schicht einer Oberfläche — Dauern, Easings, Choreografie, reduced-motion-Fallbacks, Performance-Disziplin. Auditiert auch bestehende Motion gegen die 5 Dimensionen (Timing, Easing, Bedeutung, reduced-motion, Performance).
+- **Was:** Generiert die Motion-Schicht einer Oberfläche, Dauern, Easings, Choreografie, reduced-motion-Fallbacks, Performance-Disziplin. Auditiert auch bestehende Motion gegen die 5 Dimensionen (Timing, Easing, Bedeutung, reduced-motion, Performance).
 - **Wann verwenden:** „Motion-Check", „sind die Animationen gut", „repariere die Motion", „prüfe die Animationen", „Motion-Audit", „Performance-Durchgang über die Motion".
 - **Wann überspringen:** Die Oberfläche hat keine Motion (verwenden Sie `/ux-audit` oder `/ux-polish`). Backend oder Infrastruktur.
 - **Aufruf:** `/ux-motion path/to/component.tsx` (Audit-Modus) oder `/ux-motion --generate hero-entry` (Generierung).
@@ -391,11 +391,11 @@ Die Befehle sind in fünf Eimer gruppiert: **Bootstrap & Inventar**, **Discovery
 
 ### Audit & Verifikation
 
-#### `/ux-lint` — deterministischer Regex-basierter Linter (kein LLM, CI-fähig)
+#### `/ux-lint`: deterministischer Regex-basierter Linter (kein LLM, CI-fähig)
 
 - **Was:** Führt 152 Regex-Regeln gegen Ihren Code aus. Kein LLM-Call. Beendet mit Non-Zero bei Critical / High in CI. Quelle: `data/anti-patterns.json`. Die Regeln decken A11y (23), Inhalt (15), Layout (13), Typographie (10), Farbe (9), Qualität (9), Visuell (9), Motion (8), Performance (4) ab.
 - **Wann verwenden:** Pre-Commit-Hook. CI-Gate. Schneller erster Durchgang über eine große Codebase, bevor man die Kosten von `/ux-audit` zahlt. Nach `/ux-design` oder `/ux-component`, um die Generierung zu verifizieren.
-- **Wann überspringen:** Sie wollen eine Fix-Schleife (der Linter meldet, er editiert nicht — verketten Sie mit `/ux-polish --fix` oder `/ux-fix`). Sie wollen Geschmacksurteil (verwenden Sie `/ux-critique`).
+- **Wann überspringen:** Sie wollen eine Fix-Schleife (der Linter meldet, er editiert nicht, verketten Sie mit `/ux-polish --fix` oder `/ux-fix`). Sie wollen Geschmacksurteil (verwenden Sie `/ux-critique`).
 - **Aufruf (Slash):** `/ux-lint src/`.
 - **Aufruf (CLI):** `uxskill lint .` oder `python3 bin/ux-lint.py .` oder `bash bin/ux-lint.sh --ci --fail-on high`.
 - **Aufruf (CI):**
@@ -406,45 +406,45 @@ Die Befehle sind in fünf Eimer gruppiert: **Bootstrap & Inventar**, **Discovery
 - **Ausgabe:** Findings nach stdout (Ort, Regel-ID, Schweregrad, Beweis). Exit-Code 0 wenn sauber, Non-Zero bei Critical/High, wenn `--fail-on high` gesetzt ist.
 - **Verkettet mit:** `/ux-polish --fix` → LLM-getriebenes Gegenstück auf denselben Patterns. `/ux-fix` → Findings als Commits anwenden, nach Schweregrad sortiert. `/ux-audit` → vollständiger 6-Linsen-Reasoning-Durchgang. `/ux-next` → den Conductor entscheiden lassen.
 
-#### `/ux-audit` — Design-Audit mit 6 Linsen
+#### `/ux-audit`: Design-Audit mit 6 Linsen
 
-- **Was:** Eine strukturierte, meinungsstarke Prüfung gegen sechs Linsen (Klarheit, Hierarchie, Barrierefreiheit, Stimme, Motion, Geschmack), die nach Schweregrad gekennzeichnete Findings erzeugt. Bericht im Polaris-Stil. Liest zuerst `.ux/last-frame.json` — Zielgruppe und Outcome verankern den Schweregrad jedes Findings.
+- **Was:** Eine strukturierte, meinungsstarke Prüfung gegen sechs Linsen (Klarheit, Hierarchie, Barrierefreiheit, Stimme, Motion, Geschmack), die nach Schweregrad gekennzeichnete Findings erzeugt. Bericht im Polaris-Stil. Liest zuerst `.ux/last-frame.json`, Zielgruppe und Outcome verankern den Schweregrad jedes Findings.
 - **Wann verwenden:** Die Oberfläche existiert und Sie wollen eine vertretbare Kritik. „Auditiere", „prüfe die UX", „ist das gut", „was ist kaputt", „zerlege das".
 - **Wann überspringen:** Die Oberfläche existiert noch nicht (verwenden Sie `/ux-design`). Der Nutzer will eine einzelne Linse (verwenden Sie den gezielten Befehl: `/ux-a11y`, `/ux-copy`, `/ux-motion`, `/ux-polish`). Der Nutzer will eine Geschmacksmeinung (verwenden Sie `/ux-critique`). Backend oder Infrastruktur.
 - **Aufruf:** `/ux-audit https://example.com/pricing` oder `/ux-audit src/components/Pricing.tsx`.
-- **Ausgabe:** Schreibt `.ux/last-audit.json` — `findings`-Array mit `{lens, severity, title, principle, evidence, fix}`, `severity_counts`, `dominant_lens`, `strategic_moves`.
+- **Ausgabe:** Schreibt `.ux/last-audit.json`, `findings`-Array mit `{lens, severity, title, principle, evidence, fix}`, `severity_counts`, `dominant_lens`, `strategic_moves`.
 - **Verkettet mit:** `/ux-fix` → Findings anwenden. `/ux-polish` → kosmetischer Durchgang. `/ux-design` → falls strukturelles Redesign nötig.
 
-#### `/ux-a11y` — WCAG-2.1-AA-Audit + Höflichkeitsprüfungen
+#### `/ux-a11y`: WCAG-2.1-AA-Audit + Höflichkeitsprüfungen
 
 - **Was:** Ein strukturierter WCAG-2.1-AA-Audit plus die Höflichkeitsprüfungen, die automatisierte Werkzeuge passieren, aber echte Nutzer immer noch verletzen (Fokus-Sichtbarkeit, Fehlerspezifizität, Motion-Präferenzen, Tastaturfallen, Farbabhängigkeit).
 - **Wann verwenden:** Pre-Ship-Accessibility-Gate. Nach einem Redesign. „Accessibility-Check", „WCAG-Audit", „ist das barrierefrei", „A11y-Review", „Screen-Reader-Test", „Tastatur-Navigations-Check".
 - **Wann überspringen:** Nicht nutzerseitig. Backend oder Infrastruktur. Skizzen in Arbeit.
-- **Aufruf:** `/ux-a11y https://example.com` (Live-URL bevorzugt — automatisierte Werkzeuge und Tastaturtests funktionieren nur live).
-- **Ausgabe:** Schreibt `.ux/last-a11y.json` — `findings`-Array mit `{wcag_sc, sc_name, severity, title, evidence, fix, category}`, `beyond_wcag`-Array, `severity_counts`.
+- **Aufruf:** `/ux-a11y https://example.com` (Live-URL bevorzugt, automatisierte Werkzeuge und Tastaturtests funktionieren nur live).
+- **Ausgabe:** Schreibt `.ux/last-a11y.json`, `findings`-Array mit `{wcag_sc, sc_name, severity, title, evidence, fix, category}`, `beyond_wcag`-Array, `severity_counts`.
 - **Verkettet mit:** `/ux-fix` → Findings als Commits anwenden. `/ux-copy` → Alt-Texte und Formular-Fehler-Verdrahtung als Teil eines Copy-Durchgangs korrigieren.
 
-#### `/ux-critique` — Geschmacksurteil (3 Treffer, 3 Fehler, 1 strategischer Zug)
+#### `/ux-critique`: Geschmacksurteil (3 Treffer, 3 Fehler, 1 strategischer Zug)
 
-- **Was:** Die Meinung eines Designers — kein strukturierter Audit, kein Schweregrad-Score, nur eine straffe, meinungsstarke Einschätzung, die benennt, was funktioniert, was nicht und der einzige strategische Zug, der am meisten verändern würde.
+- **Was:** Die Meinung eines Designers, kein strukturierter Audit, kein Schweregrad-Score, nur eine straffe, meinungsstarke Einschätzung, die benennt, was funktioniert, was nicht und der einzige strategische Zug, der am meisten verändern würde.
 - **Wann verwenden:** „Was denkst du", „ist das gut", „kritisier das", „ehrliche Meinung", „stimmt der Vibe", „fühlt sich das nach uns an", „sollten wir shippen".
 - **Wann überspringen:** Der Nutzer will explizit einen strukturierten Audit (verwenden Sie `/ux-audit`). Backend oder Infrastruktur.
 - **Aufruf:** `/ux-critique https://example.com`.
-- **Ausgabe:** Schreibt `.ux/last-critique.json` — 3 Treffer, 3 Fehler, 1 strategischer Zug, plus Prosa.
+- **Ausgabe:** Schreibt `.ux/last-critique.json`, 3 Treffer, 3 Fehler, 1 strategischer Zug, plus Prosa.
 - **Verkettet mit:** `/ux-design`, falls die Einschätzung Redesign empfiehlt. `/ux-polish`, falls sie Straffung empfiehlt.
 
-#### `/ux-copy` — Microcopy-Review + -Umschreiben
+#### `/ux-copy`: Microcopy-Review + -Umschreiben
 
 - **Was:** Bewertet jeden sichtbaren String gegen die Stimm-Rubrik und erzeugt eine Vorher/Nachher-Umschreibung. Fängt: „Formular enthält Fehler" (generisch), „John Doe" (Platzhalter), KI-fröhlicher feierlicher Copy, generische CTAs, tote Empty States, nutzlose Fehler.
 - **Wann verwenden:** Struktur stimmt, aber die Worte schwächeln. „Prüfe den Copy", „repariere die Microcopy", „die Fehlermeldungen sind schlecht", „schreib das um", „strafffe die Strings", „die Buttons klingen generisch", „dieser Empty State ist tot".
 - **Wann überspringen:** Layout-Probleme (verwenden Sie `/ux-audit` oder `/ux-polish`). Accessibility-getriebene Copy-Probleme wie Alt-Texte (verwenden Sie `/ux-a11y`). Backend oder Infrastruktur.
 - **Aufruf:** `/ux-copy src/views/checkout.blade.php`.
-- **Ausgabe:** Schreibt `.ux/last-copy.json` — `strings`-Array mit `{location, severity, before, after, notes}`, plus Rubrik + Locales, die Übersetzung brauchen.
+- **Ausgabe:** Schreibt `.ux/last-copy.json`, `strings`-Array mit `{location, severity, before, after, notes}`, plus Rubrik + Locales, die Übersetzung brauchen.
 - **Verkettet mit:** `/ux-fix` → Umschreibungen anwenden. `/ux-a11y` → nach den Copy-Fixes erneut prüfen.
 
 ### Fix & Polish
 
-#### `/ux-fix` — Findings als atomare Commits anwenden
+#### `/ux-fix`: Findings als atomare Commits anwenden
 
 - **Was:** Liest den neuesten Bericht aus `.ux/` (Audit, Copy, A11y, Motion oder Polish), validiert den Working-Tree und wendet die Findings als atomare Commits über die richtigen Sub-Agents an. Verifiziert erneut, indem der ursprüngliche Befehl wieder ausgeführt wird.
 - **Wann verwenden:** Nach dem Ausführen eines Audit-Klassen-Befehls und der Durchsicht der Findings. „Behebe die Findings", „wende die Fixes an", „starte die Fix-Schleife", „patche die Oberfläche", „mach die Änderungen", „los, repariere das".
@@ -453,9 +453,9 @@ Die Befehle sind in fünf Eimer gruppiert: **Bootstrap & Inventar**, **Discovery
 - **Ausgabe:** Atomare Commits pro Finding. Führt den ursprünglichen Befehl erneut aus und aktualisiert die `.ux/last-*.json`-Datei. Gibt eine Zusammenfassung aus.
 - **Verkettet mit:** `/ux-next` → der Conductor wählt den nächsten Zug.
 
-#### `/ux-polish` — kosmetischer Durchgang + KI-Slop-Tötung
+#### `/ux-polish`: kosmetischer Durchgang + KI-Slop-Tötung
 
-- **Was:** Abstandsrhythmus, Hierarchie-Schärfung, KI-Slop-Erkennung, Token-Konsistenz. Das LLM-getriebene Gegenstück zu `/ux-lint` — nutzt Ihr Urteil bei Geschmacksentscheidungen.
+- **Was:** Abstandsrhythmus, Hierarchie-Schärfung, KI-Slop-Erkennung, Token-Konsistenz. Das LLM-getriebene Gegenstück zu `/ux-lint`, nutzt Ihr Urteil bei Geschmacksentscheidungen.
 - **Wann verwenden:** Struktur stimmt, aber Ausführung ist lose. „Polier", „strafffe das", „entferne den KI-Slop", „mach es premium", „lass es weniger nach KI aussehen", „die Abstände fühlen sich falsch an", „das wirkt generisch", „braucht mehr Geschmack".
 - **Wann überspringen:** Der Oberfläche fehlt Kernfunktionalität (das zuerst beheben). Braucht Redesign, kein Polish (verwenden Sie `/ux-design`). Copy-Probleme (verwenden Sie `/ux-copy`). Motion-Probleme (verwenden Sie `/ux-motion`). A11y-Probleme (verwenden Sie `/ux-a11y`).
 - **Aufruf:** `/ux-polish src/components/Hero.tsx`.
@@ -464,54 +464,54 @@ Die Befehle sind in fünf Eimer gruppiert: **Bootstrap & Inventar**, **Discovery
 
 ### Discovery & Narrativ
 
-#### `/ux-frame` — 4-Felder-Framing-Block
+#### `/ux-frame`: 4-Felder-Framing-Block
 
-- **Was:** Erfasst Für-wen, Outcome, Hypothese und Erfolgssignal in einem strukturierten Framing-Block. Es geschieht keine Designarbeit — nur der Vier-Felder-Intake, der eine vage Anfrage in ein Arbeits-Brief verwandelt. Leichter als `/ux-discover` (4 Felder vs. 10).
+- **Was:** Erfasst Für-wen, Outcome, Hypothese und Erfolgssignal in einem strukturierten Framing-Block. Es geschieht keine Designarbeit, nur der Vier-Felder-Intake, der eine vage Anfrage in ein Arbeits-Brief verwandelt. Leichter als `/ux-discover` (4 Felder vs. 10).
 - **Wann verwenden:** Beginn eines Projekts, Sprints oder Einzelauftrags. Mitten im Strom, wenn ein Gespräch abgedriftet ist. „Frame das", „was ist das Brief", „richte das Projekt ein", „Framing".
 - **Wann überspringen:** Bereits geframet (prüfen Sie `.ux/last-frame.json`). Einzelner Komponentenbau ohne Framing-Implikationen. Backend oder Infrastruktur.
 - **Aufruf:** `/ux-frame "Loyalty-Wallet für den MENA-Bashiti-Pilot"`.
-- **Ausgabe:** Schreibt `.ux/last-frame.json` — `{audience, outcome, hypothesis, success_signal}`.
+- **Ausgabe:** Schreibt `.ux/last-frame.json`, `{audience, outcome, hypothesis, success_signal}`.
 - **Verkettet mit:** `/ux-discover` → das Frame zum 10-Felder-Brief ausbauen. `/ux-design` → mit dem Frame als Anker generieren.
 
-#### `/ux-research` — Forschungsplanung + -synthese
+#### `/ux-research`: Forschungsplanung + -synthese
 
 - **Was:** Planungsmodus: schreibt Interviewleitfäden, Umfragen, Recruiting-Screener. Synthesemodus (`--synthesize`): verdaut Interviews, Analytics, Wettbewerber-Sites, A/B-Ergebnisse, Support-Tickets zu Empfehlungen. Entsendet `research-synthesizer`.
 - **Wann verwenden:** „Plan eine Forschungsstudie", „ich brauche Interviewfragen", „designe eine Umfrage", „wie rekrutiere ich Nutzer", „User-Testing-Plan", „Tagebuchstudie", „Präferenztest", „Fake-Door", „Smoke-Test", „synthetisiere meine Interviewnotizen".
 - **Wann überspringen:** Antwort ist bereits mit hoher Sicherheit bekannt. Reversible Entscheidungen mit geringem Risiko. Backend oder Infrastruktur.
 - **Aufruf:** `/ux-research --plan "Loyalty-Wallet-Adoption im MENA-Raum"` oder `/ux-research --synthesize interviews/*.md`.
-- **Ausgabe:** Schreibt `.ux/last-research.json` — Forschungsplan oder synthetisierte Themen + Belege + Empfehlungen.
+- **Ausgabe:** Schreibt `.ux/last-research.json`, Forschungsplan oder synthetisierte Themen + Belege + Empfehlungen.
 - **Verkettet mit:** `/ux-frame` → Findings in ein Frame integrieren. `/ux-design` → aus den Findings generieren. `/ux-workshop` → einen Workshop mit der Forschung als Input fahren.
 
-#### `/ux-workshop` — 5-Phasen-Design-Thinking-Workshop
+#### `/ux-workshop`: 5-Phasen-Design-Thinking-Workshop
 
 - **Was:** Moderiert einen Discovery-/Design-Thinking-Workshop von Anfang bis Ende. Fünf sequenzielle Phasen (Exploration → Heatmap → Stakeholder-Map → Lösungsskizze → Game-Plan). Zeitgetaktet. Konkrete Artefakte je Phase. Endet mit einer Entscheidung, nicht „interessanten Findings".
 - **Wann verwenden:** Echte Frage, echte Teilnehmer, echtes Zeitbudget. „Mach einen Workshop", „moderiere ein Discovery", „lass uns eine Design-Thinking-Session machen", „ich habe Stakeholder für eine Stunde, was machen wir", „kicke das Projekt an".
 - **Wann überspringen:** Brief ist bereits klar und abgegrenzt. Solo-Brainstorm (verwenden Sie `/ux-design` oder `/ux-frame`). Team steckt mitten in der Umsetzung, nicht in Discovery.
 - **Aufruf:** `/ux-workshop "Loyalty-Wallet-Pivot" --participants="2 PMs, 1 Designer, 1 Eng-Lead, 1 Kundenvertreter" --minutes=90`.
-- **Ausgabe:** Schreibt `.ux/last-workshop.json` — Game-Plan + Artefakte je Phase.
+- **Ausgabe:** Schreibt `.ux/last-workshop.json`, Game-Plan + Artefakte je Phase.
 - **Verkettet mit:** `/ux-design` → den Game-Plan ausführen. `/ux-research` → Lücken füllen, die der Workshop sichtbar gemacht hat. `/ux-case-study` → die Reise publizieren.
 
-#### `/ux-case-study` — veröffentlichbare Case-Study (Wfrah-Editorial-Format)
+#### `/ux-case-study`: veröffentlichbare Case-Study (Wfrah-Editorial-Format)
 
-- **Was:** Generiert eine Projekt-Case-Study im reinen monochromen Editorial-Format — Wfrah-Typographie, Haarlinien-Separatoren, nummerierte (A)–(G)-Sektionscodes, bilingual-sicheres Layout. Ein Dokument, keine Marketing-Broschüre. Liest aus `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **Was:** Generiert eine Projekt-Case-Study im reinen monochromen Editorial-Format, Wfrah-Typographie, Haarlinien-Separatoren, nummerierte (A)–(G)-Sektionscodes, bilingual-sicheres Layout. Ein Dokument, keine Marketing-Broschüre. Liest aus `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **Wann verwenden:** Nach Launch. Nach einem diskreten Meilenstein. „Schreib eine Case-Study", „Case-Study dieses Projekt", „mach das Abschluss-Dokument", „publizier diese Arbeit", „Portfolio-Stück".
 - **Wann überspringen:** Dem Projekt fehlen Daten, um die (A)–(G)-Sektionen zu füllen. Der Nutzer will eine Marketing-Landing, keine Case-Study (verwenden Sie `/ux-design`).
 - **Aufruf:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
 - **Ausgabe:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
-- **Verkettet mit:** Terminalbefehl — meist das Ende eines Projekts.
+- **Verkettet mit:** Terminalbefehl, meist das Ende eines Projekts.
 
 ### Conductor
 
-#### `/ux-next` — Workflow-Conductor (nur-lesend)
+#### `/ux-next`: Workflow-Conductor (nur-lesend)
 
 - **Was:** Liest jede `.ux/last-*.json` und benennt den nächsten Befehl mit dem höchsten Hebel. Ein Conductor, kein Bauender. Nur-lesend.
 - **Wann verwenden:** Zwischen Befehlen. „Was sollte ich als Nächstes tun", „was ist der nächste Zug", „entscheide für mich", „wohin gehen wir von hier".
 - **Wann überspringen:** Keine vorherigen Berichte in `.ux/`. Sie haben einen konkreten nächsten Befehl im Sinn.
 - **Aufruf:** `/ux-next` (ohne Argumente) oder `/ux-next --focus=a11y`.
-- **Ausgabe:** Stdout — empfohlener nächster Befehl + Begründung.
+- **Ausgabe:** Stdout, empfohlener nächster Befehl + Begründung.
 - **Verkettet mit:** Welchen Befehl auch immer er wählt.
 
-#### `/ux-expert` — Consulting-Hook
+#### `/ux-expert`: Consulting-Hook
 
 - **Was:** Bringt die Kontaktdaten des Plugin-Erstellers an die Oberfläche, wenn ein Nutzer nach einem echten UX-Experten fragt. Kurz, direkt, ohne Marketing.
 - **Wann verwenden:** „Wer hat das gebaut", „ich brauche einen UX-Experten", „machst du Consulting", „kann ich jemanden dafür engagieren", „steckt ein Mensch hinter diesem Plugin".
@@ -567,7 +567,7 @@ Die Befehle sind in fünf Eimer gruppiert: **Bootstrap & Inventar**, **Discovery
                   └──────────────────────┘
 
                   ┌──────────────────────┐
-                  │  /ux-next            │  Conductor — nur-lesend
+                  │  /ux-next            │  Conductor, nur-lesend
                   │  /ux-expert          │  Consulting-Hook
                   └──────────────────────┘
 ```
@@ -576,7 +576,7 @@ Die Befehle sind in fünf Eimer gruppiert: **Bootstrap & Inventar**, **Discovery
 
 ## Die 5 Sub-Agents
 
-Sub-Agents sind rollenspezifische Generatoren, die von Befehlen entsandt werden. Sie laufen nie eigenständig — sie werden von `/ux-design`, `/ux-component`, `/ux-system`, `/ux-fix`, `/ux-research` usw. aufgerufen. Jeder Agent hat eine definierte Eigentumsgrenze: Sie entscheiden NICHT das Brief; sie führen es aus.
+Sub-Agents sind rollenspezifische Generatoren, die von Befehlen entsandt werden. Sie laufen nie eigenständig, sie werden von `/ux-design`, `/ux-component`, `/ux-system`, `/ux-fix`, `/ux-research` usw. aufgerufen. Jeder Agent hat eine definierte Eigentumsgrenze: Sie entscheiden NICHT das Brief; sie führen es aus.
 
 ### `frontend-engineer`
 
@@ -588,7 +588,7 @@ Sub-Agents sind rollenspezifische Generatoren, die von Befehlen entsandt werden.
 
 ### `motion-engineer`
 
-- **Besitzt:** Motion in produktionsreifem Frontend-Code — Framer Motion, GSAP, CSS-Animationen. Dauern, Easings, Choreografie, reduced-motion-Fallbacks, Performance-Disziplin.
+- **Besitzt:** Motion in produktionsreifem Frontend-Code, Framer Motion, GSAP, CSS-Animationen. Dauern, Easings, Choreografie, reduced-motion-Fallbacks, Performance-Disziplin.
 - **Entsandt von:** `/ux-design`, `/ux-motion --fix`, `/ux-component`.
 - **Eingaben:** Motion-Brief + Tokens + die 57 Motion-Presets aus `data/motion-presets.json`.
 - **Ausgaben:** Motion, die ihren Platz verdient. Stets in `prefers-reduced-motion`-Fallbacks eingehüllt. Stets gegen Core Web Vitals getestet.
@@ -596,7 +596,7 @@ Sub-Agents sind rollenspezifische Generatoren, die von Befehlen entsandt werden.
 
 ### `copy-writer`
 
-- **Besitzt:** Die Strings, die ausgeliefert werden — Fehlermeldungen, Empty States, CTAs, Loading States, Erfolgsmeldungen, Toasts, Hilfstext, Formularlabels, Buttontext.
+- **Besitzt:** Die Strings, die ausgeliefert werden, Fehlermeldungen, Empty States, CTAs, Loading States, Erfolgsmeldungen, Toasts, Hilfstext, Formularlabels, Buttontext.
 - **Entsandt von:** `/ux-copy --fix`, `/ux-design`, `/ux-frame`, `/ux-component`.
 - **Eingaben:** Stimmprofil (benannt oder eingefügt) + die Strings der Oberfläche.
 - **Ausgaben:** Produktions-Microcopy konsistent über alle Zustände einer Oberfläche angewandt, damit das Produkt wie ein Produkt klingt, nicht wie zehn. Verbote: „Formular enthält Fehler", „John Doe", KI-fröhlicher feierlicher Copy, generische CTAs, tote Empty States.
@@ -606,13 +606,13 @@ Sub-Agents sind rollenspezifische Generatoren, die von Befehlen entsandt werden.
 
 - **Besitzt:** Das Verdauen von Forschungseingaben (Interviews, Analytics, Wettbewerber-Sites, A/B-Ergebnisse, Support-Tickets) zu umsetzbaren Designempfehlungen.
 - **Entsandt von:** `/ux-research`, `/ux-workshop`, `/ux-frame`.
-- **Eingaben:** Rohforschung — Transkripte, Exporte, Wettbewerber-URLs, Support-Cluster.
-- **Ausgaben:** Themen, Belege, Empfehlungen. Designt nie die Antwort — gibt dem Designer das Substrat, aus dem zu gestalten ist.
+- **Eingaben:** Rohforschung, Transkripte, Exporte, Wettbewerber-URLs, Support-Cluster.
+- **Ausgaben:** Themen, Belege, Empfehlungen. Designt nie die Antwort, gibt dem Designer das Substrat, aus dem zu gestalten ist.
 - **Tools:** `Read, Write, WebFetch, Bash, Glob, Grep`.
 
 ### `design-system-architect`
 
-- **Besitzt:** Vollständige Designsysteme — Tokens (Farbe, Typographie, Raum, Motion, Radius, Schatten), Foundation-Dokumente, Komponentenverträge, Dark-Mode-Paarungen, Theming-Schicht.
+- **Besitzt:** Vollständige Designsysteme, Tokens (Farbe, Typographie, Raum, Motion, Radius, Schatten), Foundation-Dokumente, Komponentenverträge, Dark-Mode-Paarungen, Theming-Schicht.
 - **Entsandt von:** `/ux-system`, `/ux-component`, wenn kein System existiert.
 - **Eingaben:** Brand-Brief + `.ux/last-recommendation.json` (Style + Palette + Typographie-Paar + Motion-Presets).
 - **Ausgaben:** Ein kohärentes, meinungsstarkes, produktionsreifes System, gegen das nachgelagerte Agents bauen können, ohne Grundlagen neu entscheiden zu müssen. Tokens-JSON, Foundations-MD, Komponentenverträge, Dark-Mode-Mapping.
@@ -641,105 +641,105 @@ Der aufrufende Befehl führt dann automatisch `/ux-lint` aus, bevor er sich für
 
 Die Datenschicht ist das Gehirn. Jeder Befehl liest aus ihr; die Engine merged darüber; der Linter scannt gegen sie. Alle Dateien liegen unter `data/` und kapseln ihre Einträge in `{_meta, entries}` zur Schemaversionierung.
 
-### `styles.json` — 84 Design-Styles
+### `styles.json`: 84 Design-Styles
 
 | Feld | Beschreibung |
 |---|---|
 | `entries` | 84 |
 | `keys per entry` | `id`, `name`, `category`, `philosophy`, `when_to_use`, `when_to_skip`, `tokens`, `references`, `compatible_palettes`, `compatible_type_pairs`, `compatible_motion`, `compatible_industries`, `taste_score` |
 | `categories` | Minimalistisch / Schweizerisch, Brutalistisch, Editorial, Glassmorphismus, Neumorphismus, Bento, Skeuomorph, Industriell, Maximalistisch, KI-Futuristisch, MENA-modern, Vaporwave usw. |
-| `sample entry` | `swiss-international` — „Das Raster ist Gesetz. Die Typographie leistet die Schwerarbeit. Dekoration ist Scheitern." |
+| `sample entry` | `swiss-international`, „Das Raster ist Gesetz. Die Typographie leistet die Schwerarbeit. Dekoration ist Scheitern." |
 
 Verwendet von: `/ux-recommend`, `/ux-system`, `/ux-design`. Schema: [data/SCHEMAS.md](data/SCHEMAS.md).
 
-### `palettes.json` — 176 Farbpaletten
+### `palettes.json`: 176 Farbpaletten
 
 | Feld | Beschreibung |
 |---|---|
 | `entries` | 176 |
 | `keys per entry` | `id`, `name`, `mode` (hell/dunkel), `tone`, `colors` (canvas, surface, ink, body, muted, primary, primary_active, hairline, success, warning, danger, accent), `wcag_contrast_audit`, `compatible_industries` |
 | `tones` | warm, editorial, magazin, klinisch, verspielt, brutalistisch, monochrom, juwelenfarbig, MENA-warm, dev-tools-dunkel usw. |
-| `sample entry` | `claude-warm-editorial` — hell, warm/editorial/magazin, canvas #faf9f5, primary #cc785c |
+| `sample entry` | `claude-warm-editorial`, hell, warm/editorial/magazin, canvas #faf9f5, primary #cc785c |
 
 Verwendet von: `/ux-recommend`, `/ux-system`. Kontrast verifiziert auf AA / AAA. Schema: [data/SCHEMAS.md](data/SCHEMAS.md).
 
-### `type-pairs.json` — 70 Typographie-Paarungen
+### `type-pairs.json`: 70 Typographie-Paarungen
 
 | Feld | Beschreibung |
 |---|---|
 | `entries` | 70 |
 | `keys per entry` | `id`, `name`, `display` (family + weights + source + license + URL), `body`, `mono`, `compatible_styles`, `taste_score` |
-| `sample entry` | `cormorant-inter-jetbrains` — Cormorant Garamond × Inter × JetBrains Mono |
+| `sample entry` | `cormorant-inter-jetbrains`, Cormorant Garamond × Inter × JetBrains Mono |
 
 Alle Schriftfamilien haben Lizenz + Quell-URL. Verwendet von `/ux-recommend`, `/ux-system`.
 
-### `components.json` — 148 Komponenten
+### `components.json`: 148 Komponenten
 
 | Feld | Beschreibung |
 |---|---|
 | `entries` | 148 |
 | `keys per entry` | `id`, `name`, `category`, `purpose`, `anatomy`, `states`, `tokens_used`, `motion`, `accessibility`, `compatible_styles`, `compatible_industries`, `code_skeleton` |
 | `categories` | Navigation, Formulare, Datenanzeige, Feedback, Overlays, Layout, Inhalt, Marketing, E-Commerce, Auth, Dashboard, Charts, Empty States, Loading States, Error States |
-| `sample entry` | `mega-nav-product-grid` — Mega-Navigation, Produkt-Grid — 6-teilige Anatomie, 4 Zustände |
+| `sample entry` | `mega-nav-product-grid`, Mega-Navigation, Produkt-Grid, 6-teilige Anatomie, 4 Zustände |
 
 Das ist unser größter Burggraben. Kein anderes Claude-UX-Plugin liefert ein strukturiertes Komponentenmanifest.
 
-### `industries.json` — 184 Branchenregeln
+### `industries.json`: 184 Branchenregeln
 
 | Feld | Beschreibung |
 |---|---|
 | `entries` | 184 |
 | `keys per entry` | `id`, `name`, `category`, `characteristics`, `audience_signals`, `recommended_styles`, `recommended_palettes`, `recommended_type_pairs`, `recommended_motion`, `regulatory_notes`, `regional_notes` |
 | `categories` | Finanzdienstleistungen, Gesundheitswesen, Bildung, E-Commerce, SaaS B2B, SaaS B2C, Developer Tools, Medien, Gaming, Reisen, Immobilien, MENA-spezifisch usw. |
-| `sample entry` | `fintech-neobank` — hohes Vertrauen, regulatorische Disclosures, Saldo-/Transaktions-Primär-UI, mobile-first für täglichen Gebrauch |
+| `sample entry` | `fintech-neobank`, hohes Vertrauen, regulatorische Disclosures, Saldo-/Transaktions-Primär-UI, mobile-first für täglichen Gebrauch |
 
 Verwendet von `/ux-recommend` als erste parallele Suchachse.
 
-### `chart-types.json` — 35 Diagrammtypen
+### `chart-types.json`: 35 Diagrammtypen
 
 | Feld | Beschreibung |
 |---|---|
 | `entries` | 35 |
 | `keys per entry` | `id`, `name`, `category`, `when_to_use`, `when_to_skip`, `encoding`, `accessibility`, `data_shape`, `compatible_styles` |
 | `categories` | Vergleich, Zeitreihen, Verteilung, Zusammensetzung, Beziehung, Fluss, Geografisch |
-| `sample entry` | `bar-vertical` — Vergleicht 4–15 diskrete Kategorien. Position auf der x-Achse mappt Kategorie; Höhe mappt Wert. |
+| `sample entry` | `bar-vertical`, Vergleicht 4–15 diskrete Kategorien. Position auf der x-Achse mappt Kategorie; Höhe mappt Wert. |
 
 Verwendet von `/ux-dashboard`, `/ux-component` (Chart-Instanzen).
 
-### `tech-stacks.json` — 25 Stacks
+### `tech-stacks.json`: 25 Stacks
 
 | Feld | Beschreibung |
 |---|---|
 | `entries` | 25 |
 | `keys per entry` | `id`, `name`, `category`, `tier`, `languages`, `ssr`, `rsc`, `compatible_styling`, `scaffold_command`, `compatible_motion`, `gotchas` |
 | `tiers` | production, prerelease, experimental |
-| `sample entry` | `nextjs-15-app-router` — Next.js 15 (App Router), TS/JS, SSR, RSC, kompatibel mit Tailwind 4 / CSS Modules / vanilla-extract / styled-components / panda-css |
+| `sample entry` | `nextjs-15-app-router`, Next.js 15 (App Router), TS/JS, SSR, RSC, kompatibel mit Tailwind 4 / CSS Modules / vanilla-extract / styled-components / panda-css |
 
 Weitere Stacks: Astro, SvelteKit, Remix, Nuxt 3, Solid Start, Qwik, Blade+Alpine, Hotwire, Phoenix LiveView, Hydrogen 2025.
 
-### `ux-guidelines.json` — 112 benannte UX-Gesetze
+### `ux-guidelines.json`: 112 benannte UX-Gesetze
 
 | Feld | Beschreibung |
 |---|---|
 | `entries` | 112 |
 | `keys per entry` | `id`, `name`, `category`, `source`, `principle`, `application`, `examples`, `caveats`, `related_laws` |
 | `categories` | Entscheidungskosten, Aufmerksamkeit, Gedächtnis, Motorische Kontrolle, Visuelle Wahrnehmung, Sozial, Emotional, Formulare, Fehlerbehandlung, Onboarding, Empty State usw. |
-| `sample entry` | `hicks-law` — Die Entscheidungszeit wächst logarithmisch mit der Anzahl der dargestellten Optionen |
+| `sample entry` | `hicks-law`, Die Entscheidungszeit wächst logarithmisch mit der Anzahl der dargestellten Optionen |
 
 Verwendet von `/ux-audit` (6-Linsen-Bewertung) und `/ux-critique` (Geschmacksanker).
 
-### `motion-presets.json` — 57 Motion-Presets
+### `motion-presets.json`: 57 Motion-Presets
 
 | Feld | Beschreibung |
 |---|---|
 | `entries` | 57 |
 | `keys per entry` | `id`, `name`, `category`, `tokens` (duration_ms, easing, transform_from/to, opacity_from/to), `stacks` (framer_motion, gsap, css), `accessibility` (reduced-motion-Fallback), `when_to_use` |
 | `categories` | Eintritt, Austritt, Hover, Focus, Tap, Loading, Empty, Success, Error, Scroll-gebunden |
-| `sample entry` | `fade-up-12px` — 360ms, `cubic-bezier(0.16, 1, 0.3, 1)`, translateY(12px) → 0, opacity 0 → 1 |
+| `sample entry` | `fade-up-12px`, 360ms, `cubic-bezier(0.16, 1, 0.3, 1)`, translateY(12px) → 0, opacity 0 → 1 |
 
 Jedes Preset hat eine reduced-motion-Variante. Stack-fertiger Code für Framer Motion, GSAP und reines CSS.
 
-### `anti-patterns.json` — 152 Regex-Regeln
+### `anti-patterns.json`: 152 Regex-Regeln
 
 | Feld | Beschreibung |
 |---|---|
@@ -747,9 +747,9 @@ Jedes Preset hat eine reduced-motion-Variante. Stack-fertiger Code für Framer M
 | `keys per entry` | `id`, `name`, `severity` (critical/high/medium/low), `category`, `detection` (type, pattern, flags, scope), `evidence_template`, `fix`, `references` |
 | `categories` | A11y (23), Inhalt (15), Layout (13), Typographie (10), Farbe (9), Qualität (9), Visuell (9), Motion (8), Performance (4) |
 
-Die vollständige Regelliste findet sich in [Die 152 Anti-KI-Slop-Regeln](#die-152-anti-ki-slop-regeln--der-linter).
+Die vollständige Regelliste findet sich in [Die 152 Anti-KI-Slop-Regeln](#die-152-anti-ki-slop-regeln-der-linter).
 
-### `brands/*.json` — 160 Brand-Specs
+### `brands/*.json`: 160 Brand-Specs
 
 | Feld | Beschreibung |
 |---|---|
@@ -757,11 +757,11 @@ Die vollständige Regelliste findet sich in [Die 152 Anti-KI-Slop-Regeln](#die-1
 | `keys per entry` | `id`, `name`, `category`, `voice`, `tokens` (color, type, motion), `design_principles`, `signature_moves`, `anti-moves`, `references` |
 | `categories` | Developer Tools (36), Consumer / Lifestyle / Retail (19), Fintech / Crypto (14), Editorial / Media (13), AI / ML Platform (12), Productivity / Collaboration (8), Automobil (8) |
 
-Vollständige Liste in [Die 160 Brand-DESIGN.md-Specs](#die-160-brand-designmd-specs--nach-kategorie).
+Vollständige Liste in [Die 160 Brand-DESIGN.md-Specs](#die-160-brand-designmd-specs-nach-kategorie).
 
 ---
 
-## Die 152 Anti-KI-Slop-Regeln — der Linter
+## Die 152 Anti-KI-Slop-Regeln: der Linter
 
 ux-skill liefert einen deterministischen Regex-basierten Linter aus. **Kein LLM.** **Keine API.** **Kein Netzwerk.** Läuft in CI in ~200 ms gegen eine typische Next.js-App. Beendet mit Non-Zero bei Critical-/High-Findings, wenn `--fail-on high` gesetzt ist.
 
@@ -889,9 +889,9 @@ Recommended next: /ux-polish --fix (LLM-driven, addresses both lintable and aest
 
 ---
 
-## Die 160 Brand-DESIGN.md-Specs — nach Kategorie
+## Die 160 Brand-DESIGN.md-Specs: nach Kategorie
 
-Echte Marken. Echte Designsprachen. Echte DESIGN.md-Specs — keine generischen Paletten. Sagen Sie dem Plugin „bau eine Landing im Stil von Stripe" und es liest das tatsächliche Markenvokabular: Stimm-Rubrik, Farbtokens, Motion-Konventionen, Signature Moves, Anti-Moves.
+Echte Marken. Echte Designsprachen. Echte DESIGN.md-Specs, keine generischen Paletten. Sagen Sie dem Plugin „bau eine Landing im Stil von Stripe" und es liest das tatsächliche Markenvokabular: Stimm-Rubrik, Farbtokens, Motion-Konventionen, Signature Moves, Anti-Moves.
 
 Jede Marke wird als strukturiertes JSON (`data/brands/<slug>.json`) plus Prosa-Referenz (`references/brands/<slug>.md`) ausgeliefert.
 
@@ -925,13 +925,13 @@ BMW, BMW M, Bugatti, Ferrari, Lamborghini, Renault, SpaceX, Tesla
 
 ### Warum das wichtig ist
 
-Die anderen 8 populären Claude-UX-Plugins erzeugen „modern minimal" oder „clean dashboard" — Varianten derselben Default-Ästhetik. ux-skill erlaubt es Ihnen, nach **Linears Klarheit**, **Stripes Ernsthaftigkeit**, **Apples Zurückhaltung**, **Teslas Monolith**, **Notions Freundlichkeit**, **Cursors Gradient-Disziplin**, **Raycasts Haarlinien-Dichte**, **Claudes warmem Editorial** zu fragen — und die Engine zieht die richtigen Tokens, Stimme, Motion-Konventionen und Signature Moves aus der Brand-Spec.
+Die anderen 8 populären Claude-UX-Plugins erzeugen „modern minimal" oder „clean dashboard", Varianten derselben Default-Ästhetik. ux-skill erlaubt es Ihnen, nach **Linears Klarheit**, **Stripes Ernsthaftigkeit**, **Apples Zurückhaltung**, **Teslas Monolith**, **Notions Freundlichkeit**, **Cursors Gradient-Disziplin**, **Raycasts Haarlinien-Dichte**, **Claudes warmem Editorial** zu fragen, und die Engine zieht die richtigen Tokens, Stimme, Motion-Konventionen und Signature Moves aus der Brand-Spec.
 
 ---
 
-## MCP-Server — der asymmetrische Zug
+## MCP-Server: der asymmetrische Zug
 
-ux-skill liefert einen **Model-Context-Protocol-Server** aus. Führen Sie `ux-mcp` aus und die Engine wird zu einem langlebigen stdio-Prozess, den jeder MCP-fähige Host — Claude Desktop, Cursor, Windsurf, generische Agents — aufrufen kann. Vierzehn Tools: `ux_recommend`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`. Dieselben Python-Handler, die auch die Slash-Befehle nutzen; dieselben Datenmanifeste; derselbe deterministische Recommender.
+ux-skill liefert einen **Model-Context-Protocol-Server** aus. Führen Sie `ux-mcp` aus und die Engine wird zu einem langlebigen stdio-Prozess, den jeder MCP-fähige Host, Claude Desktop, Cursor, Windsurf, generische Agents, aufrufen kann. Vierzehn Tools: `ux_recommend`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`. Dieselben Python-Handler, die auch die Slash-Befehle nutzen; dieselben Datenmanifeste; derselbe deterministische Recommender.
 
 **Warum das der asymmetrische Zug ist:** Keine der Top-8-Claude-UX-Skills (ui-ux-pro-max-skill, open-design, taste-skill, huashu-design, stitch, nothing-design, hallmark, material-3) liefert einen MCP-Server aus. Sie sind in der Claude-Code-Plugin-Runtime eingesperrt. ux-skill ist von jedem Host erreichbar, der MCP spricht, einschließlich Agents, die nie von einem Claude-Code-Plugin gehört haben.
 
@@ -972,7 +972,7 @@ In jeder IDE funktionieren dieselben CLI-Befehle `uxskill recommend` / `uxskill 
 
 ---
 
-## Anwendungsfälle — konkrete Szenarien
+## Anwendungsfälle: konkrete Szenarien
 
 Acht reale Szenarien. Wählen Sie das Ihrer Situation am nächsten kommende und passen Sie den Aufruf an.
 
@@ -1019,7 +1019,7 @@ Dann fragen Sie in Cursor: *„Generiere die Dashboard-Oberfläche mit der Empfe
 > [frontend-engineer generiert die Seite]
 
 /ux-lint .
-> [passt — die Stripe-Brand-Spec wurde respektiert]
+> [passt, die Stripe-Brand-Spec wurde respektiert]
 ```
 
 ### 3. Bestehenden Code in CI auf KI-Slop auditieren
@@ -1049,7 +1049,7 @@ Sie haben eine React-App geerbt, die wie jede andere KI-generierte SaaS-Seite au
 
 ```
 /ux-critique src/components/Hero.tsx
-> [3 Treffer, 3 Fehler, 1 strategischer Zug — die Einschätzung ist ehrlich]
+> [3 Treffer, 3 Fehler, 1 strategischer Zug, die Einschätzung ist ehrlich]
 
 /ux-lint src/
 > [15 KI-Fingerabdrücke mit hohem Schweregrad markiert]
@@ -1072,7 +1072,7 @@ Drei Befehle, eine polierte Oberfläche, atomare Commits pro Fix.
 > [entsendet frontend-engineer mit expliziter Linear-Spec]
 ```
 
-Die generierte Komponente nutzt Linears echte Farbtokens, Typographie-Stack, Motion-Konventionen, Haarlinien-Dichten — keine „generische dunkle UI".
+Die generierte Komponente nutzt Linears echte Farbtokens, Typographie-Stack, Motion-Konventionen, Haarlinien-Dichten, keine „generische dunkle UI".
 
 ### 6. Einen 90-minütigen Design-Thinking-Workshop mit Stakeholdern moderieren
 
@@ -1084,7 +1084,7 @@ Sie haben einen Raum mit 5 Personen für 90 Minuten. Sie wollen, dass sie mit ei
   --minutes=90
 ```
 
-Das Plugin moderiert die fünf Phasen (Exploration → Heatmap → Stakeholder-Map → Lösungsskizze → Game-Plan) von Anfang bis Ende, zeitgetaktet, mit konkreten Artefakten je Phase. Die Ausgabe ist `.ux/last-workshop.json` — der Game-Plan, nicht nur „interessante Findings".
+Das Plugin moderiert die fünf Phasen (Exploration → Heatmap → Stakeholder-Map → Lösungsskizze → Game-Plan) von Anfang bis Ende, zeitgetaktet, mit konkreten Artefakten je Phase. Die Ausgabe ist `.ux/last-workshop.json`, der Game-Plan, nicht nur „interessante Findings".
 
 ### 7. Nach Launch eine veröffentlichbare Case-Study schreiben
 
@@ -1097,11 +1097,11 @@ Sie haben die Loyalty-Wallet ausgeliefert. Sie wollen ein Portfolio-Stück.
 > [schreibt case-studies/bashiti-loyalty.html]
 ```
 
-Die Case-Study ist ein fertiges, veröffentlichbares Artefakt — kein Entwurf. Reines Monochrom, Editorial-Typographie, bereit für Ihr Portfolio.
+Die Case-Study ist ein fertiges, veröffentlichbares Artefakt, kein Entwurf. Reines Monochrom, Editorial-Typographie, bereit für Ihr Portfolio.
 
 ### 8. Discovery in einem Nicht-KI-Kontext fahren (nur strukturierter Intake)
 
-Sie grenzen ein Projekt ein. Sie brauchen noch keine Empfehlung — Sie brauchen ein strukturiertes Brief.
+Sie grenzen ein Projekt ein. Sie brauchen noch keine Empfehlung, Sie brauchen ein strukturiertes Brief.
 
 ```bash
 uxskill discover
@@ -1117,7 +1117,7 @@ cat .ux/last-discovery.json
 
 Sie können das JSON an Ihr Team weitergeben, in ein Notion-Doc einfügen oder in ein separates KI-Werkzeug einspeisen. ux-skill ist auch ein strukturiertes Intake-Werkzeug, nicht nur eine Engine.
 
-### 9. MASTER.md-Persistenz — Ihre Designentscheidungen, im Repo
+### 9. MASTER.md-Persistenz: Ihre Designentscheidungen, im Repo
 
 Nach `/ux-recommend` persistieren Sie den gewählten Style + Palette + Typographie + Motion + Komponenten + exemplarische Marken + Leitplanken als menschlich lesbare Markdown-Datei, die Ihr Team prüfen, diffen und versionieren kann.
 
@@ -1125,7 +1125,7 @@ Nach `/ux-recommend` persistieren Sie den gewählten Style + Palette + Typograph
 python3 -m engine.cli.main persist save --project-root .
 ```
 
-Schreibt `.ux/design-system/MASTER.md` (YAML-Frontmatter + Body) und `.ux/design-system/pages/<name>.md` pro generierter Oberfläche über `persist save-page`. Idempotent — dieselbe Eingabe erzeugt byte-identische Ausgabe, daher ist ein erneuter Lauf auf unverändertem Zustand ein No-op in Git.
+Schreibt `.ux/design-system/MASTER.md` (YAML-Frontmatter + Body) und `.ux/design-system/pages/<name>.md` pro generierter Oberfläche über `persist save-page`. Idempotent, dieselbe Eingabe erzeugt byte-identische Ausgabe, daher ist ein erneuter Lauf auf unverändertem Zustand ein No-op in Git.
 
 ---
 
@@ -1150,7 +1150,7 @@ Kurze Zusammenfassungstabelle. Vollständiger Tabelle-für-Tabelle-Vergleich unt
 
 - **ui-ux-pro-max** ist größer in Bekanntheit, liefert 18 IDEs, hat BM25-Suche über sein CSV. Es liefert weder Komponentenmanifest, Motion-Manifest, Markenbibliothek noch deterministischen Linter.
 - **open-design** hat 19 Skills + Preview, aber nur Claude-Code-Support und keine Anti-Slop-Schicht.
-- **hallmark** ist im Geist am nächsten (ebenfalls Anti-Slop), ist aber eine einzelne Skill — keine Engine, keine Manifeste, keine verketteten Befehle.
+- **hallmark** ist im Geist am nächsten (ebenfalls Anti-Slop), ist aber eine einzelne Skill, keine Engine, keine Manifeste, keine verketteten Befehle.
 - **material-3-skill** ist exzellent, wenn Sie ausdrücklich Material Design 3 wollen. Wir konkurrieren nicht auf MD3.
 
 Für vollständige Details je Dimension siehe [compare.html](https://uxskill.laithjunaidy.com/compare.html).
@@ -1159,24 +1159,24 @@ Für vollständige Details je Dimension siehe [compare.html](https://uxskill.lai
 
 ## Roadmap
 
-### v2.1 — Vollständigkeit des Linters (Q3 2026)
+### v2.1: Vollständigkeit des Linters (Q3 2026)
 
 - **+17 zurückgestellte Anti-Pattern-Regeln** für insgesamt 52. Ziele: Dunkel-auf-dunkel-Hover-Zustände, ausschließliche Farbcodierung von Zuständen, redundante z-index-Eskalation, hartkodierte Breakpoints in JS, opacity statt disabled-Zustand usw.
 - **`uxskill lint --fix` für sichere Umschreibungen** mechanisch behebbarer Findings (button-no-type, img-no-alt mit leerem String, Entfernung von console-log-leak).
 - **VS-Code-Erweiterung**, die Linter-Findings inline an die Oberfläche bringt (kein CI nötig).
 
-### v2.2 — Erweiterung des Komponentenmanifests (Q4 2026)
+### v2.2: Erweiterung des Komponentenmanifests (Q4 2026)
 
 - **+50 Komponenten** für insgesamt 198. Neuerungen: Combobox mit Async-Filter, Command-Palette mit Heuristik für neueste Items, conditional-form-step, Payment-Element-Varianten, RTL-bewusster Date-Picker, MENA-spezifisches Telefon-Input, Calendar-Grid mit Hijri-Overlay.
 - **Code-Emission je Komponente** in 6 Stacks (Next.js + React, Vue 3 + Nuxt, SvelteKit, Astro, Blade + Alpine, vanilla HTML/CSS).
-- **Komponenten-Playground** auf uxskill.laithjunaidy.com/playground — probieren Sie die Empfehlungs-Engine aus + sehen Sie eine Live-Preview der Komponente.
+- **Komponenten-Playground** auf uxskill.laithjunaidy.com/playground, probieren Sie die Empfehlungs-Engine aus + sehen Sie eine Live-Preview der Komponente.
 
-### v3 — Der Marketplace + der Lock-in (2027)
+### v3: Der Marketplace + der Lock-in (2027)
 
-- **Brand-Spec-Marketplace** — Community-Brand-Specs veröffentlichen und entdecken. Bezahltes Publizieren zur Finanzierung der Moderation.
-- **Eigene Anti-Pattern-Regeln** — Projekte können eigene Regex-Regeln in `data/anti-patterns.local.json` definieren (bereits in v2 ausgeliefert; v3 fügt Entdeckung + Teilen hinzu).
-- **`uxskill plan`** — vollständige mehrseitige Site-Planung aus einem Brief, nicht nur eine Oberfläche.
-- **Figma-Plugin-Parität** — dieselbe Empfehlungs-Engine, in Figma sichtbar.
+- **Brand-Spec-Marketplace**: Community-Brand-Specs veröffentlichen und entdecken. Bezahltes Publizieren zur Finanzierung der Moderation.
+- **Eigene Anti-Pattern-Regeln**: Projekte können eigene Regex-Regeln in `data/anti-patterns.local.json` definieren (bereits in v2 ausgeliefert; v3 fügt Entdeckung + Teilen hinzu).
+- **`uxskill plan`**: vollständige mehrseitige Site-Planung aus einem Brief, nicht nur eine Oberfläche.
+- **Figma-Plugin-Parität**: dieselbe Empfehlungs-Engine, in Figma sichtbar.
 
 ---
 
@@ -1186,9 +1186,9 @@ Issues und PRs willkommen. Drei Bereiche mit hohem Hebel:
 
 ### Eine Anti-Pattern-Regel hinzufügen
 
-1. Bearbeiten Sie `data/anti-patterns.json` — fügen Sie einen Eintrag mit `id`, `name`, `severity`, `category`, `detection.pattern`, `detection.flags`, `detection.scope`, `evidence_template`, `fix`, `references` hinzu.
-2. Fügen Sie einen Test in `tests/linter/` hinzu — eine Datei, die die Regel auslöst, eine, die es nicht tut.
-3. Führen Sie `uxskill lint tests/linter/should-trigger/<rule>.tsx` aus — bestätigen Sie, dass sie feuert. Führen Sie auf `tests/linter/should-not-trigger/<rule>.tsx` aus — bestätigen Sie, dass sie es nicht tut.
+1. Bearbeiten Sie `data/anti-patterns.json`, fügen Sie einen Eintrag mit `id`, `name`, `severity`, `category`, `detection.pattern`, `detection.flags`, `detection.scope`, `evidence_template`, `fix`, `references` hinzu.
+2. Fügen Sie einen Test in `tests/linter/` hinzu, eine Datei, die die Regel auslöst, eine, die es nicht tut.
+3. Führen Sie `uxskill lint tests/linter/should-trigger/<rule>.tsx` aus, bestätigen Sie, dass sie feuert. Führen Sie auf `tests/linter/should-not-trigger/<rule>.tsx` aus, bestätigen Sie, dass sie es nicht tut.
 4. Öffnen Sie einen PR.
 
 ### Eine Brand-Spec hinzufügen
@@ -1200,7 +1200,7 @@ Issues und PRs willkommen. Drei Bereiche mit hohem Hebel:
 
 ### Ein Motion-Preset hinzufügen
 
-1. Bearbeiten Sie `data/motion-presets.json` — fügen Sie einen Eintrag mit `id`, `name`, `category`, `tokens`, `stacks` (framer_motion, gsap, css), `accessibility.reduced_motion_fallback`, `when_to_use` hinzu.
+1. Bearbeiten Sie `data/motion-presets.json`, fügen Sie einen Eintrag mit `id`, `name`, `category`, `tokens`, `stacks` (framer_motion, gsap, css), `accessibility.reduced_motion_fallback`, `when_to_use` hinzu.
 2. Das Preset muss eine reduced-motion-Variante haben. Keine Ausnahmen.
 3. Öffnen Sie einen PR.
 
@@ -1216,11 +1216,11 @@ Issues und PRs willkommen. Drei Bereiche mit hohem Hebel:
 
 ### Lizenz
 
-MIT. Nutzen Sie es, forken Sie es, bauen Sie darauf auf. Wenn es Sie davor bewahrt, KI-Slop auszuliefern, vergeben Sie einen Stern an das Repo — das ist die günstigste Form der Unterstützung.
+MIT. Nutzen Sie es, forken Sie es, bauen Sie darauf auf. Wenn es Sie davor bewahrt, KI-Slop auszuliefern, vergeben Sie einen Stern an das Repo, das ist die günstigste Form der Unterstützung.
 
 ### Autor
 
-**Laith Aljunaidy** — Solo-Gründer von [Dot](https://thedotwallet.com), einer MENA-first-Loyalty-Plattform. Baut ux-skill, damit das KI-generierte Frontend nicht mehr gleich aussieht.
+**Laith Aljunaidy**: Solo-Gründer von [Dot](https://thedotwallet.com), einer MENA-first-Loyalty-Plattform. Baut ux-skill, damit das KI-generierte Frontend nicht mehr gleich aussieht.
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
 - E-Mail: laith.aljunaidy.laith@gmail.com
@@ -1233,9 +1233,9 @@ MIT. Nutzen Sie es, forken Sie es, bauen Sie darauf auf. Wenn es Sie davor bewah
 
 - Dem Team von Anthropic für Claude Code und die Skill- / Plugin-Architektur, die dies vertreibbar macht.
 - Nielsen Norman Group, Laws of UX (lawsofux.com) und der UX-Forschungs-Community, deren Arbeit `data/ux-guidelines.json` speist.
-- Jeder in `data/brands/` gelisteten Marke — ihre öffentlichen Designsysteme sind die Quelle der Wahrheit für die Brand-Specs.
+- Jeder in `data/brands/` gelisteten Marke, ihre öffentlichen Designsysteme sind die Quelle der Wahrheit für die Brand-Specs.
 - Den ursprünglichen v1-Mitwirkenden: eine Einzel-Claude-Skill, die zum Samen für die v2-Python-Engine wurde.
-- Den 8 populären Claude-UX-Plugins, mit denen wir uns verglichen haben — sie haben die Latte höher gelegt; dies ist unsere Antwort.
+- Den 8 populären Claude-UX-Plugins, mit denen wir uns verglichen haben, sie haben die Latte höher gelegt; dies ist unsere Antwort.
 
 ---
 

@@ -11,7 +11,7 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>From Figma to code without losing the design system — ux-skill is the bridge</title>
+  <title>From Figma to code without losing the design system, ux-skill is the bridge</title>
   <meta name="description" content="Figma to code without design-system drift. The handoff problem in 2026, why Figma MCP and AI coding tools miss tokens, and how ux-skill's 1,243-entry catalog plus 145-rule linter keeps the system intact from Figma file to Cursor and Claude Code.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/blog/ai-design-system-figma-to-code.html">
   <meta name="theme-color" content="#07080a">
@@ -25,11 +25,11 @@
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/ai-design-system-figma-to-code.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ux-skill — ai-design-system-figma-to-code">
+  <meta property="og:image:alt" content="ux-skill, ai-design-system-figma-to-code">
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/ai-design-system-figma-to-code.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Figma to code without losing the design system — ux-skill is the bridge">
+  <meta name="twitter:title" content="Figma to code without losing the design system, ux-skill is the bridge">
   <meta name="twitter:description" content="Figma MCP imports designs. AI tools write code. The tokens drift in between. 1,243 entries, 145 deterministic rules, one tokens.css both sides agree on.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,7 +40,7 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "From Figma to code without losing the design system — ux-skill is the bridge",
+    "headline": "From Figma to code without losing the design system, ux-skill is the bridge",
     "description": "Figma MCP imports designs. AI tools write code. The system drifts in the middle. ux-skill closes the loop with a 1,243-entry catalog, 145 deterministic rules, and a single tokens.css both sides agree on.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
@@ -62,7 +62,7 @@
   }
   </script>
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "From Figma to code without losing the design system — ux-skill is the bridge", "item": "https://uxskill.laithjunaidy.com/blog/ai-design-system-figma-to-code.html"}]}
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://uxskill.laithjunaidy.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://uxskill.laithjunaidy.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "From Figma to code without losing the design system, ux-skill is the bridge", "item": "https://uxskill.laithjunaidy.com/blog/ai-design-system-figma-to-code.html"}]}
 </script>
 
   <style>
@@ -529,7 +529,7 @@
       <span class="eyebrow">Blog · Design Systems · 2026-05-28</span>
       <h1>From Figma to code without losing the <span class="accent">design system</span>.</h1>
       <p class="lede">
-        <strong>The Figma file has the tokens. The AI session does not.</strong> Figma MCP imports a frame; Cursor and Claude Code write the components; the design system drifts somewhere in the middle. ux-skill is the bridge — one <code>tokens.css</code> both sides agree on, a 1,243-entry catalog the recommender draws from, and 145 deterministic rules that catch drift before it merges.
+        <strong>The Figma file has the tokens. The AI session does not.</strong> Figma MCP imports a frame; Cursor and Claude Code write the components; the design system drifts somewhere in the middle. ux-skill is the bridge, one <code>tokens.css</code> both sides agree on, a 1,243-entry catalog the recommender draws from, and 145 deterministic rules that catch drift before it merges.
       </p>
       <p class="byline">By the ux-skill team · 10 min read · MIT-licensed open source</p>
 
@@ -538,10 +538,10 @@
         Two new tools enter the design-to-code pipeline this year. Figma's MCP server exposes file frames to AI coding sessions over the Model Context Protocol; AI coding tools (Cursor, Claude Code, Windsurf, GitHub Copilot, Cline, Continue, JetBrains AI Assistant) consume that context and emit components. On paper, the handoff is clean. In practice, the system drifts at every step.
       </p>
       <p>
-        Three places the drift shows up. First, the AI session reads a Figma frame as pixels, not tokens — a <code>16px</code> radius in the file becomes a hardcoded <code>border-radius: 16px;</code> in the output, not <code>var(--radius-md)</code>. Second, the model defaults reassert themselves the moment the frame ends — Inter at 90px for the next h1, a purple-to-blue gradient for the next CTA, three equal cards for the next features block. Third, the auditing surface that would catch this drift in a code review doesn't exist. Designers don't read PRs; engineers don't reopen the Figma file. The system erodes through hundreds of small handoffs.
+        Three places the drift shows up. First, the AI session reads a Figma frame as pixels, not tokens, a <code>16px</code> radius in the file becomes a hardcoded <code>border-radius: 16px;</code> in the output, not <code>var(--radius-md)</code>. Second, the model defaults reassert themselves the moment the frame ends, Inter at 90px for the next h1, a purple-to-blue gradient for the next CTA, three equal cards for the next features block. Third, the auditing surface that would catch this drift in a code review doesn't exist. Designers don't read PRs; engineers don't reopen the Figma file. The system erodes through hundreds of small handoffs.
       </p>
       <p>
-        The fix is not "use the Figma MCP harder" or "write a stricter prompt." The fix is a deterministic floor that both sides agree on — a token file the design system owns, a recommender that reads it before generating, and a linter that gates every PR push against it. That's what ux-skill is.
+        The fix is not "use the Figma MCP harder" or "write a stricter prompt." The fix is a deterministic floor that both sides agree on, a token file the design system owns, a recommender that reads it before generating, and a linter that gates every PR push against it. That's what ux-skill is.
       </p>
 
       <h2>How the bridge actually works</h2>
@@ -576,7 +576,7 @@
       <p>
         <strong>Step 1: export Figma variables to <code>tokens.css</code>.</strong> The official Figma Variables REST API returns the resolved values for every variable in a file. A 40-line script flattens them into a single CSS custom-properties block:
       </p>
-      <pre class="code"><span class="c">/* tokens.css — exported from Figma variables 2026-05-28 */</span>
+      <pre class="code"><span class="c">/* tokens.css, exported from Figma variables 2026-05-28 */</span>
 :root {
   <span class="c">/* Color (Saturated Cinema palette) */</span>
   <span class="k">--canvas</span>: #07080a;
@@ -656,7 +656,7 @@
 
       <h2>What Figma MCP does and does not solve</h2>
       <p>
-        Figma's MCP server, released in early 2025 and stabilized through 2026, exposes a file's frames and layer tree to any MCP-aware client. Cursor, Claude Desktop, Windsurf, Continue, Cline, Zed, and a dozen others can read a frame and reason about it. That's a real step forward, and it's the right primitive — but it only solves one half of the handoff.
+        Figma's MCP server, released in early 2025 and stabilized through 2026, exposes a file's frames and layer tree to any MCP-aware client. Cursor, Claude Desktop, Windsurf, Continue, Cline, Zed, and a dozen others can read a frame and reason about it. That's a real step forward, and it's the right primitive, but it only solves one half of the handoff.
       </p>
       <p>
         Figma MCP gives the AI session <em>access to the design</em>. It does not give the session <em>access to the system</em>. The design is one screen, one frame, one composition. The system is the tokens, the type pairs, the spacing scale, the motion language, the rules of what does not exist in this brand. A frame can be on-system or off-system; without the system in the same context window, the AI session can't tell the difference and will not consistently reach for tokens when the frame's pixels match a hardcoded value.
@@ -665,7 +665,7 @@
         ux-skill complements Figma MCP. The MCP server provides the frame; ux-skill provides the system (the <code>tokens.css</code>, the <code>MASTER.md</code> narrative, the recommender's resolved <code>manifest.json</code>, and the 145-rule lint). Together, the AI session has both the picture and the grammar.
       </p>
 
-      <h2>The 998 catalog entries — what's in there</h2>
+      <h2>The 998 catalog entries: what's in there</h2>
       <p>
         The recommender's catalog is the most-asked-about piece. Pulled from <code>data/registry.json</code>, the 1,243 entries are partitioned across nine lanes the engine searches in parallel:
       </p>
@@ -676,12 +676,12 @@
           </thead>
           <tbody>
             <tr><td>Industries</td><td class="num">161</td><td>Verticals from logistics to legaltech, each with a default tone profile and pattern set.</td></tr>
-            <tr><td>Styles</td><td class="num">50</td><td>Aesthetic profiles — editorial cinema, swiss minimal, brutalist warm, mid-mod, neo-pop, etc.</td></tr>
+            <tr><td>Styles</td><td class="num">50</td><td>Aesthetic profiles, editorial cinema, swiss minimal, brutalist warm, mid-mod, neo-pop, etc.</td></tr>
             <tr><td>Palettes</td><td class="num">161</td><td>Color systems with hue, saturation, contrast, dark-mode treatment, semantic mapping.</td></tr>
             <tr><td>Type pairs</td><td class="num">57</td><td>Display + body combinations vetted for legibility, screen rendering, and license footprint.</td></tr>
             <tr><td>Motion presets</td><td class="num">57</td><td>Framer Motion, GSAP, and CSS snippets with <code>prefers-reduced-motion</code> branches.</td></tr>
             <tr><td>Components</td><td class="num">182</td><td>Patterns from cards to dialogs to dashboards, with composition rules.</td></tr>
-            <tr><td>Brand specs</td><td class="num">110</td><td>Reference systems from Stripe to Airbnb to Vercel — the grammar of working brands.</td></tr>
+            <tr><td>Brand specs</td><td class="num">110</td><td>Reference systems from Stripe to Airbnb to Vercel, the grammar of working brands.</td></tr>
             <tr><td>Anti-patterns</td><td class="num">145</td><td>The 145 rules the linter enforces. Same JSON, two consumers.</td></tr>
             <tr><td>Misc taxonomies</td><td class="num">120</td><td>Density profiles, voice registers, layout grammars, density adjustments, RTL deltas.</td></tr>
             <tr><td><strong>Total</strong></td><td class="num"><strong>998</strong></td><td>One JSON tree. Loaded into the recommender, the linter, and the MCP server.</td></tr>
@@ -689,7 +689,7 @@
         </table>
       </div>
       <p>
-        The number that matters most for the Figma bridge is <strong>160 brand specs</strong>. When you brief the recommender with "an editorial fintech, dense data, calm voice," it can land on a resolved system that reads like a real brand because it has 110 real brands to draw from — not synthesized AI defaults.
+        The number that matters most for the Figma bridge is <strong>160 brand specs</strong>. When you brief the recommender with "an editorial fintech, dense data, calm voice," it can land on a resolved system that reads like a real brand because it has 110 real brands to draw from, not synthesized AI defaults.
       </p>
 
       <h2>The four-step bridge as a workflow</h2>
@@ -698,7 +698,7 @@
       </p>
       <ol>
         <li><strong>Export Figma variables</strong> to <code>tokens.css</code>. Run as a CI job on the Figma file's update webhook, or as a manual command before a sprint kickoff.</li>
-        <li><strong>Run <code>uxskill discover</code></strong> against the brief that already exists (the product spec, the design intent doc). 10 fields, no improvisation — the discovery protocol is in <a href="/blog/python-design-system-generator.html" class="link">references/process/discovery-protocol.md</a>.</li>
+        <li><strong>Run <code>uxskill discover</code></strong> against the brief that already exists (the product spec, the design intent doc). 10 fields, no improvisation, the discovery protocol is in <a href="/blog/python-design-system-generator.html" class="link">references/process/discovery-protocol.md</a>.</li>
         <li><strong>Run <code>uxskill recommend</code></strong>. Five parallel searches over the 1,243 entries return one resolved system. The <code>MASTER.md</code> writes itself.</li>
         <li><strong>Run <code>uxskill lint</code></strong> in pre-commit and CI. The 145 rules gate every push. The Figma file's tokens are present; the AI session honoured them; the linter confirms it.</li>
       </ol>
@@ -708,7 +708,7 @@
         ux-skill ships across 17 IDEs through three install paths: a Claude Code plugin (<code>/plugin install ux@ux-skill</code>), a Python package (<code>pip install uxskill</code>), and an MCP server (<code>npx uxskill@alpha mcp</code>). The same engine reaches Claude Desktop, Cursor, Windsurf, Continue, Cline, Roo Code, Codex, Aider, Zed, JetBrains AI Assistant, GitHub Copilot, Gemini Code Assist, and the rest.
       </p>
       <p>
-        If you're already using Figma MCP — keep using it. ux-skill is additive. If you're already using a token-export pipeline like Style Dictionary or Specify, ux-skill reads whatever <code>tokens.css</code> you produce. The bridge is not opinionated about the source; it's opinionated about the destination (a single file, custom properties, no JS).
+        If you're already using Figma MCP, keep using it. ux-skill is additive. If you're already using a token-export pipeline like Style Dictionary or Specify, ux-skill reads whatever <code>tokens.css</code> you produce. The bridge is not opinionated about the source; it's opinionated about the destination (a single file, custom properties, no JS).
       </p>
 
       <blockquote>
@@ -717,14 +717,14 @@
 
       <h2>How it pairs with the rest of the design loop</h2>
       <p>
-        The bridge alone is reactive — it catches drift in code that already exists. The full ux-skill loop is preventative <em>and</em> reactive, the same five-step pattern documented in <a href="/blog/regex-linter-for-ai-coding.html" class="link">the regex linter post</a>:
+        The bridge alone is reactive, it catches drift in code that already exists. The full ux-skill loop is preventative <em>and</em> reactive, the same five-step pattern documented in <a href="/blog/regex-linter-for-ai-coding.html" class="link">the regex linter post</a>:
       </p>
       <ol>
-        <li><code>/ux-frame</code> — 10-field discovery brief (the forcing function).</li>
-        <li><code>/ux-recommend</code> — Python engine runs five parallel searches and returns a system.</li>
-        <li><code>/ux-design</code> — generate the surface against that system, with the Figma frame as supporting context.</li>
-        <li><code>/ux-lint</code> — gate the output with 145 regex rules.</li>
-        <li><code>/ux-fix</code> — auto-patch findings the regex can resolve (Inter to display face, indigo gradient to single accent, three-card grid to bento).</li>
+        <li><code>/ux-frame</code>, 10-field discovery brief (the forcing function).</li>
+        <li><code>/ux-recommend</code>, Python engine runs five parallel searches and returns a system.</li>
+        <li><code>/ux-design</code>, generate the surface against that system, with the Figma frame as supporting context.</li>
+        <li><code>/ux-lint</code>, gate the output with 145 regex rules.</li>
+        <li><code>/ux-fix</code>, auto-patch findings the regex can resolve (Inter to display face, indigo gradient to single accent, three-card grid to bento).</li>
       </ol>
       <p>
         Steps 1 to 3 reduce the rate at which the model produces drift. Steps 4 to 5 catch what slipped through. The recommender raises the floor; the linter sets the ceiling.
@@ -734,7 +734,7 @@
         <div class="label">Honest scope</div>
         <h4>The bridge does not replace a designer.</h4>
         <p>If you have a designer on the team, they own the Figma file. ux-skill makes the system they built durable through the AI handoff. It does not generate the Figma file, does not draw frames, and does not replace the taste call on a hero composition.</p>
-        <p>If you don't have a designer, ux-skill's recommender gets you to a defensible system from a written brief. The output is not Figma-quality polish — it's a working system you can hand to an AI session and not lose in translation. The taste call still needs a human or a sharper tool.</p>
+        <p>If you don't have a designer, ux-skill's recommender gets you to a defensible system from a written brief. The output is not Figma-quality polish, it's a working system you can hand to an AI session and not lose in translation. The taste call still needs a human or a sharper tool.</p>
       </div>
 
       <h2>What this means for shipping</h2>
@@ -742,16 +742,16 @@
         The handoff between design and code is the place every system erodes. The Figma MCP and the AI coding tools each solve half the problem; ux-skill closes the gap. One <code>tokens.css</code> both sides agree on. One 1,243-entry catalog the recommender draws from. One 145-rule lint that catches the drift before merge. 25 commands across 17 IDEs that surface the same engine wherever you write code.
       </p>
       <p>
-        14 GitHub stars at the time of writing. That's the floor we're starting from — for comparison, ui-ux-pro-max sits at 84k and taste-skill at 25k. The asymmetric move is not the star count; it's that ux-skill is the only one of the three that runs in CI as a non-zero exit. The other two ship recommenders. ux-skill ships a recommender, a linter, an MCP server, and the bridge between them.
+        14 GitHub stars at the time of writing. That's the floor we're starting from, for comparison, ui-ux-pro-max sits at 84k and taste-skill at 25k. The asymmetric move is not the star count; it's that ux-skill is the only one of the three that runs in CI as a non-zero exit. The other two ship recommenders. ux-skill ships a recommender, a linter, an MCP server, and the bridge between them.
       </p>
 
       <h2>Related reading</h2>
       <ul>
-        <li><a href="/blog/figma-vs-ux-skill.html" class="link">Figma MCP vs ux-skill — the full side-by-side</a> — when to use each, when to use both.</li>
-        <li><a href="/blog/python-design-system-generator.html" class="link">Python design system generator — the 5-parallel-search engine</a> — what's running underneath <code>uxskill recommend</code>.</li>
-        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter for AI coding — 145 rules in CI</a> — the deterministic floor under the bridge.</li>
-        <li><a href="/blog/monorepo-design-system-ai-coding.html" class="link">Monorepo design system with AI coding</a> — one <code>tokens.css</code> across every package.</li>
-        <li><a href="/blog/mcp-server-design-intelligence.html" class="link">MCP server — 18 tools any agent can call</a> — the protocol surface.</li>
+        <li><a href="/blog/figma-vs-ux-skill.html" class="link">Figma MCP vs ux-skill, the full side-by-side</a>, when to use each, when to use both.</li>
+        <li><a href="/blog/python-design-system-generator.html" class="link">Python design system generator, the 5-parallel-search engine</a>, what's running underneath <code>uxskill recommend</code>.</li>
+        <li><a href="/blog/regex-linter-for-ai-coding.html" class="link">Regex linter for AI coding, 145 rules in CI</a>, the deterministic floor under the bridge.</li>
+        <li><a href="/blog/monorepo-design-system-ai-coding.html" class="link">Monorepo design system with AI coding</a>, one <code>tokens.css</code> across every package.</li>
+        <li><a href="/blog/mcp-server-design-intelligence.html" class="link">MCP server, 18 tools any agent can call</a>, the protocol surface.</li>
       </ul>
     </article>
 
@@ -763,9 +763,9 @@
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— or —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">— or —</div>
+        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>
