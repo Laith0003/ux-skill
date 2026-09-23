@@ -1,14 +1,19 @@
 """Guard: nothing in the public engine repeats licensed foundation docs, names the
 client engagement, or leaks a confidential term.
 
-Three tests:
+Four tests:
 1. Shingle test against the private Ds/ corpus. Runs only on a machine that has
-   the private source (CI skips).
-2. Name guard for the client company name and the vendor domain (plus its common
+   the private source (CI skips). Per R24, a shingle only counts when it is
+   mostly prose (see MIN_ALPHA_WORDS below) so public numeric vocabulary
+   (cubic-bezier curves, rgba offsets, WCAG criterion titles) does not trip
+   the guard.
+2. A CI-safe unit test proving that R24 filter: a prose sentence still yields
+   counted shingles, a numeric/token run does not. Needs no private source.
+3. Name guard for the client company name and the vendor domain (plus its common
    misspelling). Runs everywhere, including CI, over every file `git ls-files`
    tracks. The forbidden names are assembled at runtime so this file never
    carries them as literals.
-3. Private-term guard against `~/Code/ux-skill/ds-source/private-terms.txt`.
+4. Private-term guard against `~/Code/ux-skill/ds-source/private-terms.txt`.
    Skips cleanly when that file is absent (CI, or any machine without the
    private source).
 """
@@ -36,9 +41,23 @@ BINARY_SUFFIXES = {
 }
 
 
+# R24: a shingle only counts when most of it is prose. Cubic-bezier numbers,
+# rgba shadow offsets, and WCAG criterion titles ("2.3.1 ...") are public
+# vocabulary, not licensed phrasing, so require the majority of an 8-gram's
+# words to be real alphabetic terms before treating it as a match.
+MIN_ALPHA_WORDS = 5
+_ALPHA_WORD = re.compile(r"[a-z']{3,}")
+
+
 def shingles(text, n=8):
     w = re.findall(r"[a-z0-9']+", text.lower())
-    return {" ".join(w[i:i + n]) for i in range(len(w) - n)}
+    result = set()
+    for i in range(len(w) - n):
+        gram = w[i:i + n]
+        alpha = sum(1 for word in gram if _ALPHA_WORD.fullmatch(word))
+        if alpha >= MIN_ALPHA_WORDS:
+            result.add(" ".join(gram))
+    return result
 
 
 @pytest.mark.skipif(not PRIVATE.exists(), reason="private source not on this machine")
@@ -62,6 +81,16 @@ def test_no_eight_word_run_from_licensed_docs():
             if shared:
                 hits.append(f"{f.relative_to(REPO)}: {sorted(shared)[0]}")
     assert not hits, "licensed phrasing found:\n" + "\n".join(hits[:20])
+
+
+def test_shingle_filter_counts_prose_not_numbers():
+    prose = (
+        "the palette must always keep every semantic role pointing at a "
+        "primitive step"
+    )
+    numeric = "cubic bezier 0 4 0 0 2 1 standard"
+    assert shingles(prose), "prose sentence should still yield counted shingles"
+    assert not shingles(numeric), "numeric/token run should yield no counted shingles"
 
 
 def _tracked_files():
