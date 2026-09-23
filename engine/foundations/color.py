@@ -3,7 +3,8 @@ the WCAG pairings every system must meet, and a deterministic retune."""
 from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
-from typing import Dict, List, Tuple
+from types import MappingProxyType
+from typing import Dict, List, Mapping, Tuple
 
 from engine.foundations.color_math import contrast, hex_to_oklch, oklch_to_hex
 from engine.foundations.gate import GateFailure, GateFinding, Pairing, gate
@@ -15,7 +16,7 @@ STATUS_HUES = {"danger": 25.0, "warning": 75.0, "success": 150.0, "info": 245.0}
 STATUS_SEED = (0.58, 0.16)  # OKLCH lightness, chroma for status seeds
 
 
-SEMANTIC: Dict[str, Tuple[str, str]] = {
+_SEMANTIC: Dict[str, Tuple[str, str]] = {
     "color.surface.page": ("color.neutral.50", "color.neutral.950"),
     "color.surface.card": ("color.base.white", "color.neutral.900"),
     "color.surface.sunken": ("color.neutral.100", "color.base.black"),
@@ -32,11 +33,13 @@ SEMANTIC: Dict[str, Tuple[str, str]] = {
     "color.focus.ring": ("color.brand.500", "color.brand.300"),
 }
 for _s in STATUS_HUES:
-    SEMANTIC[f"color.status.{_s}.text"] = (f"color.{_s}.700", f"color.{_s}.300")
-    SEMANTIC[f"color.status.{_s}.soft"] = (f"color.{_s}.100", f"color.{_s}.900")
+    _SEMANTIC[f"color.status.{_s}.text"] = (f"color.{_s}.700", f"color.{_s}.300")
+    _SEMANTIC[f"color.status.{_s}.soft"] = (f"color.{_s}.100", f"color.{_s}.900")
+# Read-only view: role -> (light primitive, dark primitive).
+SEMANTIC: Mapping[str, Tuple[str, str]] = MappingProxyType(_SEMANTIC)
 
 _TEXT_BGS = ("color.surface.page", "color.surface.card")
-PAIRINGS: List[Pairing] = (
+PAIRINGS: Tuple[Pairing, ...] = tuple(
     [Pairing("color.text.default", bg, 4.5, "1.4.3") for bg in _TEXT_BGS + ("color.surface.sunken",)]
     + [Pairing("color.text.muted", bg, 4.5, "1.4.3") for bg in _TEXT_BGS]
     + [Pairing("color.text.link", bg, 4.5, "1.4.3") for bg in _TEXT_BGS]

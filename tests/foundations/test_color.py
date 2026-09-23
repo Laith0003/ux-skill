@@ -206,3 +206,13 @@ def test_sweep_pairings_pass_and_hover_is_distinct(seed):
         # letting the hover fill nearly disappear.
         assert contrast(hover, page) >= 3.0, \
             f"{seed}: hover on page ({mode}) = {contrast(hover, page):.2f}"
+
+
+def test_public_tables_are_immutable():
+    # R27 M8: one caller's PAIRINGS.append or SEMANTIC[...] = ... used to
+    # change the gate and the generator for the whole process.
+    from types import MappingProxyType
+    assert isinstance(PAIRINGS, tuple)
+    assert isinstance(SEMANTIC, MappingProxyType)
+    with pytest.raises(TypeError):
+        SEMANTIC["color.text.extra"] = ("color.neutral.900", "color.neutral.50")
