@@ -239,11 +239,6 @@
       display: inline-flex; align-items: center; gap: 10px;
       margin-bottom: 22px;
     }
-    .eyebrow::before {
-      content: ''; display: inline-block;
-      width: 22px; height: 1px;
-      background: currentColor;
-    }
 
     h1, h2, h3, h4 {
       font-family: var(--display);
@@ -521,7 +516,6 @@
     }
     @media (max-width: 720px) { .cta { padding: 40px 28px; } }
     .cta .eyebrow { color: var(--scene-accent); }
-    .cta .eyebrow::before { background: currentColor; }
     .cta h2 { color: var(--ink); max-width: 740px; }
     .cta p { color: var(--body); max-width: 640px; margin-bottom: 28px; }
     .install-block {

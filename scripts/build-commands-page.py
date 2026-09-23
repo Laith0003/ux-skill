@@ -315,11 +315,6 @@ HEAD = """<!DOCTYPE html>
       display: inline-flex; align-items: center; gap: 10px;
       margin-bottom: 22px;
     }
-    .eyebrow::before {
-      content: ''; display: inline-block;
-      width: 22px; height: 1px;
-      background: currentColor;
-    }
 
     h1, h2 {
       font-family: var(--display);
@@ -439,6 +434,7 @@ HEAD = """<!DOCTYPE html>
     .cmd-desc {
       color: var(--ink);
       font-weight: 500;
+      overflow-wrap: anywhere;
       margin: 0 0 8px;
     }
     .cmd-intro {

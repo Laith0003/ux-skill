@@ -287,12 +287,6 @@
       align-items: center;
       gap: 10px;
     }
-    .eyebrow::before {
-      content: '';
-      display: inline-block;
-      width: 22px; height: 1px;
-      background: currentColor;
-    }
     .accent { color: var(--accent); }
 
     /* =========================================================================
@@ -1668,7 +1662,6 @@
 
     /* RTL, drawer + nav layout flip */
     html[dir="rtl"] .nav__inner { direction: rtl; }
-    html[dir="rtl"] .eyebrow::before { margin-right: 0; margin-left: 10px; }
 
     /* ====== ARABIC TYPOGRAPHY ======
        IBM Plex Sans Arabic for the WHOLE Arabic page. Display + body + UI.
@@ -1744,9 +1737,6 @@
       letter-spacing: 0.16em;
       opacity: 0.72;
     }
-    section[data-weight="beat"] .eyebrow::before {
-      width: 14px;
-    }
     section[data-weight="beat"] .section__title {
       font-size: clamp(30px, 4vw, 52px);
       font-variation-settings: 'wdth' 90, 'opsz' 96, 'wght' 520;
@@ -1795,18 +1785,6 @@
       -webkit-text-stroke: 1.5px rgba(246, 247, 249, 0.22);
       text-stroke: 1.5px rgba(246, 247, 249, 0.22);
       opacity: 0.92;
-    }
-    /* Faint baseline tick under the numeral, a quiet chapter mark, not a
-       full-width rule (the next section owns the structural hairline). */
-    .act-divider__num::after {
-      content: '';
-      position: absolute;
-      left: 50%;
-      bottom: clamp(-22px, -2.4vw, -14px);
-      width: 40px;
-      height: 1px;
-      transform: translateX(-50%);
-      background: var(--hairline-2);
     }
     @supports not ((-webkit-text-stroke: 1px #000) or (text-stroke: 1px #000)) {
       .act-divider__num { color: var(--faint); opacity: 0.5; }

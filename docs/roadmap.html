@@ -303,11 +303,6 @@
       display: inline-flex; align-items: center; gap: 10px;
       margin-bottom: 22px;
     }
-    .eyebrow::before {
-      content: ''; display: inline-block;
-      width: 22px; height: 1px;
-      background: currentColor;
-    }
 
     h1, h2, h3, h4 {
       font-family: var(--display);
@@ -481,16 +476,7 @@
       position: relative;
       overflow: hidden;
     }
-    .wont-do::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 2px;
-      background: linear-gradient(90deg, #f472b6 0%, transparent 60%);
-    }
     .wont-do .eyebrow { color: #f472b6; }
-    .wont-do .eyebrow::before { background: currentColor; }
     .wont-do h2 {
       color: var(--ink);
       margin-bottom: 16px;
