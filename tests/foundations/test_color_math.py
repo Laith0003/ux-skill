@@ -1,3 +1,5 @@
+import re
+
 import pytest
 
 from engine.foundations.color_math import (
@@ -7,6 +9,13 @@ from engine.synthesizer.core import _contrast_ratio
 
 def test_hex_roundtrip():
     assert rgb_to_hex(hex_to_rgb("#1a2b3c")) == "#1A2B3C"
+
+
+@pytest.mark.parametrize(
+    "bad", ["#12345", "#GGGGGG", "#abcdef00", "", "##abc", "#-1-1-1", None])
+def test_hex_to_rgb_rejects_invalid_input(bad):
+    with pytest.raises(ValueError, match=re.escape(repr(bad))):
+        hex_to_rgb(bad)
 
 
 @pytest.mark.parametrize("h", ["#FFFFFF", "#000000", "#E61428", "#1F9D55", "#6B4423", "#3366FF"])
@@ -23,6 +32,30 @@ def test_white_and_black_lightness():
 def test_out_of_gamut_is_clamped_not_broken():
     out = oklch_to_hex(0.7, 0.5, 140)
     assert out.startswith("#") and len(out) == 7
+    L, C, H = hex_to_oklch(out)
+    assert abs(H - 140) <= 2
+    assert abs(L - 0.7) <= 0.01
+
+
+def test_oklch_to_hex_clamps_negative_chroma():
+    assert oklch_to_hex(0.6, -0.1, 30) == oklch_to_hex(0.6, 0.0, 30)
+
+
+def test_oklch_to_hex_rejects_non_finite():
+    with pytest.raises(ValueError):
+        oklch_to_hex(float("nan"), 0.1, 30)
+
+
+def test_hex_to_oklch_pinned_red_reference():
+    # Reference values (the well-known oklch(62.8% 0.2577 29.23) for pure
+    # red) are quoted to 4 decimals for L/C but only 2 for H. The true H is
+    # 29.233885..., which rounds to 29.23 at 2dp but is 3.9e-3 away from the
+    # literal figure, so H needs a slightly wider band than L/C to hold the
+    # same rounded reference without loosening what it pins.
+    L, C, H = hex_to_oklch("#FF0000")
+    assert L == pytest.approx(0.6280, abs=1e-3)
+    assert C == pytest.approx(0.2577, abs=1e-3)
+    assert H == pytest.approx(29.23, abs=5e-3)
 
 
 def test_contrast_matches_known_values_and_synthesizer():

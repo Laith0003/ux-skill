@@ -7,13 +7,23 @@ pins them together so the two never drift).
 from __future__ import annotations
 
 import math
+import re
 from typing import Tuple
 
 RGB = Tuple[int, int, int]
 
+_HEX_COLOR_RE = re.compile(r"#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})")
+
 
 def hex_to_rgb(h: str) -> RGB:
-    s = h.lstrip("#")
+    if isinstance(h, str):
+        m = _HEX_COLOR_RE.fullmatch(h.strip())
+    else:
+        m = None
+    if not m:
+        raise ValueError(
+            f"{h!r} is not a hex color. Use #RRGGBB or #RGB, for example #3366FF.")
+    s = m.group(1)
     if len(s) == 3:
         s = "".join(c * 2 for c in s)
     return int(s[0:2], 16), int(s[2:4], 16), int(s[4:6], 16)
@@ -61,7 +71,11 @@ def _oklch_to_linear(L: float, C: float, H: float):
 def oklch_to_hex(L: float, C: float, H: float) -> str:
     """OKLCH to sRGB hex. Out-of-gamut colors keep L and H and lose chroma
     (binary search) instead of clipping channels, so hue does not shift."""
+    if not (math.isfinite(L) and math.isfinite(C) and math.isfinite(H)):
+        raise ValueError(
+            f"oklch_to_hex requires finite L, C, H; got L={L!r}, C={C!r}, H={H!r}.")
     L = max(0.0, min(1.0, L))
+    C = max(0.0, C)
     lo, hi = 0.0, C
     rgb = _oklch_to_linear(L, C, H)
     if any(c < -1e-6 or c > 1 + 1e-6 for c in rgb):
@@ -75,6 +89,13 @@ def oklch_to_hex(L: float, C: float, H: float) -> str:
     return rgb_to_hex(tuple(_from_linear(max(0.0, min(1.0, c))) for c in rgb))
 
 
+# WCAG 2.x fixes this threshold at 0.03928, not sRGB's own 0.04045, and this
+# is deliberate: it keeps _luminance pinned to engine/synthesizer's
+# _relative_luminance so contrast() never drifts from the synthesizer's own
+# gate. For 8-bit input the two thresholds classify every channel value the
+# same way anyway (both land between 10/255 and 11/255), so nobody should
+# "fix" one of these numbers to match the other; they are independently
+# correct for what each function does.
 def _luminance(h: str) -> float:
     r, g, b = hex_to_rgb(h)
 
