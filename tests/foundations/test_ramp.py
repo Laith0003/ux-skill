@@ -3,7 +3,7 @@ import itertools
 import pytest
 
 from engine.foundations import ramp as ramp_module
-from engine.foundations.color_math import hex_to_oklch, hex_to_rgb, oklch_to_hex, rgb_to_hex
+from engine.foundations.color_math import hex_to_oklch, oklch_to_hex
 from engine.foundations.ramp import ANCHOR, STEPS, ramp
 
 
@@ -76,43 +76,48 @@ _SWEEP_LS = (0.10, 0.20, 0.30, 0.50, 0.80, 0.90, 0.97)
 _SWEEP_CS = (0.02, 0.10, 0.20)
 
 
-def _intended_lightnesses(seed_hex):
-    """The per-step lightness ramp() computes before it asks color_math to
-    turn each one into a hex stop.
+def test_min_step_sweep_keeps_intended_lightness_apart(monkeypatch):
+    # The algorithm's own guarantee, at full precision, proved against the
+    # real ramp() rather than a reimplementation of its formula: patch
+    # ramp_module.oklch_to_hex with a wrapper that records the L each call
+    # was asked to render and then delegates to the real function, so the
+    # ramp is still built correctly. ramp() calls this once per non-anchor
+    # step, in STEPS order with 500 skipped; a retuned seed also calls it
+    # once more, before the loop, to build the anchor itself. Reassembling
+    # the recorded Ls back into STEPS order and diffing adjacent pairs
+    # tests exactly what ramp() computed, at full float precision, with no
+    # hex quantization in the way. A failure here means the widening
+    # formula itself is wrong, not that hex rounding ate the margin.
+    real_oklch_to_hex = ramp_module.oklch_to_hex
+    calls = []
 
-    oklch_to_hex never changes L (it only clamps L to [0, 1], a no-op for
-    every value ramp() ever passes it, and reduces C to fit the sRGB gamut).
-    So this is not an approximation of what ramp() delivers: it is the exact
-    value, read straight off ramp()'s own module constants so the two can
-    never drift apart. Measuring the MIN_STEP guarantee here separates a
-    real spacing bug in the algorithm from 8-bit hex quantization noise
-    picked up only when a stop is round-tripped back through hex_to_oklch.
-    """
-    m = ramp_module
-    seed = rgb_to_hex(hex_to_rgb(seed_hex))
-    seed_L, _C, _H = hex_to_oklch(seed)
-    L = min(max(seed_L, m.BAND[0]), m.BAND[1])
-    dark_end = max(0.02, min(m.L_BOTTOM, L - 5 * m.MIN_STEP))
-    light_end = min(0.995, max(m.L_TOP, L + 5 * m.MIN_STEP))
-    out = {m.ANCHOR: L}
-    for step, f in m._LIGHT.items():
-        out[step] = L + (light_end - L) * f
-    for step, f in m._DARK.items():
-        out[step] = L - (L - dark_end) * f
-    return out
+    def recording_oklch_to_hex(L, C, H):
+        calls.append(L)
+        return real_oklch_to_hex(L, C, H)
 
+    monkeypatch.setattr(ramp_module, "oklch_to_hex", recording_oklch_to_hex)
 
-def test_min_step_sweep_keeps_intended_lightness_apart():
-    # The algorithm's own guarantee, at full precision: every gap ramp()
-    # computes must be at least MIN_STEP. This must hold for every seed with
-    # zero tolerance, because dark_end/light_end are constructed to make it
-    # true by arithmetic, not by luck. A failure here would mean the
-    # widening formula itself is wrong, not that hex rounding ate the margin.
     failures = []
     for h, l, c in itertools.product(_SWEEP_HUES, _SWEEP_LS, _SWEEP_CS):
         seed = oklch_to_hex(l, c, h)
-        intended = _intended_lightnesses(seed)
-        ls = [intended[s] for s in STEPS]
+        calls.clear()
+        r = ramp(seed)
+        if r.retuned:
+            # The anchor's own oklch_to_hex(L, C, H) call happens before
+            # the loop, so it is recorded first; the other ten follow in
+            # STEPS order with 500 skipped.
+            assert len(calls) == 11, f"{seed}: expected 11 calls, got {len(calls)}"
+            anchor_L, rest = calls[0], calls[1:]
+        else:
+            # In-band seeds never call oklch_to_hex for the anchor: its
+            # stop is the seed's own hex, verbatim, so its L is read back
+            # off that hex instead (an exact match for the "L" ramp()
+            # computed internally, not an approximation: the seed hex was
+            # never quantized a second time).
+            assert len(calls) == 10, f"{seed}: expected 10 calls, got {len(calls)}"
+            anchor_L, rest = hex_to_oklch(r.stops[ANCHOR])[0], calls
+        ls = rest[:5] + [anchor_L] + rest[5:]
+        assert len(ls) == len(STEPS)
         for i in range(len(ls) - 1):
             gap = ls[i] - ls[i + 1]
             if gap < ramp_module.MIN_STEP - 1e-9:
@@ -131,8 +136,8 @@ def test_min_step_sweep_keeps_intended_lightness_apart():
 # with no headroom to spare before 8-bit hex rounding. This bound (0.031, a
 # hair under the measured worst case) exists only to catch a REGRESSION back
 # toward the original 0.028 crush; it is not a substitute for the strict,
-# zero-tolerance check above, which is where the real spacing guarantee is
-# proven.
+# zero-tolerance check above (which now calls the real ramp() through a
+# recording patch on oklch_to_hex, not a reimplementation of its formula).
 _DELIVERED_MIN_GAP = 0.031
 
 

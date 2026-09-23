@@ -2,8 +2,13 @@
 
 Lighter steps interpolate lightness from the anchor up toward L_TOP and bleed
 chroma; darker steps interpolate down toward L_BOTTOM. Hue is held constant.
-When the anchor sits close enough to L_TOP or L_BOTTOM that MIN_STEP could
-not be kept, that side's end widens past the constant instead.
+
+With the current BAND, L_TOP and MIN_STEP, only the dark side ever widens
+past its constant: a retuned or near-BAND[0] anchor can sit within
+5 * MIN_STEP of L_BOTTOM, but no anchor ever sits within 5 * MIN_STEP of
+L_TOP, since BAND[1] + 5 * MIN_STEP == L_TOP exactly. The light-side widen
+and the dark-side floor are kept as defensive guards; they only start doing
+real work if BAND, L_TOP or L_BOTTOM change.
 """
 from __future__ import annotations
 
@@ -16,10 +21,14 @@ STEPS = (50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950)
 ANCHOR = 500
 L_TOP, L_BOTTOM = 0.975, 0.16
 BAND = (0.30, 0.80)
-# Minimum lightness gap between adjacent stops. A seed retuned near a band
-# edge would otherwise crush the far side of the ramp toward L_TOP or
-# L_BOTTOM, so the interpolation end on that side widens past the constant
-# when the anchor sits close to it.
+# Minimum lightness gap between adjacent stops. A seed retuned near the
+# dark band edge (BAND[0]) would otherwise crush the dark side of the ramp
+# toward L_BOTTOM, so dark_end widens past the constant once the anchor
+# sits within 5 * MIN_STEP of it. light_end's symmetric widen and dark_end's
+# 0.02 floor are defensive only: with BAND = (0.30, 0.80), L_TOP = 0.975 and
+# L_BOTTOM = 0.16, light_end is always exactly L_TOP (0.80 + 5 * 0.035 ==
+# 0.975) and the floor never binds (0.30 - 5 * 0.035 == 0.125, well above
+# 0.02); neither does anything unless BAND or L_TOP is changed later.
 MIN_STEP = 0.035
 # Position of each step between the anchor (0) and the end of its side (1).
 _LIGHT = {400: 0.2, 300: 0.4, 200: 0.6, 100: 0.8, 50: 1.0}
