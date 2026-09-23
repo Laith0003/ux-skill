@@ -7,13 +7,13 @@ AXES = AxisValues(0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5)
 
 
 def test_dtcg_roundtrip_is_lossless():
-    ts, _ = build_color(AXES, "#3366FF")
+    ts = build_color(AXES, "#3366FF").tokens
     doc = to_dtcg(ts)
     assert to_dtcg(from_dtcg(doc)) == doc
 
 
 def test_dtcg_shape():
-    doc = to_dtcg(build_color(AXES, "#3366FF")[0])
+    doc = to_dtcg(build_color(AXES, "#3366FF").tokens)
     leaf = doc["color"]["text"]["default"]
     assert leaf["$type"] == "color" and leaf["$value"].startswith("{color.neutral.")
     assert leaf["$extensions"]["ux.layer"] == "semantic"
@@ -21,7 +21,7 @@ def test_dtcg_shape():
 
 
 def test_css_semantics_are_vars_and_dark_overrides_only_semantics():
-    css = to_css(build_color(AXES, "#3366FF")[0])
+    css = to_css(build_color(AXES, "#3366FF").tokens)
     assert "--color-brand-500: #3366FF;" in css
     assert "--color-text-default: var(--color-neutral-900);" in css
     dark = css.split('[data-theme="dark"]')[1].split("}")[0]
@@ -32,9 +32,9 @@ def test_css_semantics_are_vars_and_dark_overrides_only_semantics():
 
 
 def test_byte_identical_output():
-    a = json.dumps(to_dtcg(build_color(AXES, "#E61428")[0]), sort_keys=False)
-    b = json.dumps(to_dtcg(build_color(AXES, "#E61428")[0]), sort_keys=False)
-    assert a == b and to_css(build_color(AXES, "#E61428")[0]) == to_css(build_color(AXES, "#E61428")[0])
+    a = json.dumps(to_dtcg(build_color(AXES, "#E61428").tokens), sort_keys=False)
+    b = json.dumps(to_dtcg(build_color(AXES, "#E61428").tokens), sort_keys=False)
+    assert a == b and to_css(build_color(AXES, "#E61428").tokens) == to_css(build_color(AXES, "#E61428").tokens)
 
 
 def test_css_emits_mode_overrides_whatever_the_layer():

@@ -3,11 +3,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Tuple
 
-from engine.foundations.color import generate_color
-from engine.foundations.gate import gate
 from engine.foundations.tokens import Token, TokenSet, alias_target, css_property, is_alias
-from engine.foundations.validate import validate
-from engine.synthesizer.axes import AxisValues
 
 
 def to_dtcg(ts: TokenSet) -> Dict[str, Any]:
@@ -62,12 +58,3 @@ def to_css(ts: TokenSet) -> str:
            "@media (prefers-color-scheme: dark) {", '  :root:not([data-theme="light"]) {',
            *("  " + line for line in dark), "  }", "}", ""]
     return "\n".join(out)
-
-
-def build_color(axes: AxisValues, brand_hex: str) -> Tuple[TokenSet, List[str]]:
-    result = generate_color(axes, brand_hex)
-    problems = validate(result.tokens)
-    if problems:
-        raise ValueError("\n".join(p.message for p in problems))
-    gate(result.tokens)
-    return result.tokens, result.notes

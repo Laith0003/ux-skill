@@ -2,24 +2,17 @@
 the WCAG pairings every system must meet, and a deterministic retune."""
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Dict, List, Tuple
 
 from engine.foundations.color_math import contrast, hex_to_oklch, oklch_to_hex
+from engine.foundations.gate import GateFailure, GateFinding, Pairing, gate
 from engine.foundations.ramp import STEPS, ramp
-from engine.foundations.tokens import Token, TokenSet
+from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
 from engine.synthesizer.axes import AxisValues
 
 STATUS_HUES = {"danger": 25.0, "warning": 75.0, "success": 150.0, "info": 245.0}
 STATUS_SEED = (0.58, 0.16)  # OKLCH lightness, chroma for status seeds
-
-
-@dataclass(frozen=True)
-class Pairing:
-    fg: str
-    bg: str
-    minimum: float
-    criterion: str
 
 
 SEMANTIC: Dict[str, Tuple[str, str]] = {
@@ -220,7 +213,31 @@ def _solve_action_group(mode: str, prims: Dict[str, str], pick: Dict[str, Dict[s
     )
 
 
+def _with_seed_hint(ts: TokenSet, finding: GateFinding) -> GateFinding:
+    """Add the seed direction to a finding whose pairing the brand seed
+    controls (either side aliases a brand step in that mode). A darker brand
+    only ever helps a light-mode pairing gain contrast against a light
+    page, and only a lighter brand helps the dark-mode equivalent (R17
+    minor), so the hint never suggests the direction that makes it worse.
+    Pairings the seed does not control keep the gate's own fix."""
+    for path in (finding.fg, finding.bg):
+        raw = ts.raw(path, finding.mode)
+        if is_alias(raw) and alias_target(raw).startswith("color.brand."):
+            direction = "a darker" if finding.mode == "light" else "a lighter"
+            return replace(finding, hint=(
+                "The brand seed cannot reach it within its ramp; "
+                f"choose {direction} or more saturated seed."))
+    return finding
+
+
 def generate_color(axes: AxisValues, brand_hex: str) -> ColorResult:
+    """Low-level call: build_color wraps it with input checks, validate and
+    the gate report, so prefer build_color unless you need the raw generator.
+
+    Returns the color TokenSet and the retune notes. Raises GateFailure when
+    the generated system fails a pairing in PAIRINGS, and ValueError when
+    the action group cannot be solved within the brand ramp.
+    """
     notes: List[str] = []
     prims = _primitives(axes, brand_hex.upper(), notes)
     pick = {mode: {role: pair[i] for role, pair in SEMANTIC.items()}
@@ -294,22 +311,13 @@ def generate_color(axes: AxisValues, brand_hex: str) -> ColorResult:
     # leave a pairing still failing, for example when a seed's ramp
     # genuinely has no step that clears a threshold. Re-verify every
     # pairing, in both modes, against the result actually being returned,
-    # and fail loudly rather than let a design system that violates its
-    # own WCAG gate ship silently.
-    for mode in ts.mode_names:
-        for p in PAIRINGS:
-            ratio = contrast(ts.resolve(p.fg, mode), ts.resolve(p.bg, mode))
-            if ratio < p.minimum:
-                # R17 minor: a darker brand only ever helps a light-mode
-                # pairing gain contrast against a light page/card, and only
-                # a lighter brand helps the dark-mode equivalent; the hint
-                # must not suggest the direction that would make it worse.
-                hint = "a darker" if mode == "light" else "a lighter"
-                raise ValueError(
-                    f"{p.fg} on {p.bg} ({mode}) is {ratio:.2f}:1; WCAG {p.criterion} "
-                    f"needs {p.minimum}:1. The seed cannot reach it within its ramp; "
-                    f"choose {hint} or more saturated seed."
-                )
+    # through the same gate build_color uses (R27 I3), and fail loudly with
+    # GateFailure rather than let a design system that violates its own
+    # WCAG gate ship silently.
+    report = gate(ts, PAIRINGS, raise_on_fail=False)
+    if not report.passed:
+        report.findings[:] = [_with_seed_hint(ts, f) for f in report.findings]
+        raise GateFailure(report)
 
     # R17 item (c): action.primary-hover must never resolve to the exact
     # same color as action.primary. _solve_action_group already refuses

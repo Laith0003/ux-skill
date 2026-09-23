@@ -1,8 +1,8 @@
 import pytest
 
-from engine.foundations.color import PAIRINGS, Pairing, generate_color
+from engine.foundations.color import PAIRINGS, generate_color
 from engine.foundations.color_math import contrast
-from engine.foundations.gate import GateFailure, gate
+from engine.foundations.gate import GateFailure, Pairing, gate
 from engine.foundations.tokens import Token, TokenSet
 from engine.synthesizer.axes import AxisValues
 
@@ -19,7 +19,7 @@ def failing_set():
 
 
 def test_generated_system_passes():
-    report = gate(generate_color(AXES, "#E61428").tokens)
+    report = gate(generate_color(AXES, "#E61428").tokens, PAIRINGS)
     assert report.passed and report.checked == len(PAIRINGS) * 2
 
 
