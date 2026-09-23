@@ -51,17 +51,44 @@ class GateFinding:
 class GateReport:
     findings: List[GateFinding] = field(default_factory=list)
     checked: int = 0
-    skipped: int = 0
+    # Pairings not checked because the set lacks one of their tokens. A set
+    # with none of the roles would otherwise pass with checked == 0 unseen.
+    skipped_pairings: List[Pairing] = field(default_factory=list)
 
     @property
     def passed(self) -> bool:
         return not self.findings
 
+    @property
+    def skipped(self) -> int:
+        return len(self.skipped_pairings)
+
+    def skipped_message(self) -> str:
+        """One line naming every skipped pairing, or "" when none were."""
+        if not self.skipped_pairings:
+            return ""
+        n = len(self.skipped_pairings)
+        names = ", ".join(f"{p.fg} on {p.bg}" for p in self.skipped_pairings)
+        return (f"Skipped {n} pairing{'' if n == 1 else 's'} because a token is not "
+                f"defined: {names}; define those tokens or leave those pairings out.")
+
+    def summary(self) -> str:
+        head = (f"WCAG gate {'passed' if self.passed else 'failed'}: {self.checked} checks, "
+                f"{len(self.findings)} failing, {self.skipped} "
+                f"pairing{'' if self.skipped == 1 else 's'} skipped.")
+        lines = [head] + [f.message() for f in self.findings]
+        if self.skipped_pairings:
+            lines.append(self.skipped_message())
+        return "\n".join(lines)
+
 
 class GateFailure(Exception):
     def __init__(self, report: GateReport):
         self.report = report
-        super().__init__("\n".join(f.message() for f in report.findings))
+        lines = [f.message() for f in report.findings]
+        if report.skipped_pairings:
+            lines.append(report.skipped_message())
+        super().__init__("\n".join(lines))
 
 
 def _hex(ts: TokenSet, path: str, mode: str) -> str:
@@ -81,7 +108,7 @@ def gate(ts: TokenSet, pairings: Iterable[Pairing],
     report = GateReport()
     for p in pairings:
         if not (ts.has(p.fg) and ts.has(p.bg)):
-            report.skipped += 1
+            report.skipped_pairings.append(p)
             continue
         for mode in ts.mode_names:
             report.checked += 1

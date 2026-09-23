@@ -74,3 +74,41 @@ def test_unvalidated_bad_value_names_the_token():
     ts.add(Token("color.surface.page", "color", "{color.base.white}", layer="semantic"))
     with pytest.raises(ValueError, match=r"color\.text\.default \(light\) resolves to '#GGGGGG'.*run validate"):
         gate(ts, [Pairing("color.text.default", "color.surface.page", 4.5, "1.4.3")])
+
+
+LINK_ON_PAGE = Pairing("color.text.link", "color.surface.page", 4.5, "1.4.3")
+TEXT_ON_PAGE = Pairing("color.text.default", "color.surface.page", 4.5, "1.4.3")
+
+
+def test_skipped_pairings_are_listed():
+    # R27 M7: a skipped pairing used to be a bare count.
+    report = gate(failing_set(), PAIRINGS, raise_on_fail=False)
+    assert report.skipped == len(report.skipped_pairings) > 0
+    assert LINK_ON_PAGE in report.skipped_pairings
+    assert TEXT_ON_PAGE not in report.skipped_pairings
+
+
+def test_summary_names_skipped_pairings():
+    ts = TokenSet()
+    report = gate(ts, [TEXT_ON_PAGE, LINK_ON_PAGE], raise_on_fail=False)
+    assert report.passed and report.checked == 0
+    summary = report.summary()
+    assert "0 checks" in summary and "2 pairings skipped" in summary
+    assert "color.text.default on color.surface.page" in summary
+    assert "color.text.link on color.surface.page" in summary
+    assert "define those tokens or leave those pairings out" in summary
+
+
+def test_gate_failure_names_skipped_pairings():
+    with pytest.raises(GateFailure) as exc:
+        gate(failing_set(), [TEXT_ON_PAGE, LINK_ON_PAGE])
+    text = str(exc.value)
+    assert "color.text.default on color.surface.page (light)" in text
+    assert "Skipped 1 pairing because a token is not defined: color.text.link on color.surface.page" in text
+
+
+def test_no_skip_line_when_nothing_skipped():
+    with pytest.raises(GateFailure) as exc:
+        gate(failing_set(), [TEXT_ON_PAGE])
+    assert "Skipped" not in str(exc.value)
+    assert "Skipped" not in gate(generate_color(AXES, "#3366FF").tokens, PAIRINGS).summary()
