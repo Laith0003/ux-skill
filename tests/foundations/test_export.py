@@ -46,3 +46,33 @@ def test_css_emits_mode_overrides_whatever_the_layer():
     ts.add(Token("color.role", "color", "{color.a}", layer="Semantic", modes={"dark": "{color.b}"}))
     dark = to_css(ts).split('[data-theme="dark"]')[1].split("}")[0]
     assert "--color-role: var(--color-b);" in dark
+
+
+def test_from_dtcg_tolerates_null_extensions():
+    # R27 M4: "$extensions": null used to raise AttributeError.
+    doc = {"color": {"base": {
+        "white": {"$type": "color", "$value": "#FFFFFF", "$extensions": None},
+        "black": {"$type": "color", "$value": "#000000", "$extensions": {"ux.modes": None}},
+    }}}
+    ts = from_dtcg(doc)
+    for path in ("color.base.white", "color.base.black"):
+        t = ts.get(path)
+        assert t.layer == "primitive" and t.modes == {}
+
+
+def test_from_dtcg_inherits_group_type():
+    # R27 M4: DTCG lets a group declare $type for every token below it; the
+    # nearest declaration wins and a token's own $type wins over all.
+    doc = {
+        "$type": "color",
+        "color": {
+            "base": {"white": {"$value": "#FFFFFF"}},
+            "odd": {"$type": "dimension",
+                    "inner": {"gap": {"$value": "4px"}},
+                    "own": {"$type": "color", "$value": "#000000"}},
+        },
+    }
+    ts = from_dtcg(doc)
+    assert ts.get("color.base.white").type == "color"
+    assert ts.get("color.odd.inner.gap").type == "dimension"
+    assert ts.get("color.odd.own").type == "color"

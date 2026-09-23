@@ -26,20 +26,23 @@ def to_dtcg(ts: TokenSet) -> Dict[str, Any]:
 def from_dtcg(doc: Dict[str, Any], mode_names: Tuple[str, ...] = ("light", "dark")) -> TokenSet:
     ts = TokenSet(mode_names)
 
-    def walk(node: Dict[str, Any], path: List[str]) -> None:
+    def walk(node: Dict[str, Any], path: List[str], inherited_type: str) -> None:
+        # DTCG: a group's $type applies to every token below it that does
+        # not declare its own; the nearest group wins.
+        group_type = node.get("$type", inherited_type)
         for key, val in node.items():
             if key.startswith("$") or not isinstance(val, dict):
                 continue
             if "$value" in val:
-                ext = val.get("$extensions", {})
-                ts.add(Token(".".join(path + [key]), val.get("$type", ""), val["$value"],
-                             modes=dict(ext.get("ux.modes", {})),
+                ext = val.get("$extensions") or {}
+                ts.add(Token(".".join(path + [key]), val.get("$type", group_type), val["$value"],
+                             modes=dict(ext.get("ux.modes") or {}),
                              layer=ext.get("ux.layer", "primitive"),
                              description=val.get("$description", "")))
             else:
-                walk(val, path + [key])
+                walk(val, path + [key], group_type)
 
-    walk(doc, [])
+    walk(doc, [], "")
     return ts
 
 
