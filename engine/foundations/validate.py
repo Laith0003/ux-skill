@@ -1,4 +1,5 @@
-"""Structural validation for a TokenSet. Every problem names the token and the fix."""
+"""Validation for a TokenSet: structure, values per type and path hygiene.
+Every problem names the token and the fix."""
 from __future__ import annotations
 
 import re
