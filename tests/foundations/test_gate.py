@@ -63,3 +63,14 @@ def test_near_miss_ratio_never_prints_as_passing():
 
     printed = float(message.split(" is ")[1].split(":1")[0])
     assert printed < 4.5
+
+
+def test_unvalidated_bad_value_names_the_token():
+    # R27 I2: the gate used to raise the bare color_math error with no token path.
+    ts = TokenSet()
+    ts.add(Token("color.gray.300", "color", "#GGGGGG"))
+    ts.add(Token("color.base.white", "color", "#FFFFFF"))
+    ts.add(Token("color.text.default", "color", "{color.gray.300}", layer="semantic"))
+    ts.add(Token("color.surface.page", "color", "{color.base.white}", layer="semantic"))
+    with pytest.raises(ValueError, match=r"color\.text\.default \(light\) resolves to '#GGGGGG'.*run validate"):
+        gate(ts, [Pairing("color.text.default", "color.surface.page", 4.5, "1.4.3")])

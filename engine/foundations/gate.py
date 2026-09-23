@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from typing import Iterable, List
 
 from engine.foundations.color import PAIRINGS, Pairing
-from engine.foundations.color_math import contrast
+from engine.foundations.color_math import contrast, hex_to_rgb
 from engine.foundations.tokens import TokenSet
 
 
@@ -47,6 +47,18 @@ class GateFailure(Exception):
         super().__init__("\n".join(f.message() for f in report.findings))
 
 
+def _hex(ts: TokenSet, path: str, mode: str) -> str:
+    value = ts.resolve(path, mode)
+    try:
+        hex_to_rgb(value)
+    except ValueError:
+        raise ValueError(
+            f"{path} ({mode}) resolves to {value!r}, which is not a hex color; "
+            "use #RRGGBB or #RGB, and run validate() first to see every such problem"
+        ) from None
+    return value
+
+
 def gate(ts: TokenSet, pairings: Iterable[Pairing] = PAIRINGS,
          raise_on_fail: bool = True) -> GateReport:
     report = GateReport()
@@ -56,7 +68,7 @@ def gate(ts: TokenSet, pairings: Iterable[Pairing] = PAIRINGS,
             continue
         for mode in ts.mode_names:
             report.checked += 1
-            ratio = contrast(ts.resolve(p.fg, mode), ts.resolve(p.bg, mode))
+            ratio = contrast(_hex(ts, p.fg, mode), _hex(ts, p.bg, mode))
             if ratio < p.minimum:
                 report.findings.append(
                     GateFinding(p.fg, p.bg, mode, ratio, p.minimum, p.criterion))

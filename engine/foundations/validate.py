@@ -1,13 +1,35 @@
 """Structural validation for a TokenSet. Every problem names the token and the fix."""
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
-from typing import List, Set
+from types import MappingProxyType
+from typing import Any, Callable, List, Mapping
 
-from engine.foundations.tokens import AliasError, TokenSet, alias_target, is_alias
-
+from engine.foundations.tokens import AliasError, Token, TokenSet, alias_target, is_alias
 
 LAYERS = ("primitive", "semantic")
+
+_HEX_COLOR = re.compile(r"#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})")
+
+
+@dataclass(frozen=True)
+class ValueRule:
+    """How one token type's literal values are checked: `check` says whether
+    a value is acceptable, `expected` is the fix quoted when it is not."""
+    check: Callable[[Any], bool]
+    expected: str
+
+
+def _is_hex_color(value: Any) -> bool:
+    return isinstance(value, str) and _HEX_COLOR.fullmatch(value) is not None
+
+
+# One entry per known token type. M2 adds dimension, duration, shadow and
+# font types here; nothing else in validate changes.
+VALUE_RULES: Mapping[str, ValueRule] = MappingProxyType({
+    "color": ValueRule(_is_hex_color, "use #RRGGBB or #RGB, for example #3366FF"),
+})
 
 
 @dataclass(frozen=True)
@@ -17,9 +39,28 @@ class Problem:
     message: str
 
 
+def _check_values(t: Token) -> List[Problem]:
+    rule = VALUE_RULES.get(t.type)
+    if rule is None:
+        return [Problem(t.path, "unknown-type",
+            f"{t.path} has type {t.type!r}; use one of {sorted(VALUE_RULES)}")]
+    out: List[Problem] = []
+    checked: List[Any] = []  # a list, not a set: a bad value may be unhashable
+    for where, raw in [("", t.value)] + [(f" ({m})", v) for m, v in t.modes.items()]:
+        # An alias is not a literal; its target is checked as a token itself.
+        if is_alias(raw) or raw in checked:
+            continue
+        checked.append(raw)
+        if not rule.check(raw):
+            out.append(Problem(t.path, "bad-value",
+                f"{t.path}{where} is type {t.type} but holds {raw!r}; {rule.expected}"))
+    return out
+
+
 def validate(ts: TokenSet) -> List[Problem]:
     out: List[Problem] = []
     for t in ts.tokens():
+        out.extend(_check_values(t))
         if t.layer not in LAYERS:
             out.append(Problem(t.path, "unknown-layer",
                 f"{t.path} has layer {t.layer!r}; use 'primitive' or 'semantic'"))
@@ -37,7 +78,7 @@ def validate(ts: TokenSet) -> List[Problem]:
                 out.append(Problem(t.path, "unknown-mode",
                     f"{t.path} sets mode '{mode}', which is not one of {list(ts.mode_names)}; "
                     "remove it or add the mode to the TokenSet's mode_names"))
-        seen_raws: Set[str] = set()
+        seen_raws: List[Any] = []
         for mode in ts.mode_names:
             raw = ts.raw(t.path, mode)
             if raw in seen_raws:
@@ -45,7 +86,7 @@ def validate(ts: TokenSet) -> List[Problem]:
                 # this token (for example, no per-mode override at all); do
                 # not report the same problem twice for one token.
                 continue
-            seen_raws.add(raw)
+            seen_raws.append(raw)
             if not is_alias(raw):
                 out.append(Problem(t.path, "semantic-literal",
                     f"{t.path} ({mode}) holds {raw}; alias a primitive instead"))

@@ -1,3 +1,5 @@
+import pytest
+
 from engine.foundations.color import generate_color
 from engine.foundations.tokens import Token, TokenSet
 from engine.foundations.validate import validate
@@ -87,3 +89,63 @@ def test_layer_typo_through_dtcg_is_caught():
     doc = to_dtcg(generate_color(AXES, "#3366FF").tokens)
     doc["color"]["surface"]["page"]["$extensions"]["ux.layer"] = "Semantic"
     assert "unknown-layer" in rules(from_dtcg(doc))
+
+
+def test_unknown_type_rejected():
+    # R27 I2: Token.type was never checked.
+    ts = TokenSet()
+    ts.add(Token("color.x.500", "colour", "#111111"))
+    found = validate(ts)
+    assert [p.rule for p in found] == ["unknown-type"]
+    assert "color.x.500 has type 'colour'" in found[0].message
+    assert "use one of ['color']" in found[0].message
+
+
+BAD_COLOR_VALUES = [
+    "#GGGGGG", "rgb(250,250,250)", "#12345", "3366FF", " #3366FF", "",
+    "red; } body { display:none", {"colorSpace": "srgb", "components": [1, 1, 1]}, None,
+]
+
+
+@pytest.mark.parametrize("value", BAD_COLOR_VALUES)
+def test_bad_color_literal_rejected(value):
+    # R27 I2 and M5: a color literal must be #RGB or #RRGGBB, so nothing
+    # else (a malformed hex, a CSS function, a DTCG object, CSS injection)
+    # reaches the gate or the CSS.
+    ts = TokenSet()
+    ts.add(Token("color.neutral.50", "color", value))
+    found = validate(ts)
+    assert [p.rule for p in found] == ["bad-value"]
+    assert f"color.neutral.50 is type color but holds {value!r}" in found[0].message
+    assert "use #RRGGBB or #RGB" in found[0].message
+
+
+@pytest.mark.parametrize("value", ["#abc", "#ABC", "#aabbcc", "#AABBCC"])
+def test_good_color_literals_pass(value):
+    ts = TokenSet()
+    ts.add(Token("color.neutral.50", "color", value))
+    assert validate(ts) == []
+
+
+def test_bad_value_in_a_mode_is_named_with_its_mode():
+    ts = TokenSet()
+    ts.add(Token("color.x.500", "color", "#111111"))
+    ts.add(Token("color.text.a", "color", "{color.x.500}", layer="semantic",
+                 modes={"dark": "#12"}))
+    found = [p for p in validate(ts) if p.rule == "bad-value"]
+    assert len(found) == 1 and "color.text.a (dark) is type color but holds '#12'" in found[0].message
+
+
+def test_bad_value_through_dtcg_is_caught():
+    from engine.foundations.export import from_dtcg, to_dtcg
+    doc = to_dtcg(generate_color(AXES, "#3366FF").tokens)
+    doc["color"]["neutral"]["50"]["$value"] = "#GGGGGG"
+    found = [p for p in validate(from_dtcg(doc)) if p.rule == "bad-value"]
+    assert [p.token for p in found] == ["color.neutral.50"]
+
+
+def test_value_rules_are_table_driven():
+    # M2 adds dimension, duration, shadow and font types by adding entries.
+    from engine.foundations.validate import VALUE_RULES
+    assert set(VALUE_RULES) == {"color"}
+    assert VALUE_RULES["color"].check("#3366FF") and not VALUE_RULES["color"].check("#GGGGGG")
