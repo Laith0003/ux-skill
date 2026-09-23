@@ -35,7 +35,7 @@ def test_malformed_hex_raises_value_error():
         ramp("#12345")
 
 
-# --- Fix round 1 (controller ruling R14) ---
+# Fix round 1 (controller ruling R14)
 
 
 def test_anchor_is_normalized_to_canonical_uppercase_hex():
