@@ -68,3 +68,22 @@ def test_missing_target_reached_through_a_primitive_is_alias_missing():
     ts.add(Token("color.text.z", "color", "{color.p.a}", layer="semantic"))
     found = [p.rule for p in validate(ts) if p.token == "color.text.z"]
     assert found == ["alias-missing"]
+
+
+def test_unknown_layer_rejected():
+    # R27 I1: a layer typo used to read as semantic in validate and as
+    # "not semantic" in to_css, so the dark override silently vanished.
+    ts = TokenSet()
+    ts.add(Token("color.neutral.50", "color", "#FAFAFA"))
+    ts.add(Token("color.surface.page", "color", "{color.neutral.50}", layer="Semantic"))
+    found = [p for p in validate(ts) if p.token == "color.surface.page"]
+    assert [p.rule for p in found] == ["unknown-layer"]
+    assert "color.surface.page has layer 'Semantic'" in found[0].message
+    assert "use 'primitive' or 'semantic'" in found[0].message
+
+
+def test_layer_typo_through_dtcg_is_caught():
+    from engine.foundations.export import from_dtcg, to_dtcg
+    doc = to_dtcg(generate_color(AXES, "#3366FF").tokens)
+    doc["color"]["surface"]["page"]["$extensions"]["ux.layer"] = "Semantic"
+    assert "unknown-layer" in rules(from_dtcg(doc))

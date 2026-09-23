@@ -35,3 +35,14 @@ def test_byte_identical_output():
     a = json.dumps(to_dtcg(build_color(AXES, "#E61428")[0]), sort_keys=False)
     b = json.dumps(to_dtcg(build_color(AXES, "#E61428")[0]), sort_keys=False)
     assert a == b and to_css(build_color(AXES, "#E61428")[0]) == to_css(build_color(AXES, "#E61428")[0])
+
+
+def test_css_emits_mode_overrides_whatever_the_layer():
+    # R27 I1: the gate reads modes regardless of layer, so the exporter must too.
+    from engine.foundations.tokens import Token, TokenSet
+    ts = TokenSet()
+    ts.add(Token("color.a", "color", "#FFFFFF"))
+    ts.add(Token("color.b", "color", "#000000"))
+    ts.add(Token("color.role", "color", "{color.a}", layer="Semantic", modes={"dark": "{color.b}"}))
+    dark = to_css(ts).split('[data-theme="dark"]')[1].split("}")[0]
+    assert "--color-role: var(--color-b);" in dark

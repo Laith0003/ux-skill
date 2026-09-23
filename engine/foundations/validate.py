@@ -7,6 +7,9 @@ from typing import List, Set
 from engine.foundations.tokens import AliasError, TokenSet, alias_target, is_alias
 
 
+LAYERS = ("primitive", "semantic")
+
+
 @dataclass(frozen=True)
 class Problem:
     token: str
@@ -17,6 +20,10 @@ class Problem:
 def validate(ts: TokenSet) -> List[Problem]:
     out: List[Problem] = []
     for t in ts.tokens():
+        if t.layer not in LAYERS:
+            out.append(Problem(t.path, "unknown-layer",
+                f"{t.path} has layer {t.layer!r}; use 'primitive' or 'semantic'"))
+            continue
         if t.layer == "primitive":
             if is_alias(t.value):
                 out.append(Problem(t.path, "primitive-alias",

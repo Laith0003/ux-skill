@@ -57,8 +57,11 @@ def _css_value(value: str) -> str:
 
 def to_css(ts: TokenSet) -> str:
     base = [f"  {_prop(t.path)}: {_css_value(t.value)};" for t in ts.tokens()]
+    # Every mode override is emitted whatever the token's layer, so the CSS
+    # carries exactly the data the gate checked (validate already rejects
+    # primitives with modes and unknown layers).
     dark = [f"  {_prop(t.path)}: {_css_value(t.modes['dark'])};"
-            for t in ts.tokens() if t.layer == "semantic" and "dark" in t.modes]
+            for t in ts.tokens() if "dark" in t.modes]
     out = [":root {", *base, "}", "", '[data-theme="dark"] {', *dark, "}", "",
            "@media (prefers-color-scheme: dark) {", '  :root:not([data-theme="light"]) {',
            *("  " + line for line in dark), "  }", "}", ""]
