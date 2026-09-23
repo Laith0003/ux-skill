@@ -57,7 +57,12 @@ def to_css(ts: TokenSet) -> str:
     # primitives with modes and unknown layers).
     dark = [f"  {css_property(t.path)}: {_css_value(t.modes['dark'])};"
             for t in ts.tokens() if "dark" in t.modes]
-    out = [":root {", *base, "}", "", '[data-theme="dark"] {', *dark, "}", "",
+    # A light subtree inside a dark page sets back, at its base value,
+    # every property the dark block re-points.
+    light = [f"  {css_property(t.path)}: {_css_value(t.value)};"
+             for t in ts.tokens() if "dark" in t.modes]
+    out = [":root {", *base, "}", "", '[data-theme="light"] {', *light, "}", "",
+           '[data-theme="dark"] {', *dark, "}", "",
            "@media (prefers-color-scheme: dark) {", '  :root:not([data-theme="light"]) {',
            *("  " + line for line in dark), "  }", "}", ""]
     return "\n".join(out)

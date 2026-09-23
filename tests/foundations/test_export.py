@@ -76,3 +76,19 @@ def test_from_dtcg_inherits_group_type():
     assert ts.get("color.base.white").type == "color"
     assert ts.get("color.odd.inner.gap").type == "dimension"
     assert ts.get("color.odd.own").type == "color"
+
+
+def _props(block):
+    return [line.split(":")[0].strip() for line in block.strip().splitlines()]
+
+
+def test_css_light_scope_restores_base_values():
+    # R27 M6: a light subtree inside a dark page (or a light-scoped
+    # component under OS dark) needs every re-pointed property set back.
+    css = to_css(build_color(AXES, "#3366FF").tokens)
+    light = css.split('[data-theme="light"] {')[1].split("}")[0]
+    dark = css.split('[data-theme="dark"] {')[1].split("}")[0]
+    assert "--color-surface-page: var(--color-neutral-50);" in light
+    assert "--color-text-default: var(--color-neutral-900);" in light
+    assert _props(light) == _props(dark) and _props(light)
+    assert "--color-brand-500:" not in light
