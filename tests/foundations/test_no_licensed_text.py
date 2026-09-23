@@ -52,7 +52,7 @@ _ALPHA_WORD = re.compile(r"[a-z']{3,}")
 def shingles(text, n=8):
     w = re.findall(r"[a-z0-9']+", text.lower())
     result = set()
-    for i in range(len(w) - n):
+    for i in range(len(w) - n + 1):
         gram = w[i:i + n]
         alpha = sum(1 for word in gram if _ALPHA_WORD.fullmatch(word))
         if alpha >= MIN_ALPHA_WORDS:
@@ -91,6 +91,9 @@ def test_shingle_filter_counts_prose_not_numbers():
     numeric = "cubic bezier 0 4 0 0 2 1 standard"
     assert shingles(prose), "prose sentence should still yield counted shingles"
     assert not shingles(numeric), "numeric/token run should yield no counted shingles"
+    # An exactly eight-word text is one shingle, not zero.
+    assert shingles("every semantic role must alias one primitive color step") == {
+        "every semantic role must alias one primitive color step"}
 
 
 def _tracked_files():
@@ -139,7 +142,7 @@ def test_no_confidential_names_anywhere():
                     hits.append(f"{rel}:{lineno}")
                     break
     assert not hits, (
-        "confidential name found -- remove the name; the method stays, "
+        "confidential name found. Remove the name; the method stays, "
         "the source is never named:\n" + "\n".join(hits[:50])
     )
 
