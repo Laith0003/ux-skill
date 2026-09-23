@@ -199,3 +199,18 @@ def test_css_collision_rejected():
     assert ("color.text-default and color.text.default both become the CSS property "
             "--color-text-default") in found[0].message
     assert "rename one" in found[0].message
+
+
+def test_base_mode_override_is_rejected():
+    # The base mode's value is the token's own value; to_css writes it into
+    # :root. A separate override for the base mode would let the gate check
+    # one color while the CSS ships another.
+    ts = TokenSet()
+    ts.add(Token("color.neutral.50", "color", "#FAFAFA"))
+    ts.add(Token("color.neutral.900", "color", "#111111"))
+    ts.add(Token("color.surface.page", "color", "{color.neutral.900}", layer="semantic",
+                 modes={"light": "{color.neutral.50}"}))
+    problems = [p for p in validate(ts) if p.rule == "base-mode-override"]
+    assert len(problems) == 1
+    msg = problems[0].message
+    assert "color.surface.page" in msg and "light" in msg and "$value" in msg

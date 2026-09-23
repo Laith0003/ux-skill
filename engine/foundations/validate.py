@@ -107,6 +107,11 @@ def validate(ts: TokenSet) -> List[Problem]:
                 out.append(Problem(t.path, "primitive-modes",
                     f"{t.path} is a primitive with modes {sorted(t.modes)}; move mode values to a semantic role"))
             continue
+        base = ts.mode_names[0]
+        if base in t.modes:
+            out.append(Problem(t.path, "base-mode-override",
+                f"{t.path} overrides the base mode '{base}', whose value is the token's own "
+                f"$value; move {t.modes[base]} into $value and remove the '{base}' override"))
         for mode in t.modes:
             if mode not in ts.mode_names:
                 out.append(Problem(t.path, "unknown-mode",
