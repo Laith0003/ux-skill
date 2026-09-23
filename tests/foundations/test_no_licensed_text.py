@@ -92,8 +92,8 @@ def test_shingle_filter_counts_prose_not_numbers():
     assert shingles(prose), "prose sentence should still yield counted shingles"
     assert not shingles(numeric), "numeric/token run should yield no counted shingles"
     # An exactly eight-word text is one shingle, not zero.
-    assert shingles("every semantic role must alias one primitive color step") == {
-        "every semantic role must alias one primitive color step"}
+    assert shingles("every semantic role must alias one primitive step") == {
+        "every semantic role must alias one primitive step"}
 
 
 def _tracked_files():
