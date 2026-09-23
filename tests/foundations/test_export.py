@@ -3,6 +3,7 @@ import json
 import pytest
 
 from engine.foundations import build_color, from_dtcg, to_css, to_dtcg
+from engine.foundations.export import EXT
 from engine.synthesizer.axes import AxisValues
 
 AXES = AxisValues(0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5)
@@ -18,8 +19,9 @@ def test_dtcg_shape():
     doc = to_dtcg(build_color(AXES, "#3366FF").tokens)
     leaf = doc["color"]["text"]["default"]
     assert leaf["$type"] == "color" and leaf["$value"].startswith("{color.neutral.")
-    assert leaf["$extensions"]["ux.layer"] == "semantic"
-    assert doc["color"]["brand"]["500"]["$value"] == "#3366FF"
+    assert leaf["$extensions"][EXT]["layer"] == "semantic"
+    assert doc["color"]["brand"]["500"]["$value"] == {
+        "colorSpace": "srgb", "components": [0.2, 0.4, 1.0], "hex": "#3366FF"}
 
 
 def test_css_semantics_are_vars_and_dark_overrides_only_semantics():

@@ -7,7 +7,7 @@ into a TokenSet; the validator, the WCAG gate and the exporters read it.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 
 class AliasError(ValueError):
@@ -22,7 +22,7 @@ class AliasError(ValueError):
         self.cause = cause
 
 
-def is_alias(value: str) -> bool:
+def is_alias(value: Any) -> bool:
     return isinstance(value, str) and value.startswith("{") and value.endswith("}")
 
 
@@ -40,8 +40,8 @@ def css_property(path: str) -> str:
 class Token:
     path: str
     type: str
-    value: str
-    modes: Dict[str, str] = field(default_factory=dict)
+    value: Any
+    modes: Dict[str, Any] = field(default_factory=dict)
     layer: str = "primitive"
     description: str = ""
 
@@ -74,7 +74,7 @@ class TokenSet:
     def tokens(self) -> List[Token]:
         return list(self._tokens.values())
 
-    def raw(self, path: str, mode: str) -> str:
+    def raw(self, path: str, mode: str) -> Any:
         if mode not in self.mode_names:
             raise ValueError(
                 f"mode {mode!r} is not one of {list(self.mode_names)}; "
@@ -82,14 +82,20 @@ class TokenSet:
         tok = self._lookup(path)
         return tok.modes.get(mode, tok.value)
 
-    def resolve(self, path: str, mode: str) -> str:
+    def resolve(self, path: str, mode: str) -> Any:
+        """The literal a token has in one mode. Aliases are followed, and a
+        composite value (a shadow, a typography style) comes back with its
+        aliased fields resolved too."""
+        return self._resolve(path, mode, ())
+
+    def _resolve(self, path: str, mode: str, outer: Tuple[str, ...]) -> Any:
         if path not in self._tokens:
             raise AliasError(f"{path} is not defined; add it before resolving", "missing")
         seen: List[str] = []
         current = path
         while True:
-            if current in seen:
-                chain = " -> ".join(seen + [current])
+            if current in seen or current in outer:
+                chain = " -> ".join(list(outer) + seen + [current])
                 raise AliasError(
                     f"{path} alias cycle: {chain}; "
                     "point one of these at a literal value or a primitive",
@@ -106,5 +112,14 @@ class TokenSet:
                 )
             value = self.raw(current, mode)
             if not is_alias(value):
-                return value
+                return self._deep(value, mode, outer + tuple(seen))
             current = alias_target(value)
+
+    def _deep(self, value: Any, mode: str, outer: Tuple[str, ...]) -> Any:
+        if isinstance(value, dict):
+            return {k: self._deep(v, mode, outer) for k, v in value.items()}
+        if isinstance(value, list):
+            return [self._deep(v, mode, outer) for v in value]
+        if is_alias(value):
+            return self._resolve(alias_target(value), mode, outer)
+        return value

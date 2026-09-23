@@ -87,7 +87,8 @@ def test_unknown_layer_rejected():
 def test_layer_typo_through_dtcg_is_caught():
     from engine.foundations.export import from_dtcg, to_dtcg
     doc = to_dtcg(generate_color(AXES, "#3366FF").tokens)
-    doc["color"]["surface"]["page"]["$extensions"]["ux.layer"] = "Semantic"
+    from engine.foundations.export import EXT
+    doc["color"]["surface"]["page"]["$extensions"][EXT]["layer"] = "Semantic"
     assert "unknown-layer" in rules(from_dtcg(doc))
 
 
@@ -98,7 +99,7 @@ def test_unknown_type_rejected():
     found = validate(ts)
     assert [p.rule for p in found] == ["unknown-type"]
     assert "color.x.500 has type 'colour'" in found[0].message
-    assert "use one of ['color']" in found[0].message
+    assert "use one of ['color', 'cubicBezier', 'dimension'" in found[0].message
 
 
 BAD_COLOR_VALUES = [
@@ -145,10 +146,10 @@ def test_bad_value_through_dtcg_is_caught():
 
 
 def test_value_rules_are_table_driven():
-    # M2 adds dimension, duration, shadow and font types by adding entries.
-    from engine.foundations.validate import VALUE_RULES
-    assert set(VALUE_RULES) == {"color"}
-    assert VALUE_RULES["color"].check("#3366FF") and not VALUE_RULES["color"].check("#GGGGGG")
+    from engine.foundations.values import TYPES
+    assert set(TYPES) == {"color", "cubicBezier", "dimension", "duration", "fontFamily",
+                          "fontWeight", "number", "shadow", "strokeStyle", "typography"}
+    assert TYPES["color"].check("#3366FF") and not TYPES["color"].check("#GGGGGG")
 
 
 @pytest.mark.parametrize("path, segment", [

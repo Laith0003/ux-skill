@@ -115,6 +115,10 @@ class GateFailure(Exception):
 
 def _hex(ts: TokenSet, path: str, mode: str) -> str:
     value = ts.resolve(path, mode)
+    if isinstance(value, str) and len(value) == 9 and value.startswith("#"):
+        raise ValueError(
+            f"{path} ({mode}) resolves to the translucent {value}; contrast needs opaque "
+            "colors, so pair an opaque role or leave this pairing out")
     try:
         hex_to_rgb(value)
     except ValueError:
