@@ -1,6 +1,7 @@
 """Exporters for a TokenSet: W3C DTCG JSON (in and out) and CSS custom properties."""
 from __future__ import annotations
 
+import json
 from typing import Any, Dict, List, Tuple
 
 from engine.foundations.tokens import Token, TokenSet, alias_target, css_property, is_alias
@@ -21,6 +22,13 @@ def to_dtcg(ts: TokenSet) -> Dict[str, Any]:
             entry["$description"] = t.description
         node[leaf] = entry
     return doc
+
+
+def dump_dtcg(ts: TokenSet) -> str:
+    """The DTCG document as text with fixed settings (two space indent,
+    non-ASCII kept as is, trailing newline), so equal sets give equal bytes
+    whoever writes the file."""
+    return json.dumps(to_dtcg(ts), indent=2, ensure_ascii=False) + "\n"
 
 
 def from_dtcg(doc: Dict[str, Any], mode_names: Tuple[str, ...] = ("light", "dark")) -> TokenSet:
