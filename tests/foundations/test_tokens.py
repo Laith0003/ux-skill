@@ -94,3 +94,40 @@ def test_unknown_mode_raises_on_raw():
 def test_empty_mode_names_rejected():
     with pytest.raises(ValueError, match="at least one mode name"):
         TokenSet(mode_names=())
+
+
+def test_get_unknown_path_names_the_fix():
+    # R27 M1: a bare KeyError('color.nope') names no fix.
+    with pytest.raises(KeyError, match=r"color\.nope is not defined; add it or check the spelling"):
+        make().get("color.nope")
+
+
+def test_raw_unknown_path_names_the_fix():
+    with pytest.raises(KeyError, match=r"color\.nope is not defined; add it or check the spelling"):
+        make().raw("color.nope", "light")
+
+
+def test_unknown_mode_message_names_the_fix():
+    # R27 M2: the message listed the allowed modes but never said what to do.
+    with pytest.raises(ValueError, match=r"use one of these or add it to mode_names"):
+        make().raw("color.surface.page", "dakr")
+
+
+def test_alias_error_carries_its_cause():
+    # R27 M3: callers branch on .cause, never on the message text.
+    cyc = TokenSet()
+    cyc.add(Token("a", "color", "{b}", layer="semantic"))
+    cyc.add(Token("b", "color", "{a}", layer="semantic"))
+    with pytest.raises(AliasError) as exc:
+        cyc.resolve("a", "light")
+    assert exc.value.cause == "cycle"
+
+    missing = TokenSet()
+    missing.add(Token("a", "color", "{b}", layer="semantic"))
+    with pytest.raises(AliasError) as exc:
+        missing.resolve("a", "light")
+    assert exc.value.cause == "missing"
+
+    with pytest.raises(AliasError) as exc:
+        TokenSet().resolve("nope", "light")
+    assert exc.value.cause == "missing"

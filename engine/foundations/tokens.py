@@ -11,7 +11,15 @@ from typing import Dict, List, Tuple
 
 
 class AliasError(ValueError):
-    """An alias points at a missing token or loops back on itself."""
+    """An alias points at a missing token or loops back on itself.
+
+    `cause` is "missing" or "cycle", so callers can branch on it without
+    parsing the message.
+    """
+
+    def __init__(self, message: str, cause: str):
+        super().__init__(message)
+        self.cause = cause
 
 
 def is_alias(value: str) -> bool:
@@ -46,8 +54,13 @@ class TokenSet:
             raise ValueError(f"{token.path} is already defined; token paths must be unique")
         self._tokens[token.path] = token
 
-    def get(self, path: str) -> Token:
+    def _lookup(self, path: str) -> Token:
+        if path not in self._tokens:
+            raise KeyError(f"{path} is not defined; add it or check the spelling")
         return self._tokens[path]
+
+    def get(self, path: str) -> Token:
+        return self._lookup(path)
 
     def has(self, path: str) -> bool:
         return path in self._tokens
@@ -57,13 +70,15 @@ class TokenSet:
 
     def raw(self, path: str, mode: str) -> str:
         if mode not in self.mode_names:
-            raise ValueError(f"mode {mode!r} is not one of {list(self.mode_names)}")
-        tok = self._tokens[path]
+            raise ValueError(
+                f"mode {mode!r} is not one of {list(self.mode_names)}; "
+                "use one of these or add it to mode_names")
+        tok = self._lookup(path)
         return tok.modes.get(mode, tok.value)
 
     def resolve(self, path: str, mode: str) -> str:
         if path not in self._tokens:
-            raise AliasError(f"{path} is not defined; add it before resolving")
+            raise AliasError(f"{path} is not defined; add it before resolving", "missing")
         seen: List[str] = []
         current = path
         while True:
@@ -71,7 +86,8 @@ class TokenSet:
                 chain = " -> ".join(seen + [current])
                 raise AliasError(
                     f"{path} alias cycle: {chain}; "
-                    "point one of these at a literal value or a primitive"
+                    "point one of these at a literal value or a primitive",
+                    "cycle",
                 )
             seen.append(current)
             if current not in self._tokens:
@@ -79,7 +95,8 @@ class TokenSet:
                 raise AliasError(
                     f"{holder} aliases {current}, which is not defined "
                     f"(resolving {path}). Define {current} or point {holder} "
-                    "at an existing token."
+                    "at an existing token.",
+                    "missing",
                 )
             value = self.raw(current, mode)
             if not is_alias(value):

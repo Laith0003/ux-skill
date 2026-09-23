@@ -55,6 +55,7 @@ def validate(ts: TokenSet) -> List[Problem]:
             try:
                 ts.resolve(t.path, mode)
             except AliasError as exc:
-                out.append(Problem(t.path, "alias-cycle", str(exc)))
+                rule = "alias-cycle" if exc.cause == "cycle" else "alias-missing"
+                out.append(Problem(t.path, rule, str(exc)))
                 continue
     return out

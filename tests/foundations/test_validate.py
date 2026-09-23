@@ -59,3 +59,12 @@ def test_alias_cycle_reported_for_semantic_pointing_into_a_cycle():
     assert "alias-cycle" in [p.rule for p in found]
     cycle_problem = next(p for p in found if p.rule == "alias-cycle")
     assert "color.p.a" in cycle_problem.message and "color.p.b" in cycle_problem.message
+
+
+def test_missing_target_reached_through_a_primitive_is_alias_missing():
+    # R27 M3: s.x -> p.a -> p.missing is a missing target, not a cycle.
+    ts = TokenSet()
+    ts.add(Token("color.p.a", "color", "{color.p.missing}"))
+    ts.add(Token("color.text.z", "color", "{color.p.a}", layer="semantic"))
+    found = [p.rule for p in validate(ts) if p.token == "color.text.z"]
+    assert found == ["alias-missing"]
