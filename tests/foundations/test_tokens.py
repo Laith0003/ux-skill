@@ -47,3 +47,45 @@ def test_cycle_detected():
 def test_insertion_order_is_stable():
     assert [t.path for t in make().tokens()] == [
         "color.neutral.50", "color.neutral.950", "color.surface.page"]
+
+
+def test_self_alias_is_a_cycle():
+    ts = TokenSet()
+    ts.add(Token("a", "color", "{a}", layer="semantic"))
+    with pytest.raises(AliasError, match="cycle"):
+        ts.resolve("a", "light")
+
+
+def test_missing_target_names_the_holder_and_the_root():
+    ts = TokenSet()
+    ts.add(Token("a", "color", "{b}", layer="semantic"))
+    ts.add(Token("b", "color", "{missing}", layer="semantic"))
+    with pytest.raises(AliasError, match=r"b aliases missing.*resolving a"):
+        ts.resolve("a", "light")
+
+
+def test_multi_hop_dark_fallthrough():
+    ts = TokenSet()
+    ts.add(Token("color.neutral.900", "color", "#111111"))
+    ts.add(Token("color.text.default", "color", "{color.neutral.900}", layer="semantic"))
+    ts.add(Token("color.text.emphasis", "color", "#000000",
+                 modes={"dark": "{color.text.default}"}, layer="semantic"))
+    assert ts.resolve("color.text.emphasis", "dark") == "#111111"
+
+
+def test_undefined_root_path_raises():
+    ts = TokenSet()
+    with pytest.raises(AliasError, match="nope is not defined"):
+        ts.resolve("nope", "light")
+
+
+def test_unknown_mode_raises_on_resolve():
+    ts = make()
+    with pytest.raises(ValueError, match=r"dakr.*light.*dark"):
+        ts.resolve("color.surface.page", "dakr")
+
+
+def test_unknown_mode_raises_on_raw():
+    ts = make()
+    with pytest.raises(ValueError, match=r"dakr.*light.*dark"):
+        ts.raw("color.surface.page", "dakr")

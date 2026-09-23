@@ -52,18 +52,31 @@ class TokenSet:
         return list(self._tokens.values())
 
     def raw(self, path: str, mode: str) -> str:
+        if mode not in self.mode_names:
+            raise ValueError(f"mode {mode!r} is not one of {list(self.mode_names)}")
         tok = self._tokens[path]
         return tok.modes.get(mode, tok.value)
 
     def resolve(self, path: str, mode: str) -> str:
+        if path not in self._tokens:
+            raise AliasError(f"{path} is not defined; add it before resolving")
         seen: List[str] = []
         current = path
         while True:
             if current in seen:
-                raise AliasError(f"{path} alias cycle: {' -> '.join(seen + [current])}")
+                chain = " -> ".join(seen + [current])
+                raise AliasError(
+                    f"{path} alias cycle: {chain}; "
+                    "point one of these at a literal value or a primitive"
+                )
             seen.append(current)
             if current not in self._tokens:
-                raise AliasError(f"{seen[0]} aliases {current}, which is not defined")
+                holder = seen[-2] if len(seen) > 1 else path
+                raise AliasError(
+                    f"{holder} aliases {current}, which is not defined "
+                    f"(resolving {path}). Define {current} or point {holder} "
+                    "at an existing token."
+                )
             value = self.raw(current, mode)
             if not is_alias(value):
                 return value
