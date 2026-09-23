@@ -1,13 +1,17 @@
 """Color foundation: primitives from OKLCH ramps, semantic roles per mode,
-the WCAG pairings every system must meet, and a deterministic retune."""
+the WCAG pairings every system must meet, and a deterministic retune.
+
+generate_color never gates itself: it returns tokens and notes, and
+build_system validates and gates them with PAIRINGS and CHECKS, then asks
+seed_hint for advice on the failing pairings the brand seed controls."""
 from __future__ import annotations
 
-from dataclasses import dataclass, field, replace
 from types import MappingProxyType
 from typing import Dict, List, Mapping, Tuple
 
-from engine.foundations.color_math import contrast, hex_to_oklch, oklch_to_hex
-from engine.foundations.gate import GateFailure, GateFinding, Pairing, gate
+from engine.foundations.color_math import contrast, hex_to_oklch, luminance, oklch_to_hex
+from engine.foundations.foundation import BrandInputs, Foundation, Generated
+from engine.foundations.gate import Check, GateFinding, Pairing
 from engine.foundations.ramp import STEPS, ramp
 from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
 from engine.synthesizer.axes import AxisValues
@@ -63,10 +67,8 @@ _ACTION_GROUP_ROLES = frozenset(
     {"color.text.on-action", "color.action.primary", "color.action.primary-hover"})
 
 
-@dataclass
-class ColorResult:
-    tokens: TokenSet
-    notes: List[str] = field(default_factory=list)
+# M1 name for the generator's result; every foundation now returns Generated.
+ColorResult = Generated
 
 
 def _neutral_seed(brand_hex: str, axes: AxisValues) -> str:
@@ -149,7 +151,7 @@ def _solve_action_group(mode: str, prims: Dict[str, str], pick: Dict[str, Dict[s
             if 0 <= idx < len(STEPS) and idx not in primary_indices:
                 primary_indices.append(idx)
 
-    best = None  # (score, ratios) for the exhaustion error, if it comes to that
+    best = None  # (score, ratios, (primary, hover, on-action)) if nothing clears
 
     for primary_idx in primary_indices:
         primary_hex = prims[path_at(primary_idx)]
@@ -174,7 +176,8 @@ def _solve_action_group(mode: str, prims: Dict[str, str], pick: Dict[str, Dict[s
 
                 score = min(r_op / 4.5, r_oh / 4.5, r_pp / 3.0, r_hp / 3.0)
                 if best is None or score > best[0]:
-                    best = (score, (r_op, r_oh, r_pp, r_hp))
+                    best = (score, (r_op, r_oh, r_pp, r_hp),
+                            (path_at(primary_idx), path_at(hover_idx), on_action_path))
 
                 if r_op >= 4.5 and r_oh >= 4.5 and r_pp >= 3.0 and r_hp >= 3.0:
                     chosen_primary = path_at(primary_idx)
@@ -195,51 +198,65 @@ def _solve_action_group(mode: str, prims: Dict[str, str], pick: Dict[str, Dict[s
                     return
 
     if best is None:
-        # Every hover candidate tried resolved to the exact same hex as its
-        # primary candidate (e.g. a ramp flattened to one color end to
-        # end), so the hover != primary requirement alone ruled out every
-        # combination before any ratio was even worth scoring.
-        raise ValueError(
-            f"action group ({mode}): every ramp step this seed's brand family reaches "
-            f"resolves to the same color as {primary_role}, so {hover_role} can never "
-            "read as a different color from it. Choose a brand seed whose ramp actually "
-            "varies from step to step."
-        )
+        # Every hover candidate resolved to the same hex as its primary (a
+        # ramp flat end to end). Keep the defaults; the hover-distinct
+        # check fails in the gate and names the fix.
+        notes.append(
+            f"action group ({mode}): every brand step resolves to the same color, so "
+            f"{hover_role} cannot differ from {primary_role}; kept the defaults")
+        return
 
     r_op, r_oh, r_pp, r_hp = best[1]
-    raise ValueError(
+    chosen_primary, chosen_hover, chosen_on = best[2]
+    pick[mode][primary_role] = chosen_primary
+    pick[mode][hover_role] = chosen_hover
+    pick[mode][on_action_role] = chosen_on
+    notes.append(
         f"action group ({mode}): no combination of {primary_role}, {hover_role} and "
-        f"{on_action_role} within the brand ramp clears every requirement; the closest "
-        f"reached on-action/primary {r_op:.2f}:1, on-action/hover {r_oh:.2f}:1 (both need "
-        f"4.5:1), primary/page {r_pp:.2f}:1, hover/page {r_hp:.2f}:1 (both need 3.0:1). "
-        "Choose a brand seed with more contrast range in its ramp."
-    )
+        f"{on_action_role} within the brand ramp clears every requirement; kept the closest, "
+        f"on-action/primary {r_op:.2f}:1, on-action/hover {r_oh:.2f}:1 (both need 4.5:1), "
+        f"primary/page {r_pp:.2f}:1, hover/page {r_hp:.2f}:1 (both need 3.0:1)")
 
 
-def _with_seed_hint(ts: TokenSet, finding: GateFinding) -> GateFinding:
-    """Add the seed direction to a finding whose pairing the brand seed
-    controls (either side aliases a brand step in that mode). A darker brand
-    only ever helps a light-mode pairing gain contrast against a light
-    page, and only a lighter brand helps the dark-mode equivalent (R17
-    minor), so the hint never suggests the direction that makes it worse.
-    Pairings the seed does not control keep the gate's own fix."""
-    for path in (finding.fg, finding.bg):
-        raw = ts.raw(path, finding.mode)
+def seed_hint(ts: TokenSet, finding: GateFinding) -> str:
+    """Advice for a failing pairing the brand seed controls: one side
+    aliases a brand step in that mode. The direction comes from the other
+    side: when it is lighter than the brand color, a darker seed gains
+    contrast, otherwise a lighter one does. Pairings the seed does not
+    control get no advice ("") and keep the gate's own fix."""
+    for side, other in ((finding.fg, finding.bg), (finding.bg, finding.fg)):
+        raw = ts.raw(side, finding.mode)
         if is_alias(raw) and alias_target(raw).startswith("color.brand."):
-            direction = "a darker" if finding.mode == "light" else "a lighter"
-            return replace(finding, hint=(
-                "The brand seed cannot reach it within its ramp; "
-                f"choose {direction} or more saturated seed."))
-    return finding
+            brand_lum = luminance(ts.resolve(side, finding.mode))
+            other_lum = luminance(ts.resolve(other, finding.mode))
+            direction = "a darker" if other_lum > brand_lum else "a lighter"
+            return ("The brand seed cannot reach it within its ramp; "
+                    f"choose {direction} or more saturated seed.")
+    return ""
 
 
-def generate_color(axes: AxisValues, brand_hex: str) -> ColorResult:
-    """Low-level call: build_color wraps it with input checks, validate and
-    the gate report, so prefer build_color unless you need the raw generator.
+def _hover_distinct(ts: TokenSet, mode: str) -> List[str]:
+    primary, hover = "color.action.primary", "color.action.primary-hover"
+    if not (ts.has(primary) and ts.has(hover)):
+        return []
+    p, h = ts.resolve(primary, mode), ts.resolve(hover, mode)
+    if p != h:
+        return []
+    return [f"{hover} equals {primary} ({mode}) at {p}; point {hover} at a neighboring "
+            "brand step so the hover state reads as a different color"]
 
-    Returns the color TokenSet and the retune notes. Raises GateFailure when
-    the generated system fails a pairing in PAIRINGS, and ValueError when
-    the action group cannot be solved within the brand ramp.
+
+CHECKS: Tuple[Check, ...] = (Check("hover-distinct", "system", _hover_distinct),)
+
+
+def generate_color(axes: AxisValues, brand_hex: str) -> Generated:
+    """Low-level call: build_system (and build_color, its color-only
+    shortcut) wraps it with input checks, validate and the gate, so prefer
+    those unless you need the raw generator.
+
+    Returns the color TokenSet and the retune notes. It never raises for a
+    failing pairing: when the ramp cannot reach a minimum it keeps the
+    closest step, notes it, and leaves the failure to the gate.
     """
     notes: List[str] = []
     prims = _primitives(axes, brand_hex.upper(), notes)
@@ -308,34 +325,12 @@ def generate_color(axes: AxisValues, brand_hex: str) -> ColorResult:
         ts.add(Token(role, "color", "{" + light + "}", layer="semantic",
                      modes={"dark": "{" + dark + "}"} if dark != light else {}))
 
-    # R16 item 1 (CRITICAL): every move above is bounded by the ramp's own
-    # ends, so any of them can legitimately do nothing (the "if not nxt"
-    # guard above, and _solve_action_group's own exhaustion raise) and
-    # leave a pairing still failing, for example when a seed's ramp
-    # genuinely has no step that clears a threshold. Re-verify every
-    # pairing, in both modes, against the result actually being returned,
-    # through the same gate build_color uses (R27 I3), and fail loudly with
-    # GateFailure rather than let a design system that violates its own
-    # WCAG gate ship silently.
-    report = gate(ts, PAIRINGS, raise_on_fail=False)
-    if not report.passed:
-        report.findings[:] = [_with_seed_hint(ts, f) for f in report.findings]
-        raise GateFailure(report)
+    return Generated(tokens=ts, notes=notes)
 
-    # R17 item (c): action.primary-hover must never resolve to the exact
-    # same color as action.primary. _solve_action_group already refuses
-    # any candidate where the two hexes match, so this should be
-    # unreachable; it stays as the same kind of fail-loud backstop as the
-    # pairing check above, in case a future change to the solver reopens
-    # the gap R16 item 3 first found.
-    for mode in ts.mode_names:
-        primary_hex = ts.resolve("color.action.primary", mode)
-        hover_hex = ts.resolve("color.action.primary-hover", mode)
-        if primary_hex == hover_hex:
-            raise ValueError(
-                f"color.action.primary-hover equals color.action.primary ({mode}) at "
-                f"{primary_hex}; the hover state must read as a different color from "
-                "the resting state."
-            )
 
-    return ColorResult(tokens=ts, notes=notes)
+def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
+    return generate_color(axes, inputs.brand_hex)
+
+
+FOUNDATION = Foundation(name="color", generate=_generate, pairings=PAIRINGS,
+                        checks=CHECKS, hint=seed_hint)

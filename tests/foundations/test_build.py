@@ -7,8 +7,8 @@ import pytest
 import engine.foundations.build as build_module
 import engine.foundations.color as color_module
 from engine.foundations import (
-    BuildResult, ColorResult, GateFailure, GateFinding, ValidationError, build_color,
-    generate_color,
+    BuildResult, Check, ColorResult, GateFailure, GateFinding, ValidationError, build_color,
+    build_system, generate_color,
 )
 from engine.foundations.color import PAIRINGS
 from engine.foundations.gate import GateReport, gate
@@ -17,8 +17,6 @@ from engine.foundations.tokens import Token, TokenSet
 from engine.synthesizer.axes import AxisValues
 
 AXES = AxisValues(0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5)
-# The package re-exports the gate() function under the submodule's name, so
-# "import engine.foundations.gate as m" would bind the function, not the module.
 gate_module = importlib.import_module("engine.foundations.gate")
 
 
@@ -38,7 +36,7 @@ def test_validation_problems_raise_validation_error_with_every_problem(monkeypat
     broken = TokenSet()
     broken.add(Token("color.x.500", "color", "#GGGGGG"))
     broken.add(Token("color.text.a", "color", "#444444", layer="semantic"))
-    monkeypatch.setattr(build_module, "generate_color",
+    monkeypatch.setattr(color_module, "generate_color",
                         lambda axes, brand_hex: ColorResult(tokens=broken, notes=[]))
     with pytest.raises(ValidationError) as exc:
         build_color(AXES, "#3366FF")
@@ -80,7 +78,7 @@ def test_seed_hint_only_for_pairings_the_seed_controls(monkeypatch):
         stops={s: "#808080" for s in STEPS}, retuned=False, note="")
         if seed == neutral_seed else real_ramp(seed))
     with pytest.raises(GateFailure) as exc:
-        generate_color(AXES, "#3366FF")
+        build_color(AXES, "#3366FF")
     text = [f for f in exc.value.report.findings
             if (f.fg, f.bg) == ("color.text.default", "color.surface.page")]
     assert text and all("seed" not in f.message() for f in text)
@@ -101,9 +99,12 @@ def test_pairing_lives_in_gate_and_color_reuses_it():
 def test_public_api():
     import engine.foundations as f
     for name in ("BuildResult", "ValidationError", "GateFinding", "ColorResult", "build_color",
-                 "generate_color"):
+                 "build_system", "generate_color", "run_gate", "run_validate", "Foundation",
+                 "Generated", "Check", "CheckFailure"):
         assert name in f.__all__
+    assert "gate" not in f.__all__ and "validate" not in f.__all__
     assert f.build_color is build_module.build_color
+    assert f.run_gate is gate_module.gate
     assert f.GateFinding is GateFinding
     assert "build_color" in (generate_color.__doc__ or "")
     import engine.foundations.export as export_module
@@ -161,3 +162,77 @@ def test_axis_bounds_are_inclusive(value):
 def test_axes_must_be_axis_values():
     with pytest.raises(TypeError, match=r"axes is dict; pass an AxisValues"):
         build_color({"warmth": 0.5}, "#3366FF")
+
+
+# M2 kickoff: one pipeline, generators never gate themselves.
+
+def test_package_attributes_gate_and_validate_are_the_submodules():
+    import engine.foundations as f
+    import engine.foundations.gate as g
+    import engine.foundations.validate as v
+    assert inspect.ismodule(f.gate) and inspect.ismodule(f.validate)
+    assert inspect.ismodule(g) and inspect.ismodule(v)
+    assert f.run_validate is v.validate
+
+
+def test_build_system_builds_every_registered_foundation():
+    result = build_system(AXES, "#3366FF")
+    names = {f.name for f in build_module.FOUNDATIONS}
+    assert {t.path.split(".", 1)[0] for t in result.tokens.tokens()} == names
+    assert result.report.passed
+    assert result.report.checked == sum(len(f.pairings) for f in build_module.FOUNDATIONS) * 2
+    assert result.report.rules_checked == sum(len(f.checks) for f in build_module.FOUNDATIONS) * 2
+
+
+def test_build_color_is_build_system_for_color_alone():
+    a, b = build_color(AXES, "#E61428"), build_system(AXES, "#E61428", foundations=("color",))
+    assert [(t.path, t.value, t.modes) for t in a.tokens.tokens()] == \
+        [(t.path, t.value, t.modes) for t in b.tokens.tokens()]
+    assert a.notes == b.notes
+
+
+def test_unknown_foundation_name_is_rejected():
+    with pytest.raises(ValueError, match=r"foundations names 'colour', which is not one of \['color'"):
+        build_system(AXES, "#3366FF", foundations=("colour",))
+
+
+def test_foundations_must_be_a_tuple_of_names():
+    with pytest.raises(TypeError, match=r"foundations is the string 'color'; pass a tuple"):
+        build_system(AXES, "#3366FF", foundations="color")
+
+
+@pytest.mark.parametrize("value", [None, 1, "yes"])
+def test_arabic_must_be_a_bool(value):
+    with pytest.raises(TypeError, match=r"arabic is .*; pass True or False"):
+        build_system(AXES, "#3366FF", arabic=value)
+
+
+def test_generator_returns_instead_of_raising_when_the_gate_would_fail(monkeypatch):
+    _no_solver(monkeypatch)
+    result = generate_color(AXES, "#FFD400")
+    assert isinstance(result, ColorResult) and result.tokens.has("color.action.primary")
+
+
+def test_check_failures_block_and_carry_their_message():
+    ts = TokenSet()
+    ts.add(Token("color.base.white", "color", "#FFFFFF"))
+    check = Check("demo", "system", lambda s, mode: [f"color.base.white fails in {mode}; fix it"])
+    with pytest.raises(GateFailure) as exc:
+        gate(ts, [], [check])
+    report = exc.value.report
+    assert [(f.check, f.mode) for f in report.failures] == [("demo", "light"), ("demo", "dark")]
+    assert "color.base.white fails in dark; fix it" in str(exc.value)
+    assert report.rules_checked == 2 and not report.passed
+
+
+def test_seed_hint_direction_follows_the_other_side(monkeypatch):
+    # With the solver off, dark mode keeps white text on a light yellow
+    # button. White is lighter than the button, so only a darker seed can
+    # help; the M1 hint said "lighter" for every dark-mode finding.
+    _no_solver(monkeypatch)
+    with pytest.raises(GateFailure) as exc:
+        build_color(AXES, "#FFD400")
+    dark = [f for f in exc.value.report.findings
+            if (f.fg, f.bg, f.mode) == ("color.text.on-action", "color.action.primary", "dark")]
+    assert dark, [f.message() for f in exc.value.report.findings]
+    assert "choose a darker or more saturated seed" in dark[0].message()

@@ -167,7 +167,7 @@ def test_bad_name_rejected(path, segment):
     assert "letters, digits, '_' and '-'" in found[0].message
 
 
-@pytest.mark.parametrize("order", [("radius", "radius.md"), ("radius.md", "radius")])
+@pytest.mark.parametrize("order", [("radius", "radius.card"), ("radius.card", "radius")])
 def test_path_conflict_rejected_in_either_order(order):
     # R27 I4: DTCG cannot hold a token and a group at the same path, so
     # to_dtcg dropped one of them silently.
@@ -175,8 +175,8 @@ def test_path_conflict_rejected_in_either_order(order):
     for path in order:
         ts.add(Token(path, "color", "#111111"))
     found = [p for p in validate(ts) if p.rule == "path-conflict"]
-    assert len(found) == 1 and found[0].token == "radius.md"
-    assert "radius is a token and also a group holding radius.md" in found[0].message
+    assert len(found) == 1 and found[0].token == "radius.card"
+    assert "radius is a token and also a group holding radius.card" in found[0].message
     assert "rename one" in found[0].message
 
 

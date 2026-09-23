@@ -1,9 +1,12 @@
-"""Build pipeline: generate, validate, gate. One error type per stage.
+"""Build pipeline: generate every foundation, validate, gate. One error
+type per stage.
 
-generate raises ValueError (or GateFailure from the generator's own
-re-check), validate raises ValidationError carrying every Problem, and the
-gate raises GateFailure carrying its GateReport. On success the report is
-returned with the tokens, not thrown away.
+build_system is the single entry point. Generators return tokens and notes
+and never gate themselves; the build validates the merged set once (raises
+ValidationError carrying every Problem), gates it once with every
+foundation's pairings and checks, attaches each foundation's hints to the
+findings it owns, and raises GateFailure carrying the report. On success
+the report is returned with the tokens.
 """
 from __future__ import annotations
 
@@ -11,14 +14,18 @@ import dataclasses
 import math
 import numbers
 from dataclasses import dataclass
-from typing import Any, Iterable, Tuple
+from typing import Any, Iterable, List, Optional, Sequence, Tuple
 
-from engine.foundations.color import PAIRINGS, generate_color
+from engine.foundations import color
 from engine.foundations.color_math import hex_to_rgb
-from engine.foundations.gate import GateReport, gate
+from engine.foundations.foundation import BrandInputs, Foundation
+from engine.foundations.gate import GateFailure, GateReport, gate
 from engine.foundations.tokens import TokenSet
 from engine.foundations.validate import Problem, validate
 from engine.synthesizer.axes import AxisValues
+
+# Build order. Each foundation task appends its FOUNDATION here.
+FOUNDATIONS: Tuple[Foundation, ...] = (color.FOUNDATION,)
 
 
 @dataclass(frozen=True)
@@ -36,7 +43,7 @@ class ValidationError(ValueError):
         super().__init__("\n".join(p.message for p in self.problems))
 
 
-def _check_inputs(axes: Any, brand_hex: Any) -> None:
+def _check_inputs(axes: Any, brand_hex: Any, arabic: Any) -> None:
     """Reject bad inputs before generating, naming the input and the fix."""
     if not isinstance(axes, AxisValues):
         raise TypeError(f"axes is {type(axes).__name__}; pass an AxisValues, "
@@ -55,19 +62,65 @@ def _check_inputs(axes: Any, brand_hex: Any) -> None:
     except ValueError:
         raise ValueError(f"brand_hex is {brand_hex!r}, which is not a hex color; "
                          "use #RRGGBB or #RGB, for example #3366FF") from None
+    if not isinstance(arabic, bool):
+        raise TypeError(f"arabic is {arabic!r}; pass True or False")
+
+
+def _select(foundations: Optional[Sequence[str]]) -> Tuple[Foundation, ...]:
+    if foundations is None:
+        return FOUNDATIONS
+    known = [f.name for f in FOUNDATIONS]
+    if isinstance(foundations, str):
+        raise TypeError(f"foundations is the string {foundations!r}; pass a tuple of names, "
+                        f"for example ({foundations!r},)")
+    for name in foundations:
+        if name not in known:
+            raise ValueError(f"foundations names {name!r}, which is not one of {known}; "
+                             "use those names or leave foundations out to build all")
+    return tuple(f for f in FOUNDATIONS if f.name in foundations)
+
+
+def _attach_hints(ts: TokenSet, report: GateReport, chosen: Sequence[Foundation]) -> None:
+    hinted = []
+    for finding in report.findings:
+        root = finding.fg.split(".", 1)[0]
+        owner = next((f for f in chosen if f.name == root and f.hint), None)
+        advice = owner.hint(ts, finding) if owner else ""
+        hinted.append(dataclasses.replace(finding, hint=advice) if advice else finding)
+    report.findings[:] = hinted
+
+
+def build_system(axes: AxisValues, brand_hex: str, *, arabic: bool = True,
+                 foundations: Optional[Sequence[str]] = None) -> BuildResult:
+    """Generate every foundation (or the named ones, in build order),
+    validate the merged set and gate it.
+
+    Raises TypeError or ValueError for bad inputs, ValidationError when the
+    set breaks a structural rule, and GateFailure when a pairing or check
+    fails; otherwise returns the tokens, every generator's notes and the
+    gate report.
+    """
+    _check_inputs(axes, brand_hex, arabic)
+    chosen = _select(foundations)
+    inputs = BrandInputs(brand_hex=brand_hex, arabic=arabic)
+    ts = TokenSet()
+    notes: List[str] = []
+    for f in chosen:
+        generated = f.generate(axes, inputs)
+        for token in generated.tokens.tokens():
+            ts.add(token)
+        notes.extend(generated.notes)
+    problems = validate(ts)
+    if problems:
+        raise ValidationError(problems)
+    report = gate(ts, [p for f in chosen for p in f.pairings],
+                  [c for f in chosen for c in f.checks], raise_on_fail=False)
+    if not report.passed:
+        _attach_hints(ts, report, chosen)
+        raise GateFailure(report)
+    return BuildResult(tokens=ts, notes=tuple(notes), report=report)
 
 
 def build_color(axes: AxisValues, brand_hex: str) -> BuildResult:
-    """Generate the color foundation, validate it and gate it.
-
-    Raises TypeError or ValueError for bad inputs, ValidationError when the
-    generated set breaks a structural rule, and GateFailure when a pairing
-    fails; otherwise returns the tokens, the retune notes and the gate report.
-    """
-    _check_inputs(axes, brand_hex)
-    result = generate_color(axes, brand_hex)
-    problems = validate(result.tokens)
-    if problems:
-        raise ValidationError(problems)
-    report = gate(result.tokens, PAIRINGS)
-    return BuildResult(tokens=result.tokens, notes=tuple(result.notes), report=report)
+    """Color only: the same pipeline as build_system, one foundation."""
+    return build_system(axes, brand_hex, foundations=("color",))

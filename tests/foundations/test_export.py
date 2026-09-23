@@ -1,5 +1,7 @@
 import json
 
+import pytest
+
 from engine.foundations import build_color, from_dtcg, to_css, to_dtcg
 from engine.synthesizer.axes import AxisValues
 
@@ -92,3 +94,14 @@ def test_css_light_scope_restores_base_values():
     assert "--color-text-default: var(--color-neutral-900);" in light
     assert _props(light) == _props(dark) and _props(light)
     assert "--color-brand-500:" not in light
+
+
+@pytest.mark.parametrize("order", [("radius", "radius.card"), ("radius.card", "radius")])
+def test_to_dtcg_raises_on_a_path_conflict_instead_of_dropping(order):
+    from engine.foundations.tokens import Token, TokenSet
+    ts = TokenSet()
+    for path in order:
+        ts.add(Token(path, "color", "#111111"))
+    with pytest.raises(ValueError, match=r"radius is a token and also a group holding radius\.card; "
+                                         r"DTCG cannot hold both, so rename one"):
+        to_dtcg(ts)

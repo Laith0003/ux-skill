@@ -110,3 +110,8 @@ def contrast(a: str, b: str) -> float:
     la, lb = _luminance(a), _luminance(b)
     hi, lo = max(la, lb), min(la, lb)
     return (hi + 0.05) / (lo + 0.05)
+
+
+def luminance(h: str) -> float:
+    """WCAG relative luminance of a hex color, 0 (black) to 1 (white)."""
+    return _luminance(h)

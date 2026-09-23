@@ -4,8 +4,10 @@ import re
 import pytest
 
 import engine.foundations.color as color_module
+from engine.foundations.build import build_color
 from engine.foundations.color import PAIRINGS, SEMANTIC, generate_color
 from engine.foundations.color_math import contrast, oklch_to_hex
+from engine.foundations.gate import GateFailure
 from engine.foundations.ramp import STEPS, RampResult
 from engine.synthesizer.axes import AxisValues
 
@@ -52,63 +54,48 @@ def test_deterministic():
     assert a == b
 
 
-def test_raises_when_the_action_group_ramp_is_flat(monkeypatch):
-    # R16 item 1 / R17 item (c): force the brand ramp flat (every stop the
-    # same gray) so no amount of retuning can ever change any contrast
-    # ratio computed from it, and action.primary-hover can never read as a
-    # different color from action.primary either. generate_color must not
-    # return a system with an invisible hover state or a silently-failing
-    # pairing; it must raise, naming the action group and the mode.
+def _brand_ramp(monkeypatch, brand, stops):
     real_ramp = color_module.ramp
-    brand = "#3366FF"
-    flat = RampResult(stops={s: "#808080" for s in STEPS}, retuned=False, note="")
 
     def fake_ramp(seed_hex):
         if seed_hex.upper() == brand:
-            return flat
+            return RampResult(stops=stops, retuned=False, note="")
         return real_ramp(seed_hex)
 
     monkeypatch.setattr(color_module, "ramp", fake_ramp)
 
-    with pytest.raises(ValueError) as excinfo:
-        generate_color(AXES, brand)
 
-    message = str(excinfo.value)
-    assert "action group" in message
-    assert "(light)" in message or "(dark)" in message
-    assert "color.action.primary" in message and "color.action.primary-hover" in message
-
-
-def test_raises_with_best_ratios_when_the_action_group_is_unsatisfiable(monkeypatch):
-    # R17 item (b): a ramp that varies (so it is not the flat/hover-collision
-    # case above) but never leaves the near-white end can never clear
-    # action.primary's or action.primary-hover's 3:1 against a light page,
-    # no matter which of its 11 (distinct) steps the solver tries. The
-    # raise must name the action group, the mode, and the best ratios it
-    # actually reached, per the R17 ruling's wording.
-    real_ramp = color_module.ramp
+def test_flat_action_ramp_is_noted_and_the_gate_blocks_it(monkeypatch):
+    # The generator never raises for an unsolvable action group: it keeps
+    # the defaults, notes why, and the build's gate blocks the result with
+    # the hover-distinct check naming the fix.
     brand = "#3366FF"
-    steps = list(STEPS)
-    narrow = RampResult(
-        stops={s: oklch_to_hex(0.99 - i * 0.01, 0.0, 0.0) for i, s in enumerate(steps)},
-        retuned=False, note="")
+    _brand_ramp(monkeypatch, brand, {s: "#808080" for s in STEPS})
+    result = generate_color(AXES, brand)
+    assert any(n.startswith("action group (light): every brand step resolves to the same color")
+               for n in result.notes)
+    with pytest.raises(GateFailure) as exc:
+        build_color(AXES, brand)
+    failures = [f for f in exc.value.report.failures if f.check == "hover-distinct"]
+    assert failures and "color.action.primary-hover equals color.action.primary" in failures[0].message
+    assert "point color.action.primary-hover at a neighboring brand step" in failures[0].message
 
-    def fake_ramp(seed_hex):
-        if seed_hex.upper() == brand:
-            return narrow
-        return real_ramp(seed_hex)
 
-    monkeypatch.setattr(color_module, "ramp", fake_ramp)
-
-    with pytest.raises(ValueError) as excinfo:
-        generate_color(AXES, brand)
-
-    message = str(excinfo.value)
-    assert "action group (light)" in message
-    assert "color.action.primary" in message and "color.action.primary-hover" in message
-    assert "color.text.on-action" in message
-    # the four ratios the ruling asks for, each to two decimals
-    assert len(re.findall(r"\d+\.\d\d:1", message)) == 4
+def test_unsatisfiable_action_group_keeps_the_closest_and_the_gate_blocks_it(monkeypatch):
+    # A ramp that never leaves the near-white end cannot give the button
+    # 3:1 against a light page. The generator keeps the closest candidate,
+    # its note carries the four ratios reached, and the gate names the
+    # failing pairing.
+    brand = "#3366FF"
+    _brand_ramp(monkeypatch, brand,
+                {s: oklch_to_hex(0.99 - i * 0.01, 0.0, 0.0) for i, s in enumerate(STEPS)})
+    notes = [n for n in generate_color(AXES, brand).notes if n.startswith("action group (light)")]
+    assert len(notes) == 1 and "kept the closest" in notes[0]
+    assert len(re.findall(r"\d+\.\d\d:1", notes[0])) == 4
+    with pytest.raises(GateFailure) as exc:
+        build_color(AXES, brand)
+    assert any((f.fg, f.bg, f.mode) == ("color.action.primary", "color.surface.page", "light")
+               for f in exc.value.report.findings)
 
 
 # R17 minor: pinned to the exact field shapes each note format uses, not

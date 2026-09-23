@@ -1,14 +1,15 @@
 """WCAG gate: every declared pairing, in every mode, meets its minimum or
 the system is not emitted.
 
-The gate knows no foundation. Each caller passes the pairings it owns
-(color passes color.PAIRINGS), so gate.py never imports a generator.
+The gate knows no foundation. Callers pass the contrast pairings and the
+other checks their foundations declare (build_system collects them from
+every Foundation), so gate.py never imports a generator.
 """
 from __future__ import annotations
 
 import math
 from dataclasses import dataclass, field
-from typing import Iterable, List
+from typing import Callable, Iterable, List
 
 from engine.foundations.color_math import contrast, hex_to_rgb
 from engine.foundations.tokens import TokenSet
@@ -47,17 +48,37 @@ class GateFinding:
         return f"{text} {self.hint}" if self.hint else text
 
 
+@dataclass(frozen=True)
+class Check:
+    """A requirement that is not a contrast pairing (a minimum size, a
+    width, a duration). `run(ts, mode)` returns one message per failure in
+    that mode; every message names the token and the fix."""
+    id: str
+    criterion: str
+    run: Callable[[TokenSet, str], List[str]]
+
+
+@dataclass(frozen=True)
+class CheckFailure:
+    check: str
+    criterion: str
+    mode: str
+    message: str
+
+
 @dataclass
 class GateReport:
     findings: List[GateFinding] = field(default_factory=list)
     checked: int = 0
+    failures: List[CheckFailure] = field(default_factory=list)
+    rules_checked: int = 0
     # Pairings not checked because the set lacks one of their tokens. A set
     # with none of the roles would otherwise pass with checked == 0 unseen.
     skipped_pairings: List[Pairing] = field(default_factory=list)
 
     @property
     def passed(self) -> bool:
-        return not self.findings
+        return not self.findings and not self.failures
 
     @property
     def skipped(self) -> int:
@@ -75,8 +96,9 @@ class GateReport:
     def summary(self) -> str:
         head = (f"WCAG gate {'passed' if self.passed else 'failed'}: {self.checked} checks, "
                 f"{len(self.findings)} failing, {self.skipped} "
-                f"pairing{'' if self.skipped == 1 else 's'} skipped.")
-        lines = [head] + [f.message() for f in self.findings]
+                f"pairing{'' if self.skipped == 1 else 's'} skipped; {self.rules_checked} "
+                f"rule checks, {len(self.failures)} failing.")
+        lines = [head] + [f.message() for f in self.findings] + [f.message for f in self.failures]
         if self.skipped_pairings:
             lines.append(self.skipped_message())
         return "\n".join(lines)
@@ -85,7 +107,7 @@ class GateReport:
 class GateFailure(Exception):
     def __init__(self, report: GateReport):
         self.report = report
-        lines = [f.message() for f in report.findings]
+        lines = [f.message() for f in report.findings] + [f.message for f in report.failures]
         if report.skipped_pairings:
             lines.append(report.skipped_message())
         super().__init__("\n".join(lines))
@@ -103,7 +125,7 @@ def _hex(ts: TokenSet, path: str, mode: str) -> str:
     return value
 
 
-def gate(ts: TokenSet, pairings: Iterable[Pairing],
+def gate(ts: TokenSet, pairings: Iterable[Pairing], checks: Iterable[Check] = (),
          raise_on_fail: bool = True) -> GateReport:
     report = GateReport()
     for p in pairings:
@@ -116,6 +138,11 @@ def gate(ts: TokenSet, pairings: Iterable[Pairing],
             if ratio < p.minimum:
                 report.findings.append(
                     GateFinding(p.fg, p.bg, mode, ratio, p.minimum, p.criterion))
+    for c in checks:
+        for mode in ts.mode_names:
+            report.rules_checked += 1
+            for message in c.run(ts, mode):
+                report.failures.append(CheckFailure(c.id, c.criterion, mode, message))
     if raise_on_fail and not report.passed:
         raise GateFailure(report)
     return report

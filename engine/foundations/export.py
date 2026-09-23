@@ -7,13 +7,25 @@ from typing import Any, Dict, List, Tuple
 from engine.foundations.tokens import Token, TokenSet, alias_target, css_property, is_alias
 
 
+def _conflict(prefix: str, path: str) -> ValueError:
+    return ValueError(f"{prefix} is a token and also a group holding {path}; DTCG cannot "
+                      "hold both, so rename one")
+
+
 def to_dtcg(ts: TokenSet) -> Dict[str, Any]:
+    """Nested DTCG groups. Raises ValueError when one path is a token and
+    also a group of another, instead of dropping either."""
     doc: Dict[str, Any] = {}
     for t in ts.tokens():
         node = doc
         *groups, leaf = t.path.split(".")
-        for g in groups:
+        for i, g in enumerate(groups):
             node = node.setdefault(g, {})
+            if "$value" in node:
+                raise _conflict(".".join(groups[:i + 1]), t.path)
+        if leaf in node:
+            below = next(p.path for p in ts.tokens() if p.path.startswith(t.path + "."))
+            raise _conflict(t.path, below)
         ext: Dict[str, Any] = {"ux.layer": t.layer}
         if t.modes:
             ext["ux.modes"] = dict(t.modes)
