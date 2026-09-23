@@ -93,7 +93,6 @@
   a{color:inherit;text-decoration:none}
   .wrap{width:100%;max-width:1160px;margin:0 auto;padding-inline:clamp(20px,5vw,52px)}
   .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;display:flex;justify-content:center;align-items:center;gap:13px;color:var(--muted)}
-  .eyebrow::before{content:"";width:28px;height:1px;background:currentColor;opacity:.55}
   .eyebrow .dot{width:7px;height:7px;border-radius:50%;flex:none}
   .rev{opacity:0;transform:translateY(30px);transition:opacity .8s ease, transform .9s cubic-bezier(.16,.7,.2,1)}
   .rev.in{opacity:1;transform:none}
@@ -314,7 +313,7 @@
     .turn-wiring,.turn-body{opacity:1;transform:none}
   }
   /* turn lead: larger than normal lead for cinematic weight */
-  .turn-lead{font-family:var(--disp);font-weight:800;font-size:clamp(2.4rem,7vw,5.4rem);letter-spacing:-.03em;line-height:.98;margin:0;max-width:14ch;color:#fff}
+  .turn-lead{font-family:var(--disp);font-weight:800;font-size:clamp(2.4rem,7vw,5.4rem);letter-spacing:-.03em;line-height:.98;margin:0 auto;max-width:14ch;color:#fff}
   .turn-lead em{color:var(--cyan);font-style:italic;font-weight:400}
   .turn-sub{margin:0 auto;max-width:46ch;font-size:clamp(15px,1.9vw,18px);color:var(--body);line-height:1.6;text-align:center}
   .turn-sub b{color:var(--ink);font-weight:500}

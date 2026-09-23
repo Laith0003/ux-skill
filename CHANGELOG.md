@@ -7,6 +7,43 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [3.2.0] - 2026-09-23 - **SEES THE PAGE**
+
+The linter read code. Now it also looks at the rendered page, because some
+failures only exist after layout.
+
+### Render check (new, opt-in)
+- `uxskill lint --render` loads every HTML file in headless Chromium at 390,
+  430, 768 and 1280 px and measures the real layout, in LTR and RTL.
+- `centered-text-off-center`: text is centered inside its box, but the box sits
+  against the start edge (left in LTR, right in RTL). Reports the drift in px,
+  the viewport, the direction, and the source line.
+- `horizontal-overflow`: the page scrolls sideways. Names the element that
+  causes it, including a box that fits while its text spills.
+- Install: `pip install 'uxskill[render]'`. Uses Google Chrome when installed,
+  else `python -m playwright install chromium`.
+- Found on our own site on first run: a centered heading off by up to 34 px on
+  all 18 homepages (only visible between phone and tablet widths, so a
+  two-width check missed it), the blog footer credit off by 32 px on 24 posts,
+  and a command description pushing the commands page 16 px sideways. All fixed.
+
+### New lint rule
+- `decorative-accent-ruler` (high): a short 1-2 px line used as ornament. Fades
+  out of transparent, ends in a small dot, or sits as a dash before an eyebrow
+  label. Tailwind v3/v4, `before:`/`after:` variants, and plain CSS. Full-width
+  dividers, tab underlines, hover underlines, progress bars, status dots and
+  animated loaders are not flagged. Removed 34 of them from our own site.
+
+### Fixed
+- `placeholder-token-shipped` no longer fires on ordinary JSX style objects
+  (`sx={{ left: fillLeftPercent }}`, `style={{ marginTop: spacing_md }}`). Token
+  alternatives are now case-sensitive; `lorem ipsum` stays case-insensitive.
+  Reported with a precise repro by @XanderBezuidenhout (#36).
+- A rule whose regex fails to compile is now a test failure instead of being
+  silently dropped by the loader.
+
+---
+
 ## [3.1.0] - 2026-05-31 - **BRAND-TRUE, RESPONSIVE, ALIVE**
 
 ux-skill now honors the client's brand, holds up on mobile, and reaches for a wow

@@ -1,5 +1,8 @@
 """Linter smoke + rule-specific behavior tests."""
+import re
 from pathlib import Path
+
+import pytest
 
 from engine.linter import lint
 
@@ -297,6 +300,91 @@ def test_placeholder_token_shipped_ignores_real_template_binding(tmp_path):
         encoding="utf-8")
     ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
     assert "placeholder-token-shipped" not in ids
+
+
+# Issue #36: the token alternatives were case-insensitive, so ordinary JSX
+# style objects (sx={{...}}, style={{...}}) tripped the rule.
+@pytest.mark.parametrize("snippet,should_fire", [
+    ("<Box sx={{ left: fillLeftPercent }} />", False),
+    ("<Box sx={{ backfill: true }} />", False),
+    ("<div style={{ marginTop: spacing_md }} />", False),
+    ("<title>{{FILL_ME}}</title>", True),
+    ("<meta content='{{TODO}}' />", True),
+    ("<p>Lorem Ipsum dolor sit amet</p>", True),
+])
+def test_placeholder_token_shipped_case_sensitivity_issue_36(tmp_path, snippet, should_fire):
+    f = tmp_path / "c.tsx"
+    f.write_text(snippet, encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert ("placeholder-token-shipped" in ids) is should_fire
+
+
+# Decorative accent ruler: a hairline used as ornament, fading out of
+# transparent and/or capped with a small dot. An AI fingerprint.
+@pytest.mark.parametrize("name,snippet,should_fire", [
+    ("fading.html",
+     '<div class="h-px w-24 bg-gradient-to-r from-transparent via-emerald-400 to-transparent"></div>',
+     True),
+    ("v4.tsx",
+     '<div className="mt-6 h-[1px] w-32 bg-linear-to-r from-emerald-500 to-transparent" />',
+     True),
+    ("dot.html",
+     '<div class="flex items-center"><span class="h-px w-16 bg-emerald-400"></span>'
+     '<span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span></div>',
+     True),
+    ("dot-first.jsx",
+     '<span className="size-2 rounded-full bg-lime-400" /><span className="h-px w-20 bg-lime-400" />',
+     True),
+    ("rule.css",
+     ".accent-rule {\n  height: 1px;\n  width: 96px;\n"
+     "  background: linear-gradient(90deg, transparent, #34d399);\n}",
+     True),
+    ("structural-hr.html", '<hr class="border-t border-neutral-200">', False),
+    ("solid-divider.html", '<div class="h-px w-full bg-neutral-200"></div>', False),
+    ("progress.css", ".bar { height: 4px; background: linear-gradient(90deg, #111, #333); }", False),
+    ("status-dot.html",
+     '<span class="h-2 w-2 rounded-full bg-green-500"></span><span>Online</span>', False),
+    ("hero.html",
+     '<section class="h-96 bg-gradient-to-r from-transparent to-slate-900"></section>', False),
+    # Eyebrow dash: a short solid hairline set beside a label.
+    ("eyebrow.css",
+     ".eyebrow::before {\n  content: ''; display: inline-block;\n"
+     "  width: 22px; height: 1px;\n  background: currentColor;\n}",
+     True),
+    ("eyebrow-span.html",
+     '<p class="flex items-center gap-3"><span class="h-px w-6 bg-current"></span>Roadmap</p>',
+     True),
+    ("eyebrow-variant.tsx",
+     '<p className="before:h-px before:w-8 before:bg-current">Roadmap</p>',
+     True),
+    ("tab-underline.css",
+     ".tab[aria-selected=true]::after { content: ''; height: 2px; width: 100%; background: var(--accent); }",
+     False),
+    ("link-hover.css",
+     "a::after { content: ''; height: 1px; width: 0; transition: width .2s; }",
+     False),
+    # An animated scan line is a loading-state indicator, not ornament.
+    ("scan-loader.css",
+     ".lane::before {\n  height: 2px;\n"
+     "  background: linear-gradient(90deg, transparent, #38bdf8, transparent);\n"
+     "  animation: scan 1400ms ease infinite;\n}",
+     False),
+])
+def test_decorative_accent_ruler(tmp_path, name, snippet, should_fire):
+    f = tmp_path / name
+    f.write_text(snippet, encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert ("decorative-accent-ruler" in ids) is should_fire
+
+
+def test_every_regex_rule_compiles():
+    """The loader skips rules whose pattern fails to compile. A broken pattern
+    must fail here instead of silently disabling the rule."""
+    from engine.data_loader import load
+    for entry in load("anti-patterns")["entries"]:
+        det = entry.get("detection", {})
+        if det.get("type") == "regex":
+            re.compile(det["pattern"])
 
 
 # --- Responsive gate (dogfood P6): full-viewport-width-overflow (both-direction) ---

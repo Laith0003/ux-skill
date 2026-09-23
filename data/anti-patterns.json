@@ -1,8 +1,8 @@
 {
   "_meta": {
     "version": "2.0.0",
-    "entries": 152,
-    "last_updated": "2026-05-31",
+    "entries": 153,
+    "last_updated": "2026-09-23",
     "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
     "schema_version": "1.0"
   },
@@ -3161,7 +3161,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\{TODO_FILL|\\{\\{[^}]*(?:TODO|FILL|[A-Z]{3,}_)[^}]*\\}\\}|lorem\\s+ipsum",
+        "pattern": "\\{TODO_FILL|\\{\\{[^}]*(?-i:TODO|FILL|[A-Z]{3,}_)[^}]*\\}\\}|lorem\\s+ipsum",
         "flags": "i",
         "scope": [
           "html",
@@ -3174,6 +3174,28 @@
       },
       "why": "A literal {TODO_FILL...} token, a placeholder-shaped {{ ... }} mustache, or lorem ipsum rendered in the actual UI is a draft-state leak - the rawest sign that generated output shipped without being finished. (Legitimate template bindings like {{ user.name }} are NOT flagged; only placeholder-shaped tokens are.)",
       "fix": "Fill the value where it is known (canonical/og:url from the source URL, og:image from a real CDN image). Where a value is genuinely absent (no phone, no OG image), OMIT that element gracefully - drop the meta tag or the affordance. Never print the token; keep any patch-this note outside the shipped markup."
+    },
+    {
+      "id": "decorative-accent-ruler",
+      "name": "Decorative accent ruler (hairline ornament, fade, dot, or eyebrow dash)",
+      "severity": "high",
+      "category": "Visual",
+      "detection": {
+        "type": "regex",
+        "pattern": "class(?:Name)?=[\"'](?=[^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-]))(?=[^\"']*\\bbg-(?:gradient|linear)-to-[rl]\\b)|class(?:Name)?=[\"'][^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-])[^\"']*[\"'][^<]*(?:</\\w+>)?\\s*<\\w+[^>]*class(?:Name)?=[\"'](?=[^\"']*\\brounded-full\\b)(?=[^\"']*(?<![\\w-])(?:h|size)-(?:1|1\\.5|2)(?![\\w.-]))|class(?:Name)?=[\"'](?=[^\"']*\\brounded-full\\b)(?=[^\"']*(?<![\\w-])(?:h|size)-(?:1|1\\.5|2)(?![\\w.-]))[^\"']*[\"'][^<]*(?:</\\w+>)?\\s*<\\w+[^>]*class(?:Name)?=[\"'][^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-])|\\{(?![^{}]*\\banimation(?:-name)?\\s*:)(?=[^{}]*(?<![\\w-])height\\s*:\\s*[12]px)(?=[^{}]*linear-gradient\\([^)]*\\btransparent\\b)[^{}]*\\}|class(?:Name)?=[\"'](?=[^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-]))(?=[^\"']*(?<![\\w-])w-(?:[1-9]|1[0-6]|\\[(?:[89]|[1-5]\\d|6[0-4])px\\])(?![\\w.\\[-]))|:{1,2}(?:before|after)\\s*\\{(?![^{}]*\\banimation(?:-name)?\\s*:)(?=[^{}]*(?<![\\w-])height\\s*:\\s*[12]px)(?=[^{}]*(?<![\\w-])width\\s*:\\s*(?:[89]|[1-5]\\d|6[0-4])px)[^{}]*\\}",
+        "scope": [
+          "html",
+          "blade",
+          "astro",
+          "jsx",
+          "tsx",
+          "vue",
+          "css",
+          "scss"
+        ]
+      },
+      "why": "A short 1-2px line used as ornament: under a heading, fading out of transparent, capped with a small dot, or set as a dash before an eyebrow label. It carries no structure and no meaning, and it is one of the most repeated marks in AI-generated pages. Real dividers are full-width, solid, and separate content.",
+      "fix": "Delete it. Build hierarchy with type size, weight, letter-spacing, and spacing instead. If content truly needs separating, use a full-width solid border (border-t with a neutral token) on the container, never a free-floating ornamental line."
     },
     {
       "id": "full-viewport-width-overflow",

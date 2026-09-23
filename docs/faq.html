@@ -441,11 +441,6 @@
       display: inline-flex; align-items: center; gap: 10px;
       margin-bottom: 22px;
     }
-    .eyebrow::before {
-      content: ''; display: inline-block;
-      width: 22px; height: 1px;
-      background: currentColor;
-    }
 
     h1, h2, h3, h4 {
       font-family: var(--display);
@@ -612,7 +607,6 @@
     }
     @media (max-width: 640px) { .cta { padding: 32px 24px; } }
     .cta .eyebrow { color: var(--scene-accent); }
-    .cta .eyebrow::before { background: currentColor; }
     .cta h2.cta-h {
       font-family: var(--display);
       font-variation-settings: 'wdth' 86, 'opsz' 64, 'wght' 600;

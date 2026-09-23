@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "uxskill"
-version = "3.1.0"
+version = "3.2.0"
 description = "Design intelligence engine for AI coding assistants. Deterministic anti-AI-slop linter (152 rules), mandatory discovery, 5-parallel-search recommender, 1,243 entries across 12 manifests, 160 brand DESIGN specs, MCP server. Runs in Claude Code, Cursor, Windsurf, and 14 more IDEs."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -43,6 +43,12 @@ dependencies = [
 # 3.9 with a confusing "no matching distribution" error.
 mcp = [
   "mcp>=1.0; python_version >= '3.10'"
+]
+# Render check (`uxskill lint --render`): measures the real layout in
+# headless Chromium. Uses installed Google Chrome, else run
+# `python -m playwright install chromium` once.
+render = [
+  "playwright>=1.40"
 ]
 dev = [
   "pytest>=8.4.2",
