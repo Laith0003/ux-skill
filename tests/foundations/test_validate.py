@@ -149,3 +149,53 @@ def test_value_rules_are_table_driven():
     from engine.foundations.validate import VALUE_RULES
     assert set(VALUE_RULES) == {"color"}
     assert VALUE_RULES["color"].check("#3366FF") and not VALUE_RULES["color"].check("#GGGGGG")
+
+
+@pytest.mark.parametrize("path, segment", [
+    ("color.Brand Blue.500", "Brand Blue"),
+    ("color..500", ""),
+    ("color.brand.", ""),
+    ("color.brand;x.500", "brand;x"),
+])
+def test_bad_name_rejected(path, segment):
+    # R27 M5: path segments go into CSS property names unescaped.
+    ts = TokenSet()
+    ts.add(Token(path, "color", "#111111"))
+    found = [p for p in validate(ts) if p.rule == "bad-name"]
+    assert len(found) == 1
+    assert f"{path} has segment {segment!r}" in found[0].message
+    assert "letters, digits, '_' and '-'" in found[0].message
+
+
+@pytest.mark.parametrize("order", [("radius", "radius.md"), ("radius.md", "radius")])
+def test_path_conflict_rejected_in_either_order(order):
+    # R27 I4: DTCG cannot hold a token and a group at the same path, so
+    # to_dtcg dropped one of them silently.
+    ts = TokenSet()
+    for path in order:
+        ts.add(Token(path, "color", "#111111"))
+    found = [p for p in validate(ts) if p.rule == "path-conflict"]
+    assert len(found) == 1 and found[0].token == "radius.md"
+    assert "radius is a token and also a group holding radius.md" in found[0].message
+    assert "rename one" in found[0].message
+
+
+def test_deep_path_conflict_names_each_prefix():
+    ts = TokenSet()
+    for path in ("a", "a.b", "a.b.c"):
+        ts.add(Token(path, "color", "#111111"))
+    found = sorted(p.message.split(" is a token")[0] + ">" + p.token
+                   for p in validate(ts) if p.rule == "path-conflict")
+    assert found == ["a.b>a.b.c", "a>a.b", "a>a.b.c"]
+
+
+def test_css_collision_rejected():
+    # R27 I4: two paths that map to one custom property; the last one won.
+    ts = TokenSet()
+    ts.add(Token("color.text-default", "color", "#111111"))
+    ts.add(Token("color.text.default", "color", "#222222"))
+    found = [p for p in validate(ts) if p.rule == "css-collision"]
+    assert len(found) == 1 and found[0].token == "color.text.default"
+    assert ("color.text-default and color.text.default both become the CSS property "
+            "--color-text-default") in found[0].message
+    assert "rename one" in found[0].message

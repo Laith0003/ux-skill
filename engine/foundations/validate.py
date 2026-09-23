@@ -4,13 +4,15 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from types import MappingProxyType
-from typing import Any, Callable, List, Mapping
+from typing import Any, Callable, Dict, List, Mapping
 
-from engine.foundations.tokens import AliasError, Token, TokenSet, alias_target, is_alias
+from engine.foundations.tokens import (
+    AliasError, Token, TokenSet, alias_target, css_property, is_alias)
 
 LAYERS = ("primitive", "semantic")
 
 _HEX_COLOR = re.compile(r"#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})")
+_SEGMENT = re.compile(r"[A-Za-z0-9_-]+")
 
 
 @dataclass(frozen=True)
@@ -54,6 +56,37 @@ def _check_values(t: Token) -> List[Problem]:
         if not rule.check(raw):
             out.append(Problem(t.path, "bad-value",
                 f"{t.path}{where} is type {t.type} but holds {raw!r}; {rule.expected}"))
+    return out
+
+
+def _check_paths(ts: TokenSet) -> List[Problem]:
+    """Path hygiene: segment charset (bad-name), a token that is also a
+    group of another token (path-conflict, which DTCG cannot hold), and two
+    paths that become one CSS property (css-collision)."""
+    out: List[Problem] = []
+    paths = [t.path for t in ts.tokens()]
+    defined = set(paths)
+    props: Dict[str, str] = {}
+    for path in paths:
+        segments = path.split(".")
+        for seg in segments:
+            if not _SEGMENT.fullmatch(seg):
+                out.append(Problem(path, "bad-name",
+                    f"{path} has segment {seg!r}; path segments may use only letters, "
+                    "digits, '_' and '-', so rename it"))
+        for i in range(1, len(segments)):
+            prefix = ".".join(segments[:i])
+            if prefix in defined:
+                out.append(Problem(path, "path-conflict",
+                    f"{prefix} is a token and also a group holding {path}; DTCG cannot "
+                    "hold both, so rename one"))
+        prop = css_property(path)
+        if prop in props:
+            out.append(Problem(path, "css-collision",
+                f"{props[prop]} and {path} both become the CSS property {prop}; "
+                "rename one so each token keeps its own property"))
+        else:
+            props[prop] = path
     return out
 
 
@@ -106,4 +139,5 @@ def validate(ts: TokenSet) -> List[Problem]:
                 rule = "alias-cycle" if exc.cause == "cycle" else "alias-missing"
                 out.append(Problem(t.path, rule, str(exc)))
                 continue
+    out.extend(_check_paths(ts))
     return out

@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Tuple
 
 from engine.foundations.color import generate_color
 from engine.foundations.gate import gate
-from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
+from engine.foundations.tokens import Token, TokenSet, alias_target, css_property, is_alias
 from engine.foundations.validate import validate
 from engine.synthesizer.axes import AxisValues
 
@@ -47,20 +47,16 @@ def from_dtcg(doc: Dict[str, Any], mode_names: Tuple[str, ...] = ("light", "dark
     return ts
 
 
-def _prop(path: str) -> str:
-    return "--" + path.replace(".", "-")
-
-
 def _css_value(value: str) -> str:
-    return f"var({_prop(alias_target(value))})" if is_alias(value) else value
+    return f"var({css_property(alias_target(value))})" if is_alias(value) else value
 
 
 def to_css(ts: TokenSet) -> str:
-    base = [f"  {_prop(t.path)}: {_css_value(t.value)};" for t in ts.tokens()]
+    base = [f"  {css_property(t.path)}: {_css_value(t.value)};" for t in ts.tokens()]
     # Every mode override is emitted whatever the token's layer, so the CSS
     # carries exactly the data the gate checked (validate already rejects
     # primitives with modes and unknown layers).
-    dark = [f"  {_prop(t.path)}: {_css_value(t.modes['dark'])};"
+    dark = [f"  {css_property(t.path)}: {_css_value(t.modes['dark'])};"
             for t in ts.tokens() if "dark" in t.modes]
     out = [":root {", *base, "}", "", '[data-theme="dark"] {', *dark, "}", "",
            "@media (prefers-color-scheme: dark) {", '  :root:not([data-theme="light"]) {',

@@ -30,6 +30,12 @@ def alias_target(value: str) -> str:
     return value[1:-1]
 
 
+def css_property(path: str) -> str:
+    """The CSS custom property a token path becomes. validate uses it to
+    reject two paths that would share one property; to_css uses it to emit."""
+    return "--" + path.replace(".", "-")
+
+
 @dataclass
 class Token:
     path: str
