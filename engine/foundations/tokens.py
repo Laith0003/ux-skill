@@ -34,6 +34,10 @@ class Token:
 
 class TokenSet:
     def __init__(self, mode_names: Tuple[str, ...] = ("light", "dark")):
+        if not mode_names:
+            raise ValueError(
+                "TokenSet needs at least one mode name; pass mode_names=(\"light\",) or more."
+            )
         self.mode_names = mode_names
         self._tokens: Dict[str, Token] = {}
 

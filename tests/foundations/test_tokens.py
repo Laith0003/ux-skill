@@ -89,3 +89,8 @@ def test_unknown_mode_raises_on_raw():
     ts = make()
     with pytest.raises(ValueError, match=r"dakr.*light.*dark"):
         ts.raw("color.surface.page", "dakr")
+
+
+def test_empty_mode_names_rejected():
+    with pytest.raises(ValueError, match="at least one mode name"):
+        TokenSet(mode_names=())

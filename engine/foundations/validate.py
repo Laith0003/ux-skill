@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List
+from typing import List, Set
 
 from engine.foundations.tokens import AliasError, TokenSet, alias_target, is_alias
 
@@ -30,24 +30,31 @@ def validate(ts: TokenSet) -> List[Problem]:
                 out.append(Problem(t.path, "unknown-mode",
                     f"{t.path} sets mode '{mode}', which is not one of {list(ts.mode_names)}; "
                     "remove it or add the mode to the TokenSet's mode_names"))
+        seen_raws: Set[str] = set()
         for mode in ts.mode_names:
             raw = ts.raw(t.path, mode)
+            if raw in seen_raws:
+                # Same raw value already checked under an earlier mode for
+                # this token (for example, no per-mode override at all); do
+                # not report the same problem twice for one token.
+                continue
+            seen_raws.add(raw)
             if not is_alias(raw):
                 out.append(Problem(t.path, "semantic-literal",
                     f"{t.path} ({mode}) holds {raw}; alias a primitive instead"))
-                break
+                continue
             target = alias_target(raw)
             if not ts.has(target):
                 out.append(Problem(t.path, "alias-missing",
                     f"{t.path} ({mode}) aliases {target}, which is not defined; add it or point at an existing primitive"))
-                break
+                continue
             if ts.get(target).layer == "semantic":
                 out.append(Problem(t.path, "semantic-to-semantic",
                     f"{t.path} ({mode}) aliases the semantic {target}; alias its primitive directly"))
-                break
+                continue
             try:
                 ts.resolve(t.path, mode)
             except AliasError as exc:
                 out.append(Problem(t.path, "alias-cycle", str(exc)))
-                break
+                continue
     return out

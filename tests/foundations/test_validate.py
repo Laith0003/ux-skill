@@ -34,6 +34,22 @@ def test_messages_name_token_and_fix():
     assert "color.text.a" in msg and "alias a primitive" in msg
 
 
+def test_every_mode_checked_light_literal_does_not_hide_dark_alias_missing():
+    ts = TokenSet()
+    ts.add(Token("color.text.a", "color", "#444444",
+                 modes={"dark": "{color.missing.1}"}, layer="semantic"))
+    found = sorted(p.rule for p in validate(ts) if p.token == "color.text.a")
+    assert found == ["alias-missing", "semantic-literal"]
+
+
+def test_distinct_raw_value_reported_only_once_per_token():
+    ts = TokenSet()
+    ts.add(Token("color.text.a", "color", "#444444", layer="semantic"))
+    problems = [p for p in validate(ts) if p.token == "color.text.a"]
+    assert len(problems) == 1
+    assert problems[0].rule == "semantic-literal"
+
+
 def test_alias_cycle_reported_for_semantic_pointing_into_a_cycle():
     ts = TokenSet()
     ts.add(Token("color.p.a", "color", "{color.p.b}"))
