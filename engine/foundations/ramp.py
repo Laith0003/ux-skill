@@ -50,14 +50,25 @@ def ramp(seed_hex: str) -> RampResult:
     if BAND[0] <= L <= BAND[1]:
         anchor_hex = seed
     else:
-        L = min(max(L, BAND[0]), BAND[1])
-        anchor_hex = oklch_to_hex(L, C, H)
-        result.retuned = True
-        anchor_C = hex_to_oklch(anchor_hex)[1]
-        chroma_note = ("same hue, chroma reduced to fit sRGB"
-                        if C - anchor_C > 0.005 else "same hue and chroma")
-        result.note = (f"{seed} is too {'light' if seed_L > BAND[1] else 'dark'} "
-                       f"to anchor a ramp at 500; 500 retuned to {anchor_hex}, {chroma_note}.")
+        clamped_L = min(max(L, BAND[0]), BAND[1])
+        candidate_hex = oklch_to_hex(clamped_L, C, H)
+        if candidate_hex == seed:
+            # L sat just outside BAND by less than 8-bit hex precision can
+            # tell apart (e.g. 0.80006 against a 0.80 edge): clamping it
+            # round-trips back to the exact same hex, so nothing about the
+            # seed actually changed. Anchor verbatim and keep the seed's
+            # own L for the rest of the ramp instead of reporting a retune
+            # that produced an identical color.
+            anchor_hex = seed
+        else:
+            L = clamped_L
+            anchor_hex = candidate_hex
+            result.retuned = True
+            anchor_C = hex_to_oklch(anchor_hex)[1]
+            chroma_note = ("same hue, chroma reduced to fit sRGB"
+                            if C - anchor_C > 0.005 else "same hue and chroma")
+            result.note = (f"{seed} is too {'light' if seed_L > BAND[1] else 'dark'} "
+                           f"to anchor a ramp at 500; 500 retuned to {anchor_hex}, {chroma_note}.")
     dark_end = max(0.02, min(L_BOTTOM, L - 5 * MIN_STEP))
     light_end = min(0.995, max(L_TOP, L + 5 * MIN_STEP))
     for step in STEPS:

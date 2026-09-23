@@ -26,6 +26,17 @@ def test_extreme_seed_is_retuned_with_a_note(seed):
     assert r.retuned and seed.upper() in r.note and r.stops[ANCHOR] != seed.upper()
 
 
+def test_seed_just_outside_band_that_round_trips_is_not_retuned():
+    # #00D5EF's L (~0.80006) sits a hair above BAND[1] (0.80), but clamping
+    # it to 0.80 and converting back to hex round-trips to the exact same
+    # #00D5EF: nothing about the color actually changed, so this must not
+    # be reported as a retune (R16 fix round 1, item 6).
+    r = ramp("#00D5EF")
+    assert r.retuned is False
+    assert r.note == ""
+    assert r.stops[500] == "#00D5EF"
+
+
 def test_deterministic():
     assert ramp("#3366FF").stops == ramp("#3366FF").stops
 
@@ -102,12 +113,22 @@ def test_min_step_sweep_keeps_intended_lightness_apart(monkeypatch):
         seed = oklch_to_hex(l, c, h)
         calls.clear()
         r = ramp(seed)
-        if r.retuned:
-            # The anchor's own oklch_to_hex(L, C, H) call happens before
-            # the loop, so it is recorded first; the other ten follow in
-            # STEPS order with 500 skipped.
+        seed_L = hex_to_oklch(seed)[0]
+        outside_band = not (ramp_module.BAND[0] <= seed_L <= ramp_module.BAND[1])
+        if outside_band:
+            # A seed outside BAND always makes one anchor-candidate call to
+            # oklch_to_hex, recorded first, before the other ten (500
+            # skipped) that follow in STEPS order. Most of the time the
+            # candidate differs from the seed and ramp() keeps it (retuned
+            # is True): that candidate's own L, at full float precision, is
+            # what the rest of the ramp is built from, so it is what this
+            # test must diff. Occasionally (R16 item 6) the candidate's
+            # 8-bit hex round-trips back to the seed unchanged, and ramp()
+            # reports retuned=False and reverts to the seed's own unclamped
+            # L for everything else, even though the discarded candidate
+            # call already happened and is still the first entry recorded.
             assert len(calls) == 11, f"{seed}: expected 11 calls, got {len(calls)}"
-            anchor_L, rest = calls[0], calls[1:]
+            anchor_L, rest = (calls[0] if r.retuned else seed_L), calls[1:]
         else:
             # In-band seeds never call oklch_to_hex for the anchor: its
             # stop is the seed's own hex, verbatim, so its L is read back
