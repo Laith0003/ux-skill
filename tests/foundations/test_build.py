@@ -108,3 +108,56 @@ def test_public_api():
     assert "build_color" in (generate_color.__doc__ or "")
     import engine.foundations.export as export_module
     assert not hasattr(export_module, "build_color")
+
+
+# R27 M9: build_color checks its inputs before generating, naming the input and the fix.
+
+@pytest.mark.parametrize("brand_hex", [None, 0x3366FF, b"#3366FF"])
+def test_brand_hex_must_be_a_string(brand_hex):
+    with pytest.raises(TypeError, match=r"brand_hex is .*; pass the brand color as a hex string, "
+                                        r"for example '#3366FF'"):
+        build_color(AXES, brand_hex)
+
+
+@pytest.mark.parametrize("brand_hex", ["blue", "#GGGGGG", "#12345", ""])
+def test_brand_hex_must_be_a_hex_color(brand_hex):
+    with pytest.raises(ValueError, match=r"brand_hex is .*, which is not a hex color; "
+                                         r"use #RRGGBB or #RGB"):
+        build_color(AXES, brand_hex)
+
+
+@pytest.mark.parametrize("brand_hex", ["ff00ff", "#abc", " #3366ff "])
+def test_brand_hex_forms_the_generator_accepts_still_build(brand_hex):
+    assert build_color(AXES, brand_hex).report.passed
+
+
+_AXIS_NAMES = [f.name for f in dataclasses.fields(AxisValues)]
+
+
+def _axes_with(name, value):
+    values = dict.fromkeys(_AXIS_NAMES, 0.5)
+    values[name] = value
+    return AxisValues(**values)
+
+
+@pytest.mark.parametrize("name", _AXIS_NAMES)
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), -0.1, 1.5])
+def test_axis_out_of_range_names_the_axis(name, value):
+    with pytest.raises(ValueError, match=rf"axes\.{name} is .*; set it to a number from 0 to 1"):
+        build_color(_axes_with(name, value), "#3366FF")
+
+
+@pytest.mark.parametrize("value", [None, "0.5", True])
+def test_axis_must_be_a_number(value):
+    with pytest.raises(TypeError, match=r"axes\.warmth is .*; set it to a number from 0 to 1"):
+        build_color(_axes_with("warmth", value), "#3366FF")
+
+
+@pytest.mark.parametrize("value", [0, 1, 0.0, 1.0])
+def test_axis_bounds_are_inclusive(value):
+    assert build_color(_axes_with("warmth", value), "#3366FF").report.passed
+
+
+def test_axes_must_be_axis_values():
+    with pytest.raises(TypeError, match=r"axes is dict; pass an AxisValues"):
+        build_color({"warmth": 0.5}, "#3366FF")
