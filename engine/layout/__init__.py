@@ -13,15 +13,15 @@ The guarantee comes from two layers of defense:
      - No fixed widths over 100% of viewport
    This means broken layouts CAN'T be emitted in the first place.
 
-2. **Validation**: optional ``validate()`` runs a headless Playwright check
-   at 360/768/1024/1440 px and refuses any output with overflow, clipping,
-   or hidden content. Heavy dep, opt-in via ``uxskill validate --playwright``.
+2. **Validation**: ``uxskill lint --render`` (``engine.render``) loads the
+   page in headless Chromium at phone, large-phone, tablet and desktop
+   widths, in LTR and RTL, and fails on sideways scroll and on centered text
+   whose box is not centered. Opt-in: ``pip install 'uxskill[render]'``.
 
 Public surface
 --------------
 ``synthesize_layout(brief, axes) -> LayoutSpec``     — section sequence + tokens
 ``LayoutSpec``                                       — dataclass with sections
-``validate(html, breakpoints=DEFAULT_BREAKPOINTS)``  — Playwright validator (opt-in)
 ``PRIMITIVES``                                       — registry of layout primitives
 ``DEFAULT_BREAKPOINTS``                              — (360, 768, 1024, 1440)
 """

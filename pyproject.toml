@@ -44,6 +44,12 @@ dependencies = [
 mcp = [
   "mcp>=1.0; python_version >= '3.10'"
 ]
+# Render check (`uxskill lint --render`): measures the real layout in
+# headless Chromium. Uses installed Google Chrome, else run
+# `python -m playwright install chromium` once.
+render = [
+  "playwright>=1.40"
+]
 dev = [
   "pytest>=8.4.2",
   "pytest-cov>=7.1.0",

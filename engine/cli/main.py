@@ -38,7 +38,7 @@ if str(_REPO_ROOT) not in sys.path:
 from engine import __version__
 from engine.data_loader import stats as data_stats, load
 from engine.recommender import recommend as run_recommend, Brief
-from engine.linter import lint as run_lint
+from engine.linter import lint as run_lint, compute_score
 from engine.discovery import FIELDS, DiscoveryState, next_question, record, is_complete, serialize
 from engine.generator import generate as run_generate, design_md as run_design_md
 from engine.installer import install as run_install, detect_ides, SUPPORTED
@@ -295,12 +295,26 @@ else:
                   help="Print only the 0-100 score (for shell pipes / CI).")
     @click.option("--no-log", is_flag=True,
                   help="Don't write to .ux/decisions.jsonl for this call.")
+    @click.option("--render", is_flag=True,
+                  help="Also render HTML files in headless Chromium and check the "
+                       "real layout (needs: pip install 'uxskill[render]').")
     @click.pass_context
-    def lint_cmd(ctx, paths, threshold, score_only, no_log) -> None:
+    def lint_cmd(ctx, paths, threshold, score_only, no_log, render) -> None:
         """Run the anti-AI-slop linter (v2.1: returns 0-100 quality score)."""
         if no_log:
             os.environ["UXSKILL_NO_LOG"] = "1"
         report = run_lint(paths or ["."], severity_threshold=threshold)
+        if render:
+            from engine.render import render_check, RenderUnavailable
+            try:
+                rendered = render_check(paths or ["."], severity_threshold=threshold)
+            except RenderUnavailable as exc:
+                click.echo(f"Render check skipped: {exc}", err=True)
+                sys.exit(2)
+            report.findings.extend(rendered.findings)
+            report.rules_loaded += rendered.rules_loaded
+            report.exit_code = max(report.exit_code, rendered.exit_code)
+            report.score = compute_score(report.findings, max(report.files_scanned, 1))
 
         # v2.1 — write decision record so the recommender can learn.
         try:
