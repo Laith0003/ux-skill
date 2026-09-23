@@ -52,13 +52,13 @@ def test_deterministic():
     assert a == b
 
 
-def test_raises_when_a_pairing_cannot_be_satisfied(monkeypatch):
-    # R16 item 1: force the brand ramp flat (every stop the same gray) so no
-    # amount of retuning can ever change any contrast ratio computed from it.
-    # The retune loop's own guards ("if not nxt: break", "if not moved:
-    # break") are built for exactly this: a move that legitimately does
-    # nothing. generate_color must not return a system that silently fails
-    # one of its own pairings; it must raise, naming the pairing.
+def test_raises_when_the_action_group_ramp_is_flat(monkeypatch):
+    # R16 item 1 / R17 item (c): force the brand ramp flat (every stop the
+    # same gray) so no amount of retuning can ever change any contrast
+    # ratio computed from it, and action.primary-hover can never read as a
+    # different color from action.primary either. generate_color must not
+    # return a system with an invisible hover state or a silently-failing
+    # pairing; it must raise, naming the action group and the mode.
     real_ramp = color_module.ramp
     brand = "#3366FF"
     flat = RampResult(stops={s: "#808080" for s in STEPS}, retuned=False, note="")
@@ -74,44 +74,105 @@ def test_raises_when_a_pairing_cannot_be_satisfied(monkeypatch):
         generate_color(AXES, brand)
 
     message = str(excinfo.value)
-    assert "on" in message and ":1" in message
-    assert any(p.fg in message and p.bg in message for p in PAIRINGS), (
-        "the error must name the failing pairing's foreground and background")
+    assert "action group" in message
+    assert "(light)" in message or "(dark)" in message
+    assert "color.action.primary" in message and "color.action.primary-hover" in message
 
 
-_NOTE_RATIO_RE = re.compile(r":\d")
+def test_raises_with_best_ratios_when_the_action_group_is_unsatisfiable(monkeypatch):
+    # R17 item (b): a ramp that varies (so it is not the flat/hover-collision
+    # case above) but never leaves the near-white end can never clear
+    # action.primary's or action.primary-hover's 3:1 against a light page,
+    # no matter which of its 11 (distinct) steps the solver tries. The
+    # raise must name the action group, the mode, and the best ratios it
+    # actually reached, per the R17 ruling's wording.
+    real_ramp = color_module.ramp
+    brand = "#3366FF"
+    steps = list(STEPS)
+    narrow = RampResult(
+        stops={s: oklch_to_hex(0.99 - i * 0.01, 0.0, 0.0) for i, s in enumerate(steps)},
+        retuned=False, note="")
+
+    def fake_ramp(seed_hex):
+        if seed_hex.upper() == brand:
+            return narrow
+        return real_ramp(seed_hex)
+
+    monkeypatch.setattr(color_module, "ramp", fake_ramp)
+
+    with pytest.raises(ValueError) as excinfo:
+        generate_color(AXES, brand)
+
+    message = str(excinfo.value)
+    assert "action group (light)" in message
+    assert "color.action.primary" in message and "color.action.primary-hover" in message
+    assert "color.text.on-action" in message
+    # the four ratios the ruling asks for, each to two decimals
+    assert len(re.findall(r"\d+\.\d\d:1", message)) == 4
+
+
+# R17 minor: pinned to the exact field shapes each note format uses, not
+# just "a colon followed by a digit somewhere" (":\d" would also match a
+# mangled "was X:15" with the wrong number of decimals, or survive a
+# mutant that drops "now X:1" entirely as long as some other colon-digit
+# remained). A full path is pinned as "color.<segment> -> color.<segment>"
+# so a mutant that shortens either side to a bare family or step number
+# fails it too.
+_PATH_MOVE_RE = re.compile(r"color\.\S+ -> color\.\S+")
+_WAS_RATIO_RE = re.compile(r"was \d+\.\d\d:1")
+_NOW_RATIO_RE = re.compile(r"now \d+\.\d\d:1")
+_BARE_RATIO_RE = re.compile(r"\d+\.\d\d:1")
 
 
 @pytest.mark.parametrize("seed", ["#FFD400", "#6B4423"])
 def test_notes_are_complete(seed):
-    # R16 item 2: every note the retune loop (generate_color, not ramp())
-    # writes must be traceable back to a specific role, in a specific mode,
-    # moving between two full primitive paths, for a ratio that was
-    # measured. Filtered to notes carrying "(light)"/"(dark)": that marker
-    # is exactly what separates a retune-loop note from _primitives' own
-    # "color.<family>: <seed> is too light/dark..." ramp-anchor note (a
-    # different, mode-independent kind of note, owned by ramp.py's Task 3
-    # format, not this task's retune bookkeeping).
+    # R16 item 2 / R17 minor: every note the retune loop (generate_color,
+    # not ramp()) writes must be traceable back to a specific role, in a
+    # specific mode, moving between two full primitive paths, for a ratio
+    # that was measured and a ratio it achieved. Filtered to notes carrying
+    # "(light)"/"(dark)": that marker is exactly what separates a
+    # retune-loop note from _primitives' own "color.<family>: <seed> is too
+    # light/dark..." ramp-anchor note (a different, mode-independent kind
+    # of note, owned by ramp.py's Task 3 format, not this task's retune
+    # bookkeeping).
+    #
+    # Two note shapes exist: phase 1's ordinary one-pairing move ("<role>
+    # (<mode>): <old> -> <new>, ... was X:1, now Y:1, needs Z:1 (<criterion>)")
+    # and the R17 action-group solver's single per-mode summary ("action
+    # group (<mode>): <role> <old> -> <new>, <role> <old> -> <new>, <role>
+    # <old> -> <new>, on-action/primary A:1, on-action/hover B:1,
+    # primary/page C:1, hover/page D:1"), which reports four achieved
+    # ratios instead of a single was/now pair.
     r = generate_color(AXES, seed)
     retune_notes = [n for n in r.notes if "(light)" in n or "(dark)" in n]
     assert retune_notes, f"{seed}: expected at least one retune-loop note"
     for note in retune_notes:
         assert "(light)" in note or "(dark)" in note, note
-        assert "->" in note, note
-        assert note.count("color.") >= 2, note
-        assert ":1" in note and _NOTE_RATIO_RE.search(note), note
+        assert _PATH_MOVE_RE.search(note), note
+        if note.startswith("action group ("):
+            assert note.count("color.") >= 6, note  # 3 roles x (old, new)
+            assert len(_BARE_RATIO_RE.findall(note)) == 4, note
+        else:
+            assert _WAS_RATIO_RE.search(note), note
+            assert _NOW_RATIO_RE.search(note), note
 
 
 @pytest.mark.parametrize("seed", SEEDS)
 def test_hover_differs_from_primary(seed):
-    # R16 item 3: action.primary-hover must read as a different color from
-    # action.primary in both modes, and every pairing must still pass after
-    # the distinctness fix-up runs.
+    # R16 item 3 / R17: action.primary-hover must read as a different color
+    # from action.primary in both modes, must itself clear 3:1 against the
+    # page (R17 item a: PAIRINGS now has an entry for this, so the loop
+    # below already covers it; asserted directly too so the guarantee is
+    # named, not just implied by iterating PAIRINGS), and every pairing
+    # must still pass after the action-group solver runs.
     ts = generate_color(AXES, seed).tokens
     for mode in ts.mode_names:
         primary = ts.resolve("color.action.primary", mode)
         hover = ts.resolve("color.action.primary-hover", mode)
+        page = ts.resolve("color.surface.page", mode)
         assert primary != hover, f"{seed}: primary == hover ({mode}) = {primary}"
+        assert contrast(hover, page) >= 3.0, \
+            f"{seed}: hover on page ({mode}) = {contrast(hover, page):.2f}"
     for p in PAIRINGS:
         for mode in ts.mode_names:
             ratio = contrast(ts.resolve(p.fg, mode), ts.resolve(p.bg, mode))
@@ -136,5 +197,12 @@ def test_sweep_pairings_pass_and_hover_is_distinct(seed):
             ratio = contrast(ts.resolve(p.fg, mode), ts.resolve(p.bg, mode))
             assert ratio >= p.minimum, f"{seed}: {p.fg} on {p.bg} ({mode}) = {ratio:.2f}"
     for mode in ts.mode_names:
-        assert ts.resolve("color.action.primary", mode) != ts.resolve("color.action.primary-hover", mode), \
-            f"{seed}: primary == hover ({mode})"
+        primary = ts.resolve("color.action.primary", mode)
+        hover = ts.resolve("color.action.primary-hover", mode)
+        page = ts.resolve("color.surface.page", mode)
+        assert primary != hover, f"{seed}: primary == hover ({mode})"
+        # R17: hover must stay usable (>= 3:1 against the page) even when
+        # phase 3's old nudge-only fix would have satisfied on-action while
+        # letting the hover fill nearly disappear.
+        assert contrast(hover, page) >= 3.0, \
+            f"{seed}: hover on page ({mode}) = {contrast(hover, page):.2f}"
