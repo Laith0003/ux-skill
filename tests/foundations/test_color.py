@@ -91,7 +91,7 @@ def test_unsatisfiable_action_group_keeps_the_closest_and_the_gate_blocks_it(mon
                 {s: oklch_to_hex(0.99 - i * 0.01, 0.0, 0.0) for i, s in enumerate(STEPS)})
     notes = [n for n in generate_color(AXES, brand).notes if n.startswith("action group (light)")]
     assert len(notes) == 1 and "kept the closest" in notes[0]
-    assert len(re.findall(r"\d+\.\d\d:1", notes[0])) == 4
+    assert len(re.findall(r"\d+\.\d\d:1", notes[0])) == 5
     with pytest.raises(GateFailure) as exc:
         build_color(AXES, brand)
     assert any((f.fg, f.bg, f.mode) == ("color.action.primary", "color.surface.page", "light")
@@ -137,8 +137,8 @@ def test_notes_are_complete(seed):
         assert "(light)" in note or "(dark)" in note, note
         assert _PATH_MOVE_RE.search(note), note
         if note.startswith("action group ("):
-            assert note.count("color.") >= 6, note  # 3 roles x (old, new)
-            assert len(_BARE_RATIO_RE.findall(note)) == 4, note
+            # only the roles that moved are listed, each as old -> new
+            assert len(_BARE_RATIO_RE.findall(note)) == 5, note
         else:
             assert _WAS_RATIO_RE.search(note), note
             assert _NOW_RATIO_RE.search(note), note
@@ -203,3 +203,36 @@ def test_public_tables_are_immutable():
     assert isinstance(SEMANTIC, MappingProxyType)
     with pytest.raises(TypeError):
         SEMANTIC["color.text.extra"] = ("color.neutral.900", "color.neutral.50")
+
+
+# M2 kickoff: the focus ring joins the action-group solver.
+
+def test_new_pairings_are_declared():
+    from engine.foundations.gate import Pairing
+    for p in (Pairing("color.focus.ring", "color.action.primary", 3.0, "1.4.11"),
+              Pairing("color.focus.ring", "color.surface.sunken", 3.0, "2.4.7"),
+              Pairing("color.text.muted", "color.surface.sunken", 4.5, "1.4.3"),
+              Pairing("color.text.link", "color.surface.sunken", 4.5, "1.4.3"),
+              Pairing("color.status.danger.text", "color.surface.sunken", 4.5, "1.4.3")):
+        assert p in PAIRINGS, p
+
+
+@pytest.mark.parametrize("seed", SEEDS + _SWEEP_SEEDS)
+def test_ring_stands_out_from_the_fill_and_every_surface(seed):
+    ts = generate_color(AXES, seed).tokens
+    for mode in ts.mode_names:
+        ring = ts.resolve("color.focus.ring", mode)
+        others = [ts.resolve(r, mode) for r in ("color.action.primary", "color.surface.page",
+                                                "color.surface.card", "color.surface.sunken")]
+        assert all(contrast(ring, o) >= 3.0 for o in others), f"{seed} ({mode})"
+
+
+def test_ring_prefers_a_brand_step():
+    ts = generate_color(AXES, "#3366FF").tokens
+    for mode in ts.mode_names:
+        assert ts.raw("color.focus.ring", mode).startswith("{color.brand."), mode
+
+
+def test_ring_moves_are_noted():
+    notes = [n for n in generate_color(AXES, "#6B4423").notes if n.startswith("action group (light)")]
+    assert notes and "color.focus.ring color.brand.700 -> " in notes[0]
