@@ -27,4 +27,4 @@ border.WIDTHS and the border-whole-pixels check.
 
 ## Consequences
 
-An imported system with a 0.5px role fails the build with a message naming the role; the fix is a 1px width and a quieter color.
+An imported system with a 0.5px width step fails the build with a message naming that border.width step; the fix is a 1px width and a quieter color. The check reads the border.width steps, so each role takes its width by pointing at one.

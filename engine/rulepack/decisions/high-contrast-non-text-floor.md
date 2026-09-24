@@ -19,7 +19,7 @@ Under contrast:high, text pairings rise to 7:1 (WCAG 1.4.6) and non-text pairing
 
 ## Why
 
-People who switch on high contrast need the edges of controls to stand out as much as the words do. Borrowing the text ratio for parts gives a clear, round number. Calling it WCAG would misquote the standard, and a tool that misquotes WCAG loses the trust it sells.
+People who switch on high contrast need the edges of controls to stand out as much as the words do. Borrowing the text ratio for parts gives a clear, round number. Calling it WCAG would misquote the standard, and a misquoted criterion misleads anyone who checks the work against it.
 
 ## What it touches
 

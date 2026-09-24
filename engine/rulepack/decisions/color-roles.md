@@ -15,7 +15,7 @@ Color systems grow families of near-duplicate roles: several text levels, severa
 
 ## Decision
 
-Color has six surfaces (page, card, sunken, raised, inverse, selected), text in default, muted, link, inverse, disabled and the on-fill roles, two filled actions (primary and danger) each with its own hover and pressed steps, three lines (subtle, input, selected), one focus ring plus a ring for the inverse surface, the scrim, and four statuses (danger, warning, success, info) with text, soft, strong and on-strong roles. There is no third text level, no generic hover or pressed overlay, no disabled line role, no destructive focus ring and no extra hue family. Translucent colors are 8-digit hex and are used for overlays only, never in a pairing.
+Color has six surfaces (page, card, sunken, raised, inverse, selected), text in default, muted, link, inverse, disabled and the on-fill roles, two filled actions (primary and danger) each with its own hover and pressed steps, one disabled fill, three lines (subtle, input, selected), one focus ring plus a ring for the inverse surface, the scrim, and four statuses (danger, warning, success, info) with text, soft, strong and on-strong roles. There is no third text level, no generic hover or pressed overlay, no disabled line role, no destructive focus ring and no extra hue family. Translucent colors are 8-digit hex and are used for overlays only, never in a pairing.
 
 ## Why
 

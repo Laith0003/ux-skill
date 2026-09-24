@@ -11,7 +11,7 @@ superseded_by: null
 
 ## Context
 
-Controls inside a status banner sit on a soft status fill, and a selected row is tinted with the selected surface. Their focus ring is adjacent to that tint. Measured across brands, one ring cannot clear the soft fills, the page and the other surfaces at the 4.5:1 high-contrast floor at once.
+Controls inside a status banner sit on a soft status fill, so the focus ring drawn just outside them lands on that tint. A focused row's ring is drawn just outside the row, where it can land on a neighboring selected row, tinted with the selected surface. Measured across brands, one ring cannot clear the soft fills, the page and the other surfaces at the 4.5:1 high-contrast floor at once.
 
 ## Decision
 

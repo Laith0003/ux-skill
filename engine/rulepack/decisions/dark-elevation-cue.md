@@ -15,7 +15,7 @@ Shadows read poorly on dark backgrounds. A dark theme that keeps every surface t
 
 ## Decision
 
-In the dark scheme the surface roles step lighter as they rise: page is the darkest working surface, card is lighter, raised is lighter still, and sunken is darker than the page. Dark shadows are stronger than light ones. The lightness step, not the shadow, is the primary depth cue in dark.
+In the dark scheme the surface roles step lighter as they rise: page is the darkest working surface, card is lighter and raised is lighter still, in standard and high contrast. Sunken is darker than the page at standard contrast; under high contrast both are black. Dark shadows are stronger than light ones. The lightness step, not the shadow, is the primary depth cue in dark.
 
 ## Why
 

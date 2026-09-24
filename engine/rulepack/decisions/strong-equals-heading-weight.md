@@ -15,7 +15,7 @@ A system can give emphasis inside body text its own weight between regular and t
 
 ## Decision
 
-type.strong aliases the same weight as the headings: 600, or 700 for high-contrast brands. There is no separate emphasis weight.
+type.strong aliases the same weight as the headings: 600, or 700 when the brand's contrast axis is 0.66 or more; it does not change under contrast:high. There is no separate emphasis weight.
 
 ## Why
 

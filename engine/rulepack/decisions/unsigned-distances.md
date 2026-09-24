@@ -15,7 +15,7 @@ A panel that slides in from the start edge moves right in a left-to-right page a
 
 ## Decision
 
-motion.<role>.distance values are positive lengths with no direction. motion.inline-sign is 1 under dir="ltr" and -1 under dir="rtl"; horizontal travel multiplies the distance by it. Vertical travel does not use the sign.
+motion.<role>.distance values are lengths with no direction, never negative (0 under reduced motion). motion.inline-sign is 1 under dir="ltr" and -1 under dir="rtl"; horizontal travel multiplies the distance by it. Vertical travel does not use the sign.
 
 ## Why
 

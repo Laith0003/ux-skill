@@ -19,7 +19,7 @@ radius.dialog is at least radius.card; the check allows them equal and the gener
 
 ## Why
 
-The inset rule is what keeps nested corners concentric; equal radii at different insets are what look wrong, not equal roles. A dialog that were less rounded than a card inside it would invert the hierarchy the corners express.
+The inset rule is what keeps nested corners concentric; equal radii at different insets are what look wrong, not equal roles. A dialog less rounded than a card inside it would invert the hierarchy the corners express.
 
 ## What it touches
 

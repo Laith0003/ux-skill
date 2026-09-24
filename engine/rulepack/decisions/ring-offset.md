@@ -19,7 +19,7 @@ The ring is drawn with an offset of at least 1px (border.focus-ring.offset, 2px 
 
 ## Why
 
-WCAG 1.4.11 asks that the indicator contrast with the colors adjacent to it; with an offset those colors are surfaces. Dropping the ring-to-fill pairing keeps the brand fill where the brand put it. 2.4.7 asks only that focus be visible and sets no ratio.
+WCAG 1.4.11 asks that the indicator contrast with the colors adjacent to it; with an offset those colors are surfaces. Leaving the ring unpaired with the fill keeps the brand fill where the brand put it. 2.4.7 asks only that focus be visible and sets no ratio.
 
 ## What it touches
 
