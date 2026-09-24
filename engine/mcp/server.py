@@ -236,6 +236,25 @@ class UxDecisionsStatsInput(BaseModel):
     pass
 
 
+# 4.0 beta: the foundations engine
+
+class UxSystemBuildInput(BaseModel):
+    brand: Any = Field(
+        default=None,
+        description="Brand color as hex, for example '#3366FF'. Required.")
+    brief: Any = Field(
+        default=None,
+        description="Optional brief object (industry, tone, audience, must_have, forbidden); "
+                    "the synthesizer places the axes from it. Do not combine with axes.")
+    axes: Any = Field(
+        default=None,
+        description="Optional list of seven numbers from 0 to 1: warmth, contrast, density, "
+                    "geometry, formality, motion, type_personality. Do not combine with brief.")
+    latin_only: bool = Field(
+        default=False,
+        description="Leave out the Arabic face and scale.")
+
+
 # ---------------------------------------------------------------------------
 # Filter helpers
 # ---------------------------------------------------------------------------
@@ -462,6 +481,30 @@ def handle_ux_decisions_stats(args: Dict[str, Any]) -> Dict[str, Any]:
     return _ds()
 
 
+def handle_ux_system_build(args: Dict[str, Any]) -> Dict[str, Any]:
+    """Build a WCAG-gated design system with the 4.0 foundations engine.
+
+    Never writes a file: returns the CSS, the DTCG JSON text and the report.
+    A failing gate returns passed=false, empty css and dtcg, every finding,
+    and the report, which says what to change. A bad input returns
+    passed=false and an error naming the input and the fix.
+    """
+    from engine.foundations.emit import InputError, choose_axes, make_system, parse_brand
+    payload = UxSystemBuildInput.model_validate(args or {})
+    empty = {"passed": False, "css": "", "dtcg": "", "report": "", "findings": []}
+    try:
+        brand = parse_brand(payload.brand, "brand")
+        if payload.brief is not None and not isinstance(payload.brief, dict):
+            raise InputError(f"brief is {payload.brief!r}; pass an object such as "
+                             '{"industry": "saas", "tone": ["warm"]}, or leave it out')
+        axes, source = choose_axes(payload.brief, payload.axes)
+    except InputError as exc:
+        return {**empty, "error": str(exc)}
+    system = make_system(brand, axes, source, arabic=not payload.latin_only)
+    return {**system.to_dict(), "css": system.files.get("tokens.css", ""),
+            "dtcg": system.files.get("tokens.json", ""), "report": system.report}
+
+
 # ---------------------------------------------------------------------------
 # Tool catalogue — single source of truth
 # ---------------------------------------------------------------------------
@@ -585,6 +628,16 @@ TOOLS: Dict[str, ToolEntry] = {
         "total decisions, by_command, by_industry, by_ui_type, by_mode, "
         "top_brands, lint_score_median, acceptance_rate. No telemetry — "
         "this is your install's local view of what it has learned.",
+    ),
+    "ux_system_build": (
+        handle_ux_system_build,
+        UxSystemBuildInput,
+        "4.0 beta: build a WCAG-gated design system from a brand color, with the brief or "
+        "seven axes optional. Eight foundations (color, type, space, layout, radius, border, "
+        "elevation, motion) with light, dark, high contrast, density, right-to-left Arabic and "
+        "reduced motion modes. Returns tokens.css text, DTCG tokens.json text, a plain report "
+        "and passed; on a failing gate css and dtcg are empty and findings name each token "
+        "and the fix. Writes no files.",
     ),
 }
 

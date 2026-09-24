@@ -11,13 +11,14 @@ pure handler functions in :mod:`engine.mcp.server` work whether or not the
 tests and other callers can exercise them directly.
 
 v2.1 added 3 new tools for the intelligence loop: ``ux_synthesize``,
-``ux_decisions_query``, ``ux_decisions_stats``. Total = 18 tools.
+``ux_decisions_query``, ``ux_decisions_stats``. 4.0 beta added
+``ux_system_build`` (the foundations engine). Total = 19 tools.
 
 Public surface
 --------------
 ``run_server()``  -- launch the stdio MCP server (requires ``pip install mcp``)
 ``TOOLS``         -- dict mapping tool name to (handler, input_model, description)
-``handle_*``      -- the 18 pure handler functions
+``handle_*``      -- the 19 pure handler functions
 """
 from engine.mcp.server import (
     run_server,
@@ -42,6 +43,8 @@ from engine.mcp.server import (
     handle_ux_synthesize,
     handle_ux_decisions_query,
     handle_ux_decisions_stats,
+    # 4.0 beta: foundations engine
+    handle_ux_system_build,
 )
 
 __all__ = [
@@ -66,4 +69,5 @@ __all__ = [
     "handle_ux_synthesize",
     "handle_ux_decisions_query",
     "handle_ux_decisions_stats",
+    "handle_ux_system_build",
 ]
