@@ -65,9 +65,14 @@ def _ring(ts: TokenSet, mode: str) -> List[str]:
         if ts.has("border.outline") and ring <= _px(ts, "border.outline"):
             out.append("border.focus-ring.width is not wider than border.outline; a ring must "
                        "stand out from resting borders, so point it at a wider step")
-    if ts.has("border.focus-ring.offset") and _px(ts, "border.focus-ring.offset") < 1:
-        out.append("border.focus-ring.offset is 0px; leave at least 1px of page color between "
-                   "the element and its ring, so point it at border.width.1 or wider")
+    if ts.has("border.focus-ring.width") and not ts.has("border.focus-ring.offset"):
+        out.append("border.focus-ring.width is set but border.focus-ring.offset is missing; "
+                   "leave at least 1px of page color between the element and its ring, so "
+                   "add border.focus-ring.offset pointing at border.width.1 or wider")
+    elif ts.has("border.focus-ring.offset") and _px(ts, "border.focus-ring.offset") < 1:
+        offset = _px(ts, "border.focus-ring.offset")
+        out.append(f"border.focus-ring.offset is {offset:g}px; leave at least 1px of page color "
+                   "between the element and its ring, so point it at border.width.1 or wider")
     return out
 
 

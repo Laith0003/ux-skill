@@ -91,3 +91,30 @@ def test_build_system_prints_border_widths_and_styles():
     assert "  --border-focus-ring-width: var(--border-width-2);" in css
     assert "  --border-line-dashed: dashed;" in css
     assert "  --border-style-placeholder: var(--border-line-dashed);" in css
+
+
+def _ring_set(offset=None):
+    ts = TokenSet()
+    ts.add(Token("border.width.1", "dimension", {"value": 1, "unit": "px"}))
+    ts.add(Token("border.width.2", "dimension", {"value": 2, "unit": "px"}))
+    ts.add(Token("border.focus-ring.width", "dimension", "{border.width.2}", layer="semantic"))
+    if offset is not None:
+        ts.add(Token("border.width.half", "dimension", {"value": offset, "unit": "px"}))
+        ts.add(Token("border.focus-ring.offset", "dimension", "{border.width.half}",
+                     layer="semantic"))
+    return ts
+
+
+def test_ring_without_an_offset_is_refused():
+    # Without an offset the ring sits on the element's own edge, which is
+    # the case the offset rule exists to block.
+    ring = [c for c in CHECKS if c.id == "focus-ring"][0]
+    msgs = ring.run(_ring_set(), "")
+    assert len(msgs) == 1
+    assert "border.focus-ring.offset" in msgs[0] and "border.width.1" in msgs[0]
+
+
+def test_offset_message_states_the_real_value():
+    ring = [c for c in CHECKS if c.id == "focus-ring"][0]
+    msgs = ring.run(_ring_set(offset=0.5), "")
+    assert len(msgs) == 1 and "0.5px" in msgs[0]
