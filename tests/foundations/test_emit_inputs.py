@@ -229,3 +229,8 @@ def test_the_refusal_lists_a_shared_vocabulary_once():
     message = str(exc.value)
     assert "tone and audience accept: " in message and "industry accepts: " in message
     assert message.count("playful") == 1
+
+
+def test_parse_axes_drops_the_sign_of_zero():
+    axes = parse_axes("-0,0,0,0,0,0,0")
+    assert axes.to_dict()["warmth"] == 0.0 and str(axes.warmth) == "0.0"

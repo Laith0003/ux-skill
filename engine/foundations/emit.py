@@ -14,13 +14,14 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
 import shutil
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
-from engine.foundations.build import ValidationError, build_system
+from engine.foundations.build import FOUNDATIONS, ValidationError, build_system
 from engine.foundations.color_math import hex_to_rgb, rgb_to_hex
 from engine.foundations.export import dump_dtcg, to_css
 from engine.foundations.gate import GateFailure, GateReport
@@ -89,7 +90,7 @@ def parse_axes(value: Any, label: str = "axes") -> AxisValues:
                              ) from None
         if not (math.isfinite(number) and 0.0 <= number <= 1.0):
             raise InputError(f"{label} gives {name} as {raw!r}; set it to a number from 0 to 1")
-        numbers.append(number)
+        numbers.append(number + 0.0)  # -0 reads as 0
     return AxisValues(*numbers)
 
 
@@ -307,46 +308,210 @@ def _gate_findings(report: GateReport) -> List[SystemFinding]:
     return out
 
 
+# Report words. Each table is keyed by the engine's own names, and a test
+# holds it to them, so a new foundation, mode or axis cannot go unworded.
+_FOUNDATION_WORDS: Dict[str, str] = {
+    "color": "color", "space": "spacing", "radius": "radius", "border": "borders",
+    "elevation": "elevation", "motion": "motion", "layout": "layout", "type": "type"}
+
+# Each mode axis: both values together for the opening sentence, then each
+# value alone, in the words a context key is read out in.
+_MODE_WORDS: Dict[str, Tuple[str, Dict[str, str]]] = {
+    "scheme": ("light and dark", {"light": "light mode", "dark": "dark mode"}),
+    "contrast": ("standard and high contrast",
+                 {"standard": "standard contrast", "high": "high contrast"}),
+    "density": ("comfortable and compact spacing",
+                {"comfortable": "comfortable spacing", "compact": "compact spacing"}),
+    "direction": ("left to right and right to left",
+                  {"ltr": "left to right", "rtl": "right to left"}),
+    "motion": ("full and reduced motion", {"standard": "full motion", "reduced": "reduced motion"}),
+}
+
+# Each design axis: its name in words, and what 0 and 1 mean.
+_AXIS_WORDS: Dict[str, Tuple[str, str, str]] = {
+    "warmth": ("warmth", "cool", "warm"),
+    "contrast": ("contrast", "muted", "bold"),
+    "density": ("density", "airy", "packed"),
+    "geometry": ("geometry", "sharp", "rounded"),
+    "formality": ("formality", "playful", "formal"),
+    "motion": ("motion", "still", "lively"),
+    "type_personality": ("type personality", "geometric", "humanist"),
+}
+
+_RATIO_WORDS = {"text/fill": "text on the fill", "fill/page": "the fill on the page",
+                "ring/surface": "the focus ring on the surface"}
+
+_CONTEXT_KEY = re.compile(r"\((in )?([a-z]+:[a-z]+(?:,[a-z]+:[a-z]+)*)\)")
+_PAIRING_NOTE = re.compile(
+    r"^(?P<fg>\S+) \((?P<mode>[a-z:,]+)\): (?P<old>\S+) -> (?P<new>\S+), (?P=fg) on (?P<bg>\S+) "
+    r"was (?P<was>[\d.]+:1), now (?P<now>[\d.]+:1), (?P<why>.+)$")
+_GROUP_NOTE = re.compile(r"^(?P<fill>\S+) group \((?P<mode>[a-z:,]+)\): (?P<rest>.+)$")
+_GROUP_MOVE = re.compile(r"^(\S+) (\S+) -> (\S+)$")
+_GROUP_RATIO = re.compile(r"^(text/fill|fill/page|ring/surface) ([\d.]+:1)$")
+_RAMP_NOTE = re.compile(
+    r"^color\.(?P<family>[\w-]+): (?P<seed>#[0-9A-Fa-f]{6}) is too (?P<way>light|dark) to anchor "
+    r"a ramp at 500; 500 retuned to (?P<anchor>#[0-9A-Fa-f]{6}), (?P<why>.+)\.$")
+_MOVE_SENTENCE = re.compile(r"^(?P<head>.*?:1\)?)\. Move \S+ to a step with more contrast against "
+                            r"\S+\.(?: .*)?$")
+_VALIDATION = "Validation failed"
+
+
+def _and(items: Sequence[str]) -> str:
+    items = list(items)
+    return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1]
+
+
+def _context_words(key: str) -> str:
+    """A context key in words: "scheme:dark,contrast:high" reads "dark mode,
+    high contrast". A key with a part the table does not know is kept."""
+    words = []
+    for pair in key.split(","):
+        axis, _, value = pair.partition(":")
+        word = _MODE_WORDS.get(axis, ("", {}))[1].get(value)
+        if not word:
+            return key
+        words.append(word)
+    return ", ".join(words)
+
+
+def _in_words(text: str) -> str:
+    """Every "(key)" and "(in key)" context in a line, read out in words."""
+    return _CONTEXT_KEY.sub(lambda m: f"({m.group(1) or ''}{_context_words(m.group(2))})", text)
+
+
+def _contrast_note(note: str) -> Optional[str]:
+    """A note about a color moved to meet contrast, in plain words, or None
+    when the note is not one."""
+    m = _PAIRING_NOTE.match(note)
+    if m:
+        return (f"In {_context_words(m['mode'])}, {m['fg']} moved from {m['old']} to {m['new']}: "
+                f"on {m['bg']} it measured {m['was']}, now {m['now']}, and {m['why']}.")
+    m = _GROUP_NOTE.match(note)
+    if not m:
+        return None
+    moves, ratios = [], []
+    for part in m["rest"].split(", "):
+        move, ratio = _GROUP_MOVE.match(part), _GROUP_RATIO.match(part)
+        if move:
+            moves.append(f"{move[1]} from {move[2]} to {move[3]}")
+        elif ratio:
+            ratios.append(f"{ratio[2]} for {_RATIO_WORDS[ratio[1]]}")
+        else:
+            return _in_words(note)
+    if not moves:
+        return _in_words(note)
+    text = (f"In {_context_words(m['mode'])}, for the {m['fill']} button the engine changed "
+            f"{_and(moves)}.")
+    return text + (f" It now measures {_and(ratios)}." if ratios else "")
+
+
+def _other_note(note: str) -> str:
+    m = _RAMP_NOTE.match(note)
+    if not m:
+        return _in_words(note)
+    who = "The brand color" if m["family"] == "brand" else f"The {m['family']} color"
+    return (f"{who} {m['seed']} is too {m['way']} to sit at step 500, the middle of its color "
+            f"scale, so step 500 is {m['anchor']} ({m['why']}).")
+
+
+def _finding_line(finding: SystemFinding) -> str:
+    """A finding for the report: the measurement, modes in words. The
+    engine's advice to move a token is left to the JSON findings, since no
+    input moves a token; the report says which inputs to change instead."""
+    line = finding.line()
+    m = _MOVE_SENTENCE.match(line)
+    return _in_words(f"{m['head']}." if m else line)
+
+
+def _opening(brand: str, gate_line: str, findings: Sequence[SystemFinding]) -> str:
+    if findings:
+        n = len(findings)
+        if gate_line.startswith(_VALIDATION):
+            why = (f"the generated tokens broke {n} structural rule{'' if n == 1 else 's'}, so "
+                   "the WCAG gate did not run and nothing was written")
+        else:
+            why = (f"the WCAG gate found {n} problem{'' if n == 1 else 's'} with these inputs, "
+                   "so nothing was written")
+        return f"No design system was built for {brand}: {why}."
+    parts = _and([_FOUNDATION_WORDS.get(f.name, f.name) for f in FOUNDATIONS])
+    modes = [pair for pair, _ in _MODE_WORDS.values()]
+    return (f"A complete design system for {brand}: {parts}, in {', '.join(modes[:-1])}, and "
+            f"{modes[-1]}. Every color pairing passed the WCAG contrast gate, so the files below "
+            "are ready to use.")
+
+
 def _axes_table(axes: AxisValues) -> List[str]:
-    rows = ["| Axis | Value |", "|---|---|"]
-    rows += [f"| {name} | {value:g} |" for name, value in axes.to_dict().items()]
+    rows = ["Seven axes shape the look. Each runs from 0 to 1, and the scale says what each end "
+            "means.", "", "| Axis | Value | Scale |", "|---|---|---|"]
+    for name, value in axes.to_dict().items():
+        words, low, high = _AXIS_WORDS[name]
+        rows.append(f"| {words} | {value:g} | {low} 0 to {high} 1 |")
     return rows
 
 
+_CHECKS_LINE = ("A check measures one color pairing, such as text on its background, in one mode; "
+                "a rule check covers the rest, such as minimum sizes, widths and durations.")
 _GATE_SCOPE = ("Color pairings were measured in light and dark, at standard and high contrast. "
                "Standard contrast meets WCAG 1.4.3 (text 4.5:1) and 1.4.11 (non-text 3:1). High "
                "contrast raises text to WCAG 1.4.6 (7:1) and most non-text parts to a 4.5:1 floor "
                "of our own, since WCAG sets no enhanced non-text level.")
-
-_MODES_LINE = ("Switch a mode on the html element: data-theme=\"dark\", data-contrast=\"high\", "
-               "data-density=\"compact\", dir=\"rtl\", data-motion=\"reduced\". With no attribute, "
-               "dark, high contrast and reduced motion follow the operating system setting.")
+_NOTES_LEAD = ("These are adjustments the engine made on its own, so nothing needs doing: first "
+               "the colors it moved off their default step so every pairing meets its contrast "
+               "minimum, and why, then the other choices it made from the brand color and the "
+               "axes. Modes are named in words; tokens.json keys the same modes, so dark mode, "
+               "high contrast is scheme:dark,contrast:high there.")
+_CHANGE_GATE = ("Change the inputs and build again: a darker or more saturated brand "
+                "color gives the engine more room to reach every contrast "
+                "minimum, and different axes, or a different brief, change the steps it tries. "
+                "The findings below name each pairing that fell short, for a design-system "
+                "designer.")
+_CHANGE_VALIDATION = ("No brand color or axes should cause this, so it is a problem in the "
+                      "engine: build again with the same inputs, and if it fails "
+                      "again, report it with the brand color, the axes and the findings below.")
+_MODES_LINE = ("Switch a mode with an attribute on the html element: data-theme=\"dark\" for dark "
+               "mode, data-contrast=\"high\" for high contrast, data-density=\"compact\" for "
+               "compact spacing, dir=\"rtl\" for right to left, data-motion=\"reduced\" for "
+               "reduced motion. With no attribute, dark mode, high contrast and reduced motion "
+               "follow the operating system setting.")
 
 
 def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
                   gate_line: str, notes: Sequence[str],
                   findings: Sequence[SystemFinding]) -> str:
-    """system-report.md: what was built from what, the gate result, every
-    note or finding, and how to use the files. No time stamps, so the same
-    inputs give the same bytes."""
-    scripts = ("Latin and Arabic. dir=\"rtl\" switches text to the Arabic face and scale."
-               if arabic else "Latin only (built with the Latin-only option).")
-    lines = ["# Design system report", "",
-             f"Brand color: {brand}", f"Scripts: {scripts}", f"Axes: {axes_source}.", "",
-             *_axes_table(axes), "", "## WCAG gate", "", gate_line, ""]
+    """system-report.md: one sentence on what was built, what it was built
+    from, the gate result, every note or finding in plain words, and how to
+    use the files. No time stamps, so the same inputs give the same bytes."""
+    scripts = ("Latin and Arabic. Right to left (dir=\"rtl\") switches text to the Arabic face "
+               "and type scale." if arabic else "Latin only (built with the Latin-only option).")
+    lines = ["# Design system report", "", _opening(brand, gate_line, findings), "",
+             "## Built from", "", f"- Brand color: {brand}", f"- Scripts: {scripts}",
+             f"- Axes: {axes_source}.", "", *_axes_table(axes), "",
+             "## WCAG gate", "", gate_line, "", _CHECKS_LINE, ""]
     if findings:
-        lines += ["Nothing was written. Fix each finding below, then build again.", "",
-                  "## Findings", ""]
-        lines += [f"- {f.line()}" for f in findings]
-    else:
-        lines += [_GATE_SCOPE, ""]
-        if notes:
-            lines += ["## Notes", ""] + [f"- {n}" for n in notes]
-        lines += ["", "## Files", "",
-                  "- tokens.json: every token in the W3C design tokens format (DTCG 2025.10), "
-                  "with its values for each mode.",
-                  f"- tokens.css: CSS custom properties. {_MODES_LINE}",
-                  "- system-report.md: this report."]
+        change = _CHANGE_VALIDATION if gate_line.startswith(_VALIDATION) else _CHANGE_GATE
+        lines += ["## What to change", "", change, "", "## Findings", ""]
+        lines += [f"- {_finding_line(f)}" for f in findings]
+        return "\n".join(lines) + "\n"
+    lines += [_GATE_SCOPE, ""]
+    moved: List[str] = []
+    other: List[str] = []
+    for note in notes:
+        plain = _contrast_note(note)
+        if plain is None:
+            other.append(_other_note(note))
+        else:
+            moved.append(plain)
+    if notes:
+        lines += ["## Notes", "", _NOTES_LEAD, ""]
+        if moved:
+            lines += ["### Colors moved to meet contrast", "", *[f"- {n}" for n in moved], ""]
+        if other:
+            lines += ["### Other choices", "", *[f"- {n}" for n in other], ""]
+    lines += ["## Files", "",
+              "- tokens.json: every token in the W3C design tokens format (DTCG 2025.10), with "
+              "its values for each mode.",
+              f"- tokens.css: CSS custom properties. {_MODES_LINE}",
+              "- system-report.md: this report."]
     return "\n".join(lines) + "\n"
 
 
@@ -374,7 +539,7 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
         tokens = {"tokens.json": dump_dtcg(built.tokens), "tokens.css": to_css(built.tokens)}
     report = render_report(brand, axes, axes_source, arabic, gate, notes, findings)
     files = {**tokens, "system-report.md": report} if tokens else {}
-    return SystemOutput(passed=not findings, files=files, report=report, gate=gate,
+    return SystemOutput(passed=bool(tokens), files=files, report=report, gate=gate,
                         findings=findings, brand=brand, axes=axes, axes_source=axes_source,
                         arabic=arabic)
 
