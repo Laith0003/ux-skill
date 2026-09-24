@@ -14,6 +14,8 @@ from __future__ import annotations
 import json
 import math
 import os
+import shutil
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
@@ -420,13 +422,60 @@ def conflict_message(out_dir: Path, plan: WritePlan, force_flag: str = "--force"
             f"pass a different {out_flag} folder.")
 
 
+def _stage(path: Path, data: bytes) -> None:
+    """Write one file into the staging folder."""
+    path.write_bytes(data)
+
+
+def _place(staged: Path, target: Path) -> None:
+    """Move one staged file into place. A rename within one folder, so a
+    reader never sees half a file."""
+    os.replace(str(staged), str(target))
+
+
+def _missing_folders(folder: Path) -> List[Path]:
+    """The folders a mkdir with parents would make, innermost first."""
+    missing: List[Path] = []
+    for q in (folder, *folder.parents):
+        if q.exists():
+            break
+        missing.append(q)
+    return missing
+
+
+def _remove_folders(folders: Sequence[Path]) -> None:
+    for q in folders:
+        try:
+            q.rmdir()
+        except OSError:
+            pass
+
+
+def _restore(out_dir: Path, placed: Sequence[Tuple[str, Optional[Path]]]) -> bool:
+    """Undo the moves so far: put each previous file back and remove each
+    new one. False when a previous file could not be put back."""
+    whole = True
+    for name, previous in reversed(placed):
+        target = out_dir / name
+        try:
+            if previous is not None:
+                os.replace(str(previous), str(target))
+            elif target.exists():
+                target.unlink()
+        except OSError:
+            whole = whole and previous is None
+    return whole
+
+
 def write_files(out_dir: Path, files: Mapping[str, str], *, force: bool = False) -> WritePlan:
     """Write the files that are new or, when forced, different. Without
-    force, one conflicting file stops every write, so the folder never
-    holds a mix of two systems. Identical files are never rewritten.
-    Returns the plan it acted on; `conflicts` is non-empty only when
-    nothing was written. Every filesystem error is an InputError naming
-    the path and the fix."""
+    force, one conflicting file stops every write. Identical files are
+    never rewritten. All or nothing: every file is staged in a folder
+    inside out_dir and then moved into place, and a failure at any step
+    puts the folder back as it was, so it never holds a mix of two
+    systems. Returns the plan it acted on; `conflicts` is non-empty only
+    when nothing was written. Every filesystem error is an InputError
+    naming the path and the fix."""
     if not files:
         return WritePlan((), (), ())
     plan = plan_writes(out_dir, files)
@@ -435,15 +484,41 @@ def write_files(out_dir: Path, files: Mapping[str, str], *, force: bool = False)
     names = plan.write + plan.conflicts
     if not names:
         return WritePlan((), plan.unchanged, ())
+    made = _missing_folders(out_dir)
     try:
         out_dir.mkdir(parents=True, exist_ok=True)
     except OSError as exc:
+        _remove_folders(made)
         raise InputError(f"{out_dir} cannot be made ({_reason(exc)}); pass a folder you can "
                          "write to") from None
-    for name in names:
-        try:
-            (out_dir / name).write_bytes(files[name].encode("utf-8"))
-        except OSError as exc:
-            raise InputError(f"{out_dir} cannot be written ({_reason(exc)}); pass a folder you "
-                             "can write to") from None
+    try:
+        stage = Path(tempfile.mkdtemp(prefix=".uxskill-", dir=str(out_dir)))
+    except OSError as exc:
+        _remove_folders(made)
+        raise InputError(f"{out_dir} cannot be written ({_reason(exc)}), so nothing in it was "
+                         "changed; pass a folder you can write to") from None
+    placed: List[Tuple[str, Optional[Path]]] = []
+    name = names[0]
+    try:
+        for name in names:
+            _stage(stage / name, files[name].encode("utf-8"))
+        for name in names:
+            previous = None
+            if name in plan.conflicts:
+                previous = stage / f"{name}.previous"
+                os.replace(str(out_dir / name), str(previous))
+            placed.append((name, previous))
+            _place(stage / name, out_dir / name)
+    except OSError as exc:
+        if not _restore(out_dir, placed):
+            raise InputError(f"{out_dir / name} could not be written ({_reason(exc)}), and the "
+                             f"previous files could not all be put back; they are in {stage}. "
+                             "Move them back into place, then pass a folder you can write "
+                             "to") from None
+        shutil.rmtree(str(stage), ignore_errors=True)
+        _remove_folders(made)
+        raise InputError(f"{out_dir / name} could not be written ({_reason(exc)}), so nothing "
+                         f"in {out_dir} was changed; free some space or pass a folder you can "
+                         "write to") from None
+    shutil.rmtree(str(stage), ignore_errors=True)
     return WritePlan(names, plan.unchanged, ())

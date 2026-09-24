@@ -203,3 +203,83 @@ def test_a_folder_that_cannot_be_made_is_named(tmp_path):
 def test_writing_nothing_makes_no_folder(tmp_path):
     assert write_files(tmp_path / "new", {}) == WritePlan((), (), ())
     assert not (tmp_path / "new").exists()
+
+
+# All or nothing: every file is staged in a folder inside the out folder,
+# then moved into place. A failure at any step leaves the folder exactly as
+# it was, never a mix of two systems.
+import errno  # noqa: E402
+
+import engine.foundations.emit as emit  # noqa: E402
+
+OLD = {"tokens.json": '{"old": 1}\n', "tokens.css": "/* old */\n",
+       "system-report.md": "# old\n"}
+
+
+def _snapshot(root):
+    return {str(p.relative_to(root)): (p.read_bytes() if p.is_file() else "folder")
+            for p in sorted(root.rglob("*"))}
+
+
+def _fail_on_call(real, n):
+    calls = []
+
+    def wrapper(*args):
+        calls.append(args)
+        if len(calls) == n:
+            raise OSError(errno.ENOSPC, "No space left on device")
+        return real(*args)
+    return wrapper
+
+
+def _write_old(folder):
+    folder.mkdir(parents=True, exist_ok=True)
+    for name, text in OLD.items():
+        (folder / name).write_text(text, encoding="utf-8")
+
+
+def test_a_failure_while_staging_leaves_the_folder_as_it_was(tmp_path, monkeypatch):
+    _write_old(tmp_path)
+    before = _snapshot(tmp_path)
+    monkeypatch.setattr(emit, "_stage", _fail_on_call(emit._stage, 2))
+    with pytest.raises(InputError) as exc:
+        write_files(tmp_path, FILES, force=True)
+    assert str(exc.value) == (
+        f"{tmp_path / 'tokens.css'} could not be written (No space left on device), so nothing "
+        f"in {tmp_path} was changed; free some space or pass a folder you can write to")
+    assert _snapshot(tmp_path) == before
+
+
+def test_a_failure_while_moving_into_place_restores_every_file(tmp_path, monkeypatch):
+    _write_old(tmp_path)
+    before = _snapshot(tmp_path)
+    monkeypatch.setattr(emit, "_place", _fail_on_call(emit._place, 2))
+    with pytest.raises(InputError, match="so nothing in .* was changed"):
+        write_files(tmp_path, FILES, force=True)
+    assert _snapshot(tmp_path) == before
+
+
+def test_a_failure_keeps_identical_files_untouched(tmp_path, monkeypatch):
+    (tmp_path / "tokens.json").write_text(FILES["tokens.json"], encoding="utf-8")
+    old = 1_000_000_000
+    os.utime(tmp_path / "tokens.json", (old, old))
+    before = _snapshot(tmp_path)
+    monkeypatch.setattr(emit, "_place", _fail_on_call(emit._place, 2))
+    with pytest.raises(InputError):
+        write_files(tmp_path, FILES)
+    assert _snapshot(tmp_path) == before
+    assert (tmp_path / "tokens.json").stat().st_mtime == old
+
+
+def test_a_failure_in_a_new_folder_leaves_no_folder(tmp_path, monkeypatch):
+    monkeypatch.setattr(emit, "_stage", _fail_on_call(emit._stage, 2))
+    with pytest.raises(InputError):
+        write_files(tmp_path / "new" / "ds", FILES)
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_a_forced_write_leaves_only_the_three_files(tmp_path):
+    _write_old(tmp_path)
+    plan = write_files(tmp_path, FILES, force=True)
+    assert set(plan.write) == set(FILES)
+    assert _snapshot(tmp_path) == {name: text.encode("utf-8") for name, text in FILES.items()}
