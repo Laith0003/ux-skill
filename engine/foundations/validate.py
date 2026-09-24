@@ -9,8 +9,9 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
+from engine.foundations.modes import FOUNDATION_AXES, ModeError, contexts, parse, select, sparse
 from engine.foundations.tokens import AliasError, Token, TokenSet, alias_target, is_alias
 from engine.foundations.values import TYPES, TYPOGRAPHY_FIELDS, css_names
 
@@ -90,7 +91,7 @@ def _check_alias(ts: TokenSet, t: Token, mode: str, raw: str, expected: str,
     when `where` names it): the target exists, is a primitive, and has the
     type the holder expects."""
     target = alias_target(raw)
-    label = f"{t.path} ({mode}){where}"
+    label = f"{t.path} ({mode or 'base'}){where}"
     if not ts.has(target):
         return [Problem(t.path, "alias-missing",
             f"{label} aliases {target}, which is not defined; add it or point at an existing primitive")]
@@ -103,6 +104,32 @@ def _check_alias(ts: TokenSet, t: Token, mode: str, raw: str, expected: str,
             f"{label} aliases {target}, a {tt.type} token, but needs a {expected} token; "
             f"point it at a {expected} primitive")]
     return []
+
+
+def _check_mode_keys(ts: TokenSet, t: Token, out: List[Problem]) -> Optional[List[str]]:
+    """Check a semantic token's override keys; return the axes they use,
+    or None when a key does not parse (the token's contexts are unknown)."""
+    used: List[str] = []
+    allowed = FOUNDATION_AXES.get(t.path.split(".", 1)[0])
+    for key in t.modes:
+        try:
+            pairs = parse(key, ts.axes)
+        except ModeError as exc:
+            out.append(Problem(t.path, "unknown-mode", f"{t.path}: {exc}"))
+            return None
+        for axis, value in pairs.items():
+            if value == ts.axes[axis][0]:
+                out.append(Problem(t.path, "base-mode-override",
+                    f"{t.path} override {key!r} sets {axis} to its base '{value}', whose value "
+                    f"is the token's own $value; drop '{axis}:{value}' from the key, or move "
+                    "that value into $value"))
+            if allowed is not None and axis not in allowed:
+                out.append(Problem(t.path, "axis-not-allowed",
+                    f"{t.path} varies on {axis}, but {t.path.split('.', 1)[0]} tokens vary only "
+                    f"on {list(allowed) or 'no axis'}; remove the {key!r} override"))
+            if axis not in used:
+                used.append(axis)
+    return [a for a in ts.axes if a in used]
 
 
 def validate(ts: TokenSet) -> List[Problem]:
@@ -121,21 +148,20 @@ def validate(ts: TokenSet) -> List[Problem]:
                 out.append(Problem(t.path, "primitive-modes",
                     f"{t.path} is a primitive with modes {sorted(t.modes)}; move mode values to a semantic role"))
             continue
-        base = ts.mode_names[0]
-        if base in t.modes:
-            out.append(Problem(t.path, "base-mode-override",
-                f"{t.path} overrides the base mode '{base}', whose value is the token's own "
-                f"$value; move {t.modes[base]} into $value and remove the '{base}' override"))
-        for mode in t.modes:
-            if mode not in ts.mode_names:
-                out.append(Problem(t.path, "unknown-mode",
-                    f"{t.path} sets mode '{mode}', which is not one of {list(ts.mode_names)}; "
-                    "remove it or add the mode to the TokenSet's mode_names"))
+        token_axes = _check_mode_keys(ts, t, out)
+        if token_axes is None:
+            continue
         seen_raws: List[Any] = []
-        for mode in ts.mode_names:
-            raw = ts.raw(t.path, mode)
+        for mode in contexts(token_axes, ts.axes):
+            value, tied = select(t.value, t.modes, mode, ts.axes)
+            if tied:
+                out.append(Problem(t.path, "mode-ambiguous",
+                    f"{t.path} has overrides {tied} that all apply in {mode} with different "
+                    f"values; add an override for {sparse(mode, ts.axes)!r} or make them agree"))
+                continue
+            raw = value
             if raw in seen_raws:
-                # Same raw value already checked under an earlier mode for
+                # Same raw value already checked in an earlier context for
                 # this token; do not report the same problem twice.
                 continue
             seen_raws.append(raw)
@@ -148,11 +174,11 @@ def validate(ts: TokenSet) -> List[Problem]:
                         found += _check_alias(ts, t, mode, raw[key], field_type, f" field {key}")
                     else:
                         found.append(Problem(t.path, "semantic-literal",
-                            f"{t.path} ({mode}) field {key} holds {raw[key]!r}; alias a "
+                            f"{t.path} ({mode or 'base'}) field {key} holds {raw[key]!r}; alias a "
                             f"{field_type} primitive instead"))
             else:
                 found = [Problem(t.path, "semantic-literal",
-                    f"{t.path} ({mode}) holds {raw!r}; alias a primitive instead")]
+                    f"{t.path} ({mode or 'base'}) holds {raw!r}; alias a primitive instead")]
             if found:
                 out.extend(found)
                 continue

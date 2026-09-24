@@ -91,9 +91,11 @@ def test_unknown_mode_raises_on_raw():
         ts.raw("color.surface.page", "dakr")
 
 
-def test_empty_mode_names_rejected():
-    with pytest.raises(ValueError, match="at least one mode name"):
-        TokenSet(mode_names=())
+@pytest.mark.parametrize("axes", [{"scheme": ("light",)}, {"Scheme": ("light", "dark")},
+                                  {"scheme": ("light", "light")}, {"scheme": ("light", "dark mode")}])
+def test_unusable_axes_are_rejected(axes):
+    with pytest.raises(ValueError, match=r"is not usable; name axes and values with lowercase"):
+        TokenSet(axes)
 
 
 def test_get_unknown_path_names_the_fix():
@@ -109,7 +111,7 @@ def test_raw_unknown_path_names_the_fix():
 
 def test_unknown_mode_message_names_the_fix():
     # R27 M2: the message listed the allowed modes but never said what to do.
-    with pytest.raises(ValueError, match=r"use one of these or add it to mode_names"):
+    with pytest.raises(ValueError, match=r"write it as axis:value, one of scheme: light, dark"):
         make().raw("color.surface.page", "dakr")
 
 

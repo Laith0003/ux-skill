@@ -52,4 +52,4 @@ def test_dump_dtcg_fixes_the_json_settings():
     text = dump_dtcg(ts)
     assert text == json.dumps(to_dtcg(ts), indent=2, ensure_ascii=False) + "\n"
     assert text.endswith("}\n") and "أبيض" in text and "\\u" not in text
-    assert text.startswith('{\n  "color": {\n    "base"')
+    assert text.startswith('{\n  "$extensions": {')

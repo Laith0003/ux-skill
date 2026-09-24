@@ -12,6 +12,7 @@ from engine.foundations import (
 )
 from engine.foundations.color import PAIRINGS
 from engine.foundations.gate import GateReport, gate
+from engine.foundations.modes import contexts
 from engine.foundations.ramp import STEPS, RampResult
 from engine.foundations.tokens import Token, TokenSet
 from engine.synthesizer.axes import AxisValues
@@ -25,7 +26,7 @@ def test_build_returns_tokens_notes_and_the_gate_report():
     result = build_color(AXES, "#FFD400")
     assert isinstance(result, BuildResult)
     assert isinstance(result.report, GateReport) and result.report.passed
-    assert result.report.checked == len(PAIRINGS) * 2
+    assert result.report.checked == len(PAIRINGS) * 4
     assert result.notes and isinstance(result.notes, tuple)
     assert result.tokens.get("color.brand.500").layer == "primitive"
     with pytest.raises(dataclasses.FrozenInstanceError):
@@ -61,7 +62,7 @@ def test_generator_recheck_raises_gate_failure_with_the_seed_hint(monkeypatch):
         build_color(AXES, "#FFD400")
     findings = exc.value.report.findings
     on_action = [f for f in findings
-                 if (f.fg, f.bg, f.mode) == ("color.text.on-action", "color.action.primary", "light")]
+                 if (f.fg, f.bg, f.mode) == ("color.text.on-action", "color.action.primary", "scheme:light,contrast:standard")]
     assert on_action, [f.message() for f in findings]
     assert "choose a darker or more saturated seed" in on_action[0].message()
     assert on_action[0].message() in str(exc.value)
@@ -180,8 +181,9 @@ def test_build_system_builds_every_registered_foundation():
     names = {f.name for f in build_module.FOUNDATIONS}
     assert {t.path.split(".", 1)[0] for t in result.tokens.tokens()} == names
     assert result.report.passed
-    assert result.report.checked == sum(len(f.pairings) for f in build_module.FOUNDATIONS) * 2
-    assert result.report.rules_checked == sum(len(f.checks) for f in build_module.FOUNDATIONS) * 2
+    assert result.report.checked == sum(len(f.pairings) for f in build_module.FOUNDATIONS) * 4
+    assert result.report.rules_checked == sum(len(contexts(c.axes)) for f in build_module.FOUNDATIONS
+                                              for c in f.checks)
 
 
 def test_build_color_is_build_system_for_color_alone():
@@ -216,12 +218,14 @@ def test_generator_returns_instead_of_raising_when_the_gate_would_fail(monkeypat
 def test_check_failures_block_and_carry_their_message():
     ts = TokenSet()
     ts.add(Token("color.base.white", "color", "#FFFFFF"))
-    check = Check("demo", "system", lambda s, mode: [f"color.base.white fails in {mode}; fix it"])
+    check = Check("demo", "system", lambda s, mode: [f"color.base.white fails in {mode}; fix it"],
+                  axes=("scheme",))
     with pytest.raises(GateFailure) as exc:
         gate(ts, [], [check])
     report = exc.value.report
-    assert [(f.check, f.mode) for f in report.failures] == [("demo", "light"), ("demo", "dark")]
-    assert "color.base.white fails in dark; fix it" in str(exc.value)
+    assert [(f.check, f.mode) for f in report.failures] == [("demo", "scheme:light"),
+                                                           ("demo", "scheme:dark")]
+    assert "color.base.white fails in scheme:dark; fix it" in str(exc.value)
     assert report.rules_checked == 2 and not report.passed
 
 
@@ -233,6 +237,6 @@ def test_seed_hint_direction_follows_the_other_side(monkeypatch):
     with pytest.raises(GateFailure) as exc:
         build_color(AXES, "#FFD400")
     dark = [f for f in exc.value.report.findings
-            if (f.fg, f.bg, f.mode) == ("color.text.on-action", "color.action.primary", "dark")]
+            if (f.fg, f.bg, f.mode) == ("color.text.on-action", "color.action.primary", "scheme:dark,contrast:standard")]
     assert dark, [f.message() for f in exc.value.report.findings]
     assert "choose a darker or more saturated seed" in dark[0].message()

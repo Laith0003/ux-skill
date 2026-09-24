@@ -6,8 +6,14 @@ into a TokenSet; the validator, the WCAG gate and the exporters read it.
 """
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Tuple
+from types import MappingProxyType
+from typing import Any, Dict, List, Mapping, Tuple
+
+from engine.foundations.modes import AXES, ModeError, join, parse, select
+
+_AXIS_NAME = re.compile(r"[a-z][a-z0-9-]*")
 
 
 class AliasError(ValueError):
@@ -71,12 +77,20 @@ class Token:
 
 
 class TokenSet:
-    def __init__(self, mode_names: Tuple[str, ...] = ("light", "dark")):
-        if not mode_names:
-            raise ValueError(
-                "TokenSet needs at least one mode name; pass mode_names=(\"light\",) or more."
-            )
-        self.mode_names = mode_names
+    """Tokens in insertion order, plus the mode axes their overrides use
+    (see modes.py). A context is a key such as "scheme:dark,contrast:high";
+    "" is the all-base context."""
+
+    def __init__(self, axes: Mapping[str, Tuple[str, ...]] = AXES):
+        for name, values in axes.items():
+            if not _AXIS_NAME.fullmatch(name) or len(values) < 2 or len(set(values)) != len(values) \
+                    or not all(isinstance(v, str) and _AXIS_NAME.fullmatch(v) for v in values):
+                raise ValueError(
+                    f"axis {name!r} with values {list(values)} is not usable; name axes and values "
+                    "with lowercase letters, digits and '-', and give each axis two or more "
+                    "distinct values, the base first")
+        self.axes: Mapping[str, Tuple[str, ...]] = MappingProxyType(
+            {name: tuple(values) for name, values in axes.items()})
         self._tokens: Dict[str, Token] = {}
 
     def add(self, token: Token) -> None:
@@ -98,15 +112,20 @@ class TokenSet:
     def tokens(self) -> List[Token]:
         return list(self._tokens.values())
 
-    def raw(self, path: str, mode: str) -> Any:
-        if mode not in self.mode_names:
-            raise ValueError(
-                f"mode {mode!r} is not one of {list(self.mode_names)}; "
-                "use one of these or add it to mode_names")
+    def raw(self, path: str, mode: str = "") -> Any:
+        """The value a token holds in one context, before following aliases.
+        Raises ModeError for a context that does not parse, or when two of
+        the token's overrides tie in it with different values."""
         tok = self._lookup(path)
-        return tok.modes.get(mode, tok.value)
+        value, tied = select(tok.value, tok.modes, mode, self.axes)
+        if tied:
+            raise ModeError(
+                f"{path} has overrides {tied} that all apply in {mode!r} with different "
+                f"values; add an override for {join(parse(mode, self.axes), self.axes)!r} "
+                "or make them agree")
+        return value
 
-    def resolve(self, path: str, mode: str) -> Any:
+    def resolve(self, path: str, mode: str = "") -> Any:
         """The literal a token has in one mode. Aliases are followed, and a
         composite value (a shadow, a typography style) comes back with its
         aliased fields resolved too."""

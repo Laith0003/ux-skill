@@ -187,7 +187,7 @@ def test_alias_to_a_token_of_another_type_is_rejected():
     ts.add(Token("color.text.odd", "color", "{type.size.3}", layer="semantic"))
     found = {(p.token, p.rule): p.message for p in validate(ts)}
     assert found[("type.text.bad", "alias-type")] == (
-        "type.text.bad (light) field fontSize aliases type.leading.3, a number token, but needs "
+        "type.text.bad (base) field fontSize aliases type.leading.3, a number token, but needs "
         "a dimension token; point it at a dimension primitive")
     assert ("color.text.odd", "alias-type") in found
 
@@ -196,7 +196,7 @@ def test_semantic_typography_field_must_alias():
     ts = _typed_set()
     ts.add(Token("type.text.loose", "typography", dict(GOOD["typography"][0]), layer="semantic"))
     msgs = [p.message for p in validate(ts) if p.token == "type.text.loose"]
-    assert "type.text.loose (light) field fontSize holds {'value': 1, 'unit': 'rem'}; alias a " \
+    assert "type.text.loose (base) field fontSize holds {'value': 1, 'unit': 'rem'}; alias a " \
            "dimension primitive instead" in msgs
 
 
@@ -230,7 +230,7 @@ def test_gate_refuses_a_translucent_color_by_name():
     ts = TokenSet()
     ts.add(Token("color.scrim.40", "color", "#00000066"))
     ts.add(Token("color.base.white", "color", "#FFFFFF"))
-    with pytest.raises(ValueError, match=r"color\.scrim\.40 \(light\) resolves to the translucent "
+    with pytest.raises(ValueError, match=r"color\.scrim\.40 \(scheme:light,contrast:standard\) resolves to the translucent "
                                          r"#00000066; contrast needs opaque colors"):
         gate(ts, [Pairing("color.scrim.40", "color.base.white", 3.0, "1.4.11")])
 

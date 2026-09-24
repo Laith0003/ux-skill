@@ -5,7 +5,7 @@ import pytest
 
 import engine.foundations.color as color_module
 from engine.foundations.build import build_color
-from engine.foundations.color import PAIRINGS, SEMANTIC, generate_color
+from engine.foundations.color import COLOR_CONTEXTS, PAIRINGS, SEMANTIC, generate_color
 from engine.foundations.color_math import contrast, oklch_to_hex
 from engine.foundations.gate import GateFailure
 from engine.foundations.ramp import STEPS, RampResult
@@ -20,7 +20,7 @@ SEEDS = ["#6B4423", "#3366FF", "#E61428", "#FFD400", "#1F9D55", "#7C3AED"]
 def test_every_pairing_passes_in_every_mode(seed):
     ts = generate_color(AXES, seed).tokens
     for p in PAIRINGS:
-        for mode in ts.mode_names:
+        for mode in COLOR_CONTEXTS:
             ratio = contrast(ts.resolve(p.fg, mode), ts.resolve(p.bg, mode))
             assert ratio >= p.minimum, f"{p.fg} on {p.bg} ({mode}) = {ratio:.2f}"
 
@@ -72,7 +72,7 @@ def test_flat_action_ramp_is_noted_and_the_gate_blocks_it(monkeypatch):
     brand = "#3366FF"
     _brand_ramp(monkeypatch, brand, {s: "#808080" for s in STEPS})
     result = generate_color(AXES, brand)
-    assert any(n.startswith("action group (light): every brand step resolves to the same color")
+    assert any(n.startswith("action group (scheme:light): every brand step resolves to the same color")
                for n in result.notes)
     with pytest.raises(GateFailure) as exc:
         build_color(AXES, brand)
@@ -89,12 +89,12 @@ def test_unsatisfiable_action_group_keeps_the_closest_and_the_gate_blocks_it(mon
     brand = "#3366FF"
     _brand_ramp(monkeypatch, brand,
                 {s: oklch_to_hex(0.99 - i * 0.01, 0.0, 0.0) for i, s in enumerate(STEPS)})
-    notes = [n for n in generate_color(AXES, brand).notes if n.startswith("action group (light)")]
+    notes = [n for n in generate_color(AXES, brand).notes if n.startswith("action group (scheme:light)")]
     assert len(notes) == 1 and "kept the closest" in notes[0]
     assert len(re.findall(r"\d+\.\d\d:1", notes[0])) == 5
     with pytest.raises(GateFailure) as exc:
         build_color(AXES, brand)
-    assert any((f.fg, f.bg, f.mode) == ("color.action.primary", "color.surface.page", "light")
+    assert any((f.fg, f.bg, f.mode) == ("color.action.primary", "color.surface.page", "scheme:light,contrast:standard")
                for f in exc.value.report.findings)
 
 
@@ -117,7 +117,7 @@ def test_notes_are_complete(seed):
     # not ramp()) writes must be traceable back to a specific role, in a
     # specific mode, moving between two full primitive paths, for a ratio
     # that was measured and a ratio it achieved. Filtered to notes carrying
-    # "(light)"/"(dark)": that marker is exactly what separates a
+    # "(scheme:light)"/"(scheme:dark)": that marker is exactly what separates a
     # retune-loop note from _primitives' own "color.<family>: <seed> is too
     # light/dark..." ramp-anchor note (a different, mode-independent kind
     # of note, owned by ramp.py's Task 3 format, not this task's retune
@@ -131,10 +131,10 @@ def test_notes_are_complete(seed):
     # primary/page C:1, hover/page D:1"), which reports four achieved
     # ratios instead of a single was/now pair.
     r = generate_color(AXES, seed)
-    retune_notes = [n for n in r.notes if "(light)" in n or "(dark)" in n]
+    retune_notes = [n for n in r.notes if "(scheme:" in n]
     assert retune_notes, f"{seed}: expected at least one retune-loop note"
     for note in retune_notes:
-        assert "(light)" in note or "(dark)" in note, note
+        assert "(scheme:light)" in note or "(scheme:dark)" in note, note
         assert _PATH_MOVE_RE.search(note), note
         if note.startswith("action group ("):
             # only the roles that moved are listed, each as old -> new
@@ -153,7 +153,7 @@ def test_hover_differs_from_primary(seed):
     # named, not just implied by iterating PAIRINGS), and every pairing
     # must still pass after the action-group solver runs.
     ts = generate_color(AXES, seed).tokens
-    for mode in ts.mode_names:
+    for mode in COLOR_CONTEXTS:
         primary = ts.resolve("color.action.primary", mode)
         hover = ts.resolve("color.action.primary-hover", mode)
         page = ts.resolve("color.surface.page", mode)
@@ -161,7 +161,7 @@ def test_hover_differs_from_primary(seed):
         assert contrast(hover, page) >= 3.0, \
             f"{seed}: hover on page ({mode}) = {contrast(hover, page):.2f}"
     for p in PAIRINGS:
-        for mode in ts.mode_names:
+        for mode in COLOR_CONTEXTS:
             ratio = contrast(ts.resolve(p.fg, mode), ts.resolve(p.bg, mode))
             assert ratio >= p.minimum, f"{seed}: {p.fg} on {p.bg} ({mode}) = {ratio:.2f}"
 
@@ -180,10 +180,10 @@ _SWEEP_SEEDS += ["#202020", "#808080", "#E0E0E0"]
 def test_sweep_pairings_pass_and_hover_is_distinct(seed):
     ts = generate_color(AXES, seed).tokens
     for p in PAIRINGS:
-        for mode in ts.mode_names:
+        for mode in COLOR_CONTEXTS:
             ratio = contrast(ts.resolve(p.fg, mode), ts.resolve(p.bg, mode))
             assert ratio >= p.minimum, f"{seed}: {p.fg} on {p.bg} ({mode}) = {ratio:.2f}"
-    for mode in ts.mode_names:
+    for mode in COLOR_CONTEXTS:
         primary = ts.resolve("color.action.primary", mode)
         hover = ts.resolve("color.action.primary-hover", mode)
         page = ts.resolve("color.surface.page", mode)
@@ -220,7 +220,7 @@ def test_new_pairings_are_declared():
 @pytest.mark.parametrize("seed", SEEDS + _SWEEP_SEEDS)
 def test_ring_stands_out_from_the_fill_and_every_surface(seed):
     ts = generate_color(AXES, seed).tokens
-    for mode in ts.mode_names:
+    for mode in COLOR_CONTEXTS:
         ring = ts.resolve("color.focus.ring", mode)
         others = [ts.resolve(r, mode) for r in ("color.action.primary", "color.surface.page",
                                                 "color.surface.card", "color.surface.sunken")]
@@ -229,10 +229,10 @@ def test_ring_stands_out_from_the_fill_and_every_surface(seed):
 
 def test_ring_prefers_a_brand_step():
     ts = generate_color(AXES, "#3366FF").tokens
-    for mode in ts.mode_names:
+    for mode in COLOR_CONTEXTS:
         assert ts.raw("color.focus.ring", mode).startswith("{color.brand."), mode
 
 
 def test_ring_moves_are_noted():
-    notes = [n for n in generate_color(AXES, "#6B4423").notes if n.startswith("action group (light)")]
+    notes = [n for n in generate_color(AXES, "#6B4423").notes if n.startswith("action group (scheme:light)")]
     assert notes and "color.focus.ring color.brand.700 -> " in notes[0]

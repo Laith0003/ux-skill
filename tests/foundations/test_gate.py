@@ -20,14 +20,14 @@ def failing_set():
 
 def test_generated_system_passes():
     report = gate(generate_color(AXES, "#E61428").tokens, PAIRINGS)
-    assert report.passed and report.checked == len(PAIRINGS) * 2
+    assert report.passed and report.checked == len(PAIRINGS) * 4
 
 
 def test_failing_pairing_blocks_emission():
     with pytest.raises(GateFailure) as exc:
         gate(failing_set(), [Pairing("color.text.default", "color.surface.page", 4.5, "1.4.3")])
     f = exc.value.report.findings[0]
-    assert f.criterion == "1.4.3" and f.ratio < 4.5 and f.mode == "light"
+    assert f.criterion == "1.4.3" and f.ratio < 4.5 and f.mode == "scheme:light,contrast:standard"
 
 
 def test_report_mode_and_skips():
@@ -72,7 +72,7 @@ def test_unvalidated_bad_value_names_the_token():
     ts.add(Token("color.base.white", "color", "#FFFFFF"))
     ts.add(Token("color.text.default", "color", "{color.gray.300}", layer="semantic"))
     ts.add(Token("color.surface.page", "color", "{color.base.white}", layer="semantic"))
-    with pytest.raises(ValueError, match=r"color\.text\.default \(light\) resolves to '#GGGGGG'.*run validate"):
+    with pytest.raises(ValueError, match=r"color\.text\.default \(scheme:light,contrast:standard\) resolves to '#GGGGGG'.*run validate"):
         gate(ts, [Pairing("color.text.default", "color.surface.page", 4.5, "1.4.3")])
 
 
@@ -103,7 +103,7 @@ def test_gate_failure_names_skipped_pairings():
     with pytest.raises(GateFailure) as exc:
         gate(failing_set(), [TEXT_ON_PAGE, LINK_ON_PAGE])
     text = str(exc.value)
-    assert "color.text.default on color.surface.page (light)" in text
+    assert "color.text.default on color.surface.page (scheme:light,contrast:standard)" in text
     assert "Skipped 1 pairing because a token is not defined: color.text.link on color.surface.page" in text
 
 

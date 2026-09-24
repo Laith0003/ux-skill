@@ -12,9 +12,13 @@ from typing import Dict, List, Mapping, Tuple
 from engine.foundations.color_math import contrast, hex_to_oklch, luminance, oklch_to_hex
 from engine.foundations.foundation import BrandInputs, Foundation, Generated
 from engine.foundations.gate import Check, GateFinding, Pairing
+from engine.foundations.modes import compress, contexts, parse
 from engine.foundations.ramp import STEPS, ramp
 from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
 from engine.synthesizer.axes import AxisValues
+
+# Every context color tokens are generated for, base first.
+COLOR_CONTEXTS = tuple(contexts(("scheme",)))
 
 STATUS_HUES = {"danger": 25.0, "warning": 75.0, "success": 150.0, "info": 245.0}
 STATUS_SEED = (0.58, 0.16)  # OKLCH lightness, chroma for status seeds
@@ -116,13 +120,14 @@ def _ring_candidates(mode: str, default_ring: str) -> List[str]:
     """Where the focus ring may land, in preference order: brand steps
     nearest its default, then neutral steps from the extreme that contrasts
     with the surfaces, then black and white."""
-    conv = +1 if mode == "light" else -1
+    conv = +1 if _scheme(mode) == "light" else -1
     family, step = default_ring.rsplit(".", 1)
     brand = [f"{family}.{STEPS[i]}" for i in _order_from(STEPS.index(int(step)), conv)]
-    neutral_steps = list(reversed(STEPS)) if mode == "light" else list(STEPS)
+    light = _scheme(mode) == "light"
+    neutral_steps = list(reversed(STEPS)) if light else list(STEPS)
     base = ["color.base.black", "color.base.white"]
     return brand + [f"color.neutral.{s}" for s in neutral_steps] + (
-        base if mode == "light" else list(reversed(base)))
+        base if light else list(reversed(base)))
 
 
 def _solve_action_group(mode: str, prims: Dict[str, str], pick: Dict[str, Dict[str, str]],
@@ -157,7 +162,7 @@ def _solve_action_group(mode: str, prims: Dict[str, str], pick: Dict[str, Dict[s
     rings = _ring_candidates(mode, defaults[ring_role])
 
     family, default_step = defaults[primary_role].rsplit(".", 1)
-    conv = +1 if mode == "light" else -1
+    conv = +1 if _scheme(mode) == "light" else -1
 
     def path_at(idx: int) -> str:
         return f"{family}.{STEPS[idx]}"
@@ -255,7 +260,12 @@ def _hover_distinct(ts: TokenSet, mode: str) -> List[str]:
             "brand step so the hover state reads as a different color"]
 
 
-CHECKS: Tuple[Check, ...] = (Check("hover-distinct", "system", _hover_distinct),)
+CHECKS: Tuple[Check, ...] = (
+    Check("hover-distinct", "system", _hover_distinct, axes=("scheme", "contrast")),)
+
+
+def _scheme(mode: str) -> str:
+    return parse(mode).get("scheme", "light")
 
 
 def generate_color(axes: AxisValues, brand_hex: str) -> Generated:
@@ -269,71 +279,51 @@ def generate_color(axes: AxisValues, brand_hex: str) -> Generated:
     """
     notes: List[str] = []
     prims = _primitives(axes, brand_hex.upper(), notes)
-    pick = {mode: {role: pair[i] for role, pair in SEMANTIC.items()}
-            for i, mode in enumerate(("light", "dark"))}
+    pick = {mode: {role: pair[0 if _scheme(mode) == "light" else 1]
+                   for role, pair in SEMANTIC.items()}
+            for mode in COLOR_CONTEXTS}
 
     def value(mode: str, role: str) -> str:
         return prims[pick[mode][role]]
 
-    # R17: action.primary, action.primary-hover and text.on-action are
-    # resolved together by _solve_action_group, not by the one-pairing-
-    # at-a-time loop below. A prior version (R16) retuned text.on-action
-    # jointly against both backgrounds and then nudged hover away from
-    # primary on collision, but neither step had any notion of hover's own
-    # 3:1-vs-page requirement (PAIRINGS had no such entry), so the nudge
-    # could satisfy on-action while quietly dropping the hover fill below
-    # 3:1 against the page, an invisible button on hover that nothing
-    # caught. Solving all three roles against all four constraints at once
-    # is the only way to guarantee a result that is never picked unless it
-    # already clears everything; see _solve_action_group's own docstring
-    # for the exact search order.
+    # The action group (fill, hover, text on it, focus ring) is solved
+    # jointly by _solve_action_group; every other pairing moves its own
+    # foreground away from its background, one step at a time, until all of
+    # them hold or the ramp ends. Surfaces never move.
     generic_pairings = [p for p in PAIRINGS if p.fg not in _ACTION_GROUP_ROLES]
 
-    for mode in ("light", "dark"):
+    for mode in COLOR_CONTEXTS:
         max_passes = len(generic_pairings) * len(STEPS) + 1
         for _pass in range(max_passes):
             changed = False
-
-            # Every ordinary pairing moves its own foreground, independent
-            # of the others, away from its background's lightness. None of
-            # these ever targets action.primary, action.primary-hover or
-            # text.on-action (see _ACTION_GROUP_ROLES above); those are the
-            # solver's alone, run once below, after this has converged.
             for p in generic_pairings:
                 for _ in range(len(STEPS)):
                     ratio = contrast(value(mode, p.fg), value(mode, p.bg))
                     if ratio >= p.minimum:
                         break
-                    target = p.fg
-                    old = pick[mode][target]
+                    old = pick[mode][p.fg]
                     bg_light = hex_to_oklch(value(mode, p.bg))[0] > 0.5
                     nxt = _step_path(old, +1 if bg_light else -1)
                     if not nxt:
                         break
-                    pick[mode][target] = nxt
+                    pick[mode][p.fg] = nxt
                     new_ratio = contrast(value(mode, p.fg), value(mode, p.bg))
-                    notes.append(f"{target} ({mode}): {old} -> {nxt}, "
+                    notes.append(f"{p.fg} ({mode}): {old} -> {nxt}, "
                                  f"{p.fg} on {p.bg} was {ratio:.2f}:1, now {new_ratio:.2f}:1, "
                                  f"needs {p.minimum}:1 ({p.criterion})")
                     changed = True
-
             if not changed:
                 break
-
-        # The solver runs last, once per mode: nothing in the ordinary loop
-        # above ever reads action.primary, action.primary-hover or
-        # text.on-action (no other pairing's bg is one of them), so there
-        # is no order dependency to resolve by repeating it.
+        # No generic pairing reads an action-group role as its background,
+        # so solving the group once, after the loop settles, is enough.
         _solve_action_group(mode, prims, pick, notes)
 
     ts = TokenSet()
     for path, hx in prims.items():
         ts.add(Token(path, "color", hx))
     for role in SEMANTIC:
-        light, dark = pick["light"][role], pick["dark"][role]
-        ts.add(Token(role, "color", "{" + light + "}", layer="semantic",
-                     modes={"dark": "{" + dark + "}"} if dark != light else {}))
-
+        base, modes = compress({mode: "{" + pick[mode][role] + "}" for mode in COLOR_CONTEXTS})
+        ts.add(Token(role, "color", base, modes=modes, layer="semantic"))
     return Generated(tokens=ts, notes=notes)
 
 

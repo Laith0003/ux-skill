@@ -9,9 +9,10 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass, field
-from typing import Callable, Iterable, List
+from typing import Callable, Iterable, List, Tuple
 
 from engine.foundations.color_math import contrast, hex_to_rgb
+from engine.foundations.modes import FOUNDATION_AXES, contexts
 from engine.foundations.tokens import TokenSet, opaque_hex
 
 
@@ -52,10 +53,12 @@ class GateFinding:
 class Check:
     """A requirement that is not a contrast pairing (a minimum size, a
     width, a duration). `run(ts, mode)` returns one message per failure in
-    that mode; every message names the token and the fix."""
+    that context; every message names the token and the fix. The gate runs
+    it in every context over `axes`."""
     id: str
     criterion: str
     run: Callable[[TokenSet, str], List[str]]
+    axes: Tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -129,6 +132,12 @@ def _hex(ts: TokenSet, path: str, mode: str) -> str:
     return value
 
 
+def _pairing_contexts(ts: TokenSet, p: Pairing) -> List[str]:
+    """Every context over the axes the pairing's foundation varies on."""
+    names = FOUNDATION_AXES.get(p.fg.split(".", 1)[0], tuple(ts.axes))
+    return contexts([a for a in names if a in ts.axes], ts.axes)
+
+
 def gate(ts: TokenSet, pairings: Iterable[Pairing], checks: Iterable[Check] = (),
          raise_on_fail: bool = True) -> GateReport:
     report = GateReport()
@@ -136,14 +145,14 @@ def gate(ts: TokenSet, pairings: Iterable[Pairing], checks: Iterable[Check] = ()
         if not (ts.has(p.fg) and ts.has(p.bg)):
             report.skipped_pairings.append(p)
             continue
-        for mode in ts.mode_names:
+        for mode in _pairing_contexts(ts, p):
             report.checked += 1
             ratio = contrast(_hex(ts, p.fg, mode), _hex(ts, p.bg, mode))
             if ratio < p.minimum:
                 report.findings.append(
                     GateFinding(p.fg, p.bg, mode, ratio, p.minimum, p.criterion))
     for c in checks:
-        for mode in ts.mode_names:
+        for mode in contexts([a for a in c.axes if a in ts.axes], ts.axes):
             report.rules_checked += 1
             for message in c.run(ts, mode):
                 report.failures.append(CheckFailure(c.id, c.criterion, mode, message))
