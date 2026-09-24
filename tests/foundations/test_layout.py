@@ -90,17 +90,19 @@ def test_checks_name_the_token_and_the_fix():
          "layout.columns.tablet (8) has fewer columns than layout.columns.phone (12); a wider "
          "viewport never loses columns"),
         ("target-size-minimum", "2.5.8", comfortable,
-         "layout.target.min (density:comfortable) is 20px; WCAG 2.5.8 asks for 24px targets "
-         "here, so give it a value of 24px or more"),
+         "layout.target.min (density:comfortable) is 20px; WCAG 2.5.8 asks for "
+         "targets of at least 24 by 24 CSS px, so give it a value of 24px or more"),
         ("target-size-minimum", "2.5.8", compact,
-         "layout.target.min (density:compact) is 20px; WCAG 2.5.8 asks for 24px targets here, "
-         "so give it a value of 24px or more"),
+         "layout.target.min (density:compact) is 20px; WCAG 2.5.8 asks for "
+         "targets of at least 24 by 24 CSS px, so give it a value of 24px or more"),
         ("target-size-comfortable", "2.5.5", comfortable,
-         "layout.target.min (density:comfortable) is 20px; WCAG 2.5.5 asks for 44px targets "
-         "here, so give it a value of 44px or more"),
+         "layout.target.min (density:comfortable) is 20px; WCAG 2.5.5 (AAA) asks for targets "
+         "of at least 44 by 44 CSS px, and we apply it at comfortable density, so give it a "
+         "value of 44px or more"),
         ("text-measure", "1.4.8", comfortable,
-         "layout.measure.text is 48rem; lines past about 80 characters tire readers (1.4.8), so "
-         "keep it at 40rem or less")]
+         "layout.measure.text is 48rem; WCAG 1.4.8 (AAA) keeps lines to 80 characters or "
+         "fewer, and 40rem is our approximation of that width for body text, so keep it at "
+         "40rem or less")]
 
 
 def _one_role(path, type_, alias, modes=None):
@@ -128,8 +130,9 @@ def test_compact_overrides_are_checked():
     report = gate(ts, [], CHECKS, raise_on_fail=False)
     assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures] == [
         ("text-measure", "1.4.8", "density:compact",
-         "layout.measure.text is 60rem in density:compact; lines past about 80 characters tire "
-         "readers (1.4.8), so keep it at 40rem or less")]
+         "layout.measure.text is 60rem in density:compact; WCAG 1.4.8 (AAA) keeps lines to 80 "
+         "characters or fewer, and 40rem is our approximation of that width for body text, so "
+         "keep it at 40rem or less")]
 
     ts = _one_role("layout.breakpoint.laptop", "dimension", "{layout.x.b}",
                    {"density:compact": "{layout.x.a}"})
@@ -228,12 +231,13 @@ def test_the_target_fix_names_only_tokens_the_set_has():
     report = gate(ts, [], CHECKS, raise_on_fail=False)
     messages = [f.message for f in report.failures]
     assert messages == [
-        "layout.target.min (density:comfortable) is 20px; WCAG 2.5.8 asks for 24px targets "
-        "here, so point it at layout.width.32 (32px) or a larger step",
-        "layout.target.min (density:compact) is 20px; WCAG 2.5.8 asks for 24px targets here, "
-        "so point it at layout.width.32 (32px) or a larger step",
-        "layout.target.min (density:comfortable) is 20px; WCAG 2.5.5 asks for 44px targets "
-        "here, so point it at layout.width.44 (44px) or a larger step"]
+        "layout.target.min (density:comfortable) is 20px; WCAG 2.5.8 asks for targets of at "
+        "least 24 by 24 CSS px, so point it at layout.width.32 (32px) or a larger step",
+        "layout.target.min (density:compact) is 20px; WCAG 2.5.8 asks for targets of at least "
+        "24 by 24 CSS px, so point it at layout.width.32 (32px) or a larger step",
+        "layout.target.min (density:comfortable) is 20px; WCAG 2.5.5 (AAA) asks for targets of "
+        "at least 44 by 44 CSS px, and we apply it at comfortable density, so point it at "
+        "layout.width.44 (44px) or a larger step"]
     named = [n for m in messages for n in re.findall(r"\b(?:layout|space)\.[a-z0-9.-]*[a-z0-9]", m)]
     assert named and all(ts.has(n) for n in named)
     assert not ts.has("layout.width.24")
@@ -247,5 +251,6 @@ def test_without_widths_the_target_fix_falls_back_to_a_space_step():
     ts.add(Token("layout.target.min", "dimension", "{layout.x.t}", layer="semantic"))
     report = gate(ts, [], CHECKS, raise_on_fail=False)
     assert [f.message for f in report.failures] == [
-        "layout.target.min (density:comfortable) is 40px; WCAG 2.5.5 asks for 44px targets "
-        "here, so point it at space.12 (48px) or a larger step"]
+        "layout.target.min (density:comfortable) is 40px; WCAG 2.5.5 (AAA) asks for targets of "
+        "at least 44 by 44 CSS px, and we apply it at comfortable density, so point it at "
+        "space.12 (48px) or a larger step"]

@@ -27,7 +27,8 @@ MARGIN = {"phone": (5, 4), "tablet": (8, 6), "laptop": (12, 8), "desktop": (16, 
 COMPACT_FLOOR = 2  # space units, 8px
 CONTAINERS = (1120, 1280, 1440)
 MEASURE_REM = {"text": 38, "form": 32}
-MAX_TEXT_MEASURE_REM = 40  # about 80 characters of body text
+# Our approximation of the 80 characters WCAG 1.4.8 sets as the widest line.
+MAX_TEXT_MEASURE_REM = 40
 TARGET_PX = {"comfortable": 44, "compact": 32}
 MIN_TARGET_PX, COMFORTABLE_TARGET_PX = 24, 44
 
@@ -150,22 +151,27 @@ def _step_at_least(ts: TokenSet, floor: float, mode: str) -> str:
     return f"give it a value of {floor}px or more"
 
 
-def _target(ts: TokenSet, mode: str, floor: int, criterion: str) -> List[str]:
+def _target(ts: TokenSet, mode: str, floor: int, asks: str) -> List[str]:
     p = "layout.target.min"
     if not _typed(ts, p) or _px(ts, p, mode) >= floor:
         return []
-    return [f"{p} ({mode}) is {_px(ts, p, mode):g}px; WCAG {criterion} asks for {floor}px "
-            f"targets here, so {_step_at_least(ts, floor, mode)}"]
+    return [f"{p} ({mode}) is {_px(ts, p, mode):g}px; {asks}, so "
+            f"{_step_at_least(ts, floor, mode)}"]
 
 
 def _target_minimum(ts: TokenSet, mode: str) -> List[str]:
-    return _target(ts, mode, MIN_TARGET_PX, "2.5.8")
+    return _target(ts, mode, MIN_TARGET_PX, "WCAG 2.5.8 asks for targets of at least "
+                   f"{MIN_TARGET_PX} by {MIN_TARGET_PX} CSS px")
 
 
 def _target_comfortable(ts: TokenSet, mode: str) -> List[str]:
+    """2.5.5 does not vary by density; applying it at comfortable density
+    only is our choice, and the message says so."""
     if COMPACT in mode:
         return []
-    return _target(ts, mode, COMFORTABLE_TARGET_PX, "2.5.5")
+    return _target(ts, mode, COMFORTABLE_TARGET_PX, "WCAG 2.5.5 (AAA) asks for targets of at "
+                   f"least {COMFORTABLE_TARGET_PX} by {COMFORTABLE_TARGET_PX} CSS px, and we "
+                   "apply it at comfortable density")
 
 
 def _measure(ts: TokenSet, mode: str) -> List[str]:
@@ -174,8 +180,9 @@ def _measure(ts: TokenSet, mode: str) -> List[str]:
         return []
     rem = _px(ts, p, mode) / 16
     if rem > MAX_TEXT_MEASURE_REM:
-        return [f"{p} is {rem:g}rem{_where(mode)}; lines past about 80 characters tire readers "
-                f"(1.4.8), so keep it at {MAX_TEXT_MEASURE_REM}rem or less"]
+        return [f"{p} is {rem:g}rem{_where(mode)}; WCAG 1.4.8 (AAA) keeps lines to 80 "
+                f"characters or fewer, and {MAX_TEXT_MEASURE_REM}rem is our approximation of "
+                f"that width for body text, so keep it at {MAX_TEXT_MEASURE_REM}rem or less"]
     return []
 
 
