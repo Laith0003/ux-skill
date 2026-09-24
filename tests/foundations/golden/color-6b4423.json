@@ -9,6 +9,7 @@
   "--color-action-primary: var(--color-brand-300);",
   "--color-focus-ring-inverse: var(--color-brand-700);",
   "--color-focus-ring: var(--color-brand-200);",
+  "--color-line-input: var(--color-neutral-400);",
   "--color-line-selected: var(--color-brand-300);",
   "--color-line-subtle: var(--color-neutral-700);",
   "--color-scrim: var(--color-shade-60);",
@@ -342,7 +343,7 @@
   "--color-surface-inverse: var(--color-neutral-900);",
   "--color-surface-selected: var(--color-brand-100);",
   "--color-text-default: var(--color-neutral-900);",
-  "--color-text-muted: var(--color-neutral-600);",
+  "--color-text-muted: var(--color-neutral-700);",
   "--color-text-inverse: var(--color-neutral-50);",
   "--color-text-link: var(--color-brand-600);",
   "--color-text-disabled: var(--color-neutral-400);",
@@ -981,7 +982,7 @@
   "color.text.disabled": "{color.neutral.400}",
   "color.text.inverse": "{color.neutral.50}",
   "color.text.link": "{color.brand.600}",
-  "color.text.muted": "{color.neutral.600}",
+  "color.text.muted": "{color.neutral.700}",
   "color.text.on-action": "{color.base.white}",
   "color.text.on-danger": "{color.base.white}",
   "color.tint.10": {
@@ -1400,7 +1401,7 @@
    "light-high": "#000E1D"
   },
   "color.line.input": {
-   "dark": "#78706A",
+   "dark": "#908984",
    "dark-high": "#A9A39F",
    "light": "#78706A",
    "light-high": "#4B4540"
@@ -1744,7 +1745,7 @@
   "color.text.muted": {
    "dark": "#A9A39F",
    "dark-high": "#C3BEBB",
-   "light": "#615A55",
+   "light": "#4B4540",
    "light-high": "#36312D"
   },
   "color.text.on-action": {

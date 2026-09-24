@@ -9,6 +9,7 @@
   "--color-action-primary: var(--color-brand-400);",
   "--color-focus-ring-inverse: var(--color-brand-700);",
   "--color-focus-ring: var(--color-brand-200);",
+  "--color-line-input: var(--color-neutral-400);",
   "--color-line-selected: var(--color-brand-300);",
   "--color-line-subtle: var(--color-neutral-700);",
   "--color-scrim: var(--color-shade-60);",
@@ -1400,7 +1401,7 @@
    "light-high": "#000E1D"
   },
   "color.line.input": {
-   "dark": "#6E7279",
+   "dark": "#878B91",
    "dark-high": "#A2A5AA",
    "light": "#6E7279",
    "light-high": "#43464C"

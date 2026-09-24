@@ -1679,6 +1679,7 @@
             "layer": "semantic",
             "modes": {
               "contrast:high": "{color.neutral.700}",
+              "scheme:dark": "{color.neutral.400}",
               "scheme:dark,contrast:high": "{color.neutral.300}"
             }
           }

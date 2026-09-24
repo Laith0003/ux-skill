@@ -359,6 +359,7 @@
   --color-action-danger-pressed: var(--color-danger-200);
   --color-action-disabled: var(--color-neutral-700);
   --color-line-subtle: var(--color-neutral-700);
+  --color-line-input: var(--color-neutral-400);
   --color-line-selected: var(--color-brand-300);
   --color-focus-ring: var(--color-brand-200);
   --color-focus-ring-inverse: var(--color-brand-700);
@@ -408,6 +409,7 @@
     --color-action-danger-pressed: var(--color-danger-200);
     --color-action-disabled: var(--color-neutral-700);
     --color-line-subtle: var(--color-neutral-700);
+    --color-line-input: var(--color-neutral-400);
     --color-line-selected: var(--color-brand-300);
     --color-focus-ring: var(--color-brand-200);
     --color-focus-ring-inverse: var(--color-brand-700);

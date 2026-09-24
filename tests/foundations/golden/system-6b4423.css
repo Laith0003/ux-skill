@@ -84,7 +84,7 @@
   --color-surface-inverse: var(--color-neutral-900);
   --color-surface-selected: var(--color-brand-100);
   --color-text-default: var(--color-neutral-900);
-  --color-text-muted: var(--color-neutral-600);
+  --color-text-muted: var(--color-neutral-700);
   --color-text-inverse: var(--color-neutral-50);
   --color-text-link: var(--color-brand-600);
   --color-text-disabled: var(--color-neutral-400);
@@ -372,6 +372,7 @@
   --color-action-danger-pressed: var(--color-danger-200);
   --color-action-disabled: var(--color-neutral-700);
   --color-line-subtle: var(--color-neutral-700);
+  --color-line-input: var(--color-neutral-400);
   --color-line-selected: var(--color-brand-300);
   --color-focus-ring: var(--color-brand-200);
   --color-focus-ring-inverse: var(--color-brand-700);
@@ -421,6 +422,7 @@
     --color-action-danger-pressed: var(--color-danger-200);
     --color-action-disabled: var(--color-neutral-700);
     --color-line-subtle: var(--color-neutral-700);
+    --color-line-input: var(--color-neutral-400);
     --color-line-selected: var(--color-brand-300);
     --color-focus-ring: var(--color-brand-200);
     --color-focus-ring-inverse: var(--color-brand-700);
@@ -581,11 +583,6 @@
   --type-text-fine-font-weight: var(--type-weight-400);
   --type-text-fine-letter-spacing: var(--type-tracking-0);
   --type-text-fine-line-height: var(--type-leading-arabic-3);
-  --type-text-code-font-family: var(--type-face-code);
-  --type-text-code-font-size: var(--type-size-arabic-2);
-  --type-text-code-font-weight: var(--type-weight-400);
-  --type-text-code-letter-spacing: var(--type-tracking-0);
-  --type-text-code-line-height: var(--type-leading-arabic-3);
 }
 
 :root[data-motion="reduced"] {

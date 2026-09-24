@@ -1679,6 +1679,7 @@
             "layer": "semantic",
             "modes": {
               "contrast:high": "{color.neutral.700}",
+              "scheme:dark": "{color.neutral.400}",
               "scheme:dark,contrast:high": "{color.neutral.300}"
             }
           }
@@ -4751,16 +4752,7 @@
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
-            "layer": "semantic",
-            "modes": {
-              "direction:rtl": {
-                "fontFamily": "{type.face.code}",
-                "fontSize": "{type.size.arabic.2}",
-                "fontWeight": "{type.weight.400}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.3}"
-              }
-            }
+            "layer": "semantic"
           }
         }
       }
