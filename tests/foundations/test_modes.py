@@ -101,6 +101,9 @@ def test_raw_names_the_token_and_fix_on_a_tie():
     ({"scheme:light": "{color.n.2}"}, "base-mode-override"),
     ({"density:compact": "{color.n.2}"}, "axis-not-allowed"),
     ({"scheme:dark": "{color.n.2}", "contrast:high": "{color.n.3}"}, "mode-ambiguous"),
+    # two keys for one context: reported as the duplicate, never as a tie
+    ({"dark": "{color.n.2}", "scheme:dark": "{color.n.2}"}, "duplicate-mode-key"),
+    ({"dark": "{color.n.2}", "scheme:dark": "{color.n.3}"}, "duplicate-mode-key"),
 ])
 def test_validate_guards_override_keys(modes, rule):
     found = [p for p in validate(_color_set(**modes)) if p.token == "color.surface.page"]
@@ -180,12 +183,47 @@ def test_dtcg_records_the_axes_and_round_trips_them():
     assert dict(back.axes) == dict(AXES) and to_dtcg(back) == doc
 
 
-def test_dtcg_with_its_own_axes_round_trips():
-    ts = TokenSet({"scheme": ("light", "dark", "dim")})
-    ts.add(Token("color.a", "color", "#FFFFFF"))
-    ts.add(Token("color.b", "color", "#222222"))
-    ts.add(Token("color.page", "color", "{color.a}", modes={"scheme:dim": "{color.b}"},
+@pytest.mark.parametrize("modes, message", [
+    ({"dark": "{color.n.2}", "scheme:dark": "{color.n.3}"},
+     "color.surface.page has override keys 'dark' and 'scheme:dark', which name the same "
+     "context 'scheme:dark'; keep one of them"),
+    ({"scheme:dark,contrast:high": "{color.n.2}", "contrast:high,dark": "{color.n.2}"},
+     "color.surface.page has override keys 'scheme:dark,contrast:high' and "
+     "'contrast:high,dark', which name the same context 'scheme:dark,contrast:high'; "
+     "keep one of them"),
+])
+def test_duplicate_mode_key_names_both_keys_and_the_fix(modes, message):
+    found = [p for p in validate(_color_set(**modes)) if p.token == "color.surface.page"]
+    assert [(p.rule, p.message) for p in found] == [("duplicate-mode-key", message)]
+
+
+THREE_VALUES = r"axis 'scheme' has values \['light', 'dark', 'dim'\]; a mode axis has exactly " \
+               r"two values, the base first; split a third value into its own axis"
+
+
+def test_an_axis_with_a_third_value_is_rejected():
+    with pytest.raises(ValueError, match=THREE_VALUES):
+        TokenSet({"scheme": ("light", "dark", "dim")})
+
+
+def test_dtcg_axes_with_a_third_value_are_rejected():
+    doc = to_dtcg(_color_set())
+    doc["$extensions"][EXT]["axes"]["scheme"] = ["light", "dark", "dim"]
+    with pytest.raises(ValueError, match=THREE_VALUES):
+        from_dtcg(doc)
+
+
+def test_dtcg_with_its_own_two_value_axis_round_trips():
+    ts = TokenSet({"scheme": ("light", "dark"), "tone": ("warm", "cool")})
+    ts.add(Token("brand.a", "color", "#FFFFFF"))
+    ts.add(Token("brand.b", "color", "#222222"))
+    ts.add(Token("brand.page", "color", "{brand.a}", modes={"tone:cool": "{brand.b}"},
                  layer="semantic"))
-    back = from_dtcg(to_dtcg(ts))
-    assert back.axes["scheme"] == ("light", "dark", "dim")
-    assert back.resolve("color.page", "scheme:dim") == "#222222"
+    assert validate(ts) == []
+    doc = to_dtcg(ts)
+    back = from_dtcg(doc)
+    assert dict(back.axes) == {"scheme": ("light", "dark"), "tone": ("warm", "cool")}
+    assert back.resolve("brand.page", "tone:cool") == "#222222"
+    assert back.resolve("brand.page", "cool") == "#222222"
+    assert to_dtcg(back) == doc
+    assert ':root[data-tone="cool"] {\n  --brand-page: var(--brand-b);\n}' in to_css(back)

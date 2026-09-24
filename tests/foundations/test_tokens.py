@@ -91,11 +91,18 @@ def test_unknown_mode_raises_on_raw():
         ts.raw("color.surface.page", "dakr")
 
 
-@pytest.mark.parametrize("axes", [{"scheme": ("light",)}, {"Scheme": ("light", "dark")},
+@pytest.mark.parametrize("axes", [{"Scheme": ("light", "dark")},
                                   {"scheme": ("light", "light")}, {"scheme": ("light", "dark mode")}])
 def test_unusable_axes_are_rejected(axes):
     with pytest.raises(ValueError, match=r"is not usable; name axes and values with lowercase"):
         TokenSet(axes)
+
+
+@pytest.mark.parametrize("values", [("light",), ("light", "dark", "dim"), ()])
+def test_an_axis_needs_exactly_two_values(values):
+    with pytest.raises(ValueError, match=r"axis 'scheme' has values .*; a mode axis has exactly "
+                                         r"two values, the base first"):
+        TokenSet({"scheme": values})
 
 
 def test_get_unknown_path_names_the_fix():

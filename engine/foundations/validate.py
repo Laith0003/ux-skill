@@ -11,7 +11,8 @@ import re
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
-from engine.foundations.modes import FOUNDATION_AXES, ModeError, contexts, parse, select, sparse
+from engine.foundations.modes import (
+    FOUNDATION_AXES, ModeError, contexts, join, parse, select, sparse)
 from engine.foundations.tokens import AliasError, Token, TokenSet, alias_target, is_alias
 from engine.foundations.values import TYPES, TYPOGRAPHY_FIELDS, css_names
 
@@ -111,12 +112,20 @@ def _check_mode_keys(ts: TokenSet, t: Token, out: List[Problem]) -> Optional[Lis
     or None when a key does not parse (the token's contexts are unknown)."""
     used: List[str] = []
     allowed = FOUNDATION_AXES.get(t.path.split(".", 1)[0])
+    first_key: Dict[str, str] = {}
     for key in t.modes:
         try:
             pairs = parse(key, ts.axes)
         except ModeError as exc:
             out.append(Problem(t.path, "unknown-mode", f"{t.path}: {exc}"))
             return None
+        context = join(pairs, ts.axes)
+        if context in first_key:
+            out.append(Problem(t.path, "duplicate-mode-key",
+                f"{t.path} has override keys {first_key[context]!r} and {key!r}, which name the "
+                f"same context {context!r}; keep one of them"))
+        else:
+            first_key[context] = key
         for axis, value in pairs.items():
             if value == ts.axes[axis][0]:
                 out.append(Problem(t.path, "base-mode-override",
@@ -154,7 +163,11 @@ def validate(ts: TokenSet) -> List[Problem]:
         seen_raws: List[Any] = []
         for mode in contexts(token_axes, ts.axes):
             value, tied = select(t.value, t.modes, mode, ts.axes)
-            if tied:
+            # Keys naming one context that tie are duplicate-mode-key,
+            # already reported; check the first key's value and skip the
+            # resolve below, which would raise on the tie.
+            duplicate_tie = len({join(parse(k, ts.axes), ts.axes) for k in tied}) == 1
+            if tied and not duplicate_tie:
                 out.append(Problem(t.path, "mode-ambiguous",
                     f"{t.path} has overrides {tied} that all apply in {mode} with different "
                     f"values; add an override for {sparse(mode, ts.axes)!r} or make them agree"))
@@ -181,6 +194,8 @@ def validate(ts: TokenSet) -> List[Problem]:
                     f"{t.path} ({mode or 'base'}) holds {raw!r}; alias a primitive instead")]
             if found:
                 out.extend(found)
+                continue
+            if duplicate_tie:
                 continue
             try:
                 ts.resolve(t.path, mode)

@@ -83,12 +83,16 @@ class TokenSet:
 
     def __init__(self, axes: Mapping[str, Tuple[str, ...]] = AXES):
         for name, values in axes.items():
-            if not _AXIS_NAME.fullmatch(name) or len(values) < 2 or len(set(values)) != len(values) \
+            if len(values) != 2:
+                raise ValueError(
+                    f"axis {name!r} has values {list(values)}; a mode axis has exactly two "
+                    "values, the base first; split a third value into its own axis")
+            if not _AXIS_NAME.fullmatch(name) or len(set(values)) != len(values) \
                     or not all(isinstance(v, str) and _AXIS_NAME.fullmatch(v) for v in values):
                 raise ValueError(
                     f"axis {name!r} with values {list(values)} is not usable; name axes and values "
-                    "with lowercase letters, digits and '-', and give each axis two or more "
-                    "distinct values, the base first")
+                    "with lowercase letters, digits and '-', and give each axis two distinct "
+                    "values, the base first")
         self.axes: Mapping[str, Tuple[str, ...]] = MappingProxyType(
             {name: tuple(values) for name, values in axes.items()})
         self._tokens: Dict[str, Token] = {}
