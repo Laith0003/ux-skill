@@ -10,6 +10,7 @@ from engine.contracts.library import SEED_DIR, load_folder, seed_contracts, seed
 from engine.contracts.schema import ContractError
 from engine.contracts.yamlite import loads
 from engine.foundations import build_system
+from engine.foundations.modes import contexts
 from engine.synthesizer.axes import AxisValues
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -91,3 +92,93 @@ def test_load_folder_names_every_problem_and_an_empty_folder(tmp_path):
     with pytest.raises(ContractError) as err:
         load_folder(tmp_path)
     assert [p.rule for p in err.value.problems] == ["missing-key", "yaml"]
+
+
+def _seed(name):
+    return next(c for c in seed_contracts() if c.name == name)
+
+
+def _bound(c, part, prop, variant, state):
+    """The binding that applies to `part.prop` for one variant and state: a
+    binding for the state beats a stateless one, then the one with more
+    conditions wins. None when nothing applies."""
+    fits = [b for b in c.tokens if b.part == part and b.property == prop
+            and all(variant.get(k) == v for k, v in b.when)
+            and b.state in (None, state)]
+    if not fits:
+        return None
+    return max(fits, key=lambda b: (b.state is not None, len(b.when))).role
+
+
+def test_secondary_and_ghost_buttons_are_complete_in_every_state():
+    c = _seed("button")
+    for emphasis in ("secondary", "ghost"):
+        for intent in ("neutral", "danger"):
+            v = {"emphasis": emphasis, "intent": intent}
+            assert _bound(c, "container", "fill", v, "pressed") \
+                == _bound(c, "container", "fill", v, "hover") is not None, v
+            for state in c.states:
+                width = _bound(c, "container", "border-width", v, state)
+                color = _bound(c, "container", "border-color", v, state)
+                edged = emphasis == "secondary" or state in ("hover", "pressed")
+                assert (width is not None, color is not None) == (edged, edged), (v, state)
+                if edged:
+                    assert width == "border.outline", (v, state)
+                    assert (color == "color.text.disabled") == (state == "disabled"), (v, state)
+            assert _bound(c, "label", "text", v, "disabled") == "color.text.disabled"
+
+
+def _all_contexts(ts):
+    return contexts(list(ts.axes), ts.axes)
+
+
+@pytest.mark.parametrize("name,part,surface", [("dialog", "close", "color.surface.raised"),
+                                               ("status-banner", "dismiss", None)])
+def test_close_and_dismiss_are_specified_targets(name, part, surface):
+    c = _seed(name)
+    assert "focus" in c.states and c.a11y.target == "layout.target.min"
+    role = {b.property: b.role for b in c.tokens if b.part == part and b.state is None}
+    focus = {b.property for b in c.tokens if b.part == part and b.state == "focus"}
+    assert focus == {"focus-ring", "focus-ring-width", "focus-ring-offset"}
+    assert role["min-size"] == "layout.target.min"
+    for brand in BRANDS[:3]:
+        ts = build_system(AXES[0], brand).tokens
+        # WCAG 2.5.8 sets 24 by 24 CSS px; the bound role meets it in every context.
+        for mode in _all_contexts(ts):
+            size = ts.resolve(role["min-size"], mode)
+            assert size["unit"] == "px" and size["value"] >= 24, (brand, mode)
+    backgrounds = [surface] if surface else [
+        b.role for b in c.tokens if b.part == "container" and b.property == "fill"]
+    for bg in backgrounds:
+        assert any(r.fg == role["icon"] and r.bg == bg and r.minimum == 3
+                   and r.criterion == "1.4.11" for r in c.contrast), (name, bg)
+
+
+def test_the_status_banner_draws_an_edge_paired_on_every_surface():
+    c = _seed("status-banner")
+    edge = {b.property: b.role for b in c.tokens
+            if b.part == "container" and not b.when and b.state is None}
+    assert edge["border-width"] == "border.outline"
+    assert edge["border-color"].startswith("color.line.")
+    assert any(r.fg == edge["border-color"] and r.bg == "surfaces" and r.minimum == 3
+               and r.criterion == "1.4.11" and r.high is None for r in c.contrast)
+
+
+def test_the_unchecked_box_has_a_boundary_on_every_row_fill_it_sits_on():
+    c = _seed("selectable-row")
+    v = {"selection": "multiple"}
+    assert _bound(c, "leading", "border-width", v, "default") in ("border.outline",
+                                                                   "border.emphasis")
+    line = _bound(c, "leading", "border-color", v, "default")
+    assert line == "color.line.input"
+    for state in ("default", "hover", "pressed", "focus"):
+        assert _bound(c, "leading", "border-color", v, state) == line, state
+    assert _bound(c, "leading", "border-color", v, "selected") == "color.line.selected"
+    assert _bound(c, "leading", "border-color", v, "disabled") == "color.text.disabled"
+    assert _bound(c, "leading", "border-color", {"selection": "single"}, "default") is None
+    # The unchecked box sits on the list's surfaces (default, focus) and on
+    # the hover and pressed fill; each pairing is 3:1 under WCAG 1.4.11.
+    row_fills = {_bound(c, "container", "fill", v, s) for s in ("hover", "pressed")}
+    for bg in ["surfaces"] + sorted(row_fills):
+        assert any(r.fg == line and r.bg == bg and r.minimum == 3 and r.criterion == "1.4.11"
+                   for r in c.contrast), bg

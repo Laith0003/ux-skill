@@ -12,7 +12,7 @@ parts:
   - {name: close, rtlBehavior: logical}
 variants:
   - {name: purpose, values: [standard, destructive], default: standard}
-states: [default]
+states: [default, focus]
 tokens:
   - {part: scrim, property: fill, role: color.scrim}
   - {part: scrim, property: layer, role: elevation.order.overlay}
@@ -37,11 +37,19 @@ tokens:
   - {part: body, property: text, role: color.text.default}
   - {part: body, property: font, role: type.text.body}
   - {part: actions, property: gap, role: space.control.gap}
+  # close: an icon-only button with its own target, focus ring and color
+  - {part: close, property: icon, role: color.text.muted}
+  - {part: close, property: min-size, role: layout.target.min}
+  - {part: close, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: close, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: close, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
 contrast:
   - {fg: color.text.default, bg: color.surface.raised, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: color.surface.raised, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.focus.ring, bg: color.surface.raised, minimum: 3, criterion: "1.4.11"}
 surfaces: [color.surface.page]
 a11y:
-  target: none
+  target: layout.target.min
   label: localized
   cue: none
 copy:
@@ -55,6 +63,7 @@ usage:
     - Move focus into the dialog when it opens, keep it there, and return it to the control that opened it
     - Close on the escape key and on the close button; close on a scrim click only when nothing is lost
     - Put the confirming action at the end of the action row in reading order
+    - Give the close button an accessible name in the product's language, and a target of at least 24 by 24 CSS px (WCAG 2.5.8); the bound target size meets it
   dont:
     - Do not open a dialog from a dialog
     - Do not put a form longer than one short task in a dialog; give it a page

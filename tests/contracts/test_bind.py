@@ -1,17 +1,19 @@
 """Contracts against a built token set: roles exist, are semantic and have
-the right type; a fill that matches its surface declares an edge; every
-declared pairing is measured in every color context."""
+the right type; a fill below our edge floor against its surface declares an
+edge; every declared pairing is measured in every color context."""
 import copy
+import dataclasses
 
 import pytest
 
-from engine.contracts.bind import binding_problems, pairings_of, validate_contracts
+from engine.contracts.bind import EDGE_FLOOR, binding_problems, pairings_of, validate_contracts
+from engine.contracts.library import seed_contracts
 from engine.contracts.schema import contract_problems
 from engine.contracts.yamlite import loads
 from engine.foundations import build_system
+from engine.foundations.color_math import contrast
 from engine.foundations.gate import Pairing
 from engine.synthesizer.axes import AxisValues
-
 from tests.contracts.test_schema import TOGGLE
 
 TS = build_system(AxisValues(*[0.5] * 7), "#3366FF").tokens
@@ -41,9 +43,48 @@ def test_a_contract_with_an_edge_binds_cleanly():
 def test_a_fill_that_equals_its_surface_declares_an_edge():
     assert messages(contract(with_edge=False)) == [
         ("container-edge",
-         "toggle: track.fill is color.surface.sunken, which equals color.surface.page in "
-         "scheme:light,contrast:high, so the track has no visible edge there; bind border-width "
-         "to border.outline and a border-color on track for the same variant and state")]
+         "toggle: track.fill is color.surface.sunken, which measures 1.00:1 against "
+         "color.surface.page in scheme:light,contrast:high, below our container edge floor of "
+         "1.2:1 (WCAG sets no minimum for a container's edge), so the track has no visible edge "
+         "there; bind border-width to border.outline and a border-color on track for the same "
+         "variant and state")]
+
+
+def test_the_edge_floor_is_ours_and_measured():
+    assert EDGE_FLOOR == 1.2
+
+
+def _without_edges(c):
+    return dataclasses.replace(c, tokens=tuple(b for b in c.tokens
+                                               if not b.property.startswith("border-")))
+
+
+def test_a_fill_near_but_not_equal_to_its_surface_declares_an_edge():
+    # In high contrast the status soft fills sit a few hex steps off the
+    # surfaces, never on them: an equality rule misses every one, the floor
+    # catches each.
+    banner = next(c for c in seed_contracts() if c.name == "status-banner")
+    high = ("scheme:light,contrast:high", "scheme:dark,contrast:high")
+    for status in ("info", "success", "warning", "danger"):
+        fill = f"color.status.{status}.soft"
+        near = [(s, m) for s in banner.surfaces for m in high
+                if contrast(TS.resolve(fill, m), TS.resolve(s, m)) < EDGE_FLOOR]
+        assert near and all(TS.resolve(fill, m) != TS.resolve(s, m) for s, m in near), status
+    assert binding_problems(banner, TS) == []
+    found = binding_problems(_without_edges(banner), TS)
+    assert [p.rule for p in found] == ["container-edge"] * 4
+    for p, status in zip(found, ("info", "success", "warning", "danger")):
+        fill = f"color.status.{status}.soft"
+        assert p.message.startswith(f"status-banner: container.fill (status={status}) is {fill}, "
+                                    "which measures 1.")
+        ratio = float(p.message.split("measures ")[1].split(":1")[0])
+        assert 1.0 <= ratio < EDGE_FLOOR
+        assert "below our container edge floor of 1.2:1 (WCAG sets no minimum" in p.message
+
+
+def test_a_fill_that_clears_the_edge_floor_needs_no_edge():
+    c = contract(lambda d: d["tokens"][0].update(role="color.action.primary"), with_edge=False)
+    assert messages(c) == []
 
 
 def test_an_edge_for_another_state_does_not_count():

@@ -23,16 +23,21 @@ tokens:
   - {part: container, property: fill, role: color.action.danger-hover, when: {emphasis: primary, intent: danger}, state: hover}
   - {part: container, property: fill, role: color.action.danger-pressed, when: {emphasis: primary, intent: danger}, state: pressed}
   - {part: label, property: text, role: color.text.on-danger, when: {emphasis: primary, intent: danger}}
-  # secondary: an edge and brand text, the selected surface on hover
+  # secondary: an edge and brand text in every state, the selected surface
+  # on hover and press; disabled turns the edge to the disabled color
   - {part: container, property: border-width, role: border.outline, when: {emphasis: secondary}}
   - {part: container, property: border-color, role: color.line.selected, when: {emphasis: secondary, intent: neutral}}
   - {part: container, property: border-color, role: color.status.danger.strong, when: {emphasis: secondary, intent: danger}}
+  - {part: container, property: border-color, role: color.text.disabled, when: {emphasis: secondary}, state: disabled}
   - {part: label, property: text, role: color.text.link, when: {emphasis: secondary, intent: neutral}}
   - {part: label, property: text, role: color.status.danger.text, when: {emphasis: secondary, intent: danger}}
   - {part: container, property: fill, role: color.surface.selected, when: {emphasis: secondary, intent: neutral}, state: hover}
   - {part: container, property: fill, role: color.status.danger.soft, when: {emphasis: secondary, intent: danger}, state: hover}
-  # ghost: text only; on hover the secondary fill and edge appear, since
-  # the tinted fill alone can match a card in high contrast
+  - {part: container, property: fill, role: color.surface.selected, when: {emphasis: secondary, intent: neutral}, state: pressed}
+  - {part: container, property: fill, role: color.status.danger.soft, when: {emphasis: secondary, intent: danger}, state: pressed}
+  # ghost: text only at rest and when disabled; on hover and press the
+  # secondary fill and edge appear, since the tinted fill alone can match a
+  # card in high contrast
   - {part: label, property: text, role: color.text.link, when: {emphasis: ghost, intent: neutral}}
   - {part: label, property: text, role: color.status.danger.text, when: {emphasis: ghost, intent: danger}}
   - {part: container, property: fill, role: color.surface.selected, when: {emphasis: ghost, intent: neutral}, state: hover}
@@ -40,6 +45,11 @@ tokens:
   - {part: container, property: border-width, role: border.outline, when: {emphasis: ghost}, state: hover}
   - {part: container, property: border-color, role: color.line.selected, when: {emphasis: ghost, intent: neutral}, state: hover}
   - {part: container, property: border-color, role: color.status.danger.strong, when: {emphasis: ghost, intent: danger}, state: hover}
+  - {part: container, property: fill, role: color.surface.selected, when: {emphasis: ghost, intent: neutral}, state: pressed}
+  - {part: container, property: fill, role: color.status.danger.soft, when: {emphasis: ghost, intent: danger}, state: pressed}
+  - {part: container, property: border-width, role: border.outline, when: {emphasis: ghost}, state: pressed}
+  - {part: container, property: border-color, role: color.line.selected, when: {emphasis: ghost, intent: neutral}, state: pressed}
+  - {part: container, property: border-color, role: color.status.danger.strong, when: {emphasis: ghost, intent: danger}, state: pressed}
   # disabled, every emphasis
   - {part: container, property: fill, role: color.action.disabled, when: {emphasis: primary}, state: disabled}
   - {part: label, property: text, role: color.text.disabled, state: disabled}
@@ -94,6 +104,7 @@ usage:
     - Use secondary or ghost for every other action on the same view
     - Put the icon at the start of the label in both directions; mirror only a glyph that points
     - Keep the radius the same in every state
+    - Apply the binding for a state over the one without a state, and the one with more variant conditions over the one with fewer
   dont:
     - Do not use a button to navigate inside running text; use a link
     - Do not color a button green or amber to signal an outcome; show outcomes in a status banner

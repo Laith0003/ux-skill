@@ -32,9 +32,19 @@ tokens:
   - {part: container, property: padding-inline, role: space.card.padding}
   - {part: container, property: padding-block, role: space.card.padding}
   - {part: container, property: gap, role: space.control.gap}
+  # an edge on every status: in high contrast the soft fills come within a
+  # few steps of the surfaces
+  - {part: container, property: border-width, role: border.outline}
+  - {part: container, property: border-color, role: color.line.input}
   - {part: action, property: focus-ring, role: color.focus.ring, state: focus}
   - {part: action, property: focus-ring-width, role: border.focus-ring.width, state: focus}
   - {part: action, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  # dismiss: an icon-only button with its own target, focus ring and color
+  - {part: dismiss, property: icon, role: color.text.default}
+  - {part: dismiss, property: min-size, role: layout.target.min}
+  - {part: dismiss, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: dismiss, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: dismiss, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
 contrast:
   - {fg: color.text.default, bg: color.status.info.soft, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.default, bg: color.status.success.soft, minimum: 4.5, criterion: "1.4.3"}
@@ -48,6 +58,11 @@ contrast:
   - {fg: color.status.success.strong, bg: color.status.success.soft, minimum: 3, criterion: "1.4.11"}
   - {fg: color.status.warning.strong, bg: color.status.warning.soft, minimum: 3, criterion: "1.4.11"}
   - {fg: color.status.danger.strong, bg: color.status.danger.soft, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.text.default, bg: color.status.info.soft, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.text.default, bg: color.status.success.soft, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.text.default, bg: color.status.warning.soft, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.text.default, bg: color.status.danger.soft, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   # The ring sits on the tinted fill. 3:1 holds in every context; the
   # high-contrast 4.5:1 floor cannot hold against the tint, the page and
   # the ring's other duties at once, so this pairing keeps 3:1 there.
@@ -57,7 +72,7 @@ contrast:
   - {fg: color.focus.ring, bg: color.status.danger.soft, minimum: 3, criterion: "1.4.11", high: 3}
 surfaces: [color.surface.page, color.surface.card, color.surface.raised, color.surface.sunken]
 a11y:
-  target: none
+  target: layout.target.min
   label: localized
   cue: each status has its own icon shape and the title names the status in words
 copy:
@@ -71,6 +86,7 @@ usage:
     - Show one banner per region, the most severe first
     - Keep a danger banner until the problem is fixed; let the others be dismissed
     - Announce a danger banner at once to assistive technology and the others politely
+    - Give the dismiss button an accessible name in the product's language, and a target of at least 24 by 24 CSS px (WCAG 2.5.8); the bound target size meets it
   dont:
     - Do not use a banner for a success the result already shows
     - Do not tell status apart by color alone; the icon and the title carry it too

@@ -7,7 +7,8 @@ for the subset they use. schema checks a contract on its own; bind checks
 it against a built token set. library reads a folder of contracts and the
 seed contracts that ship in seed/.
 """
-from engine.contracts.bind import EDGE_ROLES, binding_problems, pairings_of, validate_contracts
+from engine.contracts.bind import (
+    EDGE_FLOOR, EDGE_ROLES, binding_problems, pairings_of, validate_contracts)
 from engine.contracts.library import SEED_DIR, load_folder, seed_contracts, seed_sources
 from engine.contracts.schema import (
     CATEGORIES, PROMOTION, PROPERTY_TYPES, RTL_BEHAVIORS, STATES, STATUSES, A11y, Binding,
@@ -17,8 +18,8 @@ from engine.contracts.yamlite import YamlError, loads
 
 __all__ = [
     "A11y", "Binding", "CATEGORIES", "Contract", "ContractError", "ContractProblem",
-    "ContrastRule", "EDGE_ROLES", "PROMOTION", "PROPERTY_TYPES", "Part", "Provenance",
-    "RTL_BEHAVIORS", "SEED_DIR", "STATES", "STATUSES", "Variant", "YamlError",
+    "ContrastRule", "EDGE_FLOOR", "EDGE_ROLES", "PROMOTION", "PROPERTY_TYPES", "Part",
+    "Provenance", "RTL_BEHAVIORS", "SEED_DIR", "STATES", "STATUSES", "Variant", "YamlError",
     "binding_problems", "contract_problems", "load_contract", "load_folder", "loads",
     "pairings_of", "promotion_problems", "read_contract", "seed_contracts", "seed_sources",
     "validate_contracts",

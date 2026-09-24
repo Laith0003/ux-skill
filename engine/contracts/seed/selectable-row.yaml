@@ -28,6 +28,12 @@ tokens:
   - {part: container, property: border-width, role: border.active, state: selected}
   - {part: container, property: border-color, role: color.line.selected, state: selected}
   - {part: leading, property: icon, role: color.line.selected, state: selected}
+  # the check box of multiple selection: its boundary shows on every fill
+  # the row takes while unchecked, and turns to the selected line when checked
+  - {part: leading, property: border-width, role: border.emphasis, when: {selection: multiple}}
+  - {part: leading, property: border-color, role: color.line.input, when: {selection: multiple}}
+  - {part: leading, property: border-color, role: color.line.selected, when: {selection: multiple}, state: selected}
+  - {part: leading, property: border-color, role: color.text.disabled, when: {selection: multiple}, state: disabled}
   - {part: content, property: text, role: color.text.disabled, state: disabled}
   - {part: container, property: radius, role: radius.control}
   - {part: container, property: padding-inline, role: space.control.padding-inline}
@@ -45,6 +51,7 @@ contrast:
   - {fg: color.text.default, bg: color.surface.selected, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.muted, bg: color.surface.selected, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.input, bg: color.surface.sunken, minimum: 3, criterion: "1.4.11"}
   - {fg: color.line.selected, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   - {fg: color.line.selected, bg: color.surface.selected, minimum: 3, criterion: "1.4.11"}
   - {fg: color.focus.ring, bg: surfaces, minimum: 3, criterion: "1.4.11"}

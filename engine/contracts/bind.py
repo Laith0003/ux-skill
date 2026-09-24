@@ -1,9 +1,10 @@
 """Check contracts against a built token set.
 
 Every role a contract names exists, is semantic and has the type its use
-needs. A container whose fill equals a surface it sits on, in any color
-context, declares an edge (border-width at border.outline or heavier, and
-a border color) for that fill. Every contrast pairing the contract
+needs. A container whose fill measures below EDGE_FLOOR against a surface
+it sits on, in any color context, declares an edge (border-width at
+border.outline or heavier, and a border color) for that fill. The floor is
+ours: WCAG sets no minimum for the edge of a container. Every contrast pairing the contract
 declares is measured in every scheme and contrast context through the
 same gate the build uses. validate_contracts adds the checks across a set
 of contracts: unique names, and a deprecated contract's replacement exists
@@ -14,12 +15,17 @@ from __future__ import annotations
 from typing import Iterable, List, Optional, Sequence, Tuple
 
 from engine.contracts.schema import CRITERIA, PROPERTY_TYPES, Binding, Contract, ContractProblem
+from engine.foundations.color_math import contrast
 from engine.foundations.gate import OPAQUE_PAIRING, Pairing, cite, gate
 from engine.foundations.modes import contexts
 from engine.foundations.tokens import AliasError, TokenSet, opaque_hex
 
 # Border-width roles heavy enough to draw a container's edge.
 EDGE_ROLES: Tuple[str, ...] = ("border.outline", "border.emphasis", "border.active")
+# Our floor for telling a container's fill from the surface under it. A fill
+# that measures below it against a surface, in any color context, draws an
+# edge there. WCAG sets no minimum for a container's edge, so this is ours.
+EDGE_FLOOR = 1.2
 
 
 def _problem(contract: Contract, rule: str, message: str) -> ContractProblem:
@@ -54,6 +60,15 @@ def _covers(edge: Binding, fill: Binding) -> bool:
         and (edge.state is None or edge.state == fill.state)
 
 
+def _opaque(ts: TokenSet, role: str, mode: str) -> Optional[str]:
+    """The role's color in `mode` as #RRGGBB, or None when it is translucent
+    or not a hex color (the gate reports those for pairings)."""
+    value = opaque_hex(ts.resolve(role, mode))
+    if isinstance(value, str) and len(value) == 7 and value.startswith("#"):
+        return value
+    return None
+
+
 def _edge_problems(contract: Contract, ts: TokenSet) -> List[ContractProblem]:
     out: List[ContractProblem] = []
     for fill in (b for b in contract.tokens if b.property == "fill"):
@@ -64,19 +79,26 @@ def _edge_problems(contract: Contract, ts: TokenSet) -> List[ContractProblem]:
         color = any(_covers(e, fill) and e.property == "border-color" for e in contract.tokens)
         if width and color:
             continue
+        worst: Optional[Tuple[float, str, str]] = None
         for surface in contract.surfaces:
             if not (ts.has(surface) and ts.get(surface).type == "color"):
                 continue
-            same = next((m for m in _color_contexts(ts)
-                         if opaque_hex(ts.resolve(fill.role, m))
-                         == opaque_hex(ts.resolve(surface, m))), None)
-            if same is not None:
-                out.append(_problem(
-                    contract, "container-edge",
-                    f"{fill.label()} is {fill.role}, which equals {surface} in {same}, so the "
-                    f"{fill.part} has no visible edge there; bind border-width to border.outline "
-                    f"and a border-color on {fill.part} for the same variant and state"))
-                break
+            for mode in _color_contexts(ts):
+                a, b = _opaque(ts, fill.role, mode), _opaque(ts, surface, mode)
+                if a is None or b is None:
+                    continue
+                ratio = contrast(a, b)
+                if ratio < EDGE_FLOOR and (worst is None or ratio < worst[0]):
+                    worst = (ratio, surface, mode)
+        if worst is not None:
+            ratio, surface, mode = worst
+            out.append(_problem(
+                contract, "container-edge",
+                f"{fill.label()} is {fill.role}, which measures {int(ratio * 100) / 100:.2f}:1 "
+                f"against {surface} in {mode}, below our container edge floor of "
+                f"{EDGE_FLOOR:g}:1 (WCAG sets no minimum for a container's edge), so the "
+                f"{fill.part} has no visible edge there; bind border-width to border.outline "
+                f"and a border-color on {fill.part} for the same variant and state"))
     return out
 
 
