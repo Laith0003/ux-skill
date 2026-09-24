@@ -79,6 +79,10 @@ def test_rtl_switches_face_size_leading_and_drops_tracking():
     assert ltr["letterSpacing"]["value"] < 0 and rtl["letterSpacing"]["value"] == 0
     code = ts.resolve("type.text.code", "direction:rtl")
     assert code["fontFamily"][0] == "IBM Plex Mono"
+    # Arabic sizing is for Arabic glyphs: code keeps its Latin size and
+    # leading, so it needs no rtl override at all.
+    assert code == ts.resolve("type.text.code", "direction:ltr")
+    assert ts.get("type.text.code").modes == {}
 
 
 def test_body_text_is_open_and_never_tight():
@@ -247,6 +251,22 @@ def test_a_role_pointing_back_at_the_latin_face_fails():
 def test_the_code_role_keeps_its_face_without_an_override():
     ts = _generated_with("type.text.code")
     assert validate(ts) == [] and _arabic_failures(ts) == []
+
+
+def test_code_is_exempt_from_the_arabic_face_size_and_leading_rules():
+    code = generate_type(axes()).tokens.get("type.text.code").value
+    # Arabic size and leading under rtl: allowed, not required.
+    arabic_metrics = dict(code, fontSize="{type.size.arabic.2}",
+                          lineHeight="{type.leading.arabic.3}")
+    ts = _generated_with("type.text.code", arabic_metrics)
+    assert validate(ts) == [] and _arabic_failures(ts) == []
+    # Letter spacing still breaks Arabic joins in comments and strings.
+    tight = dict(code, letterSpacing="{type.tracking.1}")
+    ts = _generated_with("type.text.code", tight)
+    assert validate(ts) == []
+    assert _arabic_failures(ts) == [
+        "type.text.code (direction:rtl) spaces letters by -0.188px; letter spacing breaks "
+        "Arabic joins, so point it at type.tracking.0"]
 
 
 def test_a_latin_only_build_passes_the_arabic_rules():

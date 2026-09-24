@@ -5,11 +5,12 @@ with an Arabic variant under dir="rtl".
 The type_personality axis picks the face pairing (geometric, neutral,
 humanist), each a Latin face with an Arabic face designed to sit beside
 it. The contrast axis sets the scale ratio and heading weight; the density
-axis sets how open body text is. Under dir="rtl" every role switches to
-the Arabic face at a size 1 to 2px larger than the Latin one at the same
-step, with taller lines and no letter spacing, which would break the
-joins between Arabic letters. Sizes are rem so they follow the reader's
-default text size.
+axis sets how open body text is. Under dir="rtl" every role but code
+switches to the Arabic face at a size 1 to 2px larger than the Latin one
+at the same step, with taller lines and no letter spacing, which would
+break the joins between Arabic letters. Code keeps its monospace face and
+its Latin size and leading in both directions: Arabic sizing is for Arabic
+glyphs. Sizes are rem so they follow the reader's default text size.
 
 Checks: body and fine print keep minimum sizes in both directions;
 running text keeps line height 1.5 or more (WCAG 1.4.8) and never
@@ -143,9 +144,9 @@ def generate_type(axes: AxisValues, arabic: bool = True) -> Generated:
                  "letterSpacing": "{type.tracking.%d}" % track_i,
                  "lineHeight": "{type.leading.latin.%d}" % lead_i}
         modes = {}
-        if arabic:
+        if arabic and face != "code":
             modes["direction:rtl"] = {
-                "fontFamily": "{type.face.%s}" % ("code" if face == "code" else "arabic"),
+                "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.%d}" % step, "fontWeight": w,
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.%d}" % lead_i}
@@ -208,17 +209,18 @@ def _first(family: Any) -> str:
 
 def _arabic(ts: TokenSet, mode: str) -> List[str]:
     """Under rtl every text role but code reads the Arabic face, at the
-    Arabic size, with taller lines and no letter spacing. A set without
+    Arabic size, with taller lines, and every role, code included, drops
+    letter spacing (Arabic comments and strings sit in code too). Code
+    keeps its monospace face and its Latin size and leading. A set without
     type.face.arabic is Latin-only and has nothing to check."""
     if "direction:rtl" not in mode or not _typed(ts, ARABIC_FACE):
         return []
     arabic_face = ts.resolve(ARABIC_FACE, mode)
     out = []
     for role in _roles(ts, ROLES):
-        if ROLES[role][4] == "code":
-            continue  # code keeps its monospace face in both directions
+        code = ROLES[role][4] == "code"
         rtl, ltr = ts.resolve(role, mode), ts.resolve(role, "direction:ltr")
-        if rtl["fontFamily"] != arabic_face:
+        if not code and rtl["fontFamily"] != arabic_face:
             out.append(f"{role} (direction:rtl) is set in {_first(rtl['fontFamily'])}, not "
                        f"{ARABIC_FACE}; Arabic text needs its own face, so point its "
                        f"direction:rtl fontFamily at {ARABIC_FACE}")
@@ -226,6 +228,8 @@ def _arabic(ts: TokenSet, mode: str) -> List[str]:
             out.append(f"{role} (direction:rtl) spaces letters by "
                        f"{rtl['letterSpacing']['value']:g}px; letter spacing breaks Arabic "
                        "joins, so point it at type.tracking.0")
+        if code:
+            continue
         grow = _px(rtl["fontSize"]) - _px(ltr["fontSize"])
         if not 1 <= grow <= 2:
             out.append(f"{role} (direction:rtl) is {grow:+g}px against its Latin size; Arabic "
