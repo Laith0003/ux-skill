@@ -62,7 +62,10 @@ _SEMANTIC: Dict[str, Tuple[str, str]] = {
     # A separator sits on card and raised too, so it starts one step off
     # both (neutral.900 and neutral.800 in dark).
     "color.line.subtle": ("color.neutral.200", "color.neutral.700"),
-    "color.line.input": ("color.neutral.500", "color.neutral.500"),
+    # A field border sits on every surface a control does. In dark, raised
+    # is neutral.800, where neutral.500 falls under 3:1 for every seed, so
+    # dark starts one step lighter.
+    "color.line.input": ("color.neutral.500", "color.neutral.400"),
     "color.line.selected": ("color.brand.600", "color.brand.300"),
     "color.focus.ring": ("color.brand.700", "color.brand.200"),
     "color.focus.ring-inverse": ("color.brand.300", "color.brand.700"),
@@ -110,47 +113,75 @@ for _s in STATUS_HUES:
     _HIGH[f"color.status.{_s}.strong"] = (f"color.{_s}.800", f"color.{_s}.200")
 HIGH_CONTRAST: Mapping[str, Tuple[str, str]] = MappingProxyType(_HIGH)
 
-_TEXT_BGS = ("color.surface.page", "color.surface.card")
-# Every surface body text can sit on.
-_ALL_BGS = _TEXT_BGS + ("color.surface.sunken", "color.surface.raised")
+# Coverage by construction. Every role read as text pairs with every surface
+# text can sit on, at the text minimum (WCAG 1.4.3 4.5:1; 1.4.6 7:1 in high
+# contrast). Every line or ring that identifies a control or its state pairs
+# with every surface a control sits on, at the non-text minimum (WCAG 1.4.11
+# 3:1; our 4.5:1 floor in high contrast). A role or surface added to a table
+# gets every pairing it needs; build_pairings writes them.
+TEXT_ROLES: Tuple[str, ...] = ("color.text.default", "color.text.muted", "color.text.link") \
+    + tuple(f"color.status.{s}.text" for s in STATUS_HUES)
+TEXT_SURFACES: Tuple[str, ...] = ("color.surface.page", "color.surface.card",
+                                  "color.surface.sunken", "color.surface.raised",
+                                  "color.surface.selected")
+LINE_ROLES: Tuple[str, ...] = ("color.line.input", "color.line.selected", "color.focus.ring")
+LINE_SURFACES: Tuple[str, ...] = ("color.surface.page", "color.surface.card",
+                                  "color.surface.sunken", "color.surface.raised")
 _FILL_STATES = {
     "color.action.primary": ("color.action.primary-hover", "color.action.primary-pressed"),
     "color.action.danger": ("color.action.danger-hover", "color.action.danger-pressed"),
 }
-PAIRINGS: Tuple[Pairing, ...] = tuple(
-    # Body text also sits on the selected surface and on status soft fills
-    # (alert and banner copy).
-    [Pairing("color.text.default", bg, 4.5, "1.4.3") for bg in _ALL_BGS + ("color.surface.selected",)
-     + tuple(f"color.status.{s}.soft" for s in STATUS_HUES)]
-    + [Pairing("color.text.muted", bg, 4.5, "1.4.3") for bg in _ALL_BGS
-       + tuple(f"color.status.{s}.soft" for s in STATUS_HUES)]
-    + [Pairing("color.text.link", bg, 4.5, "1.4.3") for bg in _ALL_BGS]
-    + [Pairing("color.text.inverse", "color.surface.inverse", 4.5, "1.4.3")]
-    + [Pairing(on, state, 4.5, "1.4.3")
-       for fill, on in (("color.action.primary", "color.text.on-action"),
-                        ("color.action.danger", "color.text.on-danger"))
-       for state in (fill,) + _FILL_STATES[fill]]
-    + [Pairing(f"color.status.{s}.text", bg, 4.5, "1.4.3")
-       for s in STATUS_HUES for bg in _ALL_BGS + (f"color.status.{s}.soft",)]
-    + [Pairing(f"color.status.{s}.on-strong", f"color.status.{s}.strong", 4.5, "1.4.3")
-       for s in STATUS_HUES]
-    + [Pairing("color.line.input", bg, 3.0, "1.4.11") for bg in _TEXT_BGS]
-    # A selected edge sits on every surface the focus ring does.
-    + [Pairing("color.line.selected", bg, 3.0, "1.4.11") for bg in _ALL_BGS]
-    + [Pairing(state, "color.surface.page", 3.0, "1.4.11")
-       for fill in _FILL_STATES for state in (fill,) + _FILL_STATES[fill]]
-    + [Pairing(f"color.status.{s}.strong", "color.surface.page", 3.0, "1.4.11")
-       for s in STATUS_HUES]
-    # A focus indicator is a non-text part: 1.4.11 sets its 3:1 against the
-    # colors next to it (2.4.7 asks only that focus be visible). The border
-    # foundation guarantees border.focus-ring.offset of at least 1px, so the
-    # colors next to the ring are the surfaces, never the fill it surrounds;
-    # the ring is not paired with the button fill.
-    + [Pairing("color.focus.ring", bg, 3.0, "1.4.11") for bg in _ALL_BGS]
-    # One ring cannot also stand out from the inverse surface, so that
-    # surface gets its own.
-    + [Pairing("color.focus.ring-inverse", "color.surface.inverse", 3.0, "1.4.11")]
-)
+
+
+def _extra_text_bgs(role: str) -> Tuple[str, ...]:
+    """Fills a text role also sits on, beyond the surfaces: body and muted
+    copy on every status soft fill (alert and banner copy), status text on
+    its own soft fill."""
+    if role in ("color.text.default", "color.text.muted"):
+        return tuple(f"color.status.{s}.soft" for s in STATUS_HUES)
+    if role.startswith("color.status.") and role.endswith(".text"):
+        return (role[:-len("text")] + "soft",)
+    return ()
+
+
+def build_pairings(text_roles: Tuple[str, ...] = TEXT_ROLES,
+                   text_surfaces: Tuple[str, ...] = TEXT_SURFACES,
+                   line_roles: Tuple[str, ...] = LINE_ROLES,
+                   line_surfaces: Tuple[str, ...] = LINE_SURFACES) -> Tuple[Pairing, ...]:
+    """Every color pairing: the two coverage tables crossed, plus the
+    pairings that belong to one fill or one surface."""
+    return tuple(
+        [Pairing(role, bg, 4.5, "1.4.3")
+         for role in text_roles for bg in text_surfaces + _extra_text_bgs(role)]
+        + [Pairing("color.text.inverse", "color.surface.inverse", 4.5, "1.4.3")]
+        + [Pairing(on, state, 4.5, "1.4.3")
+           for fill, on in (("color.action.primary", "color.text.on-action"),
+                            ("color.action.danger", "color.text.on-danger"))
+           for state in (fill,) + _FILL_STATES[fill]]
+        + [Pairing(f"color.status.{s}.on-strong", f"color.status.{s}.strong", 4.5, "1.4.3")
+           for s in STATUS_HUES]
+        # A focus indicator is a non-text part: 1.4.11 sets its 3:1 against
+        # the colors next to it (2.4.7 asks only that focus be visible). The
+        # border foundation guarantees border.focus-ring.offset of at least
+        # 1px, so the colors next to the ring are the surfaces, never the
+        # fill it surrounds; the ring is not paired with the button fill.
+        + [Pairing(role, bg, 3.0, "1.4.11") for role in line_roles for bg in line_surfaces]
+        + [Pairing(state, "color.surface.page", 3.0, "1.4.11")
+           for fill in _FILL_STATES for state in (fill,) + _FILL_STATES[fill]]
+        + [Pairing(f"color.status.{s}.strong", "color.surface.page", 3.0, "1.4.11")
+           for s in STATUS_HUES]
+        # One ring cannot also stand out from the inverse surface, so that
+        # surface gets its own.
+        + [Pairing("color.focus.ring-inverse", "color.surface.inverse", 3.0, "1.4.11")]
+    )
+
+
+PAIRINGS: Tuple[Pairing, ...] = build_pairings()
+
+
+def _paired_with(fg: str) -> Tuple[str, ...]:
+    """Every background PAIRINGS pairs `fg` with, in declaration order."""
+    return tuple(p.bg for p in PAIRINGS if p.fg == fg)
 
 
 @dataclass(frozen=True)
@@ -291,7 +322,7 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
       text on the fill and on every state   >= 4.5 (WCAG 1.4.3), 7.0 high (WCAG 1.4.6)
       fill and every state on the page      >= 3.0 (WCAG 1.4.11), 4.5 high (our floor)
       every state's hex differs from the fill's and from each other's
-      ring on every text surface            >= 3.0 (WCAG 1.4.11), 4.5 high (our floor)
+      ring on every surface PAIRINGS names  >= 3.0 (WCAG 1.4.11), 4.5 high (our floor)
     The ring has no minimum against the fill: the border foundation keeps
     page color between an element and its ring.
     When nothing clears, the closest candidate is kept and noted; the gate
@@ -305,7 +336,7 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
     need_text = _need(g.on, g.fill, mode)
     need_fill = _need(g.fill, "color.surface.page", mode)
     rings = _ring_candidates(mode, defaults[g.ring]) if g.ring else []
-    ring_bgs = [(prims[pick[mode][bg]], _need(g.ring, bg, mode)) for bg in _ALL_BGS] \
+    ring_bgs = [(prims[pick[mode][bg]], _need(g.ring, bg, mode)) for bg in _paired_with(g.ring)] \
         if g.ring else []
 
     def ring_low(ring: str) -> float:

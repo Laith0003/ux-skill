@@ -697,3 +697,110 @@ def test_generated_line_subtle_differs_from_card_and_raised(seed):
         subtle = ts.resolve("color.line.subtle", mode)
         for bg in ("color.surface.card", "color.surface.raised"):
             assert subtle != ts.resolve(bg, mode), f"{seed} {bg} ({mode})"
+
+
+# Pairing coverage by construction: every text role pairs with every surface
+# text can sit on, and every line and ring role with every surface a control
+# sits on, generated from two tables so a new surface or role cannot be missed.
+
+_TEXT_ROLES = ("color.text.default", "color.text.muted", "color.text.link",
+               "color.status.danger.text", "color.status.warning.text",
+               "color.status.success.text", "color.status.info.text")
+_TEXT_SURFACES = _SURFACES + ("color.surface.selected",)
+_LINE_ROLES = ("color.line.input", "color.line.selected", "color.focus.ring")
+
+
+def test_the_coverage_tables_name_every_text_and_line_role():
+    assert color_module.TEXT_ROLES == _TEXT_ROLES
+    assert color_module.TEXT_SURFACES == _TEXT_SURFACES
+    assert color_module.LINE_ROLES == _LINE_ROLES
+    assert color_module.LINE_SURFACES == _SURFACES
+
+
+def test_every_text_and_line_role_pairs_with_every_surface_in_its_table():
+    from engine.foundations.gate import Pairing
+    for role in _TEXT_ROLES:
+        for bg in _TEXT_SURFACES:
+            assert Pairing(role, bg, 4.5, "1.4.3") in PAIRINGS, (role, bg)
+    for role in _LINE_ROLES:
+        for bg in _SURFACES:
+            assert Pairing(role, bg, 3.0, "1.4.11") in PAIRINGS, (role, bg)
+    assert len(set(PAIRINGS)) == len(PAIRINGS)
+
+
+def test_every_other_pairing_is_kept():
+    from engine.foundations.gate import Pairing
+    softs = [f"color.status.{s}.soft" for s in color_module.STATUS_HUES]
+    kept = ([Pairing(r, soft, 4.5, "1.4.3") for r in ("color.text.default", "color.text.muted")
+             for soft in softs]
+            + [Pairing(f"color.status.{s}.text", f"color.status.{s}.soft", 4.5, "1.4.3")
+               for s in color_module.STATUS_HUES]
+            + [Pairing("color.text.inverse", "color.surface.inverse", 4.5, "1.4.3")]
+            + [Pairing(on, state, 4.5, "1.4.3")
+               for fill, on in (("color.action.primary", "color.text.on-action"),
+                                ("color.action.danger", "color.text.on-danger"))
+               for state in (fill, fill + "-hover", fill + "-pressed")]
+            + [Pairing(f"color.status.{s}.on-strong", f"color.status.{s}.strong", 4.5, "1.4.3")
+               for s in color_module.STATUS_HUES]
+            + [Pairing(state, "color.surface.page", 3.0, "1.4.11")
+               for fill in ("color.action.primary", "color.action.danger")
+               for state in (fill, fill + "-hover", fill + "-pressed")]
+            + [Pairing(f"color.status.{s}.strong", "color.surface.page", 3.0, "1.4.11")
+               for s in color_module.STATUS_HUES]
+            + [Pairing("color.focus.ring-inverse", "color.surface.inverse", 3.0, "1.4.11")])
+    for p in kept:
+        assert p in PAIRINGS, p
+    covered = len(_TEXT_ROLES) * len(_TEXT_SURFACES) + len(_LINE_ROLES) * len(_SURFACES)
+    assert len(PAIRINGS) == covered + len(kept)
+
+
+def test_adding_a_surface_or_a_role_to_a_table_adds_its_pairings():
+    from engine.foundations.gate import Pairing
+    base = color_module.build_pairings()
+    assert base == PAIRINGS
+    more = color_module.build_pairings(
+        text_roles=_TEXT_ROLES + ("color.text.extra",),
+        text_surfaces=_TEXT_SURFACES + ("color.surface.extra",),
+        line_roles=_LINE_ROLES + ("color.line.extra",),
+        line_surfaces=_SURFACES + ("color.surface.extra",))
+    added = set(more) - set(base)
+    assert added == (
+        {Pairing("color.text.extra", bg, 4.5, "1.4.3")
+         for bg in _TEXT_SURFACES + ("color.surface.extra",)}
+        | {Pairing(r, "color.surface.extra", 4.5, "1.4.3") for r in _TEXT_ROLES}
+        | {Pairing("color.line.extra", bg, 3.0, "1.4.11")
+           for bg in _SURFACES + ("color.surface.extra",)}
+        | {Pairing(r, "color.surface.extra", 3.0, "1.4.11") for r in _LINE_ROLES})
+    assert set(base) <= set(more)
+
+
+def test_the_ring_solver_reads_the_ring_surfaces_from_the_pairings(monkeypatch):
+    # The group solver picks the ring against the surfaces PAIRINGS names
+    # for it, so a surface added to the line table reaches the solver too.
+    assert color_module._paired_with("color.focus.ring") == _SURFACES
+    extra = color_module.build_pairings(line_surfaces=_SURFACES + ("color.surface.selected",))
+    monkeypatch.setattr(color_module, "PAIRINGS", extra)
+    assert color_module._paired_with("color.focus.ring") == _TEXT_SURFACES
+
+
+@pytest.mark.parametrize("seed", SEEDS + _SWEEP_SEEDS)
+def test_input_borders_and_muted_text_clear_every_surface(seed):
+    # The two gaps the final review measured: an input border on the raised
+    # surface in dark mode, and muted text on the selected surface.
+    ts = generate_color(AXES, seed).tokens
+    for mode in COLOR_CONTEXTS:
+        high = "contrast:high" in mode
+        line = ts.resolve("color.line.input", mode)
+        for bg in _SURFACES:
+            assert contrast(line, ts.resolve(bg, mode)) >= (4.5 if high else 3.0), (bg, mode)
+        muted = ts.resolve("color.text.muted", mode)
+        for bg in _TEXT_SURFACES:
+            assert contrast(muted, ts.resolve(bg, mode)) >= (7.0 if high else 4.5), (bg, mode)
+
+
+@pytest.mark.parametrize("seed", SEEDS + _SWEEP_SEEDS)
+def test_dark_input_border_starts_where_it_clears_the_raised_surface(seed):
+    # The default is the fix, not a retune on every build.
+    assert SEMANTIC["color.line.input"][1] == "color.neutral.400"
+    notes = generate_color(AXES, seed).notes
+    assert not [n for n in notes if n.startswith("color.line.input (scheme:dark,contrast:standard)")]
