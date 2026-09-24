@@ -112,3 +112,16 @@ def test_no_skip_line_when_nothing_skipped():
         gate(failing_set(), [TEXT_ON_PAGE])
     assert "Skipped" not in str(exc.value)
     assert "Skipped" not in gate(generate_color(AXES, "#3366FF").tokens, PAIRINGS).summary()
+
+
+def test_check_naming_an_unknown_axis_is_refused():
+    # A misspelled axis would otherwise be dropped, and the check would run
+    # once in the base context while looking like it covered every mode.
+    from engine.foundations.gate import Check
+    ts = TokenSet()
+    ts.add(Token("color.base.white", "color", "#FFFFFF"))
+    typo = Check("space.min", "custom", lambda ts, mode: [], axes=("densty",))
+    with pytest.raises(ValueError) as exc:
+        gate(ts, [], checks=[typo])
+    msg = str(exc.value)
+    assert "space.min" in msg and "densty" in msg and "density" in msg

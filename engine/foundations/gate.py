@@ -152,7 +152,12 @@ def gate(ts: TokenSet, pairings: Iterable[Pairing], checks: Iterable[Check] = ()
                 report.findings.append(
                     GateFinding(p.fg, p.bg, mode, ratio, p.minimum, p.criterion))
     for c in checks:
-        for mode in contexts([a for a in c.axes if a in ts.axes], ts.axes):
+        unknown = [a for a in c.axes if a not in ts.axes]
+        if unknown:
+            raise ValueError(
+                f"check {c.id} names the axes {unknown}, which this token set does not "
+                f"have; use one of {list(ts.axes)}")
+        for mode in contexts(list(c.axes), ts.axes):
             report.rules_checked += 1
             for message in c.run(ts, mode):
                 report.failures.append(CheckFailure(c.id, c.criterion, mode, message))
