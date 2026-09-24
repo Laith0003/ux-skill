@@ -90,3 +90,22 @@ def test_build_system_prints_shadows_and_their_dark_switch():
     assert "  --elevation-shadow-light-1: 0px 1px 3px 0px #00000017, 0px 0px 1px 0px #0000000B;" in css
     dark = css.split(':root[data-theme="dark"] {')[1].split("}")[0]
     assert "  --elevation-dialog: var(--elevation-shadow-dark-4);" in dark
+
+
+def _layer(y, blur, color):
+    px = lambda v: {"value": v, "unit": "px"}
+    return {"color": color, "offsetX": px(0), "offsetY": px(y), "blur": px(blur), "spread": px(0)}
+
+
+def test_single_layer_shadows_are_measured_not_crashed_on():
+    # DTCG allows a shadow to be one layer object instead of a list.
+    ts = TokenSet()
+    ts.add(Token("elevation.shadow.one", "shadow", _layer(4, 8, "#00000033")))
+    ts.add(Token("elevation.shadow.two", "shadow", [_layer(2, 4, "#00000033")]))
+    ts.add(Token("elevation.card", "shadow", "{elevation.shadow.one}", layer="semantic"))
+    ts.add(Token("elevation.lifted", "shadow", "{elevation.shadow.two}", layer="semantic"))
+    order = [c for c in CHECKS if c.id == "elevation-order"][0]
+    msgs = order.run(ts, "")
+    assert len(msgs) == 1 and "elevation.lifted" in msgs[0]
+    report = gate(ts, [], checks=CHECKS, raise_on_fail=False)
+    assert not report.passed

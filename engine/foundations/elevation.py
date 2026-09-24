@@ -78,11 +78,18 @@ def _alpha(hex8: str) -> int:
     return int(hex8[7:9], 16) if len(hex8) == 9 else 255
 
 
+def _key(ts: TokenSet, role: str, mode: str) -> dict:
+    """The first (key) layer of a role's shadow; a shadow may be one layer
+    object or a list of layers."""
+    value = ts.resolve(role, mode)
+    return value[0] if isinstance(value, list) else value
+
+
 def _order(ts: TokenSet, mode: str) -> List[str]:
     present = [r for r in ROLES if ts.has(r)]
     out = []
     for a, b in zip(present, present[1:]):
-        ka, kb = ts.resolve(a, mode)[0], ts.resolve(b, mode)[0]
+        ka, kb = _key(ts, a, mode), _key(ts, b, mode)
         if not (kb["offsetY"]["value"] > ka["offsetY"]["value"]
                 and kb["blur"]["value"] > ka["blur"]["value"]
                 and _alpha(kb["color"]) >= _alpha(ka["color"])):
@@ -98,8 +105,8 @@ def _dark_strength(ts: TokenSet, mode: str) -> List[str]:
     return [f"{r} is weaker in dark than in light; dark surfaces need at least the light "
             "shadow strength to read, so point its dark override at a stronger shadow"
             for r in ROLES if ts.has(r)
-            and _alpha(ts.resolve(r, "scheme:dark")[0]["color"])
-            < _alpha(ts.resolve(r, "scheme:light")[0]["color"])]
+            and _alpha(_key(ts, r, "scheme:dark")["color"])
+            < _alpha(_key(ts, r, "scheme:light")["color"])]
 
 
 def _stacking(ts: TokenSet, mode: str) -> List[str]:
