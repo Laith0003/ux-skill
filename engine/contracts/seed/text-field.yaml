@@ -77,6 +77,7 @@ usage:
     - Size the field for the longest expected value in the longest language, since Arabic runs 10 to 25 percent longer
     - Let phone numbers, codes and email addresses run left to right inside a right-to-left form
     - Show the error when the person leaves the field or submits, not on every keystroke
+    - Apply the binding for a state over the one without a state, and the one with more variant conditions over the one with fewer
   dont:
     - Do not use the placeholder as the label
     - Do not mark an error with a red border alone

@@ -1,0 +1,89 @@
+# Border
+
+## Summary
+
+Border sets the width of every stroke: separators, the edges of containers and controls, emphasis, selection and the focus ring, plus the stroke styles. Widths are whole pixels. Border colors are color roles (color.line.subtle, color.line.input, color.line.selected); a border role carries a width only. Border does not govern the contrast of a stroke; color does.
+
+## Principles
+
+- **A job before a weight.** Every stroke does one job: separate, enclose, emphasize, show selection or show focus. Pick the role for the job, and the width follows.
+- **Border, space or surface.** A border is one of three ways to separate things; use it only when space and a surface change are not enough.
+- **Fewer lines, clearer structure.** Each extra line raises the visual noise and weakens the lines that matter.
+- **Enclose or divide.** An outline says these things belong together; a separator says these siblings are apart. They are different roles even at the same width.
+- **State needs more than color.** A selected or emphasized edge is heavier than a resting one.
+- **Stable meaning.** A role keeps its job across components and screens, and is never borrowed for its width.
+- **Density changes how many lines, not their width.** Dense data views lean on separators to guide the eye; spacious views lean on space.
+
+## Roles
+
+- `border.separator`: a line between siblings inside one parent, such as table rows or menu groups.
+- `border.outline`: the resting edge of a container or a control, such as a card, a field or a secondary button.
+- `border.emphasis`: an edge that must outrank the edges around it, such as a highlighted module, a field in error or the boundary of a check box.
+- `border.active`: the edge of a selected or active item, such as a selected row or an active tab.
+- `border.focus-ring.width`: the width of the keyboard focus ring; at least 2px and wider than an outline.
+- `border.focus-ring.offset`: the gap of surface color between an element and its focus ring; at least 1px.
+- `border.style.default`: the solid stroke for every border.
+- `border.style.placeholder`: the dashed stroke of an empty drop zone or a slot waiting for content.
+
+## Choosing
+
+| Situation | Tool |
+|---|---|
+| Rows in a dense list or table need scan lines | border.separator with color.line.subtle |
+| Blocks already read as separate through spacing | space, no border |
+| A card, panel or field needs a visible edge | border.outline |
+| Related controls should read as one set | border.outline around them, or space.group.gap if proximity is enough |
+| Two sections touch and need a stronger boundary | a surface change plus space before a heavier line |
+| Major page regions | a surface change and space.region.gap |
+| A selected item or row | border.active with color.line.selected |
+| Keyboard focus | the focus ring (width and offset roles) with color.focus.ring |
+| One boundary must outrank its neighbors | border.emphasis |
+
+Emphasis and active widths are used sparingly: when they appear everywhere, the hierarchy flattens. Selection and focus are different states; one role never stands in for the other, and neither appears on something a person cannot interact with.
+
+## Modes
+
+Border varies on no axis. Widths are the same in every scheme, contrast, density, direction and motion setting. Density changes how many borders a view uses, not their width; in dense views separators replace some of the space.
+
+## Changing the system
+
+1. Read before writing: note the width each role points at before changing one.
+2. To change a job's weight, point its role at another width step, keeping emphasis and active heavier than the outline, and the separator no heavier than the outline.
+3. Keep the focus ring at least 2px and wider than the outline, and its offset at least 1px (decisions/ring-offset.md).
+4. Keep widths whole pixels; a lighter line uses a quieter color, not a thinner stroke (decisions/whole-pixel-borders.md).
+5. To add a structural job, add a role named for it; never borrow a role because its width fits.
+6. Never swap the separator and the outline: their jobs differ even when their widths match.
+
+## Audit scope
+
+Audits the width roles and the rules between them: whole pixels, the weight order, a selected edge heavier than a resting one, and a focus ring wide enough with an offset. It does not audit the color or contrast of strokes (color does) or component layout beyond the contracts.
+
+## Checks
+
+- `focus-ring`: the ring is at least 2px, wider than the outline, and has an offset of at least 1px.
+- `active-border`: the selected edge is wider than the resting outline, so selection is not shown by color alone (WCAG 1.4.1).
+- `border-weight-order`: emphasis is heavier than the outline, and the separator is no heavier than the outline.
+- `border-whole-pixels`: every width is a whole number of pixels.
+
+## Beyond the gate
+
+- An enabled control whose only edge is color.line.subtle is a finding: its edge may not reach 3:1 (WCAG 1.4.11); use color.line.input.
+- A selected state with a zero-width edge passes only when another non-color cue shows it, such as a check mark or a filled icon; record the cue.
+- A selection or focus width on a static element is a finding: it signals a state that is not there.
+- A screen whose borders outnumber its groups probably separates with lines what space already separates.
+- A focus indicator drawn with border instead of outline shifts the layout; that is a finding for the component.
+
+## Handoff notes
+
+- Border roles hold widths only; write the stroke as three properties: border-width from the role, border-style from border.style.default, and border-color from a color.line role.
+- Draw focus with outline, outline-width from border.focus-ring.width and outline-offset from border.focus-ring.offset, so it never moves the layout.
+- Use logical sides for single edges: border-block-end for a row separator, border-inline-start for a leading indicator.
+- The separator and the outline can share a value; keep both properties in the code so a later change to one does not move the other.
+
+## Common mistakes
+
+- Using the separator and the outline interchangeably because their widths match: a divider starts to read as a container edge.
+- Putting selection or focus widths on passive elements: people read a state that does not exist.
+- Adding borders where space or a surface already separates: the noise rises and real edges lose weight.
+- Drawing focus with a border: the element jumps by the ring's width.
+- A hairline border: it disappears on standard screens.

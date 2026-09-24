@@ -75,6 +75,7 @@ usage:
     - Show multiple selection with a check box in the leading slot, single selection with a check mark
     - Let the chevron point to the end of the row, so it flips under right to left
     - Keep the gap between rows at the list gap; rows at the target size need no extra spacing
+    - Apply the binding for a state over the one without a state, and the one with more variant conditions over the one with fewer
   dont:
     - Do not show selection by the tinted fill alone
     - Do not use the hover fill for selection or the selection fill for hover
