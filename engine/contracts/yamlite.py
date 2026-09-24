@@ -284,6 +284,21 @@ def _inline(text: str, source: str, number: int, depth: int = 0) -> Any:
     return _plain(text, source, number)
 
 
+def _is_item(text: str) -> bool:
+    return text == "-" or text.startswith("- ")
+
+
+def _opens_with_key(text: str, source: str, number: int) -> bool:
+    """Whether the text starts with a key and its ':' (a quoted key
+    included), so it opens a map rather than holding one value."""
+    if text[0] in "\"'":
+        _, end = _quoted(text, 0, source, number)
+        return text[end:end + 1] == ":" and text[end + 1:end + 2] in ("", " ")
+    if text[0] in "[{":
+        return False
+    return re.match(r"[^:]*?:(?: |$)", text) is not None
+
+
 def _split_key(line: _Line, source: str) -> Tuple[str, str]:
     """(key, rest) of a mapping line; rest is "" when the value is a block."""
     text = line.text
@@ -372,7 +387,7 @@ class _Block:
             if not item:
                 value, i = self.child(i, indent, False, depth)
                 out.append(value)
-            elif item[0] not in "[{\"'" and re.match(r"[^:]*?:(?: |$)", item):
+            elif _opens_with_key(item, self.source, line.number):
                 inner = _Line(line.number, indent + len(line.text) - len(item), item)
                 value, i = self.mapping(i, inner.indent,
                                         _deeper(depth, self.source, line.number), first=inner)
@@ -394,8 +409,7 @@ def loads(text: str, source: str = "<text>") -> Any:
     if first.indent != 0:
         raise _fail(source, first.number, "the first line is indented; start the document at "
                                           "the left edge")
-    if first.text[0] in "[{\"'" or (not (first.text == "-" or first.text.startswith("- "))
-                                     and not re.match(r"[^:]*?:(?: |$)", first.text)):
+    if not _is_item(first.text) and not _opens_with_key(first.text, source, first.number):
         value = _inline(first.text, source, first.number)
         if len(lines) > 1:
             raise _fail(source, lines[1].number, "text follows a complete value; a document "

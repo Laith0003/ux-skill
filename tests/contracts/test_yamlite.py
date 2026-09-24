@@ -201,3 +201,34 @@ def test_a_number_with_too_many_digits_is_refused_by_line(text):
 
 def test_the_longest_number_allowed_still_reads():
     assert loads("a: " + "9" * MAX_DIGITS) == {"a": int("9" * MAX_DIGITS)}
+
+
+@pytest.mark.parametrize("text,expected", [
+    ("'my key': 1", {"my key": 1}),
+    ('"a": 1\nb: 2', {"a": 1, "b": 2}),
+    ("'': 1", {"": 1}),
+    ("'a b':\n  c: d", {"a b": {"c": "d"}}),
+    ("'it''s': x", {"it's": "x"}),
+    ('"a: b": [1]', {"a: b": [1]}),
+    ("- 'a b': 1\n  c: 2", [{"a b": 1, "c": 2}]),
+    ('- "x": [1]\n- z', [{"x": [1]}, "z"]),
+    ("k:\n  - 'a b': 1", {"k": [{"a b": 1}]}),
+    ("'just text'", "just text"),
+    ('"a: b"', "a: b"),
+    ("- 'x'\n- \"a: b\"", ["x", "a: b"]),
+])
+def test_a_quoted_key_works_on_every_line(text, expected):
+    assert loads(text) == expected
+
+
+@pytest.mark.parametrize("plain,quoted", [
+    ("my key: 1", "'my key': 1"),
+    ("a:\n  b: 1\n  my key: 2", "a:\n  b: 1\n  'my key': 2"),
+    ("- my key: 1", "- 'my key': 1"),
+    ("a: {my key: 1}", "a: {'my key': 1}"),
+])
+def test_the_advice_for_a_key_that_is_not_simple_works(plain, quoted):
+    with pytest.raises(YamlError, match="is not a simple key; use letters, digits, '_', '.' "
+                                        "and '-', or quote it"):
+        loads(plain)
+    assert loads(quoted)
