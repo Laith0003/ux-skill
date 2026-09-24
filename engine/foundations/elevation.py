@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Tuple
 
-from engine.foundations.foundation import BrandInputs, Foundation, Generated
+from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check
 from engine.foundations.modes import compress, contexts
 from engine.foundations.tokens import Token, TokenSet
@@ -74,6 +74,16 @@ def generate_elevation(axes: AxisValues) -> Generated:
     return Generated(tokens=ts)
 
 
+# Role path -> token type: levels are shadows, the stacking order numbers.
+# The build's role-types check reports any other type once, and the checks
+# below skip it.
+ROLE_TYPES: Dict[str, str] = {**{r: "shadow" for r in ROLES}, **{r: "number" for r in ORDER}}
+
+
+def _typed(ts: TokenSet, path: str) -> bool:
+    return typed(ts, path, ROLE_TYPES)
+
+
 def _alpha(hex8: str) -> int:
     return int(hex8[7:9], 16) if len(hex8) == 9 else 255
 
@@ -86,7 +96,7 @@ def _key(ts: TokenSet, role: str, mode: str) -> dict:
 
 
 def _order(ts: TokenSet, mode: str) -> List[str]:
-    present = [r for r in ROLES if ts.has(r)]
+    present = [r for r in ROLES if _typed(ts, r)]
     out = []
     for a, b in zip(present, present[1:]):
         ka, kb = _key(ts, a, mode), _key(ts, b, mode)
@@ -118,19 +128,19 @@ def _dark_strength(ts: TokenSet, mode: str) -> List[str]:
         return []
     return [f"{r} is no stronger in dark than in light; dark surfaces need a stronger shadow "
             "than light to read, so point its scheme:dark override at a stronger shadow"
-            for r in ROLES if ts.has(r)
+            for r in ROLES if _typed(ts, r)
             and _alpha(_key(ts, r, DARK)["color"]) <= _alpha(_key(ts, r, LIGHT)["color"])]
 
 
 def _visible(ts: TokenSet, mode: str) -> List[str]:
     return [f"{r} ({mode}) casts no visible shadow; every layer is fully transparent, so "
             "point it at a shadow step with a layer above alpha 0"
-            for r in ROLES if ts.has(r) and not _dark_only(ts, [r], mode)
+            for r in ROLES if _typed(ts, r) and not _dark_only(ts, [r], mode)
             and not any(_alpha(layer["color"]) > 0 for layer in _layers(ts, r, mode))]
 
 
 def _stacking(ts: TokenSet, mode: str) -> List[str]:
-    present = [r for r in ORDER if ts.has(r)]
+    present = [r for r in ORDER if _typed(ts, r)]
     where = f" under {mode}" if mode == DARK else ""
     return [f"{b} ({ts.resolve(b, mode):g}) does not stack above {a} ({ts.resolve(a, mode):g})"
             f"{where}; keep the order {', '.join(r.rsplit('.', 1)[1] for r in ORDER)}"
@@ -150,4 +160,5 @@ def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
     return generate_elevation(axes)
 
 
-FOUNDATION = Foundation(name="elevation", generate=_generate, checks=CHECKS)
+FOUNDATION = Foundation(name="elevation", generate=_generate, checks=CHECKS,
+                        role_types=ROLE_TYPES)

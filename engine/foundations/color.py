@@ -21,7 +21,7 @@ from types import MappingProxyType
 from typing import Callable, Dict, List, Mapping, Optional, Tuple
 
 from engine.foundations.color_math import contrast, hex_to_oklch, luminance, oklch_to_hex
-from engine.foundations.foundation import BrandInputs, Foundation, Generated
+from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check, GateFinding, Pairing, cite, required
 from engine.foundations.modes import compress, contexts, parse
 from engine.foundations.ramp import STEPS, ramp
@@ -381,11 +381,20 @@ def seed_hint(ts: TokenSet, finding: GateFinding) -> str:
     return ""
 
 
+# Every semantic role is a color. The build's role-types check reports any
+# other type once, and the checks below skip it.
+ROLE_TYPES: Mapping[str, str] = MappingProxyType({role: "color" for role in SEMANTIC})
+
+
+def _typed(ts: TokenSet, path: str) -> bool:
+    return typed(ts, path, ROLE_TYPES)
+
+
 def _states_distinct(ts: TokenSet, mode: str) -> List[str]:
     out = []
     for fill, states in _FILL_STATES.items():
         chain = (fill,) + states
-        if not all(ts.has(r) for r in chain):
+        if not all(_typed(ts, r) for r in chain):
             continue
         hexes = [ts.resolve(r, mode) for r in chain]
         for i, role in enumerate(chain[1:], 1):
@@ -401,7 +410,7 @@ def _disabled_visible(ts: TokenSet, mode: str) -> List[str]:
     Inactive controls are exempt from the WCAG contrast minimums, so this
     asks only that the colors differ."""
     disabled = "color.action.disabled"
-    if not ts.has(disabled):
+    if not _typed(ts, disabled):
         return []
     hx = ts.resolve(disabled, mode)
     return [f"{disabled} equals {bg} ({mode}) at {hx}, so a disabled button vanishes on that "
@@ -409,7 +418,7 @@ def _disabled_visible(ts: TokenSet, mode: str) -> List[str]:
             f"distinctness rule, not a ratio: point {disabled} at a step that differs from "
             "color.surface.card and color.surface.raised"
             for bg in ("color.surface.card", "color.surface.raised")
-            if ts.has(bg) and ts.resolve(bg, mode) == hx]
+            if _typed(ts, bg) and ts.resolve(bg, mode) == hx]
 
 
 def _line_subtle_visible(ts: TokenSet, mode: str) -> List[str]:
@@ -417,7 +426,7 @@ def _line_subtle_visible(ts: TokenSet, mode: str) -> List[str]:
     decorative, so no contrast ratio applies; this asks only that the
     colors differ."""
     subtle = "color.line.subtle"
-    if not ts.has(subtle):
+    if not _typed(ts, subtle):
         return []
     hx = ts.resolve(subtle, mode)
     return [f"{subtle} equals {bg} ({mode}) at {hx}, so a separator vanishes on that surface. "
@@ -425,18 +434,18 @@ def _line_subtle_visible(ts: TokenSet, mode: str) -> List[str]:
             f"divides: point {subtle} at a step that differs from color.surface.card and "
             "color.surface.raised"
             for bg in ("color.surface.card", "color.surface.raised")
-            if ts.has(bg) and ts.resolve(bg, mode) == hx]
+            if _typed(ts, bg) and ts.resolve(bg, mode) == hx]
 
 
 def _disabled_distinct(ts: TokenSet, mode: str) -> List[str]:
     out = []
     for disabled, enabled in (("color.text.disabled", ("color.text.default", "color.text.muted")),
                               ("color.action.disabled", ("color.action.primary",))):
-        if not ts.has(disabled):
+        if not _typed(ts, disabled):
             continue
         hx = ts.resolve(disabled, mode)
         for role in enabled:
-            if ts.has(role) and ts.resolve(role, mode) == hx:
+            if _typed(ts, role) and ts.resolve(role, mode) == hx:
                 out.append(f"{disabled} equals {role} ({mode}) at {hx}; point {disabled} at a "
                            "step that reads as inactive next to it")
     return out
@@ -446,7 +455,7 @@ def _scheme_polarity(ts: TokenSet, mode: str) -> List[str]:
     """A light scheme has a page lighter than its text, a dark scheme the
     reverse; a set that says dark but ships a light palette is caught here."""
     page, text = "color.surface.page", "color.text.default"
-    if not (ts.has(page) and ts.has(text)):
+    if not (_typed(ts, page) and _typed(ts, text)):
         return []
     light = _scheme(mode) == "light"
     if (luminance(ts.resolve(page, mode)) > luminance(ts.resolve(text, mode))) == light:
@@ -523,4 +532,4 @@ def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
 
 
 FOUNDATION = Foundation(name="color", generate=_generate, pairings=PAIRINGS,
-                        checks=CHECKS, hint=seed_hint)
+                        checks=CHECKS, hint=seed_hint, role_types=ROLE_TYPES)

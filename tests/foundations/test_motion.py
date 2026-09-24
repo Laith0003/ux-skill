@@ -172,9 +172,123 @@ def test_only_travel_removal_cites_wcag_and_distances_keep_their_unit():
     assert {c.id: c.criterion for c in CHECKS} == {
         "reduced-travel": "2.3.3", "reduced-length": "system",
         "reduced-curve": "system", "dismiss-faster": "system", "progress-linear": "system",
-        "progress-keeps-pace": "system", "mirrored-motion": "system"}
+        "progress-keeps-pace": "system", "mirrored-motion": "system",
+        "press-in-place": "system", "linear-progress-only": "system",
+        "reduced-not-longer": "system", "progress-floor": "system"}
     ts = _roles_set(motion__reveal__distance=("dimension", "{motion.x.a}", {}))
     report = gate(ts, [], CHECKS, raise_on_fail=False)
     assert [(f.check, f.criterion, f.message) for f in report.failures] == [
         ("reduced-travel", "2.3.3", "motion.reveal.distance travels 0.5rem under reduced motion; "
          "point its motion:reduced override at motion.distance.0")]
+
+
+def _press_set(**roles):
+    ts = _roles_set(**roles)
+    ts.add(Token("motion.x.four", "dimension", {"value": 4, "unit": "px"}))
+    return ts
+
+
+def test_a_press_never_travels_in_any_context():
+    # A base travel is this check's finding in every context; under reduced
+    # motion the reduced-travel check already names it, so it is not repeated.
+    ts = _press_set(motion__press__distance=("dimension", "{motion.x.four}", {}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures] == [
+        ("reduced-travel", "2.3.3", "motion:reduced",
+         "motion.press.distance travels 4px under reduced motion; point its motion:reduced "
+         "override at motion.distance.0"),
+        ("press-in-place", "system", "direction:ltr,motion:standard",
+         "motion.press.distance travels 4px; a press confirms in place, so point it at "
+         "motion.distance.0")]
+
+    # Travel only under rtl, and a press travel token outside the roles.
+    ts = _press_set(motion__press__distance=("dimension", "{motion.x.zero}",
+                                             {"direction:rtl": "{motion.x.four}"}),
+                    motion__press__travel=("dimension", "{motion.x.a}", {}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.mode, f.message) for f in report.failures
+            if f.check == "press-in-place"] == [
+        ("press-in-place", "direction:ltr,motion:standard",
+         "motion.press.travel travels 0.5rem; a press confirms in place, so point it at "
+         "motion.distance.0"),
+        ("press-in-place", "direction:rtl,motion:standard",
+         "motion.press.distance travels 4px under direction:rtl; a press confirms in place, so "
+         "point its direction:rtl override at motion.distance.0")]
+
+
+def test_linear_belongs_to_the_progress_loop_alone():
+    ts = _roles_set(motion__progress__curve=("cubicBezier", "{motion.c.linear}", {}),
+                    motion__reveal__curve=("cubicBezier", "{motion.c.linear}",
+                                           {"motion:reduced": "{motion.c.gentle}"}),
+                    motion__swap__curve=("cubicBezier", "{motion.c.gentle}",
+                                         {"motion:reduced": "{motion.c.even}"}))
+    ts.add(Token("motion.c.even", "cubicBezier", [0.3, 0.3, 0.7, 0.7]))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures] == [
+        ("linear-progress-only", "system", "motion:standard",
+         "motion.reveal.curve is linear; only motion.progress.curve loops, and a one-shot move "
+         "at an even pace reads mechanical, so point it at an eased curve such as "
+         "motion.curve.out"),
+        ("linear-progress-only", "system", "motion:reduced",
+         "motion.swap.curve is linear under motion:reduced; only motion.progress.curve loops, "
+         "and a one-shot move at an even pace reads mechanical, so point its motion:reduced "
+         "override at motion.curve.gentle")]
+
+
+def test_reduced_motion_never_lengthens_a_role():
+    ts = _roles_set(motion__press__duration=("duration", "{motion.d.fast}",
+                                             {"motion:reduced": "{motion.d.slow}"}),
+                    motion__progress__duration=("duration", "{motion.d.slow}", {}))
+    ts.add(Token("motion.d.tiny", "duration", {"value": 50, "unit": "ms"}))
+    ts.add(Token("motion.swap.duration", "duration", "{motion.d.tiny}",
+                 modes={"motion:reduced": "{motion.d.fast}"}, layer="semantic"))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures
+            if f.check == "reduced-not-longer"] == [
+        ("reduced-not-longer", "system", "motion:reduced",
+         "motion.press.duration lasts 1200ms under reduced motion but 100ms in standard; "
+         "reduced motion never lengthens a move, so point its motion:reduced override at "
+         "motion.d.fast or a shorter step"),
+        ("reduced-not-longer", "system", "motion:reduced",
+         "motion.swap.duration lasts 100ms under reduced motion but 50ms in standard; reduced "
+         "motion never lengthens a move, so point its motion:reduced override at motion.d.tiny "
+         "or a shorter step")]
+
+
+def test_the_progress_loop_is_never_faster_than_three_cycles_a_second():
+    ts = _roles_set(motion__progress__duration=("duration", "{motion.d.fast}", {}))
+    ts.add(Token("motion.d.400", "duration", {"value": 0.4, "unit": "s"}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    want = ("motion.progress.duration lasts 100ms; our floor for a loop is 334ms, since a "
+            "shorter cycle repeats more than three times a second and a loop that flashes that "
+            "often falls under WCAG 2.3.1, so point it at motion.d.400 or a longer step")
+    assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures] == [
+        ("progress-floor", "system", "direction:ltr,motion:standard", want)]
+    assert "2.3.1 sets" not in want and "2.3.1 asks" not in want
+
+    # Fast only under rtl: the fix names that override and the shortest
+    # duration primitive at or above the floor.
+    ts = _roles_set(motion__progress__duration=("duration", "{motion.d.slow}",
+                                                {"direction:rtl": "{motion.d.fast}"}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.mode, f.message) for f in report.failures] == [
+        ("progress-floor", "direction:rtl,motion:standard",
+         "motion.progress.duration lasts 100ms under direction:rtl; our floor for a loop is "
+         "334ms, since a shorter cycle repeats more than three times a second and a loop that "
+         "flashes that often falls under WCAG 2.3.1, so point its direction:rtl override at "
+         "motion.d.slow or a longer step")]
+
+
+@pytest.mark.parametrize("motion", [i / 10 for i in range(11)])
+def test_generated_motion_passes_the_new_rules(motion):
+    ts = generate_motion(axes(motion)).tokens
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert report.passed, report.summary()
+    assert {"press-in-place", "linear-progress-only", "reduced-not-longer",
+            "progress-floor"} <= {c.id for c in CHECKS}

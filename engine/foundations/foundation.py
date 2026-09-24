@@ -44,17 +44,26 @@ class Foundation:
     requires: Tuple[str, ...] = ()
     # Role path -> the token type its checks read. A role of another type
     # passes validate; the build's role-types check reports it once and
-    # this foundation's checks skip it.
+    # this foundation's checks and pairings skip it.
     role_types: Mapping[str, str] = field(default_factory=dict, hash=False)
 
 
-# An example value per type, for the role-types fix. Types left out (number)
-# need none.
+# An example value per type, for the role-types fix. Types left out (number,
+# shadow) need none: a number is plain, a shadow too long to quote.
 TYPE_EXAMPLES = {
+    "color": "#3366FF",
+    "strokeStyle": "solid",
     "dimension": "{value: 8, unit: px}",
     "duration": "{value: 200, unit: ms}",
     "cubicBezier": "[0.4, 0, 0.6, 1]",
 }
+
+
+def mistyped(ts: TokenSet, foundations: Sequence[Foundation]) -> List[str]:
+    """Every declared role present with a type other than its role expects:
+    the roles the role-types check reports and every other rule skips."""
+    return [path for f in foundations for path, want in f.role_types.items()
+            if ts.has(path) and ts.get(path).type != want]
 
 
 def typed(ts: TokenSet, path: str, role_types: Mapping[str, str]) -> bool:

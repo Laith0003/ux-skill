@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import Dict, List, Tuple
 
-from engine.foundations.foundation import BrandInputs, Foundation, Generated
+from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check
 from engine.foundations.tokens import Token, TokenSet
 from engine.synthesizer.axes import AxisValues
@@ -77,13 +77,22 @@ def generate_space(axes: AxisValues) -> Generated:
     return Generated(tokens=ts, notes=notes)
 
 
+# Every role is a dimension. The build's role-types check reports any other
+# type once, and the checks below skip it.
+ROLE_TYPES: Dict[str, str] = {role: "dimension" for role in ROLES}
+
+
+def _typed(ts: TokenSet, path: str) -> bool:
+    return typed(ts, path, ROLE_TYPES)
+
+
 def _value(ts: TokenSet, path: str, mode: str) -> float:
     v = ts.resolve(path, mode)
     return v["value"] * (16 if v["unit"] == "rem" else 1)
 
 
 def _control_gap(ts: TokenSet, mode: str) -> List[str]:
-    if not ts.has("space.control.gap"):
+    if not _typed(ts, "space.control.gap"):
         return []
     px = _value(ts, "space.control.gap", mode)
     if px >= MIN_CONTROL_GAP_PX:
@@ -104,7 +113,7 @@ def _scale_order(ts: TokenSet, mode: str) -> List[str]:
 
 
 def _hierarchy(ts: TokenSet, mode: str) -> List[str]:
-    present = [r for r in HIERARCHY if ts.has(r)]
+    present = [r for r in HIERARCHY if _typed(ts, r)]
     out = []
     for a, b in zip(present, present[1:]):
         if _value(ts, a, mode) >= _value(ts, b, mode):
@@ -118,7 +127,7 @@ def _compact_not_larger(ts: TokenSet, mode: str) -> List[str]:
         return []
     return [f"{r} is larger in compact than in comfortable; point its compact override at a "
             "smaller step" for r in ROLES
-            if ts.has(r) and _value(ts, r, "density:compact") > _value(ts, r, "")]
+            if _typed(ts, r) and _value(ts, r, "density:compact") > _value(ts, r, "")]
 
 
 CHECKS: Tuple[Check, ...] = (
@@ -133,4 +142,4 @@ def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
     return generate_space(axes)
 
 
-FOUNDATION = Foundation(name="space", generate=_generate, checks=CHECKS)
+FOUNDATION = Foundation(name="space", generate=_generate, checks=CHECKS, role_types=ROLE_TYPES)

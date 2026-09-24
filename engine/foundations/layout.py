@@ -137,12 +137,25 @@ def _columns(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
+def _step_at_least(ts: TokenSet, floor: float, mode: str) -> str:
+    """The fix for a short target: the smallest width primitive the set has
+    at `floor` px or more, else the smallest such space step, else the
+    value itself. Only tokens the set has are named."""
+    for family in ("layout.width.", "space."):
+        steps = sorted((_px(ts, t.path, mode), t.path) for t in ts.tokens()
+                       if t.layer == "primitive" and t.type == "dimension"
+                       and t.path.startswith(family) and _px(ts, t.path, mode) >= floor)
+        if steps:
+            return f"point it at {steps[0][1]} ({steps[0][0]:g}px) or a larger step"
+    return f"give it a value of {floor}px or more"
+
+
 def _target(ts: TokenSet, mode: str, floor: int, criterion: str) -> List[str]:
     p = "layout.target.min"
     if not _typed(ts, p) or _px(ts, p, mode) >= floor:
         return []
     return [f"{p} ({mode}) is {_px(ts, p, mode):g}px; WCAG {criterion} asks for {floor}px "
-            f"targets here, so point it at layout.width.{floor} or larger"]
+            f"targets here, so {_step_at_least(ts, floor, mode)}"]
 
 
 def _target_minimum(ts: TokenSet, mode: str) -> List[str]:

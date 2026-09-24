@@ -265,3 +265,66 @@ def test_build_color_carries_the_ring_assumption():
 @pytest.mark.parametrize("foundations", [None, ("color", "border"), ("border",), ("space",)])
 def test_no_ring_note_when_border_is_built_or_color_is_not(foundations):
     assert _RING_NOTE not in build_system(AXES, "#3366FF", foundations=foundations).notes
+
+
+@pytest.mark.parametrize("a", [AXES, AxisValues(0, 0, 0, 0, 0, 0, 0),
+                               AxisValues(1, 1, 1, 1, 1, 1, 1)])
+def test_every_foundation_declares_the_type_of_every_role_it_generates(a):
+    result = build_system(a, "#3366FF")
+    for f in build_module.FOUNDATIONS:
+        assert f.role_types, f"{f.name} declares no role types"
+        roles = {t.path: t.type for t in result.tokens.tokens()
+                 if t.layer == "semantic" and t.path.split(".", 1)[0] == f.name}
+        assert roles == {p: t for p, t in f.role_types.items() if p in roles}
+        assert set(roles) <= set(f.role_types)
+
+
+def _mistype(monkeypatch, module, generator, path, type_, alias):
+    real = getattr(module, generator)
+
+    def mistyped(*args):
+        generated = real(*args)
+        ts = TokenSet()
+        for t in generated.tokens.tokens():
+            ts.add(Token(path, type_, alias, layer="semantic") if t.path == path else t)
+        generated.tokens = ts
+        return generated
+
+    monkeypatch.setattr(module, generator, mistyped)
+
+
+@pytest.mark.parametrize("module, path, type_, alias, names, want, example", [
+    ("color", "color.text.default", "dimension", "{space.4}", ("color", "space"), "color",
+     "#3366FF"),
+    ("color", "color.action.disabled", "dimension", "{space.4}", ("color", "space"), "color",
+     "#3366FF"),
+    ("space", "space.control.gap", "number", "{elevation.z.100}", ("space", "elevation"),
+     "dimension", "{value: 8, unit: px}"),
+    ("space", "space.text.gap", "color", "{color.base.white}", ("color", "space"), "dimension",
+     "{value: 8, unit: px}"),
+    ("radius", "radius.card", "number", "{elevation.z.100}", ("radius", "elevation"),
+     "dimension", "{value: 8, unit: px}"),
+    ("radius", "radius.joined", "strokeStyle", "{border.line.solid}", ("radius", "border"),
+     "dimension", "{value: 8, unit: px}"),
+    ("border", "border.focus-ring.width", "strokeStyle", "{border.line.solid}", ("border",),
+     "dimension", "{value: 8, unit: px}"),
+    ("border", "border.active", "number", "{elevation.z.100}", ("border", "elevation"),
+     "dimension", "{value: 8, unit: px}"),
+    ("border", "border.style.default", "dimension", "{border.width.1}", ("border",),
+     "strokeStyle", "solid"),
+    ("elevation", "elevation.card", "dimension", "{space.4}", ("space", "elevation"), "shadow",
+     None),
+    ("elevation", "elevation.order.sticky", "dimension", "{space.4}", ("space", "elevation"),
+     "number", None),
+])
+def test_a_mistyped_role_in_any_foundation_is_named_once_not_a_crash(
+        monkeypatch, module, path, type_, alias, names, want, example):
+    mod = importlib.import_module(f"engine.foundations.{module}")
+    _mistype(monkeypatch, mod, f"generate_{module}", path, type_, alias)
+    with pytest.raises(GateFailure) as err:
+        build_system(AXES, "#3366FF", foundations=names)
+    report = err.value.report
+    assert report.findings == []
+    assert [(f.check, f.message) for f in report.failures] == [
+        ("role-types", f"{path} is a {type_} but its role expects a {want}; point it at a "
+         f"{want} token" + (f", for example {example}" if example else ""))]

@@ -1,5 +1,7 @@
 """Layout: breakpoints, columns, gutters and margins on the spacing scale,
 container and reading widths, and the target-size floor."""
+import re
+
 import pytest
 
 from engine.foundations import build_system, layout, space, to_css
@@ -89,13 +91,13 @@ def test_checks_name_the_token_and_the_fix():
          "viewport never loses columns"),
         ("target-size-minimum", "2.5.8", comfortable,
          "layout.target.min (density:comfortable) is 20px; WCAG 2.5.8 asks for 24px targets "
-         "here, so point it at layout.width.24 or larger"),
+         "here, so give it a value of 24px or more"),
         ("target-size-minimum", "2.5.8", compact,
          "layout.target.min (density:compact) is 20px; WCAG 2.5.8 asks for 24px targets here, "
-         "so point it at layout.width.24 or larger"),
+         "so give it a value of 24px or more"),
         ("target-size-comfortable", "2.5.5", comfortable,
          "layout.target.min (density:comfortable) is 20px; WCAG 2.5.5 asks for 44px targets "
-         "here, so point it at layout.width.44 or larger"),
+         "here, so give it a value of 44px or more"),
         ("text-measure", "1.4.8", comfortable,
          "layout.measure.text is 48rem; lines past about 80 characters tire readers (1.4.8), so "
          "keep it at 40rem or less")]
@@ -213,3 +215,37 @@ def test_css_uses_logical_margin_names_and_density_blocks():
     assert "  --layout-margin-inline-phone: var(--space-5);" in css
     assert "  --layout-target-min: var(--layout-width-32);" in css.split(
         ':root[data-density="compact"] {')[1]
+
+
+def test_the_target_fix_names_only_tokens_the_set_has():
+    ts = TokenSet()
+    for t in layout_with_space(0.5).tokens():
+        if t.path == "layout.target.min":
+            t = Token(t.path, "dimension", "{layout.width.20}", layer="semantic")
+        ts.add(t)
+    ts.add(Token("layout.width.20", "dimension", {"value": 20, "unit": "px"}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    messages = [f.message for f in report.failures]
+    assert messages == [
+        "layout.target.min (density:comfortable) is 20px; WCAG 2.5.8 asks for 24px targets "
+        "here, so point it at layout.width.32 (32px) or a larger step",
+        "layout.target.min (density:compact) is 20px; WCAG 2.5.8 asks for 24px targets here, "
+        "so point it at layout.width.32 (32px) or a larger step",
+        "layout.target.min (density:comfortable) is 20px; WCAG 2.5.5 asks for 44px targets "
+        "here, so point it at layout.width.44 (44px) or a larger step"]
+    named = [n for m in messages for n in re.findall(r"\b(?:layout|space)\.[a-z0-9.-]*[a-z0-9]", m)]
+    assert named and all(ts.has(n) for n in named)
+    assert not ts.has("layout.width.24")
+
+
+def test_without_widths_the_target_fix_falls_back_to_a_space_step():
+    ts = TokenSet()
+    for t in generate_space(axes(0.5)).tokens.tokens():
+        ts.add(t)
+    ts.add(Token("layout.x.t", "dimension", {"value": 40, "unit": "px"}))
+    ts.add(Token("layout.target.min", "dimension", "{layout.x.t}", layer="semantic"))
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [f.message for f in report.failures] == [
+        "layout.target.min (density:comfortable) is 40px; WCAG 2.5.5 asks for 44px targets "
+        "here, so point it at space.12 (48px) or a larger step"]

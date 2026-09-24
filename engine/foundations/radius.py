@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from typing import Dict, List, Tuple
 
-from engine.foundations.foundation import BrandInputs, Foundation, Generated
+from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check
 from engine.foundations.tokens import Token, TokenSet
 from engine.synthesizer.axes import AxisValues
@@ -61,12 +61,22 @@ def generate_radius(axes: AxisValues) -> Generated:
     return Generated(tokens=ts, notes=notes)
 
 
+# Every role is a dimension (the role names do not depend on geometry). The
+# build's role-types check reports any other type once, and the checks
+# below skip it.
+ROLE_TYPES: Dict[str, str] = {role: "dimension" for role in roles(0.0)}
+
+
+def _typed(ts: TokenSet, path: str) -> bool:
+    return typed(ts, path, ROLE_TYPES)
+
+
 def _px(ts: TokenSet, path: str) -> float:
     return ts.resolve(path)["value"]
 
 
 def _nesting(ts: TokenSet, mode: str) -> List[str]:
-    if not (ts.has("radius.card") and ts.has("radius.dialog")):
+    if not (_typed(ts, "radius.card") and _typed(ts, "radius.dialog")):
         return []
     card, dialog = _px(ts, "radius.card"), _px(ts, "radius.dialog")
     if card <= dialog:
@@ -76,14 +86,14 @@ def _nesting(ts: TokenSet, mode: str) -> List[str]:
 
 
 def _joined(ts: TokenSet, mode: str) -> List[str]:
-    if ts.has("radius.joined") and _px(ts, "radius.joined") != 0:
+    if _typed(ts, "radius.joined") and _px(ts, "radius.joined") != 0:
         return [f"radius.joined is {_px(ts, 'radius.joined'):g}px; shared edges must be square, "
                 "so point it at radius.0"]
     return []
 
 
 def _pill(ts: TokenSet, mode: str) -> List[str]:
-    if ts.has("radius.pill") and _px(ts, "radius.pill") < 999:
+    if _typed(ts, "radius.pill") and _px(ts, "radius.pill") < 999:
         return [f"radius.pill is {_px(ts, 'radius.pill'):g}px; a pill needs a radius larger than "
                 "any control's height, so point it at radius.round"]
     return []
@@ -108,4 +118,4 @@ def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
     return generate_radius(axes)
 
 
-FOUNDATION = Foundation(name="radius", generate=_generate, checks=CHECKS)
+FOUNDATION = Foundation(name="radius", generate=_generate, checks=CHECKS, role_types=ROLE_TYPES)

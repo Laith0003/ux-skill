@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from typing import Dict, List, Tuple
 
-from engine.foundations.foundation import BrandInputs, Foundation, Generated
+from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check
 from engine.foundations.tokens import Token, TokenSet
 from engine.synthesizer.axes import AxisValues
@@ -42,11 +42,25 @@ def generate_border(axes: AxisValues) -> Generated:
     for style in STYLES:
         ts.add(Token(f"border.line.{style}", "strokeStyle", style))
     for role, prim in roles(axes).items():
-        type_ = "strokeStyle" if prim.startswith("border.line.") else "dimension"
-        ts.add(Token(role, type_, "{" + prim + "}", layer="semantic"))
+        ts.add(Token(role, _role_type(prim), "{" + prim + "}", layer="semantic"))
     notes = [] if axes.contrast < BOLD_RING_FROM else [
         f"border.focus-ring.width: 3px, contrast axis {axes.contrast:g} is dramatic"]
     return Generated(tokens=ts, notes=notes)
+
+
+def _role_type(prim: str) -> str:
+    return "strokeStyle" if prim.startswith("border.line.") else "dimension"
+
+
+# Role path -> token type (role names and types do not depend on the axes).
+# The build's role-types check reports any other type once, and the checks
+# below skip it.
+ROLE_TYPES: Dict[str, str] = {role: _role_type(prim)
+                              for role, prim in roles(AxisValues(*[0.0] * 7)).items()}
+
+
+def _typed(ts: TokenSet, path: str) -> bool:
+    return typed(ts, path, ROLE_TYPES)
 
 
 def _px(ts: TokenSet, path: str) -> float:
@@ -55,19 +69,19 @@ def _px(ts: TokenSet, path: str) -> float:
 
 def _ring(ts: TokenSet, mode: str) -> List[str]:
     out = []
-    if ts.has("border.focus-ring.width"):
+    if _typed(ts, "border.focus-ring.width"):
         ring = _px(ts, "border.focus-ring.width")
         if ring < MIN_RING_PX:
             out.append(f"border.focus-ring.width is {ring:g}px; a focus ring needs at least "
                        f"{MIN_RING_PX}px to be seen, so point it at border.width.2 or wider")
-        if ts.has("border.outline") and ring <= _px(ts, "border.outline"):
+        if _typed(ts, "border.outline") and ring <= _px(ts, "border.outline"):
             out.append("border.focus-ring.width is not wider than border.outline; a ring must "
                        "stand out from resting borders, so point it at a wider step")
-    if ts.has("border.focus-ring.width") and not ts.has("border.focus-ring.offset"):
+    if _typed(ts, "border.focus-ring.width") and not ts.has("border.focus-ring.offset"):
         out.append("border.focus-ring.width is set but border.focus-ring.offset is missing; "
                    "leave at least 1px of page color between the element and its ring, so "
                    "add border.focus-ring.offset pointing at border.width.1 or wider")
-    elif ts.has("border.focus-ring.offset") and _px(ts, "border.focus-ring.offset") < 1:
+    elif _typed(ts, "border.focus-ring.offset") and _px(ts, "border.focus-ring.offset") < 1:
         offset = _px(ts, "border.focus-ring.offset")
         out.append(f"border.focus-ring.offset is {offset:g}px; leave at least 1px of page color "
                    "between the element and its ring, so point it at border.width.1 or wider")
@@ -77,10 +91,10 @@ def _ring(ts: TokenSet, mode: str) -> List[str]:
 def _active(ts: TokenSet, mode: str) -> List[str]:
     """A selected edge must be wider than a resting one; one as thin as
     border.outline tells the states apart by color alone."""
-    if not ts.has("border.active"):
+    if not _typed(ts, "border.active"):
         return []
     active = _px(ts, "border.active")
-    if ts.has("border.outline") and active <= _px(ts, "border.outline"):
+    if _typed(ts, "border.outline") and active <= _px(ts, "border.outline"):
         return [f"border.active ({active:g}px) is not wider than border.outline "
                 f"({_px(ts, 'border.outline'):g}px), so a selected edge differs from a resting "
                 "edge by color alone; WCAG 1.4.1 asks that color not be the only visual means of "
@@ -98,17 +112,17 @@ def _weight_order(ts: TokenSet, mode: str) -> List[str]:
     emphasis is heavier than the separator."""
     sep, outline, emph = "border.separator", "border.outline", "border.emphasis"
     out = []
-    if ts.has(outline):
+    if _typed(ts, outline):
         o = _px(ts, outline)
-        if ts.has(sep) and _px(ts, sep) > o:
+        if _typed(ts, sep) and _px(ts, sep) > o:
             out.append(f"{sep} ({_px(ts, sep):g}px) is heavier than {outline} ({o:g}px); a "
                        "separator may match a resting edge but never outweigh it, so point "
                        f"{sep} at the step {outline} uses or a lighter one")
-        if ts.has(emph) and _px(ts, emph) <= o:
+        if _typed(ts, emph) and _px(ts, emph) <= o:
             out.append(f"{emph} ({_px(ts, emph):g}px) is not heavier than {outline} ({o:g}px), "
                        "so an emphasized edge differs from a resting edge by color alone; point "
                        f"{emph} at a wider step than {outline}")
-    elif ts.has(sep) and ts.has(emph) and _px(ts, emph) <= _px(ts, sep):
+    elif _typed(ts, sep) and _typed(ts, emph) and _px(ts, emph) <= _px(ts, sep):
         out.append(f"{emph} ({_px(ts, emph):g}px) is not heavier than {sep} "
                    f"({_px(ts, sep):g}px); point {emph} at a wider step than {sep}")
     return out
@@ -133,4 +147,4 @@ def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
     return generate_border(axes)
 
 
-FOUNDATION = Foundation(name="border", generate=_generate, checks=CHECKS)
+FOUNDATION = Foundation(name="border", generate=_generate, checks=CHECKS, role_types=ROLE_TYPES)

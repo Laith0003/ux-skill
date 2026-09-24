@@ -6,7 +6,9 @@ The motion axis sets pace and character: a still brand moves briefly with
 plain curves, a kinetic one takes longer and may overshoot. Under
 motion:reduced every role keeps its meaning but loses travel, overshoot
 and length: distances drop to 0, curves turn gentle, durations cap at
-REDUCED_MAX_MS (the progress loop keeps its pace, it reports status).
+REDUCED_MAX_MS and never grow (the progress loop keeps its pace, it
+reports status). In every context a press confirms in place, only the
+progress loop runs linear, and the loop lasts at least LOOP_MIN_MS.
 """
 from __future__ import annotations
 
@@ -14,11 +16,15 @@ from typing import Dict, List, Tuple
 
 from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check
-from engine.foundations.tokens import Token, TokenSet
+from engine.foundations.modes import join, parse, sparse
+from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
 from engine.synthesizer.axes import AxisValues
 
 DURATIONS_MS = (0, 50, 100, 150, 200, 250, 300, 400, 500, 800, 1200)
 REDUCED_MAX_MS = 100
+# Our floor for one cycle of a loop: shorter repeats more than three times
+# a second.
+LOOP_MIN_MS = 334
 LINEAR = [0, 0, 1, 1]
 GENTLE = [0.4, 0, 0.6, 1]
 # motion axis band -> curves (out, in, in-out)
@@ -201,8 +207,107 @@ def _mirrored(ts: TokenSet, mode: str) -> List[str]:
             f"must be {want} here"]
 
 
+def _new_here(ts: TokenSet, path: str, mode: str) -> bool:
+    """False when `path` reads the same one step closer to the base context
+    (one non-base axis set back to its base): a failure there is already
+    reported there."""
+    pairs = parse(mode, ts.axes)
+    value = ts.resolve(path, mode)
+    return all(ts.resolve(path, join({**pairs, axis: ts.axes[axis][0]}, ts.axes)) != value
+               for axis, v in pairs.items() if v != ts.axes[axis][0])
+
+
+def _where(ts: TokenSet, mode: str) -> Tuple[str, str]:
+    """(" under <context>", "its <context> override") for a non-base
+    context; ("", "it") for the base one."""
+    key = sparse(mode, ts.axes)
+    return (f" under {key}", f"its {key} override") if key else ("", "it")
+
+
+def _press_in_place(ts: TokenSet, mode: str) -> List[str]:
+    """A press confirms where the finger is: any press travel is 0 in every
+    context. Under plain reduced motion, reduced-travel already names a
+    travelling press role, so it is not repeated."""
+    owned = set(_roles_with(ts, "distance")) if sparse(mode, ts.axes) == "motion:reduced" else set()
+    out = []
+    for t in ts.tokens():
+        if not (t.path.startswith("motion.press.") and t.type == "dimension") or t.path in owned:
+            continue
+        v = ts.resolve(t.path, mode)
+        if v["value"] != 0 and _new_here(ts, t.path, mode):
+            where, what = _where(ts, mode)
+            out.append(f"{t.path} travels {v['value']:g}{v['unit']}{where}; a press confirms in "
+                       f"place, so point {what} at motion.distance.0")
+    return out
+
+
+def _is_linear(curve: List[float]) -> bool:
+    """Both control points on the diagonal: an even pace from start to end."""
+    return curve[0] == curve[1] and curve[2] == curve[3]
+
+
+def _linear_progress_only(ts: TokenSet, mode: str) -> List[str]:
+    out = []
+    for t in ts.tokens():
+        if (t.layer != "semantic" or t.type != "cubicBezier" or not t.path.startswith("motion.")
+                or t.path == "motion.progress.curve"):
+            continue
+        if _is_linear(ts.resolve(t.path, mode)) and _new_here(ts, t.path, mode):
+            where, what = _where(ts, mode)
+            eased = ("motion.curve.gentle" if "motion:reduced" in mode
+                     else "an eased curve such as motion.curve.out")
+            out.append(f"{t.path} is linear{where}; only motion.progress.curve loops, and a "
+                       "one-shot move at an even pace reads mechanical, so point "
+                       f"{what} at {eased}")
+    return out
+
+
+def _reduced_not_longer(ts: TokenSet, mode: str) -> List[str]:
+    """Reduced motion never lengthens a role. The progress loop keeps its
+    pace instead; progress-keeps-pace owns it."""
+    if "motion:reduced" not in mode:
+        return []
+    out = []
+    for path in _roles_with(ts, "duration"):
+        reduced, standard = _ms(ts, path, mode), _ms(ts, path)
+        if path == "motion.progress.duration" or reduced <= standard:
+            continue
+        raw = ts.raw(path)
+        step = alias_target(raw) if is_alias(raw) else f"a duration of {standard:g}ms"
+        out.append(f"{path} lasts {reduced:g}ms under reduced motion but {standard:g}ms in "
+                   "standard; reduced motion never lengthens a move, so point its "
+                   f"motion:reduced override at {step} or a shorter step")
+    return out
+
+
+def _progress_floor(ts: TokenSet, mode: str) -> List[str]:
+    """The loop lasts at least LOOP_MIN_MS in every context. The floor is
+    ours: WCAG 2.3.1 limits flashes, not durations, and a loop quicker than
+    a third of a second is one that could flash more than three times a
+    second. Under plain reduced motion a loop that differs from standard is
+    progress-keeps-pace's finding, whose fix (drop the override) also
+    clears this one."""
+    p = "motion.progress.duration"
+    if not _typed(ts, p) or not _new_here(ts, p, mode):
+        return []
+    ms = _ms(ts, p, mode)
+    if ms >= LOOP_MIN_MS:
+        return []
+    if sparse(mode, ts.axes) == "motion:reduced" and ms != _ms(ts, p):
+        return []
+    longer = sorted((_ms(ts, t.path), t.path) for t in ts.tokens()
+                    if t.layer == "primitive" and t.type == "duration"
+                    and _ms(ts, t.path) >= LOOP_MIN_MS)
+    step = longer[0][1] if longer else f"a duration of {LOOP_MIN_MS}ms"
+    where, what = _where(ts, mode)
+    return [f"{p} lasts {ms:g}ms{where}; our floor for a loop is {LOOP_MIN_MS}ms, since a "
+            "shorter cycle repeats more than three times a second and a loop that flashes that "
+            f"often falls under WCAG 2.3.1, so point {what} at {step} or a longer step"]
+
+
 # Only removing travel is WCAG's (2.3.3, motion from interaction can be
-# turned off); the length cap and the gentle curve are this system's rules.
+# turned off); the length cap, the gentle curve, the still press, linear
+# for the loop alone and the loop floor are this system's rules.
 CHECKS: Tuple[Check, ...] = (
     Check("reduced-travel", "2.3.3", _reduced_travel, axes=("motion",)),
     Check("reduced-length", "system", _reduced_length, axes=("motion",)),
@@ -211,6 +316,10 @@ CHECKS: Tuple[Check, ...] = (
     Check("progress-linear", "system", _progress_linear),
     Check("progress-keeps-pace", "system", _progress_pace, axes=("motion",)),
     Check("mirrored-motion", "system", _mirrored, axes=("direction",)),
+    Check("press-in-place", "system", _press_in_place, axes=("motion", "direction")),
+    Check("linear-progress-only", "system", _linear_progress_only, axes=("motion",)),
+    Check("reduced-not-longer", "system", _reduced_not_longer, axes=("motion",)),
+    Check("progress-floor", "system", _progress_floor, axes=("motion", "direction")),
 )
 
 
