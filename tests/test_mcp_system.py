@@ -258,3 +258,13 @@ def test_the_default_result_an_agent_receives_is_under_the_output_limit():
     text = _call_through_the_server({"brand": "#3366FF", "brief": {"industry": "saas"}}, raw=True)
     assert len(text) < MCP_OUTPUT_LIMIT, len(text)
     assert json.loads(text)["status"] == "built"
+
+
+def test_a_relative_out_is_refused_with_the_fix(tmp_path, monkeypatch):
+    # The server's working folder is not the user's project, so a relative
+    # out would land somewhere the user does not expect.
+    monkeypatch.chdir(tmp_path)
+    result = handle_ux_system_build({"brand": "#3366FF", "out": "rel-ds"})
+    assert result["status"] == "invalid" and not result["passed"]
+    assert "out" in result["error"] and "absolute" in result["error"]
+    assert not (tmp_path / "rel-ds").exists()

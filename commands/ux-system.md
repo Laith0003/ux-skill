@@ -33,7 +33,7 @@ If the user asks for `enhance` or `extend`, say plainly that it arrives in 4.1, 
 
 Run `uxskill --version` first. The build needs uxskill 4.0.0b1 or later, which prints, for example, `uxskill, version 4.0.0b1`. If `uxskill` is not on PATH, run `python3 -m engine.cli.main --version` instead.
 
-If the version is 3.x, or neither command exists, stop here and give the user the install line; do not go on, and do not change any flag. pip and pipx skip pre-releases unless asked, so a plain `pip install uxskill` still gives 3.x:
+If the version is older than 4.0.0b1, or neither command exists, stop here and give the user the install line; do not go on, and do not change any flag. pip and pipx skip pre-releases unless asked, so a plain `pip install uxskill` still gives 3.x:
 
 ```bash
 pip install uxskill==4.0.0b1

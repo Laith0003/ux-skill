@@ -27,6 +27,7 @@ import json
 import logging
 import sys
 from dataclasses import is_dataclass, asdict
+from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type
 
 from pydantic import BaseModel, Field
@@ -525,7 +526,13 @@ def handle_ux_system_build(args: Dict[str, Any]) -> Dict[str, Any]:
                                      "return only their sizes")
         force = parse_switch(payload.force, "force", "replace files in out that differ",
                              "write nothing when a file differs")
-        out = None if payload.out is None else check_out_dir(payload.out, "out")
+        if payload.out is not None and not (isinstance(payload.out, str)
+                                            and Path(payload.out).expanduser().is_absolute()):
+            raise InputError(
+                f"out is {payload.out!r}, a relative path; the MCP server runs in its own "
+                "folder, so pass the full folder path, for example /Users/you/project/tokens")
+        out = None if payload.out is None else check_out_dir(
+            str(Path(payload.out).expanduser()), "out")
     except InputError as exc:
         return {"status": "invalid", "passed": False, "error": str(exc), "findings": [],
                 "report": "", "files": []}
