@@ -358,3 +358,78 @@ def test_each_refused_value_is_typed_by_another_reader(value):
     except yaml.YAMLError:
         read = None
     assert read != value or _CORE_12.fullmatch(value) or "_" in value, value
+
+
+# A quote is a quoted scalar only where a value starts. Inside a plain value
+# it is a character, so a ' #' after it still starts a comment.
+QUOTE_INSIDE_PLAIN = [
+    ('- Say "Item #3" in the title', ['Say "Item']),
+    ("a: x 'y # z'", {"a": "x 'y"}),
+    ("a: b,'c # d'", {"a": "b,'c"}),
+    ("a: x 'y", {"a": "x 'y"}),
+    ('a: Order "#1234"', {"a": 'Order "#1234"'}),
+    ("a: it's # a note", {"a": "it's"}),
+    ("a: [x, 'y # z'] # c", {"a": ["x", "y # z"]}),
+    ("a: {k: 'v # w', 'j # 2': u}", {"a": {"k": "v # w", "j # 2": "u"}}),
+    ("- 'a # b'\n- [\"c # d\"]", ["a # b", ["c # d"]]),
+    ("'k # 1': v # c", {"k # 1": "v"}),
+    ("a:\n  - x \"y\" # z", {"a": ['x "y"']}),
+]
+
+
+@pytest.mark.parametrize("text,expected", QUOTE_INSIDE_PLAIN)
+def test_a_quote_inside_a_plain_value_is_text_and_a_comment_still_starts(text, expected):
+    assert loads(text) == expected
+
+
+@pytest.mark.parametrize("text,expected", QUOTE_INSIDE_PLAIN)
+def test_a_quote_inside_a_plain_value_reads_as_pyyaml_reads_it(text, expected):
+    yaml = pytest.importorskip("yaml")
+    assert yaml.safe_load(text) == expected
+
+
+def test_a_tab_after_a_quote_inside_a_plain_value_is_refused():
+    with pytest.raises(YamlError, match="line 1: a tab sits outside quotes"):
+        loads('a: x "y\tz"')
+
+
+# Only the space character is trimmed at the edges of a plain value; other
+# readers keep a no-break or ideographic space, so yamlite keeps it too.
+UNICODE_SPACES = [
+    ("a: b\u00a0", {"a": "b\u00a0"}),
+    ("a: \u00a0b", {"a": "\u00a0b"}),
+    ("a: [\u3000b]", {"a": ["\u3000b"]}),
+    ("a: [b\u2003, c]", {"a": ["b\u2003", "c"]}),
+    ("a: b\u202f # c", {"a": "b\u202f"}),
+    ("- \u1680x\u205f", ["\u1680x\u205f"]),
+    ("a: {k: \u205fv}", {"a": {"k": "\u205fv"}}),
+    ("a: x\u200b", {"a": "x\u200b"}),
+]
+
+
+@pytest.mark.parametrize("text,expected", UNICODE_SPACES)
+def test_a_unicode_space_at_the_edge_of_a_plain_value_is_kept(text, expected):
+    assert loads(text) == expected
+
+
+@pytest.mark.parametrize("text,expected", UNICODE_SPACES)
+def test_a_unicode_space_reads_as_pyyaml_reads_it(text, expected):
+    yaml = pytest.importorskip("yaml")
+    assert yaml.safe_load(text) == expected
+
+
+@pytest.mark.parametrize("text", ["a: [#]", "a: [a,#b]", "a: {k: [#]}"])
+def test_a_flow_value_starting_with_a_hash_is_refused(text):
+    with pytest.raises(YamlError, match="line 1: '#.*' starts with '#', which starts a comment "
+                                        "in other YAML readers; quote the value"):
+        loads(text)
+
+
+@pytest.mark.parametrize("text,line", [
+    ("'a' : 1", 1), ("b: 2\n'a b' : 1", 2), ("- 'a' : 1", 1), ('- "a"  : 1', 1),
+])
+def test_a_space_between_a_quoted_key_and_its_colon_is_named(text, line):
+    with pytest.raises(YamlError) as err:
+        loads(text, source="x.yaml")
+    assert str(err.value).startswith(f"x.yaml line {line}: key ")
+    assert str(err.value).endswith("has a space before its ':'; remove the space")

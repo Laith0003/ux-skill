@@ -19,6 +19,10 @@ WORDS = [
     "\u0645\u0631\u062d\u0628\u0627", "12px", "e3", "inf", "_", "_1", "0X1F", "a?b", "x[1]",
     "x:y", "x,y", "x}y", "a - b", "http://x.y/z", "1.", "00.5", "0.5", "-1.25", "+5", "-0",
     "0", "1500", "2026-09-25", "---", "tRUE", "nULL",
+    # a quote inside a plain value is text, and a ' #' after it is a comment
+    'Say "Item #3" now', "x 'y # z'", "b,'c # d'", "x 'y", 'Order "#1234"', "it's # note",
+    # other readers keep a Unicode space at the edge of a plain value
+    "b\u00a0", "\u00a0b", "\u3000x", "x\u2003", "\u202fx\u205f",
 ]
 EDGES = [
     "1:23", "12:30", "-1:23", "1:30.5", "012", "09", "00", "+07", "0x10", "0o17", "0b101",
@@ -26,7 +30,7 @@ EDGES = [
     "-1e-3", ".5", "-.5", "+.5", "._", "2026-09-25T10:00:00Z", "2026-09-25 10:00:00", "=",
     "<<", "?q", "? q", ":b", "- a", "-", ",x", "]", "}x", "x:", "a: b", "yes", "No", "on",
     "OFF", "y", "N", "null", "Null", "~", "true", "False", "TRUE", "&a", "*a", "!t", "|", ">",
-    "%x", "@x", "`x",
+    "%x", "@x", "`x", "[#]", "#x",
 ]
 QUOTED = ["a: b", "# not", "[x]", "{y}", "yes", "12:30", "012", "?q", "- a", "", "it's",
           "tab\there", "1e3", ".inf", "on"]

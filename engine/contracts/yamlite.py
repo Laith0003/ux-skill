@@ -11,7 +11,11 @@ refuses everything else by line number, with the fix:
 - one-line flow collections: ``[a, b]`` and ``{key: value}``, nested;
 - scalars: ``null`` and ``~``, ``true`` and ``false``, integers, decimals
   such as 0.5, single or double quoted text, and plain text;
-- comments after ``#`` at the start of a line or after a space.
+- comments after ``#`` at the start of a line or after a space. A quote
+  opens a quoted value only where a value starts; inside plain text it is a
+  character, so ``Say "Item #3"`` is the text ``Say "Item`` and a comment,
+  as every YAML reader reads it. Only the space character is trimmed at
+  the edges of a plain value; a no-break or ideographic space is kept.
 
 Refused, each with a message: tabs outside quotes, anchors, aliases,
 tags, multi-line scalars (``|`` and ``>``), document markers, duplicate
@@ -98,38 +102,67 @@ def _fail(source: str, number: int, message: str) -> YamlError:
     return YamlError(f"{source} line {number}: {message}")
 
 
+def _quote_end(text: str, i: int, source: str, number: int) -> int:
+    """The index after the quoted scalar that opens at text[i]."""
+    quote = text[i]
+    i += 1
+    while i < len(text):
+        ch = text[i]
+        if quote == '"' and ch == "\\":
+            i += 2
+            continue
+        if ch == quote:
+            if quote == "'" and text[i + 1:i + 2] == "'":
+                i += 2
+                continue
+            return i + 1
+        i += 1
+    raise _fail(source, number, f"a {quote} quote is never closed; close it on the same line")
+
+
 def _strip_comment(text: str, source: str, number: int) -> str:
-    """The line without its comment. A '#' starts a comment at the start of
-    the line or after a space, outside quotes. A quote opens only where a
-    value can start, so an apostrophe inside plain text is text. A tab
-    outside quotes is refused: other readers take it as a space."""
-    quote = ""
+    """The line without its comment, as YAML reads it. A quote opens a
+    quoted scalar only where a value starts: at the start of the line, after
+    '- ' or ': ', and inside [...] or {...} after '[', '{' or ','. Anywhere
+    else it is a character of plain text, so a '#' after a space still
+    starts a comment. A tab outside quotes is refused: other readers take
+    it as a space."""
+    start = True  # a value may start here
+    flow = 0  # how many [...] and {...} are open
+    closed_quote = False  # the character before was a closing quote
     i = 0
     while i < len(text):
         ch = text[i]
-        if quote == '"':
-            if ch == "\\":
-                i += 2
-                continue
-            if ch == '"':
-                quote = ""
-        elif quote == "'":
-            if ch == "'":
-                if text[i + 1:i + 2] == "'":
-                    i += 2
-                    continue
-                quote = ""
-        elif ch in "\"'" and (i == 0 or text[i - 1] in " [{,"):
-            quote = ch
-        elif ch == "#" and (i == 0 or text[i - 1] == " "):
-            return text[:i].rstrip()
-        elif ch == "\t":
+        after_quote, closed_quote = closed_quote, False
+        nxt = text[i + 1:i + 2]
+        if ch == " ":
+            i += 1
+            continue
+        if ch == "\t":
             raise _fail(source, number, "a tab sits outside quotes; use spaces, or put the text "
                                         "in quotes")
+        if ch == "#" and (i == 0 or text[i - 1] == " "):
+            return text[:i].rstrip(" ")
+        if start and ch in "\"'":
+            i = _quote_end(text, i, source, number)
+            start, closed_quote = False, True
+            continue
+        if start and flow == 0 and ch == "-" and nxt in ("", " "):
+            i += 1
+            continue
+        if ch == ":" and (nxt in ("", " ") or (flow and after_quote)):
+            start = True
+        elif start and ch in "[{":
+            flow += 1
+        elif flow and ch == ",":
+            start = True
+        elif flow and ch in "]}":
+            flow -= 1
+            start = False
+        else:
+            start = False
         i += 1
-    if quote:
-        raise _fail(source, number, f"a {quote} quote is never closed; close it on the same line")
-    return text.rstrip()
+    return text.rstrip(" ")
 
 
 def _lines(text: str, source: str) -> List[_Line]:
@@ -185,6 +218,9 @@ def _plain(text: str, source: str, number: int, in_flow: bool = False) -> Any:
         raise _fail(source, number, f"{_show(text)} starts with '- ', which other YAML readers "
                                     "read as a list inside this one; put the list on its own "
                                     "lines, one '- item' each, or quote the value")
+    if text.startswith("#"):
+        raise _fail(source, number, f"{_show(text)} starts with '#', which starts a comment in "
+                                    "other YAML readers; quote the value")
     if text.startswith(("?", ":")):
         raise _fail(source, number, f"{_show(text)} starts with {text[0]!r}, which marks a key "
                                     "in other YAML readers; quote the value")
@@ -289,7 +325,7 @@ class _Flow:
         start = self.i
         while self.i < len(self.text) and self.text[self.i] not in stops:
             self.i += 1
-        word = self.text[start:self.i].strip()
+        word = self.text[start:self.i].strip(" ")
         if not word:
             raise self.fail("a value is missing in a [...] or {...} list; write one or remove "
                             "the extra comma")
@@ -327,7 +363,7 @@ class _Flow:
                 start = self.i
                 while self.i < len(self.text) and self.text[self.i] not in ":,}":
                     self.i += 1
-                key = self.text[start:self.i].strip()
+                key = self.text[start:self.i].strip(" ")
                 if not _KEY.fullmatch(key):
                     raise self.fail(f"{_show(key)} is not a simple key; use letters, digits, "
                                     "'_', '.' and '-', or quote it")
@@ -374,7 +410,8 @@ def _opens_with_key(text: str, source: str, number: int) -> bool:
     included), so it opens a map rather than holding one value."""
     if text[0] in "\"'":
         _, end = _quoted(text, 0, source, number)
-        return text[end:end + 1] == ":" and text[end + 1:end + 2] in ("", " ")
+        rest = text[end:].lstrip(" ")
+        return rest[:1] == ":" and rest[1:2] in ("", " ")
     if text[0] in "[{":
         return False
     return re.match(r"[^:]*?:(?: |$)", text) is not None
@@ -386,6 +423,9 @@ def _split_key(line: _Line, source: str) -> Tuple[str, str]:
     if text[0] in "\"'":
         key, end = _quoted(text, 0, source, line.number)
         rest = text[end:]
+        if rest[:1] == " " and rest.lstrip(" ")[:1] == ":":
+            raise _fail(source, line.number, f"key {key!r} has a space before its ':'; remove "
+                                             "the space")
         if not rest.startswith(":"):
             raise _fail(source, line.number, f"key {key!r} has no ':' after it; write key: value")
         rest = rest[1:]
@@ -405,7 +445,7 @@ def _split_key(line: _Line, source: str) -> Tuple[str, str]:
         rest = text[m.end(1) + 1:]
     if rest and not rest.startswith(" "):
         raise _fail(source, line.number, f"key {key!r} needs a space after its ':'")
-    return key, rest.strip()
+    return key, rest.strip(" ")
 
 
 class _Block:
