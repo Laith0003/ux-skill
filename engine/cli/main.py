@@ -14,6 +14,7 @@ Subcommands
 ``ux persist list``     -- list page names persisted under pages/
 ``ux image-extract``    -- read a design image, return brief + hints + recommendation
 ``ux stats``            -- show data manifest counts
+``ux system build``     build a WCAG-gated design system (4.0 beta)
 ``ux version``          -- print version
 """
 from __future__ import annotations
@@ -757,6 +758,77 @@ else:
         _emit(result.to_dict(), ctx.obj["pretty"])
         # Exit code: 0 = above gate or forced; 1 = gate failed
         sys.exit(0 if (result.above_gate or result.forced) else 1)
+
+    # -------- ux system build (4.0 beta) ---------------------------------
+
+    @cli.group("system")
+    def system_grp() -> None:
+        """Build a WCAG-gated design system (4.0 foundations engine)."""
+
+    @system_grp.command("build")
+    @click.option("--brand", required=True,
+                  help="Brand color as hex. Quote it in a shell ('#3366FF') or drop the #.")
+    @click.option("--brief", "brief_path", type=click.Path(dir_okay=False), default=None,
+                  help="JSON brief (or .ux/last-discovery.json); the synthesizer places the axes.")
+    @click.option("--axes", "axes_text", default=None,
+                  help="Seven numbers from 0 to 1: warmth,contrast,density,geometry,"
+                       "formality,motion,type_personality.")
+    @click.option("--latin-only", is_flag=True,
+                  help="Leave out the Arabic face and scale.")
+    @click.option("--out", "out_dir", required=True,
+                  help="Folder for tokens.json, tokens.css and system-report.md.")
+    @click.option("--force", is_flag=True,
+                  help="Replace files in --out that differ. Without it nothing is overwritten.")
+    @click.pass_context
+    def system_build_cmd(ctx, brand, brief_path, axes_text, latin_only, out_dir, force) -> None:
+        """Build tokens.json, tokens.css and system-report.md into --out.
+
+        Axes come from --brief, else --axes, else 0.5 on every axis; the
+        report says which. Exit 0 when the files are written or already
+        identical, 1 when nothing was written (a gate or validation finding,
+        a file in --out that differs, or the folder could not be written),
+        2 for a bad input.
+        """
+        from engine.foundations.emit import (
+            InputError, check_out_dir, choose_axes, conflict_message, failure_message,
+            failure_text, make_system, parse_brand, read_brief, write_files)
+        try:
+            brand_hex = parse_brand(brand, "--brand")
+            brief = read_brief(brief_path, "--brief") if brief_path else None
+            axes, source = choose_axes(brief, axes_text, brief_label="--brief",
+                                       axes_label="--axes")
+            out = check_out_dir(out_dir, "--out")
+        except InputError as exc:
+            raise click.UsageError(str(exc)) from None
+        system = make_system(brand_hex, axes, source, arabic=not latin_only)
+        payload = {**system.to_dict(), "out": str(out)}
+        if not system.passed:
+            payload.update(status="failed", written=[], unchanged=[], conflicts=[],
+                           message=failure_message(system))
+            _emit(payload, ctx.obj["pretty"])
+            click.echo(failure_text(system), err=True, nl=False)
+            sys.exit(1)
+        try:
+            plan = write_files(out, system.files, force=force)
+        except InputError as exc:
+            # The inputs were fine; the folder could not be written. Nothing
+            # in it changed, so this is a run that wrote nothing (exit 1).
+            payload.update(status="error", written=[], unchanged=[], conflicts=[],
+                           message=str(exc))
+            _emit(payload, ctx.obj["pretty"])
+            click.echo(f"Error: {exc}", err=True)
+            sys.exit(1)
+        if plan.conflicts:
+            # Refused: the plan's would-be writes did not happen.
+            payload.update(status="refused", written=[], unchanged=list(plan.unchanged),
+                           conflicts=list(plan.conflicts), message=conflict_message(out, plan))
+            _emit(payload, ctx.obj["pretty"])
+            sys.exit(1)
+        payload.update(written=list(plan.write), unchanged=list(plan.unchanged), conflicts=[],
+                       status="written" if plan.write else "unchanged",
+                       message=(f"Wrote {', '.join(plan.write)} to {out}." if plan.write else
+                                f"{out} already holds this system; nothing changed."))
+        _emit(payload, ctx.obj["pretty"])
 
     # -------- ux version -------------------------------------------------
 

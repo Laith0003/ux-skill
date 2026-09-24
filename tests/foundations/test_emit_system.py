@@ -273,3 +273,37 @@ def test_every_engine_note_reads_in_words(brand, axes):
     moved = body.split("### Other choices")[0]
     assert "->" not in moved and "text/fill" not in moved
     assert "anchor a ramp" not in body
+
+
+# What a caller tells the user when nothing was built: the report's own
+# guidance on what to change, and every finding, in words.
+def test_failure_text_and_message_point_at_the_inputs(monkeypatch):
+    from engine.foundations.emit import failure_message, failure_text
+    monkeypatch.setattr(color_module, "_solve_group", lambda *args, **kwargs: None)
+    out = make_system("#FFD400", NEUTRAL, NEUTRAL_SOURCE)
+    text = failure_text(out)
+    opening = out.report.split("\n")[2]
+    change = out.report.split("## What to change\n\n", 1)[1].split("\n\n")[0]
+    listed = out.report.split("## Findings\n\n", 1)[1]
+    assert text == f"{opening}\n\nWhat to change\n{change}\n\nFindings\n{listed}"
+    message = failure_message(out)
+    assert message.startswith("Nothing was written: the WCAG gate found ")
+    assert "darker or more saturated" in message and "the axes or the brief" in message
+    assert "fix each finding" not in (text + message).lower()
+
+
+def test_failure_message_for_a_validation_failure_says_to_report_it(monkeypatch):
+    from engine.foundations.emit import failure_message, failure_text
+
+    def broken(*args, **kwargs):
+        raise ValidationError([Problem("space.4", "bad-value", "space.4 is 'x'; use a dimension")])
+    monkeypatch.setattr("engine.foundations.emit.build_system", broken)
+    out = make_system("#3366FF", NEUTRAL, NEUTRAL_SOURCE)
+    assert "report it" in failure_message(out)
+    assert "- space.4 is 'x'; use a dimension" in failure_text(out)
+
+
+def test_failure_text_of_a_passing_system_is_empty():
+    from engine.foundations.emit import failure_message, failure_text
+    out = make_system("#3366FF", NEUTRAL, NEUTRAL_SOURCE)
+    assert failure_text(out) == "" and failure_message(out) == ""

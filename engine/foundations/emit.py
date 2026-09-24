@@ -475,6 +475,10 @@ _MODES_LINE = ("Switch a mode with an attribute on the html element: data-theme=
                "follow the operating system setting.")
 
 
+def _change(gate_line: str) -> str:
+    return _CHANGE_VALIDATION if gate_line.startswith(_VALIDATION) else _CHANGE_GATE
+
+
 def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
                   gate_line: str, notes: Sequence[str],
                   findings: Sequence[SystemFinding]) -> str:
@@ -488,8 +492,7 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
              f"- Axes: {axes_source}.", "", *_axes_table(axes), "",
              "## WCAG gate", "", gate_line, "", _CHECKS_LINE, ""]
     if findings:
-        change = _CHANGE_VALIDATION if gate_line.startswith(_VALIDATION) else _CHANGE_GATE
-        lines += ["## What to change", "", change, "", "## Findings", ""]
+        lines += ["## What to change", "", _change(gate_line), "", "## Findings", ""]
         lines += [f"- {_finding_line(f)}" for f in findings]
         return "\n".join(lines) + "\n"
     lines += [_GATE_SCOPE, ""]
@@ -542,6 +545,35 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
     return SystemOutput(passed=bool(tokens), files=files, report=report, gate=gate,
                         findings=findings, brand=brand, axes=axes, axes_source=axes_source,
                         arabic=arabic)
+
+
+def failure_text(output: SystemOutput) -> str:
+    """What a caller shows a person when nothing was built: the report's
+    opening sentence, its guidance on what to change and every finding, in
+    the report's own words. Empty for a system that passed."""
+    if output.passed:
+        return ""
+    lines = [_opening(output.brand, output.gate, output.findings), "",
+             "What to change", _change(output.gate), "", "Findings"]
+    lines += [f"- {_finding_line(f)}" for f in output.findings]
+    return "\n".join(lines) + "\n"
+
+
+def failure_message(output: SystemOutput) -> str:
+    """One line for a caller's result: nothing was written, and which
+    inputs to change. Empty for a system that passed."""
+    if output.passed:
+        return ""
+    n = len(output.findings)
+    if output.gate.startswith(_VALIDATION):
+        return (f"Nothing was written: the generated tokens broke {n} structural "
+                f"rule{'' if n == 1 else 's'}, which no brand color or axes should cause. Build "
+                "again with the same inputs, and if it fails again, report it with the brand "
+                "color, the axes and the findings.")
+    return (f"Nothing was written: the WCAG gate found {n} problem{'' if n == 1 else 's'} with "
+            "these inputs. Change the brand color (a darker or more saturated one gives the "
+            "engine more room to reach every contrast minimum), the axes or the brief, and "
+            "build again. The findings name each pairing that fell short.")
 
 
 # ---------------------------------------------------------------- write
