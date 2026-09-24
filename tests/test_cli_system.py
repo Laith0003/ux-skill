@@ -273,3 +273,9 @@ def test_the_command_reports_the_shared_statuses():
     block = source[source.index("def system_build_cmd"):source.index("# -------- ux version")]
     assert "write_outcome(" in block
     assert "sys.exit(1)" not in block, "exit through STATUS_EXIT, not a literal code"
+
+
+def test_help_says_system_pack_is_3x_and_points_at_system_build():
+    result = _runner().invoke(cli, ["--help"])
+    line = next(line for line in result.stdout.splitlines() if "system-pack" in line)
+    assert "3.x" in line and "system build" in line, line

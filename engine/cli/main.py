@@ -647,7 +647,8 @@ else:
 
     # -------- ux system-pack (v3.1) ---------------------------------------
 
-    @cli.command("system-pack")
+    @cli.command("system-pack",
+                 short_help="3.x system folder. For the 4.0 engine: system build.")
     @click.option("--industry", default="", help="Industry id (e.g. fintech-payments).")
     @click.option("--tone", multiple=True, help="Tone tags (repeatable).")
     @click.option("--audience", multiple=True, help="Audience tags (repeatable).")

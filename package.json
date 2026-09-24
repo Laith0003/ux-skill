@@ -1,7 +1,7 @@
 {
   "name": "uxskill",
   "version": "4.0.0-beta.1",
-  "description": "ux-skill — design intelligence engine for AI coding assistants. npx wrapper around the Python engine.",
+  "description": "ux-skill: design intelligence engine for AI coding assistants. npx wrapper around the Python engine.",
   "type": "module",
   "bin": {
     "uxskill": "bin/uxskill.mjs",
@@ -28,5 +28,8 @@
     "cursor", "windsurf", "linter", "design", "frontend"
   ],
   "author": "Laith Aljunaidy <laith.aljunaidy.laith@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "publishConfig": {
+    "tag": "beta"
+  }
 }

@@ -45,3 +45,12 @@ def test_readme_badge_and_changelog_match():
     changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
     first = re.search(r"^## \[([^\]]+)\]", changelog, re.M).group(1)
     assert first == semver(__version__)
+
+
+def test_npm_publishes_a_pre_release_under_its_own_tag():
+    # npx uxskill and npm i uxskill must stay on the last stable release;
+    # the docs send beta users to npx uxskill@beta.
+    data = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
+    tag = _PEP440.fullmatch(__version__).group(2)
+    expected = _TAG[tag] if tag else None
+    assert data.get("publishConfig", {}).get("tag") == expected
