@@ -2,7 +2,7 @@
 
 ## Summary
 
-Border sets the width of every stroke: separators, the edges of containers and controls, emphasis, selection and the focus ring, plus the stroke styles. Widths are whole pixels. Border colors are color roles (color.line.subtle, color.line.input, color.line.selected); a border role carries a width only. Border does not govern the contrast of a stroke; color does.
+Border sets the width of every stroke: separators, the edges of containers and controls, emphasis, selection and the focus ring, plus the stroke styles. Widths are whole pixels. Border colors are color roles, and a border role carries a width only. An edge at rest or selected takes a color.line role (color.line.subtle, color.line.input, color.line.selected); a danger or error edge takes color.status.danger.strong; a disabled edge takes the role its contract names, color.text.disabled for the secondary button and the row's check box and color.line.subtle for the text field (decisions/disabled-contrast.md). Border does not govern the contrast of a stroke; color does.
 
 ## Principles
 
@@ -75,7 +75,7 @@ Audits the width roles and the rules between them: whole pixels, the weight orde
 
 ## Handoff notes
 
-- Border roles hold widths only; write the stroke as three properties: border-width from the role, border-style from border.style.default, and border-color from a color.line role.
+- Border roles hold widths only; write the stroke as three properties: border-width from the role, border-style from border.style.default, and border-color from the color role the contract binds for that variant and state: a color.line role, color.status.danger.strong for a danger or error edge, or the disabled edge color the contract names.
 - Draw focus with outline, outline-width from border.focus-ring.width and outline-offset from border.focus-ring.offset, so it never moves the layout.
 - Use logical sides for single edges: border-block-end for a row separator, border-inline-start for a leading indicator.
 - The separator and the outline can share a value; keep both properties in the code so a later change to one does not move the other.

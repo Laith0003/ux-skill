@@ -101,12 +101,15 @@ copy:
 usage:
   do:
     - Use one primary button per view, for the action most people take next
-    - Use secondary or ghost for every other action on the same view
+    - Use secondary for another action that must read as a control at rest and when disabled, such as the second of a pair or an action on a busy surface
+    - Use ghost for light, repeated actions where the layout already marks them as actions, such as a toolbar or a table row
     - Put the icon at the start of the label in both directions; mirror only a glyph that points
     - Keep the radius the same in every state
     - Apply the binding for a state over the one without a state, and the one with more variant conditions over the one with fewer
+    - When two states apply at once, disabled wins over every other state
   dont:
     - Do not use a button to navigate inside running text; use a link
+    - Do not make a ghost button the only control in an open area; at rest only its label marks it
     - Do not color a button green or amber to signal an outcome; show outcomes in a status banner
     - Do not change the label while loading
     - Do not disable a button to hide an error; let the action run and name the problem

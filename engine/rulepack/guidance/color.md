@@ -2,7 +2,7 @@
 
 ## Summary
 
-Color sets every surface, text, line, fill and ring in the product, in light and dark and at standard and high contrast. It is generated from one brand color: the brand anchors its ramp at step 500, a neutral ramp takes a trace of the brand hue, and four status ramps sit at fixed hues. Every role that carries a contrast minimum is measured against every background it can sit on before the system is written. Color does not govern type size, spacing or shadow; those foundations own them.
+Color sets every surface, text, line, fill and ring in the product, in light and dark and at standard and high contrast. It is generated from one brand color: the brand anchors its ramp at step 500, a neutral ramp takes a trace of the brand hue, and four status ramps sit at fixed hues. The build measures text roles against every surface they can sit on, the input line, the selected line and the focus ring against the page, card, sunken and raised surfaces, and the text on each fill against that fill. Action fills and strong status fills are measured against the page only: on card, sunken and raised a filled control is found by its label and its focus ring, not its fill (decisions/fill-edge-page-only.md). Contracts add the pairings their components need. Color does not govern type size, spacing or shadow; those foundations own them.
 
 ## Principles
 
@@ -10,9 +10,9 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - **One meaning per role.** A role means the same thing on every screen and in every component. A role is never borrowed for its value.
 - **Separate families.** Brand color marks identity and the main action, neutral carries structure and reading, status colors report outcomes. A family never stands in for another.
 - **Saturation is an accent.** Fully saturated color goes on controls, focus and status, not on large surfaces, where it tires the eye and drowns the accent.
-- **Depth by lightness.** Surfaces get lighter as they rise. In dark each level is its own step and the step, not the shadow, is the main depth cue (decisions/dark-elevation-cue.md); in light the card and raised surfaces share white and the shadow tells them apart.
+- **Depth by lightness.** Surfaces get lighter as they rise. In dark each rising level, page, card and raised, is its own step, and the step, not the shadow, is the main depth cue (decisions/dark-elevation-cue.md). Sunken sits below the page except under dark high contrast, where both are black. In light the card and raised surfaces share white and the shadow tells them apart.
 - **Never color alone.** Anything color says, an icon, a word, a shape or a heavier edge says too (WCAG 1.4.1).
-- **Measured, not hoped.** Every pairing a role can meet is measured in all four color contexts; a system that fails one is not written.
+- **Measured, not hoped.** Every pairing the build declares is measured in all four color contexts, and a system that fails one is not written. A pairing the build does not declare, such as a fill on a raised surface, is not measured until a contract declares it.
 
 ## Roles
 
@@ -56,25 +56,29 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 | A floating layer | color.surface.raised with an elevation shadow | card |
 | Text people read | color.text.default | a status or link color |
 | Secondary information | color.text.muted | color.text.disabled |
-| The main action | color.action.primary with color.text.on-action | a status fill |
+| The one main action on a view | a primary button: color.action.primary with color.text.on-action | a second primary, or a status fill |
+| Another action that must read as a control on its own | a secondary button: an edge in color.line.selected, the label in color.text.link | a ghost button in an open area |
+| A light, repeated action where the layout already marks it as an action | a ghost button: the label in color.text.link, a fill and edge only on hover and press | a secondary button in every row |
 | A destructive action | color.action.danger with color.text.on-danger | a warning color |
 | A field's edge | color.line.input | color.line.subtle, which may not reach 3:1 |
 | A separator inside a card | color.line.subtle | color.line.input |
 | A selected item | color.surface.selected with color.line.selected and a heavier edge | the tint alone |
 | An error, warning, success or note | the matching color.status roles with an icon and words | the brand color |
 
+Choose a button's emphasis by how it must be found. A primary button is the one main action on a view; its fill is paired with the page only, so elsewhere its label and ring identify it. A secondary button keeps its edge in every state: color.line.selected, paired at 3:1 with every surface the button contract lists, turning to color.text.disabled when disabled, so it reads as a control at rest and when unavailable. Use it for the second action of a pair, a standalone action beside content, and any action on a busy surface. A ghost button has no fill and no edge at rest or when disabled; they appear only on hover and press. At rest only its label, color.text.link at 4.5:1, marks it, and a disabled ghost shows only color.text.disabled, which has no contrast minimum. Use it for low-weight actions that repeat, or that sit where the layout already says they are actions, such as a toolbar, a table row or a card's actions; never as the only control in an open area, and never where a disabled action must still read as a control (decisions/button-intents.md).
+
 Status colors report outcomes only: danger for failure and destruction, warning for risk that can still be avoided, success for a completed outcome, info for neutral guidance. They never color layout, and a status text role never carries body copy.
 
 ## Modes
 
-Color varies on scheme (light, dark) and contrast (standard, high). Every semantic role has a value in all four contexts; primitives never change. Dark is not an inversion: each role is chosen for dark and measured there. Under high contrast, text pairings rise to 7:1 and non-text pairings to our 4.5:1 floor, unless a pairing pins its own high-contrast minimum, as the ring on tinted fills and the disabled label do (decisions/high-contrast-non-text-floor.md). The surfaces move to the ends of the ramp: in light the page, card, sunken and raised surfaces are all white. A container whose fill then measures below our 1.2:1 floor against the surface under it draws an edge (decisions/container-edge.md).
+Color varies on scheme (light, dark) and contrast (standard, high). Every semantic role has a value in all four contexts; primitives never change. Dark is not an inversion: each role is chosen for dark and measured there. Under high contrast, text pairings rise to 7:1 and non-text pairings to our 4.5:1 floor, unless a pairing pins its own high-contrast minimum, as the ring on tinted fills (decisions/ring-on-tinted-fills.md) and the disabled label (decisions/disabled-contrast.md) do (decisions/high-contrast-non-text-floor.md). The surfaces move to the ends of the ramp: in light the page, card, sunken and raised surfaces are all white. A container whose fill then measures below our 1.2:1 floor against the surface under it draws an edge (decisions/container-edge.md).
 
 ## Changing the system
 
 1. Read before writing: trace the role to the primitive it points at in every context before changing anything.
 2. To change the palette, change the brand color and build again; the ramps, roles and pairings are regenerated and measured. Never edit a generated hex in tokens.json or tokens.css.
 3. To change one use, point the role at another step in the contexts that need it, then build and let the gate measure it in all four.
-4. To add a role, add it to a coverage table, so it is paired with every background it can meet, or to COVERAGE_EXEMPT with the reason it needs no pairing.
+4. To add a role, add it to a coverage table, so it is paired with every surface that table lists, or to COVERAGE_EXEMPT with the reason it needs no pairing.
 5. To drop a status family, first confirm no contract binds its roles; keep the ramp, since other roles may point at it.
 6. Change one thing at a time and build after each change; a failed gate names the pairing and the context.
 7. Dark and high contrast are never an afterthought: a change that passes in light is not done until the gate passes in all four contexts.
@@ -83,7 +87,7 @@ Color varies on scheme (light, dark) and contrast (standard, high). Every semant
 
 Audits the color roles and their pairings in all four contexts: contrast, distinctness, polarity, and whether color is ever the only signal. It does not audit type size, spacing, shadow or which component uses which role beyond the contracts; those have their own audits.
 
-Some roles carry no contrast minimum. Disabled text and fills are checked for distinctness instead, since WCAG exempts inactive controls; the button contract still holds its disabled label to our 1.3:1 floor on the disabled fill (decisions/disabled-contrast.md). The subtle separator is decorative and is checked for distinctness from the surfaces it divides. The scrim is translucent and never enters a pairing; content sits on the raised surface above it. A hover or pressed fill is measured with the text on it, never as an overlay.
+Some roles carry no contrast minimum. Disabled text and fills are checked for distinctness instead, since WCAG exempts inactive controls; the button contract still holds its disabled label to our 1.3:1 floor on the disabled fill (decisions/disabled-contrast.md). The subtle separator is decorative and is checked for distinctness from the surfaces it divides. The scrim is translucent and never enters a pairing; content sits on the raised surface above it. A hover or pressed fill is measured with the text on it, never as an overlay. Action and strong status fills, with their hover and pressed steps, are measured against the page only; on card, sunken and raised a filled control is identified by its label and its focus ring, so an audit checks those there (decisions/fill-edge-page-only.md).
 
 ## Checks
 
@@ -98,6 +102,7 @@ Some roles carry no contrast minimum. Disabled text and fills are checked for di
 - Color is never the only signal: an error has an icon and words, a selected item has a heavier edge or a check, a link inside text is underlined or otherwise marked (WCAG 1.4.1).
 - The edge of an enabled field or control uses color.line.input, not color.line.subtle; the subtle line does not promise 3:1.
 - A component placed on a surface its contract does not list is measured on that surface before it ships.
+- A filled control whose label is not visible, such as an icon-only button, on a card, sunken or raised surface pairs its fill with that surface in its own contract (decisions/fill-edge-page-only.md).
 - A brand color near a status hue is not used where it could read as that status (decisions/status-hues.md).
 - Text over an image or a gradient is measured against the worst area it covers.
 - A pass on the numbers is not a pass when the use breaks the rule: disabled text used for secondary copy fails even though no ratio applies.
@@ -112,9 +117,9 @@ Some roles carry no contrast minimum. Disabled text and fills are checked for di
 
 ## Common mistakes
 
-- Using color.text.default on the inverse surface or on a fill: it fails there; use color.text.inverse or the fill's on role.
+- Using color.text.default on the inverse surface or on an action or strong status fill: it fails there; use color.text.inverse or the fill's on role. On a soft status fill it is paired and fine.
 - Placing text on the scrim: the scrim is a layer; put content on color.surface.raised above it.
 - Using disabled text for secondary copy: people read it as unavailable; use color.text.muted.
 - Using status colors for neutral structure: a red card edge reads as an error; use color.line roles.
-- Changing the brand color without building again: the pairings are no longer measured.
+- Changing the brand color without building again: the values in use were never measured against the new brand.
 - Checking only light mode after a change: dark and high contrast fail on their own.

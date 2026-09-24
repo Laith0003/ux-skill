@@ -55,7 +55,8 @@ contrast:
   - {fg: color.line.selected, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   - {fg: color.line.selected, bg: color.surface.selected, minimum: 3, criterion: "1.4.11"}
   - {fg: color.focus.ring, bg: surfaces, minimum: 3, criterion: "1.4.11"}
-  # A focused row can also be selected, so the ring meets the tinted fill.
+  # A focused row's ring falls just outside it, where a neighboring selected
+  # row can sit, so the ring meets the tinted fill.
   # 3:1 holds in every context; the high-contrast 4.5:1 floor does not
   # hold against the tint for every brand, so this pairing keeps 3:1.
   - {fg: color.focus.ring, bg: color.surface.selected, minimum: 3, criterion: "1.4.11", high: 3}
@@ -76,6 +77,7 @@ usage:
     - Let the chevron point to the end of the row, so it flips under right to left
     - Keep the gap between rows at the list gap; rows at the target size need no extra spacing
     - Apply the binding for a state over the one without a state, and the one with more variant conditions over the one with fewer
+    - When two states apply at once, disabled wins over every other state, and selected wins over hover and pressed
   dont:
     - Do not show selection by the tinted fill alone
     - Do not use the hover fill for selection or the selection fill for hover

@@ -2,7 +2,7 @@
 
 ## Summary
 
-Motion sets how things move: seven interaction roles, each with a duration and a curve and, where something travels, a distance, plus a sign that mirrors horizontal travel under right to left. The motion axis sets the pace and character, from still and plain to longer and lively. Reduced motion is a mode: roles keep their meaning with no travel, gentle curves and short durations. Motion does not govern the color or layout of what moves.
+Motion sets how things move: seven interaction roles, each with a duration and a curve and, where something travels, a distance, plus a sign that mirrors horizontal travel under right to left. The motion axis sets the pace and character, from still and plain to longer and lively. Reduced motion is a mode: roles keep their meaning with no travel, and one-shot moves take gentle curves and short durations. Motion does not govern the color or layout of what moves.
 
 ## Principles
 
@@ -21,7 +21,7 @@ Motion sets how things move: seven interaction roles, each with a duration and a
 
 - `motion.<role>.duration`: how long the move lasts for that role.
 - `motion.<role>.curve`: how the move speeds up and slows down for that role.
-- `motion.<role>.distance`: how far the element travels for that role; always positive, with the direction from motion.inline-sign.
+- `motion.<role>.distance`: how far the element travels for that role; never negative (0 under reduced motion), with the direction from motion.inline-sign.
 - `motion.inline-sign`: 1 in left to right and -1 in right to left; multiply horizontal travel by it.
 
 ## Choosing
@@ -44,7 +44,7 @@ Movement follows the smallest axis that explains the change: along one axis befo
 
 ## Modes
 
-Motion varies on motion (standard, reduced) and direction (ltr, rtl). Under reduced motion every role keeps its meaning: travel drops to 0, curves turn gentle, durations cap at 100ms and never grow, a dismiss may tie a reveal but never outlast it, and the progress loop keeps its standard pace because it reports status (decisions/motion-roles.md). Under right to left the sign turns -1 so horizontal travel mirrors (decisions/unsigned-distances.md). The mode follows prefers-reduced-motion unless data-motion is set on the html element.
+Motion varies on motion (standard, reduced) and direction (ltr, rtl). Under reduced motion every role keeps its meaning: travel drops to 0, one-shot curves turn gentle, one-shot durations cap at 100ms and never grow, a dismiss may tie a reveal but never outlast it, and the progress loop keeps its standard duration and linear curve because it reports status (decisions/motion-roles.md). Under right to left the sign turns -1 so horizontal travel mirrors (decisions/unsigned-distances.md). The mode follows prefers-reduced-motion unless data-motion is set on the html element.
 
 ## Changing the system
 
@@ -53,7 +53,7 @@ Motion varies on motion (standard, reduced) and direction (ltr, rtl). Under redu
 3. To change one kind of change, point its role at another duration or curve, keeping dismiss shorter than reveal and press in place.
 4. Change reduced values only through the motion:reduced overrides, and never make them longer than the standard ones.
 5. Never create a move outside the seven roles; if a change fits none, it probably needs none.
-6. Keep progress linear and at least 334ms per cycle.
+6. Keep progress linear and at least 334ms per cycle, our floor, so the loop cannot repeat more than three times a second.
 
 ## Audit scope
 
@@ -71,7 +71,7 @@ Audits the motion roles in both motion modes and both directions: reduced travel
 - `press-in-place`: a press never travels.
 - `linear-progress-only`: only the progress loop is linear; every one-shot move eases.
 - `reduced-not-longer`: reduced motion never makes a role longer.
-- `progress-floor`: one cycle of the progress loop lasts at least 334ms.
+- `progress-floor`: one cycle of the progress loop lasts at least 334ms, our floor; a loop that flashes more than three times a second falls under WCAG 2.3.1, which sets no duration.
 
 ## Beyond the gate
 

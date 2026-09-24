@@ -50,7 +50,7 @@ Type varies on direction. Under dir="rtl" every style but code uses the Arabic f
 ## Changing the system
 
 1. Read before writing: note each style's five fields in both directions.
-2. To change the faces, build again with another type personality value, or add a face and point the styles at it; always keep an Arabic face beside a Latin one.
+2. To change the faces, build again with another type personality value, or add a face and point the styles at it; in a build with Arabic, always keep an Arabic face beside the Latin one.
 3. To change the scale, build again with another contrast axis value; the ratio and the heading weight follow.
 4. To change one style, point one field at another primitive, keeping body at 16px or more, fine at 12px or more, and reading line heights at 1.5 or more.
 5. Keep the order hero, heading-1, heading-2, heading-3, body falling in size in both directions.

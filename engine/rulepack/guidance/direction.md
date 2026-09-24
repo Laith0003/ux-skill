@@ -13,12 +13,13 @@ Right to left is a standing mode, not a translation pass. Every token that depen
 
 ## Mirroring
 
-- Mirror the glyph, never the container: a back arrow points to the start edge, which is on the right under right to left.
+- A part's rtlBehavior governs where it sits; the glyph rules below govern how it is drawn. A logical part moves to the other side without flipping its drawing; a mirror part flips its drawing. A back arrow points to the start edge, which is on the right under right to left.
+- Flip a drawing with transform: scaleX(-1) under [dir="rtl"], or ship a mirrored icon; never flip the container, which would reverse its text.
 - The first item of a navigation and the home link sit at the start edge.
 - Progress fills from the start edge to the end edge.
 - A search icon sits at the start of its field, a clear button at the end.
 - A leading icon sits at the start of its label in both directions.
-- Icons that do not point (a check, a star, a search glass) never flip; icons that point (arrows, chevrons, send) do.
+- Icons that point along the line (back and forward arrows, chevrons, send) flip. Icons that point up or down (download, upload, sort), clocks, media controls and icons that do not point (a check, a star, a search glass) keep their drawing.
 - Horizontal motion mirrors through motion.inline-sign; vertical motion does not (decisions/unsigned-distances.md).
 - Layout that auto layout tools do not mirror on their own, such as a reordered row, is reversed by hand and checked.
 
@@ -28,7 +29,7 @@ Right to left is a standing mode, not a translation pass. Every token that depen
 - The Arabic size at a step is 1 to 2px larger than the Latin size at the same step, and its line height is taller.
 - Letter spacing is 0 for Arabic; spacing breaks the joins between letters.
 - Arabic text is never set in italic or with a faux bold.
-- Load the Arabic face the tokens name; without it the browser falls back and the sizes no longer fit.
+- Load the Arabic face the tokens name; without it the browser falls back and the sizes do not fit.
 
 ## Length and layout
 

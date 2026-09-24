@@ -79,7 +79,7 @@ Audits the shadow levels and the stacking order: that each level rises above the
 - Each shadow role is a box-shadow custom property with two layers; the stacking roles are unitless z-index numbers.
 - Every floating surface sets two things from the same level: box-shadow from its shadow role and z-index from its order role. The surface fill comes from color.
 - The scrim is a fixed element with color.scrim as its background at elevation.order.overlay and no shadow.
-- Dark shadows switch with data-theme on the html element; components read one property.
+- Dark shadows switch with data-theme on the html element, or with prefers-color-scheme when the attribute is absent; components read one property.
 
 ## Common mistakes
 
