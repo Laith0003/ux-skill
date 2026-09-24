@@ -183,6 +183,10 @@ def _reduced_curve(ts: TokenSet, mode: str) -> List[str]:
 
 
 def _dismiss_faster(ts: TokenSet, mode: str) -> List[str]:
+    """Leaving is shorter than arriving. Under reduced motion both cap at
+    the same length, so a tie passes there, but a dismiss longer than the
+    reveal still fails. A reading already reported in the left-to-right or
+    the standard-motion context is not repeated."""
     a, b = "motion.dismiss.duration", "motion.reveal.duration"
     if not (_typed(ts, a) and _typed(ts, b)):
         return []
@@ -191,9 +195,16 @@ def _dismiss_faster(ts: TokenSet, mode: str) -> List[str]:
         return _ms(ts, a, m), _ms(ts, b, m)
 
     da, db = read(mode)
-    if da < db or _seen_ltr(ts, mode, read):
+    reduced = "motion:reduced" in mode
+    if (da <= db if reduced else da < db) or _seen_ltr(ts, mode, read):
+        return []
+    if reduced and read(_standard(ts, mode)) == (da, db):
         return []
     key = sparse(mode, ts.axes)
+    if reduced:
+        return [f"{a} ({da:g}ms) is longer than {b} ({db:g}ms) under {key}; reduced motion may "
+                "let the two tie but never lets leaving outlast arriving, so shorten "
+                f"{a} under {key}"]
     if not key:
         return [f"{a} ({da:g}ms) is not shorter than {b} ({db:g}ms); leaving should never hold "
                 "the next action longer than arriving, so shorten it"]
@@ -382,10 +393,7 @@ CHECKS: Tuple[Check, ...] = (
     Check("reduced-travel", "2.3.3", _reduced_travel, axes=_BOTH),
     Check("reduced-length", "system", _reduced_length, axes=_BOTH),
     Check("reduced-curve", "system", _reduced_curve, axes=_BOTH),
-    Check("dismiss-faster", "system", _dismiss_faster, axes=("direction",),
-          exempt_axes=(("motion", "under reduced motion every role caps at "
-                        f"{REDUCED_MAX_MS}ms, so dismiss and reveal may tie; reduced-length and "
-                        "reduced-not-longer check reduced durations"),)),
+    Check("dismiss-faster", "system", _dismiss_faster, axes=_BOTH),
     Check("progress-linear", "system", _progress_linear, axes=_BOTH),
     Check("progress-keeps-pace", "system", _progress_pace, axes=_BOTH),
     Check("mirrored-motion", "system", _mirrored, axes=_BOTH),

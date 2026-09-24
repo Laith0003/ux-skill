@@ -804,3 +804,23 @@ def test_dark_input_border_starts_where_it_clears_the_raised_surface(seed):
     assert SEMANTIC["color.line.input"][1] == "color.neutral.400"
     notes = generate_color(AXES, seed).notes
     assert not [n for n in notes if n.startswith("color.line.input (scheme:dark,contrast:standard)")]
+
+
+# Coverage closure: a role added to SEMANTIC in the text, surface, line or
+# focus family joins a coverage table or is exempt with a stated reason, so
+# it can never ship with no pairing at all.
+
+def test_every_text_surface_line_and_focus_role_is_in_a_table_or_exempt():
+    assert color_module.uncovered_roles(SEMANTIC) == []
+    tables = set(color_module.TEXT_ROLES + color_module.TEXT_SURFACES
+                 + color_module.LINE_ROLES + color_module.LINE_SURFACES)
+    exempt = color_module.COVERAGE_EXEMPT
+    assert set(exempt) <= set(SEMANTIC)
+    assert not set(exempt) & tables
+    assert all(reason.strip() for reason in exempt.values())
+
+
+def test_a_role_added_only_to_the_semantic_table_is_named():
+    extra = list(SEMANTIC) + ["color.text.subtle", "color.surface.overlay", "color.scrim-2",
+                              "color.action.secondary"]
+    assert color_module.uncovered_roles(extra) == ["color.text.subtle", "color.surface.overlay"]

@@ -426,12 +426,44 @@ def test_dismiss_is_faster_in_both_directions():
     report = gate(ts, [], CHECKS, raise_on_fail=False)
     assert [(f.check, f.mode, f.message) for f in report.failures
             if f.check == "dismiss-faster"] == [
-        ("dismiss-faster", "direction:rtl",
+        ("dismiss-faster", "direction:rtl,motion:standard",
          "motion.dismiss.duration (1200ms) is not shorter than motion.reveal.duration (1200ms) "
          "under direction:rtl; leaving should never hold the next action longer than arriving, "
          "so shorten motion.dismiss.duration under direction:rtl")]
     dismiss = {c.id: c for c in CHECKS}["dismiss-faster"]
-    assert dict(dismiss.exempt_axes)["motion"].startswith("under reduced motion every role caps")
+    assert dismiss.axes == ("motion", "direction") and dismiss.exempt_axes == ()
+
+
+def test_reduced_motion_lets_dismiss_and_reveal_tie():
+    ts = _roles_set(motion__reveal__duration=("duration", "{motion.d.slow}",
+                                              {"motion:reduced": "{motion.d.fast}"}),
+                    motion__dismiss__duration=("duration", "{motion.d.fast}", {}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [f for f in report.failures if f.check == "dismiss-faster"] == []
+
+
+def test_reduced_motion_never_lets_dismiss_outlast_reveal():
+    ts = _roles_set(motion__reveal__duration=("duration", "{motion.d.slow}",
+                                              {"motion:reduced": "{motion.d.fast}"}),
+                    motion__dismiss__duration=("duration", "{motion.d.fast}",
+                                               {"motion:reduced": "{motion.d.slow}"}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.mode, f.message) for f in report.failures
+            if f.check == "dismiss-faster"] == [
+        ("dismiss-faster", "direction:ltr,motion:reduced",
+         "motion.dismiss.duration (1200ms) is longer than motion.reveal.duration (100ms) under "
+         "motion:reduced; reduced motion may let the two tie but never lets leaving outlast "
+         "arriving, so shorten motion.dismiss.duration under motion:reduced")]
+
+
+def test_a_standard_motion_finding_is_not_repeated_under_reduced_motion():
+    ts = _roles_set(motion__reveal__duration=("duration", "{motion.d.fast}", {}),
+                    motion__dismiss__duration=("duration", "{motion.d.slow}", {}))
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [f.mode for f in report.failures if f.check == "dismiss-faster"] == [
+        "direction:ltr,motion:standard"]
 
 
 def test_the_inline_sign_mirrors_under_reduced_motion_too():

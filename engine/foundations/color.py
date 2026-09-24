@@ -18,7 +18,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from types import MappingProxyType
-from typing import Callable, Dict, List, Mapping, Optional, Tuple
+from typing import Callable, Dict, Iterable, List, Mapping, Optional, Tuple
 
 from engine.foundations.color_math import contrast, hex_to_oklch, luminance, oklch_to_hex
 from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
@@ -127,6 +127,32 @@ TEXT_SURFACES: Tuple[str, ...] = ("color.surface.page", "color.surface.card",
 LINE_ROLES: Tuple[str, ...] = ("color.line.input", "color.line.selected", "color.focus.ring")
 LINE_SURFACES: Tuple[str, ...] = ("color.surface.page", "color.surface.card",
                                   "color.surface.sunken", "color.surface.raised")
+# Roles in the four families the tables cover (text, surface, line,
+# focus) that sit in no table, each with the reason it needs no row there.
+# A role added to one of those families must join a table or this map, or
+# uncovered_roles names it: a role in neither would get no pairing at all.
+COVERAGE_EXEMPT: Mapping[str, str] = MappingProxyType({
+    "color.text.inverse": "sits only on color.surface.inverse and is paired there",
+    "color.text.disabled": "inactive text, which WCAG exempts from contrast minimums; "
+                           "disabled-distinct keeps it apart from enabled text",
+    "color.text.on-action": "sits only on the primary fill and its states and is paired there",
+    "color.text.on-danger": "sits only on the danger fill and its states and is paired there",
+    "color.surface.inverse": "a background whose text and ring are paired against it",
+    "color.line.subtle": "a decorative separator with no contrast minimum; "
+                         "line-subtle-visible keeps it apart from the surfaces it divides",
+    "color.focus.ring-inverse": "the ring for color.surface.inverse and is paired there",
+})
+COVERAGE_FAMILIES: Tuple[str, ...] = ("color.text.", "color.surface.", "color.line.",
+                                      "color.focus.")
+
+
+def uncovered_roles(roles: Iterable[str]) -> List[str]:
+    """Every role in a covered family that no coverage table names and
+    COVERAGE_EXEMPT does not excuse, in the order given."""
+    tables = set(TEXT_ROLES + TEXT_SURFACES + LINE_ROLES + LINE_SURFACES)
+    return [r for r in roles if r.startswith(COVERAGE_FAMILIES)
+            and r not in tables and r not in COVERAGE_EXEMPT]
+
 _FILL_STATES = {
     "color.action.primary": ("color.action.primary-hover", "color.action.primary-pressed"),
     "color.action.danger": ("color.action.danger-hover", "color.action.danger-pressed"),
