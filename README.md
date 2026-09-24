@@ -14,7 +14,7 @@ pip install uxskill
 
 *Before: generic stock-photo SEO slop. After: real construction-photo hero under a dark scrim, editorial headline with an amber accent, quote form in the hero. Same AI coding tool, same prompt, different result when ux-skill supplies the constraints.*
 
-> **v3.1.0, THE BRAIN, now brand-true + responsive.** The strongest UX plugin for AI coding. A Python reasoning core with a deterministic 7-axis synthesizer, 12 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 152 anti-pattern rules, 25 tech stacks, 160 brand specs), 25 slash commands, 5 sub-agents, 18 MCP tools, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
+> **v4.0 beta, FOUNDATIONS: one command builds a complete, WCAG-gated design system, with Arabic and right to left built in.** The strongest UX plugin for AI coding. A Python reasoning core with a deterministic 7-axis synthesizer, 12 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 152 anti-pattern rules, 25 tech stacks, 160 brand specs), 25 slash commands, 5 sub-agents, 18 MCP tools, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
 
 > **The brand name is `ux-skill`.** The PyPI / npm package name stays `uxskill`. The GitHub repo lives at [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-152-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-310_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-2159_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -59,7 +59,7 @@ This beta builds new systems; it does not read an existing one yet. 4.1 adds imp
 - **The wow layer.** The engine derives 2-3 coordinated signature moments per page, the "wow can only come from the user" doctrine is overturned.
 - **Sharper linter** (152 rules): imagery-mandatory + icon-only detection, placeholder-token and `100vw` rules; seeded picsum kept, random stripped.
 
-Tests **310 passing**. Offline. Deterministic. No LLM ever called. Full notes in [CHANGELOG.md](CHANGELOG.md).
+Tests **2159 passing**. Offline. Deterministic. No LLM ever called. Full notes in [CHANGELOG.md](CHANGELOG.md).
 
 ### What's new in v3
 

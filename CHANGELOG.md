@@ -53,9 +53,9 @@ Every 3.x command still works as it did.
   token carries its value for every mode it changes in: light and dark,
   standard and high contrast, comfortable and compact density, left to right
   and right to left, full and reduced motion.
-- The report lists every color the engine moved off its default step to meet
-  contrast, with the ratio before and after, and every other choice it made
-  from the brand color and the axes.
+- The report lists the colors the engine moved to meet contrast, with the
+  ratio each now measures (and the one before, for text colors), and the main
+  choices it made from the brand color and the axes.
 - The same inputs always give the same bytes.
 - MCP: `ux_system_build` takes `brand`, `brief` or `axes`, and `latin_only`,
   and returns the CSS, the tokens and the report as text, with pass or fail
