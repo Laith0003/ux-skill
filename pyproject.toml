@@ -84,6 +84,7 @@ include = ["engine*"]
 [tool.setuptools.package-data]
 "engine" = ["../data/**/*.json"]
 "engine.contracts" = ["seed/*.yaml"]
+"engine.rulepack" = ["decisions/*.md"]
 
 [tool.ruff]
 line-length = 100
