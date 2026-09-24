@@ -138,3 +138,25 @@ def test_gate_enforces_the_raised_minimum_in_high_contrast():
     assert [(f.mode, f.minimum, f.criterion) for f in report.findings] == [
         ("scheme:light,contrast:high", 7.0, "1.4.6"), ("scheme:dark,contrast:high", 7.0, "1.4.6")]
     assert "WCAG 1.4.6 needs 7.0:1" in report.findings[0].message()
+
+
+# A token set with its own axes: the gate reads them, never the built-in ones.
+
+def test_gate_measures_a_set_with_a_custom_axis():
+    ts = TokenSet({"scheme": ("light", "dark"), "brand": ("main", "alt")})
+    ts.add(Token("ink.fg", "color", "#BBBBBB", modes={"brand:alt": "#222222"}))
+    ts.add(Token("ink.bg", "color", "#FFFFFF"))
+    report = gate(ts, [Pairing("ink.fg", "ink.bg", 4.5, "1.4.3")], raise_on_fail=False)
+    assert report.checked == 4
+    assert [f.mode for f in report.findings] == ["scheme:light,brand:main",
+                                                "scheme:dark,brand:main"]
+
+
+def test_gate_measures_a_set_whose_axis_has_its_own_values():
+    ts = TokenSet({"scheme": ("light", "dim"), "contrast": ("standard", "high")})
+    ts.add(Token("color.text.default", "color", "#6B6B6B"))
+    ts.add(Token("color.surface.page", "color", "#FFFFFF"))
+    report = gate(ts, [TEXT_ON_PAGE], raise_on_fail=False)
+    assert report.checked == 4
+    assert [(f.mode, f.minimum, f.criterion) for f in report.findings] == [
+        ("scheme:light,contrast:high", 7.0, "1.4.6"), ("scheme:dim,contrast:high", 7.0, "1.4.6")]

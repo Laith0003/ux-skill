@@ -11,7 +11,7 @@ from typing import Dict, List, Mapping, Tuple
 
 from engine.foundations.color_math import contrast, hex_to_oklch, luminance, oklch_to_hex
 from engine.foundations.foundation import BrandInputs, Foundation, Generated
-from engine.foundations.gate import Check, GateFinding, Pairing, required
+from engine.foundations.gate import Check, GateFinding, Pairing, cite, required
 from engine.foundations.modes import compress, contexts, parse
 from engine.foundations.ramp import STEPS, ramp
 from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
@@ -85,10 +85,13 @@ PAIRINGS: Tuple[Pairing, ...] = tuple(
     + [Pairing("color.line.input", bg, 3.0, "1.4.11") for bg in _TEXT_BGS]
     + [Pairing("color.action.primary", "color.surface.page", 3.0, "1.4.11")]
     + [Pairing("color.action.primary-hover", "color.surface.page", 3.0, "1.4.11")]
-    + [Pairing("color.focus.ring", bg, 3.0, "2.4.7") for bg in _ALL_BGS]
+    # A focus indicator is a non-text part: 1.4.11 sets its 3:1 against the
+    # colors next to it (2.4.7 asks only that focus be visible).
+    + [Pairing("color.focus.ring", bg, 3.0, "1.4.11") for bg in _ALL_BGS]
     # A ring drawn around the primary button touches its fill (1.4.11). It
-    # keeps 3:1 in high contrast: no sRGB ring is 4.5:1 from both the page
-    # and a fill that is itself 4.5:1 from the page.
+    # keeps 3:1 in high contrast: once the fill is 4.5:1 from the page and
+    # carries 7:1 text, no sRGB ring is 4.5:1 from both the page and the
+    # fill unless the fill is near black.
     + [Pairing("color.focus.ring", "color.action.primary", 3.0, "1.4.11", high=3.0)]
 )
 
@@ -171,11 +174,11 @@ def _solve_action_group(mode: str, prims: Dict[str, str], pick: Dict[str, Dict[s
       4. For each triple, the first ring from _ring_candidates.
     The first candidate that clears every constraint wins (minimums are
     PAIRINGS' own in this context, so they rise under contrast:high):
-      on-action on primary and on hover  >= 4.5, 7.0 high (1.4.3, 1.4.6)
-      primary and hover on the page      >= 3.0, 4.5 high (1.4.11)
+      on-action on primary and on hover  >= 4.5 (WCAG 1.4.3), 7.0 high (WCAG 1.4.6)
+      primary and hover on the page      >= 3.0 (WCAG 1.4.11), 4.5 high (our floor)
       hover's hex differs from primary's
-      ring on page, card and sunken      >= 3.0, 4.5 high (2.4.7)
-      ring against the primary fill      >= 3.0 in both (1.4.11)
+      ring on page, card and sunken      >= 3.0 (WCAG 1.4.11), 4.5 high (our floor)
+      ring against the primary fill      >= 3.0 in both (WCAG 1.4.11)
     When nothing clears, the closest candidate is kept and noted; the gate
     then reports the failing pairings. The generator never raises here.
     """
@@ -353,7 +356,7 @@ def generate_color(axes: AxisValues, brand_hex: str) -> Generated:
                     new_ratio = contrast(value(mode, p.fg), value(mode, p.bg))
                     notes.append(f"{p.fg} ({mode}): {old} -> {nxt}, "
                                  f"{p.fg} on {p.bg} was {ratio:.2f}:1, now {new_ratio:.2f}:1, "
-                                 f"needs {minimum}:1 ({criterion})")
+                                 f"{cite(minimum, criterion)}")
                     changed = True
             if not changed:
                 break

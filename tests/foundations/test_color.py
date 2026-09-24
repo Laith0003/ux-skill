@@ -212,7 +212,7 @@ def test_public_tables_are_immutable():
 def test_new_pairings_are_declared():
     from engine.foundations.gate import Pairing
     for p in (Pairing("color.focus.ring", "color.action.primary", 3.0, "1.4.11", high=3.0),
-              Pairing("color.focus.ring", "color.surface.sunken", 3.0, "2.4.7"),
+              Pairing("color.focus.ring", "color.surface.sunken", 3.0, "1.4.11"),
               Pairing("color.text.muted", "color.surface.sunken", 4.5, "1.4.3"),
               Pairing("color.text.link", "color.surface.sunken", 4.5, "1.4.3"),
               Pairing("color.status.danger.text", "color.surface.sunken", 4.5, "1.4.3")):
@@ -250,8 +250,8 @@ def test_required_raises_minimums_only_in_high_contrast():
     ring = Pairing("color.focus.ring", "color.action.primary", 3.0, "1.4.11", high=3.0)
     assert required(text, "scheme:dark,contrast:standard") == (4.5, "1.4.3")
     assert required(text, "scheme:dark,contrast:high") == (7.0, "1.4.6")
-    assert required(part, "contrast:high") == (4.5, "1.4.11 (high contrast)")
-    assert required(ring, "contrast:high") == (3.0, "1.4.11 (high contrast)")
+    assert required(part, "contrast:high") == (4.5, "high-contrast floor over 1.4.11")
+    assert required(ring, "contrast:high") == (3.0, "1.4.11")
 
 
 @pytest.mark.parametrize("seed", SEEDS)
@@ -269,3 +269,61 @@ def test_high_contrast_variant_is_written_as_contrast_overrides():
     ts = generate_color(AXES, "#3366FF").tokens
     keys = {k for t in ts.tokens() for k in t.modes}
     assert {"scheme:dark", "contrast:high", "scheme:dark,contrast:high"} <= keys
+
+
+# Messages cite only what WCAG says: 1.4.3 sets 4.5:1, 1.4.6 sets 7:1,
+# 1.4.11 sets 3:1. The raised high-contrast non-text floor is ours, and
+# 2.4.7 sets no ratio at all.
+_WCAG_CLAIM_RE = re.compile(r"WCAG (\d+\.\d+\.\d+) (?:needs|asks) (\d+(?:\.\d+)?):1")
+_WCAG_TRUE = {("1.4.3", 4.5), ("1.4.6", 7.0), ("1.4.11", 3.0)}
+
+
+def _assert_cites_only_wcag(text):
+    claims = _WCAG_CLAIM_RE.findall(text)
+    assert claims, text
+    for sc, ratio in claims:
+        assert (sc, float(ratio)) in _WCAG_TRUE, text
+    assert "2.4.7" not in text, text
+    assert "(high contrast)" not in text, text
+
+
+@pytest.mark.parametrize("mode", COLOR_CONTEXTS)
+@pytest.mark.parametrize("p", PAIRINGS, ids=lambda p: f"{p.fg}-on-{p.bg}")
+def test_every_failure_message_cites_only_what_wcag_says(p, mode):
+    from engine.foundations.gate import GateFinding
+    minimum, criterion = required(p, mode)
+    _assert_cites_only_wcag(GateFinding(p.fg, p.bg, mode, 1.0, minimum, criterion).message())
+
+
+def test_high_contrast_non_text_floor_is_named_as_ours():
+    from engine.foundations.gate import GateFinding
+    part = next(p for p in PAIRINGS if p.fg == "color.line.input")
+    minimum, criterion = required(part, "scheme:light,contrast:high")
+    message = GateFinding(part.fg, part.bg, "scheme:light,contrast:high", 4.09,
+                          minimum, criterion).message()
+    assert "our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3.0:1)" in message
+    assert "WCAG 1.4.11 needs 4.5" not in message
+
+
+@pytest.mark.parametrize("seed", ["#FFD400", "#00F1B0", "#291F18", "#1F9D55"])
+def test_retune_notes_cite_only_what_wcag_says(seed, monkeypatch):
+    # The high-contrast table starts far enough out that no seed needs a
+    # retune there, so two starting points move inward to make the retune
+    # write high-contrast notes for text (1.4.6) and for a non-text part.
+    high = dict(color_module.HIGH_CONTRAST)
+    high["color.text.muted"] = ("color.neutral.500", "color.neutral.500")
+    high["color.line.input"] = ("color.neutral.300", "color.neutral.700")
+    monkeypatch.setattr(color_module, "HIGH_CONTRAST", high)
+    notes = [n for n in generate_color(AXES, seed).notes
+             if "(scheme:" in n and not n.startswith("action group (")]
+    assert any("contrast:standard" in n for n in notes), seed
+    assert any("WCAG 1.4.6 needs 7.0:1" in n for n in notes), seed
+    assert any("our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3.0:1)" in n
+               for n in notes), seed
+    for note in notes:
+        _assert_cites_only_wcag(note)
+
+
+def test_focus_ring_pairings_cite_non_text_contrast():
+    rings = [p for p in PAIRINGS if p.fg == "color.focus.ring"]
+    assert rings and all(p.criterion == "1.4.11" for p in rings)

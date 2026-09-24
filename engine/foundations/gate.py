@@ -9,10 +9,11 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass, field
-from typing import Callable, Iterable, List, Optional, Tuple
+from types import MappingProxyType
+from typing import Callable, Iterable, List, Mapping, Optional, Tuple
 
 from engine.foundations.color_math import contrast, hex_to_rgb
-from engine.foundations.modes import FOUNDATION_AXES, contexts, parse
+from engine.foundations.modes import AXES, FOUNDATION_AXES, contexts, parse
 from engine.foundations.tokens import TokenSet, opaque_hex
 
 
@@ -30,21 +31,48 @@ class Pairing:
     high: Optional[float] = None
 
 
-# High-contrast minimums: text meets the enhanced 7:1 of WCAG 1.4.6, and
-# non-text parts (borders, fills, focus rings) rise from 3:1 to 4.5:1.
+# High-contrast minimums: text meets the enhanced 7:1 of WCAG 1.4.6.
+# Non-text parts (borders, fills, focus rings) rise from 3:1 to 4.5:1;
+# that floor is ours, since WCAG 1.4.11 has no enhanced level.
 HIGH_TEXT = 7.0
 HIGH_NON_TEXT = 4.5
 
+# The ratio each success criterion the gate cites actually sets.
+WCAG_RATIOS: Mapping[str, float] = MappingProxyType({"1.4.3": 4.5, "1.4.6": 7.0, "1.4.11": 3.0})
 
-def required(p: Pairing, mode: str) -> Tuple[float, str]:
-    """The minimum and criterion a pairing must meet in one context."""
-    if parse(mode).get("contrast") != "high":
+# Criterion prefix for a minimum WCAG does not set: our high-contrast
+# floor, raised over the criterion that follows.
+HIGH_FLOOR = "high-contrast floor over "
+
+
+def required(p: Pairing, mode: str,
+             axes: Mapping[str, Tuple[str, ...]] = AXES) -> Tuple[float, str]:
+    """The minimum and criterion a pairing must meet in one context of
+    `axes` (the token set's own axes when the gate calls it)."""
+    if parse(mode, axes).get("contrast") != "high":
         return p.minimum, p.criterion
     if p.high is not None:
-        return p.high, f"{p.criterion} (high contrast)"
+        return p.high, p.criterion
     if p.minimum >= 4.5:
         return HIGH_TEXT, "1.4.6"
-    return HIGH_NON_TEXT, f"{p.criterion} (high contrast)"
+    return HIGH_NON_TEXT, HIGH_FLOOR + p.criterion
+
+
+def cite(minimum: float, criterion: str) -> str:
+    """How a message states a minimum. WCAG is named as the source only
+    when the criterion sets exactly that ratio; any other floor is stated
+    as a floor, with what WCAG asks beside it."""
+    if criterion.startswith(HIGH_FLOOR):
+        base = criterion[len(HIGH_FLOOR):]
+        asks = (f"WCAG {base} asks {WCAG_RATIOS[base]}:1" if base in WCAG_RATIOS
+                else f"raised over {base}")
+        return f"our high-contrast floor is {minimum}:1 ({asks})"
+    if criterion in WCAG_RATIOS:
+        if WCAG_RATIOS[criterion] == minimum:
+            return f"WCAG {criterion} needs {minimum}:1"
+        return (f"the declared floor is {minimum}:1 "
+                f"(WCAG {criterion} asks {WCAG_RATIOS[criterion]}:1)")
+    return f"the declared floor for {criterion} is {minimum}:1"
 
 
 @dataclass(frozen=True)
@@ -65,7 +93,7 @@ class GateFinding:
         # would show "4.50:1"; floor to 2 decimals shows "4.49:1".
         truncated = math.floor(self.ratio * 100) / 100
         text = (f"{self.fg} on {self.bg} ({self.mode}) is {truncated:.2f}:1; "
-                f"WCAG {self.criterion} needs {self.minimum}:1. Move {self.fg} to a "
+                f"{cite(self.minimum, self.criterion)}. Move {self.fg} to a "
                 f"step with more contrast against {self.bg}.")
         return f"{text} {self.hint}" if self.hint else text
 
@@ -169,7 +197,7 @@ def gate(ts: TokenSet, pairings: Iterable[Pairing], checks: Iterable[Check] = ()
         for mode in _pairing_contexts(ts, p):
             report.checked += 1
             ratio = contrast(_hex(ts, p.fg, mode), _hex(ts, p.bg, mode))
-            minimum, criterion = required(p, mode)
+            minimum, criterion = required(p, mode, ts.axes)
             if ratio < minimum:
                 report.findings.append(
                     GateFinding(p.fg, p.bg, mode, ratio, minimum, criterion))
