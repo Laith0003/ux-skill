@@ -21,7 +21,7 @@ from typing import Any, Iterable, List, Optional, Sequence, Tuple
 from engine.foundations import border, color, elevation, layout, motion, radius, space, typography
 from engine.foundations.color_math import hex_to_rgb
 from engine.foundations.foundation import BrandInputs, Foundation, mistyped, role_types_check
-from engine.foundations.gate import GateFailure, GateReport, gate
+from engine.foundations.gate import CheckFailure, GateFailure, GateReport, gate
 from engine.foundations.tokens import TokenSet
 from engine.foundations.validate import Problem, validate
 from engine.synthesizer.axes import AxisValues
@@ -100,11 +100,24 @@ def _select(foundations: Optional[Sequence[str]]) -> Tuple[Foundation, ...]:
 
 
 def _attach_hints(ts: TokenSet, report: GateReport, chosen: Sequence[Foundation]) -> None:
+    """Each finding gets advice from the foundation that owns its
+    foreground. A hint runs under the same guard as a check: one that
+    raises becomes a failure naming the hint, and the finding keeps its
+    own fix."""
     hinted = []
     for finding in report.findings:
         root = finding.fg.split(".", 1)[0]
         owner = next((f for f in chosen if f.name == root and f.hint), None)
-        advice = owner.hint(ts, finding) if owner else ""
+        advice = ""
+        if owner:
+            try:
+                advice = owner.hint(ts, finding)
+            except Exception as exc:  # a hint must never take the build down
+                report.failures.append(CheckFailure(
+                    f"{owner.name}-hint", "system", finding.mode,
+                    f"the {owner.name} hint could not advise on {finding.fg} on {finding.bg} "
+                    f"({finding.mode}) ({type(exc).__name__}: {exc}); that finding keeps its "
+                    f"own fix, so move {finding.fg} as it says"))
         hinted.append(dataclasses.replace(finding, hint=advice) if advice else finding)
     report.findings[:] = hinted
 

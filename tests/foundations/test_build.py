@@ -347,3 +347,28 @@ def test_a_translucent_paired_role_is_a_gate_failure_not_a_value_error(monkeypat
         "needs opaque colors, so point color.surface.card at an opaque color, or composite it "
         "over the surface beneath it first and pair the result")
     assert first.message in str(err.value)
+
+
+def test_a_hint_that_raises_is_recorded_and_the_build_still_fails_cleanly(monkeypatch):
+    # Hints run under the same guard as checks: an exception becomes a
+    # failure naming the hint, and every finding keeps its own fix.
+    _no_solver(monkeypatch)
+
+    def boom(ts, finding):
+        raise KeyError("color.brand.500")
+
+    patched = tuple(dataclasses.replace(f, hint=boom) if f.name == "color" else f
+                    for f in build_module.FOUNDATIONS)
+    monkeypatch.setattr(build_module, "FOUNDATIONS", patched)
+    with pytest.raises(GateFailure) as err:
+        build_color(AXES, "#FFD400")
+    report = err.value.report
+    assert report.findings and all(f.hint == "" for f in report.findings)
+    hint_failures = [f for f in report.failures if f.check == "color-hint"]
+    assert len(hint_failures) == len(report.findings)
+    first, finding = hint_failures[0], report.findings[0]
+    assert (first.criterion, first.mode) == ("system", finding.mode)
+    assert first.message == (
+        f"the color hint could not advise on {finding.fg} on {finding.bg} ({finding.mode}) "
+        "(KeyError: 'color.brand.500'); that finding keeps its own fix, so move "
+        f"{finding.fg} as it says")
