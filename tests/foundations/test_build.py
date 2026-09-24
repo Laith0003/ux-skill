@@ -372,3 +372,39 @@ def test_a_hint_that_raises_is_recorded_and_the_build_still_fails_cleanly(monkey
         f"the color hint could not advise on {finding.fg} on {finding.bg} ({finding.mode}) "
         "(KeyError: 'color.brand.500'); that finding keeps its own fix, so move "
         f"{finding.fg} as it says")
+
+
+def _uncovered(foundation):
+    """(check id, axis) for every axis the foundation varies on that a
+    check neither walks nor exempts with a stated reason."""
+    from engine.foundations.modes import FOUNDATION_AXES
+    out = []
+    for c in foundation.checks:
+        exempt = dict(c.exempt_axes)
+        out += [(c.id, a) for a in FOUNDATION_AXES[foundation.name]
+                if a not in c.axes and not exempt.get(a, "").strip()]
+    return out
+
+
+def test_every_check_walks_every_axis_its_foundation_varies_on():
+    # A check that skips an axis its tokens vary on passes sets that break
+    # the rule only in that axis's contexts (an rtl-only reduced travel).
+    from engine.foundations.modes import FOUNDATION_AXES
+    assert {f.name for f in build_module.FOUNDATIONS} == set(FOUNDATION_AXES)
+    for f in build_module.FOUNDATIONS:
+        assert _uncovered(f) == [], f.name
+        for c in f.checks:
+            exempt = dict(c.exempt_axes)
+            assert len(exempt) == len(c.exempt_axes), c.id
+            assert set(exempt) <= set(FOUNDATION_AXES[f.name]) - set(c.axes), c.id
+
+
+def test_the_axes_meta_test_catches_a_check_that_skips_an_axis():
+    from engine.foundations import motion
+    narrow = Check("narrow", "system", lambda ts, mode: [], axes=("motion",))
+    reasoned = Check("reasoned", "system", lambda ts, mode: [], axes=("motion",),
+                     exempt_axes=(("direction", "reads no directional token"),))
+    blank = Check("blank", "system", lambda ts, mode: [], axes=("motion",),
+                  exempt_axes=(("direction", " "),))
+    f = dataclasses.replace(motion.FOUNDATION, checks=(narrow, reasoned, blank))
+    assert _uncovered(f) == [("narrow", "direction"), ("blank", "direction")]

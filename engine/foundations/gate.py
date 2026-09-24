@@ -106,11 +106,16 @@ class Check:
     width, a duration). `run(ts, mode)` returns one message per failure in
     that context; every message names the token and the fix. The gate runs
     it in every context over `axes`. A run that raises becomes a failure of
-    this check in that context, and the gate goes on."""
+    this check in that context, and the gate goes on.
+
+    A check walks every axis its foundation's tokens vary on. An axis it
+    deliberately leaves out goes in `exempt_axes` as (axis, reason), so the
+    gap is stated where the check is declared and a test can hold it."""
     id: str
     criterion: str
     run: Callable[[TokenSet, str], List[str]]
     axes: Tuple[str, ...] = ()
+    exempt_axes: Tuple[Tuple[str, str], ...] = ()
 
 
 @dataclass(frozen=True)

@@ -12,7 +12,7 @@ progress loop runs linear, and the loop lasts at least LOOP_MIN_MS.
 """
 from __future__ import annotations
 
-from typing import Dict, List, Tuple
+from typing import Any, Callable, Dict, List, Tuple
 
 from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check
@@ -120,90 +120,143 @@ def _ms(ts: TokenSet, path: str, mode: str = "") -> float:
     return v["value"] * (1000 if v["unit"] == "s" else 1)
 
 
+def _standard(ts: TokenSet, mode: str) -> str:
+    """The same context with motion set back to standard."""
+    return join({**parse(mode, ts.axes), "motion": "standard"}, ts.axes)
+
+
+def _seen_ltr(ts: TokenSet, mode: str, read: Callable[[str], Any]) -> bool:
+    """True in a right-to-left context whose reading equals the same
+    context read left to right: a failure there is already reported there,
+    so it is not repeated. A reading that differs is a new finding."""
+    pairs = parse(mode, ts.axes)
+    ltr = ts.axes["direction"][0]
+    if pairs.get("direction", ltr) == ltr:
+        return False
+    return read(join({**pairs, "direction": ltr}, ts.axes)) == read(mode)
+
+
+def _reduced_where(ts: TokenSet, mode: str) -> Tuple[str, str]:
+    """(how a message names a reduced context, the override key to fix):
+    ("reduced motion", "motion:reduced") for plain reduced motion, the
+    context key twice otherwise."""
+    key = sparse(mode, ts.axes)
+    return ("reduced motion", key) if key == "motion:reduced" else (key, key)
+
+
 def _reduced_travel(ts: TokenSet, mode: str) -> List[str]:
     if "motion:reduced" not in mode:
         return []
+    under, key = _reduced_where(ts, mode)
     out = []
     for path in _roles_with(ts, "distance"):
         v = ts.resolve(path, mode)
-        if v["value"] != 0:
-            out.append(f"{path} travels {v['value']:g}{v['unit']} under reduced motion; point "
-                       "its motion:reduced override at motion.distance.0")
+        if v["value"] != 0 and not _seen_ltr(ts, mode, lambda m: ts.resolve(path, m)):
+            out.append(f"{path} travels {v['value']:g}{v['unit']} under {under}; point its "
+                       f"{key} override at motion.distance.0")
     return out
 
 
 def _reduced_length(ts: TokenSet, mode: str) -> List[str]:
     if "motion:reduced" not in mode:
         return []
-    return [f"{path} lasts {_ms(ts, path, mode):g}ms under reduced motion; cap it at "
-            f"{REDUCED_MAX_MS}ms with a motion:reduced override"
+    under, key = _reduced_where(ts, mode)
+    return [f"{path} lasts {_ms(ts, path, mode):g}ms under {under}; cap it at "
+            f"{REDUCED_MAX_MS}ms with a {key} override"
             for path in _roles_with(ts, "duration")
-            if path != "motion.progress.duration" and _ms(ts, path, mode) > REDUCED_MAX_MS]
+            if path != "motion.progress.duration" and _ms(ts, path, mode) > REDUCED_MAX_MS
+            and not _seen_ltr(ts, mode, lambda m: _ms(ts, path, m))]
+
+
+def _overshoots(curve: List[float]) -> bool:
+    return not (0 <= curve[1] <= 1 and 0 <= curve[3] <= 1)
 
 
 def _reduced_curve(ts: TokenSet, mode: str) -> List[str]:
     if "motion:reduced" not in mode:
         return []
-    out = []
-    for path in _roles_with(ts, "curve"):
-        c = ts.resolve(path, mode)
-        if not (0 <= c[1] <= 1 and 0 <= c[3] <= 1):
-            out.append(f"{path} overshoots under reduced motion; point its motion:reduced "
-                       "override at motion.curve.gentle")
-    return out
+    under, key = _reduced_where(ts, mode)
+    return [f"{path} overshoots under {under}; point its {key} override at motion.curve.gentle"
+            for path in _roles_with(ts, "curve")
+            if _overshoots(ts.resolve(path, mode))
+            and not _seen_ltr(ts, mode, lambda m: ts.resolve(path, m))]
 
 
 def _dismiss_faster(ts: TokenSet, mode: str) -> List[str]:
     a, b = "motion.dismiss.duration", "motion.reveal.duration"
-    if _typed(ts, a) and _typed(ts, b) and _ms(ts, a) >= _ms(ts, b):
-        return [f"{a} ({_ms(ts, a):g}ms) is not shorter than {b} ({_ms(ts, b):g}ms); leaving "
-                "should never hold the next action longer than arriving, so shorten it"]
-    return []
+    if not (_typed(ts, a) and _typed(ts, b)):
+        return []
+
+    def read(m: str) -> Tuple[float, float]:
+        return _ms(ts, a, m), _ms(ts, b, m)
+
+    da, db = read(mode)
+    if da < db or _seen_ltr(ts, mode, read):
+        return []
+    key = sparse(mode, ts.axes)
+    if not key:
+        return [f"{a} ({da:g}ms) is not shorter than {b} ({db:g}ms); leaving should never hold "
+                "the next action longer than arriving, so shorten it"]
+    return [f"{a} ({da:g}ms) is not shorter than {b} ({db:g}ms) under {key}; leaving should "
+            f"never hold the next action longer than arriving, so shorten {a} under {key}"]
 
 
 def _progress_linear(ts: TokenSet, mode: str) -> List[str]:
+    """The loop runs linear in every direction. Under reduced motion it
+    keeps its standard curve, which progress-keeps-pace checks against the
+    same direction, so this check reports the standard contexts only."""
     p = "motion.progress.curve"
-    if _typed(ts, p):
-        curve = ts.resolve(p)
-        if curve != LINEAR:
-            return [f"{p} is {curve}; a continuous loop must keep an even pace, so point it "
-                    "at motion.curve.linear"]
-    return []
+    if not _typed(ts, p) or "motion:reduced" in mode:
+        return []
+    curve = ts.resolve(p, mode)
+    if curve == LINEAR or _seen_ltr(ts, mode, lambda m: ts.resolve(p, m)):
+        return []
+    where, what = _where(ts, mode)
+    return [f"{p} is {curve}{where}; a continuous loop must keep an even pace, so point {what} "
+            "at motion.curve.linear"]
 
 
 def _progress_pace(ts: TokenSet, mode: str) -> List[str]:
-    """Under reduced motion the progress loop keeps its standard duration
-    and its linear curve: it reports status, so slowing or easing it
-    misleads. A curve that is already wrong in standard is progress-linear's
-    finding, not repeated here."""
+    """Under reduced motion the progress loop keeps the duration and curve
+    it has with standard motion in the same direction: it reports status,
+    so slowing or easing it misleads. A curve that is already wrong with
+    standard motion is progress-linear's finding, not repeated here."""
     if "motion:reduced" not in mode:
         return []
+    std = _standard(ts, mode)
+    under, key = _reduced_where(ts, mode)
+    std_where = "in standard" if key == "motion:reduced" else f"under {sparse(std, ts.axes)}"
     out = []
     d = "motion.progress.duration"
     if _typed(ts, d):
-        reduced, standard = _ms(ts, d, mode), _ms(ts, d)
-        if reduced != standard:
-            out.append(f"{d} lasts {reduced:g}ms under reduced motion but {standard:g}ms in "
-                       "standard; a status loop keeps its pace, so drop its motion:reduced "
-                       "override")
+        reduced, standard = _ms(ts, d, mode), _ms(ts, d, std)
+        if reduced != standard and not _seen_ltr(
+                ts, mode, lambda m: (_ms(ts, d, m), _ms(ts, d, _standard(ts, m)))):
+            out.append(f"{d} lasts {reduced:g}ms under {under} but {standard:g}ms {std_where}; "
+                       f"a status loop keeps its pace, so drop its {key} override")
     c = "motion.progress.curve"
     if _typed(ts, c):
         curve = ts.resolve(c, mode)
-        if curve != LINEAR and curve != ts.resolve(c):
-            out.append(f"{c} is {curve} under reduced motion; a status loop keeps an even "
-                       "pace, so drop its motion:reduced override and keep motion.curve.linear")
+        if curve != LINEAR and curve != ts.resolve(c, std) and not _seen_ltr(
+                ts, mode, lambda m: (ts.resolve(c, m), ts.resolve(c, _standard(ts, m)))):
+            out.append(f"{c} is {curve} under {under}; a status loop keeps an even pace, so "
+                       f"drop its {key} override and keep motion.curve.linear")
     return out
 
 
 def _mirrored(ts: TokenSet, mode: str) -> List[str]:
+    """The sign follows the reading direction whatever the motion setting.
+    Under reduced motion a value it already has with standard motion is
+    reported there, not repeated."""
     p = SIGN
     if not _typed(ts, p):
         return []
     want = -1 if "direction:rtl" in mode else 1
     got = ts.resolve(p, mode)
-    if got == want:
+    if got == want or ("motion:reduced" in mode and ts.resolve(p, _standard(ts, mode)) == got):
         return []
-    return [f"{p} ({mode}) is {got:g}; horizontal travel follows the reading direction, so it "
+    label = sparse(mode, ts.axes) or "direction:ltr"
+    return [f"{p} ({label}) is {got:g}; horizontal travel follows the reading direction, so it "
             f"must be {want} here"]
 
 
@@ -226,9 +279,9 @@ def _where(ts: TokenSet, mode: str) -> Tuple[str, str]:
 
 def _press_in_place(ts: TokenSet, mode: str) -> List[str]:
     """A press confirms where the finger is: any press travel is 0 in every
-    context. Under plain reduced motion, reduced-travel already names a
+    context. Under reduced motion, reduced-travel already names a
     travelling press role, so it is not repeated."""
-    owned = set(_roles_with(ts, "distance")) if sparse(mode, ts.axes) == "motion:reduced" else set()
+    owned = set(_roles_with(ts, "distance")) if "motion:reduced" in mode else set()
     out = []
     for t in ts.tokens():
         if not (t.path.startswith("motion.press.") and t.type == "dimension") or t.path in owned:
@@ -260,11 +313,6 @@ def _linear_progress_only(ts: TokenSet, mode: str) -> List[str]:
                        "one-shot move at an even pace reads mechanical, so point "
                        f"{what} at {eased}")
     return out
-
-
-def _standard(ts: TokenSet, mode: str) -> str:
-    """The same context with motion set back to standard."""
-    return join({**parse(mode, ts.axes), "motion": "standard"}, ts.axes)
 
 
 def _reduced_not_longer(ts: TokenSet, mode: str) -> List[str]:
@@ -303,16 +351,16 @@ def _progress_floor(ts: TokenSet, mode: str) -> List[str]:
     """The loop lasts at least LOOP_MIN_MS in every context. The floor is
     ours: WCAG 2.3.1 limits flashes, not durations, and a loop quicker than
     a third of a second is one that could flash more than three times a
-    second. Under plain reduced motion a loop that differs from standard is
-    progress-keeps-pace's finding, whose fix (drop the override) also
-    clears this one."""
+    second. Under reduced motion a loop that differs from standard motion
+    in the same direction is progress-keeps-pace's finding, whose fix (drop
+    the override) also clears this one."""
     p = "motion.progress.duration"
     if not _typed(ts, p) or not _new_here(ts, p, mode):
         return []
     ms = _ms(ts, p, mode)
     if ms >= LOOP_MIN_MS:
         return []
-    if sparse(mode, ts.axes) == "motion:reduced" and ms != _ms(ts, p):
+    if "motion:reduced" in mode and ms != _ms(ts, p, _standard(ts, mode)):
         return []
     longer = sorted((_ms(ts, t.path), t.path) for t in ts.tokens()
                     if t.layer == "primitive" and t.type == "duration"
@@ -326,21 +374,25 @@ def _progress_floor(ts: TokenSet, mode: str) -> List[str]:
 
 # Only removing travel is WCAG's (2.3.3, motion from interaction can be
 # turned off); the length cap, the gentle curve, the still press, linear
-# for the loop alone and the loop floor are this system's rules.
+# for the loop alone and the loop floor are this system's rules. Motion
+# tokens vary on motion and direction, so every check reads both, and a
+# right-to-left finding that repeats the left-to-right one is not repeated.
+_BOTH = ("motion", "direction")
 CHECKS: Tuple[Check, ...] = (
-    Check("reduced-travel", "2.3.3", _reduced_travel, axes=("motion",)),
-    Check("reduced-length", "system", _reduced_length, axes=("motion",)),
-    Check("reduced-curve", "system", _reduced_curve, axes=("motion",)),
-    Check("dismiss-faster", "system", _dismiss_faster),
-    Check("progress-linear", "system", _progress_linear),
-    Check("progress-keeps-pace", "system", _progress_pace, axes=("motion",)),
-    Check("mirrored-motion", "system", _mirrored, axes=("direction",)),
-    Check("press-in-place", "system", _press_in_place, axes=("motion", "direction")),
-    Check("linear-progress-only", "system", _linear_progress_only,
-          axes=("motion", "direction")),
-    Check("reduced-not-longer", "system", _reduced_not_longer,
-          axes=("motion", "direction")),
-    Check("progress-floor", "system", _progress_floor, axes=("motion", "direction")),
+    Check("reduced-travel", "2.3.3", _reduced_travel, axes=_BOTH),
+    Check("reduced-length", "system", _reduced_length, axes=_BOTH),
+    Check("reduced-curve", "system", _reduced_curve, axes=_BOTH),
+    Check("dismiss-faster", "system", _dismiss_faster, axes=("direction",),
+          exempt_axes=(("motion", "under reduced motion every role caps at "
+                        f"{REDUCED_MAX_MS}ms, so dismiss and reveal may tie; reduced-length and "
+                        "reduced-not-longer check reduced durations"),)),
+    Check("progress-linear", "system", _progress_linear, axes=_BOTH),
+    Check("progress-keeps-pace", "system", _progress_pace, axes=_BOTH),
+    Check("mirrored-motion", "system", _mirrored, axes=_BOTH),
+    Check("press-in-place", "system", _press_in_place, axes=_BOTH),
+    Check("linear-progress-only", "system", _linear_progress_only, axes=_BOTH),
+    Check("reduced-not-longer", "system", _reduced_not_longer, axes=_BOTH),
+    Check("progress-floor", "system", _progress_floor, axes=_BOTH),
 )
 
 

@@ -132,7 +132,8 @@ def _compact_not_larger(ts: TokenSet, mode: str) -> List[str]:
 
 CHECKS: Tuple[Check, ...] = (
     Check("control-gap", "system", _control_gap, axes=("density",)),
-    Check("space-scale-order", "system", _scale_order),
+    Check("space-scale-order", "system", _scale_order,
+          exempt_axes=(("density", "it reads only primitives, which never carry modes"),)),
     Check("space-hierarchy", "system", _hierarchy, axes=("density",)),
     Check("compact-not-larger", "system", _compact_not_larger, axes=("density",)),
 )

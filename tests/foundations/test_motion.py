@@ -165,7 +165,7 @@ def test_reduced_progress_keeps_its_pace(roles, want):
     assert validate(ts) == []
     report = gate(ts, [], CHECKS, raise_on_fail=False)
     assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures] == [
-        ("progress-keeps-pace", "system", "motion:reduced", want)]
+        ("progress-keeps-pace", "system", "direction:ltr,motion:reduced", want)]
 
 
 def test_only_travel_removal_cites_wcag_and_distances_keep_their_unit():
@@ -195,7 +195,7 @@ def test_a_press_never_travels_in_any_context():
     assert validate(ts) == []
     report = gate(ts, [], CHECKS, raise_on_fail=False)
     assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures] == [
-        ("reduced-travel", "2.3.3", "motion:reduced",
+        ("reduced-travel", "2.3.3", "direction:ltr,motion:reduced",
          "motion.press.distance travels 4px under reduced motion; point its motion:reduced "
          "override at motion.distance.0"),
         ("press-in-place", "system", "direction:ltr,motion:standard",
@@ -278,6 +278,9 @@ def test_a_duration_longer_only_under_rtl_reduced_motion_fails():
     assert validate(ts) == []
     report = gate(ts, [], CHECKS, raise_on_fail=False)
     assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures] == [
+        ("reduced-length", "system", "direction:rtl,motion:reduced",
+         "motion.press.duration lasts 1200ms under direction:rtl,motion:reduced; cap it at 100ms "
+         "with a direction:rtl,motion:reduced override"),
         ("reduced-not-longer", "system", "direction:rtl,motion:reduced",
          "motion.press.duration lasts 1200ms under direction:rtl,motion:reduced but 100ms under "
          "direction:rtl; reduced motion never lengthens a move, so point its "
@@ -335,3 +338,131 @@ def test_generated_motion_passes_the_new_rules(motion):
     assert report.passed, report.summary()
     assert {"press-in-place", "linear-progress-only", "reduced-not-longer",
             "progress-floor"} <= {c.id for c in CHECKS}
+
+
+# Motion varies on motion and direction, so every check reads both: a rule
+# broken only under direction:rtl fails there, named with that context.
+
+def test_an_rtl_only_reduced_distance_fails():
+    ts = _roles_set(motion__reveal__distance=("dimension", "{motion.x.a}",
+                                              {"motion:reduced": "{motion.x.zero}",
+                                               "direction:rtl,motion:reduced": "{motion.x.a}"}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures] == [
+        ("reduced-travel", "2.3.3", "direction:rtl,motion:reduced",
+         "motion.reveal.distance travels 0.5rem under direction:rtl,motion:reduced; point its "
+         "direction:rtl,motion:reduced override at motion.distance.0")]
+
+
+def test_an_rtl_only_overshoot_under_reduced_motion_fails():
+    ts = _roles_set(motion__reveal__curve=("cubicBezier", "{motion.c.gentle}",
+                                           {"direction:rtl,motion:reduced": "{motion.c.over}"}))
+    ts.add(Token("motion.c.over", "cubicBezier", [0.34, 1.56, 0.64, 1]))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures] == [
+        ("reduced-curve", "system", "direction:rtl,motion:reduced",
+         "motion.reveal.curve overshoots under direction:rtl,motion:reduced; point its "
+         "direction:rtl,motion:reduced override at motion.curve.gentle")]
+
+
+def test_an_rtl_only_loop_pace_change_fails():
+    ts = _roles_set(motion__progress__duration=("duration", "{motion.d.slow}",
+                                                {"direction:rtl,motion:reduced": "{motion.d.400}"}))
+    ts.add(Token("motion.d.400", "duration", {"value": 400, "unit": "ms"}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures] == [
+        ("progress-keeps-pace", "system", "direction:rtl,motion:reduced",
+         "motion.progress.duration lasts 400ms under direction:rtl,motion:reduced but 1200ms "
+         "under direction:rtl; a status loop keeps its pace, so drop its "
+         "direction:rtl,motion:reduced override")]
+
+
+def test_an_rtl_only_eased_loop_fails():
+    ts = _roles_set(motion__progress__curve=("cubicBezier", "{motion.c.linear}",
+                                             {"direction:rtl": "{motion.c.gentle}"}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures] == [
+        ("progress-linear", "system", "direction:rtl,motion:standard",
+         "motion.progress.curve is [0.4, 0, 0.6, 1] under direction:rtl; a continuous loop "
+         "must keep an even pace, so point its direction:rtl override at motion.curve.linear")]
+
+
+def test_an_rtl_only_reduced_loop_ease_fails_once():
+    # Eased only under rtl reduced motion: the loop changes pace there, which
+    # is progress-keeps-pace's finding; progress-linear does not repeat it.
+    ts = _roles_set(motion__progress__curve=("cubicBezier", "{motion.c.linear}",
+                                             {"direction:rtl,motion:reduced": "{motion.c.gentle}"}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.mode, f.message) for f in report.failures] == [
+        ("progress-keeps-pace", "direction:rtl,motion:reduced",
+         "motion.progress.curve is [0.4, 0, 0.6, 1] under direction:rtl,motion:reduced; a "
+         "status loop keeps an even pace, so drop its direction:rtl,motion:reduced override and "
+         "keep motion.curve.linear")]
+
+
+def test_an_rtl_only_reduced_length_fails():
+    ts = _roles_set(motion__reveal__duration=("duration", "{motion.d.fast}",
+                                              {"direction:rtl": "{motion.d.slow}",
+                                               "direction:rtl,motion:reduced": "{motion.d.slow}"}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.mode, f.message) for f in report.failures
+            if f.check == "reduced-length"] == [
+        ("reduced-length", "direction:rtl,motion:reduced",
+         "motion.reveal.duration lasts 1200ms under direction:rtl,motion:reduced; cap it at "
+         "100ms with a direction:rtl,motion:reduced override")]
+
+
+def test_dismiss_is_faster_in_both_directions():
+    ts = _roles_set(motion__reveal__duration=("duration", "{motion.d.slow}", {}),
+                    motion__dismiss__duration=("duration", "{motion.d.fast}",
+                                               {"direction:rtl": "{motion.d.slow}"}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.mode, f.message) for f in report.failures
+            if f.check == "dismiss-faster"] == [
+        ("dismiss-faster", "direction:rtl",
+         "motion.dismiss.duration (1200ms) is not shorter than motion.reveal.duration (1200ms) "
+         "under direction:rtl; leaving should never hold the next action longer than arriving, "
+         "so shorten motion.dismiss.duration under direction:rtl")]
+    dismiss = {c.id: c for c in CHECKS}["dismiss-faster"]
+    assert dict(dismiss.exempt_axes)["motion"].startswith("under reduced motion every role caps")
+
+
+def test_the_inline_sign_mirrors_under_reduced_motion_too():
+    ts = _roles_set(motion__inline_sign=("number", "{motion.n.fwd}",
+                                         {"direction:rtl": "{motion.n.back}",
+                                          "direction:rtl,motion:reduced": "{motion.n.fwd}"}))
+    ts.add(Token("motion.n.fwd", "number", 1))
+    ts.add(Token("motion.n.back", "number", -1))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.mode, f.message) for f in report.failures] == [
+        ("mirrored-motion", "direction:rtl,motion:reduced",
+         "motion.inline-sign (direction:rtl,motion:reduced) is 1; horizontal travel follows the "
+         "reading direction, so it must be -1 here")]
+
+
+def test_an_rtl_reduced_finding_is_named_once():
+    # A press that travels only under rtl reduced motion is reduced-travel's
+    # finding; press-in-place does not repeat it.
+    ts = _press_set(motion__press__distance=("dimension", "{motion.x.zero}",
+                                             {"direction:rtl,motion:reduced": "{motion.x.four}"}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.mode) for f in report.failures] == [
+        ("reduced-travel", "direction:rtl,motion:reduced")]
+    # A loop that speeds up only under rtl reduced motion is
+    # progress-keeps-pace's finding; dropping the override also clears the
+    # loop floor, so progress-floor does not repeat it.
+    fast = {"direction:rtl,motion:reduced": "{motion.d.fast}"}
+    ts = _roles_set(motion__progress__duration=("duration", "{motion.d.slow}", fast))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.mode) for f in report.failures] == [
+        ("progress-keeps-pace", "direction:rtl,motion:reduced")]
