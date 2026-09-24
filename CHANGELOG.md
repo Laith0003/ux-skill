@@ -7,6 +7,97 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [4.0.0-beta.1] - 2026-09-24 - **FOUNDATIONS**
+
+A preview of 4.0. ux-skill can now build a new design system from one brand
+color and check its contrast before it hands the files over. This beta builds
+new systems only: it does not yet read or improve a system you already have.
+Every 3.x command still works as it did.
+
+### If you are building a product or a landing page
+- One command writes three files into a folder:
+  `uxskill system build --brand '#3366FF' --out design-system`.
+  `tokens.css` holds CSS custom properties to link from your page,
+  `tokens.json` holds the same tokens for tools, and `system-report.md` says
+  in plain words what was built, from what, and what the engine adjusted.
+- Style with the roles, not raw colors: `var(--color-action-primary)` for a
+  button, `var(--color-text-default)` for body text,
+  `var(--color-surface-page)` for the page.
+- Give it your discovery brief (`--brief .ux/last-discovery.json`) and the
+  look follows your industry and tone. Or set the seven axes by hand with
+  `--axes`, or leave both out for a neutral system. The report says which,
+  and names any brief word it did not recognize.
+- Dark mode, high contrast, compact spacing, right to left and reduced motion
+  are in the same CSS file. Set `data-theme="dark"`, `data-contrast="high"`,
+  `data-density="compact"`, `dir="rtl"` or `data-motion="reduced"` on the
+  html element. With no attribute, dark mode, high contrast and reduced motion
+  follow the operating system.
+- Fonts: the tokens name the font families, but nothing loads them. Load the
+  fonts on your page (from Google Fonts or self-hosted files); until you do,
+  the browser falls back to system faces. The report names the pair the
+  engine chose.
+- In Claude Code, `/ux-system create` asks for the brand color, runs the
+  build, and explains the report.
+- It never overwrites a file that differs from what it would write, and one
+  such file stops every write. A second identical run changes nothing.
+  `--force` replaces files only when you ask.
+- When the contrast check fails, nothing is written and the message says what
+  to change: a darker or more saturated brand color, or different axes or
+  brief.
+
+### If you design design systems
+- Eight foundations: color, type, space, layout, radius, border, elevation,
+  motion. Each has primitives (the raw scale) and semantic roles (what
+  components use), and roles only point at primitives.
+- `tokens.json` follows the W3C design tokens format (DTCG 2025.10). Each
+  token carries its value for every mode it changes in: light and dark,
+  standard and high contrast, comfortable and compact density, left to right
+  and right to left, full and reduced motion.
+- The report lists every color the engine moved off its default step to meet
+  contrast, with the ratio before and after, and every other choice it made
+  from the brand color and the axes.
+- The same inputs always give the same bytes.
+- MCP: `ux_system_build` takes `brand`, `brief` or `axes`, and `latin_only`,
+  and returns the CSS, the tokens and the report as text, with pass or fail
+  and every finding. It writes no files. A bad input returns an `error` that
+  names the field and the fix.
+
+### The WCAG gate
+- Every text, control and focus color pairing is measured in light and dark,
+  at standard and high contrast. Standard contrast meets WCAG 1.4.3 (text
+  4.5:1) and 1.4.11 (non-text 3:1). High contrast raises text to WCAG 1.4.6
+  (7:1) and most non-text parts to a 4.5:1 floor of our own, since WCAG sets
+  no enhanced non-text level.
+- Rule checks cover the rest (type sizes and leading, spacing, target sizes,
+  borders, elevation, motion) in every mode they vary in.
+- A system that fails is not written. The command exits 1 and names each
+  pairing, the mode and the ratio it reached.
+
+### Arabic
+- Under `dir="rtl"` text switches to an Arabic face, 1 to 2px larger than
+  Latin at the same step, with taller line height and no letter spacing.
+  Spacing and layout use logical properties, and motion mirrors.
+  `--latin-only` leaves Arabic out.
+
+### Not in this beta
+- No importers: it cannot read an existing system from Figma, CSS, Tailwind
+  or a tokens file, so `/ux-system enhance` and `extend` are not here yet.
+- It does not load fonts (see above) or write components.
+- The 3.x token format and the system-pack output are still here, so nothing
+  you use today breaks. 4.0 final replaces them, with a migration guide.
+
+### Coming next
+- 4.1: importers for Figma variables, CSS variables, Tailwind config and DTCG
+  tokens that keep your token names; `/ux-system enhance --from` and
+  `extend --from`; Figma both ways.
+- 4.2: fewer commands (merged, with the old names kept as aliases for one
+  release), surface playbooks for landing pages, dashboards and components
+  that `/ux-design` loads from the brief, a trust layer (lint on every write,
+  fewer false positives, a fresh-eyes finish reviewer), the brand gallery
+  rebuilt in the eight-foundation format, and the public launch.
+
+---
+
 ## [3.2.0] - 2026-09-23 - **SEES THE PAGE**
 
 The linter read code. Now it also looks at the rendered page, because some

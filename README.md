@@ -20,7 +20,7 @@ pip install uxskill
 
 **Author:** [Laith Aljunaidy](https://laithjunaidy.com), designer and CTO in Amman · **Site:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **Compare vs every Claude UX plugin:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
 
-[![Version](https://img.shields.io/badge/version-3.1.0-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
+[![Version](https://img.shields.io/badge/version-4.0.0--beta.1-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Python](https://img.shields.io/badge/python-3.9%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#the-17-ide-installer)
@@ -33,6 +33,24 @@ pip install uxskill
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
 [![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
+
+### New in 4.0 beta: foundations
+
+One brand color in, a design system out, with its contrast checked before you get it.
+
+```bash
+uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out design-system
+```
+
+**Building a product or a landing page?** You get `tokens.css` to link from your page, `tokens.json` for tools, and `system-report.md`, which says in plain words what was built and why. Style with the roles (`var(--color-action-primary)`, `var(--color-text-default)`, `var(--color-surface-page)`), and switch dark mode, high contrast, compact spacing, right to left or reduced motion with one attribute on `<html>`. The tokens name the font families but do not load them: load the fonts on your page (Google Fonts or self-hosted), or the browser falls back to system faces. In Claude Code, `/ux-system create` runs the build and explains the report.
+
+**Designing a design system?** Eight foundations (color, type, space, layout, radius, border, elevation, motion), each with primitives and semantic roles, in the W3C design tokens format (DTCG 2025.10) with every mode's values. Same inputs, same bytes. Over MCP, `ux_system_build` returns the same files as text and writes nothing.
+
+- **WCAG gate.** Every text, control and focus color pairing is measured in light and dark, at standard and high contrast: WCAG 1.4.3 (text 4.5:1) and 1.4.11 (non-text 3:1) at standard contrast, WCAG 1.4.6 (text 7:1) at high contrast, plus a 4.5:1 high-contrast floor for most non-text parts that is our own, since WCAG sets no enhanced non-text level. A system that fails is not written; the message says what to change.
+- **Safe by default.** It never overwrites a file that differs. `--force` replaces files only when you ask.
+- **Arabic.** Under `dir="rtl"` text switches to an Arabic face with its own sizes and line height; spacing uses logical properties and motion mirrors. `--latin-only` leaves it out.
+
+This beta builds new systems; it does not read an existing one yet. 4.1 adds importers (Figma variables, CSS variables, Tailwind config, DTCG tokens), `/ux-system enhance` and `extend`, and Figma both ways. 4.2 merges commands and adds surface playbooks, the trust layer (lint on every write, a finish reviewer) and the launch. See the [changelog](CHANGELOG.md).
 
 ### New in v3.1: brand-true, responsive, alive
 
