@@ -4,10 +4,12 @@ retune.
 
 Contexts are scheme x contrast (light, dark; standard, high). Each role
 starts where SEMANTIC (standard) or HIGH_CONTRAST puts it for the scheme.
-Fill groups (a solid fill, its hover and pressed steps, the text on it,
-and for the primary button the focus ring) are solved jointly by
-_solve_group; every other role moves one ramp step at a time away from
-its background until its pairings hold. Surfaces never move.
+Fill groups (a solid fill, its hover and pressed steps, the text on it)
+are solved jointly by _solve_group; the primary group also picks the
+focus ring, after its fill, so the ring can prefer a color other than the
+fill without ever moving it. Every other role moves one ramp step at a
+time away from its background until its pairings hold. Surfaces never
+move.
 
 generate_color never gates itself: it returns tokens and notes, and
 build_system validates and gates them with PAIRINGS and CHECKS, then asks
@@ -16,7 +18,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from types import MappingProxyType
-from typing import Dict, List, Mapping, Optional, Tuple
+from typing import Callable, Dict, List, Mapping, Optional, Tuple
 
 from engine.foundations.color_math import contrast, hex_to_oklch, luminance, oklch_to_hex
 from engine.foundations.foundation import BrandInputs, Foundation, Generated
@@ -54,7 +56,9 @@ _SEMANTIC: Dict[str, Tuple[str, str]] = {
     "color.action.danger": ("color.danger.600", "color.danger.400"),
     "color.action.danger-hover": ("color.danger.700", "color.danger.300"),
     "color.action.danger-pressed": ("color.danger.800", "color.danger.200"),
-    "color.action.disabled": ("color.neutral.200", "color.neutral.800"),
+    # One step off the surfaces a button sits on (card and raised are
+    # white in light, neutral.900 and neutral.800 in dark).
+    "color.action.disabled": ("color.neutral.200", "color.neutral.700"),
     "color.line.subtle": ("color.neutral.200", "color.neutral.800"),
     "color.line.input": ("color.neutral.500", "color.neutral.500"),
     "color.line.selected": ("color.brand.600", "color.brand.300"),
@@ -135,13 +139,11 @@ PAIRINGS: Tuple[Pairing, ...] = tuple(
     + [Pairing(f"color.status.{s}.strong", "color.surface.page", 3.0, "1.4.11")
        for s in STATUS_HUES]
     # A focus indicator is a non-text part: 1.4.11 sets its 3:1 against the
-    # colors next to it (2.4.7 asks only that focus be visible).
+    # colors next to it (2.4.7 asks only that focus be visible). The border
+    # foundation guarantees border.focus-ring.offset of at least 1px, so the
+    # colors next to the ring are the surfaces, never the fill it surrounds;
+    # the ring is not paired with the button fill.
     + [Pairing("color.focus.ring", bg, 3.0, "1.4.11") for bg in _ALL_BGS]
-    # A ring drawn around the primary button touches its fill (1.4.11). It
-    # keeps 3:1 in high contrast: once the fill is 4.5:1 from the page and
-    # carries 7:1 text, no sRGB ring is 4.5:1 from both the page and the
-    # fill unless the fill is near black.
-    + [Pairing("color.focus.ring", "color.action.primary", 3.0, "1.4.11", high=3.0)]
     # One ring cannot also stand out from the inverse surface, so that
     # surface gets its own.
     + [Pairing("color.focus.ring-inverse", "color.surface.inverse", 3.0, "1.4.11")]
@@ -151,7 +153,8 @@ PAIRINGS: Tuple[Pairing, ...] = tuple(
 @dataclass(frozen=True)
 class _Group:
     """Roles solved together: a fill, its interaction states, the text on
-    it, and optionally the focus ring that must stand out from the fill."""
+    it, and optionally the focus ring, picked after the fill so it can
+    prefer a color other than the fill."""
     fill: str
     on: str
     states: Tuple[str, ...] = ()
@@ -251,6 +254,18 @@ def _state_offsets(conv: int, n: int) -> List[Tuple[int, ...]]:
     return out
 
 
+def _choose_ring(rings: List[str], fit: Callable[[str], float], fill_hex: str,
+                 prims: Dict[str, str]) -> str:
+    """The ring for a fill already chosen: the first candidate that clears
+    every surface and differs from the fill, else the first that clears
+    every surface (it equals the fill, which the offset makes visible),
+    else the closest. Only the ring moves here, never the fill."""
+    clear = [r for r in rings if fit(r) >= 1.0]
+    if clear:
+        return next((r for r in clear if prims[r] != fill_hex), clear[0])
+    return max(rings, key=fit)
+
+
 def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
                  pick: Dict[str, Dict[str, str]], notes: List[str]) -> None:
     """Choose one fill group for one context.
@@ -262,14 +277,20 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
       2. its states (hover, then pressed) one and two steps on in the
          conventional direction, then against it, then with gaps of two;
       3. the text on it as base.white, then base.black;
-      4. for the primary group, the first ring from _ring_candidates.
-    The first candidate that clears every constraint wins. The minimums
-    are PAIRINGS' own in this context, so they rise under contrast:high:
+      4. for the primary group, the ring, after the rest is fixed: brand
+         steps nearest its default, then neutral steps, then black and
+         white (_ring_candidates), preferring a ring whose color differs
+         from the fill. That preference only reorders ring candidates;
+         the fill never moves for it.
+    The first fill, states and text that clear every constraint win. The
+    minimums are PAIRINGS' own in this context, so they rise under
+    contrast:high:
       text on the fill and on every state   >= 4.5 (WCAG 1.4.3), 7.0 high (WCAG 1.4.6)
       fill and every state on the page      >= 3.0 (WCAG 1.4.11), 4.5 high (our floor)
       every state's hex differs from the fill's and from each other's
       ring on every text surface            >= 3.0 (WCAG 1.4.11), 4.5 high (our floor)
-      ring against the primary fill         >= 3.0 in both (WCAG 1.4.11)
+    The ring has no minimum against the fill: the border foundation keeps
+    page color between an element and its ring.
     When nothing clears, the closest candidate is kept and noted; the gate
     then reports the failing pairings. The generator never raises here.
     """
@@ -281,21 +302,27 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
     need_text = _need(g.on, g.fill, mode)
     need_fill = _need(g.fill, "color.surface.page", mode)
     rings = _ring_candidates(mode, defaults[g.ring]) if g.ring else []
-    ring_bgs = [prims[pick[mode][bg]] for bg in _ALL_BGS]
+    ring_bgs = [(prims[pick[mode][bg]], _need(g.ring, bg, mode)) for bg in _ALL_BGS] \
+        if g.ring else []
 
-    def ring_fit(ring: str, fill_hex: str) -> float:
-        hx = prims[ring]
-        return min([contrast(hx, bg) / _need(g.ring, "color.surface.page", mode) for bg in ring_bgs]
-                   + [contrast(hx, fill_hex) / _need(g.ring, g.fill, mode)])
+    def ring_low(ring: str) -> float:
+        return min(contrast(prims[ring], hx) for hx, _ in ring_bgs)
 
-    best: Optional[Tuple[float, Tuple[str, ...], str]] = None
-    for fill_idx in _order_from(STEPS.index(int(default_step)), conv):
-        fill_hex = prims[f"{family}.{STEPS[fill_idx]}"]
-        ring, ring_score = "", 1.0
+    def ring_fit(ring: str) -> float:
+        return min(contrast(prims[ring], hx) / need for hx, need in ring_bgs)
+
+    def finish(choice: Tuple[str, ...], hexes: List[str], on: str, solved: bool) -> None:
+        summary = (f"text/fill {contrast(prims[on], hexes[0]):.2f}:1, "
+                   f"fill/page {contrast(hexes[0], page_hex):.2f}:1")
         if g.ring:
-            ring = max(rings, key=lambda r: ring_fit(r, fill_hex))
-            ring = next((r for r in rings if ring_fit(r, fill_hex) >= 1.0), ring)
-            ring_score = ring_fit(ring, fill_hex)
+            ring = _choose_ring(rings, ring_fit, hexes[0], prims)
+            choice += (ring,)
+            solved = solved and ring_fit(ring) >= 1.0
+            summary += f", ring/surface {ring_low(ring):.2f}:1"
+        _apply(g, mode, pick, defaults, roles, choice, summary, notes, solved=solved)
+
+    best: Optional[Tuple[float, Tuple[str, ...], List[str], str]] = None
+    for fill_idx in _order_from(STEPS.index(int(default_step)), conv):
         for offsets in _state_offsets(conv, len(g.states)):
             idxs = [fill_idx] + [fill_idx + o for o in offsets]
             if not all(0 <= i < len(STEPS) for i in idxs):
@@ -305,23 +332,19 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
                 continue
             for on in ("color.base.white", "color.base.black"):
                 score = min([contrast(prims[on], h) / need_text for h in hexes]
-                            + [contrast(h, page_hex) / need_fill for h in hexes] + [ring_score])
-                choice = tuple(f"{family}.{STEPS[i]}" for i in idxs) + (on,) + (
-                    (ring,) if g.ring else ())
-                summary = (f"text/fill {contrast(prims[on], hexes[0]):.2f}:1, "
-                           f"fill/page {contrast(hexes[0], page_hex):.2f}:1"
-                           + (f", ring/fill {contrast(prims[ring], hexes[0]):.2f}:1" if g.ring else ""))
+                            + [contrast(h, page_hex) / need_fill for h in hexes])
+                choice = tuple(f"{family}.{STEPS[i]}" for i in idxs) + (on,)
                 if best is None or score > best[0]:
-                    best = (score, choice, summary)
+                    best = (score, choice, hexes, on)
                 if score >= 1.0:
-                    _apply(g, mode, pick, defaults, roles, choice, summary, notes, solved=True)
+                    finish(choice, hexes, on, solved=True)
                     return
     if best is None:
         notes.append(f"{g.fill} group ({mode}): every step of the {family.split('.')[-1]} ramp "
                      "resolves to the same color, so the states cannot differ from the fill; "
                      "kept the defaults")
         return
-    _apply(g, mode, pick, defaults, roles, best[1], best[2], notes, solved=False)
+    finish(best[1], best[2], best[3], solved=False)
 
 
 def _apply(g: _Group, mode: str, pick: Dict[str, Dict[str, str]], defaults: Dict[str, str],
@@ -370,6 +393,22 @@ def _states_distinct(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
+def _disabled_visible(ts: TokenSet, mode: str) -> List[str]:
+    """A disabled button must not vanish into the surface it sits on.
+    Inactive controls are exempt from the WCAG contrast minimums, so this
+    asks only that the colors differ."""
+    disabled = "color.action.disabled"
+    if not ts.has(disabled):
+        return []
+    hx = ts.resolve(disabled, mode)
+    return [f"{disabled} equals {bg} ({mode}) at {hx}, so a disabled button vanishes on that "
+            "surface. WCAG exempts inactive controls from contrast minimums, so this is a "
+            f"distinctness rule, not a ratio: point {disabled} at a step that differs from "
+            "color.surface.card and color.surface.raised"
+            for bg in ("color.surface.card", "color.surface.raised")
+            if ts.has(bg) and ts.resolve(bg, mode) == hx]
+
+
 def _disabled_distinct(ts: TokenSet, mode: str) -> List[str]:
     out = []
     for disabled, enabled in (("color.text.disabled", ("color.text.default", "color.text.muted")),
@@ -401,6 +440,7 @@ def _scheme_polarity(ts: TokenSet, mode: str) -> List[str]:
 CHECKS: Tuple[Check, ...] = (
     Check("states-distinct", "system", _states_distinct, axes=("scheme", "contrast")),
     Check("disabled-distinct", "system", _disabled_distinct, axes=("scheme", "contrast")),
+    Check("disabled-visible", "system", _disabled_visible, axes=("scheme", "contrast")),
     Check("scheme-polarity", "system", _scheme_polarity, axes=("scheme", "contrast")),
 )
 

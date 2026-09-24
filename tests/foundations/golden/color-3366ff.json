@@ -3,12 +3,12 @@
   "--color-action-danger-hover: var(--color-danger-300);",
   "--color-action-danger-pressed: var(--color-danger-200);",
   "--color-action-danger: var(--color-danger-400);",
-  "--color-action-disabled: var(--color-neutral-800);",
+  "--color-action-disabled: var(--color-neutral-700);",
   "--color-action-primary-hover: var(--color-brand-300);",
   "--color-action-primary-pressed: var(--color-brand-200);",
   "--color-action-primary: var(--color-brand-400);",
   "--color-focus-ring-inverse: var(--color-brand-700);",
-  "--color-focus-ring: var(--color-brand-50);",
+  "--color-focus-ring: var(--color-brand-200);",
   "--color-line-selected: var(--color-brand-300);",
   "--color-line-subtle: var(--color-neutral-800);",
   "--color-scrim: var(--color-shade-60);",
@@ -144,7 +144,7 @@
   "--color-line-subtle: var(--color-neutral-200);",
   "--color-line-input: var(--color-neutral-500);",
   "--color-line-selected: var(--color-brand-600);",
-  "--color-focus-ring: var(--color-brand-900);",
+  "--color-focus-ring: var(--color-brand-700);",
   "--color-focus-ring-inverse: var(--color-brand-300);",
   "--color-scrim: var(--color-shade-40);",
   "--color-status-danger-text: var(--color-danger-700);",
@@ -388,7 +388,7 @@
    ],
    "hex": "#220001"
   },
-  "color.focus.ring": "{color.brand.900}",
+  "color.focus.ring": "{color.brand.700}",
   "color.focus.ring-inverse": "{color.brand.300}",
   "color.info.100": {
    "colorSpace": "srgb",
@@ -923,483 +923,723 @@
  "resolved": {
   "color.action.danger": {
    "dark": "#D86D66",
-   "light": "#A63634"
+   "dark-high": "#F7ADA6",
+   "light": "#A63634",
+   "light-high": "#67070E"
   },
   "color.action.danger-hover": {
    "dark": "#E88E86",
-   "light": "#862021"
+   "dark-high": "#FFD0CB",
+   "light": "#862021",
+   "light-high": "#440004"
   },
   "color.action.danger-pressed": {
    "dark": "#F7ADA6",
-   "light": "#67070E"
+   "dark-high": "#FFF4F3",
+   "light": "#67070E",
+   "light-high": "#220001"
   },
   "color.action.disabled": {
-   "dark": "#2F3237",
-   "light": "#BDBFC4"
+   "dark": "#43464C",
+   "dark-high": "#43464C",
+   "light": "#BDBFC4",
+   "light-high": "#BDBFC4"
   },
   "color.action.primary": {
    "dark": "#5888FF",
-   "light": "#3366FF"
+   "dark-high": "#A5C2FF",
+   "light": "#3366FF",
+   "light-high": "#071D90"
   },
   "color.action.primary-hover": {
    "dark": "#7FA6FF",
-   "light": "#234ED9"
+   "dark-high": "#CCDCFF",
+   "light": "#234ED9",
+   "light-high": "#03006D"
   },
   "color.action.primary-pressed": {
    "dark": "#A5C2FF",
-   "light": "#1336B4"
+   "dark-high": "#F3F7FF",
+   "light": "#1336B4",
+   "light-high": "#01003B"
   },
   "color.base.black": {
    "dark": "#000000",
-   "light": "#000000"
+   "dark-high": "#000000",
+   "light": "#000000",
+   "light-high": "#000000"
   },
   "color.base.white": {
    "dark": "#FFFFFF",
-   "light": "#FFFFFF"
+   "dark-high": "#FFFFFF",
+   "light": "#FFFFFF",
+   "light-high": "#FFFFFF"
   },
   "color.brand.100": {
    "dark": "#CCDCFF",
-   "light": "#CCDCFF"
+   "dark-high": "#CCDCFF",
+   "light": "#CCDCFF",
+   "light-high": "#CCDCFF"
   },
   "color.brand.200": {
    "dark": "#A5C2FF",
-   "light": "#A5C2FF"
+   "dark-high": "#A5C2FF",
+   "light": "#A5C2FF",
+   "light-high": "#A5C2FF"
   },
   "color.brand.300": {
    "dark": "#7FA6FF",
-   "light": "#7FA6FF"
+   "dark-high": "#7FA6FF",
+   "light": "#7FA6FF",
+   "light-high": "#7FA6FF"
   },
   "color.brand.400": {
    "dark": "#5888FF",
-   "light": "#5888FF"
+   "dark-high": "#5888FF",
+   "light": "#5888FF",
+   "light-high": "#5888FF"
   },
   "color.brand.50": {
    "dark": "#F3F7FF",
-   "light": "#F3F7FF"
+   "dark-high": "#F3F7FF",
+   "light": "#F3F7FF",
+   "light-high": "#F3F7FF"
   },
   "color.brand.500": {
    "dark": "#3366FF",
-   "light": "#3366FF"
+   "dark-high": "#3366FF",
+   "light": "#3366FF",
+   "light-high": "#3366FF"
   },
   "color.brand.600": {
    "dark": "#234ED9",
-   "light": "#234ED9"
+   "dark-high": "#234ED9",
+   "light": "#234ED9",
+   "light-high": "#234ED9"
   },
   "color.brand.700": {
    "dark": "#1336B4",
-   "light": "#1336B4"
+   "dark-high": "#1336B4",
+   "light": "#1336B4",
+   "light-high": "#1336B4"
   },
   "color.brand.800": {
    "dark": "#071D90",
-   "light": "#071D90"
+   "dark-high": "#071D90",
+   "light": "#071D90",
+   "light-high": "#071D90"
   },
   "color.brand.900": {
    "dark": "#03006D",
-   "light": "#03006D"
+   "dark-high": "#03006D",
+   "light": "#03006D",
+   "light-high": "#03006D"
   },
   "color.brand.950": {
    "dark": "#01003B",
-   "light": "#01003B"
+   "dark-high": "#01003B",
+   "light": "#01003B",
+   "light-high": "#01003B"
   },
   "color.danger.100": {
    "dark": "#FFD0CB",
-   "light": "#FFD0CB"
+   "dark-high": "#FFD0CB",
+   "light": "#FFD0CB",
+   "light-high": "#FFD0CB"
   },
   "color.danger.200": {
    "dark": "#F7ADA6",
-   "light": "#F7ADA6"
+   "dark-high": "#F7ADA6",
+   "light": "#F7ADA6",
+   "light-high": "#F7ADA6"
   },
   "color.danger.300": {
    "dark": "#E88E86",
-   "light": "#E88E86"
+   "dark-high": "#E88E86",
+   "light": "#E88E86",
+   "light-high": "#E88E86"
   },
   "color.danger.400": {
    "dark": "#D86D66",
-   "light": "#D86D66"
+   "dark-high": "#D86D66",
+   "light": "#D86D66",
+   "light-high": "#D86D66"
   },
   "color.danger.50": {
    "dark": "#FFF4F3",
-   "light": "#FFF4F3"
+   "dark-high": "#FFF4F3",
+   "light": "#FFF4F3",
+   "light-high": "#FFF4F3"
   },
   "color.danger.500": {
    "dark": "#C74B47",
-   "light": "#C74B47"
+   "dark-high": "#C74B47",
+   "light": "#C74B47",
+   "light-high": "#C74B47"
   },
   "color.danger.600": {
    "dark": "#A63634",
-   "light": "#A63634"
+   "dark-high": "#A63634",
+   "light": "#A63634",
+   "light-high": "#A63634"
   },
   "color.danger.700": {
    "dark": "#862021",
-   "light": "#862021"
+   "dark-high": "#862021",
+   "light": "#862021",
+   "light-high": "#862021"
   },
   "color.danger.800": {
    "dark": "#67070E",
-   "light": "#67070E"
+   "dark-high": "#67070E",
+   "light": "#67070E",
+   "light-high": "#67070E"
   },
   "color.danger.900": {
    "dark": "#440004",
-   "light": "#440004"
+   "dark-high": "#440004",
+   "light": "#440004",
+   "light-high": "#440004"
   },
   "color.danger.950": {
    "dark": "#220001",
-   "light": "#220001"
+   "dark-high": "#220001",
+   "light": "#220001",
+   "light-high": "#220001"
   },
   "color.focus.ring": {
-   "dark": "#F3F7FF",
-   "light": "#03006D"
+   "dark": "#A5C2FF",
+   "dark-high": "#5888FF",
+   "light": "#1336B4",
+   "light-high": "#234ED9"
   },
   "color.focus.ring-inverse": {
    "dark": "#1336B4",
-   "light": "#7FA6FF"
+   "dark-high": "#071D90",
+   "light": "#7FA6FF",
+   "light-high": "#A5C2FF"
   },
   "color.info.100": {
    "dark": "#C0E1FF",
-   "light": "#C0E1FF"
+   "dark-high": "#C0E1FF",
+   "light": "#C0E1FF",
+   "light-high": "#C0E1FF"
   },
   "color.info.200": {
    "dark": "#97C9F4",
-   "light": "#97C9F4"
+   "dark-high": "#97C9F4",
+   "light": "#97C9F4",
+   "light-high": "#97C9F4"
   },
   "color.info.300": {
    "dark": "#71B1E7",
-   "light": "#71B1E7"
+   "dark-high": "#71B1E7",
+   "light": "#71B1E7",
+   "light-high": "#71B1E7"
   },
   "color.info.400": {
    "dark": "#4799D8",
-   "light": "#4799D8"
+   "dark-high": "#4799D8",
+   "light": "#4799D8",
+   "light-high": "#4799D8"
   },
   "color.info.50": {
    "dark": "#F0F8FF",
-   "light": "#F0F8FF"
+   "dark-high": "#F0F8FF",
+   "light": "#F0F8FF",
+   "light-high": "#F0F8FF"
   },
   "color.info.500": {
    "dark": "#0080CA",
-   "light": "#0080CA"
+   "dark-high": "#0080CA",
+   "light": "#0080CA",
+   "light-high": "#0080CA"
   },
   "color.info.600": {
    "dark": "#0067A4",
-   "light": "#0067A4"
+   "dark-high": "#0067A4",
+   "light": "#0067A4",
+   "light-high": "#0067A4"
   },
   "color.info.700": {
    "dark": "#004F7F",
-   "light": "#004F7F"
+   "dark-high": "#004F7F",
+   "light": "#004F7F",
+   "light-high": "#004F7F"
   },
   "color.info.800": {
    "dark": "#00385C",
-   "light": "#00385C"
+   "dark-high": "#00385C",
+   "light": "#00385C",
+   "light-high": "#00385C"
   },
   "color.info.900": {
    "dark": "#00223B",
-   "light": "#00223B"
+   "dark-high": "#00223B",
+   "light": "#00223B",
+   "light-high": "#00223B"
   },
   "color.info.950": {
    "dark": "#000E1D",
-   "light": "#000E1D"
+   "dark-high": "#000E1D",
+   "light": "#000E1D",
+   "light-high": "#000E1D"
   },
   "color.line.input": {
    "dark": "#6E7279",
-   "light": "#6E7279"
+   "dark-high": "#A2A5AA",
+   "light": "#6E7279",
+   "light-high": "#43464C"
   },
   "color.line.selected": {
    "dark": "#7FA6FF",
-   "light": "#234ED9"
+   "dark-high": "#A5C2FF",
+   "light": "#234ED9",
+   "light-high": "#071D90"
   },
   "color.line.subtle": {
    "dark": "#2F3237",
-   "light": "#BDBFC4"
+   "dark-high": "#585C62",
+   "light": "#BDBFC4",
+   "light-high": "#878B91"
   },
   "color.neutral.100": {
    "dark": "#D9DBDE",
-   "light": "#D9DBDE"
+   "dark-high": "#D9DBDE",
+   "light": "#D9DBDE",
+   "light-high": "#D9DBDE"
   },
   "color.neutral.200": {
    "dark": "#BDBFC4",
-   "light": "#BDBFC4"
+   "dark-high": "#BDBFC4",
+   "light": "#BDBFC4",
+   "light-high": "#BDBFC4"
   },
   "color.neutral.300": {
    "dark": "#A2A5AA",
-   "light": "#A2A5AA"
+   "dark-high": "#A2A5AA",
+   "light": "#A2A5AA",
+   "light-high": "#A2A5AA"
   },
   "color.neutral.400": {
    "dark": "#878B91",
-   "light": "#878B91"
+   "dark-high": "#878B91",
+   "light": "#878B91",
+   "light-high": "#878B91"
   },
   "color.neutral.50": {
    "dark": "#F6F7F9",
-   "light": "#F6F7F9"
+   "dark-high": "#F6F7F9",
+   "light": "#F6F7F9",
+   "light-high": "#F6F7F9"
   },
   "color.neutral.500": {
    "dark": "#6E7279",
-   "light": "#6E7279"
+   "dark-high": "#6E7279",
+   "light": "#6E7279",
+   "light-high": "#6E7279"
   },
   "color.neutral.600": {
    "dark": "#585C62",
-   "light": "#585C62"
+   "dark-high": "#585C62",
+   "light": "#585C62",
+   "light-high": "#585C62"
   },
   "color.neutral.700": {
    "dark": "#43464C",
-   "light": "#43464C"
+   "dark-high": "#43464C",
+   "light": "#43464C",
+   "light-high": "#43464C"
   },
   "color.neutral.800": {
    "dark": "#2F3237",
-   "light": "#2F3237"
+   "dark-high": "#2F3237",
+   "light": "#2F3237",
+   "light-high": "#2F3237"
   },
   "color.neutral.900": {
    "dark": "#1D1F23",
-   "light": "#1D1F23"
+   "dark-high": "#1D1F23",
+   "light": "#1D1F23",
+   "light-high": "#1D1F23"
   },
   "color.neutral.950": {
    "dark": "#0B0D11",
-   "light": "#0B0D11"
+   "dark-high": "#0B0D11",
+   "light": "#0B0D11",
+   "light-high": "#0B0D11"
   },
   "color.scrim": {
    "dark": "#00000099",
-   "light": "#00000066"
+   "dark-high": "#000000CC",
+   "light": "#00000066",
+   "light-high": "#00000099"
   },
   "color.shade.10": {
    "dark": "#0000001A",
-   "light": "#0000001A"
+   "dark-high": "#0000001A",
+   "light": "#0000001A",
+   "light-high": "#0000001A"
   },
   "color.shade.20": {
    "dark": "#00000033",
-   "light": "#00000033"
+   "dark-high": "#00000033",
+   "light": "#00000033",
+   "light-high": "#00000033"
   },
   "color.shade.40": {
    "dark": "#00000066",
-   "light": "#00000066"
+   "dark-high": "#00000066",
+   "light": "#00000066",
+   "light-high": "#00000066"
   },
   "color.shade.60": {
    "dark": "#00000099",
-   "light": "#00000099"
+   "dark-high": "#00000099",
+   "light": "#00000099",
+   "light-high": "#00000099"
   },
   "color.shade.80": {
    "dark": "#000000CC",
-   "light": "#000000CC"
+   "dark-high": "#000000CC",
+   "light": "#000000CC",
+   "light-high": "#000000CC"
   },
   "color.status.danger.on-strong": {
    "dark": "#000000",
-   "light": "#FFFFFF"
+   "dark-high": "#000000",
+   "light": "#FFFFFF",
+   "light-high": "#FFFFFF"
   },
   "color.status.danger.soft": {
    "dark": "#440004",
-   "light": "#FFD0CB"
+   "dark-high": "#220001",
+   "light": "#FFD0CB",
+   "light-high": "#FFF4F3"
   },
   "color.status.danger.strong": {
    "dark": "#D86D66",
-   "light": "#A63634"
+   "dark-high": "#F7ADA6",
+   "light": "#A63634",
+   "light-high": "#67070E"
   },
   "color.status.danger.text": {
    "dark": "#E88E86",
-   "light": "#862021"
+   "dark-high": "#F7ADA6",
+   "light": "#862021",
+   "light-high": "#67070E"
   },
   "color.status.info.on-strong": {
    "dark": "#000000",
-   "light": "#FFFFFF"
+   "dark-high": "#000000",
+   "light": "#FFFFFF",
+   "light-high": "#FFFFFF"
   },
   "color.status.info.soft": {
    "dark": "#00223B",
-   "light": "#C0E1FF"
+   "dark-high": "#000E1D",
+   "light": "#C0E1FF",
+   "light-high": "#F0F8FF"
   },
   "color.status.info.strong": {
    "dark": "#4799D8",
-   "light": "#0067A4"
+   "dark-high": "#97C9F4",
+   "light": "#0067A4",
+   "light-high": "#00385C"
   },
   "color.status.info.text": {
    "dark": "#71B1E7",
-   "light": "#004F7F"
+   "dark-high": "#97C9F4",
+   "light": "#004F7F",
+   "light-high": "#00385C"
   },
   "color.status.success.on-strong": {
    "dark": "#000000",
-   "light": "#FFFFFF"
+   "dark-high": "#000000",
+   "light": "#FFFFFF",
+   "light-high": "#FFFFFF"
   },
   "color.status.success.soft": {
    "dark": "#00290D",
-   "light": "#C0E9C7"
+   "dark-high": "#001204",
+   "light": "#C0E9C7",
+   "light-high": "#E5FFE9"
   },
   "color.status.success.strong": {
    "dark": "#4AA963",
-   "light": "#007634"
+   "dark-high": "#9AD4A5",
+   "light": "#007634",
+   "light-high": "#004119"
   },
   "color.status.success.text": {
    "dark": "#74BE84",
-   "light": "#005B26"
+   "dark-high": "#9AD4A5",
+   "light": "#005B26",
+   "light-high": "#004119"
   },
   "color.status.warning.on-strong": {
    "dark": "#000000",
-   "light": "#FFFFFF"
+   "dark-high": "#000000",
+   "light": "#FFFFFF",
+   "light-high": "#FFFFFF"
   },
   "color.status.warning.soft": {
    "dark": "#2E1C00",
-   "light": "#F0D9BA"
+   "dark-high": "#160B00",
+   "light": "#F0D9BA",
+   "light-high": "#FFF5E8"
   },
   "color.status.warning.strong": {
    "dark": "#B78843",
-   "light": "#845800"
+   "dark-high": "#DDBE93",
+   "light": "#845800",
+   "light-high": "#492F00"
   },
   "color.status.warning.text": {
    "dark": "#CAA36C",
-   "light": "#664300"
+   "dark-high": "#DDBE93",
+   "light": "#664300",
+   "light-high": "#492F00"
   },
   "color.success.100": {
    "dark": "#C0E9C7",
-   "light": "#C0E9C7"
+   "dark-high": "#C0E9C7",
+   "light": "#C0E9C7",
+   "light-high": "#C0E9C7"
   },
   "color.success.200": {
    "dark": "#9AD4A5",
-   "light": "#9AD4A5"
+   "dark-high": "#9AD4A5",
+   "light": "#9AD4A5",
+   "light-high": "#9AD4A5"
   },
   "color.success.300": {
    "dark": "#74BE84",
-   "light": "#74BE84"
+   "dark-high": "#74BE84",
+   "light": "#74BE84",
+   "light-high": "#74BE84"
   },
   "color.success.400": {
    "dark": "#4AA963",
-   "light": "#4AA963"
+   "dark-high": "#4AA963",
+   "light": "#4AA963",
+   "light-high": "#4AA963"
   },
   "color.success.50": {
    "dark": "#E5FFE9",
-   "light": "#E5FFE9"
+   "dark-high": "#E5FFE9",
+   "light": "#E5FFE9",
+   "light-high": "#E5FFE9"
   },
   "color.success.500": {
    "dark": "#009342",
-   "light": "#009342"
+   "dark-high": "#009342",
+   "light": "#009342",
+   "light-high": "#009342"
   },
   "color.success.600": {
    "dark": "#007634",
-   "light": "#007634"
+   "dark-high": "#007634",
+   "light": "#007634",
+   "light-high": "#007634"
   },
   "color.success.700": {
    "dark": "#005B26",
-   "light": "#005B26"
+   "dark-high": "#005B26",
+   "light": "#005B26",
+   "light-high": "#005B26"
   },
   "color.success.800": {
    "dark": "#004119",
-   "light": "#004119"
+   "dark-high": "#004119",
+   "light": "#004119",
+   "light-high": "#004119"
   },
   "color.success.900": {
    "dark": "#00290D",
-   "light": "#00290D"
+   "dark-high": "#00290D",
+   "light": "#00290D",
+   "light-high": "#00290D"
   },
   "color.success.950": {
    "dark": "#001204",
-   "light": "#001204"
+   "dark-high": "#001204",
+   "light": "#001204",
+   "light-high": "#001204"
   },
   "color.surface.card": {
    "dark": "#1D1F23",
-   "light": "#FFFFFF"
+   "dark-high": "#0B0D11",
+   "light": "#FFFFFF",
+   "light-high": "#FFFFFF"
   },
   "color.surface.inverse": {
    "dark": "#D9DBDE",
-   "light": "#1D1F23"
+   "dark-high": "#FFFFFF",
+   "light": "#1D1F23",
+   "light-high": "#000000"
   },
   "color.surface.page": {
    "dark": "#0B0D11",
-   "light": "#F6F7F9"
+   "dark-high": "#000000",
+   "light": "#F6F7F9",
+   "light-high": "#FFFFFF"
   },
   "color.surface.raised": {
    "dark": "#2F3237",
-   "light": "#FFFFFF"
+   "dark-high": "#1D1F23",
+   "light": "#FFFFFF",
+   "light-high": "#FFFFFF"
   },
   "color.surface.selected": {
    "dark": "#03006D",
-   "light": "#CCDCFF"
+   "dark-high": "#01003B",
+   "light": "#CCDCFF",
+   "light-high": "#F3F7FF"
   },
   "color.surface.sunken": {
    "dark": "#000000",
-   "light": "#D9DBDE"
+   "dark-high": "#000000",
+   "light": "#D9DBDE",
+   "light-high": "#FFFFFF"
   },
   "color.text.default": {
    "dark": "#F6F7F9",
-   "light": "#1D1F23"
+   "dark-high": "#FFFFFF",
+   "light": "#1D1F23",
+   "light-high": "#0B0D11"
   },
   "color.text.disabled": {
    "dark": "#585C62",
-   "light": "#878B91"
+   "dark-high": "#585C62",
+   "light": "#878B91",
+   "light-high": "#878B91"
   },
   "color.text.inverse": {
    "dark": "#1D1F23",
-   "light": "#F6F7F9"
+   "dark-high": "#000000",
+   "light": "#F6F7F9",
+   "light-high": "#FFFFFF"
   },
   "color.text.link": {
    "dark": "#7FA6FF",
-   "light": "#234ED9"
+   "dark-high": "#A5C2FF",
+   "light": "#234ED9",
+   "light-high": "#071D90"
   },
   "color.text.muted": {
    "dark": "#A2A5AA",
-   "light": "#585C62"
+   "dark-high": "#BDBFC4",
+   "light": "#585C62",
+   "light-high": "#2F3237"
   },
   "color.text.on-action": {
    "dark": "#000000",
-   "light": "#FFFFFF"
+   "dark-high": "#000000",
+   "light": "#FFFFFF",
+   "light-high": "#FFFFFF"
   },
   "color.text.on-danger": {
    "dark": "#000000",
-   "light": "#FFFFFF"
+   "dark-high": "#000000",
+   "light": "#FFFFFF",
+   "light-high": "#FFFFFF"
   },
   "color.tint.10": {
    "dark": "#FFFFFF1A",
-   "light": "#FFFFFF1A"
+   "dark-high": "#FFFFFF1A",
+   "light": "#FFFFFF1A",
+   "light-high": "#FFFFFF1A"
   },
   "color.tint.20": {
    "dark": "#FFFFFF33",
-   "light": "#FFFFFF33"
+   "dark-high": "#FFFFFF33",
+   "light": "#FFFFFF33",
+   "light-high": "#FFFFFF33"
   },
   "color.tint.40": {
    "dark": "#FFFFFF66",
-   "light": "#FFFFFF66"
+   "dark-high": "#FFFFFF66",
+   "light": "#FFFFFF66",
+   "light-high": "#FFFFFF66"
   },
   "color.tint.60": {
    "dark": "#FFFFFF99",
-   "light": "#FFFFFF99"
+   "dark-high": "#FFFFFF99",
+   "light": "#FFFFFF99",
+   "light-high": "#FFFFFF99"
   },
   "color.tint.80": {
    "dark": "#FFFFFFCC",
-   "light": "#FFFFFFCC"
+   "dark-high": "#FFFFFFCC",
+   "light": "#FFFFFFCC",
+   "light-high": "#FFFFFFCC"
   },
   "color.warning.100": {
    "dark": "#F0D9BA",
-   "light": "#F0D9BA"
+   "dark-high": "#F0D9BA",
+   "light": "#F0D9BA",
+   "light-high": "#F0D9BA"
   },
   "color.warning.200": {
    "dark": "#DDBE93",
-   "light": "#DDBE93"
+   "dark-high": "#DDBE93",
+   "light": "#DDBE93",
+   "light-high": "#DDBE93"
   },
   "color.warning.300": {
    "dark": "#CAA36C",
-   "light": "#CAA36C"
+   "dark-high": "#CAA36C",
+   "light": "#CAA36C",
+   "light-high": "#CAA36C"
   },
   "color.warning.400": {
    "dark": "#B78843",
-   "light": "#B78843"
+   "dark-high": "#B78843",
+   "light": "#B78843",
+   "light-high": "#B78843"
   },
   "color.warning.50": {
    "dark": "#FFF5E8",
-   "light": "#FFF5E8"
+   "dark-high": "#FFF5E8",
+   "light": "#FFF5E8",
+   "light-high": "#FFF5E8"
   },
   "color.warning.500": {
    "dark": "#A46E00",
-   "light": "#A46E00"
+   "dark-high": "#A46E00",
+   "light": "#A46E00",
+   "light-high": "#A46E00"
   },
   "color.warning.600": {
    "dark": "#845800",
-   "light": "#845800"
+   "dark-high": "#845800",
+   "light": "#845800",
+   "light-high": "#845800"
   },
   "color.warning.700": {
    "dark": "#664300",
-   "light": "#664300"
+   "dark-high": "#664300",
+   "light": "#664300",
+   "light-high": "#664300"
   },
   "color.warning.800": {
    "dark": "#492F00",
-   "light": "#492F00"
+   "dark-high": "#492F00",
+   "light": "#492F00",
+   "light-high": "#492F00"
   },
   "color.warning.900": {
    "dark": "#2E1C00",
-   "light": "#2E1C00"
+   "dark-high": "#2E1C00",
+   "light": "#2E1C00",
+   "light-high": "#2E1C00"
   },
   "color.warning.950": {
    "dark": "#160B00",
-   "light": "#160B00"
+   "dark-high": "#160B00",
+   "light": "#160B00",
+   "light-high": "#160B00"
   }
  }
 }

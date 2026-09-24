@@ -28,6 +28,14 @@ from engine.synthesizer.axes import AxisValues
 FOUNDATIONS: Tuple[Foundation, ...] = (color.FOUNDATION, space.FOUNDATION, radius.FOUNDATION,
                                       border.FOUNDATION)
 
+# The color gate measures the focus ring against surfaces only. That is
+# enough because the border foundation guarantees a ring offset; a build
+# without border has to say so.
+RING_WITHOUT_BORDER = ("color.focus.ring is checked against surfaces only and relies on "
+                       "border.focus-ring.offset of at least 1px, which the border foundation "
+                       "guarantees; build border too, or keep a gap between the element and "
+                       "its ring")
+
 
 @dataclass(frozen=True)
 class BuildResult:
@@ -111,6 +119,9 @@ def build_system(axes: AxisValues, brand_hex: str, *, arabic: bool = True,
         for token in generated.tokens.tokens():
             ts.add(token)
         notes.extend(generated.notes)
+    names = {f.name for f in chosen}
+    if "color" in names and "border" not in names:
+        notes.append(RING_WITHOUT_BORDER)
     problems = validate(ts)
     if problems:
         raise ValidationError(problems)
@@ -123,5 +134,6 @@ def build_system(axes: AxisValues, brand_hex: str, *, arabic: bool = True,
 
 
 def build_color(axes: AxisValues, brand_hex: str) -> BuildResult:
-    """Color only: the same pipeline as build_system, one foundation."""
+    """Color only: the same pipeline as build_system, one foundation. Its
+    notes end with RING_WITHOUT_BORDER, since border is not built."""
     return build_system(axes, brand_hex, foundations=("color",))

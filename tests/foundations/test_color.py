@@ -130,8 +130,8 @@ def test_notes_are_complete(seed):
     # (<mode>): <old> -> <new>, ... was X:1, now Y:1, <minimum and its
     # source>") and the fill-group solver's per-context summary ("<fill>
     # group (<mode>): <role> <old> -> <new>, ..., text/fill A:1, fill/page
-    # B:1[, ring/fill C:1]"), which reports the ratios reached instead of a
-    # single was/now pair.
+    # B:1[, ring/surface C:1]"), which reports the ratios reached instead of
+    # a single was/now pair.
     r = generate_color(AXES, seed)
     retune_notes = [n for n in r.notes if "(scheme:" in n]
     assert retune_notes, f"{seed}: expected at least one retune-loop note"
@@ -140,7 +140,8 @@ def test_notes_are_complete(seed):
         assert _PATH_MOVE_RE.search(note), note
         if re.match(r"color\.\S+ group \(", note):
             # a fill-group note lists only the roles that moved, then the
-            # text/fill and fill/page ratios, and ring/fill for the primary
+            # text/fill and fill/page ratios, and for the primary the ring's
+            # lowest ratio against the surfaces it is checked on
             ratios = len(_BARE_RATIO_RE.findall(note))
             assert ratios == (3 if note.startswith("color.action.primary group") else 2), note
         else:
@@ -209,26 +210,145 @@ def test_public_tables_are_immutable():
         SEMANTIC["color.text.extra"] = ("color.neutral.900", "color.neutral.50")
 
 
-# M2 kickoff: the focus ring joins the action-group solver.
+# The focus ring is picked with the primary fill group but never constrains
+# the fill: the border foundation guarantees an offset, so page color sits
+# between an element and its ring and the ring is measured against surfaces.
 
 def test_new_pairings_are_declared():
     from engine.foundations.gate import Pairing
-    for p in (Pairing("color.focus.ring", "color.action.primary", 3.0, "1.4.11", high=3.0),
-              Pairing("color.focus.ring", "color.surface.sunken", 3.0, "1.4.11"),
+    for p in (Pairing("color.focus.ring", "color.surface.sunken", 3.0, "1.4.11"),
               Pairing("color.text.muted", "color.surface.sunken", 4.5, "1.4.3"),
               Pairing("color.text.link", "color.surface.sunken", 4.5, "1.4.3"),
               Pairing("color.status.danger.text", "color.surface.sunken", 4.5, "1.4.3")):
         assert p in PAIRINGS, p
 
 
+def test_ring_is_not_paired_with_the_button_fill():
+    fills = ("color.action.primary",) + color_module._FILL_STATES["color.action.primary"]
+    assert not [p for p in PAIRINGS if p.fg == "color.focus.ring" and p.bg in fills]
+    assert all(p.high is None for p in PAIRINGS)
+
+
+def test_ring_keeps_every_surface_pairing_at_its_minimum():
+    from engine.foundations.gate import GateFinding, Pairing
+    surfaces = ("color.surface.page", "color.surface.card", "color.surface.sunken",
+                "color.surface.raised")
+    for bg in surfaces:
+        p = Pairing("color.focus.ring", bg, 3.0, "1.4.11")
+        assert p in PAIRINGS, p
+        assert required(p, "scheme:dark,contrast:standard") == (3.0, "1.4.11")
+        assert required(p, "scheme:dark,contrast:high") == (4.5, "high-contrast floor over 1.4.11")
+        std = GateFinding(p.fg, bg, "scheme:light,contrast:standard", 2.5,
+                          *required(p, "scheme:light,contrast:standard")).message()
+        high = GateFinding(p.fg, bg, "scheme:light,contrast:high", 4.2,
+                           *required(p, "scheme:light,contrast:high")).message()
+        assert "WCAG 1.4.11 needs 3.0:1" in std
+        assert "our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3.0:1)" in high
+    assert Pairing("color.focus.ring-inverse", "color.surface.inverse", 3.0, "1.4.11") in PAIRINGS
+
+
 @pytest.mark.parametrize("seed", SEEDS + _SWEEP_SEEDS)
-def test_ring_stands_out_from_the_fill_and_every_surface(seed):
+def test_ring_stands_out_from_every_surface(seed):
     ts = generate_color(AXES, seed).tokens
     for mode in COLOR_CONTEXTS:
+        need = 4.5 if "contrast:high" in mode else 3.0
         ring = ts.resolve("color.focus.ring", mode)
-        others = [ts.resolve(r, mode) for r in ("color.action.primary", "color.surface.page",
-                                                "color.surface.card", "color.surface.sunken")]
-        assert all(contrast(ring, o) >= 3.0 for o in others), f"{seed} ({mode})"
+        for bg in ("color.surface.page", "color.surface.card", "color.surface.sunken",
+                   "color.surface.raised"):
+            assert contrast(ring, ts.resolve(bg, mode)) >= need, f"{seed} {bg} ({mode})"
+        inverse = contrast(ts.resolve("color.focus.ring-inverse", mode),
+                           ts.resolve("color.surface.inverse", mode))
+        assert inverse >= need, f"{seed} ring-inverse ({mode})"
+
+
+_GROUP_OUT = ("color.action.primary", "color.action.primary-hover",
+              "color.action.primary-pressed", "color.text.on-action")
+
+
+@pytest.mark.parametrize("seed", SEEDS + ["#00F1B0", "#291F18", "#FFFFFF", "#000000"])
+def test_the_ring_never_moves_the_fill(seed, monkeypatch):
+    # Whatever the ring may be, the fill, its states and its text come out
+    # the same: the ring is chosen after them and constrains none of them.
+    normal = generate_color(AXES, seed).tokens
+    monkeypatch.setattr(color_module, "_ring_candidates",
+                        lambda mode, default_ring: ["color.base.white", "color.base.black"])
+    other = generate_color(AXES, seed).tokens
+    for mode in COLOR_CONTEXTS:
+        for role in _GROUP_OUT:
+            assert other.raw(role, mode) == normal.raw(role, mode), f"{seed} {role} ({mode})"
+
+
+# Hand-built brand ramps, grays by OKLCH lightness, read in the light
+# standard context: page and card near white, sunken a light gray.
+_LIGHT = "scheme:light,contrast:standard"
+
+
+def _gray_ramp(monkeypatch, lightnesses):
+    _brand_ramp(monkeypatch, "#3366FF",
+                {s: oklch_to_hex(l, 0.0, 0.0) for s, l in zip(STEPS, lightnesses)})
+
+
+def _group(ts):
+    return tuple(ts.raw(r, _LIGHT)[1:-1] for r in _GROUP_OUT + ("color.focus.ring",))
+
+
+def test_solver_order_fill_distance_before_state_direction(monkeypatch):
+    # brand.500 (the default fill) carries white text and clears the page,
+    # but 600 and 700 are near white, so hover and pressed cannot go the
+    # conventional (darker) way. The fill stays and the states go lighter.
+    # An order that put the state direction first would move the fill to
+    # 800 to keep 900 and 950 as darker states.
+    # The ring's default brand.700 is near white; the next brand step in
+    # the conventional direction, 800, clears every surface. A neutral ring
+    # (neutral.950) would come first if neutral outranked the brand ramp.
+    _gray_ramp(monkeypatch, [0.983, 0.95, 0.85, 0.49, 0.465, 0.43, 0.983, 0.983, 0.37, 0.31, 0.27])
+    assert _group(generate_color(AXES, "#3366FF").tokens) == (
+        "color.brand.500", "color.brand.400", "color.brand.300", "color.base.white",
+        "color.brand.800")
+
+
+def test_solver_order_conventional_direction_at_equal_distance(monkeypatch):
+    # The default fill brand.500 is too light. One step either way clears
+    # (600 darker, 400 lighter); the conventional darker step wins, and its
+    # states continue darker. The ring's default brand.700 clears every
+    # surface; it equals the hover, which is allowed.
+    _gray_ramp(monkeypatch, [0.983, 0.95, 0.85, 0.49, 0.465, 0.8, 0.43, 0.39, 0.34, 0.31, 0.27])
+    assert _group(generate_color(AXES, "#3366FF").tokens) == (
+        "color.brand.600", "color.brand.700", "color.brand.800", "color.base.white",
+        "color.brand.700")
+
+
+def test_ring_prefers_a_color_other_than_the_fill(monkeypatch):
+    # brand.800 resolves to the same color as the fill (brand.500). The
+    # ring skips it for the next brand step that clears every surface.
+    _gray_ramp(monkeypatch, [0.983, 0.95, 0.85, 0.49, 0.465, 0.43, 0.983, 0.983, 0.43, 0.31, 0.27])
+    assert _group(generate_color(AXES, "#3366FF").tokens) == (
+        "color.brand.500", "color.brand.400", "color.brand.300", "color.base.white",
+        "color.brand.900")
+
+
+def test_the_fill_never_moves_to_make_the_ring_differ(monkeypatch):
+    # When the only ring on offer is the fill itself, the ring equals the
+    # fill; the fill does not move to make room.
+    _gray_ramp(monkeypatch, [0.983, 0.95, 0.85, 0.49, 0.465, 0.43, 0.983, 0.983, 0.37, 0.31, 0.27])
+    monkeypatch.setattr(color_module, "_ring_candidates",
+                        lambda mode, default_ring: ["color.brand.500"])
+    assert _group(generate_color(AXES, "#3366FF").tokens) == (
+        "color.brand.500", "color.brand.400", "color.brand.300", "color.base.white",
+        "color.brand.500")
+
+
+def test_ring_candidates_run_brand_then_neutral_then_black_and_white():
+    light = color_module._ring_candidates(_LIGHT, "color.brand.700")
+    assert light[:5] == ["color.brand.700", "color.brand.800", "color.brand.600",
+                         "color.brand.900", "color.brand.500"]
+    assert light[11:13] == ["color.neutral.950", "color.neutral.900"]
+    assert light[-2:] == ["color.base.black", "color.base.white"]
+    dark = color_module._ring_candidates("scheme:dark,contrast:standard", "color.brand.200")
+    assert dark[:3] == ["color.brand.200", "color.brand.100", "color.brand.300"]
+    assert dark[11:13] == ["color.neutral.50", "color.neutral.100"]
+    assert dark[-2:] == ["color.base.white", "color.base.black"]
+    assert len(light) == len(dark) == 2 * len(STEPS) + 2
 
 
 def test_ring_prefers_a_brand_step():
@@ -238,9 +358,15 @@ def test_ring_prefers_a_brand_step():
 
 
 def test_ring_moves_are_noted():
-    notes = [n for n in generate_color(AXES, "#6B4423").notes
+    # A yellow brand's light fill moves to brand.700, the ring's default;
+    # the ring steps on to brand.800 so it differs from the fill, and the
+    # note says so with the ring's lowest ratio against the surfaces.
+    notes = [n for n in generate_color(AXES, "#FFD400").notes
              if n.startswith("color.action.primary group (scheme:light,contrast:standard)")]
-    assert notes and "color.focus.ring color.brand.700 -> " in notes[0]
+    assert len(notes) == 1
+    assert "color.action.primary color.brand.500 -> color.brand.700" in notes[0]
+    assert "color.focus.ring color.brand.700 -> color.brand.800" in notes[0]
+    assert re.search(r"ring/surface \d+\.\d\d:1$", notes[0]), notes[0]
 
 
 # High contrast: a variant per scheme with raised minimums.
@@ -249,11 +375,11 @@ def test_required_raises_minimums_only_in_high_contrast():
     from engine.foundations.gate import Pairing
     text = Pairing("color.text.default", "color.surface.page", 4.5, "1.4.3")
     part = Pairing("color.line.input", "color.surface.page", 3.0, "1.4.11")
-    ring = Pairing("color.focus.ring", "color.action.primary", 3.0, "1.4.11", high=3.0)
+    pinned = Pairing("color.x.fg", "color.x.bg", 3.0, "1.4.11", high=3.0)
     assert required(text, "scheme:dark,contrast:standard") == (4.5, "1.4.3")
     assert required(text, "scheme:dark,contrast:high") == (7.0, "1.4.6")
     assert required(part, "contrast:high") == (4.5, "high-contrast floor over 1.4.11")
-    assert required(ring, "contrast:high") == (3.0, "1.4.11")
+    assert required(pinned, "contrast:high") == (3.0, "1.4.11")
 
 
 @pytest.mark.parametrize("seed", SEEDS)
@@ -410,6 +536,42 @@ def test_disabled_and_state_checks_fire_on_collisions():
         "color.action.primary-pressed at a neighboring step so each state reads as a different color"]
     disabled = by_id["disabled-distinct"].run(ts, ctx)
     assert len(disabled) == 3 and disabled[0].startswith("color.text.disabled equals color.text.default")
+
+
+def test_disabled_fill_must_differ_from_card_and_raised():
+    from engine.foundations.color import CHECKS
+    from engine.foundations.tokens import Token, TokenSet
+    def tokens(card):
+        ts = TokenSet()
+        ts.add(Token("color.n.800", "color", "#333333"))
+        ts.add(Token("color.n.900", "color", "#222222"))
+        ts.add(Token("color.action.disabled", "color", "{color.n.800}", layer="semantic"))
+        ts.add(Token("color.surface.card", "color", "{" + card + "}", layer="semantic"))
+        ts.add(Token("color.surface.raised", "color", "{color.n.800}", layer="semantic"))
+        return ts
+
+    ts = tokens("color.n.900")
+    check = {c.id: c for c in CHECKS}["disabled-visible"]
+    assert (check.criterion, check.axes) == ("system", ("scheme", "contrast"))
+    ctx = "scheme:dark,contrast:standard"
+    assert check.run(ts, ctx) == [
+        f"color.action.disabled equals color.surface.raised ({ctx}) at #333333, so a disabled "
+        "button vanishes on that surface. WCAG exempts inactive controls from contrast "
+        "minimums, so this is a distinctness rule, not a ratio: point color.action.disabled at a "
+        "step that differs from color.surface.card and color.surface.raised"]
+    both = check.run(tokens("color.n.800"), ctx)
+    assert [m.split(" (")[0] for m in both] == [
+        "color.action.disabled equals color.surface.card",
+        "color.action.disabled equals color.surface.raised"]
+
+
+@pytest.mark.parametrize("seed", SEEDS + _SWEEP_SEEDS)
+def test_generated_disabled_fill_differs_from_card_and_raised(seed):
+    ts = generate_color(AXES, seed).tokens
+    for mode in COLOR_CONTEXTS:
+        disabled = ts.resolve("color.action.disabled", mode)
+        for bg in ("color.surface.card", "color.surface.raised"):
+            assert disabled != ts.resolve(bg, mode), f"{seed} {bg} ({mode})"
 
 
 def test_scheme_polarity_catches_a_dark_scheme_with_a_light_palette():

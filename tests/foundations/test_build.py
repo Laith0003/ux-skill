@@ -240,3 +240,26 @@ def test_seed_hint_direction_follows_the_other_side(monkeypatch):
             if (f.fg, f.bg, f.mode) == ("color.text.on-action", "color.action.primary", "scheme:dark,contrast:standard")]
     assert dark, [f.message() for f in exc.value.report.findings]
     assert "choose a darker or more saturated seed" in dark[0].message()
+
+
+# The color foundation checks the focus ring against surfaces only; that
+# holds because the border foundation guarantees a ring offset.
+
+_RING_NOTE = ("color.focus.ring is checked against surfaces only and relies on "
+              "border.focus-ring.offset of at least 1px, which the border foundation "
+              "guarantees; build border too, or keep a gap between the element and its ring")
+
+
+@pytest.mark.parametrize("foundations", [("color",), ("color", "space"), ("color", "radius")])
+def test_color_without_border_names_the_ring_assumption(foundations):
+    notes = build_system(AXES, "#3366FF", foundations=foundations).notes
+    assert notes.count(_RING_NOTE) == 1 and notes[-1] == _RING_NOTE
+
+
+def test_build_color_carries_the_ring_assumption():
+    assert _RING_NOTE in build_color(AXES, "#3366FF").notes
+
+
+@pytest.mark.parametrize("foundations", [None, ("color", "border"), ("border",), ("space",)])
+def test_no_ring_note_when_border_is_built_or_color_is_not(foundations):
+    assert _RING_NOTE not in build_system(AXES, "#3366FF", foundations=foundations).notes
