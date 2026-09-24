@@ -11,7 +11,7 @@ superseded_by: null
 
 ## Context
 
-A primary or danger fill can sit on the page, a card or a raised dialog. Holding the fill to 3:1 against every surface would push the brand fill away from the brand for many brands, mostly in dark mode on the raised surface.
+A primary or danger fill can sit on the page, a card or a raised dialog. Holding the fill to 3:1 against every surface would move the brand fill for some brands. Measured over 90 brands (the brands the color and contract tests use) in 3 axis sets, 270 builds in every scheme and contrast context: 2 brands, in 6 builds, have an action or strong status fill, or one of its hover and pressed steps, below its floor against card, sunken or raised. Every one is color.action.primary on the raised surface in dark standard contrast, worst 2.85:1.
 
 ## Decision
 
@@ -27,4 +27,4 @@ color.PAIRINGS for action and status strong fills; the button contract, which pa
 
 ## Consequences
 
-Where a contract draws a strong status color as an edge or an icon rather than a fill, such as the danger secondary button's edge or the text field's error edge, it pairs that color with every surface it lists. A design that places a filled button where its label is not visible, such as an icon-only button on a raised surface, pairs that fill with the raised surface in its own contract.
+Where a contract draws a strong status color as an edge or an icon, it pairs that color with what the edge or icon sits on, per contract: the button pairs color.status.danger.strong, the danger edge of its secondary and ghost buttons, with page, card, raised and sunken at 3:1; the text field pairs it, its error edge and icon, with page, card, raised and sunken at 3:1; the status banner pairs each strong status color, its icon, with that status's soft fill only, at 3:1. A design that places a filled button where its label is not visible, such as an icon-only button on a raised surface, pairs that fill with the raised surface in its own contract.

@@ -15,7 +15,7 @@ A button set can offer an intent for every status: positive, warning and info bu
 
 ## Decision
 
-The button contract has two intents, neutral and danger, in three emphases: primary (filled), secondary (an edge and brand text in every state) and ghost (text only at rest, taking the secondary fill and edge on hover and press). Positive and warning outcomes are shown in a status banner or next to the result, never as the color of a button. Secondary and ghost buttons use the link text, the selected line and the selected surface, and a disabled secondary edge takes color.text.disabled; the danger versions use the danger status roles.
+The button contract has two intents, neutral and danger, in three emphases: primary (filled), secondary (an edge and brand text in every enabled state) and ghost (text only at rest, taking the secondary fill and edge on hover and press). Positive and warning outcomes are shown in a status banner or next to the result, never as the color of a button. Secondary and ghost buttons use the link text, the selected line and the selected surface; the danger versions use the danger status roles. Disabled, every emphasis takes color.text.disabled for its label, and the secondary button takes it for its edge as well.
 
 ## Why
 

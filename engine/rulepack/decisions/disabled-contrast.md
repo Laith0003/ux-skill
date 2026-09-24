@@ -15,7 +15,7 @@ WCAG exempts inactive controls from contrast minimums. A disabled control that v
 
 ## Decision
 
-Disabled roles are not held to 4.5:1 or 3:1. color.text.disabled differs from default and muted text, color.action.disabled differs from the primary fill and from the card and raised surfaces in every context. The button contract holds the disabled label on the disabled fill to 1.3:1, a floor of its own, so the label never disappears. A disabled edge (the secondary button's, the check box's) takes color.text.disabled and is held to no ratio.
+Disabled roles are not held to 4.5:1 or 3:1. color.text.disabled differs from default and muted text, color.action.disabled differs from the primary fill and from the card and raised surfaces in every context. The button contract holds the disabled label on the disabled fill to 1.3:1, a floor of its own, so the label never disappears. Disabled edges are held to no ratio, and each contract names its own: the secondary button's edge takes color.text.disabled, matching its disabled label; the check box in the selectable row takes color.text.disabled, matching the row's disabled text; the text field's edge takes color.line.subtle.
 
 ## Why
 
@@ -23,7 +23,7 @@ Inactive means not available, not invisible. The distinctness checks keep a disa
 
 ## What it touches
 
-color.py's disabled-distinct and disabled-visible checks; COVERAGE_EXEMPT; the button contract and the selectable-row contract's check box.
+color.py's disabled-distinct and disabled-visible checks; COVERAGE_EXEMPT; the button, selectable-row and text-field contracts.
 
 ## Consequences
 

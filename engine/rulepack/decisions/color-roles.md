@@ -27,4 +27,4 @@ color.py SEMANTIC and HIGH_CONTRAST, the fill-group solver, the coverage tables 
 
 ## Consequences
 
-Secondary and ghost buttons reuse the link text, the selected line and the selected surface. De-emphasized copy uses muted text, never disabled text. A disabled edge, such as the secondary button's or the check box's, takes color.text.disabled. A new role joins a coverage table or COVERAGE_EXEMPT with a reason, or the build refuses it.
+Secondary and ghost buttons reuse the link text, the selected line and the selected surface. De-emphasized copy uses muted text, never disabled text. There is no disabled line role, so each contract names its disabled edge: the secondary button's edge takes color.text.disabled, matching its disabled label; the check box in the selectable row takes color.text.disabled, matching the row's disabled text; the text field's edge takes color.line.subtle. A new role joins a coverage table or COVERAGE_EXEMPT with a reason, or the build refuses it.

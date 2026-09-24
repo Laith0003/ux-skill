@@ -23,7 +23,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 ## Contrast and the gate
 
 - [High contrast raises non-text parts to our own 4.5:1 floor](high-contrast-non-text-floor.md)
-- [The gate blocks on the AAA criteria it applies and names their level](aaa-criteria-that-block.md)
+- [The gate blocks on the AAA criteria it applies](aaa-criteria-that-block.md)
 - [Every text style is held to the body text minimum](no-large-text-relaxation.md)
 - [The focus ring clears the surfaces, and an offset keeps it off the fill](ring-offset.md)
 - [A filled control's fill clears 3:1 against the page only](fill-edge-page-only.md)
