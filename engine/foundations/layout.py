@@ -1,0 +1,136 @@
+"""Layout foundation: breakpoints, grid columns and gutters, page margins,
+container and reading widths, and the minimum target size.
+
+Gutters and margins alias the spacing scale (space.<n>), so layout and
+spacing move together; the density axis places them and compact takes one
+step less, never below 8px. Breakpoints are minimum viewport widths; a
+phone is everything below the tablet breakpoint. CSS cannot read custom
+properties inside a media query, so the breakpoint tokens are reference
+values for exporters and docs.
+"""
+from __future__ import annotations
+
+from typing import List, Tuple
+
+from engine.foundations.foundation import BrandInputs, Foundation, Generated
+from engine.foundations.gate import Check
+from engine.foundations.space import UNITS
+from engine.foundations.tokens import Token, TokenSet
+from engine.synthesizer.axes import AxisValues
+
+TIERS = ("phone", "tablet", "laptop", "desktop")
+VIEWPORTS = {"tablet": 640, "laptop": 1024, "desktop": 1280}
+COLUMNS = {"phone": 4, "tablet": 8, "laptop": 12, "desktop": 12}
+# tier -> (space units when the density axis is 0, when it is 1)
+GUTTER = {"phone": (4, 3), "tablet": (6, 4), "laptop": (8, 5), "desktop": (8, 6)}
+MARGIN = {"phone": (5, 4), "tablet": (8, 6), "laptop": (12, 8), "desktop": (16, 10)}
+COMPACT_FLOOR = 2  # space units, 8px
+CONTAINERS = (1120, 1280, 1440)
+MEASURE_REM = {"text": 38, "form": 32}
+MAX_TEXT_MEASURE_REM = 40  # about 80 characters of body text
+TARGET_PX = {"comfortable": 44, "compact": 32}
+MIN_TARGET_PX, COMFORTABLE_TARGET_PX = 24, 44
+
+
+def _snap(value: float, options: Tuple[int, ...]) -> int:
+    return min(options, key=lambda o: (abs(o - value), -o))
+
+
+def _units(pair: Tuple[int, int], density: float) -> Tuple[int, int]:
+    comfortable = _snap(pair[0] + (pair[1] - pair[0]) * density, UNITS)
+    below = [u for u in UNITS if u < comfortable]
+    return comfortable, max(COMPACT_FLOOR, below[-1]) if below else comfortable
+
+
+def container_px(density: float) -> int:
+    return _snap(CONTAINERS[0] + (CONTAINERS[-1] - CONTAINERS[0]) * density, CONTAINERS)
+
+
+def generate_layout(axes: AxisValues) -> Generated:
+    d = axes.density
+    ts = TokenSet()
+    for px in VIEWPORTS.values():
+        ts.add(Token(f"layout.viewport.{px}", "dimension", {"value": px, "unit": "px"}))
+    for n in sorted(set(COLUMNS.values())):
+        ts.add(Token(f"layout.column-count.{n}", "number", n))
+    for px in sorted(set(CONTAINERS) | set(TARGET_PX.values())):
+        ts.add(Token(f"layout.width.{px}", "dimension", {"value": px, "unit": "px"}))
+    for rem in sorted(set(MEASURE_REM.values())):
+        ts.add(Token(f"layout.rem.{rem}", "dimension", {"value": rem, "unit": "rem"}))
+
+    for tier, px in VIEWPORTS.items():
+        ts.add(Token(f"layout.breakpoint.{tier}", "dimension", "{layout.viewport.%d}" % px,
+                     layer="semantic"))
+    for tier in TIERS:
+        ts.add(Token(f"layout.columns.{tier}", "number",
+                     "{layout.column-count.%d}" % COLUMNS[tier], layer="semantic"))
+    for group, table in (("gutter", GUTTER), ("margin-inline", MARGIN)):
+        for tier in TIERS:
+            comfortable, compact = _units(table[tier], d)
+            modes = {"density:compact": "{space.%d}" % compact} if compact != comfortable else {}
+            ts.add(Token(f"layout.{group}.{tier}", "dimension", "{space.%d}" % comfortable,
+                         modes=modes, layer="semantic"))
+    ts.add(Token("layout.container.max", "dimension", "{layout.width.%d}" % container_px(d),
+                 layer="semantic"))
+    for name, rem in MEASURE_REM.items():
+        ts.add(Token(f"layout.measure.{name}", "dimension", "{layout.rem.%d}" % rem,
+                     layer="semantic"))
+    ts.add(Token("layout.target.min", "dimension", "{layout.width.%d}" % TARGET_PX["comfortable"],
+                 modes={"density:compact": "{layout.width.%d}" % TARGET_PX["compact"]},
+                 layer="semantic"))
+    return Generated(tokens=ts, notes=[f"layout: container {container_px(d)}px"])
+
+
+def _px(ts: TokenSet, path: str, mode: str = "") -> float:
+    v = ts.resolve(path, mode)
+    return v["value"] * (16 if v["unit"] == "rem" else 1)
+
+
+def _breakpoints(ts: TokenSet, mode: str) -> List[str]:
+    present = [f"layout.breakpoint.{t}" for t in TIERS if ts.has(f"layout.breakpoint.{t}")]
+    return [f"{b} ({_px(ts, b):g}px) does not start above {a} ({_px(ts, a):g}px); keep "
+            "breakpoints strictly increasing"
+            for a, b in zip(present, present[1:]) if _px(ts, b) <= _px(ts, a)]
+
+
+def _columns(ts: TokenSet, mode: str) -> List[str]:
+    present = [f"layout.columns.{t}" for t in TIERS if ts.has(f"layout.columns.{t}")]
+    return [f"{b} ({ts.resolve(b):g}) has fewer columns than {a} ({ts.resolve(a):g}); a wider "
+            "viewport never loses columns"
+            for a, b in zip(present, present[1:]) if ts.resolve(b) < ts.resolve(a)]
+
+
+def _target(ts: TokenSet, mode: str) -> List[str]:
+    p = "layout.target.min"
+    if not ts.has(p):
+        return []
+    px = _px(ts, p, mode)
+    floor = COMFORTABLE_TARGET_PX if "density:comfortable" in mode else MIN_TARGET_PX
+    criterion = "2.5.5" if floor == COMFORTABLE_TARGET_PX else "2.5.8"
+    if px >= floor:
+        return []
+    return [f"{p} ({mode}) is {px:g}px; WCAG {criterion} asks for {floor}px targets here, so "
+            f"point it at layout.width.{floor} or larger"]
+
+
+def _measure(ts: TokenSet, mode: str) -> List[str]:
+    p = "layout.measure.text"
+    if ts.has(p) and _px(ts, p) > MAX_TEXT_MEASURE_REM * 16:
+        return [f"{p} is {_px(ts, p) / 16:g}rem; lines past about 80 characters tire readers "
+                f"(1.4.8), so keep it at {MAX_TEXT_MEASURE_REM}rem or less"]
+    return []
+
+
+CHECKS: Tuple[Check, ...] = (
+    Check("layout-breakpoints", "system", _breakpoints),
+    Check("layout-columns", "system", _columns),
+    Check("target-size", "2.5.8", _target, axes=("density",)),
+    Check("text-measure", "1.4.8", _measure),
+)
+
+
+def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
+    return generate_layout(axes)
+
+
+FOUNDATION = Foundation(name="layout", generate=_generate, checks=CHECKS, requires=("space",))

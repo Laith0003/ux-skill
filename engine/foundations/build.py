@@ -16,7 +16,7 @@ import numbers
 from dataclasses import dataclass
 from typing import Any, Iterable, List, Optional, Sequence, Tuple
 
-from engine.foundations import border, color, elevation, motion, radius, space
+from engine.foundations import border, color, elevation, layout, motion, radius, space
 from engine.foundations.color_math import hex_to_rgb
 from engine.foundations.foundation import BrandInputs, Foundation
 from engine.foundations.gate import GateFailure, GateReport, gate
@@ -27,7 +27,7 @@ from engine.synthesizer.axes import AxisValues
 # Build order. Each foundation task appends its FOUNDATION here.
 FOUNDATIONS: Tuple[Foundation, ...] = (color.FOUNDATION, space.FOUNDATION, radius.FOUNDATION,
                                       border.FOUNDATION, elevation.FOUNDATION,
-                                      motion.FOUNDATION)
+                                      motion.FOUNDATION, layout.FOUNDATION)
 
 # The color gate measures the focus ring against surfaces only. That is
 # enough because the border foundation guarantees a ring offset; a build
@@ -87,7 +87,13 @@ def _select(foundations: Optional[Sequence[str]]) -> Tuple[Foundation, ...]:
         if name not in known:
             raise ValueError(f"foundations names {name!r}, which is not one of {known}; "
                              "use those names or leave foundations out to build all")
-    return tuple(f for f in FOUNDATIONS if f.name in foundations)
+    chosen = tuple(f for f in FOUNDATIONS if f.name in foundations)
+    for f in chosen:
+        for need in f.requires:
+            if need not in foundations:
+                raise ValueError(f"foundations includes {f.name!r}, which aliases {need!r} tokens; "
+                                 f"add {need!r} to foundations")
+    return chosen
 
 
 def _attach_hints(ts: TokenSet, report: GateReport, chosen: Sequence[Foundation]) -> None:

@@ -40,3 +40,5 @@ class Foundation:
     pairings: Tuple[Pairing, ...] = ()
     checks: Tuple[Check, ...] = ()
     hint: Optional[Callable[[TokenSet, GateFinding], str]] = None
+    # Foundations whose primitives this one aliases (layout aliases space).
+    requires: Tuple[str, ...] = ()
