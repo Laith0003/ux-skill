@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from typing import Callable, Iterable, List
 
 from engine.foundations.color_math import contrast, hex_to_rgb
-from engine.foundations.tokens import TokenSet
+from engine.foundations.tokens import TokenSet, opaque_hex
 
 
 @dataclass(frozen=True)
@@ -114,7 +114,7 @@ class GateFailure(Exception):
 
 
 def _hex(ts: TokenSet, path: str, mode: str) -> str:
-    value = ts.resolve(path, mode)
+    value = opaque_hex(ts.resolve(path, mode))
     if isinstance(value, str) and len(value) == 9 and value.startswith("#"):
         raise ValueError(
             f"{path} ({mode}) resolves to the translucent {value}; contrast needs opaque "

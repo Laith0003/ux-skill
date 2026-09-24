@@ -56,10 +56,11 @@ def test_from_dtcg_tolerates_null_extensions():
     # R27 M4: "$extensions": null used to raise AttributeError.
     doc = {"color": {"base": {
         "white": {"$type": "color", "$value": "#FFFFFF", "$extensions": None},
-        "black": {"$type": "color", "$value": "#000000", "$extensions": {"ux.modes": None}},
+        "black": {"$type": "color", "$value": "#000000", "$extensions": {EXT: {"modes": None}}},
+        "grey": {"$type": "color", "$value": "#777777", "$extensions": {EXT: None}},
     }}}
     ts = from_dtcg(doc)
-    for path in ("color.base.white", "color.base.black"):
+    for path in ("color.base.white", "color.base.black", "color.base.grey"):
         t = ts.get(path)
         assert t.layer == "primitive" and t.modes == {}
 
@@ -107,3 +108,25 @@ def test_to_dtcg_raises_on_a_path_conflict_instead_of_dropping(order):
     with pytest.raises(ValueError, match=r"radius is a token and also a group holding radius\.card; "
                                          r"DTCG cannot hold both, so rename one"):
         to_dtcg(ts)
+
+
+@pytest.mark.parametrize("ext", [
+    {"ux.layer": "semantic", "ux.modes": {"dark": "{color.base.white}"}},
+    {"ux.layer": "semantic"},
+    {"ux.modes": {"dark": "{color.base.white}"}},
+    {EXT: {"layer": "semantic"}, "ux.layer": "semantic"},
+])
+def test_from_dtcg_rejects_the_old_extension_keys_by_name(ext):
+    doc = {"color": {
+        "base": {"black": {"$type": "color", "$value": "#000000"},
+                 "white": {"$type": "color", "$value": "#FFFFFF"}},
+        "text": {"default": {"$type": "color", "$value": "{color.base.black}",
+                             "$extensions": ext},
+                 "muted": {"$type": "color", "$value": "{color.base.black}",
+                           "$extensions": {"ux.layer": "semantic"}}},
+    }}
+    with pytest.raises(ValueError) as exc:
+        from_dtcg(doc)
+    msg = str(exc.value)
+    assert msg.startswith("color.text.default ")
+    assert "this file was written by an older build; re-export it with the current version" in msg

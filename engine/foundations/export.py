@@ -14,6 +14,9 @@ from engine.foundations.tokens import Token, TokenSet
 from engine.foundations.values import css_entries, decode, encode
 
 EXT = "io.github.laith0003.ux-skill"
+# The extension keys earlier builds wrote; a document that still carries
+# them is refused, since reading it would drop its layers and modes.
+LEGACY_EXT = ("ux.layer", "ux.modes")
 
 
 def _conflict(prefix: str, path: str) -> ValueError:
@@ -37,8 +40,8 @@ def to_dtcg(ts: TokenSet) -> Dict[str, Any]:
             raise _conflict(t.path, below)
         ext: Dict[str, Any] = {"layer": t.layer}
         if t.modes:
-            ext["modes"] = {m: encode(t.type, v) for m, v in t.modes.items()}
-        entry: Dict[str, Any] = {"$type": t.type, "$value": encode(t.type, t.value),
+            ext["modes"] = {m: encode(t.type, v, f"{t.path} ({m})") for m, v in t.modes.items()}
+        entry: Dict[str, Any] = {"$type": t.type, "$value": encode(t.type, t.value, t.path),
                                  "$extensions": {EXT: ext}}
         if t.description:
             entry["$description"] = t.description
@@ -65,7 +68,14 @@ def from_dtcg(doc: Dict[str, Any], mode_names: Tuple[str, ...] = ("light", "dark
                 continue
             if "$value" in val:
                 type_ = val.get("$type", group_type)
-                ext = (val.get("$extensions") or {}).get(EXT) or {}
+                exts = val.get("$extensions") or {}
+                legacy = [k for k in LEGACY_EXT if k in exts]
+                if legacy:
+                    raise ValueError(
+                        f"{'.'.join(path + [key])} carries the extension keys {legacy}; "
+                        "this file was written by an older build; re-export it with the "
+                        "current version")
+                ext = exts.get(EXT) or {}
                 ts.add(Token(".".join(path + [key]), type_, decode(type_, val["$value"]),
                              modes={m: decode(type_, v) for m, v in (ext.get("modes") or {}).items()},
                              layer=ext.get("layer", "primitive"),

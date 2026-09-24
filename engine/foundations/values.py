@@ -6,8 +6,9 @@ data (dict, list, str, int, float, bool) equal to the token's DTCG 2025.10
 $value, except color. A color is held as its sRGB hex string, #RRGGBB or
 #RRGGBBAA when translucent, because color math, the contrast gate and CSS
 all read sRGB hex; the codec below turns it into the 2025.10 color object
-(colorSpace srgb, components 0 to 1, alpha only when the hex carries one,
-hex fallback) and back without loss. Inside a composite (a shadow layer's
+(colorSpace srgb, components 0 to 1, alpha only when below 1, hex
+fallback) and back without loss. An opaque color is never held with an
+alpha: #RRGGBBFF and an alpha of 1 both become #RRGGBB. Inside a composite (a shadow layer's
 color, a typography field) the same rule applies field by field, and any
 field may instead be an alias such as "{color.base.black}".
 """
@@ -19,7 +20,7 @@ from dataclasses import dataclass
 from types import MappingProxyType
 from typing import Any, Callable, Dict, List, Mapping, Tuple
 
-from engine.foundations.tokens import alias_target, css_property, is_alias
+from engine.foundations.tokens import alias_target, css_property, is_alias, opaque_hex
 
 _HEX = re.compile(r"#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})")
 _FONT_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9 _-]*")
@@ -42,10 +43,14 @@ def _is_number(v: Any) -> bool:
 
 
 def _num(v: float) -> str:
-    """A number as CSS writes it: 16, 0.5, -0.25 (never 16.0 or 1e-05)."""
-    if float(v).is_integer():
-        return str(int(v))
-    return f"{v:.4f}".rstrip("0")
+    """A number as CSS writes it, to four decimals: 16, 0.5, -0.25. Never
+    16.0, 1e-05, a trailing dot or a signed zero."""
+    if isinstance(v, int):
+        return str(v)
+    r = round(float(v), 4)
+    if r == 0:
+        return "0"
+    return f"{r:.4f}".rstrip("0").rstrip(".")
 
 
 def _alias_css(value: str) -> str:
@@ -65,7 +70,7 @@ def _color_encode(v: str) -> Dict[str, Any]:
     rgb = [int(s[i:i + 2], 16) for i in (0, 2, 4)]
     out: Dict[str, Any] = {"colorSpace": "srgb",
                            "components": [round(c / 255, 6) for c in rgb]}
-    if len(s) == 8:
+    if len(s) == 8 and s[6:8].upper() != "FF":
         out["alpha"] = round(int(s[6:8], 16) / 255, 6)
     out["hex"] = "#" + s[:6].upper()
     return out
@@ -73,7 +78,7 @@ def _color_encode(v: str) -> Dict[str, Any]:
 
 def _color_decode(v: Any) -> Any:
     if isinstance(v, str) and _HEX.fullmatch(v):
-        return v.upper()  # a pre-2025.10 hex string, accepted on import
+        return opaque_hex(v.upper())  # a pre-2025.10 hex string, accepted on import
     if not (isinstance(v, dict) and v.get("colorSpace") == "srgb"):
         return v  # left as is; validate reports it as a bad value
     comps = v.get("components")
@@ -86,7 +91,8 @@ def _color_decode(v: Any) -> Any:
     if "alpha" in v:
         if not _is_number(v["alpha"]):
             return v
-        return base + f"{max(0, min(255, round(v['alpha'] * 255))):02X}"
+        alpha = max(0, min(255, round(v["alpha"] * 255)))
+        return base if alpha == 255 else base + f"{alpha:02X}"
     return base
 
 
@@ -227,11 +233,23 @@ TYPES: Mapping[str, TypeSpec] = MappingProxyType({
 })
 
 
-def encode(type_: str, value: Any) -> Any:
-    """Internal literal or alias to its DTCG 2025.10 $value."""
+class EncodeError(ValueError):
+    """A value that fails its type check reached encode. The message names
+    the token, the value and the fix, as validate's bad-value does."""
+
+
+def encode(type_: str, value: Any, path: str = "") -> Any:
+    """Internal literal or alias to its DTCG 2025.10 $value. A literal that
+    fails its type check raises EncodeError naming `path`, never a value
+    the codec half read (so a bad color cannot leave as another color).
+    An unknown type passes through; validate names it."""
     if is_alias(value) or type_ not in TYPES:
         return value
-    return TYPES[type_].encode(value)
+    spec = TYPES[type_]
+    if not spec.check(value):
+        raise EncodeError(f"{path or 'a token'} is type {type_} but holds {value!r}; "
+                          f"{spec.expected}")
+    return spec.encode(value)
 
 
 def decode(type_: str, value: Any) -> Any:

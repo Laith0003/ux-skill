@@ -1,6 +1,7 @@
 """The value model: one checker, one DTCG 2025.10 codec and one CSS
 printer per token type, composites included."""
 import json
+import re
 
 import pytest
 
@@ -232,3 +233,106 @@ def test_gate_refuses_a_translucent_color_by_name():
     with pytest.raises(ValueError, match=r"color\.scrim\.40 \(light\) resolves to the translucent "
                                          r"#00000066; contrast needs opaque colors"):
         gate(ts, [Pairing("color.scrim.40", "color.base.white", 3.0, "1.4.11")])
+
+
+@pytest.mark.parametrize("type_, value, css", [
+    ("number", 3.0, "3"),
+    ("number", 0.1 * 3 * 10, "3"),
+    ("number", 1e-05, "0"),
+    ("number", -1e-05, "0"),
+    ("number", 0.5, "0.5"),
+    ("number", -0.25, "-0.25"),
+    ("number", 1.23456, "1.2346"),
+    ("number", 1e-10, "0"),
+    ("number", -0.0, "0"),
+    ("number", 0.99999, "1"),
+    ("dimension", {"value": 0.1 * 3 * 10, "unit": "rem"}, "3rem"),
+    ("cubicBezier", [0.00001, 0, 1, 1], "cubic-bezier(0, 0, 1, 1)"),
+])
+def test_css_numbers_never_print_a_bare_dot_or_a_signed_zero(type_, value, css):
+    [(_, text)] = css_entries("a.b", type_, value)
+    assert text == css
+    for part in re.findall(r"-?[0-9.]+", text):
+        assert not re.search(r"\.(?!\d)", part), part
+        assert not (part.startswith("-") and float(part) == 0), part
+
+
+def test_opaque_alpha_from_dtcg_decodes_to_six_digits_and_passes_the_gate():
+    doc = {"color": {"base": {
+        "white": {"$type": "color", "$value": {"colorSpace": "srgb", "components": [1, 1, 1],
+                                               "alpha": 1}},
+        "black": {"$type": "color", "$value": {"colorSpace": "srgb", "components": [0, 0, 0],
+                                               "alpha": 1.0, "hex": "#000000"}},
+    }}}
+    ts = from_dtcg(doc)
+    assert ts.get("color.base.white").value == "#FFFFFF"
+    assert ts.get("color.base.black").value == "#000000"
+    assert validate(ts) == []
+    assert gate(ts, [Pairing("color.base.black", "color.base.white", 4.5, "1.4.3")]).passed
+
+
+def test_opaque_eight_digit_hex_is_normalized_and_passes_the_gate():
+    assert TYPES["color"].check("#000000FF")
+    assert encode("color", "#3366FFFF") == encode("color", "#3366FF")
+    assert decode("color", "#3366ffff") == "#3366FF"
+    ts = TokenSet()
+    ts.add(Token("color.base.black", "color", "#000000FF"))
+    ts.add(Token("color.base.white", "color", "#FFFFFFff"))
+    ts.add(Token("color.text.a", "color", "{color.base.black}", layer="semantic",
+                 modes={"dark": "#FFFFFFFF"}))
+    assert ts.get("color.base.black").value == "#000000"
+    assert ts.get("color.base.white").value == "#FFFFFF"
+    assert ts.get("color.text.a").modes == {"dark": "#FFFFFF"}
+    assert gate(ts, [Pairing("color.base.black", "color.base.white", 4.5, "1.4.3")]).passed
+    # a value set after construction still reads as opaque in the gate
+    ts.get("color.base.black").value = "#000000FF"
+    assert gate(ts, [Pairing("color.base.black", "color.base.white", 4.5, "1.4.3")]).passed
+
+
+def test_opaque_alpha_in_a_shadow_layer_is_normalized():
+    layer = dict(GOOD["shadow"][0][0], color="#000000FF")
+    ts = TokenSet()
+    ts.add(Token("elevation.shadow.light.1", "shadow", [layer]))
+    assert ts.get("elevation.shadow.light.1").value[0]["color"] == "#000000"
+    assert "alpha" not in encode("shadow", [layer])[0]["color"]
+
+
+@pytest.mark.parametrize("value", ["#12345", "#GGGGGG", "oklch(0.5 0.1 250)", "#3366FFF"])
+def test_a_bad_color_is_named_by_validate_and_by_encode(value):
+    assert not TYPES["color"].check(value)
+    ts = TokenSet()
+    ts.add(Token("color.x.500", "color", value))
+    assert [p.rule for p in validate(ts)] == ["bad-value"]
+    with pytest.raises(ValueError) as exc:
+        encode("color", value, "color.x.500")
+    assert type(exc.value) is not ValueError and not isinstance(exc.value, KeyError)
+    assert str(exc.value) == (f"color.x.500 is type color but holds {value!r}; "
+                              f"{TYPES['color'].expected}")
+    with pytest.raises(ValueError, match=r"^color\.x\.500 is type color but holds"):
+        to_dtcg(ts)
+
+
+def test_a_bad_mode_value_is_named_with_its_mode_by_encode():
+    ts = TokenSet()
+    ts.add(Token("color.x.500", "color", "#111111"))
+    ts.add(Token("color.text.a", "color", "{color.x.500}", layer="semantic",
+                 modes={"dark": "#12345"}))
+    with pytest.raises(ValueError, match=r"^color\.text\.a \(dark\) is type color but holds '#12345'"):
+        to_dtcg(ts)
+
+
+def test_a_bad_color_never_round_trips_into_another_color():
+    assert decode("color", "#12345") == "#12345"
+    broken = {"colorSpace": "srgb", "hex": "#12345"}
+    assert decode("color", broken) is broken
+    doc = {"color": {"x": {"$type": "color", "$value": "#12345"}}}
+    ts = from_dtcg(doc)
+    assert ts.get("color.x").value == "#12345"
+    assert [p.rule for p in validate(ts)] == ["bad-value"]
+
+
+def test_a_bad_shadow_layer_is_named_by_encode():
+    bad = [{"color": "#000000", "offsetX": "0px", "offsetY": {"value": 1, "unit": "px"},
+            "blur": {"value": 2, "unit": "px"}, "spread": {"value": 0, "unit": "px"}}]
+    with pytest.raises(ValueError, match=r"^elevation\.x is type shadow but holds"):
+        encode("shadow", bad, "elevation.x")

@@ -30,6 +30,24 @@ def alias_target(value: str) -> str:
     return value[1:-1]
 
 
+def opaque_hex(value: Any) -> Any:
+    """#RRGGBBFF is opaque: hold it as #RRGGBB, so an opaque color never
+    reads as translucent. Anything else comes back unchanged."""
+    if isinstance(value, str) and len(value) == 9 and value.startswith("#") \
+            and value[7:].upper() == "FF":
+        return value[:7]
+    return value
+
+
+def _opaque_layers(value: Any) -> Any:
+    """A shadow value with each layer's opaque #RRGGBBFF color shortened."""
+    if isinstance(value, dict) and "color" in value:
+        return dict(value, color=opaque_hex(value["color"]))
+    if isinstance(value, list):
+        return [_opaque_layers(v) if isinstance(v, dict) else v for v in value]
+    return value
+
+
 def css_property(path: str) -> str:
     """The CSS custom property a token path becomes. validate uses it to
     reject two paths that would share one property; to_css uses it to emit."""
@@ -44,6 +62,12 @@ class Token:
     modes: Dict[str, Any] = field(default_factory=dict)
     layer: str = "primitive"
     description: str = ""
+
+    def __post_init__(self) -> None:
+        norm = {"color": opaque_hex, "shadow": _opaque_layers}.get(self.type)
+        if norm is not None:
+            self.value = norm(self.value)
+            self.modes = {m: norm(v) for m, v in self.modes.items()}
 
 
 class TokenSet:
