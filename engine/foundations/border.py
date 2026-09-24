@@ -19,8 +19,6 @@ WIDTHS = (0, 1, 2, 3, 4)
 STYLES = ("solid", "dashed", "dotted")
 BOLD_RING_FROM = 0.66  # contrast axis
 MIN_RING_PX = 2
-# roles whose widths must not decrease in this order
-WEIGHT_ORDER = ("border.separator", "border.outline", "border.emphasis")
 
 
 def roles(axes: AxisValues) -> Dict[str, str]:
@@ -77,17 +75,43 @@ def _ring(ts: TokenSet, mode: str) -> List[str]:
 
 
 def _active(ts: TokenSet, mode: str) -> List[str]:
-    if ts.has("border.active") and _px(ts, "border.active") <= 0:
-        return ["border.active is 0px; a selected state must show more than a color change, so "
-                "point it at border.width.1 or wider"]
+    """A selected edge must be wider than a resting one; one as thin as
+    border.outline tells the states apart by color alone."""
+    if not ts.has("border.active"):
+        return []
+    active = _px(ts, "border.active")
+    if ts.has("border.outline") and active <= _px(ts, "border.outline"):
+        return [f"border.active ({active:g}px) is not wider than border.outline "
+                f"({_px(ts, 'border.outline'):g}px), so a selected edge differs from a resting "
+                "edge by color alone; WCAG 1.4.1 asks that color not be the only visual means of "
+                "conveying information, so point border.active at a wider step than "
+                "border.outline"]
+    if active <= 0:
+        return ["border.active is 0px; a selected state must show more than a color change, "
+                "so point it at border.width.1 or wider"]
     return []
 
 
 def _weight_order(ts: TokenSet, mode: str) -> List[str]:
-    present = [r for r in WEIGHT_ORDER if ts.has(r)]
-    return [f"{b} ({_px(ts, b):g}px) is lighter than {a} ({_px(ts, a):g}px); keep border "
-            f"weights in the order {', '.join(WEIGHT_ORDER)}"
-            for a, b in zip(present, present[1:]) if _px(ts, b) < _px(ts, a)]
+    """border.emphasis is heavier than border.outline, and border.separator
+    may match border.outline but never outweigh it. Without an outline,
+    emphasis is heavier than the separator."""
+    sep, outline, emph = "border.separator", "border.outline", "border.emphasis"
+    out = []
+    if ts.has(outline):
+        o = _px(ts, outline)
+        if ts.has(sep) and _px(ts, sep) > o:
+            out.append(f"{sep} ({_px(ts, sep):g}px) is heavier than {outline} ({o:g}px); a "
+                       "separator may match a resting edge but never outweigh it, so point "
+                       f"{sep} at the step {outline} uses or a lighter one")
+        if ts.has(emph) and _px(ts, emph) <= o:
+            out.append(f"{emph} ({_px(ts, emph):g}px) is not heavier than {outline} ({o:g}px), "
+                       "so an emphasized edge differs from a resting edge by color alone; point "
+                       f"{emph} at a wider step than {outline}")
+    elif ts.has(sep) and ts.has(emph) and _px(ts, emph) <= _px(ts, sep):
+        out.append(f"{emph} ({_px(ts, emph):g}px) is not heavier than {sep} "
+                   f"({_px(ts, sep):g}px); point {emph} at a wider step than {sep}")
+    return out
 
 
 def _whole_pixels(ts: TokenSet, mode: str) -> List[str]:

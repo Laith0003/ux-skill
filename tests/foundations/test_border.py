@@ -62,6 +62,20 @@ def _hand(ring=1, offset=0, active=0, separator=2, outline=1, emphasis=1, extra=
     return ts
 
 
+ACTIVE_NOT_WIDER = (
+    "border.active ({a}px) is not wider than border.outline ({o}px), so a selected edge differs "
+    "from a resting edge by color alone; WCAG 1.4.1 asks that color not be the only visual means "
+    "of conveying information, so point border.active at a wider step than border.outline")
+EMPHASIS_NOT_HEAVIER = (
+    "border.emphasis ({e}px) is not heavier than border.outline ({o}px), so an emphasized edge "
+    "differs from a resting edge by color alone; point border.emphasis at a wider step than "
+    "border.outline")
+SEPARATOR_HEAVIER = (
+    "border.separator ({s}px) is heavier than border.outline ({o}px); a separator may match a "
+    "resting edge but never outweigh it, so point border.separator at the step border.outline "
+    "uses or a lighter one")
+
+
 def test_checks_name_the_token_and_the_fix():
     report = gate(_hand(extra=0.5), [], CHECKS, raise_on_fail=False)
     assert [f.message for f in report.failures] == [
@@ -71,12 +85,60 @@ def test_checks_name_the_token_and_the_fix():
         "resting borders, so point it at a wider step",
         "border.focus-ring.offset is 0px; leave at least 1px of page color between the element "
         "and its ring, so point it at border.width.1 or wider",
-        "border.active is 0px; a selected state must show more than a color change, so point it "
-        "at border.width.1 or wider",
-        "border.outline (1px) is lighter than border.separator (2px); keep border weights in the "
-        "order border.separator, border.outline, border.emphasis",
+        ACTIVE_NOT_WIDER.format(a=0, o=1),
+        SEPARATOR_HEAVIER.format(s=2, o=1),
+        EMPHASIS_NOT_HEAVIER.format(e=1, o=1),
         "border.width.half is 0.5px; a sub-pixel stroke vanishes on 1x screens, so use a whole "
         "number of pixels"]
+
+
+def _check(check_id):
+    return [c for c in CHECKS if c.id == check_id][0]
+
+
+@pytest.mark.parametrize("active, outline, fails", [
+    (0, 1, True), (1, 1, True), (1, 2, True), (2, 1, False), (3, 2, False)])
+def test_active_must_be_wider_than_outline(active, outline, fails):
+    # A selected edge as thin as a resting edge differs by color alone.
+    check = _check("active-border")
+    assert check.criterion == "1.4.1"
+    msgs = check.run(_hand(active=active, outline=outline, separator=1, emphasis=4), "")
+    assert msgs == ([ACTIVE_NOT_WIDER.format(a=active, o=outline)] if fails else [])
+
+
+def test_active_at_zero_fails_without_an_outline():
+    ts = TokenSet()
+    ts.add(Token("border.width.0", "dimension", {"value": 0, "unit": "px"}))
+    ts.add(Token("border.active", "dimension", "{border.width.0}", layer="semantic"))
+    assert _check("active-border").run(ts, "") == [
+        "border.active is 0px; a selected state must show more than a color change, so point it "
+        "at border.width.1 or wider"]
+
+
+@pytest.mark.parametrize("separator, outline, emphasis, want", [
+    (1, 1, 2, []),
+    (0, 1, 2, []),
+    (1, 1, 1, [EMPHASIS_NOT_HEAVIER.format(e=1, o=1)]),
+    (1, 2, 1, [EMPHASIS_NOT_HEAVIER.format(e=1, o=2)]),
+    (2, 1, 2, [SEPARATOR_HEAVIER.format(s=2, o=1)]),
+    (3, 2, 2, [SEPARATOR_HEAVIER.format(s=3, o=2), EMPHASIS_NOT_HEAVIER.format(e=2, o=2)]),
+])
+def test_emphasis_is_heavier_and_separator_never_outweighs_outline(separator, outline, emphasis,
+                                                                   want):
+    check = _check("border-weight-order")
+    assert check.criterion == "system"
+    assert check.run(_hand(separator=separator, outline=outline, emphasis=emphasis), "") == want
+
+
+def test_without_an_outline_emphasis_is_heavier_than_the_separator():
+    ts = TokenSet()
+    for px in (1, 2):
+        ts.add(Token(f"border.width.{px}", "dimension", {"value": px, "unit": "px"}))
+    ts.add(Token("border.separator", "dimension", "{border.width.2}", layer="semantic"))
+    ts.add(Token("border.emphasis", "dimension", "{border.width.2}", layer="semantic"))
+    assert _check("border-weight-order").run(ts, "") == [
+        "border.emphasis (2px) is not heavier than border.separator (2px); point border.emphasis "
+        "at a wider step than border.separator"]
 
 
 def test_only_contrast_moves_borders():

@@ -588,3 +588,112 @@ def test_scheme_polarity_catches_a_dark_scheme_with_a_light_palette():
         "color.surface.page is not darker than color.text.default (scheme:dark,contrast:standard); "
         "a dark scheme needs a darker page, so point color.surface.page and color.text.default at "
         "the other ends of the neutral ramp"]
+
+
+# Selection and separators: the selected edge stands out from every
+# surface the ring does, and a separator never equals the surface it
+# divides.
+
+_SURFACES = ("color.surface.page", "color.surface.card", "color.surface.sunken",
+             "color.surface.raised")
+
+
+def test_line_selected_pairs_with_every_surface_the_ring_does():
+    from engine.foundations.gate import GateFinding, Pairing
+    ring_bgs = {p.bg for p in PAIRINGS if p.fg == "color.focus.ring"}
+    selected = {p.bg: p for p in PAIRINGS if p.fg == "color.line.selected"}
+    assert set(selected) == ring_bgs == set(_SURFACES)
+    for bg, p in selected.items():
+        assert p == Pairing("color.line.selected", bg, 3.0, "1.4.11")
+        assert required(p, "scheme:dark,contrast:standard") == (3.0, "1.4.11")
+        assert required(p, "scheme:dark,contrast:high") == (4.5, "high-contrast floor over 1.4.11")
+        std = GateFinding(p.fg, bg, "scheme:light,contrast:standard", 2.5,
+                          *required(p, "scheme:light,contrast:standard")).message()
+        high = GateFinding(p.fg, bg, "scheme:light,contrast:high", 4.2,
+                           *required(p, "scheme:light,contrast:high")).message()
+        assert "WCAG 1.4.11 needs 3.0:1" in std
+        assert "our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3.0:1)" in high
+
+
+@pytest.mark.parametrize("seed", SEEDS + _SWEEP_SEEDS)
+def test_line_selected_stands_out_from_every_surface(seed):
+    ts = generate_color(AXES, seed).tokens
+    for mode in COLOR_CONTEXTS:
+        need = 4.5 if "contrast:high" in mode else 3.0
+        line = ts.resolve("color.line.selected", mode)
+        for bg in _SURFACES:
+            assert contrast(line, ts.resolve(bg, mode)) >= need, f"{seed} {bg} ({mode})"
+
+
+def test_line_selected_retunes_against_sunken(monkeypatch):
+    # A brand.600 that clears the page and card at 3:1 but not the sunken
+    # surface: the retune moves line.selected on, as it moves other lines,
+    # and notes the sunken pairing it fixed.
+    from engine.foundations.color_math import hex_to_oklch
+    ts = generate_color(AXES, "#3366FF").tokens
+    ctx = "scheme:light,contrast:standard"
+    page, card, sunken = (ts.resolve(r, ctx) for r in _SURFACES[:3])
+    grays = [oklch_to_hex(l / 1000, 0.0, 0.0) for l in range(1000, 0, -1)]
+    edge = next(g for g in grays if min(contrast(g, page), contrast(g, card)) >= 3.0)
+    assert contrast(edge, sunken) < 3.0
+    stops = {s: oklch_to_hex(0.98 - 0.09 * i, 0.0, 0.0) for i, s in enumerate(STEPS)}
+    stops[600] = edge
+    _brand_ramp(monkeypatch, "#3366FF", stops)
+    result = generate_color(AXES, "#3366FF")
+    line = result.tokens.resolve("color.line.selected", ctx)
+    assert line != edge and hex_to_oklch(line)[0] < hex_to_oklch(edge)[0]
+    for bg in (page, card, sunken):
+        assert contrast(line, bg) >= 3.0
+    assert any(n.startswith(f"color.line.selected ({ctx}): color.brand.600 -> ")
+               and "color.line.selected on color.surface.sunken" in n
+               and "WCAG 1.4.11 needs 3.0:1" in n for n in result.notes)
+
+
+def _subtle_set(subtle, card, raised):
+    from engine.foundations.tokens import Token, TokenSet
+    ts = TokenSet()
+    for step, hx in (("700", "#444444"), ("800", "#333333"), ("900", "#222222")):
+        ts.add(Token(f"color.n.{step}", "color", hx))
+    for role, step in (("color.line.subtle", subtle), ("color.surface.card", card),
+                       ("color.surface.raised", raised)):
+        ts.add(Token(role, "color", "{color.n.%s}" % step, layer="semantic"))
+    return ts
+
+
+def test_line_subtle_must_differ_from_card_and_raised():
+    from engine.foundations.color import CHECKS
+    check = {c.id: c for c in CHECKS}["line-subtle-visible"]
+    assert (check.criterion, check.axes) == ("system", ("scheme", "contrast"))
+    ctx = "scheme:dark,contrast:standard"
+    assert check.run(_subtle_set("700", "900", "800"), ctx) == []
+    assert check.run(_subtle_set("800", "900", "800"), ctx) == [
+        f"color.line.subtle equals color.surface.raised ({ctx}) at #333333, so a separator "
+        "vanishes on that surface. A decorative line needs no contrast ratio, but it must differ "
+        "from the surface it divides: point color.line.subtle at a step that differs from "
+        "color.surface.card and color.surface.raised"]
+    both = check.run(_subtle_set("800", "800", "800"), ctx)
+    assert [m.split(" (")[0] for m in both] == [
+        "color.line.subtle equals color.surface.card",
+        "color.line.subtle equals color.surface.raised"]
+
+
+def test_line_subtle_check_blocks_the_build(monkeypatch):
+    # Put dark line.subtle back on raised's step: the gate refuses the build
+    # and names the check.
+    semantic = dict(color_module.SEMANTIC)
+    semantic["color.line.subtle"] = ("color.neutral.200", "color.neutral.800")
+    monkeypatch.setattr(color_module, "SEMANTIC", semantic)
+    with pytest.raises(GateFailure) as exc:
+        build_color(AXES, "#3366FF")
+    failures = [f for f in exc.value.report.failures if f.check == "line-subtle-visible"]
+    assert [f.mode for f in failures] == ["scheme:dark,contrast:standard"]
+    assert failures[0].message.startswith("color.line.subtle equals color.surface.raised")
+
+
+@pytest.mark.parametrize("seed", SEEDS + _SWEEP_SEEDS)
+def test_generated_line_subtle_differs_from_card_and_raised(seed):
+    ts = generate_color(AXES, seed).tokens
+    for mode in COLOR_CONTEXTS:
+        subtle = ts.resolve("color.line.subtle", mode)
+        for bg in ("color.surface.card", "color.surface.raised"):
+            assert subtle != ts.resolve(bg, mode), f"{seed} {bg} ({mode})"

@@ -1,6 +1,8 @@
 """Color output matches the golden: resolved values in all four contexts
-(light and dark, standard and high contrast), DTCG $values, and the CSS
-lines of the :root and dark blocks. Roles added later are ignored; every
+(light and dark, standard and high contrast), DTCG $values, the CSS lines
+of the :root and dark blocks, and every high-contrast CSS rule (the
+data-contrast attribute rules and the prefers-contrast media rules, alone
+and combined with dark). Roles added later are ignored; every
 role the golden holds must be unchanged. A task that changes color output
 on purpose recaptures the golden and lists every changed role."""
 import json
@@ -22,8 +24,31 @@ def _block(css, opener):
     return [line.strip() for line in body.strip().splitlines()]
 
 
+def _high_rules(css):
+    """Every rule that applies high contrast, keyed by its media query and
+    selector ("@media Q | selector", or the selector alone), with its lines."""
+    rules, media, head, lines = {}, "", None, []
+    for raw in css.splitlines():
+        line = raw.strip()
+        if line.startswith("@media "):
+            media = line[len("@media "):-1].strip()
+        elif line.endswith("{"):
+            head, lines = line[:-1].strip(), []
+        elif line == "}":
+            if head is not None:
+                key = f"@media {media} | {head}" if media else head
+                if "contrast" in key:
+                    rules[key] = lines
+                head = None
+            else:
+                media = ""
+        elif line and head is not None:
+            lines.append(line)
+    return rules
+
+
 @pytest.mark.parametrize("seed", SEEDS)
-def test_standard_contrast_output_matches_the_golden(seed):
+def test_standard_and_high_contrast_output_matches_the_golden(seed):
     golden = json.loads((GOLDEN / f"color-{seed[1:].lower()}.json").read_text(encoding="utf-8"))
     ts = build_color(AxisValues(0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5), seed).tokens
     for path, want in golden["resolved"].items():
@@ -44,3 +69,6 @@ def test_standard_contrast_output_matches_the_golden(seed):
 
     assert ours(_block(css, ":root {")) == golden["css_root"]
     assert sorted(ours(_block(css, ':root[data-theme="dark"] {'))) == golden["css_dark"]
+    high = _high_rules(css)
+    assert len(golden["css_high"]) == 6
+    assert {key: sorted(ours(high[key])) for key in golden["css_high"]} == golden["css_high"]

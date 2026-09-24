@@ -59,7 +59,9 @@ _SEMANTIC: Dict[str, Tuple[str, str]] = {
     # One step off the surfaces a button sits on (card and raised are
     # white in light, neutral.900 and neutral.800 in dark).
     "color.action.disabled": ("color.neutral.200", "color.neutral.700"),
-    "color.line.subtle": ("color.neutral.200", "color.neutral.800"),
+    # A separator sits on card and raised too, so it starts one step off
+    # both (neutral.900 and neutral.800 in dark).
+    "color.line.subtle": ("color.neutral.200", "color.neutral.700"),
     "color.line.input": ("color.neutral.500", "color.neutral.500"),
     "color.line.selected": ("color.brand.600", "color.brand.300"),
     "color.focus.ring": ("color.brand.700", "color.brand.200"),
@@ -133,7 +135,8 @@ PAIRINGS: Tuple[Pairing, ...] = tuple(
     + [Pairing(f"color.status.{s}.on-strong", f"color.status.{s}.strong", 4.5, "1.4.3")
        for s in STATUS_HUES]
     + [Pairing("color.line.input", bg, 3.0, "1.4.11") for bg in _TEXT_BGS]
-    + [Pairing("color.line.selected", bg, 3.0, "1.4.11") for bg in _TEXT_BGS]
+    # A selected edge sits on every surface the focus ring does.
+    + [Pairing("color.line.selected", bg, 3.0, "1.4.11") for bg in _ALL_BGS]
     + [Pairing(state, "color.surface.page", 3.0, "1.4.11")
        for fill in _FILL_STATES for state in (fill,) + _FILL_STATES[fill]]
     + [Pairing(f"color.status.{s}.strong", "color.surface.page", 3.0, "1.4.11")
@@ -409,6 +412,22 @@ def _disabled_visible(ts: TokenSet, mode: str) -> List[str]:
             if ts.has(bg) and ts.resolve(bg, mode) == hx]
 
 
+def _line_subtle_visible(ts: TokenSet, mode: str) -> List[str]:
+    """A separator must not vanish into the surface it divides. It is
+    decorative, so no contrast ratio applies; this asks only that the
+    colors differ."""
+    subtle = "color.line.subtle"
+    if not ts.has(subtle):
+        return []
+    hx = ts.resolve(subtle, mode)
+    return [f"{subtle} equals {bg} ({mode}) at {hx}, so a separator vanishes on that surface. "
+            "A decorative line needs no contrast ratio, but it must differ from the surface it "
+            f"divides: point {subtle} at a step that differs from color.surface.card and "
+            "color.surface.raised"
+            for bg in ("color.surface.card", "color.surface.raised")
+            if ts.has(bg) and ts.resolve(bg, mode) == hx]
+
+
 def _disabled_distinct(ts: TokenSet, mode: str) -> List[str]:
     out = []
     for disabled, enabled in (("color.text.disabled", ("color.text.default", "color.text.muted")),
@@ -441,6 +460,7 @@ CHECKS: Tuple[Check, ...] = (
     Check("states-distinct", "system", _states_distinct, axes=("scheme", "contrast")),
     Check("disabled-distinct", "system", _disabled_distinct, axes=("scheme", "contrast")),
     Check("disabled-visible", "system", _disabled_visible, axes=("scheme", "contrast")),
+    Check("line-subtle-visible", "system", _line_subtle_visible, axes=("scheme", "contrast")),
     Check("scheme-polarity", "system", _scheme_polarity, axes=("scheme", "contrast")),
 )
 
