@@ -58,6 +58,9 @@ dev = [
   "ruff>=0.15.16",
   "mypy>=1.19.1",
   "black>=25.11.0",
+  # Dev only, never a runtime dependency: the contract reader's parity
+  # test compares it with a full YAML reader, and skips without one.
+  "pyyaml>=6.0.1",
   # MCP transport is optional in dev too — guarded by Python version so
   # CI's 3.9 matrix entry can still install dev deps for non-MCP testing.
   "mcp>=1.10,<2; python_version >= '3.10'"
