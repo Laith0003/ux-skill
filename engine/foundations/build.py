@@ -4,7 +4,8 @@ type per stage.
 build_system is the single entry point. Generators return tokens and notes
 and never gate themselves; the build validates the merged set once (raises
 ValidationError carrying every Problem), gates it once with every
-foundation's pairings and checks, attaches each foundation's hints to the
+foundation's pairings and checks plus one role-types check over every
+declared role, attaches each foundation's hints to the
 findings it owns, and raises GateFailure carrying the report. On success
 the report is returned with the tokens.
 """
@@ -18,7 +19,7 @@ from typing import Any, Iterable, List, Optional, Sequence, Tuple
 
 from engine.foundations import border, color, elevation, layout, motion, radius, space
 from engine.foundations.color_math import hex_to_rgb
-from engine.foundations.foundation import BrandInputs, Foundation
+from engine.foundations.foundation import BrandInputs, Foundation, role_types_check
 from engine.foundations.gate import GateFailure, GateReport, gate
 from engine.foundations.tokens import TokenSet
 from engine.foundations.validate import Problem, validate
@@ -132,8 +133,8 @@ def build_system(axes: AxisValues, brand_hex: str, *, arabic: bool = True,
     problems = validate(ts)
     if problems:
         raise ValidationError(problems)
-    report = gate(ts, [p for f in chosen for p in f.pairings],
-                  [c for f in chosen for c in f.checks], raise_on_fail=False)
+    checks = [role_types_check(chosen)] + [c for f in chosen for c in f.checks]
+    report = gate(ts, [p for f in chosen for p in f.pairings], checks, raise_on_fail=False)
     if not report.passed:
         _attach_hints(ts, report, chosen)
         raise GateFailure(report)

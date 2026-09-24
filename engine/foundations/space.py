@@ -40,21 +40,26 @@ def _px(units: int) -> Dict[str, int]:
     return {"value": units * BASE_UNIT, "unit": "px"}
 
 
-def _snap(units: float) -> int:
-    """The scale step nearest `units`; a tie goes to the larger step."""
-    return min(UNITS, key=lambda u: (abs(u - units), -u))
+def snap(units: float, steps: Tuple[int, ...] = UNITS) -> int:
+    """The step nearest `units`; a tie goes to the larger step. Layout
+    snaps on these same rules, so the two move together."""
+    return min(steps, key=lambda u: (abs(u - units), -u))
+
+
+def compact_step(comfortable: int, floor: int) -> int:
+    """The compact step for a comfortable step: one step lower on the
+    scale, never below `floor`."""
+    below = [u for u in UNITS if u < comfortable]
+    return max(floor, below[-1]) if below else comfortable
 
 
 def comfortable_units(role: str, density: float) -> int:
     airy, dense, _ = ROLES[role]
-    return _snap(airy + (dense - airy) * density)
+    return snap(airy + (dense - airy) * density)
 
 
 def compact_units(role: str, density: float) -> int:
-    comfortable = comfortable_units(role, density)
-    floor = ROLES[role][2]
-    below = [u for u in UNITS if u < comfortable]
-    return max(floor, below[-1]) if below else comfortable
+    return compact_step(comfortable_units(role, density), ROLES[role][2])
 
 
 def generate_space(axes: AxisValues) -> Generated:

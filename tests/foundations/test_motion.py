@@ -3,9 +3,10 @@ that keeps meaning and drops travel, and a sign mirrored under rtl."""
 import pytest
 
 from engine.foundations import build_system, from_dtcg, to_css, to_dtcg
+from engine.foundations.foundation import role_types_check
 from engine.foundations.gate import gate
 from engine.foundations.motion import (
-    CHECKS, CURVES, GENTLE, LINEAR, ROLES, band, distance_unit, duration_ms, generate_motion)
+    CHECKS, CURVES, FOUNDATION, GENTLE, LINEAR, ROLES, band, distance_unit, duration_ms, generate_motion)
 from engine.foundations.tokens import Token, TokenSet
 from engine.foundations.validate import validate
 from engine.synthesizer.axes import AxisValues
@@ -139,14 +140,14 @@ def test_a_role_of_the_wrong_type_is_a_finding_not_a_crash():
                     motion__reveal__curve=("dimension", "{motion.x.a}", {}),
                     motion__inline_sign=("strokeStyle", "{motion.s.a}", {}))
     assert validate(ts) == []
-    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    report = gate(ts, [], (role_types_check([FOUNDATION]),) + CHECKS, raise_on_fail=False)
     assert [(f.check, f.message) for f in report.failures] == [
-        ("motion-role-types", "motion.press.duration is a number; point it at a motion.duration "
-         "step, a duration like {value: 200, unit: ms}"),
-        ("motion-role-types", "motion.reveal.curve is a dimension; point it at a motion.curve "
-         "step, a cubicBezier like [0.4, 0, 0.6, 1]"),
-        ("motion-role-types", "motion.inline-sign is a strokeStyle; point it at "
-         "motion.sign.forward or motion.sign.backward, a number like 1 or -1")]
+        ("role-types", "motion.press.duration is a number but its role expects a duration; "
+         "point it at a duration token, for example {value: 200, unit: ms}"),
+        ("role-types", "motion.reveal.curve is a dimension but its role expects a cubicBezier; "
+         "point it at a cubicBezier token, for example [0.4, 0, 0.6, 1]"),
+        ("role-types", "motion.inline-sign is a strokeStyle but its role expects a number; "
+         "point it at a number token")]
 
 
 @pytest.mark.parametrize("roles, want", [
@@ -169,7 +170,7 @@ def test_reduced_progress_keeps_its_pace(roles, want):
 
 def test_only_travel_removal_cites_wcag_and_distances_keep_their_unit():
     assert {c.id: c.criterion for c in CHECKS} == {
-        "motion-role-types": "system", "reduced-travel": "2.3.3", "reduced-length": "system",
+        "reduced-travel": "2.3.3", "reduced-length": "system",
         "reduced-curve": "system", "dismiss-faster": "system", "progress-linear": "system",
         "progress-keeps-pace": "system", "mirrored-motion": "system"}
     ts = _roles_set(motion__reveal__distance=("dimension", "{motion.x.a}", {}))

@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from typing import Dict, List, Tuple
 
-from engine.foundations.foundation import BrandInputs, Foundation, Generated
+from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check
 from engine.foundations.tokens import Token, TokenSet
 from engine.synthesizer.axes import AxisValues
@@ -87,39 +87,26 @@ def generate_motion(axes: AxisValues) -> Generated:
     return Generated(tokens=ts, notes=[f"motion: {band(m)} curves, {unit}px travel step"])
 
 
-# role suffix -> (token type, what to point it at)
-ROLE_TYPES: Dict[str, Tuple[str, str]] = {
-    "duration": ("duration", "a motion.duration step, a duration like {value: 200, unit: ms}"),
-    "curve": ("cubicBezier", "a motion.curve step, a cubicBezier like [0.4, 0, 0.6, 1]"),
-    "distance": ("dimension", "a motion.distance step, a dimension like {value: 8, unit: px}"),
-}
+# role suffix -> the token type its checks read
+SUFFIX_TYPES: Dict[str, str] = {"duration": "duration", "curve": "cubicBezier",
+                                "distance": "dimension"}
 SIGN = "motion.inline-sign"
-SIGN_TYPE = ("number", "motion.sign.forward or motion.sign.backward, a number like 1 or -1")
-
-
-def _expected(path: str) -> Tuple[str, str]:
-    return SIGN_TYPE if path == SIGN else ROLE_TYPES[path.rsplit(".", 1)[1]]
+# Role path -> token type; the build's role-types check reports any other
+# type once, and the checks below skip it.
+ROLE_TYPES: Dict[str, str] = {
+    **{f"{r}.{suffix}": t for r in ROLES for suffix, t in SUFFIX_TYPES.items()},
+    SIGN: "number",
+}
 
 
 def _typed(ts: TokenSet, path: str) -> bool:
     """The typed accessor every check reads through: a role is read only
-    when it exists with the type its suffix expects. A role of another type
-    is reported once, by motion-role-types, and skipped by the others."""
-    return ts.has(path) and ts.get(path).type == _expected(path)[0]
+    when it exists with the type its role expects."""
+    return typed(ts, path, ROLE_TYPES)
 
 
 def _roles_with(ts: TokenSet, suffix: str) -> List[str]:
     return [f"{r}.{suffix}" for r in ROLES if _typed(ts, f"{r}.{suffix}")]
-
-
-def _role_types(ts: TokenSet, mode: str) -> List[str]:
-    paths = [f"{r}.{s}" for r in ROLES for s in ROLE_TYPES] + [SIGN]
-    out = []
-    for path in paths:
-        if ts.has(path) and not _typed(ts, path):
-            _, fix = _expected(path)
-            out.append(f"{path} is a {ts.get(path).type}; point it at {fix}")
-    return out
 
 
 def _ms(ts: TokenSet, path: str, mode: str = "") -> float:
@@ -217,7 +204,6 @@ def _mirrored(ts: TokenSet, mode: str) -> List[str]:
 # Only removing travel is WCAG's (2.3.3, motion from interaction can be
 # turned off); the length cap and the gentle curve are this system's rules.
 CHECKS: Tuple[Check, ...] = (
-    Check("motion-role-types", "system", _role_types),
     Check("reduced-travel", "2.3.3", _reduced_travel, axes=("motion",)),
     Check("reduced-length", "system", _reduced_length, axes=("motion",)),
     Check("reduced-curve", "system", _reduced_curve, axes=("motion",)),
@@ -232,4 +218,4 @@ def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
     return generate_motion(axes)
 
 
-FOUNDATION = Foundation(name="motion", generate=_generate, checks=CHECKS)
+FOUNDATION = Foundation(name="motion", generate=_generate, checks=CHECKS, role_types=ROLE_TYPES)

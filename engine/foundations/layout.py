@@ -10,11 +10,11 @@ values for exporters and docs.
 """
 from __future__ import annotations
 
-from typing import List, Tuple
+from typing import Any, Callable, Dict, List, Sequence, Tuple
 
-from engine.foundations.foundation import BrandInputs, Foundation, Generated
+from engine.foundations import space
+from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check
-from engine.foundations.space import UNITS
 from engine.foundations.tokens import Token, TokenSet
 from engine.synthesizer.axes import AxisValues
 
@@ -32,18 +32,14 @@ TARGET_PX = {"comfortable": 44, "compact": 32}
 MIN_TARGET_PX, COMFORTABLE_TARGET_PX = 24, 44
 
 
-def _snap(value: float, options: Tuple[int, ...]) -> int:
-    return min(options, key=lambda o: (abs(o - value), -o))
-
-
 def _units(pair: Tuple[int, int], density: float) -> Tuple[int, int]:
-    comfortable = _snap(pair[0] + (pair[1] - pair[0]) * density, UNITS)
-    below = [u for u in UNITS if u < comfortable]
-    return comfortable, max(COMPACT_FLOOR, below[-1]) if below else comfortable
+    """Comfortable and compact space units on the spacing scale's own rules."""
+    comfortable = space.snap(pair[0] + (pair[1] - pair[0]) * density)
+    return comfortable, space.compact_step(comfortable, COMPACT_FLOOR)
 
 
 def container_px(density: float) -> int:
-    return _snap(CONTAINERS[0] + (CONTAINERS[-1] - CONTAINERS[0]) * density, CONTAINERS)
+    return space.snap(CONTAINERS[0] + (CONTAINERS[-1] - CONTAINERS[0]) * density, CONTAINERS)
 
 
 def generate_layout(axes: AxisValues) -> Generated:
@@ -81,51 +77,102 @@ def generate_layout(axes: AxisValues) -> Generated:
     return Generated(tokens=ts, notes=[f"layout: container {container_px(d)}px"])
 
 
+# Role path -> the token type the checks read; the build's role-types
+# check reports any other type once, and the checks below skip it.
+ROLE_TYPES: Dict[str, str] = {
+    **{f"layout.breakpoint.{t}": "dimension" for t in VIEWPORTS},
+    **{f"layout.columns.{t}": "number" for t in TIERS},
+    **{f"layout.gutter.{t}": "dimension" for t in TIERS},
+    **{f"layout.margin-inline.{t}": "dimension" for t in TIERS},
+    "layout.container.max": "dimension",
+    **{f"layout.measure.{name}": "dimension" for name in MEASURE_REM},
+    "layout.target.min": "dimension",
+}
+COMPACT = "density:compact"
+
+
+def _typed(ts: TokenSet, path: str) -> bool:
+    return typed(ts, path, ROLE_TYPES)
+
+
 def _px(ts: TokenSet, path: str, mode: str = "") -> float:
     v = ts.resolve(path, mode)
     return v["value"] * (16 if v["unit"] == "rem" else 1)
 
 
+def _number(ts: TokenSet, path: str, mode: str = "") -> Any:
+    return ts.resolve(path, mode)
+
+
+def _repeat(ts: TokenSet, paths: Sequence[str], mode: str,
+            read: Callable[[TokenSet, str, str], Any]) -> bool:
+    """In compact, a failure whose values all match comfortable is the
+    comfortable context's finding and is not repeated."""
+    return COMPACT in mode and all(read(ts, p, mode) == read(ts, p, "") for p in paths)
+
+
+def _where(mode: str) -> str:
+    return f" in {COMPACT}" if COMPACT in mode else ""
+
+
 def _breakpoints(ts: TokenSet, mode: str) -> List[str]:
-    present = [f"layout.breakpoint.{t}" for t in TIERS if ts.has(f"layout.breakpoint.{t}")]
-    return [f"{b} ({_px(ts, b):g}px) does not start above {a} ({_px(ts, a):g}px); keep "
-            "breakpoints strictly increasing"
-            for a, b in zip(present, present[1:]) if _px(ts, b) <= _px(ts, a)]
+    present = [f"layout.breakpoint.{t}" for t in TIERS if _typed(ts, f"layout.breakpoint.{t}")]
+    out = []
+    for a, b in zip(present, present[1:]):
+        va, vb, w = _px(ts, a, mode), _px(ts, b, mode), _where(mode)
+        if vb <= va and not _repeat(ts, (a, b), mode, _px):
+            out.append(f"{b} ({vb:g}px{w}) does not start above {a} ({va:g}px{w}); keep "
+                       "breakpoints strictly increasing")
+    return out
 
 
 def _columns(ts: TokenSet, mode: str) -> List[str]:
-    present = [f"layout.columns.{t}" for t in TIERS if ts.has(f"layout.columns.{t}")]
-    return [f"{b} ({ts.resolve(b):g}) has fewer columns than {a} ({ts.resolve(a):g}); a wider "
-            "viewport never loses columns"
-            for a, b in zip(present, present[1:]) if ts.resolve(b) < ts.resolve(a)]
+    present = [f"layout.columns.{t}" for t in TIERS if _typed(ts, f"layout.columns.{t}")]
+    out = []
+    for a, b in zip(present, present[1:]):
+        va, vb, w = _number(ts, a, mode), _number(ts, b, mode), _where(mode)
+        if vb < va and not _repeat(ts, (a, b), mode, _number):
+            out.append(f"{b} ({vb:g}{w}) has fewer columns than {a} ({va:g}{w}); a wider "
+                       "viewport never loses columns")
+    return out
 
 
-def _target(ts: TokenSet, mode: str) -> List[str]:
+def _target(ts: TokenSet, mode: str, floor: int, criterion: str) -> List[str]:
     p = "layout.target.min"
-    if not ts.has(p):
+    if not _typed(ts, p) or _px(ts, p, mode) >= floor:
         return []
-    px = _px(ts, p, mode)
-    floor = COMFORTABLE_TARGET_PX if "density:comfortable" in mode else MIN_TARGET_PX
-    criterion = "2.5.5" if floor == COMFORTABLE_TARGET_PX else "2.5.8"
-    if px >= floor:
+    return [f"{p} ({mode}) is {_px(ts, p, mode):g}px; WCAG {criterion} asks for {floor}px "
+            f"targets here, so point it at layout.width.{floor} or larger"]
+
+
+def _target_minimum(ts: TokenSet, mode: str) -> List[str]:
+    return _target(ts, mode, MIN_TARGET_PX, "2.5.8")
+
+
+def _target_comfortable(ts: TokenSet, mode: str) -> List[str]:
+    if COMPACT in mode:
         return []
-    return [f"{p} ({mode}) is {px:g}px; WCAG {criterion} asks for {floor}px targets here, so "
-            f"point it at layout.width.{floor} or larger"]
+    return _target(ts, mode, COMFORTABLE_TARGET_PX, "2.5.5")
 
 
 def _measure(ts: TokenSet, mode: str) -> List[str]:
     p = "layout.measure.text"
-    if ts.has(p) and _px(ts, p) > MAX_TEXT_MEASURE_REM * 16:
-        return [f"{p} is {_px(ts, p) / 16:g}rem; lines past about 80 characters tire readers "
+    if not _typed(ts, p) or _repeat(ts, (p,), mode, _px):
+        return []
+    rem = _px(ts, p, mode) / 16
+    if rem > MAX_TEXT_MEASURE_REM:
+        return [f"{p} is {rem:g}rem{_where(mode)}; lines past about 80 characters tire readers "
                 f"(1.4.8), so keep it at {MAX_TEXT_MEASURE_REM}rem or less"]
     return []
 
 
+# Every check reads the density axis, so a compact override is checked too.
 CHECKS: Tuple[Check, ...] = (
-    Check("layout-breakpoints", "system", _breakpoints),
-    Check("layout-columns", "system", _columns),
-    Check("target-size", "2.5.8", _target, axes=("density",)),
-    Check("text-measure", "1.4.8", _measure),
+    Check("layout-breakpoints", "system", _breakpoints, axes=("density",)),
+    Check("layout-columns", "system", _columns, axes=("density",)),
+    Check("target-size-minimum", "2.5.8", _target_minimum, axes=("density",)),
+    Check("target-size-comfortable", "2.5.5", _target_comfortable, axes=("density",)),
+    Check("text-measure", "1.4.8", _measure, axes=("density",)),
 )
 
 
@@ -133,4 +180,5 @@ def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
     return generate_layout(axes)
 
 
-FOUNDATION = Foundation(name="layout", generate=_generate, checks=CHECKS, requires=("space",))
+FOUNDATION = Foundation(name="layout", generate=_generate, checks=CHECKS, requires=("space",),
+                        role_types=ROLE_TYPES)

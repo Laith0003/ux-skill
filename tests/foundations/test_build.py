@@ -182,8 +182,10 @@ def test_build_system_builds_every_registered_foundation():
     assert {t.path.split(".", 1)[0] for t in result.tokens.tokens()} == names
     assert result.report.passed
     assert result.report.checked == sum(len(f.pairings) for f in build_module.FOUNDATIONS) * 4
-    assert result.report.rules_checked == sum(len(contexts(c.axes)) for f in build_module.FOUNDATIONS
-                                              for c in f.checks)
+    # every foundation's checks, plus the one role-types check the build adds
+    assert result.report.rules_checked == 1 + sum(len(contexts(c.axes))
+                                                  for f in build_module.FOUNDATIONS
+                                                  for c in f.checks)
 
 
 def test_build_color_is_build_system_for_color_alone():
