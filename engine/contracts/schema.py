@@ -15,6 +15,7 @@ token set. Every problem names the contract, the field and the fix.
 from __future__ import annotations
 
 import datetime
+import math
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -192,7 +193,8 @@ def _a(word: str) -> str:
 
 
 def _is_number(value: Any) -> bool:
-    return isinstance(value, (int, float)) and not isinstance(value, bool)
+    return isinstance(value, (int, float)) and not isinstance(value, bool) \
+        and math.isfinite(value)
 
 
 class _Checker:
@@ -287,6 +289,11 @@ def _states(c: _Checker, raw: Any, category: Any) -> Tuple[str, ...]:
     if not isinstance(raw, list) or not raw:
         c.add("bad-states", f"states is {raw!r}; list the states it supports from {list(STATES)}")
         return ("default",)
+    for i, s in enumerate(raw):
+        if not isinstance(s, str):
+            c.add("bad-states", f"states[{i}] is {s!r}; write each state as one word from "
+                                f"{list(STATES)}")
+    raw = [s for s in raw if isinstance(s, str)]
     unknown = [s for s in raw if s not in STATES]
     if unknown:
         c.add("bad-states", f"states {unknown} are not in the fixed list; use only "
@@ -354,16 +361,18 @@ def _tokens(c: _Checker, raw: Any, parts: Tuple[Part, ...], variants: Tuple[Vari
                                  "optionally when and state")
             continue
         ok = True
-        if item["part"] not in part_names:
+        if not isinstance(item["part"], str) or item["part"] not in part_names:
             c.add("bad-binding", f"{where}.part is {item['part']!r}; use one of the declared "
                                  f"parts {sorted(part_names)}")
             ok = False
-        if item["property"] not in PROPERTY_TYPES:
+        if not isinstance(item["property"], str) or item["property"] not in PROPERTY_TYPES:
             c.add("bad-binding", f"{where}.property is {item['property']!r}; use one of "
                                  f"{sorted(PROPERTY_TYPES)}")
             ok = False
         ok = _role_ok(c, item["role"], f"{where}.role") and ok
+        before = len(c.problems)
         when = _when(c, item.get("when"), where, variants)
+        ok = ok and len(c.problems) == before
         state = item.get("state")
         if state is not None and state not in states:
             c.add("bad-binding", f"{where}.state is {state!r}; use a declared state, one of "
@@ -403,7 +412,7 @@ def _contrast(c: _Checker, raw: Any, tokens: Tuple[Binding, ...],
             c.add("bad-contrast", f"{where}.minimum is {minimum!r}; write a ratio of 1 or more, "
                                   "such as 4.5")
             ok = False
-        if criterion not in CRITERIA and criterion != SYSTEM:
+        if not isinstance(criterion, str) or (criterion not in CRITERIA and criterion != SYSTEM):
             c.add("bad-contrast", f"{where}.criterion is {criterion!r}; cite '1.4.3' (text, "
                                   "4.5:1), '1.4.11' (non-text, 3:1) or system for a floor of "
                                   "your own")
@@ -601,9 +610,12 @@ def contract_problems(data: Any, source: str) -> Tuple[Optional[Contract], List[
     if status != "deprecated" and replacement is not None:
         c.add("replacement", f"replacement is set but status is {status}; only a deprecated "
                              "contract names a replacement, so remove it")
-    if not _is_text(data["description"]):
-        c.add("bad-description", "description is empty; say in one line what the component "
-                                 "does and when to use it")
+    description = data["description"]
+    if not _is_text(description):
+        shown = "empty" if isinstance(description, str) or description is None \
+            else repr(description)
+        c.add("bad-description", f"description is {shown}; say in one line what the "
+                                 "component does and when to use it")
     parts = _parts(c, data["parts"])
     variants = _variants(c, data["variants"])
     states = _states(c, data["states"], category)

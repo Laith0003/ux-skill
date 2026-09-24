@@ -242,3 +242,92 @@ def test_read_contract_turns_every_reader_failure_into_a_contract_error(text):
         read_contract(text, "toggle.yaml")
     assert [p.rule for p in err.value.problems] == ["yaml"]
     assert str(err.value).startswith("toggle.yaml line ")
+
+
+@pytest.mark.parametrize("edit,rule,message", [
+    (lambda d: d["tokens"][0].update(part=["x"]), "bad-binding",
+     "toggle: tokens[0].part is ['x']; use one of the declared parts ['label', 'thumb', "
+     "'track']"),
+    (lambda d: d["tokens"][0].update(part={"a": 1}), "bad-binding",
+     "toggle: tokens[0].part is {'a': 1}; use one of the declared parts"),
+    (lambda d: d["tokens"][0].update(property=["x"]), "bad-binding",
+     "toggle: tokens[0].property is ['x']; use one of ['border-color'"),
+    (lambda d: d["tokens"][0].update(property={"a": 1}), "bad-binding",
+     "toggle: tokens[0].property is {'a': 1}; use one of"),
+    (lambda d: d["tokens"][1].update(state=["selected"]), "bad-binding",
+     "toggle: tokens[1].state is ['selected']; use a declared state"),
+    (lambda d: d["tokens"][2].update(when={"tone": ["danger"]}), "bad-binding",
+     "toggle: tokens[2].when sets tone to ['danger']; use one of ['neutral', 'danger']"),
+    (lambda d: d["contrast"][0].update(criterion=["1.4.11"]), "bad-contrast",
+     "toggle: contrast[0].criterion is ['1.4.11']; cite '1.4.3' (text, 4.5:1), '1.4.11' "
+     "(non-text, 3:1) or system for a floor of your own"),
+    (lambda d: d["contrast"][0].update(criterion={"a": 1}), "bad-contrast",
+     "toggle: contrast[0].criterion is {'a': 1}; cite '1.4.3'"),
+    (lambda d: d["contrast"][1].update(minimum=float("inf")), "bad-contrast",
+     "toggle: contrast[1].minimum is inf; write a ratio of 1 or more, such as 4.5"),
+    (lambda d: d["contrast"][1].update(criterion="system", high=float("nan")), "bad-contrast",
+     "toggle: contrast[1].high is nan; write the high-contrast ratio, 1 or more"),
+    (lambda d: d.update(states=["default", ["focus"], "selected", "disabled"]), "bad-states",
+     "toggle: states[1] is ['focus']; write each state as one word from ['default', 'hover', "
+     "'pressed', 'focus', 'selected', 'disabled', 'loading', 'error', 'empty']"),
+    (lambda d: d.update(states=["default", "focus", {"a": 1}]), "bad-states",
+     "toggle: states[2] is {'a': 1}; write each state as one word from"),
+    (lambda d: d.update(description=["Turns it on"]), "bad-description",
+     "toggle: description is ['Turns it on']; say in one line what the component does and "
+     "when to use it"),
+    (lambda d: d.update(category=["action"]), "bad-category",
+     "toggle: category is ['action']; use one of"),
+    (lambda d: d.update(status={"a": 1}), "bad-status", "toggle: status is {'a': 1}; use"),
+    (lambda d: d["parts"][0].update(rtlBehavior=["logical"]), "bad-rtl",
+     "toggle: part track has rtlBehavior ['logical']; use logical"),
+    (lambda d: d["a11y"].update(target=["layout.target.min"]), "not-a-role",
+     "toggle: a11y.target is ['layout.target.min']; write a semantic role path"),
+    (lambda d: d["a11y"].update(label=["localized"]), "bad-a11y",
+     "toggle: a11y.label is ['localized']; write localized"),
+    (lambda d: d["copy"].update({1: ["Say it"]}), "bad-copy",
+     "toggle: copy names 1, which is not a declared state"),
+])
+def test_a_list_or_map_where_text_is_expected_is_a_problem_not_a_crash(edit, rule, message):
+    d = copy.deepcopy(data())
+    edit(d)
+    found = problems(d)
+    assert any(r == rule and m.startswith(message) for r, m in found), found
+
+
+def _paths(value, path=()):
+    yield path
+    if isinstance(value, dict):
+        for key, item in value.items():
+            yield from _paths(item, path + (key,))
+    elif isinstance(value, list):
+        for i, item in enumerate(value):
+            yield from _paths(item, path + (i,))
+
+
+WRONG_SHAPES = [["x"], [["x"]], {"k": ["x"]}, {"a": 1}, [], {}, None, 3, 1.5, True, "", "x",
+                float("inf"), float("nan")]
+
+
+def test_no_shape_in_any_field_raises():
+    """Every field, at every depth, takes every shape YAML can hold and a
+    few it cannot; the schema answers with problems, never an exception."""
+    base = data()
+    checked = 0
+    for path in list(_paths(base))[1:]:
+        for shape in WRONG_SHAPES:
+            d = copy.deepcopy(base)
+            target = d
+            for step in path[:-1]:
+                target = target[step]
+            target[path[-1]] = copy.deepcopy(shape)
+            contract, found = contract_problems(d, "toggle.yaml")
+            assert (contract is None) == bool(found), (path, shape)
+            assert all(p.message.startswith(f"{p.contract}: ") for p in found), (path, shape)
+            checked += 1
+    assert checked > 1000
+
+
+def test_a_refused_condition_does_not_also_report_a_duplicate():
+    d = data()
+    d["tokens"][2]["when"] = {"tone": "loud"}
+    assert [r for r, _ in problems(d)] == ["bad-binding"]
