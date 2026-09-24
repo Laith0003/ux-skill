@@ -457,3 +457,66 @@ def test_read_contract_raises_only_contract_errors_on_damaged_text():
             read_contract("\n".join(damaged), "toggle.yaml")
         except ContractError as err:
             assert err.problems and all(p.message for p in err.problems)
+
+
+# One row per check a second mutation pass found unproven: each input is
+# refused by the check and read clean without it (the last four only change
+# which rule fires, and the row pins the rule).
+@pytest.mark.parametrize("edit,rule,message", [
+    (lambda d: d.update(status="deprecated", replacement="Switch Two"), "replacement",
+     "toggle: a deprecated contract names its replacement; set replacement to the contract to "
+     "use instead of toggle"),
+    (lambda d: d["parts"][0].update(extra="x"), "bad-parts",
+     "toggle: parts[0] is {'name': 'track', 'rtlBehavior': 'logical', 'extra': 'x'}; give it "
+     "exactly name and rtlBehavior"),
+    (lambda d: d["variants"][0].update(extra="x"), "bad-variants",
+     "toggle: variants[0] is {'name': 'tone', 'values': ['neutral', 'danger'], 'default': "
+     "'neutral', 'extra': 'x'}; give it exactly name, values and default"),
+    (lambda d: d["variants"][0].update(values=["Neutral", "danger"], default="danger"),
+     "bad-variants", "toggle: variant tone values are ['Neutral', 'danger']; list every value "
+     "the component supports, at least two, each a distinct lowercase name"),
+    (lambda d: d["tokens"][0].update(when={}), "bad-binding",
+     "toggle: tokens[0].when is {}; write a map of variant to value, for example {emphasis: "
+     "primary}"),
+    (lambda d: d["tokens"][0].update(colour="x"), "bad-binding",
+     "toggle: tokens[0] is {'part': 'track', 'property': 'fill', 'role': "
+     "'color.surface.sunken', 'colour': 'x'}; give it part, property and role, and optionally "
+     "when and state"),
+    (lambda d: d["contrast"][0].update(extra=1), "bad-contrast",
+     "toggle: contrast[0] is {'fg': 'color.action.primary', 'bg': 'surfaces', 'minimum': 3, "
+     "'criterion': '1.4.11', 'extra': 1}; give it fg, bg, minimum and criterion, and "
+     "optionally high"),
+    (lambda d: d["a11y"].update(extra="x"), "bad-a11y",
+     "toggle: a11y is {'target': 'layout.target.min', 'label': 'localized', 'cue': 'the thumb "
+     "moves to the other end', 'extra': 'x'}; give it exactly target, label and cue"),
+    (lambda d: d["a11y"].update(cue="  "), "bad-a11y",
+     "toggle: a11y.cue is '  '; name the second cue besides color, or write none when the "
+     "component shows no meaning by color"),
+    (lambda d: d["provenance"]["figma"].update(node=123), "bad-provenance",
+     "toggle: provenance.figma.node is 123; write the node id as text, such as '12:345', or "
+     "null"),
+    (lambda d: (d["provenance"]["figma"].update(variantCount=0),
+                d["provenance"].update(drift=["the count differs"])), "bad-provenance",
+     "toggle: provenance.figma.variantCount is 0; write the number of variants the design "
+     "file's component set holds, or null"),
+    (lambda d: (d["provenance"]["figma"].update(variantCount=True),
+                d["provenance"].update(drift=["the count differs"])), "bad-provenance",
+     "toggle: provenance.figma.variantCount is True; write the number of variants"),
+    (lambda d: d["provenance"]["figma"].update(lastVerified="20260925"), "bad-provenance",
+     "toggle: provenance.figma.lastVerified is '20260925'; write the date it was last read as "
+     "YYYY-MM-DD, or null"),
+    (lambda d: d.update(states=[]), "bad-states",
+     "toggle: states is []; list the states it supports from ['default', 'hover'"),
+    (lambda d: d.update(tokens=[]), "bad-binding",
+     "toggle: tokens is []; list each binding as {part, property, role}, with optional when and "
+     "state"),
+    (lambda d: d["contrast"][0].update(bg="#ffffff"), "not-a-role",
+     "toggle: contrast[0].bg is '#ffffff'; bind a semantic role by its path"),
+    (lambda d: d["variants"][0].update(name="Tone"), "bad-variants",
+     "toggle: variants[0].name is 'Tone'; use a lowercase name with '-'"),
+])
+def test_each_check_a_second_mutation_pass_named_is_proven(edit, rule, message):
+    d = copy.deepcopy(data())
+    edit(d)
+    found = problems(d)
+    assert any(r == rule and m.startswith(message) for r, m in found), found
