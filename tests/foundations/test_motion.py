@@ -228,11 +228,11 @@ def test_linear_belongs_to_the_progress_loop_alone():
     assert validate(ts) == []
     report = gate(ts, [], CHECKS, raise_on_fail=False)
     assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures] == [
-        ("linear-progress-only", "system", "motion:standard",
+        ("linear-progress-only", "system", "direction:ltr,motion:standard",
          "motion.reveal.curve is linear; only motion.progress.curve loops, and a one-shot move "
          "at an even pace reads mechanical, so point it at an eased curve such as "
          "motion.curve.out"),
-        ("linear-progress-only", "system", "motion:reduced",
+        ("linear-progress-only", "system", "direction:ltr,motion:reduced",
          "motion.swap.curve is linear under motion:reduced; only motion.progress.curve loops, "
          "and a one-shot move at an even pace reads mechanical, so point its motion:reduced "
          "override at motion.curve.gentle")]
@@ -249,14 +249,57 @@ def test_reduced_motion_never_lengthens_a_role():
     report = gate(ts, [], CHECKS, raise_on_fail=False)
     assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures
             if f.check == "reduced-not-longer"] == [
-        ("reduced-not-longer", "system", "motion:reduced",
+        ("reduced-not-longer", "system", "direction:ltr,motion:reduced",
          "motion.press.duration lasts 1200ms under reduced motion but 100ms in standard; "
          "reduced motion never lengthens a move, so point its motion:reduced override at "
          "motion.d.fast or a shorter step"),
-        ("reduced-not-longer", "system", "motion:reduced",
+        ("reduced-not-longer", "system", "direction:ltr,motion:reduced",
          "motion.swap.duration lasts 100ms under reduced motion but 50ms in standard; reduced "
          "motion never lengthens a move, so point its motion:reduced override at motion.d.tiny "
          "or a shorter step")]
+
+
+def test_a_curve_linear_only_under_rtl_fails():
+    ts = _roles_set(motion__reveal__curve=("cubicBezier", "{motion.c.gentle}",
+                                           {"direction:rtl": "{motion.c.linear}",
+                                            "direction:rtl,motion:reduced": "{motion.c.gentle}"}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures] == [
+        ("linear-progress-only", "system", "direction:rtl,motion:standard",
+         "motion.reveal.curve is linear under direction:rtl; only motion.progress.curve loops, "
+         "and a one-shot move at an even pace reads mechanical, so point its direction:rtl "
+         "override at an eased curve such as motion.curve.out")]
+
+
+def test_a_duration_longer_only_under_rtl_reduced_motion_fails():
+    ts = _roles_set(motion__press__duration=("duration", "{motion.d.fast}",
+                                             {"direction:rtl,motion:reduced": "{motion.d.slow}"}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures] == [
+        ("reduced-not-longer", "system", "direction:rtl,motion:reduced",
+         "motion.press.duration lasts 1200ms under direction:rtl,motion:reduced but 100ms under "
+         "direction:rtl; reduced motion never lengthens a move, so point its "
+         "direction:rtl,motion:reduced override at motion.d.fast or a shorter step")]
+
+
+def test_reduced_is_compared_with_standard_in_the_same_direction():
+    # The reduced value is the same in both directions and passes in ltr,
+    # but rtl shortens standard, so rtl reduced motion lengthens the move.
+    ts = _roles_set(motion__press__duration=("duration", "{motion.d.mid}",
+                                             {"motion:reduced": "{motion.d.fast}",
+                                              "direction:rtl": "{motion.d.tiny}",
+                                              "direction:rtl,motion:reduced": "{motion.d.fast}"}))
+    ts.add(Token("motion.d.mid", "duration", {"value": 200, "unit": "ms"}))
+    ts.add(Token("motion.d.tiny", "duration", {"value": 50, "unit": "ms"}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.mode, f.message) for f in report.failures] == [
+        ("reduced-not-longer", "direction:rtl,motion:reduced",
+         "motion.press.duration lasts 100ms under direction:rtl,motion:reduced but 50ms under "
+         "direction:rtl; reduced motion never lengthens a move, so point its "
+         "direction:rtl,motion:reduced override at motion.d.tiny or a shorter step")]
 
 
 def test_the_progress_loop_is_never_faster_than_three_cycles_a_second():

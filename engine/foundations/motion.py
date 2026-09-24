@@ -262,21 +262,40 @@ def _linear_progress_only(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
+def _standard(ts: TokenSet, mode: str) -> str:
+    """The same context with motion set back to standard."""
+    return join({**parse(mode, ts.axes), "motion": "standard"}, ts.axes)
+
+
 def _reduced_not_longer(ts: TokenSet, mode: str) -> List[str]:
-    """Reduced motion never lengthens a role. The progress loop keeps its
-    pace instead; progress-keeps-pace owns it."""
+    """Reduced motion never lengthens a role: each reduced duration is
+    compared with the standard one in the same direction. A pair already
+    seen in the left-to-right context is not repeated. The progress loop
+    keeps its pace instead; progress-keeps-pace owns it."""
     if "motion:reduced" not in mode:
         return []
+    std = _standard(ts, mode)
+    base_dir = {**parse(mode, ts.axes), "direction": ts.axes["direction"][0]}
+    ltr, ltr_std = join(base_dir, ts.axes), _standard(ts, join(base_dir, ts.axes))
+    where = sparse(mode, ts.axes)
+    std_where = sparse(std, ts.axes)
     out = []
     for path in _roles_with(ts, "duration"):
-        reduced, standard = _ms(ts, path, mode), _ms(ts, path)
+        reduced, standard = _ms(ts, path, mode), _ms(ts, path, std)
         if path == "motion.progress.duration" or reduced <= standard:
             continue
-        raw = ts.raw(path)
+        if ltr != mode and (_ms(ts, path, ltr), _ms(ts, path, ltr_std)) == (reduced, standard):
+            continue
+        raw = ts.raw(path, std)
         step = alias_target(raw) if is_alias(raw) else f"a duration of {standard:g}ms"
-        out.append(f"{path} lasts {reduced:g}ms under reduced motion but {standard:g}ms in "
-                   "standard; reduced motion never lengthens a move, so point its "
-                   f"motion:reduced override at {step} or a shorter step")
+        if where == "motion:reduced":
+            out.append(f"{path} lasts {reduced:g}ms under reduced motion but {standard:g}ms in "
+                       "standard; reduced motion never lengthens a move, so point its "
+                       f"motion:reduced override at {step} or a shorter step")
+        else:
+            out.append(f"{path} lasts {reduced:g}ms under {where} but {standard:g}ms under "
+                       f"{std_where}; reduced motion never lengthens a move, so point its "
+                       f"{where} override at {step} or a shorter step")
     return out
 
 
@@ -317,8 +336,10 @@ CHECKS: Tuple[Check, ...] = (
     Check("progress-keeps-pace", "system", _progress_pace, axes=("motion",)),
     Check("mirrored-motion", "system", _mirrored, axes=("direction",)),
     Check("press-in-place", "system", _press_in_place, axes=("motion", "direction")),
-    Check("linear-progress-only", "system", _linear_progress_only, axes=("motion",)),
-    Check("reduced-not-longer", "system", _reduced_not_longer, axes=("motion",)),
+    Check("linear-progress-only", "system", _linear_progress_only,
+          axes=("motion", "direction")),
+    Check("reduced-not-longer", "system", _reduced_not_longer,
+          axes=("motion", "direction")),
     Check("progress-floor", "system", _progress_floor, axes=("motion", "direction")),
 )
 
