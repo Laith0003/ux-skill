@@ -87,15 +87,42 @@ def parse_axes(value: Any, label: str = "axes") -> AxisValues:
     return AxisValues(*numbers)
 
 
+def _json_kind(payload: Any) -> str:
+    """A JSON value's kind in JSON's own words, not Python's."""
+    if payload is None:
+        return "null"
+    if isinstance(payload, bool):
+        return "true or false"
+    if isinstance(payload, str):
+        return "string"
+    if isinstance(payload, (int, float)):
+        return "number"
+    return "list"
+
+
+def _brief_text(data: bytes) -> str:
+    """The text of a brief file. UTF-8, with Notepad's leading mark
+    dropped; a file that starts with the UTF-16 mark (Windows PowerShell 5.1
+    writes one) is read as UTF-16. Raises UnicodeDecodeError otherwise."""
+    if data.startswith((b"\xff\xfe", b"\xfe\xff")):
+        return data.decode("utf-16")
+    return data.decode("utf-8-sig")
+
+
 def read_brief(path: Any, label: str = "brief") -> Dict[str, Any]:
     """A brief file as a dict. A discovery file (answers nested under
     "answers") is flattened, as `uxskill recommend --brief-file` does."""
-    p = Path(path)
+    p = Path(path).expanduser()
     try:
-        text = p.read_text(encoding="utf-8")
+        data = p.read_bytes()
     except OSError as exc:
         raise InputError(f"{label} {p} cannot be read ({exc.strerror or exc}); pass the path "
                          "of a JSON brief, for example .ux/last-discovery.json") from None
+    try:
+        text = _brief_text(data)
+    except UnicodeDecodeError:
+        raise InputError(f"{label} {p} is not UTF-8 text; save the brief as UTF-8 and pass it "
+                         "again") from None
     try:
         payload = json.loads(text)
     except ValueError as exc:
@@ -104,7 +131,7 @@ def read_brief(path: Any, label: str = "brief") -> Dict[str, Any]:
     if isinstance(payload, dict) and isinstance(payload.get("answers"), dict):
         payload = payload["answers"]
     if not isinstance(payload, dict):
-        raise InputError(f"{label} {p} holds a JSON {type(payload).__name__}, not an object; "
+        raise InputError(f"{label} {p} holds a JSON {_json_kind(payload)}, not an object; "
                          'pass an object such as {"industry": "saas", "tone": ["warm"]}')
     return payload
 

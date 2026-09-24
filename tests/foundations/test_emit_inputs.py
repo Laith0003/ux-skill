@@ -132,3 +132,47 @@ def test_choose_axes_refuses_both():
         choose_axes({"industry": "saas"}, "0.5,0.5,0.5,0.5,0.5,0.5,0.5",
                     brief_label="--brief", axes_label="--axes")
     assert str(exc.value).startswith("both --brief and --axes were given; pass one")
+
+
+# A brief saved by Notepad (UTF-8 with a byte order mark) or by Windows
+# PowerShell 5.1 (`echo ... > brief.json` writes UTF-16) reads as usual.
+BRIEF = {"industry": "saas", "tone": ["warm"]}
+
+
+@pytest.mark.parametrize("codec,prefix", [
+    ("utf-8", b"\xef\xbb\xbf"), ("utf-16-le", b"\xff\xfe"), ("utf-16-be", b"\xfe\xff"),
+])
+def test_read_brief_accepts_a_marked_file(tmp_path, codec, prefix):
+    f = tmp_path / "brief.json"
+    f.write_bytes(prefix + json.dumps(BRIEF).encode(codec))
+    assert read_brief(f) == BRIEF
+
+
+def test_read_brief_that_is_not_utf8_names_the_file_and_the_fix(tmp_path):
+    f = tmp_path / "latin1.json"
+    f.write_bytes('{"industry": "caf\xe9"}'.encode("latin-1"))
+    with pytest.raises(InputError) as exc:
+        read_brief(f, label="--brief")
+    message = str(exc.value)
+    assert message == (f"--brief {f} is not UTF-8 text; save the brief as UTF-8 and pass it "
+                       "again")
+    for jargon in ("BOM", "codec", "decode", "encoding", "byte"):
+        assert jargon not in message
+
+
+def test_read_brief_names_json_types_not_python_ones(tmp_path):
+    for text, word in (("null", "null"), ('"saas"', "string"), ("3", "number"),
+                       ("[1]", "list"), ("true", "true or false")):
+        f = tmp_path / "b.json"
+        f.write_text(text, encoding="utf-8")
+        with pytest.raises(InputError) as exc:
+            read_brief(f, label="--brief")
+        assert f"holds a JSON {word}, not an object" in str(exc.value)
+        assert "NoneType" not in str(exc.value)
+
+
+def test_read_brief_expands_a_home_folder(tmp_path, monkeypatch):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.setenv("USERPROFILE", str(tmp_path))
+    (tmp_path / "b.json").write_text(json.dumps(BRIEF), encoding="utf-8")
+    assert read_brief("~/b.json") == BRIEF
