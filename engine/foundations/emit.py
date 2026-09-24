@@ -281,3 +281,73 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
     return SystemOutput(passed=not findings, files=files, report=report, gate=gate,
                         findings=findings, brand=brand, axes=axes, axes_source=axes_source,
                         arabic=arabic)
+
+
+# ---------------------------------------------------------------- write
+
+
+@dataclass(frozen=True)
+class WritePlan:
+    """Where each file stands against the output folder. `conflicts` are
+    files that exist with different content; they are replaced only when
+    the caller forces it. `unchanged` files are identical and left alone."""
+    write: Tuple[str, ...]
+    unchanged: Tuple[str, ...]
+    conflicts: Tuple[str, ...]
+
+
+def check_out_dir(out_dir: Any, label: str = "out") -> Path:
+    """The output folder as a Path. It may not exist yet; it may not be a
+    file."""
+    if out_dir is None or not str(out_dir).strip():
+        raise InputError(f"{label} is missing; pass the folder to write the system into, "
+                         "for example design-system")
+    p = Path(out_dir)
+    if p.exists() and not p.is_dir():
+        raise InputError(f"{label} {p} is a file, not a folder; pass a folder path, for example "
+                         f"{p.parent / 'design-system'}")
+    return p
+
+
+def plan_writes(out_dir: Path, files: Mapping[str, str]) -> WritePlan:
+    """Compare each file with what is on disk, without writing."""
+    write: List[str] = []
+    unchanged: List[str] = []
+    conflicts: List[str] = []
+    for name, text in files.items():
+        target = out_dir / name
+        if target.is_dir():
+            raise InputError(f"{target} is a folder, so {name} cannot be written there; rename "
+                             "that folder or write the system into a different folder")
+        if not target.exists():
+            write.append(name)
+        elif target.read_bytes() == text.encode("utf-8"):
+            unchanged.append(name)
+        else:
+            conflicts.append(name)
+    return WritePlan(tuple(write), tuple(unchanged), tuple(conflicts))
+
+
+def conflict_message(out_dir: Path, plan: WritePlan, force_flag: str = "--force",
+                     out_flag: str = "--out") -> str:
+    """Why nothing was written: every file that differs, and the two fixes."""
+    names = ", ".join(str(out_dir / n) for n in plan.conflicts)
+    return (f"Nothing was written: {names} already "
+            f"{'exists' if len(plan.conflicts) == 1 else 'exist'} with different content. "
+            f"Pass {force_flag} to replace {'it' if len(plan.conflicts) == 1 else 'them'}, or "
+            f"pass a different {out_flag} folder.")
+
+
+def write_files(out_dir: Path, files: Mapping[str, str], *, force: bool = False) -> WritePlan:
+    """Write the files that are new or, when forced, different. Without
+    force, one conflicting file stops every write, so the folder never
+    holds a mix of two systems. Identical files are never rewritten.
+    Returns the plan it acted on; `conflicts` is non-empty only when
+    nothing was written."""
+    plan = plan_writes(out_dir, files)
+    if plan.conflicts and not force:
+        return plan
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for name in plan.write + plan.conflicts:
+        (out_dir / name).write_bytes(files[name].encode("utf-8"))
+    return WritePlan(plan.write + plan.conflicts, plan.unchanged, ())
