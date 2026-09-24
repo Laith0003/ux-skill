@@ -11,14 +11,14 @@ from typing import Dict, List, Mapping, Tuple
 
 from engine.foundations.color_math import contrast, hex_to_oklch, luminance, oklch_to_hex
 from engine.foundations.foundation import BrandInputs, Foundation, Generated
-from engine.foundations.gate import Check, GateFinding, Pairing
+from engine.foundations.gate import Check, GateFinding, Pairing, required
 from engine.foundations.modes import compress, contexts, parse
 from engine.foundations.ramp import STEPS, ramp
 from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
 from engine.synthesizer.axes import AxisValues
 
 # Every context color tokens are generated for, base first.
-COLOR_CONTEXTS = tuple(contexts(("scheme",)))
+COLOR_CONTEXTS = tuple(contexts(("scheme", "contrast")))
 
 STATUS_HUES = {"danger": 25.0, "warning": 75.0, "success": 150.0, "info": 245.0}
 STATUS_SEED = (0.58, 0.16)  # OKLCH lightness, chroma for status seeds
@@ -46,6 +46,30 @@ for _s in STATUS_HUES:
 # Read-only view: role -> (light primitive, dark primitive).
 SEMANTIC: Mapping[str, Tuple[str, str]] = MappingProxyType(_SEMANTIC)
 
+# Starting points in contrast:high contexts, per scheme: extreme surfaces,
+# text a step or two further out. The retune and the action solver then
+# move roles until the raised minimums hold. Roles not listed start where
+# the standard table puts them.
+_HIGH: Dict[str, Tuple[str, str]] = {
+    "color.surface.page": ("color.base.white", "color.base.black"),
+    "color.surface.card": ("color.base.white", "color.neutral.950"),
+    "color.surface.sunken": ("color.base.white", "color.base.black"),
+    "color.surface.inverse": ("color.base.black", "color.base.white"),
+    "color.text.default": ("color.neutral.950", "color.base.white"),
+    "color.text.muted": ("color.neutral.800", "color.neutral.200"),
+    "color.text.inverse": ("color.base.white", "color.base.black"),
+    "color.text.link": ("color.brand.800", "color.brand.200"),
+    "color.action.primary": ("color.brand.800", "color.brand.200"),
+    "color.action.primary-hover": ("color.brand.900", "color.brand.100"),
+    "color.line.subtle": ("color.neutral.400", "color.neutral.600"),
+    "color.line.input": ("color.neutral.700", "color.neutral.300"),
+    "color.focus.ring": ("color.brand.600", "color.brand.400"),
+}
+for _s in STATUS_HUES:
+    _HIGH[f"color.status.{_s}.text"] = (f"color.{_s}.800", f"color.{_s}.200")
+    _HIGH[f"color.status.{_s}.soft"] = (f"color.{_s}.50", f"color.{_s}.950")
+HIGH_CONTRAST: Mapping[str, Tuple[str, str]] = MappingProxyType(_HIGH)
+
 _TEXT_BGS = ("color.surface.page", "color.surface.card")
 # Every surface text can sit on; surface.sunken is a text surface too.
 _ALL_BGS = _TEXT_BGS + ("color.surface.sunken",)
@@ -62,8 +86,10 @@ PAIRINGS: Tuple[Pairing, ...] = tuple(
     + [Pairing("color.action.primary", "color.surface.page", 3.0, "1.4.11")]
     + [Pairing("color.action.primary-hover", "color.surface.page", 3.0, "1.4.11")]
     + [Pairing("color.focus.ring", bg, 3.0, "2.4.7") for bg in _ALL_BGS]
-    # A ring drawn around the primary button touches its fill (1.4.11).
-    + [Pairing("color.focus.ring", "color.action.primary", 3.0, "1.4.11")]
+    # A ring drawn around the primary button touches its fill (1.4.11). It
+    # keeps 3:1 in high contrast: no sRGB ring is 4.5:1 from both the page
+    # and a fill that is itself 4.5:1 from the page.
+    + [Pairing("color.focus.ring", "color.action.primary", 3.0, "1.4.11", high=3.0)]
 )
 
 # The four roles one joint solver owns: the button fill, its hover step,
@@ -143,12 +169,13 @@ def _solve_action_group(mode: str, prims: Dict[str, str], pick: Dict[str, Dict[s
          against, then two steps each way.
       3. For each pair, text.on-action as base.white, then base.black.
       4. For each triple, the first ring from _ring_candidates.
-    The first candidate that clears every constraint wins:
-      on-action on primary and on hover  >= 4.5 (1.4.3)
-      primary and hover on the page      >= 3.0 (1.4.11)
+    The first candidate that clears every constraint wins (minimums are
+    PAIRINGS' own in this context, so they rise under contrast:high):
+      on-action on primary and on hover  >= 4.5, 7.0 high (1.4.3, 1.4.6)
+      primary and hover on the page      >= 3.0, 4.5 high (1.4.11)
       hover's hex differs from primary's
-      ring on page, card and sunken      >= 3.0 (2.4.7)
-      ring against the primary fill      >= 3.0 (1.4.11)
+      ring on page, card and sunken      >= 3.0, 4.5 high (2.4.7)
+      ring against the primary fill      >= 3.0 in both (1.4.11)
     When nothing clears, the closest candidate is kept and noted; the gate
     then reports the failing pairings. The generator never raises here.
     """
@@ -163,13 +190,18 @@ def _solve_action_group(mode: str, prims: Dict[str, str], pick: Dict[str, Dict[s
 
     family, default_step = defaults[primary_role].rsplit(".", 1)
     conv = +1 if _scheme(mode) == "light" else -1
+    need_text = _need(on_action_role, primary_role, mode)
+    need_fill = _need(primary_role, "color.surface.page", mode)
+    need_ring = _need(ring_role, "color.surface.page", mode)
+    need_ring_fill = _need(ring_role, primary_role, mode)
 
     def path_at(idx: int) -> str:
         return f"{family}.{STEPS[idx]}"
 
     def ring_fit(ring: str, primary_hex: str) -> float:
         hx = prims[ring]
-        return min([contrast(hx, bg) / 3.0 for bg in ring_bgs] + [contrast(hx, primary_hex) / 3.0])
+        return min([contrast(hx, bg) / need_ring for bg in ring_bgs]
+                   + [contrast(hx, primary_hex) / need_ring_fill])
 
     best = None  # (score, ratios, choice) kept when nothing clears
     for primary_idx in _order_from(STEPS.index(int(default_step)), conv):
@@ -190,8 +222,8 @@ def _solve_action_group(mode: str, prims: Dict[str, str], pick: Dict[str, Dict[s
                 r_oh = contrast(prims[on_path], hover_hex)
                 ring = ring_ok[0] if ring_ok else best_ring
                 r_rp = contrast(prims[ring], primary_hex)
-                score = min(r_op / 4.5, r_oh / 4.5, r_pp / 3.0, r_hp / 3.0,
-                            ring_fit(ring, primary_hex))
+                score = min(r_op / need_text, r_oh / need_text, r_pp / need_fill,
+                            r_hp / need_fill, ring_fit(ring, primary_hex))
                 choice = (path_at(primary_idx), path_at(hover_idx), on_path, ring)
                 ratios = (r_op, r_oh, r_pp, r_hp, r_rp)
                 if best is None or score > best[0]:
@@ -268,6 +300,18 @@ def _scheme(mode: str) -> str:
     return parse(mode).get("scheme", "light")
 
 
+def _default(role: str, mode: str) -> str:
+    """Where a role starts in one context, before any retune."""
+    table = HIGH_CONTRAST if parse(mode).get("contrast") == "high" and role in HIGH_CONTRAST \
+        else SEMANTIC
+    return table[role][0 if _scheme(mode) == "light" else 1]
+
+
+def _need(fg: str, bg: str, mode: str) -> float:
+    """The minimum PAIRINGS asks of fg on bg in this context."""
+    return next(required(p, mode)[0] for p in PAIRINGS if (p.fg, p.bg) == (fg, bg))
+
+
 def generate_color(axes: AxisValues, brand_hex: str) -> Generated:
     """Low-level call: build_system (and build_color, its color-only
     shortcut) wraps it with input checks, validate and the gate, so prefer
@@ -279,9 +323,7 @@ def generate_color(axes: AxisValues, brand_hex: str) -> Generated:
     """
     notes: List[str] = []
     prims = _primitives(axes, brand_hex.upper(), notes)
-    pick = {mode: {role: pair[0 if _scheme(mode) == "light" else 1]
-                   for role, pair in SEMANTIC.items()}
-            for mode in COLOR_CONTEXTS}
+    pick = {mode: {role: _default(role, mode) for role in SEMANTIC} for mode in COLOR_CONTEXTS}
 
     def value(mode: str, role: str) -> str:
         return prims[pick[mode][role]]
@@ -299,7 +341,8 @@ def generate_color(axes: AxisValues, brand_hex: str) -> Generated:
             for p in generic_pairings:
                 for _ in range(len(STEPS)):
                     ratio = contrast(value(mode, p.fg), value(mode, p.bg))
-                    if ratio >= p.minimum:
+                    minimum, criterion = required(p, mode)
+                    if ratio >= minimum:
                         break
                     old = pick[mode][p.fg]
                     bg_light = hex_to_oklch(value(mode, p.bg))[0] > 0.5
@@ -310,7 +353,7 @@ def generate_color(axes: AxisValues, brand_hex: str) -> Generated:
                     new_ratio = contrast(value(mode, p.fg), value(mode, p.bg))
                     notes.append(f"{p.fg} ({mode}): {old} -> {nxt}, "
                                  f"{p.fg} on {p.bg} was {ratio:.2f}:1, now {new_ratio:.2f}:1, "
-                                 f"needs {p.minimum}:1 ({p.criterion})")
+                                 f"needs {minimum}:1 ({criterion})")
                     changed = True
             if not changed:
                 break

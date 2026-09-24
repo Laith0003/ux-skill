@@ -120,3 +120,10 @@ def test_from_dtcg_rejects_the_old_extension_keys_by_name(ext):
     msg = str(exc.value)
     assert msg.startswith("color.text.default ")
     assert "this file was written by an older build; re-export it with the current version" in msg
+
+
+def test_css_carries_the_high_contrast_variant():
+    css = to_css(build_color(AXES, "#3366FF").tokens)
+    assert ':root[data-contrast="high"] {' in css
+    assert '@media (prefers-contrast: more) {\n  :root:not([data-contrast="standard"]) {' in css
+    assert ':root[data-theme="dark"][data-contrast="high"] {' in css

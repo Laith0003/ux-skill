@@ -7,7 +7,7 @@ import engine.foundations.color as color_module
 from engine.foundations.build import build_color
 from engine.foundations.color import COLOR_CONTEXTS, PAIRINGS, SEMANTIC, generate_color
 from engine.foundations.color_math import contrast, oklch_to_hex
-from engine.foundations.gate import GateFailure
+from engine.foundations.gate import GateFailure, required
 from engine.foundations.ramp import STEPS, RampResult
 from engine.synthesizer.axes import AxisValues
 
@@ -22,7 +22,7 @@ def test_every_pairing_passes_in_every_mode(seed):
     for p in PAIRINGS:
         for mode in COLOR_CONTEXTS:
             ratio = contrast(ts.resolve(p.fg, mode), ts.resolve(p.bg, mode))
-            assert ratio >= p.minimum, f"{p.fg} on {p.bg} ({mode}) = {ratio:.2f}"
+            assert ratio >= required(p, mode)[0], f"{p.fg} on {p.bg} ({mode}) = {ratio:.2f}"
 
 
 def test_every_role_exists_and_aliases_a_primitive():
@@ -72,7 +72,8 @@ def test_flat_action_ramp_is_noted_and_the_gate_blocks_it(monkeypatch):
     brand = "#3366FF"
     _brand_ramp(monkeypatch, brand, {s: "#808080" for s in STEPS})
     result = generate_color(AXES, brand)
-    assert any(n.startswith("action group (scheme:light): every brand step resolves to the same color")
+    assert any(n.startswith("action group (scheme:light,contrast:standard): every brand step resolves "
+                          "to the same color")
                for n in result.notes)
     with pytest.raises(GateFailure) as exc:
         build_color(AXES, brand)
@@ -89,7 +90,8 @@ def test_unsatisfiable_action_group_keeps_the_closest_and_the_gate_blocks_it(mon
     brand = "#3366FF"
     _brand_ramp(monkeypatch, brand,
                 {s: oklch_to_hex(0.99 - i * 0.01, 0.0, 0.0) for i, s in enumerate(STEPS)})
-    notes = [n for n in generate_color(AXES, brand).notes if n.startswith("action group (scheme:light)")]
+    notes = [n for n in generate_color(AXES, brand).notes
+             if n.startswith("action group (scheme:light,contrast:standard)")]
     assert len(notes) == 1 and "kept the closest" in notes[0]
     assert len(re.findall(r"\d+\.\d\d:1", notes[0])) == 5
     with pytest.raises(GateFailure) as exc:
@@ -134,7 +136,7 @@ def test_notes_are_complete(seed):
     retune_notes = [n for n in r.notes if "(scheme:" in n]
     assert retune_notes, f"{seed}: expected at least one retune-loop note"
     for note in retune_notes:
-        assert "(scheme:light)" in note or "(scheme:dark)" in note, note
+        assert re.search(r"\(scheme:(light|dark),contrast:(standard|high)\)", note), note
         assert _PATH_MOVE_RE.search(note), note
         if note.startswith("action group ("):
             # only the roles that moved are listed, each as old -> new
@@ -163,7 +165,7 @@ def test_hover_differs_from_primary(seed):
     for p in PAIRINGS:
         for mode in COLOR_CONTEXTS:
             ratio = contrast(ts.resolve(p.fg, mode), ts.resolve(p.bg, mode))
-            assert ratio >= p.minimum, f"{seed}: {p.fg} on {p.bg} ({mode}) = {ratio:.2f}"
+            assert ratio >= required(p, mode)[0], f"{seed}: {p.fg} on {p.bg} ({mode}) = {ratio:.2f}"
 
 
 # R16 item 5: a fast, broad sweep independent of the six brief seeds. Every
@@ -182,7 +184,7 @@ def test_sweep_pairings_pass_and_hover_is_distinct(seed):
     for p in PAIRINGS:
         for mode in COLOR_CONTEXTS:
             ratio = contrast(ts.resolve(p.fg, mode), ts.resolve(p.bg, mode))
-            assert ratio >= p.minimum, f"{seed}: {p.fg} on {p.bg} ({mode}) = {ratio:.2f}"
+            assert ratio >= required(p, mode)[0], f"{seed}: {p.fg} on {p.bg} ({mode}) = {ratio:.2f}"
     for mode in COLOR_CONTEXTS:
         primary = ts.resolve("color.action.primary", mode)
         hover = ts.resolve("color.action.primary-hover", mode)
@@ -209,7 +211,7 @@ def test_public_tables_are_immutable():
 
 def test_new_pairings_are_declared():
     from engine.foundations.gate import Pairing
-    for p in (Pairing("color.focus.ring", "color.action.primary", 3.0, "1.4.11"),
+    for p in (Pairing("color.focus.ring", "color.action.primary", 3.0, "1.4.11", high=3.0),
               Pairing("color.focus.ring", "color.surface.sunken", 3.0, "2.4.7"),
               Pairing("color.text.muted", "color.surface.sunken", 4.5, "1.4.3"),
               Pairing("color.text.link", "color.surface.sunken", 4.5, "1.4.3"),
@@ -229,10 +231,41 @@ def test_ring_stands_out_from_the_fill_and_every_surface(seed):
 
 def test_ring_prefers_a_brand_step():
     ts = generate_color(AXES, "#3366FF").tokens
-    for mode in COLOR_CONTEXTS:
+    for mode in ("scheme:light,contrast:standard", "scheme:dark,contrast:standard"):
         assert ts.raw("color.focus.ring", mode).startswith("{color.brand."), mode
 
 
 def test_ring_moves_are_noted():
-    notes = [n for n in generate_color(AXES, "#6B4423").notes if n.startswith("action group (scheme:light)")]
+    notes = [n for n in generate_color(AXES, "#6B4423").notes
+             if n.startswith("action group (scheme:light,contrast:standard)")]
     assert notes and "color.focus.ring color.brand.700 -> " in notes[0]
+
+
+# High contrast: a variant per scheme with raised minimums.
+
+def test_required_raises_minimums_only_in_high_contrast():
+    from engine.foundations.gate import Pairing
+    text = Pairing("color.text.default", "color.surface.page", 4.5, "1.4.3")
+    part = Pairing("color.line.input", "color.surface.page", 3.0, "1.4.11")
+    ring = Pairing("color.focus.ring", "color.action.primary", 3.0, "1.4.11", high=3.0)
+    assert required(text, "scheme:dark,contrast:standard") == (4.5, "1.4.3")
+    assert required(text, "scheme:dark,contrast:high") == (7.0, "1.4.6")
+    assert required(part, "contrast:high") == (4.5, "1.4.11 (high contrast)")
+    assert required(ring, "contrast:high") == (3.0, "1.4.11 (high contrast)")
+
+
+@pytest.mark.parametrize("seed", SEEDS)
+def test_high_contrast_starts_from_extreme_surfaces(seed):
+    ts = generate_color(AXES, seed).tokens
+    assert ts.resolve("color.surface.page", "scheme:light,contrast:high") == "#FFFFFF"
+    assert ts.resolve("color.surface.page", "scheme:dark,contrast:high") == "#000000"
+    for scheme in ("light", "dark"):
+        high = contrast(ts.resolve("color.text.muted", f"scheme:{scheme},contrast:high"),
+                        ts.resolve("color.surface.page", f"scheme:{scheme},contrast:high"))
+        assert high >= 7.0
+
+
+def test_high_contrast_variant_is_written_as_contrast_overrides():
+    ts = generate_color(AXES, "#3366FF").tokens
+    keys = {k for t in ts.tokens() for k in t.modes}
+    assert {"scheme:dark", "contrast:high", "scheme:dark,contrast:high"} <= keys

@@ -125,3 +125,16 @@ def test_check_naming_an_unknown_axis_is_refused():
         gate(ts, [], checks=[typo])
     msg = str(exc.value)
     assert "space.min" in msg and "densty" in msg and "density" in msg
+
+
+def test_gate_enforces_the_raised_minimum_in_high_contrast():
+    ts = TokenSet()
+    ts.add(Token("color.gray.600", "color", "#6B6B6B"))   # 5.33:1 on white
+    ts.add(Token("color.base.white", "color", "#FFFFFF"))
+    ts.add(Token("color.text.default", "color", "{color.gray.600}", layer="semantic"))
+    ts.add(Token("color.surface.page", "color", "{color.base.white}", layer="semantic"))
+    report = gate(ts, [TEXT_ON_PAGE], raise_on_fail=False)
+    assert report.checked == 4
+    assert [(f.mode, f.minimum, f.criterion) for f in report.findings] == [
+        ("scheme:light,contrast:high", 7.0, "1.4.6"), ("scheme:dark,contrast:high", 7.0, "1.4.6")]
+    assert "WCAG 1.4.6 needs 7.0:1" in report.findings[0].message()

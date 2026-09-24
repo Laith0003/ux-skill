@@ -9,21 +9,42 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass, field
-from typing import Callable, Iterable, List, Tuple
+from typing import Callable, Iterable, List, Optional, Tuple
 
 from engine.foundations.color_math import contrast, hex_to_rgb
-from engine.foundations.modes import FOUNDATION_AXES, contexts
+from engine.foundations.modes import FOUNDATION_AXES, contexts, parse
 from engine.foundations.tokens import TokenSet, opaque_hex
 
 
 @dataclass(frozen=True)
 class Pairing:
     """A foreground role that must reach `minimum` contrast against a
-    background role, per WCAG success criterion `criterion`."""
+    background role, per WCAG success criterion `criterion`. In a
+    contrast:high context the minimum rises (see required); `high` pins a
+    different high-contrast minimum for a pairing that cannot take the
+    standard raise."""
     fg: str
     bg: str
     minimum: float
     criterion: str
+    high: Optional[float] = None
+
+
+# High-contrast minimums: text meets the enhanced 7:1 of WCAG 1.4.6, and
+# non-text parts (borders, fills, focus rings) rise from 3:1 to 4.5:1.
+HIGH_TEXT = 7.0
+HIGH_NON_TEXT = 4.5
+
+
+def required(p: Pairing, mode: str) -> Tuple[float, str]:
+    """The minimum and criterion a pairing must meet in one context."""
+    if parse(mode).get("contrast") != "high":
+        return p.minimum, p.criterion
+    if p.high is not None:
+        return p.high, f"{p.criterion} (high contrast)"
+    if p.minimum >= 4.5:
+        return HIGH_TEXT, "1.4.6"
+    return HIGH_NON_TEXT, f"{p.criterion} (high contrast)"
 
 
 @dataclass(frozen=True)
@@ -148,9 +169,10 @@ def gate(ts: TokenSet, pairings: Iterable[Pairing], checks: Iterable[Check] = ()
         for mode in _pairing_contexts(ts, p):
             report.checked += 1
             ratio = contrast(_hex(ts, p.fg, mode), _hex(ts, p.bg, mode))
-            if ratio < p.minimum:
+            minimum, criterion = required(p, mode)
+            if ratio < minimum:
                 report.findings.append(
-                    GateFinding(p.fg, p.bg, mode, ratio, p.minimum, p.criterion))
+                    GateFinding(p.fg, p.bg, mode, ratio, minimum, criterion))
     for c in checks:
         unknown = [a for a in c.axes if a not in ts.axes]
         if unknown:
