@@ -95,7 +95,7 @@ def test_matches_a_full_yaml_reader_on_the_subset():
     ('a: "say \\"hi\\"\\n"', {"a": 'say "hi"\n'}),
     ("a: ~", {"a": None}),
     ("a: -3", {"a": -3}),
-    ("a: .5", {"a": 0.5}),
+    ("a: 0.5", {"a": 0.5}),
     ("a: 1.4.3", {"a": "1.4.3"}),
     ("a: x#y", {"a": "x#y"}),
     ("a: [ ]", {"a": []}),
@@ -232,3 +232,129 @@ def test_the_advice_for_a_key_that_is_not_simple_works(plain, quoted):
                                         "and '-', or quote it"):
         loads(plain)
     assert loads(quoted)
+
+
+# Plain values a YAML 1.1 reader (PyYAML) or a YAML 1.2 reader (core schema)
+# types as a number, a date and time or a special value. yamlite refuses each
+# rather than reading it another way, and the quoted form reads as text.
+OTHER_READINGS = [
+    "1:23", "12:30", "190:20:30", "-1:23", "1:30.5", "1_0:30",
+    "012", "09", "00", "-012", "+07", "0_1",
+    "0x10", "-0x1", "0o17", "0b101", "0x_1",
+    "1_000", "1_000.5", "1_", "+1_0", "1_0e+3", "-_1", "+_",
+    ".inf", "-.inf", "+.Inf", ".INF", ".nan", ".NaN", ".NAN",
+    "1e3", "1E3", "1.5e3", "1.5e+3", "1.5e-3", "-1e-3", "1.e+3",
+    ".5", "-.5", "+.5", ".5e3", "._", "._5",
+    "2026-09-25T10:00:00Z", "2026-09-25 10:00:00", "2026-9-5t1:02:03.5",
+    "=", "<<",
+]
+
+
+@pytest.mark.parametrize("value", OTHER_READINGS)
+@pytest.mark.parametrize("template", ["a: {}", "- {}", "a: [{}]", "a: {{k: {}}}", "{}"])
+def test_a_value_other_readers_type_differently_is_refused_by_line(value, template):
+    with pytest.raises(YamlError) as err:
+        loads(template.format(value), source="x.yaml")
+    message = str(err.value)
+    assert message.startswith(f"x.yaml line 1: the plain value {value!r} reads as "), message
+    assert " in other YAML readers; quote it" in message
+    assert loads("a: '" + value + "'") == {"a": value}
+
+
+@pytest.mark.parametrize("value,expected", [
+    ("0", 0), ("-0", 0), ("+5", 5), ("1500", 1500), ("0.5", 0.5), ("-1.25", -1.25),
+    ("1.", 1.0), ("00.5", 0.5), ("1.4.3", "1.4.3"), ("2026-09-25", "2026-09-25"),
+    ("12px", "12px"), ("100%", "100%"), ("v2", "v2"), ("e3", "e3"), ("inf", "inf"),
+    ("_", "_"), ("_1", "_1"), ("0X1F", "0X1F"), ("-x", "-x"), ("x:y", "x:y"), ("a?b", "a?b"),
+    ("x[1]", "x[1]"),
+])
+def test_values_every_reader_types_alike_still_read(value, expected):
+    assert loads(f"a: {value}") == {"a": expected}
+
+
+@pytest.mark.parametrize("text,line,start", [
+    ("- - a", 1, "'- a' starts with '- '"),
+    ("k:\n  -   - c", 2, "'- c' starts with '- '"),
+    ("a: - b", 1, "'- b' starts with '- '"),
+    ("a: -", 1, "'-' starts with '- '"),
+    ("- -", 1, "'-' starts with '- '"),
+    ("- a: - b", 1, "'- b' starts with '- '"),
+])
+def test_a_list_opened_on_the_line_of_another_is_refused(text, line, start):
+    with pytest.raises(YamlError) as err:
+        loads(text, source="x.yaml")
+    assert str(err.value) == (
+        f"x.yaml line {line}: {start}, which other YAML readers read as a list inside this "
+        "one; put the list on its own lines, one '- item' each, or quote the value")
+
+
+@pytest.mark.parametrize("text,message", [
+    ("a: [?q]", "'?q' starts with '?', which marks a key in other YAML readers; quote the value"),
+    ("a: [? q]", "'? q' starts with '?'"),
+    ("a: {k: ?q}", "'?q' starts with '?'"),
+    ("a: ? b", "'? b' starts with '?'"),
+    ("a: [:b]", "':b' starts with ':'"),
+    ("a: ]", "']' starts with ']', which YAML keeps for [...] and {...}; quote the value"),
+    ("a: }x", "'}x' starts with '}'"),
+    ("a: ,x", "',x' starts with ','"),
+    ("a: [a?b]", "'a?b' holds '?', which ends a plain value inside [...] or {...} in other "
+                 "YAML readers; quote the value"),
+    ("a: {k: b]}", "'b]' holds ']'"),
+    ("a: [b}]", "'b}' holds '}'"),
+    ("a: [x:]", "'x:' holds ': ' inside a plain value"),
+    ("a: {k:b}", "key 'k' in a {...} map needs a space after its ':'; write k: value"),
+    ("a:\tb", "a tab sits outside quotes; use spaces, or put the text in quotes"),
+    ("a: b\t# c", "a tab sits outside quotes"),
+    ("- \ta", "a tab sits outside quotes"),
+    ("on: 1", "the key 'on' reads as a yes or no in other YAML readers; quote it as 'on'"),
+    ("null: 1", "the key 'null' reads as null in other YAML readers; quote it as 'null'"),
+    ("True: 1", "the key 'True' reads as true or false in other YAML readers; quote it as "
+                "'True'"),
+    ("a: {yes: 1}", "the key 'yes' reads as a yes or no"),
+    ("- n: 1", "the key 'n' reads as a yes or no"),
+    ("a : 1", "key 'a' has a space before its ':'; remove the space"),
+])
+def test_other_forms_yaml_reads_differently_are_refused(text, message):
+    with pytest.raises(YamlError) as err:
+        loads(text, source="x.yaml")
+    assert str(err.value).startswith("x.yaml line 1: " + message), str(err.value)
+
+
+@pytest.mark.parametrize("text,expected", [
+    ("a: 'b\tc'", {"a": "b\tc"}),
+    ("a: \"?q\"", {"a": "?q"}),
+    ("'on': 1", {"on": 1}),
+    ("a: {'yes': 1, 'k': '12:30'}", {"a": {"yes": 1, "k": "12:30"}}),
+    ("\ufeffa: 1", {"a": 1}),
+    ("a: 1\r\nb: 2\rc: 3", {"a": 1, "b": 2, "c": 3}),
+])
+def test_quoting_and_line_ends_read_as_other_readers_read_them(text, expected):
+    assert loads(text) == expected
+
+
+@pytest.mark.parametrize("char", ["\x00", "\x07", "\x0b", "\x0c", "\x1b", "\x7f", "\x85",
+                                  "\u2028", "\u2029", "\ufeff"])
+def test_a_control_character_is_refused_by_line(char):
+    with pytest.raises(YamlError) as err:
+        loads(f"a: 1\nb: x{char}y\nc: 2", source="x.yaml")
+    assert str(err.value) == (
+        f"x.yaml line 2: character U+{ord(char):04X} is a control character or a line "
+        "separator; remove it")
+
+
+# YAML 1.2 core schema: integers and floats (the spec's regular expressions).
+_CORE_12 = re.compile(r"[-+]?[0-9]+|0o[0-7]+|0x[0-9a-fA-F]+|[-+]?(\.[0-9]+|[0-9]+(\.[0-9]*)?)"
+                      r"([eE][-+]?[0-9]+)?|[-+]?\.(inf|Inf|INF)|\.(nan|NaN|NAN)")
+
+
+@pytest.mark.parametrize("value", OTHER_READINGS)
+def test_each_refused_value_is_typed_by_another_reader(value):
+    """A refusal is never arbitrary: PyYAML types the value, or the YAML 1.2
+    core schema does, or it is a number with '_', which 1.1 and some 1.2
+    readers accept."""
+    yaml = pytest.importorskip("yaml")
+    try:
+        read = yaml.safe_load("a: " + value)["a"]
+    except yaml.YAMLError:
+        read = None
+    assert read != value or _CORE_12.fullmatch(value) or "_" in value, value
