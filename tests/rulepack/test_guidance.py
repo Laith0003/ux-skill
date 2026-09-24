@@ -94,3 +94,24 @@ def test_a_missing_file_names_the_sections_to_write(tmp_path):
     ts = TokenSet()
     ts.add(Token("radius.1", "dimension", {"value": 4, "unit": "px"}))
     assert guidance_problems(ts, _folder(tmp_path, _text())) == []
+
+
+def test_guidance_problems_lists_a_missing_or_broken_foundation_file(tmp_path):
+    ts = build_system(AxisValues(*[0.5] * 7), "#3366FF", foundations=("radius",)).tokens
+    folder = _folder(tmp_path, _text())
+    (folder / "radius.md").unlink()
+    assert any(p.startswith(f"{folder / 'radius.md'} does not exist; write guidance for radius")
+               for p in guidance_problems(ts, folder))
+    (folder / "radius.md").write_text(_text(drop="Modes"), encoding="utf-8")
+    assert any(p.startswith("radius.md has the sections") for p in guidance_problems(ts, folder))
+
+
+def test_two_patterns_that_describe_one_role_are_named_as_an_overlap(tmp_path):
+    ts = build_system(AxisValues(*[0.5] * 7), "#3366FF", foundations=("radius",)).tokens
+    roles = "\n".join(f"- `{t.path}`: x." for t in ts.tokens()
+                      if t.layer == "semantic" and t.path != "radius.card")
+    roles += "\n- `radius.<a>`: any.\n- `<b>.card`: card."
+    problems = guidance_problems(ts, _folder(tmp_path, _text(roles=roles)))
+    assert "radius.md: radius.card matches more than one Roles pattern (radius.<a>, <b>.card); " \
+           "describe it on its own line or keep one pattern" in problems
+    assert not any("radius.card has no description" in p for p in problems)

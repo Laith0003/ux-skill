@@ -142,8 +142,13 @@ def describe(path: str, guidance: Guidance) -> Optional[str]:
     exact = dict(guidance.roles).get(path)
     if exact is not None:
         return exact
-    matches = [d for k, d in guidance.roles if "<" in k and _pattern(k).match(path)]
-    return matches[0] if len(matches) == 1 else None
+    matches = _patterns_for(path, guidance)
+    return matches[0][1] if len(matches) == 1 else None
+
+
+def _patterns_for(path: str, guidance: Guidance) -> List[Tuple[str, str]]:
+    """The (pattern, description) pairs whose `<name>` pattern matches `path`."""
+    return [(k, d) for k, d in guidance.roles if "<" in k and _pattern(k).match(path)]
 
 
 def _semantic(ts: TokenSet, foundation: str) -> List[str]:
@@ -170,16 +175,29 @@ def role_catalog(ts: TokenSet, folder: Union[str, Path] = GUIDANCE_DIR) -> Tuple
 def guidance_problems(ts: TokenSet, folder: Union[str, Path] = GUIDANCE_DIR) -> List[str]:
     """What the guidance misses or keeps that the build does not have: a
     role with no description, a role key or check line that matches
-    nothing, a check with no line. Each message names the file and the fix."""
+    nothing, a check with no line, a role two patterns describe, and a file
+    that is missing or cannot be read. Each message names the file and the
+    fix."""
     out: List[str] = []
     for f in FOUNDATIONS:
         roles = _semantic(ts, f.name)
         if not roles:
             continue
-        g = load_guidance(f.name, folder)
+        try:
+            g = load_guidance(f.name, folder)
+        except GuidanceError as exc:
+            out.append(str(exc))
+            continue
         source = f"{f.name}.md"
         for path in roles:
-            if describe(path, g) is None:
+            if describe(path, g) is not None:
+                continue
+            overlap = [k for k, _ in _patterns_for(path, g)]
+            if len(overlap) > 1:
+                out.append(f"{source}: {path} matches more than one Roles pattern "
+                           f"({', '.join(overlap)}); describe it on its own line or keep one "
+                           "pattern")
+            else:
                 out.append(f"{source}: {path} has no description under Roles; add "
                            f"\"- `{path}`: what it is for\"")
         for key, _ in g.roles:
