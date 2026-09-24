@@ -24,7 +24,10 @@ from engine.foundations.build import ValidationError, build_system
 from engine.foundations.color_math import hex_to_rgb, rgb_to_hex
 from engine.foundations.export import dump_dtcg, to_css
 from engine.foundations.gate import GateFailure, GateReport
-from engine.synthesizer.axes import AXIS_NAMES, AxisValues, compute_axes
+from engine.synthesizer.axes import (
+    AXIS_NAMES, FORBIDDEN_CLAMPS, INDUSTRY_SEEDS, TONE_NUDGES, AxisValues, _apply_tone_nudges,
+    _normalize_tag, _seed_from_industry, compute_axes,
+)
 
 # The files a build writes, in the order they are written and reported.
 FILES: Tuple[str, ...] = ("tokens.json", "tokens.css", "system-report.md")
@@ -161,19 +164,82 @@ def _brief_values(brief: Mapping[str, Any], label: str) -> Dict[str, Any]:
     return out
 
 
-def brief_axes(brief: Mapping[str, Any], label: str = "brief") -> Tuple[AxisValues, str]:
+def _reading(key: str, word: str) -> Optional[str]:
+    """How the synthesizer reads one brief word: the word, the industry it
+    was matched to, or None when the word moves no axis. Asks the
+    synthesizer's own lookups, so the two can never disagree."""
+    if key == "industry":
+        seed = _seed_from_industry(word)
+        match = next((k for k, v in INDUSTRY_SEEDS.items() if v == seed), None)
+        if match is None:
+            return None
+        return word if _normalize_tag(word) == match else f"{word}, read as {match}"
+    if key == "forbidden":
+        return word if _normalize_tag(word) in FORBIDDEN_CLAMPS else None
+    neutral = dict(NEUTRAL.to_dict())
+    return word if _apply_tone_nudges(dict(neutral), [word]) != neutral else None
+
+
+def _accepted(key: str) -> Tuple[str, ...]:
+    """The words the synthesizer knows for a brief field."""
+    if key == "industry":
+        return tuple(sorted(INDUSTRY_SEEDS))
+    if key == "forbidden":
+        return tuple(sorted(FORBIDDEN_CLAMPS))
+    return tuple(sorted(TONE_NUDGES))
+
+
+def _accepted_lines(keys: Sequence[str]) -> List[str]:
+    """One sentence per vocabulary, naming every field that uses it."""
+    groups: Dict[Tuple[str, ...], List[str]] = {}
+    for key in keys:
+        groups.setdefault(_accepted(key), []).append(key)
+    lines = []
+    for words, fields in groups.items():
+        names = fields[0] if len(fields) == 1 else (", ".join(fields[:-1]) + " and " + fields[-1])
+        lines.append(f"{names} {'accepts' if len(fields) == 1 else 'accept'}: "
+                     f"{', '.join(words)}.")
+    return lines
+
+
+def brief_axes(brief: Mapping[str, Any], label: str = "brief", *,
+               axes_label: str = "axes") -> Tuple[AxisValues, str]:
     """Axes from a brief through the synthesizer, and a sentence saying so.
     A discovery brief (answers nested under "answers") is read the same as
-    a flat one. A brief with none of BRIEF_FIELDS is refused rather than
-    silently read as neutral."""
+    a flat one. The sentence names the words that were read and the words
+    that were ignored because the synthesizer does not know them. A brief
+    with none of BRIEF_FIELDS, or with no word the synthesizer knows, is
+    refused rather than silently read as neutral."""
     if isinstance(brief.get("answers"), dict):
         brief = brief["answers"]
     values = _brief_values(brief, label)
     if not values:
         raise InputError(f"{label} has none of {', '.join(BRIEF_FIELDS)}; add at least one "
-                         '(for example "industry": "saas"), or pass axes instead')
-    parts = [f"{k}: {v if isinstance(v, str) else ', '.join(v)}" for k, v in values.items()]
-    return compute_axes(values), "from the brief (" + "; ".join(parts) + ")"
+                         f'(for example "industry": "saas"), or pass {axes_label} instead')
+    known: Dict[str, List[str]] = {}
+    unknown: List[Tuple[str, str]] = []
+    for key, value in values.items():
+        for word in ([value] if isinstance(value, str) else value):
+            reading = _reading(key, word)
+            if reading is None:
+                unknown.append((key, word))
+            else:
+                known.setdefault(key, []).append(reading)
+    ignored = ", ".join(f"{word} ({key})" for key, word in unknown)
+    if not known:
+        fields = [k for k in BRIEF_FIELDS if any(k == key for key, _ in unknown)]
+        raise InputError(" ".join([
+            f"{label} has no word the engine recognizes, so it would build the same system as "
+            f"no brief. Not recognized: {ignored}.",
+            f"Use at least one accepted word, or pass {axes_label} instead.",
+            *_accepted_lines(fields)]))
+    axes = compute_axes(values)
+    source = "from the brief (" + "; ".join(f"{k}: {', '.join(v)}" for k, v in known.items()) + ")"
+    if axes == NEUTRAL:
+        source += ", which leaves every axis at 0.5"
+    if unknown:
+        source += f"; not recognized and ignored: {ignored}"
+    return axes, source
 
 
 def choose_axes(brief: Optional[Mapping[str, Any]], axes: Any, *,
@@ -186,7 +252,7 @@ def choose_axes(brief: Optional[Mapping[str, Any]], axes: Any, *,
         raise InputError(f"both {brief_label} and {axes_label} were given; pass one: the brief "
                          f"places the axes itself, and {axes_label} sets them by hand")
     if brief is not None:
-        return brief_axes(brief, brief_label)
+        return brief_axes(brief, brief_label, axes_label=axes_label)
     if axes is not None:
         return parse_axes(axes, axes_label), f"set by hand ({axes_label})"
     return NEUTRAL, NEUTRAL_SOURCE

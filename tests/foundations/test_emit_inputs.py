@@ -176,3 +176,56 @@ def test_read_brief_expands_a_home_folder(tmp_path, monkeypatch):
     monkeypatch.setenv("USERPROFILE", str(tmp_path))
     (tmp_path / "b.json").write_text(json.dumps(BRIEF), encoding="utf-8")
     assert read_brief("~/b.json") == BRIEF
+
+
+# A brief word the synthesizer does not know moves no axis. The source line
+# says which words were read and which were ignored, and a brief where no
+# word was read is refused instead of silently building the neutral system.
+from engine.synthesizer.axes import FORBIDDEN_CLAMPS, INDUSTRY_SEEDS, TONE_NUDGES  # noqa: E402
+
+
+def test_unrecognized_words_are_named_in_the_source():
+    axes, source = brief_axes({"industry": "saas", "tone": "warm, luxurious",
+                               "audience": "small business owners"})
+    assert axes == compute_axes({"industry": "saas", "tone": ["warm", "luxurious"],
+                                 "audience": ["small business owners"]})
+    assert source == ("from the brief (industry: saas; tone: warm); not recognized and "
+                      "ignored: luxurious (tone), small business owners (audience)")
+
+
+def test_an_industry_read_as_a_nearby_one_says_so():
+    axes, source = brief_axes({"industry": "fintech"})
+    assert axes == compute_axes({"industry": "fintech-payments"})
+    assert source == "from the brief (industry: fintech, read as fintech-payments)"
+
+
+def test_a_brief_that_leaves_every_axis_neutral_says_so():
+    axes, source = brief_axes({"forbidden": ["loud"]})
+    assert axes == NEUTRAL
+    assert source == "from the brief (forbidden: loud), which leaves every axis at 0.5"
+
+
+@pytest.mark.parametrize("brief,unknown,vocabulary", [
+    ({"industry": "bakery"}, "bakery (industry)", INDUSTRY_SEEDS),
+    ({"tone": "luxurious"}, "luxurious (tone)", TONE_NUDGES),
+    ({"audience": "small business owners"}, "small business owners (audience)", TONE_NUDGES),
+    ({"must_have": "dark mode"}, "dark mode (must_have)", TONE_NUDGES),
+    ({"forbidden": ["neon"]}, "neon (forbidden)", FORBIDDEN_CLAMPS),
+])
+def test_a_brief_with_no_recognized_word_is_refused(brief, unknown, vocabulary):
+    with pytest.raises(InputError) as exc:
+        choose_axes(brief, None, brief_label="--brief", axes_label="--axes")
+    message = str(exc.value)
+    assert message.startswith("--brief has no word the engine recognizes, so it would build "
+                              "the same system as no brief. Not recognized: " + unknown + ".")
+    assert "Use at least one accepted word, or pass --axes instead." in message
+    for word in vocabulary:
+        assert word in message
+
+
+def test_the_refusal_lists_a_shared_vocabulary_once():
+    with pytest.raises(InputError) as exc:
+        brief_axes({"industry": "bakery", "tone": "luxurious", "audience": "owners"})
+    message = str(exc.value)
+    assert "tone and audience accept: " in message and "industry accepts: " in message
+    assert message.count("playful") == 1
