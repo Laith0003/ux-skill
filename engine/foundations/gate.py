@@ -61,18 +61,20 @@ def required(p: Pairing, mode: str,
 def cite(minimum: float, criterion: str) -> str:
     """How a message states a minimum. WCAG is named as the source only
     when the criterion sets exactly that ratio; any other floor is stated
-    as a floor, with what WCAG asks beside it."""
+    as a floor, with what WCAG asks beside it. Minimums print as WCAG
+    writes them ("3:1", "4.5:1", "7:1"); measured ratios are printed by
+    the caller, floored to two decimals."""
     if criterion.startswith(HIGH_FLOOR):
         base = criterion[len(HIGH_FLOOR):]
-        asks = (f"WCAG {base} asks {WCAG_RATIOS[base]}:1" if base in WCAG_RATIOS
+        asks = (f"WCAG {base} asks {WCAG_RATIOS[base]:g}:1" if base in WCAG_RATIOS
                 else f"raised over {base}")
-        return f"our high-contrast floor is {minimum}:1 ({asks})"
+        return f"our high-contrast floor is {minimum:g}:1 ({asks})"
     if criterion in WCAG_RATIOS:
         if WCAG_RATIOS[criterion] == minimum:
-            return f"WCAG {criterion} needs {minimum}:1"
-        return (f"the declared floor is {minimum}:1 "
-                f"(WCAG {criterion} asks {WCAG_RATIOS[criterion]}:1)")
-    return f"the declared floor for {criterion} is {minimum}:1"
+            return f"WCAG {criterion} needs {minimum:g}:1"
+        return (f"the declared floor is {minimum:g}:1 "
+                f"(WCAG {criterion} asks {WCAG_RATIOS[criterion]:g}:1)")
+    return f"the declared floor for {criterion} is {minimum:g}:1"
 
 
 @dataclass(frozen=True)

@@ -242,8 +242,8 @@ def test_ring_keeps_every_surface_pairing_at_its_minimum():
                           *required(p, "scheme:light,contrast:standard")).message()
         high = GateFinding(p.fg, bg, "scheme:light,contrast:high", 4.2,
                            *required(p, "scheme:light,contrast:high")).message()
-        assert "WCAG 1.4.11 needs 3.0:1" in std
-        assert "our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3.0:1)" in high
+        assert "WCAG 1.4.11 needs 3:1" in std
+        assert "our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3:1)" in high
     assert Pairing("color.focus.ring-inverse", "color.surface.inverse", 3.0, "1.4.11") in PAIRINGS
 
 
@@ -429,7 +429,7 @@ def test_high_contrast_non_text_floor_is_named_as_ours():
     minimum, criterion = required(part, "scheme:light,contrast:high")
     message = GateFinding(part.fg, part.bg, "scheme:light,contrast:high", 4.09,
                           minimum, criterion).message()
-    assert "our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3.0:1)" in message
+    assert "our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3:1)" in message
     assert "WCAG 1.4.11 needs 4.5" not in message
 
 
@@ -445,8 +445,8 @@ def test_retune_notes_cite_only_what_wcag_says(seed, monkeypatch):
     notes = [n for n in generate_color(AXES, seed).notes
              if "(scheme:" in n and not re.match(r"color\.\S+ group \(", n)]
     assert any("contrast:standard" in n for n in notes), seed
-    assert any("WCAG 1.4.6 needs 7.0:1" in n for n in notes), seed
-    assert any("our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3.0:1)" in n
+    assert any("WCAG 1.4.6 needs 7:1" in n for n in notes), seed
+    assert any("our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3:1)" in n
                for n in notes), seed
     for note in notes:
         _assert_cites_only_wcag(note)
@@ -611,8 +611,8 @@ def test_line_selected_pairs_with_every_surface_the_ring_does():
                           *required(p, "scheme:light,contrast:standard")).message()
         high = GateFinding(p.fg, bg, "scheme:light,contrast:high", 4.2,
                            *required(p, "scheme:light,contrast:high")).message()
-        assert "WCAG 1.4.11 needs 3.0:1" in std
-        assert "our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3.0:1)" in high
+        assert "WCAG 1.4.11 needs 3:1" in std
+        assert "our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3:1)" in high
 
 
 @pytest.mark.parametrize("seed", SEEDS + _SWEEP_SEEDS)
@@ -646,7 +646,7 @@ def test_line_selected_retunes_against_sunken(monkeypatch):
         assert contrast(line, bg) >= 3.0
     assert any(n.startswith(f"color.line.selected ({ctx}): color.brand.600 -> ")
                and "color.line.selected on color.surface.sunken" in n
-               and "WCAG 1.4.11 needs 3.0:1" in n for n in result.notes)
+               and "WCAG 1.4.11 needs 3:1" in n for n in result.notes)
 
 
 def _subtle_set(subtle, card, raised):

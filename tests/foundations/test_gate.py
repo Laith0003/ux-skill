@@ -65,6 +65,24 @@ def test_near_miss_ratio_never_prints_as_passing():
     assert printed < 4.5
 
 
+@pytest.mark.parametrize("minimum, criterion, want", [
+    (3.0, "1.4.11", "WCAG 1.4.11 needs 3:1"),
+    (4.5, "1.4.3", "WCAG 1.4.3 needs 4.5:1"),
+    (7.0, "1.4.6", "WCAG 1.4.6 needs 7:1"),
+    (4.5, "high-contrast floor over 1.4.11",
+     "our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3:1)"),
+    (4.0, "1.4.11", "the declared floor is 4:1 (WCAG 1.4.11 asks 3:1)"),
+    (3.0, "custom", "the declared floor for custom is 3:1"),
+])
+def test_minimums_print_without_a_trailing_zero(minimum, criterion, want):
+    from engine.foundations.gate import GateFinding, cite
+    assert cite(minimum, criterion) == want
+    # A measured ratio keeps its floored two decimals beside the minimum.
+    message = GateFinding("color.line.input", "color.surface.raised", "scheme:dark", 2.639,
+                          minimum, criterion).message()
+    assert " is 2.63:1; " in message and want in message and ".0:1" not in message
+
+
 def test_unvalidated_bad_value_names_the_token():
     # R27 I2: the gate used to raise the bare color_math error with no token path.
     ts = TokenSet()
@@ -137,7 +155,7 @@ def test_gate_enforces_the_raised_minimum_in_high_contrast():
     assert report.checked == 4
     assert [(f.mode, f.minimum, f.criterion) for f in report.findings] == [
         ("scheme:light,contrast:high", 7.0, "1.4.6"), ("scheme:dark,contrast:high", 7.0, "1.4.6")]
-    assert "WCAG 1.4.6 needs 7.0:1" in report.findings[0].message()
+    assert "WCAG 1.4.6 needs 7:1" in report.findings[0].message()
 
 
 # A token set with its own axes: the gate reads them, never the built-in ones.
