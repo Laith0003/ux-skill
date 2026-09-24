@@ -53,3 +53,28 @@ def test_dump_dtcg_fixes_the_json_settings():
     assert text == json.dumps(to_dtcg(ts), indent=2, ensure_ascii=False) + "\n"
     assert text.endswith("}\n") and "أبيض" in text and "\\u" not in text
     assert text.startswith('{\n  "$extensions": {')
+
+
+_SYSTEM_SCRIPT = """
+import json, sys
+from tests.foundations.golden.capture_system import CASES, render
+sys.stdout.write(json.dumps({name: render(*CASES[name]) for name in sorted(CASES)}))
+"""
+
+
+def _run_system(hash_seed):
+    env = dict(os.environ, PYTHONHASHSEED=str(hash_seed))
+    env["PYTHONPATH"] = os.pathsep.join(p for p in (str(REPO), env.get("PYTHONPATH")) if p)
+    proc = subprocess.run([sys.executable, "-c", _SYSTEM_SCRIPT], cwd=REPO, env=env,
+                          capture_output=True, text=True, check=True)
+    return json.loads(proc.stdout)
+
+
+def test_build_system_is_byte_identical_across_hash_seeds_and_matches_the_golden():
+    first, second = _run_system(1), _run_system(987)
+    assert first == second
+    golden = REPO / "tests" / "foundations" / "golden"
+    assert sorted(first) == sorted(p.stem[len("system-"):] for p in golden.glob("system-*.css"))
+    for name, (css, dtcg) in first.items():
+        assert css == (golden / f"system-{name}.css").read_text(encoding="utf-8")
+        assert dtcg == (golden / f"system-{name}.json").read_text(encoding="utf-8")

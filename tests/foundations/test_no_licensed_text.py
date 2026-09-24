@@ -1,7 +1,7 @@
 """Guard: nothing in the public engine repeats licensed foundation docs, names the
 client engagement, or leaks a confidential term.
 
-Four tests:
+The guards:
 1. Shingle test against the private Ds/ corpus. Runs only on a machine that has
    the private source (CI skips). Per R24, a shingle only counts when it is
    mostly prose (see MIN_ALPHA_WORDS below) so public numeric vocabulary
@@ -16,6 +16,9 @@ Four tests:
 4. Private-term guard against `~/Code/ux-skill/ds-source/private-terms.txt`.
    Skips cleanly when that file is absent (CI, or any machine without the
    private source).
+5. Licensed token-name guard: no dotted name the private docs put in
+   backticks appears in any tracked file. Skips without the private source;
+   a CI-safe unit test pins the name pattern.
 """
 import os
 import re
@@ -169,3 +172,50 @@ def test_no_private_terms_anywhere():
                     hits.append(f"{rel}:{lineno}: {term}")
                     break
     assert not hits, "private term found:\n" + "\n".join(hits[:50])
+
+
+# Licensed token names: every dotted name the private docs put in backticks
+# (for example a role path or a style name). Our taxonomy must not reuse
+# them. Ramp names such as color.<family>.<step> are the common convention
+# M1 fixed on purpose and are allowed; names that start with a capital are
+# platform APIs, not token names.
+_TOKEN_NAME = re.compile(r"`([a-z][A-Za-z0-9-]*(?:[./][A-Za-z0-9-]+)+)`")
+_RAMP = re.compile(r"color\.[a-z]+\.\d+$")
+_FILE_NAME = re.compile(r"\.(md|json|css|js|ts|tsx|html|fig|png|svg|py)$")
+
+
+def _licensed_token_names():
+    names = set()
+    for md in PRIVATE.glob("*/*.md"):
+        for m in _TOKEN_NAME.findall(md.read_text(encoding="utf-8", errors="ignore")):
+            name = m.replace("/", ".")
+            if not _RAMP.match(name) and not _FILE_NAME.search(name):
+                names.add(name)
+    return names
+
+
+@pytest.mark.skipif(not PRIVATE.exists(), reason="private source not on this machine")
+def test_no_licensed_token_names_anywhere():
+    names = _licensed_token_names()
+    assert len(names) > 100, "the private docs should yield hundreds of names; check the pattern"
+    pattern = re.compile(r"(?<![A-Za-z0-9_.-])(" + "|".join(
+        re.escape(n) for n in sorted(names, key=len, reverse=True)) + r")(?![A-Za-z0-9_-])")
+    hits = []
+    for rel, p in _tracked_files():
+        if p.resolve() == THIS_FILE:
+            continue
+        text = _read_text(p)
+        if text is None:
+            continue
+        for lineno, line in enumerate(text.splitlines(), 1):
+            m = pattern.search(line)
+            if m:
+                hits.append(f"{rel}:{lineno}: {m.group(1)}")
+    assert not hits, "licensed token name found; use our own taxonomy:\n" + "\n".join(hits[:50])
+
+
+def test_token_name_pattern_skips_ramps_and_files():
+    assert _TOKEN_NAME.findall("use `spacing.stack.md` and `color.brand.500` in `tokens.json`") == [
+        "spacing.stack.md", "color.brand.500", "tokens.json"]
+    assert _RAMP.match("color.brand.500") and not _RAMP.match("space.control.gap")
+    assert _FILE_NAME.search("tokens.json") and not _FILE_NAME.search("radius.card")
