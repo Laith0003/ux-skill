@@ -420,3 +420,40 @@ def test_a_deprecated_contract_with_another_replacement_reads():
     d = data()
     d.update(status="deprecated", replacement="switch")
     assert problems(d) == []
+
+
+def test_read_contract_raises_only_contract_errors_on_damaged_text():
+    """TOGGLE with lines dropped, swapped and cut, characters changed, and
+    values replaced by lists, maps, deep nesting and long numbers: every
+    result is a contract or a ContractError, never another error."""
+    import random
+    import re
+    rng = random.Random(20260925)
+    lines = TOGGLE.splitlines()
+    pieces = ["[", "]", "{", "}", ":", "- ", "'", '"', "#", " ", "\t", "?", "&", "null", "[[",
+              "1:2", "yes", "م"]
+    for _ in range(2000):
+        damaged = list(lines)
+        for _ in range(rng.randint(1, 4)):
+            i = rng.randrange(len(damaged))
+            kind = rng.randrange(6)
+            words = list(re.finditer(r"(?<=: )[A-Za-z0-9][A-Za-z0-9.-]*", damaged[i]))
+            if kind >= 4 and words:
+                word = rng.choice(words)
+                shape = rng.choice(["[x]", "{a: 1}", "[[x]]", "[]", "{}", "9" * 5000,
+                                    "[" * 100 + "]" * 100])
+                damaged[i] = damaged[i][:word.start()] + shape + damaged[i][word.end():]
+            elif kind == 0:
+                del damaged[i]
+            elif kind == 1:
+                j = rng.randrange(len(damaged))
+                damaged[i], damaged[j] = damaged[j], damaged[i]
+            elif kind == 2:
+                damaged[i] = damaged[i][:rng.randrange(len(damaged[i]) + 1)]
+            else:
+                at = rng.randrange(len(damaged[i]) + 1)
+                damaged[i] = damaged[i][:at] + rng.choice(pieces) + damaged[i][at:]
+        try:
+            read_contract("\n".join(damaged), "toggle.yaml")
+        except ContractError as err:
+            assert err.problems and all(p.message for p in err.problems)
