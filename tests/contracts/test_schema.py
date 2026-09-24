@@ -391,8 +391,8 @@ def test_a_refused_condition_does_not_also_report_a_duplicate():
     (lambda d: d.update(usage={"do": ["Apply the change at once"]}), "bad-usage",
      "toggle: usage is {'do': ['Apply the change at once']}; give it do and dont, each a list "
      "of short rules"),
-    (lambda d: d["copy"].update(default=["“Wi-Fi”"]), "copy-is-a-string",
-     "toggle: copy.default holds the literal “Wi-Fi”; copy holds rules"),
+    (lambda d: d["copy"].update(default=["\u201cWi-Fi\u201d"]), "copy-is-a-string",
+     "toggle: copy.default holds the literal \u201cWi-Fi\u201d; copy holds rules"),
 ])
 def test_each_remaining_check_is_proven(edit, rule, message):
     d = copy.deepcopy(data())
@@ -431,7 +431,7 @@ def test_read_contract_raises_only_contract_errors_on_damaged_text():
     rng = random.Random(20260925)
     lines = TOGGLE.splitlines()
     pieces = ["[", "]", "{", "}", ":", "- ", "'", '"', "#", " ", "\t", "?", "&", "null", "[[",
-              "1:2", "yes", "م"]
+              "1:2", "yes", "\u0645"]
     for _ in range(2000):
         damaged = list(lines)
         for _ in range(rng.randint(1, 4)):
