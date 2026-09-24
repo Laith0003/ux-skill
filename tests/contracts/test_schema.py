@@ -230,3 +230,15 @@ def test_load_contract_names_an_unreadable_file(tmp_path):
     good.parent.mkdir()
     good.write_text(TOGGLE, encoding="utf-8")
     assert load_contract(good).name == "toggle"
+
+
+@pytest.mark.parametrize("text", [
+    "name: " + "[" * 500 + "]" * 500,
+    "\n".join("  " * i + "k:" for i in range(500)),
+    "name: " + "9" * 5000,
+])
+def test_read_contract_turns_every_reader_failure_into_a_contract_error(text):
+    with pytest.raises(ContractError) as err:
+        read_contract(text, "toggle.yaml")
+    assert [p.rule for p in err.value.problems] == ["yaml"]
+    assert str(err.value).startswith("toggle.yaml line ")

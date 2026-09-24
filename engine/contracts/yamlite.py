@@ -17,6 +17,9 @@ Refused, each with a message: tabs, anchors, aliases, tags, multi-line
 scalars (``|`` and ``>``), document markers, duplicate keys, a plain value
 holding ``": "``, plain keys that are not simple names, and the YAML 1.1
 words yes, no, on, off, y and n, which other readers turn into booleans.
+Lists and maps nest at most MAX_DEPTH deep and a number has at most
+MAX_DIGITS digits, so no input reaches the caller as anything but a
+YamlError.
 A date such as 2026-09-25 is read as text.
 """
 from __future__ import annotations
@@ -33,6 +36,12 @@ _TRUE = ("true", "True", "TRUE")
 _FALSE = ("false", "False", "FALSE")
 _AMBIGUOUS = ("yes", "no", "on", "off", "y", "n")
 _RESERVED = ("&", "*", "!", "|", ">", "%", "@", "`")
+# How many lists and maps may nest inside each other. Contracts need a
+# handful; the cap turns runaway nesting into an error with the line.
+MAX_DEPTH = 64
+# How many digits a number may have. Longer numbers are refused rather than
+# handed to int() and float(), which fail or lose them.
+MAX_DIGITS = 100
 
 
 class YamlError(ValueError):
@@ -97,6 +106,19 @@ def _lines(text: str, source: str) -> List[_Line]:
     return out
 
 
+def _show(text: str) -> str:
+    """The text for a message, cut to a readable length."""
+    return repr(text if len(text) <= 40 else text[:37] + "...")
+
+
+def _deeper(depth: int, source: str, number: int) -> int:
+    """The depth of a list or map that opens inside `depth` others."""
+    if depth + 1 > MAX_DEPTH:
+        raise _fail(source, number, f"this value nests more than {MAX_DEPTH} lists and maps "
+                                    "deep; flatten it")
+    return depth + 1
+
+
 def _plain(text: str, source: str, number: int, in_flow: bool = False) -> Any:
     """A plain (unquoted) scalar, resolved to None, a bool, a number or text."""
     if text in _NULLS:
@@ -114,9 +136,13 @@ def _plain(text: str, source: str, number: int, in_flow: bool = False) -> Any:
                                     "support; quote the value or keep it on one line")
     if ": " in text or (not in_flow and text.endswith(":")):
         raise _fail(source, number, f"{text!r} holds ': ' inside a plain value; quote the value")
-    if _INT.fullmatch(text):
+    is_int, is_float = _INT.fullmatch(text), _FLOAT.fullmatch(text)
+    if (is_int or is_float) and sum(ch.isdigit() for ch in text) > MAX_DIGITS:
+        raise _fail(source, number, f"the number {_show(text)} has more than {MAX_DIGITS} "
+                                    "digits; quote it if it is text, or shorten it")
+    if is_int:
         return int(text)
-    if _FLOAT.fullmatch(text):
+    if is_float:
         return float(text)
     return text
 
@@ -159,8 +185,9 @@ def _quoted(text: str, start: int, source: str, number: int) -> Tuple[str, int]:
 class _Flow:
     """Recursive reader for one-line flow collections and scalars."""
 
-    def __init__(self, text: str, source: str, number: int):
+    def __init__(self, text: str, source: str, number: int, depth: int = 0):
         self.text, self.source, self.number, self.i = text, source, number, 0
+        self.depth = depth
 
     def fail(self, message: str) -> YamlError:
         return _fail(self.source, self.number, message)
@@ -169,16 +196,16 @@ class _Flow:
         while self.i < len(self.text) and self.text[self.i] == " ":
             self.i += 1
 
-    def value(self, stops: str) -> Any:
+    def value(self, stops: str, depth: int) -> Any:
         self.skip()
         if self.i >= len(self.text):
             raise self.fail("a value is missing in a [...] or {...} list; write one or remove "
                             "the extra comma")
         ch = self.text[self.i]
         if ch == "[":
-            return self.sequence()
+            return self.sequence(_deeper(depth, self.source, self.number))
         if ch == "{":
-            return self.mapping()
+            return self.mapping(_deeper(depth, self.source, self.number))
         if ch in "\"'":
             value, self.i = _quoted(self.text, self.i, self.source, self.number)
             return value
@@ -191,7 +218,7 @@ class _Flow:
                             "the extra comma")
         return _plain(word, self.source, self.number, in_flow=True)
 
-    def sequence(self) -> List[Any]:
+    def sequence(self, depth: int) -> List[Any]:
         self.i += 1
         items: List[Any] = []
         self.skip()
@@ -199,7 +226,7 @@ class _Flow:
             self.i += 1
             return items
         while True:
-            items.append(self.value(",]"))
+            items.append(self.value(",]", depth))
             self.skip()
             ch = self.text[self.i:self.i + 1]
             self.i += 1
@@ -208,7 +235,7 @@ class _Flow:
             if ch != ",":
                 raise self.fail("a [...] list is not closed with ']'; close it on the same line")
 
-    def mapping(self) -> Dict[str, Any]:
+    def mapping(self, depth: int) -> Dict[str, Any]:
         self.i += 1
         items: Dict[str, Any] = {}
         self.skip()
@@ -233,7 +260,7 @@ class _Flow:
             self.i += 1
             if key in items:
                 raise self.fail(f"key {key!r} appears twice in one {{...}} map; keep one")
-            items[key] = self.value(",}")
+            items[key] = self.value(",}", depth)
             self.skip()
             ch = self.text[self.i:self.i + 1]
             self.i += 1
@@ -243,7 +270,7 @@ class _Flow:
                 raise self.fail("a {...} map is not closed with '}'; close it on the same line")
 
     def whole(self) -> Any:
-        value = self.value("")
+        value = self.value("", self.depth)
         self.skip()
         if self.i != len(self.text):
             raise self.fail(f"{self.text[self.i:]!r} follows a complete value; remove it or "
@@ -251,9 +278,9 @@ class _Flow:
         return value
 
 
-def _inline(text: str, source: str, number: int) -> Any:
+def _inline(text: str, source: str, number: int, depth: int = 0) -> Any:
     if text[0] in "[{\"'":
-        return _Flow(text, source, number).whole()
+        return _Flow(text, source, number, depth).whole()
     return _plain(text, source, number)
 
 
@@ -288,22 +315,23 @@ class _Block:
     def fail(self, line: _Line, message: str) -> YamlError:
         return _fail(self.source, line.number, message)
 
-    def block(self, i: int, indent: int) -> Tuple[Any, int]:
+    def block(self, i: int, indent: int, depth: int) -> Tuple[Any, int]:
         line = self.lines[i]
+        depth = _deeper(depth, self.source, line.number)
         if line.text == "-" or line.text.startswith("- "):
-            return self.sequence(i, indent)
-        return self.mapping(i, indent)
+            return self.sequence(i, indent, depth)
+        return self.mapping(i, indent, depth)
 
-    def child(self, i: int, indent: int, allow_same: bool) -> Tuple[Any, int]:
+    def child(self, i: int, indent: int, allow_same: bool, depth: int) -> Tuple[Any, int]:
         """The block that follows line i-1 as its value, or None when none does."""
         if i < len(self.lines):
             nxt = self.lines[i]
             if nxt.indent > indent or (allow_same and nxt.indent == indent
                                        and (nxt.text == "-" or nxt.text.startswith("- "))):
-                return self.block(i, nxt.indent)
+                return self.block(i, nxt.indent, depth)
         return None, i
 
-    def mapping(self, i: int, indent: int,
+    def mapping(self, i: int, indent: int, depth: int,
                 first: Optional[_Line] = None) -> Tuple[Dict[str, Any], int]:
         out: Dict[str, Any] = {}
         while i < len(self.lines) or first is not None:
@@ -323,12 +351,12 @@ class _Block:
             i = i + 1 if first is None else i
             first = None
             if rest:
-                out[key] = _inline(rest, self.source, line.number)
+                out[key] = _inline(rest, self.source, line.number, depth)
             else:
-                out[key], i = self.child(i, indent, allow_same=True)
+                out[key], i = self.child(i, indent, True, depth)
         return out, i
 
-    def sequence(self, i: int, indent: int) -> Tuple[List[Any], int]:
+    def sequence(self, i: int, indent: int, depth: int) -> Tuple[List[Any], int]:
         out: List[Any] = []
         while i < len(self.lines):
             line = self.lines[i]
@@ -342,14 +370,15 @@ class _Block:
             item = line.text[1:].lstrip(" ")
             i += 1
             if not item:
-                value, i = self.child(i, indent, allow_same=False)
+                value, i = self.child(i, indent, False, depth)
                 out.append(value)
             elif item[0] not in "[{\"'" and re.match(r"[^:]*?:(?: |$)", item):
                 inner = _Line(line.number, indent + len(line.text) - len(item), item)
-                value, i = self.mapping(i, inner.indent, first=inner)
+                value, i = self.mapping(i, inner.indent,
+                                        _deeper(depth, self.source, line.number), first=inner)
                 out.append(value)
             else:
-                out.append(_inline(item, self.source, line.number))
+                out.append(_inline(item, self.source, line.number, depth))
         return out, i
 
 
@@ -372,7 +401,7 @@ def loads(text: str, source: str = "<text>") -> Any:
             raise _fail(source, lines[1].number, "text follows a complete value; a document "
                                                  "holds one map, list or value")
         return value
-    value, i = _Block(lines, source).block(0, 0)
+    value, i = _Block(lines, source).block(0, 0, 0)
     if i != len(lines):
         raise _fail(source, lines[i].number, "this line is indented less than the document "
                                              "allows; line it up with its siblings")

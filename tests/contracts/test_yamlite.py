@@ -1,8 +1,10 @@
 """yamlite reads the YAML subset contracts use and refuses the rest by
 line, with the fix."""
+import re
+
 import pytest
 
-from engine.contracts.yamlite import YamlError, loads
+from engine.contracts.yamlite import MAX_DEPTH, MAX_DIGITS, YamlError, loads
 
 DOC = """\
 # a contract-shaped document
@@ -145,3 +147,57 @@ def test_refuses_what_it_does_not_support_by_line_with_the_fix(text, message):
 def test_refuses_a_non_string():
     with pytest.raises(TypeError, match="x.yaml is bytes; pass the YAML as text"):
         loads(b"a: 1", source="x.yaml")
+
+
+def _block_maps(n):
+    """n block maps, each nested under the key before it."""
+    return "\n".join("  " * i + ("k:" if i < n - 1 else "k: 1") for i in range(n))
+
+
+def _block_lists(n):
+    """n block lists, each the only item of the one before it."""
+    return "\n".join("  " * i + ("-" if i < n - 1 else "- 1") for i in range(n))
+
+
+def _maps_then_flow(n):
+    """n - 2 block maps whose last key holds two flow lists."""
+    m = n - 2
+    return "\n".join("  " * i + ("k:" if i < m - 1 else "k: [[1]]") for i in range(m))
+
+
+@pytest.mark.parametrize("make", [
+    lambda n: "[" * n + "]" * n,
+    lambda n: "a: " + "[" * (n - 1) + "]" * (n - 1),
+    lambda n: "{k: " * n + "1" + "}" * n,
+    _block_maps,
+    _block_lists,
+    _maps_then_flow,
+])
+def test_nesting_is_capped_with_the_line_and_the_fix(make):
+    assert MAX_DEPTH == 64
+    loads(make(MAX_DEPTH), source="x.yaml")
+    for depth in (MAX_DEPTH + 1, 500):
+        with pytest.raises(YamlError) as err:
+            loads(make(depth), source="x.yaml")
+        assert re.fullmatch(r"x\.yaml line \d+: this value nests more than 64 lists and maps "
+                            r"deep; flatten it", str(err.value)), str(err.value)
+
+
+@pytest.mark.parametrize("text", [
+    "a: " + "9" * (MAX_DIGITS + 1),
+    "a: -" + "9" * (MAX_DIGITS + 1),
+    "a: [" + "9" * 5000 + "]",
+    "a: " + "1" * 400 + ".5",
+    "a: 0." + "5" * 400,
+])
+def test_a_number_with_too_many_digits_is_refused_by_line(text):
+    with pytest.raises(YamlError) as err:
+        loads(text, source="x.yaml")
+    message = str(err.value)
+    assert message.startswith("x.yaml line 1: the number ") and message.endswith(
+        f"has more than {MAX_DIGITS} digits; quote it if it is text, or shorten it")
+    assert len(message) < 200
+
+
+def test_the_longest_number_allowed_still_reads():
+    assert loads("a: " + "9" * MAX_DIGITS) == {"a": int("9" * MAX_DIGITS)}
