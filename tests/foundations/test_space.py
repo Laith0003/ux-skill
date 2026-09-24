@@ -84,8 +84,9 @@ def test_checks_name_the_token_and_the_fix():
     for f in report.failures:
         messages.setdefault(f.check, f.message)  # first context: comfortable
     assert messages["control-gap"] == (
-        "space.control.gap (density:comfortable) is 4px; adjacent controls need at least 8px "
-        "between them, so point it at space.2 or larger")
+        "space.control.gap (density:comfortable) is 4px; our floor between adjacent controls "
+        "is 8px, so point it at space.2 or larger. WCAG 2.5.8 sets a minimum target of 24 by "
+        "24 CSS px, not a gap; this floor keeps smaller controls apart.")
     assert messages["space-hierarchy"].startswith("space.text.gap (density:comfortable) is not "
                                                   "smaller than space.group.gap")
     assert messages["compact-not-larger"].startswith("space.card.padding is larger in compact")
@@ -102,8 +103,48 @@ def test_directional_roles_use_logical_names_and_physical_names_are_rejected():
     ts.add(Token("space.card.padding-left", "dimension", "{space.4}", layer="semantic"))
     found = [p for p in validate(ts) if p.rule == "physical-direction"]
     assert [p.message for p in found] == [
-        "space.card.padding-left names the physical side 'left', which flips under dir=\"rtl\"; "
-        "use 'inline-start' instead"]
+        "space.card.padding-left names the physical side 'left'; left and right swap under "
+        "dir=\"rtl\" and top and bottom depend on the writing mode, so token paths use logical "
+        "names: use 'inline-start' instead"]
+
+
+def test_the_control_gap_floor_is_ours_not_a_wcag_gap():
+    report = gate(_hand(gap_px=4), [], CHECKS, raise_on_fail=False)
+    found = [f for f in report.failures if f.check == "control-gap"]
+    assert found and {f.criterion for f in found} == {"system"}
+    for f in found:
+        assert "our floor between adjacent controls is 8px" in f.message
+        assert "not a gap" in f.message
+        for claim in ("2.5.8 needs", "2.5.8 requires", "2.5.8 sets a gap", "need at least"):
+            assert claim not in f.message
+
+
+def test_physical_direction_message_says_what_each_side_depends_on():
+    ts = generate_space(axes()).tokens
+    ts.add(Token("space.card.margin-bottom", "dimension", "{space.4}", layer="semantic"))
+    found = [p.message for p in validate(ts) if p.rule == "physical-direction"]
+    assert found == [
+        "space.card.margin-bottom names the physical side 'bottom'; left and right swap under "
+        "dir=\"rtl\" and top and bottom depend on the writing mode, so token paths use logical "
+        "names: use 'block-end' instead"]
+    assert "flips under" not in found[0]
+
+
+@pytest.mark.parametrize("name,side", [
+    ("paddingLeft", "left"), ("padding_left", "left"), ("padding-left", "left"),
+    ("PaddingLeft", "left"), ("backToTop", "top"), ("TOP_BAR", "top")])
+def test_physical_words_are_found_in_every_word_form(name, side):
+    ts = generate_space(axes()).tokens
+    ts.add(Token(f"space.card.{name}", "dimension", "{space.4}", layer="semantic"))
+    found = [p.message for p in validate(ts) if p.rule == "physical-direction"]
+    assert len(found) == 1 and f"names the physical side '{side}'" in found[0]
+
+
+@pytest.mark.parametrize("name", ["leftover", "topology", "copyright", "stop", "topbar"])
+def test_words_that_only_contain_a_side_pass(name):
+    ts = generate_space(axes()).tokens
+    ts.add(Token(f"space.card.{name}", "dimension", "{space.4}", layer="semantic"))
+    assert [p for p in validate(ts) if p.rule == "physical-direction"] == []
 
 
 def test_build_system_carries_spacing_and_its_density_css():

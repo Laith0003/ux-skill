@@ -33,7 +33,7 @@ ROLES: Dict[str, Tuple[int, int, int]] = {
 # Roles whose values must grow in this order (a gap inside a group never
 # exceeds the gap between groups, and so on).
 HIERARCHY = ("space.text.gap", "space.group.gap", "space.region.gap")
-MIN_CONTROL_GAP_PX = 8
+MIN_CONTROL_GAP_PX = 8  # our floor between adjacent controls
 
 
 def _px(units: int) -> Dict[str, int]:
@@ -83,8 +83,10 @@ def _control_gap(ts: TokenSet, mode: str) -> List[str]:
     px = _value(ts, "space.control.gap", mode)
     if px >= MIN_CONTROL_GAP_PX:
         return []
-    return [f"space.control.gap ({mode}) is {px:g}px; adjacent controls need at least "
-            f"{MIN_CONTROL_GAP_PX}px between them, so point it at space.2 or larger"]
+    return [f"space.control.gap ({mode}) is {px:g}px; our floor between adjacent controls is "
+            f"{MIN_CONTROL_GAP_PX}px, so point it at space.2 or larger. WCAG 2.5.8 sets a "
+            "minimum target of 24 by 24 CSS px, not a gap; this floor keeps smaller controls "
+            "apart."]
 
 
 def _scale_order(ts: TokenSet, mode: str) -> List[str]:
@@ -115,7 +117,7 @@ def _compact_not_larger(ts: TokenSet, mode: str) -> List[str]:
 
 
 CHECKS: Tuple[Check, ...] = (
-    Check("control-gap", "2.5.8", _control_gap, axes=("density",)),
+    Check("control-gap", "system", _control_gap, axes=("density",)),
     Check("space-scale-order", "system", _scale_order),
     Check("space-hierarchy", "system", _hierarchy, axes=("density",)),
     Check("compact-not-larger", "system", _compact_not_larger, axes=("density",)),

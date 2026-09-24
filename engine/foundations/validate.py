@@ -20,10 +20,15 @@ LAYERS = ("primitive", "semantic")
 
 _SEGMENT = re.compile(r"[A-Za-z0-9_-]+")
 
-# Physical sides flip meaning under dir="rtl"; directional tokens use the
-# logical words (inline-start, inline-end, block-start, block-end).
+# Left and right swap under dir="rtl" and top and bottom depend on the
+# writing mode, so directional tokens use the logical words (inline-start,
+# inline-end, block-start, block-end). The ban covers every use of the four
+# words; a path that means something else by one (a top bar, a z-order top)
+# is renamed (app-bar, order.front) rather than allowed.
 _PHYSICAL = {"left": "inline-start", "right": "inline-end", "top": "block-start",
              "bottom": "block-end"}
+# Words inside a segment: split on '-', '_' and a lower-to-upper case change.
+_WORD_BREAK = re.compile(r"[-_]|(?<=[a-z0-9])(?=[A-Z])")
 
 
 @dataclass(frozen=True)
@@ -76,11 +81,12 @@ def _check_paths(ts: TokenSet) -> List[Problem]:
                 out.append(Problem(path, "bad-name",
                     f"{path} has segment {seg!r}; path segments may use only letters, "
                     "digits, '_' and '-', so rename it"))
-            for word in seg.lower().split("-"):
+            for word in (w.lower() for w in _WORD_BREAK.split(seg)):
                 if word in _PHYSICAL:
                     out.append(Problem(path, "physical-direction",
-                        f"{path} names the physical side '{word}', which flips under "
-                        f"dir=\"rtl\"; use '{_PHYSICAL[word]}' instead"))
+                        f"{path} names the physical side '{word}'; left and right swap under "
+                        f"dir=\"rtl\" and top and bottom depend on the writing mode, so token "
+                        f"paths use logical names: use '{_PHYSICAL[word]}' instead"))
         for i in range(1, len(segments)):
             prefix = ".".join(segments[:i])
             if prefix in defined:
