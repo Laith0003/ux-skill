@@ -19,11 +19,11 @@ reported once by the build's role-types check and skipped here.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check
-from engine.foundations.tokens import Token, TokenSet
+from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
 from engine.synthesizer.axes import AxisValues
 
 # type_personality band -> (Latin face, Arabic face)
@@ -53,6 +53,7 @@ HIERARCHY = ("type.text.hero", "type.text.heading-1", "type.text.heading-2",
              "type.text.heading-3", "type.text.body")
 MIN_BODY_PX, MIN_FINE_PX, MIN_READING_LEADING = 16, 12, 1.5
 FACES = ("latin", "arabic", "code")
+ARABIC_FACE = "type.face.arabic"
 # Role path -> the token type the checks read; the build's role-types
 # check reports any other type once, and the checks below skip it.
 ROLE_TYPES: Dict[str, str] = {
@@ -201,14 +202,26 @@ def _tracking(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
+def _first(family: Any) -> str:
+    return family if isinstance(family, str) else family[0]
+
+
 def _arabic(ts: TokenSet, mode: str) -> List[str]:
-    if "direction:rtl" not in mode:
+    """Under rtl every text role but code reads the Arabic face, at the
+    Arabic size, with taller lines and no letter spacing. A set without
+    type.face.arabic is Latin-only and has nothing to check."""
+    if "direction:rtl" not in mode or not _typed(ts, ARABIC_FACE):
         return []
+    arabic_face = ts.resolve(ARABIC_FACE, mode)
     out = []
     for role in _roles(ts, ROLES):
+        if ROLES[role][4] == "code":
+            continue  # code keeps its monospace face in both directions
         rtl, ltr = ts.resolve(role, mode), ts.resolve(role, "direction:ltr")
-        if rtl["fontFamily"] == ltr["fontFamily"]:
-            continue  # no Arabic variant (arabic=False), or the code face in both directions
+        if rtl["fontFamily"] != arabic_face:
+            out.append(f"{role} (direction:rtl) is set in {_first(rtl['fontFamily'])}, not "
+                       f"{ARABIC_FACE}; Arabic text needs its own face, so point its "
+                       f"direction:rtl fontFamily at {ARABIC_FACE}")
         if rtl["letterSpacing"]["value"] != 0:
             out.append(f"{role} (direction:rtl) spaces letters by "
                        f"{rtl['letterSpacing']['value']:g}px; letter spacing breaks Arabic "
@@ -225,11 +238,46 @@ def _arabic(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
+def _size_source(ts: TokenSet, role: str, mode: str) -> Optional[str]:
+    """The token holding the literal a role's fontSize resolves to in one
+    context, following aliases through the role and the field; None when
+    the role writes the size inline."""
+    raw, path = ts.raw(role, mode), role
+    while is_alias(raw):
+        path = alias_target(raw)
+        raw = ts.raw(path, mode)
+    field = raw["fontSize"]
+    source = None
+    while is_alias(field):
+        source = alias_target(field)
+        field = ts.raw(source, mode)
+    return source
+
+
 def _rem_sizes(ts: TokenSet, mode: str) -> List[str]:
-    return [f"{t.path} is in {t.value['unit']}; sizes in rem follow the reader's default text "
-            "size, so express it in rem"
-            for t in ts.tokens() if t.path.startswith("type.size.") and t.type == "dimension"
-            and isinstance(t.value, dict) and t.value.get("unit") != "rem"]
+    """Every text role's fontSize in rem in each direction, wherever it
+    points; then, once, any px step in the size tree no role reaches."""
+    out, named = [], set()
+    for role in _roles(ts, ROLES):
+        size = ts.resolve(role, mode)["fontSize"]
+        if size["unit"] == "rem":
+            continue
+        source = _size_source(ts, role, mode)
+        named.add(source)
+        where = f" through {source}" if source else ""
+        fix = f"express {source} in rem" if source else "write it in rem"
+        out.append(f"{role} ({mode}) is {size['value']:g}{size['unit']}{where}; sizes in rem "
+                   "follow the reader's default text size, so point its fontSize at a size in "
+                   f"rem or {fix}")
+    if "direction:rtl" in mode:
+        return out
+    for role in _roles(ts, ROLES):
+        named.add(_size_source(ts, role, "direction:rtl"))
+    return out + [f"{t.path} is in {t.value['unit']}; sizes in rem follow the reader's default "
+                  "text size, so express it in rem"
+                  for t in ts.tokens() if t.path.startswith("type.size.")
+                  and t.type == "dimension" and t.path not in named
+                  and isinstance(t.value, dict) and t.value.get("unit") != "rem"]
 
 
 def _hierarchy(ts: TokenSet, mode: str) -> List[str]:
@@ -248,7 +296,7 @@ CHECKS: Tuple[Check, ...] = (
     Check("reading-leading", "1.4.8", _leading, axes=("direction",)),
     Check("reading-tracking", "system", _tracking, axes=("direction",)),
     Check("arabic-text", "system", _arabic, axes=("direction",)),
-    Check("rem-sizes", "system", _rem_sizes),
+    Check("rem-sizes", "system", _rem_sizes, axes=("direction",)),
     Check("type-hierarchy", "system", _hierarchy, axes=("direction",)),
 )
 
