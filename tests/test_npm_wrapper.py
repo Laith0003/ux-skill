@@ -52,3 +52,96 @@ def test_the_wrapper_runs_through_a_symlink(tmp_path):
     out = subprocess.run(["node", str(link), "--version"], capture_output=True, text=True,
                          cwd=tmp_path, timeout=60)
     assert "version" in (out.stdout + out.stderr).lower()
+
+
+# ------------------------------------------------ the pip last resort
+#
+# A temp PATH holds only shims: an old `uxskill` that reports 3.2.0, a fake
+# `python3` that logs each call, and the real `which`. No pipx, so the
+# wrapper reaches its last resort, pip install --user.
+
+_OLD_UXSKILL = """#!/bin/sh
+echo "uxskill $*" >> "$LOG"
+echo "uxskill, version 3.2.0"
+"""
+
+_PYTHON3 = """#!/bin/sh
+echo "python3 $*" >> "$LOG"
+if [ "$1" = "-m" ] && [ "$2" = "pip" ]; then exit "${PIP_EXIT:-0}"; fi
+if [ "$1" = "-m" ] && [ "$2" = "engine.cli.main" ]; then
+  if [ "$3" = "--version" ]; then echo "python -m engine.cli.main, version $ENGINE_VERSION"; exit 0; fi
+  echo "engine ran"; exit 0
+fi
+exit 3
+"""
+
+
+def _shim(folder, name, text):
+    path = folder / name
+    path.write_text(text)
+    path.chmod(0o755)
+
+
+def _run_packaged(tmp_path, *, python3=True, pip_exit=0, engine_version=None):
+    """Run the wrapper as npm installs it (bin/ and package.json, no
+    engine/ beside it) with PATH limited to the shims."""
+    pkg = tmp_path / "pkg"
+    (pkg / "bin").mkdir(parents=True)
+    shutil.copy(WRAPPER, pkg / "bin" / "uxskill.mjs")
+    shutil.copy(ROOT / "package.json", pkg / "package.json")
+    shims = tmp_path / "shims"
+    shims.mkdir()
+    (shims / "which").symlink_to(shutil.which("which"))
+    _shim(shims, "uxskill", _OLD_UXSKILL)
+    if python3:
+        _shim(shims, "python3", _PYTHON3)
+    log = tmp_path / "calls.log"
+    log.write_text("")
+    version = _node("pythonSpec()")
+    env = {"PATH": str(shims), "HOME": str(tmp_path), "LOG": str(log),
+           "PIP_EXIT": str(pip_exit), "ENGINE_VERSION": engine_version or version}
+    out = subprocess.run([shutil.which("node"), str(pkg / "bin" / "uxskill.mjs"), "system",
+                          "build", "--brand", "3366FF", "--out", "ds"],
+                         capture_output=True, text=True, cwd=tmp_path, env=env, timeout=60)
+    return out, log.read_text().splitlines(), version
+
+
+needs_which = pytest.mark.skipif(shutil.which("which") is None, reason="which is not installed")
+
+
+@needs_which
+def test_after_pip_installs_it_runs_the_module_not_an_older_uxskill_on_path(tmp_path):
+    out, calls, version = _run_packaged(tmp_path)
+    assert out.returncode == 0, out.stderr
+    assert "engine ran" in out.stdout
+    assert f"python3 -m pip install --user --quiet uxskill=={version}" in calls
+    assert "python3 -m engine.cli.main system build --brand 3366FF --out ds" in calls
+    assert [c for c in calls if c.startswith("uxskill")] == ["uxskill --version"], calls
+
+
+@needs_which
+def test_a_failed_pip_install_says_pip_failed_and_gives_the_pinned_line(tmp_path):
+    out, calls, version = _run_packaged(tmp_path, pip_exit=1)
+    assert out.returncode == 1
+    assert f"pip could not install uxskill=={version}" in out.stderr
+    assert f"pipx install uxskill=={version}" in out.stderr
+    assert "Python runtime" not in out.stderr
+    assert not any("engine.cli.main" in c or c.startswith("uxskill system") for c in calls)
+
+
+@needs_which
+def test_without_python3_it_says_there_is_no_python_runtime(tmp_path):
+    out, calls, version = _run_packaged(tmp_path, python3=False)
+    assert out.returncode == 1
+    assert "no Python runtime" in out.stderr and f"uxskill=={version}" in out.stderr
+    assert not any(c.startswith("uxskill system") for c in calls)
+
+
+@needs_which
+def test_it_never_runs_a_module_of_another_version(tmp_path):
+    out, calls, version = _run_packaged(tmp_path, engine_version="3.2.0")
+    assert out.returncode == 1
+    assert "3.2.0" in out.stderr and f"uxskill=={version}" in out.stderr
+    assert "engine ran" not in out.stdout
+    assert not any(c.startswith(("uxskill system", "python3 -m engine.cli.main system"))
+                   for c in calls)

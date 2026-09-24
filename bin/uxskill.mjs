@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 /**
- * ux-skill — Node wrapper that delegates to the Python engine.
+ * ux-skill: Node wrapper that delegates to the Python engine.
  *
  * Resolution order:
  *   1. `python3 -m engine.cli.main`      (if `engine/` is sibling to this script,
  *                                          i.e. running from the repo)
  *   2. `uxskill` console script           (if installed via pip, same version)
  *   3. `pipx run --spec uxskill==X`        (no Python install on path; one-shot)
- *   4. `pip install --user uxskill==X`     (last resort)
+ *   4. `pip install --user uxskill==X`     (last resort), then
+ *      `python3 -m engine.cli.main`       through that same python3, once it
+ *                                          reports version X
  *
  * X is this package's own version in Python form (4.0.0-beta.1 is 4.0.0b1).
  * npm ships only bin/, and pip skips pre-releases unless pinned, so without
@@ -88,22 +90,40 @@ async function main() {
       ["run", "--spec", `uxskill==${version}`, "uxskill", ...args]));
   }
 
-  // 4. python3 -m pip install --user, pinned (last resort)
-  if (await which("python3")) {
-    console.error(`ux-skill: bootstrapping via \`pip install --user uxskill==${version}\`...`);
-    const installCode = await spawnPromise("python3",
-      ["-m", "pip", "install", "--user", "--quiet", `uxskill==${version}`]);
-    if (installCode === 0 && (await which("uxskill"))) {
-      process.exit(await spawnPromise("uxskill", args));
-    }
+  // 4. python3 -m pip install --user, pinned (last resort). Then run the
+  // module through the same python3, once it reports this version: a
+  // `uxskill` found on PATH may be an older install that still comes first.
+  const pinned = `uxskill==${version}`;
+  if (!(await which("python3"))) {
+    console.error(
+      "ux-skill: no Python runtime found (python3 is not on PATH). Install Python 3.9+, " +
+      `then run:\n  pipx install ${pinned}\n` +
+      "or visit https://uxskill.laithjunaidy.com for help."
+    );
+    process.exit(1);
   }
-
-  console.error(
-    "ux-skill: could not find a Python runtime. Install Python 3.9+ or run:\n" +
-    `  pipx install uxskill==${pythonSpec()}\n` +
-    "or visit https://uxskill.laithjunaidy.com for help."
-  );
-  process.exit(1);
+  console.error(`ux-skill: bootstrapping via \`python3 -m pip install --user ${pinned}\`...`);
+  const installCode = await spawnPromise("python3",
+    ["-m", "pip", "install", "--user", "--quiet", pinned]);
+  if (installCode !== 0) {
+    console.error(
+      `ux-skill: pip could not install ${pinned} (exit code ${installCode}); pip's own ` +
+      "message is above. Install it yourself, then run the command again:\n" +
+      `  pipx install ${pinned}\n` +
+      `or, inside a virtual environment:\n  pip install ${pinned}`
+    );
+    process.exit(1);
+  }
+  const loaded = (await capture("python3", ["-m", "engine.cli.main", "--version"])).trim();
+  if (!loaded.endsWith(` ${version}`)) {
+    console.error(
+      `ux-skill: pip installed ${pinned}, but python3 loads ` +
+      `${loaded ? `"${loaded}"` : "no uxskill engine"}, so the command was not run. ` +
+      `Install it where it runs on its own, then run the command again:\n  pipx install ${pinned}`
+    );
+    process.exit(1);
+  }
+  process.exit(await spawnPromise("python3", ["-m", "engine.cli.main", ...args]));
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {
