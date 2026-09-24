@@ -7,6 +7,18 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [3.2.1] - 2026-09-24 - **MCP STARTS AGAIN**
+
+### Fixed
+- The MCP server failed to start on a fresh install. `pip install 'uxskill[mcp]'`
+  pulled mcp 2.x, which removed the decorator API the server uses, so `ux-mcp`
+  stopped with `'Server' object has no attribute 'list_tools'`. The mcp
+  dependency is now `mcp>=1.10,<2`.
+- A test now builds the real MCP server whenever mcp is installed, so an
+  incompatible mcp release fails CI instead of reaching users.
+
+---
+
 ## [3.2.0] - 2026-09-23 - **SEES THE PAGE**
 
 The linter read code. Now it also looks at the rendered page, because some
