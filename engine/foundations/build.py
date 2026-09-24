@@ -18,7 +18,7 @@ import numbers
 from dataclasses import dataclass
 from typing import Any, Iterable, List, Optional, Sequence, Tuple
 
-from engine.foundations import border, color, elevation, layout, motion, radius, space
+from engine.foundations import border, color, elevation, layout, motion, radius, space, typography
 from engine.foundations.color_math import hex_to_rgb
 from engine.foundations.foundation import BrandInputs, Foundation, mistyped, role_types_check
 from engine.foundations.gate import GateFailure, GateReport, gate
@@ -29,7 +29,8 @@ from engine.synthesizer.axes import AxisValues
 # Build order. Each foundation task appends its FOUNDATION here.
 FOUNDATIONS: Tuple[Foundation, ...] = (color.FOUNDATION, space.FOUNDATION, radius.FOUNDATION,
                                       border.FOUNDATION, elevation.FOUNDATION,
-                                      motion.FOUNDATION, layout.FOUNDATION)
+                                      motion.FOUNDATION, layout.FOUNDATION,
+                                      typography.FOUNDATION)
 
 # The color gate measures the focus ring against surfaces only. That is
 # enough because the border foundation guarantees a ring offset; a build
