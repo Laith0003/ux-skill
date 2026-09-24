@@ -7,6 +7,7 @@ last stable release. These tests pin the version mapping and the pin itself.
 import json
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -57,7 +58,8 @@ def test_the_wrapper_runs_through_a_symlink(tmp_path):
 # ------------------------------------------------ the pip last resort
 #
 # A temp PATH holds only shims: an old `uxskill` that reports 3.2.0, a fake
-# `python3` that logs each call, and the real `which`. No pipx, so the
+# `python3` that logs each call (the engine's CLI as `python3 engine ...`),
+# and the real `which`. No pipx, so the
 # wrapper reaches its last resort, pip install --user.
 
 _OLD_UXSKILL = """#!/bin/sh
@@ -66,12 +68,15 @@ echo "uxskill, version 3.2.0"
 """
 
 _PYTHON3 = """#!/bin/sh
-echo "python3 $*" >> "$LOG"
-if [ "$1" = "-m" ] && [ "$2" = "pip" ]; then exit "${PIP_EXIT:-0}"; fi
-if [ "$1" = "-m" ] && [ "$2" = "engine.cli.main" ]; then
-  if [ "$3" = "--version" ]; then echo "python -m engine.cli.main, version $ENGINE_VERSION"; exit 0; fi
+if [ "$1" = "-c" ]; then
+  case "$2" in *"from engine.cli.main import cli"*) ;; *) exit 3;; esac
+  shift 2
+  echo "python3 engine $*" >> "$LOG"
+  if [ "$1" = "--version" ]; then echo "uxskill, version $ENGINE_VERSION"; exit 0; fi
   echo "engine ran"; exit 0
 fi
+echo "python3 $*" >> "$LOG"
+if [ "$1" = "-m" ] && [ "$2" = "pip" ]; then exit "${PIP_EXIT:-0}"; fi
 exit 3
 """
 
@@ -115,7 +120,7 @@ def test_after_pip_installs_it_runs_the_module_not_an_older_uxskill_on_path(tmp_
     assert out.returncode == 0, out.stderr
     assert "engine ran" in out.stdout
     assert f"python3 -m pip install --user --quiet uxskill=={version}" in calls
-    assert "python3 -m engine.cli.main system build --brand 3366FF --out ds" in calls
+    assert "python3 engine system build --brand 3366FF --out ds" in calls
     assert [c for c in calls if c.startswith("uxskill")] == ["uxskill --version"], calls
 
 
@@ -126,7 +131,7 @@ def test_a_failed_pip_install_says_pip_failed_and_gives_the_pinned_line(tmp_path
     assert f"pip could not install uxskill=={version}" in out.stderr
     assert f"pipx install uxskill=={version}" in out.stderr
     assert "Python runtime" not in out.stderr
-    assert not any("engine.cli.main" in c or c.startswith("uxskill system") for c in calls)
+    assert not any(c.startswith(("python3 engine", "uxskill system")) for c in calls)
 
 
 @needs_which
@@ -143,5 +148,50 @@ def test_it_never_runs_a_module_of_another_version(tmp_path):
     assert out.returncode == 1
     assert "3.2.0" in out.stderr and f"uxskill=={version}" in out.stderr
     assert "engine ran" not in out.stdout
-    assert not any(c.startswith(("uxskill system", "python3 -m engine.cli.main system"))
+    assert not any(c.startswith(("uxskill system", "python3 engine system"))
                    for c in calls)
+
+
+# ------------------------------------------------ a project's own engine/
+#
+# The last resort runs the engine from the user's project folder, and a
+# project may have its own top-level engine/ package. It must never run.
+
+_REAL_PYTHON3 = """#!/bin/sh
+if [ "$1" = "-m" ] && [ "$2" = "pip" ]; then exit 0; fi
+PYTHONPATH="$ENGINE_ROOT" exec "$REAL_PYTHON" "$@"
+"""
+
+_PROJECT_ENGINE = """import pathlib, sys
+pathlib.Path("PROJECT_ENGINE_RAN").write_text(" ".join(sys.argv[1:]))
+print("project engine, version " + sys.argv[-1])
+"""
+
+
+@needs_which
+def test_a_project_with_its_own_engine_package_does_not_shadow_ours(tmp_path):
+    pkg = tmp_path / "pkg"
+    (pkg / "bin").mkdir(parents=True)
+    shutil.copy(WRAPPER, pkg / "bin" / "uxskill.mjs")
+    shutil.copy(ROOT / "package.json", pkg / "package.json")
+    shims = tmp_path / "shims"
+    shims.mkdir()
+    (shims / "which").symlink_to(shutil.which("which"))
+    _shim(shims, "uxskill", _OLD_UXSKILL)
+    _shim(shims, "python3", _REAL_PYTHON3)
+    project = tmp_path / "project"
+    (project / "engine" / "cli").mkdir(parents=True)
+    (project / "engine" / "__init__.py").write_text("")
+    (project / "engine" / "cli" / "__init__.py").write_text("")
+    (project / "engine" / "cli" / "main.py").write_text(_PROJECT_ENGINE)
+    env = {"PATH": str(shims), "HOME": str(tmp_path), "LOG": str(tmp_path / "calls.log"),
+           "REAL_PYTHON": sys.executable, "ENGINE_ROOT": str(ROOT)}
+    out = subprocess.run([shutil.which("node"), str(pkg / "bin" / "uxskill.mjs"), "--no-pretty",
+                          "system", "build", "--brand", "3366FF", "--out", "ds"],
+                         capture_output=True, text=True, cwd=project, env=env, timeout=120)
+    assert out.returncode == 0, out.stderr
+    assert not (project / "PROJECT_ENGINE_RAN").exists()
+    # A relative --out still lands in the project folder.
+    assert {p.name for p in (project / "ds").iterdir()} == {
+        "tokens.json", "tokens.css", "system-report.md"}
+    assert json.loads(out.stdout)["status"] == "written"
