@@ -1,0 +1,80 @@
+# Status banner: says what happened, inline. Every value is a semantic role.
+name: status-banner
+status: experimental
+category: feedback
+description: Tells people, inside the page, what happened or what needs attention, with at most one action and an optional dismiss.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: icon, rtlBehavior: logical}
+  - {name: title, rtlBehavior: logical}
+  - {name: body, rtlBehavior: logical}
+  - {name: action, rtlBehavior: logical}
+  - {name: dismiss, rtlBehavior: logical}
+variants:
+  - {name: status, values: [info, success, warning, danger], default: info}
+states: [default, focus]
+tokens:
+  - {part: container, property: fill, role: color.status.info.soft, when: {status: info}}
+  - {part: icon, property: icon, role: color.status.info.strong, when: {status: info}}
+  - {part: container, property: fill, role: color.status.success.soft, when: {status: success}}
+  - {part: icon, property: icon, role: color.status.success.strong, when: {status: success}}
+  - {part: container, property: fill, role: color.status.warning.soft, when: {status: warning}}
+  - {part: icon, property: icon, role: color.status.warning.strong, when: {status: warning}}
+  - {part: container, property: fill, role: color.status.danger.soft, when: {status: danger}}
+  - {part: icon, property: icon, role: color.status.danger.strong, when: {status: danger}}
+  - {part: title, property: text, role: color.text.default}
+  - {part: title, property: font, role: type.text.ui}
+  - {part: body, property: text, role: color.text.default}
+  - {part: body, property: font, role: type.text.body-small}
+  - {part: action, property: text, role: color.text.link}
+  - {part: action, property: font, role: type.text.ui}
+  - {part: container, property: radius, role: radius.card}
+  - {part: container, property: padding-inline, role: space.card.padding}
+  - {part: container, property: padding-block, role: space.card.padding}
+  - {part: container, property: gap, role: space.control.gap}
+  - {part: action, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: action, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: action, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+contrast:
+  - {fg: color.text.default, bg: color.status.info.soft, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.status.success.soft, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.status.warning.soft, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.status.danger.soft, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.link, bg: color.status.info.soft, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.link, bg: color.status.success.soft, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.link, bg: color.status.warning.soft, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.link, bg: color.status.danger.soft, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.status.info.strong, bg: color.status.info.soft, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.status.success.strong, bg: color.status.success.soft, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.status.warning.strong, bg: color.status.warning.soft, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.status.danger.strong, bg: color.status.danger.soft, minimum: 3, criterion: "1.4.11"}
+  # The ring sits on the tinted fill. 3:1 holds in every context; the
+  # high-contrast 4.5:1 floor cannot hold against the tint, the page and
+  # the ring's other duties at once, so this pairing keeps 3:1 there.
+  - {fg: color.focus.ring, bg: color.status.info.soft, minimum: 3, criterion: "1.4.11", high: 3}
+  - {fg: color.focus.ring, bg: color.status.success.soft, minimum: 3, criterion: "1.4.11", high: 3}
+  - {fg: color.focus.ring, bg: color.status.warning.soft, minimum: 3, criterion: "1.4.11", high: 3}
+  - {fg: color.focus.ring, bg: color.status.danger.soft, minimum: 3, criterion: "1.4.11", high: 3}
+surfaces: [color.surface.page, color.surface.card, color.surface.raised, color.surface.sunken]
+a11y:
+  target: none
+  label: localized
+  cue: each status has its own icon shape and the title names the status in words
+copy:
+  default:
+    - The title says what happened in one clause
+    - The body says what to do next, using the real value, such as the file name or the amount
+    - A danger banner names the cause and the fix; never apologize and never blame the person
+    - The action is one verb for the next step, such as Retry or Review
+usage:
+  do:
+    - Show one banner per region, the most severe first
+    - Keep a danger banner until the problem is fixed; let the others be dismissed
+    - Announce a danger banner at once to assistive technology and the others politely
+  dont:
+    - Do not use a banner for a success the result already shows
+    - Do not tell status apart by color alone; the icon and the title carry it too
+    - Do not put more than one action in a banner
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

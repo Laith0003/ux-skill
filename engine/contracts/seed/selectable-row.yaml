@@ -1,0 +1,77 @@
+# Selectable row: one item in a list a person can choose. Every value is
+# a semantic role.
+name: selectable-row
+status: experimental
+category: selection
+description: One item in a list that a person can choose, alone or with others, showing its state by a tinted fill, a heavier edge and a check.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: leading, rtlBehavior: logical}
+  - {name: content, rtlBehavior: logical}
+  - {name: trailing, rtlBehavior: logical}
+  - {name: chevron, rtlBehavior: mirror}
+variants:
+  - {name: selection, values: [single, multiple], default: single}
+states: [default, hover, pressed, focus, selected, disabled]
+tokens:
+  - {part: content, property: text, role: color.text.default}
+  - {part: content, property: font, role: type.text.body}
+  - {part: trailing, property: text, role: color.text.muted}
+  - {part: trailing, property: font, role: type.text.body-small}
+  - {part: container, property: fill, role: color.surface.sunken, state: hover}
+  - {part: container, property: border-width, role: border.outline, state: hover}
+  - {part: container, property: border-color, role: color.line.input, state: hover}
+  - {part: container, property: fill, role: color.surface.sunken, state: pressed}
+  - {part: container, property: border-width, role: border.outline, state: pressed}
+  - {part: container, property: border-color, role: color.line.input, state: pressed}
+  - {part: container, property: fill, role: color.surface.selected, state: selected}
+  - {part: container, property: border-width, role: border.active, state: selected}
+  - {part: container, property: border-color, role: color.line.selected, state: selected}
+  - {part: leading, property: icon, role: color.line.selected, state: selected}
+  - {part: content, property: text, role: color.text.disabled, state: disabled}
+  - {part: container, property: radius, role: radius.control}
+  - {part: container, property: padding-inline, role: space.control.padding-inline}
+  - {part: container, property: padding-block, role: space.control.padding-block}
+  - {part: container, property: gap, role: space.control.gap}
+  - {part: container, property: stack-gap, role: space.list.gap}
+  - {part: container, property: min-size, role: layout.target.min}
+  - {part: container, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: container, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: container, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+contrast:
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.sunken, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.selected, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: color.surface.selected, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.selected, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.selected, bg: color.surface.selected, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.focus.ring, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  # A focused row can also be selected, so the ring meets the tinted fill.
+  # 3:1 holds in every context; the high-contrast 4.5:1 floor does not
+  # hold against the tint for every brand, so this pairing keeps 3:1.
+  - {fg: color.focus.ring, bg: color.surface.selected, minimum: 3, criterion: "1.4.11", high: 3}
+surfaces: [color.surface.page, color.surface.card, color.surface.raised]
+a11y:
+  target: layout.target.min
+  label: localized
+  cue: a check mark in the leading slot and a heavier edge show selection, never the tint alone
+copy:
+  default:
+    - Lead with the item's name; put the secondary fact in the trailing slot
+    - Keep the name to one line and let the secondary fact shorten first
+  disabled:
+    - Say why the item cannot be chosen when the reason is not visible
+usage:
+  do:
+    - Show multiple selection with a check box in the leading slot, single selection with a check mark
+    - Let the chevron point to the end of the row, so it flips under right to left
+    - Keep the gap between rows at the list gap; rows at the target size need no extra spacing
+  dont:
+    - Do not show selection by the tinted fill alone
+    - Do not use the hover fill for selection or the selection fill for hover
+    - Do not put a second button inside a row that is itself the target
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

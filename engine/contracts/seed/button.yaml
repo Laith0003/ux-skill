@@ -1,0 +1,104 @@
+# Button: starts an action. Every value is a semantic role; the engine
+# checks each binding and pairing against the built tokens.
+name: button
+status: experimental
+category: action
+description: Starts an action. Primary for the one main action on a view, secondary and ghost for the rest, danger when the action destroys data.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: label, rtlBehavior: logical}
+  - {name: icon, rtlBehavior: logical}
+  - {name: spinner, rtlBehavior: fixed}
+variants:
+  - {name: emphasis, values: [primary, secondary, ghost], default: primary}
+  - {name: intent, values: [neutral, danger], default: neutral}
+states: [default, hover, pressed, focus, disabled, loading]
+tokens:
+  # primary fills and the text on them
+  - {part: container, property: fill, role: color.action.primary, when: {emphasis: primary, intent: neutral}}
+  - {part: container, property: fill, role: color.action.primary-hover, when: {emphasis: primary, intent: neutral}, state: hover}
+  - {part: container, property: fill, role: color.action.primary-pressed, when: {emphasis: primary, intent: neutral}, state: pressed}
+  - {part: label, property: text, role: color.text.on-action, when: {emphasis: primary, intent: neutral}}
+  - {part: container, property: fill, role: color.action.danger, when: {emphasis: primary, intent: danger}}
+  - {part: container, property: fill, role: color.action.danger-hover, when: {emphasis: primary, intent: danger}, state: hover}
+  - {part: container, property: fill, role: color.action.danger-pressed, when: {emphasis: primary, intent: danger}, state: pressed}
+  - {part: label, property: text, role: color.text.on-danger, when: {emphasis: primary, intent: danger}}
+  # secondary: an edge and brand text, the selected surface on hover
+  - {part: container, property: border-width, role: border.outline, when: {emphasis: secondary}}
+  - {part: container, property: border-color, role: color.line.selected, when: {emphasis: secondary, intent: neutral}}
+  - {part: container, property: border-color, role: color.status.danger.strong, when: {emphasis: secondary, intent: danger}}
+  - {part: label, property: text, role: color.text.link, when: {emphasis: secondary, intent: neutral}}
+  - {part: label, property: text, role: color.status.danger.text, when: {emphasis: secondary, intent: danger}}
+  - {part: container, property: fill, role: color.surface.selected, when: {emphasis: secondary, intent: neutral}, state: hover}
+  - {part: container, property: fill, role: color.status.danger.soft, when: {emphasis: secondary, intent: danger}, state: hover}
+  # ghost: text only; on hover the secondary fill and edge appear, since
+  # the tinted fill alone can match a card in high contrast
+  - {part: label, property: text, role: color.text.link, when: {emphasis: ghost, intent: neutral}}
+  - {part: label, property: text, role: color.status.danger.text, when: {emphasis: ghost, intent: danger}}
+  - {part: container, property: fill, role: color.surface.selected, when: {emphasis: ghost, intent: neutral}, state: hover}
+  - {part: container, property: fill, role: color.status.danger.soft, when: {emphasis: ghost, intent: danger}, state: hover}
+  - {part: container, property: border-width, role: border.outline, when: {emphasis: ghost}, state: hover}
+  - {part: container, property: border-color, role: color.line.selected, when: {emphasis: ghost, intent: neutral}, state: hover}
+  - {part: container, property: border-color, role: color.status.danger.strong, when: {emphasis: ghost, intent: danger}, state: hover}
+  # disabled, every emphasis
+  - {part: container, property: fill, role: color.action.disabled, when: {emphasis: primary}, state: disabled}
+  - {part: label, property: text, role: color.text.disabled, state: disabled}
+  # shape, size and type, the same in every state
+  - {part: container, property: radius, role: radius.control}
+  - {part: container, property: padding-inline, role: space.control.padding-inline}
+  - {part: container, property: padding-block, role: space.control.padding-block}
+  - {part: container, property: gap, role: space.control.gap}
+  - {part: container, property: min-size, role: layout.target.min}
+  - {part: label, property: font, role: type.text.ui}
+  # focus and press
+  - {part: container, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: container, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: container, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  - {part: container, property: transition-duration, role: motion.press.duration, state: pressed}
+  - {part: container, property: transition-curve, role: motion.press.curve, state: pressed}
+contrast:
+  - {fg: color.text.on-action, bg: color.action.primary, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.on-action, bg: color.action.primary-hover, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.on-action, bg: color.action.primary-pressed, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.on-danger, bg: color.action.danger, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.on-danger, bg: color.action.danger-hover, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.on-danger, bg: color.action.danger-pressed, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.action.primary, bg: color.surface.page, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.action.danger, bg: color.surface.page, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.text.link, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.link, bg: color.surface.selected, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.line.selected, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.status.danger.text, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.status.danger.text, bg: color.status.danger.soft, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.status.danger.strong, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.focus.ring, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.text.disabled, bg: color.action.disabled, minimum: 1.3, criterion: system, high: 1.3}
+surfaces: [color.surface.page, color.surface.card, color.surface.raised, color.surface.sunken]
+a11y:
+  target: layout.target.min
+  label: localized
+  cue: the label names the action, and a danger button names the loss in its verb
+copy:
+  default:
+    - Start with a verb that names what happens, in the product's language
+    - Add the object only when two actions on one view share a verb
+    - Keep it to one line with no end punctuation
+    - On a destructive action, name what is lost; never offer yes and no
+  disabled:
+    - Keep the same label, and say near the button why it cannot be used when the reason is not visible
+  loading:
+    - Keep the same verb while the spinner runs; never switch to a gerund
+usage:
+  do:
+    - Use one primary button per view, for the action most people take next
+    - Use secondary or ghost for every other action on the same view
+    - Put the icon at the start of the label in both directions; mirror only a glyph that points
+    - Keep the radius the same in every state
+  dont:
+    - Do not use a button to navigate inside running text; use a link
+    - Do not color a button green or amber to signal an outcome; show outcomes in a status banner
+    - Do not change the label while loading
+    - Do not disable a button to hide an error; let the action run and name the problem
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

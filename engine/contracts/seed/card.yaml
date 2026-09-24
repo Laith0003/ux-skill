@@ -1,0 +1,58 @@
+# Card: groups related content on the page. Every value is a semantic role.
+name: card
+status: experimental
+category: container
+description: Groups related content into one bounded block on the page, at the standard level or lifted above its siblings.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: media, rtlBehavior: logical}
+  - {name: title, rtlBehavior: logical}
+  - {name: body, rtlBehavior: logical}
+  - {name: actions, rtlBehavior: logical}
+variants:
+  - {name: level, values: [standard, lifted], default: standard}
+states: [default]
+tokens:
+  - {part: container, property: fill, role: color.surface.card, when: {level: standard}}
+  - {part: container, property: shadow, role: elevation.card, when: {level: standard}}
+  - {part: container, property: fill, role: color.surface.raised, when: {level: lifted}}
+  - {part: container, property: shadow, role: elevation.lifted, when: {level: lifted}}
+  - {part: container, property: border-width, role: border.outline}
+  - {part: container, property: border-color, role: color.line.subtle}
+  - {part: container, property: radius, role: radius.card}
+  - {part: container, property: padding-inline, role: space.card.padding}
+  - {part: container, property: padding-block, role: space.card.padding}
+  - {part: container, property: gap, role: space.group.gap}
+  - {part: title, property: text, role: color.text.default}
+  - {part: title, property: font, role: type.text.heading-3}
+  - {part: title, property: stack-gap, role: space.text.gap}
+  - {part: body, property: text, role: color.text.muted}
+  - {part: body, property: font, role: type.text.body}
+  - {part: actions, property: gap, role: space.control.gap}
+contrast:
+  - {fg: color.text.default, bg: color.surface.card, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: color.surface.card, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.raised, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: color.surface.raised, minimum: 4.5, criterion: "1.4.3"}
+surfaces: [color.surface.page, color.surface.sunken]
+a11y:
+  target: none
+  label: localized
+  cue: none
+copy:
+  default:
+    - The title names what the card holds in a short phrase, not a sentence
+    - The body gives one or two facts that help a person decide whether to open it
+usage:
+  do:
+    - Keep an edge on every card; in high contrast the card and the page are the same color
+    - Round inner media by the card radius minus the padding, never by the card radius itself
+    - Put actions at the end of the card in reading order
+    - Use lifted for one card that must stand above its siblings, not for several
+  dont:
+    - Do not nest a card inside a card; use a group gap or a separator
+    - Do not rely on the shadow alone to show where the card ends
+    - Do not make the whole card and a button inside it both clickable
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

@@ -1,0 +1,86 @@
+# Text field: one value a person types. Every value is a semantic role.
+name: text-field
+status: experimental
+category: input
+description: Takes one value a person types, with a visible label, optional helper text and a message that names the problem and the fix.
+parts:
+  - {name: label, rtlBehavior: logical}
+  - {name: input, rtlBehavior: logical}
+  - {name: placeholder, rtlBehavior: logical}
+  - {name: helper, rtlBehavior: logical}
+  - {name: message, rtlBehavior: logical}
+  - {name: icon, rtlBehavior: logical}
+variants:
+  - {name: lines, values: [single, multiple], default: single}
+states: [default, hover, focus, disabled, error]
+tokens:
+  - {part: input, property: fill, role: color.surface.card}
+  - {part: input, property: border-width, role: border.outline}
+  - {part: input, property: border-color, role: color.line.input}
+  - {part: input, property: text, role: color.text.default}
+  - {part: input, property: font, role: type.text.body}
+  - {part: input, property: radius, role: radius.control}
+  - {part: input, property: padding-inline, role: space.control.padding-inline}
+  - {part: input, property: padding-block, role: space.control.padding-block}
+  - {part: input, property: min-size, role: layout.target.min}
+  - {part: input, property: max-width, role: layout.measure.form}
+  - {part: placeholder, property: text, role: color.text.muted}
+  - {part: label, property: text, role: color.text.default}
+  - {part: label, property: font, role: type.text.ui}
+  - {part: label, property: stack-gap, role: space.text.gap}
+  - {part: helper, property: text, role: color.text.muted}
+  - {part: helper, property: font, role: type.text.fine}
+  # focus
+  - {part: input, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: input, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: input, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  # error: a heavier edge in the danger color, an icon and a message
+  - {part: input, property: border-width, role: border.emphasis, state: error}
+  - {part: input, property: border-color, role: color.status.danger.strong, state: error}
+  - {part: icon, property: icon, role: color.status.danger.strong, state: error}
+  - {part: message, property: text, role: color.status.danger.text, state: error}
+  - {part: message, property: font, role: type.text.fine, state: error}
+  # disabled
+  - {part: input, property: fill, role: color.surface.sunken, state: disabled}
+  - {part: input, property: border-color, role: color.line.subtle, state: disabled}
+  - {part: input, property: text, role: color.text.disabled, state: disabled}
+contrast:
+  - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.input, bg: color.surface.card, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.text.default, bg: color.surface.card, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: color.surface.card, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.status.danger.strong, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.status.danger.strong, bg: color.surface.card, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.status.danger.text, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.focus.ring, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+surfaces: [color.surface.page, color.surface.card, color.surface.raised, color.surface.sunken]
+a11y:
+  target: layout.target.min
+  label: localized
+  cue: an error adds an icon, a heavier edge and a message that names the problem, never color alone
+copy:
+  default:
+    - The label names the value in two or three words, with no colon and no ending punctuation
+    - Helper text says the format or the limit before the person types, not after
+    - A placeholder shows an example value and never replaces the label
+  disabled:
+    - Say near the field why it cannot be changed when the reason is not visible
+  error:
+    - Name the field and what is wrong with the value, then the fix, in one sentence
+    - Use the value the person typed when it helps, for example the number of characters over the limit
+    - Never apologize, never blame, never write that the input is invalid without saying why
+usage:
+  do:
+    - Keep the label visible above the field in both directions
+    - Size the field for the longest expected value in the longest language, since Arabic runs 10 to 25 percent longer
+    - Let phone numbers, codes and email addresses run left to right inside a right-to-left form
+    - Show the error when the person leaves the field or submits, not on every keystroke
+  dont:
+    - Do not use the placeholder as the label
+    - Do not mark an error with a red border alone
+    - Do not place a field on the selected surface; its edge does not reach 3:1 there
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

@@ -1,0 +1,64 @@
+# Dialog: stops the flow for one decision. Every value is a semantic role.
+name: dialog
+status: experimental
+category: overlay
+description: Stops the current flow for one decision or one short task, above a scrim that dims the page, and returns focus where it was when it closes.
+parts:
+  - {name: scrim, rtlBehavior: fixed}
+  - {name: container, rtlBehavior: logical}
+  - {name: title, rtlBehavior: logical}
+  - {name: body, rtlBehavior: logical}
+  - {name: actions, rtlBehavior: logical}
+  - {name: close, rtlBehavior: logical}
+variants:
+  - {name: purpose, values: [standard, destructive], default: standard}
+states: [default]
+tokens:
+  - {part: scrim, property: fill, role: color.scrim}
+  - {part: scrim, property: layer, role: elevation.order.overlay}
+  - {part: container, property: layer, role: elevation.order.dialog}
+  - {part: container, property: fill, role: color.surface.raised}
+  - {part: container, property: shadow, role: elevation.dialog}
+  - {part: container, property: border-width, role: border.outline}
+  - {part: container, property: border-color, role: color.line.subtle}
+  - {part: container, property: radius, role: radius.dialog}
+  - {part: container, property: padding-inline, role: space.card.padding}
+  - {part: container, property: padding-block, role: space.card.padding}
+  - {part: container, property: gap, role: space.group.gap}
+  - {part: container, property: max-width, role: layout.measure.form}
+  - {part: container, property: enter-duration, role: motion.reveal.duration}
+  - {part: container, property: enter-curve, role: motion.reveal.curve}
+  - {part: container, property: enter-distance, role: motion.reveal.distance}
+  - {part: container, property: exit-duration, role: motion.dismiss.duration}
+  - {part: container, property: exit-curve, role: motion.dismiss.curve}
+  - {part: container, property: exit-distance, role: motion.dismiss.distance}
+  - {part: title, property: text, role: color.text.default}
+  - {part: title, property: font, role: type.text.heading-2}
+  - {part: body, property: text, role: color.text.default}
+  - {part: body, property: font, role: type.text.body}
+  - {part: actions, property: gap, role: space.control.gap}
+contrast:
+  - {fg: color.text.default, bg: color.surface.raised, minimum: 4.5, criterion: "1.4.3"}
+surfaces: [color.surface.page]
+a11y:
+  target: none
+  label: localized
+  cue: none
+copy:
+  default:
+    - The title states the decision as a short question or a verb phrase
+    - The body says what happens next and what cannot be undone, in one or two sentences
+    - In a destructive dialog the confirming button names the loss, such as Delete 3 files, and the other keeps things as they are; never yes and no
+usage:
+  do:
+    - Show the scrim and the dialog together and remove them together
+    - Move focus into the dialog when it opens, keep it there, and return it to the control that opened it
+    - Close on the escape key and on the close button; close on a scrim click only when nothing is lost
+    - Put the confirming action at the end of the action row in reading order
+  dont:
+    - Do not open a dialog from a dialog
+    - Do not put a form longer than one short task in a dialog; give it a page
+    - Do not show a dialog to announce success; a status banner or the result itself is enough
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []
