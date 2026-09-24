@@ -1,0 +1,134 @@
+"""Inputs for `uxskill system build` and `ux_system_build`: brand, axes and
+brief. Every error names the input by the caller's label and says the fix."""
+import json
+
+import pytest
+
+from engine.foundations.emit import (
+    NEUTRAL, NEUTRAL_SOURCE, InputError, brief_axes, choose_axes, parse_axes, parse_brand,
+    read_brief,
+)
+from engine.synthesizer.axes import AxisValues, compute_axes
+
+
+@pytest.mark.parametrize("raw,expected", [
+    ("#3366FF", "#3366FF"), ("#3366ff", "#3366FF"), ("3366ff", "#3366FF"),
+    ("#36F", "#3366FF"), ("  #3366FF ", "#3366FF"),
+])
+def test_parse_brand_normalizes(raw, expected):
+    assert parse_brand(raw) == expected
+
+
+@pytest.mark.parametrize("raw", ["blue", "#12345", "#GGGGGG", ""])
+def test_parse_brand_names_the_input_and_the_fix(raw):
+    with pytest.raises(InputError) as exc:
+        parse_brand(raw, label="--brand")
+    message = str(exc.value)
+    assert message.startswith("--brand ")
+    assert "#3366FF" in message
+
+
+def test_parse_brand_rejects_a_non_string():
+    with pytest.raises(InputError, match="^brand is missing"):
+        parse_brand(None)
+
+
+def test_parse_axes_reads_a_string_and_a_list():
+    expected = AxisValues(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7)
+    assert parse_axes("0.1,0.2,0.3,0.4,0.5,0.6,0.7") == expected
+    assert parse_axes(" 0.1, 0.2 ,0.3,0.4,0.5,0.6,0.7 ") == expected
+    assert parse_axes([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]) == expected
+    assert parse_axes([0, 1, 0, 1, 0, 1, 0]) == AxisValues(0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0)
+
+
+@pytest.mark.parametrize("raw,needle", [
+    ("0.5,0.5", "--axes has 2 values; pass seven numbers"),
+    ("0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5", "--axes has 8 values"),
+    ("0.5,0.5,x,0.5,0.5,0.5,0.5", "--axes gives density as 'x'; set it to a number from 0 to 1"),
+    ("0.5,0.5,0.5,1.5,0.5,0.5,0.5", "--axes gives geometry as '1.5'"),
+    ("0.5,0.5,0.5,0.5,0.5,0.5,nan", "--axes gives type_personality as 'nan'"),
+    ([0.5, 0.5, 0.5, 0.5, 0.5, True, 0.5], "--axes gives motion as True"),
+    (7, "--axes is 7; pass seven numbers"),
+])
+def test_parse_axes_names_the_axis_and_the_fix(raw, needle):
+    with pytest.raises(InputError) as exc:
+        parse_axes(raw, label="--axes")
+    assert needle in str(exc.value)
+
+
+def test_parse_axes_error_lists_the_order():
+    with pytest.raises(InputError) as exc:
+        parse_axes("1")
+    assert "warmth,contrast,density,geometry,formality,motion,type_personality" in str(exc.value)
+
+
+def test_read_brief_flattens_a_discovery_file(tmp_path):
+    f = tmp_path / "last-discovery.json"
+    f.write_text(json.dumps({"answers": {"industry": "saas", "tone": "warm, calm"}}),
+                 encoding="utf-8")
+    assert read_brief(f) == {"industry": "saas", "tone": "warm, calm"}
+
+
+def test_read_brief_errors_name_the_file_and_the_fix(tmp_path):
+    bad = tmp_path / "bad.json"
+    bad.write_text("{not json", encoding="utf-8")
+    with pytest.raises(InputError) as exc:
+        read_brief(bad, label="--brief")
+    assert str(exc.value).startswith(f"--brief {bad} is not valid JSON")
+    assert '{"industry": "saas"' in str(exc.value)
+
+    listed = tmp_path / "list.json"
+    listed.write_text("[1, 2]", encoding="utf-8")
+    with pytest.raises(InputError, match="holds a JSON list, not an object"):
+        read_brief(listed, label="--brief")
+
+    with pytest.raises(InputError, match="cannot be read"):
+        read_brief(tmp_path / "missing.json", label="--brief")
+
+
+def test_brief_axes_go_through_the_synthesizer():
+    brief = {"industry": "fintech-banking", "tone": ["warm"], "stack": "react"}
+    axes, source = brief_axes(brief)
+    assert axes == compute_axes({"industry": "fintech-banking", "tone": ["warm"]})
+    assert source == "from the brief (industry: fintech-banking; tone: warm)"
+
+
+def test_brief_axes_read_a_discovery_brief_as_a_flat_one():
+    nested = brief_axes({"answers": {"industry": "saas", "tone": ["warm"]}})
+    assert nested == brief_axes({"industry": "saas", "tone": ["warm"]})
+
+
+def test_brief_axes_split_comma_strings():
+    axes, source = brief_axes({"tone": "warm, calm"})
+    assert axes == compute_axes({"tone": ["warm", "calm"]})
+    assert source == "from the brief (tone: warm, calm)"
+
+
+def test_brief_without_any_field_is_refused():
+    with pytest.raises(InputError) as exc:
+        brief_axes({"stack": "react"}, label="--brief")
+    assert str(exc.value).startswith(
+        "--brief has none of industry, tone, audience, must_have, forbidden")
+    assert "or pass axes instead" in str(exc.value)
+
+
+def test_brief_field_of_the_wrong_shape_is_named():
+    with pytest.raises(InputError, match='^brief field tone is 3; give a list of words'):
+        brief_axes({"tone": 3})
+    with pytest.raises(InputError, match="^brief field industry is"):
+        brief_axes({"industry": ["saas"]})
+
+
+def test_choose_axes_sources():
+    assert choose_axes(None, None) == (NEUTRAL, NEUTRAL_SOURCE)
+    axes, source = choose_axes(None, "0,0,0,0,0,0,0", axes_label="--axes")
+    assert axes == AxisValues(0, 0, 0, 0, 0, 0, 0) and source == "set by hand (--axes)"
+    axes, source = choose_axes({"industry": "saas"}, None)
+    assert source.startswith("from the brief")
+
+
+def test_choose_axes_refuses_both():
+    with pytest.raises(InputError) as exc:
+        choose_axes({"industry": "saas"}, "0.5,0.5,0.5,0.5,0.5,0.5,0.5",
+                    brief_label="--brief", axes_label="--axes")
+    assert str(exc.value).startswith("both --brief and --axes were given; pass one")
