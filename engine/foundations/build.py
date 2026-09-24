@@ -16,7 +16,7 @@ import numbers
 from dataclasses import dataclass
 from typing import Any, Iterable, List, Optional, Sequence, Tuple
 
-from engine.foundations import color
+from engine.foundations import color, space
 from engine.foundations.color_math import hex_to_rgb
 from engine.foundations.foundation import BrandInputs, Foundation
 from engine.foundations.gate import GateFailure, GateReport, gate
@@ -25,7 +25,7 @@ from engine.foundations.validate import Problem, validate
 from engine.synthesizer.axes import AxisValues
 
 # Build order. Each foundation task appends its FOUNDATION here.
-FOUNDATIONS: Tuple[Foundation, ...] = (color.FOUNDATION,)
+FOUNDATIONS: Tuple[Foundation, ...] = (color.FOUNDATION, space.FOUNDATION)
 
 
 @dataclass(frozen=True)

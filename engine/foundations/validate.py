@@ -20,6 +20,11 @@ LAYERS = ("primitive", "semantic")
 
 _SEGMENT = re.compile(r"[A-Za-z0-9_-]+")
 
+# Physical sides flip meaning under dir="rtl"; directional tokens use the
+# logical words (inline-start, inline-end, block-start, block-end).
+_PHYSICAL = {"left": "inline-start", "right": "inline-end", "top": "block-start",
+             "bottom": "block-end"}
+
 
 @dataclass(frozen=True)
 class Problem:
@@ -55,7 +60,8 @@ def _check_values(t: Token) -> List[Problem]:
 
 
 def _check_paths(ts: TokenSet) -> List[Problem]:
-    """Path hygiene: segment charset (bad-name), a token that is also a
+    """Path hygiene: segment charset (bad-name), a physical side word in a
+    segment (physical-direction), a token that is also a
     group of another token (path-conflict, which DTCG cannot hold), and two
     tokens that print the same CSS property (css-collision)."""
     out: List[Problem] = []
@@ -70,6 +76,11 @@ def _check_paths(ts: TokenSet) -> List[Problem]:
                 out.append(Problem(path, "bad-name",
                     f"{path} has segment {seg!r}; path segments may use only letters, "
                     "digits, '_' and '-', so rename it"))
+            for word in seg.lower().split("-"):
+                if word in _PHYSICAL:
+                    out.append(Problem(path, "physical-direction",
+                        f"{path} names the physical side '{word}', which flips under "
+                        f"dir=\"rtl\"; use '{_PHYSICAL[word]}' instead"))
         for i in range(1, len(segments)):
             prefix = ".".join(segments[:i])
             if prefix in defined:
