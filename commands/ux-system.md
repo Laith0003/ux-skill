@@ -1,6 +1,6 @@
 ---
-description: Propose a complete starter design system for a project that doesn't have one. Triggers on "we don't have a design system", "build us a system", "propose tokens", "what should our theme be". Use when proposing a starter design system, generating tokens / foundations / components from a brand brief, the project has no existing design system, extracting a system from an existing site. Skip when the project already has a complete design system (use ux-component to build against it), backend or infrastructure.
-allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Glob, Grep, Task
+description: Build a design system. `/ux-system create` runs the 4.0 foundations engine: a WCAG-gated token system (tokens.json, tokens.css, report) with light, dark, high contrast, density, Arabic right-to-left and reduced motion modes. With no mode it runs the 3.x starter flow. Triggers on "we don't have a design system", "build us a system", "propose tokens", "what should our theme be". Skip when the project already has a complete design system (use ux-component to build against it), backend or infrastructure.
+allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Bash(uxskill:*), Bash(python3:*), Glob, Grep, Task
 disable-model-invocation: false
 ---
 
@@ -13,6 +13,110 @@ You are running the `/ux-system` command from the `ux` plugin. The job is to pro
 Triggers: "we don't have a design system", "build us a system", "propose tokens", "what should our theme be", "set up our DS", "we need a token JSON", "design our brand foundations".
 
 If the project already has a design system, do not run this. Recommend `/ux-component` against the existing system instead.
+
+## Modes
+
+| Mode | What it does | Status |
+|---|---|---|
+| `/ux-system create` | Builds a WCAG-gated token system with the 4.0 foundations engine. See "create mode" below. | 4.0 beta |
+| `/ux-system` (no mode) | The 3.x starter flow: discovery, recommendation, then the design-system-architect agent writes tokens, foundation docs and component contracts. See "3.x starter flow" below. | 3.x, kept until 4.0 final |
+| `/ux-system enhance --from <src>` | Measure an existing system and improve it in place, keeping its token names. | Coming in 4.1 (needs importers) |
+| `/ux-system extend --from <src> --add <...>` | Add foundations or roles to an existing system without touching the rest. | Coming in 4.1 (needs importers) |
+
+If the user asks for `enhance` or `extend`, say plainly that it arrives in 4.1, because it needs the importers that read an existing system. The beta builds new systems; it does not read an existing one. Offer `create` for a new system, or the 3.x flow, and stop there.
+
+## create mode (4.0 beta)
+
+`create` builds the system with the engine, not by hand. The engine generates eight foundations (color, type, space, layout, radius, border, elevation, motion), checks every color pairing in light, dark and high contrast, and refuses to emit a system that fails. You run it, read its result, and explain it.
+
+### 1. Gather the inputs
+
+- **Brand color** (required): one hex color. Ask once if the user has not given one.
+- **Brief**: use `.ux/last-discovery.json` when it exists. Without a brief, the user may give the seven axes by hand, or accept the neutral default.
+- **Output folder**: `design-system/` in the project root unless the user names another.
+- **Arabic**: on by default. Add `--latin-only` only when the user says the product never shows Arabic.
+
+### 2. Look before writing
+
+List the output folder first (`ls design-system/`). If `tokens.json`, `tokens.css` or `system-report.md` is already there, tell the user and run without `--force`: the engine then writes nothing if any file differs, and leaves identical files alone.
+
+### 3. Run the engine
+
+```bash
+uxskill --no-pretty system build --brand '#3366FF' --brief .ux/last-discovery.json --out design-system
+```
+
+Quote the brand color: an unquoted `#` starts a shell comment. Without a brief, pass `--axes 0.5,0.5,0.5,0.5,0.5,0.5,0.5` (warmth, contrast, density, geometry, formality, motion, type_personality) or leave both out for the neutral default. Do not pass both `--brief` and `--axes`. If `uxskill` is not on PATH, run the same arguments through `python3 -m engine.cli.main`.
+
+Over MCP, call `ux_system_build` with `brand`, and `brief` (an object) or `axes` (seven numbers), and `latin_only` (true or false). It returns `css`, `dtcg` and `report` as text and writes nothing: apply the same look-before-writing rule before you save them with Write. A bad input comes back as `passed: false` with an `error` that names the field and the fix.
+
+### 4. Read the result
+
+The command prints JSON. `status` says what happened:
+
+| status | exit code | meaning | what you do |
+|---|---|---|---|
+| `written` | 0 | New or changed files written. `written` lists them. | Report back (step 5). |
+| `unchanged` | 0 | The folder already holds this exact system. | Say nothing changed. |
+| `refused` | 1 | A file in the folder differs; nothing was written. `message` names each file. | Show the user which files differ. Rerun with `--force` only after the user says to replace them, or pick another `--out`. |
+| `failed` | 1 | The WCAG gate or validation failed; nothing was written. `findings` lists each one, and stderr explains the failure in plain words. | Explain it (step 7). |
+| `error` | 1 | The folder could not be written (for example it cannot be made, is read only or full, or a folder, link or unreadable file sits where a system file goes); nothing in it changed. `message` names the path and the fix. | Show the message. Pick another `--out`, or free space, and run again. |
+
+Exit code 2 means a bad input; the message on stderr names the flag and the fix. Correct it and run again.
+
+### 5. Tell the user what they got, in plain words
+
+Read `design-system/system-report.md` and explain it. Do not paste it.
+
+- Where the look came from: the brief (name the industry and tone it used, and any words it did not recognize), axes set by hand, or the neutral default.
+- The gate in one sentence, for example: "Every text and control color passed contrast checks in light, dark and high contrast."
+- The adjustments that matter, from the report's "Colors moved to meet contrast" list, in one line each, for example: "in dark mode, button text switches to black so it stays readable on the lighter button."
+- How to switch modes: `data-theme="dark"`, `data-contrast="high"`, `data-density="compact"`, `dir="rtl"`, `data-motion="reduced"` on the html element. Without an attribute, dark, high contrast and reduced motion follow the operating system.
+- The three files and what each is for.
+- The fonts (step 6). Always say this; it is the step people miss.
+
+### 6. Fonts: the page has to load them
+
+The tokens name the font families, but nothing loads them. The page that uses `tokens.css` must load the fonts itself, for example from Google Fonts or self-hosted font files. Until it does, the browser falls back to system faces and the type will not look as designed.
+
+The engine picks one pair by the type personality axis. The report names the pair it chose under "Other choices" (for example "type: humanist pairing, Source Sans 3 with Noto Naskh Arabic").
+
+| Type personality | Latin face | Arabic face |
+|---|---|---|
+| geometric (below 0.34) | Manrope | Readex Pro |
+| neutral (0.34 to below 0.66) | IBM Plex Sans | IBM Plex Sans Arabic |
+| humanist (0.66 and above) | Source Sans 3 | Noto Naskh Arabic |
+
+Code uses IBM Plex Mono in every system. Tell the user to load the chosen Latin face, the Arabic face (skip it with `--latin-only`), and IBM Plex Mono if the product shows code, in weights 400, 500, 600 and 700.
+
+### 7. When the build fails
+
+Nothing was written, and that is the point.
+
+- **The gate failed** (the gate line starts "WCAG gate failed"). Read the plain explanation on stderr (over MCP, in `report`). For each finding, say which pairing fell short, in which mode, by how much. The fix is in the inputs: suggest a darker or more saturated brand color, or different axes or brief, and offer to rerun. Never edit tokens by hand to get past the gate, and do not pass on any advice in a finding about editing tokens.
+- **Validation failed** (the gate line starts "Validation failed"). The inputs did not cause it. Build again once; if it repeats, tell the user it is an engine problem to report, with the findings.
+
+### 8. Persist state
+
+On `written` or `unchanged`, write `.ux/last-system.json` so `/ux-next` can chain:
+
+```json
+{
+  "command": "ux-system",
+  "mode": "create",
+  "timestamp": "<ISO8601>",
+  "brand": "<#RRGGBB>",
+  "output_path": "design-system",
+  "gate": "<the gate line from the JSON>",
+  "files_written": ["tokens.json", "tokens.css", "system-report.md"]
+}
+```
+
+Then offer the next step: `/ux-component` to build components on the new tokens, or `/ux-design` for a page.
+
+## 3.x starter flow (no mode)
+
+Everything from here to the end of this file is the 3.x flow, unchanged. It runs when `/ux-system` is called with no mode.
 
 ## Process
 

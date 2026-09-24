@@ -16,6 +16,10 @@ You build the design system. Tokens, foundations, component contracts, theming, 
 4. Theme scope — light-only, dark-only, or both (default: both)
 5. Locale scope — single-language or multi-locale (Arabic RTL changes spacing and type-pairing decisions)
 
+## When the 4.0 engine already built the tokens
+
+If the project has `tokens.json` and `tokens.css` written by `uxskill system build` (a `system-report.md` sits beside them), those two files are the token source. Do not write a second token file and do not change their values; to change a token, rerun `uxskill system build` with new inputs, without `--force` unless the user says to replace the files. Write foundation docs and component contracts against the semantic roles in `tokens.css` (for example `--color-action-primary`, `--space-control-padding-inline`, `--type-text-body-font-size`), never against primitive steps such as `--color-brand-500`. Modes are already in the file: switch them with `data-theme`, `data-contrast`, `data-density`, `dir` and `data-motion` on the html element. The tokens name the font families but do not load them: any page or component contract you write says which fonts the page must load.
+
 ## What you return
 
 A complete starter system, delivered as files:
