@@ -29,18 +29,34 @@ If the user asks for `enhance` or `extend`, say plainly that it arrives in 4.1, 
 
 `create` builds the system with the engine, not by hand. The engine generates eight foundations (color, type, space, layout, radius, border, elevation, motion), checks every color pairing in light, dark and high contrast, and refuses to emit a system that fails. You run it, read its result, and explain it.
 
-### 1. Gather the inputs
+### 1. Check the engine version
+
+Run `uxskill --version` first. The build needs uxskill 4.0.0b1 or later, which prints, for example, `uxskill, version 4.0.0b1`. If `uxskill` is not on PATH, run `python3 -m engine.cli.main --version` instead.
+
+If the version is 3.x, or neither command exists, stop here and give the user the install line; do not go on, and do not change any flag. pip and pipx skip pre-releases unless asked, so a plain `pip install uxskill` still gives 3.x:
+
+```bash
+pip install uxskill==4.0.0b1
+```
+
+With pipx: `pipx install --force uxskill==4.0.0b1` (`--force` replaces an installed 3.x). For the MCP server: `pip install 'uxskill[mcp]==4.0.0b1'`. Run the version check again after the install.
+
+### 2. Gather the inputs
 
 - **Brand color** (required): one hex color. Ask once if the user has not given one.
 - **Brief**: use `.ux/last-discovery.json` when it exists. Without a brief, the user may give the seven axes by hand, or accept the neutral default.
+- **Industry**: discovery does not ask for one, and the industry moves the look more than any other brief word. When there is no brief, or the brief has no `industry`, ask one question: which industry is closest, from the list below. The user may skip it. If they pick one, write `.ux/system-brief.json` with the discovery answers (if any) plus `"industry": "<id>"`, and pass that file as `--brief`; leave `.ux/last-discovery.json` as it is. Over MCP, add `industry` to the `brief` object. If they skip, build without it.
+  Industries: `ai-ml`, `automotive`, `consumer-lifestyle`, `crypto`, `developer-tools`, `ecommerce`, `editorial-media`, `education`, `fintech-banking`, `fintech-payments`, `fintech-trading`, `gaming`, `healthcare`, `hospitality-travel`, `luxury`, `productivity`, `saas`.
 - **Output folder**: `design-system/` in the project root unless the user names another.
 - **Arabic**: on by default. Add `--latin-only` only when the user says the product never shows Arabic.
 
-### 2. Look before writing
+The engine reads five brief fields: `industry`, `tone`, `audience`, `must_have` and `forbidden`. It does not read `project_type` or any other discovery field. Some words discovery suggests move nothing: `confident`, `dark-mode`, `RTL`, `AA accessibility`, `mobile-first`, `print-fidelity`; every system already has dark mode, the contrast gate and, unless it is Latin only, right to left. Never tell the user those words shaped the look. The report names every word it did not read.
+
+### 3. Look before writing
 
 List the output folder first (`ls design-system/`). If `tokens.json`, `tokens.css` or `system-report.md` is already there, tell the user and run without `--force`: the engine then writes nothing if any file differs, and leaves identical files alone.
 
-### 3. Run the engine
+### 4. Run the engine
 
 ```bash
 uxskill --no-pretty system build --brand '#3366FF' --brief .ux/last-discovery.json --out design-system
@@ -48,34 +64,34 @@ uxskill --no-pretty system build --brand '#3366FF' --brief .ux/last-discovery.js
 
 Quote the brand color: an unquoted `#` starts a shell comment. Without a brief, pass `--axes 0.5,0.5,0.5,0.5,0.5,0.5,0.5` (warmth, contrast, density, geometry, formality, motion, type_personality) or leave both out for the neutral default. Do not pass both `--brief` and `--axes`. If `uxskill` is not on PATH, run the same arguments through `python3 -m engine.cli.main`.
 
-Over MCP, call `ux_system_build` with `brand`, and `brief` (an object) or `axes` (seven numbers), and `latin_only` (true or false). It returns `css`, `dtcg` and `report` as text and writes nothing: apply the same look-before-writing rule before you save them with Write. A bad input comes back as `passed: false` with an `error` that names the field and the fix.
+With a shell, use the command above: it writes the files itself. Without a shell, call `ux_system_build` over MCP with `brand`, and `brief` (an object) or `axes` (seven numbers), `latin_only` (true or false), and `out`, the absolute path of the output folder. It then writes the three files as the command does and returns the same `status`, `written`, `unchanged`, `conflicts` and `message`; `force` (true or false) does what `--force` does, and the same look-before-writing rule applies. Without `out` it writes nothing and returns `status` `built` (or `failed`), the report and each file's size. `include_files` (true or false) adds the `css` and `dtcg` text, but tokens.json is over 100 KB: do not copy it into files by hand, pass `out`. A bad input comes back as `status` `invalid`, `passed: false` and an `error` that names the field and the fix.
 
-### 4. Read the result
+### 5. Read the result
 
 The command prints JSON. `status` says what happened:
 
 | status | exit code | meaning | what you do |
 |---|---|---|---|
-| `written` | 0 | New or changed files written. `written` lists them. | Report back (step 5). |
+| `written` | 0 | New or changed files written. `written` lists them. | Report back (step 6). |
 | `unchanged` | 0 | The folder already holds this exact system. | Say nothing changed. |
 | `refused` | 1 | A file in the folder differs; nothing was written. `message` names each file. | Show the user which files differ. Rerun with `--force` only after the user says to replace them, or pick another `--out`. |
-| `failed` | 1 | The WCAG gate or validation failed; nothing was written. `findings` lists each one, and stderr explains the failure in plain words. | Explain it (step 7). |
+| `failed` | 1 | The WCAG gate or validation failed; nothing was written. `findings` lists each one, and stderr explains the failure in plain words. | Explain it (step 8). |
 | `error` | 1 | The folder could not be written (for example it cannot be made, is read only or full, or a folder, link or unreadable file sits where a system file goes); nothing in it changed. `message` names the path and the fix. | Show the message. Pick another `--out`, or free space, and run again. |
 
-Exit code 2 means a bad input; the message on stderr names the flag and the fix. Correct it and run again.
+Exit code 2 means a bad input; the message on stderr names the flag and the fix. Correct it and run again. The one exception is `No such command 'system'`: the uxskill on PATH is older than 4.0, so give the user the install line from step 1 and stop.
 
-### 5. Tell the user what they got, in plain words
+### 6. Tell the user what they got, in plain words
 
 Read `design-system/system-report.md` and explain it. Do not paste it.
 
-- Where the look came from: the brief (name the industry and tone it used, and any words it did not recognize), axes set by hand, or the neutral default.
+- Where the look came from: the brief (the industry and tone it used, when the brief names them, and any words it did not recognize), axes set by hand, or the neutral default.
 - The gate in one sentence, for example: "Every text and control color passed contrast checks in light, dark and high contrast."
 - The adjustments that matter, from the report's "Colors moved to meet contrast" list, in one line each, for example: "in dark mode, button text switches to black so it stays readable on the lighter button."
 - How to switch modes: `data-theme="dark"`, `data-contrast="high"`, `data-density="compact"`, `dir="rtl"`, `data-motion="reduced"` on the html element. Without an attribute, dark, high contrast and reduced motion follow the operating system.
 - The three files and what each is for.
-- The fonts (step 6). Always say this; it is the step people miss.
+- The fonts (step 7). Always say this; it is the step people miss.
 
-### 6. Fonts: the page has to load them
+### 7. Fonts: the page has to load them
 
 The tokens name the font families, but nothing loads them. The page that uses `tokens.css` must load the fonts itself, for example from Google Fonts or self-hosted font files. Until it does, the browser falls back to system faces and the type will not look as designed.
 
@@ -89,14 +105,14 @@ The engine picks one pair by the type personality axis. The report names the pai
 
 Code uses IBM Plex Mono in every system. Tell the user to load the chosen Latin face, the Arabic face (skip it with `--latin-only`), and IBM Plex Mono if the product shows code, in weights 400, 500, 600 and 700.
 
-### 7. When the build fails
+### 8. When the build fails
 
 Nothing was written, and that is the point.
 
 - **The gate failed** (the gate line starts "WCAG gate failed"). Read the plain explanation on stderr (over MCP, in `report`). For each finding, say which pairing fell short, in which mode, by how much. The fix is in the inputs: suggest a darker or more saturated brand color, or different axes or brief, and offer to rerun. Never edit tokens by hand to get past the gate, and do not pass on any advice in a finding about editing tokens.
 - **Validation failed** (the gate line starts "Validation failed"). The inputs did not cause it. Build again once; if it repeats, tell the user it is an engine problem to report, with the findings.
 
-### 8. Persist state
+### 9. Persist state
 
 On `written` or `unchanged`, write `.ux/last-system.json` so `/ux-next` can chain:
 

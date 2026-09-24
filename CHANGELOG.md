@@ -14,6 +14,16 @@ color and check its contrast before it hands the files over. This beta builds
 new systems only: it does not yet read or improve a system you already have.
 Every 3.x command still works as it did.
 
+### Install the beta
+pip and pipx skip pre-releases unless asked, so `pip install uxskill` still
+gives 3.2. Ask for the beta:
+- pip: `pip install --upgrade --pre uxskill`, or pin it with
+  `pip install uxskill==4.0.0b1`. For the MCP server:
+  `pip install --upgrade --pre 'uxskill[mcp]'`.
+- pipx: `pipx install --pip-args=--pre uxskill`, or over an installed 3.x,
+  `pipx upgrade --pip-args=--pre uxskill`.
+- npm: `npx uxskill@beta`.
+
 ### If you are building a product or a landing page
 - One command writes three files into a folder:
   `uxskill system build --brand '#3366FF' --out design-system`.
@@ -24,9 +34,11 @@ Every 3.x command still works as it did.
   button, `var(--color-text-default)` for body text,
   `var(--color-surface-page)` for the page.
 - Give it your discovery brief (`--brief .ux/last-discovery.json`) and the
-  look follows your industry and tone. Or set the seven axes by hand with
-  `--axes`, or leave both out for a neutral system. The report says which,
-  and names any brief word it did not recognize.
+  look follows your industry and tone when the brief names them. Discovery
+  does not ask for an industry, so `/ux-system create` asks for one (you may
+  skip it). Or set the seven axes by hand with `--axes`, or leave both out
+  for a neutral system. The report says which, and names any brief word it
+  did not recognize.
 - Dark mode, high contrast, compact spacing, right to left and reduced motion
   are in the same CSS file. Set `data-theme="dark"`, `data-contrast="high"`,
   `data-density="compact"`, `dir="rtl"` or `data-motion="reduced"` on the
@@ -36,8 +48,9 @@ Every 3.x command still works as it did.
   fonts on your page (from Google Fonts or self-hosted files); until you do,
   the browser falls back to system faces. The report names the pair the
   engine chose.
-- In Claude Code, `/ux-system create` asks for the brand color, runs the
-  build, and explains the report.
+- In Claude Code, `/ux-system create` checks that the installed uxskill is
+  the beta, asks for the brand color, runs the build, and explains the
+  report.
 - It never overwrites a file that differs from what it would write, and one
   such file stops every write. A second identical run changes nothing.
   `--force` replaces files only when you ask.
@@ -57,10 +70,13 @@ Every 3.x command still works as it did.
   ratio each now measures (and the one before, for text colors), and the main
   choices it made from the brand color and the axes.
 - The same inputs always give the same bytes.
-- MCP: `ux_system_build` takes `brand`, `brief` or `axes`, and `latin_only`,
-  and returns the CSS, the tokens and the report as text, with pass or fail
-  and every finding. It writes no files. A bad input returns an `error` that
-  names the field and the fix.
+- MCP: `ux_system_build` takes `brand`, `brief` or `axes`, and `latin_only`.
+  It returns pass or fail, the gate line, every finding, the report and each
+  file's size, small enough for an agent to read. Pass `out` (a folder) and
+  it writes the three files as the command does, with the same statuses, and
+  refuses a file that differs unless `force` is true. Pass `include_files`
+  to get the CSS and tokens text back instead. A bad input returns an
+  `error` that names the field and the fix.
 
 ### The WCAG gate
 - Every text, control and focus color pairing is measured in light and dark,

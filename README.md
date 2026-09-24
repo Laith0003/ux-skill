@@ -39,18 +39,23 @@ pip install uxskill
 One brand color in, a design system out, with its contrast checked before you get it.
 
 ```bash
+pip install --upgrade --pre uxskill
 uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out design-system
 ```
 
-**Building a product or a landing page?** You get `tokens.css` to link from your page, `tokens.json` for tools, and `system-report.md`, which says in plain words what was built and why. Style with the roles (`var(--color-action-primary)`, `var(--color-text-default)`, `var(--color-surface-page)`), and switch dark mode, high contrast, compact spacing, right to left or reduced motion with one attribute on `<html>`. The tokens name the font families but do not load them: load the fonts on your page (Google Fonts or self-hosted), or the browser falls back to system faces. In Claude Code, `/ux-system create` runs the build and explains the report.
+pip and pipx skip pre-releases unless asked, so a plain `pip install uxskill` still gives 3.2. Pin the beta with `pip install uxskill==4.0.0b1`; for the MCP server, `pip install --upgrade --pre 'uxskill[mcp]'`. With pipx, `pipx install --pip-args=--pre uxskill` (over an installed 3.x, `pipx upgrade --pip-args=--pre uxskill`). With npm, `npx uxskill@beta`.
 
-**Designing a design system?** Eight foundations (color, type, space, layout, radius, border, elevation, motion), each with primitives and semantic roles, in the W3C design tokens format (DTCG 2025.10) with every mode's values. Same inputs, same bytes. Over MCP, `ux_system_build` returns the same files as text and writes nothing.
+**Building a product or a landing page?** You get `tokens.css` to link from your page, `tokens.json` for tools, and `system-report.md`, which says in plain words what was built and why. Style with the roles (`var(--color-action-primary)`, `var(--color-text-default)`, `var(--color-surface-page)`), and switch dark mode, high contrast, compact spacing, right to left or reduced motion with one attribute on `<html>`. The tokens name the font families but do not load them: load the fonts on your page (Google Fonts or self-hosted), or the browser falls back to system faces. With `--brief`, the look follows the industry and tone when the brief names them; discovery does not ask for an industry, so `/ux-system create` asks for one. In Claude Code, `/ux-system create` checks the installed version, runs the build and explains the report.
+
+**Designing a design system?** Eight foundations (color, type, space, layout, radius, border, elevation, motion), each with primitives and semantic roles, in the W3C design tokens format (DTCG 2025.10) with every mode's values. Same inputs, same bytes. Over MCP, `ux_system_build` returns the report, the gate result and each file's size, and writes the same files as the command when given `out`.
 
 - **WCAG gate.** Every text, control and focus color pairing is measured in light and dark, at standard and high contrast: WCAG 1.4.3 (text 4.5:1) and 1.4.11 (non-text 3:1) at standard contrast, WCAG 1.4.6 (text 7:1) at high contrast, plus a 4.5:1 high-contrast floor for most non-text parts that is our own, since WCAG sets no enhanced non-text level. A system that fails is not written; the message says what to change.
 - **Safe by default.** It never overwrites a file that differs. `--force` replaces files only when you ask.
 - **Arabic.** Under `dir="rtl"` text switches to an Arabic face with its own sizes and line height; spacing uses logical properties and motion mirrors. `--latin-only` leaves it out.
 
 This beta builds new systems; it does not read an existing one yet. 4.1 adds importers (Figma variables, CSS variables, Tailwind config, DTCG tokens), `/ux-system enhance` and `extend`, and Figma both ways. 4.2 merges commands and adds surface playbooks, the trust layer (lint on every write, a finish reviewer) and the launch. See the [changelog](CHANGELOG.md).
+
+Tests **2159 passing**. Offline. Deterministic. No LLM ever called.
 
 ### New in v3.1: brand-true, responsive, alive
 
@@ -59,7 +64,7 @@ This beta builds new systems; it does not read an existing one yet. 4.1 adds imp
 - **The wow layer.** The engine derives 2-3 coordinated signature moments per page, the "wow can only come from the user" doctrine is overturned.
 - **Sharper linter** (152 rules): imagery-mandatory + icon-only detection, placeholder-token and `100vw` rules; seeded picsum kept, random stripped.
 
-Tests **2159 passing**. Offline. Deterministic. No LLM ever called. Full notes in [CHANGELOG.md](CHANGELOG.md).
+Full notes in [CHANGELOG.md](CHANGELOG.md).
 
 ### What's new in v3
 
