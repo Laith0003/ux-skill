@@ -790,8 +790,8 @@ else:
         2 for a bad input.
         """
         from engine.foundations.emit import (
-            InputError, check_out_dir, choose_axes, conflict_message, failure_message,
-            failure_text, make_system, parse_brand, read_brief, write_files)
+            STATUS_EXIT, InputError, check_out_dir, choose_axes, conflict_message,
+            failure_message, failure_text, make_system, parse_brand, read_brief, write_files)
         try:
             brand_hex = parse_brand(brand, "--brand")
             brief = read_brief(brief_path, "--brief") if brief_path else None
@@ -802,33 +802,36 @@ else:
             raise click.UsageError(str(exc)) from None
         system = make_system(brand_hex, axes, source, arabic=not latin_only)
         payload = {**system.to_dict(), "out": str(out)}
-        if not system.passed:
-            payload.update(status="failed", written=[], unchanged=[], conflicts=[],
-                           message=failure_message(system))
+
+        def finish(status: str, stderr: str = "", **fields) -> None:
+            payload.update(status=status, **fields)
             _emit(payload, ctx.obj["pretty"])
-            click.echo(failure_text(system), err=True, nl=False)
-            sys.exit(1)
+            if stderr:
+                click.echo(stderr, err=True, nl=False)
+            if STATUS_EXIT[status]:
+                sys.exit(STATUS_EXIT[status])
+
+        if not system.passed:
+            finish("failed", failure_text(system), written=[], unchanged=[], conflicts=[],
+                   message=failure_message(system))
+            return
         try:
             plan = write_files(out, system.files, force=force)
         except InputError as exc:
             # The inputs were fine; the folder could not be written. Nothing
             # in it changed, so this is a run that wrote nothing (exit 1).
-            payload.update(status="error", written=[], unchanged=[], conflicts=[],
-                           message=str(exc))
-            _emit(payload, ctx.obj["pretty"])
-            click.echo(f"Error: {exc}", err=True)
-            sys.exit(1)
+            finish("error", f"Error: {exc}\n", written=[], unchanged=[], conflicts=[],
+                   message=str(exc))
+            return
         if plan.conflicts:
             # Refused: the plan's would-be writes did not happen.
-            payload.update(status="refused", written=[], unchanged=list(plan.unchanged),
-                           conflicts=list(plan.conflicts), message=conflict_message(out, plan))
-            _emit(payload, ctx.obj["pretty"])
-            sys.exit(1)
-        payload.update(written=list(plan.write), unchanged=list(plan.unchanged), conflicts=[],
-                       status="written" if plan.write else "unchanged",
-                       message=(f"Wrote {', '.join(plan.write)} to {out}." if plan.write else
-                                f"{out} already holds this system; nothing changed."))
-        _emit(payload, ctx.obj["pretty"])
+            finish("refused", written=[], unchanged=list(plan.unchanged),
+                   conflicts=list(plan.conflicts), message=conflict_message(out, plan))
+            return
+        finish("written" if plan.write else "unchanged",
+               written=list(plan.write), unchanged=list(plan.unchanged), conflicts=[],
+               message=(f"Wrote {', '.join(plan.write)} to {out}." if plan.write else
+                        f"{out} already holds this system; nothing changed."))
 
     # -------- ux version -------------------------------------------------
 

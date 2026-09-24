@@ -252,3 +252,18 @@ def test_module_entry_point_runs_system_build(tmp_path):
     assert r.returncode == 0, r.stderr
     assert json.loads(r.stdout)["status"] == "written"
     assert (tmp_path / "tokens.json").exists()
+
+
+def test_the_command_reports_the_shared_statuses():
+    # One table in emit.py names every status and its exit code; the CLI
+    # exits by it and the /ux-system doc test reads it.
+    from engine.foundations.emit import STATUS_EXIT, STATUSES
+    assert STATUSES == ("written", "unchanged", "refused", "failed", "error")
+    assert {s: STATUS_EXIT[s] for s in STATUSES} == {
+        "written": 0, "unchanged": 0, "refused": 1, "failed": 1, "error": 1}
+    import engine.cli.main as main_module
+    source = Path(main_module.__file__).read_text(encoding="utf-8")
+    block = source[source.index("def system_build_cmd"):source.index("# -------- ux version")]
+    for status in STATUSES:
+        assert f'"{status}"' in block, status
+    assert "sys.exit(1)" not in block, "exit through STATUS_EXIT, not a literal code"

@@ -33,6 +33,16 @@ from engine.synthesizer.axes import (
 # The files a build writes, in the order they are written and reported.
 FILES: Tuple[str, ...] = ("tokens.json", "tokens.css", "system-report.md")
 
+# Every status `uxskill system build` reports, with its exit code: the
+# files were written, or were already identical (0); a file in the out
+# folder differs, the gate or validation failed, or the folder could not
+# be written, and nothing changed (1). The CLI exits by this table and the
+# /ux-system doc test holds its status table to it.
+STATUS_EXIT: Dict[str, int] = {
+    "written": 0, "unchanged": 0, "refused": 1, "failed": 1, "error": 1,
+}
+STATUSES: Tuple[str, ...] = tuple(STATUS_EXIT)
+
 # Brief fields the synthesizer reads to place the axes.
 BRIEF_FIELDS: Tuple[str, ...] = ("industry", "tone", "audience", "must_have", "forbidden")
 _LIST_FIELDS = ("tone", "audience", "must_have", "forbidden")
