@@ -283,3 +283,114 @@ def test_a_forced_write_leaves_only_the_three_files(tmp_path):
     plan = write_files(tmp_path, FILES, force=True)
     assert set(plan.write) == set(FILES)
     assert _snapshot(tmp_path) == {name: text.encode("utf-8") for name, text in FILES.items()}
+
+
+# An interrupt (Ctrl-C) or any other exception mid-write puts the folder
+# back too, then goes on as it would have.
+def _interrupt_on_call(real, n):
+    calls = []
+
+    def wrapper(*args):
+        calls.append(args)
+        if len(calls) == n:
+            raise KeyboardInterrupt
+        return real(*args)
+    return wrapper
+
+
+def test_an_interrupt_between_moves_restores_every_file(tmp_path, monkeypatch):
+    _write_old(tmp_path)
+    before = _snapshot(tmp_path)
+    monkeypatch.setattr(emit, "_place", _interrupt_on_call(emit._place, 2))
+    with pytest.raises(KeyboardInterrupt):
+        write_files(tmp_path, FILES, force=True)
+    assert _snapshot(tmp_path) == before
+
+
+def test_an_interrupt_while_setting_a_file_aside_restores_every_file(tmp_path, monkeypatch):
+    _write_old(tmp_path)
+    before = _snapshot(tmp_path)
+    real = os.replace
+    asides = []
+
+    def replace(src, dst):
+        if str(dst).endswith(".previous"):
+            asides.append(src)
+            if len(asides) == 2:
+                raise KeyboardInterrupt
+        return real(src, dst)
+    monkeypatch.setattr(os, "replace", replace)
+    with pytest.raises(KeyboardInterrupt):
+        write_files(tmp_path, FILES, force=True)
+    monkeypatch.setattr(os, "replace", real)
+    assert _snapshot(tmp_path) == before
+
+
+def test_an_interrupt_while_staging_leaves_no_new_folder(tmp_path, monkeypatch):
+    monkeypatch.setattr(emit, "_stage", _interrupt_on_call(emit._stage, 2))
+    with pytest.raises(KeyboardInterrupt):
+        write_files(tmp_path / "new" / "ds", FILES)
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_any_other_exception_restores_and_is_raised_as_it_was(tmp_path, monkeypatch):
+    _write_old(tmp_path)
+    before = _snapshot(tmp_path)
+
+    def boom(*args):
+        raise RuntimeError("boom")
+    monkeypatch.setattr(emit, "_place", boom)
+    with pytest.raises(RuntimeError, match="boom"):
+        write_files(tmp_path, FILES, force=True)
+    assert _snapshot(tmp_path) == before
+
+
+def _cannot_put_back(monkeypatch):
+    """Every move of an old copy back into place fails."""
+    real = os.replace
+
+    def replace(src, dst):
+        if str(src).endswith(".previous"):
+            raise OSError(errno.EACCES, "Permission denied")
+        return real(src, dst)
+    monkeypatch.setattr(os, "replace", replace)
+
+
+@pytest.mark.parametrize("failure", [OSError(errno.ENOSPC, "No space left on device"),
+                                     KeyboardInterrupt()])
+def test_files_that_cannot_be_put_back_are_each_named_with_their_old_copy(
+        tmp_path, monkeypatch, failure):
+    _write_old(tmp_path)
+    calls = []
+
+    def place(staged, target):
+        calls.append(target)
+        if len(calls) == 3:
+            raise failure
+        return os.replace(str(staged), str(target))
+    monkeypatch.setattr(emit, "_place", place)
+    _cannot_put_back(monkeypatch)
+    with pytest.raises(InputError) as exc:
+        write_files(tmp_path, FILES, force=True)
+    monkeypatch.undo()
+    message = str(exc.value)
+    stages = [p for p in tmp_path.iterdir() if p.name.startswith(".uxskill-")]
+    assert len(stages) == 1, "the staging folder is kept while it holds old copies"
+    stage = stages[0]
+    reason = "interrupted" if isinstance(failure, KeyboardInterrupt) else "No space left on device"
+    assert message.startswith(f"{tmp_path / 'system-report.md'} could not be written ({reason})")
+    for name in FILES:
+        old_copy = stage / f"{name}.previous"
+        assert old_copy.read_text(encoding="utf-8") == OLD[name]
+        assert f"the old {name} is at {old_copy}" in message
+    assert f"To undo the write, move each old copy back into {tmp_path}, then" in message
+    assert "then pass a folder you can write to" in message
+
+
+def test_an_interrupt_while_making_the_staging_folder_leaves_no_new_folder(tmp_path, monkeypatch):
+    def interrupted(*args, **kwargs):
+        raise KeyboardInterrupt
+    monkeypatch.setattr(emit.tempfile, "mkdtemp", interrupted)
+    with pytest.raises(KeyboardInterrupt):
+        write_files(tmp_path / "new" / "ds", FILES)
+    assert list(tmp_path.iterdir()) == []

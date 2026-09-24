@@ -714,31 +714,36 @@ def _remove_folders(folders: Sequence[Path]) -> None:
             pass
 
 
-def _restore(out_dir: Path, placed: Sequence[Tuple[str, Optional[Path]]]) -> bool:
+def _restore(out_dir: Path, placed: Sequence[Tuple[str, Optional[Path]]]) -> List[str]:
     """Undo the moves so far: put each previous file back and remove each
-    new one. False when a previous file could not be put back."""
-    whole = True
+    new one. A name is recorded before its old copy is set aside, so an old
+    copy that is missing was never moved and its file is still in place.
+    Returns what could not be undone, one phrase per file."""
+    left: List[str] = []
     for name, previous in reversed(placed):
         target = out_dir / name
         try:
             if previous is not None:
-                os.replace(str(previous), str(target))
+                if previous.exists():
+                    os.replace(str(previous), str(target))
             elif target.exists():
                 target.unlink()
         except OSError:
-            whole = whole and previous is None
-    return whole
+            left.append(f"the old {name} is at {previous}" if previous is not None
+                        else f"the new {target} could not be removed")
+    return left
 
 
 def write_files(out_dir: Path, files: Mapping[str, str], *, force: bool = False) -> WritePlan:
     """Write the files that are new or, when forced, different. Without
     force, one conflicting file stops every write. Identical files are
     never rewritten. All or nothing: every file is staged in a folder
-    inside out_dir and then moved into place, and a failure at any step
-    puts the folder back as it was, so it never holds a mix of two
-    systems. Returns the plan it acted on; `conflicts` is non-empty only
-    when nothing was written. Every filesystem error is an InputError
-    naming the path and the fix."""
+    inside out_dir and then moved into place, and a failure at any step,
+    an interrupt included, puts the folder back as it was before it goes
+    on, so the folder never holds a mix of two systems. Returns the plan
+    it acted on; `conflicts` is non-empty only when nothing was written.
+    Every filesystem error is an InputError naming the path and the fix;
+    any other exception is raised as it was, once the folder is back."""
     if not files:
         return WritePlan((), (), ())
     plan = plan_writes(out_dir, files)
@@ -756,8 +761,10 @@ def write_files(out_dir: Path, files: Mapping[str, str], *, force: bool = False)
                          "write to") from None
     try:
         stage = Path(tempfile.mkdtemp(prefix=".uxskill-", dir=str(out_dir)))
-    except OSError as exc:
+    except BaseException as exc:
         _remove_folders(made)
+        if not isinstance(exc, OSError):
+            raise
         raise InputError(f"{out_dir} cannot be written ({_reason(exc)}), so nothing in it was "
                          "changed; pass a folder you can write to") from None
     placed: List[Tuple[str, Optional[Path]]] = []
@@ -766,21 +773,34 @@ def write_files(out_dir: Path, files: Mapping[str, str], *, force: bool = False)
         for name in names:
             _stage(stage / name, files[name].encode("utf-8"))
         for name in names:
-            previous = None
-            if name in plan.conflicts:
-                previous = stage / f"{name}.previous"
-                os.replace(str(out_dir / name), str(previous))
+            previous = stage / f"{name}.previous" if name in plan.conflicts else None
             placed.append((name, previous))
+            if previous is not None:
+                os.replace(str(out_dir / name), str(previous))
             _place(stage / name, out_dir / name)
-    except OSError as exc:
-        if not _restore(out_dir, placed):
-            raise InputError(f"{out_dir / name} could not be written ({_reason(exc)}), and the "
-                             f"previous files could not all be put back; they are in {stage}. "
-                             "Move them back into place, then pass a folder you can write "
-                             "to") from None
+    except BaseException as exc:
+        # Any failure, an interrupt included, puts the folder back first.
+        reason = _reason(exc) if isinstance(exc, OSError) else (
+            "interrupted" if isinstance(exc, KeyboardInterrupt) else type(exc).__name__)
+        left = _restore(out_dir, placed)
+        if left:
+            # The staging folder holds the old copies, so it stays; the
+            # person needs each path whatever stopped the write.
+            steps = []
+            if any(p.startswith("the old ") for p in left):
+                steps.append(f"move each old copy back into {out_dir}")
+            if any(p.startswith("the new ") for p in left):
+                steps.append("remove each new file named")
+            undo = _and(steps)
+            raise InputError(f"{out_dir / name} could not be written ({reason}), and "
+                             f"{len(left)} file{'' if len(left) == 1 else 's'} could not be put "
+                             f"back: {'; '.join(left)}. To undo the write, {undo}, then pass a "
+                             "folder you can write to") from exc
         shutil.rmtree(str(stage), ignore_errors=True)
         _remove_folders(made)
-        raise InputError(f"{out_dir / name} could not be written ({_reason(exc)}), so nothing "
+        if not isinstance(exc, OSError):
+            raise
+        raise InputError(f"{out_dir / name} could not be written ({reason}), so nothing "
                          f"in {out_dir} was changed; free some space or pass a folder you can "
                          "write to") from None
     shutil.rmtree(str(stage), ignore_errors=True)
