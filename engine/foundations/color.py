@@ -1,13 +1,22 @@
-"""Color foundation: primitives from OKLCH ramps, semantic roles per mode,
-the WCAG pairings every system must meet, and a deterministic retune.
+"""Color foundation: primitives from OKLCH ramps, semantic roles per
+context, the WCAG pairings every system must meet, and a deterministic
+retune.
+
+Contexts are scheme x contrast (light, dark; standard, high). Each role
+starts where SEMANTIC (standard) or HIGH_CONTRAST puts it for the scheme.
+Fill groups (a solid fill, its hover and pressed steps, the text on it,
+and for the primary button the focus ring) are solved jointly by
+_solve_group; every other role moves one ramp step at a time away from
+its background until its pairings hold. Surfaces never move.
 
 generate_color never gates itself: it returns tokens and notes, and
 build_system validates and gates them with PAIRINGS and CHECKS, then asks
 seed_hint for advice on the failing pairings the brand seed controls."""
 from __future__ import annotations
 
+from dataclasses import dataclass
 from types import MappingProxyType
-from typing import Dict, List, Mapping, Tuple
+from typing import Dict, List, Mapping, Optional, Tuple
 
 from engine.foundations.color_math import contrast, hex_to_oklch, luminance, oklch_to_hex
 from engine.foundations.foundation import BrandInputs, Foundation, Generated
@@ -22,69 +31,109 @@ COLOR_CONTEXTS = tuple(contexts(("scheme", "contrast")))
 
 STATUS_HUES = {"danger": 25.0, "warning": 75.0, "success": 150.0, "info": 245.0}
 STATUS_SEED = (0.58, 0.16)  # OKLCH lightness, chroma for status seeds
-
+# Translucent overlays: black ("shade") and white ("tint") at these percents.
+OVERLAY_STEPS = (10, 20, 40, 60, 80)
 
 _SEMANTIC: Dict[str, Tuple[str, str]] = {
     "color.surface.page": ("color.neutral.50", "color.neutral.950"),
     "color.surface.card": ("color.base.white", "color.neutral.900"),
     "color.surface.sunken": ("color.neutral.100", "color.base.black"),
+    "color.surface.raised": ("color.base.white", "color.neutral.800"),
     "color.surface.inverse": ("color.neutral.900", "color.neutral.100"),
+    "color.surface.selected": ("color.brand.100", "color.brand.900"),
     "color.text.default": ("color.neutral.900", "color.neutral.50"),
     "color.text.muted": ("color.neutral.600", "color.neutral.400"),
     "color.text.inverse": ("color.neutral.50", "color.neutral.900"),
     "color.text.link": ("color.brand.600", "color.brand.300"),
+    "color.text.disabled": ("color.neutral.400", "color.neutral.600"),
     "color.text.on-action": ("color.base.white", "color.base.white"),
+    "color.text.on-danger": ("color.base.white", "color.base.white"),
     "color.action.primary": ("color.brand.500", "color.brand.400"),
     "color.action.primary-hover": ("color.brand.600", "color.brand.300"),
+    "color.action.primary-pressed": ("color.brand.700", "color.brand.200"),
+    "color.action.danger": ("color.danger.600", "color.danger.400"),
+    "color.action.danger-hover": ("color.danger.700", "color.danger.300"),
+    "color.action.danger-pressed": ("color.danger.800", "color.danger.200"),
+    "color.action.disabled": ("color.neutral.200", "color.neutral.800"),
     "color.line.subtle": ("color.neutral.200", "color.neutral.800"),
     "color.line.input": ("color.neutral.500", "color.neutral.500"),
+    "color.line.selected": ("color.brand.600", "color.brand.300"),
     "color.focus.ring": ("color.brand.700", "color.brand.200"),
+    "color.focus.ring-inverse": ("color.brand.300", "color.brand.700"),
+    "color.scrim": ("color.shade.40", "color.shade.60"),
 }
 for _s in STATUS_HUES:
     _SEMANTIC[f"color.status.{_s}.text"] = (f"color.{_s}.700", f"color.{_s}.300")
     _SEMANTIC[f"color.status.{_s}.soft"] = (f"color.{_s}.100", f"color.{_s}.900")
+    _SEMANTIC[f"color.status.{_s}.strong"] = (f"color.{_s}.600", f"color.{_s}.400")
+    _SEMANTIC[f"color.status.{_s}.on-strong"] = ("color.base.white", "color.base.black")
 # Read-only view: role -> (light primitive, dark primitive).
 SEMANTIC: Mapping[str, Tuple[str, str]] = MappingProxyType(_SEMANTIC)
 
 # Starting points in contrast:high contexts, per scheme: extreme surfaces,
-# text a step or two further out. The retune and the action solver then
+# text a step or two further out. The retune and the group solver then
 # move roles until the raised minimums hold. Roles not listed start where
 # the standard table puts them.
 _HIGH: Dict[str, Tuple[str, str]] = {
     "color.surface.page": ("color.base.white", "color.base.black"),
     "color.surface.card": ("color.base.white", "color.neutral.950"),
     "color.surface.sunken": ("color.base.white", "color.base.black"),
+    "color.surface.raised": ("color.base.white", "color.neutral.900"),
     "color.surface.inverse": ("color.base.black", "color.base.white"),
+    "color.surface.selected": ("color.brand.50", "color.brand.950"),
     "color.text.default": ("color.neutral.950", "color.base.white"),
     "color.text.muted": ("color.neutral.800", "color.neutral.200"),
     "color.text.inverse": ("color.base.white", "color.base.black"),
     "color.text.link": ("color.brand.800", "color.brand.200"),
     "color.action.primary": ("color.brand.800", "color.brand.200"),
     "color.action.primary-hover": ("color.brand.900", "color.brand.100"),
+    "color.action.primary-pressed": ("color.brand.950", "color.brand.50"),
+    "color.action.danger": ("color.danger.800", "color.danger.200"),
+    "color.action.danger-hover": ("color.danger.900", "color.danger.100"),
+    "color.action.danger-pressed": ("color.danger.950", "color.danger.50"),
     "color.line.subtle": ("color.neutral.400", "color.neutral.600"),
     "color.line.input": ("color.neutral.700", "color.neutral.300"),
+    "color.line.selected": ("color.brand.800", "color.brand.200"),
     "color.focus.ring": ("color.brand.600", "color.brand.400"),
+    "color.focus.ring-inverse": ("color.brand.200", "color.brand.800"),
+    "color.scrim": ("color.shade.60", "color.shade.80"),
 }
 for _s in STATUS_HUES:
     _HIGH[f"color.status.{_s}.text"] = (f"color.{_s}.800", f"color.{_s}.200")
     _HIGH[f"color.status.{_s}.soft"] = (f"color.{_s}.50", f"color.{_s}.950")
+    _HIGH[f"color.status.{_s}.strong"] = (f"color.{_s}.800", f"color.{_s}.200")
 HIGH_CONTRAST: Mapping[str, Tuple[str, str]] = MappingProxyType(_HIGH)
 
 _TEXT_BGS = ("color.surface.page", "color.surface.card")
-# Every surface text can sit on; surface.sunken is a text surface too.
-_ALL_BGS = _TEXT_BGS + ("color.surface.sunken",)
+# Every surface body text can sit on.
+_ALL_BGS = _TEXT_BGS + ("color.surface.sunken", "color.surface.raised")
+_FILL_STATES = {
+    "color.action.primary": ("color.action.primary-hover", "color.action.primary-pressed"),
+    "color.action.danger": ("color.action.danger-hover", "color.action.danger-pressed"),
+}
 PAIRINGS: Tuple[Pairing, ...] = tuple(
-    [Pairing("color.text.default", bg, 4.5, "1.4.3") for bg in _ALL_BGS]
-    + [Pairing("color.text.muted", bg, 4.5, "1.4.3") for bg in _ALL_BGS]
+    # Body text also sits on the selected surface and on status soft fills
+    # (alert and banner copy).
+    [Pairing("color.text.default", bg, 4.5, "1.4.3") for bg in _ALL_BGS + ("color.surface.selected",)
+     + tuple(f"color.status.{s}.soft" for s in STATUS_HUES)]
+    + [Pairing("color.text.muted", bg, 4.5, "1.4.3") for bg in _ALL_BGS
+       + tuple(f"color.status.{s}.soft" for s in STATUS_HUES)]
     + [Pairing("color.text.link", bg, 4.5, "1.4.3") for bg in _ALL_BGS]
     + [Pairing("color.text.inverse", "color.surface.inverse", 4.5, "1.4.3")]
-    + [Pairing("color.text.on-action", bg, 4.5, "1.4.3")
-       for bg in ("color.action.primary", "color.action.primary-hover")]
+    + [Pairing(on, state, 4.5, "1.4.3")
+       for fill, on in (("color.action.primary", "color.text.on-action"),
+                        ("color.action.danger", "color.text.on-danger"))
+       for state in (fill,) + _FILL_STATES[fill]]
     + [Pairing(f"color.status.{s}.text", bg, 4.5, "1.4.3")
        for s in STATUS_HUES for bg in _ALL_BGS + (f"color.status.{s}.soft",)]
+    + [Pairing(f"color.status.{s}.on-strong", f"color.status.{s}.strong", 4.5, "1.4.3")
+       for s in STATUS_HUES]
     + [Pairing("color.line.input", bg, 3.0, "1.4.11") for bg in _TEXT_BGS]
-    + [Pairing("color.action.primary", "color.surface.page", 3.0, "1.4.11")]
-    + [Pairing("color.action.primary-hover", "color.surface.page", 3.0, "1.4.11")]
+    + [Pairing("color.line.selected", bg, 3.0, "1.4.11") for bg in _TEXT_BGS]
+    + [Pairing(state, "color.surface.page", 3.0, "1.4.11")
+       for fill in _FILL_STATES for state in (fill,) + _FILL_STATES[fill]]
+    + [Pairing(f"color.status.{s}.strong", "color.surface.page", 3.0, "1.4.11")
+       for s in STATUS_HUES]
     # A focus indicator is a non-text part: 1.4.11 sets its 3:1 against the
     # colors next to it (2.4.7 asks only that focus be visible).
     + [Pairing("color.focus.ring", bg, 3.0, "1.4.11") for bg in _ALL_BGS]
@@ -93,19 +142,47 @@ PAIRINGS: Tuple[Pairing, ...] = tuple(
     # carries 7:1 text, no sRGB ring is 4.5:1 from both the page and the
     # fill unless the fill is near black.
     + [Pairing("color.focus.ring", "color.action.primary", 3.0, "1.4.11", high=3.0)]
+    # One ring cannot also stand out from the inverse surface, so that
+    # surface gets its own.
+    + [Pairing("color.focus.ring-inverse", "color.surface.inverse", 3.0, "1.4.11")]
 )
 
-# The four roles one joint solver owns: the button fill, its hover step,
-# the text on both, and the focus ring that must stand out from the fill
-# and from every surface. The gate still checks every pairing whose
-# foreground is one of these; the one-pairing-at-a-time retune never moves
-# them. See _solve_action_group.
-_ACTION_GROUP_ROLES = frozenset({"color.text.on-action", "color.action.primary",
-                                 "color.action.primary-hover", "color.focus.ring"})
 
+@dataclass(frozen=True)
+class _Group:
+    """Roles solved together: a fill, its interaction states, the text on
+    it, and optionally the focus ring that must stand out from the fill."""
+    fill: str
+    on: str
+    states: Tuple[str, ...] = ()
+    ring: str = ""
+
+
+GROUPS: Tuple[_Group, ...] = (
+    _Group("color.action.primary", "color.text.on-action",
+           _FILL_STATES["color.action.primary"], "color.focus.ring"),
+    _Group("color.action.danger", "color.text.on-danger", _FILL_STATES["color.action.danger"]),
+) + tuple(_Group(f"color.status.{s}.strong", f"color.status.{s}.on-strong") for s in STATUS_HUES)
+_GROUP_ROLES = frozenset(r for g in GROUPS for r in (g.fill, g.on, g.ring) + g.states if r)
 
 # M1 name for the generator's result; every foundation now returns Generated.
 ColorResult = Generated
+
+
+def _scheme(mode: str) -> str:
+    return parse(mode).get("scheme", "light")
+
+
+def _default(role: str, mode: str) -> str:
+    """Where a role starts in one context, before any retune."""
+    table = HIGH_CONTRAST if parse(mode).get("contrast") == "high" and role in HIGH_CONTRAST \
+        else SEMANTIC
+    return table[role][0 if _scheme(mode) == "light" else 1]
+
+
+def _need(fg: str, bg: str, mode: str) -> float:
+    """The minimum PAIRINGS asks of fg on bg in this context."""
+    return next(required(p, mode)[0] for p in PAIRINGS if (p.fg, p.bg) == (fg, bg))
 
 
 def _neutral_seed(brand_hex: str, axes: AxisValues) -> str:
@@ -123,6 +200,9 @@ def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str,
             notes.append(f"color.{family}: {r.note}")
         for step, hx in r.stops.items():
             prims[f"color.{family}.{step}"] = hx
+    for family, rgb in (("shade", "#000000"), ("tint", "#FFFFFF")):
+        for pct in OVERLAY_STEPS:
+            prims[f"color.{family}.{pct}"] = rgb + f"{round(pct * 255 / 100):02X}"
     return prims
 
 
@@ -159,120 +239,111 @@ def _ring_candidates(mode: str, default_ring: str) -> List[str]:
         base if light else list(reversed(base)))
 
 
-def _solve_action_group(mode: str, prims: Dict[str, str], pick: Dict[str, Dict[str, str]],
-                         notes: List[str]) -> None:
-    """Choose action.primary, action.primary-hover, text.on-action and
-    focus.ring together for one mode.
+def _state_offsets(conv: int, n: int) -> List[Tuple[int, ...]]:
+    """Ramp offsets from the fill for n interaction states, in preference
+    order: each state one step further in the conventional direction, then
+    against it, then with a gap of two."""
+    if n == 0:
+        return [()]
+    out: List[Tuple[int, ...]] = []
+    for d in (conv, -conv, 2 * conv, -2 * conv):
+        out.append(tuple(d * (k + 1) for k in range(n)))
+    return out
+
+
+def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
+                 pick: Dict[str, Dict[str, str]], notes: List[str]) -> None:
+    """Choose one fill group for one context.
 
     Search order (deterministic):
-      1. action.primary at 0, 1, 2, ... ramp steps from its default; at equal
+      1. the fill at 0, 1, 2, ... ramp steps from its default; at equal
          distance the conventional direction (darker in light, lighter in
-         dark) first.
-      2. For each primary, the hover one step conventional, one step
-         against, then two steps each way.
-      3. For each pair, text.on-action as base.white, then base.black.
-      4. For each triple, the first ring from _ring_candidates.
-    The first candidate that clears every constraint wins (minimums are
-    PAIRINGS' own in this context, so they rise under contrast:high):
-      on-action on primary and on hover  >= 4.5 (WCAG 1.4.3), 7.0 high (WCAG 1.4.6)
-      primary and hover on the page      >= 3.0 (WCAG 1.4.11), 4.5 high (our floor)
-      hover's hex differs from primary's
-      ring on page, card and sunken      >= 3.0 (WCAG 1.4.11), 4.5 high (our floor)
-      ring against the primary fill      >= 3.0 in both (WCAG 1.4.11)
+         dark) first;
+      2. its states (hover, then pressed) one and two steps on in the
+         conventional direction, then against it, then with gaps of two;
+      3. the text on it as base.white, then base.black;
+      4. for the primary group, the first ring from _ring_candidates.
+    The first candidate that clears every constraint wins. The minimums
+    are PAIRINGS' own in this context, so they rise under contrast:high:
+      text on the fill and on every state   >= 4.5 (WCAG 1.4.3), 7.0 high (WCAG 1.4.6)
+      fill and every state on the page      >= 3.0 (WCAG 1.4.11), 4.5 high (our floor)
+      every state's hex differs from the fill's and from each other's
+      ring on every text surface            >= 3.0 (WCAG 1.4.11), 4.5 high (our floor)
+      ring against the primary fill         >= 3.0 in both (WCAG 1.4.11)
     When nothing clears, the closest candidate is kept and noted; the gate
     then reports the failing pairings. The generator never raises here.
     """
-    primary_role = "color.action.primary"
-    hover_role = "color.action.primary-hover"
-    on_action_role = "color.text.on-action"
-    ring_role = "color.focus.ring"
-    defaults = {r: pick[mode][r] for r in (primary_role, hover_role, on_action_role, ring_role)}
+    roles = (g.fill,) + g.states + (g.on,) + ((g.ring,) if g.ring else ())
+    defaults = {r: pick[mode][r] for r in roles}
     page_hex = prims[pick[mode]["color.surface.page"]]
-    ring_bgs = [prims[pick[mode][bg]] for bg in _ALL_BGS]
-    rings = _ring_candidates(mode, defaults[ring_role])
-
-    family, default_step = defaults[primary_role].rsplit(".", 1)
+    family, default_step = defaults[g.fill].rsplit(".", 1)
     conv = +1 if _scheme(mode) == "light" else -1
-    need_text = _need(on_action_role, primary_role, mode)
-    need_fill = _need(primary_role, "color.surface.page", mode)
-    need_ring = _need(ring_role, "color.surface.page", mode)
-    need_ring_fill = _need(ring_role, primary_role, mode)
+    need_text = _need(g.on, g.fill, mode)
+    need_fill = _need(g.fill, "color.surface.page", mode)
+    rings = _ring_candidates(mode, defaults[g.ring]) if g.ring else []
+    ring_bgs = [prims[pick[mode][bg]] for bg in _ALL_BGS]
 
-    def path_at(idx: int) -> str:
-        return f"{family}.{STEPS[idx]}"
-
-    def ring_fit(ring: str, primary_hex: str) -> float:
+    def ring_fit(ring: str, fill_hex: str) -> float:
         hx = prims[ring]
-        return min([contrast(hx, bg) / need_ring for bg in ring_bgs]
-                   + [contrast(hx, primary_hex) / need_ring_fill])
+        return min([contrast(hx, bg) / _need(g.ring, "color.surface.page", mode) for bg in ring_bgs]
+                   + [contrast(hx, fill_hex) / _need(g.ring, g.fill, mode)])
 
-    best = None  # (score, ratios, choice) kept when nothing clears
-    for primary_idx in _order_from(STEPS.index(int(default_step)), conv):
-        primary_hex = prims[path_at(primary_idx)]
-        r_pp = contrast(primary_hex, page_hex)
-        best_ring = max(rings, key=lambda r: ring_fit(r, primary_hex))
-        ring_ok = [r for r in rings if ring_fit(r, primary_hex) >= 1.0]
-        for hd in (conv, -conv, 2 * conv, -2 * conv):
-            hover_idx = primary_idx + hd
-            if not 0 <= hover_idx < len(STEPS):
+    best: Optional[Tuple[float, Tuple[str, ...], str]] = None
+    for fill_idx in _order_from(STEPS.index(int(default_step)), conv):
+        fill_hex = prims[f"{family}.{STEPS[fill_idx]}"]
+        ring, ring_score = "", 1.0
+        if g.ring:
+            ring = max(rings, key=lambda r: ring_fit(r, fill_hex))
+            ring = next((r for r in rings if ring_fit(r, fill_hex) >= 1.0), ring)
+            ring_score = ring_fit(ring, fill_hex)
+        for offsets in _state_offsets(conv, len(g.states)):
+            idxs = [fill_idx] + [fill_idx + o for o in offsets]
+            if not all(0 <= i < len(STEPS) for i in idxs):
                 continue
-            hover_hex = prims[path_at(hover_idx)]
-            if hover_hex == primary_hex:
+            hexes = [prims[f"{family}.{STEPS[i]}"] for i in idxs]
+            if len(set(hexes)) != len(hexes):
                 continue
-            r_hp = contrast(hover_hex, page_hex)
-            for on_path in ("color.base.white", "color.base.black"):
-                r_op = contrast(prims[on_path], primary_hex)
-                r_oh = contrast(prims[on_path], hover_hex)
-                ring = ring_ok[0] if ring_ok else best_ring
-                r_rp = contrast(prims[ring], primary_hex)
-                score = min(r_op / need_text, r_oh / need_text, r_pp / need_fill,
-                            r_hp / need_fill, ring_fit(ring, primary_hex))
-                choice = (path_at(primary_idx), path_at(hover_idx), on_path, ring)
-                ratios = (r_op, r_oh, r_pp, r_hp, r_rp)
+            for on in ("color.base.white", "color.base.black"):
+                score = min([contrast(prims[on], h) / need_text for h in hexes]
+                            + [contrast(h, page_hex) / need_fill for h in hexes] + [ring_score])
+                choice = tuple(f"{family}.{STEPS[i]}" for i in idxs) + (on,) + (
+                    (ring,) if g.ring else ())
+                summary = (f"text/fill {contrast(prims[on], hexes[0]):.2f}:1, "
+                           f"fill/page {contrast(hexes[0], page_hex):.2f}:1"
+                           + (f", ring/fill {contrast(prims[ring], hexes[0]):.2f}:1" if g.ring else ""))
                 if best is None or score > best[0]:
-                    best = (score, ratios, choice)
+                    best = (score, choice, summary)
                 if score >= 1.0:
-                    _apply_action_choice(mode, pick, defaults, choice, ratios, notes, solved=True)
+                    _apply(g, mode, pick, defaults, roles, choice, summary, notes, solved=True)
                     return
-
     if best is None:
-        # Every hover candidate resolved to the same hex as its primary (a
-        # ramp flat end to end). Keep the defaults; the hover-distinct
-        # check fails in the gate and names the fix.
-        notes.append(
-            f"action group ({mode}): every brand step resolves to the same color, so "
-            f"{hover_role} cannot differ from {primary_role}; kept the defaults")
+        notes.append(f"{g.fill} group ({mode}): every step of the {family.split('.')[-1]} ramp "
+                     "resolves to the same color, so the states cannot differ from the fill; "
+                     "kept the defaults")
         return
-    _apply_action_choice(mode, pick, defaults, best[2], best[1], notes, solved=False)
+    _apply(g, mode, pick, defaults, roles, best[1], best[2], notes, solved=False)
 
 
-def _apply_action_choice(mode: str, pick: Dict[str, Dict[str, str]], defaults: Dict[str, str],
-                         choice: Tuple[str, str, str, str], ratios: Tuple[float, ...],
-                         notes: List[str], solved: bool) -> None:
-    roles = ("color.action.primary", "color.action.primary-hover", "color.text.on-action",
-             "color.focus.ring")
-    r_op, r_oh, r_pp, r_hp, r_rp = ratios
+def _apply(g: _Group, mode: str, pick: Dict[str, Dict[str, str]], defaults: Dict[str, str],
+           roles: Tuple[str, ...], choice: Tuple[str, ...], summary: str, notes: List[str],
+           solved: bool) -> None:
     for role, path in zip(roles, choice):
         pick[mode][role] = path
     moves = ", ".join(f"{role} {defaults[role]} -> {path}"
                       for role, path in zip(roles, choice) if defaults[role] != path)
-    measured = (f"on-action/primary {r_op:.2f}:1, on-action/hover {r_oh:.2f}:1, "
-                f"primary/page {r_pp:.2f}:1, hover/page {r_hp:.2f}:1, ring/primary {r_rp:.2f}:1")
     if not solved:
-        notes.append(
-            f"action group ({mode}): no combination of the button fill, its hover, the text on "
-            f"it and the focus ring within the ramps clears every requirement; kept the closest"
-            f"{': ' + moves if moves else ''}, {measured}")
+        notes.append(f"{g.fill} group ({mode}): no combination within the ramps clears every "
+                     f"requirement; kept the closest{': ' + moves if moves else ''}, {summary}")
     elif moves:
-        notes.append(f"action group ({mode}): {moves}, {measured}")
+        notes.append(f"{g.fill} group ({mode}): {moves}, {summary}")
 
 
 def seed_hint(ts: TokenSet, finding: GateFinding) -> str:
     """Advice for a failing pairing the brand seed controls: one side
-    aliases a brand step in that mode. The direction comes from the other
-    side: when it is lighter than the brand color, a darker seed gains
-    contrast, otherwise a lighter one does. Pairings the seed does not
-    control get no advice ("") and keep the gate's own fix."""
+    aliases a brand step in that context. The direction comes from the
+    other side: when it is lighter than the brand color, a darker seed
+    gains contrast, otherwise a lighter one does. Pairings the seed does
+    not control get no advice ("") and keep the gate's own fix."""
     for side, other in ((finding.fg, finding.bg), (finding.bg, finding.fg)):
         raw = ts.raw(side, finding.mode)
         if is_alias(raw) and alias_target(raw).startswith("color.brand."):
@@ -284,35 +355,54 @@ def seed_hint(ts: TokenSet, finding: GateFinding) -> str:
     return ""
 
 
-def _hover_distinct(ts: TokenSet, mode: str) -> List[str]:
-    primary, hover = "color.action.primary", "color.action.primary-hover"
-    if not (ts.has(primary) and ts.has(hover)):
+def _states_distinct(ts: TokenSet, mode: str) -> List[str]:
+    out = []
+    for fill, states in _FILL_STATES.items():
+        chain = (fill,) + states
+        if not all(ts.has(r) for r in chain):
+            continue
+        hexes = [ts.resolve(r, mode) for r in chain]
+        for i, role in enumerate(chain[1:], 1):
+            if hexes[i] in hexes[:i]:
+                other = chain[hexes.index(hexes[i])]
+                out.append(f"{role} equals {other} ({mode}) at {hexes[i]}; point {role} at a "
+                           "neighboring step so each state reads as a different color")
+    return out
+
+
+def _disabled_distinct(ts: TokenSet, mode: str) -> List[str]:
+    out = []
+    for disabled, enabled in (("color.text.disabled", ("color.text.default", "color.text.muted")),
+                              ("color.action.disabled", ("color.action.primary",))):
+        if not ts.has(disabled):
+            continue
+        hx = ts.resolve(disabled, mode)
+        for role in enabled:
+            if ts.has(role) and ts.resolve(role, mode) == hx:
+                out.append(f"{disabled} equals {role} ({mode}) at {hx}; point {disabled} at a "
+                           "step that reads as inactive next to it")
+    return out
+
+
+def _scheme_polarity(ts: TokenSet, mode: str) -> List[str]:
+    """A light scheme has a page lighter than its text, a dark scheme the
+    reverse; a set that says dark but ships a light palette is caught here."""
+    page, text = "color.surface.page", "color.text.default"
+    if not (ts.has(page) and ts.has(text)):
         return []
-    p, h = ts.resolve(primary, mode), ts.resolve(hover, mode)
-    if p != h:
+    light = _scheme(mode) == "light"
+    if (luminance(ts.resolve(page, mode)) > luminance(ts.resolve(text, mode))) == light:
         return []
-    return [f"{hover} equals {primary} ({mode}) at {p}; point {hover} at a neighboring "
-            "brand step so the hover state reads as a different color"]
+    want = "lighter" if light else "darker"
+    return [f"{page} is not {want} than {text} ({mode}); a {_scheme(mode)} scheme needs a "
+            f"{want} page, so point {page} and {text} at the other ends of the neutral ramp"]
 
 
 CHECKS: Tuple[Check, ...] = (
-    Check("hover-distinct", "system", _hover_distinct, axes=("scheme", "contrast")),)
-
-
-def _scheme(mode: str) -> str:
-    return parse(mode).get("scheme", "light")
-
-
-def _default(role: str, mode: str) -> str:
-    """Where a role starts in one context, before any retune."""
-    table = HIGH_CONTRAST if parse(mode).get("contrast") == "high" and role in HIGH_CONTRAST \
-        else SEMANTIC
-    return table[role][0 if _scheme(mode) == "light" else 1]
-
-
-def _need(fg: str, bg: str, mode: str) -> float:
-    """The minimum PAIRINGS asks of fg on bg in this context."""
-    return next(required(p, mode)[0] for p in PAIRINGS if (p.fg, p.bg) == (fg, bg))
+    Check("states-distinct", "system", _states_distinct, axes=("scheme", "contrast")),
+    Check("disabled-distinct", "system", _disabled_distinct, axes=("scheme", "contrast")),
+    Check("scheme-polarity", "system", _scheme_polarity, axes=("scheme", "contrast")),
+)
 
 
 def generate_color(axes: AxisValues, brand_hex: str) -> Generated:
@@ -331,15 +421,9 @@ def generate_color(axes: AxisValues, brand_hex: str) -> Generated:
     def value(mode: str, role: str) -> str:
         return prims[pick[mode][role]]
 
-    # The action group (fill, hover, text on it, focus ring) is solved
-    # jointly by _solve_action_group; every other pairing moves its own
-    # foreground away from its background, one step at a time, until all of
-    # them hold or the ramp ends. Surfaces never move.
-    generic_pairings = [p for p in PAIRINGS if p.fg not in _ACTION_GROUP_ROLES]
-
+    generic_pairings = [p for p in PAIRINGS if p.fg not in _GROUP_ROLES]
     for mode in COLOR_CONTEXTS:
-        max_passes = len(generic_pairings) * len(STEPS) + 1
-        for _pass in range(max_passes):
+        for _pass in range(len(generic_pairings) * len(STEPS) + 1):
             changed = False
             for p in generic_pairings:
                 for _ in range(len(STEPS)):
@@ -360,9 +444,10 @@ def generate_color(axes: AxisValues, brand_hex: str) -> Generated:
                     changed = True
             if not changed:
                 break
-        # No generic pairing reads an action-group role as its background,
-        # so solving the group once, after the loop settles, is enough.
-        _solve_action_group(mode, prims, pick, notes)
+        # No generic pairing reads a group role as its background, so each
+        # group is solved once, after the loop settles.
+        for g in GROUPS:
+            _solve_group(g, mode, prims, pick, notes)
 
     ts = TokenSet()
     for path, hx in prims.items():

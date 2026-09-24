@@ -49,7 +49,7 @@ def test_validation_problems_raise_validation_error_with_every_problem(monkeypat
 
 
 def _no_solver(monkeypatch):
-    monkeypatch.setattr(color_module, "_solve_action_group", lambda *args, **kwargs: None)
+    monkeypatch.setattr(color_module, "_solve_group", lambda *args, **kwargs: None)
 
 
 def test_generator_recheck_raises_gate_failure_with_the_seed_hint(monkeypatch):

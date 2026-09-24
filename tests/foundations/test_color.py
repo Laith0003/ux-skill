@@ -66,37 +66,38 @@ def _brand_ramp(monkeypatch, brand, stops):
 
 
 def test_flat_action_ramp_is_noted_and_the_gate_blocks_it(monkeypatch):
-    # The generator never raises for an unsolvable action group: it keeps
+    # The generator never raises for an unsolvable fill group: it keeps
     # the defaults, notes why, and the build's gate blocks the result with
-    # the hover-distinct check naming the fix.
+    # the states-distinct check naming the fix.
     brand = "#3366FF"
     _brand_ramp(monkeypatch, brand, {s: "#808080" for s in STEPS})
     result = generate_color(AXES, brand)
-    assert any(n.startswith("action group (scheme:light,contrast:standard): every brand step resolves "
-                          "to the same color")
+    assert any(n.startswith("color.action.primary group (scheme:light,contrast:standard): every "
+                            "step of the brand ramp resolves to the same color")
                for n in result.notes)
     with pytest.raises(GateFailure) as exc:
         build_color(AXES, brand)
-    failures = [f for f in exc.value.report.failures if f.check == "hover-distinct"]
+    failures = [f for f in exc.value.report.failures if f.check == "states-distinct"]
     assert failures and "color.action.primary-hover equals color.action.primary" in failures[0].message
-    assert "point color.action.primary-hover at a neighboring brand step" in failures[0].message
+    assert "point color.action.primary-hover at a neighboring step" in failures[0].message
 
 
 def test_unsatisfiable_action_group_keeps_the_closest_and_the_gate_blocks_it(monkeypatch):
     # A ramp that never leaves the near-white end cannot give the button
     # 3:1 against a light page. The generator keeps the closest candidate,
-    # its note carries the four ratios reached, and the gate names the
-    # failing pairing.
+    # its note carries the ratios reached, and the gate names the failing
+    # pairing.
     brand = "#3366FF"
     _brand_ramp(monkeypatch, brand,
                 {s: oklch_to_hex(0.99 - i * 0.01, 0.0, 0.0) for i, s in enumerate(STEPS)})
     notes = [n for n in generate_color(AXES, brand).notes
-             if n.startswith("action group (scheme:light,contrast:standard)")]
+             if n.startswith("color.action.primary group (scheme:light,contrast:standard)")]
     assert len(notes) == 1 and "kept the closest" in notes[0]
-    assert len(re.findall(r"\d+\.\d\d:1", notes[0])) == 5
+    assert len(re.findall(r"\d+\.\d\d:1", notes[0])) == 3
     with pytest.raises(GateFailure) as exc:
         build_color(AXES, brand)
-    assert any((f.fg, f.bg, f.mode) == ("color.action.primary", "color.surface.page", "scheme:light,contrast:standard")
+    assert any((f.fg, f.bg, f.mode) == ("color.action.primary", "color.surface.page",
+                                        "scheme:light,contrast:standard")
                for f in exc.value.report.findings)
 
 
@@ -125,22 +126,23 @@ def test_notes_are_complete(seed):
     # of note, owned by ramp.py's Task 3 format, not this task's retune
     # bookkeeping).
     #
-    # Two note shapes exist: phase 1's ordinary one-pairing move ("<role>
-    # (<mode>): <old> -> <new>, ... was X:1, now Y:1, needs Z:1 (<criterion>)")
-    # and the R17 action-group solver's single per-mode summary ("action
-    # group (<mode>): <role> <old> -> <new>, <role> <old> -> <new>, <role>
-    # <old> -> <new>, on-action/primary A:1, on-action/hover B:1,
-    # primary/page C:1, hover/page D:1"), which reports four achieved
-    # ratios instead of a single was/now pair.
+    # Two note shapes exist: the ordinary one-pairing move ("<role>
+    # (<mode>): <old> -> <new>, ... was X:1, now Y:1, <minimum and its
+    # source>") and the fill-group solver's per-context summary ("<fill>
+    # group (<mode>): <role> <old> -> <new>, ..., text/fill A:1, fill/page
+    # B:1[, ring/fill C:1]"), which reports the ratios reached instead of a
+    # single was/now pair.
     r = generate_color(AXES, seed)
     retune_notes = [n for n in r.notes if "(scheme:" in n]
     assert retune_notes, f"{seed}: expected at least one retune-loop note"
     for note in retune_notes:
         assert re.search(r"\(scheme:(light|dark),contrast:(standard|high)\)", note), note
         assert _PATH_MOVE_RE.search(note), note
-        if note.startswith("action group ("):
-            # only the roles that moved are listed, each as old -> new
-            assert len(_BARE_RATIO_RE.findall(note)) == 5, note
+        if re.match(r"color\.\S+ group \(", note):
+            # a fill-group note lists only the roles that moved, then the
+            # text/fill and fill/page ratios, and ring/fill for the primary
+            ratios = len(_BARE_RATIO_RE.findall(note))
+            assert ratios == (3 if note.startswith("color.action.primary group") else 2), note
         else:
             assert _WAS_RATIO_RE.search(note), note
             assert _NOW_RATIO_RE.search(note), note
@@ -237,7 +239,7 @@ def test_ring_prefers_a_brand_step():
 
 def test_ring_moves_are_noted():
     notes = [n for n in generate_color(AXES, "#6B4423").notes
-             if n.startswith("action group (scheme:light,contrast:standard)")]
+             if n.startswith("color.action.primary group (scheme:light,contrast:standard)")]
     assert notes and "color.focus.ring color.brand.700 -> " in notes[0]
 
 
@@ -315,7 +317,7 @@ def test_retune_notes_cite_only_what_wcag_says(seed, monkeypatch):
     high["color.line.input"] = ("color.neutral.300", "color.neutral.700")
     monkeypatch.setattr(color_module, "HIGH_CONTRAST", high)
     notes = [n for n in generate_color(AXES, seed).notes
-             if "(scheme:" in n and not n.startswith("action group (")]
+             if "(scheme:" in n and not re.match(r"color\.\S+ group \(", n)]
     assert any("contrast:standard" in n for n in notes), seed
     assert any("WCAG 1.4.6 needs 7.0:1" in n for n in notes), seed
     assert any("our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3.0:1)" in n
@@ -325,5 +327,102 @@ def test_retune_notes_cite_only_what_wcag_says(seed, monkeypatch):
 
 
 def test_focus_ring_pairings_cite_non_text_contrast():
-    rings = [p for p in PAIRINGS if p.fg == "color.focus.ring"]
-    assert rings and all(p.criterion == "1.4.11" for p in rings)
+    rings = [p for p in PAIRINGS if p.fg in ("color.focus.ring", "color.focus.ring-inverse")]
+    assert {p.fg for p in rings} == {"color.focus.ring", "color.focus.ring-inverse"}
+    assert all(p.criterion == "1.4.11" for p in rings)
+
+
+# Color completion: states, disabled, selected, destructive, strong status
+# fills, overlays, the inverse focus ring and the raised surface.
+
+NEW_ROLES = (
+    "color.surface.raised", "color.surface.selected", "color.text.disabled",
+    "color.text.on-danger", "color.action.primary-pressed", "color.action.danger",
+    "color.action.danger-hover", "color.action.danger-pressed", "color.action.disabled",
+    "color.line.selected", "color.focus.ring-inverse", "color.scrim",
+) + tuple(f"color.status.{s}.{r}" for s in ("danger", "warning", "success", "info")
+          for r in ("strong", "on-strong"))
+
+
+def test_new_roles_exist_as_semantics():
+    ts = generate_color(AXES, "#3366FF").tokens
+    for role in NEW_ROLES:
+        assert role in SEMANTIC and ts.get(role).layer == "semantic", role
+
+
+def test_overlays_are_a_translucent_primitive_family():
+    ts = generate_color(AXES, "#3366FF").tokens
+    assert ts.get("color.shade.40").value == "#00000066"
+    assert ts.get("color.tint.10").value == "#FFFFFF1A"
+    assert [t.path for t in ts.tokens() if t.path.startswith("color.shade.")] == [
+        f"color.shade.{p}" for p in (10, 20, 40, 60, 80)]
+    assert ts.resolve("color.scrim", "scheme:light,contrast:standard") == "#00000066"
+    assert ts.resolve("color.scrim", "scheme:dark,contrast:high") == "#000000CC"
+
+
+@pytest.mark.parametrize("seed", SEEDS)
+def test_fill_states_differ_and_carry_their_text(seed):
+    ts = generate_color(AXES, seed).tokens
+    for mode in COLOR_CONTEXTS:
+        for fill, on in (("color.action.primary", "color.text.on-action"),
+                         ("color.action.danger", "color.text.on-danger")):
+            chain = [ts.resolve(r, mode) for r in (fill, f"{fill}-hover", f"{fill}-pressed")]
+            assert len(set(chain)) == 3, f"{seed} {fill} ({mode})"
+            text = ts.resolve(on, mode)
+            assert text in ("#FFFFFF", "#000000")
+            need = 7.0 if "contrast:high" in mode else 4.5
+            assert all(contrast(text, c) >= need for c in chain), f"{seed} {fill} ({mode})"
+
+
+def test_destructive_fill_comes_from_the_danger_ramp():
+    ts = generate_color(AXES, "#3366FF").tokens
+    for mode in COLOR_CONTEXTS:
+        assert ts.raw("color.action.danger", mode).startswith("{color.danger."), mode
+
+
+@pytest.mark.parametrize("seed", SEEDS)
+def test_strong_status_fills_carry_black_or_white_text(seed):
+    ts = generate_color(AXES, seed).tokens
+    for s in ("danger", "warning", "success", "info"):
+        for mode in COLOR_CONTEXTS:
+            text = ts.resolve(f"color.status.{s}.on-strong", mode)
+            fill = ts.resolve(f"color.status.{s}.strong", mode)
+            assert text in ("#FFFFFF", "#000000")
+            assert contrast(text, fill) >= (7.0 if "contrast:high" in mode else 4.5)
+
+
+def test_disabled_and_state_checks_fire_on_collisions():
+    from engine.foundations.color import CHECKS
+    from engine.foundations.tokens import Token, TokenSet
+    ts = TokenSet()
+    ts.add(Token("color.n.1", "color", "#777777"))
+    for role in ("color.action.primary", "color.action.primary-hover",
+                 "color.action.primary-pressed", "color.text.default", "color.text.muted",
+                 "color.text.disabled", "color.action.disabled"):
+        ts.add(Token(role, "color", "{color.n.1}", layer="semantic"))
+    by_id = {c.id: c for c in CHECKS}
+    ctx = "scheme:dark,contrast:standard"
+    states = by_id["states-distinct"].run(ts, ctx)
+    assert states == [
+        f"color.action.primary-hover equals color.action.primary ({ctx}) at #777777; point "
+        "color.action.primary-hover at a neighboring step so each state reads as a different color",
+        f"color.action.primary-pressed equals color.action.primary ({ctx}) at #777777; point "
+        "color.action.primary-pressed at a neighboring step so each state reads as a different color"]
+    disabled = by_id["disabled-distinct"].run(ts, ctx)
+    assert len(disabled) == 3 and disabled[0].startswith("color.text.disabled equals color.text.default")
+
+
+def test_scheme_polarity_catches_a_dark_scheme_with_a_light_palette():
+    from engine.foundations.color import CHECKS
+    from engine.foundations.tokens import Token, TokenSet
+    ts = TokenSet()
+    ts.add(Token("color.n.50", "color", "#FAFAFA"))
+    ts.add(Token("color.n.900", "color", "#111111"))
+    ts.add(Token("color.surface.page", "color", "{color.n.50}", layer="semantic"))
+    ts.add(Token("color.text.default", "color", "{color.n.900}", layer="semantic"))
+    polarity = {c.id: c for c in CHECKS}["scheme-polarity"]
+    assert polarity.run(ts, "scheme:light,contrast:standard") == []
+    assert polarity.run(ts, "scheme:dark,contrast:standard") == [
+        "color.surface.page is not darker than color.text.default (scheme:dark,contrast:standard); "
+        "a dark scheme needs a darker page, so point color.surface.page and color.text.default at "
+        "the other ends of the neutral ramp"]
