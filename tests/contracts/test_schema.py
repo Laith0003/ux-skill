@@ -331,3 +331,92 @@ def test_a_refused_condition_does_not_also_report_a_duplicate():
     d = data()
     d["tokens"][2]["when"] = {"tone": "loud"}
     assert [r for r, _ in problems(d)] == ["bad-binding"]
+
+
+# One row per check the first test table left unproven: removing the check
+# makes its row fail.
+@pytest.mark.parametrize("edit,rule,message", [
+    (lambda d: d["tokens"][0].update(role="Color.Action"), "not-a-role",
+     "toggle: tokens[0].role is 'Color.Action'; write a semantic role path such as "
+     "color.text.default"),
+    (lambda d: d["tokens"][0].update(role="primary"), "not-a-role",
+     "toggle: tokens[0].role is 'primary'; write a semantic role path"),
+    (lambda d: d["tokens"][0].update(role="var(--x)"), "not-a-role",
+     "toggle: tokens[0].role is 'var(--x)'; write a semantic role path"),
+    (lambda d: d.update(status="deprecated", replacement="toggle"), "replacement",
+     "toggle: a deprecated contract names its replacement; set replacement to the contract to "
+     "use instead of toggle"),
+    (lambda d: d.update(surfaces=["#fff"]), "not-a-role",
+     "toggle: surfaces[0] is '#fff'; bind a semantic role by its path"),
+    (lambda d: d.update(surfaces=["color.surface.page", "Card"]), "not-a-role",
+     "toggle: surfaces[1] is 'Card'; write a semantic role path such as color.text.default"),
+    (lambda d: d.update(surfaces="color.surface.page"), "bad-surfaces",
+     "toggle: surfaces is 'color.surface.page'; list the surface roles the component may sit "
+     "on, or write []"),
+    (lambda d: d["provenance"]["figma"].update(lastVerified="2026-02-30"), "bad-provenance",
+     "toggle: provenance.figma.lastVerified is '2026-02-30'; write the date it was last read "
+     "as YYYY-MM-DD, or null"),
+    (lambda d: d.update(states=["default", "selected", "disabled"]), "bad-states",
+     "toggle: an action component is operated directly, so it needs a focus state; add focus "
+     "to states"),
+    (lambda d: d["parts"].append({"name": "track", "rtlBehavior": "logical"}), "bad-parts",
+     "toggle: part track is listed twice; keep one"),
+    (lambda d: d.update(parts=[]), "bad-parts",
+     "toggle: parts is []; list each part as {name, rtlBehavior}, for example - {name: "
+     "container, rtlBehavior: logical}"),
+    (lambda d: d["parts"][0].pop("rtlBehavior"), "bad-parts",
+     "toggle: parts[0] is {'name': 'track'}; give it exactly name and rtlBehavior"),
+    (lambda d: d["parts"][0].update(name="Track"), "bad-parts",
+     "toggle: parts[0].name is 'Track'; use a lowercase name with '-', for example "
+     "leading-icon"),
+    (lambda d: d["variants"].append({"name": "tone", "values": ["a", "b"], "default": "a"}),
+     "bad-variants", "toggle: variant tone is listed twice; keep one"),
+    (lambda d: d["variants"][0].update(values=["neutral", "neutral"]), "bad-variants",
+     "toggle: variant tone values are ['neutral', 'neutral']; list every value the component "
+     "supports, at least two, each a distinct lowercase name"),
+    (lambda d: d.update(states=["default", "focus", "focus", "selected", "disabled"]),
+     "bad-states", "toggle: states lists a state twice; keep each once"),
+    (lambda d: d["contrast"][1].update(minimum=0.5, criterion="system", high=7), "bad-contrast",
+     "toggle: contrast[1].minimum is 0.5; write a ratio of 1 or more, such as 4.5"),
+    (lambda d: d["contrast"][1].update(minimum=True), "bad-contrast",
+     "toggle: contrast[1].minimum is True; write a ratio of 1 or more"),
+    (lambda d: d["contrast"][1].update(criterion="system", minimum=2, high=0.5), "bad-contrast",
+     "toggle: contrast[1].high is 0.5; write the high-contrast ratio, 1 or more"),
+    (lambda d: d.update(surfaces=[]), "unbound-pairing",
+     "toggle: contrast[0].bg is surfaces, but surfaces is empty; list the surfaces the "
+     "component sits on"),
+    (lambda d: d.update(description="  "), "bad-description",
+     "toggle: description is empty; say in one line what the component does and when to use "
+     "it"),
+    (lambda d: d.update(usage={"do": ["Apply the change at once"]}), "bad-usage",
+     "toggle: usage is {'do': ['Apply the change at once']}; give it do and dont, each a list "
+     "of short rules"),
+    (lambda d: d["copy"].update(default=["“Wi-Fi”"]), "copy-is-a-string",
+     "toggle: copy.default holds the literal “Wi-Fi”; copy holds rules"),
+])
+def test_each_remaining_check_is_proven(edit, rule, message):
+    d = copy.deepcopy(data())
+    edit(d)
+    found = problems(d)
+    assert any(r == rule and m.startswith(message) for r, m in found), found
+
+
+@pytest.mark.parametrize("value,message", [
+    (None, "toggle: toggle.yaml is empty; write the contract's fields: name, status, "
+           "category, description, parts, variants, states, tokens, contrast, surfaces, a11y, "
+           "copy, usage, provenance"),
+    ([], "toggle: toggle.yaml holds a list; a contract is a map of name, status, category"),
+    ("toggle", "toggle: toggle.yaml holds text; a contract is a map of name, status"),
+    (3, "toggle: toggle.yaml holds a number; a contract is a map of name"),
+])
+def test_a_document_that_is_not_a_map_is_named(value, message):
+    contract, found = contract_problems(value, "toggle.yaml")
+    assert contract is None
+    assert [(p.rule, p.message) for p in found] == [("not-a-map", found[0].message)]
+    assert found[0].message.startswith(message), found[0].message
+
+
+def test_a_deprecated_contract_with_another_replacement_reads():
+    d = data()
+    d.update(status="deprecated", replacement="switch")
+    assert problems(d) == []

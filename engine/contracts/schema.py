@@ -575,8 +575,15 @@ def contract_problems(data: Any, source: str) -> Tuple[Optional[Contract], List[
     label = data.get("name") if isinstance(data, dict) and isinstance(data.get("name"), str) \
         else Path(source).stem
     c = _Checker(label)
+    if data is None:
+        c.add("not-a-map", f"{source} is empty; write the contract's fields: "
+                           f"{', '.join(REQUIRED_KEYS)}")
+        return None, c.problems
     if not isinstance(data, dict):
-        c.add("not-a-map", f"{source} holds {type(data).__name__}; a contract is a map of "
+        held = ("a list" if isinstance(data, list) else "text" if isinstance(data, str)
+                else "true or false" if isinstance(data, bool)
+                else "a number" if isinstance(data, (int, float)) else type(data).__name__)
+        c.add("not-a-map", f"{source} holds {held}; a contract is a map of "
                            f"{', '.join(REQUIRED_KEYS)}")
         return None, c.problems
     missing = [k for k in REQUIRED_KEYS if k not in data]
