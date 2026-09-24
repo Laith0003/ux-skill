@@ -74,6 +74,18 @@ def parse_brand(value: Any, label: str = "brand") -> str:
                          "#RGB, for example '#3366FF' (quote it in a shell) or 3366FF") from None
 
 
+def parse_latin_only(value: Any, label: str = "latin_only") -> bool:
+    """True leaves out the Arabic face and scale; missing means false.
+    Only a real true or false is read, so a word such as "maybe" is named
+    instead of being guessed at."""
+    if value is None:
+        return False
+    if isinstance(value, bool):
+        return value
+    raise InputError(f"{label} is {value!r}; pass true to leave out the Arabic face and scale, "
+                     "or false (the default) to keep them")
+
+
 def parse_axes(value: Any, label: str = "axes") -> AxisValues:
     """Seven numbers from 0 to 1, in AXIS_NAMES order: a comma-separated
     string (the CLI) or a list (MCP)."""

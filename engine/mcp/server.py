@@ -250,9 +250,10 @@ class UxSystemBuildInput(BaseModel):
         default=None,
         description="Optional list of seven numbers from 0 to 1: warmth, contrast, density, "
                     "geometry, formality, motion, type_personality. Do not combine with brief.")
-    latin_only: bool = Field(
+    latin_only: Any = Field(
         default=False,
-        description="Leave out the Arabic face and scale.")
+        description="Optional true or false (default false). True leaves out the Arabic face "
+                    "and scale.")
 
 
 # ---------------------------------------------------------------------------
@@ -489,7 +490,8 @@ def handle_ux_system_build(args: Dict[str, Any]) -> Dict[str, Any]:
     and the report, which says what to change. A bad input returns
     passed=false and an error naming the input and the fix.
     """
-    from engine.foundations.emit import InputError, choose_axes, make_system, parse_brand
+    from engine.foundations.emit import (
+        InputError, choose_axes, make_system, parse_brand, parse_latin_only)
     payload = UxSystemBuildInput.model_validate(args or {})
     empty = {"passed": False, "css": "", "dtcg": "", "report": "", "findings": []}
     try:
@@ -498,9 +500,10 @@ def handle_ux_system_build(args: Dict[str, Any]) -> Dict[str, Any]:
             raise InputError(f"brief is {payload.brief!r}; pass an object such as "
                              '{"industry": "saas", "tone": ["warm"]}, or leave it out')
         axes, source = choose_axes(payload.brief, payload.axes)
+        latin_only = parse_latin_only(payload.latin_only, "latin_only")
     except InputError as exc:
         return {**empty, "error": str(exc)}
-    system = make_system(brand, axes, source, arabic=not payload.latin_only)
+    system = make_system(brand, axes, source, arabic=not latin_only)
     return {**system.to_dict(), "css": system.files.get("tokens.css", ""),
             "dtcg": system.files.get("tokens.json", ""), "report": system.report}
 

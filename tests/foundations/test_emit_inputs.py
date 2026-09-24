@@ -6,7 +6,7 @@ import pytest
 
 from engine.foundations.emit import (
     NEUTRAL, NEUTRAL_SOURCE, InputError, brief_axes, choose_axes, parse_axes, parse_brand,
-    read_brief,
+    parse_latin_only, read_brief,
 )
 from engine.synthesizer.axes import AxisValues, compute_axes
 
@@ -234,3 +234,13 @@ def test_the_refusal_lists_a_shared_vocabulary_once():
 def test_parse_axes_drops_the_sign_of_zero():
     axes = parse_axes("-0,0,0,0,0,0,0")
     assert axes.to_dict()["warmth"] == 0.0 and str(axes.warmth) == "0.0"
+
+
+def test_latin_only_reads_only_true_or_false():
+    assert parse_latin_only(None) is False
+    assert parse_latin_only(False) is False and parse_latin_only(True) is True
+    for junk in ("maybe", "true", 1, 0, [True]):
+        with pytest.raises(InputError) as exc:
+            parse_latin_only(junk, "latin_only")
+        assert str(exc.value).startswith(f"latin_only is {junk!r}; pass true to leave out")
+        assert "or false (the default) to keep them" in str(exc.value)

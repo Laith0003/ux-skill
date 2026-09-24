@@ -2,6 +2,8 @@
 `uxskill system build`, returns text instead of writing files."""
 import json
 
+import pytest
+
 import engine.foundations.color as color_module
 from engine.foundations.emit import NEUTRAL, NEUTRAL_SOURCE, make_system
 from engine.mcp import TOOLS, handle_ux_system_build
@@ -79,8 +81,47 @@ def test_bad_inputs_return_an_error_naming_the_input():
         ({"brand": "#3366FF", "brief": {"stack": "react"}}, "brief has none of industry"),
         ({"brand": "#3366FF", "brief": {"industry": "saas"}, "axes": [0.5] * 7},
          "both brief and axes were given; pass one"),
+        ({"brand": "#3366FF", "latin_only": "maybe"},
+         "latin_only is 'maybe'; pass true to leave out the Arabic face and scale"),
+        ({"brand": "#3366FF", "latin_only": 1}, "latin_only is 1; pass true"),
     ]
     for args, needle in cases:
         result = handle_ux_system_build(args)
         assert result["passed"] is False and result["css"] == "", args
         assert needle in result["error"], (args, result["error"])
+
+
+def _call_through_the_server(arguments):
+    """Call ux_system_build the way an MCP client does: through the
+    server's tools/call handler, which checks the arguments against the
+    tool's input schema before our handler sees them."""
+    import asyncio
+
+    from engine.mcp import MCP_AVAILABLE
+    if not MCP_AVAILABLE:
+        pytest.skip("mcp is not installed")
+    from mcp import types
+
+    from engine.mcp.server import _build_server
+    server = _build_server()
+    request = types.CallToolRequest(
+        method="tools/call",
+        params=types.CallToolRequestParams(name="ux_system_build", arguments=arguments))
+    result = asyncio.run(server.request_handlers[types.CallToolRequest](request)).root
+    assert result.isError is False, result.content[0].text
+    return json.loads(result.content[0].text)
+
+
+def test_a_junk_latin_only_reads_like_every_other_bad_input_through_the_server():
+    result = _call_through_the_server({"brand": "#3366FF", "latin_only": "maybe"})
+    assert result["passed"] is False and result["css"] == ""
+    assert result["error"] == ("latin_only is 'maybe'; pass true to leave out the Arabic face "
+                               "and scale, or false (the default) to keep them")
+
+
+def test_latin_only_true_and_false_work_through_the_server():
+    latin = _call_through_the_server({"brand": "#3366FF", "latin_only": True})
+    assert latin["passed"] is True and latin["arabic"] is False
+    both = _call_through_the_server({"brand": "#3366FF", "latin_only": False})
+    assert both["passed"] is True and both["arabic"] is True
+    assert _call_through_the_server({"brand": "#3366FF"})["arabic"] is True
