@@ -26,6 +26,7 @@ def test_parse_brand_names_the_input_and_the_fix(raw):
     message = str(exc.value)
     assert message.startswith("--brand ")
     assert "#3366FF" in message
+    assert "(quote it in a shell)" in message, "a flag is typed in a shell"
 
 
 def test_parse_brand_rejects_a_non_string():

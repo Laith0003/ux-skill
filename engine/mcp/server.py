@@ -254,6 +254,21 @@ class UxSystemBuildInput(BaseModel):
         default=False,
         description="Optional true or false (default false). True leaves out the Arabic face "
                     "and scale.")
+    out: Any = Field(
+        default=None,
+        description="Optional folder path, best absolute. When given, the tool writes "
+                    "tokens.json, tokens.css and system-report.md there, as `uxskill system "
+                    "build --out` does: identical files are left alone, and if any file "
+                    "differs nothing is written unless force is true.")
+    include_files: Any = Field(
+        default=False,
+        description="Optional true or false (default false). True adds the tokens.css text "
+                    "(css) and the tokens.json text (dtcg) to the result. They are large "
+                    "(tokens.json is over 100 KB), so prefer out.")
+    force: Any = Field(
+        default=False,
+        description="Optional true or false (default false). With out, true replaces files "
+                    "that differ.")
 
 
 # ---------------------------------------------------------------------------
@@ -485,15 +500,19 @@ def handle_ux_decisions_stats(args: Dict[str, Any]) -> Dict[str, Any]:
 def handle_ux_system_build(args: Dict[str, Any]) -> Dict[str, Any]:
     """Build a WCAG-gated design system with the 4.0 foundations engine.
 
-    Never writes a file: returns the CSS, the DTCG JSON text and the report.
-    A failing gate returns passed=false, empty css and dtcg, every finding,
-    and the report, which says what to change. A bad input returns
-    passed=false and an error naming the input and the fix.
+    The result is small by default: status, passed, gate, findings, the
+    report text and each file's name and size in bytes. The file texts
+    (css, dtcg) come back only with include_files, since tokens.json alone
+    is too large for one agent tool result. With out, the files are
+    written through the same safe writer and statuses as `uxskill system
+    build`; without it nothing is written and status is "built" or
+    "failed". A bad input returns status "invalid", passed=false and an
+    error naming the input and the fix.
     """
     from engine.foundations.emit import (
-        InputError, choose_axes, make_system, parse_brand, parse_latin_only)
+        InputError, check_out_dir, choose_axes, make_system, parse_brand, parse_latin_only,
+        parse_switch, write_outcome)
     payload = UxSystemBuildInput.model_validate(args or {})
-    empty = {"passed": False, "css": "", "dtcg": "", "report": "", "findings": []}
     try:
         brand = parse_brand(payload.brand, "brand")
         if payload.brief is not None and not isinstance(payload.brief, dict):
@@ -501,11 +520,29 @@ def handle_ux_system_build(args: Dict[str, Any]) -> Dict[str, Any]:
                              '{"industry": "saas", "tone": ["warm"]}, or leave it out')
         axes, source = choose_axes(payload.brief, payload.axes)
         latin_only = parse_latin_only(payload.latin_only, "latin_only")
+        include_files = parse_switch(payload.include_files, "include_files",
+                                     "return the tokens.css and tokens.json text",
+                                     "return only their sizes")
+        force = parse_switch(payload.force, "force", "replace files in out that differ",
+                             "write nothing when a file differs")
+        out = None if payload.out is None else check_out_dir(payload.out, "out")
     except InputError as exc:
-        return {**empty, "error": str(exc)}
+        return {"status": "invalid", "passed": False, "error": str(exc), "findings": [],
+                "report": "", "files": []}
     system = make_system(brand, axes, source, arabic=not latin_only)
-    return {**system.to_dict(), "css": system.files.get("tokens.css", ""),
-            "dtcg": system.files.get("tokens.json", ""), "report": system.report}
+    result: Dict[str, Any] = {
+        "status": "built" if system.passed else "failed", **system.to_dict(),
+        "report": system.report,
+        "files": [{"name": name, "bytes": len(text.encode("utf-8"))}
+                  for name, text in system.files.items()]}
+    if include_files:
+        result.update(css=system.files.get("tokens.css", ""),
+                      dtcg=system.files.get("tokens.json", ""))
+    if out is not None:
+        result["out"] = str(out)
+        result.update(write_outcome(system, out, force=force, force_label="force: true",
+                                    out_label="out"))
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -638,9 +675,11 @@ TOOLS: Dict[str, ToolEntry] = {
         "4.0 beta: build a WCAG-gated design system from a brand color, with the brief or "
         "seven axes optional. Eight foundations (color, type, space, layout, radius, border, "
         "elevation, motion) with light, dark, high contrast, density, right-to-left Arabic and "
-        "reduced motion modes. Returns tokens.css text, DTCG tokens.json text, a plain report "
-        "and passed; on a failing gate css and dtcg are empty and findings name each token "
-        "and the fix. Writes no files.",
+        "reduced motion modes. Returns status, passed, the gate line, findings, a plain report "
+        "and each file's size. Pass out (a folder) to write tokens.json, tokens.css and "
+        "system-report.md there, refused when a file differs unless force is true; pass "
+        "include_files true to get the css and dtcg text back instead. Without out it writes "
+        "nothing.",
     ),
 }
 

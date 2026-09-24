@@ -64,26 +64,33 @@ def parse_brand(value: Any, label: str = "brand") -> str:
     """The brand color as #RRGGBB (upper case). Accepts #RGB, #RRGGBB and
     the same without the leading #, since a shell drops an unquoted word
     that starts with #."""
+    # Only a flag is typed into a shell, where an unquoted # starts a comment.
+    shell = " (quote it in a shell)" if label.startswith("--") else ""
     if not isinstance(value, str) or not value.strip():
         raise InputError(f"{label} is missing; pass the brand color as a hex string, "
-                         "for example '#3366FF' (quote it in a shell) or 3366FF")
+                         f"for example '#3366FF'{shell} or 3366FF")
     try:
         return rgb_to_hex(hex_to_rgb(value.strip()))
     except ValueError:
         raise InputError(f"{label} is {value!r}, which is not a hex color; pass #RRGGBB or "
-                         "#RGB, for example '#3366FF' (quote it in a shell) or 3366FF") from None
+                         f"#RGB, for example '#3366FF'{shell} or 3366FF") from None
 
 
-def parse_latin_only(value: Any, label: str = "latin_only") -> bool:
-    """True leaves out the Arabic face and scale; missing means false.
-    Only a real true or false is read, so a word such as "maybe" is named
-    instead of being guessed at."""
+def parse_switch(value: Any, label: str, true_means: str, false_means: str) -> bool:
+    """An optional true or false; missing means false. Only a real true or
+    false is read, so a word such as "maybe" is named instead of being
+    guessed at."""
     if value is None:
         return False
     if isinstance(value, bool):
         return value
-    raise InputError(f"{label} is {value!r}; pass true to leave out the Arabic face and scale, "
-                     "or false (the default) to keep them")
+    raise InputError(f"{label} is {value!r}; pass true to {true_means}, or false (the default) "
+                     f"to {false_means}")
+
+
+def parse_latin_only(value: Any, label: str = "latin_only") -> bool:
+    """True leaves out the Arabic face and scale; missing means false."""
+    return parse_switch(value, label, "leave out the Arabic face and scale", "keep them")
 
 
 def parse_axes(value: Any, label: str = "axes") -> AxisValues:
@@ -625,6 +632,9 @@ def _broken_link(label: str, link: Path) -> InputError:
 def check_out_dir(out_dir: Any, label: str = "out") -> Path:
     """The output folder as a Path. It may not exist yet; it may not be a
     file, a broken link, or sit inside a file."""
+    if out_dir is not None and not isinstance(out_dir, (str, os.PathLike)):
+        raise InputError(f"{label} is {out_dir!r}; pass the folder to write the system into "
+                         "as text, for example design-system")
     if out_dir is None or not str(out_dir).strip():
         raise InputError(f"{label} is missing; pass the folder to write the system into, "
                          "for example design-system")
@@ -827,3 +837,34 @@ def write_files(out_dir: Path, files: Mapping[str, str], *, force: bool = False)
                          "write to") from None
     shutil.rmtree(str(stage), ignore_errors=True)
     return WritePlan(names, plan.unchanged, ())
+
+
+def write_outcome(system: SystemOutput, out_dir: Path, *, force: bool = False,
+                  force_label: str = "--force", out_label: str = "--out") -> Dict[str, Any]:
+    """Write a built system into out_dir and say what happened, in the
+    fields both callers report: status (a key of STATUS_EXIT), written,
+    unchanged, conflicts and message. A failed system writes nothing. The
+    labels name the force and out inputs the way the caller's person types
+    them, in the refusal message."""
+    def outcome(status: str, written: Sequence[str] = (), unchanged: Sequence[str] = (),
+                conflicts: Sequence[str] = (), message: str = "") -> Dict[str, Any]:
+        return {"status": status, "written": list(written), "unchanged": list(unchanged),
+                "conflicts": list(conflicts), "message": message}
+
+    if not system.passed:
+        return outcome("failed", message=failure_message(system))
+    try:
+        plan = write_files(out_dir, system.files, force=force)
+    except InputError as exc:
+        # The inputs were fine; the folder could not be written. Nothing in
+        # it changed, so this is a run that wrote nothing.
+        return outcome("error", message=str(exc))
+    if plan.conflicts:
+        # Refused: the plan's would-be writes did not happen.
+        return outcome("refused", unchanged=plan.unchanged, conflicts=plan.conflicts,
+                       message=conflict_message(out_dir, plan, force_label, out_label))
+    if plan.write:
+        return outcome("written", written=plan.write, unchanged=plan.unchanged,
+                       message=f"Wrote {', '.join(plan.write)} to {out_dir}.")
+    return outcome("unchanged", unchanged=plan.unchanged,
+                   message=f"{out_dir} already holds this system; nothing changed.")

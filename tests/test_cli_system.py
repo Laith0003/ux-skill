@@ -256,14 +256,20 @@ def test_module_entry_point_runs_system_build(tmp_path):
 
 def test_the_command_reports_the_shared_statuses():
     # One table in emit.py names every status and its exit code; the CLI
-    # exits by it and the /ux-system doc test reads it.
+    # exits by it and the /ux-system doc test reads it. emit.write_outcome
+    # gives every status, for the CLI and for ux_system_build with out.
     from engine.foundations.emit import STATUS_EXIT, STATUSES
     assert STATUSES == ("written", "unchanged", "refused", "failed", "error")
     assert {s: STATUS_EXIT[s] for s in STATUSES} == {
         "written": 0, "unchanged": 0, "refused": 1, "failed": 1, "error": 1}
+    import inspect
+
     import engine.cli.main as main_module
+    from engine.foundations.emit import write_outcome
+    outcome = inspect.getsource(write_outcome)
+    for status in STATUSES:
+        assert f'"{status}"' in outcome, status
     source = Path(main_module.__file__).read_text(encoding="utf-8")
     block = source[source.index("def system_build_cmd"):source.index("# -------- ux version")]
-    for status in STATUSES:
-        assert f'"{status}"' in block, status
+    assert "write_outcome(" in block
     assert "sys.exit(1)" not in block, "exit through STATUS_EXIT, not a literal code"
