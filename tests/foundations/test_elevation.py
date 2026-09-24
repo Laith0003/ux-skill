@@ -72,8 +72,10 @@ def test_checks_name_the_token_and_the_fix():
         "elevation.lifted (scheme:dark) does not rise above elevation.card; a higher level "
         "needs a larger offset and blur and at least the same strength, so point it at a "
         "higher shadow step",
-        "elevation.lifted is weaker in dark than in light; dark surfaces need at least the "
-        "light shadow strength to read, so point its dark override at a stronger shadow",
+        "elevation.card is no stronger in dark than in light; dark surfaces need a stronger "
+        "shadow than light to read, so point its scheme:dark override at a stronger shadow",
+        "elevation.lifted is no stronger in dark than in light; dark surfaces need a stronger "
+        "shadow than light to read, so point its scheme:dark override at a stronger shadow",
         "elevation.order.sticky (1) does not stack above elevation.order.base (5); keep the "
         "order base, sticky, dropdown, overlay, dialog, toast"]
 
@@ -109,3 +111,69 @@ def test_single_layer_shadows_are_measured_not_crashed_on():
     assert len(msgs) == 1 and "elevation.lifted" in msgs[0]
     report = gate(ts, [], checks=CHECKS, raise_on_fail=False)
     assert not report.passed
+
+
+def _roles(**modes):
+    """Two shadow steps and order tokens; card and lifted point at them."""
+    ts = TokenSet()
+    ts.add(Token("elevation.s.one", "shadow", [_layer(1, 3, "#00000026"), _layer(0, 1, "#00000013")]))
+    ts.add(Token("elevation.s.one-dark", "shadow", [_layer(1, 3, "#00000060")]))
+    ts.add(Token("elevation.s.two", "shadow", [_layer(2, 6, "#00000030")]))
+    ts.add(Token("elevation.s.two-dark", "shadow", [_layer(2, 6, "#00000070")]))
+    ts.add(Token("elevation.s.clear", "shadow", [_layer(4, 8, "#00000000"), _layer(1, 2, "#00000000")]))
+    ts.add(Token("elevation.card", "shadow", "{elevation.s.one}",
+                 modes=modes.get("card", {"scheme:dark": "{elevation.s.one-dark}"}),
+                 layer="semantic"))
+    ts.add(Token("elevation.lifted", "shadow", "{elevation.s.two}",
+                 modes=modes.get("lifted", {"scheme:dark": "{elevation.s.two-dark}"}),
+                 layer="semantic"))
+    ts.add(Token("elevation.z.0", "number", 0))
+    ts.add(Token("elevation.z.100", "number", 100))
+    ts.add(Token("elevation.order.base", "number", "{elevation.z.0}", layer="semantic"))
+    ts.add(Token("elevation.order.sticky", "number", "{elevation.z.100}",
+                 modes=modes.get("sticky", {}), layer="semantic"))
+    return ts
+
+
+def test_well_formed_roles_pass():
+    ts = _roles()
+    assert validate(ts) == [] and gate(ts, [], CHECKS).passed
+
+
+def test_dark_equal_to_light_fails():
+    ts = _roles(card={})
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.message) for f in report.failures] == [
+        ("elevation-dark", "elevation.card is no stronger in dark than in light; dark surfaces "
+         "need a stronger shadow than light to read, so point its scheme:dark override at a "
+         "stronger shadow")]
+
+
+def test_a_shadow_with_no_visible_layer_fails():
+    ts = _roles(lifted={"scheme:dark": "{elevation.s.clear}"})
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    visible = [(f.criterion, f.mode, f.message) for f in report.failures
+               if f.check == "visible-shadow"]
+    assert visible == [
+        ("system", "scheme:dark", "elevation.lifted (scheme:dark) casts no visible shadow; every "
+         "layer is fully transparent, so point it at a shadow step with a layer above alpha 0")]
+
+
+def test_a_dark_override_that_flips_the_stack_fails():
+    ts = _roles(sticky={"scheme:dark": "{elevation.z.0}"})
+    assert validate(ts) == []
+    stacking = [c for c in CHECKS if c.id == "stacking-order"][0]
+    assert stacking.axes == ("scheme",)
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.mode, f.message) for f in report.failures] == [
+        ("stacking-order", "scheme:dark", "elevation.order.sticky (0) does not stack above "
+         "elevation.order.base (0) under scheme:dark; keep the order base, sticky, dropdown, "
+         "overlay, dialog, toast")]
+
+
+@pytest.mark.parametrize("contrast", [i / 10 for i in range(11)])
+def test_generated_dark_shadows_are_strictly_stronger(contrast):
+    ts = generate_elevation(axes(contrast)).tokens
+    assert gate(ts, [], CHECKS).passed

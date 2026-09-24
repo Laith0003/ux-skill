@@ -103,7 +103,8 @@ class Check:
     """A requirement that is not a contrast pairing (a minimum size, a
     width, a duration). `run(ts, mode)` returns one message per failure in
     that context; every message names the token and the fix. The gate runs
-    it in every context over `axes`."""
+    it in every context over `axes`. A run that raises becomes a failure of
+    this check in that context, and the gate goes on."""
     id: str
     criterion: str
     run: Callable[[TokenSet, str], List[str]]
@@ -209,7 +210,13 @@ def gate(ts: TokenSet, pairings: Iterable[Pairing], checks: Iterable[Check] = ()
                 f"have; use one of {list(ts.axes)}")
         for mode in contexts(list(c.axes), ts.axes):
             report.rules_checked += 1
-            for message in c.run(ts, mode):
+            try:
+                messages = c.run(ts, mode)
+            except Exception as exc:  # a check must never take the gate down
+                messages = [f"check {c.id} could not read the token set "
+                            f"({type(exc).__name__}: {exc}); a token it reads has an "
+                            "unexpected shape; run validate and fix the named token"]
+            for message in messages:
                 report.failures.append(CheckFailure(c.id, c.criterion, mode, message))
     if raise_on_fail and not report.passed:
         raise GateFailure(report)

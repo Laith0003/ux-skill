@@ -99,27 +99,50 @@ def _order(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
+LIGHT, DARK = "scheme:light", "scheme:dark"
+
+
+def _layers(ts: TokenSet, role: str, mode: str) -> List[dict]:
+    value = ts.resolve(role, mode)
+    return value if isinstance(value, list) else [value]
+
+
+def _dark_only(ts: TokenSet, paths: List[str], mode: str) -> bool:
+    """In scheme:dark, whether every path reads as in light; a finding then
+    belongs to the light context and is not repeated."""
+    return mode == DARK and all(ts.resolve(p, DARK) == ts.resolve(p, LIGHT) for p in paths)
+
+
 def _dark_strength(ts: TokenSet, mode: str) -> List[str]:
-    if mode != "scheme:dark":
+    if mode != DARK:
         return []
-    return [f"{r} is weaker in dark than in light; dark surfaces need at least the light "
-            "shadow strength to read, so point its dark override at a stronger shadow"
+    return [f"{r} is no stronger in dark than in light; dark surfaces need a stronger shadow "
+            "than light to read, so point its scheme:dark override at a stronger shadow"
             for r in ROLES if ts.has(r)
-            and _alpha(_key(ts, r, "scheme:dark")["color"])
-            < _alpha(_key(ts, r, "scheme:light")["color"])]
+            and _alpha(_key(ts, r, DARK)["color"]) <= _alpha(_key(ts, r, LIGHT)["color"])]
+
+
+def _visible(ts: TokenSet, mode: str) -> List[str]:
+    return [f"{r} ({mode}) casts no visible shadow; every layer is fully transparent, so "
+            "point it at a shadow step with a layer above alpha 0"
+            for r in ROLES if ts.has(r) and not _dark_only(ts, [r], mode)
+            and not any(_alpha(layer["color"]) > 0 for layer in _layers(ts, r, mode))]
 
 
 def _stacking(ts: TokenSet, mode: str) -> List[str]:
     present = [r for r in ORDER if ts.has(r)]
-    return [f"{b} ({ts.resolve(b):g}) does not stack above {a} ({ts.resolve(a):g}); keep the "
-            f"order {', '.join(r.rsplit('.', 1)[1] for r in ORDER)}"
-            for a, b in zip(present, present[1:]) if ts.resolve(b) <= ts.resolve(a)]
+    where = f" under {mode}" if mode == DARK else ""
+    return [f"{b} ({ts.resolve(b, mode):g}) does not stack above {a} ({ts.resolve(a, mode):g})"
+            f"{where}; keep the order {', '.join(r.rsplit('.', 1)[1] for r in ORDER)}"
+            for a, b in zip(present, present[1:])
+            if ts.resolve(b, mode) <= ts.resolve(a, mode) and not _dark_only(ts, [a, b], mode)]
 
 
 CHECKS: Tuple[Check, ...] = (
     Check("elevation-order", "system", _order, axes=("scheme",)),
     Check("elevation-dark", "system", _dark_strength, axes=("scheme",)),
-    Check("stacking-order", "system", _stacking),
+    Check("visible-shadow", "system", _visible, axes=("scheme",)),
+    Check("stacking-order", "system", _stacking, axes=("scheme",)),
 )
 
 

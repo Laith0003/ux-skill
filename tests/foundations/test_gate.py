@@ -160,3 +160,40 @@ def test_gate_measures_a_set_whose_axis_has_its_own_values():
     assert report.checked == 4
     assert [(f.mode, f.minimum, f.criterion) for f in report.findings] == [
         ("scheme:light,contrast:high", 7.0, "1.4.6"), ("scheme:dim,contrast:high", 7.0, "1.4.6")]
+
+
+def test_a_check_that_raises_is_recorded_and_the_gate_goes_on():
+    from engine.foundations.gate import Check, CheckFailure, GateFailure
+
+    def broken(ts, mode):
+        return [ts.resolve("space.missing")["value"]]
+
+    ts = TokenSet()
+    ts.add(Token("color.base.white", "color", "#FFFFFF"))
+    checks = [Check("broken", "custom", broken),
+              Check("passes", "custom", lambda ts, mode: []),
+              Check("fails", "custom", lambda ts, mode: ["space.x is 3px; use 4px"])]
+    report = gate(ts, [], checks=checks, raise_on_fail=False)
+    assert report.rules_checked == 3
+    assert [(f.check, f.criterion, f.mode) for f in report.failures] == [
+        ("broken", "custom", ""), ("fails", "custom", "")]
+    assert report.failures[0].message.startswith("check broken could not read the token set (")
+    assert report.failures[0].message.endswith(
+        "); a token it reads has an unexpected shape; run validate and fix the named token")
+    assert report.failures[1] == CheckFailure("fails", "custom", "", "space.x is 3px; use 4px")
+    with pytest.raises(GateFailure):
+        gate(ts, [], checks=checks)
+
+
+def test_a_raising_check_names_the_exception():
+    from engine.foundations.gate import Check
+
+    def broken(ts, mode):
+        raise KeyError("offsetY")
+
+    ts = TokenSet()
+    ts.add(Token("color.base.white", "color", "#FFFFFF"))
+    report = gate(ts, [], checks=[Check("broken", "custom", broken)], raise_on_fail=False)
+    assert [f.message for f in report.failures] == [
+        "check broken could not read the token set (KeyError: 'offsetY'); a token it reads has "
+        "an unexpected shape; run validate and fix the named token"]

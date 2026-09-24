@@ -87,32 +87,38 @@ def generate_motion(axes: AxisValues) -> Generated:
     return Generated(tokens=ts, notes=[f"motion: {band(m)} curves, {unit}px travel step"])
 
 
+# role suffix -> (token type, what to point it at)
+ROLE_TYPES: Dict[str, Tuple[str, str]] = {
+    "duration": ("duration", "a motion.duration step, a duration like {value: 200, unit: ms}"),
+    "curve": ("cubicBezier", "a motion.curve step, a cubicBezier like [0.4, 0, 0.6, 1]"),
+    "distance": ("dimension", "a motion.distance step, a dimension like {value: 8, unit: px}"),
+}
+SIGN = "motion.inline-sign"
+SIGN_TYPE = ("number", "motion.sign.forward or motion.sign.backward, a number like 1 or -1")
+
+
+def _expected(path: str) -> Tuple[str, str]:
+    return SIGN_TYPE if path == SIGN else ROLE_TYPES[path.rsplit(".", 1)[1]]
+
+
+def _typed(ts: TokenSet, path: str) -> bool:
+    """The typed accessor every check reads through: a role is read only
+    when it exists with the type its suffix expects. A role of another type
+    is reported once, by motion-role-types, and skipped by the others."""
+    return ts.has(path) and ts.get(path).type == _expected(path)[0]
+
+
 def _roles_with(ts: TokenSet, suffix: str) -> List[str]:
-    return [f"{r}.{suffix}" for r in ROLES if ts.has(f"{r}.{suffix}")]
+    return [f"{r}.{suffix}" for r in ROLES if _typed(ts, f"{r}.{suffix}")]
 
 
-def _reduced(ts: TokenSet, mode: str) -> List[str]:
-    if "motion:reduced" not in mode:
-        return []
+def _role_types(ts: TokenSet, mode: str) -> List[str]:
+    paths = [f"{r}.{s}" for r in ROLES for s in ROLE_TYPES] + [SIGN]
     out = []
-    for path in _roles_with(ts, "distance"):
-        v = ts.resolve(path, mode)["value"]
-        if v != 0:
-            out.append(f"{path} travels {v:g}px under reduced motion; point its motion:reduced "
-                       "override at motion.distance.0")
-    for path in _roles_with(ts, "duration"):
-        if path == "motion.progress.duration":
-            continue
-        v = ts.resolve(path, mode)
-        ms = v["value"] * (1000 if v["unit"] == "s" else 1)
-        if ms > REDUCED_MAX_MS:
-            out.append(f"{path} lasts {ms:g}ms under reduced motion; cap it at "
-                       f"{REDUCED_MAX_MS}ms with a motion:reduced override")
-    for path in _roles_with(ts, "curve"):
-        c = ts.resolve(path, mode)
-        if not (0 <= c[1] <= 1 and 0 <= c[3] <= 1):
-            out.append(f"{path} overshoots under reduced motion; point its motion:reduced "
-                       "override at motion.curve.gentle")
+    for path in paths:
+        if ts.has(path) and not _typed(ts, path):
+            _, fix = _expected(path)
+            out.append(f"{path} is a {ts.get(path).type}; point it at {fix}")
     return out
 
 
@@ -121,9 +127,42 @@ def _ms(ts: TokenSet, path: str, mode: str = "") -> float:
     return v["value"] * (1000 if v["unit"] == "s" else 1)
 
 
+def _reduced_travel(ts: TokenSet, mode: str) -> List[str]:
+    if "motion:reduced" not in mode:
+        return []
+    out = []
+    for path in _roles_with(ts, "distance"):
+        v = ts.resolve(path, mode)
+        if v["value"] != 0:
+            out.append(f"{path} travels {v['value']:g}{v['unit']} under reduced motion; point "
+                       "its motion:reduced override at motion.distance.0")
+    return out
+
+
+def _reduced_length(ts: TokenSet, mode: str) -> List[str]:
+    if "motion:reduced" not in mode:
+        return []
+    return [f"{path} lasts {_ms(ts, path, mode):g}ms under reduced motion; cap it at "
+            f"{REDUCED_MAX_MS}ms with a motion:reduced override"
+            for path in _roles_with(ts, "duration")
+            if path != "motion.progress.duration" and _ms(ts, path, mode) > REDUCED_MAX_MS]
+
+
+def _reduced_curve(ts: TokenSet, mode: str) -> List[str]:
+    if "motion:reduced" not in mode:
+        return []
+    out = []
+    for path in _roles_with(ts, "curve"):
+        c = ts.resolve(path, mode)
+        if not (0 <= c[1] <= 1 and 0 <= c[3] <= 1):
+            out.append(f"{path} overshoots under reduced motion; point its motion:reduced "
+                       "override at motion.curve.gentle")
+    return out
+
+
 def _dismiss_faster(ts: TokenSet, mode: str) -> List[str]:
     a, b = "motion.dismiss.duration", "motion.reveal.duration"
-    if ts.has(a) and ts.has(b) and _ms(ts, a) >= _ms(ts, b):
+    if _typed(ts, a) and _typed(ts, b) and _ms(ts, a) >= _ms(ts, b):
         return [f"{a} ({_ms(ts, a):g}ms) is not shorter than {b} ({_ms(ts, b):g}ms); leaving "
                 "should never hold the next action longer than arriving, so shorten it"]
     return []
@@ -131,15 +170,41 @@ def _dismiss_faster(ts: TokenSet, mode: str) -> List[str]:
 
 def _progress_linear(ts: TokenSet, mode: str) -> List[str]:
     p = "motion.progress.curve"
-    if ts.has(p) and ts.resolve(p) != LINEAR:
-        return [f"{p} is {ts.resolve(p)}; a continuous loop must keep an even pace, so point "
-                "it at motion.curve.linear"]
+    if _typed(ts, p):
+        curve = ts.resolve(p)
+        if curve != LINEAR:
+            return [f"{p} is {curve}; a continuous loop must keep an even pace, so point it "
+                    "at motion.curve.linear"]
     return []
 
 
+def _progress_pace(ts: TokenSet, mode: str) -> List[str]:
+    """Under reduced motion the progress loop keeps its standard duration
+    and its linear curve: it reports status, so slowing or easing it
+    misleads. A curve that is already wrong in standard is progress-linear's
+    finding, not repeated here."""
+    if "motion:reduced" not in mode:
+        return []
+    out = []
+    d = "motion.progress.duration"
+    if _typed(ts, d):
+        reduced, standard = _ms(ts, d, mode), _ms(ts, d)
+        if reduced != standard:
+            out.append(f"{d} lasts {reduced:g}ms under reduced motion but {standard:g}ms in "
+                       "standard; a status loop keeps its pace, so drop its motion:reduced "
+                       "override")
+    c = "motion.progress.curve"
+    if _typed(ts, c):
+        curve = ts.resolve(c, mode)
+        if curve != LINEAR and curve != ts.resolve(c):
+            out.append(f"{c} is {curve} under reduced motion; a status loop keeps an even "
+                       "pace, so drop its motion:reduced override and keep motion.curve.linear")
+    return out
+
+
 def _mirrored(ts: TokenSet, mode: str) -> List[str]:
-    p = "motion.inline-sign"
-    if not ts.has(p):
+    p = SIGN
+    if not _typed(ts, p):
         return []
     want = -1 if "direction:rtl" in mode else 1
     got = ts.resolve(p, mode)
@@ -149,10 +214,16 @@ def _mirrored(ts: TokenSet, mode: str) -> List[str]:
             f"must be {want} here"]
 
 
+# Only removing travel is WCAG's (2.3.3, motion from interaction can be
+# turned off); the length cap and the gentle curve are this system's rules.
 CHECKS: Tuple[Check, ...] = (
-    Check("reduced-motion", "2.3.3", _reduced, axes=("motion",)),
+    Check("motion-role-types", "system", _role_types),
+    Check("reduced-travel", "2.3.3", _reduced_travel, axes=("motion",)),
+    Check("reduced-length", "system", _reduced_length, axes=("motion",)),
+    Check("reduced-curve", "system", _reduced_curve, axes=("motion",)),
     Check("dismiss-faster", "system", _dismiss_faster),
     Check("progress-linear", "system", _progress_linear),
+    Check("progress-keeps-pace", "system", _progress_pace, axes=("motion",)),
     Check("mirrored-motion", "system", _mirrored, axes=("direction",)),
 )
 

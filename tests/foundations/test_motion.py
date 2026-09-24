@@ -115,3 +115,65 @@ def test_dtcg_round_trip_and_css_for_reduced_motion_and_rtl():
     assert '@media (prefers-reduced-motion: reduce) {\n  :root:not([data-motion="standard"]) {' in css
     assert ':root[data-motion="reduced"] {' in css
     assert ':root[dir="rtl"] {\n  --motion-inline-sign: var(--motion-sign-backward);' in css
+
+
+def _roles_set(**roles):
+    """Motion primitives plus the given semantic roles: path -> (type, alias, modes)."""
+    ts = TokenSet()
+    ts.add(Token("motion.d.fast", "duration", {"value": 100, "unit": "ms"}))
+    ts.add(Token("motion.d.slow", "duration", {"value": 1200, "unit": "ms"}))
+    ts.add(Token("motion.c.linear", "cubicBezier", [0, 0, 1, 1]))
+    ts.add(Token("motion.c.gentle", "cubicBezier", [0.4, 0, 0.6, 1]))
+    ts.add(Token("motion.x.a", "dimension", {"value": 0.5, "unit": "rem"}))
+    ts.add(Token("motion.x.zero", "dimension", {"value": 0, "unit": "rem"}))
+    ts.add(Token("motion.n.a", "number", 150))
+    ts.add(Token("motion.s.a", "strokeStyle", "solid"))
+    for path, (type_, alias, modes) in roles.items():
+        ts.add(Token(path.replace("__", ".").replace("_", "-"), type_, alias, modes=modes,
+                     layer="semantic"))
+    return ts
+
+
+def test_a_role_of_the_wrong_type_is_a_finding_not_a_crash():
+    ts = _roles_set(motion__press__duration=("number", "{motion.n.a}", {}),
+                    motion__reveal__curve=("dimension", "{motion.x.a}", {}),
+                    motion__inline_sign=("strokeStyle", "{motion.s.a}", {}))
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.message) for f in report.failures] == [
+        ("motion-role-types", "motion.press.duration is a number; point it at a motion.duration "
+         "step, a duration like {value: 200, unit: ms}"),
+        ("motion-role-types", "motion.reveal.curve is a dimension; point it at a motion.curve "
+         "step, a cubicBezier like [0.4, 0, 0.6, 1]"),
+        ("motion-role-types", "motion.inline-sign is a strokeStyle; point it at "
+         "motion.sign.forward or motion.sign.backward, a number like 1 or -1")]
+
+
+@pytest.mark.parametrize("roles, want", [
+    ({"motion__progress__duration": ("duration", "{motion.d.slow}",
+                                     {"motion:reduced": "{motion.d.fast}"})},
+     "motion.progress.duration lasts 100ms under reduced motion but 1200ms in standard; a "
+     "status loop keeps its pace, so drop its motion:reduced override"),
+    ({"motion__progress__curve": ("cubicBezier", "{motion.c.linear}",
+                                  {"motion:reduced": "{motion.c.gentle}"})},
+     "motion.progress.curve is [0.4, 0, 0.6, 1] under reduced motion; a status loop keeps an "
+     "even pace, so drop its motion:reduced override and keep motion.curve.linear"),
+])
+def test_reduced_progress_keeps_its_pace(roles, want):
+    ts = _roles_set(**roles)
+    assert validate(ts) == []
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures] == [
+        ("progress-keeps-pace", "system", "motion:reduced", want)]
+
+
+def test_only_travel_removal_cites_wcag_and_distances_keep_their_unit():
+    assert {c.id: c.criterion for c in CHECKS} == {
+        "motion-role-types": "system", "reduced-travel": "2.3.3", "reduced-length": "system",
+        "reduced-curve": "system", "dismiss-faster": "system", "progress-linear": "system",
+        "progress-keeps-pace": "system", "mirrored-motion": "system"}
+    ts = _roles_set(motion__reveal__distance=("dimension", "{motion.x.a}", {}))
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.criterion, f.message) for f in report.failures] == [
+        ("reduced-travel", "2.3.3", "motion.reveal.distance travels 0.5rem under reduced motion; "
+         "point its motion:reduced override at motion.distance.0")]
