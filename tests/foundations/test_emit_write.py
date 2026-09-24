@@ -80,3 +80,126 @@ def test_check_out_dir(tmp_path):
         check_out_dir(f, label="--out")
     with pytest.raises(InputError, match="^--out is missing"):
         check_out_dir("", label="--out")
+
+
+# Every filesystem error names the path and the fix; none escapes as a
+# traceback.
+POSIX_USER = os.name == "posix" and hasattr(os, "geteuid") and os.geteuid() != 0
+needs_permissions = pytest.mark.skipif(
+    not POSIX_USER, reason="file permissions are not enforced here (Windows, or root)")
+
+
+def _can_symlink(tmp_path):
+    try:
+        (tmp_path / ".probe").symlink_to(tmp_path)
+    except (OSError, NotImplementedError):
+        return False
+    (tmp_path / ".probe").unlink()
+    return True
+
+
+def test_out_folder_inside_a_file_is_named(tmp_path):
+    f = tmp_path / "afile"
+    f.write_text("x", encoding="utf-8")
+    with pytest.raises(InputError) as exc:
+        check_out_dir(f / "sub" / "ds", label="--out")
+    assert str(exc.value) == (
+        f"--out {f / 'sub' / 'ds'} is inside {f}, which is a file, so the folder cannot be "
+        f"made; pass a folder path that is not inside a file, for example "
+        f"{tmp_path / 'design-system'}")
+
+
+def test_out_folder_expands_a_home_folder(tmp_path, monkeypatch):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.setenv("USERPROFILE", str(tmp_path))
+    assert check_out_dir("~/ds") == tmp_path / "ds"
+
+
+def test_out_folder_that_is_a_broken_link_is_named(tmp_path):
+    if not _can_symlink(tmp_path):
+        pytest.skip("symbolic links are not available here")
+    link = tmp_path / "ds"
+    link.symlink_to(tmp_path / "gone")
+    with pytest.raises(InputError) as exc:
+        check_out_dir(link, label="--out")
+    assert str(exc.value).startswith(
+        f"--out {link} is a link to {tmp_path / 'gone'}, which does not exist; ")
+    assert "remove the link" in str(exc.value)
+
+
+def test_a_broken_link_in_place_of_a_file_is_named(tmp_path):
+    if not _can_symlink(tmp_path):
+        pytest.skip("symbolic links are not available here")
+    (tmp_path / "tokens.css").symlink_to(tmp_path / "gone.css")
+    with pytest.raises(InputError) as exc:
+        write_files(tmp_path, FILES)
+    assert str(exc.value).startswith(
+        f"{tmp_path / 'tokens.css'} is a link to {tmp_path / 'gone.css'}, which does not exist; "
+        "remove the link")
+    assert not (tmp_path / "tokens.json").exists()
+
+
+def test_a_link_is_never_written_through(tmp_path):
+    if not _can_symlink(tmp_path):
+        pytest.skip("symbolic links are not available here")
+    shared = tmp_path / "shared.css"
+    shared.write_text(FILES["tokens.css"], encoding="utf-8")
+    out = tmp_path / "out"
+    out.mkdir()
+    (out / "tokens.css").symlink_to(shared)
+    plan = write_files(out, FILES)
+    assert plan.unchanged == ("tokens.css",)
+    shared.write_text("/* edited */\n", encoding="utf-8")
+    with pytest.raises(InputError) as exc:
+        write_files(out, FILES, force=True)
+    assert str(exc.value).startswith(f"{out / 'tokens.css'} is a link to {shared}; ")
+    assert shared.read_text(encoding="utf-8") == "/* edited */\n"
+
+
+@needs_permissions
+def test_an_unreadable_file_is_named(tmp_path):
+    target = tmp_path / "tokens.css"
+    target.write_text("/* mine */\n", encoding="utf-8")
+    target.chmod(0)
+    try:
+        with pytest.raises(InputError) as exc:
+            write_files(tmp_path, FILES)
+    finally:
+        target.chmod(0o644)
+    assert str(exc.value).startswith(f"{target} exists but cannot be read (Permission denied)")
+    assert "or write the system into a different folder" in str(exc.value)
+    assert not (tmp_path / "tokens.json").exists()
+
+
+@needs_permissions
+def test_a_read_only_folder_is_named(tmp_path):
+    out = tmp_path / "ro"
+    out.mkdir()
+    out.chmod(0o555)
+    try:
+        with pytest.raises(InputError) as exc:
+            write_files(out, FILES)
+        assert list(out.iterdir()) == []
+    finally:
+        out.chmod(0o755)
+    assert str(exc.value).startswith(f"{out} cannot be written (Permission denied)")
+    assert "pass a folder you can write to" in str(exc.value)
+
+
+@needs_permissions
+def test_a_folder_that_cannot_be_made_is_named(tmp_path):
+    parent = tmp_path / "ro"
+    parent.mkdir()
+    parent.chmod(0o555)
+    try:
+        with pytest.raises(InputError) as exc:
+            write_files(parent / "ds", FILES)
+    finally:
+        parent.chmod(0o755)
+    assert str(exc.value).startswith(f"{parent / 'ds'} cannot be made (Permission denied)")
+    assert not (parent / "ds").exists()
+
+
+def test_writing_nothing_makes_no_folder(tmp_path):
+    assert write_files(tmp_path / "new", {}) == WritePlan((), (), ())
+    assert not (tmp_path / "new").exists()

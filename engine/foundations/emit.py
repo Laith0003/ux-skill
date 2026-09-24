@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
@@ -323,35 +324,89 @@ class WritePlan:
     conflicts: Tuple[str, ...]
 
 
+def _reason(exc: OSError) -> str:
+    """The operating system's own words for a failure, such as "Permission
+    denied"."""
+    return exc.strerror or type(exc).__name__
+
+
+def _broken_link(label: str, link: Path) -> InputError:
+    return InputError(f"{label}{link} is a link to {os.readlink(str(link))}, which does not "
+                      "exist; remove the link, or write the system into a different folder")
+
+
 def check_out_dir(out_dir: Any, label: str = "out") -> Path:
     """The output folder as a Path. It may not exist yet; it may not be a
-    file."""
+    file, a broken link, or sit inside a file."""
     if out_dir is None or not str(out_dir).strip():
         raise InputError(f"{label} is missing; pass the folder to write the system into, "
                          "for example design-system")
-    p = Path(out_dir)
-    if p.exists() and not p.is_dir():
-        raise InputError(f"{label} {p} is a file, not a folder; pass a folder path, for example "
-                         f"{p.parent / 'design-system'}")
+    p = Path(out_dir).expanduser()
+    try:
+        if p.is_symlink() and not p.exists():
+            raise _broken_link(f"{label} ", p)
+        if p.exists():
+            if not p.is_dir():
+                raise InputError(f"{label} {p} is a file, not a folder; pass a folder path, "
+                                 f"for example {p.parent / 'design-system'}")
+            return p
+        for parent in p.parents:
+            if parent.is_symlink() and not parent.exists():
+                raise _broken_link(f"{label} {p} is inside ", parent)
+            if parent.exists():
+                if not parent.is_dir():
+                    raise InputError(f"{label} {p} is inside {parent}, which is a file, so the "
+                                     "folder cannot be made; pass a folder path that is not "
+                                     f"inside a file, for example "
+                                     f"{parent.parent / 'design-system'}")
+                break
+    except OSError as exc:
+        raise InputError(f"{label} {p} cannot be checked ({_reason(exc)}); pass a folder you "
+                         "can read and write") from None
     return p
 
 
+def _same_as_disk(target: Path, name: str, data: bytes) -> bool:
+    try:
+        return target.read_bytes() == data
+    except OSError as exc:
+        raise InputError(f"{target} exists but cannot be read ({_reason(exc)}), so it cannot "
+                         f"be compared with the new {name}; make it readable, move it away, or "
+                         "write the system into a different folder") from None
+
+
 def plan_writes(out_dir: Path, files: Mapping[str, str]) -> WritePlan:
-    """Compare each file with what is on disk, without writing."""
+    """Compare each file with what is on disk, without writing. A link in
+    place of a file is never written through or replaced: an identical one
+    is left alone, any other is refused."""
     write: List[str] = []
     unchanged: List[str] = []
     conflicts: List[str] = []
     for name, text in files.items():
         target = out_dir / name
-        if target.is_dir():
-            raise InputError(f"{target} is a folder, so {name} cannot be written there; rename "
-                             "that folder or write the system into a different folder")
-        if not target.exists():
-            write.append(name)
-        elif target.read_bytes() == text.encode("utf-8"):
-            unchanged.append(name)
-        else:
-            conflicts.append(name)
+        data = text.encode("utf-8")
+        try:
+            if target.is_dir():
+                raise InputError(f"{target} is a folder, so {name} cannot be written there; "
+                                 "rename that folder or write the system into a different "
+                                 "folder")
+            if target.is_symlink():
+                if not target.exists():
+                    raise _broken_link("", target)
+                if not _same_as_disk(target, name, data):
+                    raise InputError(f"{target} is a link to {os.readlink(str(target))}; the "
+                                     "system is written only as plain files, so remove the "
+                                     "link, or write the system into a different folder")
+                unchanged.append(name)
+            elif not target.exists():
+                write.append(name)
+            elif _same_as_disk(target, name, data):
+                unchanged.append(name)
+            else:
+                conflicts.append(name)
+        except OSError as exc:
+            raise InputError(f"{target} cannot be checked ({_reason(exc)}); pass a folder you "
+                             "can read and write") from None
     return WritePlan(tuple(write), tuple(unchanged), tuple(conflicts))
 
 
@@ -370,11 +425,25 @@ def write_files(out_dir: Path, files: Mapping[str, str], *, force: bool = False)
     force, one conflicting file stops every write, so the folder never
     holds a mix of two systems. Identical files are never rewritten.
     Returns the plan it acted on; `conflicts` is non-empty only when
-    nothing was written."""
+    nothing was written. Every filesystem error is an InputError naming
+    the path and the fix."""
+    if not files:
+        return WritePlan((), (), ())
     plan = plan_writes(out_dir, files)
     if plan.conflicts and not force:
         return plan
-    out_dir.mkdir(parents=True, exist_ok=True)
-    for name in plan.write + plan.conflicts:
-        (out_dir / name).write_bytes(files[name].encode("utf-8"))
-    return WritePlan(plan.write + plan.conflicts, plan.unchanged, ())
+    names = plan.write + plan.conflicts
+    if not names:
+        return WritePlan((), plan.unchanged, ())
+    try:
+        out_dir.mkdir(parents=True, exist_ok=True)
+    except OSError as exc:
+        raise InputError(f"{out_dir} cannot be made ({_reason(exc)}); pass a folder you can "
+                         "write to") from None
+    for name in names:
+        try:
+            (out_dir / name).write_bytes(files[name].encode("utf-8"))
+        except OSError as exc:
+            raise InputError(f"{out_dir} cannot be written ({_reason(exc)}); pass a folder you "
+                             "can write to") from None
+    return WritePlan(names, plan.unchanged, ())
