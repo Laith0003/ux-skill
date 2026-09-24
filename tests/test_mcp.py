@@ -145,3 +145,14 @@ def test_ux_stats_returns_dict():
     for manifest in ("styles", "palettes", "type-pairs", "components", "brands"):
         assert manifest in result["counts"], f"missing manifest count: {manifest}"
         assert isinstance(result["counts"][manifest], int)
+
+
+def test_server_builds_with_the_installed_mcp():
+    """The stdio transport needs the mcp package's decorator API. A major
+    mcp release removed it once, so build the real server whenever mcp is
+    installed; the handler tests above cannot see that break."""
+    from engine.mcp import MCP_AVAILABLE
+    if not MCP_AVAILABLE:
+        pytest.skip("mcp is not installed")
+    from engine.mcp.server import _build_server
+    assert _build_server() is not None
