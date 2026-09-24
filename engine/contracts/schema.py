@@ -490,7 +490,7 @@ def _copy(c: _Checker, raw: Any,
             continue
         texts = c.texts(rules, f"copy.{state}", "copy rules")
         for rule in texts:
-            if len(rule) > 1 and rule[0] in "\"'“" and rule[-1] in "\"'”":
+            if len(rule) > 1 and rule[0] in "\"'\u201c" and rule[-1] in "\"'\u201d":
                 c.add("copy-is-a-string", f"copy.{state} holds the literal {rule}; copy holds "
                                           "rules, not strings: say what the words do, for "
                                           "example Start with a verb that names the result")
