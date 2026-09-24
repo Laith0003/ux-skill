@@ -6,7 +6,7 @@ import re
 import pytest
 
 from engine.foundations.export import from_dtcg, to_css, to_dtcg
-from engine.foundations.gate import Pairing, gate
+from engine.foundations.gate import GateFailure, Pairing, gate
 from engine.foundations.tokens import AliasError, Token, TokenSet
 from engine.foundations.validate import validate
 from engine.foundations.values import TYPES, css_entries, decode, encode
@@ -226,13 +226,27 @@ def test_css_for_a_typed_set_prints_every_type():
         assert line in css, line
 
 
-def test_gate_refuses_a_translucent_color_by_name():
+def test_gate_reports_a_translucent_color_by_name():
+    # A translucent paired role is a gate finding naming the token and the
+    # fix, never a plain ValueError.
     ts = TokenSet()
     ts.add(Token("color.scrim.40", "color", "#00000066"))
     ts.add(Token("color.base.white", "color", "#FFFFFF"))
-    with pytest.raises(ValueError, match=r"color\.scrim\.40 \(scheme:light,contrast:standard\) resolves to the translucent "
-                                         r"#00000066; contrast needs opaque colors"):
-        gate(ts, [Pairing("color.scrim.40", "color.base.white", 3.0, "1.4.11")])
+    pairing = Pairing("color.scrim.40", "color.base.white", 3.0, "1.4.11")
+    report = gate(ts, [pairing], raise_on_fail=False)
+    assert not report.passed and report.findings == []
+    assert [(f.check, f.criterion, f.mode) for f in report.failures] == [
+        ("opaque-pairing", "system", mode) for mode in (
+            "scheme:light,contrast:standard", "scheme:light,contrast:high",
+            "scheme:dark,contrast:standard", "scheme:dark,contrast:high")]
+    assert report.failures[0].message == (
+        "color.scrim.40 (scheme:light,contrast:standard) resolves to the translucent #00000066, "
+        "so color.scrim.40 on color.base.white cannot be measured; contrast needs opaque "
+        "colors, so point color.scrim.40 at an opaque color, or composite it over the surface "
+        "beneath it first and pair the result")
+    with pytest.raises(GateFailure, match=r"color\.scrim\.40 \(scheme:light,contrast:standard\) "
+                                          r"resolves to the translucent #00000066"):
+        gate(ts, [pairing])
 
 
 @pytest.mark.parametrize("type_, value, css", [

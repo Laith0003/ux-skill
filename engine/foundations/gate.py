@@ -168,12 +168,19 @@ class GateFailure(Exception):
         super().__init__("\n".join(lines))
 
 
+class _Translucent(ValueError):
+    """A paired role resolves to a translucent color: the gate reports it
+    as a failure instead of measuring it."""
+
+    def __init__(self, path: str, mode: str, value: str):
+        self.path, self.mode, self.value = path, mode, value
+        super().__init__(f"{path} ({mode}) resolves to the translucent {value}")
+
+
 def _hex(ts: TokenSet, path: str, mode: str) -> str:
     value = opaque_hex(ts.resolve(path, mode))
     if isinstance(value, str) and len(value) == 9 and value.startswith("#"):
-        raise ValueError(
-            f"{path} ({mode}) resolves to the translucent {value}; contrast needs opaque "
-            "colors, so pair an opaque role or leave this pairing out")
+        raise _Translucent(path, mode, value)
     try:
         hex_to_rgb(value)
     except ValueError:
@@ -182,6 +189,10 @@ def _hex(ts: TokenSet, path: str, mode: str) -> str:
             "use #RRGGBB or #RGB, and run validate() first to see every such problem"
         ) from None
     return value
+
+
+# Check id for a pairing the gate cannot measure because a side is translucent.
+OPAQUE_PAIRING = "opaque-pairing"
 
 
 def _pairing_contexts(ts: TokenSet, p: Pairing) -> List[str]:
@@ -199,7 +210,17 @@ def gate(ts: TokenSet, pairings: Iterable[Pairing], checks: Iterable[Check] = ()
             continue
         for mode in _pairing_contexts(ts, p):
             report.checked += 1
-            ratio = contrast(_hex(ts, p.fg, mode), _hex(ts, p.bg, mode))
+            try:
+                ratio = contrast(_hex(ts, p.fg, mode), _hex(ts, p.bg, mode))
+            except _Translucent as t:
+                # Contrast is defined for opaque colors only; compositing
+                # over the surface beneath is the caller's step.
+                report.failures.append(CheckFailure(
+                    OPAQUE_PAIRING, "system", mode,
+                    f"{t}, so {p.fg} on {p.bg} cannot be measured; contrast needs opaque "
+                    f"colors, so point {t.path} at an opaque color, or composite it over the "
+                    "surface beneath it first and pair the result"))
+                continue
             minimum, criterion = required(p, mode, ts.axes)
             if ratio < minimum:
                 report.findings.append(

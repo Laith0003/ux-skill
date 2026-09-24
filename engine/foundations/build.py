@@ -116,8 +116,9 @@ def build_system(axes: AxisValues, brand_hex: str, *, arabic: bool = True,
 
     Raises TypeError or ValueError for bad inputs, ValidationError when the
     set breaks a structural rule, and GateFailure when a pairing or check
-    fails; otherwise returns the tokens, every generator's notes and the
-    gate report.
+    fails (a paired role that resolves to a translucent color is such a
+    failure, named by token); otherwise returns the tokens, every
+    generator's notes and the gate report.
     """
     _check_inputs(axes, brand_hex, arabic)
     chosen = _select(foundations)

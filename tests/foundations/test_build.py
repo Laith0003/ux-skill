@@ -328,3 +328,22 @@ def test_a_mistyped_role_in_any_foundation_is_named_once_not_a_crash(
     assert [(f.check, f.message) for f in report.failures] == [
         ("role-types", f"{path} is a {type_} but its role expects a {want}; point it at a "
          f"{want} token" + (f", for example {example}" if example else ""))]
+
+
+def test_a_translucent_paired_role_is_a_gate_failure_not_a_value_error(monkeypatch):
+    # A validated set whose paired surface aliases a translucent overlay
+    # reaches callers as GateFailure, naming the token and the fix.
+    _mistype(monkeypatch, color_module, "generate_color", "color.surface.card", "color",
+             "{color.shade.10}")
+    with pytest.raises(GateFailure) as err:
+        build_color(AXES, "#3366FF")
+    failures = err.value.report.failures
+    assert failures and {f.check for f in failures} == {"opaque-pairing"}
+    first = failures[0]
+    assert (first.criterion, first.mode) == ("system", "scheme:light,contrast:standard")
+    assert first.message == (
+        "color.surface.card (scheme:light,contrast:standard) resolves to the translucent "
+        "#0000001A, so color.text.default on color.surface.card cannot be measured; contrast "
+        "needs opaque colors, so point color.surface.card at an opaque color, or composite it "
+        "over the surface beneath it first and pair the result")
+    assert first.message in str(err.value)
