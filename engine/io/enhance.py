@@ -45,7 +45,7 @@ from engine.foundations.modes import AXES
 from engine.foundations.tokens import AliasError, TokenSet, alias_target, is_alias
 from engine.foundations.validate import validate
 from engine.io.adapter import (
-    AXIS_LEFT_OUT, ROLE_LEFT_OUT, ROLE_TYPES, Mapping, their_names, view)
+    AXIS_LEFT_OUT, ROLE_LEFT_OUT, ROLE_TYPES, Mapping, deleted_axes, their_names, view)
 from engine.io.report import Imported
 from engine.io.scan import Scan, Usage, canonical
 
@@ -643,7 +643,7 @@ class Enhanced:
                              "named for that use.")
         unread = self._unread(d)
         if d.strays and unread:
-            lines.append("")
+            lines += ["", "What the scan did not read or measure:", ""]
         return lines + unread
 
     @staticmethod
@@ -676,7 +676,8 @@ def _reading_face(checked: TokenSet, role: str) -> Optional[str]:
     return face if isinstance(face, str) else (face[0] if face else None)
 
 
-def _confirm(mapping: Mapping, checked: TokenSet, foundations: Sequence[str]) -> List[str]:
+def _confirm(mapping: Mapping, checked: TokenSet, foundations: Sequence[str],
+             deleted: Sequence[str] = ()) -> List[str]:
     out = []
     for role in READING_ROLES:
         first = _reading_face(checked, role) if checked.has(role) else None
@@ -700,12 +701,13 @@ def _confirm(mapping: Mapping, checked: TokenSet, foundations: Sequence[str]) ->
     else:
         out.append("No breakpoint is mapped, so reflow at 320px was not checked; map "
                    "layout.breakpoint.tablet to your first breakpoint to check it.")
-    # An axis the owner left out on purpose is not asked for again.
-    if "motion" not in mapping.axes:
+    # An axis the owner left out on purpose is not asked for again, nor one
+    # deleted from the mapping, which the decisions already name.
+    if "motion" not in mapping.axes and "motion" not in deleted:
         out.append("The system has no reduced-motion mode in the mapping, so the motion checks "
                    "under reduced motion did not run; if it has one, map it as the motion axis "
                    "in mapping.json.")
-    if "scheme" not in mapping.axes:
+    if "scheme" not in mapping.axes and "scheme" not in deleted:
         out.append("The system has no dark mode in the mapping, so dark was not checked; if it "
                    "has one, map it as the scheme axis in mapping.json.")
     return out
@@ -764,5 +766,6 @@ def enhance(imported: Imported, mapping: Mapping, scanned: Optional[Scan] = None
     decisions += [n for n in notes if n not in owner]
     return Enhanced(imported, mapping, result, structure,
                     drift(ts, scanned) if scanned is not None else None,
-                    _confirm(mapping, checked, result.foundations), decisions, findings,
+                    _confirm(mapping, checked, result.foundations, list(deleted_axes(ts, mapping))),
+                    decisions, findings,
                     list(merge_notes))
