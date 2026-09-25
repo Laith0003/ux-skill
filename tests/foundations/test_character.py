@@ -96,14 +96,14 @@ def test_scale_ratio_stays_in_its_documented_range():
     assert min(values) == pytest.approx(1.095) and max(values) == pytest.approx(1.355)
 
 
-def test_icon_stroke_rises_with_every_display_weight_step():
+def test_icon_stroke_never_falls_as_the_display_weight_rises():
     by_weight = {}
     for axes in _grid():
         by_weight.setdefault(character.display_weight(axes), set()).add(character.icon_stroke(axes))
     assert all(len(s) == 1 for s in by_weight.values())
     strokes = [by_weight[w].pop() for w in sorted(by_weight)]
     assert sorted(by_weight) == [300, 400, 500, 600, 700, 800]
-    assert strokes == [1.25, 1.5, 1.75, 2.0, 2.25, 2.5]
+    assert strokes == [1.25, 1.5, 1.75, 1.75, 2.0, 2.25]
 
 
 def test_mix_hue_takes_the_shorter_arc_and_stays_a_hue():

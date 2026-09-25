@@ -164,9 +164,9 @@ def scale_ratio(axes: AxisValues) -> float:
 
 
 def icon_stroke(axes: AxisValues) -> float:
-    """Icon stroke on a 24 unit grid, 1.25 to 2.5 in quarters, a quarter
-    heavier for each 100 of display weight."""
-    return round((1.25 + (display_weight(axes) - 300) / 400.0) * 4) / 4
+    """Icon stroke on a 24 unit grid, 1.25 to 2.25 in quarters, never
+    lighter as the display weight rises (500 and 600 share 1.75)."""
+    return round((1.25 + (display_weight(axes) - 300) / 500.0) * 4) / 4
 
 
 def overshoot(axes: AxisValues) -> float:
