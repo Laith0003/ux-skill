@@ -11,7 +11,8 @@ import pytest
 from engine.foundations.errors import InputError
 from engine.foundations.tokens import Token, TokenSet
 from engine.io.report import Source
-from engine.io.scan import MAX_BYTES, SKIP_DIRS, Scan, Usage, canonical, scan
+from engine.io.scan import (MAX_BYTES, NAMED_COLORS, SKIP_DIRS, Scan, Usage, canonical,
+                             scan)
 from engine.io.tailwind_in import import_tailwind_css, import_tailwind_json
 
 CSS = """.btn {
@@ -259,8 +260,8 @@ def test_a_var_in_an_arbitrary_class_takes_its_family_from_the_hint(tmp_path):
 
 
 def test_keyword_utilities_are_not_listed_as_unknown(tmp_path):
-    html = ('<p class="text-center border-solid rounded-full bg-transparent flex p mt m-auto '
-            'text-lg bg-brand">x</p>\n')
+    html = ('<p class="md:flex text-center border-solid rounded-full bg-transparent flex p mt '
+            'm-auto text-lg bg-brand">x</p>\n')
     result = _one(tmp_path, "a.html", html)
     assert [c for _, _, c in result.unknown_classes] == ["text-lg", "bg-brand"]
     assert result.usages == []
@@ -430,3 +431,188 @@ def test_a_few_thousand_small_files_scan_in_a_few_seconds(tmp_path):
     elapsed = time.perf_counter() - start
     assert result.files == 3000
     assert elapsed < 5, f"3000 files took {elapsed:.1f}s"
+
+
+# Fix round 1 ------------------------------------------------------------------
+
+def _not_read(result, file=None):
+    return [(n.line, n.kind, n.text) for n in result.not_read if file in (None, n.file)]
+
+
+def test_css_named_colors_are_raw_colors(tmp_path):
+    css = (".a { color: red; background: linear-gradient(navy, RebeccaPurple); "
+           "border: 1px solid tomato; transition: color 1s; }\n")
+    rows = [(r[2], r[3], r[5]) for r in _rows(_one(tmp_path, "a.css", css))]
+    assert rows == [("color", "color", "#FF0000"), ("background", "color", "#000080"),
+                    ("background", "color", "#663399"), ("border", "border", "1px"),
+                    ("border", "color", "#FF6347"), ("transition", "duration", "1000ms")]
+    jsx = "const a = <b style={{ color: 'red', backgroundColor: \"Gray\" }} />;\n"
+    rows = [(r[2], r[5]) for r in _rows(_one(tmp_path, "b.jsx", jsx)) if r[0] == "b.jsx"]
+    assert rows == [("color", "#FF0000"), ("background-color", "#808080")]
+
+
+def test_the_named_color_table_is_the_css_list():
+    import re
+    assert len(NAMED_COLORS) == 148
+    assert all(re.fullmatch(r"#[0-9A-F]{6}", v) for v in NAMED_COLORS.values())
+    assert NAMED_COLORS["rebeccapurple"] == "#663399" and NAMED_COLORS["grey"] == "#808080"
+
+
+def test_the_font_shorthand_is_read_by_its_parts(tmp_path):
+    css = """.a { font: italic 600 14px/1.4 "Body Sans", sans-serif; }
+.b { font: 1em/2 serif; }
+.c { font: inherit; }
+"""
+    result = _one(tmp_path, "a.css", css)
+    assert [(r[1], r[3], r[5]) for r in _rows(result)] == [
+        (1, "weight", "600"), (1, "type-size", "14px"), (1, "leading", "1.4"),
+        (1, "font", "Body Sans, sans-serif"), (2, "leading", "2"), (2, "font", "serif")]
+    assert {u.prop for u in result.usages} == {"font"}
+    rows = [(r[2], r[5]) for r in _rows(_one(tmp_path / "f", "b.css",
+                                             ".a { font-family: Inter, sans-serif; }\n"
+                                             ".b { font-family: -apple-system, 'Face UI'; }\n"
+                                             ))]
+    assert rows == [("font-family", "Inter, sans-serif"),
+                    ("font-family", "-apple-system, Face UI")]
+    [(line, kind, text)] = _not_read(result)
+    assert (line, kind, text) == (2, "value", "1em")
+    assert "px or rem" in result.not_read[0].why
+
+
+def test_values_with_no_single_reading_are_listed_as_not_read(tmp_path):
+    css = """.a {
+  padding: calc(1rem + 2px) 4px;
+  letter-spacing: -0.01em;
+  margin: 0 auto;
+  color: currentColor;
+  border-radius: 50%;
+  box-shadow: 0;
+  display: flex;
+  background: url(a.png) no-repeat;
+}
+"""
+    result = _one(tmp_path, "a.css", css)
+    assert [(r[1], r[2], r[5]) for r in _rows(result)] == [(2, "padding", "4px")]
+    assert _not_read(result) == [(2, "value", "calc(1rem + 2px)"), (3, "value", "-0.01em"),
+                                 (6, "value", "50%"), (7, "value", "0")]
+    whys = [n.why for n in result.not_read]
+    assert "computed by the browser" in whys[0] and "px or rem" in whys[1]
+
+
+def test_css_in_js_template_literals_are_read(tmp_path):
+    jsx = """const Button = styled.button`
+  color: #ff00ff;
+  padding: 9px;
+  &:hover { color: ${(p) => p.accent}; background: var(--color-ink); }
+`;
+const pad = css`gap: 4px;`;
+const Title = styled(Heading).attrs({ level: 2 })`font-size: 20px;`;
+"""
+    result = _one(tmp_path, "a.jsx", jsx)
+    assert [(r[1], r[2], r[4], r[5], r[6]) for r in _rows(result)] == [
+        (2, "color", "raw", "#FF00FF", ""), (3, "padding", "raw", "9px", ""),
+        (4, "background", "token", "color-ink", "hover"), (6, "gap", "raw", "4px", ""),
+        (7, "font-size", "raw", "20px", "")]
+    [(line, kind, text)] = _not_read(result)
+    assert (line, kind) == (4, "interpolation") and text.startswith("${")
+
+
+def test_style_props_bound_to_expressions_are_listed_as_not_read(tmp_path):
+    jsx = """const a = <b style={box} />;
+const c = <b style={{ ...base, color: 'red', width: size, [key]: 1 }} />;
+"""
+    result = _one(tmp_path, "a.tsx", jsx)
+    assert [(r[1], r[2], r[5]) for r in _rows(result)] == [(2, "color", "#FF0000")]
+    assert _not_read(result) == [(1, "style expression", "box"), (2, "spread", "...base"),
+                                 (2, "style value", "width: size"),
+                                 (2, "style value", "[key]: 1")]
+    assert all(n.why for n in result.not_read)
+    file, line, kind, text = result.not_read[0]
+    assert (file, line, kind, text) == ("a.tsx", 1, "style expression", "box")
+    assert result.not_read[0].where() == "a.tsx:1"
+
+
+def test_template_values_and_unreadable_arbitrary_classes_are_listed(tmp_path):
+    blade = ('<div style="color: {{ $c }}; gap: 2px" '
+             'class="hover:p-2 p-[calc(1rem+2px)]"></div>\n')
+    result = _one(tmp_path, "a.blade.php", blade)
+    assert [(r[2], r[5]) for r in _rows(result)] == [("gap", "2px"), ("p-2", "spacing")]
+    assert _not_read(result) == [(1, "value", "{{ $c }}"), (1, "class", "p-[calc(1rem+2px)]")]
+    assert "template" in result.not_read[0].why
+
+
+def test_scss_comments_respect_strings_block_comments_and_urls(tmp_path):
+    scss = """/* TODO // fix */
+.a { gap: 1px; }
+/* end */
+.b { content: " // x"; color: #ffffff; }
+.c { background: url(//cdn.example.com/bg.png) #000000; } // trailing
+.d { gap: 3px; }
+"""
+    result = _one(tmp_path, "a.scss", scss)
+    assert result.skipped == []
+    assert [(r[1], r[2], r[5]) for r in _rows(result)] == [
+        (2, "gap", "1px"), (4, "color", "#FFFFFF"), (5, "background", "#000000"),
+        (6, "gap", "3px")]
+    vue = '<style lang="less">\n/* a // b */\n.x { gap: 5px; } // c\n</style>\n'
+    rows = [(r[1], r[5]) for r in _rows(_one(tmp_path / "v", "a.vue", vue))]
+    assert rows == [(3, "5px")]
+
+
+def test_without_a_tailwind_signal_utility_looking_classes_are_not_read(tmp_path):
+    html = '<div class="text-block__title bg-image z-3 border to-do bg-primary"></div>\n'
+    result = _one(tmp_path / "plain", "a.html", html)
+    assert result.unknown_classes == []
+    assert [(r[2], r[4]) for r in _rows(result)] == [("bg-primary", "token")]
+    (tmp_path / "plain" / "b.html").write_text('<i class="focus:p-2"></i>\n', encoding="utf-8")
+    result = scan([tmp_path / "plain"], _tokens())
+    assert [c for _, _, c in result.unknown_classes] == ["text-block__title", "bg-image",
+                                                          "to-do"]
+    assert ("z-3", "raw") in [(r[2], r[4]) for r in _rows(result)]
+    (tmp_path / "post").mkdir()
+    (tmp_path / "post" / "postcss.config.mjs").write_text(
+        'export default { plugins: { "@tailwindcss/postcss": {} } };\n', encoding="utf-8")
+    assert _one(tmp_path / "post", "a.html", '<i class="bg-brand"></i>\n').unknown_classes \
+        == [("a.html", 1, "bg-brand")]
+    css = _one(tmp_path / "css", "app.css", '@import "tailwindcss";\n')
+    assert css.unknown_classes == []
+    (tmp_path / "css" / "a.html").write_text('<i class="bg-brand"></i>\n', encoding="utf-8")
+    assert [c for _, _, c in scan([tmp_path / "css"], _tokens()).unknown_classes] == ["bg-brand"]
+
+
+def test_a_style_block_that_does_not_parse_is_listed_at_its_file_line(tmp_path):
+    html = '<p style="gap: 2px"></p>\n<style>\n.a { gap: 1px;\n</style>\n'
+    result = _one(tmp_path, "a.html", html)
+    assert result.skipped == []
+    assert [(r[1], r[5]) for r in _rows(result)] == [(1, "2px")]
+    [(line, kind, _)] = _not_read(result)
+    assert (line, kind) == (3, "stylesheet")
+    assert "line 3" in result.not_read[0].why and "add the missing }" in result.not_read[0].why
+
+
+def test_a_var_to_a_missing_token_takes_the_family_of_its_property(tmp_path):
+    css = (".a { border-radius: var(--r); border-top-left-radius: var(--r); "
+           "border-style: var(--s); border-color: var(--c); border: var(--b); }\n")
+    rows = [(r[2], r[3]) for r in _rows(_one(tmp_path, "a.css", css))]
+    assert rows == [("border-radius", "radius"), ("border-top-left-radius", "radius"),
+                    ("border-style", ""), ("border-color", "color"), ("border", "border")]
+
+
+@pytest.mark.skipif(not hasattr(os, "mkfifo"), reason="needs named pipes")
+def test_a_file_that_is_not_a_regular_file_is_skipped(tmp_path):
+    os.mkfifo(tmp_path / "pipe.css")
+    (tmp_path / "ok.css").write_text(".a { gap: 1px; }", encoding="utf-8")
+    result = scan([tmp_path], _tokens())
+    assert result.files == 1
+    assert [(f, "regular file" in why) for f, why in result.skipped] == [("pipe.css", True)]
+
+
+def test_several_roots_name_files_apart_and_read_each_file_once(tmp_path):
+    for name in ("web", "admin"):
+        (tmp_path / name).mkdir()
+        (tmp_path / name / "index.css").write_text(".a { gap: 1px; }", encoding="utf-8")
+    result = scan([tmp_path / "web", tmp_path / "admin", tmp_path / "web"], _tokens())
+    assert [u.file for u in result.usages] == ["web/index.css", "admin/index.css"]
+    assert result.files == 2
+    result = scan([tmp_path], _tokens(), exclude=[tmp_path / "admin"])
+    assert [u.file for u in result.usages] == ["web/index.css"]
