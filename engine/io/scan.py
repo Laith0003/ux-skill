@@ -1,8 +1,9 @@
 """Measure what a codebase uses: the values written in CSS (plain, SCSS or
 Less, nested rules and at-rules included, and <style> blocks), in style
-attributes (HTML, Blade, Vue, Svelte, Astro), in JSX style props, in
-CSS-in-JS template literals (styled, css, keyframes) and in Tailwind
-classes. Each use records its file, line, property, the family it belongs
+attributes (HTML, Blade, Vue, Svelte, Astro), in JSX style props, emotion's
+css={{...}} and MUI's sx={{...}} objects (nested selectors such as
+'&:hover' included), in CSS-in-JS template literals (styled, css,
+keyframes) and in Tailwind classes. Each use records its file, line, property, the family it belongs
 to (color, space, radius, border, type-size, leading, tracking, weight,
 font, shadow, duration, motion, z), whether it names a token or writes a
 raw value, and the state it applies in.
@@ -22,9 +23,11 @@ What the scanner sees and cannot measure is listed in Scan.not_read, each
 entry with why and the fix, so a report can say what it did not count: a
 value with no single reading in a property that carries a family (calc(),
 em, %, a template or preprocessor value), an interpolation inside a
-CSS-in-JS template, a style prop bound to an expression, a spread or a
-computed entry in a style object, an arbitrary class whose value does not
-read, and a <style> block or template that does not parse. Values in
+CSS-in-JS template, a style, css or sx prop bound to an expression, a
+spread or a computed entry in a style object, a value MUI looks up in its
+theme (p: 2, borderRadius: 2, color: 'primary.main'), an arbitrary class
+whose value does not read, and a <style> block or template that does not
+parse. Values in
 properties that carry no family (display, width) and CSS keywords (auto,
 inherit, currentColor) are neither uses nor listed.
 
@@ -51,7 +54,7 @@ folders, such as the system's own source), and reports in Scan.skipped each
 file it does not read: one that is not a regular file, one larger than
 MAX_BYTES, a binary file, text that is not UTF-8, a minified build file and
 a stylesheet whose blocks do not close. With several roots, each file is
-named under its root's folder name and read once.
+named by its path from the folder the roots share, and read once.
 """
 from __future__ import annotations
 
@@ -67,7 +70,7 @@ from typing import (Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, O
 from engine.foundations.errors import InputError, _brief_text
 from engine.foundations.tokens import TokenSet
 from engine.foundations.values import STROKE_STYLES, TYPES, dimension_px, duration_ms
-from engine.io.css_in import _without_not, parse_css
+from engine.io.css_in import _blank_comments, _without_not, parse_css
 from engine.io.values_in import CSS_KEYWORDS, NotRead, read_value, split_top
 
 SKIP_DIRS = ("node_modules", ".git", "dist", "build", "vendor", ".next", "out", "coverage",
@@ -228,16 +231,38 @@ _REST = re.compile(r"[A-Za-z0-9._-]*")
 _TYPE_HINT = re.compile(r"([a-z][a-z-]*):(?!//)")
 # A Tailwind variant as written before a class (hover, md, group-hover/item,
 # data-[state=open], @lg, min-[400px]); the class after it must start like one.
-_VARIANT = re.compile(r"(?:[a-z0-9][a-z0-9-]*(?:-\[[^\]]+\])?|\[[^\]]+\]|@[a-z0-9-]+)"
-                      r"(?:/[\w-]+)?")
+_KNOWN_VARIANTS = (
+    "hover|focus|focus-within|focus-visible|active|visited|target|first|last|only|odd|even"
+    "|first-of-type|last-of-type|only-of-type|empty|disabled|enabled|checked|indeterminate"
+    "|default|required|valid|invalid|user-valid|user-invalid|in-range|out-of-range"
+    "|placeholder-shown|autofill|read-only|open|inert|before|after|first-letter|first-line"
+    "|marker|selection|file|backdrop|placeholder|details-content|starting|sm|md|lg|xl|2xl"
+    "|dark|portrait|landscape|motion-safe|motion-reduce|contrast-more|contrast-less|print"
+    "|rtl|ltr|forced-colors|noscript|\\*|\\*\\*")
+_VARIANT = re.compile(r"(?:(?:group|peer)-)?(?:" + _KNOWN_VARIANTS + r")(?:/[\w-]+)?"
+                      r"|(?:group|peer|has|not|in|aria|data|supports|min|max|nth|nth-last"
+                      r"|nth-of-type|nth-last-of-type)-\S+|@\S+|\[.+\]")
+# A class with an arbitrary value (w-[13px], grid-cols-[1fr_2fr], bg-(--x)).
+_ARBITRARY_CLASS = re.compile(r"-?[a-z][a-z0-9-]*-(\[[^\]]+\]|\([^)]+\))(/\S+)?")
 _UTILITY_START = re.compile(r"[!-]?[a-z\[(]")
 # At-rules only Tailwind stylesheets write.
 _TAILWIND_CSS = re.compile(r"""@tailwind\b|@import\s+["']tailwindcss|@theme\b|@apply\b"""
                            r"""|@config\b|@custom-variant\b|@utility\b""")
 
 # Markup and scripts.
-_ATTR_START = re.compile(r"(?<![\w$-])(:|v-bind:|x-bind:)?(className|class:list|class|style)"
-                         r"\s*=\s*")
+_ATTR_START = re.compile(r"(?<![\w$-])(:|v-bind:|x-bind:)?"
+                         r"(className|class:list|class|style|css|sx)\s*=\s*")
+# MUI's sx shorthands and the CSS property each one sets.
+_SX_ALIASES = {"m": "margin", "mt": "margin-top", "mr": "margin-right", "mb": "margin-bottom",
+               "ml": "margin-left", "mx": "margin-inline", "my": "margin-block",
+               "p": "padding", "pt": "padding-top", "pr": "padding-right",
+               "pb": "padding-bottom", "pl": "padding-left", "px": "padding-inline",
+               "py": "padding-block", "bgcolor": "background-color"}
+# sx keys whose number is a theme step, not px.
+_SX_THEME_NUMBERS = re.compile(r"(margin|padding|gap|row-gap|column-gap|border-radius"
+                               r"|box-shadow)(-.*)?$")
+# An sx string that names a theme entry: a palette path or a typography variant.
+_SX_THEME_PATH = re.compile(r"[a-z][A-Za-z0-9]*(\.[A-Za-z0-9]+)+")
 _STYLE_DIRECTIVE = re.compile(r"""(?<![\w-])style:([a-z-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')""")
 _OBJ_MEMBER = re.compile(r"""(?:([A-Za-z_$][\w$]*)|'([^'\n]*)'|"([^"\n]*)")\s*:\s*(.*)$""",
                          re.S)
@@ -257,6 +282,7 @@ _TEMPLATE = re.compile(r"\{\{|\{!!|<\?|\$\{|#\{|@\{|^[$@][\w-]+$")
 # CSS-in-JS: a tagged template that holds CSS.
 _CSS_IN_JS = re.compile(r"(?<![\w$.])(styled|css|keyframes|createGlobalStyle|injectGlobal)\b")
 _PLACEHOLDER = re.compile(r"__uxi\d+__")
+_LOOK_AHEAD = 500
 _LINE_IN_ERROR = re.compile(r"line (\d+)")
 
 _WHY_COMPUTED = ("is computed in JavaScript, so its value is not measured; write it as a literal "
@@ -267,6 +293,9 @@ _WHY_SPREAD = ("spreads another object into the style, so those values are not m
                "them in this object, a class or a stylesheet")
 _WHY_INTERPOLATION = ("is computed in JavaScript inside the CSS template, so its value is not "
                       "measured; write a literal or a var() to a token there")
+_WHY_THEME = ("is looked up in the MUI theme (a spacing step, a palette path or a theme "
+              "index), so its value is not measured; write a CSS value such as '8px' or "
+              "'#1F2937', or import the theme as the system")
 _WHY_TEMPLATE = ("is filled in by a template or a preprocessor when the page is built, so it is "
                  "not measured; write the value, or a var() to a token, in a stylesheet")
 
@@ -463,13 +492,15 @@ def _js_members(body: str) -> Iterator[Tuple[int, str]]:
     yield start, body[start:]
 
 
-def _closing(text: str, start: int) -> int:
+def _closing(text: str, start: int, limit: int = 0) -> int:
     """The offset of the bracket closing the one at `start` ((, [, { or <),
-    skipping strings and template literals, or -1 when it never closes."""
+    skipping strings and template literals, or -1 when it never closes (or
+    not within `limit` characters, when a limit is given)."""
     pairs = {"(": ")", "[": "]", "{": "}", "<": ">"}
     opener, closer = text[start], pairs[text[start]]
     depth, quote, i = 0, "", start
-    while i < len(text):
+    end = min(len(text), start + limit) if limit else len(text)
+    while i < end:
         ch = text[i]
         if quote:
             if ch == "\\":
@@ -505,7 +536,9 @@ def _template_start(text: str, i: int) -> int:
         elif ch == "`":
             return i
         elif ch in "(<":
-            close = _closing(text, i)
+            # A tag's arguments or type close soon; a comparison (css < 5)
+            # never does, so the look-ahead is bounded to stay linear.
+            close = _closing(text, i, _LOOK_AHEAD)
             if close == -1:
                 return -1
             i = close + 1
@@ -667,11 +700,19 @@ class _Scanner:
             return
         if not prop.startswith("--"):
             prop = prop.lower()
-        value = _PLACEHOLDER.sub(" ", _IMPORTANT.sub("", value.strip())).strip()
+        value = _IMPORTANT.sub("", value.strip())
         refs = _top_vars(value)
         for name, a, b in refs:
             self.var(at, prop, name, value[a:b], state)
         if prop.startswith(("--", "$", "@")) or not value:
+            return
+        if _PLACEHOLDER.search(value):
+            # A CSS-in-JS interpolation (listed where it was found): the parts
+            # around it are read, the part it sits in (${x}px) is not.
+            for chunk in split_top(value):
+                for part in split_top(chunk, " "):
+                    if not _PLACEHOLDER.search(part) and not part.startswith("var("):
+                        self.raw(at, prop, part, state)
             return
         if _TEMPLATE.search(value):
             if self.measured(prop) or prop == "font":
@@ -784,10 +825,10 @@ class _Scanner:
     def css(self, text: str, first_line: int = 0, pos: int = 0,
             line_comments: bool = False) -> None:
         """A stylesheet; with `line_comments` (SCSS, Less) // starts a comment."""
-        if _TAILWIND_CSS.search(text):
-            self.tailwind = True
         if line_comments:
             text = _strip_line_comments(text)
+        if _TAILWIND_CSS.search(_blank_comments(text)):
+            self.tailwind = True
         for rule in parse_css(text, self.file, every=True):
             state = _selector_state(rule.selector, rule.media)
             for d in rule.declarations:
@@ -820,7 +861,8 @@ class _Scanner:
     def utility(self, at: Tuple[int, int], cls: str, outer: str) -> None:
         variants, utility = _variants(cls)
         if variants and all(_VARIANT.fullmatch(v) for v in variants) \
-                and _UTILITY_START.match(utility):
+                and _UTILITY_START.match(utility) \
+                or _ARBITRARY_CLASS.fullmatch(utility.strip("!")):
             self.tailwind = True
         state = _merge_state(outer, _variant_state(variants))
         utility = utility.strip("!")
@@ -942,9 +984,14 @@ class _Scanner:
                 prop, _, value = decl.partition(":")
                 self.declaration((lines(start + at), start + at), prop, value, "")
 
-    def style_object(self, lines: _Lines, start: int, body: str) -> None:
-        """A style object literal's members: literal values are read, and
-        spreads, computed keys and computed values are listed as not read."""
+    def style_object(self, lines: _Lines, start: int, body: str, state: str = "",
+                     mui: bool = False) -> None:
+        """A style object literal's members (style, emotion's css, MUI's
+        sx): literal values are read, a nested selector ('&:hover', a media
+        query) is read in its state, and spreads, computed keys and
+        computed values are listed as not read. With `mui`, the sx
+        shorthands are read (p, mt, bgcolor), and a value the theme looks
+        up (p: 2, color: 'primary.main') is listed as not read."""
         for offset, member in _js_members(body):
             text = member.strip()
             if not text:
@@ -955,19 +1002,38 @@ class _Scanner:
                 self.note(where, "spread", text, f"{text} {_WHY_SPREAD}")
                 continue
             m = _OBJ_MEMBER.fullmatch(text)
-            literal = _JS_LITERAL.fullmatch(m.group(4).strip()) if m else None
+            raw_value = m.group(4).strip() if m else ""
+            key = next((g for g in m.groups()[:3] if g is not None), "") if m else ""
+            if m and raw_value.startswith("{") and raw_value.endswith("}") \
+                    and re.match(r"[&:@\[]", key):
+                inner = _merge_state(state, _selector_state(key.replace("&", ".x"),
+                                                            (key,) if key.startswith("@")
+                                                            else ()))
+                lead = at + text.index(raw_value) + 1
+                self.style_object(lines, lead, raw_value[1:-1], inner, mui)
+                continue
+            literal = _JS_LITERAL.fullmatch(raw_value) if m else None
             if literal is None:
                 self.note(where, "style value", text, f"{text} {_WHY_COMPUTED}")
                 continue
-            key = next(g for g in m.groups()[:3] if g is not None)
-            prop = key if key.startswith("--") else \
-                re.sub(r"([A-Z])", lambda c: "-" + c.group(1).lower(), key)
+            if key.startswith("--"):
+                prop = key
+            elif mui and key in _SX_ALIASES:
+                prop = _SX_ALIASES[key]
+            else:
+                prop = re.sub(r"([A-Z])", lambda c: "-" + c.group(1).lower(), key)
             number = literal.group(4)
+            string = next((g for g in literal.groups()[:3] if g is not None), None)
+            if mui and (number is not None and _SX_THEME_NUMBERS.match(prop)
+                        or string is not None and _SX_THEME_PATH.fullmatch(string)
+                        or key == "typography"):
+                self.note(where, "theme value", text, f"{text} {_WHY_THEME}")
+                continue
             if number is not None:
                 value = number if key in _UNITLESS or float(number) == 0 else f"{number}px"
             else:
-                value = next(g for g in literal.groups()[:3] if g is not None)
-            self.declaration(where, prop, value, "")
+                value = string
+            self.declaration(where, prop, value, state)
 
     def class_expression(self, lines: _Lines, start: int, body: str) -> None:
         for m in _JS_STRING.finditer(body):
@@ -1025,14 +1091,19 @@ class _Scanner:
                 body, start, expression = text[i + 1:close], i + 1, True
             else:
                 continue
-            if name == "style":
+            if name in ("css", "sx") and opener != "{":
+                continue  # a quoted css= (Vue's transition prop) is not a style
+            if name in ("style", "css", "sx"):
                 inner = body.strip()
+                written = " ".join(text[m.start():close + 1].split())
+                if len(written) > 80:
+                    written = written[:77] + "..."
                 if expression and inner.startswith("{") and inner.endswith("}"):
                     lead = body.index("{")
-                    self.style_object(lines, start + lead + 1, inner[1:-1])
-                elif expression and inner:
+                    self.style_object(lines, start + lead + 1, inner[1:-1], mui=name == "sx")
+                elif expression and inner and not re.match(r"css\s*`", inner):
                     self.note((lines(start), start), "style expression", inner,
-                              f"style={{{' '.join(inner.split())}}} {_WHY_STYLE}")
+                              f"{written} {_WHY_STYLE}")
                 elif not expression:
                     self.style_attr(lines, start, body)
             elif expression:
@@ -1047,15 +1118,32 @@ class _Scanner:
 
 def _files(roots: Sequence[Path], skip: Set[Path]) -> Iterator[Tuple[Path, str]]:
     """(path, name to report) for each code file under `roots`, each file
-    once. With several roots, a name starts with its root's folder name."""
+    once. With several roots, a name is the file's path from the folder the
+    roots share, so two roots named alike (a/src, b/src) stay apart."""
     seen: Set[Path] = set()
     several = len(roots) > 1
+    base: Optional[str] = None
+    if several:
+        try:
+            base = os.path.commonpath([os.path.abspath(r if r.is_dir() else r.parent)
+                                       for r in roots])
+        except ValueError:  # roots on different drives share no folder
+            base = None
+
+    def label(p: Path, root: Path) -> str:
+        if not several:
+            return p.relative_to(root).as_posix() if root.is_dir() else p.name
+        if base is not None:
+            return Path(os.path.relpath(os.path.abspath(p), base)).as_posix()
+        prefix = Path(os.path.abspath(root)).as_posix().strip("/").replace(":", "")
+        return f"{prefix}/{p.relative_to(root).as_posix() if root.is_dir() else p.name}"
+
     for root in roots:
         if root.is_file():
             resolved = root.resolve()
             if resolved not in skip and resolved not in seen:
                 seen.add(resolved)
-                yield root, root.name
+                yield root, label(root, root)
             continue
         for folder, dirs, names in os.walk(root):
             dirs[:] = sorted(d for d in dirs if d not in SKIP_DIRS and not d.startswith(".")
@@ -1068,8 +1156,7 @@ def _files(roots: Sequence[Path], skip: Set[Path]) -> Iterator[Tuple[Path, str]]
                         continue
                     if several:
                         seen.add(resolved)
-                    rel = p.relative_to(root).as_posix()
-                    yield p, f"{root.name}/{rel}" if several else rel
+                    yield p, label(p, root)
 
 
 def scan(roots: Sequence[Any], ts: TokenSet, exclude: Iterable[Any] = ()) -> Scan:
