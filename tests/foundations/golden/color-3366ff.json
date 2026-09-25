@@ -377,9 +377,9 @@
   "--color-brand-950: #01003B;",
   "--color-brand-exact: #3366FF;",
   "--color-brand-tint-light: #E9ECF4;",
-  "--color-brand-tint-dark: #04114C;",
+  "--color-brand-tint-dark: #0E1830;",
   "--color-brand-band-light: #D0DCF6;",
-  "--color-brand-band-dark: #141F38;",
+  "--color-brand-band-dark: #152039;",
   "--color-brand-fill: #3366FF;",
   "--color-brand-fill-hover: #2655ED;",
   "--color-brand-fill-pressed: #1A43DC;",
@@ -689,11 +689,11 @@
   "color.brand.band-dark": {
    "colorSpace": "srgb",
    "components": [
-    0.078431,
-    0.121569,
-    0.219608
+    0.082353,
+    0.12549,
+    0.223529
    ],
-   "hex": "#141F38"
+   "hex": "#152039"
   },
   "color.brand.band-light": {
    "colorSpace": "srgb",
@@ -770,11 +770,11 @@
   "color.brand.tint-dark": {
    "colorSpace": "srgb",
    "components": [
-    0.015686,
-    0.066667,
-    0.298039
+    0.054902,
+    0.094118,
+    0.188235
    ],
-   "hex": "#04114C"
+   "hex": "#0E1830"
   },
   "color.brand.tint-light": {
    "colorSpace": "srgb",
@@ -1897,10 +1897,10 @@
    "light-high": "#01003B"
   },
   "color.brand.band-dark": {
-   "dark": "#141F38",
-   "dark-high": "#141F38",
-   "light": "#141F38",
-   "light-high": "#141F38"
+   "dark": "#152039",
+   "dark-high": "#152039",
+   "light": "#152039",
+   "light-high": "#152039"
   },
   "color.brand.band-light": {
    "dark": "#D0DCF6",
@@ -1951,10 +1951,10 @@
    "light-high": "#1A43DC"
   },
   "color.brand.tint-dark": {
-   "dark": "#04114C",
-   "dark-high": "#04114C",
-   "light": "#04114C",
-   "light-high": "#04114C"
+   "dark": "#0E1830",
+   "dark-high": "#0E1830",
+   "light": "#0E1830",
+   "light-high": "#0E1830"
   },
   "color.brand.tint-light": {
    "dark": "#E9ECF4",
@@ -2593,8 +2593,8 @@
    "light-high": "#030A27"
   },
   "color.surface.band": {
-   "dark": "#141F38",
-   "dark-high": "#141F38",
+   "dark": "#152039",
+   "dark-high": "#152039",
    "light": "#D0DCF6",
    "light-high": "#D0DCF6"
   },
@@ -2659,8 +2659,8 @@
    "light-high": "#EAEBEC"
   },
   "color.surface.tint": {
-   "dark": "#04114C",
-   "dark-high": "#04114C",
+   "dark": "#0E1830",
+   "dark-high": "#0E1830",
    "light": "#E9ECF4",
    "light-high": "#E9ECF4"
   },

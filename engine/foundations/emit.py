@@ -37,7 +37,7 @@ from engine.foundations.fonts import fonts_css, link_tags, loading_lines, self_h
 from engine.foundations.gate import GateFailure, GateReport
 from engine.synthesizer.axes import (
     AXIS_NAMES, FORBIDDEN_CLAMPS, INDUSTRY_SEEDS, NUDGE_LIMIT, TONE_NUDGES, AxisValues,
-    _apply_tone_nudges, _normalize_tag, _seed_from_industry, compute_axes,
+    _apply_tone_nudges, _normalize_tag, _seed_from_industry, check_character, compute_axes,
 )
 
 # The files a build writes, in the order they are written and reported.
@@ -218,31 +218,12 @@ def _brief_values(brief: Mapping[str, Any], label: str) -> Dict[str, Any]:
 
 def brief_character(brief: Mapping[str, Any], label: str = "brief") -> Dict[str, float]:
     """The brief's character nudges by axis, in AXIS_NAMES order; empty when
-    it has none. A value that is not an object of axis names and numbers
-    from -NUDGE_LIMIT to NUDGE_LIMIT is an InputError naming the entry."""
-    value = brief.get(CHARACTER_FIELD)
-    if value in (None, {}):
-        return {}
-    if not isinstance(value, dict):
-        raise InputError(f"{label} field character is {value!r}; give an object of axis "
-                         f"nudges, for example {_NUDGE_EXAMPLE}")
-    for key in value:
-        if key not in AXIS_NAMES:
-            raise InputError(f'{label} field character names "{key}", which is not an axis; '
-                             f"use {', '.join(AXIS_NAMES)}, for example {_NUDGE_EXAMPLE}")
-    out: Dict[str, float] = {}
-    for axis in AXIS_NAMES:
-        if axis not in value:
-            continue
-        v = value[axis]
-        if isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) \
-                or abs(v) > NUDGE_LIMIT:
-            raise InputError(f"{label} field character.{axis} is {v!r}; set a nudge from "
-                             f"-{NUDGE_LIMIT:g} to {NUDGE_LIMIT:g}, for example "
-                             f'"character": {{"{axis}": 0.1}}')
-        if v:
-            out[axis] = float(v)
-    return out
+    it has none. A bad object is an InputError naming the entry and the fix
+    (axes.check_character)."""
+    try:
+        return check_character(brief.get(CHARACTER_FIELD), label)
+    except ValueError as exc:
+        raise InputError(str(exc)) from None
 
 
 def _signed(v: float) -> str:

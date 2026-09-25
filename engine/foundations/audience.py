@@ -15,7 +15,8 @@ Fields:
   default_scheme   light, dark or system
   reading_context  glance, task, long-read or on-the-go
   brand_role       fill, accent or edge
-  product_type     app, software, marketing-site, editorial or commerce
+  product_type     app, software, marketing-site, editorial, commerce, marketplace or
+                   local-service (aliases in PRODUCT_ALIASES)
 
 Beside them the brief may carry a character object: what a word the engine
 does not read means, as nudges of -0.3 to 0.3 on the seven axes, applied
@@ -35,14 +36,43 @@ SCRIPTS: Tuple[str, ...] = ("latin", "arabic")
 SCHEMES: Tuple[str, ...] = ("light", "dark", "system")
 READING: Tuple[str, ...] = ("glance", "task", "long-read", "on-the-go")
 BRAND_ROLES: Tuple[str, ...] = ("fill", "accent", "edge")
-# What the product is. BOOK_DEPTH says how far each is read like a book, 0
-# to 1: an app or software is used in short tasks, an editorial product is
-# read at length. The face choice multiplies it into a book target that is
-# continuous in type personality and formality (fonts.book_target), so the
-# field moves the faces without a table of faces.
-PRODUCT_TYPES: Tuple[str, ...] = ("app", "software", "marketing-site", "editorial", "commerce")
+# What the product is: the product the page sells, never the page itself
+# (a landing page for an app is "app"; the page kind is project_type). One
+# closed vocabulary, shared with the page-sequence picker: both import
+# PRODUCT_TYPES, PRODUCT_ALIASES and product_type_of from here. An alias is
+# accepted, mapped and reported; any other value is refused.
+PRODUCT_TYPES: Tuple[str, ...] = ("app", "software", "marketing-site", "editorial", "commerce",
+                                  "marketplace", "local-service")
+PRODUCT_ALIASES: Mapping[str, str] = MappingProxyType({
+    "saas": "software", "web-app": "software", "mobile-app": "app", "shop": "commerce",
+    "store": "commerce", "b2b-marketplace": "marketplace", "b2c-marketplace": "marketplace",
+    "service": "local-service"})
+# BOOK_DEPTH says how far each is read like a book, 0 to 1, a per-type
+# factor like AGES, never a table of faces: a product people use in tasks
+# (app, software, commerce, marketplace, local-service) is 0, a marketing
+# site with no product of its own sits between, and an editorial product
+# is read at length. The face choice multiplies it into a book target that
+# is continuous in type personality and formality (fonts.book_target).
 BOOK_DEPTH: Mapping[str, float] = MappingProxyType({
-    "app": 0.0, "software": 0.0, "commerce": 0.25, "marketing-site": 0.5, "editorial": 1.0})
+    "app": 0.0, "software": 0.0, "commerce": 0.0, "marketplace": 0.0, "local-service": 0.0,
+    "marketing-site": 0.5, "editorial": 1.0})
+PRODUCT_FIX = ("say the product the page sells, not the page: a landing page for an app is "
+               '"app", and the page kind goes in project_type')
+
+
+def product_type_of(value: Any, label: str = "brief") -> str:
+    """The product type a word names: one of PRODUCT_TYPES, or the type an
+    alias in PRODUCT_ALIASES maps to, case and spaces aside ("Web app" is
+    software). Anything else raises AudienceError naming the field, the
+    values, the aliases and the fix."""
+    word = "-".join(value.strip().lower().split()) if isinstance(value, str) else None
+    if word in PRODUCT_TYPES:
+        return word
+    if word in PRODUCT_ALIASES:
+        return PRODUCT_ALIASES[word]
+    aliases = ", ".join(f"{k} as {v}" for k, v in PRODUCT_ALIASES.items())
+    raise AudienceError(f"{label} field product_type is {value!r}; use one of "
+                        f"{', '.join(PRODUCT_TYPES)} (read too: {aliases}); {PRODUCT_FIX}")
 # Language subtags written in Arabic script.
 ARABIC_LANGUAGES: Tuple[str, ...] = ("ar", "fa", "ur", "ps", "ckb", "sd", "ug")
 # The member languages of the Arabic-script macrolanguages above, as the
@@ -76,11 +106,11 @@ FIELDS_HELP = (
     'one first, such as ["ar-JO", "en"]), primary_script '
     f"({_either(SCRIPTS)}), default_scheme ({_either(SCHEMES)}), reading_context "
     f"({_either(READING)}), brand_role ({_either(BRAND_ROLES)}), product_type "
-    f"({_either(PRODUCT_TYPES)}; an app or software leans the faces to sans, an editorial "
-    "product may take a serif). For example \"many readers are over 60\" is \"age\": "
+    f"({_either(PRODUCT_TYPES)}: the product the page sells, not the page; a product people "
+    "use leans the faces to sans, an editorial product may take a serif). For example \"many readers are over 60\" is \"age\": "
     '"older-adults". A character object passes what a word the engine does not read means, '
     "as nudges from -0.3 to 0.3 on the axes warmth, contrast, density, geometry, formality, "
-    'motion and type_personality, applied after the words: "solid" might be "character": '
+    'motion and type_personality, applied after the words: "sturdy" might be "character": '
     '{"contrast": 0.1, "geometry": -0.1}.')
 # A language tag: a primary subtag of two or three letters, then subtags.
 TAG = re.compile(r"^[A-Za-z]{2,3}(-[A-Za-z0-9]{1,8})*$")
@@ -141,6 +171,8 @@ class Audience:
     reading_context: str = "task"
     brand_role: Optional[str] = None
     product_type: Optional[str] = None
+    # The alias the brief wrote, when it wrote one ("saas" for software).
+    product_alias: Optional[str] = None
     given: Tuple[str, ...] = field(default=(), compare=False)
 
     @property
@@ -202,19 +234,14 @@ class Audience:
 
 
 def _choice(brief: Mapping[str, Any], key: str, choices: Tuple[str, ...], label: str,
-            default: Optional[str], spaces: bool = False) -> Optional[str]:
-    """A field read from a fixed list. With `spaces`, words may be written
-    with spaces for the hyphens ("marketing site")."""
+            default: Optional[str]) -> Optional[str]:
     value = brief.get(key)
     if value in (None, ""):
         return default
-    word = value.strip().lower() if isinstance(value, str) else None
-    if word is not None and spaces:
-        word = "-".join(word.split())
-    if word not in choices:
+    if not isinstance(value, str) or value.strip().lower() not in choices:
         raise AudienceError(f"{label} field {key} is {value!r}; use one of "
                             f"{', '.join(choices)}")
-    return word
+    return value.strip().lower()
 
 
 def _check_tags(langs: List[str], label: str) -> None:
@@ -263,7 +290,9 @@ def read_audience(brief: Optional[Mapping[str, Any]], label: str = "brief") -> A
         default_scheme=_choice(brief, "default_scheme", SCHEMES, label, "system") or "system",
         reading_context=_choice(brief, "reading_context", READING, label, "task") or "task",
         brand_role=_choice(brief, "brand_role", BRAND_ROLES, label, None),
-        product_type=_choice(brief, "product_type", PRODUCT_TYPES, label, None, spaces=True),
+        product_type=product_type_of(brief["product_type"], label)
+        if brief.get("product_type") not in (None, "") else None,
+        product_alias=_alias_of(brief.get("product_type")),
         given=given)
 
 
@@ -334,29 +363,45 @@ def effects(a: Audience, axes: Optional[Any] = None) -> List[Effect]:
                           f"the brief sets {a.default_scheme} as the default scheme"))
     if a.brand_role:
         out.append(Effect(f"The brand's role is {a.brand_role}", "the brief names it"))
+    if a.product_alias:
+        out.append(Effect(f'product_type "{a.product_alias}" is read as {a.product_type}',
+                          "the engine and the page-sequence picker share one vocabulary"))
     if a.product_type:
         out.append(_product_effect(a, axes))
     return out
 
 
+def _alias_of(value: Any) -> Optional[str]:
+    word = "-".join(value.strip().lower().split()) if isinstance(value, str) else None
+    return word if word in PRODUCT_ALIASES else None
+
+
 def _product_effect(a: Audience, axes: Optional[Any]) -> Effect:
-    """What the product type did to the faces at these axes."""
+    """What the product type did to the faces at these axes: the lean read
+    from the faces chosen, and the Arabic faces only when Arabic ships."""
     from engine.foundations import fonts
     from engine.synthesizer.axes import AxisValues
     at = axes if axes is not None else AxisValues(*[0.5] * 7)
     choice = fonts.choose(at, a.book_depth)
     target = fonts.book_target(at, a.book_depth or 0.0)
-    lean = "serif" if target >= 0.5 else "sans"
+    shown = [choice.display, choice.text] + ([choice.arabic, choice.arabic_display]
+                                             if a.arabic is not False else [])
+    serif = sum(fonts.bookish(f) for f in shown)
+    lean = "serif" if serif == len(shown) else ("sans" if not serif else "sans and serif")
     what = (f"The faces lean {lean}, with a book target of {target:.2f}: display "
-            f"{choice.display.family} ({choice.display.generic}), Arabic "
-            f"{choice.arabic.family} ({choice.arabic.generic})")
-    why = {0.0: "a product people use in short tasks wants interface faces, not book faces"}
-    reason = why.get(a.book_depth or 0.0, "the product is read more like a book the more "
-                     "editorial it is, and the target grows with type personality and "
-                     "formality")
-    article = "an" if a.product_type[0] in "aeiou" else "a"
-    return Effect(what, f"the brief says the product is {article} "
-                        f"{a.product_type.replace('-', ' ')}, and {reason}")
+            f"{choice.display.family} ({choice.display.generic}), text {choice.text.family}")
+    if a.arabic is not False:
+        what += (f", Arabic {choice.arabic.family} ({choice.arabic.generic}), Arabic display "
+                 f"{choice.arabic_display.family} ({choice.arabic_display.generic})")
+    reason = ("a product people use in tasks wants interface faces, not book faces"
+              if not a.book_depth else
+              "the product is read more like a book the more editorial it is, and the target "
+              "grows with type personality and formality")
+    name = a.product_type.replace("-", " ")
+    noun = name if name.endswith(("app", "software", "site", "service", "marketplace")) \
+        else f"{name} product"
+    article = "" if name == "software" else ("an " if noun[0] in "aeiou" else "a ")
+    return Effect(what, f"the brief says the product is {article}{noun}, and {reason}")
 
 
 # How a person passes what the engine could not read from free text.
@@ -366,5 +411,6 @@ HOW_TO_PASS = (
     'default_scheme ("light", "dark" or "system")',
     'reading_context ("glance", "task", "long-read" or "on-the-go")',
     'brand_role ("fill", "accent" or "edge")',
-    'product_type ("app", "software", "marketing-site", "editorial" or "commerce")',
+    'product_type ("' + '", "'.join(PRODUCT_TYPES[:-1]) + '" or "' + PRODUCT_TYPES[-1]
+    + '", the product the page sells)',
 )

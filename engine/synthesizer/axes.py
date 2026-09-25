@@ -135,8 +135,9 @@ TONE_NUDGES: Dict[str, Dict[str, float]] = {
     "precise":      {"type_personality": -0.15, "geometry": -0.10},
 
     # Common brief words, each weighted by what it says about the axes.
-    "fast":         {"motion": +0.20, "density": +0.05},
-    "quick":        {"motion": +0.15},
+    # Short and snappy: quick transitions, not kinetic ones.
+    "fast":         {"motion": -0.10, "density": +0.05},
+    "quick":        {"motion": -0.10, "density": +0.05},
     "dynamic":      {"motion": +0.25, "contrast": +0.05},
     "lively":       {"motion": +0.20, "warmth": +0.10},
     "fresh":        {"motion": +0.10, "warmth": +0.05, "contrast": +0.05},
@@ -276,18 +277,41 @@ def _apply_tone_nudges(axes: Dict[str, float], tags: Iterable[str]) -> Dict[str,
     return axes
 
 
-def _apply_character(axes: Dict[str, float], nudges: Any) -> Dict[str, float]:
-    """A brief's character object: each named axis moves by its nudge,
-    held to NUDGE_LIMIT either way, after the words. The build's inputs
-    check the object and name a bad entry; here an entry that is not a
-    number is skipped."""
-    if not isinstance(nudges, dict):
-        return axes
+_NUDGE_EXAMPLE = '"character": {"contrast": 0.1, "geometry": -0.1}'
+
+
+def check_character(value: Any, label: str = "brief") -> Dict[str, float]:
+    """A brief's character object as {axis: nudge}, in AXIS_NAMES order,
+    zero nudges left out. Anything but an object of axis names and numbers
+    from -NUDGE_LIMIT to NUDGE_LIMIT raises ValueError naming the entry and
+    the fix; every caller of compute_axes goes through it."""
+    if value in (None, {}):
+        return {}
+    if not isinstance(value, dict):
+        raise ValueError(f"{label} field character is {value!r}; give an object of axis "
+                         f"nudges, for example {_NUDGE_EXAMPLE}")
+    for key in value:
+        if key not in AXIS_NAMES:
+            raise ValueError(f'{label} field character names "{key}", which is not an axis; '
+                             f"use {', '.join(AXIS_NAMES)}, for example {_NUDGE_EXAMPLE}")
+    out: Dict[str, float] = {}
     for axis in AXIS_NAMES:
-        value = nudges.get(axis)
-        if isinstance(value, bool) or not isinstance(value, (int, float)):
-            continue
-        axes[axis] = _clamp(axes[axis] + _clamp(float(value), -NUDGE_LIMIT, NUDGE_LIMIT))
+        v = value.get(axis, 0.0)
+        if isinstance(v, bool) or not isinstance(v, (int, float)) or v != v \
+                or abs(v) > NUDGE_LIMIT:
+            raise ValueError(f"{label} field character.{axis} is {v!r}; set a nudge from "
+                             f"-{NUDGE_LIMIT:g} to {NUDGE_LIMIT:g}, for example "
+                             f'"character": {{"{axis}": 0.1}}')
+        if v:
+            out[axis] = float(v)
+    return out
+
+
+def _apply_character(axes: Dict[str, float], nudges: Any) -> Dict[str, float]:
+    """A brief's character object (check_character): each named axis moves
+    by its nudge after the words, held inside 0 to 1."""
+    for axis, value in check_character(nudges).items():
+        axes[axis] = _clamp(axes[axis] + value)
     return axes
 
 

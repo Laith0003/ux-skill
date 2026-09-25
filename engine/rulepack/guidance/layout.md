@@ -54,7 +54,7 @@ A block spans a whole number of columns and starts and ends on column lines.
 
 ## Modes
 
-Layout varies on density: gutters, margins, the region gap, the landing gap and the hero, header and footer padding take one step less in compact, never below 8px, and the minimum target is 44px in comfortable and 32px in compact. Breakpoints, columns, the container and the measures are the same in every mode. Layout varies on the viewport through the aliases: tokens.css switches each tiered role at the literal breakpoints, since a media query cannot read a custom property, and a density override reaches the alias. The same blocks set the phone factor of the landing display, hero, heading-1 and section-title, so they step down below the tablet breakpoint (decisions/landing-display-step.md).
+Layout varies on density: gutters, margins, the region gap, the landing gap and the hero, header and footer padding take one step less in compact, never below 8px, and the minimum target is 44px in comfortable and 32px in compact. Breakpoints, columns, the container and the measures are the same in every mode. Layout varies on the viewport through the aliases: tokens.css switches each tiered role at the literal breakpoints, since a media query cannot read a custom property, and a density override reaches the alias. The same blocks set the phone factor of the landing display, hero, heading-1, section-title and figure, so they step down below the tablet breakpoint, and each tier's fit factor from the tablet up, so a headline word fits the tier's column (decisions/landing-display-step.md).
 
 ## Changing the system
 

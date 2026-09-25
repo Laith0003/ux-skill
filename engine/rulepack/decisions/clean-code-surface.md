@@ -15,7 +15,7 @@ Syntax colors drawn from the text roles are measured against the page, not again
 
 ## Decision
 
-color.surface.code is the code block's background. In light it is the neutral seed's step 50 hue and chroma at the lightest lightness that stands 1.2:1 off the card (color.stand_off, CODE_EDGE, the container-edge floor); in dark it is the recess between the page and the card; under high contrast it keeps neutral.100 in light and black in dark. Six syntax roles (plain, keyword, string, number, function, comment) are paired with it at 4.5:1 (WCAG 1.4.3), 7:1 under high contrast. color.surface.stripe marks alternate table rows one step off the card, and every text role is paired with it.
+color.surface.code is the code block's background. In light it is the neutral seed's step 50 hue and chroma at the lightest lightness that stands 1.2:1 off the light card, read from the card's own step (color.stand_off, CODE_EDGE, the container-edge floor), and the surfaces-stand-apart check measures it; in dark it is the recess between the page and the card; under high contrast it keeps neutral.100 in light and black in dark. Six syntax roles (plain, keyword, string, number, function, comment) are paired with it at 4.5:1 (WCAG 1.4.3), 7:1 under high contrast. color.surface.stripe marks alternate table rows one step off the card, and every text role is paired with it.
 
 ## Why
 

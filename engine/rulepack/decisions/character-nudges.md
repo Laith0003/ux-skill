@@ -15,7 +15,7 @@ The report named every word the engine did not read, and the host AI had no way 
 
 ## Decision
 
-A brief may carry a character object: any of the seven axes (warmth, contrast, density, geometry, formality, motion, type_personality), each a nudge from -0.3 to 0.3 (axes.NUDGE_LIMIT). compute_axes applies the nudges after the industry seed and the words and before the forbidden clamps, holding each axis inside 0 to 1; a nudge never carries to another axis. emit.brief_character refuses anything else, naming the entry and the fix. The axes source line lists the nudges, and system-report.md gives each one a line under "Character nudges": the axis, the nudge, the value the words gave, the value the build used, whether the end of the axis or a forbidden word held it, and the foundations the axis moves (character.INFLUENCE). Every unread tone word's line in the report says how to pass it as a nudge.
+A brief may carry a character object: any of the seven axes (warmth, contrast, density, geometry, formality, motion, type_personality), each a nudge from -0.3 to 0.3 (axes.NUDGE_LIMIT). compute_axes applies the nudges after the industry seed and the words and before the forbidden clamps, holding each axis inside 0 to 1; a nudge never carries to another axis. axes.check_character refuses anything else, naming the entry and the fix, inside compute_axes itself, so every caller (the system build, recommend, the design-md path) refuses a bad object instead of clamping it. The axes source line lists the nudges, and system-report.md gives each one a line under "Character nudges": the axis, the nudge, the value the words gave, the value the build used, whether the end of the axis or a forbidden word held it, and the foundations the axis moves (character.INFLUENCE). Every unread tone word's line in the report says how to pass it as a nudge.
 
 ## Why
 
@@ -23,7 +23,7 @@ A nudge is a number on the same axes the words already move, so the engine stays
 
 ## What it touches
 
-axes.NUDGE_LIMIT, _apply_character, compute_axes; emit.CHARACTER_FIELD, brief_character, brief_axes, nudge_lines, unread_lines, render_report, make_system; the CLI and MCP brief descriptions (audience.FIELDS_HELP); commands/ux-system.md.
+axes.NUDGE_LIMIT, check_character, _apply_character, compute_axes; emit.CHARACTER_FIELD, brief_character, brief_axes, nudge_lines, unread_lines, render_report, make_system; the CLI and MCP brief descriptions (audience.FIELDS_HELP); commands/ux-system.md.
 
 ## Consequences
 

@@ -95,17 +95,78 @@ ICON_STROKE_RANGE = (1.0, 3.0)
 # 1 to the system's ratio, so a bold system still steps harder than a
 # quiet one; each phone size stays at least 1px above the style below it,
 # and never above its own size. tokens.css multiplies the style's size and
-# letter spacing by --<style>-scale, the factor on a phone and 1 from the
-# tablet breakpoint up, so a page reads one property.
+# letter spacing by --<style>-scale, the factor on a phone and the tier's
+# fit factor from the tablet breakpoint up, so a page reads one property.
 PHONE_ROLES = ("type.text.display", "type.text.hero", "type.text.heading-1",
                "type.text.section-title")
 PHONE_RATIO_SHARE = 0.6
 PHONE_FLOOR_ROLE = "type.text.heading-2"
+# Styles that share another's step take its factors at every width: the
+# figure steps down with heading-1, so it never outranks the headline.
+FOLLOWS = {"type.text.figure": "type.text.heading-1"}
+# From the tablet breakpoint up each style in PHONE_ROLES takes a fit factor
+# per tier: at most 1, and small enough that a FIT_WORD word at the style's
+# size fits the tier's column, measured with the face's own average advance
+# (Latin and Arabic), each style still MIN_LEVEL_RATIO above the next, and
+# never smaller on a wider tier. The column is the tier's narrowest content
+# width (its breakpoint less both margins, within the container), all of it
+# on a tablet and SPLIT_SHARE of it from the laptop up, where a split
+# composition sets the headline in seven of twelve columns.
+FIT_TIERS = ("tablet", "laptop", "desktop")
+FIT_WORD = {"latin": 13, "arabic": 10}
+SPLIT_SHARE = 7 / 12
 
 
 def phone_token(role: str) -> str:
     """The factor token of a style that steps down on a phone."""
     return "type.phone." + role.rsplit(".", 1)[1]
+
+
+def fit_token(role: str, tier: str) -> str:
+    """The fit factor token of a style that steps by tier."""
+    return f"type.fit.{role.rsplit('.', 1)[1]}.{tier}"
+
+
+def tier_columns(axes: AxisValues) -> Dict[str, float]:
+    """The width in px the largest styles set in, per tier (FIT_TIERS)."""
+    from engine.foundations import layout, space
+    out = {}
+    for tier in FIT_TIERS:
+        margin = layout._units(layout.MARGIN[tier], axes.density)[0] * space.BASE_UNIT
+        content = min(layout.VIEWPORTS[tier] - 2 * margin, layout.container_px(axes.density))
+        out[tier] = content * (1.0 if tier == "tablet" else SPLIT_SHARE)
+    return out
+
+
+def word_px(face: fonts.Face, px: float, script: str) -> float:
+    """The width of a FIT_WORD word in `script` set in `face` at `px`."""
+    avg = face.metrics.arabic_avg if script == "arabic" else face.metrics.latin_avg
+    return FIT_WORD[script] * (avg or 0) / face.metrics.upm * px
+
+
+def tier_factors(axes: AxisValues, choice: fonts.Choice, latin: List[int],
+                 arabic: Optional[List[int]]) -> Dict[str, Dict[str, float]]:
+    """{tier: {role: factor}} for PHONE_ROLES from the tablet up (FIT_TIERS),
+    each rounded down to four places, so the word fits and the order holds."""
+    cols = tier_columns(axes)
+    out: Dict[str, Dict[str, float]] = {}
+    for tier in FIT_TIERS:
+        row: Dict[str, float] = {}
+        above = None
+        for role in PHONE_ROLES:
+            n = ROLES[role][0]
+            f = min(1.0, cols[tier] / word_px(choice.display, latin[n - 1], "latin"))
+            if arabic is not None:
+                f = min(f, cols[tier] / word_px(choice.arabic_display, arabic[n - 1], "arabic"))
+            if above is not None:
+                f = min(f, above / (MIN_LEVEL_RATIO * latin[n - 1]))
+            row[role] = int(f * 10000) / 10000
+            above = latin[n - 1] * row[role]
+        out[tier] = row
+    for wide, narrow in zip(reversed(FIT_TIERS), list(reversed(FIT_TIERS))[1:]):
+        for role in PHONE_ROLES:
+            out[narrow][role] = min(out[narrow][role], out[wide][role])
+    return out
 
 
 def phone_px(axes: AxisValues, latin: List[int], body: int = BODY_PX) -> Dict[str, int]:
@@ -131,7 +192,8 @@ ROLE_TYPES: Dict[str, str] = {
     **{run: "fontFamily" for run in RUNS},
     "type.icon.size.inline": "dimension", "type.icon.size.control": "dimension",
     "type.icon.size.feature": "dimension", "type.icon.stroke": "number",
-    **{phone_token(role): "number" for role in PHONE_ROLES},
+    **{phone_token(role): "number" for role in PHONE_ROLES + tuple(FOLLOWS)},
+    **{fit_token(role, tier): "number" for role in PHONE_ROLES for tier in FIT_TIERS},
 }
 
 
@@ -335,9 +397,17 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
     for role in reversed(PHONE_ROLES):
         n = ROLES[role][0]
         ts.add(Token(f"type.phone-scale.{n}", "number", round(phone[role] / latin[n - 1], 4)))
-    for role in PHONE_ROLES:
+    for role in PHONE_ROLES + tuple(FOLLOWS):
         ts.add(Token(phone_token(role), "number", "{type.phone-scale.%d}" % ROLES[role][0],
                      layer="semantic"))
+    fits = tier_factors(axes, choice, latin, arabic_px(latin, scale) if arabic else None)
+    for role in PHONE_ROLES:
+        for tier in FIT_TIERS:
+            ts.add(Token(f"type.tier-scale.{ROLES[role][0]}.{tier}", "number", fits[tier][role]))
+    for role in PHONE_ROLES:
+        for tier in FIT_TIERS:
+            ts.add(Token(fit_token(role, tier), "number",
+                         "{type.tier-scale.%d.%s}" % (ROLES[role][0], tier), layer="semantic"))
     notes = [f"type: display {choice.display.family}, text {choice.text.family}, mono "
              f"{choice.mono.family}" + (f", Arabic {choice.arabic.family} and "
                                         f"{choice.arabic_display.family} at {scale:g} times the "
@@ -540,6 +610,14 @@ def _phone_hierarchy(ts: TokenSet, mode: str) -> List[str]:
         sizes.append((phone_token(role), _px(ts.resolve(role, mode)["fontSize"]) * factor))
     if _typed(ts, PHONE_FLOOR_ROLE):
         sizes.append((PHONE_FLOOR_ROLE, _px(ts.resolve(PHONE_FLOOR_ROLE, mode)["fontSize"])))
+    for role, leader in FOLLOWS.items():
+        if all(_typed(ts, r) and _typed(ts, phone_token(r)) for r in (role, leader)):
+            mine, theirs = (_px(ts.resolve(r, mode)["fontSize"]) * ts.resolve(phone_token(r), mode)
+                            for r in (role, leader))
+            if mine > theirs + 0.01:
+                out.append(f"{role} ({mode}) gives {mine:.1f}px on a phone, above {leader} at "
+                           f"{theirs:.1f}px; a figure never outranks the headline there, so point "
+                           f"{phone_token(role)} at {leader}'s factor")
     for (a, pa), (b, pb) in zip(sizes, sizes[1:]):
         if pa <= pb:
             out.append(f"{b} ({mode}) gives {pb:.1f}px on a phone, not smaller than {a} at "
@@ -554,7 +632,63 @@ def phone_roles(ts: TokenSet) -> List[str]:
     in a set that has the tablet breakpoint to switch it off at."""
     if not ts.has("layout.breakpoint.tablet"):
         return []
-    return [r for r in PHONE_ROLES if ts.has(r) and ts.has(phone_token(r))]
+    return [r for r in PHONE_ROLES + tuple(FOLLOWS) if ts.has(r) and ts.has(phone_token(r))]
+
+
+def _fit_of(ts: TokenSet, role: str, tier: str) -> Optional[str]:
+    """The fit token a style reads at a tier (its own, or the one of the
+    style it follows), None when the set has none."""
+    token = fit_token(FOLLOWS.get(role, role), tier)
+    return token if ts.has(token) else None
+
+
+def tier_factor(ts: TokenSet, role: str, tier: str) -> float:
+    """The factor a style takes at a tier: its fit factor, or 1."""
+    token = _fit_of(ts, role, tier)
+    return float(ts.resolve(token)) if token else 1.0
+
+
+def fit_problems(ts: TokenSet, mode: str = "") -> List[str]:
+    """At each tier from the tablet up, the display style's FIT_WORD word
+    fits the tier's column in each script the set ships, and the scaled
+    display, hero, heading-1 and section-title keep falling in size,
+    MIN_LEVEL_RATIO apart, above heading-2."""
+    need = ("layout.breakpoint.tablet", "layout.container.max", "type.face.display")
+    if not all(ts.has(p) for p in need) or not _typed(ts, "type.text.display"):
+        return []
+    from engine.foundations.layout import VIEWPORTS
+    face = fonts.BY_FAMILY.get(_first(ts.resolve("type.face.display")))
+    arabic = fonts.BY_FAMILY.get(_first(ts.resolve(ARABIC_DISPLAY_FACE))) \
+        if _typed(ts, ARABIC_DISPLAY_FACE) else None
+    if face is None:
+        return []
+    out = []
+    for tier in FIT_TIERS:
+        margin = _px(ts.resolve(f"layout.margin-inline.{tier}", mode))
+        content = min(VIEWPORTS[tier] - 2 * margin, _px(ts.resolve("layout.container.max")))
+        col = content * (1.0 if tier == "tablet" else SPLIT_SHARE)
+        f = tier_factor(ts, "type.text.display", tier)
+        sizes = [("latin", "contrast:standard,direction:ltr", face)]
+        if arabic is not None:
+            sizes.append(("arabic", "contrast:standard,direction:rtl", arabic))
+        for script, ctx, fc in sizes:
+            width = word_px(fc, _px(ts.resolve("type.text.display", ctx)["fontSize"]) * f, script)
+            if width > col + 0.5:
+                out.append(f"type.text.display at the {tier} tier sets a {FIT_WORD[script]} "
+                           f"letter {script} word {width:.0f}px wide in a {col:.0f}px column; "
+                           f"point {fit_token('type.text.display', tier)} at a factor that "
+                           "fits it")
+        chain = [(r, _px(ts.resolve(r, "contrast:standard,direction:ltr")["fontSize"])
+                  * tier_factor(ts, r, tier)) for r in PHONE_ROLES if _typed(ts, r)]
+        if _typed(ts, PHONE_FLOOR_ROLE):
+            chain.append((PHONE_FLOOR_ROLE, _px(ts.resolve(
+                PHONE_FLOOR_ROLE, "contrast:standard,direction:ltr")["fontSize"])))
+        for (a, pa), (b, pb) in zip(chain, chain[1:]):
+            if pa < pb * MIN_LEVEL_RATIO - 0.01:
+                out.append(f"{a} at the {tier} tier is {pa:.1f}px, less than {MIN_LEVEL_RATIO:g} "
+                           f"times {b} at {pb:.1f}px; point {fit_token(a, tier)} at a factor "
+                           "that keeps the order")
+    return out
 
 
 def scale_property(role: str) -> str:
@@ -564,13 +698,23 @@ def scale_property(role: str) -> str:
 
 
 def responsive_lines(ts: TokenSet) -> Dict[str, List[str]]:
-    """The declarations for the phone (:root) and from the tablet breakpoint
-    up that set each scaled style's factor."""
+    """The declarations for the phone (:root) and from each breakpoint up
+    that set each scaled style's factor: the phone factor, then the tier's
+    fit factor (or 1 where the set has none)."""
     from engine.foundations.tokens import css_property
     roles = phone_roles(ts)
-    return {"phone": [f"{scale_property(r)}: var({css_property(phone_token(r))});"
-                      for r in roles],
-            "tablet": [f"{scale_property(r)}: 1;" for r in roles]}
+    out = {"phone": [f"{scale_property(r)}: var({css_property(phone_token(r))});"
+                     for r in roles]}
+    for tier in FIT_TIERS:
+        lines = []
+        for r in roles:
+            token = _fit_of(ts, r, tier)
+            if token:
+                lines.append(f"{scale_property(r)}: var({css_property(token)});")
+            elif tier == FIT_TIERS[0]:
+                lines.append(f"{scale_property(r)}: 1;")
+        out[tier] = lines
+    return out
 
 
 def _high_weights(ts: TokenSet, mode: str) -> List[str]:
@@ -620,6 +764,10 @@ def _icons(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
+def _fits(ts: TokenSet, mode: str) -> List[str]:
+    return fit_problems(ts)
+
+
 # High contrast changes only weights; every other check reads direction.
 _WEIGHT_ONLY = (("contrast", "high contrast changes only weights, which high-contrast-weights "
                  "reads"),)
@@ -634,6 +782,9 @@ CHECKS: Tuple[Check, ...] = (
           exempt_axes=_WEIGHT_ONLY),
     Check("phone-hierarchy", "system", _phone_hierarchy, axes=("direction",),
           exempt_axes=_WEIGHT_ONLY),
+    Check("display-fits", "system", _fits,
+          exempt_axes=(("direction", "it reads both directions itself"),
+                       ("contrast", "fit factors never carry modes"))),
     Check("high-contrast-weights", "system", _high_weights, axes=("contrast", "direction")),
     Check("strong-weight", "system", _strong_gap, axes=("contrast", "direction")),
     Check("icon-sizes", "system", _icons,

@@ -47,8 +47,8 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - `color.text.accent`: words in the brand color that are not links, such as an eyebrow above a heading or a highlighted figure; never body copy. It colors the eyebrow's words only, never a line, dash or dot drawn before or after them (decisions/eyebrow-is-text.md). An existing design system's own label color wins over this role (decisions/existing-system-wins.md).
 - `color.line.accent`: a brand rule or underline: a link's underline when links are ink, a section rule, the edge of a featured card.
 - `color.text.support`: words in the supporting accent's hue, such as a tag or a second highlight; never a link and never body copy.
-- `color.surface.tint`: a quiet brand tint behind a group, such as a feature panel or a callout; it stands at least 1.1:1 off the page in both schemes, our floor for a filled area, so it never disappears into the page (decisions/surfaces-stand-apart.md).
-- `color.surface.band`: a band in the brand's hue that sets one section of a long page apart; in both schemes its chroma stays under a cap the contrast axis sets, so a muted system gets a pale band and never a loud slab, and in light it stands at least 1.2:1 off the page, our container-edge floor, beyond the tint.
+- `color.surface.tint`: a quiet brand wash behind a group, such as a feature row or a callout; it stands at least 1.1:1 off the page in both schemes, our floor for the wash, and its chroma stays under the band's, so it is seen and never loud. A panel on it that must read as a container draws an edge (decisions/container-edge.md, decisions/surfaces-stand-apart.md).
+- `color.surface.band`: a band in the brand's hue that sets one section of a long page apart; in both schemes its chroma stays under a cap the contrast axis sets, so a muted system gets a pale band and never a loud slab, and it stands at least 1.2:1 off the page in both schemes, our container-edge floor, beyond the tint.
 - `color.surface.brand`: the brand color as a band, such as a closing call to action, solved like the primary fill: the exact brand when its text reads naturally on it, else the least darkening that carries white text; only color.text.on-brand goes on it, and a control on it takes color.text.on-brand for its focus ring and edges.
 - `color.text.on-brand`: text and icons on the brand band, and the focus ring and edges of a control on it.
 - `color.action.on-brand`: the fill of the primary button on the brand band, and its edge in every state: a neutral end on the side of color.text.on-brand that clears the band.
@@ -136,6 +136,7 @@ Some roles carry no contrast minimum. Disabled text and fills are checked for di
 
 ## Checks
 
+- `surfaces-stand-apart`: in every context the tint stands at least 1.1:1 off the page and the band at least 1.2:1, beyond the tint, and in light the code surface at least 1.2:1 off the card, all floors of ours.
 - `on-color-natural`: black text on the primary fill where the natural fill for white text (color.brand.fill) sits nearer the brand than the fill plus what black text costs there (a saturated mid tone); the fill should be the natural fill with white text, our rule. Token sets the engine did not build are not checked.
 - `media-veil`: text on generated art, color.text.on-media on color.media.veil laid over each color the art draws, meets 4.5:1 (WCAG 1.4.3), and 7:1 under high contrast (WCAG 1.4.6).
 - `ring-not-weaker`: under high contrast the focus ring measures at least what the standard ring measures against each surface.
