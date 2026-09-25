@@ -17,9 +17,11 @@ measures what the code actually does against it:
   stray uses, where some uses match the name and some do not. A name with
   "on" before a word (on-surface, onPrimary) is a foreground, the color on
   that surface, by the common convention;
-- references to tokens the system does not have, and what the scan could
-  not measure (files it skipped, values it saw but does not read, with the
-  scanner's reason and fix, and classes that name no token).
+- references to tokens the system does not have (a var() to a custom
+  property the code declares itself is the code's own, listed apart with
+  a count), and what the scan could not measure (files it skipped, values
+  it saw but does not read, with the scanner's reason and fix, and classes
+  that name no token).
 
 The report says how many of the engine's roles the mapping covers, which
 ones the owner left out and which ones are not mapped at all, so a mapping
@@ -34,6 +36,7 @@ changes a value, refills an entry the owner left out, or writes a file.
 from __future__ import annotations
 
 import re
+import textwrap
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
 
@@ -66,9 +69,11 @@ RADIUS_WORDS = ("radius", "rounded", "corner")
 FAMILY_WORDS = {"space": SPACE_WORDS, "radius": RADIUS_WORDS, "border": LINE_WORDS,
                 "weight": ("weight", "bold"), "z": ("z", "layer", "zindex")}
 # The state a name promises. Only hover is held against the code: the
-# scanner reads it from :hover and hover:, while active, pressed, selected
-# and disabled are as often set by a class or an ARIA attribute it does not
-# read as a state, and a focus ring is often set at rest and shown on focus.
+# scanner reads it from :hover and hover: wherever it is set. Active,
+# pressed, selected and current it reads from pseudo-classes, the common
+# classes and ARIA attributes, but a product may set them in forms it does
+# not read (data-state=on, .open), so a use outside them is no proof; and a
+# focus ring is often set at rest and shown on focus.
 STATE_WORDS = {"hover": "hover"}
 _BG_PROPS = re.compile(r"background(-color)?$|bg$")
 _TEXT_PROPS = re.compile(r"(color|caret-color|fill|stroke|text-decoration-color)$|text$")
@@ -82,6 +87,9 @@ _THEIR_FIX = (" Change the value of one of them in your system, or map the role 
 READING_ROLES = ("type.text.body", "type.text.body-small", "type.text.fine")
 # How many names a folded line shows before "and N more".
 FEW = 6
+# The longest line the gate prints; a longer one wraps, a finding under its
+# bullet.
+WIDTH = 160
 
 
 def _and(items: Sequence[str]) -> str:
@@ -217,6 +225,9 @@ class Drift:
     not_read: List[Tuple[str, int, str, str, str]] = field(default_factory=list)
     # Some uses match the name and some do not.
     strays: List[Lie] = field(default_factory=list)
+    # --name -> where each var() to it is, for the custom properties the
+    # code declares itself: the code's own, not tokens the system lacks.
+    own: Dict[str, List[str]] = field(default_factory=dict)
 
     @property
     def complete(self) -> bool:
@@ -312,7 +323,12 @@ def drift(ts: TokenSet, scanned: Scan) -> Drift:
                 texts.append(u.text)
         if len(texts) > 1:
             d.spellings.append(Spelling(uses[0].value, texts, uses))
-    d.missing = [Missing(u.value, u.where()) for u in usages if u.kind == "missing"]
+    declared = set(getattr(scanned, "declared", ()))
+    for u in usages:
+        if u.kind == "missing" and u.value in declared:
+            d.own.setdefault(u.value, []).append(u.where())
+    d.missing = [Missing(u.value, u.where()) for u in usages
+                 if u.kind == "missing" and u.value not in declared]
     by_token: Dict[str, List[Usage]] = {}
     for u in usages:
         if u.kind == "token":
@@ -339,8 +355,11 @@ def _color_promise(named: str, against: Tuple[str, ...], how: str) -> _Promise:
 
 def _promise(words: List[str]) -> Optional[_Promise]:
     """What a token's name promises about how it is used. "on" before a
-    word names the color on that surface: a foreground, whatever follows."""
-    if "on" in words[:-1]:
+    word names the color on that surface: a foreground, whatever follows,
+    unless a background word comes first (bg-on-dark is a background for
+    use on dark)."""
+    on = words.index("on") if "on" in words[:-1] else -1
+    if on != -1 and not any(w in BG_WORDS for w in words[:on]):
         return _color_promise("the color on a surface", ("background",), "used as a {}")
     if any(w in words for w in TEXT_WORDS):
         return _color_promise("text", ("background",), "used as a {}")
@@ -456,6 +475,7 @@ class Enhanced:
                 "lies": [{"token": x.token, "message": x.message} for x in d.lies],
                 "strays": [{"token": x.token, "message": x.message} for x in d.strays],
                 "missing": [{"value": x.value, "where": x.where} for x in d.missing],
+                "own": [{"name": n, "uses": list(w)} for n, w in d.own.items()],
                 "skipped": [{"file": f, "why": w} for f, w in d.skipped],
                 "unknown_classes": [{"where": f"{f}:{n}", "class": c}
                                     for f, n, c in d.unknown_classes],
@@ -502,7 +522,13 @@ class Enhanced:
                     f"checks only: {head}")
         if self.findings:
             line += f" Each finding names our role, then your token in {source}."
-        return [line] + ([""] + [f"- {f}" for f in self.findings] if self.findings else [])
+        out = textwrap.wrap(line, WIDTH, break_long_words=False, break_on_hyphens=False)
+        if self.findings:
+            out.append("")
+            for f in self.findings:
+                out += textwrap.wrap(f, WIDTH, initial_indent="- ", subsequent_indent="  ",
+                                     break_long_words=False, break_on_hyphens=False)
+        return out
 
     def _how(self) -> List[str]:
         m = self.mapping
@@ -595,14 +621,30 @@ class Enhanced:
         for lie in d.lies:
             lines.append(f"- {lie.token} {lie.message}; rename it for how it is used, or use a "
                          "token named for that use there.")
-        for stray in d.strays:
-            lines.append(f"- {stray.token} {stray.message}; where it does not, use a token "
-                         "named for that use.")
         for miss in d.missing:
             lines.append(f"- {miss.where} references {miss.value}, which the system does not "
                          "have; add it to the system, or point the reference at a token it "
                          "has.")
-        return lines + self._unread(d)
+        if d.own:
+            k, n = len(d.own), sum(len(w) for w in d.own.values())
+            names = _few([f"{name} ({_few(w, 3)})" for name, w in d.own.items()])
+            lines.append(f"- The code declares {_count(k, 'custom property', 'custom properties')} "
+                         f"of its own and references {'it' if k == 1 else 'them'} "
+                         f"{_count(n, 'time', 'times')}: {names}. "
+                         f"{'It is' if k == 1 else 'They are'} the code's own, not "
+                         f"{'a token' if k == 1 else 'tokens'} the system lacks; if "
+                         f"{'it holds' if k == 1 else 'one holds'} a value the design keeps, "
+                         f"move it into {source} as a token.")
+        if d.strays:
+            lines += ["", ("These names match some of their uses and not others; each line says "
+                           "where a use does not match:"), ""]
+            for stray in d.strays:
+                lines.append(f"- {stray.token} {stray.message}; where it does not, use a token "
+                             "named for that use.")
+        unread = self._unread(d)
+        if d.strays and unread:
+            lines.append("")
+        return lines + unread
 
     @staticmethod
     def _unread(d: Drift) -> List[str]:

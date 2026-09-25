@@ -134,10 +134,23 @@ def test_without_a_scan_the_report_says_the_code_was_not_measured():
     assert enhance(imported, MAPPING, None).to_dict()["drift"] is None
 
 
+def _bullets(text):
+    """Each bullet of a markdown text, its wrapped lines joined."""
+    out = []
+    for line in text.splitlines():
+        if line.startswith("  ") and out and not line.startswith("  - "):
+            out[-1] += " " + line.strip()
+        else:
+            out.append(line)
+    return out
+
+
 def test_gate_findings_carry_the_systems_own_names():
     text = SYSTEM.replace("--ink: #1b1d22;", "--ink: #d9dade;")
     report = enhance(_system(text), MAPPING, None)
-    lines = [line for line in report.markdown().splitlines()
+    gate = report.markdown().split("## Gate")[1].split("## What the code")[0]
+    assert max(len(line) for line in gate.splitlines()) <= 160
+    lines = [line for line in _bullets(report.markdown())
              if line.startswith("- color.text.default (your text-body) on color.surface.page "
                                 "(your bg-page)")]
     assert lines and "(scheme:light,contrast:" not in lines[0]
@@ -261,7 +274,7 @@ def test_a_hover_token_used_on_hover_in_dark_does_not_lie(tmp_path):
     d = drift(imported.tokens, scan([tmp_path], imported.tokens))
     assert [u.state for u in scan([tmp_path], imported.tokens).usages] == [
         "hover", "scheme:dark,hover"]
-    assert d.lies == []
+    assert d.lies == [] and d.strays == []
 
 
 def test_values_the_scan_saw_but_could_not_measure_are_named(tmp_path):
@@ -391,7 +404,9 @@ def test_a_set_with_no_mode_prints_no_empty_context():
                        "color.surface.page": RoleMap("paper", "owner")})
     report = enhance(imported, mapping)
     assert report.findings and all(" ()" not in f for f in report.findings)
-    assert "Each finding names our role, then your token in tokens.css." in report.markdown()
+    # The gate wraps at 160 characters, so the sentence is matched across lines.
+    assert "Each finding names our role, then your token in tokens.css." \
+        in " ".join(report.markdown().split())
 
 
 def test_a_clean_gate_names_no_findings_and_a_lone_role_says_no_pair_was_measured():
@@ -412,3 +427,39 @@ def test_the_not_mapped_list_is_folded_and_complete_in_the_json():
     assert "  - color: 68 of 71, such as color.surface.card, color.surface.sunken and 66 more" \
         in how
     assert len(report.to_dict()["mapping"]["not_mapped"]) == len(ROLE_TYPES) - 3
+
+
+def test_a_background_name_with_on_in_the_middle_is_still_a_background(tmp_path):
+    imported = _system(":root { --bg-on-dark: #111111; --surface-on-inverse: #222222; }\n")
+    (tmp_path / "app.css").write_text(".a { background: var(--bg-on-dark); }\n"
+                                      ".b { background-color: var(--surface-on-inverse); }\n",
+                                      encoding="utf-8")
+    d = drift(imported.tokens, scan([tmp_path], imported.tokens))
+    assert d.lies == [] and d.strays == []
+
+
+def test_strays_are_introduced_by_a_sentence_that_says_what_they_are(tmp_path):
+    imported = _system()
+    text = enhance(imported, MAPPING, scan([_project(tmp_path)], imported.tokens)).markdown()
+    lines = text.splitlines()
+    first = next(i for i, line in enumerate(lines) if line.startswith("- text-body is named"))
+    assert lines[first - 2] == ("These names match some of their uses and not others; each "
+                                "line says where a use does not match:")
+
+
+def test_a_var_to_a_property_the_code_declares_is_not_a_missing_token(tmp_path):
+    (tmp_path / "a.css").write_text(".l { --local: var(--only-local); color: var(--local); }\n",
+                                    encoding="utf-8")
+    (tmp_path / "b.css").write_text(".m { background: var(--local); }\n", encoding="utf-8")
+    imported = _system()
+    report = enhance(imported, MAPPING, scan([tmp_path], imported.tokens))
+    d = report.drift
+    assert [m.value for m in d.missing] == ["--only-local"]
+    assert d.own == {"--local": ["a.css:1", "b.css:1"]}
+    text = report.markdown()
+    assert "references --local" not in text
+    assert ("- The code declares 1 custom property of its own and references it 2 times: "
+            "--local (a.css:1, b.css:1). It is the code's own, not a token the system lacks; if "
+            "it holds a value the design keeps, move it into tokens.css as a token.") in text
+    assert report.to_dict()["drift"]["own"] == [
+        {"name": "--local", "uses": ["a.css:1", "b.css:1"]}]
