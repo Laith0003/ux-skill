@@ -27,6 +27,9 @@ from engine.foundations.audience import (
     writes_arabic)
 from engine.foundations.build import FOUNDATIONS, ValidationError, build_system
 from engine.foundations.composition import choose as choose_composition
+# InputError and _brief_text live in a leaf module so the importers can use
+# them without loading this one; they are re-exported here unchanged.
+from engine.foundations.errors import InputError, _brief_text  # noqa: F401
 from engine.foundations.color import brand_fidelity
 from engine.foundations.color_math import hex_to_rgb, rgb_to_hex
 from engine.foundations.export import dump_dtcg, to_css
@@ -73,10 +76,6 @@ NEUTRAL = AxisValues(*([0.5] * len(AXIS_NAMES)))
 NEUTRAL_SOURCE = "neutral default: every axis at 0.5, since no brief or axes were given"
 
 _AXES_EXAMPLE = ",".join(["0.5"] * len(AXIS_NAMES))
-
-
-class InputError(ValueError):
-    """A bad input. The message names the input and the fix."""
 
 
 # ---------------------------------------------------------------- inputs
@@ -156,15 +155,6 @@ def _json_kind(payload: Any) -> str:
     if isinstance(payload, (int, float)):
         return "number"
     return "list"
-
-
-def _brief_text(data: bytes) -> str:
-    """The text of a brief file. UTF-8, with Notepad's leading mark
-    dropped; a file that starts with the UTF-16 mark (Windows PowerShell 5.1
-    writes one) is read as UTF-16. Raises UnicodeDecodeError otherwise."""
-    if data.startswith((b"\xff\xfe", b"\xfe\xff")):
-        return data.decode("utf-16")
-    return data.decode("utf-8-sig")
 
 
 def read_brief(path: Any, label: str = "brief") -> Dict[str, Any]:
