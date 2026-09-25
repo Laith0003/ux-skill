@@ -182,3 +182,16 @@ def test_the_unchecked_box_has_a_boundary_on_every_row_fill_it_sits_on():
     for bg in ["surfaces"] + sorted(row_fills):
         assert any(r.fg == line and r.bg == bg and r.minimum == 3 and r.criterion == "1.4.11"
                    for r in c.contrast), bg
+
+
+def test_the_card_says_in_which_high_contrast_its_fill_meets_the_page():
+    card = next(c for c in seed_contracts() if c.name == "card")
+    line = next(d for d in card.do if d.startswith("Keep an edge on every card"))
+    assert "in light high contrast the card and the page are the same color" in line
+    for brand in BRANDS:
+        ts = build_system(AXES[0], brand).tokens
+        light = [ts.resolve(r, "contrast:high") for r in ("color.surface.card",
+                                                          "color.surface.page")]
+        dark = [ts.resolve(r, "scheme:dark,contrast:high") for r in ("color.surface.card",
+                                                                     "color.surface.page")]
+        assert light[0] == light[1] and dark[0] != dark[1], brand

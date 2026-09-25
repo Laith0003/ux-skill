@@ -15,7 +15,7 @@ A container is told apart from what it sits on by its fill, its edge or its shad
 
 ## Decision
 
-For every fill a contract binds and every surface the contract lists, bind.py measures the fill against the surface in every scheme and contrast context. Where it measures below 1.2:1 in any of them, the contract binds border-width to border.outline (or a heavier edge role in EDGE_ROLES) and a border-color that apply to that fill's variant and state, or the contract is refused. The 1.2:1 floor is ours (EDGE_FLOOR), not a WCAG number. A shadow is never the only edge.
+For every fill a contract binds and every surface the contract lists, bind.py measures the fill against the surface in every scheme and contrast context. Where it measures below 1.2:1 in any of them, the contract binds border-width to border.outline (or a heavier edge role in EDGE_ROLES) and a border-color that apply to that fill's variant and state, or the contract is refused. The 1.2:1 floor is ours (EDGE_FLOOR), not a WCAG number, and it is measured on the fill only: the rule asks for an edge color but does not measure it, so a contract that relies on its edge pairs the edge color itself. A shadow is never the only edge.
 
 ## Why
 

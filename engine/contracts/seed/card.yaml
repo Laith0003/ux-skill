@@ -45,7 +45,7 @@ copy:
     - The body gives one or two facts that help a person decide whether to open it
 usage:
   do:
-    - Keep an edge on every card; in high contrast the card and the page are the same color
+    - Keep an edge on every card; in light high contrast the card and the page are the same color
     - Round inner media by the card radius minus the padding, never by the card radius itself
     - Put actions at the end of the card in reading order
     - Use lifted for one card that must stand above its siblings, not for several

@@ -11,7 +11,7 @@ superseded_by: null
 
 ## Context
 
-A primary or danger fill can sit on the page, a card or a raised dialog. Holding the fill to 3:1 against every surface would move the brand fill for some brands. Measured over 90 brands (the brands the color and contract tests use) in 3 axis sets, 270 builds in every scheme and contrast context: 2 brands, in 6 builds, have an action or strong status fill, or one of its hover and pressed steps, below its floor against card, sunken or raised. Every one is color.action.primary on the raised surface in dark standard contrast, worst 2.85:1.
+A primary or danger fill can sit on the page, a card or a raised dialog. Holding the fill to 3:1 against every surface would move the brand fill for some brands. Measured over 90 brands (the brands the color and contract tests use) in 3 axis sets, 270 builds in every scheme and contrast context: 2 brands, in 6 builds, have an action or strong status fill, or one of its hover and pressed steps, below its floor against card, sunken or raised. Every one is color.action.primary on the raised surface in dark standard contrast, worst 2.85:1 in that sample; over a wider sample of 152 brands in 456 builds the same pair reaches 2.78:1 (#2D0679).
 
 ## Decision
 

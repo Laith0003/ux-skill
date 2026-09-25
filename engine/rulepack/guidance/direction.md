@@ -9,12 +9,12 @@
 
 - Direction is one of the mode axes: dir="rtl" on the html element switches every direction-dependent token at once (decisions/axes-on-the-root.md).
 - Tokens never name physical sides: inline-start and inline-end, block-start and block-end, never left, right, top or bottom.
-- Every contract part declares its right-to-left behavior: logical (placed with logical properties, so it moves to the other side), mirror (the glyph itself flips), or fixed (never flips).
+- Every contract part declares its right-to-left behavior: logical (placed with logical properties, so it moves to the other side), mirror (it moves to the other side like a logical part, and its glyph also flips), or fixed (never flips).
 - Name frames and screens with their direction so both are reviewed.
 
 ## Mirroring
 
-- A part's rtlBehavior governs where it sits; the glyph rules below govern how it is drawn. A logical part moves to the other side without flipping its drawing; a mirror part flips its drawing. A back arrow points to the start edge, which is on the right under right to left.
+- A part's rtlBehavior governs where it sits; the glyph rules below govern how it is drawn. A logical part moves to the other side without flipping its drawing; a mirror part moves to the other side and also flips its drawing, as the row's chevron sits at the end and points there in both directions. A back arrow points to the start edge, which is on the right under right to left.
 - Flip a drawing with transform: scaleX(-1) under [dir="rtl"], or ship a mirrored icon; never flip the container, which would reverse its text.
 - The first item of a navigation and the home link sit at the start edge.
 - Progress fills from the start edge to the end edge.
