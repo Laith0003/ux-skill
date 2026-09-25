@@ -34,7 +34,6 @@
 | Use sentence case for headlines | Use Title Case On Every Word |
 | Compress display line-height to 1.0 to 1.15 | Run display headlines at body line-height (looks like a stack) |
 | Use tabular figures in tables, dashboards, prices, timers | Use proportional figures for vertically aligned numeric columns |
-| Cap H1 at 2 to 3 lines maximum | Allow H1 to wrap to 4+ lines (catastrophic at 6) |
 | Pair sans with a mono for technical contexts | Pair two display faces together |
 | Use weight changes (400 to 600) to signal hierarchy | Use color alone to signal hierarchy |
 | Use ALL CAPS only for eyebrows at 10 to 13px with +0.06em tracking | Use ALL CAPS for body or subheads at any size |
@@ -49,7 +48,7 @@
 ### Pattern: Display headline at hero scale
 **Use when**: Hero or section opener carrying the page's primary claim.
 **Anti-pattern**: 6-line wrapped headline crammed inside a narrow container, or a hero headline at 24px hoping weight will carry it.
-**How**: Set the H1 in an ultra-wide container (`max-w-5xl` or wider). Size with clamp: `clamp(3rem, 5vw, 5.5rem)` so the line lands on conceptual beats, not on whitespace. Compress line-height to 1.0 to 1.15. Tighten tracking to -0.02em. Cap at 2 to 3 lines; if it overflows, widen the container before shrinking the font.
+**How**: Set the H1 in an ultra-wide container (`max-w-5xl` or wider). Size with clamp: `clamp(3rem, 5vw, 5.5rem)` so the line lands on conceptual beats, not on whitespace. Compress line-height to 1.0 to 1.15. Tighten tracking to -0.02em. The line limit lives in `references/surfaces/landing.md` (Hero composition); if the H1 overflows it, widen the container before shrinking the font.
 
 ### Pattern: Editorial body with measured column
 **Use when**: Long-form marketing prose, documentation body, or any reading-intensive surface.
@@ -345,7 +344,7 @@ The default LLM output reaches for typography that signals AI generation. Overri
 ## Checklist (severity-tagged)
 
 - [ ] Display font is distinctive and chosen deliberately, not a default reflex (severity: High)
-- [ ] H1 never exceeds 2 to 3 lines at any breakpoint from 375px to 1440px (severity: Critical)
+- [ ] H1 within the line limit in `references/surfaces/landing.md` (Hero composition) (severity: Critical)
 - [ ] Body sits at 16px minimum on mobile (prevents iOS auto-zoom on input focus) (severity: Critical)
 - [ ] Body line-height is 1.5 to 1.7 (severity: High)
 - [ ] Display line-height is 1.0 to 1.15 (severity: High)
@@ -406,7 +405,7 @@ The default LLM output reaches for typography that signals AI generation. Overri
 - See **color.md** for contrast pairs that govern text legibility.
 - See **layout.md** for ultra-wide container widths that prevent H1 line-count failures.
 - See **spacing.md** for vertical rhythm between type and surrounding sections.
-- See **dashboards.md** for tabular numeral discipline in data-dense surfaces.
+- See `references/surfaces/dashboard.md` for tabular numeral discipline in data-dense surfaces.
 - See **copy.md** for the words that fill the type system.
 - See **accessibility.md** for dynamic-type scaling support and contrast minimums.
 - See **components.md** for label, helper-text, and button typography contracts.

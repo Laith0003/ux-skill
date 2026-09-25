@@ -337,4 +337,4 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 - See **components.md** for state-by-state animation specs (hover, active, focus, loading).
 - See **layout.md** for layout-shift avoidance during motion.
 - See **typography.md** for variable-axis weight animations.
-- See **dashboards.md** for breathing live indicators and number-counter rules.
+- See `references/surfaces/dashboard.md` for breathing live indicators and number-counter rules.

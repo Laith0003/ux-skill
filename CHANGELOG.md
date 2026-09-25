@@ -27,6 +27,24 @@ project adheres to [Semantic Versioning](https://semver.org/).
   support ends here. On 3.9, pip keeps installing 3.2.x, which still works;
   to get 4.0, upgrade Python to 3.10 or newer, or pin
   `pip install 'uxskill<4'` to stay on 3.2.x on purpose.
+- Surface rules live in three playbooks under `references/surfaces/`:
+  `landing.md`, `dashboard.md` and `component.md`. `/ux-design` loads
+  exactly one, picked by its mode: page mode loads `landing.md` for a page
+  that explains, sells or converts and none otherwise, component mode loads
+  `component.md`, dashboard mode loads `dashboard.md`, and image mode
+  follows the build mode it stacks with. The mode's state file records the
+  pick as `surface`.
+- Landing rules move out of `styles/anti-slop.md`, `styles/arsenal.md`,
+  `styles/exemplars.md` and `foundations/layout.md` into `landing.md`;
+  `foundations/dashboards.md` becomes a pointer to `dashboard.md`. The
+  component contracts (card grid, form, data table, modal and drawer) stay
+  in `foundations/component-behaviors.md` and load on every build that
+  uses those components. The five live-product archetypes move to
+  `styles/arsenal.md`, since dashboards, components and AI landing heroes
+  all use them.
+- A test fails when a rule sentence, exact or near (0.9 similarity), sits
+  in a playbook and in a file it moved out of, in `commands/ux-design.md`,
+  or in two playbooks, and when a file pointer does not resolve.
 
 ### Deprecated
 These seven commands are now aliases. Each one says where it moved and

@@ -647,5 +647,5 @@ Every component documents:
 - See **typography.md** for label, helper text, and button typography.
 - See **color.md** for state tokens (default, hover, active, focus, disabled).
 - See **spacing.md** for component padding by density mode.
-- See **dashboards.md** for table, chart, and data-dense component patterns.
+- See `references/surfaces/dashboard.md` for table, chart, and data-dense component patterns.
 - See **copy.md** for button labels, error messages, and toast copy.

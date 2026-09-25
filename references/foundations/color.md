@@ -412,7 +412,7 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 
 - See **typography.md** for body text colors paired with these surfaces.
 - See **accessibility.md** for contrast minimums, color-not-only rules, and color-blind palette guidance.
-- See **dashboards.md** for semantic color discipline inside data viz.
+- See `references/surfaces/dashboard.md` for semantic color discipline inside data viz.
 - See **components.md** for state-specific color tokens (default, hover, active, focus, disabled).
 - See **motion.md** for accent-tinted shadows and ambient color drift.
 - See **layout.md** for section-anchored background color shifts.

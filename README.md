@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-152-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-3391_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-3396_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -53,11 +53,13 @@ pip and pipx skip pre-releases unless asked, so a plain `pip install uxskill` st
 - **Safe by default.** It never overwrites a file that differs. `--force` replaces files only when you ask.
 - **Arabic.** Under `dir="rtl"` text switches to an Arabic face with its own sizes and line height; spacing uses logical properties and motion mirrors. `--latin-only` leaves it out.
 
-This beta builds new systems; it does not read an existing one yet. 4.1 adds importers (Figma variables, CSS variables, Tailwind config, DTCG tokens), `/ux-system enhance` and `extend`, and Figma both ways. 4.2 adds surface playbooks, the trust layer (lint on every write, a finish reviewer) and the launch. See the [changelog](CHANGELOG.md).
+This beta builds new systems; it does not read an existing one yet. 4.1 adds importers (Figma variables, CSS variables, Tailwind config, DTCG tokens), `/ux-system enhance` and `extend`, and Figma both ways. 4.2 adds the trust layer (lint on every write, a finish reviewer) and the launch. See the [changelog](CHANGELOG.md).
 
 **Fewer commands.** 25 slash commands become 18. `/ux-discover` takes `--frame` and `--recommend`, `/ux-design` takes `--component`, `--dashboard` and `--from-image`, `/ux-polish` loops lint, fix, re-lint until the score reaches 90 or three rounds pass, and `/ux-init` takes `--stats`. The seven old names still work as aliases and go away in 4.1; see [the aliases](#aliases-removed-in-41).
 
-Tests **3391 passing**. Offline. Deterministic. No LLM ever called.
+**Surface playbooks.** Landing, dashboard and component rules live in `references/surfaces/`, one playbook each. `/ux-design` loads exactly one, picked by its mode, so a dashboard build never reads hero rules.
+
+Tests **3396 passing**. Offline. Deterministic. No LLM ever called.
 
 ### New in v3.1: brand-true, responsive, alive
 

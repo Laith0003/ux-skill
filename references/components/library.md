@@ -332,23 +332,7 @@ The overlay patterns. Each blocks or interrupts the user differently; choosing t
 
 ### Sheet (bottom drawer on mobile)
 
-**When to use.** Mobile-first overlay for actions or content. Action sheets, picker UIs, share menus.
-
-**Required behaviors.**
-- Slides up from the bottom edge.
-- Backdrop scrim above the sheet.
-- Drag-to-dismiss handle (a small horizontal bar at the top of the sheet).
-- Tap outside to dismiss.
-- Max-height typically 80-90% of viewport; user can drag taller or shorter within bounds.
-
-**Anti-patterns.**
-- Sheets used on desktop. Desktop wants modals or drawers, not bottom sheets.
-- Sheets that cover the entire viewport without a way back. The user feels trapped.
-
-**Code-level guidance.**
-- Use a portal as with modals.
-- Animation: 250-300ms slide-in, cubic-bezier easing (e.g., `cubic-bezier(0.32, 0.72, 0, 1)`).
-- Drag handling: track touch events on the handle; below a threshold (e.g., 100px drag), snap back; above threshold, dismiss.
+The sheet pattern lives in `references/surfaces/component.md` (Sheet). The mobile contract for modals, sheets and drawers lives in `references/foundations/component-behaviors.md`.
 
 ### Drawer (side-anchored panel)
 
@@ -454,17 +438,15 @@ How users move through the product. The right pattern depends on hierarchy depth
 - Active state: clearly indicates which page the user is on (underline, fill, color change).
 - Hover on items: subtle color or underline change.
 - Focus: ring visible.
-- Mobile: collapses to a hamburger menu that opens a drawer or full-screen overlay.
 
 **Anti-patterns.**
 - Stuffing every link into the top nav. Prioritize 3-7 items.
 - Active state that is barely visible. Users need to know where they are.
-- No mobile pattern — letting the desktop nav crash into the mobile viewport.
 
 **Code-level guidance.**
 - Use `<nav>` semantic element with appropriate `aria-label`.
 - Active state via `aria-current="page"`.
-- Mobile breakpoint typically 768-1024px; below, switch to the collapsed pattern.
+- The mobile nav contract (collapse breakpoint, drawer, one-row bar) lives in `references/surfaces/landing.md` (Header and navigation).
 
 ### Bottom navigation (mobile tab bar)
 
@@ -619,15 +601,7 @@ The data grid pattern. Tables are inherently dense; the design choice is how den
 
 ### Responsive collapse
 
-**Required behaviors.**
-- Below a breakpoint (typically 768px or 1024px), the table either:
-  - Collapses to cards (each row becomes a card with the columns as labeled fields).
-  - Allows horizontal scroll with sticky first column.
-  - Hides non-essential columns.
-
-**Anti-patterns.**
-- Tables that overflow horizontally on mobile without any handling. Users have to scroll a tiny window.
-- Hiding the most important column on collapse. Choose what to hide carefully.
+The table's responsive collapse lives in `references/foundations/component-behaviors.md` (Data table).
 
 ### General table guidance
 
@@ -643,33 +617,9 @@ The data grid pattern. Tables are inherently dense; the design choice is how den
 
 How users provide structured input. The form pattern shapes the entire flow.
 
-### Single-column form
+### Single-column and two-column forms
 
-**When to use.** Linear flows. Sign-up, sign-in, simple settings. The user works top-to-bottom.
-
-**Required structure.**
-- Fields stacked vertically, full-width or comfortably wide (max-width 480-640px).
-- Labels above inputs.
-- Helper text below inputs (when needed).
-- Error text below the helper text or replacing it.
-- Submit button at the bottom, left-aligned (or full-width on mobile).
-
-**Anti-patterns.**
-- Two-column forms when the form has only 4-6 fields. The columns add no value.
-- Centered single-column forms with narrow widths that force every label to break into multiple lines.
-
-### Two-column form
-
-**When to use.** Dense settings panels. Forms with many related field pairs (first name + last name, city + zip).
-
-**Required structure.**
-- Two-column grid with appropriate gap.
-- Related fields side by side; unrelated fields full-width.
-- Collapses to single column on mobile.
-
-**Anti-patterns.**
-- Two-column for fields that are not related. The user's eye does not know where to go.
-- Two-column that does not collapse on mobile.
+Single-column and two-column form layouts live in `references/surfaces/component.md` (Form layouts). The form's mobile contract lives in `references/foundations/component-behaviors.md` (Form).
 
 ### Multi-step wizard
 

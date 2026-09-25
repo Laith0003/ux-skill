@@ -455,4 +455,4 @@ Resist the temptation to make each layer do the others' jobs.
 - See **color.md** for semantic state colors that pair with error and success copy.
 - See **motion.md** for toast entry / exit timing and skeleton loading patterns.
 - See **interaction.md** for tactile feedback that accompanies microcopy.
-- See **dashboards.md** for stat callout typography and tabular numeral discipline.
+- See `references/surfaces/dashboard.md` for stat callout typography and tabular numeral discipline.
