@@ -77,6 +77,7 @@ WCAG sets target sizes, not gaps: 2.5.8 asks for targets of 24 by 24 CSS px, or 
 - `space-grid`: every numbered spacing step is a whole multiple of 4px.
 - `space-hierarchy`: text gap, group gap and region gap strictly increase in every density.
 - `compact-not-larger`: no role is larger in compact than in comfortable.
+- `space-within-group`: control gap, control padding (the large control's block padding too), field gaps, table cell padding, list gap and card padding never exceed the group gap, and the list gap stays below it, in every density.
 
 ## Beyond the gate
 

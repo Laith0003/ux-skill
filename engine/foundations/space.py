@@ -41,6 +41,16 @@ ROLES: Dict[str, Tuple[int, int, int]] = {
 # Roles whose values must grow in this order (a gap inside a group never
 # exceeds the gap between groups, and so on).
 HIERARCHY = ("space.text.gap", "space.group.gap", "space.region.gap")
+# Spacing inside a component never outgrows the gap between groups; rows of
+# a list sit strictly closer than groups do. The large control's inline
+# padding is left out: it sizes the one call to action a hero holds, and a
+# dense system gives it more room than the gap between groups.
+WITHIN_GROUP = ("space.control.gap", "space.control.padding-inline",
+                "space.control.padding-block", "space.control.padding-block-large",
+                "space.field.label-gap", "space.field.message-gap",
+                "space.table.cell-padding-inline", "space.table.cell-padding-block",
+                "space.list.gap", "space.card.padding")
+GROUP = "space.group.gap"
 MIN_CONTROL_GAP_PX = 8  # our floor between adjacent controls
 
 
@@ -157,6 +167,24 @@ def _hierarchy(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
+def _within_group(ts: TokenSet, mode: str) -> List[str]:
+    if not _typed(ts, GROUP):
+        return []
+    group = _value(ts, GROUP, mode)
+    out = []
+    for role in (r for r in WITHIN_GROUP if _typed(ts, r)):
+        v = _value(ts, role, mode)
+        if role == "space.list.gap" and v >= group:
+            out.append(f"{role} ({mode}, {v:g}px) is not smaller than {GROUP} ({group:g}px); "
+                       f"rows inside a group sit closer than groups do, so move {role} down "
+                       "the scale")
+        elif v > group:
+            out.append(f"{role} ({mode}, {v:g}px) is larger than {GROUP} ({group:g}px); "
+                       "spacing inside a component never outgrows the gap between groups, so "
+                       f"move {role} down the scale")
+    return out
+
+
 def _compact_not_larger(ts: TokenSet, mode: str) -> List[str]:
     if mode != "density:compact":
         return []
@@ -174,6 +202,7 @@ CHECKS: Tuple[Check, ...] = (
           exempt_axes=(("density", "it reads only primitives, which never carry modes"),)),
     Check("space-hierarchy", "system", _hierarchy, axes=("density",)),
     Check("compact-not-larger", "system", _compact_not_larger, axes=("density",)),
+    Check("space-within-group", "system", _within_group, axes=("density",)),
 )
 
 

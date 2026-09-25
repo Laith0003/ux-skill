@@ -76,6 +76,13 @@ Audits the grid tokens in both densities: breakpoint order, column order, the re
 - `text-measure`: the reading measure is 40rem or less, our approximation of 80 characters (WCAG 1.4.8, AAA).
 - `layout-regions`: the region gap, the landing gap and the hero padding never shrink as the viewport grows, and the landing gap never falls below the region gap at its tier.
 - `layout-on-space`: gutters, inline margins, region and landing gaps and the hero, header and footer padding point at steps of the spacing scale, so layout and spacing move together.
+- `layout-grid-order`: gutters and inline margins never shrink as the tier widens, in every density.
+- `layout-gutter-floor`: every gutter and inline margin is at least 8px in every density.
+- `reflow-phone-tier`: the tablet tier starts above 320px, so a 320px viewport gets the phone grid (WCAG 1.4.10).
+- `phone-columns`: at 320px the phone margins and gutters leave each column at least 44px, our floor.
+- `text-measure-floor`: the reading measure is at least 30rem, our floor.
+- `form-measure`: the form measure is 40rem or less, the same ceiling as reading text.
+- `container-bounds`: the container is at least 320px and at least the reading measure.
 
 ## Beyond the gate
 

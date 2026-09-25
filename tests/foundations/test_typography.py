@@ -180,7 +180,7 @@ def test_every_axis_mix_is_valid_and_passes(contrast, density, personality, form
     ts = generate_type(a).tokens
     assert validate(ts) == []
     report = gate(ts, [], CHECKS)
-    assert report.passed and report.rules_checked == 24
+    assert report.passed and report.rules_checked == 29
 
 
 def _hand():
@@ -260,7 +260,8 @@ def test_only_the_leading_rule_cites_wcag():
                    "rem-sizes": "system", "type-hierarchy": "system",
                    "high-contrast-weights": "system", "icon-sizes": "system",
                    "strong-weight": "system", "phone-hierarchy": "system",
-                   "display-fits": "system"}
+                   "display-fits": "system", "type-tracking-order": "system",
+                   "line-height-floor": "system", "code-face": "system"}
 
 
 def test_a_role_of_the_wrong_type_is_named_once_not_a_crash():
