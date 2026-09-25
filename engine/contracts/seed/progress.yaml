@@ -1,0 +1,55 @@
+# Progress: how far a task has got. Every value is a semantic role.
+name: progress
+status: experimental
+category: feedback
+description: Shows how far a task has got, as a bar when the share is known and as a spinner when it is not, with the value in words.
+parts:
+  - {name: track, rtlBehavior: logical}
+  - {name: bar, rtlBehavior: logical}
+  - {name: spinner, rtlBehavior: fixed}
+  - {name: label, rtlBehavior: logical}
+  - {name: value, rtlBehavior: fixed}
+variants:
+  - {name: kind, values: [bar, spinner], default: bar}
+states: [default, loading]
+tokens:
+  - {part: track, property: fill, role: color.surface.sunken, when: {kind: bar}}
+  - {part: track, property: border-width, role: border.outline, when: {kind: bar}}
+  - {part: track, property: border-color, role: color.line.subtle, when: {kind: bar}}
+  - {part: track, property: radius, role: radius.pill, when: {kind: bar}}
+  - {part: bar, property: fill, role: color.line.selected, when: {kind: bar}}
+  - {part: bar, property: transition-duration, role: motion.swap.duration, when: {kind: bar}}
+  - {part: bar, property: transition-curve, role: motion.swap.curve, when: {kind: bar}}
+  - {part: spinner, property: icon, role: color.line.selected, when: {kind: spinner}}
+  - {part: spinner, property: transition-duration, role: motion.progress.duration, when: {kind: spinner}}
+  - {part: spinner, property: transition-curve, role: motion.progress.curve, when: {kind: spinner}}
+  - {part: label, property: text, role: color.text.default}
+  - {part: label, property: font, role: type.text.body-small}
+  - {part: value, property: text, role: color.text.default}
+  - {part: value, property: font, role: type.text.body-small}
+contrast:
+  - {fg: color.line.selected, bg: color.surface.sunken, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.selected, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+surfaces: [color.surface.page, color.surface.card, color.surface.raised]
+a11y:
+  target: none
+  label: localized
+  cue: the value is also written in words, such as 3 of 5 files, never the bar alone
+copy:
+  default:
+    - The label says what is in progress, such as Uploading invoices
+    - The value gives the real numbers, such as 3 of 5 files, or a percentage when there is no count
+  loading:
+    - When the share is not known, say what is happening, such as Checking your details
+usage:
+  do:
+    - Use the bar when the share is known and the spinner only when it is not
+    - Fill the bar from the start of the line, so it runs right to left under right to left
+    - Announce the finish and every quarter to assistive technology, not every change
+  dont:
+    - Do not show a spinner for less than a second; show nothing
+    - Do not use the brand fill for the bar; its edge against the track is not measured
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

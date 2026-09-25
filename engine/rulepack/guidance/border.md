@@ -2,7 +2,7 @@
 
 ## Summary
 
-Border sets the width of every stroke: separators, the edges of containers and controls, emphasis, selection and the focus ring, plus the stroke styles. Widths are whole pixels. Border colors are color roles, and a border role carries a width only. An edge at rest or selected takes a color.line role (color.line.subtle, color.line.input, color.line.selected); a primary button's edge takes color.action.primary-edge, a field in error color.line.danger and a danger button's edge color.status.danger.strong, unless the control is disabled; a disabled edge, in error or not, takes the role its contract names, color.text.disabled for the secondary button and the row's check box and color.line.subtle for the text field (decisions/disabled-contrast.md). Border does not govern the contrast of a stroke; color does.
+Border sets the width of every stroke: separators, the edges of containers and controls, emphasis, selection and the focus ring, plus the stroke styles. Widths are whole pixels. Border colors are color roles, and a border role carries a width only. An edge at rest or selected takes a color.line role (color.line.subtle, color.line.input, color.line.selected, and color.line.accent for a link's underline or a highlighted column); a primary button's edge takes color.action.primary-edge, a field in error color.line.danger and a danger button's edge color.status.danger.strong, unless the control is disabled; a disabled edge, in error or not, takes the role its contract names, color.text.disabled for the secondary button and the row's check box and color.line.subtle for the text field (decisions/disabled-contrast.md). Border does not govern the contrast of a stroke; color does.
 
 ## Principles
 

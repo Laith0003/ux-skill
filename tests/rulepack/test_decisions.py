@@ -26,6 +26,7 @@ EXPECTED = {
     "field-and-table-spacing", "expressive-motion", "brief-fields", "default-scheme",
     "imagery-foundation", "generated-art", "page-composition", "distinctness",
     "readable-fields", "button-sizes", "card-and-banner-reading", "form-contracts",
+    "display-and-navigation-contracts",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",

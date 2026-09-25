@@ -1,0 +1,73 @@
+# Table: rows of records with the same fields. Every value is a semantic
+# role.
+name: table
+status: experimental
+category: container
+description: Shows records with the same fields in rows and columns, with a header, optional stripes and a highlighted column, and a phone layout that keeps every value readable.
+parts:
+  - {name: table, rtlBehavior: logical}
+  - {name: header, rtlBehavior: logical}
+  - {name: row, rtlBehavior: logical}
+  - {name: cell, rtlBehavior: logical}
+  - {name: number, rtlBehavior: fixed}
+  - {name: column, rtlBehavior: logical}
+  - {name: caption, rtlBehavior: logical}
+variants:
+  - {name: rows, values: [plain, striped], default: plain}
+states: [default, hover, selected]
+tokens:
+  - {part: table, property: radius, role: radius.card}
+  - {part: header, property: fill, role: color.surface.sunken}
+  - {part: header, property: border-width, role: border.outline}
+  - {part: header, property: border-color, role: color.line.subtle}
+  - {part: header, property: text, role: color.text.default}
+  - {part: header, property: font, role: type.text.label}
+  - {part: row, property: border-width, role: border.outline}
+  - {part: row, property: border-color, role: color.line.subtle}
+  - {part: row, property: fill, role: color.surface.stripe, when: {rows: striped}}
+  - {part: row, property: fill, role: color.surface.sunken, state: hover}
+  - {part: row, property: fill, role: color.surface.selected, state: selected}
+  - {part: row, property: border-width, role: border.active, state: selected}
+  - {part: row, property: border-color, role: color.line.selected, state: selected}
+  - {part: cell, property: text, role: color.text.default}
+  - {part: cell, property: font, role: type.text.body-small}
+  - {part: cell, property: padding-inline, role: space.table.cell-padding-inline}
+  - {part: cell, property: padding-block, role: space.table.cell-padding-block}
+  - {part: number, property: text, role: color.text.default}
+  - {part: number, property: font, role: type.text.body-small}
+  - {part: column, property: fill, role: color.surface.tint}
+  - {part: column, property: border-width, role: border.outline}
+  - {part: column, property: border-color, role: color.line.accent}
+  - {part: caption, property: text, role: color.text.muted}
+  - {part: caption, property: font, role: type.text.body-small}
+contrast:
+  - {fg: color.text.default, bg: color.surface.sunken, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.stripe, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.selected, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.tint, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.line.selected, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.accent, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+surfaces: [color.surface.card, color.surface.raised]
+a11y:
+  target: none
+  label: localized
+  cue: a selected row has a heavier edge and a checked box, and the highlighted column has its own edge and header, never the tint alone
+copy:
+  default:
+    - Column headers are short nouns with the unit, such as Amount (JOD)
+    - The caption says what the table holds and where the numbers come from
+usage:
+  do:
+    - Put a table in a card; align numbers to the end of their column in tabular figures and text to the start
+    - On a phone, keep the table in a container that scrolls sideways with the first column fixed, or show each row as a card of label and value pairs when there are more than four columns
+    - Use stripes for wide tables with many columns; plain rows with separators otherwise
+    - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
+    - When two states apply at once, selected wins over hover
+  dont:
+    - Do not use a table for layout
+    - Do not highlight more than one column
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

@@ -1,0 +1,66 @@
+# Navigation: the header that moves a person between the main pages. Every
+# value is a semantic role.
+name: nav
+status: experimental
+category: container
+description: The page header with the logo and the links to the main pages, marking the current page, and collapsing to a menu button on a phone.
+parts:
+  - {name: bar, rtlBehavior: logical}
+  - {name: logo, rtlBehavior: logical}
+  - {name: item, rtlBehavior: logical}
+  - {name: menu-button, rtlBehavior: logical}
+  - {name: action, rtlBehavior: logical}
+variants:
+  - {name: layout, values: [inline, collapsed], default: inline}
+states: [default, hover, focus, selected]
+tokens:
+  - {part: bar, property: fill, role: color.surface.page}
+  - {part: bar, property: padding-block, role: layout.header.padding-block}
+  - {part: bar, property: gap, role: space.group.gap}
+  - {part: bar, property: border-width, role: border.outline}
+  - {part: bar, property: border-color, role: color.line.subtle}
+  - {part: bar, property: layer, role: elevation.order.sticky}
+  - {part: logo, property: icon, role: color.logo}
+  - {part: item, property: text, role: color.text.default}
+  - {part: item, property: font, role: type.text.ui}
+  - {part: item, property: min-size, role: layout.target.min}
+  - {part: item, property: padding-inline, role: space.control.padding-inline}
+  - {part: item, property: text, role: color.text.link, state: hover}
+  - {part: item, property: border-width, role: border.active, state: selected}
+  - {part: item, property: border-color, role: color.line.selected, state: selected}
+  - {part: menu-button, property: icon, role: color.text.default, when: {layout: collapsed}}
+  - {part: menu-button, property: min-size, role: layout.target.min, when: {layout: collapsed}}
+  - {part: item, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: item, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: item, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  - {part: menu-button, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: menu-button, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: menu-button, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+contrast:
+  - {fg: color.text.default, bg: color.surface.page, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.link, bg: color.surface.page, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.line.selected, bg: color.surface.page, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.logo, bg: color.surface.page, minimum: 3, criterion: system, high: 3}
+  - {fg: color.focus.ring, bg: color.surface.page, minimum: 3, criterion: "1.4.11"}
+surfaces: [color.surface.page]
+a11y:
+  target: layout.target.min
+  label: localized
+  cue: the current page's link carries a heavier underline and aria-current, never color alone
+copy:
+  default:
+    - Each link names a page in one or two words, the same words as the page's title
+    - The menu button's accessible name says Menu in the product's language
+usage:
+  do:
+    - Mark the current page with aria-current and the selected underline
+    - Collapse the links into the menu button below the tablet breakpoint, keeping the one main action visible
+    - Keep the logo at the start of the bar in both directions and the menu button at the end
+    - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
+    - When two states apply at once, selected keeps its underline and hover changes only the text
+  dont:
+    - Do not put more than seven links in the bar
+    - Do not hide the only way to the main action in the collapsed menu
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

@@ -1,0 +1,71 @@
+# Chip: a compact choice or a value a person added. Every value is a
+# semantic role.
+name: chip
+status: experimental
+category: selection
+description: A compact control that filters a view or holds a value a person added, such as a tag, and can be chosen or removed.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: label, rtlBehavior: logical}
+  - {name: check, rtlBehavior: fixed}
+  - {name: remove, rtlBehavior: logical}
+variants:
+  - {name: kind, values: [filter, input], default: filter}
+states: [default, hover, focus, selected, disabled]
+tokens:
+  - {part: container, property: fill, role: color.surface.card}
+  - {part: container, property: border-width, role: border.outline}
+  - {part: container, property: border-color, role: color.line.input}
+  - {part: container, property: radius, role: radius.chip}
+  - {part: container, property: padding-inline, role: space.control.padding-inline}
+  - {part: container, property: gap, role: space.control.gap}
+  - {part: container, property: min-size, role: layout.target.min}
+  - {part: label, property: text, role: color.text.default}
+  - {part: label, property: font, role: type.text.ui}
+  - {part: remove, property: icon, role: color.text.muted, when: {kind: input}}
+  - {part: remove, property: min-size, role: layout.target.min, when: {kind: input}}
+  - {part: container, property: fill, role: color.surface.sunken, state: hover}
+  - {part: container, property: fill, role: color.surface.selected, state: selected}
+  - {part: container, property: border-width, role: border.active, state: selected}
+  - {part: container, property: border-color, role: color.line.selected, state: selected}
+  - {part: check, property: icon, role: color.line.selected, state: selected}
+  - {part: container, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: container, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: container, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  - {part: container, property: border-color, role: color.text.disabled, state: disabled}
+  - {part: label, property: text, role: color.text.disabled, state: disabled}
+contrast:
+  - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.input, bg: color.surface.sunken, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.selected, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.selected, bg: color.surface.selected, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.text.default, bg: color.surface.card, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.sunken, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.selected, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: color.surface.card, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.focus.ring, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.focus.ring, bg: color.surface.selected, minimum: 3, criterion: "1.4.11", high: 3}
+surfaces: [color.surface.page, color.surface.card, color.surface.raised]
+a11y:
+  target: layout.target.min
+  label: localized
+  cue: a chosen chip shows a check mark and a heavier edge, never the tint alone
+copy:
+  default:
+    - One to three words, a noun or a short phrase, never a sentence
+    - The remove button's accessible name says what it removes, such as Remove Amman
+  disabled:
+    - Say why a filter is not available when the reason is not visible
+usage:
+  do:
+    - Use filter chips for a few quick filters above results; use input chips for values a person typed or picked
+    - Wrap chips onto the next line at the control gap rather than scrolling them out of view
+    - A disabled component takes no hover or pressed binding; a disabled component that can take focus keeps its focus ring; selected and error still apply, and where disabled and another state bind the same part and property, disabled wins. Apply this first, then the specificity rule
+    - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
+    - When two states apply at once, selected wins over hover
+  dont:
+    - Do not use a chip for a primary action; use a button
+    - Do not use a chip to show a status; use a badge
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

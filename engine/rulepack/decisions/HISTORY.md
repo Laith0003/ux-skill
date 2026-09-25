@@ -81,3 +81,4 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Buttons come in two sizes, and a view is one screen](button-sizes.md)
 - [Card bodies and banner text read at full strength](card-and-banner-reading.md)
 - [Every form control has a contract, and they share the field rules](form-contracts.md)
+- [Chips, badges, links, navigation, progress and tables have contracts](display-and-navigation-contracts.md)

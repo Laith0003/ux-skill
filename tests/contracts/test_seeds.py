@@ -14,8 +14,9 @@ from engine.foundations.modes import contexts
 from engine.synthesizer.axes import AxisValues
 
 ROOT = Path(__file__).resolve().parents[2]
-NAMES = ("button", "card", "checkbox", "date", "dialog", "input-prefix", "radio", "select",
-         "selectable-row", "status-banner", "text-field", "textarea")
+NAMES = ("badge", "button", "card", "checkbox", "chip", "date", "dialog", "input-prefix", "link",
+         "nav", "progress", "radio", "select", "selectable-row", "status-banner", "table",
+         "text-field", "textarea")
 BRANDS = ("#3366FF", "#6B4423", "#FFD400", "#E11D48", "#16A34A", "#0EA5E9", "#7C3AED",
           "#F97316", "#111827", "#F5F5F5", "#00FFFF", "#FF00FF",
           # A near-gray brand whose selected surface matches a card in dark high
@@ -30,9 +31,9 @@ def test_the_seeds_load_and_are_experimental():
     assert tuple(c.name for c in seeds) == NAMES
     assert all(c.status == "experimental" for c in seeds)
     assert {c.name: c.variant_product() for c in seeds} == {
-        "button": 12, "card": 2, "checkbox": 3, "date": 1, "dialog": 2, "input-prefix": 2,
-        "radio": 2, "select": 1, "selectable-row": 2, "status-banner": 4, "text-field": 2,
-        "textarea": 2}
+        "badge": 6, "button": 12, "card": 2, "checkbox": 3, "chip": 2, "date": 1, "dialog": 2,
+        "input-prefix": 2, "link": 2, "nav": 2, "progress": 2, "radio": 2, "select": 1,
+        "selectable-row": 2, "status-banner": 4, "table": 2, "text-field": 2, "textarea": 2}
     assert all(c.provenance.node is None and c.provenance.drift == () for c in seeds)
 
 
@@ -48,7 +49,8 @@ def test_interactive_seeds_meet_the_minimums():
     for c in seed_contracts():
         if c.interactive:
             assert c.a11y.target == "layout.target.min", c.name
-            assert "focus" in c.states and "disabled" in c.states, c.name
+            # a link is never disabled: it is there or it is not
+            assert "focus" in c.states and ("disabled" in c.states or c.name == "link"), c.name
         assert c.a11y.label == "localized"
 
 
@@ -69,7 +71,8 @@ def test_containers_that_match_their_surface_declare_an_edge():
 def test_rings_on_tinted_fills_pin_three_to_one():
     pinned = [(c.name, r.bg) for c in seed_contracts() for r in c.contrast if r.high is not None
               and r.fg == "color.focus.ring"]
-    assert pinned == [("selectable-row", "color.surface.selected")] + [
+    assert pinned == [("chip", "color.surface.selected"),
+                      ("selectable-row", "color.surface.selected")] + [
         ("status-banner", f"color.status.{s}.soft")
         for s in ("info", "success", "warning", "danger")]
 
