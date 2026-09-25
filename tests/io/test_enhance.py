@@ -70,10 +70,12 @@ def test_drift_finds_unused_tokens_raw_values_and_spellings(tmp_path):
     assert [(m.value, m.where) for m in d.missing] == [("--missing-ring", "app.css:6")]
 
 
-def test_names_that_lie_are_named_with_where_they_are_used(tmp_path):
+def test_names_with_stray_uses_are_named_with_where_they_are_used(tmp_path):
     imported = _system()
     d = drift(imported.tokens, scan([_project(tmp_path)], imported.tokens))
-    assert [(n.token, n.message) for n in d.lies] == [
+    # Some uses match these names, so they are strays, not lies.
+    assert d.lies == []
+    assert [(n.token, n.message) for n in d.strays] == [
         ("text-body", "is named for text but is used as a background at app.css:5; 1 of its 2 "
                       "uses match its name"),
         ("primary-hover", "is named for hover but is used outside hover at app.css:4; 1 of its "
@@ -92,7 +94,10 @@ def test_the_report_is_markdown_in_a_fixed_order_and_writes_nothing(tmp_path):
                      "## What the code uses", "## For the owner to confirm",
                      "## Decisions made without you"]
     assert f"Mapped 3 of {len(ROLE_TYPES)} " in text
-    assert "- 3 of 11 tokens are never used: radius-sm, radius-lg, border-subtle." in text
+    assert ("- 3 of 11 tokens were not found in the 1 file read: radius-sm, radius-lg, "
+            "border-subtle. They are defined in tokens.css; if no code outside the scan uses "
+            "them, removing them is your call") in text
+    assert "never used" not in text
     assert ("- #FFFFFF is written raw 3 times (app.css:2, app.css:5, app.css:6); the system "
             "holds it as bg-page and paper, so use a token.") in text
     assert "- radius is written as 2 raw values: 4px, 11px." in text
@@ -116,7 +121,7 @@ def test_every_code_line_names_where_and_the_fix(tmp_path):
     for line in lines:
         if line.startswith(("- color: ", "- dimension: ")):
             continue
-        assert any(w in line for w in ("app.css:", "never used")), line
+        assert any(w in line for w in ("app.css:", "not found")), line
         assert any(w in line for w in ("use a token", "pick one", "move", "rename", "add ",
                                        "remove", "scan")), line
 
@@ -209,8 +214,7 @@ def test_what_the_scan_did_not_read_is_carried_into_the_report(tmp_path):
     scanned = scan([project], imported.tokens)
     scanned.unknown_classes.append(("page.html", 1, "text-brand"))
     text = enhance(imported, MAPPING, scanned).markdown()
-    assert "- app.min.css was not read: it is a minified build file; scan its source instead." \
-        in text
+    assert "- app.min.css is a minified build file; scan its source instead." in text
     assert "- page.html:1 uses the class text-brand, which names no token in the system;" in text
 
 
@@ -263,10 +267,148 @@ def test_a_hover_token_used_on_hover_in_dark_does_not_lie(tmp_path):
 def test_values_the_scan_saw_but_could_not_measure_are_named(tmp_path):
     imported = _system()
     scanned = scan([_project(tmp_path)], imported.tokens)
-    scanned.not_read = [("Card.tsx", 4, "CSS-in-JS template", "color: ${ink};\n  padding: 8px;")]
+    # A plain tuple, as an older scanner wrote it: no reason, so a generic fix.
+    scanned.not_read = [("Card.tsx", 4, "interpolation", "color: ${ink};\n  padding: 8px;")]
+    report = enhance(imported, MAPPING, scanned)
+    assert ("- Card.tsx:4 writes color: ${ink}; padding: 8px; (interpolation), which the scan "
+            "does not measure; check it by hand") in report.markdown()
+    assert report.to_dict()["drift"]["not_read"] == [
+        {"where": "Card.tsx:4", "kind": "interpolation",
+         "text": "color: ${ink};\n  padding: 8px;", "why": ""}]
+    assert report.to_dict()["drift"]["complete"] is False
+
+
+# ---------------------------------------------------------------- coverage
+
+
+def test_an_empty_folder_measures_nothing_and_lists_no_token(tmp_path):
+    imported = _system()
+    report = enhance(imported, MAPPING, scan([tmp_path], imported.tokens))
+    section = report.markdown().split("## What the code uses")[1].split("## For the")[0]
+    assert "No file was read, so nothing was measured" in section
+    assert "radius-sm" not in section and "not found" not in section
+    assert report.to_dict()["drift"]["complete"] is False
+
+
+def test_tokens_used_only_in_a_skipped_file_are_never_advised_away(tmp_path):
+    project = _project(tmp_path)
+    (project / "vendor.min.css").write_text(".x{border-radius:var(--radius-sm)}",
+                                            encoding="utf-8")
+    imported = _system()
+    report = enhance(imported, MAPPING, scan([project], imported.tokens))
+    text = report.markdown()
+    assert "Read 1 file. 1 file was not read; each is listed at the end of this section" in text
+    assert ("- 3 of 11 tokens were not found in the 1 file read: radius-sm, radius-lg, "
+            "border-subtle. They are defined in tokens.css; 1 file was not read (listed below), "
+            "so scan those too or confirm by hand before removing any.") in text
+    assert "- vendor.min.css is a minified build file; scan its source instead." in text
+    assert report.to_dict()["drift"]["complete"] is False
+
+
+def test_what_the_scanner_could_not_measure_carries_its_reason(tmp_path):
+    (tmp_path / "app.css").write_text(".a { margin: calc(100% - 12px); color: var(--ink); }\n",
+                                      encoding="utf-8")
+    imported = _system()
+    scanned = scan([tmp_path], imported.tokens)
+    entries = list(getattr(scanned, "not_read", ()))
+    assert entries and getattr(entries[0], "why", "")
     text = enhance(imported, MAPPING, scanned).markdown()
-    assert ("- Card.tsx:4 writes color: ${ink}; padding: 8px; (CSS-in-JS template), which the "
-            "scan does not measure, so nothing above counts it; check it by hand") in text
-    assert enhance(imported, MAPPING, scanned).to_dict()["drift"]["not_read"] == [
-        {"where": "Card.tsx:4", "kind": "CSS-in-JS template",
-         "text": "color: ${ink};\n  padding: 8px;"}]
+    assert f"- app.css:1 was not measured (value): {entries[0].why}" in text
+    assert "1 place was not measured" in text
+    assert "so scan those too or confirm by hand before removing any" in text
+
+
+# ---------------------------------------------------------------- names
+
+
+NAMED = """:root {
+  --surface: #ffffff;
+  --surface-card: #f4f5f7;
+  --on-surface: #1b1d22;
+  --on-primary: #ffffff;
+  --onSecondary: #ffffff;
+  --hover-bg: #e8eaee;
+  --weight-regular: 400;
+  --z-top: 400;
+  --space-4: 16px;
+  --radius-lg: 1rem;
+}
+"""
+
+
+def _named(tmp_path, css):
+    imported = _system(NAMED)
+    (tmp_path / "app.css").write_text(css, encoding="utf-8")
+    return drift(imported.tokens, scan([tmp_path], imported.tokens))
+
+
+def test_a_name_on_a_surface_is_a_foreground(tmp_path):
+    d = _named(tmp_path, ".a { color: var(--on-surface); background: var(--surface); }\n"
+                         ".b { color: var(--on-primary); fill: var(--onSecondary); }\n")
+    assert d.lies == [] and d.strays == []
+
+
+def test_a_foreground_used_as_a_background_is_a_lie(tmp_path):
+    d = _named(tmp_path, ".a { background: var(--on-surface); }\n")
+    assert [(x.token, x.message) for x in d.lies] == [
+        ("on-surface", "is named for the color on a surface but is used as a background at "
+                       "app.css:1; 0 of its 1 uses match its name")]
+
+
+def test_a_background_used_only_as_text_is_a_lie_and_a_border_use_is_not(tmp_path):
+    d = _named(tmp_path, ".a { color: var(--surface-card); }\n"
+                         ".b { border-color: var(--surface); }\n")
+    assert [x.token for x in d.lies] == ["surface-card"]
+    assert "is named for backgrounds but is used for text color at app.css:1" in d.lies[0].message
+    assert d.strays == []
+
+
+def test_the_lie_names_the_word_that_failed(tmp_path):
+    d = _named(tmp_path, ".a { background: var(--hover-bg); }\n")
+    assert [(x.token, x.message) for x in d.lies] == [
+        ("hover-bg", "is named for hover but is used outside hover at app.css:1; 0 of its 1 "
+                     "uses match its name")]
+
+
+def test_raw_values_are_matched_within_their_family(tmp_path):
+    d = _named(tmp_path, ".a { z-index: 400; font-weight: 400; padding: 16px; "
+                         "border-radius: 1rem; }\n")
+    held = {(r.uses[0].family, r.value): r.tokens for r in d.raw_with_token}
+    assert held == {("z", "400"): ["z-top"], ("weight", "400"): ["weight-regular"],
+                    ("space", "16px"): ["space-4"], ("radius", "16px"): ["radius-lg"]}
+    assert d.spellings == []
+
+
+# ---------------------------------------------------------------- gate
+
+
+def test_a_set_with_no_mode_prints_no_empty_context():
+    ts = TokenSet({})
+    ts.add(Token("ink", "color", "#D9DADE"))
+    ts.add(Token("paper", "color", "#FFFFFF"))
+    imported = Imported(ts, ImportReport.of(Source("tokens.css", "css", "ab" * 32, 10), ts, 2))
+    mapping = Mapping({"color.text.default": RoleMap("ink", "owner"),
+                       "color.surface.page": RoleMap("paper", "owner")})
+    report = enhance(imported, mapping)
+    assert report.findings and all(" ()" not in f for f in report.findings)
+    assert "Each finding names our role, then your token in tokens.css." in report.markdown()
+
+
+def test_a_clean_gate_names_no_findings_and_a_lone_role_says_no_pair_was_measured():
+    text = enhance(_system(), MAPPING).markdown()
+    assert "Each finding names" not in text
+    lone = Mapping({"color.text.default": RoleMap("text-body", "owner")})
+    report = enhance(_system(), lone)
+    assert "No contrast pair was measured, since each needs both of its roles mapped" \
+        in report.markdown()
+    assert report.to_dict()["gate"]["pairs_checked"] == 0
+
+
+def test_the_not_mapped_list_is_folded_and_complete_in_the_json():
+    report = enhance(_system(), MAPPING)
+    text = report.markdown()
+    how = text.split("## How it was checked")[1].split("## Structure")[0]
+    assert max(len(line) for line in how.splitlines()) <= 160
+    assert "  - color: 68 of 71, such as color.surface.card, color.surface.sunken and 66 more" \
+        in how
+    assert len(report.to_dict()["mapping"]["not_mapped"]) == len(ROLE_TYPES) - 3

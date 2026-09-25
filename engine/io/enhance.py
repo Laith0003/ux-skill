@@ -4,15 +4,22 @@ enhance() reads an imported system (in its own names), checks it through
 the naming adapter's view, and, given a scan of the product's code,
 measures what the code actually does against it:
 
-- tokens nothing uses, directly or through a token that is used;
-- raw values a token already holds (use the token);
+- tokens not found in the code read, directly or through a token that is
+  found; when the scan skipped files or saw values it could not measure,
+  the report says so beside the list, and it never tells the owner to
+  remove a token on the scan's word alone;
+- raw values a token already holds (use the token), matched within the
+  family the value is written in (a z-index is never matched to a weight);
 - values written many ways (#fff, #FFF and white), and how many raw
   values each family carries (a radius written eleven ways);
-- names that lie: a token named for text used as a background, or named
-  for hover used outside hover;
+- names that lie: every use contradicts the name (a background token only
+  ever used as text, a hover token never used on hover), and names with
+  stray uses, where some uses match the name and some do not. A name with
+  "on" before a word (on-surface, onPrimary) is a foreground, the color on
+  that surface, by the common convention;
 - references to tokens the system does not have, and what the scan could
-  not measure (files it skipped, values it saw but does not read, such as
-  a font shorthand, and classes that name no token).
+  not measure (files it skipped, values it saw but does not read, with the
+  scanner's reason and fix, and classes that name no token).
 
 The report says how many of the engine's roles the mapping covers, which
 ones the owner left out and which ones are not mapped at all, so a mapping
@@ -34,27 +41,37 @@ from engine.foundations.build import FOUNDATIONS, SystemCheck, check_system
 from engine.foundations.modes import AXES
 from engine.foundations.tokens import AliasError, TokenSet, alias_target, is_alias
 from engine.foundations.validate import validate
-from engine.io.adapter import ROLE_TYPES, Mapping, their_names, view
+from engine.io.adapter import (
+    AXIS_LEFT_OUT, ROLE_LEFT_OUT, ROLE_TYPES, Mapping, their_names, view)
 from engine.io.report import Imported
 from engine.io.scan import Scan, Usage, canonical
 
-# Family of a use -> the token type that can hold its value, when its
-# canonical form does not say (a color is #..., a length px, a time ms).
-FAMILY_TYPES = {"color": "color", "space": "dimension", "radius": "dimension",
-                "border": "dimension", "type-size": "dimension", "tracking": "dimension",
-                "leading": "number", "weight": "fontWeight", "z": "number",
-                "duration": "duration", "motion": "cubicBezier", "shadow": "shadow",
-                "font": "fontFamily"}
+# Family of a use -> the token types that can hold its value. A
+# line-height is a number, or a length when written with a unit.
+FAMILY_TYPES: Dict[str, Tuple[str, ...]] = {
+    "color": ("color",), "space": ("dimension",), "radius": ("dimension",),
+    "border": ("dimension",), "type-size": ("dimension",), "tracking": ("dimension",),
+    "leading": ("number",), "weight": ("fontWeight", "number"), "z": ("number",),
+    "duration": ("duration",), "motion": ("cubicBezier",), "shadow": ("shadow",),
+    "font": ("fontFamily",)}
 # Name words and the use they promise.
 TEXT_WORDS = ("text", "fg", "foreground")
 BG_WORDS = ("bg", "background", "surface", "canvas", "backdrop")
 LINE_WORDS = ("border", "line", "stroke", "outline", "divider", "ring", "separator")
 SPACE_WORDS = ("space", "spacing", "gap", "padding", "margin", "gutter", "inset")
 RADIUS_WORDS = ("radius", "rounded", "corner")
-STATE_WORDS = {"hover": "hover", "pressed": "active", "active": "active", "focus": "focus",
-               "disabled": "disabled"}
+# Words that name a family: a raw value is matched only to tokens named for
+# its own family or for none of the others (a z-index of 400 is not a
+# weight token that holds 400, nor a 16px padding a radius token).
+FAMILY_WORDS = {"space": SPACE_WORDS, "radius": RADIUS_WORDS, "border": LINE_WORDS,
+                "weight": ("weight", "bold"), "z": ("z", "layer", "zindex")}
+# The state a name promises. Only hover is held against the code: the
+# scanner reads it from :hover and hover:, while active, pressed, selected
+# and disabled are as often set by a class or an ARIA attribute it does not
+# read as a state, and a focus ring is often set at rest and shown on focus.
+STATE_WORDS = {"hover": "hover"}
 _BG_PROPS = re.compile(r"background(-color)?$|bg$")
-_TEXT_PROPS = re.compile(r"(color|caret-color|fill|text-decoration-color)$|text$")
+_TEXT_PROPS = re.compile(r"(color|caret-color|fill|stroke|text-decoration-color)$|text$")
 _LINE_PROPS = re.compile(r"(border|outline|ring|divide)(-.*)?$|box-shadow$")
 _NUMBER = re.compile(r"-?\d+(\.\d+)?$")
 # The engine's own fix on a contrast finding (move to a step of its ramp,
@@ -63,11 +80,27 @@ _MOVE = re.compile(r" Move \S+ to a step with more contrast against \S+\.(?: .*)
 _THEIR_FIX = (" Change the value of one of them in your system, or map the role to a token "
               "with more contrast.")
 READING_ROLES = ("type.text.body", "type.text.body-small", "type.text.fine")
+# How many names a folded line shows before "and N more".
+FEW = 6
 
 
 def _and(items: Sequence[str]) -> str:
     items = list(items)
     return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1]
+
+
+def _few(items: Sequence[str], n: int = FEW) -> str:
+    """The items, comma separated, or the first n and how many more."""
+    items = list(items)
+    if len(items) <= n + 1:
+        return ", ".join(items)
+    return f"{', '.join(items[:n])} and {len(items) - n} more"
+
+
+def _and_few(items: Sequence[str], n: int) -> str:
+    """The items joined with "and", or the first n and how many more."""
+    items = list(items)
+    return _and(items if len(items) <= n + 1 else items[:n] + [f"{len(items) - n} more"])
 
 
 def _count(n: int, one: str, many: str) -> str:
@@ -108,17 +141,30 @@ def _key(value: str) -> str:
 
 
 def _kinds(u: Usage) -> Tuple[str, ...]:
-    """The token types that could hold a raw use's value."""
+    """The token types that could hold a raw use's value: its family's, or
+    for a use in no known family, what its canonical form says."""
+    if u.family == "leading" and u.value.endswith("px"):
+        return ("dimension",)
+    if u.family in FAMILY_TYPES:
+        return FAMILY_TYPES[u.family]
     if u.value.startswith("#"):
         return ("color",)
     if u.value.endswith("px"):
         return ("dimension",)
     if u.value.endswith("ms"):
         return ("duration",)
-    if _NUMBER.match(u.value):
-        return ("number", "fontWeight")
-    kind = FAMILY_TYPES.get(u.family)
-    return (kind,) if kind else ()
+    return ("number",) if _NUMBER.match(u.value) else ()
+
+
+def _fits(path: str, family: str) -> Tuple[bool, bool]:
+    """(fits, named for it): whether a token may hold a raw value of the
+    family, and whether its name says that family."""
+    if family not in FAMILY_WORDS:
+        return True, False
+    words = set(_words(path))
+    own = bool(words & set(FAMILY_WORDS[family]))
+    other = any(words & set(w) for f, w in FAMILY_WORDS.items() if f != family)
+    return own or not other, own
 
 
 @dataclass(frozen=True)
@@ -149,13 +195,15 @@ class Missing:
 
 @dataclass
 class Drift:
+    # Tokens not found in the code read (see complete).
     unused: List[str] = field(default_factory=list)
-    # type -> (tokens, tokens used)
+    # type -> (tokens, tokens found in use)
     totals: Dict[str, Tuple[int, int]] = field(default_factory=dict)
     raw_with_token: List[RawWithToken] = field(default_factory=list)
     spellings: List[Spelling] = field(default_factory=list)
     # family -> the raw values it carries, in the order first seen
     distinct: Dict[str, List[str]] = field(default_factory=dict)
+    # Every use contradicts the name.
     lies: List[Lie] = field(default_factory=list)
     missing: List[Missing] = field(default_factory=list)
     # (family, value) -> where it is first written raw
@@ -164,8 +212,18 @@ class Drift:
     files: int = 0
     skipped: List[Tuple[str, str]] = field(default_factory=list)
     unknown_classes: List[Tuple[str, int, str]] = field(default_factory=list)
-    # (file, line, kind, text) for values the scan saw but could not measure
-    not_read: List[Tuple[str, int, str, str]] = field(default_factory=list)
+    # (file, line, kind, text, why) for values the scan saw but could not
+    # measure; why is the scanner's reason and fix, or ""
+    not_read: List[Tuple[str, int, str, str, str]] = field(default_factory=list)
+    # Some uses match the name and some do not.
+    strays: List[Lie] = field(default_factory=list)
+
+    @property
+    def complete(self) -> bool:
+        """Whether the scan read files and measured everything in them: no
+        file skipped, no value seen and left unmeasured. Only then does a
+        token not found mean no code read uses it."""
+        return self.files > 0 and not self.skipped and not self.not_read
 
 
 def _refs(ts: TokenSet, path: str) -> List[str]:
@@ -199,11 +257,28 @@ def _held(ts: TokenSet) -> Dict[Tuple[str, str], List[str]]:
     return held
 
 
+def _holders(held: Dict[Tuple[str, str], List[str]], u: Usage) -> List[str]:
+    """The tokens that hold a raw use's value within its family, those
+    named for the family first."""
+    out: List[Tuple[bool, str]] = []
+    for kind in _kinds(u):
+        for path in held.get((kind, _key(u.value)), []):
+            fits, own = _fits(path, u.family)
+            if fits:
+                out.append((not own, path))
+    return [p for _, p in sorted(out, key=lambda x: x[0])]
+
+
+def _not_read(entry: Any) -> Tuple[str, int, str, str, str]:
+    file, line, kind, text = tuple(entry)[:4]
+    return file, line, kind, text, getattr(entry, "why", "") or ""
+
+
 def drift(ts: TokenSet, scanned: Scan) -> Drift:
     """What the code does against the system (see the module docstring)."""
     d = Drift(files=scanned.files, skipped=list(scanned.skipped),
               unknown_classes=list(scanned.unknown_classes),
-              not_read=[tuple(x) for x in getattr(scanned, "not_read", ())])
+              not_read=[_not_read(x) for x in getattr(scanned, "not_read", ())])
     usages = scanned.usages
     reached, todo = set(), [u.value for u in usages if u.kind == "token"]
     while todo:
@@ -218,17 +293,17 @@ def drift(ts: TokenSet, scanned: Scan) -> Drift:
         d.totals[t.type] = (total + 1, hit + (t.path in reached))
 
     held = _held(ts)
-    groups: Dict[Tuple[Tuple[str, ...], str], List[Usage]] = {}
+    groups: Dict[Tuple[str, str], List[Usage]] = {}
     for u in usages:
         if u.kind != "raw":
             continue
-        groups.setdefault((_kinds(u), _key(u.value)), []).append(u)
+        groups.setdefault((u.family, _key(u.value)), []).append(u)
         values = d.distinct.setdefault(u.family, [])
         if u.value not in values:
             values.append(u.value)
             d.first_seen[(u.family, u.value)] = u.where()
-    for (kinds, value), uses in groups.items():
-        tokens = [p for k in kinds for p in held.get((k, value), [])]
+    for uses in groups.values():
+        tokens = _holders(held, uses[0])
         if tokens:
             d.raw_with_token.append(RawWithToken(uses[0].value, tokens, uses))
         texts: List[str] = []
@@ -243,58 +318,68 @@ def drift(ts: TokenSet, scanned: Scan) -> Drift:
         if u.kind == "token":
             by_token.setdefault(u.value, []).append(u)
     for t in ts.tokens():
-        lie = _lie(t.path, by_token.get(t.path, []))
-        if lie:
-            d.lies.append(Lie(t.path, lie))
+        found = _lie(t.path, by_token.get(t.path, []))
+        if found:
+            message, every = found
+            (d.lies if every else d.strays).append(Lie(t.path, message))
     return d
 
 
+# (what the name is for, whether a use keeps that promise, how it breaks it)
 _Promise = Tuple[str, Callable[[Usage], bool], Callable[[Usage], str]]
 
 
-def _color_promise(named: str, cls: str, how: str) -> _Promise:
-    return (named, lambda u: u.family != "color" or _prop_class(u.prop) in (cls, ""),
-            lambda u: how.format(_prop_class(u.prop) or u.family))
+def _color_promise(named: str, against: Tuple[str, ...], how: str) -> _Promise:
+    """A color name broken only by a use in a class it clearly is not (a
+    text color as a background); a border use of a text or surface color is
+    common and not held against it."""
+    return (named, lambda u: u.family != "color" or _prop_class(u.prop) not in against,
+            lambda u: how.format(_prop_class(u.prop)))
 
 
 def _promise(words: List[str]) -> Optional[_Promise]:
-    """What a token's name promises about how it is used."""
+    """What a token's name promises about how it is used. "on" before a
+    word names the color on that surface: a foreground, whatever follows."""
+    if "on" in words[:-1]:
+        return _color_promise("the color on a surface", ("background",), "used as a {}")
     if any(w in words for w in TEXT_WORDS):
-        return _color_promise("text", "text", "used as a {}")
+        return _color_promise("text", ("background",), "used as a {}")
     if any(w in words for w in BG_WORDS):
-        return _color_promise("backgrounds", "background", "used for {} color")
+        return _color_promise("backgrounds", ("text",), "used for {} color")
     if any(w in words for w in LINE_WORDS):
-        return _color_promise("edges", "border", "used for {} color")
+        return _color_promise("edges", ("background",), "used as a {}")
     if any(w in words for w in SPACE_WORDS):
-        return ("spacing", lambda u: u.family == "space", lambda u: f"used for {u.family}")
+        return ("spacing", lambda u: u.family in ("space", ""),
+                lambda u: f"used for {u.family}")
     if any(w in words for w in RADIUS_WORDS):
-        return ("corners", lambda u: u.family == "radius", lambda u: f"used for {u.family}")
+        return ("corners", lambda u: u.family in ("radius", ""),
+                lambda u: f"used for {u.family}")
     return None
 
 
-def _lie(path: str, uses: List[Usage]) -> str:
-    """How a token's name misstates its uses, or "" when it does not."""
+def _lie(path: str, uses: List[Usage]) -> Optional[Tuple[str, bool]]:
+    """How a token's name misstates its uses, and whether every use does;
+    None when none does."""
     if not uses:
-        return ""
+        return None
     words = _words(path)
+    wrong: List[Tuple[Usage, str, str]] = []
     promise = _promise(words)
-    state = next((STATE_WORDS[w] for w in words if w in STATE_WORDS), None)
-    wrong: List[Tuple[Usage, str]] = []
     if promise:
-        _, ok, how = promise
-        wrong += [(u, how(u)) for u in uses if not ok(u)]
+        named, ok, how = promise
+        wrong += [(u, named, how(u)) for u in uses if not ok(u)]
+    state = next((STATE_WORDS[w] for w in words if w in STATE_WORDS), None)
     if state:
-        seen = [w for w, _ in wrong]
-        wrong += [(u, f"used outside {state}") for u in uses
+        seen = [w for w, _, _ in wrong]
+        wrong += [(u, state, f"used outside {state}") for u in uses
                   if state not in u.state.split(",") and u not in seen]
     if not wrong:
-        return ""
-    named = promise[0] if promise else next(w for w in words if w in STATE_WORDS)
-    first, how = wrong[0]
+        return None
+    first, named, how = wrong[0]
     more = f" and {len(wrong) - 1} more" if len(wrong) > 1 else ""
     good = len(uses) - len(wrong)
     return (f"is named for {named} but is {how} at {first.where()}{more}; {good} of its "
-            f"{len(uses)} uses match its name")
+            f"{len(uses)} uses match its name"), good == 0
 
 
 # ---------------------------------------------------------------- report
@@ -335,6 +420,7 @@ class Enhanced:
     def to_dict(self) -> Dict[str, Any]:
         d = self.drift
         m = self.mapping
+        report = self.check.report
         return {
             "source": self.imported.report.source.to_dict(),
             "import": {"entries": self.imported.report.entries,
@@ -351,11 +437,14 @@ class Enhanced:
                         "merge_notes": list(self.merge_notes)},
             "structure": list(self.structure),
             "gate": {"measured": self.measured,
-                     "passed": self.check.report.passed if self.measured else None,
+                     "passed": report.passed if self.measured else None,
+                     "pairs_checked": report.checked,
+                     "rules_checked": report.rules_checked,
                      "findings": list(self.findings),
                      "foundations": list(self.check.foundations)},
             "drift": None if d is None else {
                 "files": d.files,
+                "complete": d.complete,
                 "unused": list(d.unused),
                 "totals": {k: list(v) for k, v in d.totals.items()},
                 "raw_with_token": [{"value": r.value, "tokens": r.tokens,
@@ -365,12 +454,13 @@ class Enhanced:
                                "uses": [u.where() for u in s.uses]} for s in d.spellings],
                 "distinct": {k: list(v) for k, v in d.distinct.items()},
                 "lies": [{"token": x.token, "message": x.message} for x in d.lies],
+                "strays": [{"token": x.token, "message": x.message} for x in d.strays],
                 "missing": [{"value": x.value, "where": x.where} for x in d.missing],
                 "skipped": [{"file": f, "why": w} for f, w in d.skipped],
                 "unknown_classes": [{"where": f"{f}:{n}", "class": c}
                                     for f, n, c in d.unknown_classes],
-                "not_read": [{"where": f"{f}:{n}", "kind": k, "text": t}
-                             for f, n, k, t in d.not_read]},
+                "not_read": [{"where": f"{f}:{n}", "kind": k, "text": t, "why": w}
+                             for f, n, k, t, w in d.not_read]},
             "confirm": list(self.confirm),
             "decisions": list(self.decisions),
         }
@@ -390,15 +480,7 @@ class Enhanced:
         lines += ["", "## Structure", ""]
         lines += [f"- {_sentence(p)}" for p in self.structure] or ["No structural problem."]
         lines += ["", "## Gate", ""]
-        if not self.measured:
-            lines.append("No role is mapped, so the gate had nothing to measure and nothing "
-                         "here passed; map roles to your tokens in mapping.json to check them.")
-        else:
-            head = self.check.report.summary().splitlines()[0]
-            lines.append(f"Checked {_and(self.check.foundations)}: {head} Each finding names "
-                         f"our role, then your token in {s.path}.")
-            if self.findings:
-                lines += [""] + [f"- {f}" for f in self.findings]
+        lines += self._gate(s.path)
         lines += ["", "## What the code uses", ""]
         lines += self._code(s.path)
         lines += ["", "## For the owner to confirm", ""]
@@ -406,6 +488,21 @@ class Enhanced:
         lines += ["", "## Decisions made without you", ""]
         lines += [f"- {_sentence(c)}" for c in self.decisions] or ["None."]
         return "\n".join(lines) + "\n"
+
+    def _gate(self, source: str) -> List[str]:
+        if not self.measured:
+            return [("No role is mapped, so the gate had nothing to measure and nothing here "
+                     "passed; map roles to your tokens in mapping.json to check them.")]
+        report = self.check.report
+        head = report.summary().splitlines()[0]
+        line = f"Checked {_and(self.check.foundations)}: {head}"
+        if report.checked == 0:
+            line = (f"Checked {_and(self.check.foundations)}. No contrast pair was measured, "
+                    "since each needs both of its roles mapped, so the verdict covers the rule "
+                    f"checks only: {head}")
+        if self.findings:
+            line += f" Each finding names our role, then your token in {source}."
+        return [line] + ([""] + [f"- {f}" for f in self.findings] if self.findings else [])
 
     def _how(self) -> List[str]:
         m = self.mapping
@@ -418,7 +515,7 @@ class Enhanced:
                   "mapping.json to check more."), "",
                  "| Foundation | Mapped | Left out by you | Not mapped |", "|---|---|---|---|"]
         left, missing = set(self.left_out()), set(self.not_mapped())
-        per: Dict[str, List[str]] = {}
+        per: Dict[str, Tuple[int, List[str]]] = {}
         for f in FOUNDATIONS:
             roles = list(f.role_types)
             hit = sum(1 for r in roles if r in mapped)
@@ -426,18 +523,19 @@ class Enhanced:
             none = [r for r in roles if r in missing]
             lines.append(f"| {f.name} | {hit} of {len(roles)} | {out} | {len(none)} |")
             if none:
-                per[f.name] = none
+                per[f.name] = (len(roles), none)
         lines.append("")
         if left:
-            lines.append(f"- Left out by you ({len(left)}): {', '.join(self.left_out())}.")
+            lines.append(f"- Left out by you ({len(left)}): {_few(self.left_out())}.")
         if self.axes_left_out():
             lines.append(f"- Axes left out by you ({len(self.axes_left_out())}): "
                          f"{', '.join(self.axes_left_out())}.")
         if missing:
             lines.append(f"- Not mapped at all ({len(missing)}); map each one you have a "
                          "token for, or write {\"token\": null, \"by\": \"owner\"} to keep it "
-                         "out:")
-            lines += [f"  - {name}: {', '.join(roles)}" for name, roles in per.items()]
+                         "out. The JSON report lists every one:")
+            lines += [f"  - {name}: {len(none)} of {total}, such as {_few(none, 2)}"
+                      for name, (total, none) in per.items()]
         else:
             lines.append("- Every role is named in the mapping.")
         return lines
@@ -447,48 +545,80 @@ class Enhanced:
         if d is None:
             return [("No code was scanned, so nothing here says which tokens are used; pass "
                      "the folders that hold the product's code with --scan.")]
-        lines = [f"Read {_count(d.files, 'file', 'files')}.", ""]
+        if d.files == 0:
+            return [("No file was read, so nothing was measured: no token is known to be used "
+                     "or unused. Pass the folders that hold the product's code with --scan.")] \
+                + self._unread(d)
+        read = f"the {_count(d.files, 'file', 'files')} read"
+        gaps = []
+        if d.skipped:
+            gaps.append(f"{_count(len(d.skipped), 'file was', 'files were')} not read")
+        if d.not_read:
+            gaps.append(f"{_count(len(d.not_read), 'place was', 'places were')} not measured")
+        lines = [f"Read {_count(d.files, 'file', 'files')}."]
+        if gaps:
+            lines[0] += (f" {_and(gaps).capitalize()}; each is listed at the end of this "
+                         "section, and what is below covers only what was read.")
+        lines.append("")
         total = sum(t for t, _ in d.totals.values())
         if d.unused:
-            lines.append(f"- {len(d.unused)} of {total} tokens are never used: "
-                         f"{', '.join(d.unused)}. They are defined in {source}; if the scan "
-                         "covered all the product's code, remove them or use them, and if not, "
-                         "scan the rest.")
+            line = (f"- {len(d.unused)} of {total} tokens were not found in {read}: "
+                    f"{_few(d.unused, 12)}. They are defined in {source}; ")
+            if d.complete:
+                line += ("if no code outside the scan uses them, removing them is your call; "
+                         "scan any other code first.")
+            else:
+                line += (f"{_and(gaps)} (listed below), so scan those too or confirm by hand "
+                         "before removing any.")
+            lines.append(line)
         for kind, (count, hit) in d.totals.items():
-            lines.append(f"- {kind}: {hit} of {count} tokens used.")
+            lines.append(f"- {kind}: {hit} of {count} tokens found in use.")
         for r in d.raw_with_token:
-            wheres = ", ".join(u.where() for u in r.uses)
+            wheres = _few([u.where() for u in r.uses])
             lines.append(f"- {r.value} is written raw {len(r.uses)} "
                          f"time{'' if len(r.uses) == 1 else 's'} ({wheres}); the system "
-                         f"holds it as {_and(r.tokens)}, so use a token.")
+                         f"holds it as {_and_few(r.tokens, 3)}, so use a token.")
         for sp in d.spellings:
-            first = {}
+            first: Dict[str, str] = {}
             for u in sp.uses:
                 first.setdefault(u.text, u.where())
-            written = ", ".join(f"{t} at {first[t]}" for t in sp.texts)
+            written = _few([f"{t} at {first[t]}" for t in sp.texts])
             lines.append(f"- {sp.value} is written {len(sp.texts)} ways: {written}; pick one, "
                          "or better, use a token that holds it.")
         for family, values in d.distinct.items():
             if len(values) > 1:
-                seen = _and([d.first_seen[(family, v)] for v in values])
-                lines.append(f"- {family} is written as {len(values)} raw values: "
-                             f"{', '.join(values)}. First seen at {seen}; move each onto a "
-                             f"{family} token, or add one for a value the design keeps.")
+                shown = _few(values, 12)
+                seen = _few([d.first_seen[(family, v)] for v in values], 3)
+                lines.append(f"- {family} is written as {len(values)} raw values: {shown}. "
+                             f"First seen at {seen}; move each onto a {family} token, or add "
+                             "one for a value the design keeps.")
         for lie in d.lies:
             lines.append(f"- {lie.token} {lie.message}; rename it for how it is used, or use a "
                          "token named for that use there.")
+        for stray in d.strays:
+            lines.append(f"- {stray.token} {stray.message}; where it does not, use a token "
+                         "named for that use.")
         for miss in d.missing:
             lines.append(f"- {miss.where} references {miss.value}, which the system does not "
                          "have; add it to the system, or point the reference at a token it "
                          "has.")
+        return lines + self._unread(d)
+
+    @staticmethod
+    def _unread(d: Drift) -> List[str]:
+        """What the scan did not read or measure, each with the fix."""
+        lines = []
         for file, why in d.skipped:
-            why = f"it {why}" if why.startswith(("is ", "cannot ")) else why
-            lines.append(f"- {file} was not read: {_sentence(why)}")
-        for file, line, kind, written in d.not_read:
-            lines.append(f"- {file}:{line} writes {_brief(written)} ({kind}), which the scan "
-                         "does not measure, so nothing above counts it; check it by hand, or "
-                         "write it in a form the scan reads (a longhand property or a var() "
-                         "to a token).")
+            # The scanner writes a reason as what the file is or cannot do.
+            lines.append(f"- {file} {_sentence(why)}" if why[:1].islower()
+                         else f"- {file} was not read: {_sentence(why)}")
+        for file, line, kind, written, why in d.not_read:
+            if why:
+                lines.append(f"- {file}:{line} was not measured ({kind}): {_sentence(why)}")
+            else:
+                lines.append(f"- {file}:{line} writes {_brief(written)} ({kind}), which the "
+                             "scan does not measure; check it by hand, or write it in a form "
+                             "the scan reads (a longhand property or a var() to a token).")
         for file, line, cls in d.unknown_classes:
             lines.append(f"- {file}:{line} uses the class {cls}, which names no token in the "
                          "system; add the token to the system, or use a class that names one "
@@ -539,13 +669,19 @@ def _confirm(mapping: Mapping, checked: TokenSet, foundations: Sequence[str]) ->
     return out
 
 
-def _owner_out(note: str, mapping: Mapping) -> bool:
-    """Whether a view note only restates a "not mapped" entry the owner
-    wrote (the report lists those under How it was checked)."""
-    return any(note.startswith(f"{r} is not checked: the owner left it out")
-               for r, m in mapping.roles.items() if m.token is None) \
-        or any(note.startswith(f"the axis {a} is not checked: the owner left it out")
-               for a, m in mapping.axes.items() if m.source is None)
+def _owner_notes(mapping: Mapping, name: str) -> List[str]:
+    """The notes view() gives for the owner's "not mapped" entries, which
+    the report lists itself under How it was checked."""
+    return [ROLE_LEFT_OUT.format(role=r, name=name)
+            for r, m in mapping.roles.items() if m.token is None] \
+        + [AXIS_LEFT_OUT.format(axis=a, name=name)
+           for a, m in mapping.axes.items() if m.source is None]
+
+
+def _finding(text: str, mapping: Mapping) -> str:
+    """A gate message in the system's names; a set with no mode axis
+    prints an empty context, which is dropped."""
+    return their_names(text.replace(" ()", ""), mapping)
 
 
 def enhance(imported: Imported, mapping: Mapping, scanned: Optional[Scan] = None, *,
@@ -561,9 +697,8 @@ def enhance(imported: Imported, mapping: Mapping, scanned: Optional[Scan] = None
     structure = ([p.message for p in validate(ts)] if checked is not ts
                  else [p.message for p in result.problems])
     report = result.report
-    findings = [their_names(_MOVE.sub(_THEIR_FIX, f.message()), mapping)
-                for f in report.findings]
-    findings += [their_names(f"{c.message} (in {c.mode})" if c.mode else c.message, mapping)
+    findings = [_finding(_MOVE.sub(_THEIR_FIX, f.message()), mapping) for f in report.findings]
+    findings += [_finding(f"{c.message} (in {c.mode})" if c.mode else c.message, mapping)
                  for c in report.failures]
     decisions = [f"{r} is mapped to {m.token} by name only; confirm it in {mapping_name}."
                  for r, m in mapping.roles.items() if m.by == "name" and m.token is not None]
@@ -583,7 +718,8 @@ def enhance(imported: Imported, mapping: Mapping, scanned: Optional[Scan] = None
     if noted:
         decisions.append(f"{_count(noted, 'entry was', 'entries were')} read with a note; the "
                          "import report lists each one.")
-    decisions += [n for n in notes if not _owner_out(n, mapping)]
+    owner = set(_owner_notes(mapping, mapping_name))
+    decisions += [n for n in notes if n not in owner]
     return Enhanced(imported, mapping, result, structure,
                     drift(ts, scanned) if scanned is not None else None,
                     _confirm(mapping, checked, result.foundations), decisions, findings,
