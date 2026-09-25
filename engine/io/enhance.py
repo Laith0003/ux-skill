@@ -1,0 +1,590 @@
+"""Measure before defining: the enhance report.
+
+enhance() reads an imported system (in its own names), checks it through
+the naming adapter's view, and, given a scan of the product's code,
+measures what the code actually does against it:
+
+- tokens nothing uses, directly or through a token that is used;
+- raw values a token already holds (use the token);
+- values written many ways (#fff, #FFF and white), and how many raw
+  values each family carries (a radius written eleven ways);
+- names that lie: a token named for text used as a background, or named
+  for hover used outside hover;
+- references to tokens the system does not have, and what the scan could
+  not measure (files it skipped, values it saw but does not read, such as
+  a font shorthand, and classes that name no token).
+
+The report says how many of the engine's roles the mapping covers, which
+ones the owner left out and which ones are not mapped at all, so a mapping
+that maps nothing never passes as a clean gate. Then what the owner should
+confirm (reading faces, breakpoints, modes the mapping lacks) and every
+decision the engine made without them (mappings by name, entries a merge
+proposed, values read with a note), so they can reverse it.
+
+The system is fixed input: the report measures and proposes, and never
+changes a value, refills an entry the owner left out, or writes a file.
+"""
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass, field
+from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
+
+from engine.foundations.build import FOUNDATIONS, SystemCheck, check_system
+from engine.foundations.modes import AXES
+from engine.foundations.tokens import AliasError, TokenSet, alias_target, is_alias
+from engine.foundations.validate import validate
+from engine.io.adapter import ROLE_TYPES, Mapping, their_names, view
+from engine.io.report import Imported
+from engine.io.scan import Scan, Usage, canonical
+
+# Family of a use -> the token type that can hold its value, when its
+# canonical form does not say (a color is #..., a length px, a time ms).
+FAMILY_TYPES = {"color": "color", "space": "dimension", "radius": "dimension",
+                "border": "dimension", "type-size": "dimension", "tracking": "dimension",
+                "leading": "number", "weight": "fontWeight", "z": "number",
+                "duration": "duration", "motion": "cubicBezier", "shadow": "shadow",
+                "font": "fontFamily"}
+# Name words and the use they promise.
+TEXT_WORDS = ("text", "fg", "foreground")
+BG_WORDS = ("bg", "background", "surface", "canvas", "backdrop")
+LINE_WORDS = ("border", "line", "stroke", "outline", "divider", "ring", "separator")
+SPACE_WORDS = ("space", "spacing", "gap", "padding", "margin", "gutter", "inset")
+RADIUS_WORDS = ("radius", "rounded", "corner")
+STATE_WORDS = {"hover": "hover", "pressed": "active", "active": "active", "focus": "focus",
+               "disabled": "disabled"}
+_BG_PROPS = re.compile(r"background(-color)?$|bg$")
+_TEXT_PROPS = re.compile(r"(color|caret-color|fill|text-decoration-color)$|text$")
+_LINE_PROPS = re.compile(r"(border|outline|ring|divide)(-.*)?$|box-shadow$")
+_NUMBER = re.compile(r"-?\d+(\.\d+)?$")
+# The engine's own fix on a contrast finding (move to a step of its ramp,
+# and a hint about its seed) does not apply to a system it did not make.
+_MOVE = re.compile(r" Move \S+ to a step with more contrast against \S+\.(?: .*)?$")
+_THEIR_FIX = (" Change the value of one of them in your system, or map the role to a token "
+              "with more contrast.")
+READING_ROLES = ("type.text.body", "type.text.body-small", "type.text.fine")
+
+
+def _and(items: Sequence[str]) -> str:
+    items = list(items)
+    return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1]
+
+
+def _count(n: int, one: str, many: str) -> str:
+    return f"{n} {one if n == 1 else many}"
+
+
+def _brief(text: str, limit: int = 60) -> str:
+    """Written text on one line, cut at `limit` characters."""
+    flat = " ".join(str(text).split())
+    return flat if len(flat) <= limit else flat[:limit - 3] + "..."
+
+
+def _sentence(text: str) -> str:
+    return text if text.endswith(".") else text + "."
+
+
+def _words(path: str) -> List[str]:
+    spaced = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", path)
+    return [w.lower() for w in re.split(r"[.\-/_ ]+", spaced) if w]
+
+
+def _prop_class(prop: str) -> str:
+    """How a use applies a color: background, text or border. A Tailwind
+    utility (bg-ink) is read by its prefix."""
+    for candidate in (prop, prop.split("-", 1)[0]):
+        if _BG_PROPS.match(candidate):
+            return "background"
+        if _LINE_PROPS.match(candidate):
+            return "border"
+        if _TEXT_PROPS.match(candidate):
+            return "text"
+    return ""
+
+
+def _key(value: str) -> str:
+    """A canonical value as a lookup key: hex colors in one case."""
+    return value.upper() if value.startswith("#") else value
+
+
+def _kinds(u: Usage) -> Tuple[str, ...]:
+    """The token types that could hold a raw use's value."""
+    if u.value.startswith("#"):
+        return ("color",)
+    if u.value.endswith("px"):
+        return ("dimension",)
+    if u.value.endswith("ms"):
+        return ("duration",)
+    if _NUMBER.match(u.value):
+        return ("number", "fontWeight")
+    kind = FAMILY_TYPES.get(u.family)
+    return (kind,) if kind else ()
+
+
+@dataclass(frozen=True)
+class RawWithToken:
+    value: str
+    tokens: List[str]
+    uses: List[Usage]
+
+
+@dataclass(frozen=True)
+class Spelling:
+    value: str
+    texts: List[str]
+    uses: List[Usage]
+
+
+@dataclass(frozen=True)
+class Lie:
+    token: str
+    message: str
+
+
+@dataclass(frozen=True)
+class Missing:
+    value: str
+    where: str
+
+
+@dataclass
+class Drift:
+    unused: List[str] = field(default_factory=list)
+    # type -> (tokens, tokens used)
+    totals: Dict[str, Tuple[int, int]] = field(default_factory=dict)
+    raw_with_token: List[RawWithToken] = field(default_factory=list)
+    spellings: List[Spelling] = field(default_factory=list)
+    # family -> the raw values it carries, in the order first seen
+    distinct: Dict[str, List[str]] = field(default_factory=dict)
+    lies: List[Lie] = field(default_factory=list)
+    missing: List[Missing] = field(default_factory=list)
+    # (family, value) -> where it is first written raw
+    first_seen: Dict[Tuple[str, str], str] = field(default_factory=dict)
+    # What the scan read and what it could not.
+    files: int = 0
+    skipped: List[Tuple[str, str]] = field(default_factory=list)
+    unknown_classes: List[Tuple[str, int, str]] = field(default_factory=list)
+    # (file, line, kind, text) for values the scan saw but could not measure
+    not_read: List[Tuple[str, int, str, str]] = field(default_factory=list)
+
+
+def _refs(ts: TokenSet, path: str) -> List[str]:
+    t = ts.get(path)
+    out: List[str] = []
+
+    def leaves(v: Any) -> None:
+        if isinstance(v, dict):
+            for x in v.values():
+                leaves(x)
+        elif isinstance(v, list):
+            for x in v:
+                leaves(x)
+        elif is_alias(v):
+            out.append(alias_target(v))
+    for v in [t.value, *t.modes.values()]:
+        leaves(v)
+    return out
+
+
+def _held(ts: TokenSet) -> Dict[Tuple[str, str], List[str]]:
+    """(type, canonical value) -> the tokens that hold it, semantic ones
+    first."""
+    held: Dict[Tuple[str, str], List[str]] = {}
+    for t in sorted(ts.tokens(), key=lambda t: t.layer != "semantic"):
+        try:
+            value = canonical(t.type, ts.resolve(t.path))
+        except (AliasError, KeyError, TypeError, ValueError):
+            continue
+        held.setdefault((t.type, _key(value)), []).append(t.path)
+    return held
+
+
+def drift(ts: TokenSet, scanned: Scan) -> Drift:
+    """What the code does against the system (see the module docstring)."""
+    d = Drift(files=scanned.files, skipped=list(scanned.skipped),
+              unknown_classes=list(scanned.unknown_classes),
+              not_read=[tuple(x) for x in getattr(scanned, "not_read", ())])
+    usages = scanned.usages
+    reached, todo = set(), [u.value for u in usages if u.kind == "token"]
+    while todo:
+        path = todo.pop()
+        if path in reached or not ts.has(path):
+            continue
+        reached.add(path)
+        todo += _refs(ts, path)
+    d.unused = [t.path for t in ts.tokens() if t.path not in reached]
+    for t in ts.tokens():
+        total, hit = d.totals.get(t.type, (0, 0))
+        d.totals[t.type] = (total + 1, hit + (t.path in reached))
+
+    held = _held(ts)
+    groups: Dict[Tuple[Tuple[str, ...], str], List[Usage]] = {}
+    for u in usages:
+        if u.kind != "raw":
+            continue
+        groups.setdefault((_kinds(u), _key(u.value)), []).append(u)
+        values = d.distinct.setdefault(u.family, [])
+        if u.value not in values:
+            values.append(u.value)
+            d.first_seen[(u.family, u.value)] = u.where()
+    for (kinds, value), uses in groups.items():
+        tokens = [p for k in kinds for p in held.get((k, value), [])]
+        if tokens:
+            d.raw_with_token.append(RawWithToken(uses[0].value, tokens, uses))
+        texts: List[str] = []
+        for u in uses:
+            if u.text not in texts:
+                texts.append(u.text)
+        if len(texts) > 1:
+            d.spellings.append(Spelling(uses[0].value, texts, uses))
+    d.missing = [Missing(u.value, u.where()) for u in usages if u.kind == "missing"]
+    by_token: Dict[str, List[Usage]] = {}
+    for u in usages:
+        if u.kind == "token":
+            by_token.setdefault(u.value, []).append(u)
+    for t in ts.tokens():
+        lie = _lie(t.path, by_token.get(t.path, []))
+        if lie:
+            d.lies.append(Lie(t.path, lie))
+    return d
+
+
+_Promise = Tuple[str, Callable[[Usage], bool], Callable[[Usage], str]]
+
+
+def _color_promise(named: str, cls: str, how: str) -> _Promise:
+    return (named, lambda u: u.family != "color" or _prop_class(u.prop) in (cls, ""),
+            lambda u: how.format(_prop_class(u.prop) or u.family))
+
+
+def _promise(words: List[str]) -> Optional[_Promise]:
+    """What a token's name promises about how it is used."""
+    if any(w in words for w in TEXT_WORDS):
+        return _color_promise("text", "text", "used as a {}")
+    if any(w in words for w in BG_WORDS):
+        return _color_promise("backgrounds", "background", "used for {} color")
+    if any(w in words for w in LINE_WORDS):
+        return _color_promise("edges", "border", "used for {} color")
+    if any(w in words for w in SPACE_WORDS):
+        return ("spacing", lambda u: u.family == "space", lambda u: f"used for {u.family}")
+    if any(w in words for w in RADIUS_WORDS):
+        return ("corners", lambda u: u.family == "radius", lambda u: f"used for {u.family}")
+    return None
+
+
+def _lie(path: str, uses: List[Usage]) -> str:
+    """How a token's name misstates its uses, or "" when it does not."""
+    if not uses:
+        return ""
+    words = _words(path)
+    promise = _promise(words)
+    state = next((STATE_WORDS[w] for w in words if w in STATE_WORDS), None)
+    wrong: List[Tuple[Usage, str]] = []
+    if promise:
+        _, ok, how = promise
+        wrong += [(u, how(u)) for u in uses if not ok(u)]
+    if state:
+        seen = [w for w, _ in wrong]
+        wrong += [(u, f"used outside {state}") for u in uses
+                  if state not in u.state.split(",") and u not in seen]
+    if not wrong:
+        return ""
+    named = promise[0] if promise else next(w for w in words if w in STATE_WORDS)
+    first, how = wrong[0]
+    more = f" and {len(wrong) - 1} more" if len(wrong) > 1 else ""
+    good = len(uses) - len(wrong)
+    return (f"is named for {named} but is {how} at {first.where()}{more}; {good} of its "
+            f"{len(uses)} uses match its name")
+
+
+# ---------------------------------------------------------------- report
+
+
+@dataclass
+class Enhanced:
+    imported: Imported
+    mapping: Mapping
+    check: SystemCheck
+    structure: List[str]
+    drift: Optional[Drift]
+    confirm: List[str]
+    decisions: List[str]
+    findings: List[str]
+    merge_notes: List[str] = field(default_factory=list)
+
+    def mapped(self) -> List[str]:
+        return [r for r, m in self.mapping.roles.items() if m.token is not None]
+
+    def left_out(self) -> List[str]:
+        """Roles the owner kept out of the check with a "not mapped" entry."""
+        return [r for r, m in self.mapping.roles.items() if m.token is None]
+
+    def not_mapped(self) -> List[str]:
+        """Roles the mapping does not name at all."""
+        return [r for r in ROLE_TYPES if r not in self.mapping.roles]
+
+    def axes_left_out(self) -> List[str]:
+        return [a for a, m in self.mapping.axes.items() if m.source is None]
+
+    @property
+    def measured(self) -> bool:
+        """Whether the gate measured anything: a mapping that maps no role
+        leaves it nothing, and that is never a pass."""
+        return bool(self.check.foundations)
+
+    def to_dict(self) -> Dict[str, Any]:
+        d = self.drift
+        m = self.mapping
+        return {
+            "source": self.imported.report.source.to_dict(),
+            "import": {"entries": self.imported.report.entries,
+                       "tokens": self.imported.report.tokens,
+                       "not_read": len(self.imported.report.not_read)},
+            "mapping": {"roles": {r: x.token for r, x in m.roles.items()},
+                        "axes": {a: x.source for a, x in m.axes.items()},
+                        "mapped": len(self.mapped()), "of": len(ROLE_TYPES),
+                        "by_name": [r for r, x in m.roles.items()
+                                    if x.token is not None and x.by == "name"],
+                        "left_out": self.left_out(),
+                        "axes_left_out": self.axes_left_out(),
+                        "not_mapped": self.not_mapped(),
+                        "merge_notes": list(self.merge_notes)},
+            "structure": list(self.structure),
+            "gate": {"measured": self.measured,
+                     "passed": self.check.report.passed if self.measured else None,
+                     "findings": list(self.findings),
+                     "foundations": list(self.check.foundations)},
+            "drift": None if d is None else {
+                "files": d.files,
+                "unused": list(d.unused),
+                "totals": {k: list(v) for k, v in d.totals.items()},
+                "raw_with_token": [{"value": r.value, "tokens": r.tokens,
+                                    "uses": [u.where() for u in r.uses]}
+                                   for r in d.raw_with_token],
+                "spellings": [{"value": s.value, "texts": s.texts,
+                               "uses": [u.where() for u in s.uses]} for s in d.spellings],
+                "distinct": {k: list(v) for k, v in d.distinct.items()},
+                "lies": [{"token": x.token, "message": x.message} for x in d.lies],
+                "missing": [{"value": x.value, "where": x.where} for x in d.missing],
+                "skipped": [{"file": f, "why": w} for f, w in d.skipped],
+                "unknown_classes": [{"where": f"{f}:{n}", "class": c}
+                                    for f, n, c in d.unknown_classes],
+                "not_read": [{"where": f"{f}:{n}", "kind": k, "text": t}
+                             for f, n, k, t in d.not_read]},
+            "confirm": list(self.confirm),
+            "decisions": list(self.decisions),
+        }
+
+    def markdown(self) -> str:
+        report = self.imported.report
+        s = report.source
+        lines = ["# Enhance report", "",
+                 ("This report measures the system and the code as they are. It changes "
+                  "nothing; the owner decides what should be."), "",
+                 "## What was read", "",
+                 (f"{s.path} ({s.format}, sha256 {s.sha256[:12]}): {report.tokens} tokens "
+                  f"from {report.entries} entries, {len(report.not_read)} not read. The import "
+                  "report lists each entry."), "",
+                 "## How it was checked", ""]
+        lines += self._how()
+        lines += ["", "## Structure", ""]
+        lines += [f"- {_sentence(p)}" for p in self.structure] or ["No structural problem."]
+        lines += ["", "## Gate", ""]
+        if not self.measured:
+            lines.append("No role is mapped, so the gate had nothing to measure and nothing "
+                         "here passed; map roles to your tokens in mapping.json to check them.")
+        else:
+            head = self.check.report.summary().splitlines()[0]
+            lines.append(f"Checked {_and(self.check.foundations)}: {head} Each finding names "
+                         f"our role, then your token in {s.path}.")
+            if self.findings:
+                lines += [""] + [f"- {f}" for f in self.findings]
+        lines += ["", "## What the code uses", ""]
+        lines += self._code(s.path)
+        lines += ["", "## For the owner to confirm", ""]
+        lines += [f"- {c}" for c in self.confirm] or ["Nothing."]
+        lines += ["", "## Decisions made without you", ""]
+        lines += [f"- {_sentence(c)}" for c in self.decisions] or ["None."]
+        return "\n".join(lines) + "\n"
+
+    def _how(self) -> List[str]:
+        m = self.mapping
+        mapped = self.mapped()
+        by_name = sum(1 for r in mapped if m.roles[r].by == "name")
+        axes = [a for a, x in m.axes.items() if x.source is not None]
+        lines = [(f"Mapped {len(mapped)} of {len(ROLE_TYPES)} roles the engine checks "
+                  f"({by_name} by name, {len(mapped) - by_name} by you), and {len(axes)} of "
+                  f"{len(AXES)} mode axes. Only mapped roles are measured; map more in "
+                  "mapping.json to check more."), "",
+                 "| Foundation | Mapped | Left out by you | Not mapped |", "|---|---|---|---|"]
+        left, missing = set(self.left_out()), set(self.not_mapped())
+        per: Dict[str, List[str]] = {}
+        for f in FOUNDATIONS:
+            roles = list(f.role_types)
+            hit = sum(1 for r in roles if r in mapped)
+            out = sum(1 for r in roles if r in left)
+            none = [r for r in roles if r in missing]
+            lines.append(f"| {f.name} | {hit} of {len(roles)} | {out} | {len(none)} |")
+            if none:
+                per[f.name] = none
+        lines.append("")
+        if left:
+            lines.append(f"- Left out by you ({len(left)}): {', '.join(self.left_out())}.")
+        if self.axes_left_out():
+            lines.append(f"- Axes left out by you ({len(self.axes_left_out())}): "
+                         f"{', '.join(self.axes_left_out())}.")
+        if missing:
+            lines.append(f"- Not mapped at all ({len(missing)}); map each one you have a "
+                         "token for, or write {\"token\": null, \"by\": \"owner\"} to keep it "
+                         "out:")
+            lines += [f"  - {name}: {', '.join(roles)}" for name, roles in per.items()]
+        else:
+            lines.append("- Every role is named in the mapping.")
+        return lines
+
+    def _code(self, source: str) -> List[str]:
+        d = self.drift
+        if d is None:
+            return [("No code was scanned, so nothing here says which tokens are used; pass "
+                     "the folders that hold the product's code with --scan.")]
+        lines = [f"Read {_count(d.files, 'file', 'files')}.", ""]
+        total = sum(t for t, _ in d.totals.values())
+        if d.unused:
+            lines.append(f"- {len(d.unused)} of {total} tokens are never used: "
+                         f"{', '.join(d.unused)}. They are defined in {source}; if the scan "
+                         "covered all the product's code, remove them or use them, and if not, "
+                         "scan the rest.")
+        for kind, (count, hit) in d.totals.items():
+            lines.append(f"- {kind}: {hit} of {count} tokens used.")
+        for r in d.raw_with_token:
+            wheres = ", ".join(u.where() for u in r.uses)
+            lines.append(f"- {r.value} is written raw {len(r.uses)} "
+                         f"time{'' if len(r.uses) == 1 else 's'} ({wheres}); the system "
+                         f"holds it as {_and(r.tokens)}, so use a token.")
+        for sp in d.spellings:
+            first = {}
+            for u in sp.uses:
+                first.setdefault(u.text, u.where())
+            written = ", ".join(f"{t} at {first[t]}" for t in sp.texts)
+            lines.append(f"- {sp.value} is written {len(sp.texts)} ways: {written}; pick one, "
+                         "or better, use a token that holds it.")
+        for family, values in d.distinct.items():
+            if len(values) > 1:
+                seen = _and([d.first_seen[(family, v)] for v in values])
+                lines.append(f"- {family} is written as {len(values)} raw values: "
+                             f"{', '.join(values)}. First seen at {seen}; move each onto a "
+                             f"{family} token, or add one for a value the design keeps.")
+        for lie in d.lies:
+            lines.append(f"- {lie.token} {lie.message}; rename it for how it is used, or use a "
+                         "token named for that use there.")
+        for miss in d.missing:
+            lines.append(f"- {miss.where} references {miss.value}, which the system does not "
+                         "have; add it to the system, or point the reference at a token it "
+                         "has.")
+        for file, why in d.skipped:
+            why = f"it {why}" if why.startswith(("is ", "cannot ")) else why
+            lines.append(f"- {file} was not read: {_sentence(why)}")
+        for file, line, kind, written in d.not_read:
+            lines.append(f"- {file}:{line} writes {_brief(written)} ({kind}), which the scan "
+                         "does not measure, so nothing above counts it; check it by hand, or "
+                         "write it in a form the scan reads (a longhand property or a var() "
+                         "to a token).")
+        for file, line, cls in d.unknown_classes:
+            lines.append(f"- {file}:{line} uses the class {cls}, which names no token in the "
+                         "system; add the token to the system, or use a class that names one "
+                         "it has.")
+        return lines
+
+
+def _reading_face(checked: TokenSet, role: str) -> Optional[str]:
+    try:
+        face = checked.resolve(role)["fontFamily"]
+    except (AliasError, KeyError, TypeError, ValueError):
+        return None
+    return face if isinstance(face, str) else (face[0] if face else None)
+
+
+def _confirm(mapping: Mapping, checked: TokenSet, foundations: Sequence[str]) -> List[str]:
+    out = []
+    for role in READING_ROLES:
+        first = _reading_face(checked, role) if checked.has(role) else None
+        if first:
+            out.append(f"{role} (your {mapping.roles[role].token}) is set in {first}; confirm "
+                       "it is a face made for running text, not a display face."
+                       if role in mapping.roles else
+                       f"{role} is set in {first}; confirm it is a face made for running "
+                       "text, not a display face.")
+    breakpoints = [r for r in ROLE_TYPES if r.startswith("layout.breakpoint.")
+                   and checked.has(r)]
+    if breakpoints:
+        values = []
+        for r in breakpoints:
+            v = checked.resolve(r)
+            values.append(f"{r} {v['value']:g}{v['unit']}" if isinstance(v, dict) else r)
+        checked_how = (" (the gate checked reflow at 320px against them)"
+                       if "layout" in foundations else "")
+        out.append(f"The breakpoints are {', '.join(values)}; confirm they are the ones the "
+                   f"product ships{checked_how}.")
+    else:
+        out.append("No breakpoint is mapped, so reflow at 320px was not checked; map "
+                   "layout.breakpoint.tablet to your first breakpoint to check it.")
+    # An axis the owner left out on purpose is not asked for again.
+    if "motion" not in mapping.axes:
+        out.append("The system has no reduced-motion mode in the mapping, so the motion checks "
+                   "under reduced motion did not run; if it has one, map it as the motion axis "
+                   "in mapping.json.")
+    if "scheme" not in mapping.axes:
+        out.append("The system has no dark mode in the mapping, so dark was not checked; if it "
+                   "has one, map it as the scheme axis in mapping.json.")
+    return out
+
+
+def _owner_out(note: str, mapping: Mapping) -> bool:
+    """Whether a view note only restates a "not mapped" entry the owner
+    wrote (the report lists those under How it was checked)."""
+    return any(note.startswith(f"{r} is not checked: the owner left it out")
+               for r, m in mapping.roles.items() if m.token is None) \
+        or any(note.startswith(f"the axis {a} is not checked: the owner left it out")
+               for a, m in mapping.axes.items() if m.source is None)
+
+
+def enhance(imported: Imported, mapping: Mapping, scanned: Optional[Scan] = None, *,
+            merge_notes: Sequence[str] = (), mapping_name: str = "mapping.json") -> Enhanced:
+    """The enhance report on an imported system (see the module docstring).
+    `merge_notes` are the notes adapter.merge() gave when the mapping was
+    merged with the owner's file; `mapping_name` is that file, as the
+    messages name it. Raises InputError (from view) for a mapping that
+    names a token or mode the system lacks."""
+    ts = imported.tokens
+    checked, notes = view(ts, mapping, mapping_name)
+    result = check_system(checked, structure=checked is ts)
+    structure = ([p.message for p in validate(ts)] if checked is not ts
+                 else [p.message for p in result.problems])
+    report = result.report
+    findings = [their_names(_MOVE.sub(_THEIR_FIX, f.message()), mapping)
+                for f in report.findings]
+    findings += [their_names(f"{c.message} (in {c.mode})" if c.mode else c.message, mapping)
+                 for c in report.failures]
+    decisions = [f"{r} is mapped to {m.token} by name only; confirm it in {mapping_name}."
+                 for r, m in mapping.roles.items() if m.by == "name" and m.token is not None]
+    for axis, m in mapping.axes.items():
+        if m.by == "name" and m.source is not None:
+            values = ""
+            if any(ours != theirs for ours, theirs in m.values.items()):
+                values = " (" + ", ".join(f"{ours} is {theirs}"
+                                          for ours, theirs in m.values.items()) + ")"
+            decisions.append(f"{axis} is read from {m.source} by name only{values}; confirm "
+                             f"it in {mapping_name}.")
+    decisions += list(merge_notes)
+    renamed, noted = len(imported.report.renamed), len(imported.report.notes)
+    if renamed:
+        decisions.append(f"{_count(renamed, 'name was', 'names were')} changed on the way in; "
+                         "the import report lists each one.")
+    if noted:
+        decisions.append(f"{_count(noted, 'entry was', 'entries were')} read with a note; the "
+                         "import report lists each one.")
+    decisions += [n for n in notes if not _owner_out(n, mapping)]
+    return Enhanced(imported, mapping, result, structure,
+                    drift(ts, scanned) if scanned is not None else None,
+                    _confirm(mapping, checked, result.foundations), decisions, findings,
+                    list(merge_notes))
