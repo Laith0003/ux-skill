@@ -1,0 +1,83 @@
+/* An invented Tailwind 4 app stylesheet: the theme in @theme, the scheme
+   colors in @layer base under :root and .dark, and one value set through
+   the dark variant nested in a rule. */
+@import "tailwindcss";
+@plugin "./forms.js";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-*: initial;
+  --font-*: initial;
+  --color-white: #fff;
+  --color-black: #000;
+  --color-moss-100: oklch(0.95 0.03 150);
+  --color-moss-500: oklch(0.62 0.19 150);
+  --color-moss-700: oklch(0.45 0.12 150);
+  --color-ink-50: oklch(0.98 0.005 100);
+  --color-ink-900: oklch(0.22 0.01 280);
+
+  --font-sans: "Body Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Code Mono", ui-monospace, monospace;
+
+  --text-xs: 0.75rem;
+  --text-xs--line-height: calc(1 / 0.75);
+  --text-base: 1rem;
+  --text-base--line-height: 1.5;
+
+  --spacing: 0.25rem;
+  --breakpoint-md: 48rem;
+  --radius-lg: 0.5rem;
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --animate-wiggle: wiggle 1s ease-in-out infinite;
+
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+  --default-transition-duration: 150ms;
+}
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-on-surface: var(--on-surface);
+  --color-accent: var(--accent);
+}
+
+@layer base {
+  :root {
+    --surface: var(--color-ink-50);
+    --on-surface: var(--color-ink-900);
+    --accent: var(--color-moss-700);
+  }
+
+  .dark {
+    --surface: var(--color-ink-900);
+    --on-surface: var(--color-ink-50);
+  }
+
+  body {
+    background: var(--color-surface);
+    color: var(--color-on-surface);
+  }
+}
+
+@layer theme {
+  :root {
+    @variant dark {
+      --accent: var(--color-moss-100);
+    }
+  }
+}
+
+@layer components {
+  .card {
+    --card-pad: calc(var(--spacing) * 4);
+    padding: var(--card-pad);
+  }
+}
+
+@utility tab-4 {
+  tab-size: 4;
+}

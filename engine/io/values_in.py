@@ -51,6 +51,8 @@ EASING_KEYWORDS = {
     "linear": [0, 0, 1, 1], "ease": [0.25, 0.1, 0.25, 1], "ease-in": [0.42, 0, 1, 1],
     "ease-out": [0, 0, 0.58, 1], "ease-in-out": [0.42, 0, 0.58, 1],
 }
+# CSS keywords that take a value from elsewhere: none of them is a value.
+CSS_KEYWORDS = ("inherit", "initial", "unset", "revert", "currentcolor", "auto", "none")
 # The three color keywords read as colors; any other bare word is ambiguous.
 COLOR_KEYWORDS = {"white": "#FFFFFF", "black": "#000000", "transparent": "#00000000"}
 _RELATIVE = {"em": "the parent's font size", "%": "its container", "vw": "the viewport",
@@ -312,6 +314,12 @@ def read_value(text: Any, mapped: Optional[List[GamutMapped]] = None) -> Tuple[s
     if not text:
         raise NotRead("the value is empty; write a value or remove the entry")
     lower = text.lower()
+    if lower == "currentcolor":
+        raise NotRead(f"{text} has no fixed value; it takes the color of the element it sits "
+                      "on, so write the color as hex")
+    if lower in CSS_KEYWORDS:
+        raise NotRead(f"{text} is a CSS keyword that takes its value from elsewhere, so it has no "
+                      "value of its own")
     if _HEX.match(text):
         return "color", _hex(text)
     if lower in COLOR_KEYWORDS:
@@ -366,12 +374,12 @@ def read_value(text: Any, mapped: Optional[List[GamutMapped]] = None) -> Tuple[s
                               for w in words):
         raise NotRead(f"{text} is a border shorthand; write its width, style and color as "
                       "separate tokens")
+    if re.fullmatch(_NUMBER + r"\s*/\s*" + _NUMBER, text):
+        raise NotRead(f"{text} is a ratio, and the engine has no ratio token; keep it in the "
+                      "component that uses it")
     if len(words) > 1 and any("/" in w and "(" not in w for w in words):
         raise NotRead(f"{text} is a font shorthand; write its family, size, weight and line "
                       "height as separate tokens")
-    if lower == "currentcolor":
-        raise NotRead(f"{text} has no fixed value; it takes the color of the element it sits "
-                      "on, so write the color as hex")
     if re.fullmatch(_NUMBER + r"\s+" + _NUMBER + r"%\s+" + _NUMBER + "%", text):
         raise NotRead(f"{text} is hsl channels without hsl(); write hsl({text}) or hex")
     layers = split_top(text)
