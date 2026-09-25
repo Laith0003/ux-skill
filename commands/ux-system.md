@@ -54,7 +54,7 @@ The engine reads five brief fields: `industry`, `tone`, `audience`, `must_have` 
 
 ### 3. Look before writing
 
-List the output folder first (`ls design-system/`). If `tokens.json`, `tokens.css` or `system-report.md` is already there, tell the user and run without `--force`: the engine then writes nothing if any file differs, and leaves identical files alone.
+List the output folder first (`ls design-system/`). If `tokens.json`, `tokens.css`, `system-report.md` or a `rule-pack/` folder is already there, tell the user and run without `--force`: the engine then writes nothing if any file differs, and leaves identical files alone.
 
 ### 4. Run the engine
 
@@ -63,6 +63,8 @@ uxskill --no-pretty system build --brand '#3366FF' --brief .ux/last-discovery.js
 ```
 
 Quote the brand color: an unquoted `#` starts a shell comment. Without a brief, pass `--axes 0.5,0.5,0.5,0.5,0.5,0.5,0.5` (warmth, contrast, density, geometry, formality, motion, type_personality) or leave both out for the neutral default. Do not pass both `--brief` and `--axes`. If `uxskill` is not on PATH, run the same arguments through `python3 -m engine.cli.main`.
+
+Add `--rule-pack` when the user wants the system's rules written for AI agents and people too, for example to keep an agent on the system while it builds screens, or to hand the system to another team. It is off by default. It writes `design-system/rule-pack/` beside the three files: per foundation an architecture, reference, audit and handoff file, the content and right-to-left rules, the six component contracts (button, text field, card, dialog, status banner, selectable row) and the decision records, all checked against the tokens just built. Only the command writes it; over MCP, build the tokens, then run the command with a shell when the user wants the rule pack.
 
 With a shell, use the command above: it writes the files itself. Without a shell, call `ux_system_build` over MCP with `brand`, and `brief` (an object) or `axes` (seven numbers), `latin_only` (true or false), and `out`, the absolute path of the output folder. It then writes the three files as the command does and returns the same `status`, `written`, `unchanged`, `conflicts` and `message`; `force` (true or false) does what `--force` does, and the same look-before-writing rule applies. Without `out` it writes nothing and returns `status` `built` (or `failed`), the report and each file's size. `include_files` (true or false) adds the `css` and `dtcg` text, but tokens.json is over 100 KB: do not copy it into files by hand, pass `out`. A bad input comes back as `status` `invalid`, `passed: false` and an `error` that names the field and the fix.
 
@@ -88,7 +90,7 @@ Read `design-system/system-report.md` and explain it. Do not paste it.
 - The gate in one sentence, for example: "Every text and control color passed contrast checks in light, dark and high contrast."
 - The adjustments that matter, from the report's "Colors moved to meet contrast" list, in one line each, for example: "in dark mode, button text switches to black so it stays readable on the lighter button."
 - How to switch modes: `data-theme="dark"`, `data-contrast="high"`, `data-density="compact"`, `dir="rtl"`, `data-motion="reduced"` on the html element. Without an attribute, dark, high contrast and reduced motion follow the operating system.
-- The three files and what each is for.
+- The three files and what each is for, and with `--rule-pack`, that an agent starts at `rule-pack/README.md`, which says which one file to load for each task.
 - The fonts (step 7). Always say this; it is the step people miss.
 
 ### 7. Fonts: the page has to load them

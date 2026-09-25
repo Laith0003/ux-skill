@@ -128,6 +128,23 @@ def test_architect_builds_on_engine_tokens_instead_of_redefining_them():
     assert "Do not write a second token file" in section
 
 
+def test_create_mode_offers_the_rule_pack_off_by_default():
+    run = _step("### 4. Run the engine")
+    assert "`--rule-pack`" in run and "off by default" in run
+    assert "design-system/rule-pack/" in run
+    assert "`rule-pack/README.md`" in _step("### 6. Tell the user what they got, in plain words")
+    assert "`rule-pack/` folder" in _step("### 3. Look before writing")
+
+
+def test_architect_authors_contracts_at_experimental_and_reads_decisions_first():
+    from engine.contracts.schema import RTL_BEHAVIORS
+    section = _section(AGENT, "## When the 4.0 engine already built the tokens")
+    assert "`rule-pack/README.md`" in section
+    assert "`status: experimental`" in section and "never set `ready`" in section
+    assert all(b in section for b in RTL_BEHAVIORS)
+    assert "`rule-pack/decisions/`" in section
+
+
 # ------------------------------------------------ installing the beta
 
 PINNED = f"uxskill=={__version__}"
