@@ -57,7 +57,7 @@ tokens:
   - {part: day, property: fill, role: color.surface.selected, state: selected}
   - {part: day, property: border-width, role: border.active, state: selected}
   - {part: day, property: border-color, role: color.line.selected, state: selected}
-  - {part: input, property: border-width, role: border.emphasis, state: hover}
+  - {part: input, property: edge-weight, role: border.emphasis, state: hover}
   - {part: input, property: focus-ring, role: color.focus.ring, state: focus}
   - {part: input, property: focus-ring-width, role: border.focus-ring.width, state: focus}
   - {part: input, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
@@ -73,7 +73,7 @@ tokens:
   - {part: next, property: focus-ring, role: color.focus.ring, state: focus}
   - {part: next, property: focus-ring-width, role: border.focus-ring.width, state: focus}
   - {part: next, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
-  - {part: input, property: border-width, role: border.emphasis, state: error}
+  - {part: input, property: edge-weight, role: border.emphasis, state: error}
   - {part: input, property: border-color, role: color.line.danger, state: error}
   - {part: message, property: text, role: color.status.danger.text, state: error}
   - {part: message, property: font, role: type.text.body-small, state: error}
@@ -110,6 +110,7 @@ copy:
     - Name the field, the problem and an example that works, such as Enter the date as 25/09/2026
 usage:
   do:
+    - Draw the heavier edge of hover and error with edge-weight, keeping the border at border-width and drawing the difference inside it as an inset box-shadow in the state's border color, never an outline, which the focus ring owns, so the field never moves by a pixel
     - Reserve one line of the message's height under the field, so an error never moves what follows
     - Let people type the date; the calendar is a help, not the only way in
     - Keep the typed value left to right inside a right to left form, and flip the previous and next arrows

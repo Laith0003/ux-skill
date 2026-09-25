@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import re
 from bisect import bisect_right
+from html import unescape as html_unescape
 from functools import lru_cache
 from itertools import combinations
 from dataclasses import dataclass
@@ -1079,14 +1080,60 @@ _TOKEN_NAME = re.compile(r"(?:^|[/_.-])(?:design-?)?(?:tokens?|variables|vars|cu
 _CUSTOM_PROP = re.compile(r"--[\w-]+\s*:[^;{}]*;?")
 
 
+# Declarations a token file carries besides custom properties: color-scheme,
+# which the engine writes with every scheme so native controls follow it, and
+# the descriptors of an @property rule. Neither styles an element.
+_TOKEN_EXTRAS = re.compile(r"(?<![\w-])(?:color-scheme|syntax|inherits|initial-value)\s*:[^;{}]*;?", re.I)
+
+
 def _custom_properties_only(css: str) -> bool:
+    """True when a stylesheet only defines tokens: custom properties, with
+    color-scheme and @property descriptors, under any selector or @media."""
     css = re.sub(r"/\*.*?\*/", " ", css, flags=re.S)
     if "--" not in css:
         return False
     rest = _CUSTOM_PROP.sub(" ", css)
+    rest = _TOKEN_EXTRAS.sub(" ", rest)
     rest = re.sub(r"[^{};]*\{", " ", rest)
     rest = rest.replace("}", " ").replace(";", " ")
     return not rest.strip()
+
+
+def token_definitions(ctx: FileContext) -> Optional[Tuple[List[int], List[int]]]:
+    """The custom-property definitions of a token layer, as merged spans of
+    the original file; None when the file is not a token layer.
+
+    A token layer is a stylesheet made mostly of custom-property definitions:
+    at least three, and at least nine in ten of its declarations
+    (color-scheme and @property descriptors left out), so a page stylesheet
+    padded with custom properties is still a page stylesheet. Content decides, never the file name, so
+    a client's own tokens file and the engine's tokens.css are read the same
+    way, and a page's stylesheet with a few custom properties is not one."""
+    def build() -> Optional[Tuple[List[int], List[int]]]:
+        if ctx.views.kind != "css":
+            return None
+        view = ctx.views.get("css")
+        if view is None or "--" not in view.text:
+            return None
+        custom = other = 0
+        for block in _blocks(ctx, view)[0]:
+            for prop, _value in _declarations(block.body):
+                if prop.startswith("--"):
+                    custom += 1
+                elif prop not in ("color-scheme", "syntax", "inherits", "initial-value") and prop:
+                    other += 1
+        if custom < 3 or custom < 9 * other:
+            return None
+        spans = [(view.orig(m.start()), view.orig(max(m.start(), m.end() - 1)) + 1)
+                 for m in re.finditer(r"(?<![\w-])--[\w-]+\s*:[^;{}]*", view.text)]
+        return _merge(spans)
+    return ctx.cached("token_definitions", build)  # type: ignore[return-value]
+
+
+def in_spans(spans: Tuple[List[int], List[int]], pos: int) -> bool:
+    starts, ends = spans
+    i = bisect_right(starts, pos) - 1
+    return i >= 0 and starts[i] <= pos < ends[i]
 
 
 def import_blocks_render(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
@@ -1108,6 +1155,821 @@ def import_blocks_render(ctx: FileContext, view: View, match: re.Match, start: i
     except OSError:
         pass
     return not _TOKEN_NAME.search(Path(path).name.rsplit(".", 1)[0])
+
+
+# ---------------------------------------------------------------------------
+# decorative-accent-ruler
+# ---------------------------------------------------------------------------
+# An eyebrow is text only. The ornament beside it takes many forms: a
+# pseudo-element with a size or a border, an empty span or i, an edge on the
+# label, a background line, an SVG line or dot, or a dash typed into the
+# text. The regex passes find the candidates (named groups tell them apart)
+# and these checks decide. Real separators stay clean: an hr, table rules, a
+# card's own edge, a full-width underline, list markers and icon glyphs.
+
+_EYEBROW = re.compile(
+    r"(?:^|[_-])(?:eyebrow|kicker|overline|pre-?title|pre-?heading|super-?head(?:ing|line)?"
+    r"|section-label|section-tag)(?:$|[_-])"
+    r"|(?-i:(?<=[a-z])(?:Eyebrow|Kicker|Overline|Pretitle)(?![a-z]))"
+    r"|^(?:eyebrow|kicker|overline|pretitle)(?-i:(?=[A-Z]))", re.I)
+_EYEBROW_ATTR = re.compile(r"^\[data-(?:eyebrow|kicker|overline|pre-?title|section-label)\b", re.I)
+_TRACKED = re.compile(r"^tracking-(?:wide|wider|widest|\[[\d.]+(?:em|rem|px)\])$")
+_ICONISH = re.compile(
+    r"(?:^|[_-])(?:icon|ico|glyph|symbol|emoji|avatar|flag|logo|sr-only|visually-hidden|spinner"
+    r"|arrow|chevron|caret)(?:$|[_-])"
+    r"|^(?:fa|fas|far|fab|fal|fad|bi|ph|ri|mdi|la|lucide|material-symbols[\w-]*|material-icons)$"
+    r"|^(?:fa|bi|ph|ri|mdi|la|lucide|i)-", re.I)
+# Selectors that draw a control or an icon out of pseudo-elements: their short
+# bars are glyph strokes, not ornament.
+_CONTROLISH = re.compile(
+    r"burger|menu|toggle|icon|close|check|chevron|arrow|caret|spinner|loader|loading|radio"
+    r"|switch|slider|thumb|handle|progress|track|knob|tick|cross|plus|minus|bullet|marker"
+    r"|step|timeline|legend|swatch|status|item", re.I)
+_DASHES = set("\u2014\u2013\u2015\u2012\u2010\u2011-\u2022\u00b7\u25cf\u25aa\u25a0\u2219~\u2500\u2501")
+_CSS_STRING = re.compile(r"\"((?:[^\"\\]|\\.)*)\"|'((?:[^'\\]|\\.)*)'", re.S)
+_CSS_ESCAPE = re.compile(r"\\([0-9a-fA-F]{1,6})\s?|\\(.)", re.S)
+_THIN_VAR = re.compile(r"^var\(\s*--[\w-]*(?:border|line|rule|stroke|hairline|divider|separator)", re.I)
+_SHORT_VAR = re.compile(r"^var\(\s*--[\w-]*(?:space|size|gap|spacing|inset)", re.I)
+_LENGTH_VALUE = re.compile(r"^(-?\d*\.?\d+)(px|rem|em|ch)?$")
+_WIDTHS = ("width", "inline-size", "min-width", "min-inline-size")
+_HEIGHTS = ("height", "block-size", "min-height", "min-block-size")
+_BLOCK_SIDES = ("border-top", "border-bottom", "border-block-start", "border-block-end",
+                "border-block")
+_DRAWS = _WIDTHS + _HEIGHTS + ("border", "background", "background-color", "background-image",
+                               "box-shadow", "outline")
+_SHAPES = ("line", "path", "rect", "circle", "ellipse", "polyline", "polygon")
+_SVG_OPAQUE = ("use", "image", "text", "foreignobject")
+
+
+def _css_string(value: str) -> Optional[str]:
+    """The text a ``content`` value renders, escapes resolved; None when the
+    value holds no string (``none``, ``counter()``, ``attr()``)."""
+    parts = _CSS_STRING.findall(value)
+    if not parts or re.search(r"\b(?:counter|counters|attr|url)\(", value):
+        return None
+
+    def unescape(s: str) -> str:
+        return _CSS_ESCAPE.sub(lambda m: chr(int(m.group(1), 16)) if m.group(1) else m.group(2), s)
+    return "".join(unescape(a or b) for a, b in parts)
+
+
+def _dashy(s: str) -> bool:
+    s = s.strip()
+    return bool(s) and all(c in _DASHES or c.isspace() for c in s)
+
+
+def _length_px(value: str) -> Optional[float]:
+    m = _LENGTH_VALUE.match(value.strip())
+    if not m:
+        return None
+    n = float(m.group(1))
+    unit = m.group(2) or ("px" if n == 0 else "")
+    if unit == "px":
+        return n
+    if unit in ("rem", "em"):
+        return n * 16
+    if unit == "ch":
+        return n * 8
+    return None
+
+
+def _thin(value: str) -> bool:
+    px = _length_px(value)
+    if px is not None:
+        return 0 < px <= 4
+    return bool(_THIN_VAR.match(value.strip()))
+
+
+def _short(value: str) -> bool:
+    px = _length_px(value)
+    if px is not None:
+        return 6 <= px <= 160
+    return bool(_SHORT_VAR.match(value.strip()))
+
+
+def _decl_map(body: str) -> Dict[str, str]:
+    out: Dict[str, str] = {}
+    for prop, value in _declarations(body):
+        out[prop] = value
+    return out
+
+
+def _first(decls: Dict[str, str], props: Sequence[str]) -> Optional[str]:
+    for p in props:
+        if p in decls:
+            return decls[p]
+    return None
+
+
+def _full_bleed(decls: Dict[str, str]) -> bool:
+    """The pseudo-element spans its box: an overlay, an edge or a full-width
+    underline, not a short mark. A short max-width or a scale below 1 on X
+    makes it a mark again."""
+    cap = _first(decls, ("max-width", "max-inline-size"))
+    scale = re.search(r"scale(?:x)?\(\s*([\d.]+)", decls.get("transform", "") + " " + decls.get("scale", "scale(1)"))
+    if (cap and _short(cap)) or (scale and float(scale.group(1) or 1) < 1):
+        return False
+    zero = lambda p: p in decls and all(_ZERO.match(w) for w in decls[p].split())  # noqa: E731
+    if zero("inset") or zero("inset-inline"):
+        return True
+    if (zero("left") and zero("right")) or (zero("inset-inline-start") and zero("inset-inline-end")):
+        return True
+    width = _first(decls, ("width", "inline-size"))
+    return bool(width and re.match(r"^(?:100%|100vw|auto|fit-content|max-content|stretch)$", width))
+
+
+def _painted(decls: Dict[str, str]) -> bool:
+    for p in ("background", "background-color", "background-image"):
+        if p in decls and _paints(decls[p]) and decls[p] not in ("none",):
+            return True
+    return False
+
+
+_LONG_VAR = re.compile(r"container|max|content|page|full|wide|measure|column|gutter", re.I)
+_MARK_VAR = re.compile(r"(?:rule|line|dash|mark)[\w-]*(?:length|size|width)", re.I)
+
+
+def _short_expression(width: str) -> bool:
+    """A calc() with no percentage or viewport term, or a var() whose name
+    reads as a short length, beside a thin height."""
+    if width.startswith("calc("):
+        return not re.search(r"%|\d(?:vw|vi|dvw|svw|lvw)\b", width)
+    if width.startswith("var("):
+        name = width[4:].split(",")[0]
+        return not _LONG_VAR.search(name) and bool(_SHORT_VAR.match(width) or _MARK_VAR.search(name))
+    return False
+
+
+def _draws_line(decls: Dict[str, str]) -> bool:
+    """A short horizontal line: a thin, short painted box, or a short box with
+    a painted block-side border."""
+    if any(p.startswith("animation") for p in decls):
+        return False
+    if re.search(r"rotate|skew|matrix", decls.get("transform", "")) or "rotate" in decls:
+        return False
+    if _full_bleed(decls):
+        return False
+    flex = decls.get("flex", "").split()
+    width = _first(decls, _WIDTHS) or decls.get("flex-basis") or (flex[2] if len(flex) == 3 else None)
+    height = _first(decls, _HEIGHTS)
+    thin = height is not None and _thin(height)
+    if width is None or not (_short(width) or (thin and _short_expression(width))):
+        return False
+    if thin and (_painted(decls) or "border" in decls):
+        return True
+    flat = height is None or _thin(height) or _length_px(height) == 0
+    return flat and any(p in decls and _paints(decls[p]) for p in _BLOCK_SIDES)
+
+
+def _subject(selector: str) -> str:
+    parts = compounds(selector)
+    return parts[-1] if parts else ""
+
+
+def _pseudo_element(compound: str) -> bool:
+    return bool(re.search(r"::?(?:before|after)\b", compound, re.I))
+
+
+def _is_eyebrow_compound(compound: str) -> bool:
+    return any((t.startswith(".") and _EYEBROW.search(t[1:])) or _EYEBROW_ATTR.match(t)
+               for t in tokens(compound))
+
+
+def _controlish(compound: str) -> bool:
+    toks = tokens(compound)
+    return "li" in toks or any(_CONTROLISH.search(t) for t in toks if t[:1] in ".#[")
+
+
+def _pseudo_ruler(decls: Dict[str, str], selector: str) -> bool:
+    subject = _subject(selector)
+    if not _pseudo_element(subject):
+        return False
+    content = decls.get("content")
+    if content is None:
+        return False
+    rendered = _css_string(content)
+    if rendered is None:
+        return False
+    if _is_eyebrow_compound(subject):
+        if _dashy(rendered):
+            return True
+        if _full_bleed(decls) or any(p in decls for p in ("mask", "-webkit-mask", "mask-image",
+                                                          "-webkit-mask-image")):
+            return False
+        return not rendered.strip() and any(
+            p in decls and (not p.startswith(("border", "background", "box-shadow", "outline"))
+                            or _paints(decls[p])) for p in _DRAWS)
+    if rendered.strip() or _controlish(subject):
+        return False
+    return _draws_line(decls)
+
+
+def _edge_ruler(prop: str, value: str, decls: Dict[str, str]) -> bool:
+    """A side edge or a background line drawn on the label itself."""
+    if prop.startswith("border"):
+        if prop.endswith("-color"):
+            return False
+        if prop.endswith("-width"):
+            px = _length_px(value)
+            return px is None or px > 0
+        if prop.endswith("-style"):
+            return value.strip() not in ("none", "hidden")
+        return _paints(value)
+    if prop == "box-shadow":
+        m = re.search(r"\binset\s+(-?[\d.]+)[a-z%]*\s+(-?[\d.]+)", value)
+        return bool(m) and float(m.group(1)) != 0 and float(m.group(2)) == 0
+    repeat = "no-repeat" in value or "no-repeat" in decls.get("background-repeat", "")
+    if "url(" in value and "gradient(" not in value:
+        return repeat
+    if "gradient(" not in value:
+        return False
+    size = decls.get("background-size", "")
+    if any(_thin(w) for w in size.split()):
+        return True
+    return repeat
+
+
+def accent_ruler(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
+    groups = match.groupdict()
+    if groups.get("pseudo"):
+        brace = view.text.find("{", match.end())
+        block = block_at(ctx, view, brace + 1) if brace != -1 else None
+        if block is None:
+            return False
+        decls = _decl_map(block.body)
+        return any(_pseudo_ruler(decls, s) for s in block.selectors)
+    if groups.get("edge"):
+        block = block_at(ctx, view, match.start())
+        if block is None or not any(_is_eyebrow_compound(_subject(s)) and not _pseudo_element(_subject(s))
+                                    for s in block.selectors):
+            return False
+        prop = match.group("edge").split(":")[0].strip().lower()
+        rest = view.text[match.end():]
+        value = re.split(r"[;}]", rest, maxsplit=1)[0].replace("!important", "").strip().lower()
+        return _edge_ruler(prop, value, _decl_map(block.body))
+    if groups.get("eyebrow"):
+        return start in _ruled_eyebrows(ctx)
+    return True
+
+
+def _class_list(ctx: FileContext, tag: Tag) -> List[str]:
+    out: List[str] = []
+    for a in tag.attrs:
+        if a.name.lower() in ("class", "classname") and a.kind == "str":
+            out.extend(ctx.text[a.vstart:a.vend].split())
+    return out
+
+
+def _bare(cls: str) -> str:
+    return cls.rsplit(":", 1)[-1] if not cls.startswith("[") else cls
+
+
+def _named_eyebrow(classes: List[str]) -> bool:
+    return any(_EYEBROW.search(c) for c in classes if ":" not in c)
+
+
+def _utility_eyebrow(classes: List[str]) -> bool:
+    bare = [_bare(c) for c in classes]
+    return "uppercase" in bare and any(_TRACKED.match(b) for b in bare)
+
+
+_NOT_EYEBROW_TAGS = {"th", "td", "a", "button", "label", "li", "ul", "ol", "tr"}
+_HEADING_TAG = re.compile(r"^h[1-6]$")
+
+
+def _heads_a_heading(ctx: FileContext, i: int) -> bool:
+    """An uppercase, tracked label is an eyebrow when a heading follows it, or
+    the row that holds it, or when it sits in an hgroup or header with one."""
+    tags, ends, parents = ctx.tree()
+    if tags[i].name.lower() in _NOT_EYEBROW_TAGS:
+        return False
+    kids = _children(ctx)
+    k = i
+    for _ in range(2):
+        sibs = kids.get(parents[k], [])
+        at = sibs.index(k)
+        if at + 1 < len(sibs) and _HEADING_TAG.match(tags[sibs[at + 1]].name.lower()):
+            return True
+        k = parents[k]
+        if k < 0:
+            break
+    k = parents[i]
+    while k >= 0:
+        if tags[k].name.lower() in ("hgroup", "header"):
+            return any(_HEADING_TAG.match(tags[j].name.lower())
+                       for j in range(i + 1, len(tags)) if tags[j].start < ends[k])
+        k = parents[k]
+    return False
+
+
+def _utility_ruler(classes: List[str]) -> bool:
+    """Tailwind forms on the label: a side border, or a pseudo-element drawn
+    with before: or after: utilities."""
+    if any(c.startswith("bg-[linear-gradient(") for c in classes) and (
+            "bg-no-repeat" in classes or any(re.match(r"^bg-\[length:[^\]]*_(?:[0-4](?:\.\d+)?px|0\.\d+rem)\]$", c)
+                                             for c in classes)):
+        return True
+    for c in classes:
+        parts = c.split(":")
+        bare = parts[-1]
+        if re.match(r"^border-(?:l|r|s|e|x)(?:-(?!0\b|transparent\b|none\b)\S+)?$", bare):
+            return True
+        if any(p in ("before", "after") for p in parts[:-1]) and re.match(
+                r"^(?:content-|w-|h-|size-|border|bg-|inline-block$|block$)", bare):
+            return True
+    return False
+
+
+def _children(ctx: FileContext) -> Dict[int, List[int]]:
+    def build() -> Dict[int, List[int]]:
+        _tags, _ends, parents = ctx.tree()
+        out: Dict[int, List[int]] = {}
+        for i, p in enumerate(parents):
+            out.setdefault(p, []).append(i)
+        return out
+    return ctx.cached("children", build)  # type: ignore[return-value]
+
+
+def _close_end(ctx: FileContext, tags: List[Tag], ends: List[int], i: int) -> int:
+    """Offset just past the element's closing tag, or past its own tag when it
+    is void or self-closing. ``ends`` holds where the closing tag starts."""
+    if not ctx.text.startswith("</", ends[i]):
+        return max(tags[i].end, ends[i])
+    k = ctx.text.find(">", ends[i])
+    return len(ctx.text) if k == -1 else k + 1
+
+
+def _blank(s: str) -> bool:
+    return not re.sub(r"<!--.*?-->|&nbsp;|&#160;", " ", s, flags=re.S).strip()
+
+
+def _svg_number(value: str) -> Optional[float]:
+    m = re.match(r"^\s*(-?\d*\.?\d+)", value)
+    return float(m.group(1)) if m else None
+
+
+def _line_svg(ctx: FileContext, tags: List[Tag], ends: List[int], j: int) -> bool:
+    """An SVG that draws one straight line or one dot."""
+    attrs = attr_values(ctx.text, tags[j])
+    box = attrs.get("viewbox", ("", ""))[1].replace(",", " ").split()
+    if len(box) == 4:
+        try:
+            w, h = float(box[2]), float(box[3])
+            if 0 < min(w, h) <= 4 and max(w, h) >= 6:
+                return True
+        except ValueError:
+            pass
+    inner = [k for k in range(j + 1, len(tags)) if tags[k].start < ends[j]]
+    names = [tags[k].name.lower() for k in inner]
+    if any(n in _SVG_OPAQUE for n in names):
+        return False
+    shapes = [k for k in inner if tags[k].name.lower() in _SHAPES]
+    if len(shapes) != 1:
+        return False
+    k = shapes[0]
+    name = tags[k].name.lower()
+    a = {n: v for n, (_kind, v) in attr_values(ctx.text, tags[k]).items()}
+    if name in ("line", "circle", "ellipse"):
+        return True
+    if name == "rect":
+        w, h = _svg_number(a.get("width", "")), _svg_number(a.get("height", ""))
+        if w is None or h is None:
+            return False
+        return min(w, h) <= 4 or max(w, h) <= 12
+    if name == "polyline":
+        return len(re.findall(r"-?\d*\.?\d+", a.get("points", ""))) == 4
+    if name == "path":
+        d = a.get("d", "").strip()
+        num = r"(-?\d*\.?\d+)"
+        m = re.match(r"^[Mm]\s*" + num + r"[\s,]+" + num + r"\s*(?:([HhVv])\s*" + num
+                     + r"|[Ll]\s*" + num + r"[\s,]+" + num + r")\s*[Zz]?\s*$", d)
+        if not m:
+            return False
+        if m.group(3):
+            return True
+        return m.group(1) == m.group(5) or m.group(2) == m.group(6)
+    return False
+
+
+def _ornament(ctx: FileContext, tags: List[Tag], ends: List[int], j: int) -> bool:
+    """An empty span or i, or an SVG line or dot: a mark with no words."""
+    tag = tags[j]
+    name = tag.name.lower()
+    attrs = attr_values(ctx.text, tag)
+    if name == "svg":
+        return not any(_ICONISH.search(_bare(c)) for c in _class_list(ctx, tag)) \
+            and _line_svg(ctx, tags, ends, j)
+    if name == "img":
+        w, h = _svg_number(attrs.get("width", ("", ""))[1]), _svg_number(attrs.get("height", ("", ""))[1])
+        shaped = w is not None and h is not None and 0 < min(w, h) <= 4 and max(w, h) >= 6
+        return "alt" in attrs and not attrs["alt"][1] and (
+            shaped or bool(re.search(r"(?:^|[/_-])(?:line|rule|dash|stroke)[\w-]*\.\w+$",
+                                     attrs.get("src", ("", ""))[1])))
+    if name not in ("span", "i", "div", "b", "em", "small"):
+        return False
+    classes = _class_list(ctx, tag)
+    if any(re.search(r"divider|separator|rule-full", c, re.I) for c in classes) \
+            or any("." + c in _masked_classes(ctx) for c in classes):
+        return False
+    if ends[j] > tag.end and not _blank(ctx.text[tag.end:ends[j]]):
+        return False
+    if any(k == "id" or k.startswith(("data-lucide", "data-icon", "data-feather", "data-slot",
+                                      "data-bind", "data-text", "data-value", "data-field",
+                                      "aria-label", "aria-live", "role", "x-", "v-", ":", "@"))
+           for k in attrs):
+        return False
+    return not any(_ICONISH.search(_bare(c)) for c in _class_list(ctx, tag))
+
+
+def _masked_classes(ctx: FileContext) -> Set[str]:
+    """Classes the file draws as icons with a CSS mask."""
+    def build() -> Set[str]:
+        view = ctx.views.get("css")
+        out: Set[str] = set()
+        for block in (css_blocks(view.text) if view is not None and view.text else []):
+            if re.search(r"(?:^|;)\s*(?:-webkit-)?mask(?:-image)?\s*:", block.body):
+                for sel in block.selectors:
+                    out.update(t for t in tokens(_subject(sel)) if t.startswith("."))
+        return out
+    return ctx.cached("masked_classes", build)  # type: ignore[return-value]
+
+
+def _ruled_eyebrows(ctx: FileContext) -> Set[int]:
+    """Start offsets of eyebrow elements drawn with an ornament beside them."""
+    def build() -> Set[int]:
+        tags, ends, parents = ctx.tree()
+        kids = _children(ctx)
+        out: Set[int] = set()
+        for i, tag in enumerate(tags):
+            classes = _class_list(ctx, tag)
+            if not classes or not (_named_eyebrow(classes)
+                                   or (_utility_eyebrow(classes) and _heads_a_heading(ctx, i))):
+                continue
+            if _utility_ruler(classes):
+                out.add(tag.start)
+                continue
+            inner = ctx.text[tag.end:ends[i]] if ends[i] > tag.end else ""
+            own = kids.get(i, [])
+            if not own and _blank(inner) and tag.name.lower() in ("span", "i"):
+                out.add(tag.start)
+                continue
+            if own:
+                first, last = own[0], own[-1]
+                if _blank(ctx.text[tag.end:tags[first].start]) and _ornament(ctx, tags, ends, first):
+                    out.add(tag.start)
+                    continue
+                if _blank(ctx.text[_close_end(ctx, tags, ends, last):ends[i]]) and _ornament(ctx, tags, ends, last):
+                    out.add(tag.start)
+                    continue
+            words = html_unescape(re.sub(r"<[^>]*>", " ", inner)).strip()
+            if len(words) > 1 and ((words[0] in _DASHES and words[1].isspace())
+                                   or (words[-1] in _DASHES and words[-2].isspace())):
+                out.add(tag.start)
+                continue
+            sibs = kids.get(parents[i], [])
+            at = sibs.index(i)
+            if at > 0:
+                prev = sibs[at - 1]
+                if _blank(ctx.text[_close_end(ctx, tags, ends, prev):tag.start]) and _ornament(ctx, tags, ends, prev):
+                    out.add(tag.start)
+                    continue
+            if at + 1 < len(sibs):
+                nxt = sibs[at + 1]
+                if _blank(ctx.text[_close_end(ctx, tags, ends, i):tags[nxt].start]) and _ornament(ctx, tags, ends, nxt):
+                    out.add(tag.start)
+        return out
+    return ctx.cached("ruled_eyebrows", build)  # type: ignore[return-value]
+
+
+# ---------------------------------------------------------------------------
+# nav-equal-hamburger-desktop
+# ---------------------------------------------------------------------------
+# A menu button is found in any language: by a menu word in its name, class,
+# id or icon, by the hamburger glyph, or by structure (aria-expanded with
+# aria-controls naming the site navigation). It passes when anything hides it,
+# or an ancestor, at desktop width: the hidden attribute, a Tailwind,
+# Bootstrap, Bulma or Foundation breakpoint class, an inline style, or any
+# CSS rule in the file or in a local stylesheet it links or imports, read
+# with its media queries at DESKTOP_WIDTH.
+
+DESKTOP_WIDTH = 1280
+_MENU_WORD = re.compile(
+    r"menu|menú|menü|hamburger|burger|navigation|nav[_-]*(?:toggl|btn|button|open|trigger)"
+    r"|navbar-toggler|drawer|offcanvas|off-canvas|(?:ال)?قائمة|منو"
+    r"|תפריט|メニュー|菜单|菜單|選單"
+    r"|меню|메뉴|मेनू|เมนู"
+    r"|trình đơn|menyu", re.I)
+_CLOSE_WORD = re.compile(
+    r"(?<!\w)(?:close|dismiss|إغلاق|اغلاق|schlie(?:ß|ss)en|cerrar|fermer|fechar|chiudi"
+    r"|閉じる|关闭|關閉|закрыть|닫기"
+    r"|बंद|ปิด|đóng|tutup|kapat|sluit)(?!\w)", re.I)
+# Words that may stand beside a menu word on the site menu's button; any other
+# word names a destination ("Products menu", "قائمة الطعام").
+_MENU_MODIFIERS = {"open", "show", "toggle", "main", "site", "the", "navigation", "nav",
+                   "فتح", "الرئيسية", "عرض", "abrir", "ouvrir", "öffnen", "apri"}
+_BURGER_GLYPH = re.compile(r"☰|&#9776;|&#x2630;", re.I)
+_SR_ONLY = re.compile(r"<(\w+)[^>]*class\s*=\s*[\"'][^\"']*(?:sr-only|visually-hidden|screen-reader)[^\"']*[\"'][^>]*>.*?</\1>",
+                      re.I | re.S)
+_TW_BREAKPOINTS = {"sm": 640, "md": 768, "lg": 1024, "xl": 1280, "2xl": 1536}
+_BS_BREAKPOINTS = {"sm": 576, "md": 768, "lg": 992, "xl": 1200, "xxl": 1400}
+_SHOWN = r"(?:block|flex|inline-flex|inline-block|inline|grid|inline-grid|table|contents)"
+
+
+def _bp_px(prefix: str) -> Optional[float]:
+    if prefix in _TW_BREAKPOINTS:
+        return _TW_BREAKPOINTS[prefix]
+    m = re.match(r"^min-\[(\d*\.?\d+)(px|rem|em)\]$", prefix)
+    if m:
+        return float(m.group(1)) * (1 if m.group(2) == "px" else 16)
+    return None
+
+
+def _classes_hide(classes: List[str], ancestors: List[List[str]]) -> bool:
+    """A breakpoint class hides the element at desktop width."""
+    shown_from: List[float] = []
+    hidden_base = False
+    for c in classes:
+        parts = c.split(":")
+        util, prefixes = parts[-1], parts[:-1]
+        if not prefixes:
+            if util in ("hidden", "invisible"):
+                hidden_base = True
+            continue
+        if len(prefixes) != 1:
+            continue
+        px = _bp_px(prefixes[0])
+        if px is None:
+            continue
+        if util in ("hidden", "invisible") and px <= DESKTOP_WIDTH:
+            return True
+        if re.fullmatch(_SHOWN, util):
+            shown_from.append(px)
+    if hidden_base and not any(px <= DESKTOP_WIDTH for px in shown_from):
+        return True
+    for c in classes:
+        m = re.fullmatch(r"d-(sm|md|lg|xl|xxl)-none", c)
+        if m and _BS_BREAKPOINTS[m.group(1)] <= DESKTOP_WIDTH:
+            return True
+        if re.fullmatch(r"hide-for-(?:medium|large)(?:-up)?|show-for-small-only|uk-hidden@(?:s|m|l)|navbar-burger", c):
+            return True
+    if "navbar-toggler" in classes:
+        for anc in ancestors:
+            for c in anc:
+                m = re.fullmatch(r"navbar-expand(?:-(sm|md|lg|xl|xxl))?", c)
+                if m and (m.group(1) is None or _BS_BREAKPOINTS[m.group(1)] <= DESKTOP_WIDTH):
+                    return True
+    return False
+
+
+def _media_px(value: str) -> Optional[float]:
+    m = re.match(r"^\s*(\d*\.?\d+)\s*(px|rem|em)?\s*$", value)
+    if not m:
+        return None
+    return float(m.group(1)) * (16 if m.group(2) in ("rem", "em") else 1)
+
+
+def _feature_true(feature: str, width: float) -> bool:
+    f = feature.strip().lower()
+    m = re.fullmatch(r"(min|max)-width\s*:\s*(.+)", f)
+    if m:
+        px = _media_px(m.group(2))
+        if px is None:
+            return False
+        return px <= width if m.group(1) == "min" else px >= width
+    m = re.fullmatch(r"width\s*(>=|>|<=|<)\s*(.+)", f) or None
+    if m:
+        px = _media_px(m.group(2))
+        if px is None:
+            return False
+        return {">=": width >= px, ">": width > px, "<=": width <= px, "<": width < px}[m.group(1)]
+    m = re.fullmatch(r"(.+?)\s*(>=|>|<=|<)\s*width", f)
+    if m:
+        px = _media_px(m.group(1))
+        if px is None:
+            return False
+        return {">=": px >= width, ">": px > width, "<=": px <= width, "<": px < width}[m.group(2)]
+    m = re.fullmatch(r"(.+?)\s*(<=|<)\s*width\s*(<=|<)\s*(.+)", f)
+    if m:
+        lo, hi = _media_px(m.group(1)), _media_px(m.group(4))
+        if lo is None or hi is None:
+            return False
+        return (lo <= width if m.group(2) == "<=" else lo < width) and \
+            (width <= hi if m.group(3) == "<=" else width < hi)
+    return f in ("hover: hover", "hover:hover", "pointer: fine", "pointer:fine", "any-hover: hover",
+                 "orientation: landscape", "prefers-reduced-motion: no-preference",
+                 "prefers-color-scheme: light", "prefers-contrast: no-preference")
+
+
+def _media_true(query: str, width: float = DESKTOP_WIDTH) -> bool:
+    """Whether a media query list holds on a desktop screen of ``width``."""
+    for q in _split_top(query):
+        q = q.strip().lower()
+        negate = q.startswith("not ")
+        if negate or q.startswith("only "):
+            q = q.split(" ", 1)[1]
+        feats = re.findall(r"\(([^()]*(?:\([^()]*\)[^()]*)*)\)", q)
+        media_type = re.sub(r"\([^()]*\)", " ", q).replace(" and ", " ").split()
+        ok = all(t in ("screen", "all", "and") for t in media_type)
+        ok = ok and all(_feature_true(f, width) for f in feats)
+        if ok != negate:
+            return True
+    return False
+
+
+def _applies(atrules: Tuple[str, ...]) -> bool:
+    for at in atrules:
+        if at.startswith("@media"):
+            if not _media_true(at[len("@media"):]):
+                return False
+        elif at.startswith(("@container", "@document", "@page", "@font-face", "@keyframes")):
+            return False
+    return True
+
+
+def _linked_sheets(ctx: FileContext) -> List[Tuple[str, str]]:
+    """(media query, css text) of every local stylesheet the file links or
+    imports, one @import level deep."""
+    def build() -> List[Tuple[str, str]]:
+        out: List[Tuple[str, str]] = []
+        seen: Set[Path] = set()
+
+        def read(ref: str, media: str, base: Path, depth: int) -> None:
+            ref = ref.split("?", 1)[0].split("#", 1)[0]
+            if not ref or re.match(r"[a-z][a-z0-9+.-]*:|//", ref, re.I) or ref.startswith("/"):
+                return
+            target = (base / ref)
+            try:
+                key = target.resolve()
+                if key in seen or not target.is_file() or target.stat().st_size > 1_000_000:
+                    return
+                seen.add(key)
+                css = target.read_text(encoding="utf-8", errors="ignore")
+            except OSError:
+                return
+            css = re.sub(r"/\*.*?\*/", " ", css, flags=re.S)
+            if depth < 1:
+                for m in re.finditer(r"@import\s+(?:url\(\s*)?[\"']?([^\"')\s;]+)[\"']?\s*\)?\s*([^;]*);", css, re.I):
+                    read(m.group(1), m.group(2).strip(), target.parent, depth + 1)
+            out.append((media, css))
+
+        base = ctx.path.parent
+        for tag in sorted(ctx.views.scan.tags, key=lambda t: t.start):
+            if tag.name.lower() != "link":
+                continue
+            a = attr_values(ctx.text, tag)
+            if "stylesheet" in a.get("rel", ("", ""))[1].lower().split() and "href" in a:
+                read(a["href"][1], a.get("media", ("", ""))[1], base, 0)
+        for m in re.finditer(r"""\bimport\s+(?:[\w{}\s,*]+\s+from\s+)?["']([^"']+\.(?:css|scss))["']""", ctx.text):
+            if ".module." not in m.group(1):
+                read(m.group(1), "", base, 0)
+        return out
+    return ctx.cached("linked_sheets", build)  # type: ignore[return-value]
+
+
+def _hiding_rules(ctx: FileContext) -> List[Tuple[List[FrozenSet[str]], bool, bool]]:
+    """Every rule that sets display or visibility and holds at desktop width,
+    in cascade order: (subject token sets, hides, important)."""
+    def build() -> List[Tuple[List[FrozenSet[str]], bool, bool]]:
+        sheets = list(_linked_sheets(ctx))
+        own = ctx.views.get("css")
+        if own is not None and own.text:
+            sheets.append(("", own.text))
+        out: List[Tuple[List[FrozenSet[str]], bool, bool]] = []
+        for media, css in sheets:
+            if media and media.lower() not in ("all", "screen") and not _media_true(media):
+                continue
+            for block in css_blocks(css):
+                if not block.selectors or not _applies(block.atrules):
+                    continue
+                subjects: List[FrozenSet[str]] = []
+                for sel in block.selectors:
+                    subject = _subject(sel)
+                    if any(name not in ("not", "is", "where") for name, _arg in pseudos(subject)):
+                        continue
+                    toks = tokens(subject)
+                    if any(t[:1] in ".#[" for t in toks):
+                        subjects.append(toks)
+                if not subjects:
+                    continue
+                for part in block.body.split(";"):
+                    if ":" not in part:
+                        continue
+                    prop, value = part.split(":", 1)
+                    prop = prop.strip().lower()
+                    if prop not in ("display", "visibility"):
+                        continue
+                    important = "!important" in value
+                    v = value.replace("!important", "").strip().lower()
+                    hides = v == "none" if prop == "display" else v in ("hidden", "collapse")
+                    shows = prop == "display" or v == "visible"
+                    if hides or shows:
+                        out.append((subjects, hides, important))
+        return out
+    return ctx.cached("hiding_rules", build)  # type: ignore[return-value]
+
+
+def _element_tokens(ctx: FileContext, tag: Tag) -> FrozenSet[str]:
+    out = {tag.name.lower()}
+    for a in tag.attrs:
+        low = a.name.lower()
+        if low.startswith((":", "@", "v-", "x-")) or a.kind == "expr":
+            continue
+        value = ctx.text[a.vstart:a.vend]
+        if low in ("class", "classname"):
+            out.update("." + c for c in value.split())
+            continue
+        if low == "id":
+            out.add("#" + value.strip())
+        out.add("[" + low + "]")
+        out.add("[" + low + "=" + re.sub(r"[\s'\"]", "", value).lower() + "]")
+    return frozenset(out)
+
+
+def _css_hides(ctx: FileContext, tag: Tag) -> bool:
+    mine = _element_tokens(ctx, tag)
+    hidden = None
+    hidden_important = None
+    for subjects, hides, important in _hiding_rules(ctx):
+        if not any(s <= mine for s in subjects):
+            continue
+        if important:
+            hidden_important = hides
+        else:
+            hidden = hides
+    if hidden_important is not None:
+        return hidden_important
+    return bool(hidden)
+
+
+def _hidden_at_desktop(ctx: FileContext, i: int) -> bool:
+    tags, _ends, parents = ctx.tree()
+    chain: List[int] = []
+    k = i
+    while k >= 0:
+        chain.append(k)
+        k = parents[k]
+    ancestors = [_class_list(ctx, tags[k]) for k in chain[1:]]
+    for n, k in enumerate(chain):
+        tag = tags[k]
+        a = attr_values(ctx.text, tag)
+        if "hidden" in a and a["hidden"][1].lower() not in ("false", "until-found"):
+            return True
+        style = a.get("style", ("", ""))[1].lower().replace(" ", "")
+        if "display:none" in style or "visibility:hidden" in style:
+            return True
+        if _classes_hide(_class_list(ctx, tag), ancestors[n:]):
+            return True
+        if _css_hides(ctx, tag):
+            return True
+    return False
+
+
+def _menu_button(ctx: FileContext, i: int) -> bool:
+    """A button that opens the site's menu, told apart in any language."""
+    tags, ends, _parents = ctx.tree()
+    tag = tags[i]
+    a = attr_values(ctx.text, tag)
+    inner = ctx.text[tag.end:ends[i]] if ends[i] > tag.end else ""
+    words = html_unescape(re.sub(r"<[^>]*>", " ", _SR_ONLY.sub(" ", inner))).strip()
+    names = " ".join(v for k, (_kind, v) in a.items()
+                     if k in ("aria-label", "title", "class", "classname", "id", "aria-controls",
+                              "data-toggle", "data-bs-toggle", "data-target", "data-bs-target"))
+    spoken = " ".join(v for k, (_kind, v) in a.items() if k in ("aria-label", "title"))
+    if _CLOSE_WORD.search(spoken + " " + words):
+        return False
+    # Visible words: up to three, one of them a menu word ("Menu", "Open
+    # menu", "القائمة"); a button with other words is a dropdown or an action.
+    parts = [w.strip(".,:;!?()").lower() for w in words.split()]
+    if words and not _BURGER_GLYPH.search(words) and not (
+            len(parts) <= 3 and any(_MENU_WORD.search(w) for w in parts)
+            and all(_MENU_WORD.search(w) or w in _MENU_MODIFIERS for w in parts)):
+        return False
+    inner_attrs = " ".join(re.findall(r"(?:href|class|id)\s*=\s*[\"']([^\"']*)", inner))
+    if _MENU_WORD.search(names) or _MENU_WORD.search(inner_attrs) or _BURGER_GLYPH.search(inner):
+        return True
+    if "aria-expanded" not in a or "aria-controls" not in a:
+        return False
+    target = _id_tags(ctx).get(a["aria-controls"][1].split()[0] if a["aria-controls"][1] else "")
+    if target is None:
+        return False
+    t = attr_values(ctx.text, target)
+    if target.name.lower() == "nav" or t.get("role", ("", ""))[1].lower() in ("navigation", "menu", "menubar"):
+        return True
+    return ctx.text.count("<a ", target.end, ctx.element_end(target)) >= 3
+
+
+def hamburger_on_desktop(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
+    tags, _ends, _parents = ctx.tree()
+    index = ctx.cached("tree_index", lambda: {t.start: n for n, t in enumerate(tags)})
+    i = index.get(start)  # type: ignore[union-attr]
+    if i is None:
+        return False
+    name = tags[i].name.lower()
+    a = attr_values(ctx.text, tags[i])
+    if name != "button" and a.get("role", ("", ""))[1].lower() != "button" and not re.search(
+            r"hamburger|burger|menu-toggle|nav-toggle", a.get("class", a.get("classname", ("", "")))[1], re.I):
+        return False
+    return _menu_button(ctx, i) and not _hidden_at_desktop(ctx, i)
 
 
 # ---------------------------------------------------------------------------
@@ -1140,4 +2002,6 @@ POST_CHECKS: Dict[str, Callable[[FileContext, View, re.Match, int], bool]] = {
     "page-needs-imagery": page_needs_imagery,
     "import-blocks-render": import_blocks_render,
     "skip-link": skip_link,
+    "accent-ruler": accent_ruler,
+    "hamburger-on-desktop": hamburger_on_desktop,
 }

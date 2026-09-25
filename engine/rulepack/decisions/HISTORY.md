@@ -122,3 +122,6 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Chips, badges, links, navigation, progress and tables are measured where they sit, and the table binds its phone layout](display-contracts-measured.md)
 - [A part inside a group draws one divider where it meets the rest, and the group draws the edge](divider-edge.md)
 - [Arabic copy follows the market for currency, months and fixed runs](arabic-market-content.md)
+- [An eyebrow is text only, with no line, dash or dot before or after it](eyebrow-is-text.md)
+- [A field's heavier hover and error edge is drawn inside its border](edge-weight-inside.md)
+- [An FAQ accordion and a site footer have contracts, and the footer binds the logo role](faq-and-footer-contracts.md)

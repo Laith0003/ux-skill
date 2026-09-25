@@ -1,0 +1,72 @@
+# Site footer: the end of every page, with the logo, grouped links, contact
+# and the legal line. Every value is a semantic role.
+name: site-footer
+status: experimental
+category: container
+description: Closes every page with the logo in its brand color, grouped links to the main pages and policies, a way to reach the company and the legal line, separated from the page by one full-width line.
+parts:
+  - {name: region, rtlBehavior: logical}
+  - {name: divider, rtlBehavior: logical}
+  - {name: logo, rtlBehavior: logical}
+  - {name: column-title, rtlBehavior: logical}
+  - {name: link, rtlBehavior: logical}
+  - {name: legal, rtlBehavior: logical}
+variants: []
+states: [default, hover, focus]
+tokens:
+  - {part: region, property: padding-block, role: layout.footer.padding-block}
+  - {part: region, property: gap, role: space.group.gap}
+  # one full-width line where the footer meets the page
+  - {part: divider, property: border-width, role: border.separator}
+  - {part: divider, property: border-color, role: color.line.subtle}
+  # the logo keeps the exact brand color wherever it clears our 3:1 floor
+  - {part: logo, property: icon, role: color.logo}
+  - {part: logo, property: min-size, role: layout.target.min}
+  - {part: logo, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: logo, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: logo, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  - {part: column-title, property: text, role: color.text.default}
+  - {part: column-title, property: font, role: type.text.label}
+  - {part: column-title, property: stack-gap, role: space.text.gap}
+  - {part: link, property: text, role: color.text.default}
+  - {part: link, property: font, role: type.text.body-small}
+  - {part: link, property: min-size, role: layout.target.min}
+  - {part: link, property: text, role: color.text.link, state: hover}
+  - {part: link, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: link, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: link, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  - {part: legal, property: text, role: color.text.muted}
+  - {part: legal, property: font, role: type.text.fine}
+contrast:
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.link, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.logo, bg: color.surface.page, minimum: 3, criterion: system, high: 3}
+  - {fg: color.focus.ring, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+surfaces: [color.surface.page]
+a11y:
+  target: layout.target.min
+  label: localized
+  cue: a hovered link changes color and takes an underline, never color alone
+copy:
+  default:
+    - Each column title names its group in one or two words
+    - Each link uses the same words as the title of the page it opens
+    - The legal line gives the year and the company's registered name, never a slogan
+usage:
+  do:
+    - Mark the footer with the footer element, and its link columns with a nav whose accessible name differs from the header's
+    - Keep the logo at the start in both directions, as a link to the home page
+    - Group the links into two to four columns under column titles; they stack into one column below the tablet breakpoint
+    - Draw the divider as one full-width line at the footer's block start, and keep the footer on the page surface, where the logo is measured
+    - Underline a link on hover as well as changing its color
+    - A phone number is a tel link and runs left to right inside a right-to-left footer
+    - Keep privacy and terms in the link columns at the target size; the legal line holds only the year and the company's name
+    - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
+  dont:
+    - Do not make the footer the only way to contact the company or to reach the main action
+    - Do not copy the whole header navigation and a sitemap into one footer
+    - Do not draw a short ornamental line above a column title
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

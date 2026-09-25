@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
 from engine.data_loader import load
-from engine.linter.structure import POST_CHECKS, FileContext
+from engine.linter.structure import POST_CHECKS, FileContext, in_spans, token_definitions
 from engine.linter.views import CHANNELS, FileViews, is_mention
 
 
@@ -171,6 +171,9 @@ def _compile_rules() -> List[Dict[str, Any]]:
             "passes": passes,
             "skip_inside": tuple(x.lower() for x in det.get("skip_inside", [])),
             "post": POST_CHECKS.get(det.get("post", "")),
+            # A rule written for token definitions also reads them inside a
+            # token layer; every other rule skips them there.
+            "token_defs": bool(det.get("token_definitions")),
         })
     _RULE_CACHE.clear()
     _RULE_CACHE[id(data)] = rules
@@ -247,6 +250,7 @@ def lint_text(name: str, text: str, rules: Optional[List[Dict[str, Any]]] = None
     lines = text.splitlines()
     waived = _suppressions(text)
     ctx = FileContext(path, text, views)
+    defs = token_definitions(ctx)
     findings: List[Finding] = []
     for rule in rules:
         if not _scope_matches(path, rule["scope"]):
@@ -265,6 +269,8 @@ def lint_text(name: str, text: str, rules: Optional[List[Dict[str, Any]]] = None
                 if target == "text" and is_mention(view.text, match.start(), match.end()):
                     continue
                 start = view.orig(match.start())
+                if defs is not None and not rule["token_defs"] and in_spans(defs, start):
+                    continue
                 if rule["skip_inside"] and ctx.inside(start, rule["skip_inside"]):
                     continue
                 line_no = bisect_right(line_starts, start)

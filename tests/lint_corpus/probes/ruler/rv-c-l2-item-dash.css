@@ -1,0 +1,1 @@
+.features__item::before { content: ""; width: 12px; height: 2px; background: var(--accent); margin-inline-end: 8px; }

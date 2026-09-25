@@ -1,0 +1,13 @@
+:root {
+  color-scheme: light;
+  --color-page: #ffffff;
+  --space-4: 1rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-page: #0b0b0c;
+  }
+}
+:root[dir="rtl"] :is([lang|="ar"]) { --type-size-1: 1.0625rem; }
+@property --progress { syntax: '<length>'; inherits: false; initial-value: 0px; }

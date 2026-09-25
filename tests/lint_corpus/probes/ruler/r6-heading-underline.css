@@ -1,0 +1,8 @@
+.section-head h2::after {
+  content: "";
+  display: block;
+  inline-size: 3rem;
+  block-size: 3px;
+  background: var(--accent);
+  margin-block-start: 1rem;
+}
