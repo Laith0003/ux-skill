@@ -1,0 +1,29 @@
+{
+  "$description": "Semantic roles, dark theme. Same paths as the light file.",
+  "bg": {
+    "$type": "color",
+    "canvas": {"$value": "{color.neutral.950}"},
+    "subtle": {"$value": "{color.neutral.800}"},
+    "overlay": {"$value": "{color.overlay}"}
+  },
+  "fg": {
+    "$type": "color",
+    "default": {"$value": "{color.neutral.50}"},
+    "muted": {"$value": "{color.neutral.200}"},
+    "on-accent": {"$value": "{color.neutral.950}"}
+  },
+  "accent": {
+    "$type": "color",
+    "$root": {"$value": "{color.brand.300}"},
+    "hover": {"$value": "{color.brand.500}"}
+  },
+  "border": {
+    "$type": "color",
+    "default": {"$value": "{color.neutral.800}"}
+  },
+  "status": {
+    "$type": "color",
+    "danger": {"$value": "{color.danger.500}"},
+    "success": {"$value": "{color.success.600}"}
+  }
+}
