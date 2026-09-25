@@ -596,3 +596,10 @@ def test_an_indented_line_right_after_a_heading_is_code_as_in_commonmark():
     # A paragraph line is not a heading: an indented line after it continues it.
     text = "Spacing\n    - `a`: 4px\n"
     assert [t.path for t in _import(text).tokens.tokens()] == ["a"]
+
+
+@pytest.mark.parametrize("before", ["Tokens\n======\n", "Tokens\n------\n", "```\nx\n```\n",
+                                    "***\n"])
+def test_an_indented_line_after_a_setext_heading_a_fence_or_a_break_is_code(before):
+    text = f"{before}    - `a`: 4px\n\n- `b`: 8px\n"
+    assert [t.path for t in _import(text).tokens.tokens()] == ["b"]
