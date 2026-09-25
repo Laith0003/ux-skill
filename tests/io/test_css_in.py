@@ -720,3 +720,30 @@ def test_a_screen_query_is_read_as_the_base():
     imported = _import("@media screen {\n  :root { --b: 2px; }\n}\n")
     assert imported.tokens.get("b").value == {"value": 2, "unit": "px"}
     assert imported.report.not_read == []
+
+
+@pytest.mark.parametrize("attr", ["data-code-theme", "data-model", "data-remode"])
+def test_an_attribute_that_holds_a_theme_word_inside_another_name_is_not_the_scheme(attr):
+    imported = _import(f":root {{ --ink: #FFFFFF; }}\n[{attr}=dark] {{ --ink: #000000; }}\n")
+    assert imported.tokens.get("ink").modes == {}
+    assert [i.message for i in imported.report.not_read] == [
+        f"is set on [{attr}=dark], which sets dark on {attr}, a name that does not say it "
+        "themes the page; write it on :root or html to make it the page scheme, or keep it in "
+        "the component it themes"]
+
+
+@pytest.mark.parametrize("attr", ["data-theme", "data-mode", "data-color-scheme", "data-scheme"])
+def test_an_attribute_named_for_the_page_theme_is_the_scheme(attr):
+    imported = _import(f":root {{ --ink: #FFFFFF; }}\n[{attr}=dark] {{ --ink: #000000; }}\n")
+    assert imported.tokens.get("ink").modes == {"scheme:dark": "#000000"}
+
+
+def test_a_spelling_note_does_not_hide_the_scaled_note_on_the_same_property():
+    text = (":root { --s-phone: 0.5; --s-wide: 0.8; --s: var(--s-phone); --size-a: 20px; "
+            "--size-b: 24px; --t: calc(var(--size-a) * var(--s)); }\n"
+            "@media (min-width: 640px) { :root { --s: var(--s-wide); } }\n"
+            ".dark { --t: var(--size-b); }\n"
+            "@media (prefers-color-scheme: dark) { :root { --t: var(--size-b, 1px); } }\n")
+    notes = [i.message for i in _import(text).report.notes if i.name == "--t"]
+    assert any("two spellings of one value" in n for n in notes)
+    assert any(n.startswith("is calc(var(--size-a) * var(--s)), and --s scales it") for n in notes)

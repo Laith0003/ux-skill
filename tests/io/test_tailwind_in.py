@@ -461,3 +461,26 @@ def test_json_literals_inside_lists_are_named_not_read_as_text():
     assert [(i.name, i.message) for i in report.notes] == [
         ("fontSize.lg", "its line height 1.75 was left out; the engine keeps line heights as "
                         "their own tokens, so add one if you need it")]
+
+
+def test_every_selector_a_dark_variant_names_is_read_as_dark():
+    text = ("@custom-variant dark (&:where(.theme-night, .theme-night *, "
+            "[data-appearance=night], [data-appearance=night] *));\n"
+            ":root { --bg: #fff; --ink: #111; }\n"
+            ".theme-night { --bg: #000; }\n"
+            "[data-appearance=night] { --ink: #eee; }\n")
+    imported = _css(text)
+    assert dict(imported.tokens.axes) == {"scheme": ("light", "dark")}
+    assert imported.tokens.get("bg").modes == {"scheme:dark": "#000000"}
+    assert imported.tokens.get("ink").modes == {"scheme:dark": "#EEEEEE"}
+    assert imported.report.not_read == []
+
+
+def test_a_nested_dark_variant_is_set_on_every_selector_it_names():
+    text = ("@custom-variant dark (&:where(.theme-night, .theme-night *, "
+            "[data-appearance=night], [data-appearance=night] *));\n"
+            ":root {\n  --bg: #fff;\n  @variant dark {\n    --bg: #000;\n  }\n}\n"
+            "[data-appearance=night] { --bg: #000; }\n")
+    imported = _css(text)
+    assert imported.tokens.get("bg").modes == {"scheme:dark": "#000000"}
+    assert imported.report.not_read == []
