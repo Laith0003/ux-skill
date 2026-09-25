@@ -2,7 +2,7 @@
 
 ## Summary
 
-Radius sets the corners of every shape. The geometry axis sets a base corner from 0px to 14px, a playful brand rounds it up and a formal one squares it off (decisions/roundness.md), and the scale is fixed multiples of it, so controls, cards and dialogs round together. Each step stays at least 1px above the one below, so at the sharp end controls are 2px, cards 3px and dialogs 4px, and only radius.joined is square. Eight roles say what a shape is (a joined seam, a chip, a control, a check box's box, a field of several lines, a card, a dialog, a pill), and radius.media sets the corner of photos. Radius does not govern the color or width of a focus ring; color and border do.
+Radius sets the corners of every shape. The geometry axis sets a base corner from 0px to 14px, a playful brand rounds it up and a formal one squares it off (decisions/roundness.md), and a tone word's formality weight also moves geometry, so playful words round the corners and formal words sharpen them (decisions/tone-words-reach-shape.md), and the scale is fixed multiples of it, so controls, cards and dialogs round together. Each step stays at least 1px above the one below, so at the sharp end controls are 2px, cards 3px and dialogs 4px, and only radius.joined is square. Eight roles say what a shape is (a joined seam, a chip, a control, a check box's box, a field of several lines, a card, a dialog, a pill), and radius.media sets the corner of photos. Radius does not govern the color or width of a focus ring; color and border do.
 
 ## Principles
 

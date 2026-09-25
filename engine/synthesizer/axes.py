@@ -119,6 +119,31 @@ TONE_NUDGES: Dict[str, Dict[str, float]] = {
 }
 
 
+# A word's formality weight also reaches geometry and type personality,
+# in proportion to it: a playful word (formality down) rounds the corners
+# and humanizes the type, a formal word (formality up) sharpens the
+# corners. Type personality moves on the playful side only, since formal
+# type can be a serif or a grotesque. Continuous in the weight, so two
+# words with close formality weights move the shape by close amounts.
+GEOMETRY_PER_FORMALITY = -0.6
+TYPE_PER_PLAYFULNESS = 0.5
+
+
+def word_weights(nudge: Dict[str, float]) -> Dict[str, float]:
+    """A tone word's axis weights with its formality weight carried to
+    geometry and type personality (GEOMETRY_PER_FORMALITY,
+    TYPE_PER_PLAYFULNESS)."""
+    out = dict(nudge)
+    formality = nudge.get("formality", 0.0)
+    if formality:
+        out["geometry"] = out.get("geometry", 0.0) + GEOMETRY_PER_FORMALITY * formality
+        playful = max(0.0, -formality)
+        if playful:
+            out["type_personality"] = out.get("type_personality", 0.0) \
+                + TYPE_PER_PLAYFULNESS * playful
+    return out
+
+
 # Forbidden tag → forced clamps. Used to clip axes hard.
 FORBIDDEN_CLAMPS: Dict[str, Tuple[str, Tuple[float, float]]] = {
     "playful":       ("formality", (0.6, 1.0)),
@@ -187,7 +212,7 @@ def _apply_tone_nudges(axes: Dict[str, float], tags: Iterable[str]) -> Dict[str,
             nudge = TONE_NUDGES.get(tag2)
         if not nudge:
             continue
-        for axis, delta in nudge.items():
+        for axis, delta in word_weights(nudge).items():
             axes[axis] = _clamp(axes[axis] + delta)
     return axes
 

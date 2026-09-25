@@ -337,3 +337,41 @@ def test_a_grey_brands_built_accent_keeps_clear_of_the_built_status_colors(warmt
     for status in character.STATUS_HUES:
         hue = hex_to_oklch(ts.resolve(f"color.{status}.500"))[2]
         assert abs(character.hue_delta(accent, hue)) >= character.STATUS_CLEARANCE, status
+
+
+# M3.5c item 4: a tone word's formality weight also reaches geometry and
+# type personality, continuously: playful words round the corners and
+# humanize the type, formal words sharpen the corners.
+@pytest.mark.parametrize("word", ["playful", "casual", "friendly", "irreverent"])
+def test_a_playful_word_rounds_the_corners_and_humanizes_the_type(word):
+    a = compute_axes({"tone": [word]})
+    assert a.geometry > 0.5 and a.type_personality > 0.5, (word, a)
+
+
+@pytest.mark.parametrize("word", ["corporate", "serious", "professional", "clinical"])
+def test_a_formal_word_sharpens_the_corners(word):
+    assert compute_axes({"tone": [word]}).geometry < 0.5, word
+
+
+def test_the_reach_is_in_proportion_to_the_word_weight():
+    """playful moves formality by -0.30 and casual by -0.25, so playful moves
+    geometry six fifths as far: a continuous weight, not a word table."""
+    playful = compute_axes({"tone": ["playful"]}).geometry - 0.5
+    casual = compute_axes({"tone": ["casual"]}).geometry - 0.5
+    assert casual > 0 and abs(playful / casual - 0.30 / 0.25) < 1e-9
+
+
+def test_a_word_without_a_formality_weight_leaves_geometry_alone():
+    for word in ("warm", "bold", "calm", "dense"):
+        assert compute_axes({"tone": [word]}).geometry == 0.5, word
+
+
+def test_a_playful_brief_is_rounder_than_a_formal_one_in_the_built_corners():
+    """The trial restaurant (warm, playful) had exactly the formal clinic's
+    control and card corners."""
+    def corners(brief):
+        ts = build_system(compute_axes(brief), "#E85D04").tokens
+        return tuple(_px(ts.resolve(r)) for r in ("radius.control", "radius.card"))
+    playful = corners({"tone": ["warm", "playful"]})
+    formal = corners({"industry": "healthcare", "tone": ["calm", "reassuring"]})
+    assert playful[1] > formal[1] and playful[0] >= formal[0], (playful, formal)

@@ -83,6 +83,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Emphasis uses the heading weight, and stays 200 above body text under high contrast](strong-under-high-contrast.md)
 - [Reading styles have a line height of 1.5 or more by default](reading-line-height.md)
 - [Geometry and formality set one roundness, and every corner follows it](roundness.md)
+- [A tone word's formality weight also moves the corners and the type](tone-words-reach-shape.md)
 - [High contrast makes edges and the focus ring heavier](high-contrast-borders.md)
 - [The surface treatment runs from flat hairlines to deep shadows](surface-treatment.md)
 - [Weight and letter spacing change along the type scale](type-along-the-scale.md)

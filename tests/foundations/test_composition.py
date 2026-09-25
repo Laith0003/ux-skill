@@ -45,7 +45,7 @@ def test_the_report_and_the_result_say_which_and_why():
     out = make_system("#E85D04", axes, "x", audience=audience)
     section = out.report.split("## Page composition\n\n", 1)[1].split("\n## ", 1)[0]
     assert "- full-bleed-media: edge-to-edge images or generated art" in section
-    assert "ahead of bento at 0.50, mostly for warmth and playfulness." in section
+    assert "ahead of stacked at 0.50, mostly for warmth and playfulness." in section
     assert out.to_dict()["composition"]["name"] == "full-bleed-media"
 
 
@@ -56,8 +56,8 @@ def test_the_report_opens_with_one_character_sentence_per_system():
         report = make_system(brand, axes, "x", audience=audience).report
         sentences[name] = report.split("\n")[4]
     assert sentences["restaurant"] == (
-        "Character: warm and playful. In this system the brand fills the main action, "
-        "Bricolage Grotesque sets the display type, and a landing page starts from the "
+        "Character: warm, rounded, playful and humanist. In this system the brand fills the "
+        "main action, Baloo 2 sets the display type, and a landing page starts from the "
         "full-bleed-media composition.")
     assert all(s.startswith("Character: ") for s in sentences.values())
     assert len(set(sentences.values())) == 4
