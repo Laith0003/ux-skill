@@ -51,6 +51,11 @@ HUE_CHROMA = 0.04
 # The neutral seed's chroma: a whisper of the brand at warmth 0.5, the warm
 # or cool anchor's at either end.
 NEUTRAL_C = (0.008, 0.030)
+# A grey brand's supporting accent hue at warmth 0 and at warmth 1: violet
+# to rose, the one arc of the wheel that keeps STATUS_CLEARANCE from every
+# status hue at every warmth (39 degrees at the least).
+GREY_ACCENT = (285.0, 355.0)
+STATUS_CLEARANCE = 30.0
 
 
 def clamp(v: float, lo: float = 0.0, hi: float = 1.0) -> float:
@@ -139,11 +144,14 @@ def status_seed(status: str, axes: AxisValues, brand_hue: float,
 
 
 def axes_support_hue(axes: AxisValues) -> float:
-    """The supporting accent's hue when the brand has none: the warm anchor
-    at warmth 1, the cool anchor at warmth 0, and between them the hue walks
-    back through rose (340 degrees at warmth 0.5) and violet, so it moves
-    continuously with warmth and never lands on the success green."""
-    return (WARM_HUE - 180.0 * (1.0 - axes.warmth)) % 360.0
+    """The supporting accent's hue when the brand has none: violet at
+    warmth 0, rose at warmth 1, orchid between, in proportion to warmth
+    (GREY_ACCENT). The status hues sit at 25, 75, 150 and 245 degrees and
+    lean up to STATUS_BAND with warmth; only the arc from violet to rose
+    keeps STATUS_CLEARANCE from all four, so the accent stays on it and
+    never reads as danger, warning, success or info."""
+    cool, warm = GREY_ACCENT
+    return (cool + (warm - cool) * axes.warmth) % 360.0
 
 
 def support_hue(axes: AxisValues, brand_hue: float, brand_chroma: float) -> float:

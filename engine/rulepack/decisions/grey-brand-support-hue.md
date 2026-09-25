@@ -1,10 +1,10 @@
 ---
 id: grey-brand-support-hue
 title: A grey brand's supporting accent takes its hue from warmth alone
-status: active
+status: superseded
 areas: [color]
 supersedes: null
-superseded_by: null
+superseded_by: grey-accent-clear-of-status
 ---
 
 # A grey brand's supporting accent takes its hue from warmth alone

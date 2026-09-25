@@ -59,6 +59,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Warmth moves the neutrals and the duotone light through grey, never around the wheel](warmth-through-grey.md)
 - [A brand's hue counts in proportion to its chroma, so a grey brand steers no hue](grey-brands-steer-no-hue.md)
 - [A grey brand's supporting accent takes its hue from warmth alone](grey-brand-support-hue.md)
+- [A grey brand's supporting accent runs from violet to rose, clear of every status hue](grey-accent-clear-of-status.md)
 - [A sunken surface sits a small step below the page](recessed-sunken.md)
 - [High contrast keeps every surface level apart](high-contrast-surfaces.md)
 - [In dark mode, surfaces lighten as they rise](dark-elevation-cue.md)

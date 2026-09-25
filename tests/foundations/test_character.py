@@ -222,10 +222,34 @@ def test_a_grey_brand_takes_its_support_hue_from_the_axes():
                                         0.3 * character.warm_pull(axes))
                 for chroma in (character.HUE_CHROMA, 0.2):
                     assert character.support_hue(axes, float(h), chroma) == led
-    assert character.axes_support_hue(AxisValues(0.0, *[0.5] * 6)) == character.COOL_HUE
-    assert character.axes_support_hue(AxisValues(1.0, *[0.5] * 6)) == character.WARM_HUE
+    assert character.axes_support_hue(AxisValues(0.0, *[0.5] * 6)) == character.GREY_ACCENT[0]
+    assert character.axes_support_hue(AxisValues(1.0, *[0.5] * 6)) == character.GREY_ACCENT[1]
 
 
 def test_the_axes_support_hue_is_continuous_in_warmth():
     hues = [character.axes_support_hue(AxisValues(i / 400, *[0.5] * 6)) for i in range(401)]
     assert max(abs(character.hue_delta(a, b)) for a, b in zip(hues, hues[1:])) <= 0.5
+
+
+def test_a_grey_brands_accent_keeps_clear_of_every_status_hue():
+    """At every warmth, and whatever the other axes, a grey brand's accent
+    sits at least STATUS_CLEARANCE from each of the four status hues the
+    same system gets, so it never reads as danger or info."""
+    for i in range(1001):
+        for contrast in (0.0, 1.0):
+            axes = AxisValues(i / 1000, contrast, *[0.5] * 5)
+            accent = character.support_hue(axes, 0.0, 0.0)
+            for status in character.STATUS_HUES:
+                hue = character.status_seed(status, axes, 0.0, 0.0)[2]
+                assert abs(character.hue_delta(accent, hue)) >= character.STATUS_CLEARANCE, \
+                    (i / 1000, status, accent, hue)
+
+
+@pytest.mark.parametrize("warmth", [0.0, 0.25, 0.5, 0.75, 1.0])
+def test_a_grey_brands_built_accent_keeps_clear_of_the_built_status_colors(warmth):
+    from engine.foundations.color_math import hex_to_oklch
+    ts = build_system(AxisValues(warmth, *[0.5] * 6), "#808080").tokens
+    accent = hex_to_oklch(ts.resolve("color.support.500"))[2]
+    for status in character.STATUS_HUES:
+        hue = hex_to_oklch(ts.resolve(f"color.{status}.500"))[2]
+        assert abs(character.hue_delta(accent, hue)) >= character.STATUS_CLEARANCE, status
