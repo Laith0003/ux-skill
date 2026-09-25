@@ -1,6 +1,6 @@
 ---
 name: design-system-architect
-description: Builds complete design systems — tokens (color, type, space, motion, radius, shadow), foundation docs, component contracts, dark-mode pairings, theming layer. Dispatched by /ux-system and /ux-component when no system exists.
+description: Builds complete design systems: tokens (color, type, space, motion, radius, shadow), foundation docs, component contracts, dark-mode pairings, theming layer. Dispatched by /ux-system and /ux-design --component when no system exists.
 tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: frontend-engineer
-description: Generates production-grade frontend code (React, Next.js, Vue, Blade+Alpine, vanilla HTML, Astro) with anti-AI-slop discipline. Dispatched by /ux-design, /ux-component, /ux-dashboard, /ux-fix. Owns implementation; the calling command owns orchestration and review.
+description: Generates production-grade frontend code (React, Next.js, Vue, Blade+Alpine, vanilla HTML, Astro) with anti-AI-slop discipline. Dispatched by /ux-design (page, component, dashboard and image modes), /ux-fix. Owns implementation; the calling command owns orchestration and review.
 tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 

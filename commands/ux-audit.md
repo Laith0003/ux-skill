@@ -24,7 +24,7 @@ If `.ux/last-frame.json` exists, read it first — audience and outcome anchor e
 
 ### 1. Anchor to the framing
 
-Read `.ux/last-frame.json` if present. If absent and the surface clearly needs framing context, suggest running `/ux-frame` first — but proceed if the user insists.
+Read `.ux/last-frame.json` if present. If absent and the surface clearly needs framing context, suggest running `/ux-discover --frame` first, but proceed if the user insists.
 
 ### 2. Read the surface
 
@@ -182,7 +182,7 @@ The audit report from step 5, followed by either fix-loop results (if `--fix`) o
 
 Based on `dominant_lens` (the lens with the highest-severity cluster), recommend the narrower follow-up:
 
-- FRAME → `/ux-frame` (the brief is the problem)
+- FRAME → `/ux-discover --frame` (the brief is the problem)
 - DISCOVER → `/ux-audit --fix` (structural fixes)
 - SCAN → `/ux-polish` (hierarchy and rhythm)
 - ACT → `/ux-audit --fix` (interaction-level fixes)
@@ -223,7 +223,7 @@ Other moves: /ux-audit --fix    (apply all findings)
 | Surface URL returns 4xx / 5xx / timeout | Fall back to a file path, screenshot, or pasted code; surface the fetch error to the user |
 | File path does not exist | List nearby paths with `ls` of the parent directory; ask which one matches |
 | Screenshot too low-resolution or scope too broad to inspect | Ask for higher resolution or scope narrowed to one section |
-| `.ux/last-frame.json` absent and surface clearly needs framing | Suggest running `/ux-frame` first; proceed if the user insists, with "no framing on file" stamped on the report |
+| `.ux/last-frame.json` absent and surface clearly needs framing | Suggest running `/ux-discover --frame` first; proceed if the user insists, with "no framing on file" stamped on the report |
 | Description-only input with no inspectable artifact | Ask one clarifying question to either obtain an artifact or narrow scope; then proceed |
 | `--fix` requested on a dirty working tree | Stop; prompt for commit / stash / abort before any dispatch |
 

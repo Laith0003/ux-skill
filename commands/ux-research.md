@@ -166,7 +166,7 @@ After `/ux-research` (planning):
 
 After `/ux-research --synthesize`:
 - `/ux-design` — apply findings to a design
-- `/ux-frame` — re-baseline the brief on what you learned
+- `/ux-discover --frame`: re-baseline the brief on what you learned
 - `/ux-workshop` — if findings open a bigger question
 - `/ux-next` — let the conductor pick
 

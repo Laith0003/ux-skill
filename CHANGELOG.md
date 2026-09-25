@@ -7,6 +7,39 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Changed
+- 25 slash commands become 18. Each merged command keeps every step and
+  flag of the ones it absorbed:
+  - `/ux-discover` takes `--frame` (the four-field framing block) and
+    `--recommend` (the recommender alone). With no flag it runs the
+    10-field intake and then the recommender.
+  - `/ux-design` takes `--component`, `--dashboard` and `--from-image`.
+    With no flag the brief picks the mode.
+  - `/ux-polish` loops lint, fix, re-lint by default until the score
+    reaches 90 or three rounds pass, then runs the taste pass.
+    `--loop-only` runs just the loop, `--no-loop` just the taste pass.
+  - `/ux-init` takes `--stats` for the inventory snapshot alone.
+- `/ux-recommend` is no longer a command of its own. The `ux_recommend`
+  MCP tool is unchanged.
+
+### Deprecated
+These seven commands are now aliases. Each one says where it moved and
+runs the new command with the same arguments. They are removed in 4.1.
+- `/ux-frame`: use `/ux-discover --frame`.
+- `/ux-recommend`: use `/ux-discover --recommend`.
+- `/ux-stats`: use `/ux-init --stats`.
+- `/ux-evolve`: use `/ux-polish --loop-only`. The alias passes
+  `--rounds 5` to keep its old five-round cap.
+- `/ux-component`: use `/ux-design --component`.
+- `/ux-dashboard`: use `/ux-design --dashboard`.
+- `/ux-image-to-code`: use `/ux-design --from-image`. The alias passes
+  `--extract-only` to keep its old behavior of stopping after the
+  extraction.
+
+---
+
 ## [4.0.0-beta.1] - 2026-09-24 - **FOUNDATIONS**
 
 A preview of 4.0. ux-skill can now build a new design system from one brand

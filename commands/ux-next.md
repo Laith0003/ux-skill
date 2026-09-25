@@ -48,10 +48,10 @@ Pick the report with the highest leverage score. The next command is the one tha
 | `last-motion.json` flagging jank | `/ux-motion --fix` |
 | `last-design.json` with no follow-up | `/ux-polish` then `/ux-a11y` |
 | `last-research.json` with results pending | `/ux-research --synthesize` |
-| `last-workshop.json` with a Game Plan | `/ux-design` (first MVP) or `/ux-frame` |
-| `last-component.json` standalone | `/ux-component` (next one) or `/ux-design` (assemble) |
+| `last-workshop.json` with a Game Plan | `/ux-design` (first MVP) or `/ux-discover --frame` |
+| `last-component.json` standalone | `/ux-design --component` (next one) or `/ux-design` (assemble) |
 | `last-dashboard.json` with Critical | `/ux-polish` or `/ux-a11y` |
-| `last-system.json` newly built | `/ux-component` (build against it) |
+| `last-system.json` newly built | `/ux-design --component` (build against it) |
 | `last-case-study.json` complete | `/ux-expert` (share) or done |
 | Nothing actionable, all green | `/ux-next done` (call it shipped) |
 
@@ -95,8 +95,8 @@ This command is read-only. Do not write to `.ux/`. The user re-runs `/ux-next` a
 
 ## Failure modes
 
-- **Empty `.ux/` directory**: output `No prior UX state. Start with /ux-frame (lock the brief) or /ux-design (jump in).` Stop.
-- **All reports older than 30 days**: warn the user that state is stale; recommend `/ux-frame` to re-baseline.
+- **Empty `.ux/` directory**: output `No prior UX state. Start with /ux-discover --frame (lock the brief) or /ux-design (jump in).` Stop.
+- **All reports older than 30 days**: warn the user that state is stale; recommend `/ux-discover --frame` to re-baseline.
 - **Conflicting signals across reports** (e.g. polish says ship-ready, a11y says no-go): surface the conflict explicitly. Recommend resolving a11y first — accessibility is a blocker.
 - **Stale state vs. current code**: this command cannot detect drift between `.ux/` reports and the actual codebase. If the user has made changes since the last report, recommend re-running the relevant audit before acting.
 
@@ -104,8 +104,8 @@ This command is read-only. Do not write to `.ux/`. The user re-runs `/ux-next` a
 
 | Error condition | Recovery |
 |---|---|
-| No prior reports in `.ux/` | Output the empty-state response and suggest `/ux-frame` or `/ux-design` as entry points |
-| All reports older than 30 days | Warn that state is stale; recommend `/ux-frame` to re-baseline |
+| No prior reports in `.ux/` | Output the empty-state response and suggest `/ux-discover --frame` or `/ux-design` as entry points |
+| All reports older than 30 days | Warn that state is stale; recommend `/ux-discover --frame` to re-baseline |
 | Conflicting signals (polish says ship, a11y says no-go) | Surface the conflict explicitly; recommend resolving a11y first — accessibility is a blocker |
 | `.ux/last-*.json` files are malformed or unreadable | Skip the unreadable file, surface the parse error in evidence, continue with the rest |
 | User asks for a specific report and it doesn't exist | List the reports that do exist and let the user pick |
@@ -137,9 +137,9 @@ state = {
 print('STATE:', state)
 suggestion = None
 if not state['discovery']:
-    suggestion = '/ux-frame  -- start by framing the problem (10-field intake)'
+    suggestion = '/ux-discover: start with the 10-field intake'
 elif not state['recommendation']:
-    suggestion = '/ux-recommend  -- get the merged design system'
+    suggestion = '/ux-discover --recommend: get the merged design system'
 elif not state['generated']:
     suggestion = '/ux-design [brief]  -- generate frontend code using the recommendation'
 elif not state['lint_report']:
@@ -157,4 +157,4 @@ The suggestion logic above maps state -> next command deterministically. The LLM
 
 ### Fallback
 
-If state files are missing entirely, the answer is always `/ux-frame` first.
+If state files are missing entirely, the answer is always `/ux-discover` first.

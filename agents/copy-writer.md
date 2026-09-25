@@ -1,6 +1,6 @@
 ---
 name: copy-writer
-description: Drafts production microcopy with the project's voice. Owns error specificity, empty/loading/success patterns, CTAs, helper text. Dispatched by /ux-copy --fix, /ux-design, /ux-frame, /ux-component.
+description: Drafts production microcopy with the project's voice. Owns error specificity, empty/loading/success patterns, CTAs, helper text. Dispatched by /ux-copy --fix, /ux-design (every mode), /ux-discover --frame.
 tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
