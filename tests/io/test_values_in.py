@@ -323,3 +323,22 @@ def test_a_transition_list_is_named_not_read_as_a_font_stack(text):
 ])
 def test_a_font_stack_still_reads_after_the_transition_check(text, names):
     assert read_value(text) == ("fontFamily", names)
+
+
+@pytest.mark.parametrize("text", ["200ms, 300ms", "0.2s, 150MS, 1s"])
+def test_a_bare_list_of_durations_is_named(text):
+    with pytest.raises(NotRead) as exc:
+        read_value(text)
+    assert str(exc.value) == (f"{text} is a list of durations, one per transition or "
+                              "animation; write each duration as its own token")
+
+
+def test_an_unquoted_font_ending_in_a_duration_like_word_is_still_a_font():
+    assert read_value("Font 2s, serif") == ("fontFamily", ["Font 2s", "serif"])
+
+
+@pytest.mark.parametrize("text", ["opacity 200MS ease", "fade 1S ease-out"])
+def test_the_duration_in_a_shorthand_is_matched_in_any_case(text):
+    with pytest.raises(NotRead) as exc:
+        read_value(text)
+    assert "is a transition or animation shorthand" in str(exc.value)

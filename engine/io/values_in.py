@@ -268,6 +268,12 @@ def _font_names(text: str) -> Optional[List[str]]:
     return names
 
 
+def _is_duration(word: str) -> bool:
+    """True for a number in ms or s, the unit in any case."""
+    m = _UNIT.match(word)
+    return bool(m) and m.group(2).lower() in ("ms", "s")
+
+
 def _is_length(word: str, any_unit: bool = False) -> bool:
     """True for a word a shadow layer reads as a length: 0, px or rem, or
     with `any_unit` any length unit, relative ones included."""
@@ -370,13 +376,19 @@ def read_value(text: Any, mapped: Optional[List[GamutMapped]] = None) -> Tuple[s
         raise NotRead(f"{text} uses {name}(), which this reader does not read; write a plain "
                       "value")
     # A transition or animation shorthand, one member or a comma list of
-    # them: a member of several words that holds a duration. Checked before
-    # the font reading, which would take `opacity 200ms ease` as a name.
-    if any(len(split_top(p, " ")) > 1 and any(
-            (_UNIT.match(w) or [None] * 3)[2] in ("ms", "s") for w in split_top(p, " "))
-           for p in split_top(text)):
-        raise NotRead(f"{text} is a transition or animation shorthand; write its duration and "
-                      "its curve as separate tokens")
+    # them: a member of several words that holds a duration (in any case,
+    # 200MS too). Checked before the font reading, which would take
+    # `opacity 200ms ease` as a name; a list that ends in a generic family
+    # (Font 2s, serif) is a font stack. A list of bare durations is named too.
+    members = split_top(text)
+    if not (len(members) > 1 and members[-1].lower() in GENERIC_FAMILIES):
+        if any(len(split_top(p, " ")) > 1 and any(_is_duration(w) for w in split_top(p, " "))
+               for p in members):
+            raise NotRead(f"{text} is a transition or animation shorthand; write its duration "
+                          "and its curve as separate tokens")
+        if len(members) > 1 and all(_is_duration(p) for p in members):
+            raise NotRead(f"{text} is a list of durations, one per transition or animation; "
+                          "write each duration as its own token")
     names = _font_names(text)
     if names is not None:
         return "fontFamily", names
