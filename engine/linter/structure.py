@@ -561,7 +561,7 @@ _ZERO = re.compile(r"^-?0(?:\.0+)?(?:px|em|rem|%)?$")
 _NO_PAINT = {"none", "hidden", "transparent", "initial", "unset"}
 _RING_CLASS = re.compile(
     r"(?:^|\s)(?:[\w-]+:)*focus(?:-visible|-within)?:"
-    r"(?:outline|ring|shadow|border)(?!-(?:none|0|offset|transparent)\b)(?:-[\w\[\]#().,/%-]+)?(?=\s|$)",
+    r"(?:ring|shadow|border)(?!-(?:none|0|offset|transparent)\b)(?:-[\w\[\]#().,/%-]+)?(?=\s|$)",
     re.I,
 )
 
@@ -585,6 +585,19 @@ def _paints(value: str) -> bool:
     return not all(_ZERO.match(w) for w in words)
 
 
+_LENGTH = re.compile(r"^-?(?:\d+\.?\d*|\.\d+)(?:px|em|rem|%)?$")
+
+
+def _shadow_has_size(value: str) -> bool:
+    """A shadow draws only when one layer has a non-zero blur or spread;
+    ``0 0 0 0 #06c`` paints nothing. Offsets alone count too."""
+    for layer in _split_top(value):
+        lengths = [w for w in layer.split() if _LENGTH.match(w)]
+        if not lengths or any(not _ZERO.match(w) for w in lengths):
+            return True
+    return False
+
+
 def ring_kind(body: str) -> str:
     """"outline" or "other" when a block's own declarations draw a visible
     focus indicator; "" when they do not. ``outline: none``, ``border: 0``,
@@ -595,7 +608,7 @@ def ring_kind(body: str) -> str:
             if _paints(value):
                 return "outline"
         elif prop == "box-shadow":
-            if _paints(value):
+            if _paints(value) and _shadow_has_size(value):
                 kind = kind or "other"
         elif prop.startswith("border") and not re.search(r"radius|image|collapse|spacing", prop):
             if _paints(value):
@@ -626,8 +639,9 @@ def _specificity(selector: str) -> Tuple[int, int, int]:
 
 def _sub(ring: FrozenSet[str], removal: FrozenSet[str]) -> bool:
     """A ring compound covers a removal compound when its tokens are a subset:
-    it is as general or more. An empty compound covers only an empty one."""
-    return ring <= removal if ring else not removal
+    it is as general or more. An empty compound (``:focus-visible``, ``*``)
+    covers any element; specificity then decides who wins."""
+    return ring <= removal
 
 
 def _covers(ring: List[FrozenSet[str]], removal: List[FrozenSet[str]]) -> bool:
@@ -637,7 +651,7 @@ def _covers(ring: List[FrozenSet[str]], removal: List[FrozenSet[str]]) -> bool:
         return False
     j = len(removal) - 2
     for r in reversed(ring[:-1]):
-        while j >= 0 and not (r and r <= removal[j]):
+        while j >= 0 and not r <= removal[j]:
             j -= 1
         if j < 0:
             return False
@@ -648,6 +662,8 @@ def _covers(ring: List[FrozenSet[str]], removal: List[FrozenSet[str]]) -> bool:
 @dataclass
 class Ring:
     kind: str                       # "self" or "ancestor"
+    cond: FrozenSet[str]            # @media, @supports and @container around the ring
+    important: bool                 # the ring's outline is !important
     paint: str                      # "outline" or "other"
     toks: List[FrozenSet[str]]      # tokens per compound
     spec: Tuple[int, int, int]
@@ -655,6 +671,39 @@ class Ring:
     anchor: int = -1                # ancestor rings: compound index of the anchor
     within: bool = False            # :focus-within (the anchor may be the element itself)
     inner: Optional[FrozenSet[str]] = None  # :has() argument subject tokens
+
+
+_IMPORTANT_OUTLINE = re.compile(r"(?:^|;)\s*outline(?:-style)?\s*:[^;]*!\s*important", re.I)
+_ALT = re.compile(r":(?:is|where|matches)\(", re.I)
+
+
+def _conditions(block: Block) -> FrozenSet[str]:
+    return frozenset(a for a in block.atrules if a.startswith(("@media", "@supports", "@container")))
+
+
+@lru_cache(maxsize=4096)
+def _alternatives(selector: str) -> Tuple[str, ...]:
+    """Expand ``:is()`` and ``:where()`` into one selector per argument, so
+    ``:where(.btn, .icon-btn):focus-visible`` is read as two rings."""
+    m = _ALT.search(selector)
+    if not m:
+        return (selector,)
+    depth = 0
+    for k in range(m.end() - 1, len(selector)):
+        if selector[k] == "(":
+            depth += 1
+        elif selector[k] == ")":
+            depth -= 1
+            if depth == 0:
+                break
+    else:
+        return (selector,)
+    out: List[str] = []
+    for arg in _split_top(selector[m.end():k]):
+        out.extend(_alternatives(selector[:m.start()] + arg + selector[k + 1:]))
+        if len(out) >= 16:
+            break
+    return tuple(out) or (selector,)
 
 
 def _rings(ctx: FileContext, view: View) -> Tuple[Dict[FrozenSet[str], List[Ring]], Dict[str, List[Ring]], List[Ring]]:
@@ -666,18 +715,20 @@ def _rings(ctx: FileContext, view: View) -> Tuple[Dict[FrozenSet[str], List[Ring
         by_anchor: Dict[str, List[Ring]] = {}
         ancestors: List[Ring] = []
         for b in _blocks(ctx, view)[0]:
-            if not b.selectors or any(a.startswith("@media") and "print" in a for a in b.atrules):
+            if not b.selectors:
                 continue
             paint = ring_kind(b.body)
             if not paint:
                 continue
-            for sel in b.selectors:
-                parts = compounds(sel)
+            cond = _conditions(b)
+            important = bool(_IMPORTANT_OUTLINE.search(b.body))
+            for sel, alt in ((x, y) for x in b.selectors for y in _alternatives(x)):
+                parts = compounds(alt)
                 if not parts:
                     continue
                 toks = [tokens(x) for x in parts]
                 if _focus_kind(parts[-1]) == "self":
-                    ring = Ring("self", paint, toks, _specificity(sel), b.start)
+                    ring = Ring("self", cond, important, paint, toks, _specificity(sel), b.start)
                     by_tokens.setdefault(frozenset().union(*toks), []).append(ring)
                     continue
                 last = len(parts) - 1
@@ -691,8 +742,8 @@ def _rings(ctx: FileContext, view: View) -> Tuple[Dict[FrozenSet[str], List[Ring
                     elif name == "has" and ":focus" in arg:
                         first = _split_top(arg)[:1]
                         sub = compounds(first[0].lstrip(">+~ ")) if first else []
-                        inner = tokens(sub[-1]) if sub else frozenset()
-                ring = Ring("ancestor", paint, toks, _specificity(sel), b.start, last, within, inner)
+                        inner = (tokens(sub[-1]) if sub else frozenset()) or None
+                ring = Ring("ancestor", cond, important, paint, toks, _specificity(sel), b.start, last, within, inner)
                 ancestors.append(ring)
                 for key in toks[last]:
                     by_anchor.setdefault(key, []).append(ring)
@@ -753,14 +804,21 @@ def _markup_wraps(ctx: FileContext, ring: Ring, matched: List[int]) -> bool:
     return True
 
 
-def _removal_has_ring(ctx: FileContext, view: View, selector: str, at: int) -> bool:
+def _removal_has_ring(ctx: FileContext, view: View, selector: str, at: int,
+                      cond: FrozenSet[str] = frozenset(), important: bool = False) -> bool:
     parts = compounds(selector)
     if not parts:
         return False
     removal = [tokens(x) for x in parts]
     spec = _specificity(selector)
     by_tokens, by_anchor, ancestors = _rings(ctx, view)
-    shielded = any(name == "not" and ":focus-visible" in arg for p in parts for name, arg in pseudos(p))
+
+    def applies(ring: Ring) -> bool:
+        # A ring inside a media query the removal is not in (print, dark
+        # theme, a breakpoint) leaves the removal bare elsewhere.
+        if not ring.cond <= cond:
+            return False
+        return not (important and ring.paint == "outline" and not ring.important)
     # A ring that covers the removal uses only tokens the removal has, so
     # rings are looked up by every subset of the removal's tokens.
     pool = sorted(frozenset().union(*removal))
@@ -770,12 +828,14 @@ def _removal_has_ring(ctx: FileContext, view: View, selector: str, at: int) -> b
     else:
         self_rings = [r for rs in by_tokens.values() for r in rs]
     for ring in self_rings:
-        if not _covers(ring.toks, removal):
+        if not applies(ring) or not _covers(ring.toks, removal):
             continue
-        if ring.paint == "outline" and not shielded and (ring.spec, ring.at) < (spec, at):
+        if ring.paint == "outline" and (ring.spec, ring.at) < (spec, at):
             continue  # the removal is more specific (or later) and wins
         return True
-    inner_ok = lambda ring: ring.inner is None or _sub(ring.inner, removal[-1])  # noqa: E731
+
+    def inner_ok(ring: Ring) -> bool:
+        return applies(ring) and (ring.inner is None or _sub(ring.inner, removal[-1]))
     candidates = {id(r): r for t in set().union(*removal) for r in by_anchor.get(t, ())}
     last = len(removal) - 1
     for ring in candidates.values():
@@ -808,13 +868,18 @@ def outline_without_ring(ctx: FileContext, view: View, match: re.Match, start: i
     if block is None or not block.selectors:
         return True
     own_ring = bool(ring_kind(block.body))
+    cond = _conditions(block)
+    important = bool(_IMPORTANT_OUTLINE.search(block.body))
     for sel in block.selectors:
-        parts = compounds(sel)
-        if own_ring and parts and _focus_kind(parts[-1]):
-            continue
-        key = "removal:%d:%s" % (id(view), sel)
-        if not ctx.cached(key, lambda sel=sel: _removal_has_ring(ctx, view, sel, block.start)):
-            return True
+        if re.search(r":not\(\s*:focus-visible\s*\)", sel):
+            continue  # removed only for mouse focus: the keyboard ring stays
+        for alt in _alternatives(sel):
+            parts = compounds(alt)
+            if own_ring and parts and _focus_kind(parts[-1]):
+                continue
+            key = "removal:%d:%s:%s:%s" % (id(view), alt, sorted(cond), important)
+            if not ctx.cached(key, lambda alt=alt: _removal_has_ring(ctx, view, alt, block.start, cond, important)):
+                return True
     return False
 
 
@@ -889,38 +954,115 @@ def _content_share(ctx: FileContext, spans: List[Tuple[int, int]], text: str, s:
     return sum(_visible_len(text[a:b]) for a, b in zip(starts, ends))
 
 
-def document_or_app_surface(ctx: FileContext) -> bool:
-    """True when the page's main content is a document or an app surface:
-    one article, form, table, code listing or grid holds most of the visible
-    text of ``<main>`` (or ``<body>``), or forms, tables, listings and grids
-    together do. Section counts and the mere presence of a form decide
-    nothing, so a landing page built from divs still needs imagery."""
-    def build() -> bool:
-        # Same offsets as the file, with comments, scripts and styles blanked.
-        low = list(ctx.low)
+_CTA = re.compile(
+    r"<(?:a|button)\b[^>]*(?:\bclass\s*=\s*[\"'][^\"']*\b(?:btn|button|cta)\b"
+    r"|\bhref\s*=\s*[\"'][^\"']*(?:sign-?up|register|get-started|start|trial|demo|pricing|contact|book))",
+    re.I,
+)
+
+
+def _page_text(ctx: FileContext) -> str:
+    """The file lowercased, with comments, scripts and styles blanked in
+    place so offsets still match the file."""
+    def build() -> str:
+        chars = list(ctx.low)
         for a, b in list(ctx.views.scan.blanks) + [(x, y) for _, x, y in ctx.views.scan.raw]:
-            low[a:b] = " " * (b - a)
-        low = "".join(low)
+            chars[a:b] = " " * (b - a)
+        return "".join(chars)
+    return ctx.cached("page_text", build)  # type: ignore[return-value]
+
+
+def _has_hero(low: str) -> bool:
+    """An h1 followed by a call to action (a button-styled link or button, or
+    a sign-up, trial, demo, pricing or contact link) before the next h2 or
+    form. A form's own submit button is not a hero."""
+    m = re.search(r"<h1\b", low)
+    if not m:
+        return False
+    nxt = re.search(r"<(?:h2|form)\b", low[m.end():])
+    stop = m.end() + (nxt.start() if nxt else 2000)
+    return bool(_CTA.search(low, m.end(), min(stop, m.end() + 2000)))
+
+
+def _sidebars(ctx: FileContext) -> List[Tuple[int, int]]:
+    """Navigation columns beside the content: an ``<aside>``, or a ``<nav>``
+    or ``role="navigation"`` inside ``<main>`` or named as a sidebar or table
+    of contents, holding three or more links, not inside a header, footer,
+    section or article."""
+    tags, ends, parents = ctx.tree()
+    out: List[Tuple[int, int]] = []
+    for i, tag in enumerate(tags):
+        name = tag.name.lower()
+        attrs = attr_values(ctx.text, tag)
+        is_nav = name == "nav" or attrs.get("role", ("", ""))[1].lower() == "navigation"
+        if name != "aside" and not is_nav:
+            continue
+        chain = []
+        k = parents[i]
+        while k >= 0:
+            chain.append(tags[k].name.lower())
+            k = parents[k]
+        if {"header", "footer", "section", "article"} & set(chain):
+            continue
+        named = re.search(r"side|toc|docs", attrs.get("class", ("", ""))[1] + " " + attrs.get("id", ("", ""))[1], re.I)
+        if name != "aside" and "main" not in chain and not named:
+            continue
+        links = sum(1 for t in tags[i + 1:] if t.start < ends[i] and t.name.lower() == "a")
+        if links >= 3:
+            out.append((tag.start, ends[i]))
+    return out
+
+
+def document_or_app_surface(ctx: FileContext) -> bool:
+    """True when the page is a document or an app surface, not a landing page.
+
+    1. A page with no text (a single-page app root) or ``role="application"``
+       is an app.
+    2. A hero (an h1 followed by a call to action) makes it a landing page.
+    3. A sidebar or table of contents beside the content makes it a docs page
+       or an app shell.
+    4. Otherwise, with navigation left out, the page is a document or app when
+       one article, form, table, code listing, list or grid holds at least 60
+       percent of the main text, or those regions do together. A form that
+       wraps several sections is the page itself and does not count."""
+    def build() -> bool:
+        low = _page_text(ctx)
         s, e = _region(low, "main") or _region(low, "body") or (0, len(low))
+        if not _visible_len(low[s:e]) or re.search(r"role\s*=\s*[\"']?application\b", low):
+            return True
+        if _has_hero(low[s:e]):
+            return False
+        side = _sidebars(ctx)
+        if side:
+            return True
+        chars = list(low)
+        for name in ("nav", "header", "footer"):
+            for a, b in zip(*ctx.element_ranges(name)):
+                if s <= a < e:
+                    chars[a:b] = " " * (b - a)
+        low = "".join(chars)
         total = _visible_len(low[s:e])
         if not total:
-            return False
+            return True
         grids = [
             (t.start, ctx.element_end(t)) for t in ctx.views.scan.tags
-            if re.fullmatch(r"grid|treegrid|application", attr_values(ctx.text, t).get("role", ("", ""))[1].lower())
+            if re.fullmatch(r"grid|treegrid|listbox|log", attr_values(ctx.text, t).get("role", ("", ""))[1].lower())
         ]
-        app: List[Tuple[int, int]] = list(grids)
-        for name in ("article", "form", "table", "pre"):
-            spans = list(zip(*ctx.element_ranges(name)))
-            for a, b in spans:
-                if s <= a < e and _visible_len(low[a:min(b, e)]) >= 0.6 * total:
+        regions: List[Tuple[int, int]] = list(grids)
+        for name in ("article", "form", "table", "pre", "ul", "ol"):
+            for a, b in zip(*ctx.element_ranges(name)):
+                if not s <= a < e:
+                    continue
+                if name == "form" and len(re.findall(r"<section\b", low[a:b])) >= 2:
+                    continue  # a form wrapping the page's sections is the page
+                if name != "article":
+                    regions.append((a, b))
+                if _visible_len(low[a:min(b, e)]) >= 0.6 * total:
                     return True
-            if name != "article":
-                app.extend(spans)
         for a, b in grids:
             if s <= a < e and _visible_len(low[a:min(b, e)]) >= 0.6 * total:
                 return True
-        return _content_share(ctx, app, low, s, e) >= 0.6 * total
+        return _content_share(ctx, regions, low, s, e) >= 0.6 * total
     return bool(ctx.cached("doc_surface", build))
 
 

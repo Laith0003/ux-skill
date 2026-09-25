@@ -109,7 +109,74 @@ EXPECT = {
     "misc/h2.css": {"hover-only-card-actions": []},
     "misc/s.htm": {"image-format-jpg-no-webp-avif": [1], "arbitrary-z-index-9999": [2]},
     "misc/s.svelte": {"image-format-jpg-no-webp-avif": [1], "arbitrary-z-index-9999": [2]},
+    # Round 3. H3: a ring with no tag, class or id on its subject covers any
+    # element in its context and specificity decides; :not(:focus-visible)
+    # removals are safe; rings under another media query, a weaker outline
+    # against !important, and outline classes on an inline removal do not
+    # count. See KNOWN_GAPS for the two lines that still pass wrongly.
+    "r3/h3-app.html": {OUT: [6, 13]},
+    "r3/h3-blog.html": {OUT: [4]},
+    "r3/h3-docs.html": {OUT: [8]},
+    "r3/imp/main.css": {IMP: [1]},
+    "r3/imp/base.css": {IMP: []},
+    "r3/imp/tokens.css": {IMP: []},
+    # Round 3. H4: landing pages fire, docs pages and app shells do not.
+    "r3/h4-docs-a.html": {IMG: []},
+    "r3/h4-docs-b.html": {IMG: []},
+    "r3/h4-docs-c-landing-table.html": {IMG: [1]},
+    "r3/h4-app-a-dashboard.html": {IMG: []},
+    "r3/h4-app-b-chat.html": {IMG: []},
+    "r3/h4-app-c-spa-root.html": {IMG: []},
+    "r3/h4-app-d-form-wrapper.html": {IMG: [1]},
+    "r3/h4-blog-a-hero-css.html": {IMG: []},
+    "r3/h4-blog-b-astro-image.astro": {IMG: []},
+    "r3/h4-blog-c-landing-in-article.html": {IMG: [1]},
 }
+
+# Lines that still pass although they should fire. Each is pinned at its
+# current result so a change in either direction is noticed; move a line into
+# EXPECT when the gap is closed.
+KNOWN_GAPS = {
+    "r3/h3-blog.html": {OUT: (6, "a later .share .share-link:focus-visible { box-shadow: none } cancels the ring")},
+    "r3/h3-docs.html": {OUT: (6, "a .toc > a ring is read as .toc a; child combinators are not compared")},
+}
+
+
+def test_known_gaps_are_still_open():
+    for name, rules in KNOWN_GAPS.items():
+        path = PROBES / name
+        findings = lint_text(str(path), path.read_text(encoding="utf-8"))
+        for rule_id, (line, why) in rules.items():
+            fired = any(f.rule_id == rule_id and f.line == line for f in findings)
+            assert not fired, (
+                f"probes/{name}:{line} now fires {rule_id} ({why}). The gap is closed: "
+                f"add line {line} to EXPECT and remove it from KNOWN_GAPS"
+            )
+
+
+# The reviewer's isolated H3 cases, one stylesheet each.
+ISO = [
+    ("global-fv", "button { outline: none; }\n:focus-visible { outline: 2px solid #06c; }\n", False),
+    ("star-fv", "a, button { outline: none; }\n*:focus-visible { outline: 2px solid #06c; }\n", False),
+    ("desc-universal", ".post-body a { outline: none; }\n.post-body :focus-visible { outline: 2px solid #06c; }\n", False),
+    ("where", ".icon-btn { outline: none; }\n:where(.btn, .icon-btn):focus-visible { outline: 2px solid #06c; }\n", False),
+    ("is", ".icon-btn { outline: none; }\n:is(.btn, .icon-btn):focus-visible { outline: 2px solid #06c; }\n", False),
+    ("has-bare", ".tabs [role=tab] { outline: none; }\n.tabs:has(:focus-visible) { box-shadow: 0 0 0 2px #06c; }\n", False),
+    ("not-fv alone", "button:focus:not(:focus-visible) { outline: none; }\n", False),
+    ("important", ".doc a { outline: none !important; }\n.doc a:focus-visible { outline: 2px solid #06c; }\n", True),
+    ("important both", ".doc a { outline: none !important; }\n.doc a:focus-visible { outline: 2px solid #06c !important; }\n", False),
+    ("dark-only", ".cta { outline: none; }\n@media (prefers-color-scheme: dark) { .cta:focus-visible { outline: 2px solid white; } }\n", True),
+    ("zero-shadow", ".z { outline: none; }\n.z:focus-visible { box-shadow: 0 0 0 0 #06c; }\n", True),
+    ("star vs specific", "*:focus-visible { outline: 2px solid blue; }\n.search input:focus { outline: none; }\n", True),
+    ("global ring weaker", ":focus-visible { outline: 2px solid blue; }\nbutton:focus { outline: none; }\n", True),
+    ("global shadow ring", "button:focus { outline: none; }\n:focus-visible { box-shadow: 0 0 0 3px blue; }\n", False),
+]
+
+
+@pytest.mark.parametrize("name,css,should_fire", ISO, ids=[c[0] for c in ISO])
+def test_isolated_outline_case(name, css, should_fire):
+    fired = any(f.rule_id == OUT for f in lint_text("x.css", css))
+    assert fired is should_fire, f"{name}: expected {'a finding' if should_fire else 'no finding'}"
 
 
 def test_every_probe_file_has_an_expectation():

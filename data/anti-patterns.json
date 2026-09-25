@@ -859,7 +859,7 @@
         "target": "css",
         "post": "outline-without-ring"
       },
-      "why": "outline: none removes the only keyboard focus indicator and leaves keyboard users with no signal of focus state - a WCAG 2.4.7 failure.",
+      "why": "outline: none removes the only keyboard focus indicator and leaves keyboard users with no signal of focus state - a WCAG 2.4.7 failure. The linter decides per rule block. A removal passes when it is limited to :not(:focus-visible), when a :focus-visible or :focus rule that covers the same element (a bare :focus-visible or * covers every element) draws a visible outline, box-shadow or border and wins on specificity, or when a :focus-within or :has(:focus-visible) rule on an ancestor of that element draws one. A ring inside a media query the removal is not in, or on some other element, does not count.",
       "fix": "Give this selector its own focus ring, or ring an ancestor that holds it: .x:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }, or .field:focus-within { box-shadow: 0 0 0 3px var(--primary); }. A ring on another element does not count."
     },
     {
@@ -3010,7 +3010,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\A(?=[\\s\\S]*<body\\b)(?![\\s\\S]*(?:<img\\b|<picture\\b|<video\\b|<svg\\b[^>]*(?:\\s(?:width|height)\\s*=\\s*[\\\"']?\\s*[1-9]\\d{2,}|viewBox\\s*=\\s*[\\\"']\\s*[-\\d.]+\\s+[-\\d.]+\\s+[1-9]\\d{2,})|url\\([^)]*\\.(?:png|jpe?g|webp|avif|gif)))[\\s\\S]{0,80}",
+        "pattern": "\\A(?=[\\s\\S]*<body\\b)(?![\\s\\S]*(?:<img\\b|<picture\\b|<video\\b|<image\\b|<(?!svg\\b)[a-z][\\w-]*\\b[^>]*\\brole\\s*=\\s*[\\\"']img[\\\"']|<svg\\b[^>]*(?:\\s(?:width|height)\\s*=\\s*[\\\"']?\\s*[1-9]\\d{2,}|viewBox\\s*=\\s*[\\\"']\\s*[-\\d.]+\\s+[-\\d.]+\\s+[1-9]\\d{2,})|url\\([^)]*\\.(?:png|jpe?g|webp|avif|gif)))[\\s\\S]{0,80}",
         "flags": "i",
         "scope": [
           "html",
@@ -3020,7 +3020,7 @@
         "target": "code",
         "post": "page-needs-imagery"
       },
-      "why": "Imagery is mandatory and real. A full rendered page (has a <body>) whose only visuals are icon-sized SVGs (sub-100px, a tiny viewBox) - or that ships no imagery at all - is a text-wall of cards that reads as a memo, not a product. Icons are not imagery; a meaningful illustration (>=100px or a large viewBox), a real <img>/<picture>/<video>, or a real background photo is. The single biggest richness failure. (Scoped to full documents; component fragments without a <body> are exempt.)",
+      "why": "Imagery is mandatory and real. A full rendered page (has a <body>) whose only visuals are icon-sized SVGs (sub-100px, a tiny viewBox) - or that ships no imagery at all - is a text-wall of cards that reads as a memo, not a product. Icons are not imagery; a meaningful illustration (>=100px or a large viewBox), a real <img>/<picture>/<video>, or a real background photo is. The single biggest richness failure. (Scoped to full documents; component fragments without a <body> are exempt.) Pages that are not landing pages are skipped: an app root with no text or role=application; a docs page or app shell with a sidebar or table of contents beside the content; or a page where one article, form, table, code listing, list or grid holds most of the main text. A hero (an h1 followed by a call to action) always marks a landing page, and a form that wraps several sections is the page itself.",
       "fix": "Add real imagery: the client's own product UI/screenshots first, then curated Unsplash/Pexels chosen to match the brand and temperature. An abstract SVG illustration can support a section but is not a substitute for a real product/site image. Anchor major sections with imagery; never ship a text-only wall."
     },
     {
