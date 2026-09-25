@@ -10,9 +10,9 @@ value the browser computes (calc(), color-mix()), a unit relative to
 something outside the token (em, %, vw) and a color space it does not
 convert raise NotRead with the reason and the fix. Nothing is guessed.
 
-An oklch() or oklab() color outside sRGB is never refused (ruling M4-R5):
-it is mapped into sRGB by CSS Color 4 gamut mapping, keeping its lightness
-and hue, and reported as a GamutMapped with the OKLab distance it moved.
+An oklch() or oklab() color outside sRGB is never refused: it is mapped
+into sRGB by CSS Color 4 gamut mapping, keeping its lightness and hue, and
+reported as a GamutMapped with the OKLab distance it moved.
 """
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ import re
 from dataclasses import dataclass
 from typing import Any, List, Optional, Tuple
 
-from engine.foundations.color_math import gamut_map_oklch, rgb_to_hex
+from engine.foundations.color_math import gamut_map_oklch, oklab_to_oklch, rgb_to_hex
 from engine.foundations.values import GENERIC_FAMILIES, STROKE_STYLES
 
 
@@ -44,7 +44,7 @@ _NUM = re.compile(_NUMBER + r"$", re.I)
 _UNIT = re.compile(r"(" + _NUMBER + r")([a-z%]+)$", re.I)
 _HEX = re.compile(r"#([0-9a-f]{3,8})$", re.I)
 _FUNC = re.compile(r"([a-z-]+)\((.*)\)$", re.I | re.S)
-_VAR = re.compile(r"var\(\s*--([A-Za-z0-9_-]+)\s*(?:,\s*(.*?))?\s*\)$", re.S)
+_VAR_HEAD = re.compile(r"var\(\s*--([A-Za-z0-9_-]+)\s*")
 
 # The curves CSS defines for its easing keywords.
 EASING_KEYWORDS = {
@@ -59,14 +59,43 @@ _RELATIVE = {"em": "the parent's font size", "%": "its container", "vw": "the vi
              "svh": "the viewport", "dvh": "the viewport", "lvh": "the viewport"}
 _COMPUTED = ("calc", "min", "max", "clamp", "color-mix", "light-dark", "env", "attr")
 _OTHER_SPACES = ("lab", "lch", "hwb", "color")
+# Each color function's channels, for the fix a refusal names.
+_CHANNELS = {"rgb": "r g b", "hsl": "h s l", "oklch": "l c h", "oklab": "l a b"}
 # CSS angle units, in degrees.
 _HUE_UNITS = {"deg": 1.0, "turn": 360.0, "rad": 180 / math.pi, "grad": 0.9}
 
 
+def _finite(value: float) -> float:
+    if not math.isfinite(value):
+        raise ValueError(value)
+    return value
+
+
 def _number(text: str) -> float:
     value = float(text)
+    if not math.isfinite(value):
+        raise NotRead(f"{text} is not a finite number; write a plain number")
     return int(value) if value == int(value) and "." not in text and "e" not in text.lower() \
         else value
+
+
+def _closing_paren(text: str, start: int) -> int:
+    """The index of the paren that closes the one at `start`, skipping quoted
+    text, or -1 when it never closes."""
+    depth, quote = 0, ""
+    for i in range(start, len(text)):
+        ch = text[i]
+        if quote:
+            quote = "" if ch == quote else quote
+        elif ch in "\"'":
+            quote = ch
+        elif ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+            if depth == 0:
+                return i
+    return -1
 
 
 def split_top(text: str, sep: str = ",") -> List[str]:
@@ -93,9 +122,15 @@ def css_alias(text: str) -> Optional[Tuple[str, str]]:
     None when it is not a reference. A value mixing a reference with
     anything else raises NotRead."""
     text = text.strip()
-    m = _VAR.match(text)
-    if m:
-        return m.group(1), (m.group(2) or "").strip()
+    m = _VAR_HEAD.match(text)
+    # The reference is the whole value only when the paren that closes var(
+    # is the last character.
+    if m and _closing_paren(text, 3) == len(text) - 1:
+        rest = text[m.end():-1]
+        if not rest or rest.startswith(","):
+            return m.group(1), rest[1:].strip()
+    if "var(" in text and text.split("(", 1)[0].strip().lower() in _COMPUTED:
+        raise NotRead(f"{text} is computed by the browser; write the value it computes to")
     if "var(" in text:
         raise NotRead(f"{text} joins several values with var(); split it into one token per "
                       "value")
@@ -118,9 +153,11 @@ def _alpha_hex(alpha: float) -> str:
 
 def _channel(part: str, scale: float) -> float:
     """One channel: a number on `scale`, or a percentage of it."""
+    if part.lower() == "none":  # CSS: a missing channel reads as zero
+        return 0.0
     if part.endswith("%"):
-        return float(part[:-1]) / 100 * scale
-    return float(part)
+        return _finite(float(part[:-1]) / 100 * scale)
+    return _finite(float(part))
 
 
 def _args(text: str, name: str, body: str) -> Tuple[List[str], Optional[str]]:
@@ -135,15 +172,16 @@ def _args(text: str, name: str, body: str) -> Tuple[List[str], Optional[str]]:
         channels = main.split()
         alpha = alpha_text.strip() or None
     if len(channels) != 3:
-        raise NotRead(f"{text} needs three channels; write it as {name}(r g b) or "
-                      f"{name}(r g b / a)")
+        names = _CHANNELS.get(name.rstrip("a") if name != "oklab" else name, "r g b")
+        raise NotRead(f"{text} needs three channels; write it as {name}({names}) or "
+                      f"{name}({names} / a)")
     return channels, alpha
 
 
 def _alpha(text: Optional[str]) -> float:
     if text is None:
         return 1.0
-    return float(text[:-1]) / 100 if text.endswith("%") else float(text)
+    return _channel(text, 1)
 
 
 def _hsl_to_rgb(h: float, s: float, lightness: float) -> Tuple[float, float, float]:
@@ -165,13 +203,16 @@ def _hue(text: str, part: str) -> float:
         if unit not in _HUE_UNITS:
             raise NotRead(f"{text} writes its hue in {unit}, which this reader does not read; "
                           "write the hue in deg, turn, rad or grad")
-        return float(m.group(1)) * _HUE_UNITS[unit]
-    return float(part)
+        return _finite(float(m.group(1)) * _HUE_UNITS[unit])
+    return _finite(float(part))
 
 
 def _color_function(text: str, name: str, body: str,
                     mapped: Optional[List[GamutMapped]] = None) -> str:
     name = name.lower()
+    if body.strip().lower().startswith("from "):
+        raise NotRead(f"{text} is a relative color, computed by the browser; write the value "
+                      "it computes to")
     try:
         channels, alpha_text = _args(text, name, body)
         alpha = _alpha(alpha_text)
@@ -180,15 +221,19 @@ def _color_function(text: str, name: str, body: str,
         elif name in ("hsl", "hsla"):
             # CSS Color 4: a unitless saturation or lightness is a percentage.
             hue = _hue(text, channels[0])
-            sat, light = (float(c[:-1] if c.endswith("%") else c) / 100 for c in channels[1:])
+            if "," in body and not all(c.endswith("%") for c in channels[1:]):
+                raise NotRead(f"{text} writes saturation and lightness without %, which the "
+                              f"comma syntax does not allow; write {name}({channels[0]}, "
+                              f"{channels[1].rstrip('%')}%, {channels[2].rstrip('%')}%)")
+            sat, light = (_channel(c.rstrip("%"), 1) / 100 for c in channels[1:])
             rgb = _hsl_to_rgb(hue, sat, light)
         else:  # oklch, oklab
             lightness = _channel(channels[0], 1)
             if name == "oklch":
                 chroma, hue = _channel(channels[1], 0.4), _hue(text, channels[2])
             else:
-                a, b = _channel(channels[1], 0.4), _channel(channels[2], 0.4)
-                chroma, hue = math.hypot(a, b), math.degrees(math.atan2(b, a)) % 360
+                _, chroma, hue = oklab_to_oklch(0, _channel(channels[1], 0.4),
+                                                _channel(channels[2], 0.4))
             # CSS Color 4 gamut mapping, the one `system detect` uses too.
             hx, distance, was_mapped = gamut_map_oklch(lightness, chroma, hue)
             hx += _alpha_hex(alpha)
@@ -259,7 +304,7 @@ def read_value(text: Any, mapped: Optional[List[GamutMapped]] = None) -> Tuple[s
         text = str(text)
     text = text.strip().rstrip(";").strip()
     if not text:
-        raise NotRead("the value is empty")
+        raise NotRead("the value is empty; write a value or remove the entry")
     lower = text.lower()
     if _HEX.match(text):
         return "color", _hex(text)
@@ -309,6 +354,18 @@ def read_value(text: Any, mapped: Optional[List[GamutMapped]] = None) -> Tuple[s
     names = _font_names(text)
     if names is not None:
         return "fontFamily", names
+    words = split_top(text, " ")
+    # inset is a border style and a shadow keyword; the shadow reading wins.
+    if len(words) > 1 and any(w.lower() in STROKE_STYLES and w.lower() != "inset"
+                              for w in words):
+        raise NotRead(f"{text} is a border shorthand; write its width, style and color as "
+                      "separate tokens")
+    if len(words) > 1 and any("/" in w and "(" not in w for w in words):
+        raise NotRead(f"{text} is a font shorthand; write its family, size, weight and line "
+                      "height as separate tokens")
+    if lower == "currentcolor":
+        raise NotRead(f"{text} has no fixed value; it takes the color of the element it sits "
+                      "on, so write the color as hex")
     layers = split_top(text)
     if any(ch.isdigit() for ch in text) and all(len(split_top(p, " ")) >= 3 for p in layers):
         return "shadow", [_shadow_layer(p, mapped) for p in layers]

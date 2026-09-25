@@ -107,6 +107,7 @@ def test_an_empty_section_says_so():
     assert "Modes: none; every token has one value.\n" in text
     assert "## Not read\n\nNothing was left unread.\n" in text
     assert "## Renamed on the way in" not in text and "## Read with a note" not in text
+    assert "## Mapped into sRGB" not in text
 
 
 def test_imported_carries_the_tokens_the_report_and_the_css_forms():

@@ -13,6 +13,8 @@ import re
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
+from engine.foundations.color_math import oklab_to_oklch
+
 # The frontmatter key and value ux-skill writes into a MASTER.md it owns.
 OWNER_KEY = "generated_by"
 OWNER_VALUE = "ux-skill"
@@ -137,7 +139,7 @@ def _function_hex(name: str, args: str) -> str:
             return _oklch_hex(_num(parts[0], 1.0), _num(parts[1], 0.4), _num(parts[2]))
         if name == "oklab" and len(parts) >= 3:
             L, a, b = _num(parts[0], 1.0), _num(parts[1], 0.4), _num(parts[2], 0.4)
-            return _oklch_hex(L, math.hypot(a, b), math.degrees(math.atan2(b, a)) % 360)
+            return _oklch_hex(*oklab_to_oklch(L, a, b))
         if name == "color" and len(parts) >= 4 and parts[0].lower() == "srgb":
             return _rgb_hex(*(_num(p, 1.0) * 255 for p in parts[1:4]))
     except (ValueError, ImportError):
@@ -168,8 +170,7 @@ def normalize_hex(value: Any) -> str:
                 if space == "oklch":
                     return _oklch_hex(*c)
                 if space == "oklab":
-                    return _oklch_hex(c[0], math.hypot(c[1], c[2]),
-                                      math.degrees(math.atan2(c[2], c[1])) % 360)
+                    return _oklch_hex(*oklab_to_oklch(*c))
             except (ValueError, ImportError):
                 return ""
         return ""

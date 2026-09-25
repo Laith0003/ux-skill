@@ -91,7 +91,7 @@ def test_a_shadow_with_two_lengths_gets_no_blur_or_spread():
     ("rgb(1, 2)", "rgb(1, 2) needs three channels; write it as rgb(r g b) or rgb(r g b / a)"),
     ("cubic-bezier(2, 0, 0, 1)", "cubic-bezier(2, 0, 0, 1) has an x outside 0 to 1; x1 and x2 "
                                  "must sit from 0 to 1"),
-    ("", "the value is empty"),
+    ("", "the value is empty; write a value or remove the entry"),
 ])
 def test_what_it_cannot_read_comes_back_as_a_reason(text, reason):
     with pytest.raises(NotRead) as exc:
@@ -122,7 +122,7 @@ def test_a_fallback_may_itself_hold_a_nested_reference():
 
 
 def test_system_detect_reads_colors_and_references_through_this_reader():
-    """BF6's `system detect` and the importers read one color the same way:
+    """`system detect` and the importers read one color the same way:
     detect reads through read_value, maps out-of-gamut oklch the same way,
     and keeps its lenient reading only for what the importer refuses."""
     import random
@@ -153,7 +153,7 @@ def test_system_detect_reads_colors_and_references_through_this_reader():
 
 
 # Tailwind v4's blue-500, green-500 and red-600: written in oklch, outside
-# sRGB. The hex each maps to is the sRGB fallback Tailwind itself publishes.
+# sRGB. The hex each maps to is the widely used hex for these steps.
 TAILWIND_V4 = {
     "oklch(62.3% 0.214 259.815)": "#2B7FFF",
     "oklch(72.3% 0.219 149.579)": "#00C950",
@@ -165,8 +165,9 @@ TAILWIND_V4_RED_500 = "oklch(63.7% 0.237 25.331)"
 
 @pytest.mark.parametrize("text", sorted(TAILWIND_V4))
 def test_out_of_gamut_oklch_is_mapped_into_srgb_never_refused(text):
-    """M4-R5: CSS Color 4 gamut mapping. Lower the chroma, keep lightness
-    and hue, until the color sits inside sRGB within a just visible step."""
+    """An out-of-gamut color is mapped by CSS Color 4 gamut mapping, never
+    refused: lower the chroma, keep lightness and hue, until the color sits
+    inside sRGB within a just visible step."""
     from engine.foundations.color_math import hex_to_oklch
 
     mapped = []
@@ -227,3 +228,76 @@ def test_any_other_hue_unit_is_refused_by_name():
         read_value("oklch(0.7 0.1 30foo)")
     assert str(exc.value) == ("oklch(0.7 0.1 30foo) writes its hue in foo, which this reader "
                               "does not read; write the hue in deg, turn, rad or grad")
+
+
+# Tailwind v4 compiles --tw-ring-shadow to this: several values, one of them
+# a reference with an empty fallback.
+TAILWIND_RING_SHADOW = ("var(--tw-ring-inset,) 0 0 0 calc(3px + var(--tw-ring-offset-width)) "
+                        "var(--tw-ring-color, currentcolor)")
+
+
+@pytest.mark.parametrize("text", ["var(--a, 1px) var(--b)", "var(--a) 1px",
+                                  TAILWIND_RING_SHADOW])
+def test_a_reference_followed_by_more_is_not_one_reference(text):
+    with pytest.raises(NotRead, match="joins several values with var"):
+        css_alias(text)
+
+
+def test_detect_returns_a_value_of_several_references_as_written():
+    from engine.existing import resolve_css_var
+
+    props = {"--a": "#111111", "--sh": "var(--a, 0 1px) var(--b)",
+             "--ring": TAILWIND_RING_SHADOW}
+    assert resolve_css_var("var(--sh)", props) == "var(--a, 0 1px) var(--b)"
+    assert resolve_css_var("var(--ring)", props) == TAILWIND_RING_SHADOW
+
+
+def test_an_empty_fallback_and_a_fallback_with_parens_still_read():
+    assert css_alias("var(--tw-ring-inset,)") == ("tw-ring-inset", "")
+    assert css_alias("var(--c, rgb(0 0 0 / 50%))") == ("c", "rgb(0 0 0 / 50%)")
+    assert css_alias('var(--f, "a)b")') == ("f", '"a)b"')
+
+
+@pytest.mark.parametrize("text,reason", [
+    ("1e999px", "1e999 is not a finite number; write a plain number"),
+    ("rgb(nan 0 0)", "rgb(nan 0 0) has a channel that is not a number; write it as hex"),
+    ("rgb(0 0 0 / inf)", "rgb(0 0 0 / inf) has a channel that is not a number; write it as hex"),
+    ("hsl(inf 50% 50%)", "hsl(inf 50% 50%) has a channel that is not a number; write it as hex"),
+    ("oklch(from var(--brand) l c h / 50%)", "oklch(from var(--brand) l c h / 50%) is a "
+     "relative color, computed by the browser; write the value it computes to"),
+    ("oklch(0.5 0.1)", "oklch(0.5 0.1) needs three channels; write it as oklch(l c h) or "
+                       "oklch(l c h / a)"),
+    ("hsl(1, 2)", "hsl(1, 2) needs three channels; write it as hsl(h s l) or hsl(h s l / a)"),
+    ("1px solid #000", "1px solid #000 is a border shorthand; write its width, style and "
+                       "color as separate tokens"),
+    ("400 16px/1.5 Inter", "400 16px/1.5 Inter is a font shorthand; write its family, size, "
+                           "weight and line height as separate tokens"),
+    ("currentColor", "currentColor has no fixed value; it takes the color of the element it "
+                     "sits on, so write the color as hex"),
+    ("hsl(225, 100, 60)", "hsl(225, 100, 60) writes saturation and lightness without %, which "
+                          "the comma syntax does not allow; write hsl(225, 100%, 60%)"),
+])
+def test_odd_values_are_refused_with_the_right_reason(text, reason):
+    with pytest.raises(NotRead) as exc:
+        read_value(text)
+    assert str(exc.value) == reason
+
+
+def test_calc_around_a_reference_is_refused_as_computed():
+    with pytest.raises(NotRead) as exc:
+        css_alias("calc(var(--x) * 2)")
+    assert str(exc.value) == ("calc(var(--x) * 2) is computed by the browser; write the value "
+                              "it computes to")
+
+
+def test_a_none_channel_reads_as_zero():
+    assert read_value("oklch(none 0.1 180)") == read_value("oklch(0 0.1 180)")
+    assert read_value("rgb(0 0 0 / none)") == ("color", "#00000000")
+    assert read_value("hsl(none 100% 50%)") == ("color", "#FF0000")
+
+
+def test_float_noise_at_the_gamut_edge_is_not_reported_as_mapped():
+    mapped = []
+    # #FF0000 written as oklch with the usual rounding sits a hair outside sRGB.
+    assert read_value("oklch(62.8% 0.258 29.234)", mapped) == ("color", "#FF0000")
+    assert mapped == []
