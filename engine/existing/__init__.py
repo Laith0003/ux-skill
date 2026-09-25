@@ -8,20 +8,27 @@ overwrite or re-derive it. This package finds it and reads the few values
 the engine needs (the declared primary, the text color, the font
 families, the page language). The full importer is a later milestone.
 
+It also decides who owns a file: ux-skill stamps a digest of its own text
+into what it writes, and a file is ux-skill's only while that digest still
+matches, so a hand edit makes it the person's file and it is never
+overwritten.
+
 Public surface
 --------------
 ``detect_existing_system(root) -> dict``
 ``flatten_dtcg(doc) -> dict``
-``is_ux_skill_file(path) -> bool``
-``OWNER_KEY``, ``OWNER_VALUE``
+``ownership(path) -> str``, ``is_ux_skill_file(path) -> bool``
+``stamp_digest(text, comment=False) -> str``
+``client_files_in(out_dir, names) -> list``
 """
 from engine.existing.detect import (
-    OWNER_KEY, OWNER_VALUE, DESIGN_MD_MARKER, detect_existing_system, flatten_dtcg,
-    is_ux_skill_file, css_custom_properties, resolve_css_var, normalize_hex,
+    DESIGN_MD_MARKER, DIGEST_KEY, OWNER_KEY, OWNER_VALUE, client_files_in,
+    css_custom_properties, detect_existing_system, flatten_dtcg, is_ux_skill_file,
+    mark_suggestions, normalize_hex, ownership, resolve_css_var, stamp_digest, text_digest,
 )
 
 __all__ = [
-    "OWNER_KEY", "OWNER_VALUE", "DESIGN_MD_MARKER", "detect_existing_system",
-    "flatten_dtcg", "is_ux_skill_file", "css_custom_properties", "resolve_css_var",
-    "normalize_hex",
+    "DESIGN_MD_MARKER", "DIGEST_KEY", "OWNER_KEY", "OWNER_VALUE", "client_files_in",
+    "css_custom_properties", "detect_existing_system", "flatten_dtcg", "is_ux_skill_file",
+    "mark_suggestions", "normalize_hex", "ownership", "resolve_css_var", "stamp_digest", "text_digest",
 ]

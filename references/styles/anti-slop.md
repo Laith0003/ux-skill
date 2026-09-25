@@ -24,7 +24,7 @@ Treat each ban as a hard rule unless a brief explicitly overrides it. The goal i
 
 8. **Clarity over consistency.** When making something significantly clearer requires slight inconsistency, choose clarity every time.
 
-9. **A client's existing design system wins.** When the project already has its own system (tokens, foundation CSS, a hand-written MASTER.md or DESIGN.md), every generic rule in this file yields to it: its colors, saturation, gradients, type, label tracking and case stand as they are. These bans guard against model defaults, never against a client's deliberate identity. Find it with `ux system detect` before applying any rule below.
+9. **A client's existing design system wins.** When the project already has its own system (tokens, foundation CSS, a hand-written MASTER.md or DESIGN.md), every generic rule in this file yields to it: its colors, saturation, gradients, type, label tracking and case stand as they are. These bans guard against model defaults, never against a client's deliberate identity; a mark beside a label still needs the recorded waiver (decisions/eyebrow-is-text.md). Find it with `ux system detect` before applying any rule below.
 
 ---
 
@@ -106,7 +106,7 @@ Hero rules, including the hero height, live in `references/surfaces/landing.md`.
 | Decorative or handwritten display faces on premium surfaces | Personality comes from scale, weight contrast, and whitespace — not face selection |
 | 5+ weights from the same family | Three-weight system at most: bold/semibold for display, regular for body, lighter for support |
 | Variable font weight animated for decoration only | When variable axes animate, the motion expresses state change — not "look at this font" |
-| Eyebrows that aren't tracked (`+0.05em` to `+0.10em`) | All eyebrows are tracked. The wide tracking is the whole point. An existing design system wins: when the client's system sets label letter-spacing to 0 or sentence case, keep it (decisions/eyebrow-is-text.md) |
+| Eyebrows that aren't tracked (`+0.05em` to `+0.10em`) | All eyebrows are tracked. The wide tracking is the whole point. An existing design system wins: when the client's system sets label letter-spacing to 0 or sentence case, keep it (decisions/existing-system-wins.md) |
 | A short line, dash or dot before or after an eyebrow (a `::before` bar, an empty span, a left border, an SVG line, a typed dash) | The eyebrow is text only. Its size, weight, tracking and color carry it; lint flags every build as `decorative-accent-ruler` |
 
 ---

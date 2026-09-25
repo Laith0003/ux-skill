@@ -6,6 +6,8 @@ disable-model-invocation: false
 
 # /ux-polish
 
+**An existing design system is fixed input.** Before any engine pick, run `python3 -m engine.cli.main --no-pretty system detect --root .` (over MCP, `ux_system_detect`). When `found` is true, follow `commands/ux-design.md` step 1a: the project's tokens win, the engine's palette and type picks are suggestions for gaps only, and nothing edits, overwrites or re-derives the system's files.
+
 You are running the `/ux-polish` command from the `ux` plugin. The job is a cosmetic pass: the surface mostly works but feels rough, generic, or unfinished. First the deterministic loop (lint, fix, re-lint) raises the score; then the taste pass tightens spacing, sharpens hierarchy, kills AI-slop tells, and aligns loose tokens.
 
 `/ux-polish` absorbs what used to be `/ux-evolve`; that name still works as an alias until 4.1.

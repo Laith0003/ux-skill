@@ -72,6 +72,10 @@ def _kind(value: Any) -> str:
         return "an object"
     if isinstance(value, list):
         return "a list"
+    if isinstance(value, str):
+        return "a string"
+    if value is None:
+        return "null"
     return "a %s" % type(value).__name__
 
 
@@ -108,10 +112,16 @@ def brief_from_dict(payload: Any, label: str = "brief") -> Brief:
             continue
         if isinstance(value, str):
             value = [s.strip() for s in value.split(",") if s.strip()]
-        if not isinstance(value, list) or not all(isinstance(v, str) for v in value):
+        if not isinstance(value, list):
             raise BriefError(f"{label} field {key} is {_kind(value)}; pass a list of strings "
                              f'such as "{key}": ["calm", "precise"], or one comma-separated '
                              f'string such as "{key}": "calm, precise"')
+        for n, item in enumerate(value, 1):
+            if not isinstance(item, str):
+                raise BriefError(f"{label} field {key} item {n} is {_kind(item)}; pass it as a "
+                                 f"string, for example \"{item}\"" if isinstance(item, (int, float))
+                                 else f"{label} field {key} item {n} is {_kind(item)}; pass it "
+                                 "as a string")
         kwargs[key] = [v.strip() for v in value if v.strip()]
     brand = payload.get("brand")
     if brand is not None:

@@ -219,8 +219,11 @@ def build_profile(signals: Dict[str, Any]) -> BrandProfile:
     if declared_primary and logo_pick:
         skip.add(logo_pick.upper())   # a sample of the primary, reported as logo_primary
     seen = set()
+    # Dark neutrals are text or ink, never a secondary brand color, even when
+    # a declared text color already fills the text role.
     p.secondary = [h for h in (logo_hexes + css_hexes)
-                   if h.upper() not in skip and not (h.upper() in seen or seen.add(h.upper()))][:4]
+                   if h.upper() not in skip and not _is_text_like(h)
+                   and not (h.upper() in seen or seen.add(h.upper()))][:4]
     if css_hexes and logo_hexes and p.primary_source == "logo":
         p.notes.append("Primary taken from the logo, not the most-painted CSS color.")
 
