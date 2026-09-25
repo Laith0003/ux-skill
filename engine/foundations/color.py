@@ -20,6 +20,7 @@ from dataclasses import dataclass
 from types import MappingProxyType
 from typing import Callable, Dict, Iterable, List, Mapping, Optional, Tuple
 
+from engine.foundations import character
 from engine.foundations.color_math import contrast, hex_to_oklch, luminance, oklch_to_hex
 from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check, GateFinding, Pairing, cite, required
@@ -31,15 +32,18 @@ from engine.synthesizer.axes import AxisValues
 # Every context color tokens are generated for, base first.
 COLOR_CONTEXTS = tuple(contexts(("scheme", "contrast")))
 
-STATUS_HUES = {"danger": 25.0, "warning": 75.0, "success": 150.0, "info": 245.0}
-STATUS_SEED = (0.58, 0.16)  # OKLCH lightness, chroma for status seeds
+# Each status family's own hue; character.status_seed harmonizes it to the
+# brand and the warmth axis, never more than character.STATUS_BAND away.
+STATUS_HUES = dict(character.STATUS_HUES)
 # Translucent overlays: black ("shade") and white ("tint") at these percents.
 OVERLAY_STEPS = (10, 20, 40, 60, 80)
 
 _SEMANTIC: Dict[str, Tuple[str, str]] = {
     "color.surface.page": ("color.neutral.50", "color.neutral.950"),
     "color.surface.card": ("color.base.white", "color.neutral.900"),
-    "color.surface.sunken": ("color.neutral.100", "color.base.black"),
+    # A recess sits half a step below the page, so it reads as a well and
+    # not as a disabled slab (light) or a hole (dark).
+    "color.surface.sunken": ("color.neutral.recess-light", "color.neutral.recess-dark"),
     "color.surface.raised": ("color.base.white", "color.neutral.800"),
     "color.surface.inverse": ("color.neutral.900", "color.neutral.100"),
     "color.surface.selected": ("color.brand.100", "color.brand.900"),
@@ -67,6 +71,9 @@ _SEMANTIC: Dict[str, Tuple[str, str]] = {
     # dark starts one step lighter.
     "color.line.input": ("color.neutral.500", "color.neutral.400"),
     "color.line.selected": ("color.brand.600", "color.brand.300"),
+    # The error edge of a field: the danger hue at a non-text minimum, with
+    # no text on it, so high contrast never pushes it toward black.
+    "color.line.danger": ("color.danger.600", "color.danger.400"),
     "color.focus.ring": ("color.brand.700", "color.brand.200"),
     "color.focus.ring-inverse": ("color.brand.300", "color.brand.700"),
     "color.scrim": ("color.shade.40", "color.shade.60"),
@@ -85,9 +92,9 @@ SEMANTIC: Mapping[str, Tuple[str, str]] = MappingProxyType(_SEMANTIC)
 # the standard table puts them.
 _HIGH: Dict[str, Tuple[str, str]] = {
     "color.surface.page": ("color.base.white", "color.base.black"),
-    "color.surface.card": ("color.base.white", "color.neutral.950"),
-    "color.surface.sunken": ("color.base.white", "color.base.black"),
-    "color.surface.raised": ("color.base.white", "color.neutral.900"),
+    "color.surface.card": ("color.base.white", "color.neutral.900"),
+    "color.surface.sunken": ("color.neutral.100", "color.base.black"),
+    "color.surface.raised": ("color.base.white", "color.neutral.800"),
     "color.surface.inverse": ("color.base.black", "color.base.white"),
     "color.surface.selected": ("color.brand.50", "color.brand.950"),
     "color.text.default": ("color.neutral.950", "color.base.white"),
@@ -103,6 +110,7 @@ _HIGH: Dict[str, Tuple[str, str]] = {
     "color.line.subtle": ("color.neutral.400", "color.neutral.600"),
     "color.line.input": ("color.neutral.700", "color.neutral.300"),
     "color.line.selected": ("color.brand.800", "color.brand.200"),
+    "color.line.danger": ("color.danger.700", "color.danger.300"),
     "color.focus.ring": ("color.brand.600", "color.brand.400"),
     "color.focus.ring-inverse": ("color.brand.200", "color.brand.800"),
     "color.scrim": ("color.shade.60", "color.shade.80"),
@@ -124,7 +132,8 @@ TEXT_ROLES: Tuple[str, ...] = ("color.text.default", "color.text.muted", "color.
 TEXT_SURFACES: Tuple[str, ...] = ("color.surface.page", "color.surface.card",
                                   "color.surface.sunken", "color.surface.raised",
                                   "color.surface.selected")
-LINE_ROLES: Tuple[str, ...] = ("color.line.input", "color.line.selected", "color.focus.ring")
+LINE_ROLES: Tuple[str, ...] = ("color.line.input", "color.line.selected", "color.line.danger",
+                                "color.focus.ring")
 LINE_SURFACES: Tuple[str, ...] = ("color.surface.page", "color.surface.card",
                                   "color.surface.sunken", "color.surface.raised")
 # Roles in the four families the tables cover (text, surface, line,
@@ -249,20 +258,38 @@ def _need(fg: str, bg: str, mode: str) -> float:
 
 
 def _neutral_seed(brand_hex: str, axes: AxisValues) -> str:
-    _, _, hue = hex_to_oklch(brand_hex)
-    return oklch_to_hex(0.55, 0.004 + 0.018 * axes.warmth, hue)
+    """The neutral ramp's seed: the brand hue at warmth 0.5, pulled toward
+    a warm or a cool hue, with more chroma, toward either end."""
+    hue, chroma = character.neutral_tint(axes, hex_to_oklch(brand_hex)[2])
+    return oklch_to_hex(0.55, chroma, hue)
+
+
+# How far a recess sits below the page, in OKLCH lightness.
+RECESS_L = 0.035
+
+
+def _shift(hx: str, delta: float) -> str:
+    """The same hue and chroma at a lightness `delta` away."""
+    L, C, H = hex_to_oklch(hx)
+    return oklch_to_hex(L + delta, C, H)
 
 
 def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str, str]:
     prims = {"color.base.white": "#FFFFFF", "color.base.black": "#000000"}
     seeds = {"brand": brand_hex, "neutral": _neutral_seed(brand_hex, axes)}
-    seeds.update({s: oklch_to_hex(STATUS_SEED[0], STATUS_SEED[1], h) for s, h in STATUS_HUES.items()})
+    brand_hue = hex_to_oklch(brand_hex)[2]
+    seeds.update({s: oklch_to_hex(*character.status_seed(s, axes, brand_hue))
+                  for s in STATUS_HUES})
     for family, seed in seeds.items():
         r = ramp(seed)
         if r.retuned:
             notes.append(f"color.{family}: {r.note}")
         for step, hx in r.stops.items():
             prims[f"color.{family}.{step}"] = hx
+        if family == "neutral":
+            # Kept beside the ramp, so a DTCG round trip keeps the order.
+            prims["color.neutral.recess-light"] = _shift(r.stops[50], -RECESS_L)
+            prims["color.neutral.recess-dark"] = _shift(r.stops[950], -RECESS_L)
     for family, rgb in (("shade", "#000000"), ("tint", "#FFFFFF")):
         for pct in OVERLAY_STEPS:
             prims[f"color.{family}.{pct}"] = rgb + f"{round(pct * 255 / 100):02X}"
@@ -522,7 +549,33 @@ def _scheme_polarity(ts: TokenSet, mode: str) -> List[str]:
             f"{want} page, so point {page} and {text} at the other ends of the neutral ramp"]
 
 
+def _step_of(ts: TokenSet, role: str, mode: str) -> Optional[Tuple[str, int]]:
+    """(family, ramp index) a role aliases in one context, or None."""
+    raw = ts.raw(role, mode)
+    if not is_alias(raw):
+        return None
+    family, _, step = alias_target(raw).rpartition(".")
+    return (family, STEPS.index(int(step))) if step.isdigit() and int(step) in STEPS else None
+
+
+def _error_edge_hue(ts: TokenSet, mode: str) -> List[str]:
+    """Under high contrast the error edge sits at most one ramp step past
+    its standard step, so it stays red instead of going near black (light)
+    or near white (dark)."""
+    role = "color.line.danger"
+    if parse(mode).get("contrast") != "high" or not _typed(ts, role):
+        return []
+    std = mode.replace("contrast:high", "contrast:standard")
+    high, base = _step_of(ts, role, mode), _step_of(ts, role, std)
+    if high is None or base is None or high[0] != base[0] or abs(high[1] - base[1]) <= 1:
+        return []
+    return [f"{role} ({mode}) sits {abs(high[1] - base[1])} ramp steps from its standard step "
+            f"{base[0]}.{STEPS[base[1]]}, so the error edge loses its red; keep it within one "
+            "step and let the field's icon and message carry the rest"]
+
+
 CHECKS: Tuple[Check, ...] = (
+    Check("error-edge-hue", "system", _error_edge_hue, axes=("scheme", "contrast")),
     Check("states-distinct", "system", _states_distinct, axes=("scheme", "contrast")),
     Check("disabled-distinct", "system", _disabled_distinct, axes=("scheme", "contrast")),
     Check("disabled-visible", "system", _disabled_visible, axes=("scheme", "contrast")),

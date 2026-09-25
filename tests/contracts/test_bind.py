@@ -44,7 +44,7 @@ def test_a_fill_that_equals_its_surface_declares_an_edge():
     assert messages(contract(with_edge=False)) == [
         ("container-edge",
          "toggle: track.fill is color.surface.sunken, which measures 1.00:1 against "
-         "color.surface.page in scheme:light,contrast:high, below our container edge floor of "
+         "color.surface.page in scheme:dark,contrast:high, below our container edge floor of "
          "1.2:1 (WCAG sets no minimum for a container's edge), so the track has no visible edge "
          "there; bind border-width to border.outline and a border-color on track for the same "
          "variant and state")]
@@ -123,7 +123,7 @@ def test_a_declared_pairing_is_measured_in_every_color_context():
         "scheme:dark,contrast:high"]
     assert found[1] == (
         "contrast", "toggle: color.text.disabled on color.surface.page (scheme:dark,"
-        "contrast:standard) is 2.89:1; WCAG 1.4.11 needs 3:1. Bind a role with more contrast "
+        "contrast:standard) is 2.88:1; WCAG 1.4.11 needs 3:1. Bind a role with more contrast "
         "against color.surface.page, or build the system again with a different brand color")
     assert "our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3:1)" in found[0][1]
 
@@ -139,7 +139,7 @@ def test_high_pins_the_high_contrast_minimum_and_system_floors_say_whose_they_ar
     found = [m for _, m in messages(contract(edit))]
     assert [m for m in found if "surface.page" in m] == [
         "toggle: color.text.disabled on color.surface.page (scheme:dark,contrast:standard) is "
-        "2.89:1; WCAG 1.4.11 needs 3:1. Bind a role with more contrast against "
+        "2.88:1; WCAG 1.4.11 needs 3:1. Bind a role with more contrast against "
         "color.surface.page, or build the system again with a different brand color"]
     card = [m for m in found if "surface.card" in m]
     assert len(card) == 4 and all("the declared floor for the toggle contract is 5:1" in m

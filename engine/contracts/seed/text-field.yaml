@@ -36,7 +36,7 @@ tokens:
   - {part: input, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
   # error: a heavier edge in the danger color, an icon and a message
   - {part: input, property: border-width, role: border.emphasis, state: error}
-  - {part: input, property: border-color, role: color.status.danger.strong, state: error}
+  - {part: input, property: border-color, role: color.line.danger, state: error}
   - {part: icon, property: icon, role: color.status.danger.strong, state: error}
   - {part: message, property: text, role: color.status.danger.text, state: error}
   - {part: message, property: font, role: type.text.fine, state: error}
@@ -51,6 +51,7 @@ contrast:
   - {fg: color.text.muted, bg: color.surface.card, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.line.danger, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   - {fg: color.status.danger.strong, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   - {fg: color.status.danger.strong, bg: color.surface.card, minimum: 3, criterion: "1.4.11"}
   - {fg: color.status.danger.text, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}

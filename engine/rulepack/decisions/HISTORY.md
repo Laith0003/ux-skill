@@ -30,6 +30,10 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [A focus ring on a tinted fill keeps 3:1 in high contrast](ring-on-tinted-fills.md)
 - [Disabled colors stay distinct and visible, not readable at 4.5:1](disabled-contrast.md)
 - [Status colors keep their own hues, whatever the brand hue](status-hues.md)
+- [Status colors lean toward the brand and the warmth axis, inside a fixed band](status-harmony.md)
+- [Warmth sets the hue and chroma of the neutrals](neutral-tint.md)
+- [A sunken surface sits a small step below the page](recessed-sunken.md)
+- [High contrast keeps every surface level apart](high-contrast-surfaces.md)
 - [In dark mode, surfaces lighten as they rise](dark-elevation-cue.md)
 
 ## Shape, space and motion
@@ -45,3 +49,4 @@ A router, not a story. Each line opens one record; the record says what was deci
 
 - [A container whose fill measures below 1.2:1 against its surface draws an edge](container-edge.md)
 - [Buttons have two intents, neutral and danger](button-intents.md)
+- [A field's error edge has its own role and keeps its red](error-edge.md)

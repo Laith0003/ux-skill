@@ -299,9 +299,9 @@ def test_the_states_that_meet_come_from_the_bindings(tmp_path):
     shutil.copytree(SEED_DIR, contracts)
     field = contracts / "text-field.yaml"
     text = field.read_text(encoding="utf-8")
-    assert "role: color.status.danger.strong, state: error}" in text
+    assert "property: border-color, role: color.line.danger, state: error}" in text
     field.write_text(text.replace("role: color.line.subtle, state: disabled}",
-                                  "role: color.status.danger.strong, state: disabled}"),
+                                  "role: color.line.danger, state: disabled}"),
                      encoding="utf-8")
     changed = {c.name: c for c in load_folder(contracts)}["text-field"]
     assert state_pairs(changed) == []
@@ -476,9 +476,10 @@ def test_every_surface_order_statement_holds_for_the_build(brand):
         assert luminance(v["page"]) < luminance(v["card"]) < luminance(v["raised"])
     assert light["card"] == light["raised"] and lhc["card"] == lhc["raised"]
     assert "Where two levels share a color, as card and raised do in light" in arch
-    assert set(lhc.values()) == {"#FFFFFF"} and dhc["sunken"] == dhc["page"] == "#000000"
-    assert "in light all four surfaces are white, and in dark the sunken surface and the " \
-           "page are both black" in arch
+    assert lhc["page"] == lhc["card"] == lhc["raised"] == "#FFFFFF" != lhc["sunken"]
+    assert dhc["sunken"] == dhc["page"] == "#000000"
+    assert "in light the page, card and raised surfaces are white and the sunken surface is " \
+           "neutral.100, and in dark the page and the sunken surface are black" in arch
     record = files[f"{PACK}/decisions/dark-elevation-cue.md"]
     assert "Sunken is darker than the page at standard contrast; under high contrast both are " \
            "black." in record

@@ -1,10 +1,10 @@
 ---
 id: status-hues
 title: Status colors keep their own hues, whatever the brand hue
-status: active
+status: superseded
 areas: [color]
 supersedes: null
-superseded_by: null
+superseded_by: status-harmony
 ---
 
 # Status colors keep their own hues, whatever the brand hue

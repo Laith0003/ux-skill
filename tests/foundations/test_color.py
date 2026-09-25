@@ -707,7 +707,8 @@ _TEXT_ROLES = ("color.text.default", "color.text.muted", "color.text.link",
                "color.status.danger.text", "color.status.warning.text",
                "color.status.success.text", "color.status.info.text")
 _TEXT_SURFACES = _SURFACES + ("color.surface.selected",)
-_LINE_ROLES = ("color.line.input", "color.line.selected", "color.focus.ring")
+_LINE_ROLES = ("color.line.input", "color.line.selected", "color.line.danger",
+               "color.focus.ring")
 
 
 def test_the_coverage_tables_name_every_text_and_line_role():

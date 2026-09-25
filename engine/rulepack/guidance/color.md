@@ -2,7 +2,7 @@
 
 ## Summary
 
-Color sets every surface, text, line, fill and ring in the product, in light and dark and at standard and high contrast. It is generated from one brand color: the brand anchors its ramp at step 500, a neutral ramp takes a trace of the brand hue, and four status ramps sit at fixed hues. The build measures text roles against every surface they can sit on, the input line, the selected line and the focus ring against the page, card, sunken and raised surfaces, and the text on each fill against that fill. Action fills and strong status fills are measured against the page only: on card, sunken and raised a filled control is found by its label and its focus ring, not its fill (decisions/fill-edge-page-only.md). Contracts add the pairings their components need. Color does not govern type size, spacing or shadow; those foundations own them.
+Color sets every surface, text, line, fill and ring in the product, in light and dark and at standard and high contrast. It is generated from one brand color: the brand anchors its ramp at step 500, a neutral ramp takes the brand hue pulled warm or cool by the warmth axis (decisions/neutral-tint.md), and four status ramps lean toward the brand inside a fixed band of their own hues (decisions/status-harmony.md). The build measures text roles against every surface they can sit on, the input line, the selected line, the error edge and the focus ring against the page, card, sunken and raised surfaces, and the text on each fill against that fill. Action fills and strong status fills are measured against the page only: on card, sunken and raised a filled control is found by its label and its focus ring, not its fill (decisions/fill-edge-page-only.md). Contracts add the pairings their components need. Color does not govern type size, spacing or shadow; those foundations own them.
 
 ## Principles
 
@@ -18,7 +18,7 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 
 - `color.surface.page`: the page itself, the lowest working surface everything else sits on.
 - `color.surface.card`: a contained block on the page, such as a card, a panel or a field's fill.
-- `color.surface.sunken`: a recessed area below the page, such as a well, a code block, a hovered row or a disabled field.
+- `color.surface.sunken`: a recessed area a small step below the page, such as a well, a hovered row or a disabled field (decisions/recessed-sunken.md).
 - `color.surface.raised`: a surface above the page that floats, such as a dialog, a menu or a lifted card.
 - `color.surface.inverse`: a surface in the opposite scheme, such as a tooltip or a snackbar; only inverse text and the inverse ring go on it.
 - `color.surface.selected`: the tint of a selected item and the hover and pressed fill of secondary and ghost buttons.
@@ -39,12 +39,13 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - `color.line.subtle`: a quiet separator between siblings, the edge of a card or dialog that only marks its shape, and the edge of a disabled field; decorative, so never the only edge of an enabled control.
 - `color.line.input`: the edge of a field, a check box, a status banner, a row under hover or press, and any control that must be found by its edge.
 - `color.line.selected`: the edge and check mark of a selected item, and the edge of a secondary button and of a ghost button under hover or press.
+- `color.line.danger`: the edge of a field in error; it carries no text, so it keeps its red under high contrast (decisions/error-edge.md).
 - `color.focus.ring`: the keyboard focus ring on every surface except inverse.
 - `color.focus.ring-inverse`: the focus ring on the inverse surface.
 - `color.scrim`: the translucent dimming behind a dialog; a layer, never a surface for content.
 - `color.status.danger.text`: danger words in running text, such as an error message under a field, and the label of a danger secondary or ghost button.
 - `color.status.danger.soft`: the quiet danger tint of a danger status banner or badge, and the hover and pressed fill of a danger secondary or ghost button.
-- `color.status.danger.strong`: the solid danger color for the icon of a danger status banner, a field's error edge and icon, the edge of a danger secondary button and of a danger ghost button under hover or press, and a danger badge.
+- `color.status.danger.strong`: the solid danger color for the icon of a danger status banner, a field's error icon, the edge of a danger secondary button and of a danger ghost button under hover or press, and a danger badge.
 - `color.status.danger.on-strong`: text and icons on the strong danger fill.
 - `color.status.warning.text`: warning words in running text, such as a note about a risk that can still be avoided.
 - `color.status.warning.soft`: the quiet warning tint of a warning status banner or badge.
@@ -73,6 +74,7 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 | A light, repeated action where the layout already marks it as an action | a ghost button: the label in color.text.link, a fill and edge only on hover and press | a secondary button in every row |
 | A destructive action | color.action.danger with color.text.on-danger | a warning color |
 | A field's edge | color.line.input | color.line.subtle, which may not reach 3:1 |
+| A field in error | color.line.danger with an icon and a message | the strong danger fill, which goes dark in high contrast |
 | A separator inside a card | color.line.subtle | color.line.input |
 | A selected item | color.surface.selected with color.line.selected and a heavier edge | the tint alone |
 | An error, warning, success or note | the matching color.status roles with an icon and words | the brand color |
@@ -85,11 +87,11 @@ An icon takes the role its contract binds; with none, it takes the role of the t
 
 ## Modes
 
-Color varies on scheme (light, dark) and contrast (standard, high). Every semantic role has a value in all four contexts; primitives never change. Dark is not an inversion: each role is chosen for dark and measured there. Under high contrast, text pairings rise to 7:1 and non-text pairings to our 4.5:1 floor, unless a pairing pins its own high-contrast minimum, as the ring on tinted fills (decisions/ring-on-tinted-fills.md) and the disabled label (decisions/disabled-contrast.md) do (decisions/high-contrast-non-text-floor.md). Under high contrast the surfaces move toward the ends of the ramp: in light all four surfaces are white, and in dark the sunken surface and the page are both black. A container whose fill then measures below our 1.2:1 floor against the surface under it draws an edge (decisions/container-edge.md).
+Color varies on scheme (light, dark) and contrast (standard, high). Every semantic role has a value in all four contexts; primitives never change. Dark is not an inversion: each role is chosen for dark and measured there. Under high contrast, text pairings rise to 7:1 and non-text pairings to our 4.5:1 floor, unless a pairing pins its own high-contrast minimum, as the ring on tinted fills (decisions/ring-on-tinted-fills.md) and the disabled label (decisions/disabled-contrast.md) do (decisions/high-contrast-non-text-floor.md). Under high contrast the surfaces move toward the ends of the ramp while each level stays apart: in light the page, card and raised surfaces are white and the sunken surface is neutral.100, and in dark the page and the sunken surface are black, the card neutral.900 and the raised surface neutral.800 (decisions/high-contrast-surfaces.md). A container whose fill then measures below our 1.2:1 floor against the surface under it draws an edge (decisions/container-edge.md).
 
 ## Changing the system
 
-1. Color moves with the brand color, and the warmth axis sets how much of the brand hue the neutrals carry. Change them and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json; the ramps, roles and pairings are regenerated and measured in all four contexts.
+1. Color moves with the brand color and the axes: warmth sets the neutral tint and leans the status hues, and contrast sets how saturated the status colors are. Change them and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json; the ramps, roles and pairings are regenerated and measured in all four contexts.
 2. Change one input at a time: a failed gate names the pairing and the context, and a change is not done until it passes in dark and high contrast as well as light.
 3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
 4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.
@@ -102,6 +104,7 @@ Some roles carry no contrast minimum. Disabled text and fills are checked for di
 
 ## Checks
 
+- `error-edge-hue`: under high contrast the error edge stays within one ramp step of its standard step, so it stays red.
 - `states-distinct`: each fill's hover and pressed steps differ from the fill and from each other.
 - `disabled-distinct`: disabled text differs from default and muted text, and the disabled fill differs from the primary fill.
 - `disabled-visible`: the disabled fill differs from the card and raised surfaces, so a disabled button never vanishes.
@@ -114,7 +117,7 @@ Some roles carry no contrast minimum. Disabled text and fills are checked for di
 - The edge of an enabled field or control uses color.line.input, not color.line.subtle; the subtle line does not promise 3:1.
 - A component placed on a surface its contract does not list is measured on that surface before it ships.
 - A filled control whose label is not visible, such as an icon-only button, on a card, sunken or raised surface pairs its fill with that surface in its own contract (decisions/fill-edge-page-only.md).
-- A brand color near a status hue is not used where it could read as that status (decisions/status-hues.md).
+- A brand color near a status hue is not used where it could read as that status (decisions/status-harmony.md).
 - Text over an image or a gradient is measured against the worst area it covers.
 - A pass on the numbers is not a pass when the use breaks the rule: disabled text used for secondary copy fails even though no ratio applies.
 

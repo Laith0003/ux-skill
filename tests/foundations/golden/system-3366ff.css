@@ -12,61 +12,63 @@
   --color-brand-800: #071D90;
   --color-brand-900: #03006D;
   --color-brand-950: #01003B;
-  --color-neutral-50: #F6F7F9;
-  --color-neutral-100: #D9DBDE;
-  --color-neutral-200: #BDBFC4;
-  --color-neutral-300: #A2A5AA;
-  --color-neutral-400: #878B91;
-  --color-neutral-500: #6E7279;
-  --color-neutral-600: #585C62;
-  --color-neutral-700: #43464C;
-  --color-neutral-800: #2F3237;
-  --color-neutral-900: #1D1F23;
-  --color-neutral-950: #0B0D11;
-  --color-danger-50: #FFF4F3;
-  --color-danger-100: #FFD0CB;
-  --color-danger-200: #F7ADA6;
-  --color-danger-300: #E88E86;
-  --color-danger-400: #D86D66;
-  --color-danger-500: #C74B47;
-  --color-danger-600: #A63634;
-  --color-danger-700: #862021;
-  --color-danger-800: #67070E;
-  --color-danger-900: #440004;
-  --color-danger-950: #220001;
-  --color-warning-50: #FFF5E8;
-  --color-warning-100: #F0D9BA;
-  --color-warning-200: #DDBE93;
-  --color-warning-300: #CAA36C;
-  --color-warning-400: #B78843;
-  --color-warning-500: #A46E00;
-  --color-warning-600: #845800;
-  --color-warning-700: #664300;
-  --color-warning-800: #492F00;
-  --color-warning-900: #2E1C00;
-  --color-warning-950: #160B00;
-  --color-success-50: #E5FFE9;
-  --color-success-100: #C0E9C7;
-  --color-success-200: #9AD4A5;
-  --color-success-300: #74BE84;
-  --color-success-400: #4AA963;
-  --color-success-500: #009342;
-  --color-success-600: #007634;
-  --color-success-700: #005B26;
-  --color-success-800: #004119;
-  --color-success-900: #00290D;
-  --color-success-950: #001204;
-  --color-info-50: #F0F8FF;
-  --color-info-100: #C0E1FF;
-  --color-info-200: #97C9F4;
-  --color-info-300: #71B1E7;
-  --color-info-400: #4799D8;
-  --color-info-500: #0080CA;
-  --color-info-600: #0067A4;
-  --color-info-700: #004F7F;
-  --color-info-800: #00385C;
-  --color-info-900: #00223B;
-  --color-info-950: #000E1D;
+  --color-neutral-50: #F6F7F8;
+  --color-neutral-100: #D9DBDD;
+  --color-neutral-200: #BEBFC2;
+  --color-neutral-300: #A3A5A8;
+  --color-neutral-400: #888B8F;
+  --color-neutral-500: #6F7276;
+  --color-neutral-600: #595C5F;
+  --color-neutral-700: #44464A;
+  --color-neutral-800: #303235;
+  --color-neutral-900: #1D1F21;
+  --color-neutral-950: #0C0D0F;
+  --color-neutral-recess-light: #EAEBEC;
+  --color-neutral-recess-dark: #060608;
+  --color-danger-50: #FFF4F4;
+  --color-danger-100: #FCD0D3;
+  --color-danger-200: #ECB1B6;
+  --color-danger-300: #DC939A;
+  --color-danger-400: #CA757F;
+  --color-danger-500: #B85765;
+  --color-danger-600: #99424F;
+  --color-danger-700: #7A2D3A;
+  --color-danger-800: #5D1826;
+  --color-danger-900: #410414;
+  --color-danger-950: #220006;
+  --color-warning-50: #FFF5EC;
+  --color-warning-100: #F5D6BB;
+  --color-warning-200: #E4BA95;
+  --color-warning-300: #D29E6F;
+  --color-warning-400: #C08348;
+  --color-warning-500: #AD6715;
+  --color-warning-600: #8E5100;
+  --color-warning-700: #6E3D00;
+  --color-warning-800: #4F2B00;
+  --color-warning-900: #321900;
+  --color-warning-950: #180900;
+  --color-success-50: #E5FEF0;
+  --color-success-100: #C0E8D3;
+  --color-success-200: #9BD2B6;
+  --color-success-300: #76BC99;
+  --color-success-400: #4CA67E;
+  --color-success-500: #0B9163;
+  --color-success-600: #00754F;
+  --color-success-700: #005A3B;
+  --color-success-800: #004029;
+  --color-success-900: #002818;
+  --color-success-950: #001208;
+  --color-info-50: #F1F8FF;
+  --color-info-100: #C4E0FD;
+  --color-info-200: #A2C7EF;
+  --color-info-300: #80AFE0;
+  --color-info-400: #5D96D1;
+  --color-info-500: #387EC1;
+  --color-info-600: #2465A1;
+  --color-info-700: #0E4D82;
+  --color-info-800: #003662;
+  --color-info-900: #00213F;
+  --color-info-950: #000E20;
   --color-shade-10: #0000001A;
   --color-shade-20: #00000033;
   --color-shade-40: #00000066;
@@ -79,7 +81,7 @@
   --color-tint-80: #FFFFFFCC;
   --color-surface-page: var(--color-neutral-50);
   --color-surface-card: var(--color-base-white);
-  --color-surface-sunken: var(--color-neutral-100);
+  --color-surface-sunken: var(--color-neutral-recess-light);
   --color-surface-raised: var(--color-base-white);
   --color-surface-inverse: var(--color-neutral-900);
   --color-surface-selected: var(--color-brand-100);
@@ -100,6 +102,7 @@
   --color-line-subtle: var(--color-neutral-200);
   --color-line-input: var(--color-neutral-500);
   --color-line-selected: var(--color-brand-600);
+  --color-line-danger: var(--color-danger-600);
   --color-focus-ring: var(--color-brand-700);
   --color-focus-ring-inverse: var(--color-brand-300);
   --color-scrim: var(--color-shade-40);
@@ -353,7 +356,7 @@
 :root[data-theme="dark"] {
   --color-surface-page: var(--color-neutral-950);
   --color-surface-card: var(--color-neutral-900);
-  --color-surface-sunken: var(--color-base-black);
+  --color-surface-sunken: var(--color-neutral-recess-dark);
   --color-surface-raised: var(--color-neutral-800);
   --color-surface-inverse: var(--color-neutral-100);
   --color-surface-selected: var(--color-brand-900);
@@ -374,6 +377,7 @@
   --color-line-subtle: var(--color-neutral-700);
   --color-line-input: var(--color-neutral-400);
   --color-line-selected: var(--color-brand-300);
+  --color-line-danger: var(--color-danger-400);
   --color-focus-ring: var(--color-brand-200);
   --color-focus-ring-inverse: var(--color-brand-700);
   --color-scrim: var(--color-shade-60);
@@ -403,7 +407,7 @@
   :root:not([data-theme="light"]) {
     --color-surface-page: var(--color-neutral-950);
     --color-surface-card: var(--color-neutral-900);
-    --color-surface-sunken: var(--color-base-black);
+    --color-surface-sunken: var(--color-neutral-recess-dark);
     --color-surface-raised: var(--color-neutral-800);
     --color-surface-inverse: var(--color-neutral-100);
     --color-surface-selected: var(--color-brand-900);
@@ -424,6 +428,7 @@
     --color-line-subtle: var(--color-neutral-700);
     --color-line-input: var(--color-neutral-400);
     --color-line-selected: var(--color-brand-300);
+    --color-line-danger: var(--color-danger-400);
     --color-focus-ring: var(--color-brand-200);
     --color-focus-ring-inverse: var(--color-brand-700);
     --color-scrim: var(--color-shade-60);
@@ -452,7 +457,7 @@
 
 :root[data-contrast="high"] {
   --color-surface-page: var(--color-base-white);
-  --color-surface-sunken: var(--color-base-white);
+  --color-surface-sunken: var(--color-neutral-100);
   --color-surface-inverse: var(--color-base-black);
   --color-surface-selected: var(--color-brand-50);
   --color-text-default: var(--color-neutral-950);
@@ -468,6 +473,7 @@
   --color-line-subtle: var(--color-neutral-400);
   --color-line-input: var(--color-neutral-700);
   --color-line-selected: var(--color-brand-800);
+  --color-line-danger: var(--color-danger-700);
   --color-focus-ring: var(--color-brand-600);
   --color-focus-ring-inverse: var(--color-brand-200);
   --color-scrim: var(--color-shade-60);
@@ -488,7 +494,7 @@
 @media (prefers-contrast: more) {
   :root:not([data-contrast="standard"]) {
     --color-surface-page: var(--color-base-white);
-    --color-surface-sunken: var(--color-base-white);
+    --color-surface-sunken: var(--color-neutral-100);
     --color-surface-inverse: var(--color-base-black);
     --color-surface-selected: var(--color-brand-50);
     --color-text-default: var(--color-neutral-950);
@@ -504,6 +510,7 @@
     --color-line-subtle: var(--color-neutral-400);
     --color-line-input: var(--color-neutral-700);
     --color-line-selected: var(--color-brand-800);
+    --color-line-danger: var(--color-danger-700);
     --color-focus-ring: var(--color-brand-600);
     --color-focus-ring-inverse: var(--color-brand-200);
     --color-scrim: var(--color-shade-60);
@@ -624,13 +631,11 @@
 
 :root[data-theme="dark"][data-contrast="high"] {
   --color-surface-page: var(--color-base-black);
-  --color-surface-card: var(--color-neutral-950);
   --color-surface-sunken: var(--color-base-black);
-  --color-surface-raised: var(--color-neutral-900);
   --color-surface-inverse: var(--color-base-white);
   --color-surface-selected: var(--color-brand-950);
   --color-text-default: var(--color-base-white);
-  --color-text-muted: var(--color-neutral-200);
+  --color-text-muted: var(--color-neutral-100);
   --color-text-inverse: var(--color-base-black);
   --color-text-link: var(--color-brand-200);
   --color-action-primary: var(--color-brand-200);
@@ -642,7 +647,8 @@
   --color-line-subtle: var(--color-neutral-600);
   --color-line-input: var(--color-neutral-300);
   --color-line-selected: var(--color-brand-200);
-  --color-focus-ring: var(--color-brand-400);
+  --color-line-danger: var(--color-danger-300);
+  --color-focus-ring: var(--color-brand-300);
   --color-focus-ring-inverse: var(--color-brand-800);
   --color-scrim: var(--color-shade-80);
   --color-status-danger-text: var(--color-danger-200);
@@ -662,13 +668,11 @@
 @media (prefers-contrast: more) {
   :root[data-theme="dark"]:not([data-contrast="standard"]) {
     --color-surface-page: var(--color-base-black);
-    --color-surface-card: var(--color-neutral-950);
     --color-surface-sunken: var(--color-base-black);
-    --color-surface-raised: var(--color-neutral-900);
     --color-surface-inverse: var(--color-base-white);
     --color-surface-selected: var(--color-brand-950);
     --color-text-default: var(--color-base-white);
-    --color-text-muted: var(--color-neutral-200);
+    --color-text-muted: var(--color-neutral-100);
     --color-text-inverse: var(--color-base-black);
     --color-text-link: var(--color-brand-200);
     --color-action-primary: var(--color-brand-200);
@@ -680,7 +684,8 @@
     --color-line-subtle: var(--color-neutral-600);
     --color-line-input: var(--color-neutral-300);
     --color-line-selected: var(--color-brand-200);
-    --color-focus-ring: var(--color-brand-400);
+    --color-line-danger: var(--color-danger-300);
+    --color-focus-ring: var(--color-brand-300);
     --color-focus-ring-inverse: var(--color-brand-800);
     --color-scrim: var(--color-shade-80);
     --color-status-danger-text: var(--color-danger-200);
@@ -701,13 +706,11 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"])[data-contrast="high"] {
     --color-surface-page: var(--color-base-black);
-    --color-surface-card: var(--color-neutral-950);
     --color-surface-sunken: var(--color-base-black);
-    --color-surface-raised: var(--color-neutral-900);
     --color-surface-inverse: var(--color-base-white);
     --color-surface-selected: var(--color-brand-950);
     --color-text-default: var(--color-base-white);
-    --color-text-muted: var(--color-neutral-200);
+    --color-text-muted: var(--color-neutral-100);
     --color-text-inverse: var(--color-base-black);
     --color-text-link: var(--color-brand-200);
     --color-action-primary: var(--color-brand-200);
@@ -719,7 +722,8 @@
     --color-line-subtle: var(--color-neutral-600);
     --color-line-input: var(--color-neutral-300);
     --color-line-selected: var(--color-brand-200);
-    --color-focus-ring: var(--color-brand-400);
+    --color-line-danger: var(--color-danger-300);
+    --color-focus-ring: var(--color-brand-300);
     --color-focus-ring-inverse: var(--color-brand-800);
     --color-scrim: var(--color-shade-80);
     --color-status-danger-text: var(--color-danger-200);
@@ -740,13 +744,11 @@
 @media (prefers-color-scheme: dark) and (prefers-contrast: more) {
   :root:not([data-theme="light"]):not([data-contrast="standard"]) {
     --color-surface-page: var(--color-base-black);
-    --color-surface-card: var(--color-neutral-950);
     --color-surface-sunken: var(--color-base-black);
-    --color-surface-raised: var(--color-neutral-900);
     --color-surface-inverse: var(--color-base-white);
     --color-surface-selected: var(--color-brand-950);
     --color-text-default: var(--color-base-white);
-    --color-text-muted: var(--color-neutral-200);
+    --color-text-muted: var(--color-neutral-100);
     --color-text-inverse: var(--color-base-black);
     --color-text-link: var(--color-brand-200);
     --color-action-primary: var(--color-brand-200);
@@ -758,7 +760,8 @@
     --color-line-subtle: var(--color-neutral-600);
     --color-line-input: var(--color-neutral-300);
     --color-line-selected: var(--color-brand-200);
-    --color-focus-ring: var(--color-brand-400);
+    --color-line-danger: var(--color-danger-300);
+    --color-focus-ring: var(--color-brand-300);
     --color-focus-ring-inverse: var(--color-brand-800);
     --color-scrim: var(--color-shade-80);
     --color-status-danger-text: var(--color-danger-200);

@@ -17,14 +17,17 @@ EXPECTED = {
     "status-hues", "dark-elevation-cue", "whole-pixel-borders", "nested-radius",
     "list-gap-and-control-gap", "unsigned-distances", "strong-equals-heading-weight",
     "reading-line-height", "container-edge", "button-intents",
+    "status-harmony", "neutral-tint", "recessed-sunken", "high-contrast-surfaces", "error-edge",
 }
+# Records a later record replaced; each names its replacement.
+SUPERSEDED = {"status-hues": "status-harmony"}
 
 
 def test_every_shipped_record_is_valid_and_routed():
     records, problems = check_folder()
     assert problems == []
     assert {r.id for r in records} == EXPECTED
-    assert all(r.status == "active" for r in records)
+    assert {r.id: r.superseded_by for r in records if r.status == "superseded"} == SUPERSEDED
 
 
 def test_every_foundation_has_a_record_for_its_roles():
@@ -62,8 +65,8 @@ def test_the_fill_edge_record_cites_the_lowest_measured_primary_on_raised():
     from engine.foundations.tokens import opaque_hex
     from engine.synthesizer.axes import AxisValues
     text = (RECORDS_DIR / "fill-edge-page-only.md").read_text(encoding="utf-8")
-    assert "reaches 2.78:1 (#2D0679" in text
+    assert "reaches 2.79:1 (#2D0679" in text
     ts = build_system(AxisValues(0.9, 0.1, 0.8, 0.7, 0.6, 0.5, 0.4), "#2D0679").tokens
     ratio = contrast(opaque_hex(ts.resolve("color.action.primary", "scheme:dark")),
                      opaque_hex(ts.resolve("color.surface.raised", "scheme:dark")))
-    assert math.floor(ratio * 100) / 100 == 2.78
+    assert math.floor(ratio * 100) / 100 == 2.79
