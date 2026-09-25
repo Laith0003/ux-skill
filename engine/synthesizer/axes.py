@@ -163,7 +163,7 @@ def _seed_from_industry(industry: Optional[str]) -> Dict[str, float]:
     """Look up the industry seed, fuzzy on substring if exact id misses."""
     if not industry:
         return {name: 0.5 for name in AXIS_NAMES}
-    key = _normalize_tag(industry)
+    key = "-".join(_normalize_tag(industry).split())
     if key in INDUSTRY_SEEDS:
         return dict(INDUSTRY_SEEDS[key])
     # fuzzy: substring match
