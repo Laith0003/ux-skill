@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-152-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-3339_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-3345_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -55,7 +55,7 @@ pip and pipx skip pre-releases unless asked, so a plain `pip install uxskill` st
 
 This beta builds new systems; it does not read an existing one yet. 4.1 adds importers (Figma variables, CSS variables, Tailwind config, DTCG tokens), `/ux-system enhance` and `extend`, and Figma both ways. 4.2 merges commands and adds surface playbooks, the trust layer (lint on every write, a finish reviewer) and the launch. See the [changelog](CHANGELOG.md).
 
-Tests **3339 passing**. Offline. Deterministic. No LLM ever called.
+Tests **3345 passing**. Offline. Deterministic. No LLM ever called.
 
 ### New in v3.1: brand-true, responsive, alive
 
