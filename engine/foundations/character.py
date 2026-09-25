@@ -1,8 +1,11 @@
 """Character: the continuous quantities every foundation reads from the
 seven axes.
 
-Each function is a pure, continuous function of the axes (and, for hues,
-of the brand hue). No function looks up an industry, a keyword or a band:
+Each function is a pure, continuous function of the axes. The hues also
+read the brand hue: status_seed is continuous in it, while neutral_tint
+and support_hue turn toward their anchor the short way and so flip
+direction where the brand sits opposite the anchor (see each docstring).
+No function looks up an industry, a keyword or a band:
 a foundation that needs a discrete choice (a face, a pill corner, a brand
 role) takes it from one of these quantities, so two briefs that differ on
 an axis differ in the output.
@@ -35,6 +38,9 @@ WARM_HUE, COOL_HUE = 70.0, 250.0
 STATUS_HUES: Mapping[str, float] = MappingProxyType(
     {"danger": 25.0, "warning": 75.0, "success": 150.0, "info": 245.0})
 STATUS_BAND = 12.0
+# Within this many degrees of a status hue's opposite the brand lean fades
+# to zero, so a brand there pulls neither way and the hue has no seam.
+STATUS_FADE = 15.0
 STATUS_L = 0.58
 
 
@@ -74,7 +80,10 @@ def neutral_tint(axes: AxisValues, brand_hue: float) -> Tuple[float, float]:
     """(hue, chroma) of the neutral seed. At warmth 0.5 the neutrals take
     the brand hue at a whisper of chroma; toward either end they move to a
     warm or a cool hue and gain chroma, so a warm brand gets cream and a
-    cool one blue grey."""
+    cool one blue grey. Continuous in the axes; in the brand hue it turns
+    the short way to the anchor, so away from warmth 0.5 it flips direction
+    where the brand sits opposite the anchor (a warm brief with a brand
+    near 250, a cool one with a brand near 70)."""
     t = warm_pull(axes)
     anchor = WARM_HUE if axes.warmth >= 0.5 else COOL_HUE
     return mix_hue(brand_hue, anchor, 0.8 * t), 0.008 + 0.022 * t
@@ -83,10 +92,13 @@ def neutral_tint(axes: AxisValues, brand_hue: float) -> Tuple[float, float]:
 def status_seed(status: str, axes: AxisValues, brand_hue: float) -> Tuple[float, float, float]:
     """(L, C, H) of one status seed. The hue leans a quarter of the way
     toward the brand and toward warm or cool with warmth, never more than
-    STATUS_BAND from its own hue, so danger stays red. Chroma follows the
-    contrast axis: a muted brand gets quiet status colors."""
+    STATUS_BAND from its own hue, so danger stays red. The brand lean fades
+    to zero within STATUS_FADE degrees of the status hue's opposite, so the
+    hue is continuous in the brand hue too. Chroma follows the contrast
+    axis: a muted brand gets quiet status colors."""
     base = STATUS_HUES[status]
-    lean = 0.25 * hue_delta(base, brand_hue)
+    d = hue_delta(base, brand_hue)
+    lean = 0.25 * d * clamp((180.0 - abs(d)) / STATUS_FADE)
     anchor = WARM_HUE if axes.warmth >= 0.5 else COOL_HUE
     lean += 0.2 * warm_pull(axes) * hue_delta(base, anchor)
     hue = (base + clamp(lean, -STATUS_BAND, STATUS_BAND)) % 360.0
@@ -95,7 +107,9 @@ def status_seed(status: str, axes: AxisValues, brand_hue: float) -> Tuple[float,
 
 def support_hue(axes: AxisValues, brand_hue: float) -> float:
     """The supporting accent's hue: analogous for a muted brand, close to
-    complementary for a bold one, pulled warm or cool with warmth."""
+    complementary for a bold one, pulled warm or cool with warmth. The pull
+    turns the short way, so it flips direction where the offset hue sits
+    opposite the anchor."""
     offset = 30.0 + 150.0 * axes.contrast
     anchor = WARM_HUE if axes.warmth >= 0.5 else COOL_HUE
     return mix_hue((brand_hue + offset) % 360.0, anchor, 0.3 * warm_pull(axes))
@@ -144,15 +158,15 @@ def label_tracking(axes: AxisValues) -> float:
 
 
 def scale_ratio(axes: AxisValues) -> float:
-    """The type scale ratio: 1.125 for a muted brand to 1.333 for a bold
-    one; a dense system tightens it."""
+    """The type scale ratio, 1.095 to 1.355: 1.125 for a muted, open brand
+    to 1.355 for a bold one; a dense system tightens it by up to 0.03."""
     return round(1.125 + 0.23 * axes.contrast - 0.03 * axes.density, 4)
 
 
 def icon_stroke(axes: AxisValues) -> float:
-    """Icon stroke on a 24 unit grid, 1.25 to 2.25 in quarters, following
-    the display weight."""
-    return round((1.25 + (display_weight(axes) - 300) / 500.0) * 4) / 4
+    """Icon stroke on a 24 unit grid, 1.25 to 2.5 in quarters, a quarter
+    heavier for each 100 of display weight."""
+    return round((1.25 + (display_weight(axes) - 300) / 400.0) * 4) / 4
 
 
 def overshoot(axes: AxisValues) -> float:
@@ -173,7 +187,14 @@ def technical(axes: AxisValues) -> float:
 
 
 def log_position(size: float, low: float, high: float) -> float:
-    """Where `size` sits between low and high on a log scale, 0 to 1."""
+    """Where `size` sits between low and high on a log scale, 0 to 1.
+    size and low must be above 0."""
+    if size <= 0:
+        raise ValueError(f"log_position: size must be above 0, got {size}; "
+                         "pass a positive size")
+    if low <= 0:
+        raise ValueError(f"log_position: low must be above 0, got {low}; "
+                         "pass a positive lower bound")
     if high <= low:
         return 0.0
     return clamp(math.log(size / low) / math.log(high / low))
