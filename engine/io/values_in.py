@@ -9,19 +9,34 @@ family. Text with more than one reading (a bare word such as Inter), a
 value the browser computes (calc(), color-mix()), a unit relative to
 something outside the token (em, %, vw) and a color space it does not
 convert raise NotRead with the reason and the fix. Nothing is guessed.
+
+An oklch() or oklab() color outside sRGB is never refused (ruling M4-R5):
+it is mapped into sRGB by CSS Color 4 gamut mapping, keeping its lightness
+and hue, and reported as a GamutMapped with the OKLab distance it moved.
 """
 from __future__ import annotations
 
+import math
 import re
+from dataclasses import dataclass
 from typing import Any, List, Optional, Tuple
 
-from engine.foundations.color_math import _oklch_to_linear, oklch_to_hex, rgb_to_hex
+from engine.foundations.color_math import gamut_map_oklch, rgb_to_hex
 from engine.foundations.values import GENERIC_FAMILIES, STROKE_STYLES
 
 
 class NotRead(ValueError):
     """A value the reader cannot read for certain. The message says why and
     how to write it so it can."""
+
+
+@dataclass(frozen=True)
+class GamutMapped:
+    """An oklch() or oklab() color outside sRGB, as written, the hex it was
+    read as, and the OKLab distance between the two."""
+    original: str
+    hex: str
+    distance: float
 
 
 _NUMBER = r"[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?"
@@ -43,7 +58,9 @@ _RELATIVE = {"em": "the parent's font size", "%": "its container", "vw": "the vi
              "ch": "the font", "ex": "the font", "lh": "the line height",
              "svh": "the viewport", "dvh": "the viewport", "lvh": "the viewport"}
 _COMPUTED = ("calc", "min", "max", "clamp", "color-mix", "light-dark", "env", "attr")
-_OTHER_SPACES = ("lab", "lch", "oklab", "hwb", "color")
+_OTHER_SPACES = ("lab", "lch", "hwb", "color")
+# CSS angle units, in degrees.
+_HUE_UNITS = {"deg": 1.0, "turn": 360.0, "rad": 180 / math.pi, "grad": 0.9}
 
 
 def _number(text: str) -> float:
@@ -138,7 +155,22 @@ def _hsl_to_rgb(h: float, s: float, lightness: float) -> Tuple[float, float, flo
     return tuple((v + m) * 255 for v in (r, g, b))
 
 
-def _color_function(text: str, name: str, body: str) -> str:
+def _hue(text: str, part: str) -> float:
+    """A hue in degrees: a number, or an angle in deg, turn, rad or grad."""
+    if part.lower() == "none":
+        return 0.0
+    m = _UNIT.match(part)
+    if m:
+        unit = m.group(2).lower()
+        if unit not in _HUE_UNITS:
+            raise NotRead(f"{text} writes its hue in {unit}, which this reader does not read; "
+                          "write the hue in deg, turn, rad or grad")
+        return float(m.group(1)) * _HUE_UNITS[unit]
+    return float(part)
+
+
+def _color_function(text: str, name: str, body: str,
+                    mapped: Optional[List[GamutMapped]] = None) -> str:
     name = name.lower()
     try:
         channels, alpha_text = _args(text, name, body)
@@ -147,20 +179,22 @@ def _color_function(text: str, name: str, body: str) -> str:
             rgb = tuple(_channel(c, 255) for c in channels)
         elif name in ("hsl", "hsla"):
             # CSS Color 4: a unitless saturation or lightness is a percentage.
-            hue = float(channels[0].rstrip("deg"))
+            hue = _hue(text, channels[0])
             sat, light = (float(c[:-1] if c.endswith("%") else c) / 100 for c in channels[1:])
             rgb = _hsl_to_rgb(hue, sat, light)
-        else:  # oklch
+        else:  # oklch, oklab
             lightness = _channel(channels[0], 1)
-            chroma = _channel(channels[1], 0.4)
-            hue = float(channels[2].rstrip("deg")) if channels[2] != "none" else 0.0
-            linear = _oklch_to_linear(lightness, chroma, hue)
-            if any(c < -1e-4 or c > 1 + 1e-4 for c in linear):
-                raise NotRead(f"{text} is outside the sRGB range this engine measures; write "
-                              "the sRGB color you want as hex")
-            # The one OKLCH conversion the engine has, which `system detect`
-            # (engine.existing) uses too, so both read a color the same way.
-            return oklch_to_hex(lightness, chroma, hue) + _alpha_hex(alpha)
+            if name == "oklch":
+                chroma, hue = _channel(channels[1], 0.4), _hue(text, channels[2])
+            else:
+                a, b = _channel(channels[1], 0.4), _channel(channels[2], 0.4)
+                chroma, hue = math.hypot(a, b), math.degrees(math.atan2(b, a)) % 360
+            # CSS Color 4 gamut mapping, the one `system detect` uses too.
+            hx, distance, was_mapped = gamut_map_oklch(lightness, chroma, hue)
+            hx += _alpha_hex(alpha)
+            if was_mapped and mapped is not None:
+                mapped.append(GamutMapped(text, hx, distance))
+            return hx
     except ValueError as exc:
         if isinstance(exc, NotRead):
             raise
@@ -186,7 +220,7 @@ def _font_names(text: str) -> Optional[List[str]]:
     return names
 
 
-def _shadow_layer(text: str) -> dict:
+def _shadow_layer(text: str, mapped: Optional[List[GamutMapped]]) -> dict:
     words = split_top(text, " ")
     inset = "inset" in (w.lower() for w in words)
     words = [w for w in words if w.lower() != "inset"]
@@ -197,7 +231,7 @@ def _shadow_layer(text: str) -> dict:
             lengths.append({"value": _number(m.group(1)) if m else 0,
                             "unit": m.group(2).lower() if m else "px"})
         elif color is None:
-            kind, value = read_value(w)
+            kind, value = read_value(w, mapped)
             if kind != "color":
                 raise NotRead(f"{text} is not a shadow layer; write x, y, blur, spread and a "
                               "color")
@@ -215,10 +249,12 @@ def _shadow_layer(text: str) -> dict:
     return layer
 
 
-def read_value(text: Any) -> Tuple[str, Any]:
+def read_value(text: Any, mapped: Optional[List[GamutMapped]] = None) -> Tuple[str, Any]:
     """(token type, internal literal) for a value written as text. Raises
     NotRead with the reason and the fix when the text has no single
-    reading. A var() reference is not a value; read it with css_alias."""
+    reading. A var() reference is not a value; read it with css_alias.
+    Every oklch() or oklab() color mapped into sRGB is appended to `mapped`
+    when it is given, so the importer can put it in its report."""
     if not isinstance(text, str):
         text = str(text)
     text = text.strip().rstrip(";").strip()
@@ -253,8 +289,8 @@ def read_value(text: Any) -> Tuple[str, Any]:
         name, body = f.group(1).lower(), f.group(2)
         if name in _COMPUTED:
             raise NotRead(f"{text} is computed by the browser; write the value it computes to")
-        if name in ("rgb", "rgba", "hsl", "hsla", "oklch"):
-            return "color", _color_function(text, name, body)
+        if name in ("rgb", "rgba", "hsl", "hsla", "oklch", "oklab"):
+            return "color", _color_function(text, name, body, mapped)
         if name in _OTHER_SPACES:
             raise NotRead(f"{text} is in a color space this reader does not convert; write it "
                           "as hex or oklch()")
@@ -275,7 +311,7 @@ def read_value(text: Any) -> Tuple[str, Any]:
         return "fontFamily", names
     layers = split_top(text)
     if any(ch.isdigit() for ch in text) and all(len(split_top(p, " ")) >= 3 for p in layers):
-        return "shadow", [_shadow_layer(p) for p in layers]
+        return "shadow", [_shadow_layer(p, mapped) for p in layers]
     if re.fullmatch(r"[A-Za-z][A-Za-z-]*", text):
         raise NotRead(f"{text} is a single word that could be a color name, a font name or a "
                       "keyword; write a color as hex, and quote a font name")

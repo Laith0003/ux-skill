@@ -7,7 +7,8 @@ import pytest
 
 from engine.foundations.emit import InputError
 from engine.foundations.tokens import Token, TokenSet
-from engine.io.report import FORMATS, Imported, ImportReport, Item, Source, read_source
+from engine.io.report import (FORMATS, Imported, ImportReport, Item, Mapped, Source,
+                              read_source)
 
 
 def test_read_source_records_the_digest_and_decodes_the_text(tmp_path):
@@ -76,7 +77,8 @@ def test_the_report_counts_tokens_by_type_and_lists_the_modes():
     assert d["not_read"] == [{"where": "tokens.css:5", "name": "--measure",
                               "message": report.not_read[0].message}]
     assert list(d) == ["source", "entries", "tokens", "by_type", "axes", "renamed", "notes",
-                       "not_read"]
+                       "mapped", "not_read"]
+    assert d["mapped"] == []
 
 
 def test_the_report_reads_as_markdown_in_a_fixed_order():
@@ -111,3 +113,25 @@ def test_imported_carries_the_tokens_the_report_and_the_css_forms():
     ts, report = _report()
     imported = Imported(ts, report)
     assert imported.tokens is ts and imported.report is report and imported.forms == {}
+
+
+def test_a_color_mapped_into_srgb_is_listed_with_both_values_and_the_distance():
+    from engine.io.values_in import read_value
+
+    _, report = _report()
+    found = []
+    text = "oklch(62.3% 0.214 259.815)"
+    _, hx = read_value(text, found)
+    report.mapped.append(Mapped.of("tokens.css:6", "--blue-500", found[0]))
+    item = report.mapped[0]
+    assert (item.original, item.hex) == (text, hx) and item.distance == found[0].distance
+    assert report.to_dict()["mapped"] == [{
+        "where": "tokens.css:6", "name": "--blue-500", "original": text, "hex": hx,
+        "distance": round(found[0].distance, 4)}]
+    line = (f"- tokens.css:6 `--blue-500`: {text} is outside sRGB; read as {hx}, the same "
+            f"lightness and hue with less chroma (OKLab distance {found[0].distance:.4f})")
+    text_md = report.markdown()
+    assert ("## Mapped into sRGB\n\nCSS Color 4 gamut mapping: each color below lies "
+            "outside sRGB and was read at its own lightness and hue with the chroma "
+            "lowered until it fits.\n\n" + line + "\n\n## Not read") in text_md
+    assert text_md.index("## Read with a note") < text_md.index("## Mapped into sRGB")

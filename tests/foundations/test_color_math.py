@@ -64,3 +64,21 @@ def test_contrast_matches_known_values_and_synthesizer():
     for a, b in [("#6B4423", "#FAF6F2"), ("#3366FF", "#FFFFFF")]:
         assert contrast(a, b) == pytest.approx(
             _contrast_ratio(hex_to_rgb(a), hex_to_rgb(b)), abs=1e-9)
+
+
+def test_gamut_map_oklch_follows_css_color_4():
+    from engine.foundations.color_math import gamut_map_oklch
+
+    # In gamut: the plain conversion, not mapped, no distance to speak of.
+    hx, dist, mapped = gamut_map_oklch(0.5, 0.1, 250)
+    assert (hx, mapped) == (oklch_to_hex(0.5, 0.1, 250), False) and dist < 0.005
+    # Lightness at or past the ends is white or black.
+    assert gamut_map_oklch(1.2, 0.3, 30)[0] == "#FFFFFF"
+    assert gamut_map_oklch(-0.1, 0.3, 30)[0] == "#000000"
+    # Out of gamut: mapped, lightness and hue kept, the same answer every time.
+    first = gamut_map_oklch(0.623, 0.214, 259.815)
+    assert first[2] is True and first == gamut_map_oklch(0.623, 0.214, 259.815)
+    L, C, H = hex_to_oklch(first[0])
+    assert abs(L - 0.623) < 0.01 and abs(H - 259.815) < 3 and C < 0.214
+    with pytest.raises(ValueError):
+        gamut_map_oklch(float("nan"), 0.1, 0)

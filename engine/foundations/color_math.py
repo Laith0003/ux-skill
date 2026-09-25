@@ -89,6 +89,89 @@ def oklch_to_hex(L: float, C: float, H: float) -> str:
     return rgb_to_hex(tuple(_from_linear(max(0.0, min(1.0, c))) for c in rgb))
 
 
+# CSS Color 4 gamut mapping (css-color-4, "binary search gamut mapping"):
+# a just noticeable difference in OKLab, and the chroma resolution.
+_GAMUT_JND = 0.02
+_GAMUT_EPSILON = 0.0001
+_IN_GAMUT = 1e-6
+
+
+def _linear_to_oklab(rgb) -> Tuple[float, float, float]:
+    r, g, b = rgb
+    l = 0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b
+    m = 0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b
+    s = 0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b
+    l_, m_, s_ = (math.copysign(abs(x) ** (1 / 3), x) for x in (l, m, s))
+    return (0.2104542553 * l_ + 0.7936177850 * m_ - 0.0040720468 * s_,
+            1.9779984951 * l_ - 2.4285922050 * m_ + 0.4505937099 * s_,
+            0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_)
+
+
+def _oklch_to_oklab(L: float, C: float, H: float) -> Tuple[float, float, float]:
+    return L, C * math.cos(math.radians(H)), C * math.sin(math.radians(H))
+
+
+def _in_gamut(rgb) -> bool:
+    return all(-_IN_GAMUT <= c <= 1 + _IN_GAMUT for c in rgb)
+
+
+def _clip(rgb) -> Tuple[float, float, float]:
+    return tuple(max(0.0, min(1.0, c)) for c in rgb)
+
+
+def gamut_map_oklch(L: float, C: float, H: float) -> Tuple[str, float, bool]:
+    """(hex, OKLab distance from the color asked for, mapped) for an OKLCH
+    color, by CSS Color 4 gamut mapping: a color outside sRGB keeps its
+    lightness and hue and loses chroma (binary search) until clipping it
+    moves it less than a just noticeable difference (deltaE OK 0.02).
+    Lightness at or past 1 is white and at or below 0 is black.
+    Deterministic. Raises ValueError for a value that is not finite."""
+    if not (math.isfinite(L) and math.isfinite(C) and math.isfinite(H)):
+        raise ValueError(
+            f"gamut_map_oklch requires finite L, C, H; got L={L!r}, C={C!r}, H={H!r}.")
+    C = max(0.0, C)
+    origin = _oklch_to_oklab(L, C, H)
+    if L >= 1 or L <= 0:
+        rgb = (1.0, 1.0, 1.0) if L >= 1 else (0.0, 0.0, 0.0)
+        mapped = C > 0 or L > 1 or L < 0
+    else:
+        rgb = _oklch_to_linear(L, C, H)
+        mapped = not _in_gamut(rgb)
+        if mapped:
+            rgb = _gamut_search(L, C, H)
+    rgb = _clip(rgb)
+    hx = rgb_to_hex(tuple(_from_linear(c) for c in rgb))
+    got = _linear_to_oklab(tuple(_to_linear(c) for c in hex_to_rgb(hx)))
+    return hx, math.dist(origin, got), mapped
+
+
+def _gamut_search(L: float, C: float, H: float) -> Tuple[float, float, float]:
+    """The CSS Color 4 binary search on chroma, in linear sRGB."""
+    def delta(chroma: float, clipped) -> float:
+        return math.dist(_oklch_to_oklab(L, chroma, H), _linear_to_oklab(clipped))
+
+    clipped = _clip(_oklch_to_linear(L, C, H))
+    if delta(C, clipped) < _GAMUT_JND:
+        return clipped
+    lo, hi, lo_in_gamut = 0.0, C, True
+    while hi - lo > _GAMUT_EPSILON:
+        chroma = (lo + hi) / 2
+        current = _oklch_to_linear(L, chroma, H)
+        if lo_in_gamut and _in_gamut(current):
+            lo = chroma
+            continue
+        clipped = _clip(current)
+        e = delta(chroma, clipped)
+        if e < _GAMUT_JND:
+            if _GAMUT_JND - e < _GAMUT_EPSILON:
+                return clipped
+            lo_in_gamut = False
+            lo = chroma
+        else:
+            hi = chroma
+    return clipped
+
+
 # WCAG 2.x fixes this threshold at 0.03928, not sRGB's own 0.04045, and this
 # is deliberate: it keeps _luminance pinned to engine/synthesizer's
 # _relative_luminance so contrast() never drifts from the synthesizer's own
