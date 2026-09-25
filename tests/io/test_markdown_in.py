@@ -588,3 +588,11 @@ def test_a_lone_high_or_reduced_column_needs_the_axis_name():
     assert "High names no mode" in imported.report.notes[0].message
     text = "| Token | Value | Reduced motion |\n|---|---|---|\n| `t` | 200ms | 0ms |\n"
     assert dict(_import(text).tokens.axes) == {"motion": ("standard", "reduced")}
+
+
+def test_an_indented_line_right_after_a_heading_is_code_as_in_commonmark():
+    text = "# Tokens\n    - `a`: 4px\n\n- `b`: 8px\n"
+    assert [t.path for t in _import(text).tokens.tokens()] == ["b"]
+    # A paragraph line is not a heading: an indented line after it continues it.
+    text = "Spacing\n    - `a`: 4px\n"
+    assert [t.path for t in _import(text).tokens.tokens()] == ["a"]

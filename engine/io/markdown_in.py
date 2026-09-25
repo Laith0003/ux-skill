@@ -69,6 +69,7 @@ _PLAIN = re.compile(r"[a-z]+(?:'[a-z]+)?")
 _SENTENCE_END = re.compile(r"[.!?](?:\s|$)")
 _VALUEISH = re.compile(r"[0-9#({\"']")
 _BULLET = re.compile(r"\s*(?:[-*+]|\d+[.)])\s")
+_HEADING = re.compile(r" {0,3}#{1,6}(?:\s|$)")
 _LOOP = "references only itself through a loop of references; give one of them a value"
 
 
@@ -361,11 +362,13 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
             where = f"{file_name}:{i + 1}"
             opened = _FENCE.match(line)
             if not fence and line.strip():
-                # An indented code block: four spaces in, after a blank line,
+                # An indented code block: four spaces in, after a blank line
+                # or an ATX heading (a heading is one line, so it ends there),
                 # outside a list.
                 indent = len(line.expandtabs(4)) - len(line.expandtabs(4).lstrip())
                 if indent >= 4 and not in_list and (in_code or i == 0
-                                                    or not lines[i - 1].strip()):
+                                                    or not lines[i - 1].strip()
+                                                    or _HEADING.match(lines[i - 1])):
                     in_code = True
                     i += 1
                     continue
