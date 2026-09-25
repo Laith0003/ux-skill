@@ -7,6 +7,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 const OUT_DIR = join(process.cwd(), 'docs/og');
+// Slugs on the command line render only those cards: node scripts/render-og-pages.mjs home faq
+const ONLY = process.argv.slice(2);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const CHROME = ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   '/Applications/Chromium.app/Contents/MacOS/Chromium'].find((p) => existsSync(p));
@@ -42,6 +44,39 @@ const PAGES = {
   "ai-design-system-cli": ["Tooling", "AI design system CLI", "10-field discovery · 60-second design language"],
   "claude-desktop-mcp-design": ["MCP", "Claude Desktop + MCP\ndesign intelligence", "ux-skill as stdio server · 18 tools"],
   "commands": ["Reference", "Every slash command,\ndocumented", "25 commands · discover → recommend → generate → lint"],
+  // Blog posts whose og:image had no card (English and translated posts).
+  "ai-built-website-no-slop": ["Blog", "AI-built websites in 2026 · why every one looks the same", ""],
+  "ai-design-system-figma-to-code": ["Blog", "From Figma to code without losing the design system", ""],
+  "anti-slop-cli-vibe-coders": ["Blog", "The anti-slop CLI for vibe coders, 145 rules, no LLM, runs in CI", ""],
+  "ar-ai-coding-design-arabic": ["Blog · العربية", "تصميم برمجة الذكاء الاصطناعي, كيف تبني نظام تصميم لـ Claude Code", ""],
+  "ar-v3-the-brain": ["Blog · العربية", "ux-skill v3.0 · أطلقنا The Brain. مواصفات العلامات صارت بيانات تدريب لا قوالب.", ""],
+  "best-ai-coding-tools-2026-design-quality": ["Blog", "Best AI coding tools for design-quality output in 2026", ""],
+  "de-ki-coding-design-deutsch": ["Blog · Deutsch", "KI-Coding Design · wie man ein Cursor-AI-Designsystem baut", ""],
+  "de-v3-the-brain": ["Blog · Deutsch", "ux-skill v3.0 · The Brain. Brand-Specs sind Trainingsdaten, keine Templates.", ""],
+  "es-diseno-ai-coding-espanol": ["Blog · Español", "Reglas de diseño para coding con IA · por qué toda IA genera la misma UI", ""],
+  "es-v3-the-brain": ["Blog · Español", "ux-skill v3.0 · lanzamos The Brain. Las brand specs son datos de entrenamiento, no plantillas.", ""],
+  "fr-ia-coding-design-francais": ["Blog · Français", "IA coding design · construire un système de design pour Claude Code", ""],
+  "fr-v3-the-brain": ["Blog · Français", "ux-skill v3.0 · The Brain. Les brand specs sont des données d'entraînement, pas des templates.", ""],
+  "hi-ai-coding-design-rules": ["Blog · हिन्दी", "AI कोडिंग के लिए डिज़ाइन नियम, हर AI एक जैसी UI क्यों बनाता है", ""],
+  "hi-mcp-server-design-india": ["Blog · हिन्दी", "MCP सर्वर, AI डिज़ाइन इंजन को Claude Desktop में जोड़ना", ""],
+  "it-ai-coding-design-italian": ["Blog · Italiano", "Design AI coding · come costruire un design system con Claude Code", ""],
+  "ja-ai-coding-design-japanese": ["Blog · 日本語", "AI コーディング デザイン, Claude Code デザインシステムの作り方", ""],
+  "ja-ai-design-system-cli": ["Blog · 日本語", "AI 設計システム CLI, Claude Code と Cursor のためのデザインインテリジェンス", ""],
+  "ja-v3-the-brain": ["Blog · 日本語", "ux-skill v3.0 · The Brain をリリース。ブランド仕様はテンプレートではなく訓練データに。", ""],
+  "ja-vibe-coding-design": ["Blog · 日本語", "「Vibe coding」でAIが書いたUIが毎回同じに見える理由", ""],
+  "ko-ai-coding-design-korean": ["Blog · 한국어", "AI 코딩 디자인 · Claude Code 디자인 시스템을 만드는 법", ""],
+  "ko-ai-coding-design-rules": ["Blog · 한국어", "AI 코딩 시대의 디자인 규칙 · 왜 모든 AI가 같은 UI를 만드는가", ""],
+  "ko-cursor-design-rules-korean": ["Blog · 한국어", "Cursor 디자인 규칙 · AI 코딩의 디자인 슬롭을 막는 방법", ""],
+  "pt-BR-ai-coding-design-portuguese": ["Blog · Português", "Design para programação com IA · como montar um sistema no Claude Code", ""],
+  "pt-br-design-ai-coding-brasil": ["Blog · Português", "Regras de design para AI coding, por que toda IA produz a mesma UI?", ""],
+  "v3-the-brain-launch": ["Blog", "ux-skill v3.0 · we shipped The Brain. Brand specs are training data, not templates.", ""],
+  "vi-anti-ai-slop-vietnam": ["Blog · Tiếng Việt", "Chống AI slop trong thiết kế web, cho người Việt dùng AI coding", ""],
+  "vibe-coding-design-system": ["Blog", "Vibe coding is real · but your AI still ships the same defaults", ""],
+  "zh-CN-ai-coding-design-chinese": ["Blog · 简体中文", "AI 编程设计, 用 ux-skill 给 Cursor 设计系统兜底", ""],
+  "zh-CN-anti-ai-slop-cli-china": ["Blog · 简体中文", "AI Slop CLI,145 条规则,无 LLM,在 CI 中运行", ""],
+  "zh-CN-v3-the-brain": ["Blog · 简体中文", "ux-skill v3.0 · 我们发布了 The Brain。品牌规范是训练数据,不是模板。", ""],
+  "zh-vibe-coding-shipping-real-design": ["Blog · 简体中文", "用 Vibe Coding 做出真正能交付的设计,而非 AI 默认渐变", ""],
+  "zh-tw-ai-coding-design": ["Blog · 繁體中文", "AI 編程的設計規則,為什麼每個 AI 寫出來的網站都長得一樣", ""],
 };
 
 const CSS = readFileSync(join(process.cwd(), 'scripts/og-card.html'), 'utf8').match(/<style>([\s\S]*?)<\/style>/)[1];
@@ -59,7 +94,7 @@ function buildHTML(eyebrow, title, sub){
 <div class="card"><div class="grid"></div><div class="three">3<em>.</em>1</div>
 <div class="inner">
   <div class="top"><span class="dot"></span><span class="brand">uxskill</span><span class="tag">deterministic · offline · no LLM</span></div>
-  <div class="mid"><div class="eyebrow">${esc(eyebrow)}</div><h1>${titleHtml}</h1>${sub?`<p class="sub">${esc(sub)}</p>`:''}</div>
+  <div class="mid"><div class="eyebrow">${esc(eyebrow)}</div><h1 dir="auto">${titleHtml}</h1>${sub?`<p class="sub" dir="auto">${esc(sub)}</p>`:''}</div>
   <div class="stats"><span><b>1,243</b> entries</span><span><b>160</b> brand specs</span><span><b>152</b> anti-patterns</span><span><b>17</b> IDEs</span></div>
 </div></div></body></html>`;
 }
@@ -78,6 +113,7 @@ function makeCdp(wsUrl){const ws=new WebSocket(wsUrl);let id=0;const waiters=new
   await cdp.send('Emulation.setDeviceMetricsOverride',{width:1200,height:630,deviceScaleFactor:2,mobile:false},sid);
   let first=true;
   for(const [slug,[eyebrow,title,sub]] of Object.entries(PAGES)){
+    if(ONLY.length && !ONLY.includes(slug)) continue;
     const html=buildHTML(eyebrow,title,sub);
     const tmp=join(udd,slug.replace(/[^a-z0-9-]/gi,'_')+'.html');
     writeFileSync(tmp,html);
