@@ -112,6 +112,8 @@ _CLASS = re.compile(r"\.([a-z][a-z0-9-]*)")
 _CUSTOM_DARK = re.compile(r"@custom-variant\s+dark\s*([({])")
 _THEME_TOKEN = re.compile(r"\.[a-z][a-z0-9-]*|\[[a-z][a-z0-9-]*" + _VALUE + r"\]")
 DARK_MEDIA = CSS_AXES["scheme"][1]
+# A :not() group, innermost first: what it names is where dark is not.
+_NEGATED = re.compile(r":not\([^()]*\)")
 # An Arabic language selector: right to left, the direction axis at rtl.
 _LANG = re.compile(r'\[lang\|="ar"\]')
 # Subtrees inside the root that read right to left.
@@ -413,27 +415,34 @@ class _Modes:
             self.forms["scheme"] = (self.forms["scheme"][0], CSS_AXES["scheme"][1])
 
 
-def dark_variant(text: str) -> Optional[Tuple[str, int]]:
-    """(where Tailwind's dark variant switches, line) from a
-    `@custom-variant dark` declaration: the first class or attribute
-    selector it names (an attribute as `[attr="value"]`), or the
-    prefers-color-scheme query; None when the file declares none, or names
-    nothing this importer reads."""
+def dark_variant(text: str) -> Optional[Tuple[str, int, str]]:
+    """(where Tailwind's dark variant switches, line, the variant as
+    written) from a `@custom-variant dark` declaration: the first class or
+    attribute selector it names outside :not() (an attribute as
+    `[attr="value"]`), or the prefers-color-scheme query. Where is "" when
+    the variant names no such selector (`&:where(:not(.light), ...)` names
+    only what dark is not). None when the file declares no dark variant."""
     text = _blank_comments(text)
     m = _CUSTOM_DARK.search(text)
     if not m:
         return None
     start = m.start(1)
     end = text.find(";", start) if m.group(1) == "(" else _matching(text, start, "the file")
-    body = text[start + 1:end if end != -1 else len(text)]
+    body = text[start + 1:end if end != -1 else len(text)].strip()
+    if m.group(1) == "(" and body.endswith(")"):
+        body = body[:-1]
+    line, written = _line(text, m.start()), " ".join(body.split())
     if "prefers-color-scheme" in body:
-        return DARK_MEDIA, _line(text, m.start())
-    found = _THEME_TOKEN.search(body)
+        return DARK_MEDIA, line, written
+    positive = body
+    while _NEGATED.search(positive):
+        positive = _NEGATED.sub("", positive)
+    found = _THEME_TOKEN.search(positive)
     if not found:
-        return None
+        return "", line, written
     attr = _ATTR.fullmatch(found.group(0))
     value = next((g for g in attr.groups()[1:] if g is not None), "") if attr else ""
-    return (f'[{attr.group(1)}="{value}"]' if attr else found.group(0)), _line(text, m.start())
+    return (f'[{attr.group(1)}="{value}"]' if attr else found.group(0)), line, written
 
 
 def _on_dark_variant(rule: Rule, dark_at: str) -> Rule:
@@ -444,6 +453,8 @@ def _on_dark_variant(rule: Rule, dark_at: str) -> Rule:
         return rule
     media = tuple(m for m in rule.media if m != "@variant dark")
     label = " ".join([*(f"@media {m}" for m in media), rule.selector, "@variant dark"])
+    if not dark_at:  # the variant names no dark selector: left for the importer to name
+        return Rule(rule.selector, rule.media, rule.declarations, rule.line, label)
     if dark_at.startswith("("):
         return Rule(rule.selector, media + (dark_at,), rule.declarations, rule.line, label)
     selector = ", ".join((":root" if s == "@theme" else s) + dark_at
@@ -553,15 +564,16 @@ _UNREAD_SCHEME = ("is set on {sel}, a scheme selector in a form this importer do
                   "(prefers-color-scheme: dark) on :root")
 
 
-def _outside_message(selector: str, options: List[Any]) -> str:
+def _outside_message(selector: str, options: List[Any], shown: str = "") -> str:
     """Why a rule outside the root and theme selectors is not read: a scheme
-    selector in a form not read, or a component."""
+    selector in a form not read, or a component. `shown` is the rule as the
+    file writes it, when the importer moved it."""
     for one, parts in zip(split_top(selector, ","), options):
         bare = re.sub(r"\([^()]*\)", "()", one)
         if parts is None and _SCHEMEISH.search(one) and (
                 " " not in bare.strip() or bare.strip().endswith(" *")):
-            return _UNREAD_SCHEME.format(sel=selector)
-    return _COMPONENT.format(sel=selector)
+            return _UNREAD_SCHEME.format(sel=shown or selector)
+    return _COMPONENT.format(sel=shown or selector)
 
 
 def _media_message(media: Tuple[str, ...]) -> str:
@@ -588,7 +600,8 @@ def import_css(text: str, source: Source) -> Imported:
     dark_at = variant[0] if variant else DARK_MEDIA
     # A dark variant on a selector this engine does not already read as dark.
     known = [(a, v) for a, v, _ in _Modes.parse(dark_at) or []] == [("scheme", "dark")]
-    variant_on = (dark_at,) if variant and not dark_at.startswith("(") and not known else ()
+    variant_on = (dark_at,) if dark_at and variant and not dark_at.startswith("(") \
+        and not known else ()
     rules = [_on_dark_variant(r, dark_at) for r in parse_css(text, source.path)]
     modes = _Modes()
     switches = _viewport(rules)
@@ -651,19 +664,25 @@ def import_css(text: str, source: Source) -> Imported:
                               "this file sets")))
                 continue
             item = None
+            shown = rule.label or rule.selector
             if outside:
-                item = _outside_message(rule.selector, options)
+                item = _outside_message(rule.selector, options, rule.label)
+            elif component:
+                item = _COMPONENT.format(sel=shown)
+            elif "@variant dark" in rule.media:  # the custom variant names no dark selector
+                item = (f"is set under {shown}, and @custom-variant dark ({variant[2]}) names no "
+                        "dark selector, only what dark is not; name one in it, such as "
+                        "&:where(.dark, .dark *) or &:where([data-theme=dark], "
+                        "[data-theme=dark] *), and set the dark values under that selector")
             elif media is None:
                 item = _media_message(rule.media)
-            elif component:
-                item = _COMPONENT.format(sel=rule.selector)
             elif modes.refused:
                 axis, held, value = modes.refused
-                item = (f"is set under {rule.selector}, but [{axis}] already switches to "
+                item = (f"is set under {shown}, but [{axis}] already switches to "
                         f"{held}; an imported axis has one value besides its base, so give "
                         f"{value} an attribute of its own")
             elif len(keys) > 1 or None in keys:
-                item = (f"is set under {rule.selector}, which names more than one mode; split "
+                item = (f"is set under {shown}, which names more than one mode; split "
                         "it into one rule per mode")
             if item:
                 not_read.append((d.line, Item(f"{name}:{d.line}", d.name, item)))
@@ -682,7 +701,12 @@ def import_css(text: str, source: Source) -> Imported:
                                                      "each property it points at is read as its "
                                                      "own token")))
     axes = modes.axes()
-    if variant and "scheme" not in axes:
+    if variant and not dark_at:
+        notes.append((variant[1], Item(f"{name}:{variant[1]}", "@custom-variant dark", (
+            f"is declared as {variant[2]}, which names no dark selector, only what dark is "
+            "not, so no value is read as the dark scheme through it; name one, such as "
+            "&:where(.dark, .dark *), and set the dark values under that selector"))))
+    elif variant and "scheme" not in axes:
         where = f"@media {dark_at}" if dark_at.startswith("(") else dark_at
         notes.append((variant[1], Item(f"{name}:{variant[1]}", "@custom-variant dark", (
             f"puts Tailwind's dark: variant on {where}, and this file sets no custom property "
