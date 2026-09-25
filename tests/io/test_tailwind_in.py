@@ -484,3 +484,21 @@ def test_a_nested_dark_variant_is_set_on_every_selector_it_names():
     imported = _css(text)
     assert imported.tokens.get("bg").modes == {"scheme:dark": "#000000"}
     assert imported.report.not_read == []
+
+
+@pytest.mark.parametrize("variant, dark, inner", [
+    ("&:where([data-theme=dark] .content, [data-theme=dark] .content *)",
+     '[data-theme="dark"]', ".content"),
+    ("&:where(.dark .app, .dark .app *)", ".dark", ".app"),
+    ("&:where(.dark > .shell, .dark > .shell *)", ".dark", ".shell"),
+    ("&:is(html.night .panel)", ".night", ".panel"),
+])
+def test_a_dark_variant_is_read_on_the_selector_that_opens_each_member(variant, dark, inner):
+    text = (f"@custom-variant dark ({variant});\n"
+            f":root {{ --bg: #fff; }}\n{inner} {{ --bg: #fafafa; }}\n")
+    imported = _css(text)
+    # The element inside dark is not the dark scheme: its value is never read as dark.
+    assert "scheme:dark" not in imported.tokens.get("bg").modes
+    assert not any("is the dark scheme" in i.message for i in imported.report.notes)
+    from engine.io.css_in import dark_variant
+    assert dark_variant(text)[3] == (dark,)

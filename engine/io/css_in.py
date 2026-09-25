@@ -454,11 +454,13 @@ class _Modes:
 def dark_variant(text: str) -> Optional[Tuple[str, int, str, Tuple[str, ...]]]:
     """(where Tailwind's dark variant switches, line, the variant as
     written, every selector it switches on) from a `@custom-variant dark`
-    declaration: the class and attribute selectors it names outside :not()
-    (an attribute as `[attr="value"]`), each once and the first as where,
-    or the prefers-color-scheme query. Where is "" when the variant names
-    no such selector (`&:where(:not(.light), ...)` names only what dark is
-    not). None when the file declares no dark variant."""
+    declaration: the class or attribute selector that opens each of its
+    comma members outside :not() (an attribute as `[attr="value"]`; in
+    `.dark .app` only .dark, since .app is an element inside dark), each
+    once and the first as where, or the prefers-color-scheme query. Where
+    is "" when the variant names no such selector (`&:where(:not(.light),
+    ...)` names only what dark is not). None when the file declares no dark
+    variant."""
     text = _blank_comments(text)
     m = _CUSTOM_DARK.search(text)
     if not m:
@@ -474,7 +476,13 @@ def dark_variant(text: str) -> Optional[Tuple[str, int, str, Tuple[str, ...]]]:
     if "prefers-color-scheme" in body:
         return DARK_MEDIA, line, written, (DARK_MEDIA,)
     selectors: List[str] = []
-    for found in _THEME_TOKEN.finditer(_without_not(body)):
+    for member in _variant_members(_without_not(body)):
+        # Only the selector that opens a member is where dark switches: in
+        # `.dark .app`, .app is an element inside dark, not the scheme.
+        opener = (split_top(member.lstrip("&").strip(), " ") or [""])[0]
+        found = _THEME_TOKEN.search(opener)
+        if not found:
+            continue
         attr = _ATTR.fullmatch(found.group(0))
         value = next((g for g in attr.groups()[1:] if g is not None), "") if attr else ""
         selector = f'[{attr.group(1)}="{value}"]' if attr else found.group(0)
@@ -483,6 +491,21 @@ def dark_variant(text: str) -> Optional[Tuple[str, int, str, Tuple[str, ...]]]:
     if not selectors:
         return "", line, written, ()
     return selectors[0], line, written, tuple(selectors)
+
+
+def _variant_members(body: str) -> List[str]:
+    """The comma members of a dark variant's selector: those inside its
+    first :where() or :is() group, else the whole selector's."""
+    m = re.search(r":(?:where|is)\(", body)
+    if m:
+        depth, end = 0, len(body)
+        for i in range(m.end() - 1, len(body)):
+            depth += {"(": 1, ")": -1}.get(body[i], 0)
+            if depth == 0:
+                end = i
+                break
+        body = body[m.end():end]
+    return [p.strip() for p in split_top(body, ",") if p.strip()]
 
 
 def _without_not(text: str) -> str:
