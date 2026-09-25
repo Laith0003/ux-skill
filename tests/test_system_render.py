@@ -230,7 +230,7 @@ def test_dir_rtl_switches_to_the_arabic_face_and_scale(page, tokens):
     latin_family = _style(page, "body", "font-family")
     latin_size = float(_style(page, "body", "font-size").removesuffix("px"))
     heading_tracking = _style(page, "h1", "letter-spacing")
-    assert tokens.resolve("type.face.latin", "")[0] in latin_family.split(",")[0]
+    assert tokens.resolve("type.face.text", "")[0] in latin_family.split(",")[0]
     assert heading_tracking not in ("normal", "0px"), heading_tracking
 
     _set(page, dir="rtl")

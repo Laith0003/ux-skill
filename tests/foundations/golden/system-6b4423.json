@@ -4760,12 +4760,40 @@
   },
   "type": {
     "face": {
-      "latin": {
+      "display": {
         "$type": "fontFamily",
         "$value": [
-          "Manrope",
+          "Space Grotesk",
+          "Space Grotesk Fallback",
+          "sans-serif"
+        ],
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "text": {
+        "$type": "fontFamily",
+        "$value": [
+          "IBM Plex Sans",
+          "IBM Plex Sans Fallback",
           "system-ui",
           "sans-serif"
+        ],
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "mono": {
+        "$type": "fontFamily",
+        "$value": [
+          "JetBrains Mono",
+          "JetBrains Mono Fallback",
+          "ui-monospace",
+          "monospace"
         ],
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -4776,9 +4804,9 @@
       "arabic": {
         "$type": "fontFamily",
         "$value": [
-          "Readex Pro",
-          "Manrope",
-          "Noto Sans Arabic",
+          "IBM Plex Sans Arabic",
+          "IBM Plex Sans Arabic Fallback",
+          "IBM Plex Sans",
           "Tahoma",
           "sans-serif"
         ],
@@ -4788,12 +4816,13 @@
           }
         }
       },
-      "code": {
+      "arabic-display": {
         "$type": "fontFamily",
         "$value": [
-          "IBM Plex Mono",
-          "ui-monospace",
-          "monospace"
+          "Readex Pro",
+          "Readex Pro Fallback",
+          "IBM Plex Sans Arabic",
+          "sans-serif"
         ],
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -4824,15 +4853,6 @@
       "600": {
         "$type": "fontWeight",
         "$value": 600,
-        "$extensions": {
-          "io.github.laith0003.ux-skill": {
-            "layer": "primitive"
-          }
-        }
-      },
-      "700": {
-        "$type": "fontWeight",
-        "$value": 700,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -4893,7 +4913,7 @@
         "5": {
           "$type": "dimension",
           "$value": {
-            "value": 1.3125,
+            "value": 1.25,
             "unit": "rem"
           },
           "$extensions": {
@@ -4905,7 +4925,7 @@
         "6": {
           "$type": "dimension",
           "$value": {
-            "value": 1.5,
+            "value": 1.4375,
             "unit": "rem"
           },
           "$extensions": {
@@ -4917,7 +4937,7 @@
         "7": {
           "$type": "dimension",
           "$value": {
-            "value": 1.75,
+            "value": 1.5625,
             "unit": "rem"
           },
           "$extensions": {
@@ -4929,7 +4949,7 @@
         "8": {
           "$type": "dimension",
           "$value": {
-            "value": 1.9375,
+            "value": 1.75,
             "unit": "rem"
           },
           "$extensions": {
@@ -4941,7 +4961,7 @@
         "9": {
           "$type": "dimension",
           "$value": {
-            "value": 2.25,
+            "value": 2.0,
             "unit": "rem"
           },
           "$extensions": {
@@ -5015,7 +5035,7 @@
         "6": {
           "$type": "dimension",
           "$value": {
-            "value": 1.5625,
+            "value": 1.625,
             "unit": "rem"
           },
           "$extensions": {
@@ -5027,7 +5047,7 @@
         "7": {
           "$type": "dimension",
           "$value": {
-            "value": 1.8125,
+            "value": 1.75,
             "unit": "rem"
           },
           "$extensions": {
@@ -5051,7 +5071,7 @@
         "9": {
           "$type": "dimension",
           "$value": {
-            "value": 2.3125,
+            "value": 2.25,
             "unit": "rem"
           },
           "$extensions": {
@@ -5064,9 +5084,18 @@
     },
     "leading": {
       "latin": {
+        "0": {
+          "$type": "number",
+          "$value": 1.14,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
         "1": {
           "$type": "number",
-          "$value": 1.1,
+          "$value": 1.2,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -5075,7 +5104,7 @@
         },
         "2": {
           "$type": "number",
-          "$value": 1.25,
+          "$value": 1.3,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -5093,9 +5122,18 @@
         }
       },
       "arabic": {
+        "0": {
+          "$type": "number",
+          "$value": 1.34,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
         "1": {
           "$type": "number",
-          "$value": 1.3,
+          "$value": 1.4,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -5104,7 +5142,7 @@
         },
         "2": {
           "$type": "number",
-          "$value": 1.45,
+          "$value": 1.5,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -5126,7 +5164,7 @@
       "0": {
         "$type": "dimension",
         "$value": {
-          "value": 0.0,
+          "value": 0,
           "unit": "px"
         },
         "$extensions": {
@@ -5135,10 +5173,10 @@
           }
         }
       },
-      "1": {
+      "step-5": {
         "$type": "dimension",
         "$value": {
-          "value": -0.138,
+          "value": -0.0,
           "unit": "px"
         },
         "$extensions": {
@@ -5147,10 +5185,10 @@
           }
         }
       },
-      "2": {
+      "step-6": {
         "$type": "dimension",
         "$value": {
-          "value": -0.275,
+          "value": -0.04,
           "unit": "px"
         },
         "$extensions": {
@@ -5159,10 +5197,46 @@
           }
         }
       },
-      "3": {
+      "step-7": {
         "$type": "dimension",
         "$value": {
-          "value": -0.55,
+          "value": -0.07,
+          "unit": "px"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "step-8": {
+        "$type": "dimension",
+        "$value": {
+          "value": -0.11,
+          "unit": "px"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "step-9": {
+        "$type": "dimension",
+        "$value": {
+          "value": -0.18,
+          "unit": "px"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "label": {
+        "$type": "dimension",
+        "$value": {
+          "value": 0.9,
           "unit": "px"
         },
         "$extensions": {
@@ -5176,22 +5250,22 @@
       "hero": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{type.face.latin}",
+          "fontFamily": "{type.face.display}",
           "fontSize": "{type.size.latin.9}",
-          "fontWeight": "{type.weight.600}",
-          "letterSpacing": "{type.tracking.3}",
-          "lineHeight": "{type.leading.latin.1}"
+          "fontWeight": "{type.weight.400}",
+          "letterSpacing": "{type.tracking.step-9}",
+          "lineHeight": "{type.leading.latin.0}"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
               "direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
+                "fontFamily": "{type.face.arabic-display}",
                 "fontSize": "{type.size.arabic.9}",
-                "fontWeight": "{type.weight.600}",
+                "fontWeight": "{type.weight.400}",
                 "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.1}"
+                "lineHeight": "{type.leading.arabic.0}"
               }
             }
           }
@@ -5200,10 +5274,34 @@
       "heading-1": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{type.face.latin}",
+          "fontFamily": "{type.face.display}",
+          "fontSize": "{type.size.latin.8}",
+          "fontWeight": "{type.weight.400}",
+          "letterSpacing": "{type.tracking.step-8}",
+          "lineHeight": "{type.leading.latin.0}"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "direction:rtl": {
+                "fontFamily": "{type.face.arabic-display}",
+                "fontSize": "{type.size.arabic.8}",
+                "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.0}"
+              }
+            }
+          }
+        }
+      },
+      "section-title": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{type.face.display}",
           "fontSize": "{type.size.latin.7}",
-          "fontWeight": "{type.weight.600}",
-          "letterSpacing": "{type.tracking.2}",
+          "fontWeight": "{type.weight.400}",
+          "letterSpacing": "{type.tracking.step-7}",
           "lineHeight": "{type.leading.latin.1}"
         },
         "$extensions": {
@@ -5211,9 +5309,33 @@
             "layer": "semantic",
             "modes": {
               "direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
+                "fontFamily": "{type.face.arabic-display}",
                 "fontSize": "{type.size.arabic.7}",
-                "fontWeight": "{type.weight.600}",
+                "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.1}"
+              }
+            }
+          }
+        }
+      },
+      "figure": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{type.face.display}",
+          "fontSize": "{type.size.latin.6}",
+          "fontWeight": "{type.weight.500}",
+          "letterSpacing": "{type.tracking.step-6}",
+          "lineHeight": "{type.leading.latin.1}"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "direction:rtl": {
+                "fontFamily": "{type.face.arabic-display}",
+                "fontSize": "{type.size.arabic.6}",
+                "fontWeight": "{type.weight.500}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.1}"
               }
@@ -5224,22 +5346,36 @@
       "heading-2": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{type.face.latin}",
+          "fontFamily": "{type.face.text}",
           "fontSize": "{type.size.latin.5}",
-          "fontWeight": "{type.weight.600}",
-          "letterSpacing": "{type.tracking.1}",
-          "lineHeight": "{type.leading.latin.2}"
+          "fontWeight": "{type.weight.500}",
+          "letterSpacing": "{type.tracking.step-5}",
+          "lineHeight": "{type.leading.latin.1}"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
+              "contrast:high": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.5}",
+                "fontWeight": "{type.weight.600}",
+                "letterSpacing": "{type.tracking.step-5}",
+                "lineHeight": "{type.leading.latin.1}"
+              },
               "direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.5}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.1}"
+              },
+              "contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.5}",
                 "fontWeight": "{type.weight.600}",
                 "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.2}"
+                "lineHeight": "{type.leading.arabic.1}"
               }
             }
           }
@@ -5248,9 +5384,9 @@
       "heading-3": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{type.face.latin}",
+          "fontFamily": "{type.face.text}",
           "fontSize": "{type.size.latin.4}",
-          "fontWeight": "{type.weight.600}",
+          "fontWeight": "{type.weight.500}",
           "letterSpacing": "{type.tracking.0}",
           "lineHeight": "{type.leading.latin.2}"
         },
@@ -5258,7 +5394,21 @@
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
+              "contrast:high": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.4}",
+                "fontWeight": "{type.weight.600}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.2}"
+              },
               "direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.4}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.2}"
+              },
+              "contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.4}",
                 "fontWeight": "{type.weight.600}",
@@ -5272,7 +5422,7 @@
       "body": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{type.face.latin}",
+          "fontFamily": "{type.face.text}",
           "fontSize": "{type.size.latin.3}",
           "fontWeight": "{type.weight.400}",
           "letterSpacing": "{type.tracking.0}",
@@ -5282,10 +5432,24 @@
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
+              "contrast:high": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.3}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.3}"
+              },
               "direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.3}",
                 "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.3}"
+              },
+              "contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.3}",
+                "fontWeight": "{type.weight.500}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.3}"
               }
@@ -5296,7 +5460,7 @@
       "body-small": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{type.face.latin}",
+          "fontFamily": "{type.face.text}",
           "fontSize": "{type.size.latin.2}",
           "fontWeight": "{type.weight.400}",
           "letterSpacing": "{type.tracking.0}",
@@ -5306,10 +5470,24 @@
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
+              "contrast:high": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.2}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.3}"
+              },
               "direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.2}",
                 "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.3}"
+              },
+              "contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.2}",
+                "fontWeight": "{type.weight.500}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.3}"
               }
@@ -5320,7 +5498,7 @@
       "ui": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{type.face.latin}",
+          "fontFamily": "{type.face.text}",
           "fontSize": "{type.size.latin.2}",
           "fontWeight": "{type.weight.500}",
           "letterSpacing": "{type.tracking.0}",
@@ -5330,10 +5508,62 @@
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
+              "contrast:high": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.2}",
+                "fontWeight": "{type.weight.600}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.2}"
+              },
               "direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.2}",
                 "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.2}"
+              },
+              "contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.2}",
+                "fontWeight": "{type.weight.600}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.2}"
+              }
+            }
+          }
+        }
+      },
+      "label": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{type.face.mono}",
+          "fontSize": "{type.size.latin.2}",
+          "fontWeight": "{type.weight.500}",
+          "letterSpacing": "{type.tracking.label}",
+          "lineHeight": "{type.leading.latin.2}"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": {
+                "fontFamily": "{type.face.mono}",
+                "fontSize": "{type.size.latin.2}",
+                "fontWeight": "{type.weight.600}",
+                "letterSpacing": "{type.tracking.label}",
+                "lineHeight": "{type.leading.latin.2}"
+              },
+              "direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.2}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.2}"
+              },
+              "contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.2}",
+                "fontWeight": "{type.weight.600}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.2}"
               }
@@ -5344,7 +5574,7 @@
       "fine": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{type.face.latin}",
+          "fontFamily": "{type.face.text}",
           "fontSize": "{type.size.latin.1}",
           "fontWeight": "{type.weight.400}",
           "letterSpacing": "{type.tracking.0}",
@@ -5354,10 +5584,24 @@
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
+              "contrast:high": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.1}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.3}"
+              },
               "direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.1}",
                 "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.3}"
+              },
+              "contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.1}",
+                "fontWeight": "{type.weight.500}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.3}"
               }
@@ -5368,7 +5612,7 @@
       "code": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{type.face.code}",
+          "fontFamily": "{type.face.mono}",
           "fontSize": "{type.size.latin.2}",
           "fontWeight": "{type.weight.400}",
           "letterSpacing": "{type.tracking.0}",
@@ -5376,17 +5620,131 @@
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
-            "layer": "semantic"
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": {
+                "fontFamily": "{type.face.mono}",
+                "fontSize": "{type.size.latin.2}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.3}"
+              }
+            }
           }
         }
       }
     },
     "strong": {
       "$type": "fontWeight",
-      "$value": "{type.weight.600}",
+      "$value": "{type.weight.500}",
       "$extensions": {
         "io.github.laith0003.ux-skill": {
           "layer": "semantic"
+        }
+      }
+    },
+    "run": {
+      "latin": {
+        "$type": "fontFamily",
+        "$value": "{type.face.text}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "arabic": {
+        "$type": "fontFamily",
+        "$value": "{type.face.arabic}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      }
+    },
+    "icon": {
+      "inline": {
+        "$type": "dimension",
+        "$value": {
+          "value": 1.0,
+          "unit": "rem"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "control": {
+        "$type": "dimension",
+        "$value": {
+          "value": 1.25,
+          "unit": "rem"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "feature": {
+        "$type": "dimension",
+        "$value": {
+          "value": 2.1,
+          "unit": "rem"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "stroke-width": {
+        "$type": "number",
+        "$value": 1.5,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "size": {
+        "inline": {
+          "$type": "dimension",
+          "$value": "{type.icon.inline}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic"
+            }
+          }
+        },
+        "control": {
+          "$type": "dimension",
+          "$value": "{type.icon.control}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic"
+            }
+          }
+        },
+        "feature": {
+          "$type": "dimension",
+          "$value": "{type.icon.feature}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic"
+            }
+          }
+        }
+      },
+      "stroke": {
+        "$type": "number",
+        "$value": "{type.icon.stroke-width}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
         }
       }
     }

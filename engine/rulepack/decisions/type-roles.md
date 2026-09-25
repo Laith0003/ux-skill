@@ -1,10 +1,10 @@
 ---
 id: type-roles
 title: Nine text styles as composites, faces chosen per script
-status: active
+status: superseded
 areas: [type, direction]
 supersedes: null
-superseded_by: null
+superseded_by: type-three-faces
 ---
 
 # Nine text styles as composites, faces chosen per script

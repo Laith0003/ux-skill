@@ -1,100 +1,117 @@
-"""Typography foundation: faces, weights, a size scale in rem, line
-heights, letter spacing, and text roles as DTCG typography composites,
-with an Arabic variant under dir="rtl".
+"""Typography foundation: three faces (display, text, mono) with their
+Arabic partners, a size scale in rem, weights and letter spacing that vary
+along the scale, line heights, text roles as DTCG typography composites,
+icon sizes and stroke, and an Arabic variant under dir="rtl".
 
-The type_personality axis picks the face pairing (geometric, neutral,
-humanist), each a Latin face with an Arabic face designed to sit beside
-it. The contrast axis sets the scale ratio and heading weight; the density
-axis sets how open body text is. Under dir="rtl" every role but code
-switches to the Arabic face at a size 1 to 2px larger than the Latin one
-at the same step, with taller lines and no letter spacing, which would
-break the joins between Arabic letters. Code keeps its monospace face and
-its Latin size and leading in both directions: Arabic sizing is for Arabic
-glyphs. Sizes are rem so they follow the reader's default text size.
+fonts.choose picks the faces from the axes. The contrast axis sets the
+scale ratio (density tightens it); the display weight comes from contrast
+and formality and eases toward the text face's heading weight down the
+scale; letter spacing tightens toward the largest sizes by the contrast
+and formality axes, and small labels open up. Under high contrast every
+style set in the text or mono face is one weight heavier. Under dir="rtl"
+every style but code switches to the Arabic face (the display
+styles to the Arabic display face) at a size larger by the ratio the two
+faces' metrics give (fonts.arabic_scale), with taller lines and no letter
+spacing, which would break the joins between Arabic letters. Sizes are
+rem so they follow the reader's default text size.
 
 Checks: body and fine print keep minimum sizes in both directions;
 running text keeps line height 1.5 or more (WCAG 1.4.8) and never
-tightens its letters; the Arabic rules above; sizes in rem; and falling
-sizes from hero to body. A role of another type than ROLE_TYPES names is
-reported once by the build's role-types check and skipped here.
+tightens its letters; the Arabic rules above; sizes in rem; falling sizes
+from hero to body; high contrast never lightens a style; icon sizes rise
+and the stroke stays readable. A role of another type than ROLE_TYPES
+names is reported once by the build's role-types check and skipped here.
 """
 from __future__ import annotations
 
 from typing import Any, Dict, List, Optional, Tuple
 
+from engine.foundations import character, fonts
 from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check
+from engine.foundations.modes import compress
 from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
 from engine.synthesizer.axes import AxisValues
 
-# type_personality band -> (Latin face, Arabic face)
-PAIRINGS = {
-    "geometric": ("Manrope", "Readex Pro"),
-    "neutral": ("IBM Plex Sans", "IBM Plex Sans Arabic"),
-    "humanist": ("Source Sans 3", "Noto Naskh Arabic"),
-}
-CODE_FACE = ["IBM Plex Mono", "ui-monospace", "monospace"]
-WEIGHTS = (400, 500, 600, 700)
 STEPS = tuple(range(1, 10))
 BODY_STEP = 3
-# role -> (size step, weight key, leading index, tracking index, face)
-ROLES: Dict[str, Tuple[Any, str, int, int, str]] = {
-    "type.text.hero": (9, "heading", 1, 3, "latin"),
-    "type.text.heading-1": (7, "heading", 1, 2, "latin"),
-    "type.text.heading-2": (5, "heading", 2, 1, "latin"),
-    "type.text.heading-3": (4, "heading", 2, 0, "latin"),
-    "type.text.body": (3, "regular", 3, 0, "latin"),
-    "type.text.body-small": (2, "regular", 3, 0, "latin"),
-    "type.text.ui": ("ui", "medium", 2, 0, "latin"),
-    "type.text.fine": (1, "regular", 3, 0, "latin"),
-    "type.text.code": (2, "regular", 3, 0, "code"),
+BODY_PX = 16
+# role -> (size step, face, weight kind, leading index, tracking kind).
+# Faces: display, text, mono, label (the mono face for a technical system,
+# else the text face). Weight kinds: display (eases along the scale),
+# heading, regular, medium. Tracking kinds: scale (tightens with size),
+# label (opens up), none.
+ROLES: Dict[str, Tuple[Any, str, str, int, str]] = {
+    "type.text.hero": (9, "display", "display", 0, "scale"),
+    "type.text.heading-1": (8, "display", "display", 0, "scale"),
+    "type.text.section-title": (7, "display", "display", 1, "scale"),
+    "type.text.figure": (6, "display", "display", 1, "scale"),
+    "type.text.heading-2": (5, "text", "heading", 1, "scale"),
+    "type.text.heading-3": (4, "text", "heading", 2, "none"),
+    "type.text.body": (3, "text", "regular", 3, "none"),
+    "type.text.body-small": (2, "text", "regular", 3, "none"),
+    "type.text.ui": ("ui", "text", "medium", 2, "none"),
+    "type.text.label": (2, "label", "medium", 2, "label"),
+    "type.text.fine": (1, "text", "regular", 3, "none"),
+    "type.text.code": (2, "mono", "regular", 3, "none"),
 }
 READING = ("type.text.body", "type.text.body-small", "type.text.fine")
-HIERARCHY = ("type.text.hero", "type.text.heading-1", "type.text.heading-2",
-             "type.text.heading-3", "type.text.body")
+HIERARCHY = ("type.text.hero", "type.text.heading-1", "type.text.section-title",
+             "type.text.heading-2", "type.text.heading-3", "type.text.body")
 MIN_BODY_PX, MIN_FINE_PX, MIN_READING_LEADING = 16, 12, 1.5
-FACES = ("latin", "arabic", "code")
+# Face roles: the token each face is written to.
+FACE_TOKENS = {"display": "type.face.display", "text": "type.face.text",
+               "mono": "type.face.mono", "arabic": "type.face.arabic",
+               "arabic-display": "type.face.arabic-display"}
 ARABIC_FACE = "type.face.arabic"
-# Role path -> the token type the checks read; the build's role-types
-# check reports any other type once, and the checks below skip it.
+ARABIC_DISPLAY_FACE = "type.face.arabic-display"
+# The one style that keeps its Latin face under rtl: code, whose Arabic
+# comments and strings still read in the mono face. A label set in the mono
+# face switches to the Arabic face like any other text.
+KEEP_FACE = ("type.text.code",)
+# A technical system sets labels in the mono face.
+MONO_LABEL_FROM = 0.5
+# Icon sizes: inline follows body text, control sits in a control, feature
+# grows with the contrast axis.
+ICON_CONTROL_REM = 1.25
+ICON_STROKE_RANGE = (1.0, 3.0)
+# Run roles: the face a run in the other script takes inside a paragraph.
+RUNS = {"type.run.latin": "type.face.text", "type.run.arabic": ARABIC_FACE}
 ROLE_TYPES: Dict[str, str] = {
-    **{f"type.face.{face}": "fontFamily" for face in FACES},
+    **{token: "fontFamily" for token in FACE_TOKENS.values()},
     **{role: "typography" for role in ROLES},
     "type.strong": "fontWeight",
+    **{run: "fontFamily" for run in RUNS},
+    "type.icon.size.inline": "dimension", "type.icon.size.control": "dimension",
+    "type.icon.size.feature": "dimension", "type.icon.stroke": "number",
 }
 
 
-def band(type_personality: float) -> str:
-    if type_personality < 0.34:
-        return "geometric"
-    return "humanist" if type_personality >= 0.66 else "neutral"
+def ratio(axes: AxisValues) -> float:
+    return character.scale_ratio(axes)
 
 
-def ratio(contrast: float) -> float:
-    return round(1.125 + 0.2 * contrast, 4)
-
-
-def latin_px(contrast: float) -> List[int]:
-    """Sizes in px for steps 1..9: 12, 14, 16, then the ratio upward."""
-    r = ratio(contrast)
-    out = [12, 14, 16]
+def latin_px(axes: AxisValues, body: int = BODY_PX) -> List[int]:
+    """Sizes in px for steps 1..9: body minus 4, body minus 2, body, then
+    the ratio upward."""
+    r = ratio(axes)
+    out = [body - 4, body - 2, body]
     for n in STEPS[3:]:
-        out.append(max(int(16 * r ** (n - BODY_STEP) + 0.5), out[-1] + 1))
+        out.append(max(int(body * r ** (n - BODY_STEP) + 0.5), out[-1] + 1))
     return out
 
 
-def arabic_px(latin: List[int]) -> List[int]:
-    """The Arabic size at each step: 2px larger up to 23px, 1px above."""
-    return [px + (2 if px < 24 else 1) for px in latin]
+def arabic_px(latin: List[int], scale: float) -> List[int]:
+    """The Arabic size at each step: the Latin size times the scale the
+    two faces' metrics give, at least one pixel larger."""
+    return [max(px + 1, int(px * scale + 0.5)) for px in latin]
 
 
-def leading(density: float) -> Dict[int, float]:
-    return {1: 1.1, 2: 1.25, 3: round(1.5 + 0.1 * (1 - density), 2)}
-
-
-def tracking(contrast: float) -> Dict[int, float]:
-    t = round((0.5 + 0.5 * contrast) * 20) / 20
-    return {0: 0.0, 1: round(-0.25 * t, 3), 2: round(-0.5 * t, 3), 3: round(-1.0 * t, 3)}
+def leading(axes: AxisValues) -> Dict[int, float]:
+    """Line heights: display lines tighten with contrast, reading lines
+    open as density falls."""
+    return {0: round(1.05 + 0.1 * (1 - axes.contrast), 2), 1: 1.2, 2: 1.3,
+            3: round(1.5 + 0.1 * (1 - axes.density), 2)}
 
 
 def _rem(px: float) -> Dict[str, Any]:
@@ -106,56 +123,156 @@ def _step(role: str, axes: AxisValues) -> int:
     return (BODY_STEP if axes.density < 0.5 else 2) if step == "ui" else step
 
 
-def _weight(key: str, axes: AxisValues) -> int:
-    return {"regular": 400, "medium": 500,
-            "heading": 700 if axes.contrast >= 0.66 else 600}[key]
+def _snap(w: float) -> int:
+    return int(round(w / 100.0)) * 100
 
 
-def generate_type(axes: AxisValues, arabic: bool = True) -> Generated:
-    latin_face, arabic_face = PAIRINGS[band(axes.type_personality)]
+def weights(axes: AxisValues, choice: fonts.Choice, sizes: List[int]) -> Dict[str, int]:
+    """The weight of every style at standard contrast. Display styles ease
+    from the display weight at the hero to the heading weight at heading-3
+    along a log scale of size; the rest take their kind's weight."""
+    display = choice.display.clamp(character.display_weight(axes))
+    heading = choice.text.clamp(character.heading_weight(axes))
+    hero_px = sizes[ROLES["type.text.hero"][0] - 1]
+    h3_px = sizes[ROLES["type.text.heading-3"][0] - 1]
+    out = {}
+    for role, (_, face, kind, _, _) in ROLES.items():
+        if kind == "display":
+            px = sizes[_step(role, axes) - 1]
+            t = character.log_position(px, h3_px, hero_px)
+            out[role] = choice.display.clamp(_snap(heading + (display - heading) * t))
+        else:
+            out[role] = {"heading": heading, "regular": 400, "medium": 500}[kind]
+    return out
+
+
+def tracking_em(axes: AxisValues, px: float, hero_px: float) -> float:
+    """Letter spacing in em for a heading size: 0 at 20px and below, the
+    full display tracking at the hero size."""
+    return character.display_tracking(axes) * character.log_position(px, 20, hero_px)
+
+
+def _face_list(face: fonts.Face, *rest: str) -> List[str]:
+    return [face.family, fonts.fallback_name(face), *rest]
+
+
+def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX) -> Generated:
+    choice = fonts.choose(axes)
     ts = TokenSet()
-    ts.add(Token("type.face.latin", "fontFamily", [latin_face, "system-ui", "sans-serif"]))
-    if arabic:
-        ts.add(Token("type.face.arabic", "fontFamily",
-                     [arabic_face, latin_face, "Noto Sans Arabic", "Tahoma", "sans-serif"]))
-    ts.add(Token("type.face.code", "fontFamily", list(CODE_FACE)))
-    for w in WEIGHTS:
+    faces = {
+        "display": _face_list(choice.display, choice.display.generic),
+        "text": _face_list(choice.text, "system-ui", "sans-serif"),
+        "mono": _face_list(choice.mono, "ui-monospace", "monospace"),
+        "arabic": _face_list(choice.arabic, choice.text.family, "Tahoma", "sans-serif"),
+        "arabic-display": _face_list(choice.arabic_display, choice.arabic.family, "sans-serif"),
+    }
+    for role, token in FACE_TOKENS.items():
+        if arabic or not role.startswith("arabic"):
+            ts.add(Token(token, "fontFamily", faces[role]))
+    latin = latin_px(axes, body_px)
+    scale = fonts.arabic_scale(choice.text, choice.arabic)
+    std = weights(axes, choice, latin)
+    high = {role: _heavier(role, w, choice) for role, w in std.items()}
+
+    def in_arabic(role: str, w: int) -> int:
+        face = choice.arabic_display if ROLES[role][1] == "display" else choice.arabic
+        return face.clamp(w)
+
+    used = sorted(set(std.values()) | set(high.values())
+                  | ({in_arabic(r, w) for r, w in list(std.items()) + list(high.items())}
+                     if arabic else set()))
+    for w in used:
         ts.add(Token(f"type.weight.{w}", "fontWeight", w))
-    latin = latin_px(axes.contrast)
     for n, px in zip(STEPS, latin):
         ts.add(Token(f"type.size.latin.{n}", "dimension", _rem(px)))
     if arabic:
-        for n, px in zip(STEPS, arabic_px(latin)):
+        for n, px in zip(STEPS, arabic_px(latin, scale)):
             ts.add(Token(f"type.size.arabic.{n}", "dimension", _rem(px)))
-    lead = leading(axes.density)
+    lead = leading(axes)
     for i, v in lead.items():
         ts.add(Token(f"type.leading.latin.{i}", "number", v))
     if arabic:
         for i, v in lead.items():
             ts.add(Token(f"type.leading.arabic.{i}", "number", round(v + 0.2, 2)))
-    for i, v in tracking(axes.contrast).items():
-        ts.add(Token(f"type.tracking.{i}", "dimension", {"value": v, "unit": "px"}))
+    hero_px = latin[ROLES["type.text.hero"][0] - 1]
+    ts.add(Token("type.tracking.0", "dimension", {"value": 0, "unit": "px"}))
+    scale_steps = sorted({_step(r, axes) for r, spec in ROLES.items() if spec[4] == "scale"})
+    for n in scale_steps:
+        px = latin[n - 1]
+        ts.add(Token(f"type.tracking.step-{n}", "dimension",
+                     {"value": round(tracking_em(axes, px, hero_px) * px, 2), "unit": "px"}))
+    label_px = latin[_step("type.text.label", axes) - 1]
+    ts.add(Token("type.tracking.label", "dimension",
+                 {"value": round(character.label_tracking(axes) * label_px, 2), "unit": "px"}))
 
-    for role, (_, weight, lead_i, track_i, face) in ROLES.items():
+    label_face = "mono" if character.technical(axes) >= MONO_LABEL_FROM else "text"
+    for role, (_, face, _, lead_i, track) in ROLES.items():
+        face = label_face if face == "label" else face
         step = _step(role, axes)
-        w = "{type.weight.%d}" % _weight(weight, axes)
-        value = {"fontFamily": "{type.face.%s}" % face,
-                 "fontSize": "{type.size.latin.%d}" % step, "fontWeight": w,
-                 "letterSpacing": "{type.tracking.%d}" % track_i,
+        tracking = {"scale": "{type.tracking.step-%d}" % step, "label": "{type.tracking.label}",
+                    "none": "{type.tracking.0}"}[track]
+        value = {"fontFamily": "{%s}" % FACE_TOKENS[face],
+                 "fontSize": "{type.size.latin.%d}" % step,
+                 "fontWeight": "{type.weight.%d}" % std[role],
+                 "letterSpacing": tracking,
                  "lineHeight": "{type.leading.latin.%d}" % lead_i}
-        modes = {}
-        if arabic and face != "code":
-            modes["direction:rtl"] = {
-                "fontFamily": "{type.face.arabic}",
-                "fontSize": "{type.size.arabic.%d}" % step, "fontWeight": w,
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.%d}" % lead_i}
-        ts.add(Token(role, "typography", value, modes=modes, layer="semantic"))
-    ts.add(Token("type.strong", "fontWeight", "{type.weight.%d}" % _weight("heading", axes),
+        rtl = value
+        arabic_rtl = arabic and role not in KEEP_FACE
+        if arabic_rtl:
+            arabic_face = ARABIC_DISPLAY_FACE if face == "display" else ARABIC_FACE
+            rtl = {"fontFamily": "{%s}" % arabic_face,
+                   "fontSize": "{type.size.arabic.%d}" % step,
+                   "fontWeight": "{type.weight.%d}" % in_arabic(role, std[role]),
+                   "letterSpacing": "{type.tracking.0}",
+                   "lineHeight": "{type.leading.arabic.%d}" % lead_i}
+        elif arabic:
+            # Code keeps its face, size and leading, but drops letter
+            # spacing for the Arabic strings it can hold.
+            rtl = dict(value, letterSpacing="{type.tracking.0}")
+        heavy = "{type.weight.%d}" % high[role]
+        heavy_rtl = "{type.weight.%d}" % (in_arabic(role, high[role]) if arabic_rtl
+                                          else high[role])
+        per_context = {
+            "contrast:standard,direction:ltr": value,
+            "contrast:high,direction:ltr": dict(value, fontWeight=heavy),
+            "contrast:standard,direction:rtl": rtl,
+            "contrast:high,direction:rtl": dict(rtl, fontWeight=heavy_rtl),
+        }
+        if not arabic:
+            per_context = {k: v for k, v in per_context.items() if "rtl" not in k}
+            per_context = {k.split(",")[0]: v for k, v in per_context.items()}
+        base, modes = compress(per_context)
+        ts.add(Token(role, "typography", base, modes=modes, layer="semantic"))
+    ts.add(Token("type.strong", "fontWeight", "{type.weight.%d}" % std["type.text.heading-3"],
                  layer="semantic"))
-    notes = [f"type: {band(axes.type_personality)} pairing, {latin_face}"
-             + (f" with {arabic_face}" if arabic else "") + f", ratio {ratio(axes.contrast)}"]
+    for run, face in RUNS.items():
+        if arabic or run == "type.run.latin":
+            ts.add(Token(run, "fontFamily", "{%s}" % face, layer="semantic"))
+    feature = round(2.0 + 1.0 * axes.contrast, 4)
+    for name, rem in (("inline", body_px / 16), ("control", ICON_CONTROL_REM),
+                      ("feature", feature)):
+        ts.add(Token(f"type.icon.{name}", "dimension", {"value": round(rem, 4), "unit": "rem"}))
+    ts.add(Token("type.icon.stroke-width", "number", character.icon_stroke(axes)))
+    for name in ("inline", "control", "feature"):
+        ts.add(Token(f"type.icon.size.{name}", "dimension", "{type.icon.%s}" % name,
+                     layer="semantic"))
+    ts.add(Token("type.icon.stroke", "number", "{type.icon.stroke-width}", layer="semantic"))
+    notes = [f"type: display {choice.display.family}, text {choice.text.family}, mono "
+             f"{choice.mono.family}" + (f", Arabic {choice.arabic.family} and "
+                                        f"{choice.arabic_display.family} at {scale:g} times the "
+                                        "Latin size" if arabic else "")
+             + f", ratio {ratio(axes):g}, display weight {std['type.text.hero']}"]
     return Generated(tokens=ts, notes=notes)
+
+
+def _heavier(role: str, weight: int, choice: fonts.Choice) -> int:
+    """High contrast adds one weight to every style set in the text or
+    mono face, within what the face (and its Arabic partner) ships."""
+    face = ROLES[role][1]
+    if face == "display":
+        return weight
+    top = min(choice.text.weights[1], choice.arabic.weights[1], choice.mono.weights[1], 700)
+    return max(weight, min(weight + 100, top))
 
 
 def _px(dim: Dict[str, Any]) -> float:
@@ -207,34 +324,42 @@ def _first(family: Any) -> str:
     return family if isinstance(family, str) else family[0]
 
 
+# Arabic sits at least a pixel and at most a fifth above the Latin size.
+ARABIC_GROW_MAX = 1.2
+
+
 def _arabic(ts: TokenSet, mode: str) -> List[str]:
-    """Under rtl every text role but code reads the Arabic face, at the
-    Arabic size, with taller lines, and every role, code included, drops
-    letter spacing (Arabic comments and strings sit in code too). Code
-    keeps its monospace face and its Latin size and leading. A set without
-    type.face.arabic is Latin-only and has nothing to check."""
+    """Under rtl every style set in the text or display face reads the
+    Arabic face (or the Arabic display face) at a size 4 to 20 percent
+    larger than its Latin size, with taller lines, and every style drops
+    letter spacing. Code keeps its face, size and leading. A set without
+    type.face.arabic is Latin-only."""
     if "direction:rtl" not in mode or not _typed(ts, ARABIC_FACE):
         return []
-    arabic_face = ts.resolve(ARABIC_FACE, mode)
+    ltr_mode = mode.replace("direction:rtl", "direction:ltr")
     out = []
+    mono = _first(ts.resolve("type.face.mono")) if ts.has("type.face.mono") else ""
     for role in _roles(ts, ROLES):
-        code = ROLES[role][4] == "code"
-        rtl, ltr = ts.resolve(role, mode), ts.resolve(role, "direction:ltr")
-        if not code and rtl["fontFamily"] != arabic_face:
+        rtl, ltr = ts.resolve(role, mode), ts.resolve(role, ltr_mode)
+        kept = role in KEEP_FACE and rtl["fontFamily"] == ltr["fontFamily"] \
+            and _first(ltr["fontFamily"]) == mono
+        face = ARABIC_DISPLAY_FACE if ROLES[role][1] == "display" and \
+            _typed(ts, ARABIC_DISPLAY_FACE) else ARABIC_FACE
+        if not kept and rtl["fontFamily"] != ts.resolve(face, mode):
             out.append(f"{role} (direction:rtl) is set in {_first(rtl['fontFamily'])}, not "
-                       f"{ARABIC_FACE}; Arabic text needs its own face, so point its "
-                       f"direction:rtl fontFamily at {ARABIC_FACE}")
+                       f"{face}; Arabic text needs its own face, so point its direction:rtl "
+                       f"fontFamily at {face}")
         if rtl["letterSpacing"]["value"] != 0:
             out.append(f"{role} (direction:rtl) spaces letters by "
                        f"{rtl['letterSpacing']['value']:g}px; letter spacing breaks Arabic "
                        "joins, so point it at type.tracking.0")
-        if code:
+        if kept:
             continue
-        grow = _px(rtl["fontSize"]) - _px(ltr["fontSize"])
-        if not 1 <= grow <= 2:
-            out.append(f"{role} (direction:rtl) is {grow:+g}px against its Latin size; Arabic "
-                       "reads at 1 to 2px larger at the same step, so point it at the Arabic "
-                       "size for that step")
+        rtl_px, ltr_px = _px(rtl["fontSize"]), _px(ltr["fontSize"])
+        if not ltr_px + 1 <= rtl_px <= ltr_px * ARABIC_GROW_MAX:
+            out.append(f"{role} (direction:rtl) is {rtl_px:g}px against its Latin {ltr_px:g}px; "
+                       "Arabic reads at least 1px and at most a fifth larger than the Latin size "
+                       "at the same step, so point it at the Arabic size for that step")
         if rtl["lineHeight"] <= ltr["lineHeight"]:
             out.append(f"{role} (direction:rtl) has line height {rtl['lineHeight']:g}, not taller "
                        f"than its Latin {ltr['lineHeight']:g}; Arabic needs room for its marks, "
@@ -295,13 +420,52 @@ def _hierarchy(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
+def _high_weights(ts: TokenSet, mode: str) -> List[str]:
+    """Under high contrast no style is lighter than at standard contrast."""
+    if "contrast:high" not in mode:
+        return []
+    std = mode.replace("contrast:high", "contrast:standard")
+    return [f"{role} ({mode}) is weight {ts.resolve(role, mode)['fontWeight']:g}, lighter than "
+            f"its {ts.resolve(role, std)['fontWeight']:g} at standard contrast; high contrast "
+            "never lightens text, so point its contrast:high fontWeight at a heavier step"
+            for role in _roles(ts, ROLES)
+            if ts.resolve(role, mode)["fontWeight"] < ts.resolve(role, std)["fontWeight"]]
+
+
+def _icons(ts: TokenSet, mode: str) -> List[str]:
+    sizes = [r for r in ("type.icon.size.inline", "type.icon.size.control",
+                         "type.icon.size.feature") if _typed(ts, r)]
+    out = []
+    for a, b in zip(sizes, sizes[1:]):
+        pa, pb = _px(ts.resolve(a, mode)), _px(ts.resolve(b, mode))
+        if pa >= pb:
+            out.append(f"{b} ({pb:g}px) is not larger than {a} ({pa:g}px); keep inline, control "
+                       "and feature icons in rising size")
+    if _typed(ts, "type.icon.stroke"):
+        stroke = ts.resolve("type.icon.stroke", mode)
+        lo, hi = ICON_STROKE_RANGE
+        if not lo <= stroke <= hi:
+            out.append(f"type.icon.stroke is {stroke:g}; on a 24 unit icon a stroke outside {lo:g} "
+                       f"to {hi:g} breaks up or fills in, so point it inside that range")
+    return out
+
+
+# High contrast changes only weights; every other check reads direction.
+_WEIGHT_ONLY = (("contrast", "high contrast changes only weights, which high-contrast-weights "
+                 "reads"),)
 CHECKS: Tuple[Check, ...] = (
-    Check("type-sizes", "system", _sizes, axes=("direction",)),
-    Check("reading-leading", "1.4.8", _leading, axes=("direction",)),
-    Check("reading-tracking", "system", _tracking, axes=("direction",)),
-    Check("arabic-text", "system", _arabic, axes=("direction",)),
-    Check("rem-sizes", "system", _rem_sizes, axes=("direction",)),
-    Check("type-hierarchy", "system", _hierarchy, axes=("direction",)),
+    Check("type-sizes", "system", _sizes, axes=("direction",), exempt_axes=_WEIGHT_ONLY),
+    Check("reading-leading", "1.4.8", _leading, axes=("direction",), exempt_axes=_WEIGHT_ONLY),
+    Check("reading-tracking", "system", _tracking, axes=("direction",),
+          exempt_axes=_WEIGHT_ONLY),
+    Check("arabic-text", "system", _arabic, axes=("direction",), exempt_axes=_WEIGHT_ONLY),
+    Check("rem-sizes", "system", _rem_sizes, axes=("direction",), exempt_axes=_WEIGHT_ONLY),
+    Check("type-hierarchy", "system", _hierarchy, axes=("direction",),
+          exempt_axes=_WEIGHT_ONLY),
+    Check("high-contrast-weights", "system", _high_weights, axes=("contrast", "direction")),
+    Check("icon-sizes", "system", _icons,
+          exempt_axes=(("direction", "icon sizes and the stroke never carry modes"),
+                       ("contrast", "icon sizes and the stroke never carry modes"))),
 )
 
 

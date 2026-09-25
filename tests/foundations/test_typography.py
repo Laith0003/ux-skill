@@ -1,22 +1,22 @@
-"""Typography: face pairings, a rem scale, text roles as DTCG typography
-composites, and the Arabic variant under dir="rtl"."""
+"""Typography: three faces chosen from the catalog, a rem scale, weight
+and tracking along the scale, text roles as DTCG typography composites,
+heavier text under high contrast, icons, and the Arabic variant under
+dir="rtl"."""
 import pytest
 
-from engine.foundations import build_system, from_dtcg, to_css, to_dtcg
+from engine.foundations import build_system, fonts, from_dtcg, to_css, to_dtcg
 from engine.foundations.foundation import role_types_check
 from engine.foundations.gate import gate
 from engine.foundations.tokens import Token, TokenSet
 from engine.foundations.typography import (
     CHECKS,
     FOUNDATION,
-    PAIRINGS,
     arabic_px,
-    band,
     generate_type,
     latin_px,
     leading,
     ratio,
-    tracking,
+    weights,
 )
 from engine.foundations.validate import validate
 from engine.synthesizer.axes import AxisValues
@@ -33,30 +33,47 @@ def px(dim):
     return dim["value"] * (16 if dim["unit"] == "rem" else 1)
 
 
-@pytest.mark.parametrize("contrast, sizes", [
-    (0.0, [12, 14, 16, 18, 20, 23, 26, 29, 32]),
-    (0.5, [12, 14, 16, 20, 24, 29, 36, 44, 54]),
-    (1.0, [12, 14, 16, 21, 28, 37, 49, 65, 87]),
+@pytest.mark.parametrize("contrast, sizes, r", [
+    (0.0, [12, 14, 16, 18, 20, 22, 24, 27, 30], 1.11),
+    (0.5, [12, 14, 16, 20, 24, 29, 36, 44, 54], 1.225),
+    (1.0, [12, 14, 16, 21, 29, 38, 52, 69, 93], 1.34),
 ])
-def test_scale_ratio_follows_the_contrast_axis(contrast, sizes):
-    assert latin_px(contrast) == sizes
-    assert ratio(contrast) == round(1.125 + 0.2 * contrast, 4)
+def test_scale_ratio_follows_the_contrast_axis(contrast, sizes, r):
+    assert latin_px(axes(contrast=contrast)) == sizes
+    assert ratio(axes(contrast=contrast)) == r
 
 
-def test_arabic_sizes_are_one_to_two_px_larger():
-    for contrast in (0.0, 0.5, 1.0):
-        latin = latin_px(contrast)
-        assert all(1 <= a - l <= 2 for a, l in zip(arabic_px(latin), latin))
-    assert arabic_px([12, 16, 23, 24, 54]) == [14, 18, 25, 25, 55]
+def test_arabic_sizes_follow_the_faces_ratio_and_are_never_equal():
+    choice = fonts.choose(axes())
+    scale = fonts.arabic_scale(choice.text, choice.arabic)
+    assert scale == 1.15
+    latin = latin_px(axes())
+    arabic = arabic_px(latin, scale)
+    assert arabic == [14, 16, 18, 23, 28, 33, 41, 51, 62]
+    assert all(a >= lat + 1 and a <= lat * 1.2 for a, lat in zip(arabic, latin))
 
 
-def test_face_pairing_follows_type_personality():
-    assert [band(t) for t in (0.0, 0.33, 0.34, 0.65, 0.66, 1.0)] == [
-        "geometric", "geometric", "neutral", "neutral", "humanist", "humanist"]
-    ts = generate_type(axes(type_personality=1.0)).tokens
-    latin, arabic = PAIRINGS["humanist"]
-    assert ts.resolve("type.face.latin") == [latin, "system-ui", "sans-serif"]
-    assert ts.resolve("type.face.arabic")[:2] == [arabic, latin]
+def test_three_faces_with_metric_matched_fallbacks():
+    ts = generate_type(axes()).tokens
+    assert ts.resolve("type.face.display") == ["Outfit", "Outfit Fallback", "sans-serif"]
+    assert ts.resolve("type.face.text") == ["Noto Sans", "Noto Sans Fallback", "system-ui",
+                                            "sans-serif"]
+    assert ts.resolve("type.face.mono") == ["IBM Plex Mono", "IBM Plex Mono Fallback",
+                                            "ui-monospace", "monospace"]
+    assert ts.resolve("type.face.arabic")[:3] == ["Noto Sans Arabic", "Noto Sans Arabic Fallback",
+                                                  "Noto Sans"]
+    assert ts.resolve("type.face.arabic-display")[0] == "Alexandria"
+
+
+def test_display_styles_use_the_display_face_and_reading_styles_the_text_face():
+    ts = generate_type(axes()).tokens
+    for role in ("type.text.hero", "type.text.heading-1", "type.text.section-title",
+                 "type.text.figure"):
+        assert ts.get(role).value["fontFamily"] == "{type.face.display}", role
+    for role in ("type.text.heading-2", "type.text.heading-3", "type.text.body",
+                 "type.text.ui", "type.text.fine"):
+        assert ts.get(role).value["fontFamily"] == "{type.face.text}", role
+    assert ts.get("type.text.code").value["fontFamily"] == "{type.face.mono}"
 
 
 def test_sizes_are_rem_and_roles_are_composites():
@@ -64,30 +81,63 @@ def test_sizes_are_rem_and_roles_are_composites():
     assert all(t.value["unit"] == "rem" for t in ts.tokens() if t.path.startswith("type.size."))
     body = ts.get("type.text.body")
     assert body.type == "typography" and body.value == {
-        "fontFamily": "{type.face.latin}", "fontSize": "{type.size.latin.3}",
+        "fontFamily": "{type.face.text}", "fontSize": "{type.size.latin.3}",
         "fontWeight": "{type.weight.400}", "letterSpacing": "{type.tracking.0}",
         "lineHeight": "{type.leading.latin.3}"}
+
+
+@pytest.mark.parametrize("contrast, formality, hero, heading", [
+    (0.5, 0.5, 600, 600), (1.0, 0.0, 800, 700), (0.0, 1.0, 300, 500)])
+def test_weight_eases_from_the_display_weight_to_the_heading_weight(contrast, formality, hero,
+                                                                     heading):
+    a = axes(contrast=contrast, formality=formality)
+    w = weights(a, fonts.choose(a), latin_px(a))
+    assert (w["type.text.hero"], w["type.text.heading-3"]) == (hero, heading)
+    order = [w[r] for r in ("type.text.hero", "type.text.heading-1", "type.text.section-title",
+                            "type.text.heading-2", "type.text.heading-3")]
+    assert order == sorted(order, reverse=hero > heading)
+
+
+def test_tracking_tightens_toward_the_hero_and_labels_open_up():
+    ts = generate_type(axes()).tokens
+    track = [ts.resolve(r)["letterSpacing"]["value"] for r in (
+        "type.text.hero", "type.text.heading-1", "type.text.section-title",
+        "type.text.heading-2")]
+    assert track == [-1.1, -0.71, -0.43, -0.09]
+    assert ts.resolve("type.text.label")["letterSpacing"]["value"] > 0
+    assert ts.resolve("type.text.body")["letterSpacing"]["value"] == 0
+
+
+def test_high_contrast_makes_text_styles_heavier_but_not_display_styles():
+    ts = generate_type(axes()).tokens
+    high = "contrast:high"
+    assert ts.resolve("type.text.body", high)["fontWeight"] == 500
+    assert ts.resolve("type.text.ui", high)["fontWeight"] == 600
+    assert ts.resolve("type.text.hero", high)["fontWeight"] == \
+        ts.resolve("type.text.hero")["fontWeight"]
+    assert ts.resolve("type.text.body", "contrast:high,direction:rtl")["fontWeight"] == 500
 
 
 def test_rtl_switches_face_size_leading_and_drops_tracking():
     ts = generate_type(axes()).tokens
     ltr, rtl = ts.resolve("type.text.heading-1", "direction:ltr"), ts.resolve(
         "type.text.heading-1", "direction:rtl")
-    assert rtl["fontFamily"][0] == "IBM Plex Sans Arabic"
-    assert px(rtl["fontSize"]) - px(ltr["fontSize"]) == 1
+    assert rtl["fontFamily"][0] == "Alexandria"
+    assert px(rtl["fontSize"]) == 51 and px(ltr["fontSize"]) == 44
     assert rtl["lineHeight"] == round(ltr["lineHeight"] + 0.2, 2)
     assert ltr["letterSpacing"]["value"] < 0 and rtl["letterSpacing"]["value"] == 0
+    body = ts.resolve("type.text.body", "direction:rtl")
+    assert body["fontFamily"][0] == "Noto Sans Arabic"
     code = ts.resolve("type.text.code", "direction:rtl")
     assert code["fontFamily"][0] == "IBM Plex Mono"
     # Arabic sizing is for Arabic glyphs: code keeps its Latin size and
-    # leading, so it needs no rtl override at all.
+    # leading under rtl; it changes only its weight under high contrast.
     assert code == ts.resolve("type.text.code", "direction:ltr")
-    assert ts.get("type.text.code").modes == {}
+    assert set(ts.get("type.text.code").modes) == {"contrast:high"}
 
 
 def test_body_text_is_open_and_never_tight():
-    assert leading(0.0)[3] == 1.6 and leading(1.0)[3] == 1.5
-    assert tracking(1.0) == {0: 0.0, 1: -0.25, 2: -0.5, 3: -1.0}
+    assert leading(axes(density=0.0))[3] == 1.6 and leading(axes(density=1.0))[3] == 1.5
     ts = generate_type(axes()).tokens
     for mode in ("direction:ltr", "direction:rtl"):
         body = ts.resolve("type.text.body", mode)
@@ -95,21 +145,39 @@ def test_body_text_is_open_and_never_tight():
         assert body["letterSpacing"]["value"] == 0
 
 
+def test_icons_follow_body_text_and_the_display_weight():
+    ts = generate_type(axes()).tokens
+    assert [px(ts.resolve(f"type.icon.size.{n}")) for n in ("inline", "control", "feature")] == \
+        [16, 20, 40]
+    assert ts.resolve("type.icon.stroke") == 1.75
+    heavy = generate_type(axes(contrast=1.0, formality=0.0)).tokens
+    assert heavy.resolve("type.icon.stroke") > ts.resolve("type.icon.stroke")
+
+
+def test_runs_name_the_face_of_the_other_script():
+    ts = generate_type(axes()).tokens
+    assert ts.get("type.run.latin").value == "{type.face.text}"
+    assert ts.get("type.run.arabic").value == "{type.face.arabic}"
+    assert not generate_type(axes(), arabic=False).tokens.has("type.run.arabic")
+
+
 def test_without_arabic_there_is_no_rtl_variant():
     ts = generate_type(axes(), arabic=False).tokens
     assert not ts.has("type.face.arabic") and not ts.has("type.size.arabic.3")
-    assert all(not t.modes for t in ts.tokens())
+    assert all("direction" not in k for t in ts.tokens() for k in t.modes)
     assert validate(ts) == [] and gate(ts, [], CHECKS).passed
 
 
-@pytest.mark.parametrize("contrast, density, personality", [
-    (c, d, p) for c in (0.0, 0.5, 1.0) for d in (0.0, 1.0) for p in (0.0, 0.5, 1.0)])
-def test_every_axis_mix_is_valid_and_passes(contrast, density, personality):
-    a = axes(contrast=contrast, density=density, type_personality=personality)
+@pytest.mark.parametrize("contrast, density, personality, formality", [
+    (c, d, p, f) for c in (0.0, 0.5, 1.0) for d in (0.0, 1.0) for p in (0.0, 0.5, 1.0)
+    for f in (0.0, 1.0)])
+def test_every_axis_mix_is_valid_and_passes(contrast, density, personality, formality):
+    a = axes(contrast=contrast, density=density, type_personality=personality,
+             formality=formality)
     ts = generate_type(a).tokens
     assert validate(ts) == []
     report = gate(ts, [], CHECKS)
-    assert report.passed and report.rules_checked == 12
+    assert report.passed and report.rules_checked == 17
 
 
 def _hand():
@@ -145,8 +213,9 @@ def test_checks_name_the_token_and_the_fix():
         "more, so point it at type.tracking.0",
         "type.text.body (direction:rtl) spaces letters by -0.5px; letter spacing breaks Arabic "
         "joins, so point it at type.tracking.0",
-        "type.text.body (direction:rtl) is +6px against its Latin size; Arabic reads at 1 to 2px "
-        "larger at the same step, so point it at the Arabic size for that step",
+        "type.text.body (direction:rtl) is 20px against its Latin 14px; Arabic reads at least "
+        "1px and at most a fifth larger than the Latin size at the same step, so point it at "
+        "the Arabic size for that step",
         "type.text.body (direction:rtl) has line height 1.2, not taller than its Latin 1.2; "
         "Arabic needs room for its marks, so point it at the Arabic leading",
         "type.text.body (direction:ltr) is 14px through type.size.x; sizes in rem follow the "
@@ -159,10 +228,13 @@ def test_checks_name_the_token_and_the_fix():
         ("rem-sizes", "system")]
 
 
-def test_only_its_axes_move_typography():
-    base = [(t.path, t.value, t.modes) for t in generate_type(axes()).tokens.tokens()]
-    other = axes(warmth=0.0, geometry=1.0, formality=0.0, motion=1.0)
-    assert [(t.path, t.value, t.modes) for t in generate_type(other).tokens.tokens()] == base
+def test_every_axis_but_motion_moves_typography():
+    def dump(a):
+        return [(t.path, t.value, t.modes) for t in generate_type(a).tokens.tokens()]
+    base = dump(axes())
+    assert dump(axes(motion=1.0)) == base
+    for name in ("warmth", "contrast", "density", "geometry", "formality", "type_personality"):
+        assert dump(axes(**{name: 0.0})) != base or dump(axes(**{name: 1.0})) != base, name
 
 
 def test_dtcg_round_trip_and_rtl_css():
@@ -171,7 +243,7 @@ def test_dtcg_round_trip_and_rtl_css():
     assert doc["type"]["text"]["body"]["$value"]["fontSize"] == "{type.size.latin.3}"
     assert to_dtcg(from_dtcg(doc)) == doc
     css = to_css(build_system(axes(), "#3366FF").tokens)
-    assert '  --type-face-latin: "IBM Plex Sans", system-ui, sans-serif;' in css
+    assert '  --type-face-text: "Noto Sans", "Noto Sans Fallback", system-ui, sans-serif;' in css
     rtl = css.split(':root[dir="rtl"] {')[1].split("}")[0]
     assert "  --type-text-body-font-family: var(--type-face-arabic);" in rtl
     assert "  --type-text-body-letter-spacing: var(--type-tracking-0);" in rtl
@@ -182,7 +254,8 @@ def test_only_the_leading_rule_cites_wcag():
     ids = {c.id: c.criterion for c in CHECKS}
     assert ids == {"type-sizes": "system", "reading-leading": "1.4.8",
                    "reading-tracking": "system", "arabic-text": "system",
-                   "rem-sizes": "system", "type-hierarchy": "system"}
+                   "rem-sizes": "system", "type-hierarchy": "system",
+                   "high-contrast-weights": "system", "icon-sizes": "system"}
 
 
 def test_a_role_of_the_wrong_type_is_named_once_not_a_crash():
@@ -226,24 +299,25 @@ def test_a_role_without_an_rtl_override_fails_every_arabic_rule():
     ts = _generated_with("type.text.heading-1")
     assert validate(ts) == []
     assert _arabic_failures(ts) == [
-        "type.text.heading-1 (direction:rtl) is set in IBM Plex Sans, not type.face.arabic; "
+        "type.text.heading-1 (direction:rtl) is set in Outfit, not type.face.arabic-display; "
         "Arabic text needs its own face, so point its direction:rtl fontFamily at "
-        "type.face.arabic",
-        "type.text.heading-1 (direction:rtl) spaces letters by -0.375px; letter spacing breaks "
+        "type.face.arabic-display",
+        "type.text.heading-1 (direction:rtl) spaces letters by -0.71px; letter spacing breaks "
         "Arabic joins, so point it at type.tracking.0",
-        "type.text.heading-1 (direction:rtl) is +0px against its Latin size; Arabic reads at 1 "
-        "to 2px larger at the same step, so point it at the Arabic size for that step",
+        "type.text.heading-1 (direction:rtl) is 44px against its Latin 44px; Arabic reads at "
+        "least 1px and at most a fifth larger than the Latin size at the same step, so point "
+        "it at the Arabic size for that step",
         "type.text.heading-1 (direction:rtl) has line height 1.1, not taller than its Latin "
         "1.1; Arabic needs room for its marks, so point it at the Arabic leading"]
 
 
 def test_a_role_pointing_back_at_the_latin_face_fails():
     rtl = dict(generate_type(axes()).tokens.get("type.text.body").modes["direction:rtl"],
-               fontFamily="{type.face.latin}")
+               fontFamily="{type.face.text}")
     ts = _generated_with("type.text.body", rtl)
     assert validate(ts) == []
     assert _arabic_failures(ts) == [
-        "type.text.body (direction:rtl) is set in IBM Plex Sans, not type.face.arabic; "
+        "type.text.body (direction:rtl) is set in Noto Sans, not type.face.arabic; "
         "Arabic text needs its own face, so point its direction:rtl fontFamily at "
         "type.face.arabic"]
 
@@ -261,11 +335,11 @@ def test_code_is_exempt_from_the_arabic_face_size_and_leading_rules():
     ts = _generated_with("type.text.code", arabic_metrics)
     assert validate(ts) == [] and _arabic_failures(ts) == []
     # Letter spacing still breaks Arabic joins in comments and strings.
-    tight = dict(code, letterSpacing="{type.tracking.1}")
+    tight = dict(code, letterSpacing="{type.tracking.step-9}")
     ts = _generated_with("type.text.code", tight)
     assert validate(ts) == []
     assert _arabic_failures(ts) == [
-        "type.text.code (direction:rtl) spaces letters by -0.188px; letter spacing breaks "
+        "type.text.code (direction:rtl) spaces letters by -1.1px; letter spacing breaks "
         "Arabic joins, so point it at type.tracking.0"]
 
 
@@ -304,3 +378,12 @@ def test_an_unused_px_size_step_is_named_once():
     assert [f.message for f in report.failures] == [
         "type.size.extra is in px; sizes in rem follow the reader's default text size, so "
         "express it in rem"]
+
+
+def test_a_mono_label_switches_to_the_arabic_face_under_rtl():
+    technical = axes(warmth=0.0, type_personality=0.0)
+    ts = generate_type(technical).tokens
+    assert ts.get("type.text.label").value["fontFamily"] == "{type.face.mono}"
+    rtl = ts.resolve("type.text.label", "direction:rtl")
+    assert rtl["fontFamily"] == ts.resolve("type.face.arabic")
+    assert rtl["letterSpacing"]["value"] == 0

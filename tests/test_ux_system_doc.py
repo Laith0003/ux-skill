@@ -16,7 +16,7 @@ from engine import __version__  # noqa: E402
 from engine.cli.main import cli  # noqa: E402
 from engine.discovery.core import FIELDS  # noqa: E402
 from engine.foundations.emit import STATUS_EXIT, _reading  # noqa: E402
-from engine.foundations.typography import CODE_FACE, PAIRINGS  # noqa: E402
+from engine.foundations.fonts import FACES  # noqa: E402
 from engine.mcp import TOOLS  # noqa: E402
 from engine.mcp.server import UxSystemBuildInput  # noqa: E402
 from engine.synthesizer.axes import INDUSTRY_SEEDS  # noqa: E402
@@ -99,9 +99,8 @@ def test_a_failed_build_points_at_the_inputs_not_at_tokens():
 
 
 def test_it_says_nothing_loads_the_fonts_and_names_every_family():
-    for latin, arabic in PAIRINGS.values():
-        assert latin in CREATE and arabic in CREATE, (latin, arabic)
-    assert CODE_FACE[0] in CREATE
+    for face in FACES:
+        assert face.family in CREATE, face.family
     assert "nothing loads them" in CREATE
     assert "Google Fonts" in CREATE and "self-hosted" in CREATE
     assert "system faces" in CREATE

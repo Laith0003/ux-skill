@@ -27,7 +27,8 @@
 {arabic} ## Arabic type
 
 - Every text style but code switches to the Arabic face under right to left.
-- The Arabic size at a step is 1 to 2px larger than the Latin size at the same step, and its line height is taller.
+- The Arabic size at a step is larger than the Latin size by a ratio the two faces' metrics give (1.05 to 1.15, at least 1px), so the two scripts read at one size from body text to the hero; its line height is taller.
+{arabic} - A Latin run inside Arabic text, such as a brand name, takes type.run.latin; an Arabic run inside Latin text takes type.run.arabic.
 - Letter spacing is 0 for Arabic; spacing breaks the joins between letters.
 - Arabic text is never set in italic or with a faux bold.
 - Load the Arabic face the tokens name; without it the browser falls back and the sizes do not fit.

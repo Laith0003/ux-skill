@@ -19,10 +19,13 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Motion has seven interaction roles and reduced motion is a mode](motion-roles.md)
 - [Layout tokens cover the page grid; regions and panes belong to page patterns](layout-scope.md)
 - [Nine text styles as composites, faces chosen per script](type-roles.md)
+- [Twelve text styles in three faces, display, text and mono](type-three-faces.md)
 - [The axes choose whether the brand fills the action, marks words or draws edges](brand-roles.md)
 - [The brand reaches surfaces as a tint, a band or one brand band](brand-surfaces.md)
 - [A supporting accent takes a second hue placed by the axes](support-accent.md)
 - [Code blocks and tables have their own surfaces](code-and-table-colors.md)
+- [The axes choose each face from a catalog by distance, never by keyword](face-choice.md)
+- [Arabic is set larger by a ratio the two faces' metrics give](arabic-proportional.md)
 
 ## Contrast and the gate
 
@@ -43,6 +46,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [The primary fill keeps the exact brand color whenever text reads on it](brand-fidelity.md)
 - [The focus ring never weakens under high contrast, and is measured against the fill](ring-never-weaker.md)
 - [The logo keeps the brand color, and decoration has a visibility floor of ours](logo-and-decoration.md)
+- [High contrast sets text one weight heavier](high-contrast-weights.md)
 
 ## Shape, space and motion
 
@@ -51,10 +55,12 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Stacked rows use the list gap, controls in a row use the control gap](list-gap-and-control-gap.md)
 - [Travel distances are unsigned, and one sign follows the reading direction](unsigned-distances.md)
 - [Emphasis inside text uses the heading weight](strong-equals-heading-weight.md)
+- [Emphasis inside text uses the text face's heading weight](strong-weight.md)
 - [Reading styles have a line height of 1.5 or more by default](reading-line-height.md)
 - [Geometry and formality set one roundness, and every corner follows it](roundness.md)
 - [High contrast makes edges and the focus ring heavier](high-contrast-borders.md)
 - [The surface treatment runs from flat hairlines to deep shadows](surface-treatment.md)
+- [Weight and letter spacing change along the type scale](type-along-the-scale.md)
 
 ## Components
 

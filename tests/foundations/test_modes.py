@@ -16,7 +16,8 @@ def test_axes_are_the_required_five_with_base_first():
                           "motion": ("standard", "reduced")}
     assert FOUNDATION_AXES["color"] == ("scheme", "contrast")
     assert FOUNDATION_AXES["space"] == FOUNDATION_AXES["layout"] == ("density",)
-    assert FOUNDATION_AXES["type"] == ("direction",)
+    assert FOUNDATION_AXES["type"] == ("direction", "contrast")
+    assert FOUNDATION_AXES["border"] == ("contrast",)
 
 
 @pytest.mark.parametrize("key, pairs", [

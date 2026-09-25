@@ -21,9 +21,12 @@ EXPECTED = {
     "brand-fidelity", "primary-edge", "ring-never-weaker",
     "brand-roles", "brand-surfaces", "support-accent", "logo-and-decoration",
     "code-and-table-colors", "roundness", "high-contrast-borders", "surface-treatment",
+    "type-three-faces", "face-choice", "type-along-the-scale", "arabic-proportional",
+    "high-contrast-weights", "strong-weight",
 }
 # Records a later record replaced; each names its replacement.
-SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge"}
+SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",
+              "type-roles": "type-three-faces", "strong-equals-heading-weight": "strong-weight"}
 
 
 def test_every_shipped_record_is_valid_and_routed():
@@ -35,8 +38,9 @@ def test_every_shipped_record_is_valid_and_routed():
 
 def test_every_foundation_has_a_record_for_its_roles():
     ids = {r.id for r in load_records()}
-    for foundation in ("color", "space", "radius", "border", "elevation", "motion", "type"):
+    for foundation in ("color", "space", "radius", "border", "elevation", "motion"):
         assert f"{foundation}-roles" in ids, foundation
+    assert "type-three-faces" in ids
     assert "layout-scope" in ids
 
 

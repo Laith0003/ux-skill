@@ -99,7 +99,7 @@ def test_guidance_is_ascii_without_dashes():
 INPUTS = {"border": "contrast axis", "color": "brand color",
           "elevation": "contrast and formality axes", "layout": "density axis",
           "motion": "motion axis", "radius": "geometry and formality axes",
-          "space": "density axis", "type": "type personality axis"}
+          "space": "density axis", "type": "every axis but motion"}
 REPOINT = re.compile(r"\bpoint (the|its|one|it|a) |COVERAGE_EXEMPT|coverage table|generator "
                      r"change|overrides|\badd (it|a|an) [a-z ]*role\b|engine/", re.I)
 

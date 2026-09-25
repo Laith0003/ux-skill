@@ -97,15 +97,16 @@ Read `design-system/system-report.md` and explain it. Do not paste it.
 
 The tokens name the font families, but nothing loads them. The page that uses `tokens.css` must load the fonts itself, for example from Google Fonts or self-hosted font files. Until it does, the browser falls back to system faces and the type will not look as designed.
 
-The engine picks one pair by the type personality axis. The report names the pair it chose under "Other choices" (for example "type: humanist pairing, Source Sans 3 with Noto Naskh Arabic").
+The engine picks three faces from a small catalog of open-license faces by the axes: a display face for the hero, the page and section titles and large figures, a text face for reading and controls, and a mono face for code. Each Latin face has an Arabic face drawn beside it. The report names the faces under "Other choices" (for example "type: display Outfit, text Noto Sans, mono IBM Plex Mono, Arabic Noto Sans Arabic and Alexandria").
 
-| Type personality | Latin face | Arabic face |
-|---|---|---|
-| geometric (below 0.34) | Manrope | Readex Pro |
-| neutral (0.34 to below 0.66) | IBM Plex Sans | IBM Plex Sans Arabic |
-| humanist (0.66 and above) | Source Sans 3 | Noto Naskh Arabic |
+| Role | Faces the catalog holds |
+|---|---|
+| Display | Fraunces, Playfair Display, Space Grotesk, Bricolage Grotesque, Sora, Outfit, Newsreader, Baloo 2 |
+| Text | IBM Plex Sans, Source Sans 3, Manrope, Nunito Sans, Noto Sans |
+| Mono | IBM Plex Mono, JetBrains Mono |
+| Arabic | IBM Plex Sans Arabic, Noto Naskh Arabic, Readex Pro, Tajawal, Noto Sans Arabic, El Messiri, Amiri, Baloo Bhaijaan 2, Alexandria |
 
-Code uses IBM Plex Mono in every system. Tell the user to load the chosen Latin face, the Arabic face (skip it with `--latin-only`), and IBM Plex Mono if the product shows code, in weights 400, 500, 600 and 700.
+Tell the user to load the display, text and mono faces the report names, and the Arabic faces unless the build is Latin only, in the weights the report lists.
 
 ### 8. When the build fails
 

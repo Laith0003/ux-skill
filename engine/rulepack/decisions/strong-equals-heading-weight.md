@@ -1,10 +1,10 @@
 ---
 id: strong-equals-heading-weight
 title: Emphasis inside text uses the heading weight
-status: active
+status: superseded
 areas: [type]
 supersedes: null
-superseded_by: null
+superseded_by: strong-weight
 ---
 
 # Emphasis inside text uses the heading weight

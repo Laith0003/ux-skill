@@ -2,32 +2,42 @@
 
 ## Summary
 
-{arabic} Type sets the faces, sizes, weights, line heights and letter spacing of all text, as nine text styles plus one emphasis weight. The type personality axis picks a pairing of a Latin face and an Arabic face drawn to sit beside it; code uses a monospace face. Sizes are in rem. Under right to left every style but code switches to the Arabic face at its own size and leading, with no letter spacing. Type does not govern text color or contrast; color does.
-{latin} Type sets the faces, sizes, weights, line heights and letter spacing of all text, as nine text styles plus one emphasis weight. The type personality axis picks the Latin face; code uses a monospace face. Sizes are in rem. Every style has one value in every mode. Type does not govern text color or contrast; color does.
+{arabic} Type sets the faces, sizes, weights, line heights and letter spacing of all text, as twelve text styles, one emphasis weight, two run faces and the icon sizes and stroke. Three faces do separate jobs: a display face for the largest statements, a text face for reading and controls, and a mono face for code (and labels in a technical system). The axes choose each face from a small catalog of open-license faces by where it sits on formality, warmth, roundness, type personality and contrast (decisions/face-choice.md), and each has an Arabic face drawn to sit beside it. Sizes are in rem. Weight and letter spacing change along the scale (decisions/type-along-the-scale.md). Under high contrast text styles are one weight heavier. Under right to left every style but code switches to its Arabic face at a size larger by the ratio the two faces' metrics give (decisions/arabic-proportional.md), with no letter spacing. Type does not govern text color or contrast; color does.
+{latin} Type sets the faces, sizes, weights, line heights and letter spacing of all text, as twelve text styles, one emphasis weight, one run face and the icon sizes and stroke. Three faces do separate jobs: a display face for the largest statements, a text face for reading and controls, and a mono face for code (and labels in a technical system). The axes choose each face from a small catalog of open-license faces by where it sits on formality, warmth, roundness, type personality and contrast (decisions/face-choice.md). Sizes are in rem. Weight and letter spacing change along the scale (decisions/type-along-the-scale.md). Under high contrast text styles are one weight heavier. Type does not govern text color or contrast; color does.
 
 ## Principles
 
 - **Role before size.** A style is chosen for what the text is (a page title, a label, a caption), never for how big it should look.
-- **Hierarchy by size.** Hero, headings and body fall in size. Every heading shares one heavier weight, so size, not weight, sets the rank between them; inside a style, weight marks emphasis.
+- **Hierarchy by size, character by weight.** Hero, headings and body fall in size, so size sets the rank. The display face's weight eases toward the heading weight as sizes fall, so a light, formal display or a heavy, playful one still meets the text face cleanly; inside a style, weight marks emphasis.
 - **Reading comes first.** Body styles keep a line height of 1.5 or more and no negative letter spacing.
-{arabic} - **Faces per script.** Latin, Arabic and code each have their face; a style never sets Arabic in a Latin face.
-{latin} - **Faces per use.** Text and code each have their face; a style never sets code in the text face.
+{arabic} - **Faces per job and script.** Display, text and mono each have their face, and each Latin face has an Arabic partner; a style never sets Arabic in a Latin face.
+{latin} - **Faces per job.** Display, text and mono each have their face; a style never sets code in the text face.
 - **One anchor per view.** The hero, when used, appears once; one heading level opens each section.
 - **Sizes follow the reader.** Rem sizes grow with the reader's own default text size.
 - **Styles are whole.** Size, line height, weight, letter spacing and face travel together in one composite.
 
 ## Roles
 
-- `type.text.hero`: the single largest statement on a view, such as a landing page headline; once per view.
-- `type.text.heading-1`: the title of a page.
-- `type.text.heading-2`: the title of a major section, or of a dialog.
+- `type.text.hero`: the single largest statement on a view, such as a landing page headline, in the display face; once per view.
+- `type.text.heading-1`: the title of a page, in the display face.
+- `type.text.section-title`: the title of a section of a long page, between the page title and heading-2, in the display face.
+- `type.text.figure`: a price, an amount or a key number shown large, in the display face; set it with tabular figures.
+- `type.text.heading-2`: the title of a major block, or of a dialog, in the text face.
 - `type.text.heading-3`: the title of a card, a panel or a group.
 - `type.text.body`: paragraphs and any text people read in full.
-- `type.text.body-small`: secondary paragraphs and dense reading, such as banner bodies and table cells.
+- `type.text.body-small`: secondary paragraphs and dense reading, such as table cells.
 - `type.text.ui`: labels on buttons, fields, tabs and menus; short, one line.
-- `type.text.fine`: captions, helper text, a field's error message, timestamps and metadata.
+- `type.text.label`: an eyebrow above a heading, a tag or a line of metadata, spaced open; set in the mono face in a technical system.
+- `type.text.fine`: captions, timestamps and small print nobody must read to act.
 - `type.text.code`: code, token names and values that need fixed-width characters.
 - `type.strong`: the weight of emphasis inside any style; the same as the heading weight.
+{arabic} - `type.run.latin`: the face for a Latin run, such as a brand name or a code, inside a right-to-left paragraph.
+{latin} - `type.run.latin`: the text face, for a run that must keep it inside a style set in another face.
+{arabic} - `type.run.arabic`: the face for an Arabic run inside a left-to-right paragraph.
+- `type.icon.size.inline`: an icon inside a line of body text; the body size.
+- `type.icon.size.control`: an icon inside a button, a field or a menu item.
+- `type.icon.size.feature`: a large icon that heads a feature or an empty state.
+- `type.icon.stroke`: the stroke width of line icons drawn on a 24 unit grid, following the display weight.
 
 ## Choosing
 
@@ -35,33 +45,36 @@
 |---|---|
 | The one main statement of a landing page | type.text.hero |
 | A page title | type.text.heading-1 |
-| A section title, a dialog title | type.text.heading-2 |
+| The title of a section of a long page | type.text.section-title |
+| A price or a key amount shown large | type.text.figure |
+| A block title, a dialog title | type.text.heading-2 |
 | A card or panel title | type.text.heading-3 |
-| A paragraph | type.text.body |
-| A dense paragraph, a banner body | type.text.body-small |
+| A paragraph, a banner body, a field's helper text or error message | type.text.body |
+| A dense paragraph, a table cell | type.text.body-small |
 | A button, a field label, a tab | type.text.ui |
-| Helper text, a timestamp, a caption | type.text.fine |
+| An eyebrow, a tag, metadata | type.text.label |
+| A timestamp, a caption | type.text.fine |
 | Code or an identifier | type.text.code |
 
-Styles that work together: a heading above body text; a hero with body text or a ui action directly below it; a heading-3 with fine metadata below it, or with ui actions beside it kept at the ui weight; a ui label with fine helper text; code with a fine caption. A heading never sits inside a card at the page title level, body text never labels a button, and fine print never carries text people must read in full.
+Styles that work together: a label above a section title or a hero; a heading above body text; a hero with body text or a ui action directly below it; a heading-3 with fine metadata below it, or with ui actions beside it kept at the ui weight; a ui label with body helper text; code with a fine caption. A heading never sits inside a card at the page title level, body text never labels a button, and fine print never carries text people must read to act, such as a field's error or helper text.
 
 ## Modes
 
-{arabic} Type varies on direction. Under dir="rtl" every style but code uses the Arabic face, at a size 1 to 2px larger than the Latin size at the same step, with taller line heights and letter spacing at 0, since spacing breaks the joins between Arabic letters. Code keeps its face, size and leading in both directions, with no letter spacing. Type does not change by breakpoint or with the density mode; sizes are rem (decisions/breakpoints-are-reference-values.md). The brief's density axis sets the reading line heights and the ui size once, at build time.
-{latin} Type varies on no mode axis in this build: each style has one value in every scheme, contrast, density and motion setting. Type does not change by breakpoint or with the density mode; sizes are rem (decisions/breakpoints-are-reference-values.md). The brief's density axis sets the reading line heights and the ui size once, at build time.
+{arabic} Type varies on direction and contrast. Under dir="rtl" every style but code uses its Arabic face, the display styles the Arabic display face, at a size larger than the Latin size at the same step by the ratio the two faces' metrics give (at least 1px, at most a fifth), with taller line heights and letter spacing at 0, since spacing breaks the joins between Arabic letters. Code keeps its face, size and leading in both directions, with no letter spacing under right to left; a label set in the mono face switches to the Arabic face like any other text. Under high contrast every style in the text or mono face is one weight heavier, within what the face ships (decisions/high-contrast-weights.md). Type does not change by breakpoint or with the density mode; sizes are rem (decisions/breakpoints-are-reference-values.md). The brief's density axis sets the reading line heights and the ui size once, at build time.
+{latin} Type varies on contrast: under high contrast every style in the text or mono face is one weight heavier, within what the face ships (decisions/high-contrast-weights.md). Type does not change by breakpoint or with the density mode; sizes are rem (decisions/breakpoints-are-reference-values.md). The brief's density axis sets the reading line heights and the ui size once, at build time.
 
 ## Changing the system
 
-{arabic} 1. Type moves with three axes: the type personality axis picks the faces, the contrast axis sets the scale ratio and the heading weight, and the density axis sets the reading line heights and the ui size. Without --latin-only the build keeps an Arabic face beside the Latin one. Change them in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
-{latin} 1. Type moves with three axes: the type personality axis picks the faces, the contrast axis sets the scale ratio and the heading weight, and the density axis sets the reading line heights and the ui size. Change them in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
-2. The build keeps body at 16px or more, fine at 12px or more, reading line heights at 1.5 or more and the order hero, heading-1, heading-2, heading-3, body falling in size; a failed check names the style and the mode.
+{arabic} 1. Type moves with every axis but motion: the type personality, formality, warmth, geometry and contrast axes choose the faces, the contrast and formality axes set the display weight and letter spacing, the contrast axis the scale ratio, and the density axis the reading line heights, the ui size and a tighter ratio. Without --latin-only the build keeps an Arabic face beside each Latin one. Change them in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+{latin} 1. Type moves with every axis but motion: the type personality, formality, warmth, geometry and contrast axes choose the faces, the contrast and formality axes set the display weight and letter spacing, the contrast axis the scale ratio, and the density axis the reading line heights, the ui size and a tighter ratio. Change them in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+2. The build keeps body at 16px or more, fine at 12px or more, reading line heights at 1.5 or more, the order hero, heading-1, section-title, heading-2, heading-3, body falling in size, no style lighter under high contrast and the icon sizes rising; a failed check names the style and the mode.
 3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
 4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.
 
 ## Audit scope
 
-{arabic} Audits the text styles in both directions: minimum sizes, line height and letter spacing for reading, the Arabic rules, rem units and the size order. Every text style is held to the same contrast minimum by color, whatever its size (decisions/no-large-text-relaxation.md), so no large-text classification is needed. Whether headings and labels describe their content (WCAG 2.4.6) is a content check (content.md). It does not audit text color.
-{latin} Audits the text styles: minimum sizes, line height and letter spacing for reading, rem units and the size order. Every text style is held to the same contrast minimum by color, whatever its size (decisions/no-large-text-relaxation.md), so no large-text classification is needed. Whether headings and labels describe their content (WCAG 2.4.6) is a content check (content.md). It does not audit text color.
+{arabic} Audits the text styles in both directions and both contrast modes: minimum sizes, line height and letter spacing for reading, the Arabic rules, rem units, the size order, high contrast weights and the icon sizes. Every text style is held to the same contrast minimum by color, whatever its size (decisions/no-large-text-relaxation.md), so no large-text classification is needed. Whether headings and labels describe their content (WCAG 2.4.6) is a content check (content.md). It does not audit text color.
+{latin} Audits the text styles in both contrast modes: minimum sizes, line height and letter spacing for reading, rem units, the size order, high contrast weights and the icon sizes. Every text style is held to the same contrast minimum by color, whatever its size (decisions/no-large-text-relaxation.md), so no large-text classification is needed. Whether headings and labels describe their content (WCAG 2.4.6) is a content check (content.md). It does not audit text color.
 
 ## Checks
 
@@ -69,12 +82,14 @@ Styles that work together: a heading above body text; a hero with body text or a
 {latin} - `type-sizes`: body is at least 16px and fine print at least 12px.
 - `reading-leading`: body, body-small and fine have a line height of 1.5 or more (WCAG 1.4.8, AAA).
 - `reading-tracking`: reading styles never tighten letter spacing.
-{arabic} - `arabic-text`: under right to left every style but code uses the Arabic face at its size and taller leading, and no style spaces letters.
+{arabic} - `arabic-text`: under right to left every style but code uses its Arabic face at a size at least 1px and at most a fifth above its Latin size, with taller leading, and no style spaces letters.
 {latin} - `arabic-text`: this build has one script, so the check has nothing to hold.
 {arabic} - `rem-sizes`: every style's size is in rem, in both directions.
 {latin} - `rem-sizes`: every style's size is in rem.
-{arabic} - `type-hierarchy`: hero, headings and body fall in size, in both directions.
-{latin} - `type-hierarchy`: hero, headings and body fall in size.
+{arabic} - `type-hierarchy`: hero, heading-1, section-title, heading-2, heading-3 and body fall in size, in both directions.
+{latin} - `type-hierarchy`: hero, heading-1, section-title, heading-2, heading-3 and body fall in size.
+- `high-contrast-weights`: under high contrast no style is lighter than at standard contrast.
+- `icon-sizes`: inline, control and feature icons rise in size, and the stroke stays between 1 and 3 units.
 
 ## Beyond the gate
 
@@ -89,8 +104,10 @@ Styles that work together: a heading above body text; a hero with body text or a
 
 - Each style is five custom properties: font-family, font-size, font-weight, line-height and letter-spacing, named after the style, such as --type-text-body-font-size.
 - Apply a style as a whole, all five properties together; never size text with a raw value.
-{arabic} - The faces are named, not loaded: the page loads the Latin face, the Arabic face and the code face it uses.
-{latin} - The faces are named, not loaded: the page loads the Latin face and the code face it uses.
+{arabic} - The faces are named, not loaded: the page loads the display, text and mono faces and their Arabic partners.
+{latin} - The faces are named, not loaded: the page loads the display, text and mono faces.
+- Set type.text.figure with font-variant-numeric: tabular-nums, so amounts line up.
+- Draw line icons with stroke-width from type.icon.stroke and size them with the type.icon.size roles.
 {arabic} - Direction switches with dir on the html element; a right-to-left run inside a left-to-right page sets its five properties from the style's Arabic values by hand (decisions/axes-on-the-root.md).
 - Emphasis inside text uses font-weight from type.strong.
 
@@ -101,3 +118,5 @@ Styles that work together: a heading above body text; a hero with body text or a
 - Using a heading level inside a card that belongs to the page: the hierarchy inverts.
 - Using fine print for text people must read: it is too small to sustain.
 {arabic} - Tightening letter spacing on Arabic text: the letters disconnect.
+- Using fine print for a field's helper or error text: people must read it to act; use body.
+- Setting body text in the display face: the display face is drawn for large sizes.
