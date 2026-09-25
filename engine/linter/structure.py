@@ -1170,7 +1170,9 @@ def import_blocks_render(ctx: FileContext, view: View, match: re.Match, start: i
 _EYEBROW = re.compile(
     r"(?:^|[_-])(?:eyebrow|kicker|overline|pre-?title|pre-?heading|super-?head(?:ing|line)?"
     r"|section-label|section-tag)(?:$|[_-])"
-    r"|(?-i:(?<=[a-z])(?:Eyebrow|Kicker|Overline|Pretitle)(?![a-z]))", re.I)
+    r"|(?-i:(?<=[a-z])(?:Eyebrow|Kicker|Overline|Pretitle)(?![a-z]))"
+    r"|^(?:eyebrow|kicker|overline|pretitle)(?-i:(?=[A-Z]))", re.I)
+_EYEBROW_ATTR = re.compile(r"^\[data-(?:eyebrow|kicker|overline|pre-?title|section-label)\b", re.I)
 _TRACKED = re.compile(r"^tracking-(?:wide|wider|widest|\[[\d.]+(?:em|rem|px)\])$")
 _ICONISH = re.compile(
     r"(?:^|[_-])(?:icon|ico|glyph|symbol|emoji|avatar|flag|logo|sr-only|visually-hidden|spinner"
@@ -1261,7 +1263,12 @@ def _first(decls: Dict[str, str], props: Sequence[str]) -> Optional[str]:
 
 def _full_bleed(decls: Dict[str, str]) -> bool:
     """The pseudo-element spans its box: an overlay, an edge or a full-width
-    underline, not a short mark."""
+    underline, not a short mark. A short max-width or a scale below 1 on X
+    makes it a mark again."""
+    cap = _first(decls, ("max-width", "max-inline-size"))
+    scale = re.search(r"scale(?:x)?\(\s*([\d.]+)", decls.get("transform", "") + " " + decls.get("scale", "scale(1)"))
+    if (cap and _short(cap)) or (scale and float(scale.group(1) or 1) < 1):
+        return False
     zero = lambda p: p in decls and all(_ZERO.match(w) for w in decls[p].split())  # noqa: E731
     if zero("inset") or zero("inset-inline"):
         return True
@@ -1278,6 +1285,21 @@ def _painted(decls: Dict[str, str]) -> bool:
     return False
 
 
+_LONG_VAR = re.compile(r"container|max|content|page|full|wide|measure|column|gutter", re.I)
+_MARK_VAR = re.compile(r"(?:rule|line|dash|mark)[\w-]*(?:length|size|width)", re.I)
+
+
+def _short_expression(width: str) -> bool:
+    """A calc() with no percentage or viewport term, or a var() whose name
+    reads as a short length, beside a thin height."""
+    if width.startswith("calc("):
+        return not re.search(r"%|\d(?:vw|vi|dvw|svw|lvw)\b", width)
+    if width.startswith("var("):
+        name = width[4:].split(",")[0]
+        return not _LONG_VAR.search(name) and bool(_SHORT_VAR.match(width) or _MARK_VAR.search(name))
+    return False
+
+
 def _draws_line(decls: Dict[str, str]) -> bool:
     """A short horizontal line: a thin, short painted box, or a short box with
     a painted block-side border."""
@@ -1291,7 +1313,7 @@ def _draws_line(decls: Dict[str, str]) -> bool:
     width = _first(decls, _WIDTHS) or decls.get("flex-basis") or (flex[2] if len(flex) == 3 else None)
     height = _first(decls, _HEIGHTS)
     thin = height is not None and _thin(height)
-    if width is None or not (_short(width) or (thin and width.startswith(("var(", "calc(")))):
+    if width is None or not (_short(width) or (thin and _short_expression(width))):
         return False
     if thin and (_painted(decls) or "border" in decls):
         return True
@@ -1309,7 +1331,8 @@ def _pseudo_element(compound: str) -> bool:
 
 
 def _is_eyebrow_compound(compound: str) -> bool:
-    return any(t.startswith(".") and _EYEBROW.search(t[1:]) for t in tokens(compound))
+    return any((t.startswith(".") and _EYEBROW.search(t[1:])) or _EYEBROW_ATTR.match(t)
+               for t in tokens(compound))
 
 
 def _controlish(compound: str) -> bool:
@@ -1442,6 +1465,10 @@ def _heads_a_heading(ctx: FileContext, i: int) -> bool:
 def _utility_ruler(classes: List[str]) -> bool:
     """Tailwind forms on the label: a side border, or a pseudo-element drawn
     with before: or after: utilities."""
+    if any(c.startswith("bg-[linear-gradient(") for c in classes) and (
+            "bg-no-repeat" in classes or any(re.match(r"^bg-\[length:[^\]]*_(?:[0-4](?:\.\d+)?px|0\.\d+rem)\]$", c)
+                                             for c in classes)):
+        return True
     for c in classes:
         parts = c.split(":")
         bare = parts[-1]
@@ -1540,6 +1567,10 @@ def _ornament(ctx: FileContext, tags: List[Tag], ends: List[int], j: int) -> boo
                                      attrs.get("src", ("", ""))[1])))
     if name not in ("span", "i", "div", "b", "em", "small"):
         return False
+    classes = _class_list(ctx, tag)
+    if any(re.search(r"divider|separator|rule-full", c, re.I) for c in classes) \
+            or any("." + c in _masked_classes(ctx) for c in classes):
+        return False
     if ends[j] > tag.end and not _blank(ctx.text[tag.end:ends[j]]):
         return False
     if any(k == "id" or k.startswith(("data-lucide", "data-icon", "data-feather", "data-slot",
@@ -1548,6 +1579,19 @@ def _ornament(ctx: FileContext, tags: List[Tag], ends: List[int], j: int) -> boo
            for k in attrs):
         return False
     return not any(_ICONISH.search(_bare(c)) for c in _class_list(ctx, tag))
+
+
+def _masked_classes(ctx: FileContext) -> Set[str]:
+    """Classes the file draws as icons with a CSS mask."""
+    def build() -> Set[str]:
+        view = ctx.views.get("css")
+        out: Set[str] = set()
+        for block in (css_blocks(view.text) if view is not None and view.text else []):
+            if re.search(r"(?:^|;)\s*(?:-webkit-)?mask(?:-image)?\s*:", block.body):
+                for sel in block.selectors:
+                    out.update(t for t in tokens(_subject(sel)) if t.startswith("."))
+        return out
+    return ctx.cached("masked_classes", build)  # type: ignore[return-value]
 
 
 def _ruled_eyebrows(ctx: FileContext) -> Set[int]:
@@ -1616,9 +1660,13 @@ _MENU_WORD = re.compile(
     r"|меню|메뉴|मेनू|เมนู"
     r"|trình đơn|menyu", re.I)
 _CLOSE_WORD = re.compile(
-    r"(?<!\w)(?:close|dismiss|إغلاق|اغلاق|schlie|cerrar|fermer|fechar|chiudi"
+    r"(?<!\w)(?:close|dismiss|إغلاق|اغلاق|schlie(?:ß|ss)en|cerrar|fermer|fechar|chiudi"
     r"|閉じる|关闭|關閉|закрыть|닫기"
-    r"|बंद|ปิด|đóng|tutup|kapat|sluit)", re.I)
+    r"|बंद|ปิด|đóng|tutup|kapat|sluit)(?!\w)", re.I)
+# Words that may stand beside a menu word on the site menu's button; any other
+# word names a destination ("Products menu", "قائمة الطعام").
+_MENU_MODIFIERS = {"open", "show", "toggle", "main", "site", "the", "navigation", "nav",
+                   "فتح", "الرئيسية", "عرض", "abrir", "ouvrir", "öffnen", "apri"}
 _BURGER_GLYPH = re.compile(r"☰|&#9776;|&#x2630;", re.I)
 _SR_ONLY = re.compile(r"<(\w+)[^>]*class\s*=\s*[\"'][^\"']*(?:sr-only|visually-hidden|screen-reader)[^\"']*[\"'][^>]*>.*?</\1>",
                       re.I | re.S)
@@ -1891,8 +1939,10 @@ def _menu_button(ctx: FileContext, i: int) -> bool:
         return False
     # Visible words: up to three, one of them a menu word ("Menu", "Open
     # menu", "القائمة"); a button with other words is a dropdown or an action.
+    parts = [w.strip(".,:;!?()").lower() for w in words.split()]
     if words and not _BURGER_GLYPH.search(words) and not (
-            len(words.split()) <= 3 and _MENU_WORD.search(words)):
+            len(parts) <= 3 and any(_MENU_WORD.search(w) for w in parts)
+            and all(_MENU_WORD.search(w) or w in _MENU_MODIFIERS for w in parts)):
         return False
     inner_attrs = " ".join(re.findall(r"(?:href|class|id)\s*=\s*[\"']([^\"']*)", inner))
     if _MENU_WORD.search(names) or _MENU_WORD.search(inner_attrs) or _BURGER_GLYPH.search(inner):

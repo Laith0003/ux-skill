@@ -1,0 +1,1 @@
+.section + .section::before { content: ""; display: block; width: calc(100% - 2 * var(--gutter)); height: 1px; margin-inline: auto; background: var(--color-line-subtle); }

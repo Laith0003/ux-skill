@@ -262,6 +262,32 @@ EXPECT = {
     "tokdef/rv-t-page-inline.css": {"cubic-bezier-material-only": [2], "transition-property-all": [2]},
     "tokdef/rv-t-page-plain.css": {"cubic-bezier-material-only": [3], "transition-property-all": [10]},
     "tokdef/rv-t-page-padded.css": {"cubic-bezier-material-only": [3], "transition-property-all": [22]},
+    # The second review's probes: token and calc widths on full-width
+    # dividers, divider and icon marks beside an eyebrow, and the capped,
+    # scaled, utility and attribute forms of the ruler.
+    "ruler/rv2-f1-gradient-shorthand.css": {RUL: [1]},
+    "ruler/rv2-f1b-gradient-tw.html": {RUL: [1]},
+    "ruler/rv2-f1c-gradient-stops.css": {RUL: [1]},
+    "ruler/rv2-f2-after-maxwidth.css": {RUL: [1]},
+    "ruler/rv2-f2b-after-scalex.css": {RUL: [1]},
+    "ruler/rv2-f3-after-camel-lower.css": {RUL: [1]},
+    "ruler/rv2-f3b-after-attr.css": {RUL: [1]},
+    "ruler/rv2-f3c-after-flexline.css": {RUL: [2]},
+    "ruler/rv2-n1-section-divider-calc.css": {RUL: []},
+    "ruler/rv2-n1b-section-divider-var.css": {RUL: []},
+    "ruler/rv2-n2-divider-div-before-eyebrow.html": {RUL: []},
+    "ruler/rv2-n2b-overline-border-top.css": {RUL: []},
+    "ruler/rv2-n3-mask-icon-span.html": {RUL: []},
+    "ruler/rv2-n3b-icons-misc.html": {RUL: []},
+    # A menu word among other words names a destination, not the site menu,
+    # unless the others are modifiers such as open, main or show.
+    "nav/rv2-m1-products-menu.html": {HAM: []},
+    "nav/rv2-m2-dinner-menu-tab.html": {HAM: []},
+    "nav/rv2-m3-ar-food-menu.html": {HAM: []},
+    "nav/rv2-m4-en-open-menu.html": {HAM: [1]},
+    "nav/rv2-m5-ar-visible.html": {HAM: [1]},
+    "nav/rv2-m6-closed.html": {HAM: [1]},
+    "nav/rv2-m7-closed-state-label.html": {HAM: [1]},
 }
 
 # Lines that still pass although they should fire. Each is pinned at its
