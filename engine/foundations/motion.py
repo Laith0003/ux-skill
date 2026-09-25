@@ -174,6 +174,8 @@ def _reduced_travel(ts: TokenSet, mode: str) -> List[str]:
 # keeps its pace (progress-keeps-pace) and decoration is removed
 # (expressive-removed).
 OWN_REDUCED_DURATION = ("motion.progress.duration", f"{EXPRESSIVE}.duration")
+# The loop's curve under reduced motion belongs to progress-keeps-pace.
+OWN_REDUCED_CURVE = ("motion.progress.curve",)
 
 
 def _reduced_length(ts: TokenSet, mode: str) -> List[str]:
@@ -207,7 +209,7 @@ def _reduced_curve(ts: TokenSet, mode: str) -> List[str]:
     under, key = _reduced_where(ts, mode)
     return [f"{path} overshoots under {under}; point its {key} override at motion.curve.gentle"
             for path in _roles_with(ts, "curve")
-            if _overshoots(ts.resolve(path, mode))
+            if path not in OWN_REDUCED_CURVE and _overshoots(ts.resolve(path, mode))
             and not _seen_ltr(ts, mode, lambda m: ts.resolve(path, m))]
 
 

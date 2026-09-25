@@ -106,8 +106,6 @@ def test_checks_name_the_token_and_the_fix():
         "motion:reduced override",
         "motion.dismiss.curve overshoots under reduced motion; point its motion:reduced override "
         "at motion.curve.gentle",
-        "motion.progress.curve overshoots under reduced motion; point its motion:reduced override "
-        "at motion.curve.gentle",
         "motion.dismiss.duration (300ms) is not shorter than motion.reveal.duration (200ms); "
         "leaving should never hold the next action longer than arriving, so shorten it",
         "motion.progress.curve is [0.34, 1.56, 0.64, 1]; a continuous loop must keep an even "
@@ -586,3 +584,12 @@ def test_the_length_cap_names_a_step_that_also_keeps_reduced_no_longer():
     assert [(f.check, f.message) for f in report.failures] == [
         ("reduced-length", "motion.swap.duration lasts 1200ms under reduced motion; cap it at "
          "50ms, its standard length, with a motion:reduced override")]
+
+
+def test_an_overshooting_progress_curve_under_reduced_motion_has_one_owner():
+    # progress-keeps-pace owns the loop's curve under reduced motion, so
+    # reduced-curve does not give a second, contradicting fix.
+    ts = generate_motion(axes(0.25)).tokens
+    ts.get("motion.progress.curve").modes = {"motion:reduced": "{motion.curve.in-out}"}
+    found = _findings_for(ts, "motion.progress.curve")
+    assert [f[0] for f in found] == ["progress-keeps-pace"], found
