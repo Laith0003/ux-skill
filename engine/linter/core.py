@@ -240,9 +240,71 @@ def _pass_targets(rule: Dict[str, Any]) -> Iterable[tuple]:
             yield rpass, target
 
 
-def lint_text(name: str, text: str, rules: Optional[List[Dict[str, Any]]] = None) -> List[Finding]:
+# Files that hold markup a separate stylesheet can style.
+MARKUP_SUFFIXES = (".html", ".htm", ".php", ".vue", ".svelte", ".astro", ".jsx", ".tsx")
+STYLE_SUFFIXES = (".css", ".scss")
+_STYLE_REF = re.compile(
+    r"""<link\b[^>]*?\bhref\s*=\s*["']([^"'?#]+)"""
+    r"""|\bimport\s+(?:[\w{}\s,*]+\s+from\s+)?["']([^"'?#]+\.s?css)["']""",
+    re.I,
+)
+
+
+def _links(page: Path, text: str, css: Path) -> bool:
+    """True when ``page`` loads the stylesheet at ``css`` by a link or an import."""
+    target = css.resolve()
+    for m in _STYLE_REF.finditer(text):
+        ref = (m.group(1) or m.group(2) or "").strip()
+        if not ref or re.match(r"^(?:[a-z]+:)?//", ref, re.I) or ref.startswith(("data:", "{", "$")):
+            continue
+        if ref.startswith("/"):
+            # Root-relative: match on the path's tail, since the site root is unknown.
+            if target.as_posix().endswith(ref):
+                return True
+        elif (page.parent / ref).resolve() == target:
+            return True
+    return False
+
+
+def stylesheet_pages(css: Path, candidates: Iterable[Path] = ()) -> List[Path]:
+    """The pages that load the stylesheet ``css``: from ``candidates`` (the
+    files being linted) and the markup files beside it or one folder above."""
+    css = Path(css)
+    pool: Dict[Path, Path] = {}
+    folders = [css.parent, css.parent.parent]
+    for folder in folders:
+        if folder.is_dir():
+            for f in sorted(folder.iterdir()):
+                if f.is_file() and f.name.lower().endswith(MARKUP_SUFFIXES):
+                    pool.setdefault(f.resolve(), f)
+    for f in candidates:
+        f = Path(f)
+        if f.is_file() and f.name.lower().endswith(MARKUP_SUFFIXES):
+            pool.setdefault(f.resolve(), f)
+    out: List[Path] = []
+    for key in sorted(pool):
+        try:
+            text = pool[key].read_text(encoding="utf-8", errors="ignore")
+        except OSError:
+            continue
+        if _links(pool[key], text, css):
+            out.append(pool[key])
+    return out
+
+
+def _page_contexts(pages: Optional[Iterable[tuple]]) -> List[FileContext]:
+    out: List[FileContext] = []
+    for pname, ptext in pages or ():
+        ppath = Path(pname)
+        out.append(FileContext(ppath, ptext, FileViews(ppath.name, ptext)))
+    return out
+
+
+def lint_text(name: str, text: str, rules: Optional[List[Dict[str, Any]]] = None,
+              pages: Optional[Iterable[tuple]] = None) -> List[Finding]:
     """Lint one file's contents. ``name`` supplies the extension and the
-    path reported in each finding."""
+    path reported in each finding. ``pages`` are ``(name, text)`` pairs of
+    the pages that load this stylesheet, read by rules that need its markup."""
     rules = _compile_rules() if rules is None else rules
     path = Path(name)
     views = FileViews(path.name, text)
@@ -250,6 +312,7 @@ def lint_text(name: str, text: str, rules: Optional[List[Dict[str, Any]]] = None
     lines = text.splitlines()
     waived = _suppressions(text)
     ctx = FileContext(path, text, views)
+    ctx.pages = _page_contexts(pages)
     defs = token_definitions(ctx)
     findings: List[Finding] = []
     for rule in rules:
@@ -314,13 +377,27 @@ def lint(
     files_scanned = 0
 
     targets = [Path(p) for p in (paths or [Path(".")])]
-    for path in _walk_paths(targets):
-        try:
-            text = path.read_text(encoding="utf-8", errors="ignore")
-        except OSError:
+    files = list(_walk_paths(targets))
+    texts: Dict[Path, str] = {}
+
+    def read(p: Path) -> Optional[str]:
+        key = p.resolve()
+        if key not in texts:
+            try:
+                texts[key] = p.read_text(encoding="utf-8", errors="ignore")
+            except OSError:
+                return None
+        return texts[key]
+
+    for path in files:
+        text = read(path)
+        if text is None:
             continue
         files_scanned += 1
-        findings.extend(lint_text(str(path), text, rules))
+        pages = None
+        if path.name.lower().endswith(STYLE_SUFFIXES):
+            pages = [(str(p), t) for p in stylesheet_pages(path, files) if (t := read(p)) is not None]
+        findings.extend(lint_text(str(path), text, rules, pages=pages))
 
     fatal = any(SEVERITY_RANK.get(f.severity, 0) >= threshold for f in findings)
     score = compute_score(findings, files_scanned)
