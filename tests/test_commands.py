@@ -120,7 +120,7 @@ def _dashboard_section() -> str:
 
 
 def test_dashboard_mode_skips_the_page_sequence():
-    assert "The page-sequence step (v2 step 2.5) does not apply" in _dashboard_section()
+    assert "The page-sequence step (engine step 2.5) does not apply" in _dashboard_section()
 
 
 def test_the_modes_table_keeps_page_steps_out_of_component_and_dashboard():

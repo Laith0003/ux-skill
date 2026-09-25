@@ -2,7 +2,7 @@
 
 Default model output has measurable, predictable failure modes. This file catalogues them. Every entry here exists because the unconstrained generator reaches for it reflexively, and the result reads as machine-made.
 
-Treat each ban as a hard rule unless a brief explicitly overrides it. The goal is not stylistic preference — it is the elimination of fingerprints that mark output as generated.
+Treat each ban as a hard rule unless a brief explicitly overrides it, or the client's own system or identity does otherwise (principles 9 and 10). The goal is not stylistic preference: it is the elimination of fingerprints that mark output as generated.
 
 ---
 
@@ -26,6 +26,8 @@ Treat each ban as a hard rule unless a brief explicitly overrides it. The goal i
 
 9. **A client's existing design system wins.** When the project already has its own system (tokens, foundation CSS, a hand-written MASTER.md or DESIGN.md), every generic rule in this file yields to it: its colors, saturation, gradients, type, label tracking and case stand as they are. These bans guard against model defaults, never against a client's deliberate identity; a mark beside a label still needs the recorded waiver (decisions/eyebrow-is-text.md). Find it with `ux system detect` before applying any rule below.
 
+10. **A client's own identity wins, even with no full system.** When there are no token files but the client has a logo, a site, an app or a brand book, the same holds for what that material shows: its saturated brand, its brand gradient, its pure white or pure black canvas, its blue or violet hue stay as the client uses them (decisions/client-identity-wins.md, which extends decisions/existing-system-wins.md to identities with no full system). The evidence is client material that predates the build, named with its exact value (the hex, the gradient stops), and the page uses that exact value; the engine's generated art, anything made in this session and a word in the brief are not evidence. The contrast gate still holds: keep the color and solve the text on it.
+
 ---
 
 ## Responsive / mobile-first (non-negotiable)
@@ -40,7 +42,7 @@ Mobile is not the small version of the desktop — it is where most of the traff
 
 4. **Never ship a literal placeholder token.** `{TODO_FILL...}`, `{{ var }}` mustache left in markup, "lorem ipsum" — none of these reach the rendered UI. If a value is genuinely absent (no phone number, no OG image), OMIT that element gracefully — drop the affordance, don't print the token. A visible `{TODO_FILL: phone}` in a sticky header is the rawest draft-state leak there is.
 
-5. **Imagery as backdrop, not just an icon.** Where it adds depth — hero, location/coverage cards, feature tiles — use a REAL image as the section or card background with text overlaid and a readable scrim, not a flat card with one lone icon. A single centered icon on a bare card is a slop tell precisely where a backdrop image would have carried the surface. (The icon-per-item rule for lists still holds; this is about sections and feature/coverage cards that read as empty without imagery.)
+5. **Imagery as backdrop, not just an icon.** Where it adds depth (hero, location or coverage cards, feature tiles), use a REAL image as the section or card background with text overlaid and a readable scrim, not a flat card with one lone icon. A single centered icon on a bare card is a slop tell precisely where a backdrop image would have carried the surface. (Icons on list items follow the one icon rule in `commands/ux-design.md`; this is about sections and feature/coverage cards that read as empty without imagery.)
 
 6. **Never repeat one icon across differentiated items.** Every skip size, every plan, every sector rendered with the same box/grid/check icon reads as the generator giving up. If you cannot source a DISTINCT, meaningful icon per item, drop the icons there entirely and differentiate with TYPOGRAPHY (scale, weight, the number itself), color, or layout. A repeated icon is worse than no icon — it actively says "these are the same" about things you are claiming are different.
 
@@ -53,12 +55,12 @@ Mobile is not the small version of the desktop — it is where most of the traff
 | Don't | Do instead |
 |---|---|
 | Default `box-shadow` glows, neon outer glows | Inner border (`border-white/10`) + tinted inner shadow (`shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]`) |
-| Pure black (`#000000`) | Zinc-950, charcoal, off-black — `#0a0a0a`, `#111111` are correct |
-| Pure white (`#FFFFFF`) on premium marketing | Warm off-white in the `#FAFAF8` to `#F7F6F3` range; pure white reads as default |
-| Oversaturated accents (>80% saturation) | Desaturate. High contrast comes from value, not saturation |
+| Pure black (`#000000`) | Zinc-950, charcoal, off-black: `#0a0a0a`, `#111111` are correct. A client whose identity is set in pure black keeps it (decisions/client-identity-wins.md) |
+| Pure white (`#FFFFFF`) on premium marketing | Warm off-white in the `#FAFAF8` to `#F7F6F3` range; pure white reads as default. A client whose identity is set on pure white keeps it (decisions/client-identity-wins.md) |
+| Oversaturated accents (>80% saturation) | Desaturate. High contrast comes from value, not saturation. A client's own saturated brand stays exact (decisions/client-identity-wins.md) |
 | Text-fill gradients on large headers | Solid color + weight hierarchy. One word in gradient per page is the absolute maximum |
-| The "AI" purple-to-blue gradient on white | A single restrained accent (Emerald, Electric Blue, Deep Rose, Amber) against neutrals |
-| Full-bleed gradient hero backgrounds covering large surfaces | Gradients sit inside narrow 30–60° hue windows at low saturation, used as accents not as canvas |
+| The "AI" purple-to-blue gradient on white | A single restrained accent (Emerald, Electric Blue, Deep Rose, Amber) against neutrals. A gradient from the client's own identity is not this default and stays (decisions/client-identity-wins.md) |
+| Full-bleed gradient hero backgrounds covering large surfaces | Gradients sit inside narrow 30–60° hue windows at low saturation, used as accents not as canvas. The client's own gradient band may run full-bleed, as their material shows it (decisions/client-identity-wins.md) |
 | Multi-stop rainbow gradients | 2-3 stops, axis-aligned, narrow hue spread |
 | More than one gradient section per page | One gradient feature, max |
 | Custom mouse cursors | Native cursors only — performance + a11y + outdated. Exception: a custom cursor inside an interactive product demo surface |
@@ -230,7 +232,7 @@ Hero component rules live in `references/surfaces/landing.md`. Dashboard card-de
 
 ## Tokens / numeric guardrails
 
-- **Color saturation**: < 80% for any accent in restrained styles; saturated jewel tones acceptable in maximalist styles but reserved for small surface areas, never full-bleed
+- **Color saturation**: < 80% for any accent in restrained styles; saturated jewel tones acceptable in maximalist styles but reserved for small surface areas, never full-bleed. A client's own brand keeps its saturation (decisions/client-identity-wins.md)
 - **Contrast**: ≥ 4.5:1 for body text, ≥ 3:1 for large/UI text. AAA where possible on primary copy
 - **Spacing**: multiples of 4 (4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 160)
 - **Touch targets**: ≥ 44×44 pt (iOS), ≥ 48×48 dp (Android) regardless of visual render
@@ -256,7 +258,7 @@ Marketing section padding lives in `references/surfaces/landing.md`.
 Run before shipping any UI output. Severity tags indicate the failure mode if violated.
 
 ### Critical (blocker — ship is not possible)
-- [ ] No purple-to-blue "AI" gradient on white
+- [ ] No purple-to-blue "AI" gradient on white, unless it is the client's own identity
 - [ ] No generic names ("John Doe", "Jane Smith")
 - [ ] No "Acme / Nexus / SmartFlow" filler brand placeholders
 - [ ] No Lorem ipsum, no "Your text here" placeholder content
@@ -284,7 +286,7 @@ Run before shipping any UI output. Severity tags indicate the failure mode if vi
 - [ ] Imagery is present, real, and intentional (no text-only walls; no abstract SVG as a stand-in for a real product/site image)
 - [ ] Icons are one consistent family at consistent stroke width
 - [ ] No hover-only critical interactions
-- [ ] No oversaturated accents (> 80% in restrained styles)
+- [ ] No oversaturated accents (> 80% in restrained styles), except the client's own brand
 - [ ] No multiple gradient sections
 - [ ] No filler verbs ("Elevate", "Unleash", "Next-Gen")
 - Landing-page high checks (centered hero, logo color, CTA wording, footer) live in the checklist of `references/surfaces/landing.md`.

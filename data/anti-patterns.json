@@ -233,7 +233,7 @@
       "category": "Motion",
       "detection": {
         "type": "regex",
-        "pattern": "(?:transition(?:-duration)?|animation-duration):\\s*300ms\\b|duration-300\\b|\\bduration:\\s*0\\.3s\\b",
+        "pattern": "(?:transition(?:-duration)?|animation-duration):\\s*300ms\\b|(?<![\\w$@-])duration-300\\b|\\bduration:\\s*0\\.3s\\b",
         "flags": "i",
         "scope": [
           "css",

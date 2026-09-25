@@ -63,6 +63,9 @@ class FileContext:
         self._low: Optional[str] = None
         self._ranges: Dict[str, Tuple[List[int], List[int]]] = {}
         self._cache: Dict[str, object] = {}
+        # Pages that load this stylesheet, for rules that need the markup a
+        # separate stylesheet styles (the parent focus ring).
+        self.pages: List["FileContext"] = []
 
     @property
     def low(self) -> str:
@@ -845,10 +848,14 @@ def _removal_has_ring(ctx: FileContext, view: View, selector: str, at: int,
             continue
         if any(anchor <= removal[k] for k in range(last + (1 if ring.within else 0))):
             return True
-    if ctx.views.scan.tags and ancestors:
-        matched = _matching_elements(ctx, removal)
+    if ancestors:
+        # The markup is this file's own, or, for a separate stylesheet, every
+        # page that loads it: the ring covers the removal only when each page
+        # that has the element puts it inside the ring's anchor.
+        docs = [d for d in [ctx, *ctx.pages] if d.views.scan.tags]
+        found = [(d, m) for d in docs for m in [_matching_elements(d, removal)] if m]
         for ring in ancestors:
-            if inner_ok(ring) and _markup_wraps(ctx, ring, matched):
+            if found and inner_ok(ring) and all(_markup_wraps(d, ring, m) for d, m in found):
                 return True
     return False
 
