@@ -62,6 +62,7 @@ def render_rule_card(rule):
     category = html.escape(str(rule.get("category", "")))
     severity = (rule.get("severity") or "medium").lower()
     sev_color, sev_ink, sev_label = SEVERITY_BADGE.get(severity, SEVERITY_BADGE["medium"])
+    sev_class = severity if severity in SEVERITY_BADGE else "medium"
     # Real schema uses "detection.regex" + "why" + "fix"; legacy uses
     # "description", "why_bad", "example_bad", "example_good".
     detection = rule.get("detection") or {}
@@ -100,9 +101,9 @@ def render_rule_card(rule):
     <article class="ap-card" id="{rid}">
       <header class="ap-head">
         <span class="ap-id">#{rid}</span>
-        <span class="ap-sev" style="background:#{sev_color};color:#{sev_ink}">{sev_label}</span>
+        <span class="ap-sev ap-sev--{sev_class}">{sev_label}</span>
         <span class="ap-cat">{category}</span>
-        <h3 class="ap-name">{name}</h3>
+        <h2 class="ap-name">{name}</h2>
         <div class="ap-applies">{applies_pills}</div>
       </header>
       <p class="ap-desc">{desc}</p>
@@ -197,7 +198,7 @@ def build_html(rules, version):
   .toolbar {{ padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); position: sticky; top: 0; background: rgba(7,8,10,0.92); backdrop-filter: blur(8px); z-index: 10; }}
   .toolbar__row {{ display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }}
   .ap-search {{ flex: 1; min-width: 260px; padding: 10px 14px; background: var(--surface-1); border: 1px solid var(--hairline); border-radius: 8px; color: var(--ink); font-family: var(--sans); font-size: 14px; }}
-  .ap-search:focus {{ outline: none; border-color: var(--accent); }}
+  .ap-search:focus {{ outline: 2px solid transparent; border-color: var(--accent); }}
   .ap-chip {{ background: var(--surface-1); border: 1px solid var(--hairline); color: var(--body); padding: 6px 12px; border-radius: 999px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; }}
   .ap-chip.is-active {{ background: var(--accent); color: var(--canvas); border-color: var(--accent); }}
   .ap-chip:hover {{ border-color: var(--hairline-2); }}
@@ -207,6 +208,9 @@ def build_html(rules, version):
   .ap-head {{ display: grid; grid-template-columns: auto auto auto; gap: 8px 12px; align-items: center; margin-bottom: 14px; }}
   .ap-id {{ font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }}
   .ap-sev {{ font-family: var(--mono); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.08em; }}
+  .ap-sev--high {{ background: #ff5d5d; color: #FFFFFF; }}
+  .ap-sev--medium {{ background: #e8a63c; color: #07080a; }}
+  .ap-sev--low {{ background: #8be9b1; color: #07080a; }}
   .ap-cat {{ font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.10em; text-transform: uppercase; }}
   .ap-name {{ grid-column: 1 / -1; font-size: 20px; font-weight: 600; color: var(--ink); line-height: 1.2; }}
   .ap-applies {{ grid-column: 1 / -1; display: flex; gap: 6px; flex-wrap: wrap; }}
@@ -236,6 +240,10 @@ def build_html(rules, version):
   @media (max-width: 640px) {{
     .grid {{ grid-template-columns: 1fr; }}
   }}
+  .docfig {{ margin: 32px 0; border: 1px solid rgba(255,255,255,0.10); border-radius: 14px; overflow: hidden; background: #0b0d12; }}
+  .docfig img {{ display: block; width: 100%; height: auto; }}
+  .docfig figcaption {{ margin: 0; padding: 12px 16px; font-size: 13px; line-height: 1.5; color: #8a8f96; border-top: 1px solid rgba(255,255,255,0.08); }}
+  .docfig--narrow {{ max-width: 720px; }}
 </style>
 </head>
 <body>
@@ -266,6 +274,10 @@ def build_html(rules, version):
       <span class="top__stat"><b>{low}</b> low</span>
       <span class="top__stat"><b>{len(categories)}</b> categories</span>
     </div>
+    <figure class="docfig docfig--narrow">
+      <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="A terminal running ux lint on a docs folder: two high-severity findings, a purple-to-blue gradient and leftover placeholder text, each shown with its file, line and fix, then exit code 1." loading="lazy" decoding="async">
+      <figcaption>Every rule on this page runs in ux lint. This is what a finding looks like in the terminal.</figcaption>
+    </figure>
   </div>
 </section>
 
@@ -280,7 +292,10 @@ def build_html(rules, version):
 <section>
   <div class="container">
     <div class="grid" id="ap-grid">
+      <!-- The cards quote every rule: its name, regex, why and fix. Those quotes are the subject of the page, not copy it ships, so the linter skips this region. -->
+      <!-- ux-lint-disable -->
       {cards}
+      <!-- ux-lint-enable -->
     </div>
   </div>
 </section>

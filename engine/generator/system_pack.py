@@ -237,7 +237,7 @@ a:hover {
 
 a:focus-visible,
 button:focus-visible {
-  outline: none;
+  outline: 2px solid transparent;
   border-radius: var(--radius-sm);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 38%, transparent);
 }
@@ -315,7 +315,7 @@ button:focus-visible {
 }
 
 .btn:focus-visible {
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 38%, transparent);
 }
 
@@ -482,7 +482,7 @@ button:focus-visible {
 .input:focus,
 .select:focus,
 .textarea:focus {
-  outline: none;
+  outline: 2px solid transparent;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 26%, transparent);
 }
@@ -561,6 +561,22 @@ button:focus-visible {
   border-radius: var(--radius-pill);
   background: currentColor;
   flex: none;
+}
+
+.dot-success {
+  color: var(--color-success);
+}
+
+.dot-warning {
+  color: var(--color-warning);
+}
+
+.dot-info {
+  color: var(--color-info);
+}
+
+.dot-danger {
+  color: var(--color-danger);
 }
 
 /* Stat tile */
@@ -666,7 +682,7 @@ button:focus-visible {
 }
 
 .switch input:focus-visible + .switch-track {
-  outline: none;
+  outline: 2px solid transparent;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 38%, transparent);
 }
 
@@ -708,7 +724,7 @@ button:focus-visible {
 }
 
 .nav-link:focus-visible {
-  outline: none;
+  outline: 2px solid transparent;
   border-radius: var(--radius-sm);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 38%, transparent);
 }
@@ -813,7 +829,7 @@ _PREVIEW_CSS = """
 
 .sh-mock-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-md);
   margin-bottom: var(--space-lg);
 }
@@ -834,7 +850,7 @@ _PREVIEW_CSS = """
 
 .sh-cols {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-lg);
 }
 
@@ -849,6 +865,7 @@ _PREVIEW_CSS = """
 .sh-bar {
   flex: 1;
   min-height: 6px;
+  height: var(--h);
   background: var(--color-primary);
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
   transition: opacity var(--motion-base) var(--motion-ease);
@@ -866,6 +883,26 @@ _PREVIEW_CSS = """
   opacity: 1;
 }
 
+.sh-trend {
+  display: block;
+  width: 100%;
+  height: 132px;
+  margin-top: var(--space-sm);
+}
+
+.sh-trend-area {
+  fill: color-mix(in srgb, var(--color-primary) 14%, transparent);
+}
+
+.sh-trend-line {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
 .sh-bars-h {
   font-family: var(--font-display);
   font-size: 15px;
@@ -876,6 +913,7 @@ _PREVIEW_CSS = """
 
 .sh-type-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-md);
@@ -885,6 +923,25 @@ _PREVIEW_CSS = """
 
 .sh-type-row:last-child {
   border-bottom: 0;
+}
+
+.sh-type-display {
+  font-family: var(--font-display);
+  font-size: 34px;
+  color: var(--color-ink);
+  letter-spacing: -0.02em;
+}
+
+.sh-type-body {
+  font-family: var(--font-body);
+  font-size: 17px;
+  color: var(--color-ink);
+}
+
+.sh-type-mono {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--color-body);
 }
 
 .sh-type-meta {
@@ -915,6 +972,7 @@ _PREVIEW_CSS = """
 .sh-sw-chip {
   width: 56px;
   height: 56px;
+  background: var(--sw);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
 }
@@ -958,11 +1016,11 @@ _PREVIEW_CSS = """
 
 @media (max-width: 680px) {
   .sh-cols {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .sh-mock-stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 """
@@ -975,7 +1033,7 @@ _PREVIEW_BODY = """
     <a class="nav-link" href="#overview">Overview</a>
     <a class="nav-link" href="#components">Components</a>
     <a class="nav-link" href="#tokens">Tokens</a>
-    <a class="btn btn-primary btn-sm" href="#start">Get started</a>
+    <a class="btn btn-primary btn-sm" href="#start">Build with it</a>
   </div>
 </nav>
 
@@ -1017,17 +1075,10 @@ _PREVIEW_BODY = """
         </div>
       </div>
 
-      <div class="sh-bars" role="img" aria-label="Revenue trend across the last nine weeks">
-        <span class="sh-bar" style="height:38%"></span>
-        <span class="sh-bar" style="height:54%"></span>
-        <span class="sh-bar" style="height:47%"></span>
-        <span class="sh-bar alt" style="height:71%"></span>
-        <span class="sh-bar" style="height:63%"></span>
-        <span class="sh-bar" style="height:82%"></span>
-        <span class="sh-bar" style="height:58%"></span>
-        <span class="sh-bar alt" style="height:94%"></span>
-        <span class="sh-bar" style="height:76%"></span>
-      </div>
+      <svg class="sh-trend" viewBox="0 0 360 132" preserveAspectRatio="none" role="img" aria-label="Revenue trend across the last nine weeks">
+        <path class="sh-trend-area" d="M0,82 L45,63 L90,72 L135,43 L180,52 L225,30 L270,58 L315,15 L360,37 L360,132 L0,132 Z"/>
+        <path class="sh-trend-line" d="M0,82 L45,63 L90,72 L135,43 L180,52 L225,30 L270,58 L315,15 L360,37"/>
+      </svg>
     </div>
   </section>
 
@@ -1216,14 +1267,14 @@ _PREVIEW_BODY = """
       <div class="card">
         <p class="sh-bars-h">Sessions by region</p>
         <div class="sh-bars" role="img" aria-label="Sessions across eight regions">
-          <span class="sh-bar" style="height:88%"></span>
-          <span class="sh-bar" style="height:62%"></span>
-          <span class="sh-bar alt" style="height:74%"></span>
-          <span class="sh-bar" style="height:41%"></span>
-          <span class="sh-bar" style="height:57%"></span>
-          <span class="sh-bar alt" style="height:33%"></span>
-          <span class="sh-bar" style="height:49%"></span>
-          <span class="sh-bar" style="height:28%"></span>
+          <span class="sh-bar" style="--h:88%"></span>
+          <span class="sh-bar" style="--h:62%"></span>
+          <span class="sh-bar alt" style="--h:74%"></span>
+          <span class="sh-bar" style="--h:41%"></span>
+          <span class="sh-bar" style="--h:57%"></span>
+          <span class="sh-bar alt" style="--h:33%"></span>
+          <span class="sh-bar" style="--h:49%"></span>
+          <span class="sh-bar" style="--h:28%"></span>
         </div>
       </div>
 
@@ -1231,22 +1282,22 @@ _PREVIEW_BODY = """
         <p class="sh-bars-h">Today</p>
         <div class="sh-checklist">
           <div class="sh-check">
-            <span class="dot" style="color: var(--color-success)"></span>
+            <span class="dot dot-success"></span>
             <span class="sh-check-label">Approve the September billing run</span>
             <span class="chip">Done</span>
           </div>
           <div class="sh-check">
-            <span class="dot" style="color: var(--color-warning)"></span>
+            <span class="dot dot-warning"></span>
             <span class="sh-check-label">Review 3 flagged refund requests</span>
             <span class="chip">In review</span>
           </div>
           <div class="sh-check">
-            <span class="dot" style="color: var(--color-info)"></span>
+            <span class="dot dot-info"></span>
             <span class="sh-check-label">Publish the v2 onboarding flow</span>
             <span class="chip">Queued</span>
           </div>
           <div class="sh-check">
-            <span class="dot" style="color: var(--color-danger)"></span>
+            <span class="dot dot-danger"></span>
             <span class="sh-check-label">Investigate the latency spike on us-east-2</span>
             <span class="chip">Blocked</span>
           </div>
@@ -1271,6 +1322,21 @@ _PREVIEW_BODY = """
 _PREVIEW_MOBILE = ("@media(max-width:620px){.nav{flex-wrap:wrap;row-gap:10px}"
                    ".nav-links{flex-wrap:wrap;gap:16px}.table{font-size:13px}"
                    ".table th,.table td{padding:8px 9px}}")
+
+
+def _preview_phone_padding(system: Any) -> str:
+    """Tighter padding below 680px when the spacing scale is wide.
+
+    With a 72px ``--space-lg`` the container and card padding leave a phone
+    column about 100px across, so text overflows sideways. Narrower scales
+    keep their own padding.
+    """
+    sp = dict(getattr(system, "spacing", None) or system.get("spacing", {}))
+    scale = sp.get("scale") or [4, 8, 12, 16, 24, 32, 48, 64]
+    if len(scale) < 5 or scale[4] <= 48:
+        return ""
+    return ("@media(max-width:680px){.container{padding-inline:var(--space-xs)}"
+            ".card,.card-elevated{padding:var(--space-sm)}}")
 
 
 def _tokens_css(system: Any, pal: Dict[str, str], name: str) -> str:
@@ -1388,17 +1454,14 @@ def _preview_html(system: Any, pal: Dict[str, str], name: str, description: str,
     links = "".join(f'<link href="{u}" rel="stylesheet">' for u in dict.fromkeys(_urls))
     sw_keys = ["canvas", "surface", "ink", "body", "primary", "success", "warning", "danger", "info"]
     swatches = '<div class="sh-swatches">' + "".join(
-        f'<div class="sh-sw"><div class="sh-sw-chip" style="background:{pal[k]}"></div>'
+        f'<div class="sh-sw"><div class="sh-sw-chip" style="--sw:{pal[k]}"></div>'
         f'<span>{k}</span><span>{pal[k]}</span></div>' for k in sw_keys) + "</div>"
     type_spec = (
-        f'<div class="sh-type-row"><span style="font-family:var(--font-display);font-size:34px;'
-        f'color:var(--color-ink);letter-spacing:-.02em">Display</span>'
+        f'<div class="sh-type-row"><span class="sh-type-display">Display</span>'
         f'<span class="sh-type-meta">{display}</span></div>'
-        f'<div class="sh-type-row"><span style="font-family:var(--font-body);font-size:17px;'
-        f'color:var(--color-ink)">The quick brown fox</span>'
+        f'<div class="sh-type-row"><span class="sh-type-body">The quick brown fox</span>'
         f'<span class="sh-type-meta">{body_f}</span></div>'
-        f'<div class="sh-type-row"><span style="font-family:var(--font-mono);font-size:14px;'
-        f'color:var(--color-body)">const tokens = system;</span>'
+        f'<div class="sh-type-row"><span class="sh-type-mono">const tokens = system;</span>'
         f'<span class="sh-type-meta">{mono}</span></div>'
     )
     inner = (_PREVIEW_BODY.replace("{{NAME}}", name).replace("{{DESC}}", description)
@@ -1407,7 +1470,8 @@ def _preview_html(system: Any, pal: Dict[str, str], name: str, description: str,
         f'<!doctype html><html lang="en" data-theme="{pal["_theme"]}"><head><meta charset="utf-8">'
         f'<meta name="viewport" content="width=device-width, initial-scale=1">'
         f'<meta name="generator" content="ux-skill"><title>{name} design system preview</title>{links}'
-        f'<style>{_tokens_css(system, pal, name)}\n{_PREVIEW_CSS}{_PREVIEW_MOBILE}</style></head>'
+        f'<style>{_tokens_css(system, pal, name)}\n{_PREVIEW_CSS}{_PREVIEW_MOBILE}'
+        f'{_preview_phone_padding(system)}</style></head>'
         f'<body>{inner}</body></html>'
     )
 

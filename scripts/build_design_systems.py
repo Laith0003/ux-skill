@@ -152,7 +152,7 @@ _GALLERY_CSS = """<style id="ds-gallery">
 .dsx__name{font-size:27px;font-weight:700;letter-spacing:-.02em;color:var(--i);margin:11px 0 6px}
 .dsx__desc{font-size:13.5px;line-height:1.5;color:var(--b);margin:0 0 15px}
 .dsx__sw{display:flex;gap:5px;margin-bottom:16px}
-.dsx__sw span{width:23px;height:23px;border-radius:6px;border:1px solid rgba(0,0,0,.08)}
+.dsx__sw span{width:23px;height:23px;border-radius:6px;border:1px solid rgba(0,0,0,.08);background:var(--sw)}
 .dsx__demo{display:flex;gap:9px;align-items:center}
 .dsx__btn{background:var(--p);color:var(--op);font:600 12.5px system-ui,sans-serif;padding:8px 15px;border-radius:8px}
 .dsx__chip{border:1px solid var(--p);color:var(--p);font:600 12px system-ui,sans-serif;padding:6px 12px;border-radius:999px}
@@ -178,7 +178,7 @@ _GALLERY_CSS = """<style id="ds-gallery">
 
 
 def _swatch_spans(sw):
-    return "".join(f'<span style="background:{c}"></span>' for c in sw)
+    return "".join(f'<span style="--sw:{c}"></span>' for c in sw)
 
 
 def _card(s):
@@ -188,7 +188,7 @@ def _card(s):
         f'--p:{p["primary"]};--op:{p["on_primary"]}">'
         f'<div class="dsx__live">'
         f'<div class="dsx__eyebrow">{s["display_font"]} &middot; {s["theme"]}</div>'
-        f'<h3 class="dsx__name"><a href="/design-systems/{s["slug"]}/">{s["name"]}</a></h3>'
+        f'<h2 class="dsx__name"><a href="/design-systems/{s["slug"]}/">{s["name"]}</a></h2>'
         f'<p class="dsx__desc">{s["description"]}</p>'
         f'<div class="dsx__sw">{_swatch_spans(s["swatches"])}</div>'
         f'<div class="dsx__demo"><span class="dsx__btn">Primary</span>'
@@ -259,6 +259,12 @@ def build_gallery(systems):
         '<p>Every system here was generated, not curated. Point the engine at a brief and it synthesizes a '
         'fresh, accessible design language and writes the same folder:</p>'
         '<code class="ds-code">ux system-pack --industry fintech-payments --tone bold --name "Cobalt"</code>'
+        '<figure class="docfig docfig--narrow">  <img src="/screenshots/terminal-ux-recommend.webp" '
+        'width="1600" height="1000" alt="A terminal running ux recommend on a landing-page brief: five '
+        'lanes (industry, style, palette, type, motion) each resolve with a confidence score and merge '
+        'into one recommendation file." loading="lazy" decoding="async">  <figcaption>The '
+        'brief-to-system step in the terminal. Every system above was compiled this way, never picked '
+        'by hand.</figcaption></figure>'
         '<p>Deterministic, offline, free. <a href="/commands.html">See the commands</a>, read '
         '<a href="/what-is-a-design-md.html">what a DESIGN.md is</a>, or grab the '
         '<a href="design-systems/index.json">machine-readable index</a>.</p>'
@@ -273,6 +279,7 @@ def build_gallery(systems):
 
 _DETAIL_CSS = """<style id="ds-detail">
 .dd-wrap{max-width:920px;margin:0 auto;padding:0 24px}
+.dd-back svg{width:14px;height:14px;flex:none}
 .dd-back{display:inline-flex;align-items:center;gap:7px;font:600 13px ui-monospace,monospace;color:var(--accent,#e8c33a);text-decoration:none;margin-top:40px}
 .dd-hero{padding:22px 0 8px}
 .dd-tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
@@ -289,12 +296,12 @@ _DETAIL_CSS = """<style id="ds-detail">
 .dd-concept p{font-size:18px;line-height:1.7;max-width:64ch;opacity:.9;margin:0}
 .dd-pal{display:flex;flex-direction:column;gap:1px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
 .dd-pal__row{display:grid;grid-template-columns:44px 1.1fr 1fr 1.7fr auto;align-items:center;gap:14px;padding:11px 14px;background:rgba(255,255,255,.02)}
-.dd-pal__sw{width:32px;height:32px;border-radius:8px;border:1px solid rgba(255,255,255,.14)}
+.dd-pal__sw{width:32px;height:32px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:var(--sw)}
 .dd-pal__name{font-weight:600;font-size:14px}
 .dd-pal__hex{font:500 13px ui-monospace,monospace;opacity:.75}
 .dd-pal__role{font-size:13px;opacity:.6}
 .dd-pal__cr{font:600 12px ui-monospace,monospace;color:#86c79b;justify-self:end}
-.dd-type__row{padding:18px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.dd-type__row{padding:18px 0;border-bottom:1px solid rgba(255,255,255,.06);font-family:var(--ff)}
 .dd-type__lbl{font:600 11px ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;opacity:.5}
 .dd-type__big{font-size:54px;line-height:1.1;letter-spacing:-.02em;margin:6px 0 2px}
 .dd-type__line{font-size:18px;opacity:.8;margin:0}
@@ -309,11 +316,18 @@ _DETAIL_CSS = """<style id="ds-detail">
 .dd-how2 p{font-size:16px;line-height:1.7;opacity:.85;max-width:62ch}
 .dd-how2 code{font:500 13px ui-monospace,monospace;background:rgba(255,255,255,.07);padding:2px 6px;border-radius:5px}
 .dd-nav{display:flex;justify-content:space-between;gap:16px;padding:34px 0 80px;font-weight:600;flex-wrap:wrap}
-.dd-nav a{color:var(--accent,#e8c33a);text-decoration:none}
+.dd-nav a{color:var(--accent,#e8c33a);text-decoration:none;display:inline-flex;align-items:center;gap:7px}
+.dd-nav svg{width:14px;height:14px;flex:none}
 .usknav__drawer{display:none}
 .usknav__drawer.is-open{display:flex;flex-direction:column}
 @media (max-width:640px){.dd-pal__row{grid-template-columns:36px 1fr auto;gap:10px}.dd-pal__hex,.dd-pal__role{display:none}.dd-frame{height:460px}}
 </style>"""
+
+
+_ARROW_SVG = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
+              'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{d}"/></svg>')
+_ARROW_LEFT = _ARROW_SVG.format(d="M19 12H5m7 7-7-7 7-7")
+_ARROW_RIGHT = _ARROW_SVG.format(d="M5 12h14m-7-7 7 7-7 7")
 
 
 def build_detail_page(row, prev_row, next_row):
@@ -327,13 +341,14 @@ def build_detail_page(row, prev_row, next_row):
                        for f in meta.get("fonts", []) if f.get("cssImport"))
     tags = "".join(f"<span>{t}</span>" for t in meta.get("tags", []))
     pal_rows = "".join(
-        f'<div class="dd-pal__row"><span class="dd-pal__sw" style="background:{c["value"]}"></span>'
+        f'<div class="dd-pal__row"><span class="dd-pal__sw" style="--sw:{c["value"]}"></span>'
         f'<span class="dd-pal__name">{c["name"]}</span><code class="dd-pal__hex">{c["value"]}</code>'
         f'<span class="dd-pal__role">{c.get("role", "")}</span>'
         f'<span class="dd-pal__cr">{c.get("contrastOnCanvas", "")}:1</span></div>'
         for c in meta.get("palette", []))
     type_rows = "".join(
-        f'<div class="dd-type__row" style="font-family:&#39;{f["name"]}&#39;,system-ui">'
+        # Unquoted family names are valid CSS and keep the value free of entities.
+        f'<div class="dd-type__row" style="--ff:{f["name"]},system-ui">'
         f'<div class="dd-type__lbl">{f.get("usage", "")} / {f["name"]}</div>'
         f'<div class="dd-type__big">Ag 1234</div>'
         f'<p class="dd-type__line">The quick brown fox jumps over the lazy dog.</p></div>'
@@ -346,9 +361,9 @@ def build_detail_page(row, prev_row, next_row):
         f'<a class="dd-file" href="/design-systems/{slug}/{path}">{label}</a>'
         for label, path in [("DESIGN.md", "DESIGN.md"), ("tokens.css", "css/tokens.css"),
                             ("metadata.json", "metadata.json"), ("preview.html", "preview.html")])
-    prev_link = (f'<a href="/design-systems/{prev_row["slug"]}/">&larr; {prev_row["name"]}</a>'
+    prev_link = (f'<a href="/design-systems/{prev_row["slug"]}/">{_ARROW_LEFT}{prev_row["name"]}</a>'
                  if prev_row else "<span></span>")
-    next_link = (f'<a href="/design-systems/{next_row["slug"]}/">{next_row["name"]} &rarr;</a>'
+    next_link = (f'<a href="/design-systems/{next_row["slug"]}/">{next_row["name"]}{_ARROW_RIGHT}</a>'
                  if next_row else "<span></span>")
     jsonld = json.dumps({
         "@context": "https://schema.org", "@type": "CreativeWork", "name": f"{name} design system",
@@ -372,7 +387,7 @@ def build_detail_page(row, prev_row, next_row):
     )
     main_html = (
         '<main class="dd"><div class="dd-wrap">'
-        '<a class="dd-back" href="/design-systems.html">&larr; All design systems</a>'
+        f'<a class="dd-back" href="/design-systems.html">{_ARROW_LEFT}All design systems</a>'
         f'<header class="dd-hero"><div class="dd-tags">{tags}</div>'
         f'<h1 class="dd-name">{name}</h1><p class="dd-desc">{meta.get("description", "")}</p>'
         '<div class="dd-hero__actions">'
