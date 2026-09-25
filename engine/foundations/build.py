@@ -184,6 +184,12 @@ def gate_foundations(ts: TokenSet, chosen: Sequence[Foundation],
     return report
 
 
+# The validate rules about a value itself, which a checking view still
+# reports with structure=False: a pairing cannot measure a value it cannot
+# read.
+VALUE_RULES = ("unknown-type", "bad-value")
+
+
 @dataclass(frozen=True)
 class SystemCheck:
     """What check_system found: every structural problem, the gate report
@@ -204,12 +210,15 @@ def foundations_in(ts: TokenSet) -> Tuple[str, ...]:
 
 
 def check_system(ts: TokenSet, foundations: Optional[Sequence[str]] = None, *,
-                 strict: bool = False) -> SystemCheck:
+                 strict: bool = False, structure: bool = True) -> SystemCheck:
     """Validate and gate a token set the engine did not generate, without
     raising for what it finds. Checks the named foundations, or every
     foundation whose root the set has. A foundation named that requires
     another is checked on its own; an alias into a foundation the set lacks
-    is a validate problem."""
+    is a validate problem. structure=False keeps only the problems with a
+    value itself (VALUE_RULES) and leaves the structural ones (aliases,
+    layers, names, the axes a root may use), for a checking view whose
+    roles hold resolved values by design (engine.io.adapter)."""
     if foundations is None:
         present = foundations_in(ts)
         chosen = tuple(f for f in FOUNDATIONS if f.name in present)
@@ -224,7 +233,7 @@ def check_system(ts: TokenSet, foundations: Optional[Sequence[str]] = None, *,
                                  "use those names or leave foundations out to check every "
                                  "foundation the set has")
         chosen = tuple(f for f in FOUNDATIONS if f.name in foundations)
-    problems = tuple(validate(ts))
+    problems = tuple(p for p in validate(ts) if structure or p.rule in VALUE_RULES)
     return SystemCheck(problems=problems,
                        report=gate_foundations(ts, chosen, strict, problems=problems),
                        foundations=tuple(f.name for f in chosen))
