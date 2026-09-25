@@ -6,7 +6,8 @@ SECTIONS, in order. Two of them are read line by line:
 
 - Roles: one bullet per semantic role, "- `role.path`: what it is for".
   A path may hold `<name>` for one segment, so one line can describe a
-  family such as `color.status.<status>.text`.
+  family such as `motion.<role>.duration`; the description writes <name>
+  where the member's name goes, so each member reads its own use.
 - Checks: one bullet per check the foundation's gate runs,
   "- `check-id`: what it guards".
 
@@ -15,6 +16,12 @@ foundation's role_types or the token) and the axes it varies on, for every
 semantic role in a built token set. guidance_problems says what is
 missing or stale against the build: a role with no description, a
 description that matches no role, a check with no line.
+
+A line that starts with {arabic} is read only for a build whose type
+varies on direction (it has right to left type), and one that starts with
+{latin} only for a build whose type does not, so a Latin-only system gets
+guidance that says nothing about Arabic. A section heading marked {arabic}
+is left out with its lines.
 """
 from __future__ import annotations
 
@@ -40,6 +47,48 @@ SHARED: Mapping[str, Tuple[str, ...]] = {
                   "layout", "Numbers and fixed runs", "Audit checks"),
 }
 _BULLET = re.compile(r"^- `([^`]+)`: (.+)$")
+_PLACEHOLDER = re.compile(r"<([a-z-]+)>")
+ARABIC_MARK = "{arabic} "
+LATIN_MARK = "{latin} "
+
+
+def rtl_type(ts: TokenSet) -> bool:
+    """True when a type role in `ts` has a right to left value, read from
+    the tokens' own modes."""
+    return any(t.layer == "semantic" and t.path.startswith("type.")
+               and any("direction" in key for key in t.modes) for t in ts.tokens())
+
+
+def select(text: str, arabic: bool = True) -> str:
+    """The text a build reads: {arabic} lines kept only when it has right
+    to left type, {latin} lines only when it does not, the marks removed.
+    A heading marked {arabic} drops out with every line up to the next
+    heading of its level or above."""
+    out: List[str] = []
+    skip_level = 0
+    for line in text.split("\n"):
+        mark = None
+        for m in (ARABIC_MARK, LATIN_MARK):
+            if line.startswith(m):
+                mark, line = m, line[len(m):]
+        level = len(line) - len(line.lstrip("#")) if line.startswith("#") else 0
+        if skip_level and (not level or level > skip_level):
+            continue
+        skip_level = 0
+        keep = mark is None or (mark == ARABIC_MARK) == arabic
+        if not keep and level:
+            skip_level = level
+        if keep:
+            out.append(line)
+    return "\n".join(out)
+
+
+def sections_for(text: str, sections: Sequence[str], arabic: bool) -> Tuple[str, ...]:
+    """The sections a build reads: those under a heading marked {arabic}
+    drop out of a build without right to left type."""
+    marked = {line[len(ARABIC_MARK) + 3:].strip() for line in text.split("\n")
+              if line.startswith(ARABIC_MARK + "## ")}
+    return tuple(h for h in sections if arabic or h not in marked)
 
 
 @dataclass(frozen=True)
@@ -105,9 +154,12 @@ def _bullets(body: str, source: str, heading: str) -> Tuple[Tuple[str, str], ...
     return tuple(out)
 
 
-def read_guidance(text: str, source: str, sections: Sequence[str] = SECTIONS) -> Guidance:
-    """Read one guidance file. Raises GuidanceError naming the file and the fix."""
-    title, found = _split(text, source)
+def read_guidance(text: str, source: str, sections: Sequence[str] = SECTIONS,
+                  arabic: bool = True) -> Guidance:
+    """Read one guidance file as a build with (arabic) or without right to
+    left type reads it. Raises GuidanceError naming the file and the fix."""
+    sections = sections_for(text, sections, arabic)
+    title, found = _split(select(text, arabic), source)
     headings = [h for h, _ in found]
     if headings != list(sections):
         raise GuidanceError(f"{source} has the sections {headings}; use exactly "
@@ -121,29 +173,40 @@ def read_guidance(text: str, source: str, sections: Sequence[str] = SECTIONS) ->
     return Guidance(Path(source).stem, title, tuple(found), roles, checks)
 
 
-def load_guidance(name: str, folder: Union[str, Path] = GUIDANCE_DIR) -> Guidance:
-    """The guidance for a foundation, or for a shared topic in SHARED."""
+def load_guidance(name: str, folder: Union[str, Path] = GUIDANCE_DIR,
+                  arabic: bool = True) -> Guidance:
+    """The guidance for a foundation, or for a shared topic in SHARED, as a
+    build with (arabic) or without right to left type reads it."""
     path = Path(folder) / f"{name}.md"
     if not path.exists():
         raise GuidanceError(f"{path} does not exist; write guidance for {name} with the "
                             f"sections {', '.join(SHARED.get(name, SECTIONS))}")
     return read_guidance(path.read_text(encoding="utf-8"), path.name,
-                         SHARED.get(name, SECTIONS))
+                         SHARED.get(name, SECTIONS), arabic)
 
 
 def _pattern(key: str) -> "re.Pattern[str]":
-    return re.compile("^" + re.sub(r"<[a-z-]+>", "[a-z0-9-]+",
+    return re.compile("^" + re.sub(r"<[a-z-]+>", "([a-z0-9-]+)",
                                    re.escape(key).replace(r"\<", "<").replace(r"\>", ">")) + "$")
+
+
+def _fill(key: str, description: str, path: str) -> str:
+    """A pattern's description with each <name> replaced by the segment
+    of `path` it matched."""
+    m = _pattern(key).match(path)
+    for name, value in zip(_PLACEHOLDER.findall(key), m.groups() if m else ()):
+        description = description.replace(f"<{name}>", value)
+    return description
 
 
 def describe(path: str, guidance: Guidance) -> Optional[str]:
     """The description whose key matches `path`: an exact key first, else
-    the one pattern that matches."""
+    the one pattern that matches, with the member's name written in."""
     exact = dict(guidance.roles).get(path)
     if exact is not None:
         return exact
     matches = _patterns_for(path, guidance)
-    return matches[0][1] if len(matches) == 1 else None
+    return _fill(*matches[0], path) if len(matches) == 1 else None
 
 
 def _patterns_for(path: str, guidance: Guidance) -> List[Tuple[str, str]]:
@@ -160,11 +223,12 @@ def role_catalog(ts: TokenSet, folder: Union[str, Path] = GUIDANCE_DIR) -> Tuple
     """Every semantic role in `ts`, in build order, with its foundation,
     type, the axes it may vary on and its description."""
     out: List[RoleEntry] = []
+    arabic = rtl_type(ts)
     for f in FOUNDATIONS:
         roles = _semantic(ts, f.name)
         if not roles:
             continue
-        g = load_guidance(f.name, folder)
+        g = load_guidance(f.name, folder, arabic)
         for path in roles:
             out.append(RoleEntry(path, f.name, f.role_types.get(path, ts.get(path).type),
                                  tuple(FOUNDATION_AXES.get(f.name, ())),
@@ -179,12 +243,13 @@ def guidance_problems(ts: TokenSet, folder: Union[str, Path] = GUIDANCE_DIR) -> 
     that is missing or cannot be read. Each message names the file and the
     fix."""
     out: List[str] = []
+    arabic = rtl_type(ts)
     for f in FOUNDATIONS:
         roles = _semantic(ts, f.name)
         if not roles:
             continue
         try:
-            g = load_guidance(f.name, folder)
+            g = load_guidance(f.name, folder, arabic)
         except GuidanceError as exc:
             out.append(str(exc))
             continue
@@ -200,10 +265,16 @@ def guidance_problems(ts: TokenSet, folder: Union[str, Path] = GUIDANCE_DIR) -> 
             else:
                 out.append(f"{source}: {path} has no description under Roles; add "
                            f"\"- `{path}`: what it is for\"")
-        for key, _ in g.roles:
+        for key, text in g.roles:
             if not any((key == p) or ("<" in key and _pattern(key).match(p)) for p in roles):
                 out.append(f"{source}: the Roles line for {key} matches no role in the "
                            "build; remove it or fix the path")
+            for name in _PLACEHOLDER.findall(key):
+                if f"<{name}>" not in text:
+                    out.append(f"{source}: the Roles line for {key} does not write <{name}> in "
+                               "its description, so every role it matches would read the "
+                               f"same; write <{name}> where the role's name goes, or describe "
+                               "each role on its own line")
         ids = [c.id for c in f.checks]
         described = dict(g.checks)
         for cid in ids:
@@ -216,7 +287,7 @@ def guidance_problems(ts: TokenSet, folder: Union[str, Path] = GUIDANCE_DIR) -> 
                            "remove it or fix the id")
     for name in SHARED:
         try:
-            load_guidance(name, folder)
+            load_guidance(name, folder, arabic)
         except GuidanceError as exc:
             out.append(str(exc))
     return out

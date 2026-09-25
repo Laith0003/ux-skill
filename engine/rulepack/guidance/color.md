@@ -10,7 +10,7 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - **One meaning per role.** A role means the same thing on every screen and in every component. A role is never borrowed for its value.
 - **Separate families.** Brand color marks identity and the main action, neutral carries structure and reading, status colors report outcomes. A family never stands in for another.
 - **Saturation is an accent.** Fully saturated color goes on controls, focus and status, not on large surfaces, where it tires the eye and drowns the accent.
-- **Depth by lightness.** Surfaces get lighter as they rise. In dark each rising level, page, card and raised, is its own step, and the step, not the shadow, is the main depth cue (decisions/dark-elevation-cue.md). Sunken sits below the page except under dark high contrast, where both are black. In light the card and raised surfaces share white and the shadow tells them apart.
+- **Depth by lightness.** A surface that sits higher is never darker than the one below it. In dark the page, card and raised surfaces are each their own lighter step, and the step, not the shadow, is the main depth cue (decisions/dark-elevation-cue.md). Where two levels share a color, as card and raised do in light, the shadow or an edge tells them apart. Modes lists the order in each context as built.
 - **Never color alone.** Anything color says, an icon, a word, a shape or a heavier edge says too (WCAG 1.4.1).
 - **Measured, not hoped.** Every pairing the build declares is measured in all four color contexts, and a system that fails one is not written. A pairing the build does not declare, such as a fill on a raised surface, is not measured until a contract declares it.
 
@@ -42,10 +42,22 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - `color.focus.ring`: the keyboard focus ring on every surface except inverse.
 - `color.focus.ring-inverse`: the focus ring on the inverse surface.
 - `color.scrim`: the translucent dimming behind a dialog; a layer, never a surface for content.
-- `color.status.<status>.text`: status words in running text, such as an error message under a field or the label of a danger secondary or ghost button.
-- `color.status.<status>.soft`: the quiet tinted fill of a status banner or badge, and the hover and pressed fill of a danger secondary or ghost button.
-- `color.status.<status>.strong`: the solid status color for an icon, a badge, a field's error edge or a danger button's edge.
-- `color.status.<status>.on-strong`: text and icons on the strong status fill.
+- `color.status.danger.text`: danger words in running text, such as an error message under a field, and the label of a danger secondary or ghost button.
+- `color.status.danger.soft`: the quiet danger tint of a danger status banner or badge, and the hover and pressed fill of a danger secondary or ghost button.
+- `color.status.danger.strong`: the solid danger color for the icon of a danger status banner, a field's error edge and icon, the edge of a danger secondary button and of a danger ghost button under hover or press, and a danger badge.
+- `color.status.danger.on-strong`: text and icons on the strong danger fill.
+- `color.status.warning.text`: warning words in running text, such as a note about a risk that can still be avoided.
+- `color.status.warning.soft`: the quiet warning tint of a warning status banner or badge.
+- `color.status.warning.strong`: the solid warning color for the icon of a warning status banner and a warning badge.
+- `color.status.warning.on-strong`: text and icons on the strong warning fill.
+- `color.status.success.text`: success words in running text, such as a line that confirms a completed outcome.
+- `color.status.success.soft`: the quiet success tint of a success status banner or badge.
+- `color.status.success.strong`: the solid success color for the icon of a success status banner and a success badge.
+- `color.status.success.on-strong`: text and icons on the strong success fill.
+- `color.status.info.text`: info words in running text, such as a neutral note of guidance.
+- `color.status.info.soft`: the quiet info tint of an info status banner or badge.
+- `color.status.info.strong`: the solid info color for the icon of an info status banner and an info badge.
+- `color.status.info.on-strong`: text and icons on the strong info fill.
 
 ## Choosing
 
@@ -71,7 +83,7 @@ Status colors report outcomes only: danger for failure and destruction, warning 
 
 ## Modes
 
-Color varies on scheme (light, dark) and contrast (standard, high). Every semantic role has a value in all four contexts; primitives never change. Dark is not an inversion: each role is chosen for dark and measured there. Under high contrast, text pairings rise to 7:1 and non-text pairings to our 4.5:1 floor, unless a pairing pins its own high-contrast minimum, as the ring on tinted fills (decisions/ring-on-tinted-fills.md) and the disabled label (decisions/disabled-contrast.md) do (decisions/high-contrast-non-text-floor.md). The surfaces move to the ends of the ramp: in light the page, card, sunken and raised surfaces are all white. A container whose fill then measures below our 1.2:1 floor against the surface under it draws an edge (decisions/container-edge.md).
+Color varies on scheme (light, dark) and contrast (standard, high). Every semantic role has a value in all four contexts; primitives never change. Dark is not an inversion: each role is chosen for dark and measured there. Under high contrast, text pairings rise to 7:1 and non-text pairings to our 4.5:1 floor, unless a pairing pins its own high-contrast minimum, as the ring on tinted fills (decisions/ring-on-tinted-fills.md) and the disabled label (decisions/disabled-contrast.md) do (decisions/high-contrast-non-text-floor.md). Under high contrast the surfaces move to the ends of the ramp: in light all four surfaces are white, and in dark the sunken surface and the page are both black. A container whose fill then measures below our 1.2:1 floor against the surface under it draws an edge (decisions/container-edge.md).
 
 ## Changing the system
 

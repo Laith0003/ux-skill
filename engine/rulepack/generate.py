@@ -30,12 +30,13 @@ from engine.foundations.build import FOUNDATIONS
 from engine.foundations.foundation import Foundation
 from engine.foundations.gate import (
     HIGH_FLOOR, HIGH_NON_TEXT, HIGH_TEXT, WCAG_RATIOS, Pairing, required)
-from engine.foundations.modes import CSS_AXES, FOUNDATION_AXES, contexts, parse, sparse
+from engine.foundations.color_math import luminance
+from engine.foundations.modes import CSS_AXES, contexts, parse, sparse
 from engine.foundations.tokens import TokenSet, alias_target, is_alias
 from engine.foundations.values import TYPES, TYPOGRAPHY_FIELDS, css_names
 from engine.rulepack.guidance import (
     GUIDANCE_DIR, SHARED, Guidance, RoleEntry, catalog_by_foundation, guidance_problems,
-    load_guidance, role_catalog)
+    load_guidance, role_catalog, rtl_type, select)
 from engine.rulepack.records import RECORDS_DIR, Record, RecordError, load_records, record_sources
 
 PACK = "rule-pack"
@@ -94,8 +95,42 @@ def _context_label(mode: str, ts: TokenSet) -> str:
     return sparse(mode, ts.axes) or "base"
 
 
-def _foundation_contexts(f: Foundation, ts: TokenSet) -> List[str]:
-    return contexts([a for a in FOUNDATION_AXES.get(f.name, ()) if a in ts.axes], ts.axes)
+def _used_axes(ts: TokenSet, entries: Sequence[RoleEntry]) -> List[str]:
+    """The axes the foundation's roles actually vary on in this build, read
+    from the tokens' own modes, in axis order."""
+    used = {a for e in entries for a in _varies(ts, e.path)}
+    return [a for a in ts.axes if a in used]
+
+
+def _foundation_contexts(ts: TokenSet, entries: Sequence[RoleEntry]) -> List[str]:
+    return contexts(_used_axes(ts, entries), ts.axes)
+
+
+SURFACE_LEVELS: Tuple[str, ...] = ("sunken", "page", "card", "raised")
+
+
+def _surface_order(ts: TokenSet) -> List[str]:
+    """For each scheme and contrast context, the surface levels from the
+    lowest up, with the relation each pair has as built: < when the next is
+    lighter, = when it is the same color, > when it is darker."""
+    if not all(ts.has(f"color.surface.{s}") for s in SURFACE_LEVELS):
+        return []
+    axes = [a for a in ("scheme", "contrast") if a in ts.axes]
+    out = []
+    for mode in contexts(axes, ts.axes):
+        values = parse(mode, ts.axes)
+        words = ", ".join(f"{values.get(a, ts.axes[a][0])}" +
+                          (" contrast" if a == "contrast" else "") for a in axes)
+        v = {s: str(ts.resolve(f"color.surface.{s}", mode)).upper() for s in SURFACE_LEVELS}
+        text = SURFACE_LEVELS[0]
+        for a, b in zip(SURFACE_LEVELS, SURFACE_LEVELS[1:]):
+            if v[a] == v[b]:
+                sign = "="
+            else:
+                sign = "<" if luminance(v[a]) < luminance(v[b]) else ">"
+            text += f" {sign} {b}"
+        out.append(f"- {words}: {text}")
+    return out
 
 
 def _varies(ts: TokenSet, path: str) -> List[str]:
@@ -228,7 +263,7 @@ def _architecture(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[Ro
     families: Dict[str, int] = {}
     for t in prims:
         families[t.path.rsplit(".", 1)[0]] = families.get(t.path.rsplit(".", 1)[0], 0) + 1
-    axes = [a for a in FOUNDATION_AXES.get(f.name, ()) if a in ts.axes]
+    axes = _used_axes(ts, entries)
     lines = [f"# {g.title} architecture", "", "## Summary", "", g.section("Summary"), "",
              "## Layers", "",
              f"Two layers (decisions/two-layers.md): {len(prims)} primitives hold literal "
@@ -241,7 +276,13 @@ def _architecture(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[Ro
              "## Principles", "", g.section("Principles"), "", "## Roles", ""]
     lines += [f"- `{e.path}` ({e.type}): {e.description}" for e in entries]
     lines += ["", "## Choosing", "", g.section("Choosing"), "", "## Modes", "",
-              g.section("Modes"), "", "## Changing the system", "",
+              g.section("Modes"), ""]
+    order = _surface_order(ts) if f.name == "color" else []
+    if order:
+        lines += ["The surfaces as built, from the lowest level to the highest in each context: "
+                  "< means the next surface is lighter, = the same color, > darker.", ""]
+        lines += order + [""]
+    lines += ["## Changing the system", "",
               g.section("Changing the system"), "", "## Decisions", "",
               "Check these before changing what they decide; each is a deliberate choice.", ""]
     mine = [r for r in records if f.name in r.areas]
@@ -260,7 +301,7 @@ def _architecture(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[Ro
 
 def _reference(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[RoleEntry],
                contracts: Sequence[Contract]) -> str:
-    modes = _foundation_contexts(f, ts)
+    modes = _foundation_contexts(ts, entries)
     labels = [_context_label(m, ts) for m in modes]
     lines = [f"# {g.title} reference", "",
              f"Every {g.title.lower()} token in this system as built. Values are resolved for "
@@ -304,7 +345,7 @@ def _reference(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[RoleE
 
 # -------------------------------------------------------------------- audit
 
-def _audit(f: Foundation, g: Guidance, ts: TokenSet) -> str:
+def _audit(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[RoleEntry]) -> str:
     title = g.title
     checks = dict(g.checks)
     lines = [f"# {title} audit", "",
@@ -331,7 +372,7 @@ def _audit(f: Foundation, g: Guidance, ts: TokenSet) -> str:
         lines += ["", "A check that cites an AAA criterion blocks like the others: the system "
                       "applies it where it chose to (decisions/aaa-criteria-that-block.md)."]
     if f.pairings:
-        n = len(_foundation_contexts(f, ts))
+        n = len(_foundation_contexts(ts, entries))
         lines += ["", f"The gate also measures {len(f.pairings)} contrast pairings in {n} "
                       "contexts each; reference.md lists them under Pairings."]
     lines += ["", "## Beyond the gate", "",
@@ -374,7 +415,7 @@ def _audit(f: Foundation, g: Guidance, ts: TokenSet) -> str:
 
 def _handoff(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[RoleEntry]) -> str:
     title = g.title
-    axes = [a for a in FOUNDATION_AXES.get(f.name, ()) if a in ts.axes]
+    axes = _used_axes(ts, entries)
     lines = [f"# {title} handoff", "",
              f"Use this file to hand the {title.lower()} tokens to developers. It documents "
              "what is built; it does not audit or redesign.", "", "## Inputs", "",
@@ -419,8 +460,10 @@ def _readme(foundations: Sequence[Tuple[Foundation, Guidance]],
              "## Load one path per task", "",
              "Load the files for your task, then stop: loading everything crowds out the "
              "work.", "", "| Task | Load |", "|---|---|",
-             "| Build or change a screen | contracts/ for each component, then "
-             "<foundation>/architecture.md for each foundation it touches |",
+             "| Build or change a screen | contracts/ for each component, "
+             "<foundation>/architecture.md for each foundation it touches, "
+             "<foundation>/handoff.md for the custom property names, content.md for its copy "
+             "and direction.md for right to left |",
              "| Pick a token | <foundation>/reference.md |",
              "| Review or audit | <foundation>/audit.md for each foundation in scope, plus "
              "content.md and direction.md |",
@@ -481,7 +524,8 @@ def build_rule_pack(ts: TokenSet, *, contracts_dir: Union[str, Path] = SEED_DIR,
     if problems:
         raise RulePackError(problems)
     by_foundation = catalog_by_foundation(role_catalog(ts, guidance_dir))
-    guides = [(f, load_guidance(f.name, guidance_dir)) for f in FOUNDATIONS
+    arabic = rtl_type(ts)
+    guides = [(f, load_guidance(f.name, guidance_dir, arabic)) for f in FOUNDATIONS
               if f.name in by_foundation]
     files: Dict[str, str] = {f"{PACK}/README.md": _readme(guides, contracts)}
     for f, g in guides:
@@ -489,11 +533,11 @@ def build_rule_pack(ts: TokenSet, *, contracts_dir: Union[str, Path] = SEED_DIR,
         files[f"{PACK}/{f.name}/architecture.md"] = _architecture(f, g, ts, entries, records,
                                                                   contracts)
         files[f"{PACK}/{f.name}/reference.md"] = _reference(f, g, ts, entries, contracts)
-        files[f"{PACK}/{f.name}/audit.md"] = _audit(f, g, ts)
+        files[f"{PACK}/{f.name}/audit.md"] = _audit(f, g, ts, entries)
         files[f"{PACK}/{f.name}/handoff.md"] = _handoff(f, g, ts, entries)
     for name in SHARED:
-        files[f"{PACK}/{name}.md"] = (Path(guidance_dir) / f"{name}.md").read_text(
-            encoding="utf-8")
+        files[f"{PACK}/{name}.md"] = select(
+            (Path(guidance_dir) / f"{name}.md").read_text(encoding="utf-8"), arabic)
     for path in sorted(Path(contracts_dir).glob("*.yaml")):
         files[f"{PACK}/contracts/{path.name}"] = path.read_text(encoding="utf-8")
     for name, text in record_sources(records_dir).items():

@@ -19,9 +19,9 @@ Motion sets how things move: seven interaction roles, each with a duration and a
 
 ## Roles
 
-- `motion.<role>.duration`: how long the move lasts for that role.
-- `motion.<role>.curve`: how the move speeds up and slows down for that role.
-- `motion.<role>.distance`: how far the element travels for that role; never negative (0 under reduced motion), with the direction from motion.inline-sign.
+- `motion.<role>.duration`: how long the <role> move lasts.
+- `motion.<role>.curve`: how the <role> move speeds up and slows down.
+- `motion.<role>.distance`: how far the element travels in the <role> move; never negative (0 under reduced motion), with the direction from motion.inline-sign.
 - `motion.inline-sign`: 1 in left to right and -1 in right to left; multiply horizontal travel by it.
 
 ## Choosing

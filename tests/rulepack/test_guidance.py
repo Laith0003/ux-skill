@@ -46,9 +46,9 @@ def test_refuses_a_malformed_file_with_the_fix(text, message):
 
 
 def test_a_family_pattern_describes_every_member_and_an_exact_key_wins():
-    g = read_guidance(_text(roles="- `color.status.<status>.text`: status words.\n"
+    g = read_guidance(_text(roles="- `color.status.<status>.text`: <status> words.\n"
                                   "- `color.status.info.text`: info words."), "color.md")
-    assert describe("color.status.danger.text", g) == "status words."
+    assert describe("color.status.danger.text", g) == "danger words."
     assert describe("color.status.info.text", g) == "info words."
     assert describe("color.status.danger.soft", g) is None
 
@@ -115,3 +115,37 @@ def test_two_patterns_that_describe_one_role_are_named_as_an_overlap(tmp_path):
     assert "radius.md: radius.card matches more than one Roles pattern (radius.<a>, <b>.card); " \
            "describe it on its own line or keep one pattern" in problems
     assert not any("radius.card has no description" in p for p in problems)
+
+
+
+# A family line names each member, so no role reads its sibling's use.
+def test_a_pattern_line_names_the_member_it_describes():
+    g = read_guidance(_text(roles="- `motion.<role>.duration`: how long the <role> move "
+                                  "lasts."), "motion.md")
+    assert describe("motion.reveal.duration", g) == "how long the reveal move lasts."
+    assert describe("motion.page.duration", g) == "how long the page move lasts."
+
+
+def test_a_pattern_line_that_does_not_name_its_member_is_a_gap(tmp_path):
+    ts = build_system(AxisValues(*[0.5] * 7), "#3366FF", foundations=("radius",)).tokens
+    roles = "\n".join(f"- `{t.path}`: x." for t in ts.tokens()
+                      if t.layer == "semantic" and t.path != "radius.card")
+    roles += "\n- `radius.<a>`: a corner."
+    problems = guidance_problems(ts, _folder(tmp_path, _text(roles=roles)))
+    assert "radius.md: the Roles line for radius.<a> does not write <a> in its description, so " \
+           "every role it matches would read the same; write <a> where the role's name goes, " \
+           "or describe each role on its own line" in problems
+
+
+# Lines marked {arabic} are read only for a build whose type varies on
+# direction, lines marked {latin} only for one whose type does not.
+def test_marked_lines_follow_whether_the_build_has_right_to_left_type():
+    text = _text().replace("Principles text.", "{arabic} Arabic line.\n{latin} Latin line.")
+    assert read_guidance(text, "radius.md").section("Principles") == "Arabic line."
+    assert read_guidance(text, "radius.md", arabic=False).section("Principles") == "Latin line."
+
+
+def test_rtl_type_is_read_from_the_tokens():
+    from engine.rulepack.guidance import rtl_type
+    assert rtl_type(build_system(AxisValues(*[0.5] * 7), "#3366FF").tokens)
+    assert not rtl_type(build_system(AxisValues(*[0.5] * 7), "#3366FF", arabic=False).tokens)

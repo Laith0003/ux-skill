@@ -318,3 +318,132 @@ def test_the_pack_is_the_same_under_every_hash_seed():
         out = subprocess.run([sys.executable, "-c", script], env=env, check=True,
                              capture_output=True, text=True).stdout.strip()
         assert out == here.hexdigest(), seed
+
+
+# Fix round 1: role uses per role, surface order per context, direction
+# from the tokens, the screen route.
+from engine.foundations.color_math import luminance  # noqa: E402
+from engine.rulepack.guidance import load_guidance  # noqa: E402
+
+BRANDS = ("#3366FF", "#E7EEE7", "#FFD400")
+LATIN = build_system(AXES, "#3366FF", arabic=False).tokens
+LATIN_PACK = build_rule_pack(LATIN)
+LEVELS = ("sunken", "page", "card", "raised")
+COLOR_MODES = {"light, standard contrast": "scheme:light",
+               "dark, standard contrast": "scheme:dark",
+               "light, high contrast": "scheme:light,contrast:high",
+               "dark, high contrast": "scheme:dark,contrast:high"}
+
+
+def test_every_status_role_has_its_own_line_and_its_uses_are_its_own():
+    exact = dict(load_guidance("color").roles)
+    status = [e for e in role_catalog(TS) if e.path.startswith("color.status.")]
+    assert len(status) == 16
+    for e in status:
+        assert exact.get(e.path) == e.description, e.path
+        binders = {c.name for c in CONTRACTS if e.path in c.roles()}
+        for word, contract in (("button", "button"), ("field", "text-field"),
+                               ("banner", "status-banner")):
+            if word in e.description:
+                assert contract in binders, (e.path, word)
+    for e in role_catalog(TS):
+        for name in ("architecture.md", "reference.md", "handoff.md"):
+            assert f"`{e.path}`" in PACK_FILES[f"{PACK}/{e.foundation}/{name}"]
+
+
+def test_no_two_roles_read_the_same_use():
+    by_text = {}
+    for e in role_catalog(TS):
+        by_text.setdefault(e.description, []).append(e.path)
+    assert {d: p for d, p in by_text.items() if len(p) > 1} == {}
+
+
+def _surface_order(ts, mode):
+    v = {s: ts.resolve(f"color.surface.{s}", mode).upper() for s in LEVELS}
+    text = LEVELS[0]
+    for a, b in zip(LEVELS, LEVELS[1:]):
+        if v[a] == v[b]:
+            sign = "="
+        else:
+            sign = "<" if luminance(v[a]) < luminance(v[b]) else ">"
+        text += f" {sign} {b}"
+    return text, v
+
+
+@pytest.mark.parametrize("brand", BRANDS)
+def test_every_surface_order_statement_holds_for_the_build(brand):
+    ts = build_system(AXES, brand).tokens
+    files = build_rule_pack(ts)
+    arch = files[f"{PACK}/color/architecture.md"]
+    values = {}
+    for words, mode in COLOR_MODES.items():
+        order, v = _surface_order(ts, mode)
+        values[words] = v
+        assert f"- {words}: {order}" in arch, (brand, words)
+    # The sentences written by hand, each checked against the same values.
+    light, dark = values["light, standard contrast"], values["dark, standard contrast"]
+    lhc, dhc = values["light, high contrast"], values["dark, high contrast"]
+    for v in values.values():
+        assert all(luminance(v[a]) <= luminance(v[b]) for a, b in zip(LEVELS, LEVELS[1:]))
+    assert "A surface that sits higher is never darker than the one below it." in arch
+    for v in (dark, dhc):
+        assert luminance(v["page"]) < luminance(v["card"]) < luminance(v["raised"])
+    assert light["card"] == light["raised"] and lhc["card"] == lhc["raised"]
+    assert "Where two levels share a color, as card and raised do in light" in arch
+    assert set(lhc.values()) == {"#FFFFFF"} and dhc["sunken"] == dhc["page"] == "#000000"
+    assert "in light all four surfaces are white, and in dark the sunken surface and the " \
+           "page are both black" in arch
+    record = files[f"{PACK}/decisions/dark-elevation-cue.md"]
+    assert "Sunken is darker than the page at standard contrast; under high contrast both are " \
+           "black." in record
+    assert luminance(dark["sunken"]) < luminance(dark["page"])
+    edge = files[f"{PACK}/decisions/container-edge.md"]
+    assert "in light high contrast the page, card, sunken and raised surfaces are all white" \
+        in edge
+
+
+def _vary_line(text):
+    return next(line for line in text.split("\n") if line.startswith("Roles vary on"))
+
+
+@pytest.mark.parametrize("ts,files", [(TS, PACK_FILES), (LATIN, LATIN_PACK)])
+def test_the_axes_a_foundation_names_are_the_axes_its_roles_use(ts, files):
+    for f in FOUNDATIONS:
+        entries = [e for e in role_catalog(ts) if e.foundation == f.name]
+        used = [a for a in ts.axes
+                if any(a in k for e in entries for k in ts.get(e.path).modes)]
+        line = _vary_line(files[f"{PACK}/{f.name}/architecture.md"])
+        assert line == ("Roles vary on " + ", ".join(used) + "." if used
+                        else "Roles vary on no mode axis."), f.name
+        handoff = files[f"{PACK}/{f.name}/handoff.md"]
+        listed = [a for a in ts.axes if f"\n- {a} (" in handoff]
+        assert listed == used, f.name
+
+
+def test_a_latin_only_pack_says_nothing_about_arabic_or_right_to_left_type():
+    for path, text in LATIN_PACK.items():
+        if path.startswith((f"{PACK}/decisions/", f"{PACK}/contracts/")):
+            continue
+        assert "arabic" not in text.lower() or "`arabic-text`" in text, path
+        assert "Arabic" not in text.replace("`arabic-text`", ""), path
+    for name in FILES:
+        text = LATIN_PACK[f"{PACK}/type/{name}"]
+        for words in ("right to left", "right-to-left", "rtl", "both directions"):
+            assert words not in text, (name, words)
+    assert _vary_line(LATIN_PACK[f"{PACK}/type/architecture.md"]) == \
+        "Roles vary on no mode axis."
+    assert "## Arabic type" not in LATIN_PACK[f"{PACK}/direction.md"]
+    assert "## Arabic type" in PACK_FILES[f"{PACK}/direction.md"]
+    assert "- direction (ltr, rtl): dir=\"rtl\" on the html element" in \
+        LATIN_PACK[f"{PACK}/motion/handoff.md"]
+    assert "- direction (ltr, rtl)" not in LATIN_PACK[f"{PACK}/type/handoff.md"]
+    assert "- direction (ltr, rtl)" in PACK_FILES[f"{PACK}/type/handoff.md"]
+
+
+def test_the_screen_route_loads_the_direction_and_content_rules():
+    for files in (PACK_FILES, LATIN_PACK):
+        row = next(line for line in files[f"{PACK}/README.md"].split("\n")
+                   if line.startswith("| Build or change a screen |"))
+        for name in ("contracts/", "<foundation>/architecture.md", "direction.md", "content.md",
+                     "<foundation>/handoff.md"):
+            assert name in row, name

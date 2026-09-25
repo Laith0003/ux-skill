@@ -19,10 +19,10 @@ Layout sets the page grid: three breakpoints that start four tiers (phone, table
 
 ## Roles
 
-- `layout.breakpoint.<tier>`: the viewport width at which that tier starts; a reference value for media queries.
-- `layout.columns.<tier>`: the number of grid columns in that tier.
-- `layout.gutter.<tier>`: the gap between grid columns in that tier.
-- `layout.margin-inline.<tier>`: the space between the viewport edge and the grid in that tier.
+- `layout.breakpoint.<tier>`: the viewport width at which the <tier> tier starts; a reference value for media queries.
+- `layout.columns.<tier>`: the number of grid columns in the <tier> tier.
+- `layout.gutter.<tier>`: the gap between grid columns in the <tier> tier.
+- `layout.margin-inline.<tier>`: the space between the viewport edge and the grid in the <tier> tier.
 - `layout.container.max`: the widest the page content grows.
 - `layout.measure.text`: the widest a block of running text grows, about 80 characters.
 - `layout.measure.form`: the widest a form or a dialog grows.

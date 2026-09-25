@@ -2,7 +2,8 @@
 
 ## Summary
 
-Right to left is a standing mode, not a translation pass. Every token that depends on direction is named with logical sides, every contract says how each part behaves under right to left, and the Arabic type rules hold in every style. This file collects the rules for building and checking a right-to-left interface.
+{arabic} Right to left is a standing mode, not a translation pass. Every token that depends on direction is named with logical sides, every contract says how each part behaves under right to left, and the Arabic type rules hold in every style. This file collects the rules for building and checking a right-to-left interface.
+{latin} Right to left is a standing mode, not a translation pass. Every token that depends on direction is named with logical sides, and every contract says how each part behaves under right to left. This file collects the rules for building and checking a right-to-left interface.
 
 ## Direction is a mode
 
@@ -23,7 +24,7 @@ Right to left is a standing mode, not a translation pass. Every token that depen
 - Horizontal motion mirrors through motion.inline-sign; vertical motion does not (decisions/unsigned-distances.md).
 - Layout that auto layout tools do not mirror on their own, such as a reordered row, is reversed by hand and checked.
 
-## Arabic type
+{arabic} ## Arabic type
 
 - Every text style but code switches to the Arabic face under right to left.
 - The Arabic size at a step is 1 to 2px larger than the Latin size at the same step, and its line height is taller.
@@ -33,8 +34,10 @@ Right to left is a standing mode, not a translation pass. Every token that depen
 
 ## Length and layout
 
-- Design fields and buttons at the Arabic length: Arabic copy runs 10 to 25 percent longer than the English draft.
-- Alignment follows the content's direction, not the frame's: a Latin email address in an Arabic form aligns left inside a right-aligned label.
+{arabic} - Design fields and buttons at the Arabic length: Arabic copy runs 10 to 25 percent longer than the English draft.
+{latin} - Design fields and buttons at the length of the longest language the product ships, not the first draft.
+{arabic} - Alignment follows the content's direction, not the frame's: a Latin email address in an Arabic form aligns left inside a right-aligned label.
+{latin} - Alignment follows the content's direction, not the frame's: a left-to-right run inside a right-to-left form aligns left inside a right-aligned label.
 - Truncation keeps the start of the text in its own direction.
 - Tables keep their first column at the start edge.
 
@@ -50,5 +53,6 @@ Right to left is a standing mode, not a translation pass. Every token that depen
 - Every contract part has an rtlBehavior, and each rendered part behaves that way.
 - Every pointing icon mirrors and every non-pointing icon does not.
 - Every fixed run stays left to right.
-- Every style under right to left uses the Arabic face, size and leading, with no letter spacing.
-- Review each screen at the Arabic length in both directions.
+{arabic} - Every style under right to left uses the Arabic face, size and leading, with no letter spacing.
+{arabic} - Review each screen at the Arabic length in both directions.
+{latin} - Review each screen in both directions at the length of the longest language it ships.
