@@ -57,7 +57,7 @@ render = [
 dev = [
   "pytest>=8.4.2",
   "pytest-cov>=7.1.0",
-  "ruff>=0.15.16",
+  "ruff>=0.15.20",
   "mypy>=1.19.1",
   "black>=25.11.0",
   # Dev only, never a runtime dependency: the contract reader's parity
