@@ -543,3 +543,28 @@ def test_a_font_column_of_unquoted_stacks_reads():
 def test_a_prose_rule_does_not_get_the_font_hint():
     [note] = _import("- `accent`: use for links, never for text\n").report.notes
     assert "font list" not in note.message
+
+
+def test_a_bare_type_in_a_name_is_not_font_evidence():
+    imported = _import("- `type.sizes`: Small, Large\n")
+    assert imported.report.tokens == 0
+    [note] = imported.report.notes
+    assert note.message.startswith("1 line holds a rule, not a value")
+
+
+def test_a_type_column_of_size_names_is_not_read_as_fonts():
+    imported = _import("| Token | Type |\n|---|---|\n| `size` | Small, Large |\n")
+    assert imported.report.tokens == 0
+    assert [i.message for i in imported.report.notes] == [
+        "a table whose Type column holds no values was not read as tokens; head the value "
+        "column Value, Hex or Size to read it"]
+
+
+@pytest.mark.parametrize("text", [
+    "- `type.family.body`: Inter, Arial\n",
+    "- `fontFamily`: Inter, Arial\n",
+    "| Token | Font family |\n|---|---|\n| `body` | Inter, Arial |\n",
+])
+def test_font_family_or_typeface_in_the_context_is_evidence(text):
+    [token] = _import(text).tokens.tokens()
+    assert (token.type, token.value) == ("fontFamily", ["Inter", "Arial"])

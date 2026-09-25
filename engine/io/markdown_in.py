@@ -130,7 +130,7 @@ def _prose(text: str) -> bool:
 
 
 _FONT_PART = re.compile(r"-?[A-Za-z][A-Za-z0-9 _-]*")
-_TYPE_CONTEXT = re.compile(r"font|family|typeface|type", re.I)
+_TYPE_CONTEXT = re.compile(r"font|family|typeface", re.I)
 
 
 def _font_shaped(text: str) -> bool:
@@ -145,7 +145,8 @@ def _font_shaped(text: str) -> bool:
 def _font_evidence(text: str, context: str) -> bool:
     """True when a comma list of names is a font stack for certain: a part
     is quoted, it ends in a generic family, or its name or column header
-    speaks of type."""
+    says font, family or typeface. A bare "type" is no evidence: type.sizes
+    and a Type column of sizes are common."""
     parts = split_top(text)
     last = parts[-1].lower()
     return (any(p[0] in "\"'" for p in parts) or last in GENERIC_FAMILIES
