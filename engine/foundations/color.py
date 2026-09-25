@@ -1107,25 +1107,34 @@ def _scheme_polarity(ts: TokenSet, mode: str) -> List[str]:
             f"{want} page, so point {page} and {text} at the other ends of the neutral ramp"]
 
 
-def _step_of(ts: TokenSet, role: str, mode: str) -> Optional[Tuple[str, int]]:
-    """(family, ramp index) a role aliases in one context, or None."""
+def _step_of(ts: TokenSet, role: str, mode: str,
+             family: str = "") -> Optional[Tuple[str, int]]:
+    """(family, ramp index) a role aliases in one context, or None. A role
+    that holds a literal reads as the step of `family` with that value, so
+    an edited set that writes the value is judged the same way."""
     raw = ts.raw(role, mode)
-    if not is_alias(raw):
-        return None
-    family, _, step = alias_target(raw).rpartition(".")
-    return (family, STEPS.index(int(step))) if step.isdigit() and int(step) in STEPS else None
+    if is_alias(raw):
+        target = alias_target(raw)
+    else:
+        target = next((f"{family}.{n}" for n in STEPS if family and ts.has(f"{family}.{n}")
+                       and ts.resolve(f"{family}.{n}", mode) == raw), "")
+    ramp, _, step = target.rpartition(".")
+    return (ramp, STEPS.index(int(step))) if step.isdigit() and int(step) in STEPS else None
 
 
 def _error_edge_hue(ts: TokenSet, mode: str) -> List[str]:
     """Under high contrast the error edge sits at most one ramp step past
     its standard step, so it stays red instead of going near black (light)
     or near white (dark). It fails closed: a high contrast edge that is a
-    literal or a step of another ramp is a finding too."""
+    literal off the danger ramp or a step of another ramp is a finding
+    too. A set without the danger ramp (a checking view holds the roles
+    only) has no steps to read, so the check leaves it."""
     role, family = "color.line.danger", "color.danger"
-    if parse(mode).get("contrast") != "high" or not _typed(ts, role):
+    if parse(mode).get("contrast") != "high" or not _typed(ts, role) \
+            or not any(ts.has(f"{family}.{n}") for n in STEPS):
         return []
     std = mode.replace("contrast:high", "contrast:standard")
-    high, base = _step_of(ts, role, mode), _step_of(ts, role, std)
+    high, base = _step_of(ts, role, mode, family), _step_of(ts, role, std, family)
     if high is None or high[0] != family:
         where = (f" of its standard step {base[0]}.{STEPS[base[1]]}"
                  if base is not None and base[0] == family else "")

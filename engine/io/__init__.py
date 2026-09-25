@@ -1,8 +1,12 @@
 """Systems in and out: importers that read an existing design system in
 its own names (DTCG JSON, CSS custom properties, a Tailwind theme, markdown
 rule files, a Figma variables export), each with a report of what it read,
-and the value reader they share.
+the value reader they share, and the naming adapter that checks an imported
+system in the engine's roles while it keeps its own names.
 """
+from engine.io.adapter import (
+    ROLE_TYPES, AxisMap, Mapping, RoleMap, dump_mapping, load_mapping, parse_mapping, propose,
+    their_names, view)
 from engine.io.css_in import import_css, parse_css, read_css
 from engine.io.dtcg_in import import_dtcg, read_dtcg
 from engine.io.figma_in import REST_ENDPOINT, SIZE_SCOPES, import_figma, read_figma
@@ -15,9 +19,11 @@ from engine.io.values_in import (CSS_KEYWORDS, GamutMapped, NotRead, css_alias, 
                                  split_top)
 
 __all__ = [
-    "CSS_KEYWORDS", "EXPORT_COMMAND", "FORMATS", "REST_ENDPOINT", "SIZE_SCOPES", "GamutMapped",
-    "ImportReport", "Imported", "Item", "Mapped", "NotRead", "Source", "css_alias", "import_css",
-    "import_dtcg", "import_figma", "import_markdown", "import_tailwind_css",
-    "import_tailwind_json", "parse_css", "read_css", "read_dtcg", "read_figma", "read_markdown",
-    "read_source", "read_tailwind", "read_value", "split_top",
+    "CSS_KEYWORDS", "EXPORT_COMMAND", "FORMATS", "REST_ENDPOINT", "ROLE_TYPES", "SIZE_SCOPES",
+    "AxisMap", "GamutMapped", "ImportReport", "Imported", "Item", "Mapped", "Mapping", "NotRead",
+    "RoleMap", "Source", "css_alias", "dump_mapping", "import_css", "import_dtcg", "import_figma",
+    "import_markdown", "import_tailwind_css", "import_tailwind_json", "load_mapping",
+    "parse_css", "parse_mapping", "propose", "read_css", "read_dtcg", "read_figma",
+    "read_markdown", "read_source", "read_tailwind", "read_value", "split_top", "their_names",
+    "view",
 ]

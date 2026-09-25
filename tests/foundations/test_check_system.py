@@ -117,6 +117,56 @@ def test_a_set_without_the_character_roles_passes_and_strict_names_each_gap():
     assert len(strict.report.failures) == loose.report.skipped
 
 
+def test_structure_can_be_left_out_for_a_checking_view():
+    ts = build_system(NEUTRAL, "#3366FF", foundations=("space",)).tokens
+    literal = TokenSet(ts.axes)
+    for t in ts.tokens():
+        if t.layer == "semantic":
+            literal.add(Token(t.path, t.type, ts.resolve(t.path), layer="semantic"))
+    assert check_system(literal).problems
+    result = check_system(literal, structure=False)
+    assert result.problems == () and result.passed
+
+
+def test_a_view_without_structure_still_names_a_value_it_cannot_read():
+    ts = TokenSet({"scheme": ("light", "dark")})
+    ts.add(Token("color.text.default", "color", "#111111", layer="semantic"))
+    ts.add(Token("color.surface.page", "color", "sky", layer="semantic"))
+    result = check_system(ts, structure=False)
+    assert [(p.token, p.rule) for p in result.problems] == [("color.surface.page", "bad-value")]
+    assert not result.passed
+
+
+def _error_edge_failures(ts):
+    report = check_system(ts, structure=False).report
+    return [f.message for f in report.failures if f.check == "error-edge-hue"]
+
+
+def test_the_error_edge_reads_a_literal_by_its_ramp_step_and_skips_a_set_without_the_ramp():
+    built = build_system(NEUTRAL, "#3366FF", foundations=("color",)).tokens
+    literal, off_ramp, roles_only = (TokenSet(built.axes) for _ in range(3))
+    for t in built.tokens():
+        if t.path == "color.line.danger":
+            values = {m: built.resolve(t.path, m) for m in t.modes}
+            literal.add(Token(t.path, t.type, built.resolve(t.path), modes=values,
+                              layer=t.layer))
+            off_ramp.add(Token(t.path, t.type, built.resolve(t.path),
+                               modes={**values, "contrast:high": "#202020"}, layer=t.layer))
+        else:
+            literal.add(t)
+            off_ramp.add(t)
+        if t.layer == "semantic":
+            roles_only.add(Token(t.path, t.type, built.resolve(t.path),
+                                 modes={m: built.resolve(t.path, m) for m in t.modes},
+                                 layer="semantic"))
+    assert _error_edge_failures(literal) == []
+    assert _error_edge_failures(off_ramp) == [
+        "color.line.danger (scheme:light,contrast:high) is #202020, not a step of the danger "
+        "ramp, so the error edge can lose its red; point it at a color.danger step within one "
+        "step of its standard step color.danger.600"]
+    assert _error_edge_failures(roles_only) == []
+
+
 def test_a_set_with_no_foundation_the_engine_knows_checks_nothing():
     ts = TokenSet({})
     ts.add(Token("brand.ink", "color", "#111111"))
