@@ -18,6 +18,7 @@ Fields:
 """
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from types import MappingProxyType
 from typing import Any, Dict, List, Mapping, Optional, Tuple
@@ -33,6 +34,16 @@ BRAND_ROLES: Tuple[str, ...] = ("fill", "accent", "edge")
 ARABIC_LANGUAGES: Tuple[str, ...] = ("ar", "fa", "ur", "ps", "ckb", "sd", "ug")
 FIELDS: Tuple[str, ...] = ("age", "languages", "primary_script", "default_scheme",
                            "reading_context", "brand_role")
+# A language tag: a primary subtag of two or three letters, then subtags.
+TAG = re.compile(r"^[A-Za-z]{2,3}(-[A-Za-z0-9]{1,8})*$")
+# Language names a brief may hold by mistake, and the tag to give instead.
+# Only the error message reads it; a name is never taken as a tag.
+NAME_TAGS: Mapping[str, str] = MappingProxyType({
+    "arabic": "ar", "english": "en", "french": "fr", "spanish": "es", "german": "de",
+    "persian": "fa", "farsi": "fa", "urdu": "ur", "pashto": "ps", "kurdish": "ckb",
+    "turkish": "tr", "hebrew": "he", "hindi": "hi", "chinese": "zh", "japanese": "ja",
+    "korean": "ko", "russian": "ru", "portuguese": "pt", "italian": "it", "dutch": "nl",
+    "indonesian": "id", "malay": "ms"})
 
 
 class AudienceError(ValueError):
@@ -97,10 +108,12 @@ class Audience:
 
     @property
     def arabic(self) -> Optional[bool]:
-        """True or False when the brief names languages, None when it does
-        not (the build keeps its default)."""
+        """True or False when the brief names languages, True when it sets
+        the primary script to Arabic, None otherwise (the build keeps its
+        default)."""
         if not self.languages:
-            return None
+            return True if self.primary_script == "arabic" and "primary_script" in self.given \
+                else None
         return self.primary_script == "arabic" or any(
             t.split("-")[0].lower() in ARABIC_LANGUAGES for t in self.languages)
 
@@ -121,6 +134,21 @@ def _choice(brief: Mapping[str, Any], key: str, choices: Tuple[str, ...], label:
     return value.strip().lower()
 
 
+def _check_tags(langs: List[str], label: str) -> None:
+    """Every entry is a language tag. A language name points to its tag."""
+    for t in langs:
+        if TAG.match(t):
+            continue
+        if t.lower() in NAME_TAGS:
+            example = ", ".join(f'"{NAME_TAGS.get(x.lower(), x)}"' for x in langs)
+            raise AudienceError(f'{label} field languages holds "{t}", a language name; give its '
+                                f'tag "{NAME_TAGS[t.lower()]}", for example "languages": '
+                                f"[{example}]")
+        raise AudienceError(f'{label} field languages holds "{t}", which is not a language tag; '
+                            "give a tag of two or three letters and optional subtags, for "
+                            'example "languages": ["ar-JO", "en"]')
+
+
 def read_audience(brief: Optional[Mapping[str, Any]], label: str = "brief") -> Audience:
     """The structured fields of a brief (a discovery file's answers are
     read the same way). Missing fields keep their defaults; a field with a
@@ -135,10 +163,10 @@ def read_audience(brief: Optional[Mapping[str, Any]], label: str = "brief") -> A
     else:
         if isinstance(langs, str):
             langs = [s.strip() for s in langs.split(",") if s.strip()]
-        if not isinstance(langs, list) or not all(
-                isinstance(t, str) and t.replace("-", "").isalnum() for t in langs):
+        if not isinstance(langs, list) or not all(isinstance(t, str) for t in langs):
             raise AudienceError(f"{label} field languages is {langs!r}; give language tags, for "
                                 'example "languages": ["ar-JO", "en"]')
+        _check_tags([t.strip() for t in langs], label)
         languages = tuple(t.strip() for t in langs)
     script_default = "latin"
     if languages and languages[0].split("-")[0].lower() in ARABIC_LANGUAGES:
@@ -169,6 +197,16 @@ def _ring_words(a: Audience, axes: Optional[Any]) -> str:
             f"({std + 1}px under high contrast)")
 
 
+def _glance_words(a: Audience, axes: Optional[Any]) -> str:
+    """What glance reading did: the score it added to bento, the
+    composition people scan, and whether the page starts from it."""
+    from engine.foundations.composition import GLANCE_BONUS, choose
+    from engine.synthesizer.axes import AxisValues
+    win = choose(axes if axes is not None else AxisValues(*[0.5] * 7), a).name
+    lead = f"Bento, the composition people scan, scores {GLANCE_BONUS:.2f} higher, and the page "
+    return lead + ("starts from it" if win == "bento" else f"still starts from {win}")
+
+
 def effects(a: Audience, axes: Optional[Any] = None) -> List[Effect]:
     """What each field the brief set changed, and why. With the axes, the
     ring line states the ring the build made at them."""
@@ -187,8 +225,7 @@ def effects(a: Audience, axes: Optional[Any] = None) -> List[Effect]:
         out.append(Effect(f"Body line height is 0.1 taller and the reading measure is "
                           f"{a.measure_rem}rem", "the brief says people read at length"))
     if a.reading_context == "glance":
-        out.append(Effect("The page composition favors scanning",
-                          "the brief says people glance at it"))
+        out.append(Effect(_glance_words(a, axes), "the brief says people glance at it"))
     if "languages" in a.given:
         if a.arabic:
             out.append(Effect("Arabic faces, sizes and right to left styles are built",
@@ -197,7 +234,8 @@ def effects(a: Audience, axes: Optional[Any] = None) -> List[Effect]:
             out.append(Effect("The system is Latin only",
                               f"the brief names {', '.join(a.languages)}, none written in "
                               "Arabic script"))
-    if a.primary_script == "arabic" and ("primary_script" in a.given or "languages" in a.given):
+    if a.primary_script == "arabic" and a.arabic and (
+            "primary_script" in a.given or "languages" in a.given):
         out.append(Effect('Set dir="rtl" and the lang attribute on the html element',
                           "the primary script is Arabic, so pages open right to left"))
     if "default_scheme" in a.given and a.default_scheme != "system":

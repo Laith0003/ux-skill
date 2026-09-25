@@ -23,7 +23,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from engine.foundations.audience import (
-    FIELDS as AUDIENCE_FIELDS, HOW_TO_PASS, Audience, AudienceError, effects, read_audience)
+    ARABIC_LANGUAGES, FIELDS as AUDIENCE_FIELDS, HOW_TO_PASS, Audience, AudienceError, effects,
+    read_audience)
 from engine.foundations.build import FOUNDATIONS, ValidationError, build_system
 from engine.foundations.composition import choose as choose_composition
 from engine.foundations.color import brand_fidelity
@@ -325,15 +326,40 @@ def unread_lines(brief: Optional[Mapping[str, Any]], label: str = "brief") -> Li
             else:
                 out.append(f'{key} "{word}" moves no axis. {key} accepts: '
                            f"{', '.join(_accepted(key))}.")
+    for key, value in brief.items():
+        if key in BRIEF_FIELDS or key in AUDIENCE_FIELDS or value in (None, "", [], {}):
+            continue
+        out.append(f'{key} "{_as_words(value)}" is not read by the system build'
+                   + (_UNREAD_HINTS[key] if key in _UNREAD_HINTS
+                      else ", so it changed nothing here."))
     return out
 
 
+# How to pass what a field the build does not read means for the system.
+_UNREAD_HINTS: Mapping[str, str] = {
+    "region": ". Say what it means for the system with " + HOW_TO_PASS[1] + ".",
+}
+
+
+def _as_words(value: Any) -> str:
+    if isinstance(value, str):
+        return value
+    if isinstance(value, list) and all(isinstance(v, str) for v in value):
+        return ", ".join(value)
+    return json.dumps(value, sort_keys=True, ensure_ascii=False)
+
+
 def resolve_arabic(latin_only: bool, audience: Audience, flag: str = "latin_only") -> bool:
-    """Whether the build keeps Arabic: the brief's languages decide when it
-    names any; the flag decides otherwise. A brief that names an Arabic
-    language with the flag set is refused, since the two disagree."""
+    """Whether the build keeps Arabic: the brief's languages, or an Arabic
+    primary script, decide when the brief gives them; the flag decides
+    otherwise. A brief that names Arabic with the flag set is refused,
+    since the two disagree."""
     if audience.arabic is None:
         return not latin_only
+    if audience.arabic and latin_only and not any(
+            t.split("-")[0].lower() in ARABIC_LANGUAGES for t in audience.languages):
+        raise InputError(f"{flag} leaves Arabic out, but the brief's primary_script is arabic; "
+                         f"drop {flag}, or set primary_script to latin")
     if audience.arabic and latin_only:
         raise InputError(f"{flag} leaves Arabic out, but the brief's languages "
                          f"({', '.join(audience.languages)}) include one written in Arabic "

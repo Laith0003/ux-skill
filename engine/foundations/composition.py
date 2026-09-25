@@ -19,6 +19,10 @@ from engine.foundations.audience import Audience
 from engine.synthesizer.axes import AxisValues
 
 Terms = List[Tuple[str, float]]
+# What glance reading adds to bento's score, and long reading to the
+# editorial column's.
+GLANCE_BONUS = 0.2
+LONG_READ_BONUS = 0.4
 
 DESCRIPTIONS: Mapping[str, str] = MappingProxyType({
     "split": "the message on one side and one image or proof on the other, then alternating "
@@ -48,13 +52,13 @@ def _terms_stacked(a: AxisValues, aud: Audience) -> Terms:
 def _terms_bento(a: AxisValues, aud: Audience) -> Terms:
     return [("density", 0.4 * a.density), ("contrast", 0.35 * a.contrast),
             ("geometric type", 0.25 * (1 - a.type_personality)),
-            ("glance reading", 0.2 if aud.reading_context == "glance" else 0.0)]
+            ("glance reading", GLANCE_BONUS if aud.reading_context == "glance" else 0.0)]
 
 
 def _terms_editorial(a: AxisValues, aud: Audience) -> Terms:
     return [("humanist type", 0.5 * a.type_personality), ("formality", 0.3 * a.formality),
             ("airiness", 0.2 * (1 - a.density)),
-            ("long reading", 0.4 if aud.reading_context == "long-read" else 0.0)]
+            ("long reading", LONG_READ_BONUS if aud.reading_context == "long-read" else 0.0)]
 
 
 def _terms_media(a: AxisValues, aud: Audience) -> Terms:

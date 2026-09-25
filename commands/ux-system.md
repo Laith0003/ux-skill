@@ -50,20 +50,20 @@ With pipx: `pipx install --force uxskill==4.0.0b1` (`--force` replaces an instal
 - **Output folder**: `design-system/` in the project root unless the user names another.
 - **Arabic**: on by default. Add `--latin-only` only when the user says the product never shows Arabic.
 
-The engine reads five brief fields for the look: `industry`, `tone`, `audience`, `must_have` and `forbidden`. It does not read `project_type` or any other discovery field. Some words discovery suggests move nothing: `confident`, `dark-mode`, `RTL`, `AA accessibility`, `mobile-first`, `print-fidelity`; every system already has dark mode, the contrast gate and, unless it is Latin only, right to left. Never tell the user those words shaped the look. The report names every word it did not read.
+The engine reads five brief fields for the look: `industry`, `tone`, `audience`, `must_have` and `forbidden`. It does not read `project_type`, `region` or any other discovery field; the report gives each one a line, and for `region` says to pass it as `languages`. Some words discovery suggests move nothing: `confident`, `dark-mode`, `RTL`, `AA accessibility`, `mobile-first`, `print-fidelity`; every system already has dark mode, the contrast gate and, unless it is Latin only, right to left. Never tell the user those words shaped the look. The report names every word it did not read.
 
 It also reads six structured fields about who the product is for. The engine never parses plain text for them, so you fill them from what the user said, in the brief file (`.ux/system-brief.json`) or the MCP `brief` object, and leave out any the user did not say:
 
 | Field | Values | Fill it when the user says, for example |
 |---|---|---|
 | `age` | `children`, `teens`, `adults`, `all-ages`, `older-adults` | "many patients are over 60" gives `older-adults`; "families" gives `all-ages` |
-| `languages` | language tags, first the main one | "Arabic-speaking shop owners in Jordan and Egypt" gives `["ar-JO", "ar-EG"]`; add `"en"` when the product also ships English |
-| `primary_script` | `latin`, `arabic` | read from the first language when left out; set it when the main language is not first |
+| `languages` | language tags (two or three letters, then optional subtags), first the main one; never a name such as `"Arabic"`, which is refused with its tag | "Arabic-speaking shop owners in Jordan and Egypt" gives `["ar-JO", "ar-EG"]`; add `"en"` when the product also ships English |
+| `primary_script` | `latin`, `arabic` | read from the first language when left out; set it when the main language is not first. `arabic` alone ships Arabic, like an Arabic language does |
 | `default_scheme` | `light`, `dark`, `system` | "dark by default" gives `dark`; leave it out to follow the operating system |
-| `reading_context` | `glance`, `task`, `long-read`, `on-the-go` | "people read long articles" gives `long-read`; "booked from a phone on the way" gives `on-the-go` |
+| `reading_context` | `glance`, `task`, `long-read`, `on-the-go` | "people read long articles" gives `long-read`; "booked from a phone on the way" gives `on-the-go`; "a status screen people check in passing" gives `glance`, which raises the bento composition's score |
 | `brand_role` | `fill`, `accent`, `edge` | only when the user names how the brand color should be used; otherwise the axes choose |
 
-Older and mixed-age readers get larger body text and targets, a wider focus ring and no compact density; languages decide whether Arabic ships (a language in Arabic script with `--latin-only` is refused); `dark` opens the page dark while `data-theme="light"` still switches it. The report's "Who it is for" section says what each field changed and why, and "What the engine did not read" names every word that changed nothing and how to say it. Never tell the user that unread words shaped the system.
+Older and mixed-age readers get larger body text and targets, a wider focus ring and no compact density; languages or an Arabic primary script decide whether Arabic ships (either with `--latin-only` is refused); `dark` opens the page dark while `data-theme="light"` still switches it. The report's "Who it is for" section says what each field changed and why, and "What the engine did not read" names every word that changed nothing and how to say it. Never tell the user that unread words shaped the system.
 
 ### 3. Look before writing
 

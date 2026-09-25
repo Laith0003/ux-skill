@@ -28,7 +28,7 @@ EXPECTED = {
     "readable-fields", "button-sizes", "card-and-banner-reading", "form-contracts",
     "display-and-navigation-contracts", "arabic-market-content", "scrim-worst-image",
     "controls-on-brand-surfaces", "warmth-through-grey", "grey-brands-steer-no-hue",
-    "exact-fill-states", "ring-room",
+    "exact-fill-states", "ring-room", "brief-fields-checked",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",

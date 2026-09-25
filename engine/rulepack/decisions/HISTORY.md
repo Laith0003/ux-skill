@@ -10,6 +10,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Density has two modes, comfortable and compact](two-density-modes.md)
 - [The build writes fonts.css with local faces first and matched fallbacks](font-loading.md)
 - [Who the product is for arrives as structured fields, and every effect is reported](brief-fields.md)
+- [Languages are tags, an Arabic primary script ships Arabic, and every field gets a line](brief-fields-checked.md)
 - [A brief can open the page dark, and color-scheme follows every scheme](default-scheme.md)
 - [Opposite characters build measurably different systems](distinctness.md)
 

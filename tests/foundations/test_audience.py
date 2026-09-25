@@ -140,3 +140,58 @@ def test_the_age_line_states_the_ring_the_build_made_at_a_dramatic_contrast():
                                "(4px under high contrast), and compact density is not offered")
     mid = [e.line() for e in effects(a, MID)]
     assert "the focus ring is 1px wider" in mid[0]
+
+
+def test_glance_reading_states_the_composition_score_it_moved():
+    a = read_audience({"reading_context": "glance"})
+    dense = AxisValues(0.5, 0.7, 0.8, 0.5, 0.5, 0.5, 0.2)
+    lines = [e.line() for e in effects(a, dense)]
+    assert lines == ["Bento, the composition people scan, scores 0.20 higher, and the page starts "
+                     "from it: the brief says people glance at it"]
+    calm = AxisValues(0.5, 0.2, 0.1, 0.5, 0.9, 0.5, 0.9)
+    lines = [e.line() for e in effects(a, calm)]
+    assert lines == ["Bento, the composition people scan, scores 0.20 higher, and the page still "
+                     "starts from editorial-column: the brief says people glance at it"]
+
+
+@pytest.mark.parametrize("langs, message", [
+    (["Arabic", "English"], 'brief field languages holds "Arabic", a language name; give its '
+                            'tag "ar", for example "languages": ["ar", "en"]'),
+    (["english"], 'brief field languages holds "english", a language name; give its tag "en", '
+                  'for example "languages": ["en"]'),
+    (["klingon"], 'brief field languages holds "klingon", which is not a language tag; give a '
+                  'tag of two or three letters and optional subtags, for example "languages": '
+                  '["ar-JO", "en"]'),
+    (["ar_JO"], 'brief field languages holds "ar_JO", which is not a language tag; give a tag of '
+                'two or three letters and optional subtags, for example "languages": '
+                '["ar-JO", "en"]'),
+])
+def test_languages_need_a_tag_and_a_language_name_points_to_its_tag(langs, message):
+    with pytest.raises(AudienceError) as exc:
+        read_audience({"languages": langs})
+    assert str(exc.value) == message
+    assert read_audience({"languages": ["ar-JO", "zh-Hant-TW", "en"]}).arabic is True
+
+
+def test_an_arabic_primary_script_names_arabic():
+    a = read_audience({"primary_script": "arabic"})
+    assert a.arabic is True
+    with pytest.raises(InputError) as exc:
+        resolve_arabic(True, a, "--latin-only")
+    assert "primary_script is arabic" in str(exc.value)
+    assert read_audience({"primary_script": "latin"}).arabic is None
+    rtl = [e.line() for e in effects(a) if 'dir="rtl"' in e.line()]
+    assert rtl and resolve_arabic(False, a) is True
+
+
+def test_every_unread_field_gets_a_line():
+    brief = {"industry": "fintech", "region": "Jordan", "project_type": "landing",
+             "reference_brands": ["a", "b"], "success_metric": "", "stack": "astro"}
+    lines = unread_lines(brief)
+    assert lines == [
+        'region "Jordan" is not read by the system build. Say what it means for the system with '
+        'languages (tags such as ["ar-JO", "en"]) and primary_script ("latin" or "arabic").',
+        'project_type "landing" is not read by the system build, so it changed nothing here.',
+        'reference_brands "a, b" is not read by the system build, so it changed nothing here.',
+        'stack "astro" is not read by the system build, so it changed nothing here.',
+    ]
