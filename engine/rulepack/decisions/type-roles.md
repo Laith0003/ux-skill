@@ -15,7 +15,7 @@ Type systems can expand every role into several sizes and emphasis levels, each 
 
 ## Decision
 
-Type has nine text styles, each one composite token holding family, size, weight, line height and letter spacing: hero, heading-1, heading-2, heading-3, body, body-small, ui, fine and code. Faces are chosen per script: one Latin face, one Arabic face drawn to sit beside it, and one monospace face for code. Emphasis inside a style is type.strong, a weight, not another style.
+Type has nine text styles, each one composite token holding family, size, weight, line height and letter spacing: hero, heading-1, heading-2, heading-3, body, body-small, ui, fine and code. Faces are chosen per script: one Latin face, one Arabic face drawn to sit beside it, and one monospace face for code. Emphasis inside a style is type.strong, a weight, not another style. Line heights are unitless ratios, three steps per script, so a style's leading scales with its own size. Letter spacing only tightens the large styles (hero, heading-1, heading-2); every other style keeps 0, no style spaces letters wider, and under right to left every style keeps 0.
 
 ## Why
 

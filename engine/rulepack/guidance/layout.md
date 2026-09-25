@@ -44,6 +44,8 @@ The grid names a few areas. The safe area sits inside the inline margins, and ev
 
 Contained is where every page starts. Full width is picked on purpose, for data, and a data view never takes the reading width. On phones everything is one column inside the margins and secondary areas move below the main content or into an overlay. Pane patterns (navigation, side panels, split views) take their widths from columns and measures, and collapse in a fixed order: secondary tools, then supporting panels, then side regions, then navigation. The main content never collapses.
 
+A block spans a whole number of columns and starts and ends on column lines.
+
 ## Modes
 
 Layout varies on density: gutters and margins take one step less in compact, never below 8px, and the minimum target is 44px in comfortable and 32px in compact. Breakpoints, columns, the container and the measures are the same in every mode. Breakpoints cannot be read by media queries from CSS custom properties, so stylesheets copy their values (decisions/breakpoints-are-reference-values.md).
@@ -53,10 +55,11 @@ Layout varies on density: gutters and margins take one step less in compact, nev
 1. Read before writing: note each tier's columns, gutter and margin in both densities.
 2. To change the tiers, change the breakpoint values together, keeping them strictly increasing.
 3. To change a gutter or margin, point it at another spacing step; it moves with density on the spacing scale's rules.
-4. Keep a wider tier with at least as many columns as a narrower one.
-5. Keep layout.measure.text at 40rem or less and layout.target.min at 44px or more in comfortable.
-6. Add a page pattern (a pane layout, a dashboard) in terms of these tokens; add a token only when every product needs it.
-7. Review the change on the main screens of the product before building on it.
+4. Columns are fixed per tier at 4, 8, 12 and 12, and no axis moves them; changing them is a generator change, and a wider tier keeps at least as many columns as a narrower one.
+5. layout.container.max is one width for every tier, 1120, 1280 or 1440px as the density axis picks; to change it, build again with another density axis value.
+6. Keep layout.measure.text at 40rem or less and layout.target.min at 44px or more in comfortable.
+7. Add a page pattern (a pane layout, a dashboard) in terms of these tokens; add a token only when every product needs it.
+8. Review the change on the main screens of the product before building on it.
 
 ## Audit scope
 
@@ -77,7 +80,7 @@ Audits the grid tokens in both densities: breakpoint order, column order, target
 - Navigation stays reachable on phones, through an overlay, a rail or a visible control.
 - Every supporting panel has a defined place on phones: below the content, in an overlay, or hidden behind a control.
 - A layout that works only in one orientation is a finding.
-- If the product truly never runs below a width, record that scope in the report instead of skipping the check silently.
+- Browser zoom at 400% brings a 1280px window to 320 CSS px, so the reflow check applies to a desktop-only product too. A product that never runs on a phone may record that scope for the phone checks above, never for reflow, and says so in the report instead of skipping a check silently.
 
 ## Handoff notes
 

@@ -15,7 +15,7 @@ CSS custom properties cannot be read inside a media query, so a breakpoint token
 
 ## Decision
 
-layout.breakpoint.tablet, laptop and desktop are tokens for exporters and documentation; stylesheets copy their values into media queries. Columns, gutters and margins are named per tier so a stylesheet picks the right one inside each query. Type sizes are in rem and do not change by breakpoint.
+layout.breakpoint.tablet, laptop and desktop are tokens for exporters and documentation; stylesheets copy their values into media queries. Columns, gutters and margins are named per tier so a stylesheet picks the right one inside each query. Type sizes are in rem and do not change by breakpoint. There is no phone breakpoint: the phone tier is every width below layout.breakpoint.tablet, and the layout audit checks reflow at 320 CSS px wide (WCAG 1.4.10).
 
 ## Why
 

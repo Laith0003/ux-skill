@@ -43,7 +43,7 @@
 | Helper text, a timestamp, a caption | type.text.fine |
 | Code or an identifier | type.text.code |
 
-Styles that work together: a heading above body text; a heading-3 with fine metadata below it; a ui label with fine helper text; code with a fine caption. A heading never sits inside a card at the page title level, body text never labels a button, and fine print never carries text people must read in full.
+Styles that work together: a heading above body text; a hero with body text or a ui action directly below it; a heading-3 with fine metadata below it, or with ui actions beside it kept at the ui weight; a ui label with fine helper text; code with a fine caption. A heading never sits inside a card at the page title level, body text never labels a button, and fine print never carries text people must read in full.
 
 ## Modes
 
@@ -62,6 +62,8 @@ Styles that work together: a heading above body text; a heading-3 with fine meta
 {latin} 5. Keep the order hero, heading-1, heading-2, heading-3, body falling in size.
 6. Never merge two styles because their values match today; each has its own job.
 7. Never write a text style outside the tokens; a new need is a new style with its five fields.
+
+A new face must carry 400, 500 and the heading weight (600, or 700 at a contrast axis value of 0.66 or more); a missing weight falls back to another and blurs the hierarchy. Make one change at a time and build after each; a failed check names the style and the mode.
 
 ## Audit scope
 

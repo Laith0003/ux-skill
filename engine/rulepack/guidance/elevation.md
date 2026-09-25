@@ -11,7 +11,8 @@ Elevation sets how far things float: four shadow levels, each stronger in dark, 
 - **Shadows say depth, not style.** A shadow means the surface floats above the one beneath; it is not decoration.
 - **Contained or detached.** A card belongs to the page; a dialog or menu floats above it. The two use different levels and different surfaces.
 - **Fix layout with layout.** Weak grouping is fixed with space and structure before any shadow is added.
-- **Temporary lifts return.** A drag or a press may lift an element for its duration; it comes back to rest when the interaction ends.
+- **Only a drag lifts.** Hover, focus and press never change a component's elevation. A drag lifts an element to elevation.lifted while it is held, and it comes back to rest when the drag ends.
+- **Only named pairs.** A surface and a shadow combine only as Choosing pairs them; a new pair is a system decision, not a local choice.
 - **A scrim travels with its dialog.** The dimming layer appears and leaves with the surface above it; one never shows without the other.
 
 ## Roles
@@ -40,7 +41,7 @@ Elevation sets how far things float: four shadow levels, each stronger in dark, 
 | A short lift while dragging | elevation.lifted for the drag only |
 | A layout that feels flat because groups are weak | space and structure, no elevation |
 
-When several siblings all look important, lower one rather than raising all. Not every dialog blocks the page: a panel that leaves the page usable is a popover or a raised surface, not a dialog.
+A card may sit on the page or on a sunken well; where its fill measures below our 1.2:1 floor against the well, its edge keeps them apart (decisions/container-edge.md). When several siblings all look important, lower one rather than raising all. Not every dialog blocks the page: a panel that leaves the page usable is a popover or a raised surface, not a dialog.
 
 ## Modes
 
@@ -71,7 +72,7 @@ Audits the shadow levels and the stacking order: that each level rises above the
 - A surface whose only boundary is its shadow is a finding when its fill measures below our 1.2:1 floor against the surface under it: the shadow is not measured, so the surface needs an edge or a fill that clears the floor (decisions/container-edge.md).
 - A scrim with a shadow is a finding: it reads as a content surface.
 - A dialog without its scrim, or a scrim left behind after its dialog closes, is a finding.
-- A lift that stays after a drag ends is a finding.
+- A lift that stays after a drag ends is a finding, and so is a shadow that changes on hover, focus or press.
 - A z-index without its shadow, or a shadow without its z-index, stacks correctly but reads at the wrong depth.
 
 ## Handoff notes
