@@ -416,7 +416,7 @@ def _contrast(c: _Checker, raw: Any, tokens: Tuple[Binding, ...],
                                   "such as 4.5")
             ok = False
         if not isinstance(criterion, str) or (criterion not in CRITERIA and criterion != SYSTEM):
-            what = (", a WCAG criterion that sets no contrast ratio"
+            what = (", which is not a criterion this schema knows a contrast ratio for"
                     if isinstance(criterion, str) and _WCAG_NUMBER.fullmatch(criterion) else "")
             c.add("bad-contrast", f"{where}.criterion is {criterion!r}{what}; cite {_CITABLE} "
                                   "or system for a floor of your own")

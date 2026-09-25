@@ -546,10 +546,15 @@ def test_each_check_a_second_mutation_pass_named_is_proven(edit, rule, message):
      "toggle: contrast[1] (color.text.default on color.surface.page) sets high 1:1, below its "
      "minimum of 1.3:1; high contrast never lowers a floor, so raise high to at least 1.3"),
     (lambda d: d["contrast"][1].update(criterion="2.4.7"),
-     "toggle: contrast[1].criterion is '2.4.7', a WCAG criterion that sets no contrast ratio; "
-     "cite '1.4.3' (text, 4.5:1), '1.4.6' (text, 7:1, AAA), '1.4.11' (non-text, 3:1) or "
-     "system "
-     "for a floor of your own"),
+     "toggle: contrast[1].criterion is '2.4.7', which is not a criterion this schema knows a "
+     "contrast ratio for; cite '1.4.3' (text, 4.5:1), '1.4.6' (text, 7:1, AAA), '1.4.11' "
+     "(non-text, 3:1) or system for a floor of your own"),
+    (lambda d: d["contrast"][1].update(criterion="2.4.13"),
+     "toggle: contrast[1].criterion is '2.4.13', which is not a criterion this schema knows a "
+     "contrast ratio for; cite '1.4.3'"),
+    (lambda d: d["contrast"][1].update(criterion="1.4.99"),
+     "toggle: contrast[1].criterion is '1.4.99', which is not a criterion this schema knows a "
+     "contrast ratio for; cite '1.4.3'"),
 ])
 def test_a_high_contrast_minimum_below_its_floor_is_refused(edit, message):
     d = copy.deepcopy(data())
@@ -582,3 +587,11 @@ def test_the_seed_contracts_pin_no_floor_below_what_they_cite():
             if rule.high is not None:
                 assert rule.high >= rule.minimum, (c.name, rule)
                 assert rule.high >= CRITERIA.get(rule.criterion, 1), (c.name, rule)
+
+
+def test_a_criterion_message_claims_nothing_about_what_the_criterion_sets():
+    for criterion in ("2.4.13", "1.4.99", "2.4.7"):
+        d = copy.deepcopy(data())
+        d["contrast"][1]["criterion"] = criterion
+        found = [m for r, m in problems(d) if r == "bad-contrast"]
+        assert found and all("sets no" not in m for m in found), found
