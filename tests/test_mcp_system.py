@@ -279,6 +279,8 @@ def test_a_forced_build_beside_a_pack_from_other_tokens_names_it_as_stale(tmp_pa
     result = handle_ux_system_build({"brand": "#FFD400", "out": str(out), "force": True})
     assert result["status"] == "written"
     assert result["stale_rule_pack"] == str(out / "rule-pack")
+    assert "Build again with uxskill system build --rule-pack --force to replace it" in \
+        result["message"]
     assert "## Rule pack" in result["report"]
     assert (out / "system-report.md").read_text(encoding="utf-8") == result["report"]
     assert (out / "rule-pack" / "README.md").read_text(encoding="utf-8") == \

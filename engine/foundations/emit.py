@@ -949,8 +949,8 @@ def note_rule_pack(system: SystemOutput, out_dir: Path, *,
         "", "## Rule pack", "",
         f"The {RULE_PACK_DIR}/ folder beside these files cannot be matched to this tokens.json "
         f"({reason}), so its values, pairings and rules may describe another system. It was "
-        f"left as it is. Build again with --rule-pack to write a pack for these tokens, or "
-        f"remove {RULE_PACK_DIR}/."]) + "\n"
+        f"left as it is. Build again with uxskill system build --rule-pack --force to write a "
+        f"pack for these tokens, or remove {RULE_PACK_DIR}/."]) + "\n"
     noted = replace(system, files={**system.files, "system-report.md": report}, report=report,
                     stale_rule_pack=str(folder), stale_reason=reason)
     # A refused write changes nothing, so the pack still matches the files
@@ -976,9 +976,8 @@ def write_outcome(system: SystemOutput, out_dir: Path, *, force: bool = False,
         named = stale if status in ("written", "unchanged") else None
         if named:
             message += (f" {named} holds a rule pack that cannot be matched to this tokens.json "
-                        f"({reason}); it "
-                        f"was left as it is. Build again with --rule-pack to replace it, or "
-                        f"remove {named}.")
+                        f"({reason}); it was left as it is. Build again with uxskill system "
+                        f"build --rule-pack --force to replace it, or remove {named}.")
         return {"status": status, "written": list(written), "unchanged": list(unchanged),
                 "conflicts": list(conflicts), "message": message, "stale_rule_pack": named}
 

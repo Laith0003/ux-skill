@@ -504,7 +504,7 @@ def _readme(foundations: Sequence[Tuple[Foundation, Guidance]],
              "relative to the file they sit in.", "",
              f"{RULE_PACK_MANIFEST} holds the sha256 of the tokens.json this pack was built "
              "from. When the tokens.json beside this folder has another digest, the pack "
-             "describes other tokens: build again with --rule-pack.", "",
+             "describes other tokens: build again into this folder with --rule-pack --force.", "",
              "## Load the files for your task", "",
              "Load the files for your task, then stop: loading everything crowds out the "
              "work.", "", "| Task | Load |", "|---|---|",

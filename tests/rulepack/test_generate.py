@@ -552,3 +552,9 @@ def test_the_reference_says_which_mode_the_alias_column_shows():
     body = TS.resolve("type.text.body")["fontFamily"]
     stack = body if isinstance(body, str) else ", ".join(body)
     assert stack.count(",") >= 1 and stack.split(",")[1].strip().strip('"') in typ
+
+
+def test_the_readme_names_the_whole_rebuild_for_a_stale_pack():
+    readme = PACK_FILES[f"{PACK}/README.md"]
+    assert "the pack describes other tokens: build again into this folder with --rule-pack " \
+           "--force." in readme

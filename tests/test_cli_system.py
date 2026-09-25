@@ -330,9 +330,14 @@ def test_a_pack_left_beside_other_tokens_is_reported_stale_and_kept(tmp_path):
     assert payload["stale_rule_pack"] == str(folder)
     assert f"{folder} holds a rule pack that cannot be matched to this tokens.json" in \
         payload["message"]
-    assert "Build again with --rule-pack to replace it, or remove" in payload["message"]
+    # The fix named is the whole fix: a pack from other tokens differs, so
+    # replacing it needs --force as well as --rule-pack.
+    assert "Build again with uxskill system build --rule-pack --force to replace it, or " \
+           "remove" in payload["message"]
     report = (out / "system-report.md").read_text(encoding="utf-8")
     assert "## Rule pack" in report and "remove rule-pack/" in report
+    assert "Build again with uxskill system build --rule-pack --force to write a pack for " \
+           "these tokens" in report
     assert str(tmp_path) not in report
     assert _pack_bytes(out) == before
     # Built again the same way: unchanged, still stale.
@@ -341,7 +346,10 @@ def test_a_pack_left_beside_other_tokens_is_reported_stale_and_kept(tmp_path):
     # Refused: nothing is written, so the pack still matches what is there.
     refused, payload = _run("--brand", "#3366FF", "--out", str(out))
     assert payload["status"] == "refused" and payload["stale_rule_pack"] is None
-    # Rebuilt with the flag: the pack follows the tokens again.
+    # The flag alone is refused, since the pack on disk differs.
+    alone, payload = _run("--brand", "#FFD400", "--out", str(out), "--rule-pack")
+    assert payload["status"] == "refused"
+    # Rebuilt with the flag and --force: the pack follows the tokens again.
     fresh, payload = _run("--brand", "#FFD400", "--out", str(out), "--rule-pack", "--force")
     assert payload["status"] == "written" and payload["stale_rule_pack"] is None
     assert "## Rule pack" not in (out / "system-report.md").read_text(encoding="utf-8")
