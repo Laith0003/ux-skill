@@ -312,15 +312,17 @@ def test_tokens_css_switches_every_tiered_role_by_viewport():
                      css)
     assert base, "no :root block of responsive aliases"
     # The same blocks carry the phone factor of the four largest type
-    # styles (decisions/landing-display-step.md).
-    styles = ("display", "hero", "heading-1", "section-title")
+    # styles and the figure, and each tier's fit factor, the figure taking
+    # heading-1's (decisions/landing-display-step.md).
+    styles = ("display", "hero", "heading-1", "section-title", "figure")
     assert base.group(1).splitlines() == [
         f"  --layout-{g}: var(--layout-{g}-phone);" for g in groups] + [
         f"  --type-text-{s}-scale: var(--type-phone-{s});" for s in styles]
     for tier, px in (("tablet", 640), ("laptop", 1024), ("desktop", 1280)):
         assert _media_block(css, px) == [
-            f"    --layout-{g}: var(--layout-{g}-{tier});" for g in groups] + (
-            [f"    --type-text-{s}-scale: 1;" for s in styles] if tier == "tablet" else [])
+            f"    --layout-{g}: var(--layout-{g}-{tier});" for g in groups] + [
+            f"    --type-text-{s}-scale: var(--type-fit-"
+            f"{'heading-1' if s == 'figure' else s}-{tier});" for s in styles]
     # The breakpoints come from the set's own breakpoint tokens.
     assert layout.VIEWPORTS == {"tablet": 640, "laptop": 1024, "desktop": 1280}
 

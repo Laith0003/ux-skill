@@ -441,9 +441,9 @@
   --type-text-section-title-letter-spacing: calc(var(--type-tracking-step-7) * var(--type-text-section-title-scale));
   --type-text-section-title-line-height: var(--type-leading-latin-1);
   --type-text-figure-font-family: var(--type-face-display);
-  --type-text-figure-font-size: var(--type-size-latin-8);
+  --type-text-figure-font-size: calc(var(--type-size-latin-8) * var(--type-text-figure-scale));
   --type-text-figure-font-weight: var(--type-weight-700);
-  --type-text-figure-letter-spacing: var(--type-tracking-step-8);
+  --type-text-figure-letter-spacing: calc(var(--type-tracking-step-8) * var(--type-text-figure-scale));
   --type-text-figure-line-height: var(--type-leading-latin-0);
   --type-text-heading-2-font-family: var(--type-face-text);
   --type-text-heading-2-font-size: var(--type-size-latin-5);
@@ -509,6 +509,31 @@
   --type-phone-hero: var(--type-phone-scale-9);
   --type-phone-heading-1: var(--type-phone-scale-8);
   --type-phone-section-title: var(--type-phone-scale-7);
+  --type-phone-figure: var(--type-phone-scale-8);
+  --type-tier-scale-10-tablet: 0.7771;
+  --type-tier-scale-10-laptop: 0.7771;
+  --type-tier-scale-10-desktop: 0.9378;
+  --type-tier-scale-9-tablet: 0.7857;
+  --type-tier-scale-9-laptop: 0.7857;
+  --type-tier-scale-9-desktop: 0.9481;
+  --type-tier-scale-8-tablet: 0.9589;
+  --type-tier-scale-8-laptop: 0.9589;
+  --type-tier-scale-8-desktop: 1;
+  --type-tier-scale-7-tablet: 1;
+  --type-tier-scale-7-laptop: 1;
+  --type-tier-scale-7-desktop: 1;
+  --type-fit-display-tablet: var(--type-tier-scale-10-tablet);
+  --type-fit-display-laptop: var(--type-tier-scale-10-laptop);
+  --type-fit-display-desktop: var(--type-tier-scale-10-desktop);
+  --type-fit-hero-tablet: var(--type-tier-scale-9-tablet);
+  --type-fit-hero-laptop: var(--type-tier-scale-9-laptop);
+  --type-fit-hero-desktop: var(--type-tier-scale-9-desktop);
+  --type-fit-heading-1-tablet: var(--type-tier-scale-8-tablet);
+  --type-fit-heading-1-laptop: var(--type-tier-scale-8-laptop);
+  --type-fit-heading-1-desktop: var(--type-tier-scale-8-desktop);
+  --type-fit-section-title-tablet: var(--type-tier-scale-7-tablet);
+  --type-fit-section-title-laptop: var(--type-tier-scale-7-laptop);
+  --type-fit-section-title-desktop: var(--type-tier-scale-7-desktop);
   --imagery-aspect-4-5: 0.8;
   --imagery-aspect-4-3: 1.3333;
   --imagery-aspect-2-1: 2;
@@ -915,9 +940,9 @@
   --type-text-section-title-letter-spacing: calc(var(--type-tracking-0) * var(--type-text-section-title-scale));
   --type-text-section-title-line-height: var(--type-leading-arabic-1);
   --type-text-figure-font-family: var(--type-face-arabic-display);
-  --type-text-figure-font-size: var(--type-size-arabic-8);
+  --type-text-figure-font-size: calc(var(--type-size-arabic-8) * var(--type-text-figure-scale));
   --type-text-figure-font-weight: var(--type-weight-700);
-  --type-text-figure-letter-spacing: var(--type-tracking-0);
+  --type-text-figure-letter-spacing: calc(var(--type-tracking-0) * var(--type-text-figure-scale));
   --type-text-figure-line-height: var(--type-leading-arabic-0);
   --type-text-heading-2-font-family: var(--type-face-arabic);
   --type-text-heading-2-font-size: var(--type-size-arabic-5);
@@ -984,9 +1009,9 @@
   --type-text-section-title-letter-spacing: calc(var(--type-tracking-0) * var(--type-text-section-title-scale));
   --type-text-section-title-line-height: var(--type-leading-arabic-1);
   --type-text-figure-font-family: var(--type-face-arabic-display);
-  --type-text-figure-font-size: var(--type-size-arabic-8);
+  --type-text-figure-font-size: calc(var(--type-size-arabic-8) * var(--type-text-figure-scale));
   --type-text-figure-font-weight: var(--type-weight-700);
-  --type-text-figure-letter-spacing: var(--type-tracking-0);
+  --type-text-figure-letter-spacing: calc(var(--type-tracking-0) * var(--type-text-figure-scale));
   --type-text-figure-line-height: var(--type-leading-arabic-0);
   --type-text-heading-2-font-family: var(--type-face-arabic);
   --type-text-heading-2-font-size: var(--type-size-arabic-5);
@@ -1421,6 +1446,7 @@
   --type-text-hero-scale: var(--type-phone-hero);
   --type-text-heading-1-scale: var(--type-phone-heading-1);
   --type-text-section-title-scale: var(--type-phone-section-title);
+  --type-text-figure-scale: var(--type-phone-figure);
 }
 
 @media (min-width: 640px) {
@@ -1431,10 +1457,11 @@
     --layout-region-gap: var(--layout-region-gap-tablet);
     --layout-landing-gap: var(--layout-landing-gap-tablet);
     --layout-hero-padding-block: var(--layout-hero-padding-block-tablet);
-    --type-text-display-scale: 1;
-    --type-text-hero-scale: 1;
-    --type-text-heading-1-scale: 1;
-    --type-text-section-title-scale: 1;
+    --type-text-display-scale: var(--type-fit-display-tablet);
+    --type-text-hero-scale: var(--type-fit-hero-tablet);
+    --type-text-heading-1-scale: var(--type-fit-heading-1-tablet);
+    --type-text-section-title-scale: var(--type-fit-section-title-tablet);
+    --type-text-figure-scale: var(--type-fit-heading-1-tablet);
   }
 }
 
@@ -1446,6 +1473,11 @@
     --layout-region-gap: var(--layout-region-gap-laptop);
     --layout-landing-gap: var(--layout-landing-gap-laptop);
     --layout-hero-padding-block: var(--layout-hero-padding-block-laptop);
+    --type-text-display-scale: var(--type-fit-display-laptop);
+    --type-text-hero-scale: var(--type-fit-hero-laptop);
+    --type-text-heading-1-scale: var(--type-fit-heading-1-laptop);
+    --type-text-section-title-scale: var(--type-fit-section-title-laptop);
+    --type-text-figure-scale: var(--type-fit-heading-1-laptop);
   }
 }
 
@@ -1457,5 +1489,10 @@
     --layout-region-gap: var(--layout-region-gap-desktop);
     --layout-landing-gap: var(--layout-landing-gap-desktop);
     --layout-hero-padding-block: var(--layout-hero-padding-block-desktop);
+    --type-text-display-scale: var(--type-fit-display-desktop);
+    --type-text-hero-scale: var(--type-fit-hero-desktop);
+    --type-text-heading-1-scale: var(--type-fit-heading-1-desktop);
+    --type-text-section-title-scale: var(--type-fit-section-title-desktop);
+    --type-text-figure-scale: var(--type-fit-heading-1-desktop);
   }
 }

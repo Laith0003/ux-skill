@@ -180,7 +180,7 @@ def test_every_axis_mix_is_valid_and_passes(contrast, density, personality, form
     ts = generate_type(a).tokens
     assert validate(ts) == []
     report = gate(ts, [], CHECKS)
-    assert report.passed and report.rules_checked == 23
+    assert report.passed and report.rules_checked == 24
 
 
 def _hand():
@@ -259,7 +259,8 @@ def test_only_the_leading_rule_cites_wcag():
                    "reading-tracking": "system", "arabic-text": "system",
                    "rem-sizes": "system", "type-hierarchy": "system",
                    "high-contrast-weights": "system", "icon-sizes": "system",
-                   "strong-weight": "system", "phone-hierarchy": "system"}
+                   "strong-weight": "system", "phone-hierarchy": "system",
+                   "display-fits": "system"}
 
 
 def test_a_role_of_the_wrong_type_is_named_once_not_a_crash():
@@ -511,7 +512,7 @@ def test_tokens_css_switches_the_phone_factor_at_the_tablet_breakpoint():
             "var(--type-text-hero-scale));") in rtl
     assert "  --type-text-hero-scale: var(--type-phone-hero);" in css
     tablet = css.split("@media (min-width: 640px) {")[1].split("\n}")[0]
-    assert "--type-text-hero-scale: 1;" in tablet
+    assert "--type-text-hero-scale: var(--type-fit-hero-tablet);" in tablet
 
 
 def test_a_phone_size_out_of_order_is_named_with_the_fix():

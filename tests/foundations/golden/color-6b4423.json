@@ -370,7 +370,7 @@
   "--color-brand-tint-light: #F4EAE2;",
   "--color-brand-tint-dark: #261506;",
   "--color-brand-band-light: #E1CFC0;",
-  "--color-brand-band-dark: #291200;",
+  "--color-brand-band-dark: #331B05;",
   "--color-brand-fill: #6B4423;",
   "--color-brand-fill-hover: #5C3715;",
   "--color-brand-fill-pressed: #4E2905;",
@@ -680,11 +680,11 @@
   "color.brand.band-dark": {
    "colorSpace": "srgb",
    "components": [
-    0.160784,
-    0.070588,
-    0.0
+    0.2,
+    0.105882,
+    0.019608
    ],
-   "hex": "#291200"
+   "hex": "#331B05"
   },
   "color.brand.band-light": {
    "colorSpace": "srgb",
@@ -1888,10 +1888,10 @@
    "light-high": "#190900"
   },
   "color.brand.band-dark": {
-   "dark": "#291200",
-   "dark-high": "#291200",
-   "light": "#291200",
-   "light-high": "#291200"
+   "dark": "#331B05",
+   "dark-high": "#331B05",
+   "light": "#331B05",
+   "light-high": "#331B05"
   },
   "color.brand.band-light": {
    "dark": "#E1CFC0",
@@ -2584,8 +2584,8 @@
    "light-high": "#001209"
   },
   "color.surface.band": {
-   "dark": "#291200",
-   "dark-high": "#291200",
+   "dark": "#331B05",
+   "dark-high": "#331B05",
    "light": "#E1CFC0",
    "light-high": "#E1CFC0"
   },

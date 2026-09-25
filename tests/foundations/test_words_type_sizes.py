@@ -11,13 +11,15 @@ holds a number band, a landing region gap, a tint that stands off the page,
 a light band whose chroma follows contrast and a clean light code surface.
 Briefs and brand colors here are neutral examples."""
 import math
+import re
 
 import pytest
 
 from engine.foundations import build_system, character, fonts, to_css
 from engine.foundations.audience import (
-    BOOK_DEPTH, FIELDS, FIELDS_HELP, PRODUCT_TYPES, AudienceError, effects, read_audience)
-from engine.foundations.color import CODE_EDGE, TINT_FLOOR
+    BOOK_DEPTH, FIELDS, FIELDS_HELP, PRODUCT_ALIASES, PRODUCT_TYPES, AudienceError, effects,
+    product_type_of, read_audience)
+from engine.foundations.color import BAND_FLOOR, CODE_EDGE, TINT_FLOOR
 from engine.foundations.color_math import contrast, hex_to_oklch
 from engine.foundations.emit import (
     InputError, _reading, brief_audience, brief_axes, make_system, nudge_lines, unread_lines)
@@ -51,7 +53,8 @@ def dim(ts, path, mode=""):
 
 # Each word and the axis it must move, with the sign of the move.
 WORD_MOVES = [
-    ("fast", "motion", +1), ("quick", "motion", +1), ("clear", "density", -1),
+    ("fast", "motion", -1), ("quick", "motion", -1), ("fast", "density", +1),
+    ("clear", "density", -1),
     ("practical", "formality", +1), ("practical", "type_personality", -1),
     ("solid", "contrast", +1), ("solid", "geometry", -1), ("modern", "type_personality", -1),
     ("reliable", "formality", +1), ("reliable", "motion", -1), ("simple", "density", -1),
@@ -157,6 +160,7 @@ def test_a_brief_with_only_character_builds_from_neutral():
     ({"warmth": 0.31}, "character.warmth is 0.31; set a nudge from -0.3 to 0.3"),
     ({"warmth": "more"}, "character.warmth is 'more'; set a nudge from -0.3 to 0.3"),
     ({"vibe": 0.1}, 'character names "vibe", which is not an axis; use warmth, contrast'),
+    ({"warmth": float("nan")}, "character.warmth is nan; set a nudge from -0.3 to 0.3"),
     (["warmth"], 'character is [\'warmth\']; give an object of axis nudges, for example'),
 ])
 def test_a_bad_character_names_the_field_and_the_fix(value, needle):
@@ -238,25 +242,82 @@ def test_the_book_target_is_continuous_in_type_personality_and_formality():
     assert sorted(BOOK_DEPTH) == sorted(PRODUCT_TYPES)
 
 
-@pytest.mark.parametrize("given, want", [("app", "app"), ("Marketing site", "marketing-site"),
-                                         ("marketing-site", "marketing-site")])
-def test_product_type_reads_its_values(given, want):
+def test_product_type_is_one_closed_vocabulary_with_aliases():
+    """The engine and the page-sequence picker share it
+    (engine/foundations/audience.py: PRODUCT_TYPES, PRODUCT_ALIASES,
+    product_type_of)."""
+    assert PRODUCT_TYPES == ("app", "software", "marketing-site", "editorial", "commerce",
+                             "marketplace", "local-service")
+    assert PRODUCT_ALIASES == {"saas": "software", "web-app": "software", "mobile-app": "app",
+                               "shop": "commerce", "store": "commerce",
+                               "b2b-marketplace": "marketplace",
+                               "b2c-marketplace": "marketplace", "service": "local-service"}
+    assert set(PRODUCT_ALIASES.values()) <= set(PRODUCT_TYPES)
+
+
+@pytest.mark.parametrize("given, want", [
+    ("app", "app"), ("Marketing site", "marketing-site"), ("marketing-site", "marketing-site"),
+    ("marketplace", "marketplace"), ("local service", "local-service"), ("SaaS", "software"),
+    ("web app", "software"), ("mobile-app", "app"), ("shop", "commerce"),
+    ("store", "commerce"), ("b2b marketplace", "marketplace"),
+    ("b2c-marketplace", "marketplace"), ("service", "local-service")])
+def test_product_type_reads_its_values_and_aliases(given, want):
     assert read_audience({"product_type": given}).product_type == want
+    assert product_type_of(given) == want
     assert "product_type" in FIELDS
 
 
-def test_a_bad_product_type_names_the_field_and_the_choices():
+def test_an_alias_gets_one_line_in_the_report():
+    a = read_audience({"product_type": "saas"})
+    lines = [e.line() for e in effects(a, MID)]
+    assert sum('product_type "saas" is read as software' in x for x in lines) == 1, lines
+    assert not any("is read as" in x for x in
+                   (e.line() for e in effects(read_audience({"product_type": "app"}), MID)))
+
+
+def test_a_bad_product_type_names_the_field_the_values_and_the_fix():
     with pytest.raises(AudienceError) as exc:
         read_audience({"product_type": "website"})
-    assert str(exc.value) == ("brief field product_type is 'website'; use one of app, "
-                              "software, marketing-site, editorial, commerce")
+    msg = str(exc.value)
+    assert msg.startswith("brief field product_type is 'website'; use one of app, software, "
+                          "marketing-site, editorial, commerce, marketplace, local-service"), msg
+    assert "saas" in msg and "the product the page sells" in msg, msg
+
+
+@pytest.mark.parametrize("kind", ["marketplace", "commerce", "local-service", "software"])
+def test_product_surfaces_lean_sans_like_an_app(kind):
+    assert BOOK_DEPTH[kind] == BOOK_DEPTH["app"] == 0.0
+    assert 0.0 < BOOK_DEPTH["marketing-site"] < BOOK_DEPTH["editorial"]
+    f = faces_of({**CARE, "product_type": kind})
+    assert f["display"].generic == f["arabic"].generic == "sans-serif", kind
+
+
+def test_a_sans_latin_text_never_pairs_with_a_serif_arabic_text_under_a_product_type():
+    for tone in (["trustworthy", "fast", "clear", "friendly"], ["trustworthy"]):
+        for kind in PRODUCT_TYPES:
+            f = faces_of({**CARE, "tone": tone, "product_type": kind})
+            assert f["arabic"].generic == f["text"].generic, (tone, kind, f["arabic"].family)
 
 
 def test_product_type_has_a_line_in_who_it_is_for():
     a, _ = brief_axes({**CARE, "product_type": "app"})
     lines = [e.line() for e in effects(read_audience({**CARE, "product_type": "app"}), a)]
     line = next(x for x in lines if "product" in x)
-    assert "sans" in line and "app" in line, line
+    assert "sans" in line and "an app" in line, line
+    assert "Arabic Noto Sans Arabic" in line and "Arabic display Alexandria" in line, line
+
+
+def test_the_product_line_reads_the_lean_from_the_faces_and_drops_arabic_when_off():
+    brief = {**CARE, "tone": ["trustworthy"], "product_type": "editorial"}
+    a, _ = brief_axes(brief)
+    line = next(e.line() for e in effects(read_audience(brief), a) if "product" in e.line())
+    assert "an editorial product" in line and "display Newsreader (serif)" in line, line
+    assert "lean sans and serif" in line, line
+    latin = {"industry": "healthcare", "tone": ["trustworthy"], "languages": ["en"],
+             "product_type": "editorial"}
+    a, _ = brief_axes(latin)
+    line = next(e.line() for e in effects(read_audience(latin), a) if "product" in e.line())
+    assert "Arabic" not in line, line
 
 
 # ---------------------------------------------------------------- 3. sizes
@@ -277,6 +338,42 @@ def test_the_landing_display_rises_with_contrast_and_falls_with_formality():
     assert by_formality[0] > by_formality[-1]
 
 
+TIERS_FIT = ("tablet", "laptop", "desktop")
+
+
+@pytest.mark.parametrize("c, f", [(0.0, 1.0), (0.5, 0.5), (1.0, 0.0), (0.7, 1.0)])
+@pytest.mark.parametrize("brand_arabic", [True, False])
+def test_the_display_word_fits_each_tier(c, f, brand_arabic):
+    """A 13 letter Latin word and a 10 letter Arabic word at the display
+    size fit the column of each tier from tablet up, at 640 and 1024 too."""
+    from engine.foundations.typography import fit_problems, tier_factor
+    ts = build_system(axes(contrast=c, formality=f), "#2F6FDB", arabic=brand_arabic).tokens
+    assert fit_problems(ts) == []
+    for tier in TIERS_FIT:
+        d, h = tier_factor(ts, "type.text.display", tier), tier_factor(ts, "type.text.hero", tier)
+        assert 0 < d <= 1 and 0 < h <= 1
+        assert px(ts, "type.text.display") * d >= px(ts, "type.text.hero") * h * MIN_LEVEL_RATIO
+    assert [tier_factor(ts, "type.text.display", t) for t in TIERS_FIT] == sorted(
+        tier_factor(ts, "type.text.display", t) for t in TIERS_FIT)
+
+
+def test_the_tier_factors_reach_tokens_css():
+    ts = build_system(axes(contrast=1.0, formality=0.0), "#2F6FDB").tokens
+    css = to_css(ts)
+    for tier in TIERS_FIT:
+        assert f"--type-text-display-scale: var(--type-fit-display-{tier});" in css, tier
+        assert f"--type-text-hero-scale: var(--type-fit-hero-{tier});" in css, tier
+
+
+def test_the_figure_steps_down_with_heading_1_on_a_phone():
+    from engine.foundations.typography import phone_roles
+    ts = build_system(MID, "#2F6FDB").tokens
+    assert "type.text.figure" in phone_roles(ts)
+    assert ts.resolve(phone_token("type.text.figure")) == ts.resolve(
+        phone_token("type.text.heading-1"))
+    assert "--type-text-figure-scale: var(--type-phone-figure);" in to_css(ts)
+
+
 def test_the_landing_display_steps_down_on_a_phone_through_its_alias():
     ts = build_system(MID, "#2F6FDB").tokens
     assert PHONE_ROLES[0] == "type.text.display"
@@ -285,7 +382,7 @@ def test_the_landing_display_steps_down_on_a_phone_through_its_alias():
     assert 0 < factor < 1 and px(ts, "type.text.display") * factor > hero_phone
     css = to_css(ts)
     assert "--type-text-display-scale: var(--type-phone-display);" in css
-    assert "--type-text-display-scale: 1;" in css
+    assert "--type-text-display-scale: var(--type-fit-display-tablet);" in css
 
 
 def test_the_figure_holds_a_number_band():
@@ -307,7 +404,7 @@ def test_the_landing_gap_matches_the_playbook_at_desktop(density, want):
     assert "--layout-landing-gap: var(--layout-landing-gap-desktop);" in to_css(ts)
 
 
-BRANDS = ("#2F6FDB", "#1510F0", "#BBBBBB", "#E0A800", "#7A4B2A", "#0E8A5F")
+BRANDS = ("#2F6FDB", "#1510F0", "#BBBBBB", "#E0A800", "#7A4B2A", "#0E8A5F", "#111111")
 
 
 @pytest.mark.parametrize("brand", BRANDS)
@@ -317,6 +414,31 @@ def test_the_tint_stands_off_the_page(brand, mode):
         ts = build_system(a, brand).tokens
         page, tint = ts.resolve("color.surface.page", mode), ts.resolve("color.surface.tint", mode)
         assert contrast(page, tint) >= TINT_FLOOR, (brand, mode, page, tint)
+
+
+@pytest.mark.parametrize("brand", BRANDS)
+@pytest.mark.parametrize("mode", [LIGHT, DARK])
+def test_the_band_sits_beyond_the_tint(brand, mode):
+    for a in (MID, axes(contrast=0.1), axes(contrast=0.9)):
+        ts = build_system(a, brand).tokens
+        page, tint, band = (ts.resolve(f"color.surface.{r}", mode)
+                            for r in ("page", "tint", "band"))
+        assert contrast(page, band) >= BAND_FLOOR, (brand, mode, band)
+        assert contrast(page, band) > contrast(page, tint), (brand, mode, tint, band)
+
+
+@pytest.mark.parametrize("mode", [LIGHT, DARK])
+def test_the_tint_is_never_louder_than_the_band(mode):
+    for brand in BRANDS:
+        ts = build_system(MID, brand).tokens
+        tint = hex_to_oklch(ts.resolve("color.surface.tint", mode))[1]
+        band = hex_to_oklch(ts.resolve("color.surface.band", mode))[1]
+        assert tint <= band + 0.002, (brand, mode, tint, band)
+
+
+def test_a_surface_check_measures_the_floors_in_every_context():
+    from engine.foundations.color import CHECKS
+    assert "surfaces-stand-apart" in {c.id for c in CHECKS}
 
 
 def test_the_light_tint_sits_between_the_page_and_the_band():
@@ -350,3 +472,17 @@ def test_the_code_edge_is_the_container_edge_floor():
     from engine.contracts import EDGE_FLOOR
     assert CODE_EDGE == EDGE_FLOOR
 
+
+
+def test_other_callers_refuse_a_bad_character_too():
+    """compute_axes is also called by recommend and the design-md path; a
+    bad character there is refused, never clamped silently."""
+    with pytest.raises(ValueError) as exc:
+        compute_axes({"industry": "saas", "character": {"warmth": 0.9}})
+    assert "character.warmth is 0.9; set a nudge from -0.3 to 0.3" in str(exc.value)
+    assert compute_axes({"character": {"warmth": 0.2}}).warmth == 0.7
+
+
+def test_the_example_nudge_word_is_one_the_engine_does_not_read():
+    example = re.search(r'"(\w+)" might be "character"', FIELDS_HELP).group(1)
+    assert _reading("tone", example) is None, example

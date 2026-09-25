@@ -48,12 +48,12 @@
 ### Pattern: Marketing section padding
 **Use when**: Any marketing landing section that needs to feel like a distinct cinematic chapter.
 **Anti-pattern**: `py-12` (48px) — sections feel cramped, slabs of content with no breathing room.
-**How**: Apply `py-32 md:py-48` minimum (128px mobile, 192px desktop). For premium and developer-tooling surfaces, push to `py-40` or `py-48` (160 to 192px). Sections breathe; the page reads as composed.
+**How**: With a 4.0 design system, space sections with `var(--layout-landing-gap)`: it follows the viewport's tier (64 to 80px on a phone, 80 to 96px on a tablet, 96 to 128px on a laptop, 128 to 192px at desktop, by the system's density). Without one, use at least `py-16 md:py-48` (64px phone, 192px desktop). Sections breathe; the page reads as composed.
 
 ### Pattern: AIDA section vertical rhythm
 **Use when**: Landing pages structured around Attention → Interest → Desire → Action.
 **Anti-pattern**: Identical padding on every section regardless of role.
-**How**: Hero gets the deepest top padding (often `min-h-[100dvh]` with content centered or split). Interest sections (bento, features) get `py-32 md:py-48`. Desire sections (motion, media) get `py-40 md:py-56` to let scroll moments breathe. Action sections (final CTA) get `py-32 md:py-48` plus a tinted background band that visually separates from the footer.
+**How**: Hero gets the deepest top padding (often `min-h-[100dvh]` with content centered or split). Interest sections (bento, features) get `var(--layout-landing-gap)`. Desire sections (motion, media) may take up to one and a half times it to let scroll moments breathe. Action sections (final CTA) get `var(--layout-landing-gap)` plus a tinted background band that visually separates from the footer.
 
 ### Pattern: Adaptive gutter scaling
 **Use when**: Pages that span 375px mobile to 1440px+ desktop.
@@ -147,9 +147,9 @@
 **Anti-pattern**: Same `py-32` on every section.
 **How**:
 - Hero (Attention): `min-h-[100dvh]` with centered or split content; section padding minimal because the hero is its own block
-- Interest (bento, features): `py-32 md:py-48` standard
-- Desire (motion / proof / scrolly): `py-40 md:py-56` to let scroll moments breathe
-- Action (final CTA): `py-32 md:py-48` plus tinted background band
+- Interest (bento, features): `var(--layout-landing-gap)` standard
+- Desire (motion / proof / scrolly): up to one and a half times `var(--layout-landing-gap)` to let scroll moments breathe
+- Action (final CTA): `var(--layout-landing-gap)` plus tinted background band
 - Footer: handled separately; minimum `py-16 md:py-24`
 
 ### Pattern: Magazine effect (wide canvas, narrow column)
@@ -173,9 +173,9 @@
 - In px: 0 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 / 128 / 192 / 256 / 384 / 512 / 640
 
 ### Section padding by surface type
-- Marketing landing: `py-32 md:py-48` (128 to 192px desktop)
+- Marketing landing: `var(--layout-landing-gap)` (64 to 80px phone, 128 to 192px desktop, by density)
 - Marketing premium / developer-tooling: `py-40 md:py-56` (160 to 224px desktop)
-- Marketing brutalist / editorial: `py-32 md:py-48`, often paired with full-width macro-typography
+- Marketing brutalist / editorial: `var(--layout-landing-gap)`, often paired with full-width macro-typography
 - Product / dashboard: `py-12 md:py-16` (48 to 64px)
 - Modal / sheet: `p-6` (24px) to `p-8` (32px)
 - Mobile: halve the desktop values; floor at `py-16` (64px) for marketing
@@ -236,7 +236,7 @@
 - `h-screen` for full-height sections (use `min-h-[100dvh]`)
 - Flex percentage math like `w-[calc(33%-1rem)]` (use CSS Grid)
 - Same narrow gutter from phone to desktop (adapt by breakpoint)
-- Section padding under `py-32` on marketing surfaces
+- Section spacing under `var(--layout-landing-gap)` on marketing surfaces
 - Empty cells in bento grids (use `grid-flow-dense`)
 - Symmetrical padding on every section as a fallback
 - Arbitrary `z-50` or `z-[9999]` without documented purpose
@@ -255,7 +255,7 @@
 
 - [ ] Base spacing unit (4 or 8) chosen and documented (severity: High)
 - [ ] All gaps, paddings, margins land on multiples of the base unit (severity: High)
-- [ ] Marketing sections use `py-32 md:py-48` minimum (severity: High)
+- [ ] Marketing sections use `var(--layout-landing-gap)`, or at least 64px phone and 128px desktop without a design system (severity: High)
 - [ ] Hero uses `min-h-[100dvh]`, not `h-screen` (severity: Critical)
 - [ ] Page wrapped in `overflow-x-hidden w-full max-w-full` when motion is used (severity: High)
 - [ ] Outer container caps at `max-w-7xl` (1280px) or `max-w-[1400px]` (severity: Medium)

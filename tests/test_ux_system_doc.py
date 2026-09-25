@@ -58,7 +58,8 @@ def _build_flags():
 
 
 def test_every_flag_the_create_mode_names_exists():
-    used = set(re.findall(r"(?<![\w-])(--[a-z][a-z-]*)", CREATE))
+    # A CSS custom property read with var() is not a flag.
+    used = set(re.findall(r"(?<![\w(-])(--[a-z][a-z-]*)", CREATE))
     assert used, "the create section names no flags"
     # --version belongs to uxskill itself, which the first step runs.
     assert "--version" in {opt for p in cli.params for opt in p.opts}
