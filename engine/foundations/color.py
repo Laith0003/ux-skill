@@ -787,13 +787,20 @@ def _step_of(ts: TokenSet, role: str, mode: str) -> Optional[Tuple[str, int]]:
 def _error_edge_hue(ts: TokenSet, mode: str) -> List[str]:
     """Under high contrast the error edge sits at most one ramp step past
     its standard step, so it stays red instead of going near black (light)
-    or near white (dark)."""
-    role = "color.line.danger"
+    or near white (dark). It fails closed: a high contrast edge that is a
+    literal or a step of another ramp is a finding too."""
+    role, family = "color.line.danger", "color.danger"
     if parse(mode).get("contrast") != "high" or not _typed(ts, role):
         return []
     std = mode.replace("contrast:high", "contrast:standard")
     high, base = _step_of(ts, role, mode), _step_of(ts, role, std)
-    if high is None or base is None or high[0] != base[0] or abs(high[1] - base[1]) <= 1:
+    if high is None or high[0] != family:
+        where = (f" of its standard step {base[0]}.{STEPS[base[1]]}"
+                 if base is not None and base[0] == family else "")
+        return [f"{role} ({mode}) is {ts.raw(role, mode)}, not a step of the danger ramp, so "
+                f"the error edge can lose its red; point it at a {family} step within one step"
+                f"{where}"]
+    if base is None or base[0] != family or abs(high[1] - base[1]) <= 1:
         return []
     return [f"{role} ({mode}) sits {abs(high[1] - base[1])} ramp steps from its standard step "
             f"{base[0]}.{STEPS[base[1]]}, so the error edge loses its red; keep it within one "

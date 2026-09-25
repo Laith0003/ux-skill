@@ -8,7 +8,7 @@ Imagery sets how photos and illustrations sit in the system: the aspect ratios m
 
 - **Media serves the task.** An image earns its place by showing the product, the people who use it or the result; a decorative image is marked decorative and never carries a message alone.
 - **Crop to a ratio, not to the photo.** Media takes the system's ratios so a grid of images reads as one set.
-- **Text over an image always has a scrim.** The scrim is measured against the brightest possible image, so no photo can take the text below its minimum.
+- **Text over an image always has a scrim.** The scrim is measured against the worst image for its text, the brightest under light text and the darkest under dark text, so no photo can take the text below its minimum.
 - **Treat photos as a set.** A tint or a duotone pulls photos from different sources into the brand's light; use one treatment per page.
 - **Art fills, it does not explain.** Generated art is decoration: it sets the mood where a photo is missing and says nothing a screen reader needs.
 
@@ -43,7 +43,7 @@ Imagery varies on contrast: under high contrast the scrim is stronger, so white 
 ## Changing the system
 
 1. Imagery moves with the axes and the brand color: the hero ratio with the contrast, density and formality axes, the card ratio with the geometry and formality axes, the duotone highlight and the tint with the warmth axis, and the scrim, the duotone shadow and the tint with the brand hue. Change them in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
-2. The build keeps white text on the scrim at 4.5:1 over a white image (7:1 under high contrast), every ratio between 1:5 and 5:1, and the duotone pair 7:1 apart, our floor; a failed check names the role.
+2. The build keeps the text on the scrim at 4.5:1 over the worst image for it (7:1 under high contrast), every ratio between 1:5 and 5:1, and the duotone pair 7:1 apart, our floor; a failed check names the role.
 3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
 4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.
 
@@ -53,7 +53,7 @@ Audits how media is cropped, treated and captioned: ratios, the scrim under any 
 
 ## Checks
 
-- `scrim-text`: white text on the scrim reaches 4.5:1 over a white image, 7:1 under high contrast (WCAG 1.4.3 and 1.4.6).
+- `scrim-text`: the text on the scrim reaches 4.5:1 over both a white and a black image, 7:1 under high contrast (WCAG 1.4.3 and 1.4.6); a white image is the worst under light text and a black one under dark text, and the finding names the image that failed.
 - `media-ratios`: every ratio lies between 1:5 and 5:1.
 - `duotone-range`: the duotone shadow and highlight are at least 7:1 apart, our floor, so a treated photo keeps its detail.
 

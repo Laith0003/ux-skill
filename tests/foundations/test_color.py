@@ -953,3 +953,48 @@ def test_the_logo_keeps_the_exact_brand_where_it_clears_our_floor():
     (1.0, "color.neutral.100", "color.neutral.700")])
 def test_the_surface_treatment_sets_the_subtle_line(depth, light, dark):
     assert color_module._subtle_steps(depth) == (light, dark)
+
+
+def _error_edge(high_raw):
+    """The #3366FF set with the light high contrast error edge repointed."""
+    ts = generate_color(AXES, "#3366FF").tokens
+    ts.get("color.line.danger").modes["contrast:high"] = high_raw
+    check = {c.id: c for c in color_module.CHECKS}["error-edge-hue"]
+    return check.run(ts, "scheme:light,contrast:high")
+
+
+def test_the_error_edge_check_passes_the_generated_edge_and_fires_three_steps_out():
+    ts = generate_color(AXES, "#3366FF").tokens
+    check = {c.id: c for c in color_module.CHECKS}["error-edge-hue"]
+    assert all(check.run(ts, mode) == [] for mode in COLOR_CONTEXTS)
+    assert _error_edge("{color.danger.900}") == [
+        "color.line.danger (scheme:light,contrast:high) sits 3 ramp steps from its standard "
+        "step color.danger.600, so the error edge loses its red; keep it within one step and let "
+        "the field's icon and message carry the rest"]
+
+
+@pytest.mark.parametrize("raw, shown", [("{color.neutral.900}", "{color.neutral.900}"),
+                                        ("#000000", "#000000")])
+def test_the_error_edge_check_fails_closed_off_the_danger_ramp(raw, shown):
+    assert _error_edge(raw) == [
+        f"color.line.danger (scheme:light,contrast:high) is {shown}, not a step of the danger "
+        "ramp, so the error edge can lose its red; point it at a color.danger step within one "
+        "step of its standard step color.danger.600"]
+
+
+def _record(name):
+    from engine.rulepack.records import RECORDS_DIR
+    return (RECORDS_DIR / f"{name}.md").read_text(encoding="utf-8")
+
+
+def test_the_brand_fidelity_record_states_the_identity_distance_the_code_uses():
+    text = _record("brand-fidelity")
+    assert f"more than {color_module.IDENTITY_DISTANCE:g} from the brand in OKLab" in text
+    assert "0.15" not in text
+
+
+def test_the_status_harmony_record_states_the_fade_at_the_opposite_hue():
+    from engine.foundations import character
+    text = _record("status-harmony")
+    assert f"within {character.STATUS_FADE:g} degrees of the status hue's opposite" in text
+    assert "never reads as orange" not in text

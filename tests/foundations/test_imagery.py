@@ -69,3 +69,30 @@ def test_media_is_rounded_by_the_roundness():
     sharp = build_system(axes(geometry=0.0, formality=1.0), "#3366FF").tokens
     soft = build_system(axes(geometry=1.0, formality=0.0), "#3366FF").tokens
     assert sharp.resolve("radius.media")["value"] < soft.resolve("radius.media")["value"]
+
+
+def test_the_scrim_is_measured_against_the_worst_image_for_its_text():
+    """Dark text on a light scrim is weakest over a black image, not a white one."""
+    ts = generate_imagery(axes(), "#3366FF").tokens
+    ts.get("imagery.shade.standard").value = "#FFFFFF20"
+    ts.get("imagery.white").value = "#000000"
+    check = next(c for c in CHECKS if c.id == "scrim-text")
+    found = check.run(ts, "")
+    assert len(found) == 1 and found[0].startswith(
+        "imagery.on-scrim on imagery.scrim over a black image () is 1.28:1")
+
+
+def test_the_scrim_alpha_reaches_the_minimum_over_both_images():
+    base = scrim_base("#3366FF")
+    for need in (4.5, 7.0):
+        a = scrim_alpha(base, need)
+        for image in ("#FFFFFF", "#000000"):
+            assert contrast("#FFFFFF", _over(base, a / 255, image)) >= need
+
+
+def test_text_between_the_two_composites_meets_a_grey_image_at_one_to_one():
+    ts = generate_imagery(axes(), "#3366FF").tokens
+    ts.get("imagery.white").value = "#404040"
+    check = next(c for c in CHECKS if c.id == "scrim-text")
+    assert check.run(ts, "")[0].startswith(
+        "imagery.on-scrim on imagery.scrim over a grey image () is 1.00:1")

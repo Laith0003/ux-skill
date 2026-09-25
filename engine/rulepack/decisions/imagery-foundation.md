@@ -15,7 +15,7 @@ The site trials had no images at all: nothing in the system said how to crop a p
 
 ## Decision
 
-A ninth foundation, imagery, holds the media ratios (hero from the contrast, density and formality axes; card from geometry and formality; portrait 4:5), a scrim whose alpha is the least that lets white text reach 4.5:1 over a pure white image and 7:1 under high contrast, a duotone pair in the brand hue with a highlight pulled warm or cool, and a brand tint whose strength grows with warmth. radius.media gives media its corner. The scrim-text check measures the scrim over a white image in every context; the duotone pair holds our 7:1 floor.
+A ninth foundation, imagery, holds the media ratios (hero from the contrast, density and formality axes; card from geometry and formality; portrait 4:5), a scrim whose alpha is the least that lets its text reach 4.5:1 over the worst image for that text and 7:1 under high contrast (decisions/scrim-worst-image.md), a duotone pair in the brand hue with a highlight pulled warm or cool, and a brand tint whose strength grows with warmth. radius.media gives media its corner. The scrim-text check measures the scrim over a white and a black image in every context and counts the lower ratio; the duotone pair holds our 7:1 floor.
 
 ## Why
 

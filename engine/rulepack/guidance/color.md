@@ -128,7 +128,7 @@ Some roles carry no contrast minimum. Disabled text and fills are checked for di
 
 - `ring-not-weaker`: under high contrast the focus ring measures at least what the standard ring measures against each surface.
 - `ring-on-fill`: a ring under 3:1 against the primary fill keeps at least 2px of page color between them, our rule.
-- `error-edge-hue`: under high contrast the error edge stays within one ramp step of its standard step, so it stays red.
+- `error-edge-hue`: under high contrast the error edge stays within one ramp step of its standard step, so it stays red; an edge that is a literal color or a step of another ramp is a finding too.
 - `states-distinct`: each fill's hover and pressed steps differ from the fill and from each other.
 - `disabled-distinct`: disabled text differs from default and muted text, and the disabled fill differs from the primary fill.
 - `disabled-visible`: the disabled fill differs from the card and raised surfaces, so a disabled button never vanishes.

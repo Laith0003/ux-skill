@@ -7,7 +7,10 @@ never of an industry. The hero ratio widens as the system gets bolder,
 airier and more playful; the card ratio squares up as geometry softens and
 widens as formality rises. The scrim's alpha is the least that lets white
 text reach 4.5:1 over a pure white image (7:1 under high contrast), so the
-worst photo still reads. The duotone pair takes the brand hue: a deep
+worst photo still reads; the scrim is measured over a white and a black
+image, and the lower ratio counts, since white is the worst image for light
+text and black the worst for dark text (text whose luminance falls between
+the two composites meets a grey image that matches it). The duotone pair takes the brand hue: a deep
 shadow and a highlight pulled warm or cool with the warmth axis; the tint
 is the brand color at a strength that grows with warmth.
 
@@ -19,7 +22,7 @@ from typing import Dict, List, Tuple
 
 from engine.foundations import character
 from engine.foundations.color_math import (
-    contrast, hex_to_oklch, hex_to_rgb, oklch_to_hex, rgb_to_hex)
+    contrast, hex_to_oklch, hex_to_rgb, luminance, oklch_to_hex, rgb_to_hex)
 from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check
 from engine.foundations.tokens import Token, TokenSet
@@ -28,8 +31,13 @@ from engine.synthesizer.axes import AxisValues
 HERO_RATIOS: Tuple[Tuple[int, int], ...] = ((4, 3), (3, 2), (16, 9), (2, 1), (21, 9))
 CARD_RATIOS: Tuple[Tuple[int, int], ...] = ((1, 1), (4, 3), (3, 2), (16, 9))
 PORTRAIT: Tuple[int, int] = (4, 5)
-# The minimum white text on the scrim must reach over a white image.
+# The minimum the text on the scrim must reach over the worst image.
 SCRIM_TEXT = {"standard": (4.5, "1.4.3"), "high": (7.0, "1.4.6")}
+# The two extreme images: white is the worst under light text, black under
+# dark text. Compositing is linear in each channel and luminance rises with
+# every channel, so no photo's composite is lighter than white's or darker
+# than black's.
+IMAGES = (("white", "#FFFFFF"), ("black", "#000000"))
 # Our floor between the duotone's shadow and highlight, so an image keeps
 # its detail.
 DUOTONE_FLOOR = 7.0
@@ -53,11 +61,25 @@ def _over(color: str, alpha: float, under: str) -> str:
     return rgb_to_hex(tuple(alpha * t + (1 - alpha) * b for t, b in zip(top, bottom)))
 
 
-def scrim_alpha(base: str, need: float) -> int:
-    """The smallest alpha, in 1/255 steps, at which white text reaches
-    `need` over `base` laid on a white image."""
+def _worst(text: str, color: str, alpha: float) -> Tuple[float, str]:
+    """The lowest ratio of `text` on `color` at `alpha` over any image, and
+    the image that gives it. Over a grey image the composite runs between
+    the two extremes, so when the text's luminance lies between theirs some
+    grey matches it and the ratio is 1:1."""
+    over = [(contrast(text, _over(color, alpha, hx)), name, luminance(_over(color, alpha, hx)))
+            for name, hx in IMAGES]
+    lows = sorted(lum for _, _, lum in over)
+    if lows[0] < luminance(text) < lows[1]:
+        return 1.0, "grey"
+    ratio, name, _ = min(over)
+    return ratio, name
+
+
+def scrim_alpha(base: str, need: float, text: str = WHITE) -> int:
+    """The smallest alpha, in 1/255 steps, at which `text` reaches `need`
+    over `base` laid on the worst image for it."""
     for a in range(256):
-        if contrast(WHITE, _over(base, a / 255, WHITE)) >= need:
+        if _worst(text, base, a / 255)[0] >= need:
             return a
     return 255
 
@@ -138,18 +160,19 @@ def _split(hx: str) -> Tuple[str, float]:
 
 
 def _scrim_text(ts: TokenSet, mode: str) -> List[str]:
-    """White text on the scrim reaches the text minimum over the worst
-    image, a white one, in this context."""
+    """The text on the scrim reaches the text minimum over the worst image
+    for it in this context: a white image under light text, a black one
+    under dark text. The lower of the two is measured."""
     if not (_typed(ts, "imagery.scrim") and _typed(ts, "imagery.on-scrim")):
         return []
     key = "high" if "contrast:high" in mode else "standard"
     need, criterion = SCRIM_TEXT[key]
     color, alpha = _split(str(ts.resolve("imagery.scrim", mode)))
     text = str(ts.resolve("imagery.on-scrim", mode))
-    ratio = contrast(text, _over(color, alpha, WHITE))
+    ratio, image = _worst(text, color, alpha)
     if ratio >= need:
         return []
-    return [f"imagery.on-scrim on imagery.scrim over a white image ({mode}) is "
+    return [f"imagery.on-scrim on imagery.scrim over a {image} image ({mode}) is "
             f"{int(ratio * 100) / 100:.2f}:1; WCAG {criterion} needs {need:g}:1, so point "
             "imagery.scrim at a stronger shade"]
 

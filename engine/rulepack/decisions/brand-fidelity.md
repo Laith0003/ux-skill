@@ -15,7 +15,7 @@ A fill that moves a ramp step whenever white text falls short costs a bright bra
 
 ## Decision
 
-The primary fill's first candidate in every context is the exact brand color. In light at standard contrast it stays whenever white or black text meets 4.5:1 on it. In dark and under high contrast it stays whenever white text meets the minimum, or black text does on a fill at OKLCH lightness 0.72 or more; otherwise the fill moves to the brand step nearest the brand color in OKLab that meets the minimum under the same rule, and takes black text on a darker step only when no step passes without it. The system report states, per context, the fill, its text and whether it is the brand color; when the fill sits more than 0.15 from the brand in OKLab it says the brand's identity is not carried by the button there.
+The primary fill's first candidate in every context is the exact brand color. In light at standard contrast it stays whenever white or black text meets 4.5:1 on it. In dark and under high contrast it stays whenever white text meets the minimum, or black text does on a fill at OKLCH lightness 0.72 or more; otherwise the fill moves to the brand step nearest the brand color in OKLab that meets the minimum under the same rule, and takes black text on a darker step only when no step passes without it. The system report states, per context, the fill, its text and whether it is the brand color; when the fill sits more than 0.12 from the brand in OKLab it says the brand's identity is not carried by the button there.
 
 ## Why
 

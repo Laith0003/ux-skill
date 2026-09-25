@@ -11,7 +11,7 @@ superseded_by: null
 
 ## Context
 
-A well, a code block or a disabled field needs a surface below the page. One full ramp step below the page reads as a heavy grey slab in light, which people take for disabled, and pure black in dark reads as a hole in the page.
+A well, a hovered row or a disabled field needs a surface below the page. One full ramp step below the page reads as a heavy grey slab in light, which people take for disabled, and pure black in dark reads as a hole in the page.
 
 ## Decision
 
