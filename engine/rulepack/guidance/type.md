@@ -52,18 +52,11 @@ Styles that work together: a heading above body text; a hero with body text or a
 
 ## Changing the system
 
-{arabic} 1. Read before writing: note each style's five fields in both directions.
-{latin} 1. Read before writing: note each style's five fields.
-{arabic} 2. To change the faces, build again with another type personality value, or add a face and point the styles at it; in a build with Arabic, always keep an Arabic face beside the Latin one.
-{latin} 2. To change the faces, build again with another type personality value, or add a face and point the styles at it.
-3. To change the scale, build again with another contrast axis value; the ratio and the heading weight follow.
-4. To change one style, point one field at another primitive, keeping body at 16px or more, fine at 12px or more, and reading line heights at 1.5 or more.
-{arabic} 5. Keep the order hero, heading-1, heading-2, heading-3, body falling in size in both directions.
-{latin} 5. Keep the order hero, heading-1, heading-2, heading-3, body falling in size.
-6. Never merge two styles because their values match today; each has its own job.
-7. Never write a text style outside the tokens; a new need is a new style with its five fields.
-
-A new face must carry 400, 500 and the heading weight (600, or 700 at a contrast axis value of 0.66 or more); a missing weight falls back to another and blurs the hierarchy. Make one change at a time and build after each; a failed check names the style and the mode.
+{arabic} 1. Type moves with three axes: the type personality axis picks the faces, the contrast axis sets the scale ratio and the heading weight, and the density axis sets the reading line heights and the ui size. Without --latin-only the build keeps an Arabic face beside the Latin one. Change them in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+{latin} 1. Type moves with three axes: the type personality axis picks the faces, the contrast axis sets the scale ratio and the heading weight, and the density axis sets the reading line heights and the ui size. Change them in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+2. The build keeps body at 16px or more, fine at 12px or more, reading line heights at 1.5 or more and the order hero, heading-1, heading-2, heading-3, body falling in size; a failed check names the style and the mode.
+3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
+4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.
 
 ## Audit scope
 

@@ -50,12 +50,10 @@ Under reduced motion drop scale as well as travel: an element that grows from a 
 
 ## Changing the system
 
-1. Read before writing: note each role's duration, curve and distance in both motion modes.
-2. To make all motion calmer or livelier, build again with another motion axis value; every role moves together.
-3. To change one kind of change, point its role at another duration or curve, keeping dismiss shorter than reveal and press in place.
-4. Change reduced values only through the motion:reduced overrides, and never make them longer than the standard ones.
-5. Never create a move outside the seven roles; if a change fits none, it probably needs none.
-6. Keep progress linear and at least 334ms per cycle, our floor, so the loop cannot repeat more than three times a second.
+1. Motion moves with the motion axis: every role grows calmer or livelier together. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+2. The build keeps dismiss shorter than reveal, press in place, reduced values never longer than standard ones, and progress linear at 334ms or more per cycle, our floor; a failed check names the role and the mode.
+3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
+4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.
 
 ## Audit scope
 

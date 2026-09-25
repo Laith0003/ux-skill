@@ -43,12 +43,10 @@ Radius varies on no axis: corners are the same in every scheme, contrast, densit
 
 ## Changing the system
 
-1. Read before writing: note the pixel value of every role before changing one.
-2. To make every corner softer or sharper, build again with another geometry axis value; the scale moves as one.
-3. To change one shape, point its role at another step, keeping radius.dialog at least radius.card.
-4. Keep the joined and nested rules when a parent's radius changes: its inset children and joined parts change with it.
-5. Never write a pixel value into a component; if no role fits, propose one and name the shape it is for.
-6. Make one change at a time and check the components that use the role.
+1. Corners move with the geometry axis: the whole scale grows softer or sharper together. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+2. The build keeps the scale increasing, radius.dialog at least radius.card, radius.joined at 0 and radius.pill at 999px or more; nested and joined corners follow from those roles.
+3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
+4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.
 
 ## Audit scope
 

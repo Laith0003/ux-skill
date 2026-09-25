@@ -49,12 +49,10 @@ Elevation varies on scheme (light, dark). Dark shadows are stronger than light o
 
 ## Changing the system
 
-1. Read before writing: note each level's shadow in both schemes before changing one.
-2. To make shadows stronger or softer, build again with another contrast axis value; every level moves together and stays ordered.
-3. Keep every level above the one below it: a larger offset and blur and at least the same strength.
-4. Keep dark shadows stronger than light ones, and every level visible in both schemes.
-5. Keep the stacking order base, sticky, dropdown, overlay, dialog, toast.
-6. To add a level, add a shadow role and an order role for it and place both in the sequence; never reuse a level for a different kind of layer.
+1. Shadows move with the contrast axis: every level grows stronger or softer together and stays in order. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+2. The build keeps every level above the one below, dark shadows stronger than light ones, every level visible in both schemes, and the stacking order base, sticky, dropdown, overlay, dialog, toast; a failed check names the level.
+3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
+4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.
 
 ## Audit scope
 

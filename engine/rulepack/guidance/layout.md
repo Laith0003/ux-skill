@@ -52,14 +52,10 @@ Layout varies on density: gutters and margins take one step less in compact, nev
 
 ## Changing the system
 
-1. Read before writing: note each tier's columns, gutter and margin in both densities.
-2. To change the tiers, change the breakpoint values together, keeping them strictly increasing.
-3. To change a gutter or margin, point it at another spacing step; it moves with density on the spacing scale's rules.
-4. Columns are fixed per tier at 4, 8, 12 and 12, and no axis moves them; changing them is a generator change, and a wider tier keeps at least as many columns as a narrower one.
-5. layout.container.max is one width for every tier, 1120, 1280 or 1440px as the density axis picks; to change it, build again with another density axis value.
-6. Keep layout.measure.text at 40rem or less and layout.target.min at 44px or more in comfortable.
-7. Add a page pattern (a pane layout, a dashboard) in terms of these tokens; add a token only when every product needs it.
-8. Review the change on the main screens of the product before building on it.
+1. Layout moves with the density axis: it sets the gutters, the margins, layout.container.max (1120, 1280 or 1440px) and the targets. Breakpoints and the columns per tier (4, 8, 12 and 12) are fixed in this version. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+2. The build keeps the breakpoints strictly increasing, no wider tier with fewer columns, layout.measure.text at 40rem or less and layout.target.min at 44px or more in comfortable; review the main screens of the product after a change.
+3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
+4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.
 
 ## Audit scope
 

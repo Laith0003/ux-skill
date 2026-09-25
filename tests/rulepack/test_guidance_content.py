@@ -89,3 +89,26 @@ def test_guidance_is_ascii_without_dashes():
         text = path.read_text(encoding="utf-8")
         assert text.isascii(), path.name
         assert not re.search(r"\s--\s|\w--\s|\s--$", text, re.M), path.name
+
+
+# Changing the system says what this version supports: change an input,
+# build again and read the report. Repointing, exempting or adding a role
+# comes with the 4.1 importers and the extend mode, and nothing tells a
+# reader to edit engine code or a generated value.
+INPUTS = {"border": "contrast axis", "color": "brand color", "elevation": "contrast axis",
+          "layout": "density axis", "motion": "motion axis", "radius": "geometry axis",
+          "space": "density axis", "type": "type personality axis"}
+REPOINT = re.compile(r"\bpoint (the|its|one|it|a) |COVERAGE_EXEMPT|coverage table|generator "
+                     r"change|overrides|\badd (it|a|an) [a-z ]*role\b|engine/", re.I)
+
+
+@pytest.mark.parametrize("arabic", [True, False])
+@pytest.mark.parametrize("name", sorted(INPUTS))
+def test_changing_the_system_says_what_this_version_supports(name, arabic):
+    text = load_guidance(name, arabic=arabic).section("Changing the system")
+    assert "uxskill system build" in text, name
+    assert "system report it writes beside tokens.json" in text, name
+    assert "4.1 importers and the extend mode" in text, name
+    assert INPUTS[name] in text, name
+    assert not REPOINT.search(text), (name, REPOINT.search(text).group(0))
+    assert len(text) < 1400, (name, len(text))

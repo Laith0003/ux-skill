@@ -47,12 +47,10 @@ Border varies on no axis. Widths are the same in every scheme, contrast, density
 
 ## Changing the system
 
-1. Read before writing: note the width each role points at before changing one.
-2. To change a job's weight, point its role at another width step, keeping emphasis and active heavier than the outline, and the separator no heavier than the outline.
-3. Keep the focus ring at least 2px and wider than the outline, and its offset at least 1px (decisions/ring-offset.md).
-4. Keep widths whole pixels; a lighter line uses a quieter color, not a thinner stroke (decisions/whole-pixel-borders.md).
-5. To add a structural job, add a role named for it; never borrow a role because its width fits.
-6. Never swap the separator and the outline: their jobs differ even when their widths match.
+1. Border widths move with the contrast axis: at 0.66 or more the focus ring is one step wider. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+2. The build keeps widths whole pixels, emphasis and active heavier than the outline, the separator no heavier than the outline, and the focus ring at least 2px with an offset of at least 1px (decisions/whole-pixel-borders.md, decisions/ring-offset.md); a failed check names the role.
+3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
+4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.
 
 ## Audit scope
 

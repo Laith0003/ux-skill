@@ -89,13 +89,10 @@ Color varies on scheme (light, dark) and contrast (standard, high). Every semant
 
 ## Changing the system
 
-1. Read before writing: trace the role to the primitive it points at in every context before changing anything.
-2. To change the palette, change the brand color and build again; the ramps, roles and pairings are regenerated and measured. Never edit a generated hex in tokens.json or tokens.css.
-3. To change one use, point the role at another step in the contexts that need it, then build and let the gate measure it in all four.
-4. To add a role, add it to a coverage table, so it is paired with every surface that table lists, or to COVERAGE_EXEMPT with the reason it needs no pairing.
-5. To drop a status family, first confirm no contract binds its roles; keep the ramp, since other roles may point at it.
-6. Change one thing at a time and build after each change; a failed gate names the pairing and the context.
-7. Dark and high contrast are never an afterthought: a change that passes in light is not done until the gate passes in all four contexts.
+1. Color moves with the brand color, and the warmth axis sets how much of the brand hue the neutrals carry. Change them and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json; the ramps, roles and pairings are regenerated and measured in all four contexts.
+2. Change one input at a time: a failed gate names the pairing and the context, and a change is not done until it passes in dark and high contrast as well as light.
+3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
+4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.
 
 ## Audit scope
 

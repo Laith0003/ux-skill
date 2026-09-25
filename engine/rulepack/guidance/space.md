@@ -48,12 +48,10 @@ Space varies on density (comfortable, compact). Comfortable is the base; the bri
 
 ## Changing the system
 
-1. Read before writing: find the role's step in both densities before changing it.
-2. To make every space larger or smaller, build again with another density axis value; the scale is fixed, the roles move.
-3. To change one relationship, point its role at another step, keeping the order text gap, group gap, region gap.
-4. Keep the small steps stable: the 8px control gap and control padding protect targets and tap accuracy.
-5. To add a relationship, add a role named for it and state what it separates; never reuse a role for a different relationship because the value fits.
-6. Never remap one role to another's value to make two spacings match; if they must match, they are the same relationship.
+1. Space moves with the density axis: every role grows larger or smaller together, while the scale stays fixed. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+2. The build keeps the control gap at 8px or more, the order text gap, group gap, region gap in every density, and compact never larger than comfortable; a failed check names the role and the density.
+3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
+4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.
 
 ## Audit scope
 
