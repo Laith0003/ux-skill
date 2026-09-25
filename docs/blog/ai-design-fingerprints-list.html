@@ -21,8 +21,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ai-design-fingerprints-list.html">
   <meta property="og:title" content="The 35 AI design fingerprints every AI coding tool ships by default">
-  <!-- ux-lint-disable --><meta property="og:description" content="Inter as display, indigo-to-blue gradients, three equal cards, John Doe placeholders. The full taxonomy with detection regex and fixes."><!-- ux-lint-enable -->
-  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/ai-design-fingerprints-list.png">
+<!-- ux-lint-off fake-name-john-doe --><meta property="og:description" content="Inter as display, indigo-to-blue gradients, three equal cards, John Doe placeholders. The full taxonomy with detection regex and fixes."><!-- ux-lint-on -->  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/ai-design-fingerprints-list.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="ux-skill · ai-design-fingerprints-list">
@@ -30,8 +29,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="The 35 AI design fingerprints">
-  <!-- ux-lint-disable --><meta name="twitter:description" content="Inter as display, indigo-to-blue gradients, three equal cards, John Doe placeholders. Full list with regex."><!-- ux-lint-enable -->
-
+<!-- ux-lint-off fake-name-john-doe --><meta name="twitter:description" content="Inter as display, indigo-to-blue gradients, three equal cards, John Doe placeholders. Full list with regex."><!-- ux-lint-on -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -601,9 +599,9 @@
     <article>
       <span class="eyebrow">Blog · Reference · 2026-05-28</span>
       <h1>The 35 AI design fingerprints every AI coding tool ships <span class="accent">by default</span>.</h1>
-      <p class="lede">
-        <!-- ux-lint-disable -->        Every AI coding tool (Claude Code, Cursor, Windsurf, Copilot, Aider, v0, Bolt) produces the same recognizable defaults when you ask it to design something. Inter at 90px. Indigo-to-blue gradients. Three identical cards. "John Doe" placeholders. fade-in-up on everything. This is the full taxonomy. <strong>35 fingerprints, grouped by category, with the regex that detects each one.</strong>
-      <!-- ux-lint-enable --></p>
+      <!-- ux-lint-off fake-name-john-doe --><p class="lede">
+        Every AI coding tool (Claude Code, Cursor, Windsurf, Copilot, Aider, v0, Bolt) produces the same recognizable defaults when you ask it to design something. Inter at 90px. Indigo-to-blue gradients. Three identical cards. "John Doe" placeholders. fade-in-up on everything. This is the full taxonomy. <strong>35 fingerprints, grouped by category, with the regex that detects each one.</strong>
+</p><!-- ux-lint-on -->
       <p class="byline">By the ux-skill team · 14 min read · Sourced from data/anti-patterns.json</p>
       <figure class="docfig">
         <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="A terminal running ux lint on a docs folder: two high-severity findings, a purple-to-blue gradient and leftover placeholder text, each shown with its file, line and fix, then exit code 1." loading="lazy" decoding="async">
@@ -639,8 +637,6 @@
 
   <div class="wrap-wide">
     <article>
-      <!-- The taxonomy quotes each fingerprint it describes. ux-lint skips it. -->
-      <!-- ux-lint-disable -->
       <h2 class="cat-header" id="typography">Typography <span class="count">3 fingerprints</span></h2>
       <p class="cat-blurb">Type is the single highest-signal surface in any design. The fingerprints below cover face choice, size, and the system-font escape hatch.</p>
 
@@ -673,7 +669,7 @@
           <span class="sev medium">medium</span>
         </div>
         <div class="regex">text-\[(?:9[0-9]|1[0-9]{2})px\]|font-size:\s*(?:9[0-9]|1[0-9]{2})px\b</div>
-        <p class="why"><strong>Why it's slop:</strong> Arbitrary px values like text-[90px] or text-[112px] bypass the type scale and signal the size was picked by eye, not by system.</p>
+        <!-- ux-lint-off hero-text-arbitrary-90px --><p class="why"><strong>Why it's slop:</strong> Arbitrary px values like text-[90px] or text-[112px] bypass the type scale and signal the size was picked by eye, not by system.</p><!-- ux-lint-on -->
         <p class="fix"><strong>Fix:</strong> Extend the Tailwind theme scale or use clamp() for fluid hero typography. text-6xl/7xl/8xl exist for a reason.</p>
       </div>
 
@@ -720,7 +716,7 @@
           <span class="sev low">low</span>
         </div>
         <div class="regex">\b(?:bg|text|border|ring|from|to|via)-(?:blue|red|green|yellow|purple|pink|indigo|orange)-(?:400|500|600)\b</div>
-        <p class="why"><strong>Why it's slop:</strong> Raw bg-blue-500 / bg-purple-500 with no semantic token (primary, success, danger) signals the color system was never designed.</p>
+        <!-- ux-lint-off tailwind-color-named-vague --><p class="why"><strong>Why it's slop:</strong> Raw bg-blue-500 / bg-purple-500 with no semantic token (primary, success, danger) signals the color system was never designed.</p><!-- ux-lint-on -->
         <p class="fix"><strong>Fix:</strong> Define semantic tokens in tailwind.config or CSS custom properties: bg-primary, text-success, ring-accent. Map them once.</p>
       </div>
 
@@ -779,7 +775,7 @@
         </div>
         <div class="regex">class="[^"]*-space-x-[0-9]+[^"]*"[^&gt;]*&gt;(?:\s*&lt;(?:img|div)[^&gt;]*class="[^"]*(?:avatar|rounded-full)[^"]*"[^&gt;]*/?&gt;\s*){3,}</div>
         <p class="why"><strong>Why it's slop:</strong> Three overlapping circular avatars in the nav as "our team" or "join 10k users" is a content-marketing template tell.</p>
-        <p class="fix"><strong>Fix:</strong> Use real customer logos, named testimonials with quotes, or specific signal like "Used by 312 engineering teams at Series-A companies."</p>
+        <!-- ux-lint-off trust-badge-no-source --><p class="fix"><strong>Fix:</strong> Use real customer logos, named testimonials with quotes, or specific signal like "Used by 312 engineering teams at Series-A companies."</p><!-- ux-lint-on -->
       </div>
 
       <div class="fp-card">
@@ -790,7 +786,7 @@
         </div>
         <div class="regex">&lt;button[^&gt;]*class="[^"]*\brounded-full\b[^"]*"|&lt;(?:input|textarea)[^&gt;]*class="[^"]*\brounded-full\b</div>
         <p class="why"><strong>Why it's slop:</strong> rounded-full on every button and input is the iOS-tutorial fingerprint, signals the radius decision was skipped entirely.</p>
-        <p class="fix"><strong>Fix:</strong> rounded-full for pills, avatars, icon buttons only. Use rounded-md or rounded-lg for primary buttons; rounded-xl or rounded-2xl for cards.</p>
+        <!-- ux-lint-off border-radius-2xl-default --><p class="fix"><strong>Fix:</strong> rounded-full for pills, avatars, icon buttons only. Use rounded-md or rounded-lg for primary buttons; rounded-xl or rounded-2xl for cards.</p><!-- ux-lint-on -->
       </div>
 
       <div class="fp-card">
@@ -814,7 +810,7 @@
           <span class="sev medium">medium</span>
         </div>
         <div class="regex">\b(?:John\s+Doe|Jane\s+Doe|John\s+Smith|Sarah\s+Chan|Test\s+User|Demo\s+User|Foo\s+Bar)\b</div>
-        <p class="why"><strong>Why it's slop:</strong> John/Jane Doe and their cousins signal that nobody thought about who would actually use the product, immediate AI-generated-tutorial vibe.</p>
+        <!-- ux-lint-off fake-name-john-doe --><p class="why"><strong>Why it's slop:</strong> John/Jane Doe and their cousins signal that nobody thought about who would actually use the product, immediate AI-generated-tutorial vibe.</p><!-- ux-lint-on -->
         <p class="fix"><strong>Fix:</strong> Use plausible names that fit the target market, like Maya Iqbal, Adam Levin, Wen Zhang, Layla Haddad. Match region for regional products.</p>
       </div>
 
@@ -883,7 +879,7 @@
           <span class="sev low">low</span>
         </div>
         <div class="regex">cubic-bezier\(\s*0?\.4\s*,\s*0\s*,\s*0?\.2\s*,\s*1\s*\)</div>
-        <p class="why"><strong>Why it's slop:</strong> cubic-bezier(0.4, 0, 0.2, 1) is Material Design's default standard ease; using it as the only curve signals no taste decision was made.</p>
+        <!-- ux-lint-off cubic-bezier-material-only --><p class="why"><strong>Why it's slop:</strong> cubic-bezier(0.4, 0, 0.2, 1) is Material Design's default standard ease; using it as the only curve signals no taste decision was made.</p><!-- ux-lint-on -->
         <p class="fix"><strong>Fix:</strong> Use cubic-bezier(0.16, 1, 0.3, 1) for premium exits, cubic-bezier(0.34, 1.56, 0.64, 1) for playful overshoot, or spring physics.</p>
       </div>
 
@@ -1043,11 +1039,10 @@
           <span class="sev medium">medium</span>
         </div>
         <div class="regex">z-index:\s*(?:9999+|99999+|2147483647)\b|\bz-\[(?:9999+|99999+)\]</div>
-        <p class="why"><strong>Why it's slop:</strong> z-index: 9999 is the "I gave up on the stacking system" value; it signals there's no z-scale token map and stacking bugs are coming.</p>
+        <!-- ux-lint-off arbitrary-z-index-9999 --><p class="why"><strong>Why it's slop:</strong> z-index: 9999 is the "I gave up on the stacking system" value; it signals there's no z-scale token map and stacking bugs are coming.</p><!-- ux-lint-on -->
         <p class="fix"><strong>Fix:</strong> Define a z-scale token set (z-base: 0, z-dropdown: 10, z-sticky: 20, z-modal: 50, z-toast: 60). Use the tokens, never a raw 9999.</p>
       </div>
 
-      <!-- ux-lint-enable -->
       <h2>How to run all 35 against your codebase</h2>
       <p>
         The full taxonomy ships in ux-skill v2's anti-pattern linter. The CLI runs every rule against your source files and exits non-zero if any high-severity fingerprint matches. Drop it into a pre-commit hook or a CI step.

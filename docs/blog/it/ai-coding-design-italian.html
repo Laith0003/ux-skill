@@ -565,9 +565,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         Qui sotto un blocco hero semplificato preso da uno starter Next.js, che cade in tre regole, e la versione riscritta che esce con exit 0. Stessa intenzione di conversione, impronta diversa.
       </p>
-      <!-- A code sample of the slop this post describes. ux-lint skips it. -->
-      <!-- ux-lint-disable -->
-      <pre class="code"><span class="c">// Prima: 3 finding high</span>
+      <!-- ux-lint-off purple-to-blue-gradient, tailwind-color-named-vague --><pre class="code"><span class="c">// Prima: 3 finding high</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -596,8 +594,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
     &lt;Card className=<span class="s">"col-span-5"</span>
       title=<span class="s">"Ranking trasportatori"</span> /&gt;
   &lt;/div&gt;
-&lt;/section&gt;</pre>
-      <!-- ux-lint-enable -->
+&lt;/section&gt;</pre><!-- ux-lint-on -->
       <p>
         Nel «prima» scattano tre regole: Inter su <code>text-7xl</code>, il gradiente canonico dell'AI, e la griglia di tre card identiche. Nel «dopo» Fraunces (display) si accoppia a Inter (corpo), la superficie diventa piatta, e la griglia passa a un asimmetrico 7-e-5. L'intenzione è la stessa, l'impronta è sparita.
       </p>

@@ -528,22 +528,63 @@ def test_placeholder_as_only_label_still_flagged(tmp_path):
         tmp_path, "bad.html", '<input type="email" placeholder="Email">')
 
 
-def test_disabled_region_is_not_scanned(tmp_path):
-    """docs/anti-patterns.html quotes every rule it documents. A marked region
-    is skipped; the rest of the file is still linted, on the right line."""
-    html = ('<!-- ux-lint-disable -->\n'
+def _hits(tmp_path, name, body, rule):
+    f = tmp_path / name
+    f.write_text(body, encoding="utf-8")
+    report = lint([str(f)])
+    return [x for x in report.to_dict()["findings"] if x["rule_id"] == rule], report
+
+
+def test_region_waives_only_the_rules_it_names(tmp_path):
+    """docs/anti-patterns.html quotes the rules it documents. A ux-lint-off
+    region waives the named rules on its lines; other rules still fire there,
+    and lines after ux-lint-on are linted as usual."""
+    html = ('<!-- ux-lint-off lorem-ipsum-leak, placeholder-token-shipped -->\n'
             '<h3 class="ap-name">Lorem ipsum in shipping code</h3>\n'
-            '<!-- ux-lint-enable -->\n'
+            '<p>We saved John Doe 10 hours.</p>\n'
+            '<!-- ux-lint-on -->\n'
             '<p>lorem ipsum dolor</p>\n')
-    f = tmp_path / "catalog.html"
-    f.write_text(html, encoding="utf-8")
-    hits = [x for x in lint([str(f)]).to_dict()["findings"] if x["rule_id"] == "lorem-ipsum-leak"]
-    assert [x["line"] for x in hits] == [4]
+    lorem, report = _hits(tmp_path, "catalog.html", html, "lorem-ipsum-leak")
+    assert [x["line"] for x in lorem] == [5]
+    names, _ = _hits(tmp_path, "catalog.html", html, "fake-name-john-doe")
+    assert [x["line"] for x in names] == [3]
+    assert report.waived_lines == 4
+    assert report.to_dict()["waived_lines"] == 4
 
 
-def test_unclosed_disable_runs_to_end_of_file(tmp_path):
-    html = '<p>ok</p>\n<!-- ux-lint-disable -->\n<p>Lorem ipsum</p>\n'
-    assert "lorem-ipsum-leak" not in _ids(tmp_path, "open.html", html)
+def test_unclosed_region_waives_nothing_and_is_a_finding(tmp_path):
+    html = '<p>ok</p>\n<!-- ux-lint-off lorem-ipsum-leak -->\n<p>Lorem ipsum</p>\n'
+    lorem, _ = _hits(tmp_path, "open.html", html, "lorem-ipsum-leak")
+    assert [x["line"] for x in lorem] == [3]
+    broken, report = _hits(tmp_path, "open.html", html, "lint-waiver-region")
+    assert [x["line"] for x in broken] == [2]
+    assert broken[0]["severity"] == "high"
+    assert "line 2" in broken[0]["fix"] and "ux-lint-on" in broken[0]["fix"]
+    assert report.exit_code == 1
+
+
+def test_region_without_rule_ids_waives_nothing_and_is_a_finding(tmp_path):
+    html = '<!-- ux-lint-off -->\n<p>Lorem ipsum</p>\n<!-- ux-lint-on -->\n'
+    lorem, _ = _hits(tmp_path, "bare.html", html, "lorem-ipsum-leak")
+    assert [x["line"] for x in lorem] == [2]
+    broken, _ = _hits(tmp_path, "bare.html", html, "lint-waiver-region")
+    assert [x["line"] for x in broken] == [1] and "names no rule" in broken[0]["fix"]
+
+
+def test_stray_region_close_is_a_finding(tmp_path):
+    broken, _ = _hits(tmp_path, "stray.html", "<p>ok</p>\n<!-- ux-lint-on -->\n", "lint-waiver-region")
+    assert [x["line"] for x in broken] == [2]
+
+
+def test_disable_comment_waives_its_own_line_only(tmp_path):
+    """commands/ux-lint.md: `ux-lint-disable` on a line skips that line."""
+    html = ('<p>Acme Inc, Lorem ipsum <!-- ux-lint-disable --></p>\n'
+            '<p>Lorem ipsum</p>\n'
+            '<p>Lorem ipsum <!-- ux-lint-disable fake-name-john-doe --></p>\n'
+            '<!-- ux-lint-disable-next-line lorem-ipsum-leak -->\n'
+            '<p>Lorem ipsum</p>\n')
+    lorem, _ = _hits(tmp_path, "line.html", html, "lorem-ipsum-leak")
+    assert [x["line"] for x in lorem] == [2, 3]
 
 
 def test_passive_listener_explicit_false_not_flagged(tmp_path):
@@ -557,3 +598,53 @@ def test_passive_listener_explicit_false_not_flagged(tmp_path):
 def test_passive_listener_missing_option_still_flagged(tmp_path):
     js = "window.addEventListener('scroll', onScroll);"
     assert "event-listener-no-passive-on-scroll" in _ids(tmp_path, "bad.js", js)
+
+
+# --- placeholder-as-label: pass only with a real accessible name ---
+
+@pytest.mark.parametrize("name,body", [
+    ("id-no-label.html", '<input id="email" type="email" placeholder="Email">'),
+    ("search.tsx", '<input id="search" placeholder="Search" />'),
+    ("label-elsewhere.html", '<label for="other">Name</label><input id="email" placeholder="Email">'),
+    ("data-id.html", '<input data-id="x" placeholder="Search">'),
+    ("testid.html", '<input data-testid="q" placeholder="Search">'),
+    ("labelledby-missing.html", '<input aria-labelledby="nope" placeholder="Search">'),
+    ("empty-aria-label.html", '<input aria-label="" placeholder="Search">'),
+    ("closed-label.html", '<label>Name</label><input placeholder="Search">'),
+])
+def test_placeholder_without_accessible_name_fires(tmp_path, name, body):
+    assert "placeholder-as-label" in _ids(tmp_path, name, body)
+
+
+@pytest.mark.parametrize("name,body", [
+    ("label-for.html", '<label for="email">Email</label>\n<input id="email" placeholder="you@x.com">'),
+    ("label-after.html", '<input id="q" placeholder="Search"><label for="q">Search</label>'),
+    ("html-for.tsx", '<label htmlFor="q">Search</label><input id="q" placeholder="Search" />'),
+    ("wrapping.html", '<label>Email <input type="email" placeholder="you@x.com"></label>'),
+    ("aria-label.html", '<input aria-label="Search" placeholder="Search">'),
+    ("labelledby.html", '<span id="lbl">Search</span><input aria-labelledby="lbl" placeholder="Search">'),
+])
+def test_placeholder_with_accessible_name_passes(tmp_path, name, body):
+    assert "placeholder-as-label" not in _ids(tmp_path, name, body)
+
+
+def test_box_shadow_tailwind_composite_not_flagged(tmp_path):
+    css = (".ring { box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), "
+           "var(--tw-shadow, 0 0 #0000); }")
+    assert "box-shadow-multilayer-default" not in _ids(tmp_path, "tw.css", css)
+
+
+def test_box_shadow_three_hex_layers_flagged(tmp_path):
+    css = ".c { box-shadow: 0 1px 2px #0001, 0 4px 8px #0001, 0 16px 32px #0001; }"
+    assert "box-shadow-multilayer-default" in _ids(tmp_path, "hex.css", css)
+
+
+def test_glass_word_background_in_transition_is_not_a_fallback(tmp_path):
+    css = ".x { transition: background .2s; backdrop-filter: blur(8px); }"
+    assert "glass-without-fallback" in _ids(tmp_path, "t.css", css)
+
+
+def test_glass_finding_points_at_the_blur_line(tmp_path):
+    css = ".x {\n  color: red;\n  backdrop-filter: blur(8px);\n}\n"
+    hits, _ = _hits(tmp_path, "l.css", css, "glass-without-fallback")
+    assert [x["line"] for x in hits] == [3]

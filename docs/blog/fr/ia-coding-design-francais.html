@@ -565,9 +565,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         Voici un bloc héros simplifié, tiré d'un starter Next.js, qui échoue à trois règles, et sa réécriture qui sort en exit 0. Même intention commerciale, empreinte différente.
       </p>
-      <!-- A code sample of the slop this post describes. ux-lint skips it. -->
-      <!-- ux-lint-disable -->
-      <pre class="code"><span class="c">// Avant: 3 détections high</span>
+      <!-- ux-lint-off purple-to-blue-gradient, tailwind-color-named-vague --><pre class="code"><span class="c">// Avant: 3 détections high</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -596,8 +594,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
     &lt;Card className=<span class="s">"col-span-5"</span>
       title=<span class="s">"Classement transporteurs"</span> /&gt;
   &lt;/div&gt;
-&lt;/section&gt;</pre>
-      <!-- ux-lint-enable -->
+&lt;/section&gt;</pre><!-- ux-lint-on -->
       <p>
         Dans l'avant, trois règles se déclenchent : Inter à <code>text-7xl</code>, le dégradé canonique de l'IA, et la grille de trois cartes identiques. Dans l'après, on apparie Fraunces (display) avec Inter (corps), on adopte une surface plate, et l'on passe à une grille asymétrique 7-et-5. Même intention, l'empreinte a disparu.
       </p>

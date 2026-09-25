@@ -565,9 +565,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         Unten steht ein vereinfachter Hero-Block aus einem Next.js-Starter, der drei Regeln verletzt, und die umgeschriebene Variante, die mit Exit-Code 0 durchläuft. Gleiche Konversionsabsicht, anderer Fingerprint.
       </p>
-      <!-- A code sample of the slop this post describes. ux-lint skips it. -->
-      <!-- ux-lint-disable -->
-      <pre class="code"><span class="c">// Vorher: 3 High-Findings</span>
+      <!-- ux-lint-off purple-to-blue-gradient, tailwind-color-named-vague --><pre class="code"><span class="c">// Vorher: 3 High-Findings</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -596,8 +594,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
     &lt;Card className=<span class="s">"col-span-5"</span>
       title=<span class="s">"Carrier-Ranking"</span> /&gt;
   &lt;/div&gt;
-&lt;/section&gt;</pre>
-      <!-- ux-lint-enable -->
+&lt;/section&gt;</pre><!-- ux-lint-on -->
       <p>
         Im Vorher schlagen drei Regeln an: Inter bei <code>text-7xl</code>, der kanonische KI-Verlauf und das Dreierraster identischer Karten. Im Nachher paart die Vorlage Fraunces (Display) mit Inter (Body), nutzt eine flache Oberfläche und tauscht in ein asymmetrisches 7-zu-5-Raster. Gleiche Absicht, kein Fingerprint mehr.
       </p>

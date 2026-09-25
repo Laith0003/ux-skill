@@ -54,13 +54,18 @@ def test_wide_spacing_scale_gets_phone_padding():
     assert _preview_phone_padding({"spacing": {"scale": [6, 12, 18, 24, 36, 54]}}) == ""
 
 
-@pytest.mark.parametrize("script", ["build-brands-page.py", "build-anti-patterns-page.py"])
+@pytest.mark.parametrize("script", ["build-brands-page.py", "build-anti-patterns-page.py",
+                                    "build-commands-page.py"])
 def test_catalog_page_regenerates_lint_clean(tmp_path, script):
     mod = _load_script(script)
     if script == "build-brands-page.py":
         page = mod.build_html(*mod.load_index())
+    elif script == "build-commands-page.py":
+        page = mod.build_html(mod.collect())
     else:
-        page = mod.build_html(*mod.load_rules())
+        page = mod.waive_quotes(mod.build_html(*mod.load_rules()))
+        # regions name the rules they waive, and every one is closed
+        assert "ux-lint-disable -->" not in page and page.count("ux-lint-off") == page.count("ux-lint-on")
     out = tmp_path / "page.html"
     out.write_text(page, encoding="utf-8")
     assert _bad(out) == []

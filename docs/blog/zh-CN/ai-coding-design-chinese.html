@@ -565,9 +565,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         下面是一段从 Next.js 起始模板里截出来的简化 Hero,会命中三条规则;下方是改写后能以 exit 0 通过的版本。同样的转化意图,完全不同的指纹。
       </p>
-      <!-- A code sample of the slop this post describes. ux-lint skips it. -->
-      <!-- ux-lint-disable -->
-      <pre class="code"><span class="c">// 改写前, 命中 3 条 high</span>
+      <!-- ux-lint-off purple-to-blue-gradient, tailwind-color-named-vague --><pre class="code"><span class="c">// 改写前, 命中 3 条 high</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -596,8 +594,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
     &lt;Card className=<span class="s">"col-span-5"</span>
       title=<span class="s">"承运人排名"</span> /&gt;
   &lt;/div&gt;
-&lt;/section&gt;</pre>
-      <!-- ux-lint-enable -->
+&lt;/section&gt;</pre><!-- ux-lint-on -->
       <p>
         改写前命中三条规则:Inter 用在 <code>text-7xl</code>、AI 标志性渐变、三张同款卡的三列网格。改写后用 Fraunces (显示字) 配 Inter (正文),底色变成平的浅米色,网格换成 7-5 非对称布局。意图没变,指纹消失了。
       </p>

@@ -107,7 +107,9 @@ The walker uses `find` with prune-style exclusions for portability across BSD (m
 
 For every file, for every rule whose `Extensions` list matches the file's extension, run `LC_ALL=C grep -nE -- "$pattern" "$file"`. The `LC_ALL=C` forces byte-mode matching so high-byte character classes behave predictably regardless of the user's locale.
 
-Lines containing the string `ux-lint-disable` are skipped — this allows surgical suppression on individual lines where the pattern is a true positive against intent (e.g., a legal-entity name that genuinely is "Acme" because Acme is a real party in a contract).
+A line containing `ux-lint-disable` is skipped: every rule, or only the rule ids listed after it (`ux-lint-disable fake-name-john-doe`). `ux-lint-disable-next-line` does the same for the line below. This allows surgical suppression where the pattern is a true positive against intent (e.g., a legal-entity name that genuinely is "Acme" because Acme is a real party in a contract).
+
+For a block of quoted text, such as a rule catalog or a "before" code sample, open a region with `<!-- ux-lint-off rule-a, rule-b -->` and close it with `<!-- ux-lint-on -->`. Only the named rules are waived, on every line from the opening comment to the closing one. A region must name at least one rule and must be closed. A region that names no rule, is never closed, or opens inside another waives nothing and is reported as a high finding (`lint-waiver-region`) on its opening line, with the fix. The JSON report counts waived lines in `waived_lines`.
 
 If a rule's regex is malformed, the linter logs a warning to stderr, skips that rule, and continues. One broken rule does not fail the entire scan.
 
@@ -224,7 +226,9 @@ Do not paraphrase the script's output. The output is the contract — the report
 | Regex error in a single rule | Skip that rule, log warning to stderr, continue |
 | No rules parsed from the file | Exit 2, print "no rules parsed" |
 | Bad CLI flag or missing value | Exit 3, print usage hint |
-| `ux-lint-disable` on a matched line | Skip the match, do not record a finding |
+| `ux-lint-disable [ids]` on a matched line | Skip the match (all rules, or the listed ids), do not record a finding |
+| Line inside a closed `ux-lint-off ids` region | Skip matches for the listed ids only |
+| `ux-lint-off` that names no rule, is never closed, or opens inside another | Waive nothing; record a high `lint-waiver-region` finding on its line |
 
 ### Working with the rules file
 
@@ -239,7 +243,8 @@ The rules file is human-editable markdown. To add a rule:
 
 To suppress a finding without editing the rules:
 
-- **Per-line**: add a `ux-lint-disable` comment on the offending line. Use `ux-lint-disable rule-N` to document the specific rule being waived.
+- **Per-line**: add a `ux-lint-disable` comment on the offending line, or `ux-lint-disable-next-line` on the line above. Name the rule being waived: `ux-lint-disable fake-name-john-doe`.
+- **Per-block**: wrap quoted text in `<!-- ux-lint-off rule-a, rule-b -->` ... `<!-- ux-lint-on -->`. Name every rule it waives; the region covers nothing else.
 - **Per-file**: pass `--exclude` to the linter with that file's glob.
 - **Project-wide**: pass `--disable <id>` for that rule ID.
 

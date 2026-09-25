@@ -519,8 +519,6 @@
 <section>
   <div class="container">
     <div class="grid" id="ap-grid">
-      <!-- The cards quote every rule: its name, regex, why and fix. Those quotes are the subject of the page, not copy it ships, so the linter skips this region. -->
-      <!-- ux-lint-disable -->
     <article class="ap-card" id="anchor-no-href-as-button">
       <header class="ap-head">
         <span class="ap-id">#anchor-no-href-as-button</span>
@@ -1146,11 +1144,11 @@
         <span class="ap-id">#lorem-ipsum-leak</span>
         <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Content</span>
-        <h2 class="ap-name">Lorem ipsum in shipping code</h2>
+        <!-- ux-lint-off lorem-ipsum-leak, placeholder-token-shipped --><h2 class="ap-name">Lorem ipsum in shipping code</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Lorem ipsum in production source code is unshipped placeholder content - the most obvious draft-state leak.</p></div>
+      <!-- ux-lint-off lorem-ipsum-leak, placeholder-token-shipped --><div class="ap-why"><span class="ap-sub">Why bad</span><p>Lorem ipsum in production source code is unshipped placeholder content - the most obvious draft-state leak.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Write real copy that makes a specific claim about the product. If you can&#x27;t write it yet, mark the block with TODO and a content owner.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\b(?:Lorem\s+ipsum|lorem\s+ipsum\s+dolor|consectetur\s+adipiscing|sed\s+do\s+eiusmod)\b</code></pre>
       <div class="ap-examples">
@@ -1312,12 +1310,12 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>100vh on mobile includes the browser chrome that retracts on scroll, so the layout jumps as the address bar collapses - dynamic viewport units (dvh) fix this.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use height: 100dvh or h-[100dvh] as the primary, with h-screen / 100vh as the legacy fallback for browsers that lack dvh.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:height\s*:\s*100vh|class=[^&gt;]*h-screen)(?![^}]*100dvh)</code></pre>
+      <!-- ux-lint-off h-screen-no-dvh-fallback --><pre class="ap-pre ap-pre--rx"><code>(?:height\s*:\s*100vh|class=[^&gt;]*h-screen)(?![^}]*100dvh)</code></pre><!-- ux-lint-on -->
       <div class="ap-examples">
         
         
       </div>
-      <a href="#h-screen-no-dvh-fallback" class="ap-anchor" aria-label="Link to rule #h-screen-no-dvh-fallback">link</a>
+      <!-- ux-lint-off h-screen-no-dvh-fallback --><a href="#h-screen-no-dvh-fallback" class="ap-anchor" aria-label="Link to rule #h-screen-no-dvh-fallback">link</a><!-- ux-lint-on -->
     </article>
     
 
@@ -1690,7 +1688,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Reaching only for env(safe-area-inset-bottom) signals the dev copied the iPhone-X home-indicator fix without thinking about the notch (top), Dynamic Island, landscape mode, or rotated devices where left/right inset matters. The layout punches into hardware on three sides while pretending to be device-safe.</p></div>
+      <!-- ux-lint-off safe-area-inset-only-bottom --><div class="ap-why"><span class="ap-sub">Why bad</span><p>Reaching only for env(safe-area-inset-bottom) signals the dev copied the iPhone-X home-indicator fix without thinking about the notch (top), Dynamic Island, landscape mode, or rotated devices where left/right inset matters. The layout punches into hardware on three sides while pretending to be device-safe.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>If the surface goes edge-to-edge, set all four insets (or `padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)` and let CSS pick the active ones). For a bottom-fixed nav, that&#x27;s fine - but verify landscape with rotation doesn&#x27;t expose the issue.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>env\(\s*safe-area-inset-bottom\s*\)(?![\s\S]{0,400}env\(\s*safe-area-inset-(?:top|left|right)\s*\))</code></pre>
       <div class="ap-examples">
@@ -1746,7 +1744,7 @@
         <span class="ap-id">#glass-without-fallback</span>
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Color</span>
-        <h2 class="ap-name">backdrop-filter blur without background fallback</h2>
+        <!-- ux-lint-off glass-morphism-default --><h2 class="ap-name">backdrop-filter blur without background fallback</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1810,9 +1808,9 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>0 to 100 / 100% guaranteed / 100% effective are the magnitude-by-default phrases AI reaches for - readers have learned to discount them.</p></div>
+      <!-- ux-lint-off before-after-100-percent, round-number-stats --><div class="ap-why"><span class="ap-sub">Why bad</span><p>0 to 100 / 100% guaranteed / 100% effective are the magnitude-by-default phrases AI reaches for - readers have learned to discount them.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Quote the real spread: &#x27;from 14 manual steps to 3 automated&#x27;. If you can&#x27;t measure it, don&#x27;t claim it.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:0 to 100|100% (?:guaranteed|effective|accurate|certain))</code></pre>
+      <!-- ux-lint-off before-after-100-percent --><pre class="ap-pre ap-pre--rx"><code>(?:0 to 100|100% (?:guaranteed|effective|accurate|certain))</code></pre><!-- ux-lint-on -->
       <div class="ap-examples">
         
         
@@ -1850,7 +1848,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>We saved 10,000 hours / Generated 1,000,000 lines of code / Reduced 50,000 tickets - large round numbers with no citation that signal the magnitude was invented to sound impressive.</p></div>
+      <!-- ux-lint-off fake-line-of-code-count --><div class="ap-why"><span class="ap-sub">Why bad</span><p>We saved 10,000 hours / Generated 1,000,000 lines of code / Reduced 50,000 tickets - large round numbers with no citation that signal the magnitude was invented to sound impressive.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use the real measured number with the real source: &#x27;In Q1 2026, customers saved 4,217 support hours (mean across 38 teams)&#x27;. Real numbers are messy and specific.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?:saved|generated|reduced|increased)\s+\d{1,3}(?:[,.]?\d{3})+\s+(?:hours|lines|users|teams)</code></pre>
       <div class="ap-examples">
@@ -1870,7 +1868,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>John/Jane Doe and their cousins signal that nobody thought about who would actually use the product - immediate AI-generated-tutorial vibe.</p></div>
+      <!-- ux-lint-off fake-name-john-doe --><div class="ap-why"><span class="ap-sub">Why bad</span><p>John/Jane Doe and their cousins signal that nobody thought about who would actually use the product - immediate AI-generated-tutorial vibe.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use plausible names that fit the target market: Maya Iqbal, Adam Levin, Wen Zhang, Layla Haddad. Match region for regional products.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\b(?:John\s+Doe|Jane\s+Doe|John\s+Smith|Jane\s+Smith|Sarah\s+Chan|Test\s+User|Demo\s+User|Foo\s+Bar)\b|\b(?:john\.doe|jane\.doe|test\.user)@(?:example|test|demo)\.com\b</code></pre>
       <div class="ap-examples">
@@ -1881,163 +1879,163 @@
     </article>
     
 
-    <article class="ap-card" id="marketing-buzz-ai-powered-driven">
+    <!-- ux-lint-off marketing-buzz-ai-powered-driven --><article class="ap-card" id="marketing-buzz-ai-powered-driven"><!-- ux-lint-on -->
       <header class="ap-head">
-        <span class="ap-id">#marketing-buzz-ai-powered-driven</span>
+        <!-- ux-lint-off marketing-buzz-ai-powered-driven --><span class="ap-id">#marketing-buzz-ai-powered-driven</span><!-- ux-lint-on -->
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h2 class="ap-name">Buzzword: AI-powered / AI-driven</h2>
+        <!-- ux-lint-off marketing-buzz-ai-powered-driven --><h2 class="ap-name">Buzzword: AI-powered / AI-driven</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;AI-powered&#x27; has become the new &#x27;cloud-based&#x27; - every landing page claims it, nobody asks what model, what data, what task. Empty by saturation.</p></div>
+      <!-- ux-lint-off marketing-buzz-ai-powered-driven --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;AI-powered&#x27; has become the new &#x27;cloud-based&#x27; - every landing page claims it, nobody asks what model, what data, what task. Empty by saturation.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the model and the function: &#x27;uses Claude to generate brand-aware tokens&#x27;, &#x27;embeddings from text-embedding-3-small for palette match&#x27;. Or drop the qualifier and just describe the feature.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\bAI[\s-]?(?:powered|driven|enabled|enhanced|first)\b</code></pre>
       <div class="ap-examples">
         
         
       </div>
-      <a href="#marketing-buzz-ai-powered-driven" class="ap-anchor" aria-label="Link to rule #marketing-buzz-ai-powered-driven">link</a>
+      <!-- ux-lint-off marketing-buzz-ai-powered-driven --><a href="#marketing-buzz-ai-powered-driven" class="ap-anchor" aria-label="Link to rule #marketing-buzz-ai-powered-driven">link</a><!-- ux-lint-on -->
     </article>
     
 
-    <article class="ap-card" id="marketing-buzz-best-in-class">
+    <!-- ux-lint-off marketing-buzz-best-in-class --><article class="ap-card" id="marketing-buzz-best-in-class"><!-- ux-lint-on -->
       <header class="ap-head">
-        <span class="ap-id">#marketing-buzz-best-in-class</span>
+        <!-- ux-lint-off marketing-buzz-best-in-class --><span class="ap-id">#marketing-buzz-best-in-class</span><!-- ux-lint-on -->
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h2 class="ap-name">Buzzword: best-in-class</h2>
+        <!-- ux-lint-off marketing-buzz-best-in-class --><h2 class="ap-name">Buzzword: best-in-class</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Best-in-class&#x27; is a vendor pitch phrase with no defined benchmark - reads as marketing autopilot. If you really are best at something, name the comparison.</p></div>
+      <!-- ux-lint-off marketing-buzz-best-in-class --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Best-in-class&#x27; is a vendor pitch phrase with no defined benchmark - reads as marketing autopilot. If you really are best at something, name the comparison.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace with a measurable claim: &#x27;fastest CI lint at 90ms&#x27;, &#x27;most rules in the category at 145&#x27;. If no comparison exists, drop the phrase.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\bbest[\s-]in[\s-]class\b</code></pre>
       <div class="ap-examples">
         
         
       </div>
-      <a href="#marketing-buzz-best-in-class" class="ap-anchor" aria-label="Link to rule #marketing-buzz-best-in-class">link</a>
+      <!-- ux-lint-off marketing-buzz-best-in-class --><a href="#marketing-buzz-best-in-class" class="ap-anchor" aria-label="Link to rule #marketing-buzz-best-in-class">link</a><!-- ux-lint-on -->
     </article>
     
 
-    <article class="ap-card" id="marketing-buzz-cutting-edge">
+    <!-- ux-lint-off marketing-buzz-cutting-edge --><article class="ap-card" id="marketing-buzz-cutting-edge"><!-- ux-lint-on -->
       <header class="ap-head">
-        <span class="ap-id">#marketing-buzz-cutting-edge</span>
+        <!-- ux-lint-off marketing-buzz-cutting-edge --><span class="ap-id">#marketing-buzz-cutting-edge</span><!-- ux-lint-on -->
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h2 class="ap-name">Buzzword: cutting-edge</h2>
+        <!-- ux-lint-off marketing-buzz-cutting-edge --><h2 class="ap-name">Buzzword: cutting-edge</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Cutting-edge&#x27; is the laziest tech adjective in marketing copy - empty signal that means &#x27;we don&#x27;t want to commit to a specific claim&#x27;. Skipped by anyone reading critically.</p></div>
+      <!-- ux-lint-off marketing-buzz-cutting-edge --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Cutting-edge&#x27; is the laziest tech adjective in marketing copy - empty signal that means &#x27;we don&#x27;t want to commit to a specific claim&#x27;. Skipped by anyone reading critically.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace with a concrete capability: &#x27;ships in under 50ms&#x27;, &#x27;covers 152 anti-patterns&#x27;, &#x27;runs inside Cursor and Windsurf&#x27;. Specifics beat adjectives.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\bcutting[\s-]edge\b</code></pre>
       <div class="ap-examples">
         
         
       </div>
-      <a href="#marketing-buzz-cutting-edge" class="ap-anchor" aria-label="Link to rule #marketing-buzz-cutting-edge">link</a>
+      <!-- ux-lint-off marketing-buzz-cutting-edge --><a href="#marketing-buzz-cutting-edge" class="ap-anchor" aria-label="Link to rule #marketing-buzz-cutting-edge">link</a><!-- ux-lint-on -->
     </article>
     
 
-    <article class="ap-card" id="marketing-buzz-game-changing">
+    <!-- ux-lint-off marketing-buzz-game-changing --><article class="ap-card" id="marketing-buzz-game-changing"><!-- ux-lint-on -->
       <header class="ap-head">
-        <span class="ap-id">#marketing-buzz-game-changing</span>
+        <!-- ux-lint-off marketing-buzz-game-changing --><span class="ap-id">#marketing-buzz-game-changing</span><!-- ux-lint-on -->
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h2 class="ap-name">Buzzword: game-changing / game-changer</h2>
+        <!-- ux-lint-off marketing-buzz-game-changing --><h2 class="ap-name">Buzzword: game-changing / game-changer</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Game-changing&#x27; is the most overused tech-PR adjective in the last decade - means the writer wanted hype without committing to a specific shift. Reads instantly as filler.</p></div>
+      <!-- ux-lint-off marketing-buzz-game-changing --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Game-changing&#x27; is the most overused tech-PR adjective in the last decade - means the writer wanted hype without committing to a specific shift. Reads instantly as filler.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Describe the shift in one sentence: &#x27;design intelligence in the model context, not just in Figma&#x27;. Concrete &gt; grandiose.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\bgame[\s-]chang(?:er|ing|e)\b</code></pre>
       <div class="ap-examples">
         
         
       </div>
-      <a href="#marketing-buzz-game-changing" class="ap-anchor" aria-label="Link to rule #marketing-buzz-game-changing">link</a>
+      <!-- ux-lint-off marketing-buzz-game-changing --><a href="#marketing-buzz-game-changing" class="ap-anchor" aria-label="Link to rule #marketing-buzz-game-changing">link</a><!-- ux-lint-on -->
     </article>
     
 
-    <article class="ap-card" id="marketing-buzz-industry-leading">
+    <!-- ux-lint-off marketing-buzz-industry-leading --><article class="ap-card" id="marketing-buzz-industry-leading"><!-- ux-lint-on -->
       <header class="ap-head">
-        <span class="ap-id">#marketing-buzz-industry-leading</span>
+        <!-- ux-lint-off marketing-buzz-industry-leading --><span class="ap-id">#marketing-buzz-industry-leading</span><!-- ux-lint-on -->
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h2 class="ap-name">Buzzword: industry-leading</h2>
+        <!-- ux-lint-off marketing-buzz-industry-leading --><h2 class="ap-name">Buzzword: industry-leading</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Industry-leading&#x27; is unverifiable by definition - every category leader and every follower uses it identically. Removes signal, adds slop.</p></div>
+      <!-- ux-lint-off marketing-buzz-industry-leading --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Industry-leading&#x27; is unverifiable by definition - every category leader and every follower uses it identically. Removes signal, adds slop.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Cite the specific lead: &#x27;first design linter in Claude Code marketplace&#x27;, &#x27;4x more rules than the next entrant&#x27;. No claim, no superlative.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\bindustry[\s-]leading\b</code></pre>
       <div class="ap-examples">
         
         
       </div>
-      <a href="#marketing-buzz-industry-leading" class="ap-anchor" aria-label="Link to rule #marketing-buzz-industry-leading">link</a>
+      <!-- ux-lint-off marketing-buzz-industry-leading --><a href="#marketing-buzz-industry-leading" class="ap-anchor" aria-label="Link to rule #marketing-buzz-industry-leading">link</a><!-- ux-lint-on -->
     </article>
     
 
-    <article class="ap-card" id="marketing-buzz-leverage-ai-harness">
+    <!-- ux-lint-off marketing-buzz-leverage-ai-harness --><article class="ap-card" id="marketing-buzz-leverage-ai-harness"><!-- ux-lint-on -->
       <header class="ap-head">
-        <span class="ap-id">#marketing-buzz-leverage-ai-harness</span>
+        <!-- ux-lint-off marketing-buzz-leverage-ai-harness --><span class="ap-id">#marketing-buzz-leverage-ai-harness</span><!-- ux-lint-on -->
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h2 class="ap-name">Buzzword: leverage / harness the power of</h2>
+        <!-- ux-lint-off marketing-buzz-leverage-ai-harness --><h2 class="ap-name">Buzzword: leverage / harness the power of</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Leverage AI&#x27;, &#x27;harness the power of&#x27;, &#x27;tap into the power of&#x27; are LinkedIn-thinkpiece formulas - immediately telegraphs generated marketing copy with no specifics.</p></div>
+      <!-- ux-lint-off marketing-buzz-leverage-ai-harness --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Leverage AI&#x27;, &#x27;harness the power of&#x27;, &#x27;tap into the power of&#x27; are LinkedIn-thinkpiece formulas - immediately telegraphs generated marketing copy with no specifics.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use &#x27;use&#x27; or name the verb directly: &#x27;uses Claude for layout suggestions&#x27;. Plain verbs beat power-of-X scaffolding.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>\b(?:leverage(?:\s+the\s+power\s+of)?\s+AI|harness(?:\s+the\s+power\s+of)?|tap\s+into\s+the\s+power\s+of)\b</code></pre>
+      <!-- ux-lint-off marketing-buzz-leverage-ai-harness --><pre class="ap-pre ap-pre--rx"><code>\b(?:leverage(?:\s+the\s+power\s+of)?\s+AI|harness(?:\s+the\s+power\s+of)?|tap\s+into\s+the\s+power\s+of)\b</code></pre><!-- ux-lint-on -->
       <div class="ap-examples">
         
         
       </div>
-      <a href="#marketing-buzz-leverage-ai-harness" class="ap-anchor" aria-label="Link to rule #marketing-buzz-leverage-ai-harness">link</a>
+      <!-- ux-lint-off marketing-buzz-leverage-ai-harness --><a href="#marketing-buzz-leverage-ai-harness" class="ap-anchor" aria-label="Link to rule #marketing-buzz-leverage-ai-harness">link</a><!-- ux-lint-on -->
     </article>
     
 
-    <article class="ap-card" id="marketing-buzz-next-generation">
+    <!-- ux-lint-off marketing-buzz-next-generation --><article class="ap-card" id="marketing-buzz-next-generation"><!-- ux-lint-on -->
       <header class="ap-head">
-        <span class="ap-id">#marketing-buzz-next-generation</span>
+        <!-- ux-lint-off marketing-buzz-next-generation --><span class="ap-id">#marketing-buzz-next-generation</span><!-- ux-lint-on -->
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h2 class="ap-name">Buzzword: next-generation</h2>
+        <!-- ux-lint-off marketing-buzz-next-generation --><h2 class="ap-name">Buzzword: next-generation</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Next-generation&#x27; is a category-leader cliche that names nothing - every press release in the last 30 years has claimed it. The phrase signals unedited marketing copy and shows the writer skipped the work of saying what is actually new.</p></div>
+      <!-- ux-lint-off marketing-buzz-next-generation --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Next-generation&#x27; is a category-leader cliche that names nothing - every press release in the last 30 years has claimed it. The phrase signals unedited marketing copy and shows the writer skipped the work of saying what is actually new.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the specific capability that is new (e.g., &#x27;first MCP-native design engine&#x27;, &#x27;first regex linter with 152 rules&#x27;). If you can&#x27;t name a specific advance, drop the qualifier.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\bnext[\s-]generation\b</code></pre>
       <div class="ap-examples">
         
         
       </div>
-      <a href="#marketing-buzz-next-generation" class="ap-anchor" aria-label="Link to rule #marketing-buzz-next-generation">link</a>
+      <!-- ux-lint-off marketing-buzz-next-generation --><a href="#marketing-buzz-next-generation" class="ap-anchor" aria-label="Link to rule #marketing-buzz-next-generation">link</a><!-- ux-lint-on -->
     </article>
     
 
-    <article class="ap-card" id="marketing-buzz-world-class">
+    <!-- ux-lint-off marketing-buzz-world-class --><article class="ap-card" id="marketing-buzz-world-class"><!-- ux-lint-on -->
       <header class="ap-head">
-        <span class="ap-id">#marketing-buzz-world-class</span>
+        <!-- ux-lint-off marketing-buzz-world-class --><span class="ap-id">#marketing-buzz-world-class</span><!-- ux-lint-on -->
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h2 class="ap-name">Buzzword: world-class</h2>
+        <!-- ux-lint-off marketing-buzz-world-class --><h2 class="ap-name">Buzzword: world-class</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;World-class&#x27; is consultancy filler - signals the writer either had nothing concrete to say or was scared to commit. Costs trust in a landing page.</p></div>
+      <!-- ux-lint-off marketing-buzz-world-class --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;World-class&#x27; is consultancy filler - signals the writer either had nothing concrete to say or was scared to commit. Costs trust in a landing page.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the specific bar you cleared: &#x27;tested in 17 IDEs&#x27;, &#x27;WCAG AA on every component&#x27;. If there&#x27;s no bar, the word does not belong.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\bworld[\s-]class\b</code></pre>
       <div class="ap-examples">
         
         
       </div>
-      <a href="#marketing-buzz-world-class" class="ap-anchor" aria-label="Link to rule #marketing-buzz-world-class">link</a>
+      <!-- ux-lint-off marketing-buzz-world-class --><a href="#marketing-buzz-world-class" class="ap-anchor" aria-label="Link to rule #marketing-buzz-world-class">link</a><!-- ux-lint-on -->
     </article>
     
 
@@ -2046,11 +2044,11 @@
         <span class="ap-id">#marketing-unlock-unleash-potential</span>
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h2 class="ap-name">Buzzword: unlock / unleash the potential, reach new heights</h2>
+        <!-- ux-lint-off filler-marketing-verbs, marketing-unlock-unleash-potential --><h2 class="ap-name">Buzzword: unlock / unleash the potential, reach new heights</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Unlock the potential&#x27; / &#x27;unleash your creativity&#x27; / &#x27;reach new heights&#x27; / &#x27;take it to the next level&#x27; / &#x27;the future is here&#x27; is the strongest cluster of LinkedIn-thinkpiece phrases in any landing page - immediate AI-generated marketing copy tell.</p></div>
+      <!-- ux-lint-off marketing-unlock-unleash-potential --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Unlock the potential&#x27; / &#x27;unleash your creativity&#x27; / &#x27;reach new heights&#x27; / &#x27;take it to the next level&#x27; / &#x27;the future is here&#x27; is the strongest cluster of LinkedIn-thinkpiece phrases in any landing page - immediate AI-generated marketing copy tell.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Describe what the user can do that they could not do before: &#x27;lint AI-generated code in 50ms&#x27;, &#x27;install in three IDEs from one command&#x27;. Specifics beat &#x27;unlock&#x27; every time.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\b(?:unlock(?:\s+the)?\s+(?:potential|power|magic|future)|unleash\s+(?:your|the)\s+(?:potential|creativity|power)|reach\s+new\s+heights|take\s+(?:it|things)\s+to\s+the\s+next\s+level|the\s+future\s+is\s+here)\b</code></pre>
       <div class="ap-examples">
@@ -2070,9 +2068,9 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>99.99%, 10x faster, 100% guaranteed - the suspiciously round numbers AI invents to sound credible. Real measurements are messy and specific.</p></div>
+      <!-- ux-lint-off before-after-100-percent, round-number-stats --><div class="ap-why"><span class="ap-sub">Why bad</span><p>99.99%, 10x faster, 100% guaranteed - the suspiciously round numbers AI invents to sound credible. Real measurements are messy and specific.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use the real number you measured: 99.93% uptime over Q1, 4.2x faster median build, refunded 218 of 244 reported issues. Specificity is the signal.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:99\.99%|99\.9%|10x faster|100% guaranteed|10x more)</code></pre>
+      <!-- ux-lint-off before-after-100-percent, round-number-stats --><pre class="ap-pre ap-pre--rx"><code>(?:99\.99%|99\.9%|10x faster|100% guaranteed|10x more)</code></pre><!-- ux-lint-on -->
       <div class="ap-examples">
         
         
@@ -2110,7 +2108,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Trusted by 1000+ teams / Used by Fortune 500 / Loved by 50k developers - unsourced trust claims that signal the generator invented the number to fill space.</p></div>
+      <!-- ux-lint-off trust-badge-no-source --><div class="ap-why"><span class="ap-sub">Why bad</span><p>Trusted by 1000+ teams / Used by Fortune 500 / Loved by 50k developers - unsourced trust claims that signal the generator invented the number to fill space.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the actual companies, link to the actual case studies, or show the actual review aggregate. Specificity beats magnitude every time.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?:Trusted by|Used by|Loved by|Joined by)\s+\d+</code></pre>
       <div class="ap-examples">
@@ -2151,7 +2149,7 @@
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Three overlapping circular avatars in the nav as &#x27;our team&#x27; or &#x27;join 10k users&#x27; is a content-marketing template tell.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use real customer logos, named testimonials with quotes, or specific signal (Used by 312 engineering teams at Series-A companies).</p></div>
+      <!-- ux-lint-off trust-badge-no-source --><div class="ap-fix"><span class="ap-sub">Fix</span><p>Use real customer logos, named testimonials with quotes, or specific signal (Used by 312 engineering teams at Series-A companies).</p></div><!-- ux-lint-on -->
       <pre class="ap-pre ap-pre--rx"><code>class=&quot;[^&quot;]*-space-x-[0-9]+[^&quot;]*&quot;[^&gt;]*&gt;(?:\s*&lt;(?:img|div)[^&gt;]*class=&quot;[^&quot;]*(?:avatar|rounded-full)[^&quot;]*&quot;[^&gt;]*/?&gt;\s*){3,}</code></pre>
       <div class="ap-examples">
         
@@ -2346,12 +2344,12 @@
         <span class="ap-id">#transition-property-all</span>
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Motion</span>
-        <h2 class="ap-name">transition: all (lazy property list)</h2>
+        <!-- ux-lint-off transition-property-all --><h2 class="ap-name">transition: all (lazy property list)</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>transition: all is the lazy default that animates every property change - including layout-triggering ones like width/height/margin - causing jank and unintended motion. It also fires on properties the author never meant to transition.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>List the exact properties: transition: transform 200ms ease, opacity 200ms ease. In Tailwind, prefer transition-colors, transition-opacity, transition-transform over transition-all.</p></div>
+      <!-- ux-lint-off transition-property-all --><div class="ap-why"><span class="ap-sub">Why bad</span><p>transition: all is the lazy default that animates every property change - including layout-triggering ones like width/height/margin - causing jank and unintended motion. It also fires on properties the author never meant to transition.</p></div><!-- ux-lint-on -->
+      <!-- ux-lint-off transition-property-all --><div class="ap-fix"><span class="ap-sub">Fix</span><p>List the exact properties: transition: transform 200ms ease, opacity 200ms ease. In Tailwind, prefer transition-colors, transition-opacity, transition-transform over transition-all.</p></div><!-- ux-lint-on -->
       <pre class="ap-pre ap-pre--rx"><code>transition\s*:\s*all\b|transition-property\s*:\s*all\b|\btransition-all\b</code></pre>
       <div class="ap-examples">
         
@@ -2390,7 +2388,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A raw &lt;img&gt; with a .jpg or .png source ships 3-10x more bytes than the same image as AVIF or WebP. On a hero photo this is 800KB vs 80KB - directly hurts LCP, mobile data, and Core Web Vitals. The fact that &lt;picture&gt;+&lt;source type=&quot;image/avif&quot;&gt; has been universal since 2023 means this is now a generator-default tell.</p></div>
+      <!-- ux-lint-off round-number-stats --><div class="ap-why"><span class="ap-sub">Why bad</span><p>A raw &lt;img&gt; with a .jpg or .png source ships 3-10x more bytes than the same image as AVIF or WebP. On a hero photo this is 800KB vs 80KB - directly hurts LCP, mobile data, and Core Web Vitals. The fact that &lt;picture&gt;+&lt;source type=&quot;image/avif&quot;&gt; has been universal since 2023 means this is now a generator-default tell.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Wrap in &lt;picture&gt; with AVIF first, WebP next, JPG fallback: &lt;picture&gt;&lt;source srcset=&quot;hero.avif&quot; type=&quot;image/avif&quot;&gt;&lt;source srcset=&quot;hero.webp&quot; type=&quot;image/webp&quot;&gt;&lt;img src=&quot;hero.jpg&quot; alt=&quot;...&quot; width=&quot;...&quot; height=&quot;...&quot;&gt;&lt;/picture&gt;. For framework images (next/image, astro:assets), the conversion is automatic - use them.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>&lt;img\s[^&gt;]*src\s*=\s*[&#x27;&quot;][^&#x27;&quot;]+\.(?:jpg|jpeg|png)[&#x27;&quot;][^&gt;]*&gt;</code></pre>
       <div class="ap-examples">
@@ -2430,7 +2428,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>z-index: 9999 is the &#x27;I gave up on the stacking system&#x27; value - signals there&#x27;s no z-scale token map and stacking bugs are coming.</p></div>
+      <!-- ux-lint-off arbitrary-z-index-9999 --><div class="ap-why"><span class="ap-sub">Why bad</span><p>z-index: 9999 is the &#x27;I gave up on the stacking system&#x27; value - signals there&#x27;s no z-scale token map and stacking bugs are coming.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Define a z-scale token set (z-base: 0, z-dropdown: 10, z-sticky: 20, z-modal: 50, z-toast: 60). Use the tokens, never a raw 9999.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>z-index:\s*(?:9999+|99999+|2147483647)\b|\bz-\[(?:9999+|99999+)\]</code></pre>
       <div class="ap-examples">
@@ -2590,7 +2588,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Arbitrary px values like text-[90px] or text-[112px] bypass the type scale and signal the size was picked by eye, not by system.</p></div>
+      <!-- ux-lint-off hero-text-arbitrary-90px --><div class="ap-why"><span class="ap-sub">Why bad</span><p>Arbitrary px values like text-[90px] or text-[112px] bypass the type scale and signal the size was picked by eye, not by system.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Extend the Tailwind theme scale or use clamp() for fluid hero typography. text-6xl/text-7xl/text-8xl exist for a reason.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>text-\[(?:9[0-9]|1[0-9]{2})px\]|font-size:\s*(?:9[0-9]|1[0-9]{2})px\b</code></pre>
       <div class="ap-examples">
@@ -2630,7 +2628,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>text-3xl md:text-4xl lg:text-5xl (and the 4xl/5xl/6xl shift) is the verbatim Tailwind tutorial cadence for every AI-generated hero - signals the responsive type was set by stepping through preset utilities, not by tuning the actual feel at each breakpoint.</p></div>
+      <!-- ux-lint-off text-3xl-4xl-5xl-stack --><div class="ap-why"><span class="ap-sub">Why bad</span><p>text-3xl md:text-4xl lg:text-5xl (and the 4xl/5xl/6xl shift) is the verbatim Tailwind tutorial cadence for every AI-generated hero - signals the responsive type was set by stepping through preset utilities, not by tuning the actual feel at each breakpoint.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use clamp() for fluid type: text-[clamp(2.5rem,5vw,4.5rem)] or define a custom step in tailwind.config that jumps by content priority, not utility index.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\btext-3xl\b[^&quot;]*\bmd:text-4xl\b[^&quot;]*\blg:text-5xl\b|\btext-4xl\b[^&quot;]*\bmd:text-5xl\b[^&quot;]*\blg:text-6xl\b|\btext-5xl\b[^&quot;]*\bmd:text-6xl\b[^&quot;]*\blg:text-7xl\b</code></pre>
       <div class="ap-examples">
@@ -2646,7 +2644,7 @@
         <span class="ap-id">#title-case-headlines</span>
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Typography</span>
-        <h2 class="ap-name">Title Case On Display Headings</h2>
+        <!-- ux-lint-off title-case-headlines --><h2 class="ap-name">Title Case On Display Headings</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2746,11 +2744,11 @@
         <span class="ap-id">#glass-morphism-default</span>
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Visual</span>
-        <h2 class="ap-name">Backdrop-blur frosted-glass on four-plus surfaces</h2>
+        <!-- ux-lint-off blur-bg-only-decoration, glass-morphism-default --><h2 class="ap-name">Backdrop-blur frosted-glass on four-plus surfaces</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Frosted-glass everywhere is the iOS-aesthetic AI tell - signals the generator confused &#x27;depth&#x27; with &#x27;blur every surface&#x27;. Four-plus backdrop-blur layers on a single page is the visual equivalent of using bold on every word.</p></div>
+      <!-- ux-lint-off blur-bg-only-decoration --><div class="ap-why"><span class="ap-sub">Why bad</span><p>Frosted-glass everywhere is the iOS-aesthetic AI tell - signals the generator confused &#x27;depth&#x27; with &#x27;blur every surface&#x27;. Four-plus backdrop-blur layers on a single page is the visual equivalent of using bold on every word.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Reserve glass for one or two surfaces that have a clear reason to feel translucent (a floating nav, a notification toast). Solid surfaces with restraint read more premium than four blurred panels.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?:backdrop-(?:blur|filter)|backdrop-filter\s*:\s*blur)[\s\S]{0,1500}?(?:backdrop-(?:blur|filter)|backdrop-filter\s*:\s*blur)[\s\S]{0,1500}?(?:backdrop-(?:blur|filter)|backdrop-filter\s*:\s*blur)[\s\S]{0,1500}?(?:backdrop-(?:blur|filter)|ba</code></pre>
       <div class="ap-examples">
@@ -2810,7 +2808,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Raw bg-blue-500 / bg-purple-500 with no semantic token (primary, success, danger) signals the color system was never designed.</p></div>
+      <!-- ux-lint-off tailwind-color-named-vague --><div class="ap-why"><span class="ap-sub">Why bad</span><p>Raw bg-blue-500 / bg-purple-500 with no semantic token (primary, success, danger) signals the color system was never designed.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Define semantic tokens in tailwind.config or CSS custom properties: bg-primary, text-success, ring-accent. Map them once.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\b(?:bg|text|border|ring|from|to|via)-(?:blue|red|green|yellow|purple|pink|indigo|orange)-(?:400|500|600)\b</code></pre>
       <div class="ap-examples">
@@ -2826,12 +2824,12 @@
         <span class="ap-id">#footer-built-with-love-coffee</span>
         <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Content</span>
-        <h2 class="ap-name">Footer: Built with love / Made with coffee / Crafted with care</h2>
+        <!-- ux-lint-off footer-built-with-love-coffee --><h2 class="ap-name">Footer: Built with love / Made with coffee / Crafted with care</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Built with love&#x27; / &#x27;Made with coffee&#x27; / &#x27;Crafted with care&#x27; is the universal indie-hacker footer template - signals the writer reached for a meme line because they did not want to commit to a real footer voice. Reads as the most generated of all generated lines.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use a real footer line - your domain, the year, a one-line manifesto, a credit. If you want to be warm, be specific: &#x27;Shipped from Amman&#x27; / &#x27;Open source since 2026&#x27; beats &#x27;made with love&#x27; every time.</p></div>
+      <!-- ux-lint-off footer-built-with-love-coffee --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Built with love&#x27; / &#x27;Made with coffee&#x27; / &#x27;Crafted with care&#x27; is the universal indie-hacker footer template - signals the writer reached for a meme line because they did not want to commit to a real footer voice. Reads as the most generated of all generated lines.</p></div><!-- ux-lint-on -->
+      <!-- ux-lint-off footer-built-with-love-coffee --><div class="ap-fix"><span class="ap-sub">Fix</span><p>Use a real footer line - your domain, the year, a one-line manifesto, a credit. If you want to be warm, be specific: &#x27;Shipped from Amman&#x27; / &#x27;Open source since 2026&#x27; beats &#x27;made with love&#x27; every time.</p></div><!-- ux-lint-on -->
       <pre class="ap-pre ap-pre--rx"><code>\b(?:(?:Built|Made|Crafted|Designed|Forged|Brewed)\s+with\s+(?:love|care|coffee|caffeine|passion|heart|joy|pride)|with\s+love\s+from)\b</code></pre>
       <div class="ap-examples">
         
@@ -2931,7 +2929,7 @@
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>rounded-full on every button and input is the iOS-tutorial fingerprint - signals the radius decision was skipped entirely.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>rounded-full for pills, avatars, icon buttons only. Use rounded-md or rounded-lg for primary buttons; rounded-xl or rounded-2xl for cards.</p></div>
+      <!-- ux-lint-off border-radius-2xl-default --><div class="ap-fix"><span class="ap-sub">Fix</span><p>rounded-full for pills, avatars, icon buttons only. Use rounded-md or rounded-lg for primary buttons; rounded-xl or rounded-2xl for cards.</p></div><!-- ux-lint-on -->
       <pre class="ap-pre ap-pre--rx"><code>&lt;button[^&gt;]*class=&quot;[^&quot;]*\brounded-full\b[^&quot;]*&quot;[^&gt;]*&gt;(?![^&lt;]*(?:×|close|menu|search))|&lt;(?:input|textarea)[^&gt;]*class=&quot;[^&quot;]*\brounded-full\b</code></pre>
       <div class="ap-examples">
         
@@ -2950,7 +2948,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>cubic-bezier(0.4, 0, 0.2, 1) is Material Design&#x27;s default standard ease - using it as the only curve signals no taste decision was made.</p></div>
+      <!-- ux-lint-off cubic-bezier-material-only --><div class="ap-why"><span class="ap-sub">Why bad</span><p>cubic-bezier(0.4, 0, 0.2, 1) is Material Design&#x27;s default standard ease - using it as the only curve signals no taste decision was made.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use cubic-bezier(0.16, 1, 0.3, 1) for premium exits, cubic-bezier(0.34, 1.56, 0.64, 1) for playful overshoot, or spring physics.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>cubic-bezier\(\s*0?\.4\s*,\s*0\s*,\s*0?\.2\s*,\s*1\s*\)</code></pre>
       <div class="ap-examples">
@@ -2992,7 +2990,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>300ms is the editor default - using it everywhere signals zero motion intent and reads as laziness to anyone who tunes animation curves.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Micro-interactions 150-220ms, complex transitions 250-400ms, exit 60-70% of entry. Pick durations that match the feel, not the default.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:transition(?:-duration)?|animation-duration):\s*300ms\b|duration-300\b|\bduration:\s*0\.3s\b</code></pre>
+      <!-- ux-lint-off timing-300ms-default --><pre class="ap-pre ap-pre--rx"><code>(?:transition(?:-duration)?|animation-duration):\s*300ms\b|duration-300\b|\bduration:\s*0\.3s\b</code></pre><!-- ux-lint-on -->
       <div class="ap-examples">
         
         
@@ -3051,7 +3049,7 @@
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>data-testid attributes are test-runner hooks that have no business in the production payload - they bloat the DOM, leak internal test names to anyone who Views Source, and signal the build pipeline strips nothing. AI-pasted-from-example-code fingerprint.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Strip data-testid at build time (Vite / Webpack / esbuild plugin) or move identifiers to data-test-* / aria-label that the test harness reads. Keep production HTML free of test-only attributes.</p></div>
+      <!-- ux-lint-off marketing-buzz-leverage-ai-harness --><div class="ap-fix"><span class="ap-sub">Fix</span><p>Strip data-testid at build time (Vite / Webpack / esbuild plugin) or move identifiers to data-test-* / aria-label that the test harness reads. Keep production HTML free of test-only attributes.</p></div><!-- ux-lint-on -->
       <pre class="ap-pre ap-pre--rx"><code>\sdata-testid\s*=\s*[&#x27;\&quot;][^&#x27;\&quot;]+[&#x27;\&quot;]</code></pre>
       <div class="ap-examples">
         
@@ -3212,7 +3210,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Backdrop blur applied without a translucent surface behind it is GPU work for zero visual benefit - decoration, not design.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Pair backdrop-blur with a translucent fill: bg-white/70 or bg-zinc-950/60. Otherwise remove the blur entirely.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:backdrop-blur(?:-(?:sm|md|lg|xl|2xl|3xl))?|backdrop-filter:\s*blur\([^)]+\))(?![^&quot;&#x27;;]*(?:bg-white/[0-9]|bg-black/[0-9]|bg-[a-z]+-[0-9]+/[0-9]|background:[^;]*rgba))</code></pre>
+      <!-- ux-lint-off blur-bg-only-decoration --><pre class="ap-pre ap-pre--rx"><code>(?:backdrop-blur(?:-(?:sm|md|lg|xl|2xl|3xl))?|backdrop-filter:\s*blur\([^)]+\))(?![^&quot;&#x27;;]*(?:bg-white/[0-9]|bg-black/[0-9]|bg-[a-z]+-[0-9]+/[0-9]|background:[^;]*rgba))</code></pre><!-- ux-lint-on -->
       <div class="ap-examples">
         
         
@@ -3226,7 +3224,7 @@
         <span class="ap-id">#body-background-color-inherit</span>
         <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Visual</span>
-        <h2 class="ap-name">body { background-color: inherit }</h2>
+        <!-- ux-lint-off body-background-color-inherit --><h2 class="ap-name">body { background-color: inherit }</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3246,11 +3244,11 @@
         <span class="ap-id">#border-radius-2xl-default</span>
         <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Visual</span>
-        <h2 class="ap-name">rounded-2xl or larger applied to everything</h2>
+        <!-- ux-lint-off border-radius-2xl-default --><h2 class="ap-name">rounded-2xl or larger applied to everything</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>rounded-2xl/3xl (24-32px+) on every card, button, and input is the Tailwind AI signature - signals the radius was set once and copy-pasted instead of being calibrated per element size. Buttons end up looking like pills, inputs lose definition, dense surfaces feel cartoonish.</p></div>
+      <!-- ux-lint-off border-radius-2xl-default --><div class="ap-why"><span class="ap-sub">Why bad</span><p>rounded-2xl/3xl (24-32px+) on every card, button, and input is the Tailwind AI signature - signals the radius was set once and copy-pasted instead of being calibrated per element size. Buttons end up looking like pills, inputs lose definition, dense surfaces feel cartoonish.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Calibrate radius to element size: 4-8px for inputs, 8-12px for buttons, 12-16px for cards, 16-24px for marketing surfaces only. Define a 4-5 step radius scale and use the tokens.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\brounded-(?:2xl|3xl)\b|border-radius\s*:\s*(?:24|28|32|36|40)px\b|border-radius\s*:\s*1\.[5-9]rem\b|border-radius\s*:\s*[2-3]rem\b</code></pre>
       <div class="ap-examples">
@@ -3291,7 +3289,7 @@
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>The 4-border-color, border-top-different, animation: spin recipe is the textbook 1998 spinner that every AI generator emits for any loading state - signals the loading affordance was set by default, not designed. Modern systems use skeleton screens, progress bars, or branded indicators.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace with a skeleton screen for content loading, a progress indicator for known-duration tasks, or a branded SVG mark animated via transform: rotate. The bordered spinner is the loading equivalent of Lorem ipsum.</p></div>
+      <!-- ux-lint-off lorem-ipsum-leak, placeholder-token-shipped --><div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace with a skeleton screen for content loading, a progress indicator for known-duration tasks, or a branded SVG mark animated via transform: rotate. The bordered spinner is the loading equivalent of Lorem ipsum.</p></div><!-- ux-lint-on -->
       <pre class="ap-pre ap-pre--rx"><code>border\s*:\s*\d+px\s+solid[^;}]*[;}][^{]*border-top(?:-color)?\s*:[^;]+;[^}]*animation\s*:[^;]*spin|\.(?:loader|spinner)[^{]*\{[^}]*border-radius\s*:\s*50%[^}]*animation[^}]*:[^}]*spin</code></pre>
       <div class="ap-examples">
         
@@ -3419,7 +3417,6 @@
       </div>
       <a href="#viewport-no-zoom" class="ap-anchor" aria-label="Link to rule #viewport-no-zoom">link</a>
     </article>
-    <!-- ux-lint-enable -->
     </div>
   </div>
 </section>

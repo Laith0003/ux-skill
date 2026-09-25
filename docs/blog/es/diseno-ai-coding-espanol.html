@@ -561,9 +561,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         Aquí va un bloque de héroe simplificado de un starter de Next.js, fallando en tres reglas, y la versión reescrita que sale con exit 0. Misma intención de conversión, huella distinta.
       </p>
-      <!-- A code sample of the slop this post describes. ux-lint skips it. -->
-      <!-- ux-lint-disable -->
-      <pre class="code"><span class="c">// Antes: 3 hallazgos high</span>
+      <!-- ux-lint-off purple-to-blue-gradient, tailwind-color-named-vague --><pre class="code"><span class="c">// Antes: 3 hallazgos high</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -592,8 +590,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
     &lt;Card className=<span class="s">"col-span-5"</span>
       title=<span class="s">"Ranking de transportistas"</span> /&gt;
   &lt;/div&gt;
-&lt;/section&gt;</pre>
-      <!-- ux-lint-enable -->
+&lt;/section&gt;</pre><!-- ux-lint-on -->
       <p>
         Tres reglas disparan en el antes: Inter a <code>text-7xl</code>, el degradado canónico de IA, y la cuadrícula de tres tarjetas iguales. En el después se empareja Fraunces (display) con Inter (cuerpo), se usa una superficie plana, y se adopta una cuadrícula asimétrica 7-y-5. Misma intención, sin huella.
       </p>

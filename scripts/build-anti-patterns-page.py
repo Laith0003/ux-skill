@@ -12,6 +12,7 @@ Re-run after data/anti-patterns.json changes.
 """
 from pathlib import Path
 import json
+import sys
 import html
 import re
 
@@ -292,10 +293,7 @@ def build_html(rules, version):
 <section>
   <div class="container">
     <div class="grid" id="ap-grid">
-      <!-- The cards quote every rule: its name, regex, why and fix. Those quotes are the subject of the page, not copy it ships, so the linter skips this region. -->
-      <!-- ux-lint-disable -->
       {cards}
-      <!-- ux-lint-enable -->
     </div>
   </div>
 </section>
@@ -340,9 +338,30 @@ def build_html(rules, version):
 """
 
 
+# Each card quotes its rule: its id (in the anchor and link), the name, the
+# why, the fix, the regex and the examples. Those quotes are the subject of the page, so each one that trips a
+# rule is wrapped in a ux-lint-off region naming exactly those rules. The card
+# chrome around them stays linted.
+QUOTED = (
+    r'<article class="ap-card" id="[^"]*">',
+    r'<span class="ap-id">.*?</span>',
+    r'<a href="#[^"]*" class="ap-anchor"[^>]*>.*?</a>',
+    r'<h2 class="ap-name">.*?</h2>',
+    r'<div class="ap-why">.*?</div>',
+    r'<div class="ap-fix">.*?</div>',
+    r'<pre class="ap-pre[^"]*">.*?</pre>',
+)
+
+
+def waive_quotes(html):
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from lint_waivers import wrap_quoted
+    return wrap_quoted(html, QUOTED)
+
+
 def main():
     rules, version = load_rules()
-    out_html = build_html(rules, version)
+    out_html = waive_quotes(build_html(rules, version))
     OUT.write_text(out_html, encoding="utf-8")
     print(f"ok  {len(rules)} rules  →  docs/anti-patterns.html")
 

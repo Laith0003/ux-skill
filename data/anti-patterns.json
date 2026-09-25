@@ -800,7 +800,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<input(?![^>]*\\baria-label=)(?![^>]*\\baria-labelledby=)(?![^>]*\\bid=)[^>]+placeholder=",
+        "pattern": "<input\\b[^>]*?(?<![\\w-])placeholder\\s*=",
         "flags": "i",
         "scope": [
           "tsx",
@@ -1121,7 +1121,7 @@
       "category": "Visual",
       "detection": {
         "type": "regex",
-        "pattern": "box-shadow:\\s*(?:(?:[^(),;]|\\((?:[^()]|\\([^()]*\\))*\\))+,){2}",
+        "pattern": "box-shadow:(?:\\s*var\\((?:[^()]|\\([^()]*\\))*\\)\\s*,)*(?:\\s*(?![\\s]|var\\()(?:[^(),;]|\\((?:[^()]|\\([^()]*\\))*\\))+,(?:\\s*var\\((?:[^()]|\\([^()]*\\))*\\)\\s*,)*){2}\\s*(?![\\s]|var\\()(?:[^(),;]|\\((?:[^()]|\\([^()]*\\))*\\))+",
         "flags": "im",
         "scope": [
           "css",
@@ -1132,7 +1132,7 @@
           "html"
         ]
       },
-      "why": "Stacking five or more shadow layers is the AI's idea of premium depth; reads as visual bloat and chews the GPU on paint.",
+      "why": "Stacking three or more shadow layers is the AI's idea of premium depth; reads as visual bloat and chews the GPU on paint.",
       "fix": "Use one ambient diffusion shadow (e.g. 0 20px 40px -15px rgba(0,0,0,0.08)) and at most one tight contact shadow. Depth comes from contrast, not layer count."
     },
     {
@@ -1197,7 +1197,7 @@
       "category": "Color",
       "detection": {
         "type": "regex",
-        "pattern": "\\{(?![^}]*background)[^}]*?backdrop-filter\\s*:\\s*blur[^;]+;|style=\"(?![^\"]*background)[^\"]*backdrop-filter\\s*:\\s*blur",
+        "pattern": "(?<![\\w-])backdrop-filter\\s*:\\s*blur",
         "flags": "im",
         "scope": [
           "css",

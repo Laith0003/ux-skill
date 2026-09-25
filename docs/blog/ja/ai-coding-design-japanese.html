@@ -565,9 +565,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         以下は、Next.js のスターターから切り出した簡略化されたヒーローブロックで、3 つのルールに引っかかります。下が exit 0 で通る書き換え版です。コンバージョンの意図は同じ、指紋は別物です。
       </p>
-      <!-- A code sample of the slop this post describes. ux-lint skips it. -->
-      <!-- ux-lint-disable -->
-      <pre class="code"><span class="c">// Before, 3 件の high 検出</span>
+      <!-- ux-lint-off purple-to-blue-gradient, tailwind-color-named-vague --><pre class="code"><span class="c">// Before, 3 件の high 検出</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -596,8 +594,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
     &lt;Card className=<span class="s">"col-span-5"</span>
       title=<span class="s">"キャリアランキング"</span> /&gt;
   &lt;/div&gt;
-&lt;/section&gt;</pre>
-      <!-- ux-lint-enable -->
+&lt;/section&gt;</pre><!-- ux-lint-on -->
       <p>
         Before では 3 つのルールが発火します。Inter を <code>text-7xl</code> で使う、AI 定番のグラデーション、3 枚同一カードのグリッド。After では Fraunces（ディスプレイ）と Inter（ボディ）をペアにし、フラットなサーフェスを採用し、7 と 5 の非対称グリッドに切り替えています。意図は同じ、指紋はもう残っていません。
       </p>

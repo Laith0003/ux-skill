@@ -510,6 +510,11 @@ HEAD = """<!DOCTYPE html>
         animation-duration: 0.01ms !important;
       }
     }
+    .docfig { margin: 32px 0; border: 1px solid rgba(255,255,255,0.10); border-radius: 14px; overflow: hidden; background: #0b0d12; }
+    .docfig img { display: block; width: 100%; height: auto; }
+    .docfig figcaption { margin: 0; padding: 12px 16px; font-size: 13px; line-height: 1.5; color: #8a8f96; border-top: 1px solid rgba(255,255,255,0.08); }
+    a.link-accent-u { color: var(--scene-accent); text-underline-offset: 3px; }
+    p.note-muted { font-size: 14px; color: var(--muted); margin-bottom: 8px; }
   </style>
 __JSONLD__
 </head>
@@ -575,6 +580,13 @@ __JSONLD__
       into the next via <code>.ux/last-*.json</code> state files. Click any name to jump
       to its summary or follow the source link for the full markdown.
     </p>
+
+    <p class="note-muted">New to ux-skill? Start with <a href="/how-to-add-a-design-system-to-claude-code.html" class="link-accent-u">how to add a design system to Claude Code</a>, then come back for the full command reference.</p>
+
+    <figure class="docfig">
+      <img src="/screenshots/terminal-ux-recommend.webp" width="1600" height="1000" alt="A terminal running the uxskill /ux-recommend command, compiling a design system from a brief: style, palette, type pair, and motion resolved into one token set." loading="lazy">
+      <figcaption>One command compiles a full system. The 25 below chain through shared state files.</figcaption>
+    </figure>
 
     <nav class="toc" aria-label="Commands index">
       <p class="toc-h">Quick index</p>
@@ -710,21 +722,25 @@ def build_jsonld(cmds: list) -> str:
     )
 
 
-def main() -> None:
-    cmds = collect()
-    print(f"Found {len(cmds)} commands.")
+def build_html(cmds: list) -> str:
     toc = "\n".join(
         f'        <li><a href="#{c["slug"]}">/{c["name"]}</a></li>'
         for c in cmds
     )
     body = "".join(render_command_card(c) for c in cmds)
     jsonld = build_jsonld(cmds)
-    out = (
+    return (
         HEAD
         .replace("__JSONLD__", jsonld)
         .replace("__TOC__", toc)
         .replace("__BODY__", body)
     )
+
+
+def main() -> None:
+    cmds = collect()
+    print(f"Found {len(cmds)} commands.")
+    out = build_html(cmds)
     DOCS_OUT.write_text(out, encoding="utf-8")
     print(f"Wrote {DOCS_OUT}  ({len(out) // 1024} KB)")
 

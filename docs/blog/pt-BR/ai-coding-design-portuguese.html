@@ -565,9 +565,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         A seguir, um bloco de herói simplificado tirado de um starter Next.js que cai em três regras, e a versão reescrita que sai com exit 0. Mesma intenção de conversão, digital diferente.
       </p>
-      <!-- A code sample of the slop this post describes. ux-lint skips it. -->
-      <!-- ux-lint-disable -->
-      <pre class="code"><span class="c">// Antes: 3 achados high</span>
+      <!-- ux-lint-off purple-to-blue-gradient, tailwind-color-named-vague --><pre class="code"><span class="c">// Antes: 3 achados high</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -596,8 +594,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
     &lt;Card className=<span class="s">"col-span-5"</span>
       title=<span class="s">"Ranking de transportadoras"</span> /&gt;
   &lt;/div&gt;
-&lt;/section&gt;</pre>
-      <!-- ux-lint-enable -->
+&lt;/section&gt;</pre><!-- ux-lint-on -->
       <p>
         No «antes» disparam três regras: Inter em <code>text-7xl</code>, o gradiente canônico de IA, e o grid de três cartões iguais. No «depois» a fonte de display Fraunces se emparelha com Inter no corpo, a superfície fica plana, e o grid vira 7-e-5 assimétrico. Intenção igual, digital sumiu.
       </p>

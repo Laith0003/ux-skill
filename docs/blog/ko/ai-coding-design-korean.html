@@ -565,9 +565,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         아래는 Next.js 스타터에서 잘라낸 단순화된 히어로 블록입니다. 세 규칙에 걸리고, exit 0으로 통과하는 재작성본이 그 아래 있습니다. 전환 의도는 같지만, 지문은 다릅니다.
       </p>
-      <!-- A code sample of the slop this post describes. ux-lint skips it. -->
-      <!-- ux-lint-disable -->
-      <pre class="code"><span class="c">// Before: high 3건</span>
+      <!-- ux-lint-off purple-to-blue-gradient, tailwind-color-named-vague --><pre class="code"><span class="c">// Before: high 3건</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -596,8 +594,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
     &lt;Card className=<span class="s">"col-span-5"</span>
       title=<span class="s">"운송사 랭킹"</span> /&gt;
   &lt;/div&gt;
-&lt;/section&gt;</pre>
-      <!-- ux-lint-enable -->
+&lt;/section&gt;</pre><!-- ux-lint-on -->
       <p>
         Before에서는 세 규칙이 발동합니다. <code>text-7xl</code>로 쓰인 Inter, AI 표준 그라데이션, 동일 카드 3개 그리드. After는 Fraunces(디스플레이)와 Inter(본문)을 짝짓고, 플랫 표면을 채택하며, 7-5 비대칭 그리드로 갈아탔습니다. 의도는 같고 지문은 사라졌습니다.
       </p>

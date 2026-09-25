@@ -572,9 +572,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         فيما يلي كتلة hero مبسّطة من قالب Next.js افتراضي تسقط في ثلاث قواعد، يليها بديل يُعيد كتابتها يخرج بـ exit 0. نفس نية التحويل، بصمة مختلفة.
       </p>
-      <!-- A code sample of the slop this post describes. ux-lint skips it. -->
-      <!-- ux-lint-disable -->
-      <pre class="code"><span class="c">// قبل, 3 نتائج high</span>
+      <!-- ux-lint-off purple-to-blue-gradient, tailwind-color-named-vague --><pre class="code"><span class="c">// قبل, 3 نتائج high</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -603,8 +601,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
     &lt;Card className=<span class="s">"col-span-5"</span>
       title=<span class="s">"Carrier ranking"</span> /&gt;
   &lt;/div&gt;
-&lt;/section&gt;</pre>
-      <!-- ux-lint-enable -->
+&lt;/section&gt;</pre><!-- ux-lint-on -->
       <p>
         في الـ«قبل» تنطلق ثلاث قواعد: Inter في <code>text-7xl</code>، تدرّج الذكاء الاصطناعي القياسي، وشبكة البطاقات الثلاث المتطابقة. في الـ«بعد» يقترن Fraunces (عرض) مع Inter (نصّ)، تعتمد سطحًا مسطّحًا، وتنتقل إلى شبكة غير متناظرة 7 و5. نفس النية، البصمة اختفت.
       </p>
