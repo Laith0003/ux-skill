@@ -111,6 +111,12 @@ _RULES = {
              "min-width: 0 on flex children, overflow-wrap: anywhere on long strings) "
              "instead of hiding overflow on the body."),
         what="page is {drift}px wider than the viewport ({dir}, {vw}px viewport)"),
+    "render-failed": dict(
+        name="Page could not be rendered", severity="medium", category="Layout",
+        fix=("The render check could not load or measure this page, so its layout is "
+             "unchecked. Run it again; if it repeats, look for a script or resource that "
+             "never finishes loading, or a page error, in the message."),
+        what="not measured: {error} ({vw}px viewport)"),
 }
 
 
@@ -162,6 +168,10 @@ async def _measure(browser, sem, f: Path, w: int, h: int):
             await page.goto(f.resolve().as_uri(), wait_until="load")
             await page.add_style_tag(content=_FREEZE_CSS)
             return await page.evaluate(_MEASURE_JS, TOLERANCE_PX)
+        except Exception as exc:  # one page that hangs or errors must not stop the run
+            error = (str(exc).strip().splitlines() or [type(exc).__name__])[0][:160]
+            return {"vw": w, "findings": [
+                {"rule": "render-failed", "sel": "page", "cls": "", "text": "", "error": error}]}
         finally:
             await page.close()
 
