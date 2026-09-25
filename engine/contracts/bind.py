@@ -15,18 +15,21 @@ names (surface=brand places it on color.surface.brand). The fill or the
 edge drawn around it clears 3:1 there (WCAG 1.4.11), and our 4.5:1 floor
 under high contrast. Every contrast pairing the contract
 declares is measured in every scheme and contrast context through the
-same gate the build uses. validate_contracts adds the checks across a set
+same gate the build uses; a pairing the gate cannot resolve (a broken
+alias in a set nobody validated) is reported once per pairing and cause.
+validate_contracts adds the checks across a set
 of contracts: unique names, and a deprecated contract's replacement exists
 and is not deprecated itself.
 """
 from __future__ import annotations
 
-from typing import Iterable, List, Optional, Sequence, Tuple
+from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
 from engine.contracts.schema import (
     CRITERIA, INTERACTIVE, PLACEMENT, PROPERTY_TYPES, Binding, Contract, ContractProblem)
 from engine.foundations.color_math import contrast
-from engine.foundations.gate import OPAQUE_PAIRING, Pairing, cite, gate, required
+from engine.foundations.gate import (
+    OPAQUE_PAIRING, UNRESOLVED_PAIRING, CheckFailure, Pairing, cite, gate, required)
 from engine.foundations.modes import contexts
 from engine.foundations.tokens import AliasError, TokenSet, opaque_hex
 
@@ -207,6 +210,26 @@ def _contrast_problems(contract: Contract, ts: TokenSet) -> List[ContractProblem
                             "color"))
     out += [_problem(contract, "contrast", c.message) for c in report.failures
             if c.check == OPAQUE_PAIRING]
+    return out + _unresolved_problems(contract, report.failures)
+
+
+def _unresolved_problems(contract: Contract,
+                         failures: Sequence[CheckFailure]) -> List[ContractProblem]:
+    """One problem per pairing and cause the gate could not resolve. The
+    gate records one failure per context; a broken alias breaks every
+    context alike, so the contexts are counted, not repeated."""
+    causes: Dict[str, List[str]] = {}
+    for c in failures:
+        if c.check == UNRESOLVED_PAIRING:
+            causes.setdefault(c.message.replace(f" ({c.mode})", "", 1), []).append(c.mode)
+    out = []
+    for message, modes in causes.items():
+        more = len(modes) - 1
+        where = modes[0] if not more else \
+            f"{modes[0]} and {more} other context{'s' if more > 1 else ''}"
+        out.append(_problem(contract, "unresolved",
+                            f"{message} It fails in {where}; run validate on the token set to "
+                            "see every such problem"))
     return out
 
 

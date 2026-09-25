@@ -1,10 +1,10 @@
 ---
 id: nested-radius
 title: A dialog is never less rounded than a card, and inner corners follow the padding
-status: active
+status: superseded
 areas: [radius]
 supersedes: null
-superseded_by: null
+superseded_by: strict-radius-nesting
 ---
 
 # A dialog is never less rounded than a card, and inner corners follow the padding

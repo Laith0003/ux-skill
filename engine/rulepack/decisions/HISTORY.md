@@ -23,6 +23,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Distinctness is measured on what a person sees at a glance, and each axis moves a named quantity](distinctness-at-a-glance.md)
 - [Distinctness scales are measured on a grey reference brand, which leaves every color feature to the axes](distinctness-on-a-grey-reference.md)
 - [Distinctness is measured on a grey and on four saturated reference brands, each with its corner floor](distinctness-on-saturated-brands.md)
+- [Checks compare dimensions in px and durations in ms, and read scale steps by their number](checks-read-one-unit.md)
 
 ## Roles per foundation
 
@@ -103,17 +104,25 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [The logo keeps the brand color, and decoration has a visibility floor of ours](logo-and-decoration.md)
 - [High contrast sets text one weight heavier](high-contrast-weights.md)
 - [Links read on every status soft fill](links-on-status-soft-fills.md)
+- [A contrast pairing the gate cannot resolve is a failure it reports, and contracts report it too](unresolved-pairing.md)
 
 ## Shape, space and motion
 
 - [Border widths are whole pixels](whole-pixel-borders.md)
 - [A dialog is never less rounded than a card, and inner corners follow the padding](nested-radius.md)
+- [Chip, control, card and dialog grow strictly rounder, and inner corners follow the padding](strict-radius-nesting.md)
 - [Stacked rows use the list gap, controls in a row use the control gap](list-gap-and-control-gap.md)
+- [Spacing, radius and layout spacing roles point at a step of their own scale](roles-on-their-scale.md)
+- [Every numbered spacing step is a whole multiple of 4px](spacing-on-the-4px-grid.md)
+- [Spacing inside a component never outgrows the gap between groups](spacing-within-group.md)
+- [Gutters, margins, measures and the container stay inside our bounds at every tier](layout-bounds.md)
+- [A 320px viewport gets the phone grid, and the phone grid leaves each column 44px there](reflow-at-320.md)
 - [Travel distances are unsigned, and one sign follows the reading direction](unsigned-distances.md)
 - [Emphasis inside text uses the heading weight](strong-equals-heading-weight.md)
 - [Emphasis inside text uses the text face's heading weight](strong-weight.md)
 - [Emphasis uses the heading weight, and stays 200 above body text under high contrast](strong-under-high-contrast.md)
-- [Reading styles have a line height of 1.5 or more by default](reading-line-height.md)
+- [Reading styles and code have a line height of 1.5 or more by default](reading-line-height.md)
+- [Every type style keeps a size, leading and tracking floor, and code keeps a fixed width](the-full-type-ladder.md)
 - [Geometry and formality set one roundness, and every corner follows it](roundness.md)
 - [A tone word's formality weight also moves the corners and the type](tone-words-reach-shape.md)
 - [Common tone words carry axis weights, and four more industries seed the axes](wider-vocabulary.md)

@@ -24,6 +24,10 @@ from engine.synthesizer.axes import AxisValues
 # radius.<n> = base corner x multiple
 MULTIPLES = (0, 0.5, 1, 1.5, 2, 3, 4)
 PILL_PX = 9999
+# Our floor for a pill: at 999px a corner is larger than any control's
+# height. radius-pill holds radius.pill to it, and radius-nesting sets any
+# role at or above it aside as a pill.
+PILL_FLOOR_PX = 999
 CHIP_PILL_FROM, CONTROL_PILL_FROM = 0.6, 0.85  # roundness thresholds
 MAX_BASE_PX = 14
 
@@ -95,13 +99,13 @@ def _px(ts: TokenSet, path: str) -> float:
 
 # Shapes from the innermost out: a chip sits in a control's row, a control
 # in a card, a card in a dialog. Each is strictly less round than the next,
-# unless both are square; a role at the pill value is a shape of its own
-# and sits outside the order.
+# unless both are square; a role at or above PILL_FLOOR_PX is a pill, a
+# shape of its own, and sits outside the order.
 NESTING = ("radius.chip", "radius.control", "radius.card", "radius.dialog")
 
 
 def _nesting(ts: TokenSet, mode: str) -> List[str]:
-    present = [r for r in NESTING if _typed(ts, r) and _px(ts, r) < PILL_PX / 10]
+    present = [r for r in NESTING if _typed(ts, r) and _px(ts, r) < PILL_FLOOR_PX]
     out = []
     for inner, outer in zip(present, present[1:]):
         a, b = _px(ts, inner), _px(ts, outer)
@@ -124,7 +128,7 @@ def _joined(ts: TokenSet, mode: str) -> List[str]:
 
 
 def _pill(ts: TokenSet, mode: str) -> List[str]:
-    if _typed(ts, "radius.pill") and _px(ts, "radius.pill") < 999:
+    if _typed(ts, "radius.pill") and _px(ts, "radius.pill") < PILL_FLOOR_PX:
         return [f"radius.pill is {_px(ts, 'radius.pill'):g}px; a pill needs a radius larger than "
                 "any control's height, so point it at radius.round"]
     return []
