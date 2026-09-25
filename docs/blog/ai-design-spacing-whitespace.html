@@ -118,6 +118,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
 
@@ -208,6 +209,10 @@
 <h1>Why AI-generated UIs <em>get spacing wrong</em>.</h1>
 <p class="lede">Look closely at a generated layout and the gaps are all the same. Sixteen pixels between the heading and the body, sixteen between the cards, sixteen inside them. It reads as competent and lands as lifeless, because spacing is the part of a design that carries rhythm, and the model has flattened it to a single value. The fix is not bigger gaps or smaller ones. It is a scale, a vertical rhythm, and a density matched to what the surface is actually for.</p>
 </header>
+<figure class="docfig">
+  <img src="/screenshots/terminal-ux-recommend.webp" width="1600" height="1000" alt="A terminal running ux recommend on a landing-page brief: five lanes (industry, style, palette, type, motion) each resolve with a confidence score and merge into one recommendation file." loading="lazy" decoding="async">
+  <figcaption>Spacing is decided in the system, not per component: the brief resolves before any layout is written.</figcaption>
+</figure>
 
 <h2>One value, everywhere</h2>
 <p>The tell is uniformity. A real layout uses a handful of distinct spacing steps, and the choice between them is meaningful: a section break gets more room than a paragraph break, a card's inner padding differs from the gap between cards, a label sits closer to its field than to the next group. Generated output collapses all of those decisions into one number, usually 16 or 24, applied to almost everything.</p>

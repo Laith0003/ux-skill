@@ -401,6 +401,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
   
@@ -492,6 +493,10 @@
         <strong>Claude Code, Cursor, Cline, Windsurf, हर AI कोडिंग टूल वही डिफ़ॉल्ट चुनता है।</strong> 90px पर Inter, बैंगनी-नीला ग्रेडिएंट, तीन एक जैसे कार्ड। मॉडल बदलिए, आउटपुट लगभग वैसा ही दिखता है। ux-skill एक खुला-स्रोत Python इंजन है जो 145 निर्धारित (deterministic) नियमों के साथ इन डिफ़ॉल्ट्स को CI में रोकता है। कोई LLM कॉल नहीं, कोई टोकन बजट नहीं।
       </p>
       <p class="byline">ux-skill टीम · 9 मिनट पढ़ाई · MIT लाइसेंस</p>
+      <figure class="docfig">
+        <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="टर्मिनल में ux lint चल रहा है: दो high स्तर की समस्याएँ, एक बैंगनी से नीला ग्रेडिएंट और छूटा हुआ प्लेसहोल्डर टेक्स्ट, हर एक के साथ फ़ाइल, लाइन और सुधार, फिर exit code 1।" loading="lazy" decoding="async">
+        <figcaption>एक असली रन: हर नतीजे के साथ नियम, फ़ाइल में जगह और सुधार। कोई LLM कॉल नहीं।</figcaption>
+      </figure>
 
       <h2>हर AI एक जैसी UI क्यों बनाता है</h2>
       <p>

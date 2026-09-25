@@ -444,6 +444,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
   
@@ -535,6 +536,10 @@
         <strong>Every other design-system generator ships as a SaaS GUI.</strong> ux-skill ships as a CLI. The full pipeline, brief discovery, recommender, token generator, MASTER.md persistence, runs from the terminal in three commands. No browser, no Figma file, no account. Here is the full path from zero to a working tokens file, with timings on a 2023 MacBook Air.
       </p>
       <p class="byline">By the ux-skill team &middot; 8 min read &middot; MIT-licensed open source</p>
+      <figure class="docfig">
+        <img src="/screenshots/terminal-ux-recommend.webp" width="1600" height="1000" alt="A terminal running ux recommend on a landing-page brief: five lanes (industry, style, palette, type, motion) each resolve with a confidence score and merge into one recommendation file." loading="lazy" decoding="async">
+        <figcaption>The CLI step that turns a brief into a system: five lanes, one merged file, no browser.</figcaption>
+      </figure>
 
       <h2>Why a CLI instead of a GUI</h2>
       <p>

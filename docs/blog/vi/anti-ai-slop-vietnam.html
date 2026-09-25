@@ -412,6 +412,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
   
@@ -503,6 +504,10 @@
         <strong>Cursor, Claude Code, Cline, Windsurf đều rơi vào cùng một bộ mặc định.</strong> Inter 90px làm chữ tiêu đề, gradient tím-xanh, ba thẻ giống nhau xếp ngang. Bạn đổi model, kết quả gần như không thay đổi. ux-skill là một engine Python mã nguồn mở (MIT) với 145 quy tắc deterministic chặn slop ngay trong CI. Không gọi LLM, không tốn token, không có telemetry.
       </p>
       <p class="byline">Đội ux-skill · 11 phút đọc · Giấy phép MIT, mã nguồn mở</p>
+      <figure class="docfig">
+        <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="Terminal chạy ux lint trên thư mục docs: hai lỗi mức high, một gradient tím sang xanh và một đoạn văn bản giữ chỗ còn sót, mỗi lỗi kèm tệp, dòng và cách sửa, rồi thoát với mã 1." loading="lazy" decoding="async">
+        <figcaption>Một lần chạy thật: mỗi lỗi có tên quy tắc, vị trí trong tệp và cách sửa. Không gọi LLM.</figcaption>
+      </figure>
 
       <h2>"AI slop" trong thiết kế nghĩa là gì</h2>
       <p>

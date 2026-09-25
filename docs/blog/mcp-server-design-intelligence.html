@@ -429,6 +429,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
   
@@ -520,6 +521,10 @@
         <strong>A slash command is shaped like a prompt template. A skill is shaped like a manifest the host model reads.</strong> Neither is composable with other agents. The Model Context Protocol is, and ux-skill v2.1 ships an MCP server that exposes the recommender, the 51-rule linter, and every queryable manifest as 14 tools any MCP-aware host can call. Claude Desktop, Cursor, Windsurf, Cline, Continue, same engine, same Pydantic schemas, same 1,243 entries.
       </p>
       <p class="byline">By the ux-skill team · 9 min read · MIT-licensed open source</p>
+      <figure class="docfig">
+        <img src="/screenshots/claude-code-running-ux.webp" width="1600" height="1000" alt="A Claude Code session running /ux-recommend and then /ux-design hero: the brief resolves to a style, palette, type pair and motion preset, and the generated hero lints at 0 critical and 0 high." loading="lazy" decoding="async">
+        <figcaption>The engine the MCP server exposes, running in a Claude Code session.</figcaption>
+      </figure>
 
       <h2>Why MCP, not another skill</h2>
       <p>

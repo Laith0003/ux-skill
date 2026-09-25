@@ -118,6 +118,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
 
@@ -208,6 +209,10 @@
 <h1>Design tokens are the <em>missing layer</em><br>in AI coding.</h1>
 <p class="lede">AI coding tools are good at components. Ask for a card, a form, a settings page, and you get working markup in seconds. But watch what happens to the values inside: a hex picked here, a 13px there, a one-off radius on this card and a different one on the next. The model writes literal numbers straight into each file, with nothing shared between them. There is no token layer, so every screen improvises its own, and the whole thing drifts the moment you have more than one.</p>
 </header>
+<figure class="docfig">
+  <img src="/screenshots/terminal-ux-recommend.webp" width="1600" height="1000" alt="A terminal running ux recommend on a landing-page brief: five lanes (industry, style, palette, type, motion) each resolve with a confidence score and merge into one recommendation file." loading="lazy" decoding="async">
+  <figcaption>Tokens start as a recommendation file the AI session reads, not values it improvises.</figcaption>
+</figure>
 
 <h2>What the model actually emits</h2>
 <p>A design token is a named decision (<code>--color-fg-muted</code>, <code>--space-3</code>, <code>--radius-md</code>) referenced everywhere instead of repeated. It is the layer that keeps a hundred components agreeing on the same gray, the same step in the spacing scale, the same corner. It is also exactly the layer an AI coding tool skips.</p>

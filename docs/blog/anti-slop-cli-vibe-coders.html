@@ -422,6 +422,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
   
@@ -513,6 +514,10 @@
         <strong>The vibe coder's tool belt is a hand-rolled set of CLI primitives.</strong> Cursor, Claude Code, Cline, Aider, Codex, the model writes; the developer reviews. The missing piece is a deterministic gate that catches the AI design fingerprint before it merges. Not an LLM judge. Not a SaaS dashboard. A command-line linter that runs in milliseconds, plugs into pre-commit, and exits non-zero on a finding. Here is the engineering write-up.
       </p>
       <p class="byline">By the ux-skill team &middot; 8 min read &middot; MIT-licensed open source</p>
+      <figure class="docfig">
+        <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="A terminal running ux lint on a docs folder: two high-severity findings, a purple-to-blue gradient and leftover placeholder text, each shown with its file, line and fix, then exit code 1." loading="lazy" decoding="async">
+        <figcaption>The gate in action: two high findings, one fix line each, exit code 1.</figcaption>
+      </figure>
 
       <h2>Why a CLI is the right shape for vibe coding</h2>
       <p>
