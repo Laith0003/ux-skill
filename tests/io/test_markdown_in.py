@@ -568,3 +568,23 @@ def test_a_type_column_of_size_names_is_not_read_as_fonts():
 def test_font_family_or_typeface_in_the_context_is_evidence(text):
     [token] = _import(text).tokens.tokens()
     assert (token.type, token.value) == ("fontFamily", ["Inter", "Arial"])
+
+
+@pytest.mark.parametrize("head, axes", [
+    ("| Token | Standard | High |", {"standard-high": ("standard", "high")}),
+    ("| Token | Standard | Reduced |", {"standard-reduced": ("standard", "reduced")}),
+    ("| Token | Standard | High contrast |", {"contrast": ("standard", "high")}),
+    ("| Token | Standard motion | Reduced motion |", {"motion": ("standard", "reduced")}),
+])
+def test_standard_high_and_reduced_name_an_axis_only_beside_its_name(head, axes):
+    text = f"{head}\n|---|---|---|\n| `gap` | 8px | 4px |\n"
+    assert dict(_import(text).tokens.axes) == axes
+
+
+def test_a_lone_high_or_reduced_column_needs_the_axis_name():
+    text = "| Token | Value | High |\n|---|---|---|\n| `gap` | 8px | 4px |\n"
+    imported = _import(text)
+    assert dict(imported.tokens.axes) == {}
+    assert "High names no mode" in imported.report.notes[0].message
+    text = "| Token | Value | Reduced motion |\n|---|---|---|\n| `t` | 200ms | 0ms |\n"
+    assert dict(_import(text).tokens.axes) == {"motion": ("standard", "reduced")}

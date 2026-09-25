@@ -14,6 +14,7 @@ from engine.io.dtcg_in import import_dtcg, read_dtcg
 from engine.io.enhance import Drift, Enhanced, drift, enhance
 from engine.io.figma_in import REST_ENDPOINT, SIZE_SCOPES, import_figma, read_figma
 from engine.io.markdown_in import import_markdown, read_markdown
+from engine.io.mode_words import axis_of
 from engine.io.report import (FORMATS, Imported, ImportReport, Item, Mapped, Source,
                               read_source)
 from engine.io.scan import SKIP_DIRS, Scan, Usage, scan
@@ -25,7 +26,8 @@ from engine.io.values_in import (CSS_KEYWORDS, GamutMapped, NotRead, css_alias, 
 __all__ = [
     "CSS_KEYWORDS", "EXPORT_COMMAND", "FORMATS", "REST_ENDPOINT", "ROLE_TYPES", "SIZE_SCOPES",
     "SKIP_DIRS", "AxisMap", "Drift", "Enhanced", "GamutMapped", "ImportReport", "Imported",
-    "Item", "Mapped", "Mapping", "NotRead", "RoleMap", "Scan", "Source", "Usage", "css_alias",
+    "Item", "Mapped", "Mapping", "NotRead", "RoleMap", "Scan", "Source", "Usage", "axis_of",
+    "css_alias",
     "drift", "dump_mapping", "enhance",
     "import_css", "import_dtcg", "import_figma", "import_markdown", "import_tailwind_css",
     "import_tailwind_json", "load_mapping", "merge",

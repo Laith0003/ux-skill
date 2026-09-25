@@ -48,20 +48,17 @@ from engine.foundations.errors import InputError
 from engine.foundations.modes import AXES
 from engine.foundations.tokens import Token, TokenSet
 from engine.io.graph import cycles
+from engine.io.mode_words import axis_of
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source, read_source
 
 # The FLOAT scopes that size something in px.
 SIZE_SCOPES = ("CORNER_RADIUS", "WIDTH_HEIGHT", "GAP", "STROKE_FLOAT", "FONT_SIZE",
                "LINE_HEIGHT", "LETTER_SPACING", "EFFECT_FLOAT", "PARAGRAPH_SPACING",
                "PARAGRAPH_INDENT")
-# Value words that name an axis only beside the axis's own name: Standard
-# and High are contrast only in a Contrast collection or a High contrast mode.
-_NEEDS_AXIS_WORD = ("contrast", "motion")
 # Where a person exports a file's variables.
 REST_ENDPOINT = "GET /v1/files/<file key>/variables/local"
 _BAD = re.compile(r"[^A-Za-z0-9_-]+")
 _AXIS_WORD = re.compile(r"[a-z][a-z0-9-]*")
-_CAMEL = re.compile(r"(?<=[a-z0-9])(?=[A-Z])")
 _DECIMALS = 4
 
 
@@ -121,24 +118,13 @@ def _slug(name: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
 
 
-def _words(name: str) -> set:
-    return set(re.findall(r"[a-z0-9]+", _CAMEL.sub(" ", name).lower()))
-
-
 def _known_axis(first: str, second: str, collection: str = "") -> Optional[Tuple[str, bool]]:
     """(axis, whether `first` is its base) when the two mode names name the
     two values of a known axis (Light and Dark, Dark mode and Light mode),
-    or None. Contrast and motion share the word standard, so they also need
-    their own name in the collection's name or a mode's."""
-    a, b = _words(first), _words(second)
-    for axis, (base, other) in AXES.items():
-        if axis in _NEEDS_AXIS_WORD and axis not in a | b | _words(collection):
-            continue
-        if base in a and other not in a and other in b and base not in b:
-            return axis, True
-        if other in a and base not in a and base in b and other not in b:
-            return axis, False
-    return None
+    or None, by the importers' shared matcher: contrast and motion also
+    need their own name in the collection's name or a mode's."""
+    known = axis_of([first, second], [collection])
+    return None if known is None else (known[0], known[1] == 0)
 
 
 def _number(raw: Any) -> bool:

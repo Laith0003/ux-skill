@@ -523,3 +523,14 @@ def test_a_path_is_free_again_when_its_first_holder_is_not_read():
     imported = _import(doc)
     assert imported.tokens.get("color.bg").value == "#FFFFFF"
     assert [n for n, _ in _rows(imported.report.not_read)] == ["flag", "color/bg"]
+
+
+def test_reduced_is_motion_only_where_motion_is_named_and_words_are_whole():
+    def axes(collection, modes):
+        col = _collection("c:1", collection, modes, ["v:1"])
+        doc = _one(col, [_var("v:1", "gap", "c:1", "FLOAT",
+                              {f"c:1:{m}": 8 for m in modes}, ["GAP"])])
+        return dict(_import(doc).tokens.axes)
+    assert axes("Size", ["Standard", "Reduced"]) == {"standard-reduced": ("standard", "reduced")}
+    assert axes("Motion", ["Standard", "Reduced"]) == {"motion": ("standard", "reduced")}
+    assert "scheme" not in axes("Theme", ["Light", "Darkness"])
