@@ -201,6 +201,7 @@ def evolve(html: str, css: str,
            force: bool = False,
            max_rounds: int = MAX_ROUNDS,
            brand_profile: Optional[Any] = None,
+           base_dir: Optional[str] = None,
            ) -> EvolveResult:
     """Run the lint→polish→re-lint loop until convergence.
 
@@ -215,7 +216,7 @@ def evolve(html: str, css: str,
     initial_eval = evaluate(
         html=html, css=css, synth_system=synth_system,
         brief_axes=brief_axes, linter_score=linter_score,
-        brand_profile=brand_profile,
+        brand_profile=brand_profile, base_dir=base_dir,
     )
     initial_score = initial_eval.composite
 
@@ -223,7 +224,7 @@ def evolve(html: str, css: str,
         ev = evaluate(
             html=html, css=css, synth_system=synth_system,
             brief_axes=brief_axes, linter_score=linter_score,
-            brand_profile=brand_profile,
+            brand_profile=brand_profile, base_dir=base_dir,
         )
         delta = (ev.composite - prev_score) if prev_score is not None else 0
         round_rec = EvolveRound(
@@ -289,7 +290,7 @@ def evolve(html: str, css: str,
     final_eval = evaluate(
         html=html, css=css, synth_system=synth_system,
         brief_axes=brief_axes, linter_score=linter_score,
-        brand_profile=brand_profile,
+        brand_profile=brand_profile, base_dir=base_dir,
     )
     above_gate = final_eval.composite >= QUALITY_GATE and final_eval.brand_passed
     return EvolveResult(

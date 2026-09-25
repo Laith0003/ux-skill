@@ -305,8 +305,13 @@ def evaluate(html: str = "", css: str = "",
              spacing_scale: Optional[List[int]] = None,
              prior_decisions: Optional[List[Dict[str, Any]]] = None,
              brand_profile: Optional[Any] = None,
+             base_dir: Optional[str] = None,
              ) -> Evaluation:
     """Run all 7 axis scorers, return an Evaluation.
+
+    ``base_dir`` is the page's folder: the brand-fidelity check then reads
+    the stylesheets the page links, so a token-driven page is judged with
+    its CSS, not by its HTML text alone.
 
     ``brief_tags`` is the v3.0 independence path — pass raw brief tone /
     must-have / forbidden tags here so tone_match has an independent ground
@@ -361,7 +366,7 @@ def evaluate(html: str = "", css: str = "",
     brand_passed = True
     prof = _as_profile(brand_profile)
     if prof is not None and (prof.primary or prof.name or prof.logo):
-        fid = score_brand_fidelity(html, prof)
+        fid = score_brand_fidelity(html, prof, css_text=css, base_dir=base_dir)
         img = score_imagery(html)
         brand_fidelity = fid["score"]
         imagery = img["score"]

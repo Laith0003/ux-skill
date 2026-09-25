@@ -12,14 +12,16 @@ offline; the same (html, profile) always returns the same result.
 
 Public surface
 --------------
-``score_brand_fidelity(html_text, profile) -> dict``
+``score_brand_fidelity(html_text, profile, css_text="", base_dir=None) -> dict``
 """
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 from engine.brand.extract import BrandProfile, hue_family
+from engine.existing import css_custom_properties, normalize_hex, resolve_css_var
 
 
 # The engine's own house colors. If a brand's primary differs from these and one
@@ -153,8 +155,79 @@ def _family_used_as_display(html: str, html_lower: str, family: str) -> bool:
     return False
 
 
-def score_brand_fidelity(html_text: str, profile: BrandProfile) -> Dict[str, Any]:
+_LINK_TAG_RE = re.compile(r"<link\b[^>]*>", re.IGNORECASE)
+_HREF_RE = re.compile(r"\bhref\s*=\s*['\"]([^'\"]+)['\"]", re.IGNORECASE)
+_REL_STYLESHEET_RE = re.compile(r"\brel\s*=\s*['\"][^'\"]*\bstylesheet\b", re.IGNORECASE)
+_IMPORT_RE = re.compile(r"@import\s+(?:url\(\s*)?['\"]?([^'\")\s;]+)", re.IGNORECASE)
+_STYLE_BLOCK_RE = re.compile(r"<style\b[^>]*>(.*?)</style>", re.IGNORECASE | re.DOTALL)
+_RGB_LITERAL_RE = re.compile(r"rgba?\([^)]*\)", re.IGNORECASE)
+_MAX_LINKED = 50
+
+
+def _linked_stylesheets(html: str, base_dir: Optional[Any]) -> List[str]:
+    """The text of every local stylesheet the page links, and every local
+    file those import. Remote URLs are skipped (the check stays offline)."""
+    if base_dir is None:
+        return []
+    base = Path(base_dir).expanduser().resolve()
+    seen: set = set()
+    texts: List[str] = []
+
+    def load(ref: str, rel_to: Path) -> None:
+        ref = ref.strip().split("?")[0].split("#")[0]
+        if not ref or re.match(r"^(?:[a-z][a-z0-9+.-]*:|//)", ref, re.IGNORECASE):
+            return
+        path = (base / ref.lstrip("/")) if ref.startswith("/") else (rel_to / ref)
+        try:
+            path = path.resolve()
+        except OSError:
+            return
+        if path in seen or len(seen) >= _MAX_LINKED or not path.is_file():
+            return
+        seen.add(path)
+        try:
+            text = path.read_text(encoding="utf-8", errors="ignore")
+        except OSError:
+            return
+        texts.append(text)
+        for imported in _IMPORT_RE.findall(text):
+            load(imported, path.parent)
+
+    for tag in _LINK_TAG_RE.findall(html):
+        if _REL_STYLESHEET_RE.search(tag):
+            href = _HREF_RE.search(tag)
+            if href:
+                load(href.group(1), base)
+    for block in _STYLE_BLOCK_RE.findall(html):
+        for imported in _IMPORT_RE.findall(block):
+            load(imported, base)
+    return texts
+
+
+def _primary_carriers(corpus: str, primary: str) -> Tuple[bool, List[str]]:
+    """Whether the primary appears in any color form (hex or rgb(), directly
+    or through custom properties), and the custom properties that carry it,
+    the ones the page references first."""
+    target = normalize_hex(primary)
+    if not target:
+        return False, []
+    literal = any(normalize_hex(m) == target for m in _RGB_LITERAL_RE.findall(corpus))
+    props = css_custom_properties(corpus)
+    carriers = [name for name, value in props.items()
+                if normalize_hex(resolve_css_var(value, props)) == target]
+    used = [n for n in carriers if re.search(r"var\(\s*" + re.escape(n) + r"\s*[,)]", corpus)]
+    ordered = used + [n for n in carriers if n not in used]
+    return (literal or bool(carriers)), ordered
+
+
+def score_brand_fidelity(html_text: str, profile: BrandProfile, css_text: str = "",
+                         base_dir: Optional[Any] = None) -> Dict[str, Any]:
     """Score how faithfully ``html_text`` honors ``profile``. Deterministic.
+
+    The page is read with its styles: inline ``<style>``, ``css_text``, and,
+    when ``base_dir`` (the page's folder) is given, every local stylesheet the
+    page links or imports. Custom properties are resolved, so a token-driven
+    page that paints the primary through ``var(--brand-primary)`` passes.
 
     Returns ``{score, passed, findings}`` where findings is a list of
     ``{check, severity, ok, detail}``. The hard floor (rule 7): if the profile
@@ -163,22 +236,37 @@ def score_brand_fidelity(html_text: str, profile: BrandProfile) -> Dict[str, Any
     """
     html = html_text or ""
     html_lower = html.lower()
+    linked = _linked_stylesheets(html, base_dir)
+    corpus = "\n".join([html, css_text or ""] + linked)
+    corpus_lower = corpus.lower()
     findings: List[Dict[str, Any]] = []
     earned = 0
 
     has_primary = bool((profile.primary or "").strip())
 
     # (a) PRIMARY USED -------------------------------------------------------
-    primary_ok = bool(has_primary and _hex_present(html_lower, profile.primary))
+    carriers: List[str] = []
+    primary_ok = False
     if has_primary:
+        primary_ok = _hex_present(corpus_lower, profile.primary)
+        found, carriers = _primary_carriers(corpus, profile.primary)
+        primary_ok = primary_ok or found
+    if has_primary:
+        where = []
+        if linked:
+            where.append("read with %d linked stylesheet(s)" % len(linked))
+        if carriers:
+            where.append("carried by %s" % ", ".join(carriers[:4]))
         findings.append({
             "check": "primary_used",
             "severity": "critical",
             "ok": primary_ok,
-            "detail": ("Brand primary %s is used in the output." % profile.primary)
+            "detail": ("Brand primary %s is used in the output%s." % (
+                profile.primary, (" (" + "; ".join(where) + ")") if where else ""))
             if primary_ok else
-            ("Brand primary %s is MISSING from the output -- it must drive the "
-             "palette/CTA." % profile.primary),
+            ("Brand primary %s is MISSING from the output and its stylesheets. It must "
+             "drive the palette/CTA. If the page links its CSS, pass the page's folder as "
+             "base_dir so the linked files are read." % profile.primary),
         })
         if primary_ok:
             earned += _CHECK_WEIGHTS["primary_used"]
@@ -217,7 +305,7 @@ def score_brand_fidelity(html_text: str, profile: BrandProfile) -> Dict[str, Any
     # (c) TYPE MATCHES -------------------------------------------------------
     rejected = _rejected_default_family(profile)
     if rejected:
-        drift = _family_used_as_display(html, html_lower, rejected)
+        drift = _family_used_as_display(corpus, corpus_lower, rejected)
         type_ok = not drift
         findings.append({
             "check": "type_matches",
@@ -245,7 +333,7 @@ def score_brand_fidelity(html_text: str, profile: BrandProfile) -> Dict[str, Any
     for hx, label in HOUSE_COLORS.items():
         if hx == primary_norm:
             continue  # the brand's primary legitimately equals a house color
-        if _hex_present(html_lower, hx):
+        if _hex_present(corpus_lower, hx):
             leaked.append("%s %s" % (hx, label))
     drift_ok = not leaked
     findings.append({
