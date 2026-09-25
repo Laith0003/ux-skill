@@ -215,7 +215,7 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 
 ### Transform values
 - Tap feedback: `-translate-y-[1px]` or `scale-[0.98]`
-- Card hover scale: `scale-[1.02]` to `scale-[1.05]` inside `overflow-hidden`
+- Card hover: border or background shift, no scale
 - Scroll fade-up: `translateY(12px)` to `translateY(24px)`
 - Cinematic entry: `translateY(64px)` + `blur(12px)` + `opacity-0`
 - Magnetic button: 4 to 8px translate maximum toward cursor
