@@ -6,6 +6,7 @@ proves the module entry point wires the group.
 """
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -368,3 +369,23 @@ def test_no_pack_folder_reports_nothing(tmp_path):
     assert payload["stale_rule_pack"] is None
     assert "## Rule pack" not in (tmp_path / "ds" / "system-report.md").read_text(
         encoding="utf-8")
+
+
+def test_the_structured_brief_fields_are_named_in_the_cli_help_and_over_mcp():
+    """A host that reaches the engine through MCP or the CLI alone learns
+    every structured field and its allowed values from the descriptions."""
+    from engine.foundations import audience
+    from engine.mcp import TOOLS
+    from engine.mcp.server import UxSystemBuildInput
+
+    help_text = _runner().invoke(cli, ["system", "build", "--help"]).stdout
+    # click wraps at hyphens too; join a wrapped "older-" back to "adults".
+    help_text = re.sub(r"-\s+", "-", " ".join(help_text.split()))
+    field = UxSystemBuildInput.model_fields["brief"].description
+    tool = TOOLS["ux_system_build"][2]
+    values = (tuple(audience.AGES) + audience.SCRIPTS + audience.SCHEMES + audience.READING
+              + audience.BRAND_ROLES)
+    for where, text in (("--brief help", help_text), ("MCP brief field", field),
+                        ("MCP tool", tool)):
+        for name in audience.FIELDS + values:
+            assert name in text, (where, name)

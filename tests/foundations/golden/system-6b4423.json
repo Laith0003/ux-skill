@@ -5762,7 +5762,7 @@
         "7": {
           "$type": "dimension",
           "$value": {
-            "value": 1.75,
+            "value": 1.8125,
             "unit": "rem"
           },
           "$extensions": {

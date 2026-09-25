@@ -111,6 +111,21 @@ def test_unread_text_is_named_with_how_to_pass_it_never_waved_through():
     assert "nothing needs doing" not in report
 
 
+def test_the_unread_audience_line_names_only_the_fields_the_brief_lacks():
+    brief = {"industry": "healthcare", "audience": "many over 60", "age": "older-adults",
+             "languages": ["ar"]}
+    assert unread_lines(brief) == [
+        'audience "many over 60" is plain text, which the engine does not parse. Say who the '
+        "readers are with the brief's fields: "
+        'default_scheme ("light", "dark" or "system"); '
+        'reading_context ("glance", "task", "long-read" or "on-the-go").']
+    brief.update(default_scheme="dark", reading_context="task")
+    assert unread_lines(brief) == [
+        'audience "many over 60" is plain text, which the engine does not parse. The brief\'s '
+        "fields age, languages, default_scheme and reading_context already say who the readers "
+        "are."]
+
+
 def test_industry_words_with_spaces_are_read():
     axes, source = choose_axes({"industry": "developer tools"}, None)
     assert source == "from the brief (industry: developer tools, read as developer-tools)"
@@ -195,3 +210,50 @@ def test_every_unread_field_gets_a_line():
         'languages (tags such as ["ar-JO", "en"]) and primary_script ("latin" or "arabic").',
         'stack "astro" is not read by the system build, so it changed nothing here.',
     ]
+
+
+@pytest.mark.parametrize("tag", ["arz", "apc", "ajp", "ary", "aeb", "acm", "arz-EG", "ar-arz",
+                                 "pa-Arab", "ur-Aran", "ms-Arab-MY", "prs", "pbt"])
+def test_arabic_varieties_and_an_arabic_script_subtag_ship_arabic(tag):
+    """A member of the Arabic, Persian or Pashto macrolanguage, or any tag
+    whose script subtag is Arab (or Aran), is written in Arabic script."""
+    a = read_audience({"languages": [tag, "en"]})
+    assert a.arabic is True and a.primary_script == "arabic"
+    assert resolve_arabic(False, a) is True
+    lines = [e.line() for e in effects(a)]
+    assert f"Arabic faces, sizes and right to left styles are built: the brief names {tag}, en" \
+        in lines
+    with pytest.raises(InputError) as exc:
+        resolve_arabic(True, a, "--latin-only")
+    assert f"brief's languages ({tag}, en) include one written in Arabic script" in str(exc.value)
+
+
+@pytest.mark.parametrize("tag", ["arz", "apc", "pa-Arab", "ur-Aran", "fa"])
+def test_a_tag_the_arabic_selector_misses_is_told_to_carry_dir_rtl(tag):
+    lines = [e.line() for e in effects(read_audience({"languages": ["en", tag]}))]
+    assert (f'Mark text in {tag} with dir="rtl": tokens.css switches to the Arabic styles on '
+            f'dir="rtl" or on a lang of ar and its subtags, and "{tag}" is neither') in lines
+
+
+def test_a_tag_the_arabic_selector_matches_needs_no_extra_line():
+    for tag in ("ar", "ar-EG", "ar-arz", "AR-jo"):
+        lines = [e.line() for e in effects(read_audience({"languages": [tag]}))]
+        assert not any(line.startswith("Mark text in") for line in lines), tag
+    lines = [e.line() for e in effects(read_audience({"languages": ["ar"]}))]
+    assert lines == ["Arabic faces, sizes and right to left styles are built: the brief names ar",
+                     'Set dir="rtl" and the lang attribute on the html element: the primary '
+                     "script is Arabic, so pages open right to left"]
+
+
+@pytest.mark.parametrize("tag", ["en", "ar-Latn", "sd-Deva", "tr", "hi", "mt"])
+def test_a_tag_in_another_script_stays_latin(tag):
+    a = read_audience({"languages": [tag]})
+    assert a.arabic is False and a.primary_script == "latin"
+    assert resolve_arabic(False, a) is False
+
+
+def test_an_arabic_variety_builds_the_arabic_faces():
+    a = read_audience({"languages": ["arz"]})
+    ts = build_system(AxisValues(*[0.5] * 7), "#3366FF", arabic=resolve_arabic(False, a),
+                      audience=a).tokens
+    assert ts.has("type.face.arabic") and ts.has("type.size.arabic.3")

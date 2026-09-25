@@ -15,6 +15,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [fonts.css holds the matched fallbacks, fonts-self-host.css the faces, and every weight is one a face ships](font-files.md)
 - [Who the product is for arrives as structured fields, and every effect is reported](brief-fields.md)
 - [Languages are tags, an Arabic primary script ships Arabic, and every field gets a line](brief-fields-checked.md)
+- [A language tag is Arabic by its script subtag, else by its language or macrolanguage](arabic-by-script.md)
 - [A brief can open the page dark, and color-scheme follows every scheme](default-scheme.md)
 - [Opposite characters build measurably different systems](distinctness.md)
 - [Distinctness is measured on what a person sees at a glance, and each axis moves a named quantity](distinctness-at-a-glance.md)
@@ -95,6 +96,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [High contrast makes edges and the focus ring heavier](high-contrast-borders.md)
 - [The surface treatment runs from flat hairlines to deep shadows](surface-treatment.md)
 - [Weight and letter spacing change along the type scale](type-along-the-scale.md)
+- [Neighbouring type levels stay at least 1.08 times apart after rounding](type-levels-apart.md)
 - [Curves bend continuously, and decoration has one role that reduced motion removes](expressive-motion.md)
 - [Curves bend continuously, decoration leaves under reduced motion by our rule, and each motion property has one check](motion-check-owners.md)
 

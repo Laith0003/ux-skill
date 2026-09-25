@@ -57,7 +57,7 @@ It also reads six structured fields about who the product is for. The engine nev
 | Field | Values | Fill it when the user says, for example |
 |---|---|---|
 | `age` | `children`, `teens`, `adults`, `all-ages`, `older-adults` | "many patients are over 60" gives `older-adults`; "families" gives `all-ages` |
-| `languages` | language tags (two or three letters, then optional subtags), first the main one; never a name such as `"Arabic"`, which is refused with its tag | "Arabic-speaking shop owners in Jordan and Egypt" gives `["ar-JO", "ar-EG"]`; add `"en"` when the product also ships English |
+| `languages` | language tags (two or three letters, then optional subtags), first the main one; never a name such as `"Arabic"`, which is refused with its tag. An Arabic variety (`arz`, `apc`, `ary`) or any tag with the `Arab` script subtag (`pa-Arab`) ships Arabic; `ar-Latn` does not | "Arabic-speaking shop owners in Jordan and Egypt" gives `["ar-JO", "ar-EG"]`; add `"en"` when the product also ships English |
 | `primary_script` | `latin`, `arabic` | read from the first language when left out; set it when the main language is not first. `arabic` alone ships Arabic, like an Arabic language does |
 | `default_scheme` | `light`, `dark`, `system` | "dark by default" gives `dark`; leave it out to follow the operating system |
 | `reading_context` | `glance`, `task`, `long-read`, `on-the-go` | "people read long articles" gives `long-read`; "booked from a phone on the way" gives `on-the-go`; "a status screen people check in passing" gives `glance`, which raises the bento composition's score |
@@ -103,7 +103,7 @@ Read `design-system/system-report.md` and explain it. Do not paste it.
 - Where the look came from: the brief (the industry and tone it used, when the brief names them, and any words it did not recognize), axes set by hand, or the neutral default.
 - The gate in one sentence, for example: "Every text and control color passed contrast checks in light, dark and high contrast."
 - The adjustments that matter, from the report's "Colors moved to meet contrast" list, in one line each, for example: "in dark mode, button text switches to black so it stays readable on the lighter button."
-- How to switch modes: `data-theme="dark"`, `data-contrast="high"`, `data-density="compact"`, `dir="rtl"`, `data-motion="reduced"` on the html element. Without an attribute, dark, high contrast and reduced motion follow the operating system. `dir="rtl"` or `lang="ar"` also works on any element inside the page, such as an Arabic block in an English page, and gives it the Arabic type.
+- How to switch modes: `data-theme="dark"`, `data-contrast="high"`, `data-density="compact"`, `dir="rtl"`, `data-motion="reduced"` on the html element. Without an attribute, dark, high contrast and reduced motion follow the operating system. `dir="rtl"` or `lang="ar"` (or any `ar-` tag) also works on any element inside the page, such as an Arabic block in an English page, and gives it the Arabic type; a block tagged with another Arabic-script language, such as `lang="arz"`, also needs `dir="rtl"`.
 - That the hero, heading-1 and section-title step down on phones on their own; the page needs no media query for them.
 - The files it wrote (tokens.json, tokens.css, fonts.css, fonts-self-host.css, system-report.md and the art/ folder) and what each is for, and with `--rule-pack`, that an agent starts at `rule-pack/README.md`, which names the files to load for each task.
 - The fonts (step 7). Always say this; it is the step people miss.

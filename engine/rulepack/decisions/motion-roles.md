@@ -15,7 +15,7 @@ Motion systems often name an intent for every kind of change, including separate
 
 ## Decision
 
-Motion has seven roles, each with a duration and a curve and, where something travels, a distance: press, reveal, dismiss, swap, expand, page and progress. Emphasis and attention are not roles; a change that must be noticed uses reveal or swap, and one that must interrupt uses a status banner or a dialog. Reduced motion is the motion axis: every role keeps its meaning with no travel, every one-shot role takes a gentle curve and at most 100ms, and the progress loop keeps its standard duration and linear curve.
+Motion has seven interaction roles, each with a duration and a curve and, where something travels, a distance: press, reveal, dismiss, swap, expand, page and progress. Emphasis and attention are not roles; a change that must be noticed uses reveal or swap, and one that must interrupt uses a status banner or a dialog. Reduced motion is the motion axis: every interaction role keeps its meaning with no travel, every one-shot role takes a gentle curve and at most 100ms, and the progress loop keeps its standard duration and linear curve.
 
 ## Why
 

@@ -36,6 +36,7 @@ EXPECTED = {
     "tone-words-reach-shape", "sentence-names-the-shown-face", "type-steps-down-on-phones",
     "direction-on-any-subtree", "dark-recess-and-bands", "high-contrast-levels",
     "soft-fills-follow-character", "brand-fill-family", "media-veil", "dark-surfaces-rise",
+    "type-levels-apart", "arabic-by-script",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",

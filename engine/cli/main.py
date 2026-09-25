@@ -41,6 +41,7 @@ from engine.data_loader import stats as data_stats, load
 from engine.recommender import recommend as run_recommend, Brief
 from engine.linter import lint as run_lint, compute_score
 from engine.discovery import FIELDS, DiscoveryState, next_question, record, is_complete, serialize
+from engine.foundations.audience import FIELDS_HELP as BRIEF_FIELDS_HELP
 from engine.generator import generate as run_generate, design_md as run_design_md
 from engine.installer import install as run_install, detect_ides, SUPPORTED
 from engine.persist import save_master, save_page, load_master, list_pages
@@ -770,7 +771,9 @@ else:
     @click.option("--brand", required=True,
                   help="Brand color as hex. Quote it in a shell ('#3366FF') or drop the #.")
     @click.option("--brief", "brief_path", type=click.Path(dir_okay=False), default=None,
-                  help="JSON brief (or .ux/last-discovery.json); the synthesizer places the axes.")
+                  help="JSON brief (or .ux/last-discovery.json); the synthesizer places the axes "
+                       "from industry, tone, audience, must_have and forbidden. "
+                       + BRIEF_FIELDS_HELP)
     @click.option("--axes", "axes_text", default=None,
                   help="Seven numbers from 0 to 1: warmth,contrast,density,geometry,"
                        "formality,motion,type_personality.")

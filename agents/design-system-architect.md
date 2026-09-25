@@ -311,7 +311,7 @@ When multi-locale (Arabic, Hebrew, Farsi):
 - Use logical Tailwind utilities: `ps-4` (`padding-inline-start`) not `pl-4`
 - Direction-aware shadows: keep neutral on `x` axis where possible; if asymmetric, the shadow flips
 - Direction-aware iconography: chevron-right is `forward` semantically; mirrors under RTL
-- Type-pairing changes: Arabic fonts (IBM Plex Sans Arabic, Tajawal, Cairo) often need a slightly smaller scale ratio because Arabic glyphs are visually weightier
+- Type-pairing changes: the engine sets Arabic 1.05 to 1.15 times the Latin size at the same step, a ratio the two faces' metrics give (decisions/arabic-proportional.md); never shrink the Arabic scale
 
 Add a `dir-aware-radius` token if the brand uses asymmetric corner radii.
 

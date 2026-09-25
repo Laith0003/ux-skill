@@ -34,6 +34,7 @@ from pydantic import BaseModel, Field
 
 from engine import __version__
 from engine.data_loader import load, load_brands, stats
+from engine.foundations.audience import FIELDS_HELP as BRIEF_FIELDS_HELP
 from engine.linter import lint
 from engine.persist import save_master, load_master
 from engine.recommender import Brief, recommend
@@ -246,7 +247,8 @@ class UxSystemBuildInput(BaseModel):
     brief: Any = Field(
         default=None,
         description="Optional brief object (industry, tone, audience, must_have, forbidden); "
-                    "the synthesizer places the axes from it. Do not combine with axes.")
+                    "the synthesizer places the axes from it. Do not combine with axes. "
+                    + BRIEF_FIELDS_HELP)
     axes: Any = Field(
         default=None,
         description="Optional list of seven numbers from 0 to 1: warmth, contrast, density, "
@@ -692,10 +694,8 @@ TOOLS: Dict[str, ToolEntry] = {
         "Arabic and reduced motion modes. Returns status, passed, the gate line, findings, a "
         "plain report and each file's size. Pass out (a folder) to write tokens.json, "
         "tokens.css, fonts.css, fonts-self-host.css, system-report.md and art/ there, refused "
-        "when a file differs unless "
-        "force is true; pass "
-        "include_files true to get the css and dtcg text back instead. Without out it writes "
-        "nothing.",
+        "when a file differs unless force is true; pass include_files true to get the css and "
+        "dtcg text back instead. Without out it writes nothing. " + BRIEF_FIELDS_HELP,
     ),
 }
 

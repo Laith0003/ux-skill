@@ -45,7 +45,7 @@ Movement follows the smallest axis that explains the change: along one axis befo
 
 ## Modes
 
-Motion varies on motion (standard, reduced) and direction (ltr, rtl). Under reduced motion every role keeps its meaning: travel drops to 0, one-shot curves turn gentle, one-shot durations cap at 100ms and never grow, a dismiss may tie a reveal but never outlast it, the progress loop keeps its standard duration and linear curve because it reports status (decisions/motion-roles.md), and the expressive role is removed: 0ms and no travel. Under right to left the sign turns -1 so horizontal travel mirrors (decisions/unsigned-distances.md). The mode follows prefers-reduced-motion unless data-motion is set on the html element.
+Motion varies on motion (standard, reduced) and direction (ltr, rtl). Under reduced motion every interaction role keeps its meaning: travel drops to 0, one-shot curves turn gentle, one-shot durations cap at 100ms and never grow, a dismiss may tie a reveal but never outlast it, the progress loop keeps its standard duration and linear curve because it reports status (decisions/motion-roles.md), and the expressive role is removed: 0ms and no travel. Under right to left the sign turns -1 so horizontal travel mirrors (decisions/unsigned-distances.md). The mode follows prefers-reduced-motion unless data-motion is set on the html element.
 
 Under reduced motion drop scale as well as travel: an element that grows from a point appears at full size, with a quick fade if it needs a signal.
 

@@ -60,6 +60,10 @@ READING = ("type.text.body", "type.text.body-small", "type.text.fine")
 HIERARCHY = ("type.text.hero", "type.text.heading-1", "type.text.section-title",
              "type.text.heading-2", "type.text.heading-3", "type.text.body")
 MIN_BODY_PX, MIN_FINE_PX, MIN_READING_LEADING = 16, 12, 1.5
+# Our floor between neighbouring levels of HIERARCHY: a smaller step does
+# not read as a new level. The generator holds every step from body up to
+# it after rounding, in both scripts.
+MIN_LEVEL_RATIO = 1.08
 # Under high contrast, bold words stay at least this far above body text.
 STRONG_GAP = 200
 # Face roles: the token each face is written to.
@@ -127,20 +131,34 @@ def ratio(axes: AxisValues) -> float:
     return character.scale_ratio(axes)
 
 
+def _clear_level(px: int, below: int) -> int:
+    """px raised by whole pixels until it sits MIN_LEVEL_RATIO above the
+    step below it."""
+    while px / below < MIN_LEVEL_RATIO:
+        px += 1
+    return px
+
+
 def latin_px(axes: AxisValues, body: int = BODY_PX) -> List[int]:
     """Sizes in px for steps 1..9: body minus 4, body minus 2, body, then
-    the ratio upward."""
+    the ratio upward, each step at least MIN_LEVEL_RATIO above the one
+    below after rounding."""
     r = ratio(axes)
     out = [body - 4, body - 2, body]
     for n in STEPS[3:]:
-        out.append(max(int(body * r ** (n - BODY_STEP) + 0.5), out[-1] + 1))
+        out.append(_clear_level(int(body * r ** (n - BODY_STEP) + 0.5), out[-1]))
     return out
 
 
 def arabic_px(latin: List[int], scale: float) -> List[int]:
     """The Arabic size at each step: the Latin size times the scale the
-    two faces' metrics give, at least one pixel larger."""
-    return [max(px + 1, int(px * scale + 0.5)) for px in latin]
+    two faces' metrics give, at least one pixel larger, and from body up
+    at least MIN_LEVEL_RATIO above the step below."""
+    out: List[int] = []
+    for i, px in enumerate(latin):
+        size = max(px + 1, int(px * scale + 0.5))
+        out.append(_clear_level(size, out[-1]) if i >= BODY_STEP else size)
+    return out
 
 
 def leading(axes: AxisValues, extra: float = 0.0) -> Dict[int, float]:
@@ -482,6 +500,11 @@ def _hierarchy(ts: TokenSet, mode: str) -> List[str]:
         if pa <= pb:
             out.append(f"{a} ({mode}, {pa:g}px) is not larger than {b} ({pb:g}px); keep "
                        f"{', '.join(r.rsplit('.', 1)[1] for r in HIERARCHY)} in falling size")
+        elif pa / pb < MIN_LEVEL_RATIO:
+            times = int(pa / pb * 100) / 100
+            out.append(f"{a} ({mode}, {pa:g}px) is only {times:.2f} times {b} ({pb:g}px); our "
+                       f"floor between neighbouring levels is {MIN_LEVEL_RATIO:g} times, since a "
+                       f"smaller step does not read as a new level, so move {a} up the scale")
     return out
 
 

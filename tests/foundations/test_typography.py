@@ -11,6 +11,9 @@ from engine.foundations.tokens import Token, TokenSet
 from engine.foundations.typography import (
     CHECKS,
     FOUNDATION,
+    HIERARCHY,
+    MIN_LEVEL_RATIO,
+    ROLES,
     arabic_px,
     generate_type,
     latin_px,
@@ -299,9 +302,10 @@ def _arabic_failures(ts, also=()):
 def test_a_role_without_an_rtl_override_fails_every_arabic_rule():
     ts = _generated_with("type.text.heading-1")
     assert validate(ts) == []
-    # heading-1 at its Latin size under rtl also falls under section-title
-    # on a phone, which phone-hierarchy reports on its own.
-    assert _arabic_failures(ts, also=("phone-hierarchy",)) == [
+    # heading-1 at its Latin size under rtl also sits too close to the
+    # Arabic section-title and falls under it on a phone, which
+    # type-hierarchy and phone-hierarchy report on their own.
+    assert _arabic_failures(ts, also=("type-hierarchy", "phone-hierarchy")) == [
         "type.text.heading-1 (direction:rtl) is set in Outfit, not type.face.arabic-display; "
         "Arabic text needs its own face, so point its direction:rtl fontFamily at "
         "type.face.arabic-display",
@@ -518,3 +522,48 @@ def test_a_phone_size_out_of_order_is_named_with_the_fix():
     report = gate(ts, [], CHECKS, raise_on_fail=False)
     msgs = [f.message for f in report.failures if f.check == "phone-hierarchy"]
     assert msgs and "type.phone.heading-1" in msgs[0] and "type.phone.hero" in msgs[0]
+
+
+GRID = (0.0, 0.25, 0.5, 0.75, 1.0)
+
+
+@pytest.mark.parametrize("body", [16, 18])
+@pytest.mark.parametrize("contrast, density", [(c, d) for c in GRID for d in GRID])
+def test_neighbouring_levels_stay_apart_over_contrast_and_density(contrast, density, body):
+    """Whole-pixel rounding at a muted, dense corner once set heading-2
+    1px above heading-3; every level of the hierarchy keeps our 1.08 floor
+    over the next, in both directions, and the whole type gate passes."""
+    ts = generate_type(axes(contrast=contrast, density=density), body_px=body).tokens
+    for mode in ("direction:ltr", "direction:rtl"):
+        sizes = [px(ts.resolve(r, mode)["fontSize"]) for r in HIERARCHY]
+        assert all(hi / lo >= MIN_LEVEL_RATIO for hi, lo in zip(sizes, sizes[1:])), (mode, sizes)
+    assert gate(ts, [], CHECKS, raise_on_fail=False).failures == []
+
+
+@pytest.mark.parametrize("scale", [round(1.05 + 0.005 * k, 3) for k in range(21)])
+def test_arabic_levels_stay_apart_at_every_face_ratio(scale):
+    steps = [ROLES[r][0] for r in HIERARCHY]
+    for contrast in GRID:
+        for density in GRID:
+            for body in (16, 17, 18):
+                latin = latin_px(axes(contrast=contrast, density=density), body)
+                arabic = arabic_px(latin, scale)
+                assert all(a >= lat + 1 and a <= lat * 1.2 for a, lat in zip(arabic, latin))
+                levels = [arabic[n - 1] for n in steps]
+                assert all(hi / lo >= MIN_LEVEL_RATIO
+                           for hi, lo in zip(levels, levels[1:])), (contrast, density, levels)
+
+
+def test_a_level_too_close_to_the_next_is_named_with_the_fix():
+    ts = TokenSet()
+    for t in generate_type(axes()).tokens.tokens():
+        if t.path == "type.text.heading-2":
+            t = Token(t.path, t.type, dict(t.value, fontSize="{type.size.latin.x}"),
+                      modes=t.modes, layer=t.layer)
+        ts.add(t)
+    ts.add(Token("type.size.latin.x", "dimension", {"value": 1.3125, "unit": "rem"}))
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [f.message for f in report.failures if f.check == "type-hierarchy"] == [
+        "type.text.heading-2 (direction:ltr, 21px) is only 1.05 times type.text.heading-3 "
+        "(20px); our floor between neighbouring levels is 1.08 times, since a smaller step does "
+        "not read as a new level, so move type.text.heading-2 up the scale"]

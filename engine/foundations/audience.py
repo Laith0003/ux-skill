@@ -32,8 +32,38 @@ READING: Tuple[str, ...] = ("glance", "task", "long-read", "on-the-go")
 BRAND_ROLES: Tuple[str, ...] = ("fill", "accent", "edge")
 # Language subtags written in Arabic script.
 ARABIC_LANGUAGES: Tuple[str, ...] = ("ar", "fa", "ur", "ps", "ckb", "sd", "ug")
+# The member languages of the Arabic-script macrolanguages above, as the
+# IANA language subtag registry lists them (Macrolanguage: ar, fa, ps), so
+# a variety such as Egyptian (arz) or Levantine (apc) reads as Arabic.
+# ajp is kept though the registry now points it at apc.
+MACROLANGUAGE_MEMBERS: Mapping[str, Tuple[str, ...]] = MappingProxyType({
+    "ar": ("aao", "abh", "abv", "acm", "acq", "acw", "acx", "acy", "adf", "aeb", "aec", "afb",
+           "ajp", "apc", "apd", "arb", "arq", "ars", "ary", "arz", "auz", "avl", "ayh", "ayl",
+           "ayn", "ayp", "pga", "shu", "ssh"),
+    "fa": ("pes", "prs"),
+    "ps": ("pbt", "pbu", "pst")})
+# ISO 15924 script subtags for Arabic script: Arabic, and its Nastaliq form.
+ARABIC_SCRIPTS: Tuple[str, ...] = ("arab", "aran")
+# The language tokens.css also switches the Arabic styles on, besides
+# dir="rtl": [lang|="ar"] matches "ar" and every "ar-" tag.
+SELECTOR_LANGUAGE = "ar"
 FIELDS: Tuple[str, ...] = ("age", "languages", "primary_script", "default_scheme",
                            "reading_context", "brand_role")
+
+
+def _either(choices: Tuple[str, ...]) -> str:
+    return ", ".join(choices[:-1]) + " or " + choices[-1]
+
+
+# The structured fields and their allowed values, for the CLI help and the
+# MCP descriptions: a host that never reads the command doc learns them here.
+FIELDS_HELP = (
+    "The brief also takes six structured fields, filled from its plain words (free text is "
+    f"never read for them): age ({_either(tuple(AGES))}), languages (language tags, the main "
+    'one first, such as ["ar-JO", "en"]), primary_script '
+    f"({_either(SCRIPTS)}), default_scheme ({_either(SCHEMES)}), reading_context "
+    f"({_either(READING)}), brand_role ({_either(BRAND_ROLES)}). For example \"many readers are "
+    'over 60" is "age": "older-adults".')
 # A language tag: a primary subtag of two or three letters, then subtags.
 TAG = re.compile(r"^[A-Za-z]{2,3}(-[A-Za-z0-9]{1,8})*$")
 # Language names a brief may hold by mistake, and the tag to give instead.
@@ -44,6 +74,29 @@ NAME_TAGS: Mapping[str, str] = MappingProxyType({
     "turkish": "tr", "hebrew": "he", "hindi": "hi", "chinese": "zh", "japanese": "ja",
     "korean": "ko", "russian": "ru", "portuguese": "pt", "italian": "it", "dutch": "nl",
     "indonesian": "id", "malay": "ms"})
+
+
+def script_subtag(tag: str) -> Optional[str]:
+    """The script subtag of a language tag, lower case, or None: the first
+    subtag of four letters after the language and any extended language
+    subtags of three letters."""
+    for part in tag.split("-")[1:]:
+        if len(part) == 3 and part.isalpha():
+            continue
+        return part.lower() if len(part) == 4 and part.isalpha() else None
+    return None
+
+
+def writes_arabic(tag: str) -> bool:
+    """Whether a language tag is written in Arabic script: its script
+    subtag says so when it has one (so ar-Latn is Latin and pa-Arab is
+    Arabic); otherwise its language is an Arabic-script language or a
+    member of one of their macrolanguages."""
+    script = script_subtag(tag)
+    if script is not None:
+        return script in ARABIC_SCRIPTS
+    lang = tag.split("-")[0].lower()
+    return lang in ARABIC_LANGUAGES or any(lang in m for m in MACROLANGUAGE_MEMBERS.values())
 
 
 class AudienceError(ValueError):
@@ -114,8 +167,7 @@ class Audience:
         if not self.languages:
             return True if self.primary_script == "arabic" and "primary_script" in self.given \
                 else None
-        return self.primary_script == "arabic" or any(
-            t.split("-")[0].lower() in ARABIC_LANGUAGES for t in self.languages)
+        return self.primary_script == "arabic" or any(writes_arabic(t) for t in self.languages)
 
     def to_dict(self) -> Dict[str, Any]:
         return {"age": self.age, "languages": list(self.languages),
@@ -169,7 +221,7 @@ def read_audience(brief: Optional[Mapping[str, Any]], label: str = "brief") -> A
         _check_tags([t.strip() for t in langs], label)
         languages = tuple(t.strip() for t in langs)
     script_default = "latin"
-    if languages and languages[0].split("-")[0].lower() in ARABIC_LANGUAGES:
+    if languages and writes_arabic(languages[0]):
         script_default = "arabic"
     given = tuple(k for k in FIELDS if brief.get(k) not in (None, "", []))
     return Audience(
@@ -230,6 +282,12 @@ def effects(a: Audience, axes: Optional[Any] = None) -> List[Effect]:
         if a.arabic:
             out.append(Effect("Arabic faces, sizes and right to left styles are built",
                               f"the brief names {', '.join(a.languages)}"))
+            for tag in a.languages:
+                if writes_arabic(tag) and tag.split("-")[0].lower() != SELECTOR_LANGUAGE:
+                    out.append(Effect(
+                        f'Mark text in {tag} with dir="rtl"',
+                        'tokens.css switches to the Arabic styles on dir="rtl" or on a lang of '
+                        f'{SELECTOR_LANGUAGE} and its subtags, and "{tag}" is neither'))
         else:
             out.append(Effect("The system is Latin only",
                               f"the brief names {', '.join(a.languages)}, none written in "

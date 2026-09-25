@@ -162,14 +162,20 @@ systems a person can tell apart. No industry or keyword table picks a look.
 - High contrast never weakens the focus ring, makes edges, the ring and text
   one step heavier, keeps every surface level apart and keeps the error edge
   red.
-- An imagery foundation: media ratios, a scrim measured over a white image,
-  a duotone pair and a brand tint. The report names the page composition a
+- An imagery foundation: media ratios, a scrim measured over the worst of a
+  white and a black image, a duotone pair and a brand tint. The report names the page composition a
   landing page starts from: split, stacked, bento, editorial column or
   full-bleed media.
 - Structured brief fields: age, languages and primary script, default
   scheme, reading context and brand role. The report says what each changed
   and why, and names every brief word the engine did not read with how to
-  pass it.
+  pass it. An Arabic variety such as `arz` or any `-Arab` tag ships Arabic.
+- On a phone the hero, heading-1 and section title step down in size, and
+  neighbouring heading levels stay at least 1.08 times apart. Text on
+  generated art sits on a veil of the page color, with on-media color roles.
+  Arabic type applies on any `dir="rtl"` or `lang="ar"` subtree. Status soft
+  fills stay quiet, a band in dark stays a quiet tint, and tone words also
+  move the corners and the type.
 - Eighteen component contracts, the form controls, chip, badge, link,
   navigation, progress and table among them, and fixes to the text field,
   card and status banner.

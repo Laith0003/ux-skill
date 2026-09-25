@@ -23,8 +23,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from engine.foundations.audience import (
-    ARABIC_LANGUAGES, FIELDS as AUDIENCE_FIELDS, HOW_TO_PASS, Audience, AudienceError, effects,
-    read_audience)
+    FIELDS as AUDIENCE_FIELDS, HOW_TO_PASS, Audience, AudienceError, effects, read_audience,
+    writes_arabic)
 from engine.foundations.build import FOUNDATIONS, ValidationError, build_system
 from engine.foundations.composition import choose as choose_composition
 from engine.foundations.color import brand_fidelity
@@ -318,9 +318,14 @@ def unread_lines(brief: Optional[Mapping[str, Any]], label: str = "brief") -> Li
                            f"{', '.join(_accepted(key))}, or leave industry out and describe "
                            "the character with tone words.")
             elif key == "audience":
+                ways = {h.split(" ", 1)[0]: h for h in HOW_TO_PASS[:4]}
+                held = [k for k in ways if brief.get(k) not in (None, "", [])]
+                missing = [h for k, h in ways.items() if k not in held]
                 out.append(f'audience "{word}" is plain text, which the engine does not parse. '
-                           "Say who the readers are with the brief's fields: "
-                           f"{'; '.join(HOW_TO_PASS[:4])}.")
+                           + (f"Say who the readers are with the brief's fields: "
+                              f"{'; '.join(missing)}." if missing else
+                              f"The brief's fields {', '.join(held[:-1])} and {held[-1]} "
+                              "already say who the readers are."))
             elif key == "forbidden":
                 out.append(f'forbidden "{word}" limits no axis. forbidden accepts: '
                            f"{', '.join(_accepted(key))}.")
@@ -358,7 +363,7 @@ def resolve_arabic(latin_only: bool, audience: Audience, flag: str = "latin_only
     if audience.arabic is None:
         return not latin_only
     if audience.arabic and latin_only and not any(
-            t.split("-")[0].lower() in ARABIC_LANGUAGES for t in audience.languages):
+            writes_arabic(t) for t in audience.languages):
         raise InputError(f"{flag} leaves Arabic out, but the brief's primary_script is arabic; "
                          f"drop {flag}, or set primary_script to latin")
     if audience.arabic and latin_only:

@@ -94,8 +94,8 @@ Styles that work together: a label above a section title or a hero; a heading ab
 {latin} - `rem-sizes`: every style's size is in rem.
 {arabic} - `phone-hierarchy`: on a phone hero, heading-1 and section-title keep falling in size above heading-2, in both directions, and each factor sits above 0 and at most 1.
 {latin} - `phone-hierarchy`: on a phone hero, heading-1 and section-title keep falling in size above heading-2, and each factor sits above 0 and at most 1.
-{arabic} - `type-hierarchy`: hero, heading-1, section-title, heading-2, heading-3 and body fall in size, in both directions.
-{latin} - `type-hierarchy`: hero, heading-1, section-title, heading-2, heading-3 and body fall in size.
+{arabic} - `type-hierarchy`: hero, heading-1, section-title, heading-2, heading-3 and body fall in size, each at least 1.08 times the next, our floor, in both directions.
+{latin} - `type-hierarchy`: hero, heading-1, section-title, heading-2, heading-3 and body fall in size, each at least 1.08 times the next, our floor.
 - `high-contrast-weights`: under high contrast no style is lighter than at standard contrast.
 - `strong-weight`: under high contrast type.strong is at least 200 above body text.
 - `icon-sizes`: inline, control and feature icons rise in size, and the stroke stays between 1 and 3 units.
@@ -105,8 +105,8 @@ Styles that work together: a label above a section title or a hero; a heading ab
 - The hero appears at most once per view, and one heading level opens each section.
 - Text set at 200 percent zoom still fits its container without cutting words (WCAG 1.4.4).
 - Line length for running text stays within layout.measure.text.
-{arabic} - An Arabic block inside a Latin page takes the Arabic styles from dir="rtl" and lang="ar" on its element; a Latin run inside Arabic text takes type.run.latin.
-{arabic} - A page that ships Arabic loads the Arabic face; a missing face falls back to a system font and breaks the sizes.
+{arabic} - An Arabic block inside a Latin page takes the Arabic styles from dir="rtl" or lang="ar" (or any "ar-" tag) on its element; a block in another Arabic-script language, such as lang="arz" or lang="fa", also needs dir="rtl"; a Latin run inside Arabic text takes type.run.latin.
+{arabic} - A page that ships Arabic loads the Arabic face; a missing face falls back to its matched fallback in fonts.css; without fonts.css the sizes break.
 - Headings and labels say what follows them; a vague heading is a content finding.
 
 ## Handoff notes
