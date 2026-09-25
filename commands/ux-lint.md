@@ -239,11 +239,51 @@ The rules file is human-editable markdown. To add a rule:
 
 To suppress a finding without editing the rules:
 
-- **Per-line**: add a `ux-lint-disable` comment on the offending line. Use `ux-lint-disable rule-N` to document the specific rule being waived.
+- **Per-line**: add a `ux-lint-disable` comment on the offending line. Name the rule to waive only that rule: `/* ux-lint-disable arbitrary-z-index-9999 */`. Several ids can be listed, separated by commas.
+- **Next line**: in JSX, where a trailing comment is awkward, put `{/* ux-lint-disable-next-line inline-style-attribute */}` on the line above.
 - **Per-file**: pass `--exclude` to the linter with that file's glob.
 - **Project-wide**: pass `--disable <id>` for that rule ID.
 
 To raise or lower the CI gate, pass `--fail-on critical` (looser) or `--fail-on medium` (stricter).
+
+## How a rule reads a file
+
+The Python linter does not run a rule over the raw file. Each rule names the channel it judges in `detection.target` in `data/anti-patterns.json`, and every match is mapped back to the line and column of the original file.
+
+| Channel | What it contains |
+|---|---|
+| `markup` | Tags, attributes and text, with comments blanked and `<style>` and `<script>` bodies removed. JSX `className` reads as `class`. The default. |
+| `css` | Every CSS region: stylesheets, `<style>` bodies, `style` attributes, JSX `style` and `sx` objects (camelCase keys become kebab-case, numbers become px), Vue `:style` objects, CSS-in-JS templates. |
+| `classes` | Every class list: `class` and `className` values, strings inside `cn()` or template literals, Vue `:class`, `@apply`, class-like string constants. |
+| `text` | Visible copy: text nodes outside `<code>` and `<pre>`, copy attributes (`alt`, `title`, `aria-label`, `placeholder`), sentence-like strings in scripts. A phrase wrapped in quotation marks is a mention, not a use, and does not fire. |
+| `code` | The file with comments and data URI payloads blanked. |
+| `raw` | The file as written. |
+
+So a CSS rule fires on `style={{ zIndex: 9999 }}` and on `className="z-[9999]"`, but not on a `zIndex={9999}` prop, a comment, a `data:` URI, or a sentence that mentions `z-index: 9999`.
+
+Other detection fields: `also` adds more passes with their own pattern and target, `unless` waives a pass for the whole file when its pattern matches (for example, `outline: none` is fine in a file that draws a `:focus-visible` ring), and `skip_inside` ignores matches inside the named elements (a `.jpg` fallback inside `<picture>`).
+
+Two fixture sets keep the rules honest. `tests/lint_corpus/clean/` holds real-world UI files with no anti-patterns, and the test suite requires zero findings at medium or above on it. `tests/lint_corpus/dirty/` holds one file per rule, named after the rule id, and every rule must fire on its own file. A new rule needs both.
+
+## Lint on every write
+
+The plugin registers a `PostToolUse` hook (`bin/ux-lint-hook.py`, declared in `.claude-plugin/plugin.json`). After every `Write`, `Edit` or `MultiEdit` on a UI file (`.html`, `.htm`, `.css`, `.scss`, `.jsx`, `.tsx`, `.vue`, `.svelte`, `.astro`, `.blade.php`), it lints that one file and hands findings at medium severity and above back to the session, each with its `file:line:column`, rule id and fix.
+
+- It never blocks the write. The tool has already run, the hook always exits 0, and any error inside it is swallowed.
+- It is pure Python standard library. No Node, no binaries, no installed packages.
+- It finishes in well under 500 ms on a 2,000-line file (`tests/test_lint_hook.py` checks this).
+
+To turn it off, use either of these:
+
+1. Set `UXSKILL_LINT_ON_WRITE=0` in the environment. For one project, add it to `.claude/settings.json`:
+
+   ```json
+   { "env": { "UXSKILL_LINT_ON_WRITE": "0" } }
+   ```
+
+2. Create an empty file at `.ux/lint-on-write.off` in the project root.
+
+`"disableAllHooks": true` in settings also stops it, along with every other hook.
 
 ## Wiring into pre-commit hooks
 
