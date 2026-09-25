@@ -35,9 +35,11 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from engine.foundations.errors import InputError, _brief_text
 from engine.foundations.modes import AXES
+from engine.foundations.values import GENERIC_FAMILIES, STROKE_STYLES
 from engine.foundations.tokens import Token, TokenSet
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source
-from engine.io.values_in import GamutMapped, NotRead, css_alias, read_value
+from engine.io.values_in import (COLOR_KEYWORDS, CSS_KEYWORDS, EASING_KEYWORDS, GamutMapped,
+                                 NotRead, css_alias, read_value, split_top)
 
 NAME_HEADERS = ("token", "name", "variable", "role", "token name", "css variable")
 VALUE_HEADERS = ("value", "hex", "color", "size", "px", "rem", "ms")
@@ -50,9 +52,22 @@ _DELIMITER = re.compile(r"\s*\|?\s*:?-+:?\s*(?:\|\s*:?-+:?\s*)*\|?\s*$")
 _FENCE = re.compile(r"\s{0,3}(`{3,}|~{3,})\s*([^`\s]*)")
 _BRACE = re.compile(r"\{\s*([^{}\s]+)\s*\}")
 _AXIS_WORD = re.compile(r"[a-z][a-z0-9-]*")
+# The name column, when a table has several name-like headers: the one
+# that holds the token's own name wins over a role or a label.
+_NAME_PREFERENCE = ("token", "token name", "variable", "css variable", "name", "role")
 # Words a mode column's header may carry around the mode's name.
 _MODE_WORDS = ("mode", "theme", "scheme", "value", "contrast", "density", "motion",
-               "direction")
+               "direction", "hex", "color", "default")
+# Every value of an engine axis: a header holding exactly one of them
+# names that mode, whatever else it says ("Light (default)", "Dark hex").
+_MODE_VALUES = frozenset(v for values in AXES.values() for v in values)
+# Lowercase words that are values, not prose.
+_KEYWORDS = frozenset((*CSS_KEYWORDS, *COLOR_KEYWORDS, *EASING_KEYWORDS, *STROKE_STYLES,
+                       *GENERIC_FAMILIES, "none"))
+_PLAIN = re.compile(r"[a-z]+(?:'[a-z]+)?")
+_SENTENCE_END = re.compile(r"[.!?](?:\s|$)")
+_VALUEISH = re.compile(r"[0-9#({\"']")
+_BULLET = re.compile(r"\s*(?:[-*+]|\d+[.)])\s")
 _LOOP = "references only itself through a loop of references; give one of them a value"
 
 
@@ -82,9 +97,43 @@ def _header(cell: str) -> str:
 def _mode_word(header: str) -> str:
     """The mode a column header names ("Dark mode" is dark), or "" when it
     cannot name one."""
-    words = [w for w in header.lower().split() if w not in _MODE_WORDS]
+    hits = {w for w in re.findall(r"[a-z0-9]+", header.lower()) if w in _MODE_VALUES}
+    if len(hits) == 1:
+        return hits.pop()
+    bare = re.sub(r"\([^)]*\)", " ", header.lower())
+    words = [w for w in bare.split() if w not in _MODE_WORDS]
     slug = re.sub(r"[^a-z0-9]+", "-", " ".join(words)).strip("-")
     return slug if _AXIS_WORD.fullmatch(slug) else ""
+
+
+def _prose_header(header: str) -> bool:
+    """True for a column of prose: Notes, Usage, When to use and the like."""
+    return header in PROSE_HEADERS or any(w in PROSE_HEADERS for w in header.split())
+
+
+def _prose(text: str) -> bool:
+    """True when a value is a rule written in words, not a value: it holds a
+    backtick or ends a sentence, or one of its comma parts has two or more
+    plain lowercase words that are not CSS keywords, or more than four
+    words and no number. A font list (Inter, system-ui, sans-serif) is not
+    prose: each part is a name of a few words."""
+    if "`" in text or _SENTENCE_END.search(text):
+        return True
+    for part in split_top(text):
+        if part[:1] in "\"'":
+            continue
+        words = part.split()
+        plain = [w for w in words if _PLAIN.fullmatch(w) and w not in _KEYWORDS]
+        if len(plain) >= 2 or (len(words) > 4 and not _VALUEISH.search(part)):
+            return True
+    return False
+
+
+def _valueish(cell: str) -> bool:
+    """True when a cell could hold a value: a digit, a hex, a function, a
+    reference, a quote or a CSS keyword."""
+    text = _unquote(cell)
+    return bool(_VALUEISH.search(text)) or text.lower() in _KEYWORDS
 
 
 def _known_axis(*words: str) -> Optional[str]:
@@ -130,12 +179,13 @@ def _table(raw: List[str]) -> Optional[_Table]:
     """How a table with these headers is read; None when it holds no
     tokens (no name column, or only prose beside it)."""
     headers = [h.lower() for h in raw]
-    name = next((c for c, h in enumerate(headers) if h in NAME_HEADERS), None)
+    name = next((headers.index(h) for h in _NAME_PREFERENCE if h in headers), None)
     if name is None:
         return None
     value = [c for c, h in enumerate(headers) if c != name and h in VALUE_HEADERS]
     other = [c for c, h in enumerate(headers)
-             if c != name and h not in VALUE_HEADERS and h not in PROSE_HEADERS and h]
+             if c != name and h and h not in VALUE_HEADERS and h not in NAME_HEADERS
+             and not _prose_header(h)]
     table = _Table(name)
     if value:
         table.base = value[0]
@@ -151,6 +201,13 @@ def _table(raw: List[str]) -> Optional[_Table]:
             table.mode, word = modes[0]
             table.axis = _known_axis(word) or ""
             table.values = AXES[table.axis][0], word
+        left = [raw[c] for c in other if c != table.mode]
+        if left:
+            table.notes.append(
+                f"a table with the columns {_and(raw)}: {_and(left)} "
+                f"{'name' if len(left) > 1 else 'names'} no mode and "
+                f"{'were' if len(left) > 1 else 'was'} left out; head a column with a mode name "
+                "such as Dark to read it as that mode, or put it in its own table")
         return table
     if len(other) == 1:
         table.base = other[0]
@@ -209,11 +266,20 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
     notes: List[Item] = []
     not_read: List[Item] = []
     entries = 0
+    # file -> [(line, name)] of lines whose value is a rule, not a value
+    rules: Dict[str, List[Tuple[int, str]]] = {}
+    # (path, where, name, what the second says, where the first was, what it set)
+    again: List[Tuple[str, str, str, str, str, str]] = []
 
     def add(name: str, where: str, values: Dict[str, str], labels: Dict[str, str]) -> None:
         nonlocal entries
-        entries += 1
         written = _unquote(re.sub(r"^(\*{1,2}|_{1,2})(.+)\1$", r"\2", name.strip()))
+        if written and _NAME.fullmatch(written) and any(_prose(_unquote(v))
+                                                         for v in values.values()):
+            file_name, _, line = where.rpartition(":")
+            rules.setdefault(file_name, []).append((int(line), written))
+            return
+        entries += 1
         if not written:
             not_read.append(Item(where, "", f"has no name; write the token's name in the "
                                  f"{labels.get('name', 'first')} column"))
@@ -231,11 +297,9 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                 if was == now:
                     continue
                 label = f" {labels.get(ctx) or first.labels.get(ctx)}" if ctx else ""
-                again = f"another{label} value ({now})" if now else f"no{label} value"
+                said = f"another{label} value ({now})" if now else f"no{label} value"
                 kept = f"to {was}" if was else f"with no{label} value"
-                not_read.append(Item(where, written, f"is set again with {again}; "
-                                     f"{first.where} set it first {kept}, which was kept, so "
-                                     "keep one"))
+                again.append((path, where, written, said, first.where, kept))
                 return
             return
         if "" not in values:
@@ -248,11 +312,25 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
 
     for file_name, text in files:
         lines = text.splitlines()
-        i, fence = 0, ""
+        i, fence, in_list, in_code = 0, "", False, False
         while i < len(lines):
             line = lines[i]
             where = f"{file_name}:{i + 1}"
             opened = _FENCE.match(line)
+            if not fence and line.strip():
+                # An indented code block: four spaces in, after a blank line,
+                # outside a list.
+                indent = len(line.expandtabs(4)) - len(line.expandtabs(4).lstrip())
+                if indent >= 4 and not in_list and (in_code or i == 0
+                                                    or not lines[i - 1].strip()):
+                    in_code = True
+                    i += 1
+                    continue
+                in_code = False
+                if _BULLET.match(line):
+                    in_list = True
+                elif indent == 0:
+                    in_list = False
             if fence:
                 if opened and opened.group(1)[0] == fence[0] and len(opened.group(1)) >= \
                         len(fence) and not opened.group(2):
@@ -281,6 +359,14 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                 table = _table(raw)
                 if table is not None:
                     notes += [Item(where, "", n) for n in table.notes]
+                if table is not None and table.base >= 0 and not table.axis \
+                        and raw[table.base].lower() not in VALUE_HEADERS \
+                        and not any(_valueish(c[table.base]) for c in
+                                    (_split(x) for x in lines[i + 2:end]) if len(c) > table.base):
+                    notes.append(Item(where, "", (
+                        f"a table whose {raw[table.base]} column holds no values was not read as "
+                        "tokens; head the value column Value, Hex or Size to read it")))
+                    table = None
                 if table is not None and table.base >= 0:
                     ctx = f"{table.axis}:{table.values[1]}" if table.axis else ""
                     if ctx:
@@ -307,12 +393,22 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                         if ctx:
                             values[ctx], labels[ctx] = cells[table.mode], raw[table.mode]
                         add(cells[table.name], at, values, labels)
-                i = end
+                i, in_list = end, False
                 continue
             i += 1
 
+    for file_name, found_rules in rules.items():
+        listed = ", ".join(f"`{name}` (line {line})" for line, name in found_rules)
+        count = len(found_rules)
+        head = (f"{count} lines hold rules, not values, and were kept as rules"
+                if count > 1 else "1 line holds a rule, not a value, and was kept as a rule")
+        notes.append(Item(f"{file_name}:{found_rules[0][0]}", "", (
+            f"{head}: {listed}; to make {'one' if count > 1 else 'it'} a token, write only its "
+            "value after the colon or in the cell, and put the rule on its own line")))
+
     # Decode each value; a reference is kept as an alias to its target.
     defined = set(found)
+    failed = set()
     for path in list(found):
         entry = found[path]
         try:
@@ -325,7 +421,13 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                         from None
         except NotRead as exc:
             not_read.append(Item(entry.where, entry.written, str(exc)))
+            failed.add(path)
             del found[path]
+    for path, where, written, said, first_where, kept in again:
+        fate = ("which could not be read and was not kept; fix that line or remove it, and keep "
+                "one" if path in failed else "which was kept, so keep one")
+        not_read.append(Item(where, written, f"is set again with {said}; {first_where} set it "
+                             f"first {kept}, {fate}"))
 
     def drop(path: str, why: str) -> None:
         entry = found.pop(path)

@@ -226,8 +226,8 @@ def test_a_row_short_of_cells_is_named():
 
 
 def test_tables_without_outer_pipes_are_read():
-    text = "Token | Value\n--- | ---\n`radius.sm` | 4px\n"
-    assert _import(text).tokens.get("radius.sm").value == {"value": 4, "unit": "px"}
+    text = "Token | Value\n--- | ---\n`corner.tight` | 4px\n"
+    assert _import(text).tokens.get("corner.tight").value == {"value": 4, "unit": "px"}
 
 
 def test_a_second_value_column_is_left_out_with_a_note():
@@ -358,3 +358,129 @@ def test_a_reference_to_a_name_of_two_types_is_not_read_either():
     assert [i.name for i in imported.report.not_read] == ["bg", "surface"]
     assert imported.report.not_read[1].message == (
         "references bg, which was not read; fix bg and import again")
+
+
+# A rule written like a token is a rule: it is listed once per file, never
+# read as a value, and a real font list still reads as a font.
+RULES = """| Token | Value |
+|---|---|
+| `color.text` | #1b1d22 |
+
+- `accent`: use for links and focus, never for body text
+- `radius.card`: 12px, use for cards only
+- `color.text`: always meets 4.5:1 on `color.bg`
+- `font.body`: Inter, system-ui, sans-serif
+- `font.mono`: "Mono Face", ui-monospace, monospace
+- `font.head`: Display Serif, Georgia, serif
+"""
+
+
+def test_a_value_written_as_prose_is_kept_as_a_rule():
+    imported = _import(RULES)
+    ts = imported.tokens
+    assert [t.path for t in ts.tokens()] == ["color.text", "font.body", "font.mono", "font.head"]
+    assert imported.report.entries == 4 and imported.report.not_read == []
+    assert _rows(imported.report.notes) == [
+        ("rules.md:5", "", "3 lines hold rules, not values, and were kept as rules: `accent` "
+                           "(line 5), `radius.card` (line 6), `color.text` (line 7); to make "
+                           "one a token, write only its value after the colon or in the cell, "
+                           "and put the rule on its own line")]
+
+
+def test_a_font_list_is_still_a_font():
+    ts = _import(RULES).tokens
+    assert (ts.get("font.body").type, ts.get("font.body").value) == (
+        "fontFamily", ["Inter", "system-ui", "sans-serif"])
+    assert ts.get("font.mono").value == ["Mono Face", "ui-monospace", "monospace"]
+    assert ts.get("font.head").value == ["Display Serif", "Georgia", "serif"]
+
+
+def test_one_rule_in_a_file_is_named_in_the_singular():
+    report = _import("- `accent`: for links\n").report
+    assert _rows(report.notes) == [
+        ("rules.md:1", "", "1 line holds a rule, not a value, and was kept as a rule: `accent` "
+                           "(line 1); to make it a token, write only its value after the colon "
+                           "or in the cell, and put the rule on its own line")]
+
+
+def test_rules_are_grouped_per_file(tmp_path):
+    folder = tmp_path / "rules"
+    folder.mkdir()
+    (folder / "a.md").write_text("- `x`: for links\n", encoding="utf-8")
+    (folder / "b.md").write_text("- `y`: 4px\n- `z`: never on dark fills\n", encoding="utf-8")
+    notes = read_markdown(folder).report.notes
+    assert [(i.where, i.message.split(":")[0]) for i in notes] == [
+        ("a.md:1", "1 line holds a rule, not a value, and was kept as a rule"),
+        ("b.md:2", "1 line holds a rule, not a value, and was kept as a rule")]
+
+
+@pytest.mark.parametrize("light, dark", [
+    ("Light (default)", "Dark"), ("Light hex", "Dark hex"), ("Light", "Dark mode"),
+    ("Light value", "Dark value")])
+def test_a_header_holding_a_mode_word_reads_as_that_mode(light, dark):
+    text = f"| Token | {light} | {dark} | Notes |\n|---|---|---|---|\n| `bg` | #fff | #000 | x |\n"
+    ts = _import(text).tokens
+    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    assert ts.get("bg").modes == {"scheme:dark": "#000000"}
+
+
+def test_the_token_column_wins_over_a_role_column():
+    text = "| Role | Token | Value |\n|---|---|---|\n| Body text | `color.text` | #111 |\n"
+    imported = _import(text)
+    assert [t.path for t in imported.tokens.tokens()] == ["color.text"]
+    assert imported.report.not_read == [] and imported.report.notes == []
+
+
+def test_a_usage_map_is_noted_once_not_per_row():
+    text = ("| Component | Token |\n|---|---|\n| Primary button | `color.accent` |\n"
+            "| Card | `radius.card` |\n")
+    imported = _import(text)
+    assert imported.report.entries == 0 and imported.report.not_read == []
+    assert _rows(imported.report.notes) == [
+        ("rules.md:1", "", "a table whose Component column holds no values was not read as "
+                           "tokens; head the value column Value, Hex or Size to read it")]
+
+
+def test_a_column_beside_the_value_that_names_no_mode_is_noted():
+    text = "| Token | Value | Hover |\n|---|---|---|\n| `accent` | #c2410c | #9a3412 |\n"
+    imported = _import(text)
+    assert imported.tokens.get("accent").modes == {}
+    assert _rows(imported.report.notes) == [
+        ("rules.md:1", "", "a table with the columns Token, Value and Hover: Hover names no mode "
+                           "and was left out; head a column with a mode name such as Dark to "
+                           "read it as that mode, or put it in its own table")]
+
+
+def test_a_name_set_again_after_an_unreadable_first_value_says_so():
+    report = _import("- `a`: 3em\n- `a`: 4px\n").report
+    assert _rows(report.not_read) == [
+        ("rules.md:1", "a", "3em is relative to the parent's font size, so it has no fixed "
+                            "value; write it in px or rem"),
+        ("rules.md:2", "a", "is set again with another value (4px); rules.md:1 set it first to "
+                            "3em, which could not be read and was not kept; fix that line or "
+                            "remove it, and keep one")]
+
+
+def test_an_indented_code_block_is_not_read():
+    text = "Example:\n\n    | Token | Value |\n    |---|---|\n    | `a` | 4px |\n\n- `b`: 8px\n"
+    imported = _import(text)
+    assert [t.path for t in imported.tokens.tokens()] == ["b"]
+
+
+def test_an_indented_list_item_inside_a_list_is_read():
+    text = "- `a`: 4px\n\n    - `b`: 8px\n"
+    assert [t.path for t in _import(text).tokens.tokens()] == ["a", "b"]
+
+
+def test_a_table_inside_a_fence_is_not_read():
+    text = "```\n| Token | Value |\n|---|---|\n| `a` | 4px |\n```\n"
+    imported = _import(text)
+    assert imported.report.entries == 0 and imported.report.notes == []
+
+
+def test_a_folder_is_read_in_name_order(tmp_path):
+    folder = tmp_path / "rules"
+    folder.mkdir()
+    (folder / "b.md").write_text("- `second`: 8px\n", encoding="utf-8")
+    (folder / "a.md").write_text("- `first`: 4px\n", encoding="utf-8")
+    assert [t.path for t in read_markdown(folder).tokens.tokens()] == ["first", "second"]
