@@ -1,0 +1,2 @@
+.newsletter:focus-within { box-shadow: 0 0 0 3px blue; }
+.search input { outline: none; }

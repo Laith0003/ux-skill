@@ -1,0 +1,2 @@
+.is-active:focus-visible { box-shadow: 0 0 0 3px blue; }
+.menu .is-active:focus { outline: none; }

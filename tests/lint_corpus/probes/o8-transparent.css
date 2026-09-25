@@ -1,0 +1,2 @@
+.btn { outline: none; }
+.btn:focus-visible { outline-color: transparent; }

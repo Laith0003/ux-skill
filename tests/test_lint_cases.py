@@ -140,3 +140,32 @@ def test_picture_lookup_is_linear(tmp_path):
     hits = [f for f in findings if f.rule_id == "image-format-jpg-no-webp-avif"]
     assert len(hits) == 20000, f"expected one finding per bare <img>, got {len(hits)}"
     assert elapsed < 5, f"linting 20,000 images took {elapsed:.1f} s; skip_inside must use a precomputed range lookup"
+
+
+@pytest.mark.parametrize("shape", ["unrelated", "shared-subject", "anchor"])
+def test_outline_check_scales_with_many_rings(shape):
+    """2,000 removals against 2,000 rings: rings are indexed once per file,
+    so the check stays well under the hook's timeout."""
+    import time
+
+    if shape == "unrelated":
+        rules = [".r%d input{outline:none;}\n.k%d:focus-visible{outline:2px solid red}\n" % (i, i) for i in range(2000)]
+    elif shape == "shared-subject":
+        rules = [".r%d input{outline:none;}\n.k%d input:focus-visible{outline:2px solid red}\n" % (i, i) for i in range(2000)]
+    else:
+        rules = [".c%d input{outline:none;}\n.c%d:focus-within{box-shadow:0 0 0 2px red}\n" % (i, i) for i in range(2000)]
+    text = "".join(rules) + "".join(".f%d{color:red;padding:4px}\n" % i for i in range(5000))
+    start = time.perf_counter()
+    findings = [f for f in lint_text("big.css", text) if f.rule_id == "outline-none-no-focus-visible"]
+    elapsed = time.perf_counter() - start
+    assert len(findings) == (0 if shape == "anchor" else 2000)
+    assert elapsed < 2, f"{shape}: outline check took {elapsed:.1f} s on 2,000 removals and 2,000 rings; index the rings"
+
+
+def test_a_three_layer_glow_is_caught_by_the_glow_rule(tmp_path):
+    path = tmp_path / "glow.css"
+    path.write_text(".x { box-shadow: 0 0 20px rgba(139,92,246,.5), 0 0 40px rgba(139,92,246,.3), "
+                    "0 0 60px rgba(139,92,246,.2); }", encoding="utf-8")
+    fired = _fired(path)
+    assert "glow-shadow-zero-offset" in fired
+    assert "box-shadow-multilayer-default" not in fired

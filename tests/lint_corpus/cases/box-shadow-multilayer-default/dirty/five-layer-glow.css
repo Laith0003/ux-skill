@@ -1,0 +1,9 @@
+/* Five layers at the boundary: the generated stacked glow. */
+.cta {
+  box-shadow:
+    0 0 4px rgba(139, 92, 246, 0.6),
+    0 0 12px rgba(139, 92, 246, 0.5),
+    0 0 24px rgba(139, 92, 246, 0.4),
+    0 0 48px rgba(139, 92, 246, 0.3),
+    0 0 96px rgba(139, 92, 246, 0.2);
+}
