@@ -61,3 +61,23 @@ def test_the_report_opens_with_one_character_sentence_per_system():
         "full-bleed-media composition.")
     assert all(s.startswith("Character: ") for s in sentences.values())
     assert len(set(sentences.values())) == 4
+
+
+# M3.5c item 8: an Arabic-first page renders its display type in the Arabic
+# display face, so the character sentence names that face first.
+def test_an_arabic_first_sentence_names_the_arabic_display_face():
+    from engine.foundations import build_system
+    axes, audience = _trial("fintech-ar")
+    ts = build_system(axes, TRIALS["fintech-ar"], arabic=True, audience=audience).tokens
+    arabic, latin = ts.resolve("type.face.arabic-display")[0], ts.resolve("type.face.display")[0]
+    report = make_system(TRIALS["fintech-ar"], axes, "x", audience=audience).report
+    sentence = next(line for line in report.splitlines() if line.startswith("Character:"))
+    assert f"{arabic} sets the Arabic display type and {latin} the Latin" in sentence, sentence
+    assert sentence.index(arabic) < sentence.index(latin)
+
+
+def test_a_latin_first_sentence_names_the_latin_display_face_only():
+    axes, audience = _trial("clinic")
+    report = make_system(TRIALS["clinic"], axes, "x", audience=audience).report
+    sentence = next(line for line in report.splitlines() if line.startswith("Character:"))
+    assert "Arabic display" not in sentence and "sets the display type" in sentence

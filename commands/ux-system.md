@@ -99,6 +99,7 @@ Exit code 2 means a bad input; the message on stderr names the flag and the fix.
 
 Read `design-system/system-report.md` and explain it. Do not paste it.
 
+- What the system is like, from the character sentence at the top of the report: the axes that lean one way, the brand's role, the display face and the composition. When the primary script is Arabic it names the Arabic display face first, since that is the face the page shows, and the Latin display face after it.
 - Where the look came from: the brief (the industry and tone it used, when the brief names them, and any words it did not recognize), axes set by hand, or the neutral default.
 - The gate in one sentence, for example: "Every text and control color passed contrast checks in light, dark and high contrast."
 - The adjustments that matter, from the report's "Colors moved to meet contrast" list, in one line each, for example: "in dark mode, button text switches to black so it stays readable on the lighter button."

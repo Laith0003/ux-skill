@@ -33,7 +33,7 @@ EXPECTED = {
     "motion-check-owners", "space-relationship-roles", "page-regions-by-tier", "layout-aliases",
     "distinctness-at-a-glance", "grey-accent-clear-of-status", "form-contracts-per-control",
     "display-contracts-measured", "radius-roles-by-shape", "divider-edge",
-    "tone-words-reach-shape",
+    "tone-words-reach-shape", "sentence-names-the-shown-face",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",

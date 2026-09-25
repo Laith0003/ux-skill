@@ -96,6 +96,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Buttons have two intents, neutral and danger](button-intents.md)
 - [A field's error edge has its own role and keeps its red](error-edge.md)
 - [A landing page starts from one of five compositions, scored from the axes](page-composition.md)
+- [The character sentence names the display face the page shows](sentence-names-the-shown-face.md)
 - [A field's helper and error text are readable, and its label is never smaller than its value](readable-fields.md)
 - [Buttons come in two sizes, and a view is one screen](button-sizes.md)
 - [Card bodies and banner text read at full strength](card-and-banner-reading.md)

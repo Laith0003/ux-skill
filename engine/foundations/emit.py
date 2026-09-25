@@ -742,10 +742,14 @@ _ROLE_PHRASE = {"fill": "the brand fills the main action",
                 "edge": "the brand draws edges and rules around ink actions"}
 
 
-def character_sentence(axes: AxisValues, ts: Any, composition: str) -> str:
+def character_sentence(axes: AxisValues, ts: Any, composition: str,
+                       audience: Optional[Audience] = None) -> str:
     """One sentence that says what the system is like: the axes that lean
     clearly one way, the brand's role, the display face and the page
-    composition. Read from the built tokens, so it states what was built."""
+    composition. Read from the built tokens, so it states what was built.
+    When the primary script is Arabic and the set has an Arabic display
+    face, the page's display type is set in it, so the sentence names it
+    first and the Latin display face after it."""
     words = []
     for name, value in axes.to_dict().items():
         _, low, high = _AXIS_WORDS[name]
@@ -758,8 +762,13 @@ def character_sentence(axes: AxisValues, ts: Any, composition: str) -> str:
     link = ts.raw("color.text.link", "scheme:light,contrast:standard")
     role = "fill" if "brand" in raw else ("edge" if "neutral" in link else "accent")
     display = ts.resolve("type.face.display")[0]
-    return (f"Character: {lead}. In this system {_ROLE_PHRASE[role]}, {display} sets the display "
-            f"type, and a landing page starts from the {composition} composition.")
+    faces = f"{display} sets the display type"
+    if audience is not None and audience.primary_script == "arabic" \
+            and ts.has("type.face.arabic-display"):
+        faces = (f"{ts.resolve('type.face.arabic-display')[0]} sets the Arabic display type and "
+                 f"{display} the Latin")
+    return (f"Character: {lead}. In this system {_ROLE_PHRASE[role]}, {faces}, and a landing "
+            f"page starts from the {composition} composition.")
 
 
 def make_system(brand: str, axes: AxisValues, axes_source: str, *,
@@ -817,7 +826,8 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
                            font_link=font_link,
                            audience=[e.line() for e in effects(audience, axes)], unread=unread,
                            art=bool(art), composition=composition.line() if tokens else "",
-                           sentence=character_sentence(axes, built.tokens, composition.name)
+                           sentence=character_sentence(axes, built.tokens, composition.name,
+                                                       audience)
                            if tokens else "")
     files = {**tokens, "system-report.md": report, **art, **pack} if tokens else {}
     return SystemOutput(passed=bool(tokens), files=files, report=report, gate=gate,
