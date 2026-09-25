@@ -52,6 +52,74 @@ class Brief:
     region: str = ""                    # "mena" | "us" | "eu" | "apac"
     brand: Optional[Dict[str, Any]] = None  # extracted BrandProfile dict; anchors palette/type
     brand_url: str = ""                 # existing site/brand URL, if any; arms the capture gate
+    existing_system: Optional[Dict[str, Any]] = None  # `ux system detect` result; its tokens win
+
+
+_BRIEF_TEXT_FIELDS = ("project_type", "industry", "stack", "region", "brand_url")
+_BRIEF_LIST_FIELDS = ("audience", "tone", "must_have", "forbidden")
+
+
+class BriefError(ValueError):
+    """A brief field of the wrong shape. The message names the field and the fix."""
+
+
+def _kind(value: Any) -> str:
+    if isinstance(value, bool):
+        return "true or false"
+    if isinstance(value, (int, float)):
+        return "a number (%s)" % value
+    if isinstance(value, dict):
+        return "an object"
+    if isinstance(value, list):
+        return "a list"
+    return "a %s" % type(value).__name__
+
+
+def brief_from_dict(payload: Any, label: str = "brief") -> Brief:
+    """A Brief from a loose dict, as briefs arrive from discovery and from people.
+
+    Keys the recommender does not read (goal, wow_moment, reference_brands and
+    the like) are ignored. A list field (audience, tone, must_have, forbidden)
+    takes a list of strings or one comma-separated string; a text field takes a
+    string, and a list of strings is joined. Anything else is a BriefError that
+    names the field and the fix.
+    """
+    if payload is None:
+        return Brief()
+    if not isinstance(payload, dict):
+        raise BriefError(f"{label} is {_kind(payload)}, not an object; pass a JSON object such as "
+                         '{"industry": "saas", "tone": ["calm"]}')
+    if isinstance(payload.get("answers"), dict):
+        payload = payload["answers"]
+    kwargs: Dict[str, Any] = {}
+    for key in _BRIEF_TEXT_FIELDS:
+        value = payload.get(key)
+        if value is None:
+            continue
+        if isinstance(value, list) and all(isinstance(v, str) for v in value):
+            value = ", ".join(v.strip() for v in value if v.strip())
+        if not isinstance(value, str):
+            raise BriefError(f"{label} field {key} is {_kind(value)}; pass a string, "
+                             f'for example "{key}": "saas"')
+        kwargs[key] = value.strip()
+    for key in _BRIEF_LIST_FIELDS:
+        value = payload.get(key)
+        if value is None:
+            continue
+        if isinstance(value, str):
+            value = [s.strip() for s in value.split(",") if s.strip()]
+        if not isinstance(value, list) or not all(isinstance(v, str) for v in value):
+            raise BriefError(f"{label} field {key} is {_kind(value)}; pass a list of strings "
+                             f'such as "{key}": ["calm", "precise"], or one comma-separated '
+                             f'string such as "{key}": "calm, precise"')
+        kwargs[key] = [v.strip() for v in value if v.strip()]
+    brand = payload.get("brand")
+    if brand is not None:
+        if not isinstance(brand, dict):
+            raise BriefError(f"{label} field brand is {_kind(brand)}; pass the brand.json object "
+                             "from `ux brand`, or pass it with --brand-file")
+        kwargs["brand"] = brand
+    return Brief(**kwargs)
 
 
 @dataclass
@@ -67,6 +135,7 @@ class Recommendation:
     type_directive: Optional[Dict[str, Any]] = None  # logo-style type directive
     rationale: List[str] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)  # loud non-fatal flags (e.g. brand URL given, not captured)
+    existing_system: Optional[Dict[str, Any]] = None  # set when the project has its own design system
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -511,4 +580,24 @@ def recommend(brief: Brief) -> Recommendation:
         )
         rec.warnings.append(msg)
         rec.rationale.append("WARNING: " + msg)
+
+    # An existing design system is fixed input: its tokens win, and the
+    # palette and type pair become suggestions for gaps only.
+    existing = getattr(brief, "existing_system", None)
+    if isinstance(existing, dict) and existing.get("found"):
+        rec.existing_system = {
+            "root": existing.get("root", ""),
+            "sources": list(existing.get("sources") or []),
+            "declared": dict(existing.get("declared") or {}),
+        }
+        if isinstance(rec.palette, dict):
+            rec.palette = dict(rec.palette, status="suggestion")
+        if isinstance(rec.type_pair, dict):
+            rec.type_pair = dict(rec.type_pair, status="suggestion")
+        paths = [s.get("path", "") for s in rec.existing_system["sources"]][:4]
+        msg = ("The project has an existing design system (%s). Its tokens win: palette and "
+               "type_pair are suggestions for a gap the system leaves, never replacements for "
+               "its values." % ", ".join(p for p in paths if p))
+        rec.warnings.append(msg)
+        rec.rationale.append("EXISTING SYSTEM: " + msg)
     return rec

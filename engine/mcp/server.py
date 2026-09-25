@@ -388,8 +388,9 @@ def handle_ux_landing_patterns(args: Dict[str, Any]) -> Dict[str, Any]:
 def handle_ux_persist_save(args: Dict[str, Any]) -> Dict[str, Any]:
     """Persist a recommendation as ``.ux/design-system/MASTER.md`` and return its path."""
     payload = UxPersistSaveInput.model_validate(args or {})
-    path = save_master(payload.project_root, payload.recommendation, payload.brief)
-    return {"path": path, "project_root": payload.project_root}
+    from engine.persist import save_master_result
+    result = save_master_result(payload.project_root, payload.recommendation, payload.brief)
+    return {**result, "project_root": payload.project_root}
 
 
 def handle_ux_persist_load(args: Dict[str, Any]) -> Dict[str, Any]:
