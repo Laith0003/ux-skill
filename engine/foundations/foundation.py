@@ -23,7 +23,8 @@ class BrandInputs:
     brand_hex: str
     arabic: bool = True
     # "fill", "accent" or "edge" when the brief names the brand's role;
-    # None lets the axes choose (character.brand_role).
+    # None lets the brand color and the axes choose (character.brand_role
+    # with character.brand_fill_evidence).
     brand_role: Optional[str] = None
     # The structured brief fields: age, languages, scheme, reading context.
     audience: Audience = Audience()

@@ -57,25 +57,24 @@ def test_brand_seed_is_action_primary_when_it_passes():
 
 @pytest.mark.parametrize("seed", SEEDS + ["#E85D04", "#0F766E", "#6D28D9", "#2563EB"])
 def test_the_exact_brand_is_the_light_fill_whenever_its_text_reads_naturally(seed):
-    # decisions/natural-text-on-the-brand.md: white text on the exact brand
-    # keeps it; black text keeps it unless a brand step nearer than what
-    # black costs there carries white text
+    # decisions/natural-fill-for-white-text.md: white text on the exact
+    # brand keeps it; black text keeps it unless the least darkening that
+    # carries white sits nearer than what black costs there
     ts = generate_color(AXES, seed, brand_role="fill").tokens
     exact = seed.upper()
     light = "scheme:light,contrast:standard"
-    white_steps = [oklab_distance(ts.resolve(f"color.brand.{s}"), exact) for s in STEPS
-                   if contrast(ts.resolve(f"color.brand.{s}"), "#FFFFFF") >= 4.5]
+    move = oklab_distance(color_module.natural_fill(exact, 4.5)[0], exact)
     natural = contrast(exact, "#FFFFFF") >= 4.5 or (
         contrast(exact, "#000000") >= 4.5
-        and color_module.natural_cost(exact, "color.base.black") <= min(white_steps, default=1))
+        and color_module.natural_cost(exact, "color.base.black", light) < move)
     assert (ts.resolve("color.action.primary", light) == exact) == natural
     assert ts.resolve("color.brand.exact") == exact
 
 
-def test_an_orange_brand_keeps_its_color_with_black_text_in_light():
-    ts = generate_color(AXES, "#E85D04").tokens
+def test_a_bright_orange_brand_keeps_its_color_with_black_text_in_light():
+    ts = generate_color(AXES, "#F97316").tokens
     light = "scheme:light,contrast:standard"
-    assert ts.resolve("color.action.primary", light) == "#E85D04"
+    assert ts.resolve("color.action.primary", light) == "#F97316"
     assert ts.resolve("color.text.on-action", light) == "#000000"
     # black text keeps reading, so hover and pressed step away from it
     assert ts.raw("color.action.primary-hover", light) == "{color.brand.400}"
@@ -83,16 +82,20 @@ def test_an_orange_brand_keeps_its_color_with_black_text_in_light():
 
 
 @pytest.mark.parametrize("seed", SEEDS + _SWEEP_SEEDS)
-def test_dark_mode_never_puts_black_text_on_a_mid_tone_fill(seed):
-    """Black text on a mid tone reads muddy on a dark page, at standard and
-    high contrast; on a light page it is the brand's own look
-    (decisions/brand-fill-family.md)."""
-    from engine.foundations.color_math import hex_to_oklch
-    ts = generate_color(AXES, seed).tokens
-    for mode in (m for m in COLOR_CONTEXTS if "scheme:dark" in m):
+def test_black_text_on_a_mid_tone_costs_more_than_the_natural_move_in_both_schemes(seed):
+    """Black text on a saturated mid tone weighs what it costs against the
+    least darkening that carries white, by one cost in light and dark
+    (decisions/natural-fill-for-white-text.md)."""
+    ts = generate_color(AXES, seed, brand_role="fill").tokens
+    exact = seed.upper()
+    move = oklab_distance(ts.resolve("color.brand.fill"), exact)
+    for mode in ("scheme:light,contrast:standard", "scheme:dark,contrast:standard"):
         fill = ts.resolve("color.action.primary", mode)
-        if ts.resolve("color.text.on-action", mode) == "#000000":
-            assert hex_to_oklch(fill)[0] >= color_module.MUDDY_L, f"{seed} ({mode}) {fill}"
+        if ts.resolve("color.text.on-action", mode) == "#000000" \
+                and contrast("#FFFFFF", ts.resolve("color.brand.fill")) >= 4.5:
+            cost = oklab_distance(fill, exact) + color_module.natural_cost(
+                fill, "color.base.black", mode)
+            assert cost <= move + 1e-6, f"{seed} ({mode}) {fill}"
 
 
 @pytest.mark.parametrize("seed", SEEDS)
@@ -139,6 +142,7 @@ def test_flat_action_ramp_is_noted_and_the_gate_blocks_it(monkeypatch):
     # brand color, so the two flat states collide with each other.
     brand = "#3366FF"
     _brand_ramp(monkeypatch, brand, {s: "#808080" for s in STEPS})
+    monkeypatch.setattr(color_module, "natural_fill", lambda hx, need: ("#808080",) * 3)
     result = generate_color(AXES, brand)
     assert any(n.startswith("color.action.primary group (scheme:light,contrast:standard): every "
                             "step of the brand ramp resolves to the same color")
@@ -851,6 +855,10 @@ def test_every_other_pairing_is_kept():
             + [Pairing("color.action.on-brand", "color.surface.brand", 3.0, "1.4.11")]
             + [Pairing(f"color.status.{s}.strong", "color.surface.page", 3.0, "1.4.11")
                for s in color_module.STATUS_HUES]
+            + [Pairing("color.status.danger.strong", bg, 3.0, "1.4.11")
+               for bg in color_module.CONTROL_SURFACES[1:]]
+            + [Pairing("color.text.link", f"color.status.{s}.soft", 4.5, "1.4.3")
+               for s in color_module.STATUS_HUES]
             + [Pairing("color.focus.ring-inverse", "color.surface.inverse", 3.0, "1.4.11")]
             + [Pairing("color.text.on-brand", "color.surface.brand", 4.5, "1.4.3")]
             + [Pairing(r, "color.surface.code", 4.5, "1.4.3") for r in color_module.SYNTAX_ROLES]
@@ -943,17 +951,20 @@ def test_brand_fidelity_states_every_context_and_names_an_identity_loss():
     assert [line.split(":")[0] for line in lines[:4]] == [
         "Light mode", "Dark mode", "Light mode, high contrast", "Dark mode, high contrast"]
     assert lines[4] == "The logo (color.logo) is the brand color #E85D04 exactly in every mode."
-    assert lines[0].startswith("Light mode: the button is the brand color #E85D04 exactly, with "
-                               "black text at 5.99:1 (white would be 3.50:1).")
-    assert "black on a mid tone reads muddy in this mode" in lines[1]
-    # light high contrast keeps a near brand step with black text
-    # (decisions/brand-fill-family.md); dark high contrast takes a deeper
-    # step the ring can stand off, and names the distance
+    # black text on this saturated mid orange weighs as much as the least
+    # darkening that carries white, so both schemes take white on the
+    # natural fill (decisions/natural-fill-for-white-text.md)
+    for line in lines[:2]:
+        assert "the button is #CA5000 (color.brand.fill), with white text at 4.50:1" in line
+        assert "black on a saturated mid tone reads less naturally" in line
+    # light high contrast keeps a near brand step with black text; dark high
+    # contrast darkens the brand's own hue until white reads at 7:1, where a
+    # ring stands off it, and names the distance
     assert "the button is #F37D47 (color.brand.400), with black text" in lines[2]
-    assert "different color" not in lines[2]
-    assert "reads as a different color from the brand (OKLab distance 0.20)" in lines[3]
+    assert "the button is #9A3B00 (color.brand.fill-high), with white text" in lines[3]
+    assert "reads as a different color from the brand (OKLab distance 0.18)" in lines[3]
+    assert all("different color" not in line for line in lines[:3])
     assert all("The focus ring measures " in line for line in lines[:4])
-    assert "different color" not in lines[1]
 
 
 @pytest.mark.parametrize("axes, role", [
@@ -962,11 +973,11 @@ def test_brand_fidelity_states_every_context_and_names_an_identity_loss():
     (AxisValues(0.3, 0.7, 0.6, 0.2, 0.65, 0.4, 0.0), "edge"),
 ])
 def test_the_axes_choose_the_brand_role_and_every_role_passes(axes, role):
-    # a very dark brand cannot carry a fill, so the axes choose its role
-    # (decisions/brand-leads-the-role.md)
+    # a near black grey cannot carry a fill, so the axes choose its role
+    # (decisions/brand-leads-by-reach.md)
     from engine.foundations import character
     assert character.brand_role(axes) == role
-    ts = build_color(axes, "#1E1B4B").tokens
+    ts = build_color(axes, "#2B2D33").tokens
     light = "scheme:light,contrast:standard"
     primary = ts.raw("color.action.primary", light)
     link = ts.raw("color.text.link", light)

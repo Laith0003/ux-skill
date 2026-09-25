@@ -1,10 +1,10 @@
 ---
 id: support-clear-of-banned-pairs
 title: A cool brand's supporting accent leans to its own hue, and the gradient stays in one hue
-status: active
+status: superseded
 areas: [color, imagery]
 supersedes: support-accent
-superseded_by: null
+superseded_by: support-in-the-brand-family
 ---
 
 # A cool brand's supporting accent leans to its own hue, and the gradient stays in one hue

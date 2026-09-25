@@ -283,6 +283,108 @@
             "layer": "primitive"
           }
         }
+      },
+      "fill": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.552941,
+            0.454902,
+            0.0
+          ],
+          "hex": "#8D7400"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "fill-hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.486275,
+            0.4,
+            0.0
+          ],
+          "hex": "#7C6600"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "fill-pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.423529,
+            0.345098,
+            0.0
+          ],
+          "hex": "#6C5800"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "fill-high": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.419608,
+            0.341176,
+            0.0
+          ],
+          "hex": "#6B5700"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "fill-high-hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.356863,
+            0.290196,
+            0.0
+          ],
+          "hex": "#5B4A00"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "fill-high-pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.294118,
+            0.239216,
+            0.0
+          ],
+          "hex": "#4B3D00"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
       }
     },
     "neutral": {
@@ -308,11 +410,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.862745,
-            0.854902,
+            0.858824,
+            0.858824,
             0.847059
           ],
-          "hex": "#DCDAD8"
+          "hex": "#DBDBD8"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -325,11 +427,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.756863,
+            0.752941,
             0.74902,
             0.733333
           ],
-          "hex": "#C1BFBB"
+          "hex": "#C0BFBB"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -343,10 +445,10 @@
           "colorSpace": "srgb",
           "components": [
             0.65098,
-            0.643137,
+            0.647059,
             0.627451
           ],
-          "hex": "#A6A4A0"
+          "hex": "#A6A5A0"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -359,11 +461,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.552941,
-            0.541176,
+            0.54902,
+            0.545098,
             0.521569
           ],
-          "hex": "#8D8A85"
+          "hex": "#8C8B85"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -376,11 +478,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.454902,
-            0.443137,
+            0.45098,
+            0.447059,
             0.419608
           ],
-          "hex": "#74716B"
+          "hex": "#73726B"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -393,11 +495,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.368627,
-            0.356863,
-            0.337255
+            0.364706,
+            0.360784,
+            0.333333
           ],
-          "hex": "#5E5B56"
+          "hex": "#5D5C55"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -410,11 +512,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.282353,
+            0.278431,
             0.27451,
             0.254902
           ],
-          "hex": "#484641"
+          "hex": "#474641"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -427,11 +529,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.203922,
-            0.192157,
+            0.2,
+            0.196078,
             0.176471
           ],
-          "hex": "#34312D"
+          "hex": "#33322D"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -461,11 +563,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.058824,
+            0.054902,
             0.05098,
             0.039216
           ],
-          "hex": "#0F0D0A"
+          "hex": "#0E0D0A"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -1951,12 +2053,12 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.058824,
+            0.054902,
             0.05098,
             0.039216
           ],
           "alpha": 0.262745,
-          "hex": "#0F0D0A"
+          "hex": "#0E0D0A"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -2161,7 +2263,7 @@
             "modes": {
               "contrast:high": "{color.neutral.800}",
               "scheme:dark": "{color.neutral.300}",
-              "scheme:dark,contrast:high": "{color.neutral.200}"
+              "scheme:dark,contrast:high": "{color.neutral.100}"
             }
           }
         }

@@ -1,10 +1,10 @@
 ---
 id: fills-on-every-placement
 title: A control's fill, or its edge, clears every surface its contract places it on, the brand band included
-status: active
+status: superseded
 areas: [color, contracts]
 supersedes: primary-edge
-superseded_by: null
+superseded_by: fills-on-every-control-surface
 ---
 
 # A control's fill, or its edge, clears every surface its contract places it on, the brand band included

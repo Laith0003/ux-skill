@@ -15,7 +15,7 @@ Rules that keep saturated color off large surfaces, with no brand-tinted surface
 
 ## Decision
 
-Three surface roles carry the brand: color.surface.tint (step 50 in light, 950 in dark) for a quiet group, color.surface.band (step 100 in light, 900 in dark) for a section band, and color.surface.brand, the exact brand color, for one band per view with color.text.on-brand on it. Every text role is paired with the tint and the band, and every line role and the focus ring with the tint, the band and the table stripe; a control on the brand band takes color.text.on-brand for its focus ring and edges (decisions/controls-on-brand-surfaces.md). The brand band is solved like a fill: the exact brand first, then the nearest brand step whose text reads, with no pairing against the page.
+Three surface roles carry the brand: color.surface.tint (step 50 in light, 950 in dark) for a quiet group, color.surface.band (step 100 in light, 900 in dark) for a section band, and color.surface.brand, the brand color, for one band per view with color.text.on-brand on it. Every text role is paired with the tint and the band, and every line role and the focus ring with the tint, the band and the table stripe; a control on the brand band takes color.text.on-brand for its focus ring and edges (decisions/controls-on-brand-surfaces.md). The brand band is solved like the primary fill (decisions/natural-fill-for-white-text.md): the exact brand first, then the least darkening that carries white text or the nearest brand step whose text reads, with no pairing against the page.
 
 ## Why
 

@@ -9,6 +9,7 @@ import pytest
 
 from engine.contracts.library import SEED_DIR
 from engine.foundations import FOUNDATIONS, build_system
+from engine.foundations.audience import Audience
 from engine.rulepack.generate import (
     ARCHITECTURE_HEADINGS, AUDIT_HEADINGS, COLOR_REFERENCE_HEADINGS, FILES, HANDOFF_HEADINGS,
     PACK, README_HEADINGS, REFERENCE_HEADINGS, RulePackError, build_rule_pack)
@@ -577,3 +578,15 @@ def test_the_readme_names_the_whole_rebuild_for_a_stale_pack():
     readme = PACK_FILES[f"{PACK}/README.md"]
     assert "the pack describes other tokens: build again into this folder with --rule-pack " \
            "--force." in readme
+
+
+def test_the_color_handoff_states_what_the_primary_fill_is_in_this_system():
+    handoff = PACK_FILES[f"{PACK}/color/handoff.md"]
+    light = TS.resolve("color.action.primary", "scheme:light,contrast:standard")
+    dark = TS.resolve("color.action.primary", "scheme:dark,contrast:standard")
+    line = next(x for x in handoff.splitlines() if x.startswith("- `color.action.primary`:"))
+    assert f"In this system the brand role is fill: color.action.primary is {light}" in line
+    assert f"in light mode and {dark} in dark mode" in line
+    ink = build_rule_pack(build_system(AXES, "#1E1B4B", audience=Audience(brand_role="edge"))
+                          .tokens)[f"{PACK}/color/handoff.md"]
+    assert "In this system the brand role is edge: color.action.primary is #" in ink

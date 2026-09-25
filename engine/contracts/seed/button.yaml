@@ -39,6 +39,22 @@ tokens:
   - {part: container, property: border-color, role: color.action.on-brand, when: {emphasis: primary, intent: neutral, surface: brand}}
   - {part: label, property: text, role: color.text.on-brand-action, when: {emphasis: primary, intent: neutral, surface: brand}}
   - {part: container, property: focus-ring, role: color.text.on-brand, when: {surface: brand}, state: focus}
+  # secondary and ghost on the brand band draw their label and edge in the
+  # band's own text color, and under hover and press turn to that color as
+  # a fill with the band's color as the label; danger stays off the band
+  - {part: label, property: text, role: color.text.on-brand, when: {emphasis: secondary, intent: neutral, surface: brand}}
+  - {part: container, property: border-color, role: color.text.on-brand, when: {emphasis: secondary, intent: neutral, surface: brand}}
+  - {part: container, property: fill, role: color.text.on-brand, when: {emphasis: secondary, intent: neutral, surface: brand}, state: hover}
+  - {part: container, property: fill, role: color.text.on-brand, when: {emphasis: secondary, intent: neutral, surface: brand}, state: pressed}
+  - {part: label, property: text, role: color.surface.brand, when: {emphasis: secondary, intent: neutral, surface: brand}, state: hover}
+  - {part: label, property: text, role: color.surface.brand, when: {emphasis: secondary, intent: neutral, surface: brand}, state: pressed}
+  - {part: label, property: text, role: color.text.on-brand, when: {emphasis: ghost, intent: neutral, surface: brand}}
+  - {part: container, property: fill, role: color.text.on-brand, when: {emphasis: ghost, intent: neutral, surface: brand}, state: hover}
+  - {part: container, property: fill, role: color.text.on-brand, when: {emphasis: ghost, intent: neutral, surface: brand}, state: pressed}
+  - {part: container, property: border-color, role: color.text.on-brand, when: {emphasis: ghost, intent: neutral, surface: brand}, state: hover}
+  - {part: container, property: border-color, role: color.text.on-brand, when: {emphasis: ghost, intent: neutral, surface: brand}, state: pressed}
+  - {part: label, property: text, role: color.surface.brand, when: {emphasis: ghost, intent: neutral, surface: brand}, state: hover}
+  - {part: label, property: text, role: color.surface.brand, when: {emphasis: ghost, intent: neutral, surface: brand}, state: pressed}
   # secondary: an edge and brand text in every state, the selected surface
   # on hover and press; disabled turns the edge to the disabled color
   - {part: container, property: border-width, role: border.outline, when: {emphasis: secondary}}
@@ -68,6 +84,9 @@ tokens:
   - {part: container, property: border-color, role: color.status.danger.strong, when: {emphasis: ghost, intent: danger}, state: pressed}
   # disabled, every emphasis
   - {part: container, property: fill, role: color.action.disabled, when: {emphasis: primary}, state: disabled}
+  # the disabled fill can match a tinted surface, so it keeps an edge there
+  - {part: container, property: border-width, role: border.outline, when: {emphasis: primary}, state: disabled}
+  - {part: container, property: border-color, role: color.text.disabled, when: {emphasis: primary}, state: disabled}
   - {part: label, property: text, role: color.text.disabled, state: disabled}
   # shape, size and type, the same in every state
   - {part: container, property: radius, role: radius.control}
@@ -102,7 +121,8 @@ contrast:
   - {fg: color.text.on-brand-action, bg: color.action.on-brand-hover, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.on-brand-action, bg: color.action.on-brand-pressed, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.action.on-brand, bg: color.surface.brand, minimum: 3, criterion: "1.4.11"}
-  - {fg: color.text.on-brand, bg: color.surface.brand, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.text.on-brand, bg: color.surface.brand, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.surface.brand, bg: color.text.on-brand, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.link, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.link, bg: color.surface.selected, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.line.selected, bg: surfaces, minimum: 3, criterion: "1.4.11"}
@@ -111,7 +131,7 @@ contrast:
   - {fg: color.status.danger.strong, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   - {fg: color.focus.ring, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   - {fg: color.text.disabled, bg: color.action.disabled, minimum: 1.3, criterion: system, high: 1.3}
-surfaces: [color.surface.page, color.surface.card, color.surface.raised, color.surface.sunken]
+surfaces: [color.surface.page, color.surface.card, color.surface.raised, color.surface.sunken, color.surface.tint, color.surface.band, color.surface.stripe, color.surface.header]
 a11y:
   target: layout.target.min
   label: localized
@@ -130,7 +150,7 @@ usage:
   do:
     - Use one primary button per view, for the action most people take next. A view is what one screen shows without scrolling; on a long page each section may have its own primary, as long as two never share one screen
     - Use the large size for the one call to action of a hero or a band, and medium everywhere else
-    - On the brand band (color.surface.brand) use the primary neutral button with surface set to brand; it takes its own fill, label and focus ring, all measured against the band. Keep secondary, ghost and danger buttons off the brand band
+    - On the brand band (color.surface.brand) set surface to brand. The primary button takes its own fill, label and focus ring, measured against the band; secondary and ghost take the band's own text color for the label, edge and ring, and invert under hover and press. The contract allows no danger button on the band
     - Use secondary for another action that must read as a control at rest and when disabled, such as the second of a pair or an action on a busy surface
     - Use ghost for light, repeated actions where the layout already marks them as actions, such as a toolbar or a table row
     - On media, such as a hero over generated art or a photo, draw a secondary or ghost button's label, edge and focus ring in color.text.on-media over art under color.media.veil, or in imagery.on-scrim over a photo under imagery.scrim; the link and selected colors are measured against surfaces, not media

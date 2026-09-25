@@ -20,6 +20,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Opposite characters build measurably different systems](distinctness.md)
 - [Distinctness is measured on what a person sees at a glance, and each axis moves a named quantity](distinctness-at-a-glance.md)
 - [Distinctness scales are measured on a grey reference brand, which leaves every color feature to the axes](distinctness-on-a-grey-reference.md)
+- [Distinctness is measured on a grey and on four saturated reference brands, each with its corner floor](distinctness-on-saturated-brands.md)
 
 ## Roles per foundation
 
@@ -38,10 +39,12 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Twelve text styles in three faces, display, text and mono](type-three-faces.md)
 - [The axes choose whether the brand fills the action, marks words or draws edges](brand-roles.md)
 - [The brand color leads its role, and the axes decide only where the brand cannot carry a fill](brand-leads-the-role.md)
+- [The brand leads its role when it is saturated and stands apart from the page and from ink](brand-leads-by-reach.md)
 - [The brand reaches surfaces as a tint, a band or one brand band](brand-surfaces.md)
 - [Controls keep their edges and focus ring on the tint, the band, the stripe and the brand band](controls-on-brand-surfaces.md)
 - [A supporting accent takes a second hue placed by the axes](support-accent.md)
 - [A cool brand's supporting accent leans to its own hue, and the gradient stays in one hue](support-clear-of-banned-pairs.md)
+- [A cool brand's supporting accent moves with the axes inside its own family, and never forms a banned pairing](support-in-the-brand-family.md)
 - [Code blocks and tables have their own surfaces](code-and-table-colors.md)
 - [The axes choose each face from a catalog by distance, never by keyword](face-choice.md)
 - [Arabic is set larger by a ratio the two faces' metrics give](arabic-proportional.md)
@@ -62,6 +65,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [A filled control's fill clears 3:1 against the page only](fill-edge-page-only.md)
 - [The primary button's edge carries its contrast against the page](primary-edge.md)
 - [A control's fill, or its edge, clears every surface its contract places it on, the brand band included](fills-on-every-placement.md)
+- [A control's fill, or its edge, clears every surface a control sits on, and a placement allows only what it binds](fills-on-every-control-surface.md)
 - [A focus ring on a tinted fill keeps 3:1 in high contrast](ring-on-tinted-fills.md)
 - [Disabled colors stay distinct and visible, not readable at 4.5:1](disabled-contrast.md)
 - [Status colors keep their own hues, whatever the brand hue](status-hues.md)
@@ -70,9 +74,11 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Warmth sets the hue and chroma of the neutrals](neutral-tint.md)
 - [Warmth moves the neutrals and the duotone light through grey, never around the wheel](warmth-through-grey.md)
 - [The neutrals take their temperature from the brand first, and warmth only leans them](neutrals-follow-the-brand.md)
+- [The neutrals take their temperature from the brand, and warmth leans them along the brand's own hue](neutrals-lean-along-the-brand.md)
 - [A brand's hue counts in proportion to its chroma, so a grey brand steers no hue](grey-brands-steer-no-hue.md)
 - [A grey brand's supporting accent takes its hue from warmth alone](grey-brand-support-hue.md)
 - [A grey brand's supporting accent runs from violet to rose, clear of every status hue](grey-accent-clear-of-status.md)
+- [A grey brand's supporting accent is a neutral step, since an identity with no hue gains none](grey-support-is-neutral.md)
 - [A sunken surface sits a small step below the page](recessed-sunken.md)
 - [In dark the sunken surface sits between the page and the card, a band stays a quiet tint, and a table header is a band off the card](dark-recess-and-bands.md)
 - [High contrast keeps every surface level apart](high-contrast-surfaces.md)
@@ -82,11 +88,13 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [The primary fill keeps the exact brand color whenever text reads on it](brand-fidelity.md)
 - [The primary fill keeps the exact brand whenever text reads on it, and otherwise the nearest brand step, weighing the ring in dark high contrast](brand-fill-family.md)
 - [The primary fill weighs black text on a saturated mid tone against a move to a step that carries white](natural-text-on-the-brand.md)
+- [The primary fill weighs black text on a saturated mid tone against the least move that carries white, in light and dark alike](natural-fill-for-white-text.md)
 - [Hover and pressed step away from the fill from where the fill sits in its ramp](exact-fill-states.md)
 - [The focus ring never weakens under high contrast, and is measured against the fill](ring-never-weaker.md)
 - [The standard focus ring stops one step below the widest, so high contrast can widen it](ring-room.md)
 - [The logo keeps the brand color, and decoration has a visibility floor of ours](logo-and-decoration.md)
 - [High contrast sets text one weight heavier](high-contrast-weights.md)
+- [Links read on every status soft fill](links-on-status-soft-fills.md)
 
 ## Shape, space and motion
 

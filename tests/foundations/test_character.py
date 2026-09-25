@@ -315,12 +315,13 @@ def test_a_grey_brand_takes_its_support_hue_from_the_axes():
                 quiet = character.coolness(float(h)) / character.QUIET_COOLNESS
                 for chroma in (character.HUE_CHROMA, 0.2):
                     got = character.support_hue(axes, float(h), chroma)
-                    # a warm brand keeps its brand-led hue; a cool one leans
-                    # to its own (decisions/support-clear-of-banned-pairs.md)
-                    if quiet <= 0.0:
+                    # a warm brand keeps its brand-led hue; a cool one stays in
+                    # its family (decisions/support-in-the-brand-family.md)
+                    if quiet <= 0.0 and not character.banned_pair(float(h), led):
                         assert got == led
                     elif quiet >= 1.0:
-                        assert abs(character.hue_delta(float(h), got)) < 1e-6
+                        assert abs(character.hue_delta(float(h), got)) \
+                            <= character.FAMILY_SPAN + 1e-6
     assert character.axes_support_hue(AxisValues(0.0, *[0.5] * 6)) == character.GREY_ACCENT[0]
     assert character.axes_support_hue(AxisValues(1.0, *[0.5] * 6)) == character.GREY_ACCENT[1]
 
@@ -345,13 +346,13 @@ def test_a_grey_brands_accent_keeps_clear_of_every_status_hue():
 
 
 @pytest.mark.parametrize("warmth", [0.0, 0.25, 0.5, 0.75, 1.0])
-def test_a_grey_brands_built_accent_keeps_clear_of_the_built_status_colors(warmth):
+def test_a_grey_brands_built_accent_is_a_neutral_step_that_reads_as_no_status(warmth):
+    """An identity with no hue gains none: the accent is a neutral step,
+    with too little chroma to read as any hue, a status hue included
+    (decisions/grey-support-is-neutral.md)."""
     from engine.foundations.color_math import hex_to_oklch
     ts = build_system(AxisValues(warmth, *[0.5] * 6), "#808080").tokens
-    accent = hex_to_oklch(ts.resolve("color.support.500"))[2]
-    for status in character.STATUS_HUES:
-        hue = hex_to_oklch(ts.resolve(f"color.{status}.500"))[2]
-        assert abs(character.hue_delta(accent, hue)) >= character.STATUS_CLEARANCE, status
+    assert hex_to_oklch(ts.resolve("color.support.500"))[1] <= 0.01
 
 
 # M3.5c item 4: a tone word's formality weight also reaches geometry and

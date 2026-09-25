@@ -15,12 +15,13 @@ token set. Every problem names the contract, the field and the fix.
 from __future__ import annotations
 
 import datetime
+import itertools
 import math
 import re
 from dataclasses import dataclass
 from pathlib import Path
 from types import MappingProxyType
-from typing import Any, List, Mapping, Optional, Sequence, Tuple, Union
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple, Union
 
 from engine.contracts.yamlite import YamlError, loads
 
@@ -183,13 +184,29 @@ class Contract:
     def interactive(self) -> bool:
         return self.category in INTERACTIVE
 
+    def combinations(self) -> List[Dict[str, str]]:
+        """Every variant combination the contract allows, in enum order. A
+        PLACEMENT value other than default allows only the combinations a
+        binding under it names: one whose conditions besides the placement
+        all hold. So a component set never holds a placement nothing binds
+        and nothing measures."""
+        names = [v.name for v in self.variants]
+        out: List[Dict[str, str]] = []
+        for values in itertools.product(*(v.values for v in self.variants)):
+            combo = dict(zip(names, values))
+            where = combo.get(PLACEMENT, "default")
+            if where != "default" and not any(
+                    dict(b.when).get(PLACEMENT) == where and len(b.when) > 1
+                    and all(combo.get(k) == v for k, v in b.when) for b in self.tokens):
+                continue
+            out.append(combo)
+        return out
+
     def variant_product(self) -> int:
-        """How many variant combinations the enums allow: the count a
-        design file's component set holds when it is exhaustive."""
-        n = 1
-        for v in self.variants:
-            n *= len(v.values)
-        return n
+        """How many variant combinations the contract allows
+        (combinations): the count a design file's component set holds when
+        it is exhaustive."""
+        return len(self.combinations())
 
     def roles(self) -> Tuple[str, ...]:
         """Every role the contract binds, in first-use order."""

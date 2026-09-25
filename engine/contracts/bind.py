@@ -7,7 +7,8 @@ border.outline or heavier, and a border color) for that fill, or a divider
 (divider-width and divider-color) when the part sits inside a group whose
 own edge draws its other sides. The floor is
 ours: WCAG sets no minimum for the edge of a container. A control's action
-fill (every color.action role but the disabled one) is measured against
+fill (every color.action role but the disabled one), and any fill bound
+under a placement, is measured against
 every surface its contract places it on, in every scheme and contrast
 context: the contract's surfaces, or the one surface a PLACEMENT variant
 names (surface=brand places it on color.surface.brand). The fill or the
@@ -148,7 +149,9 @@ def _placement_problems(contract: Contract, ts: TokenSet) -> List[ContractProble
         return []
     out: List[ContractProblem] = []
     for fill in contract.tokens:
-        if fill.property != "fill" or not fill.role.startswith("color.action.") \
+        placed = dict(fill.when).get(PLACEMENT, "default") != "default"
+        if fill.property != "fill" \
+                or not (fill.role.startswith("color.action.") or placed) \
                 or fill.role == "color.action.disabled" or fill.state == "disabled" \
                 or not (ts.has(fill.role) and ts.get(fill.role).type == "color"):
             continue

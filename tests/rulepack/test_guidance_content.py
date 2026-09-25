@@ -53,12 +53,13 @@ def test_color_states_which_pairings_the_fills_have():
     strong status fills with the page; the guidance says so and cites the
     records, and claims no wider coverage."""
     text = (GUIDANCE_DIR / "color.md").read_text(encoding="utf-8")
-    for record in ("fills-on-every-placement", "natural-text-on-the-brand", "ring-never-weaker",
-                   "ring-on-tinted-fills", "brand-leads-the-role"):
+    for record in ("fills-on-every-control-surface", "natural-fill-for-white-text",
+                   "ring-never-weaker", "ring-on-tinted-fills", "brand-leads-by-reach",
+                   "links-on-status-soft-fills"):
         assert f"decisions/{record}.md" in text, record
     summary = _section("color", "Summary")
     assert "every surface its contract places it on" in summary
-    assert "The strong status fills are measured against the page." in summary
+    assert "The other strong status fills are measured against the page." in summary
     assert "every background it can sit on" not in text
     assert "Every pairing a role can meet" not in text
 

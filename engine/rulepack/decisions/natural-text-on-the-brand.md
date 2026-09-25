@@ -1,10 +1,10 @@
 ---
 id: natural-text-on-the-brand
 title: The primary fill weighs black text on a saturated mid tone against a move to a step that carries white
-status: active
+status: superseded
 areas: [color]
 supersedes: brand-fill-family
-superseded_by: null
+superseded_by: natural-fill-for-white-text
 ---
 
 # The primary fill weighs black text on a saturated mid tone against a move to a step that carries white

@@ -15,6 +15,12 @@
   --color-brand-950: #190900;
   --color-brand-exact: #6B4423;
   --color-brand-band-dark: #22160C;
+  --color-brand-fill: #6B4423;
+  --color-brand-fill-hover: #5C3715;
+  --color-brand-fill-pressed: #4E2905;
+  --color-brand-fill-high: #6B4423;
+  --color-brand-fill-high-hover: #5C3715;
+  --color-brand-fill-high-pressed: #4E2905;
   --color-neutral-50: #F7F6F6;
   --color-neutral-100: #DCDAD9;
   --color-neutral-200: #C1BFBE;

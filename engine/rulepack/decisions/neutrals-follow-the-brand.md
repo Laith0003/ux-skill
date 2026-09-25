@@ -1,10 +1,10 @@
 ---
 id: neutrals-follow-the-brand
 title: The neutrals take their temperature from the brand first, and warmth only leans them
-status: active
+status: superseded
 areas: [color, imagery]
 supersedes: warmth-through-grey
-superseded_by: null
+superseded_by: neutrals-lean-along-the-brand
 ---
 
 # The neutrals take their temperature from the brand first, and warmth only leans them

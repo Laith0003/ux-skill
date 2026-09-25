@@ -1,10 +1,10 @@
 ---
 id: brand-leads-the-role
 title: The brand color leads its role, and the axes decide only where the brand cannot carry a fill
-status: active
+status: superseded
 areas: [color]
 supersedes: brand-roles
-superseded_by: null
+superseded_by: brand-leads-by-reach
 ---
 
 # The brand color leads its role, and the axes decide only where the brand cannot carry a fill

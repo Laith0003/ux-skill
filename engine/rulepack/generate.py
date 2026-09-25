@@ -31,6 +31,7 @@ from engine.contracts.library import SEED_DIR, load_folder
 from engine.contracts.precedence import (
     DISABLED_RULE, SPECIFICITY_OPENING, SPECIFICITY_RULE, TWO_STATE_OPENING, can_meet)
 from engine.contracts.schema import Binding, Contract, ContractError
+from engine.foundations import color
 from engine.foundations.build import FOUNDATIONS
 from engine.foundations.foundation import Foundation
 from engine.foundations.gate import (
@@ -462,6 +463,15 @@ def _audit(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[RoleEntry
 
 # ------------------------------------------------------------------ handoff
 
+def _in_this_system(path: str, ts: TokenSet) -> str:
+    """What a role resolves to in the system the handoff is for, where the
+    guidance can only say what it depends on: the primary fill."""
+    if path == "color.action.primary":
+        line = color.primary_in_this_system(ts)
+        return f" {line}" if line else ""
+    return ""
+
+
 def _handoff(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[RoleEntry]) -> str:
     title = g.title
     axes = _used_axes(ts, entries)
@@ -487,7 +497,7 @@ def _handoff(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[RoleEnt
     else:
         lines += ["These values are the same in every mode."]
     lines += ["", "## Using the roles", ""]
-    lines += [f"- `{e.path}`: {e.description}" for e in entries]
+    lines += [f"- `{e.path}`: {e.description}" + _in_this_system(e.path, ts) for e in entries]
     lines += ["", "## Implementation notes", "", g.section("Handoff notes"), "",
               "## Common mistakes", "", g.section("Common mistakes"), "",
               "## What a handoff does not do", "",

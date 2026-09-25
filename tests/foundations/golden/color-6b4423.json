@@ -366,6 +366,12 @@
   "--color-brand-950: #190900;",
   "--color-brand-exact: #6B4423;",
   "--color-brand-band-dark: #291200;",
+  "--color-brand-fill: #6B4423;",
+  "--color-brand-fill-hover: #5C3715;",
+  "--color-brand-fill-pressed: #4E2905;",
+  "--color-brand-fill-high: #6B4423;",
+  "--color-brand-fill-high-hover: #5C3715;",
+  "--color-brand-fill-high-pressed: #4E2905;",
   "--color-neutral-50: #F8F6F5;",
   "--color-neutral-100: #DCDAD9;",
   "--color-neutral-200: #C1BEBD;",
@@ -682,6 +688,60 @@
     0.137255
    ],
    "hex": "#6B4423"
+  },
+  "color.brand.fill": {
+   "colorSpace": "srgb",
+   "components": [
+    0.419608,
+    0.266667,
+    0.137255
+   ],
+   "hex": "#6B4423"
+  },
+  "color.brand.fill-high": {
+   "colorSpace": "srgb",
+   "components": [
+    0.419608,
+    0.266667,
+    0.137255
+   ],
+   "hex": "#6B4423"
+  },
+  "color.brand.fill-high-hover": {
+   "colorSpace": "srgb",
+   "components": [
+    0.360784,
+    0.215686,
+    0.082353
+   ],
+   "hex": "#5C3715"
+  },
+  "color.brand.fill-high-pressed": {
+   "colorSpace": "srgb",
+   "components": [
+    0.305882,
+    0.160784,
+    0.019608
+   ],
+   "hex": "#4E2905"
+  },
+  "color.brand.fill-hover": {
+   "colorSpace": "srgb",
+   "components": [
+    0.360784,
+    0.215686,
+    0.082353
+   ],
+   "hex": "#5C3715"
+  },
+  "color.brand.fill-pressed": {
+   "colorSpace": "srgb",
+   "components": [
+    0.305882,
+    0.160784,
+    0.019608
+   ],
+   "hex": "#4E2905"
   },
   "color.danger.100": {
    "colorSpace": "srgb",
@@ -1796,6 +1856,42 @@
    "dark-high": "#6B4423",
    "light": "#6B4423",
    "light-high": "#6B4423"
+  },
+  "color.brand.fill": {
+   "dark": "#6B4423",
+   "dark-high": "#6B4423",
+   "light": "#6B4423",
+   "light-high": "#6B4423"
+  },
+  "color.brand.fill-high": {
+   "dark": "#6B4423",
+   "dark-high": "#6B4423",
+   "light": "#6B4423",
+   "light-high": "#6B4423"
+  },
+  "color.brand.fill-high-hover": {
+   "dark": "#5C3715",
+   "dark-high": "#5C3715",
+   "light": "#5C3715",
+   "light-high": "#5C3715"
+  },
+  "color.brand.fill-high-pressed": {
+   "dark": "#4E2905",
+   "dark-high": "#4E2905",
+   "light": "#4E2905",
+   "light-high": "#4E2905"
+  },
+  "color.brand.fill-hover": {
+   "dark": "#5C3715",
+   "dark-high": "#5C3715",
+   "light": "#5C3715",
+   "light-high": "#5C3715"
+  },
+  "color.brand.fill-pressed": {
+   "dark": "#4E2905",
+   "dark-high": "#4E2905",
+   "light": "#4E2905",
+   "light-high": "#4E2905"
   },
   "color.danger.100": {
    "dark": "#FCD2C8",
