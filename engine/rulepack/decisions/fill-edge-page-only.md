@@ -1,10 +1,10 @@
 ---
 id: fill-edge-page-only
 title: A filled control's fill clears 3:1 against the page only
-status: active
+status: superseded
 areas: [color, contracts]
 supersedes: null
-superseded_by: null
+superseded_by: primary-edge
 ---
 
 # A filled control's fill clears 3:1 against the page only

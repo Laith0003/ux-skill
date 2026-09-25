@@ -27,6 +27,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Every text style is held to the body text minimum](no-large-text-relaxation.md)
 - [The focus ring clears the surfaces, and an offset keeps it off the fill](ring-offset.md)
 - [A filled control's fill clears 3:1 against the page only](fill-edge-page-only.md)
+- [The primary button's edge carries its contrast against the page](primary-edge.md)
 - [A focus ring on a tinted fill keeps 3:1 in high contrast](ring-on-tinted-fills.md)
 - [Disabled colors stay distinct and visible, not readable at 4.5:1](disabled-contrast.md)
 - [Status colors keep their own hues, whatever the brand hue](status-hues.md)
@@ -35,6 +36,8 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [A sunken surface sits a small step below the page](recessed-sunken.md)
 - [High contrast keeps every surface level apart](high-contrast-surfaces.md)
 - [In dark mode, surfaces lighten as they rise](dark-elevation-cue.md)
+- [The primary fill keeps the exact brand color whenever text reads on it](brand-fidelity.md)
+- [The focus ring never weakens under high contrast, and is measured against the fill](ring-never-weaker.md)
 
 ## Shape, space and motion
 

@@ -24,7 +24,7 @@ variants:
 states: [default, focus, selected, disabled]
 tokens:
   - {part: track, property: fill, role: color.surface.sunken}
-  - {part: track, property: fill, role: color.action.primary, state: selected}
+  - {part: track, property: fill, role: color.line.selected, state: selected}
   - {part: track, property: fill, role: color.action.danger, when: {tone: danger}, state: selected}
   - {part: track, property: min-size, role: layout.target.min}
   - {part: label, property: text, role: color.text.default}
@@ -32,7 +32,7 @@ tokens:
   - {part: track, property: focus-ring-width, role: border.focus-ring.width, state: focus}
   - {part: track, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
 contrast:
-  - {fg: color.action.primary, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.selected, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   - {fg: color.text.default, bg: color.surface.page, minimum: 4.5, criterion: "1.4.3"}
 surfaces: [color.surface.page, color.surface.card]
 a11y: {target: layout.target.min, label: localized, cue: the thumb moves to the other end}
@@ -68,7 +68,7 @@ def test_a_valid_contract_reads_whole():
     assert c.tokens[2].label() == "track.fill (tone=danger, selected)"
     assert c.contrast[0].bg == "surfaces" and c.contrast[0].minimum == 3.0
     assert c.copy == (("default", ("Name the setting, not the action",)),)
-    assert c.roles()[:2] == ("color.surface.sunken", "color.action.primary")
+    assert c.roles()[:2] == ("color.surface.sunken", "color.line.selected")
     assert c.interactive
 
 
@@ -152,7 +152,8 @@ def test_states_come_back_in_the_fixed_order():
     (lambda d: d["a11y"].update(label="english"), "bad-a11y",
      "toggle: a11y.label is 'english'; write localized"),
     (lambda d: d["a11y"].update(cue="none"), "bad-a11y",
-     "toggle: the component binds color.action.danger, which carry meaning by color; "
+     "toggle: the component binds color.action.danger, color.line.selected, which carry "
+     "meaning by color; "
      "a11y.cue must name the second cue"),
     (lambda d: d["copy"].update(default=['"Wi-Fi"']), "copy-is-a-string",
      "toggle: copy.default holds the literal \"Wi-Fi\"; copy holds rules, not strings"),
@@ -483,7 +484,7 @@ def test_read_contract_raises_only_contract_errors_on_damaged_text():
      "'color.surface.sunken', 'colour': 'x'}; give it part, property and role, and optionally "
      "when and state"),
     (lambda d: d["contrast"][0].update(extra=1), "bad-contrast",
-     "toggle: contrast[0] is {'fg': 'color.action.primary', 'bg': 'surfaces', 'minimum': 3, "
+     "toggle: contrast[0] is {'fg': 'color.line.selected', 'bg': 'surfaces', 'minimum': 3, "
      "'criterion': '1.4.11', 'extra': 1}; give it fg, bg, minimum and criterion, and "
      "optionally high"),
     (lambda d: d["a11y"].update(extra="x"), "bad-a11y",
@@ -535,7 +536,7 @@ def test_each_check_a_second_mutation_pass_named_is_proven(edit, rule, message):
      "toggle: contrast[1] (color.text.default on color.surface.page) cites WCAG 1.4.3 with "
      "high 4.4:1, but 1.4.3 sets 4.5:1"),
     (lambda d: d["contrast"][0].update(high=2.9),
-     "toggle: contrast[0] (color.action.primary on surfaces) cites WCAG 1.4.11 with high "
+     "toggle: contrast[0] (color.line.selected on surfaces) cites WCAG 1.4.11 with high "
      "2.9:1, but 1.4.11 sets 3:1 in every contrast mode; raise high to at least 3, or cite "
      "system for a floor of your own"),
     (lambda d: d["contrast"][1].update(minimum=7, criterion="1.4.6", high=4.5),

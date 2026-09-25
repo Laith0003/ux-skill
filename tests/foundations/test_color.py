@@ -25,6 +25,16 @@ def test_every_pairing_passes_in_every_mode(seed):
             assert ratio >= required(p, mode)[0], f"{p.fg} on {p.bg} ({mode}) = {ratio:.2f}"
 
 
+# R16 item 5: a fast, broad sweep independent of the six brief seeds. Every
+# 30 degrees of hue, three lightnesses, two chromas, plus three flat grays.
+_SWEEP_HUES = range(0, 360, 30)
+_SWEEP_LS = (0.35, 0.55, 0.75)
+_SWEEP_CS = (0.05, 0.15)
+_SWEEP_SEEDS = [oklch_to_hex(L, C, float(H))
+                for H, L, C in itertools.product(_SWEEP_HUES, _SWEEP_LS, _SWEEP_CS)]
+_SWEEP_SEEDS += ["#202020", "#808080", "#E0E0E0"]
+
+
 def test_every_role_exists_and_aliases_a_primitive():
     ts = generate_color(AXES, "#3366FF").tokens
     for role in SEMANTIC:
@@ -41,6 +51,50 @@ def test_primitives_never_carry_modes():
 def test_brand_seed_is_action_primary_when_it_passes():
     ts = generate_color(AXES, "#1D4ED8").tokens
     assert ts.resolve("color.action.primary", "light") == "#1D4ED8"
+    assert ts.raw("color.action.primary", "light") == "{color.brand.exact}"
+
+
+@pytest.mark.parametrize("seed", SEEDS + ["#E85D04", "#0F766E", "#6D28D9", "#2563EB"])
+def test_the_exact_brand_is_the_light_fill_whenever_either_text_color_reads(seed):
+    ts = generate_color(AXES, seed).tokens
+    exact = seed.upper()
+    light = "scheme:light,contrast:standard"
+    readable = max(contrast(exact, "#FFFFFF"), contrast(exact, "#000000")) >= 4.5
+    assert (ts.resolve("color.action.primary", light) == exact) == readable
+    assert ts.resolve("color.brand.exact") == exact
+
+
+def test_an_orange_brand_keeps_its_color_with_black_text_in_light():
+    ts = generate_color(AXES, "#E85D04").tokens
+    light = "scheme:light,contrast:standard"
+    assert ts.resolve("color.action.primary", light) == "#E85D04"
+    assert ts.resolve("color.text.on-action", light) == "#000000"
+    # black text keeps reading, so hover and pressed step away from it
+    assert ts.raw("color.action.primary-hover", light) == "{color.brand.400}"
+    assert ts.raw("color.action.primary-pressed", light) == "{color.brand.300}"
+
+
+@pytest.mark.parametrize("seed", SEEDS + _SWEEP_SEEDS)
+def test_dark_and_high_contrast_never_put_black_text_on_a_mid_tone_fill(seed):
+    from engine.foundations.color_math import hex_to_oklch
+    ts = generate_color(AXES, seed).tokens
+    for mode in COLOR_CONTEXTS[1:]:
+        fill = ts.resolve("color.action.primary", mode)
+        if ts.resolve("color.text.on-action", mode) == "#000000":
+            assert hex_to_oklch(fill)[0] >= color_module.MUDDY_L, f"{seed} ({mode}) {fill}"
+
+
+@pytest.mark.parametrize("seed", SEEDS)
+def test_the_primary_edge_clears_the_page_and_equals_the_fill_when_the_fill_does(seed):
+    ts = generate_color(AXES, seed).tokens
+    for mode in COLOR_CONTEXTS:
+        fill, edge = (ts.resolve(r, mode) for r in ("color.action.primary",
+                                                     "color.action.primary-edge"))
+        page = ts.resolve("color.surface.page", mode)
+        need = 4.5 if "contrast:high" in mode else 3.0
+        assert contrast(edge, page) >= need, f"{seed} ({mode})"
+        if contrast(fill, page) >= need:
+            assert edge == fill, f"{seed} ({mode})"
 
 
 def test_light_brand_gets_retuned_with_notes():
@@ -68,7 +122,8 @@ def _brand_ramp(monkeypatch, brand, stops):
 def test_flat_action_ramp_is_noted_and_the_gate_blocks_it(monkeypatch):
     # The generator never raises for an unsolvable fill group: it keeps
     # the defaults, notes why, and the build's gate blocks the result with
-    # the states-distinct check naming the fix.
+    # the states-distinct check naming the fix. The fill keeps the exact
+    # brand color, so the two flat states collide with each other.
     brand = "#3366FF"
     _brand_ramp(monkeypatch, brand, {s: "#808080" for s in STEPS})
     result = generate_color(AXES, brand)
@@ -78,16 +133,17 @@ def test_flat_action_ramp_is_noted_and_the_gate_blocks_it(monkeypatch):
     with pytest.raises(GateFailure) as exc:
         build_color(AXES, brand)
     failures = [f for f in exc.value.report.failures if f.check == "states-distinct"]
-    assert failures and "color.action.primary-hover equals color.action.primary" in failures[0].message
-    assert "point color.action.primary-hover at a neighboring step" in failures[0].message
+    assert failures and \
+        "color.action.primary-pressed equals color.action.primary-hover" in failures[0].message
+    assert "point color.action.primary-pressed at a neighboring step" in failures[0].message
 
 
 def test_unsatisfiable_action_group_keeps_the_closest_and_the_gate_blocks_it(monkeypatch):
-    # A ramp that never leaves the near-white end cannot give the button
-    # 3:1 against a light page. The generator keeps the closest candidate,
-    # its note carries the ratios reached, and the gate names the failing
-    # pairing.
-    brand = "#3366FF"
+    # A near-white brand whose ramp never leaves the near-white end cannot
+    # give the button an edge at 3:1 against a light page. The generator
+    # keeps the closest candidate, its note carries the ratios reached, and
+    # the gate names the failing pairing.
+    brand = "#FAFAFA"
     _brand_ramp(monkeypatch, brand,
                 {s: oklch_to_hex(0.99 - i * 0.01, 0.0, 0.0) for i, s in enumerate(STEPS)})
     notes = [n for n in generate_color(AXES, brand).notes
@@ -96,7 +152,7 @@ def test_unsatisfiable_action_group_keeps_the_closest_and_the_gate_blocks_it(mon
     assert len(re.findall(r"\d+\.\d\d:1", notes[0])) == 3
     with pytest.raises(GateFailure) as exc:
         build_color(AXES, brand)
-    assert any((f.fg, f.bg, f.mode) == ("color.action.primary", "color.surface.page",
+    assert any((f.fg, f.bg, f.mode) == ("color.action.primary-edge", "color.surface.page",
                                         "scheme:light,contrast:standard")
                for f in exc.value.report.findings)
 
@@ -151,34 +207,22 @@ def test_notes_are_complete(seed):
 
 @pytest.mark.parametrize("seed", SEEDS)
 def test_hover_differs_from_primary(seed):
-    # R16 item 3 / R17: action.primary-hover must read as a different color
-    # from action.primary in both modes, must itself clear 3:1 against the
-    # page (R17 item a: PAIRINGS now has an entry for this, so the loop
-    # below already covers it; asserted directly too so the guarantee is
-    # named, not just implied by iterating PAIRINGS), and every pairing
-    # must still pass after the action-group solver runs.
+    # action.primary-hover reads as a different color from action.primary in
+    # every context, the primary edge clears the page (the fill and its
+    # states need not), and every pairing still passes after the solver.
     ts = generate_color(AXES, seed).tokens
     for mode in COLOR_CONTEXTS:
         primary = ts.resolve("color.action.primary", mode)
         hover = ts.resolve("color.action.primary-hover", mode)
+        edge = ts.resolve("color.action.primary-edge", mode)
         page = ts.resolve("color.surface.page", mode)
         assert primary != hover, f"{seed}: primary == hover ({mode}) = {primary}"
-        assert contrast(hover, page) >= 3.0, \
-            f"{seed}: hover on page ({mode}) = {contrast(hover, page):.2f}"
+        assert contrast(edge, page) >= 3.0, \
+            f"{seed}: edge on page ({mode}) = {contrast(edge, page):.2f}"
     for p in PAIRINGS:
         for mode in COLOR_CONTEXTS:
             ratio = contrast(ts.resolve(p.fg, mode), ts.resolve(p.bg, mode))
             assert ratio >= required(p, mode)[0], f"{seed}: {p.fg} on {p.bg} ({mode}) = {ratio:.2f}"
-
-
-# R16 item 5: a fast, broad sweep independent of the six brief seeds. Every
-# 30 degrees of hue, three lightnesses, two chromas, plus three flat grays.
-_SWEEP_HUES = range(0, 360, 30)
-_SWEEP_LS = (0.35, 0.55, 0.75)
-_SWEEP_CS = (0.05, 0.15)
-_SWEEP_SEEDS = [oklch_to_hex(L, C, float(H))
-                for H, L, C in itertools.product(_SWEEP_HUES, _SWEEP_LS, _SWEEP_CS)]
-_SWEEP_SEEDS += ["#202020", "#808080", "#E0E0E0"]
 
 
 @pytest.mark.parametrize("seed", _SWEEP_SEEDS)
@@ -193,11 +237,9 @@ def test_sweep_pairings_pass_and_hover_is_distinct(seed):
         hover = ts.resolve("color.action.primary-hover", mode)
         page = ts.resolve("color.surface.page", mode)
         assert primary != hover, f"{seed}: primary == hover ({mode})"
-        # R17: hover must stay usable (>= 3:1 against the page) even when
-        # phase 3's old nudge-only fix would have satisfied on-action while
-        # letting the hover fill nearly disappear.
-        assert contrast(hover, page) >= 3.0, \
-            f"{seed}: hover on page ({mode}) = {contrast(hover, page):.2f}"
+        edge = ts.resolve("color.action.primary-edge", mode)
+        assert contrast(edge, page) >= 3.0, \
+            f"{seed}: edge on page ({mode}) = {contrast(edge, page):.2f}"
 
 
 def test_public_tables_are_immutable():
@@ -221,6 +263,19 @@ def test_new_pairings_are_declared():
               Pairing("color.text.link", "color.surface.sunken", 4.5, "1.4.3"),
               Pairing("color.status.danger.text", "color.surface.sunken", 4.5, "1.4.3")):
         assert p in PAIRINGS, p
+
+
+def test_high_contrast_ring_never_weakens_and_is_checked(monkeypatch):
+    ts = generate_color(AXES, "#3366FF").tokens
+    for scheme in ("light", "dark"):
+        std, high = f"scheme:{scheme},contrast:standard", f"scheme:{scheme},contrast:high"
+        assert color_module._lowest(ts, "color.focus.ring", high)[0] >= \
+            color_module._lowest(ts, "color.focus.ring", std)[0]
+    assert color_module._ring_not_weaker(ts, "scheme:light,contrast:high") == []
+    weak = generate_color(AXES, "#3366FF").tokens
+    weak.get("color.focus.ring").modes["contrast:high"] = "{color.brand.600}"
+    found = color_module._ring_not_weaker(weak, "scheme:light,contrast:high")
+    assert found and "high contrast never weakens focus" in found[0]
 
 
 def test_ring_is_not_paired_with_the_button_fill():
@@ -289,42 +344,40 @@ def _gray_ramp(monkeypatch, lightnesses):
 
 
 def _group(ts):
-    return tuple(ts.raw(r, _LIGHT)[1:-1] for r in _GROUP_OUT + ("color.focus.ring",))
+    return tuple(ts.raw(r, _LIGHT)[1:-1] for r in _GROUP_OUT + ("color.action.primary-edge",
+                                                                 "color.focus.ring"))
 
 
 def test_solver_order_fill_distance_before_state_direction(monkeypatch):
-    # brand.500 (the default fill) carries white text and clears the page,
-    # but 600 and 700 are near white, so hover and pressed cannot go the
-    # conventional (darker) way. The fill stays and the states go lighter.
-    # An order that put the state direction first would move the fill to
-    # 800 to keep 900 and 950 as darker states.
-    # The ring's default brand.700 is near white; the next brand step in
-    # the conventional direction, 800, clears every surface. A neutral ring
-    # (neutral.950) would come first if neutral outranked the brand ramp.
+    # The exact brand carries white text, but 600 and 700 are near white,
+    # so hover and pressed cannot go the conventional (darker) way. The fill
+    # stays and the states go lighter. An order that put the state
+    # direction first would move the fill to keep darker states. The ring
+    # takes the first brand step that clears every surface and stands 3:1
+    # off the fill and the tinted fills: brand.950.
     _gray_ramp(monkeypatch, [0.983, 0.95, 0.85, 0.49, 0.465, 0.43, 0.983, 0.983, 0.37, 0.31, 0.27])
     assert _group(generate_color(AXES, "#3366FF").tokens) == (
-        "color.brand.500", "color.brand.400", "color.brand.300", "color.base.white",
-        "color.brand.800")
+        "color.brand.exact", "color.brand.400", "color.brand.300", "color.base.white",
+        "color.brand.exact", "color.brand.950")
 
 
 def test_solver_order_conventional_direction_at_equal_distance(monkeypatch):
-    # The default fill brand.500 is too light. One step either way clears
-    # (600 darker, 400 lighter); the conventional darker step wins, and its
-    # states continue darker. The ring's default brand.700 clears every
-    # surface; it equals the hover, which is allowed.
+    # The exact brand carries white text; its states step the conventional
+    # (darker) way, and the ring takes brand.950, the first step that also
+    # stands 3:1 off the fill and the tinted fills.
     _gray_ramp(monkeypatch, [0.983, 0.95, 0.85, 0.49, 0.465, 0.8, 0.43, 0.39, 0.34, 0.31, 0.27])
     assert _group(generate_color(AXES, "#3366FF").tokens) == (
-        "color.brand.600", "color.brand.700", "color.brand.800", "color.base.white",
-        "color.brand.700")
+        "color.brand.exact", "color.brand.600", "color.brand.700", "color.base.white",
+        "color.brand.exact", "color.brand.950")
 
 
 def test_ring_prefers_a_color_other_than_the_fill(monkeypatch):
-    # brand.800 resolves to the same color as the fill (brand.500). The
-    # ring skips it for the next brand step that clears every surface.
+    # With only white and the fill itself on offer, the ring takes white,
+    # which differs from the fill, over a ring equal to the fill.
     _gray_ramp(monkeypatch, [0.983, 0.95, 0.85, 0.49, 0.465, 0.43, 0.983, 0.983, 0.43, 0.31, 0.27])
-    assert _group(generate_color(AXES, "#3366FF").tokens) == (
-        "color.brand.500", "color.brand.400", "color.brand.300", "color.base.white",
-        "color.brand.900")
+    monkeypatch.setattr(color_module, "_ring_candidates",
+                        lambda mode, default_ring: ["color.brand.exact", "color.neutral.950"])
+    assert _group(generate_color(AXES, "#3366FF").tokens)[-1] == "color.neutral.950"
 
 
 def test_the_fill_never_moves_to_make_the_ring_differ(monkeypatch):
@@ -332,10 +385,10 @@ def test_the_fill_never_moves_to_make_the_ring_differ(monkeypatch):
     # fill; the fill does not move to make room.
     _gray_ramp(monkeypatch, [0.983, 0.95, 0.85, 0.49, 0.465, 0.43, 0.983, 0.983, 0.37, 0.31, 0.27])
     monkeypatch.setattr(color_module, "_ring_candidates",
-                        lambda mode, default_ring: ["color.brand.500"])
+                        lambda mode, default_ring: ["color.brand.exact"])
     assert _group(generate_color(AXES, "#3366FF").tokens) == (
-        "color.brand.500", "color.brand.400", "color.brand.300", "color.base.white",
-        "color.brand.500")
+        "color.brand.exact", "color.brand.400", "color.brand.300", "color.base.white",
+        "color.brand.exact", "color.brand.exact")
 
 
 def test_ring_candidates_run_brand_then_neutral_then_black_and_white():
@@ -357,16 +410,18 @@ def test_ring_prefers_a_brand_step():
         assert ts.raw("color.focus.ring", mode).startswith("{color.brand."), mode
 
 
-def test_ring_moves_are_noted():
-    # A yellow brand's light fill moves to brand.700, the ring's default;
-    # the ring steps on to brand.800 so it differs from the fill, and the
-    # note says so with the ring's lowest ratio against the surfaces.
+def test_ring_and_edge_moves_are_noted():
+    # A yellow brand keeps its exact fill with black text; its edge moves to
+    # brand.700 to clear the page, and the note says so with the edge and
+    # ring ratios.
     notes = [n for n in generate_color(AXES, "#FFD400").notes
              if n.startswith("color.action.primary group (scheme:light,contrast:standard)")]
     assert len(notes) == 1
-    assert "color.action.primary color.brand.500 -> color.brand.700" in notes[0]
-    assert "color.focus.ring color.brand.700 -> color.brand.800" in notes[0]
-    assert re.search(r"ring/surface \d+\.\d\d:1$", notes[0]), notes[0]
+    assert ", color.action.primary color." not in notes[0] and ": color.action.primary color." \
+        not in notes[0]
+    assert "color.text.on-action color.base.white -> color.base.black" in notes[0]
+    assert "color.action.primary-edge color.brand.exact -> color.brand.700" in notes[0]
+    assert re.search(r"edge/page \d+\.\d\d:1, ring/surface \d+\.\d\d:1$", notes[0]), notes[0]
 
 
 # High contrast: a variant per scheme with raised minimums.
@@ -743,9 +798,10 @@ def test_every_other_pairing_is_kept():
                for state in (fill, fill + "-hover", fill + "-pressed")]
             + [Pairing(f"color.status.{s}.on-strong", f"color.status.{s}.strong", 4.5, "1.4.3")
                for s in color_module.STATUS_HUES]
+            + [Pairing("color.action.primary-edge", "color.surface.page", 3.0, "1.4.11")]
             + [Pairing(state, "color.surface.page", 3.0, "1.4.11")
-               for fill in ("color.action.primary", "color.action.danger")
-               for state in (fill, fill + "-hover", fill + "-pressed")]
+               for state in ("color.action.danger", "color.action.danger-hover",
+                             "color.action.danger-pressed")]
             + [Pairing(f"color.status.{s}.strong", "color.surface.page", 3.0, "1.4.11")
                for s in color_module.STATUS_HUES]
             + [Pairing("color.focus.ring-inverse", "color.surface.inverse", 3.0, "1.4.11")])
@@ -825,3 +881,16 @@ def test_a_role_added_only_to_the_semantic_table_is_named():
     extra = list(SEMANTIC) + ["color.text.subtle", "color.surface.overlay", "color.scrim-2",
                               "color.action.secondary"]
     assert color_module.uncovered_roles(extra) == ["color.text.subtle", "color.surface.overlay"]
+
+
+def test_brand_fidelity_states_every_context_and_names_an_identity_loss():
+    ts = generate_color(AXES, "#E85D04").tokens
+    lines = color_module.brand_fidelity(ts)
+    assert [line.split(":")[0] for line in lines] == [
+        "Light mode", "Dark mode", "Light mode, high contrast", "Dark mode, high contrast"]
+    assert lines[0].startswith("Light mode: the button is the brand color #E85D04 exactly, with "
+                               "black text at 5.99:1 (white would be 3.50:1).")
+    assert "black on a mid tone reads muddy in this mode" in lines[1]
+    assert "reads as a different color from the brand (OKLab distance 0.14)" in lines[2]
+    assert all("The focus ring measures " in line for line in lines)
+    assert "different color" not in lines[1]

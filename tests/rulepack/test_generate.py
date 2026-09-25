@@ -478,8 +478,8 @@ def test_every_surface_order_statement_holds_for_the_build(brand):
     assert "Where two levels share a color, as card and raised do in light" in arch
     assert lhc["page"] == lhc["card"] == lhc["raised"] == "#FFFFFF" != lhc["sunken"]
     assert dhc["sunken"] == dhc["page"] == "#000000"
-    assert "in light the page, card and raised surfaces are white and the sunken surface is " \
-           "neutral.100, and in dark the page and the sunken surface are black" in arch
+    assert "in light the page, card and raised surfaces are white and the sunken surface keeps " \
+           "its recess step, and in dark the page and the sunken surface are black" in arch
     record = files[f"{PACK}/decisions/dark-elevation-cue.md"]
     assert "Sunken is darker than the page at standard contrast; under high contrast both are " \
            "black." in record

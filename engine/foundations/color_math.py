@@ -115,3 +115,13 @@ def contrast(a: str, b: str) -> float:
 def luminance(h: str) -> float:
     """WCAG relative luminance of a hex color, 0 (black) to 1 (white)."""
     return _luminance(h)
+
+
+def oklab_distance(a: str, b: str) -> float:
+    """Euclidean distance between two hex colors in OKLab: 0 for the same
+    color, about 0.02 for a just visible step, 1 for black to white."""
+    la, ca, ha = hex_to_oklch(a)
+    lb, cb, hb = hex_to_oklch(b)
+    ax, ay = ca * math.cos(math.radians(ha)), ca * math.sin(math.radians(ha))
+    bx, by = cb * math.cos(math.radians(hb)), cb * math.sin(math.radians(hb))
+    return math.sqrt((la - lb) ** 2 + (ax - bx) ** 2 + (ay - by) ** 2)

@@ -16,16 +16,18 @@ build_system validates and gates them with PAIRINGS and CHECKS, then asks
 seed_hint for advice on the failing pairings the brand seed controls."""
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 from types import MappingProxyType
 from typing import Callable, Dict, Iterable, List, Mapping, Optional, Tuple
 
 from engine.foundations import character
-from engine.foundations.color_math import contrast, hex_to_oklch, luminance, oklch_to_hex
+from engine.foundations.color_math import (
+    contrast, hex_to_oklch, hex_to_rgb, luminance, oklab_distance, oklch_to_hex, rgb_to_hex)
 from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check, GateFinding, Pairing, cite, required
 from engine.foundations.modes import compress, contexts, parse
-from engine.foundations.ramp import STEPS, ramp
+from engine.foundations.ramp import ANCHOR, STEPS, ramp
 from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
 from engine.synthesizer.axes import AxisValues
 
@@ -54,9 +56,14 @@ _SEMANTIC: Dict[str, Tuple[str, str]] = {
     "color.text.disabled": ("color.neutral.400", "color.neutral.600"),
     "color.text.on-action": ("color.base.white", "color.base.white"),
     "color.text.on-danger": ("color.base.white", "color.base.white"),
-    "color.action.primary": ("color.brand.500", "color.brand.400"),
+    # The exact brand color is every context's first candidate; the solver
+    # moves off it only when neither white nor black text reads on it.
+    "color.action.primary": ("color.brand.exact", "color.brand.exact"),
     "color.action.primary-hover": ("color.brand.600", "color.brand.300"),
     "color.action.primary-pressed": ("color.brand.700", "color.brand.200"),
+    # The primary button's edge: the fill itself when the fill clears the
+    # page, else the nearest step of its ramp that does.
+    "color.action.primary-edge": ("color.brand.exact", "color.brand.exact"),
     "color.action.danger": ("color.danger.600", "color.danger.400"),
     "color.action.danger-hover": ("color.danger.700", "color.danger.300"),
     "color.action.danger-pressed": ("color.danger.800", "color.danger.200"),
@@ -93,7 +100,7 @@ SEMANTIC: Mapping[str, Tuple[str, str]] = MappingProxyType(_SEMANTIC)
 _HIGH: Dict[str, Tuple[str, str]] = {
     "color.surface.page": ("color.base.white", "color.base.black"),
     "color.surface.card": ("color.base.white", "color.neutral.900"),
-    "color.surface.sunken": ("color.neutral.100", "color.base.black"),
+    "color.surface.sunken": ("color.neutral.recess-light", "color.base.black"),
     "color.surface.raised": ("color.base.white", "color.neutral.800"),
     "color.surface.inverse": ("color.base.black", "color.base.white"),
     "color.surface.selected": ("color.brand.50", "color.brand.950"),
@@ -101,9 +108,10 @@ _HIGH: Dict[str, Tuple[str, str]] = {
     "color.text.muted": ("color.neutral.800", "color.neutral.200"),
     "color.text.inverse": ("color.base.white", "color.base.black"),
     "color.text.link": ("color.brand.800", "color.brand.200"),
-    "color.action.primary": ("color.brand.800", "color.brand.200"),
+    "color.action.primary": ("color.brand.exact", "color.brand.exact"),
     "color.action.primary-hover": ("color.brand.900", "color.brand.100"),
     "color.action.primary-pressed": ("color.brand.950", "color.brand.50"),
+    "color.action.primary-edge": ("color.brand.exact", "color.brand.exact"),
     "color.action.danger": ("color.danger.800", "color.danger.200"),
     "color.action.danger-hover": ("color.danger.900", "color.danger.100"),
     "color.action.danger-pressed": ("color.danger.950", "color.danger.50"),
@@ -111,7 +119,9 @@ _HIGH: Dict[str, Tuple[str, str]] = {
     "color.line.input": ("color.neutral.700", "color.neutral.300"),
     "color.line.selected": ("color.brand.800", "color.brand.200"),
     "color.line.danger": ("color.danger.700", "color.danger.300"),
-    "color.focus.ring": ("color.brand.600", "color.brand.400"),
+    # One step further out than the standard ring, so high contrast starts
+    # no weaker than standard.
+    "color.focus.ring": ("color.brand.800", "color.brand.100"),
     "color.focus.ring-inverse": ("color.brand.200", "color.brand.800"),
     "color.scrim": ("color.shade.60", "color.shade.80"),
 }
@@ -201,8 +211,11 @@ def build_pairings(text_roles: Tuple[str, ...] = TEXT_ROLES,
         # 1px, so the colors next to the ring are the surfaces, never the
         # fill it surrounds; the ring is not paired with the button fill.
         + [Pairing(role, bg, 3.0, "1.4.11") for role in line_roles for bg in line_surfaces]
+        # The primary fill keeps the brand color; its edge carries the 3:1
+        # against the page. The danger fill carries it itself.
+        + [Pairing("color.action.primary-edge", "color.surface.page", 3.0, "1.4.11")]
         + [Pairing(state, "color.surface.page", 3.0, "1.4.11")
-           for fill in _FILL_STATES for state in (fill,) + _FILL_STATES[fill]]
+           for state in ("color.action.danger",) + _FILL_STATES["color.action.danger"]]
         + [Pairing(f"color.status.{s}.strong", "color.surface.page", 3.0, "1.4.11")
            for s in STATUS_HUES]
         # One ring cannot also stand out from the inverse surface, so that
@@ -228,14 +241,31 @@ class _Group:
     on: str
     states: Tuple[str, ...] = ()
     ring: str = ""
+    # The role that carries the fill's contrast against the page, drawn as
+    # an edge around it; "" when the fill and its states carry it.
+    edge: str = ""
+    # Whether the group keeps the exact brand color when a text color reads
+    # on it (brand fidelity).
+    brand: bool = False
 
 
 GROUPS: Tuple[_Group, ...] = (
     _Group("color.action.primary", "color.text.on-action",
-           _FILL_STATES["color.action.primary"], "color.focus.ring"),
+           _FILL_STATES["color.action.primary"], "color.focus.ring",
+           edge="color.action.primary-edge", brand=True),
     _Group("color.action.danger", "color.text.on-danger", _FILL_STATES["color.action.danger"]),
 ) + tuple(_Group(f"color.status.{s}.strong", f"color.status.{s}.on-strong") for s in STATUS_HUES)
-_GROUP_ROLES = frozenset(r for g in GROUPS for r in (g.fill, g.on, g.ring) + g.states if r)
+_GROUP_ROLES = frozenset(r for g in GROUPS for r in (g.fill, g.on, g.ring, g.edge) + g.states
+                         if r)
+EXACT = "color.brand.exact"
+# In dark and high contrast, black text goes only on a fill at least this
+# light (OKLCH): black on a mid tone reads muddy.
+MUDDY_L = 0.72
+# The ring prefers a color that also stands 3:1 off the primary fill.
+RING_ON_FILL = 3.0
+# A brand fill further than this from the brand color (OKLab distance)
+# reads as another color; the report says so.
+IDENTITY_DISTANCE = 0.12
 
 # M1 name for the generator's result; every foundation now returns Generated.
 ColorResult = Generated
@@ -286,6 +316,10 @@ def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str,
             notes.append(f"color.{family}: {r.note}")
         for step, hx in r.stops.items():
             prims[f"color.{family}.{step}"] = hx
+        if family == "brand":
+            # The brand color exactly as given, beside its ramp (a DTCG round
+            # trip keeps the order).
+            prims[EXACT] = rgb_to_hex(hex_to_rgb(brand_hex))
         if family == "neutral":
             # Kept beside the ramp, so a DTCG round trip keeps the order.
             prims["color.neutral.recess-light"] = _shift(r.stops[50], -RECESS_L)
@@ -342,90 +376,156 @@ def _state_offsets(conv: int, n: int) -> List[Tuple[int, ...]]:
 
 
 def _choose_ring(rings: List[str], fit: Callable[[str], float], fill_hex: str,
-                 prims: Dict[str, str]) -> str:
+                 prims: Dict[str, str], tints: Tuple[str, ...] = ()) -> str:
     """The ring for a fill already chosen: the first candidate that clears
-    every surface and differs from the fill, else the first that clears
-    every surface (it equals the fill, which the offset makes visible),
-    else the closest. Only the ring moves here, never the fill."""
+    every surface and stands RING_ON_FILL off the fill and off each tinted
+    fill the contracts pair it with (`tints`: the selected surface and the
+    status soft fills), else the first that clears every surface and
+    differs from the fill, else the first that clears every surface (it
+    equals the fill, which the offset makes visible), else the closest.
+    Only the ring moves here, never the fill."""
     clear = [r for r in rings if fit(r) >= 1.0]
     if clear:
-        return next((r for r in clear if prims[r] != fill_hex), clear[0])
+        return next((r for r in clear
+                     if all(contrast(prims[r], hx) >= RING_ON_FILL for hx in (fill_hex,) + tints)),
+                    next((r for r in clear if prims[r] != fill_hex), clear[0]))
     return max(rings, key=fit)
 
 
+def _fill_candidates(g: _Group, default: str, conv: int,
+                     prims: Dict[str, str]) -> List[Tuple[str, int]]:
+    """(fill path, ramp index its states step from), in preference order.
+    A brand group whose default is the exact brand color tries it first,
+    then every brand step by OKLab distance from it, so a move keeps as
+    much of the brand as the text allows. Any other group walks its ramp
+    outward from the default, the conventional direction first."""
+    family, step = default.rsplit(".", 1)
+    if g.brand and default == EXACT:
+        anchor = STEPS.index(ANCHOR)
+        steps = [(f"{family}.{s}", i) for i, s in enumerate(STEPS)]
+        order = _order_from(anchor, conv)
+        steps.sort(key=lambda p: (round(oklab_distance(prims[p[0]], prims[EXACT]), 6),
+                                  order.index(p[1])))
+        return [(EXACT, anchor)] + steps
+    return [(f"{family}.{STEPS[i]}", i) for i in _order_from(STEPS.index(int(step)), conv)]
+
+
+def _muddy(fill_hex: str, on: str, mode: str) -> bool:
+    """Black text on a mid tone, in a context where that reads muddy (dark
+    or high contrast)."""
+    strict = _scheme(mode) == "dark" or parse(mode).get("contrast") == "high"
+    return strict and on == "color.base.black" and hex_to_oklch(fill_hex)[0] < MUDDY_L
+
+
+def _choose_edge(fill_path: str, family: str, page_hex: str, need: float,
+                 prims: Dict[str, str]) -> str:
+    """The fill itself when it clears the page, else the step of its ramp
+    nearest the fill that does, else the one that comes closest."""
+    if contrast(prims[fill_path], page_hex) >= need:
+        return fill_path
+    steps = sorted((f"{family}.{s}" for s in STEPS),
+                   key=lambda p: (round(oklab_distance(prims[p], prims[fill_path]), 6), p))
+    return next((p for p in steps if contrast(prims[p], page_hex) >= need),
+                max(steps, key=lambda p: contrast(prims[p], page_hex)))
+
+
 def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
-                 pick: Dict[str, Dict[str, str]], notes: List[str]) -> None:
+                 pick: Dict[str, Dict[str, str]], notes: List[str],
+                 ring_floor: float = 0.0) -> None:
     """Choose one fill group for one context.
 
     Search order (deterministic):
-      1. the fill at 0, 1, 2, ... ramp steps from its default; at equal
-         distance the conventional direction (darker in light, lighter in
-         dark) first;
+      1. the fill: for the brand group the exact brand color, then brand
+         steps by OKLab distance from it; for any other group the ramp
+         outward from its default, the conventional direction (darker in
+         light, lighter in dark) first at equal distance;
       2. its states (hover, then pressed) one and two steps on in the
          conventional direction, then against it, then with gaps of two;
-      3. the text on it as base.white, then base.black;
-      4. for the primary group, the ring, after the rest is fixed: brand
+      3. the text on it as base.white, then base.black; in dark and high
+         contrast the brand group first skips black text on a fill darker
+         than MUDDY_L, and takes it only when nothing else clears;
+      4. for a group with an edge, the edge: the fill when it clears the
+         page, else the nearest step of its ramp that does;
+      5. for the primary group, the ring, after the rest is fixed: brand
          steps nearest its default, then neutral steps, then black and
-         white (_ring_candidates), preferring a ring whose color differs
-         from the fill. That preference only reorders ring candidates;
-         the fill never moves for it.
-    The first fill, states and text that clear every constraint win. The
-    minimums are PAIRINGS' own in this context, so they rise under
+         white (_ring_candidates), preferring a ring that stands 3:1 off
+         the fill, then one whose color differs from it. The fill never
+         moves for the ring.
+    The minimums are PAIRINGS' own in this context, so they rise under
     contrast:high:
       text on the fill and on every state   >= 4.5 (WCAG 1.4.3), 7.0 high (WCAG 1.4.6)
-      fill and every state on the page      >= 3.0 (WCAG 1.4.11), 4.5 high (our floor)
+      the fill and every state on the page  >= 3.0 (WCAG 1.4.11), 4.5 high (our floor),
+                                               or the edge on the page when the group has one
       every state's hex differs from the fill's and from each other's
-      ring on every surface PAIRINGS names  >= 3.0 (WCAG 1.4.11), 4.5 high (our floor)
-    The ring has no minimum against the fill: the border foundation keeps
-    page color between an element and its ring.
+      ring on every surface PAIRINGS names  >= 3.0 (WCAG 1.4.11), 4.5 high (our floor),
+                                               and under high contrast its lowest ratio never
+                                               below the standard ring's lowest (ring_floor)
     When nothing clears, the closest candidate is kept and noted; the gate
     then reports the failing pairings. The generator never raises here.
     """
-    roles = (g.fill,) + g.states + (g.on,) + ((g.ring,) if g.ring else ())
+    roles = (g.fill,) + g.states + (g.on,) + ((g.edge,) if g.edge else ()) \
+        + ((g.ring,) if g.ring else ())
     defaults = {r: pick[mode][r] for r in roles}
     page_hex = prims[pick[mode]["color.surface.page"]]
-    family, default_step = defaults[g.fill].rsplit(".", 1)
+    family = defaults[g.fill].rsplit(".", 1)[0]
     conv = +1 if _scheme(mode) == "light" else -1
     need_text = _need(g.on, g.fill, mode)
-    need_fill = _need(g.fill, "color.surface.page", mode)
+    need_fill = 0.0 if g.edge else _need(g.fill, "color.surface.page", mode)
     rings = _ring_candidates(mode, defaults[g.ring]) if g.ring else []
-    ring_bgs = [(prims[pick[mode][bg]], _need(g.ring, bg, mode)) for bg in _paired_with(g.ring)] \
-        if g.ring else []
+    ring_bgs = [(prims[pick[mode][bg]], _need(g.ring, bg, mode))
+                for bg in _paired_with(g.ring)] if g.ring else []
+
+    tints = tuple(prims[pick[mode][r]] for r in ("color.surface.selected",)
+                  + tuple(f"color.status.{s}.soft" for s in STATUS_HUES)) if g.ring else ()
 
     def ring_low(ring: str) -> float:
         return min(contrast(prims[ring], hx) for hx, _ in ring_bgs)
 
     def ring_fit(ring: str) -> float:
-        return min(contrast(prims[ring], hx) / need for hx, need in ring_bgs)
+        fit = min(contrast(prims[ring], hx) / need for hx, need in ring_bgs)
+        return min(fit, ring_low(ring) / ring_floor) if ring_floor else fit
 
     def finish(choice: Tuple[str, ...], hexes: List[str], on: str, solved: bool) -> None:
-        summary = (f"text/fill {contrast(prims[on], hexes[0]):.2f}:1, "
-                   f"fill/page {contrast(hexes[0], page_hex):.2f}:1")
+        summary = f"text/fill {contrast(prims[on], hexes[0]):.2f}:1"
+        if g.edge:
+            need_edge = _need(g.edge, "color.surface.page", mode)
+            edge = _choose_edge(choice[0], family, page_hex, need_edge, prims)
+            choice += (edge,)
+            solved = solved and contrast(prims[edge], page_hex) >= need_edge
+            summary += f", edge/page {contrast(prims[edge], page_hex):.2f}:1"
+        else:
+            summary += f", fill/page {contrast(hexes[0], page_hex):.2f}:1"
         if g.ring:
-            ring = _choose_ring(rings, ring_fit, hexes[0], prims)
+            ring = _choose_ring(rings, ring_fit, hexes[0], prims, tints)
             choice += (ring,)
             solved = solved and ring_fit(ring) >= 1.0
             summary += f", ring/surface {ring_low(ring):.2f}:1"
         _apply(g, mode, pick, defaults, roles, choice, summary, notes, solved=solved)
 
     best: Optional[Tuple[float, Tuple[str, ...], List[str], str]] = None
-    for fill_idx in _order_from(STEPS.index(int(default_step)), conv):
-        for offsets in _state_offsets(conv, len(g.states)):
-            idxs = [fill_idx] + [fill_idx + o for o in offsets]
-            if not all(0 <= i < len(STEPS) for i in idxs):
-                continue
-            hexes = [prims[f"{family}.{STEPS[i]}"] for i in idxs]
-            if len(set(hexes)) != len(hexes):
-                continue
-            for on in ("color.base.white", "color.base.black"):
-                score = min([contrast(prims[on], h) / need_text for h in hexes]
-                            + [contrast(h, page_hex) / need_fill for h in hexes])
-                choice = tuple(f"{family}.{STEPS[i]}" for i in idxs) + (on,)
-                if best is None or score > best[0]:
-                    best = (score, choice, hexes, on)
-                if score >= 1.0:
-                    finish(choice, hexes, on, solved=True)
-                    return
+    candidates = _fill_candidates(g, defaults[g.fill], conv, prims)
+    for allow_muddy in ((False, True) if g.brand else (True,)):
+        for fill_path, fill_idx in candidates:
+            for offsets in _state_offsets(conv, len(g.states)):
+                idxs = [fill_idx + o for o in offsets]
+                if not all(0 <= i < len(STEPS) for i in idxs):
+                    continue
+                paths = [fill_path] + [f"{family}.{STEPS[i]}" for i in idxs]
+                hexes = [prims[p] for p in paths]
+                if len(set(hexes)) != len(hexes):
+                    continue
+                for on in ("color.base.white", "color.base.black"):
+                    if not allow_muddy and _muddy(hexes[0], on, mode):
+                        continue
+                    score = min([contrast(prims[on], h) / need_text for h in hexes]
+                                + [contrast(h, page_hex) / need_fill for h in hexes
+                                   if need_fill])
+                    choice = tuple(paths) + (on,)
+                    if best is None or score > best[0]:
+                        best = (score, choice, hexes, on)
+                    if score >= 1.0:
+                        finish(choice, hexes, on, solved=True)
+                        return
     if best is None:
         notes.append(f"{g.fill} group ({mode}): every step of the {family.split('.')[-1]} ramp "
                      "resolves to the same color, so the states cannot differ from the fill; "
@@ -574,7 +674,56 @@ def _error_edge_hue(ts: TokenSet, mode: str) -> List[str]:
             "step and let the field's icon and message carry the rest"]
 
 
+def _lowest(ts: TokenSet, ring: str, mode: str) -> Tuple[float, str]:
+    """The ring's lowest ratio against the surfaces it is paired with, and
+    that surface."""
+    return min((contrast(ts.resolve(ring, mode), ts.resolve(bg, mode)), bg)
+               for bg in _opaque_surfaces(ts, ring, mode))
+
+
+def _opaque_surfaces(ts: TokenSet, ring: str, mode: str) -> List[str]:
+    """The surfaces the ring is paired with that resolve to an opaque color
+    here; a translucent one is the opaque-pairing check's finding."""
+    return [bg for bg in _paired_with(ring)
+            if _typed(ts, bg) and len(str(ts.resolve(bg, mode))) == 7]
+
+
+def _ring_not_weaker(ts: TokenSet, mode: str) -> List[str]:
+    """Under high contrast the ring's lowest ratio against its surfaces is
+    at least the standard ring's lowest in the same scheme."""
+    ring = "color.focus.ring"
+    std = mode.replace("contrast:high", "contrast:standard")
+    if parse(mode).get("contrast") != "high" or not _typed(ts, ring) \
+            or not (_opaque_surfaces(ts, ring, mode) and _opaque_surfaces(ts, ring, std)):
+        return []
+    (high, bg), (base, base_bg) = _lowest(ts, ring, mode), _lowest(ts, ring, std)
+    if high + 1e-9 >= base:
+        return []
+    return [f"{ring} ({mode}) measures {math.floor(high * 100) / 100:.2f}:1 on {bg}, weaker than "
+            f"the standard ring's lowest, {math.floor(base * 100) / 100:.2f}:1 on {base_bg}; "
+            "high contrast never weakens focus, so point the high contrast ring at a step with "
+            "at least that contrast against every surface"]
+
+
+def _ring_on_fill(ts: TokenSet, mode: str) -> List[str]:
+    """Where the ring stands under RING_ON_FILL against the primary fill,
+    a gap of page color of at least 2px keeps it visible: our rule."""
+    ring, fill, offset = "color.focus.ring", "color.action.primary", "border.focus-ring.offset"
+    if not (_typed(ts, ring) and _typed(ts, fill)) or not ts.has(offset):
+        return []
+    ratio = contrast(ts.resolve(ring, mode), ts.resolve(fill, mode))
+    gap = ts.resolve(offset)
+    px = gap["value"] * (16 if gap["unit"] == "rem" else 1) if isinstance(gap, dict) else 0
+    if ratio >= RING_ON_FILL or px >= 2:
+        return []
+    return [f"{ring} stands {math.floor(ratio * 100) / 100:.2f}:1 off {fill} ({mode}) and "
+            f"{offset} is {px:g}px; our rule keeps a ring under {RING_ON_FILL:g}:1 against the "
+            f"fill at least 2px away from it, so point {offset} at border.width.2 or wider"]
+
+
 CHECKS: Tuple[Check, ...] = (
+    Check("ring-not-weaker", "system", _ring_not_weaker, axes=("scheme", "contrast")),
+    Check("ring-on-fill", "system", _ring_on_fill, axes=("scheme", "contrast")),
     Check("error-edge-hue", "system", _error_edge_hue, axes=("scheme", "contrast")),
     Check("states-distinct", "system", _states_distinct, axes=("scheme", "contrast")),
     Check("disabled-distinct", "system", _disabled_distinct, axes=("scheme", "contrast")),
@@ -582,6 +731,21 @@ CHECKS: Tuple[Check, ...] = (
     Check("line-subtle-visible", "system", _line_subtle_visible, axes=("scheme", "contrast")),
     Check("scheme-polarity", "system", _scheme_polarity, axes=("scheme", "contrast")),
 )
+
+
+def _ring_low(ring_hex: str, mode: str, prims: Dict[str, str],
+              pick: Dict[str, Dict[str, str]]) -> float:
+    """The ring's lowest ratio against the surfaces PAIRINGS pairs it with."""
+    return min(contrast(ring_hex, prims[pick[mode][bg]]) for bg in _paired_with("color.focus.ring"))
+
+
+def _ring_floor(mode: str, prims: Dict[str, str], pick: Dict[str, Dict[str, str]]) -> float:
+    """Under high contrast, the standard ring's lowest ratio against its
+    surfaces in the same scheme; 0 in a standard context."""
+    if parse(mode).get("contrast") != "high":
+        return 0.0
+    std = mode.replace("contrast:high", "contrast:standard")
+    return _ring_low(prims[pick[std]["color.focus.ring"]], std, prims, pick)
 
 
 def generate_color(axes: AxisValues, brand_hex: str) -> Generated:
@@ -624,9 +788,12 @@ def generate_color(axes: AxisValues, brand_hex: str) -> Generated:
             if not changed:
                 break
         # No generic pairing reads a group role as its background, so each
-        # group is solved once, after the loop settles.
+        # group is solved once, after the loop settles. Under high contrast
+        # the ring's lowest ratio against the surfaces never falls below the
+        # standard ring's lowest in the same scheme.
+        floor = _ring_floor(mode, prims, pick)
         for g in GROUPS:
-            _solve_group(g, mode, prims, pick, notes)
+            _solve_group(g, mode, prims, pick, notes, ring_floor=floor if g.ring else 0.0)
 
     ts = TokenSet()
     for path, hx in prims.items():
@@ -635,6 +802,63 @@ def generate_color(axes: AxisValues, brand_hex: str) -> Generated:
         base, modes = compress({mode: "{" + pick[mode][role] + "}" for mode in COLOR_CONTEXTS})
         ts.add(Token(role, "color", base, modes=modes, layer="semantic"))
     return Generated(tokens=ts, notes=notes)
+
+
+_CONTEXT_WORDS = (("scheme:light,contrast:standard", "Light mode"),
+                  ("scheme:dark,contrast:standard", "Dark mode"),
+                  ("scheme:light,contrast:high", "Light mode, high contrast"),
+                  ("scheme:dark,contrast:high", "Dark mode, high contrast"))
+
+
+def _ratio(v: float) -> str:
+    return f"{math.floor(v * 100) / 100:.2f}:1"
+
+
+def brand_fidelity(ts: TokenSet) -> List[str]:
+    """One plain line per color context on the primary fill: whether it is
+    the exact brand color, the text on it, where it moved and how far, its
+    edge, and the focus ring against it. Read from the tokens, so it states
+    what was built. Empty for a set without the primary group."""
+    roles = ("color.action.primary", "color.text.on-action", "color.action.primary-edge",
+             "color.focus.ring", EXACT)
+    if not all(ts.has(p) for p in roles):
+        return []
+    exact = ts.resolve(EXACT)
+    out = []
+    for mode, words in _CONTEXT_WORDS:
+        fill, on, edge, ring = (ts.resolve(p, mode) for p in roles[:4])
+        text = "black" if on == "#000000" else ("white" if on == "#FFFFFF" else on)
+        other = "#FFFFFF" if on == "#000000" else "#000000"
+        other_word = "white" if on == "#000000" else "black"
+        raw = ts.raw("color.action.primary", mode)
+        where = alias_target(raw) if is_alias(raw) else fill
+        if where == EXACT or fill == exact:
+            line = (f"{words}: the button is the brand color {exact} exactly, with {text} text "
+                    f"at {_ratio(contrast(on, fill))} ({other_word} would be "
+                    f"{_ratio(contrast(other, fill))}).")
+        else:
+            distance = oklab_distance(fill, exact)
+            need = required(next(p for p in PAIRINGS if (p.fg, p.bg) == (
+                "color.text.on-action", "color.action.primary")), mode)[0]
+            white, black = contrast("#FFFFFF", exact), contrast("#000000", exact)
+            if black >= need and _muddy(exact, "color.base.black", mode):
+                why = (f"black text would measure {_ratio(black)} on the brand color, but black "
+                       "on a mid tone reads muddy in this mode, and white measures "
+                       f"{_ratio(white)}")
+            else:
+                why = (f"on the brand color white text measures {_ratio(white)} and black "
+                       f"{_ratio(black)}, under the {need:g}:1 this mode needs")
+            line = (f"{words}: the button is {fill} ({where}), with {text} text at "
+                    f"{_ratio(contrast(on, fill))}; {why}.")
+            if distance > IDENTITY_DISTANCE:
+                line += (f" This fill reads as a different color from the brand (OKLab distance "
+                         f"{distance:.2f}), so the button does not carry the brand here; keep "
+                         "it in other places, such as the logo and the links.")
+        if edge != fill:
+            line += f" Its edge is {edge}, so the button still stands out from the page."
+        line += f" The focus ring measures {_ratio(contrast(ring, fill))} against the fill."
+        out.append(line)
+    return out
 
 
 def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:

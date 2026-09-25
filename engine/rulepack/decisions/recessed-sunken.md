@@ -15,7 +15,7 @@ A well, a code block or a disabled field needs a surface below the page. One ful
 
 ## Decision
 
-color.surface.sunken is its own neutral primitive per scheme, 0.035 OKLCH lightness below the page's step: color.neutral.recess-light in light and color.neutral.recess-dark in dark. Under high contrast it is neutral.100 in light, so a well stays visible on a white page, and black in dark.
+color.surface.sunken is its own neutral primitive per scheme, 0.035 OKLCH lightness below the page's step: color.neutral.recess-light in light and color.neutral.recess-dark in dark. Under high contrast it keeps color.neutral.recess-light in light, so a well stays visible on a white page, and is black in dark.
 
 ## Why
 

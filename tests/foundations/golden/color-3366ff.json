@@ -4,11 +4,8 @@
   "--color-action-danger-pressed: var(--color-danger-200);",
   "--color-action-danger: var(--color-danger-400);",
   "--color-action-disabled: var(--color-neutral-700);",
-  "--color-action-primary-hover: var(--color-brand-300);",
-  "--color-action-primary-pressed: var(--color-brand-200);",
-  "--color-action-primary: var(--color-brand-400);",
   "--color-focus-ring-inverse: var(--color-brand-700);",
-  "--color-focus-ring: var(--color-brand-200);",
+  "--color-focus-ring: var(--color-brand-100);",
   "--color-line-danger: var(--color-danger-400);",
   "--color-line-input: var(--color-neutral-400);",
   "--color-line-selected: var(--color-brand-300);",
@@ -41,7 +38,6 @@
   "--color-text-inverse: var(--color-neutral-900);",
   "--color-text-link: var(--color-brand-300);",
   "--color-text-muted: var(--color-neutral-300);",
-  "--color-text-on-action: var(--color-base-black);",
   "--color-text-on-danger: var(--color-base-black);"
  ],
  "css_high": {
@@ -49,11 +45,11 @@
    "--color-action-danger-hover: var(--color-danger-900);",
    "--color-action-danger-pressed: var(--color-danger-950);",
    "--color-action-danger: var(--color-danger-800);",
-   "--color-action-primary-hover: var(--color-brand-900);",
-   "--color-action-primary-pressed: var(--color-brand-950);",
-   "--color-action-primary: var(--color-brand-800);",
+   "--color-action-primary-edge: var(--color-brand-700);",
+   "--color-action-primary-hover: var(--color-brand-800);",
+   "--color-action-primary-pressed: var(--color-brand-900);",
+   "--color-action-primary: var(--color-brand-700);",
    "--color-focus-ring-inverse: var(--color-brand-200);",
-   "--color-focus-ring: var(--color-brand-600);",
    "--color-line-danger: var(--color-danger-700);",
    "--color-line-input: var(--color-neutral-700);",
    "--color-line-selected: var(--color-brand-800);",
@@ -74,7 +70,6 @@
    "--color-surface-inverse: var(--color-base-black);",
    "--color-surface-page: var(--color-base-white);",
    "--color-surface-selected: var(--color-brand-50);",
-   "--color-surface-sunken: var(--color-neutral-100);",
    "--color-text-default: var(--color-neutral-950);",
    "--color-text-inverse: var(--color-base-white);",
    "--color-text-link: var(--color-brand-800);",
@@ -84,11 +79,8 @@
    "--color-action-danger-hover: var(--color-danger-100);",
    "--color-action-danger-pressed: var(--color-danger-50);",
    "--color-action-danger: var(--color-danger-200);",
-   "--color-action-primary-hover: var(--color-brand-100);",
-   "--color-action-primary-pressed: var(--color-brand-50);",
-   "--color-action-primary: var(--color-brand-200);",
+   "--color-action-primary-edge: var(--color-brand-400);",
    "--color-focus-ring-inverse: var(--color-brand-800);",
-   "--color-focus-ring: var(--color-brand-300);",
    "--color-line-danger: var(--color-danger-300);",
    "--color-line-input: var(--color-neutral-300);",
    "--color-line-selected: var(--color-brand-200);",
@@ -119,11 +111,8 @@
    "--color-action-danger-hover: var(--color-danger-100);",
    "--color-action-danger-pressed: var(--color-danger-50);",
    "--color-action-danger: var(--color-danger-200);",
-   "--color-action-primary-hover: var(--color-brand-100);",
-   "--color-action-primary-pressed: var(--color-brand-50);",
-   "--color-action-primary: var(--color-brand-200);",
+   "--color-action-primary-edge: var(--color-brand-400);",
    "--color-focus-ring-inverse: var(--color-brand-800);",
-   "--color-focus-ring: var(--color-brand-300);",
    "--color-line-danger: var(--color-danger-300);",
    "--color-line-input: var(--color-neutral-300);",
    "--color-line-selected: var(--color-brand-200);",
@@ -154,11 +143,8 @@
    "--color-action-danger-hover: var(--color-danger-100);",
    "--color-action-danger-pressed: var(--color-danger-50);",
    "--color-action-danger: var(--color-danger-200);",
-   "--color-action-primary-hover: var(--color-brand-100);",
-   "--color-action-primary-pressed: var(--color-brand-50);",
-   "--color-action-primary: var(--color-brand-200);",
+   "--color-action-primary-edge: var(--color-brand-400);",
    "--color-focus-ring-inverse: var(--color-brand-800);",
-   "--color-focus-ring: var(--color-brand-300);",
    "--color-line-danger: var(--color-danger-300);",
    "--color-line-input: var(--color-neutral-300);",
    "--color-line-selected: var(--color-brand-200);",
@@ -189,11 +175,11 @@
    "--color-action-danger-hover: var(--color-danger-900);",
    "--color-action-danger-pressed: var(--color-danger-950);",
    "--color-action-danger: var(--color-danger-800);",
-   "--color-action-primary-hover: var(--color-brand-900);",
-   "--color-action-primary-pressed: var(--color-brand-950);",
-   "--color-action-primary: var(--color-brand-800);",
+   "--color-action-primary-edge: var(--color-brand-700);",
+   "--color-action-primary-hover: var(--color-brand-800);",
+   "--color-action-primary-pressed: var(--color-brand-900);",
+   "--color-action-primary: var(--color-brand-700);",
    "--color-focus-ring-inverse: var(--color-brand-200);",
-   "--color-focus-ring: var(--color-brand-600);",
    "--color-line-danger: var(--color-danger-700);",
    "--color-line-input: var(--color-neutral-700);",
    "--color-line-selected: var(--color-brand-800);",
@@ -214,7 +200,6 @@
    "--color-surface-inverse: var(--color-base-black);",
    "--color-surface-page: var(--color-base-white);",
    "--color-surface-selected: var(--color-brand-50);",
-   "--color-surface-sunken: var(--color-neutral-100);",
    "--color-text-default: var(--color-neutral-950);",
    "--color-text-inverse: var(--color-base-white);",
    "--color-text-link: var(--color-brand-800);",
@@ -224,11 +209,8 @@
    "--color-action-danger-hover: var(--color-danger-100);",
    "--color-action-danger-pressed: var(--color-danger-50);",
    "--color-action-danger: var(--color-danger-200);",
-   "--color-action-primary-hover: var(--color-brand-100);",
-   "--color-action-primary-pressed: var(--color-brand-50);",
-   "--color-action-primary: var(--color-brand-200);",
+   "--color-action-primary-edge: var(--color-brand-400);",
    "--color-focus-ring-inverse: var(--color-brand-800);",
-   "--color-focus-ring: var(--color-brand-300);",
    "--color-line-danger: var(--color-danger-300);",
    "--color-line-input: var(--color-neutral-300);",
    "--color-line-selected: var(--color-brand-200);",
@@ -270,6 +252,7 @@
   "--color-brand-800: #071D90;",
   "--color-brand-900: #03006D;",
   "--color-brand-950: #01003B;",
+  "--color-brand-exact: #3366FF;",
   "--color-neutral-50: #F6F7F8;",
   "--color-neutral-100: #D9DBDD;",
   "--color-neutral-200: #BEBFC2;",
@@ -350,9 +333,10 @@
   "--color-text-disabled: var(--color-neutral-400);",
   "--color-text-on-action: var(--color-base-white);",
   "--color-text-on-danger: var(--color-base-white);",
-  "--color-action-primary: var(--color-brand-500);",
+  "--color-action-primary: var(--color-brand-exact);",
   "--color-action-primary-hover: var(--color-brand-600);",
   "--color-action-primary-pressed: var(--color-brand-700);",
+  "--color-action-primary-edge: var(--color-brand-exact);",
   "--color-action-danger: var(--color-danger-600);",
   "--color-action-danger-hover: var(--color-danger-700);",
   "--color-action-danger-pressed: var(--color-danger-800);",
@@ -361,7 +345,7 @@
   "--color-line-input: var(--color-neutral-500);",
   "--color-line-selected: var(--color-brand-600);",
   "--color-line-danger: var(--color-danger-600);",
-  "--color-focus-ring: var(--color-brand-700);",
+  "--color-focus-ring: var(--color-brand-900);",
   "--color-focus-ring-inverse: var(--color-brand-300);",
   "--color-scrim: var(--color-shade-40);",
   "--color-status-danger-text: var(--color-danger-700);",
@@ -386,7 +370,8 @@
   "color.action.danger-hover": "{color.danger.700}",
   "color.action.danger-pressed": "{color.danger.800}",
   "color.action.disabled": "{color.neutral.200}",
-  "color.action.primary": "{color.brand.500}",
+  "color.action.primary": "{color.brand.exact}",
+  "color.action.primary-edge": "{color.brand.exact}",
   "color.action.primary-hover": "{color.brand.600}",
   "color.action.primary-pressed": "{color.brand.700}",
   "color.base.black": {
@@ -506,6 +491,15 @@
    ],
    "hex": "#01003B"
   },
+  "color.brand.exact": {
+   "colorSpace": "srgb",
+   "components": [
+    0.2,
+    0.4,
+    1.0
+   ],
+   "hex": "#3366FF"
+  },
   "color.danger.100": {
    "colorSpace": "srgb",
    "components": [
@@ -605,7 +599,7 @@
    ],
    "hex": "#220006"
   },
-  "color.focus.ring": "{color.brand.700}",
+  "color.focus.ring": "{color.brand.900}",
   "color.focus.ring-inverse": "{color.brand.300}",
   "color.info.100": {
    "colorSpace": "srgb",
@@ -1182,22 +1176,28 @@
    "light-high": "#BEBFC2"
   },
   "color.action.primary": {
-   "dark": "#5888FF",
-   "dark-high": "#A5C2FF",
+   "dark": "#3366FF",
+   "dark-high": "#1336B4",
    "light": "#3366FF",
-   "light-high": "#071D90"
+   "light-high": "#1336B4"
+  },
+  "color.action.primary-edge": {
+   "dark": "#3366FF",
+   "dark-high": "#5888FF",
+   "light": "#3366FF",
+   "light-high": "#1336B4"
   },
   "color.action.primary-hover": {
-   "dark": "#7FA6FF",
-   "dark-high": "#CCDCFF",
+   "dark": "#234ED9",
+   "dark-high": "#071D90",
    "light": "#234ED9",
-   "light-high": "#03006D"
+   "light-high": "#071D90"
   },
   "color.action.primary-pressed": {
-   "dark": "#A5C2FF",
-   "dark-high": "#F3F7FF",
+   "dark": "#1336B4",
+   "dark-high": "#03006D",
    "light": "#1336B4",
-   "light-high": "#01003B"
+   "light-high": "#03006D"
   },
   "color.base.black": {
    "dark": "#000000",
@@ -1277,6 +1277,12 @@
    "light": "#01003B",
    "light-high": "#01003B"
   },
+  "color.brand.exact": {
+   "dark": "#3366FF",
+   "dark-high": "#3366FF",
+   "light": "#3366FF",
+   "light-high": "#3366FF"
+  },
   "color.danger.100": {
    "dark": "#FCD0D3",
    "dark-high": "#FCD0D3",
@@ -1344,10 +1350,10 @@
    "light-high": "#220006"
   },
   "color.focus.ring": {
-   "dark": "#A5C2FF",
-   "dark-high": "#7FA6FF",
-   "light": "#1336B4",
-   "light-high": "#234ED9"
+   "dark": "#CCDCFF",
+   "dark-high": "#CCDCFF",
+   "light": "#03006D",
+   "light-high": "#03006D"
   },
   "color.focus.ring-inverse": {
    "dark": "#1336B4",
@@ -1755,7 +1761,7 @@
    "dark": "#060608",
    "dark-high": "#000000",
    "light": "#EAEBEC",
-   "light-high": "#D9DBDD"
+   "light-high": "#EAEBEC"
   },
   "color.text.default": {
    "dark": "#F6F7F8",
@@ -1788,8 +1794,8 @@
    "light-high": "#303235"
   },
   "color.text.on-action": {
-   "dark": "#000000",
-   "dark-high": "#000000",
+   "dark": "#FFFFFF",
+   "dark-high": "#FFFFFF",
    "light": "#FFFFFF",
    "light-high": "#FFFFFF"
   },

@@ -2,7 +2,7 @@
 
 ## Summary
 
-Color sets every surface, text, line, fill and ring in the product, in light and dark and at standard and high contrast. It is generated from one brand color: the brand anchors its ramp at step 500, a neutral ramp takes the brand hue pulled warm or cool by the warmth axis (decisions/neutral-tint.md), and four status ramps lean toward the brand inside a fixed band of their own hues (decisions/status-harmony.md). The build measures text roles against every surface they can sit on, the input line, the selected line, the error edge and the focus ring against the page, card, sunken and raised surfaces, and the text on each fill against that fill. Action fills and strong status fills are measured against the page only: on card, sunken and raised a filled control is found by its label and its focus ring, not its fill (decisions/fill-edge-page-only.md). Contracts add the pairings their components need. Color does not govern type size, spacing or shadow; those foundations own them.
+Color sets every surface, text, line, fill and ring in the product, in light and dark and at standard and high contrast. It is generated from one brand color: the brand anchors its ramp at step 500, a neutral ramp takes the brand hue pulled warm or cool by the warmth axis (decisions/neutral-tint.md), and four status ramps lean toward the brand inside a fixed band of their own hues (decisions/status-harmony.md). The build measures text roles against every surface they can sit on, the input line, the selected line, the error edge and the focus ring against the page, card, sunken and raised surfaces, and the text on each fill against that fill. The primary button keeps the exact brand color as its fill whenever white or black text reads on it (decisions/brand-fidelity.md), and its edge carries its 3:1 against the page (decisions/primary-edge.md). That edge, the danger fill and the strong status fills are measured against the page only: on card, sunken and raised a filled control is found by its label, its edge and its focus ring. The focus ring is also measured against the primary fill, and under high contrast never measures less than the standard ring (decisions/ring-never-weaker.md). Contracts add the pairings their components need. Color does not govern type size, spacing or shadow; those foundations own them.
 
 ## Principles
 
@@ -29,7 +29,8 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - `color.text.disabled`: the label of an unavailable control, and its edge where it has one (a secondary button, a check box); never to make active text quieter.
 - `color.text.on-action`: text and icons on the primary fill and its hover and pressed steps.
 - `color.text.on-danger`: text and icons on the danger fill and its hover and pressed steps.
-- `color.action.primary`: the fill of the one main action on a view.
+- `color.action.primary`: the fill of the one main action on a view; the exact brand color whenever white or black text reads on it.
+- `color.action.primary-edge`: the edge of the primary button: the fill itself when the fill clears the page, else the nearest step of its ramp that does.
 - `color.action.primary-hover`: the primary fill under a pointer.
 - `color.action.primary-pressed`: the primary fill while pressed.
 - `color.action.danger`: the fill of an action that destroys data.
@@ -69,7 +70,7 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 | A floating layer | color.surface.raised with an elevation shadow | card |
 | Text people read | color.text.default | a status or link color |
 | Secondary information | color.text.muted | color.text.disabled |
-| The one main action on a view | a primary button: color.action.primary with color.text.on-action | a second primary, or a status fill |
+| The one main action on a view | a primary button: color.action.primary with color.text.on-action and an edge in color.action.primary-edge | a second primary, or a status fill |
 | Another action that must read as a control on its own | a secondary button: an edge in color.line.selected, the label in color.text.link | a ghost button in an open area |
 | A light, repeated action where the layout already marks it as an action | a ghost button: the label in color.text.link, a fill and edge only on hover and press | a secondary button in every row |
 | A destructive action | color.action.danger with color.text.on-danger | a warning color |
@@ -79,7 +80,7 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 | A selected item | color.surface.selected with color.line.selected and a heavier edge | the tint alone |
 | An error, warning, success or note | the matching color.status roles with an icon and words | the brand color |
 
-Choose a button's emphasis by how it must be found. A primary button is the one main action on a view; its fill is paired with the page only, so elsewhere its label and ring identify it. A secondary button keeps its edge in every state: color.line.selected, paired at 3:1 with every surface the button contract lists, turning to color.text.disabled when disabled, so it reads as a control at rest and when unavailable. Use it for the second action of a pair, a standalone action beside content, and any action on a busy surface. A ghost button has no fill and no edge at rest or when disabled; they appear only on hover and press. At rest only its label, color.text.link at 4.5:1, marks it, and a disabled ghost shows only color.text.disabled, which has no contrast minimum. Use it for low-weight actions that repeat, or that sit where the layout already says they are actions, such as a toolbar, a table row or a card's actions; never as the only control in an open area, and never where a disabled action must still read as a control (decisions/button-intents.md).
+Choose a button's emphasis by how it must be found. A primary button is the one main action on a view; its edge is paired with the page only, so elsewhere its label, edge and ring identify it. A secondary button keeps its edge in every state: color.line.selected, paired at 3:1 with every surface the button contract lists, turning to color.text.disabled when disabled, so it reads as a control at rest and when unavailable. Use it for the second action of a pair, a standalone action beside content, and any action on a busy surface. A ghost button has no fill and no edge at rest or when disabled; they appear only on hover and press. At rest only its label, color.text.link at 4.5:1, marks it, and a disabled ghost shows only color.text.disabled, which has no contrast minimum. Use it for low-weight actions that repeat, or that sit where the layout already says they are actions, such as a toolbar, a table row or a card's actions; never as the only control in an open area, and never where a disabled action must still read as a control (decisions/button-intents.md).
 
 Status colors report outcomes only: danger for failure and destruction, warning for risk that can still be avoided, success for a completed outcome, info for neutral guidance. They never color layout, and a status text role never carries body copy.
 
@@ -87,7 +88,7 @@ An icon takes the role its contract binds; with none, it takes the role of the t
 
 ## Modes
 
-Color varies on scheme (light, dark) and contrast (standard, high). Every semantic role has a value in all four contexts; primitives never change. Dark is not an inversion: each role is chosen for dark and measured there. Under high contrast, text pairings rise to 7:1 and non-text pairings to our 4.5:1 floor, unless a pairing pins its own high-contrast minimum, as the ring on tinted fills (decisions/ring-on-tinted-fills.md) and the disabled label (decisions/disabled-contrast.md) do (decisions/high-contrast-non-text-floor.md). Under high contrast the surfaces move toward the ends of the ramp while each level stays apart: in light the page, card and raised surfaces are white and the sunken surface is neutral.100, and in dark the page and the sunken surface are black, the card neutral.900 and the raised surface neutral.800 (decisions/high-contrast-surfaces.md). A container whose fill then measures below our 1.2:1 floor against the surface under it draws an edge (decisions/container-edge.md).
+Color varies on scheme (light, dark) and contrast (standard, high). Every semantic role has a value in all four contexts; primitives never change. Dark is not an inversion: each role is chosen for dark and measured there. Under high contrast, text pairings rise to 7:1 and non-text pairings to our 4.5:1 floor, unless a pairing pins its own high-contrast minimum, as the ring on tinted fills (decisions/ring-on-tinted-fills.md) and the disabled label (decisions/disabled-contrast.md) do (decisions/high-contrast-non-text-floor.md). Under high contrast the surfaces move toward the ends of the ramp while each level stays apart: in light the page, card and raised surfaces are white and the sunken surface keeps its recess step, and in dark the page and the sunken surface are black, the card neutral.900 and the raised surface neutral.800 (decisions/high-contrast-surfaces.md). A container whose fill then measures below our 1.2:1 floor against the surface under it draws an edge (decisions/container-edge.md).
 
 ## Changing the system
 
@@ -100,10 +101,12 @@ Color varies on scheme (light, dark) and contrast (standard, high). Every semant
 
 Audits the color roles and their pairings in all four contexts: contrast, distinctness, polarity, and whether color is ever the only signal. It does not audit type size, spacing, shadow or which component uses which role beyond the contracts; those have their own audits.
 
-Some roles carry no contrast minimum. Disabled text and fills are checked for distinctness instead, since WCAG exempts inactive controls; the button contract still holds its disabled label to our 1.3:1 floor on the disabled fill (decisions/disabled-contrast.md). The subtle separator is decorative and is checked for distinctness from the surfaces it divides. The scrim is translucent and never enters a pairing; content sits on the raised surface above it. A hover or pressed fill is measured with the text on it, never as an overlay. Action and strong status fills, with their hover and pressed steps, are measured against the page only; on card, sunken and raised a filled control is identified by its label and its focus ring, so an audit checks those there (decisions/fill-edge-page-only.md).
+Some roles carry no contrast minimum. Disabled text and fills are checked for distinctness instead, since WCAG exempts inactive controls; the button contract still holds its disabled label to our 1.3:1 floor on the disabled fill (decisions/disabled-contrast.md). The subtle separator is decorative and is checked for distinctness from the surfaces it divides. The scrim is translucent and never enters a pairing; content sits on the raised surface above it. A hover or pressed fill is measured with the text on it, never as an overlay. The primary edge, the danger fill with its hover and pressed steps, and the strong status fills are measured against the page only; on card, sunken and raised a filled control is identified by its label, its edge and its focus ring, so an audit checks those there (decisions/primary-edge.md).
 
 ## Checks
 
+- `ring-not-weaker`: under high contrast the focus ring measures at least what the standard ring measures against each surface.
+- `ring-on-fill`: a ring under 3:1 against the primary fill keeps at least 2px of page color between them, our rule.
 - `error-edge-hue`: under high contrast the error edge stays within one ramp step of its standard step, so it stays red.
 - `states-distinct`: each fill's hover and pressed steps differ from the fill and from each other.
 - `disabled-distinct`: disabled text differs from default and muted text, and the disabled fill differs from the primary fill.
@@ -116,7 +119,7 @@ Some roles carry no contrast minimum. Disabled text and fills are checked for di
 - Color is never the only signal: an error has an icon and words, a selected item has a heavier edge or a check, a link inside text is underlined or otherwise marked (WCAG 1.4.1).
 - The edge of an enabled field or control uses color.line.input, not color.line.subtle; the subtle line does not promise 3:1.
 - A component placed on a surface its contract does not list is measured on that surface before it ships.
-- A filled control whose label is not visible, such as an icon-only button, on a card, sunken or raised surface pairs its fill with that surface in its own contract (decisions/fill-edge-page-only.md).
+- A filled control whose label is not visible, such as an icon-only button, on a card, sunken or raised surface pairs its fill with that surface in its own contract (decisions/primary-edge.md).
 - A brand color near a status hue is not used where it could read as that status (decisions/status-harmony.md).
 - Text over an image or a gradient is measured against the worst area it covers.
 - A pass on the numbers is not a pass when the use breaks the rule: disabled text used for secondary copy fails even though no ratio applies.

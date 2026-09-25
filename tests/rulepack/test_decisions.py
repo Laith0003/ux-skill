@@ -18,9 +18,10 @@ EXPECTED = {
     "list-gap-and-control-gap", "unsigned-distances", "strong-equals-heading-weight",
     "reading-line-height", "container-edge", "button-intents",
     "status-harmony", "neutral-tint", "recessed-sunken", "high-contrast-surfaces", "error-edge",
+    "brand-fidelity", "primary-edge", "ring-never-weaker",
 }
 # Records a later record replaced; each names its replacement.
-SUPERSEDED = {"status-hues": "status-harmony"}
+SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge"}
 
 
 def test_every_shipped_record_is_valid_and_routed():
@@ -56,17 +57,3 @@ def test_decision_records_ship_with_the_package():
     pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     assert re.search(r'"engine\.rulepack" = \["decisions/\*\.md"', pyproject)
     assert (RECORDS_DIR / "HISTORY.md").exists()
-
-
-def test_the_fill_edge_record_cites_the_lowest_measured_primary_on_raised():
-    import math
-    from engine.foundations import build_system
-    from engine.foundations.color_math import contrast
-    from engine.foundations.tokens import opaque_hex
-    from engine.synthesizer.axes import AxisValues
-    text = (RECORDS_DIR / "fill-edge-page-only.md").read_text(encoding="utf-8")
-    assert "reaches 2.79:1 (#2D0679" in text
-    ts = build_system(AxisValues(0.9, 0.1, 0.8, 0.7, 0.6, 0.5, 0.4), "#2D0679").tokens
-    ratio = contrast(opaque_hex(ts.resolve("color.action.primary", "scheme:dark")),
-                     opaque_hex(ts.resolve("color.surface.raised", "scheme:dark")))
-    assert math.floor(ratio * 100) / 100 == 2.79

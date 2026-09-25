@@ -12,6 +12,7 @@
   --color-brand-800: #5B4A00;
   --color-brand-900: #342A00;
   --color-brand-950: #120D00;
+  --color-brand-exact: #FFD400;
   --color-neutral-50: #F8F6F3;
   --color-neutral-100: #DDDAD5;
   --color-neutral-200: #C3BFB7;
@@ -90,11 +91,12 @@
   --color-text-inverse: var(--color-neutral-50);
   --color-text-link: var(--color-brand-800);
   --color-text-disabled: var(--color-neutral-400);
-  --color-text-on-action: var(--color-base-white);
+  --color-text-on-action: var(--color-base-black);
   --color-text-on-danger: var(--color-base-white);
-  --color-action-primary: var(--color-brand-700);
-  --color-action-primary-hover: var(--color-brand-800);
-  --color-action-primary-pressed: var(--color-brand-900);
+  --color-action-primary: var(--color-brand-exact);
+  --color-action-primary-hover: var(--color-brand-400);
+  --color-action-primary-pressed: var(--color-brand-300);
+  --color-action-primary-edge: var(--color-brand-700);
   --color-action-danger: var(--color-danger-600);
   --color-action-danger-hover: var(--color-danger-700);
   --color-action-danger-pressed: var(--color-danger-800);
@@ -103,7 +105,7 @@
   --color-line-input: var(--color-neutral-500);
   --color-line-selected: var(--color-brand-700);
   --color-line-danger: var(--color-danger-600);
-  --color-focus-ring: var(--color-brand-800);
+  --color-focus-ring: var(--color-brand-700);
   --color-focus-ring-inverse: var(--color-brand-300);
   --color-scrim: var(--color-shade-40);
   --color-status-danger-text: var(--color-danger-700);
@@ -365,11 +367,8 @@
   --color-text-inverse: var(--color-neutral-900);
   --color-text-link: var(--color-brand-300);
   --color-text-disabled: var(--color-neutral-600);
-  --color-text-on-action: var(--color-base-black);
   --color-text-on-danger: var(--color-base-black);
-  --color-action-primary: var(--color-brand-400);
-  --color-action-primary-hover: var(--color-brand-300);
-  --color-action-primary-pressed: var(--color-brand-200);
+  --color-action-primary-edge: var(--color-brand-exact);
   --color-action-danger: var(--color-danger-400);
   --color-action-danger-hover: var(--color-danger-300);
   --color-action-danger-pressed: var(--color-danger-200);
@@ -416,11 +415,8 @@
     --color-text-inverse: var(--color-neutral-900);
     --color-text-link: var(--color-brand-300);
     --color-text-disabled: var(--color-neutral-600);
-    --color-text-on-action: var(--color-base-black);
     --color-text-on-danger: var(--color-base-black);
-    --color-action-primary: var(--color-brand-400);
-    --color-action-primary-hover: var(--color-brand-300);
-    --color-action-primary-pressed: var(--color-brand-200);
+    --color-action-primary-edge: var(--color-brand-exact);
     --color-action-danger: var(--color-danger-400);
     --color-action-danger-hover: var(--color-danger-300);
     --color-action-danger-pressed: var(--color-danger-200);
@@ -457,16 +453,11 @@
 
 :root[data-contrast="high"] {
   --color-surface-page: var(--color-base-white);
-  --color-surface-sunken: var(--color-neutral-100);
   --color-surface-inverse: var(--color-base-black);
   --color-surface-selected: var(--color-brand-50);
   --color-text-default: var(--color-neutral-950);
   --color-text-muted: var(--color-neutral-800);
   --color-text-inverse: var(--color-base-white);
-  --color-text-link: var(--color-brand-900);
-  --color-action-primary: var(--color-brand-800);
-  --color-action-primary-hover: var(--color-brand-900);
-  --color-action-primary-pressed: var(--color-brand-950);
   --color-action-danger: var(--color-danger-800);
   --color-action-danger-hover: var(--color-danger-900);
   --color-action-danger-pressed: var(--color-danger-950);
@@ -474,7 +465,7 @@
   --color-line-input: var(--color-neutral-700);
   --color-line-selected: var(--color-brand-800);
   --color-line-danger: var(--color-danger-700);
-  --color-focus-ring: var(--color-brand-900);
+  --color-focus-ring: var(--color-brand-800);
   --color-focus-ring-inverse: var(--color-brand-200);
   --color-scrim: var(--color-shade-60);
   --color-status-danger-text: var(--color-danger-800);
@@ -494,16 +485,11 @@
 @media (prefers-contrast: more) {
   :root:not([data-contrast="standard"]) {
     --color-surface-page: var(--color-base-white);
-    --color-surface-sunken: var(--color-neutral-100);
     --color-surface-inverse: var(--color-base-black);
     --color-surface-selected: var(--color-brand-50);
     --color-text-default: var(--color-neutral-950);
     --color-text-muted: var(--color-neutral-800);
     --color-text-inverse: var(--color-base-white);
-    --color-text-link: var(--color-brand-900);
-    --color-action-primary: var(--color-brand-800);
-    --color-action-primary-hover: var(--color-brand-900);
-    --color-action-primary-pressed: var(--color-brand-950);
     --color-action-danger: var(--color-danger-800);
     --color-action-danger-hover: var(--color-danger-900);
     --color-action-danger-pressed: var(--color-danger-950);
@@ -511,7 +497,7 @@
     --color-line-input: var(--color-neutral-700);
     --color-line-selected: var(--color-brand-800);
     --color-line-danger: var(--color-danger-700);
-    --color-focus-ring: var(--color-brand-900);
+    --color-focus-ring: var(--color-brand-800);
     --color-focus-ring-inverse: var(--color-brand-200);
     --color-scrim: var(--color-shade-60);
     --color-status-danger-text: var(--color-danger-800);
@@ -638,9 +624,6 @@
   --color-text-muted: var(--color-neutral-200);
   --color-text-inverse: var(--color-base-black);
   --color-text-link: var(--color-brand-200);
-  --color-action-primary: var(--color-brand-200);
-  --color-action-primary-hover: var(--color-brand-100);
-  --color-action-primary-pressed: var(--color-brand-50);
   --color-action-danger: var(--color-danger-200);
   --color-action-danger-hover: var(--color-danger-100);
   --color-action-danger-pressed: var(--color-danger-50);
@@ -648,7 +631,7 @@
   --color-line-input: var(--color-neutral-300);
   --color-line-selected: var(--color-brand-200);
   --color-line-danger: var(--color-danger-300);
-  --color-focus-ring: var(--color-brand-400);
+  --color-focus-ring: var(--color-brand-100);
   --color-focus-ring-inverse: var(--color-brand-800);
   --color-scrim: var(--color-shade-80);
   --color-status-danger-text: var(--color-danger-200);
@@ -675,9 +658,6 @@
     --color-text-muted: var(--color-neutral-200);
     --color-text-inverse: var(--color-base-black);
     --color-text-link: var(--color-brand-200);
-    --color-action-primary: var(--color-brand-200);
-    --color-action-primary-hover: var(--color-brand-100);
-    --color-action-primary-pressed: var(--color-brand-50);
     --color-action-danger: var(--color-danger-200);
     --color-action-danger-hover: var(--color-danger-100);
     --color-action-danger-pressed: var(--color-danger-50);
@@ -685,7 +665,7 @@
     --color-line-input: var(--color-neutral-300);
     --color-line-selected: var(--color-brand-200);
     --color-line-danger: var(--color-danger-300);
-    --color-focus-ring: var(--color-brand-400);
+    --color-focus-ring: var(--color-brand-100);
     --color-focus-ring-inverse: var(--color-brand-800);
     --color-scrim: var(--color-shade-80);
     --color-status-danger-text: var(--color-danger-200);
@@ -713,9 +693,6 @@
     --color-text-muted: var(--color-neutral-200);
     --color-text-inverse: var(--color-base-black);
     --color-text-link: var(--color-brand-200);
-    --color-action-primary: var(--color-brand-200);
-    --color-action-primary-hover: var(--color-brand-100);
-    --color-action-primary-pressed: var(--color-brand-50);
     --color-action-danger: var(--color-danger-200);
     --color-action-danger-hover: var(--color-danger-100);
     --color-action-danger-pressed: var(--color-danger-50);
@@ -723,7 +700,7 @@
     --color-line-input: var(--color-neutral-300);
     --color-line-selected: var(--color-brand-200);
     --color-line-danger: var(--color-danger-300);
-    --color-focus-ring: var(--color-brand-400);
+    --color-focus-ring: var(--color-brand-100);
     --color-focus-ring-inverse: var(--color-brand-800);
     --color-scrim: var(--color-shade-80);
     --color-status-danger-text: var(--color-danger-200);
@@ -751,9 +728,6 @@
     --color-text-muted: var(--color-neutral-200);
     --color-text-inverse: var(--color-base-black);
     --color-text-link: var(--color-brand-200);
-    --color-action-primary: var(--color-brand-200);
-    --color-action-primary-hover: var(--color-brand-100);
-    --color-action-primary-pressed: var(--color-brand-50);
     --color-action-danger: var(--color-danger-200);
     --color-action-danger-hover: var(--color-danger-100);
     --color-action-danger-pressed: var(--color-danger-50);
@@ -761,7 +735,7 @@
     --color-line-input: var(--color-neutral-300);
     --color-line-selected: var(--color-brand-200);
     --color-line-danger: var(--color-danger-300);
-    --color-focus-ring: var(--color-brand-400);
+    --color-focus-ring: var(--color-brand-100);
     --color-focus-ring-inverse: var(--color-brand-800);
     --color-scrim: var(--color-shade-80);
     --color-status-danger-text: var(--color-danger-200);

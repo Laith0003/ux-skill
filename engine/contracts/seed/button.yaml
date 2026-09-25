@@ -19,6 +19,10 @@ tokens:
   - {part: container, property: fill, role: color.action.primary-hover, when: {emphasis: primary, intent: neutral}, state: hover}
   - {part: container, property: fill, role: color.action.primary-pressed, when: {emphasis: primary, intent: neutral}, state: pressed}
   - {part: label, property: text, role: color.text.on-action, when: {emphasis: primary, intent: neutral}}
+  # the primary edge carries the button's 3:1 against the page, so the fill
+  # can stay the brand color
+  - {part: container, property: border-width, role: border.outline, when: {emphasis: primary, intent: neutral}}
+  - {part: container, property: border-color, role: color.action.primary-edge, when: {emphasis: primary, intent: neutral}}
   - {part: container, property: fill, role: color.action.danger, when: {emphasis: primary, intent: danger}}
   - {part: container, property: fill, role: color.action.danger-hover, when: {emphasis: primary, intent: danger}, state: hover}
   - {part: container, property: fill, role: color.action.danger-pressed, when: {emphasis: primary, intent: danger}, state: pressed}
@@ -73,7 +77,7 @@ contrast:
   - {fg: color.text.on-danger, bg: color.action.danger, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.on-danger, bg: color.action.danger-hover, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.on-danger, bg: color.action.danger-pressed, minimum: 4.5, criterion: "1.4.3"}
-  - {fg: color.action.primary, bg: color.surface.page, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.action.primary-edge, bg: color.surface.page, minimum: 3, criterion: "1.4.11"}
   - {fg: color.action.danger, bg: color.surface.page, minimum: 3, criterion: "1.4.11"}
   - {fg: color.text.link, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.link, bg: color.surface.selected, minimum: 4.5, criterion: "1.4.3"}

@@ -149,8 +149,8 @@ def test_high_pins_the_high_contrast_minimum_and_system_floors_say_whose_they_ar
 def test_pairings_expand_the_surfaces_shorthand():
     c = contract()
     assert pairings_of([c])[:2] == [
-        ("toggle", Pairing("color.action.primary", "color.surface.page", 3.0, "1.4.11")),
-        ("toggle", Pairing("color.action.primary", "color.surface.card", 3.0, "1.4.11"))]
+        ("toggle", Pairing("color.line.selected", "color.surface.page", 3.0, "1.4.11")),
+        ("toggle", Pairing("color.line.selected", "color.surface.card", 3.0, "1.4.11"))]
 
 
 def test_validate_contracts_checks_names_and_replacements():

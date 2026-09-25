@@ -52,7 +52,7 @@ def test_same_inputs_give_the_same_bytes():
 
 
 def test_gate_failure_returns_findings_and_no_files(monkeypatch):
-    # With the action solver off, white text stays on a yellow button.
+    # With the action solver off, white text stays on the exact yellow.
     monkeypatch.setattr(color_module, "_solve_group", lambda *args, **kwargs: None)
     out = make_system("#FFD400", NEUTRAL, NEUTRAL_SOURCE)
     assert not out.passed and dict(out.files) == {}
@@ -65,7 +65,7 @@ def test_gate_failure_returns_findings_and_no_files(monkeypatch):
     assert "WCAG gate failed: " in out.report
     assert "so nothing was written." in out.report
     assert ("- color.text.on-action on color.action.primary (light mode, standard contrast) "
-            "is 1.87:1; WCAG 1.4.3 needs 4.5:1.\n") in out.report
+            "is 1.43:1; WCAG 1.4.3 needs 4.5:1.\n") in out.report
     findings = out.report.split("## Findings\n", 1)[1]
     assert len(findings.strip().splitlines()) == len(out.findings)
     assert "scheme:" not in findings and "Move " not in findings
@@ -340,3 +340,12 @@ def test_a_rule_pack_that_does_not_fit_writes_nothing(monkeypatch):
     assert "Build again without the rule pack" in out.report
     assert failure_message(out).startswith("Nothing was written: the tokens passed the WCAG "
                                            "gate, but the rule pack found 1 problem")
+
+
+def test_the_report_states_the_brand_color_in_every_context():
+    report = make_system("#E85D04", NEUTRAL, NEUTRAL_SOURCE).report
+    section = report.split("## Brand color\n\n", 1)[1].split("\n## ", 1)[0]
+    lines = [line for line in section.splitlines() if line.startswith("- ")]
+    assert len(lines) == 4
+    assert lines[0].startswith("- Light mode: the button is the brand color #E85D04 exactly")
+    assert report.index("## Brand color") < report.index("## Notes")

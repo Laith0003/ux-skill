@@ -15,11 +15,11 @@ High contrast pushes surfaces toward the ends of the ramp. Taken to the end, eve
 
 ## Decision
 
-Under high contrast in light, the page, card and raised surfaces are white and the sunken surface is neutral.100. In dark, the page and the sunken surface are black, the card is neutral.900 and the raised surface neutral.800. Text on every surface still meets 7:1.
+Under high contrast in light, the page, card and raised surfaces are white and the sunken surface keeps its recess step, color.neutral.recess-light. In dark, the page and the sunken surface are black, the card is neutral.900 and the raised surface neutral.800. Text on every surface still meets 7:1.
 
 ## Why
 
-A card one full step above a black page measures about 1.3:1 instead of 1.08:1, so the level reads without its edge, and the heavier high-contrast edges the border foundation draws add to it. A light well stays visible on white. Text roles move to keep 7:1, which the gate measures.
+A card one full step above a black page measures about 1.3:1 instead of 1.08:1, so the level reads without its edge, and the heavier high-contrast edges the border foundation draws add to it. A light well stays visible on white, and every high contrast surface is at least as far out as its standard surface, so the focus ring can always hold its standard contrast. Text roles move to keep 7:1, which the gate measures.
 
 ## What it touches
 

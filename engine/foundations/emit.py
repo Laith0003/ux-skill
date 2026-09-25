@@ -23,6 +23,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from engine.foundations.build import FOUNDATIONS, ValidationError, build_system
+from engine.foundations.color import brand_fidelity
 from engine.foundations.color_math import hex_to_rgb, rgb_to_hex
 from engine.foundations.export import dump_dtcg, to_css
 from engine.foundations.gate import GateFailure, GateReport
@@ -377,6 +378,7 @@ _AXIS_WORDS: Dict[str, Tuple[str, str, str]] = {
 }
 
 _RATIO_WORDS = {"text/fill": "text on the fill", "fill/page": "the fill on the page",
+                "edge/page": "the edge on the page",
                 "ring/surface": "the focus ring on the surface"}
 
 _CONTEXT_KEY = re.compile(r"\((in )?([a-z]+:[a-z]+(?:,[a-z]+:[a-z]+)*)\)")
@@ -385,7 +387,7 @@ _PAIRING_NOTE = re.compile(
     r"was (?P<was>[\d.]+:1), now (?P<now>[\d.]+:1), (?P<why>.+)$")
 _GROUP_NOTE = re.compile(r"^(?P<fill>\S+) group \((?P<mode>[a-z:,]+)\): (?P<rest>.+)$")
 _GROUP_MOVE = re.compile(r"^(\S+) (\S+) -> (\S+)$")
-_GROUP_RATIO = re.compile(r"^(text/fill|fill/page|ring/surface) ([\d.]+:1)$")
+_GROUP_RATIO = re.compile(r"^(text/fill|fill/page|edge/page|ring/surface) ([\d.]+:1)$")
 _RAMP_NOTE = re.compile(
     r"^color\.(?P<family>[\w-]+): (?P<seed>#[0-9A-Fa-f]{6}) is too (?P<way>light|dark) to anchor "
     r"a ramp at 500; 500 retuned to (?P<anchor>#[0-9A-Fa-f]{6}), (?P<why>.+)\.$")
@@ -517,6 +519,9 @@ _PACK_LINE = ("- rule-pack/: the rules for AI agents and people: per foundation 
               "architecture, reference, audit and handoff file, the content and right-to-left "
               "rules, the component contracts and the decision records. Start at "
               "rule-pack/README.md.")
+_FIDELITY_LEAD = ("The main button keeps the exact brand color whenever white or black text "
+                  "reads on it. Where a mode needs more contrast, the button moves to the nearest "
+                  "step of the brand's scale, and the line says how far.")
 _MODES_LINE = ("Switch a mode with an attribute on the html element: data-theme=\"dark\" for dark "
                "mode, data-contrast=\"high\" for high contrast, data-density=\"compact\" for "
                "compact spacing, dir=\"rtl\" for right to left, data-motion=\"reduced\" for "
@@ -532,7 +537,8 @@ def _change(gate_line: str) -> str:
 
 def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
                   gate_line: str, notes: Sequence[str],
-                  findings: Sequence[SystemFinding], rule_pack: bool = False) -> str:
+                  findings: Sequence[SystemFinding], rule_pack: bool = False,
+                  fidelity: Sequence[str] = ()) -> str:
     """system-report.md: one sentence on what was built, what it was built
     from, the gate result, every note or finding in plain words, and how to
     use the files, the rule pack among them when it was written. No time
@@ -548,6 +554,8 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
         lines += [f"- {_finding_line(f)}" for f in findings]
         return "\n".join(lines) + "\n"
     lines += [_GATE_SCOPE, ""]
+    if fidelity:
+        lines += ["## Brand color", "", _FIDELITY_LEAD, "", *[f"- {f}" for f in fidelity], ""]
     moved: List[str] = []
     other: List[str] = []
     for note in notes:
@@ -580,6 +588,7 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
     `findings` names every problem, so a caller can never write a failing
     system."""
     notes: Sequence[str] = ()
+    fidelity: Sequence[str] = ()
     tokens: Dict[str, str] = {}
     pack: Dict[str, str] = {}
     try:
@@ -596,6 +605,7 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
         findings = ()
         gate = built.report.summary().splitlines()[0]
         notes = built.notes
+        fidelity = brand_fidelity(built.tokens)
         tokens = {"tokens.json": dump_dtcg(built.tokens), "tokens.css": to_css(built.tokens)}
         if rule_pack:
             from engine.rulepack.generate import RulePackError, build_rule_pack
@@ -606,9 +616,9 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
                 n = len(findings)
                 gate = (f"{gate} {_RULE_PACK}: {n} problem{'' if n == 1 else 's'} between its "
                         "guidance, contracts or records and these tokens.")
-                notes, tokens = (), {}
+                notes, tokens, fidelity = (), {}, ()
     report = render_report(brand, axes, axes_source, arabic, gate, notes, findings,
-                           rule_pack=bool(pack))
+                           rule_pack=bool(pack), fidelity=fidelity)
     files = {**tokens, "system-report.md": report, **pack} if tokens else {}
     return SystemOutput(passed=bool(tokens), files=files, report=report, gate=gate,
                         findings=findings, brand=brand, axes=axes, axes_source=axes_source,
