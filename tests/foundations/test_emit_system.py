@@ -402,3 +402,10 @@ def test_the_report_says_how_to_load_the_fonts():
     assert "remove" not in fonts
     assert "- fonts.css: metric-matched fallback faces" in report
     assert "- fonts-self-host.css: the faces from your own fonts/ folder" in report
+
+
+def test_unread_field_lines_do_not_depend_on_key_order():
+    from engine.foundations.emit import unread_lines as _unread
+    a = {"region": "Jordan", "project_type": "landing", "stack": "astro"}
+    b = dict(reversed(list(a.items())))
+    assert _unread(a) == _unread(b)

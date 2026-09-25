@@ -189,9 +189,9 @@ def test_every_unread_field_gets_a_line():
              "reference_brands": ["a", "b"], "success_metric": "", "stack": "astro"}
     lines = unread_lines(brief)
     assert lines == [
-        'region "Jordan" is not read by the system build. Say what it means for the system with '
-        'languages (tags such as ["ar-JO", "en"]) and primary_script ("latin" or "arabic").',
         'project_type "landing" is not read by the system build, so it changed nothing here.',
         'reference_brands "a, b" is not read by the system build, so it changed nothing here.',
+        'region "Jordan" is not read by the system build. Say what it means for the system with '
+        'languages (tags such as ["ar-JO", "en"]) and primary_script ("latin" or "arabic").',
         'stack "astro" is not read by the system build, so it changed nothing here.',
     ]

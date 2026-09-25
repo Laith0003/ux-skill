@@ -327,7 +327,7 @@ def unread_lines(brief: Optional[Mapping[str, Any]], label: str = "brief") -> Li
             else:
                 out.append(f'{key} "{word}" moves no axis. {key} accepts: '
                            f"{', '.join(_accepted(key))}.")
-    for key, value in brief.items():
+    for key, value in sorted(brief.items()):
         if key in BRIEF_FIELDS or key in AUDIENCE_FIELDS or value in (None, "", [], {}):
             continue
         out.append(f'{key} "{_as_words(value)}" is not read by the system build'
