@@ -798,7 +798,7 @@ else:
         """
         from engine.foundations.emit import (
             STATUS_EXIT, InputError, check_out_dir, choose_axes, failure_text, make_system,
-            parse_brand, read_brief, write_outcome)
+            note_rule_pack, parse_brand, read_brief, write_outcome)
         try:
             brand_hex = parse_brand(brand, "--brand")
             brief = read_brief(brief_path, "--brief") if brief_path else None
@@ -809,6 +809,7 @@ else:
             raise click.UsageError(str(exc)) from None
         system = make_system(brand_hex, axes, source, arabic=not latin_only,
                              rule_pack=rule_pack)
+        system = note_rule_pack(system, out, force=force)
         outcome = write_outcome(system, out, force=force)
         status = outcome["status"]
         _emit({**system.to_dict(), "out": str(out), **outcome}, ctx.obj["pretty"])

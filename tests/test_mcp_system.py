@@ -268,3 +268,18 @@ def test_a_relative_out_is_refused_with_the_fix(tmp_path, monkeypatch):
     assert result["status"] == "invalid" and not result["passed"]
     assert "out" in result["error"] and "absolute" in result["error"]
     assert not (tmp_path / "rel-ds").exists()
+
+
+def test_a_forced_build_beside_a_pack_from_other_tokens_names_it_as_stale(tmp_path):
+    out = tmp_path / "ds"
+    pack = make_system("#3366FF", NEUTRAL, NEUTRAL_SOURCE, rule_pack=True)
+    for name, text in pack.files.items():
+        (out / name).parent.mkdir(parents=True, exist_ok=True)
+        (out / name).write_text(text, encoding="utf-8")
+    result = handle_ux_system_build({"brand": "#FFD400", "out": str(out), "force": True})
+    assert result["status"] == "written"
+    assert result["stale_rule_pack"] == str(out / "rule-pack")
+    assert "## Rule pack" in result["report"]
+    assert (out / "system-report.md").read_text(encoding="utf-8") == result["report"]
+    assert (out / "rule-pack" / "README.md").read_text(encoding="utf-8") == \
+        pack.files["rule-pack/README.md"]

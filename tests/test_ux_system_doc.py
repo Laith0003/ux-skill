@@ -136,6 +136,15 @@ def test_create_mode_offers_the_rule_pack_off_by_default():
     assert "`rule-pack/` folder" in _step("### 3. Look before writing")
 
 
+def test_create_mode_says_a_pack_goes_stale_without_the_flag():
+    look = _step("### 3. Look before writing")
+    assert "`--rule-pack` again" in look and "stale" in look and "rule-pack/built-from.json" in look
+    run = _step("### 4. Run the engine")
+    assert "all checked against the tokens" not in run
+    assert "which names the files to load for each task" in \
+        _step("### 6. Tell the user what they got, in plain words")
+
+
 def test_architect_authors_contracts_at_experimental_and_reads_decisions_first():
     from engine.contracts.schema import RTL_BEHAVIORS
     section = _section(AGENT, "## When the 4.0 engine already built the tokens")

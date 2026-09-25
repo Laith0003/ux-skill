@@ -33,7 +33,18 @@ def test_the_pack_holds_a_router_four_files_per_foundation_and_the_sources():
     expected += [f"{PACK}/content.md", f"{PACK}/direction.md"]
     expected += [f"{PACK}/contracts/{p.name}" for p in sorted(SEED_DIR.glob("*.yaml"))]
     expected += [f"{PACK}/decisions/{p.name}" for p in sorted(RECORDS_DIR.glob("*.md"))]
+    expected += [f"{PACK}/built-from.json"]
     assert list(PACK_FILES) == expected
+
+
+def test_the_pack_records_the_digest_of_the_tokens_it_was_built_from():
+    import hashlib
+    import json
+    from engine.foundations import dump_dtcg
+    manifest = json.loads(PACK_FILES[f"{PACK}/built-from.json"])
+    assert manifest == {"tokens.json": {
+        "sha256": hashlib.sha256(dump_dtcg(TS).encode("utf-8")).hexdigest()}}
+    assert "built-from.json" in PACK_FILES[f"{PACK}/README.md"]
 
 
 def test_every_file_has_its_fixed_headings():

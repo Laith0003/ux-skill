@@ -299,3 +299,66 @@ def test_without_the_flag_no_rule_pack_is_written(tmp_path):
     result, _ = _run("--brand", "#3366FF", "--out", str(out))
     assert result.exit_code == 0
     assert sorted(p.name for p in out.iterdir()) == sorted(FILES)
+
+
+# A pack beside tokens it was not built from is reported as stale, named
+# with its folder and the fix, and never touched.
+def _pack_bytes(out):
+    root = out / "rule-pack"
+    return {str(p.relative_to(root)): p.read_bytes() for p in sorted(root.rglob("*"))
+            if p.is_file()}
+
+
+def test_a_pack_left_beside_other_tokens_is_reported_stale_and_kept(tmp_path):
+    import hashlib
+    out = tmp_path / "ds"
+    result, payload = _run("--brand", "#3366FF", "--out", str(out), "--rule-pack")
+    assert payload["stale_rule_pack"] is None
+    manifest = json.loads((out / "rule-pack" / "built-from.json").read_text(encoding="utf-8"))
+    assert manifest == {"tokens.json": {
+        "sha256": hashlib.sha256((out / "tokens.json").read_bytes()).hexdigest()}}
+    before = _pack_bytes(out)
+    # The same tokens without the flag: the pack matches, nothing is said.
+    result, payload = _run("--brand", "#3366FF", "--out", str(out))
+    assert payload["status"] == "unchanged" and payload["stale_rule_pack"] is None
+    assert "rule pack" not in payload["message"]
+    # Other tokens, forced, without the flag: written, the pack kept and
+    # named as stale in the message, the JSON and the report.
+    result, payload = _run("--brand", "#FFD400", "--out", str(out), "--force")
+    assert result.exit_code == 0 and payload["status"] == "written"
+    folder = out / "rule-pack"
+    assert payload["stale_rule_pack"] == str(folder)
+    assert f"{folder} holds a rule pack built from other tokens" in payload["message"]
+    assert "Build again with --rule-pack to replace it, or remove" in payload["message"]
+    report = (out / "system-report.md").read_text(encoding="utf-8")
+    assert "## Rule pack" in report and "remove rule-pack/" in report
+    assert str(tmp_path) not in report
+    assert _pack_bytes(out) == before
+    # Built again the same way: unchanged, still stale.
+    again, payload = _run("--brand", "#FFD400", "--out", str(out))
+    assert payload["status"] == "unchanged" and payload["stale_rule_pack"] == str(folder)
+    # Refused: nothing is written, so the pack still matches what is there.
+    refused, payload = _run("--brand", "#3366FF", "--out", str(out))
+    assert payload["status"] == "refused" and payload["stale_rule_pack"] is None
+    # Rebuilt with the flag: the pack follows the tokens again.
+    fresh, payload = _run("--brand", "#FFD400", "--out", str(out), "--rule-pack", "--force")
+    assert payload["status"] == "written" and payload["stale_rule_pack"] is None
+    assert "## Rule pack" not in (out / "system-report.md").read_text(encoding="utf-8")
+
+
+def test_a_pack_without_its_digest_cannot_be_matched_and_is_reported(tmp_path):
+    out = tmp_path / "ds"
+    (out / "rule-pack").mkdir(parents=True)
+    (out / "rule-pack" / "README.md").write_text("# mine\n", encoding="utf-8")
+    result, payload = _run("--brand", "#3366FF", "--out", str(out))
+    assert payload["status"] == "written"
+    assert payload["stale_rule_pack"] == str(out / "rule-pack")
+    assert "it has no built-from.json" in payload["message"]
+    assert (out / "rule-pack" / "README.md").read_text(encoding="utf-8") == "# mine\n"
+
+
+def test_no_pack_folder_reports_nothing(tmp_path):
+    result, payload = _run("--brand", "#3366FF", "--out", str(tmp_path / "ds"))
+    assert payload["stale_rule_pack"] is None
+    assert "## Rule pack" not in (tmp_path / "ds" / "system-report.md").read_text(
+        encoding="utf-8")

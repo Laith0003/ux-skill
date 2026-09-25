@@ -11,13 +11,14 @@ file that differs unless the caller forces it.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 import os
 import re
 import shutil
 import tempfile
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
@@ -34,6 +35,8 @@ from engine.synthesizer.axes import (
 FILES: Tuple[str, ...] = ("tokens.json", "tokens.css", "system-report.md")
 # The folder the rule pack is written into, inside the out folder, when asked.
 RULE_PACK_DIR = "rule-pack"
+# The file in it that records the sha256 of the tokens.json it was built from.
+RULE_PACK_MANIFEST = "built-from.json"
 
 # Every status `uxskill system build` reports, with its exit code: the
 # files were written, or were already identical (0); a file in the out
@@ -326,6 +329,10 @@ class SystemOutput:
     axes: AxisValues
     axes_source: str
     arabic: bool
+    # The rule pack folder in the out folder that was not built from these
+    # tokens, and why, when note_rule_pack found one.
+    stale_rule_pack: Optional[str] = None
+    stale_reason: str = ""
 
     def to_dict(self) -> Dict[str, Any]:
         return {"passed": self.passed, "gate": self.gate, "brand": self.brand,
@@ -899,6 +906,62 @@ def write_files(out_dir: Path, files: Mapping[str, str], *, force: bool = False)
     return WritePlan(names, plan.unchanged, ())
 
 
+def tokens_digest(tokens_json: str) -> str:
+    """The sha256 of tokens.json as the writer puts it on disk."""
+    return hashlib.sha256(tokens_json.encode("utf-8")).hexdigest()
+
+
+def _pack_mismatch(folder: Path, tokens_json: str) -> Optional[str]:
+    """Why the rule pack in `folder` cannot be matched to this tokens.json,
+    or None when its manifest names exactly this file."""
+    manifest = folder / RULE_PACK_MANIFEST
+    if not manifest.is_file():
+        return f"it has no {RULE_PACK_MANIFEST}"
+    try:
+        recorded = json.loads(manifest.read_text(encoding="utf-8"))["tokens.json"]["sha256"]
+    except (OSError, ValueError, KeyError, TypeError):
+        return f"its {RULE_PACK_MANIFEST} cannot be read"
+    if recorded != tokens_digest(tokens_json):
+        return f"its {RULE_PACK_MANIFEST} names another tokens.json"
+    return None
+
+
+def note_rule_pack(system: SystemOutput, out_dir: Path, *,
+                    force: bool = False) -> SystemOutput:
+    """For a build that does not write the rule pack into an out_dir that
+    holds one: a pack built from this tokens.json is listed in the report
+    as if it had been written, so the report describes the folder and a
+    rebuild without the flag leaves it unchanged. A pack built from other
+    tokens (or with no readable digest) is named as stale in the report,
+    when the write will go ahead. The pack itself is never touched. Any
+    other system is returned as it is."""
+    if not system.passed or f"{RULE_PACK_DIR}/README.md" in system.files:
+        return system
+    folder = out_dir / RULE_PACK_DIR
+    if not folder.is_dir():
+        return system
+    reason = _pack_mismatch(folder, system.files["tokens.json"])
+    if reason is None:
+        report = system.report + _PACK_LINE + "\n"
+        return replace(system, files={**system.files, "system-report.md": report},
+                       report=report)
+    report = system.report + "\n".join([
+        "", "## Rule pack", "",
+        f"The {RULE_PACK_DIR}/ folder beside these files was not built from this tokens.json "
+        f"({reason}), so its values, pairings and rules may describe another system. It was "
+        f"left as it is. Build again with --rule-pack to write a pack for these tokens, or "
+        f"remove {RULE_PACK_DIR}/."]) + "\n"
+    noted = replace(system, files={**system.files, "system-report.md": report}, report=report,
+                    stale_rule_pack=str(folder), stale_reason=reason)
+    # A refused write changes nothing, so the pack still matches the files
+    # on disk; name it only when these files will be written or are there.
+    try:
+        plan = plan_writes(out_dir, noted.files)
+    except InputError:
+        return system
+    return system if plan.conflicts and not force else noted
+
+
 def write_outcome(system: SystemOutput, out_dir: Path, *, force: bool = False,
                   force_label: str = "--force", out_label: str = "--out") -> Dict[str, Any]:
     """Write a built system into out_dir and say what happened, in the
@@ -906,10 +969,17 @@ def write_outcome(system: SystemOutput, out_dir: Path, *, force: bool = False,
     unchanged, conflicts and message. A failed system writes nothing. The
     labels name the force and out inputs the way the caller's person types
     them, in the refusal message."""
+    stale, reason = system.stale_rule_pack, system.stale_reason
+
     def outcome(status: str, written: Sequence[str] = (), unchanged: Sequence[str] = (),
                 conflicts: Sequence[str] = (), message: str = "") -> Dict[str, Any]:
+        named = stale if status in ("written", "unchanged") else None
+        if named:
+            message += (f" {named} holds a rule pack built from other tokens ({reason}); it "
+                        f"was left as it is. Build again with --rule-pack to replace it, or "
+                        f"remove {named}.")
         return {"status": status, "written": list(written), "unchanged": list(unchanged),
-                "conflicts": list(conflicts), "message": message}
+                "conflicts": list(conflicts), "message": message, "stale_rule_pack": named}
 
     if not system.passed:
         return outcome("failed", message=failure_message(system))

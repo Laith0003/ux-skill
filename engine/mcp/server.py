@@ -511,8 +511,8 @@ def handle_ux_system_build(args: Dict[str, Any]) -> Dict[str, Any]:
     error naming the input and the fix.
     """
     from engine.foundations.emit import (
-        InputError, check_out_dir, choose_axes, make_system, parse_brand, parse_latin_only,
-        parse_switch, write_outcome)
+        InputError, check_out_dir, choose_axes, make_system, note_rule_pack, parse_brand,
+        parse_latin_only, parse_switch, write_outcome)
     payload = UxSystemBuildInput.model_validate(args or {})
     try:
         brand = parse_brand(payload.brand, "brand")
@@ -538,6 +538,8 @@ def handle_ux_system_build(args: Dict[str, Any]) -> Dict[str, Any]:
         return {"status": "invalid", "passed": False, "error": str(exc), "findings": [],
                 "report": "", "files": []}
     system = make_system(brand, axes, source, arabic=not latin_only)
+    if out is not None:
+        system = note_rule_pack(system, out, force=force)
     result: Dict[str, Any] = {
         "status": "built" if system.passed else "failed", **system.to_dict(),
         "report": system.report,

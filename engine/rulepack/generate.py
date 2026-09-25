@@ -20,6 +20,8 @@ bytes.
 """
 from __future__ import annotations
 
+import hashlib
+import json
 from pathlib import Path
 from typing import Any, Dict, List, Sequence, Tuple, Union
 
@@ -31,6 +33,8 @@ from engine.foundations.foundation import Foundation
 from engine.foundations.gate import (
     HIGH_FLOOR, HIGH_NON_TEXT, HIGH_TEXT, WCAG_RATIOS, Pairing, required)
 from engine.foundations.color_math import luminance
+from engine.foundations.emit import RULE_PACK_MANIFEST
+from engine.foundations.export import dump_dtcg
 from engine.foundations.modes import CSS_AXES, contexts, parse, sparse
 from engine.foundations.tokens import TokenSet, alias_target, is_alias
 from engine.foundations.values import TYPES, TYPOGRAPHY_FIELDS, css_names
@@ -457,6 +461,9 @@ def _readme(foundations: Sequence[Tuple[Foundation, Guidance]],
              "tokens, the component contracts and the decision records. The files state what "
              "is true now; the reasons are in decisions/. Paths cited in the files, such as "
              "decisions/two-layers.md, are relative to this folder.", "",
+             f"{RULE_PACK_MANIFEST} holds the sha256 of the tokens.json this pack was built "
+             "from. When the tokens.json beside this folder has another digest, the pack "
+             "describes other tokens: build again with --rule-pack.", "",
              "## Load one path per task", "",
              "Load the files for your task, then stop: loading everything crowds out the "
              "work.", "", "| Task | Load |", "|---|---|",
@@ -542,4 +549,7 @@ def build_rule_pack(ts: TokenSet, *, contracts_dir: Union[str, Path] = SEED_DIR,
         files[f"{PACK}/contracts/{path.name}"] = path.read_text(encoding="utf-8")
     for name, text in record_sources(records_dir).items():
         files[f"{PACK}/decisions/{name}"] = text
+    digest = hashlib.sha256(dump_dtcg(ts).encode("utf-8")).hexdigest()
+    files[f"{PACK}/{RULE_PACK_MANIFEST}"] = json.dumps(
+        {"tokens.json": {"sha256": digest}}, indent=2) + "\n"
     return files
