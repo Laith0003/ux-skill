@@ -9,7 +9,7 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - **Hierarchy by contrast.** The strongest contrast goes to primary content and the one main action; supporting content steps down. When everything is loud, nothing leads.
 - **One meaning per role.** A role means the same thing on every screen and in every component. A role is never borrowed for its value.
 - **Separate families.** Brand color marks identity, and by its role the main action, the words or the edges; neutral carries structure and reading; status colors report outcomes. A family never stands in for another.
-- **Saturation is an accent.** Fully saturated color goes on controls, focus, status and at most one brand band per view. Elsewhere the brand reaches surfaces as a tint or a band, never behind running text at full strength (decisions/brand-surfaces.md).
+- **Saturation is an accent.** Fully saturated color goes on controls, focus, status and at most one brand band per view. Elsewhere the brand reaches surfaces as a tint or a band, never behind running text at full strength (decisions/surfaces-stand-apart.md).
 - **Depth by lightness.** A surface that sits higher is never darker than the one below it. In dark the page, card and raised surfaces are each their own lighter step, and the step, not the shadow, is the main depth cue; the page is the floor, and the sunken surface sits in the card, between the page and the card (decisions/dark-surfaces-rise.md). Where two levels share a color, as card and raised do in light, the shadow or an edge tells them apart. Modes lists the order in each context as built.
 - **Never color alone.** Anything color says, an icon, a word, a shape or a heavier edge says too (WCAG 1.4.1).
 - **Measured, not hoped.** Every pairing the build declares is measured in all four color contexts, and a system that fails one is not written. A pairing the build does not declare, such as a fill on a raised surface, is not measured until a contract declares it.
@@ -47,8 +47,8 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - `color.text.accent`: words in the brand color that are not links, such as an eyebrow above a heading or a highlighted figure; never body copy. It colors the eyebrow's words only, never a line, dash or dot drawn before or after them (decisions/eyebrow-is-text.md). An existing design system's own label color wins over this role (decisions/existing-system-wins.md).
 - `color.line.accent`: a brand rule or underline: a link's underline when links are ink, a section rule, the edge of a featured card.
 - `color.text.support`: words in the supporting accent's hue, such as a tag or a second highlight; never a link and never body copy.
-- `color.surface.tint`: a quiet brand tint behind a group, such as a feature panel or a callout.
-- `color.surface.band`: a band in the brand's hue that sets one section of a long page apart; in dark its chroma stays under a cap the contrast axis sets, so it reads as a tint, never a slab.
+- `color.surface.tint`: a quiet brand tint behind a group, such as a feature panel or a callout; it stands at least 1.1:1 off the page in both schemes, our floor for a filled area, so it never disappears into the page (decisions/surfaces-stand-apart.md).
+- `color.surface.band`: a band in the brand's hue that sets one section of a long page apart; in both schemes its chroma stays under a cap the contrast axis sets, so a muted system gets a pale band and never a loud slab, and in light it stands at least 1.2:1 off the page, our container-edge floor, beyond the tint.
 - `color.surface.brand`: the brand color as a band, such as a closing call to action, solved like the primary fill: the exact brand when its text reads naturally on it, else the least darkening that carries white text; only color.text.on-brand goes on it, and a control on it takes color.text.on-brand for its focus ring and edges.
 - `color.text.on-brand`: text and icons on the brand band, and the focus ring and edges of a control on it.
 - `color.action.on-brand`: the fill of the primary button on the brand band, and its edge in every state: a neutral end on the side of color.text.on-brand that clears the band.
@@ -57,7 +57,7 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - `color.text.on-brand-action`: the label of the button on the brand band: the brand step nearest the band that reads on its fill and states.
 - `color.surface.stripe`: every other row of a table, one step off the card.
 - `color.surface.header`: the header row of a table: the stripe's step in light and the raised surface's in dark, a band off the card that never sits below the page.
-- `color.surface.code`: the background of a code block.
+- `color.surface.code`: the background of a code block: in light the lightest neutral that stands 1.2:1 off the card, our container-edge floor, so it reads as a clean well and needs no edge (decisions/clean-code-surface.md); in dark a recess between the page and the card.
 - `color.syntax.<name>`: <name> tokens in a code block, on color.surface.code only.
 - `color.decorative.<name>`: a <name> shape or pattern with no meaning, such as a form in generated art; never text and never the only cue.
 - `color.illustration.line`: lines in a drawing that carry meaning, such as a diagram's arrows or a chart's axis.
@@ -123,7 +123,7 @@ Color varies on scheme (light, dark) and contrast (standard, high). Every semant
 
 ## Changing the system
 
-1. Color moves with the brand color and the axes: the brand color leads the role and the neutral temperature, warmth leans the neutral tint and the status hues, contrast sets how saturated the status colors are, and contrast with motion how quiet their soft fills are and the most chroma a dark band takes. Change them and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json; the ramps, roles and pairings are regenerated and measured in all four contexts.
+1. Color moves with the brand color and the axes: the brand color leads the role and the neutral temperature, warmth leans the neutral tint and the status hues, contrast sets how saturated the status colors are, and contrast with motion how quiet their soft fills are; contrast also sets the most chroma a band takes in light and in dark. Change them and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json; the ramps, roles and pairings are regenerated and measured in all four contexts.
 2. Change one input at a time: a failed gate names the pairing and the context, and a change is not done until it passes in dark and high contrast as well as light.
 3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
 4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.

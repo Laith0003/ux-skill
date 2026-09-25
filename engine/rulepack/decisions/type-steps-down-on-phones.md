@@ -1,10 +1,10 @@
 ---
 id: type-steps-down-on-phones
 title: Breakpoints are reference values, tokens.css switches the tiered roles, and the three largest type styles step down on phones
-status: active
+status: superseded
 areas: [layout, type, output]
 supersedes: layout-aliases
-superseded_by: null
+superseded_by: landing-display-step
 ---
 
 # Breakpoints are reference values, tokens.css switches the tiered roles, and the three largest type styles step down on phones

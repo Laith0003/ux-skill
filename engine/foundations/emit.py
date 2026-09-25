@@ -36,8 +36,8 @@ from engine.foundations.art import report_lines as art_lines
 from engine.foundations.fonts import fonts_css, link_tags, loading_lines, self_host_css
 from engine.foundations.gate import GateFailure, GateReport
 from engine.synthesizer.axes import (
-    AXIS_NAMES, FORBIDDEN_CLAMPS, INDUSTRY_SEEDS, TONE_NUDGES, AxisValues, _apply_tone_nudges,
-    _normalize_tag, _seed_from_industry, compute_axes,
+    AXIS_NAMES, FORBIDDEN_CLAMPS, INDUSTRY_SEEDS, NUDGE_LIMIT, TONE_NUDGES, AxisValues,
+    _apply_tone_nudges, _normalize_tag, _seed_from_industry, compute_axes,
 )
 
 # The files a build writes, in the order they are written and reported.
@@ -63,6 +63,11 @@ STATUSES: Tuple[str, ...] = tuple(STATUS_EXIT)
 # fields in audience.FIELDS are read beside them.
 BRIEF_FIELDS: Tuple[str, ...] = ("industry", "tone", "audience", "must_have", "forbidden")
 _LIST_FIELDS = ("tone", "audience", "must_have", "forbidden")
+# The brief's object of axis nudges: what a word the engine does not read
+# means, from -NUDGE_LIMIT to NUDGE_LIMIT per axis, applied after the words.
+CHARACTER_FIELD = "character"
+_NUDGE_EXAMPLE = '"character": {"contrast": 0.1, "geometry": -0.1}'
+
 
 NEUTRAL = AxisValues(*([0.5] * len(AXIS_NAMES)))
 NEUTRAL_SOURCE = "neutral default: every axis at 0.5, since no brief or axes were given"
@@ -211,6 +216,66 @@ def _brief_values(brief: Mapping[str, Any], label: str) -> Dict[str, Any]:
     return out
 
 
+def brief_character(brief: Mapping[str, Any], label: str = "brief") -> Dict[str, float]:
+    """The brief's character nudges by axis, in AXIS_NAMES order; empty when
+    it has none. A value that is not an object of axis names and numbers
+    from -NUDGE_LIMIT to NUDGE_LIMIT is an InputError naming the entry."""
+    value = brief.get(CHARACTER_FIELD)
+    if value in (None, {}):
+        return {}
+    if not isinstance(value, dict):
+        raise InputError(f"{label} field character is {value!r}; give an object of axis "
+                         f"nudges, for example {_NUDGE_EXAMPLE}")
+    for key in value:
+        if key not in AXIS_NAMES:
+            raise InputError(f'{label} field character names "{key}", which is not an axis; '
+                             f"use {', '.join(AXIS_NAMES)}, for example {_NUDGE_EXAMPLE}")
+    out: Dict[str, float] = {}
+    for axis in AXIS_NAMES:
+        if axis not in value:
+            continue
+        v = value[axis]
+        if isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) \
+                or abs(v) > NUDGE_LIMIT:
+            raise InputError(f"{label} field character.{axis} is {v!r}; set a nudge from "
+                             f"-{NUDGE_LIMIT:g} to {NUDGE_LIMIT:g}, for example "
+                             f'"character": {{"{axis}": 0.1}}')
+        if v:
+            out[axis] = float(v)
+    return out
+
+
+def _signed(v: float) -> str:
+    return f"{v:+g}"
+
+
+def nudge_lines(brief: Optional[Mapping[str, Any]], label: str = "brief") -> List[str]:
+    """One line per character nudge: the axis, the nudge, the value the
+    words gave and the value the build used, and the foundations the axis
+    moves. Empty without nudges."""
+    if brief is None:
+        return []
+    if isinstance(brief.get("answers"), dict):
+        brief = brief["answers"]
+    nudges = brief_character(brief, label)
+    if not nudges:
+        return []
+    from engine.foundations.character import INFLUENCE
+    values = _brief_values(brief, label)
+    before = compute_axes(values).to_dict()
+    after = compute_axes({**values, CHARACTER_FIELD: nudges}).to_dict()
+    out = []
+    for axis, nudge in nudges.items():
+        name = _AXIS_WORDS[axis][0]
+        line = f"{name} {_signed(nudge)}: from {before[axis]:g} to {after[axis]:g}"
+        if round(after[axis] - before[axis], 3) != round(nudge, 3):
+            line += (" (held at the end of the axis)" if after[axis] in (0.0, 1.0)
+                     else " (held by a forbidden word)")
+        reach = _and([_FOUNDATION_WORDS.get(f, f) for f in INFLUENCE.get(axis, ())])
+        out.append(f"{line}; {name} moves {reach}.")
+    return out
+
+
 def _reading(key: str, word: str) -> Optional[str]:
     """How the synthesizer reads one brief word: the word, the industry it
     was matched to, or None when the word moves no axis. Asks the
@@ -260,7 +325,13 @@ def brief_axes(brief: Mapping[str, Any], label: str = "brief", *,
     if isinstance(brief.get("answers"), dict):
         brief = brief["answers"]
     values = _brief_values(brief, label)
+    nudges = brief_character(brief, label)
+    said = ("; character nudges: " + ", ".join(f"{k} {_signed(v)}" for k, v in nudges.items())
+            if nudges else "")
     structured = [k for k in AUDIENCE_FIELDS if brief.get(k) not in (None, "", [])]
+    if not values and nudges:
+        return (compute_axes({CHARACTER_FIELD: nudges}),
+                f"from the brief's character nudges, from 0.5 on every axis{said}")
     if not values and structured:
         return NEUTRAL, (f"from the brief's fields ({', '.join(structured)}), which leave every "
                          "axis at 0.5")
@@ -278,6 +349,10 @@ def brief_axes(brief: Mapping[str, Any], label: str = "brief", *,
             else:
                 known.setdefault(key, []).append(reading)
     ignored = ", ".join(f"{word} ({key})" for key, word in unknown)
+    if not known and nudges:
+        axes = compute_axes({**values, CHARACTER_FIELD: nudges})
+        return axes, (f"from the brief's character nudges, from 0.5 on every axis{said}; not "
+                      f"recognized and ignored: {ignored}")
     if not known and structured:
         return NEUTRAL, (f"from the brief's fields ({', '.join(structured)}), which leave every "
                          f"axis at 0.5; not recognized and ignored: {ignored}")
@@ -288,10 +363,11 @@ def brief_axes(brief: Mapping[str, Any], label: str = "brief", *,
             f"no brief. Not recognized: {ignored}.",
             f"Use at least one accepted word, or pass {axes_label} instead.",
             *_accepted_lines(fields)]))
-    axes = compute_axes(values)
+    axes = compute_axes({**values, CHARACTER_FIELD: nudges} if nudges else values)
     source = "from the brief (" + "; ".join(f"{k}: {', '.join(v)}" for k, v in known.items()) + ")"
     if axes == NEUTRAL:
         source += ", which leaves every axis at 0.5"
+    source += said
     if unknown:
         source += f"; not recognized and ignored: {ignored}"
     return axes, source
@@ -331,9 +407,12 @@ def unread_lines(brief: Optional[Mapping[str, Any]], label: str = "brief") -> Li
                            f"{', '.join(_accepted(key))}.")
             else:
                 out.append(f'{key} "{word}" moves no axis. {key} accepts: '
-                           f"{', '.join(_accepted(key))}.")
+                           f"{', '.join(_accepted(key))}. Or pass what it means as character "
+                           f"nudges from -{NUDGE_LIMIT:g} to {NUDGE_LIMIT:g} on the axes, for "
+                           f"example {_NUDGE_EXAMPLE}.")
     for key, value in sorted(brief.items()):
-        if key in BRIEF_FIELDS or key in AUDIENCE_FIELDS or value in (None, "", [], {}):
+        if key in BRIEF_FIELDS or key in AUDIENCE_FIELDS or key == CHARACTER_FIELD \
+                or value in (None, "", [], {}):
             continue
         out.append(f'{key} "{_as_words(value)}" is not read by the system build'
                    + (_UNREAD_HINTS[key] if key in _UNREAD_HINTS
@@ -344,6 +423,7 @@ def unread_lines(brief: Optional[Mapping[str, Any]], label: str = "brief") -> Li
 # How to pass what a field the build does not read means for the system.
 _UNREAD_HINTS: Mapping[str, str] = {
     "region": ". Say what it means for the system with " + HOW_TO_PASS[1] + ".",
+    "project_type": ". Say what the product is with " + HOW_TO_PASS[5] + ".",
 }
 
 
@@ -638,6 +718,8 @@ _NOTES_LEAD = ("These are choices the engine made from the inputs: first the col
                "scheme:dark,contrast:high there.")
 _AUDIENCE_LEAD = ("What the brief's fields changed, and why. The same inputs give the same "
                   "changes every time.")
+_NUDGE_LEAD = ("What the brief's character nudges did: each moved one axis after the words, "
+               "and the axis moves the foundations named.")
 _UNREAD_LEAD = ("The engine reads a fixed vocabulary and the brief's structured fields. These "
                 "words changed nothing; say them as below and build again, or they stay unread.")
 _CHANGE_GATE = ("Change the inputs and build again: a darker or more saturated brand "
@@ -702,7 +784,8 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
                   fidelity: Sequence[str] = (), fonts: Sequence[str] = (),
                   font_link: Sequence[str] = (), audience: Sequence[str] = (),
                   unread: Sequence[str] = (), art: bool = False,
-                  composition: str = "", sentence: str = "") -> str:
+                  composition: str = "", sentence: str = "",
+                  nudges: Sequence[str] = ()) -> str:
     """system-report.md: one sentence on what was built, what it was built
     from, the gate result, every note or finding in plain words, and how to
     use the files, the rule pack among them when it was written. No time
@@ -721,6 +804,8 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
     lines += [_GATE_SCOPE, ""]
     if audience:
         lines += ["## Who it is for", "", _AUDIENCE_LEAD, "", *[f"- {a}" for a in audience], ""]
+    if nudges:
+        lines += ["## Character nudges", "", _NUDGE_LEAD, "", *[f"- {n}" for n in nudges], ""]
     if unread:
         lines += ["## What the engine did not read", "", _UNREAD_LEAD, "",
                   *[f"- {u}" for u in unread], ""]
@@ -801,7 +886,7 @@ def character_sentence(axes: AxisValues, ts: Any, composition: str,
 def make_system(brand: str, axes: AxisValues, axes_source: str, *,
                 arabic: bool = True, rule_pack: bool = False,
                 audience: Optional[Audience] = None,
-                unread: Sequence[str] = ()) -> SystemOutput:
+                unread: Sequence[str] = (), nudges: Sequence[str] = ()) -> SystemOutput:
     """Build, validate and gate. On success `files` holds every file in FILES
     and ART_FILES, and with rule_pack every rule pack file under
     RULE_PACK_DIR after them;
@@ -855,7 +940,7 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
                            art=bool(art), composition=composition.line() if tokens else "",
                            sentence=character_sentence(axes, built.tokens, composition.name,
                                                        audience)
-                           if tokens else "")
+                           if tokens else "", nudges=nudges)
     files = {**tokens, "system-report.md": report, **art, **pack} if tokens else {}
     return SystemOutput(passed=bool(tokens), files=files, report=report, gate=gate,
                         findings=findings, brand=brand, axes=axes, axes_source=axes_source,

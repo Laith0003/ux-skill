@@ -45,6 +45,7 @@ Space sets the distances inside and between things: the padding of a control, th
 | Sections of a form, groups of settings | space.group.gap |
 | Inside a card, panel, banner or dialog | space.card.padding |
 | Between the hero and the content, the content and the footer | var(--layout-region-gap), which follows the viewport's tier |
+| Between the sections of a landing page | var(--layout-landing-gap), 128 to 192px at desktop by density |
 | Page margins and grid gutters | layout.margin-inline and layout.gutter for the tier |
 
 When two neighbors could take either of two roles, take the one for the larger relationship: a heading that opens a group uses the group gap above it and the text gap below it.
