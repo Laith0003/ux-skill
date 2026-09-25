@@ -8,7 +8,9 @@ what to confirm (an entry the owner writes says "by": "owner"). The owner
 keeps a role or an axis out of the check with a "not mapped" entry,
 {"token": null, "by": "owner"} or {"from": null, "by": "owner"}; view()
 leaves it out with a note, merge() never fills it again and propose()
-never writes one.
+never writes one. An axis deleted from the file instead, one the system
+has and propose() would read, is left out too, with a note that names it
+and the "not mapped" entry that keeps it out on purpose.
 
 propose() maps a role only when a token's name is the role's own path
 written with other separators (color.text.default, color-text-default,
@@ -59,6 +61,10 @@ _AXIS_WORDS: Dict[str, str] = {
 ROLE_LEFT_OUT = "{role} is not checked: the owner left it out in {name}"
 AXIS_LEFT_OUT = ("the axis {axis} is not checked: the owner left it out in {name}, so every role "
                  "is read at the system's base")
+AXIS_DELETED = ("{name} leaves out the axis {axis}, which the imported system has as {source}, "
+                "so it was not checked and every role is read at the system's base; map it to "
+                "check it, or write " + _AXIS_OUT.replace("{", "{{").replace("}", "}}")
+                + " for it to keep it out on purpose")
 _BASE_WORDS = ("light", "ltr", "comfortable", "standard", "default", "base", "off",
                "no-preference")
 
@@ -114,13 +120,18 @@ def propose(ts: TokenSet) -> Mapping:
             prefix = role.replace(".", "-")
             if _has_fields(ts, prefix):
                 roles[role] = RoleMap(prefix, "name")
+    return Mapping(roles, _propose_axes(ts))
+
+
+def _propose_axes(ts: TokenSet) -> Dict[str, AxisMap]:
+    """The axes a first mapping reads, by the names of the set's own."""
     axes: Dict[str, AxisMap] = {}
     for name, (base, other) in ts.axes.items():
         ours = _our_axis(name, base, other)
         if ours is None or ours in axes:
             continue
         axes[ours] = AxisMap(name, {AXES[ours][0]: base, AXES[ours][1]: other}, "name")
-    return Mapping(roles, axes)
+    return axes
 
 
 def _our_axis(name: str, base: str, other: str) -> Optional[str]:
@@ -327,6 +338,16 @@ def _left_out(ts: TokenSet, mapping: Mapping, name: str) -> List[str]:
             "own name, so they were not checked; map each one to check it"]
 
 
+def _axes_left_out(ts: TokenSet, mapping: Mapping, name: str) -> List[str]:
+    """A note on each axis the set has, and a first mapping would read, that
+    the mapping leaves out without a "not mapped" entry: it was deleted from
+    the file, so it is not checked."""
+    used = {m.source for m in mapping.axes.values() if m.source is not None}
+    return [AXIS_DELETED.format(axis=axis, source=m.source, name=name)
+            for axis, m in _propose_axes(ts).items()
+            if axis not in mapping.axes and m.source not in used]
+
+
 def _resolve(ts: TokenSet, role: str, token: str, context: str) -> Any:
     if ROLE_TYPES[role] == "typography" and not ts.has(token):
         return {key: ts.resolve(path, context) for key, path in _field_names(token).items()}
@@ -349,6 +370,7 @@ def view(ts: TokenSet, mapping: Mapping,
     out = TokenSet(axes)
     notes: List[str] = [AXIS_LEFT_OUT.format(axis=a, name=name)
                         for a, m in mapping.axes.items() if m.source is None]
+    notes += _axes_left_out(ts, mapping, name)
     notes += _left_out(ts, mapping, name)
     for role, m in mapping.roles.items():
         if m.token is None:

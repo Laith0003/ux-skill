@@ -358,10 +358,16 @@ def test_a_role_the_owner_took_out_of_the_mapping_is_not_checked():
 
 def test_an_empty_mapping_checks_nothing():
     checked, notes = view(_css(FOREIGN), Mapping())
-    assert (checked.tokens(), dict(checked.axes), notes) == ([], {}, [])
+    assert (checked.tokens(), dict(checked.axes)) == ([], {})
+    # Nothing is checked, and the axis the file lost is named.
+    assert [n.split(",")[0] for n in notes] == [
+        "the mapping leaves out the axis scheme"]
     checked, notes = view(_own(), Mapping())
     assert checked.tokens() == []
-    assert notes == [
+    assert [n.split(",")[0] for n in notes[:5]] == [
+        f"the mapping leaves out the axis {a}" for a in
+        ("scheme", "contrast", "density", "direction", "motion")]
+    assert notes[5:] == [
         "the mapping leaves out color.surface.page, color.surface.card, color.surface.sunken and "
         "68 more, which the imported system has under each role's own name, so they were not "
         "checked; map each one to check it"]
@@ -372,7 +378,11 @@ def test_an_axis_the_owner_took_out_of_the_mapping_is_held_at_its_base():
     mapping = propose(ts)
     del mapping.axes["scheme"]
     checked, notes = view(ts, mapping)
-    assert notes == [] and "scheme" not in checked.axes
+    assert notes == [
+        "the mapping leaves out the axis scheme, which the imported system has as scheme, so it "
+        "was not checked and every role is read at the system's base; map it to check it, or "
+        'write {"from": null, "by": "owner"} for it to keep it out on purpose'] \
+        and "scheme" not in checked.axes
     text = checked.get("color.text.default")
     assert text.value == ts.resolve("color.text.default")
     assert all("scheme" not in key for key in text.modes)
@@ -536,3 +546,25 @@ def test_a_reimport_keeps_what_the_owner_left_out_and_proposes_what_is_missing(t
         "the axis contrast is not checked: the owner left it out in mapping.json, so every role "
         "is read at the system's base",
         "color.text.default is not checked: the owner left it out in mapping.json"]
+
+
+def test_an_axis_deleted_from_a_foreign_mapping_is_named_and_a_null_is_not():
+    ts = _css(FOREIGN)
+    mapping = propose(ts)
+    source = mapping.axes["scheme"].source
+    del mapping.axes["scheme"]
+    _, notes = view(ts, mapping, "mapping.json")
+    assert [n for n in notes if "the axis scheme" in n] == [
+        f"mapping.json leaves out the axis scheme, which the imported system has as {source}, "
+        "so it was not checked and every role is read at the system's base; map it to check "
+        'it, or write {"from": null, "by": "owner"} for it to keep it out on purpose']
+    mapping.axes["scheme"] = AxisMap(None, {}, "owner")
+    _, notes = view(ts, mapping, "mapping.json")
+    assert [n for n in notes if "leaves out the axis" in n] == []
+
+
+def test_merge_and_the_loop_finder_are_exported():
+    import engine.io
+    from engine.io.graph import cycles, loop
+    assert engine.io.merge is merge and engine.io.cycles is cycles and engine.io.loop is loop
+    assert {"merge", "cycles", "loop"} <= set(engine.io.__all__)
