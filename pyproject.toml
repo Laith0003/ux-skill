@@ -31,7 +31,9 @@ classifiers = [
   "Topic :: Software Development :: Libraries :: Python Modules"
 ]
 dependencies = [
-  "click>=8.1.8",
+  # click 8.2 and later need Python 3.10+, so 3.9 keeps the 8.1 line.
+  "click>=8.1.8; python_version < '3.10'",
+  "click>=8.4.2; python_version >= '3.10'",
   "rich>=15.0.0",
   "pydantic>=2.13.4",
   "tomli>=2.0;python_version<'3.11'"
