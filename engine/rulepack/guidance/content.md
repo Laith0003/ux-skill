@@ -47,7 +47,9 @@ Words are part of the design. This file holds the content rules every contract's
 
 - Use Western digits (0 to 9) in both scripts unless the product decides otherwise and says so.
 - Put the currency after the amount with a space when the market reads it that way: 50 JOD.
+{arabic} - In Arabic copy, write the currency with its Arabic abbreviation after the amount: د.أ (Jordanian dinar), ج.م (Egyptian pound), ر.س (Saudi riyal), د.إ (UAE dirham), د.ك (Kuwaiti dinar), ر.ق (Qatari riyal), د.ب (Bahraini dinar), ر.ع (Omani rial), د.ع (Iraqi dinar), ل.ل (Lebanese pound). Keep the amount and its abbreviation together with a no-break space.
 - Write dates in the order the market reads them, with the month as a word when order could be ambiguous.
+{arabic} - Name months the way the market does. The Levant and Iraq (Jordan, Palestine, Lebanon, Syria, Iraq) use كانون الثاني، شباط، آذار، نيسان، أيار، حزيران، تموز، آب، أيلول، تشرين الأول، تشرين الثاني، كانون الأول. Egypt and the Gulf use يناير، فبراير، مارس، أبريل، مايو، يونيو، يوليو، أغسطس، سبتمبر، أكتوبر، نوفمبر، ديسمبر. One page that serves both writes the Levantine name with the other after it, such as أيلول (سبتمبر).
 - Phone numbers, codes, email addresses and identifiers run left to right in every direction and are grouped as the country writes them (direction.md).
 
 ## Audit checks

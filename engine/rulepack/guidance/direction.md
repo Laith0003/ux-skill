@@ -45,6 +45,8 @@
 ## Numbers and fixed runs
 
 - Phone numbers, codes, card numbers, email addresses and Latin identifiers are fixed: they run left to right inside right-to-left text and never mirror.
+- A fixed run never breaks across lines: wrap it in an element with dir="ltr" and white-space: nowrap, so a phone number never splits and its plus sign stays in front.
+{arabic} - An amount with its currency is one fixed run too: 50 د.أ keeps the amount and the abbreviation on one line (content.md).
 - Use Western digits and put the currency after the amount with a space (content.md).
 - Mixed runs are wrapped so their direction is explicit and punctuation lands where the reader expects it.
 
@@ -53,7 +55,7 @@
 - Every direction-dependent token uses logical names; a physical side in a path is a finding.
 - Every contract part has an rtlBehavior, and each rendered part behaves that way.
 - Every pointing icon mirrors and every non-pointing icon does not.
-- Every fixed run stays left to right.
+- Every fixed run stays left to right and on one line.
 {arabic} - Every style under right to left uses the Arabic face, size and leading, with no letter spacing.
 {arabic} - Review each screen at the Arabic length in both directions.
 {latin} - Review each screen in both directions at the length of the longest language it ships.

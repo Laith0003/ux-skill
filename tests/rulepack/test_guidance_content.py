@@ -85,10 +85,20 @@ def test_color_says_when_each_button_emphasis_is_right():
             emphasis
 
 
+# Arabic words (currency abbreviations, month names) may appear in the
+# content and direction guidance; every other character outside ASCII is
+# refused everywhere.
+ARABIC_ALLOWED = ("content.md", "direction.md")
+
+
+def _outside(text, arabic):
+    return [c for c in text if not c.isascii() and not (arabic and "؀" <= c <= "ۿ")]
+
+
 def test_guidance_is_ascii_without_dashes():
     for path in sorted(GUIDANCE_DIR.glob("*.md")):
         text = path.read_text(encoding="utf-8")
-        assert text.isascii(), path.name
+        assert _outside(text, path.name in ARABIC_ALLOWED) == [], path.name
         assert not re.search(r"\s--\s|\w--\s|\s--$", text, re.M), path.name
 
 

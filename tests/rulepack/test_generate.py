@@ -88,8 +88,11 @@ def test_links_and_citations_resolve_inside_the_pack():
 
 
 def test_the_pack_is_plain_ascii_with_no_dashes():
+    arabic_ok = (f"{PACK}/content.md", f"{PACK}/direction.md")
     for path, text in PACK_FILES.items():
-        assert text.isascii(), path
+        outside = [c for c in text if not c.isascii()
+                   and not (path in arabic_ok and "؀" <= c <= "ۿ")]
+        assert outside == [], path
         assert not re.search(r"\s--\s", text), path
 
 
