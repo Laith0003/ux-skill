@@ -16,7 +16,7 @@ from engine.foundations import color as color_module
 from engine.foundations.art import art_files
 from engine.foundations.color import COLOR_CONTEXTS, IDENTITY_DISTANCE, brand_fidelity
 from engine.foundations.color_math import contrast, hex_to_oklch, oklab_distance, oklch_to_hex
-from engine.foundations.emit import brief_audience, choose_axes
+from engine.foundations.emit import brief_audience, choose_axes, make_system
 from engine.foundations.modes import parse
 from engine.synthesizer.axes import AxisValues
 
@@ -97,6 +97,17 @@ def test_the_report_says_the_brand_led_the_role():
     _, result = built(ELECTRIC)
     note = next(n for n in result.notes if n.startswith("color: brand role "))
     assert "brand 1.00" in note
+
+
+def test_the_report_states_the_brand_s_case_and_the_natural_move_in_sentences():
+    brief = BRIEFS[MID_BLUE]
+    axes, source = choose_axes(brief, None)
+    report = make_system(MID_BLUE, axes, source, audience=brief_audience(brief)).report
+    assert ("Brand role fill: the brand fills the main action. The brand color's own case for "
+            "a fill scored 1.00, where a saturated mid tone scores 1") in report
+    assert ("In light mode, color.action.primary is color.brand.600 with white text rather "
+            "than color.brand.exact with black text: black text there weighs ") in report
+    assert "- color: in " not in report
 
 
 # ------------------------------------------------------ 2. natural on-colors

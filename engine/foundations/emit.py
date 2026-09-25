@@ -565,15 +565,20 @@ def _other_note(note: str) -> str:
     role = _ROLE_NOTE.match(note)
     if role:
         brand, _, scores = role["why"].partition("; ")
-        if role["why"] == "set by the brief":
-            why = "the brief set it"
-        elif scores:
-            why = (f"the brand color's own case for a fill scored {brand.split()[-1]} (it is "
-                   "saturated and a mid tone at 1, very light, very dark or grey at 0), and "
-                   f"with the axes the roles scored {scores}; the highest wins")
-        else:
-            why = f"the axes scored {role['why']}, and the highest wins"
-        return f"Brand role {role['role']}: {_ROLE_WORDS[role['role']]} ({why})."
+        head = f"Brand role {role['role']}: {_ROLE_WORDS[role['role']]}"
+        if scores:
+            return (f"{head}. The brand color's own case for a fill scored {brand.split()[-1]}, "
+                    "where a saturated mid tone scores 1 and a very light, very dark or grey "
+                    f"brand 0; with the axes the roles scored {scores}, and the highest wins.")
+        why = ("the brief set it" if role["why"] == "set by the brief"
+               else f"the axes scored {role['why']}, and the highest wins")
+        return f"{head} ({why})."
+    natural = _NATURAL_NOTE.match(note)
+    if natural:
+        return (f"In {natural['ctx']}, {natural['fill']} is {natural['step']} with white text "
+                f"rather than {natural['was']} with black text: black text there weighs "
+                f"{natural['cost']} in naturalness, more than the move of {natural['move']} "
+                "from the brand.")
     m = _RAMP_NOTE.match(note)
     if not m:
         return _in_words(note)
@@ -671,6 +676,10 @@ _ART_LEAD = ("Generated from the axes and the colors above, so a page is never e
              "area from the neutral to the accents, geometry rounds the shapes, and formality "
              "sets how many accents there are and how square to their lines they sit.")
 _ROLE_NOTE = re.compile(r"^color: brand role (?P<role>\w+) \((?P<why>.+)\)$")
+_NATURAL_NOTE = re.compile(
+    r"^color: in (?P<ctx>[a-z ,]+), (?P<fill>\S+) takes white text on (?P<step>\S+) rather than "
+    r"black text on (?P<was>\S+): black there weighs (?P<cost>[\d.]+) in naturalness, more than "
+    r"the move of (?P<move>[\d.]+) from the brand$")
 _ROLE_WORDS = {"fill": "the brand fills the main action",
                "accent": "the brand marks words and links, and the main action is ink",
                "edge": "the brand draws edges and rules, and actions and links are ink"}
