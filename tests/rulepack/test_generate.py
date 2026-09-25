@@ -136,7 +136,7 @@ from engine.contracts.library import load_folder  # noqa: E402
 from engine.foundations.gate import HIGH_FLOOR, required  # noqa: E402
 from engine.foundations.export import to_css  # noqa: E402
 from engine.rulepack.generate import (  # noqa: E402
-    PRECEDENCE_OPENINGS, contract_pairing_rows, overlaps, precedence_lines)
+    PRECEDENCE_OPENINGS, contract_pairing_rows, overlaps, precedence_lines, state_pairs)
 
 CONTRACTS = load_folder(SEED_DIR)
 
@@ -226,10 +226,33 @@ def test_the_precedence_lines_are_the_contracts_own_and_every_overlap_has_them()
         for need, opening in zip(overlaps(c), PRECEDENCE_OPENINGS):
             assert not need or any(line.startswith(opening) for line in lines), (c.name, opening)
         assert all(line in c.do for line in lines)
-        assert "\n".join([f"- {c.name}:"] + [f"  - {line}" for line in lines]) in readme
+        pairs = "; ".join(f"{a} and {b}" for a, b in state_pairs(c))
+        head = f"- {c.name} (states that meet: {pairs}):" if pairs else f"- {c.name}:"
+        assert "\n".join([head] + [f"  - {line}" for line in lines]) in readme
+    listed = readme.split("are listed with it.")[1].split("## Rules")[0]
     for c in CONTRACTS:
         if not any(overlaps(c)):
-            assert f"- {c.name}:\n" not in readme.split("says which wins:")[1]
+            assert f"- {c.name}" not in listed
+
+
+def test_the_states_that_meet_come_from_the_bindings(tmp_path):
+    by_name = {c.name: c for c in CONTRACTS}
+    assert state_pairs(by_name["button"]) == [
+        ("hover", "pressed"), ("hover", "disabled"), ("pressed", "disabled")]
+    assert state_pairs(by_name["text-field"]) == [("disabled", "error")]
+    # Two states that bind the same role never meet: the row's hover and
+    # pressed both take color.surface.sunken.
+    assert ("hover", "pressed") not in state_pairs(by_name["selectable-row"])
+    contracts = tmp_path / "contracts"
+    shutil.copytree(SEED_DIR, contracts)
+    field = contracts / "text-field.yaml"
+    text = field.read_text(encoding="utf-8")
+    assert "role: color.status.danger.strong, state: error}" in text
+    field.write_text(text.replace("role: color.line.subtle, state: disabled}",
+                                  "role: color.status.danger.strong, state: disabled}"),
+                     encoding="utf-8")
+    changed = {c.name: c for c in load_folder(contracts)}["text-field"]
+    assert state_pairs(changed) == []
 
 
 def test_a_contract_with_overlapping_bindings_and_no_precedence_stops_the_pack(tmp_path):

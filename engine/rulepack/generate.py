@@ -164,21 +164,42 @@ def _compatible(a: Binding, b: Binding) -> bool:
     return all(ours[k] == theirs[k] for k in ours.keys() & theirs.keys())
 
 
-def overlaps(contract: Contract) -> Tuple[bool, bool]:
-    """Whether two bindings of one part and property can apply at once,
-    as (bindings whose conditions differ, one with a state and one without
-    or with more variant conditions than the other; bindings for two
-    different states)."""
-    conditions = states = False
+def _meetings(contract: Contract) -> List[Tuple[Binding, Binding]]:
+    """Pairs of bindings of one part and property, naming different roles,
+    that can apply at once: no variant they both set takes two values."""
+    out = []
     tokens = contract.tokens
     for i, a in enumerate(tokens):
         for b in tokens[i + 1:]:
-            if (a.part, a.property) != (b.part, b.property) or not _compatible(a, b):
-                continue
-            if a.state and b.state and a.state != b.state:
-                states = True
-            elif (a.when, a.state) != (b.when, b.state):
-                conditions = True
+            if (a.part, a.property) == (b.part, b.property) and a.role != b.role \
+                    and _compatible(a, b):
+                out.append((a, b))
+    return out
+
+
+def state_pairs(contract: Contract) -> List[Tuple[str, str]]:
+    """The pairs of states whose bindings can meet that way, in the order
+    of the contract's states."""
+    order = {s: i for i, s in enumerate(contract.states)}
+    pairs = []
+    for a, b in _meetings(contract):
+        if a.state and b.state and a.state != b.state:
+            pair = tuple(sorted((a.state, b.state), key=lambda s: order.get(s, len(order))))
+            if pair not in pairs:
+                pairs.append(pair)
+    return sorted(pairs, key=lambda q: (order.get(q[0], 0), order.get(q[1], 0)))
+
+
+def overlaps(contract: Contract) -> Tuple[bool, bool]:
+    """Whether two bindings of one part and property, naming different
+    roles, can apply at once, as (one with a state and one without, or
+    with more variant conditions than the other; two different states)."""
+    conditions = states = False
+    for a, b in _meetings(contract):
+        if a.state and b.state and a.state != b.state:
+            states = True
+        elif (a.when, a.state) != (b.when, b.state):
+            conditions = True
     return conditions, states
 
 
@@ -414,13 +435,17 @@ def _readme(foundations: Sequence[Tuple[Foundation, Guidance]],
     lines += ["", "## Contracts", ""]
     lines += [f"- [{c.name}](contracts/{c.name}.yaml) ({c.status}): {c.description}"
               for c in contracts]
-    ruled = [(c, precedence_lines(c)) for c in contracts if precedence_lines(c)]
-    if ruled:
-        lines += ["", "When two bindings of one part and property both match, the contract "
-                      "says which wins:", ""]
-        for c, rules in ruled:
-            lines.append(f"- {c.name}:")
-            lines += [f"  - {r}" for r in rules]
+    met = [c for c in contracts if any(overlaps(c))]
+    if met:
+        lines += ["", "In these contracts two bindings of one part and property, naming "
+                      "different roles, can both match. Each says in usage.do which one wins, "
+                      "in the lines below; the states that can meet that way are listed with "
+                      "it.", ""]
+        for c in met:
+            pairs = "; ".join(f"{a} and {b}" for a, b in state_pairs(c))
+            lines.append(f"- {c.name}" + (f" (states that meet: {pairs})" if pairs else "")
+                         + ":")
+            lines += [f"  - {r}" for r in precedence_lines(c)]
     lines += ["", "## Rules for every task", "",
               "- The token files are the source. Never edit a generated value; change the "
               "inputs and build again.",
