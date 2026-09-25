@@ -350,5 +350,8 @@ def test_a_font_with_a_duration_like_word_needs_a_generic_family_or_quotes():
     # shorthand and the fix is to quote the name.
     with pytest.raises(NotRead) as exc:
         read_value("Font 2s, Inter")
-    assert "is a transition or animation shorthand" in str(exc.value)
+    assert str(exc.value) == (
+        "Font 2s, Inter is a transition or animation shorthand; write its duration and its "
+        "curve as separate tokens, or, if it is a font list, quote each font name or end the "
+        "list with a generic family such as sans-serif")
     assert read_value('"Font 2s", Inter') == ("fontFamily", ["Font 2s", "Inter"])

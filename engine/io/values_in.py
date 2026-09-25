@@ -392,8 +392,13 @@ def read_value(text: Any, mapped: Optional[List[GamutMapped]] = None) -> Tuple[s
     if not (len(members) > 1 and members[-1].lower() in GENERIC_FAMILIES):
         if any(len(split_top(p, " ")) > 1 and any(_is_duration(w) for w in split_top(p, " "))
                for p in members):
+            # A capitalized word is a font name's more than a property's
+            # (Font 2s, Inter): give a font author the way forward too.
+            font = (", or, if it is a font list, quote each font name or end the list with a "
+                    "generic family such as sans-serif") \
+                if len(members) > 1 and re.search(r"(?<![\w-])[A-Z]", text) else ""
             raise NotRead(f"{text} is a transition or animation shorthand; write its duration "
-                          "and its curve as separate tokens")
+                          f"and its curve as separate tokens{font}")
         if len(members) > 1 and all(_is_duration(p) for p in members):
             raise NotRead(f"{text} is a list of durations, one per transition or animation; "
                           "write each duration as its own token")
