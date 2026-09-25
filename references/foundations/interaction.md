@@ -312,4 +312,4 @@ Threshold disambiguates: short tap with no movement = tap; sustained movement pa
 - See **components.md** for state-by-state interaction contracts on buttons, inputs, and cards.
 - See **layout.md** for navigation patterns and bottom tab discipline.
 - See **spacing.md** for touch target spacing and density modes.
-- See **dashboards.md** for interactive chart and table behaviors.
+- See `references/surfaces/dashboard.md` for interactive chart and table behaviors.

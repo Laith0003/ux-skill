@@ -296,5 +296,5 @@
 - See **interaction.md** for touch target sizes and spacing between tappable elements.
 - See **accessibility.md** for safe-area compliance and zoom behavior.
 - See **components.md** for card-specific padding contracts.
-- See **dashboards.md** for cockpit-density spacing rules.
+- See `references/surfaces/dashboard.md` for cockpit-density spacing rules.
 - See **motion.md** for layout shift avoidance during animations.

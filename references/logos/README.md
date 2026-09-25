@@ -20,7 +20,7 @@ vercel
 - Inline the SVG and set `fill="currentColor"` (or a single brand/ink color) so
   it adapts to light/dark surfaces. The marks are monochrome single-path.
 - Render at a uniform optical size in a logo wall; one mono treatment for all
-  (see `../styles/anti-slop.md` logo-wall rules).
+  (see the logo-wall rules in `../surfaces/landing.md`).
 
 ## Adding a logo
 

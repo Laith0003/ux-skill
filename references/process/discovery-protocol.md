@@ -83,9 +83,9 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 - **Color preferences / accent color** — "Specific accent color or one we should pick from the brand?"
 - **Dark/light/both** — "Light only, dark only, or both? If both, which is the primary?"
 - **Mobile-first or desktop-first** — Default is mobile-first; ask if the audience is desktop-dominant (B2B admin, professional tools).
-- **Sections / IA hint** — "Sections you know you want, in order? Or trust the AIDA default?"
 - **Existing copy** — "Have copy already, or should I draft it?"
 - **Animation appetite** — "Heavy motion, restrained, or static?"
+- **Surface-specific follow-ups** live in the playbook for the surface: the landing-page sections question is in `references/surfaces/landing.md`.
 
 ---
 
@@ -127,7 +127,7 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
    - `MOTION_INTENSITY` (1 static → 10 cinematic)
    - `VISUAL_DENSITY` (1 art-gallery → 10 cockpit)
 4. **Pick 2–4 arsenal patterns** that fit the brief + the wow moment.
-5. **Dispatch the sub-agent** with the full discovery payload + the dials + the picked patterns + `references/styles/anti-slop.md` + the relevant arsenal entries embedded inline.
+5. **Dispatch the sub-agent** with the full discovery payload + the dials + the picked patterns + `references/styles/anti-slop.md` + the relevant arsenal entries + the surface playbook the command selected (`references/surfaces/`), embedded inline.
 6. **Echo the discovery summary** in the output so the user can verify their intent landed.
 
 ---

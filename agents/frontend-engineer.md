@@ -143,7 +143,7 @@ Every design MUST include intentional, REAL imagery. Text-only walls are forbidd
 - 2-line H1 maximum (concise headline + supporting line)
 - Wide containers — `max-w-5xl` to `max-w-6xl` for marketing surfaces
 
-### 6a. Responsive gate (MANDATORY — verify before returning; cross-ref `references/foundations/component-behaviors.md`)
+### 6a. Responsive gate (MANDATORY — verify before returning; cross-ref `references/surfaces/landing.md` for nav and header chrome and `references/surfaces/component.md` for component contracts)
 
 This is as hard a gate as anything in this file. Build mobile-first, then BEFORE you return the code, verify at **360px AND 390px** that:
 

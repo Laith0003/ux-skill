@@ -332,13 +332,27 @@ NEVER proceed to step 2 without the wow moment field populated. If the user says
 
 If a `DESIGN.md` exists in the project root, read it FIRST and treat it as the source of truth for the visual system (colors, typography, spacing, rounded, components). Match it exactly. If none exists, after discovery emit one for this project with `ux design-md` (the Google Stitch / awesome-design-md standard) and treat it as the contract the generated UI must satisfy.
 
+### 1c. Pick exactly one surface playbook
+
+Surface-specific rules live in playbooks under `references/surfaces/`. Read the brief and pick exactly one:
+
+| Brief | Playbook |
+|---|---|
+| A page that explains, sells or converts: landing page, homepage, launch, waitlist, pricing, service or lead-gen page | `references/surfaces/landing.md` |
+| A data surface: dashboard, admin panel, analytics, ops or monitoring console, internal tool | `references/surfaces/dashboard.md` |
+| One component or a small set: card grid, form, table, modal, sheet, drawer | `references/surfaces/component.md` |
+| Anything else (signed-in app screen, docs, portfolio, email) | none |
+
+Load only the playbook you picked. Never load two. If the brief straddles two surfaces, pick the one that owns the primary deliverable and state the choice in the design brief output. Record it as `surface` in `.ux/last-design.json`.
+
 ### 2. Read the references
 
 Before writing a single line of code, read:
 - `references/styles/anti-slop.md` — the ban list. Internalize every forbidden pattern.
 - `references/styles/arsenal.md` — the high-end pattern library. Pick 2-4 patterns that fit the brief.
 - `references/foundations/wow.md`: derive the **WOW LAYER**: 2-3 coordinated signature moments (one hero moment + a motion signature + an optional section moment; component and dashboard modes skip the hero moment) from the brand temperature + industry + goal. The page must do something a visitor remembers, not just be clean. Derived + varied to THIS brand, never a stamped recipe.
-- `references/foundations/responsive.md` + `references/foundations/component-behaviors.md` — mobile-first mechanics + per-component responsive contracts. The build is verified at 360px (no horizontal scroll, no wrapping nav/wordmark/label, sticky chrome <= ~96px).
+- `references/foundations/responsive.md`: mobile-first mechanics. The build is verified at 360px (no horizontal scroll, no wrapping nav/wordmark/label, sticky chrome <= ~96px).
+- The surface playbook picked in step 1c, if any. Its rules are as binding as the ban list.
 
 These are non-negotiable. The output's distinction from generic AI output IS the value of this command.
 
@@ -361,6 +375,7 @@ Call the Task tool with `subagent_type: "frontend-engineer"`. Pass the agent:
 - The 2-4 arsenal patterns you picked
 - **The page-level section sequence** (page mode only; component and dashboard modes skip this bullet) selected for the brief's goal (see the v2 Python integration step below). Instruct the sub-agent to expand the ENTIRE ordered sequence, map all source content into it (every sector -> a pill, every size -> a card, every benefit -> a checklist item; do not trim), give every card/pill/stat a relevant inline SVG icon, and ship the goal's conversion mechanisms.
 - The full content of `references/styles/anti-slop.md` (paste into the prompt — do not assume the sub-agent has read it)
+- The full content of the surface playbook picked in step 1c, if any
 - The target stack
 - An instruction to return:
   1. The generated code
@@ -376,6 +391,7 @@ Use this exact template:
 ```
 ─── design brief ───
 Product:   <one-line summary>
+Surface:   <landing | dashboard | component | none>
 Stack:     <stack>
 Dials:     DESIGN_VARIANCE=<n>, MOTION_INTENSITY=<n>, VISUAL_DENSITY=<n>
 Patterns:  <2-4 arsenal patterns chosen>
@@ -405,6 +421,7 @@ Write to `.ux/last-design.json` in the project root:
   "timestamp": "<ISO8601>",
   "brief": "<verbatim brief>",
   "stack": "<stack>",
+  "surface": "<landing|dashboard|component|none>",
   "dials": { "variance": <n>, "motion": <n>, "density": <n> },
   "patterns": ["<arsenal pattern names>"],
   "output_file": "<path if saved to disk>"
@@ -431,9 +448,9 @@ Page mode only; component and dashboard modes skip this section. For any landing
 - NEVER repeat one icon across differentiated items (every skip size with the same box icon). Distinct icon per item, or none + typographic differentiation.
 - NEVER animate `width`/`height`/`top`/`left`. Use `transform` and `opacity` only.
 - NEVER skip empty/loading/error states.
-- NEVER use serif fonts on dashboards.
-- NEVER produce centered hero sections when `DESIGN_VARIANCE > 4` — force asymmetry.
 - NEVER use scroll progress paths / scroll-tied SVG line drawing on the side of the page.
+
+Surface-specific hard rules (hero, dashboard typography, component contracts) live in the playbook picked in step 1c.
 
 If you find yourself reaching for any of these, stop. Re-read `anti-slop.md`. Pick the alternative.
 
@@ -583,7 +600,7 @@ Exit code non-zero means a high+ finding landed in your output. Fix before decla
 > Real headless Chrome at a TRUE device viewport (self-calibrated so a lying viewport is caught), it measures **(a) horizontal overflow** and **(e) sticky-chrome height** reliably and **writes a screenshot per width so you can SEE the page.** Honesty contract: exit `0` = verified clean · `1` = FAIL (it names the cause — usually a fixed min-width wider than the device, or a tall pinned bar) · `2` = DEGRADED/UNVERIFIED (no Chrome, or the viewport was not honored) — **you have NOT verified; eyeball on a real device and never claim passed.** It does NOT catch **(b)/(c)/(d)** nav wrap/collision or the *feel* — open the screenshots it writes and check those by eye. A green from a DEGRADED run is not a green. See `references/foundations/responsive.md`.
 
 - **(a) No horizontal scroll** — `document.documentElement.scrollWidth <= window.innerWidth`. The page never scrolls sideways on a phone.
-- **(b) The header/nav stayed one row** — the sticky header/primary nav bar stays a single row. `scrollWidth` alone MISSES this: a nav that wrapped to two rows still reports `scrollWidth == innerWidth`, so it sails through a scroll-only gate. Detect the wrap directly: the bar's `offsetHeight` exceeds ~1.6x its single-row content height, OR its flex children span more than one distinct row (compare child vertical centers, not raw `offsetTop`, since `align-items:center` shifts each child). The **utility/announcement topbar is NOT a strict one-row bar** — but its intended mobile state is now ONE compact centered line (middot-separated claims), or fewer claims, and it is **non-sticky** (see component-behaviors.md). Check it for "not ragged AND not tall": its `|` dividers are hidden on mobile, it does not wrap mid-phrase with dangling dividers, and it does not balloon into a tall stacked block. (A topbar collapsed to one line passes the strict one-row check too; the stacked-lines escape hatch is reserved for 1–2 short items and must never make the header tall — its height is policed by (e).)
+- **(b) The header/nav stayed one row** — the sticky header/primary nav bar stays a single row. `scrollWidth` alone MISSES this: a nav that wrapped to two rows still reports `scrollWidth == innerWidth`, so it sails through a scroll-only gate. Detect the wrap directly: the bar's `offsetHeight` exceeds ~1.6x its single-row content height, OR its flex children span more than one distinct row (compare child vertical centers, not raw `offsetTop`, since `align-items:center` shifts each child). The **utility/announcement topbar is NOT a strict one-row bar** — but its intended mobile state is now ONE compact centered line (middot-separated claims), or fewer claims, and it is **non-sticky** (see Header and navigation in `references/surfaces/landing.md`). Check it for "not ragged AND not tall": its `|` dividers are hidden on mobile, it does not wrap mid-phrase with dangling dividers, and it does not balloon into a tall stacked block. (A topbar collapsed to one line passes the strict one-row check too; the stacked-lines escape hatch is reserved for 1–2 short items and must never make the header tall — its height is policed by (e).)
 - **(c) No short inline label wrapped** — for the brand wordmark and every button/CTA label, assert it is on ONE line: `el.scrollHeight <= 1.4 * lineHeight`. (Measure the label element itself, not its button wrapper — a chip/icon inside the button inflates the button's `scrollHeight` and gives a false positive. Wrap a bare label text node in its own `<span>` so it is measurable. Resolve `line-height:normal` to `fontSize * 1.2`.)
 - **(d) Header-bar children do not collide/overlap** — `nowrap` (the fix for (c)) does not always cause horizontal scroll; inside a flex bar it can instead make the wordmark **overlap the CTA** while `scrollWidth == innerWidth` AND each label still measures one line — so (a), (b), and (c) ALL pass on a visibly-broken bar (observed). Catch it directly: no two of the header bar's one-row children's rects may intersect, i.e. each child's `right` must stay within the next child's `left` (and within the bar's content box). When the wordmark cannot fit beside the logo + CTA without colliding, the fix is to shrink it or **collapse to the logomark** (hide the words) — never overlap, never two lines.
 - **(e) The sticky/fixed top chrome is not too tall** — sum the `offsetHeight` of every **top-anchored** `position:sticky` / `position:fixed` element, **de-duped for nesting** (drop any element contained by another in the set; count the OUTERMOST only, so a sticky child inside a sticky parent is not double-counted). "Top-anchored" means it pins at the top: computed `position` is sticky/fixed AND computed `top` ≈ 0. **Do NOT also require resting `getBoundingClientRect().top` ≈ 0** — when a non-sticky utility bar sits ABOVE a `sticky; top:0` header, that header's rest `rect.top` equals the bar's height (e.g. ~26px), so a rest-rect check would wrongly EXCLUDE the very header this gate exists to measure. A bottom-fixed bar (`bottom:0`, so `top:auto`) yields `NaN` for `top` and is excluded; a `top:80px` side rail is excluded by `|top| > 1`. **FAIL if the sum exceeds ~96px (hard ceiling) OR > ~20% of `window.innerHeight`.** This is the bug observed on a real phone: a tall sticky header (~168px — a utility bar stacked to four centered lines, pinned together with the nav) crushes the viewport and reads as broken. The page TARGET is ≤72px (one nav row); the 96px is the absolute gate ceiling. An over-tall sticky header is a failure — report it and fix it (drop decorative bars out of the sticky container so only the nav stays pinned, trim padding) before declaring done. Note: a sticky element is bounded by its containing block, so the correct fix is to keep the sticky wrapper around the nav ALONE — a utility bar left inside the sticky `<header>` both inflates this number AND lets the nav unstick once the header box scrolls past.
@@ -722,4 +739,4 @@ Exit `1` = the output dropped the brand primary/logo or shipped no real imagery.
 
 ### Fallback
 
-If `python3 -m engine.cli.main` is not on PATH (user hasn't installed v2 yet), fall back to v1 prose-only behavior using references/foundations/*.md as the source of taste. The output quality will be lower but the command still works.
+If `python3 -m engine.cli.main` is not on PATH (user hasn't installed v2 yet), fall back to v1 prose-only behavior using `references/foundations/*.md` and the surface playbook picked in step 1c as the source of taste. The output quality will be lower but the command still works.

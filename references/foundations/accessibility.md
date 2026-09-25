@@ -418,4 +418,4 @@ Honor at every level. Never assume the user "will be fine."
 - See **components.md** for form field, modal, and toast accessibility contracts.
 - See **typography.md** for Dynamic Type support and sizing minimums.
 - See **layout.md** for skip-link placement and heading hierarchy across page structure.
-- See **dashboards.md** for chart accessibility (legends, tooltips, table alternatives).
+- See `references/surfaces/dashboard.md` for chart accessibility (legends, tooltips, table alternatives).

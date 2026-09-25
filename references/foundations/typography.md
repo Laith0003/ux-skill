@@ -406,7 +406,7 @@ The default LLM output reaches for typography that signals AI generation. Overri
 - See **color.md** for contrast pairs that govern text legibility.
 - See **layout.md** for ultra-wide container widths that prevent H1 line-count failures.
 - See **spacing.md** for vertical rhythm between type and surrounding sections.
-- See **dashboards.md** for tabular numeral discipline in data-dense surfaces.
+- See `references/surfaces/dashboard.md` for tabular numeral discipline in data-dense surfaces.
 - See **copy.md** for the words that fill the type system.
 - See **accessibility.md** for dynamic-type scaling support and contrast minimums.
 - See **components.md** for label, helper-text, and button typography contracts.

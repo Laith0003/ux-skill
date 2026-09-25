@@ -6,81 +6,14 @@ The calling command picks patterns based on:
 - The user's brief
 - The MOTION_INTENSITY dial
 - The DESIGN_VARIANCE dial
-- The product type (landing, dashboard, component)
+- The product type (landing, dashboard, component), whose surface-specific patterns live in `references/surfaces/`
 - The committed style system (industrial, minimalist, high-end)
 
 Patterns below are organized by purpose. Skim by section to find what fits the moment. Cost notes indicate implementation effort; performance notes indicate where these patterns break if applied carelessly.
 
 ---
 
-## Hero & landing patterns
-
-### Asymmetric split hero
-**Use when**: marketing pages, product landings, premium positioning.
-**What it is**: Text aligned left or right, media asset on the opposite side, no centering. Background fades subtly into the page background (lighter on light mode, darker on dark mode). The split is intentionally uneven — 7/5 or 5/7 columns, not 6/6.
-**Why it works**: Defeats the "centered hero over dark image" default. The asymmetry creates hierarchy without typography variance.
-**Cost**: zero — pure layout.
-
-### Editorial column rhythm
-**Use when**: longform marketing surfaces, story-led product pages.
-**What it is**: Sections alternate text-left/image-right, then text-right/image-left, then occasionally full-bleed. Each section reads as a magazine spread. The grid is felt but not enforced; cards inside sections are deliberately not all identical.
-**Why it works**: Creates visual zigzag with zero decorative cost. The alternation is the rhythm.
-**Cost**: zero — pure layout discipline.
-
-### Bento grid
-**Use when**: feature sections, SaaS landings, dashboards, product overviews.
-**What it is**: Asymmetric tile grouping. Different tile sizes; uses `grid-flow-dense` for tight packing. Each tile has its own micro-interaction. Tile size carries hierarchy instead of headline weight; larger tiles carry marquee features, smaller tiles carry supporting capabilities.
-**Why it works**: Implies depth + density without overwhelming. Lets each tile carry its own story.
-**Cost**: design effort medium, code low (CSS Grid).
-**Combine with**: perpetual micro-interactions per tile; the 5 card archetypes for dashboards.
-
-### Masonry layout
-**Use when**: galleries, portfolios, content-heavy pages.
-**What it is**: Staggered grid with no fixed row heights.
-**Cost**: low — use CSS columns or a masonry library.
-
-### Curtain reveal
-**Use when**: brand statement at top of hero, theatrical entry, big-moment marketing.
-**What it is**: Hero section that splits in the middle on scroll, revealing what's behind.
-**Cost**: scroll-trigger library needed.
-
-### Cinematic center hero
-**Use when**: marketing surfaces where a single statement carries the entire value proposition.
-**What it is**: Text perfectly centered, massive width, ultra-wide H1 container (`max-w-5xl` or wider). Exactly two high-contrast CTAs below. Behind everything, a stunning full-bleed background image with a dark radial wash. Buttons perfectly legible — dark background gets white text, light background gets dark text.
-**Why it works**: When centered is the intentional choice (not the default), it functions as a declaration of confidence.
-**Cost**: low — careful contrast tuning, image processing.
-
-### Artistic asymmetry hero
-**Use when**: brand-forward marketing, creative-tool landings.
-**What it is**: Text offset to the left. An artistic floating image overlapping the text from the bottom right. Generous negative space.
-**Cost**: low — layout + image z-stacking.
-
-### Editorial split hero
-**Use when**: premium SaaS, content-led products.
-**What it is**: Text left, image right, but with massive negative space between. The split is not 50/50 — it's 60/40 or 65/35 with breathing room.
-**Cost**: zero — layout discipline.
-
-### Asymmetric hero with stylistic fade
-**Use when**: brand-driven launch pages, premium consumer products.
-**What it is**: High-quality relevant background image with a subtle stylistic fade (darkening or lightening into the page background depending on light or dark mode). Text aligned cleanly left or right.
-**Cost**: low — image processing + CSS gradient mask.
-
-### Email-capture hero
-**Use when**: fintech, signup-led products where the implied promise is "this is one field, not a multi-step funnel."
-**What it is**: A single email input + a single button as the hero's primary CTA, replacing a "Sign Up" button. The hero copy implies the field IS the start.
-**Cost**: low — form + state.
-
-### Thesis-statement hero
-**Use when**: editorial / AI / research-positioning products where the brand voice is "we have something to say."
-**What it is**: Large centered display headline (single line if possible), 2-4 sentences of body-size prose under it, single CTA with at most one secondary link. No multi-button toolbar.
-**Why it works**: The cliff between display scale and body scale is the design. Confidence reads as willingness to use full sentences in the subhead.
-**Cost**: zero — typographic discipline.
-
-### AIDA section flow (mandatory framing for landings)
-- **Attention (Hero)** — cinematic, clean, wide layout. One claim, one supporting line, one primary CTA + one secondary.
-- **Interest (Features / Bento)** — high-density, mathematically intentional grid or interactive components.
-- **Desire (Motion / Media)** — pinned sections, horizontal scroll, scroll-driven reveals, customer outcomes.
-- **Action (Footer / Pricing)** — massive high-contrast CTA, clean footer.
+Hero and landing-page patterns (hero variants, section flow, AIDA framing) live in `references/surfaces/landing.md`.
 
 ---
 
@@ -146,6 +79,18 @@ Patterns below are organized by purpose. Skim by section to find what fits the m
 ---
 
 ## Layout & grid patterns
+
+### Bento grid
+**Use when**: feature sections, SaaS landings, dashboards, product overviews.
+**What it is**: Asymmetric tile grouping. Different tile sizes; uses `grid-flow-dense` for tight packing. Each tile has its own micro-interaction. Tile size carries hierarchy instead of headline weight; larger tiles carry marquee features, smaller tiles carry supporting capabilities.
+**Why it works**: Implies depth + density without overwhelming. Lets each tile carry its own story.
+**Cost**: design effort medium, code low (CSS Grid).
+**Combine with**: perpetual micro-interactions per tile; the 5 card archetypes for dashboards.
+
+### Masonry layout
+**Use when**: galleries, portfolios, content-heavy pages.
+**What it is**: Staggered grid with no fixed row heights.
+**Cost**: low — use CSS columns or a masonry library.
 
 ### Split-screen scroll
 **Use when**: storytelling, dual-narrative content.
@@ -361,6 +306,11 @@ Patterns below are organized by purpose. Skim by section to find what fits the m
 **Why it works**: Whole sentences in gradient text date the work; one word in gradient reads as craft.
 **Cost**: low — `background-clip: text` on a single span.
 
+### Keyboard shortcut chip
+**Use when**: products that have been designed by people who care about keyboard speed.
+**What it is**: Compressed monospace inside a low-radius pill with a 1px hairline border. Appears in nav, body text, hero illustrations. `<kbd>` markup: `border: 1px solid #EAEAEA`, `border-radius: 4px`, `background: #F7F6F3`, monospace font.
+**Cost**: zero — markup discipline.
+
 ### Headline + deflating qualifier
 **Use when**: ambitious-but-honest brand voice (creative tools, AI products).
 **What it is**: Big claim + small honest constraint. "Make anything possible — in one tool." "Build better sites, faster." The qualifier is what makes the claim believable.
@@ -465,63 +415,7 @@ Every clickable card or image reacts on hover:
 
 ---
 
-## Dashboard-specific patterns
-
-The 5 card archetypes for modern SaaS dashboards. A common arrangement: Row 1 with 3 columns, Row 2 with 2 columns split 70/30.
-
-### The Intelligent List
-Vertical stack of items with an infinite auto-sorting loop. Items swap positions using shared layout IDs, simulating an AI prioritizing tasks in real-time.
-**Use for**: "this is a smart product" surfaces.
-
-### The Command Input
-Search / AI bar with a multi-step typewriter effect. Cycles through complex prompts. Includes a blinking cursor and a "processing" state with a shimmering loading gradient.
-**Use for**: hero placement on AI products, search-first surfaces.
-
-### The Live Status
-Scheduling interface with "breathing" status indicators. Pop-up notification badge that emerges with overshoot spring, holds for 3 seconds, vanishes cleanly.
-**Use for**: live-data products, monitoring surfaces.
-
-### The Wide Data Stream
-Horizontal infinite carousel of data cards or metrics. Loop is seamless via `x: ["0%", "-100%"]` at a speed that feels effortless (15-25s typical).
-**Use for**: telemetry surfaces, observability, real-time feeds.
-
-### The Contextual Focus Mode
-Document view that animates a staggered highlight of a text block, followed by a float-in of a floating action toolbar with micro-icons.
-**Use for**: editing surfaces, AI-assisted document tools.
-
-### Dashboard hardening rules (when VISUAL_DENSITY > 7)
-- Generic card containers are out. Use logic-grouping via `border-t`, `divide-y`, or pure negative space.
-- Numbers right-aligned in `font-mono` (tabular figures).
-- Sticky headers on long tables.
-- Empty rows show empty states across the full width, never collapse silently.
-- Action columns right-aligned.
-- 1px hairline borders for surface elevation in dark mode rather than drop shadows.
-- 4-5 step surface lightness ladder (page → card → raised → popover → overlay).
-
-### Tiered surface elevation (dark mode)
-**Use when**: dark-mode dashboards, premium dev tools.
-**What it is**: 4-5 step lightness ladder for page/card/raised/popover/overlay. Each step is small in absolute lightness (~3-5% L lift) but the cumulative effect creates real depth. No drop shadows; elevation lives in lightness.
-**Cost**: zero — token discipline.
-
-### Code-as-design-content
-**Use when**: developer-tooling surfaces, infrastructure marketing.
-**What it is**: Treat a code block like hero photography. Short (6-14 lines), syntax-highlighted with a custom theme that matches the page accent (not a third-party scheme), inside window chrome (traffic-light dots, title bar with filename). Pixel-perfect HTML/CSS, not a screenshot — scales crisply.
-**Cost**: medium — custom syntax theme + window chrome styling.
-
-### Terminal mockup
-**Use when**: infrastructure / CLI / dev-tool marketing.
-**What it is**: Near-black window with traffic-light chrome and a `$` or `>` prompt. Command is short, declarative, often runnable exactly as written. Multi-line terminals fade older lines via opacity reduction. Output is monospace and color-coded (green success, gray chatter, bright neutral for user input).
-**Cost**: low — CSS + content.
-
-### Cropped dashboard preview
-**Use when**: B2B product marketing showing dashboards or admin interfaces.
-**What it is**: Cropped, never full-page. The reader sees one card, one chart, a sliver of nav — enough to read "this is software," not enough to actually parse the dashboard. Real data shapes (sparklines, log lines, plausible numbers) instead of stock chart shapes.
-**Cost**: zero — design discipline.
-
-### Keyboard shortcut chip
-**Use when**: products that have been designed by people who care about keyboard speed.
-**What it is**: Compressed monospace inside a low-radius pill with a 1px hairline border. Appears in nav, body text, hero illustrations. `<kbd>` markup: `border: 1px solid #EAEAEA`, `border-radius: 4px`, `background: #F7F6F3`, monospace font.
-**Cost**: zero — markup discipline.
+Dashboard card archetypes, density hardening and surface elevation live in `references/surfaces/dashboard.md`. Code, terminal and cropped-dashboard hero media for product marketing live in `references/surfaces/landing.md`.
 
 ---
 
@@ -575,11 +469,7 @@ Imagery is part of the design, not a nice-to-have. Every layout must accommodate
 **What it is**: Two-panel comparison: messy input left, clean output right, often with an arrow or wand glyph between. Demonstrates value without verbal explanation.
 **Cost**: zero — layout.
 
-### Monochrome logo wall
-**Use when**: trust strips, customer-proof sections.
-**What it is**: 6-10 customer logos in a single row, all desaturated to the page's neutral text color, at uniform optical weight (not pixel size — adjusted per logo so they read evenly). Spaced with generous gutters. Often introduced by a short label ("Working with", "Trusted by teams at").
-**Why it works**: Removes visual chaos; the wall reads as a single block of social proof.
-**Cost**: zero — CSS filter or pre-rendered greyscale assets.
+Logo wall rules live in `references/surfaces/landing.md` (Proof).
 
 ### Generative-art output as portfolio
 **Use when**: AI products where the output IS the product.
@@ -608,40 +498,7 @@ Imagery is part of the design, not a nice-to-have. Every layout must accommodate
 
 ---
 
-## Hero treatments observed across premium sites
-
-### Large product mock as hero
-The canonical hero image is the actual UI — a dashboard, workflow, chat interface. Cropped close, with extreme detail visible. Real-looking data inside it. Soft drop shadow + subtle rounded corners (12-24px). Box-shadow at low opacity, high blur (e.g., `0 24px 64px rgba(0,0,0,0.08)`). The screenshot floats above the page without harsh edges.
-
-### Animated metric callouts in hero
-Numbers tick up from 0 on entry over 800-1500ms. Restricted to 2-3 stats max; more dilutes the effect. Counter triggers once per page entry, not on every scroll past.
-
-### Interactive product demo in hero
-A real, manipulable instance of the product running inline. The user can drag, type, click — and the product responds with actual logic, not a video loop. The strongest "designed by designers" signal available. Affordances: subtle pulsing dots, ghost hand-cursor hints, a "try it" label on the first interactable element.
-
-### Kinetic headline reveal
-Hero text appears almost instantly; the heavier interactive demo or 3D render fades in 200-400ms behind it. Never make users wait for first meaningful paint.
-
-### Slow ambient hero motion
-A slow rotating gradient, a chart that gently animates, a token sliding across a connection. Subtle enough that you only notice it on a second look.
-
-### Auto-playing muted hero video
-Hero video plays automatically, muted, looped, often at reduced contrast or with a subtle dark gradient overlay to keep overlaid text legible. The video runs in the background of attention. Provides a still poster image as a fallback. Compresses aggressively (under 4MB for a 30-second loop).
-
-### Pulsing globe / animated map
-Recurring shorthand for "global infrastructure." The animation is slow (3-6s loop), low-saturation, never obstructs the headline. Labels only on the regions you actually have presence in.
-
-### 3D marquee object
-A single hero-render of the product as a physical thing — soft-clay device, glass orb, metallic monolith. Rotates on scroll. Matte (not glossy) PBR materials with strong rim light and soft floor shadow. Anchors the brand in physical-design vocabulary.
-
-### Two-column hero with metaphor image
-Text the heavy lifting; image carries metaphor. Works for support and customer-experience categories. The image is atmospheric (not literal product UI) — water, light, fabric, sky as metaphor for the feeling the product evokes.
-
-### Synthetic screenshot composition
-When the surface is too abstract to screenshot (a workflow, an AI agent conversation, a queue of work), the imagery becomes a stylized composition of UI fragments: a card, a notification, a chat bubble, a status pill, all floating against a soft background. Implies a product without committing to a literal frame.
-
-### Narrative chat thread
-Multi-turn conversation between an agent and a person, shown inline on the marketing page. The reader absorbs the capability through the conversation, not through prose explaining it. Replaces older "feature screenshot" treatments for AI-adjacent capabilities.
+Hero treatments (product mock, demo, metric callouts, ambient motion, video, globe, 3D object) live in `references/surfaces/landing.md`.
 
 ---
 
@@ -649,18 +506,12 @@ Multi-turn conversation between an agent and a person, shown inline on the marke
 
 | Brief | Patterns |
 |---|---|
-| Modern SaaS landing | Asymmetric split hero + bento grid + spotlight border cards + perpetual micro-interactions |
-| AI product landing | Thesis-statement hero + before/after panels + command input demo + magnetic button + mesh gradient bg |
-| Developer-tooling landing | Code-as-design hero + terminal mockup + monochrome logo wall + keyboard chips + status indicator |
-| Fintech / wealth | Editorial split + email-capture hero + monochrome logo wall + research/timeline band |
-| Creator-tool landing | Interactive demo hero + bento grid + per-section accent colors + tilted product frames + tinted shadows |
-| Premium consumer brand | Cinematic center hero + double-bezel containers + mesh gradient + scroll-pinned product walks |
 | Portfolio | Masonry + parallax tilt cards + horizontal scroll hijack on featured pieces |
 | Editorial / brand | Curtain reveal + kinetic marquee + text mask reveal + circular text path |
-| Dashboard (cockpit density) | Tiered surface elevation + intelligent list + wide data stream + cropped dashboard preview |
-| Mobile app landing | Morphing status pill nav + dock-style magnification CTA + parallax tilt feature card |
 | Long-form content / docs | Editorial column rhythm + hairline-border cards + subtle fade-up + monochrome logo wall |
 | Brutalist editorial | Visible grid + bordered industrial cards + step-function reveals + terminal mockup |
+
+Landing-page pairings live in `references/surfaces/landing.md`; the dashboard pairing lives in `references/surfaces/dashboard.md`.
 
 ---
 
@@ -677,8 +528,8 @@ Multi-turn conversation between an agent and a person, shown inline on the marke
 | Mesh gradient + heavy texture overlay on hero | Visual noise; the gradient loses depth |
 | 3D-tilted product window + parallax background + scroll-scrubbed video | Three "premium effect" patterns layered; the page reads as showcase, not product |
 | Brutalist visible grid + soft drop shadow + glassmorphism | Style collision — pick one system and commit |
-| Title Case + decorative serif + center alignment on a software dashboard | Three "premium feel" reflexes on a surface that doesn't want them |
-| Customer logo wall repeated 3+ times | Overcompensation; the trust signal collapses |
+
+The dashboard combination to avoid lives in `references/surfaces/dashboard.md`; the repeated logo wall lives in `references/surfaces/landing.md`.
 
 ---
 
@@ -699,26 +550,17 @@ Multi-turn conversation between an agent and a person, shown inline on the marke
 - **Critical-path CSS** — inline for above-the-fold content where possible.
 - **`prefers-reduced-motion`** — respected universally. Replace transforms with simple opacity fades, shorten durations, drop blur components, pause background mesh animations.
 - **Reduce motion intensity by 2 levels on mobile** — what reads as ambient on desktop reads as distracting on mobile.
-- **Cap hero video size** — under 4MB for a 30-second loop. Provide poster image for slow connections.
+- **Hero video size** lives in `references/surfaces/landing.md`.
 - **Mount animations once** — number counters animate on enter-view, not on every scroll past.
 
 ---
 
 ## When to apply each pattern
 
-- **Animated counters**: when the metric is the proof. Skip when the number is incidental.
-- **Numbered "how it works"**: when the product has a clear onboarding arc. Skip if it's a single tool with no sequence.
-- **"Before / after" comparison**: when there's a clear status-quo competitor to displace. Skip in greenfield categories.
-- **Logo strip**: when 6+ recognizable customers can be named. Skip with 3 logos — looks thin.
-- **Bento grids**: when 5-8 distinct capabilities need showcasing. Skip for 3 — looks underbuilt.
-- **Chapter-framework narrative**: when the product is large enough to feel like a journey. Skip on single-purpose tools.
-- **Ambient hero motion**: when the page is otherwise quiet. Don't stack motion on motion.
-- **Compliance badges**: when procurement teams will ask. Skip on consumer-facing surfaces.
+When to include landing-page sections (counters, logo strips, bento, demos, badges, deflectors) lives in `references/surfaces/landing.md`.
+
 - **Gradient background section**: once per page, at the section that matters most.
-- **Mid-page "still have questions" deflector**: on long pages. Skip on short pages — the final CTA does the job.
-- **Interactive product demo**: when the product is visual or temporal and 60+ seconds of engagement justifies the build cost.
 - **Mesh gradient background**: on hero surfaces in maximalist styles; skip on minimalist or industrial.
-- **Pulsing globe**: when the product has genuine global infrastructure to surface; skip when it's vibes.
 - **Variable-axis hover animation**: when the brand voice is "we notice details"; skip when the audience won't.
 - **Tinted shadow**: in creative-cohort styles; skip in industrial or minimalist.
 - **Liquid glass / double bezel**: in high-end maximalist styles; skip elsewhere — it reads as decorative grafting.

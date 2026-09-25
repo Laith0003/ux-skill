@@ -402,5 +402,5 @@
 - See **interaction.md** for navigation touch targets and tap feedback.
 - See **accessibility.md** for skip-links, heading hierarchy, and orientation support.
 - See **motion.md** for scroll-triggered reveals and pinned-section choreography.
-- See **dashboards.md** for data-dense layout density and the 5 dashboard archetypes.
+- See `references/surfaces/dashboard.md` for data-dense layout density and the 5 dashboard archetypes.
 - See **components.md** for navbar, modal, and bento card contracts.
