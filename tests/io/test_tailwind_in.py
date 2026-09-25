@@ -358,6 +358,8 @@ def test_a_nested_dark_class_joins_the_root_selector():
 @pytest.mark.parametrize("variant", [
     "@custom-variant dark (&:where(:not(.light), :not(.light) *));",
     "@custom-variant dark (&:not([data-theme=light] *));",
+    "@custom-variant dark (&:where(:not(:is(.light, .light *))));",
+    "@custom-variant dark (&:not(:where(.light, .light *)));",
 ])
 def test_a_dark_variant_that_names_only_what_dark_is_not_is_not_guessed(variant):
     text = (f"{variant}\n:root {{\n  --bg: #111;\n  @variant dark {{\n    --bg: #000;\n  }}\n}}\n"
@@ -376,8 +378,9 @@ def test_a_dark_variant_that_names_only_what_dark_is_not_is_not_guessed(variant)
          "&:where(.dark, .dark *), and set the dark values under that selector")]
     assert [(i.where, i.name, i.message) for i in report.not_read] == [
         ("app.css:5", "--bg",
-         f"is set under :root @variant dark, and @custom-variant dark ({written}) names no dark "
-         "selector, only what dark is not; name one in it, such as &:where(.dark, .dark *) or "
+         f"is set under :root @variant dark, and @custom-variant dark, declared as {written}, "
+         "names no dark selector, only what dark is not; name one in it, such as "
+         "&:where(.dark, .dark *) or "
          "&:where([data-theme=dark], [data-theme=dark] *), and set the dark values under that "
          "selector"),
         ("app.css:9", "--pad", "is set on .card, not on the root or a theme selector; a "
@@ -416,3 +419,45 @@ def test_json_literals_and_a_theme_that_is_not_an_object_are_named():
         import_tailwind_json(bad, Source("cfg.json", "tailwind-json", "0" * 64, len(bad)))
     assert str(exc.value) == ("cfg.json holds theme as null, not an object; export the "
                               f"resolved theme instead: {EXPORT_COMMAND}")
+
+
+@pytest.mark.parametrize("variant", [
+    "@custom-variant dark (&:where(.dark, .dark *):not(.print));",
+    "@custom-variant dark (&:not(:is(.print, .print *)):where(.dark, .dark *));",
+])
+def test_a_dark_variant_with_a_negated_part_reads_its_dark_selector(variant):
+    text = f"{variant}\n:root {{\n  --bg: #111;\n  @variant dark {{\n    --bg: #000;\n  }}\n}}\n"
+    imported = _css(text)
+    assert imported.tokens.get("bg").modes == {"scheme:dark": "#000000"}
+    assert imported.forms == {"scheme": (".dark", "")}
+
+
+def test_the_block_form_of_a_negated_variant_is_named_by_its_selector():
+    text = ("@custom-variant dark {\n  &:where(:not(.light), :not(.light) *) {\n"
+            "    @slot;\n  }\n}\n"
+            ":root {\n  --bg: #111;\n  @variant dark {\n    --bg: #000;\n  }\n}\n")
+    report = _css(text).report
+    assert report.notes[0].message.startswith(
+        "is declared as &:where(:not(.light), :not(.light) *), which names no dark selector")
+    assert "declared as &:where(:not(.light), :not(.light) *), names" in report.not_read[0].message
+
+
+def test_json_literals_inside_lists_are_named_not_read_as_text():
+    text = json.dumps({"fontFamily": {"sans": ["Inter", None], "mono": ["Code Mono", "monospace"]},
+                       "fontSize": {"sm": [None, "1rem"], "md": ["1rem", {"lineHeight": False}],
+                                    "lg": ["1.125rem", {"lineHeight": 1.75}]},
+                       "dropShadow": {"md": ["0 1px 2px #0000001a", True]}})
+    imported = import_tailwind_json(text, Source("t.json", "tailwind-json", "0" * 64,
+                                                 len(text)))
+    assert [(t.path, t.value) for t in imported.tokens.tokens()] == [
+        ("fontFamily.mono", ["Code Mono", "monospace"]),
+        ("fontSize.lg", {"value": 1.125, "unit": "rem"})]
+    report = imported.report
+    assert [(i.name, i.message) for i in report.not_read] == [
+        (name, f"holds {lit}, a JSON literal, not a theme value; write that member as a "
+               "string, or remove it")
+        for name, lit in [("fontFamily.sans", "null"), ("fontSize.sm", "null"),
+                          ("fontSize.md", "false"), ("dropShadow.md", "true")]]
+    assert [(i.name, i.message) for i in report.notes] == [
+        ("fontSize.lg", "its line height 1.75 was left out; the engine keeps line heights as "
+                        "their own tokens, so add one if you need it")]
