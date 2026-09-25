@@ -15,6 +15,11 @@ Fields:
   default_scheme   light, dark or system
   reading_context  glance, task, long-read or on-the-go
   brand_role       fill, accent or edge
+  product_type     app, software, marketing-site, editorial or commerce
+
+Beside them the brief may carry a character object: what a word the engine
+does not read means, as nudges of -0.3 to 0.3 on the seven axes, applied
+after the words (engine.synthesizer.axes.NUDGE_LIMIT).
 """
 from __future__ import annotations
 
@@ -30,6 +35,14 @@ SCRIPTS: Tuple[str, ...] = ("latin", "arabic")
 SCHEMES: Tuple[str, ...] = ("light", "dark", "system")
 READING: Tuple[str, ...] = ("glance", "task", "long-read", "on-the-go")
 BRAND_ROLES: Tuple[str, ...] = ("fill", "accent", "edge")
+# What the product is. BOOK_DEPTH says how far each is read like a book, 0
+# to 1: an app or software is used in short tasks, an editorial product is
+# read at length. The face choice multiplies it into a book target that is
+# continuous in type personality and formality (fonts.book_target), so the
+# field moves the faces without a table of faces.
+PRODUCT_TYPES: Tuple[str, ...] = ("app", "software", "marketing-site", "editorial", "commerce")
+BOOK_DEPTH: Mapping[str, float] = MappingProxyType({
+    "app": 0.0, "software": 0.0, "commerce": 0.25, "marketing-site": 0.5, "editorial": 1.0})
 # Language subtags written in Arabic script.
 ARABIC_LANGUAGES: Tuple[str, ...] = ("ar", "fa", "ur", "ps", "ckb", "sd", "ug")
 # The member languages of the Arabic-script macrolanguages above, as the
@@ -48,7 +61,7 @@ ARABIC_SCRIPTS: Tuple[str, ...] = ("arab", "aran")
 # dir="rtl": [lang|="ar"] matches "ar" and every "ar-" tag.
 SELECTOR_LANGUAGE = "ar"
 FIELDS: Tuple[str, ...] = ("age", "languages", "primary_script", "default_scheme",
-                           "reading_context", "brand_role")
+                           "reading_context", "brand_role", "product_type")
 
 
 def _either(choices: Tuple[str, ...]) -> str:
@@ -58,12 +71,17 @@ def _either(choices: Tuple[str, ...]) -> str:
 # The structured fields and their allowed values, for the CLI help and the
 # MCP descriptions: a host that never reads the command doc learns them here.
 FIELDS_HELP = (
-    "The brief also takes six structured fields, filled from its plain words (free text is "
+    "The brief also takes seven structured fields, filled from its plain words (free text is "
     f"never read for them): age ({_either(tuple(AGES))}), languages (language tags, the main "
     'one first, such as ["ar-JO", "en"]), primary_script '
     f"({_either(SCRIPTS)}), default_scheme ({_either(SCHEMES)}), reading_context "
-    f"({_either(READING)}), brand_role ({_either(BRAND_ROLES)}). For example \"many readers are "
-    'over 60" is "age": "older-adults".')
+    f"({_either(READING)}), brand_role ({_either(BRAND_ROLES)}), product_type "
+    f"({_either(PRODUCT_TYPES)}; an app or software leans the faces to sans, an editorial "
+    "product may take a serif). For example \"many readers are over 60\" is \"age\": "
+    '"older-adults". A character object passes what a word the engine does not read means, '
+    "as nudges from -0.3 to 0.3 on the axes warmth, contrast, density, geometry, formality, "
+    'motion and type_personality, applied after the words: "solid" might be "character": '
+    '{"contrast": 0.1, "geometry": -0.1}.')
 # A language tag: a primary subtag of two or three letters, then subtags.
 TAG = re.compile(r"^[A-Za-z]{2,3}(-[A-Za-z0-9]{1,8})*$")
 # Language names a brief may hold by mistake, and the tag to give instead.
@@ -122,6 +140,7 @@ class Audience:
     default_scheme: str = "system"
     reading_context: str = "task"
     brand_role: Optional[str] = None
+    product_type: Optional[str] = None
     given: Tuple[str, ...] = field(default=(), compare=False)
 
     @property
@@ -160,6 +179,12 @@ class Audience:
         return 34 if self.reading_context == "long-read" else 38
 
     @property
+    def book_depth(self) -> Optional[float]:
+        """How far the product is read like a book (BOOK_DEPTH), or None
+        when the brief does not say what the product is."""
+        return BOOK_DEPTH[self.product_type] if self.product_type else None
+
+    @property
     def arabic(self) -> Optional[bool]:
         """True or False when the brief names languages, True when it sets
         the primary script to Arabic, None otherwise (the build keeps its
@@ -172,18 +197,24 @@ class Audience:
     def to_dict(self) -> Dict[str, Any]:
         return {"age": self.age, "languages": list(self.languages),
                 "primary_script": self.primary_script, "default_scheme": self.default_scheme,
-                "reading_context": self.reading_context, "brand_role": self.brand_role}
+                "reading_context": self.reading_context, "brand_role": self.brand_role,
+                "product_type": self.product_type}
 
 
 def _choice(brief: Mapping[str, Any], key: str, choices: Tuple[str, ...], label: str,
-            default: Optional[str]) -> Optional[str]:
+            default: Optional[str], spaces: bool = False) -> Optional[str]:
+    """A field read from a fixed list. With `spaces`, words may be written
+    with spaces for the hyphens ("marketing site")."""
     value = brief.get(key)
     if value in (None, ""):
         return default
-    if not isinstance(value, str) or value.strip().lower() not in choices:
+    word = value.strip().lower() if isinstance(value, str) else None
+    if word is not None and spaces:
+        word = "-".join(word.split())
+    if word not in choices:
         raise AudienceError(f"{label} field {key} is {value!r}; use one of "
                             f"{', '.join(choices)}")
-    return value.strip().lower()
+    return word
 
 
 def _check_tags(langs: List[str], label: str) -> None:
@@ -232,6 +263,7 @@ def read_audience(brief: Optional[Mapping[str, Any]], label: str = "brief") -> A
         default_scheme=_choice(brief, "default_scheme", SCHEMES, label, "system") or "system",
         reading_context=_choice(brief, "reading_context", READING, label, "task") or "task",
         brand_role=_choice(brief, "brand_role", BRAND_ROLES, label, None),
+        product_type=_choice(brief, "product_type", PRODUCT_TYPES, label, None, spaces=True),
         given=given)
 
 
@@ -302,7 +334,29 @@ def effects(a: Audience, axes: Optional[Any] = None) -> List[Effect]:
                           f"the brief sets {a.default_scheme} as the default scheme"))
     if a.brand_role:
         out.append(Effect(f"The brand's role is {a.brand_role}", "the brief names it"))
+    if a.product_type:
+        out.append(_product_effect(a, axes))
     return out
+
+
+def _product_effect(a: Audience, axes: Optional[Any]) -> Effect:
+    """What the product type did to the faces at these axes."""
+    from engine.foundations import fonts
+    from engine.synthesizer.axes import AxisValues
+    at = axes if axes is not None else AxisValues(*[0.5] * 7)
+    choice = fonts.choose(at, a.book_depth)
+    target = fonts.book_target(at, a.book_depth or 0.0)
+    lean = "serif" if target >= 0.5 else "sans"
+    what = (f"The faces lean {lean}, with a book target of {target:.2f}: display "
+            f"{choice.display.family} ({choice.display.generic}), Arabic "
+            f"{choice.arabic.family} ({choice.arabic.generic})")
+    why = {0.0: "a product people use in short tasks wants interface faces, not book faces"}
+    reason = why.get(a.book_depth or 0.0, "the product is read more like a book the more "
+                     "editorial it is, and the target grows with type personality and "
+                     "formality")
+    article = "an" if a.product_type[0] in "aeiou" else "a"
+    return Effect(what, f"the brief says the product is {article} "
+                        f"{a.product_type.replace('-', ' ')}, and {reason}")
 
 
 # How a person passes what the engine could not read from free text.
@@ -312,4 +366,5 @@ HOW_TO_PASS = (
     'default_scheme ("light", "dark" or "system")',
     'reading_context ("glance", "task", "long-read" or "on-the-go")',
     'brand_role ("fill", "accent" or "edge")',
+    'product_type ("app", "software", "marketing-site", "editorial" or "commerce")',
 )

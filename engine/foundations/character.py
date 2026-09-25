@@ -231,6 +231,29 @@ def dark_band_chroma(axes: AxisValues) -> float:
     return round(0.02 + 0.06 * axes.contrast, 4)
 
 
+def light_band_chroma(axes: AxisValues) -> float:
+    """The most chroma a section band takes in light mode, 0.015 for a
+    muted system to 0.06 for a bold one: a light band spans a whole
+    section, so a muted system gets a pale tint of the brand, never a loud
+    slab of it."""
+    return round(0.015 + 0.045 * axes.contrast, 4)
+
+
+# The landing display size at body 16px: LANDING_DISPLAY_PX[0] for a
+# muted, formal system, rising by up to LANDING_DISPLAY_PX[1] with contrast
+# and playfulness.
+LANDING_DISPLAY_PX = (56.0, 48.0)
+
+
+def landing_display_px(axes: AxisValues) -> float:
+    """The headline size of a landing page at body 16px, 56 to 104px: bold
+    systems go large, and a formal one holds back a little. Contrast counts
+    three fifths and playfulness two fifths, so the size is continuous in
+    both; the type scale keeps it above the hero."""
+    low, span = LANDING_DISPLAY_PX
+    return low + span * (0.6 * axes.contrast + 0.4 * (1.0 - axes.formality))
+
+
 def axes_support_hue(axes: AxisValues) -> float:
     """The supporting accent's hue when the brand has none: violet at
     warmth 0, rose at warmth 1, orchid between, in proportion to warmth

@@ -35,10 +35,15 @@ MARGIN = {"phone": (5, 4), "tablet": (8, 6), "laptop": (12, 8), "desktop": (16, 
 # every density.
 REGION_GAP = {"phone": (12, 8), "tablet": (16, 12), "laptop": (24, 16), "desktop": (32, 16)}
 HERO_PADDING = {"phone": (16, 10), "tablet": (20, 12), "laptop": (24, 16), "desktop": (32, 20)}
+# The gap between the sections of a landing page, per tier: airier than an
+# app's region gap, 128 to 192px at desktop by density, so a long page
+# changes pace between sections. Never below the region gap at its tier.
+LANDING_GAP = {"phone": (20, 16), "tablet": (24, 20), "laptop": (32, 24), "desktop": (48, 32)}
 # Header and footer block padding, the same at every width.
 HEADER_PADDING, FOOTER_PADDING = (4, 3), (16, 10)
 # Tiered roles with a responsive alias in CSS (responsive_css).
-RESPONSIVE = ("columns", "gutter", "margin-inline", "region-gap", "hero.padding-block")
+RESPONSIVE = ("columns", "gutter", "margin-inline", "region-gap", "landing-gap",
+              "hero.padding-block")
 COMPACT_FLOOR = 2  # space units, 8px
 CONTAINERS = (1120, 1280, 1440)
 MEASURE_REM = {"text": 38, "form": 32}
@@ -89,7 +94,8 @@ def generate_layout(axes: AxisValues, target_px: int = TARGET_PX["comfortable"],
         ts.add(Token(f"layout.columns.{tier}", "number",
                      "{layout.column-count.%d}" % COLUMNS[tier], layer="semantic"))
     for group, table in (("gutter", GUTTER), ("margin-inline", MARGIN),
-                         ("region-gap", REGION_GAP), ("hero.padding-block", HERO_PADDING)):
+                         ("region-gap", REGION_GAP), ("landing-gap", LANDING_GAP),
+                         ("hero.padding-block", HERO_PADDING)):
         for tier in TIERS:
             comfortable, compact = _units(table[tier], d)
             compact = comfortable if refuse_compact else compact
@@ -154,6 +160,7 @@ ROLE_TYPES: Dict[str, str] = {
     **{f"layout.gutter.{t}": "dimension" for t in TIERS},
     **{f"layout.margin-inline.{t}": "dimension" for t in TIERS},
     **{f"layout.region-gap.{t}": "dimension" for t in TIERS},
+    **{f"layout.landing-gap.{t}": "dimension" for t in TIERS},
     **{f"layout.hero.padding-block.{t}": "dimension" for t in TIERS},
     "layout.header.padding-block": "dimension", "layout.footer.padding-block": "dimension",
     "layout.container.max": "dimension",
@@ -259,10 +266,19 @@ def _measure(ts: TokenSet, mode: str) -> List[str]:
 
 
 def _regions(ts: TokenSet, mode: str) -> List[str]:
-    """The region gap and the hero padding never shrink as the viewport
-    grows."""
+    """The region gap, the landing gap and the hero padding never shrink as
+    the viewport grows, and the landing gap never falls below the region
+    gap at its tier."""
     out = []
-    for group in ("region-gap", "hero.padding-block"):
+    for t in TIERS:
+        a, b = f"layout.region-gap.{t}", f"layout.landing-gap.{t}"
+        if _typed(ts, a) and _typed(ts, b) and _px(ts, b, mode) < _px(ts, a, mode) \
+                and not _repeat(ts, (a, b), mode, _px):
+            w = _where(mode)
+            out.append(f"{b} ({_px(ts, b, mode):g}px{w}) is smaller than {a} "
+                       f"({_px(ts, a, mode):g}px{w}); a landing page spaces its sections at "
+                       "least as far apart as an app, so point it at a larger space step")
+    for group in ("region-gap", "landing-gap", "hero.padding-block"):
         present = [f"layout.{group}.{t}" for t in TIERS if _typed(ts, f"layout.{group}.{t}")]
         for a, b in zip(present, present[1:]):
             va, vb, w = _px(ts, a, mode), _px(ts, b, mode), _where(mode)

@@ -878,7 +878,8 @@ else:
                   help="Brand color as hex. Quote it in a shell ('#3366FF') or drop the #.")
     @click.option("--brief", "brief_path", type=click.Path(dir_okay=False), default=None,
                   help="JSON brief (or .ux/last-discovery.json); the synthesizer places the axes "
-                       "from industry, tone, audience, must_have and forbidden. "
+                       "from industry, tone, audience, must_have and forbidden, then applies "
+                       "the character nudges. "
                        + BRIEF_FIELDS_HELP)
     @click.option("--axes", "axes_text", default=None,
                   help="Seven numbers from 0 to 1: warmth,contrast,density,geometry,"
@@ -912,8 +913,8 @@ else:
         """
         from engine.foundations.emit import (
             STATUS_EXIT, InputError, brief_audience, check_out_dir, choose_axes, failure_text,
-            make_system, note_rule_pack, parse_brand, read_brief, resolve_arabic, unread_lines,
-            write_outcome)
+            make_system, note_rule_pack, nudge_lines, parse_brand, read_brief, resolve_arabic,
+            unread_lines, write_outcome)
         try:
             brand_hex = parse_brand(brand, "--brand")
             brief = read_brief(brief_path, "--brief") if brief_path else None
@@ -925,7 +926,8 @@ else:
         except InputError as exc:
             raise click.UsageError(str(exc)) from None
         system = make_system(brand_hex, axes, source, arabic=arabic, rule_pack=rule_pack,
-                             audience=audience, unread=unread_lines(brief, "--brief"))
+                             audience=audience, unread=unread_lines(brief, "--brief"),
+                             nudges=nudge_lines(brief, "--brief"))
         system = note_rule_pack(system, out, force=force)
         from engine.existing import client_files_in
         theirs = client_files_in(out, system.files) if (force and not replace_client) else []

@@ -44,7 +44,7 @@
   "--color-surface-selected: var(--color-brand-900);",
   "--color-surface-stripe: var(--color-neutral-950);",
   "--color-surface-sunken: var(--color-neutral-recess-dark);",
-  "--color-surface-tint: var(--color-brand-950);",
+  "--color-surface-tint: var(--color-brand-tint-dark);",
   "--color-syntax-comment: var(--color-neutral-400);",
   "--color-syntax-function: var(--color-info-300);",
   "--color-syntax-keyword: var(--color-brand-300);",
@@ -94,6 +94,7 @@
    "--color-status-warning-strong: var(--color-warning-800);",
    "--color-status-warning-text: var(--color-warning-800);",
    "--color-surface-brand: var(--color-brand-fill-high);",
+   "--color-surface-code: var(--color-neutral-100);",
    "--color-surface-header: var(--color-neutral-100);",
    "--color-surface-inverse: var(--color-base-black);",
    "--color-surface-page: var(--color-base-white);",
@@ -289,6 +290,7 @@
    "--color-status-warning-strong: var(--color-warning-800);",
    "--color-status-warning-text: var(--color-warning-800);",
    "--color-surface-brand: var(--color-brand-fill-high);",
+   "--color-surface-code: var(--color-neutral-100);",
    "--color-surface-header: var(--color-neutral-100);",
    "--color-surface-inverse: var(--color-base-black);",
    "--color-surface-page: var(--color-base-white);",
@@ -374,6 +376,9 @@
   "--color-brand-900: #03006D;",
   "--color-brand-950: #01003B;",
   "--color-brand-exact: #3366FF;",
+  "--color-brand-tint-light: #E9ECF4;",
+  "--color-brand-tint-dark: #04114C;",
+  "--color-brand-band-light: #D0DCF6;",
   "--color-brand-band-dark: #141F38;",
   "--color-brand-fill: #3366FF;",
   "--color-brand-fill-hover: #2655ED;",
@@ -394,6 +399,7 @@
   "--color-neutral-950: #0C0D0F;",
   "--color-neutral-recess-light: #EAEBEC;",
   "--color-neutral-recess-dark: #141618;",
+  "--color-neutral-code-light: #EAEAEB;",
   "--color-support-50: #F3F7FF;",
   "--color-support-100: #D2DEF7;",
   "--color-support-200: #B6C6E8;",
@@ -485,12 +491,12 @@
   "--color-surface-raised: var(--color-base-white);",
   "--color-surface-inverse: var(--color-neutral-900);",
   "--color-surface-selected: var(--color-brand-100);",
-  "--color-surface-tint: var(--color-brand-50);",
-  "--color-surface-band: var(--color-brand-100);",
+  "--color-surface-tint: var(--color-brand-tint-light);",
+  "--color-surface-band: var(--color-brand-band-light);",
   "--color-surface-brand: var(--color-brand-exact);",
   "--color-surface-stripe: var(--color-neutral-50);",
   "--color-surface-header: var(--color-neutral-50);",
-  "--color-surface-code: var(--color-neutral-100);",
+  "--color-surface-code: var(--color-neutral-code-light);",
   "--color-text-default: var(--color-neutral-900);",
   "--color-text-muted: var(--color-neutral-600);",
   "--color-text-inverse: var(--color-neutral-50);",
@@ -689,6 +695,15 @@
    ],
    "hex": "#141F38"
   },
+  "color.brand.band-light": {
+   "colorSpace": "srgb",
+   "components": [
+    0.815686,
+    0.862745,
+    0.964706
+   ],
+   "hex": "#D0DCF6"
+  },
   "color.brand.exact": {
    "colorSpace": "srgb",
    "components": [
@@ -751,6 +766,24 @@
     0.862745
    ],
    "hex": "#1A43DC"
+  },
+  "color.brand.tint-dark": {
+   "colorSpace": "srgb",
+   "components": [
+    0.015686,
+    0.066667,
+    0.298039
+   ],
+   "hex": "#04114C"
+  },
+  "color.brand.tint-light": {
+   "colorSpace": "srgb",
+   "components": [
+    0.913725,
+    0.92549,
+    0.956863
+   ],
+   "hex": "#E9ECF4"
   },
   "color.danger.100": {
    "colorSpace": "srgb",
@@ -1134,6 +1167,15 @@
    ],
    "hex": "#0C0D0F"
   },
+  "color.neutral.code-light": {
+   "colorSpace": "srgb",
+   "components": [
+    0.917647,
+    0.917647,
+    0.921569
+   ],
+   "hex": "#EAEAEB"
+  },
   "color.neutral.recess-dark": {
    "colorSpace": "srgb",
    "components": [
@@ -1453,10 +1495,10 @@
    ],
    "hex": "#030A27"
   },
-  "color.surface.band": "{color.brand.100}",
+  "color.surface.band": "{color.brand.band-light}",
   "color.surface.brand": "{color.brand.exact}",
   "color.surface.card": "{color.base.white}",
-  "color.surface.code": "{color.neutral.100}",
+  "color.surface.code": "{color.neutral.code-light}",
   "color.surface.header": "{color.neutral.50}",
   "color.surface.inverse": "{color.neutral.900}",
   "color.surface.page": "{color.neutral.50}",
@@ -1464,7 +1506,7 @@
   "color.surface.selected": "{color.brand.100}",
   "color.surface.stripe": "{color.neutral.50}",
   "color.surface.sunken": "{color.neutral.recess-light}",
-  "color.surface.tint": "{color.brand.50}",
+  "color.surface.tint": "{color.brand.tint-light}",
   "color.syntax.comment": "{color.neutral.600}",
   "color.syntax.function": "{color.info.700}",
   "color.syntax.keyword": "{color.brand.700}",
@@ -1860,6 +1902,12 @@
    "light": "#141F38",
    "light-high": "#141F38"
   },
+  "color.brand.band-light": {
+   "dark": "#D0DCF6",
+   "dark-high": "#D0DCF6",
+   "light": "#D0DCF6",
+   "light-high": "#D0DCF6"
+  },
   "color.brand.exact": {
    "dark": "#3366FF",
    "dark-high": "#3366FF",
@@ -1901,6 +1949,18 @@
    "dark-high": "#1A43DC",
    "light": "#1A43DC",
    "light-high": "#1A43DC"
+  },
+  "color.brand.tint-dark": {
+   "dark": "#04114C",
+   "dark-high": "#04114C",
+   "light": "#04114C",
+   "light-high": "#04114C"
+  },
+  "color.brand.tint-light": {
+   "dark": "#E9ECF4",
+   "dark-high": "#E9ECF4",
+   "light": "#E9ECF4",
+   "light-high": "#E9ECF4"
   },
   "color.danger.100": {
    "dark": "#FCD0D3",
@@ -2226,6 +2286,12 @@
    "light": "#0C0D0F",
    "light-high": "#0C0D0F"
   },
+  "color.neutral.code-light": {
+   "dark": "#EAEAEB",
+   "dark-high": "#EAEAEB",
+   "light": "#EAEAEB",
+   "light-high": "#EAEAEB"
+  },
   "color.neutral.recess-dark": {
    "dark": "#141618",
    "dark-high": "#141618",
@@ -2529,8 +2595,8 @@
   "color.surface.band": {
    "dark": "#141F38",
    "dark-high": "#141F38",
-   "light": "#CCDCFF",
-   "light-high": "#CCDCFF"
+   "light": "#D0DCF6",
+   "light-high": "#D0DCF6"
   },
   "color.surface.brand": {
    "dark": "#3366FF",
@@ -2547,7 +2613,7 @@
   "color.surface.code": {
    "dark": "#141618",
    "dark-high": "#000000",
-   "light": "#D9DBDD",
+   "light": "#EAEAEB",
    "light-high": "#D9DBDD"
   },
   "color.surface.header": {
@@ -2593,10 +2659,10 @@
    "light-high": "#EAEBEC"
   },
   "color.surface.tint": {
-   "dark": "#01003B",
-   "dark-high": "#01003B",
-   "light": "#F3F7FF",
-   "light-high": "#F3F7FF"
+   "dark": "#04114C",
+   "dark-high": "#04114C",
+   "light": "#E9ECF4",
+   "light-high": "#E9ECF4"
   },
   "color.syntax.comment": {
    "dark": "#888B8F",

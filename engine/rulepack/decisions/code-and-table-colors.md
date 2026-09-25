@@ -1,10 +1,10 @@
 ---
 id: code-and-table-colors
 title: Code blocks and tables have their own surfaces
-status: active
+status: superseded
 areas: [color]
 supersedes: null
-superseded_by: null
+superseded_by: clean-code-surface
 ---
 
 # Code blocks and tables have their own surfaces

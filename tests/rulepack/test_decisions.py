@@ -44,6 +44,8 @@ EXPECTED = {
     "brand-leads-by-reach", "natural-fill-for-white-text", "neutrals-lean-along-the-brand",
     "support-in-the-brand-family", "grey-support-is-neutral", "fills-on-every-control-surface",
     "links-on-status-soft-fills", "distinctness-on-saturated-brands",
+    "wider-vocabulary", "character-nudges", "faces-by-product-type", "landing-display-step",
+    "figure-holds-a-number-band", "landing-gap", "surfaces-stand-apart", "clean-code-surface",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",
@@ -77,7 +79,11 @@ SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-e
               "support-clear-of-banned-pairs": "support-in-the-brand-family",
               "grey-accent-clear-of-status": "grey-support-is-neutral",
               "fills-on-every-placement": "fills-on-every-control-surface",
-              "distinctness-on-a-grey-reference": "distinctness-on-saturated-brands"}
+              "distinctness-on-a-grey-reference": "distinctness-on-saturated-brands",
+              "face-choice": "faces-by-product-type",
+              "type-steps-down-on-phones": "landing-display-step",
+              "brand-surfaces": "surfaces-stand-apart",
+              "code-and-table-colors": "clean-code-surface"}
 
 
 def test_every_shipped_record_is_valid_and_routed():

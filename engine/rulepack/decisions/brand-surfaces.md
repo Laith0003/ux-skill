@@ -1,10 +1,10 @@
 ---
 id: brand-surfaces
 title: The brand reaches surfaces as a tint, a band or one brand band
-status: active
+status: superseded
 areas: [color]
 supersedes: null
-superseded_by: null
+superseded_by: surfaces-stand-apart
 ---
 
 # The brand reaches surfaces as a tint, a band or one brand band
