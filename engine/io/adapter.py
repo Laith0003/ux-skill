@@ -21,6 +21,7 @@ roles.
 """
 from __future__ import annotations
 
+import difflib
 import json
 import re
 from dataclasses import dataclass, field
@@ -109,7 +110,9 @@ def propose(ts: TokenSet) -> Mapping:
 
 
 def _our_axis(name: str, base: str, other: str) -> Optional[str]:
-    if name in AXES and (base, other) == AXES[name]:
+    """The axis of ours a mode axis is: the one it is named for, whatever
+    its values, or the one its values or class name say."""
+    if name in AXES:
         return name
     if base not in _BASE_WORDS and not name.startswith(base + "-"):
         return None
@@ -117,6 +120,22 @@ def _our_axis(name: str, base: str, other: str) -> Optional[str]:
     if (base, other) == ("off", "on"):
         word = name.split("-", 1)[1] if "-" in name else name
     return _AXIS_WORDS.get(word)
+
+
+def merge(proposed: Mapping, existing: Mapping) -> Mapping:
+    """The mapping to write when a system is imported again: every entry
+    the owner wrote ("by": "owner") as it is, and the new proposal only for
+    the roles and axes the owner has not set. An entry the engine proposed
+    before is replaced by the new proposal, or dropped when names no longer
+    say it. Roles and axes come in the engine's order."""
+    roles = {r: m for r, m in existing.roles.items() if m.by == "owner"}
+    for r, m in proposed.roles.items():
+        roles.setdefault(r, m)
+    axes = {a: m for a, m in existing.axes.items() if m.by == "owner"}
+    for a, m in proposed.axes.items():
+        axes.setdefault(a, m)
+    return Mapping({r: roles[r] for r in ROLE_TYPES if r in roles},
+                   {a: axes[a] for a in AXES if a in axes})
 
 
 # ---------------------------------------------------------------- file
@@ -158,8 +177,11 @@ def parse_mapping(text: str, name: str) -> Mapping:
     roles: Dict[str, RoleMap] = {}
     for role, entry in (doc.get("roles") or {}).items():
         if role not in ROLE_TYPES:
+            near = difflib.get_close_matches(role, list(ROLE_TYPES), n=1)
+            example = (f"such as the nearest, {near[0]}" if near
+                       else "for example color.text.default")
             raise InputError(f"{name} maps {role}, which is not a role the engine checks; use "
-                             "one of its roles, for example color.text.default")
+                             f"one of its roles, {example}")
         if not (isinstance(entry, dict) and isinstance(entry.get("token"), str)
                 and entry["token"] and entry.get("by", "owner") in BY):
             raise InputError(f"{name} role {role} is {json.dumps(entry)}; write {_ROLE_FIX}")
@@ -196,39 +218,67 @@ def load_mapping(path: Any, label: str = "--mapping") -> Mapping:
 # ---------------------------------------------------------------- view
 
 
-def _check(ts: TokenSet, mapping: Mapping) -> None:
+def _check(ts: TokenSet, mapping: Mapping, name: str) -> None:
     for role, m in mapping.roles.items():
         if not ts.has(m.token) and not (ROLE_TYPES[role] == "typography"
                                         and _has_fields(ts, m.token)):
-            raise InputError(f"the mapping sends {role} to {m.token}, which the imported system "
+            raise InputError(f"{name} sends {role} to {m.token}, which the imported system "
                              "does not have; point it at one of its tokens, or remove the line")
     used: Dict[str, str] = {}
     for axis, m in mapping.axes.items():
         if m.source not in ts.axes:
             have = ", ".join(ts.axes) or "none"
-            raise InputError(f"the mapping reads {axis} from the mode axis {m.source}, which the "
+            raise InputError(f"{name} reads {axis} from the mode axis {m.source}, which the "
                              f"imported system does not have (it has {have}); fix the from "
                              "value, or remove the axis")
         if m.source in used:
-            raise InputError(f"the mapping reads {used[m.source]} and {axis} both from "
+            raise InputError(f"{name} reads {used[m.source]} and {axis} both from "
                              f"{m.source}; read each of the engine's axes from a mode axis of "
                              "its own, or remove one")
         used[m.source] = axis
         theirs = ts.axes[m.source]
         for ours, value in m.values.items():
             if value not in theirs:
-                raise InputError(f"the mapping reads {axis} {ours} from {m.source} {value}, but "
+                raise InputError(f"{name} reads {axis} {ours} from {m.source} {value}, but "
                                  f"{m.source} has the values {theirs[0]} and {theirs[1]}; use "
                                  "those")
         if len(set(m.values.values())) < len(m.values):
             base, other = AXES[axis]
-            raise InputError(f"the mapping reads {axis} {base} and {other} both from "
+            raise InputError(f"{name} reads {axis} {base} and {other} both from "
                              f"{m.source} {m.values[base]}; read each from its own value")
 
 
+def _own_roles(ts: TokenSet) -> List[str]:
+    """The roles the set has under the role's own path."""
+    return [r for r in ROLE_TYPES if ts.has(r)]
+
+
 def _identity(ts: TokenSet, mapping: Mapping) -> bool:
-    return all(r == m.token for r, m in mapping.roles.items()) and all(
-        a == m.source and m.values == {v: v for v in AXES[a]} for a, m in mapping.axes.items())
+    """Whether the mapping names every role and axis the set has, each as
+    itself, and nothing else."""
+    return set(mapping.roles) == set(_own_roles(ts)) \
+        and all(r == m.token for r, m in mapping.roles.items()) \
+        and set(mapping.axes) == set(ts.axes) \
+        and all(a == m.source and m.values == {v: v for v in AXES[a]}
+                for a, m in mapping.axes.items())
+
+
+def _and(names: List[str]) -> str:
+    return names[0] if len(names) == 1 else f"{', '.join(names[:-1])} and {names[-1]}"
+
+
+def _left_out(ts: TokenSet, mapping: Mapping, name: str) -> List[str]:
+    """A note on the roles the set has under their own paths that the
+    mapping leaves out: the owner took them out, so they are not checked."""
+    gone = [r for r in _own_roles(ts) if r not in mapping.roles]
+    if not gone:
+        return []
+    if len(gone) == 1:
+        return [f"{name} leaves out {gone[0]}, which the imported system has under the role's "
+                "own name, so it was not checked; map it to check it"]
+    shown = gone if len(gone) <= 4 else gone[:3] + [f"{len(gone) - 3} more"]
+    return [f"{name} leaves out {_and(shown)}, which the imported system has under each role's "
+            "own name, so they were not checked; map each one to check it"]
 
 
 def _resolve(ts: TokenSet, role: str, token: str, context: str) -> Any:
@@ -237,17 +287,20 @@ def _resolve(ts: TokenSet, role: str, token: str, context: str) -> Any:
     return ts.resolve(token, context)
 
 
-def view(ts: TokenSet, mapping: Mapping) -> Tuple[TokenSet, List[str]]:
+def view(ts: TokenSet, mapping: Mapping,
+         name: str = "the mapping") -> Tuple[TokenSet, List[str]]:
     """The set the engine checks, in its own roles and axes, and notes on
-    what it read differently or left out. A mapping that names every role
-    and axis as the system already does gives the system itself. Raises
-    InputError for a token or axis value the system lacks."""
-    _check(ts, mapping)
-    if _identity(ts, mapping) and set(ts.axes) <= set(AXES):
-        return ts, []
+    what it read differently or left out. Only the mapped roles and axes
+    are in it: a role or axis the owner took out of the mapping is not
+    checked, and an axis left out is held at the system's base. A mapping
+    that names every role and axis the set has, each as itself, with
+    nothing read differently, gives the system itself. Raises InputError
+    for a token or axis value the system lacks; `name` is the mapping file
+    its messages name."""
+    _check(ts, mapping, name)
     axes = {a: AXES[a] for a in AXES if a in mapping.axes}
     out = TokenSet(axes)
-    notes: List[str] = []
+    notes: List[str] = _left_out(ts, mapping, name)
     for role, m in mapping.roles.items():
         want = ROLE_TYPES[role]
         values: Dict[str, Any] = {}
@@ -271,16 +324,32 @@ def view(ts: TokenSet, mapping: Mapping) -> Tuple[TokenSet, List[str]]:
             kind = "fontWeight"
         base, modes = compress(values, axes) if axes else (values[""], {})
         out.add(Token(role, kind, base, modes=modes, layer="semantic"))
+    if not notes and _identity(ts, mapping):
+        return ts, []
     return out, notes
 
 
+_CONTEXT = re.compile(r"\(([a-z]+:[a-z]+(?:,[a-z]+:[a-z]+)*)\)")
+
+
 def their_names(text: str, mapping: Mapping) -> str:
-    """`text` with each mapped role followed by the system's own name. A
-    role is matched whole: a longer path that starts with it is left, and
-    a period that ends a sentence after it is not part of it."""
+    """`text` with each mapped role followed by the system's own name, and
+    each context of mapped axes followed by the system's own modes when
+    they differ. A role is matched whole: a longer path that starts with it
+    is left, and a period that ends a sentence after it is not part of
+    it."""
     roles = sorted(mapping.roles, key=len, reverse=True)
-    if not roles:
-        return text
-    pattern = re.compile(r"(?<![\w.-])(" + "|".join(re.escape(r) for r in roles)
-                         + r")(?![\w-]|\.[\w-])")
-    return pattern.sub(lambda m: f"{m.group(1)} (your {mapping.roles[m.group(1)].token})", text)
+    if roles:
+        pattern = re.compile(r"(?<![\w.-])(" + "|".join(re.escape(r) for r in roles)
+                             + r")(?![\w-]|\.[\w-])")
+        text = pattern.sub(lambda m: f"{m.group(1)} (your {mapping.roles[m.group(1)].token})",
+                           text)
+    return _CONTEXT.sub(lambda m: _their_context(m.group(0), m.group(1), mapping), text)
+
+
+def _their_context(whole: str, key: str, mapping: Mapping) -> str:
+    pairs = [p.split(":") for p in key.split(",")]
+    if not all(a in mapping.axes and v in AXES[a] for a, v in pairs):
+        return whole
+    theirs = ",".join(f"{mapping.axes[a].source}:{mapping.axes[a].values[v]}" for a, v in pairs)
+    return whole if theirs == key else f"({key}; your {theirs})"

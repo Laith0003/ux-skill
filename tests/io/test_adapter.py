@@ -11,8 +11,8 @@ from engine.foundations.errors import InputError
 from engine.foundations.export import to_css
 from engine.foundations.tokens import Token, TokenSet
 from engine.io.adapter import (
-    ROLE_TYPES, AxisMap, Mapping, RoleMap, dump_mapping, load_mapping, parse_mapping, propose,
-    their_names, view)
+    ROLE_TYPES, AxisMap, Mapping, RoleMap, dump_mapping, load_mapping, merge, parse_mapping,
+    propose, their_names, view)
 from engine.io.css_in import import_css
 from engine.io.dtcg_in import import_dtcg
 from engine.io.report import Source
@@ -154,6 +154,13 @@ def test_an_imported_dtcg_set_with_a_dark_file_is_checked_in_our_roles():
         their_names(found[0].message(), mapping)
 
 
+def test_a_view_error_names_the_mapping_file_it_came_from():
+    mapping = Mapping(roles={"color.text.default": RoleMap("text-main", "owner")}, axes={})
+    with pytest.raises(InputError) as exc:
+        view(_css(FOREIGN), mapping, "mapping.json")
+    assert str(exc.value).startswith("mapping.json sends color.text.default to text-main, ")
+
+
 def test_a_mapping_to_a_token_that_is_not_there_is_named():
     ts = _css(FOREIGN)
     mapping = Mapping(roles={"color.text.default": RoleMap("text-main", "owner")}, axes={})
@@ -232,8 +239,11 @@ def test_a_mapping_file_that_cannot_be_read_names_the_flag_and_the_fix(tmp_path)
                                  "keep only version, axes and roles"),
     ({"version": 2}, "mapping.json has version 2; this engine reads version 1, so write "
                      "\"version\": 1"),
-    ({"version": 1, "roles": {"color.text.main": {"token": "x", "by": "owner"}}},
-     "mapping.json maps color.text.main, which is not a role the engine checks; use one of its "
+    ({"version": 1, "roles": {"space.control.gpa": {"token": "x", "by": "owner"}}},
+     "mapping.json maps space.control.gpa, which is not a role the engine checks; use one of "
+     "its roles, such as the nearest, space.control.gap"),
+    ({"version": 1, "roles": {"brand.ink": {"token": "x", "by": "owner"}}},
+     "mapping.json maps brand.ink, which is not a role the engine checks; use one of its "
      "roles, for example color.text.default"),
     ({"version": 1, "roles": {"color.text.default": "x"}},
      "mapping.json role color.text.default is \"x\"; write {\"token\": \"<your token>\", \"by\": "
@@ -291,3 +301,131 @@ def test_a_role_that_resolves_nowhere_in_a_context_is_left_out_with_a_note():
     assert notes == ["color.text.default reads text-body, which cannot be resolved (text-body "
                      "aliases ink, which is not defined (resolving text-body). Define ink or "
                      "point text-body at an existing token.); it was left out of the check"]
+
+
+# The system itself is checked only when the mapping names every role and
+# axis the set has, each as itself. Anything the owner took out of the
+# mapping file is out of the check.
+
+def _own(recolor=None):
+    """A generated color set in our own names, with color.text.default
+    optionally pointed at another step."""
+    built = build_system(NEUTRAL, "#3366FF", foundations=("color",)).tokens
+    if recolor is None:
+        return built
+    ts = TokenSet(built.axes)
+    for t in built.tokens():
+        ts.add(Token(t.path, t.type, recolor, layer=t.layer)
+               if t.path == "color.text.default" else t)
+    return ts
+
+
+def test_a_mapping_that_names_every_role_and_axis_as_itself_checks_the_system_itself():
+    ts = _own()
+    checked, notes = view(ts, propose(ts))
+    assert checked is ts and notes == []
+
+
+def test_a_role_the_owner_took_out_of_the_mapping_is_not_checked():
+    ts = _own("{color.neutral.100}")
+    mapping = propose(ts)
+    assert any(f.fg == "color.text.default"
+               for f in check_system(view(ts, mapping)[0], structure=False).report.findings)
+    del mapping.roles["color.text.default"]
+    checked, notes = view(ts, mapping)
+    assert checked is not ts and not checked.has("color.text.default")
+    assert notes == ["the mapping leaves out color.text.default, which the imported system has "
+                     "under the role's own name, so it was not checked; map it to check it"]
+    report = check_system(checked, structure=False).report
+    assert not [f for f in report.findings if "color.text.default" in (f.fg, f.bg)]
+    assert not [f for f in report.failures if "color.text.default" in f.message]
+
+
+def test_an_empty_mapping_checks_nothing():
+    checked, notes = view(_css(FOREIGN), Mapping())
+    assert (checked.tokens(), dict(checked.axes), notes) == ([], {}, [])
+    checked, notes = view(_own(), Mapping())
+    assert checked.tokens() == []
+    assert notes == [
+        "the mapping leaves out color.surface.page, color.surface.card, color.surface.sunken and "
+        "68 more, which the imported system has under each role's own name, so they were not "
+        "checked; map each one to check it"]
+
+
+def test_an_axis_the_owner_took_out_of_the_mapping_is_held_at_its_base():
+    ts = _own()
+    mapping = propose(ts)
+    del mapping.axes["scheme"]
+    checked, notes = view(ts, mapping)
+    assert notes == [] and "scheme" not in checked.axes
+    text = checked.get("color.text.default")
+    assert text.value == ts.resolve("color.text.default")
+    assert all("scheme" not in key for key in text.modes)
+
+
+def test_own_names_still_read_a_number_weight_and_leave_out_what_cannot_resolve():
+    ts = TokenSet({})
+    ts.add(Token("type.strong", "number", 600, layer="semantic"))
+    ts.add(Token("color.text.default", "color", "{color.ink}", layer="semantic"))
+    mapping = propose(ts)
+    assert mapping.roles == {"type.strong": RoleMap("type.strong", "name"),
+                             "color.text.default": RoleMap("color.text.default", "name")}
+    checked, notes = view(ts, mapping)
+    assert checked is not ts
+    assert [(t.path, t.type, t.value) for t in checked.tokens()] == [
+        ("type.strong", "fontWeight", 600)]
+    assert notes == [
+        "color.text.default reads color.text.default, which cannot be resolved "
+        "(color.text.default aliases color.ink, which is not defined (resolving "
+        "color.text.default). Define color.ink or point color.text.default at an existing "
+        "token.); it was left out of the check",
+        "type.strong reads type.strong, a number, as a fontWeight (600), since the role needs "
+        "one"]
+
+
+def test_merge_keeps_what_the_owner_wrote_and_fills_only_the_rest():
+    proposed = Mapping(
+        roles={"color.text.default": RoleMap("text-default", "name"),
+               "color.surface.page": RoleMap("surface-page", "name"),
+               "space.control.gap": RoleMap("gap", "name")},
+        axes={"scheme": AxisMap("scheme", {"light": "light", "dark": "dark"}, "name"),
+              "density": AxisMap("class-compact", {"comfortable": "off", "compact": "on"},
+                                 "name")})
+    existing = Mapping(
+        roles={"color.text.default": RoleMap("text-body", "owner"),
+               "color.surface.page": RoleMap("old-page", "name"),
+               "color.line.danger": RoleMap("error-edge", "owner")},
+        axes={"scheme": AxisMap("class-night", {"light": "off", "dark": "on"}, "owner")})
+    merged = merge(proposed, existing)
+    assert merged.roles == {"color.text.default": RoleMap("text-body", "owner"),
+                            "color.surface.page": RoleMap("surface-page", "name"),
+                            "color.line.danger": RoleMap("error-edge", "owner"),
+                            "space.control.gap": RoleMap("gap", "name")}
+    assert list(merged.roles) == [r for r in ROLE_TYPES if r in merged.roles]
+    assert merged.axes == {"scheme": existing.axes["scheme"],
+                           "density": proposed.axes["density"]}
+    assert merge(proposed, Mapping()) == proposed
+    assert merge(Mapping(), existing) == Mapping(
+        roles={r: m for r, m in existing.roles.items() if m.by == "owner"},
+        axes=existing.axes)
+
+
+def test_an_axis_named_as_one_of_ours_is_that_axis_whatever_its_values():
+    ts = TokenSet({"density": ("default", "high")})
+    ts.add(Token("gap", "dimension", {"value": 8, "unit": "px"},
+                 modes={"density:high": {"value": 4, "unit": "px"}}, layer="semantic"))
+    assert propose(ts).axes == {
+        "density": AxisMap("density", {"comfortable": "default", "compact": "high"}, "name")}
+
+
+def test_findings_name_their_mode_beside_ours():
+    mapping = Mapping(roles={"color.text.default": RoleMap("text-body", "owner")},
+                      axes={"scheme": AxisMap("class-night", {"light": "off", "dark": "on"}),
+                            "contrast": AxisMap("contrast",
+                                                {"standard": "standard", "high": "high"})})
+    assert their_names("color.text.default (scheme:dark,contrast:high) is 2.1:1", mapping) == (
+        "color.text.default (your text-body) (scheme:dark,contrast:high; your class-night:on,"
+        "contrast:high) is 2.1:1")
+    # A context every axis of which the system names as we do is left as it is.
+    assert their_names("x (contrast:high) and y (scheme:light)", mapping) == (
+        "x (contrast:high) and y (scheme:light; your class-night:off)")
