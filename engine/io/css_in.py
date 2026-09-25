@@ -18,7 +18,8 @@ opens.
 
 A dark scheme is read wherever stylesheets keep it: `[data-theme="dark"]`,
 `.dark`, `[data-mode="dark"]`, any other attribute whose name says it
-themes the page (theme, mode or scheme) set to dark, and
+themes the page (data-theme, data-mode, data-color-scheme, data-scheme,
+matched as whole segments) set to dark, and
 `@media (prefers-color-scheme: dark)`, with an attribute value quoted
 either way or bare. An attribute with another name set to dark
 (`[data-sidebar=dark]`) themes a region, so it is the scheme only when
@@ -39,8 +40,8 @@ selector (with the media query when the file uses both) so the exporter
 writes the scheme back the way it came.
 
 Tailwind's dark variant is read where the stylesheet declares it:
-`@custom-variant dark (...)` names the selector its dark: utilities switch
-on, and a rule on that selector sets scheme:dark. `@variant dark { ... }`
+`@custom-variant dark (...)` names the selectors its dark: utilities switch
+on, and a rule on any of them sets scheme:dark. `@variant dark { ... }`
 nested in a rule is read on that selector, or under prefers-color-scheme,
 where the variant switches when no custom variant is declared. A custom
 variant with no property set under it is noted: its dark values live in
@@ -115,9 +116,13 @@ _VALUE = r"""=(?:"([^"]*)"|'([^']*)'|([A-Za-z0-9_-]+))"""
 _ATTR = re.compile(r"\[([a-z][a-z0-9-]*)" + _VALUE + r"\]")
 _NOT = re.compile(r":not\(\[([a-z][a-z0-9-]*)" + _VALUE + r"\]\)")
 # An attribute whose name says it themes the page (data-theme, data-mode,
-# data-color-scheme): set to dark or light anywhere, it is the scheme.
-# Another attribute set to dark (data-sidebar) is the scheme only on the root.
-_THEME_NAME = re.compile(r"theme|mode|scheme")
+# data-color-scheme, data-scheme, or one of them after a page-wide word such
+# as data-app-theme): set to dark or light anywhere, it is the scheme. The
+# word is matched as whole segments, so a region's theme (data-code-theme)
+# or another word (data-model) is not. Another attribute set to dark
+# (data-sidebar) is the scheme only on the root.
+THEME_ATTR = re.compile(r"(?:data-)?(?:(?:app|page|site|ui|bs)-)?(?:color-)?"
+                        r"(?:theme|mode|scheme)")
 # A selector that names a scheme in a form the importer does not read.
 _SCHEMEISH = re.compile(r"""\.(?:dark|light)\b|=\s*["']?(?:dark|light)\b""")
 # Media types that leave a preference query meaning what it says on screen.
@@ -364,7 +369,7 @@ class _Modes:
                 elif axis is not None and value in AXES[axis]:
                     parts.append((axis, value, ""))
                 elif value in AXES["scheme"]:
-                    if not (rooted or _THEME_NAME.search(attr)):
+                    if not (rooted or THEME_ATTR.fullmatch(attr)):
                         return None
                     parts.append(("scheme", value, token))
                 else:
@@ -446,13 +451,14 @@ class _Modes:
             self.forms["scheme"] = (self.forms["scheme"][0], CSS_AXES["scheme"][1])
 
 
-def dark_variant(text: str) -> Optional[Tuple[str, int, str]]:
+def dark_variant(text: str) -> Optional[Tuple[str, int, str, Tuple[str, ...]]]:
     """(where Tailwind's dark variant switches, line, the variant as
-    written) from a `@custom-variant dark` declaration: the first class or
-    attribute selector it names outside :not() (an attribute as
-    `[attr="value"]`), or the prefers-color-scheme query. Where is "" when
-    the variant names no such selector (`&:where(:not(.light), ...)` names
-    only what dark is not). None when the file declares no dark variant."""
+    written, every selector it switches on) from a `@custom-variant dark`
+    declaration: the class and attribute selectors it names outside :not()
+    (an attribute as `[attr="value"]`), each once and the first as where,
+    or the prefers-color-scheme query. Where is "" when the variant names
+    no such selector (`&:where(:not(.light), ...)` names only what dark is
+    not). None when the file declares no dark variant."""
     text = _blank_comments(text)
     m = _CUSTOM_DARK.search(text)
     if not m:
@@ -466,13 +472,17 @@ def dark_variant(text: str) -> Optional[Tuple[str, int, str]]:
     shown = body.split("{", 1)[0] if m.group(1) == "{" else body
     line, written = _line(text, m.start()), " ".join(shown.split())
     if "prefers-color-scheme" in body:
-        return DARK_MEDIA, line, written
-    found = _THEME_TOKEN.search(_without_not(body))
-    if not found:
-        return "", line, written
-    attr = _ATTR.fullmatch(found.group(0))
-    value = next((g for g in attr.groups()[1:] if g is not None), "") if attr else ""
-    return (f'[{attr.group(1)}="{value}"]' if attr else found.group(0)), line, written
+        return DARK_MEDIA, line, written, (DARK_MEDIA,)
+    selectors: List[str] = []
+    for found in _THEME_TOKEN.finditer(_without_not(body)):
+        attr = _ATTR.fullmatch(found.group(0))
+        value = next((g for g in attr.groups()[1:] if g is not None), "") if attr else ""
+        selector = f'[{attr.group(1)}="{value}"]' if attr else found.group(0)
+        if selector not in selectors:
+            selectors.append(selector)
+    if not selectors:
+        return "", line, written, ()
+    return selectors[0], line, written, tuple(selectors)
 
 
 def _without_not(text: str) -> str:
@@ -491,10 +501,10 @@ def _without_not(text: str) -> str:
         text = text[:at] + text[i + 1:]
 
 
-def _on_dark_variant(rule: Rule, dark_at: str) -> Rule:
+def _on_dark_variant(rule: Rule, dark_at: str, every: Tuple[str, ...] = ()) -> Rule:
     """A rule nested under `@variant dark`, moved to where the variant
-    switches: the prefers-color-scheme query, or the selector joined onto
-    the rule's own."""
+    switches: the prefers-color-scheme query, or each selector it names
+    (`every`, else `dark_at`) joined onto the rule's own."""
     if "@variant dark" not in rule.media:
         return rule
     media = tuple(m for m in rule.media if m != "@variant dark")
@@ -503,8 +513,8 @@ def _on_dark_variant(rule: Rule, dark_at: str) -> Rule:
         return Rule(rule.selector, rule.media, rule.declarations, rule.line, label)
     if dark_at.startswith("("):
         return Rule(rule.selector, media + (dark_at,), rule.declarations, rule.line, label)
-    selector = ", ".join((":root" if s == "@theme" else s) + dark_at
-                         for s in split_top(rule.selector, ","))
+    selector = ", ".join((":root" if s == "@theme" else s) + d
+                         for s in split_top(rule.selector, ",") for d in every or (dark_at,))
     return Rule(selector, media, rule.declarations, rule.line, label)
 
 
@@ -651,7 +661,7 @@ def _outside_message(selector: str, options: List[Any], shown: str = "") -> str:
         for m in _ATTR.finditer(one) if parts is None else ():
             attr, value = m.group(1), next(g for g in m.groups()[1:] if g is not None)
             if value in AXES["scheme"] and attr not in _ATTR_AXES \
-                    and not _THEME_NAME.search(attr):
+                    and not THEME_ATTR.fullmatch(attr):
                 return (f"is set on {selector}, which sets {value} on {attr}, a name that does "
                         "not say it themes the page; write it on :root or html to make it the "
                         "page scheme, or keep it in the component it themes")
@@ -684,11 +694,11 @@ def import_css(text: str, source: Source) -> Imported:
     name = Path(source.path).name
     variant = dark_variant(text)
     dark_at = variant[0] if variant else DARK_MEDIA
-    # A dark variant on a selector this engine does not already read as dark.
-    known = [(a, v) for a, v, _ in _Modes.parse(dark_at) or []] == [("scheme", "dark")]
-    variant_on = (dark_at,) if dark_at and variant and not dark_at.startswith("(") \
-        and not known else ()
-    rules = [_on_dark_variant(r, dark_at) for r in parse_css(text, source.path)]
+    every = variant[3] if variant and dark_at and not dark_at.startswith("(") else ()
+    # The dark variant's selectors this engine does not already read as dark.
+    variant_on = tuple(d for d in every
+                       if [(a, v) for a, v, _ in _Modes.parse(d) or []] != [("scheme", "dark")])
+    rules = [_on_dark_variant(r, dark_at, every) for r in parse_css(text, source.path)]
     modes = _Modes()
     switches = _viewport(rules)
     root_values: Dict[str, str] = {}
@@ -792,7 +802,7 @@ def import_css(text: str, source: Source) -> Imported:
             "not, so no value is read as the dark scheme through it; name one, such as "
             "&:where(.dark, .dark *), and set the dark values under that selector"))))
     elif variant and "scheme" not in axes:
-        where = f"@media {dark_at}" if dark_at.startswith("(") else dark_at
+        where = f"@media {dark_at}" if dark_at.startswith("(") else ", ".join(every)
         notes.append((variant[1], Item(f"{name}:{variant[1]}", "@custom-variant dark", (
             f"puts Tailwind's dark: variant on {where}, and this file sets no custom property "
             "there, so it holds no dark scheme; dark: utilities in markup are not theme values. "
@@ -816,6 +826,8 @@ def import_css(text: str, source: Source) -> Imported:
             continue
         read: List[Tuple[str, str, Any, int]] = []
         own_mapped: List[Tuple[int, Mapped]] = []
+        # One note on the scaled value per property, beside any spelling note.
+        scaled_noted = False
         try:
             for key, (value_text, at) in by_key.items():
                 if re.search(r"!\s*important\s*$", value_text, re.I):
@@ -824,7 +836,8 @@ def import_css(text: str, source: Source) -> Imported:
                 scaled = _SCALED.fullmatch(value_text.strip())
                 if scaled and f"--{scaled.group(2)}" in factors:
                     size, factor = scaled.group(1), f"--{scaled.group(2)}"
-                    if not any(n[1].name == prop for n in notes + own_notes):
+                    if not scaled_noted:
+                        scaled_noted = True
                         own_notes.append((at, Item(f"{name}:{at}", prop, _scaled_note(
                             value_text.strip(), size, factor, factors[factor]))))
                     value_text = f"var(--{size})"
