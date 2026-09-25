@@ -127,7 +127,7 @@ Stakeholders
 
 ---
 
-## How each mode flows from /ux-frame
+## How each mode flows from /ux-discover --frame
 
 Every mode starts the same way: the frame establishes who the work is for, what it is for, what the constraints are, and what success looks like. The frame is the input to mode selection.
 

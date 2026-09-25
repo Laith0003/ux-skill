@@ -1,6 +1,6 @@
 ---
 name: research-synthesizer
-description: Digests research inputs (interviews, analytics, competitive sites, A/B results, support tickets) into actionable design recommendations. Dispatched by /ux-research, /ux-workshop, /ux-frame.
+description: Digests research inputs (interviews, analytics, competitive sites, A/B results, support tickets) into actionable design recommendations. Dispatched by /ux-research, /ux-workshop, /ux-discover --frame.
 tools: Read, Write, WebFetch, Bash, Glob, Grep
 ---
 

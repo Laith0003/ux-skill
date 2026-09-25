@@ -10,7 +10,7 @@ You are running the `/ux-workshop` command from the `ux` plugin. The job is to f
 
 ## When to use
 
-Triggers: "run a workshop", "facilitate a discovery", "let's do a design thinking session", "I have stakeholders for an hour, what do we do", "we need to align on this opportunity", "kick off the project". Use when there's a real question and real participants — not as a solo brainstorm (use `/ux-design` or `/ux-frame` for that).
+Triggers: "run a workshop", "facilitate a discovery", "let's do a design thinking session", "I have stakeholders for an hour, what do we do", "we need to align on this opportunity", "kick off the project". Use when there's a real question and real participants, not as a solo brainstorm (use `/ux-design` or `/ux-discover --frame` for that).
 
 ## Input
 
@@ -138,7 +138,7 @@ Kill criteria:  <what would end the initiative>
 ─── next ───
 Recommended: /ux-design     (start designing the MVP)
 Other moves: /ux-research   (if Game Plan reveals research gaps)
-             /ux-frame      (lock the brief from the Game Plan)
+             /ux-discover --frame  (lock the brief from the Game Plan)
              /ux-next       (let me decide)
 ```
 
@@ -206,7 +206,7 @@ For path issues: see references/process/discovery-protocol.md for state file loc
 After `/ux-workshop`:
 - `/ux-design` — start designing the MVP
 - `/ux-research` — if Game Plan reveals research gaps
-- `/ux-frame` — lock the brief from the Game Plan
+- `/ux-discover --frame`: lock the brief from the Game Plan
 - `/ux-next` — let the conductor pick
 
 ---

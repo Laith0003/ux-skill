@@ -1,6 +1,6 @@
 ---
 name: motion-engineer
-description: Implements motion in production frontend code: Framer Motion, GSAP, CSS animations. Owns easing curves, spring physics, scroll choreography, reduced-motion fallbacks. Dispatched by /ux-design, /ux-motion --fix, /ux-component.
+description: Implements motion in production frontend code: Framer Motion, GSAP, CSS animations. Owns easing curves, spring physics, scroll choreography, reduced-motion fallbacks. Dispatched by /ux-design (every mode), /ux-motion --fix.
 tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 

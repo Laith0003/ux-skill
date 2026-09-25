@@ -1,26 +1,119 @@
 ---
-description: Cosmetic pass on a surface. Spacing rhythm, hierarchy, AI-slop detection, token consistency. Triggers on "polish", "tighten this up", "remove the AI-slop", or "make it premium". Use when polishing an existing surface, tightening spacing / hierarchy, removing AI-slop tells, the user says "make this premium" or "tighten this up". Skip when the surface is missing core functionality (fix that first), the surface needs a redesign not a polish (use ux-design), backend or infrastructure.
-allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(grep:*), Bash(find:*), Bash(mkdir:*), Bash(date:*), Glob, Grep, Task, WebFetch
+description: Polish a surface. Loops lint, fix, re-lint until the score reaches 90 or three rounds pass, then a taste pass on spacing, hierarchy, tokens and AI-slop tells. --fix applies the taste findings.
+allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(grep:*), Bash(find:*), Bash(mkdir:*), Bash(date:*), Bash(uxskill:*), Bash(python3:*), Glob, Grep, Task, WebFetch
 disable-model-invocation: false
 ---
 
 # /ux-polish
 
-You are running the `/ux-polish` command from the `ux` plugin. The job is a cosmetic pass — the surface mostly works but feels rough, generic, or unfinished. Tighten spacing, sharpen hierarchy, kill AI-slop tells, and align loose tokens.
+You are running the `/ux-polish` command from the `ux` plugin. The job is a cosmetic pass: the surface mostly works but feels rough, generic, or unfinished. First the deterministic loop (lint, fix, re-lint) raises the score; then the taste pass tightens spacing, sharpens hierarchy, kills AI-slop tells, and aligns loose tokens.
+
+`/ux-polish` absorbs what used to be `/ux-evolve`; that name still works as an alias until 4.1.
+
+## Modes and flags
+
+| Mode | Flag | What it does |
+|---|---|---|
+| loop + taste (default) | none | Step 0 loop on a local HTML file, then steps 1 to 6 on the result |
+| loop only | `--loop-only` | Step 0 alone, then the loop report. No taste pass (the old `/ux-evolve`) |
+| taste only | `--no-loop` | Steps 1 to 6 alone. Used automatically when the input is a URL, a screenshot, or a snippet, because the loop needs a file |
+| fix | `--fix` | After the report, apply the taste findings (step 7) |
+
+| Flag | Meaning |
+|---|---|
+| `--rounds <n>` | Loop cap. Default 3. `--max-rounds <n>` means the same. The old `/ux-evolve` cap was 5; pass `--rounds 5` for it |
+| `--css <path>` | CSS file that belongs to the HTML under polish |
+| `--force` | Ship the loop output even when the final score is below the 65 quality gate |
+| `--brand-file <path>` | Client brand (`.ux/brand.json`). Turns on the brand-fidelity hard floor in the loop and in the taste pass. Used automatically when `.ux/brand.json` exists |
+| `--no-log` | Do not append the loop result to `.ux/decisions.jsonl` |
+
+When the same flag appears twice, the last value wins.
 
 ## When to use
 
-Triggers: "polish", "tighten this up", "remove the AI-slop", "make it premium", "make this less AI-looking", "the spacing feels off", "this looks generic", "needs more taste", "the design feels cheap".
+Triggers: "polish", "tighten this up", "remove the AI-slop", "make it premium", "make this less AI-looking", "the spacing feels off", "this looks generic", "needs more taste", "the design feels cheap", "evolve this surface", "improve until score 90+", "auto-fix this file", "run the loop on", "make it ship-ready".
 
 Use when the structure is right but the execution is loose. Not for fundamental problems (use `/ux-audit` or `/ux-design`). Not for copy issues (use `/ux-copy`). Not for motion (use `/ux-motion`). Not for accessibility (use `/ux-a11y`).
 
 If a `/ux-critique` or `/ux-audit` has surfaced structural issues, run those first — polish on a broken structure is wasted work.
 
+Skip the loop when the artifact is already at 90+ (run `uxskill lint <file> --score-only` to confirm) or when the user wants a single targeted fix (`/ux-fix`). With no artifact yet, generate one with `/ux-design` or `/ux-system` first.
+
 ## Input
 
-One of: a URL, an absolute file path containing the code, a screenshot, or a code snippet. Code is preferred for token consistency checks; a URL or screenshot is preferred for visual rhythm.
+One of: a URL, an absolute file path containing the code, a screenshot, or a code snippet. Code is preferred for token consistency checks; a URL or screenshot is preferred for visual rhythm. The loop in step 0 runs only on a local HTML file (plus optional CSS).
 
 ## Process
+
+### 0. The loop: lint, fix, re-lint
+
+**Offline, deterministic, no LLM calls inside the loop.** Skip this step with `--no-loop`, or when the input is not a local HTML file.
+
+#### Resolve the target
+
+Take it from `$ARGUMENTS`, or ask once: "Path to the artifact (HTML + optional CSS)?" If the user says "the last one", search in this order:
+1. `.ux/last-design.html` + `.ux/last-design.css`
+2. The most recent file under `out/` matching `*.html`
+3. Fall back to asking explicitly.
+
+#### Run it
+
+```bash
+uxskill evolve <html_path> [--css <css_path>] [--force] --max-rounds <rounds, default 3> [--brand-file .ux/brand.json] [--no-log]
+```
+
+Each round:
+
+1. Run the linter to get the 0-100 quality score
+2. Run the evaluator to score the 7 axes (hierarchy / coherence / spacing / readability / tone / uniqueness + linter)
+3. Apply the 6 deterministic polish passes
+4. Re-evaluate
+5. Decide: `target_hit` (score reaches 90), `plateau` (delta < 5 between rounds), `max_rounds` (the `--rounds` cap, default 3), or continue
+
+The 6 polish passes are all idempotent: running them twice produces no further change. Strip inline styles, replace generic CTAs, swap placeholder URLs for data URIs, normalize spacing to the 8pt-ish scale, strip Lorem ipsum, normalize `font-weight: bold` to `700`.
+
+This writes:
+- `<artifact>.evolved.html` and `<artifact>.evolved.css` (the refined output)
+- `.ux/last-evolve.json` (the full EvolveResult with rounds + scores)
+- One line to `.ux/decisions.jsonl` (the learning signal; schema `_v: 1`), unless `--no-log`
+
+It reads the target artifact paths, `data/anti-patterns.json` (for lint scoring), and `data/brands/_index.json` plus `data/brands/*.json` (for uniqueness comparison).
+
+**If the surface is a brand redesign, pass `--brand-file .ux/brand.json`.** The brand-fidelity HARD FLOOR then applies at every exit: an off-brand page (dropped the brand primary/logo, or shipped no real imagery) reports `above_gate=false` + `stopped_reason=gate_failed` no matter how high the composite score, and `uxskill evolve` exits `1`. Polishing cannot fix brand drift: fix the source (use the brand color, carry the logo, add real imagery) and regenerate.
+
+#### Quality gate
+
+If the final score is < 65, the loop refuses to commit by default and returns `stopped_reason: "gate_failed"`. The user can override with `--force` to ship anyway. Below 65 and not forced: do NOT replace the original file. Above 65 OR forced: replace the original `<file>.html` with the evolved version (the user can diff it in version control). The recommended next move on a gate failure is to regenerate the artifact via `/ux-design` with different axis hints (for example, add `forbidden: [low-contrast]` if the linter is flagging contrast issues).
+
+#### Loop report
+
+Print:
+- Initial score to final score (for example `72 → 91`)
+- Number of rounds (for example `3 rounds`)
+- Stop reason (`target_hit` / `plateau` / `max_rounds` / `gate_failed`)
+- The polish passes applied per round (for example `round 1: strip_inline_styles, replace_generic_ctas; round 2: normalize_spacing`)
+- Where the evolved output landed
+- If gate_failed and not forced: the regenerate axis hints
+
+End the loop report with:
+```
+EVOLVE COMPLETE: <initial> → <final> ({stop_reason}, {n} rounds)
+artifact:      <path>
+evaluation:    .ux/last-evolve.json
+ledger entry:  .ux/decisions.jsonl (+1)
+```
+
+With `--loop-only`, stop here.
+
+#### What the loop cannot fix
+
+Things outside its remit (rerun `/ux-design` or `/ux-system`):
+- Wrong information architecture (sections in wrong order)
+- Missing content (no real copy, no real imagery)
+- Stack mismatch (user wants Next.js, you generated Blade)
+- Brand axis target wildly off (tone_match < 30 means the axes are wrong, not the polish)
+
+Flag these in the report instead of pushing them through more rounds. Do not add LLM-driven cosmetic passes inside the loop; it is meant to be fast and predictable. The taste pass below is where judgment happens, and it runs on the loop's output.
 
 ### 1. Run the AI-slop tell list
 
@@ -165,10 +258,12 @@ If the surface is too far gone for polish (Critical count > 5 or "purple gradien
 
 ## Output
 
-The polish report and (if `--fix`) the fix-loop results.
+The loop report (step 0, when it ran), the polish report, and (if `--fix`) the fix-loop results.
 
 ## State persisted
 
+- `.ux/last-evolve.json`: the full loop result, when step 0 ran.
+- `.ux/decisions.jsonl`: one appended line per loop run, unless `--no-log`.
 - `.ux/last-polish.json` — keys: `command`, `timestamp`, `surface`, `findings` (array of `{category, severity, title, evidence, fix, auto_fixable}`), `severity_counts`, `prioritized_fix_list`.
 
 ## Next prompt

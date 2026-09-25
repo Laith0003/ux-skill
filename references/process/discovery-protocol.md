@@ -1,6 +1,6 @@
 # Discovery protocol — ask first, never improvise
 
-Every generation command (`/ux-design`, `/ux-component`, `/ux-dashboard`, `/ux-system`, `/ux-case-study`) **MUST** run the discovery protocol below before dispatching any sub-agent or writing any code. Improvisation is forbidden. The plugin's value is the discipline of the intake; the work is downstream of it.
+Every generation command (`/ux-design` in every mode, `/ux-system`, `/ux-case-study`) **MUST** run the discovery protocol below before dispatching any sub-agent or writing any code. Improvisation is forbidden. The plugin's value is the discipline of the intake; the work is downstream of it.
 
 A generation command that skips discovery is a bug.
 

@@ -1,6 +1,6 @@
 ---
-description: Generate a beautiful, anti-AI-slop design or component from a brief. Dispatches the frontend-engineer sub-agent with creative direction drawn from anti-slop and arsenal references. Use when generating a new design or component from a brief, the user says "build me X" or "design a Y", after running discovery + intaking brand identity, producing premium frontend code with anti-AI-slop discipline. Skip when the user wants a review not a build (use ux-audit / ux-critique), the user wants only one component (use ux-component), backend or infrastructure work.
-allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Glob, Grep, Task
+description: Build a page, a component (--component), a dashboard (--dashboard), or a design from a reference image (--from-image) from a brief, with anti-AI-slop discipline. The brief picks the mode when no flag is given.
+allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Bash(python3:*), Glob, Grep, Task
 disable-model-invocation: false
 ---
 
@@ -10,7 +10,277 @@ You are running the `/ux-design` command from the `ux` plugin. The job is to gen
 
 ## When to use
 
-Triggers: "design a", "build me a", "generate a landing page", "create a dashboard", "make a component", "I need a hero section", "design a modal", any free-form request for a visual/UI deliverable.
+Triggers: "design a", "build me a", "generate a landing page", "create a dashboard", "make a component", "I need a hero section", "design a modal", "build a button", "design the admin panel", "build it like this screenshot", any free-form request for a visual/UI deliverable.
+
+## Modes
+
+`/ux-design` builds four kinds of output. It absorbs what used to be `/ux-component`, `/ux-dashboard` and `/ux-image-to-code`; those names still work as aliases until 4.1.
+
+| Mode | Flag | Picked from the brief when | State file |
+|---|---|---|---|
+| page (default) | none | A page, a landing, a multi-section surface, a marketing page with stats | `.ux/last-design.json` |
+| component | `--component [name]` | The brief names ONE element: button, modal, navbar, sidebar, card, table, form, chart. Not a full page | `.ux/last-component.json` |
+| dashboard | `--dashboard` | Dashboard, admin panel, metrics page, operator console, analytics view, KPI board, monitoring screen | `.ux/last-dashboard.json` |
+| image | `--from-image <path>` | The brief attaches a design image (PNG, JPG, WebP) or names one | `.ux/last-image-extract.json`, then the state file of the build mode |
+
+A flag always wins over the words. Image mode stacks with the others: `--from-image ref.png --dashboard` reads the image, then builds a dashboard. Say which mode you picked in the first line of the output so the user can stop you.
+
+Every mode runs the same Process below (discovery, references, dials, dispatch, output, state) and the same v2 steps (brief, brand, recommendation, sequence, generation, lint and responsive and brand gates). The mode sections list only what changes.
+
+| Flag | Meaning |
+|---|---|
+| `--component [name]` | Component mode |
+| `--dashboard` | Dashboard mode |
+| `--from-image <path>` | Image mode: read the image first |
+| `--extract-only` | Image mode: stop after the extraction and print its JSON. No build |
+| `--no-recommendation` | Image mode: hints only, no recommender run. Implies `--extract-only` |
+| `--save <path>` | Image mode: where to write the extraction (default `.ux/last-image-extract.json`; empty string skips the write) |
+| `--skip-discovery` | Skip the discovery intake (see step 1) |
+
+### Component mode (`--component`)
+
+The job is a single, production-grade component that avoids generic AI aesthetics. One component, fully realized: all four interaction states, accessible, on-brand. If the brief asks for a full page or multi-section surface, switch to page mode.
+
+Triggers: "build a button", "create a pricing card", "make a modal", "add a navbar", "design a sidebar", "I need a data table", "build a form", "make a chart component", or any single-element request.
+
+**Discovery (step 1).** Focus on: brand identity, 2-3 references for the component type, audience, style direction, voice, stack, imagery (if applicable), must-have patterns, avoid list, and the wow moment for THIS component specifically. Group into one or two messages. Skip only on `--skip-discovery` or if the spec already covers every field. Without the wow moment, push back.
+
+**Capture the spec.** Required:
+- **Component type**: button / modal / navbar / sidebar / card / table / form / chart / other
+- **Stack**: React + Tailwind / Vue / Svelte / Blade + Alpine / vanilla HTML / etc.
+- **Brand voice**: pull from `.ux/last-frame.json` if it exists, otherwise ask one line: *"What's the voice: minimal / brutalist / editorial / playful / dark? Or 'your call'?"*
+
+Optional but useful: specific behavior (auto-sort, multi-step, infinite scroll, drag-reorder), data shape, density target. Do not ask three questions. One question that surfaces everything missing.
+
+**Arsenal picks (step 2).** Pick 1-2 patterns that fit. For a button: live status with overshoot, optimistic update. For a modal: contextual focus mode. For a navbar: command input, intelligent list. For a card: hairline-separated metric blocks. For a table: intelligent list, monospace tabular. For a form: inline validation with field-level @error, multi-step wizard. For a chart: monochrome + semantic state colors only.
+
+**Dials (step 3).** DESIGN_VARIANCE 5 (4 for system components, 6 for marketing components). MOTION_INTENSITY 4 (3 for utility components, 5 for marketing components). VISUAL_DENSITY 5 (7 for tables/charts, 4 for buttons/modals).
+
+**Dispatch (step 4).** `frontend-engineer` gets the spec verbatim, the dials, the 1-2 patterns, the full `references/styles/anti-slop.md`, the target stack, and an instruction to return code + self-review on bans avoided + patterns used. Dispatch `motion-engineer` in parallel if the spec involves motion (loading states, optimistic UI, micro-interactions, transitions). Dispatch `copy-writer` in parallel if the component has non-trivial copy (form labels, empty states, error messages, CTAs).
+
+**Generation (v2 step 4).** Look up the requested component name in `.ux/last-recommendation.json`'s `components` list. If present, generate using its `anatomy`, `states`, `tokens_used`, and `motion` fields as the spec. If not present, search `data/components.json` directly via `cat data/components.json | jq '.entries[] | select(.name | test("<name>"; "i"))'`. The page-sequence step (v2 step 2.5) does not apply. The brand anchor applies as in page mode: the component must use the brand primary color, the logo where one belongs, and logo-style type, and ship real imagery when it carries visuals, or it fails the brand-fidelity floor. A house-style component for a client brand is wrong no matter how clean.
+
+**Output (step 5).**
+
+```
+─── component spec ───
+Type:       <component type>
+Stack:      <stack>
+Voice:      <brand voice>
+Dials:      DESIGN_VARIANCE=<n>, MOTION_INTENSITY=<n>, VISUAL_DENSITY=<n>
+Patterns:   <1-2 arsenal patterns>
+
+─── generated ───
+<code from sub-agent, verbatim>
+
+─── interaction states ───
+Default:    <description>
+Hover:      <description>
+Active:     <description>
+Disabled:   <description>
+Loading:    <description>  (if applicable)
+Error:      <description>  (if applicable)
+Empty:      <description>  (if applicable)
+
+─── self-review ───
+Bans avoided:    <list>
+Patterns used:   <list>
+
+─── next ───
+Recommended: /ux-design --component   (build the next one)
+Other moves: /ux-polish      (cosmetic pass)
+             /ux-a11y        (WCAG check)
+             /ux-design      (assemble into a fuller surface)
+             /ux-next        (let me decide)
+```
+
+**State (step 6).** Write `.ux/last-component.json`:
+
+```json
+{
+  "command": "ux-component",
+  "timestamp": "<ISO8601>",
+  "type": "<component type>",
+  "stack": "<stack>",
+  "voice": "<voice>",
+  "dials": { "variance": <n>, "motion": <n>, "density": <n> },
+  "patterns": ["<arsenal patterns>"],
+  "output_file": "<path if saved>"
+}
+```
+
+The `command` value stays `ux-component` so `/ux-next` keeps reading it.
+
+**Component hard rules** (in addition to the shared hard rules):
+- All four interaction states (default / hover / active / disabled). Non-negotiable. Buttons/inputs that look identical when hovered, active, or disabled = failure.
+- Loading + error + empty states wherever the component can hit them.
+- Mandatory imagery if visual (avatars, product shots, illustrations): real and on-brand, client assets first, then curated Unsplash/Pexels chosen to match the brand + temperature.
+- Inter is allowed. Do not ban it.
+- No 3-equal-cards layouts for grouped components.
+
+**Component failure modes and errors:**
+
+| Failure or error | Recovery |
+|---|---|
+| Stack unclear | Ask one combined question covering stack + voice + behavior |
+| Component type ambiguous ("thing to filter stuff") | List the candidate types (table with command input / sidebar with filter chips / autocomplete combobox) and ask which one |
+| Sub-agent returns the default state only | Reject and redo; all four interaction states are non-negotiable |
+| Sub-agent returns the wrong stack | Catch in review, redo |
+| Sub-agent says "I avoided X" but the code uses X | Grep the output. Reject and redo |
+| Over-scope: a full page for a single button, or a spec that implies a full page | Trim to the requested component; offer page mode as the follow-up |
+| No motion when motion was specified | Re-dispatch with an explicit motion brief |
+| `.ux/last-frame.json` absent and voice not provided | Ask the one-line voice question above |
+
+### Dashboard mode (`--dashboard`)
+
+The job is a dashboard that respects data density and operator attention, not a marketing site with charts pasted on. Anti-card-overuse, monospace tabular numbers, semantic state colors, sparing motion. A marketing landing page with stats stays in page mode.
+
+Triggers: "build a dashboard", "design the admin panel", "make a metrics page", "operator console", "analytics view", "KPI board", "monitoring screen".
+
+**Discovery (step 1).** Highest-leverage fields: brand identity, references (admired dashboards), audience (operator / analyst / exec: different density needs), key metrics + data shape, style direction, voice for state messages, stack, must-have widgets (intelligent-list / command-input / live-status / wide-stream / contextual-focus), avoid list, and the wow moment. Group into 2-3 messages. Push back on "anything's fine".
+
+**Capture the brief.** Required:
+- **Data shape**: what entities, what metrics, what relationships. Time-series? Categorical? Hierarchical?
+- **Key metrics**: the 3-7 numbers that dominate the page
+- **Audience**: operator (always-on, scan-and-act) / analyst (deep dive, filter and segment) / exec (status at a glance)
+- **Stack**: React + Tailwind / Next.js / Vue / Blade + Alpine / etc.
+
+If anything's missing, ask once: *"One line: data shape, key metrics, audience (operator/analyst/exec), stack?"*
+
+**Arsenal picks (step 2).** Pick 3-5 dashboard patterns:
+- **Bento grid**: asymmetric, intentional, never 3-equal-cards
+- **Intelligent list**: auto-sorting, contextual ordering
+- **Command input**: keyboard-driven filter/search
+- **Live status with overshoot**: for real-time indicators, used sparingly
+- **Wide data stream**: infinite carousel of metrics when there's more than fits
+- **Contextual focus mode**: click a metric, get the deep-dive without page change
+- **Hairline-separated metric blocks**: for tight KPI rows, no cards needed
+
+**Dials (step 3).** DESIGN_VARIANCE 4 (dashboards are calmer than landings). MOTION_INTENSITY 3 (data should feel still until it changes). VISUAL_DENSITY 8 (dashboards are cockpits, not galleries).
+
+**Dispatch (step 4).** `frontend-engineer` gets the brief verbatim, data shape + key metrics + audience, stack, dials, the 3-5 patterns, the full `references/styles/anti-slop.md`, and an explicit instruction: monospace tabular numbers, no purple gradients, max 2 live indicators per viewport, semantic state colors only. Dispatch `motion-engineer` in parallel for live indicators and state transitions. Dispatch `copy-writer` in parallel for empty states, error messages, and metric labels.
+
+**Generation (v2 step 4).** Filter `components` from the recommendation for dashboard patterns (`category: Data Display`, `Charts & Viz`). Build a dashboard grid using the picked palette in dark mode (force `mode=dark` if not already set in the recommendation). Give `frontend-engineer` the `chart-types.json` picks scoped to the data the user described. With a client brand, dark mode still holds, but the brand primary (not the house pick) is the accent on every state color, the logo sits in the chrome, and type matches the logo style; the dashboard must clear the brand-fidelity floor.
+
+**Output (step 5).**
+
+```
+─── dashboard brief ───
+Data shape:  <summary>
+Metrics:     <3-7 key metrics>
+Audience:    <operator | analyst | exec>
+Stack:       <stack>
+Dials:       DESIGN_VARIANCE=<n>, MOTION_INTENSITY=<n>, VISUAL_DENSITY=<n>
+Patterns:    <3-5 arsenal patterns>
+
+─── generated ───
+<code from sub-agent, verbatim>
+
+─── layout logic ───
+Grouping:    <how widgets are grouped: border-t / divide-y / negative space>
+KPI row:     <pattern used: hairline-separated / asymmetric bento / focus widget>
+Live count:  <number of breathing/live indicators in initial viewport, must be ≤2>
+
+─── self-review ───
+Bans avoided:    <list>
+Patterns used:   <list>
+Accessibility:   <color-not-only confirmed for all chart series>
+
+─── next ───
+Recommended: /ux-design --component   (build a missing widget)
+Other moves: /ux-polish      (cosmetic pass)
+             /ux-a11y        (color-not-only audit for charts, contrast for tabular data)
+             /ux-motion      (verify live indicators don't fight attention)
+             /ux-next        (let me decide)
+```
+
+**State (step 6).** Write `.ux/last-dashboard.json`:
+
+```json
+{
+  "command": "ux-dashboard",
+  "timestamp": "<ISO8601>",
+  "data_shape": "<summary>",
+  "metrics": ["<key metrics>"],
+  "audience": "<operator|analyst|exec>",
+  "stack": "<stack>",
+  "dials": { "variance": <n>, "motion": <n>, "density": <n> },
+  "patterns": ["<arsenal patterns>"],
+  "live_indicator_count": <n>,
+  "output_file": "<path if saved>"
+}
+```
+
+**Dashboard hard rules** (in addition to the shared hard rules):
+- Numbers use `font-mono` with tabular figures (`font-variant-numeric: tabular-nums`). Non-negotiable.
+- NEVER 3-equal-cards for KPIs. Use asymmetric bento or hairline-separated metric blocks.
+- Maximum 2 "breathing" / live-pulse indicators per viewport. More = noise.
+- Default monochrome. Semantic state colors only (success / warning / danger / info).
+- Charts: every series has a non-color indicator (pattern, shape, label). Never color alone.
+- Empty, loading and error states for every widget.
+- Group via negative space, hairlines (`border-t`), or `divide-y`. Don't card-wrap everything.
+
+**Dashboard failure modes and errors:**
+
+| Failure or error | Recovery |
+|---|---|
+| Card overuse: every widget in `rounded-lg shadow border` | Reject. Use hairlines and grouping |
+| 3-equal-card KPI row | Reject, replace with asymmetric bento or hairline-separated blocks |
+| 3 or more live indicators in the initial viewport | Reject, reduce to 2 or fewer |
+| Proportional digits in metrics (numbers jitter on update) | Reject, force `tabular-nums` |
+| Color-only chart series | Reject, add patterns/shapes/labels |
+| Marketing gradient on the analytics page | Reject, swap to neutral + semantic accent |
+| No empty/loading/error states | Reject and redo |
+| Data shape missing | Ask for entities + relationships + metrics in one combined question |
+| Audience unclear, or "all of them" | Ask once; density and motion defaults depend on a single primary audience, so push back until one is picked |
+| More than 7 key metrics | Force a triage to the 3-7 that dominate; surface the rest as secondary |
+
+### Image mode (`--from-image <path>`)
+
+**Pure CV. No multimodal LLM.** Hand the engine a screenshot or a design reference; it returns a Brief, a closest-match palette, a closest-match style, and a full Recommendation. No vision model is called. Every signal is computed deterministically from pixels via Pillow.
+
+Use it when you have a reference design (a competitor screenshot, a gallery shot, a Figma export) and want the build to go in that direction, when you want the recommendation anchored on a real image instead of a typed brief, or when you want to check the engine's read on a design before generating code. Skip it when the reference is text (a written brief, a PRD: use `/ux-discover`), or when you want pixel-perfect cloning: this is a HINT generator, not a copy-paste tool.
+
+**1. Extract.**
+
+```bash
+python3 -m engine.cli.main image-extract path/to/reference.png [--no-recommendation] [--save .ux/last-image-extract.json]
+```
+
+What happens, step by step:
+
+1. **Decode + downsample**: Pillow opens the image and resizes the long edge to 512px to keep quantization fast.
+2. **Quantize to 5 colors**: `Image.quantize(colors=5, method=MAXCOVERAGE)` finds the dominant tones (a deterministic palette reduction, equivalent in shape to a small k-means but without sklearn).
+3. **Canvas polarity**: average luminance under the sRGB curve. Above 0.5 is light; below is dark.
+4. **Type polarity**: ratio of `EDGE_ENHANCE_MORE` variance to `EMBOSS` variance. High ratio leans serif, low leans sans, between is `unknown`.
+5. **Aspect + density**: `FIND_EDGES` followed by binarization gives a coarse "edge fraction." Lots of edges means a dense layout (dashboard, dense editorial); few edges means an airy hero.
+6. **Match against manifests**: for each palette in `data/palettes.json`, sum the nearest-neighbour distances between the extracted 5 colors and the palette's canvas/surface/ink/primary anchors. Lowest sum wins.
+7. **Style fit**: bias styles whose id/category contains "dark"/"cinema"/"luxe" for dark canvas, "swiss"/"editorial"/"minimal" for light canvas. Boost styles that appear in the matched palette's `compatible_styles`.
+8. **Synthetic Brief, then recommend**: pack the hints into a `Brief` and run the recommender to produce a complete system.
+
+The result is JSON with `image`, `brief`, `hints` (`dominant_colors`, `canvas_polarity`, `type_polarity`, `aspect`, `matched_palette_id`, `matched_palette_name`, `matched_style_id`, `matched_style_name`), `recommendation`, and `saved_to`. The same pipeline is the MCP tool `ux_image_extract` (`{"path": "/abs/path/to/reference.png", "with_recommendation": true}`), and in Python:
+
+```python
+from engine.image_extract import image_to_brief
+from engine.recommender import Brief, recommend
+
+result = image_to_brief("reference.png")
+rec = recommend(Brief(**result["brief"]))
+```
+
+**2. Report the read.** Tell the user in one short block what the engine sees: canvas polarity, type polarity, dominant colors, matched palette and matched style. With `--extract-only` or `--no-recommendation`, print the JSON and stop.
+
+**3. Build.** Otherwise continue into the build mode (page by default, or `--component` / `--dashboard`). Use the extraction's `recommendation` in place of the v2 step 2 `recommend` call, and its `brief` to fill discovery fields the user has not answered. For more control, edit the saved file and rerun the recommender on it: `python3 -m engine.cli.main recommend --brief-file .ux/last-image-extract.json`.
+
+**Brand anchor.** The uploaded image IS the brand source. When the build should match the source's identity rather than the house style, extract the brand from it first (v2 step 1.5: capture the logo color/type from the image into `.ux/brand-signals.json`, then `uxskill brand --signals-file .ux/brand-signals.json --out .ux`) so the build inherits the source's primary color, logo, and logo-style type. The CV `hints` are color and polarity only; the travelling brand carries the logo and type intent the recommender enforces.
+
+**Default forbidden list.** The synthetic brief auto-populates `forbidden` with the project-wide taste guardrails: `yellow`, `amber`, `gold`, `cream`, `coral`, `cormorant`. The extraction is for COLOR and POLARITY hints; the forbidden vocabulary is a separate policy decision the engine respects regardless of what the image suggests. To override it, edit `.ux/last-image-extract.json`, remove items from `brief.forbidden`, and rerun the recommender on that file.
+
+**Limitations (say these when they matter):**
+- **Type polarity is a guess.** It samples edge-filter variance ratios; that correlates with serif vs sans-serif but is not OCR.
+- **The matched palette is the closest in our manifest, not the closest globally.** If the reference uses colors no palette covers, the match picks the least-bad neighbour.
+- **No layout reconstruction.** The engine reads color, light and edge density. It does NOT read grid structure, component boundaries, or copy. Layout comes from the brief and the page sequence, not the image.
+- **No multimodal LLM is consulted.** That is the point: it stays cheap, deterministic, and offline.
 
 ## Process
 
