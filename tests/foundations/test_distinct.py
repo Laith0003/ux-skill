@@ -24,7 +24,7 @@ BRIEFS = Path(__file__).resolve().parent / "briefs"
 # least TRIAL_FLOOR, pairwise; moving any one axis but motion end to end
 # changes at least AXIS_FLOOR. The motion axis shows only in use, so it is
 # held to BEHAVIOR_FLOOR on the behavior score instead.
-CORNER_FLOOR, TRIAL_FLOOR, AXIS_FLOOR, BEHAVIOR_FLOOR = 0.55, 0.15, 0.10, 0.30
+CORNER_FLOOR, TRIAL_FLOOR, AXIS_FLOOR, BEHAVIOR_FLOOR = 0.55, 0.20, 0.10, 0.30
 
 
 def _built(name, brand):
