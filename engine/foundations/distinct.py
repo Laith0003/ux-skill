@@ -35,7 +35,11 @@ from engine.foundations.color_math import hex_to_oklch
 from engine.foundations.tokens import TokenSet
 
 LIGHT = "scheme:light,contrast:standard"
-REFERENCE_BRAND = "#3366FF"
+# A mid grey leads nothing (decisions/brand-leads-the-role.md): its role,
+# neutrals and supporting accent are the axes' alone, so the spans measured
+# with it are what the axes can do. A saturated brand fills its action and
+# sets its neutrals whatever the axes, which would leave those spans empty.
+REFERENCE_BRAND = "#808080"
 
 # How much each glance feature counts. 2 for what leads the first screen:
 # the main action's color, the neutrals that tint the page and the grey
@@ -55,8 +59,8 @@ BEHAVIOR: Tuple[str, ...] = ("reveal.ms", "overshoot", "ring.px", "face.mono")
 NAMED: Tuple[str, ...] = ("face.display", "face.text", "face.mono")
 # The widest the engine goes on each numeric feature (see the docstring).
 SPAN: Mapping[str, float] = MappingProxyType({
-    "button": 0.43, "link": 0.3, "support": 0.32, "neutral": 0.06,
-    "status.hue": 26.5, "status.chroma": 0.08,
+    "button": 0.37, "link": 0.11, "support": 0.07, "neutral": 0.021,
+    "status.hue": 38.0, "status.chroma": 0.082,
     "radius.control": 58.0, "radius.card": 18.0,
     "hero.px": 71.0, "hero.weight": 500.0, "hero.tracking": 4.7, "body.px": 2.0,
     "shadow.alpha": 0.14, "shadow.blur": 2.0,

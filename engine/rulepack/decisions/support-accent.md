@@ -1,10 +1,10 @@
 ---
 id: support-accent
 title: A supporting accent takes a second hue placed by the axes
-status: active
+status: superseded
 areas: [color]
 supersedes: null
-superseded_by: null
+superseded_by: support-clear-of-banned-pairs
 ---
 
 # A supporting accent takes a second hue placed by the axes

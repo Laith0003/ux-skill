@@ -19,6 +19,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [A brief can open the page dark, and color-scheme follows every scheme](default-scheme.md)
 - [Opposite characters build measurably different systems](distinctness.md)
 - [Distinctness is measured on what a person sees at a glance, and each axis moves a named quantity](distinctness-at-a-glance.md)
+- [Distinctness scales are measured on a grey reference brand, which leaves every color feature to the axes](distinctness-on-a-grey-reference.md)
 
 ## Roles per foundation
 
@@ -36,9 +37,11 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Nine text styles as composites, faces chosen per script](type-roles.md)
 - [Twelve text styles in three faces, display, text and mono](type-three-faces.md)
 - [The axes choose whether the brand fills the action, marks words or draws edges](brand-roles.md)
+- [The brand color leads its role, and the axes decide only where the brand cannot carry a fill](brand-leads-the-role.md)
 - [The brand reaches surfaces as a tint, a band or one brand band](brand-surfaces.md)
 - [Controls keep their edges and focus ring on the tint, the band, the stripe and the brand band](controls-on-brand-surfaces.md)
 - [A supporting accent takes a second hue placed by the axes](support-accent.md)
+- [A cool brand's supporting accent leans to its own hue, and the gradient stays in one hue](support-clear-of-banned-pairs.md)
 - [Code blocks and tables have their own surfaces](code-and-table-colors.md)
 - [The axes choose each face from a catalog by distance, never by keyword](face-choice.md)
 - [Arabic is set larger by a ratio the two faces' metrics give](arabic-proportional.md)
@@ -57,6 +60,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [The focus ring clears the surfaces, and an offset keeps it off the fill](ring-offset.md)
 - [A filled control's fill clears 3:1 against the page only](fill-edge-page-only.md)
 - [The primary button's edge carries its contrast against the page](primary-edge.md)
+- [A control's fill, or its edge, clears every surface its contract places it on, the brand band included](fills-on-every-placement.md)
 - [A focus ring on a tinted fill keeps 3:1 in high contrast](ring-on-tinted-fills.md)
 - [Disabled colors stay distinct and visible, not readable at 4.5:1](disabled-contrast.md)
 - [Status colors keep their own hues, whatever the brand hue](status-hues.md)
@@ -64,6 +68,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Status soft fills take their chroma from the character](soft-fills-follow-character.md)
 - [Warmth sets the hue and chroma of the neutrals](neutral-tint.md)
 - [Warmth moves the neutrals and the duotone light through grey, never around the wheel](warmth-through-grey.md)
+- [The neutrals take their temperature from the brand first, and warmth only leans them](neutrals-follow-the-brand.md)
 - [A brand's hue counts in proportion to its chroma, so a grey brand steers no hue](grey-brands-steer-no-hue.md)
 - [A grey brand's supporting accent takes its hue from warmth alone](grey-brand-support-hue.md)
 - [A grey brand's supporting accent runs from violet to rose, clear of every status hue](grey-accent-clear-of-status.md)
@@ -75,6 +80,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [In dark mode, surfaces lighten as they rise, and a well sits between the page and the card](dark-surfaces-rise.md)
 - [The primary fill keeps the exact brand color whenever text reads on it](brand-fidelity.md)
 - [The primary fill keeps the exact brand whenever text reads on it, and otherwise the nearest brand step, weighing the ring in dark high contrast](brand-fill-family.md)
+- [The primary fill weighs black text on a saturated mid tone against a move to a step that carries white](natural-text-on-the-brand.md)
 - [Hover and pressed step away from the fill from where the fill sits in its ramp](exact-fill-states.md)
 - [The focus ring never weakens under high contrast, and is measured against the fill](ring-never-weaker.md)
 - [The standard focus ring stops one step below the widest, so high contrast can widen it](ring-room.md)

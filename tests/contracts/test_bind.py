@@ -106,7 +106,17 @@ def test_a_fill_near_but_not_equal_to_its_surface_declares_an_edge():
 
 def test_a_fill_that_clears_the_edge_floor_needs_no_edge():
     c = contract(lambda d: d["tokens"][0].update(role="color.action.primary"), with_edge=False)
-    assert messages(c) == []
+    assert [r for r, _ in messages(c) if r == "container-edge"] == []
+
+
+def test_an_action_fill_with_no_edge_is_measured_on_every_surface_it_sits_on():
+    # decisions/fills-on-every-placement.md: the fill itself must clear the
+    # non-text minimum where no edge is drawn around it
+    c = contract(lambda d: d["tokens"][0].update(role="color.action.primary"), with_edge=False)
+    found = [m for r, m in messages(c) if r == "fill-placement"]
+    assert len(found) == 1
+    assert found[0].startswith("toggle: track.fill is color.action.primary, which measures ")
+    assert "against color.surface.card in " in found[0]
 
 
 def test_an_edge_for_another_state_does_not_count():

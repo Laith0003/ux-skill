@@ -52,9 +52,10 @@ def test_same_inputs_give_the_same_bytes():
 
 
 def test_gate_failure_returns_findings_and_no_files(monkeypatch):
-    # With the action solver off, white text stays on the exact yellow.
+    # With the action solver off, white text stays on the exact amber, a
+    # brand that fills its action (decisions/brand-leads-the-role.md).
     monkeypatch.setattr(color_module, "_solve_group", lambda *args, **kwargs: None)
-    out = make_system("#FFD400", NEUTRAL, NEUTRAL_SOURCE)
+    out = make_system("#EAB308", NEUTRAL, NEUTRAL_SOURCE)
     assert not out.passed and dict(out.files) == {}
     assert out.findings
     first = out.findings[0]
@@ -65,7 +66,7 @@ def test_gate_failure_returns_findings_and_no_files(monkeypatch):
     assert "WCAG gate failed: " in out.report
     assert "so nothing was written." in out.report
     assert ("- color.text.on-action on color.action.primary (light mode, standard contrast) "
-            "is 1.43:1; WCAG 1.4.3 needs 4.5:1.\n") in out.report
+            "is 1.91:1; WCAG 1.4.3 needs 4.5:1.\n") in out.report
     findings = out.report.split("## Findings\n", 1)[1]
     assert len(findings.strip().splitlines()) == len(out.findings)
     assert "scheme:" not in findings and "Move " not in findings

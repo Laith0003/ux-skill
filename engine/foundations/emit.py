@@ -489,6 +489,9 @@ _AXIS_WORDS: Dict[str, Tuple[str, str, str]] = {
 
 _RATIO_WORDS = {"text/fill": "text on the fill", "fill/page": "the fill on the page",
                 "edge/page": "the edge on the page",
+                "fill/surface": "the fill on the surfaces it sits on",
+                "edge/surface": "the edge on the surfaces it sits on",
+                "fill/band": "the fill on the brand band",
                 "ring/surface": "the focus ring on the surface"}
 
 _CONTEXT_KEY = re.compile(r"\((in )?([a-z]+:[a-z]+(?:,[a-z]+:[a-z]+)*)\)")
@@ -497,7 +500,9 @@ _PAIRING_NOTE = re.compile(
     r"was (?P<was>[\d.]+:1), now (?P<now>[\d.]+:1), (?P<why>.+)$")
 _GROUP_NOTE = re.compile(r"^(?P<fill>\S+) group \((?P<mode>[a-z:,]+)\): (?P<rest>.+)$")
 _GROUP_MOVE = re.compile(r"^(\S+) (\S+) -> (\S+)$")
-_GROUP_RATIO = re.compile(r"^(text/fill|fill/page|edge/page|ring/surface) ([\d.]+:1)$")
+_GROUP_RATIO = re.compile(
+    r"^(text/fill|fill/page|edge/page|fill/surface|edge/surface|fill/band|ring/surface) "
+    r"([\d.]+:1)$")
 _RAMP_NOTE = re.compile(
     r"^color\.(?P<family>[\w-]+): (?P<seed>#[0-9A-Fa-f]{6}) is too (?P<way>light|dark) to anchor "
     r"a ramp at 500; 500 retuned to (?P<anchor>#[0-9A-Fa-f]{6}), (?P<why>.+)\.$")
@@ -559,8 +564,15 @@ def _contrast_note(note: str) -> Optional[str]:
 def _other_note(note: str) -> str:
     role = _ROLE_NOTE.match(note)
     if role:
-        why = ("the brief set it" if role["why"] == "set by the brief"
-               else f"the axes scored {role['why']}, and the highest wins")
+        brand, _, scores = role["why"].partition("; ")
+        if role["why"] == "set by the brief":
+            why = "the brief set it"
+        elif scores:
+            why = (f"the brand color's own case for a fill scored {brand.split()[-1]} (it is "
+                   "saturated and a mid tone at 1, very light, very dark or grey at 0), and "
+                   f"with the axes the roles scored {scores}; the highest wins")
+        else:
+            why = f"the axes scored {role['why']}, and the highest wins"
         return f"Brand role {role['role']}: {_ROLE_WORDS[role['role']]} ({why})."
     m = _RAMP_NOTE.match(note)
     if not m:
@@ -639,9 +651,10 @@ _PACK_LINE = ("- rule-pack/: the rules for AI agents and people: per foundation 
               "rules, the component contracts and the decision records. Start at "
               "rule-pack/README.md.")
 _FIDELITY_LEAD = ("Where the brand color appears, and whether it stays exact in each mode. A "
-                  "brand fill keeps the exact color whenever white or black text reads on it; "
-                  "where a mode needs more contrast it moves to the nearest step of the brand's "
-                  "scale, and the line says how far.")
+                  "brand fill keeps the exact color whenever its text reads naturally on it; "
+                  "where black text would sit on a saturated mid tone, or a mode needs more "
+                  "contrast, it moves to the nearest step of the brand's scale, and the line "
+                  "says how far.")
 _FONTS_LEAD = ("The tokens name these faces. fonts.css holds a metric-matched fallback for "
                "each, so text keeps its size and line breaks while a face loads; it does not "
                "load the faces. Load them one of two ways, each together with fonts.css, both "

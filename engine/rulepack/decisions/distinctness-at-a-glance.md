@@ -1,10 +1,10 @@
 ---
 id: distinctness-at-a-glance
 title: Distinctness is measured on what a person sees at a glance, and each axis moves a named quantity
-status: active
+status: superseded
 areas: [output]
 supersedes: distinctness
-superseded_by: null
+superseded_by: distinctness-on-a-grey-reference
 ---
 
 # Distinctness is measured on what a person sees at a glance, and each axis moves a named quantity

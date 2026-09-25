@@ -31,7 +31,7 @@ def test_the_seeds_load_and_are_experimental():
     assert tuple(c.name for c in seeds) == NAMES
     assert all(c.status == "experimental" for c in seeds)
     assert {c.name: c.variant_product() for c in seeds} == {
-        "badge": 6, "button": 12, "card": 2, "checkbox": 3, "chip": 2, "date": 1, "dialog": 2,
+        "badge": 6, "button": 24, "card": 2, "checkbox": 3, "chip": 2, "date": 1, "dialog": 2,
         "input-prefix": 2, "link": 2, "nav": 2, "progress": 2, "radio": 2, "select": 1,
         "selectable-row": 2, "status-banner": 4, "table": 6, "text-field": 2, "textarea": 2}
     assert all(c.provenance.node is None and c.provenance.drift == () for c in seeds)

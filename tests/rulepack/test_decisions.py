@@ -36,7 +36,9 @@ EXPECTED = {
     "tone-words-reach-shape", "sentence-names-the-shown-face", "type-steps-down-on-phones",
     "direction-on-any-subtree", "dark-recess-and-bands", "high-contrast-levels",
     "soft-fills-follow-character", "brand-fill-family", "media-veil", "dark-surfaces-rise",
-    "type-levels-apart", "arabic-by-script",
+    "type-levels-apart", "arabic-by-script", "brand-leads-the-role",
+    "natural-text-on-the-brand", "neutrals-follow-the-brand", "support-clear-of-banned-pairs",
+    "fills-on-every-placement", "distinctness-on-a-grey-reference",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",
@@ -57,7 +59,13 @@ SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-e
               "recessed-sunken": "dark-recess-and-bands",
               "high-contrast-surfaces": "high-contrast-levels",
               "brand-fidelity": "brand-fill-family",
-              "dark-elevation-cue": "dark-surfaces-rise"}
+              "dark-elevation-cue": "dark-surfaces-rise",
+              "brand-roles": "brand-leads-the-role",
+              "brand-fill-family": "natural-text-on-the-brand",
+              "warmth-through-grey": "neutrals-follow-the-brand",
+              "support-accent": "support-clear-of-banned-pairs",
+              "primary-edge": "fills-on-every-placement",
+              "distinctness-at-a-glance": "distinctness-on-a-grey-reference"}
 
 
 def test_every_shipped_record_is_valid_and_routed():

@@ -4,9 +4,10 @@ import re
 import pytest
 
 import engine.foundations.color as color_module
-from engine.foundations.build import build_color
+from engine.foundations.audience import Audience
+from engine.foundations.build import build_color, build_system
 from engine.foundations.color import COLOR_CONTEXTS, PAIRINGS, SEMANTIC, generate_color
-from engine.foundations.color_math import contrast, oklch_to_hex
+from engine.foundations.color_math import contrast, oklab_distance, oklch_to_hex
 from engine.foundations.gate import GateFailure, required
 from engine.foundations.ramp import STEPS, RampResult
 from engine.synthesizer.axes import AxisValues
@@ -55,12 +56,19 @@ def test_brand_seed_is_action_primary_when_it_passes():
 
 
 @pytest.mark.parametrize("seed", SEEDS + ["#E85D04", "#0F766E", "#6D28D9", "#2563EB"])
-def test_the_exact_brand_is_the_light_fill_whenever_either_text_color_reads(seed):
-    ts = generate_color(AXES, seed).tokens
+def test_the_exact_brand_is_the_light_fill_whenever_its_text_reads_naturally(seed):
+    # decisions/natural-text-on-the-brand.md: white text on the exact brand
+    # keeps it; black text keeps it unless a brand step nearer than what
+    # black costs there carries white text
+    ts = generate_color(AXES, seed, brand_role="fill").tokens
     exact = seed.upper()
     light = "scheme:light,contrast:standard"
-    readable = max(contrast(exact, "#FFFFFF"), contrast(exact, "#000000")) >= 4.5
-    assert (ts.resolve("color.action.primary", light) == exact) == readable
+    white_steps = [oklab_distance(ts.resolve(f"color.brand.{s}"), exact) for s in STEPS
+                   if contrast(ts.resolve(f"color.brand.{s}"), "#FFFFFF") >= 4.5]
+    natural = contrast(exact, "#FFFFFF") >= 4.5 or (
+        contrast(exact, "#000000") >= 4.5
+        and color_module.natural_cost(exact, "color.base.black") <= min(white_steps, default=1))
+    assert (ts.resolve("color.action.primary", light) == exact) == natural
     assert ts.resolve("color.brand.exact") == exact
 
 
@@ -88,15 +96,17 @@ def test_dark_mode_never_puts_black_text_on_a_mid_tone_fill(seed):
 
 
 @pytest.mark.parametrize("seed", SEEDS)
-def test_the_primary_edge_clears_the_page_and_equals_the_fill_when_the_fill_does(seed):
-    ts = generate_color(AXES, seed).tokens
+def test_the_primary_edge_clears_every_control_surface_and_equals_the_fill_when_the_fill_does(
+        seed):
+    # decisions/fills-on-every-placement.md
+    ts = generate_color(AXES, seed, brand_role="fill").tokens
     for mode in COLOR_CONTEXTS:
         fill, edge = (ts.resolve(r, mode) for r in ("color.action.primary",
                                                      "color.action.primary-edge"))
-        page = ts.resolve("color.surface.page", mode)
+        grounds = [ts.resolve(r, mode) for r in color_module.CONTROL_SURFACES]
         need = 4.5 if "contrast:high" in mode else 3.0
-        assert contrast(edge, page) >= need, f"{seed} ({mode})"
-        if contrast(fill, page) >= need:
+        assert all(contrast(edge, g) >= need for g in grounds), f"{seed} ({mode})"
+        if all(contrast(fill, g) >= need for g in grounds):
             assert edge == fill, f"{seed} ({mode})"
 
 
@@ -149,12 +159,12 @@ def test_unsatisfiable_action_group_keeps_the_closest_and_the_gate_blocks_it(mon
     brand = "#FAFAFA"
     _brand_ramp(monkeypatch, brand,
                 {s: oklch_to_hex(0.99 - i * 0.01, 0.0, 0.0) for i, s in enumerate(STEPS)})
-    notes = [n for n in generate_color(AXES, brand).notes
+    notes = [n for n in generate_color(AXES, brand, brand_role="fill").notes
              if n.startswith("color.action.primary group (scheme:light,contrast:standard)")]
     assert len(notes) == 1 and "kept the closest" in notes[0]
     assert len(re.findall(r"\d+\.\d\d:1", notes[0])) == 3
     with pytest.raises(GateFailure) as exc:
-        build_color(AXES, brand)
+        build_system(AXES, brand, foundations=("color",), audience=Audience(brand_role="fill"))
     assert any((f.fg, f.bg, f.mode) == ("color.action.primary-edge", "color.surface.page",
                                         "scheme:light,contrast:standard")
                for f in exc.value.report.findings)
@@ -199,10 +209,13 @@ def test_notes_are_complete(seed):
         assert _PATH_MOVE_RE.search(note), note
         if re.match(r"color\.\S+ group \(", note):
             # a fill-group note lists only the roles that moved, then the
-            # text/fill and fill/page ratios, and for the primary the ring's
-            # lowest ratio against the surfaces it is checked on
+            # text/fill ratio, the fill or edge against the surfaces it must
+            # clear (none for the brand band), and for the primary the
+            # ring's lowest ratio against the surfaces it is checked on
             ratios = len(_BARE_RATIO_RE.findall(note))
-            assert ratios == (3 if note.startswith("color.action.primary group") else 2), note
+            want = 3 if note.startswith("color.action.primary group") else \
+                1 if note.startswith("color.surface.brand group") else 2
+            assert ratios == want, note
         else:
             assert _WAS_RATIO_RE.search(note), note
             assert _NOW_RATIO_RE.search(note), note
@@ -372,7 +385,7 @@ def test_solver_order_fill_distance_before_state_direction(monkeypatch):
     # stays and the states go lighter, each further from the fill: the
     # fill's distance from the brand outranks the states' direction.
     brand = _gray_ramp(monkeypatch, _ONE_DARKER)
-    assert _group(generate_color(AXES, brand).tokens)[:5] == (
+    assert _group(generate_color(AXES, brand, brand_role="fill").tokens)[:5] == (
         "color.brand.exact", "color.brand.400", "color.brand.300", "color.base.white",
         "color.brand.exact")
 
@@ -382,7 +395,7 @@ def test_solver_order_conventional_direction_at_equal_distance(monkeypatch):
     # conventional (darker) way.
     brand = _gray_ramp(monkeypatch, [0.983, 0.95, 0.85, 0.5, 0.465, 0.43, 0.395, 0.36, 0.33,
                                      0.3, 0.27])
-    assert _group(generate_color(AXES, brand).tokens)[:5] == (
+    assert _group(generate_color(AXES, brand, brand_role="fill").tokens)[:5] == (
         "color.brand.exact", "color.brand.600", "color.brand.700", "color.base.white",
         "color.brand.exact")
 
@@ -393,7 +406,7 @@ def test_ring_prefers_a_color_other_than_the_fill(monkeypatch):
     brand = _gray_ramp(monkeypatch, _ONE_DARKER)
     monkeypatch.setattr(color_module, "_ring_candidates",
                         lambda mode, default_ring: ["color.brand.exact", "color.neutral.950"])
-    assert _group(generate_color(AXES, brand).tokens)[-1] == "color.neutral.950"
+    assert _group(generate_color(AXES, brand, brand_role="fill").tokens)[-1] == "color.neutral.950"
 
 
 def test_the_fill_never_moves_to_make_the_ring_differ(monkeypatch):
@@ -402,7 +415,7 @@ def test_the_fill_never_moves_to_make_the_ring_differ(monkeypatch):
     brand = _gray_ramp(monkeypatch, _ONE_DARKER)
     monkeypatch.setattr(color_module, "_ring_candidates",
                         lambda mode, default_ring: ["color.brand.exact"])
-    assert _group(generate_color(AXES, brand).tokens) == (
+    assert _group(generate_color(AXES, brand, brand_role="fill").tokens) == (
         "color.brand.exact", "color.brand.400", "color.brand.300", "color.base.white",
         "color.brand.exact", "color.brand.exact")
 
@@ -430,14 +443,15 @@ def test_ring_and_edge_moves_are_noted():
     # A yellow brand keeps its exact fill with black text; its edge moves to
     # brand.700 to clear the page, and the note says so with the edge and
     # ring ratios.
-    notes = [n for n in generate_color(AXES, "#FFD400").notes
+    notes = [n for n in generate_color(AXES, "#FFD400", brand_role="fill").notes
              if n.startswith("color.action.primary group (scheme:light,contrast:standard)")]
     assert len(notes) == 1
     assert ", color.action.primary color." not in notes[0] and ": color.action.primary color." \
         not in notes[0]
     assert "color.text.on-action color.base.white -> color.base.black" in notes[0]
     assert "color.action.primary-edge color.brand.exact -> color.brand.700" in notes[0]
-    assert re.search(r"edge/page \d+\.\d\d:1, ring/surface \d+\.\d\d:1$", notes[0]), notes[0]
+    assert re.search(r"edge/surface \d+\.\d\d:1, ring/surface \d+\.\d\d:1$", notes[0]), \
+        notes[0]
 
 
 # High contrast: a variant per scheme with raised minimums.
@@ -822,14 +836,19 @@ def test_every_other_pairing_is_kept():
             + [Pairing("color.text.inverse", "color.surface.inverse", 4.5, "1.4.3")]
             + [Pairing(on, state, 4.5, "1.4.3")
                for fill, on in (("color.action.primary", "color.text.on-action"),
-                                ("color.action.danger", "color.text.on-danger"))
+                                ("color.action.danger", "color.text.on-danger"),
+                                ("color.action.on-brand", "color.text.on-brand-action"))
                for state in (fill, fill + "-hover", fill + "-pressed")]
             + [Pairing(f"color.status.{s}.on-strong", f"color.status.{s}.strong", 4.5, "1.4.3")
                for s in color_module.STATUS_HUES]
-            + [Pairing("color.action.primary-edge", "color.surface.page", 3.0, "1.4.11")]
-            + [Pairing(state, "color.surface.page", 3.0, "1.4.11")
+            # decisions/fills-on-every-placement.md
+            + [Pairing("color.action.primary-edge", bg, 3.0, "1.4.11")
+               for bg in color_module.CONTROL_SURFACES]
+            + [Pairing(state, bg, 3.0, "1.4.11")
                for state in ("color.action.danger", "color.action.danger-hover",
-                             "color.action.danger-pressed")]
+                             "color.action.danger-pressed")
+               for bg in color_module.CONTROL_SURFACES]
+            + [Pairing("color.action.on-brand", "color.surface.brand", 3.0, "1.4.11")]
             + [Pairing(f"color.status.{s}.strong", "color.surface.page", 3.0, "1.4.11")
                for s in color_module.STATUS_HUES]
             + [Pairing("color.focus.ring-inverse", "color.surface.inverse", 3.0, "1.4.11")]
@@ -943,9 +962,11 @@ def test_brand_fidelity_states_every_context_and_names_an_identity_loss():
     (AxisValues(0.3, 0.7, 0.6, 0.2, 0.65, 0.4, 0.0), "edge"),
 ])
 def test_the_axes_choose_the_brand_role_and_every_role_passes(axes, role):
+    # a very dark brand cannot carry a fill, so the axes choose its role
+    # (decisions/brand-leads-the-role.md)
     from engine.foundations import character
     assert character.brand_role(axes) == role
-    ts = build_color(axes, "#6D28D9").tokens
+    ts = build_color(axes, "#1E1B4B").tokens
     light = "scheme:light,contrast:standard"
     primary = ts.raw("color.action.primary", light)
     link = ts.raw("color.text.link", light)

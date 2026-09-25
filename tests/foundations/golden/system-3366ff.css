@@ -28,17 +28,17 @@
   --color-neutral-950: #0C0D0F;
   --color-neutral-recess-light: #EAEBEC;
   --color-neutral-recess-dark: #141618;
-  --color-support-50: #FFF4F5;
-  --color-support-100: #FFD0D6;
-  --color-support-200: #F9AEB9;
-  --color-support-300: #EB8F9E;
-  --color-support-400: #DC7083;
-  --color-support-500: #CC4F6A;
-  --color-support-600: #A93853;
-  --color-support-700: #88223D;
-  --color-support-800: #680928;
-  --color-support-900: #440016;
-  --color-support-950: #220007;
+  --color-support-50: #F3F7FF;
+  --color-support-100: #D7DEED;
+  --color-support-200: #BCC6DA;
+  --color-support-300: #A2AEC7;
+  --color-support-400: #8997B5;
+  --color-support-500: #7080A2;
+  --color-support-600: #586685;
+  --color-support-700: #414E69;
+  --color-support-800: #2C374E;
+  --color-support-900: #182134;
+  --color-support-950: #060C1D;
   --color-danger-50: #FFF4F4;
   --color-danger-100: #FCD0D3;
   --color-danger-200: #ECB1B6;
@@ -112,7 +112,7 @@
   --color-veil-light: #F6F7F800;
   --color-veil-light-high: #FFFFFF00;
   --color-veil-dark: #0C0D0F00;
-  --color-veil-dark-high: #00000015;
+  --color-veil-dark-high: #00000020;
   --color-surface-page: var(--color-neutral-50);
   --color-surface-card: var(--color-base-white);
   --color-surface-sunken: var(--color-neutral-recess-light);
@@ -135,6 +135,7 @@
   --color-text-accent: var(--color-brand-700);
   --color-text-support: var(--color-support-700);
   --color-text-on-brand: var(--color-base-white);
+  --color-text-on-brand-action: var(--color-brand-700);
   --color-text-on-media: var(--color-neutral-900);
   --color-action-primary: var(--color-brand-exact);
   --color-action-primary-hover: var(--color-brand-600);
@@ -144,6 +145,9 @@
   --color-action-danger-hover: var(--color-danger-700);
   --color-action-danger-pressed: var(--color-danger-800);
   --color-action-disabled: var(--color-neutral-200);
+  --color-action-on-brand: var(--color-neutral-50);
+  --color-action-on-brand-hover: var(--color-neutral-100);
+  --color-action-on-brand-pressed: var(--color-neutral-200);
   --color-line-subtle: var(--color-neutral-200);
   --color-line-input: var(--color-neutral-500);
   --color-line-selected: var(--color-brand-600);
@@ -521,6 +525,7 @@
   --color-text-accent: var(--color-brand-300);
   --color-text-support: var(--color-support-300);
   --color-text-on-media: var(--color-neutral-50);
+  --color-action-primary-edge: var(--color-brand-400);
   --color-action-danger: var(--color-danger-400);
   --color-action-danger-hover: var(--color-danger-300);
   --color-action-danger-pressed: var(--color-danger-200);
@@ -590,6 +595,7 @@
     --color-text-accent: var(--color-brand-300);
     --color-text-support: var(--color-support-300);
     --color-text-on-media: var(--color-neutral-50);
+    --color-action-primary-edge: var(--color-brand-400);
     --color-action-danger: var(--color-danger-400);
     --color-action-danger-hover: var(--color-danger-300);
     --color-action-danger-pressed: var(--color-danger-200);
@@ -650,6 +656,7 @@
   --color-text-link: var(--color-brand-800);
   --color-text-accent: var(--color-brand-800);
   --color-text-support: var(--color-support-800);
+  --color-text-on-brand-action: var(--color-brand-800);
   --color-text-on-media: var(--color-neutral-950);
   --color-action-primary: var(--color-brand-700);
   --color-action-primary-hover: var(--color-brand-800);
@@ -753,6 +760,7 @@
     --color-text-link: var(--color-brand-800);
     --color-text-accent: var(--color-brand-800);
     --color-text-support: var(--color-support-800);
+    --color-text-on-brand-action: var(--color-brand-800);
     --color-text-on-media: var(--color-neutral-950);
     --color-action-primary: var(--color-brand-700);
     --color-action-primary-hover: var(--color-brand-800);
@@ -1064,7 +1072,7 @@
   --color-text-accent: var(--color-brand-200);
   --color-text-support: var(--color-support-200);
   --color-text-on-media: var(--color-base-white);
-  --color-action-primary-edge: var(--color-brand-400);
+  --color-action-primary-edge: var(--color-brand-300);
   --color-action-danger: var(--color-danger-200);
   --color-action-danger-hover: var(--color-danger-100);
   --color-action-danger-pressed: var(--color-danger-50);
@@ -1114,7 +1122,7 @@
     --color-text-accent: var(--color-brand-200);
     --color-text-support: var(--color-support-200);
     --color-text-on-media: var(--color-base-white);
-    --color-action-primary-edge: var(--color-brand-400);
+    --color-action-primary-edge: var(--color-brand-300);
     --color-action-danger: var(--color-danger-200);
     --color-action-danger-hover: var(--color-danger-100);
     --color-action-danger-pressed: var(--color-danger-50);
@@ -1165,7 +1173,7 @@
     --color-text-accent: var(--color-brand-200);
     --color-text-support: var(--color-support-200);
     --color-text-on-media: var(--color-base-white);
-    --color-action-primary-edge: var(--color-brand-400);
+    --color-action-primary-edge: var(--color-brand-300);
     --color-action-danger: var(--color-danger-200);
     --color-action-danger-hover: var(--color-danger-100);
     --color-action-danger-pressed: var(--color-danger-50);
@@ -1216,7 +1224,7 @@
     --color-text-accent: var(--color-brand-200);
     --color-text-support: var(--color-support-200);
     --color-text-on-media: var(--color-base-white);
-    --color-action-primary-edge: var(--color-brand-400);
+    --color-action-primary-edge: var(--color-brand-300);
     --color-action-danger: var(--color-danger-200);
     --color-action-danger-hover: var(--color-danger-100);
     --color-action-danger-pressed: var(--color-danger-50);
