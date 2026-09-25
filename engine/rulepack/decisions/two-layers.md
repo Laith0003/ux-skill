@@ -27,4 +27,4 @@ The validator: primitive-alias, primitive-modes, semantic-literal and semantic-t
 
 ## Consequences
 
-To change a value everywhere, move the primitive a role points at, or point the role at another primitive. To change one use, change the role. A per-mode difference is always an override on a role. Nothing outside the token file names a primitive.
+To change a value everywhere, move the primitive a role points at, or point the role at another primitive. To change one use, bind it to the role whose job fits; never change a role to suit one component. A per-mode difference is always an override on a role. Nothing outside the token file names a primitive.

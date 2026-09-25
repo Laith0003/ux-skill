@@ -40,6 +40,8 @@ Space sets the distances inside and between things: the padding of a control, th
 
 When two neighbors could take either of two roles, take the one for the larger relationship: a heading that opens a group uses the group gap above it and the text gap below it.
 
+Stacked fields in a form sit space.group.gap apart: a label, its field and its helper text form one group, and the group gap separates one field's group from the next.
+
 ## Modes
 
 Space varies on density (comfortable, compact). Comfortable is the base; the brief's density axis places it between airy and dense. Compact takes every role one step lower on the scale, never below the role's floor and never larger than comfortable (decisions/two-density-modes.md). The whole page switches with data-density on the html element; density is not scoped to one section (decisions/axes-on-the-root.md).

@@ -52,7 +52,7 @@ Radius varies on no axis: corners are the same in every scheme, contrast, densit
 
 ## Audit scope
 
-Audits the radius roles and the rules between them: the order of the scale, square joins, pill shapes, and a dialog never less rounded than a card. Radius values alone cannot fail a WCAG criterion; the risks are structural, such as a focus ring whose corners do not follow the element or nested corners that bulge. It does not audit focus ring color or width.
+Audits the radius roles and the rules between them: the order of the scale, square joins, pill shapes, and a dialog never less rounded than a card. Radius values alone cannot fail a WCAG criterion; the risks are structural, such as a focus ring whose corners do not follow the element or nested corners that bulge. It does not audit focus ring color or width, the contrast of an element's edge, which color owns, or component layout beyond the contracts.
 
 ## Checks
 
