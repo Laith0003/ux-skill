@@ -693,3 +693,54 @@ def test_an_unclosed_generic_after_a_css_tag_stays_linear(tmp_path):
     start = time.perf_counter()
     scan([tmp_path], _tokens())
     assert time.perf_counter() - start < 1
+
+
+def test_states_set_by_a_class_or_an_aria_attribute_are_recorded(tmp_path):
+    css = """.tab.is-active { color: #111111; }
+.nav a.active { color: #222222; }
+.row.selected { background: #333333; }
+[aria-pressed="true"] { background: #444444; }
+.opt[aria-selected=true] { background: #555555; }
+.nav [aria-current] { color: #666666; }
+.nav [aria-current="page"] { color: #777777; }
+[aria-pressed="false"] { color: #888888; }
+.inactive { color: #999999; }
+.dark .tab.is-active { color: #aaaaaa; }
+"""
+    rows = [(r[1], r[6]) for r in _rows(_one(tmp_path, "a.css", css))]
+    assert rows == [(1, "active"), (2, "active"), (3, "selected"), (4, "pressed"),
+                    (5, "selected"), (6, "current"), (7, "current"), (8, ""), (9, ""),
+                    (10, "scheme:dark,active")]
+
+
+def test_aria_variants_in_tailwind_are_states(tmp_path):
+    html = '<a class="aria-selected:bg-ink aria-pressed:bg-surface aria-current:text-ink">x</a>\n'
+    rows = [(r[2], r[6]) for r in _rows(_one(tmp_path, "a.html", html))]
+    assert rows == [("bg-ink", "selected"), ("bg-surface", "pressed"), ("text-ink", "current")]
+
+
+def test_a_mui_responsive_object_is_listed_with_its_breakpoints(tmp_path):
+    jsx = "const a = <Box sx={{ p: { xs: 1, md: 2 }, color: '#ffffff' }} />;\n"
+    result = _one(tmp_path, "a.jsx", jsx)
+    assert [(r[2], r[5]) for r in _rows(result)] == [("color", "#FFFFFF")]
+    [entry] = result.not_read
+    assert (entry.kind, entry.text) == ("responsive value", "p: { xs: 1, md: 2 }")
+    assert entry.why == ("p: { xs: 1, md: 2 } sets a value per breakpoint (xs and md), so its "
+                         "values are not measured; set each breakpoint's value in a stylesheet "
+                         "media query or a class, with a CSS value or a var() to a token")
+
+
+def test_the_custom_properties_the_code_declares_are_listed(tmp_path):
+    (tmp_path / "a.css").write_text(".l { --local: var(--only-local); color: var(--local); }\n"
+                                    ":root { --gap: 4px; }\n", encoding="utf-8")
+    (tmp_path / "b.jsx").write_text("const s = <div style={{ '--tone': '#fff' }} />;\n",
+                                    encoding="utf-8")
+    result = scan([tmp_path], _tokens())
+    assert result.declared == ["--local", "--gap", "--tone"]
+
+
+def test_a_regions_theme_attribute_is_not_the_dark_scheme(tmp_path):
+    css = ('[data-code-theme="dark"] .x { color: #111111; }\n'
+           '[data-color-scheme="dark"] .x { color: #222222; }\n')
+    rows = [(r[1], r[6]) for r in _rows(_one(tmp_path, "a.css", css))]
+    assert rows == [(1, ""), (2, "scheme:dark")]

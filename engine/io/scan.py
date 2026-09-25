@@ -17,7 +17,9 @@ wherever a property takes a color. The font shorthand is read by its
 parts: weight, size, line height and family. A var() reference is a use
 of the token it names, or "missing" when the system has no such token. A
 custom property, SCSS or Less variable set in the app's own CSS is a
-definition, not a raw use, and so is an @font-face or @property block.
+definition, not a raw use, and so is an @font-face or @property block;
+Scan.declared lists the custom properties the code declares, so a report
+can tell a var() to one of them from a token the system lacks.
 
 What the scanner sees and cannot measure is listed in Scan.not_read, each
 entry with why and the fix, so a report can say what it did not count: a
@@ -25,7 +27,8 @@ value with no single reading in a property that carries a family (calc(),
 em, %, a template or preprocessor value), an interpolation inside a
 CSS-in-JS template, a style, css or sx prop bound to an expression, a
 spread or a computed entry in a style object, a value MUI looks up in its
-theme (p: 2, borderRadius: 2, color: 'primary.main'), an arbitrary class
+theme (p: 2, borderRadius: 2, color: 'primary.main') or sets per
+breakpoint (p: { xs: 1, md: 2 }, with each breakpoint named), an arbitrary class
 whose value does not read, and a <style> block or template that does not
 parse. Values in
 properties that carry no family (display, width) and CSS keywords (auto,
@@ -44,9 +47,14 @@ classes are kept only when the code shows it uses Tailwind: a variant
 "tailwindcss", @tailwind, @theme, @apply), a tailwind.config file or a
 postcss config that loads Tailwind; a class that names one of the system's
 tokens is always kept. Variants are states: hover, focus, active and
-disabled (group- and peer- forms included), and dark: records the scheme
-as the importers name it, scheme:dark. CSS records the same from its
-selectors and queries. A state joins the scheme first: "scheme:dark,hover".
+disabled (group- and peer- forms included), pressed, selected and current
+(aria-pressed:, aria-selected:, aria-current:), and dark: records the
+scheme as the importers name it, scheme:dark. CSS records the same from
+its selectors and queries, and reads active, pressed, selected and current
+from a class (.active, .is-selected) or an ARIA attribute
+([aria-pressed=true], [aria-selected=true], [aria-current]) too, a
+pseudo-class winning in the same selector. A state joins the scheme first:
+"scheme:dark,hover".
 
 The scanner only reads files and never runs code. It walks folders sorted,
 skips SKIP_DIRS and hidden folders, the paths in `exclude` (files or
@@ -70,7 +78,7 @@ from typing import (Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, O
 from engine.foundations.errors import InputError, _brief_text
 from engine.foundations.tokens import TokenSet
 from engine.foundations.values import STROKE_STYLES, TYPES, dimension_px, duration_ms
-from engine.io.css_in import _blank_comments, _without_not, parse_css
+from engine.io.css_in import THEME_ATTR, _blank_comments, _without_not, parse_css
 from engine.io.values_in import CSS_KEYWORDS, NotRead, read_value, split_top
 
 SKIP_DIRS = ("node_modules", ".git", "dist", "build", "vendor", ".next", "out", "coverage",
@@ -166,11 +174,20 @@ _UNITLESS = frozenset((
 # States: CSS pseudo-classes and attributes, and Tailwind variants.
 _CSS_STATE = re.compile(r":(hover|active|focus-visible|focus-within|focus|disabled)(?![\w-])"
                         r"|\[(disabled|aria-disabled)[\]=]")
+# A state a class or an ARIA attribute sets: .active, .is-selected,
+# [aria-pressed=true], [aria-current] (any value but false). A pseudo-class
+# in the same selector wins, so .tab.is-active:hover is hover.
+_CLASS_STATE = re.compile(
+    r"\.(?:is-)?(active|pressed|selected|current)(?![\w-])"
+    r"""|\[(aria-pressed|aria-selected)\s*=\s*["']?true["']?\s*\]"""
+    r"""|\[(aria-current)(?:\s*=\s*["']?(?!false\b)[\w-]+["']?)?\s*\]""")
 _STATES = {"hover": "hover", "active": "active", "focus": "focus", "focus-visible": "focus",
-           "focus-within": "focus", "disabled": "disabled", "aria-disabled": "disabled"}
+           "focus-within": "focus", "disabled": "disabled", "aria-disabled": "disabled",
+           "pressed": "pressed", "selected": "selected", "current": "current",
+           "aria-pressed": "pressed", "aria-selected": "selected", "aria-current": "current"}
 DARK = "scheme:dark"
 _DARK_SELECTOR = re.compile(r"""\.dark(?![\w-])|\[class~=["']?dark["']?\]|"""
-                            r"""\[[\w-]*(?:theme|mode|scheme)[\w-]*\s*=\s*["']?dark["']?\s*\]""")
+                            r"""\[""" + THEME_ATTR.pattern + r"""\s*=\s*["']?dark["']?\s*\]""")
 _DARK_MEDIA = re.compile(r"prefers-color-scheme\s*:\s*dark")
 
 # Tailwind: utility prefix -> the theme namespaces its value may name, with
@@ -296,6 +313,8 @@ _WHY_INTERPOLATION = ("is computed in JavaScript inside the CSS template, so its
 _WHY_THEME = ("is looked up in the MUI theme (a spacing step, a palette path or a theme "
               "index), so its value is not measured; write a CSS value such as '8px' or "
               "'#1F2937', or import the theme as the system")
+_WHY_RESPONSIVE = ("so its values are not measured; set each breakpoint's value in a "
+                   "stylesheet media query or a class, with a CSS value or a var() to a token")
 _WHY_TEMPLATE = ("is filled in by a template or a preprocessor when the page is built, so it is "
                  "not measured; write the value, or a var() to a token, in a stylesheet")
 
@@ -309,7 +328,8 @@ class Usage:
     kind: str      # "token", "raw" or "missing" (a var() to a token the system lacks)
     value: str     # the token path, the raw value in its canonical form, or --name
     text: str      # as written
-    state: str     # "", "hover", "active", "focus", "disabled", "scheme:dark" or both joined
+    state: str     # "", "hover", "active", "focus", "disabled", "pressed", "selected",
+    #                "current", "scheme:dark", or the scheme and one state joined
 
     def where(self) -> str:
         return f"{self.file}:{self.line}"
@@ -349,6 +369,9 @@ class Scan:
     # (file, line, kind, text) for what was seen and could not be measured;
     # each entry is a NotMeasured, which carries why beside the tuple
     not_read: List[NotMeasured] = field(default_factory=list)
+    # The custom properties the code declares itself (--name), each once in
+    # the order first seen: a var() to one is the code's own, not a token.
+    declared: List[str] = field(default_factory=list)
 
 
 def _norm(name: str) -> str:
@@ -392,8 +415,8 @@ def _selector_state(selector: str, media: Tuple[str, ...]) -> str:
         or all(_DARK_SELECTOR.search(m) for m in members)
     states = set()
     for m in members:
-        found = _CSS_STATE.search(m)
-        states.add(_STATES[found.group(1) or found.group(2)] if found else "")
+        found = _CSS_STATE.search(m) or _CLASS_STATE.search(m)
+        states.add(_STATES[next(g for g in found.groups() if g)] if found else "")
     return _join_state(DARK if dark else "", states.pop() if len(states) == 1 else "")
 
 
@@ -593,6 +616,7 @@ class _Scanner:
         self._found: List[Tuple[int, int, int, Usage]] = []
         self._unknown: List[Tuple[int, int, int, Tuple[str, int, str]]] = []
         self._missed: List[Tuple[int, int, int, NotMeasured]] = []
+        self._declared: List[str] = []
         self._seq = 0
         self.file = ""
         # Tailwind: whether the code shows it, and the class uses kept only if so.
@@ -606,6 +630,7 @@ class _Scanner:
 
     def begin(self, file: str) -> None:
         self.file, self._found, self._unknown, self._missed = file, [], [], []
+        self._declared = []
 
     def end(self) -> None:
         for bucket, out in ((self._found, self.result.usages),
@@ -613,6 +638,9 @@ class _Scanner:
                             (self._missed, self.result.not_read)):
             bucket.sort(key=lambda f: f[:3])
             out.extend(f[3] for f in bucket)
+        for name in self._declared:
+            if name not in self.result.declared:
+                self.result.declared.append(name)
 
     def finish(self) -> Scan:
         """Drop what only a Tailwind project writes when the code shows no
@@ -701,6 +729,8 @@ class _Scanner:
         if not prop.startswith("--"):
             prop = prop.lower()
         value = _IMPORTANT.sub("", value.strip())
+        if prop.startswith("--") and len(prop) > 2:
+            self._declared.append(prop)
         refs = _top_vars(value)
         for name, a, b in refs:
             self.var(at, prop, name, value[a:b], state)
@@ -1012,6 +1042,17 @@ class _Scanner:
                 lead = at + text.index(raw_value) + 1
                 self.style_object(lines, lead, raw_value[1:-1], inner, mui)
                 continue
+            if mui and m and raw_value.startswith("{") and raw_value.endswith("}"):
+                points = [_OBJ_MEMBER.fullmatch(p.strip()) for _, p in
+                          _js_members(raw_value[1:-1]) if p.strip()]
+                if points and all(p and p.group(1) for p in points):
+                    names = [p.group(1) for p in points]
+                    shown = names[0] if len(names) == 1 else \
+                        ", ".join(names[:-1]) + " and " + names[-1]
+                    self.note(where, "responsive value", text,
+                              f"{' '.join(text.split())} sets a value per breakpoint ({shown}), "
+                              f"{_WHY_RESPONSIVE}")
+                    continue
             literal = _JS_LITERAL.fullmatch(raw_value) if m else None
             if literal is None:
                 self.note(where, "style value", text, f"{text} {_WHY_COMPUTED}")
