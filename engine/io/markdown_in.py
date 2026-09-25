@@ -69,7 +69,11 @@ _PLAIN = re.compile(r"[a-z]+(?:'[a-z]+)?")
 _SENTENCE_END = re.compile(r"[.!?](?:\s|$)")
 _VALUEISH = re.compile(r"[0-9#({\"']")
 _BULLET = re.compile(r"\s*(?:[-*+]|\d+[.)])\s")
-_HEADING = re.compile(r" {0,3}#{1,6}(?:\s|$)")
+# Lines that end a block, so a line four spaces in right after one opens
+# an indented code block: an ATX heading, a setext underline and a
+# thematic break.
+_BLOCK_END = re.compile(r" {0,3}(?:#{1,6}(?:\s|$)|=+\s*$|-{2,}\s*$"
+                        r"|(?:\*\s*){3,}$|(?:-\s*){3,}$|(?:_\s*){3,}$)")
 _LOOP = "references only itself through a loop of references; give one of them a value"
 
 
@@ -356,19 +360,20 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
 
     for file_name, text in files:
         lines = text.splitlines()
-        i, fence, in_list, in_code = 0, "", False, False
+        i, fence, in_list, in_code, closed = 0, "", False, False, -1
         while i < len(lines):
             line = lines[i]
             where = f"{file_name}:{i + 1}"
             opened = _FENCE.match(line)
             if not fence and line.strip():
-                # An indented code block: four spaces in, after a blank line
-                # or an ATX heading (a heading is one line, so it ends there),
-                # outside a list.
+                # An indented code block: four spaces in, after a blank line,
+                # a heading, a thematic break or a closing fence (each ends
+                # its block there), outside a list.
                 indent = len(line.expandtabs(4)) - len(line.expandtabs(4).lstrip())
                 if indent >= 4 and not in_list and (in_code or i == 0
                                                     or not lines[i - 1].strip()
-                                                    or _HEADING.match(lines[i - 1])):
+                                                    or _BLOCK_END.match(lines[i - 1])
+                                                    or closed == i - 1):
                     in_code = True
                     i += 1
                     continue
@@ -380,7 +385,7 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
             if fence:
                 if opened and opened.group(1)[0] == fence[0] and len(opened.group(1)) >= \
                         len(fence) and not opened.group(2):
-                    fence = ""
+                    fence, closed = "", i
                 i += 1
                 continue
             if opened:
