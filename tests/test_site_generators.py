@@ -63,9 +63,31 @@ def test_catalog_page_regenerates_lint_clean(tmp_path, script):
     elif script == "build-commands-page.py":
         page = mod.build_html(mod.collect())
     else:
-        page = mod.waive_quotes(mod.build_html(*mod.load_rules()))
+        rules, version = mod.load_rules()
+        page = mod.waive_quotes(mod.build_html(rules, version), rules)
         # regions name the rules they waive, and every one is closed
         assert "ux-lint-disable -->" not in page and page.count("ux-lint-off") == page.count("ux-lint-on")
     out = tmp_path / "page.html"
     out.write_text(page, encoding="utf-8")
     assert _bad(out) == []
+
+
+def test_catalog_waivers_never_hide_template_markup(tmp_path):
+    """Review of #45, W1: an inline style added to the card template, on the
+    permalink or inside a quoted field, still reports after a rebuild."""
+    mod = _load_script("build-anti-patterns-page.py")
+    rules, version = mod.load_rules()
+    page = mod.build_html(rules, version)
+    page = page.replace('class="ap-anchor"', 'class="ap-anchor" style="color:red"')
+    page = page.replace('<span class="ap-sub">Why bad</span>',
+                        '<span class="ap-sub" style="color:red">Why bad</span>')
+    page = mod.waive_quotes(page, rules)
+    out = tmp_path / "page.html"
+    out.write_text(page, encoding="utf-8")
+    styled = [f for f in lint([str(out)]).findings if f.rule_id == "inline-style-attribute"]
+    lines = page.splitlines()
+    assert sum('class="ap-anchor"' in lines[f.line - 1] for f in styled) == len(rules)
+    assert sum('class="ap-why"' in lines[f.line - 1] for f in styled) >= len(rules) - 5
+    # the chrome is never inside a region
+    for f in styled:
+        assert "ux-lint-off" not in lines[f.line - 1] or "inline-style-attribute" not in lines[f.line - 1]

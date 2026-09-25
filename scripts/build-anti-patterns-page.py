@@ -338,14 +338,14 @@ def build_html(rules, version):
 """
 
 
-# Each card quotes its rule: its id (in the anchor and link), the name, the
-# why, the fix, the regex and the examples. Those quotes are the subject of the page, so each one that trips a
-# rule is wrapped in a ux-lint-off region naming exactly those rules. The card
-# chrome around them stays linted.
-QUOTED = (
-    r'<article class="ap-card" id="[^"]*">',
-    r'<span class="ap-id">.*?</span>',
-    r'<a href="#[^"]*" class="ap-anchor"[^>]*>.*?</a>',
+# Each card quotes its rule in four fields: the name, the why, the fix and
+# the regex. Those quotes are the subject of the page. A field is wrapped in a
+# ux-lint-off region only for rules that (1) fire on the field's text, not its
+# markup, and (2) fire on that rule's own name, why, fix, regex or examples as
+# plain text. The allowlist comes from the rule data, never from what fails on
+# the page, so card chrome (the article, the id badge, the permalink) and any
+# markup inside a field are always linted.
+QUOTED_FIELDS = (
     r'<h2 class="ap-name">.*?</h2>',
     r'<div class="ap-why">.*?</div>',
     r'<div class="ap-fix">.*?</div>',
@@ -353,15 +353,52 @@ QUOTED = (
 )
 
 
-def waive_quotes(html):
+def quoted_rule_ids(rules):
+    """{rule id: rule ids its quoted text trips}, from the data alone. Each
+    field is linted on its own, the way the card shows it, and the card's
+    fields are linted together."""
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from lint_waivers import lint_findings
+    frags = {}
+    for i, r in enumerate(rules):
+        det = r.get("detection") or {}
+        fields = [r.get("why_bad") or r.get("why", ""), r.get("fix", ""),
+                  det.get("regex") or det.get("pattern") or "", det.get("example_bad") or "",
+                  det.get("example_good") or ""]
+        esc = lambda x: sanitize_dashes(html.escape(str(x)))  # noqa: E731
+        frags[f"c{i}-name.html"] = f'<h2 class="ap-name">{esc(r.get("name", ""))}</h2>'
+        for k, field in enumerate(fields):
+            if field:
+                frags[f"c{i}-{k}.html"] = f"<p>{esc(field)}</p>"
+        # and the card as a whole, for rules that count repeats across fields
+        frags[f"c{i}-all.html"] = (f'<h2 class="ap-name">{esc(r.get("name", ""))}</h2>\n'
+                                   + "\n".join(f"<p>{esc(x)}</p>" for x in fields if x))
+    found = lint_findings(frags)
+    out = {}
+    for name, findings in found.items():
+        i = int(name[1:].split("-")[0])
+        out.setdefault(str(rules[i].get("id", "")), set()).update(f.rule_id for f in findings)
+    return out
+
+
+def waive_quotes(page, rules):
     sys.path.insert(0, str(ROOT / "scripts"))
     from lint_waivers import wrap_quoted
-    return wrap_quoted(html, QUOTED)
+    allowed = quoted_rule_ids(rules)
+
+    def allow(text, pos):
+        opened = text.rfind('<article class="ap-card" id="', 0, pos)
+        if opened == -1:
+            return set()
+        rid = text[opened:].split('id="', 1)[1].split('"', 1)[0]
+        return allowed.get(html.unescape(rid), set())
+
+    return wrap_quoted(page, [(pattern, allow) for pattern in QUOTED_FIELDS])
 
 
 def main():
     rules, version = load_rules()
-    out_html = waive_quotes(build_html(rules, version))
+    out_html = waive_quotes(build_html(rules, version), rules)
     OUT.write_text(out_html, encoding="utf-8")
     print(f"ok  {len(rules)} rules  →  docs/anti-patterns.html")
 

@@ -484,9 +484,18 @@ def test_box_shadow_two_color_mix_layers_not_flagged(tmp_path):
     assert "box-shadow-multilayer-default" not in _ids(tmp_path, "tokens.css", css)
 
 
-def test_box_shadow_three_layers_still_flagged(tmp_path):
-    css = ".c { box-shadow: 0 1px 2px rgba(0,0,0,.1), 0 4px 8px rgba(0,0,0,.1), 0 16px 32px rgba(0,0,0,.1); }"
-    assert "box-shadow-multilayer-default" in _ids(tmp_path, "three.css", css)
+def test_box_shadow_four_layer_elevation_not_flagged(tmp_path):
+    """Boundary: an elevation scale builds depth from up to four layers."""
+    css = (".c { box-shadow: 0 1px 1px rgba(0,0,0,.08), 0 2px 2px rgba(0,0,0,.08), "
+           "0 4px 4px rgba(0,0,0,.08), 0 8px 8px rgba(0,0,0,.08); }")
+    assert "box-shadow-multilayer-default" not in _ids(tmp_path, "four.css", css)
+
+
+def test_box_shadow_five_layers_flagged(tmp_path):
+    """Boundary: the fifth layer is the AI-premium stack the rule exists for."""
+    css = (".c { box-shadow: 0 1px 1px rgba(0,0,0,.08), 0 2px 2px rgba(0,0,0,.08), "
+           "0 4px 4px rgba(0,0,0,.08), 0 8px 8px rgba(0,0,0,.08), 0 16px 16px rgba(0,0,0,.08); }")
+    assert "box-shadow-multilayer-default" in _ids(tmp_path, "five.css", css)
 
 
 def test_fixed_height_ignores_letters_inside_other_words(tmp_path):
@@ -634,9 +643,21 @@ def test_box_shadow_tailwind_composite_not_flagged(tmp_path):
     assert "box-shadow-multilayer-default" not in _ids(tmp_path, "tw.css", css)
 
 
-def test_box_shadow_three_hex_layers_flagged(tmp_path):
-    css = ".c { box-shadow: 0 1px 2px #0001, 0 4px 8px #0001, 0 16px 32px #0001; }"
+def test_box_shadow_five_hex_layers_flagged(tmp_path):
+    css = ".c { box-shadow: 0 1px #0001, 0 2px #0001, 0 4px #0001, 0 8px #0001, 0 16px #0001; }"
     assert "box-shadow-multilayer-default" in _ids(tmp_path, "hex.css", css)
+
+
+def test_three_layer_zero_offset_glow_is_caught_by_the_glow_rule(tmp_path):
+    """A 3-layer glow is below the layer threshold; glow-shadow-zero-offset catches it."""
+    css = ".c { box-shadow: 0 0 20px #22d3ee, 0 0 40px #22d3ee, 0 0 80px #22d3ee; }"
+    ids = _ids(tmp_path, "glow.css", css)
+    assert "glow-shadow-zero-offset" in ids and "box-shadow-multilayer-default" not in ids
+
+
+def test_offset_shadow_and_focus_ring_are_not_glows(tmp_path):
+    css = ".c { box-shadow: 0 4px 12px rgb(0 0 0 / .12); }\n.f:focus-visible { box-shadow: 0 0 0 3px #22d3ee; }"
+    assert "glow-shadow-zero-offset" not in _ids(tmp_path, "ok.css", css)
 
 
 def test_glass_word_background_in_transition_is_not_a_fallback(tmp_path):
@@ -648,3 +669,32 @@ def test_glass_finding_points_at_the_blur_line(tmp_path):
     css = ".x {\n  color: red;\n  backdrop-filter: blur(8px);\n}\n"
     hits, _ = _hits(tmp_path, "l.css", css, "glass-without-fallback")
     assert [x["line"] for x in hits] == [3]
+
+
+# --- A rule's own slug in an id, href, aria-label or #anchor text is an identifier, not copy ---
+
+@pytest.mark.parametrize("rule,phrase", [
+    ("marketing-buzz-next-generation", "next-generation"),
+    ("marketing-buzz-cutting-edge", "cutting-edge"),
+    ("marketing-buzz-best-in-class", "best-in-class"),
+    ("marketing-buzz-world-class", "world-class"),
+    ("marketing-buzz-industry-leading", "industry-leading"),
+    ("marketing-buzz-game-changing", "game-changing"),
+    ("marketing-buzz-ai-powered-driven", "AI-powered"),
+    ("marketing-buzz-leverage-ai-harness", "harness the power of"),
+])
+def test_buzzword_ignores_identifiers_but_fires_on_copy(tmp_path, rule, phrase):
+    """docs/anti-patterns.html card chrome: <article id>, <span>#slug</span>, <a href aria-label>."""
+    slug = rule
+    chrome = (f'<article class="ap-card" id="{slug}">\n<span class="ap-id">#{slug}</span>\n'
+              f'<a href="#{slug}" class="ap-anchor" aria-label="Link to rule #{slug}">link</a>\n'
+              f'<div class="hero-{slug}-x"></div>\n')
+    assert rule not in _ids(tmp_path, "chrome.html", chrome)
+    assert rule in _ids(tmp_path, "copy.html", f"<p>Our {phrase} platform.</p>")
+
+
+def test_h_screen_only_counts_the_class_attribute(tmp_path):
+    anchor = ('<a href="#h-screen-no-dvh-fallback" class="ap-anchor" '
+              'aria-label="Link to rule #h-screen-no-dvh-fallback">link</a>')
+    assert "h-screen-no-dvh-fallback" not in _ids(tmp_path, "a.html", anchor)
+    assert "h-screen-no-dvh-fallback" in _ids(tmp_path, "b.html", '<section class="hero h-screen">x</section>')
