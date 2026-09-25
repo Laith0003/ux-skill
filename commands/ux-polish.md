@@ -1,6 +1,6 @@
 ---
 description: Polish a surface. Loops lint, fix, re-lint until the score reaches 90 or three rounds pass, then a taste pass on spacing, hierarchy, tokens and AI-slop tells. --fix applies the taste findings.
-allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(grep:*), Bash(find:*), Bash(mkdir:*), Bash(date:*), Bash(git:*), Bash(uxskill:*), Bash(python3:*), Glob, Grep, Task, WebFetch
+allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(grep:*), Bash(find:*), Bash(mkdir:*), Bash(date:*), Bash(git status:*), Bash(uxskill:*), Bash(python3:*), Glob, Grep, Task, WebFetch
 disable-model-invocation: false
 ---
 

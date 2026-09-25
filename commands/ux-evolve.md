@@ -1,6 +1,6 @@
 ---
 description: Moved to /ux-polish --loop-only --rounds 5. Alias kept until 4.1.
-allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(grep:*), Bash(find:*), Bash(mkdir:*), Bash(date:*), Bash(git:*), Bash(uxskill:*), Bash(python3:*), Glob, Grep, Task, WebFetch
+allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(grep:*), Bash(find:*), Bash(mkdir:*), Bash(date:*), Bash(git status:*), Bash(uxskill:*), Bash(python3:*), Glob, Grep, Task, WebFetch
 disable-model-invocation: true
 ---
 
