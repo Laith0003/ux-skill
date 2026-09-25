@@ -527,8 +527,8 @@ def _readme(foundations: Sequence[Tuple[Foundation, Guidance]],
     lines += [f"- [{c.name}](contracts/{c.name}.yaml) ({c.status}): {c.description}"
               for c in contracts]
     lines += ["", "When two bindings of one part and property, naming different roles, both "
-                  "match, every contract resolves them in this order, and each says so in "
-                  "usage.do:", "",
+                  "match, they resolve in this order; each contract whose bindings can meet that "
+                  "way says so in usage.do:", "",
               f"1. {DISABLED_RULE}.",
               f"2. {SPECIFICITY_RULE}.",
               "3. Where two other states still bind one part and property, the contract's line "

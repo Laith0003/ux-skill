@@ -105,8 +105,8 @@ usage:
     - Use ghost for light, repeated actions where the layout already marks them as actions, such as a toolbar or a table row
     - Put the icon at the start of the label in both directions; mirror only a glyph that points
     - Keep the radius the same in every state
-    - Apply the disabled rule before the others; a disabled component takes no hover, pressed or focus binding, selected and error still apply, and where disabled and another state bind the same part and property, disabled wins
-    - Apply the binding for a state over the one without a state, and the one with more variant conditions over the one with fewer
+    - A disabled component takes no hover or pressed binding; a disabled component that can take focus keeps its focus ring; selected and error still apply, and where disabled and another state bind the same part and property, disabled wins. Apply this first, then the specificity rule
+    - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
     - When two states apply at once, pressed wins over hover
   dont:
     - Do not use a button to navigate inside running text; use a link

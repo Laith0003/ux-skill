@@ -245,6 +245,11 @@ def test_contract_lines_come_from_the_contracts():
 def test_the_readme_states_the_one_resolution_order_word_for_word():
     readme = PACK_FILES[f"{PACK}/README.md"]
     section = readme.split("## Contracts\n", 1)[1].split("## Rules")[0]
+    # Only contracts whose bindings can meet state the order; card, dialog
+    # and status-banner have nothing to resolve.
+    assert "every contract resolves" not in section
+    assert "they resolve in this order; each contract whose bindings can meet that way says " \
+           "so in usage.do:" in section
     assert f"1. {DISABLED_RULE}.\n" in section
     assert f"2. {SPECIFICITY_RULE}.\n" in section
     assert f"3. Where two other states still bind one part and property, the contract's line " \

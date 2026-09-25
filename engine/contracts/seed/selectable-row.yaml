@@ -76,8 +76,8 @@ usage:
     - Show multiple selection with a check box in the leading slot, single selection with a check mark
     - Let the chevron point to the end of the row, so it flips under right to left
     - Keep the gap between rows at the list gap; rows at the target size need no extra spacing
-    - Apply the disabled rule before the others; a disabled component takes no hover, pressed or focus binding, selected and error still apply, and where disabled and another state bind the same part and property, disabled wins
-    - Apply the binding for a state over the one without a state, and the one with more variant conditions over the one with fewer
+    - A disabled component takes no hover or pressed binding; a disabled component that can take focus keeps its focus ring; selected and error still apply, and where disabled and another state bind the same part and property, disabled wins. Apply this first, then the specificity rule
+    - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
     - When two states apply at once, selected wins over hover and pressed
   dont:
     - Do not show selection by the tinted fill alone

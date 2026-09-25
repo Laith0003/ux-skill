@@ -1,11 +1,11 @@
 """Which binding applies when a component's states and variants meet.
 
 Every contract resolves its bindings in one order. First the disabled
-rule: a disabled component takes no hover, pressed or focus binding;
-selected and error still apply, and where disabled and another state bind
-the same part and property, disabled wins. Then the specificity rule: a
-binding for a state beats one without a state, and one with more variant
-conditions beats one with fewer. Two other states still left on one part
+rule: a disabled component takes no hover or pressed binding; one that can
+take focus keeps its focus ring; selected and error still apply, and where
+disabled and another state bind the same part and property, disabled wins.
+Then the specificity rule: a binding for a state beats one without a state,
+and among those one with more variant conditions beats one with fewer. Two other states still left on one part
 and property are ranked by the contract's own line that starts
 TWO_STATE_OPENING.
 
@@ -20,13 +20,16 @@ from typing import Dict, Iterable, List, Mapping, Tuple
 
 from engine.contracts.schema import Binding, Contract
 
-# The states a disabled component takes no binding for.
-DISABLED_SUPPRESSES: Tuple[str, ...] = ("hover", "pressed", "focus")
-DISABLED_RULE = ("Apply the disabled rule before the others; a disabled component takes no "
-                 "hover, pressed or focus binding, selected and error still apply, and where "
-                 "disabled and another state bind the same part and property, disabled wins")
-SPECIFICITY_RULE = ("Apply the binding for a state over the one without a state, and the one "
-                    "with more variant conditions over the one with fewer")
+# The states a disabled component takes no binding for. Focus is not one:
+# a disabled control that can take focus (a listbox option, a menu item, an
+# aria-disabled button) keeps its ring, since WCAG 2.4.7 exempts no control.
+DISABLED_SUPPRESSES: Tuple[str, ...] = ("hover", "pressed")
+DISABLED_RULE = ("A disabled component takes no hover or pressed binding; a disabled component "
+                 "that can take focus keeps its focus ring; selected and error still apply, and "
+                 "where disabled and another state bind the same part and property, disabled "
+                 "wins. Apply this first, then the specificity rule")
+SPECIFICITY_RULE = ("Apply the binding for a state over the one without a state, then, among "
+                    "those, the one with more variant conditions over the one with fewer")
 SPECIFICITY_OPENING = "Apply the binding for a state"
 TWO_STATE_OPENING = "When two states apply at once"
 
