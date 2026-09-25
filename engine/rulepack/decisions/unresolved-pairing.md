@@ -11,11 +11,11 @@ superseded_by: null
 
 ## Context
 
-A set nobody validated can alias a color role at a token that does not exist, or carry overrides that tie in one context. When the gate stopped on the first such pairing, every other pairing went unmeasured and the person saw one error at a time.
+A set nobody validated can alias a color role at a token that does not exist, carry overrides that tie in one context, or hold a color that is not hex, such as rgb() or a keyword. When the gate stopped on the first such pairing, every other pairing went unmeasured and the person saw one error at a time.
 
 ## Decision
 
-When a side of a pairing cannot be resolved in a context, the gate records an unresolved-pairing failure for that context, with the alias error's own text naming the token, the alias and the fix, and goes on with every other pairing. A contract bound to a token set reports each unresolved pairing as an unresolved problem: one per pairing and cause, naming the pairing, the alias and its fix, the first context it fails in and how many others, and telling the person to run validate on the token set.
+When a side of a pairing cannot be resolved in a context, or resolves to a color that is not hex, the gate records an unresolved-pairing failure for that context, with the alias error's own text naming the token, the alias and the fix, and goes on with every other pairing. A contract bound to a token set reports each unresolved pairing as an unresolved problem: one per pairing and cause, naming the pairing, the alias and its fix, the first context it fails in and how many others, and telling the person to run validate on the token set.
 
 ## Why
 

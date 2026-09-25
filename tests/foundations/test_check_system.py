@@ -244,3 +244,85 @@ def test_a_hand_written_set_with_the_core_roles_only_passes_and_strict_fails_it(
     assert not strict.passed
     assert {f.check for f in strict.report.failures} == {build_module.SKIPPED_PAIRING}
     assert len(strict.report.failures) == loose.report.skipped
+
+
+def _project(ts: TokenSet, keep, drop=()) -> TokenSet:
+    """The set on the axes in `keep` only, as a system without our other
+    modes would be, less the tokens whose path starts with `drop`."""
+    out = TokenSet({a: v for a, v in ts.axes.items() if a in keep})
+    for t in ts.tokens():
+        if drop and t.path.startswith(tuple(drop)):
+            continue
+        modes = {k: v for k, v in t.modes.items()
+                 if all(part.split(":", 1)[0] in keep for part in k.split(","))}
+        out.add(Token(t.path, t.type, t.value, modes=modes, layer=t.layer))
+    return out
+
+
+@pytest.mark.parametrize("keep", [("scheme",), ("scheme", "direction"),
+                                  ("scheme", "contrast"), ()])
+def test_display_fits_reads_the_axes_the_set_has(keep):
+    ts = _project(build_system(NEUTRAL, "#3366FF").tokens, keep)
+    assert ts.has("type.text.display")
+    result = check_system(ts)
+    assert result.passed, result.report.summary()
+
+
+def test_display_fits_skips_a_tier_without_its_margin():
+    ts = _project(build_system(NEUTRAL, "#3366FF").tokens, tuple(build_module.TokenSet().axes),
+                  drop=("layout.margin-inline.",))
+    result = check_system(ts)
+    assert result.passed, result.report.summary()
+
+
+def test_a_color_it_cannot_read_comes_back_as_a_problem():
+    ts = _core_set()
+    ts.add(Token("palette.ink", "color", "rgb(0 0 0)"))
+    edited = TokenSet(ts.axes)
+    for t in ts.tokens():
+        if t.path == "color.text.default":
+            t = Token(t.path, t.type, "{palette.ink}", modes={}, layer="semantic")
+        edited.add(t)
+    result = check_system(edited)
+    assert [(p.token, p.rule) for p in result.problems] == [("palette.ink", "bad-value")]
+    assert not result.passed
+    # Without validate's findings the gate still does not raise: each
+    # context of each pairing on the role is a failure naming the value.
+    report = build_module.gate_foundations(edited, build_module.FOUNDATIONS[:1])
+    unread = [f for f in report.failures if f.check == "unresolved-pairing"]
+    assert unread and all("rgb(0 0 0)" in f.message for f in unread)
+
+
+def test_bad_value_roles_are_left_to_validate():
+    ts = _core_set()
+    edited = TokenSet(ts.axes)
+    for t in ts.tokens():
+        if t.path == "color.text.muted":
+            t = Token(t.path, t.type, "{palette.ink}", layer="semantic")
+        edited.add(t)
+    edited.add(Token("palette.ink", "color", "oklch(0.2 0 0)"))
+    problems = tuple(build_module.validate(edited))
+    report = build_module.gate_foundations(edited, build_module.FOUNDATIONS[:1],
+                                           problems=problems)
+    assert report.failures == []
+    assert not any("color.text.muted" in (p.fg, p.bg) for p in report.skipped_pairings)
+
+
+def test_strict_names_both_sides_when_both_are_missing():
+    ts = _core_set()
+    strict = check_system(ts, strict=True)
+    both = next(f for f in strict.report.failures
+                if f.message.startswith("color.text.muted on color.surface.band "))
+    assert "color.text.muted" not in both.message.split(" was not checked ")[1]
+    missing = TokenSet(ts.axes)
+    for t in ts.tokens():
+        if t.path != "color.text.muted":
+            missing.add(t)
+    msg = next(f.message for f in check_system(missing, strict=True).report.failures
+               if f.message.startswith("color.text.muted on color.surface.band "))
+    assert "because color.text.muted and color.surface.band are not defined; define them" in msg
+
+
+def test_a_string_for_foundations_is_refused():
+    with pytest.raises(TypeError, match=r"pass a tuple of names, for example \('color',\)"):
+        check_system(TokenSet(), foundations="color")

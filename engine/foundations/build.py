@@ -20,7 +20,7 @@ import dataclasses
 import math
 import numbers
 from dataclasses import dataclass
-from typing import Any, Iterable, List, Optional, Sequence, Tuple
+from typing import Any, Iterable, List, Optional, Sequence, Set, Tuple
 
 from engine.foundations import (
     border, color, elevation, imagery, layout, motion, radius, space, typography)
@@ -28,7 +28,7 @@ from engine.foundations.audience import Audience
 from engine.foundations.color_math import hex_to_rgb
 from engine.foundations.foundation import BrandInputs, Foundation, mistyped, role_types_check
 from engine.foundations.gate import Check, CheckFailure, GateFailure, GateReport, gate
-from engine.foundations.tokens import TokenSet
+from engine.foundations.tokens import TokenSet, alias_target, is_alias
 from engine.foundations.validate import Problem, validate
 from engine.synthesizer.axes import AxisValues
 
@@ -139,27 +139,46 @@ def _narrow(check: Check, ts: TokenSet) -> Check:
     return check if axes == check.axes else dataclasses.replace(check, axes=axes)
 
 
+def _reads(ts: TokenSet, path: str, bad: Set[str], seen: Tuple[str, ...] = ()) -> bool:
+    """Whether `path` is, or aliases in any context, a token in `bad`."""
+    if path in bad:
+        return True
+    if path in seen or not ts.has(path):
+        return False
+    t = ts.get(path)
+    return any(_reads(ts, alias_target(v), bad, seen + (path,))
+               for v in [t.value, *t.modes.values()] if is_alias(v))
+
+
 def gate_foundations(ts: TokenSet, chosen: Sequence[Foundation],
-                     strict: bool = False) -> GateReport:
+                     strict: bool = False, *,
+                     problems: Sequence[Problem] = ()) -> GateReport:
     """Gate `ts` with the chosen foundations' pairings and checks and one
     role-types check over their roles. Checks run over the axes the set
     has. With strict, each pairing that could not be checked because a
-    token is not defined is a failure. Failing findings get their
-    foundation's hints. Never raises for what it finds."""
+    token is not defined is a failure. `problems` is what validate found
+    on the set; a pairing on a token it calls a bad value is left to it.
+    Failing findings get their foundation's hints. Never raises for what
+    it finds."""
     checks = ([role_types_check(chosen)] if chosen else []) \
         + [_narrow(c, ts) for f in chosen for c in f.checks]
     # A pairing on a mistyped role cannot be measured; role-types names the
-    # role, so the pairing waits until it is fixed.
+    # role, so the pairing waits until it is fixed. One on a bad value
+    # waits for validate's problem the same way.
     skip = set(mistyped(ts, chosen))
-    pairings = [p for f in chosen for p in f.pairings if p.fg not in skip and p.bg not in skip]
+    bad = {p.token for p in problems if p.rule == "bad-value"}
+    pairings = [p for f in chosen for p in f.pairings if not {p.fg, p.bg} & skip
+                and not (bad and (_reads(ts, p.fg, bad) or _reads(ts, p.bg, bad)))]
     report = gate(ts, pairings, checks, raise_on_fail=False)
     if strict:
         for p in report.skipped_pairings:
-            missing = p.fg if not ts.has(p.fg) else p.bg
+            missing = [t for t in (p.fg, p.bg) if not ts.has(t)]
+            what = (f"{missing[0]} is not defined; define it" if len(missing) == 1 else
+                    f"{missing[0]} and {missing[1]} are not defined; define them")
             report.failures.append(CheckFailure(
                 SKIPPED_PAIRING, "system", "",
-                f"{p.fg} on {p.bg} was not checked because {missing} is not defined; define "
-                "it, or for an imported system map the role to one of its tokens"))
+                f"{p.fg} on {p.bg} was not checked because {what}, or for an imported system "
+                "map the role to one of its tokens"))
     if not report.passed:
         _attach_hints(ts, report, chosen)
     return report
@@ -192,7 +211,11 @@ def check_system(ts: TokenSet, foundations: Optional[Sequence[str]] = None, *,
     another is checked on its own; an alias into a foundation the set lacks
     is a validate problem."""
     if foundations is None:
-        chosen = tuple(f for f in FOUNDATIONS if f.name in foundations_in(ts))
+        present = foundations_in(ts)
+        chosen = tuple(f for f in FOUNDATIONS if f.name in present)
+    elif isinstance(foundations, str):
+        raise TypeError(f"foundations is the string {foundations!r}; pass a tuple of names, "
+                        f"for example ({foundations!r},)")
     else:
         known = [f.name for f in FOUNDATIONS]
         for name in foundations:
@@ -201,8 +224,9 @@ def check_system(ts: TokenSet, foundations: Optional[Sequence[str]] = None, *,
                                  "use those names or leave foundations out to check every "
                                  "foundation the set has")
         chosen = tuple(f for f in FOUNDATIONS if f.name in foundations)
-    return SystemCheck(problems=tuple(validate(ts)),
-                       report=gate_foundations(ts, chosen, strict),
+    problems = tuple(validate(ts))
+    return SystemCheck(problems=problems,
+                       report=gate_foundations(ts, chosen, strict, problems=problems),
                        foundations=tuple(f.name for f in chosen))
 
 

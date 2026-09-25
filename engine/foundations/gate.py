@@ -13,8 +13,8 @@ from types import MappingProxyType
 from typing import Callable, Iterable, List, Mapping, Optional, Tuple
 
 from engine.foundations.color_math import contrast, hex_to_rgb
-from engine.foundations.modes import AXES, FOUNDATION_AXES, ModeError, contexts, parse
-from engine.foundations.tokens import AliasError, TokenSet, opaque_hex
+from engine.foundations.modes import AXES, FOUNDATION_AXES, contexts, parse
+from engine.foundations.tokens import TokenSet, opaque_hex
 
 
 @dataclass(frozen=True)
@@ -201,8 +201,8 @@ def _hex(ts: TokenSet, path: str, mode: str) -> str:
 # Check id for a pairing the gate cannot measure because a side is translucent.
 OPAQUE_PAIRING = "opaque-pairing"
 # Check id for a pairing whose token cannot be resolved in a context (a
-# broken alias, overrides that tie): one finding per context, and the gate
-# goes on with every other pairing.
+# broken alias, overrides that tie, a color that is not hex): one finding
+# per context, and the gate goes on with every other pairing.
 UNRESOLVED_PAIRING = "unresolved-pairing"
 
 
@@ -232,7 +232,9 @@ def gate(ts: TokenSet, pairings: Iterable[Pairing], checks: Iterable[Check] = ()
                     f"colors, so point {t.path} at an opaque color, or composite it over the "
                     "surface beneath it first and pair the result"))
                 continue
-            except (AliasError, ModeError) as exc:
+            except ValueError as exc:
+                # A broken alias, overrides that tie, or a color that is not
+                # hex: the pairing cannot be measured in this context.
                 report.failures.append(CheckFailure(
                     UNRESOLVED_PAIRING, "system", mode,
                     f"{p.fg} on {p.bg} ({mode}) cannot be measured: {exc}"))

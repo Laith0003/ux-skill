@@ -1,3 +1,5 @@
+import re
+
 import pytest
 
 from engine.foundations.color import PAIRINGS, generate_color
@@ -85,13 +87,20 @@ def test_minimums_print_without_a_trailing_zero(minimum, criterion, want):
 
 def test_unvalidated_bad_value_names_the_token():
     # R27 I2: the gate used to raise the bare color_math error with no token path.
+    # M4a Task 2 I2: it reports the pairing as unresolved in each context and
+    # goes on, so check_system never raises on a color it cannot read.
     ts = TokenSet()
     ts.add(Token("color.gray.300", "color", "#GGGGGG"))
     ts.add(Token("color.base.white", "color", "#FFFFFF"))
     ts.add(Token("color.text.default", "color", "{color.gray.300}", layer="semantic"))
     ts.add(Token("color.surface.page", "color", "{color.base.white}", layer="semantic"))
-    with pytest.raises(ValueError, match=r"color\.text\.default \(scheme:light,contrast:standard\) resolves to '#GGGGGG'.*run validate"):
-        gate(ts, [Pairing("color.text.default", "color.surface.page", 4.5, "1.4.3")])
+    report = gate(ts, [Pairing("color.text.default", "color.surface.page", 4.5, "1.4.3")],
+                  raise_on_fail=False)
+    first = report.failures[0]
+    assert {f.check for f in report.failures} == {"unresolved-pairing"}
+    assert first.mode == "scheme:light,contrast:standard"
+    assert re.search(r"color\.text\.default \(scheme:light,contrast:standard\) resolves to "
+                     r"'#GGGGGG'.*run validate", first.message)
 
 
 LINK_ON_PAGE = Pairing("color.text.link", "color.surface.page", 4.5, "1.4.3")
