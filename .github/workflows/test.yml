@@ -18,9 +18,9 @@ jobs:
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install
@@ -35,7 +35,7 @@ jobs:
   data-validation:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Validate every JSON in data/
         run: |
           python - <<'PY'
@@ -55,7 +55,7 @@ jobs:
   ga-tag-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Every docs/*.html must carry the GA4 tag
         # Static site, no server-side includes: the analytics tag is inline per
         # page. This fails the build if any page ships without it (the homepage
@@ -66,7 +66,7 @@ jobs:
   emoji-scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Scan plugin source for forbidden emoji
         run: |
           # SCAN: commands/, agents/, engine/, tests/, bin/, root .md files
