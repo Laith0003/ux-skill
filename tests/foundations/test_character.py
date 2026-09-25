@@ -1,9 +1,34 @@
-"""Character: the continuous quantities every foundation reads from the
-axes, and industry words written with spaces."""
+"""Character: every axis reaches every foundation it should, continuously,
+over a range wide enough to see; the quantities keep their documented
+ranges; and industry words written with spaces."""
 import pytest
 
-from engine.foundations import character
-from engine.synthesizer.axes import AxisValues, compute_axes
+from engine.foundations import build_system, character
+from engine.foundations.build import FOUNDATIONS
+from engine.synthesizer.axes import AXIS_NAMES, AxisValues, compute_axes
+
+MID = dict(zip(AXIS_NAMES, [0.5] * 7))
+
+
+def _dump(axes, root):
+    ts = build_system(axes, "#3366FF").tokens
+    return [(t.path, t.value, t.modes) for t in ts.tokens() if t.path.split(".", 1)[0] == root]
+
+
+def test_influence_names_every_axis_and_real_foundations():
+    assert set(character.INFLUENCE) == set(AXIS_NAMES)
+    names = {f.name for f in FOUNDATIONS}
+    assert all(set(roots) <= names for roots in character.INFLUENCE.values())
+    reached = {r for roots in character.INFLUENCE.values() for r in roots}
+    assert reached == names
+
+
+@pytest.mark.parametrize("axis, root", [(a, r) for a, roots in character.INFLUENCE.items()
+                                        for r in roots])
+def test_each_axis_moves_each_foundation_it_names(axis, root):
+    low = AxisValues(**dict(MID, **{axis: 0.0}))
+    high = AxisValues(**dict(MID, **{axis: 1.0}))
+    assert _dump(low, root) != _dump(high, root), (axis, root)
 
 
 @pytest.mark.parametrize("fn", [character.roundness, character.depth, character.overshoot,
