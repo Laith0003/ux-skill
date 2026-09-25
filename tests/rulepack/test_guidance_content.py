@@ -112,3 +112,16 @@ def test_changing_the_system_says_what_this_version_supports(name, arabic):
     assert INPUTS[name] in text, name
     assert not REPOINT.search(text), (name, REPOINT.search(text).group(0))
     assert len(text) < 1400, (name, len(text))
+
+
+def test_layout_names_what_the_density_axis_moves_and_what_is_fixed():
+    text = load_guidance("layout").section("Changing the system")
+    assert "it sets the gutters, the margins and layout.container.max (1120, 1280 or 1440px)" \
+        in text
+    assert "the measures and the targets (44px comfortable, 32px compact) are fixed" in text
+    lo, hi = (build_system(AxisValues(*([d] * 7)), "#3366FF").tokens for d in (0.0, 1.0))
+    for role in ("layout.target.min", "layout.measure.text", "layout.breakpoint.tablet",
+                 "layout.columns.phone"):
+        for mode in ("", "density:compact"):
+            assert lo.resolve(role, mode) == hi.resolve(role, mode), (role, mode)
+    assert lo.resolve("layout.container.max") != hi.resolve("layout.container.max")

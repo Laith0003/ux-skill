@@ -52,7 +52,7 @@ Layout varies on density: gutters and margins take one step less in compact, nev
 
 ## Changing the system
 
-1. Layout moves with the density axis: it sets the gutters, the margins, layout.container.max (1120, 1280 or 1440px) and the targets. Breakpoints and the columns per tier (4, 8, 12 and 12) are fixed in this version. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+1. Layout moves with the density axis: it sets the gutters, the margins and layout.container.max (1120, 1280 or 1440px). Breakpoints, the columns per tier (4, 8, 12 and 12), the measures and the targets (44px comfortable, 32px compact) are fixed in this version. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
 2. The build keeps the breakpoints strictly increasing, no wider tier with fewer columns, layout.measure.text at 40rem or less and layout.target.min at 44px or more in comfortable; review the main screens of the product after a change.
 3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
 4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.
