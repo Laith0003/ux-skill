@@ -414,7 +414,7 @@ def test_the_twelve_contracts_bind_on_the_softest_corner():
         assert validate_contracts(seed_contracts(), ts) == [], brand
 
 
-# BF5: a field's hover and error never move the layout -----------------------
+# A field's hover and error never move the layout ----------------------------
 
 FIELDS = {"text-field": "input", "textarea": "input", "date": "input", "select": "trigger",
           "input-prefix": "group"}
@@ -440,7 +440,7 @@ def test_edge_weight_is_a_dimension_the_schema_names():
     assert "edge-weight" in text and "inset" in text
 
 
-# BF5: the FAQ accordion and the site footer ---------------------------------
+# The FAQ accordion and the site footer --------------------------------------
 
 def test_the_faq_question_is_the_whole_row_and_the_answer_reads_as_body_text():
     assert SEEDS["faq-accordion"].status == "experimental"

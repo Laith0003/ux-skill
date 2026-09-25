@@ -18,16 +18,16 @@
         "local service", "commercial service", "consultation", "free estimate", "coverage area"
       ],
       "section_sequence": [
-        {"section": "Hero (with inline quote/contact form)", "purpose": "Capture the lead at first paint. Text left (headline + one-line value + phone affordance), inline quote or contact form right. The form is the wow moment and the conversion path -- never buried below.", "without_phone": "Capture the lead at first paint. Text left (headline + one-line value), inline quote or contact form right. The form is the wow moment and the conversion path, never buried below."},
-        {"section": "Proof/stats bar", "purpose": "A thin band of 3-5 real, organic numbers (jobs completed, years operating, response time, coverage radius) directly under the hero -- instant credibility before the scroll.", "proof": "stats"},
+        {"section": "Hero (with inline quote/contact form)", "purpose": "Capture the lead at first paint. Text left (headline + one-line value + phone affordance), inline quote or contact form right. The form is the wow moment and the conversion path, never buried below.", "without_phone": "Capture the lead at first paint. Text left (headline + one-line value), inline quote or contact form right. The form is the wow moment and the conversion path, never buried below."},
+        {"section": "Proof/stats bar", "purpose": "A thin band of 3-5 real, organic numbers (jobs completed, years operating, response time, coverage radius) directly under the hero: instant credibility before the scroll.", "proof": "stats"},
         {"section": "Value cards", "purpose": "3-5 cards naming the concrete reasons to choose this service (speed, price transparency, licensing, same-day). Each card has a tight heading and one sentence."},
-        {"section": "Category pills", "purpose": "Every service category / sector the business covers, rendered as a scannable row of pills. Map EVERY sector from the source into a pill -- do not trim to a tidy few."},
+        {"section": "Category pills", "purpose": "Every service category / sector the business covers, rendered as a scannable row of pills. Map EVERY sector from the source into a pill. Do not trim to a tidy few."},
         {"section": "Item cards", "purpose": "Every concrete offering (every skip size, every package, every product line) as its own card with a spec line and an action. Completeness over neatness: one source item -> one card."},
-        {"section": "Split feature rows", "purpose": "2-column zig-zag rows that expand the marquee differentiators with depth -- alternating media/text, each row earning its own visual. Not a 3-equal-card grid."},
-        {"section": "Coverage", "purpose": "Where the service operates -- a map, a region list, or a coverage statement. For a local/commercial service this answers the 'do you cover me?' question that gates the lead."},
+        {"section": "Split feature rows", "purpose": "2-column zig-zag rows that expand the marquee differentiators with depth: alternating media/text, each row earning its own visual. Not a 3-equal-card grid."},
+        {"section": "Coverage", "purpose": "Where the service operates: a map, a region list, or a coverage statement. For a local/commercial service this answers the 'do you cover me?' question that gates the lead."},
         {"section": "Social proof / pull-quote", "purpose": "A named, quantified testimonial or a strong pull-quote with attribution (name, role/company). One strong quote beats fifteen vibes-only blurbs.", "proof": "testimonials"},
         {"section": "CTA band", "purpose": "A focused conversion band repeating the primary action (get a quote / call now) with the phone affordance, after the page has earned the click.", "without_phone": "A focused conversion band repeating the primary action (get a quote), after the page has earned the click."},
-        {"section": "Rich footer", "purpose": "A sitemap footer: services, coverage areas, company, contact (phone + hours), legal. Generosity after the page's restraint -- never a thin one-row strip.", "without_phone": "A sitemap footer: services, coverage areas, company, contact (the routes the client offers, and hours), legal. Generosity after the page's restraint, never a thin one-row strip."}
+        {"section": "Rich footer", "purpose": "A sitemap footer: services, coverage areas, company, contact (phone + hours), legal. Generosity after the page's restraint, never a thin one-row strip.", "without_phone": "A sitemap footer: services, coverage areas, company, contact (the routes the client offers, and hours), legal. Generosity after the page's restraint, never a thin one-row strip."}
       ],
       "cta_placement": "Primary lead-capture in the hero (inline form) and repeated in a dedicated CTA band before the footer; phone number persistent in header and CTA band.",
       "conversion_mechanisms": [
@@ -61,13 +61,13 @@
       ],
       "section_sequence": [
         {"section": "Hero (product mock + primary CTA)", "purpose": "Asymmetric hero: value headline + one-line lede + primary CTA on one side, a real product mock (screenshot or interactive demo) on the other. The mock is the proof."},
-        {"section": "Logo / trust strip", "purpose": "A single monochrome customer-logo row near the hero -- social proof before the feature tour. Skip if there are no real logos.", "proof": "logos"},
+        {"section": "Logo / trust strip", "purpose": "A single monochrome customer-logo row near the hero: social proof before the feature tour. Skip if there are no real logos.", "proof": "logos"},
         {"section": "Value cards", "purpose": "3-5 outcome-led cards (not feature lists), each with a concrete claim with a number where possible."},
         {"section": "Split feature rows", "purpose": "3-5 marquee feature sections, each a 2-column zig-zag with a deep visual (annotated screenshot, before/after, synthetic UI). Depth over a dense feature grid."},
         {"section": "Integrations / ecosystem", "purpose": "The integrations or ecosystem the product plugs into, as a labelled grid of marks. Maps EVERY integration the source lists."},
-        {"section": "Metrics / outcomes band", "purpose": "A stats band of real outcomes (latency, time saved, adoption) -- organic numbers, not round marketing figures.", "proof": "stats"},
+        {"section": "Metrics / outcomes band", "purpose": "A stats band of real outcomes (latency, time saved, adoption), organic numbers, not round marketing figures.", "proof": "stats"},
         {"section": "Social proof / case quote", "purpose": "A named, quantified customer quote or mini case study with attribution and a real metric.", "proof": "testimonials"},
-        {"section": "Pricing teaser", "purpose": "A 'starts at $X' teaser linking out to full pricing -- never a full pricing table on the homepage."},
+        {"section": "Pricing teaser", "purpose": "A 'starts at $X' teaser linking out to full pricing, never a full pricing table on the homepage."},
         {"section": "CTA band", "purpose": "A focused sign-up / start-free band repeating the single primary action."},
         {"section": "Rich footer", "purpose": "Sitemap footer by audience: Product, Solutions, Resources, Company, Legal."}
       ],
@@ -104,10 +104,10 @@
         {"section": "Product hero (gallery + buy box)", "purpose": "Product imagery gallery on one side, buy box (title, price, variant pickers, add-to-cart) on the other. The buy box is the conversion path, above the fold."},
         {"section": "Trust / shipping bar", "purpose": "A thin band of trust signals: free shipping threshold, returns window, secure checkout, in-stock status."},
         {"section": "Key benefits / spec cards", "purpose": "Cards covering the concrete reasons to buy (materials, warranty, what's in the box) and a spec line."},
-        {"section": "Variant / option grid", "purpose": "Every variant, size, or option as a selectable card/swatch. Map EVERY option the source lists -- one variant, one tile."},
-        {"section": "Split feature rows", "purpose": "Zig-zag rows telling the product story with real photography or detail shots -- craft, use, results."},
-        {"section": "Reviews / social proof", "purpose": "Real, attributed reviews with a rating distribution -- named, specific, not 'amazing!'.", "proof": "reviews"},
-        {"section": "Related / cross-sell", "purpose": "A small, curated set of related products -- not an endless grid."},
+        {"section": "Variant / option grid", "purpose": "Every variant, size, or option as a selectable card/swatch. Map EVERY option the source lists: one variant, one tile."},
+        {"section": "Split feature rows", "purpose": "Zig-zag rows telling the product story with real photography or detail shots: craft, use, results."},
+        {"section": "Reviews / social proof", "purpose": "Real, attributed reviews with a rating distribution: named, specific, not 'amazing!'.", "proof": "reviews"},
+        {"section": "Related / cross-sell", "purpose": "A small, curated set of related products, not an endless grid."},
         {"section": "FAQ / shipping & returns", "purpose": "The objection-handling section: shipping, returns, sizing, care. Answers the questions that block checkout."},
         {"section": "CTA band (add to cart)", "purpose": "A sticky or repeated add-to-cart band so the conversion action is always reachable."},
         {"section": "Rich footer", "purpose": "Sitemap footer: Shop, Help (shipping/returns), Company, Legal, contact."}
@@ -141,13 +141,13 @@
         "projects", "services agency", "branding", "design studio", "showcase", "clients"
       ],
       "section_sequence": [
-        {"section": "Hero (statement + selected work peek)", "purpose": "A confident positioning statement with a peek of selected work. Editorial, asymmetric -- the work carries the page."},
+        {"section": "Hero (statement + selected work peek)", "purpose": "A confident positioning statement with a peek of selected work. Editorial, asymmetric: the work carries the page."},
         {"section": "Selected work grid", "purpose": "An irregular, editorial grid of case studies (varied aspect ratios, generous gaps). Each tile is a real project, not a card box."},
         {"section": "Services / capabilities", "purpose": "What the studio does, as capability cards or a list. Map EVERY discipline the source lists."},
         {"section": "Split feature rows (case depth)", "purpose": "1-3 deep case studies as zig-zag rows: problem, approach, result with a real metric."},
-        {"section": "Process / approach", "purpose": "How the studio works -- a few honest steps, not numbered chapter signposting for its own sake."},
+        {"section": "Process / approach", "purpose": "How the studio works: a few honest steps, not numbered chapter signposting for its own sake."},
         {"section": "Client logos / proof", "purpose": "A monochrome client-logo wall or named testimonials with attribution.", "proof": "logos"},
-        {"section": "About / team", "purpose": "Who's behind the work -- real people, real photos or styled portraits."},
+        {"section": "About / team", "purpose": "Who's behind the work: real people, real photos or styled portraits."},
         {"section": "CTA band (start a project)", "purpose": "A direct 'start a project / let's talk' band with a real contact path."},
         {"section": "Rich footer", "purpose": "Sitemap footer: Work, Services, About, Contact, social."}
       ],
@@ -162,7 +162,7 @@
         "repeated CTA band"
       ],
       "footer": "Sitemap footer: Work, Services, About, Contact, social.",
-      "notes": "The work is the proof; description is supplementary. Use varied image ratios and an irregular grid -- never a tidy 3-equal-card row. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item.",
+      "notes": "The work is the proof; description is supplementary. Use varied image ratios and an irregular grid, never a tidy 3-equal-card row. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item.",
       "industries": [],
       "product_types": [],
       "project_types": [],
@@ -176,13 +176,13 @@
         "news", "media", "stories", "essays", "archive", "journal"
       ],
       "section_sequence": [
-        {"section": "Hero (lead story + masthead)", "purpose": "A masthead with the lead story given editorial weight -- big headline, real image, byline. Sets the publication's voice."},
-        {"section": "Featured stories grid", "purpose": "An editorial grid of featured pieces with varied prominence (one dominant, several secondary) -- not equal cards."},
+        {"section": "Hero (lead story + masthead)", "purpose": "A masthead with the lead story given editorial weight: big headline, real image, byline. Sets the publication's voice."},
+        {"section": "Featured stories grid", "purpose": "An editorial grid of featured pieces with varied prominence (one dominant, several secondary), not equal cards."},
         {"section": "Category pills / sections", "purpose": "Every section/topic the publication covers, as a row of pills. Map EVERY category from the source."},
-        {"section": "Latest articles list", "purpose": "A scannable list of recent pieces with byline, date, and reading time -- typographic, not boxed."},
+        {"section": "Latest articles list", "purpose": "A scannable list of recent pieces with byline, date, and reading time, typographic, not boxed."},
         {"section": "Editor's pick / pull-quote", "purpose": "A highlighted piece or a pull-quote that carries the editorial point of view, with attribution."},
         {"section": "Newsletter signup", "purpose": "An inline newsletter capture (not a timed modal) with a clear value line and a single email field."},
-        {"section": "Contributors / about", "purpose": "Who writes here -- real contributors with names and roles."},
+        {"section": "Contributors / about", "purpose": "Who writes here: real contributors with names and roles."},
         {"section": "CTA band (subscribe)", "purpose": "A focused subscribe band repeating the newsletter or membership action."},
         {"section": "Rich footer", "purpose": "Sitemap footer: Sections, Archive, About, Subscribe, legal."}
       ],
@@ -216,11 +216,11 @@
       ],
       "section_sequence": [
         {"section": "Hero (device mock + store badges)", "purpose": "A device mock (real app screen) beside a value headline and app-store badges. The store badges are the conversion path, above the fold."},
-        {"section": "Proof/stats bar", "purpose": "A thin band of real numbers (downloads, rating, active users) -- organic, not round marketing figures.", "proof": "stats"},
+        {"section": "Proof/stats bar", "purpose": "A thin band of real numbers (downloads, rating, active users), organic, not round marketing figures.", "proof": "stats"},
         {"section": "Value cards", "purpose": "3-5 cards naming what the app does for the user, each with a concrete benefit."},
-        {"section": "Screenshot carousel / gallery", "purpose": "Real app screenshots in device frames showing the key flows -- varied, not all clipped to one ratio."},
-        {"section": "Split feature rows", "purpose": "Zig-zag rows expanding the marquee features with a screenshot each -- depth over a dense grid."},
-        {"section": "Social proof / reviews", "purpose": "Named, specific app-store reviews or a rating breakdown -- not 'great app!'.", "proof": "reviews"},
+        {"section": "Screenshot carousel / gallery", "purpose": "Real app screenshots in device frames showing the key flows: varied, not all clipped to one ratio."},
+        {"section": "Split feature rows", "purpose": "Zig-zag rows expanding the marquee features with a screenshot each, depth over a dense grid."},
+        {"section": "Social proof / reviews", "purpose": "Named, specific app-store reviews or a rating breakdown, not 'great app!'.", "proof": "reviews"},
         {"section": "How it works / onboarding", "purpose": "A short, honest set of steps from install to value."},
         {"section": "CTA band (download)", "purpose": "A focused download band repeating the store badges and the single primary action."},
         {"section": "Rich footer", "purpose": "Sitemap footer: App, Support, Company, Legal, store links."}
