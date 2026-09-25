@@ -5,10 +5,8 @@ build script and never writes.
 """
 from __future__ import annotations
 
-import colorsys
 import hashlib
 import json
-import math
 import re
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
@@ -103,11 +101,21 @@ def _num(text: str, percent_scale: float = 1.0) -> float:
         return 0.0
     if t.endswith("%"):
         return float(t[:-1]) / 100.0 * percent_scale
-    for unit in ("deg", "turn", "rad", "grad"):
-        if t.endswith(unit):
-            v = float(t[:-len(unit)])
-            return {"deg": v, "turn": v * 360, "rad": math.degrees(v), "grad": v * 0.9}[unit]
     return float(t)
+
+
+def _hue(text: str) -> float:
+    """A hue in degrees, read by the importers' value reader (a number, or
+    an angle in deg, turn, rad or grad). Raises ValueError otherwise."""
+    from engine.io.values_in import NotRead
+    from engine.io.values_in import _hue as read_hue  # engine.io imports this package
+    t = text.strip()
+    if not t:
+        return 0.0
+    try:
+        return read_hue(t, t)
+    except NotRead as exc:
+        raise ValueError(str(exc)) from None
 
 
 def _rgb_hex(r: float, g: float, b: float) -> str:
@@ -120,9 +128,11 @@ def _oklch_hex(L: float, C: float, H: float) -> str:
     return gamut_map_oklch(L, C, H)[0]
 
 
-def _hsl_hex(h: float, s: float, l: float) -> str:
-    r, g, b = colorsys.hls_to_rgb((h % 360) / 360.0, max(0.0, min(1.0, l)), max(0.0, min(1.0, s)))
-    return _rgb_hex(r * 255, g * 255, b * 255)
+def _from_hsl(h: float, s: float, light: float) -> str:
+    """An hsl color (saturation and lightness from 0 to 1, clamped) as hex,
+    converted by the importers' value reader."""
+    from engine.io.values_in import _hsl_to_rgb  # engine.io imports this package
+    return _rgb_hex(*_hsl_to_rgb(h, max(0.0, min(1.0, s)), max(0.0, min(1.0, light))))
 
 
 def _function_hex(name: str, args: str) -> str:
@@ -131,12 +141,12 @@ def _function_hex(name: str, args: str) -> str:
         if name in ("rgb", "rgba") and len(parts) >= 3:
             return _rgb_hex(*(_num(p, 255.0) for p in parts[:3]))
         if name in ("hsl", "hsla") and len(parts) >= 3:
-            return _hsl_hex(_num(parts[0]), _num(parts[1], 1.0) if parts[1].endswith("%")
-                            else float(parts[1]) / 100.0,
-                            _num(parts[2], 1.0) if parts[2].endswith("%")
-                            else float(parts[2]) / 100.0)
+            return _from_hsl(_hue(parts[0]), _num(parts[1], 1.0) if parts[1].endswith("%")
+                             else float(parts[1]) / 100.0,
+                             _num(parts[2], 1.0) if parts[2].endswith("%")
+                             else float(parts[2]) / 100.0)
         if name == "oklch" and len(parts) >= 3:
-            return _oklch_hex(_num(parts[0], 1.0), _num(parts[1], 0.4), _num(parts[2]))
+            return _oklch_hex(_num(parts[0], 1.0), _num(parts[1], 0.4), _hue(parts[2]))
         if name == "oklab" and len(parts) >= 3:
             L, a, b = _num(parts[0], 1.0), _num(parts[1], 0.4), _num(parts[2], 0.4)
             return _oklch_hex(*oklab_to_oklch(L, a, b))
@@ -166,7 +176,7 @@ def normalize_hex(value: Any) -> str:
                 if space == "srgb":
                     return _rgb_hex(*(x * 255 for x in c))
                 if space == "hsl":
-                    return _hsl_hex(c[0], c[1] / 100.0, c[2] / 100.0)
+                    return _from_hsl(c[0], c[1] / 100.0, c[2] / 100.0)
                 if space == "oklch":
                     return _oklch_hex(*c)
                 if space == "oklab":
