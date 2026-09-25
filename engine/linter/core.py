@@ -126,6 +126,20 @@ def _compile_rules() -> List[Dict[str, Any]]:
     return rules
 
 
+# Text between these two comments is not scanned: a rule catalog that quotes
+# the patterns it documents, or a "before" sample of what not to ship. An
+# unclosed disable runs to the end of the file. Masking keeps every newline,
+# so line and column numbers outside the region do not move.
+_DISABLED_REGION = re.compile(
+    r"<!--\s*ux-lint-disable\s*-->.*?(?:<!--\s*ux-lint-enable\s*-->|\Z)", re.S)
+
+
+def _mask_disabled(text: str) -> str:
+    if "ux-lint-disable" not in text:
+        return text
+    return _DISABLED_REGION.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), text)
+
+
 def _walk_paths(paths: Iterable[Path]) -> Iterable[Path]:
     for p in paths:
         if p.is_file():
@@ -171,6 +185,7 @@ def lint(
             continue
         files_scanned += 1
         lines = text.splitlines()
+        text = _mask_disabled(text)
 
         for rule in rules:
             if not _scope_matches(path, rule["scope"]):

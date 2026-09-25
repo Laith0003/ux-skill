@@ -469,7 +469,7 @@
       "category": "Quality",
       "detection": {
         "type": "regex",
-        "pattern": "<(?:div|span|p|section|article|h[1-6]|button|a|img)[^>]*\\sstyle=\"[^\"]+\"",
+        "pattern": "<(?:div|span|p|section|article|h[1-6]|button|a|img)\\b[^>]*\\sstyle=\"(?!\\s*--[\\w-]+\\s*:[^;\"]*(?:;\\s*--[\\w-]+\\s*:[^;\"]*)*;?\\s*\")[^\"]+\"",
         "flags": "i",
         "scope": [
           "tsx",
@@ -800,7 +800,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<input(?![^>]*\\baria-label=)(?![^>]*\\baria-labelledby=)[^>]+placeholder=",
+        "pattern": "<input(?![^>]*\\baria-label=)(?![^>]*\\baria-labelledby=)(?![^>]*\\bid=)[^>]+placeholder=",
         "flags": "i",
         "scope": [
           "tsx",
@@ -1035,7 +1035,7 @@
       "category": "Motion",
       "detection": {
         "type": "regex",
-        "pattern": "transition[^;]*:\\s*[^;]*(?:width|height|top|left|margin|padding)[^;]*;",
+        "pattern": "transition[^;{}<>]*:\\s*[^;{}<>]*(?:width|height|top|left|margin|padding)[^;{}<>]*[;}\"]",
         "flags": "i",
         "scope": [
           "css",
@@ -1098,7 +1098,7 @@
       "category": "Color",
       "detection": {
         "type": "regex",
-        "pattern": "linear-gradient\\([^)]+,[^)]+,[^)]+,[^)]+,",
+        "pattern": "linear-gradient\\((?:(?:[^(),;]|\\((?:[^()]|\\([^()]*\\))*\\))+,){4}",
         "flags": "im",
         "scope": [
           "css",
@@ -1121,7 +1121,7 @@
       "category": "Visual",
       "detection": {
         "type": "regex",
-        "pattern": "box-shadow:\\s*([^,;]+,[^,;]+,[^,;]+,[^,;]+,[^,;]+,)",
+        "pattern": "box-shadow:\\s*(?:(?:[^(),;]|\\((?:[^()]|\\([^()]*\\))*\\))+,){2}",
         "flags": "im",
         "scope": [
           "css",
@@ -1142,7 +1142,7 @@
       "category": "Layout",
       "detection": {
         "type": "regex",
-        "pattern": "(?:p|div|span)[^{]*\\{[^}]*height\\s*:\\s*\\d+px[^}]*color",
+        "pattern": "(?<![\\w-])(?:p|div|span)\\b[^{};]*\\{[^}]*height\\s*:\\s*\\d+px[^}]*color",
         "flags": "im",
         "scope": [
           "css",
@@ -1166,8 +1166,8 @@
           "scss"
         ]
       },
-      "why": "scale(1.1) or higher on hover reads as amateur - it shouts when a 1-2 percent nudge or a shadow lift would be more confident.",
-      "fix": "Use scale(1.01) to scale(1.03), or replace the scale with a translateY(-2px) plus shadow shift. Restraint reads premium."
+      "why": "scale(1.1) or higher on hover reads as amateur - it shouts when a border or background shift would be more confident.",
+      "fix": "Drop the scale from the card :hover rule and shift its border or background instead. Hover never changes a card's elevation; only a drag lifts. Restraint reads premium."
     },
     {
       "id": "dynamic-island-glow-everywhere",
@@ -1197,7 +1197,7 @@
       "category": "Color",
       "detection": {
         "type": "regex",
-        "pattern": "backdrop-filter\\s*:\\s*blur[^;]+;(?![^}]*background)",
+        "pattern": "\\{(?![^}]*background)[^}]*?backdrop-filter\\s*:\\s*blur[^;]+;|style=\"(?![^\"]*background)[^\"]*backdrop-filter\\s*:\\s*blur",
         "flags": "im",
         "scope": [
           "css",
@@ -1948,7 +1948,7 @@
       "category": "Performance",
       "detection": {
         "type": "regex",
-        "pattern": "addEventListener\\s*\\(\\s*['\"](?:scroll|touchmove|touchstart|wheel|mousewheel)['\"]\\s*,(?:(?!passive\\s*:\\s*true)[^)])*\\)",
+        "pattern": "addEventListener\\s*\\(\\s*['\"](?:scroll|touchmove|touchstart|wheel|mousewheel)['\"]\\s*,(?:(?!passive\\s*:\\s*(?:true|false))[^)])*\\)",
         "flags": "i",
         "scope": [
           "ts",
@@ -2808,7 +2808,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\A(?=[\\s\\S]*<body\\b)(?![\\s\\S]*(?:<img\\b|<picture\\b|<video\\b|<svg\\b[^>]*(?:\\s(?:width|height)\\s*=\\s*[\"']?\\s*[1-9]\\d{2,}|viewBox\\s*=\\s*[\"']\\s*[-\\d.]+\\s+[-\\d.]+\\s+[1-9]\\d{2,})|url\\([^)]*\\.(?:png|jpe?g|webp|avif|gif)))[\\s\\S]{0,80}",
+        "pattern": "\\A(?=[\\s\\S]*<body\\b)(?![\\s\\S]*(?:<img\\b|<picture\\b|<video\\b|<iframe\\b|<svg\\b[^>]*(?:\\s(?:width|height)\\s*=\\s*[\"']?\\s*[1-9]\\d{2,}|viewBox\\s*=\\s*[\"']\\s*[-\\d.]+\\s+[-\\d.]+\\s+[1-9]\\d{2,})|url\\([^)]*\\.(?:png|jpe?g|webp|avif|gif)))[\\s\\S]{0,80}",
         "flags": "i",
         "scope": [
           "html",
