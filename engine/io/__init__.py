@@ -5,6 +5,7 @@ and the value reader they share.
 """
 from engine.io.css_in import import_css, parse_css, read_css
 from engine.io.dtcg_in import import_dtcg, read_dtcg
+from engine.io.markdown_in import import_markdown, read_markdown
 from engine.io.report import (FORMATS, Imported, ImportReport, Item, Mapped, Source,
                               read_source)
 from engine.io.tailwind_in import (
@@ -15,6 +16,6 @@ from engine.io.values_in import (CSS_KEYWORDS, GamutMapped, NotRead, css_alias, 
 __all__ = [
     "CSS_KEYWORDS", "EXPORT_COMMAND", "FORMATS", "GamutMapped", "ImportReport", "Imported",
     "Item", "Mapped", "NotRead", "Source", "css_alias", "import_css", "import_dtcg",
-    "import_tailwind_css", "import_tailwind_json", "parse_css", "read_css", "read_dtcg",
-    "read_source", "read_tailwind", "read_value", "split_top",
+    "import_markdown", "import_tailwind_css", "import_tailwind_json", "parse_css", "read_css",
+    "read_dtcg", "read_markdown", "read_source", "read_tailwind", "read_value", "split_top",
 ]
