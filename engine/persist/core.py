@@ -32,10 +32,13 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from engine import __version__
-from engine.existing import OWNER_KEY, OWNER_VALUE, detect_existing_system, is_ux_skill_file
+from engine.existing import (
+    OWNER_KEY, OWNER_VALUE, detect_existing_system, is_ux_skill_file, ownership, stamp_digest,
+)
 
-# The owner mark written into every file persist creates; files without it
-# are hand-written and never overwritten.
+# The owner mark written into every file persist creates. Ownership itself is
+# the digest stamp_digest adds: a file is persist's only while its text still
+# matches that digest, so a hand-edited or hand-written file is never overwritten.
 OWNER_MARK = OWNER_VALUE + " persist"
 
 # Marker that frontmatter is delimited by --- lines
@@ -448,6 +451,14 @@ def _owned_target(path: Path) -> Tuple[Path, bool]:
     return beside, True
 
 
+def _beside_note(path: Path, target: Path) -> str:
+    how = {"edited": "was changed by hand after ux-skill wrote it",
+           "legacy": "has no ux-skill digest, so it may hold hand edits"}.get(
+        ownership(path), "is hand-written")
+    return (f"{path} {how}, so persist did not write it; it wrote {target} beside it. "
+            "The existing file stays the source of truth.")
+
+
 def _render_existing_system(project_root: str) -> str:
     found = detect_existing_system(project_root)
     if not found.get("found"):
@@ -475,11 +486,8 @@ def save_master_result(project_root: str, recommendation: Dict[str, Any],
     master.parent.mkdir(parents=True, exist_ok=True)
     target, beside = _owned_target(master)
     path = _save_master_to(target, project_root, recommendation, brief)
-    note = ""
-    if beside:
-        note = (f"{master} is hand-written, so persist did not write it; it wrote {target} "
-                "beside it. The hand-written file stays the source of truth.")
-    return {"path": path, "wrote_beside": beside, "note": note}
+    return {"path": path, "wrote_beside": beside,
+            "note": _beside_note(master, target) if beside else ""}
 
 
 def save_master(project_root: str, recommendation: Dict[str, Any], brief: Dict[str, Any]) -> str:
@@ -520,7 +528,7 @@ def _save_master_to(target: Path, project_root: str, recommendation: Dict[str, A
         "ux_skill_version": __version__,
         OWNER_KEY: OWNER_MARK,
     }
-    payload = _write_frontmatter(meta) + "\n" + body
+    payload = stamp_digest(_write_frontmatter(meta) + "\n" + body)
     target.write_text(payload, encoding="utf-8")
     return str(target)
 
@@ -608,7 +616,12 @@ def load_master(project_root: str) -> Optional[Dict[str, Any]]:
     """
     target = _master_path(project_root)
     if not target.exists():
-        return None
+        # The project's own MASTER.md, where a client keeps its system.
+        root = Path(project_root).resolve()
+        target = next((c for c in (root / "design-system" / "MASTER.md", root / "MASTER.md")
+                       if c.is_file()), None)
+        if target is None:
+            return None
     text = target.read_text(encoding="utf-8")
     meta = _parse_frontmatter(text) or {}
     body = _strip_frontmatter(text)
@@ -633,17 +646,31 @@ def save_page(
     brief: Dict[str, Any],
     output: Dict[str, Any],
 ) -> str:
-    """Write a per-page persistence file under ``pages/``.
+    """Write a per-page persistence file under ``pages/`` (or beside a
+    hand-written one; see ``save_page_result``). Returns the path written.
+    """
+    return save_page_result(project_root, page_name, brief, output)["path"]
 
-    ``output`` is a free-form dict describing the generated artifact —
+
+def save_page_result(
+    project_root: str,
+    page_name: str,
+    brief: Dict[str, Any],
+    output: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Write a per-page file and say where: ``{path, wrote_beside, note}``.
+
+    ``output`` is a free-form dict describing the generated artifact,
     typically the bundle from ``engine.generator.generate`` plus any lint
-    findings and design decisions. Returns the absolute path written.
+    findings and design decisions. A page file ux-skill does not own is
+    never overwritten; the write goes beside it as ``<page>.ux-skill.md``.
     """
     pages_dir = _pages_dir(project_root)
     pages_dir.mkdir(parents=True, exist_ok=True)
 
     stem = _slugify(page_name)
-    target, _beside = _owned_target(pages_dir / f"{stem}.md")
+    path = pages_dir / f"{stem}.md"
+    target, beside = _owned_target(path)
 
     body_sections: List[str] = []
     body_sections.append(f"# Page — {page_name.strip() or stem}")
@@ -713,9 +740,10 @@ def save_page(
         "ux_skill_version": __version__,
         OWNER_KEY: OWNER_MARK,
     }
-    payload = _write_frontmatter(meta) + "\n" + new_body
+    payload = stamp_digest(_write_frontmatter(meta) + "\n" + new_body)
     target.write_text(payload, encoding="utf-8")
-    return str(target)
+    return {"path": str(target), "wrote_beside": beside,
+            "note": _beside_note(path, target) if beside else ""}
 
 
 def list_pages(project_root: str) -> List[str]:
@@ -725,5 +753,7 @@ def list_pages(project_root: str) -> List[str]:
         return []
     out: List[str] = []
     for path in sorted(pages_dir.glob("*.md")):
+        if path.name.endswith(BESIDE_SUFFIX):
+            continue   # ux-skill's copy beside a hand-written page, not a page of its own
         out.append(path.stem)
     return out

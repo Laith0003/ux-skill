@@ -181,6 +181,13 @@ else:
             return payload["brand"]
         return payload if isinstance(payload, dict) else None
 
+    def _page_root(html_path):
+        """The project folder a page's links may reach: the working folder
+        when the page is inside it, else the page's own folder."""
+        page = Path(html_path).resolve()
+        here = Path.cwd().resolve()
+        return str(here if here in page.parents else page.parent)
+
     def _existing_system(root):
         """The `ux system detect` result for ``root`` when it found a system, else None."""
         from engine.existing import detect_existing_system
@@ -397,8 +404,11 @@ else:
     @cli.command("generate")
     @click.option("--brief-file", type=click.Path(exists=True), required=False)
     @click.option("--out-dir", default="./.ux/generated")
+    @click.option("--project-root", default=".",
+                  help="Project to check for an existing design system (default: here). When "
+                       "one is found the emitted tokens are suggestions its tokens override.")
     @click.pass_context
-    def generate_cmd(ctx, brief_file, out_dir) -> None:
+    def generate_cmd(ctx, brief_file, out_dir, project_root) -> None:
         """Emit tokens + manifest from a recommendation."""
         if brief_file:
             from engine.recommender import BriefError, brief_from_dict
@@ -409,6 +419,7 @@ else:
                 raise click.UsageError(str(exc)) from None
         else:
             brief = Brief()
+        brief.existing_system = _existing_system(project_root)
         rec = run_recommend(brief)
         bundle = run_generate(rec, brief, out_dir)
         _emit(bundle.to_dict(), ctx.obj["pretty"])
@@ -476,6 +487,8 @@ else:
         except DesignMdRefused as exc:
             click.echo(f"Error: {exc}", err=True)
             sys.exit(1)
+        if result.get("note"):
+            click.echo(result["note"], err=True)
         _emit(result, ctx.obj["pretty"])
 
     # -------- ux persist -------------------------------------------------
@@ -555,8 +568,15 @@ else:
             payload = json.loads(Path(from_output).read_text(encoding="utf-8"))
             if isinstance(payload, dict):
                 output = payload
-        path = save_page(project_root, name, brief_dict, output)
-        _emit({"path": path}, ctx.obj["pretty"])
+        from engine.persist import save_page_result
+        try:
+            result = save_page_result(project_root, name, brief_dict, output)
+        except ValueError as exc:
+            click.echo(f"Error: {exc}", err=True)
+            sys.exit(1)
+        if result["wrote_beside"]:
+            click.echo(result["note"], err=True)
+        _emit(result, ctx.obj["pretty"])
 
     @persist_grp.command("load")
     @click.option("--project-root", default=".")
@@ -586,8 +606,10 @@ else:
     @click.option("--save", type=click.Path(),
                   default=".ux/last-image-extract.json",
                   help="Path to write the JSON result; pass empty string to skip.")
+    @click.option("--project-root", default=".",
+                  help="Project to check for an existing design system (default: here).")
     @click.pass_context
-    def image_extract_cmd(ctx, path, with_recommendation, save) -> None:
+    def image_extract_cmd(ctx, path, with_recommendation, save, project_root) -> None:
         """Read a design image, return brief + hints + (optional) recommendation.
 
         Pure CV pipeline — Pillow only. Extracts the dominant 5 colors via
@@ -617,7 +639,9 @@ else:
                 if k in {"project_type", "industry", "audience", "tone",
                          "must_have", "forbidden", "stack", "region"}
             }
-            rec = run_recommend(Brief(**brief_kwargs))
+            image_brief = Brief(**brief_kwargs)
+            image_brief.existing_system = _existing_system(project_root)
+            rec = run_recommend(image_brief)
             result["recommendation"] = rec.to_dict()
 
         # Strip the embedded matched_palette / matched_style dicts from the
@@ -678,9 +702,12 @@ else:
                   help="Extracted client brand.json -- stamps the client's primary/type over the synthesis.")
     @click.option("--strict", is_flag=True, help="With --brand: 100% brand tokens, no synthesis.")
     @click.option("--no-log", is_flag=True, help="Don't write to .ux/decisions.jsonl.")
+    @click.option("--project-root", default=".",
+                  help="Project to check for an existing design system (default: here). When "
+                       "one is found the synthesis is a suggestion its tokens override.")
     @click.pass_context
     def synthesize_cmd(ctx, industry, tone, audience, must_have, forbidden,
-                       brand, brand_file, strict, no_log) -> None:
+                       brand, brand_file, strict, no_log, project_root) -> None:
         """Synthesize a fresh design language from a brief (v2.1).
 
         Modes (auto-dispatched):
@@ -719,7 +746,9 @@ else:
             })
         except Exception:
             pass
-        _emit(sys_out.to_dict(), ctx.obj["pretty"])
+        from engine.existing import mark_suggestions
+        _emit(mark_suggestions(sys_out.to_dict(), _existing_system(project_root)),
+              ctx.obj["pretty"])
 
     # -------- ux system-pack (v3.1) ---------------------------------------
 
@@ -804,6 +833,7 @@ else:
             max_rounds=max_rounds,
             brand_profile=_load_brand_dict(brand_file),
             base_dir=str(Path(html_path).resolve().parent),
+            root=_page_root(html_path),
         )
 
         # Persist outputs only if above gate or forced
@@ -864,9 +894,12 @@ else:
                        "and decision records.")
     @click.option("--force", is_flag=True,
                   help="Replace files in --out that differ. Without it nothing is overwritten.")
+    @click.option("--replace-client-files", "replace_client", is_flag=True,
+                  help="Also replace files in --out that ux-skill did not build, such as a "
+                       "client's own tokens.json. --force alone never does.")
     @click.pass_context
     def system_build_cmd(ctx, brand, brief_path, axes_text, latin_only, out_dir, rule_pack,
-                         force) -> None:
+                         force, replace_client) -> None:
         """Build tokens.json, tokens.css, fonts.css, fonts-self-host.css,
         system-report.md and art/ into --out, and with --rule-pack the rule
         pack into --out/rule-pack/.
@@ -894,7 +927,19 @@ else:
         system = make_system(brand_hex, axes, source, arabic=arabic, rule_pack=rule_pack,
                              audience=audience, unread=unread_lines(brief, "--brief"))
         system = note_rule_pack(system, out, force=force)
-        outcome = write_outcome(system, out, force=force)
+        from engine.existing import client_files_in
+        theirs = client_files_in(out, system.files) if (force and not replace_client) else []
+        if theirs:
+            outcome = {
+                "status": "refused", "written": [], "unchanged": [], "conflicts": theirs,
+                "stale_rule_pack": None,
+                "message": (f"Nothing was written: {out} holds a design system ux-skill did not "
+                            f"build, and {', '.join(theirs)} would be replaced. An existing "
+                            "design system is fixed input. Build into a new folder, or pass "
+                            "--replace-client-files as well as --force to replace them."),
+            }
+        else:
+            outcome = write_outcome(system, out, force=force)
         status = outcome["status"]
         _emit({**system.to_dict(), "out": str(out), **outcome}, ctx.obj["pretty"])
         if status == "failed":
@@ -917,6 +962,10 @@ else:
         none overrides it. Exit 0 either way; "found" says which.
         """
         from engine.existing import detect_existing_system
+        if not Path(root).expanduser().is_dir():
+            click.echo(f"Error: --root {root} does not exist or is not a folder; pass the "
+                       "project folder, for example --root .", err=True)
+            sys.exit(2)
         _emit(detect_existing_system(root), ctx.obj["pretty"])
 
     # -------- ux version -------------------------------------------------

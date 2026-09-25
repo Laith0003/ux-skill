@@ -495,7 +495,7 @@ This parses the standard brand.md into `.ux/brand.json` (travels through the eng
 
 If the brief names a reference site/URL or provides a screenshot, the output MUST look like THEM, not the house style. Extract the brand FIRST — canonical rules in `references/process/brand-extraction.md`. The engine is offline, so YOU capture the signals; the engine normalizes + enforces.
 
-1. **Capture the signals.** Open the URL / read the screenshot and **sample the logo pixels** for the dominant non-neutral color (the brand primary comes from the LOGO, not the most-painted CSS), read the logo's letterform style, and collect 2–3 secondary colors, the fonts, any real imagery URLs, and the voice. Write `.ux/brand-signals.json`:
+1. **Capture the signals.** Open the URL / read the screenshot and **sample the logo pixels** for the dominant non-neutral color (the brand primary comes from the LOGO, not the most-painted CSS, unless `ux system detect` declares a primary; then the declared token wins and the logo sample is only reported), read the logo's letterform style, and collect 2–3 secondary colors, the fonts, any real imagery URLs, and the voice. Write `.ux/brand-signals.json`:
    `{"name":"…","logo":{"src":"…","alt":"…"},"logo_colors":[{"hex":"#…"}],"brand_colors":[{"hex":"#…"}],"logo_type_style":"…","fonts":{"h1":"…","body":"…"},"imagery":["…"],"voice":"…"}`
 2. **Build the anchor:**
    ```bash
@@ -724,8 +724,10 @@ from engine.brand.extract import BrandProfile
 b = json.load(open('.ux/brand.json'))
 prof = BrandProfile(**{k: v for k, v in b.items() if k in BrandProfile.__dataclass_fields__})
 page = '<output.html>'
-# base_dir: the page's folder, so linked stylesheets and custom properties are read too.
-ev = evaluate(html=open(page).read(), brand_profile=prof, base_dir=os.path.dirname(os.path.abspath(page)))
+# base_dir: the page's folder, so linked stylesheets and custom properties are read too;
+# root: the project, so a page in en/ can link ../css/.
+ev = evaluate(html=open(page).read(), brand_profile=prof,
+              base_dir=os.path.dirname(os.path.abspath(page)), root=os.getcwd())
 print('brand_fidelity', ev.brand_fidelity, '| imagery', ev.imagery, '| passed', ev.brand_passed)
 [print(' -', n) for n in ev.notes if 'BRAND FLOOR' in n]
 sys.exit(0 if ev.brand_passed else 1)

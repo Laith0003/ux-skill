@@ -63,7 +63,7 @@ def test_detect_reads_the_declared_values(client: Path) -> None:
     assert declared["primary"] == PRIMARY
     assert declared["primary_token"] == "brand.primary"
     assert declared["text"] == TEXT
-    assert declared["text_token"] == "text.primary"
+    assert declared["text_token"] == "brand.text.default"
     assert declared["fonts"]["body"] == "Fixture Sans"
     assert declared["languages"][0] == "ar"
     assert declared["colors"]["brand-primary"] == PRIMARY
@@ -203,9 +203,10 @@ def test_design_md_never_overwrites_a_hand_written_design_md(client: Path) -> No
     target = client / "DESIGN.md"
     target.write_text("# Our design\n\nHand-written.\n", encoding="utf-8")
     result = _run(["design-md", "--from-system", "--out", str(target)], cwd=client)
-    assert result.exit_code == 1
+    assert result.exit_code == 0, result.output
     assert "did not write" in result.output
     assert target.read_text(encoding="utf-8") == "# Our design\n\nHand-written.\n"
+    assert PRIMARY in (client / "DESIGN.ux-skill.md").read_text(encoding="utf-8")
 
 
 # ---------------------------------------------------------------- 18: persist
@@ -236,14 +237,13 @@ def test_persist_save_overwrites_its_own_file(tmp_path: Path) -> None:
     assert "b" in Path(second).read_text(encoding="utf-8")
 
 
-def test_persist_save_still_owns_a_master_from_before_the_marker(tmp_path: Path) -> None:
-    from engine.persist import save_master
+def test_a_master_from_before_the_digest_is_not_a_client_system(tmp_path: Path) -> None:
     target = tmp_path / ".ux" / "design-system" / "MASTER.md"
     target.parent.mkdir(parents=True)
     target.write_text("---\nproject: p\nlast_updated: \"2026-01-01T00:00:00Z\"\n"
                       "ux_skill_version: 2.0.0\n---\n\n# Design system \u2014 MASTER\n\nold\n",
                       encoding="utf-8")
-    assert save_master(str(tmp_path), {}, {"project": "p"}) == str(target.resolve())
+    assert detect_existing_system(tmp_path)["found"] is False
 
 
 def test_persist_save_cli_says_it_wrote_beside(tmp_path: Path) -> None:
@@ -297,6 +297,37 @@ def test_declared_primary_beats_logo_pixels_and_both_are_reported(client: Path) 
     assert p.language == "ar"
 
 
+def test_a_sale_red_is_never_the_text_color(client: Path) -> None:
+    declared = detect_existing_system(client)["declared"]
+    assert declared["text"] == TEXT
+    assert declared["colors"]["promo-sale-fg"] == "#C8102E"
+
+
+def test_the_text_role_ranks_text_default_above_a_bare_fg(tmp_path: Path) -> None:
+    doc = {"promo": {"$type": "color", "sale": {"fg": {"$value": "#C8102E"}}},
+           "ui": {"$type": "color", "fg": {"$value": "#3366FF"}},
+           "ink": {"$type": "color", "text": {"default": {"$value": "#1A1D24"}}}}
+    (tmp_path / "tokens.json").write_text(json.dumps(doc), encoding="utf-8")
+    declared = detect_existing_system(tmp_path)["declared"]
+    assert declared["text"] == "#1A1D24" and declared["text_token"] == "ink.text.default"
+
+
+def test_a_text_candidate_must_be_neutral_and_readable(tmp_path: Path) -> None:
+    doc = {"color": {"$type": "color", "text": {"primary": {"$value": "#E11D48"}},
+                     "fg": {"$value": "#D9DDE3"}}}
+    (tmp_path / "tokens.json").write_text(json.dumps(doc), encoding="utf-8")
+    assert "text" not in detect_existing_system(tmp_path)["declared"]
+
+
+def test_dark_neutrals_leave_the_secondaries_even_with_a_declared_text() -> None:
+    from engine.brand import build_profile
+    p = build_profile({"logo_colors": [{"hex": "#3D8BF0"}],
+                       "brand_colors": [{"hex": "#D6263B"}, {"hex": "#202428"}],
+                       "declared": {"primary": PRIMARY, "text": TEXT}})
+    assert p.text_color == TEXT
+    assert p.secondary == ["#D6263B"]
+
+
 def test_text_color_is_not_a_secondary_without_tokens() -> None:
     from engine.brand import build_profile
     p = build_profile({"logo_colors": [{"hex": "#1C64D9"}],
@@ -344,7 +375,7 @@ def test_fidelity_resolves_custom_properties_in_other_color_forms() -> None:
     from engine.brand import score_brand_fidelity
     html = ("<html><head><style>:root{--blue: rgb(28, 100, 217); --cta: var(--blue)}"
             ".b{background: var(--cta)}</style></head><body><header>Fixture Client</header>"
-            "</body></html>")
+            "<a class=\"b\" href=\"#\">Go</a></body></html>")
     res = score_brand_fidelity(html, _profile())
     assert res["passed"] is True
 
@@ -369,6 +400,23 @@ def test_anti_slop_says_the_clients_system_wins() -> None:
 
 
 def test_eyebrow_guidance_defers_to_the_clients_system() -> None:
-    for rel in ("engine/rulepack/guidance/type.md", "references/foundations/typography.md"):
+    for rel in ("engine/rulepack/guidance/type.md", "engine/rulepack/guidance/color.md"):
         text = (ROOT / rel).read_text(encoding="utf-8")
         assert re.search(r"existing (design )?system", text), rel
+
+
+def test_the_client_wins_clause_keeps_the_eyebrow_waiver() -> None:
+    slop = (ROOT / "references" / "styles" / "anti-slop.md").read_text(encoding="utf-8")
+    principle = next(ln for ln in slop.splitlines() if ln.startswith("9. "))
+    assert "recorded waiver (decisions/eyebrow-is-text.md)" in principle
+    row = next(ln for ln in slop.splitlines() if ln.startswith("| Eyebrows that aren't tracked"))
+    assert "decisions/existing-system-wins.md" in row
+    record = (ROOT / "engine" / "rulepack" / "decisions" / "existing-system-wins.md").read_text(
+        encoding="utf-8")
+    decision = record[record.index("## Decision"):record.index("## Why")]
+    assert "recorded waiver (decisions/eyebrow-is-text.md)" in decision
+
+
+def test_the_detect_docstring_matches_what_counts() -> None:
+    from engine.existing import detect_existing_system
+    assert "hand-edited" not in (detect_existing_system.__doc__ or "")

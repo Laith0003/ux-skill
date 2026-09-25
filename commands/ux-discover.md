@@ -7,6 +7,8 @@ disable-model-invocation: false
 
 # /ux-discover: the forcing function
 
+**An existing design system is fixed input.** Before any engine pick, run `python3 -m engine.cli.main --no-pretty system detect --root .` (over MCP, `ux_system_detect`). When `found` is true, follow `commands/ux-design.md` step 1a: the project's tokens win, the engine's palette and type picks are suggestions for gaps only, and nothing edits, overwrites or re-derives the system's files.
+
 **No generation without discovery.**
 
 This is the discipline gate. The intake every project goes through before `/ux-design`, `/ux-system`, or any other generation command runs. The plugin asks; you answer; the engine has constraints to work with instead of guessing.

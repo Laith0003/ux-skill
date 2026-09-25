@@ -103,6 +103,16 @@ class UxRecommendInput(BaseModel):
         default_factory=BriefModel,
         description="Project brief — industry, audience, tone, must-haves, forbidden moves.",
     )
+    project_root: Optional[str] = Field(
+        default=None,
+        description="The project folder. When it holds an existing design system, its tokens "
+                    "win: palette and type_pair come back as suggestions, with an "
+                    "existing_system block.",
+    )
+
+
+class UxSystemDetectInput(BaseModel):
+    root: str = Field(default=".", description="The project folder to look in.")
 
 
 class UxLintInput(BaseModel):
@@ -197,6 +207,10 @@ class UxStatsInput(BaseModel):
 
 
 class UxImageExtractInput(BaseModel):
+    project_root: Optional[str] = Field(
+        default=None,
+        description="The project folder. When it holds an existing design system, the "
+                    "recommendation's palette and type pair are suggestions its tokens override.")
     path: str = Field(
         description="Absolute or relative path to a design image (PNG/JPG/WebP/etc.).",
     )
@@ -209,6 +223,10 @@ class UxImageExtractInput(BaseModel):
 # v2.1 — synthesis + decisions log MCP inputs
 
 class UxSynthesizeInput(BaseModel):
+    project_root: Optional[str] = Field(
+        default=None,
+        description="The project folder. When it holds an existing design system, the "
+                    "synthesis comes back as a suggestion its tokens override.")
     industry: str = Field(default="", description="Industry id, e.g. fintech-payments.")
     tone: List[str] = Field(default_factory=list, description="Tone tags.")
     audience: List[str] = Field(default_factory=list, description="Audience tags.")
@@ -303,8 +321,35 @@ def handle_ux_recommend(args: Dict[str, Any]) -> Dict[str, Any]:
     """Run the 5-parallel-search recommender and return a serialisable dict."""
     payload = UxRecommendInput.model_validate(args or {})
     brief_kwargs = payload.brief.model_dump()
-    rec = recommend(Brief(**brief_kwargs))
+    brief = Brief(**brief_kwargs)
+    if payload.project_root:
+        from engine.existing import detect_existing_system
+        found = detect_existing_system(payload.project_root)
+        brief.existing_system = found if found.get("found") else None
+    rec = recommend(brief)
     return rec.to_dict()
+
+
+from engine.existing import mark_suggestions  # noqa: E402
+
+
+def _found(project_root: Optional[str]) -> Optional[Dict[str, Any]]:
+    """The existing design system under ``project_root``, or None."""
+    if not project_root:
+        return None
+    from engine.existing import detect_existing_system
+    found = detect_existing_system(project_root)
+    return found if found.get("found") else None
+
+
+def handle_ux_system_detect(args: Dict[str, Any]) -> Dict[str, Any]:
+    """Find an existing design system under ``root`` and what it declares."""
+    payload = UxSystemDetectInput.model_validate(args or {})
+    from engine.existing import detect_existing_system
+    if not Path(payload.root).expanduser().is_dir():
+        return {"found": False, "error": f"root {payload.root} does not exist or is not a "
+                                         "folder; pass the project folder"}
+    return detect_existing_system(payload.root)
 
 
 def handle_ux_lint(args: Dict[str, Any]) -> Dict[str, Any]:
@@ -439,7 +484,9 @@ def handle_ux_image_extract(args: Dict[str, Any]) -> Dict[str, Any]:
             if k in {"project_type", "industry", "audience", "tone",
                      "must_have", "forbidden", "stack", "region"}
         }
-        rec = recommend(Brief(**brief_kwargs))
+        image_brief = Brief(**brief_kwargs)
+        image_brief.existing_system = _found(payload.project_root)
+        rec = recommend(image_brief)
         response["recommendation"] = rec.to_dict()
     return response
 
@@ -477,7 +524,7 @@ def handle_ux_synthesize(args: Dict[str, Any]) -> Dict[str, Any]:
         })
     except Exception:
         pass
-    return out.to_dict()
+    return mark_suggestions(out.to_dict(), _found(payload.project_root))
 
 
 def handle_ux_decisions_query(args: Dict[str, Any]) -> Dict[str, Any]:
@@ -557,8 +604,21 @@ def handle_ux_system_build(args: Dict[str, Any]) -> Dict[str, Any]:
                       dtcg=system.files.get("tokens.json", ""))
     if out is not None:
         result["out"] = str(out)
-        result.update(write_outcome(system, out, force=force, force_label="force: true",
-                                    out_label="out"))
+        from engine.existing import client_files_in
+        theirs = client_files_in(out, system.files) if force else []
+        if theirs:
+            # An existing design system is fixed input: force never replaces it here.
+            result.update({
+                "status": "refused", "written": [], "unchanged": [], "conflicts": theirs,
+                "stale_rule_pack": None,
+                "message": (f"Nothing was written: {out} holds a design system ux-skill did not "
+                            f"build, and {', '.join(theirs)} would be replaced. An existing "
+                            "design system is fixed input; pass a new out folder. Only the "
+                            "command line's --replace-client-files replaces it."),
+            })
+        else:
+            result.update(write_outcome(system, out, force=force, force_label="force: true",
+                                        out_label="out"))
     return result
 
 
@@ -576,6 +636,15 @@ TOOLS: Dict[str, ToolEntry] = {
         "Run the 5-parallel-search recommender over a brief and return the "
         "merged design system (style, palette, type pair, motion, components, "
         "brand exemplars, anti-pattern guardrails, rationale).",
+    ),
+    "ux_system_detect": (
+        handle_ux_system_detect,
+        UxSystemDetectInput,
+        "Find an existing design system in a project (a DTCG or tokens.json file, a token "
+        "build script, CSS custom-property foundations, a hand-written MASTER.md or DESIGN.md) "
+        "and return its files and what it declares: primary, text color, fonts, named colors "
+        "and page languages. An existing system is fixed input: read it before any other "
+        "tool, and never override or overwrite it.",
     ),
     "ux_lint": (
         handle_ux_lint,

@@ -51,6 +51,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Text on generated art sits on a veil of the page color, measured over the art's own colors](media-veil.md)
 - [Every build draws decorative brand art from the axes](generated-art.md)
 - [Generated art is a composition of three layers, placed by the axes and never at random](art-composition.md)
+- [A project's existing design system wins over the guidance's generic label and accent rules](existing-system-wins.md)
 
 ## Contrast and the gate
 
