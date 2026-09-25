@@ -141,7 +141,7 @@ Every design MUST include intentional, REAL imagery. Text-only walls are forbidd
 - Never `h-screen` for hero; use `min-h-[100dvh]`
 - Grid for structure, never `w-[calc(33%-1rem)]` flex-math
 - AIDA reading order on landing pages: Attention (hero) → Interest (value props) → Desire (proof) → Action (CTA)
-- 2-line H1 maximum (concise headline + supporting line)
+- H1 line limit: the one in `references/surfaces/landing.md` (Hero composition)
 - Wide containers — `max-w-5xl` to `max-w-6xl` for marketing surfaces
 
 ### 6a. Responsive gate (MANDATORY: verify before returning. Cross-ref the surface playbook the calling command passed, and `references/foundations/component-behaviors.md` for the component contracts)

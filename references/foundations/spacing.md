@@ -268,7 +268,7 @@
 - [ ] No `h-screen` anywhere — `min-h-[100dvh]` used consistently (severity: Critical)
 - [ ] CSS Grid used for responsive structures; no flex percentage math (severity: High)
 - [ ] Bento grids use `grid-flow-dense`; no empty cells (severity: High)
-- [ ] Bento card count is 3 to 5, not 8 (severity: Medium)
+- [ ] Bento card count follows `references/surfaces/landing.md` (When to include a section) (severity: Medium)
 - [ ] Z-index scale documented; no `z-50` or `z-[9999]` spam (severity: Medium)
 - [ ] No horizontal scroll on mobile body content (severity: Critical)
 - [ ] Verified on 375px, 414px, 768px, 1024px, 1440px (severity: Critical)

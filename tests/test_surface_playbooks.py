@@ -196,7 +196,18 @@ def _resolve(path, ref, index):
     if ref.startswith("../") or ref.startswith("./"):
         return (path.parent / ref).resolve()
     if "/" in ref:
-        return None
+        # `surfaces/x.md`, `foundations/x.md` and similar name a file under
+        # references/; `commands/x.md` and similar name one at the repo root.
+        # A first folder that exists in neither place (`.ux/`, `rule-pack/`)
+        # is a path in the user's project.
+        first = ref.split("/", 1)[0]
+        bases = [b for b in (REPO / "references", REPO) if not first.startswith(".") and (b / first).is_dir()]
+        if not bases:
+            return None
+        for base in bases:
+            if (base / ref).exists():
+                return base / ref
+        return bases[0] / ref
     local = path.parent / ref
     if local.exists():
         return local
@@ -242,6 +253,22 @@ def test_pointer_check_catches_a_bad_bare_name(tmp_path):
     targets = [(ref, t.exists()) for _, ref, t in _pointer_targets(doc, _by_name())]
     assert ("anti-slopp.md", False) in targets
     assert ("nowhere.md", False) in targets
+
+
+def test_pointer_check_catches_a_bad_folder_path(tmp_path):
+    """Prove the pointer control fails on `surfaces/nope.md` and passes the real folder forms."""
+    doc = tmp_path / "doc.md"
+    doc.write_text(
+        "See `surfaces/nope.md`, `surfaces/landing.md`, `foundations/layout.md` and `commands/ux-design.md`.\n",
+        encoding="utf-8",
+    )
+    targets = dict((ref, t.exists()) for _, ref, t in _pointer_targets(doc, _by_name()))
+    assert targets == {
+        "surfaces/nope.md": False,
+        "surfaces/landing.md": True,
+        "foundations/layout.md": True,
+        "commands/ux-design.md": True,
+    }
 
 
 def test_every_pointer_resolves():
@@ -290,5 +317,5 @@ def test_ux_design_loads_exactly_one_playbook():
 
 def test_every_mode_records_its_surface():
     text = _read("commands/ux-design.md")
-    for value in ('"surface": "component"', '"surface": "dashboard"', '"surface": "<landing|dashboard|component|none>"'):
+    for value in ('"surface": "component"', '"surface": "dashboard"', '"surface": "<landing|none>"'):
         assert value in text, f"/ux-design state files must record {value}"

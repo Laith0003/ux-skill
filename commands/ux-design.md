@@ -327,7 +327,7 @@ Surface-specific rules live in playbooks under `references/surfaces/`. The mode 
 | dashboard | `references/surfaces/dashboard.md` |
 | image | the playbook of the build mode it stacks with; none with `--extract-only` |
 
-Load only the playbook you picked. Never load two surface playbooks. The one-playbook rule applies to surface playbooks only: component contracts (`references/foundations/component-behaviors.md`, `references/components/library.md`, `references/foundations/components.md`) and the shared foundations still load when a build needs them, so a landing page with a quote form or a comparison table reads the form and data table contracts. If the brief straddles two surfaces, pick the one that owns the primary deliverable and state the choice in the first line of the output. Record it as `surface` in the state file of the build mode: `.ux/last-design.json`, `.ux/last-component.json` or `.ux/last-dashboard.json`.
+Load only the playbook you picked. Never load two surface playbooks. The one-playbook rule applies to surface playbooks only: component contracts (`references/foundations/component-behaviors.md`, `references/components/library.md`, `references/foundations/components.md`) and the shared foundations still load when a build needs them, so a landing page with a quote form or a comparison table reads the form and data table contracts. A brief that straddles two surfaces gets its mode from the Modes rules, and the mode decides the playbook; there is no second pick. Record it as `surface` in the state file of the build mode: `.ux/last-design.json`, `.ux/last-component.json` or `.ux/last-dashboard.json`.
 
 ### 2. Read the references
 
@@ -360,6 +360,7 @@ Call the Task tool with `subagent_type: "frontend-engineer"`. Pass the agent:
 - **The page-level section sequence** (page mode only; component and dashboard modes skip this bullet) selected for the brief's goal (see the v2 Python integration step below). Instruct the sub-agent to expand the ENTIRE ordered sequence, map all source content into it (every sector -> a pill, every size -> a card, every benefit -> a checklist item; do not trim), give every card/pill/stat a relevant inline SVG icon, and ship the goal's conversion mechanisms.
 - The full content of `references/styles/anti-slop.md` (paste into the prompt — do not assume the sub-agent has read it)
 - The full content of the surface playbook picked in step 1c, if any
+- The full content of `references/foundations/component-behaviors.md` when the build contains a card grid, form, data table, modal, sheet or drawer
 - The target stack
 - An instruction to return:
   1. The generated code
@@ -375,7 +376,7 @@ Use this exact template:
 ```
 ─── design brief ───
 Product:   <one-line summary>
-Surface:   <landing | dashboard | component | none>
+Surface:   <landing | none>
 Stack:     <stack>
 Dials:     DESIGN_VARIANCE=<n>, MOTION_INTENSITY=<n>, VISUAL_DENSITY=<n>
 Patterns:  <2-4 arsenal patterns chosen>
@@ -405,7 +406,7 @@ Write to `.ux/last-design.json` in the project root:
   "timestamp": "<ISO8601>",
   "brief": "<verbatim brief>",
   "stack": "<stack>",
-  "surface": "<landing|dashboard|component|none>",
+  "surface": "<landing|none>",
   "dials": { "variance": <n>, "motion": <n>, "density": <n> },
   "patterns": ["<arsenal pattern names>"],
   "output_file": "<path if saved to disk>"
@@ -434,7 +435,7 @@ Page mode only; component and dashboard modes skip this section. For any landing
 - NEVER skip empty/loading/error states.
 - NEVER use scroll progress paths / scroll-tied SVG line drawing on the side of the page.
 
-Surface-specific hard rules (hero, dashboard typography, component contracts) live in the playbook picked in step 1c.
+Surface-specific hard rules (hero, dashboard typography) live in the playbook picked in step 1c. Component contracts live in `references/foundations/component-behaviors.md`.
 
 If you find yourself reaching for any of these, stop. Re-read `anti-slop.md`. Pick the alternative.
 

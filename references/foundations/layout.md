@@ -8,7 +8,7 @@
 
 2. **Ultra-wide containers prevent H1 failure** — H1 containers at `max-w-5xl`, `max-w-6xl`, or `w-full`. Narrow containers cause 6-line wraps and reflexive failure. The width prevents the wrap, not the font size alone.
 
-3. **2-line H1 rule** — H1 never exceeds 2 to 3 lines at any breakpoint from 375px to 1440px. 4 lines is failure; 5 is catastrophic; 6 is disqualifying.
+3. **H1 line limit.** The limit lives in `references/surfaces/landing.md` (Hero composition). Ultra-wide containers (principle 2) are how a page meets it.
 
 4. **Center by choice, never by fallback.** When a hero may be centered is a landing rule (`references/surfaces/landing.md`, Hero bans). Elsewhere, center a block only when the composition calls for it; a centered-everything page is the fallback this rule bans.
 
@@ -18,7 +18,7 @@
 
 7. **Grid over flex-math** — Use CSS Grid for responsive structures, especially bento layouts. Flex percentage math (`w-[calc(33%-1rem)]`) is banned — Grid wins on responsive, gap consistency, and dense flow.
 
-8. **`grid-flow-dense` on bento layouts** — Asymmetric bento grids fill empty cells. No missing corners, no dead space. 3 to 5 intentional cards beat 8 messy ones every time.
+8. **`grid-flow-dense` on bento layouts.** Asymmetric bento grids fill empty cells. No missing corners, no dead space. The card count lives in `references/surfaces/landing.md` (When to include a section).
 
 9. **Section spacing creates chapters** — Each section feels like a distinct cinematic chapter. Marketing sections at `py-32 md:py-48` minimum; premium at `py-40 md:py-56`. Cramming kills editorial energy.
 
@@ -39,7 +39,6 @@
 | Use CSS Grid for layout | Use flex percentage math like `w-[calc(33%-1rem)]` |
 | Use fractional grid columns (`2fr 1fr 1fr`) for asymmetry | Use `grid-cols-3` for every feature row |
 | Use `grid-flow-dense` on bento | Leave empty cells in bento grids |
-| Build 3 to 5 intentional bento cards | Cram 8+ cards into one bento section |
 | Wrap page in `overflow-x-hidden w-full max-w-full` when motion is used | Allow horizontal scroll on mobile |
 | Alternate image-left / image-right between feature sections | Use the same orientation for every feature row |
 | Allow macro-typography to bleed past viewport edges (brutalist) | Force macro-headlines into rigid container widths |
@@ -56,7 +55,7 @@ Landing-page patterns (AIDA structure, section order, hero composition and hero 
 ### Pattern: Bento grid (modern SaaS)
 **Use when**: Feature showcases, dashboards, "what's in the box" sections.
 **Anti-pattern**: 3-column equal cards row (banned).
-**How**: 3 to 5 intentional cards in varying sizes — one tall, one wide, one or two square. Use CSS Grid with `grid-flow-dense` and fractional spans. Common arrangement: Row 1 with 3 columns, Row 2 with 2 columns split 70/30. Premium versions use `rounded-[2rem]` to `rounded-[2.5rem]` for major containers with diffusion shadows.
+**How**: Cards in varying sizes (one tall, one wide, the rest square), in the count `references/surfaces/landing.md` (When to include a section) sets. Use CSS Grid with `grid-flow-dense` and fractional spans. Common arrangement: Row 1 with 3 columns, Row 2 with 2 columns split 70/30. Premium versions use `rounded-[2rem]` to `rounded-[2.5rem]` for major containers with diffusion shadows.
 
 ### Pattern: Z-axis cascade (high-end aesthetic)
 **Use when**: Premium marketing surfaces where depth communicates craftsmanship.
@@ -188,7 +187,7 @@ Landing-page patterns (AIDA structure, section order, hero composition and hero 
 - Final CTA: `py-32 md:py-48` with band background
 
 ### Bento layout
-- Card count: 3 to 5 (not 8)
+- Card count: see `references/surfaces/landing.md` (When to include a section)
 - Card sizes: vary — one tall, one wide, one or two square
 - Common arrangement: Row 1 with 3 columns, Row 2 with 2 columns split 70/30
 - Card radii: `rounded-[2rem]` to `rounded-[2.5rem]` for premium
@@ -220,7 +219,6 @@ Landing-page patterns (AIDA structure, section order, hero composition and hero 
 - 3-column equal card feature rows
 - Center-everything fallback at VARIANCE > 4
 - Bento grids with empty cells (use `grid-flow-dense`)
-- 8+ cards in a single bento grid
 - Cramped sections (`py-12` on marketing)
 - Horizontal scroll on mobile body content
 - Tab bar + sidebar + bottom nav at the same hierarchy level
@@ -240,13 +238,13 @@ Landing-page patterns (AIDA structure, section order, hero composition and hero 
 
 - [ ] Hero uses `min-h-[100dvh]`, never `h-screen` (severity: Critical)
 - [ ] H1 container is `max-w-5xl` or wider (severity: Critical)
-- [ ] H1 never exceeds 2 to 3 lines at any breakpoint (375px to 1440px) (severity: Critical)
+- [ ] H1 within the line limit in `references/surfaces/landing.md` (Hero composition) (severity: Critical)
 - [ ] Outer container caps at `max-w-7xl` or `max-w-[1400px]` (severity: Medium)
 - [ ] Page wrapped in `overflow-x-hidden w-full max-w-full` if motion is used (severity: Critical)
 - [ ] No horizontal scroll on mobile body content (severity: Critical)
 - [ ] CSS Grid used for layout; no flex percentage math (severity: High)
 - [ ] Bento grids use `grid-flow-dense`; no empty cells (severity: High)
-- [ ] Bento card count is 3 to 5, not 8 (severity: Medium)
+- [ ] Bento card count follows `references/surfaces/landing.md` (When to include a section) (severity: Medium)
 - [ ] No 3-equal-card feature rows (severity: High)
 - [ ] Marketing sections use `py-32 md:py-48` minimum (severity: High)
 - [ ] Sections feel like distinct cinematic chapters, not cramped slabs (severity: Medium)

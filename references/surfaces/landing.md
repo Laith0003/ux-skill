@@ -122,6 +122,7 @@ The section order comes from the archetype above and from the engine's page sequ
 
 - One headline, one supporting line, one primary CTA (filled) and at most one secondary (ghost button or text link), one product image or short motion. The CTA section below holds the button rules.
 - Above the fold, nothing else fights for attention. No carousel, no slideshow, no rotating taglines.
+- **H1 line limit.** The H1 runs 3 lines at most at every breakpoint from 375px to 1440px; a 4-line H1 fails. Meet the limit by widening the container (`max-w-5xl`, `max-w-6xl` or `w-full`) and scaling with `clamp()`, not by cutting the claim.
 - A "Built for X" line ("Built for finance", "Built for sales teams") under or beside the H1 pre-qualifies the visitor in one breath. It never sits above the H1; the eyebrow owns that slot.
 
 ### Hero patterns

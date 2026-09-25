@@ -87,7 +87,7 @@ Hero rules, including the hero height, live in `references/surfaces/landing.md`.
 |---|---|
 | Serif faces on dashboards, admin, data UIs, software UIs | Sans only. Geist + Geist Mono, Satoshi + JetBrains Mono, IBM Plex Sans + IBM Plex Mono, or similar disciplined pairings |
 | H1 that screams (`text-9xl`) just because it's an H1 | Hierarchy from weight + color + spacing; cap display at `text-4xl md:text-6xl tracking-tighter leading-none` unless the brief is maximalist |
-| H1 wrapping to 4, 5, or 6 lines | 2–3 lines maximum. Widen the container (`max-w-5xl`, `max-w-6xl`, `w-full`) and use `clamp()` to scale the font down |
+| H1 wrapping past the line limit in `references/surfaces/landing.md` (Hero composition) | Widen the container (`max-w-5xl`, `max-w-6xl`, `w-full`) and use `clamp()` to scale the font down |
 | Mismatched font families per section | One display + one body across the entire project. If a serif appears, it appears surgically — once or twice per page maximum |
 | Body text > 75 characters per line | `max-w-[65ch]` on paragraphs. Roughly 55-72 characters per line is the editorial sweet spot |
 | Body type below 16px on marketing surfaces | 16-18px minimum. Compressed body type reads as a startup template |
@@ -233,7 +233,7 @@ Hero component rules live in `references/surfaces/landing.md`. Dashboard card-de
 - **Touch targets**: ≥ 44×44 pt (iOS), ≥ 48×48 dp (Android) regardless of visual render
 - **Animation duration**: 150-300ms micro, ≤ 400ms complex hover, 400-800ms major reveals, 600-1200ms cinematic transitions, never > 1500ms
 - **Body line length**: 35-60 chars mobile, 55-72 desktop (`max-w-[65ch]`)
-- **Max H1 lines**: 2-3 (4 is failure, 5 is catastrophic, 6 is disqualifying)
+- **Max H1 lines**: the limit in `references/surfaces/landing.md` (Hero composition)
 - **Container max-width**: 1200-1400px or `max-w-7xl`
 - **Card internal padding**: 24-40px
 - **Font scale**: 12 / 14 / 16 / 18 / 24 / 32 / 48 / 64 / 96 / 144 — pick a 4-step subset and commit
@@ -269,7 +269,7 @@ Run before shipping any UI output. Severity tags indicate the failure mode if vi
 - Landing-page critical checks live in the checklist of `references/surfaces/landing.md`.
 
 ### High (must fix before review)
-- [ ] H1 ≤ 2-3 lines max
+- [ ] H1 within the line limit in `references/surfaces/landing.md` (Hero composition)
 - [ ] Every multi-column block (hero, image+text, card rows, stat bars) collapses to one column at ≤640px
 - [ ] Sections/feature/coverage cards use a real backdrop image where depth is needed, not a lone icon on a bare card
 - [ ] No single icon repeated across differentiated items (distinct icon per item, or none + typographic differentiation)
