@@ -32,6 +32,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Arabic is set larger by a ratio the two faces' metrics give](arabic-proportional.md)
 - [Fields and tables have their own inner spacing](field-and-table-spacing.md)
 - [Imagery is a foundation of ratios, a measured scrim, a duotone and a tint](imagery-foundation.md)
+- [Every build draws decorative brand art from the axes](generated-art.md)
 
 ## Contrast and the gate
 

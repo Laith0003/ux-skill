@@ -28,6 +28,8 @@ from engine.foundations.build import FOUNDATIONS, ValidationError, build_system
 from engine.foundations.color import brand_fidelity
 from engine.foundations.color_math import hex_to_rgb, rgb_to_hex
 from engine.foundations.export import dump_dtcg, to_css
+from engine.foundations.art import art_files
+from engine.foundations.art import report_lines as art_lines
 from engine.foundations.fonts import cdn_url, fonts_css, loading_lines
 from engine.foundations.gate import GateFailure, GateReport
 from engine.synthesizer.axes import (
@@ -37,6 +39,8 @@ from engine.synthesizer.axes import (
 
 # The files a build writes, in the order they are written and reported.
 FILES: Tuple[str, ...] = ("tokens.json", "tokens.css", "fonts.css", "system-report.md")
+# The generated art, written after FILES (engine.foundations.art).
+ART_FILES: Tuple[str, ...] = ("art/pattern.svg", "art/shapes.svg", "art/gradient.svg")
 # The folder the rule pack is written into, inside the out folder, when asked.
 RULE_PACK_DIR = "rule-pack"
 # The file in it that records the sha256 of the tokens.json it was built from.
@@ -608,6 +612,9 @@ _FONTS_LEAD = ("The tokens name these faces and fonts.css loads them: link fonts
                "folder beside fonts.css, so put the WOFF2 files there to self-host (each file is "
                "named in fonts.css). Each face also has a metric-matched fallback, so text keeps "
                "its size and line breaks while the face loads.")
+_ART_LEAD = ("Generated from the axes and the colors above, so a page is never empty for want "
+             "of photos: geometry sets the shapes, warmth the palette and formality how many "
+             "shapes there are and how regular they sit.")
 _ROLE_NOTE = re.compile(r"^color: brand role (?P<role>\w+) \((?P<why>.+)\)$")
 _ROLE_WORDS = {"fill": "the brand fills the main action",
                "accent": "the brand marks words and links, and the main action is ink",
@@ -630,7 +637,7 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
                   findings: Sequence[SystemFinding], rule_pack: bool = False,
                   fidelity: Sequence[str] = (), fonts: Sequence[str] = (),
                   font_link: str = "", audience: Sequence[str] = (),
-                  unread: Sequence[str] = ()) -> str:
+                  unread: Sequence[str] = (), art: bool = False) -> str:
     """system-report.md: one sentence on what was built, what it was built
     from, the gate result, every note or finding in plain words, and how to
     use the files, the rule pack among them when it was written. No time
@@ -672,6 +679,8 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
                   "To load them from Google Fonts instead of your own files, add this link to "
                   "the page head and remove the first block of @font-face rules in fonts.css:",
                   "", f"    {font_link}", ""]
+    if art:
+        lines += ["## Brand art", "", _ART_LEAD, "", *[f"- {a}" for a in art_lines()], ""]
     lines += ["## Files", "",
               "- tokens.json: every token in the W3C design tokens format (DTCG 2025.10), with "
               "its values for each mode.",
@@ -679,6 +688,8 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
               "- fonts.css: the faces and their metric-matched fallbacks; link it before "
               "tokens.css.",
               "- system-report.md: this report."]
+    if art:
+        lines.append("- art/: generated brand art, decorative SVG (see Brand art).")
     if rule_pack:
         lines.append(_PACK_LINE)
     return "\n".join(lines) + "\n"
@@ -699,6 +710,7 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
     fonts: Sequence[str] = ()
     font_link = ""
     tokens: Dict[str, str] = {}
+    art: Dict[str, str] = {}
     pack: Dict[str, str] = {}
     try:
         built = build_system(axes, brand, arabic=arabic, audience=audience)
@@ -716,6 +728,7 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
         notes = built.notes
         fidelity = brand_fidelity(built.tokens)
         fonts, font_link = loading_lines(built.tokens), cdn_url(built.tokens)
+        art = art_files(built.tokens, axes, brand)
         tokens = {"tokens.json": dump_dtcg(built.tokens),
                   "tokens.css": to_css(built.tokens, audience.default_scheme),
                   "fonts.css": fonts_css(built.tokens)}
@@ -728,12 +741,13 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
                 n = len(findings)
                 gate = (f"{gate} {_RULE_PACK}: {n} problem{'' if n == 1 else 's'} between its "
                         "guidance, contracts or records and these tokens.")
-                notes, tokens, fidelity, fonts = (), {}, (), ()
+                notes, tokens, fidelity, fonts, art = (), {}, (), (), {}
     report = render_report(brand, axes, axes_source, arabic, gate, notes, findings,
                            rule_pack=bool(pack), fidelity=fidelity, fonts=fonts,
                            font_link=font_link,
-                           audience=[e.line() for e in effects(audience)], unread=unread)
-    files = {**tokens, "system-report.md": report, **pack} if tokens else {}
+                           audience=[e.line() for e in effects(audience)], unread=unread,
+                           art=bool(art))
+    files = {**tokens, "system-report.md": report, **art, **pack} if tokens else {}
     return SystemOutput(passed=bool(tokens), files=files, report=report, gate=gate,
                         findings=findings, brand=brand, axes=axes, axes_source=axes_source,
                         arabic=arabic, audience=audience, unread=tuple(unread))

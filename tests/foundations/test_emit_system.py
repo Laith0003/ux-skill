@@ -7,7 +7,7 @@ import pytest
 import engine.foundations.color as color_module
 from engine.foundations import ValidationError, build_system, dump_dtcg, to_css
 from engine.foundations.emit import (
-    FILES, NEUTRAL, NEUTRAL_SOURCE, SystemFinding, make_system,
+    ART_FILES, FILES, NEUTRAL, NEUTRAL_SOURCE, SystemFinding, make_system,
 )
 from engine.foundations.validate import Problem
 from engine.synthesizer.axes import AxisValues
@@ -16,7 +16,7 @@ from engine.synthesizer.axes import AxisValues
 def test_passing_build_returns_all_three_files():
     out = make_system("#3366FF", NEUTRAL, NEUTRAL_SOURCE)
     assert out.passed and out.findings == ()
-    assert tuple(out.files) == FILES
+    assert tuple(out.files) == FILES + ART_FILES
     built = build_system(NEUTRAL, "#3366FF")
     assert out.files["tokens.json"] == dump_dtcg(built.tokens)
     assert out.files["tokens.css"] == to_css(built.tokens)
@@ -314,13 +314,13 @@ def test_failure_text_of_a_passing_system_is_empty():
 # The rule pack: off by default, written after the three files when asked,
 # and a pack that does not fit the build writes nothing.
 def test_the_rule_pack_is_off_by_default_and_follows_the_three_files():
-    from engine.foundations.emit import FILES, RULE_PACK_DIR
+    from engine.foundations.emit import ART_FILES, FILES, RULE_PACK_DIR
     plain = make_system("#3366FF", NEUTRAL, "x")
-    assert tuple(plain.files) == FILES and "rule-pack" not in plain.report
+    assert tuple(plain.files) == FILES + ART_FILES and "rule-pack" not in plain.report
     packed = make_system("#3366FF", NEUTRAL, "x", rule_pack=True)
     names = list(packed.files)
-    assert tuple(names[:4]) == FILES and names[4] == f"{RULE_PACK_DIR}/README.md"
-    assert all(n.startswith(f"{RULE_PACK_DIR}/") for n in names[4:])
+    assert tuple(names[:7]) == FILES + ART_FILES and names[7] == f"{RULE_PACK_DIR}/README.md"
+    assert all(n.startswith(f"{RULE_PACK_DIR}/") for n in names[7:])
     assert {k: packed.files[k] for k in FILES[:3]} == {k: plain.files[k] for k in FILES[:3]}
     assert "- rule-pack/: the rules for AI agents and people" in packed.report
     assert packed.files["system-report.md"] == packed.report

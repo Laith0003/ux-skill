@@ -21,7 +21,8 @@ from engine.foundations.emit import NEUTRAL, make_system  # noqa: E402
 from engine.synthesizer.axes import compute_axes  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-FILES = ("tokens.json", "tokens.css", "fonts.css", "system-report.md")
+FILES = ("tokens.json", "tokens.css", "fonts.css", "system-report.md", "art/pattern.svg",
+         "art/shapes.svg", "art/gradient.svg")
 
 
 def _runner():
@@ -156,6 +157,7 @@ def test_a_write_error_exits_1_and_changes_nothing(tmp_path, monkeypatch):
 
     import engine.foundations.emit as emit
     for name in FILES:
+        (tmp_path / name).parent.mkdir(exist_ok=True)
         (tmp_path / name).write_text("old\n", encoding="utf-8")
     before = _snapshot(tmp_path)
 
@@ -280,7 +282,7 @@ def test_rule_pack_flag_writes_the_pack_beside_the_three_files(tmp_path):
     out = tmp_path / "ds"
     result, payload = _run("--brand", "#3366FF", "--out", str(out), "--rule-pack")
     assert result.exit_code == 0, result.output
-    assert payload["written"][:4] == list(FILES)
+    assert payload["written"][:7] == list(FILES)
     assert "rule-pack/README.md" in payload["written"]
     assert (out / "rule-pack" / "color" / "audit.md").is_file()
     assert (out / "rule-pack" / "contracts" / "button.yaml").is_file()
@@ -293,7 +295,7 @@ def test_without_the_flag_no_rule_pack_is_written(tmp_path):
     out = tmp_path / "ds"
     result, _ = _run("--brand", "#3366FF", "--out", str(out))
     assert result.exit_code == 0
-    assert sorted(p.name for p in out.iterdir()) == sorted(FILES)
+    assert sorted(p.name for p in out.iterdir()) == sorted({n.split("/")[0] for n in FILES})
 
 
 # A pack beside tokens it was not built from is reported as stale, named
