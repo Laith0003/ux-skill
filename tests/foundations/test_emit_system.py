@@ -307,3 +307,36 @@ def test_failure_text_of_a_passing_system_is_empty():
     from engine.foundations.emit import failure_message, failure_text
     out = make_system("#3366FF", NEUTRAL, NEUTRAL_SOURCE)
     assert failure_text(out) == "" and failure_message(out) == ""
+
+
+# The rule pack: off by default, written after the three files when asked,
+# and a pack that does not fit the build writes nothing.
+def test_the_rule_pack_is_off_by_default_and_follows_the_three_files():
+    from engine.foundations.emit import FILES, RULE_PACK_DIR
+    plain = make_system("#3366FF", NEUTRAL, "x")
+    assert tuple(plain.files) == FILES and "rule-pack" not in plain.report
+    packed = make_system("#3366FF", NEUTRAL, "x", rule_pack=True)
+    names = list(packed.files)
+    assert tuple(names[:3]) == FILES and names[3] == f"{RULE_PACK_DIR}/README.md"
+    assert all(n.startswith(f"{RULE_PACK_DIR}/") for n in names[3:])
+    assert {k: packed.files[k] for k in FILES[:2]} == {k: plain.files[k] for k in FILES[:2]}
+    assert "- rule-pack/: the rules for AI agents and people" in packed.report
+    assert packed.files["system-report.md"] == packed.report
+
+
+def test_a_rule_pack_that_does_not_fit_writes_nothing(monkeypatch):
+    import engine.rulepack.generate as generate
+    from engine.foundations.emit import failure_message
+
+    def broken(ts):
+        raise generate.RulePackError(["card: container.fill needs an edge"])
+    monkeypatch.setattr(generate, "build_rule_pack", broken)
+    out = make_system("#3366FF", NEUTRAL, "x", rule_pack=True)
+    assert out.passed is False and out.files == {}
+    assert [(f.subject, f.message) for f in out.findings] == [
+        ("rule-pack", "card: container.fill needs an edge")]
+    assert "The rule pack could not be built: 1 problem" in out.gate
+    assert "the tokens passed the WCAG gate, but the rule pack found 1 problem" in out.report
+    assert "Build again without the rule pack" in out.report
+    assert failure_message(out).startswith("Nothing was written: the tokens passed the WCAG "
+                                           "gate, but the rule pack found 1 problem")

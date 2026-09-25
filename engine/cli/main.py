@@ -778,17 +778,23 @@ else:
                   help="Leave out the Arabic face and scale.")
     @click.option("--out", "out_dir", required=True,
                   help="Folder for tokens.json, tokens.css and system-report.md.")
+    @click.option("--rule-pack", "rule_pack", is_flag=True,
+                  help="Also write the AI rule pack into --out/rule-pack/: per foundation "
+                       "architecture, reference, audit and handoff files, plus the contracts "
+                       "and decision records.")
     @click.option("--force", is_flag=True,
                   help="Replace files in --out that differ. Without it nothing is overwritten.")
     @click.pass_context
-    def system_build_cmd(ctx, brand, brief_path, axes_text, latin_only, out_dir, force) -> None:
-        """Build tokens.json, tokens.css and system-report.md into --out.
+    def system_build_cmd(ctx, brand, brief_path, axes_text, latin_only, out_dir, rule_pack,
+                         force) -> None:
+        """Build tokens.json, tokens.css and system-report.md into --out,
+        and with --rule-pack the rule pack into --out/rule-pack/.
 
         Axes come from --brief, else --axes, else 0.5 on every axis; the
         report says which. Exit 0 when the files are written or already
-        identical, 1 when nothing was written (a gate or validation finding,
-        a file in --out that differs, or the folder could not be written),
-        2 for a bad input.
+        identical, 1 when nothing was written (a gate, validation or rule
+        pack finding, a file in --out that differs, or the folder could not
+        be written), 2 for a bad input.
         """
         from engine.foundations.emit import (
             STATUS_EXIT, InputError, check_out_dir, choose_axes, failure_text, make_system,
@@ -801,7 +807,8 @@ else:
             out = check_out_dir(out_dir, "--out")
         except InputError as exc:
             raise click.UsageError(str(exc)) from None
-        system = make_system(brand_hex, axes, source, arabic=not latin_only)
+        system = make_system(brand_hex, axes, source, arabic=not latin_only,
+                             rule_pack=rule_pack)
         outcome = write_outcome(system, out, force=force)
         status = outcome["status"]
         _emit({**system.to_dict(), "out": str(out), **outcome}, ctx.obj["pretty"])

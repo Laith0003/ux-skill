@@ -394,3 +394,52 @@ def test_an_interrupt_while_making_the_staging_folder_leaves_no_new_folder(tmp_p
     with pytest.raises(KeyboardInterrupt):
         write_files(tmp_path / "new" / "ds", FILES)
     assert list(tmp_path.iterdir()) == []
+
+
+# Names inside subfolders (the rule pack) are written, compared and rolled
+# back the same way, and a file in place of a subfolder is named.
+NESTED = {"tokens.json": "{}\n", "rule-pack/README.md": "# r\n",
+          "rule-pack/color/audit.md": "# a\n"}
+
+
+def test_names_inside_subfolders_are_written_and_compared(tmp_path):
+    plan = write_files(tmp_path, NESTED)
+    assert plan.write == tuple(NESTED)
+    assert (tmp_path / "rule-pack" / "color" / "audit.md").read_text(encoding="utf-8") == "# a\n"
+    assert write_files(tmp_path, NESTED) == WritePlan((), tuple(NESTED), ())
+    (tmp_path / "rule-pack" / "color" / "audit.md").write_text("# mine\n", encoding="utf-8")
+    assert write_files(tmp_path, NESTED).conflicts == ("rule-pack/color/audit.md",)
+
+
+def test_a_failure_removes_the_subfolders_it_made(tmp_path, monkeypatch):
+    (tmp_path / "keep.txt").write_text("x", encoding="utf-8")
+    before = _snapshot(tmp_path)
+    monkeypatch.setattr(emit, "_place", _fail_on_call(emit._place, 3))
+    with pytest.raises(InputError, match="so nothing in .* was changed"):
+        write_files(tmp_path, NESTED)
+    assert _snapshot(tmp_path) == before
+
+
+def test_a_file_where_a_subfolder_goes_is_named(tmp_path):
+    (tmp_path / "rule-pack").write_text("not a folder", encoding="utf-8")
+    with pytest.raises(InputError) as exc:
+        write_files(tmp_path, NESTED)
+    assert str(exc.value) == (
+        f"{tmp_path / 'rule-pack'} is a file or a link where a folder should be, so "
+        "rule-pack/README.md cannot be written; move it away or write the system into a "
+        "different folder")
+    assert sorted(p.name for p in tmp_path.iterdir()) == ["rule-pack"]
+
+
+def test_a_link_where_a_subfolder_goes_is_named_and_never_written_through(tmp_path):
+    elsewhere = tmp_path / "elsewhere"
+    elsewhere.mkdir()
+    out = tmp_path / "out"
+    out.mkdir()
+    (out / "rule-pack").symlink_to(elsewhere, target_is_directory=True)
+    with pytest.raises(InputError) as exc:
+        write_files(out, NESTED)
+    assert str(exc.value).startswith(f"{out / 'rule-pack'} is a file or a link where a folder "
+                                     "should be")
+    assert list(elsewhere.iterdir()) == [] and sorted(p.name for p in out.iterdir()) == [
+        "rule-pack"]

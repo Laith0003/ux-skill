@@ -279,3 +279,23 @@ def test_help_says_system_pack_is_3x_and_points_at_system_build():
     result = _runner().invoke(cli, ["--help"])
     line = next(line for line in result.stdout.splitlines() if "system-pack" in line)
     assert "3.x" in line and "system build" in line, line
+
+
+def test_rule_pack_flag_writes_the_pack_beside_the_three_files(tmp_path):
+    out = tmp_path / "ds"
+    result, payload = _run("--brand", "#3366FF", "--out", str(out), "--rule-pack")
+    assert result.exit_code == 0, result.output
+    assert payload["written"][:3] == list(FILES)
+    assert "rule-pack/README.md" in payload["written"]
+    assert (out / "rule-pack" / "color" / "audit.md").is_file()
+    assert (out / "rule-pack" / "contracts" / "button.yaml").is_file()
+    assert (out / "rule-pack" / "decisions" / "HISTORY.md").is_file()
+    again, payload = _run("--brand", "#3366FF", "--out", str(out), "--rule-pack")
+    assert again.exit_code == 0 and payload["status"] == "unchanged"
+
+
+def test_without_the_flag_no_rule_pack_is_written(tmp_path):
+    out = tmp_path / "ds"
+    result, _ = _run("--brand", "#3366FF", "--out", str(out))
+    assert result.exit_code == 0
+    assert sorted(p.name for p in out.iterdir()) == sorted(FILES)

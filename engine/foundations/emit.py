@@ -32,6 +32,8 @@ from engine.synthesizer.axes import (
 
 # The files a build writes, in the order they are written and reported.
 FILES: Tuple[str, ...] = ("tokens.json", "tokens.css", "system-report.md")
+# The folder the rule pack is written into, inside the out folder, when asked.
+RULE_PACK_DIR = "rule-pack"
 
 # Every status `uxskill system build` reports, with its exit code: the
 # files were written, or were already identical (0); a file in the out
@@ -383,6 +385,7 @@ _RAMP_NOTE = re.compile(
 _MOVE_SENTENCE = re.compile(r"^(?P<head>.*?:1\)?)\. Move \S+ to a step with more contrast against "
                             r"\S+\.(?: .*)?$")
 _VALIDATION = "Validation failed"
+_RULE_PACK = "The rule pack could not be built"
 
 
 def _and(items: Sequence[str]) -> str:
@@ -458,6 +461,9 @@ def _opening(brand: str, gate_line: str, findings: Sequence[SystemFinding]) -> s
         if gate_line.startswith(_VALIDATION):
             why = (f"the generated tokens broke {n} structural rule{'' if n == 1 else 's'}, so "
                    "the WCAG gate did not run and nothing was written")
+        elif _RULE_PACK in gate_line:
+            why = (f"the tokens passed the WCAG gate, but the rule pack found {n} "
+                   f"problem{'' if n == 1 else 's'}, so nothing was written")
         else:
             why = (f"the WCAG gate found {n} problem{'' if n == 1 else 's'} with these inputs, "
                    "so nothing was written")
@@ -497,6 +503,13 @@ _CHANGE_GATE = ("Change the inputs and build again: a darker or more saturated b
 _CHANGE_VALIDATION = ("No brand color or axes should cause this, so it is a problem in the "
                       "engine: build again with the same inputs, and if it fails "
                       "again, report it with the brand color, the axes and the findings below.")
+_CHANGE_PACK = ("No brand color or axes should cause this: the rule pack's guidance, contracts "
+                "or decision records do not fit the tokens this version builds. Build again "
+                "without the rule pack to get the tokens, and report the findings below.")
+_PACK_LINE = ("- rule-pack/: the rules for AI agents and people: per foundation an "
+              "architecture, reference, audit and handoff file, the content and right-to-left "
+              "rules, the component contracts and the decision records. Start at "
+              "rule-pack/README.md.")
 _MODES_LINE = ("Switch a mode with an attribute on the html element: data-theme=\"dark\" for dark "
                "mode, data-contrast=\"high\" for high contrast, data-density=\"compact\" for "
                "compact spacing, dir=\"rtl\" for right to left, data-motion=\"reduced\" for "
@@ -505,15 +518,18 @@ _MODES_LINE = ("Switch a mode with an attribute on the html element: data-theme=
 
 
 def _change(gate_line: str) -> str:
-    return _CHANGE_VALIDATION if gate_line.startswith(_VALIDATION) else _CHANGE_GATE
+    if gate_line.startswith(_VALIDATION):
+        return _CHANGE_VALIDATION
+    return _CHANGE_PACK if _RULE_PACK in gate_line else _CHANGE_GATE
 
 
 def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
                   gate_line: str, notes: Sequence[str],
-                  findings: Sequence[SystemFinding]) -> str:
+                  findings: Sequence[SystemFinding], rule_pack: bool = False) -> str:
     """system-report.md: one sentence on what was built, what it was built
     from, the gate result, every note or finding in plain words, and how to
-    use the files. No time stamps, so the same inputs give the same bytes."""
+    use the files, the rule pack among them when it was written. No time
+    stamps, so the same inputs give the same bytes."""
     scripts = ("Latin and Arabic. Right to left (dir=\"rtl\") switches text to the Arabic face "
                "and type scale." if arabic else "Latin only (built with the Latin-only option).")
     lines = ["# Design system report", "", _opening(brand, gate_line, findings), "",
@@ -544,16 +560,21 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
               "its values for each mode.",
               f"- tokens.css: CSS custom properties. {_MODES_LINE}",
               "- system-report.md: this report."]
+    if rule_pack:
+        lines.append(_PACK_LINE)
     return "\n".join(lines) + "\n"
 
 
 def make_system(brand: str, axes: AxisValues, axes_source: str, *,
-                arabic: bool = True) -> SystemOutput:
-    """Build, validate and gate. On success `files` holds all three texts;
-    on a validation or gate failure `files` is empty and `findings` names
-    every problem, so a caller can never write a failing system."""
+                arabic: bool = True, rule_pack: bool = False) -> SystemOutput:
+    """Build, validate and gate. On success `files` holds all three texts,
+    and with rule_pack every rule pack file under RULE_PACK_DIR after them;
+    on a validation, gate or rule pack failure `files` is empty and
+    `findings` names every problem, so a caller can never write a failing
+    system."""
     notes: Sequence[str] = ()
     tokens: Dict[str, str] = {}
+    pack: Dict[str, str] = {}
     try:
         built = build_system(axes, brand, arabic=arabic)
     except ValidationError as exc:
@@ -569,8 +590,19 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
         gate = built.report.summary().splitlines()[0]
         notes = built.notes
         tokens = {"tokens.json": dump_dtcg(built.tokens), "tokens.css": to_css(built.tokens)}
-    report = render_report(brand, axes, axes_source, arabic, gate, notes, findings)
-    files = {**tokens, "system-report.md": report} if tokens else {}
+        if rule_pack:
+            from engine.rulepack.generate import RulePackError, build_rule_pack
+            try:
+                pack = build_rule_pack(built.tokens)
+            except RulePackError as exc:
+                findings = tuple(SystemFinding(RULE_PACK_DIR, "", p) for p in exc.problems)
+                n = len(findings)
+                gate = (f"{gate} {_RULE_PACK}: {n} problem{'' if n == 1 else 's'} between its "
+                        "guidance, contracts or records and these tokens.")
+                notes, tokens = (), {}
+    report = render_report(brand, axes, axes_source, arabic, gate, notes, findings,
+                           rule_pack=bool(pack))
+    files = {**tokens, "system-report.md": report, **pack} if tokens else {}
     return SystemOutput(passed=bool(tokens), files=files, report=report, gate=gate,
                         findings=findings, brand=brand, axes=axes, axes_source=axes_source,
                         arabic=arabic)
@@ -594,6 +626,10 @@ def failure_message(output: SystemOutput) -> str:
     if output.passed:
         return ""
     n = len(output.findings)
+    if _RULE_PACK in output.gate:
+        return (f"Nothing was written: the tokens passed the WCAG gate, but the rule pack found "
+                f"{n} problem{'' if n == 1 else 's'}, which no brand color or axes should cause. "
+                "Build again without the rule pack to get the tokens, and report the findings.")
     if output.gate.startswith(_VALIDATION):
         return (f"Nothing was written: the generated tokens broke {n} structural "
                 f"rule{'' if n == 1 else 's'}, which no brand color or axes should cause. Build "
@@ -672,10 +708,22 @@ def _same_as_disk(target: Path, name: str, data: bytes) -> bool:
                          "write the system into a different folder") from None
 
 
+def _blocked_folder(out_dir: Path, name: str) -> Optional[Path]:
+    """For a name inside subfolders (rule-pack/color/audit.md), the first
+    of those subfolders that exists as something other than a folder."""
+    folder = out_dir
+    for part in Path(name).parts[:-1]:
+        folder = folder / part
+        if folder.is_symlink() or (folder.exists() and not folder.is_dir()):
+            return folder
+    return None
+
+
 def plan_writes(out_dir: Path, files: Mapping[str, str]) -> WritePlan:
     """Compare each file with what is on disk, without writing. A link in
     place of a file is never written through or replaced: an identical one
-    is left alone, any other is refused."""
+    is left alone, any other is refused. A name may sit in subfolders; a
+    file or link where one of them should be is named."""
     write: List[str] = []
     unchanged: List[str] = []
     conflicts: List[str] = []
@@ -683,6 +731,11 @@ def plan_writes(out_dir: Path, files: Mapping[str, str]) -> WritePlan:
         target = out_dir / name
         data = text.encode("utf-8")
         try:
+            blocked = _blocked_folder(out_dir, name)
+            if blocked is not None:
+                raise InputError(f"{blocked} is a file or a link where a folder should be, so "
+                                 f"{name} cannot be written; move it away or write the system "
+                                 "into a different folder")
             if target.is_dir():
                 raise InputError(f"{target} is a folder, so {name} cannot be written there; "
                                  "rename that folder or write the system into a different "
@@ -718,7 +771,8 @@ def conflict_message(out_dir: Path, plan: WritePlan, force_flag: str = "--force"
 
 
 def _stage(path: Path, data: bytes) -> None:
-    """Write one file into the staging folder."""
+    """Write one file into the staging folder, making its subfolders."""
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(data)
 
 
@@ -800,6 +854,7 @@ def write_files(out_dir: Path, files: Mapping[str, str], *, force: bool = False)
         raise InputError(f"{out_dir} cannot be written ({_reason(exc)}), so nothing in it was "
                          "changed; pass a folder you can write to") from None
     placed: List[Tuple[str, Optional[Path]]] = []
+    inner: List[Path] = []
     name = names[0]
     try:
         for name in names:
@@ -809,12 +864,17 @@ def write_files(out_dir: Path, files: Mapping[str, str], *, force: bool = False)
             placed.append((name, previous))
             if previous is not None:
                 os.replace(str(out_dir / name), str(previous))
+            folder = (out_dir / name).parent
+            if not folder.exists():
+                inner[:0] = _missing_folders(folder)
+                folder.mkdir(parents=True)
             _place(stage / name, out_dir / name)
     except BaseException as exc:
         # Any failure, an interrupt included, puts the folder back first.
         reason = _reason(exc) if isinstance(exc, OSError) else (
             "interrupted" if isinstance(exc, KeyboardInterrupt) else type(exc).__name__)
         left = _restore(out_dir, placed)
+        _remove_folders(inner)
         if left:
             # The staging folder holds the old copies, so it stays; the
             # person needs each path whatever stopped the write.
