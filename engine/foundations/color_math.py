@@ -94,6 +94,14 @@ def oklch_to_hex(L: float, C: float, H: float) -> str:
 _GAMUT_JND = 0.02
 _GAMUT_EPSILON = 0.0001
 _IN_GAMUT = 1e-6
+# A color that moves less than this (about one 8-bit step) sits outside sRGB
+# only by float noise or rounding in how it was written: not reported.
+_REPORT_FLOOR = 0.002
+
+
+def oklab_to_oklch(L: float, a: float, b: float) -> Tuple[float, float, float]:
+    """OKLab to OKLCH, the hue in degrees from 0 to 360."""
+    return L, math.hypot(a, b), math.degrees(math.atan2(b, a)) % 360
 
 
 def _linear_to_oklab(rgb) -> Tuple[float, float, float]:
@@ -142,7 +150,8 @@ def gamut_map_oklch(L: float, C: float, H: float) -> Tuple[str, float, bool]:
     rgb = _clip(rgb)
     hx = rgb_to_hex(tuple(_from_linear(c) for c in rgb))
     got = _linear_to_oklab(tuple(_to_linear(c) for c in hex_to_rgb(hx)))
-    return hx, math.dist(origin, got), mapped
+    distance = math.dist(origin, got)
+    return hx, distance, mapped and distance > _REPORT_FLOOR
 
 
 def _gamut_search(L: float, C: float, H: float) -> Tuple[float, float, float]:

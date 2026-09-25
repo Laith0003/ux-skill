@@ -4,10 +4,11 @@ a report of what it read.
 The report records the source (path, format, sha256, size), how many
 entries the source held and how many became tokens, the token types and
 the modes, and four lists: entries renamed on the way in, entries read
-with a note, colors mapped into sRGB (ruling M4-R5), and entries not read.
-Every list item names where the entry sits and says what happened or how
-to write it so it can be read. Nothing
-is guessed: an entry with more than one reading is not read.
+with a note, colors mapped into sRGB (an out-of-gamut color is mapped by
+CSS Color 4 gamut mapping, never refused), and entries not read. Every list
+item names where the entry sits and says what happened or how to write it
+so it can be read. Nothing is guessed: an entry with more than one reading
+is not read.
 """
 from __future__ import annotations
 
