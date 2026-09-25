@@ -309,3 +309,23 @@ def test_mcp_image_extract_reads_the_existing_system(client: Path) -> None:
     Image.new("RGB", (64, 64), (28, 100, 217)).save(img)
     out = TOOLS["ux_image_extract"][0]({"path": str(img), "project_root": str(client)})
     assert out["recommendation"]["palette"]["status"] == "suggestion"
+
+
+def test_detect_reads_hues_and_hsl_through_the_value_reader():
+    """detect keeps a lenient reading for what the importer refuses, but a
+    hue and an hsl color are converted by the value reader's own helpers,
+    not by copies of them."""
+    import ast
+    import inspect
+
+    from engine.existing import detect
+
+    source = inspect.getsource(detect)
+    tree = ast.parse(source)
+    imported = {a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names}
+    assert "colorsys" not in imported
+    assert '"grad"' not in source and "_hsl_hex" not in source
+    # The lenient paths still read, in the reader's units.
+    assert detect.normalize_hex("hsl(0.5turn, 100%, 50%, 1, 2)") == "#00FFFF"
+    assert detect.normalize_hex("oklch(60% 0.1 3.14rad, 1)") == "#239382"
+    assert detect.normalize_hex({"colorSpace": "hsl", "components": [225, 100, 60]}) == "#3366FF"
