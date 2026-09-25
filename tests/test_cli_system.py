@@ -25,13 +25,8 @@ FILES = ("tokens.json", "tokens.css", "system-report.md")
 
 
 def _runner():
-    """stderr apart from stdout on every supported click: 8.1 (the last
-    release for Python 3.9) needs mix_stderr=False; 8.2 removed the option
-    and always keeps them apart."""
-    try:
-        return CliRunner(mix_stderr=False)
-    except TypeError:
-        return CliRunner()
+    """click 8.2 and later always keep stderr apart from stdout."""
+    return CliRunner()
 
 
 def _run(*args):

@@ -18,7 +18,7 @@ Two hard-won rules (see references/process/brand-extraction.md):
 
 Signal capture (reading the live DOM, sampling logo pixels, reading the logo's
 type style) is I/O + vision done by the caller. This module is the deterministic
-normalize + render half: signals dict -> BrandProfile -> markdown. Python 3.9+.
+normalize + render half: signals dict -> BrandProfile -> markdown. Python 3.10+.
 """
 from __future__ import annotations
 

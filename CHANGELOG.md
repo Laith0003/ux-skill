@@ -57,6 +57,12 @@ gives 3.2. Ask for the beta:
   `pipx upgrade --pip-args=--pre uxskill`.
 - npm: `npx uxskill@beta`.
 
+### Python 3.10 or newer
+- 4.0 needs Python 3.10 or newer. Python 3.9 is past end of life, so its
+  support ends here. On 3.9, pip keeps installing 3.2.x, which still works;
+  to get 4.0, upgrade Python to 3.10 or newer, or pin
+  `pip install 'uxskill<4'` to stay on 3.2.x on purpose.
+
 ### If you are building a product or a landing page
 - One command writes three files into a folder:
   `uxskill system build --brand '#3366FF' --out design-system`.

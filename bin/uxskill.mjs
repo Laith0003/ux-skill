@@ -110,7 +110,7 @@ async function main() {
   const pinned = `uxskill==${version}`;
   if (!(await which("python3"))) {
     console.error(
-      "ux-skill: no Python runtime found (python3 is not on PATH). Install Python 3.9+, " +
+      "ux-skill: no Python runtime found (python3 is not on PATH). Install Python 3.10+, " +
       `then run:\n  pipx install ${pinned}\n` +
       "or visit https://uxskill.laithjunaidy.com for help."
     );

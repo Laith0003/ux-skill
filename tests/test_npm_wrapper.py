@@ -140,6 +140,7 @@ def test_without_python3_it_says_there_is_no_python_runtime(tmp_path):
     out, calls, version = _run_packaged(tmp_path, python3=False)
     assert out.returncode == 1
     assert "no Python runtime" in out.stderr and f"uxskill=={version}" in out.stderr
+    assert "Install Python 3.10+" in out.stderr
     assert not any(c.startswith("uxskill system") for c in calls)
 
 

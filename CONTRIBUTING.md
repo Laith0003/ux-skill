@@ -46,7 +46,7 @@ Local dev:
 git clone https://github.com/Laith0003/ux-skill.git
 cd ux-skill
 
-# Python ≥3.9 baseline; ≥3.10 unlocks the MCP transport.
+# Python 3.10 or newer.
 python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 
@@ -67,7 +67,7 @@ python3 scripts/build-commands-page.py
 ln -s "$(pwd)" ~/.claude/plugins/ux
 ```
 
-CI runs the pytest suite across Python 3.9 / 3.10 / 3.11 / 3.12 / 3.13 (matrix in `.github/workflows/test.yml`). Your PR must pass CI. The advisor reviewer will run your changes through `python3 -m engine.cli.main lint` — PRs must lint clean against ux-skill itself. We dogfood our own product.
+CI runs the pytest suite across Python 3.10 / 3.11 / 3.12 / 3.13 (matrix in `.github/workflows/test.yml`). Your PR must pass CI. The advisor reviewer will run your changes through `python3 -m engine.cli.main lint` — PRs must lint clean against ux-skill itself. We dogfood our own product.
 
 ## Releases
 
