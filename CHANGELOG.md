@@ -80,11 +80,12 @@ gives 3.2. Ask for the beta:
 - npm: `npx uxskill@beta`.
 
 ### If you are building a product or a landing page
-- One command writes three files into a folder:
+- One command writes the system into a folder:
   `uxskill system build --brand '#3366FF' --out design-system`.
   `tokens.css` holds CSS custom properties to link from your page,
-  `tokens.json` holds the same tokens for tools, and `system-report.md` says
-  in plain words what was built, from what, and what the engine adjusted.
+  `fonts.css` loads the faces, `tokens.json` holds the same tokens for tools,
+  `art/` holds decorative brand art, and `system-report.md` says in plain
+  words what was built, from what, and what the engine adjusted.
 - Style with the roles, not raw colors: `var(--color-action-primary)` for a
   button, `var(--color-text-default)` for body text,
   `var(--color-surface-page)` for the page.
@@ -99,10 +100,10 @@ gives 3.2. Ask for the beta:
   `data-density="compact"`, `dir="rtl"` or `data-motion="reduced"` on the
   html element. With no attribute, dark mode, high contrast and reduced motion
   follow the operating system.
-- Fonts: the tokens name the font families, but nothing loads them. Load the
-  fonts on your page (from Google Fonts or self-hosted files); until you do,
-  the browser falls back to system faces. The report names the pair the
-  engine chose.
+- Fonts: link `fonts.css` before `tokens.css`. It loads each face from the
+  reader's own copy first, then from self-hosted files in `fonts/`, and the
+  report gives the Google Fonts link. Until a face loads, its matched
+  fallback keeps text the same size. The report names the faces chosen.
 - In Claude Code, `/ux-system create` checks that the installed uxskill is
   the beta, asks for the brand color, runs the build, and explains the
   report.
@@ -114,8 +115,8 @@ gives 3.2. Ask for the beta:
   brief.
 
 ### If you design design systems
-- Eight foundations: color, type, space, layout, radius, border, elevation,
-  motion. Each has primitives (the raw scale) and semantic roles (what
+- Nine foundations: color, type, space, layout, radius, border, elevation,
+  motion, imagery. Each has primitives (the raw scale) and semantic roles (what
   components use), and roles only point at primitives.
 - `tokens.json` follows the W3C design tokens format (DTCG 2025.10). Each
   token carries its value for every mode it changes in: light and dark,
@@ -128,10 +129,47 @@ gives 3.2. Ask for the beta:
 - MCP: `ux_system_build` takes `brand`, `brief` or `axes`, and `latin_only`.
   It returns pass or fail, the gate line, every finding, the report and each
   file's size, small enough for an agent to read. Pass `out` (a folder) and
-  it writes the three files as the command does, with the same statuses, and
+  it writes the files as the command does, with the same statuses, and
   refuses a file that differs unless `force` is true. Pass `include_files`
   to get the CSS and tokens text back instead. A bad input returns an
   `error` that names the field and the fix.
+
+### Character
+
+The 4.0 beta builds systems with character: every foundation now varies
+continuously with the seven axes, so two briefs of different character build
+systems a person can tell apart. No industry or keyword table picks a look.
+
+- A build writes `fonts.css` (the chosen faces, local copies first, then
+  self-hosted files, with metric-matched fallbacks) and decorative brand art
+  in `art/` beside `tokens.json`, `tokens.css` and `system-report.md`.
+- Three type roles: a display face, a text face and a mono face, chosen from
+  a small catalog of open-license faces by the axes, each with an Arabic
+  partner. Weight and letter spacing change along the scale; new styles for
+  a section title, a large figure, a label and a large control label.
+- The brand keeps its exact color on the main button whenever white or black
+  text reads on it; the button's edge carries its contrast against the page.
+  The axes choose whether the brand fills the action, marks words and links,
+  or draws edges, and add a supporting accent, brand tints, a brand band,
+  decorative, illustration, logo, code and table colors.
+- Corners, shadows, edges, neutrals, status colors and motion curves follow
+  the axes: roundness from geometry and formality, a surface treatment from
+  flat to deep, a warm or cool neutral tint, status colors harmonized to the
+  brand, and an expressive motion role that reduced motion removes.
+- High contrast never weakens the focus ring, makes edges, the ring and text
+  one step heavier, keeps every surface level apart and keeps the error edge
+  red.
+- An imagery foundation: media ratios, a scrim measured over a white image,
+  a duotone pair and a brand tint. The report names the page composition a
+  landing page starts from: split, stacked, bento, editorial column or
+  full-bleed media.
+- Structured brief fields: age, languages and primary script, default
+  scheme, reading context and brand role. The report says what each changed
+  and why, and names every brief word the engine did not read with how to
+  pass it.
+- Eighteen component contracts, the form controls, chip, badge, link,
+  navigation, progress and table among them, and fixes to the text field,
+  card and status banner.
 
 ### The WCAG gate
 - Every text, control and focus color pairing is measured in light and dark,
