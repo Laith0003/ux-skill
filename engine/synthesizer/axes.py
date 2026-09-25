@@ -21,6 +21,7 @@ the other. Industry defaults seed the values; brief tags adjust them.
 """
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, asdict
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
@@ -159,18 +160,56 @@ def _normalize_tag(tag: str) -> str:
     return (tag or "").strip().lower()
 
 
+# Common short forms of an industry word, matched as whole words only.
+INDUSTRY_ALIASES: Dict[str, str] = {
+    "health": "healthcare",
+    "bank": "fintech-banking",
+    "payment": "fintech-payments",
+    "auto": "automotive",
+    "edu": "education",
+}
+
+
+def _industry_words(text: str) -> List[str]:
+    return [w for w in re.split(r"[^a-z0-9]+", text.lower()) if w]
+
+
+def match_industry(industry: Optional[str]) -> Optional[str]:
+    """The industry id a brief's industry text names, or None.
+
+    Whole words only, so an unknown word never lands on an unrelated
+    industry: the text is an id (in any case, with spaces, hyphens or
+    underscores), or it contains an id as consecutive whole words (the first
+    in table order wins), or it is a single word that is one part of an id
+    (again the first in table order) or a listed short form.
+    """
+    words = _industry_words(industry or "")
+    if not words:
+        return None
+    joined = "-".join(words)
+    if joined in INDUSTRY_SEEDS:
+        return joined
+    for key in INDUSTRY_SEEDS:
+        parts = key.split("-")
+        n = len(parts)
+        if any(words[i:i + n] == parts for i in range(len(words) - n + 1)):
+            return key
+    if len(words) == 1:
+        word = words[0]
+        for key in INDUSTRY_SEEDS:
+            if word in key.split("-"):
+                return key
+        return INDUSTRY_ALIASES.get(word)
+    return None
+
+
 def _seed_from_industry(industry: Optional[str]) -> Dict[str, float]:
-    """Look up the industry seed, fuzzy on substring if exact id misses."""
-    if not industry:
+    """The industry seed for a brief's industry text; neutral 0.5s when the
+    text names no known industry (see match_industry)."""
+    key = match_industry(industry)
+    if key is None:
         return {name: 0.5 for name in AXIS_NAMES}
-    key = _normalize_tag(industry)
-    if key in INDUSTRY_SEEDS:
-        return dict(INDUSTRY_SEEDS[key])
-    # fuzzy: substring match
-    for k, v in INDUSTRY_SEEDS.items():
-        if key in k or k in key:
-            return dict(v)
-    return {name: 0.5 for name in AXIS_NAMES}
+    return dict(INDUSTRY_SEEDS[key])
 
 
 def _apply_tone_nudges(axes: Dict[str, float], tags: Iterable[str]) -> Dict[str, float]:
