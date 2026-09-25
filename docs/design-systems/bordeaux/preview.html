@@ -685,7 +685,7 @@ button:focus-visible {
 
 .sh-mock-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-md);
   margin-bottom: var(--space-lg);
 }
@@ -706,7 +706,7 @@ button:focus-visible {
 
 .sh-cols {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-lg);
 }
 
@@ -748,6 +748,7 @@ button:focus-visible {
 
 .sh-type-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-md);
@@ -830,11 +831,21 @@ button:focus-visible {
 
 @media (max-width: 680px) {
   .sh-cols {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .sh-mock-stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* The 72px spacing step leaves a phone column about 100px wide. */
+  .container {
+    padding-inline: var(--space-xs);
+  }
+
+  .card,
+  .card-elevated {
+    padding: var(--space-sm);
   }
 }
 @media(max-width:620px){.nav{flex-wrap:wrap;row-gap:10px}.nav-links{flex-wrap:wrap;gap:16px}.table{font-size:13px}.table th,.table td{padding:8px 9px}}</style></head><body>
@@ -844,7 +855,7 @@ button:focus-visible {
     <a class="nav-link" href="#overview">Overview</a>
     <a class="nav-link" href="#components">Components</a>
     <a class="nav-link" href="#tokens">Tokens</a>
-    <a class="btn btn-primary btn-sm" href="#start">Get started</a>
+    <a class="btn btn-primary btn-sm" href="#start">Build with it</a>
   </div>
 </nav>
 
