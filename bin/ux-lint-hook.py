@@ -66,6 +66,21 @@ def _load_linter():
     return lint_text
 
 
+def _pages(path: Path, project_dir: Path) -> list:
+    """The pages that load a stylesheet, so a parent focus ring in a separate
+    stylesheet is read against their markup. Empty for any other file."""
+    if not path.name.lower().endswith((".css", ".scss")):
+        return []
+    try:
+        from engine.linter.core import stylesheet_pages
+        root = project_dir.resolve()
+        inside = root == path.resolve() or root in path.resolve().parents
+        return [(str(p), p.read_text(encoding="utf-8", errors="ignore"))
+                for p in stylesheet_pages(path, root=root if inside else None)]
+    except Exception:  # noqa: BLE001 - the pages only waive; the lint still runs
+        return []
+
+
 def _files(payload: dict) -> list:
     tool_input = payload.get("tool_input") or {}
     if not isinstance(tool_input, dict):
@@ -133,7 +148,7 @@ def build_report(paths: list, project_dir: Path, written=None) -> str:
             if lint_text is None:
                 return ""
         findings = [
-            f for f in lint_text(shown, text)
+            f for f in lint_text(shown, text, pages=_pages(path, project_dir))
             if REPORT_RANKS.get(f.severity, 0) >= 1
         ]
         elsewhere = 0

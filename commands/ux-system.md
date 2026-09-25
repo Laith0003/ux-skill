@@ -156,9 +156,9 @@ Then offer the next step: `/ux-component` to build components on the new tokens,
 
 ## 3.x starter flow (no mode)
 
-Everything from here to the end of this file is the 3.x flow, unchanged. It runs when `/ux-system` is called with no mode.
+Everything from here to the end of this file is the 3.x flow, unchanged. It runs when `/ux-system` is called with no mode, and its rules hold for this flow only. `/ux-design` page mode never runs it: page mode builds its tokens with `system build` (create mode above).
 
-## Process
+## Process (3.x flow only)
 
 ### 0. Discovery protocol (MANDATORY)
 
@@ -198,7 +198,7 @@ Call `design-system-architect` via Task. Pass:
 - Full content of `references/styles/anti-slop.md`
 - Instruction to produce:
   1. **Token JSON** — colors (with semantic + brand layers), type scale, spacing scale, radius scale, shadow scale, motion duration + easing, breakpoints
-  2. **5-10 foundation MDs** — color principles, type rules, spacing logic, motion principles, accessibility floor, dark mode strategy, voice tone, iconography (Material Symbols default), imagery rules, data viz palette
+  2. **5-10 foundation MDs**: color principles, type rules, spacing logic, motion principles, accessibility floor, dark mode strategy, voice tone, iconography (the one icon rule in `commands/ux-design.md`), imagery rules, data viz palette
   3. **6-8 component contracts** — button, input, modal, card, table, navbar, badge, alert (at minimum). Each contract: anatomy, states, variants, accessibility notes, do/don't
   4. **Dark-mode pairings** — every light token has a dark counterpart, not just inverted
   5. **Theme switcher pattern** — CSS variable swap on `[data-theme]`, no JS for the toggle beyond setting the attribute
@@ -256,11 +256,11 @@ Write to `.ux/last-system.json`:
 }
 ```
 
-## Hard rules
+## Rules (3.x flow only)
 
 - No purple/blue AI gradient as the brand accent. Single high-contrast accent, saturation < 80%.
 - No pure black (`#000`) anywhere in the neutral scale. Start at Zinc-950 or darker-but-not-black.
-- Material Symbols is the default icon set; the system MUST specify font-variation-settings for it.
+- Icons follow the one icon rule in `commands/ux-design.md` (Hard rules, Icons): the client's own set, else inline SVG line icons stroked and sized by the type.icon roles.
 - Dark mode is mandatory. Every semantic token has a dark counterpart.
 - Type scale uses a modular ratio, not arbitrary px jumps.
 - Spacing scale is a single unit-based scale (4 or 8), not mixed.
@@ -268,7 +268,7 @@ Write to `.ux/last-system.json`:
 - No 3-equal-cards example layouts in component contracts.
 - Token JSON is the source of truth; CSS variables derive from it, not the other way around.
 
-## Failure modes
+## Failure modes (3.x flow only)
 
 - **Architect produces a single CSS file instead of a system**: reject. The output must be structured — tokens, foundations, contracts, separately.
 - **Brand accent is purple/blue gradient**: reject, redo with a constrained palette.
@@ -276,7 +276,7 @@ Write to `.ux/last-system.json`:
 - **No accessibility floor specified**: reject. Every system must state its AA/AAA target.
 - **Output overwrites existing files**: stop and ask the user. Never silently overwrite.
 
-## Error Handling
+## Error handling (3.x flow only)
 
 | Error condition | Recovery |
 |---|---|
@@ -299,7 +299,7 @@ After `/ux-system`:
 
 ---
 
-## v2 Python integration — required preamble
+## Engine preamble (3.x flow only)
 
 Before generating any output, the LLM running this command MUST shell to the v2 Python engine to ground the work in structured data. This is not optional — running without the preamble means generating from training-data defaults (the slop signal).
 

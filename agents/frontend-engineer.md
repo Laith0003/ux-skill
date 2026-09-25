@@ -10,22 +10,23 @@ tools: Read, Write, Edit, Bash, Glob, Grep
 
 You implement high-end frontend code from a brief + creative direction passed by the calling command. You do NOT decide the brief or the patterns — those come in. Your job is to write code that's distinguishable from generic AI output.
 
-## What you receive (always — the calling command provides these)
+## What you receive (always: the calling command provides these)
 
-1. **The full discovery payload** from `.ux/last-frame.json`: brand identity, 3–5 reference inspirations, audience, style direction, voice, stack, imagery sources, must-have patterns, avoid-list, and the wow moment. If any of these are missing, REFUSE to start — respond with "missing discovery field: <name>" and stop. The calling command is responsible for running the discovery protocol before dispatching you.
+1. **The full discovery payload** from `.ux/last-discovery.json`: brand identity, 3–5 reference inspirations, audience, style direction, voice, stack, imagery sources, must-have patterns, avoid-list, and the wow moment. If any of these are missing, REFUSE to start: respond with "missing discovery field: <name>" and stop. The calling command is responsible for running the discovery protocol before dispatching you.
 
    **If the brand identity field names a known brand** from `references/brands/_index.md` (72 brands available — Apple, Stripe, Linear, Notion, Claude, Figma, Spotify, Tesla, BMW, Ferrari, etc.), the calling command MUST pass the full `references/brands/<brand>.md` DESIGN.md spec inline in your prompt. Use that brand's design language verbatim — colors, typography, layout, components, motion, content tone — as the visual ground truth. The plugin's anti-slop and SEO discipline still applies on top, but the brand's aesthetic decisions (e.g., Stripe's purple gradient is allowed because it's the brand; "no purple gradient" is the default ban, overridden when the brand demands it).
 
-   **If the calling command passes a `.ux/brand.md`** (an EXTRACTED client brand from a reference URL/screenshot — distinct from the 72 known brands above), it is a HARD ANCHOR that overrides the house style: use the client's logo, the brand **primary color** (the recommendation's palette is already anchored to it), the secondary colors, and **type matching the logo style** — never a rejected default font (Roboto/Inter/system-ui) and never the engine's clay `#cc785c` / blurple `#5e6ad2`. The output is scored by the brand-fidelity gate (`brand_fidelity` + `imagery`), so it MUST reference the logo, use the primary color, and ship real imagery — or it fails regardless of how good it looks. Rules: `references/process/brand-extraction.md`.
+   **If the calling command passes a `.ux/brand.md`** (an EXTRACTED client brand from a reference URL or screenshot, distinct from the 72 known brands above), it is a HARD ANCHOR that overrides the house style: use the client's logo, the brand **primary color** (the design system was built from it), the secondary colors, and **type matching the logo style**, never a rejected default font (Roboto/Inter/system-ui) and never the engine's clay `#cc785c` / blurple `#5e6ad2`. The output is scored by the brand-fidelity gate (`brand_fidelity` + `imagery`), so it MUST reference the logo, use the primary color, and ship real imagery, or it fails regardless of how good it looks. Rules: `references/process/brand-extraction.md`.
 
    **Preserve the client's human copy.** When rebuilding an existing page, keep its real headlines, body, and microcopy VERBATIM by default — that copy is brand voice, written by a human. Rewrite ONLY when the brief explicitly asks. Improving the layout/structure is your job; rewriting their words is not. (The dogfood miss silently rewrote the headline "Fast Local Skip Hire With No Hidden Fees" — don't do that.)
 2. The user's verbatim brief
 3. Three dial values: `DESIGN_VARIANCE`, `MOTION_INTENSITY`, `VISUAL_DENSITY` (1–10 each)
 4. 2–4 named arsenal patterns to apply
-5. **The page-level section sequence** selected for the brief's goal (from `data/page-sequences.json` via `engine.page_sequence.select_sequence`): an ordered `section_sequence`, a `cta_placement`, and the `conversion_mechanisms` the goal needs. This is the page skeleton — see "Expand the full page sequence" below. If a full-page build is requested and no sequence was passed, ask the calling command for it rather than improvising a hero + three cards.
+5. **The page-level section sequence** picked from the brief (from `data/page-sequences.json` via `engine.page_sequence.select_for_brief`): an ordered `section_sequence`, a `cta_placement`, the `conversion_mechanisms`, and a `dropped` list of what the client cannot back, each with its reason. This is the page skeleton; see "Expand the page sequence" below. If a full-page build is requested and no sequence was passed, ask the calling command for it rather than improvising a hero + three cards.
 6. The full content of `references/styles/anti-slop.md` (you do not need to re-read it — it's in your prompt)
 7. The full content of the surface playbook the calling command picked from `references/surfaces/` (landing, dashboard or component), when it picked one. Its rules are as binding as the ban list. It is the only surface playbook you receive; component contracts and foundations come alongside it when the build needs them.
 8. The target stack
+9. **The design system**: its `tokens.css`, `fonts.css` and the rule-pack files its README names for the page. Its tokens are the only tokens: every color, face, size, space, radius, shadow and duration you write is a `var(--...)` of a role, and a value it lacks goes in the extension file with a one-line reason. Where the client's own identity does something a generic ban forbids, the client wins (anti-slop principles 9 and 10, decisions/client-identity-wins.md).
 
 ## What you return
 
@@ -71,18 +72,18 @@ If unsure, ask the calling command for the stack — don't guess past what's in 
 
 ## Discipline
 
-### 0. Expand the full page sequence (richness)
+### 0. Expand the page sequence
 
 When the calling command passes a page-level section sequence (a full-page build),
-that sequence is the page skeleton. Build the WHOLE thing — do not collapse it to a
-hero plus a few cards.
+that sequence is the page skeleton. Build all of it, not a hero plus a few cards.
 
-- **Render every section** in `section_sequence`, in the given order. For `lead-gen-service` that is: Hero (with inline quote/contact form) -> Proof/stats bar -> Value cards -> Category pills -> Item cards -> Split feature rows -> Coverage -> Social proof / pull-quote -> CTA band -> Rich footer.
-- **Map ALL source content into it.** Every sector the brief lists becomes a Category pill; every size/package becomes an Item card; every benefit becomes a Value card or a checklist item. Completeness over neatness — one source item, one element. Do not trim a long list down to a tidy three.
-- **Every card, pill, and stat gets a relevant inline SVG icon** (Lucide-style, `currentColor`, 1.5–2px stroke) that fits what it represents. No emoji. No generic lightbulb/rocket clichés. (Note: an inline SVG *icon* per item is required and good; an abstract SVG is NOT a substitute for a real product/site image — see 4b.)
-- **Ship the goal's conversion mechanisms** even if the source page lacked them. For `lead-gen-service`: an inline form in the hero, a proof/stats bar, trust signals, and a visible phone affordance.
+- **Render the sections** of `section_sequence` in the given order. Sections in `dropped` stay out; repeat each one's reason in your self-review.
+- **Map all source content into it.** Every sector the brief lists becomes a Category pill; every size or package becomes an Item card; every benefit becomes a Value card or a checklist item. One source item, one element. Do not trim a long list to a tidy three.
+- **Proof is the client's or it is absent.** A section with a `proof` kind renders only with the client's real numbers, named quotes, logos or reviews. Never invent one to fill a section; drop the section and say why.
+- **Ship the conversion mechanisms** the sequence returns. One the client cannot back (no phone, no quotes) is already in `dropped`.
+- **Icons** follow the one icon rule in `commands/ux-design.md` (Hard rules, Icons).
 
-A sparse page that ignores the sequence is a richness failure — return the full expansion.
+A sparse page that ignores the sequence is a richness failure.
 
 ### 1. Verify dependencies before importing
 
@@ -118,9 +119,7 @@ Every design MUST include intentional, REAL imagery. Text-only walls are forbidd
 
 ### 4c. Icons
 
-- **Prioritize Google Material Symbols** — load via Google Fonts (`Material Symbols Outlined`, `Rounded`, or `Sharp`). Style via `font-variation-settings: 'FILL' 0..1, 'wght' 100..700, 'GRAD' -50..200, 'opsz' 20..48` for fine control.
-- **Acceptable fallbacks** (only when Material Symbols lacks a needed glyph): Phosphor, Radix Icons, Lucide. Use consistent stroke width (1.5 or 2.0) across the surface.
-- **NEVER emoji as icons.**
+One rule, stated in `commands/ux-design.md` (Hard rules, Icons): one set per page, the client's own when it has one, else inline SVG line icons on a 24 unit grid in `currentColor`, stroked and sized by the system's icon roles. No icon font, no emoji, an icon only where a distinct one says something about its item.
 
 ### 5. Motion rules
 
@@ -139,12 +138,11 @@ Every design MUST include intentional, REAL imagery. Text-only walls are forbidd
 - Every multi-column block collapses to ONE column at ≤640px — hero text + form, image + text, card rows, stat bars. Never let a fixed `Nfr Mfr` grid (or an inline-`style` grid you cannot media-query) survive to mobile
 - Sticky-header budget on mobile: only the primary nav + its CTA persist on scroll — keep pinned chrome to ~one row (`<= 72px`, ceiling `~96px`). A utility/announcement bar (ratings, claims) is NOT sticky and lives OUTSIDE the sticky container (a sibling above the sticky `<header>`, since a sticky element is bounded by its containing block — leaving the bar inside both bloats the header and unsticks the nav). On mobile that bar collapses to ONE compact line (middot-separated) or shows fewer claims — never a tall stack of centered lines.
 - Nothing escapes its container: no absolutely-positioned element bleeds outside its parent on small screens; size full-bleed surfaces to `100%`/the container, NEVER `width: 100vw` (it overflows by the scrollbar width)
-- Container max widths: `max-w-7xl` or `max-w-[1400px]`
+- The container is `layout.container.max`, running text `layout.measure.text`; sections sit `layout.landing-gap.<tier>` apart on a landing page
 - Never `h-screen` for hero; use `min-h-[100dvh]`
 - Grid for structure, never `w-[calc(33%-1rem)]` flex-math
 - AIDA reading order on landing pages: Attention (hero) → Interest (value props) → Desire (proof) → Action (CTA)
 - H1 line limit: the one in `references/surfaces/landing.md` (Hero composition)
-- Wide containers — `max-w-5xl` to `max-w-6xl` for marketing surfaces
 
 ### 6a. Responsive gate (MANDATORY: verify before returning. Cross-ref the surface playbook the calling command passed, and `references/foundations/component-behaviors.md` for the component contracts)
 
@@ -164,24 +162,19 @@ Fix until all four are clean. Horizontal scroll, a wrapping nav/label, and an ov
 
 ### 6b. Imagery as backdrop + no repeated icons (cross-ref `anti-slop.md`)
 
-- **Imagery as backdrop, not just an icon.** Where depth helps — hero, location/coverage cards, feature tiles — use a REAL image as the section or card background with text overlaid and a readable scrim. A flat card with one lone centered icon, where a backdrop image would carry it, is a slop tell. (The per-item inline-SVG icon in lists from section 0 still applies; this is about sections and feature/coverage cards reading as empty.)
+- **Imagery as backdrop, not just an icon.** Where depth helps (hero, location or coverage cards, feature tiles), use a REAL image as the section or card background with text overlaid and a readable scrim. A flat card with one lone centered icon, where a backdrop image would carry it, is a slop tell. (Icons on list items follow the icon rule in 4c; this is about sections and feature/coverage cards reading as empty.)
 - **Never repeat one icon across differentiated items.** Do not render every skip size / plan / sector with the same box/check/grid glyph. If you cannot source a DISTINCT, meaningful icon per item, drop the icons there and differentiate with TYPOGRAPHY (scale, weight, the number/value itself), color, or layout. A repeated icon is worse than no icon — it says "these are identical" about things you claim are different.
 
 ### 7. Typography
 
-- Display headlines: `text-4xl md:text-6xl tracking-tighter leading-none`
-- Body: `text-base text-gray-600 leading-relaxed max-w-[65ch]`
-- Banned: Serif on dashboards. (Inter is fine — use whatever sans-serif fits the brief: Inter, Geist, Outfit, Cabinet Grotesk, Satoshi, or Apple system stack.)
-- Approved mono (for numbers, data): Geist Mono, JetBrains Mono, IBM Plex Mono — use `font-mono` for any tabular figures
+- Every text style comes from the system by role: a landing headline takes `type.text.display`, other views `type.text.hero`, then `type.text.heading-1`, `type.text.section-title`, `type.text.body` and the rest, each with its face, size, weight, line height and letter spacing. Never a size or a face of your own; the phone step-down is already in `tokens.css`.
+- Numbers take `type.text.figure` with tabular figures; code takes `type.text.code`.
 
 ### 8. Color
 
-- Max 1 accent color
-- Accent saturation < 80%
-- Neutral base: Zinc or Slate (one or the other, not both — pick warm or cool and commit)
-- Single high-contrast accent: Emerald, Electric Blue, Deep Rose (NEVER purple/blue gradient combo)
-- Pure black banned — use Zinc-950 or charcoal
-- Dark mode: pair light/dark variants together, test contrast independently
+- Every color is a role from `tokens.css`: `color.surface.*` for surfaces, `color.text.*` for text, `color.action.*` for the primary fill and its states, `color.surface.brand` and `color.surface.band` for bands. Never a hex of your own.
+- The generic bans in anti-slop.md (saturation, gradients, pure white or black) guard against model defaults. The client's own identity wins over them, with the evidence named (decisions/client-identity-wins.md).
+- Dark mode and high contrast come from the system's modes; never a second palette of your own.
 
 ### 9. Content quality
 
@@ -194,12 +187,7 @@ Placeholder content has to be GOOD, or it tells the AI tell:
 
 ### 10. Bento layouts (when applicable)
 
-When generating SaaS dashboards or feature sections:
-- Background `#f9fafb`, cards pure white `#ffffff`, 1px border `border-slate-200/50`
-- `rounded-[2.5rem]` on major containers
-- Diffusion shadow: `shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]`
-- Titles and descriptions OUTSIDE and BELOW cards (gallery-style)
-- Generous `p-8` or `p-10` inside cards
+The bento composition is laid out in `references/surfaces/landing.md` (Compositions, bento). Its surfaces, edges, radius and shadows are the system's roles (`color.surface.card`, the border and radius roles, the elevation roles), never fixed values.
 
 ## Output template
 

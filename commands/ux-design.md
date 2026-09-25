@@ -25,11 +25,11 @@ Triggers: "design a", "build me a", "generate a landing page", "create a dashboa
 
 A flag always wins over the words. Image mode stacks with the others: `--from-image ref.png --dashboard` reads the image, then builds a dashboard. Say which mode you picked in the first line of the output so the user can stop you.
 
-Every mode runs the same Process below (discovery, references, dials, dispatch, output, state) and the v2 steps (brief, brand, recommendation, generation, lint, responsive gate, brand floor). Some shared steps are page steps only. This table says which apply per mode; the mode sections list only what else changes.
+Every mode runs the same Process below (discovery, references, dials, build, output, state) and the engine steps (brief, brand, suggestions, section sequence, tokens, generation, lint, responsive gate, brand floor). Some shared steps are page steps only. This table says which apply per mode; the mode sections list only what else changes.
 
 | Shared step | page | component | dashboard |
 |---|---|---|---|
-| v2 step 2.5 page-level section sequence, and the section-sequence bullet in step 4 dispatch | yes | no | no |
+| engine step 2.5 page-level section sequence, and the section sequence in step 4 | yes | no | no |
 | WOW layer, hero moment (step 2) | yes | no | no |
 | WOW layer, motion signature and section moment (step 2) | yes | yes | yes |
 | SEO section | yes | no | no |
@@ -68,9 +68,9 @@ Optional but useful: specific behavior (auto-sort, multi-step, infinite scroll, 
 
 **Dials (step 3).** DESIGN_VARIANCE 5 (4 for system components, 6 for marketing components). MOTION_INTENSITY 4 (3 for utility components, 5 for marketing components). VISUAL_DENSITY 5 (7 for tables/charts, 4 for buttons/modals).
 
-**Dispatch (step 4).** `frontend-engineer` gets the spec verbatim, the dials, the 1-2 patterns, the full `references/styles/anti-slop.md`, the full `references/surfaces/component.md` (the playbook step 1c picks for this mode), the target stack, and an instruction to return code + self-review on bans avoided + patterns used. Dispatch `motion-engineer` in parallel if the spec involves motion (loading states, optimistic UI, micro-interactions, transitions). Dispatch `copy-writer` in parallel if the component has non-trivial copy (form labels, empty states, error messages, CTAs).
+**Build (step 4).** The build (or the optional `frontend-engineer` subagent) gets the spec verbatim, the dials, the 1-2 patterns, the full `references/styles/anti-slop.md`, the full `references/surfaces/component.md` (the playbook step 1c picks for this mode), the target stack, and an instruction to return code + self-review on bans avoided + patterns used. A `motion-engineer` subagent may run in parallel if the spec involves motion (loading states, optimistic UI, micro-interactions, transitions). A `copy-writer` subagent may run in parallel if the component has non-trivial copy (form labels, empty states, error messages, CTAs).
 
-**Generation (v2 step 4).** Look up the requested component name in `.ux/last-recommendation.json`'s `components` list. If present, generate using its `anatomy`, `states`, `tokens_used`, and `motion` fields as the spec. If not present, search `data/components.json` directly via `cat data/components.json | jq '.entries[] | select(.name | test("<name>"; "i"))'`. The page-sequence step (v2 step 2.5) does not apply. The brand anchor applies as in page mode: the component must use the brand primary color, the logo where one belongs, and logo-style type, and ship real imagery when it carries visuals, or it fails the brand-fidelity floor. A house-style component for a client brand is wrong no matter how clean.
+**Generation (engine step 4).** Look up the requested component name in `.ux/last-recommendation.json`'s `components` list. If present, generate using its `anatomy`, `states`, `tokens_used`, and `motion` fields as the spec. If not present, search `data/components.json` directly via `cat data/components.json | jq '.entries[] | select(.name | test("<name>"; "i"))'`. The page-sequence step (engine step 2.5) does not apply. The brand anchor applies as in page mode: the component must use the brand primary color, the logo where one belongs, and logo-style type, and ship real imagery when it carries visuals, or it fails the brand-fidelity floor. A house-style component for a client brand is wrong no matter how clean.
 
 **Output (step 5).**
 
@@ -83,7 +83,7 @@ Dials:      DESIGN_VARIANCE=<n>, MOTION_INTENSITY=<n>, VISUAL_DENSITY=<n>
 Patterns:   <1-2 arsenal patterns>
 
 ─── generated ───
-<code from sub-agent, verbatim>
+<code, verbatim>
 
 ─── interaction states ───
 Default:    <description>
@@ -136,7 +136,7 @@ The `command` value stays `ux-component` so `/ux-next` keeps reading it.
 | Sub-agent returns the wrong stack | Catch in review, redo |
 | Sub-agent says "I avoided X" but the code uses X | Grep the output. Reject and redo |
 | Over-scope: a full page for a single button, or a spec that implies a full page | Trim to the requested component; offer page mode as the follow-up |
-| No motion when motion was specified | Re-dispatch with an explicit motion brief |
+| No motion when motion was specified | Redo the build with an explicit motion brief |
 | `.ux/last-frame.json` absent and voice not provided | Ask the one-line voice question above |
 
 ### Dashboard mode (`--dashboard`)
@@ -159,9 +159,9 @@ If anything's missing, ask once: *"One line: data shape, key metrics, audience (
 
 **Dials (step 3).** DESIGN_VARIANCE 4 (dashboards are calmer than landings). MOTION_INTENSITY 3 (data should feel still until it changes). VISUAL_DENSITY 8 (dashboards are cockpits, not galleries).
 
-**Dispatch (step 4).** `frontend-engineer` gets the brief verbatim, data shape + key metrics + audience, stack, dials, the 3-5 patterns, the full `references/styles/anti-slop.md`, the full `references/surfaces/dashboard.md` (the playbook step 1c picks for this mode), and an explicit instruction to follow the playbook's rules on tabular numbers, live indicators and semantic state colors. Dispatch `motion-engineer` in parallel for live indicators and state transitions. Dispatch `copy-writer` in parallel for empty states, error messages, and metric labels.
+**Build (step 4).** The build (or the optional `frontend-engineer` subagent) gets the brief verbatim, data shape + key metrics + audience, stack, dials, the 3-5 patterns, the full `references/styles/anti-slop.md`, the full `references/surfaces/dashboard.md` (the playbook step 1c picks for this mode), and an explicit instruction to follow the playbook's rules on tabular numbers, live indicators and semantic state colors. A `motion-engineer` subagent may run in parallel for live indicators and state transitions. A `copy-writer` subagent may run in parallel for empty states, error messages, and metric labels.
 
-**Generation (v2 step 4).** The page-sequence step (v2 step 2.5) does not apply: no section sequence, no conversion mechanisms, no hero. Filter `components` from the recommendation for dashboard patterns (`category: Data Display`, `Charts & Viz`). Build a dashboard grid using the picked palette in dark mode (force `mode=dark` if not already set in the recommendation). Give `frontend-engineer` the `chart-types.json` picks scoped to the data the user described. With a client brand, dark mode still holds, but the brand primary (not the house pick) is the accent on every state color, the logo sits in the chrome, and type matches the logo style; the dashboard must clear the brand-fidelity floor.
+**Generation (engine step 4).** The page-sequence step (engine step 2.5) does not apply: no section sequence, no conversion mechanisms, no hero. Filter `components` from the recommendation for dashboard patterns (`category: Data Display`, `Charts & Viz`). Build a dashboard grid on the system's tokens in dark mode. The build gets the `chart-types.json` picks scoped to the data the user described. With a client brand, dark mode still holds, but the brand primary (not the house pick) is the accent on every state color, the logo sits in the chrome, and type matches the logo style; the dashboard must clear the brand-fidelity floor.
 
 **Output (step 5).**
 
@@ -175,7 +175,7 @@ Dials:       DESIGN_VARIANCE=<n>, MOTION_INTENSITY=<n>, VISUAL_DENSITY=<n>
 Patterns:    <3-5 arsenal patterns>
 
 ─── generated ───
-<code from sub-agent, verbatim>
+<code, verbatim>
 
 ─── layout logic ───
 Grouping:    <how widgets are grouped: border-t / divide-y / negative space>
@@ -265,9 +265,9 @@ rec = recommend(Brief(**result["brief"]))
 
 **2. Report the read.** Tell the user in one short block what the engine sees: canvas polarity, type polarity, dominant colors, matched palette and matched style. With `--extract-only` or `--no-recommendation`, print the JSON and stop.
 
-**3. Build.** Otherwise continue into the build mode (page by default, or `--component` / `--dashboard`). Use the extraction's `recommendation` in place of the v2 step 2 `recommend` call, and its `brief` to fill discovery fields the user has not answered. For more control, edit the saved file and rerun the recommender on it: `python3 -m engine.cli.main recommend --brief-file .ux/last-image-extract.json`.
+**3. Build.** Otherwise continue into the build mode (page by default, or `--component` / `--dashboard`). Use the extraction's `recommendation` in place of the engine step 2 `recommend` call, and its `brief` to fill discovery fields the user has not answered. For more control, edit the saved file and rerun the recommender on it: `python3 -m engine.cli.main recommend --brief-file .ux/last-image-extract.json`.
 
-**Brand anchor.** The uploaded image IS the brand source. When the build should match the source's identity rather than the house style, extract the brand from it first (v2 step 1.5: capture the logo color/type from the image into `.ux/brand-signals.json`, then `uxskill brand --signals-file .ux/brand-signals.json --out .ux`) so the build inherits the source's primary color, logo, and logo-style type. The CV `hints` are color and polarity only; the travelling brand carries the logo and type intent the recommender enforces.
+**Brand anchor.** The uploaded image IS the brand source. When the build should match the source's identity rather than the house style, extract the brand from it first (engine step 1.5: capture the logo color/type from the image into `.ux/brand-signals.json`, then `uxskill brand --signals-file .ux/brand-signals.json --out .ux`) so the build inherits the source's primary color, logo, and logo-style type. The CV `hints` are color and polarity only; the travelling brand carries the logo and type intent the recommender enforces.
 
 **Default forbidden list.** The synthetic brief auto-populates `forbidden` with the project-wide taste guardrails: `yellow`, `amber`, `gold`, `cream`, `coral`, `cormorant`. The extraction is for COLOR and POLARITY hints; the forbidden vocabulary is a separate policy decision the engine respects regardless of what the image suggests. To override it, edit `.ux/last-image-extract.json`, remove items from `brief.forbidden`, and rerun the recommender on that file.
 
@@ -305,11 +305,23 @@ The 10 required fields are:
 **Skip conditions** (the only ones):
 - User passes `--skip-discovery` flag.
 - User's first message already covers ALL 10 fields. Verify it does; if anything's missing, ask only for the missing fields.
-- User is iterating on a prior design (read `.ux/last-frame.json`; ask only what's changed).
+- User is iterating on a prior design (read `.ux/last-discovery.json`; ask only what's changed).
 
-**After collecting answers**: write `.ux/last-frame.json` with the full discovery payload. Echo a 2-sentence summary back to the user before generating — let them stop you if their intent didn't land.
+**After collecting answers**: write `.ux/last-discovery.json` with the full discovery payload (the file /ux-discover writes). Echo a 2-sentence summary back to the user before generating, so they can stop you if their intent did not land.
 
 NEVER proceed to step 2 without the wow moment field populated. If the user says "anything's fine", push back: "Give me one concrete moment, even tiny — something a visitor would remember."
+
+### Page mode, in order
+
+Page mode runs these steps in this order; the sections below give the detail of each.
+
+1. **Discovery** (Process step 1) writes `.ux/last-discovery.json`.
+2. **The system brief.** Write `.ux/system-brief.json`: the discovery answers plus the structured fields /ux-system reads (`industry`, `brand_role`, `product_type` and the others it lists, filled from what the user said) and the page fields engine step 2.5 reads (`proof`, `contact`, `stage`). Every later step reads this file.
+3. **Brand** (engine step 1.5): extract it from the client's material, or, with no brand material, ask for one hex, as /ux-system create mode does.
+4. **System**: `system detect` (step 1a); when it finds none, `system build` from that hex and that brief (step 1b).
+5. **Suggestions** (engine step 2), only when no system existed before step 4.
+6. **Sequence**: `select_for_brief` (engine step 2.5).
+7. **Build** (Process steps 2 to 4, engine steps 3 and 4), then the gates (engine step 5), the output and the state (Process steps 5 and 6).
 
 ### 1a. An existing design system is fixed input
 
@@ -321,9 +333,9 @@ Before any engine pick, run `python3 -m engine.cli.main --no-pretty system detec
 4. A gap the page needs (a token the system lacks) goes in a separate extension file next to the page CSS, named after the system, such as `<system>-ext.css`. Name each new token in the system's own naming, and log one comment per token: what it is and why the system lacked it.
 5. Pass `detect`'s `declared` block into the brand step: the declared primary beats logo pixels.
 
-### 1b. DESIGN.md is the visual contract
+### 1b. The design system is the contract
 
-If a `DESIGN.md` exists in the project root, read it FIRST and treat it as the source of truth for the visual system (colors, typography, spacing, rounded, components). Match it exactly. If none exists and step 1a found no system, after discovery emit one for this project with `ux design-md` (the Google Stitch / awesome-design-md standard) and treat it as the contract the generated UI must satisfy. When 1a found a system, that system is the contract.
+When step 1a found a system (a hand-written `DESIGN.md` counts), that system is the contract. When it found none, build one before any page code, the /ux-system way: `uxskill --no-pretty system build --brand '<hex>' --brief .ux/system-brief.json --out design-system --rule-pack`. Take the hex from the client's own material (engine step 1.5), or the one hex the user gave when there is no brand material; fill the brief's structured fields as /ux-system describes, including `brand_role` from how the client's own material uses the brand. Link `design-system/tokens.css` and `fonts.css`, and load the rule-pack files `design-system/rule-pack/README.md` names for a landing page. The built tokens are the only tokens (engine step 3).
 
 ### 1c. Pick exactly one surface playbook
 
@@ -342,7 +354,7 @@ Load only the playbook you picked. Never load two surface playbooks. The one-pla
 ### 2. Read the references
 
 Before writing a single line of code, read:
-- `references/styles/anti-slop.md` — the ban list. Internalize every forbidden pattern.
+- `references/styles/anti-slop.md`: the ban list. Its bans guard against model defaults; the client's own system and identity win over them (principles 9 and 10).
 - `references/styles/arsenal.md` — the high-end pattern library. Pick 2-4 patterns that fit the brief.
 - `references/foundations/wow.md`: derive the **WOW LAYER**: 2-3 coordinated signature moments (one hero moment + a motion signature + an optional section moment; component and dashboard modes skip the hero moment) from the brand temperature + industry + goal. The page must do something a visitor remembers, not just be clean. Derived + varied to THIS brand, never a stamped recipe.
 - `references/foundations/responsive.md` and `references/foundations/component-behaviors.md`: mobile-first mechanics and the component contracts (card grid, form, data table, modal and drawer). The build is verified at 360px (no horizontal scroll, no wrapping nav/wordmark/label, sticky chrome <= ~96px).
@@ -360,24 +372,19 @@ Pick values for three dials based on the brief (these are inherited from `design
 
 Override with whatever the user explicitly asked for. Surface your dial values in the output so the user sees what you picked.
 
-### 4. Dispatch the frontend-engineer sub-agent
+### 4. Build the page (a subagent is optional)
 
-Call the Task tool with `subagent_type: "frontend-engineer"`. Pass the agent:
+Build it yourself, or hand it to the `frontend-engineer` subagent when the host has one; the subagent is recommended for a long page, never required. Either way the build gets the same inputs:
 
 - The brief (verbatim from the user)
 - Your dial values
 - The 2-4 arsenal patterns you picked
-- **The page-level section sequence** (page mode only; component and dashboard modes skip this bullet) selected for the brief's goal (see the v2 Python integration step below). Instruct the sub-agent to expand the ENTIRE ordered sequence, map all source content into it (every sector -> a pill, every size -> a card, every benefit -> a checklist item; do not trim), give every card/pill/stat a relevant inline SVG icon, and ship the goal's conversion mechanisms.
-- The full content of `references/styles/anti-slop.md` (paste into the prompt — do not assume the sub-agent has read it)
-- The full content of the surface playbook picked in step 1c, if any
-- The full content of `references/foundations/component-behaviors.md` when the build contains a card grid, form, data table, modal, sheet or drawer
+- **The page-level section sequence** (page mode only) from engine step 2.5, with its `dropped` list
+- The system's `tokens.css`, `fonts.css` and the rule-pack files its README names for a landing page
+- `references/styles/anti-slop.md`, the surface playbook picked in step 1c, and `references/foundations/component-behaviors.md` when the build contains a card grid, form, data table, modal, sheet or drawer (a subagent gets their full text in its prompt)
 - The target stack
-- An instruction to return:
-  1. The generated code
-  2. A self-review noting which anti-slop bans they had to consciously avoid
-  3. Which arsenal patterns they used
 
-Do not write the design yourself. The sub-agent's job is implementation; your job is orchestration.
+The build returns the code, a self-review naming the anti-slop bans it avoided and any it waived for the client's identity (with the evidence), and the arsenal patterns it used.
 
 ### 5. Format the output
 
@@ -392,10 +399,11 @@ Dials:     DESIGN_VARIANCE=<n>, MOTION_INTENSITY=<n>, VISUAL_DENSITY=<n>
 Patterns:  <2-4 arsenal patterns chosen>
 
 ─── generated ───
-<code blocks from the sub-agent — preserve verbatim>
+<code blocks, verbatim>
 
-─── self-review (sub-agent) ───
-<sub-agent's notes on which anti-slop bans they avoided>
+─── self-review ───
+<anti-slop bans avoided, and any waived for the client's identity with the evidence>
+<sections dropped from the sequence, each with its reason>
 <which arsenal patterns they used and why>
 
 ─── next ───
@@ -427,20 +435,21 @@ This lets `/ux-next` and downstream commands pick up where you left off.
 
 ## SEO is mandatory for public-web outputs
 
-Page mode only; component and dashboard modes skip this section. For any landing page or public-facing surface, read `references/foundations/seo.md` and require the frontend-engineer to ship the full SEO foundation (head surface, OG + Twitter, JSON-LD, semantic HTML, image discipline, CWV targets). Surface this requirement in your dispatch prompt. The output is incomplete without it. Derive sensible real values from the brief + source when the brief doesn't supply them (canonical/og:url from the source URL, og:image from a real CDN image the page references). **Never let the frontend-engineer ship a literal `{TODO_FILL...}` token inside the rendered markup**: the linter flags it HIGH and it is a draft-state leak. Where a value is genuinely absent (no phone, no OG image), OMIT that element gracefully (drop the `<meta>` / the affordance); surface any "you should patch this" note to the user OUTSIDE the code, never as a placeholder in the HTML.
+Page mode only; component and dashboard modes skip this section. For any landing page or public-facing surface, read `references/foundations/seo.md` and ship the full SEO foundation (head surface, OG + Twitter, JSON-LD, semantic HTML, image discipline, CWV targets). When a subagent builds, say so in its prompt. The output is incomplete without it. Derive sensible real values from the brief + source when the brief doesn't supply them (canonical/og:url from the source URL, og:image from a real CDN image the page references). **Never ship a literal `{TODO_FILL...}` token inside the rendered markup**: the linter flags it HIGH and it is a draft-state leak. Where a value is genuinely absent (no phone, no OG image), OMIT that element gracefully (drop the `<meta>` / the affordance); surface any "you should patch this" note to the user OUTSIDE the code, never as a placeholder in the HTML.
 
 ## Hard rules (non-negotiable)
 
-- NEVER use purple/blue AI gradients. Single high-contrast accent, saturation < 80%.
+These guard against model defaults. Where the client's own system or identity (its tokens, logo, site, app or brand book) does what a rule bans, the client wins: the build notes name the material and its exact value, and the page uses that value (decisions/client-identity-wins.md).
+
+- NEVER reach for the default purple-to-blue gradient or an oversaturated accent. A client's own brand gradient, saturated brand, blue or pure white stays as the client uses it.
 - NEVER use generic names ("John Doe", "Acme", "Nexus") in placeholder content.
-- NEVER use pure black (`#000`). Use Zinc-950, Charcoal, or Off-Black.
+- NEVER use pure black (`#000`) unless the client's identity does. Use the system's ink.
 - Imagery is mandatory and REAL: client assets first, then curated Unsplash/Pexels chosen to match the brand + 7-axis temperature (`engine.brand.image_search_terms` suggests on-brand search terms). Pick the best per slot; treat them so they read as deliberate. An abstract SVG is NOT a substitute for a real product/site image. Ban only random/generic stock and auto-rotating placeholder services.
 - NEVER ship a text-only wall — always include intentional, real imagery.
-- NEVER use emoji as icons. Prioritize **Google Material Symbols** (load via Google Fonts: `Material+Symbols+Outlined` / `Rounded` / `Sharp`, styled with `font-variation-settings`). Phosphor / Radix / Lucide are acceptable secondary choices when an icon doesn't exist in Material Symbols.
+- **Icons.** One set per page: the client's own icon set when it has one, else inline SVG line icons on a 24 unit grid in `currentColor`, stroked at `type.icon.stroke` and sized by the `type.icon.size` roles. No icon font, no emoji. An item gets an icon only when a distinct one says something about that item; otherwise no icon, and type carries the difference. Never one icon repeated across items that differ.
 - NEVER ship 3-equal-cards layouts. Use 2-col zig-zag, asymmetric, or horizontal scroll.
 - NEVER ship horizontal scroll on mobile. Every layout works at 360–390px with `scrollWidth <= innerWidth`; every multi-column block collapses to one column at ≤640px. This is verified in Step 5, not assumed.
 - NEVER ship a literal placeholder token (`{TODO_FILL...}`, `{{ var }}`, "lorem ipsum") in the rendered markup. Fill known values; OMIT genuinely-absent elements; never print the token.
-- NEVER repeat one icon across differentiated items (every skip size with the same box icon). Distinct icon per item, or none + typographic differentiation.
 - NEVER animate `width`/`height`/`top`/`left`. Use `transform` and `opacity` only.
 - NEVER skip empty/loading/error states.
 - NEVER use scroll progress paths / scroll-tied SVG line drawing on the side of the page.
@@ -451,10 +460,11 @@ If you find yourself reaching for any of these, stop. Re-read `anti-slop.md`. Pi
 
 ## Failure modes to watch
 
-- **Stack drift**: user said React, sub-agent returns Vue. Catch this in your review of the sub-agent's output, ask for a redo.
-- **Slop creep** (page mode only; component and dashboard modes allow Inter): sub-agent claims it avoided Inter but actually used it. Grep the output for `Inter` and `font-family: Inter`. Reject and redo if found.
-- **Missing states**: sub-agent shows a happy-path component with no loading/error/empty. Reject and redo.
-- **Bare-bones output**: sub-agent returns 30 lines for a "landing page" request. Push back — landing pages have multiple sections.
+- **Stack drift**: the user said React and the build is Vue. Catch it in review and redo.
+- **Off-system values**: a color, face, size or space that is not a system token. Grep the CSS for raw hex and px outside the extension file. Replace each with its token.
+- **Missing states**: a happy-path component with no loading, error or empty state. Redo.
+- **Bare-bones output**: 30 lines for a landing page. A landing page renders its whole sequence, less the sections dropped with a reason.
+- **Invented proof**: a number, quote or logo the client did not give. Remove it and drop the section with its reason.
 
 ## Error Handling
 
@@ -463,27 +473,28 @@ If you find yourself reaching for any of these, stop. Re-read `anti-slop.md`. Pi
 | Discovery incomplete (any of the 10 fields missing) | Return to discovery — never proceed without all 10 fields populated |
 | User refuses to name a wow moment | Push back: "Give me one concrete moment, even tiny — something a visitor would remember." Block generation until provided |
 | Stack auto-detection fails or conflicts | Ask the user explicitly which stack to target |
-| Sub-agent returns slop tells (Inter on a brand surface, purple gradient, "Acme") | Reject and redo with explicit anti-slop reminder |
-| Sub-agent ships code in the wrong stack | Catch in review, redo |
+| The build shows slop tells (a model-default gradient, "Acme", a face the system does not name) | Redo against anti-slop.md; keep whatever the client's own identity shows |
+| The build ships code in the wrong stack | Catch in review, redo |
+| `select_for_brief` raises on a field (`proof`, `contact`, `stage`, `page_sequence`) | The message names the field and its choices; fix that field in the brief and run it again |
 | SEO foundation missing on a public-web output | Reject; the output is incomplete without head surface, OG/Twitter, JSON-LD, semantic HTML, image discipline, CWV targets |
 
 For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.
 
 ---
 
-## v2 Python integration — required preamble
+## Engine steps
 
-Before generating any output, the LLM running this command MUST shell to the v2 Python engine to ground the work in structured data. This is not optional — running without the preamble means generating from training-data defaults (the slop signal).
+Run these before any page code. Without them the page comes from a model's defaults.
 
-### Step 1 — Load the saved discovery brief
+### Step 1: Load the brief
 
 ```bash
-test -f .ux/last-discovery.json && cat .ux/last-discovery.json
+cat .ux/system-brief.json 2>/dev/null || cat .ux/last-discovery.json
 ```
 
-If the file doesn't exist, run `/ux-discover` first. Do NOT proceed without a complete 10-field brief.
+`.ux/system-brief.json` is the 4.0 brief /ux-system builds from (the discovery answers plus the structured fields); `.ux/last-discovery.json` is the discovery file. With neither, run `/ux-discover` first.
 
-### Step 1.5 — Brand: ingest an existing brand.md FIRST, else extract
+### Step 1.5: Brand, from an existing brand.md first, else extracted
 
 **Input-first.** Before anything else, check if the project already has a `brand.md` (repo root, or walk up the directory tree) — the common `brand.md` convention. If so, **consume it** instead of extracting; it is the authoritative anchor:
 
@@ -504,81 +515,71 @@ If the brief names a reference site/URL or provides a screenshot, the output MUS
    Writes `.ux/brand.json` (travels through the engine) and `.ux/brand.md` (the human-readable anchor). `ux brand` also reads the project (`--project-root`, default here): a primary declared in its token files beats the logo pixels (both are reported, as `primary` and `logo_primary`), the text color is kept out of the secondaries, and the language comes from the project's HTML.
 3. **CONFIRM before locking (do not skip).** Show the user the extracted `brand.md` — primary color, type direction, logo — in one short message and get a yes. A wrong auto-read (clay instead of amber) poisons the entire build; the 5-second check is the guardrail. If they correct it, edit `.ux/brand-signals.json` and re-run step 2.
 
-If there is NO reference brand, skip this step (pure synthesis from the brief).
+If there is NO reference brand, skip the extraction and ask the user for one hex, as /ux-system create mode does; the system is built from it.
 
-### Step 2 — Get the merged recommendation from the engine
+### Step 2: Suggestions, only when no design system exists
+
+`recommend` and `synthesize` never set a token. When the project had no design system before this run, their picks (style, patterns, motion presets, components, exemplars) are suggestions for the brief and the build; `system build` sets the tokens. When `system detect` found a system, run neither.
 
 ```bash
-# If a brand was extracted (Step 1.5), pass it so the palette + type anchor to THEM.
-BRAND=""; [ -f .ux/brand.json ] && BRAND="--brand-file=.ux/brand.json"
-python3 -m engine.cli.main --no-pretty recommend \
-  --brief-file=.ux/last-discovery.json $BRAND > .ux/last-recommendation.json 2>/dev/null \
-  || echo "engine not installed — falling back to v1 prose-only mode"
+if python3 -m engine.cli.main --no-pretty system detect --root . | grep -q '"found": false'; then
+  BRAND=""; [ -f .ux/brand.json ] && BRAND="--brand-file=.ux/brand.json"
+  python3 -m engine.cli.main --no-pretty recommend \
+    --brief-file=.ux/system-brief.json $BRAND > .ux/last-recommendation.json
+fi
 ```
 
-When `--brand-file` is passed, the recommendation's `palette.colors.primary` is the brand color (from the logo), and it carries `brand` + `type_directive` blocks — the build uses THOSE, not the engine's default pick.
+Run it before step 1b writes `design-system/`, since detect then finds the new system.
 
-Inspect the recommendation:
-```bash
-cat .ux/last-recommendation.json | python3 -c "
-import json, sys
-r = json.load(sys.stdin)
-print('STYLE:    ', (r.get('style') or {}).get('name'))
-print('PALETTE:  ', (r.get('palette') or {}).get('name'))
-print('TYPE:     ', (r.get('type_pair') or {}).get('name'))
-print('MOTION:   ', [m['id'] for m in r.get('motion', [])[:5]])
-print('COMPS:    ', [c['id'] for c in r.get('components', [])[:6]])
-print('BRANDS:   ', [b['id'] for b in r.get('brand_exemplars', [])[:5]])
-print('GUARDRAILS:', len(r.get('guardrails', [])), 'anti-pattern rules active')
-"
-```
-
-### Step 2.5 — Select the page-level section sequence (richness)
+### Step 2.5: Pick the page-level section sequence
 
 Page mode only. Component and dashboard modes skip this step.
 
-A recommendation gives you the *vocabulary* (style/palette/type). The page
-*skeleton* — what sections appear and in what order — comes from the page-sequence
-selector. Pick one by the brief's goal so the output is RICH and COMPLETE, not a
-hero + three cards.
+The sequence is the page skeleton. `select_for_brief` always returns a sequence, never empty. It decides in this order, and `why` in its result says which rule decided:
+
+1. `page_sequence`, when the user names the kind of page: that sequence.
+2. `stage: pre-launch`: the `pre-launch` sequence (early access, the team, no proof section).
+3. `product_type` narrows the choice, then `project_type`, then `industry`; the brief's own phrases (goal, audience, description) choose among what is left. A call-to-action verb such as "book" never counts.
+4. With none of these, `general-landing`: hero, what it does, how it works, feature rows, one named quote, FAQ, closing band. When `why` starts with "general", tell the user which sequence you are building and offer the others by id.
+
+Fill the fields from what the user said, and leave out any the user did not say:
+
+| Field | Values | Fill it when |
+|---|---|---|
+| `product_type` | `app`, `software`, `marketing-site`, `editorial`, `commerce`, `marketplace`, `local-service`: the one list /ux-system and the picker share. Aliases are mapped and reported in `why` (`saas` and `web-app` to `software`, `mobile-app` to `app`, `shop` and `store` to `commerce`, `b2b-marketplace` and `b2c-marketplace` to `marketplace`, `service` to `local-service`); any other value is refused | what the product is. A B2B marketplace is `marketplace`; `commerce` points to the shop, `app` and `software` to the software sequences, `editorial` to the publication, `local-service` to the service page; `marketing-site` narrows nothing |
+| `industry` | the /ux-system industry list only, or one of its other names (`building-materials`, `wholesale`, `cybersecurity`, `medical-supply`) | the same value the system brief carries. Every industry leads to a sequence: `b2b-marketplace`, `pharmacy` and `construction` to the marketplace (construction also to the service page), the fintech ids, `crypto` and `security` to `trust-led`, `healthcare`, `hospitality-travel`, `education` and `automotive` to `lead-gen-service` |
+| `proof` | any of `stats`, `testimonials`, `logos`, `reviews`, `case-studies`, `certifications`, `press`; `[]` for none | the client gives real numbers, named quotes, client logos and so on. `[]` when it has none |
+| `contact` | any of `phone`, `whatsapp`, `email`, `form`, `chat`, `address` | the routes the client really offers |
+| `stage` | `live`, `pre-launch` | `pre-launch` when there are no customers yet |
+| `page_sequence` | `lead-gen-service`, `saas-marketing`, `ecommerce-product`, `portfolio-agency`, `content-publication`, `app-mobile-landing`, `b2b-marketplace`, `trust-led`, `pre-launch`, `general-landing` | the user names the kind of page outright |
 
 ```bash
 python3 -c "
 import json
-from engine.page_sequence import select_sequence
-brief = json.load(open('.ux/last-discovery.json'))
-goal = brief.get('goal') or brief.get('primary_goal') or brief.get('product_type') or ''
-query = goal or (str(brief.get('product_type','')) + ' ' + str(brief.get('audience','')))
-seq = select_sequence(query) or select_sequence(json.dumps(brief))
-print(json.dumps(seq, indent=2) if seq else 'no sequence matched')
-" 2>/dev/null
+from engine.page_sequence import select_for_brief
+print(json.dumps(select_for_brief(json.load(open('.ux/system-brief.json'))), indent=2))
+"
 ```
 
-Then EXPAND the whole sequence in the build (this is non-negotiable for richness):
+A field outside its values stops the script with an error that names the field and the values; fix the field in `.ux/system-brief.json` and run it again.
 
-- Render EVERY section in `section_sequence`, in order — do not trim to the few you find easiest.
-- Map ALL source content into it: every sector -> a Category pill, every size/package -> an Item card, every benefit -> a Value card or checklist item. Completeness over neatness — one source item, one element.
-- Give EVERY card, pill, and stat a relevant inline SVG icon (Lucide-style, `currentColor`, 1.5–2px stroke). Never emoji, and never a numbered-placeholder generic glyph.
-- Include the `conversion_mechanisms` the goal needs even if the source page lacked them. For `lead-gen-service` that means an inline hero form, a proof/stats bar, trust signals, and a visible phone affordance.
+Build it this way:
 
-Pass the selected sequence to the frontend-engineer sub-agent as the page skeleton.
+- Render the sections of `section_sequence` in order, and map all the client's content into them: every sector, size, package and benefit gets its element.
+- A section that carries a `proof` kind renders only with the client's real proof of that kind. The picker has already dropped the ones the brief's `proof` list lacks; each entry in `dropped` gives its reason, and the self-review repeats it. When `proof_unknown` is true, ask for the proof, or drop the section and say why. Never invent a number, a quote or a logo to fill one.
+- Ship the `conversion_mechanisms` it returns; one the client cannot back is already in `dropped`, and a section's text no longer mentions a phone the client does not have.
 
-### Step 3 — Use the recommendation as hard constraints
+### Step 3: The system's tokens are the only tokens
 
-When step 1a found an existing design system, its tokens win: the recommendation carries an `existing_system` block, and `palette` and `type_pair` are marked `"status": "suggestion"`. Use them only to fill a gap the system leaves, logged in the extension file. Otherwise the engine's picks are constraints:
-- The picked `style.tokens` are the design vocabulary you generate from
-- With no existing design system, the picked `palette.colors` are the only color tokens used
-- With no existing design system, the picked `type_pair` is the only typography (display + body + mono)
-- The 35+ `guardrails` are checked-against during generation — do NOT emit code that matches any anti-pattern regex
-- The 5 `brand_exemplars` are the visual reference for taste
+The page uses the design system's tokens and nothing else: an existing design system (step 1a), or the one `uxskill system build` wrote (step 1b). Colors, faces, sizes, spacing, radius, shadows and motion all come from its `tokens.css` by role. `recommend` and `synthesize` picks are a suggestion at most, never a token. A value the system lacks goes in the extension file, named in the system's style, with a one-line comment on why. The `guardrails` from step 2 are checked against the output; the client's identity wins over any of them (decisions/client-identity-wins.md).
 
-### Step 4 — Generate output
+### Step 4: Generate output
 
-Dispatch the `frontend-engineer` sub-agent (Task tool) with the recommendation passed in as creative-direction context. Generate the page/component as requested by the brief, using ONLY the picked style + palette + type + motion presets + components.
+Build the page from the sequence, the system's tokens, the rule pack and the playbook; a subagent is optional (Process step 4).
 
-**If a brand was extracted (Step 1.5):** paste the full `.ux/brand.md` into the sub-agent prompt and state that the brand is a HARD ANCHOR — use the client's logo, the brand primary color (the recommendation's palette is already anchored to it), and type matching the logo style; never fall back to the house style or a rejected default font. **Preserve the client's existing human copy verbatim** unless the brief explicitly asks for a rewrite.
+**If a brand was extracted (Step 1.5):** the brand is a hard anchor: the client's logo, the brand primary, which the system was built from, and type matching the logo style; never fall back to the house style or a rejected default font. **Preserve the client's existing human copy verbatim** unless the brief explicitly asks for a rewrite.
 
-### Step 5 — Lint + brand-fidelity gate before reporting
+### Step 5: Lint and the brand-fidelity gate before reporting
 
 ```bash
 python3 -m engine.cli.main --no-pretty lint <output-paths> --threshold high
@@ -738,4 +739,4 @@ Exit `1` = the output dropped the brand primary/logo or shipped no real imagery.
 
 ### Fallback
 
-If `python3 -m engine.cli.main` is not on PATH (user hasn't installed v2 yet), fall back to v1 prose-only behavior using `references/foundations/*.md` and the surface playbook picked in step 1c as the source of taste. The output quality will be lower but the command still works.
+If `python3 -m engine.cli.main` is not on PATH (the user has not installed the engine), fall back to prose-only behavior using `references/foundations/*.md` and the surface playbook picked in step 1c as the source of taste. The output quality will be lower but the command still works.
