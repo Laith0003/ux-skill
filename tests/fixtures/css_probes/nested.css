@@ -1,0 +1,7 @@
+:root {
+  --ink: #111111;
+  &.dark { --ink: #EEEEEE; }
+  @media (prefers-color-scheme: dark) { --ink: #EEEEEE; }
+  .card { color: red; --card-pad: 16px; }
+  --gap: 8px;
+}

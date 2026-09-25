@@ -1,0 +1,11 @@
+@layer reset, tokens, components;
+@layer tokens {
+  :root { --ink: #111111; --gap: 8px; }
+  [data-theme="dark"] { --ink: #EEEEEE; }
+}
+@layer tokens.extra {
+  :root { --gap-lg: 24px; }
+}
+@layer components {
+  .btn { --btn-pad: 12px; }
+}

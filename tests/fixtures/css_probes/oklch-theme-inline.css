@@ -1,0 +1,20 @@
+/* The same library in its oklch form, with the theme block that maps the
+   semantic names into the utility framework. */
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+}
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+}
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --color-background: var(--background);
+  --color-primary: var(--primary);
+}

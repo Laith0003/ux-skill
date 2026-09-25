@@ -1,0 +1,7 @@
+.theme-harbor {
+  --ink: #111111;
+  --gap: 8px;
+}
+.theme-harbor.dark {
+  --ink: #EEEEEE;
+}
