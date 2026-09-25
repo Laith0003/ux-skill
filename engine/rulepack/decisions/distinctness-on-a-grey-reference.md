@@ -1,10 +1,10 @@
 ---
 id: distinctness-on-a-grey-reference
 title: Distinctness scales are measured on a grey reference brand, which leaves every color feature to the axes
-status: active
+status: superseded
 areas: [output]
 supersedes: distinctness-at-a-glance
-superseded_by: null
+superseded_by: distinctness-on-saturated-brands
 ---
 
 # Distinctness scales are measured on a grey reference brand, which leaves every color feature to the axes

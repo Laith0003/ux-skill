@@ -12,7 +12,8 @@ import pytest
 from engine.foundations import build_system
 from engine.foundations.audience import AGES, Audience
 from engine.foundations.distinct import (
-    BEHAVIOR, NAMED, REFERENCE_BRAND, SPAN, WEIGHTS, apart, behavior, character_of, distance)
+    BEHAVIOR, NAMED, REFERENCE_BRAND, REFERENCE_BRANDS, SATURATED_REFERENCES, SPAN, WEIGHTS,
+    apart, behavior, character_of, distance)
 from engine.foundations.emit import brief_audience, choose_axes, resolve_arabic
 from engine.synthesizer.axes import AXIS_NAMES, AxisValues
 
@@ -25,6 +26,10 @@ BRIEFS = Path(__file__).resolve().parent / "briefs"
 # changes at least AXIS_FLOOR. The motion axis shows only in use, so it is
 # held to BEHAVIOR_FLOOR on the behavior score instead.
 CORNER_FLOOR, TRIAL_FLOOR, AXIS_FLOOR, BEHAVIOR_FLOOR = 0.55, 0.20, 0.10, 0.30
+# A saturated brand leads its button and link (3 of the 19.5 glance weight),
+# so its opposite corners are held to their own floor, which still fails
+# every collapse the grey floor guards against (see the mutation test).
+SATURATED_CORNER_FLOOR = 0.46
 
 
 def _built(name, brand):
@@ -36,9 +41,14 @@ def _built(name, brand):
 
 
 @functools.lru_cache(maxsize=None)
-def _corners():
-    return {bits: character_of(build_system(AxisValues(*bits), REFERENCE_BRAND).tokens)
+def _corners(brand=REFERENCE_BRAND):
+    return {bits: character_of(build_system(AxisValues(*bits), brand).tokens)
             for bits in itertools.product((0.0, 1.0), repeat=7)}
+
+
+def _opposite(corners):
+    return [distance(corners[(0.0, *bits)], corners[(1.0, *[1.0 - b for b in bits])])
+            for bits in itertools.product((0.0, 1.0), repeat=6)]
 
 
 def _along(axis, v):
@@ -65,16 +75,19 @@ def test_what_shows_only_in_use_never_counts_at_a_glance():
 
 
 def test_every_span_is_the_widest_the_engine_goes():
-    """SPAN is measured, not guessed: over the 128 corners of the axes each
-    numeric feature spans at least 95 percent of its SPAN and never more.
-    The body size moves with the audience's age, not the axes."""
-    corners = list(_corners().values())
+    """SPAN is measured, not guessed: over the 128 corners of the axes with
+    any reference brand each numeric feature spans at least 95 percent of
+    its SPAN and never more. The body size moves with the audience's age,
+    not the axes."""
     for key, span in SPAN.items():
         if key == "body.px":
             continue
-        widest = max((math.dist(a[key], b[key]) if isinstance(a[key], tuple)
-                      else abs(a[key] - b[key])) for a, b in itertools.combinations(corners, 2))
+        widest = max(max((math.dist(a[key], b[key]) if isinstance(a[key], tuple)
+                          else abs(a[key] - b[key]))
+                         for a, b in itertools.combinations(list(_corners(r).values()), 2))
+                     for r in REFERENCE_BRANDS)
         assert widest <= span <= widest / 0.95, (key, widest, span)
+    corners = list(_corners().values())
     sizes = [Audience(age=age).body_px for age in AGES]
     assert SPAN["body.px"] == max(sizes) - min(sizes)
     assert {c["body.px"] for c in corners} == {16}
@@ -88,15 +101,45 @@ def test_the_neutrals_and_status_colors_are_seen_at_their_real_range():
     assert apart("neutral", cool["neutral"], warm["neutral"]) >= 0.9
     assert apart("status.hue", cool["status.hue"], warm["status.hue"]) >= 0.5
     low, high = _along("contrast", 0.0), _along("contrast", 1.0)
-    assert apart("status.chroma", low["status.chroma"], high["status.chroma"]) >= 0.9
+    # the status chroma's scale is the widest over five reference brands,
+    # an orange's among them, so the grey reference reaches most of it
+    assert apart("status.chroma", low["status.chroma"], high["status.chroma"]) >= 0.8
     assert WEIGHTS["neutral"] == WEIGHTS["button"] == max(WEIGHTS.values())
 
 
 def test_opposite_corners_of_the_axes_are_far_apart():
-    corners = _corners()
-    found = [distance(corners[(0.0, *bits)], corners[(1.0, *[1.0 - b for b in bits])])
-             for bits in itertools.product((0.0, 1.0), repeat=6)]
+    found = _opposite(_corners())
     assert min(found) >= CORNER_FLOOR, min(found)
+
+
+@pytest.mark.parametrize("brand", SATURATED_REFERENCES)
+def test_opposite_corners_of_a_saturated_brand_are_far_apart(brand):
+    """The brand leads its button and link; character shows in everything
+    else, the supporting accent and the neutrals included."""
+    found = _opposite(_corners(brand))
+    assert min(found) >= SATURATED_CORNER_FLOOR, (brand, min(found))
+
+
+# Collapses the corner floors guard against, each a set of glance features
+# frozen at one corner's value for every corner: one face set, a color
+# foundation that ignores warmth, and the collapse the site trials showed.
+COLLAPSES = {
+    "one face set": ("face.display", "face.text"),
+    "color ignores warmth": ("neutral", "support", "status.hue"),
+    "trial collapse": ("face.display", "face.text", "neutral", "status.hue", "status.chroma",
+                       "radius.control", "radius.card"),
+}
+
+
+@pytest.mark.parametrize("collapse", sorted(COLLAPSES))
+@pytest.mark.parametrize("brand", REFERENCE_BRANDS)
+def test_every_corner_floor_fails_a_collapse(brand, collapse):
+    corners = _corners(brand)
+    frozen = corners[(0.0,) * 7]
+    mutated = {bits: dict(c, **{k: frozen[k] for k in COLLAPSES[collapse]})
+               for bits, c in corners.items()}
+    floor = CORNER_FLOOR if brand == REFERENCE_BRAND else SATURATED_CORNER_FLOOR
+    assert min(_opposite(mutated)) < floor, (brand, collapse, min(_opposite(mutated)))
 
 
 @pytest.mark.parametrize("axis", [a for a in AXIS_NAMES if a != "motion"])

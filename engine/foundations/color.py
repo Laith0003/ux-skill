@@ -318,19 +318,22 @@ _FILL_STATES = {
     "color.action.danger": ("color.action.danger-hover", "color.action.danger-pressed"),
     "color.action.on-brand": ("color.action.on-brand-hover", "color.action.on-brand-pressed"),
 }
-# The surfaces the button contract places a button on. The primary edge and
-# the danger fill with its states clear each of them, so a filled control
-# is found by its own boundary wherever it sits; the button on the brand
-# band has its own fill, measured against the band.
+# The surfaces the button contract places a button on: every surface a
+# control sits on (LINE_SURFACES). The primary edge, the danger fill with
+# its states and the danger edge (color.status.danger.strong) clear each of
+# them, so a filled control is found by its own boundary wherever it sits;
+# the button on the brand band has its own fill, measured against the band.
 CONTROL_SURFACES: Tuple[str, ...] = ("color.surface.page", "color.surface.card",
-                                     "color.surface.sunken", "color.surface.raised")
+                                     "color.surface.sunken", "color.surface.raised",
+                                     "color.surface.tint", "color.surface.band",
+                                     "color.surface.stripe", "color.surface.header")
 
 
 def _extra_text_bgs(role: str) -> Tuple[str, ...]:
     """Fills a text role also sits on, beyond the surfaces: body and muted
-    copy on every status soft fill (alert and banner copy), status text on
-    its own soft fill."""
-    if role in ("color.text.default", "color.text.muted"):
+    copy and links on every status soft fill (alert and banner copy and its
+    action link), status text on its own soft fill."""
+    if role in ("color.text.default", "color.text.muted", "color.text.link"):
         return tuple(f"color.status.{s}.soft" for s in STATUS_HUES)
     if role.startswith("color.status.") and role.endswith(".text"):
         return (role[:-len("text")] + "soft",)
@@ -372,6 +375,9 @@ def build_pairings(text_roles: Tuple[str, ...] = TEXT_ROLES,
         + [Pairing("color.action.on-brand", "color.surface.brand", 3.0, "1.4.11")]
         + [Pairing(f"color.status.{s}.strong", "color.surface.page", 3.0, "1.4.11")
            for s in STATUS_HUES]
+        # The danger edge of secondary and ghost buttons sits where a button does.
+        + [Pairing("color.status.danger.strong", bg, 3.0, "1.4.11")
+           for bg in CONTROL_SURFACES if bg != "color.surface.page"]
         # One ring cannot also stand out from the inverse surface, so that
         # surface gets its own.
         + [Pairing("color.focus.ring-inverse", "color.surface.inverse", 3.0, "1.4.11")]
@@ -425,7 +431,9 @@ GROUPS: Tuple[_Group, ...] = (
            grounds=CONTROL_SURFACES, edge="color.action.primary-edge", brand=True),
     _Group("color.action.danger", "color.text.on-danger", _FILL_STATES["color.action.danger"],
            grounds=CONTROL_SURFACES),
-) + tuple(_Group(f"color.status.{s}.strong", f"color.status.{s}.on-strong") for s in STATUS_HUES) \
+) + tuple(_Group(f"color.status.{s}.strong", f"color.status.{s}.on-strong",
+                 grounds=CONTROL_SURFACES if s == "danger" else ("color.surface.page",))
+          for s in STATUS_HUES) \
     + (_Group("color.surface.brand", "color.text.on-brand", grounds=(), brand=True),
        # After the band: the button on it clears the band as solved.
        _Group("color.action.on-brand", "color.text.on-brand-action",
@@ -434,9 +442,13 @@ GROUPS: Tuple[_Group, ...] = (
 _GROUP_ROLES = frozenset(r for g in GROUPS for r in (g.fill, g.on, g.ring, g.edge) + g.states
                          if r)
 EXACT = "color.brand.exact"
-# In dark, black text goes only on a fill at least this light (OKLCH):
-# black on a mid tone reads muddy on a dark page.
-MUDDY_L = 0.72
+# The brand's natural fill for white text in standard and high contrast:
+# the brand's hue and chroma at the highest lightness where white text
+# reaches the text minimum (natural_fill), with its hover and pressed steps
+# STATE_L and twice STATE_L darker in OKLCH lightness.
+NATURAL_FILLS: Mapping[str, float] = MappingProxyType({"color.brand.fill": 4.5,
+                                                       "color.brand.fill-high": 7.0})
+STATE_L = 0.05
 # The ring prefers a color that also stands 3:1 off the primary fill.
 RING_ON_FILL = 3.0
 # Under high contrast, how much a ring that cannot stand RING_ON_FILL off a
@@ -555,6 +567,10 @@ def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str,
             prims[EXACT] = rgb_to_hex(hex_to_rgb(brand_hex))
             prims["color.brand.band-dark"] = _with_chroma(
                 r.stops[900], cap=character.dark_band_chroma(axes))
+            for path, need in NATURAL_FILLS.items():
+                fill, hover, pressed = natural_fill(brand_hex, need)
+                prims[path], prims[path + "-hover"], prims[path + "-pressed"] = \
+                    fill, hover, pressed
         if family == "neutral":
             # Kept beside the ramp, so a DTCG round trip keeps the order. The
             # dark recess sits halfway between the page (950) and the card
@@ -569,6 +585,28 @@ def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str,
         for pct in OVERLAY_STEPS:
             prims[f"color.{family}.{pct}"] = rgb + f"{round(pct * 255 / 100):02X}"
     return prims
+
+
+def natural_fill(brand_hex: str, need: float) -> Tuple[str, str, str]:
+    """The brand's own hue and chroma at the highest OKLCH lightness, no
+    lighter than the brand, where white text reaches `need` on it, found by
+    bisection; then its hover and pressed steps STATE_L and twice STATE_L
+    darker. The least move off the brand that carries white text, continuous
+    in the brand color, instead of the nearest ramp step."""
+    L, C, H = hex_to_oklch(brand_hex)
+    if contrast("#FFFFFF", oklch_to_hex(L, C, H)) >= need:
+        top = L
+    else:
+        lo, hi = 0.0, L
+        for _ in range(40):
+            mid = (lo + hi) / 2
+            if contrast("#FFFFFF", oklch_to_hex(mid, C, H)) >= need:
+                lo = mid
+            else:
+                hi = mid
+        top = lo
+    return tuple(oklch_to_hex(max(0.0, top - k * STATE_L), C, H)  # type: ignore[return-value]
+                 for k in range(3))
 
 
 def _step_path(path: str, delta: int) -> str:
@@ -652,20 +690,28 @@ def _choose_ring(rings: List[str], fit: Callable[[str], float], fill_hex: str,
     """The ring for a fill already chosen: the first candidate that clears
     every surface and stands RING_ON_FILL off the fill and off each tinted
     fill the contracts pair it with (`tints`: the selected surface and the
-    status soft fills), else the first that clears every surface and
-    differs from the fill, else the first that clears every surface (it
-    equals the fill, which the offset makes visible), else the closest.
-    Only the ring moves here, never the fill."""
+    status soft fills), else the first that clears every surface and stands
+    RING_ON_FILL off the fill alone, else the first that clears every
+    surface and differs from the fill, else the first that clears every
+    surface (it equals the fill, which the offset makes visible), else the
+    closest. Only the ring moves here, never the fill."""
     clear = [r for r in rings if fit(r) >= 1.0]
     if clear:
         return next((r for r in clear
                      if all(contrast(prims[r], hx) >= RING_ON_FILL for hx in (fill_hex,) + tints)),
-                    next((r for r in clear if prims[r] != fill_hex), clear[0]))
+                    next((r for r in clear if contrast(prims[r], fill_hex) >= RING_ON_FILL),
+                         next((r for r in clear if prims[r] != fill_hex), clear[0])))
     return max(rings, key=fit)
 
 
+def _natural_path(mode: str) -> str:
+    """The natural fill for white text that a context's text minimum needs."""
+    return "color.brand.fill-high" if parse(mode).get("contrast") == "high" \
+        else "color.brand.fill"
+
+
 def _fill_candidates(g: _Group, default: str, conv: int,
-                     prims: Dict[str, str]) -> List[str]:
+                     prims: Dict[str, str], mode: str = "") -> List[str]:
     """Fill paths in preference order. A brand group whose default is the
     exact brand color tries it first, then every brand step by OKLab
     distance from it, so a move keeps as much of the brand as the text
@@ -677,16 +723,16 @@ def _fill_candidates(g: _Group, default: str, conv: int,
         steps = sorted(range(len(STEPS)), key=lambda i: (
             round(oklab_distance(prims[f"{family}.{STEPS[i]}"], prims[EXACT]), 6),
             order.index(i)))
-        return [EXACT] + [f"{family}.{STEPS[i]}" for i in steps]
+        rest = [f"{family}.{STEPS[i]}" for i in steps]
+        natural = _natural_path(mode)
+        if natural in prims:
+            # the natural fill joins the steps by its distance from the brand
+            d = round(oklab_distance(prims[natural], prims[EXACT]), 6)
+            at = next((k for k, p in enumerate(rest)
+                       if round(oklab_distance(prims[p], prims[EXACT]), 6) > d), len(rest))
+            rest.insert(at, natural)
+        return [EXACT] + rest
     return [f"{family}.{STEPS[i]}" for i in _order_from(STEPS.index(int(step)), conv)]
-
-
-def _muddy(fill_hex: str, on: str, mode: str) -> bool:
-    """Black text on a mid tone on a dark page, where that reads muddy (dark
-    mode, standard and high contrast). On a light page black text on a
-    bright brand reads as the brand's own look, in high contrast too."""
-    return _scheme(mode) == "dark" and on == "color.base.black" \
-        and hex_to_oklch(fill_hex)[0] < MUDDY_L
 
 
 def _choose_edge(fill_path: str, family: str, grounds: List[Tuple[str, float]],
@@ -711,13 +757,14 @@ def _label(grounds: Tuple[str, ...]) -> str:
     return "band" if grounds == ("color.surface.brand",) else "surface"
 
 
-def natural_cost(fill_hex: str, on: str) -> float:
-    """What the text on a fill costs in naturalness: black text on a
-    saturated mid tone costs character.black_text_cost, white nothing."""
+def natural_cost(fill_hex: str, on: str, mode: str = "") -> float:
+    """What the text on a fill costs in naturalness in one context: black
+    text on a saturated mid tone costs character.black_text_cost, stricter
+    on a dark page, white nothing."""
     if on != "color.base.black":
         return 0.0
     lightness, chroma, _ = hex_to_oklch(fill_hex)
-    return character.black_text_cost(lightness, chroma)
+    return character.black_text_cost(lightness, chroma, dark=_scheme(mode) == "dark")
 
 
 def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
@@ -727,7 +774,9 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
 
     Search order (deterministic):
       1. the fill: for the brand group the exact brand color, then brand
-         steps by OKLab distance from it; for any other group the ramp
+         steps and the natural fill for white text (natural_fill, whose
+         states step darker in its own hue) by OKLab distance from it; for
+         any other group the ramp
          outward from its default, the conventional direction (darker in
          light, lighter in dark) first at equal distance;
       2. its states (hover, then pressed) one and two steps on from the
@@ -736,10 +785,7 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
          fill (_state_paths), so the exact brand steps from where it sits
          in its ramp, not from step 500;
       3. the text on it as base.white, then base.black (a group with
-         brand_text tries brand steps nearest the brand band first); in
-         dark and high contrast the brand group first skips black text on a
-         fill darker than MUDDY_L, and takes it only when nothing else
-         clears;
+         brand_text tries brand steps nearest the brand band first);
       4. for a group with an edge, the edge: the fill when it clears every
          surface in grounds, else the nearest step of its ramp that does;
       5. for the primary group, the ring, after the rest is fixed: brand
@@ -752,8 +798,9 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
     distance from the brand (plus the ring's shortfall in dark high
     contrast) plus what the text costs in naturalness (natural_cost), and
     the lowest cost wins, the search order breaking ties. So white text on
-    a step just darker beats black text on a saturated mid tone whenever
-    the step is nearer than black costs, and never beyond IDENTITY_DISTANCE.
+    the natural fill beats black text on a saturated mid tone whenever the
+    natural fill is nearer than black costs, and never beyond
+    IDENTITY_DISTANCE; one cost decides light and dark alike.
     The minimums are PAIRINGS' own in this context, so they rise under
     contrast:high:
       text on the fill and on every state   >= 4.5 (WCAG 1.4.3), 7.0 high (WCAG 1.4.6)
@@ -814,7 +861,7 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
         _apply(g, mode, pick, defaults, roles, choice, summary, notes, solved=solved)
 
     best: Optional[Tuple[float, Tuple[str, ...], List[str], str]] = None
-    candidates = _fill_candidates(g, defaults[g.fill], conv, prims)
+    candidates = _fill_candidates(g, defaults[g.fill], conv, prims, mode)
 
     def ring_shortfall(fill_path: str) -> float:
         """How far the best ring that clears every surface falls short of
@@ -840,11 +887,16 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
         rank.update({p: rank[p] + RING_WEIGHT * ring_shortfall(p) for p in candidates[1:]})
         rest = sorted(candidates[1:], key=lambda p: (round(rank[p], 6), candidates.index(p)))
         order = candidates[:1] + rest
-    for allow_muddy in ((False, True) if g.brand else (True,)):
+    for _once in (True,):
         passing: List[Tuple[float, int, Tuple[str, ...], List[str], str]] = []
         for fill_path in order:
             kept = len(passing)
-            for states in _state_paths(prims[fill_path], family, conv, len(g.states), prims):
+            if fill_path in NATURAL_FILLS:
+                # the natural fill steps from itself, darker, in its own hue
+                paths_for = [(fill_path + "-hover", fill_path + "-pressed")[:len(g.states)]]
+            else:
+                paths_for = _state_paths(prims[fill_path], family, conv, len(g.states), prims)
+            for states in paths_for:
                 if len(passing) > kept:
                     break
                 paths = [fill_path] + list(states)
@@ -852,8 +904,6 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
                 if len(set(hexes)) != len(hexes):
                     continue
                 for on in ons:
-                    if not allow_muddy and _muddy(hexes[0], on, mode):
-                        continue
                     score = min([contrast(prims[on], h) / need_text for h in hexes]
                                 + [contrast(h, hx) / need
                                    for h in (hexes if g.states_on_grounds else hexes[:1])
@@ -865,7 +915,7 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
                         if not weighed:
                             finish(choice, hexes, on, solved=True)
                             return
-                        cost = rank[fill_path] + natural_cost(hexes[0], on)
+                        cost = rank[fill_path] + natural_cost(hexes[0], on, mode)
                         passing.append((round(cost, 6), len(passing), choice, hexes, on))
                         break
         if passing:
@@ -876,7 +926,7 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
                 words = dict(_CONTEXT_WORDS)[mode].lower()
                 notes.append(f"color: in {words}, {g.fill} takes white text on {choice[0]} "
                              f"rather than black text on {first[2][0]}: black there weighs "
-                             f"{natural_cost(first[3][0], first[4]):.2f} in naturalness, more "
+                             f"{natural_cost(first[3][0], first[4], mode):.2f} in naturalness, more "
                              f"than the move of {moved:.2f} from the brand")
             finish(choice, hexes, on, solved=True)
             return
@@ -1107,39 +1157,34 @@ def _media_veil(ts: TokenSet, mode: str) -> List[str]:
 
 def _on_color_natural(ts: TokenSet, mode: str) -> List[str]:
     """Black text on a brand fill weighs what it costs in naturalness
-    (natural_cost) against a move off the brand: where a brand step nearer
-    to the brand than the fill plus that cost carries white text at the
-    minimum, on it and on the next two steps in the direction the fill's
-    states take, the fill should be that step with white text."""
+    (natural_cost) against a move off the brand: where the natural fill for
+    white text (natural_fill) sits nearer to the brand than the fill plus
+    that cost, the fill should be the natural fill with white text. It reads
+    the natural fill the engine wrote, so a token set the engine did not
+    build (one without it) is not checked, and dark high contrast, where the
+    solver also weighs the focus ring, is left to the solver."""
     fill, on = "color.action.primary", "color.text.on-action"
-    if not (_typed(ts, fill) and _typed(ts, on) and ts.has(EXACT)):
+    natural = _natural_path(mode)
+    if not (_typed(ts, fill) and _typed(ts, on) and ts.has(EXACT) and ts.has(natural)) \
+            or mode == "scheme:dark,contrast:high":
         return []
     raw = ts.raw(fill, mode)
     if not (is_alias(raw) and alias_target(raw).startswith("color.brand.")) \
             or ts.resolve(on, mode) != "#000000":
         return []
-    exact, here = ts.resolve(EXACT), ts.resolve(fill, mode)
-    if natural_cost(here, "color.base.black") <= 0.0:
+    exact, here, hx = ts.resolve(EXACT), ts.resolve(fill, mode), ts.resolve(natural)
+    black = natural_cost(here, "color.base.black", mode)
+    if black <= 0.0:
         return []
-    cost = oklab_distance(here, exact) + natural_cost(here, "color.base.black")
     need = required(next(p for p in PAIRINGS if (p.fg, p.bg) == (on, fill)), mode)[0]
-    conv = +1 if _scheme(mode) == "light" else -1
-    for step in sorted(STEPS, key=lambda s: oklab_distance(ts.resolve(f"color.brand.{s}"),
-                                                           exact)):
-        hx = ts.resolve(f"color.brand.{step}")
-        if oklab_distance(hx, exact) + 1e-6 >= cost:
-            break
-        i = STEPS.index(step)
-        run = [STEPS[j] for j in (i, i + conv, i + 2 * conv) if 0 <= j < len(STEPS)]
-        if len(run) == 3 and all(contrast("#FFFFFF", ts.resolve(f"color.brand.{s}")) >= need
-                                 for s in run):
-            return [f"{on} is black on {fill} ({mode}) at {here}, a saturated mid tone where "
-                    f"black text weighs {natural_cost(here, 'color.base.black'):.2f} in "
-                    f"naturalness, but color.brand.{step} ({hx}) sits "
-                    f"{oklab_distance(hx, exact):.2f} from the brand and carries white text at "
-                    f"{math.floor(contrast('#FFFFFF', hx) * 100) / 100:.2f}:1; point {fill} at "
-                    f"color.brand.{step} and {on} at color.base.white"]
-    return []
+    moved = oklab_distance(hx, exact)
+    if moved + 1e-6 >= oklab_distance(here, exact) + black \
+            or contrast("#FFFFFF", hx) < need:
+        return []
+    return [f"{on} is black on {fill} ({mode}) at {here}, a saturated mid tone where black text "
+            f"weighs {black:.2f} in naturalness, but {natural} ({hx}) sits {moved:.2f} from the "
+            f"brand and carries white text at {math.floor(contrast('#FFFFFF', hx) * 100) / 100:.2f}"
+            f":1; point {fill} at {natural} and {on} at color.base.white"]
 
 
 CHECKS: Tuple[Check, ...] = (
@@ -1315,15 +1360,11 @@ def brand_fidelity(ts: TokenSet) -> List[str]:
             need = required(next(p for p in PAIRINGS if (p.fg, p.bg) == (
                 "color.text.on-action", "color.action.primary")), mode)[0]
             white, black = contrast("#FFFFFF", exact), contrast("#000000", exact)
-            if black >= need and _muddy(exact, "color.base.black", mode):
+            if black >= need and on == "#FFFFFF":
                 why = (f"black text would measure {_ratio(black)} on the brand color, but black "
-                       "on a mid tone reads muddy in this mode, and white measures "
-                       f"{_ratio(white)}")
-            elif black >= need and on == "#FFFFFF":
-                why = (f"black text would measure {_ratio(black)} on the brand color, but black "
-                       "on a saturated mid tone reads less naturally than white on a step "
+                       "on a saturated mid tone reads less naturally than white on a fill "
                        f"{distance:.2f} away in OKLab (black there weighs "
-                       f"{natural_cost(exact, 'color.base.black'):.2f}), and white measures "
+                       f"{natural_cost(exact, 'color.base.black', mode):.2f}), and white measures "
                        f"{_ratio(white)} on the brand color itself")
             else:
                 why = (f"on the brand color white text measures {_ratio(white)} and black "
@@ -1339,6 +1380,27 @@ def brand_fidelity(ts: TokenSet) -> List[str]:
         line += f" The focus ring measures {_ratio(contrast(ring, fill))} against the fill."
         out.append(line)
     return out + _logo_lines(ts, exact)
+
+
+def primary_in_this_system(ts: TokenSet) -> str:
+    """The sentence a handoff adds to color.action.primary: the brand role
+    this system was built with, and what the primary fill resolves to in
+    light and dark at standard contrast. Empty for a set without it."""
+    fill = "color.action.primary"
+    if not ts.has(fill):
+        return ""
+    light, dark = COLOR_CONTEXTS[0], "scheme:dark,contrast:standard"
+    raw = ts.raw(fill, light)
+    target = alias_target(raw) if is_alias(raw) else ""
+    if target.startswith("color.brand."):
+        role = "fill"
+    else:
+        link = ts.raw("color.text.link", light) if ts.has("color.text.link") else ""
+        role = "edge" if is_alias(link) and alias_target(link).startswith("color.neutral.") \
+            else "accent"
+    return (f"In this system the brand role is {role}: color.action.primary is "
+            f"{ts.resolve(fill, light)}{f' ({target})' if target else ''} in light mode and "
+            f"{ts.resolve(fill, dark)} in dark mode, at standard contrast.")
 
 
 def _role_lines(ts: TokenSet) -> List[str]:

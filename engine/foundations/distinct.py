@@ -17,9 +17,10 @@ systems that differ only in how they move or in their focus ring are not
 distinct at a glance.
 
 Each numeric feature is scaled by SPAN, the widest the engine goes on it
-over the 128 corners of the axes with REFERENCE_BRAND (the body size by
-the audience's age bands, since the axes do not move it), and a test pins
-every SPAN to that measured range. A color is a point in OKLab, the
+over the 128 corners of the axes with any of REFERENCE_BRANDS, a mid grey
+and four saturated brands (the body size by the audience's age bands,
+since the axes do not move it), and a test pins every SPAN to that
+measured range. A color is a point in OKLab, the
 neutral tint a point in the OKLab a/b plane and the status hues a point in
 the four hue turns; each compares by straight-line distance. A named
 feature (a face) counts 0 when equal and 1 when not.
@@ -35,11 +36,14 @@ from engine.foundations.color_math import hex_to_oklch
 from engine.foundations.tokens import TokenSet
 
 LIGHT = "scheme:light,contrast:standard"
-# A mid grey leads nothing (decisions/brand-leads-the-role.md): its role,
-# neutrals and supporting accent are the axes' alone, so the spans measured
-# with it are what the axes can do. A saturated brand fills its action and
-# sets its neutrals whatever the axes, which would leave those spans empty.
+# A mid grey leads nothing (decisions/brand-leads-the-role.md): its role
+# and neutrals are the axes' alone. A saturated brand leads its button and
+# link, and the axes show in its supporting accent and neutrals instead.
+# The spans are the widest over all five, and the corner floors hold on
+# each (decisions/distinctness-on-saturated-brands.md).
 REFERENCE_BRAND = "#808080"
+SATURATED_REFERENCES: Tuple[str, ...] = ("#3366FF", "#FF6A00", "#0D9488", "#7C3AED")
+REFERENCE_BRANDS: Tuple[str, ...] = (REFERENCE_BRAND,) + SATURATED_REFERENCES
 
 # How much each glance feature counts. 2 for what leads the first screen:
 # the main action's color, the neutrals that tint the page and the grey
@@ -59,8 +63,8 @@ BEHAVIOR: Tuple[str, ...] = ("reveal.ms", "overshoot", "ring.px", "face.mono")
 NAMED: Tuple[str, ...] = ("face.display", "face.text", "face.mono")
 # The widest the engine goes on each numeric feature (see the docstring).
 SPAN: Mapping[str, float] = MappingProxyType({
-    "button": 0.37, "link": 0.11, "support": 0.07, "neutral": 0.021,
-    "status.hue": 38.0, "status.chroma": 0.082,
+    "button": 0.37, "link": 0.13, "support": 0.25, "neutral": 0.021,
+    "status.hue": 38.0, "status.chroma": 0.098,
     "radius.control": 58.0, "radius.card": 18.0,
     "hero.px": 71.0, "hero.weight": 500.0, "hero.tracking": 4.7, "body.px": 2.0,
     "shadow.alpha": 0.14, "shadow.blur": 2.0,
