@@ -146,8 +146,10 @@ def test_the_generated_pack_repeats_no_licensed_phrasing():
 from engine.contracts.library import load_folder  # noqa: E402
 from engine.foundations.gate import HIGH_FLOOR, required  # noqa: E402
 from engine.foundations.export import to_css  # noqa: E402
+from engine.contracts.precedence import (  # noqa: E402
+    DISABLED_RULE, SPECIFICITY_OPENING, SPECIFICITY_RULE, TWO_STATE_OPENING)
 from engine.rulepack.generate import (  # noqa: E402
-    PRECEDENCE_OPENINGS, contract_pairing_rows, overlaps, precedence_lines, state_pairs)
+    contract_pairing_rows, overlaps, precedence_lines, state_pairs)
 
 CONTRACTS = load_folder(SEED_DIR)
 
@@ -240,32 +242,54 @@ def test_contract_lines_come_from_the_contracts():
             (want or ["- No contract binds these roles yet."]), f.name
 
 
+def test_the_readme_states_the_one_resolution_order_word_for_word():
+    readme = PACK_FILES[f"{PACK}/README.md"]
+    section = readme.split("## Contracts\n", 1)[1].split("## Rules")[0]
+    assert f"1. {DISABLED_RULE}.\n" in section
+    assert f"2. {SPECIFICITY_RULE}.\n" in section
+    assert f"3. Where two other states still bind one part and property, the contract's line " \
+           f"that starts \"{TWO_STATE_OPENING}\" says which wins." in section
+    # The rule is the contracts' own: every contract with a disabled state
+    # carries it word for word, and the pack copies the contracts as written.
+    for c in CONTRACTS:
+        if "disabled" in c.states:
+            assert DISABLED_RULE in c.do
+            assert f"- {DISABLED_RULE}\n" in PACK_FILES[f"{PACK}/contracts/{c.name}.yaml"]
+
+
 def test_the_precedence_lines_are_the_contracts_own_and_every_overlap_has_them():
     readme = PACK_FILES[f"{PACK}/README.md"]
-    ruled = [c for c in CONTRACTS if any(overlaps(c))]
-    assert [c.name for c in ruled] == ["button", "selectable-row", "text-field"]
-    for c in ruled:
-        lines = precedence_lines(c)
-        for need, opening in zip(overlaps(c), PRECEDENCE_OPENINGS):
-            assert not need or any(line.startswith(opening) for line in lines), (c.name, opening)
-        assert all(line in c.do for line in lines)
-        pairs = "; ".join(f"{a} and {b}" for a, b in state_pairs(c))
-        head = f"- {c.name} (states that meet: {pairs}):" if pairs else f"- {c.name}:"
-        assert "\n".join([head] + [f"  - {line}" for line in lines]) in readme
-    listed = readme.split("are listed with it.")[1].split("## Rules")[0]
+    listed = readme.split("with each contract's own line:")[1].split("## Rules")[0]
+    met = [c for c in CONTRACTS if state_pairs(c)]
+    assert [c.name for c in met] == ["button", "selectable-row", "text-field"]
     for c in CONTRACTS:
-        if not any(overlaps(c)):
+        lines = precedence_lines(c)
+        assert all(line in c.do for line in lines)
+        if overlaps(c)[0]:
+            assert SPECIFICITY_RULE in lines, c.name
+        own = [line for line in lines if line.startswith(TWO_STATE_OPENING)]
+        for a, b in state_pairs(c):
+            if "disabled" not in (a, b):
+                assert any(a in line and b in line for line in own), (c.name, a, b)
+        pairs = "; ".join(f"{a} and {b}" for a, b in state_pairs(c))
+        if not pairs:
             assert f"- {c.name}" not in listed
+            continue
+        head = f"- {c.name} (states that meet: {pairs})" + (":" if own else ".")
+        assert "\n".join([head] + [f"  - {line}" for line in own]) in listed
+    assert "- text-field (states that meet: disabled and error).\n" in listed
 
 
 def test_the_states_that_meet_come_from_the_bindings(tmp_path):
     by_name = {c.name: c for c in CONTRACTS}
-    assert state_pairs(by_name["button"]) == [
-        ("hover", "pressed"), ("hover", "disabled"), ("pressed", "disabled")]
+    # A disabled button takes no hover or pressed binding, so those states
+    # never meet disabled; hover and press still meet.
+    assert state_pairs(by_name["button"]) == [("hover", "pressed")]
     assert state_pairs(by_name["text-field"]) == [("disabled", "error")]
     # Two states that bind the same role never meet: the row's hover and
     # pressed both take color.surface.sunken.
-    assert ("hover", "pressed") not in state_pairs(by_name["selectable-row"])
+    assert state_pairs(by_name["selectable-row"]) == [
+        ("hover", "selected"), ("pressed", "selected"), ("selected", "disabled")]
     contracts = tmp_path / "contracts"
     shutil.copytree(SEED_DIR, contracts)
     field = contracts / "text-field.yaml"
@@ -281,17 +305,39 @@ def test_the_states_that_meet_come_from_the_bindings(tmp_path):
 def test_a_contract_with_overlapping_bindings_and_no_precedence_stops_the_pack(tmp_path):
     contracts = tmp_path / "contracts"
     shutil.copytree(SEED_DIR, contracts)
-    field = contracts / "text-field.yaml"
-    text = field.read_text(encoding="utf-8")
-    kept = [line for line in text.split("\n") if not line.strip().startswith(
-        ("- Apply the binding for a state", "- When two states apply at once"))]
-    field.write_text("\n".join(kept), encoding="utf-8")
+    button = contracts / "button.yaml"
+    text = button.read_text(encoding="utf-8")
+    kept = [line for line in text.split("\n") if line.strip()[2:] not in (
+        DISABLED_RULE, SPECIFICITY_RULE, "When two states apply at once, pressed wins over hover")]
+    assert len(kept) == len(text.split("\n")) - 3
+    button.write_text("\n".join(kept), encoding="utf-8")
     with pytest.raises(RulePackError) as err:
         build_rule_pack(TS, contracts_dir=contracts)
-    assert err.value.problems == tuple(
-        "text-field: two of its bindings for one part and property can apply at once, and "
-        f"usage.do does not say which wins; add a line that starts \"{o}\""
-        for o in PRECEDENCE_OPENINGS)
+    assert err.value.problems == (
+        "button: it has a disabled state, and usage.do does not state the disabled rule; add "
+        f"this line word for word: \"{DISABLED_RULE}\"",
+        "button: two of its bindings for one part and property can apply at once, and usage.do "
+        f"does not say which wins; add a line that starts \"{SPECIFICITY_OPENING}\"",
+        "button: its hover and pressed bindings can set one part and property at once, and no "
+        f"usage.do line that starts \"{TWO_STATE_OPENING}\" names both; add one that says "
+        "which wins")
+
+
+def test_a_two_state_line_must_name_both_states(tmp_path):
+    contracts = tmp_path / "contracts"
+    shutil.copytree(SEED_DIR, contracts)
+    row = contracts / "selectable-row.yaml"
+    text = row.read_text(encoding="utf-8")
+    old = "When two states apply at once, selected wins over hover and pressed"
+    assert old in text
+    row.write_text(text.replace(old, "When two states apply at once, selected wins over hover"),
+                   encoding="utf-8")
+    with pytest.raises(RulePackError) as err:
+        build_rule_pack(TS, contracts_dir=contracts)
+    assert err.value.problems == (
+        "selectable-row: its pressed and selected bindings can set one part and property at "
+        f"once, and no usage.do line that starts \"{TWO_STATE_OPENING}\" names both; add one "
+        "that says which wins",)
 
 
 def test_the_mode_lines_are_the_selectors_tokens_css_writes():

@@ -76,11 +76,12 @@ usage:
     - Show multiple selection with a check box in the leading slot, single selection with a check mark
     - Let the chevron point to the end of the row, so it flips under right to left
     - Keep the gap between rows at the list gap; rows at the target size need no extra spacing
+    - Apply the disabled rule before the others; a disabled component takes no hover, pressed or focus binding, selected and error still apply, and where disabled and another state bind the same part and property, disabled wins
     - Apply the binding for a state over the one without a state, and the one with more variant conditions over the one with fewer
-    - When two states apply at once, disabled wins over every other state, and selected wins over hover and pressed
+    - When two states apply at once, selected wins over hover and pressed
   dont:
     - Do not show selection by the tinted fill alone
-    - Do not use the hover fill for selection or the selection fill for hover
+    - In a row, do not use the hover fill for selection or the selection fill for hover
     - Do not put a second button inside a row that is itself the target
 provenance:
   figma: {node: null, variantCount: null, lastVerified: null}

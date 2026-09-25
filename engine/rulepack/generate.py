@@ -22,11 +22,14 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from pathlib import Path
 from typing import Any, Dict, List, Sequence, Tuple, Union
 
 from engine.contracts.bind import pairings_of, validate_contracts
 from engine.contracts.library import SEED_DIR, load_folder
+from engine.contracts.precedence import (
+    DISABLED_RULE, SPECIFICITY_OPENING, SPECIFICITY_RULE, TWO_STATE_OPENING, can_meet)
 from engine.contracts.schema import Binding, Contract, ContractError
 from engine.foundations.build import FOUNDATIONS
 from engine.foundations.foundation import Foundation
@@ -63,9 +66,9 @@ README_HEADINGS: Tuple[str, ...] = ("Load the files for your task", "Foundations
 AAA: Tuple[str, ...] = ("1.4.6", "1.4.8", "2.3.3", "2.5.5")
 # The usage.do openings that say which binding wins when two apply at
 # once: one for a state over no state and more conditions over fewer, one
-# for two states at once.
-PRECEDENCE_OPENINGS: Tuple[str, str] = ("Apply the binding for a state",
-                                        "When two states apply at once")
+# for two states at once. The disabled rule comes before both, word for
+# word (engine.contracts.precedence).
+PRECEDENCE_OPENINGS: Tuple[str, str] = (SPECIFICITY_OPENING, TWO_STATE_OPENING)
 
 
 class RulePackError(ValueError):
@@ -231,11 +234,12 @@ def _meetings(contract: Contract) -> List[Tuple[Binding, Binding]]:
 
 def state_pairs(contract: Contract) -> List[Tuple[str, str]]:
     """The pairs of states whose bindings can meet that way, in the order
-    of the contract's states."""
+    of the contract's states. Disabled never meets hover, pressed or focus:
+    a disabled component takes none of their bindings."""
     order = {s: i for i, s in enumerate(contract.states)}
     pairs = []
     for a, b in _meetings(contract):
-        if a.state and b.state and a.state != b.state:
+        if a.state and b.state and a.state != b.state and can_meet(a.state, b.state):
             pair = tuple(sorted((a.state, b.state), key=lambda s: order.get(s, len(order))))
             if pair not in pairs:
                 pairs.append(pair)
@@ -245,30 +249,47 @@ def state_pairs(contract: Contract) -> List[Tuple[str, str]]:
 def overlaps(contract: Contract) -> Tuple[bool, bool]:
     """Whether two bindings of one part and property, naming different
     roles, can apply at once, as (one with a state and one without, or
-    with more variant conditions than the other; two different states)."""
+    with more variant conditions than the other; two different states
+    that the disabled rule does not settle)."""
     conditions = states = False
     for a, b in _meetings(contract):
         if a.state and b.state and a.state != b.state:
-            states = True
+            states = states or "disabled" not in (a.state, b.state) \
+                and can_meet(a.state, b.state)
         elif (a.when, a.state) != (b.when, b.state):
             conditions = True
     return conditions, states
 
 
 def precedence_lines(contract: Contract) -> List[str]:
-    """The usage.do lines in which the contract says which binding wins."""
-    return [line for line in contract.do if line.startswith(PRECEDENCE_OPENINGS)]
+    """The usage.do lines in which the contract says which binding wins:
+    the disabled rule and the lines that start with PRECEDENCE_OPENINGS."""
+    return [line for line in contract.do
+            if line == DISABLED_RULE or line.startswith(PRECEDENCE_OPENINGS)]
+
+
+def _names(line: str, state: str) -> bool:
+    return re.search(rf"\b{re.escape(state)}\b", line) is not None
 
 
 def _precedence_problems(contracts: Sequence[Contract]) -> List[str]:
     out = []
     for c in contracts:
-        lines = precedence_lines(c)
-        for needed, opening in zip(overlaps(c), PRECEDENCE_OPENINGS):
-            if needed and not any(line.startswith(opening) for line in lines):
-                out.append(f"{c.name}: two of its bindings for one part and property can apply "
-                           f"at once, and usage.do does not say which wins; add a line that "
-                           f"starts \"{opening}\"")
+        if "disabled" in c.states and DISABLED_RULE not in c.do:
+            out.append(f"{c.name}: it has a disabled state, and usage.do does not state the "
+                       f"disabled rule; add this line word for word: \"{DISABLED_RULE}\"")
+        if overlaps(c)[0] and not any(line.startswith(SPECIFICITY_OPENING) for line in c.do):
+            out.append(f"{c.name}: two of its bindings for one part and property can apply "
+                       f"at once, and usage.do does not say which wins; add a line that "
+                       f"starts \"{SPECIFICITY_OPENING}\"")
+        own = [line for line in c.do if line.startswith(TWO_STATE_OPENING)]
+        for a, b in state_pairs(c):
+            if "disabled" in (a, b):
+                continue
+            if not any(_names(line, a) and _names(line, b) for line in own):
+                out.append(f"{c.name}: its {a} and {b} bindings can set one part and property "
+                           f"at once, and no usage.do line that starts \"{TWO_STATE_OPENING}\" "
+                           "names both; add one that says which wins")
     return out
 
 
@@ -505,17 +526,22 @@ def _readme(foundations: Sequence[Tuple[Foundation, Guidance]],
     lines += ["", "## Contracts", ""]
     lines += [f"- [{c.name}](contracts/{c.name}.yaml) ({c.status}): {c.description}"
               for c in contracts]
-    met = [c for c in contracts if any(overlaps(c))]
+    lines += ["", "When two bindings of one part and property, naming different roles, both "
+                  "match, every contract resolves them in this order, and each says so in "
+                  "usage.do:", "",
+              f"1. {DISABLED_RULE}.",
+              f"2. {SPECIFICITY_RULE}.",
+              "3. Where two other states still bind one part and property, the contract's line "
+              f"that starts \"{TWO_STATE_OPENING}\" says which wins."]
+    met = [c for c in contracts if state_pairs(c)]
     if met:
-        lines += ["", "In these contracts two bindings of one part and property, naming "
-                      "different roles, can both match. Each says in usage.do which one wins, "
-                      "in the lines below; the states that can meet that way are listed with "
-                      "it.", ""]
+        lines += ["", "The states whose bindings can meet on one part and property (a pair with "
+                      "disabled is settled by rule 1), with each contract's own line:", ""]
         for c in met:
             pairs = "; ".join(f"{a} and {b}" for a, b in state_pairs(c))
-            lines.append(f"- {c.name}" + (f" (states that meet: {pairs})" if pairs else "")
-                         + ":")
-            lines += [f"  - {r}" for r in precedence_lines(c)]
+            own = [line for line in c.do if line.startswith(TWO_STATE_OPENING)]
+            lines.append(f"- {c.name} (states that meet: {pairs})" + (":" if own else "."))
+            lines += [f"  - {r}" for r in own]
     lines += ["", "## Rules for every task", "",
               "- The token files are the source. Never edit a generated value; change the "
               "inputs and build again.",
