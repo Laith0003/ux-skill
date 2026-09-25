@@ -17,7 +17,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Tuple
 
-from engine.foundations.emit import InputError, _brief_text
+from engine.foundations.errors import InputError, _brief_text
 from engine.foundations.tokens import TokenSet
 
 # Every format the importers read.
@@ -119,6 +119,9 @@ class ImportReport:
     notes: List[Item] = field(default_factory=list)
     not_read: List[Item] = field(default_factory=list)
     mapped: List[Mapped] = field(default_factory=list)
+    # Other files read with the source (a sibling dark file), each with its
+    # digest, so a later write can tell whether any of them changed.
+    also_read: List[Source] = field(default_factory=list)
 
     @classmethod
     def of(cls, source: Source, ts: TokenSet, entries: int) -> "ImportReport":
@@ -131,7 +134,9 @@ class ImportReport:
                    {a: list(v) for a, v in ts.axes.items()})
 
     def to_dict(self) -> Dict[str, Any]:
-        return {"source": self.source.to_dict(), "entries": self.entries, "tokens": self.tokens,
+        return {"source": self.source.to_dict(),
+                "also_read": [a.to_dict() for a in self.also_read],
+                "entries": self.entries, "tokens": self.tokens,
                 "by_type": dict(self.by_type), "axes": {a: list(v) for a, v in self.axes.items()},
                 "renamed": [i.to_dict() for i in self.renamed],
                 "notes": [i.to_dict() for i in self.notes],
@@ -143,6 +148,8 @@ class ImportReport:
         lines = ["# Import report", "",
                  f"Read {s.path} ({s.format}, {s.size} bytes, sha256 {s.sha256[:12]}): "
                  f"{self.entries} entries, {self.tokens} tokens.", "",
+                 *[f"Also read {a.path} ({a.format}, {a.size} bytes, sha256 {a.sha256[:12]})."
+                   for a in self.also_read], *([""] if self.also_read else []),
                  "## What was read", "", "| Type | Tokens |", "|---|---|"]
         lines += [f"| {t} | {n} |" for t, n in self.by_type.items()]
         if self.axes:

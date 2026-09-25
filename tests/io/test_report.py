@@ -76,8 +76,9 @@ def test_the_report_counts_tokens_by_type_and_lists_the_modes():
                            "size": 120}
     assert d["not_read"] == [{"where": "tokens.css:5", "name": "--measure",
                               "message": report.not_read[0].message}]
-    assert list(d) == ["source", "entries", "tokens", "by_type", "axes", "renamed", "notes",
-                       "mapped", "not_read"]
+    assert list(d) == ["source", "also_read", "entries", "tokens", "by_type", "axes",
+                       "renamed", "notes", "mapped", "not_read"]
+    assert d["also_read"] == []
     assert d["mapped"] == []
 
 

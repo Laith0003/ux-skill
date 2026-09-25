@@ -11,7 +11,8 @@ from engine.foundations.build import build_system
 from engine.foundations.emit import InputError
 from engine.foundations.export import dump_dtcg
 from engine.io.dtcg_in import import_dtcg, read_dtcg
-from engine.io.report import Source
+from engine.foundations.values import TYPES
+from engine.io.report import Item, Source
 from engine.synthesizer.axes import AxisValues
 
 NEUTRAL = AxisValues(*[0.5] * 7)
@@ -174,9 +175,9 @@ def test_read_dtcg_reads_the_file(tmp_path):
     assert [t.path for t in imported.tokens.tokens()] == ["a"]
 
 
-# Ruling M4-R5: an oklch or oklab color object outside sRGB is mapped into
-# sRGB by CSS Color 4 gamut mapping and reported, never refused, the same
-# way the value reader maps oklch() text. Tailwind v4's blue-500 sits
+# An oklch or oklab color object outside sRGB is mapped into sRGB by CSS
+# Color 4 gamut mapping and reported, never refused, the same way the
+# value reader maps oklch() text. Tailwind v4's blue-500 sits
 # outside sRGB; its red-500 sits inside.
 def test_oklch_and_oklab_objects_are_converted_and_out_of_gamut_ones_mapped():
     import math
@@ -269,23 +270,47 @@ def test_a_primitives_file_reads_its_ramps_and_maps_the_vivid_steps():
 
 
 def test_a_semantic_file_alone_keeps_its_references_and_says_they_do_not_resolve_here():
-    for theme in ("light", "dark"):
-        imported = read_dtcg(FIXTURE / f"semantic.{theme}.tokens.json")
-        ts, report = imported.tokens, imported.report
-        assert report.tokens == 11 and report.not_read == []
-        assert {t.layer for t in ts.tokens()} == {"semantic"}
-        assert ts.get("accent.root").value.startswith("{color.brand.")
-        assert _lines(report.renamed)[0][0] == "accent.$root"
-        assert ("bg.canvas", "references " + ts.get("bg.canvas").value[1:-1] + ", which this "
-                "file does not hold; the reference is kept as written and resolves only where "
-                "the file that defines it is read too") in _lines(report.notes)
-        assert len(report.notes) == 11
+    # The dark file read on its own: its name marks it dark, so nothing is paired.
+    imported = read_dtcg(FIXTURE / "semantic.dark.tokens.json")
+    ts, report = imported.tokens, imported.report
+    assert report.tokens == 11 and report.not_read == [] and dict(ts.axes) == {}
+    assert {t.layer for t in ts.tokens()} == {"semantic"}
+    assert ts.get("accent.root").value == "{color.brand.300}"
+    assert _lines(report.renamed)[0][0] == "accent.$root"
+    assert ("bg.canvas", "references color.neutral.950, which this file does not hold; the "
+            "reference is kept as written and resolves only where the file that defines it is "
+            "read too") in _lines(report.notes)
+    assert len(report.notes) == 11
 
 
-def test_a_file_with_every_layer_reports_the_modes_it_cannot_read():
+def test_the_light_file_pairs_its_dark_sibling_by_token_path():
+    imported = read_dtcg(FIXTURE / "semantic.light.tokens.json")
+    ts, report = imported.tokens, imported.report
+    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    assert report.tokens == 11 and report.not_read == []
+    accent = ts.get("accent.root")
+    assert (accent.value, accent.modes) == ("{color.brand.500}",
+                                            {"scheme:dark": "{color.brand.300}"})
+    # The same reference in both schemes needs no dark value.
+    assert ts.get("status.success").modes == {}
+    assert [s.path for s in report.also_read] == [str(FIXTURE / "semantic.dark.tokens.json")]
+    assert report.notes[0] == Item(
+        "semantic.dark.tokens.json", "",
+        "paired with semantic.light.tokens.json by token path into scheme:dark; 9 tokens take "
+        "their dark value from here and 2 are the same in both schemes")
+    assert dump_dtcg(import_dtcg(dump_dtcg(ts), _src("t.json")).tokens) == dump_dtcg(ts)
+
+
+def test_a_file_with_every_layer_pairs_the_dark_mode_another_tool_keeps():
     imported = read_dtcg(FIXTURE / "themed.tokens.json")
     ts, report = imported.tokens, imported.report
-    assert dict(ts.axes) == {}
+    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    assert ts.get("semantic.surface.page").modes == {"scheme:dark": "{primitive.color.ink}"}
+    assert ts.get("semantic.surface.text").modes == {"scheme:dark": "{primitive.color.white}"}
+    assert report.notes[0] == Item(
+        "themed.tokens.json $extensions org.example.themes", "",
+        "paired with themed.tokens.json by token path into scheme:dark; 2 tokens take their "
+        "dark value from here and 0 are the same in both schemes")
     assert [t.path for t in ts.tokens() if t.layer == "semantic"] == [
         "semantic.surface.page", "semantic.surface.text", "semantic.surface.muted",
         "semantic.action.primary", "semantic.gap.inline", "semantic.gap.stack",
@@ -294,11 +319,10 @@ def test_a_file_with_every_layer_reports_the_modes_it_cannot_read():
     assert ts.get("component.button.label").value["fontWeight"] == 600
     assert len(ts.get("component.button.shadow").value) == 2
     notes = _lines(report.notes)
-    assert notes[0] == ("", "carries $extensions from org.example.themes, which the engine "
+    assert notes[1] == ("", "carries $extensions from org.example.themes, which the engine "
                             "does not read; they are left out of what it writes")
-    assert report.notes[0].where == "themed.tokens.json (root)"
-    assert ("semantic.surface.page", "carries $extensions from org.example.themes, which the "
-            "engine does not read; they are left out of what it writes") in notes
+    assert report.notes[1].where == "themed.tokens.json (root)"
+    assert "semantic.surface.page" not in [n for n, _ in notes]
     assert [i.name for i in report.not_read] == ["component.button.outline",
                                                  "component.button.press"]
     assert [m.name for m in report.mapped] == ["primitive.color.blue"]
@@ -335,3 +359,360 @@ def test_an_untyped_reference_to_a_token_the_file_does_not_hold_names_it():
     assert _lines(report.not_read) == [
         ("gap", "has no $type, and space.2, which it references, is not in this file; add a "
                 "$type")]
+
+
+def _src(name):
+    return Source(name, "dtcg", "0" * 64, 1)
+
+
+# Nothing is dropped without a line: older token forms, bare values and
+# properties DTCG does not define are each listed.
+def test_a_style_dictionary_3_file_is_listed_not_dropped():
+    doc = {"color": {"base": {"red": {"value": "#f00", "comment": "Brand red",
+                                      "attributes": {"category": "color"}},
+                              "blue": {"value": "{color.base.red.value}"}}}}
+    report = _import(doc).report
+    assert (report.entries, report.tokens) == (0, 0)
+    assert _lines(report.not_read) == [
+        ("color.base.red", "uses value, the form before DTCG 2025.10; write $value and $type"),
+        ("color.base.blue", "uses value, the form before DTCG 2025.10; write $value and $type")]
+
+
+def test_a_tokens_studio_legacy_file_is_listed_not_dropped():
+    doc = {"global": {"colors": {"white": {"value": "#ffffff", "type": "color"}},
+                      "type": {"body": {"value": {"fontFamily": "Inter"}, "type": "typography"}}},
+           "$themes": [], "$metadata": {"tokenSetOrder": ["global"]}}
+    report = _import(doc).report
+    assert [i.name for i in report.not_read] == ["global.colors.white", "global.type.body"]
+    assert _lines(report.notes) == [
+        ("$themes", "names no themes called light and dark, so its sets were read as groups"),
+        ("$metadata", "is not a DTCG property; it was left out")]
+
+
+def test_bare_values_and_unknown_properties_are_named():
+    doc = {"red": "#f00", "g": {"$type": "number", "$foo": 1, "a": {"$value": 1}}}
+    report = _import(doc).report
+    assert _lines(report.not_read) == [
+        ("red", 'a bare value; write it as {"$value": ..., "$type": ...}')]
+    assert _lines(report.notes) == [("g.$foo", "is not a DTCG property; it was left out")]
+
+
+def test_circular_references_are_refused_naming_the_loop():
+    doc = {"c": {"$type": "color", "a": {"$value": "{c.b}"}, "b": {"$value": "{c.a}"},
+                 "self": {"$value": "{c.self}"}, "ok": {"$value": "#FFFFFF"},
+                 "leans": {"$value": "{c.a}"}},
+           "u": {"x": {"$value": "{u.y}"}, "y": {"$value": "{u.x}"}}}
+    imported = _import(doc)
+    assert [t.path for t in imported.tokens.tokens()] == ["c.ok"]
+    assert _lines(imported.report.not_read) == [
+        ("c.a", "references c.b, which leads back to it (c.a -> c.b -> c.a); point one of them "
+                "at a value"),
+        ("c.b", "references c.a, which leads back to it (c.b -> c.a -> c.b); point one of them "
+                "at a value"),
+        ("c.self", "references c.self, which leads back to it (c.self -> c.self); point one of "
+                   "them at a value"),
+        ("c.leans", "references c.a, which was not read; fix c.a and import again"),
+        ("u.x", "has no $type, and its references lead back to it (u.x -> u.y -> u.x); point "
+                "one of them at a value"),
+        ("u.y", "has no $type, and its references lead back to it (u.y -> u.x -> u.y); point "
+                "one of them at a value")]
+
+
+def test_a_typography_field_that_references_its_own_token_is_refused():
+    doc = {"t": {"$type": "typography", "$value": {
+        "fontFamily": "Inter", "fontSize": "{t}", "fontWeight": 400,
+        "letterSpacing": {"value": 0, "unit": "px"}, "lineHeight": 1.5}}}
+    imported = _import(doc)
+    assert imported.tokens.tokens() == [] and [i.name for i in imported.report.not_read] == ["t"]
+
+
+# DTCG makes the components the color and the hex a fallback: they are
+# checked, never clamped, and a fallback that disagrees is not guessed at.
+@pytest.mark.parametrize("value, message", [
+    ({"colorSpace": "srgb", "components": [255, 128, 0]},
+     "its srgb components [255, 128, 0] look like 0 to 255; divide each by 255"),
+    ({"colorSpace": "srgb", "components": [1.2, 0, 0]},
+     "its srgb components [1.2, 0, 0] run outside 0 to 1; write each from 0 to 1"),
+    ({"colorSpace": "srgb", "components": [1, 0, 0], "hex": "#00FF00"},
+     "its components read as #FF0000 but its hex fallback is #00FF00; fix one"),
+    ({"colorSpace": "srgb", "components": [1, 0, 0], "alpha": 2},
+     "its alpha 2 is not a number from 0 to 1; write one"),
+    ({"colorSpace": "srgb", "components": [1, 0]},
+     "an srgb color without three numeric components; write them from 0 to 1"),
+    ({"colorSpace": "hsl", "components": [120, 140, 50]},
+     "its hsl saturation and lightness run from 0 to 100; write them in that range"),
+])
+def test_srgb_components_are_checked_not_clamped(value, message):
+    report = _import({"c": {"$type": "color", "$value": value}}).report
+    assert _lines(report.not_read) == [("c", message)]
+
+
+def test_srgb_components_are_the_color_and_a_hex_one_step_off_is_the_same_color():
+    ts = _import({"c": {"$type": "color",
+                        "a": {"$value": {"colorSpace": "srgb", "components": [1, 0.5, 0]}},
+                        "b": {"$value": {"colorSpace": "srgb", "components": [0.1, 0.1, 0.1],
+                                         "hex": "#191919"}}}}).tokens
+    assert ts.get("c.a").value == "#FF8000"
+    assert ts.get("c.b").value == "#191919"
+
+
+# Malformed shapes are named with the fix, never a crash.
+def test_malformed_shapes_are_named_with_the_fix():
+    doc = {"$extensions": [1],
+           "a": {"$type": 5, "$value": 1},
+           "g": {"$type": ["color"], "x": {"$value": "#fff"}},
+           "o": {"$type": "number", "$value": 1,
+                 "$extensions": {"io.github.laith0003.ux-skill": "primitive"}},
+           "m": {"$type": "number", "$value": 1,
+                 "$extensions": {"io.github.laith0003.ux-skill": {"modes": [1]}}},
+           "r": {"$type": "number", "$root": {"$value": 1}, "root": {"$value": 2}},
+           "a.b": {"$type": "number", "$value": 1}}
+    imported = _import(doc)
+    assert [t.path for t in imported.tokens.tokens()] == ["o", "r.root"]
+    assert _lines(imported.report.not_read) == [
+        ("a", "its $type 5 is not a string; write one of " + str(sorted(TYPES))),
+        ("g", "its $type ['color'] is not a string; write one of " + str(sorted(TYPES))
+              + "; the tokens below take no type from it"),
+        ("g.x", "has no $type and its groups set none; add a $type"),
+        ("m", 'its modes are not an object; write them as {"scheme:dark": <value>}'),
+        ("r.root", "is read as r.root, which r.$root already names; rename one"),
+        ("a.b", "a name cannot contain '.', '{' or '}'; rename it")]
+    assert _lines(imported.report.notes) == [
+        ("", "its $extensions is not an object; it was left out"),
+        ("o", "its io.github.laith0003.ux-skill extension is not an object; it was left out")]
+
+
+def test_ref_forms_the_importer_cannot_follow_are_named():
+    doc = {"g": {"$type": "number", "a/b": {"$value": 1},
+                 "c": {"$value": {"$ref": "#/g/a~1b"}},
+                 "far": {"$value": {"$ref": "prims.json#/g/a"}},
+                 "part": {"$value": {"$ref": "#/g/c/$value/0"}}}}
+    imported = _import(doc)
+    assert imported.tokens.get("g.c").value == "{g.a/b}"
+    assert _lines(imported.report.not_read) == [
+        ("g.far", "references another file (prims.json#/g/a); import both together or write "
+                  "the value"),
+        ("g.part", "references part of a value (#/g/c/$value/0); reference the whole token")]
+
+
+def test_omissions_are_noted():
+    doc = {"$extensions": {"io.github.laith0003.ux-skill": {"axes": {"scheme": ["light",
+                                                                                "dark"]}}},
+           "old": {"$type": "number", "$deprecated": True, "a": {"$value": 1}},
+           "d": {"$type": "number", "$value": 1, "$description": 5},
+           "l": {"$type": "number", "$value": 1,
+                 "$extensions": {"io.github.laith0003.ux-skill": {"layer": "banana"}}},
+           "f": {"$type": "number", "$value": 1,
+                 "$extensions": {"io.github.laith0003.ux-skill": {"modes": {"flavor:x": 2}}}},
+           "s": {"$type": "dimension", "$value": {"value": "16", "unit": "px"}}}
+    imported = _import(doc)
+    assert _lines(imported.report.notes) == [
+        ("old", "is marked deprecated; the engine has no deprecated tokens, so the tokens below "
+                "were read as live ones"),
+        ("d", "its $description is not text; it was left out"),
+        ("l", "its layer 'banana' is not one of ['primitive', 'semantic']; it was read as "
+              "primitive by its references"),
+        ("s", "its value is text inside the object; read as 16px")]
+    assert _lines(imported.report.not_read) == [
+        ("f", "its mode flavor:x does not parse: mode key 'flavor:x' names axis 'flavor'; use "
+              "one of ['scheme']")]
+    assert imported.tokens.get("l").layer == "primitive"
+
+
+def test_a_reference_to_a_group_or_to_another_type_is_not_read():
+    doc = {"bg": {"$type": "color", "a": {"$value": "#ffffff"}},
+           "x": {"$type": "color", "$value": "{bg}"},
+           "s": {"$type": "dimension", "$value": {"value": 8, "unit": "px"}},
+           "c": {"$type": "color", "$value": "{s}"}}
+    assert _lines(_import(doc).report.not_read) == [
+        ("x", "references bg, which names a group, not a token; reference one of its tokens"),
+        ("c", "references s, a dimension, where a color belongs; point it at a color")]
+
+
+def test_json_errors_name_comments_trailing_commas_and_duplicate_keys():
+    with pytest.raises(InputError) as exc:
+        import_dtcg('{\n  // a comment\n  "a": 1\n}', _src("/x/t.json"))
+    assert str(exc.value).startswith("t.json is not valid JSON (")
+    assert str(exc.value).endswith("JSON holds no comments or trailing commas; remove them and "
+                                   "import it again")
+    with pytest.raises(InputError) as exc:
+        import_dtcg('{"a": 1,}', _src("t.json"))
+    assert "JSON holds no comments or trailing commas" in str(exc.value)
+    with pytest.raises(InputError) as exc:
+        import_dtcg('{"a": {"$value": 1}, "a": {"$value": 2}}', _src("t.json"))
+    assert str(exc.value) == ("t.json holds the key 'a' twice in one object; keep one and import "
+                              "it again")
+
+
+def test_errors_name_the_file_by_its_name():
+    doc = {"$extensions": {"io.github.laith0003.ux-skill": {"axes": {"scheme": ["light"]}}}}
+    text = json.dumps(doc)
+    with pytest.raises(InputError, match=r"^t\.json names the mode axis scheme"):
+        import_dtcg(text, _src("/some/folder/t.json"))
+
+
+def test_long_broken_and_untyped_chains_import_in_linear_time():
+    import time
+
+    n = 5000
+    broken = {"c": {"$type": "dimension",
+                    **{f"t{i}": {"$value": f"{{c.t{i + 1}}}"} for i in range(n)},
+                    f"t{n}": {"$value": {"value": 2, "unit": "em"}}}}
+    untyped = {"p": {"$type": "number", "$value": 1},
+               **{f"u{i}": {"$value": "{p}" if i == 0 else f"{{u{i - 1}}}"} for i in range(n)}}
+    start = time.perf_counter()
+    assert _import(broken).report.tokens == 0
+    assert _import(untyped).report.tokens == n + 1
+    assert time.perf_counter() - start < 3
+
+
+def test_the_reader_does_not_import_the_writer():
+    """The importers take their error class from a leaf module, so reading a
+    system does not load emit and everything it builds with."""
+    import ast
+
+    import engine.io.dtcg_in
+    import engine.io.report
+    import engine.io.values_in
+    from engine.foundations import emit, errors
+
+    assert emit.InputError is errors.InputError and emit._brief_text is errors._brief_text
+    for module in (engine.io.dtcg_in, engine.io.report, engine.io.values_in, errors):
+        tree = ast.parse(Path(module.__file__).read_text(encoding="utf-8"))
+        names = [n.module for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)]
+        assert "engine.foundations.emit" not in names, module.__name__
+
+
+# A dark scheme is read wherever systems keep it: a sibling file named for
+# dark, another tool's mode in $extensions, or a Tokens Studio theme. Each
+# pairing is reported, and so is every token found in only one scheme.
+def _write(path, doc):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(doc), encoding="utf-8")
+    return path
+
+
+LIGHT = {"color": {"$type": "color", "bg": {"$value": "#ffffff"}, "fg": {"$value": "#111111"},
+                   "brand": {"$value": "#3366ff"}},
+         "space": {"$type": "dimension", "2": {"$value": {"value": 8, "unit": "px"}}}}
+DARK = {"color": {"$type": "color", "bg": {"$value": "#111111"}, "fg": {"$value": "#ffffff"},
+                  "brand": {"$value": "#3366ff"}, "glow": {"$value": "#00ffff"}},
+        "space": {"2": {"$type": "color", "$value": "#000000"}}}
+
+
+@pytest.mark.parametrize("dark_name", ["tokens.dark.json", "dark.json", "dark/tokens.json"])
+def test_a_sibling_dark_file_is_paired_by_token_path(tmp_path, dark_name):
+    src = _write(tmp_path / "tokens.json", LIGHT)
+    _write(tmp_path / dark_name, DARK)
+    imported = read_dtcg(src)
+    ts, report = imported.tokens, imported.report
+    label = Path(dark_name).name
+    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    assert ts.get("color.bg").modes == {"scheme:dark": "#111111"}
+    assert ts.get("color.fg").modes == {"scheme:dark": "#FFFFFF"}
+    assert ts.get("color.brand").modes == {} and ts.get("space.2").modes == {}
+    assert [s.path for s in report.also_read] == [str(tmp_path / dark_name)]
+    assert report.notes[0] == Item(label, "", "paired with tokens.json by token path into "
+                                              "scheme:dark; 2 tokens take their dark value "
+                                              "from here and 1 is the same in both schemes")
+    assert Item("tokens.json space.2", "space.2",
+                f"has no dark value in {label}; it keeps this value in both schemes") \
+        not in report.notes
+    assert _lines(report.not_read) == [
+        ("color.glow", f"is only in {label}, with no light value in tokens.json, so it was not "
+                       "read; add it to tokens.json"),
+        ("space.2", f"is a color in {label} but a dimension in tokens.json; give both one "
+                    "type")]
+    assert report.not_read[0].where == f"{label} color.glow"
+
+
+def test_a_token_missing_from_the_dark_file_is_named(tmp_path):
+    src = _write(tmp_path / "tokens.json", LIGHT)
+    _write(tmp_path / "tokens.dark.json", {"color": {"$type": "color",
+                                                     "bg": {"$value": "#111111"}}})
+    report = read_dtcg(src).report
+    assert ("color.fg", "has no dark value in tokens.dark.json; it keeps this value in both "
+                        "schemes") in _lines(report.notes)
+
+
+def test_the_dark_file_read_on_its_own_and_our_own_file_are_not_paired(tmp_path):
+    _write(tmp_path / "tokens.json", LIGHT)
+    dark = _write(tmp_path / "tokens.dark.json", DARK)
+    assert dict(read_dtcg(dark).tokens.axes) == {}
+    ours = tmp_path / "ours" / "tokens.json"
+    ours.parent.mkdir()
+    ours.write_text(dump_dtcg(build_system(NEUTRAL, "#3366FF").tokens), encoding="utf-8")
+    _write(tmp_path / "ours" / "tokens.dark.json", DARK)
+    imported = read_dtcg(ours)
+    assert imported.report.also_read == [] and imported.report.not_read == []
+    assert imported.report.notes == [Item(
+        "tokens.dark.json", "", "is named as the dark half of tokens.json, which carries its "
+                                "own modes, so it was not read")]
+
+
+def test_a_dark_mode_in_another_tools_extensions_is_paired():
+    doc = {"c": {"$type": "color",
+                 "a": {"$value": "#ffffff", "$extensions": {"com.example.figma": {
+                     "modes": {"Light": "#ffffff", "Dark": "#000000"}}}},
+                 "b": {"$value": "#ffffff", "$extensions": {"com.example.figma": {
+                     "modes": {"Compact": "#ffffff", "Comfortable": "#eeeeee"}}}},
+                 "c": {"$value": "#ffffff", "$extensions": {"org.example.themes": {
+                     "dark": {"colorSpace": "oklch", "components": [0.623, 0.214, 259.815]},
+                     "id": "123"}}}}}
+    imported = _import(doc)
+    ts, report = imported.tokens, imported.report
+    assert ts.get("c.a").modes == {"scheme:dark": "#000000"}
+    assert ts.get("c.b").modes == {}
+    assert ts.get("c.c").modes == {"scheme:dark": "#2B7FFF"}
+    assert [(n, m) for n, m in _lines(report.notes) if "hex string" not in m] == [
+        ("", "paired with system.tokens.json by token path into scheme:dark; 1 token takes "
+             "its dark value from here and 0 are the same in both schemes"),
+        ("", "paired with system.tokens.json by token path into scheme:dark; 1 token takes "
+             "its dark value from here and 0 are the same in both schemes"),
+        ("c.b", "carries the modes Compact, Comfortable under com.example.figma, which are not "
+                "light and dark, so the engine left them out"),
+        ("c.c", "carries $extensions from org.example.themes, which the engine does not read; "
+                "they are left out of what it writes")]
+    assert [n.where for n in report.notes[:2]] == [
+        "system.tokens.json $extensions com.example.figma",
+        "system.tokens.json $extensions org.example.themes"]
+    assert [(m.where, m.name) for m in report.mapped] == [
+        ("system.tokens.json c.c (scheme:dark)", "c.c")]
+
+
+STUDIO = {
+    "global": {"colors": {"white": {"$type": "color", "$value": "#ffffff"},
+                          "ink": {"$type": "color", "$value": "#111111"}},
+               "space": {"sm": {"$type": "spacing", "$value": "8"}}},
+    "light": {"bg": {"$type": "color", "$value": "{colors.white}"},
+              "fg": {"$type": "color", "$value": "{colors.ink}"}},
+    "dark": {"bg": {"$type": "color", "$value": "{colors.ink}"},
+             "fg": {"$type": "color", "$value": "{colors.white}"}},
+    "brand-b": {"bg": {"$type": "color", "$value": "#ff0000"}},
+    "$themes": [
+        {"id": "1", "name": "Light", "selectedTokenSets": {"global": "source",
+                                                          "light": "enabled",
+                                                          "brand-b": "disabled"}},
+        {"id": "2", "name": "Dark", "selectedTokenSets": {"global": "source",
+                                                         "dark": "enabled"}}],
+    "$metadata": {"tokenSetOrder": ["global", "light", "dark", "brand-b"]},
+}
+
+
+def test_a_tokens_studio_file_pairs_its_light_and_dark_themes():
+    imported = _import(STUDIO, "studio.json")
+    ts, report = imported.tokens, imported.report
+    assert [t.path for t in ts.tokens()] == ["colors.white", "colors.ink", "bg", "fg"]
+    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    assert (ts.get("bg").value, ts.get("bg").modes) == ("{colors.white}",
+                                                        {"scheme:dark": "{colors.ink}"})
+    assert ts.resolve("bg", "scheme:dark") == "#111111"
+    assert report.notes[0] == Item("studio.json $themes", "",
+                                   "paired with the theme Light by token path into "
+                                   "scheme:dark; 2 tokens take their dark value from here and "
+                                   "2 are the same in both schemes")
+    assert ("brand-b", "is a set in neither the light nor the dark theme; it was left out") \
+        in _lines(report.notes)
+    assert not any("does not hold" in n for _, n in _lines(report.notes))
+    assert [i.name for i in report.not_read] == ["global.space.sm"]
+    assert report.not_read[0].where == "studio.json global.space.sm"
