@@ -64,6 +64,7 @@ Audits the radius roles and the rules between them: the order of the scale, squa
 - `radius-joined`: radius.joined is 0.
 - `radius-pill`: radius.pill is at least 999px, so it is larger than any control's height.
 - `radius-scale-order`: the scale steps strictly increase.
+- `radius-on-scale`: every radius role points at a radius step or the pill value, never at another foundation's value.
 
 ## Beyond the gate
 

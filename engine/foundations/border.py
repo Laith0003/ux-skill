@@ -15,6 +15,7 @@ from typing import Dict, List, Tuple
 from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check
 from engine.foundations.tokens import Token, TokenSet
+from engine.foundations.values import dimension_px
 from engine.synthesizer.axes import AxisValues
 
 WIDTHS = (0, 1, 2, 3, 4)
@@ -82,7 +83,7 @@ def _typed(ts: TokenSet, path: str) -> bool:
 
 
 def _px(ts: TokenSet, path: str, mode: str = "") -> float:
-    return ts.resolve(path, mode)["value"]
+    return dimension_px(ts.resolve(path, mode))
 
 
 def _where(mode: str) -> str:
@@ -188,10 +189,11 @@ def _weight_order(ts: TokenSet, mode: str) -> List[str]:
 
 
 def _whole_pixels(ts: TokenSet, mode: str) -> List[str]:
-    return [f"{t.path} is {t.value['value']:g}px; a sub-pixel stroke vanishes on 1x screens, so "
-            "use a whole number of pixels"
-            for t in ts.tokens() if t.path.startswith("border.width.")
-            and isinstance(t.value, dict) and float(t.value["value"]) != int(t.value["value"])]
+    widths = [(t.path, round(dimension_px(t.value), 4)) for t in ts.tokens()
+              if t.path.startswith("border.width.") and t.type == "dimension"
+              and isinstance(t.value, dict)]
+    return [f"{path} is {px:g}px; a sub-pixel stroke vanishes on 1x screens, so use a whole "
+            "number of pixels" for path, px in widths if px != int(px)]
 
 
 CHECKS: Tuple[Check, ...] = (

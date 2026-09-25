@@ -31,6 +31,7 @@ from engine.foundations.foundation import BrandInputs, Foundation, Generated, ty
 from engine.foundations.gate import Check
 from engine.foundations.modes import compress
 from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
+from engine.foundations.values import dimension_px
 from engine.synthesizer.axes import AxisValues
 
 STEPS = tuple(range(1, 11))
@@ -444,7 +445,7 @@ def _heavier(role: str, weight: int, choice: fonts.Choice) -> int:
 
 
 def _px(dim: Dict[str, Any]) -> float:
-    return dim["value"] * (16 if dim["unit"] == "rem" else 1)
+    return dimension_px(dim)
 
 
 def _typed(ts: TokenSet, path: str) -> bool:

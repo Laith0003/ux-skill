@@ -11,9 +11,11 @@ from __future__ import annotations
 
 from typing import Dict, List, Tuple
 
-from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
+from engine.foundations.foundation import (
+    BrandInputs, Foundation, Generated, direct_alias, is_step, numbered_steps, typed)
 from engine.foundations.gate import Check
 from engine.foundations.tokens import Token, TokenSet
+from engine.foundations.values import dimension_px
 from engine.synthesizer.axes import AxisValues
 
 BASE_UNIT = 4  # px; every step lands on a 4px grid
@@ -95,8 +97,7 @@ def _typed(ts: TokenSet, path: str) -> bool:
 
 
 def _value(ts: TokenSet, path: str, mode: str) -> float:
-    v = ts.resolve(path, mode)
-    return v["value"] * (16 if v["unit"] == "rem" else 1)
+    return dimension_px(ts.resolve(path, mode))
 
 
 def _control_gap(ts: TokenSet, mode: str) -> List[str]:
@@ -112,11 +113,37 @@ def _control_gap(ts: TokenSet, mode: str) -> List[str]:
 
 
 def _scale_order(ts: TokenSet, mode: str) -> List[str]:
-    steps = [t for t in ts.tokens() if t.layer == "primitive" and t.path.startswith("space.")]
+    steps = numbered_steps(ts, "space.")
+    return [f"{b} is not larger than {a}; keep the scale strictly increasing"
+            for a, b in zip(steps, steps[1:]) if _value(ts, a, mode) >= _value(ts, b, mode)]
+
+
+def _on_scale(ts: TokenSet, mode: str) -> List[str]:
+    """Every role that aliases a primitive aliases space.<n>. A role holding
+    its value directly is left to the value checks."""
     out = []
-    for a, b in zip(steps, steps[1:]):
-        if _value(ts, a.path, mode) >= _value(ts, b.path, mode):
-            out.append(f"{b.path} is not larger than {a.path}; keep the scale strictly increasing")
+    for role in ROLES:
+        if not _typed(ts, role):
+            continue
+        target = direct_alias(ts, role, mode)
+        if target is not None and not is_step(target, "space."):
+            out.append(f"{role} ({mode}) points at {target}, which is not a step of the spacing "
+                       "scale; spacing values come from space.<n>, so point it at a space step")
+    return out
+
+
+def _grid(ts: TokenSet, mode: str) -> List[str]:
+    """Every numbered spacing step is a whole multiple of BASE_UNIT."""
+    out = []
+    for path in numbered_steps(ts, "space.", others=False):
+        if ts.get(path).type != "dimension":
+            continue
+        px = _value(ts, path, mode)
+        if px % BASE_UNIT:
+            low = int(px // BASE_UNIT) * BASE_UNIT
+            out.append(f"{path} is {px:g}px, which is not a multiple of {BASE_UNIT}px; every "
+                       f"spacing step sits on the {BASE_UNIT}px grid, so round it to {low}px or "
+                       f"{low + BASE_UNIT}px")
     return out
 
 
@@ -141,6 +168,9 @@ def _compact_not_larger(ts: TokenSet, mode: str) -> List[str]:
 CHECKS: Tuple[Check, ...] = (
     Check("control-gap", "system", _control_gap, axes=("density",)),
     Check("space-scale-order", "system", _scale_order,
+          exempt_axes=(("density", "it reads only primitives, which never carry modes"),)),
+    Check("space-on-scale", "system", _on_scale, axes=("density",)),
+    Check("space-grid", "system", _grid,
           exempt_axes=(("density", "it reads only primitives, which never carry modes"),)),
     Check("space-hierarchy", "system", _hierarchy, axes=("density",)),
     Check("compact-not-larger", "system", _compact_not_larger, axes=("density",)),

@@ -90,7 +90,9 @@ def test_checks_name_the_token_and_the_fix():
     ts.add(Token("radius.dialog", "dimension", "{radius.d}", layer="semantic"))
     ts.add(Token("radius.pill", "dimension", "{radius.c}", layer="semantic"))
     report = gate(ts, [], CHECKS, raise_on_fail=False)
-    assert [f.message for f in report.failures] == [
+    # The letter steps are off the numbered scale; radius-on-scale names
+    # them, and its own tests cover it.
+    assert [f.message for f in report.failures if f.check != "radius-on-scale"] == [
         "radius.card (20px) is rounder than radius.dialog (12px); a container is never rounder "
         "than the one it sits in, so point radius.dialog at a larger step",
         "radius.joined is 4px; shared edges must be square, so point it at radius.0",

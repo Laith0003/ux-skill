@@ -20,6 +20,7 @@ from engine.foundations.foundation import BrandInputs, Foundation, Generated, ty
 from engine.foundations.gate import Check
 from engine.foundations.modes import compress, contexts
 from engine.foundations.tokens import Token, TokenSet
+from engine.foundations.values import dimension_px
 from engine.synthesizer.axes import AxisValues
 
 # per level 1..4: key (y, blur, spread), ambient (y, blur), strength multiple
@@ -125,8 +126,8 @@ def _order(ts: TokenSet, mode: str) -> List[str]:
     out = []
     for a, b in zip(present, present[1:]):
         ka, kb = _key(ts, a, mode), _key(ts, b, mode)
-        if not (kb["offsetY"]["value"] > ka["offsetY"]["value"]
-                and kb["blur"]["value"] > ka["blur"]["value"]
+        if not (dimension_px(kb["offsetY"]) > dimension_px(ka["offsetY"])
+                and dimension_px(kb["blur"]) > dimension_px(ka["blur"])
                 and _alpha(kb["color"]) >= _alpha(ka["color"])):
             out.append(f"{b} ({mode}) does not rise above {a}; a higher level needs a larger "
                        "offset and blur and at least the same strength, so point it at a "

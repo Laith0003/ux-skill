@@ -13,7 +13,7 @@ from typing import Callable, List, Mapping, Optional, Sequence, Tuple
 
 from engine.foundations.audience import Audience
 from engine.foundations.gate import Check, GateFinding, Pairing
-from engine.foundations.tokens import TokenSet
+from engine.foundations.tokens import TokenSet, alias_target, is_alias
 from engine.synthesizer.axes import AxisValues
 
 
@@ -77,6 +77,32 @@ def typed(ts: TokenSet, path: str, role_types: Mapping[str, str]) -> bool:
     """True when `path` exists with the type its role expects; the typed
     accessor foundation checks read through, so a mistyped role is skipped."""
     return ts.has(path) and ts.get(path).type == role_types[path]
+
+
+def is_step(path: str, prefix: str) -> bool:
+    """True for a numbered scale step: `prefix` followed by a number only
+    (space.4, radius.0)."""
+    return path.startswith(prefix) and path[len(prefix):].isdigit()
+
+
+def numbered_steps(ts: TokenSet, prefix: str, others: bool = True) -> List[str]:
+    """The primitive steps under `prefix`, the numbered ones sorted by their
+    number, then (with `others`) any others in the order the set lists
+    them. A file may list its scale in any order; the number says where a
+    step sits."""
+    steps = [t.path for t in ts.tokens() if t.layer == "primitive" and t.path.startswith(prefix)]
+    numbered = sorted((p for p in steps if is_step(p, prefix)),
+                      key=lambda p: int(p[len(prefix):]))
+    return numbered + ([p for p in steps if not is_step(p, prefix)] if others else [])
+
+
+def direct_alias(ts: TokenSet, path: str, mode: str) -> Optional[str]:
+    """The token `path` aliases in one context, or None when it is absent or
+    holds its value directly."""
+    if not ts.has(path):
+        return None
+    raw = ts.raw(path, mode)
+    return alias_target(raw) if is_alias(raw) else None
 
 
 def role_types_check(foundations: Sequence[Foundation]) -> Check:
