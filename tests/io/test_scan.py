@@ -616,3 +616,80 @@ def test_several_roots_name_files_apart_and_read_each_file_once(tmp_path):
     assert result.files == 2
     result = scan([tmp_path], _tokens(), exclude=[tmp_path / "admin"])
     assert [u.file for u in result.usages] == ["web/index.css"]
+
+
+# Fix round 2 ------------------------------------------------------------------
+
+def test_emotion_css_objects_are_read_like_style_objects(tmp_path):
+    jsx = """const a = <b css={{ color: 'red', padding: 8, '&:hover': { color: '#00ff00' } }} />;
+const c = <b css={{ margin: gap }} />;
+"""
+    result = _one(tmp_path, "a.jsx", jsx)
+    assert [(r[1], r[2], r[5], r[6]) for r in _rows(result)] == [
+        (1, "color", "#FF0000", ""), (1, "padding", "8px", ""), (1, "color", "#00FF00", "hover")]
+    assert _not_read(result) == [(2, "style value", "margin: gap")]
+
+
+def test_mui_sx_reads_css_values_and_lists_theme_lookups(tmp_path):
+    jsx = """const a = <Box sx={{ color: 'red', padding: '8px', bgcolor: '#ffffff', p: 2,
+  mt: '4px', borderRadius: 2, backgroundColor: 'primary.main', zIndex: 3 }} />;
+const b = <Box sx={(theme) => ({ color: theme.x })} />;
+"""
+    result = _one(tmp_path, "a.jsx", jsx)
+    assert [(r[1], r[2], r[5]) for r in _rows(result)] == [
+        (1, "color", "#FF0000"), (1, "padding", "8px"), (1, "background-color", "#FFFFFF"),
+        (2, "margin-top", "4px"), (2, "z-index", "3")]
+    theme = [(n.line, n.kind, n.text) for n in result.not_read if n.kind == "theme value"]
+    assert theme == [(1, "theme value", "p: 2"), (2, "theme value", "borderRadius: 2"),
+                     (2, "theme value", "backgroundColor: 'primary.main'")]
+    assert all("theme" in n.why for n in result.not_read if n.kind == "theme value")
+    assert ("style expression", 3) in [(n.kind, n.line) for n in result.not_read]
+    assert "sx={" in [n for n in result.not_read if n.kind == "style expression"][0].why
+
+
+def test_roots_with_the_same_folder_name_stay_apart(tmp_path):
+    for name in ("a", "b"):
+        (tmp_path / name / "src").mkdir(parents=True)
+        (tmp_path / name / "src" / "x.css").write_text(".a { gap: 1px; }", encoding="utf-8")
+    result = scan([tmp_path / "a" / "src", tmp_path / "b" / "src"], _tokens())
+    assert [u.file for u in result.usages] == ["a/src/x.css", "b/src/x.css"]
+    result = scan([tmp_path / "a" / "src" / "x.css", tmp_path / "b" / "src"], _tokens())
+    assert [u.file for u in result.usages] == ["a/src/x.css", "b/src/x.css"]
+
+
+def test_an_interpolation_takes_its_glued_unit_with_it(tmp_path):
+    jsx = "const A = styled.div`padding: 8px ${x}px; margin: calc(${y} * 2);`;\n"
+    result = _one(tmp_path, "a.jsx", jsx)
+    assert [(r[2], r[5]) for r in _rows(result)] == [("padding", "8px")]
+    assert [k for _, k, _ in _not_read(result)] == ["interpolation", "interpolation"]
+
+
+def test_a_vue_style_binding_is_named_as_vue_writes_it(tmp_path):
+    result = _one(tmp_path, "a.vue", '<template><b :style="box"></b></template>\n')
+    [n] = result.not_read
+    assert n.why.startswith(':style="box"')
+
+
+def test_tailwind_signal_edges(tmp_path):
+    html = '<b class="w-[13px] bg-brand"></b>\n'
+    assert [c for _, _, c in _one(tmp_path / "w", "a.html", html).unknown_classes] == ["bg-brand"]
+    css = "/* we used @apply once */\n.a { gap: 1px; }\n"
+    (tmp_path / "c").mkdir()
+    (tmp_path / "c" / "a.css").write_text(css, encoding="utf-8")
+    assert _one(tmp_path / "c", "b.html", '<b class="bg-brand"></b>\n').unknown_classes == []
+    js = '<b class="js:toggle bg-brand"></b>\n'
+    assert _one(tmp_path / "j", "a.html", js).unknown_classes == []
+    for variant in ("max-md", "group-hover/item", "data-[state=open]", "@lg", "aria-checked"):
+        html = f'<b class="{variant}:flex bg-brand"></b>\n'
+        found = _one(tmp_path / variant.replace("/", "_").replace("[", "").replace("]", "")
+                     .replace("=", ""), "a.html", html).unknown_classes
+        assert [c for _, _, c in found] == ["bg-brand"], variant
+
+
+def test_an_unclosed_generic_after_a_css_tag_stays_linear(tmp_path):
+    body = "".join(f"if (styled < {i}) {{ css(x < {i}); }}\n" for i in range(3500))
+    (tmp_path / "big.js").write_text("const t = `x`;\n" + body, encoding="utf-8")
+    assert (tmp_path / "big.js").stat().st_size > 100_000
+    start = time.perf_counter()
+    scan([tmp_path], _tokens())
+    assert time.perf_counter() - start < 1
