@@ -414,6 +414,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
   
@@ -505,6 +506,10 @@
         <strong>每个 AI 编码工具都会在第一次生成时落入同样的视觉默认值,头部用 Inter 90px、紫到蓝渐变、三张完全相同的卡片。</strong>解决方法不是问大模型「这个设计够好吗」,那是非确定性的。解决方法是一个在 CI 中跑的确定性 linter:145 条正则规则,扫描磁盘上的代码,无 LLM 调用,无 token 预算,sub-second。这就是 ux-skill 的 lint 子命令。
       </p>
       <p class="byline">By the ux-skill team &middot; 8 min read &middot; MIT-licensed open source</p>
+      <figure class="docfig">
+        <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="终端运行 ux lint：发现两个 high 级别问题，一个紫到蓝渐变和一段遗留的占位文字，每个都标出文件、行号和修复方法，最后以退出码 1 结束。" loading="lazy" decoding="async">
+        <figcaption>一次真实运行：每条结果都带有规则名、文件位置和修复方法。没有 LLM 调用。</figcaption>
+      </figure>
 
       <h2>为什么用正则,而不是 LLM 当裁判</h2>
       <p>

@@ -115,6 +115,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
 
@@ -205,6 +206,10 @@
 <h1>Read a screenshot into a brief, <em>without a vision model</em>.</h1>
 <p class="lede">You see a competitor's app, or a Dribbble shot, and you want the same energy. The usual move is to paste it into a vision model and ask it to describe the design. ux-skill does the opposite: it measures the pixels with plain computer vision, returns a structured brief, and never sends the image anywhere. Here is what the pixels actually say, and where the honest limits are.</p>
 </header>
+<figure class="docfig">
+  <img src="/screenshots/terminal-ux-recommend.webp" width="1600" height="1000" alt="A terminal running ux recommend on a landing-page brief: five lanes (industry, style, palette, type, motion) each resolve with a confidence score and merge into one recommendation file." loading="lazy" decoding="async">
+  <figcaption>The output side: whatever the brief came from, the engine resolves it into style, palette, type and motion.</figcaption>
+</figure>
 
 <h2>Why not just ask a vision model</h2>
 <p>A vision-LLM will gladly narrate a screenshot. The trouble is everything that comes with it. The image leaves your machine, the description costs a call, and the answer is non-deterministic, so the same shot can yield "warm and editorial" today and "clean and minimal" tomorrow. Worse, the narration is prose, not numbers. You wanted a palette and a density value to feed an engine, and you got an adjective.</p>

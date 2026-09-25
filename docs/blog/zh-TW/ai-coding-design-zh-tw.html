@@ -401,6 +401,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
   
@@ -492,6 +493,10 @@
         <strong>Cursor、Claude Code、Cline、Windsurf,每個 AI 編程工具都掉進同一組預設。</strong>90px Inter、紫到藍漸層、三張一模一樣的卡片。換 model 也一樣,輸出幾乎沒變。ux-skill 是一個 MIT 授權的 Python 開源引擎,用 145 條確定性正則規則在 CI 中擋下預設值。不呼叫 LLM,不耗 token,沒有遙測。
       </p>
       <p class="byline">ux-skill 團隊 · 10 分鐘閱讀 · MIT 授權</p>
+      <figure class="docfig">
+        <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="終端機執行 ux lint：找出兩個 high 等級問題，一個紫到藍漸層與一段殘留的佔位文字，每個都標出檔案、行號與修正方式，最後以結束碼 1 結束。" loading="lazy" decoding="async">
+        <figcaption>一次真實執行：每條結果都附上規則名、檔案位置與修正方式。不呼叫 LLM。</figcaption>
+      </figure>
 
       <h2>為什麼每個 AI 都寫出一樣的網站</h2>
       <p>

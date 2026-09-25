@@ -118,6 +118,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
 
@@ -208,6 +209,10 @@
 <h1>A pre-ship review checklist for <em>AI-generated UI</em>.</h1>
 <p class="lede">AI output passes a glance and fails a review. It looks plausible for three seconds because it lands on the training centroid (the average of every screenshot the model saw), and the average is competent, generic, and exactly what your competitor also shipped last week. A glance can't catch that. A checklist can. Here is the one I run before anything goes out, organized by the layer it lives in, with the tell and the fix for each.</p>
 </header>
+<figure class="docfig">
+  <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="A terminal running ux lint on a docs folder: two high-severity findings, a purple-to-blue gradient and leftover placeholder text, each shown with its file, line and fix, then exit code 1." loading="lazy" decoding="async">
+  <figcaption>The mechanical half of the checklist runs as a linter. The rest is a human review.</figcaption>
+</figure>
 
 <h2>Why it passes a glance and fails a review</h2>
 <p>A glance reads silhouette: is there a hero, a nav, some cards, a footer? AI nails the silhouette every time, because the silhouette is the centroid. A review reads the layers underneath: saturation, type variety, spacing rhythm, the states you only see when you interact. That is where the regression to the mean shows: one violet accent, a single sans for everything, three equal cards, the soft default corner, and not a single hover or empty state in sight. None of it is broken. All of it is forgettable. The checklist below works one layer at a time, because that is where the tells hide.</p>

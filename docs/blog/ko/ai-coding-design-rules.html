@@ -405,6 +405,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
   
@@ -496,6 +497,10 @@
         <strong>Claude Code, Cursor, Cline, Windsurf, Codex가 같은 prompt를 받으면 거의 같은 화면을 내놓습니다.</strong> 본문 서체가 90 픽셀 헤드라인으로 늘어나고, 보라에서 파랑으로 흐르는 그라데이션이 흰 배경 위에 깔리고, 영웅 영역 아래 똑같이 생긴 카드 세 개가 줄을 섭니다. ux-skill은 이 "디폴트"가 머지되기 전에 잡아내는 결정론적 규칙 레이어입니다. 100개의 정규식, 998개의 카탈로그 항목, LLM 호출 0회.
       </p>
       <p class="byline">By the ux-skill team &middot; 8 min read &middot; MIT-licensed open source</p>
+      <figure class="docfig">
+        <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="ux lint를 실행한 터미널. 보라에서 파랑으로 가는 그라데이션과 남아 있는 자리표시 텍스트, 두 개의 high 항목을 파일, 줄, 수정 방법과 함께 보여 주고 종료 코드 1로 끝난다." loading="lazy" decoding="async">
+        <figcaption>실제 실행 결과. 항목마다 규칙 이름, 파일 위치, 수정 방법이 붙습니다. LLM 호출은 없습니다.</figcaption>
+      </figure>
 
       <h2>왜 모든 AI가 같은 화면을 만드는가</h2>
       <p>

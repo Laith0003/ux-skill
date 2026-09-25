@@ -443,6 +443,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
   
@@ -534,6 +535,10 @@
         <strong>Recommenders ask the model to do the right thing. Linters punish the model when it doesn't.</strong> ux-skill ships both, but only the linter runs in your CI on every push. Here's how 51 regex rules catch the recognizable fingerprints of AI design output before they merge, with no LLM call, no prompt, and no token budget.
       </p>
       <p class="byline">By the ux-skill team · 8 min read · MIT-licensed open source</p>
+      <figure class="docfig">
+        <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="A terminal running ux lint on a docs folder: two high-severity findings, a purple-to-blue gradient and leftover placeholder text, each shown with its file, line and fix, then exit code 1." loading="lazy" decoding="async">
+        <figcaption>A real run: each finding carries the rule, the file and line, the offending code, and the fix.</figcaption>
+      </figure>
 
       <h2>Why regex, not an LLM</h2>
       <p>
