@@ -114,6 +114,7 @@ usage:
     - Use the large size for the one call to action of a hero or a band, and medium everywhere else
     - Use secondary for another action that must read as a control at rest and when disabled, such as the second of a pair or an action on a busy surface
     - Use ghost for light, repeated actions where the layout already marks them as actions, such as a toolbar or a table row
+    - On media, such as a hero over generated art or a photo, draw a secondary or ghost button's label, edge and focus ring in color.text.on-media over art under color.media.veil, or in imagery.on-scrim over a photo under imagery.scrim; the link and selected colors are measured against surfaces, not media
     - Put the icon at the start of the label in both directions; mirror only a glyph that points
     - Keep the radius the same in every state
     - A disabled component takes no hover or pressed binding; a disabled component that can take focus keeps its focus ring; selected and error still apply, and where disabled and another state bind the same part and property, disabled wins. Apply this first, then the specificity rule

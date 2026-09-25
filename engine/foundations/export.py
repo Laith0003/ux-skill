@@ -12,6 +12,7 @@ import json
 from typing import Any, Dict, List, Tuple
 
 from engine.foundations.layout import responsive_css
+from engine.foundations.typography import phone_roles, responsive_lines, scale_property
 from engine.foundations.modes import AXES, CSS_AXES, join, parse
 from engine.foundations.tokens import Token, TokenSet
 from engine.foundations.values import css_entries, decode, encode
@@ -95,8 +96,18 @@ def from_dtcg(doc: Dict[str, Any]) -> TokenSet:
     return ts
 
 
-def _lines(t: Token, value: Any, indent: str = "  ") -> List[str]:
-    return [f"{indent}{prop}: {text};" for prop, text in css_entries(t.path, t.type, value)]
+def _lines(t: Token, value: Any, indent: str = "  ", phone: Tuple[str, ...] = ()) -> List[str]:
+    """The declarations of one token value. A type style in `phone` scales
+    its size and letter spacing by its --<style>-scale property, which
+    tokens.css sets to the phone factor below the tablet breakpoint and to
+    1 from it up."""
+    entries = css_entries(t.path, t.type, value)
+    if t.path in phone:
+        scale = scale_property(t.path)
+        entries = [(prop, f"calc({text} * var({scale}))"
+                    if prop.endswith(("-font-size", "-letter-spacing")) else text)
+                   for prop, text in entries]
+    return [f"{indent}{prop}: {text};" for prop, text in entries]
 
 
 # How the scheme axis reaches CSS for each default scheme: "system" follows
@@ -106,26 +117,39 @@ def _lines(t: Token, value: Any, indent: str = "  ") -> List[str]:
 SCHEME_DEFAULTS = ("system", "light", "dark")
 
 
+# A right to left subtree: any element inside the root with dir="rtl" or
+# an Arabic lang, so an Arabic block inside a left to right page gets the
+# Arabic faces, sizes and travel sign too. The root keeps its own form.
+NESTED_RTL = ':is([dir="rtl"], [lang|="ar"])'
+
+
 def _rules(ts: TokenSet, key: str, scheme: str = "system") -> List[Tuple[str, str]]:
     """(media query, selector) pairs under which override `key` applies:
     each axis in the key is set either by its root attribute or, when the
     axis has a media feature, by that feature while the attribute does not
     pin the base value. A key over k media-backed axes gives 2**k rules.
-    The scheme axis follows `scheme` (SCHEME_DEFAULTS)."""
+    The scheme axis follows `scheme` (SCHEME_DEFAULTS). The direction axis
+    at rtl has a second form, a subtree inside the root (NESTED_RTL), with
+    every other axis still read from the root, so a combined override
+    reaches the subtree with the same specificity it has on the root."""
     options = []
     for axis, value in parse(key, ts.axes).items():
         attr, media = CSS_AXES.get(axis, (f"data-{axis}", ""))
         if axis == "scheme" and scheme == "dark":
-            options.append([("", f':not([{attr}="{ts.axes[axis][0]}"])')])
+            options.append([("", f':not([{attr}="{ts.axes[axis][0]}"])', "")])
             continue
-        forms = [("", f'[{attr}="{value}"]')]
+        forms = [("", f'[{attr}="{value}"]', "")]
         if media and not (axis == "scheme" and scheme == "light"):
-            forms.append((media, f':not([{attr}="{ts.axes[axis][0]}"])'))
+            forms.append((media, f':not([{attr}="{ts.axes[axis][0]}"])', ""))
+        if axis == "direction" and value == "rtl":
+            forms.append(("", "", NESTED_RTL))
         options.append(forms)
     out = []
     for combo in itertools.product(*options):
-        media = " and ".join(m for m, _ in combo if m)
-        out.append((media, ":root" + "".join(sel for _, sel in combo)))
+        media = " and ".join(m for m, _, _ in combo if m)
+        nested = "".join(n for _, _, n in combo)
+        out.append((media, ":root" + "".join(sel for _, sel, _ in combo)
+                    + (f" {nested}" if nested else "")))
     return out
 
 
@@ -144,7 +168,9 @@ def to_css(ts: TokenSet, scheme: str = "system") -> str:
     schemed = "scheme" in ts.axes and any(
         "scheme" in parse(k, ts.axes) for t in ts.tokens() for k in t.modes)
     base = [f"  color-scheme: {ts.axes['scheme'][0]};"] if schemed else []
-    out = [":root {", *base, *(line for t in ts.tokens() for line in _lines(t, t.value)), "}"]
+    phone = tuple(phone_roles(ts))
+    out = [":root {", *base, *(line for t in ts.tokens() for line in _lines(t, t.value,
+                                                                             phone=phone)), "}"]
     keys: List[str] = []
     for t in ts.tokens():
         for key in t.modes:
@@ -155,7 +181,8 @@ def to_css(ts: TokenSet, scheme: str = "system") -> str:
     keys.sort(key=lambda k: (len(parse(k, ts.axes)), [order.index(a) for a in parse(k, ts.axes)]))
     for key in keys:
         lines = [line for t in ts.tokens() for mk, v in t.modes.items()
-                 if join(parse(mk, ts.axes), ts.axes) == key for line in _lines(t, v)]
+                 if join(parse(mk, ts.axes), ts.axes) == key
+                 for line in _lines(t, v, phone=phone)]
         if schemed and parse(key, ts.axes).get("scheme") not in (None, ts.axes["scheme"][0]):
             lines = [f"  color-scheme: {parse(key, ts.axes)['scheme']};"] + lines
         for media, selector in _rules(ts, key, scheme):
@@ -164,5 +191,5 @@ def to_css(ts: TokenSet, scheme: str = "system") -> str:
                         *("  " + line for line in lines), "  }", "}"]
             else:
                 out += ["", f"{selector} {{", *lines, "}"]
-    out += responsive_css(ts)
+    out += responsive_css(ts, responsive_lines(ts))
     return "\n".join(out) + "\n"

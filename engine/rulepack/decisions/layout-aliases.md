@@ -1,10 +1,10 @@
 ---
 id: layout-aliases
 title: Breakpoints are reference values, tokens.css switches the tiered roles, and type does not change by breakpoint
-status: active
+status: superseded
 areas: [layout, output]
 supersedes: breakpoints-are-reference-values
-superseded_by: null
+superseded_by: type-steps-down-on-phones
 ---
 
 # Breakpoints are reference values, tokens.css switches the tiered roles, and type does not change by breakpoint

@@ -78,6 +78,38 @@ MONO_LABEL_FROM = 0.5
 # grows with the contrast axis.
 ICON_CONTROL_REM = 1.25
 ICON_STROKE_RANGE = (1.0, 3.0)
+# The styles that step down on a phone (every width below the tablet
+# breakpoint): the three largest display styles. Each takes a factor on its
+# size from a phone scale whose ratio is PHONE_RATIO_SHARE of the way from
+# 1 to the system's ratio, so a bold system still steps harder than a
+# quiet one; each phone size stays at least 1px above the style below it,
+# and never above its own size. tokens.css multiplies the style's size and
+# letter spacing by --<style>-scale, the factor on a phone and 1 from the
+# tablet breakpoint up, so a page reads one property.
+PHONE_ROLES = ("type.text.hero", "type.text.heading-1", "type.text.section-title")
+PHONE_RATIO_SHARE = 0.6
+PHONE_FLOOR_ROLE = "type.text.heading-2"
+
+
+def phone_token(role: str) -> str:
+    """The factor token of a style that steps down on a phone."""
+    return "type.phone." + role.rsplit(".", 1)[1]
+
+
+def phone_px(axes: AxisValues, latin: List[int], body: int = BODY_PX) -> Dict[str, int]:
+    """The phone size in px of each style in PHONE_ROLES: the phone scale's
+    size at its step, at least 1px above the style below it on the phone
+    (heading-2 at its own size for the lowest) and at most its own size."""
+    r = 1 + (ratio(axes) - 1) * PHONE_RATIO_SHARE
+    floor = latin[ROLES[PHONE_FLOOR_ROLE][0] - 1]
+    out: Dict[str, int] = {}
+    for role in reversed(PHONE_ROLES):
+        n = ROLES[role][0]
+        px = min(latin[n - 1], max(int(body * r ** (n - BODY_STEP) + 0.5), floor + 1))
+        out[role] = floor = px
+    return out
+
+
 # Run roles: the face a run in the other script takes inside a paragraph.
 RUNS = {"type.run.latin": "type.face.text", "type.run.arabic": ARABIC_FACE}
 ROLE_TYPES: Dict[str, str] = {
@@ -87,6 +119,7 @@ ROLE_TYPES: Dict[str, str] = {
     **{run: "fontFamily" for run in RUNS},
     "type.icon.size.inline": "dimension", "type.icon.size.control": "dimension",
     "type.icon.size.feature": "dimension", "type.icon.stroke": "number",
+    **{phone_token(role): "number" for role in PHONE_ROLES},
 }
 
 
@@ -265,11 +298,19 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
         ts.add(Token(f"type.icon.size.{name}", "dimension", "{type.icon.%s}" % name,
                      layer="semantic"))
     ts.add(Token("type.icon.stroke", "number", "{type.icon.stroke-width}", layer="semantic"))
+    phone = phone_px(axes, latin, body_px)
+    for role in reversed(PHONE_ROLES):
+        n = ROLES[role][0]
+        ts.add(Token(f"type.phone-scale.{n}", "number", round(phone[role] / latin[n - 1], 4)))
+    for role in PHONE_ROLES:
+        ts.add(Token(phone_token(role), "number", "{type.phone-scale.%d}" % ROLES[role][0],
+                     layer="semantic"))
     notes = [f"type: display {choice.display.family}, text {choice.text.family}, mono "
              f"{choice.mono.family}" + (f", Arabic {choice.arabic.family} and "
                                         f"{choice.arabic_display.family} at {scale:g} times the "
                                         "Latin size" if arabic else "")
-             + f", ratio {ratio(axes):g}, display weight {std['type.text.hero']}"]
+             + f", ratio {ratio(axes):g}, display weight {std['type.text.hero']}, hero "
+             f"{latin[ROLES['type.text.hero'][0] - 1]}px ({phone['type.text.hero']}px on a phone)"]
     return Generated(tokens=ts, notes=notes)
 
 
@@ -444,6 +485,56 @@ def _hierarchy(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
+def _phone_hierarchy(ts: TokenSet, mode: str) -> List[str]:
+    """On a phone the styles in PHONE_ROLES take their size times their
+    factor: each factor sits above 0 and at most 1, and the phone sizes
+    keep falling from hero to section-title and stay above heading-2."""
+    present = [r for r in PHONE_ROLES if _typed(ts, r) and _typed(ts, phone_token(r))]
+    if not present:
+        return []
+    out = []
+    sizes = []
+    for role in present:
+        factor = ts.resolve(phone_token(role), mode)
+        if not 0 < factor <= 1:
+            out.append(f"{phone_token(role)} ({mode}) is {factor:g}; a phone factor sits above 0 "
+                       "and at most 1, so point it at a factor in that range")
+        sizes.append((phone_token(role), _px(ts.resolve(role, mode)["fontSize"]) * factor))
+    if _typed(ts, PHONE_FLOOR_ROLE):
+        sizes.append((PHONE_FLOOR_ROLE, _px(ts.resolve(PHONE_FLOOR_ROLE, mode)["fontSize"])))
+    for (a, pa), (b, pb) in zip(sizes, sizes[1:]):
+        if pa <= pb:
+            out.append(f"{b} ({mode}) gives {pb:.1f}px on a phone, not smaller than {a} at "
+                       f"{pa:.1f}px; keep hero, heading-1, section-title and heading-2 in falling "
+                       f"size on a phone, so point {b if b != PHONE_FLOOR_ROLE else a} at a "
+                       "factor that restores the order")
+    return out
+
+
+def phone_roles(ts: TokenSet) -> List[str]:
+    """The styles tokens.css scales on a phone: those with a factor token,
+    in a set that has the tablet breakpoint to switch it off at."""
+    if not ts.has("layout.breakpoint.tablet"):
+        return []
+    return [r for r in PHONE_ROLES if ts.has(r) and ts.has(phone_token(r))]
+
+
+def scale_property(role: str) -> str:
+    """The CSS property that holds a style's phone factor or 1."""
+    from engine.foundations.tokens import css_property
+    return f"{css_property(role)}-scale"
+
+
+def responsive_lines(ts: TokenSet) -> Dict[str, List[str]]:
+    """The declarations for the phone (:root) and from the tablet breakpoint
+    up that set each scaled style's factor."""
+    from engine.foundations.tokens import css_property
+    roles = phone_roles(ts)
+    return {"phone": [f"{scale_property(r)}: var({css_property(phone_token(r))});"
+                      for r in roles],
+            "tablet": [f"{scale_property(r)}: 1;" for r in roles]}
+
+
 def _high_weights(ts: TokenSet, mode: str) -> List[str]:
     """Under high contrast no style is lighter than at standard contrast."""
     if "contrast:high" not in mode:
@@ -502,6 +593,8 @@ CHECKS: Tuple[Check, ...] = (
     Check("arabic-text", "system", _arabic, axes=("direction",), exempt_axes=_WEIGHT_ONLY),
     Check("rem-sizes", "system", _rem_sizes, axes=("direction",), exempt_axes=_WEIGHT_ONLY),
     Check("type-hierarchy", "system", _hierarchy, axes=("direction",),
+          exempt_axes=_WEIGHT_ONLY),
+    Check("phone-hierarchy", "system", _phone_hierarchy, axes=("direction",),
           exempt_axes=_WEIGHT_ONLY),
     Check("high-contrast-weights", "system", _high_weights, axes=("contrast", "direction")),
     Check("strong-weight", "system", _strong_gap, axes=("contrast", "direction")),

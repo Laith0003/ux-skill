@@ -307,14 +307,20 @@ def test_tokens_css_switches_every_tiered_role_by_viewport():
     assert layout.RESPONSIVE == ("columns", "gutter", "margin-inline", "region-gap",
                                  "hero.padding-block")
     groups = [g.replace(".", "-") for g in layout.RESPONSIVE]
-    base = re.search(r"\n:root \{\n((?:  --layout-[a-z-]+: var\(--layout-[a-z-]+-phone\);\n)+)\}",
+    base = re.search(r"\n:root \{\n((?:  --layout-[a-z-]+: var\(--layout-[a-z-]+-phone\);\n)+"
+                     r"(?:  --type-text-[a-z0-9-]+-scale: var\(--type-phone-[a-z0-9-]+\);\n)*)\}",
                      css)
     assert base, "no :root block of responsive aliases"
+    # The same blocks carry the phone factor of the three largest type
+    # styles (decisions/type-steps-down-on-phones.md).
+    styles = ("hero", "heading-1", "section-title")
     assert base.group(1).splitlines() == [
-        f"  --layout-{g}: var(--layout-{g}-phone);" for g in groups]
+        f"  --layout-{g}: var(--layout-{g}-phone);" for g in groups] + [
+        f"  --type-text-{s}-scale: var(--type-phone-{s});" for s in styles]
     for tier, px in (("tablet", 640), ("laptop", 1024), ("desktop", 1280)):
         assert _media_block(css, px) == [
-            f"    --layout-{g}: var(--layout-{g}-{tier});" for g in groups]
+            f"    --layout-{g}: var(--layout-{g}-{tier});" for g in groups] + (
+            [f"    --type-text-{s}-scale: 1;" for s in styles] if tier == "tablet" else [])
     # The breakpoints come from the set's own breakpoint tokens.
     assert layout.VIEWPORTS == {"tablet": 640, "laptop": 1024, "desktop": 1280}
 

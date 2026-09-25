@@ -53,7 +53,7 @@ Stacked fields in a form sit space.group.gap apart: a label, its field and its h
 
 ## Modes
 
-Space varies on density (comfortable, compact). Comfortable is the base; the brief's density axis places it between airy and dense. Compact takes every role one step lower on the scale, never below the role's floor and never larger than comfortable (decisions/two-density-modes.md). The whole page switches with data-density on the html element; density is not scoped to one section (decisions/axes-on-the-root.md).
+Space varies on density (comfortable, compact). Comfortable is the base; the brief's density axis places it between airy and dense. Compact takes every role one step lower on the scale, never below the role's floor and never larger than comfortable (decisions/two-density-modes.md). The whole page switches with data-density on the html element; density is not scoped to one section (decisions/direction-on-any-subtree.md).
 
 ## Changing the system
 

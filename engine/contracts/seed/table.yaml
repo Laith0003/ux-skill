@@ -22,7 +22,9 @@ variants:
 states: [default, hover, focus, selected]
 tokens:
   - {part: table, property: radius, role: radius.card}
-  - {part: header, property: fill, role: color.surface.sunken}
+  # the header is a band off the card: the stripe's step in light, the raised
+  # surface's in dark, never below the page
+  - {part: header, property: fill, role: color.surface.header}
   - {part: header, property: border-width, role: border.outline}
   - {part: header, property: border-color, role: color.line.subtle}
   - {part: header, property: text, role: color.text.default}
@@ -70,6 +72,7 @@ tokens:
   - {part: label, property: font, role: type.text.label, when: {layout: stacked}}
 contrast:
   - {fg: color.text.default, bg: color.surface.sunken, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.header, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.default, bg: color.surface.stripe, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.default, bg: color.surface.selected, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.default, bg: color.surface.tint, minimum: 4.5, criterion: "1.4.3"}

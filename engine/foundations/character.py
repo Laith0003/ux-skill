@@ -35,7 +35,7 @@ INFLUENCE: Mapping[str, Tuple[str, ...]] = MappingProxyType({
     "density": ("space", "layout", "type"),
     "geometry": ("radius", "imagery"),
     "formality": ("radius", "type", "elevation", "motion", "imagery"),
-    "motion": ("motion",),
+    "motion": ("motion", "color"),
     "type_personality": ("type",),
 })
 
@@ -145,6 +145,26 @@ def status_seed(status: str, axes: AxisValues, brand_hue: float,
     lean += 0.2 * warm_pull(axes) * hue_delta(base, anchor)
     hue = (base + clamp(lean, -STATUS_BAND, STATUS_BAND)) % 360.0
     return STATUS_L, 0.07 + 0.11 * axes.contrast, hue
+
+
+def energy(axes: AxisValues) -> float:
+    """How loud and lively the system is, 0 to 1: the contrast axis and,
+    less, the motion axis. A calm, muted brief sits near 0."""
+    return clamp(0.6 * axes.contrast + 0.4 * axes.motion)
+
+
+def status_soft(axes: AxisValues) -> float:
+    """The share of its ramp step's chroma a status soft fill keeps, 0.3
+    for a calm, muted system to 1 for a loud, lively one, so a calm brief
+    gets quiet info, success, warning and danger fills."""
+    return round(0.3 + 0.7 * energy(axes), 4)
+
+
+def dark_band_chroma(axes: AxisValues) -> float:
+    """The most chroma a section band takes in dark mode, 0.02 for a muted
+    system to 0.08 for a bold one: a dark band is a quiet tint of the
+    brand, never a saturated slab."""
+    return round(0.02 + 0.06 * axes.contrast, 4)
 
 
 def axes_support_hue(axes: AxisValues) -> float:

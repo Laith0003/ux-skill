@@ -177,7 +177,7 @@ def test_every_axis_mix_is_valid_and_passes(contrast, density, personality, form
     ts = generate_type(a).tokens
     assert validate(ts) == []
     report = gate(ts, [], CHECKS)
-    assert report.passed and report.rules_checked == 21
+    assert report.passed and report.rules_checked == 23
 
 
 def _hand():
@@ -256,7 +256,7 @@ def test_only_the_leading_rule_cites_wcag():
                    "reading-tracking": "system", "arabic-text": "system",
                    "rem-sizes": "system", "type-hierarchy": "system",
                    "high-contrast-weights": "system", "icon-sizes": "system",
-                   "strong-weight": "system"}
+                   "strong-weight": "system", "phone-hierarchy": "system"}
 
 
 def test_a_role_of_the_wrong_type_is_named_once_not_a_crash():
@@ -289,9 +289,9 @@ def _generated_with(role, rtl=None):
     return ts
 
 
-def _arabic_failures(ts):
+def _arabic_failures(ts, also=()):
     report = gate(ts, [], CHECKS, raise_on_fail=False)
-    others = [f.message for f in report.failures if f.check != "arabic-text"]
+    others = [f.message for f in report.failures if f.check not in ("arabic-text",) + also]
     assert others == []
     return [f.message for f in report.failures if f.check == "arabic-text"]
 
@@ -299,7 +299,9 @@ def _arabic_failures(ts):
 def test_a_role_without_an_rtl_override_fails_every_arabic_rule():
     ts = _generated_with("type.text.heading-1")
     assert validate(ts) == []
-    assert _arabic_failures(ts) == [
+    # heading-1 at its Latin size under rtl also falls under section-title
+    # on a phone, which phone-hierarchy reports on its own.
+    assert _arabic_failures(ts, also=("phone-hierarchy",)) == [
         "type.text.heading-1 (direction:rtl) is set in Outfit, not type.face.arabic-display; "
         "Arabic text needs its own face, so point its direction:rtl fontFamily at "
         "type.face.arabic-display",
@@ -461,3 +463,58 @@ def test_the_static_arabic_case_is_exercised():
     ts = generate_type(axes(warmth=0.8, formality=0.3, type_personality=0.55,
                             contrast=0.9)).tokens
     assert ts.resolve("type.text.ui", "contrast:high,direction:rtl")["fontWeight"] == 700
+
+
+# M3.5c item 1: the three largest display styles step down on phones, by a
+# factor from a gentler phone ratio, and keep their order above heading-2.
+PHONE_ROLES = ("hero", "heading-1", "section-title")
+
+
+def _phone_px(ts, role, mode=""):
+    return ts.resolve(f"type.text.{role}", mode)["fontSize"]["value"] * 16 \
+        * ts.resolve(f"type.phone.{role}", mode)
+
+
+@pytest.mark.parametrize("a", [axes(), axes(contrast=1.0, density=0.0),
+                               axes(contrast=0.0, density=1.0), axes(contrast=0.7, density=0.6)])
+@pytest.mark.parametrize("mode", ["", "direction:rtl"])
+def test_the_largest_styles_step_down_on_a_phone_and_keep_their_order(a, mode):
+    ts = build_system(a, "#3366FF").tokens
+    phone = [_phone_px(ts, r, mode) for r in PHONE_ROLES]
+    desktop = [ts.resolve(f"type.text.{r}", mode)["fontSize"]["value"] * 16 for r in PHONE_ROLES]
+    h2 = ts.resolve("type.text.heading-2", mode)["fontSize"]["value"] * 16
+    assert all(p <= d for p, d in zip(phone, desktop))
+    assert phone[0] < desktop[0] and phone[1] < desktop[1]
+    assert phone[0] > phone[1] > phone[2] > h2, (phone, h2)
+
+
+def test_the_phone_factor_is_continuous_in_the_contrast_axis():
+    prev = None
+    for i in range(21):
+        f = build_system(axes(contrast=i / 20), "#3366FF").tokens.resolve("type.phone.hero")
+        assert 0 < f <= 1
+        if prev is not None:
+            assert abs(f - prev) < 0.05
+        prev = f
+
+
+def test_tokens_css_switches_the_phone_factor_at_the_tablet_breakpoint():
+    css = to_css(build_system(axes(), "#3366FF").tokens)
+    assert ("  --type-text-hero-font-size: calc(var(--type-size-latin-9) * "
+            "var(--type-text-hero-scale));") in css
+    rtl = css.split(':root[dir="rtl"] {')[1].split("}")[0]
+    assert ("  --type-text-hero-font-size: calc(var(--type-size-arabic-9) * "
+            "var(--type-text-hero-scale));") in rtl
+    assert "  --type-text-hero-scale: var(--type-phone-hero);" in css
+    tablet = css.split("@media (min-width: 640px) {")[1].split("\n}")[0]
+    assert "--type-text-hero-scale: 1;" in tablet
+
+
+def test_a_phone_size_out_of_order_is_named_with_the_fix():
+    built = build_system(axes(), "#3366FF").tokens
+    ts = TokenSet()
+    for t in built.tokens():
+        ts.add(Token(t.path, t.type, 1.0) if t.path == "type.phone-scale.8" else t)
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    msgs = [f.message for f in report.failures if f.check == "phone-hierarchy"]
+    assert msgs and "type.phone.heading-1" in msgs[0] and "type.phone.hero" in msgs[0]

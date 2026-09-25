@@ -2,7 +2,7 @@
 
 ## Summary
 
-Color sets every surface, text, line, fill and ring in the product, in light and dark and at standard and high contrast. It is generated from one brand color and the axes. The axes choose the brand's role: it fills the main action (fill), marks words and links while the main action is ink (accent), or draws edges, rules and underlines while actions and links are ink (edge) (decisions/brand-roles.md). The brand anchors its ramp at step 500, a supporting accent takes a second hue the axes place, which for a grey brand runs from violet to rose and keeps clear of every status hue (decisions/support-accent.md, decisions/grey-accent-clear-of-status.md), a neutral ramp takes the brand hue pulled warm or cool by the warmth axis, through grey rather than around the wheel (decisions/warmth-through-grey.md), a grey brand steers no hue (decisions/grey-brands-steer-no-hue.md), and four status ramps lean toward the brand inside a fixed band of their own hues (decisions/status-harmony.md). The build measures text roles against every surface they can sit on, the input line, the selected line, the error edge, the accent line and the focus ring against every surface a control sits on (the page, card, sunken and raised surfaces, the tint, the band and the table stripe), and the text on each fill against that fill. A control on the brand band takes color.text.on-brand for its focus ring and its edges (decisions/controls-on-brand-surfaces.md). The primary button keeps the exact brand color as its fill whenever white or black text reads on it (decisions/brand-fidelity.md), and its edge carries its 3:1 against the page (decisions/primary-edge.md). That edge, the danger fill and the strong status fills are measured against the page only: on card, sunken and raised a filled control is found by its label, its edge and its focus ring. The focus ring is also measured against the primary fill, and under high contrast never measures less than the standard ring (decisions/ring-never-weaker.md). Contracts add the pairings their components need. Color does not govern type size, spacing or shadow; those foundations own them.
+Color sets every surface, text, line, fill and ring in the product, in light and dark and at standard and high contrast. It is generated from one brand color and the axes. The axes choose the brand's role: it fills the main action (fill), marks words and links while the main action is ink (accent), or draws edges, rules and underlines while actions and links are ink (edge) (decisions/brand-roles.md). The brand anchors its ramp at step 500, a supporting accent takes a second hue the axes place, which for a grey brand runs from violet to rose and keeps clear of every status hue (decisions/support-accent.md, decisions/grey-accent-clear-of-status.md), a neutral ramp takes the brand hue pulled warm or cool by the warmth axis, through grey rather than around the wheel (decisions/warmth-through-grey.md), a grey brand steers no hue (decisions/grey-brands-steer-no-hue.md), and four status ramps lean toward the brand inside a fixed band of their own hues (decisions/status-harmony.md). The build measures text roles against every surface they can sit on, the input line, the selected line, the error edge, the accent line and the focus ring against every surface a control sits on (the page, card, sunken and raised surfaces, the tint, the band and the table stripe), and the text on each fill against that fill. A control on the brand band takes color.text.on-brand for its focus ring and its edges (decisions/controls-on-brand-surfaces.md). The primary button keeps the exact brand color as its fill whenever white or black text reads on it, and otherwise the nearest brand step whose text passes, weighing the focus ring in dark high contrast (decisions/brand-fill-family.md), and its edge carries its 3:1 against the page (decisions/primary-edge.md). That edge, the danger fill and the strong status fills are measured against the page only: on card, sunken and raised a filled control is found by its label, its edge and its focus ring. The focus ring is also measured against the primary fill, and under high contrast never measures less than the standard ring (decisions/ring-never-weaker.md). Contracts add the pairings their components need. Color does not govern type size, spacing or shadow; those foundations own them.
 
 ## Principles
 
@@ -10,7 +10,7 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - **One meaning per role.** A role means the same thing on every screen and in every component. A role is never borrowed for its value.
 - **Separate families.** Brand color marks identity, and by its role the main action, the words or the edges; neutral carries structure and reading; status colors report outcomes. A family never stands in for another.
 - **Saturation is an accent.** Fully saturated color goes on controls, focus, status and at most one brand band per view. Elsewhere the brand reaches surfaces as a tint or a band, never behind running text at full strength (decisions/brand-surfaces.md).
-- **Depth by lightness.** A surface that sits higher is never darker than the one below it. In dark the page, card and raised surfaces are each their own lighter step, and the step, not the shadow, is the main depth cue (decisions/dark-elevation-cue.md). Where two levels share a color, as card and raised do in light, the shadow or an edge tells them apart. Modes lists the order in each context as built.
+- **Depth by lightness.** A surface that sits higher is never darker than the one below it. In dark the page, card and raised surfaces are each their own lighter step, and the step, not the shadow, is the main depth cue; the page is the floor, and the sunken surface sits in the card, between the page and the card (decisions/dark-surfaces-rise.md). Where two levels share a color, as card and raised do in light, the shadow or an edge tells them apart. Modes lists the order in each context as built.
 - **Never color alone.** Anything color says, an icon, a word, a shape or a heavier edge says too (WCAG 1.4.1).
 - **Measured, not hoped.** Every pairing the build declares is measured in all four color contexts, and a system that fails one is not written. A pairing the build does not declare, such as a fill on a raised surface, is not measured until a contract declares it.
 
@@ -18,7 +18,7 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 
 - `color.surface.page`: the page itself, the lowest working surface everything else sits on.
 - `color.surface.card`: a contained block on the page, such as a card, a panel or a field's fill.
-- `color.surface.sunken`: a recessed area a small step below the page, such as a well, a hovered row or a disabled field (decisions/recessed-sunken.md).
+- `color.surface.sunken`: a recessed area, such as a well, a hovered row or a disabled field: a small step below the page in light, and between the page and the card in dark, so it never reads as a hole (decisions/dark-recess-and-bands.md).
 - `color.surface.raised`: a surface above the page that floats, such as a dialog, a menu or a lifted card.
 - `color.surface.inverse`: a surface in the opposite scheme, such as a tooltip or a snackbar; only inverse text and the inverse ring go on it.
 - `color.surface.selected`: the tint of a selected item and the hover and pressed fill of secondary and ghost buttons.
@@ -48,14 +48,17 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - `color.line.accent`: a brand rule or underline: a link's underline when links are ink, a section rule, the edge of a featured card.
 - `color.text.support`: words in the supporting accent's hue, such as a tag or a second highlight; never a link and never body copy.
 - `color.surface.tint`: a quiet brand tint behind a group, such as a feature panel or a callout.
-- `color.surface.band`: a band in the brand's hue that sets one section of a long page apart.
+- `color.surface.band`: a band in the brand's hue that sets one section of a long page apart; in dark its chroma stays under a cap the contrast axis sets, so it reads as a tint, never a slab.
 - `color.surface.brand`: the exact brand color as a band, such as a closing call to action; only color.text.on-brand goes on it, and a control on it takes color.text.on-brand for its focus ring and edges.
 - `color.text.on-brand`: text and icons on the brand band, and the focus ring and edges of a control on it.
 - `color.surface.stripe`: every other row of a table, one step off the card.
+- `color.surface.header`: the header row of a table: the stripe's step in light and the raised surface's in dark, a band off the card that never sits below the page.
 - `color.surface.code`: the background of a code block.
 - `color.syntax.<name>`: <name> tokens in a code block, on color.surface.code only.
 - `color.decorative.<name>`: a <name> shape or pattern with no meaning, such as a form in generated art; never text and never the only cue.
 - `color.illustration.line`: lines in a drawing that carry meaning, such as a diagram's arrows or a chart's axis.
+- `color.media.veil`: a veil of the page's own color over generated art under text, at the least alpha that lets color.text.on-media read over every color the art draws, so light art keeps its colors instead of turning grey (decisions/media-veil.md).
+- `color.text.on-media`: text on generated art under color.media.veil, and the label, edge and focus ring of a control on it.
 - `color.logo`: the logo and brand mark: the exact brand color wherever it clears our 3:1 floor against the page (decisions/logo-and-decoration.md).
 - `color.status.danger.text`: danger words in running text, such as an error message under a field, and the label of a danger secondary or ghost button.
 - `color.status.danger.soft`: the quiet danger tint of a danger status banner or badge, and the hover and pressed fill of a danger secondary or ghost button.
@@ -70,7 +73,7 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - `color.status.success.strong`: the solid success color for the icon of a success status banner and a success badge.
 - `color.status.success.on-strong`: text and icons on the strong success fill.
 - `color.status.info.text`: info words in running text, such as a neutral note of guidance.
-- `color.status.info.soft`: the quiet info tint of an info status banner or badge.
+- `color.status.info.soft`: the quiet info tint of an info status banner or badge. Every soft fill keeps the share of its step's chroma the character gives, less for a calm, muted brief and all of it for a loud, lively one (decisions/soft-fills-follow-character.md).
 - `color.status.info.strong`: the solid info color for the icon of an info status banner and an info badge.
 - `color.status.info.on-strong`: text and icons on the strong info fill.
 
@@ -97,6 +100,8 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 | One section of a long page set apart | color.surface.band | a status soft fill |
 | A closing call to action in the brand color | color.surface.brand with color.text.on-brand | a primary button stretched wide |
 | A table's alternate rows | color.surface.stripe | color.surface.sunken, which reads as recessed |
+| A table's header row | color.surface.header | color.surface.sunken, which reads as a well |
+| Text or a control over generated art | color.text.on-media on color.media.veil | color.text.link or imagery.scrim, which dims light art |
 | A code block | color.surface.code with the color.syntax roles | text colors meant for surfaces |
 | A shape in generated art | a color.decorative role | a status color |
 | The logo | color.logo | color.action.primary, which moves for text contrast |
@@ -109,11 +114,11 @@ An icon takes the role its contract binds; with none, it takes the role of the t
 
 ## Modes
 
-Color varies on scheme (light, dark) and contrast (standard, high). Every semantic role has a value in all four contexts; primitives never change. Dark is not an inversion: each role is chosen for dark and measured there. Under high contrast, text pairings rise to 7:1 and non-text pairings to our 4.5:1 floor, unless a pairing pins its own high-contrast minimum, as the ring on tinted fills (decisions/ring-on-tinted-fills.md) and the disabled label (decisions/disabled-contrast.md) do (decisions/high-contrast-non-text-floor.md). Under high contrast the surfaces move toward the ends of the ramp while each level stays apart: in light the page, card and raised surfaces are white and the sunken surface keeps its recess step, and in dark the page and the sunken surface are black, the card neutral.900 and the raised surface neutral.800 (decisions/high-contrast-surfaces.md). A container whose fill then measures below our 1.2:1 floor against the surface under it draws an edge (decisions/container-edge.md).
+Color varies on scheme (light, dark) and contrast (standard, high). Every semantic role has a value in all four contexts; primitives never change. Dark is not an inversion: each role is chosen for dark and measured there. Under high contrast, text pairings rise to 7:1 and non-text pairings to our 4.5:1 floor, unless a pairing pins its own high-contrast minimum, as the ring on tinted fills (decisions/ring-on-tinted-fills.md) and the disabled label (decisions/disabled-contrast.md) do (decisions/high-contrast-non-text-floor.md). Under high contrast the surfaces move toward the ends of the ramp while each level stays apart: in light the page, card and raised surfaces are white and the sunken surface keeps its recess step, and in dark the page is black, the sunken surface keeps its recess between the page and the card, the card is neutral.900 and the raised surface neutral.800 (decisions/high-contrast-levels.md). A brand fill that cannot keep the exact brand moves to the nearest brand step whose text passes; on a light page black text on a bright step is allowed in high contrast too, and in dark high contrast the order weighs how far the best focus ring falls short of standing 3:1 off each step (decisions/brand-fill-family.md). A container whose fill then measures below our 1.2:1 floor against the surface under it draws an edge (decisions/container-edge.md).
 
 ## Changing the system
 
-1. Color moves with the brand color and the axes: warmth sets the neutral tint and leans the status hues, and contrast sets how saturated the status colors are. Change them and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json; the ramps, roles and pairings are regenerated and measured in all four contexts.
+1. Color moves with the brand color and the axes: warmth sets the neutral tint and leans the status hues, contrast sets how saturated the status colors are, and contrast with motion how quiet their soft fills are and the most chroma a dark band takes. Change them and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json; the ramps, roles and pairings are regenerated and measured in all four contexts.
 2. Change one input at a time: a failed gate names the pairing and the context, and a change is not done until it passes in dark and high contrast as well as light.
 3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
 4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.
@@ -126,6 +131,7 @@ Some roles carry no contrast minimum. Disabled text and fills are checked for di
 
 ## Checks
 
+- `media-veil`: text on generated art, color.text.on-media on color.media.veil laid over each color the art draws, meets 4.5:1 (WCAG 1.4.3), and 7:1 under high contrast (WCAG 1.4.6).
 - `ring-not-weaker`: under high contrast the focus ring measures at least what the standard ring measures against each surface.
 - `ring-on-fill`: a ring under 3:1 against the primary fill keeps at least 2px of page color between them, our rule.
 - `error-edge-hue`: under high contrast the error edge stays within one ramp step of its standard step, so it stays red; an edge that is a literal color or a step of another ramp is a finding too.
@@ -142,7 +148,7 @@ Some roles carry no contrast minimum. Disabled text and fills are checked for di
 - A component placed on a surface its contract does not list is measured on that surface before it ships.
 - A filled control whose label is not visible, such as an icon-only button, on a card, sunken or raised surface pairs its fill with that surface in its own contract (decisions/primary-edge.md).
 - A brand color near a status hue is not used where it could read as that status (decisions/status-harmony.md).
-- Text over an image or a gradient is measured against the worst area it covers.
+- Text over an image or a gradient is measured against the worst area it covers. Over generated art, color.media.veil and color.text.on-media are already measured; over a photo, use imagery.scrim with imagery.on-scrim.
 - A pass on the numbers is not a pass when the use breaks the rule: disabled text used for secondary copy fails even though no ratio applies.
 
 ## Handoff notes
@@ -150,6 +156,7 @@ Some roles carry no contrast minimum. Disabled text and fills are checked for di
 - Every role is a custom property in tokens.css, grouped surfaces, text, action, line, focus and status; components use those and never a ramp step such as the brand 500.
 - Dark and high contrast are the same property names with other values: set data-theme and data-contrast on the html element, or leave them off to follow the operating system. tokens.css sets color-scheme with each scheme, so native controls such as date pickers and selects follow it; a brief that opens dark makes dark the default and data-theme="light" still switches it (decisions/default-scheme.md).
 - The scrim is an 8-digit hex (#RRGGBBAA): a translucent layer for overlays, never a surface for text.
+- color.media.veil is an 8-digit hex too: lay it over the generated art as its own layer, then the text and controls in color.text.on-media; its alpha can be 0 when the art is already light enough.
 - Hover and pressed are separate roles, not an opacity trick, because each is measured with the text on it.
 - Draw focus with outline and outline-offset, using color.focus.ring and the border foundation's width and offset.
 

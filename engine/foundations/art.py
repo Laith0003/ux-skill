@@ -356,4 +356,8 @@ def report_lines() -> List[str]:
         "never as the only carrier of a message. Inline it to follow dark mode; as an image "
         "it shows the light colors. Colors sit in style attributes, so a policy that blocks "
         "inline styles needs the image form.",
+        "Text over the art, such as a headline across a full-bleed hero, sits on a layer of "
+        "color.media.veil in color.text.on-media, and so do the label, edge and focus ring of "
+        "a control there; the veil is measured over the art's own colors, so light art keeps "
+        "its colors. Keep the photo scrim (imagery.scrim) for photos.",
     ]

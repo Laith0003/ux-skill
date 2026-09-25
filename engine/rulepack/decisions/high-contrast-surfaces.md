@@ -1,10 +1,10 @@
 ---
 id: high-contrast-surfaces
 title: High contrast keeps every surface level apart
-status: active
+status: superseded
 areas: [color]
 supersedes: null
-superseded_by: null
+superseded_by: high-contrast-levels
 ---
 
 # High contrast keeps every surface level apart

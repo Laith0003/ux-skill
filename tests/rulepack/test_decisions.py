@@ -33,7 +33,9 @@ EXPECTED = {
     "motion-check-owners", "space-relationship-roles", "page-regions-by-tier", "layout-aliases",
     "distinctness-at-a-glance", "grey-accent-clear-of-status", "form-contracts-per-control",
     "display-contracts-measured", "radius-roles-by-shape", "divider-edge",
-    "tone-words-reach-shape", "sentence-names-the-shown-face",
+    "tone-words-reach-shape", "sentence-names-the-shown-face", "type-steps-down-on-phones",
+    "direction-on-any-subtree", "dark-recess-and-bands", "high-contrast-levels",
+    "soft-fills-follow-character", "brand-fill-family", "media-veil", "dark-surfaces-rise",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",
@@ -48,7 +50,13 @@ SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-e
               "grey-brand-support-hue": "grey-accent-clear-of-status",
               "form-contracts": "form-contracts-per-control",
               "display-and-navigation-contracts": "display-contracts-measured",
-              "radius-roles": "radius-roles-by-shape"}
+              "radius-roles": "radius-roles-by-shape",
+              "layout-aliases": "type-steps-down-on-phones",
+              "axes-on-the-root": "direction-on-any-subtree",
+              "recessed-sunken": "dark-recess-and-bands",
+              "high-contrast-surfaces": "high-contrast-levels",
+              "brand-fidelity": "brand-fill-family",
+              "dark-elevation-cue": "dark-surfaces-rise"}
 
 
 def test_every_shipped_record_is_valid_and_routed():

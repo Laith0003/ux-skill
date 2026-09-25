@@ -9,6 +9,7 @@ Imagery sets how photos and illustrations sit in the system: the aspect ratios m
 - **Media serves the task.** An image earns its place by showing the product, the people who use it or the result; a decorative image is marked decorative and never carries a message alone.
 - **Crop to a ratio, not to the photo.** Media takes the system's ratios so a grid of images reads as one set.
 - **Text over an image always has a scrim.** The scrim is measured against the worst image for its text, the brightest under light text and the darkest under dark text, so no photo can take the text below its minimum.
+- **Generated art takes a veil, not the scrim.** The build knows every color its art draws, so text over the art sits on color.media.veil, a veil of the page's own color measured over those colors, in color.text.on-media: light art needs little veil and keeps its colors, where the photo scrim would turn it grey (decisions/media-veil.md).
 - **Treat photos as a set.** A tint or a duotone pulls photos from different sources into the brand's light; use one treatment per page.
 - **Art fills, it does not explain.** Generated art is decoration: it sets the mood where a photo is missing and says nothing a screen reader needs.
 - **Art is composed, not scattered.** The hero art has one focal shape in the brand color, a quiet neutral plane behind it and small support accents in front, open space on the heading's side, and area in proportion, about 60, 30 and 10 percent (decisions/art-composition.md).
@@ -29,6 +30,8 @@ Imagery sets how photos and illustrations sit in the system: the aspect ratios m
 | Media | Ratio | Treatment |
 |---|---|---|
 | A hero photo with the headline on it | imagery.ratio.hero | imagery.scrim under the text, imagery.on-scrim for the text |
+| A hero over the generated art with the headline on it | the art full bleed | color.media.veil over the art, color.text.on-media for the text |
+| A secondary or ghost button on media | color.text.on-media for its label, edge and ring over art, imagery.on-scrim over a photo | color.text.link, measured against surfaces only |
 | A hero photo beside the headline | imagery.ratio.hero | none, or the page's one treatment |
 | Images in a card grid | imagery.ratio.card | the page's one treatment, the same on every card |
 | A person, a team member, an upright product | imagery.ratio.portrait | none |
@@ -70,6 +73,7 @@ Audits how media is cropped, treated and captioned: ratios, the scrim under any 
 
 - Set aspect-ratio from the imagery.ratio roles and object-fit: cover on the image, and round it with radius.media.
 - Lay the scrim as a layer between the image and the text, with background from imagery.scrim; set the text in imagery.on-scrim.
+- Over the generated art, lay color.media.veil the same way and set the text, and the label, edge and focus ring of any control there, in color.text.on-media.
 - A duotone is a filter: map the image's shadows to imagery.duotone.shadow and its highlights to imagery.duotone.highlight, for example with an SVG feComponentTransfer or a mix-blend-mode pair.
 - The tint is a layer over the photo with background from imagery.tint and mix-blend-mode: multiply in light, screen in dark.
 - The generated art in art/ is SVG with its own palette from the build; place it with an empty alt.

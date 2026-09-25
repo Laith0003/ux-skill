@@ -1,10 +1,10 @@
 ---
 id: recessed-sunken
 title: A sunken surface sits a small step below the page
-status: active
+status: superseded
 areas: [color]
 supersedes: null
-superseded_by: null
+superseded_by: dark-recess-and-bands
 ---
 
 # A sunken surface sits a small step below the page

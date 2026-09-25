@@ -1,10 +1,10 @@
 ---
 id: brand-fidelity
 title: The primary fill keeps the exact brand color whenever text reads on it
-status: active
+status: superseded
 areas: [color]
 supersedes: null
-superseded_by: null
+superseded_by: brand-fill-family
 ---
 
 # The primary fill keeps the exact brand color whenever text reads on it

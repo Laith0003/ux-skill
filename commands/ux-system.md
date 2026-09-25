@@ -103,7 +103,8 @@ Read `design-system/system-report.md` and explain it. Do not paste it.
 - Where the look came from: the brief (the industry and tone it used, when the brief names them, and any words it did not recognize), axes set by hand, or the neutral default.
 - The gate in one sentence, for example: "Every text and control color passed contrast checks in light, dark and high contrast."
 - The adjustments that matter, from the report's "Colors moved to meet contrast" list, in one line each, for example: "in dark mode, button text switches to black so it stays readable on the lighter button."
-- How to switch modes: `data-theme="dark"`, `data-contrast="high"`, `data-density="compact"`, `dir="rtl"`, `data-motion="reduced"` on the html element. Without an attribute, dark, high contrast and reduced motion follow the operating system.
+- How to switch modes: `data-theme="dark"`, `data-contrast="high"`, `data-density="compact"`, `dir="rtl"`, `data-motion="reduced"` on the html element. Without an attribute, dark, high contrast and reduced motion follow the operating system. `dir="rtl"` or `lang="ar"` also works on any element inside the page, such as an Arabic block in an English page, and gives it the Arabic type.
+- That the hero, heading-1 and section-title step down on phones on their own; the page needs no media query for them.
 - The files it wrote (tokens.json, tokens.css, fonts.css, fonts-self-host.css, system-report.md and the art/ folder) and what each is for, and with `--rule-pack`, that an agent starts at `rule-pack/README.md`, which names the files to load for each task.
 - The fonts (step 7). Always say this; it is the step people miss.
 

@@ -21,6 +21,9 @@
 - `type.text.hero`: the single largest statement on a view, such as a landing page headline, in the display face; once per view.
 - `type.text.heading-1`: the title of a page, in the display face.
 - `type.text.section-title`: the title of a section of a long page, between the page title and heading-2, in the display face.
+- `type.phone.hero`: the factor type.text.hero's size and letter spacing take on a phone, every width below layout.breakpoint.tablet; tokens.css applies it, so a page reads the style as usual.
+- `type.phone.heading-1`: the factor type.text.heading-1 takes on a phone, a little gentler than the hero's.
+- `type.phone.section-title`: the factor type.text.section-title takes on a phone, so it stays under heading-1 there.
 - `type.text.figure`: a price, an amount or a key number shown large, in the display face; set it with tabular figures.
 - `type.text.heading-2`: the title of a major block, or of a dialog, in the text face.
 - `type.text.heading-3`: the title of a card, a panel or a group.
@@ -63,8 +66,8 @@ Styles that work together: a label above a section title or a hero; a heading ab
 
 ## Modes
 
-{arabic} Type varies on direction and contrast. Under dir="rtl" every style but code uses its Arabic face, the display styles the Arabic display face, at a size larger than the Latin size at the same step by the ratio the two faces' metrics give (at least 1px, at most a fifth), with taller line heights and letter spacing at 0, since spacing breaks the joins between Arabic letters. Code keeps its face, size and leading in both directions, with no letter spacing under right to left; a label set in the mono face switches to the Arabic face like any other text. Under high contrast every style in the text or mono face is one weight heavier, within what the face ships (decisions/high-contrast-weights.md). Under right to left every weight, type.strong's too, is one the Arabic face ships, so a static face never gets a weight it lacks (decisions/font-files.md). Type does not change by breakpoint or with the density mode; sizes are rem (decisions/layout-aliases.md). The brief's density axis sets the reading line heights and the ui size once, at build time.
-{latin} Type varies on contrast: under high contrast every style in the text or mono face is one weight heavier, within what the face ships (decisions/high-contrast-weights.md). Type does not change by breakpoint or with the density mode; sizes are rem (decisions/layout-aliases.md). The brief's density axis sets the reading line heights and the ui size once, at build time.
+{arabic} Type varies on direction and contrast. Under dir="rtl" every style but code uses its Arabic face, the display styles the Arabic display face, at a size larger than the Latin size at the same step by the ratio the two faces' metrics give (at least 1px, at most a fifth), with taller line heights and letter spacing at 0, since spacing breaks the joins between Arabic letters. Code keeps its face, size and leading in both directions, with no letter spacing under right to left; a label set in the mono face switches to the Arabic face like any other text. Under high contrast every style in the text or mono face is one weight heavier, within what the face ships (decisions/high-contrast-weights.md). Under right to left every weight, type.strong's too, is one the Arabic face ships, so a static face never gets a weight it lacks (decisions/font-files.md). The hero, heading-1 and section-title step down on a phone: below layout.breakpoint.tablet tokens.css multiplies their size and letter spacing by their type.phone factor, from a phone scale with a gentler ratio, and they keep falling in size above heading-2 (decisions/type-steps-down-on-phones.md). No other style changes by breakpoint, and none with the density mode; sizes are rem. The brief's density axis sets the reading line heights and the ui size once, at build time.
+{latin} Type varies on contrast: under high contrast every style in the text or mono face is one weight heavier, within what the face ships (decisions/high-contrast-weights.md). The hero, heading-1 and section-title step down on a phone: below layout.breakpoint.tablet tokens.css multiplies their size and letter spacing by their type.phone factor, from a phone scale with a gentler ratio, and they keep falling in size above heading-2 (decisions/type-steps-down-on-phones.md). No other style changes by breakpoint, and none with the density mode; sizes are rem. The brief's density axis sets the reading line heights and the ui size once, at build time.
 
 ## Changing the system
 
@@ -89,6 +92,8 @@ Styles that work together: a label above a section title or a hero; a heading ab
 {latin} - `arabic-text`: this build has one script, so the check has nothing to hold.
 {arabic} - `rem-sizes`: every style's size is in rem, in both directions.
 {latin} - `rem-sizes`: every style's size is in rem.
+{arabic} - `phone-hierarchy`: on a phone hero, heading-1 and section-title keep falling in size above heading-2, in both directions, and each factor sits above 0 and at most 1.
+{latin} - `phone-hierarchy`: on a phone hero, heading-1 and section-title keep falling in size above heading-2, and each factor sits above 0 and at most 1.
 {arabic} - `type-hierarchy`: hero, heading-1, section-title, heading-2, heading-3 and body fall in size, in both directions.
 {latin} - `type-hierarchy`: hero, heading-1, section-title, heading-2, heading-3 and body fall in size.
 - `high-contrast-weights`: under high contrast no style is lighter than at standard contrast.
@@ -100,7 +105,7 @@ Styles that work together: a label above a section title or a hero; a heading ab
 - The hero appears at most once per view, and one heading level opens each section.
 - Text set at 200 percent zoom still fits its container without cutting words (WCAG 1.4.4).
 - Line length for running text stays within layout.measure.text.
-{arabic} - Arabic text inside a Latin page, or the reverse, uses the other script's style fields for that run.
+{arabic} - An Arabic block inside a Latin page takes the Arabic styles from dir="rtl" and lang="ar" on its element; a Latin run inside Arabic text takes type.run.latin.
 {arabic} - A page that ships Arabic loads the Arabic face; a missing face falls back to a system font and breaks the sizes.
 - Headings and labels say what follows them; a vague heading is a content finding.
 
@@ -111,13 +116,15 @@ Styles that work together: a label above a section title or a hero; a heading ab
 - fonts.css, written beside tokens.css, holds a metric-matched fallback for each face, named "<face> Fallback", so text keeps its size and line breaks while the face loads; it does not load the faces. Load them with the Google Fonts link the system report gives, or with fonts-self-host.css and the files it names in a fonts/ folder, and link fonts.css with either one, before tokens.css. Edit neither file (decisions/font-files.md).
 - Set type.text.figure with font-variant-numeric: tabular-nums, so amounts line up.
 - Draw line icons with stroke-width from type.icon.stroke and size them with the type.icon.size roles.
-{arabic} - Direction switches with dir on the html element; a right-to-left run inside a left-to-right page sets its five properties from the style's Arabic values by hand (decisions/axes-on-the-root.md).
+{arabic} - Direction switches with dir on the html element, and an element inside the page with dir="rtl" or an Arabic lang takes every style's Arabic values on its own, faces, sizes and line heights included (decisions/direction-on-any-subtree.md).
+- The hero, heading-1 and section-title step down on a phone on their own; read their properties as usual and never copy a breakpoint to resize them.
 - Emphasis inside text uses font-weight from type.strong.
 
 ## Common mistakes
 
 - Using the hero or heading-1 more than once on a view: the anchor disappears.
 - Using body for button labels: controls need the compact ui style.
+- Shrinking the hero with a media query of your own: tokens.css already steps it down on a phone, and a second rule breaks the order with heading-1.
 - Using a heading level inside a card that belongs to the page: the hierarchy inverts.
 - Using fine print for text people must read: it is too small to sustain.
 {arabic} - Tightening letter spacing on Arabic text: the letters disconnect.

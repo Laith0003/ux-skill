@@ -112,12 +112,16 @@ def _foundation_contexts(ts: TokenSet, entries: Sequence[RoleEntry]) -> List[str
 
 
 SURFACE_LEVELS: Tuple[str, ...] = ("sunken", "page", "card", "raised")
+# In dark the page is the floor and a well sits in the card, between the
+# page and the card (decisions/dark-surfaces-rise.md).
+DARK_LEVELS: Tuple[str, ...] = ("page", "sunken", "card", "raised")
 
 
 def _surface_order(ts: TokenSet) -> List[str]:
     """For each scheme and contrast context, the surface levels from the
-    lowest up, with the relation each pair has as built: < when the next is
-    lighter, = when it is the same color, > when it is darker."""
+    lowest up (SURFACE_LEVELS in light, DARK_LEVELS in dark), with the
+    relation each pair has as built: < when the next is lighter, = when it
+    is the same color, > when it is darker."""
     if not all(ts.has(f"color.surface.{s}") for s in SURFACE_LEVELS):
         return []
     axes = [a for a in ("scheme", "contrast") if a in ts.axes]
@@ -126,9 +130,10 @@ def _surface_order(ts: TokenSet) -> List[str]:
         values = parse(mode, ts.axes)
         words = ", ".join(f"{values.get(a, ts.axes[a][0])}" +
                           (" contrast" if a == "contrast" else "") for a in axes)
-        v = {s: str(ts.resolve(f"color.surface.{s}", mode)).upper() for s in SURFACE_LEVELS}
-        text = SURFACE_LEVELS[0]
-        for a, b in zip(SURFACE_LEVELS, SURFACE_LEVELS[1:]):
+        levels = DARK_LEVELS if values.get("scheme") == "dark" else SURFACE_LEVELS
+        v = {s: str(ts.resolve(f"color.surface.{s}", mode)).upper() for s in levels}
+        text = levels[0]
+        for a, b in zip(levels, levels[1:]):
             if v[a] == v[b]:
                 sign = "="
             else:

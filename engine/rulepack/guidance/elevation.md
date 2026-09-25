@@ -46,7 +46,7 @@ A card may sit on the page or on a sunken well; where its fill measures below ou
 
 ## Modes
 
-Elevation varies on scheme (light, dark). Dark shadows are stronger than light ones so they still read, but in dark the main depth cue is lightness: surfaces lighten as they rise (decisions/dark-elevation-cue.md). The stacking order is the same in every mode.
+Elevation varies on scheme (light, dark). Dark shadows are stronger than light ones so they still read, but in dark the main depth cue is lightness: surfaces lighten as they rise, and a well sits between the page and the card (decisions/dark-surfaces-rise.md). The stacking order is the same in every mode.
 
 ## Changing the system
 

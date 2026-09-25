@@ -1,10 +1,10 @@
 ---
 id: axes-on-the-root
 title: Mode axes switch on the root element only
-status: active
+status: superseded
 areas: [output, direction, space]
 supersedes: null
-superseded_by: null
+superseded_by: direction-on-any-subtree
 ---
 
 # Mode axes switch on the root element only

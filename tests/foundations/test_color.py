@@ -75,10 +75,13 @@ def test_an_orange_brand_keeps_its_color_with_black_text_in_light():
 
 
 @pytest.mark.parametrize("seed", SEEDS + _SWEEP_SEEDS)
-def test_dark_and_high_contrast_never_put_black_text_on_a_mid_tone_fill(seed):
+def test_dark_mode_never_puts_black_text_on_a_mid_tone_fill(seed):
+    """Black text on a mid tone reads muddy on a dark page, at standard and
+    high contrast; on a light page it is the brand's own look
+    (decisions/brand-fill-family.md)."""
     from engine.foundations.color_math import hex_to_oklch
     ts = generate_color(AXES, seed).tokens
-    for mode in COLOR_CONTEXTS[1:]:
+    for mode in (m for m in COLOR_CONTEXTS if "scheme:dark" in m):
         fill = ts.resolve("color.action.primary", mode)
         if ts.resolve("color.text.on-action", mode) == "#000000":
             assert hex_to_oklch(fill)[0] >= color_module.MUDDY_L, f"{seed} ({mode}) {fill}"
@@ -323,12 +326,18 @@ _GROUP_OUT = ("color.action.primary", "color.action.primary-hover",
 @pytest.mark.parametrize("seed", SEEDS + ["#00F1B0", "#291F18", "#FFFFFF", "#000000"])
 def test_the_ring_never_moves_the_fill(seed, monkeypatch):
     # Whatever the ring may be, the fill, its states and its text come out
-    # the same: the ring is chosen after them and constrains none of them.
+    # the same at standard contrast: the ring is chosen after them and
+    # constrains none of them. In dark high contrast a brand fill that has
+    # left the exact brand weighs the ring among the steps it could take
+    # (decisions/brand-fill-family.md); the exact brand never moves for it.
     normal = generate_color(AXES, seed).tokens
     monkeypatch.setattr(color_module, "_ring_candidates",
                         lambda mode, default_ring: ["color.base.white", "color.base.black"])
     other = generate_color(AXES, seed).tokens
     for mode in COLOR_CONTEXTS:
+        if mode == "scheme:dark,contrast:high" and normal.raw("color.action.primary", mode) \
+                != "{color.brand.exact}":
+            continue
         for role in _GROUP_OUT:
             assert other.raw(role, mode) == normal.raw(role, mode), f"{seed} {role} ({mode})"
 
@@ -667,7 +676,7 @@ _BASE_SURFACES = ("color.surface.page", "color.surface.card", "color.surface.sun
                   "color.surface.raised")
 # Every surface a control sits on: the base four and the brand-tinted ones.
 _SURFACES = _BASE_SURFACES + ("color.surface.tint", "color.surface.band",
-                              "color.surface.stripe")
+                              "color.surface.stripe", "color.surface.header")
 
 
 def test_line_selected_pairs_with_every_surface_the_ring_does():
@@ -779,7 +788,8 @@ _TEXT_ROLES = ("color.text.default", "color.text.muted", "color.text.link",
                "color.status.success.text", "color.status.info.text",
                "color.text.accent", "color.text.support")
 _TEXT_SURFACES = _BASE_SURFACES + ("color.surface.selected", "color.surface.tint",
-                                   "color.surface.band", "color.surface.stripe")
+                                   "color.surface.band", "color.surface.stripe",
+                                   "color.surface.header")
 _LINE_ROLES = ("color.line.input", "color.line.selected", "color.line.danger",
                "color.line.accent", "color.focus.ring")
 
@@ -917,7 +927,12 @@ def test_brand_fidelity_states_every_context_and_names_an_identity_loss():
     assert lines[0].startswith("Light mode: the button is the brand color #E85D04 exactly, with "
                                "black text at 5.99:1 (white would be 3.50:1).")
     assert "black on a mid tone reads muddy in this mode" in lines[1]
-    assert "reads as a different color from the brand (OKLab distance 0.14)" in lines[2]
+    # light high contrast keeps a near brand step with black text
+    # (decisions/brand-fill-family.md); dark high contrast takes a deeper
+    # step the ring can stand off, and names the distance
+    assert "the button is #F37D47 (color.brand.400), with black text" in lines[2]
+    assert "different color" not in lines[2]
+    assert "reads as a different color from the brand (OKLab distance 0.20)" in lines[3]
     assert all("The focus ring measures " in line for line in lines[:4])
     assert "different color" not in lines[1]
 
@@ -1056,11 +1071,15 @@ def test_the_primitives_pin_the_recess_and_the_status_seeds():
     for warmth in (0.1, 0.9):
         axes = AxisValues(warmth, *[0.5] * 6)
         prims = color_module._primitives(axes, "#3366FF", [])
-        for recess, page in (("recess-light", 50), ("recess-dark", 950)):
-            got = hex_to_oklch(prims[f"color.neutral.{recess}"])
-            want = hex_to_oklch(prims[f"color.neutral.{page}"])
-            assert got[0] == pytest.approx(want[0] - color_module.RECESS_L, abs=0.004)
-            assert got[1] == pytest.approx(want[1], abs=0.004)
+        got = hex_to_oklch(prims["color.neutral.recess-light"])
+        want = hex_to_oklch(prims["color.neutral.50"])
+        assert got[0] == pytest.approx(want[0] - color_module.RECESS_L, abs=0.004)
+        assert got[1] == pytest.approx(want[1], abs=0.004)
+        # the dark recess sits halfway between the page's and the card's
+        # steps (decisions/dark-recess-and-bands.md)
+        dark = hex_to_oklch(prims["color.neutral.recess-dark"])
+        page, card = (hex_to_oklch(prims[f"color.neutral.{s}"]) for s in (950, 900))
+        assert dark[0] == pytest.approx((page[0] + card[0]) / 2, abs=0.004)
         _, chroma, hue = hex_to_oklch("#3366FF")
         for status in color_module.STATUS_HUES:
             seed = oklch_to_hex(*character.status_seed(status, axes, hue, chroma))

@@ -1,10 +1,10 @@
 ---
 id: dark-elevation-cue
 title: In dark mode, surfaces lighten as they rise
-status: active
+status: superseded
 areas: [color, elevation]
 supersedes: null
-superseded_by: null
+superseded_by: dark-surfaces-rise
 ---
 
 # In dark mode, surfaces lighten as they rise

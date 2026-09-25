@@ -43,8 +43,8 @@ def test_a_contract_with_an_edge_binds_cleanly():
 def test_a_fill_that_equals_its_surface_declares_an_edge():
     assert messages(contract(with_edge=False)) == [
         ("container-edge",
-         "toggle: track.fill is color.surface.sunken, which measures 1.00:1 against "
-         "color.surface.page in scheme:dark,contrast:high, below our container edge floor of "
+         "toggle: track.fill is color.surface.sunken, which measures 1.07:1 against "
+         "color.surface.page in scheme:dark,contrast:standard, below our container edge floor of "
          "1.2:1 (WCAG sets no minimum for a container's edge), so the track has no visible edge "
          "there; bind border-width to border.outline and a border-color on track for the same "
          "variant and state, or a divider-width and divider-color when track sits inside a group "

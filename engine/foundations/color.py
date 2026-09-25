@@ -43,8 +43,9 @@ OVERLAY_STEPS = (10, 20, 40, 60, 80)
 _SEMANTIC: Dict[str, Tuple[str, str]] = {
     "color.surface.page": ("color.neutral.50", "color.neutral.950"),
     "color.surface.card": ("color.base.white", "color.neutral.900"),
-    # A recess sits half a step below the page, so it reads as a well and
-    # not as a disabled slab (light) or a hole (dark).
+    # A recess sits a little below the page in light, so it reads as a well
+    # and not as a disabled slab; in dark it sits between the page and the
+    # card, so a well in a card never reads as a hole or a black strip.
     "color.surface.sunken": ("color.neutral.recess-light", "color.neutral.recess-dark"),
     "color.surface.raised": ("color.base.white", "color.neutral.800"),
     "color.surface.inverse": ("color.neutral.900", "color.neutral.100"),
@@ -92,11 +93,16 @@ _SEMANTIC: Dict[str, Tuple[str, str]] = {
     # Brand-tinted surfaces: a quiet tint, a section band, and the exact
     # brand as a band with its own text.
     "color.surface.tint": ("color.brand.50", "color.brand.950"),
-    "color.surface.band": ("color.brand.100", "color.brand.900"),
+    # In dark the band is brand.900's lightness and hue at no more chroma
+    # than character.dark_band_chroma allows, so it never reads as a slab.
+    "color.surface.band": ("color.brand.100", "color.brand.band-dark"),
     "color.surface.brand": ("color.brand.exact", "color.brand.exact"),
     "color.text.on-brand": ("color.base.white", "color.base.white"),
-    # Table stripes and the code surface with its syntax colors.
+    # Table stripes, the table header and the code surface with its syntax
+    # colors. The header is the stripe's step in light and the raised
+    # surface's in dark: a band off the card that never sits below the page.
     "color.surface.stripe": ("color.neutral.50", "color.neutral.950"),
+    "color.surface.header": ("color.neutral.50", "color.neutral.800"),
     "color.surface.code": ("color.neutral.100", "color.neutral.recess-dark"),
     "color.syntax.plain": ("color.neutral.900", "color.neutral.50"),
     "color.syntax.keyword": ("color.brand.700", "color.brand.300"),
@@ -112,10 +118,18 @@ _SEMANTIC: Dict[str, Tuple[str, str]] = {
     "color.illustration.line": ("color.brand.600", "color.brand.400"),
     # The logo keeps the exact brand color wherever it clears our floor.
     "color.logo": ("color.brand.exact", "color.brand.exact"),
+    # Generated art under text: a veil of the page's own color at the least
+    # alpha that lets color.text.on-media read over every color the art
+    # draws, so light art stays light (generate_color writes the veil
+    # primitives), and the text, edge and ring of a control on it.
+    "color.media.veil": ("color.veil.light", "color.veil.dark"),
+    "color.text.on-media": ("color.neutral.900", "color.neutral.50"),
 }
 for _s in STATUS_HUES:
     _SEMANTIC[f"color.status.{_s}.text"] = (f"color.{_s}.700", f"color.{_s}.300")
-    _SEMANTIC[f"color.status.{_s}.soft"] = (f"color.{_s}.100", f"color.{_s}.900")
+    # The soft fills keep the share of their step's chroma the character
+    # gives (character.status_soft), so a calm brief gets quiet fills.
+    _SEMANTIC[f"color.status.{_s}.soft"] = (f"color.{_s}.soft-100", f"color.{_s}.soft-900")
     _SEMANTIC[f"color.status.{_s}.strong"] = (f"color.{_s}.600", f"color.{_s}.400")
     _SEMANTIC[f"color.status.{_s}.on-strong"] = ("color.base.white", "color.base.black")
 
@@ -153,7 +167,7 @@ SEMANTIC: Mapping[str, Tuple[str, str]] = MappingProxyType(_grouped(_SEMANTIC))
 _HIGH: Dict[str, Tuple[str, str]] = {
     "color.surface.page": ("color.base.white", "color.base.black"),
     "color.surface.card": ("color.base.white", "color.neutral.900"),
-    "color.surface.sunken": ("color.neutral.recess-light", "color.base.black"),
+    "color.surface.sunken": ("color.neutral.recess-light", "color.neutral.recess-dark"),
     "color.surface.raised": ("color.base.white", "color.neutral.800"),
     "color.surface.inverse": ("color.base.black", "color.base.white"),
     "color.surface.selected": ("color.brand.50", "color.brand.950"),
@@ -181,6 +195,7 @@ _HIGH: Dict[str, Tuple[str, str]] = {
     "color.line.accent": ("color.brand.800", "color.brand.200"),
     "color.text.support": ("color.support.800", "color.support.200"),
     "color.surface.stripe": ("color.neutral.100", "color.neutral.800"),
+    "color.surface.header": ("color.neutral.100", "color.neutral.800"),
     "color.surface.code": ("color.neutral.100", "color.base.black"),
     "color.syntax.plain": ("color.neutral.950", "color.base.white"),
     "color.syntax.keyword": ("color.brand.800", "color.brand.200"),
@@ -189,10 +204,12 @@ _HIGH: Dict[str, Tuple[str, str]] = {
     "color.syntax.function": ("color.info.800", "color.info.200"),
     "color.syntax.comment": ("color.neutral.700", "color.neutral.300"),
     "color.illustration.line": ("color.brand.800", "color.brand.200"),
+    "color.media.veil": ("color.veil.light-high", "color.veil.dark-high"),
+    "color.text.on-media": ("color.neutral.950", "color.base.white"),
 }
 for _s in STATUS_HUES:
     _HIGH[f"color.status.{_s}.text"] = (f"color.{_s}.800", f"color.{_s}.200")
-    _HIGH[f"color.status.{_s}.soft"] = (f"color.{_s}.50", f"color.{_s}.950")
+    _HIGH[f"color.status.{_s}.soft"] = (f"color.{_s}.soft-50", f"color.{_s}.soft-950")
     _HIGH[f"color.status.{_s}.strong"] = (f"color.{_s}.800", f"color.{_s}.200")
 HIGH_CONTRAST: Mapping[str, Tuple[str, str]] = MappingProxyType(_HIGH)
 
@@ -232,7 +249,8 @@ TEXT_ROLES: Tuple[str, ...] = ("color.text.default", "color.text.muted", "color.
 TEXT_SURFACES: Tuple[str, ...] = ("color.surface.page", "color.surface.card",
                                   "color.surface.sunken", "color.surface.raised",
                                   "color.surface.selected", "color.surface.tint",
-                                  "color.surface.band", "color.surface.stripe")
+                                  "color.surface.band", "color.surface.stripe",
+                                  "color.surface.header")
 LINE_ROLES: Tuple[str, ...] = ("color.line.input", "color.line.selected", "color.line.danger",
                                 "color.line.accent", "color.focus.ring")
 # Syntax colors sit on the code surface only; plain is the text between them.
@@ -253,7 +271,7 @@ LOGO_FLOOR = 3.0
 LINE_SURFACES: Tuple[str, ...] = ("color.surface.page", "color.surface.card",
                                   "color.surface.sunken", "color.surface.raised",
                                   "color.surface.tint", "color.surface.band",
-                                  "color.surface.stripe")
+                                  "color.surface.stripe", "color.surface.header")
 # Roles in the four families the tables cover (text, surface, line,
 # focus) that sit in no table, each with the reason it needs no row there.
 # A role added to one of those families must join a table or this map, or
@@ -271,6 +289,8 @@ COVERAGE_EXEMPT: Mapping[str, str] = MappingProxyType({
     "color.surface.brand": "a band whose only text is color.text.on-brand, paired there",
     "color.text.on-brand": "sits only on color.surface.brand and is paired there",
     "color.surface.code": "a background whose syntax colors are paired against it",
+    "color.text.on-media": "sits only on color.media.veil over generated art, where the "
+                           "media-veil check measures it over every color the art draws",
 })
 COVERAGE_FAMILIES: Tuple[str, ...] = ("color.text.", "color.surface.", "color.line.",
                                       "color.focus.")
@@ -380,11 +400,15 @@ GROUPS: Tuple[_Group, ...] = (
 _GROUP_ROLES = frozenset(r for g in GROUPS for r in (g.fill, g.on, g.ring, g.edge) + g.states
                          if r)
 EXACT = "color.brand.exact"
-# In dark and high contrast, black text goes only on a fill at least this
-# light (OKLCH): black on a mid tone reads muddy.
+# In dark, black text goes only on a fill at least this light (OKLCH):
+# black on a mid tone reads muddy on a dark page.
 MUDDY_L = 0.72
 # The ring prefers a color that also stands 3:1 off the primary fill.
 RING_ON_FILL = 3.0
+# Under high contrast, how much a ring that cannot stand RING_ON_FILL off a
+# moved brand fill counts against that fill, in OKLab distance at a full
+# shortfall.
+RING_WEIGHT = 0.3
 # The least OKLab distance a hover or pressed step keeps from its fill: a
 # just visible step.
 JUST_VISIBLE = 0.02
@@ -394,6 +418,28 @@ IDENTITY_DISTANCE = 0.12
 
 # M1 name for the generator's result; every foundation now returns Generated.
 ColorResult = Generated
+
+
+# The colors generated art draws, under the veil (art.PALETTE).
+ART_ROLES: Tuple[str, ...] = ("color.decorative.brand", "color.decorative.support",
+                              "color.decorative.neutral")
+
+
+def over(color: str, alpha: float, under: str) -> str:
+    """`color` at `alpha` composited over the opaque `under`."""
+    top, bottom = hex_to_rgb(color), hex_to_rgb(under)
+    return rgb_to_hex(tuple(alpha * t + (1 - alpha) * b for t, b in zip(top, bottom)))
+
+
+def veil_alpha(text: str, veil: str, art: Iterable[str], need: float) -> int:
+    """The least alpha, in 1/255 steps, at which `text` reaches `need` over
+    `veil` laid on each art color. Light art under dark text needs little
+    or none, so the art keeps its colors."""
+    art = list(art)
+    for a in range(256):
+        if all(contrast(text, over(veil, a / 255, hx)) >= need for hx in art):
+            return a
+    return 255
 
 
 def _scheme(mode: str) -> str:
@@ -431,10 +477,29 @@ def _neutral_seed(brand_hex: str, axes: AxisValues) -> str:
 RECESS_L = 0.035
 
 
+def _midpoint(a: str, b: str) -> str:
+    """The color halfway between two in OKLab."""
+    La, Ca, Ha = hex_to_oklch(a)
+    Lb, Cb, Hb = hex_to_oklch(b)
+    hue, chroma = character.ab_mix(Ha, Ca, Hb, Cb, 0.5)
+    return oklch_to_hex((La + Lb) / 2, chroma, hue)
+
+
 def _shift(hx: str, delta: float) -> str:
     """The same hue and chroma at a lightness `delta` away."""
     L, C, H = hex_to_oklch(hx)
     return oklch_to_hex(L + delta, C, H)
+
+
+def _with_chroma(hx: str, share: float = 1.0, cap: float = 1.0) -> str:
+    """The same lightness and hue at `share` of its chroma, at most `cap`."""
+    L, C, H = hex_to_oklch(hx)
+    return oklch_to_hex(L, min(C * share, cap), H)
+
+
+# The status steps a soft fill is drawn from: 100 and 900 at standard
+# contrast, 50 and 950 under high contrast.
+SOFT_STEPS = (50, 100, 900, 950)
 
 
 def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str, str]:
@@ -453,12 +518,20 @@ def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str,
             prims[f"color.{family}.{step}"] = hx
         if family == "brand":
             # The brand color exactly as given, beside its ramp (a DTCG round
-            # trip keeps the order).
+            # trip keeps the order), and the dark band.
             prims[EXACT] = rgb_to_hex(hex_to_rgb(brand_hex))
+            prims["color.brand.band-dark"] = _with_chroma(
+                r.stops[900], cap=character.dark_band_chroma(axes))
         if family == "neutral":
-            # Kept beside the ramp, so a DTCG round trip keeps the order.
+            # Kept beside the ramp, so a DTCG round trip keeps the order. The
+            # dark recess sits halfway between the page (950) and the card
+            # (900) in OKLab.
             prims["color.neutral.recess-light"] = _shift(r.stops[50], -RECESS_L)
-            prims["color.neutral.recess-dark"] = _shift(r.stops[950], -RECESS_L)
+            prims["color.neutral.recess-dark"] = _midpoint(r.stops[950], r.stops[900])
+        if family in STATUS_HUES:
+            for step in SOFT_STEPS:
+                prims[f"color.{family}.soft-{step}"] = _with_chroma(
+                    r.stops[step], share=character.status_soft(axes))
     for family, rgb in (("shade", "#000000"), ("tint", "#FFFFFF")):
         for pct in OVERLAY_STEPS:
             prims[f"color.{family}.{pct}"] = rgb + f"{round(pct * 255 / 100):02X}"
@@ -576,10 +649,11 @@ def _fill_candidates(g: _Group, default: str, conv: int,
 
 
 def _muddy(fill_hex: str, on: str, mode: str) -> bool:
-    """Black text on a mid tone, in a context where that reads muddy (dark
-    or high contrast)."""
-    strict = _scheme(mode) == "dark" or parse(mode).get("contrast") == "high"
-    return strict and on == "color.base.black" and hex_to_oklch(fill_hex)[0] < MUDDY_L
+    """Black text on a mid tone on a dark page, where that reads muddy (dark
+    mode, standard and high contrast). On a light page black text on a
+    bright brand reads as the brand's own look, in high contrast too."""
+    return _scheme(mode) == "dark" and on == "color.base.black" \
+        and hex_to_oklch(fill_hex)[0] < MUDDY_L
 
 
 def _choose_edge(fill_path: str, family: str, page_hex: str, need: float,
@@ -672,8 +746,32 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
 
     best: Optional[Tuple[float, Tuple[str, ...], List[str], str]] = None
     candidates = _fill_candidates(g, defaults[g.fill], conv, prims)
+
+    def ring_shortfall(fill_path: str) -> float:
+        """How far the best ring that clears every surface falls short of
+        standing RING_ON_FILL off this fill, 0 (it stands off) to 1."""
+        best_ring = max((contrast(prims[r], prims[fill_path]) for r in rings
+                         if ring_fit(r) >= 1.0), default=1.0)
+        return max(0.0, 1.0 - best_ring / RING_ON_FILL)
+
+    # In dark high contrast a brand fill that has to leave the exact brand
+    # weighs the ring as well as the distance from the brand: the candidates
+    # after the exact brand are ranked by OKLab distance plus RING_WEIGHT
+    # times the ring's shortfall, so a step a ring can stand off wins over a
+    # slightly nearer one no ring can, and a far step never wins for it
+    # alone. There the ring is light, so the step it favors is a deeper one,
+    # which keeps most of the brand's chroma; in light the ring would favor
+    # a paler step, which loses chroma faster, so light keeps the nearest
+    # step. The exact brand stays first.
+    order = candidates
+    if g.brand and g.ring and defaults[g.fill] == EXACT and _scheme(mode) == "dark" \
+            and parse(mode).get("contrast") == "high":
+        rest = sorted(candidates[1:], key=lambda p: (
+            round(oklab_distance(prims[p], prims[EXACT]) + RING_WEIGHT * ring_shortfall(p), 6),
+            candidates.index(p)))
+        order = candidates[:1] + rest
     for allow_muddy in ((False, True) if g.brand else (True,)):
-        for fill_path in candidates:
+        for fill_path in order:
             for states in _state_paths(prims[fill_path], family, conv, len(g.states), prims):
                 paths = [fill_path] + list(states)
                 hexes = [prims[p] for p in paths]
@@ -893,7 +991,31 @@ def _ring_on_fill(ts: TokenSet, mode: str) -> List[str]:
             f"fill at least 2px away from it, so point {offset} at border.width.2 or wider"]
 
 
+def _media_veil(ts: TokenSet, mode: str) -> List[str]:
+    """Text on generated art (color.text.on-media on color.media.veil laid
+    over each color the art draws) meets the text minimum: 4.5:1 (WCAG
+    1.4.3), 7:1 under high contrast (WCAG 1.4.6)."""
+    veil, text = "color.media.veil", "color.text.on-media"
+    if not (_typed(ts, veil) and _typed(ts, text)) \
+            or not all(_typed(ts, r) for r in ART_ROLES):
+        return []
+    v = str(ts.resolve(veil, mode))
+    base, alpha = v[:7], (int(v[7:9], 16) / 255 if len(v) == 9 else 1.0)
+    high = parse(mode).get("contrast") == "high"
+    need, criterion = (7.0, "1.4.6") if high else (4.5, "1.4.3")
+    out = []
+    for role in ART_ROLES:
+        ratio = contrast(str(ts.resolve(text, mode)), over(base, alpha, ts.resolve(role, mode)))
+        if ratio < need:
+            out.append(f"{text} on {veil} over {role} ({mode}) is "
+                       f"{math.floor(ratio * 100) / 100:.2f}:1; WCAG {criterion} needs {need:g}:1 "
+                       f"for text on generated art, so point {veil} at a stronger veil of the "
+                       f"page color or {text} at the page's text color")
+    return out
+
+
 CHECKS: Tuple[Check, ...] = (
+    Check("media-veil", "1.4.3", _media_veil, axes=("scheme", "contrast")),
     Check("ring-not-weaker", "system", _ring_not_weaker, axes=("scheme", "contrast")),
     Check("ring-on-fill", "system", _ring_on_fill, axes=("scheme", "contrast")),
     Check("error-edge-hue", "system", _error_edge_hue, axes=("scheme", "contrast")),
@@ -988,6 +1110,17 @@ def generate_color(axes: AxisValues, brand_hex: str, brand_role: Optional[str] =
         floor = _ring_floor(mode, prims, pick)
         for g in GROUPS:
             _solve_group(g, mode, prims, pick, notes, ring_floor=floor if g.ring else 0.0)
+
+    for mode in COLOR_CONTEXTS:
+        # Text on generated art is the page's text, and the veil is the
+        # page's color at the least alpha that lets it read over the art.
+        pick[mode]["color.text.on-media"] = pick[mode]["color.text.default"]
+        path = pick[mode]["color.media.veil"]
+        page = value(mode, "color.surface.page")
+        alpha = veil_alpha(value(mode, "color.text.on-media"), page,
+                           [value(mode, r) for r in ART_ROLES],
+                           _need("color.text.default", "color.surface.page", mode))
+        prims[path] = f"{page}{alpha:02X}"
 
     ts = TokenSet()
     for path, hx in prims.items():

@@ -451,10 +451,14 @@ def test_no_two_roles_read_the_same_use():
     assert {d: p for d, p in by_text.items() if len(p) > 1} == {}
 
 
+DARK_LEVELS = ("page", "sunken", "card", "raised")
+
+
 def _surface_order(ts, mode):
-    v = {s: ts.resolve(f"color.surface.{s}", mode).upper() for s in LEVELS}
-    text = LEVELS[0]
-    for a, b in zip(LEVELS, LEVELS[1:]):
+    levels = DARK_LEVELS if "dark" in mode else LEVELS
+    v = {s: ts.resolve(f"color.surface.{s}", mode).upper() for s in levels}
+    text = levels[0]
+    for a, b in zip(levels, levels[1:]):
         if v[a] == v[b]:
             sign = "="
         else:
@@ -476,21 +480,24 @@ def test_every_surface_order_statement_holds_for_the_build(brand):
     # The sentences written by hand, each checked against the same values.
     light, dark = values["light, standard contrast"], values["dark, standard contrast"]
     lhc, dhc = values["light, high contrast"], values["dark, high contrast"]
-    for v in values.values():
-        assert all(luminance(v[a]) <= luminance(v[b]) for a, b in zip(LEVELS, LEVELS[1:]))
+    for words, v in values.items():
+        levels = DARK_LEVELS if "dark" in words else LEVELS
+        assert all(luminance(v[a]) <= luminance(v[b]) for a, b in zip(levels, levels[1:]))
     assert "A surface that sits higher is never darker than the one below it." in arch
     for v in (dark, dhc):
         assert luminance(v["page"]) < luminance(v["card"]) < luminance(v["raised"])
     assert light["card"] == light["raised"] and lhc["card"] == lhc["raised"]
     assert "Where two levels share a color, as card and raised do in light" in arch
     assert lhc["page"] == lhc["card"] == lhc["raised"] == "#FFFFFF" != lhc["sunken"]
-    assert dhc["sunken"] == dhc["page"] == "#000000"
+    assert dhc["page"] == "#000000" != dhc["sunken"]
+    for v in (dark, dhc):
+        assert luminance(v["page"]) < luminance(v["sunken"]) < luminance(v["card"])
     assert "in light the page, card and raised surfaces are white and the sunken surface keeps " \
-           "its recess step, and in dark the page and the sunken surface are black" in arch
-    record = files[f"{PACK}/decisions/dark-elevation-cue.md"]
-    assert "Sunken is darker than the page at standard contrast; under high contrast both are " \
-           "black." in record
-    assert luminance(dark["sunken"]) < luminance(dark["page"])
+           "its recess step, and in dark the page is black, the sunken surface keeps its recess " \
+           "between the page and the card" in arch
+    record = files[f"{PACK}/decisions/dark-surfaces-rise.md"]
+    assert "The sunken surface sits between the page and the card, at standard and high " \
+           "contrast." in record
     edge = files[f"{PACK}/decisions/container-edge.md"]
     assert "in light high contrast the page, card, sunken and raised surfaces are all white" \
         in edge

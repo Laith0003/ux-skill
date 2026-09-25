@@ -127,3 +127,42 @@ def test_css_carries_the_high_contrast_variant():
     assert ':root[data-contrast="high"] {' in css
     assert '@media (prefers-contrast: more) {\n  :root:not([data-contrast="standard"]) {' in css
     assert ':root[data-theme="dark"][data-contrast="high"] {' in css
+
+
+# M3.5c item 7: a right to left or Arabic subtree gets the Arabic type
+# anywhere on the page, not only on the root.
+NESTED = ':is([dir="rtl"], [lang|="ar"])'
+
+
+def _block(css, selector):
+    head = selector + " {\n"
+    assert head in css, selector
+    return css.split(head, 1)[1].split("}", 1)[0]
+
+
+def test_a_nested_rtl_or_arabic_subtree_gets_every_direction_override():
+    from engine.foundations import build_system
+    css = to_css(build_system(AXES, "#3366FF").tokens)
+    root = _block(css, ':root[dir="rtl"]')
+    nested = _block(css, f":root {NESTED}")
+    assert nested == root
+    assert "--type-text-body-font-family: var(--type-face-arabic);" in nested
+
+
+def test_a_nested_subtree_keeps_the_axes_set_on_the_root():
+    """dark high contrast on the root and an Arabic block inside: the
+    combined override reaches the block with the root's other attributes."""
+    from engine.foundations import build_system
+    css = to_css(build_system(AXES, "#3366FF").tokens)
+    combined = _block(css, ':root[data-contrast="high"][dir="rtl"]')
+    assert _block(css, f':root[data-contrast="high"] {NESTED}') == combined
+    media = css.split("@media (prefers-contrast: more) {\n  :root:not("
+                      '[data-contrast="standard"]) ' + NESTED + " {\n", 1)
+    assert len(media) == 2
+
+
+def test_a_latin_only_set_gives_a_subtree_its_travel_sign_but_no_arabic_type():
+    from engine.foundations import build_system
+    css = to_css(build_system(AXES, "#3366FF", arabic=False).tokens)
+    nested = _block(css, f":root {NESTED}")
+    assert "--type-" not in nested and "--motion-" in nested

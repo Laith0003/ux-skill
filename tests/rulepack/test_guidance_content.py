@@ -51,7 +51,7 @@ def test_color_states_which_pairings_the_fills_have():
     """Action and strong status fills are paired with the page only; the
     guidance says so and cites the record, and claims no wider coverage."""
     text = (GUIDANCE_DIR / "color.md").read_text(encoding="utf-8")
-    for record in ("primary-edge", "brand-fidelity", "ring-never-weaker",
+    for record in ("primary-edge", "brand-fill-family", "ring-never-weaker",
                    "ring-on-tinted-fills"):
         assert f"decisions/{record}.md" in text, record
     assert "page only" in _section("color", "Summary")

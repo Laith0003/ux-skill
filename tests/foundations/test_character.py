@@ -79,6 +79,10 @@ QUANTITIES = {
         ("expressive overshoot", lambda ts: ts.resolve("motion.expressive.curve")[1], 1, 0.3),
         ("reveal duration ms", lambda ts: ts.resolve("motion.reveal.duration")["value"],
          1, 100)),
+    ("motion", "color"): (
+        ("mean status soft fill chroma, a calm brief quieter",
+         lambda ts: sum(hex_to_oklch(ts.resolve(f"color.status.{s}.soft"))[1]
+                        for s in character.STATUS_HUES) / len(character.STATUS_HUES), 1, 0.009),),
     ("type_personality", "type"): (
         ("display face's type personality",
          lambda ts: fonts.BY_FAMILY[ts.resolve("type.face.display")[0]].place[3], 1, 0.5),),

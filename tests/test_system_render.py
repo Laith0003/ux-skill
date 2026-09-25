@@ -264,7 +264,10 @@ def test_dir_rtl_sets_a_display_style_in_the_arabic_display_face(page, tokens):
     assert arabic_display in _style(page, ".display", "font-family").split(",")[0]
     assert _style(page, ".display", "letter-spacing") in ("normal", "0px")
     size = tokens.resolve("type.text.heading-1", "direction:rtl")["fontSize"]
-    assert _style(page, ".display", "font-size") == f"{size['value'] * 16:g}px"
+    # the page is 390px wide, a phone, where heading-1 takes its phone factor
+    factor = tokens.resolve("type.phone.heading-1", "direction:rtl")
+    got = float(_style(page, ".display", "font-size").removesuffix("px"))
+    assert got == pytest.approx(size["value"] * 16 * factor, abs=0.01)
 
 
 def test_compact_density_shrinks_the_gaps(page, tokens):
@@ -347,3 +350,104 @@ def test_the_region_gap_follows_the_viewport_from_one_property(site, tokens, wid
             if width == 375:
                 assert gap <= 40, f"a phone shows a {gap:g}px gap between regions"
         browser.close()
+
+
+# M3.5c items 1 and 7: the hero steps down on phones from one property,
+# and an Arabic block inside a left to right page gets the Arabic type.
+TYPE_PAGE = """<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Type</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  body { margin: 0; }
+  .body { font-family: var(--type-text-body-font-family); font-size: var(--type-text-body-font-size);
+          font-weight: var(--type-text-body-font-weight); }
+  .hero, .h1, .st { margin: 0; }
+  .hero { font-family: var(--type-text-hero-font-family); font-size: var(--type-text-hero-font-size);
+          letter-spacing: var(--type-text-hero-letter-spacing); }
+  .h1 { font-family: var(--type-text-heading-1-font-family);
+        font-size: var(--type-text-heading-1-font-size); }
+  .st { font-size: var(--type-text-section-title-font-size); }
+  .h2 { font-size: var(--type-text-heading-2-font-size); }
+</style>
+</head>
+<body>
+<p class="hero">Ship it</p><p class="h1">Heading</p><p class="st">Section</p><p class="h2">Sub</p>
+<p class="body" id="latin">Latin body</p>
+<div dir="rtl" lang="ar"><p class="body" id="nested">نص عربي</p><p class="h1" id="nested-h1">عنوان</p></div>
+<div lang="ar"><p class="body" id="lang-only">نص عربي</p></div>
+</body>
+</html>
+"""
+
+
+def _open(site, width):
+    (site / "type.html").write_text(TYPE_PAGE, encoding="utf-8")
+    from playwright.sync_api import sync_playwright
+    pw = sync_playwright().start()
+    browser = None
+    for kwargs in ({"channel": "chrome"}, {}):
+        try:
+            browser = pw.chromium.launch(**kwargs)
+            break
+        except Exception:
+            continue
+    if browser is None:
+        pw.stop()
+        pytest.skip("no browser for the render test")
+    pg = browser.new_page(viewport={"width": width, "height": 800})
+    pg.goto((site / "type.html").as_uri())
+    return pw, browser, pg
+
+
+def _size(pg, selector):
+    return float(_style(pg, selector, "font-size").removesuffix("px"))
+
+
+def test_an_arabic_block_inside_a_latin_page_gets_the_arabic_type(site, tokens):
+    pw, browser, pg = _open(site, 1024)
+    try:
+        arabic = tokens.resolve("type.face.arabic", "")[0]
+        latin = tokens.resolve("type.face.text", "")[0]
+        assert latin in _style(pg, "#latin", "font-family").split(",")[0]
+        for sel in ("#nested", "#lang-only"):
+            assert arabic in _style(pg, sel, "font-family").split(",")[0], sel
+            want = tokens.resolve("type.text.body", "direction:rtl")["fontSize"]["value"] * 16
+            assert _size(pg, sel) == pytest.approx(want), sel
+        display = tokens.resolve("type.face.arabic-display", "")[0]
+        assert display in _style(pg, "#nested-h1", "font-family").split(",")[0]
+        _set(pg, **{"data-contrast": "high"})
+        want = tokens.resolve("type.text.body", "contrast:high,direction:rtl")["fontWeight"]
+        assert _style(pg, "#nested", "font-weight") == f"{want:g}"
+    finally:
+        browser.close()
+        pw.stop()
+
+
+@pytest.mark.parametrize("direction", ["ltr", "rtl"])
+def test_the_hero_steps_down_on_a_phone_and_keeps_its_order(site, tokens, direction):
+    mode = "direction:rtl" if direction == "rtl" else ""
+    desktop = {r: tokens.resolve(f"type.text.{r}", mode)["fontSize"]["value"] * 16
+               for r in ("hero", "heading-1", "section-title", "heading-2")}
+    for width in (375, 1440):
+        pw, browser, pg = _open(site, width)
+        try:
+            if direction == "rtl":
+                _set(pg, dir="rtl")
+            sizes = {r: _size(pg, "." + c) for r, c in
+                     (("hero", "hero"), ("heading-1", "h1"), ("section-title", "st"),
+                      ("heading-2", "h2"))}
+        finally:
+            browser.close()
+            pw.stop()
+        if width == 1440:
+            assert sizes == pytest.approx(desktop)
+        else:
+            factor = tokens.resolve("type.phone.hero", "")
+            assert sizes["hero"] == pytest.approx(desktop["hero"] * factor, abs=0.01)
+            assert sizes["hero"] < desktop["hero"] and sizes["heading-1"] < desktop["heading-1"]
+            assert sizes["hero"] > sizes["heading-1"] > sizes["section-title"] \
+                > sizes["heading-2"], sizes

@@ -266,6 +266,23 @@
             "layer": "primitive"
           }
         }
+      },
+      "band-dark": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.078431,
+            0.121569,
+            0.219608
+          ],
+          "hex": "#141F38"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
       }
     },
     "neutral": {
@@ -478,11 +495,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.023529,
-            0.023529,
-            0.031373
+            0.078431,
+            0.086275,
+            0.094118
           ],
-          "hex": "#060608"
+          "hex": "#141618"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -867,6 +884,74 @@
             "layer": "primitive"
           }
         }
+      },
+      "soft-50": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.988235,
+            0.960784,
+            0.960784
+          ],
+          "hex": "#FCF5F5"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "soft-100": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.945098,
+            0.835294,
+            0.839216
+          ],
+          "hex": "#F1D5D6"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "soft-900": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.215686,
+            0.070588,
+            0.094118
+          ],
+          "hex": "#371218"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "soft-950": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.109804,
+            0.019608,
+            0.031373
+          ],
+          "hex": "#1C0508"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
       }
     },
     "warning": {
@@ -1050,6 +1135,74 @@
             0.0
           ],
           "hex": "#180900"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "soft-50": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.988235,
+            0.964706,
+            0.941176
+          ],
+          "hex": "#FCF6F0"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "soft-100": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.929412,
+            0.847059,
+            0.780392
+          ],
+          "hex": "#EDD8C7"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "soft-900": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.172549,
+            0.109804,
+            0.05098
+          ],
+          "hex": "#2C1C0D"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "soft-950": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.078431,
+            0.043137,
+            0.015686
+          ],
+          "hex": "#140B04"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -1245,6 +1398,74 @@
             "layer": "primitive"
           }
         }
+      },
+      "soft-50": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.921569,
+            0.984314,
+            0.94902
+          ],
+          "hex": "#EBFBF2"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "soft-100": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.796078,
+            0.894118,
+            0.839216
+          ],
+          "hex": "#CBE4D6"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "soft-900": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.058824,
+            0.14902,
+            0.105882
+          ],
+          "hex": "#0F261B"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "soft-950": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.019608,
+            0.066667,
+            0.039216
+          ],
+          "hex": "#05110A"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
       }
     },
     "info": {
@@ -1428,6 +1649,74 @@
             0.12549
           ],
           "hex": "#000E20"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "soft-50": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.952941,
+            0.972549,
+            0.988235
+          ],
+          "hex": "#F3F8FC"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "soft-100": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.803922,
+            0.87451,
+            0.94902
+          ],
+          "hex": "#CDDFF2"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "soft-900": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.054902,
+            0.129412,
+            0.203922
+          ],
+          "hex": "#0E2134"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "soft-950": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.015686,
+            0.054902,
+            0.101961
+          ],
+          "hex": "#040E1A"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -1620,6 +1909,80 @@
         }
       }
     },
+    "veil": {
+      "light": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.964706,
+            0.968627,
+            0.972549
+          ],
+          "alpha": 0.0,
+          "hex": "#F6F7F8"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "light-high": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "alpha": 0.0,
+          "hex": "#FFFFFF"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "dark": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.047059,
+            0.05098,
+            0.058824
+          ],
+          "alpha": 0.0,
+          "hex": "#0C0D0F"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "dark-high": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "alpha": 0.082353,
+          "hex": "#000000"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      }
+    },
     "surface": {
       "page": {
         "$type": "color",
@@ -1654,8 +2017,7 @@
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
-              "scheme:dark": "{color.neutral.recess-dark}",
-              "scheme:dark,contrast:high": "{color.base.black}"
+              "scheme:dark": "{color.neutral.recess-dark}"
             }
           }
         }
@@ -1719,7 +2081,7 @@
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
-              "scheme:dark": "{color.brand.900}"
+              "scheme:dark": "{color.brand.band-dark}"
             }
           }
         }
@@ -1745,6 +2107,20 @@
             "modes": {
               "contrast:high": "{color.neutral.100}",
               "scheme:dark": "{color.neutral.950}",
+              "scheme:dark,contrast:high": "{color.neutral.800}"
+            }
+          }
+        }
+      },
+      "header": {
+        "$type": "color",
+        "$value": "{color.neutral.50}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": "{color.neutral.100}",
+              "scheme:dark": "{color.neutral.800}",
               "scheme:dark,contrast:high": "{color.neutral.800}"
             }
           }
@@ -1888,6 +2264,20 @@
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic"
+          }
+        }
+      },
+      "on-media": {
+        "$type": "color",
+        "$value": "{color.neutral.900}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": "{color.neutral.950}",
+              "scheme:dark": "{color.neutral.50}",
+              "scheme:dark,contrast:high": "{color.base.white}"
+            }
           }
         }
       }
@@ -2262,6 +2652,22 @@
         }
       }
     },
+    "media": {
+      "veil": {
+        "$type": "color",
+        "$value": "{color.veil.light}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": "{color.veil.light-high}",
+              "scheme:dark": "{color.veil.dark}",
+              "scheme:dark,contrast:high": "{color.veil.dark-high}"
+            }
+          }
+        }
+      }
+    },
     "status": {
       "danger": {
         "text": {
@@ -2280,14 +2686,14 @@
         },
         "soft": {
           "$type": "color",
-          "$value": "{color.danger.100}",
+          "$value": "{color.danger.soft-100}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.danger.50}",
-                "scheme:dark": "{color.danger.900}",
-                "scheme:dark,contrast:high": "{color.danger.950}"
+                "contrast:high": "{color.danger.soft-50}",
+                "scheme:dark": "{color.danger.soft-900}",
+                "scheme:dark,contrast:high": "{color.danger.soft-950}"
               }
             }
           }
@@ -2336,14 +2742,14 @@
         },
         "soft": {
           "$type": "color",
-          "$value": "{color.warning.100}",
+          "$value": "{color.warning.soft-100}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.warning.50}",
-                "scheme:dark": "{color.warning.900}",
-                "scheme:dark,contrast:high": "{color.warning.950}"
+                "contrast:high": "{color.warning.soft-50}",
+                "scheme:dark": "{color.warning.soft-900}",
+                "scheme:dark,contrast:high": "{color.warning.soft-950}"
               }
             }
           }
@@ -2392,14 +2798,14 @@
         },
         "soft": {
           "$type": "color",
-          "$value": "{color.success.100}",
+          "$value": "{color.success.soft-100}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.success.50}",
-                "scheme:dark": "{color.success.900}",
-                "scheme:dark,contrast:high": "{color.success.950}"
+                "contrast:high": "{color.success.soft-50}",
+                "scheme:dark": "{color.success.soft-900}",
+                "scheme:dark,contrast:high": "{color.success.soft-950}"
               }
             }
           }
@@ -2448,14 +2854,14 @@
         },
         "soft": {
           "$type": "color",
-          "$value": "{color.info.100}",
+          "$value": "{color.info.soft-100}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.info.50}",
-                "scheme:dark": "{color.info.900}",
-                "scheme:dark,contrast:high": "{color.info.950}"
+                "contrast:high": "{color.info.soft-50}",
+                "scheme:dark": "{color.info.soft-900}",
+                "scheme:dark,contrast:high": "{color.info.soft-950}"
               }
             }
           }
@@ -5759,6 +6165,64 @@
       "stroke": {
         "$type": "number",
         "$value": "{type.icon.stroke-width}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      }
+    },
+    "phone-scale": {
+      "7": {
+        "$type": "number",
+        "$value": 0.75,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "8": {
+        "$type": "number",
+        "$value": 0.6818,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "9": {
+        "$type": "number",
+        "$value": 0.6296,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      }
+    },
+    "phone": {
+      "hero": {
+        "$type": "number",
+        "$value": "{type.phone-scale.9}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "heading-1": {
+        "$type": "number",
+        "$value": "{type.phone-scale.8}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "section-title": {
+        "$type": "number",
+        "$value": "{type.phone-scale.7}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic"

@@ -7,7 +7,8 @@
 
 ## Direction is a mode
 
-- Direction is one of the mode axes: dir="rtl" on the html element switches every direction-dependent token at once (decisions/axes-on-the-root.md).
+{arabic} - Direction is one of the mode axes: dir="rtl" on the html element switches every direction-dependent token at once, and dir="rtl" or an Arabic lang on an element inside the page switches them for that element and everything in it, so an Arabic block inside a left-to-right page needs no values copied by hand (decisions/direction-on-any-subtree.md).
+{latin} - Direction is one of the mode axes: dir="rtl" on the html element switches every direction-dependent token at once, and dir="rtl" on an element inside the page switches them for that element and everything in it (decisions/direction-on-any-subtree.md).
 - Tokens never name physical sides: inline-start and inline-end, block-start and block-end, never left, right, top or bottom.
 - Every contract part declares its right-to-left behavior: logical (placed with logical properties, so it moves to the other side), mirror (it moves to the other side like a logical part, and its glyph also flips), or fixed (never flips).
 - Name frames and screens with their direction so both are reviewed.

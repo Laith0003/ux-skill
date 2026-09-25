@@ -117,27 +117,32 @@ def generate_layout(axes: AxisValues, target_px: int = TARGET_PX["comfortable"],
     return Generated(tokens=ts, notes=[f"layout: container {container_px(d)}px"])
 
 
-def responsive_css(ts: TokenSet) -> List[str]:
+def responsive_css(ts: TokenSet, extra: Dict[str, List[str]] = None) -> List[str]:
     """CSS lines that give each tiered role in RESPONSIVE one alias,
     --layout-<role>: the phone value at :root, then each tier's value from
     its breakpoint up, under @media (min-width) with the breakpoint's
     literal px (CSS cannot read a custom property in a media query). A
-    density override reaches the alias through var(). Empty when the set
-    lacks a breakpoint or every tier of a role."""
+    density override reaches the alias through var(). `extra` adds
+    declarations per tier to the same blocks (the type styles that step
+    down on a phone). Empty when the set lacks a breakpoint, or when it
+    lacks every tier of a role and `extra` is empty."""
+    extra = extra or {}
     groups = [g for g in RESPONSIVE if all(ts.has(f"layout.{g}.{t}") for t in TIERS)]
     tiers = [t for t in TIERS[1:] if ts.has(f"layout.breakpoint.{t}")]
-    if not groups or len(tiers) != len(TIERS) - 1:
+    if not (groups or any(extra.values())) or len(tiers) != len(TIERS) - 1:
         return []
 
     def lines(tier: str, indent: str) -> List[str]:
         return [f"{indent}{css_property(f'layout.{g}')}: var({css_property(f'layout.{g}.{tier}')});"
-                for g in groups]
+                for g in groups] + [indent + line for line in extra.get(tier, [])]
 
     out = ["", ":root {", *lines(TIERS[0], "  "), "}"]
     for tier in tiers:
+        body = lines(tier, "    ")
+        if not body:
+            continue
         px = _px(ts, f"layout.breakpoint.{tier}")
-        out += ["", f"@media (min-width: {px:g}px) {{", "  :root {", *lines(tier, "    "), "  }",
-                "}"]
+        out += ["", f"@media (min-width: {px:g}px) {{", "  :root {", *body, "  }", "}"]
     return out
 
 
