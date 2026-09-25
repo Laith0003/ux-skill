@@ -338,14 +338,19 @@ def _left_out(ts: TokenSet, mapping: Mapping, name: str) -> List[str]:
             "own name, so they were not checked; map each one to check it"]
 
 
-def _axes_left_out(ts: TokenSet, mapping: Mapping, name: str) -> List[str]:
-    """A note on each axis the set has, and a first mapping would read, that
-    the mapping leaves out without a "not mapped" entry: it was deleted from
-    the file, so it is not checked."""
+def deleted_axes(ts: TokenSet, mapping: Mapping) -> Dict[str, str]:
+    """Each axis the set has, and a first mapping would read, that the
+    mapping leaves out without a "not mapped" entry (it was deleted from
+    the file), with the set's own axis it would read."""
     used = {m.source for m in mapping.axes.values() if m.source is not None}
-    return [AXIS_DELETED.format(axis=axis, source=m.source, name=name)
-            for axis, m in _propose_axes(ts).items()
-            if axis not in mapping.axes and m.source not in used]
+    return {axis: m.source for axis, m in _propose_axes(ts).items()
+            if axis not in mapping.axes and m.source not in used}
+
+
+def _axes_left_out(ts: TokenSet, mapping: Mapping, name: str) -> List[str]:
+    """A note on each axis deleted from the mapping: it is not checked."""
+    return [AXIS_DELETED.format(axis=axis, source=source, name=name)
+            for axis, source in deleted_axes(ts, mapping).items()]
 
 
 def _resolve(ts: TokenSet, role: str, token: str, context: str) -> Any:

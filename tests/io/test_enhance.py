@@ -463,3 +463,22 @@ def test_a_var_to_a_property_the_code_declares_is_not_a_missing_token(tmp_path):
             "it holds a value the design keeps, move it into tokens.css as a token.") in text
     assert report.to_dict()["drift"]["own"] == [
         {"name": "--local", "uses": ["a.css:1", "b.css:1"]}]
+
+
+def test_what_was_not_read_is_not_listed_under_the_strays(tmp_path):
+    project = _project(tmp_path)
+    (project / "extra.css").write_text(".x { margin: calc(100% - 4px); }\n", encoding="utf-8")
+    imported = _system()
+    lines = enhance(imported, MAPPING, scan([project], imported.tokens)).markdown().splitlines()
+    unread = next(i for i, line in enumerate(lines) if line.startswith("- extra.css:1"))
+    strays = next(i for i, line in enumerate(lines) if line.startswith("These names match"))
+    assert strays < unread
+    assert lines[unread - 2] == "What the scan did not read or measure:"
+
+
+def test_a_deleted_axis_is_named_once_not_asked_about_again():
+    mapping = Mapping(dict(MAPPING.roles), {})
+    report = enhance(_system(), mapping)
+    text = report.markdown()
+    assert "mapping.json leaves out the axis scheme" in " ".join(text.split())
+    assert "The system has no dark mode in the mapping" not in text
