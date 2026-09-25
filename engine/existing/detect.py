@@ -54,7 +54,6 @@ _GENERATED_RE = re.compile(r"generated\b.{0,200}?\bdo not edit|do not edit.{0,20
                            re.I | re.S)
 _FOUNDATION_CSS_RE = re.compile(r"(?:^|[-_.])(?:foundations?|tokens|variables|theme)\.css$", re.I)
 _CUSTOM_PROP_RE = re.compile(r"(--[A-Za-z0-9_-]+)\s*:\s*([^;{}]+)")
-_VAR_RE = re.compile(r"var\(\s*(--[A-Za-z0-9_-]+)\s*(?:,\s*([^()]*(?:\([^()]*\)[^()]*)*))?\)")
 _HTML_LANG_RE = re.compile(r"<html\b[^>]*\blang\s*=\s*['\"]([A-Za-z]{2,3})(?:-[A-Za-z0-9-]+)?['\"]", re.I)
 _HTML_RTL_RE = re.compile(r"<html\b[^>]*\bdir\s*=\s*['\"]rtl['\"]", re.I)
 _HEX_RE = re.compile(r"^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$")
@@ -177,14 +176,19 @@ def normalize_hex(value: Any) -> str:
         return ""
     s = value.strip()
     m = _FUNC_RE.match(s)
-    if m:
-        return _function_hex(m.group(1).lower(), m.group(2))
-    if not _HEX_RE.match(s):
+    if not (m or _HEX_RE.match(s)):
         return ""
-    h = s[1:]
-    if len(h) in (3, 4):
-        h = "".join(c * 2 for c in h[:3])
-    return "#" + h[:6].upper()
+    # The importers' value reader first, so detect and import read one color
+    # the same way. What it refuses by design (oklab, color(srgb), an oklch
+    # outside sRGB, hue units) detect still reads leniently, to find a primary.
+    from engine.io.values_in import NotRead, read_value  # engine.io imports this package
+    try:
+        kind, hx = read_value(s)
+        if kind == "color":
+            return hx[:7]
+    except NotRead:
+        pass
+    return _function_hex(m.group(1).lower(), m.group(2)) if m else ""
 
 
 def _segments(path: str) -> List[str]:
@@ -436,10 +440,15 @@ def resolve_css_var(value: str, props: Dict[str, str], depth: int = 0) -> str:
     """Follow ``var(--x)`` chains to the final value (fallbacks honored)."""
     if depth > 24 or not isinstance(value, str):
         return value or ""
-    m = _VAR_RE.fullmatch(value.strip())
-    if not m:
+    # One reader of a var() reference: the importers' css_alias.
+    from engine.io.values_in import NotRead, css_alias  # engine.io imports this package
+    try:
+        ref = css_alias(value)
+    except NotRead:
+        ref = None
+    if ref is None:
         return value.strip()
-    name, fallback = m.group(1), m.group(2)
+    name, fallback = "--" + ref[0], ref[1]
     if name in props:
         return resolve_css_var(props[name], props, depth + 1)
     return resolve_css_var(fallback, props, depth + 1) if fallback else ""
