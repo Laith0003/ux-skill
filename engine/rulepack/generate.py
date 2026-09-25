@@ -55,7 +55,7 @@ AUDIT_HEADINGS: Tuple[str, ...] = ("Before you audit", "Scope", "What the gate c
 HANDOFF_HEADINGS: Tuple[str, ...] = ("Inputs", "CSS custom properties", "Using the roles",
                                      "Implementation notes", "Common mistakes",
                                      "What a handoff does not do")
-README_HEADINGS: Tuple[str, ...] = ("Load one path per task", "Foundations", "Contracts",
+README_HEADINGS: Tuple[str, ...] = ("Load the files for your task", "Foundations", "Contracts",
                                     "Rules for every task")
 
 # The WCAG criteria at level AAA that a check or pairing may cite; the
@@ -79,13 +79,11 @@ class RulePackError(ValueError):
 
 def _fmt(type_: str, value: Any) -> str:
     """A resolved value as CSS would print it; a typography composite as
-    its five fields."""
+    its five fields, the font family with its whole fallback stack."""
     if type_ == "typography":
         parts = []
         for key, (field_type, css) in TYPOGRAPHY_FIELDS.items():
             text = TYPES[field_type].css(value[key])
-            if field_type == "fontFamily":
-                text = text.split(",")[0].strip()
             parts.append(f"{css} {text}")
         return ", ".join(parts)
     return TYPES[type_].css(value)
@@ -182,10 +180,25 @@ def _high_cell(p: Pairing, ts: TokenSet) -> str:
     return f"{high:g}:1 (WCAG {criterion}{', AAA' if criterion in AAA else ''})"
 
 
-def _pairing_source(p: Pairing) -> str:
+def _pairing_source(name: str, p: Pairing) -> str:
     """A contract pairing with a floor of its own gets the contract's name
     as its criterion (bind._pairings); that floor is ours."""
-    return "our floor" if p.criterion.startswith("the ") else _criterion_words(p.criterion)
+    return "our floor" if p.criterion == f"the {name} contract" else _criterion_words(p.criterion)
+
+
+def _used_by(contract: Contract, p: Pairing) -> str:
+    """The parts whose bindings a contract pairing measures: the non-text
+    bindings of its foreground for a non-text criterion (1.4.11), the text
+    bindings for any other, every binding of it when none is of that
+    kind."""
+    uses = [b for b in contract.tokens if b.role == p.fg]
+    kind = [b for b in uses if (b.property == "text") != (p.criterion == "1.4.11")]
+    uses = kind or uses
+    out: List[str] = []
+    for b in uses:
+        if f"{b.part} {b.property}" not in out:
+            out.append(f"{b.part} {b.property}")
+    return ", ".join(out)
 
 
 def contract_pairing_rows(contracts: Sequence[Contract]) -> List[Tuple[str, Pairing]]:
@@ -309,9 +322,10 @@ def _reference(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[RoleE
     labels = [_context_label(m, ts) for m in modes]
     lines = [f"# {g.title} reference", "",
              f"Every {g.title.lower()} token in this system as built. Values are resolved for "
-             "each mode; the role column says what each is for, and architecture.md says when "
+             f"each mode; the role column says what each is for, and {f.name}/architecture.md "
+             "says when "
              "to use it.", "", "## Semantic roles", "",
-             "| Role | Type | Points at | " + " | ".join(labels) + " |",
+             "| Role | Type | Points at (base) | " + " | ".join(labels) + " |",
              "|---|---|---|" + "---|" * len(labels)]
     for e in entries:
         raw = ts.raw(e.path, "")
@@ -339,11 +353,13 @@ def _reference(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[RoleE
                       "pack measured each in every scheme and contrast context against these "
                       "tokens before it was written. Their minimums rise under high contrast the "
                       "same way, unless the contract pins its own (marked pinned).", "",
-                  "| Contract | Foreground | Background | Minimum | High contrast | Source |",
-                  "|---|---|---|---|---|---|"]
+                  "| Contract | Used by | Foreground | Background | Minimum | High contrast | "
+                  "Source |",
+                  "|---|---|---|---|---|---|---|"]
+        by_name = {c.name: c for c in contracts}
         for name, p in contract_pairing_rows(contracts):
-            lines.append(f"| {name} | `{p.fg}` | `{p.bg}` | {p.minimum:g}:1 | "
-                         f"{_high_cell(p, ts)} | {_pairing_source(p)} |")
+            lines.append(f"| {name} | {_used_by(by_name[name], p)} | `{p.fg}` | `{p.bg}` | "
+                         f"{p.minimum:g}:1 | {_high_cell(p, ts)} | {_pairing_source(name, p)} |")
     return "\n".join(lines) + "\n"
 
 
@@ -366,8 +382,8 @@ def _audit(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[RoleEntry
              "asked to skip.", "",
              "## Scope", "", g.section("Audit scope"), "", "## What the gate checks", "",
              "The build runs these checks on every system and refuses to write one that fails, "
-             "so a system straight from the build passes them. Run them again after any hand "
-             "edit.", "", "| Check | Source | What it guards |", "|---|---|---|"]
+             "so a system straight from the build passes them. A token file edited by hand has "
+             "not been checked: change the inputs and build again instead.", "", "| Check | Source | What it guards |", "|---|---|---|"]
     for c in f.checks:
         lines.append(f"| `{c.id}` | {_criterion_words(c.criterion)} | "
                      f"{_cell(checks[c.id].rstrip('.'))} |")
@@ -378,15 +394,15 @@ def _audit(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[RoleEntry
     if f.pairings:
         n = len(_foundation_contexts(ts, entries))
         lines += ["", f"The gate also measures {len(f.pairings)} contrast pairings in {n} "
-                      "contexts each; reference.md lists them under Pairings."]
+                      f"contexts each; {f.name}/reference.md lists them under Pairings."]
     lines += ["", "## Beyond the gate", "",
               "These need the screens or the product, not only the tokens:", "",
               g.section("Beyond the gate"), "", "## Classify and cite", "",
-              "1. Name the element and the contract it matches (../contracts/). No matching "
+              "1. Name the element and the contract it matches (contracts/). No matching "
               "contract is itself a finding: a missing contract.",
               "2. Match its variant and state against that contract.",
-              "3. Cite the rule it breaks: a contract field, a role in reference.md, a check "
-              "above, a decision record, or a line in ../content.md or ../direction.md. No "
+              f"3. Cite the rule it breaks: a contract field, a role in {f.name}/reference.md, "
+              "a check above, a decision record, or a line in content.md or direction.md. No "
               "citation, no finding.",
               "4. End with a system trace: the role, contract or rule that was missing or "
               "broken. \"No role exists for this\" is a valid trace; it is how the system "
@@ -399,9 +415,9 @@ def _audit(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[RoleEntry
               "contract pairing, AAA criteria and our floors included |",
               "| serious | frequent, or stops some people with a workaround; or misses an AAA "
               "criterion the system does not apply |",
-              "| minor | rare and does not stop the task; or passes within 10 percent of a "
-              "minimum |", "",
-              "Every finding has a level. A value that cannot be measured is reported as "
+              "| minor | rare and does not stop the task |", "",
+              "A missing contract is a serious finding: nothing states how that element must "
+              "behave. Every finding has a level. A value that cannot be measured is reported as "
               "unmeasured, never as a pass.", "",
               "## Report", "",
               "```",
@@ -459,12 +475,13 @@ def _readme(foundations: Sequence[Tuple[Foundation, Guidance]],
     lines = ["# Rule pack", "",
              "The rules of this design system for agents and people, generated from the built "
              "tokens, the component contracts and the decision records. The files state what "
-             "is true now; the reasons are in decisions/. Paths cited in the files, such as "
-             "decisions/two-layers.md, are relative to this folder.", "",
+             "is true now; the reasons are in decisions/. Paths cited in the text, such as "
+             "decisions/two-layers.md, are relative to this folder; markdown links are "
+             "relative to the file they sit in.", "",
              f"{RULE_PACK_MANIFEST} holds the sha256 of the tokens.json this pack was built "
              "from. When the tokens.json beside this folder has another digest, the pack "
              "describes other tokens: build again with --rule-pack.", "",
-             "## Load one path per task", "",
+             "## Load the files for your task", "",
              "Load the files for your task, then stop: loading everything crowds out the "
              "work.", "", "| Task | Load |", "|---|---|",
              "| Build or change a screen | contracts/ for each component, "

@@ -183,15 +183,27 @@ def test_pairing_rows_are_the_build_and_the_contracts_and_nothing_else():
     intro = next(line for line in reference.split("\n")
                  if line.startswith("Contracts add these pairings"))
     want = []
+    by_name = {c.name: c for c in CONTRACTS}
     for name, p in contract_pairing_rows(CONTRACTS):
-        source = "our floor" if p.criterion.startswith("the ") else f"WCAG {p.criterion}"
-        want.append(f"| {name} | `{p.fg}` | `{p.bg}` | {p.minimum:g}:1 | {_high(p)} | {source} |")
+        source = "our floor" if p.criterion == f"the {name} contract" else f"WCAG {p.criterion}"
+        uses = [b for b in by_name[name].tokens if b.role == p.fg]
+        kind = [b for b in uses if (b.property == "text") != (p.criterion == "1.4.11")]
+        used = []
+        for b in (kind or uses):
+            if f"{b.part} {b.property}" not in used:
+                used.append(f"{b.part} {b.property}")
+        want.append(f"| {name} | {', '.join(used)} | `{p.fg}` | `{p.bg}` | {p.minimum:g}:1 | "
+                    f"{_high(p)} | {source} |")
     assert _rows(reference, intro) == want
     assert len(want) == len(set(want))
     # A floor of our own is never attributed to WCAG, and a pinned minimum
     # is marked as pinned.
-    assert "| button | `color.text.disabled` | `color.action.disabled` | 1.3:1 | 1.3:1 (pinned) " \
-           "| our floor |" in want
+    assert "| button | label text | `color.text.disabled` | `color.action.disabled` | 1.3:1 | " \
+           "1.3:1 (pinned) | our floor |" in want
+    # A non-text pairing names the part it is for, not the text that shares
+    # its color.
+    assert "| dialog | close icon | `color.text.muted` | `color.surface.raised` | 3:1 | " \
+           "4.5:1 (our floor) | WCAG 1.4.11 |" in want
 
 
 def test_a_new_contract_pairing_or_description_shows_up_in_the_pack(tmp_path):
@@ -207,8 +219,8 @@ def test_a_new_contract_pairing_or_description_shows_up_in_the_pack(tmp_path):
                         "Holds related content in one bounded block")
     card.write_text(text, encoding="utf-8")
     files = build_rule_pack(TS, contracts_dir=contracts)
-    row = "| card | `color.text.default` | `color.surface.page` | 4.5:1 | 7:1 (WCAG 1.4.6, AAA) | " \
-          "WCAG 1.4.3 |"
+    row = "| card | title text | `color.text.default` | `color.surface.page` | 4.5:1 | " \
+          "7:1 (WCAG 1.4.6, AAA) | WCAG 1.4.3 |"
     assert row in files[f"{PACK}/color/reference.md"]
     assert row not in PACK_FILES[f"{PACK}/color/reference.md"]
     assert "Holds related content in one bounded block" in files[f"{PACK}/README.md"]
@@ -305,6 +317,8 @@ def test_checks_citing_aaa_block_and_so_do_our_floors():
         assert "| blocking | fails WCAG at level A or AA; or fails a check the gate runs or a " \
                "contract pairing, AAA criteria and our floors included |" in audit
         assert "misses an AAA criterion the system does not apply |" in audit
+        assert "10 percent" not in audit and "hand edit" not in audit
+        assert "A missing contract is a serious finding" in audit
 
 
 def test_the_pack_is_the_same_under_every_hash_seed():
@@ -327,7 +341,8 @@ def test_the_pack_is_the_same_under_every_hash_seed():
     for seed in ("0", "1", "4242"):
         env = {**os.environ, "PYTHONHASHSEED": seed}
         out = subprocess.run([sys.executable, "-c", script], env=env, check=True,
-                             capture_output=True, text=True).stdout.strip()
+                             capture_output=True, text=True,
+                             cwd=str(SEED_DIR.parents[2])).stdout.strip()
         assert out == here.hexdigest(), seed
 
 
@@ -458,3 +473,27 @@ def test_the_screen_route_loads_the_direction_and_content_rules():
         for name in ("contracts/", "<foundation>/architecture.md", "direction.md", "content.md",
                      "<foundation>/handoff.md"):
             assert name in row, name
+
+
+
+def test_plain_path_citations_are_relative_to_the_pack():
+    """Paths in the text (not markdown link targets) resolve from rule-pack/,
+    as README says."""
+    for path, text in PACK_FILES.items():
+        if path.startswith(f"{PACK}/decisions/") or path.endswith((".yaml", ".json")):
+            continue
+        plain = re.sub(r"\]\([^)]*\)", "]", text)
+        for cited in re.findall(r"(?<![\w./<>-])((?:[a-z0-9-]+/)*[a-z0-9-]+\.md)\b", plain):
+            assert f"{PACK}/{cited}" in PACK_FILES, (path, cited)
+        for cited in re.findall(r"(?<![\w./-])(contracts|decisions)/(?![\w])", plain):
+            assert any(k.startswith(f"{PACK}/{cited}/") for k in PACK_FILES), (path, cited)
+        assert "../" not in plain, path
+
+
+def test_the_reference_says_which_mode_the_alias_column_shows():
+    reference = PACK_FILES[f"{PACK}/color/reference.md"]
+    assert "| Role | Type | Points at (base) |" in reference
+    typ = PACK_FILES[f"{PACK}/type/reference.md"]
+    body = TS.resolve("type.text.body")["fontFamily"]
+    stack = body if isinstance(body, str) else ", ".join(body)
+    assert stack.count(",") >= 1 and stack.split(",")[1].strip().strip('"') in typ
