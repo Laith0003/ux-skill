@@ -115,6 +115,15 @@ def _linear_to_oklab(rgb) -> Tuple[float, float, float]:
             0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_)
 
 
+def srgb_to_oklch(r: float, g: float, b: float) -> Tuple[float, float, float]:
+    """OKLCH for sRGB channels written from 0 to 1 (a design tool's floats),
+    extended past that range so a channel below 0 or above 1 reads as a
+    color outside sRGB, ready for gamut_map_oklch. Hue in degrees."""
+    def linear(c: float) -> float:
+        return math.copysign(_to_linear(abs(c) * 255.0), c)
+    return oklab_to_oklch(*_linear_to_oklab((linear(r), linear(g), linear(b))))
+
+
 def _oklch_to_oklab(L: float, C: float, H: float) -> Tuple[float, float, float]:
     return L, C * math.cos(math.radians(H)), C * math.sin(math.radians(H))
 
