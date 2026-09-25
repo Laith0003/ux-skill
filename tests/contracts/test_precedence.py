@@ -49,8 +49,8 @@ def test_every_reachable_combination_is_run():
     # text field 2 by 2**4.
     counts = {name: sum(1 for n, _, _ in CASES if n == name) for name in CONTRACTS}
     assert counts == {"badge": 6, "button": 768, "card": 2, "checkbox": 48, "chip": 32,
-                      "date": 32, "dialog": 4, "input-prefix": 32, "link": 8, "nav": 16,
-                      "progress": 4, "radio": 32, "select": 128, "selectable-row": 64,
+                      "date": 32, "dialog": 4, "faq-accordion": 4, "input-prefix": 32, "link": 8, "nav": 16,
+                      "progress": 4, "radio": 32, "select": 128, "selectable-row": 64, "site-footer": 4,
                       "status-banner": 8, "table": 48, "text-field": 32, "textarea": 32}
 
 
@@ -157,7 +157,8 @@ def test_a_disabled_field_in_error_keeps_the_error_where_disabled_binds_nothing(
     field = CONTRACTS["text-field"]
     v = {"lines": "single"}
     states = ("default", "hover", "focus", "disabled", "error")
-    assert _role(field, v, states, "input", "border-width") == "border.emphasis"
+    assert _role(field, v, states, "input", "border-width") == "border.outline"
+    assert _role(field, v, states, "input", "edge-weight") == "border.emphasis"
     assert _role(field, v, states, "input", "border-color") == "color.line.subtle"
     assert _role(field, v, states, "message", "text") == "color.status.danger.text"
     assert _role(field, v, states, "icon", "icon") == "color.status.danger.strong"

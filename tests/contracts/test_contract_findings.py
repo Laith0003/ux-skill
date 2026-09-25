@@ -387,7 +387,7 @@ def test_the_form_record_states_what_each_contract_binds():
         label_part = "legend" if name == "radio" else "label"
         assert f"`{_role(name, label_part, 'font')}`" == label, name
         hover_props = {b.property for b in c.tokens if b.state == "hover"}
-        assert (hover == "edge") == (hover_props == {"border-width"}), name
+        assert (hover == "edge") == (hover_props == {"edge-weight"}), name
         assert (icon == "yes") == any(b.part == "icon" and b.state == "error"
                                       for b in c.tokens), name
         assert (reserved == "yes") == any("Reserve one line" in d for d in c.do), name
@@ -412,3 +412,80 @@ def test_the_twelve_contracts_bind_on_the_softest_corner():
     for brand in BRANDS:
         ts = build_system(SOFT, brand).tokens
         assert validate_contracts(seed_contracts(), ts) == [], brand
+
+
+# BF5: a field's hover and error never move the layout -----------------------
+
+FIELDS = {"text-field": "input", "textarea": "input", "date": "input", "select": "trigger",
+          "input-prefix": "group"}
+
+
+@pytest.mark.parametrize("name,part", sorted(FIELDS.items()))
+def test_a_field_draws_its_heavier_edge_inside_its_border(name, part):
+    # A 2px border on hover shifts the layout by a pixel on each side. The
+    # border keeps its resting width in every state; the extra weight is
+    # edge-weight, drawn inside it as an inset shadow or an outline.
+    resting = _role(name, part, "border-width")
+    assert resting == "border.outline"
+    for state in ("hover", "error"):
+        assert _role(name, part, "border-width", states=(state,)) == resting, (name, state)
+        assert _role(name, part, "edge-weight", states=(state,)) == "border.emphasis", (name, state)
+    assert any("edge-weight" in line and "inset" in line for line in SEEDS[name].do), name
+
+
+def test_edge_weight_is_a_dimension_the_schema_names():
+    from engine.contracts.schema import PROPERTY_TYPES
+    assert PROPERTY_TYPES["edge-weight"] == "dimension"
+    text = (GUIDANCE / "border.md").read_text(encoding="utf-8")
+    assert "edge-weight" in text and "inset" in text
+
+
+# BF5: the FAQ accordion and the site footer ---------------------------------
+
+def test_the_faq_question_is_the_whole_row_and_the_answer_reads_as_body_text():
+    assert SEEDS["faq-accordion"].status == "experimental"
+    assert _role("faq-accordion", "question", "min-size") == "layout.target.min"
+    assert _role("faq-accordion", "question", "font") == "type.text.heading-3"
+    assert _role("faq-accordion", "answer", "font") == "type.text.body"
+    assert _role("faq-accordion", "answer", "max-width") == "layout.measure.text"
+    assert _role("faq-accordion", "answer", "enter-duration") == "motion.expand.duration"
+    assert _role("faq-accordion", "item", "border-width") == "border.separator"
+    assert _role("faq-accordion", "question", "focus-ring", states=("focus",)) == "color.focus.ring"
+    assert any("aria-expanded" in line and "aria-controls" in line for line in SEEDS["faq-accordion"].do)
+
+
+def test_the_footer_binds_the_logo_role_and_keeps_links_at_the_target_size():
+    assert SEEDS["site-footer"].status == "experimental"
+    assert _role("site-footer", "logo", "icon") == "color.logo"
+    assert _paired("site-footer", "color.logo", "color.surface.page")
+    assert _role("site-footer", "link", "min-size") == "layout.target.min"
+    assert _role("site-footer", "region", "padding-block") == "layout.footer.padding-block"
+    assert _role("site-footer", "divider", "border-width") == "border.separator"
+    assert _role("site-footer", "legal", "font") == "type.text.fine"
+    assert _role("site-footer", "link", "focus-ring", states=("focus",)) == "color.focus.ring"
+
+
+@pytest.mark.parametrize("name", ["faq-accordion", "site-footer"])
+def test_the_new_contracts_bind_on_every_generated_system(name):
+    contract = [SEEDS[name]]
+    for brand, _axes, ts in _systems():
+        assert validate_contracts(contract, ts) == [], (name, brand)
+
+
+def test_the_footer_sits_on_the_page_where_its_logo_is_measured():
+    # color.logo is held at 3:1 against the page only; on the sunken surface
+    # it falls below that for some brands, so the footer does not offer it.
+    assert SEEDS["site-footer"].surfaces == ("color.surface.page",)
+
+
+@pytest.mark.parametrize("name", ["nav", "site-footer"])
+def test_a_logo_that_links_home_has_a_target_and_a_ring(name):
+    assert _role(name, "logo", "min-size") == "layout.target.min"
+    for prop in RING:
+        assert _role(name, "logo", prop, states=("focus",)) is not None, (name, prop)
+
+
+def test_edge_weight_is_never_drawn_as_an_outline():
+    text = (GUIDANCE / "border.md").read_text(encoding="utf-8")
+    assert "--color-line-danger" in text and "Never draw it with an outline" in text
+    assert not any("negative offset" in line for c in SEEDS.values() for line in c.do)

@@ -1,0 +1,68 @@
+# FAQ accordion: questions a reader opens one at a time to read the answer.
+# Every value is a semantic role.
+name: faq-accordion
+status: experimental
+category: container
+description: Lists the questions people ask, each a button that opens its answer in place, separated by full-width lines, so a page can answer many questions without a wall of text.
+parts:
+  - {name: list, rtlBehavior: logical}
+  - {name: item, rtlBehavior: logical}
+  - {name: question, rtlBehavior: logical}
+  - {name: icon, rtlBehavior: fixed}
+  - {name: answer, rtlBehavior: logical}
+variants: []
+states: [default, hover, focus]
+tokens:
+  # items are siblings in one list: a scan line at each item's block end
+  - {part: item, property: border-width, role: border.separator}
+  - {part: item, property: border-color, role: color.line.subtle}
+  # the whole question row is the button
+  - {part: question, property: text, role: color.text.default}
+  - {part: question, property: font, role: type.text.heading-3}
+  - {part: question, property: min-size, role: layout.target.min}
+  - {part: question, property: padding-block, role: space.control.padding-block-large}
+  - {part: question, property: gap, role: space.control.gap}
+  - {part: question, property: text, role: color.text.link, state: hover}
+  - {part: question, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: question, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: question, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  - {part: icon, property: icon, role: color.text.default}
+  - {part: icon, property: transition-duration, role: motion.expand.duration}
+  - {part: icon, property: transition-curve, role: motion.expand.curve}
+  # the answer reads as body text within the reading measure
+  - {part: answer, property: text, role: color.text.default}
+  - {part: answer, property: font, role: type.text.body}
+  - {part: answer, property: stack-gap, role: space.text.gap}
+  - {part: answer, property: max-width, role: layout.measure.text}
+  - {part: answer, property: enter-duration, role: motion.expand.duration}
+  - {part: answer, property: enter-curve, role: motion.expand.curve}
+contrast:
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.link, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.focus.ring, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+surfaces: [color.surface.page, color.surface.card]
+a11y:
+  target: layout.target.min
+  label: localized
+  cue: an open item shows its answer, turns its icon and sets aria-expanded; hover only changes the question's color and never marks a state
+copy:
+  default:
+    - Each question is one a reader asks, in their words, and ends with a question mark
+    - The answer's first sentence answers the question; details and a link follow
+    - Keep to about five to ten questions, and give a long answer its own page
+usage:
+  do:
+    - Wrap each question in a heading at the page's next level, with a button inside it that carries aria-expanded and aria-controls naming its answer
+    - The whole question row is the button and meets layout.target.min, never the icon alone
+    - Put the icon at the inline end in both directions; it turns to show the item is open and is aria-hidden
+    - Start with every item closed, and let more than one stay open at once
+    - Separate items with one full-width line at each item's block end, border.separator in color.line.subtle, never a card per item
+    - Open the answer with motion.expand; under reduced motion it appears without moving
+    - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
+  dont:
+    - Do not hide prices, limits or legal terms only inside a closed answer
+    - Do not nest an accordion inside an answer
+    - Do not draw a plus and a chevron together, or a line or dot beside the question
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

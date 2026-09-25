@@ -35,11 +35,11 @@ tokens:
   - {part: counter, property: text, role: color.text.muted}
   - {part: counter, property: font, role: type.text.body-small}
   - {part: counter, property: stack-gap, role: space.field.message-gap}
-  - {part: input, property: border-width, role: border.emphasis, state: hover}
+  - {part: input, property: edge-weight, role: border.emphasis, state: hover}
   - {part: input, property: focus-ring, role: color.focus.ring, state: focus}
   - {part: input, property: focus-ring-width, role: border.focus-ring.width, state: focus}
   - {part: input, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
-  - {part: input, property: border-width, role: border.emphasis, state: error}
+  - {part: input, property: edge-weight, role: border.emphasis, state: error}
   - {part: input, property: border-color, role: color.line.danger, state: error}
   - {part: icon, property: icon, role: color.status.danger.strong, state: error}
   - {part: counter, property: text, role: color.status.danger.text, state: error}
@@ -73,6 +73,7 @@ copy:
     - Name the field and the problem, with the real number when it is a length, such as 40 characters over the limit
 usage:
   do:
+    - Draw the heavier edge of hover and error with edge-weight, keeping the border at border-width and drawing the difference inside it as an inset box-shadow in the state's border color, never an outline, which the focus ring owns, so the field never moves by a pixel
     - Size it for the expected text, three lines or more, in the longest language
     - Reserve one line of the message's height under the field, so an error never moves what follows
     - A disabled component takes no hover or pressed binding; a disabled component that can take focus keeps its focus ring; selected and error still apply, and where disabled and another state bind the same part and property, disabled wins. Apply this first, then the specificity rule
