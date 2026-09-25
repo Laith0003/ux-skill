@@ -1,0 +1,7 @@
+.hero__kicker::after {
+  content: '';
+  display: inline-block;
+  width: 2rem;
+  border-top: 2px solid currentColor;
+}
+.overline:before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }

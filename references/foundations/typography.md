@@ -58,7 +58,7 @@
 ### Pattern: Eyebrow + headline
 **Use when**: Sectioning a long page without numbered chapters or decorative dividers.
 **Anti-pattern**: Naming sections as "SECTION 01" / "ABOUT US" / "OUR PROCESS 02" — these are amateur-tier signposting and banned.
-**How**: A short label sits above the headline at 10 to 13px, weight 500 to 600, tracking +0.06em to +0.10em, in muted neutral or a paired accent. Sentence case or uppercase both work; pick one and apply consistently. Often paired with a 6 to 8px colored dot or geometric mark to the left.
+**How**: A short label sits above the headline at 10 to 13px, weight 500 to 600, tracking +0.06em to +0.10em, in muted neutral or a paired accent. Sentence case or uppercase both work; pick one and apply consistently. The eyebrow is text only: no line, dash or dot before or after it.
 
 ### Pattern: Stat callout
 **Use when**: A specific number is the persuasion — latency, accuracy, customer count, savings.
@@ -305,7 +305,7 @@ The default LLM output reaches for typography that signals AI generation. Overri
 - Compress to four to six type scales; no fifth scale snuck in
 - Use weight changes more aggressively than size changes for adjacent levels
 - Reserve italic for genuine emphasis or for titles
-- Use a 6 to 8px colored dot or geometric mark before eyebrows when more visual weight is needed
+- Give an eyebrow more weight with its own size, weight or color, never with a line, dash or dot beside it
 - Anchor numerals to the brand: stat moments at 96 to 144px in display weight; unit labels at 40 to 60% of the numeral size
 
 ### Editorial column rhythm

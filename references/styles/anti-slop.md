@@ -105,6 +105,7 @@ Hero rules, including the hero height, live in `references/surfaces/landing.md`.
 | 5+ weights from the same family | Three-weight system at most: bold/semibold for display, regular for body, lighter for support |
 | Variable font weight animated for decoration only | When variable axes animate, the motion expresses state change — not "look at this font" |
 | Eyebrows that aren't tracked (`+0.05em` to `+0.10em`) | All eyebrows are tracked. The wide tracking is the whole point |
+| A short line, dash or dot before or after an eyebrow (a `::before` bar, an empty span, a left border, an SVG line, a typed dash) | The eyebrow is text only. Its size, weight, tracking and color carry it; lint flags every build as `decorative-accent-ruler` |
 
 ---
 

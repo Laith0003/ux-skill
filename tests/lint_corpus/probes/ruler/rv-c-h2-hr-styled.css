@@ -1,0 +1,2 @@
+hr, .divider { border: 0; border-top: 1px solid var(--color-line-subtle); margin-block: var(--space-8); }
+.divider { height: 1px; width: 100%; background: var(--color-line-subtle); }

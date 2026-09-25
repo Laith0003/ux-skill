@@ -39,6 +39,7 @@ EXPECTED = {
     "type-levels-apart", "arabic-by-script", "brand-leads-the-role",
     "natural-text-on-the-brand", "neutrals-follow-the-brand", "support-clear-of-banned-pairs",
     "fills-on-every-placement", "distinctness-on-a-grey-reference",
+    "eyebrow-is-text",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",

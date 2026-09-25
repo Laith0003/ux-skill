@@ -1,0 +1,1 @@
+.kicker::before { content: ""; display: inline-block; width: var(--space-6); height: var(--border-width); background-image: linear-gradient(90deg, var(--accent), transparent); }

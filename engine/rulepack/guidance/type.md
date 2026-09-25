@@ -31,7 +31,7 @@
 - `type.text.body-small`: secondary paragraphs and dense reading, such as table cells.
 - `type.text.ui`: labels on buttons, tabs and menus; short, one line. A field's label takes type.text.ui-large.
 - `type.text.ui-large`: the label of a field and of a large button; body size at the ui weight, so a label is never smaller than the value it names.
-- `type.text.label`: an eyebrow above a heading, a tag or a line of metadata, spaced open; set in the mono face in a technical system.
+- `type.text.label`: an eyebrow above a heading, a tag or a line of metadata, spaced open; set in the mono face in a technical system. An eyebrow is text only: never a line, dash or dot before or after it (decisions/eyebrow-is-text.md).
 - `type.text.fine`: captions, timestamps and small print nobody must read to act.
 - `type.text.code`: code, token names and values that need fixed-width characters.
 - `type.strong`: the weight of emphasis inside any style; the heading weight, and under high contrast at least 200 above body text, since body text gets heavier there (decisions/strong-under-high-contrast.md).
@@ -130,3 +130,4 @@ Styles that work together: a label above a section title or a hero; a heading ab
 {arabic} - Tightening letter spacing on Arabic text: the letters disconnect.
 - Using fine print for a field's helper or error text: people must read it to act; use body-small.
 - Setting body text in the display face: the display face is drawn for large sizes.
+- Drawing a line, dash or dot before or after an eyebrow, with a pseudo-element, an empty span, an edge, a background or an SVG: it adds no structure and reads as generated; the label style carries the eyebrow alone.

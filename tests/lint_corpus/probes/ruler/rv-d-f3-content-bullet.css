@@ -1,0 +1,1 @@
+.pretitle::before { content: "\2022"; margin-inline-end: .5em; color: var(--accent); }
