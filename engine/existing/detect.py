@@ -107,13 +107,12 @@ def _num(text: str, percent_scale: float = 1.0) -> float:
 def _hue(text: str) -> float:
     """A hue in degrees, read by the importers' value reader (a number, or
     an angle in deg, turn, rad or grad). Raises ValueError otherwise."""
-    from engine.io.values_in import NotRead
-    from engine.io.values_in import _hue as read_hue  # engine.io imports this package
+    from engine.io.values_in import NotRead, hue_degrees  # engine.io imports this package
     t = text.strip()
     if not t:
         return 0.0
     try:
-        return read_hue(t, t)
+        return hue_degrees(t)
     except NotRead as exc:
         raise ValueError(str(exc)) from None
 
@@ -131,8 +130,8 @@ def _oklch_hex(L: float, C: float, H: float) -> str:
 def _from_hsl(h: float, s: float, light: float) -> str:
     """An hsl color (saturation and lightness from 0 to 1, clamped) as hex,
     converted by the importers' value reader."""
-    from engine.io.values_in import _hsl_to_rgb  # engine.io imports this package
-    return _rgb_hex(*_hsl_to_rgb(h, max(0.0, min(1.0, s)), max(0.0, min(1.0, light))))
+    from engine.io.values_in import hsl_to_rgb  # engine.io imports this package
+    return _rgb_hex(*hsl_to_rgb(h, max(0.0, min(1.0, s)), max(0.0, min(1.0, light))))
 
 
 def _function_hex(name: str, args: str) -> str:
