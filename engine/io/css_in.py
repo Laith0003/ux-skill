@@ -127,8 +127,6 @@ _CLASS = re.compile(r"\.([a-z][a-z0-9-]*)")
 _CUSTOM_DARK = re.compile(r"@custom-variant\s+dark\s*([({])")
 _THEME_TOKEN = re.compile(r"\.[a-z][a-z0-9-]*|\[[a-z][a-z0-9-]*" + _VALUE + r"\]")
 DARK_MEDIA = CSS_AXES["scheme"][1]
-# A :not() group, innermost first: what it names is where dark is not.
-_NEGATED = re.compile(r":not\([^()]*\)")
 # An Arabic language selector: right to left, the direction axis at rtl.
 _LANG = re.compile(r'\[lang\|="ar"\]')
 # Subtrees inside the root that read right to left.
@@ -448,18 +446,33 @@ def dark_variant(text: str) -> Optional[Tuple[str, int, str]]:
     body = text[start + 1:end if end != -1 else len(text)].strip()
     if m.group(1) == "(" and body.endswith(")"):
         body = body[:-1]
-    line, written = _line(text, m.start()), " ".join(body.split())
+    # The block form is named by the selector before its own block.
+    shown = body.split("{", 1)[0] if m.group(1) == "{" else body
+    line, written = _line(text, m.start()), " ".join(shown.split())
     if "prefers-color-scheme" in body:
         return DARK_MEDIA, line, written
-    positive = body
-    while _NEGATED.search(positive):
-        positive = _NEGATED.sub("", positive)
-    found = _THEME_TOKEN.search(positive)
+    found = _THEME_TOKEN.search(_without_not(body))
     if not found:
         return "", line, written
     attr = _ATTR.fullmatch(found.group(0))
     value = next((g for g in attr.groups()[1:] if g is not None), "") if attr else ""
     return (f'[{attr.group(1)}="{value}"]' if attr else found.group(0)), line, written
+
+
+def _without_not(text: str) -> str:
+    """`text` with every :not(...) group cut out, its parentheses matched
+    at any depth (`:not(:is(.light, .light *))`): what a :not() names is
+    where dark is not."""
+    while True:
+        at = text.find(":not(")
+        if at == -1:
+            return text
+        depth, i = 0, at + len(":not")
+        for i in range(at + len(":not"), len(text)):
+            depth += {"(": 1, ")": -1}.get(text[i], 0)
+            if depth == 0:
+                break
+        text = text[:at] + text[i + 1:]
 
 
 def _on_dark_variant(rule: Rule, dark_at: str) -> Rule:
@@ -726,8 +739,9 @@ def import_css(text: str, source: Source) -> Imported:
             elif component:
                 item = _COMPONENT.format(sel=shown)
             elif "@variant dark" in rule.media:  # the custom variant names no dark selector
-                item = (f"is set under {shown}, and @custom-variant dark ({variant[2]}) names no "
-                        "dark selector, only what dark is not; name one in it, such as "
+                item = (f"is set under {shown}, and @custom-variant dark, declared as "
+                        f"{variant[2]}, names no dark selector, only what dark is not; name one "
+                        "in it, such as "
                         "&:where(.dark, .dark *) or &:where([data-theme=dark], "
                         "[data-theme=dark] *), and set the dark values under that selector")
             elif media is None:

@@ -102,6 +102,12 @@ def import_tailwind_json(text: str, source: Source) -> Imported:
                                      "literal, not a theme value; write the value as a string, "
                                      "or remove the key"))
                 continue
+            literal = _json_literal(value)
+            if literal:
+                not_read.append(Item(where, source_name, f"holds {literal}, a JSON literal, not "
+                                     "a theme value; write that member as a string, or remove "
+                                     "it"))
+                continue
             text_value, extra = _tailwind_value(src[0], value)
             try:
                 if isinstance(text_value, list):
@@ -132,6 +138,26 @@ def import_tailwind_json(text: str, source: Source) -> Imported:
     return Imported(ts, report)
 
 
+def _json_literal(value: Any) -> str:
+    """The first null, true or false inside a list or object value, as JSON
+    writes it, or ""."""
+    members = value.values() if isinstance(value, dict) else value \
+        if isinstance(value, list) else ()
+    for member in members:
+        if member is None or isinstance(member, bool):
+            return json.dumps(member)
+        inner = _json_literal(member)
+        if inner:
+            return inner
+    return ""
+
+
+def _text(value: Any) -> str:
+    """A JSON value as text: a string as it is, anything else as JSON writes
+    it (16, 0.5), never as Python writes it."""
+    return value if isinstance(value, str) else json.dumps(value)
+
+
 def _tailwind_value(key: str, value: Any) -> Tuple[Any, str]:
     """(the value to read, a note or ""). Tailwind writes a font size with
     what it pairs as [size, {lineHeight, letterSpacing, fontWeight}] or
@@ -139,27 +165,28 @@ def _tailwind_value(key: str, value: Any) -> Tuple[Any, str]:
     [names, {fontFeatureSettings}]; the note names what was left out. Any
     other list (a drop shadow's layers) is read as one comma list."""
     if not isinstance(value, list):
-        return (value if isinstance(value, str) else json.dumps(value)), ""
+        return _text(value), ""
     if key == "fontSize" and len(value) == 2 and isinstance(value[1], (dict, str)):
         pairs = value[1] if isinstance(value[1], dict) else {"lineHeight": value[1]}
-        left = [f"{label} {pairs[field]}" for field, label in _SIZE_FIELDS if field in pairs]
+        left = [f"{label} {_text(pairs[field])}" for field, label in _SIZE_FIELDS
+                if field in pairs]
         if not left:
-            return str(value[0]), ""
+            return _text(value[0]), ""
         if len(left) == 1 and "lineHeight" in pairs:
-            return str(value[0]), (f"its {left[0]} was left out; the engine keeps line heights "
+            return _text(value[0]), (f"its {left[0]} was left out; the engine keeps line heights "
                                    "as their own tokens, so add one if you need it")
         listed = ", ".join(left[:-1]) + f" and {left[-1]} were" if len(left) > 1 \
             else f"{left[0]} was"
-        return str(value[0]), (f"its {listed} left out; the engine keeps these as their own "
+        return _text(value[0]), (f"its {listed} left out; the engine keeps these as their own "
                                "tokens, so add them if you need them")
     if key == "fontFamily":
         names, note = value, ""
         if len(value) == 2 and isinstance(value[0], list) and isinstance(value[1], dict):
             names = value[0]
-            note = ", ".join(f"{k} {v}" for k, v in value[1].items())
+            note = ", ".join(f"{k} {_text(v)}" for k, v in value[1].items())
             note = f"its {note} was left out; a font family token holds only the names"
-        return [str(n).strip().strip("\"'") for n in names], note
-    return ", ".join(str(v) for v in value), ""
+        return [_text(n).strip().strip("\"'") for n in names], note
+    return ", ".join(_text(v) for v in value), ""
 
 
 def read_tailwind(path: Any, label: str = "--from") -> Imported:
