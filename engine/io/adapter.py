@@ -54,6 +54,11 @@ _AXIS_WORDS: Dict[str, str] = {
     "high-contrast": "contrast", "contrast-high": "contrast", "more": "contrast",
     "reduced": "motion", "reduce": "motion", "reduced-motion": "motion",
 }
+# The notes view() gives for an owner's "not mapped" entry, shared so a
+# report that lists those entries itself can tell the notes apart.
+ROLE_LEFT_OUT = "{role} is not checked: the owner left it out in {name}"
+AXIS_LEFT_OUT = ("the axis {axis} is not checked: the owner left it out in {name}, so every role "
+                 "is read at the system's base")
 _BASE_WORDS = ("light", "ltr", "comfortable", "standard", "default", "base", "off",
                "no-preference")
 
@@ -342,13 +347,12 @@ def view(ts: TokenSet, mapping: Mapping,
     _check(ts, mapping, name)
     axes = {a: AXES[a] for a in AXES if a in mapping.axes and mapping.axes[a].source is not None}
     out = TokenSet(axes)
-    notes: List[str] = [f"the axis {a} is not checked: the owner left it out in {name}, so every "
-                        "role is read at the system's base"
+    notes: List[str] = [AXIS_LEFT_OUT.format(axis=a, name=name)
                         for a, m in mapping.axes.items() if m.source is None]
     notes += _left_out(ts, mapping, name)
     for role, m in mapping.roles.items():
         if m.token is None:
-            notes.append(f"{role} is not checked: the owner left it out in {name}")
+            notes.append(ROLE_LEFT_OUT.format(role=role, name=name))
             continue
         want = ROLE_TYPES[role]
         values: Dict[str, Any] = {}
