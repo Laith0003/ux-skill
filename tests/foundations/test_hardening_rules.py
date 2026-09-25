@@ -255,6 +255,22 @@ def test_controls_and_chips_nest_inside_cards_pills_aside():
     assert _failures(pill, radius.CHECKS, "radius-nesting") == []
 
 
+def test_a_999px_pill_is_a_pill_to_both_checks():
+    # radius-pill accepts 999px as a pill, so radius-nesting sets it aside too.
+    ts = _with(_built("radius"), Token("radius.round", "dimension", _px(999)),
+               Token("radius.control", "dimension", "{radius.round}", layer="semantic"))
+    assert radius.PILL_FLOOR_PX == 999
+    assert _failures(ts, radius.CHECKS, "radius-pill") == []
+    assert _failures(ts, radius.CHECKS, "radius-nesting") == []
+    below = _with(ts, Token("radius.round", "dimension", _px(998)))
+    assert _failures(below, radius.CHECKS, "radius-pill") == [
+        "radius.pill is 998px; a pill needs a radius larger than any control's height, so "
+        "point it at radius.round"]
+    assert _failures(below, radius.CHECKS, "radius-nesting") == [
+        "radius.control (998px) is rounder than radius.card (11px); a container is never "
+        "rounder than the one it sits in, so point radius.card at a larger step"]
+
+
 # Color: a set that never says what dark looks like fails in dark.
 
 def test_a_color_set_with_no_dark_values_fails_the_polarity_check():

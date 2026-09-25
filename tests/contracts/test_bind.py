@@ -13,6 +13,7 @@ from engine.contracts.yamlite import loads
 from engine.foundations import build_system
 from engine.foundations.color_math import contrast
 from engine.foundations.gate import Pairing
+from engine.foundations.tokens import Token, TokenSet
 from engine.synthesizer.axes import AxisValues
 from tests.contracts.test_schema import TOGGLE
 
@@ -176,6 +177,23 @@ def test_high_pins_the_high_contrast_minimum_and_system_floors_say_whose_they_ar
     card = [m for m in found if "surface.card" in m]
     assert len(card) == 4 and all("the declared floor for the toggle contract is 5:1" in m
                                   for m in card)
+
+
+def test_a_broken_contrast_alias_reaches_the_report():
+    # A contract bound to a set nobody validated: the gate records the alias
+    # it cannot follow, and the contract reports it once per pairing.
+    broken = TokenSet(TS.axes)
+    for t in TS.tokens():
+        broken.add(Token(t.path, t.type, "{color.nowhere.1}", modes={}, layer=t.layer)
+                   if t.path == "color.line.selected" else t)
+    cause = ("cannot be measured: color.line.selected aliases color.nowhere.1, which is not "
+             "defined (resolving color.line.selected). Define color.nowhere.1 or point "
+             "color.line.selected at an existing token. It fails in "
+             "scheme:light,contrast:standard and 3 other contexts; run validate on the token "
+             "set to see every such problem")
+    assert [(p.rule, p.message) for p in binding_problems(contract(), broken)] == [
+        ("unresolved", f"toggle: color.line.selected on color.surface.page {cause}"),
+        ("unresolved", f"toggle: color.line.selected on color.surface.card {cause}")]
 
 
 def test_pairings_expand_the_surfaces_shorthand():

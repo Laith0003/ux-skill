@@ -46,6 +46,9 @@ EXPECTED = {
     "links-on-status-soft-fills", "distinctness-on-saturated-brands",
     "wider-vocabulary", "character-nudges", "faces-by-product-type", "landing-display-step",
     "figure-holds-a-number-band", "landing-gap", "surfaces-stand-apart", "clean-code-surface",
+    "checks-read-one-unit", "roles-on-their-scale", "spacing-on-the-4px-grid", "unresolved-pairing",
+    "layout-bounds", "reflow-at-320", "spacing-within-group", "strict-radius-nesting",
+    "the-full-type-ladder",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",
@@ -83,7 +86,8 @@ SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-e
               "face-choice": "faces-by-product-type",
               "type-steps-down-on-phones": "landing-display-step",
               "brand-surfaces": "surfaces-stand-apart",
-              "code-and-table-colors": "clean-code-surface"}
+              "code-and-table-colors": "clean-code-surface",
+              "nested-radius": "strict-radius-nesting"}
 
 
 def test_every_shipped_record_is_valid_and_routed():

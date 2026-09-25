@@ -41,7 +41,7 @@ Radius sets the corners of every shape. The geometry axis sets a base corner fro
 
 Joined shapes follow three patterns. A group of parts that reads as one shape keeps the role on its outer corners and squares the corners where parts meet. A region attached to another keeps the outline of the main shape and squares the shared edge. Stacked layers round only the corners that stay visible.
 
-Nested shapes step down. A container inside a container without padding between them takes the next smaller role. An element inset by padding takes the outer radius minus the padding, and never the outer radius itself (decisions/nested-radius.md).
+Nested shapes step down. A container inside a container without padding between them takes the next smaller role. An element inset by padding takes the outer radius minus the padding, and never the outer radius itself (decisions/strict-radius-nesting.md).
 
 ## Modes
 
