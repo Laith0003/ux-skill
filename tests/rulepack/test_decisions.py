@@ -23,7 +23,7 @@ EXPECTED = {
     "code-and-table-colors", "roundness", "high-contrast-borders", "surface-treatment",
     "type-three-faces", "face-choice", "type-along-the-scale", "arabic-proportional",
     "high-contrast-weights", "strong-weight", "font-loading", "page-regions",
-    "field-and-table-spacing",
+    "field-and-table-spacing", "expressive-motion",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",

@@ -64,6 +64,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [High contrast makes edges and the focus ring heavier](high-contrast-borders.md)
 - [The surface treatment runs from flat hairlines to deep shadows](surface-treatment.md)
 - [Weight and letter spacing change along the type scale](type-along-the-scale.md)
+- [Curves bend continuously, and decoration has one role that reduced motion removes](expressive-motion.md)
 
 ## Components
 

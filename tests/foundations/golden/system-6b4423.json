@@ -4092,10 +4092,10 @@
       "out": {
         "$type": "cubicBezier",
         "$value": [
-          0.25,
-          0.1,
-          0.25,
-          1
+          0.254,
+          0.167,
+          0.268,
+          1.0
         ],
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -4106,10 +4106,10 @@
       "in": {
         "$type": "cubicBezier",
         "$value": [
-          0.42,
-          0,
-          1,
-          1
+          0.417,
+          0.0,
+          0.984,
+          0.928
         ],
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -4120,10 +4120,24 @@
       "in-out": {
         "$type": "cubicBezier",
         "$value": [
-          0.42,
-          0,
-          0.58,
-          1
+          0.432,
+          -0.028,
+          0.568,
+          1.028
+        ],
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "expressive": {
+        "$type": "cubicBezier",
+        "$value": [
+          0.3,
+          0.751,
+          0.405,
+          1.0
         ],
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -4418,6 +4432,44 @@
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic"
+          }
+        }
+      }
+    },
+    "expressive": {
+      "duration": {
+        "$type": "duration",
+        "$value": "{motion.duration.400}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "motion:reduced": "{motion.duration.0}"
+            }
+          }
+        }
+      },
+      "curve": {
+        "$type": "cubicBezier",
+        "$value": "{motion.curve.expressive}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "motion:reduced": "{motion.curve.gentle}"
+            }
+          }
+        }
+      },
+      "distance": {
+        "$type": "dimension",
+        "$value": "{motion.distance.3}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "motion:reduced": "{motion.distance.0}"
+            }
           }
         }
       }

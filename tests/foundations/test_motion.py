@@ -6,7 +6,8 @@ from engine.foundations import build_system, from_dtcg, to_css, to_dtcg
 from engine.foundations.foundation import role_types_check
 from engine.foundations.gate import gate
 from engine.foundations.motion import (
-    CHECKS, CURVES, FOUNDATION, GENTLE, LINEAR, ROLES, band, distance_unit, duration_ms, generate_motion)
+    CHECKS, FOUNDATION, GENTLE, LINEAR, ROLES, curves, distance_unit, duration_ms,
+    generate_motion)
 from engine.foundations.tokens import Token, TokenSet
 from engine.foundations.validate import validate
 from engine.synthesizer.axes import AxisValues
@@ -21,11 +22,14 @@ def axes(motion=0.5, **kw):
 
 @pytest.mark.parametrize("motion, want", [
     (0.0, {"motion.press": 100, "motion.reveal": 150, "motion.dismiss": 100, "motion.swap": 150,
-           "motion.expand": 200, "motion.page": 250, "motion.progress": 1200}),
+           "motion.expand": 200, "motion.page": 250, "motion.progress": 1200,
+           "motion.expressive": 300}),
     (0.5, {"motion.press": 100, "motion.reveal": 250, "motion.dismiss": 150, "motion.swap": 200,
-           "motion.expand": 250, "motion.page": 400, "motion.progress": 1200}),
+           "motion.expand": 250, "motion.page": 400, "motion.progress": 1200,
+           "motion.expressive": 500}),
     (1.0, {"motion.press": 100, "motion.reveal": 300, "motion.dismiss": 200, "motion.swap": 250,
-           "motion.expand": 300, "motion.page": 500, "motion.progress": 800}),
+           "motion.expand": 300, "motion.page": 500, "motion.progress": 800,
+           "motion.expressive": 800}),
 ])
 def test_durations_follow_the_motion_axis(motion, want):
     assert {r: duration_ms(r, motion) for r in ROLES} == want
@@ -33,13 +37,25 @@ def test_durations_follow_the_motion_axis(motion, want):
     assert {r: ts.resolve(f"{r}.duration")["value"] for r in ROLES} == want
 
 
-def test_curves_and_travel_follow_the_motion_axis():
-    assert [band(m) for m in (0.0, 0.33, 0.34, 0.65, 0.66, 1.0)] == [
-        "calm", "calm", "balanced", "balanced", "lively", "lively"]
+def test_curves_bend_continuously_with_the_overshoot():
+    assert curves(0.0)[0] == [0.25, 0.1, 0.25, 1]
+    assert curves(1.0)[0] == [0.34, 1.56, 0.64, 1]
+    assert curves(0.5)[0] == [0.295, 0.83, 0.445, 1]
     assert [distance_unit(m) for m in (0.0, 0.5, 1.0)] == [4, 6, 8]
     ts = generate_motion(axes(1.0)).tokens
-    assert ts.resolve("motion.reveal.curve") == CURVES["lively"][0]
+    # motion 1 at formality 0.5 overshoots 0.7 of the way
+    assert ts.resolve("motion.reveal.curve") == curves(0.7)[0]
     assert ts.resolve("motion.page.distance") == {"value": 16, "unit": "px"}
+    formal = generate_motion(AxisValues(0.5, 0.5, 0.5, 0.5, 1.0, 1.0, 0.5)).tokens
+    assert formal.resolve("motion.reveal.curve") == curves(0.4)[0]
+
+
+def test_the_expressive_role_is_removed_under_reduced_motion():
+    ts = generate_motion(axes(0.8)).tokens
+    assert ts.resolve("motion.expressive.duration")["value"] > 400
+    assert ts.resolve("motion.expressive.duration", "motion:reduced")["value"] == 0
+    assert ts.resolve("motion.expressive.distance", "motion:reduced")["value"] == 0
+    assert ts.resolve("motion.expressive.distance")["value"] == 4 * distance_unit(0.8)
 
 
 @pytest.mark.parametrize("motion", [i / 10 for i in range(11)])
@@ -51,6 +67,8 @@ def test_reduced_motion_keeps_meaning_and_drops_travel(motion):
         standard = ts.resolve(f"{role}.duration")["value"]
         if role == "motion.progress":
             assert reduced == standard
+        elif role == "motion.expressive":
+            assert reduced == 0
         else:
             assert 0 < reduced <= 100 and reduced <= standard
             assert ts.resolve(f"{role}.curve", "motion:reduced") == GENTLE
@@ -98,11 +116,12 @@ def test_checks_name_the_token_and_the_fix():
         "direction, so it must be -1 here"]
 
 
-def test_only_motion_moves_motion():
+def test_only_motion_and_formality_move_motion():
     base = [(t.path, t.value, t.modes) for t in generate_motion(axes()).tokens.tokens()]
-    other = axes(warmth=0.0, contrast=1.0, density=1.0, geometry=0.0, formality=1.0,
-                 type_personality=0.0)
+    other = axes(warmth=0.0, contrast=1.0, density=1.0, geometry=0.0, type_personality=0.0)
     assert [(t.path, t.value, t.modes) for t in generate_motion(other).tokens.tokens()] == base
+    formal = axes(formality=1.0)
+    assert [(t.path, t.value, t.modes) for t in generate_motion(formal).tokens.tokens()] != base
 
 
 def test_dtcg_round_trip_and_css_for_reduced_motion_and_rtl():
@@ -112,7 +131,7 @@ def test_dtcg_round_trip_and_css_for_reduced_motion_and_rtl():
     assert doc["motion"]["curve"]["linear"]["$value"] == [0, 0, 1, 1]
     assert to_dtcg(from_dtcg(doc)) == doc
     css = to_css(build_system(axes(), "#3366FF").tokens)
-    assert "  --motion-curve-in-out: cubic-bezier(0.65, 0, 0.35, 1);" in css
+    assert "  --motion-curve-in-out: cubic-bezier(0.511, -0.21, 0.489, 1.21);" in css
     assert '@media (prefers-reduced-motion: reduce) {\n  :root:not([data-motion="standard"]) {' in css
     assert ':root[data-motion="reduced"] {' in css
     assert ':root[dir="rtl"] {\n  --motion-inline-sign: var(--motion-sign-backward);' in css
@@ -170,7 +189,7 @@ def test_reduced_progress_keeps_its_pace(roles, want):
 
 def test_only_travel_removal_cites_wcag_and_distances_keep_their_unit():
     assert {c.id: c.criterion for c in CHECKS} == {
-        "reduced-travel": "2.3.3", "reduced-length": "system",
+        "reduced-travel": "2.3.3", "reduced-length": "system", "expressive-removed": "2.3.3",
         "reduced-curve": "system", "dismiss-faster": "system", "progress-linear": "system",
         "progress-keeps-pace": "system", "mirrored-motion": "system",
         "press-in-place": "system", "linear-progress-only": "system",

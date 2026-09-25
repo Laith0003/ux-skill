@@ -250,9 +250,10 @@
   --motion-duration-800: 800ms;
   --motion-duration-1200: 1200ms;
   --motion-curve-linear: cubic-bezier(0, 0, 1, 1);
-  --motion-curve-out: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --motion-curve-in: cubic-bezier(0.36, 0, 0.66, -0.56);
-  --motion-curve-in-out: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  --motion-curve-out: cubic-bezier(0.316, 1.177, 0.538, 1);
+  --motion-curve-in: cubic-bezier(0.376, 0, 0.749, -0.151);
+  --motion-curve-in-out: cubic-bezier(0.612, -0.443, 0.388, 1.443);
+  --motion-curve-expressive: cubic-bezier(0.3, 1.512, 0.474, 1);
   --motion-curve-gentle: cubic-bezier(0.4, 0, 0.6, 1);
   --motion-distance-0: 0px;
   --motion-distance-1: 8px;
@@ -277,6 +278,9 @@
   --motion-page-distance: var(--motion-distance-2);
   --motion-progress-duration: var(--motion-duration-800);
   --motion-progress-curve: var(--motion-curve-linear);
+  --motion-expressive-duration: var(--motion-duration-800);
+  --motion-expressive-curve: var(--motion-curve-expressive);
+  --motion-expressive-distance: var(--motion-distance-3);
   --motion-inline-sign: var(--motion-sign-forward);
   --layout-viewport-640: 640px;
   --layout-viewport-1024: 1024px;
@@ -833,6 +837,9 @@
   --motion-page-duration: var(--motion-duration-100);
   --motion-page-curve: var(--motion-curve-gentle);
   --motion-page-distance: var(--motion-distance-0);
+  --motion-expressive-duration: var(--motion-duration-0);
+  --motion-expressive-curve: var(--motion-curve-gentle);
+  --motion-expressive-distance: var(--motion-distance-0);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -851,6 +858,9 @@
     --motion-page-duration: var(--motion-duration-100);
     --motion-page-curve: var(--motion-curve-gentle);
     --motion-page-distance: var(--motion-distance-0);
+    --motion-expressive-duration: var(--motion-duration-0);
+    --motion-expressive-curve: var(--motion-curve-gentle);
+    --motion-expressive-distance: var(--motion-distance-0);
   }
 }
 

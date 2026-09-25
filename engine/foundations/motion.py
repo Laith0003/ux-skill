@@ -2,18 +2,23 @@
 interaction roles that use them, a reduced-motion variant, and a sign that
 mirrors horizontal travel under dir="rtl".
 
-The motion axis sets pace and character: a still brand moves briefly with
-plain curves, a kinetic one takes longer and may overshoot. Under
-motion:reduced every role keeps its meaning but loses travel, overshoot
-and length: distances drop to 0, curves turn gentle, durations cap at
-REDUCED_MAX_MS and never grow (the progress loop keeps its pace, it
-reports status). In every context a press confirms in place, only the
-progress loop runs linear, and the loop lasts at least LOOP_MIN_MS.
+The motion axis sets pace, and character.overshoot (motion, held back by
+formality) bends every curve continuously from plain to springy: a still,
+formal brand moves briefly with plain curves, a kinetic, playful one takes
+longer and overshoots. motion.expressive is the one role for decoration: a
+reveal on scroll, a celebration. Under motion:reduced every role keeps its
+meaning but loses travel, overshoot and length: distances drop to 0,
+curves turn gentle, durations cap at REDUCED_MAX_MS and never grow (the
+progress loop keeps its pace, it reports status), and the expressive role
+is removed: 0ms and no travel. In every context a press confirms in place,
+only the progress loop runs linear, and the loop lasts at least
+LOOP_MIN_MS.
 """
 from __future__ import annotations
 
 from typing import Any, Callable, Dict, List, Tuple
 
+from engine.foundations import character
 from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check
 from engine.foundations.modes import join, parse, sparse
@@ -27,12 +32,11 @@ REDUCED_MAX_MS = 100
 LOOP_MIN_MS = 334
 LINEAR = [0, 0, 1, 1]
 GENTLE = [0.4, 0, 0.6, 1]
-# motion axis band -> curves (out, in, in-out)
-CURVES = {
-    "calm": ([0.25, 0.1, 0.25, 1], [0.42, 0, 1, 1], [0.42, 0, 0.58, 1]),
-    "balanced": ([0.16, 1, 0.3, 1], [0.7, 0, 0.84, 0], [0.65, 0, 0.35, 1]),
-    "lively": ([0.34, 1.56, 0.64, 1], [0.36, 0, 0.66, -0.56], [0.68, -0.6, 0.32, 1.6]),
-}
+# The plain and the springy end of each curve (out, in, in-out, expressive);
+# character.overshoot places every curve between them.
+PLAIN = ([0.25, 0.1, 0.25, 1], [0.42, 0, 1, 1], [0.42, 0, 0.58, 1], [0.3, 0.7, 0.4, 1])
+SPRINGY = ([0.34, 1.56, 0.64, 1], [0.36, 0, 0.66, -0.56], [0.68, -0.6, 0.32, 1.6],
+           [0.3, 1.8, 0.5, 1])
 # role -> (ms when the motion axis is 0, ms when it is 1, curve, distance step or None)
 ROLES: Dict[str, Tuple[int, int, str, object]] = {
     "motion.press": (100, 100, "out", None),
@@ -42,11 +46,17 @@ ROLES: Dict[str, Tuple[int, int, str, object]] = {
     "motion.expand": (200, 300, "in-out", None),
     "motion.page": (250, 500, "out", 2),
     "motion.progress": (1200, 800, "linear", None),
+    # decoration: removed under reduced motion
+    "motion.expressive": (300, 800, "expressive", 3),
 }
+EXPRESSIVE = "motion.expressive"
 
 
-def band(motion: float) -> str:
-    return "calm" if motion < 0.34 else ("lively" if motion >= 0.66 else "balanced")
+def curves(overshoot: float) -> List[List[float]]:
+    """(out, in, in-out, expressive) at this overshoot, each control point
+    interpolated between the plain and the springy curve."""
+    return [[round(p + (s - p) * overshoot, 3) for p, s in zip(plain, springy)]
+            for plain, springy in zip(PLAIN, SPRINGY)]
 
 
 def distance_unit(motion: float) -> int:
@@ -65,9 +75,10 @@ def generate_motion(axes: AxisValues) -> Generated:
     ts = TokenSet()
     for ms in DURATIONS_MS:
         ts.add(Token(f"motion.duration.{ms}", "duration", {"value": ms, "unit": "ms"}))
-    out_curve, in_curve, in_out_curve = CURVES[band(m)]
+    o = character.overshoot(axes)
+    out_curve, in_curve, in_out_curve, expressive = curves(o)
     for name, curve in (("linear", LINEAR), ("out", out_curve), ("in", in_curve),
-                        ("in-out", in_out_curve), ("gentle", GENTLE)):
+                        ("in-out", in_out_curve), ("expressive", expressive), ("gentle", GENTLE)):
         ts.add(Token(f"motion.curve.{name}", "cubicBezier", list(curve)))
     unit = distance_unit(m)
     for step, mult in enumerate((0, 1, 2, 4)):
@@ -77,7 +88,8 @@ def generate_motion(axes: AxisValues) -> Generated:
 
     for role, (_, _, curve, distance) in ROLES.items():
         ms = duration_ms(role, m)
-        reduced_ms = ms if role == "motion.progress" else min(ms, REDUCED_MAX_MS)
+        reduced_ms = ms if role == "motion.progress" else (
+            0 if role == EXPRESSIVE else min(ms, REDUCED_MAX_MS))
         ts.add(Token(f"{role}.duration", "duration", "{motion.duration.%d}" % ms,
                      modes={} if reduced_ms == ms else
                      {"motion:reduced": "{motion.duration.%d}" % reduced_ms},
@@ -90,7 +102,8 @@ def generate_motion(axes: AxisValues) -> Generated:
                          modes={"motion:reduced": "{motion.distance.0}"}, layer="semantic"))
     ts.add(Token("motion.inline-sign", "number", "{motion.sign.forward}",
                  modes={"direction:rtl": "{motion.sign.backward}"}, layer="semantic"))
-    return Generated(tokens=ts, notes=[f"motion: {band(m)} curves, {unit}px travel step"])
+    return Generated(tokens=ts, notes=[f"motion: overshoot {o:g} from motion {m:g} and formality "
+                                       f"{axes.formality:g}, {unit}px travel step"])
 
 
 # role suffix -> the token type its checks read
@@ -383,6 +396,24 @@ def _progress_floor(ts: TokenSet, mode: str) -> List[str]:
             f"often falls under WCAG 2.3.1, so point {what} at {step} or a longer step"]
 
 
+def _expressive_removed(ts: TokenSet, mode: str) -> List[str]:
+    """Under reduced motion the expressive role does not run: 0ms and no
+    travel."""
+    if "motion:reduced" not in mode:
+        return []
+    d, t = f"{EXPRESSIVE}.duration", f"{EXPRESSIVE}.distance"
+    out = []
+    if _typed(ts, d) and _ms(ts, d, mode) != 0 and not _seen_ltr(ts, mode, lambda m: _ms(ts, d, m)):
+        out.append(f"{d} lasts {_ms(ts, d, mode):g}ms under {sparse(mode, ts.axes)}; decoration "
+                   "is removed under reduced motion, so point its motion:reduced override at "
+                   "motion.duration.0")
+    if _typed(ts, t) and ts.resolve(t, mode)["value"] != 0 and \
+            not _seen_ltr(ts, mode, lambda m: ts.resolve(t, m)):
+        out.append(f"{t} travels under {sparse(mode, ts.axes)}; decoration is removed under "
+                   "reduced motion, so point its motion:reduced override at motion.distance.0")
+    return out
+
+
 # Only removing travel is WCAG's (2.3.3, motion from interaction can be
 # turned off); the length cap, the gentle curve, the still press, linear
 # for the loop alone and the loop floor are this system's rules. Motion
@@ -401,6 +432,7 @@ CHECKS: Tuple[Check, ...] = (
     Check("linear-progress-only", "system", _linear_progress_only, axes=_BOTH),
     Check("reduced-not-longer", "system", _reduced_not_longer, axes=_BOTH),
     Check("progress-floor", "system", _progress_floor, axes=_BOTH),
+    Check("expressive-removed", "2.3.3", _expressive_removed, axes=_BOTH),
 )
 
 

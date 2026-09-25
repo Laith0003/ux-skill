@@ -2,7 +2,7 @@
 
 ## Summary
 
-Motion sets how things move: seven interaction roles, each with a duration and a curve and, where something travels, a distance, plus a sign that mirrors horizontal travel under right to left. The motion axis sets the pace and character, from still and plain to longer and lively. Reduced motion is a mode: roles keep their meaning with no travel, and one-shot moves take gentle curves and short durations. Motion does not govern the color or layout of what moves.
+Motion sets how things move: seven interaction roles and one expressive role for decoration, each with a duration and a curve and, where something travels, a distance, plus a sign that mirrors horizontal travel under right to left. The motion axis sets the pace, and the motion and formality axes bend every curve continuously from plain to springy (decisions/expressive-motion.md). Reduced motion is a mode: roles keep their meaning with no travel, and one-shot moves take gentle curves and short durations. Motion does not govern the color or layout of what moves.
 
 ## Principles
 
@@ -38,19 +38,20 @@ The seven roles are press (a control confirms a tap in place), reveal (something
 | A move to another page or view | page | the longest one-shot move |
 | Work under way | progress | a linear loop that keeps its pace |
 | A value updates in a dense view | none, or swap at its shortest | frequent changes stay quiet |
+| A section reveals on scroll, a success is celebrated | expressive | decoration only; gone under reduced motion |
 | Nothing changes that matters | none | never add motion for its own sake |
 
 Movement follows the smallest axis that explains the change: along one axis before two, translate for position, scale only for growth from a point, and opacity to support a move, not to replace one that carries meaning. The transform origin is where the change starts: a menu grows from its trigger.
 
 ## Modes
 
-Motion varies on motion (standard, reduced) and direction (ltr, rtl). Under reduced motion every role keeps its meaning: travel drops to 0, one-shot curves turn gentle, one-shot durations cap at 100ms and never grow, a dismiss may tie a reveal but never outlast it, and the progress loop keeps its standard duration and linear curve because it reports status (decisions/motion-roles.md). Under right to left the sign turns -1 so horizontal travel mirrors (decisions/unsigned-distances.md). The mode follows prefers-reduced-motion unless data-motion is set on the html element.
+Motion varies on motion (standard, reduced) and direction (ltr, rtl). Under reduced motion every role keeps its meaning: travel drops to 0, one-shot curves turn gentle, one-shot durations cap at 100ms and never grow, a dismiss may tie a reveal but never outlast it, the progress loop keeps its standard duration and linear curve because it reports status (decisions/motion-roles.md), and the expressive role is removed: 0ms and no travel. Under right to left the sign turns -1 so horizontal travel mirrors (decisions/unsigned-distances.md). The mode follows prefers-reduced-motion unless data-motion is set on the html element.
 
 Under reduced motion drop scale as well as travel: an element that grows from a point appears at full size, with a quick fade if it needs a signal.
 
 ## Changing the system
 
-1. Motion moves with the motion axis: every role grows calmer or livelier together. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+1. Motion moves with the motion axis, and its curves with the motion and formality axes: every role grows calmer or livelier together. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
 2. The build keeps dismiss shorter than reveal, press in place, reduced values never longer than standard ones, and progress linear at 334ms or more per cycle, our floor; a failed check names the role and the mode.
 3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
 4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.
@@ -71,6 +72,7 @@ Audits the motion roles in both motion modes and both directions: reduced travel
 - `press-in-place`: a press never travels.
 - `linear-progress-only`: only the progress loop is linear; every one-shot move eases.
 - `reduced-not-longer`: reduced motion never makes a role longer.
+- `expressive-removed`: under reduced motion the expressive role lasts 0ms and does not travel (WCAG 2.3.3).
 - `progress-floor`: one cycle of the progress loop lasts at least 334ms, our floor; a loop that flashes more than three times a second falls under WCAG 2.3.1, which sets no duration.
 
 ## Beyond the gate
