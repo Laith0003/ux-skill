@@ -391,22 +391,22 @@ The build returns the code, a self-review naming the anti-slop bans it avoided a
 Use this exact template:
 
 ```
-─── design brief ───
+=== design brief ===
 Product:   <one-line summary>
 Surface:   <landing | none>
 Stack:     <stack>
 Dials:     DESIGN_VARIANCE=<n>, MOTION_INTENSITY=<n>, VISUAL_DENSITY=<n>
 Patterns:  <2-4 arsenal patterns chosen>
 
-─── generated ───
+=== generated ===
 <code blocks, verbatim>
 
-─── self-review ───
+=== self-review ===
 <anti-slop bans avoided, and any waived for the client's identity with the evidence>
 <sections dropped from the sequence, each with its reason>
 <which arsenal patterns they used and why>
 
-─── next ───
+=== next ===
 Recommended: /ux-polish      (cosmetic pass on the generated design)
 Other moves: /ux-motion      (verify the motion holds up)
              /ux-a11y        (WCAG check on the generated design)
@@ -506,7 +506,7 @@ This parses the standard brand.md into `.ux/brand.json` (travels through the eng
 
 If the brief names a reference site/URL or provides a screenshot, the output MUST look like THEM, not the house style. Extract the brand FIRST — canonical rules in `references/process/brand-extraction.md`. The engine is offline, so YOU capture the signals; the engine normalizes + enforces.
 
-1. **Capture the signals.** Open the URL / read the screenshot and **sample the logo pixels** for the dominant non-neutral color (the brand primary comes from the LOGO, not the most-painted CSS, unless `ux system detect` declares a primary; then the declared token wins and the logo sample is only reported), read the logo's letterform style, and collect 2–3 secondary colors, the fonts, any real imagery URLs, and the voice. Write `.ux/brand-signals.json`:
+1. **Capture the signals.** Open the URL / read the screenshot and **sample the logo pixels** for the dominant non-neutral color (the brand primary comes from the LOGO, not the most-painted CSS, unless `ux system detect` declares a primary; then the declared token wins and the logo sample is only reported), read the logo's letterform style, and collect 2 to 3 secondary colors, the fonts, any real imagery URLs, and the voice. Write `.ux/brand-signals.json`:
    `{"name":"…","logo":{"src":"…","alt":"…"},"logo_colors":[{"hex":"#…"}],"brand_colors":[{"hex":"#…"}],"logo_type_style":"…","fonts":{"h1":"…","body":"…"},"imagery":["…"],"voice":"…"}`
 2. **Build the anchor:**
    ```bash

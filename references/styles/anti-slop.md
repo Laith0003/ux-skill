@@ -60,7 +60,7 @@ Mobile is not the small version of the desktop — it is where most of the traff
 | Oversaturated accents (>80% saturation) | Desaturate. High contrast comes from value, not saturation. A client's own saturated brand stays exact (decisions/client-identity-wins.md) |
 | Text-fill gradients on large headers | Solid color + weight hierarchy. One word in gradient per page is the absolute maximum |
 | The "AI" purple-to-blue gradient on white | A single restrained accent (Emerald, Electric Blue, Deep Rose, Amber) against neutrals. A gradient from the client's own identity is not this default and stays (decisions/client-identity-wins.md) |
-| Full-bleed gradient hero backgrounds covering large surfaces | Gradients sit inside narrow 30–60° hue windows at low saturation, used as accents not as canvas. The client's own gradient band may run full-bleed, as their material shows it (decisions/client-identity-wins.md) |
+| Full-bleed gradient hero backgrounds covering large surfaces | Gradients sit inside narrow 30 to 60 degree hue windows at low saturation, used as accents not as canvas. The client's own gradient band may run full-bleed, as their material shows it (decisions/client-identity-wins.md) |
 | Multi-stop rainbow gradients | 2-3 stops, axis-aligned, narrow hue spread |
 | More than one gradient section per page | One gradient feature, max |
 | Custom mouse cursors | Native cursors only — performance + a11y + outdated. Exception: a custom cursor inside an interactive product demo surface |

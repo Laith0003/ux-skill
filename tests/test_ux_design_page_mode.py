@@ -219,4 +219,4 @@ def test_no_em_dash_on_the_lines_this_round_opened():
     for text, needle in ((slop, "Treat each ban as a hard rule"), (slop, "Imagery as backdrop, not just an icon"),
                          (agent, "Imagery as backdrop, not just an icon"), (sys_doc, "foundation MDs")):
         line = next(ln for ln in text.splitlines() if needle in ln)
-        assert "—" not in line, needle
+        assert "\u2014" not in line, needle

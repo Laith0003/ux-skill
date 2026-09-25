@@ -19,10 +19,10 @@ always returns the same sequence, and ties are broken by manifest order.
 
 Public surface
 --------------
-``select_for_brief(brief) -> Dict``                     -- the pick for a 4.0 brief
-``select_sequence(goal_or_keywords) -> Optional[Dict]`` -- best match for free text
-``score_sequence(entry, tokens, raw) -> float``         -- the text score (exposed for tests)
-``load_sequences() -> List[Dict]``                      -- raw manifest entries
+``select_for_brief(brief) -> Dict``: the pick for a 4.0 brief.
+``select_sequence(goal_or_keywords) -> Optional[Dict]``: best match for free text.
+``score_sequence(entry, tokens, raw) -> float``: the text score (exposed for tests).
+``load_sequences() -> List[Dict]``: raw manifest entries.
 """
 from __future__ import annotations
 
