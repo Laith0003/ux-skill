@@ -93,14 +93,27 @@ def _px(ts: TokenSet, path: str) -> float:
     return dimension_px(ts.resolve(path))
 
 
+# Shapes from the innermost out: a chip sits in a control's row, a control
+# in a card, a card in a dialog. Each is strictly less round than the next,
+# unless both are square; a role at the pill value is a shape of its own
+# and sits outside the order.
+NESTING = ("radius.chip", "radius.control", "radius.card", "radius.dialog")
+
+
 def _nesting(ts: TokenSet, mode: str) -> List[str]:
-    if not (_typed(ts, "radius.card") and _typed(ts, "radius.dialog")):
-        return []
-    card, dialog = _px(ts, "radius.card"), _px(ts, "radius.dialog")
-    if card <= dialog:
-        return []
-    return [f"radius.card ({card:g}px) is rounder than radius.dialog ({dialog:g}px); a container "
-            "is never rounder than the one it sits in, so point radius.dialog at a larger step"]
+    present = [r for r in NESTING if _typed(ts, r) and _px(ts, r) < PILL_PX / 10]
+    out = []
+    for inner, outer in zip(present, present[1:]):
+        a, b = _px(ts, inner), _px(ts, outer)
+        if a > b:
+            out.append(f"{inner} ({a:g}px) is rounder than {outer} ({b:g}px); a container is "
+                       f"never rounder than the one it sits in, so point {outer} at a larger "
+                       "step")
+        elif a == b and a != 0:
+            out.append(f"{inner} ({a:g}px) is as round as {outer} ({b:g}px); a shape inside "
+                       f"another is less round than its container, so point {outer} at a "
+                       "larger step")
+    return out
 
 
 def _joined(ts: TokenSet, mode: str) -> List[str]:

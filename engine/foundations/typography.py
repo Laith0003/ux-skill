@@ -65,6 +65,10 @@ ROLES: Dict[str, Tuple[Any, str, str, int, str]] = {
     "type.text.code": (2, "mono", "regular", 3, "none"),
 }
 READING = ("type.text.body", "type.text.body-small", "type.text.fine")
+# Roles that keep the reading line height: running text and code blocks.
+LEADING_ROLES = READING + ("type.text.code",)
+# Roles that never tighten their letters: running text and labels.
+TRACKING_ROLES = READING + ("type.text.ui",)
 HIERARCHY = ("type.text.display", "type.text.hero", "type.text.heading-1", "type.text.section-title",
              "type.text.heading-2", "type.text.heading-3", "type.text.body")
 MIN_BODY_PX, MIN_FINE_PX, MIN_READING_LEADING = 16, 12, 1.5
@@ -72,6 +76,7 @@ MIN_BODY_PX, MIN_FINE_PX, MIN_READING_LEADING = 16, 12, 1.5
 # not read as a new level. The generator holds every step from body up to
 # it after rounding, in both scripts.
 MIN_LEVEL_RATIO = 1.08
+MONOSPACE = ("monospace", "ui-monospace")
 # Under high contrast, bold words stay at least this far above body text.
 STRONG_GAP = 200
 # Face roles: the token each face is written to.
@@ -459,8 +464,10 @@ def _roles(ts: TokenSet, names) -> List[str]:
 
 
 def _sizes(ts: TokenSet, mode: str) -> List[str]:
+    """Body keeps 16px; every other role keeps the 12px fine-print floor."""
     out = []
-    for role, floor in (("type.text.body", MIN_BODY_PX), ("type.text.fine", MIN_FINE_PX)):
+    for role in ROLES:
+        floor = MIN_BODY_PX if role == "type.text.body" else MIN_FINE_PX
         if _typed(ts, role):
             px = _px(ts.resolve(role, mode)["fontSize"])
             if px < floor:
@@ -471,7 +478,7 @@ def _sizes(ts: TokenSet, mode: str) -> List[str]:
 
 def _leading(ts: TokenSet, mode: str) -> List[str]:
     out = []
-    for role in _roles(ts, READING):
+    for role in _roles(ts, LEADING_ROLES):
         v = ts.resolve(role, mode)
         if v["lineHeight"] < MIN_READING_LEADING:
             out.append(f"{role} ({mode}) has line height {v['lineHeight']:g}; running text needs "
@@ -481,7 +488,7 @@ def _leading(ts: TokenSet, mode: str) -> List[str]:
 
 def _tracking(ts: TokenSet, mode: str) -> List[str]:
     out = []
-    for role in _roles(ts, READING):
+    for role in _roles(ts, TRACKING_ROLES):
         v = ts.resolve(role, mode)
         if v["letterSpacing"]["value"] < 0:
             out.append(f"{role} ({mode}) tightens letters to {v['letterSpacing']['value']:g}px; "
@@ -592,6 +599,46 @@ def _hierarchy(ts: TokenSet, mode: str) -> List[str]:
                        f"floor between neighbouring levels is {MIN_LEVEL_RATIO:g} times, since a "
                        f"smaller step does not read as a new level, so move {a} up the scale")
     return out
+
+
+def _tracking_order(ts: TokenSet, mode: str) -> List[str]:
+    """Down the ladder, tracking loosens or stays: a smaller role never
+    tracks tighter than the larger role above it. Under rtl in a set with
+    an Arabic face, arabic-text holds every role at 0, so it owns tracking
+    there."""
+    if "direction:rtl" in mode and _typed(ts, ARABIC_FACE):
+        return []
+    present = _roles(ts, HIERARCHY)
+    out = []
+    for a, b in zip(present, present[1:]):
+        ta = _px(ts.resolve(a, mode)["letterSpacing"])
+        tb = _px(ts.resolve(b, mode)["letterSpacing"])
+        if tb < ta:
+            out.append(f"{b} ({mode}) tracks at {tb:g}px, tighter than {a} ({ta:g}px) above "
+                       f"it; tracking loosens as size falls, so point {b} at a looser tracking")
+    return out
+
+
+def _line_height_floor(ts: TokenSet, mode: str) -> List[str]:
+    out = []
+    for role in _roles(ts, ROLES):
+        lh = ts.resolve(role, mode)["lineHeight"]
+        if lh <= 1:
+            out.append(f"{role} ({mode}) has line height {lh:g}; at 1 or less its lines touch, "
+                       "so point it at a leading above 1")
+    return out
+
+
+def _code_face(ts: TokenSet, mode: str) -> List[str]:
+    p = FACE_TOKENS["mono"]
+    if not _typed(ts, p):
+        return []
+    family = ts.resolve(p, mode)
+    last = family if isinstance(family, str) else family[-1]
+    if last in MONOSPACE:
+        return []
+    return [f"{p} ends in {last}; code needs a fixed width, so end its list with ui-monospace "
+            "or monospace"]
 
 
 def _phone_hierarchy(ts: TokenSet, mode: str) -> List[str]:
@@ -786,6 +833,15 @@ CHECKS: Tuple[Check, ...] = (
     Check("display-fits", "system", _fits,
           exempt_axes=(("direction", "it reads both directions itself"),
                        ("contrast", "fit factors never carry modes"))),
+    Check("type-tracking-order", "system", _tracking_order, axes=("direction",),
+          exempt_axes=_WEIGHT_ONLY),
+    Check("line-height-floor", "system", _line_height_floor, axes=("direction",),
+          exempt_axes=_WEIGHT_ONLY),
+    Check("code-face", "system", _code_face,
+          exempt_axes=(("direction", "the mono face is a primitive, the same in both "
+                                     "directions"),
+                       ("contrast", "the mono face is a primitive, the same in both "
+                                    "contrasts"))),
     Check("high-contrast-weights", "system", _high_weights, axes=("contrast", "direction")),
     Check("strong-weight", "system", _strong_gap, axes=("contrast", "direction")),
     Check("icon-sizes", "system", _icons,

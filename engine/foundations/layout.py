@@ -53,6 +53,14 @@ CONTAINERS = (1120, 1280, 1440)
 MEASURE_REM = {"text": 38, "form": 32}
 # Our approximation of the 80 characters WCAG 1.4.8 sets as the widest line.
 MAX_TEXT_MEASURE_REM = 40
+# Our floor for a reading column: narrower, lines break every few words.
+MIN_TEXT_MEASURE_REM = 30
+# WCAG 1.4.10: content reflows at a 320 CSS px wide viewport.
+REFLOW_PX = 320
+# Our floor per phone column at the reflow width: room for a 44px target.
+MIN_PHONE_COLUMN_PX = 44
+# Our floor for a gutter or inline margin, in every density.
+MIN_GUTTER_PX = COMPACT_FLOOR * space.BASE_UNIT
 TARGET_PX = {"comfortable": 44, "compact": 32}
 MIN_TARGET_PX, COMFORTABLE_TARGET_PX = 24, 44
 # A large control (the call to action of a hero) stands this much taller.
@@ -220,11 +228,12 @@ def _columns(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
-def _step_at_least(ts: TokenSet, floor: float, mode: str) -> str:
-    """The fix for a short target: the smallest width primitive the set has
-    at `floor` px or more, else the smallest such space step, else the
-    value itself. Only tokens the set has are named."""
-    for family in ("layout.width.", "space."):
+def _step_at_least(ts: TokenSet, floor: float, mode: str,
+                   families: Sequence[str] = ("layout.width.", "space.")) -> str:
+    """The fix for a value under `floor`: the smallest primitive of the
+    first family that has one at `floor` px or more, else the value itself.
+    Only tokens the set has are named."""
+    for family in families:
         steps = sorted((_px(ts, t.path, mode), t.path) for t in ts.tokens()
                        if t.layer == "primitive" and t.type == "dimension"
                        and t.path.startswith(family) and _px(ts, t.path, mode) >= floor)
@@ -291,6 +300,107 @@ def _regions(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
+def _grid_order(ts: TokenSet, mode: str) -> List[str]:
+    """Gutters and inline margins never shrink as the tier widens."""
+    out = []
+    for group in ("gutter", "margin-inline"):
+        present = [f"layout.{group}.{t}" for t in TIERS if _typed(ts, f"layout.{group}.{t}")]
+        for a, b in zip(present, present[1:]):
+            va, vb, w = _px(ts, a, mode), _px(ts, b, mode), _where(mode)
+            if vb < va and not _repeat(ts, (a, b), mode, _px):
+                out.append(f"{b} ({vb:g}px{w}) is narrower than {a} ({va:g}px{w}); a wider "
+                           "viewport never gets a smaller gutter or inline margin, so point "
+                           f"{b} at a step of {va:g}px or more")
+    return out
+
+
+def _gutter_floor(ts: TokenSet, mode: str) -> List[str]:
+    out = []
+    for group in ("gutter", "margin-inline"):
+        for tier in TIERS:
+            p = f"layout.{group}.{tier}"
+            if not _typed(ts, p) or _repeat(ts, (p,), mode, _px):
+                continue
+            v = _px(ts, p, mode)
+            if v < MIN_GUTTER_PX:
+                out.append(f"{p} ({mode}) is {v:g}px; our floor for a gutter or inline margin "
+                           f"is {MIN_GUTTER_PX}px in every density, so "
+                           f"{_step_at_least(ts, MIN_GUTTER_PX, mode, ('space.',))}")
+    return out
+
+
+def _reflow(ts: TokenSet, mode: str) -> List[str]:
+    """The first breakpoint sits above the reflow width, so a 320px
+    viewport gets the phone grid."""
+    p = "layout.breakpoint.tablet"
+    if not _typed(ts, p) or _repeat(ts, (p,), mode, _px):
+        return []
+    v = _px(ts, p, mode)
+    if v > REFLOW_PX:
+        return []
+    return [f"{p} is {v:g}px{_where(mode)}, so a {REFLOW_PX}px viewport gets the tablet grid; "
+            f"WCAG 1.4.10 asks that content reflow at {REFLOW_PX} CSS px, so start the tablet "
+            f"tier above {REFLOW_PX}px"]
+
+
+def _phone_columns(ts: TokenSet, mode: str) -> List[str]:
+    """At the reflow width, the phone margins and gutters leave each column
+    room for a comfortable target."""
+    m, g, c = "layout.margin-inline.phone", "layout.gutter.phone", "layout.columns.phone"
+    if not all(_typed(ts, p) for p in (m, g, c)) or _repeat(ts, (m, g), mode, _px):
+        return []
+    margin, gutter, cols = _px(ts, m, mode), _px(ts, g, mode), _number(ts, c, mode)
+    if cols < 1:
+        return []
+    each = (REFLOW_PX - 2 * margin - (cols - 1) * gutter) / cols
+    if each >= MIN_PHONE_COLUMN_PX:
+        return []
+    return [f"at {REFLOW_PX}px the phone grid leaves {each:g}px per column (two {m} of "
+            f"{margin:g}px and {cols - 1:g} {g} of {gutter:g}px beside {cols:g} columns"
+            f"{_where(mode)}); our floor is {MIN_PHONE_COLUMN_PX}px per column so a column can "
+            "hold a comfortable target, so narrow the phone margins or gutters"]
+
+
+def _measure_floor(ts: TokenSet, mode: str) -> List[str]:
+    p = "layout.measure.text"
+    if not _typed(ts, p) or _repeat(ts, (p,), mode, _px):
+        return []
+    rem = _px(ts, p, mode) / 16
+    if rem >= MIN_TEXT_MEASURE_REM:
+        return []
+    return [f"{p} is {rem:g}rem{_where(mode)}; below our floor of {MIN_TEXT_MEASURE_REM}rem a "
+            "reading column breaks lines every few words, so keep it at "
+            f"{MIN_TEXT_MEASURE_REM}rem or more"]
+
+
+def _form_measure(ts: TokenSet, mode: str) -> List[str]:
+    p = "layout.measure.form"
+    if not _typed(ts, p) or _repeat(ts, (p,), mode, _px):
+        return []
+    rem = _px(ts, p, mode) / 16
+    if rem <= MAX_TEXT_MEASURE_REM:
+        return []
+    return [f"{p} is {rem:g}rem{_where(mode)}; a form wider than the reading measure is read "
+            f"like a long line, so keep it at {MAX_TEXT_MEASURE_REM}rem or less, our ceiling "
+            "for a reading width"]
+
+
+def _container(ts: TokenSet, mode: str) -> List[str]:
+    p = "layout.container.max"
+    if not _typed(ts, p) or _repeat(ts, (p,), mode, _px):
+        return []
+    v, out = _px(ts, p, mode), []
+    if v < REFLOW_PX:
+        out.append(f"{p} is {v:g}px{_where(mode)}, narrower than the {REFLOW_PX}px reflow "
+                   f"width; point it at a width of {REFLOW_PX}px or more")
+    text = "layout.measure.text"
+    if _typed(ts, text) and v < _px(ts, text, mode):
+        need = _px(ts, text, mode)
+        out.append(f"{p} is {v:g}px{_where(mode)}, narrower than {text} ({need:g}px), so a "
+                   f"reading column would not fit; point it at a width of {need:g}px or more")
+    return out
+
+
 def _on_space(ts: TokenSet, mode: str) -> List[str]:
     """Layout roles that take a spacing value (gutters, inline margins,
     region and landing gaps, the hero, header and footer padding) alias
@@ -319,6 +429,13 @@ CHECKS: Tuple[Check, ...] = (
     Check("text-measure", "1.4.8", _measure, axes=("density",)),
     Check("layout-regions", "system", _regions, axes=("density",)),
     Check("layout-on-space", "system", _on_space, axes=("density",)),
+    Check("layout-grid-order", "system", _grid_order, axes=("density",)),
+    Check("layout-gutter-floor", "system", _gutter_floor, axes=("density",)),
+    Check("reflow-phone-tier", "1.4.10", _reflow, axes=("density",)),
+    Check("phone-columns", "system", _phone_columns, axes=("density",)),
+    Check("text-measure-floor", "system", _measure_floor, axes=("density",)),
+    Check("form-measure", "system", _form_measure, axes=("density",)),
+    Check("container-bounds", "system", _container, axes=("density",)),
 )
 
 

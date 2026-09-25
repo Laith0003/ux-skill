@@ -90,10 +90,10 @@ Styles that work together: a label above a section title, a hero or the landing 
 
 ## Checks
 
-{arabic} - `type-sizes`: body is at least 16px and fine print at least 12px, in both directions.
-{latin} - `type-sizes`: body is at least 16px and fine print at least 12px.
-- `reading-leading`: body, body-small and fine have a line height of 1.5 or more (WCAG 1.4.8, AAA).
-- `reading-tracking`: reading styles never tighten letter spacing.
+{arabic} - `type-sizes`: body is at least 16px and every other style at least 12px, in both directions.
+{latin} - `type-sizes`: body is at least 16px and every other style at least 12px.
+- `reading-leading`: body, body-small, fine and code have a line height of 1.5 or more (WCAG 1.4.8, AAA).
+- `reading-tracking`: reading styles and the ui label style never tighten letter spacing.
 {arabic} - `arabic-text`: under right to left every style but code uses its Arabic face at a size at least 1px and at most a fifth above its Latin size, with taller leading, and no style spaces letters.
 {latin} - `arabic-text`: this build has one script, so the check has nothing to hold.
 {arabic} - `rem-sizes`: every style's size is in rem, in both directions.
@@ -107,6 +107,9 @@ Styles that work together: a label above a section title, a hero or the landing 
 - `high-contrast-weights`: under high contrast no style is lighter than at standard contrast.
 - `strong-weight`: under high contrast type.strong is at least 200 above body text.
 - `icon-sizes`: inline, control and feature icons rise in size, and the stroke stays between 1 and 3 units.
+- `type-tracking-order`: down from display to body, no style tracks tighter than the larger style above it.
+- `line-height-floor`: every style has a line height above 1.
+- `code-face`: the mono face list ends in ui-monospace or monospace.
 
 ## Beyond the gate
 

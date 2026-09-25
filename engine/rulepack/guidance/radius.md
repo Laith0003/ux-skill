@@ -60,7 +60,7 @@ Audits the radius roles and the rules between them: the order of the scale, squa
 
 ## Checks
 
-- `radius-nesting`: radius.card is not rounder than radius.dialog.
+- `radius-nesting`: chip, control, card and dialog grow strictly rounder in that order, pill shapes aside; two square corners may match.
 - `radius-joined`: radius.joined is 0.
 - `radius-pill`: radius.pill is at least 999px, so it is larger than any control's height.
 - `radius-scale-order`: the scale steps strictly increase.
