@@ -10,6 +10,7 @@ High-value because:
 Re-run after data/brands/_index.json changes.
 """
 from pathlib import Path
+import sys
 import json
 import html
 import re
@@ -25,6 +26,13 @@ def sanitize_dashes(s):
 
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def site_version():
+    """The package version from pyproject.toml, the version the site states."""
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from site_version import version
+    return version()
 INDEX = ROOT / "data" / "brands" / "_index.json"
 BRANDS_DIR = ROOT / "data" / "brands"
 OUT = ROOT / "docs" / "brands.html"
@@ -239,7 +247,7 @@ def build_html(brands, version):
 
 <section class="top">
   <div class="container">
-    <p class="top__eyebrow">Brand catalogue · v{html.escape(str(version)) if version else ""}</p>
+    <p class="top__eyebrow">Brand catalogue · v{site_version()}</p>
     <h1 class="top__title">{total} brand <em>DESIGN.md</em> specs.</h1>
     <p class="top__lead">
       The recommender doesn't guess. Each brand is a queryable <code>spec.json</code> and a prose <code>DESIGN.md</code>: palette, typography, philosophy, components observed, voice do's-don'ts, anti-patterns to avoid. The AI session pulls the whole spec, not a slogan. Apple, Stripe, Linear, Vercel, Ferrari, Anthropic, and {total - 6} more.

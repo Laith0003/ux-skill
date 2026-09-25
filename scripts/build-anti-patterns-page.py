@@ -26,6 +26,13 @@ def sanitize_dashes(s):
 
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def site_version():
+    """The package version from pyproject.toml, the version the site states."""
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from site_version import version
+    return version()
 SRC = ROOT / "data" / "anti-patterns.json"
 OUT = ROOT / "docs" / "anti-patterns.html"
 
@@ -263,7 +270,7 @@ def build_html(rules, version):
 
 <section class="top">
   <div class="container">
-    <p class="top__eyebrow">Linter catalogue · v{html.escape(str(version)) if version else ""}</p>
+    <p class="top__eyebrow">Linter catalogue · v{site_version()}</p>
     <h1 class="top__title">{total} fingerprints of <em>AI design slop.</em></h1>
     <p class="top__lead">
       Every rule in <code>data/anti-patterns.json</code>, browseable. Run the linter (<code>uxskill lint</code>) and it scans your HTML/CSS/JS for these regex patterns in &lt;50&#x20;ms: no LLM, no API call, no telemetry. Each rule names the fingerprint, explains why it's slop, and tells the AI session what to ship instead.

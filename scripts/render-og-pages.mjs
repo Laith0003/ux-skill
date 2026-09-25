@@ -1,12 +1,14 @@
 #!/usr/bin/env node
-// Render ALL per-page OG cards -> docs/og/<slug>.png at 2400x1260, in the v3.1
-// homepage style (giant cyan 3.1 + brand dot + stats bar). One Chrome session.
+// Render ALL per-page OG cards -> docs/og/<slug>.png at 2400x1260, in the
+// homepage style (giant cyan release numeral + brand dot + stats bar). One Chrome session.
 import { spawn } from 'node:child_process';
 import { mkdtempSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 const OUT_DIR = join(process.cwd(), 'docs/og');
+// The giant numeral is the release line from pyproject.toml, e.g. 3.2.
+const LINE = readFileSync(join(process.cwd(), 'pyproject.toml'), 'utf8').match(/^version\s*=\s*"(\d+\.\d+)/m)[1];
 // Slugs on the command line render only those cards: node scripts/render-og-pages.mjs home faq
 const ONLY = process.argv.slice(2);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -20,10 +22,10 @@ const PAGES = {
   "compare": ["Compare", "Every Claude design\nskill, side by side", "ux-skill 46/50 · next best 30/50"],
   "about": ["About", "Why ux-skill exists", "From the prose-only v1 to the queryable Python engine"],
   "faq": ["FAQ", "25 questions,\nanswered straight", "Install, license, plugin landscape, MCP"],
-  "roadmap": ["Roadmap", "What ships next", "v3.1 shipped · the road to v3.5"],
+  "roadmap": ["Roadmap", "What ships next", `v${LINE} shipped · the render check is live`],
   "mcp": ["MCP server", "18 tools over stdio.\nAny MCP host.", "Claude Desktop · Cursor · Windsurf · generic agents"],
   "blog-index": ["Blog", "Long-form writing on\nAI coding's design problem", "Honest comparisons. Real numbers. No marketing verbs."],
-  "vs-ui-ux-pro-max": ["Comparison", "ui-ux-pro-max alternative\n— the honest table", "1,243 entries vs ~600 · 152-rule linter vs none"],
+  "vs-ui-ux-pro-max": ["Comparison", "ui-ux-pro-max alternative:\nthe honest table", "1,243 entries vs ~600 · 152-rule linter vs none"],
   "anti-ai-slop-claude-skills": ["Ranking", "Anti-AI-slop tools for\nClaude Code in 2026", "taste-skill · hallmark · ux-skill v3.1"],
   "best-claude-code-design-skills-2026": ["Ranking", "Best Claude Code skills\nfor UX/UI design (2026)", "ui-ux-pro-max · open-design · taste-skill · ux-skill"],
   "cursor-design-plugin": ["Integration", "Cursor design plugin", "Install ux-skill via npx · 152-rule linter"],
@@ -36,8 +38,8 @@ const PAGES = {
   "regex-linter-for-ai-coding": ["Tooling", "Regex linter for\nAI coding output", "152 rules · deterministic · no LLM"],
   "dark-editorial-cinema-design": ["Design", "Dark editorial\ncinema design", "Charcoal + variable opsz + scroll-pinned scenes"],
   "mcp-server-design-intelligence": ["MCP", "MCP server for\ndesign intelligence", "18 tools over stdio"],
-  "motion-presets-framer-gsap-css": ["Motion", "Motion presets —\nFramer, GSAP, CSS", "57 presets · 8 categories · 3 engines"],
-  "dogfooding-design-engine": ["Story", "Dogfooding ux-skill —\nbugs we found", "Engine bugs filed against ourselves · all fixed"],
+  "motion-presets-framer-gsap-css": ["Motion", "Motion presets for\nFramer, GSAP, CSS", "57 presets · 8 categories · 3 engines"],
+  "dogfooding-design-engine": ["Story", "Dogfooding ux-skill:\nbugs we found", "Engine bugs filed against ourselves · all fixed"],
   "zed-design-plugin": ["Integration", "Zed design plugin", "Install ux-skill in the Rust IDE · 152-rule linter"],
   "github-copilot-design-rules": ["Integration", "GitHub Copilot\ndesign rules", "Catch AI-design fingerprints in Copilot output"],
   "jetbrains-ai-design-system": ["Integration", "JetBrains AI\ndesign system rules", "IntelliJ + WebStorm · 152-rule linter"],
@@ -91,7 +93,7 @@ function buildHTML(eyebrow, title, sub){
   .sub{font-size:21px;margin-top:22px}
   .three{font-size:480px}
 </style></head><body>
-<div class="card"><div class="grid"></div><div class="three">3<em>.</em>1</div>
+<div class="card"><div class="grid"></div><div class="three">${LINE.split(".")[0]}<em>.</em>${LINE.split(".")[1]}</div>
 <div class="inner">
   <div class="top"><span class="dot"></span><span class="brand">uxskill</span><span class="tag">deterministic · offline · no LLM</span></div>
   <div class="mid"><div class="eyebrow">${esc(eyebrow)}</div><h1 dir="auto">${titleHtml}</h1>${sub?`<p class="sub" dir="auto">${esc(sub)}</p>`:''}</div>
