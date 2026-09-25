@@ -114,3 +114,29 @@ def test_unread_text_is_named_with_how_to_pass_it_never_waved_through():
 def test_industry_words_with_spaces_are_read():
     axes, source = choose_axes({"industry": "developer tools"}, None)
     assert source == "from the brief (industry: developer tools, read as developer-tools)"
+
+
+@pytest.mark.parametrize("age", ["children", "teens", "adults", "all-ages", "older-adults"])
+@pytest.mark.parametrize("contrast", [0.0, 0.66, 1.0])
+def test_every_age_builds_at_every_contrast_and_the_high_ring_stays_one_wider(age, contrast):
+    a = read_audience({"age": age})
+    axes = AxisValues(0.5, contrast, 0.5, 0.5, 0.5, 0.5, 0.5)
+    out = make_system("#3366FF", axes, "x", audience=a)
+    assert out.passed, [f.message for f in out.findings]
+    ts = build_system(axes, "#3366FF", audience=a).tokens
+    std = ts.resolve("border.focus-ring.width")["value"]
+    high = ts.resolve("border.focus-ring.width", "contrast:high")["value"]
+    assert high == std + 1
+    base = build_system(axes, "#3366FF").tokens.resolve("border.focus-ring.width")["value"]
+    assert std >= base
+
+
+def test_the_age_line_states_the_ring_the_build_made_at_a_dramatic_contrast():
+    a = read_audience({"age": "older-adults"})
+    axes = AxisValues(0.5, 0.9, 0.5, 0.5, 0.5, 0.5, 0.5)
+    lines = [e.line() for e in effects(a, axes)]
+    assert lines[0].startswith("Body text is 18px, targets are at least 48px, the focus ring "
+                               "stays 3px, already the widest standard ring for this contrast "
+                               "(4px under high contrast), and compact density is not offered")
+    mid = [e.line() for e in effects(a, MID)]
+    assert "the focus ring is 1px wider" in mid[0]

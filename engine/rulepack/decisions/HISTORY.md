@@ -58,6 +58,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [The primary fill keeps the exact brand color whenever text reads on it](brand-fidelity.md)
 - [Hover and pressed step away from the fill from where the fill sits in its ramp](exact-fill-states.md)
 - [The focus ring never weakens under high contrast, and is measured against the fill](ring-never-weaker.md)
+- [The standard focus ring stops one step below the widest, so high contrast can widen it](ring-room.md)
 - [The logo keeps the brand color, and decoration has a visibility floor of ours](logo-and-decoration.md)
 - [High contrast sets text one weight heavier](high-contrast-weights.md)
 

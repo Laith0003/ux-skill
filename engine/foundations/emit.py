@@ -781,7 +781,7 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
     report = render_report(brand, axes, axes_source, arabic, gate, notes, findings,
                            rule_pack=bool(pack), fidelity=fidelity, fonts=fonts,
                            font_link=font_link,
-                           audience=[e.line() for e in effects(audience)], unread=unread,
+                           audience=[e.line() for e in effects(audience, axes)], unread=unread,
                            art=bool(art), composition=composition.line() if tokens else "",
                            sentence=character_sentence(axes, built.tokens, composition.name)
                            if tokens else "")

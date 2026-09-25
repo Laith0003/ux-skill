@@ -155,14 +155,29 @@ def read_audience(brief: Optional[Mapping[str, Any]], label: str = "brief") -> A
         given=given)
 
 
-def effects(a: Audience) -> List[Effect]:
-    """What each field the brief set changed, and why."""
+def _ring_words(a: Audience, axes: Optional[Any]) -> str:
+    """What the age did to the focus ring at these axes: the pixels it
+    added, or that the ring was already the widest standard ring."""
+    from engine.foundations.border import ring_px
+    if axes is None:
+        return f"the focus ring is {a.ring_extra}px wider"
+    wider = ring_px(axes, a.ring_extra) - ring_px(axes)
+    if wider >= a.ring_extra:
+        return f"the focus ring is {wider}px wider"
+    std = ring_px(axes, a.ring_extra)
+    return (f"the focus ring stays {std}px, already the widest standard ring for this contrast "
+            f"({std + 1}px under high contrast)")
+
+
+def effects(a: Audience, axes: Optional[Any] = None) -> List[Effect]:
+    """What each field the brief set changed, and why. With the axes, the
+    ring line states the ring the build made at them."""
     out: List[Effect] = []
     if "age" in a.given and a.age_factor:
         out.append(Effect(
-            f"Body text is {a.body_px}px, targets are at least {a.target_px}px, the focus ring "
-            f"is {a.ring_extra}px wider" + (", and compact density is not offered"
-                                              if a.refuse_compact else ""),
+            f"Body text is {a.body_px}px, targets are at least {a.target_px}px, "
+            f"{_ring_words(a, axes)}" + (", and compact density is not offered"
+                                          if a.refuse_compact else ""),
             f"the brief says the readers are {a.age.replace('-', ' ')}, who need larger text, "
             "larger targets and a focus ring they can find"))
     if a.reading_context == "on-the-go" and "reading_context" in a.given:

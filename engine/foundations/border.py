@@ -3,9 +3,10 @@ them. Border colors live in the color foundation (color.line.*).
 
 Widths are whole pixels; a sub-pixel stroke vanishes on 1x screens. The
 focus ring is the heaviest stroke and a dramatic brand (contrast axis at
-0.66 or more) gets a 3px ring. The ring's offset leaves a gap of page
-color between the element and the ring. Under high contrast the outline,
-emphasis, active edge and ring are each one pixel heavier.
+0.66 or more) gets a 3px ring; readers who lean on the ring get a pixel
+more, up to one step below the widest width. The ring's offset leaves a
+gap of page color between the element and the ring. Under high contrast
+the outline, emphasis, active edge and ring are each one pixel heavier.
 """
 from __future__ import annotations
 
@@ -22,8 +23,15 @@ BOLD_RING_FROM = 0.66  # contrast axis
 MIN_RING_PX = 2
 
 
+def ring_px(axes: AxisValues, ring_extra: int = 0) -> int:
+    """The standard focus ring: 2px, 3px for a dramatic brand, plus the
+    audience's extra pixel, never past the second widest width, so the
+    high contrast ring is always one step wider (decisions/ring-room.md)."""
+    return min(WIDTHS[-2], (3 if axes.contrast >= BOLD_RING_FROM else 2) + ring_extra)
+
+
 def roles(axes: AxisValues, ring_extra: int = 0) -> Dict[str, str]:
-    ring = f"border.width.{(3 if axes.contrast >= BOLD_RING_FROM else 2) + ring_extra}"
+    ring = f"border.width.{ring_px(axes, ring_extra)}"
     return {
         "border.separator": "border.width.1",
         "border.outline": "border.width.1",

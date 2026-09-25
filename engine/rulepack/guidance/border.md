@@ -47,7 +47,7 @@ Border varies on contrast. Under high contrast the outline, the emphasis edge, t
 
 ## Changing the system
 
-1. Border widths move with the contrast axis: at 0.66 or more the focus ring is one step wider. The high contrast mode adds a pixel to the outline, emphasis, active edge and ring. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+1. Border widths move with the contrast axis: at 0.66 or more the focus ring is one step wider. Older and mixed-age readers add a pixel to the ring, up to 3px at standard contrast (decisions/ring-room.md). The high contrast mode adds a pixel to the outline, emphasis, active edge and ring. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
 2. The build keeps widths whole pixels, emphasis and active heavier than the outline, the separator no heavier than the outline, and the focus ring at least 2px with an offset of at least 1px (decisions/whole-pixel-borders.md, decisions/ring-offset.md); a failed check names the role.
 3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
 4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.

@@ -15,7 +15,7 @@ Words such as over 60, Arabic-speaking or dark by default sat in free text the e
 
 ## Decision
 
-The brief carries six structured fields beside the seven axes: age, languages, primary_script, default_scheme, reading_context and brand_role, each from a fixed list. The host AI fills them from the user's words; the engine never parses free text for them. Older and mixed-age readers get body text 17 or 18px, targets 46 or 48px, a focus ring 1px wider and compact density refused; on-the-go use adds 4px to targets; long reading adds 0.1 to body line height and narrows the measure to 34rem; languages decide whether Arabic ships, and a language in Arabic script with the Latin-only flag is refused. The report lists each change with its reason, and names every brief word that changed nothing with how to pass it.
+The brief carries six structured fields beside the seven axes: age, languages, primary_script, default_scheme, reading_context and brand_role, each from a fixed list. The host AI fills them from the user's words; the engine never parses free text for them. Older and mixed-age readers get body text 17 or 18px, targets 46 or 48px, a focus ring 1px wider, up to 3px at standard contrast (decisions/ring-room.md), and compact density refused; on-the-go use adds 4px to targets; long reading adds 0.1 to body line height and narrows the measure to 34rem; languages decide whether Arabic ships, and a language in Arabic script with the Latin-only flag is refused. The report lists each change with its reason, and names every brief word that changed nothing with how to pass it.
 
 ## Why
 
