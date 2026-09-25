@@ -2,9 +2,13 @@
 and tracking along the scale, text roles as DTCG typography composites,
 heavier text under high contrast, icons, and the Arabic variant under
 dir="rtl"."""
+import random
+
 import pytest
 
 from engine.foundations import build_system, fonts, from_dtcg, to_css, to_dtcg
+from engine.foundations.audience import AGES, BOOK_DEPTH, BRAND_ROLES, READING
+from engine.foundations.emit import brief_audience
 from engine.foundations.foundation import role_types_check
 from engine.foundations.gate import gate
 from engine.foundations.tokens import Token, TokenSet
@@ -16,8 +20,11 @@ from engine.foundations.typography import (
     ROLES,
     arabic_px,
     generate_type,
+    hold_phone_order,
     latin_px,
     leading,
+    phone_factors,
+    phone_px,
     ratio,
     weights,
 )
@@ -524,6 +531,91 @@ def test_a_phone_size_out_of_order_is_named_with_the_fix():
     report = gate(ts, [], CHECKS, raise_on_fail=False)
     msgs = [f.message for f in report.failures if f.check == "phone-hierarchy"]
     assert msgs and "type.phone.heading-1" in msgs[0] and "type.phone.hero" in msgs[0]
+
+
+# The phone factors are set on the Latin sizes, and the Arabic sizes round
+# per step, so one factor could leave a style under the one below it in
+# Arabic: a muted, dense system for children set the Arabic hero at 28.0px
+# and the landing display at 27.8px on a phone.
+PHONE_ORDER = ("display", "hero", "heading-1", "section-title")
+# Four-place factors move a phone size by at most half of 1e-4 of the size,
+# so two neighbours 1px apart stay this far apart after rounding.
+PHONE_STEP = 0.98
+
+
+def _phone_steps(ts, mode):
+    sizes = [_phone_px(ts, r, mode) for r in PHONE_ORDER]
+    sizes.append(ts.resolve("type.text.heading-2", mode)["fontSize"]["value"] * 16)
+    return sizes
+
+
+def test_the_phone_order_holds_in_arabic_when_the_arabic_sizes_round_together():
+    a = AxisValues(warmth=1, contrast=0, density=1, geometry=0.9971852622206079, formality=0,
+                   motion=0, type_personality=0)
+    brief = {"age": "children", "reading_context": "task", "brand_role": "edge"}
+    ts = build_system(a, "#A9A119", arabic=True, audience=brief_audience(brief)).tokens
+    for mode in ("direction:ltr", "direction:rtl"):
+        sizes = _phone_steps(ts, mode)
+        assert all(hi - lo >= PHONE_STEP for hi, lo in zip(sizes, sizes[1:])), (mode, sizes)
+        assert all(0 < ts.resolve(f"type.phone.{r}", mode) <= 1 for r in PHONE_ORDER)
+
+
+def _random_case(rng):
+    brand = "#%06X" % rng.randrange(1 << 24)
+    a = AxisValues(*[rng.choice([0.0, 1.0, rng.random()]) for _ in range(7)])
+    brief = {"age": rng.choice(list(AGES)), "reading_context": rng.choice(READING),
+             "brand_role": rng.choice(BRAND_ROLES)}
+    if rng.random() < 0.5:
+        brief["product_type"] = rng.choice(list(BOOK_DEPTH))
+    return brand, a, brief
+
+
+@pytest.mark.parametrize("seed", range(4))
+def test_phone_sizes_fall_from_display_to_section_title_in_both_scripts(seed):
+    """Random brands, axes and audiences: on a phone display, hero,
+    heading-1 and section-title fall by at least a pixel and stay above
+    heading-2, in the Latin and the Arabic sizes, and the type gate
+    passes."""
+    rng = random.Random(1000 + seed)
+    for _ in range(80):
+        brand, a, brief = _random_case(rng)
+        for arabic in (True, False):
+            ts = build_system(a, brand, arabic=arabic, foundations=("type",),
+                              audience=brief_audience(brief)).tokens
+            modes = ("direction:ltr", "direction:rtl") if arabic else ("",)
+            for mode in modes:
+                sizes = _phone_steps(ts, mode)
+                assert all(hi - lo >= PHONE_STEP for hi, lo in zip(sizes, sizes[1:])), \
+                    (brand, a, brief, mode, sizes)
+
+
+def test_phone_factors_never_fall_below_the_latin_rule_and_never_pass_one():
+    rng = random.Random(7)
+    for _ in range(300):
+        _, a, brief = _random_case(rng)
+        aud = brief_audience(brief)
+        choice = fonts.choose(a, aud.book_depth)
+        latin = latin_px(a, aud.body_px)
+        arabic = arabic_px(latin, fonts.arabic_scale(choice.text, choice.arabic))
+        latin_rule = phone_px(a, latin, aud.body_px)
+        for script in (None, arabic):
+            got = phone_factors(a, latin, aud.body_px, script)
+            for role, px_ in latin_rule.items():
+                assert round(px_ / latin[ROLES[role][0] - 1], 4) <= got[role] <= 1
+
+
+def test_a_style_that_cannot_clear_the_one_below_at_full_size_lowers_that_one():
+    """Only a scale whose steps do not rise by whole pixels can get here:
+    hero and heading-1 at the same 25px. The hero stops at its own size and
+    heading-1 comes down to keep the 1px step, and so on down."""
+    sizes = [12, 14, 16, 18, 20, 22, 24, 25, 25, 60]
+    start = {"type.text.display": 0.5, "type.text.hero": 0.99,
+             "type.text.heading-1": 0.99, "type.text.section-title": 0.99}
+    got = hold_phone_order(start, [sizes])
+    phone = [sizes[ROLES["type.text." + r][0] - 1] * got["type.text." + r] for r in PHONE_ORDER]
+    phone.append(20)
+    assert got["type.text.hero"] == 1.0
+    assert all(hi - lo >= PHONE_STEP for hi, lo in zip(phone, phone[1:])), phone
 
 
 GRID = (0.0, 0.25, 0.5, 0.75, 1.0)

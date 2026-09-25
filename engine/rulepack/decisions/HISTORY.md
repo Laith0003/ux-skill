@@ -11,6 +11,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Breakpoints are reference values, tokens.css switches the tiered roles, and type does not change by breakpoint](layout-aliases.md)
 - [Breakpoints are reference values, tokens.css switches the tiered roles, and the three largest type styles step down on phones](type-steps-down-on-phones.md)
 - [A landing display step sits above the hero, and the four largest type styles step down on phones](landing-display-step.md)
+- [Each phone factor keeps the phone order in every script the system carries](phone-order-in-both-scripts.md)
 - [Density has two modes, comfortable and compact](two-density-modes.md)
 - [The build writes fonts.css with local faces first and matched fallbacks](font-loading.md)
 - [fonts.css holds the matched fallbacks, fonts-self-host.css the faces, and every weight is one a face ships](font-files.md)

@@ -6857,7 +6857,7 @@
       },
       "9": {
         "$type": "number",
-        "$value": 0.75,
+        "$value": 0.7579,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
