@@ -2793,7 +2793,7 @@
     "2": {
       "$type": "dimension",
       "$value": {
-        "value": 8,
+        "value": 7,
         "unit": "px"
       },
       "$extensions": {
@@ -2805,7 +2805,7 @@
     "3": {
       "$type": "dimension",
       "$value": {
-        "value": 12,
+        "value": 11,
         "unit": "px"
       },
       "$extensions": {
@@ -2817,7 +2817,7 @@
     "4": {
       "$type": "dimension",
       "$value": {
-        "value": 16,
+        "value": 14,
         "unit": "px"
       },
       "$extensions": {
@@ -2829,7 +2829,7 @@
     "5": {
       "$type": "dimension",
       "$value": {
-        "value": 24,
+        "value": 21,
         "unit": "px"
       },
       "$extensions": {
@@ -2841,7 +2841,7 @@
     "6": {
       "$type": "dimension",
       "$value": {
-        "value": 32,
+        "value": 28,
         "unit": "px"
       },
       "$extensions": {
@@ -3023,7 +3023,10 @@
       "$value": "{border.width.1}",
       "$extensions": {
         "io.github.laith0003.ux-skill": {
-          "layer": "semantic"
+          "layer": "semantic",
+          "modes": {
+            "contrast:high": "{border.width.2}"
+          }
         }
       }
     },
@@ -3032,7 +3035,10 @@
       "$value": "{border.width.2}",
       "$extensions": {
         "io.github.laith0003.ux-skill": {
-          "layer": "semantic"
+          "layer": "semantic",
+          "modes": {
+            "contrast:high": "{border.width.3}"
+          }
         }
       }
     },
@@ -3041,7 +3047,10 @@
       "$value": "{border.width.2}",
       "$extensions": {
         "io.github.laith0003.ux-skill": {
-          "layer": "semantic"
+          "layer": "semantic",
+          "modes": {
+            "contrast:high": "{border.width.3}"
+          }
         }
       }
     },
@@ -3051,7 +3060,10 @@
         "$value": "{border.width.2}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
-            "layer": "semantic"
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": "{border.width.3}"
+            }
           }
         }
       },
@@ -3100,7 +3112,7 @@
                   0.0,
                   0.0
                 ],
-                "alpha": 0.090196,
+                "alpha": 0.101961,
                 "hex": "#000000"
               },
               "offsetX": {
@@ -3128,7 +3140,7 @@
                   0.0,
                   0.0
                 ],
-                "alpha": 0.043137,
+                "alpha": 0.05098,
                 "hex": "#000000"
               },
               "offsetX": {
@@ -3166,7 +3178,7 @@
                   0.0,
                   0.0
                 ],
-                "alpha": 0.113725,
+                "alpha": 0.12549,
                 "hex": "#000000"
               },
               "offsetX": {
@@ -3194,7 +3206,7 @@
                   0.0,
                   0.0
                 ],
-                "alpha": 0.054902,
+                "alpha": 0.062745,
                 "hex": "#000000"
               },
               "offsetX": {
@@ -3232,7 +3244,7 @@
                   0.0,
                   0.0
                 ],
-                "alpha": 0.133333,
+                "alpha": 0.14902,
                 "hex": "#000000"
               },
               "offsetX": {
@@ -3260,7 +3272,7 @@
                   0.0,
                   0.0
                 ],
-                "alpha": 0.066667,
+                "alpha": 0.07451,
                 "hex": "#000000"
               },
               "offsetX": {
@@ -3298,7 +3310,7 @@
                   0.0,
                   0.0
                 ],
-                "alpha": 0.180392,
+                "alpha": 0.2,
                 "hex": "#000000"
               },
               "offsetX": {
@@ -3326,7 +3338,7 @@
                   0.0,
                   0.0
                 ],
-                "alpha": 0.090196,
+                "alpha": 0.101961,
                 "hex": "#000000"
               },
               "offsetX": {
@@ -3345,6 +3357,45 @@
                 "value": 0,
                 "unit": "px"
               }
+            }
+          ],
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
+        "inset": {
+          "$type": "shadow",
+          "$value": [
+            {
+              "color": {
+                "colorSpace": "srgb",
+                "components": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "alpha": 0.078431,
+                "hex": "#000000"
+              },
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 1,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 3,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              },
+              "inset": true
             }
           ],
           "$extensions": {
@@ -3366,7 +3417,7 @@
                   0.0,
                   0.0
                 ],
-                "alpha": 0.223529,
+                "alpha": 0.25098,
                 "hex": "#000000"
               },
               "offsetX": {
@@ -3394,7 +3445,7 @@
                   0.0,
                   0.0
                 ],
-                "alpha": 0.113725,
+                "alpha": 0.12549,
                 "hex": "#000000"
               },
               "offsetX": {
@@ -3432,7 +3483,7 @@
                   0.0,
                   0.0
                 ],
-                "alpha": 0.282353,
+                "alpha": 0.313725,
                 "hex": "#000000"
               },
               "offsetX": {
@@ -3460,7 +3511,7 @@
                   0.0,
                   0.0
                 ],
-                "alpha": 0.141176,
+                "alpha": 0.156863,
                 "hex": "#000000"
               },
               "offsetX": {
@@ -3498,7 +3549,7 @@
                   0.0,
                   0.0
                 ],
-                "alpha": 0.337255,
+                "alpha": 0.376471,
                 "hex": "#000000"
               },
               "offsetX": {
@@ -3526,7 +3577,7 @@
                   0.0,
                   0.0
                 ],
-                "alpha": 0.168627,
+                "alpha": 0.188235,
                 "hex": "#000000"
               },
               "offsetX": {
@@ -3564,7 +3615,7 @@
                   0.0,
                   0.0
                 ],
-                "alpha": 0.45098,
+                "alpha": 0.501961,
                 "hex": "#000000"
               },
               "offsetX": {
@@ -3592,7 +3643,7 @@
                   0.0,
                   0.0
                 ],
-                "alpha": 0.223529,
+                "alpha": 0.25098,
                 "hex": "#000000"
               },
               "offsetX": {
@@ -3611,6 +3662,45 @@
                 "value": 0,
                 "unit": "px"
               }
+            }
+          ],
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
+        "inset": {
+          "$type": "shadow",
+          "$value": [
+            {
+              "color": {
+                "colorSpace": "srgb",
+                "components": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "alpha": 0.2,
+                "hex": "#000000"
+              },
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 1,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 3,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              },
+              "inset": true
             }
           ],
           "$extensions": {
@@ -3721,6 +3811,18 @@
           "layer": "semantic",
           "modes": {
             "scheme:dark": "{elevation.shadow.dark.4}"
+          }
+        }
+      }
+    },
+    "inset": {
+      "$type": "shadow",
+      "$value": "{elevation.shadow.light.inset}",
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "semantic",
+          "modes": {
+            "scheme:dark": "{elevation.shadow.dark.inset}"
           }
         }
       }

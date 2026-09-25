@@ -120,7 +120,7 @@
   --color-action-danger-hover: var(--color-danger-700);
   --color-action-danger-pressed: var(--color-danger-800);
   --color-action-disabled: var(--color-neutral-200);
-  --color-line-subtle: var(--color-neutral-200);
+  --color-line-subtle: var(--color-neutral-300);
   --color-line-input: var(--color-neutral-500);
   --color-line-selected: var(--color-brand-600);
   --color-line-danger: var(--color-danger-600);
@@ -178,12 +178,12 @@
   --space-card-padding: var(--space-4);
   --space-region-gap: var(--space-16);
   --radius-0: 0px;
-  --radius-1: 2px;
-  --radius-2: 4px;
-  --radius-3: 6px;
-  --radius-4: 8px;
-  --radius-5: 12px;
-  --radius-6: 16px;
+  --radius-1: 1px;
+  --radius-2: 2px;
+  --radius-3: 3px;
+  --radius-4: 4px;
+  --radius-5: 5px;
+  --radius-6: 6px;
   --radius-round: 9999px;
   --radius-joined: var(--radius-0);
   --radius-chip: var(--radius-1);
@@ -207,14 +207,16 @@
   --border-focus-ring-offset: var(--border-width-2);
   --border-style-default: var(--border-line-solid);
   --border-style-placeholder: var(--border-line-dashed);
-  --elevation-shadow-light-1: 0px 1px 3px 0px #00000011, 0px 0px 1px 0px #00000008;
-  --elevation-shadow-light-2: 0px 2px 6px -1px #00000015, 0px 1px 2px 0px #0000000B;
-  --elevation-shadow-light-3: 0px 6px 16px -3px #00000019, 0px 2px 4px 0px #0000000D;
-  --elevation-shadow-light-4: 0px 12px 32px -6px #00000022, 0px 4px 8px 0px #00000011;
-  --elevation-shadow-dark-1: 0px 1px 3px 0px #0000002A, 0px 0px 1px 0px #00000015;
-  --elevation-shadow-dark-2: 0px 2px 6px -1px #00000035, 0px 1px 2px 0px #0000001A;
-  --elevation-shadow-dark-3: 0px 6px 16px -3px #0000003F, 0px 2px 4px 0px #0000001F;
-  --elevation-shadow-dark-4: 0px 12px 32px -6px #00000054, 0px 4px 8px 0px #0000002A;
+  --elevation-shadow-light-1: 0px 1px 2px 0px #00000008, 0px 0px 1px 0px #00000004;
+  --elevation-shadow-light-2: 0px 2px 4px -1px #00000009, 0px 1px 2px 0px #00000005;
+  --elevation-shadow-light-3: 0px 6px 11px -3px #0000000B, 0px 2px 4px 0px #00000006;
+  --elevation-shadow-light-4: 0px 12px 22px -6px #0000000F, 0px 4px 8px 0px #00000008;
+  --elevation-shadow-light-inset: inset 0px 1px 2px 0px #0000000A;
+  --elevation-shadow-dark-1: 0px 1px 2px 0px #00000013, 0px 0px 1px 0px #00000009;
+  --elevation-shadow-dark-2: 0px 2px 4px -1px #00000018, 0px 1px 2px 0px #0000000C;
+  --elevation-shadow-dark-3: 0px 6px 11px -3px #0000001D, 0px 2px 4px 0px #0000000E;
+  --elevation-shadow-dark-4: 0px 12px 22px -6px #00000026, 0px 4px 8px 0px #00000013;
+  --elevation-shadow-dark-inset: inset 0px 1px 2px 0px #0000001A;
   --elevation-z-0: 0;
   --elevation-z-100: 100;
   --elevation-z-1000: 1000;
@@ -225,6 +227,7 @@
   --elevation-lifted: var(--elevation-shadow-light-2);
   --elevation-popover: var(--elevation-shadow-light-3);
   --elevation-dialog: var(--elevation-shadow-light-4);
+  --elevation-inset: var(--elevation-shadow-light-inset);
   --elevation-order-base: var(--elevation-z-0);
   --elevation-order-sticky: var(--elevation-z-100);
   --elevation-order-dropdown: var(--elevation-z-1000);
@@ -414,7 +417,7 @@
   --color-action-danger-hover: var(--color-danger-300);
   --color-action-danger-pressed: var(--color-danger-200);
   --color-action-disabled: var(--color-neutral-700);
-  --color-line-subtle: var(--color-neutral-700);
+  --color-line-subtle: var(--color-neutral-600);
   --color-line-input: var(--color-neutral-400);
   --color-line-selected: var(--color-brand-300);
   --color-line-danger: var(--color-danger-400);
@@ -453,6 +456,7 @@
   --elevation-lifted: var(--elevation-shadow-dark-2);
   --elevation-popover: var(--elevation-shadow-dark-3);
   --elevation-dialog: var(--elevation-shadow-dark-4);
+  --elevation-inset: var(--elevation-shadow-dark-inset);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -484,7 +488,7 @@
     --color-action-danger-hover: var(--color-danger-300);
     --color-action-danger-pressed: var(--color-danger-200);
     --color-action-disabled: var(--color-neutral-700);
-    --color-line-subtle: var(--color-neutral-700);
+    --color-line-subtle: var(--color-neutral-600);
     --color-line-input: var(--color-neutral-400);
     --color-line-selected: var(--color-brand-300);
     --color-line-danger: var(--color-danger-400);
@@ -523,6 +527,7 @@
     --elevation-lifted: var(--elevation-shadow-dark-2);
     --elevation-popover: var(--elevation-shadow-dark-3);
     --elevation-dialog: var(--elevation-shadow-dark-4);
+    --elevation-inset: var(--elevation-shadow-dark-inset);
   }
 }
 
@@ -571,6 +576,10 @@
   --color-status-info-text: var(--color-info-800);
   --color-status-info-soft: var(--color-info-50);
   --color-status-info-strong: var(--color-info-800);
+  --border-outline: var(--border-width-2);
+  --border-emphasis: var(--border-width-3);
+  --border-active: var(--border-width-3);
+  --border-focus-ring-width: var(--border-width-3);
 }
 
 @media (prefers-contrast: more) {
@@ -619,6 +628,10 @@
     --color-status-info-text: var(--color-info-800);
     --color-status-info-soft: var(--color-info-50);
     --color-status-info-strong: var(--color-info-800);
+    --border-outline: var(--border-width-2);
+    --border-emphasis: var(--border-width-3);
+    --border-active: var(--border-width-3);
+    --border-focus-ring-width: var(--border-width-3);
   }
 }
 

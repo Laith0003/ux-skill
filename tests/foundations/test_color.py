@@ -740,11 +740,10 @@ def test_line_subtle_must_differ_from_card_and_raised():
 
 
 def test_line_subtle_check_blocks_the_build(monkeypatch):
-    # Put dark line.subtle back on raised's step: the gate refuses the build
-    # and names the check.
-    semantic = dict(color_module.SEMANTIC)
-    semantic["color.line.subtle"] = ("color.neutral.200", "color.neutral.800")
-    monkeypatch.setattr(color_module, "SEMANTIC", semantic)
+    # Put dark line.subtle on raised's step: the gate refuses the build and
+    # names the check.
+    monkeypatch.setattr(color_module, "_subtle_steps",
+                        lambda depth: ("color.neutral.200", "color.neutral.800"))
     with pytest.raises(GateFailure) as exc:
         build_color(AXES, "#3366FF")
     failures = [f for f in exc.value.report.failures if f.check == "line-subtle-visible"]
@@ -946,3 +945,11 @@ def test_the_logo_keeps_the_exact_brand_where_it_clears_our_floor():
     for mode in COLOR_CONTEXTS:
         assert contrast(ts.resolve("color.logo", mode),
                         ts.resolve("color.surface.page", mode)) >= color_module.LOGO_FLOOR
+
+
+@pytest.mark.parametrize("depth, light, dark", [
+    (0.0, "color.neutral.300", "color.neutral.600"),
+    (0.5, "color.neutral.200", "color.neutral.700"),
+    (1.0, "color.neutral.100", "color.neutral.700")])
+def test_the_surface_treatment_sets_the_subtle_line(depth, light, dark):
+    assert color_module._subtle_steps(depth) == (light, dark)

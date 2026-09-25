@@ -2,9 +2,12 @@
 stacking order of floating layers.
 
 Each level's shadow has two layers, a key light that grows with the level
-and a tight ambient one. The contrast axis sets how strong they are; dark
+and a tight ambient one. The surface treatment (character.depth, from the
+contrast and formality axes) sets how strong and how soft they are: a
+flat system keeps a whisper of shadow, a deep one casts a clear one. Dark
 schemes need stronger shadows to read at all, so their alpha is 2.5 times
-the light alpha, capped. The surfaces these shadows sit on are color roles
+the light alpha, capped. elevation.inset gives a sunken surface an inner
+shadow, so it reads as recessed. The surfaces these shadows sit on are color roles
 (color.surface.card, color.surface.raised) and the dimming behind a dialog
 is color.scrim.
 """
@@ -12,6 +15,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Tuple
 
+from engine.foundations import character
 from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check
 from engine.foundations.modes import compress, contexts
@@ -30,11 +34,18 @@ ORDER = {"elevation.order.base": 0, "elevation.order.sticky": 100,
          "elevation.order.dialog": 2100, "elevation.order.toast": 3000}
 
 
-def key_alpha(contrast: float, level: int, scheme: str) -> float:
-    a = (0.06 + 0.06 * contrast) * STRENGTH[level - 1]
+def key_alpha(depth: float, level: int, scheme: str) -> float:
+    """The key light's alpha: 0.03 for a flat system to 0.17 for a deep one
+    at level 1, stronger per level and in dark."""
+    a = (0.03 + 0.14 * depth) * STRENGTH[level - 1]
     if scheme == "dark":
         a *= DARK_FACTOR
     return round(min(a, ALPHA_CAP), 3)
+
+
+def softness(depth: float) -> float:
+    """How far a shadow spreads its blur: 0.7 flat to 1.3 deep."""
+    return 0.7 + 0.6 * depth
 
 
 def _black(alpha: float) -> str:
@@ -45,39 +56,53 @@ def _dim(px: int) -> Dict[str, Any]:
     return {"value": px, "unit": "px"}
 
 
-def shadow(contrast: float, level: int, scheme: str) -> List[Dict[str, Any]]:
+def shadow(depth: float, level: int, scheme: str) -> List[Dict[str, Any]]:
     y, blur, spread = KEY[level - 1]
     ay, ablur = AMBIENT[level - 1]
-    a = key_alpha(contrast, level, scheme)
+    a = key_alpha(depth, level, scheme)
     return [
-        {"color": _black(a), "offsetX": _dim(0), "offsetY": _dim(y), "blur": _dim(blur),
-         "spread": _dim(spread)},
+        {"color": _black(a), "offsetX": _dim(0), "offsetY": _dim(y),
+         "blur": _dim(max(y + 1, int(blur * softness(depth) + 0.5))), "spread": _dim(spread)},
         {"color": _black(round(a / 2, 3)), "offsetX": _dim(0), "offsetY": _dim(ay),
          "blur": _dim(ablur), "spread": _dim(0)},
     ]
 
 
+def inset(depth: float, scheme: str) -> List[Dict[str, Any]]:
+    """An inner shadow along the top edge of a sunken surface."""
+    a = round(min((0.04 + 0.08 * depth) * (DARK_FACTOR if scheme == "dark" else 1), ALPHA_CAP), 3)
+    return [{"color": _black(a), "offsetX": _dim(0), "offsetY": _dim(1),
+             "blur": _dim(2 + int(2 * depth + 0.5)), "spread": _dim(0), "inset": True}]
+
+
 def generate_elevation(axes: AxisValues) -> Generated:
+    d = character.depth(axes)
     ts = TokenSet()
     for scheme in ("light", "dark"):
         for level in range(1, 5):
             ts.add(Token(f"elevation.shadow.{scheme}.{level}", "shadow",
-                         shadow(axes.contrast, level, scheme)))
+                         shadow(d, level, scheme)))
+        ts.add(Token(f"elevation.shadow.{scheme}.inset", "shadow", inset(d, scheme)))
     for z in sorted(set(ORDER.values())):
         ts.add(Token(f"elevation.z.{z}", "number", z))
     for level, role in enumerate(ROLES, 1):
         base, modes = compress({ctx: "{elevation.shadow.%s.%d}" % (ctx.split(":")[1], level)
                                 for ctx in contexts(("scheme",))})
         ts.add(Token(role, "shadow", base, modes=modes, layer="semantic"))
+    base, modes = compress({ctx: "{elevation.shadow.%s.inset}" % ctx.split(":")[1]
+                            for ctx in contexts(("scheme",))})
+    ts.add(Token("elevation.inset", "shadow", base, modes=modes, layer="semantic"))
     for role, z in ORDER.items():
         ts.add(Token(role, "number", "{elevation.z.%d}" % z, layer="semantic"))
-    return Generated(tokens=ts)
+    return Generated(tokens=ts, notes=[f"elevation: depth {d:.2f} from contrast "
+                                       f"{axes.contrast:g} and formality {axes.formality:g}"])
 
 
 # Role path -> token type: levels are shadows, the stacking order numbers.
 # The build's role-types check reports any other type once, and the checks
 # below skip it.
-ROLE_TYPES: Dict[str, str] = {**{r: "shadow" for r in ROLES}, **{r: "number" for r in ORDER}}
+ROLE_TYPES: Dict[str, str] = {**{r: "shadow" for r in ROLES}, "elevation.inset": "shadow",
+                              **{r: "number" for r in ORDER}}
 
 
 def _typed(ts: TokenSet, path: str) -> bool:

@@ -859,6 +859,15 @@ CHECKS: Tuple[Check, ...] = (
 )
 
 
+def _subtle_steps(depth: float) -> Tuple[str, str]:
+    """color.line.subtle for light and dark at standard contrast: neutral
+    300, 200 or 100 in light as the surface treatment goes from flat to
+    deep; in dark 600 when flat and 700 otherwise, since 800 is the raised
+    surface."""
+    k = min(2, int(depth * 3))
+    return f"color.neutral.{(300, 200, 100)[k]}", f"color.neutral.{(600, 700, 700)[k]}"
+
+
 def _ring_low(ring_hex: str, mode: str, prims: Dict[str, str],
               pick: Dict[str, Dict[str, str]]) -> float:
     """The ring's lowest ratio against the surfaces PAIRINGS pairs it with."""
@@ -892,6 +901,13 @@ def generate_color(axes: AxisValues, brand_hex: str, brand_role: Optional[str] =
     notes.append(f"color: brand role {role} (" + ("set by the brief" if brand_role else ", ".join(
         f"{k} {scores[k]:.2f}" for k in BRAND_ROLES)) + ")")
     pick = {mode: {r: _default(r, mode, role) for r in SEMANTIC} for mode in COLOR_CONTEXTS}
+    # Surface treatment: a flat system draws its separators and card edges
+    # a step darker (a hairline carries the shape), a deep one a step
+    # lighter (the shadow carries it).
+    subtle = _subtle_steps(character.depth(axes))
+    for mode in COLOR_CONTEXTS:
+        if parse(mode).get("contrast") != "high":
+            pick[mode]["color.line.subtle"] = subtle[0 if _scheme(mode) == "light" else 1]
 
     def value(mode: str, role: str) -> str:
         return prims[pick[mode][role]]

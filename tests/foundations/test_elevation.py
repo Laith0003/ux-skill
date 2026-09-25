@@ -20,18 +20,32 @@ def axes(contrast=0.5, **kw):
 
 def test_a_level_is_a_two_layer_shadow():
     assert shadow(0.5, 2, "light") == [
-        {"color": "#0000001D", "offsetX": {"value": 0, "unit": "px"},
+        {"color": "#00000020", "offsetX": {"value": 0, "unit": "px"},
          "offsetY": {"value": 2, "unit": "px"}, "blur": {"value": 6, "unit": "px"},
          "spread": {"value": -1, "unit": "px"}},
-        {"color": "#0000000E", "offsetX": {"value": 0, "unit": "px"},
+        {"color": "#00000010", "offsetX": {"value": 0, "unit": "px"},
          "offsetY": {"value": 1, "unit": "px"}, "blur": {"value": 2, "unit": "px"},
          "spread": {"value": 0, "unit": "px"}}]
 
 
-def test_contrast_axis_sets_strength_and_dark_is_stronger():
-    assert [key_alpha(0.0, lvl, "light") for lvl in (1, 2, 3, 4)] == [0.06, 0.075, 0.09, 0.12]
-    assert [key_alpha(1.0, lvl, "light") for lvl in (1, 2, 3, 4)] == [0.12, 0.15, 0.18, 0.24]
-    assert [key_alpha(1.0, lvl, "dark") for lvl in (1, 2, 3, 4)] == [0.3, 0.375, 0.45, 0.6]
+def test_depth_sets_strength_and_dark_is_stronger():
+    assert [key_alpha(0.0, lvl, "light") for lvl in (1, 2, 3, 4)] == [0.03, 0.037, 0.045, 0.06]
+    assert [key_alpha(1.0, lvl, "light") for lvl in (1, 2, 3, 4)] == [0.17, 0.213, 0.255, 0.34]
+    assert [key_alpha(1.0, lvl, "dark") for lvl in (1, 2, 3, 4)] == [0.425, 0.531, 0.637, 0.8]
+
+
+def test_a_deep_system_casts_softer_stronger_shadows_than_a_flat_one():
+    flat, deep = shadow(0.0, 3, "light")[0], shadow(1.0, 3, "light")[0]
+    assert deep["blur"]["value"] > flat["blur"]["value"]
+    assert int(deep["color"][7:], 16) > int(flat["color"][7:], 16)
+
+
+def test_sunken_surfaces_get_an_inset_shadow_per_scheme():
+    ts = generate_elevation(axes()).tokens
+    tok = ts.get("elevation.inset")
+    assert tok.value == "{elevation.shadow.light.inset}"
+    assert tok.modes == {"scheme:dark": "{elevation.shadow.dark.inset}"}
+    assert ts.resolve("elevation.inset")[0]["inset"] is True
 
 
 def test_roles_switch_shadows_with_the_scheme():
@@ -80,16 +94,17 @@ def test_checks_name_the_token_and_the_fix():
         "order base, sticky, dropdown, overlay, dialog, toast"]
 
 
-def test_only_contrast_moves_elevation():
+def test_only_contrast_and_formality_move_elevation():
     base = [(t.path, t.value) for t in generate_elevation(axes()).tokens.tokens()]
-    other = axes(warmth=0.0, density=1.0, geometry=0.0, formality=1.0, motion=0.0,
-                 type_personality=1.0)
+    other = axes(warmth=0.0, density=1.0, geometry=0.0, motion=0.0, type_personality=1.0)
     assert [(t.path, t.value) for t in generate_elevation(other).tokens.tokens()] == base
+    formal = axes(formality=1.0)
+    assert [(t.path, t.value) for t in generate_elevation(formal).tokens.tokens()] != base
 
 
 def test_build_system_prints_shadows_and_their_dark_switch():
     css = to_css(build_system(axes(), "#3366FF").tokens)
-    assert "  --elevation-shadow-light-1: 0px 1px 3px 0px #00000017, 0px 0px 1px 0px #0000000B;" in css
+    assert "  --elevation-shadow-light-1: 0px 1px 3px 0px #0000001A, 0px 0px 1px 0px #0000000D;" in css
     dark = css.split(':root[data-theme="dark"] {')[1].split("}")[0]
     assert "  --elevation-dialog: var(--elevation-shadow-dark-4);" in dark
 

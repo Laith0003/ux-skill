@@ -89,7 +89,26 @@ def test_checks_name_the_token_and_the_fix():
         SEPARATOR_HEAVIER.format(s=2, o=1),
         EMPHASIS_NOT_HEAVIER.format(e=1, o=1),
         "border.width.half is 0.5px; a sub-pixel stroke vanishes on 1x screens, so use a whole "
-        "number of pixels"]
+        "number of pixels",
+        # the hand-built set has no high contrast step; the standard findings are not repeated
+        "border.outline is 1px under high contrast and 1px at standard; high contrast makes the "
+        "ring and the outline heavier and never thins an edge, so point its contrast:high "
+        "override at a wider step than 1px",
+        "border.focus-ring.width is 1px under high contrast and 1px at standard; high contrast "
+        "makes the ring and the outline heavier and never thins an edge, so point its "
+        "contrast:high override at a wider step than 1px"]
+
+
+def test_high_contrast_adds_a_pixel_to_the_outline_emphasis_active_edge_and_ring():
+    from engine.foundations.border import generate_border
+    ts = generate_border(AxisValues(*[0.5] * 7)).tokens
+    high = "contrast:high"
+    assert {r: (ts.resolve(r)["value"], ts.resolve(r, high)["value"]) for r in (
+        "border.separator", "border.outline", "border.emphasis", "border.active",
+        "border.focus-ring.width", "border.focus-ring.offset")} == {
+        "border.separator": (1, 1), "border.outline": (1, 2), "border.emphasis": (2, 3),
+        "border.active": (2, 3), "border.focus-ring.width": (2, 3),
+        "border.focus-ring.offset": (2, 2)}
 
 
 def _check(check_id):

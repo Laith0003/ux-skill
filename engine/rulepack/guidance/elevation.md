@@ -2,7 +2,7 @@
 
 ## Summary
 
-Elevation sets how far things float: four shadow levels, each stronger in dark, and the stacking order of floating layers. The surface under a shadow is a color role and the dimming behind a dialog is color.scrim (decisions/elevation-roles.md). Elevation does not govern the contrast of surfaces; color does.
+Elevation sets how far things float: four shadow levels, each stronger in dark, an inner shadow for sunken surfaces, and the stacking order of floating layers. The surface treatment, from the contrast and formality axes, runs from flat (a whisper of shadow, hairline edges) to deep (clear, soft shadows) (decisions/surface-treatment.md). The surface under a shadow is a color role and the dimming behind a dialog is color.scrim (decisions/elevation-roles.md). Elevation does not govern the contrast of surfaces; color does.
 
 ## Principles
 
@@ -21,6 +21,7 @@ Elevation sets how far things float: four shadow levels, each stronger in dark, 
 - `elevation.lifted`: a card that stands above its siblings, or an element held during a drag.
 - `elevation.popover`: menus, dropdowns, popovers and tooltips anchored to a control.
 - `elevation.dialog`: dialogs and other layers that block the page.
+- `elevation.inset`: the inner shadow of a sunken surface, such as a well or a code block, so it reads as recessed.
 - `elevation.order.base`: the stacking level of normal content.
 - `elevation.order.sticky`: headers and toolbars that stick while content scrolls under them.
 - `elevation.order.dropdown`: menus and popovers above sticky content.
@@ -49,7 +50,7 @@ Elevation varies on scheme (light, dark). Dark shadows are stronger than light o
 
 ## Changing the system
 
-1. Shadows move with the contrast axis: every level grows stronger or softer together and stays in order. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+1. Shadows move with the contrast and formality axes: every level grows stronger and softer together as the treatment deepens, and stays in order. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
 2. The build keeps every level above the one below, dark shadows stronger than light ones, every level visible in both schemes, and the stacking order base, sticky, dropdown, overlay, dialog, toast; a failed check names the level.
 3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
 4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.

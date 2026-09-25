@@ -37,7 +37,7 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - `color.action.danger-hover`: the danger fill under a pointer.
 - `color.action.danger-pressed`: the danger fill while pressed.
 - `color.action.disabled`: the fill of an unavailable filled control; it stays visible on card and raised surfaces.
-- `color.line.subtle`: a quiet separator between siblings, the edge of a card or dialog that only marks its shape, and the edge of a disabled field; decorative, so never the only edge of an enabled control.
+- `color.line.subtle`: a quiet separator between siblings, darker in a flat system and lighter in a deep one (decisions/surface-treatment.md), the edge of a card or dialog that only marks its shape, and the edge of a disabled field; decorative, so never the only edge of an enabled control.
 - `color.line.input`: the edge of a field, a check box, a status banner, a row under hover or press, and any control that must be found by its edge.
 - `color.line.selected`: the edge and check mark of a selected item, and the edge of a secondary button and of a ghost button under hover or press.
 - `color.line.danger`: the edge of a field in error; it carries no text, so it keeps its red under high contrast (decisions/error-edge.md).

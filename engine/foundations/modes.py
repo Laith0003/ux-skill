@@ -37,7 +37,7 @@ FOUNDATION_AXES: Mapping[str, Tuple[str, ...]] = MappingProxyType({
     "type": ("direction",),
     "motion": ("motion", "direction"),
     "radius": (),
-    "border": (),
+    "border": ("contrast",),
 })
 
 # How each axis reaches CSS: the root attribute that sets it, and the media

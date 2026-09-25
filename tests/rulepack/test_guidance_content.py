@@ -96,8 +96,9 @@ def test_guidance_is_ascii_without_dashes():
 # build again and read the report. Repointing, exempting or adding a role
 # comes with the 4.1 importers and the extend mode, and nothing tells a
 # reader to edit engine code or a generated value.
-INPUTS = {"border": "contrast axis", "color": "brand color", "elevation": "contrast axis",
-          "layout": "density axis", "motion": "motion axis", "radius": "geometry axis",
+INPUTS = {"border": "contrast axis", "color": "brand color",
+          "elevation": "contrast and formality axes", "layout": "density axis",
+          "motion": "motion axis", "radius": "geometry and formality axes",
           "space": "density axis", "type": "type personality axis"}
 REPOINT = re.compile(r"\bpoint (the|its|one|it|a) |COVERAGE_EXEMPT|coverage table|generator "
                      r"change|overrides|\badd (it|a|an) [a-z ]*role\b|engine/", re.I)

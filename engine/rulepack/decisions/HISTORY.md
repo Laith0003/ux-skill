@@ -52,6 +52,9 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Travel distances are unsigned, and one sign follows the reading direction](unsigned-distances.md)
 - [Emphasis inside text uses the heading weight](strong-equals-heading-weight.md)
 - [Reading styles have a line height of 1.5 or more by default](reading-line-height.md)
+- [Geometry and formality set one roundness, and every corner follows it](roundness.md)
+- [High contrast makes edges and the focus ring heavier](high-contrast-borders.md)
+- [The surface treatment runs from flat hairlines to deep shadows](surface-treatment.md)
 
 ## Components
 

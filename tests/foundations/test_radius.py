@@ -17,13 +17,20 @@ def axes(geometry=0.5, **kw):
     return AxisValues(**values)
 
 
-@pytest.mark.parametrize("geometry, base, steps", [
-    (0.0, 2, [0, 1, 2, 3, 4, 6, 8]),
-    (0.5, 8, [0, 4, 8, 12, 16, 24, 32]),
-    (1.0, 12, [0, 6, 12, 18, 24, 36, 48]),
+@pytest.mark.parametrize("roundness, base, steps", [
+    (0.0, 0, [0, 1, 2, 3, 4, 5, 6]),
+    (0.5, 7, [0, 4, 7, 11, 14, 21, 28]),
+    (1.0, 14, [0, 7, 14, 21, 28, 42, 56]),
 ])
-def test_scale_follows_the_geometry_axis(geometry, base, steps):
-    assert base_corner(geometry) == base and scale(geometry) == steps
+def test_scale_follows_the_roundness(roundness, base, steps):
+    assert base_corner(roundness) == base and scale(roundness) == steps
+
+
+@pytest.mark.parametrize("geometry, formality, want", [
+    (0.5, 0.5, 0.5), (0.5, 0.0, 0.7), (0.5, 1.0, 0.3), (0.0, 1.0, 0.0), (1.0, 0.0, 1.0)])
+def test_roundness_comes_from_geometry_and_formality(geometry, formality, want):
+    from engine.foundations.character import roundness
+    assert roundness(axes(geometry, formality=formality)) == pytest.approx(want)
 
 
 def test_primitives_and_roles():
@@ -32,8 +39,8 @@ def test_primitives_and_roles():
         f"radius.{n}" for n in range(7)] + ["radius.round"]
     assert ts.get("radius.round").value == {"value": PILL_PX, "unit": "px"}
     got = {r: ts.resolve(r)["value"] for r in roles(0.5)}
-    assert got == {"radius.joined": 0, "radius.chip": 4, "radius.control": 8, "radius.card": 12,
-                   "radius.dialog": 16, "radius.pill": PILL_PX}
+    assert got == {"radius.joined": 0, "radius.chip": 4, "radius.control": 7, "radius.card": 11,
+                   "radius.dialog": 14, "radius.pill": PILL_PX}
 
 
 def test_soft_brands_move_chips_then_controls_to_pills():
@@ -42,8 +49,9 @@ def test_soft_brands_move_chips_then_controls_to_pills():
     assert roles(0.84)["radius.control"] == "radius.2"
     assert roles(0.85)["radius.control"] == "radius.round"
     notes = generate_radius(axes(0.9)).notes
-    assert notes == ["radius.chip: pill shape, geometry 0.9 is soft",
-                     "radius.control: pill shape, geometry 0.9 is soft"]
+    assert notes == ["radius: roundness 0.90 from geometry 0.9 and formality 0.5, base corner 13px",
+                     "radius.chip: pill shape, roundness 0.90 is soft",
+                     "radius.control: pill shape, roundness 0.90 is soft"]
 
 
 @pytest.mark.parametrize("geometry", [i / 20 for i in range(21)])
@@ -53,11 +61,12 @@ def test_every_geometry_is_valid_and_passes(geometry):
     assert gate(ts, [], CHECKS).passed
 
 
-def test_only_geometry_moves_radius():
+def test_only_geometry_and_formality_move_radius():
     base = [(t.path, t.value) for t in generate_radius(axes()).tokens.tokens()]
-    other = axes(warmth=0.0, contrast=1.0, density=0.0, formality=1.0, motion=1.0,
-                 type_personality=0.0)
+    other = axes(warmth=0.0, contrast=1.0, density=0.0, motion=1.0, type_personality=0.0)
     assert [(t.path, t.value) for t in generate_radius(other).tokens.tokens()] == base
+    assert [(t.path, t.value) for t in generate_radius(axes(formality=0.0)).tokens.tokens()] \
+        != base
 
 
 def test_checks_name_the_token_and_the_fix():
@@ -84,4 +93,4 @@ def test_radius_has_no_modes_and_prints_plain_css():
     result = build_system(axes(), "#3366FF")
     assert all(not t.modes for t in result.tokens.tokens() if t.path.startswith("radius."))
     css = to_css(result.tokens)
-    assert "  --radius-control: var(--radius-2);" in css and "  --radius-2: 8px;" in css
+    assert "  --radius-control: var(--radius-2);" in css and "  --radius-2: 7px;" in css

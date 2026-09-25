@@ -120,7 +120,7 @@
   --color-action-danger-hover: var(--color-danger-700);
   --color-action-danger-pressed: var(--color-danger-800);
   --color-action-disabled: var(--color-neutral-200);
-  --color-line-subtle: var(--color-neutral-200);
+  --color-line-subtle: var(--color-neutral-100);
   --color-line-input: var(--color-neutral-500);
   --color-line-selected: var(--color-brand-700);
   --color-line-danger: var(--color-danger-600);
@@ -178,12 +178,12 @@
   --space-card-padding: var(--space-8);
   --space-region-gap: var(--space-32);
   --radius-0: 0px;
-  --radius-1: 6px;
-  --radius-2: 12px;
-  --radius-3: 18px;
-  --radius-4: 24px;
-  --radius-5: 36px;
-  --radius-6: 48px;
+  --radius-1: 7px;
+  --radius-2: 14px;
+  --radius-3: 21px;
+  --radius-4: 28px;
+  --radius-5: 42px;
+  --radius-6: 56px;
   --radius-round: 9999px;
   --radius-joined: var(--radius-0);
   --radius-chip: var(--radius-round);
@@ -207,14 +207,16 @@
   --border-focus-ring-offset: var(--border-width-2);
   --border-style-default: var(--border-line-solid);
   --border-style-placeholder: var(--border-line-dashed);
-  --elevation-shadow-light-1: 0px 1px 3px 0px #0000001D, 0px 0px 1px 0px #0000000F;
-  --elevation-shadow-light-2: 0px 2px 6px -1px #00000024, 0px 1px 2px 0px #00000012;
-  --elevation-shadow-light-3: 0px 6px 16px -3px #0000002C, 0px 2px 4px 0px #00000016;
-  --elevation-shadow-light-4: 0px 12px 32px -6px #0000003A, 0px 4px 8px 0px #0000001D;
-  --elevation-shadow-dark-1: 0px 1px 3px 0px #00000049, 0px 0px 1px 0px #00000024;
-  --elevation-shadow-dark-2: 0px 2px 6px -1px #0000005B, 0px 1px 2px 0px #0000002D;
-  --elevation-shadow-dark-3: 0px 6px 16px -3px #0000006D, 0px 2px 4px 0px #00000036;
-  --elevation-shadow-dark-4: 0px 12px 32px -6px #00000091, 0px 4px 8px 0px #00000049;
+  --elevation-shadow-light-1: 0px 1px 4px 0px #0000002A, 0px 0px 1px 0px #00000015;
+  --elevation-shadow-light-2: 0px 2px 8px -1px #00000035, 0px 1px 2px 0px #0000001A;
+  --elevation-shadow-light-3: 0px 6px 20px -3px #0000003F, 0px 2px 4px 0px #0000001F;
+  --elevation-shadow-light-4: 0px 12px 41px -6px #00000054, 0px 4px 8px 0px #0000002A;
+  --elevation-shadow-light-inset: inset 0px 1px 4px 0px #0000001E;
+  --elevation-shadow-dark-1: 0px 1px 4px 0px #00000069, 0px 0px 1px 0px #00000034;
+  --elevation-shadow-dark-2: 0px 2px 8px -1px #00000083, 0px 1px 2px 0px #00000042;
+  --elevation-shadow-dark-3: 0px 6px 20px -3px #0000009D, 0px 2px 4px 0px #0000004F;
+  --elevation-shadow-dark-4: 0px 12px 41px -6px #000000CC, 0px 4px 8px 0px #00000066;
+  --elevation-shadow-dark-inset: inset 0px 1px 4px 0px #0000004A;
   --elevation-z-0: 0;
   --elevation-z-100: 100;
   --elevation-z-1000: 1000;
@@ -225,6 +227,7 @@
   --elevation-lifted: var(--elevation-shadow-light-2);
   --elevation-popover: var(--elevation-shadow-light-3);
   --elevation-dialog: var(--elevation-shadow-light-4);
+  --elevation-inset: var(--elevation-shadow-light-inset);
   --elevation-order-base: var(--elevation-z-0);
   --elevation-order-sticky: var(--elevation-z-100);
   --elevation-order-dropdown: var(--elevation-z-1000);
@@ -449,6 +452,7 @@
   --elevation-lifted: var(--elevation-shadow-dark-2);
   --elevation-popover: var(--elevation-shadow-dark-3);
   --elevation-dialog: var(--elevation-shadow-dark-4);
+  --elevation-inset: var(--elevation-shadow-dark-inset);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -515,6 +519,7 @@
     --elevation-lifted: var(--elevation-shadow-dark-2);
     --elevation-popover: var(--elevation-shadow-dark-3);
     --elevation-dialog: var(--elevation-shadow-dark-4);
+    --elevation-inset: var(--elevation-shadow-dark-inset);
   }
 }
 
@@ -559,6 +564,10 @@
   --color-status-info-text: var(--color-info-800);
   --color-status-info-soft: var(--color-info-50);
   --color-status-info-strong: var(--color-info-800);
+  --border-outline: var(--border-width-2);
+  --border-emphasis: var(--border-width-3);
+  --border-active: var(--border-width-3);
+  --border-focus-ring-width: var(--border-width-4);
 }
 
 @media (prefers-contrast: more) {
@@ -603,6 +612,10 @@
     --color-status-info-text: var(--color-info-800);
     --color-status-info-soft: var(--color-info-50);
     --color-status-info-strong: var(--color-info-800);
+    --border-outline: var(--border-width-2);
+    --border-emphasis: var(--border-width-3);
+    --border-active: var(--border-width-3);
+    --border-focus-ring-width: var(--border-width-4);
   }
 }
 

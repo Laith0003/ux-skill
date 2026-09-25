@@ -1,8 +1,9 @@
-"""Radius foundation: a corner scale set by the geometry axis and the
-roles that use it.
+"""Radius foundation: a corner scale set by the roundness the geometry and
+formality axes give, and the roles that use it.
 
-The base corner is 2px for a sharp brand (geometry 0) and 12px for a soft
-one (geometry 1); the scale steps are fixed multiples of it. Rounded
+The base corner runs from 0px for a sharp, formal brand to 14px for a
+soft, playful one (character.roundness); the scale steps are fixed
+multiples of it, so controls, cards and dialogs round together. Rounded
 brands move chips, then controls, to the pill shape. Containers nest, so
 a dialog is never less rounded than a card inside it.
 """
@@ -10,6 +11,7 @@ from __future__ import annotations
 
 from typing import Dict, List, Tuple
 
+from engine.foundations import character
 from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check
 from engine.foundations.tokens import Token, TokenSet
@@ -18,17 +20,18 @@ from engine.synthesizer.axes import AxisValues
 # radius.<n> = base corner x multiple
 MULTIPLES = (0, 0.5, 1, 1.5, 2, 3, 4)
 PILL_PX = 9999
-CHIP_PILL_FROM, CONTROL_PILL_FROM = 0.6, 0.85  # geometry thresholds
+CHIP_PILL_FROM, CONTROL_PILL_FROM = 0.6, 0.85  # roundness thresholds
+MAX_BASE_PX = 14
 
 
-def base_corner(geometry: float) -> int:
-    """2px at geometry 0 to 12px at geometry 1, in 2px steps."""
-    return 2 * int(1 + 5 * geometry + 0.5)
+def base_corner(roundness: float) -> int:
+    """0px at roundness 0 to 14px at roundness 1, to the nearest pixel."""
+    return int(MAX_BASE_PX * roundness + 0.5)
 
 
-def scale(geometry: float) -> List[int]:
+def scale(roundness: float) -> List[int]:
     """Corner sizes for radius.0 .. radius.6, strictly increasing."""
-    b = base_corner(geometry)
+    b = base_corner(roundness)
     out: List[int] = []
     for m in MULTIPLES:
         v = int(b * m + 0.5)
@@ -36,12 +39,12 @@ def scale(geometry: float) -> List[int]:
     return out
 
 
-def roles(geometry: float) -> Dict[str, str]:
+def roles(roundness: float) -> Dict[str, str]:
     """Semantic radius role -> primitive it aliases."""
     return {
         "radius.joined": "radius.0",
-        "radius.chip": "radius.round" if geometry >= CHIP_PILL_FROM else "radius.1",
-        "radius.control": "radius.round" if geometry >= CONTROL_PILL_FROM else "radius.2",
+        "radius.chip": "radius.round" if roundness >= CHIP_PILL_FROM else "radius.1",
+        "radius.control": "radius.round" if roundness >= CONTROL_PILL_FROM else "radius.2",
         "radius.card": "radius.3",
         "radius.dialog": "radius.4",
         "radius.pill": "radius.round",
@@ -49,15 +52,17 @@ def roles(geometry: float) -> Dict[str, str]:
 
 
 def generate_radius(axes: AxisValues) -> Generated:
+    r = character.roundness(axes)
     ts = TokenSet()
-    for n, px in enumerate(scale(axes.geometry)):
+    for n, px in enumerate(scale(r)):
         ts.add(Token(f"radius.{n}", "dimension", {"value": px, "unit": "px"}))
     ts.add(Token("radius.round", "dimension", {"value": PILL_PX, "unit": "px"}))
-    notes: List[str] = []
-    for role, prim in roles(axes.geometry).items():
+    notes: List[str] = [f"radius: roundness {r:.2f} from geometry {axes.geometry:g} and formality "
+                        f"{axes.formality:g}, base corner {base_corner(r)}px"]
+    for role, prim in roles(r).items():
         ts.add(Token(role, "dimension", "{" + prim + "}", layer="semantic"))
         if prim == "radius.round" and role != "radius.pill":
-            notes.append(f"{role}: pill shape, geometry {axes.geometry:g} is soft")
+            notes.append(f"{role}: pill shape, roundness {r:.2f} is soft")
     return Generated(tokens=ts, notes=notes)
 
 

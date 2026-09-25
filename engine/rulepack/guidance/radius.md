@@ -2,7 +2,7 @@
 
 ## Summary
 
-Radius sets the corners of every shape. The geometry axis sets a base corner, from sharp to soft, and the scale is fixed multiples of it. Six roles say what a shape is: a joined seam, a chip, a control, a card, a dialog, a pill. Radius does not govern the color or width of a focus ring; color and border do.
+Radius sets the corners of every shape. The geometry axis sets a base corner from sharp (0px) to soft (14px), a playful brand rounds it up and a formal one squares it off (decisions/roundness.md), and the scale is fixed multiples of it, so controls, cards and dialogs round together. Six roles say what a shape is: a joined seam, a chip, a control, a card, a dialog, a pill. Radius does not govern the color or width of a focus ring; color and border do.
 
 ## Principles
 
@@ -11,7 +11,7 @@ Radius sets the corners of every shape. The geometry axis sets a base corner, fr
 - **One rule per silhouette.** Every exposed corner of one shape follows the same role; only shared seams are square.
 - **Same shape in every state.** A control keeps its radius in default, hover, pressed, focus and disabled.
 - **Few families per view.** A screen uses as few radius roles as its structure needs.
-- **Softness is a brand setting.** A softer or sharper look moves the whole scale through the geometry axis, not one role at a time.
+- **Softness is a brand setting.** A softer or sharper look moves the whole scale through the geometry and formality axes, not one role at a time.
 
 ## Roles
 
@@ -39,11 +39,11 @@ Nested shapes step down. A container inside a container without padding between 
 
 ## Modes
 
-Radius varies on no axis: corners are the same in every scheme, contrast, density, direction and motion setting. The geometry axis of the brief sets them once, at build time.
+Radius varies on no axis: corners are the same in every scheme, contrast, density, direction and motion setting. The geometry and formality axes of the brief set them once, at build time.
 
 ## Changing the system
 
-1. Corners move with the geometry axis: the whole scale grows softer or sharper together. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+1. Corners move with the geometry and formality axes: the whole scale grows softer or sharper together, and chips then controls turn into pills at the soft end. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
 2. The build keeps the scale increasing, radius.dialog at least radius.card, radius.joined at 0 and radius.pill at 999px or more; nested and joined corners follow from those roles.
 3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
 4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.

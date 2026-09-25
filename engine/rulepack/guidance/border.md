@@ -43,11 +43,11 @@ Emphasis and active widths are used sparingly: when they appear everywhere, the 
 
 ## Modes
 
-Border varies on no axis. Widths are the same in every scheme, contrast, density, direction and motion setting. Density changes how many borders a view uses, not their width; in dense views separators replace some of the space.
+Border varies on contrast. Under high contrast the outline, the emphasis edge, the active edge and the focus ring are each one pixel heavier; the separator and the ring's offset keep their width (decisions/high-contrast-borders.md). Widths are the same in every scheme, density, direction and motion setting. Density changes how many borders a view uses, not their width; in dense views separators replace some of the space.
 
 ## Changing the system
 
-1. Border widths move with the contrast axis: at 0.66 or more the focus ring is one step wider. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+1. Border widths move with the contrast axis: at 0.66 or more the focus ring is one step wider. The high contrast mode adds a pixel to the outline, emphasis, active edge and ring. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
 2. The build keeps widths whole pixels, emphasis and active heavier than the outline, the separator no heavier than the outline, and the focus ring at least 2px with an offset of at least 1px (decisions/whole-pixel-borders.md, decisions/ring-offset.md); a failed check names the role.
 3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
 4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.
@@ -62,6 +62,7 @@ Audits the width roles and the rules between them: whole pixels, the weight orde
 - `active-border`: the selected edge is wider than the resting outline, so selection is not shown by color alone (WCAG 1.4.1).
 - `border-weight-order`: emphasis is heavier than the outline, and the separator is no heavier than the outline.
 - `border-whole-pixels`: every width is a whole number of pixels.
+- `high-contrast-borders`: under high contrast no edge is thinner than at standard contrast, and the ring and the outline are heavier.
 
 ## Beyond the gate
 

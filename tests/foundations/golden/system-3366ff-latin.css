@@ -179,11 +179,11 @@
   --space-region-gap: var(--space-24);
   --radius-0: 0px;
   --radius-1: 4px;
-  --radius-2: 8px;
-  --radius-3: 12px;
-  --radius-4: 16px;
-  --radius-5: 24px;
-  --radius-6: 32px;
+  --radius-2: 7px;
+  --radius-3: 11px;
+  --radius-4: 14px;
+  --radius-5: 21px;
+  --radius-6: 28px;
   --radius-round: 9999px;
   --radius-joined: var(--radius-0);
   --radius-chip: var(--radius-1);
@@ -207,14 +207,16 @@
   --border-focus-ring-offset: var(--border-width-2);
   --border-style-default: var(--border-line-solid);
   --border-style-placeholder: var(--border-line-dashed);
-  --elevation-shadow-light-1: 0px 1px 3px 0px #00000017, 0px 0px 1px 0px #0000000B;
-  --elevation-shadow-light-2: 0px 2px 6px -1px #0000001D, 0px 1px 2px 0px #0000000E;
-  --elevation-shadow-light-3: 0px 6px 16px -3px #00000022, 0px 2px 4px 0px #00000011;
-  --elevation-shadow-light-4: 0px 12px 32px -6px #0000002E, 0px 4px 8px 0px #00000017;
-  --elevation-shadow-dark-1: 0px 1px 3px 0px #00000039, 0px 0px 1px 0px #0000001D;
-  --elevation-shadow-dark-2: 0px 2px 6px -1px #00000048, 0px 1px 2px 0px #00000024;
-  --elevation-shadow-dark-3: 0px 6px 16px -3px #00000056, 0px 2px 4px 0px #0000002B;
-  --elevation-shadow-dark-4: 0px 12px 32px -6px #00000073, 0px 4px 8px 0px #00000039;
+  --elevation-shadow-light-1: 0px 1px 3px 0px #0000001A, 0px 0px 1px 0px #0000000D;
+  --elevation-shadow-light-2: 0px 2px 6px -1px #00000020, 0px 1px 2px 0px #00000010;
+  --elevation-shadow-light-3: 0px 6px 16px -3px #00000026, 0px 2px 4px 0px #00000013;
+  --elevation-shadow-light-4: 0px 12px 32px -6px #00000033, 0px 4px 8px 0px #0000001A;
+  --elevation-shadow-light-inset: inset 0px 1px 3px 0px #00000014;
+  --elevation-shadow-dark-1: 0px 1px 3px 0px #00000040, 0px 0px 1px 0px #00000020;
+  --elevation-shadow-dark-2: 0px 2px 6px -1px #00000050, 0px 1px 2px 0px #00000028;
+  --elevation-shadow-dark-3: 0px 6px 16px -3px #00000060, 0px 2px 4px 0px #00000030;
+  --elevation-shadow-dark-4: 0px 12px 32px -6px #00000080, 0px 4px 8px 0px #00000040;
+  --elevation-shadow-dark-inset: inset 0px 1px 3px 0px #00000033;
   --elevation-z-0: 0;
   --elevation-z-100: 100;
   --elevation-z-1000: 1000;
@@ -225,6 +227,7 @@
   --elevation-lifted: var(--elevation-shadow-light-2);
   --elevation-popover: var(--elevation-shadow-light-3);
   --elevation-dialog: var(--elevation-shadow-light-4);
+  --elevation-inset: var(--elevation-shadow-light-inset);
   --elevation-order-base: var(--elevation-z-0);
   --elevation-order-sticky: var(--elevation-z-100);
   --elevation-order-dropdown: var(--elevation-z-1000);
@@ -434,6 +437,7 @@
   --elevation-lifted: var(--elevation-shadow-dark-2);
   --elevation-popover: var(--elevation-shadow-dark-3);
   --elevation-dialog: var(--elevation-shadow-dark-4);
+  --elevation-inset: var(--elevation-shadow-dark-inset);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -498,6 +502,7 @@
     --elevation-lifted: var(--elevation-shadow-dark-2);
     --elevation-popover: var(--elevation-shadow-dark-3);
     --elevation-dialog: var(--elevation-shadow-dark-4);
+    --elevation-inset: var(--elevation-shadow-dark-inset);
   }
 }
 
@@ -546,6 +551,10 @@
   --color-status-info-text: var(--color-info-800);
   --color-status-info-soft: var(--color-info-50);
   --color-status-info-strong: var(--color-info-800);
+  --border-outline: var(--border-width-2);
+  --border-emphasis: var(--border-width-3);
+  --border-active: var(--border-width-3);
+  --border-focus-ring-width: var(--border-width-3);
 }
 
 @media (prefers-contrast: more) {
@@ -594,6 +603,10 @@
     --color-status-info-text: var(--color-info-800);
     --color-status-info-soft: var(--color-info-50);
     --color-status-info-strong: var(--color-info-800);
+    --border-outline: var(--border-width-2);
+    --border-emphasis: var(--border-width-3);
+    --border-active: var(--border-width-3);
+    --border-focus-ring-width: var(--border-width-3);
   }
 }
 
