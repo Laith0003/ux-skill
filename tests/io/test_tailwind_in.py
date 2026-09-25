@@ -492,6 +492,7 @@ def test_a_nested_dark_variant_is_set_on_every_selector_it_names():
     ("&:where(.dark .app, .dark .app *)", ".dark", ".app"),
     ("&:where(.dark > .shell, .dark > .shell *)", ".dark", ".shell"),
     ("&:is(html.night .panel)", ".night", ".panel"),
+    ("&:where(:not(.light) .content, :not(.light) .content *)", None, ".content"),
 ])
 def test_a_dark_variant_is_read_on_the_selector_that_opens_each_member(variant, dark, inner):
     text = (f"@custom-variant dark ({variant});\n"
@@ -501,4 +502,27 @@ def test_a_dark_variant_is_read_on_the_selector_that_opens_each_member(variant, 
     assert "scheme:dark" not in imported.tokens.get("bg").modes
     assert not any("is the dark scheme" in i.message for i in imported.report.notes)
     from engine.io.css_in import dark_variant
-    assert dark_variant(text)[3] == (dark,)
+    assert dark_variant(text)[3] == ((dark,) if dark else ())
+
+
+@pytest.mark.parametrize("variant, dark", [
+    ("&:where(.dark .card, .dark .card *), &:where([data-theme=dark] .x)",
+     (".dark", '[data-theme="dark"]')),
+    ("&:where(.content[data-theme=dark])", ('[data-theme="dark"]',)),
+    ("&:where(.theme .dark .card)", (".dark",)),
+    ("&:where(.shell .theme-dark .card)", (".theme-dark",)),
+    ("&:where([data-theme=night] .x)", ('[data-theme="night"]',)),
+])
+def test_the_dark_selector_is_the_one_that_names_dark_in_every_group(variant, dark):
+    from engine.io.css_in import dark_variant
+    text = f"@custom-variant dark ({variant});\n:root {{ --bg: #fff; }}\n"
+    assert dark_variant(text)[3] == dark
+
+
+def test_a_compound_that_names_dark_keeps_its_other_class_out_of_the_scheme():
+    text = ("@custom-variant dark (&:where(.content[data-theme=dark]));\n"
+            ":root { --bg: #fff; }\n.content { --bg: #fafafa; }\n"
+            "[data-theme=dark] { --bg: #000; }\n")
+    imported = _css(text)
+    # Were .content dark too, its value would clash with the dark rule's.
+    assert imported.tokens.get("bg").modes.get("scheme:dark") == "#000000"
