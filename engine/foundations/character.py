@@ -64,9 +64,10 @@ BRAND_HOLD = 0.5
 # Chroma at and below SAT_CHROMA[0] reads as grey; at SAT_CHROMA[1] and above
 # a brand reads fully saturated (saturation()).
 SAT_CHROMA = (0.03, 0.12)
-# OKLCH lightness a brand fill carries: none at FILL_L[0] (very dark), in
-# full from FILL_L[1] to FILL_L[2], none again at FILL_L[3] (very light).
-FILL_L = (0.30, 0.42, 0.74, 0.86)
+# How far a brand must stand from white (the page) and from black (ink), in
+# OKLab distance, to carry a fill: none at REACH[0] and below, in full at
+# REACH[1] and above (reach()).
+REACH = (0.04, 0.12)
 # How much the brand's own fill evidence adds to the fill score, and how
 # much its absence adds to accent and edge (brand_role_scores). A lead of 1
 # is at least any accent or edge score the axes can reach, so a brand with
@@ -81,14 +82,27 @@ BRAND_ARGUE = 0.25
 # never pulls a fill further from the brand than that.
 BLACK_TEXT_COST = 0.12
 NATURAL_L = (0.60, 0.72)
-# A cool, saturated brand's supporting accent leans to its own hue at this
-# share of the supporting chroma (support_seed): analogous and quiet, never a
-# second saturated hue from the blue, purple and pink arc anti-slop bans.
+# On a dark page black text on a mid tone reads muddier, so the same cost
+# runs from full at NATURAL_L_DARK[0] to nothing at NATURAL_L_DARK[1]: the
+# dark factor of one continuous rule.
+NATURAL_L_DARK = (0.72, 0.84)
+# A cool brand's supporting accent stays in its own family (support_seed):
+# up to FAMILY_SPAN degrees from the brand hue, moved by warmth and held in
+# by formality, at a share of the supporting chroma from SUPPORT_QUIET for a
+# muted brief to SUPPORT_QUIET + SUPPORT_LOUD for a bold one.
+FAMILY_SPAN = 30.0
 SUPPORT_QUIET = 0.35
-# The coolness from which a brand's supporting accent leans all the way to
-# its own hue; below it the lean falls in proportion to nothing on the warm
-# side.
+SUPPORT_LOUD = 0.45
+# The coolness from which a brand's supporting accent stays wholly in its
+# family; below it the brand-led accent returns in proportion, all of it on
+# the warm side.
 QUIET_COOLNESS = 2.0 / 3.0
+# The pairings anti-slop bans, as hue arcs, each [start, end) in OKLCH
+# degrees (banned_pair): a blue brand with a purple or pink accent, a purple
+# brand with a blue one, and a cool brand (coolness BANNED_COOL and up) with
+# a pink one.
+BLUE_ARC, PURPLE_ARC, PINK_ARC = (215.0, 285.0), (285.0, 330.0), (330.0, 380.0)
+BANNED_COOL = 0.75
 # A grey brand's supporting accent hue at warmth 0 and at warmth 1: violet
 # to rose, the one arc of the wheel that keeps STATUS_CLEARANCE from every
 # status hue at every warmth (39 degrees at the least).
@@ -155,18 +169,24 @@ def neutral_tint(axes: AxisValues, brand_hue: float,
     leaned by warmth. The brand's own hue sits at a whisper of chroma
     (NEUTRAL_C[0], weighted by hue_weight, so a grey brand gives true grey).
     Warmth adds a lean toward the warm or the cool anchor in the OKLab a/b
-    plane, up to LEAN_C at warmth 0 or 1 and nothing at 0.5, and a brand
-    with a hue holds back BRAND_HOLD of it. So a grey brand in a warm
-    industry gets a grey with a trace of sand, and a blue brand with a warm
-    tone keeps a cool or a near true grey instead of beige. Continuous in
+    plane, up to LEAN_C at warmth 0 or 1 and nothing at 0.5. For a brand
+    with a hue the lean runs along the brand's own hue axis only (its
+    projection there), at 1 - BRAND_HOLD of its size: a warm brief deepens
+    or thins the whisper toward grey, and never turns it through a third
+    hue. So a grey brand in a warm industry gets a grey with a trace of
+    sand, a blue brand with a warm tone a thinner blue grey, and an orange
+    brand with a cool brief a thinner warm grey, never rose. Continuous in
     the axes and in the brand color: the lean is zero where the anchor
-    switches."""
+    switches, and hue_weight blends the free lean into the projected one."""
     weight = hue_weight(brand_chroma)
     anchor = WARM_HUE if axes.warmth >= 0.5 else COOL_HUE
-    lean = LEAN_C * warm_pull(axes) * (1.0 - BRAND_HOLD * weight)
+    size = LEAN_C * warm_pull(axes)
+    ux, uy = math.cos(math.radians(brand_hue)), math.sin(math.radians(brand_hue))
+    fx, fy = size * math.cos(math.radians(anchor)), size * math.sin(math.radians(anchor))
+    along = (fx * ux + fy * uy) * (1.0 - BRAND_HOLD)
     whisper = NEUTRAL_C[0] * weight
-    a = whisper * math.cos(math.radians(brand_hue)) + lean * math.cos(math.radians(anchor))
-    b = whisper * math.sin(math.radians(brand_hue)) + lean * math.sin(math.radians(anchor))
+    a = whisper * ux + (1.0 - weight) * fx + weight * along * ux
+    b = whisper * uy + (1.0 - weight) * fy + weight * along * uy
     chroma = math.hypot(a, b)
     if chroma < 1e-12:
         return brand_hue % 360.0, 0.0
@@ -228,30 +248,35 @@ def saturation(chroma: float) -> float:
     return clamp((chroma - SAT_CHROMA[0]) / (SAT_CHROMA[1] - SAT_CHROMA[0]))
 
 
-def mid_lightness(lightness: float) -> float:
-    """1 for a mid tone that can carry a fill (FILL_L[1] to FILL_L[2]),
-    falling in proportion to 0 at a very dark (FILL_L[0]) or a very light
-    (FILL_L[3]) brand."""
-    return clamp(min((lightness - FILL_L[0]) / (FILL_L[1] - FILL_L[0]),
-                     (FILL_L[3] - lightness) / (FILL_L[3] - FILL_L[2])))
+def reach(lightness: float, chroma: float) -> float:
+    """How far a brand stands apart from the page and from ink, 0 to 1: its
+    OKLab distance from the nearer of white and black, 0 at REACH[0] and
+    below, 1 at REACH[1] and above, in proportion between. A saturated
+    yellow or navy stands well apart from both; a near white tint or a near
+    black does not."""
+    near = min(math.hypot(1.0 - lightness, chroma), math.hypot(lightness, chroma))
+    return clamp((near - REACH[0]) / (REACH[1] - REACH[0]))
 
 
 def brand_fill_evidence(lightness: float, chroma: float) -> float:
     """How strongly the brand color argues for filling the main action, 0
-    to 1: saturated and a mid tone. A very light, very dark or near grey
-    brand argues for accent or edge instead. The text on the fill never
-    argues against it here: white or black always reaches 4.58:1 (the square
-    root of 21) on any color, and the fidelity rule picks which."""
-    return round(saturation(chroma) * mid_lightness(lightness), 6)
+    to 1: saturated, and standing apart from the page and from ink (reach).
+    A near grey, a near white tint or a near black brand argues for accent
+    or edge instead; a saturated yellow or navy does not. The text on the
+    fill never argues against it here: white or black always reaches 4.58:1
+    (the square root of 21) on any color, and the fidelity rule picks
+    which."""
+    return round(saturation(chroma) * reach(lightness, chroma), 6)
 
 
-def black_text_cost(lightness: float, chroma: float) -> float:
+def black_text_cost(lightness: float, chroma: float, dark: bool = False) -> float:
     """What black text on a fill costs in naturalness, in OKLab distance: up
     to BLACK_TEXT_COST on a saturated fill at NATURAL_L[0] or darker,
     nothing on a grey fill or one at NATURAL_L[1] or lighter, in proportion
-    between. The fidelity rule weighs it against a move off the brand."""
-    return BLACK_TEXT_COST * saturation(chroma) * clamp(
-        (NATURAL_L[1] - lightness) / (NATURAL_L[1] - NATURAL_L[0]))
+    between; on a dark page the same ramp sits at NATURAL_L_DARK. The
+    fidelity rule weighs it against a move off the brand."""
+    lo, hi = NATURAL_L_DARK if dark else NATURAL_L
+    return BLACK_TEXT_COST * saturation(chroma) * clamp((hi - lightness) / (hi - lo))
 
 
 def coolness(hue: float) -> float:
@@ -259,6 +284,34 @@ def coolness(hue: float) -> float:
     anchor (blue and violet), 0.5 a quarter turn away (green, pink), 0 on
     the warm side."""
     return clamp(0.5 + 0.75 * math.cos(math.radians(hue - COOL_HUE)))
+
+
+def _in_arc(hue: float, arc: Tuple[float, float]) -> bool:
+    lo, hi = arc
+    return lo <= hue % 360.0 < hi or lo <= hue % 360.0 + 360.0 < hi
+
+
+def banned_pair(brand_hue: float, support_hue: float) -> bool:
+    """Whether a brand hue and a supporting hue make a pairing anti-slop
+    bans: a blue brand with a purple or pink accent, a purple brand with a
+    blue one, or a cool brand with a pink one (the arcs above)."""
+    return (_in_arc(brand_hue, BLUE_ARC)
+            and (_in_arc(support_hue, PURPLE_ARC) or _in_arc(support_hue, PINK_ARC))) \
+        or (_in_arc(brand_hue, PURPLE_ARC) and _in_arc(support_hue, BLUE_ARC)) \
+        or (coolness(brand_hue) >= BANNED_COOL and _in_arc(support_hue, PINK_ARC))
+
+
+def clear_of_banned(brand_hue: float, hue: float) -> float:
+    """The hue itself when it forms no banned pairing with the brand, else
+    the first hue that does not on the short arc from it back toward the
+    brand hue, in quarter degrees: the edge of the banned arc it sits in, so
+    the hue slides along that edge instead of jumping."""
+    step = 0.25 if hue_delta(hue, brand_hue) >= 0 else -0.25
+    for i in range(1441):
+        h = (hue + i * step) % 360.0
+        if not banned_pair(brand_hue, h):
+            return h
+    return brand_hue % 360.0
 
 
 def _brand_led_support(axes: AxisValues, brand_hue: float) -> float:
@@ -270,23 +323,37 @@ def _brand_led_support(axes: AxisValues, brand_hue: float) -> float:
     return mix_hue((brand_hue + offset) % 360.0, anchor, 0.3 * warm_pull(axes))
 
 
+def family_hue(axes: AxisValues, brand_hue: float) -> float:
+    """A cool brand's supporting hue inside its own family: up to
+    FAMILY_SPAN degrees from the brand hue, toward higher hues as warmth
+    rises and lower as it falls, held closer by formality."""
+    return (brand_hue + FAMILY_SPAN * (2.0 * axes.warmth - 1.0)
+            * (1.0 - 0.5 * axes.formality)) % 360.0
+
+
 def support_seed(axes: AxisValues, brand_hue: float,
                  brand_chroma: float) -> Tuple[float, float, float]:
-    """(L, C, H) of the supporting accent's seed. The brand-led hue
-    (_brand_led_support) moves in a straight line in the OKLab a/b plane
-    toward the brand's own hue at SUPPORT_QUIET of the chroma, as far as the
-    brand is cool, in full from QUIET_COOLNESS up, and its hue reads
-    (hue_weight). So a blue or
-    violet brand gets an analogous, quiet accent and never a pink or a
-    purple beside it, and a warm brand keeps its complementary accent. That
-    hue counts by hue_weight against axes_support_hue, so a grey brand's
-    accent still comes from warmth alone. Chroma is 0.9 of the brand's,
-    between 0.06 and 0.16, times the share the lean keeps."""
-    quiet = clamp(coolness(brand_hue) / QUIET_COOLNESS) * hue_weight(brand_chroma)
-    led, share = ab_mix(_brand_led_support(axes, brand_hue), 1.0, brand_hue, SUPPORT_QUIET,
-                        quiet)
-    hue = ab_mix(axes_support_hue(axes), 1.0, led, 1.0, hue_weight(brand_chroma))[0]
-    return 0.6, min(0.16, max(0.06, 0.9 * brand_chroma)) * share, hue
+    """(L, C, H) of the supporting accent's seed. A warm brand keeps its
+    brand-led accent (_brand_led_support). A cool brand's accent moves in a
+    straight line in the OKLab a/b plane to its own family (family_hue, at
+    a share of the chroma that contrast raises from SUPPORT_QUIET), as far
+    as the brand is cool, in full from QUIET_COOLNESS up, and its hue reads
+    (hue_weight). So warmth, formality and contrast still move a cool
+    brand's accent, inside its family. That hue counts by hue_weight against
+    axes_support_hue, and whatever results is slid out of any banned
+    pairing with the brand (clear_of_banned). Chroma is 0.9 of the brand's,
+    between 0.06 and 0.16, times the share the lean keeps, times hue_weight:
+    an identity with no hue gains none, so a grey brand's accent is a
+    neutral step and a nearly grey brand's nearly one."""
+    weight = hue_weight(brand_chroma)
+    quiet = clamp(coolness(brand_hue) / QUIET_COOLNESS) * weight
+    led, share = ab_mix(_brand_led_support(axes, brand_hue), 1.0, family_hue(axes, brand_hue),
+                        SUPPORT_QUIET + SUPPORT_LOUD * axes.contrast, quiet)
+    hue = ab_mix(axes_support_hue(axes), 1.0, led, 1.0, weight)[0]
+    if weight > 0.0:
+        # a grey brand's hue is noise and its accent has no chroma to pair
+        hue = clear_of_banned(brand_hue, hue)
+    return 0.6, min(0.16, max(0.06, 0.9 * brand_chroma)) * share * weight, hue
 
 
 def support_hue(axes: AxisValues, brand_hue: float, brand_chroma: float) -> float:

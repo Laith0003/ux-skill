@@ -1,10 +1,10 @@
 ---
 id: grey-accent-clear-of-status
 title: A grey brand's supporting accent runs from violet to rose, clear of every status hue
-status: active
+status: superseded
 areas: [color]
 supersedes: grey-brand-support-hue
-superseded_by: null
+superseded_by: grey-support-is-neutral
 ---
 
 # A grey brand's supporting accent runs from violet to rose, clear of every status hue

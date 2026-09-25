@@ -41,6 +41,9 @@ EXPECTED = {
     "fills-on-every-placement", "distinctness-on-a-grey-reference",
     "eyebrow-is-text",
     "edge-weight-inside", "faq-and-footer-contracts", "existing-system-wins",
+    "brand-leads-by-reach", "natural-fill-for-white-text", "neutrals-lean-along-the-brand",
+    "support-in-the-brand-family", "grey-support-is-neutral", "fills-on-every-control-surface",
+    "links-on-status-soft-fills", "distinctness-on-saturated-brands",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",
@@ -67,7 +70,14 @@ SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-e
               "warmth-through-grey": "neutrals-follow-the-brand",
               "support-accent": "support-clear-of-banned-pairs",
               "primary-edge": "fills-on-every-placement",
-              "distinctness-at-a-glance": "distinctness-on-a-grey-reference"}
+              "distinctness-at-a-glance": "distinctness-on-a-grey-reference",
+              "brand-leads-the-role": "brand-leads-by-reach",
+              "natural-text-on-the-brand": "natural-fill-for-white-text",
+              "neutrals-follow-the-brand": "neutrals-lean-along-the-brand",
+              "support-clear-of-banned-pairs": "support-in-the-brand-family",
+              "grey-accent-clear-of-status": "grey-support-is-neutral",
+              "fills-on-every-placement": "fills-on-every-control-surface",
+              "distinctness-on-a-grey-reference": "distinctness-on-saturated-brands"}
 
 
 def test_every_shipped_record_is_valid_and_routed():
