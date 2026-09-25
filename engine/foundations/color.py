@@ -91,11 +91,14 @@ _SEMANTIC: Dict[str, Tuple[str, str]] = {
     "color.line.accent": ("color.brand.600", "color.brand.300"),
     "color.text.support": ("color.support.700", "color.support.300"),
     # Brand-tinted surfaces: a quiet tint, a section band, and the exact
-    # brand as a band with its own text.
-    "color.surface.tint": ("color.brand.50", "color.brand.950"),
-    # In dark the band is brand.900's lightness and hue at no more chroma
-    # than character.dark_band_chroma allows, so it never reads as a slab.
-    "color.surface.band": ("color.brand.100", "color.brand.band-dark"),
+    # brand as a band with its own text. The tint is the brand's hue at the
+    # lightness nearest the page that stands TINT_FLOOR off it, so it never
+    # disappears into the page.
+    "color.surface.tint": ("color.brand.tint-light", "color.brand.tint-dark"),
+    # The band is brand.100's lightness and hue in light and brand.900's in
+    # dark, at no more chroma than character.light_band_chroma and
+    # dark_band_chroma allow, so it never reads as a slab.
+    "color.surface.band": ("color.brand.band-light", "color.brand.band-dark"),
     "color.surface.brand": ("color.brand.exact", "color.brand.exact"),
     "color.text.on-brand": ("color.base.white", "color.base.white"),
     # The primary button on the brand band: a fill from the neutral end on
@@ -111,7 +114,9 @@ _SEMANTIC: Dict[str, Tuple[str, str]] = {
     # surface's in dark: a band off the card that never sits below the page.
     "color.surface.stripe": ("color.neutral.50", "color.neutral.950"),
     "color.surface.header": ("color.neutral.50", "color.neutral.800"),
-    "color.surface.code": ("color.neutral.100", "color.neutral.recess-dark"),
+    # In light the code surface is the lightest neutral that stands CODE_EDGE
+    # off the card, so it reads as a clean well and not as a grey slab.
+    "color.surface.code": ("color.neutral.code-light", "color.neutral.recess-dark"),
     "color.syntax.plain": ("color.neutral.900", "color.neutral.50"),
     "color.syntax.keyword": ("color.brand.700", "color.brand.300"),
     "color.syntax.string": ("color.success.700", "color.success.300"),
@@ -521,6 +526,31 @@ def _neutral_seed(brand_hex: str, axes: AxisValues) -> str:
 
 # How far a recess sits below the page, in OKLCH lightness.
 RECESS_L = 0.035
+# Our floor between a tinted surface and the page: an area of fill is seen
+# at a smaller step than a hairline edge needs (container-edge, 1.2:1).
+TINT_FLOOR = 1.1
+# The container-edge floor (contracts.bind.EDGE_FLOOR). The light code
+# surface stands this far off the card, so a code block needs no edge
+# there, and the light band at least this far off the page, so a band
+# always reads as a section and sits beyond the tint.
+CODE_EDGE = BAND_FLOOR = 1.2
+
+
+def stand_off(ground: str, chroma: float, hue: float, floor: float) -> str:
+    """The color of this hue and chroma at the OKLCH lightness nearest the
+    ground's that measures `floor` against it, darker than a light ground
+    and lighter than a dark one, found by bisection: the least step off the
+    ground that still reads as a surface of its own."""
+    g = hex_to_oklch(ground)[0]
+    darker = g >= 0.5
+    lo, hi = (0.0, g) if darker else (g, 1.0)
+    for _ in range(40):
+        mid = (lo + hi) / 2
+        if (contrast(ground, oklch_to_hex(mid, chroma, hue)) >= floor) == darker:
+            lo = mid
+        else:
+            hi = mid
+    return oklch_to_hex(lo if darker else hi, chroma, hue)
 
 
 def _midpoint(a: str, b: str) -> str:
@@ -565,6 +595,18 @@ def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str,
             # The brand color exactly as given, beside its ramp (a DTCG round
             # trip keeps the order), and the dark band.
             prims[EXACT] = rgb_to_hex(hex_to_rgb(brand_hex))
+            # The tints stand TINT_FLOOR off the page in each scheme (the
+            # neutral ramp's 50 and 950), at the brand's 50 and 950 hue and
+            # chroma.
+            pages = ramp(seeds["neutral"]).stops
+            for scheme, step, page in (("light", 50, pages[50]), ("dark", 950, pages[950])):
+                _, c, h = hex_to_oklch(r.stops[step])
+                prims[f"color.brand.tint-{scheme}"] = stand_off(page, c, h, TINT_FLOOR)
+            band = _with_chroma(r.stops[100], cap=character.light_band_chroma(axes))
+            if contrast(pages[50], band) < BAND_FLOOR:
+                _, c, h = hex_to_oklch(band)
+                band = stand_off(pages[50], c, h, BAND_FLOOR)
+            prims["color.brand.band-light"] = band
             prims["color.brand.band-dark"] = _with_chroma(
                 r.stops[900], cap=character.dark_band_chroma(axes))
             for path, need in NATURAL_FILLS.items():
@@ -577,6 +619,8 @@ def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str,
             # (900) in OKLab.
             prims["color.neutral.recess-light"] = _shift(r.stops[50], -RECESS_L)
             prims["color.neutral.recess-dark"] = _midpoint(r.stops[950], r.stops[900])
+            _, c50, h50 = hex_to_oklch(r.stops[50])
+            prims["color.neutral.code-light"] = stand_off("#FFFFFF", c50, h50, CODE_EDGE)
         if family in STATUS_HUES:
             for step in SOFT_STEPS:
                 prims[f"color.{family}.soft-{step}"] = _with_chroma(

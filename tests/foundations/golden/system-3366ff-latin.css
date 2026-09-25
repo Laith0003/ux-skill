@@ -14,6 +14,9 @@
   --color-brand-900: #03006D;
   --color-brand-950: #01003B;
   --color-brand-exact: #3366FF;
+  --color-brand-tint-light: #E9ECF4;
+  --color-brand-tint-dark: #04114C;
+  --color-brand-band-light: #D0DCF6;
   --color-brand-band-dark: #141F38;
   --color-brand-fill: #3366FF;
   --color-brand-fill-hover: #2655ED;
@@ -34,6 +37,7 @@
   --color-neutral-950: #0C0D0F;
   --color-neutral-recess-light: #EAEBEC;
   --color-neutral-recess-dark: #141618;
+  --color-neutral-code-light: #EAEAEB;
   --color-support-50: #F3F7FF;
   --color-support-100: #D2DEF7;
   --color-support-200: #B6C6E8;
@@ -125,12 +129,12 @@
   --color-surface-raised: var(--color-base-white);
   --color-surface-inverse: var(--color-neutral-900);
   --color-surface-selected: var(--color-brand-100);
-  --color-surface-tint: var(--color-brand-50);
-  --color-surface-band: var(--color-brand-100);
+  --color-surface-tint: var(--color-brand-tint-light);
+  --color-surface-band: var(--color-brand-band-light);
   --color-surface-brand: var(--color-brand-exact);
   --color-surface-stripe: var(--color-neutral-50);
   --color-surface-header: var(--color-neutral-50);
-  --color-surface-code: var(--color-neutral-100);
+  --color-surface-code: var(--color-neutral-code-light);
   --color-text-default: var(--color-neutral-900);
   --color-text-muted: var(--color-neutral-600);
   --color-text-inverse: var(--color-neutral-50);
@@ -204,6 +208,8 @@
   --space-20: 80px;
   --space-24: 96px;
   --space-32: 128px;
+  --space-40: 160px;
+  --space-48: 192px;
   --space-control-gap: var(--space-3);
   --space-control-padding-inline: var(--space-4);
   --space-control-padding-block: var(--space-3);
@@ -355,6 +361,10 @@
   --layout-region-gap-tablet: var(--space-16);
   --layout-region-gap-laptop: var(--space-20);
   --layout-region-gap-desktop: var(--space-24);
+  --layout-landing-gap-phone: var(--space-20);
+  --layout-landing-gap-tablet: var(--space-24);
+  --layout-landing-gap-laptop: var(--space-32);
+  --layout-landing-gap-desktop: var(--space-40);
   --layout-hero-padding-block-phone: var(--space-12);
   --layout-hero-padding-block-tablet: var(--space-16);
   --layout-hero-padding-block-laptop: var(--space-20);
@@ -382,17 +392,23 @@
   --type-size-latin-7: 2.25rem;
   --type-size-latin-8: 2.75rem;
   --type-size-latin-9: 3.375rem;
+  --type-size-latin-10: 5rem;
   --type-leading-latin-0: 1.1;
   --type-leading-latin-1: 1.2;
   --type-leading-latin-2: 1.3;
   --type-leading-latin-3: 1.55;
   --type-tracking-0: 0px;
   --type-tracking-step-5: -0.09px;
-  --type-tracking-step-6: -0.22px;
   --type-tracking-step-7: -0.43px;
   --type-tracking-step-8: -0.71px;
   --type-tracking-step-9: -1.1px;
+  --type-tracking-step-10: -1.62px;
   --type-tracking-label: 0.56px;
+  --type-text-display-font-family: var(--type-face-display);
+  --type-text-display-font-size: calc(var(--type-size-latin-10) * var(--type-text-display-scale));
+  --type-text-display-font-weight: var(--type-weight-600);
+  --type-text-display-letter-spacing: calc(var(--type-tracking-step-10) * var(--type-text-display-scale));
+  --type-text-display-line-height: var(--type-leading-latin-0);
   --type-text-hero-font-family: var(--type-face-display);
   --type-text-hero-font-size: calc(var(--type-size-latin-9) * var(--type-text-hero-scale));
   --type-text-hero-font-weight: var(--type-weight-600);
@@ -409,10 +425,10 @@
   --type-text-section-title-letter-spacing: calc(var(--type-tracking-step-7) * var(--type-text-section-title-scale));
   --type-text-section-title-line-height: var(--type-leading-latin-1);
   --type-text-figure-font-family: var(--type-face-display);
-  --type-text-figure-font-size: var(--type-size-latin-6);
+  --type-text-figure-font-size: var(--type-size-latin-8);
   --type-text-figure-font-weight: var(--type-weight-600);
-  --type-text-figure-letter-spacing: var(--type-tracking-step-6);
-  --type-text-figure-line-height: var(--type-leading-latin-1);
+  --type-text-figure-letter-spacing: var(--type-tracking-step-8);
+  --type-text-figure-line-height: var(--type-leading-latin-0);
   --type-text-heading-2-font-family: var(--type-face-text);
   --type-text-heading-2-font-size: var(--type-size-latin-5);
   --type-text-heading-2-font-weight: var(--type-weight-600);
@@ -471,6 +487,8 @@
   --type-phone-scale-7: 0.75;
   --type-phone-scale-8: 0.6818;
   --type-phone-scale-9: 0.6296;
+  --type-phone-scale-10: 0.4875;
+  --type-phone-display: var(--type-phone-scale-10);
   --type-phone-hero: var(--type-phone-scale-9);
   --type-phone-heading-1: var(--type-phone-scale-8);
   --type-phone-section-title: var(--type-phone-scale-7);
@@ -501,7 +519,7 @@
   --color-surface-raised: var(--color-neutral-800);
   --color-surface-inverse: var(--color-neutral-100);
   --color-surface-selected: var(--color-brand-900);
-  --color-surface-tint: var(--color-brand-950);
+  --color-surface-tint: var(--color-brand-tint-dark);
   --color-surface-band: var(--color-brand-band-dark);
   --color-surface-stripe: var(--color-neutral-950);
   --color-surface-header: var(--color-neutral-800);
@@ -571,7 +589,7 @@
     --color-surface-raised: var(--color-neutral-800);
     --color-surface-inverse: var(--color-neutral-100);
     --color-surface-selected: var(--color-brand-900);
-    --color-surface-tint: var(--color-brand-950);
+    --color-surface-tint: var(--color-brand-tint-dark);
     --color-surface-band: var(--color-brand-band-dark);
     --color-surface-stripe: var(--color-neutral-950);
     --color-surface-header: var(--color-neutral-800);
@@ -640,6 +658,7 @@
   --color-surface-brand: var(--color-brand-fill-high);
   --color-surface-stripe: var(--color-neutral-100);
   --color-surface-header: var(--color-neutral-100);
+  --color-surface-code: var(--color-neutral-100);
   --color-text-default: var(--color-neutral-950);
   --color-text-muted: var(--color-neutral-800);
   --color-text-inverse: var(--color-base-white);
@@ -744,6 +763,7 @@
     --color-surface-brand: var(--color-brand-fill-high);
     --color-surface-stripe: var(--color-neutral-100);
     --color-surface-header: var(--color-neutral-100);
+    --color-surface-code: var(--color-neutral-100);
     --color-text-default: var(--color-neutral-950);
     --color-text-muted: var(--color-neutral-800);
     --color-text-inverse: var(--color-base-white);
@@ -868,6 +888,10 @@
   --layout-region-gap-tablet: var(--space-12);
   --layout-region-gap-laptop: var(--space-16);
   --layout-region-gap-desktop: var(--space-20);
+  --layout-landing-gap-phone: var(--space-16);
+  --layout-landing-gap-tablet: var(--space-20);
+  --layout-landing-gap-laptop: var(--space-24);
+  --layout-landing-gap-desktop: var(--space-32);
   --layout-hero-padding-block-phone: var(--space-10);
   --layout-hero-padding-block-tablet: var(--space-12);
   --layout-hero-padding-block-laptop: var(--space-16);
@@ -1134,7 +1158,9 @@
   --layout-gutter: var(--layout-gutter-phone);
   --layout-margin-inline: var(--layout-margin-inline-phone);
   --layout-region-gap: var(--layout-region-gap-phone);
+  --layout-landing-gap: var(--layout-landing-gap-phone);
   --layout-hero-padding-block: var(--layout-hero-padding-block-phone);
+  --type-text-display-scale: var(--type-phone-display);
   --type-text-hero-scale: var(--type-phone-hero);
   --type-text-heading-1-scale: var(--type-phone-heading-1);
   --type-text-section-title-scale: var(--type-phone-section-title);
@@ -1146,7 +1172,9 @@
     --layout-gutter: var(--layout-gutter-tablet);
     --layout-margin-inline: var(--layout-margin-inline-tablet);
     --layout-region-gap: var(--layout-region-gap-tablet);
+    --layout-landing-gap: var(--layout-landing-gap-tablet);
     --layout-hero-padding-block: var(--layout-hero-padding-block-tablet);
+    --type-text-display-scale: 1;
     --type-text-hero-scale: 1;
     --type-text-heading-1-scale: 1;
     --type-text-section-title-scale: 1;
@@ -1159,6 +1187,7 @@
     --layout-gutter: var(--layout-gutter-laptop);
     --layout-margin-inline: var(--layout-margin-inline-laptop);
     --layout-region-gap: var(--layout-region-gap-laptop);
+    --layout-landing-gap: var(--layout-landing-gap-laptop);
     --layout-hero-padding-block: var(--layout-hero-padding-block-laptop);
   }
 }
@@ -1169,6 +1198,7 @@
     --layout-gutter: var(--layout-gutter-desktop);
     --layout-margin-inline: var(--layout-margin-inline-desktop);
     --layout-region-gap: var(--layout-region-gap-desktop);
+    --layout-landing-gap: var(--layout-landing-gap-desktop);
     --layout-hero-padding-block: var(--layout-hero-padding-block-desktop);
   }
 }

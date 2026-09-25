@@ -33,8 +33,12 @@ from engine.foundations.modes import compress
 from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
 from engine.synthesizer.axes import AxisValues
 
-STEPS = tuple(range(1, 10))
+STEPS = tuple(range(1, 11))
 BODY_STEP = 3
+# The landing display step: the headline of a landing page, above the hero
+# by a size from contrast and formality (character.landing_display_px), not
+# by the ratio, so a landing page reads as one in a quiet system too.
+DISPLAY_STEP = 10
 BODY_PX = 16
 # role -> (size step, face, weight kind, leading index, tracking kind).
 # Faces: display, text, mono, label (the mono face for a technical system,
@@ -42,10 +46,13 @@ BODY_PX = 16
 # heading, regular, medium. Tracking kinds: scale (tightens with size),
 # label (opens up), none.
 ROLES: Dict[str, Tuple[Any, str, str, int, str]] = {
+    "type.text.display": (DISPLAY_STEP, "display", "display", 0, "scale"),
     "type.text.hero": (9, "display", "display", 0, "scale"),
     "type.text.heading-1": (8, "display", "display", 0, "scale"),
     "type.text.section-title": (7, "display", "display", 1, "scale"),
-    "type.text.figure": (6, "display", "display", 1, "scale"),
+    # A proof number reads at the page title's size, so a band of three or
+    # four of them holds a section.
+    "type.text.figure": (8, "display", "display", 0, "scale"),
     "type.text.heading-2": (5, "text", "heading", 1, "scale"),
     "type.text.heading-3": (4, "text", "heading", 2, "none"),
     "type.text.body": (3, "text", "regular", 3, "none"),
@@ -57,7 +64,7 @@ ROLES: Dict[str, Tuple[Any, str, str, int, str]] = {
     "type.text.code": (2, "mono", "regular", 3, "none"),
 }
 READING = ("type.text.body", "type.text.body-small", "type.text.fine")
-HIERARCHY = ("type.text.hero", "type.text.heading-1", "type.text.section-title",
+HIERARCHY = ("type.text.display", "type.text.hero", "type.text.heading-1", "type.text.section-title",
              "type.text.heading-2", "type.text.heading-3", "type.text.body")
 MIN_BODY_PX, MIN_FINE_PX, MIN_READING_LEADING = 16, 12, 1.5
 # Our floor between neighbouring levels of HIERARCHY: a smaller step does
@@ -83,14 +90,15 @@ MONO_LABEL_FROM = 0.5
 ICON_CONTROL_REM = 1.25
 ICON_STROKE_RANGE = (1.0, 3.0)
 # The styles that step down on a phone (every width below the tablet
-# breakpoint): the three largest display styles. Each takes a factor on its
+# breakpoint): the four largest display styles. Each takes a factor on its
 # size from a phone scale whose ratio is PHONE_RATIO_SHARE of the way from
 # 1 to the system's ratio, so a bold system still steps harder than a
 # quiet one; each phone size stays at least 1px above the style below it,
 # and never above its own size. tokens.css multiplies the style's size and
 # letter spacing by --<style>-scale, the factor on a phone and 1 from the
 # tablet breakpoint up, so a page reads one property.
-PHONE_ROLES = ("type.text.hero", "type.text.heading-1", "type.text.section-title")
+PHONE_ROLES = ("type.text.display", "type.text.hero", "type.text.heading-1",
+               "type.text.section-title")
 PHONE_RATIO_SHARE = 0.6
 PHONE_FLOOR_ROLE = "type.text.heading-2"
 
@@ -140,13 +148,18 @@ def _clear_level(px: int, below: int) -> int:
 
 
 def latin_px(axes: AxisValues, body: int = BODY_PX) -> List[int]:
-    """Sizes in px for steps 1..9: body minus 4, body minus 2, body, then
-    the ratio upward, each step at least MIN_LEVEL_RATIO above the one
-    below after rounding."""
+    """Sizes in px for steps 1..10: body minus 4, body minus 2, body, then
+    the ratio upward to the hero at step 9, and the landing display at step
+    10 (character.landing_display_px, scaled with the body size), each step
+    at least MIN_LEVEL_RATIO above the one below after rounding."""
     r = ratio(axes)
     out = [body - 4, body - 2, body]
     for n in STEPS[3:]:
-        out.append(_clear_level(int(body * r ** (n - BODY_STEP) + 0.5), out[-1]))
+        if n == DISPLAY_STEP:
+            want = int(character.landing_display_px(axes) * body / BODY_PX + 0.5)
+        else:
+            want = int(body * r ** (n - BODY_STEP) + 0.5)
+        out.append(_clear_level(want, out[-1]))
     return out
 
 
@@ -211,8 +224,10 @@ def _face_list(face: fonts.Face, *rest: str) -> List[str]:
 
 
 def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
-                  leading_extra: float = 0.0) -> Generated:
-    choice = fonts.choose(axes)
+                  leading_extra: float = 0.0, book_depth: Optional[float] = None) -> Generated:
+    """The type tokens. `book_depth` is the product's book depth from the
+    brief's product_type (fonts.choose), None when the brief does not say."""
+    choice = fonts.choose(axes, book_depth)
     ts = TokenSet()
     faces = {
         "display": _face_list(choice.display, choice.display.generic),
@@ -630,7 +645,7 @@ CHECKS: Tuple[Check, ...] = (
 def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
     a = inputs.audience
     return generate_type(axes, arabic=inputs.arabic, body_px=a.body_px,
-                         leading_extra=a.leading_extra)
+                         leading_extra=a.leading_extra, book_depth=a.book_depth)
 
 
 FOUNDATION = Foundation(name="type", generate=_generate, checks=CHECKS, role_types=ROLE_TYPES)

@@ -195,7 +195,7 @@ def test_the_beta_sections_say_how_to_install_the_beta(name):
 def test_create_asks_for_an_industry_from_the_synthesizer_list():
     gather = _step("### 2. Gather the inputs")
     line = next(line for line in gather.splitlines() if line.strip().startswith("Industries:"))
-    assert re.findall(r"`([a-z-]+)`", line) == sorted(INDUSTRY_SEEDS)
+    assert re.findall(r"`([a-z0-9-]+)`", line) == sorted(INDUSTRY_SEEDS)
     assert "skip" in gather and ".ux/system-brief.json" in gather
 
 

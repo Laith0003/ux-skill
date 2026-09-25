@@ -56,6 +56,23 @@ INDUSTRY_SEEDS: Dict[str, Dict[str, float]] = {
     "gaming":               {"warmth": 0.5,  "contrast": 0.85, "density": 0.7,  "geometry": 0.35, "formality": 0.3,  "motion": 0.85, "type_personality": 0.45},
     "crypto":               {"warmth": 0.25, "contrast": 0.85, "density": 0.7,  "geometry": 0.3,  "formality": 0.55, "motion": 0.7,  "type_personality": 0.3},
     "education":            {"warmth": 0.6,  "contrast": 0.5,  "density": 0.5,  "geometry": 0.6,  "formality": 0.5,  "motion": 0.45, "type_personality": 0.65},
+    # Sturdy and square: plain type, firm contrast, little motion.
+    "construction":         {"warmth": 0.45, "contrast": 0.6,  "density": 0.55, "geometry": 0.3,  "formality": 0.65, "motion": 0.35, "type_personality": 0.35},
+    # A trade catalog: dense, practical, plain type.
+    "b2b-marketplace":      {"warmth": 0.45, "contrast": 0.5,  "density": 0.65, "geometry": 0.45, "formality": 0.6,  "motion": 0.4,  "type_personality": 0.4},
+    # Cool, formal and exact.
+    "security":             {"warmth": 0.25, "contrast": 0.65, "density": 0.55, "geometry": 0.3,  "formality": 0.8,  "motion": 0.35, "type_personality": 0.25},
+    # Clinical supply: calmer and denser than care, less warm.
+    "pharmacy":             {"warmth": 0.5,  "contrast": 0.45, "density": 0.6,  "geometry": 0.55, "formality": 0.65, "motion": 0.35, "type_personality": 0.45},
+}
+
+# Other names for a seeded industry. Each points at a key of INDUSTRY_SEEDS,
+# so the name reaches the same axis seed; it never names a look.
+INDUSTRY_ALIASES: Dict[str, str] = {
+    "building-materials": "construction",
+    "wholesale": "b2b-marketplace",
+    "cybersecurity": "security",
+    "medical-supply": "pharmacy",
 }
 
 
@@ -116,7 +133,44 @@ TONE_NUDGES: Dict[str, Dict[str, float]] = {
     "humanist":     {"type_personality": +0.25, "warmth": +0.10},
     "technical":    {"type_personality": -0.20, "formality": +0.10},
     "precise":      {"type_personality": -0.15, "geometry": -0.10},
+
+    # Common brief words, each weighted by what it says about the axes.
+    "fast":         {"motion": +0.20, "density": +0.05},
+    "quick":        {"motion": +0.15},
+    "dynamic":      {"motion": +0.25, "contrast": +0.05},
+    "lively":       {"motion": +0.20, "warmth": +0.10},
+    "fresh":        {"motion": +0.10, "warmth": +0.05, "contrast": +0.05},
+    "stable":       {"motion": -0.15, "formality": +0.10},
+    "clear":        {"density": -0.15, "contrast": +0.10},
+    "simple":       {"density": -0.20, "contrast": -0.05, "type_personality": -0.05},
+    "clean":        {"density": -0.15, "contrast": -0.05},
+    "efficient":    {"density": +0.15, "type_personality": -0.10},
+    "functional":   {"density": +0.10, "formality": +0.05, "type_personality": -0.10},
+    "premium":      {"density": -0.15, "contrast": +0.10, "formality": +0.15},
+    "elegant":      {"type_personality": +0.20, "density": -0.15, "formality": +0.10},
+    "practical":    {"formality": +0.05, "type_personality": -0.15, "density": +0.05,
+                     "motion": -0.05},
+    "solid":        {"contrast": +0.10, "geometry": -0.10, "formality": +0.05, "motion": -0.05},
+    "robust":       {"contrast": +0.10, "geometry": -0.15},
+    "crisp":        {"contrast": +0.10, "geometry": -0.15},
+    "direct":       {"contrast": +0.10, "formality": +0.05, "motion": -0.05},
+    "vibrant":      {"contrast": +0.20, "warmth": +0.10},
+    "gentle":       {"contrast": -0.15, "geometry": +0.15, "motion": -0.10},
+    "smooth":       {"geometry": +0.15, "motion": +0.05},
+    "modern":       {"type_personality": -0.15, "warmth": -0.05, "density": -0.05},
+    "innovative":   {"type_personality": -0.10, "motion": +0.10},
+    "reliable":     {"formality": +0.10, "motion": -0.05},
+    "trusted":      {"formality": +0.15, "contrast": -0.05},
+    "secure":       {"formality": +0.20, "warmth": -0.10, "motion": -0.10},
+    "expert":       {"formality": +0.15, "type_personality": -0.05},
+    "approachable": {"warmth": +0.15, "formality": -0.10},
+    "welcoming":    {"warmth": +0.20},
+    "caring":       {"warmth": +0.20, "geometry": +0.10},
 }
+
+# The most a brief's character object moves one axis, either way. The host
+# AI passes what a word the engine does not read means as these nudges.
+NUDGE_LIMIT = 0.3
 
 
 # A word's formality weight also reaches geometry and type personality,
@@ -193,10 +247,15 @@ def _seed_from_industry(industry: Optional[str]) -> Dict[str, float]:
         return {name: 0.5 for name in AXIS_NAMES}
     if key in INDUSTRY_SEEDS:
         return dict(INDUSTRY_SEEDS[key])
-    # fuzzy: substring match
+    if key in INDUSTRY_ALIASES:
+        return dict(INDUSTRY_SEEDS[INDUSTRY_ALIASES[key]])
+    # fuzzy: substring match, on the seeds and then on their other names
     for k, v in INDUSTRY_SEEDS.items():
         if key in k or k in key:
             return dict(v)
+    for k, seed in INDUSTRY_ALIASES.items():
+        if key in k or k in key:
+            return dict(INDUSTRY_SEEDS[seed])
     return {name: 0.5 for name in AXIS_NAMES}
 
 
@@ -214,6 +273,21 @@ def _apply_tone_nudges(axes: Dict[str, float], tags: Iterable[str]) -> Dict[str,
             continue
         for axis, delta in word_weights(nudge).items():
             axes[axis] = _clamp(axes[axis] + delta)
+    return axes
+
+
+def _apply_character(axes: Dict[str, float], nudges: Any) -> Dict[str, float]:
+    """A brief's character object: each named axis moves by its nudge,
+    held to NUDGE_LIMIT either way, after the words. The build's inputs
+    check the object and name a bad entry; here an entry that is not a
+    number is skipped."""
+    if not isinstance(nudges, dict):
+        return axes
+    for axis in AXIS_NAMES:
+        value = nudges.get(axis)
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            continue
+        axes[axis] = _clamp(axes[axis] + _clamp(float(value), -NUDGE_LIMIT, NUDGE_LIMIT))
     return axes
 
 
@@ -259,10 +333,13 @@ def compute_axes(brief: Any) -> AxisValues:
     # 3. Must-have tags can nudge too — "data-heavy" must imply density up
     axes = _apply_tone_nudges(axes, must_have)
 
-    # 4. Forbidden tags clamp axes hard
+    # 4. The character object's nudges, after the words
+    axes = _apply_character(axes, g("character", None))
+
+    # 5. Forbidden tags clamp axes hard
     axes = _apply_forbidden_clamps(axes, forbidden)
 
-    # 5. Build the frozen value object
+    # 6. Build the frozen value object
     return AxisValues(
         warmth=axes["warmth"],
         contrast=axes["contrast"],

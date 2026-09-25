@@ -37,9 +37,9 @@ def px(dim):
 
 
 @pytest.mark.parametrize("contrast, sizes, r", [
-    (0.0, [12, 14, 16, 18, 20, 22, 24, 27, 30], 1.11),
-    (0.5, [12, 14, 16, 20, 24, 29, 36, 44, 54], 1.225),
-    (1.0, [12, 14, 16, 21, 29, 38, 52, 69, 93], 1.34),
+    (0.0, [12, 14, 16, 18, 20, 22, 24, 27, 30, 66], 1.11),
+    (0.5, [12, 14, 16, 20, 24, 29, 36, 44, 54, 80], 1.225),
+    (1.0, [12, 14, 16, 21, 29, 38, 52, 69, 93, 101], 1.34),
 ])
 def test_scale_ratio_follows_the_contrast_axis(contrast, sizes, r):
     assert latin_px(axes(contrast=contrast)) == sizes
@@ -52,7 +52,7 @@ def test_arabic_sizes_follow_the_faces_ratio_and_are_never_equal():
     assert scale == 1.15
     latin = latin_px(axes())
     arabic = arabic_px(latin, scale)
-    assert arabic == [14, 16, 18, 23, 28, 33, 41, 51, 62]
+    assert arabic == [14, 16, 18, 23, 28, 33, 41, 51, 62, 92]
     assert all(a >= lat + 1 and a <= lat * 1.2 for a, lat in zip(arabic, latin))
 
 
@@ -70,8 +70,8 @@ def test_three_faces_with_metric_matched_fallbacks():
 
 def test_display_styles_use_the_display_face_and_reading_styles_the_text_face():
     ts = generate_type(axes()).tokens
-    for role in ("type.text.hero", "type.text.heading-1", "type.text.section-title",
-                 "type.text.figure"):
+    for role in ("type.text.display", "type.text.hero", "type.text.heading-1",
+                 "type.text.section-title", "type.text.figure"):
         assert ts.get(role).value["fontFamily"] == "{type.face.display}", role
     for role in ("type.text.heading-2", "type.text.heading-3", "type.text.body",
                  "type.text.ui", "type.text.fine"):

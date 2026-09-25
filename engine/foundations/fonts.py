@@ -13,6 +13,15 @@ the published font files with fontTools.
 choose(axes) picks, for each role, the face nearest the axes by weighted
 distance, ties broken by name: never an industry or keyword table. The
 display face is never the text face.
+
+When the brief says what the product is (audience.BOOK_DEPTH), one more
+dimension counts: how bookish a face is (a serif is, a sans is not)
+against a book target, the depth times the mean of type personality and
+formality (book_target). An app aims at 0, so its display face leans sans
+and its Arabic face moves off a book partner to the nearest interface face;
+an editorial product aims high, so a humanist, formal brief may take a
+serif. Without a product type the dimension counts for nothing and every
+Arabic face is the one drawn beside its Latin face.
 """
 from __future__ import annotations
 
@@ -172,6 +181,11 @@ WEIGHTS: Mapping[str, Tuple[float, float, float, float, float]] = MappingProxyTy
     "display": (1.5, 1.0, 1.0, 1.5, 1.0),
     "mono": (1.0, 1.0, 0.5, 2.0, 0.5),
 })
+# How much the book dimension counts against the place (book_cost), and what
+# an Arabic face that is not the one drawn beside the Latin face costs
+# (arabic_cost). Both apply only when the brief gives a product type.
+BOOK_WEIGHT = 2.0
+PARTNER_GAP = 0.5
 # How far an Arabic face is set above the Latin size at the same step.
 ARABIC_SCALE = (1.05, 1.15)
 
@@ -184,6 +198,56 @@ def place_of(axes: AxisValues) -> Tuple[float, float, float, float, float]:
 def distance(face: Face, axes: AxisValues) -> float:
     w = WEIGHTS[face.role]
     return sum(k * (a - b) ** 2 for k, a, b in zip(w, place_of(axes), face.place))
+
+
+def bookish(face: Face) -> float:
+    """1 for a face drawn for books (a serif, in Latin or Arabic), 0 for an
+    interface face."""
+    return 1.0 if face.generic == "serif" else 0.0
+
+
+def book_target(axes: AxisValues, depth: float) -> float:
+    """How bookish the faces should be, 0 to 1: the product's book depth
+    times the mean of type personality and formality. Continuous in both
+    axes; 0 for an app or software, whatever the axes."""
+    return character.clamp(depth * 0.5 * (axes.type_personality + axes.formality))
+
+
+def book_cost(face: Face, axes: AxisValues, depth: Optional[float]) -> float:
+    """BOOK_WEIGHT times the squared gap between the face's bookishness and
+    the book target; 0 when the brief gives no product type."""
+    if depth is None:
+        return 0.0
+    return BOOK_WEIGHT * (bookish(face) - book_target(axes, depth)) ** 2
+
+
+def _arabic_place(face: Face) -> Tuple[float, ...]:
+    """An Arabic face's place: the mean place of the Latin faces drawn to
+    sit beside it."""
+    partners = [f.place for f in FACES if f.arabic == face.family]
+    if not partners:
+        return (0.5,) * 5
+    return tuple(sum(p[i] for p in partners) / len(partners) for i in range(5))
+
+
+def arabic_cost(face: Face, latin: Face, axes: AxisValues, depth: float) -> float:
+    """What an Arabic face costs beside a Latin one: PARTNER_GAP unless it
+    is the face drawn beside it, its place's weighted distance from the
+    Latin face's place, and its book_cost."""
+    w = WEIGHTS["text"]
+    gap = sum(k * (a - b) ** 2 for k, a, b in zip(w, _arabic_place(face), latin.place))
+    return (0.0 if face.family == latin.arabic else PARTNER_GAP) + gap \
+        + book_cost(face, axes, depth)
+
+
+def arabic_for(latin: Face, axes: AxisValues, depth: Optional[float] = None) -> Face:
+    """The Arabic face beside a Latin face: the one drawn beside it when the
+    brief gives no product type, else the lowest arabic_cost, ties by name."""
+    if depth is None:
+        return BY_FAMILY[latin.arabic]
+    candidates = [f for f in FACES if f.role == "arabic"]
+    return min(candidates, key=lambda f: (round(arabic_cost(f, latin, axes, depth), 9),
+                                          f.family))
 
 
 @dataclass(frozen=True)
@@ -203,16 +267,21 @@ class Choice:
         return tuple(out)
 
 
-def nearest(role: str, axes: AxisValues, exclude: Tuple[str, ...] = ()) -> Face:
+def nearest(role: str, axes: AxisValues, exclude: Tuple[str, ...] = (),
+            depth: Optional[float] = None) -> Face:
     candidates = [f for f in FACES if f.role == role and f.family not in exclude]
-    return min(candidates, key=lambda f: (round(distance(f, axes), 9), f.family))
+    return min(candidates, key=lambda f: (round(distance(f, axes) + book_cost(f, axes, depth),
+                                                9), f.family))
 
 
-def choose(axes: AxisValues) -> Choice:
-    text = nearest("text", axes)
-    display = nearest("display", axes, exclude=(text.family,))
+def choose(axes: AxisValues, depth: Optional[float] = None) -> Choice:
+    """The faces for these axes; `depth` is the product's book depth
+    (audience.Audience.book_depth), None when the brief does not say."""
+    text = nearest("text", axes, depth=depth)
+    display = nearest("display", axes, exclude=(text.family,), depth=depth)
     return Choice(text=text, display=display, mono=nearest("mono", axes),
-                  arabic=BY_FAMILY[text.arabic], arabic_display=BY_FAMILY[display.arabic])
+                  arabic=arabic_for(text, axes, depth),
+                  arabic_display=arabic_for(display, axes, depth))
 
 
 def arabic_scale(latin: Face, arabic: Face) -> float:

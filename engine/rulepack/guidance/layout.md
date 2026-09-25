@@ -23,7 +23,8 @@ Layout sets the page grid and the page regions: three breakpoints that start fou
 - `layout.columns.<tier>`: the number of grid columns in the <tier> tier.
 - `layout.gutter.<tier>`: the gap between grid columns in the <tier> tier.
 - `layout.margin-inline.<tier>`: the space between the viewport edge and the grid in the <tier> tier.
-- `layout.region-gap.<tier>`: the gap between major regions of a page, such as sections of a landing page, in the <tier> tier.
+- `layout.region-gap.<tier>`: the gap between major regions of a product page or an app view, such as a header, the content and the footer, in the <tier> tier.
+- `layout.landing-gap.<tier>`: the gap between the sections of a landing page, in the <tier> tier: 128 to 192px at desktop by density, never below the region gap at its tier (decisions/landing-gap.md).
 - `layout.hero.padding-block.<tier>`: the space above and below the content of a hero in the <tier> tier.
 - `layout.header.padding-block`: the space above and below the content of the page header.
 - `layout.footer.padding-block`: the space above and below the content of the page footer.
@@ -53,7 +54,7 @@ A block spans a whole number of columns and starts and ends on column lines.
 
 ## Modes
 
-Layout varies on density: gutters, margins, the region gap and the hero, header and footer padding take one step less in compact, never below 8px, and the minimum target is 44px in comfortable and 32px in compact. Breakpoints, columns, the container and the measures are the same in every mode. Layout varies on the viewport through the aliases: tokens.css switches each tiered role at the literal breakpoints, since a media query cannot read a custom property, and a density override reaches the alias. The same blocks set the phone factor of the hero, heading-1 and section-title, so they step down below the tablet breakpoint (decisions/type-steps-down-on-phones.md).
+Layout varies on density: gutters, margins, the region gap, the landing gap and the hero, header and footer padding take one step less in compact, never below 8px, and the minimum target is 44px in comfortable and 32px in compact. Breakpoints, columns, the container and the measures are the same in every mode. Layout varies on the viewport through the aliases: tokens.css switches each tiered role at the literal breakpoints, since a media query cannot read a custom property, and a density override reaches the alias. The same blocks set the phone factor of the landing display, hero, heading-1 and section-title, so they step down below the tablet breakpoint (decisions/landing-display-step.md).
 
 ## Changing the system
 
@@ -64,7 +65,7 @@ Layout varies on density: gutters, margins, the region gap and the hero, header 
 
 ## Audit scope
 
-Audits the grid tokens in both densities: breakpoint order, column order, the region gap and hero padding growing with the viewport, target size and the reading measure. The WCAG risks are reflow at narrow widths (1.4.10: content works at 320 CSS px without scrolling in two directions), target size (2.5.8, 24 by 24 CSS px; 2.5.5, 44 by 44 CSS px, AAA) and line length (1.4.8, AAA, about 80 characters). It does not audit color, type size or the spacing inside a region.
+Audits the grid tokens in both densities: breakpoint order, column order, the region gap, the landing gap and hero padding growing with the viewport, the landing gap at or above the region gap, target size and the reading measure. The WCAG risks are reflow at narrow widths (1.4.10: content works at 320 CSS px without scrolling in two directions), target size (2.5.8, 24 by 24 CSS px; 2.5.5, 44 by 44 CSS px, AAA) and line length (1.4.8, AAA, about 80 characters). It does not audit color, type size or the spacing inside a region.
 
 ## Checks
 
@@ -73,7 +74,7 @@ Audits the grid tokens in both densities: breakpoint order, column order, the re
 - `target-size-minimum`: the minimum target is at least 24px in every density (WCAG 2.5.8).
 - `target-size-comfortable`: the minimum target is at least 44px at comfortable density (WCAG 2.5.5, AAA, applied at comfortable density by our choice).
 - `text-measure`: the reading measure is 40rem or less, our approximation of 80 characters (WCAG 1.4.8, AAA).
-- `layout-regions`: the region gap and the hero padding never shrink as the viewport grows.
+- `layout-regions`: the region gap, the landing gap and the hero padding never shrink as the viewport grows, and the landing gap never falls below the region gap at its tier.
 
 ## Beyond the gate
 
@@ -86,9 +87,9 @@ Audits the grid tokens in both densities: breakpoint order, column order, the re
 
 ## Handoff notes
 
-- Aliases: tokens.css gives each tiered role one property that takes the value of the viewport's tier: --layout-columns, --layout-gutter, --layout-margin-inline, --layout-region-gap and --layout-hero-padding-block (decisions/type-steps-down-on-phones.md).
+- Aliases: tokens.css gives each tiered role one property that takes the value of the viewport's tier: --layout-columns, --layout-gutter, --layout-margin-inline, --layout-region-gap, --layout-landing-gap and --layout-hero-padding-block (decisions/landing-display-step.md).
 - Page grid: display grid with grid-template-columns: repeat(var(--layout-columns), 1fr), column-gap: var(--layout-gutter), padding-inline: var(--layout-margin-inline), and max-inline-size from layout.container.max with margin-inline: auto. The aliases switch at the breakpoints on their own; no media query is needed for them.
-- Page regions: gap or margin-block var(--layout-region-gap) between sections, padding-block var(--layout-hero-padding-block) in the hero.
+- Page regions: gap or margin-block var(--layout-region-gap) between the regions of a product page, var(--layout-landing-gap) between the sections of a landing page, padding-block var(--layout-hero-padding-block) in the hero.
 - A media query of your own for anything else copies the breakpoint value: @media (min-width: 640px) when layout.breakpoint.tablet is 640px.
 - Reading and form areas use max-inline-size from layout.measure.text and layout.measure.form.
 - Every target uses min-block-size and min-inline-size from layout.target.min.
@@ -102,3 +103,4 @@ Audits the grid tokens in both densities: breakpoint order, column order, the re
 - Adding breakpoints per screen instead of using the tiers.
 - Reading a breakpoint custom property inside a media query: it does not work; copy the value.
 - Spacing page sections with one tier's token, such as --layout-region-gap-desktop, at every width: a phone gets a screen of empty space; use var(--layout-region-gap).
+- Spacing a landing page's sections with a gap of your own, such as 160px: it ignores density and the tier; use var(--layout-landing-gap).

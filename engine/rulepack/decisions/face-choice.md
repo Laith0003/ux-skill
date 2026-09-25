@@ -1,10 +1,10 @@
 ---
 id: face-choice
 title: The axes choose each face from a catalog by distance, never by keyword
-status: active
+status: superseded
 areas: [type]
 supersedes: null
-superseded_by: null
+superseded_by: faces-by-product-type
 ---
 
 # The axes choose each face from a catalog by distance, never by keyword
