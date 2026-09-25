@@ -454,10 +454,11 @@ class _Modes:
 def dark_variant(text: str) -> Optional[Tuple[str, int, str, Tuple[str, ...]]]:
     """(where Tailwind's dark variant switches, line, the variant as
     written, every selector it switches on) from a `@custom-variant dark`
-    declaration: the class or attribute selector that opens each of its
-    comma members outside :not() (an attribute as `[attr="value"]`; in
-    `.dark .app` only .dark, since .app is an element inside dark), each
-    once and the first as where, or the prefers-color-scheme query. Where
+    declaration: for each comma member of each :where() or :is() group,
+    the class or attribute that names dark, else the one that opens the
+    member, never what a :not() names (an attribute as `[attr="value"]`;
+    see _scheme_token), each once and the first as where, or the
+    prefers-color-scheme query. Where
     is "" when the variant names no such selector (`&:where(:not(.light),
     ...)` names only what dark is not). None when the file declares no dark
     variant."""
@@ -476,16 +477,13 @@ def dark_variant(text: str) -> Optional[Tuple[str, int, str, Tuple[str, ...]]]:
     if "prefers-color-scheme" in body:
         return DARK_MEDIA, line, written, (DARK_MEDIA,)
     selectors: List[str] = []
-    for member in _variant_members(_without_not(body)):
-        # Only the selector that opens a member is where dark switches: in
-        # `.dark .app`, .app is an element inside dark, not the scheme.
-        opener = (split_top(member.lstrip("&").strip(), " ") or [""])[0]
-        found = _THEME_TOKEN.search(opener)
-        if not found:
+    for member in _variant_members(body):
+        found = _scheme_token(member)
+        if found is None:
             continue
-        attr = _ATTR.fullmatch(found.group(0))
+        attr = _ATTR.fullmatch(found)
         value = next((g for g in attr.groups()[1:] if g is not None), "") if attr else ""
-        selector = f'[{attr.group(1)}="{value}"]' if attr else found.group(0)
+        selector = f'[{attr.group(1)}="{value}"]' if attr else found
         if selector not in selectors:
             selectors.append(selector)
     if not selectors:
@@ -493,19 +491,57 @@ def dark_variant(text: str) -> Optional[Tuple[str, int, str, Tuple[str, ...]]]:
     return selectors[0], line, written, tuple(selectors)
 
 
+_GROUP = re.compile(r":(where|is|not)\(")
+
+
 def _variant_members(body: str) -> List[str]:
-    """The comma members of a dark variant's selector: those inside its
-    first :where() or :is() group, else the whole selector's."""
-    m = re.search(r":(?:where|is)\(", body)
-    if m:
-        depth, end = 0, len(body)
-        for i in range(m.end() - 1, len(body)):
-            depth += {"(": 1, ")": -1}.get(body[i], 0)
-            if depth == 0:
-                end = i
+    """The comma members of a dark variant's selector: those inside each of
+    its top-level :where() and :is() groups (never inside a :not()), or a
+    top-level member itself when it has no such group."""
+    out: List[str] = []
+    for outer in split_top(body, ","):
+        groups, i = [], 0
+        while True:
+            m = _GROUP.search(outer, i)
+            if not m:
                 break
-        body = body[m.end():end]
-    return [p.strip() for p in split_top(body, ",") if p.strip()]
+            depth, end = 0, len(outer)
+            for j in range(m.end() - 1, len(outer)):
+                depth += {"(": 1, ")": -1}.get(outer[j], 0)
+                if depth == 0:
+                    end = j
+                    break
+            if m.group(1) != "not":
+                groups.append(outer[m.end():end])
+            i = end + 1
+        out += [p for g in groups for p in split_top(g, ",")] if groups else [outer]
+    return [p.strip() for p in out if p.strip()]
+
+
+def _names_dark(token: str) -> bool:
+    """True for a class with dark as a word of its name (.dark, .theme-dark)
+    or a theme attribute set to dark ([data-theme=dark])."""
+    attr = _ATTR.fullmatch(token)
+    if attr:
+        value = next(g for g in attr.groups()[1:] if g is not None)
+        return value.lower() == "dark" and bool(THEME_ATTR.fullmatch(attr.group(1)))
+    return "dark" in token.lstrip(".").lower().split("-")
+
+
+def _scheme_token(member: str) -> Optional[str]:
+    """Where one member of a dark variant switches: the class or attribute
+    in its chain that names dark (.dark in `.theme .dark .card`,
+    [data-theme=dark] in `.content[data-theme=dark]`), else the first one
+    of the compound that opens it; what a :not() names is never taken, so
+    `:not(.light) .content` gives None. In `.dark .app`, .app is an element
+    inside dark, not the scheme."""
+    chain = [c for c in split_top(re.sub(r"\s*[>+~]\s*", " ", member), " ")
+             if c.strip() not in ("", "&", "*")]
+    compounds = [[t.group(0) for t in _THEME_TOKEN.finditer(_without_not(c))] for c in chain]
+    named = next((t for tokens in compounds for t in tokens if _names_dark(t)), None)
+    if named is not None:
+        return named
+    return compounds[0][0] if compounds and compounds[0] else None
 
 
 def _without_not(text: str) -> str:
