@@ -78,7 +78,7 @@ The site uses a 12-column grid with a max content width of 1280–1440px. Sectio
 
 ## 7. Motion Vocabulary
 
-Friendly micro-animations — Dax may wave or blink on hero pages. Hover lifts on cards (1.02 scale + 200ms ease). Search bar focus animates with a soft expand. The motion is friendly-confident.
+Friendly micro-animations — Dax may wave or blink on hero pages. Search bar focus animates with a soft expand. The motion is friendly-confident.
 
 ## 8. Anti-patterns to Avoid
 

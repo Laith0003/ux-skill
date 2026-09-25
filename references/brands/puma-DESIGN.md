@@ -14,7 +14,7 @@ Puma Red (#e21e26) — the brand's "Forever Faster" red — is the seasonal volt
 - Athlete-and-celebrity collaboration heroes
 - Wide black-on-white chrome with bright campaign-driven accents
 - Rectilinear product cards (0–8px radius)
-- Kinetic motion vocabulary — quick carousel cuts, hover lift on cards
+- Kinetic motion vocabulary — quick carousel cuts
 
 ## 2. Color Palette & Roles
 
@@ -83,7 +83,7 @@ The site uses a 12-column grid with a max content width of 1440px. Section paddi
 
 ## 7. Motion Vocabulary
 
-Kinetic motion. Hero carousels with quick 3-second cuts. Slight ken-burns pans on still imagery (~5 seconds per pan). Hover lift on product cards (1.03 scale + 150ms ease). The leaping cat occasionally jumps on idle in mascot animations on certain promotional pages. The motion budget is kinetic-controlled — faster than Adidas, never bouncy.
+Kinetic motion. Hero carousels with quick 3-second cuts. Slight ken-burns pans on still imagery (~5 seconds per pan). The leaping cat occasionally jumps on idle in mascot animations on certain promotional pages. The motion budget is kinetic-controlled — faster than Adidas, never bouncy.
 
 ## 8. Anti-patterns to Avoid
 

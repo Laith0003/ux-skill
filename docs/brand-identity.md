@@ -104,7 +104,7 @@ Display sizes use weight 400 (regular), never bold. Negative letter-spacing (-0.
 | Soft hairline | 1px hairline border | Inputs, sub-nav, occasionally cards |
 | Cream card | surface-card background, no shadow | Feature cards, content cards |
 | Dark surface | surface-dark background, no shadow | Code mockups, model cards, footer |
-| Subtle drop | `0 1px 3px rgba(20,20,19,0.08)` | Rare hover-elevated states |
+| Subtle drop | `0 1px 3px rgba(20,20,19,0.08)` | Rare dragged items |
 
 **Color-block first, shadow rare.** Depth from surface contrast.
 

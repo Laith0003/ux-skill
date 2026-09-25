@@ -393,7 +393,7 @@ Whitespace is generous on the marketing surfaces and tight on the discovery surf
 | 0 — Flat | No border, no shadow | Default for pin cards, feature cards, footer — the dominant treatment |
 | 1 — Hairline border | 1px solid `{colors.hairline}` | Inputs, footer column dividers, in-list rows |
 | 2 — Modal scrim + soft shadow | Modal sits on a dark scrim over the page content with a soft 16px ambient shadow | Login / signup modal, image preview modal |
-| 3 — Pin hover lift | (intentionally undocumented per system policy) | n/a |
+| 3 — Raised pin | (intentionally undocumented per system policy) | n/a |
 
 Pinterest's system has effectively no shadow elevation in its content surfaces. Pin cards sit flat on the canvas; the only "elevation" appears on the modal layer where a 16px ambient shadow paired with a 50%-opacity scrim lifts the modal above the page content.
 

@@ -79,7 +79,7 @@ The site uses a 12-column grid with a max content width of 1280–1440px. Sectio
 
 ## 7. Motion Vocabulary
 
-Camera-grade motion. AR Lens previews auto-play in product mockups. Hero photography may have subtle ken-burns pans (5-second cycles). Hover lift on cards (1.03 scale + 200ms ease). The motion is camera-shutter snappy.
+Camera-grade motion. AR Lens previews auto-play in product mockups. Hero photography may have subtle ken-burns pans (5-second cycles). The motion is camera-shutter snappy.
 
 ## 8. Anti-patterns to Avoid
 

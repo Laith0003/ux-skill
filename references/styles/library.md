@@ -1283,7 +1283,7 @@ Appropriate motion:
 
 - Aggressive scroll entries: type rises from `translate-y-32` with rotation snapping to neutral over `800ms`.
 - Marquee scrolls with bold type that loops without pause.
-- Gestural hover effects: cards that lift, rotate, and reveal additional content on hover.
+- Gestural hover effects: cards that rotate and reveal additional content on hover.
 - Color flips on tap: backgrounds change color at the press of a CTA.
 - Sound on intentional interaction (with a clearly-marked mute toggle).
 
@@ -1306,7 +1306,6 @@ Cards:
 
 - Filled, high-contrast, often rotated slightly.
 - Internal padding is moderate to allow content to breathe within the loud frame.
-- Hover: a lift with a hard shadow offset (e.g., `8px 8px 0 currentColor`).
 
 Navigation:
 

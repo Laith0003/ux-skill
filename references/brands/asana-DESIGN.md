@@ -87,7 +87,7 @@ The site uses a 12-column grid with a max content width of 1280–1440px. Sectio
 
 ## 7. Motion Vocabulary
 
-Gentle workflow-themed micro-animations — task cards have a subtle hover lift (1.01 scale + 200ms ease). The three-dot brand mark may pulse on landing. Carousel transitions use 300ms ease-in-out. The brand reads as friendly-productive.
+Gentle workflow-themed micro-animations. The three-dot brand mark may pulse on landing. Carousel transitions use 300ms ease-in-out. The brand reads as friendly-productive.
 
 ## 8. Anti-patterns to Avoid
 

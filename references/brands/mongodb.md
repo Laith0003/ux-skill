@@ -513,7 +513,7 @@ Marketing surfaces give content generous breathing room — `{spacing.hero}` (12
 | Level | Treatment | Use |
 |---|---|---|
 | 0 (flat) | No shadow; `{colors.hairline}` border | Default cards, table rows |
-| 1 (subtle) | `rgba(0, 30, 43, 0.04) 0px 1px 2px 0px` | Hover-elevated tiles |
+| 1 (subtle) | `rgba(0, 30, 43, 0.04) 0px 1px 2px 0px` | Raised tiles |
 | 2 (card) | `rgba(0, 30, 43, 0.08) 0px 4px 12px 0px` | Feature cards |
 | 3 (mockup) | `rgba(0, 30, 43, 0.12) 0px 12px 24px -4px` | Code mockup over hero |
 | 4 (modal) | `rgba(0, 30, 43, 0.16) 0px 16px 48px -8px` | Modals, dropdowns |

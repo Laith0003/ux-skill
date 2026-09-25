@@ -24,7 +24,7 @@ IKEA is the Swedish flat-pack democracy. Canvas is pure white. The brand-asset t
 8-base (8/16/24/32/48). Section padding 48–64px — tighter than luxury, looser than Booking. Room-photograph hero carousels consume full viewport width with image + headline overlay. Product grids stack 4-up at desktop, 2-up at tablet.
 
 ## Motion signature
-Carousel-driven motion. Room-photograph carousels auto-advance every 6 seconds with a slow 800ms cross-fade. Hover on product tiles raises a 4px soft shadow over 200ms. CTA buttons have a hover background-darken from `#0058a3` to `#003e72` over 150ms. Page transitions are flat fades — no kinetic scroll-fanfare.
+Carousel-driven motion. Room-photograph carousels auto-advance every 6 seconds with a slow 800ms cross-fade. CTA buttons have a hover background-darken from `#0058a3` to `#003e72` over 150ms. Page transitions are flat fades — no kinetic scroll-fanfare.
 
 ## Components observed
 - `room-staging-hero-carousel` — fully-furnished room photograph with people

@@ -460,7 +460,7 @@ Every clickable card or image reacts on hover:
 
 ### Choreographed micro-events on cards
 **Use when**: feature cards, premium grid surfaces.
-**What it is**: A card hover does multiple things in concert: background lifts (translate -2px), shadow expands, border brightens, an inner icon rotates 10°, an arrow slides 4px right. The composite effect reads as one motion, not five separate animations.
+**What it is**: A card hover does several things in concert while the card stays at rest: the border brightens, an inner icon rotates 10°, an arrow slides 4px right. The composite effect reads as one motion, not five separate animations.
 **Cost**: zero — CSS transitions with consistent timing.
 
 ---
