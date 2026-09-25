@@ -17,11 +17,12 @@ Public surface
 from __future__ import annotations
 
 import re
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from engine.brand.extract import BrandProfile, hue_family
-from engine.existing import css_custom_properties, normalize_hex, resolve_css_var
+from engine.existing import css_custom_properties, normalize_hex
 
 
 # The engine's own house colors. If a brand's primary differs from these and one
@@ -155,89 +156,298 @@ def _family_used_as_display(html: str, html_lower: str, family: str) -> bool:
     return False
 
 
-_LINK_TAG_RE = re.compile(r"<link\b[^>]*>", re.IGNORECASE)
-_HREF_RE = re.compile(r"\bhref\s*=\s*['\"]([^'\"]+)['\"]", re.IGNORECASE)
-_REL_STYLESHEET_RE = re.compile(r"\brel\s*=\s*['\"][^'\"]*\bstylesheet\b", re.IGNORECASE)
-_IMPORT_RE = re.compile(r"@import\s+(?:url\(\s*)?['\"]?([^'\")\s;]+)", re.IGNORECASE)
-_STYLE_BLOCK_RE = re.compile(r"<style\b[^>]*>(.*?)</style>", re.IGNORECASE | re.DOTALL)
-_RGB_LITERAL_RE = re.compile(r"rgba?\([^)]*\)", re.IGNORECASE)
+_IMPORT_RE = re.compile(
+    r"@import\s+(?:url\(\s*)?['\"]?([^'\")\s;]+)['\"]?\s*\)?\s*([^;]*);?", re.IGNORECASE)
+_HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
+_CSS_COMMENT_RE = re.compile(r"/\*.*?\*/", re.DOTALL)
+_COLOR_LITERAL_RE = re.compile(
+    r"#[0-9a-fA-F]{3,8}\b|(?:rgba?|hsla?|oklch|oklab|color)\([^)]*\)", re.IGNORECASE)
+_VAR_REF_RE = re.compile(r"var\(\s*(--[A-Za-z0-9_-]+)\s*(?:,\s*((?:[^()]|\([^()]*\))*))?\)")
+_PSEUDO_RE = re.compile(r"::?[A-Za-z-]+(?:\((?:[^()]|\([^()]*\))*\))?")
+_COMPOUND_RE = re.compile(r"(\*|[A-Za-z][\w-]*)|\.([\w-]+)|#([\w-]+)|\[\s*([\w:-]+)[^\]]*\]")
+_GROUPING_AT_RULES = ("@media", "@supports", "@layer", "@container", "@document", "@scope")
+_PRESENTATION_ATTRS = ("fill", "stroke", "color", "bgcolor", "stop-color")
 _MAX_LINKED = 50
 
 
-def _linked_stylesheets(html: str, base_dir: Optional[Any]) -> List[str]:
-    """The text of every local stylesheet the page links, and every local
-    file those import. Remote URLs are skipped (the check stays offline)."""
-    if base_dir is None:
-        return []
-    base = Path(base_dir).expanduser().resolve()
+class _Element:
+    __slots__ = ("tag", "id", "classes", "attrs")
+
+    def __init__(self, tag: str, attrs: Dict[str, str]):
+        self.tag = tag
+        self.id = attrs.get("id", "")
+        self.classes = set((attrs.get("class") or "").split())
+        self.attrs = attrs
+
+
+class _PageParser(HTMLParser):
+    """Elements, <link> tags and <style> blocks of a page."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.elements: List[_Element] = []
+        self.links: List[Dict[str, str]] = []
+        self.styles: List[Tuple[Dict[str, str], str]] = []
+        self._style: Optional[Dict[str, str]] = None
+        self._buf: List[str] = []
+        self._template = 0
+
+    def handle_starttag(self, tag, attrs):
+        a = {k.lower(): (v or "") for k, v in attrs}
+        if tag.lower() == "template":
+            self._template += 1
+        # Content of a <template>, and a hidden element, paint nothing on the page.
+        hidden = "hidden" in a or re.search(r"display\s*:\s*none", a.get("style", ""), re.I)
+        if not self._template and not hidden:
+            self.elements.append(_Element(tag.lower(), a))
+        if tag.lower() == "link":
+            self.links.append(a)
+        elif tag.lower() == "style":
+            self._style, self._buf = a, []
+
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
+
+    def handle_data(self, data):
+        if self._style is not None:
+            self._buf.append(data)
+
+    def handle_endtag(self, tag):
+        if tag.lower() == "template" and self._template:
+            self._template -= 1
+        if tag.lower() == "style" and self._style is not None:
+            self.styles.append((self._style, "".join(self._buf)))
+            self._style = None
+
+
+def _media_off(media: str) -> bool:
+    """A media query that never applies on a screen: "not all", or print
+    and speech only."""
+    m = re.sub(r"\s+", " ", (media or "").strip().lower())
+    return m == "not all" or bool(re.match(r"^(?:only )?(?:print|speech)\b", m))
+
+
+def _read_local(ref: str, rel_to: Path, base: Path, seen: set) -> Optional[Tuple[Path, str]]:
+    ref = ref.strip().split("?")[0].split("#")[0]
+    if not ref or re.match(r"^(?:[a-z][a-z0-9+.-]*:|//)", ref, re.IGNORECASE):
+        return None
+    path = (base / ref.lstrip("/")) if ref.startswith("/") else (rel_to / ref)
+    try:
+        path = path.resolve()
+        path.relative_to(base)   # outside the page's folder: not this page's CSS
+    except (OSError, ValueError):
+        return None
+    if path in seen or len(seen) >= _MAX_LINKED or not path.is_file():
+        return None
+    seen.add(path)
+    try:
+        return path, path.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return None
+
+
+def _page_stylesheets(page: "_PageParser", css_text: str, base_dir: Optional[Any],
+                      root: Optional[Any] = None) -> List[str]:
+    """The CSS that applies to the page, comments removed: inline <style>
+    blocks, ``css_text``, and, when ``base_dir`` (the page's folder) is
+    given, the local stylesheets the page links (rel="stylesheet", not
+    alternate, not disabled, not print or media="not all") and the local
+    files they import. Links resolve against the page's folder and must stay
+    inside ``root`` (the project, default the page's folder); a leading "/"
+    starts at ``root``. Remote URLs are not read."""
+    page_dir = Path(base_dir).expanduser().resolve() if base_dir is not None else None
+    base = Path(root).expanduser().resolve() if root is not None else page_dir
     seen: set = set()
-    texts: List[str] = []
+    out: List[str] = []
 
-    def load(ref: str, rel_to: Path) -> None:
-        ref = ref.strip().split("?")[0].split("#")[0]
-        if not ref or re.match(r"^(?:[a-z][a-z0-9+.-]*:|//)", ref, re.IGNORECASE):
+    def add(text: str, rel_to: Optional[Path]) -> None:
+        clean = _CSS_COMMENT_RE.sub("", text or "")
+        out.append(clean)
+        if base is None or rel_to is None:
             return
-        path = (base / ref.lstrip("/")) if ref.startswith("/") else (rel_to / ref)
-        try:
-            path = path.resolve()
-        except OSError:
-            return
-        if path in seen or len(seen) >= _MAX_LINKED or not path.is_file():
-            return
-        seen.add(path)
-        try:
-            text = path.read_text(encoding="utf-8", errors="ignore")
-        except OSError:
-            return
-        texts.append(text)
-        for imported in _IMPORT_RE.findall(text):
-            load(imported, path.parent)
+        for ref, media in _IMPORT_RE.findall(clean):
+            if _media_off(media):
+                continue
+            got = _read_local(ref, rel_to, base, seen)
+            if got:
+                add(got[1], got[0].parent)
 
-    for tag in _LINK_TAG_RE.findall(html):
-        if _REL_STYLESHEET_RE.search(tag):
-            href = _HREF_RE.search(tag)
-            if href:
-                load(href.group(1), base)
-    for block in _STYLE_BLOCK_RE.findall(html):
-        for imported in _IMPORT_RE.findall(block):
-            load(imported, base)
-    return texts
+    for attrs, text in page.styles:
+        if not _media_off(attrs.get("media", "")):
+            add(text, page_dir)
+    if css_text:
+        add(css_text, page_dir)
+    if base is not None and page_dir is not None:
+        for link in page.links:
+            rel = set((link.get("rel") or "").lower().split())
+            if "stylesheet" not in rel or "alternate" in rel or "disabled" in link:
+                continue
+            if _media_off(link.get("media", "")):
+                continue
+            got = _read_local(link.get("href", ""), page_dir, base, seen)
+            if got:
+                add(got[1], got[0].parent)
+    return out
 
 
-def _primary_carriers(corpus: str, primary: str) -> Tuple[bool, List[str]]:
-    """Whether the primary appears in any color form (hex or rgb(), directly
-    or through custom properties), and the custom properties that carry it,
-    the ones the page references first."""
+def _style_rules(css: str) -> List[Tuple[str, str]]:
+    """(selector, declarations) for every style rule. Grouping at-rules
+    (@media, @supports, @layer, ...) are opened; other at-rules skipped."""
+    rules: List[Tuple[str, str]] = []
+    i, n = 0, len(css)
+    while i < n:
+        j = css.find("{", i)
+        if j < 0:
+            break
+        prelude = css[i:j].rsplit(";", 1)[-1].rsplit("}", 1)[-1].strip()
+        depth, k = 1, j + 1
+        while k < n and depth:
+            if css[k] == "{":
+                depth += 1
+            elif css[k] == "}":
+                depth -= 1
+            k += 1
+        body = css[j + 1:k - 1]
+        if prelude.startswith("@"):
+            name = prelude.split(None, 1)[0].lower()
+            if name in _GROUPING_AT_RULES and not (name == "@media" and _media_off(prelude[6:])):
+                rules.extend(_style_rules(body))
+        elif prelude:
+            rules.append((prelude, body))
+        i = k
+    return rules
+
+
+def _declarations(body: str) -> List[Tuple[str, str]]:
+    out = []
+    for decl in re.sub(r"\{[^{}]*\}", "", body).split(";"):
+        if ":" in decl:
+            prop, value = decl.split(":", 1)
+            out.append((prop.strip().lower(), value.strip()))
+    return out
+
+
+def _expand(value: str, props: Dict[str, str], used: List[str], depth: int = 0) -> str:
+    """``value`` with every var() replaced by what it resolves to; the
+    custom properties followed are appended to ``used``."""
+    if depth > 24:
+        return value
+
+    def sub(m: "re.Match[str]") -> str:
+        name, fallback = m.group(1), m.group(2)
+        if name in props:
+            used.append(name)
+            return _expand(props[name], props, used, depth + 1)
+        return _expand(fallback or "", props, used, depth + 1)
+
+    return _VAR_REF_RE.sub(sub, value)
+
+
+def _paints(value: str, target: str, props: Dict[str, str]) -> Tuple[bool, List[str]]:
+    used: List[str] = []
+    expanded = _expand(value, props, used)
+    hit = any(normalize_hex(c) == target for c in _COLOR_LITERAL_RE.findall(expanded))
+    carried = [n for n in used if any(
+        normalize_hex(c) == target
+        for c in _COLOR_LITERAL_RE.findall(_expand(props[n], props, [])))]
+    return hit, carried
+
+
+def _compound_matches(compound: str, el: "_Element") -> bool:
+    parts = _COMPOUND_RE.findall(compound)
+    if not parts:
+        return False
+    for tag, cls, ident, attr in parts:
+        if tag and tag != "*" and tag.lower() != el.tag:
+            return False
+        if cls and cls not in el.classes:
+            return False
+        if ident and ident != el.id:
+            return False
+        if attr and attr.lower() not in el.attrs:
+            return False
+    return True
+
+
+def _selector_matches(selector: str, elements: List["_Element"]) -> bool:
+    """True when some element of the page matches the selector's subject
+    (its last compound). Pseudo-classes and pseudo-elements are dropped.
+    :root (and html) is the page itself; a subject that is only a state
+    pseudo-class, such as :focus-visible or :hover, names no element."""
+    for single in selector.split(","):
+        bare = _PSEUDO_RE.sub("", single).strip()
+        compounds = [c for c in re.split(r"\s*[>+~]\s*|\s+", bare) if c]
+        if not compounds:
+            if re.fullmatch(r"\s*:root\s*", single) and elements:
+                return True
+            continue
+        if any(_compound_matches(compounds[-1], el) for el in elements):
+            return True
+    return False
+
+
+def _primary_use(page: "_PageParser", sheets: List[str],
+                 primary: str) -> Tuple[bool, str, List[str]]:
+    """Whether an element of the page is painted with the primary, where,
+    and the custom properties that carried it. Counts a normal declaration
+    (not a custom-property definition) in a rule whose selector matches an
+    element, an inline style attribute, or a color attribute such as an SVG
+    fill; the value may reach the primary through var() chains."""
     target = normalize_hex(primary)
     if not target:
-        return False, []
-    literal = any(normalize_hex(m) == target for m in _RGB_LITERAL_RE.findall(corpus))
-    props = css_custom_properties(corpus)
-    carriers = [name for name, value in props.items()
-                if normalize_hex(resolve_css_var(value, props)) == target]
-    used = [n for n in carriers if re.search(r"var\(\s*" + re.escape(n) + r"\s*[,)]", corpus)]
-    ordered = used + [n for n in carriers if n not in used]
-    return (literal or bool(carriers)), ordered
+        return False, "", []
+    props = css_custom_properties("\n".join(sheets))
+    for el in page.elements:
+        for decl in (el.attrs.get("style") or "").split(";"):
+            if ":" not in decl:
+                continue
+            prop, value = decl.split(":", 1)
+            if prop.strip().startswith("--") or prop.strip().lower() == "content":
+                continue
+            hit, used = _paints(value, target, props)
+            if hit:
+                return True, "an inline style on <%s>" % el.tag, used
+        for attr in _PRESENTATION_ATTRS:
+            if normalize_hex(el.attrs.get(attr, "")) == target:
+                return True, "the %s attribute of <%s>" % (attr, el.tag), []
+    for sheet in sheets:
+        for selector, body in _style_rules(sheet):
+            for prop, value in _declarations(body):
+                if prop.startswith("--") or prop == "content":
+                    continue   # a definition, or a string that paints nothing
+                hit, used = _paints(value, target, props)
+                if hit and _selector_matches(selector, page.elements):
+                    return True, "%s { %s }" % (selector.strip(), prop), used
+    return False, "", []
 
 
 def score_brand_fidelity(html_text: str, profile: BrandProfile, css_text: str = "",
-                         base_dir: Optional[Any] = None) -> Dict[str, Any]:
+                         base_dir: Optional[Any] = None,
+                         root: Optional[Any] = None) -> Dict[str, Any]:
     """Score how faithfully ``html_text`` honors ``profile``. Deterministic.
 
     The page is read with its styles: inline ``<style>``, ``css_text``, and,
     when ``base_dir`` (the page's folder) is given, every local stylesheet the
     page links or imports. Custom properties are resolved, so a token-driven
     page that paints the primary through ``var(--brand-primary)`` passes.
+    ``root`` is the project folder: links resolve against the page's folder
+    and may reach anywhere inside ``root``, such as ``../css/`` from ``en/``.
 
     Returns ``{score, passed, findings}`` where findings is a list of
     ``{check, severity, ok, detail}``. The hard floor (rule 7): if the profile
     has a primary and the output is missing that primary OR missing the logo,
     ``passed`` is False regardless of the numeric score.
     """
-    html = html_text or ""
+    html = _HTML_COMMENT_RE.sub("", html_text or "")
     html_lower = html.lower()
-    linked = _linked_stylesheets(html, base_dir)
-    corpus = "\n".join([html, css_text or ""] + linked)
+    page = _PageParser()
+    try:
+        page.feed(html)
+        page.close()
+    except Exception:  # a malformed page still gets scored on what parsed
+        pass
+    sheets = _page_stylesheets(page, css_text, base_dir, root)
+    corpus = "\n".join([html] + sheets)
     corpus_lower = corpus.lower()
     findings: List[Dict[str, Any]] = []
     earned = 0
@@ -245,28 +455,24 @@ def score_brand_fidelity(html_text: str, profile: BrandProfile, css_text: str = 
     has_primary = bool((profile.primary or "").strip())
 
     # (a) PRIMARY USED -------------------------------------------------------
-    carriers: List[str] = []
-    primary_ok = False
+    # Counted only where an element of the page is painted with it: a matched
+    # rule, an inline style or a color attribute. A stylesheet that only
+    # defines the primary, a comment, or a selector nothing matches does not count.
+    primary_ok, where, carriers = (False, "", [])
     if has_primary:
-        primary_ok = _hex_present(corpus_lower, profile.primary)
-        found, carriers = _primary_carriers(corpus, profile.primary)
-        primary_ok = primary_ok or found
+        primary_ok, where, carriers = _primary_use(page, sheets, profile.primary)
     if has_primary:
-        where = []
-        if linked:
-            where.append("read with %d linked stylesheet(s)" % len(linked))
-        if carriers:
-            where.append("carried by %s" % ", ".join(carriers[:4]))
+        via = (" through %s" % " then ".join(dict.fromkeys(carriers))) if carriers else ""
         findings.append({
             "check": "primary_used",
             "severity": "critical",
             "ok": primary_ok,
-            "detail": ("Brand primary %s is used in the output%s." % (
-                profile.primary, (" (" + "; ".join(where) + ")") if where else ""))
+            "detail": ("Brand primary %s paints the page at %s%s." % (profile.primary, where, via))
             if primary_ok else
-            ("Brand primary %s is MISSING from the output and its stylesheets. It must "
-             "drive the palette/CTA. If the page links its CSS, pass the page's folder as "
-             "base_dir so the linked files are read." % profile.primary),
+            ("Brand primary %s paints no element of the page. Use it in a rule whose selector "
+             "matches an element, an inline style or a color attribute (a definition alone "
+             "does not count); if the page links its CSS, pass the page's folder as "
+             "base_dir." % profile.primary),
         })
         if primary_ok:
             earned += _CHECK_WEIGHTS["primary_used"]
