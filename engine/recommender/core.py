@@ -24,6 +24,7 @@ Public surface
 from __future__ import annotations
 
 import colorsys
+import re
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field, asdict
 from typing import Any, Dict, List, Optional, Tuple
@@ -183,41 +184,94 @@ def _palette_color_penalty(entry: Dict[str, Any], brief: Brief) -> float:
     return -8.0
 
 
+# Words that say what kind of product it is, not which industry. On their own
+# they name no industry, so they never pick an entry.
+_INDUSTRY_STOPWORDS = frozenset({
+    "a", "an", "and", "the", "of", "for", "it",
+    "app", "apps", "application", "applications", "platform", "platforms",
+    "tech", "technology", "tool", "tools", "software", "service", "services",
+    "solution", "solutions", "system", "systems", "site", "website", "web",
+    "online", "digital", "mobile", "product", "products", "company",
+    "business", "startup", "management", "b2b", "b2c",
+})
+
+# Synthesizer industry ids that no single entry spells out word for word,
+# mapped to the entry they have always matched.
+_INDUSTRY_ALIASES = {
+    "fintech-banking": "fintech-neobank",
+}
+
+
+def _industry_words(text: Optional[str]) -> List[str]:
+    """Lowercase whole words of ``text``, split on anything not a letter or digit."""
+    return [w for w in re.split(r"[^a-z0-9]+", (text or "").lower()) if w]
+
+
+def _match_industry(industry: Optional[str], entries: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    """The industries.json entry a brief's industry text names, or None.
+
+    Whole words only, so a word that sits inside another word never matches.
+    Tried in order, the first entry in table order wins at each step:
+      1. the text is an entry's id or name, in any case, with spaces,
+         hyphens, underscores or other separators between the words, or
+         a key of _INDUSTRY_ALIASES
+      2. every content word is a word of an entry's id
+      3. the text is an entry's category (the first entry in it)
+      4. every content word is a word of an entry's name
+      5. every content word is a word of an entry's category
+    Content words drop one-letter words and _INDUSTRY_STOPWORDS; text with
+    no content word names nothing.
+    """
+    words = _industry_words(industry)
+    if not words:
+        return None
+    joined = "-".join(words)
+    for field_name in ("id", "name"):
+        for e in entries:
+            if "-".join(_industry_words(e.get(field_name))) == joined:
+                return e
+    alias = _INDUSTRY_ALIASES.get(joined)
+    if alias:
+        for e in entries:
+            if e.get("id") == alias:
+                return e
+
+    content = [w for w in words if len(w) > 1 and w not in _INDUSTRY_STOPWORDS]
+    if not content:
+        return None
+
+    def holds_all(e: Dict[str, Any], field_name: str) -> bool:
+        vocab = set(_industry_words(e.get(field_name)))
+        return all(w in vocab for w in content)
+
+    for e in entries:
+        if holds_all(e, "id"):
+            return e
+    for e in entries:
+        if "-".join(_industry_words(e.get("category"))) == joined:
+            return e
+    for field_name in ("name", "category"):
+        for e in entries:
+            if holds_all(e, field_name):
+                return e
+    return None
+
+
 def _lane_industry(brief: Brief) -> Dict[str, Any]:
     """Find the industry entry matching the brief.
 
-    v2.1 fix (task #53) — falls back through three matching strategies
-    instead of bouncing to score-all on unknown industry IDs:
-      1. exact id match
-      2. fuzzy match: brief.industry substring in entry.id / name / category
-      3. tag-score (the original fallback)
+    The entry the brief's industry text names (see _match_industry), else
+    the best tag-score fit for the brief's tone and audience.
     """
     data = load("industries")
     entries = data.get("entries", [])
     if not entries:
         return {}
 
-    target = (brief.industry or "").strip().lower()
+    matched = _match_industry(brief.industry, entries)
+    if matched is not None:
+        return matched
 
-    # Strategy 1: exact id match
-    if target:
-        for e in entries:
-            if (e.get("id") or "").lower() == target:
-                return e
-
-        # Strategy 2: fuzzy substring match on id / name / category
-        for e in entries:
-            haystack = " ".join([
-                (e.get("id") or "").lower(),
-                (e.get("name") or "").lower(),
-                (e.get("category") or "").lower(),
-            ])
-            if target in haystack or any(
-                tok in haystack for tok in target.replace("-", " ").split() if len(tok) > 2
-            ):
-                return e
-
-    # Strategy 3: tag-score fallback (original behavior)
     ranked = sorted(entries, key=lambda e: _score(e, brief), reverse=True)
     return ranked[0] if ranked else {}
 
