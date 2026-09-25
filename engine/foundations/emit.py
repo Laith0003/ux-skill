@@ -30,6 +30,7 @@ from engine.foundations.composition import choose as choose_composition
 from engine.foundations.color import brand_fidelity
 from engine.foundations.color_math import hex_to_rgb, rgb_to_hex
 from engine.foundations.export import dump_dtcg, to_css
+from engine.foundations.art import FILES as ART_FILES
 from engine.foundations.art import art_files
 from engine.foundations.art import report_lines as art_lines
 from engine.foundations.fonts import fonts_css, link_tags, loading_lines, self_host_css
@@ -42,8 +43,7 @@ from engine.synthesizer.axes import (
 # The files a build writes, in the order they are written and reported.
 FILES: Tuple[str, ...] = ("tokens.json", "tokens.css", "fonts.css", "fonts-self-host.css",
                           "system-report.md")
-# The generated art, written after FILES (engine.foundations.art).
-ART_FILES: Tuple[str, ...] = ("art/pattern.svg", "art/shapes.svg", "art/gradient.svg")
+# The generated art (engine.foundations.art.FILES as ART_FILES) is written after FILES.
 # The folder the rule pack is written into, inside the out folder, when asked.
 RULE_PACK_DIR = "rule-pack"
 # The file in it that records the sha256 of the tokens.json it was built from.
@@ -648,8 +648,10 @@ _COMPOSITION_LEAD = ("The layout a landing page starts from, scored from the axe
                      "fields; the landing playbooks build on it, and the JSON result names it as "
                      "composition.")
 _ART_LEAD = ("Generated from the axes and the colors above, so a page is never empty for want "
-             "of photos: geometry sets the shapes, warmth the palette and formality how many "
-             "shapes there are and how regular they sit.")
+             "of photos. Three layers, a quiet neutral plane, the brand's focal shape and "
+             "support accents, split the drawn area about 60, 30 and 10 percent; warmth moves "
+             "area from the neutral to the accents, geometry rounds the shapes, and formality "
+             "sets how many accents there are and how square to their lines they sit.")
 _ROLE_NOTE = re.compile(r"^color: brand role (?P<role>\w+) \((?P<why>.+)\)$")
 _ROLE_WORDS = {"fill": "the brand fills the main action",
                "accent": "the brand marks words and links, and the main action is ink",
@@ -765,8 +767,8 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
                 audience: Optional[Audience] = None,
                 unread: Sequence[str] = ()) -> SystemOutput:
     """Build, validate and gate. On success `files` holds every file in FILES
-    and the art,
-    and with rule_pack every rule pack file under RULE_PACK_DIR after them;
+    and ART_FILES, and with rule_pack every rule pack file under
+    RULE_PACK_DIR after them;
     on a validation, gate or rule pack failure `files` is empty and
     `findings` names every problem, so a caller can never write a failing
     system."""

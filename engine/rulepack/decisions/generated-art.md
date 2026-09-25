@@ -1,10 +1,10 @@
 ---
 id: generated-art
 title: Every build draws decorative brand art from the axes
-status: active
+status: superseded
 areas: [imagery, output]
 supersedes: null
-superseded_by: null
+superseded_by: art-composition
 ---
 
 # Every build draws decorative brand art from the axes

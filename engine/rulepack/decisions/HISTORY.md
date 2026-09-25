@@ -38,6 +38,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Imagery is a foundation of ratios, a measured scrim, a duotone and a tint](imagery-foundation.md)
 - [The scrim is measured over the worst image for its text](scrim-worst-image.md)
 - [Every build draws decorative brand art from the axes](generated-art.md)
+- [Generated art is a composition of three layers, placed by the axes and never at random](art-composition.md)
 
 ## Contrast and the gate
 
@@ -80,6 +81,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [The surface treatment runs from flat hairlines to deep shadows](surface-treatment.md)
 - [Weight and letter spacing change along the type scale](type-along-the-scale.md)
 - [Curves bend continuously, and decoration has one role that reduced motion removes](expressive-motion.md)
+- [Curves bend continuously, decoration leaves under reduced motion by our rule, and each motion property has one check](motion-check-owners.md)
 
 ## Components
 

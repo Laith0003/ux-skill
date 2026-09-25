@@ -29,14 +29,16 @@ EXPECTED = {
     "display-and-navigation-contracts", "arabic-market-content", "scrim-worst-image",
     "controls-on-brand-surfaces", "warmth-through-grey", "grey-brands-steer-no-hue",
     "exact-fill-states", "ring-room", "brief-fields-checked", "font-files",
-    "strong-under-high-contrast", "grey-brand-support-hue",
+    "strong-under-high-contrast", "grey-brand-support-hue", "art-composition",
+    "motion-check-owners",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",
               "type-roles": "type-three-faces", "strong-equals-heading-weight": "strong-weight",
               "strong-weight": "strong-under-high-contrast",
               "layout-scope": "page-regions", "neutral-tint": "warmth-through-grey",
-              "font-loading": "font-files"}
+              "font-loading": "font-files", "generated-art": "art-composition",
+              "expressive-motion": "motion-check-owners"}
 
 
 def test_every_shipped_record_is_valid_and_routed():

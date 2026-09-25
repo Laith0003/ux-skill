@@ -1,10 +1,10 @@
 ---
 id: expressive-motion
 title: Curves bend continuously, and decoration has one role that reduced motion removes
-status: active
+status: superseded
 areas: [motion]
 supersedes: null
-superseded_by: null
+superseded_by: motion-check-owners
 ---
 
 # Curves bend continuously, and decoration has one role that reduced motion removes

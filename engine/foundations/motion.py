@@ -170,15 +170,31 @@ def _reduced_travel(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
+# The roles whose reduced duration another check owns: the progress loop
+# keeps its pace (progress-keeps-pace) and decoration is removed
+# (expressive-removed).
+OWN_REDUCED_DURATION = ("motion.progress.duration", f"{EXPRESSIVE}.duration")
+
+
 def _reduced_length(ts: TokenSet, mode: str) -> List[str]:
+    """A one-shot role past the cap under reduced motion. The cap it names is
+    the lower of REDUCED_MAX_MS and the role's standard length in the same
+    direction, so the one fix also keeps reduced motion from lengthening
+    the move; reduced-not-longer does not repeat it."""
     if "motion:reduced" not in mode:
         return []
     under, key = _reduced_where(ts, mode)
-    return [f"{path} lasts {_ms(ts, path, mode):g}ms under {under}; cap it at "
-            f"{REDUCED_MAX_MS}ms with a {key} override"
-            for path in _roles_with(ts, "duration")
-            if path != "motion.progress.duration" and _ms(ts, path, mode) > REDUCED_MAX_MS
-            and not _seen_ltr(ts, mode, lambda m: _ms(ts, path, m))]
+    out = []
+    for path in _roles_with(ts, "duration"):
+        ms = _ms(ts, path, mode)
+        if path in OWN_REDUCED_DURATION or ms <= REDUCED_MAX_MS \
+                or _seen_ltr(ts, mode, lambda m: _ms(ts, path, m)):
+            continue
+        standard = _ms(ts, path, _standard(ts, mode))
+        cap = (f"{standard:g}ms, its standard length," if standard < REDUCED_MAX_MS
+               else f"{REDUCED_MAX_MS}ms")
+        out.append(f"{path} lasts {ms:g}ms under {under}; cap it at {cap} with a {key} override")
+    return out
 
 
 def _overshoots(curve: List[float]) -> bool:
@@ -211,6 +227,8 @@ def _dismiss_faster(ts: TokenSet, mode: str) -> List[str]:
     reduced = "motion:reduced" in mode
     if (da <= db if reduced else da < db) or _seen_ltr(ts, mode, read):
         return []
+    if reduced and da > REDUCED_MAX_MS:
+        return []  # reduced-length's finding; its cap lets the two tie
     if reduced and read(_standard(ts, mode)) == (da, db):
         return []
     key = sparse(mode, ts.axes)
@@ -343,7 +361,9 @@ def _reduced_not_longer(ts: TokenSet, mode: str) -> List[str]:
     """Reduced motion never lengthens a role: each reduced duration is
     compared with the standard one in the same direction. A pair already
     seen in the left-to-right context is not repeated. The progress loop
-    keeps its pace instead; progress-keeps-pace owns it."""
+    keeps its pace instead (progress-keeps-pace), the expressive role is
+    removed (expressive-removed), and a duration past the cap is
+    reduced-length's finding, whose fix clears this one."""
     if "motion:reduced" not in mode:
         return []
     std = _standard(ts, mode)
@@ -354,7 +374,7 @@ def _reduced_not_longer(ts: TokenSet, mode: str) -> List[str]:
     out = []
     for path in _roles_with(ts, "duration"):
         reduced, standard = _ms(ts, path, mode), _ms(ts, path, std)
-        if path == "motion.progress.duration" or reduced <= standard:
+        if path in OWN_REDUCED_DURATION or reduced <= standard or reduced > REDUCED_MAX_MS:
             continue
         if ltr != mode and (_ms(ts, path, ltr), _ms(ts, path, ltr_std)) == (reduced, standard):
             continue
@@ -397,26 +417,24 @@ def _progress_floor(ts: TokenSet, mode: str) -> List[str]:
 
 
 def _expressive_removed(ts: TokenSet, mode: str) -> List[str]:
-    """Under reduced motion the expressive role does not run: 0ms and no
-    travel."""
+    """Under reduced motion the expressive role does not run: it lasts 0ms.
+    This is our rule, not WCAG's. Its travel is reduced-travel's finding
+    (WCAG 2.3.3), not repeated here."""
     if "motion:reduced" not in mode:
         return []
-    d, t = f"{EXPRESSIVE}.duration", f"{EXPRESSIVE}.distance"
-    out = []
-    if _typed(ts, d) and _ms(ts, d, mode) != 0 and not _seen_ltr(ts, mode, lambda m: _ms(ts, d, m)):
-        out.append(f"{d} lasts {_ms(ts, d, mode):g}ms under {sparse(mode, ts.axes)}; decoration "
-                   "is removed under reduced motion, so point its motion:reduced override at "
-                   "motion.duration.0")
-    if _typed(ts, t) and ts.resolve(t, mode)["value"] != 0 and \
-            not _seen_ltr(ts, mode, lambda m: ts.resolve(t, m)):
-        out.append(f"{t} travels under {sparse(mode, ts.axes)}; decoration is removed under "
-                   "reduced motion, so point its motion:reduced override at motion.distance.0")
-    return out
+    d = f"{EXPRESSIVE}.duration"
+    if not _typed(ts, d) or _ms(ts, d, mode) == 0 or _seen_ltr(ts, mode, lambda m: _ms(ts, d, m)):
+        return []
+    under, key = _reduced_where(ts, mode)
+    return [f"{d} lasts {_ms(ts, d, mode):g}ms under {under}; decoration is removed under "
+            f"reduced motion, our rule, so point its {key} override at motion.duration.0"]
 
 
 # Only removing travel is WCAG's (2.3.3, motion from interaction can be
 # turned off); the length cap, the gentle curve, the still press, linear
-# for the loop alone and the loop floor are this system's rules. Motion
+# for the loop alone, the loop floor and removing decoration are this
+# system's rules. Each property has one owner check, so a broken role gives
+# one finding with one fix. Motion
 # tokens vary on motion and direction, so every check reads both, and a
 # right-to-left finding that repeats the left-to-right one is not repeated.
 _BOTH = ("motion", "direction")
@@ -432,7 +450,7 @@ CHECKS: Tuple[Check, ...] = (
     Check("linear-progress-only", "system", _linear_progress_only, axes=_BOTH),
     Check("reduced-not-longer", "system", _reduced_not_longer, axes=_BOTH),
     Check("progress-floor", "system", _progress_floor, axes=_BOTH),
-    Check("expressive-removed", "2.3.3", _expressive_removed, axes=_BOTH),
+    Check("expressive-removed", "system", _expressive_removed, axes=_BOTH),
 )
 
 

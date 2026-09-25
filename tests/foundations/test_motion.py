@@ -189,7 +189,7 @@ def test_reduced_progress_keeps_its_pace(roles, want):
 
 def test_only_travel_removal_cites_wcag_and_distances_keep_their_unit():
     assert {c.id: c.criterion for c in CHECKS} == {
-        "reduced-travel": "2.3.3", "reduced-length": "system", "expressive-removed": "2.3.3",
+        "reduced-travel": "2.3.3", "reduced-length": "system", "expressive-removed": "system",
         "reduced-curve": "system", "dismiss-faster": "system", "progress-linear": "system",
         "progress-keeps-pace": "system", "mirrored-motion": "system",
         "press-in-place": "system", "linear-progress-only": "system",
@@ -266,12 +266,13 @@ def test_reduced_motion_never_lengthens_a_role():
                  modes={"motion:reduced": "{motion.d.fast}"}, layer="semantic"))
     assert validate(ts) == []
     report = gate(ts, [], CHECKS, raise_on_fail=False)
+    # The press is past the cap too, so reduced-length owns it alone.
+    assert [(f.check, f.message) for f in report.failures
+            if f.message.startswith("motion.press.duration")] == [
+        ("reduced-length", "motion.press.duration lasts 1200ms under reduced motion; cap it at "
+         "100ms with a motion:reduced override")]
     assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures
             if f.check == "reduced-not-longer"] == [
-        ("reduced-not-longer", "system", "direction:ltr,motion:reduced",
-         "motion.press.duration lasts 1200ms under reduced motion but 100ms in standard; "
-         "reduced motion never lengthens a move, so point its motion:reduced override at "
-         "motion.d.fast or a shorter step"),
         ("reduced-not-longer", "system", "direction:ltr,motion:reduced",
          "motion.swap.duration lasts 100ms under reduced motion but 50ms in standard; reduced "
          "motion never lengthens a move, so point its motion:reduced override at motion.d.tiny "
@@ -299,11 +300,7 @@ def test_a_duration_longer_only_under_rtl_reduced_motion_fails():
     assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures] == [
         ("reduced-length", "system", "direction:rtl,motion:reduced",
          "motion.press.duration lasts 1200ms under direction:rtl,motion:reduced; cap it at 100ms "
-         "with a direction:rtl,motion:reduced override"),
-        ("reduced-not-longer", "system", "direction:rtl,motion:reduced",
-         "motion.press.duration lasts 1200ms under direction:rtl,motion:reduced but 100ms under "
-         "direction:rtl; reduced motion never lengthens a move, so point its "
-         "direction:rtl,motion:reduced override at motion.d.fast or a shorter step")]
+         "with a direction:rtl,motion:reduced override")]
 
 
 def test_reduced_is_compared_with_standard_in_the_same_direction():
@@ -464,17 +461,30 @@ def test_reduced_motion_lets_dismiss_and_reveal_tie():
 
 def test_reduced_motion_never_lets_dismiss_outlast_reveal():
     ts = _roles_set(motion__reveal__duration=("duration", "{motion.d.slow}",
-                                              {"motion:reduced": "{motion.d.fast}"}),
-                    motion__dismiss__duration=("duration", "{motion.d.fast}",
-                                               {"motion:reduced": "{motion.d.slow}"}))
+                                              {"motion:reduced": "{motion.d.tiny}"}),
+                    motion__dismiss__duration=("duration", "{motion.d.fast}", {}))
+    ts.add(Token("motion.d.tiny", "duration", {"value": 50, "unit": "ms"}))
     assert validate(ts) == []
     report = gate(ts, [], CHECKS, raise_on_fail=False)
     assert [(f.check, f.mode, f.message) for f in report.failures
             if f.check == "dismiss-faster"] == [
         ("dismiss-faster", "direction:ltr,motion:reduced",
-         "motion.dismiss.duration (1200ms) is longer than motion.reveal.duration (100ms) under "
+         "motion.dismiss.duration (100ms) is longer than motion.reveal.duration (50ms) under "
          "motion:reduced; reduced motion may let the two tie but never lets leaving outlast "
          "arriving, so shorten motion.dismiss.duration under motion:reduced")]
+
+
+def test_a_dismiss_past_the_cap_is_the_length_check_alone():
+    # Capping the dismiss at its standard 100ms also lets it tie the reveal.
+    ts = _roles_set(motion__reveal__duration=("duration", "{motion.d.slow}",
+                                              {"motion:reduced": "{motion.d.fast}"}),
+                    motion__dismiss__duration=("duration", "{motion.d.fast}",
+                                               {"motion:reduced": "{motion.d.slow}"}))
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.message) for f in report.failures
+            if f.message.startswith("motion.dismiss.duration")] == [
+        ("reduced-length", "motion.dismiss.duration lasts 1200ms under reduced motion; cap it at "
+         "100ms with a motion:reduced override")]
 
 
 def test_a_standard_motion_finding_is_not_repeated_under_reduced_motion():
@@ -517,3 +527,62 @@ def test_an_rtl_reduced_finding_is_named_once():
     report = gate(ts, [], CHECKS, raise_on_fail=False)
     assert [(f.check, f.mode) for f in report.failures] == [
         ("progress-keeps-pace", "direction:rtl,motion:reduced")]
+
+
+def _broken(role_path, modes):
+    """Generated motion with one role's overrides replaced."""
+    ts = generate_motion(axes(0.8)).tokens
+    ts.get(role_path).modes = modes
+    return ts
+
+
+def _findings_for(ts, path):
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    return [(f.check, f.mode, f.message) for f in report.failures if f.message.startswith(path)]
+
+
+def test_a_broken_expressive_role_gives_one_finding_per_property():
+    ts = _broken("motion.expressive.duration", {})
+    ts.get("motion.expressive.distance").modes = {}
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.criterion, f.mode, f.message) for f in report.failures] == [
+        ("reduced-travel", "2.3.3", "direction:ltr,motion:reduced",
+         "motion.expressive.distance travels 28px under reduced motion; point its "
+         "motion:reduced override at motion.distance.0"),
+        ("expressive-removed", "system", "direction:ltr,motion:reduced",
+         "motion.expressive.duration lasts 800ms under reduced motion; decoration is removed "
+         "under reduced motion, our rule, so point its motion:reduced override at "
+         "motion.duration.0")]
+
+
+def test_a_short_expressive_role_under_reduced_motion_still_fails_as_our_rule():
+    ts = _broken("motion.expressive.duration", {"motion:reduced": "{motion.duration.50}"})
+    assert _findings_for(ts, "motion.expressive") == [
+        ("expressive-removed", "direction:ltr,motion:reduced",
+         "motion.expressive.duration lasts 50ms under reduced motion; decoration is removed "
+         "under reduced motion, our rule, so point its motion:reduced override at "
+         "motion.duration.0")]
+
+
+@pytest.mark.parametrize("role", [r for r in ROLES if r != "motion.progress"])
+def test_every_broken_reduced_duration_has_one_owner(role):
+    # Longer than standard and past the cap: one finding whose fix clears both.
+    ts = _broken(f"{role}.duration", {"motion:reduced": "{motion.duration.1200}"})
+    found = _findings_for(ts, f"{role}.duration")
+    assert len(found) == 1, found
+    # Longer than standard but under the cap: one finding too.
+    ts = generate_motion(axes(0.0)).tokens
+    std = ts.resolve(f"{role}.duration")["value"]
+    if std < 100:
+        ts.get(f"{role}.duration").modes = {"motion:reduced": "{motion.duration.100}"}
+        assert len(_findings_for(ts, f"{role}.duration")) == 1
+
+
+def test_the_length_cap_names_a_step_that_also_keeps_reduced_no_longer():
+    ts = _roles_set(motion__swap__duration=("duration", "{motion.d.tiny}",
+                                            {"motion:reduced": "{motion.d.slow}"}))
+    ts.add(Token("motion.d.tiny", "duration", {"value": 50, "unit": "ms"}))
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    assert [(f.check, f.message) for f in report.failures] == [
+        ("reduced-length", "motion.swap.duration lasts 1200ms under reduced motion; cap it at "
+         "50ms, its standard length, with a motion:reduced override")]

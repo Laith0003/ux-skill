@@ -2,7 +2,7 @@
 
 ## Summary
 
-Motion sets how things move: seven interaction roles and one expressive role for decoration, each with a duration and a curve and, where something travels, a distance, plus a sign that mirrors horizontal travel under right to left. The motion axis sets the pace, and the motion and formality axes bend every curve continuously from plain to springy (decisions/expressive-motion.md). Reduced motion is a mode: roles keep their meaning with no travel, and one-shot moves take gentle curves and short durations. Motion does not govern the color or layout of what moves.
+Motion sets how things move: seven interaction roles and one expressive role for decoration, each with a duration and a curve and, where something travels, a distance, plus a sign that mirrors horizontal travel under right to left. The motion axis sets the pace, and the motion and formality axes bend every curve continuously from plain to springy (decisions/motion-check-owners.md). Reduced motion is a mode: roles keep their meaning with no travel, and one-shot moves take gentle curves and short durations. Motion does not govern the color or layout of what moves.
 
 ## Principles
 
@@ -38,7 +38,7 @@ The seven roles are press (a control confirms a tap in place), reveal (something
 | A move to another page or view | page | the longest one-shot move |
 | Work under way | progress | a linear loop that keeps its pace |
 | A value updates in a dense view | none, or swap at its shortest | frequent changes stay quiet |
-| A section reveals on scroll, a success is celebrated | expressive | decoration only; gone under reduced motion |
+| A section reveals on scroll | expressive | decoration only; gone under reduced motion |
 | Nothing changes that matters | none | never add motion for its own sake |
 
 Movement follows the smallest axis that explains the change: along one axis before two, translate for position, scale only for growth from a point, and opacity to support a move, not to replace one that carries meaning. The transform origin is where the change starts: a menu grows from its trigger.
@@ -52,18 +52,18 @@ Under reduced motion drop scale as well as travel: an element that grows from a 
 ## Changing the system
 
 1. Motion moves with the motion axis, and its curves with the motion and formality axes: every role grows calmer or livelier together. Change the axis in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
-2. The build keeps dismiss shorter than reveal, press in place, reduced values never longer than standard ones, and progress linear at 334ms or more per cycle, our floor; a failed check names the role and the mode.
+2. The build keeps dismiss shorter than reveal, press in place, reduced values never longer than standard ones, the expressive role at 0ms under reduced motion, and progress linear at 334ms or more per cycle, our floor; a failed check names the role, the mode and the one fix, since each property has one owner check.
 3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
 4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.
 
 ## Audit scope
 
-Audits the motion roles in both motion modes and both directions: reduced travel, length and curves, dismiss against reveal, press in place, the progress loop, and the mirrored sign. The WCAG risks are flashes (2.3.1: nothing flashes more than three times in any one second unless the flashes stay below the flash thresholds), motion from interaction that cannot be turned off (2.3.3, AAA) and moving content that cannot be paused (2.2.2). One-shot moves cannot flash, so 2.3.1 matters for loops only. It does not audit the color of what moves or video content.
+Audits the motion roles in both motion modes and both directions: reduced travel, length and curves, dismiss against reveal, press in place, the progress loop, the expressive role's removal, and the mirrored sign. The WCAG risks are flashes (2.3.1: nothing flashes more than three times in any one second unless the flashes stay below the flash thresholds), motion from interaction that cannot be turned off (2.3.3, AAA) and moving content that cannot be paused (2.2.2). One-shot moves cannot flash, so 2.3.1 matters for loops only. It does not audit the color of what moves or video content.
 
 ## Checks
 
 - `reduced-travel`: under reduced motion no role travels (WCAG 2.3.3).
-- `reduced-length`: under reduced motion no one-shot role lasts more than 100ms.
+- `reduced-length`: under reduced motion no one-shot role lasts more than 100ms, or more than its standard length when that is shorter; the progress loop and the expressive role have their own checks.
 - `reduced-curve`: under reduced motion no curve overshoots.
 - `dismiss-faster`: a dismiss is shorter than a reveal; under reduced motion it may tie but never be longer.
 - `progress-linear`: the progress loop runs at an even pace.
@@ -71,8 +71,8 @@ Audits the motion roles in both motion modes and both directions: reduced travel
 - `mirrored-motion`: the inline sign is 1 in left to right and -1 in right to left.
 - `press-in-place`: a press never travels.
 - `linear-progress-only`: only the progress loop is linear; every one-shot move eases.
-- `reduced-not-longer`: reduced motion never makes a role longer.
-- `expressive-removed`: under reduced motion the expressive role lasts 0ms and does not travel (WCAG 2.3.3).
+- `reduced-not-longer`: reduced motion never makes a role longer; a role past 100ms is reduced-length's finding.
+- `expressive-removed`: under reduced motion the expressive role lasts 0ms. Removing decoration is our rule; its travel is reduced-travel's finding (WCAG 2.3.3).
 - `progress-floor`: one cycle of the progress loop lasts at least 334ms, our floor; a loop that flashes more than three times a second falls under WCAG 2.3.1, which sets no duration.
 
 ## Beyond the gate

@@ -11,6 +11,7 @@ Imagery sets how photos and illustrations sit in the system: the aspect ratios m
 - **Text over an image always has a scrim.** The scrim is measured against the worst image for its text, the brightest under light text and the darkest under dark text, so no photo can take the text below its minimum.
 - **Treat photos as a set.** A tint or a duotone pulls photos from different sources into the brand's light; use one treatment per page.
 - **Art fills, it does not explain.** Generated art is decoration: it sets the mood where a photo is missing and says nothing a screen reader needs.
+- **Art is composed, not scattered.** The hero art has one focal shape in the brand color, a quiet neutral plane behind it and small support accents in front, open space on the heading's side, and area in proportion, about 60, 30 and 10 percent (decisions/art-composition.md).
 
 ## Roles
 
@@ -31,7 +32,8 @@ Imagery sets how photos and illustrations sit in the system: the aspect ratios m
 | A hero photo beside the headline | imagery.ratio.hero | none, or the page's one treatment |
 | Images in a card grid | imagery.ratio.card | the page's one treatment, the same on every card |
 | A person, a team member, an upright product | imagery.ratio.portrait | none |
-| A page with no photos yet | the generated art in art/ | decorative, with an empty alt |
+| A hero with no photo yet | art/shapes.svg, the heading on its open side | decorative, with an empty alt; mirrored under right to left |
+| A section, a card or an empty state with no photo | art/pattern.svg as a repeating background, or art/gradient.svg | decorative |
 | Photos from mixed sources on one page | their ratio | imagery.duotone or imagery.tint on all of them |
 
 Art direction, in our words: crop to the subject's eyes or the product's working face and keep it off the center line in a split layout; choose light that matches the scheme (bright, high key light for a light page, low key light for a dark one); prefer real use over staged smiles; show hands and faces from the audience the brief names; and keep the horizon and verticals level so the grid stays calm.
