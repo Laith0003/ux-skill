@@ -1,0 +1,10 @@
+/* Custom properties only: a design-token file by content. */
+:root {
+  --color-ink: #1a1a1a;
+  --color-paper: #fdfcf8;
+}
+
+[data-theme="dark"] {
+  --color-ink: #f2f2f2;
+  --color-paper: #121212;
+}

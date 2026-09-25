@@ -252,6 +252,7 @@ Optional `detection` fields read by `engine/linter`:
 | `unless` | Regex; when it matches anywhere in `unless_target` (default: the pass's own targets), the pass is skipped for that file. |
 | `unless_target` | Channel or list of channels `unless` reads. |
 | `skip_inside` | Element names; a match inside an open element of that name is ignored (for example `["picture"]`). |
+| `post` | Name of a structural check in `engine/linter/structure.py` (`POST_CHECKS`) that decides each match on its own: the element around it, its CSS rule block, or the file it imports. A rule with `post` needs clean and dirty cases under `tests/lint_corpus/cases/<rule-id>/`. |
 
 Every rule needs a fixture at `tests/lint_corpus/dirty/<id>.<ext>` that it fires on, and must stay silent on `tests/lint_corpus/clean/`.
 

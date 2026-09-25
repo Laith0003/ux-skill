@@ -241,8 +241,8 @@ To suppress a finding without editing the rules:
 
 - **Per-line**: add a `ux-lint-disable` comment on the offending line. Name the rule to waive only that rule: `/* ux-lint-disable arbitrary-z-index-9999 */`. Several ids can be listed, separated by commas.
 - **Next line**: in JSX, where a trailing comment is awkward, put `{/* ux-lint-disable-next-line inline-style-attribute */}` on the line above.
-- **Per-file**: pass `--exclude` to the linter with that file's glob.
-- **Project-wide**: pass `--disable <id>` for that rule ID.
+- **Per-file** (shell linter `bin/ux-lint.sh` only): pass `--exclude` with that file's glob. The Python `uxskill lint` has no such flag; lint the paths you want instead.
+- **Project-wide** (shell linter `bin/ux-lint.sh` only): pass `--disable <id>` for that rule ID. The Python `uxskill lint` has no such flag; use `ux-lint-disable` comments.
 
 To raise or lower the CI gate, pass `--fail-on critical` (looser) or `--fail-on medium` (stricter).
 
@@ -261,7 +261,19 @@ The Python linter does not run a rule over the raw file. Each rule names the cha
 
 So a CSS rule fires on `style={{ zIndex: 9999 }}` and on `className="z-[9999]"`, but not on a `zIndex={9999}` prop, a comment, a `data:` URI, or a sentence that mentions `z-index: 9999`.
 
-Other detection fields: `also` adds more passes with their own pattern and target, `unless` waives a pass for the whole file when its pattern matches (for example, `outline: none` is fine in a file that draws a `:focus-visible` ring), and `skip_inside` ignores matches inside the named elements (a `.jpg` fallback inside `<picture>`).
+Other detection fields: `also` adds more passes with their own pattern and target, `unless` waives a pass for the whole file when its pattern matches, `skip_inside` ignores matches inside the named elements (a `.jpg` fallback inside `<picture>`), and `post` names a structural check in `engine/linter/structure.py` that decides each hit on its own:
+
+| Rule | What the `post` check decides |
+|---|---|
+| `placeholder-as-label` | The input passes only with a real accessible name: a `<label for>` that matches its id, a wrapping `<label>`, `aria-label`, or `aria-labelledby` that points to an id in the file. An id alone names nothing. |
+| `outline-none-no-focus-visible` | Per rule block. A removed outline passes only when the same selector draws a ring on focus (outline, box-shadow or border), or a `:focus-within` or `:has(...:focus-visible)` rule on an ancestor does. A ring on some other element never excuses it. |
+| `hover-only-card-actions` | Passes when the hiding sits inside `@media (hover: hover)`, or a focus rule on the same card reveals the actions too. |
+| `imagery-mandatory-missing` | Skips a page whose main content is a document or app surface: one article or form that holds most of the content, or a page with fewer than two sections built around a form, article, table, code listing or grid. A landing page with a signup form still needs imagery. |
+| `css-import-render-blocking` | Allows `@import` of a local design-token stylesheet, named as one (`tokens.css`, `variables.css`) or holding custom properties only. Every other import still fires. |
+| `screen-reader-only-without-class` | Judges the first link in the body when it points at `#main` or `#content`, whatever language its text is in. A class containing `sr-only`, `visually-hidden`, `skip` or `screen-reader` passes. |
+| `inline-svg-no-aria` | An SVG inside an `aria-hidden="true"` ancestor is hidden already. |
+
+`.htm` files read as HTML, and `.svelte` files match every rule scoped to HTML or Vue.
 
 Two fixture sets keep the rules honest. `tests/lint_corpus/clean/` holds real-world UI files with no anti-patterns, and the test suite requires zero findings at medium or above on it. `tests/lint_corpus/dirty/` holds one file per rule, named after the rule id, and every rule must fire on its own file. A new rule needs both.
 
@@ -272,6 +284,9 @@ The plugin registers a `PostToolUse` hook (`bin/ux-lint-hook.py`, declared in `.
 - It never blocks the write. The tool has already run, the hook always exits 0, and any error inside it is swallowed.
 - It is pure Python standard library. No Node, no binaries, no installed packages.
 - It finishes in well under 500 ms on a 2,000-line file (`tests/test_lint_hook.py` checks this).
+- After an `Edit` or `MultiEdit` it lists only findings on the lines the edit wrote, and counts the older ones, so the same finding is not repeated on every edit. A `Write` lists them all.
+- A file over 1 MB is skipped, with a one-line note on stderr that names the file. Lint it by hand with `uxskill lint <file>`.
+- If the linter cannot load (for example under a Python older than 3.10), it prints one line to stderr saying so instead of going quiet.
 
 To turn it off, use either of these:
 

@@ -1,0 +1,20 @@
+.btn:focus {
+  outline: none;
+}
+
+.btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--focus);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--focus);
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+}

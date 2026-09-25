@@ -159,3 +159,75 @@ def test_hook_is_fast_on_a_2000_line_file(tmp_path):
         f"hook took {best * 1000:.0f} ms on 2,000 lines; budget is {BUDGET_SECONDS * 1000:.0f} ms "
         f"(test allows x{CI_MARGIN} for CI)"
     )
+
+
+@pytest.mark.parametrize("name,snippet,rule_id", [
+    ("Card.svelte", '<img src="/cover.jpg" alt="Cover">\n', "image-format-jpg-no-webp-avif"),
+    ("legacy.htm", '<div style="z-index: 9999">x</div>\n', "arbitrary-z-index-9999"),
+])
+def test_hook_lints_svelte_and_htm(tmp_path, name, snippet, rule_id):
+    f = tmp_path / name
+    f.write_text(snippet, encoding="utf-8")
+    context = json.loads(run_hook(payload_for(f)).stdout)["hookSpecificOutput"]["additionalContext"]
+    assert rule_id in context
+
+
+def test_hook_skips_files_over_one_megabyte_with_a_note(tmp_path):
+    f = tmp_path / "huge.html"
+    f.write_text("<div style=\"z-index: 9999\">x</div>\n" * 40000, encoding="utf-8")
+    assert f.stat().st_size > 1_000_000
+    result = run_hook(payload_for(f))
+    assert result.returncode == 0
+    assert result.stdout.strip() == ""
+    note = result.stderr.strip()
+    assert len(note.splitlines()) == 1, f"expected a one-line note, got: {note!r}"
+    assert "huge.html" in note and "uxskill lint huge.html" in note
+
+
+def test_hook_reports_only_edited_lines_after_an_edit(tmp_path):
+    f = tmp_path / "a.css"
+    f.write_text(".old { z-index: 9999; }\n.fine { color: red; }\n.new { transition: all 150ms; }\n", encoding="utf-8")
+    payload = payload_for(f, "Edit")
+    payload["tool_input"].update({"old_string": ".new { color: red; }", "new_string": ".new { transition: all 150ms; }"})
+    context = json.loads(run_hook(payload).stdout)["hookSpecificOutput"]["additionalContext"]
+    assert "a.css:3:" in context and "transition-property-all" in context
+    assert "arbitrary-z-index-9999" not in context
+    assert "1 older finding(s) elsewhere" in context
+
+
+def test_hook_reports_every_line_after_an_edit_it_cannot_place(tmp_path):
+    f = tmp_path / "a.css"
+    f.write_text(".old { z-index: 9999; }\n", encoding="utf-8")
+    payload = payload_for(f, "MultiEdit")
+    payload["tool_input"]["edits"] = [{"old_string": "x", "new_string": ""}]
+    context = json.loads(run_hook(payload).stdout)["hookSpecificOutput"]["additionalContext"]
+    assert "arbitrary-z-index-9999" in context
+
+
+def test_hook_exits_zero_on_a_malformed_cwd(tmp_path):
+    f = tmp_path / "a.css"
+    f.write_text(".a { z-index: 9999; }", encoding="utf-8")
+    payload = {"tool_name": "Write", "tool_input": {"file_path": "a.css"}, "cwd": 5}
+    result = run_hook(payload)
+    assert result.returncode == 0
+    assert "Traceback" not in result.stderr
+
+
+def test_hook_says_so_when_the_linter_cannot_load(tmp_path):
+    (tmp_path / "bin").mkdir()
+    hook = tmp_path / "bin" / "ux-lint-hook.py"
+    hook.write_text(HOOK.read_text(encoding="utf-8"), encoding="utf-8")
+    linter = tmp_path / "engine" / "linter"
+    linter.mkdir(parents=True)
+    (linter / "__init__.py").write_text("", encoding="utf-8")
+    (linter / "core.py").write_text("def broken(:\n", encoding="utf-8")
+    f = tmp_path / "a.css"
+    f.write_text(".a { z-index: 9999; }", encoding="utf-8")
+    env = {k: v for k, v in os.environ.items() if k not in ("UXSKILL_LINT_ON_WRITE", "CLAUDE_PROJECT_DIR")}
+    result = subprocess.run(
+        [sys.executable, str(hook)], input=json.dumps(payload_for(f)), capture_output=True, text=True,
+        env=env, timeout=60,
+    )
+    assert result.returncode == 0
+    assert result.stdout.strip() == ""
+    assert "ux-lint hook is off" in result.stderr and "Python 3.10" in result.stderr

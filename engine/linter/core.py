@@ -22,6 +22,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
 from engine.data_loader import load
+from engine.linter.structure import POST_CHECKS, FileContext
 from engine.linter.views import CHANNELS, FileViews, is_mention
 
 
@@ -169,6 +170,7 @@ def _compile_rules() -> List[Dict[str, Any]]:
             "regex": passes[0]["regex"],
             "passes": passes,
             "skip_inside": tuple(x.lower() for x in det.get("skip_inside", [])),
+            "post": POST_CHECKS.get(det.get("post", "")),
         })
     _RULE_CACHE.clear()
     _RULE_CACHE[id(data)] = rules
@@ -195,11 +197,16 @@ def _walk_paths(paths: Iterable[Path]) -> Iterable[Path]:
             yield f
 
 
+# Extensions that read like another scope: an .htm file is HTML, and a Svelte
+# component is HTML markup with Vue-like blocks.
+SCOPE_ALIASES = {"htm": ("html",), "svelte": ("html", "vue")}
+
+
 def _scope_matches(path: Path, scope: set) -> bool:
     if not scope:
         return True
     suffix = path.suffix.lstrip(".").lower()
-    if suffix in scope:
+    if suffix in scope or any(alias in scope for alias in SCOPE_ALIASES.get(suffix, ())):
         return True
     # special-case combined suffixes (.blade.php)
     name = path.name.lower()
@@ -224,16 +231,6 @@ def _suppressions(text: str) -> Dict[int, Optional[set]]:
     return out
 
 
-def _inside(text: str, pos: int, names: tuple) -> bool:
-    """True when ``pos`` sits inside an open element named in ``names``."""
-    low = text[:pos].lower()
-    for name in names:
-        opened = max(low.rfind("<" + name + ">"), low.rfind("<" + name + " "))
-        if opened != -1 and low.rfind("</" + name, opened) == -1:
-            return True
-    return False
-
-
 def _pass_targets(rule: Dict[str, Any]) -> Iterable[tuple]:
     for rpass in rule["passes"]:
         for target in rpass["targets"]:
@@ -249,6 +246,7 @@ def lint_text(name: str, text: str, rules: Optional[List[Dict[str, Any]]] = None
     line_starts = [0] + [m.end() for m in re.finditer("\n", text)]
     lines = text.splitlines()
     waived = _suppressions(text)
+    ctx = FileContext(path, text, views)
     findings: List[Finding] = []
     for rule in rules:
         if not _scope_matches(path, rule["scope"]):
@@ -267,13 +265,15 @@ def lint_text(name: str, text: str, rules: Optional[List[Dict[str, Any]]] = None
                 if target == "text" and is_mention(view.text, match.start(), match.end()):
                     continue
                 start = view.orig(match.start())
-                if rule["skip_inside"] and _inside(text, start, rule["skip_inside"]):
+                if rule["skip_inside"] and ctx.inside(start, rule["skip_inside"]):
                     continue
                 line_no = bisect_right(line_starts, start)
                 if line_no in seen_lines:
                     continue
                 w = waived.get(line_no, set())
                 if w is None or (rule["id"] or "").lower() in w:
+                    continue
+                if rule["post"] is not None and not rule["post"](ctx, view, match, start):
                     continue
                 seen_lines.add(line_no)
                 col_no = start - line_starts[line_no - 1] + 1
