@@ -104,8 +104,7 @@ Styles that work together: a label above a section title or a hero; a heading ab
 
 - Each style is five custom properties: font-family, font-size, font-weight, line-height and letter-spacing, named after the style, such as --type-text-body-font-size.
 - Apply a style as a whole, all five properties together; never size text with a raw value.
-{arabic} - The faces are named, not loaded: the page loads the display, text and mono faces and their Arabic partners.
-{latin} - The faces are named, not loaded: the page loads the display, text and mono faces.
+- fonts.css, written beside tokens.css, loads the faces: link it before tokens.css. Each face loads from the reader's own copy first, then from a fonts/ folder beside it; the system report gives the Google Fonts link for loading them from there instead. Each face has a metric-matched fallback, named "<face> Fallback", so text keeps its size and line breaks while the face loads.
 - Set type.text.figure with font-variant-numeric: tabular-nums, so amounts line up.
 - Draw line icons with stroke-width from type.icon.stroke and size them with the type.icon.size roles.
 {arabic} - Direction switches with dir on the html element; a right-to-left run inside a left-to-right page sets its five properties from the style's Arabic values by hand (decisions/axes-on-the-root.md).

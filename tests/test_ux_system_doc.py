@@ -101,7 +101,7 @@ def test_a_failed_build_points_at_the_inputs_not_at_tokens():
 def test_it_says_nothing_loads_the_fonts_and_names_every_family():
     for face in FACES:
         assert face.family in CREATE, face.family
-    assert "nothing loads them" in CREATE
+    assert "nothing loads the faces" in CREATE and "link `fonts.css` before `tokens.css`" in CREATE
     assert "Google Fonts" in CREATE and "self-hosted" in CREATE
     assert "system faces" in CREATE
 

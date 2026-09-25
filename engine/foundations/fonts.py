@@ -18,10 +18,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from types import MappingProxyType
-from typing import Dict, Mapping, Optional, Tuple
+from typing import TYPE_CHECKING, Dict, List, Mapping, Optional, Tuple
 
 from engine.foundations import character
 from engine.synthesizer.axes import AxisValues
+
+if TYPE_CHECKING:  # pragma: no cover
+    from engine.foundations.tokens import TokenSet
 
 LICENSE = "OFL-1.1"
 CDN = "https://fonts.googleapis.com/css2"
@@ -245,3 +248,100 @@ def css2_family(face: Face, weights: Tuple[int, ...]) -> str:
     if face.variable:
         return f"{name}:wght@{face.weights[0]}..{face.weights[1]}"
     return f"{name}:wght@" + ";".join(str(w) for w in sorted(set(weights)))
+
+
+# The Arabic blocks an Arabic face covers, so a page loads it only when it
+# shows Arabic.
+ARABIC_RANGE = "U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF"
+
+
+def faces_in(ts: "TokenSet") -> List[Tuple[str, Face]]:
+    """(face token, face) for every type.face.* token whose first family is
+    in the catalog, in token order, each face once."""
+    out: List[Tuple[str, Face]] = []
+    seen = set()
+    for t in ts.tokens():
+        if t.path.startswith("type.face.") and t.type == "fontFamily":
+            first = t.value[0] if isinstance(t.value, list) else t.value
+            face = BY_FAMILY.get(first)
+            if face and face.family not in seen:
+                seen.add(face.family)
+                out.append((t.path, face))
+    return out
+
+
+def weights_in(ts: "TokenSet") -> Tuple[int, ...]:
+    return tuple(sorted(int(t.value) for t in ts.tokens()
+                        if t.path.startswith("type.weight.") and t.type == "fontWeight"))
+
+
+def cdn_url(ts: "TokenSet") -> str:
+    """One Google Fonts CSS2 link for every face the system names."""
+    used = weights_in(ts)
+    params = "&".join("family=" + css2_family(f, tuple(f.clamp(w) for w in used))
+                      for _, f in faces_in(ts))
+    return f"{CDN}?{params}&display=swap"
+
+
+def fonts_css(ts: "TokenSet") -> str:
+    """fonts.css: an @font-face per face (local() first, then a WOFF2 in
+    fonts/ beside the file, font-display swap, Arabic faces limited to the
+    Arabic blocks), then a metric-matched fallback per face, and a comment
+    that says how to self-host or load from the CDN instead."""
+    used = weights_in(ts)
+    lines = [
+        "/* Fonts for this design system. Link this file before tokens.css.",
+        "   Each face loads from the reader's own copy first (local()), then from",
+        "   the fonts/ folder beside this file: to self-host, put the WOFF2 files",
+        "   named below in fonts/. To load from Google Fonts instead, remove the",
+        "   first block of @font-face rules and add to the page head:",
+        '   <link rel="preconnect" href="https://fonts.googleapis.com">',
+        '   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
+        f'   <link rel="stylesheet" href="{cdn_url(ts)}">',
+        "   Keep the Fallback faces either way: they give the system font the web",
+        "   face's width and height, so text does not move when the face arrives.",
+        "   Every face is under the SIL Open Font License 1.1. */",
+    ]
+    for _, face in faces_in(ts):
+        arabic = face.role == "arabic"
+        if face.variable:
+            srcs = [(f"fonts/{face.slug}.woff2", f"{face.weights[0]} {face.weights[1]}")]
+        else:
+            srcs = [(f"fonts/{face.slug}-{w}.woff2", str(w))
+                    for w in sorted({face.clamp(w) for w in used})]
+        for url, weight in srcs:
+            lines += ["", "@font-face {", f'  font-family: "{face.family}";',
+                      f'  src: local("{face.family}"), url("{url}") format("woff2");',
+                      f"  font-weight: {weight};", "  font-style: normal;",
+                      "  font-display: swap;"]
+            if arabic:
+                lines.append(f"  unicode-range: {ARABIC_RANGE};")
+            lines.append("}")
+    for _, face in faces_in(ts):
+        kind = "arabic" if face.role == "arabic" else face.generic
+        names = FALLBACKS[kind][0]
+        lines += ["", "@font-face {", f'  font-family: "{fallback_name(face)}";',
+                  "  src: " + ", ".join(f'local("{n}")' for n in names) + ";"]
+        lines += [f"  {k}: {v};" for k, v in fallback_overrides(face).items()]
+        lines.append("}")
+    return "\n".join(lines) + "\n"
+
+
+def loading_lines(ts: "TokenSet") -> List[str]:
+    """The report's words on loading the faces: what each is for, the
+    weights, how fonts.css loads them and the two ways to supply the files."""
+    used = weights_in(ts)
+    role_words = {"type.face.display": "display", "type.face.text": "text",
+                  "type.face.mono": "mono", "type.face.arabic": "Arabic text",
+                  "type.face.arabic-display": "Arabic display"}
+    roles: Dict[str, List[str]] = {}
+    for t in ts.tokens():
+        if t.path in role_words:
+            first = t.value[0] if isinstance(t.value, list) else t.value
+            roles.setdefault(first, []).append(role_words[t.path])
+    out = []
+    for _, face in faces_in(ts):
+        ws = sorted({face.clamp(w) for w in used})
+        out.append(f"{face.family} ({' and '.join(roles.get(face.family, []))}), weights "
+                   f"{', '.join(str(w) for w in ws)}, {LICENSE}.")
+    return out

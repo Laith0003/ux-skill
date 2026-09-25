@@ -317,9 +317,9 @@ def test_the_rule_pack_is_off_by_default_and_follows_the_three_files():
     assert tuple(plain.files) == FILES and "rule-pack" not in plain.report
     packed = make_system("#3366FF", NEUTRAL, "x", rule_pack=True)
     names = list(packed.files)
-    assert tuple(names[:3]) == FILES and names[3] == f"{RULE_PACK_DIR}/README.md"
-    assert all(n.startswith(f"{RULE_PACK_DIR}/") for n in names[3:])
-    assert {k: packed.files[k] for k in FILES[:2]} == {k: plain.files[k] for k in FILES[:2]}
+    assert tuple(names[:4]) == FILES and names[4] == f"{RULE_PACK_DIR}/README.md"
+    assert all(n.startswith(f"{RULE_PACK_DIR}/") for n in names[4:])
+    assert {k: packed.files[k] for k in FILES[:3]} == {k: plain.files[k] for k in FILES[:3]}
     assert "- rule-pack/: the rules for AI agents and people" in packed.report
     assert packed.files["system-report.md"] == packed.report
 
@@ -349,3 +349,25 @@ def test_the_report_states_the_brand_color_in_every_context():
     assert len(lines) == 5 and lines[4].startswith("- The logo (color.logo) is the brand color")
     assert lines[0].startswith("- Light mode: the button is the brand color #E85D04 exactly")
     assert report.index("## Brand color") < report.index("## Notes")
+
+
+def test_fonts_css_loads_every_face_local_first_with_a_matched_fallback():
+    out = make_system("#3366FF", NEUTRAL, NEUTRAL_SOURCE)
+    css = out.files["fonts.css"]
+    assert css.startswith("/* Fonts for this design system. Link this file before tokens.css.")
+    for family in ("Outfit", "Noto Sans", "IBM Plex Mono", "Noto Sans Arabic", "Alexandria"):
+        assert f'  src: local("{family}"), url("fonts/' in css, family
+        assert f'  font-family: "{family} Fallback";' in css, family
+    assert css.count("  font-display: swap;") == 8
+    assert "  size-adjust: 99.32%;" in css and "  unicode-range: U+0600-06FF" in css
+    assert "https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Noto+Sans" in css
+    assert "--" not in css.replace("--type", "")
+
+
+def test_the_report_says_how_to_load_the_fonts():
+    report = make_system("#3366FF", NEUTRAL, NEUTRAL_SOURCE).report
+    fonts = report.split("## Fonts\n\n", 1)[1].split("\n## ", 1)[0]
+    assert "link fonts.css before tokens.css" in fonts
+    assert "- Outfit (display), weights 400, 500, 600, 700, OFL-1.1." in fonts
+    assert "https://fonts.googleapis.com/css2?family=" in fonts
+    assert "- fonts.css: the faces and their metric-matched fallbacks" in report

@@ -1,5 +1,5 @@
-"""From user inputs to the three files a builder keeps: tokens.json,
-tokens.css and system-report.md.
+"""From user inputs to the files a builder keeps: tokens.json, tokens.css,
+fonts.css and system-report.md.
 
 The CLI (`uxskill system build`) and the MCP tool (`ux_system_build`) are
 thin callers of this module, so both read inputs, word errors and gate the
@@ -26,6 +26,7 @@ from engine.foundations.build import FOUNDATIONS, ValidationError, build_system
 from engine.foundations.color import brand_fidelity
 from engine.foundations.color_math import hex_to_rgb, rgb_to_hex
 from engine.foundations.export import dump_dtcg, to_css
+from engine.foundations.fonts import cdn_url, fonts_css, loading_lines
 from engine.foundations.gate import GateFailure, GateReport
 from engine.synthesizer.axes import (
     AXIS_NAMES, FORBIDDEN_CLAMPS, INDUSTRY_SEEDS, TONE_NUDGES, AxisValues, _apply_tone_nudges,
@@ -33,7 +34,7 @@ from engine.synthesizer.axes import (
 )
 
 # The files a build writes, in the order they are written and reported.
-FILES: Tuple[str, ...] = ("tokens.json", "tokens.css", "system-report.md")
+FILES: Tuple[str, ...] = ("tokens.json", "tokens.css", "fonts.css", "system-report.md")
 # The folder the rule pack is written into, inside the out folder, when asked.
 RULE_PACK_DIR = "rule-pack"
 # The file in it that records the sha256 of the tokens.json it was built from.
@@ -528,6 +529,11 @@ _FIDELITY_LEAD = ("Where the brand color appears, and whether it stays exact in 
                   "brand fill keeps the exact color whenever white or black text reads on it; "
                   "where a mode needs more contrast it moves to the nearest step of the brand's "
                   "scale, and the line says how far.")
+_FONTS_LEAD = ("The tokens name these faces and fonts.css loads them: link fonts.css before "
+               "tokens.css. Each face loads from the reader's own copy first, then from a fonts/ "
+               "folder beside fonts.css, so put the WOFF2 files there to self-host (each file is "
+               "named in fonts.css). Each face also has a metric-matched fallback, so text keeps "
+               "its size and line breaks while the face loads.")
 _ROLE_NOTE = re.compile(r"^color: brand role (?P<role>\w+) \((?P<why>.+)\)$")
 _ROLE_WORDS = {"fill": "the brand fills the main action",
                "accent": "the brand marks words and links, and the main action is ink",
@@ -548,7 +554,8 @@ def _change(gate_line: str) -> str:
 def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
                   gate_line: str, notes: Sequence[str],
                   findings: Sequence[SystemFinding], rule_pack: bool = False,
-                  fidelity: Sequence[str] = ()) -> str:
+                  fidelity: Sequence[str] = (), fonts: Sequence[str] = (),
+                  font_link: str = "") -> str:
     """system-report.md: one sentence on what was built, what it was built
     from, the gate result, every note or finding in plain words, and how to
     use the files, the rule pack among them when it was written. No time
@@ -580,10 +587,17 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
             lines += ["### Colors moved to meet contrast", "", *[f"- {n}" for n in moved], ""]
         if other:
             lines += ["### Other choices", "", *[f"- {n}" for n in other], ""]
+    if fonts:
+        lines += ["## Fonts", "", _FONTS_LEAD, "", *[f"- {f}" for f in fonts], "",
+                  "To load them from Google Fonts instead of your own files, add this link to "
+                  "the page head and remove the first block of @font-face rules in fonts.css:",
+                  "", f"    {font_link}", ""]
     lines += ["## Files", "",
               "- tokens.json: every token in the W3C design tokens format (DTCG 2025.10), with "
               "its values for each mode.",
               f"- tokens.css: CSS custom properties. {_MODES_LINE}",
+              "- fonts.css: the faces and their metric-matched fallbacks; link it before "
+              "tokens.css.",
               "- system-report.md: this report."]
     if rule_pack:
         lines.append(_PACK_LINE)
@@ -599,6 +613,8 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
     system."""
     notes: Sequence[str] = ()
     fidelity: Sequence[str] = ()
+    fonts: Sequence[str] = ()
+    font_link = ""
     tokens: Dict[str, str] = {}
     pack: Dict[str, str] = {}
     try:
@@ -616,7 +632,9 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
         gate = built.report.summary().splitlines()[0]
         notes = built.notes
         fidelity = brand_fidelity(built.tokens)
-        tokens = {"tokens.json": dump_dtcg(built.tokens), "tokens.css": to_css(built.tokens)}
+        fonts, font_link = loading_lines(built.tokens), cdn_url(built.tokens)
+        tokens = {"tokens.json": dump_dtcg(built.tokens), "tokens.css": to_css(built.tokens),
+                  "fonts.css": fonts_css(built.tokens)}
         if rule_pack:
             from engine.rulepack.generate import RulePackError, build_rule_pack
             try:
@@ -626,9 +644,10 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
                 n = len(findings)
                 gate = (f"{gate} {_RULE_PACK}: {n} problem{'' if n == 1 else 's'} between its "
                         "guidance, contracts or records and these tokens.")
-                notes, tokens, fidelity = (), {}, ()
+                notes, tokens, fidelity, fonts = (), {}, (), ()
     report = render_report(brand, axes, axes_source, arabic, gate, notes, findings,
-                           rule_pack=bool(pack), fidelity=fidelity)
+                           rule_pack=bool(pack), fidelity=fidelity, fonts=fonts,
+                           font_link=font_link)
     files = {**tokens, "system-report.md": report, **pack} if tokens else {}
     return SystemOutput(passed=bool(tokens), files=files, report=report, gate=gate,
                         findings=findings, brand=brand, axes=axes, axes_source=axes_source,

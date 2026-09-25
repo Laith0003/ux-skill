@@ -54,7 +54,7 @@ The engine reads five brief fields: `industry`, `tone`, `audience`, `must_have` 
 
 ### 3. Look before writing
 
-List the output folder first (`ls design-system/`). If `tokens.json`, `tokens.css`, `system-report.md` or a `rule-pack/` folder is already there, tell the user and run without `--force`: the engine then writes nothing if any file differs, and leaves identical files alone. When a `rule-pack/` folder is there, pass `--rule-pack` again whenever you change the system: a build without it leaves the pack as it was, and if the new `tokens.json` no longer matches the digest in `rule-pack/built-from.json`, the result and `system-report.md` name the pack as stale, with the fix (build again with `--rule-pack`, or remove the folder). The engine never deletes it.
+List the output folder first (`ls design-system/`). If `tokens.json`, `tokens.css`, `fonts.css`, `system-report.md` or a `rule-pack/` folder is already there, tell the user and run without `--force`: the engine then writes nothing if any file differs, and leaves identical files alone. When a `rule-pack/` folder is there, pass `--rule-pack` again whenever you change the system: a build without it leaves the pack as it was, and if the new `tokens.json` no longer matches the digest in `rule-pack/built-from.json`, the result and `system-report.md` name the pack as stale, with the fix (build again with `--rule-pack`, or remove the folder). The engine never deletes it.
 
 ### 4. Run the engine
 
@@ -64,9 +64,9 @@ uxskill --no-pretty system build --brand '#3366FF' --brief .ux/last-discovery.js
 
 Quote the brand color: an unquoted `#` starts a shell comment. Without a brief, pass `--axes 0.5,0.5,0.5,0.5,0.5,0.5,0.5` (warmth, contrast, density, geometry, formality, motion, type_personality) or leave both out for the neutral default. Do not pass both `--brief` and `--axes`. If `uxskill` is not on PATH, run the same arguments through `python3 -m engine.cli.main`.
 
-Add `--rule-pack` when the user wants the system's rules written for AI agents and people too, for example to keep an agent on the system while it builds screens, or to hand the system to another team. It is off by default. It writes `design-system/rule-pack/` beside the three files: per foundation an architecture, reference, audit and handoff file, the content and right-to-left rules, the six component contracts (button, text field, card, dialog, status banner, selectable row) and the decision records. The guidance and the contracts are checked against the tokens just built, and nothing is written if they do not fit. Only the command writes it; over MCP, build the tokens, then run the command with a shell when the user wants the rule pack.
+Add `--rule-pack` when the user wants the system's rules written for AI agents and people too, for example to keep an agent on the system while it builds screens, or to hand the system to another team. It is off by default. It writes `design-system/rule-pack/` beside the four files: per foundation an architecture, reference, audit and handoff file, the content and right-to-left rules, the six component contracts (button, text field, card, dialog, status banner, selectable row) and the decision records. The guidance and the contracts are checked against the tokens just built, and nothing is written if they do not fit. Only the command writes it; over MCP, build the tokens, then run the command with a shell when the user wants the rule pack.
 
-With a shell, use the command above: it writes the files itself. Without a shell, call `ux_system_build` over MCP with `brand`, and `brief` (an object) or `axes` (seven numbers), `latin_only` (true or false), and `out`, the absolute path of the output folder. It then writes the three files as the command does and returns the same `status`, `written`, `unchanged`, `conflicts` and `message`; `force` (true or false) does what `--force` does, and the same look-before-writing rule applies. Without `out` it writes nothing and returns `status` `built` (or `failed`), the report and each file's size. `include_files` (true or false) adds the `css` and `dtcg` text, but tokens.json is over 100 KB: do not copy it into files by hand, pass `out`. A bad input comes back as `status` `invalid`, `passed: false` and an `error` that names the field and the fix.
+With a shell, use the command above: it writes the files itself. Without a shell, call `ux_system_build` over MCP with `brand`, and `brief` (an object) or `axes` (seven numbers), `latin_only` (true or false), and `out`, the absolute path of the output folder. It then writes the four files as the command does and returns the same `status`, `written`, `unchanged`, `conflicts` and `message`; `force` (true or false) does what `--force` does, and the same look-before-writing rule applies. Without `out` it writes nothing and returns `status` `built` (or `failed`), the report and each file's size. `include_files` (true or false) adds the `css` and `dtcg` text, but tokens.json is over 100 KB: do not copy it into files by hand, pass `out`. A bad input comes back as `status` `invalid`, `passed: false` and an `error` that names the field and the fix.
 
 ### 5. Read the result
 
@@ -90,12 +90,12 @@ Read `design-system/system-report.md` and explain it. Do not paste it.
 - The gate in one sentence, for example: "Every text and control color passed contrast checks in light, dark and high contrast."
 - The adjustments that matter, from the report's "Colors moved to meet contrast" list, in one line each, for example: "in dark mode, button text switches to black so it stays readable on the lighter button."
 - How to switch modes: `data-theme="dark"`, `data-contrast="high"`, `data-density="compact"`, `dir="rtl"`, `data-motion="reduced"` on the html element. Without an attribute, dark, high contrast and reduced motion follow the operating system.
-- The three files and what each is for, and with `--rule-pack`, that an agent starts at `rule-pack/README.md`, which names the files to load for each task.
+- The four files and what each is for, and with `--rule-pack`, that an agent starts at `rule-pack/README.md`, which names the files to load for each task.
 - The fonts (step 7). Always say this; it is the step people miss.
 
 ### 7. Fonts: the page has to load them
 
-The tokens name the font families, but nothing loads them. The page that uses `tokens.css` must load the fonts itself, for example from Google Fonts or self-hosted font files. Until it does, the browser falls back to system faces and the type will not look as designed.
+The tokens name the font families, and `fonts.css`, written beside `tokens.css`, loads them: tell the user to link `fonts.css` before `tokens.css`. It loads each face from the reader's own copy first, then from a `fonts/` folder beside it, so self-hosted font files go there under the names `fonts.css` gives. To load from Google Fonts instead, the report's "Fonts" section gives the link. Until the page links `fonts.css`, nothing loads the faces and the browser falls back to system faces; each face has a metric-matched fallback, so text keeps its size and line breaks while a face loads.
 
 The engine picks three faces from a small catalog of open-license faces by the axes: a display face for the hero, the page and section titles and large figures, a text face for reading and controls, and a mono face for code. Each Latin face has an Arabic face drawn beside it. The report names the faces under "Other choices" (for example "type: display Outfit, text Noto Sans, mono IBM Plex Mono, Arabic Noto Sans Arabic and Alexandria").
 
@@ -106,7 +106,7 @@ The engine picks three faces from a small catalog of open-license faces by the a
 | Mono | IBM Plex Mono, JetBrains Mono |
 | Arabic | IBM Plex Sans Arabic, Noto Naskh Arabic, Readex Pro, Tajawal, Noto Sans Arabic, El Messiri, Amiri, Baloo Bhaijaan 2, Alexandria |
 
-Tell the user to load the display, text and mono faces the report names, and the Arabic faces unless the build is Latin only, in the weights the report lists.
+The report's "Fonts" section lists each face with its role, the weights it loads and its license (all SIL Open Font License 1.1).
 
 ### 8. When the build fails
 

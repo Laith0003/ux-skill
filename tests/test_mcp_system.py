@@ -129,7 +129,7 @@ def test_a_default_passing_result_is_small_enough_for_an_agent():
         assert result["report"] == expected.report
         assert result["files"] == [
             {"name": name, "bytes": len(expected.files[name].encode("utf-8"))}
-            for name in ("tokens.json", "tokens.css", "system-report.md")]
+            for name in ("tokens.json", "tokens.css", "fonts.css", "system-report.md")]
 
 
 def test_include_files_returns_the_texts():
@@ -157,7 +157,7 @@ def test_out_writes_the_same_bytes_as_the_cli(tmp_path):
     out = tmp_path / "mcp"
     result = handle_ux_system_build({"brand": "#3366FF", "brief": brief, "out": str(out)})
     assert result["status"] == "written" and result["passed"] is True
-    assert result["written"] == ["tokens.json", "tokens.css", "system-report.md"]
+    assert result["written"] == ["tokens.json", "tokens.css", "fonts.css", "system-report.md"]
     assert result["unchanged"] == [] and result["conflicts"] == []
     assert "css" not in result
     for name in result["written"]:
@@ -165,7 +165,7 @@ def test_out_writes_the_same_bytes_as_the_cli(tmp_path):
 
     again = handle_ux_system_build({"brand": "#3366FF", "brief": brief, "out": str(out)})
     assert again["status"] == "unchanged" and again["written"] == []
-    assert again["unchanged"] == ["tokens.json", "tokens.css", "system-report.md"]
+    assert again["unchanged"] == ["tokens.json", "tokens.css", "fonts.css", "system-report.md"]
 
 
 def test_out_refuses_a_differing_file_without_force(tmp_path):
@@ -173,7 +173,9 @@ def test_out_refuses_a_differing_file_without_force(tmp_path):
     before = {p.name: p.read_bytes() for p in tmp_path.iterdir()}
     result = handle_ux_system_build({"brand": "#AA3300", "out": str(tmp_path)})
     assert result["status"] == "refused" and result["passed"] is True
-    assert result["written"] == [] and set(result["conflicts"]) == set(before)
+    # fonts.css follows the axes, not the brand, so it is left as it is
+    assert result["written"] == [] and set(result["conflicts"]) == set(before) - {"fonts.css"}
+    assert result["unchanged"] == ["fonts.css"]
     assert "Pass force: true to replace them, or pass a different out folder." in result["message"]
     assert {p.name: p.read_bytes() for p in tmp_path.iterdir()} == before
 

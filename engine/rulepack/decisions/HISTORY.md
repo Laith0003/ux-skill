@@ -8,6 +8,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Mode axes switch on the root element only](axes-on-the-root.md)
 - [Breakpoints are reference values, and type does not change by breakpoint](breakpoints-are-reference-values.md)
 - [Density has two modes, comfortable and compact](two-density-modes.md)
+- [The build writes fonts.css with local faces first and matched fallbacks](font-loading.md)
 
 ## Roles per foundation
 

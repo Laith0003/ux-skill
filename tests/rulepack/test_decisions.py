@@ -22,7 +22,7 @@ EXPECTED = {
     "brand-roles", "brand-surfaces", "support-accent", "logo-and-decoration",
     "code-and-table-colors", "roundness", "high-contrast-borders", "surface-treatment",
     "type-three-faces", "face-choice", "type-along-the-scale", "arabic-proportional",
-    "high-contrast-weights", "strong-weight",
+    "high-contrast-weights", "strong-weight", "font-loading",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",
