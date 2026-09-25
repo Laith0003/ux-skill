@@ -122,3 +122,4 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Chips, badges, links, navigation, progress and tables are measured where they sit, and the table binds its phone layout](display-contracts-measured.md)
 - [A part inside a group draws one divider where it meets the rest, and the group draws the edge](divider-edge.md)
 - [Arabic copy follows the market for currency, months and fixed runs](arabic-market-content.md)
+- [An eyebrow is text only, with no line, dash or dot before or after it](eyebrow-is-text.md)

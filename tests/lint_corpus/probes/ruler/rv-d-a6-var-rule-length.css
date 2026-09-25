@@ -1,0 +1,1 @@
+.label::before { content: ""; width: var(--rule-length); height: var(--rule-weight); background: var(--accent); }

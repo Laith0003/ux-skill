@@ -466,7 +466,7 @@
       "category": "Layout",
       "detection": {
         "type": "regex",
-        "pattern": "<(?:button|div)[^>]*(?:aria-label=\"(?:menu|navigation|hamburger)\"|class=\"[^\"]*\\b(?:hamburger|menu-toggle)\\b[^\"]*\")[^>]*>(?![\\s\\S]*?(?:md:hidden|lg:hidden|hidden\\s+md:|hidden\\s+lg:))",
+        "pattern": "<(?:button|div|span|a)\\b(?=[^>]*(?:\\baria-(?:controls|expanded|label)\\b|\\b(?:class|id|title|data-[\\w-]+)\\s*=\\s*[\"'][^\"']*(?:menu|burger|toggl|nav|drawer|canvas)))[^>]*>",
         "flags": "i",
         "scope": [
           "tsx",
@@ -476,10 +476,11 @@
           "blade",
           "astro"
         ],
-        "target": "markup"
+        "target": "markup",
+        "post": "hamburger-on-desktop"
       },
-      "why": "Hamburger on a wide viewport hides nav from users for no reason; signals the responsive breakpoint was skipped.",
-      "fix": "Show inline nav on md: and up; hide the hamburger above that breakpoint with md:hidden."
+      "why": "A menu button on a wide viewport hides the navigation behind a click for no reason; the links fit, so the responsive breakpoint was skipped.",
+      "fix": "Show the links inline at desktop widths and hide the menu button there: a media query at the width where the links fit (@media (min-width: 1024px) { .menu-button { display: none } }), or a breakpoint class such as lg:hidden. Keep the button, its aria-expanded and aria-controls, below that width."
     },
     {
       "id": "tailwind-color-named-vague",
@@ -716,7 +717,8 @@
           "css",
           "scss"
         ],
-        "target": "css"
+        "target": "css",
+        "token_definitions": true
       },
       "why": "The default shadcn HSL token block with --radius 0.5rem is recognizable in two seconds by anyone who has shipped one shadcn app.",
       "fix": "Customize tokens at init: swap slate for zinc/stone, shift primary to a brand hue, set --radius to 0.625rem or 0.75rem."
@@ -3400,12 +3402,12 @@
     },
     {
       "id": "decorative-accent-ruler",
-      "name": "Decorative accent ruler (hairline ornament, fade, dot, or eyebrow dash)",
+      "name": "Decorative accent ruler (hairline ornament, fade, dot, or a line or dash beside an eyebrow)",
       "severity": "high",
       "category": "Visual",
       "detection": {
         "type": "regex",
-        "pattern": "class(?:Name)?=[\"'](?=[^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-]))(?=[^\"']*\\bbg-(?:gradient|linear)-to-[rl]\\b)|class(?:Name)?=[\"'][^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-])[^\"']*[\"'][^<]*(?:</\\w+>)?\\s*<\\w+[^>]*class(?:Name)?=[\"'](?=[^\"']*\\brounded-full\\b)(?=[^\"']*(?<![\\w-])(?:h|size)-(?:1|1\\.5|2)(?![\\w.-]))|class(?:Name)?=[\"'](?=[^\"']*\\brounded-full\\b)(?=[^\"']*(?<![\\w-])(?:h|size)-(?:1|1\\.5|2)(?![\\w.-]))[^\"']*[\"'][^<]*(?:</\\w+>)?\\s*<\\w+[^>]*class(?:Name)?=[\"'][^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-])|\\{(?![^{}]*\\banimation(?:-name)?\\s*:)(?=[^{}]*(?<![\\w-])height\\s*:\\s*[12]px)(?=[^{}]*linear-gradient\\([^)]*\\btransparent\\b)[^{}]*\\}|class(?:Name)?=[\"'](?=[^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-]))(?=[^\"']*(?<![\\w-])w-(?:[1-9]|1[0-6]|\\[(?:[89]|[1-5]\\d|6[0-4])px\\])(?![\\w.\\[-]))|:{1,2}(?:before|after)\\s*\\{(?![^{}]*\\banimation(?:-name)?\\s*:)(?=[^{}]*(?<![\\w-])height\\s*:\\s*[12]px)(?=[^{}]*(?<![\\w-])width\\s*:\\s*(?:[89]|[1-5]\\d|6[0-4])px)[^{}]*\\}",
+        "pattern": "class(?:Name)?=[\"'](?=[^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-]))(?=[^\"']*\\bbg-(?:gradient|linear)-to-[rl]\\b)|class(?:Name)?=[\"'][^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-])[^\"']*[\"'][^<]*(?:</\\w+>)?\\s*<\\w+[^>]*class(?:Name)?=[\"'](?=[^\"']*\\brounded-full\\b)(?=[^\"']*(?<![\\w-])(?:h|size)-(?:1|1\\.5|2)(?![\\w.-]))|class(?:Name)?=[\"'](?=[^\"']*\\brounded-full\\b)(?=[^\"']*(?<![\\w-])(?:h|size)-(?:1|1\\.5|2)(?![\\w.-]))[^\"']*[\"'][^<]*(?:</\\w+>)?\\s*<\\w+[^>]*class(?:Name)?=[\"'][^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-])|\\{(?![^{}]*\\banimation(?:-name)?\\s*:)(?=[^{}]*(?<![\\w-])height\\s*:\\s*[12]px)(?=[^{}]*linear-gradient\\([^)]*\\btransparent\\b)[^{}]*\\}|class(?:Name)?=[\"'](?=[^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-]))(?=[^\"']*(?<![\\w-])w-(?:[1-9]|1[0-6]|\\[(?:[89]|[1-5]\\d|6[0-4])px\\])(?![\\w.\\[-]))",
         "scope": [
           "html",
           "blade",
@@ -3419,10 +3421,28 @@
         "target": [
           "markup",
           "css"
+        ],
+        "post": "accent-ruler",
+        "also": [
+          {
+            "pattern": "(?P<pseudo>:{1,2}(?:before|after)\\b)(?=[^{};]*\\{)",
+            "flags": "i",
+            "target": "css"
+          },
+          {
+            "pattern": "(?P<edge>(?<![\\w-])(?:border-(?:left|right|inline-start|inline-end|inline)(?:-width|-style|-color)?|background(?:-image)?|box-shadow)\\s*:)",
+            "flags": "i",
+            "target": "css"
+          },
+          {
+            "pattern": "(?P<eyebrow><[A-Za-z][\\w.-]*\\s[^>]*?\\bclass\\s*=\\s*(?:\"[^\"]*|'[^']*)(?:eyebrow|kicker|overline|pre-?title|pre-?heading|super-?head|section-label|section-tag|uppercase))",
+            "flags": "i",
+            "target": "markup"
+          }
         ]
       },
-      "why": "A short 1-2px line used as ornament: under a heading, fading out of transparent, capped with a small dot, or set as a dash before an eyebrow label. It carries no structure and no meaning, and it is one of the most repeated marks in AI-generated pages. Real dividers are full-width, solid, and separate content.",
-      "fix": "Delete it. Build hierarchy with type size, weight, letter-spacing, and spacing instead. If content truly needs separating, use a full-width solid border (border-t with a neutral token) on the container, never a free-floating ornamental line."
+      "why": "A short line used as ornament: under a heading, fading out of transparent, capped with a small dot, or set as a line, dash or dot before or after an eyebrow label. It carries no structure and no meaning, and it is one of the most repeated marks in AI-generated pages. The eyebrow form comes in many builds: a ::before or ::after with a size or a border, an empty span or i, a border-inline-start on the label, a background-image line, an SVG line or dot, or a dash typed into the text. Real dividers are full-width, solid, and separate content.",
+      "fix": "Delete the mark and keep the eyebrow as text only: the label style (type.text.label) and its color carry it. Build hierarchy with type size, weight, letter-spacing and spacing. If content truly needs separating, use a full-width solid border (border-t with a neutral token) on the container, never a short ornamental line."
     },
     {
       "id": "full-viewport-width-overflow",
@@ -3505,7 +3525,8 @@
             "pattern": "(?<![\\w-])(?:shadow|drop-shadow)-\\[0(?:px)?_0(?:px)?_(?:(?:1[6-9]|[2-9]\\d|\\d{3,})px|[1-9]\\d*(?:\\.\\d+)?rem)",
             "target": "classes"
           }
-        ]
+        ],
+        "token_definitions": true
       },
       "why": "A shadow with no offset and a wide blur is not a shadow, it is a halo. Light has no source, so the element floats in neon instead of sitting on the page.",
       "fix": "Give the shadow a light source: a small y offset and a blur about twice the offset, for example box-shadow: 0 4px 12px rgb(0 0 0 / 0.12). For focus, use a spread ring with no blur (0 0 0 3px)."
@@ -3572,7 +3593,8 @@
             "flags": "",
             "unless": "next/font/local|(?<![\\w.])(?!(?:Inter|Geist|Geist_Mono)\\b)[A-Z][A-Za-z_]*\\(\\s*\\{\\s*(?:subsets|weight|variable|display)"
           }
-        ]
+        ],
+        "token_definitions": true
       },
       "why": "Inter or Geist alone, with no display face, scale or pairing, is the framework default. The type says nothing about the product because no one decided anything.",
       "fix": "Make one type decision on top of the default: pair the sans with a display or serif face for headings (declare it as a second font-family or --font-display token), or replace the default with a face chosen for the brand."
