@@ -113,8 +113,9 @@ def _rgb_hex(r: float, g: float, b: float) -> str:
 
 
 def _oklch_hex(L: float, C: float, H: float) -> str:
-    from engine.foundations.color_math import oklch_to_hex
-    return oklch_to_hex(L, C, H).upper()
+    # CSS Color 4 gamut mapping, the same the importers' value reader uses.
+    from engine.foundations.color_math import gamut_map_oklch
+    return gamut_map_oklch(L, C, H)[0]
 
 
 def _hsl_hex(h: float, s: float, l: float) -> str:
@@ -179,8 +180,8 @@ def normalize_hex(value: Any) -> str:
     if not (m or _HEX_RE.match(s)):
         return ""
     # The importers' value reader first, so detect and import read one color
-    # the same way. What it refuses by design (oklab, color(srgb), an oklch
-    # outside sRGB, hue units) detect still reads leniently, to find a primary.
+    # the same way. What it refuses by design (color(srgb), loose syntax)
+    # detect still reads leniently, to find a primary.
     from engine.io.values_in import NotRead, read_value  # engine.io imports this package
     try:
         kind, hx = read_value(s)

@@ -3,9 +3,10 @@ a report of what it read.
 
 The report records the source (path, format, sha256, size), how many
 entries the source held and how many became tokens, the token types and
-the modes, and three lists: entries renamed on the way in, entries read
-with a note, and entries not read. Every list item names where the entry
-sits and says what happened or how to write it so it can be read. Nothing
+the modes, and four lists: entries renamed on the way in, entries read
+with a note, colors mapped into sRGB (ruling M4-R5), and entries not read.
+Every list item names where the entry sits and says what happened or how
+to write it so it can be read. Nothing
 is guessed: an entry with more than one reading is not read.
 """
 from __future__ import annotations
@@ -37,6 +38,33 @@ class Item:
     def line(self) -> str:
         name = f" `{self.name}`" if self.name else ""
         return f"- {self.where}{name}: {self.message}"
+
+
+@dataclass(frozen=True)
+class Mapped:
+    """A color outside sRGB that was read by CSS Color 4 gamut mapping:
+    where it sits, its name, the value as written, the hex it was read as,
+    and the OKLab distance between the two."""
+    where: str
+    name: str
+    original: str
+    hex: str
+    distance: float
+
+    @classmethod
+    def of(cls, where: str, name: str, gamut: Any) -> "Mapped":
+        """From the GamutMapped that values_in.read_value reported."""
+        return cls(where, name, gamut.original, gamut.hex, gamut.distance)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {"where": self.where, "name": self.name, "original": self.original,
+                "hex": self.hex, "distance": round(self.distance, 4)}
+
+    def line(self) -> str:
+        name = f" `{self.name}`" if self.name else ""
+        return (f"- {self.where}{name}: {self.original} is outside sRGB; read as {self.hex}, "
+                f"the same lightness and hue with less chroma (OKLab distance "
+                f"{self.distance:.4f})")
 
 
 @dataclass(frozen=True)
@@ -89,6 +117,7 @@ class ImportReport:
     renamed: List[Item] = field(default_factory=list)
     notes: List[Item] = field(default_factory=list)
     not_read: List[Item] = field(default_factory=list)
+    mapped: List[Mapped] = field(default_factory=list)
 
     @classmethod
     def of(cls, source: Source, ts: TokenSet, entries: int) -> "ImportReport":
@@ -105,6 +134,7 @@ class ImportReport:
                 "by_type": dict(self.by_type), "axes": {a: list(v) for a, v in self.axes.items()},
                 "renamed": [i.to_dict() for i in self.renamed],
                 "notes": [i.to_dict() for i in self.notes],
+                "mapped": [i.to_dict() for i in self.mapped],
                 "not_read": [i.to_dict() for i in self.not_read]}
 
     def markdown(self) -> str:
@@ -123,6 +153,11 @@ class ImportReport:
             lines += ["", "## Renamed on the way in", "", *(i.line() for i in self.renamed)]
         if self.notes:
             lines += ["", "## Read with a note", "", *(i.line() for i in self.notes)]
+        if self.mapped:
+            lines += ["", "## Mapped into sRGB", "",
+                      "CSS Color 4 gamut mapping: each color below lies outside sRGB and was "
+                      "read at its own lightness and hue with the chroma lowered until it fits.",
+                      "", *(i.line() for i in self.mapped)]
         lines += ["", "## Not read", ""]
         if self.not_read:
             lines += ["Nothing below was guessed; each entry says how to write it so it can be "

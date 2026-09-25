@@ -123,8 +123,8 @@ def test_a_fallback_may_itself_hold_a_nested_reference():
 
 def test_system_detect_reads_colors_and_references_through_this_reader():
     """BF6's `system detect` and the importers read one color the same way:
-    detect reads through read_value and keeps its lenient reading only for
-    what the importer refuses (oklab, color(srgb), out-of-gamut oklch)."""
+    detect reads through read_value, maps out-of-gamut oklch the same way,
+    and keeps its lenient reading only for what the importer refuses."""
     import random
 
     from engine.existing import normalize_hex, resolve_css_var
@@ -142,7 +142,88 @@ def test_system_detect_reads_colors_and_references_through_this_reader():
                 continue
             assert normalize_hex(text) == want, text
     assert normalize_hex("#36fc") == "#3366FF" and normalize_hex("white") == ""
-    assert normalize_hex("oklch(62.3% 0.214 259.815)").startswith("#")
+    for text in TAILWIND_V4:
+        assert normalize_hex(text) == read_value(text)[1]
+    # The DTCG object form maps through the same function.
+    assert normalize_hex({"colorSpace": "oklch", "components": [0.623, 0.214, 259.815]}) \
+        == read_value("oklch(0.623 0.214 259.815)")[1]
     props = {"--a": "var(--b, var(--c, #111111))", "--x": "var(--y) var(--z)"}
     assert resolve_css_var("var(--a)", props) == "#111111"
     assert resolve_css_var("var(--x)", props) == "var(--y) var(--z)"
+
+
+# Tailwind v4's blue-500, green-500 and red-600: written in oklch, outside
+# sRGB. The hex each maps to is the sRGB fallback Tailwind itself publishes.
+TAILWIND_V4 = {
+    "oklch(62.3% 0.214 259.815)": "#2B7FFF",
+    "oklch(72.3% 0.219 149.579)": "#00C950",
+    "oklch(57.7% 0.245 27.325)": "#E7000B",
+}
+# Tailwind v4's red-500 sits inside sRGB: read as it is, with no report line.
+TAILWIND_V4_RED_500 = "oklch(63.7% 0.237 25.331)"
+
+
+@pytest.mark.parametrize("text", sorted(TAILWIND_V4))
+def test_out_of_gamut_oklch_is_mapped_into_srgb_never_refused(text):
+    """M4-R5: CSS Color 4 gamut mapping. Lower the chroma, keep lightness
+    and hue, until the color sits inside sRGB within a just visible step."""
+    from engine.foundations.color_math import hex_to_oklch
+
+    mapped = []
+    kind, hx = read_value(text, mapped)
+    assert (kind, hx) == ("color", TAILWIND_V4[text])
+    assert [(m.original, m.hex) for m in mapped] == [(text, hx)]
+    assert 0 < mapped[0].distance < 0.1
+    L, C, H = hex_to_oklch(hx)
+    body = text[6:-1].split()
+    assert abs(L - float(body[0][:-1]) / 100) < 0.01
+    assert abs((H - float(body[2]) + 180) % 360 - 180) < 3
+    assert C < float(body[1])
+
+
+def test_the_mapping_is_deterministic():
+    runs = [[read_value(t) for t in sorted(TAILWIND_V4)] for _ in range(3)]
+    assert runs[0] == runs[1] == runs[2]
+
+
+def test_an_in_gamut_color_is_unchanged_and_not_reported():
+    from engine.foundations.color_math import oklch_to_hex
+
+    mapped = []
+    for L, C, H in ((0.5, 0.1, 250), (0.9, 0.02, 90), (0.2, 0.05, 20)):
+        assert read_value(f"oklch({L} {C} {H})", mapped) == ("color", oklch_to_hex(L, C, H))
+    assert read_value("#3366FF", mapped) == ("color", "#3366FF")
+    assert read_value(TAILWIND_V4_RED_500, mapped) == ("color", "#FB2C36")
+    assert mapped == []
+
+
+def test_oklab_reads_and_maps_the_same_way():
+    import math
+
+    a, b = 0.214 * math.cos(math.radians(259.815)), 0.214 * math.sin(math.radians(259.815))
+    mapped = []
+    assert read_value(f"oklab(0.623 {a:.6f} {b:.6f})", mapped) \
+        == read_value("oklch(62.3% 0.214 259.815)")
+    assert len(mapped) == 1
+    assert read_value("oklab(1 0 0)") == ("color", "#FFFFFF")
+    assert read_value("oklab(0 0 0 / 50%)") == ("color", "#00000080")
+
+
+def test_a_mapped_color_inside_a_shadow_is_reported_too():
+    mapped = []
+    read_value("0 1px 2px oklch(62.3% 0.214 259.815)", mapped)
+    assert [m.original for m in mapped] == ["oklch(62.3% 0.214 259.815)"]
+
+
+@pytest.mark.parametrize("hue", ["180", "180deg", "0.5turn", "3.141592653589793rad",
+                                 "200grad"])
+def test_hue_units(hue):
+    assert read_value(f"oklch(0.7 0.1 {hue})") == read_value("oklch(0.7 0.1 180)")
+    assert read_value(f"hsl({hue} 100% 50%)") == ("color", "#00FFFF")
+
+
+def test_any_other_hue_unit_is_refused_by_name():
+    with pytest.raises(NotRead) as exc:
+        read_value("oklch(0.7 0.1 30foo)")
+    assert str(exc.value) == ("oklch(0.7 0.1 30foo) writes its hue in foo, which this reader "
+                              "does not read; write the hue in deg, turn, rad or grad")
