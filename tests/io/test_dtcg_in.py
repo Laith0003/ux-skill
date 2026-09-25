@@ -116,7 +116,11 @@ def test_the_report_lists_renames_notes_and_what_was_not_read():
         ("motion.calm", "is marked deprecated (use motion.quick); the engine has no deprecated "
                         "tokens, so it was read as a live one"),
         ("layer", "carries $extensions from com.example.tool, which the engine does not read; "
-                  "they are left out of what it writes")]
+                  "they are left out of what it writes")] + [
+        ("heading", f"its field {field} ({value}) is a literal inside a semantic token; extract "
+                    "it to a primitive token and alias it, as fontSize is")
+        for field, value in (("fontFamily", "Serif Display, serif"), ("fontWeight", "700"),
+                             ("letterSpacing", "0px"), ("lineHeight", "1.2"))]
     assert [(i.name, i.message) for i in report.not_read] == [
         ("palette.night", "a lab color with no hex fallback; the engine measures sRGB only, so "
                           "write it as srgb or add a hex fallback"),
@@ -600,7 +604,7 @@ DARK = {"color": {"$type": "color", "bg": {"$value": "#111111"}, "fg": {"$value"
         "space": {"2": {"$type": "color", "$value": "#000000"}}}
 
 
-@pytest.mark.parametrize("dark_name", ["tokens.dark.json", "dark.json", "dark/tokens.json"])
+@pytest.mark.parametrize("dark_name", ["tokens.dark.json", "dark/tokens.json"])
 def test_a_sibling_dark_file_is_paired_by_token_path(tmp_path, dark_name):
     src = _write(tmp_path / "tokens.json", LIGHT)
     _write(tmp_path / dark_name, DARK)
@@ -716,3 +720,70 @@ def test_a_tokens_studio_file_pairs_its_light_and_dark_themes():
     assert not any("does not hold" in n for _, n in _lines(report.notes))
     assert [i.name for i in report.not_read] == ["global.space.sm"]
     assert report.not_read[0].where == "studio.json global.space.sm"
+
+
+def test_a_bare_dark_json_pairs_with_a_light_named_file(tmp_path):
+    for light in ("light.json", "theme.light.json"):
+        folder = tmp_path / light.split(".")[0]
+        src = _write(folder / light, LIGHT)
+        _write(folder / "dark.json", DARK)
+        imported = read_dtcg(src)
+        assert imported.tokens.get("color.bg").modes == {"scheme:dark": "#111111"}
+        assert [s.path for s in imported.report.also_read] == [str(folder / "dark.json")]
+
+
+def test_a_bare_dark_json_beside_a_file_not_named_light_is_a_candidate(tmp_path):
+    src = _write(tmp_path / "tokens.json", LIGHT)
+    _write(tmp_path / "dark.json", DARK)
+    imported = read_dtcg(src)
+    assert dict(imported.tokens.axes) == {} and imported.report.also_read == []
+    assert imported.report.notes[0] == Item(
+        "dark.json", "", "sits beside tokens.json and may hold its dark scheme, but was not "
+                         "paired, since neither file is named for light; rename tokens.json to "
+                         "light.json, or dark.json to tokens.dark.json, and import again to "
+                         "read it as scheme:dark")
+
+
+def test_a_bare_dark_json_beside_a_light_json_is_that_files_not_anothers(tmp_path):
+    src = _write(tmp_path / "tokens.json", LIGHT)
+    _write(tmp_path / "light.json", LIGHT)
+    _write(tmp_path / "dark.json", DARK)
+    imported = read_dtcg(src)
+    assert imported.report.also_read == []
+    assert imported.report.notes[0] == Item(
+        "dark.json", "", "sits beside light.json, so it is read as the dark half of light.json, "
+                         "not of tokens.json; import light.json to read the two schemes "
+                         "together")
+
+
+def test_a_literal_inside_a_partly_aliased_composite_is_named():
+    doc = {"font": {"$type": "fontFamily", "body": {"$value": ["Inter", "sans-serif"]}},
+           "shade": {"$type": "color", "soft": {"$value": "#00000033"}},
+           "type": {"$type": "typography", "body": {"$value": {
+               "fontFamily": "{font.body}", "fontSize": {"value": 16, "unit": "px"},
+               "fontWeight": 400, "lineHeight": 1.5,
+               "letterSpacing": {"value": 0, "unit": "px"}}}},
+           "lift": {"$type": "shadow", "card": {"$value": {
+               "color": "{shade.soft}", "offsetX": {"value": 0, "unit": "px"},
+               "offsetY": {"value": 1, "unit": "px"}, "blur": {"value": 2, "unit": "px"},
+               "spread": {"value": 0, "unit": "px"}}}}}
+    imported = _import(doc)
+    assert imported.tokens.get("type.body").layer == "semantic"
+    notes = [(i.name, i.message) for i in imported.report.notes
+             if "a literal inside a semantic token" in i.message]
+    assert notes[0] == (
+        "type.body", "its field fontSize (16px) is a literal inside a semantic token; extract "
+                     "it to a primitive token and alias it, as fontFamily is")
+    assert [n for n, _ in notes] == ["type.body"] * 4 + ["lift.card"] * 4
+    assert "its field blur (2px) is" in notes[6][1]
+
+
+def test_a_composite_with_every_field_aliased_or_none_has_no_literal_note():
+    doc = {"font": {"$type": "fontFamily", "body": {"$value": ["Inter", "sans-serif"]}},
+           "type": {"$type": "typography", "body": {"$value": {
+               "fontFamily": ["Inter"], "fontSize": {"value": 16, "unit": "px"},
+               "fontWeight": 400, "lineHeight": 1.5,
+               "letterSpacing": {"value": 0, "unit": "px"}}}}}
+    imported = _import(doc)
+    assert imported.tokens.get("type.body").layer == "primitive"
+    assert not [i for i in imported.report.notes if "literal inside" in i.message]

@@ -26,10 +26,13 @@ DTCG forbids and a property DTCG does not define are each listed.
 A dark scheme is read wherever systems keep it, and paired by token path
 into scheme:dark: a sibling file named for dark (tokens.dark.json,
 x.dark.tokens.json beside x.tokens.json, x.dark.json beside x.light.json,
-dark.json, or the same name in a dark/ folder), another tool's `dark` or
+dark.json beside a file named for light, or the same name in a dark/
+folder), another tool's `dark` or
 `modes` {light, dark} entry in a token's $extensions, or the Light and
-Dark themes of a Tokens Studio file. The report names every pairing, and
-every token found in only one scheme. Other tools' $extensions are
+Dark themes of a Tokens Studio file. A bare dark.json beside a file not
+named for light is not paired; the report names it as a candidate, with
+the rename that pairs it. The report names every pairing, and every token
+found in only one scheme. Other tools' $extensions are
 otherwise left out and the report says so.
 """
 from __future__ import annotations
@@ -154,6 +157,38 @@ def _leaves(value: Any) -> List[Any]:
 
 def _refs(value: Any) -> List[str]:
     return [alias_target(x) for x in _leaves(value) if is_alias(x)]
+
+
+def _literal_text(value: Any) -> str:
+    """A field's literal value as a person writes it: 16px, 400, Inter."""
+    if isinstance(value, dict) and set(value) == {"value", "unit"} and _number(value["value"]):
+        return f"{value['value']:g}{value['unit']}"
+    if _number(value):
+        return f"{value:g}"
+    if isinstance(value, list) and all(isinstance(x, str) for x in value):
+        return ", ".join(value)
+    return value if isinstance(value, str) else json.dumps(value)
+
+
+def _literals_inside(value: Any, context: str = "") -> List[str]:
+    """A note for each literal field of a composite (a typography, a shadow
+    and its layers) whose other fields are aliases: the token references
+    others, so it is semantic, and a literal inside it is a primitive
+    value that belongs in a token of its own."""
+    layers = value if isinstance(value, list) else [value]
+    if not layers or not all(isinstance(x, dict) for x in layers):
+        return []
+    fields = [(n, k, v) for n, layer in enumerate(layers, 1) for k, v in layer.items()]
+    aliased = list(dict.fromkeys(k for _, k, v in fields if _refs(v)))
+    if not aliased:
+        return []
+    at = f" in {context}" if context else ""
+    held = aliased[0] if len(aliased) == 1 else ", ".join(aliased[:-1]) + " and " + aliased[-1]
+    verb = "is" if len(aliased) == 1 else "are"
+    return [f"its field {k}{f' of layer {n}' if len(layers) > 1 else ''}{at} "
+            f"({_literal_text(v)}) is a literal inside a semantic token; extract it to a "
+            f"primitive token and alias it, as {held} {verb}"
+            for n, k, v in fields if not _refs(v)]
 
 
 class _Reader:
@@ -832,6 +867,8 @@ def import_dtcg(text: str, source: Source,
         if left_out:
             reader.notes.append(_extensions_note(left_out))
         refs = [r for v in [value, *modes.values()] for r in _refs(v)]
+        for context, v in [("", value), *modes.items()]:
+            reader.notes += _literals_inside(v, context)
         outside = sorted({r for r in refs if r not in union})
         if outside:
             reader.notes.append(f"references {', '.join(outside)}, which this file does not "
@@ -940,13 +977,21 @@ def import_dtcg(text: str, source: Source,
     return Imported(ts, report)
 
 
+def _dark_named(path: Path) -> bool:
+    return "dark" in [w.lower() for w in path.name.split(".")] \
+        or path.parent.name.lower() == "dark"
+
+
 def _dark_sibling(path: Path) -> Optional[Path]:
     """The file beside `path` that holds its dark scheme, by name: the
     light file's name with light turned to dark, the name with .dark after
-    its first part (tokens.json, tokens.dark.json), dark.json, or the same
-    name in a dark/ folder. None when `path` itself is the dark one."""
+    its first part (tokens.json, tokens.dark.json), dark.json when `path`
+    is named for light (light.json, theme.light.json), or the same name in
+    a dark/ folder. None when `path` itself is the dark one. A bare
+    dark.json beside a file not named for light is only a candidate (see
+    _bare_dark)."""
     words = [w.lower() for w in path.name.split(".")]
-    if "dark" in words or path.parent.name.lower() == "dark":
+    if _dark_named(path):
         return None
     first, _, rest = path.name.partition(".")
     options = []
@@ -955,10 +1000,31 @@ def _dark_sibling(path: Path) -> Optional[Path]:
                                                for w in path.name.split("."))))
     if rest:
         options.append(path.with_name(f"{first}.dark.{rest}"))
-    options += [path.with_name("dark.json"), path.parent / "dark" / path.name]
+    if "light" in words[:-1]:
+        options.append(path.with_name("dark.json"))
+    options.append(path.parent / "dark" / path.name)
     if path.parent.name.lower() == "light":
         options.append(path.parent.parent / "dark" / path.name)
     return next((o for o in options if o != path and o.is_file()), None)
+
+
+def _bare_dark(path: Path) -> Optional[Item]:
+    """A note on a bare dark.json beside `path` that was not paired with
+    it: it belongs to a light.json beside it, or nothing names the pair."""
+    bare = path.with_name("dark.json")
+    if bare == path or _dark_named(path) or not bare.is_file():
+        return None
+    light = path.with_name("light.json")
+    if light != path and light.is_file():
+        return Item("dark.json", "", f"sits beside light.json, so it is read as the dark half "
+                                     f"of light.json, not of {path.name}; import light.json to "
+                                     "read the two schemes together")
+    first, _, rest = path.name.partition(".")
+    return Item("dark.json", "", f"sits beside {path.name} and may hold its dark scheme, but "
+                                 "was not paired, since neither file is named for light; rename "
+                                 f"{path.name} to light.json, or dark.json to "
+                                 f"{first}.dark.{rest or 'json'}, and import again to read it as "
+                                 "scheme:dark")
 
 
 def read_dtcg(path: Any, label: str = "--from", pair: bool = True) -> Imported:
@@ -967,6 +1033,10 @@ def read_dtcg(path: Any, label: str = "--from", pair: bool = True) -> Imported:
     source, text = read_source(path, "dtcg", label)
     sibling = _dark_sibling(Path(source.path)) if pair else None
     if sibling is None:
-        return import_dtcg(text, source)
+        imported = import_dtcg(text, source)
+        candidate = _bare_dark(Path(source.path)) if pair else None
+        if candidate is not None:
+            imported.report.notes.insert(0, candidate)
+        return imported
     dark_source, dark_text = read_source(sibling, "dtcg", label)
     return import_dtcg(text, source, (dark_text, dark_source))
