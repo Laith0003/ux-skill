@@ -14,7 +14,8 @@ from engine.foundations.modes import contexts
 from engine.synthesizer.axes import AxisValues
 
 ROOT = Path(__file__).resolve().parents[2]
-NAMES = ("button", "card", "dialog", "selectable-row", "status-banner", "text-field")
+NAMES = ("button", "card", "checkbox", "date", "dialog", "input-prefix", "radio", "select",
+         "selectable-row", "status-banner", "text-field", "textarea")
 BRANDS = ("#3366FF", "#6B4423", "#FFD400", "#E11D48", "#16A34A", "#0EA5E9", "#7C3AED",
           "#F97316", "#111827", "#F5F5F5", "#00FFFF", "#FF00FF",
           # A near-gray brand whose selected surface matches a card in dark high
@@ -24,13 +25,14 @@ AXES = (AxisValues(*[0.5] * 7), AxisValues(0.1, 0.9, 0.2, 0.3, 0.4, 0.5, 0.6),
         AxisValues(0.9, 0.1, 0.8, 0.7, 0.6, 0.5, 0.4))
 
 
-def test_the_six_seeds_load_and_are_experimental():
+def test_the_seeds_load_and_are_experimental():
     seeds = seed_contracts()
     assert tuple(c.name for c in seeds) == NAMES
     assert all(c.status == "experimental" for c in seeds)
     assert {c.name: c.variant_product() for c in seeds} == {
-        "button": 12, "card": 2, "dialog": 2, "selectable-row": 2, "status-banner": 4,
-        "text-field": 2}
+        "button": 12, "card": 2, "checkbox": 3, "date": 1, "dialog": 2, "input-prefix": 2,
+        "radio": 2, "select": 1, "selectable-row": 2, "status-banner": 4, "text-field": 2,
+        "textarea": 2}
     assert all(c.provenance.node is None and c.provenance.drift == () for c in seeds)
 
 

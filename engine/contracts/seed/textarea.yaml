@@ -1,0 +1,84 @@
+# Textarea: text that runs to several lines. Every value is a semantic role.
+name: textarea
+status: experimental
+category: input
+description: Takes a message or a note that runs to several lines, with a visible label, optional helper text, a count when there is a limit, and a message that names the problem and the fix.
+parts:
+  - {name: label, rtlBehavior: logical}
+  - {name: input, rtlBehavior: logical}
+  - {name: placeholder, rtlBehavior: logical}
+  - {name: helper, rtlBehavior: logical}
+  - {name: counter, rtlBehavior: logical}
+  - {name: message, rtlBehavior: logical}
+  - {name: icon, rtlBehavior: logical}
+variants:
+  - {name: resize, values: [vertical, none], default: vertical}
+states: [default, hover, focus, disabled, error]
+tokens:
+  - {part: label, property: text, role: color.text.default}
+  - {part: label, property: font, role: type.text.ui-large}
+  - {part: label, property: stack-gap, role: space.field.label-gap}
+  - {part: input, property: fill, role: color.surface.card}
+  - {part: input, property: border-width, role: border.outline}
+  - {part: input, property: border-color, role: color.line.input}
+  - {part: input, property: text, role: color.text.default}
+  - {part: input, property: font, role: type.text.body}
+  - {part: input, property: radius, role: radius.control}
+  - {part: input, property: padding-inline, role: space.control.padding-inline}
+  - {part: input, property: padding-block, role: space.control.padding-block}
+  - {part: input, property: min-size, role: layout.target.min}
+  - {part: placeholder, property: text, role: color.text.muted}
+  - {part: helper, property: text, role: color.text.default}
+  - {part: helper, property: font, role: type.text.body-small}
+  - {part: helper, property: stack-gap, role: space.field.message-gap}
+  - {part: counter, property: text, role: color.text.muted}
+  - {part: counter, property: font, role: type.text.body-small}
+  - {part: input, property: border-width, role: border.emphasis, state: hover}
+  - {part: input, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: input, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: input, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  - {part: input, property: border-width, role: border.emphasis, state: error}
+  - {part: input, property: border-color, role: color.line.danger, state: error}
+  - {part: icon, property: icon, role: color.status.danger.strong, state: error}
+  - {part: counter, property: text, role: color.status.danger.text, state: error}
+  - {part: message, property: text, role: color.status.danger.text, state: error}
+  - {part: message, property: font, role: type.text.body-small, state: error}
+  - {part: message, property: stack-gap, role: space.field.message-gap, state: error}
+  - {part: input, property: fill, role: color.surface.sunken, state: disabled}
+  - {part: input, property: border-color, role: color.line.subtle, state: disabled}
+  - {part: input, property: text, role: color.text.disabled, state: disabled}
+contrast:
+  - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.input, bg: color.surface.card, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.danger, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.text.default, bg: color.surface.card, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: color.surface.card, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.status.danger.strong, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.status.danger.text, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.focus.ring, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+surfaces: [color.surface.page, color.surface.card, color.surface.raised, color.surface.sunken]
+a11y:
+  target: layout.target.min
+  label: localized
+  cue: an error adds an icon, a heavier edge and a message, and an exceeded count turns to the danger text with its number
+copy:
+  default:
+    - The label names what to write in two or three words
+    - When there is a limit, the counter shows the characters left, never the characters used
+  error:
+    - Name the field and the problem, with the real number when it is a length, such as 40 characters over the limit
+usage:
+  do:
+    - Size it for the expected text, three lines or more, in the longest language
+    - Reserve one line of the message's height under the field, so an error never moves what follows
+    - A disabled component takes no hover or pressed binding; a disabled component that can take focus keeps its focus ring; selected and error still apply, and where disabled and another state bind the same part and property, disabled wins. Apply this first, then the specificity rule
+    - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
+    - When two states apply at once, error wins over hover
+  dont:
+    - Do not use a textarea for one line of text; use a text field
+    - Do not cut text at the limit; let people type past it and name the excess
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

@@ -1,0 +1,121 @@
+# Select: one choice from a list that opens on demand. Every value is a
+# semantic role.
+name: select
+status: experimental
+category: input
+description: Lets a person pick one value from a list that opens below the field, with a visible label, optional helper text and a message that names the problem and the fix.
+parts:
+  - {name: label, rtlBehavior: logical}
+  - {name: trigger, rtlBehavior: logical}
+  - {name: placeholder, rtlBehavior: logical}
+  - {name: chevron, rtlBehavior: logical}
+  - {name: helper, rtlBehavior: logical}
+  - {name: message, rtlBehavior: logical}
+  - {name: icon, rtlBehavior: logical}
+  - {name: menu, rtlBehavior: logical}
+  - {name: option, rtlBehavior: logical}
+variants: []
+states: [default, hover, focus, selected, disabled, error]
+tokens:
+  - {part: label, property: text, role: color.text.default}
+  - {part: label, property: font, role: type.text.ui-large}
+  - {part: label, property: stack-gap, role: space.field.label-gap}
+  - {part: trigger, property: fill, role: color.surface.card}
+  - {part: trigger, property: border-width, role: border.outline}
+  - {part: trigger, property: border-color, role: color.line.input}
+  - {part: trigger, property: text, role: color.text.default}
+  - {part: trigger, property: font, role: type.text.body}
+  - {part: trigger, property: radius, role: radius.control}
+  - {part: trigger, property: padding-inline, role: space.control.padding-inline}
+  - {part: trigger, property: padding-block, role: space.control.padding-block}
+  - {part: trigger, property: min-size, role: layout.target.min}
+  - {part: placeholder, property: text, role: color.text.muted}
+  - {part: chevron, property: icon, role: color.text.muted}
+  - {part: helper, property: text, role: color.text.default}
+  - {part: helper, property: font, role: type.text.body-small}
+  - {part: helper, property: stack-gap, role: space.field.message-gap}
+  # the open list: a floating layer with its own edge
+  - {part: menu, property: fill, role: color.surface.raised}
+  - {part: menu, property: shadow, role: elevation.popover}
+  - {part: menu, property: border-width, role: border.outline}
+  - {part: menu, property: border-color, role: color.line.subtle}
+  - {part: menu, property: radius, role: radius.dialog}
+  - {part: menu, property: layer, role: elevation.order.dropdown}
+  - {part: menu, property: enter-duration, role: motion.reveal.duration}
+  - {part: menu, property: enter-curve, role: motion.reveal.curve}
+  - {part: option, property: text, role: color.text.default}
+  - {part: option, property: font, role: type.text.body}
+  - {part: option, property: padding-inline, role: space.control.padding-inline}
+  - {part: option, property: padding-block, role: space.control.padding-block}
+  - {part: option, property: min-size, role: layout.target.min}
+  # an option under the pointer or chosen draws an edge, since its fill can
+  # match the menu
+  - {part: option, property: fill, role: color.surface.sunken, state: hover}
+  - {part: option, property: border-width, role: border.outline, state: hover}
+  - {part: option, property: border-color, role: color.line.input, state: hover}
+  - {part: option, property: fill, role: color.surface.selected, state: selected}
+  - {part: option, property: border-width, role: border.active, state: selected}
+  - {part: option, property: border-color, role: color.line.selected, state: selected}
+  - {part: option, property: icon, role: color.line.selected, state: selected}
+  # hover: a heavier edge on the closed field
+  - {part: trigger, property: border-width, role: border.emphasis, state: hover}
+  # focus
+  - {part: trigger, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: trigger, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: trigger, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  # error
+  - {part: trigger, property: border-width, role: border.emphasis, state: error}
+  - {part: trigger, property: border-color, role: color.line.danger, state: error}
+  - {part: icon, property: icon, role: color.status.danger.strong, state: error}
+  - {part: message, property: text, role: color.status.danger.text, state: error}
+  - {part: message, property: font, role: type.text.body-small, state: error}
+  - {part: message, property: stack-gap, role: space.field.message-gap, state: error}
+  # disabled
+  - {part: trigger, property: fill, role: color.surface.sunken, state: disabled}
+  - {part: trigger, property: border-color, role: color.line.subtle, state: disabled}
+  - {part: trigger, property: text, role: color.text.disabled, state: disabled}
+contrast:
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.card, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.raised, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.sunken, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.selected, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: color.surface.card, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.input, bg: color.surface.card, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.danger, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.selected, bg: color.surface.selected, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.selected, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.input, bg: color.surface.sunken, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.status.danger.strong, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.status.danger.text, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.focus.ring, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+surfaces: [color.surface.page, color.surface.card, color.surface.raised, color.surface.sunken]
+a11y:
+  target: layout.target.min
+  label: localized
+  cue: the chosen option carries a check mark, and an error adds an icon, a heavier edge and a message
+copy:
+  default:
+    - The label names the value in two or three words, with no colon
+    - Options are short nouns in a stable order, most likely first unless the list is alphabetical
+    - The placeholder says what to choose, such as Choose a city, and never replaces the label
+  error:
+    - Name the field and what is missing or wrong, then the fix, in one sentence
+    - Never apologize, never blame, never write that the choice is invalid without saying why
+usage:
+  do:
+    - Use a select for five or more options; for fewer, use radio buttons so every option shows
+    - Open the list below the field and keep the chosen option in view when it opens
+    - Reserve one line of the message's height under the field, so an error never moves what follows
+    - A disabled component takes no hover or pressed binding; a disabled component that can take focus keeps its focus ring; selected and error still apply, and where disabled and another state bind the same part and property, disabled wins. Apply this first, then the specificity rule
+    - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
+    - When two states apply at once, selected wins over hover on an option, and error wins over hover on the field
+    - Place the list on the raised surface; it can match a card, so its edge is always drawn
+  dont:
+    - Do not use a select for two or three options
+    - Do not submit or navigate when an option is chosen; wait for the form's action
+    - Do not mark an error with a red border alone
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

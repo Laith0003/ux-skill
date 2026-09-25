@@ -48,8 +48,9 @@ def test_every_reachable_combination_is_run():
     # button: 12 variant choices by 2**5 state sets; the row 2 by 2**5; the
     # text field 2 by 2**4.
     counts = {name: sum(1 for n, _, _ in CASES if n == name) for name in CONTRACTS}
-    assert counts == {"button": 384, "card": 2, "dialog": 4, "selectable-row": 64,
-                      "status-banner": 8, "text-field": 32}
+    assert counts == {"button": 384, "card": 2, "checkbox": 48, "date": 32, "dialog": 4,
+                      "input-prefix": 32, "radio": 32, "select": 32, "selectable-row": 64,
+                      "status-banner": 8, "text-field": 32, "textarea": 32}
 
 
 @pytest.mark.parametrize("name,variant,states", CASES)

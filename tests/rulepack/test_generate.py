@@ -267,7 +267,8 @@ def test_the_precedence_lines_are_the_contracts_own_and_every_overlap_has_them()
     readme = PACK_FILES[f"{PACK}/README.md"]
     listed = readme.split("with each contract's own line:")[1].split("## Rules")[0]
     met = [c for c in CONTRACTS if state_pairs(c)]
-    assert [c.name for c in met] == ["button", "selectable-row", "text-field"]
+    assert [c.name for c in met] == ["button", "checkbox", "date", "input-prefix", "radio",
+                                     "select", "selectable-row", "text-field", "textarea"]
     for c in CONTRACTS:
         lines = precedence_lines(c)
         assert all(line in c.do for line in lines)

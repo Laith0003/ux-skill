@@ -25,7 +25,7 @@ EXPECTED = {
     "high-contrast-weights", "strong-weight", "font-loading", "page-regions",
     "field-and-table-spacing", "expressive-motion", "brief-fields", "default-scheme",
     "imagery-foundation", "generated-art", "page-composition", "distinctness",
-    "readable-fields", "button-sizes", "card-and-banner-reading",
+    "readable-fields", "button-sizes", "card-and-banner-reading", "form-contracts",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",
