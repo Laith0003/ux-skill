@@ -1,0 +1,63 @@
+/* Foundation tokens: primitives first, then the semantic layer that
+   components read. Exported from the design file; edit it there. */
+:root {
+  /* Neutral ramp */
+  --neutral-0: #ffffff;
+  --neutral-50: #f7f7f5;
+  --neutral-200: #e4e4e0;
+  --neutral-500: #74746c;
+  --neutral-800: #2a2a26;
+  --neutral-950: #111110;
+
+  /* Brand and status ramps, written in oklch; the vivid steps sit outside sRGB. */
+  --brand-300: oklch(0.809 0.105 251.813);
+  --brand-500: oklch(0.623 0.214 259.815);
+  --brand-700: oklch(0.488 0.243 264.376);
+  --danger-500: oklch(0.637 0.237 25.331);
+  --success-600: rgb(0 166 62);
+  --overlay: rgb(17 17 16 / 0.6);
+
+  /* Space, radius, type, motion */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-4: 16px;
+  --space-8: 2rem;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-pill: 9999px;
+  --font-sans: "Grotesk Text", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Mono Code", ui-monospace, monospace;
+  --font-size-body: 1rem;
+  --font-size-small: 0.875rem;
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+  --line-height-body: 1.5;
+  --tracking-tight: -0.02em;
+  --duration-fast: 120ms;
+  --duration-base: .2s;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --shadow-raised: 0 1px 2px rgb(17 17 16 / 0.08), 0 4px 12px -2px rgb(17 17 16 / 0.12);
+  --content-max: min(72rem, 100vw - 2rem);
+
+  /* Semantic layer */
+  --surface-page: var(--neutral-0);
+  --surface-raised: var(--neutral-50);
+  --text-primary: var(--neutral-950);
+  --text-muted: var(--neutral-500);
+  --border-subtle: var(--neutral-200);
+  --action-primary: var(--brand-500);
+  --action-primary-hover: var(--brand-700);
+  --focus-ring: var(--brand-300);
+  --status-danger: var(--danger-500);
+  --status-success: var(--success-600);
+  --radius-control: var(--radius-md);
+  --gap-stack: var(--space-4);
+  --motion-hover: var(--duration-fast);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-hover: 0ms;
+    --ease-standard: linear;
+  }
+}

@@ -901,7 +901,7 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
         fonts, font_link = loading_lines(built.tokens), link_tags(built.tokens)
         art = art_files(built.tokens, axes, brand)
         tokens = {"tokens.json": dump_dtcg(built.tokens),
-                  "tokens.css": to_css(built.tokens, audience.default_scheme),
+                  "tokens.css": to_css(built.tokens, scheme=audience.default_scheme),
                   "fonts.css": fonts_css(built.tokens),
                   "fonts-self-host.css": self_host_css(built.tokens)}
         if rule_pack:

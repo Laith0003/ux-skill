@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import itertools
 import json
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from engine.foundations.layout import responsive_css
 from engine.foundations.typography import phone_roles, responsive_lines, scale_property
@@ -123,7 +123,8 @@ SCHEME_DEFAULTS = ("system", "light", "dark")
 NESTED_RTL = ':is([dir="rtl"], [lang|="ar"])'
 
 
-def _rules(ts: TokenSet, key: str, scheme: str = "system") -> List[Tuple[str, str]]:
+def _rules(ts: TokenSet, key: str, scheme: str = "system",
+           forms: Optional[Mapping[str, Tuple[str, str]]] = None) -> List[Tuple[str, str]]:
     """(media query, selector) pairs under which override `key` applies:
     each axis in the key is set either by its root attribute or, when the
     axis has a media feature, by that feature while the attribute does not
@@ -131,9 +132,15 @@ def _rules(ts: TokenSet, key: str, scheme: str = "system") -> List[Tuple[str, st
     The scheme axis follows `scheme` (SCHEME_DEFAULTS). The direction axis
     at rtl has a second form, a subtree inside the root (NESTED_RTL), with
     every other axis still read from the root, so a combined override
-    reaches the subtree with the same specificity it has on the root."""
+    reaches the subtree with the same specificity it has on the root. An
+    axis named in `forms` is set by the selector (and media query, when one
+    is given) recorded there, as an imported stylesheet set it."""
     options = []
     for axis, value in parse(key, ts.axes).items():
+        if forms and axis in forms:
+            selector, media = forms[axis]
+            options.append([("", selector, "")] + ([(media, "", "")] if media else []))
+            continue
         attr, media = CSS_AXES.get(axis, (f"data-{axis}", ""))
         if axis == "scheme" and scheme == "dark":
             options.append([("", f':not([{attr}="{ts.axes[axis][0]}"])', "")])
@@ -153,7 +160,8 @@ def _rules(ts: TokenSet, key: str, scheme: str = "system") -> List[Tuple[str, st
     return out
 
 
-def to_css(ts: TokenSet, scheme: str = "system") -> str:
+def to_css(ts: TokenSet, *, scheme: str = "system",
+           forms: Optional[Mapping[str, Tuple[str, str]]] = None) -> str:
     """Custom properties on :root, then one rule per override key and form.
     Axes are set on the root element (data-theme, data-contrast,
     data-density, dir, data-motion) or by the matching media query when the
@@ -161,8 +169,10 @@ def to_css(ts: TokenSet, scheme: str = "system") -> str:
     A set with a scheme axis in use writes color-scheme with each scheme,
     so native controls follow it. A rule over more axes has higher
     specificity, so a combined override wins over single-axis ones in every
-    case. Last come the layout's responsive aliases (layout.responsive_css),
-    one property per tiered role that follows the viewport."""
+    case. `forms` gives an imported system's own selector for an axis
+    (css_in records it), so the system is written back the way it came.
+    Last come the layout's responsive aliases (layout.responsive_css), one
+    property per tiered role that follows the viewport."""
     if scheme not in SCHEME_DEFAULTS:
         raise ValueError(f"scheme is {scheme!r}; use one of {list(SCHEME_DEFAULTS)}")
     schemed = "scheme" in ts.axes and any(
@@ -185,7 +195,7 @@ def to_css(ts: TokenSet, scheme: str = "system") -> str:
                  for line in _lines(t, v, phone=phone)]
         if schemed and parse(key, ts.axes).get("scheme") not in (None, ts.axes["scheme"][0]):
             lines = [f"  color-scheme: {parse(key, ts.axes)['scheme']};"] + lines
-        for media, selector in _rules(ts, key, scheme):
+        for media, selector in _rules(ts, key, scheme, forms):
             if media:
                 out += ["", f"@media {media} {{", f"  {selector} {{",
                         *("  " + line for line in lines), "  }", "}"]
