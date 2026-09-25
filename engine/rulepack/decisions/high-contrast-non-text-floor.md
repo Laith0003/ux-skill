@@ -15,7 +15,7 @@ WCAG sets an enhanced level for text (1.4.6, 7:1) but none for non-text parts: 1
 
 ## Decision
 
-Under contrast:high, text pairings rise to 7:1 (WCAG 1.4.6) and non-text pairings rise to 4.5:1. The 4.5:1 is our floor, not a WCAG number, and every message says so: "our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3:1)". A pairing that cannot take the raise pins its own high-contrast minimum, and the pin is stated where it is declared.
+Under contrast:high, text pairings rise to 7:1 (WCAG 1.4.6) and non-text pairings rise to 4.5:1. The 4.5:1 is our floor, not a WCAG number, and every message says so: "our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3:1)". A pairing that cannot take the raise pins its own high-contrast minimum, and the pin is stated where it is declared. A pin never falls below the pairing's own minimum or below the ratio of the WCAG criterion it cites, since WCAG holds in every contrast mode; the contract schema refuses a lower pin.
 
 ## Why
 

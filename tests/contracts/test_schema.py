@@ -259,8 +259,8 @@ def test_read_contract_turns_every_reader_failure_into_a_contract_error(text):
     (lambda d: d["tokens"][2].update(when={"tone": ["danger"]}), "bad-binding",
      "toggle: tokens[2].when sets tone to ['danger']; use one of ['neutral', 'danger']"),
     (lambda d: d["contrast"][0].update(criterion=["1.4.11"]), "bad-contrast",
-     "toggle: contrast[0].criterion is ['1.4.11']; cite '1.4.3' (text, 4.5:1), '1.4.11' "
-     "(non-text, 3:1) or system for a floor of your own"),
+     "toggle: contrast[0].criterion is ['1.4.11']; cite '1.4.3' (text, 4.5:1), '1.4.6' "
+     "(text, 7:1, AAA), '1.4.11' (non-text, 3:1) or system for a floor of your own"),
     (lambda d: d["contrast"][0].update(criterion={"a": 1}), "bad-contrast",
      "toggle: contrast[0].criterion is {'a': 1}; cite '1.4.3'"),
     (lambda d: d["contrast"][1].update(minimum=float("inf")), "bad-contrast",
@@ -520,3 +520,65 @@ def test_each_check_a_second_mutation_pass_named_is_proven(edit, rule, message):
     edit(d)
     found = problems(d)
     assert any(r == rule and m.startswith(message) for r, m in found), found
+
+
+# A pinned high-contrast minimum never drops below the pairing's own
+# minimum, nor below the ratio of the WCAG criterion it cites: WCAG holds in
+# every contrast mode, so a lower pin would cite WCAG for a ratio it does not
+# set. A criterion that sets no ratio carries no ratio claim.
+@pytest.mark.parametrize("edit,message", [
+    (lambda d: d["contrast"][1].update(high=1),
+     "toggle: contrast[1] (color.text.default on color.surface.page) cites WCAG 1.4.3 with "
+     "high 1:1, but 1.4.3 sets 4.5:1 in every contrast mode; raise high to at least 4.5, or "
+     "cite system for a floor of your own"),
+    (lambda d: d["contrast"][1].update(high=4.4),
+     "toggle: contrast[1] (color.text.default on color.surface.page) cites WCAG 1.4.3 with "
+     "high 4.4:1, but 1.4.3 sets 4.5:1"),
+    (lambda d: d["contrast"][0].update(high=2.9),
+     "toggle: contrast[0] (color.action.primary on surfaces) cites WCAG 1.4.11 with high "
+     "2.9:1, but 1.4.11 sets 3:1 in every contrast mode; raise high to at least 3, or cite "
+     "system for a floor of your own"),
+    (lambda d: d["contrast"][1].update(minimum=7, criterion="1.4.6", high=4.5),
+     "toggle: contrast[1] (color.text.default on color.surface.page) cites WCAG 1.4.6 with "
+     "high 4.5:1, but 1.4.6 sets 7:1 in every contrast mode; raise high to at least 7, or "
+     "cite system for a floor of your own"),
+    (lambda d: d["contrast"][1].update(minimum=1.3, criterion="system", high=1),
+     "toggle: contrast[1] (color.text.default on color.surface.page) sets high 1:1, below its "
+     "minimum of 1.3:1; high contrast never lowers a floor, so raise high to at least 1.3"),
+    (lambda d: d["contrast"][1].update(criterion="2.4.7"),
+     "toggle: contrast[1].criterion is '2.4.7', a WCAG criterion that sets no contrast ratio; "
+     "cite '1.4.3' (text, 4.5:1), '1.4.6' (text, 7:1, AAA), '1.4.11' (non-text, 3:1) or "
+     "system "
+     "for a floor of your own"),
+])
+def test_a_high_contrast_minimum_below_its_floor_is_refused(edit, message):
+    d = copy.deepcopy(data())
+    edit(d)
+    found = problems(d)
+    assert [m for r, m in found if r == "bad-contrast"] and \
+        any(r == "bad-contrast" and m.startswith(message) for r, m in found), found
+
+
+@pytest.mark.parametrize("edit", [
+    lambda d: d["contrast"][1].update(high=4.5),
+    lambda d: d["contrast"][1].update(high=7),
+    lambda d: d["contrast"][0].update(high=3),
+    lambda d: d["contrast"][1].update(minimum=7, criterion="1.4.6"),
+    lambda d: d["contrast"][1].update(minimum=7, criterion="1.4.6", high=7),
+    lambda d: d["contrast"][1].update(minimum=1.3, criterion="system", high=1.3),
+    lambda d: d["contrast"][1].update(minimum=1.3, criterion="system", high=4.5),
+])
+def test_a_high_contrast_minimum_at_or_above_its_floor_reads(edit):
+    d = copy.deepcopy(data())
+    edit(d)
+    assert problems(d) == []
+
+
+def test_the_seed_contracts_pin_no_floor_below_what_they_cite():
+    from engine.contracts.library import SEED_DIR, load_folder
+    from engine.contracts.schema import CRITERIA
+    for c in load_folder(SEED_DIR):
+        for rule in c.contrast:
+            if rule.high is not None:
+                assert rule.high >= rule.minimum, (c.name, rule)
+                assert rule.high >= CRITERIA.get(rule.criterion, 1), (c.name, rule)

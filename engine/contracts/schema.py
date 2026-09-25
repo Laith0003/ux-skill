@@ -54,7 +54,10 @@ PROPERTY_TYPES: Mapping[str, str] = MappingProxyType({
 })
 # The WCAG criteria a contract pairing may cite, with the ratio each sets.
 # Any other floor is the contract's own and says so ("system").
-CRITERIA: Mapping[str, float] = MappingProxyType({"1.4.3": 4.5, "1.4.11": 3.0})
+CRITERIA: Mapping[str, float] = MappingProxyType({"1.4.3": 4.5, "1.4.6": 7.0, "1.4.11": 3.0})
+# How messages list the criteria a pairing may cite.
+_CITABLE = "'1.4.3' (text, 4.5:1), '1.4.6' (text, 7:1, AAA), '1.4.11' (non-text, 3:1)"
+_WCAG_NUMBER = re.compile(r"[1-4]\.[0-9]+\.[0-9]+")
 SYSTEM = "system"
 # Bound roles that carry meaning by color, so the contract names a second cue.
 COLOR_SIGNALS: Tuple[str, ...] = ("color.status.", "color.action.danger", "color.line.selected",
@@ -413,18 +416,32 @@ def _contrast(c: _Checker, raw: Any, tokens: Tuple[Binding, ...],
                                   "such as 4.5")
             ok = False
         if not isinstance(criterion, str) or (criterion not in CRITERIA and criterion != SYSTEM):
-            c.add("bad-contrast", f"{where}.criterion is {criterion!r}; cite '1.4.3' (text, "
-                                  "4.5:1), '1.4.11' (non-text, 3:1) or system for a floor of "
-                                  "your own")
+            what = (", a WCAG criterion that sets no contrast ratio"
+                    if isinstance(criterion, str) and _WCAG_NUMBER.fullmatch(criterion) else "")
+            c.add("bad-contrast", f"{where}.criterion is {criterion!r}{what}; cite {_CITABLE} "
+                                  "or system for a floor of your own")
             ok = False
         elif criterion in CRITERIA and _is_number(minimum) and minimum != CRITERIA[criterion]:
             c.add("bad-contrast", f"{where} cites WCAG {criterion} with {minimum:g}:1, but "
                                   f"{criterion} sets {CRITERIA[criterion]:g}:1; use that ratio, "
                                   "or cite system for a floor of your own")
             ok = False
+        pair = f"{where} ({fg} on {bg})"
         if high is not None and not (_is_number(high) and high >= 1):
             c.add("bad-contrast", f"{where}.high is {high!r}; write the high-contrast ratio, 1 "
                                   "or more")
+            ok = False
+        elif high is not None and criterion in CRITERIA and high < CRITERIA[criterion]:
+            c.add("bad-contrast", f"{pair} cites WCAG {criterion} with high {high:g}:1, but "
+                                  f"{criterion} sets {CRITERIA[criterion]:g}:1 in every "
+                                  "contrast mode; raise high to at least "
+                                  f"{CRITERIA[criterion]:g}, or cite system for a floor of "
+                                  "your own")
+            ok = False
+        elif high is not None and _is_number(minimum) and high < minimum:
+            c.add("bad-contrast", f"{pair} sets high {high:g}:1, below its minimum of "
+                                  f"{minimum:g}:1; high contrast never lowers a floor, so raise "
+                                  f"high to at least {minimum:g}")
             ok = False
         if criterion == SYSTEM and high is None:
             c.add("bad-contrast", f"{where} sets a system floor with no high; write high, the "
