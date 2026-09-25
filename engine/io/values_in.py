@@ -268,10 +268,12 @@ def _font_names(text: str) -> Optional[List[str]]:
     return names
 
 
-def _is_length(word: str) -> bool:
-    """True for a word a shadow layer reads as a length: 0, px or rem."""
+def _is_length(word: str, any_unit: bool = False) -> bool:
+    """True for a word a shadow layer reads as a length: 0, px or rem, or
+    with `any_unit` any length unit, relative ones included."""
     m = _UNIT.match(word)
-    return word == "0" or bool(m and m.group(2).lower() in ("px", "rem"))
+    units = ("px", "rem", *_RELATIVE) if any_unit else ("px", "rem")
+    return word == "0" or bool(m and m.group(2).lower() in units)
 
 
 def _shadow_layer(text: str, mapped: Optional[List[GamutMapped]]) -> dict:
@@ -384,10 +386,15 @@ def read_value(text: Any, mapped: Optional[List[GamutMapped]] = None) -> Tuple[s
                       "height as separate tokens")
     if re.fullmatch(_NUMBER + r"\s+" + _NUMBER + r"%\s+" + _NUMBER + "%", text):
         raise NotRead(f"{text} is hsl channels without hsl(); write hsl({text}) or hex")
+    if len(words) > 1 and any((_UNIT.match(w) or [None] * 3)[2] in ("ms", "s") for w in words):
+        raise NotRead(f"{text} is a transition or animation shorthand; write its duration and "
+                      "its curve as separate tokens")
     layers = split_top(text)
+    # A shadow layer has two lengths at least; a length here is 0 or any
+    # length unit, so a relative one gets its own refusal from the layer.
     if all(len(split_top(p, " ")) >= 3
-           and sum(1 for w in split_top(p, " ") if w == "0" or _UNIT.match(w)) >= 2
-           for p in layers):
+           and sum(1 for w in split_top(p, " ") if w == "0" or _is_length(w, any_unit=True))
+           >= 2 for p in layers):
         return "shadow", [_shadow_layer(p, mapped) for p in layers]
     if re.fullmatch(r"[A-Za-z][A-Za-z-]*", text):
         raise NotRead(f"{text} is a single word that could be a color name, a font name or a "
