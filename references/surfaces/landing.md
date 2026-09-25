@@ -84,14 +84,14 @@ Every system the engine builds names one of five compositions: the layout a land
 
 The composition is the layout; the archetype above is the argument the page makes. They pair naturally: split with the Split-hero product page or Service lead generation, stacked with Thesis statement or Single-field conversion, bento with Product demo led, editorial-column with Editorial long form, full-bleed-media with Cinematic brand. Another pairing is allowed when the build notes give the reason.
 
-What all five share. Widths are read at 1440 (the desktop tier: `layout.columns.desktop` columns inside `layout.container.max`) and at 375 (the phone tier: `layout.columns.phone` columns inside `layout.margin-inline.phone`). Regions sit the region gap apart (`layout.region-gap.<tier>`, or the system's landing region gap where it has one). The headline takes the hero style (`type.text.hero`, or the system's landing display step where it has one) and steps down on phones by `type.phone.hero`. Numbers take `type.text.figure`. The primary action is a filled button at `layout.target.large`. A proof section with no real proof behind it is dropped with its reason (/ux-design engine step 2.5); the layouts below close up around the gap rather than hold an empty band.
+What all five share. Widths are read at 1440 (the desktop tier: `layout.columns.desktop` columns inside `layout.container.max`) and at 375 (the phone tier: `layout.columns.phone` columns inside `layout.margin-inline.phone`). Sections sit `var(--layout-landing-gap)` apart, the `layout.landing-gap.<tier>` role that tokens.css switches per tier. The headline takes `type.text.display` and steps down on phones by `type.phone.display`. These two token sizes are the answer wherever this playbook gives a section spacing or a headline size: they are built and checked, a size of your own is not. Numbers take `type.text.figure`. The primary action is a filled button at `layout.target.large`. A proof section with no real proof behind it is dropped with its reason (/ux-design engine step 2.5); the layouts below close up around the gap rather than hold an empty band.
 
 ### split
 
 **Structure.** The message on one side and one image or proof object on the other, then sections that alternate sides.
 **The engine picks it** when the brief is formal, the contrast is balanced rather than extreme, and the temperature is cool: formality, balanced contrast and coolness are its three terms. It suits business software, finance, security, and a marketplace with a real product view.
 **At 1440.** Hero: the copy spans 7 of the 12 columns and the media 5, or 5 and 7 when the media carries the value; headline, one lede, the primary action and at most one secondary link. Proof: one full-width band directly under the hero, either a logo row or three to five figures with their labels. Sections below alternate the media side, each 7 and 5. Call to action: a full-width closing band on `color.surface.brand` with one filled action.
-**At 375.** One column: copy, then the action at full width, then the media at full width at `imagery.ratio.card` or the media's own ratio, cropped clear of any mark. The proof band becomes two figures per row, or a logo row that wraps to two rows. Every alternating section stacks the same way, media first. The closing band keeps one full-width action.
+**At 375.** Hero: one column, copy, then the action at full width, then the media at full width at `imagery.ratio.card` or the media's own ratio, cropped clear of any mark. Proof: the band becomes two figures per row, or a logo row that wraps to two rows. Every alternating section stacks the same way, media first. Call to action: the closing band keeps one full-width action.
 **Arabic.** Under `dir="rtl"` the copy column takes the start side, the right, and the media the left, through logical grid placement, not reordered markup. The alternation mirrors with it. Figures keep Western digits and the media itself never flips.
 **It fails when.** The split drifts to an even 6 and 6, every section repeats copy on the same side, or the media is a generic illustration where the product should be.
 
@@ -100,7 +100,7 @@ What all five share. Widths are read at 1440 (the desktop tier: `layout.columns.
 **Structure.** One centered column of large, calm sections, one idea each, read top to bottom.
 **The engine picks it** when the audience is older or of mixed age (the age field weighs most), the density is airy and the contrast is muted: the audience's age, airiness and muted contrast are its terms. It suits patient-facing healthcare, public services and local businesses whose visitors read on a phone.
 **At 1440.** Hero: headline, lede and one action centered within `layout.measure.text`, with the image below the action across the container, never beside it. Pair it with the Thesis statement archetype so the centered hero is deliberate; otherwise align the hero to the start of the same column. Proof: one row of figures or one named quote, inside the measure. Each later section is one idea in the measure, its media across the container, and every second region sits on `color.surface.band` so the column has a rhythm. Call to action: a centered closing band that repeats the hero's action.
-**At 375.** Almost nothing moves, since the column already fits: the headline steps down, actions go full width, and the region gap takes its phone value.
+**At 375.** Almost nothing moves, since the column already fits. Hero: the headline steps down and the action goes full width. Proof: figures stack one per row, or the quote runs the full width. Call to action: the closing band keeps its one action at full width. The landing gap takes its phone value.
 **Arabic.** Centered lines stay centered. Lists, forms and captions inside the column align to the start, the right.
 **It fails when.** Every region is the same centered block at the same weight and the page reads as a slide deck, or it is kept for a product people have to compare side by side.
 
@@ -109,7 +109,7 @@ What all five share. Widths are read at 1440 (the desktop tier: `layout.columns.
 **Structure.** A grid of tiles of different sizes, each a feature or a number, scanned at a glance.
 **The engine picks it** for a dense, high-contrast brief with geometric type, and more strongly when the brief's reading context is glance: density, contrast, geometric type and glance reading are its terms. It suits developer tools, status and monitoring products, and apps whose value is several capabilities at once.
 **At 1440.** Hero: a start-aligned or split hero above the grid; the grid is never the hero. Grid: five to eight tiles on the 12 columns, spanning 3, 4, 6 or 8 columns and one or two rows, with one lead tile (6 or 8 columns, two rows) holding the real product view. Tiles sit `layout.gutter.desktop` apart, not the region gap. Proof: figures live inside tiles with their labels, and one tile may hold a named quote. Call to action: a closing band after the grid, never a tile.
-**At 375.** One column in reading order, lead tile first, each tile at full width with its height set by its content. Two figure tiles may share a row when each is a number and a short label.
+**At 375.** Hero: copy, action at full width, then the product view. Grid: one column in reading order, lead tile first, each tile at full width with its height set by its content. Proof: two figure tiles may share a row when each is a number and a short label; a quote tile runs full width. Call to action: the closing band after the last tile, one full-width action.
 **Arabic.** Grid placement mirrors, so the lead tile starts at the right edge. Tile content aligns to the start; digits keep their order.
 **It fails when.** The tiles are equal, a three by three of identical cards, there are fewer than five, or a tile holds a decorative shape instead of a feature or a number.
 
@@ -119,7 +119,7 @@ What all five share. Widths are read at 1440 (the desktop tier: `layout.columns.
 **The engine picks it** for humanist type, a formal tone and an airy density, and more strongly when the reading context is long reading: humanist type, formality, airiness and long reading are its terms. It suits research, editorial products, consultancies that sell judgment and long product explainers.
 **At 1440.** Hero: the display title start-aligned across up to 8 columns, a standfirst in the body style within `layout.measure.text`, a line of metadata in `type.text.label`, then one image at `imagery.ratio.hero` across the container. Body: the text column at `layout.measure.text`, offset from the start by one or two columns; images break out to the container; pull quotes sit in the wide margin beside the paragraph they come from. Proof: the pull quotes, each attributed with name, role and company. Call to action: an inline action where the argument ends, then a closing band.
 **When the client has no pull quotes:** use one of the client's own sentences as a callout, set large with no quotation marks and no attribution, since it is the page's own claim; or a real figure with its source in a caption; or a captioned image of the real product or place. Never an invented quote, and never quotation marks around words nobody said.
-**At 375.** The column takes the full width inside the margins, the title steps down, images run the full width, and margin callouts become blocks between paragraphs.
+**At 375.** Hero: the title steps down and the standfirst follows it, the image runs the full width. Body: the column takes the full width inside the margins. Proof: margin quotes and callouts become blocks between paragraphs. Call to action: the inline action at full width, then the closing band.
 **Arabic.** The column starts at the right, so margin callouts move to the left margin. The display title takes the Arabic display face with no letter spacing, and body text keeps the system's reading line height.
 **It fails when.** The column runs wider than the measure, the page has little to read (a tool with three features), or a quote is made up to fill the margin.
 
@@ -128,7 +128,7 @@ What all five share. Widths are read at 1440 (the desktop tier: `layout.columns.
 **Structure.** Edge-to-edge images or generated art with the headline on a scrim, then bands of media and short copy.
 **The engine picks it** for a warm, playful brief with lively motion: warmth, playfulness and motion are its terms. It suits hospitality, food, consumer products, events and lifestyle brands with real photography.
 **At 1440.** Hero: the image runs to both viewport edges at `imagery.ratio.hero`, with the headline and action inside the container on `imagery.scrim` in `imagery.on-scrim`, the scrim measured on the worst part of the image (decisions/scrim-worst-image.md). Proof: a band of short attributed lines or a rating between the media bands, on the page surface, never on a photo. Below, full-bleed image bands alternate with contained text bands. Call to action: a closing band over an image on the scrim, or on `color.surface.brand`.
-**At 375.** The hero takes an art-directed portrait crop at `imagery.ratio.portrait` (a separate source through `<picture>`), subject clear of the text; the headline sits on the scrim in the lower third and the action runs full width. Each band stacks image then text.
+**At 375.** Hero: an art-directed portrait crop at `imagery.ratio.portrait` (a separate source through `<picture>`), subject clear of the text; the headline sits on the scrim in the lower third and the action runs full width. Each band stacks image then text. Proof: the attributed lines stack one per row on the page surface. Call to action: the closing band keeps its scrim and one full-width action.
 **Arabic.** The text block moves to the start side, the right, and the crop keeps the subject away from it, so the right-to-left crop may differ from the left-to-right one. Photos never flip.
 **It fails when.** The images are stock, text sits on a photo without the scrim, or the client has no real imagery; then start from the runner-up the report names instead.
 
@@ -166,7 +166,7 @@ The section order comes from the archetype above and from the engine's page sequ
 | 5-column or 9-tile feature grids cramming every capability into one screen | 3-5 marquee feature sections, each with a deep visual. Width breeds shallowness; depth wins memory |
 | Cramped feature cards with 9-12 tiny tiles in a 3x3 or 4x3 grid | 3-5 themed sections with one feature focus each. The dense grid reads as a single visual unit and the reader remembers nothing |
 | Long bare bullet lists of features | Features get marquee treatment with visuals, not bare bullets |
-| Marketing sections at `py-12` or less | `py-32 md:py-48` minimum on desktop, 64-96px on tablet, 48-72px on mobile. Sections must feel like distinct chapters |
+| Marketing sections packed tight, a small padding of your own | Sections sit `layout.landing-gap.<tier>` apart, the system's landing gap for each tier. Sections must feel like distinct chapters |
 
 **Feature split on mobile.** Alternating image and text rows stack on mobile: the image goes full-width above the text (use `order`), not a squeezed half-width thumbnail. Rows alternate sides on desktop; on mobile they all stack the same way, image on top.
 
@@ -178,7 +178,7 @@ The section order comes from the archetype above and from the engine's page sequ
 
 - One headline, one supporting line, one primary CTA (filled) and at most one secondary (ghost button or text link), one product image or short motion. The CTA section below holds the button rules.
 - Above the fold, nothing else fights for attention. No carousel, no slideshow, no rotating taglines.
-- **H1 line limit.** The H1 runs 3 lines at most at every breakpoint from 375px to 1440px; a 4-line H1 fails. Meet the limit by widening the container (`max-w-5xl`, `max-w-6xl` or `w-full`) and scaling with `clamp()`, not by cutting the claim.
+- **H1 line limit.** The H1 runs 3 lines at most at every breakpoint from 375px to 1440px; a 4-line H1 fails. Meet the limit by widening the headline's container up to `layout.container.max`, and by tightening the words, never by shrinking `type.text.display` or adding a size of your own.
 - A "Built for X" line ("Built for finance", "Built for sales teams") under or beside the H1 pre-qualifies the visitor in one breath. It never sits above the H1; the eyebrow owns that slot.
 
 ### Hero patterns
@@ -252,7 +252,7 @@ The section order comes from the archetype above and from the engine's page sequ
 
 ### Hero on mobile
 
-Stack to one column: copy and CTA first, media below. Or put the media behind the copy as a full-bleed background with a legibility scrim (dark overlay) so the headline and accent stay readable. The headline clamps down; a 56px headline does not fit a 360px screen. A hero form goes full-width below the copy. The failure to prevent: a fixed 2-column hero where the text and the form sit side by side and overflow the viewport.
+Stack to one column: copy and CTA first, media below. Or put the media behind the copy as a full-bleed background with a legibility scrim (dark overlay) so the headline and accent stay readable. The headline steps down on its own through `type.phone.display`; never add a size of your own. A hero form goes full-width below the copy. The failure to prevent: a fixed 2-column hero where the text and the form sit side by side and overflow the viewport.
 
 ### Form in the hero
 

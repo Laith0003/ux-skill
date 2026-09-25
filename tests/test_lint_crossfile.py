@@ -36,6 +36,11 @@ def _out_lines(target: Path) -> list:
     ("nested", []),
     ("rooted", []),
     ("rooted/assets/app.css", []),
+    # A stylesheet two folders below its page, linted alone: the walk reaches the project root.
+    ("deep/assets/css/site.css", []),
+    ("deep", []),
+    # A root-relative link names the root sheet, never a same-named sheet in a sub folder.
+    ("rootlink/sub/styles.css", [2]),
     # The input sits outside the parent, or no page loads the stylesheet: the removal is bare.
     ("unwrapped", [2]),
     ("unwrapped/styles.css", [2]),
@@ -72,15 +77,34 @@ def test_stylesheet_pages_finds_only_the_pages_that_link_it():
     assert names(CROSS / "unlinked" / "styles.css") == []
     assert names(CROSS / "nested" / "css" / "site.css") == ["index.html"]
     assert names(CROSS / "rooted" / "assets" / "app.css") == ["index.html"]
+    assert names(CROSS / "deep" / "assets" / "css" / "site.css") == ["index.html"]
+    assert names(CROSS / "rootlink" / "sub" / "styles.css") == []
 
 
-@pytest.mark.parametrize("folder,fires", [("wrapped", False), ("unwrapped", True)])
-def test_the_write_hook_reads_the_pages_too(folder, fires):
-    """The hook lints one written stylesheet; it reads the pages beside it."""
+def test_lint_reads_each_page_once(monkeypatch):
+    """The lint run reads a page once, however many stylesheets it links."""
+    from pathlib import Path as _P
+    reads = []
+    real = _P.read_text
+
+    def counting(self, *a, **k):
+        if self.suffix == ".html":
+            reads.append(self.resolve())
+        return real(self, *a, **k)
+    monkeypatch.setattr(_P, "read_text", counting)
+    lint([CROSS / "twopages"], "high")
+    assert len(reads) == len(set(reads)), sorted(reads)
+
+
+@pytest.mark.parametrize("sheet,fires", [("wrapped/styles.css", False), ("unwrapped/styles.css", True),
+                                         ("deep/assets/css/site.css", False)])
+def test_the_write_hook_reads_the_pages_too(sheet, fires):
+    """The hook lints one written stylesheet; it reads the pages up to the project root."""
     hook = Path(__file__).resolve().parent.parent / "bin" / "ux-lint-hook.py"
-    css = CROSS / folder / "styles.css"
+    css = CROSS / sheet
+    root = CROSS / sheet.split("/")[0]
     payload = {"session_id": "test", "hook_event_name": "PostToolUse", "tool_name": "Write",
-               "tool_input": {"file_path": str(css)}, "cwd": str(css.parent)}
+               "tool_input": {"file_path": str(css)}, "cwd": str(root)}
     env = {k: v for k, v in os.environ.items() if k not in ("UXSKILL_LINT_ON_WRITE", "CLAUDE_PROJECT_DIR")}
     result = subprocess.run([sys.executable, str(hook)], input=json.dumps(payload),
                             capture_output=True, text=True, env=env, timeout=60)

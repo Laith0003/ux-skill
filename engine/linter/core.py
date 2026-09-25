@@ -19,7 +19,7 @@ import re
 from bisect import bisect_right
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Callable, Dict, Iterable, List, Optional
 
 from engine.data_loader import load
 from engine.linter.structure import POST_CHECKS, FileContext, in_spans, token_definitions
@@ -250,44 +250,83 @@ _STYLE_REF = re.compile(
 )
 
 
-def _links(page: Path, text: str, css: Path) -> bool:
-    """True when ``page`` loads the stylesheet at ``css`` by a link or an import."""
+ROOT_MARKERS = (".git", "package.json", "pyproject.toml", "composer.json")
+# How far a stylesheet's pages are looked for above it, without a root marker.
+MAX_LEVELS = 4
+
+
+def _project_root(start: Path, stop: Optional[Path] = None) -> Optional[Path]:
+    """The nearest folder at or above ``start`` holding a project marker, or
+    ``stop`` when the walk reaches it first; None when neither is found."""
+    stop = stop.resolve() if stop else None
+    for folder in [start, *start.parents]:
+        if stop is not None and folder == stop:
+            return folder
+        if any((folder / m).exists() for m in ROOT_MARKERS):
+            return folder
+    return None
+
+
+def _links(page: Path, text: str, css: Path, root: Optional[Path] = None) -> bool:
+    """True when ``page`` loads the stylesheet at ``css`` by a link or an import.
+    A root-relative link resolves against the project root; with no root
+    known, against the page's own folder and each one above it."""
     target = css.resolve()
+    page = page.resolve()
     for m in _STYLE_REF.finditer(text):
         ref = (m.group(1) or m.group(2) or "").strip()
         if not ref or re.match(r"^(?:[a-z]+:)?//", ref, re.I) or ref.startswith(("data:", "{", "$")):
             continue
         if ref.startswith("/"):
-            # Root-relative: match on the path's tail, since the site root is unknown.
-            if target.as_posix().endswith(ref):
+            base = root or _project_root(page.parent)
+            bases = [base] if base else [page.parent, *page.parent.parents]
+            if any((b / ref.lstrip("/")).resolve() == target for b in bases):
                 return True
         elif (page.parent / ref).resolve() == target:
             return True
     return False
 
 
-def stylesheet_pages(css: Path, candidates: Iterable[Path] = ()) -> List[Path]:
+def _folders_up(css: Path, root: Optional[Path]) -> List[Path]:
+    """The stylesheet's folder and the ones above it, up to the project root,
+    at most MAX_LEVELS above the stylesheet."""
+    out: List[Path] = []
+    for folder in [css.parent, *css.parent.parents][:MAX_LEVELS + 1]:
+        out.append(folder)
+        if root is not None and folder == root:
+            break
+    return out
+
+
+def stylesheet_pages(css: Path, candidates: Iterable[Path] = (), root: Optional[Path] = None,
+                     read: Optional[Callable[[Path], Optional[str]]] = None) -> List[Path]:
     """The pages that load the stylesheet ``css``: from ``candidates`` (the
-    files being linted) and the markup files beside it or one folder above."""
-    css = Path(css)
+    files being linted) and the markup files in its folder and each folder
+    above it, up to the project root (``root``, else the nearest folder with
+    a .git, package.json, pyproject.toml or composer.json). ``read`` returns
+    a page's text, so a lint run reads each page once."""
+    css = Path(css).resolve()
+    proj = Path(root).resolve() if root else _project_root(css.parent)
     pool: Dict[Path, Path] = {}
-    folders = [css.parent, css.parent.parent]
-    for folder in folders:
+    for folder in _folders_up(css, proj):
         if folder.is_dir():
             for f in sorted(folder.iterdir()):
                 if f.is_file() and f.name.lower().endswith(MARKUP_SUFFIXES):
                     pool.setdefault(f.resolve(), f)
     for f in candidates:
         f = Path(f)
-        if f.is_file() and f.name.lower().endswith(MARKUP_SUFFIXES):
+        if f.name.lower().endswith(MARKUP_SUFFIXES) and f.is_file():
             pool.setdefault(f.resolve(), f)
     out: List[Path] = []
     for key in sorted(pool):
-        try:
-            text = pool[key].read_text(encoding="utf-8", errors="ignore")
-        except OSError:
-            continue
-        if _links(pool[key], text, css):
+        if read is not None:
+            text = read(pool[key])
+        else:
+            try:
+                text = pool[key].read_text(encoding="utf-8", errors="ignore")
+            except OSError:
+                text = None
+        if text is not None and _links(pool[key], text, css, proj):
             out.append(pool[key])
     return out
 
@@ -396,7 +435,7 @@ def lint(
         files_scanned += 1
         pages = None
         if path.name.lower().endswith(STYLE_SUFFIXES):
-            pages = [(str(p), t) for p in stylesheet_pages(path, files) if (t := read(p)) is not None]
+            pages = [(str(p), t) for p in stylesheet_pages(path, files, read=read) if (t := read(p)) is not None]
         findings.extend(lint_text(str(path), text, rules, pages=pages))
 
     fatal = any(SEVERITY_RANK.get(f.severity, 0) >= threshold for f in findings)
