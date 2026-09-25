@@ -100,7 +100,8 @@ ICON_STROKE_RANGE = (1.0, 3.0)
 # size from a phone scale whose ratio is PHONE_RATIO_SHARE of the way from
 # 1 to the system's ratio, so a bold system still steps harder than a
 # quiet one; each phone size stays at least 1px above the style below it,
-# and never above its own size. tokens.css multiplies the style's size and
+# in the Latin and the Arabic sizes (hold_phone_order), and never above its
+# own size. tokens.css multiplies the style's size and
 # letter spacing by --<style>-scale, the factor on a phone and the tier's
 # fit factor from the tablet breakpoint up, so a page reads one property.
 PHONE_ROLES = ("type.text.display", "type.text.hero", "type.text.heading-1",
@@ -187,6 +188,48 @@ def phone_px(axes: AxisValues, latin: List[int], body: int = BODY_PX) -> Dict[st
         px = min(latin[n - 1], max(int(body * r ** (n - BODY_STEP) + 0.5), floor + 1))
         out[role] = floor = px
     return out
+
+
+def hold_phone_order(start: Dict[str, float], scripts: List[List[float]]) -> Dict[str, float]:
+    """The phone factor of each style in PHONE_ROLES, rounded to four
+    places: from the lowest up, the smallest factor at or above `start`
+    that keeps the style at least 1px above the phone size of the style
+    below it (heading-2 at its own size for the lowest) in every script in
+    `scripts` (one size list per script, steps 1..10), at most 1.
+
+    A style at its own size that still cannot clear the style below in a
+    script keeps factor 1, and the styles below it come down instead, each
+    to 1px under the one above. Scales whose steps rise by whole pixels
+    never get there, since a style's size is then at least 1px above the
+    next style's size, and so above its phone size. Rounding to four
+    places moves a phone size by at most half of 1e-4 of the size, so two
+    neighbours 1px apart stay more than 0.98px apart under 200px."""
+    below = [s[ROLES[PHONE_FLOOR_ROLE][0] - 1] for s in scripts]
+    exact: Dict[str, float] = {}
+    capped = False
+    for role in reversed(PHONE_ROLES):
+        sizes = [s[ROLES[role][0] - 1] for s in scripts]
+        need = max((b + 1) / size for b, size in zip(below, sizes))
+        capped = capped or need > 1
+        exact[role] = min(1.0, max(start[role], need))
+        below = [size * exact[role] for size in sizes]
+    if capped:
+        for role, lower in zip(PHONE_ROLES, PHONE_ROLES[1:]):
+            n, m = ROLES[role][0], ROLES[lower][0]
+            exact[lower] = min(exact[lower], min((s[n - 1] * exact[role] - 1) / s[m - 1]
+                                                 for s in scripts))
+    return {role: round(f, 4) for role, f in exact.items()}
+
+
+def phone_factors(axes: AxisValues, latin: List[int], body: int = BODY_PX,
+                  arabic: Optional[List[int]] = None) -> Dict[str, float]:
+    """The phone factor of each style in PHONE_ROLES: the Latin phone size
+    (phone_px) over the style's size, raised where the Arabic sizes, which
+    round per step, would otherwise leave a style less than 1px above the
+    one below it on a phone (hold_phone_order)."""
+    px = phone_px(axes, latin, body)
+    start = {role: px[role] / latin[ROLES[role][0] - 1] for role in PHONE_ROLES}
+    return hold_phone_order(start, [latin] + ([arabic] if arabic is not None else []))
 
 
 # Run roles: the face a run in the other script takes inside a paragraph.
@@ -399,14 +442,14 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
         ts.add(Token(f"type.icon.size.{name}", "dimension", "{type.icon.%s}" % name,
                      layer="semantic"))
     ts.add(Token("type.icon.stroke", "number", "{type.icon.stroke-width}", layer="semantic"))
-    phone = phone_px(axes, latin, body_px)
+    arabic_sizes = arabic_px(latin, scale) if arabic else None
+    phone = phone_factors(axes, latin, body_px, arabic_sizes)
     for role in reversed(PHONE_ROLES):
-        n = ROLES[role][0]
-        ts.add(Token(f"type.phone-scale.{n}", "number", round(phone[role] / latin[n - 1], 4)))
+        ts.add(Token(f"type.phone-scale.{ROLES[role][0]}", "number", phone[role]))
     for role in PHONE_ROLES + tuple(FOLLOWS):
         ts.add(Token(phone_token(role), "number", "{type.phone-scale.%d}" % ROLES[role][0],
                      layer="semantic"))
-    fits = tier_factors(axes, choice, latin, arabic_px(latin, scale) if arabic else None)
+    fits = tier_factors(axes, choice, latin, arabic_sizes)
     for role in PHONE_ROLES:
         for tier in FIT_TIERS:
             ts.add(Token(f"type.tier-scale.{ROLES[role][0]}.{tier}", "number", fits[tier][role]))
@@ -414,12 +457,14 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
         for tier in FIT_TIERS:
             ts.add(Token(fit_token(role, tier), "number",
                          "{type.tier-scale.%d.%s}" % (ROLES[role][0], tier), layer="semantic"))
+    hero_n = ROLES["type.text.hero"][0]
     notes = [f"type: display {choice.display.family}, text {choice.text.family}, mono "
              f"{choice.mono.family}" + (f", Arabic {choice.arabic.family} and "
                                         f"{choice.arabic_display.family} at {scale:g} times the "
                                         "Latin size" if arabic else "")
              + f", ratio {ratio(axes):g}, display weight {std['type.text.hero']}, hero "
-             f"{latin[ROLES['type.text.hero'][0] - 1]}px ({phone['type.text.hero']}px on a phone)"]
+             f"{latin[hero_n - 1]}px ({latin[hero_n - 1] * phone['type.text.hero']:.0f}px on a "
+             "phone)"]
     return Generated(tokens=ts, notes=notes)
 
 
