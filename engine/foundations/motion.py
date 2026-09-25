@@ -23,6 +23,7 @@ from engine.foundations.foundation import BrandInputs, Foundation, Generated, ty
 from engine.foundations.gate import Check
 from engine.foundations.modes import join, parse, sparse
 from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
+from engine.foundations.values import duration_ms as literal_ms
 from engine.synthesizer.axes import AxisValues
 
 DURATIONS_MS = (0, 50, 100, 150, 200, 250, 300, 400, 500, 800, 1200)
@@ -129,8 +130,13 @@ def _roles_with(ts: TokenSet, suffix: str) -> List[str]:
 
 
 def _ms(ts: TokenSet, path: str, mode: str = "") -> float:
-    v = ts.resolve(path, mode)
-    return v["value"] * (1000 if v["unit"] == "s" else 1)
+    return literal_ms(ts.resolve(path, mode))
+
+
+def _ltr(ts: TokenSet) -> str:
+    """The base direction of the set, "ltr" when it has no direction axis
+    (an imported set may not)."""
+    return ts.axes.get("direction", ("ltr",))[0]
 
 
 def _standard(ts: TokenSet, mode: str) -> str:
@@ -143,7 +149,7 @@ def _seen_ltr(ts: TokenSet, mode: str, read: Callable[[str], Any]) -> bool:
     context read left to right: a failure there is already reported there,
     so it is not repeated. A reading that differs is a new finding."""
     pairs = parse(mode, ts.axes)
-    ltr = ts.axes["direction"][0]
+    ltr = _ltr(ts)
     if pairs.get("direction", ltr) == ltr:
         return False
     return read(join({**pairs, "direction": ltr}, ts.axes)) == read(mode)
@@ -369,7 +375,7 @@ def _reduced_not_longer(ts: TokenSet, mode: str) -> List[str]:
     if "motion:reduced" not in mode:
         return []
     std = _standard(ts, mode)
-    base_dir = {**parse(mode, ts.axes), "direction": ts.axes["direction"][0]}
+    base_dir = {**parse(mode, ts.axes), "direction": _ltr(ts)}
     ltr, ltr_std = join(base_dir, ts.axes), _standard(ts, join(base_dir, ts.axes))
     where = sparse(mode, ts.axes)
     std_where = sparse(std, ts.axes)

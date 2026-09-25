@@ -73,6 +73,8 @@ WCAG sets target sizes, not gaps: 2.5.8 asks for targets of 24 by 24 CSS px, or 
 
 - `control-gap`: space.control.gap is at least 8px in every density.
 - `space-scale-order`: the scale steps strictly increase.
+- `space-on-scale`: every spacing role points at a step of the spacing scale, never at another foundation's value.
+- `space-grid`: every numbered spacing step is a whole multiple of 4px.
 - `space-hierarchy`: text gap, group gap and region gap strictly increase in every density.
 - `compact-not-larger`: no role is larger in compact than in comfortable.
 

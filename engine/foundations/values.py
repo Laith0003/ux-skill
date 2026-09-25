@@ -109,6 +109,21 @@ def _unit_css(v: Dict[str, Any]) -> str:
     return f"{_num(v['value'])}{v['unit']}"
 
 
+# Checks compare dimensions in px and durations in ms, whatever unit a set
+# writes them in: a rem is read at the browser default of 16px.
+REM_PX = 16
+
+
+def dimension_px(v: Dict[str, Any]) -> float:
+    """A dimension literal in px."""
+    return v["value"] * (REM_PX if v["unit"] == "rem" else 1)
+
+
+def duration_ms(v: Dict[str, Any]) -> float:
+    """A duration literal in ms."""
+    return v["value"] * (1000 if v["unit"] == "s" else 1)
+
+
 # cubicBezier, fontFamily, fontWeight, number, strokeStyle
 
 def _bezier_ok(v: Any) -> bool:

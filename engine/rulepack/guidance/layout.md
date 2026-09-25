@@ -75,6 +75,7 @@ Audits the grid tokens in both densities: breakpoint order, column order, the re
 - `target-size-comfortable`: the minimum target is at least 44px at comfortable density (WCAG 2.5.5, AAA, applied at comfortable density by our choice).
 - `text-measure`: the reading measure is 40rem or less, our approximation of 80 characters (WCAG 1.4.8, AAA).
 - `layout-regions`: the region gap, the landing gap and the hero padding never shrink as the viewport grows, and the landing gap never falls below the region gap at its tier.
+- `layout-on-space`: gutters, inline margins, region and landing gaps and the hero, header and footer padding point at steps of the spacing scale, so layout and spacing move together.
 
 ## Beyond the gate
 

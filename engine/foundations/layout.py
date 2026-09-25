@@ -17,9 +17,11 @@ from __future__ import annotations
 from typing import Any, Callable, Dict, List, Sequence, Tuple
 
 from engine.foundations import space
-from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
+from engine.foundations.foundation import (
+    BrandInputs, Foundation, Generated, direct_alias, is_step, typed)
 from engine.foundations.gate import Check
 from engine.foundations.tokens import Token, TokenSet, css_property
+from engine.foundations.values import dimension_px
 from engine.synthesizer.axes import AxisValues
 
 TIERS = ("phone", "tablet", "laptop", "desktop")
@@ -44,6 +46,8 @@ HEADER_PADDING, FOOTER_PADDING = (4, 3), (16, 10)
 # Tiered roles with a responsive alias in CSS (responsive_css).
 RESPONSIVE = ("columns", "gutter", "margin-inline", "region-gap", "landing-gap",
               "hero.padding-block")
+# Tiered roles that alias the spacing scale (layout-on-space).
+ON_SPACE = ("gutter", "margin-inline", "region-gap", "landing-gap", "hero.padding-block")
 COMPACT_FLOOR = 2  # space units, 8px
 CONTAINERS = (1120, 1280, 1440)
 MEASURE_REM = {"text": 38, "form": 32}
@@ -176,8 +180,7 @@ def _typed(ts: TokenSet, path: str) -> bool:
 
 
 def _px(ts: TokenSet, path: str, mode: str = "") -> float:
-    v = ts.resolve(path, mode)
-    return v["value"] * (16 if v["unit"] == "rem" else 1)
+    return dimension_px(ts.resolve(path, mode))
 
 
 def _number(ts: TokenSet, path: str, mode: str = "") -> Any:
@@ -288,6 +291,25 @@ def _regions(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
+def _on_space(ts: TokenSet, mode: str) -> List[str]:
+    """Layout roles that take a spacing value (gutters, inline margins,
+    region and landing gaps, the hero, header and footer padding) alias
+    space.<n> when they alias a primitive, so layout and spacing move
+    together."""
+    roles = [f"layout.{group}.{tier}" for group in ON_SPACE for tier in TIERS]
+    roles += [f"layout.{name}.padding-block" for name in ("header", "footer")]
+    out = []
+    for role in roles:
+        if not _typed(ts, role):
+            continue
+        target = direct_alias(ts, role, mode)
+        if target is not None and not is_step(target, "space."):
+            out.append(f"{role} ({mode}) points at {target}, which is not a step of the "
+                       "spacing scale; layout spacing comes from space.<n>, so point it at a "
+                       "space step")
+    return out
+
+
 # Every check reads the density axis, so a compact override is checked too.
 CHECKS: Tuple[Check, ...] = (
     Check("layout-breakpoints", "system", _breakpoints, axes=("density",)),
@@ -296,6 +318,7 @@ CHECKS: Tuple[Check, ...] = (
     Check("target-size-comfortable", "2.5.5", _target_comfortable, axes=("density",)),
     Check("text-measure", "1.4.8", _measure, axes=("density",)),
     Check("layout-regions", "system", _regions, axes=("density",)),
+    Check("layout-on-space", "system", _on_space, axes=("density",)),
 )
 
 

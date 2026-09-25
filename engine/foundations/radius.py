@@ -14,9 +14,11 @@ from __future__ import annotations
 from typing import Dict, List, Tuple
 
 from engine.foundations import character
-from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
+from engine.foundations.foundation import (
+    BrandInputs, Foundation, Generated, direct_alias, is_step, numbered_steps, typed)
 from engine.foundations.gate import Check
 from engine.foundations.tokens import Token, TokenSet
+from engine.foundations.values import dimension_px
 from engine.synthesizer.axes import AxisValues
 
 # radius.<n> = base corner x multiple
@@ -88,7 +90,7 @@ def _typed(ts: TokenSet, path: str) -> bool:
 
 
 def _px(ts: TokenSet, path: str) -> float:
-    return ts.resolve(path)["value"]
+    return dimension_px(ts.resolve(path))
 
 
 def _nesting(ts: TokenSet, mode: str) -> List[str]:
@@ -116,10 +118,25 @@ def _pill(ts: TokenSet, mode: str) -> List[str]:
 
 
 def _scale_order(ts: TokenSet, mode: str) -> List[str]:
-    steps = [t.path for t in ts.tokens() if t.layer == "primitive"
-             and t.path.startswith("radius.") and t.path.split(".")[1].isdigit()]
+    steps = numbered_steps(ts, "radius.", others=False)
     return [f"{b} is not larger than {a}; keep the radius scale strictly increasing"
             for a, b in zip(steps, steps[1:]) if _px(ts, a) >= _px(ts, b)]
+
+
+def _on_scale(ts: TokenSet, mode: str) -> List[str]:
+    """Every role that aliases a primitive aliases radius.<n> or
+    radius.round. A role holding its value directly is left to the value
+    checks."""
+    out = []
+    for role in ROLE_TYPES:
+        if not _typed(ts, role):
+            continue
+        target = direct_alias(ts, role, mode)
+        if target is not None and target != "radius.round" and not is_step(target, "radius."):
+            out.append(f"{role} points at {target}, which is not a step of the radius scale; "
+                       "corners come from radius.<n> or radius.round, so point it at one of "
+                       "those")
+    return out
 
 
 CHECKS: Tuple[Check, ...] = (
@@ -127,6 +144,7 @@ CHECKS: Tuple[Check, ...] = (
     Check("radius-joined", "system", _joined),
     Check("radius-pill", "system", _pill),
     Check("radius-scale-order", "system", _scale_order),
+    Check("radius-on-scale", "system", _on_scale),
 )
 
 
