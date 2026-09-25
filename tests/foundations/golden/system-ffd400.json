@@ -2959,6 +2959,15 @@
           "layer": "semantic"
         }
       }
+    },
+    "media": {
+      "$type": "dimension",
+      "$value": "{radius.4}",
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "semantic"
+        }
+      }
     }
   },
   "border": {
@@ -5946,6 +5955,225 @@
           "io.github.laith0003.ux-skill": {
             "layer": "semantic"
           }
+        }
+      }
+    }
+  },
+  "imagery": {
+    "aspect": {
+      "4-5": {
+        "$type": "number",
+        "$value": 0.8,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "4-3": {
+        "$type": "number",
+        "$value": 1.3333,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "2-1": {
+        "$type": "number",
+        "$value": 2.0,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      }
+    },
+    "shade": {
+      "standard": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.066667,
+            0.05098,
+            0.003922
+          ],
+          "alpha": 0.564706,
+          "hex": "#110D01"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "high": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.066667,
+            0.05098,
+            0.003922
+          ],
+          "alpha": 0.690196,
+          "hex": "#110D01"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      }
+    },
+    "white": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "hex": "#FFFFFF"
+      },
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "primitive"
+        }
+      }
+    },
+    "duo": {
+      "shadow": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.152941,
+            0.117647,
+            0.0
+          ],
+          "hex": "#271E00"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "highlight": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.992157,
+            0.913725,
+            0.752941
+          ],
+          "hex": "#FDE9C0"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      }
+    },
+    "wash": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1.0,
+          0.831373,
+          0.0
+        ],
+        "alpha": 0.258824,
+        "hex": "#FFD400"
+      },
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "primitive"
+        }
+      }
+    },
+    "ratio": {
+      "hero": {
+        "$type": "number",
+        "$value": "{imagery.aspect.2-1}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "card": {
+        "$type": "number",
+        "$value": "{imagery.aspect.4-3}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "portrait": {
+        "$type": "number",
+        "$value": "{imagery.aspect.4-5}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      }
+    },
+    "scrim": {
+      "$type": "color",
+      "$value": "{imagery.shade.standard}",
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "semantic",
+          "modes": {
+            "contrast:high": "{imagery.shade.high}"
+          }
+        }
+      }
+    },
+    "on-scrim": {
+      "$type": "color",
+      "$value": "{imagery.white}",
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "semantic"
+        }
+      }
+    },
+    "duotone": {
+      "shadow": {
+        "$type": "color",
+        "$value": "{imagery.duo.shadow}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "highlight": {
+        "$type": "color",
+        "$value": "{imagery.duo.highlight}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      }
+    },
+    "tint": {
+      "$type": "color",
+      "$value": "{imagery.wash}",
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "semantic"
         }
       }
     }

@@ -39,7 +39,7 @@ HISTORY = "HISTORY.md"
 HEADINGS: Tuple[str, ...] = ("Context", "Decision", "Why", "What it touches", "Consequences")
 STATUSES: Tuple[str, ...] = ("active", "superseded")
 AREAS: Tuple[str, ...] = ("color", "space", "radius", "border", "elevation", "motion", "layout",
-                          "type", "contracts", "content", "direction", "output")
+                          "type", "imagery", "contracts", "content", "direction", "output")
 FRONT_KEYS: Tuple[str, ...] = ("id", "title", "status", "areas", "supersedes", "superseded_by")
 # Words that tell how a rule changed instead of what it is.
 CORRECTION_WORDS: Tuple[str, ...] = (

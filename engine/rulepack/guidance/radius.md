@@ -20,6 +20,7 @@ Radius sets the corners of every shape. The geometry axis sets a base corner fro
 - `radius.control`: buttons, fields, toggles and selectable rows; a pill in very soft brands.
 - `radius.card`: cards, panels, banners and other containers on the page.
 - `radius.dialog`: dialogs, menus, popovers and other floating layers; never less rounded than a card.
+- `radius.media`: photos, illustrations and video, on their own or at the top of a card; sharper than a card in a sharp brand and rounder in a soft one.
 - `radius.pill`: fully rounded shapes, such as a pill button or an avatar frame; the final shape follows the element's proportions.
 
 ## Choosing

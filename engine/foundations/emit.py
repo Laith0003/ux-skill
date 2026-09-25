@@ -421,7 +421,8 @@ def _gate_findings(report: GateReport) -> List[SystemFinding]:
 # holds it to them, so a new foundation, mode or axis cannot go unworded.
 _FOUNDATION_WORDS: Dict[str, str] = {
     "color": "color", "space": "spacing", "radius": "radius", "border": "borders",
-    "elevation": "elevation", "motion": "motion", "layout": "layout", "type": "type"}
+    "elevation": "elevation", "motion": "motion", "layout": "layout", "type": "type",
+    "imagery": "imagery"}
 
 # Each mode axis: both values together for the opening sentence, then each
 # value alone, in the words a context key is read out in.

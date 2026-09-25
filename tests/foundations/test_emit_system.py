@@ -116,8 +116,9 @@ def test_golden_brands_pass(brand):
 from engine.foundations.emit import render_report  # noqa: E402
 
 SENTENCE = ("A complete design system for #3366FF: color, spacing, radius, borders, elevation, "
-            "motion, layout and type, in light and dark, standard and high contrast, comfortable "
-            "and compact spacing, left to right and right to left, and full and reduced motion. "
+            "motion, layout, type and imagery, in light and dark, standard and high contrast, "
+            "comfortable and compact spacing, left to right and right to left, and full and "
+            "reduced motion. "
             "Every color pairing passed the WCAG contrast gate, so the files below are ready "
             "to use.")
 

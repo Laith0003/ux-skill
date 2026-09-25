@@ -40,7 +40,7 @@ def test_primitives_and_roles():
     assert ts.get("radius.round").value == {"value": PILL_PX, "unit": "px"}
     got = {r: ts.resolve(r)["value"] for r in roles(0.5)}
     assert got == {"radius.joined": 0, "radius.chip": 4, "radius.control": 7, "radius.card": 11,
-                   "radius.dialog": 14, "radius.pill": PILL_PX}
+                   "radius.dialog": 14, "radius.pill": PILL_PX, "radius.media": 11}
 
 
 def test_soft_brands_move_chips_then_controls_to_pills():

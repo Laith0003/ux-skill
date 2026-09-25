@@ -27,7 +27,7 @@ If the user asks for `enhance` or `extend`, say plainly that it arrives in 4.1, 
 
 ## create mode (4.0 beta)
 
-`create` builds the system with the engine, not by hand. The engine generates eight foundations (color, type, space, layout, radius, border, elevation, motion), checks every color pairing in light, dark and high contrast, and refuses to emit a system that fails. You run it, read its result, and explain it.
+`create` builds the system with the engine, not by hand. The engine generates nine foundations (color, type, space, layout, radius, border, elevation, motion, imagery), checks every color pairing in light, dark and high contrast, and refuses to emit a system that fails. You run it, read its result, and explain it.
 
 ### 1. Check the engine version
 

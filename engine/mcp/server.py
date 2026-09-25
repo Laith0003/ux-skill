@@ -686,11 +686,12 @@ TOOLS: Dict[str, ToolEntry] = {
         handle_ux_system_build,
         UxSystemBuildInput,
         "4.0 beta: build a WCAG-gated design system from a brand color, with the brief or "
-        "seven axes optional. Eight foundations (color, type, space, layout, radius, border, "
-        "elevation, motion) with light, dark, high contrast, density, right-to-left Arabic and "
-        "reduced motion modes. Returns status, passed, the gate line, findings, a plain report "
-        "and each file's size. Pass out (a folder) to write tokens.json, tokens.css and "
-        "system-report.md there, refused when a file differs unless force is true; pass "
+        "seven axes optional. Nine foundations (color, type, space, layout, radius, border, "
+        "elevation, motion, imagery) with light, dark, high contrast, density, right-to-left "
+        "Arabic and reduced motion modes. Returns status, passed, the gate line, findings, a "
+        "plain report and each file's size. Pass out (a folder) to write tokens.json, "
+        "tokens.css, fonts.css and system-report.md there, refused when a file differs unless "
+        "force is true; pass "
         "include_files true to get the css and dtcg text back instead. Without out it writes "
         "nothing.",
     ),

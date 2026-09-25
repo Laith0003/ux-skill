@@ -14,7 +14,8 @@ from tests.foundations.golden.capture_system import CASES, render
 
 GOLDEN = Path(__file__).resolve().parent / "golden"
 MID = AxisValues(0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5)
-EIGHT = ("color", "space", "radius", "border", "elevation", "motion", "layout", "type")
+EIGHT = ("color", "space", "radius", "border", "elevation", "motion", "layout", "type",
+         "imagery")
 
 
 def _rule_body(css, selector):

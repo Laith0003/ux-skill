@@ -48,6 +48,9 @@ def roles(roundness: float) -> Dict[str, str]:
         "radius.card": "radius.3",
         "radius.dialog": "radius.4",
         "radius.pill": "radius.round",
+        # Photos and illustrations: sharper than a card in a sharp brand,
+        # rounder in a soft one.
+        "radius.media": f"radius.{2 + min(2, int(roundness * 3))}",
     }
 
 
