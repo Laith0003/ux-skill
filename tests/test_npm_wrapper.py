@@ -6,6 +6,7 @@ last stable release. These tests pin the version mapping and the pin itself.
 """
 import json
 import shutil
+import site
 import subprocess
 import sys
 from pathlib import Path
@@ -168,6 +169,30 @@ print("project engine, version " + sys.argv[-1])
 """
 
 
+def _real_python_env(tmp_path, **extra):
+    """The shim env for a python3 that pip --user has just installed into.
+    HOME is a temp folder, so PYTHONUSERBASE keeps the real user site, where
+    pip --user put the engine's dependencies (click, for one). Without it an
+    interpreter whose click lives only in the user site runs the click-less
+    fallback, and the wrapper rejects its bare version line."""
+    env = {"PATH": str(tmp_path / "shims"), "HOME": str(tmp_path),
+           "LOG": str(tmp_path / "calls.log"), "REAL_PYTHON": sys.executable,
+           "ENGINE_ROOT": str(ROOT), "PYTHONUSERBASE": site.getuserbase()}
+    env.update(extra)
+    return env
+
+
+@needs_which
+def test_the_real_python_shim_still_sees_the_engines_dependencies(tmp_path):
+    shims = tmp_path / "shims"
+    shims.mkdir()
+    _shim(shims, "python3", _REAL_PYTHON3)
+    out = subprocess.run([str(shims / "python3"), "-c", "import click"],
+                         capture_output=True, text=True, cwd=tmp_path,
+                         env=_real_python_env(tmp_path), timeout=60)
+    assert out.returncode == 0, out.stderr
+
+
 @needs_which
 def test_a_project_with_its_own_engine_package_does_not_shadow_ours(tmp_path):
     pkg = tmp_path / "pkg"
@@ -184,8 +209,7 @@ def test_a_project_with_its_own_engine_package_does_not_shadow_ours(tmp_path):
     (project / "engine" / "__init__.py").write_text("")
     (project / "engine" / "cli" / "__init__.py").write_text("")
     (project / "engine" / "cli" / "main.py").write_text(_PROJECT_ENGINE)
-    env = {"PATH": str(shims), "HOME": str(tmp_path), "LOG": str(tmp_path / "calls.log"),
-           "REAL_PYTHON": sys.executable, "ENGINE_ROOT": str(ROOT)}
+    env = _real_python_env(tmp_path)
     out = subprocess.run([shutil.which("node"), str(pkg / "bin" / "uxskill.mjs"), "--no-pretty",
                           "system", "build", "--brand", "3366FF", "--out", "ds"],
                          capture_output=True, text=True, cwd=project, env=env, timeout=120)
