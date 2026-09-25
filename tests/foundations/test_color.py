@@ -1025,6 +1025,21 @@ def test_near_grey_brands_get_the_same_neutrals_and_status_colors(warmth):
             assert max(oklab_distance(sets[0][path], s[path]) for s in sets[1:]) <= 0.006, path
 
 
+@pytest.mark.parametrize("warmth, contrast", [(0.2, 0.5), (0.5, 0.5), (0.8, 0.5),
+                                               (0.5, 0.0), (0.5, 1.0)])
+def test_near_grey_brands_get_the_same_support_accent(warmth, contrast):
+    """The four near greys' noise hues must not give them olive, violet, teal
+    and brown support accents: the axes alone set a grey brand's accent."""
+    from engine.foundations.color_math import oklab_distance
+    axes = AxisValues(warmth, contrast, *[0.5] * 5)
+    sets = [{t.path: t.value for t in generate_color(axes, s).tokens.tokens()}
+            for s in ("#808080", "#7F8080", "#80807F", "#807F80")]
+    for step in STEPS:
+        path = f"color.support.{step}"
+        assert max(oklab_distance(a[path], b[path])
+                   for a, b in itertools.combinations(sets, 2)) <= 0.02, path
+
+
 @pytest.mark.parametrize("seed", ["#000000", "#808080", "#FFFFFF"])
 def test_a_grey_brand_gets_grey_neutrals_at_the_middle_warmth(seed):
     ts = generate_color(AXES, seed).tokens

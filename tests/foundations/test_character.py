@@ -103,7 +103,9 @@ def _grid():
 def test_support_hue_is_a_hue():
     for axes in _grid():
         for brand_hue in range(0, 360, 30):
-            assert 0.0 <= character.support_hue(axes, float(brand_hue)) < 360.0
+            for brand_chroma in (0.0, 0.02, 0.1):
+                hue = character.support_hue(axes, float(brand_hue), brand_chroma)
+                assert 0.0 <= hue < 360.0
 
 
 def test_display_tracking_is_tight_and_bounded():
@@ -203,3 +205,27 @@ def test_a_grey_brand_steers_no_hue():
     for status, base in character.STATUS_HUES.items():
         for brand_hue in (0.0, 106.0, 197.0):
             assert character.status_seed(status, mid, brand_hue, 0.0)[2] == pytest.approx(base)
+
+
+def test_a_grey_brand_takes_its_support_hue_from_the_axes():
+    """At chroma 0 the brand hue is noise and the accent hue is the axes'
+    alone; from HUE_CHROMA up the brand-led hue is kept exactly."""
+    for warmth in (0.0, 0.25, 0.5, 0.75, 1.0):
+        for contrast in (0.0, 0.5, 1.0):
+            axes = AxisValues(warmth, contrast, *[0.5] * 5)
+            grey = {character.support_hue(axes, float(h), 0.0) for h in range(0, 360, 15)}
+            assert grey == {character.axes_support_hue(axes)}
+            for h in range(0, 360, 15):
+                offset = 30.0 + 150.0 * contrast
+                anchor = character.WARM_HUE if warmth >= 0.5 else character.COOL_HUE
+                led = character.mix_hue((h + offset) % 360.0, anchor,
+                                        0.3 * character.warm_pull(axes))
+                for chroma in (character.HUE_CHROMA, 0.2):
+                    assert character.support_hue(axes, float(h), chroma) == led
+    assert character.axes_support_hue(AxisValues(0.0, *[0.5] * 6)) == character.COOL_HUE
+    assert character.axes_support_hue(AxisValues(1.0, *[0.5] * 6)) == character.WARM_HUE
+
+
+def test_the_axes_support_hue_is_continuous_in_warmth():
+    hues = [character.axes_support_hue(AxisValues(i / 400, *[0.5] * 6)) for i in range(401)]
+    assert max(abs(character.hue_delta(a, b)) for a, b in zip(hues, hues[1:])) <= 0.5

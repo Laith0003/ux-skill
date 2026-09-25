@@ -29,7 +29,7 @@ EXPECTED = {
     "display-and-navigation-contracts", "arabic-market-content", "scrim-worst-image",
     "controls-on-brand-surfaces", "warmth-through-grey", "grey-brands-steer-no-hue",
     "exact-fill-states", "ring-room", "brief-fields-checked", "font-files",
-    "strong-under-high-contrast",
+    "strong-under-high-contrast", "grey-brand-support-hue",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",

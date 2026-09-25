@@ -442,7 +442,7 @@ def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str,
     seeds = {"brand": brand_hex, "neutral": _neutral_seed(brand_hex, axes)}
     _, brand_chroma, brand_hue = hex_to_oklch(brand_hex)
     seeds["support"] = oklch_to_hex(0.6, min(0.16, max(0.06, 0.9 * brand_chroma)),
-                                    character.support_hue(axes, brand_hue))
+                                    character.support_hue(axes, brand_hue, brand_chroma))
     seeds.update({s: oklch_to_hex(*character.status_seed(s, axes, brand_hue, brand_chroma))
                   for s in STATUS_HUES})
     for family, seed in seeds.items():

@@ -6,7 +6,7 @@ read the brand hue, weighted by the brand's chroma (hue_weight), so a grey
 brand, whose hue is noise, steers nothing. status_seed and neutral_tint are
 continuous in the brand color; support_hue turns toward its anchor the
 short way and so flips direction where its offset hue sits opposite the
-anchor (see its docstring).
+anchor, and a grey brand's accent comes from the axes (see its docstring).
 No function looks up an industry, a keyword or a band:
 a foundation that needs a discrete choice (a face, a pill corner, a brand
 role) takes it from one of these quantities, so two briefs that differ on
@@ -138,14 +138,26 @@ def status_seed(status: str, axes: AxisValues, brand_hue: float,
     return STATUS_L, 0.07 + 0.11 * axes.contrast, hue
 
 
-def support_hue(axes: AxisValues, brand_hue: float) -> float:
+def axes_support_hue(axes: AxisValues) -> float:
+    """The supporting accent's hue when the brand has none: the warm anchor
+    at warmth 1, the cool anchor at warmth 0, and between them the hue walks
+    back through rose (340 degrees at warmth 0.5) and violet, so it moves
+    continuously with warmth and never lands on the success green."""
+    return (WARM_HUE - 180.0 * (1.0 - axes.warmth)) % 360.0
+
+
+def support_hue(axes: AxisValues, brand_hue: float, brand_chroma: float) -> float:
     """The supporting accent's hue: analogous for a muted brand, close to
     complementary for a bold one, pulled warm or cool with warmth. The pull
     turns the short way, so it flips direction where the offset hue sits
-    opposite the anchor."""
+    opposite the anchor. That brand-led hue counts by hue_weight: it mixes
+    in a straight line in the OKLab a/b plane with axes_support_hue, all of
+    it from HUE_CHROMA up and none at grey, so a grey brand's accent comes
+    from the axes alone and near greys get the same accent."""
     offset = 30.0 + 150.0 * axes.contrast
     anchor = WARM_HUE if axes.warmth >= 0.5 else COOL_HUE
-    return mix_hue((brand_hue + offset) % 360.0, anchor, 0.3 * warm_pull(axes))
+    brand_led = mix_hue((brand_hue + offset) % 360.0, anchor, 0.3 * warm_pull(axes))
+    return ab_mix(axes_support_hue(axes), 1.0, brand_led, 1.0, hue_weight(brand_chroma))[0]
 
 
 def brand_role_scores(axes: AxisValues) -> Dict[str, float]:
