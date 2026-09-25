@@ -534,3 +534,40 @@ def test_reduced_is_motion_only_where_motion_is_named_and_words_are_whole():
     assert axes("Size", ["Standard", "Reduced"]) == {"standard-reduced": ("standard", "reduced")}
     assert axes("Motion", ["Standard", "Reduced"]) == {"motion": ("standard", "reduced")}
     assert "scheme" not in axes("Theme", ["Light", "Darkness"])
+
+
+def test_a_library_variable_whose_collection_is_missing_is_named_by_its_own_name():
+    doc = copy.deepcopy(LIBRARY)
+    doc["variables"]["v:lib1"]["variableCollectionId"] = "VariableCollectionId:gone/0:9"
+    doc["variables"]["v:lib2"] = dict(_var("v:lib2", "black", None, "COLOR",
+                                           {"m:a": {"r": 0, "g": 0, "b": 0, "a": 1}}),
+                                      remote=True)
+    report = _import(doc).report
+    text = " ".join(f"{i.where} {i.name} {i.message}" for i in report.notes + report.not_read)
+    assert "VariableCollectionId" not in text and "None" not in text
+    assert [(i.where, i.name, i.message) for i in report.notes
+            if i.name in ("white", "black")] == [
+        ("variables.json white", "white",
+         "is a variable of an unknown library collection (remote in the export, and its "
+         "collection is not in it); it was not read as this file's token; import that "
+         "library's own export to read it"),
+        ("variables.json black", "black",
+         "is a variable of an unknown library collection (remote in the export, and its "
+         "collection is not in it); it was not read as this file's token; import that "
+         "library's own export to read it")]
+    assert _rows(report.not_read)[0] == (
+        "surface/base", "references white in the mode Light of Color, a variable of an "
+                        "unknown library collection in another file; import that library's "
+                        "export too, or detach the variable in Figma")
+
+
+def test_two_library_collections_with_one_name_are_counted_apart():
+    doc = copy.deepcopy(LIBRARY)
+    doc["variableCollections"]["c:lib2"] = dict(doc["variableCollections"]["c:lib"],
+                                                id="c:lib2", variableIds=["v:lib2", "v:lib3"])
+    for vid in ("v:lib2", "v:lib3"):
+        doc["variables"][vid] = dict(_var(vid, f"gray/{vid[-1]}", "c:lib2", "COLOR",
+                                          {"m:a": {"r": 0, "g": 0, "b": 0, "a": 1}}),
+                                     remote=True)
+    notes = [i.message for i in _import(doc).report.notes if i.name == "Shared Palette"]
+    assert ["1 variable of it" in notes[0], "2 variables of it" in notes[1]] == [True, True]

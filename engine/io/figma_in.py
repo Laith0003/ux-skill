@@ -376,7 +376,8 @@ def import_figma(text: str, source: Source,
     entries: Dict[str, _Entry] = {}
     # Library variables the export holds: id -> (name, library collection).
     library: Dict[str, Tuple[str, str]] = {}
-    used: Dict[str, int] = {}
+    used: Dict[Any, int] = {}
+    library_note: Dict[Any, int] = {}
 
     for vid in order:
         v = variables[vid]
@@ -389,11 +390,18 @@ def import_figma(text: str, source: Source,
         plan = plans.get(cid)
         cname = plan.name if plan is not None else str(cid)
         if v.get("remote") is True or (plan is not None and plan.remote):
+            if plan is None:
+                # Its collection is not in the export: named by its own name.
+                library[vid] = (vname, "")
+                col_notes.append((position[vid], 0, Item(f"{name} {vname}", vname,
+                                                         _UNKNOWN_LIBRARY)))
+                continue
             library[vid] = (vname, cname)
             if ("library", cid) not in noted:
                 noted.add(("library", cid))
+                library_note[cid] = len(col_notes)
                 col_notes.append((position[vid], 0, Item(f"{name} {cname}", cname, "")))
-            used[cname] = used.get(cname, 0) + 1
+            used[cid] = used.get(cid, 0) + 1
             continue
         where = f"{name} {cname}/{vname}"
         if plan is not None and plan.note and cid not in noted:
@@ -406,9 +414,11 @@ def import_figma(text: str, source: Source,
     for cid, plan in plans.items():
         if plan.note and cid not in noted:
             col_notes.append((len(order), 0, Item(f"{name} {plan.name}", plan.name, plan.note)))
-    # A library collection's note, with the count of its variables here.
-    col_notes = [(p, k, i if i.message else Item(i.where, i.name, _library_note(used[i.name])))
-                 for p, k, i in col_notes]
+    # A library collection's note, with the count of its variables here,
+    # counted by collection id: two libraries may share a name.
+    for cid, at in library_note.items():
+        p, k, i = col_notes[at]
+        col_notes[at] = (p, k, Item(i.where, i.name, _library_note(used[cid])))
 
     while True:
         _check_aliases(entries, variables, library, position, not_read)
@@ -437,6 +447,12 @@ def import_figma(text: str, source: Source,
     report.mapped = [m for _, m in mapped]
     report.not_read = [i for _, i in sorted(not_read, key=lambda n: n[0])]
     return Imported(ts, report)
+
+
+_UNKNOWN_COLLECTION = "an unknown library collection"
+_UNKNOWN_LIBRARY = (f"is a variable of {_UNKNOWN_COLLECTION} (remote in the export, and its "
+                    "collection is not in it); it was not read as this file's token; import "
+                    "that library's own export to read it")
 
 
 def _library_note(count: int) -> str:
@@ -516,9 +532,10 @@ def _check_aliases(entries: Dict[str, _Entry], variables: Dict[str, Any],
             at = e.at.get(ctx, "")
             if target in library:
                 tname, cname = library[target]
-                drop(vid, f"references {tname} in {at}, a variable of the library collection "
-                          f"{cname} in another file; import that library's export too, or "
-                          "detach the variable in Figma")
+                which = f"the library collection {cname}" if cname else _UNKNOWN_COLLECTION
+                drop(vid, f"references {tname} in {at}, a variable of {which} in another "
+                          "file; import that library's export too, or detach the variable in "
+                          "Figma")
             elif target in variables:
                 drop(vid, f"references {label(target)} in {at}, which was not read; fix "
                           f"{label(target)} and import again")
