@@ -435,8 +435,8 @@ def test_the_compiled_stylesheet_pairs_the_app_dark_theme_into_the_foundation():
         "is set on *, :before, :after, ::backdrop, not on the root or a theme selector; a "
         "property set on a component is not a system token; move it to :root if it is one")
     assert report.not_read[3].message == (
-        "spin 1s linear infinite is not a value this reader knows; write a hex color, a "
-        "length in px or rem, a duration in ms or s, a number, a curve or a quoted font list")
+        "spin 1s linear infinite is a transition or animation shorthand; write its duration "
+        "and its curve as separate tokens")
 
 
 def test_the_compiled_stylesheet_round_trips_through_its_own_dark_class():
@@ -587,6 +587,10 @@ def test_equal_dark_values_in_two_forms_are_not_a_clash():
                        "@media (prefers-color-scheme: dark) { :root { --a: #FFFFFF; } }\n")
     assert imported.report.not_read == []
     assert imported.tokens.get("a").modes == {"scheme:dark": "#FFFFFF"}
+    assert [(i.where, i.name, i.message) for i in imported.report.notes
+            if i.name == "--a"] == [
+        ("theme.css:3", "--a", "is #fff on line 2 and #FFFFFF on line 3, both in scheme:dark: "
+                               "two spellings of one value, read as one")]
 
 
 def test_a_second_dark_form_says_how_it_is_written_back():
@@ -660,3 +664,59 @@ def test_a_scoped_theme_with_no_root_is_named_with_its_fix():
             "component is not a system token; move it to :root if it is one")
         for n, sel in [("--ink", ".theme-harbor"), ("--gap", ".theme-harbor"),
                        ("--ink", ".theme-harbor.dark")]]
+
+
+# Every value that disagrees is reported; two spellings of one value never
+# hide a third that differs.
+def test_a_real_clash_after_two_spellings_of_one_value_is_reported():
+    imported = _import(":root { --a: #000000; }\n.dark { --a: #fff; }\n"
+                       "@media (prefers-color-scheme: dark) { :root { --a: #FFFFFF; } }\n"
+                       '[data-mode="dark"] { --a: #123456; }\n')
+    assert [(i.where, i.name, i.message) for i in imported.report.not_read] == [
+        ("theme.css:4", "--a", "is #fff on line 2, #FFFFFF on line 3 and #123456 on line 4, "
+                               "all in scheme:dark; keep one, or make them agree")]
+    assert imported.tokens.tokens() == []
+    assert [i.name for i in imported.report.notes] == []
+
+
+def test_a_real_clash_in_another_mode_is_reported_beside_a_spelling_pair():
+    imported = _import(":root { --a: #000000; }\n.dark { --a: #fff; }\n"
+                       "@media (prefers-color-scheme: dark) { :root { --a: #FFFFFF; } }\n"
+                       '[data-contrast="high"] { --a: #111111; }\n'
+                       "@media (prefers-contrast: more) { :root { --a: #222222; } }\n")
+    assert [(i.where, i.name, i.message) for i in imported.report.not_read] == [
+        ("theme.css:5", "--a", "is #111111 on line 4 and #222222 on line 5, both in "
+                               "contrast:high; keep one, or make them agree")]
+    assert imported.tokens.tokens() == []
+
+
+@pytest.mark.parametrize("value", ["200ms 100ms ease-out", "150ms cubic-bezier(0.2, 0, 0, 1)"])
+def test_a_transition_shorthand_is_named_as_one(value):
+    report = _import(f":root {{ --t: {value}; }}\n").report
+    assert [(i.name, i.message) for i in report.not_read] == [
+        ("--t", f"{value} is a transition or animation shorthand; write its duration and its "
+                "curve as separate tokens")]
+
+
+def test_an_attribute_that_does_not_name_the_page_theme_is_not_the_scheme():
+    imported = _import(":root { --side: #FFFFFF; }\n[data-sidebar=dark] { --side: #000000; }\n")
+    assert dict(imported.tokens.axes) == {}
+    assert imported.tokens.get("side").modes == {}
+    assert [(i.name, i.message) for i in imported.report.not_read] == [
+        ("--side", "is set on [data-sidebar=dark], which sets dark on data-sidebar, a name that "
+                   "does not say it themes the page; write it on :root or html to make it the "
+                   "page scheme, or keep it in the component it themes")]
+
+
+@pytest.mark.parametrize("selector", [":root[data-sidebar=dark]", "html[data-sidebar=dark]",
+                                      "[data-color-mode=dark]", "[data-app-theme=dark]"])
+def test_an_attribute_on_the_root_or_naming_the_theme_is_the_scheme(selector):
+    imported = _import(f":root {{ --ink: #FFFFFF; }}\n{selector} {{ --ink: #000000; }}\n")
+    assert imported.tokens.get("ink").modes == {"scheme:dark": "#000000"}
+    assert imported.report.not_read == []
+
+
+def test_a_screen_query_is_read_as_the_base():
+    imported = _import("@media screen {\n  :root { --b: 2px; }\n}\n")
+    assert imported.tokens.get("b").value == {"value": 2, "unit": "px"}
+    assert imported.report.not_read == []

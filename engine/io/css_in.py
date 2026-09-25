@@ -17,10 +17,21 @@ opens the dark scheme, and Imported.scheme records which scheme a file
 opens.
 
 A dark scheme is read wherever stylesheets keep it: `[data-theme="dark"]`,
-`.dark`, `[data-mode="dark"]`, any other attribute set to dark, and
+`.dark`, `[data-mode="dark"]`, any other attribute whose name says it
+themes the page (theme, mode or scheme) set to dark, and
 `@media (prefers-color-scheme: dark)`, with an attribute value quoted
-either way or bare. A selector list is the root when each member is the
-root or a theme selector at its base value (`:root, [data-x=light]`).
+either way or bare. An attribute with another name set to dark
+(`[data-sidebar=dark]`) themes a region, so it is the scheme only when
+written on :root or html; elsewhere it is not read, and the report says
+so. A selector list is the root when each member is the root or a theme
+selector at its base value (`:root, [data-x=light]`). The media types
+screen and all are dropped from a query: `@media screen and
+(prefers-color-scheme: dark)` is the dark scheme, and `@media screen`
+alone is read as the base, since it holds wherever the page is on screen.
+
+A property set more than once in one context is read only when every
+value reads the same; two spellings of one value (#fff, #FFFFFF) are
+noted, and values that differ are all listed under "Not read".
 Each property a dark rule sets is paired by name with the one on the root
 and read as scheme:dark; a dark rule written in a form this engine does not
 write is named under notes with the pairing, and Imported.forms records its
@@ -102,6 +113,10 @@ _ATTR_AXES = {attr: axis for axis, (attr, _) in CSS_AXES.items()}
 _VALUE = r"""=(?:"([^"]*)"|'([^']*)'|([A-Za-z0-9_-]+))"""
 _ATTR = re.compile(r"\[([a-z][a-z0-9-]*)" + _VALUE + r"\]")
 _NOT = re.compile(r":not\(\[([a-z][a-z0-9-]*)" + _VALUE + r"\]\)")
+# An attribute whose name says it themes the page (data-theme, data-mode,
+# data-color-scheme): set to dark or light anywhere, it is the scheme.
+# Another attribute set to dark (data-sidebar) is the scheme only on the root.
+_THEME_NAME = re.compile(r"theme|mode|scheme")
 # A selector that names a scheme in a form the importer does not read.
 _SCHEMEISH = re.compile(r"""\.(?:dark|light)\b|=\s*["']?(?:dark|light)\b""")
 # Media types that leave a preference query meaning what it says on screen.
@@ -300,10 +315,10 @@ class _Modes:
         an attribute this engine writes, ":not" for one set by
         :not([attr="base"]), and the selector text for any other; None when
         it is not a root or theme selector."""
-        rest = sel
+        rest, rooted = sel, False
         for root in ROOTS:
             if rest.startswith(root):
-                rest = rest[len(root):]
+                rest, rooted = rest[len(root):], root != "@theme"
                 break
         parts: List[Tuple[str, str, str]] = []
         while rest:
@@ -335,6 +350,8 @@ class _Modes:
                 elif axis is not None and value in AXES[axis]:
                     parts.append((axis, value, ""))
                 elif value in AXES["scheme"]:
+                    if not (rooted or _THEME_NAME.search(attr)):
+                        return None
                     parts.append(("scheme", value, token))
                 else:
                     parts.append((attr, value, token))
@@ -489,6 +506,39 @@ def _reading(text: str) -> Any:
         return None
 
 
+def _clashes(prop: str, by_key: Dict[Tuple[Tuple[str, str], ...], List[Tuple[str, int]]],
+             axes: Dict[str, Tuple[str, str]], name: str
+             ) -> Tuple[List[Tuple[int, Item]], List[Tuple[int, Item]]]:
+    """For a property set more than once in one context: a Not read item
+    per context whose values read differently, naming every value, and a
+    note per context whose values are spellings of one value."""
+    clashed: List[Tuple[int, Item]] = []
+    spelled: List[Tuple[int, Item]] = []
+    for key, entries in by_key.items():
+        distinct: List[Tuple[str, int]] = []
+        for value, line in entries:
+            if all(" ".join(value.split()) != " ".join(v.split()) for v, _ in distinct):
+                distinct.append((value, line))
+        if len(distinct) < 2:
+            continue
+        where = join(dict(key), axes) or "the base mode"
+        last = distinct[-1][1]
+        listed = [f"{v} on line {n}" for v, n in distinct]
+        text = (" and ".join(listed) if len(listed) == 2
+                else ", ".join(listed[:-1]) + " and " + listed[-1])
+        readings = [_reading(v) for v, _ in distinct]
+        if None in readings or any(r != readings[0] for r in readings):
+            both = "both" if len(listed) == 2 else "all"
+            clashed.append((last, Item(f"{name}:{last}", prop, (
+                f"is {text}, {both} in {where}; keep one, or make them agree"))))
+        else:
+            spelled.append((last, Item(f"{name}:{last}", prop, (
+                f"is {text}, both in {where}: two spellings of one value, read as one"
+                if len(listed) == 2 else
+                f"is {text}, all in {where}: spellings of one value, read as one"))))
+    return clashed, spelled
+
+
 def _viewport(rules: List[Rule]) -> Dict[str, List[Tuple[str, str, int]]]:
     """Root properties a min-width media query sets: name -> [(width, value,
     line)], the root value first with width ""."""
@@ -569,6 +619,13 @@ def _outside_message(selector: str, options: List[Any], shown: str = "") -> str:
     selector in a form not read, or a component. `shown` is the rule as the
     file writes it, when the importer moved it."""
     for one, parts in zip(split_top(selector, ","), options):
+        for m in _ATTR.finditer(one) if parts is None else ():
+            attr, value = m.group(1), next(g for g in m.groups()[1:] if g is not None)
+            if value in AXES["scheme"] and attr not in _ATTR_AXES \
+                    and not _THEME_NAME.search(attr):
+                return (f"is set on {selector}, which sets {value} on {attr}, a name that does "
+                        "not say it themes the page; write it on :root or html to make it the "
+                        "page scheme, or keep it in the component it themes")
         bare = re.sub(r"\([^()]*\)", "()", one)
         if parts is None and _SCHEMEISH.search(one) and (
                 " " not in bare.strip() or bare.strip().endswith(" *")):
@@ -623,9 +680,8 @@ def import_css(text: str, source: Source) -> Imported:
     notes: List[Tuple[int, Item]] = []
     # Dark rules in a form this engine does not write: (line, label, properties).
     paired: List[Tuple[int, str, List[str]]] = []
-    # property -> (context, first (value, line), second (value, line)): set
-    # twice in one context with different values.
-    clashes: Dict[str, Tuple[Tuple[Tuple[str, str], ...], Tuple[str, int], Tuple[str, int]]] = {}
+    # property -> context -> every (value, line) set there, in the order read.
+    seen: Dict[str, Dict[Tuple[Tuple[str, str], ...], List[Tuple[str, int]]]] = {}
     entries = 0
     for rule in rules:
         if not rule.declarations:  # a rule with no custom property sets no mode
@@ -688,9 +744,8 @@ def import_css(text: str, source: Source) -> Imported:
                 not_read.append((d.line, Item(f"{name}:{d.line}", d.name, item)))
                 continue
             key = next(iter(keys))
-            prior = found.setdefault(d.name, {}).setdefault(key, (d.value, d.line))
-            if " ".join(prior[0].split()) != " ".join(d.value.split()):
-                clashes.setdefault(d.name, (key, prior, (d.value, d.line)))
+            found.setdefault(d.name, {}).setdefault(key, (d.value, d.line))
+            seen.setdefault(d.name, {}).setdefault(key, []).append((d.value, d.line))
     modes.finish()
 
     for prop, values in switches.items():
@@ -725,17 +780,11 @@ def import_css(text: str, source: Source) -> Imported:
                              "give it a value on :root too, so the base mode has one, or import "
                              "it together with the file that sets its base value")))
             continue
-        clash = clashes.get(prop)
-        if clash and (_reading(clash[1][0]) is None
-                      or _reading(clash[1][0]) != _reading(clash[2][0])):
-            key, (first, one), (second, two) = clash
-            where = join(dict(key), axes) or "the base mode"
-            not_read.append((two, Item(f"{name}:{two}", prop, (
-                f"is {first} on line {one} and {second} on line {two}, both in {where}; "
-                "keep one, or make them agree"))))
+        clashed, own_notes = _clashes(prop, seen[prop], axes, name)
+        if clashed:
+            not_read += clashed
             continue
         read: List[Tuple[str, str, Any, int]] = []
-        own_notes: List[Tuple[int, Item]] = []
         own_mapped: List[Tuple[int, Mapped]] = []
         try:
             for key, (value_text, at) in by_key.items():
