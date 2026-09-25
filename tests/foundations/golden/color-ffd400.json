@@ -57,7 +57,8 @@
   "--color-text-link: var(--color-brand-300);",
   "--color-text-muted: var(--color-neutral-300);",
   "--color-text-on-danger: var(--color-base-black);",
-  "--color-text-support: var(--color-support-300);"
+  "--color-text-support: var(--color-support-300);",
+  "color-scheme: dark;"
  ],
  "css_high": {
   ":root[data-contrast=\"high\"]": [
@@ -144,7 +145,8 @@
    "--color-text-inverse: var(--color-base-black);",
    "--color-text-link: var(--color-brand-200);",
    "--color-text-muted: var(--color-neutral-100);",
-   "--color-text-support: var(--color-support-200);"
+   "--color-text-support: var(--color-support-200);",
+   "color-scheme: dark;"
   ],
   "@media (prefers-color-scheme: dark) and (prefers-contrast: more) | :root:not([data-theme=\"light\"]):not([data-contrast=\"standard\"])": [
    "--color-action-danger-hover: var(--color-danger-100);",
@@ -188,7 +190,8 @@
    "--color-text-inverse: var(--color-base-black);",
    "--color-text-link: var(--color-brand-200);",
    "--color-text-muted: var(--color-neutral-100);",
-   "--color-text-support: var(--color-support-200);"
+   "--color-text-support: var(--color-support-200);",
+   "color-scheme: dark;"
   ],
   "@media (prefers-color-scheme: dark) | :root:not([data-theme=\"light\"])[data-contrast=\"high\"]": [
    "--color-action-danger-hover: var(--color-danger-100);",
@@ -232,7 +235,8 @@
    "--color-text-inverse: var(--color-base-black);",
    "--color-text-link: var(--color-brand-200);",
    "--color-text-muted: var(--color-neutral-100);",
-   "--color-text-support: var(--color-support-200);"
+   "--color-text-support: var(--color-support-200);",
+   "color-scheme: dark;"
   ],
   "@media (prefers-contrast: more) | :root:not([data-contrast=\"standard\"])": [
    "--color-action-danger-hover: var(--color-danger-900);",
@@ -318,10 +322,12 @@
    "--color-text-inverse: var(--color-base-black);",
    "--color-text-link: var(--color-brand-200);",
    "--color-text-muted: var(--color-neutral-100);",
-   "--color-text-support: var(--color-support-200);"
+   "--color-text-support: var(--color-support-200);",
+   "color-scheme: dark;"
   ]
  },
  "css_root": [
+  "color-scheme: light;",
   "--color-base-white: #FFFFFF;",
   "--color-base-black: #000000;",
   "--color-brand-50: #FFF7DB;",

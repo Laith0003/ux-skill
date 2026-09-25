@@ -66,17 +66,19 @@ def compact_units(role: str, density: float) -> int:
     return compact_step(comfortable_units(role, density), ROLES[role][2])
 
 
-def generate_space(axes: AxisValues) -> Generated:
+def generate_space(axes: AxisValues, refuse_compact: bool = False) -> Generated:
+    """Every spacing role; with `refuse_compact` (older or mixed-age
+    readers) the compact mode keeps the comfortable values."""
     ts = TokenSet()
     for n in UNITS:
         ts.add(Token(f"space.{n}", "dimension", _px(n)))
     notes: List[str] = []
     for role in ROLES:
         comfortable = comfortable_units(role, axes.density)
-        compact = compact_units(role, axes.density)
+        compact = comfortable if refuse_compact else compact_units(role, axes.density)
         modes = {"density:compact": "{space.%d}" % compact} if compact != comfortable else {}
         ts.add(Token(role, "dimension", "{space.%d}" % comfortable, modes=modes, layer="semantic"))
-        if compact == comfortable:
+        if compact == comfortable and not refuse_compact:
             notes.append(f"{role}: compact keeps {comfortable * BASE_UNIT}px, its floor")
     return Generated(tokens=ts, notes=notes)
 
@@ -144,7 +146,7 @@ CHECKS: Tuple[Check, ...] = (
 
 
 def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
-    return generate_space(axes)
+    return generate_space(axes, refuse_compact=inputs.audience.refuse_compact)
 
 
 FOUNDATION = Foundation(name="space", generate=_generate, checks=CHECKS, role_types=ROLE_TYPES)

@@ -282,8 +282,8 @@ def test_every_foundation_declares_the_type_of_every_role_it_generates(a):
 def _mistype(monkeypatch, module, generator, path, type_, alias):
     real = getattr(module, generator)
 
-    def mistyped(*args):
-        generated = real(*args)
+    def mistyped(*args, **kwargs):
+        generated = real(*args, **kwargs)
         ts = TokenSet()
         for t in generated.tokens.tokens():
             ts.add(Token(path, type_, alias, layer="semantic") if t.path == path else t)

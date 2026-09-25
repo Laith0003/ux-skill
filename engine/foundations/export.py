@@ -98,16 +98,27 @@ def _lines(t: Token, value: Any, indent: str = "  ") -> List[str]:
     return [f"{indent}{prop}: {text};" for prop, text in css_entries(t.path, t.type, value)]
 
 
-def _rules(ts: TokenSet, key: str) -> List[Tuple[str, str]]:
+# How the scheme axis reaches CSS for each default scheme: "system" follows
+# the operating system unless data-theme pins it; "light" opens light and
+# switches only on data-theme="dark"; "dark" opens dark unless
+# data-theme="light".
+SCHEME_DEFAULTS = ("system", "light", "dark")
+
+
+def _rules(ts: TokenSet, key: str, scheme: str = "system") -> List[Tuple[str, str]]:
     """(media query, selector) pairs under which override `key` applies:
     each axis in the key is set either by its root attribute or, when the
     axis has a media feature, by that feature while the attribute does not
-    pin the base value. A key over k media-backed axes gives 2**k rules."""
+    pin the base value. A key over k media-backed axes gives 2**k rules.
+    The scheme axis follows `scheme` (SCHEME_DEFAULTS)."""
     options = []
     for axis, value in parse(key, ts.axes).items():
         attr, media = CSS_AXES.get(axis, (f"data-{axis}", ""))
+        if axis == "scheme" and scheme == "dark":
+            options.append([("", f':not([{attr}="{ts.axes[axis][0]}"])')])
+            continue
         forms = [("", f'[{attr}="{value}"]')]
-        if media:
+        if media and not (axis == "scheme" and scheme == "light"):
             forms.append((media, f':not([{attr}="{ts.axes[axis][0]}"])'))
         options.append(forms)
     out = []
@@ -117,13 +128,21 @@ def _rules(ts: TokenSet, key: str) -> List[Tuple[str, str]]:
     return out
 
 
-def to_css(ts: TokenSet) -> str:
+def to_css(ts: TokenSet, scheme: str = "system") -> str:
     """Custom properties on :root, then one rule per override key and form.
     Axes are set on the root element (data-theme, data-contrast,
     data-density, dir, data-motion) or by the matching media query when the
-    attribute is absent. A rule over more axes has higher specificity, so
-    a combined override wins over single-axis ones in every case."""
-    out = [":root {", *(line for t in ts.tokens() for line in _lines(t, t.value)), "}"]
+    attribute is absent; `scheme` sets which scheme opens (SCHEME_DEFAULTS).
+    A set with a scheme axis in use writes color-scheme with each scheme,
+    so native controls follow it. A rule over more axes has higher
+    specificity, so a combined override wins over single-axis ones in every
+    case."""
+    if scheme not in SCHEME_DEFAULTS:
+        raise ValueError(f"scheme is {scheme!r}; use one of {list(SCHEME_DEFAULTS)}")
+    schemed = "scheme" in ts.axes and any(
+        "scheme" in parse(k, ts.axes) for t in ts.tokens() for k in t.modes)
+    base = [f"  color-scheme: {ts.axes['scheme'][0]};"] if schemed else []
+    out = [":root {", *base, *(line for t in ts.tokens() for line in _lines(t, t.value)), "}"]
     keys: List[str] = []
     for t in ts.tokens():
         for key in t.modes:
@@ -135,7 +154,9 @@ def to_css(ts: TokenSet) -> str:
     for key in keys:
         lines = [line for t in ts.tokens() for mk, v in t.modes.items()
                  if join(parse(mk, ts.axes), ts.axes) == key for line in _lines(t, v)]
-        for media, selector in _rules(ts, key):
+        if schemed and parse(key, ts.axes).get("scheme") not in (None, ts.axes["scheme"][0]):
+            lines = [f"  color-scheme: {parse(key, ts.axes)['scheme']};"] + lines
+        for media, selector in _rules(ts, key, scheme):
             if media:
                 out += ["", f"@media {media} {{", f"  {selector} {{",
                         *("  " + line for line in lines), "  }", "}"]

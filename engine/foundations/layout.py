@@ -51,16 +51,25 @@ def container_px(density: float) -> int:
     return space.snap(CONTAINERS[0] + (CONTAINERS[-1] - CONTAINERS[0]) * density, CONTAINERS)
 
 
-def generate_layout(axes: AxisValues) -> Generated:
+def generate_layout(axes: AxisValues, target_px: int = TARGET_PX["comfortable"],
+                    measure_rem: int = MEASURE_REM["text"],
+                    refuse_compact: bool = False) -> Generated:
+    """The page grid and regions. `target_px` and `measure_rem` come from
+    the audience (larger targets for older readers, a narrower measure for
+    long reading); with `refuse_compact` the compact mode keeps every
+    comfortable value."""
     d = axes.density
+    measures = dict(MEASURE_REM, text=measure_rem)
+    targets = {"comfortable": target_px,
+               "compact": target_px if refuse_compact else TARGET_PX["compact"]}
     ts = TokenSet()
     for px in VIEWPORTS.values():
         ts.add(Token(f"layout.viewport.{px}", "dimension", {"value": px, "unit": "px"}))
     for n in sorted(set(COLUMNS.values())):
         ts.add(Token(f"layout.column-count.{n}", "number", n))
-    for px in sorted(set(CONTAINERS) | set(TARGET_PX.values())):
+    for px in sorted(set(CONTAINERS) | set(TARGET_PX.values()) | set(targets.values())):
         ts.add(Token(f"layout.width.{px}", "dimension", {"value": px, "unit": "px"}))
-    for rem in sorted(set(MEASURE_REM.values())):
+    for rem in sorted(set(MEASURE_REM.values()) | set(measures.values())):
         ts.add(Token(f"layout.rem.{rem}", "dimension", {"value": rem, "unit": "rem"}))
 
     for tier, px in VIEWPORTS.items():
@@ -73,21 +82,24 @@ def generate_layout(axes: AxisValues) -> Generated:
                          ("region-gap", REGION_GAP), ("hero.padding-block", HERO_PADDING)):
         for tier in TIERS:
             comfortable, compact = _units(table[tier], d)
+            compact = comfortable if refuse_compact else compact
             modes = {"density:compact": "{space.%d}" % compact} if compact != comfortable else {}
             ts.add(Token(f"layout.{group}.{tier}", "dimension", "{space.%d}" % comfortable,
                          modes=modes, layer="semantic"))
     for name, pair in (("header", HEADER_PADDING), ("footer", FOOTER_PADDING)):
         comfortable, compact = _units(pair, d)
+        compact = comfortable if refuse_compact else compact
         modes = {"density:compact": "{space.%d}" % compact} if compact != comfortable else {}
         ts.add(Token(f"layout.{name}.padding-block", "dimension", "{space.%d}" % comfortable,
                      modes=modes, layer="semantic"))
     ts.add(Token("layout.container.max", "dimension", "{layout.width.%d}" % container_px(d),
                  layer="semantic"))
-    for name, rem in MEASURE_REM.items():
+    for name, rem in measures.items():
         ts.add(Token(f"layout.measure.{name}", "dimension", "{layout.rem.%d}" % rem,
                      layer="semantic"))
-    ts.add(Token("layout.target.min", "dimension", "{layout.width.%d}" % TARGET_PX["comfortable"],
-                 modes={"density:compact": "{layout.width.%d}" % TARGET_PX["compact"]},
+    ts.add(Token("layout.target.min", "dimension", "{layout.width.%d}" % targets["comfortable"],
+                 modes={} if targets["compact"] == targets["comfortable"] else
+                 {"density:compact": "{layout.width.%d}" % targets["compact"]},
                  layer="semantic"))
     return Generated(tokens=ts, notes=[f"layout: container {container_px(d)}px"])
 
@@ -229,7 +241,9 @@ CHECKS: Tuple[Check, ...] = (
 
 
 def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
-    return generate_layout(axes)
+    a = inputs.audience
+    return generate_layout(axes, target_px=a.target_px, measure_rem=a.measure_rem,
+                           refuse_compact=a.refuse_compact)
 
 
 FOUNDATION = Foundation(name="layout", generate=_generate, checks=CHECKS, requires=("space",),

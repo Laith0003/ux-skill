@@ -1,4 +1,5 @@
 :root {
+  color-scheme: light;
   --color-base-white: #FFFFFF;
   --color-base-black: #000000;
   --color-brand-50: #FFF7DB;
@@ -440,6 +441,7 @@
 }
 
 :root[data-theme="dark"] {
+  color-scheme: dark;
   --color-surface-page: var(--color-neutral-950);
   --color-surface-card: var(--color-neutral-900);
   --color-surface-sunken: var(--color-neutral-recess-dark);
@@ -507,6 +509,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
+    color-scheme: dark;
     --color-surface-page: var(--color-neutral-950);
     --color-surface-card: var(--color-neutral-900);
     --color-surface-sunken: var(--color-neutral-recess-dark);
@@ -865,6 +868,7 @@
 }
 
 :root[data-theme="dark"][data-contrast="high"] {
+  color-scheme: dark;
   --color-surface-page: var(--color-base-black);
   --color-surface-sunken: var(--color-base-black);
   --color-surface-inverse: var(--color-base-white);
@@ -911,6 +915,7 @@
 
 @media (prefers-contrast: more) {
   :root[data-theme="dark"]:not([data-contrast="standard"]) {
+    color-scheme: dark;
     --color-surface-page: var(--color-base-black);
     --color-surface-sunken: var(--color-base-black);
     --color-surface-inverse: var(--color-base-white);
@@ -958,6 +963,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"])[data-contrast="high"] {
+    color-scheme: dark;
     --color-surface-page: var(--color-base-black);
     --color-surface-sunken: var(--color-base-black);
     --color-surface-inverse: var(--color-base-white);
@@ -1005,6 +1011,7 @@
 
 @media (prefers-color-scheme: dark) and (prefers-contrast: more) {
   :root:not([data-theme="light"]):not([data-contrast="standard"]) {
+    color-scheme: dark;
     --color-surface-page: var(--color-base-black);
     --color-surface-sunken: var(--color-base-black);
     --color-surface-inverse: var(--color-base-white);

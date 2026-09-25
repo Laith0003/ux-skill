@@ -169,8 +169,8 @@ def test_a_role_of_the_wrong_type_is_named_once_not_a_crash(path, type_, alias, 
 def test_build_system_checks_role_types(monkeypatch):
     real = layout.generate_layout
 
-    def mistyped(axes):
-        generated = real(axes)
+    def mistyped(axes, **kwargs):
+        generated = real(axes, **kwargs)
         ts = TokenSet()
         for t in generated.tokens.tokens():
             if t.path == "layout.columns.tablet":

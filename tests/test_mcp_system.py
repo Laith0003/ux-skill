@@ -123,9 +123,12 @@ def test_a_default_passing_result_is_small_enough_for_an_agent():
         assert "css" not in result and "dtcg" not in result
         text = json.dumps(result)
         assert len(text) < MCP_OUTPUT_LIMIT, len(text)
+        from engine.foundations.emit import brief_audience, unread_lines
+        given = args.get("brief")
         expected = make_system("#3366FF", *(
             (NEUTRAL, NEUTRAL_SOURCE) if "brief" not in args else
-            (compute_axes(brief), result["axes_source"])))
+            (compute_axes(brief), result["axes_source"])),
+            audience=brief_audience(given), unread=unread_lines(given))
         assert result["report"] == expected.report
         assert result["files"] == [
             {"name": name, "bytes": len(expected.files[name].encode("utf-8"))}
@@ -287,3 +290,16 @@ def test_a_forced_build_beside_a_pack_from_other_tokens_names_it_as_stale(tmp_pa
     assert (out / "system-report.md").read_text(encoding="utf-8") == result["report"]
     assert (out / "rule-pack" / "README.md").read_text(encoding="utf-8") == \
         pack.files["rule-pack/README.md"]
+
+
+def test_the_brief_fields_travel_over_mcp():
+    result = handle_ux_system_build({"brand": "#3366FF", "include_files": True,
+                                     "brief": {"default_scheme": "dark", "age": "older-adults",
+                                               "languages": ["en"]}})
+    assert result["status"] == "built" and result["arabic"] is False
+    assert result["audience"]["age"] == "older-adults"
+    assert ':root:not([data-theme="light"]) {\n  color-scheme: dark;' in result["css"]
+    clash = handle_ux_system_build({"brand": "#3366FF", "latin_only": True,
+                                    "brief": {"languages": ["ar"]}})
+    assert clash["status"] == "invalid" and clash["error"].startswith(
+        "latin_only leaves Arabic out, but the brief's languages (ar)")

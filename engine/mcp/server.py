@@ -511,8 +511,8 @@ def handle_ux_system_build(args: Dict[str, Any]) -> Dict[str, Any]:
     error naming the input and the fix.
     """
     from engine.foundations.emit import (
-        InputError, check_out_dir, choose_axes, make_system, note_rule_pack, parse_brand,
-        parse_latin_only, parse_switch, write_outcome)
+        InputError, brief_audience, check_out_dir, choose_axes, make_system, note_rule_pack,
+        parse_brand, parse_latin_only, parse_switch, resolve_arabic, unread_lines, write_outcome)
     payload = UxSystemBuildInput.model_validate(args or {})
     try:
         brand = parse_brand(payload.brand, "brand")
@@ -521,6 +521,8 @@ def handle_ux_system_build(args: Dict[str, Any]) -> Dict[str, Any]:
                              '{"industry": "saas", "tone": ["warm"]}, or leave it out')
         axes, source = choose_axes(payload.brief, payload.axes)
         latin_only = parse_latin_only(payload.latin_only, "latin_only")
+        audience = brief_audience(payload.brief, "brief")
+        arabic = resolve_arabic(latin_only, audience, "latin_only")
         include_files = parse_switch(payload.include_files, "include_files",
                                      "return the tokens.css and tokens.json text",
                                      "return only their sizes")
@@ -537,7 +539,8 @@ def handle_ux_system_build(args: Dict[str, Any]) -> Dict[str, Any]:
     except InputError as exc:
         return {"status": "invalid", "passed": False, "error": str(exc), "findings": [],
                 "report": "", "files": []}
-    system = make_system(brand, axes, source, arabic=not latin_only)
+    system = make_system(brand, axes, source, arabic=arabic, audience=audience,
+                         unread=unread_lines(payload.brief, "brief"))
     if out is not None:
         system = note_rule_pack(system, out, force=force)
     result: Dict[str, Any] = {

@@ -19,6 +19,7 @@ from dataclasses import dataclass
 from typing import Any, Iterable, List, Optional, Sequence, Tuple
 
 from engine.foundations import border, color, elevation, layout, motion, radius, space, typography
+from engine.foundations.audience import Audience
 from engine.foundations.color_math import hex_to_rgb
 from engine.foundations.foundation import BrandInputs, Foundation, mistyped, role_types_check
 from engine.foundations.gate import CheckFailure, GateFailure, GateReport, gate
@@ -123,7 +124,8 @@ def _attach_hints(ts: TokenSet, report: GateReport, chosen: Sequence[Foundation]
 
 
 def build_system(axes: AxisValues, brand_hex: str, *, arabic: bool = True,
-                 foundations: Optional[Sequence[str]] = None) -> BuildResult:
+                 foundations: Optional[Sequence[str]] = None,
+                 audience: Optional[Audience] = None) -> BuildResult:
     """Generate every foundation (or the named ones, in build order),
     validate the merged set and gate it.
 
@@ -135,7 +137,9 @@ def build_system(axes: AxisValues, brand_hex: str, *, arabic: bool = True,
     """
     _check_inputs(axes, brand_hex, arabic)
     chosen = _select(foundations)
-    inputs = BrandInputs(brand_hex=brand_hex, arabic=arabic)
+    audience = audience or Audience()
+    inputs = BrandInputs(brand_hex=brand_hex, arabic=arabic, brand_role=audience.brand_role,
+                         audience=audience)
     ts = TokenSet()
     notes: List[str] = []
     for f in chosen:

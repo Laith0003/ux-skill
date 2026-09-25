@@ -22,8 +22,8 @@ BOLD_RING_FROM = 0.66  # contrast axis
 MIN_RING_PX = 2
 
 
-def roles(axes: AxisValues) -> Dict[str, str]:
-    ring = "border.width.3" if axes.contrast >= BOLD_RING_FROM else "border.width.2"
+def roles(axes: AxisValues, ring_extra: int = 0) -> Dict[str, str]:
+    ring = f"border.width.{(3 if axes.contrast >= BOLD_RING_FROM else 2) + ring_extra}"
     return {
         "border.separator": "border.width.1",
         "border.outline": "border.width.1",
@@ -44,13 +44,13 @@ def _heavier(prim: str) -> str:
     return f"border.width.{min(WIDTHS[-1], int(prim.rsplit('.', 1)[1]) + 1)}"
 
 
-def generate_border(axes: AxisValues) -> Generated:
+def generate_border(axes: AxisValues, ring_extra: int = 0) -> Generated:
     ts = TokenSet()
     for px in WIDTHS:
         ts.add(Token(f"border.width.{px}", "dimension", {"value": px, "unit": "px"}))
     for style in STYLES:
         ts.add(Token(f"border.line.{style}", "strokeStyle", style))
-    for role, prim in roles(axes).items():
+    for role, prim in roles(axes, ring_extra).items():
         modes = {"contrast:high": "{" + _heavier(prim) + "}"} if role in HIGH_STEP else {}
         ts.add(Token(role, _role_type(prim), "{" + prim + "}", modes=modes, layer="semantic"))
     notes = [] if axes.contrast < BOLD_RING_FROM else [
@@ -197,7 +197,7 @@ CHECKS: Tuple[Check, ...] = (
 
 
 def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
-    return generate_border(axes)
+    return generate_border(axes, ring_extra=inputs.audience.ring_extra)
 
 
 FOUNDATION = Foundation(name="border", generate=_generate, checks=CHECKS, role_types=ROLE_TYPES)

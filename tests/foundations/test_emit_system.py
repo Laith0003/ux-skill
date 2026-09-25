@@ -151,9 +151,10 @@ def test_modes_are_named_in_words():
 def test_notes_start_by_saying_what_they_are():
     report = make_system("#3366FF", NEUTRAL, NEUTRAL_SOURCE).report
     notes = report.split("## Notes\n\n", 1)[1]
-    assert notes.startswith("These are adjustments the engine made on its own, so nothing "
-                            "needs doing: first the colors it moved off their default step so "
-                            "every pairing meets its contrast minimum, and why")
+    assert notes.startswith("These are choices the engine made from the inputs: first the "
+                            "colors it moved off their default step so every pairing meets its "
+                            "contrast minimum, and why")
+    assert "nothing needs doing" not in report
     assert "### Colors moved to meet contrast" in notes and "### Other choices" in notes
 
 

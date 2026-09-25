@@ -11,6 +11,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Callable, List, Mapping, Optional, Sequence, Tuple
 
+from engine.foundations.audience import Audience
 from engine.foundations.gate import Check, GateFinding, Pairing
 from engine.foundations.tokens import TokenSet
 from engine.synthesizer.axes import AxisValues
@@ -24,6 +25,8 @@ class BrandInputs:
     # "fill", "accent" or "edge" when the brief names the brand's role;
     # None lets the axes choose (character.brand_role).
     brand_role: Optional[str] = None
+    # The structured brief fields: age, languages, scheme, reading context.
+    audience: Audience = Audience()
 
 
 @dataclass

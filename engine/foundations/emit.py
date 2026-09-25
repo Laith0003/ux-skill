@@ -22,6 +22,8 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
+from engine.foundations.audience import (
+    FIELDS as AUDIENCE_FIELDS, HOW_TO_PASS, Audience, AudienceError, effects, read_audience)
 from engine.foundations.build import FOUNDATIONS, ValidationError, build_system
 from engine.foundations.color import brand_fidelity
 from engine.foundations.color_math import hex_to_rgb, rgb_to_hex
@@ -50,7 +52,8 @@ STATUS_EXIT: Dict[str, int] = {
 }
 STATUSES: Tuple[str, ...] = tuple(STATUS_EXIT)
 
-# Brief fields the synthesizer reads to place the axes.
+# Brief fields the synthesizer reads to place the axes; the structured
+# fields in audience.FIELDS are read beside them.
 BRIEF_FIELDS: Tuple[str, ...] = ("industry", "tone", "audience", "must_have", "forbidden")
 _LIST_FIELDS = ("tone", "audience", "must_have", "forbidden")
 
@@ -250,9 +253,14 @@ def brief_axes(brief: Mapping[str, Any], label: str = "brief", *,
     if isinstance(brief.get("answers"), dict):
         brief = brief["answers"]
     values = _brief_values(brief, label)
+    structured = [k for k in AUDIENCE_FIELDS if brief.get(k) not in (None, "", [])]
+    if not values and structured:
+        return NEUTRAL, (f"from the brief's fields ({', '.join(structured)}), which leave every "
+                         "axis at 0.5")
     if not values:
-        raise InputError(f"{label} has none of {', '.join(BRIEF_FIELDS)}; add at least one "
-                         f'(for example "industry": "saas"), or pass {axes_label} instead')
+        raise InputError(f"{label} has none of {', '.join(BRIEF_FIELDS + AUDIENCE_FIELDS)}; add "
+                         'at least one (for example "industry": "saas" or "age": '
+                         f'"older-adults"), or pass {axes_label} instead')
     known: Dict[str, List[str]] = {}
     unknown: List[Tuple[str, str]] = []
     for key, value in values.items():
@@ -263,6 +271,9 @@ def brief_axes(brief: Mapping[str, Any], label: str = "brief", *,
             else:
                 known.setdefault(key, []).append(reading)
     ignored = ", ".join(f"{word} ({key})" for key, word in unknown)
+    if not known and structured:
+        return NEUTRAL, (f"from the brief's fields ({', '.join(structured)}), which leave every "
+                         f"axis at 0.5; not recognized and ignored: {ignored}")
     if not known:
         fields = [k for k in BRIEF_FIELDS if any(k == key for key, _ in unknown)]
         raise InputError(" ".join([
@@ -277,6 +288,61 @@ def brief_axes(brief: Mapping[str, Any], label: str = "brief", *,
     if unknown:
         source += f"; not recognized and ignored: {ignored}"
     return axes, source
+
+
+def unread_lines(brief: Optional[Mapping[str, Any]], label: str = "brief") -> List[str]:
+    """Every brief word the engine did not read, each with how to say it so
+    it is read. Empty when every word was read."""
+    if brief is None:
+        return []
+    if isinstance(brief.get("answers"), dict):
+        brief = brief["answers"]
+    try:
+        values = _brief_values(brief, label)
+    except InputError:
+        return []
+    out = []
+    for key, value in values.items():
+        for word in ([value] if isinstance(value, str) else value):
+            if _reading(key, word) is not None:
+                continue
+            if key == "industry":
+                out.append(f'industry "{word}" is not one the engine knows. Pass the nearest of '
+                           f"{', '.join(_accepted(key))}, or leave industry out and describe "
+                           "the character with tone words.")
+            elif key == "audience":
+                out.append(f'audience "{word}" is plain text, which the engine does not parse. '
+                           "Say who the readers are with the brief's fields: "
+                           f"{'; '.join(HOW_TO_PASS[:4])}.")
+            elif key == "forbidden":
+                out.append(f'forbidden "{word}" limits no axis. forbidden accepts: '
+                           f"{', '.join(_accepted(key))}.")
+            else:
+                out.append(f'{key} "{word}" moves no axis. {key} accepts: '
+                           f"{', '.join(_accepted(key))}.")
+    return out
+
+
+def resolve_arabic(latin_only: bool, audience: Audience, flag: str = "latin_only") -> bool:
+    """Whether the build keeps Arabic: the brief's languages decide when it
+    names any; the flag decides otherwise. A brief that names an Arabic
+    language with the flag set is refused, since the two disagree."""
+    if audience.arabic is None:
+        return not latin_only
+    if audience.arabic and latin_only:
+        raise InputError(f"{flag} leaves Arabic out, but the brief's languages "
+                         f"({', '.join(audience.languages)}) include one written in Arabic "
+                         f"script; drop {flag}, or take the Arabic languages out of the brief")
+    return audience.arabic
+
+
+def brief_audience(brief: Optional[Mapping[str, Any]], label: str = "brief") -> Audience:
+    """The structured fields of a brief, with a bad field as an InputError
+    that names it and the choices."""
+    try:
+        return read_audience(brief, label)
+    except AudienceError as exc:
+        raise InputError(str(exc)) from None
 
 
 def choose_axes(brief: Optional[Mapping[str, Any]], axes: Any, *,
@@ -335,11 +401,14 @@ class SystemOutput:
     # tokens, and why, when note_rule_pack found one.
     stale_rule_pack: Optional[str] = None
     stale_reason: str = ""
+    audience: Audience = Audience()
+    unread: Tuple[str, ...] = ()
 
     def to_dict(self) -> Dict[str, Any]:
         return {"passed": self.passed, "gate": self.gate, "brand": self.brand,
                 "axes": self.axes.to_dict(), "axes_source": self.axes_source,
-                "arabic": self.arabic, "findings": [f.to_dict() for f in self.findings]}
+                "arabic": self.arabic, "audience": self.audience.to_dict(),
+                "unread": list(self.unread), "findings": [f.to_dict() for f in self.findings]}
 
 
 def _gate_findings(report: GateReport) -> List[SystemFinding]:
@@ -505,11 +574,15 @@ _GATE_SCOPE = ("Color pairings were measured in light and dark, at standard and 
                "Standard contrast meets WCAG 1.4.3 (text 4.5:1) and 1.4.11 (non-text 3:1). High "
                "contrast raises text to WCAG 1.4.6 (7:1) and most non-text parts to a 4.5:1 floor "
                "of our own, since WCAG sets no enhanced non-text level.")
-_NOTES_LEAD = ("These are adjustments the engine made on its own, so nothing needs doing: first "
-               "the colors it moved off their default step so every pairing meets its contrast "
-               "minimum, and why, then the other choices it made from the brand color and the "
-               "axes. Modes are named in words; tokens.json keys the same modes, so dark mode, "
-               "high contrast is scheme:dark,contrast:high there.")
+_NOTES_LEAD = ("These are choices the engine made from the inputs: first the colors it moved "
+               "off their default step so every pairing meets its contrast minimum, and why, then "
+               "the other choices it made from the brand color and the axes. Modes are named in "
+               "words; tokens.json keys the same modes, so dark mode, high contrast is "
+               "scheme:dark,contrast:high there.")
+_AUDIENCE_LEAD = ("What the brief's fields changed, and why. The same inputs give the same "
+                  "changes every time.")
+_UNREAD_LEAD = ("The engine reads a fixed vocabulary and the brief's structured fields. These "
+                "words changed nothing; say them as below and build again, or they stay unread.")
 _CHANGE_GATE = ("Change the inputs and build again: a darker or more saturated brand "
                 "color gives the engine more room to reach every contrast "
                 "minimum, and different axes, or a different brief, change the steps it tries. "
@@ -555,7 +628,8 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
                   gate_line: str, notes: Sequence[str],
                   findings: Sequence[SystemFinding], rule_pack: bool = False,
                   fidelity: Sequence[str] = (), fonts: Sequence[str] = (),
-                  font_link: str = "") -> str:
+                  font_link: str = "", audience: Sequence[str] = (),
+                  unread: Sequence[str] = ()) -> str:
     """system-report.md: one sentence on what was built, what it was built
     from, the gate result, every note or finding in plain words, and how to
     use the files, the rule pack among them when it was written. No time
@@ -571,6 +645,11 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
         lines += [f"- {_finding_line(f)}" for f in findings]
         return "\n".join(lines) + "\n"
     lines += [_GATE_SCOPE, ""]
+    if audience:
+        lines += ["## Who it is for", "", _AUDIENCE_LEAD, "", *[f"- {a}" for a in audience], ""]
+    if unread:
+        lines += ["## What the engine did not read", "", _UNREAD_LEAD, "",
+                  *[f"- {u}" for u in unread], ""]
     if fidelity:
         lines += ["## Brand color", "", _FIDELITY_LEAD, "", *[f"- {f}" for f in fidelity], ""]
     moved: List[str] = []
@@ -605,12 +684,15 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
 
 
 def make_system(brand: str, axes: AxisValues, axes_source: str, *,
-                arabic: bool = True, rule_pack: bool = False) -> SystemOutput:
+                arabic: bool = True, rule_pack: bool = False,
+                audience: Optional[Audience] = None,
+                unread: Sequence[str] = ()) -> SystemOutput:
     """Build, validate and gate. On success `files` holds all three texts,
     and with rule_pack every rule pack file under RULE_PACK_DIR after them;
     on a validation, gate or rule pack failure `files` is empty and
     `findings` names every problem, so a caller can never write a failing
     system."""
+    audience = audience or Audience()
     notes: Sequence[str] = ()
     fidelity: Sequence[str] = ()
     fonts: Sequence[str] = ()
@@ -618,7 +700,7 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
     tokens: Dict[str, str] = {}
     pack: Dict[str, str] = {}
     try:
-        built = build_system(axes, brand, arabic=arabic)
+        built = build_system(axes, brand, arabic=arabic, audience=audience)
     except ValidationError as exc:
         findings = tuple(SystemFinding(p.token, "", p.message) for p in exc.problems)
         n = len(findings)
@@ -633,7 +715,8 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
         notes = built.notes
         fidelity = brand_fidelity(built.tokens)
         fonts, font_link = loading_lines(built.tokens), cdn_url(built.tokens)
-        tokens = {"tokens.json": dump_dtcg(built.tokens), "tokens.css": to_css(built.tokens),
+        tokens = {"tokens.json": dump_dtcg(built.tokens),
+                  "tokens.css": to_css(built.tokens, audience.default_scheme),
                   "fonts.css": fonts_css(built.tokens)}
         if rule_pack:
             from engine.rulepack.generate import RulePackError, build_rule_pack
@@ -647,11 +730,12 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
                 notes, tokens, fidelity, fonts = (), {}, (), ()
     report = render_report(brand, axes, axes_source, arabic, gate, notes, findings,
                            rule_pack=bool(pack), fidelity=fidelity, fonts=fonts,
-                           font_link=font_link)
+                           font_link=font_link,
+                           audience=[e.line() for e in effects(audience)], unread=unread)
     files = {**tokens, "system-report.md": report, **pack} if tokens else {}
     return SystemOutput(passed=bool(tokens), files=files, report=report, gate=gate,
                         findings=findings, brand=brand, axes=axes, axes_source=axes_source,
-                        arabic=arabic)
+                        arabic=arabic, audience=audience, unread=tuple(unread))
 
 
 def failure_text(output: SystemOutput) -> str:

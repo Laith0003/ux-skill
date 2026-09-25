@@ -107,11 +107,11 @@ def arabic_px(latin: List[int], scale: float) -> List[int]:
     return [max(px + 1, int(px * scale + 0.5)) for px in latin]
 
 
-def leading(axes: AxisValues) -> Dict[int, float]:
+def leading(axes: AxisValues, extra: float = 0.0) -> Dict[int, float]:
     """Line heights: display lines tighten with contrast, reading lines
-    open as density falls."""
+    open as density falls, and more for long reading (`extra`)."""
     return {0: round(1.05 + 0.1 * (1 - axes.contrast), 2), 1: 1.2, 2: 1.3,
-            3: round(1.5 + 0.1 * (1 - axes.density), 2)}
+            3: round(1.5 + 0.1 * (1 - axes.density) + extra, 2)}
 
 
 def _rem(px: float) -> Dict[str, Any]:
@@ -156,7 +156,8 @@ def _face_list(face: fonts.Face, *rest: str) -> List[str]:
     return [face.family, fonts.fallback_name(face), *rest]
 
 
-def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX) -> Generated:
+def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
+                  leading_extra: float = 0.0) -> Generated:
     choice = fonts.choose(axes)
     ts = TokenSet()
     faces = {
@@ -188,7 +189,7 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX)
     if arabic:
         for n, px in zip(STEPS, arabic_px(latin, scale)):
             ts.add(Token(f"type.size.arabic.{n}", "dimension", _rem(px)))
-    lead = leading(axes)
+    lead = leading(axes, leading_extra)
     for i, v in lead.items():
         ts.add(Token(f"type.leading.latin.{i}", "number", v))
     if arabic:
@@ -470,7 +471,9 @@ CHECKS: Tuple[Check, ...] = (
 
 
 def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
-    return generate_type(axes, arabic=inputs.arabic)
+    a = inputs.audience
+    return generate_type(axes, arabic=inputs.arabic, body_px=a.body_px,
+                         leading_extra=a.leading_extra)
 
 
 FOUNDATION = Foundation(name="type", generate=_generate, checks=CHECKS, role_types=ROLE_TYPES)

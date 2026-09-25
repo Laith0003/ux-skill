@@ -146,12 +146,15 @@ def test_css_sets_each_axis_by_attribute_or_media_query():
                  layer="semantic"))
     css = to_css(ts)
     for block in (
-        ':root[data-theme="dark"] {\n  --color-surface-page: var(--color-n-2);\n}',
+        ':root {\n  color-scheme: light;\n',
+        ':root[data-theme="dark"] {\n  color-scheme: dark;\n  --color-surface-page: '
+        'var(--color-n-2);\n}',
         '@media (prefers-color-scheme: dark) {\n  :root:not([data-theme="light"]) {\n'
-        '    --color-surface-page: var(--color-n-2);\n  }\n}',
+        '    color-scheme: dark;\n    --color-surface-page: var(--color-n-2);\n  }\n}',
         ':root[data-contrast="high"] {\n  --color-surface-page: var(--color-n-3);\n}',
         '@media (prefers-contrast: more) {\n  :root:not([data-contrast="standard"]) {',
-        ':root[data-theme="dark"][data-contrast="high"] {\n  --color-surface-page: var(--color-n-1);\n}',
+        ':root[data-theme="dark"][data-contrast="high"] {\n  color-scheme: dark;\n'
+        '  --color-surface-page: var(--color-n-1);\n}',
         '@media (prefers-contrast: more) {\n  :root[data-theme="dark"]:not([data-contrast="standard"]) {',
         '@media (prefers-color-scheme: dark) {\n  :root:not([data-theme="light"])[data-contrast="high"] {',
         '@media (prefers-color-scheme: dark) and (prefers-contrast: more) {\n'
@@ -228,3 +231,23 @@ def test_dtcg_with_its_own_two_value_axis_round_trips():
     assert back.resolve("brand.page", "cool") == "#222222"
     assert to_dtcg(back) == doc
     assert ':root[data-tone="cool"] {\n  --brand-page: var(--brand-b);\n}' in to_css(back)
+
+
+@pytest.mark.parametrize("scheme, opens_dark, follows_os", [
+    ("system", ':root[data-theme="dark"] {', True),
+    ("dark", ':root:not([data-theme="light"]) {', False),
+    ("light", ':root[data-theme="dark"] {', False),
+])
+def test_the_default_scheme_decides_which_scheme_opens(scheme, opens_dark, follows_os):
+    ts = _color_set(**{"scheme:dark": "{color.n.2}"})
+    css = to_css(ts, scheme)
+    assert opens_dark + "\n  color-scheme: dark;" in css
+    assert ("prefers-color-scheme" in css) == follows_os
+    if scheme == "dark":
+        # an explicit light choice still wins: the rule excludes it
+        assert '[data-theme="dark"]' not in css
+
+
+def test_an_unknown_default_scheme_is_refused():
+    with pytest.raises(ValueError, match="scheme is 'dim'; use one of"):
+        to_css(_color_set(**{"scheme:dark": "{color.n.2}"}), "dim")

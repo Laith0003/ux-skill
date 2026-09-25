@@ -797,18 +797,21 @@ else:
         be written), 2 for a bad input.
         """
         from engine.foundations.emit import (
-            STATUS_EXIT, InputError, check_out_dir, choose_axes, failure_text, make_system,
-            note_rule_pack, parse_brand, read_brief, write_outcome)
+            STATUS_EXIT, InputError, brief_audience, check_out_dir, choose_axes, failure_text,
+            make_system, note_rule_pack, parse_brand, read_brief, resolve_arabic, unread_lines,
+            write_outcome)
         try:
             brand_hex = parse_brand(brand, "--brand")
             brief = read_brief(brief_path, "--brief") if brief_path else None
             axes, source = choose_axes(brief, axes_text, brief_label="--brief",
                                        axes_label="--axes")
+            audience = brief_audience(brief, "--brief")
+            arabic = resolve_arabic(latin_only, audience, "--latin-only")
             out = check_out_dir(out_dir, "--out")
         except InputError as exc:
             raise click.UsageError(str(exc)) from None
-        system = make_system(brand_hex, axes, source, arabic=not latin_only,
-                             rule_pack=rule_pack)
+        system = make_system(brand_hex, axes, source, arabic=arabic, rule_pack=rule_pack,
+                             audience=audience, unread=unread_lines(brief, "--brief"))
         system = note_rule_pack(system, out, force=force)
         outcome = write_outcome(system, out, force=force)
         status = outcome["status"]

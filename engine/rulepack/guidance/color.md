@@ -148,7 +148,7 @@ Some roles carry no contrast minimum. Disabled text and fills are checked for di
 ## Handoff notes
 
 - Every role is a custom property in tokens.css, grouped surfaces, text, action, line, focus and status; components use those and never a ramp step such as the brand 500.
-- Dark and high contrast are the same property names with other values: set data-theme and data-contrast on the html element, or leave them off to follow the operating system.
+- Dark and high contrast are the same property names with other values: set data-theme and data-contrast on the html element, or leave them off to follow the operating system. tokens.css sets color-scheme with each scheme, so native controls such as date pickers and selects follow it; a brief that opens dark makes dark the default and data-theme="light" still switches it (decisions/default-scheme.md).
 - The scrim is an 8-digit hex (#RRGGBBAA): a translucent layer for overlays, never a surface for text.
 - Hover and pressed are separate roles, not an opacity trick, because each is measured with the text on it.
 - Draw focus with outline and outline-offset, using color.focus.ring and the border foundation's width and offset.

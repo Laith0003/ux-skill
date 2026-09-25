@@ -9,6 +9,8 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Breakpoints are reference values, and type does not change by breakpoint](breakpoints-are-reference-values.md)
 - [Density has two modes, comfortable and compact](two-density-modes.md)
 - [The build writes fonts.css with local faces first and matched fallbacks](font-loading.md)
+- [Who the product is for arrives as structured fields, and every effect is reported](brief-fields.md)
+- [A brief can open the page dark, and color-scheme follows every scheme](default-scheme.md)
 
 ## Roles per foundation
 
