@@ -2968,6 +2968,24 @@
         }
       }
     },
+    "box": {
+      "$type": "dimension",
+      "$value": "{radius.1}",
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "semantic"
+        }
+      }
+    },
+    "area": {
+      "$type": "dimension",
+      "$value": "{radius.2}",
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "semantic"
+        }
+      }
+    },
     "card": {
       "$type": "dimension",
       "$value": "{radius.3}",

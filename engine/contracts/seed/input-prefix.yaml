@@ -5,10 +5,12 @@ status: experimental
 category: input
 description: Joins a fixed part, such as a dialing code or a currency, to a text field, so a person types only the rest of the value.
 parts:
+  - {name: label, rtlBehavior: logical}
   - {name: group, rtlBehavior: logical}
+  - {name: run, rtlBehavior: fixed}
   - {name: prefix, rtlBehavior: fixed}
   - {name: input, rtlBehavior: fixed}
-  - {name: label, rtlBehavior: logical}
+  - {name: suffix, rtlBehavior: logical}
   - {name: message, rtlBehavior: logical}
 variants:
   - {name: position, values: [start, end], default: start}
@@ -17,22 +19,26 @@ tokens:
   - {part: label, property: text, role: color.text.default}
   - {part: label, property: font, role: type.text.ui-large}
   - {part: label, property: stack-gap, role: space.field.label-gap}
+  # the group is one shape: it holds the only edge, the fill and the corner,
+  # and clips its parts
+  - {part: group, property: fill, role: color.surface.card}
   - {part: group, property: border-width, role: border.outline}
   - {part: group, property: border-color, role: color.line.input}
   - {part: group, property: radius, role: radius.control}
   - {part: group, property: min-size, role: layout.target.min}
-  # the shared edge between the prefix and the field is square
-  - {part: prefix, property: radius, role: radius.joined}
-  - {part: prefix, property: fill, role: color.surface.sunken}
-  - {part: prefix, property: border-width, role: border.outline}
-  - {part: prefix, property: border-color, role: color.line.input}
-  - {part: prefix, property: text, role: color.text.muted}
-  - {part: prefix, property: font, role: type.text.body}
-  - {part: prefix, property: padding-inline, role: space.control.padding-inline}
-  - {part: input, property: radius, role: radius.joined}
-  - {part: input, property: fill, role: color.surface.card}
-  - {part: input, property: border-width, role: border.outline}
-  - {part: input, property: border-color, role: color.line.input}
+  # the fixed part draws one divider, where it meets the value
+  - {part: prefix, property: fill, role: color.surface.sunken, when: {position: start}}
+  - {part: prefix, property: divider-width, role: border.separator, when: {position: start}}
+  - {part: prefix, property: divider-color, role: color.line.input, when: {position: start}}
+  - {part: prefix, property: text, role: color.text.muted, when: {position: start}}
+  - {part: prefix, property: font, role: type.text.body, when: {position: start}}
+  - {part: prefix, property: padding-inline, role: space.control.padding-inline, when: {position: start}}
+  - {part: suffix, property: fill, role: color.surface.sunken, when: {position: end}}
+  - {part: suffix, property: divider-width, role: border.separator, when: {position: end}}
+  - {part: suffix, property: divider-color, role: color.line.input, when: {position: end}}
+  - {part: suffix, property: text, role: color.text.muted, when: {position: end}}
+  - {part: suffix, property: font, role: type.text.body, when: {position: end}}
+  - {part: suffix, property: padding-inline, role: space.control.padding-inline, when: {position: end}}
   - {part: input, property: text, role: color.text.default}
   - {part: input, property: font, role: type.text.body}
   - {part: input, property: padding-inline, role: space.control.padding-inline}
@@ -46,10 +52,13 @@ tokens:
   - {part: message, property: text, role: color.status.danger.text, state: error}
   - {part: message, property: font, role: type.text.body-small, state: error}
   - {part: message, property: stack-gap, role: space.field.message-gap, state: error}
-  - {part: input, property: fill, role: color.surface.sunken, state: disabled}
-  - {part: input, property: text, role: color.text.disabled, state: disabled}
-  - {part: prefix, property: text, role: color.text.disabled, state: disabled}
+  - {part: group, property: fill, role: color.surface.sunken, state: disabled}
   - {part: group, property: border-color, role: color.line.subtle, state: disabled}
+  - {part: input, property: text, role: color.text.disabled, state: disabled}
+  - {part: prefix, property: text, role: color.text.disabled, when: {position: start}, state: disabled}
+  - {part: prefix, property: divider-color, role: color.line.subtle, when: {position: start}, state: disabled}
+  - {part: suffix, property: text, role: color.text.disabled, when: {position: end}, state: disabled}
+  - {part: suffix, property: divider-color, role: color.line.subtle, when: {position: end}, state: disabled}
 contrast:
   - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   - {fg: color.line.input, bg: color.surface.card, minimum: 3, criterion: "1.4.11"}
@@ -67,21 +76,24 @@ a11y:
   cue: an error adds a heavier edge and a message, never color alone
 copy:
   default:
-    - The prefix is the fixed part exactly as it is written, such as +962 or USD, and is part of the accessible name
+    - The prefix or suffix is the fixed part exactly as it is written, such as +962 or JOD, and is part of the accessible name
     - The label names the whole value, such as Mobile number
   error:
     - Name what is wrong with the part the person typed and give the fix, such as Enter the 9 digits after +962
 usage:
   do:
-    - Keep the prefix and the value left to right inside a right to left form, with white-space nowrap, and keep the prefix on the side where it is read
-    - Put a currency after the amount when the market writes it that way, with position end
-    - Round only the outer corners of the group; the shared edge takes radius.joined
+    - With position start, the prefix and the typed value sit in the run, one left to right run with white-space nowrap, so a phone reads +962 791234567 with the code first in both directions; use it for dialing codes, card and account codes, and a currency the market writes before the amount
+    - With position end, the suffix follows the amount in the page's direction, as the market writes it, such as 50 JOD, or the Arabic abbreviation after the amount under right to left (content.md); the amount itself is a fixed run
+    - Wrap the code in the label, helper and message in its own fixed run too, so +962 keeps its plus sign in front inside right to left text
+    - Reserve one line of the message's height under the field, so an error never moves what follows
+    - The group is one shape with the only edge, the fill and radius.control, and clips its parts; the prefix or suffix draws only its divider where it meets the value, so every state changes one edge
     - A disabled component takes no hover or pressed binding; a disabled component that can take focus keeps its focus ring; selected and error still apply, and where disabled and another state bind the same part and property, disabled wins. Apply this first, then the specificity rule
     - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
     - When two states apply at once, error wins over hover
   dont:
     - Do not let people type the prefix again in the field
     - Do not split a phone number into several fields
+    - Do not draw an edge around the prefix or the value; the group's edge is the field's only edge
 provenance:
   figma: {node: null, variantCount: null, lastVerified: null}
   drift: []

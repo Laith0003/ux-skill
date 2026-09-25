@@ -37,10 +37,15 @@ STATES: Tuple[str, ...] = ("default", "hover", "pressed", "focus", "selected", "
 WORDED_STATES: Tuple[str, ...] = ("default", "loading", "error", "empty")
 RTL_BEHAVIORS: Tuple[str, ...] = ("logical", "mirror", "fixed")
 # Every property a binding may set, with the token type its role must have.
+# border-width and border-color draw every side of a part. divider-width and
+# divider-color draw one side only: the side where a part inside a group
+# meets the rest of the group (the inline end of a part at the start, the
+# inline start of a part at the end, the end edge of a sticky column); its
+# other sides lie on the group's own edge.
 PROPERTY_TYPES: Mapping[str, str] = MappingProxyType({
     "fill": "color", "text": "color", "icon": "color", "border-color": "color",
-    "focus-ring": "color",
-    "border-width": "dimension", "focus-ring-width": "dimension",
+    "focus-ring": "color", "divider-color": "color",
+    "border-width": "dimension", "focus-ring-width": "dimension", "divider-width": "dimension",
     "focus-ring-offset": "dimension", "border-style": "strokeStyle",
     "radius": "dimension", "padding-inline": "dimension", "padding-block": "dimension",
     "gap": "dimension", "stack-gap": "dimension", "min-size": "dimension",

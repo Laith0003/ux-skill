@@ -48,7 +48,9 @@ tokens:
   - {part: day, property: min-size, role: layout.target.min}
   - {part: day, property: radius, role: radius.control}
   - {part: previous, property: icon, role: color.text.default}
+  - {part: previous, property: min-size, role: layout.target.min}
   - {part: next, property: icon, role: color.text.default}
+  - {part: next, property: min-size, role: layout.target.min}
   - {part: day, property: fill, role: color.surface.sunken, state: hover}
   - {part: day, property: border-width, role: border.outline, state: hover}
   - {part: day, property: border-color, role: color.line.input, state: hover}
@@ -62,6 +64,15 @@ tokens:
   - {part: day, property: focus-ring, role: color.focus.ring, state: focus}
   - {part: day, property: focus-ring-width, role: border.focus-ring.width, state: focus}
   - {part: day, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  - {part: button, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: button, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: button, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  - {part: previous, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: previous, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: previous, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  - {part: next, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: next, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: next, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
   - {part: input, property: border-width, role: border.emphasis, state: error}
   - {part: input, property: border-color, role: color.line.danger, state: error}
   - {part: message, property: text, role: color.status.danger.text, state: error}
@@ -71,6 +82,7 @@ tokens:
   - {part: input, property: border-color, role: color.line.subtle, state: disabled}
   - {part: input, property: text, role: color.text.disabled, state: disabled}
   - {part: day, property: text, role: color.text.disabled, state: disabled}
+  - {part: button, property: icon, role: color.text.disabled, state: disabled}
 contrast:
   - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   - {fg: color.line.input, bg: color.surface.card, minimum: 3, criterion: "1.4.11"}
@@ -98,10 +110,14 @@ copy:
     - Name the field, the problem and an example that works, such as Enter the date as 25/09/2026
 usage:
   do:
+    - Reserve one line of the message's height under the field, so an error never moves what follows
     - Let people type the date; the calendar is a help, not the only way in
     - Keep the typed value left to right inside a right to left form, and flip the previous and next arrows
     - Start the week on the day the market starts it
+    - Draw a day out of range in color.text.disabled with no hover fill and aria-disabled; it stays reachable by the arrow keys, so a person can hear why it cannot be chosen
+    - Mark today with border.outline in color.line.input on the day and aria-current=date, never a color alone
     - A disabled component takes no hover or pressed binding; a disabled component that can take focus keeps its focus ring; selected and error still apply, and where disabled and another state bind the same part and property, disabled wins. Apply this first, then the specificity rule
+    - Only the part that holds focus draws its ring; the focus bindings on the other parts apply when each holds focus in turn
     - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
     - When two states apply at once, selected wins over hover on a day, and error wins over hover on the field
   dont:

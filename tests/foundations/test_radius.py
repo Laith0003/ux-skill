@@ -39,8 +39,18 @@ def test_primitives_and_roles():
         f"radius.{n}" for n in range(7)] + ["radius.round"]
     assert ts.get("radius.round").value == {"value": PILL_PX, "unit": "px"}
     got = {r: ts.resolve(r)["value"] for r in roles(0.5)}
-    assert got == {"radius.joined": 0, "radius.chip": 4, "radius.control": 7, "radius.card": 11,
-                   "radius.dialog": 14, "radius.pill": PILL_PX, "radius.media": 11}
+    assert got == {"radius.joined": 0, "radius.chip": 4, "radius.control": 7, "radius.box": 4,
+                   "radius.area": 7, "radius.card": 11, "radius.dialog": 14,
+                   "radius.pill": PILL_PX, "radius.media": 11}
+
+
+@pytest.mark.parametrize("roundness", [i / 20 for i in range(21)])
+def test_a_box_and_a_multi_line_field_never_become_pills(roundness):
+    # A round check box reads as a radio button; a stadium clips the first
+    # and last lines of a paragraph. Both stay rectangles at every roundness.
+    r = roles(roundness)
+    assert r["radius.box"] == "radius.1"
+    assert r["radius.area"] == ("radius.2" if r["radius.control"] == "radius.2" else "radius.3")
 
 
 def test_soft_brands_move_chips_then_controls_to_pills():

@@ -88,6 +88,7 @@ usage:
     - Keep a danger banner until the problem is fixed; let the others be dismissed
     - Announce a danger banner at once to assistive technology and the others politely
     - Give the dismiss button an accessible name in the product's language, and a target of at least 24 by 24 CSS px (WCAG 2.5.8); the bound target size meets it
+    - Only the part that holds focus draws its ring; the focus bindings on the other parts apply when each holds focus in turn
   dont:
     - Do not use a banner for a success the result already shows
     - Do not tell status apart by color alone; the icon and the title carry it too

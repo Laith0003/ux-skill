@@ -195,6 +195,8 @@
   --radius-joined: var(--radius-0);
   --radius-chip: var(--radius-1);
   --radius-control: var(--radius-2);
+  --radius-box: var(--radius-1);
+  --radius-area: var(--radius-2);
   --radius-card: var(--radius-3);
   --radius-dialog: var(--radius-4);
   --radius-pill: var(--radius-round);

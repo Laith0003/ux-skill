@@ -8,18 +8,18 @@ parts:
   - {name: bar, rtlBehavior: logical}
   - {name: spinner, rtlBehavior: fixed}
   - {name: label, rtlBehavior: logical}
-  - {name: value, rtlBehavior: fixed}
+  - {name: value, rtlBehavior: logical}
 variants:
   - {name: kind, values: [bar, spinner], default: bar}
 states: [default, loading]
 tokens:
   - {part: track, property: fill, role: color.surface.sunken, when: {kind: bar}}
   - {part: track, property: border-width, role: border.outline, when: {kind: bar}}
-  - {part: track, property: border-color, role: color.line.subtle, when: {kind: bar}}
+  - {part: track, property: border-color, role: color.line.input, when: {kind: bar}}
   - {part: track, property: radius, role: radius.pill, when: {kind: bar}}
   - {part: bar, property: fill, role: color.line.selected, when: {kind: bar}}
-  - {part: bar, property: transition-duration, role: motion.swap.duration, when: {kind: bar}}
-  - {part: bar, property: transition-curve, role: motion.swap.curve, when: {kind: bar}}
+  - {part: bar, property: transition-duration, role: motion.expand.duration, when: {kind: bar}}
+  - {part: bar, property: transition-curve, role: motion.expand.curve, when: {kind: bar}}
   - {part: spinner, property: icon, role: color.line.selected, when: {kind: spinner}}
   - {part: spinner, property: transition-duration, role: motion.progress.duration, when: {kind: spinner}}
   - {part: spinner, property: transition-curve, role: motion.progress.curve, when: {kind: spinner}}
@@ -30,6 +30,7 @@ tokens:
 contrast:
   - {fg: color.line.selected, bg: color.surface.sunken, minimum: 3, criterion: "1.4.11"}
   - {fg: color.line.selected, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
 surfaces: [color.surface.page, color.surface.card, color.surface.raised]
 a11y:
@@ -47,6 +48,10 @@ usage:
     - Use the bar when the share is known and the spinner only when it is not
     - Fill the bar from the start of the line, so it runs right to left under right to left
     - Announce the finish and every quarter to assistive technology, not every change
+    - Draw the empty track's edge in color.line.input, measured at 3:1 on every surface, so the whole the bar is a share of always shows
+    - The value keeps the page's direction and its digits run left to right on their own; never wrap the whole value in dir=ltr, which puts an Arabic value's number after its words
+    - Give the bar role progressbar with aria-valuemin, aria-valuemax, aria-valuenow and aria-valuetext set to the value in words; the spinner sets aria-busy on the region it loads
+    - When the spinner can run longer than 5 seconds, put a control beside it that pauses or cancels the work, as the progress loop asks (motion.md)
   dont:
     - Do not show a spinner for less than a second; show nothing
     - Do not use the brand fill for the bar; its edge against the track is not measured

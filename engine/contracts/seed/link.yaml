@@ -36,6 +36,7 @@ copy:
 usage:
   do:
     - Underline every link; inline links take the text's size and are exempt from the target minimum inside a sentence (WCAG 2.5.8), standalone links meet it
+    - Draw the underline under the words, with text-decoration-thickness from the underline's width and text-decoration-color from its color, never at the edge of a standalone link's target box
     - Let an arrow icon point to the end of the line, so it flips under right to left
     - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
   dont:

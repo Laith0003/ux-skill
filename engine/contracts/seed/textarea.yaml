@@ -23,7 +23,8 @@ tokens:
   - {part: input, property: border-color, role: color.line.input}
   - {part: input, property: text, role: color.text.default}
   - {part: input, property: font, role: type.text.body}
-  - {part: input, property: radius, role: radius.control}
+  # several lines keep a rectangle: radius.area never becomes a pill
+  - {part: input, property: radius, role: radius.area}
   - {part: input, property: padding-inline, role: space.control.padding-inline}
   - {part: input, property: padding-block, role: space.control.padding-block}
   - {part: input, property: min-size, role: layout.target.min}
@@ -33,6 +34,7 @@ tokens:
   - {part: helper, property: stack-gap, role: space.field.message-gap}
   - {part: counter, property: text, role: color.text.muted}
   - {part: counter, property: font, role: type.text.body-small}
+  - {part: counter, property: stack-gap, role: space.field.message-gap}
   - {part: input, property: border-width, role: border.emphasis, state: hover}
   - {part: input, property: focus-ring, role: color.focus.ring, state: focus}
   - {part: input, property: focus-ring-width, role: border.focus-ring.width, state: focus}

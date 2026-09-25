@@ -9,6 +9,7 @@ parts:
   - {name: label, rtlBehavior: logical}
   - {name: legend, rtlBehavior: logical}
   - {name: message, rtlBehavior: logical}
+  - {name: target, rtlBehavior: logical}
 variants:
   - {name: chosen, values: ["off", "on"], default: "off"}
 states: [default, hover, focus, disabled, error]
@@ -17,8 +18,11 @@ tokens:
   - {part: dot, property: border-width, role: border.emphasis}
   - {part: dot, property: border-color, role: color.line.input}
   - {part: dot, property: radius, role: radius.pill}
-  - {part: dot, property: min-size, role: layout.target.min}
-  - {part: dot, property: gap, role: space.control.gap}
+  # the dot is drawn at the control icon size; the target wraps the dot
+  # and its label
+  - {part: dot, property: min-size, role: type.icon.size.control}
+  - {part: target, property: min-size, role: layout.target.min}
+  - {part: target, property: gap, role: space.control.gap}
   - {part: dot, property: border-color, role: color.line.selected, when: {chosen: "on"}}
   - {part: mark, property: icon, role: color.line.selected, when: {chosen: "on"}}
   - {part: label, property: text, role: color.text.default}
@@ -63,10 +67,11 @@ usage:
   do:
     - Use radio buttons for two to five options that all fit on screen; for more, use a select
     - Group the options in a fieldset with the legend as its first child
+    - Let the whole label choose the option, so the target part wraps the dot and its label and meets the target size, while the dot stays at the control icon size
     - Choose a default only when one option is right for most people
     - A disabled component takes no hover or pressed binding; a disabled component that can take focus keeps its focus ring; selected and error still apply, and where disabled and another state bind the same part and property, disabled wins. Apply this first, then the specificity rule
     - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
-    - When two states apply at once, error wins over the chosen edge
+    - When two states apply at once, error sets the dot's edge and hover its fill, so both show; a chosen dot in error keeps its mark
   dont:
     - Do not use a single radio button; use a checkbox
     - Do not submit when an option is chosen

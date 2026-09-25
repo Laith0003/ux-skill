@@ -82,9 +82,9 @@ def test_the_catalog_joins_description_type_and_axes(tmp_path):
                       if t.layer == "semantic")
     catalog = role_catalog(ts, _folder(tmp_path, _text(roles=roles)))
     assert [e.path for e in catalog] == ["radius.joined", "radius.chip", "radius.control",
-                                         "radius.card", "radius.dialog", "radius.pill",
-                                         "radius.media"]
-    card = catalog[3]
+                                         "radius.box", "radius.area", "radius.card",
+                                         "radius.dialog", "radius.pill", "radius.media"]
+    card = catalog[5]
     assert (card.foundation, card.type, card.axes, card.description) == (
         "radius", "dimension", (), "the card corner.")
 

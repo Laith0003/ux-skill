@@ -1,10 +1,10 @@
 ---
 id: radius-roles
 title: Six radius roles follow structure, and geometry sets the scale
-status: active
+status: superseded
 areas: [radius]
 supersedes: null
-superseded_by: null
+superseded_by: radius-roles-by-shape
 ---
 
 # Six radius roles follow structure, and geometry sets the scale

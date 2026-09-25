@@ -1,10 +1,10 @@
 ---
 id: form-contracts
 title: Every form control has a contract, and they share the field rules
-status: active
+status: superseded
 areas: [contracts]
 supersedes: null
-superseded_by: null
+superseded_by: form-contracts-per-control
 ---
 
 # Every form control has a contract, and they share the field rules

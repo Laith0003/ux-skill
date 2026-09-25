@@ -10,6 +10,7 @@ parts:
   - {name: label, rtlBehavior: logical}
   - {name: helper, rtlBehavior: logical}
   - {name: message, rtlBehavior: logical}
+  - {name: target, rtlBehavior: logical}
 variants:
   - {name: checked, values: ["off", "on", mixed], default: "off"}
 states: [default, hover, focus, disabled, error]
@@ -17,20 +18,25 @@ tokens:
   - {part: box, property: fill, role: color.surface.card}
   - {part: box, property: border-width, role: border.emphasis}
   - {part: box, property: border-color, role: color.line.input}
-  - {part: box, property: radius, role: radius.chip}
-  - {part: box, property: min-size, role: layout.target.min}
-  - {part: box, property: gap, role: space.control.gap}
+  # the box is a small square at the control icon size; the target wraps
+  # the box and its label
+  - {part: box, property: radius, role: radius.box}
+  - {part: box, property: min-size, role: type.icon.size.control}
+  - {part: target, property: min-size, role: layout.target.min}
+  - {part: target, property: gap, role: space.control.gap}
   - {part: box, property: fill, role: color.action.primary, when: {checked: "on"}}
-  - {part: box, property: border-color, role: color.action.primary-edge, when: {checked: "on"}}
+  - {part: box, property: border-color, role: color.line.selected, when: {checked: "on"}}
   - {part: mark, property: icon, role: color.text.on-action, when: {checked: "on"}}
   - {part: box, property: fill, role: color.action.primary, when: {checked: mixed}}
-  - {part: box, property: border-color, role: color.action.primary-edge, when: {checked: mixed}}
+  - {part: box, property: border-color, role: color.line.selected, when: {checked: mixed}}
   - {part: mark, property: icon, role: color.text.on-action, when: {checked: mixed}}
   - {part: label, property: text, role: color.text.default}
   - {part: label, property: font, role: type.text.body}
   - {part: helper, property: text, role: color.text.default}
   - {part: helper, property: font, role: type.text.body-small}
+  - {part: helper, property: stack-gap, role: space.field.message-gap}
   - {part: box, property: fill, role: color.action.primary-hover, when: {checked: "on"}, state: hover}
+  - {part: box, property: fill, role: color.action.primary-hover, when: {checked: mixed}, state: hover}
   - {part: box, property: fill, role: color.surface.sunken, when: {checked: "off"}, state: hover}
   - {part: box, property: focus-ring, role: color.focus.ring, state: focus}
   - {part: box, property: focus-ring-width, role: border.focus-ring.width, state: focus}
@@ -46,7 +52,7 @@ tokens:
 contrast:
   - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   - {fg: color.line.input, bg: color.surface.sunken, minimum: 3, criterion: "1.4.11"}
-  - {fg: color.action.primary-edge, bg: color.surface.page, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.selected, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   - {fg: color.text.on-action, bg: color.action.primary, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.on-action, bg: color.action.primary-hover, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.line.danger, bg: surfaces, minimum: 3, criterion: "1.4.11"}
@@ -66,12 +72,13 @@ copy:
     - Say what must be checked and why, such as Agree to the terms to continue
 usage:
   do:
-    - Let the whole label toggle the box, so the target is the box and its label
+    - Let the whole label toggle the box, so the target part wraps the box and its label and meets the target size, while the box stays at the control icon size
+    - Draw the checked box's edge in color.line.selected, which clears 3:1 on every surface the box sits on; the fill is the brand, and the mark on it clears 4.5:1
     - Use mixed only for a box that checks a group, when some of the group are checked
     - Stack checkboxes at the list gap, one per line
     - A disabled component takes no hover or pressed binding; a disabled component that can take focus keeps its focus ring; selected and error still apply, and where disabled and another state bind the same part and property, disabled wins. Apply this first, then the specificity rule
     - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
-    - When two states apply at once, error wins over hover on the box's edge
+    - When two states apply at once, hover changes the box's fill and error its edge, so both show
   dont:
     - Do not use a checkbox for a choice that takes effect at once; use a toggle
     - Do not write a label as a question

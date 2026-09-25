@@ -47,7 +47,29 @@ def test_a_fill_that_equals_its_surface_declares_an_edge():
          "color.surface.page in scheme:dark,contrast:high, below our container edge floor of "
          "1.2:1 (WCAG sets no minimum for a container's edge), so the track has no visible edge "
          "there; bind border-width to border.outline and a border-color on track for the same "
-         "variant and state")]
+         "variant and state, or a divider-width and divider-color when track sits inside a group "
+         "whose edge draws its other sides")]
+
+
+DIVIDER = [{"part": "track", "property": "divider-width", "role": "border.separator"},
+           {"part": "track", "property": "divider-color", "role": "color.line.input"}]
+
+
+def test_a_part_inside_a_group_meets_the_rest_at_its_divider():
+    # A prefix inside a field group draws one side, where it meets the value;
+    # the group's own edge draws the others, so the part needs no box.
+    assert messages(contract(lambda d: d["tokens"].extend(copy.deepcopy(DIVIDER)),
+                             with_edge=False)) == []
+    half = contract(lambda d: d["tokens"].append(copy.deepcopy(DIVIDER[0])), with_edge=False)
+    assert [r for r, _ in messages(half)] == ["container-edge"]
+
+
+def test_a_divider_for_another_variant_does_not_count():
+    def edit(d):
+        for b in copy.deepcopy(DIVIDER):
+            b["when"] = {"tone": "danger"}
+            d["tokens"].append(b)
+    assert [r for r, _ in messages(contract(edit, with_edge=False))] == ["container-edge"]
 
 
 def test_the_edge_floor_is_ours_and_measured():

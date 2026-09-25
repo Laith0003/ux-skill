@@ -20,6 +20,7 @@ tokens:
   - {part: input, property: text, role: color.text.default}
   - {part: input, property: font, role: type.text.body}
   - {part: input, property: radius, role: radius.control}
+  - {part: input, property: radius, role: radius.area, when: {lines: multiple}}
   - {part: input, property: padding-inline, role: space.control.padding-inline}
   - {part: input, property: padding-block, role: space.control.padding-block}
   - {part: input, property: min-size, role: layout.target.min}

@@ -16,7 +16,7 @@ Border sets the width of every stroke: separators, the edges of containers and c
 
 ## Roles
 
-- `border.separator`: a line between siblings inside one parent, such as table rows or menu groups.
+- `border.separator`: a line between siblings inside one parent, such as plain table rows, menu groups, or the divider between a field's prefix and its value; a striped row takes border.outline, since its fill can match the card and its edge is then a container edge (decisions/container-edge.md).
 - `border.outline`: the resting edge of a container or a control, such as a card, a field or a secondary button.
 - `border.emphasis`: an edge that must outrank the edges around it, such as a highlighted module, a field in error or the boundary of a check box.
 - `border.active`: the edge of a selected or active item, such as a selected row or an active tab.
@@ -29,7 +29,8 @@ Border sets the width of every stroke: separators, the edges of containers and c
 
 | Situation | Tool |
 |---|---|
-| Rows in a dense list or table need scan lines | border.separator with color.line.subtle |
+| Rows in a dense list or table need scan lines | border.separator with color.line.subtle; a striped row takes border.outline |
+| A part inside a group meets the rest, such as a field's prefix or a table's sticky first column | a divider: divider-width at border.separator and divider-color, on the one side where it meets the rest |
 | Blocks already read as separate through spacing | space, no border |
 | A card, panel or field needs a visible edge | border.outline |
 | Related controls should read as one set | border.outline around them, or space.group.gap if proximity is enough |

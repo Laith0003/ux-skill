@@ -1,10 +1,10 @@
 ---
 id: display-and-navigation-contracts
 title: Chips, badges, links, navigation, progress and tables have contracts
-status: active
+status: superseded
 areas: [contracts]
 supersedes: null
-superseded_by: null
+superseded_by: display-contracts-measured
 ---
 
 # Chips, badges, links, navigation, progress and tables have contracts

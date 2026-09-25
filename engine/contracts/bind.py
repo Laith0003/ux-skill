@@ -3,7 +3,9 @@
 Every role a contract names exists, is semantic and has the type its use
 needs. A container whose fill measures below EDGE_FLOOR against a surface
 it sits on, in any color context, declares an edge (border-width at
-border.outline or heavier, and a border color) for that fill. The floor is
+border.outline or heavier, and a border color) for that fill, or a divider
+(divider-width and divider-color) when the part sits inside a group whose
+own edge draws its other sides. The floor is
 ours: WCAG sets no minimum for the edge of a container. Every contrast pairing the contract
 declares is measured in every scheme and contrast context through the
 same gate the build uses. validate_contracts adds the checks across a set
@@ -79,6 +81,11 @@ def _edge_problems(contract: Contract, ts: TokenSet) -> List[ContractProblem]:
         color = any(_covers(e, fill) and e.property == "border-color" for e in contract.tokens)
         if width and color:
             continue
+        # A part inside a group meets the rest of the group at its divider;
+        # the group's own edge draws its other sides.
+        if all(any(_covers(e, fill) and e.property == prop for e in contract.tokens)
+               for prop in ("divider-width", "divider-color")):
+            continue
         worst: Optional[Tuple[float, str, str]] = None
         for surface in contract.surfaces:
             if not (ts.has(surface) and ts.get(surface).type == "color"):
@@ -98,7 +105,9 @@ def _edge_problems(contract: Contract, ts: TokenSet) -> List[ContractProblem]:
                 f"against {surface} in {mode}, below our container edge floor of "
                 f"{EDGE_FLOOR:g}:1 (WCAG sets no minimum for a container's edge), so the "
                 f"{fill.part} has no visible edge there; bind border-width to border.outline "
-                f"and a border-color on {fill.part} for the same variant and state"))
+                f"and a border-color on {fill.part} for the same variant and state, or a "
+                f"divider-width and divider-color when {fill.part} sits inside a group whose "
+                "edge draws its other sides"))
     return out
 
 

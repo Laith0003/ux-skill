@@ -4,8 +4,10 @@ formality axes give, and the roles that use it.
 The base corner runs from 0px for a sharp, formal brand to 14px for a
 soft, playful one (character.roundness); the scale steps are fixed
 multiples of it, so controls, cards and dialogs round together. Rounded
-brands move chips, then controls, to the pill shape. Containers nest, so
-a dialog is never less rounded than a card inside it.
+brands move chips, then controls, to the pill shape. A check box's box and
+a field that runs to several lines never do: a round box reads as a radio
+button, and a stadium clips a paragraph's first and last lines. Containers
+nest, so a dialog is never less rounded than a card inside it.
 """
 from __future__ import annotations
 
@@ -45,6 +47,12 @@ def roles(roundness: float) -> Dict[str, str]:
         "radius.joined": "radius.0",
         "radius.chip": "radius.round" if roundness >= CHIP_PILL_FROM else "radius.1",
         "radius.control": "radius.round" if roundness >= CONTROL_PILL_FROM else "radius.2",
+        # A small square mark such as a check box: half the control corner,
+        # never a pill.
+        "radius.box": "radius.1",
+        # A control that runs to several lines: the control corner, and the
+        # card corner once controls are pills, never a pill itself.
+        "radius.area": "radius.3" if roundness >= CONTROL_PILL_FROM else "radius.2",
         "radius.card": "radius.3",
         "radius.dialog": "radius.4",
         "radius.pill": "radius.round",

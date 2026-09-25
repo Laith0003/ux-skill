@@ -50,8 +50,8 @@ def test_every_reachable_combination_is_run():
     counts = {name: sum(1 for n, _, _ in CASES if n == name) for name in CONTRACTS}
     assert counts == {"badge": 6, "button": 384, "card": 2, "checkbox": 48, "chip": 32,
                       "date": 32, "dialog": 4, "input-prefix": 32, "link": 8, "nav": 16,
-                      "progress": 4, "radio": 32, "select": 32, "selectable-row": 64,
-                      "status-banner": 8, "table": 8, "text-field": 32, "textarea": 32}
+                      "progress": 4, "radio": 32, "select": 128, "selectable-row": 64,
+                      "status-banner": 8, "table": 48, "text-field": 32, "textarea": 32}
 
 
 @pytest.mark.parametrize("name,variant,states", CASES)
