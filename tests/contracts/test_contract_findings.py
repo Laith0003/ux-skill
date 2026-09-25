@@ -15,6 +15,7 @@ import pytest
 from engine.contracts.bind import validate_contracts
 from engine.contracts.library import seed_contracts
 from engine.contracts.precedence import resolve
+from engine.contracts.schema import PLACEMENT
 from engine.foundations import build_system
 from engine.foundations.color_math import contrast
 from engine.foundations.modes import contexts
@@ -239,12 +240,15 @@ def test_every_control_edge_and_ring_is_paired_with_every_surface():
                 continue
             if b.property in ("border-color", "divider-color") and b.role in CONTROL_EDGES \
                     or b.property == "focus-ring":
-                if c.name == "button" and b.role == "color.action.primary-edge":
-                    continue  # decisions/primary-edge.md: the fill's edge, page only
                 on_fill = any(_paired(c.name, b.role, f) for f in inner
                               if f not in c.surfaces and not any(
                                   x.part == b.part and x.role == f for x in c.tokens))
-                for s in c.surfaces:
+                # a binding under a placement variant sits on the surface it
+                # names (decisions/fills-on-every-placement.md)
+                where = dict(b.when).get(PLACEMENT)
+                surfaces = (f"color.surface.{where}",) if where and where != "default" \
+                    else c.surfaces
+                for s in surfaces:
                     if not _paired(c.name, b.role, s) and not on_fill:
                         unpaired.append((c.name, b.label(), s))
     assert sorted(set(unpaired)) == []

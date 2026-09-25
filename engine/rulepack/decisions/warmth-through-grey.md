@@ -1,10 +1,10 @@
 ---
 id: warmth-through-grey
 title: Warmth moves the neutrals and the duotone light through grey, never around the wheel
-status: active
+status: superseded
 areas: [color, imagery]
 supersedes: neutral-tint
-superseded_by: null
+superseded_by: neutrals-follow-the-brand
 ---
 
 # Warmth moves the neutrals and the duotone light through grey, never around the wheel

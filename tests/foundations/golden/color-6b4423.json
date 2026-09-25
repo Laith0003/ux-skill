@@ -4,7 +4,7 @@
   "--color-action-danger-pressed: var(--color-danger-200);",
   "--color-action-danger: var(--color-danger-400);",
   "--color-action-disabled: var(--color-neutral-700);",
-  "--color-action-primary-edge: var(--color-brand-400);",
+  "--color-action-primary-edge: var(--color-brand-300);",
   "--color-decorative-brand: var(--color-brand-600);",
   "--color-decorative-neutral: var(--color-neutral-600);",
   "--color-decorative-support: var(--color-support-600);",
@@ -106,6 +106,7 @@
    "--color-text-inverse: var(--color-base-white);",
    "--color-text-link: var(--color-brand-800);",
    "--color-text-muted: var(--color-neutral-800);",
+   "--color-text-on-brand-action: var(--color-brand-700);",
    "--color-text-on-media: var(--color-neutral-950);",
    "--color-text-support: var(--color-support-800);"
   ],
@@ -113,7 +114,7 @@
    "--color-action-danger-hover: var(--color-danger-100);",
    "--color-action-danger-pressed: var(--color-danger-50);",
    "--color-action-danger: var(--color-danger-200);",
-   "--color-action-primary-edge: var(--color-brand-300);",
+   "--color-action-primary-edge: var(--color-brand-200);",
    "--color-focus-ring-inverse: var(--color-brand-800);",
    "--color-focus-ring: var(--color-brand-100);",
    "--color-illustration-line: var(--color-brand-200);",
@@ -161,7 +162,7 @@
    "--color-action-danger-hover: var(--color-danger-100);",
    "--color-action-danger-pressed: var(--color-danger-50);",
    "--color-action-danger: var(--color-danger-200);",
-   "--color-action-primary-edge: var(--color-brand-300);",
+   "--color-action-primary-edge: var(--color-brand-200);",
    "--color-focus-ring-inverse: var(--color-brand-800);",
    "--color-focus-ring: var(--color-brand-100);",
    "--color-illustration-line: var(--color-brand-200);",
@@ -209,7 +210,7 @@
    "--color-action-danger-hover: var(--color-danger-100);",
    "--color-action-danger-pressed: var(--color-danger-50);",
    "--color-action-danger: var(--color-danger-200);",
-   "--color-action-primary-edge: var(--color-brand-300);",
+   "--color-action-primary-edge: var(--color-brand-200);",
    "--color-focus-ring-inverse: var(--color-brand-800);",
    "--color-focus-ring: var(--color-brand-100);",
    "--color-illustration-line: var(--color-brand-200);",
@@ -295,6 +296,7 @@
    "--color-text-inverse: var(--color-base-white);",
    "--color-text-link: var(--color-brand-800);",
    "--color-text-muted: var(--color-neutral-800);",
+   "--color-text-on-brand-action: var(--color-brand-700);",
    "--color-text-on-media: var(--color-neutral-950);",
    "--color-text-support: var(--color-support-800);"
   ],
@@ -302,7 +304,7 @@
    "--color-action-danger-hover: var(--color-danger-100);",
    "--color-action-danger-pressed: var(--color-danger-50);",
    "--color-action-danger: var(--color-danger-200);",
-   "--color-action-primary-edge: var(--color-brand-300);",
+   "--color-action-primary-edge: var(--color-brand-200);",
    "--color-focus-ring-inverse: var(--color-brand-800);",
    "--color-focus-ring: var(--color-brand-100);",
    "--color-illustration-line: var(--color-brand-200);",
@@ -484,6 +486,7 @@
   "--color-text-accent: var(--color-brand-700);",
   "--color-text-support: var(--color-support-700);",
   "--color-text-on-brand: var(--color-base-white);",
+  "--color-text-on-brand-action: var(--color-brand-500);",
   "--color-text-on-media: var(--color-neutral-900);",
   "--color-action-primary: var(--color-brand-exact);",
   "--color-action-primary-hover: var(--color-brand-600);",
@@ -493,6 +496,9 @@
   "--color-action-danger-hover: var(--color-danger-700);",
   "--color-action-danger-pressed: var(--color-danger-800);",
   "--color-action-disabled: var(--color-neutral-200);",
+  "--color-action-on-brand: var(--color-neutral-50);",
+  "--color-action-on-brand-hover: var(--color-neutral-100);",
+  "--color-action-on-brand-pressed: var(--color-neutral-200);",
   "--color-line-subtle: var(--color-neutral-200);",
   "--color-line-input: var(--color-neutral-500);",
   "--color-line-selected: var(--color-brand-600);",
@@ -535,6 +541,9 @@
   "color.action.danger-hover": "{color.danger.700}",
   "color.action.danger-pressed": "{color.danger.800}",
   "color.action.disabled": "{color.neutral.200}",
+  "color.action.on-brand": "{color.neutral.50}",
+  "color.action.on-brand-hover": "{color.neutral.100}",
+  "color.action.on-brand-pressed": "{color.neutral.200}",
   "color.action.primary": "{color.brand.exact}",
   "color.action.primary-edge": "{color.brand.exact}",
   "color.action.primary-hover": "{color.brand.600}",
@@ -1401,6 +1410,7 @@
   "color.text.muted": "{color.neutral.600}",
   "color.text.on-action": "{color.base.white}",
   "color.text.on-brand": "{color.base.white}",
+  "color.text.on-brand-action": "{color.brand.500}",
   "color.text.on-danger": "{color.base.white}",
   "color.text.on-media": "{color.neutral.900}",
   "color.text.support": "{color.support.700}",
@@ -1655,6 +1665,24 @@
    "light": "#C1BEBD",
    "light-high": "#C1BEBD"
   },
+  "color.action.on-brand": {
+   "dark": "#F8F6F5",
+   "dark-high": "#F8F6F5",
+   "light": "#F8F6F5",
+   "light-high": "#F8F6F5"
+  },
+  "color.action.on-brand-hover": {
+   "dark": "#DCDAD9",
+   "dark-high": "#DCDAD9",
+   "light": "#DCDAD9",
+   "light-high": "#DCDAD9"
+  },
+  "color.action.on-brand-pressed": {
+   "dark": "#C1BEBD",
+   "dark-high": "#C1BEBD",
+   "light": "#C1BEBD",
+   "light-high": "#C1BEBD"
+  },
   "color.action.primary": {
    "dark": "#6B4423",
    "dark-high": "#6B4423",
@@ -1662,8 +1690,8 @@
    "light-high": "#6B4423"
   },
   "color.action.primary-edge": {
-   "dark": "#886549",
-   "dark-high": "#A5876F",
+   "dark": "#A5876F",
+   "dark-high": "#C3AA97",
    "light": "#6B4423",
    "light-high": "#6B4423"
   },
@@ -2548,6 +2576,12 @@
    "dark-high": "#FFFFFF",
    "light": "#FFFFFF",
    "light-high": "#FFFFFF"
+  },
+  "color.text.on-brand-action": {
+   "dark": "#6B4423",
+   "dark-high": "#492A0E",
+   "light": "#6B4423",
+   "light-high": "#492A0E"
   },
   "color.text.on-danger": {
    "dark": "#000000",

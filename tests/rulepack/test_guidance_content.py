@@ -48,13 +48,17 @@ def _section(name, heading):
 
 
 def test_color_states_which_pairings_the_fills_have():
-    """Action and strong status fills are paired with the page only; the
-    guidance says so and cites the record, and claims no wider coverage."""
+    """The primary edge and the danger fill are paired with every surface the
+    button sits on, the button on the brand band with the band, and the
+    strong status fills with the page; the guidance says so and cites the
+    records, and claims no wider coverage."""
     text = (GUIDANCE_DIR / "color.md").read_text(encoding="utf-8")
-    for record in ("primary-edge", "brand-fill-family", "ring-never-weaker",
-                   "ring-on-tinted-fills"):
+    for record in ("fills-on-every-placement", "natural-text-on-the-brand", "ring-never-weaker",
+                   "ring-on-tinted-fills", "brand-leads-the-role"):
         assert f"decisions/{record}.md" in text, record
-    assert "page only" in _section("color", "Summary")
+    summary = _section("color", "Summary")
+    assert "every surface its contract places it on" in summary
+    assert "The strong status fills are measured against the page." in summary
     assert "every background it can sit on" not in text
     assert "Every pairing a role can meet" not in text
 

@@ -1,10 +1,10 @@
 ---
 id: brand-fill-family
 title: The primary fill keeps the exact brand whenever text reads on it, and otherwise the nearest brand step, weighing the ring in dark high contrast
-status: active
+status: superseded
 areas: [color]
 supersedes: brand-fidelity
-superseded_by: null
+superseded_by: natural-text-on-the-brand
 ---
 
 # The primary fill keeps the exact brand whenever text reads on it, and otherwise the nearest brand step, weighing the ring in dark high contrast

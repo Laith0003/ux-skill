@@ -98,6 +98,14 @@ _SEMANTIC: Dict[str, Tuple[str, str]] = {
     "color.surface.band": ("color.brand.100", "color.brand.band-dark"),
     "color.surface.brand": ("color.brand.exact", "color.brand.exact"),
     "color.text.on-brand": ("color.base.white", "color.base.white"),
+    # The primary button on the brand band: a fill from the neutral end on
+    # the side of color.text.on-brand, so it stands out from the band, with
+    # its hover and pressed steps and a label in the nearest brand step that
+    # reads on it (generate_color sets the fill's start after the band).
+    "color.action.on-brand": ("color.neutral.50", "color.neutral.50"),
+    "color.action.on-brand-hover": ("color.neutral.100", "color.neutral.100"),
+    "color.action.on-brand-pressed": ("color.neutral.200", "color.neutral.200"),
+    "color.text.on-brand-action": ("color.brand.exact", "color.brand.exact"),
     # Table stripes, the table header and the code surface with its syntax
     # colors. The header is the stripe's step in light and the raised
     # surface's in dark: a band off the card that never sits below the page.
@@ -288,6 +296,8 @@ COVERAGE_EXEMPT: Mapping[str, str] = MappingProxyType({
     "color.focus.ring-inverse": "the ring for color.surface.inverse and is paired there",
     "color.surface.brand": "a band whose only text is color.text.on-brand, paired there",
     "color.text.on-brand": "sits only on color.surface.brand and is paired there",
+    "color.text.on-brand-action": "sits only on color.action.on-brand and its states and is "
+                                  "paired there",
     "color.surface.code": "a background whose syntax colors are paired against it",
     "color.text.on-media": "sits only on color.media.veil over generated art, where the "
                            "media-veil check measures it over every color the art draws",
@@ -306,7 +316,14 @@ def uncovered_roles(roles: Iterable[str]) -> List[str]:
 _FILL_STATES = {
     "color.action.primary": ("color.action.primary-hover", "color.action.primary-pressed"),
     "color.action.danger": ("color.action.danger-hover", "color.action.danger-pressed"),
+    "color.action.on-brand": ("color.action.on-brand-hover", "color.action.on-brand-pressed"),
 }
+# The surfaces the button contract places a button on. The primary edge and
+# the danger fill with its states clear each of them, so a filled control
+# is found by its own boundary wherever it sits; the button on the brand
+# band has its own fill, measured against the band.
+CONTROL_SURFACES: Tuple[str, ...] = ("color.surface.page", "color.surface.card",
+                                     "color.surface.sunken", "color.surface.raised")
 
 
 def _extra_text_bgs(role: str) -> Tuple[str, ...]:
@@ -332,7 +349,8 @@ def build_pairings(text_roles: Tuple[str, ...] = TEXT_ROLES,
         + [Pairing("color.text.inverse", "color.surface.inverse", 4.5, "1.4.3")]
         + [Pairing(on, state, 4.5, "1.4.3")
            for fill, on in (("color.action.primary", "color.text.on-action"),
-                            ("color.action.danger", "color.text.on-danger"))
+                            ("color.action.danger", "color.text.on-danger"),
+                            ("color.action.on-brand", "color.text.on-brand-action"))
            for state in (fill,) + _FILL_STATES[fill]]
         + [Pairing(f"color.status.{s}.on-strong", f"color.status.{s}.strong", 4.5, "1.4.3")
            for s in STATUS_HUES]
@@ -343,10 +361,15 @@ def build_pairings(text_roles: Tuple[str, ...] = TEXT_ROLES,
         # fill it surrounds; the ring is not paired with the button fill.
         + [Pairing(role, bg, 3.0, "1.4.11") for role in line_roles for bg in line_surfaces]
         # The primary fill keeps the brand color; its edge carries the 3:1
-        # against the page. The danger fill carries it itself.
-        + [Pairing("color.action.primary-edge", "color.surface.page", 3.0, "1.4.11")]
-        + [Pairing(state, "color.surface.page", 3.0, "1.4.11")
-           for state in ("color.action.danger",) + _FILL_STATES["color.action.danger"]]
+        # against every surface the button sits on. The danger fill carries
+        # it itself, and the button on the brand band against the band.
+        + [Pairing("color.action.primary-edge", bg, 3.0, "1.4.11") for bg in CONTROL_SURFACES]
+        + [Pairing(state, bg, 3.0, "1.4.11")
+           for state in ("color.action.danger",) + _FILL_STATES["color.action.danger"]
+           for bg in CONTROL_SURFACES]
+        # The button on the brand band draws its rest fill as its edge in
+        # every state, so the fill carries the 3:1 against the band.
+        + [Pairing("color.action.on-brand", "color.surface.brand", 3.0, "1.4.11")]
         + [Pairing(f"color.status.{s}.strong", "color.surface.page", 3.0, "1.4.11")
            for s in STATUS_HUES]
         # One ring cannot also stand out from the inverse surface, so that
@@ -379,24 +402,35 @@ class _Group:
     on: str
     states: Tuple[str, ...] = ()
     ring: str = ""
-    # Whether the fill (or its edge) must clear the page: a control must, a
-    # band of brand color behind a section need not.
-    page: bool = True
-    # The role that carries the fill's contrast against the page, drawn as
-    # an edge around it; "" when the fill and its states carry it.
+    # The surfaces the fill (or its edge) must clear: a control's, none for
+    # a band of brand color behind a section.
+    grounds: Tuple[str, ...] = ("color.surface.page",)
+    # The role that carries the fill's contrast against the grounds, drawn
+    # as an edge around it; "" when the fill and its states carry it.
     edge: str = ""
     # Whether the group keeps the exact brand color when a text color reads
     # on it (brand fidelity).
     brand: bool = False
+    # Whether the text on the fill may be a brand step, nearest the brand
+    # band first, before white and black.
+    brand_text: bool = False
+    # Whether the states must clear the grounds too; False when the rest
+    # fill is drawn as the edge in every state and carries it for them.
+    states_on_grounds: bool = True
 
 
 GROUPS: Tuple[_Group, ...] = (
     _Group("color.action.primary", "color.text.on-action",
            _FILL_STATES["color.action.primary"], "color.focus.ring",
-           edge="color.action.primary-edge", brand=True),
-    _Group("color.action.danger", "color.text.on-danger", _FILL_STATES["color.action.danger"]),
+           grounds=CONTROL_SURFACES, edge="color.action.primary-edge", brand=True),
+    _Group("color.action.danger", "color.text.on-danger", _FILL_STATES["color.action.danger"],
+           grounds=CONTROL_SURFACES),
 ) + tuple(_Group(f"color.status.{s}.strong", f"color.status.{s}.on-strong") for s in STATUS_HUES) \
-    + (_Group("color.surface.brand", "color.text.on-brand", page=False, brand=True),)
+    + (_Group("color.surface.brand", "color.text.on-brand", grounds=(), brand=True),
+       # After the band: the button on it clears the band as solved.
+       _Group("color.action.on-brand", "color.text.on-brand-action",
+              _FILL_STATES["color.action.on-brand"], grounds=("color.surface.brand",),
+              brand_text=True, states_on_grounds=False))
 _GROUP_ROLES = frozenset(r for g in GROUPS for r in (g.fill, g.on, g.ring, g.edge) + g.states
                          if r)
 EXACT = "color.brand.exact"
@@ -506,8 +540,7 @@ def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str,
     prims = {"color.base.white": "#FFFFFF", "color.base.black": "#000000"}
     seeds = {"brand": brand_hex, "neutral": _neutral_seed(brand_hex, axes)}
     _, brand_chroma, brand_hue = hex_to_oklch(brand_hex)
-    seeds["support"] = oklch_to_hex(0.6, min(0.16, max(0.06, 0.9 * brand_chroma)),
-                                    character.support_hue(axes, brand_hue, brand_chroma))
+    seeds["support"] = oklch_to_hex(*character.support_seed(axes, brand_hue, brand_chroma))
     seeds.update({s: oklch_to_hex(*character.status_seed(s, axes, brand_hue, brand_chroma))
                   for s in STATUS_HUES})
     for family, seed in seeds.items():
@@ -656,16 +689,35 @@ def _muddy(fill_hex: str, on: str, mode: str) -> bool:
         and hex_to_oklch(fill_hex)[0] < MUDDY_L
 
 
-def _choose_edge(fill_path: str, family: str, page_hex: str, need: float,
+def _choose_edge(fill_path: str, family: str, grounds: List[Tuple[str, float]],
                  prims: Dict[str, str]) -> str:
-    """The fill itself when it clears the page, else the step of its ramp
-    nearest the fill that does, else the one that comes closest."""
-    if contrast(prims[fill_path], page_hex) >= need:
+    """The fill itself when it clears every surface in `grounds` (hex, the
+    minimum there), else the step of its ramp nearest the fill that does,
+    else the one that comes closest."""
+    def fit(path: str) -> float:
+        return min((contrast(prims[path], hx) / need for hx, need in grounds), default=1.0)
+
+    if fit(fill_path) >= 1.0:
         return fill_path
     steps = sorted((f"{family}.{s}" for s in STEPS),
                    key=lambda p: (round(oklab_distance(prims[p], prims[fill_path]), 6), p))
-    return next((p for p in steps if contrast(prims[p], page_hex) >= need),
-                max(steps, key=lambda p: contrast(prims[p], page_hex)))
+    return next((p for p in steps if fit(p) >= 1.0), max(steps, key=fit))
+
+
+def _label(grounds: Tuple[str, ...]) -> str:
+    """How a group's note names the surfaces its fill or edge clears."""
+    if grounds == ("color.surface.page",):
+        return "page"
+    return "band" if grounds == ("color.surface.brand",) else "surface"
+
+
+def natural_cost(fill_hex: str, on: str) -> float:
+    """What the text on a fill costs in naturalness: black text on a
+    saturated mid tone costs character.black_text_cost, white nothing."""
+    if on != "color.base.black":
+        return 0.0
+    lightness, chroma, _ = hex_to_oklch(fill_hex)
+    return character.black_text_cost(lightness, chroma)
 
 
 def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
@@ -683,21 +735,30 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
          it, then with gaps of two, each at least JUST_VISIBLE from the
          fill (_state_paths), so the exact brand steps from where it sits
          in its ramp, not from step 500;
-      3. the text on it as base.white, then base.black; in dark and high
-         contrast the brand group first skips black text on a fill darker
-         than MUDDY_L, and takes it only when nothing else clears;
-      4. for a group with an edge, the edge: the fill when it clears the
-         page, else the nearest step of its ramp that does;
+      3. the text on it as base.white, then base.black (a group with
+         brand_text tries brand steps nearest the brand band first); in
+         dark and high contrast the brand group first skips black text on a
+         fill darker than MUDDY_L, and takes it only when nothing else
+         clears;
+      4. for a group with an edge, the edge: the fill when it clears every
+         surface in grounds, else the nearest step of its ramp that does;
       5. for the primary group, the ring, after the rest is fixed: brand
          steps nearest its default, then neutral steps, then black and
          white (_ring_candidates), preferring a ring that stands 3:1 off
          the fill, then one whose color differs from it. The fill never
          moves for the ring.
+    A brand group that starts at the exact brand weighs every passing
+    choice instead of taking the first: its cost is the fill's OKLab
+    distance from the brand (plus the ring's shortfall in dark high
+    contrast) plus what the text costs in naturalness (natural_cost), and
+    the lowest cost wins, the search order breaking ties. So white text on
+    a step just darker beats black text on a saturated mid tone whenever
+    the step is nearer than black costs, and never beyond IDENTITY_DISTANCE.
     The minimums are PAIRINGS' own in this context, so they rise under
     contrast:high:
       text on the fill and on every state   >= 4.5 (WCAG 1.4.3), 7.0 high (WCAG 1.4.6)
-      the fill and every state on the page  >= 3.0 (WCAG 1.4.11), 4.5 high (our floor),
-                                               or the edge on the page when the group has one
+      the fill and every state on grounds   >= 3.0 (WCAG 1.4.11), 4.5 high (our floor),
+                                               or the edge on grounds when the group has one
       every state's hex differs from the fill's and from each other's
       ring on every surface PAIRINGS names  >= 3.0 (WCAG 1.4.11), 4.5 high (our floor),
                                                and under high contrast its lowest ratio never
@@ -708,17 +769,23 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
     roles = (g.fill,) + g.states + (g.on,) + ((g.edge,) if g.edge else ()) \
         + ((g.ring,) if g.ring else ())
     defaults = {r: pick[mode][r] for r in roles}
-    page_hex = prims[pick[mode]["color.surface.page"]]
     family = defaults[g.fill].rsplit(".", 1)[0]
     conv = +1 if _scheme(mode) == "light" else -1
     need_text = _need(g.on, g.fill, mode)
-    need_fill = 0.0 if g.edge or not g.page else _need(g.fill, "color.surface.page", mode)
+    grounds = [(prims[pick[mode][r]], _need(g.edge or g.fill, r, mode)) for r in g.grounds]
+    fill_grounds = [] if g.edge else grounds
+    label = _label(g.grounds)
     rings = _ring_candidates(mode, defaults[g.ring]) if g.ring else []
     ring_bgs = [(prims[pick[mode][bg]], _need(g.ring, bg, mode))
                 for bg in _paired_with(g.ring)] if g.ring else []
 
     tints = tuple(prims[pick[mode][r]] for r in ("color.surface.selected",)
                   + tuple(f"color.status.{s}.soft" for s in STATUS_HUES)) if g.ring else ()
+    ons = ["color.base.white", "color.base.black"]
+    if g.brand_text:
+        band = prims[pick[mode]["color.surface.brand"]]
+        ons = sorted((f"color.brand.{s}" for s in STEPS),
+                     key=lambda p: (round(oklab_distance(prims[p], band), 6), p)) + ons
 
     def ring_low(ring: str) -> float:
         return min(contrast(prims[ring], hx) for hx, _ in ring_bgs)
@@ -730,13 +797,15 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
     def finish(choice: Tuple[str, ...], hexes: List[str], on: str, solved: bool) -> None:
         summary = f"text/fill {contrast(prims[on], hexes[0]):.2f}:1"
         if g.edge:
-            need_edge = _need(g.edge, "color.surface.page", mode)
-            edge = _choose_edge(choice[0], family, page_hex, need_edge, prims)
+            edge = _choose_edge(choice[0], family, grounds, prims)
             choice += (edge,)
-            solved = solved and contrast(prims[edge], page_hex) >= need_edge
-            summary += f", edge/page {contrast(prims[edge], page_hex):.2f}:1"
-        else:
-            summary += f", fill/page {contrast(hexes[0], page_hex):.2f}:1"
+            low = min((contrast(prims[edge], hx) / need, contrast(prims[edge], hx))
+                      for hx, need in grounds)
+            solved = solved and low[0] >= 1.0
+            summary += f", edge/{label} {low[1]:.2f}:1"
+        elif grounds:
+            low = min(contrast(h, hx) for h in hexes[:1] for hx, _ in grounds)
+            summary += f", fill/{label} {low:.2f}:1"
         if g.ring:
             ring = _choose_ring(rings, ring_fit, hexes[0], prims, tints)
             choice += (ring,)
@@ -763,32 +832,54 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
     # which keeps most of the brand's chroma; in light the ring would favor
     # a paler step, which loses chroma faster, so light keeps the nearest
     # step. The exact brand stays first.
+    weighed = g.brand and defaults[g.fill] == EXACT
+    rank = {p: oklab_distance(prims[p], prims[EXACT]) if weighed else 0.0 for p in candidates}
     order = candidates
-    if g.brand and g.ring and defaults[g.fill] == EXACT and _scheme(mode) == "dark" \
+    if weighed and g.ring and _scheme(mode) == "dark" \
             and parse(mode).get("contrast") == "high":
-        rest = sorted(candidates[1:], key=lambda p: (
-            round(oklab_distance(prims[p], prims[EXACT]) + RING_WEIGHT * ring_shortfall(p), 6),
-            candidates.index(p)))
+        rank.update({p: rank[p] + RING_WEIGHT * ring_shortfall(p) for p in candidates[1:]})
+        rest = sorted(candidates[1:], key=lambda p: (round(rank[p], 6), candidates.index(p)))
         order = candidates[:1] + rest
     for allow_muddy in ((False, True) if g.brand else (True,)):
+        passing: List[Tuple[float, int, Tuple[str, ...], List[str], str]] = []
         for fill_path in order:
+            kept = len(passing)
             for states in _state_paths(prims[fill_path], family, conv, len(g.states), prims):
+                if len(passing) > kept:
+                    break
                 paths = [fill_path] + list(states)
                 hexes = [prims[p] for p in paths]
                 if len(set(hexes)) != len(hexes):
                     continue
-                for on in ("color.base.white", "color.base.black"):
+                for on in ons:
                     if not allow_muddy and _muddy(hexes[0], on, mode):
                         continue
                     score = min([contrast(prims[on], h) / need_text for h in hexes]
-                                + [contrast(h, page_hex) / need_fill for h in hexes
-                                   if need_fill])
+                                + [contrast(h, hx) / need
+                                   for h in (hexes if g.states_on_grounds else hexes[:1])
+                                   for hx, need in fill_grounds])
                     choice = tuple(paths) + (on,)
                     if best is None or score > best[0]:
                         best = (score, choice, hexes, on)
                     if score >= 1.0:
-                        finish(choice, hexes, on, solved=True)
-                        return
+                        if not weighed:
+                            finish(choice, hexes, on, solved=True)
+                            return
+                        cost = rank[fill_path] + natural_cost(hexes[0], on)
+                        passing.append((round(cost, 6), len(passing), choice, hexes, on))
+                        break
+        if passing:
+            cost, _, choice, hexes, on = min(passing, key=lambda c: (c[0], c[1]))
+            first = passing[0]
+            if first[4] == "color.base.black" and on != first[4]:
+                moved = oklab_distance(hexes[0], prims[EXACT])
+                words = dict(_CONTEXT_WORDS)[mode].lower()
+                notes.append(f"color: in {words}, {g.fill} takes white text on {choice[0]} "
+                             f"rather than black text on {first[2][0]}: black there weighs "
+                             f"{natural_cost(first[3][0], first[4]):.2f} in naturalness, more "
+                             f"than the move of {moved:.2f} from the brand")
+            finish(choice, hexes, on, solved=True)
+            return
     if best is None:
         notes.append(f"{g.fill} group ({mode}): every step of the {family.split('.')[-1]} ramp "
                      "resolves to the same color, so the states cannot differ from the fill; "
@@ -1014,8 +1105,46 @@ def _media_veil(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
+def _on_color_natural(ts: TokenSet, mode: str) -> List[str]:
+    """Black text on a brand fill weighs what it costs in naturalness
+    (natural_cost) against a move off the brand: where a brand step nearer
+    to the brand than the fill plus that cost carries white text at the
+    minimum, on it and on the next two steps in the direction the fill's
+    states take, the fill should be that step with white text."""
+    fill, on = "color.action.primary", "color.text.on-action"
+    if not (_typed(ts, fill) and _typed(ts, on) and ts.has(EXACT)):
+        return []
+    raw = ts.raw(fill, mode)
+    if not (is_alias(raw) and alias_target(raw).startswith("color.brand.")) \
+            or ts.resolve(on, mode) != "#000000":
+        return []
+    exact, here = ts.resolve(EXACT), ts.resolve(fill, mode)
+    if natural_cost(here, "color.base.black") <= 0.0:
+        return []
+    cost = oklab_distance(here, exact) + natural_cost(here, "color.base.black")
+    need = required(next(p for p in PAIRINGS if (p.fg, p.bg) == (on, fill)), mode)[0]
+    conv = +1 if _scheme(mode) == "light" else -1
+    for step in sorted(STEPS, key=lambda s: oklab_distance(ts.resolve(f"color.brand.{s}"),
+                                                           exact)):
+        hx = ts.resolve(f"color.brand.{step}")
+        if oklab_distance(hx, exact) + 1e-6 >= cost:
+            break
+        i = STEPS.index(step)
+        run = [STEPS[j] for j in (i, i + conv, i + 2 * conv) if 0 <= j < len(STEPS)]
+        if len(run) == 3 and all(contrast("#FFFFFF", ts.resolve(f"color.brand.{s}")) >= need
+                                 for s in run):
+            return [f"{on} is black on {fill} ({mode}) at {here}, a saturated mid tone where "
+                    f"black text weighs {natural_cost(here, 'color.base.black'):.2f} in "
+                    f"naturalness, but color.brand.{step} ({hx}) sits "
+                    f"{oklab_distance(hx, exact):.2f} from the brand and carries white text at "
+                    f"{math.floor(contrast('#FFFFFF', hx) * 100) / 100:.2f}:1; point {fill} at "
+                    f"color.brand.{step} and {on} at color.base.white"]
+    return []
+
+
 CHECKS: Tuple[Check, ...] = (
     Check("media-veil", "1.4.3", _media_veil, axes=("scheme", "contrast")),
+    Check("on-color-natural", "system", _on_color_natural, axes=("scheme", "contrast")),
     Check("ring-not-weaker", "system", _ring_not_weaker, axes=("scheme", "contrast")),
     Check("ring-on-fill", "system", _ring_on_fill, axes=("scheme", "contrast")),
     Check("error-edge-hue", "system", _error_edge_hue, axes=("scheme", "contrast")),
@@ -1051,6 +1180,16 @@ def _ring_floor(mode: str, prims: Dict[str, str], pick: Dict[str, Dict[str, str]
     return _ring_low(prims[pick[std]["color.focus.ring"]], std, prims, pick)
 
 
+def _start_on_band(g: _Group, mode: str, prims: Dict[str, str],
+                   pick: Dict[str, Dict[str, str]]) -> None:
+    """The button on the brand band starts at the end of the neutral ramp
+    on the side of the band's own text: near white where the band takes
+    white text, near black where it takes black, so it stands out from the
+    band as that text does."""
+    light = luminance(prims[pick[mode]["color.text.on-brand"]]) > 0.5
+    pick[mode][g.fill] = "color.neutral.50" if light else "color.neutral.950"
+
+
 def generate_color(axes: AxisValues, brand_hex: str, brand_role: Optional[str] = None) -> Generated:
     """Low-level call: build_system (and build_color, its color-only
     shortcut) wraps it with input checks, validate and the gate, so prefer
@@ -1060,14 +1199,18 @@ def generate_color(axes: AxisValues, brand_hex: str, brand_role: Optional[str] =
     failing pairing: when the ramp cannot reach a minimum it keeps the
     closest step, notes it, and leaves the failure to the gate. The brand's
     role is `brand_role` when given (a brief can name it), else the one the
-    axes score highest (character.brand_role).
+    brand color and the axes score highest (character.brand_role with
+    character.brand_fill_evidence).
     """
     notes: List[str] = []
     prims = _primitives(axes, brand_hex.upper(), notes)
-    role = brand_role or character.brand_role(axes)
-    scores = character.brand_role_scores(axes)
-    notes.append(f"color: brand role {role} (" + ("set by the brief" if brand_role else ", ".join(
-        f"{k} {scores[k]:.2f}" for k in BRAND_ROLES)) + ")")
+    lightness, chroma, _ = hex_to_oklch(brand_hex)
+    evidence = character.brand_fill_evidence(lightness, chroma)
+    role = brand_role or character.brand_role(axes, evidence)
+    scores = character.brand_role_scores(axes, evidence)
+    notes.append(f"color: brand role {role} (" + (
+        "set by the brief" if brand_role else f"brand {evidence:.2f}; " + ", ".join(
+            f"{k} {scores[k]:.2f}" for k in BRAND_ROLES)) + ")")
     pick = {mode: {r: _default(r, mode, role) for r in SEMANTIC} for mode in COLOR_CONTEXTS}
     # Surface treatment: a flat system draws its separators and card edges
     # a step darker (a hairline carries the shape), a deep one a step
@@ -1109,6 +1252,8 @@ def generate_color(axes: AxisValues, brand_hex: str, brand_role: Optional[str] =
         # standard ring's lowest in the same scheme.
         floor = _ring_floor(mode, prims, pick)
         for g in GROUPS:
+            if g.grounds == ("color.surface.brand",):
+                _start_on_band(g, mode, prims, pick)
             _solve_group(g, mode, prims, pick, notes, ring_floor=floor if g.ring else 0.0)
 
     for mode in COLOR_CONTEXTS:
@@ -1174,6 +1319,12 @@ def brand_fidelity(ts: TokenSet) -> List[str]:
                 why = (f"black text would measure {_ratio(black)} on the brand color, but black "
                        "on a mid tone reads muddy in this mode, and white measures "
                        f"{_ratio(white)}")
+            elif black >= need and on == "#FFFFFF":
+                why = (f"black text would measure {_ratio(black)} on the brand color, but black "
+                       "on a saturated mid tone reads less naturally than white on a step "
+                       f"{distance:.2f} away in OKLab (black there weighs "
+                       f"{natural_cost(exact, 'color.base.black'):.2f}), and white measures "
+                       f"{_ratio(white)} on the brand color itself")
             else:
                 why = (f"on the brand color white text measures {_ratio(white)} and black "
                        f"{_ratio(black)}, under the {need:g}:1 this mode needs")

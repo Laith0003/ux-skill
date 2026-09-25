@@ -1,10 +1,10 @@
 ---
 id: brand-roles
 title: The axes choose whether the brand fills the action, marks words or draws edges
-status: active
+status: superseded
 areas: [color]
 supersedes: null
-superseded_by: null
+superseded_by: brand-leads-the-role
 ---
 
 # The axes choose whether the brand fills the action, marks words or draws edges

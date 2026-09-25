@@ -34,12 +34,16 @@ def _status_chroma(ts):
 
 # For every axis-to-foundation pair in INFLUENCE, the visible quantities
 # that must move as the axis goes from 0 to 1 with the others at 0.5 (brand
-# #3366FF): (what, read from the built tokens, direction, least total move).
-# Direction 1: it never falls along the sweep; -1: it never rises. The
-# least move is ours, about two thirds of what the engine moves it.
+# #3366FF unless a fifth item names another): (what, read from the built
+# tokens, direction, least total move). Direction 1: it never falls along
+# the sweep; -1: it never rises. The least move is ours, about two thirds of
+# what the engine moves it. The neutral b is read on a grey brand: the brand
+# sets the neutrals' temperature first and warmth only leans them, least
+# for a saturated brand (decisions/neutrals-follow-the-brand.md).
 QUANTITIES = {
     ("warmth", "color"): (
-        ("neutral b, cool to warm", lambda ts: _b(ts.resolve("color.neutral.500")), 1, 0.04),
+        ("neutral b of a grey brand, cool to warm",
+         lambda ts: _b(ts.resolve("color.neutral.500")), 1, 0.012, "#808080"),
         ("info hue, turning toward the warm hue",
          lambda ts: character.hue_delta(245.0, hex_to_oklch(ts.resolve("color.info.500"))[2]),
          -1, 12.0)),
@@ -90,8 +94,8 @@ QUANTITIES = {
 
 
 @functools.lru_cache(maxsize=None)
-def _sweep(axis):
-    return tuple(build_system(AxisValues(**dict(MID, **{axis: i / 10})), "#3366FF").tokens
+def _sweep(axis, brand="#3366FF"):
+    return tuple(build_system(AxisValues(**dict(MID, **{axis: i / 10})), brand).tokens
                  for i in range(11))
 
 
@@ -112,8 +116,8 @@ def test_every_influence_pair_names_a_quantity():
 def test_each_axis_moves_a_named_quantity_one_way_and_far_enough(axis, root):
     """Not only that some token under the root changes: each named quantity
     moves one way along the whole sweep, by at least the stated amount."""
-    for what, read, direction, least in QUANTITIES[(axis, root)]:
-        values = [direction * read(ts) for ts in _sweep(axis)]
+    for what, read, direction, least, *brand in QUANTITIES[(axis, root)]:
+        values = [direction * read(ts) for ts in _sweep(axis, *brand)]
         steps = [b - a for a, b in zip(values, values[1:])]
         assert min(steps) >= -1e-9, (axis, root, what, values)
         assert values[-1] - values[0] >= least, (axis, root, what, values)
@@ -129,8 +133,10 @@ def test_derived_quantities_stay_in_range_and_are_continuous(fn):
 
 def test_the_neutral_tint_turns_warm_or_cool_without_a_jump_at_the_middle():
     hues = [character.neutral_tint(AxisValues(w / 20, *[0.5] * 6), 264.0) for w in range(21)]
-    assert hues[10] == (264.0, 0.008)
-    assert hues[0][1] == hues[20][1] == pytest.approx(0.03)
+    assert hues[10] == pytest.approx((264.0, 0.008))
+    # a brand with a hue holds back half the lean
+    most = character.NEUTRAL_C[0] + character.LEAN_C * (1 - character.BRAND_HOLD)
+    assert all(chroma <= most + 1e-12 for _, chroma in hues)
     assert abs(hues[9][0] - hues[11][0]) < 30
 
 
@@ -254,25 +260,23 @@ def test_a_whitespace_industry_reads_as_no_industry():
 @pytest.mark.parametrize("brand_hue", [30.0, 60.0, 144.0, 265.0])
 @pytest.mark.parametrize("warmth, anchor", [(0.1, character.COOL_HUE),
                                             (0.9, character.WARM_HUE)])
-def test_the_neutral_tint_reaches_its_anchor_without_crossing_a_third_hue(
+def test_the_neutral_tint_keeps_the_brand_temperature_whatever_the_warmth(
         brand_hue, warmth, anchor):
-    """A blue brand with a warm brief gets cream, a brown brand with a cool
-    brief gets blue grey: never mauve or rose on the way round the wheel."""
-    from engine.foundations.color import generate_color
-    from engine.foundations.color_math import hex_to_oklch, oklch_to_hex
+    """A blue brand with a warm brief keeps a cool grey, a brown brand with a
+    cool brief a warm one: the brand sets the temperature and warmth only
+    leans it (decisions/neutrals-follow-the-brand.md)."""
     axes = AxisValues(warmth, *[0.5] * 6)
-    hue, _ = character.neutral_tint(axes, brand_hue)
-    assert abs(character.hue_delta(anchor, hue)) <= 40.0
-    brand = oklch_to_hex(0.55, 0.12, brand_hue)
-    prims = {t.path: t.value for t in generate_color(axes, brand).tokens.tokens()}
-    assert abs(character.hue_delta(anchor, hex_to_oklch(prims["color.neutral.500"])[2])) <= 40.0
+    hue, chroma = character.neutral_tint(axes, brand_hue)
+    assert abs(character.hue_delta(brand_hue, hue)) <= 40.0
+    assert chroma <= character.NEUTRAL_C[0] + character.LEAN_C * (1 - character.BRAND_HOLD)
 
 
-def test_the_neutral_tint_reaches_the_anchor_at_either_end():
+def test_a_grey_brand_s_neutrals_lean_to_the_anchor_at_either_end():
     for warmth, anchor in ((0.0, character.COOL_HUE), (1.0, character.WARM_HUE)):
         for brand_hue in range(0, 360, 15):
-            hue, chroma = character.neutral_tint(AxisValues(warmth, *[0.5] * 6), float(brand_hue))
-            assert hue == pytest.approx(anchor) and chroma == pytest.approx(0.03)
+            hue, chroma = character.neutral_tint(AxisValues(warmth, *[0.5] * 6),
+                                                 float(brand_hue), 0.0)
+            assert hue == pytest.approx(anchor) and chroma == pytest.approx(character.LEAN_C)
 
 
 def test_the_neutral_seed_is_continuous_in_the_brand_hue():
@@ -308,8 +312,15 @@ def test_a_grey_brand_takes_its_support_hue_from_the_axes():
                 anchor = character.WARM_HUE if warmth >= 0.5 else character.COOL_HUE
                 led = character.mix_hue((h + offset) % 360.0, anchor,
                                         0.3 * character.warm_pull(axes))
+                quiet = character.coolness(float(h)) / character.QUIET_COOLNESS
                 for chroma in (character.HUE_CHROMA, 0.2):
-                    assert character.support_hue(axes, float(h), chroma) == led
+                    got = character.support_hue(axes, float(h), chroma)
+                    # a warm brand keeps its brand-led hue; a cool one leans
+                    # to its own (decisions/support-clear-of-banned-pairs.md)
+                    if quiet <= 0.0:
+                        assert got == led
+                    elif quiet >= 1.0:
+                        assert abs(character.hue_delta(float(h), got)) < 1e-6
     assert character.axes_support_hue(AxisValues(0.0, *[0.5] * 6)) == character.GREY_ACCENT[0]
     assert character.axes_support_hue(AxisValues(1.0, *[0.5] * 6)) == character.GREY_ACCENT[1]
 

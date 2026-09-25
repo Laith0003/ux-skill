@@ -7,6 +7,8 @@ brand, whose hue is noise, steers nothing. status_seed and neutral_tint are
 continuous in the brand color; support_hue turns toward its anchor the
 short way and so flips direction where its offset hue sits opposite the
 anchor, and a grey brand's accent comes from the axes (see its docstring).
+The brand's lightness and chroma weigh its role (brand_fill_evidence) and
+the cost of black text on it (black_text_cost).
 No function looks up an industry, a keyword or a band:
 a foundation that needs a discrete choice (a face, a pill corner, a brand
 role) takes it from one of these quantities, so two briefs that differ on
@@ -23,7 +25,7 @@ from __future__ import annotations
 
 import math
 from types import MappingProxyType
-from typing import Dict, Mapping, Tuple
+from typing import Dict, Mapping, Optional, Tuple
 
 from engine.synthesizer.axes import AxisValues
 
@@ -52,9 +54,41 @@ STATUS_L = 0.58
 # hue's pull shrinks in proportion, to nothing at grey, where the hue is
 # noise (#808080 reads 0 degrees, #7F8080 197).
 HUE_CHROMA = 0.04
-# The neutral seed's chroma: a whisper of the brand at warmth 0.5, the warm
-# or cool anchor's at either end.
+# The neutral seed's chroma: a whisper of the brand's own hue, NEUTRAL_C[0],
+# weighted by the brand's chroma. Warmth only leans it: toward the warm or
+# cool anchor by up to LEAN_C at warmth 0 or 1, and a brand with a hue holds
+# back BRAND_HOLD of that lean, so the brand sets the temperature first.
 NEUTRAL_C = (0.008, 0.030)
+LEAN_C = 0.010
+BRAND_HOLD = 0.5
+# Chroma at and below SAT_CHROMA[0] reads as grey; at SAT_CHROMA[1] and above
+# a brand reads fully saturated (saturation()).
+SAT_CHROMA = (0.03, 0.12)
+# OKLCH lightness a brand fill carries: none at FILL_L[0] (very dark), in
+# full from FILL_L[1] to FILL_L[2], none again at FILL_L[3] (very light).
+FILL_L = (0.30, 0.42, 0.74, 0.86)
+# How much the brand's own fill evidence adds to the fill score, and how
+# much its absence adds to accent and edge (brand_role_scores). A lead of 1
+# is at least any accent or edge score the axes can reach, so a brand with
+# full evidence fills the action whatever the brief.
+BRAND_LEAD = 1.0
+BRAND_ARGUE = 0.25
+# Black text on a fill costs up to BLACK_TEXT_COST in naturalness, measured
+# in OKLab distance like a move off the brand, on a saturated fill at or
+# below NATURAL_L[0], falling to nothing at NATURAL_L[1], where black on a
+# bright color reads as the color's own look (black_text_cost). The most it
+# costs equals the identity distance (color.IDENTITY_DISTANCE), so white text
+# never pulls a fill further from the brand than that.
+BLACK_TEXT_COST = 0.12
+NATURAL_L = (0.60, 0.72)
+# A cool, saturated brand's supporting accent leans to its own hue at this
+# share of the supporting chroma (support_seed): analogous and quiet, never a
+# second saturated hue from the blue, purple and pink arc anti-slop bans.
+SUPPORT_QUIET = 0.35
+# The coolness from which a brand's supporting accent leans all the way to
+# its own hue; below it the lean falls in proportion to nothing on the warm
+# side.
+QUIET_COOLNESS = 2.0 / 3.0
 # A grey brand's supporting accent hue at warmth 0 and at warmth 1: violet
 # to rose, the one arc of the wheel that keeps STATUS_CLEARANCE from every
 # status hue at every warmth (39 degrees at the least).
@@ -117,16 +151,26 @@ def warm_pull(axes: AxisValues) -> float:
 
 def neutral_tint(axes: AxisValues, brand_hue: float,
                  brand_chroma: float = HUE_CHROMA) -> Tuple[float, float]:
-    """(hue, chroma) of the neutral seed. At warmth 0.5 the neutrals take
-    the brand hue at a whisper of chroma (none for a grey brand); toward
-    either end they travel in a straight line in the OKLab a/b plane to a
-    warm or a cool hue at more chroma, reaching it at warmth 0 and 1, so a
-    warm brief gets cream and sand and a cool one blue grey whatever the
-    brand hue: a blue brand with a warm brief passes near grey on the way,
-    never through mauve. Continuous in the axes and in the brand color."""
+    """(hue, chroma) of the neutral seed: the brand's temperature first,
+    leaned by warmth. The brand's own hue sits at a whisper of chroma
+    (NEUTRAL_C[0], weighted by hue_weight, so a grey brand gives true grey).
+    Warmth adds a lean toward the warm or the cool anchor in the OKLab a/b
+    plane, up to LEAN_C at warmth 0 or 1 and nothing at 0.5, and a brand
+    with a hue holds back BRAND_HOLD of it. So a grey brand in a warm
+    industry gets a grey with a trace of sand, and a blue brand with a warm
+    tone keeps a cool or a near true grey instead of beige. Continuous in
+    the axes and in the brand color: the lean is zero where the anchor
+    switches."""
+    weight = hue_weight(brand_chroma)
     anchor = WARM_HUE if axes.warmth >= 0.5 else COOL_HUE
-    return ab_mix(brand_hue, NEUTRAL_C[0] * hue_weight(brand_chroma), anchor, NEUTRAL_C[1],
-                  warm_pull(axes))
+    lean = LEAN_C * warm_pull(axes) * (1.0 - BRAND_HOLD * weight)
+    whisper = NEUTRAL_C[0] * weight
+    a = whisper * math.cos(math.radians(brand_hue)) + lean * math.cos(math.radians(anchor))
+    b = whisper * math.sin(math.radians(brand_hue)) + lean * math.sin(math.radians(anchor))
+    chroma = math.hypot(a, b)
+    if chroma < 1e-12:
+        return brand_hue % 360.0, 0.0
+    return math.degrees(math.atan2(b, a)) % 360.0, chroma
 
 
 def status_seed(status: str, axes: AxisValues, brand_hue: float,
@@ -178,35 +222,105 @@ def axes_support_hue(axes: AxisValues) -> float:
     return (cool + (warm - cool) * axes.warmth) % 360.0
 
 
-def support_hue(axes: AxisValues, brand_hue: float, brand_chroma: float) -> float:
-    """The supporting accent's hue: analogous for a muted brand, close to
-    complementary for a bold one, pulled warm or cool with warmth. The pull
-    turns the short way, so it flips direction where the offset hue sits
-    opposite the anchor. That brand-led hue counts by hue_weight: it mixes
-    in a straight line in the OKLab a/b plane with axes_support_hue, all of
-    it from HUE_CHROMA up and none at grey, so a grey brand's accent comes
-    from the axes alone and near greys get the same accent."""
+def saturation(chroma: float) -> float:
+    """0 for a grey brand (SAT_CHROMA[0] and below) to 1 for a saturated one
+    (SAT_CHROMA[1] and above), in proportion between."""
+    return clamp((chroma - SAT_CHROMA[0]) / (SAT_CHROMA[1] - SAT_CHROMA[0]))
+
+
+def mid_lightness(lightness: float) -> float:
+    """1 for a mid tone that can carry a fill (FILL_L[1] to FILL_L[2]),
+    falling in proportion to 0 at a very dark (FILL_L[0]) or a very light
+    (FILL_L[3]) brand."""
+    return clamp(min((lightness - FILL_L[0]) / (FILL_L[1] - FILL_L[0]),
+                     (FILL_L[3] - lightness) / (FILL_L[3] - FILL_L[2])))
+
+
+def brand_fill_evidence(lightness: float, chroma: float) -> float:
+    """How strongly the brand color argues for filling the main action, 0
+    to 1: saturated and a mid tone. A very light, very dark or near grey
+    brand argues for accent or edge instead. The text on the fill never
+    argues against it here: white or black always reaches 4.58:1 (the square
+    root of 21) on any color, and the fidelity rule picks which."""
+    return round(saturation(chroma) * mid_lightness(lightness), 6)
+
+
+def black_text_cost(lightness: float, chroma: float) -> float:
+    """What black text on a fill costs in naturalness, in OKLab distance: up
+    to BLACK_TEXT_COST on a saturated fill at NATURAL_L[0] or darker,
+    nothing on a grey fill or one at NATURAL_L[1] or lighter, in proportion
+    between. The fidelity rule weighs it against a move off the brand."""
+    return BLACK_TEXT_COST * saturation(chroma) * clamp(
+        (NATURAL_L[1] - lightness) / (NATURAL_L[1] - NATURAL_L[0]))
+
+
+def coolness(hue: float) -> float:
+    """How cool a hue reads, 0 to 1: 1 within about 50 degrees of the cool
+    anchor (blue and violet), 0.5 a quarter turn away (green, pink), 0 on
+    the warm side."""
+    return clamp(0.5 + 0.75 * math.cos(math.radians(hue - COOL_HUE)))
+
+
+def _brand_led_support(axes: AxisValues, brand_hue: float) -> float:
+    """The support hue a bold, warm or muted brand gets: analogous for a
+    muted brand, close to complementary for a bold one, pulled warm or cool
+    with warmth."""
     offset = 30.0 + 150.0 * axes.contrast
     anchor = WARM_HUE if axes.warmth >= 0.5 else COOL_HUE
-    brand_led = mix_hue((brand_hue + offset) % 360.0, anchor, 0.3 * warm_pull(axes))
-    return ab_mix(axes_support_hue(axes), 1.0, brand_led, 1.0, hue_weight(brand_chroma))[0]
+    return mix_hue((brand_hue + offset) % 360.0, anchor, 0.3 * warm_pull(axes))
 
 
-def brand_role_scores(axes: AxisValues) -> Dict[str, float]:
-    """How well each brand role fits the axes. fill: the brand is the
-    action color. accent: the brand marks text and links, actions are ink.
-    edge: the brand draws edges and rules, actions are ink. The highest
-    score wins; a brief may name the role instead."""
-    return {
+def support_seed(axes: AxisValues, brand_hue: float,
+                 brand_chroma: float) -> Tuple[float, float, float]:
+    """(L, C, H) of the supporting accent's seed. The brand-led hue
+    (_brand_led_support) moves in a straight line in the OKLab a/b plane
+    toward the brand's own hue at SUPPORT_QUIET of the chroma, as far as the
+    brand is cool, in full from QUIET_COOLNESS up, and its hue reads
+    (hue_weight). So a blue or
+    violet brand gets an analogous, quiet accent and never a pink or a
+    purple beside it, and a warm brand keeps its complementary accent. That
+    hue counts by hue_weight against axes_support_hue, so a grey brand's
+    accent still comes from warmth alone. Chroma is 0.9 of the brand's,
+    between 0.06 and 0.16, times the share the lean keeps."""
+    quiet = clamp(coolness(brand_hue) / QUIET_COOLNESS) * hue_weight(brand_chroma)
+    led, share = ab_mix(_brand_led_support(axes, brand_hue), 1.0, brand_hue, SUPPORT_QUIET,
+                        quiet)
+    hue = ab_mix(axes_support_hue(axes), 1.0, led, 1.0, hue_weight(brand_chroma))[0]
+    return 0.6, min(0.16, max(0.06, 0.9 * brand_chroma)) * share, hue
+
+
+def support_hue(axes: AxisValues, brand_hue: float, brand_chroma: float) -> float:
+    """The supporting accent's hue (support_seed). The warm or cool pull
+    turns the short way, so it flips direction where the offset hue sits
+    opposite the anchor."""
+    return support_seed(axes, brand_hue, brand_chroma)[2]
+
+
+def brand_role_scores(axes: AxisValues, brand: Optional[float] = None) -> Dict[str, float]:
+    """How well each brand role fits. fill: the brand is the action color.
+    accent: the brand marks text and links, actions are ink. edge: the brand
+    draws edges and rules, actions are ink. The axes score each role; the
+    brand's own evidence (brand_fill_evidence, when given) adds BRAND_LEAD
+    times itself to fill and BRAND_ARGUE times its absence to accent and
+    edge. The brand leads: at full evidence fill wins whatever the axes, and
+    accent or edge win only where the brand is very light, very dark or near
+    grey, or where a formal brief meets a brand that cannot carry a fill.
+    The highest score wins; a brief may name the role instead."""
+    scores = {
         "fill": 0.4 * axes.contrast + 0.35 * (1 - axes.formality) + 0.25 * axes.warmth,
         "accent": 0.45 * axes.formality + 0.3 * (1 - axes.contrast)
         + 0.25 * axes.type_personality,
         "edge": 0.5 * axes.formality + 0.3 * (1 - axes.warmth) + 0.2 * (1 - axes.geometry),
     }
+    if brand is not None:
+        scores["fill"] += BRAND_LEAD * brand
+        scores["accent"] += BRAND_ARGUE * (1 - brand)
+        scores["edge"] += BRAND_ARGUE * (1 - brand)
+    return scores
 
 
-def brand_role(axes: AxisValues) -> str:
-    scores = brand_role_scores(axes)
+def brand_role(axes: AxisValues, brand: Optional[float] = None) -> str:
+    scores = brand_role_scores(axes, brand)
     return max(("fill", "accent", "edge"), key=lambda k: (round(scores[k], 6), k == "fill"))
 
 

@@ -79,6 +79,10 @@ REQUIRED_KEYS: Tuple[str, ...] = ("name", "status", "category", "description", "
                                   "variants", "states", "tokens", "contrast", "surfaces",
                                   "a11y", "copy", "usage", "provenance")
 OPTIONAL_KEYS: Tuple[str, ...] = ("replacement",)
+# The variant that places a part on a surface other than the contract's own:
+# any value but "default" names color.surface.<value>, which the part's
+# bindings under it sit on and its pairings may name.
+PLACEMENT = "surface"
 
 _NAME = re.compile(r"[a-z][a-z0-9]*(-[a-z0-9]+)*")
 _ROLE = re.compile(r"[a-z][a-z0-9-]*(\.[a-z0-9-]+)+")
@@ -404,6 +408,8 @@ def _contrast(c: _Checker, raw: Any, tokens: Tuple[Binding, ...],
                               "criterion}}, or write [] when the component sets no color")
         return ()
     bound = {b.role for b in tokens}
+    placed = {f"color.surface.{v}" for b in tokens for k, v in b.when
+              if k == PLACEMENT and v != "default"}
     out: List[ContrastRule] = []
     for i, item in enumerate(raw):
         where = f"contrast[{i}]"
@@ -457,7 +463,8 @@ def _contrast(c: _Checker, raw: Any, tokens: Tuple[Binding, ...],
             c.add("unbound-pairing", f"{where}.fg {fg} is not bound in tokens; pair only roles "
                                      "the component uses, or bind it")
             ok = False
-        if isinstance(bg, str) and bg != "surfaces" and bg not in bound and bg not in surfaces:
+        if isinstance(bg, str) and bg != "surfaces" and bg not in bound and bg not in surfaces \
+                and bg not in placed:
             c.add("unbound-pairing", f"{where}.bg {bg} is neither bound in tokens nor listed in "
                                      "surfaces; pair only roles the component uses or sits on")
             ok = False

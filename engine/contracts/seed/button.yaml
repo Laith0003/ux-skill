@@ -13,6 +13,7 @@ variants:
   - {name: emphasis, values: [primary, secondary, ghost], default: primary}
   - {name: intent, values: [neutral, danger], default: neutral}
   - {name: size, values: [medium, large], default: medium}
+  - {name: surface, values: [default, brand], default: default}
 states: [default, hover, pressed, focus, disabled, loading]
 tokens:
   # primary fills and the text on them
@@ -20,14 +21,24 @@ tokens:
   - {part: container, property: fill, role: color.action.primary-hover, when: {emphasis: primary, intent: neutral}, state: hover}
   - {part: container, property: fill, role: color.action.primary-pressed, when: {emphasis: primary, intent: neutral}, state: pressed}
   - {part: label, property: text, role: color.text.on-action, when: {emphasis: primary, intent: neutral}}
-  # the primary edge carries the button's 3:1 against the page, so the fill
-  # can stay the brand color
+  # the primary edge carries the button's 3:1 against every surface it sits
+  # on, so the fill can stay the brand color
   - {part: container, property: border-width, role: border.outline, when: {emphasis: primary, intent: neutral}}
   - {part: container, property: border-color, role: color.action.primary-edge, when: {emphasis: primary, intent: neutral}}
   - {part: container, property: fill, role: color.action.danger, when: {emphasis: primary, intent: danger}}
   - {part: container, property: fill, role: color.action.danger-hover, when: {emphasis: primary, intent: danger}, state: hover}
   - {part: container, property: fill, role: color.action.danger-pressed, when: {emphasis: primary, intent: danger}, state: pressed}
   - {part: label, property: text, role: color.text.on-danger, when: {emphasis: primary, intent: danger}}
+  # on the brand band (surface: brand) the primary button takes its own
+  # fill, a neutral end that clears the band, drawn as its edge in every
+  # state, a label in the nearest brand step that reads on it, and the
+  # band's own text color as its focus ring
+  - {part: container, property: fill, role: color.action.on-brand, when: {emphasis: primary, intent: neutral, surface: brand}}
+  - {part: container, property: fill, role: color.action.on-brand-hover, when: {emphasis: primary, intent: neutral, surface: brand}, state: hover}
+  - {part: container, property: fill, role: color.action.on-brand-pressed, when: {emphasis: primary, intent: neutral, surface: brand}, state: pressed}
+  - {part: container, property: border-color, role: color.action.on-brand, when: {emphasis: primary, intent: neutral, surface: brand}}
+  - {part: label, property: text, role: color.text.on-brand-action, when: {emphasis: primary, intent: neutral, surface: brand}}
+  - {part: container, property: focus-ring, role: color.text.on-brand, when: {surface: brand}, state: focus}
   # secondary: an edge and brand text in every state, the selected surface
   # on hover and press; disabled turns the edge to the disabled color
   - {part: container, property: border-width, role: border.outline, when: {emphasis: secondary}}
@@ -83,8 +94,15 @@ contrast:
   - {fg: color.text.on-danger, bg: color.action.danger, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.on-danger, bg: color.action.danger-hover, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.on-danger, bg: color.action.danger-pressed, minimum: 4.5, criterion: "1.4.3"}
-  - {fg: color.action.primary-edge, bg: color.surface.page, minimum: 3, criterion: "1.4.11"}
-  - {fg: color.action.danger, bg: color.surface.page, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.action.primary-edge, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.action.danger, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.action.danger-hover, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.action.danger-pressed, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.text.on-brand-action, bg: color.action.on-brand, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.on-brand-action, bg: color.action.on-brand-hover, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.on-brand-action, bg: color.action.on-brand-pressed, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.action.on-brand, bg: color.surface.brand, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.text.on-brand, bg: color.surface.brand, minimum: 3, criterion: "1.4.11"}
   - {fg: color.text.link, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.link, bg: color.surface.selected, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.line.selected, bg: surfaces, minimum: 3, criterion: "1.4.11"}
@@ -112,6 +130,7 @@ usage:
   do:
     - Use one primary button per view, for the action most people take next. A view is what one screen shows without scrolling; on a long page each section may have its own primary, as long as two never share one screen
     - Use the large size for the one call to action of a hero or a band, and medium everywhere else
+    - On the brand band (color.surface.brand) use the primary neutral button with surface set to brand; it takes its own fill, label and focus ring, all measured against the band. Keep secondary, ghost and danger buttons off the brand band
     - Use secondary for another action that must read as a control at rest and when disabled, such as the second of a pair or an action on a busy surface
     - Use ghost for light, repeated actions where the layout already marks them as actions, such as a toolbar or a table row
     - On media, such as a hero over generated art or a photo, draw a secondary or ghost button's label, edge and focus ring in color.text.on-media over art under color.media.veil, or in imagery.on-scrim over a photo under imagery.scrim; the link and selected colors are measured against surfaces, not media

@@ -6,7 +6,13 @@ it sits on, in any color context, declares an edge (border-width at
 border.outline or heavier, and a border color) for that fill, or a divider
 (divider-width and divider-color) when the part sits inside a group whose
 own edge draws its other sides. The floor is
-ours: WCAG sets no minimum for the edge of a container. Every contrast pairing the contract
+ours: WCAG sets no minimum for the edge of a container. A control's action
+fill (every color.action role but the disabled one) is measured against
+every surface its contract places it on, in every scheme and contrast
+context: the contract's surfaces, or the one surface a PLACEMENT variant
+names (surface=brand places it on color.surface.brand). The fill or the
+edge drawn around it clears 3:1 there (WCAG 1.4.11), and our 4.5:1 floor
+under high contrast. Every contrast pairing the contract
 declares is measured in every scheme and contrast context through the
 same gate the build uses. validate_contracts adds the checks across a set
 of contracts: unique names, and a deprecated contract's replacement exists
@@ -16,9 +22,10 @@ from __future__ import annotations
 
 from typing import Iterable, List, Optional, Sequence, Tuple
 
-from engine.contracts.schema import CRITERIA, PROPERTY_TYPES, Binding, Contract, ContractProblem
+from engine.contracts.schema import (
+    CRITERIA, INTERACTIVE, PLACEMENT, PROPERTY_TYPES, Binding, Contract, ContractProblem)
 from engine.foundations.color_math import contrast
-from engine.foundations.gate import OPAQUE_PAIRING, Pairing, cite, gate
+from engine.foundations.gate import OPAQUE_PAIRING, Pairing, cite, gate, required
 from engine.foundations.modes import contexts
 from engine.foundations.tokens import AliasError, TokenSet, opaque_hex
 
@@ -111,6 +118,68 @@ def _edge_problems(contract: Contract, ts: TokenSet) -> List[ContractProblem]:
     return out
 
 
+def _placements(contract: Contract, fill: Binding) -> Tuple[str, ...]:
+    """The surfaces a fill sits on: the one its PLACEMENT condition names,
+    else the contract's surfaces."""
+    where = dict(fill.when).get(PLACEMENT)
+    if where and where != "default":
+        return (f"color.surface.{where}",)
+    return contract.surfaces
+
+
+def _edge_of(contract: Contract, fill: Binding) -> Optional[str]:
+    """The color of the edge drawn around a fill: the most specific
+    border-color binding that covers it (a state first, then the most
+    variant conditions), when a border width heavy enough to draw an edge
+    covers it too; else None."""
+    if not any(_covers(e, fill) and e.property == "border-width" and e.role in EDGE_ROLES
+               for e in contract.tokens):
+        return None
+    colors = [e for e in contract.tokens if _covers(e, fill) and e.property == "border-color"]
+    if not colors:
+        return None
+    return max(colors, key=lambda e: (e.state is not None, len(e.when))).role
+
+
+def _placement_problems(contract: Contract, ts: TokenSet) -> List[ContractProblem]:
+    """Every action fill of an interactive contract, or the edge around it,
+    clears its non-text minimum against every surface it is placed on."""
+    if contract.category not in INTERACTIVE:
+        return []
+    out: List[ContractProblem] = []
+    for fill in contract.tokens:
+        if fill.property != "fill" or not fill.role.startswith("color.action.") \
+                or fill.role == "color.action.disabled" or fill.state == "disabled" \
+                or not (ts.has(fill.role) and ts.get(fill.role).type == "color"):
+            continue
+        edge = _edge_of(contract, fill)
+        worst: Optional[Tuple[float, float, float, str, str, str]] = None
+        for surface in _placements(contract, fill):
+            if not (ts.has(surface) and ts.get(surface).type == "color"):
+                continue
+            for mode in _color_contexts(ts):
+                a, bg = _opaque(ts, fill.role, mode), _opaque(ts, surface, mode)
+                e = _opaque(ts, edge, mode) if edge and ts.has(edge) else None
+                if a is None or bg is None:
+                    continue
+                ratio = max(contrast(a, bg), contrast(e, bg) if e else 0.0)
+                need, criterion = required(Pairing(fill.role, surface, 3.0, "1.4.11"), mode,
+                                           ts.axes)
+                if ratio < need and (worst is None or ratio / need < worst[0]):
+                    worst = (ratio / need, ratio, need, criterion, surface, mode)
+        if worst is not None:
+            _, ratio, need, criterion, surface, mode = worst
+            what = f"{fill.role} with its edge {edge}" if edge else fill.role
+            out.append(_problem(
+                contract, "fill-placement",
+                f"{fill.label()} is {what}, which measures {int(ratio * 100) / 100:.2f}:1 "
+                f"against {surface} in {mode}, a surface the contract places it on; "
+                f"{cite(need, criterion)}, so the control cannot be told from that surface. Bind "
+                f"a fill or an edge with more contrast against {surface} for the same variant "
+                "and state, or place the control only on surfaces it clears"))
+    return out
+
+
 def _pairings(contract: Contract) -> List[Pairing]:
     out: List[Pairing] = []
     for rule in contract.contrast:
@@ -161,7 +230,8 @@ def binding_problems(contract: Contract, ts: TokenSet) -> List[ContractProblem]:
     if out:
         return out
     try:
-        return _edge_problems(contract, ts) + _contrast_problems(contract, ts)
+        return _edge_problems(contract, ts) + _placement_problems(contract, ts) \
+            + _contrast_problems(contract, ts)
     except AliasError as exc:
         return [_problem(contract, "unresolved", f"a role it binds cannot be resolved ({exc}); "
                                                  "run validate on the token set and fix it")]

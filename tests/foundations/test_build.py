@@ -55,11 +55,12 @@ def _no_solver(monkeypatch):
 def test_generator_recheck_raises_gate_failure_with_the_seed_hint(monkeypatch):
     # R27 I3: the generator's own re-check goes through gate(), so a
     # failing generated system reaches callers as GateFailure, never a
-    # plain ValueError. A yellow seed with the action solver switched off
-    # leaves white text on a yellow button.
+    # plain ValueError. An amber seed, which fills its action
+    # (decisions/brand-leads-the-role.md), with the action solver switched
+    # off leaves white text on an amber button.
     _no_solver(monkeypatch)
     with pytest.raises(GateFailure) as exc:
-        build_color(AXES, "#FFD400")
+        build_color(AXES, "#EAB308")
     findings = exc.value.report.findings
     on_action = [f for f in findings
                  if (f.fg, f.bg, f.mode) == ("color.text.on-action", "color.action.primary", "scheme:light,contrast:standard")]
@@ -232,12 +233,12 @@ def test_check_failures_block_and_carry_their_message():
 
 
 def test_seed_hint_direction_follows_the_other_side(monkeypatch):
-    # With the solver off, dark mode keeps white text on a light yellow
+    # With the solver off, dark mode keeps white text on a light amber
     # button. White is lighter than the button, so only a darker seed can
     # help; the M1 hint said "lighter" for every dark-mode finding.
     _no_solver(monkeypatch)
     with pytest.raises(GateFailure) as exc:
-        build_color(AXES, "#FFD400")
+        build_color(AXES, "#EAB308")
     dark = [f for f in exc.value.report.findings
             if (f.fg, f.bg, f.mode) == ("color.text.on-action", "color.action.primary", "scheme:dark,contrast:standard")]
     assert dark, [f.message() for f in exc.value.report.findings]

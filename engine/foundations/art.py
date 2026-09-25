@@ -23,6 +23,9 @@ The tile is a lattice of evenly spaced shapes with a size rhythm and a
 half drop that grows as formality falls; shapes that cross an edge are
 drawn again on the far side, so the tile repeats without seams.
 
+The gradient stays in one hue: from the page through the brand tint to the
+brand, so it never pairs the brand with a second hue.
+
 Every file is decoration: the root is aria-hidden, there is no title, and
 the report says to place it with an empty alt. Colors are CSS custom
 properties with the light values as fallbacks, so an inline SVG follows
@@ -333,10 +336,10 @@ def art_files(ts: TokenSet, axes: AxisValues, brand: str) -> Dict[str, str]:
     wash = f"uxs-art-{digest(axes, brand)}-wash"
     stops = [f'<linearGradient id="{wash}" gradientTransform="rotate({gradient_angle(axes)} '
              '0.5 0.5)">',
-             f'  <stop offset="0" style="stop-color: {_paint(ts, "color.surface.tint")}"/>',
+             f'  <stop offset="0" style="stop-color: {_paint(ts, "color.surface.page")}"/>',
              f'  <stop offset="{_n(0.4 + 0.3 * axes.formality)}" style="stop-color: '
-             f'{paints["color.decorative.brand"]}"/>',
-             f'  <stop offset="1" style="stop-color: {paints["color.decorative.support"]}"/>',
+             f'{_paint(ts, "color.surface.tint")}"/>',
+             f'  <stop offset="1" style="stop-color: {paints["color.decorative.brand"]}"/>',
              "</linearGradient>"]
     gradient = _svg(HERO[0], HERO[1], [f'<rect width="{HERO[0]}" height="{HERO[1]}" '
                                        f'fill="url(#{wash})"/>'], stops)
@@ -350,8 +353,9 @@ def report_lines() -> List[str]:
         "focal shape in a phone crop; under dir=\"rtl\" mirror it with transform: scaleX(-1).",
         "art/pattern.svg: a 240px tile that repeats without seams behind a section, a card or "
         "an empty state; as a CSS background it repeats at 240px, and background-size scales it.",
-        "art/gradient.svg: a wash from the brand tint to the supporting accent; contrast turns "
-        "it from left to right toward top to bottom.",
+        "art/gradient.svg: a wash in one hue, from the page through the brand tint to the "
+        "brand, never to a second hue; contrast turns it from left to right toward top to "
+        "bottom.",
         "Each is decoration: place it with an empty alt (alt=\"\") or as a CSS background, "
         "never as the only carrier of a message. Inline it to follow dark mode; as an image "
         "it shows the light colors. Colors sit in style attributes, so a policy that blocks "

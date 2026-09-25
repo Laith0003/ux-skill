@@ -1,10 +1,10 @@
 ---
 id: primary-edge
 title: The primary button's edge carries its contrast against the page
-status: active
+status: superseded
 areas: [color, contracts]
 supersedes: fill-edge-page-only
-superseded_by: null
+superseded_by: fills-on-every-placement
 ---
 
 # The primary button's edge carries its contrast against the page
