@@ -21,6 +21,9 @@ class BrandInputs:
     """Brand inputs a generator may read besides the axes."""
     brand_hex: str
     arabic: bool = True
+    # "fill", "accent" or "edge" when the brief names the brand's role;
+    # None lets the axes choose (character.brand_role).
+    brand_role: Optional[str] = None
 
 
 @dataclass

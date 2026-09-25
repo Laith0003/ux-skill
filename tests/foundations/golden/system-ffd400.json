@@ -491,6 +491,195 @@
         }
       }
     },
+    "support": {
+      "50": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.964706,
+            0.964706,
+            1.0
+          ],
+          "hex": "#F6F6FF"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "100": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.866667,
+            0.85098,
+            1.0
+          ],
+          "hex": "#DDD9FF"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "200": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.768627,
+            0.737255,
+            0.988235
+          ],
+          "hex": "#C4BCFC"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "300": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.678431,
+            0.635294,
+            0.941176
+          ],
+          "hex": "#ADA2F0"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "400": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.588235,
+            0.52549,
+            0.894118
+          ],
+          "hex": "#9686E4"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "500": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.505882,
+            0.419608,
+            0.847059
+          ],
+          "hex": "#816BD8"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "600": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.407843,
+            0.32549,
+            0.709804
+          ],
+          "hex": "#6853B5"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "700": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.313725,
+            0.231373,
+            0.576471
+          ],
+          "hex": "#503B93"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "800": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.223529,
+            0.141176,
+            0.447059
+          ],
+          "hex": "#392472"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "900": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.141176,
+            0.05098,
+            0.32549
+          ],
+          "hex": "#240D53"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "950": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.062745,
+            0.0,
+            0.188235
+          ],
+          "hex": "#100030"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      }
+    },
     "danger": {
       "50": {
         "$type": "color",
@@ -1510,6 +1699,66 @@
             }
           }
         }
+      },
+      "tint": {
+        "$type": "color",
+        "$value": "{color.brand.50}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "scheme:dark": "{color.brand.950}"
+            }
+          }
+        }
+      },
+      "band": {
+        "$type": "color",
+        "$value": "{color.brand.100}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "scheme:dark": "{color.brand.900}"
+            }
+          }
+        }
+      },
+      "brand": {
+        "$type": "color",
+        "$value": "{color.brand.exact}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "stripe": {
+        "$type": "color",
+        "$value": "{color.neutral.50}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": "{color.neutral.100}",
+              "scheme:dark": "{color.neutral.950}",
+              "scheme:dark,contrast:high": "{color.neutral.800}"
+            }
+          }
+        }
+      },
+      "code": {
+        "$type": "color",
+        "$value": "{color.neutral.100}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "scheme:dark": "{color.neutral.recess-dark}",
+              "scheme:dark,contrast:high": "{color.base.black}"
+            }
+          }
+        }
       }
     },
     "text": {
@@ -1562,6 +1811,7 @@
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
+              "contrast:high": "{color.brand.900}",
               "scheme:dark": "{color.brand.300}",
               "scheme:dark,contrast:high": "{color.brand.200}"
             }
@@ -1598,6 +1848,43 @@
             "modes": {
               "scheme:dark": "{color.base.black}"
             }
+          }
+        }
+      },
+      "accent": {
+        "$type": "color",
+        "$value": "{color.brand.800}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": "{color.brand.900}",
+              "scheme:dark": "{color.brand.300}",
+              "scheme:dark,contrast:high": "{color.brand.200}"
+            }
+          }
+        }
+      },
+      "support": {
+        "$type": "color",
+        "$value": "{color.support.700}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": "{color.support.800}",
+              "scheme:dark": "{color.support.300}",
+              "scheme:dark,contrast:high": "{color.support.200}"
+            }
+          }
+        }
+      },
+      "on-brand": {
+        "$type": "color",
+        "$value": "{color.base.black}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
           }
         }
       }
@@ -1753,6 +2040,20 @@
             }
           }
         }
+      },
+      "accent": {
+        "$type": "color",
+        "$value": "{color.brand.700}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": "{color.brand.800}",
+              "scheme:dark": "{color.brand.300}",
+              "scheme:dark,contrast:high": "{color.brand.200}"
+            }
+          }
+        }
       }
     },
     "focus": {
@@ -1795,6 +2096,158 @@
             "contrast:high": "{color.shade.60}",
             "scheme:dark": "{color.shade.60}",
             "scheme:dark,contrast:high": "{color.shade.80}"
+          }
+        }
+      }
+    },
+    "syntax": {
+      "plain": {
+        "$type": "color",
+        "$value": "{color.neutral.900}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": "{color.neutral.950}",
+              "scheme:dark": "{color.neutral.50}",
+              "scheme:dark,contrast:high": "{color.base.white}"
+            }
+          }
+        }
+      },
+      "keyword": {
+        "$type": "color",
+        "$value": "{color.brand.800}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": "{color.brand.900}",
+              "scheme:dark": "{color.brand.300}",
+              "scheme:dark,contrast:high": "{color.brand.200}"
+            }
+          }
+        }
+      },
+      "string": {
+        "$type": "color",
+        "$value": "{color.success.700}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": "{color.success.800}",
+              "scheme:dark": "{color.success.300}",
+              "scheme:dark,contrast:high": "{color.success.200}"
+            }
+          }
+        }
+      },
+      "number": {
+        "$type": "color",
+        "$value": "{color.warning.700}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": "{color.warning.800}",
+              "scheme:dark": "{color.warning.300}",
+              "scheme:dark,contrast:high": "{color.warning.200}"
+            }
+          }
+        }
+      },
+      "function": {
+        "$type": "color",
+        "$value": "{color.info.700}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": "{color.info.800}",
+              "scheme:dark": "{color.info.300}",
+              "scheme:dark,contrast:high": "{color.info.200}"
+            }
+          }
+        }
+      },
+      "comment": {
+        "$type": "color",
+        "$value": "{color.neutral.600}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": "{color.neutral.800}",
+              "scheme:dark": "{color.neutral.400}",
+              "scheme:dark,contrast:high": "{color.neutral.300}"
+            }
+          }
+        }
+      }
+    },
+    "decorative": {
+      "brand": {
+        "$type": "color",
+        "$value": "{color.brand.400}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "scheme:dark": "{color.brand.600}"
+            }
+          }
+        }
+      },
+      "support": {
+        "$type": "color",
+        "$value": "{color.support.300}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "scheme:dark": "{color.support.600}"
+            }
+          }
+        }
+      },
+      "neutral": {
+        "$type": "color",
+        "$value": "{color.neutral.300}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "scheme:dark": "{color.neutral.600}"
+            }
+          }
+        }
+      }
+    },
+    "illustration": {
+      "line": {
+        "$type": "color",
+        "$value": "{color.brand.700}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": "{color.brand.800}",
+              "scheme:dark": "{color.brand.400}",
+              "scheme:dark,contrast:high": "{color.brand.200}"
+            }
+          }
+        }
+      }
+    },
+    "logo": {
+      "$type": "color",
+      "$value": "{color.brand.700}",
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "semantic",
+          "modes": {
+            "scheme:dark": "{color.brand.exact}"
           }
         }
       }

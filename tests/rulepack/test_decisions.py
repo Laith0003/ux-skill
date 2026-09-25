@@ -19,6 +19,8 @@ EXPECTED = {
     "reading-line-height", "container-edge", "button-intents",
     "status-harmony", "neutral-tint", "recessed-sunken", "high-contrast-surfaces", "error-edge",
     "brand-fidelity", "primary-edge", "ring-never-weaker",
+    "brand-roles", "brand-surfaces", "support-accent", "logo-and-decoration",
+    "code-and-table-colors",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge"}

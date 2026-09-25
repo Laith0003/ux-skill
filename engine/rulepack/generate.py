@@ -368,8 +368,10 @@ def _reference(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[RoleE
                   "| Foreground | Background | Minimum | High contrast | Source |",
                   "|---|---|---|---|---|"]
         for p in f.pairings:
+            source = ("our floor" if p.criterion == "system"
+                      else _criterion_words(p.criterion))
             lines.append(f"| `{p.fg}` | `{p.bg}` | {p.minimum:g}:1 | {_high_cell(p, ts)} | "
-                         f"{_criterion_words(p.criterion)} |")
+                         f"{source} |")
         lines += ["", "Contracts add these pairings for the components they describe. The rule "
                       "pack measured each in every scheme and contrast context against these "
                       "tokens before it was written. Their minimums rise under high contrast the "

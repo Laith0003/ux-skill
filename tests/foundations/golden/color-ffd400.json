@@ -5,12 +5,18 @@
   "--color-action-danger: var(--color-danger-400);",
   "--color-action-disabled: var(--color-neutral-700);",
   "--color-action-primary-edge: var(--color-brand-exact);",
+  "--color-decorative-brand: var(--color-brand-600);",
+  "--color-decorative-neutral: var(--color-neutral-600);",
+  "--color-decorative-support: var(--color-support-600);",
   "--color-focus-ring-inverse: var(--color-brand-700);",
   "--color-focus-ring: var(--color-brand-200);",
+  "--color-illustration-line: var(--color-brand-400);",
+  "--color-line-accent: var(--color-brand-300);",
   "--color-line-danger: var(--color-danger-400);",
   "--color-line-input: var(--color-neutral-400);",
   "--color-line-selected: var(--color-brand-300);",
   "--color-line-subtle: var(--color-neutral-700);",
+  "--color-logo: var(--color-brand-exact);",
   "--color-scrim: var(--color-shade-60);",
   "--color-status-danger-on-strong: var(--color-base-black);",
   "--color-status-danger-soft: var(--color-danger-900);",
@@ -28,18 +34,30 @@
   "--color-status-warning-soft: var(--color-warning-900);",
   "--color-status-warning-strong: var(--color-warning-400);",
   "--color-status-warning-text: var(--color-warning-300);",
+  "--color-surface-band: var(--color-brand-900);",
   "--color-surface-card: var(--color-neutral-900);",
+  "--color-surface-code: var(--color-neutral-recess-dark);",
   "--color-surface-inverse: var(--color-neutral-100);",
   "--color-surface-page: var(--color-neutral-950);",
   "--color-surface-raised: var(--color-neutral-800);",
   "--color-surface-selected: var(--color-brand-900);",
+  "--color-surface-stripe: var(--color-neutral-950);",
   "--color-surface-sunken: var(--color-neutral-recess-dark);",
+  "--color-surface-tint: var(--color-brand-950);",
+  "--color-syntax-comment: var(--color-neutral-400);",
+  "--color-syntax-function: var(--color-info-300);",
+  "--color-syntax-keyword: var(--color-brand-300);",
+  "--color-syntax-number: var(--color-warning-300);",
+  "--color-syntax-plain: var(--color-neutral-50);",
+  "--color-syntax-string: var(--color-success-300);",
+  "--color-text-accent: var(--color-brand-300);",
   "--color-text-default: var(--color-neutral-50);",
   "--color-text-disabled: var(--color-neutral-600);",
   "--color-text-inverse: var(--color-neutral-900);",
   "--color-text-link: var(--color-brand-300);",
   "--color-text-muted: var(--color-neutral-300);",
-  "--color-text-on-danger: var(--color-base-black);"
+  "--color-text-on-danger: var(--color-base-black);",
+  "--color-text-support: var(--color-support-300);"
  ],
  "css_high": {
   ":root[data-contrast=\"high\"]": [
@@ -48,6 +66,8 @@
    "--color-action-danger: var(--color-danger-800);",
    "--color-focus-ring-inverse: var(--color-brand-200);",
    "--color-focus-ring: var(--color-brand-800);",
+   "--color-illustration-line: var(--color-brand-800);",
+   "--color-line-accent: var(--color-brand-800);",
    "--color-line-danger: var(--color-danger-700);",
    "--color-line-input: var(--color-neutral-700);",
    "--color-line-selected: var(--color-brand-800);",
@@ -68,9 +88,19 @@
    "--color-surface-inverse: var(--color-base-black);",
    "--color-surface-page: var(--color-base-white);",
    "--color-surface-selected: var(--color-brand-50);",
+   "--color-surface-stripe: var(--color-neutral-100);",
+   "--color-syntax-comment: var(--color-neutral-800);",
+   "--color-syntax-function: var(--color-info-800);",
+   "--color-syntax-keyword: var(--color-brand-900);",
+   "--color-syntax-number: var(--color-warning-800);",
+   "--color-syntax-plain: var(--color-neutral-950);",
+   "--color-syntax-string: var(--color-success-800);",
+   "--color-text-accent: var(--color-brand-900);",
    "--color-text-default: var(--color-neutral-950);",
    "--color-text-inverse: var(--color-base-white);",
-   "--color-text-muted: var(--color-neutral-800);"
+   "--color-text-link: var(--color-brand-900);",
+   "--color-text-muted: var(--color-neutral-800);",
+   "--color-text-support: var(--color-support-800);"
   ],
   ":root[data-theme=\"dark\"][data-contrast=\"high\"]": [
    "--color-action-danger-hover: var(--color-danger-100);",
@@ -78,6 +108,8 @@
    "--color-action-danger: var(--color-danger-200);",
    "--color-focus-ring-inverse: var(--color-brand-800);",
    "--color-focus-ring: var(--color-brand-100);",
+   "--color-illustration-line: var(--color-brand-200);",
+   "--color-line-accent: var(--color-brand-200);",
    "--color-line-danger: var(--color-danger-300);",
    "--color-line-input: var(--color-neutral-300);",
    "--color-line-selected: var(--color-brand-200);",
@@ -95,14 +127,24 @@
    "--color-status-warning-soft: var(--color-warning-950);",
    "--color-status-warning-strong: var(--color-warning-200);",
    "--color-status-warning-text: var(--color-warning-200);",
+   "--color-surface-code: var(--color-base-black);",
    "--color-surface-inverse: var(--color-base-white);",
    "--color-surface-page: var(--color-base-black);",
    "--color-surface-selected: var(--color-brand-950);",
+   "--color-surface-stripe: var(--color-neutral-800);",
    "--color-surface-sunken: var(--color-base-black);",
+   "--color-syntax-comment: var(--color-neutral-300);",
+   "--color-syntax-function: var(--color-info-200);",
+   "--color-syntax-keyword: var(--color-brand-200);",
+   "--color-syntax-number: var(--color-warning-200);",
+   "--color-syntax-plain: var(--color-base-white);",
+   "--color-syntax-string: var(--color-success-200);",
+   "--color-text-accent: var(--color-brand-200);",
    "--color-text-default: var(--color-base-white);",
    "--color-text-inverse: var(--color-base-black);",
    "--color-text-link: var(--color-brand-200);",
-   "--color-text-muted: var(--color-neutral-100);"
+   "--color-text-muted: var(--color-neutral-100);",
+   "--color-text-support: var(--color-support-200);"
   ],
   "@media (prefers-color-scheme: dark) and (prefers-contrast: more) | :root:not([data-theme=\"light\"]):not([data-contrast=\"standard\"])": [
    "--color-action-danger-hover: var(--color-danger-100);",
@@ -110,6 +152,8 @@
    "--color-action-danger: var(--color-danger-200);",
    "--color-focus-ring-inverse: var(--color-brand-800);",
    "--color-focus-ring: var(--color-brand-100);",
+   "--color-illustration-line: var(--color-brand-200);",
+   "--color-line-accent: var(--color-brand-200);",
    "--color-line-danger: var(--color-danger-300);",
    "--color-line-input: var(--color-neutral-300);",
    "--color-line-selected: var(--color-brand-200);",
@@ -127,14 +171,24 @@
    "--color-status-warning-soft: var(--color-warning-950);",
    "--color-status-warning-strong: var(--color-warning-200);",
    "--color-status-warning-text: var(--color-warning-200);",
+   "--color-surface-code: var(--color-base-black);",
    "--color-surface-inverse: var(--color-base-white);",
    "--color-surface-page: var(--color-base-black);",
    "--color-surface-selected: var(--color-brand-950);",
+   "--color-surface-stripe: var(--color-neutral-800);",
    "--color-surface-sunken: var(--color-base-black);",
+   "--color-syntax-comment: var(--color-neutral-300);",
+   "--color-syntax-function: var(--color-info-200);",
+   "--color-syntax-keyword: var(--color-brand-200);",
+   "--color-syntax-number: var(--color-warning-200);",
+   "--color-syntax-plain: var(--color-base-white);",
+   "--color-syntax-string: var(--color-success-200);",
+   "--color-text-accent: var(--color-brand-200);",
    "--color-text-default: var(--color-base-white);",
    "--color-text-inverse: var(--color-base-black);",
    "--color-text-link: var(--color-brand-200);",
-   "--color-text-muted: var(--color-neutral-100);"
+   "--color-text-muted: var(--color-neutral-100);",
+   "--color-text-support: var(--color-support-200);"
   ],
   "@media (prefers-color-scheme: dark) | :root:not([data-theme=\"light\"])[data-contrast=\"high\"]": [
    "--color-action-danger-hover: var(--color-danger-100);",
@@ -142,6 +196,8 @@
    "--color-action-danger: var(--color-danger-200);",
    "--color-focus-ring-inverse: var(--color-brand-800);",
    "--color-focus-ring: var(--color-brand-100);",
+   "--color-illustration-line: var(--color-brand-200);",
+   "--color-line-accent: var(--color-brand-200);",
    "--color-line-danger: var(--color-danger-300);",
    "--color-line-input: var(--color-neutral-300);",
    "--color-line-selected: var(--color-brand-200);",
@@ -159,14 +215,24 @@
    "--color-status-warning-soft: var(--color-warning-950);",
    "--color-status-warning-strong: var(--color-warning-200);",
    "--color-status-warning-text: var(--color-warning-200);",
+   "--color-surface-code: var(--color-base-black);",
    "--color-surface-inverse: var(--color-base-white);",
    "--color-surface-page: var(--color-base-black);",
    "--color-surface-selected: var(--color-brand-950);",
+   "--color-surface-stripe: var(--color-neutral-800);",
    "--color-surface-sunken: var(--color-base-black);",
+   "--color-syntax-comment: var(--color-neutral-300);",
+   "--color-syntax-function: var(--color-info-200);",
+   "--color-syntax-keyword: var(--color-brand-200);",
+   "--color-syntax-number: var(--color-warning-200);",
+   "--color-syntax-plain: var(--color-base-white);",
+   "--color-syntax-string: var(--color-success-200);",
+   "--color-text-accent: var(--color-brand-200);",
    "--color-text-default: var(--color-base-white);",
    "--color-text-inverse: var(--color-base-black);",
    "--color-text-link: var(--color-brand-200);",
-   "--color-text-muted: var(--color-neutral-100);"
+   "--color-text-muted: var(--color-neutral-100);",
+   "--color-text-support: var(--color-support-200);"
   ],
   "@media (prefers-contrast: more) | :root:not([data-contrast=\"standard\"])": [
    "--color-action-danger-hover: var(--color-danger-900);",
@@ -174,6 +240,8 @@
    "--color-action-danger: var(--color-danger-800);",
    "--color-focus-ring-inverse: var(--color-brand-200);",
    "--color-focus-ring: var(--color-brand-800);",
+   "--color-illustration-line: var(--color-brand-800);",
+   "--color-line-accent: var(--color-brand-800);",
    "--color-line-danger: var(--color-danger-700);",
    "--color-line-input: var(--color-neutral-700);",
    "--color-line-selected: var(--color-brand-800);",
@@ -194,9 +262,19 @@
    "--color-surface-inverse: var(--color-base-black);",
    "--color-surface-page: var(--color-base-white);",
    "--color-surface-selected: var(--color-brand-50);",
+   "--color-surface-stripe: var(--color-neutral-100);",
+   "--color-syntax-comment: var(--color-neutral-800);",
+   "--color-syntax-function: var(--color-info-800);",
+   "--color-syntax-keyword: var(--color-brand-900);",
+   "--color-syntax-number: var(--color-warning-800);",
+   "--color-syntax-plain: var(--color-neutral-950);",
+   "--color-syntax-string: var(--color-success-800);",
+   "--color-text-accent: var(--color-brand-900);",
    "--color-text-default: var(--color-neutral-950);",
    "--color-text-inverse: var(--color-base-white);",
-   "--color-text-muted: var(--color-neutral-800);"
+   "--color-text-link: var(--color-brand-900);",
+   "--color-text-muted: var(--color-neutral-800);",
+   "--color-text-support: var(--color-support-800);"
   ],
   "@media (prefers-contrast: more) | :root[data-theme=\"dark\"]:not([data-contrast=\"standard\"])": [
    "--color-action-danger-hover: var(--color-danger-100);",
@@ -204,6 +282,8 @@
    "--color-action-danger: var(--color-danger-200);",
    "--color-focus-ring-inverse: var(--color-brand-800);",
    "--color-focus-ring: var(--color-brand-100);",
+   "--color-illustration-line: var(--color-brand-200);",
+   "--color-line-accent: var(--color-brand-200);",
    "--color-line-danger: var(--color-danger-300);",
    "--color-line-input: var(--color-neutral-300);",
    "--color-line-selected: var(--color-brand-200);",
@@ -221,14 +301,24 @@
    "--color-status-warning-soft: var(--color-warning-950);",
    "--color-status-warning-strong: var(--color-warning-200);",
    "--color-status-warning-text: var(--color-warning-200);",
+   "--color-surface-code: var(--color-base-black);",
    "--color-surface-inverse: var(--color-base-white);",
    "--color-surface-page: var(--color-base-black);",
    "--color-surface-selected: var(--color-brand-950);",
+   "--color-surface-stripe: var(--color-neutral-800);",
    "--color-surface-sunken: var(--color-base-black);",
+   "--color-syntax-comment: var(--color-neutral-300);",
+   "--color-syntax-function: var(--color-info-200);",
+   "--color-syntax-keyword: var(--color-brand-200);",
+   "--color-syntax-number: var(--color-warning-200);",
+   "--color-syntax-plain: var(--color-base-white);",
+   "--color-syntax-string: var(--color-success-200);",
+   "--color-text-accent: var(--color-brand-200);",
    "--color-text-default: var(--color-base-white);",
    "--color-text-inverse: var(--color-base-black);",
    "--color-text-link: var(--color-brand-200);",
-   "--color-text-muted: var(--color-neutral-100);"
+   "--color-text-muted: var(--color-neutral-100);",
+   "--color-text-support: var(--color-support-200);"
   ]
  },
  "css_root": [
@@ -259,6 +349,17 @@
   "--color-neutral-950: #0E0D0B;",
   "--color-neutral-recess-light: #EBEBE9;",
   "--color-neutral-recess-dark: #070605;",
+  "--color-support-50: #E4FCFD;",
+  "--color-support-100: #C0E7E8;",
+  "--color-support-200: #9BD1D3;",
+  "--color-support-300: #75BCBF;",
+  "--color-support-400: #4BA7AB;",
+  "--color-support-500: #009297;",
+  "--color-support-600: #007579;",
+  "--color-support-700: #005A5D;",
+  "--color-support-800: #004042;",
+  "--color-support-900: #002729;",
+  "--color-support-950: #001112;",
   "--color-danger-50: #FFF4F1;",
   "--color-danger-100: #FCD2C6;",
   "--color-danger-200: #ECB4A4;",
@@ -319,6 +420,11 @@
   "--color-surface-raised: var(--color-base-white);",
   "--color-surface-inverse: var(--color-neutral-900);",
   "--color-surface-selected: var(--color-brand-100);",
+  "--color-surface-tint: var(--color-brand-50);",
+  "--color-surface-band: var(--color-brand-100);",
+  "--color-surface-brand: var(--color-brand-exact);",
+  "--color-surface-stripe: var(--color-neutral-50);",
+  "--color-surface-code: var(--color-neutral-100);",
   "--color-text-default: var(--color-neutral-900);",
   "--color-text-muted: var(--color-neutral-600);",
   "--color-text-inverse: var(--color-neutral-50);",
@@ -326,6 +432,9 @@
   "--color-text-disabled: var(--color-neutral-400);",
   "--color-text-on-action: var(--color-base-black);",
   "--color-text-on-danger: var(--color-base-white);",
+  "--color-text-accent: var(--color-brand-800);",
+  "--color-text-support: var(--color-support-700);",
+  "--color-text-on-brand: var(--color-base-black);",
   "--color-action-primary: var(--color-brand-exact);",
   "--color-action-primary-hover: var(--color-brand-400);",
   "--color-action-primary-pressed: var(--color-brand-300);",
@@ -338,9 +447,21 @@
   "--color-line-input: var(--color-neutral-500);",
   "--color-line-selected: var(--color-brand-700);",
   "--color-line-danger: var(--color-danger-600);",
+  "--color-line-accent: var(--color-brand-700);",
   "--color-focus-ring: var(--color-brand-700);",
   "--color-focus-ring-inverse: var(--color-brand-300);",
   "--color-scrim: var(--color-shade-40);",
+  "--color-syntax-plain: var(--color-neutral-900);",
+  "--color-syntax-keyword: var(--color-brand-800);",
+  "--color-syntax-string: var(--color-success-700);",
+  "--color-syntax-number: var(--color-warning-700);",
+  "--color-syntax-function: var(--color-info-700);",
+  "--color-syntax-comment: var(--color-neutral-600);",
+  "--color-decorative-brand: var(--color-brand-400);",
+  "--color-decorative-support: var(--color-support-300);",
+  "--color-decorative-neutral: var(--color-neutral-300);",
+  "--color-illustration-line: var(--color-brand-700);",
+  "--color-logo: var(--color-brand-700);",
   "--color-status-danger-text: var(--color-danger-700);",
   "--color-status-danger-soft: var(--color-danger-100);",
   "--color-status-danger-strong: var(--color-danger-600);",
@@ -592,8 +713,12 @@
    ],
    "hex": "#1F0300"
   },
+  "color.decorative.brand": "{color.brand.400}",
+  "color.decorative.neutral": "{color.neutral.300}",
+  "color.decorative.support": "{color.support.300}",
   "color.focus.ring": "{color.brand.700}",
   "color.focus.ring-inverse": "{color.brand.300}",
+  "color.illustration.line": "{color.brand.700}",
   "color.info.100": {
    "colorSpace": "srgb",
    "components": [
@@ -693,10 +818,12 @@
    ],
    "hex": "#000F19"
   },
+  "color.line.accent": "{color.brand.700}",
   "color.line.danger": "{color.danger.600}",
   "color.line.input": "{color.neutral.500}",
   "color.line.selected": "{color.brand.700}",
   "color.line.subtle": "{color.neutral.200}",
+  "color.logo": "{color.brand.700}",
   "color.neutral.100": {
    "colorSpace": "srgb",
    "components": [
@@ -980,19 +1107,132 @@
    ],
    "hex": "#031200"
   },
+  "color.support.100": {
+   "colorSpace": "srgb",
+   "components": [
+    0.752941,
+    0.905882,
+    0.909804
+   ],
+   "hex": "#C0E7E8"
+  },
+  "color.support.200": {
+   "colorSpace": "srgb",
+   "components": [
+    0.607843,
+    0.819608,
+    0.827451
+   ],
+   "hex": "#9BD1D3"
+  },
+  "color.support.300": {
+   "colorSpace": "srgb",
+   "components": [
+    0.458824,
+    0.737255,
+    0.74902
+   ],
+   "hex": "#75BCBF"
+  },
+  "color.support.400": {
+   "colorSpace": "srgb",
+   "components": [
+    0.294118,
+    0.654902,
+    0.670588
+   ],
+   "hex": "#4BA7AB"
+  },
+  "color.support.50": {
+   "colorSpace": "srgb",
+   "components": [
+    0.894118,
+    0.988235,
+    0.992157
+   ],
+   "hex": "#E4FCFD"
+  },
+  "color.support.500": {
+   "colorSpace": "srgb",
+   "components": [
+    0.0,
+    0.572549,
+    0.592157
+   ],
+   "hex": "#009297"
+  },
+  "color.support.600": {
+   "colorSpace": "srgb",
+   "components": [
+    0.0,
+    0.458824,
+    0.47451
+   ],
+   "hex": "#007579"
+  },
+  "color.support.700": {
+   "colorSpace": "srgb",
+   "components": [
+    0.0,
+    0.352941,
+    0.364706
+   ],
+   "hex": "#005A5D"
+  },
+  "color.support.800": {
+   "colorSpace": "srgb",
+   "components": [
+    0.0,
+    0.25098,
+    0.258824
+   ],
+   "hex": "#004042"
+  },
+  "color.support.900": {
+   "colorSpace": "srgb",
+   "components": [
+    0.0,
+    0.152941,
+    0.160784
+   ],
+   "hex": "#002729"
+  },
+  "color.support.950": {
+   "colorSpace": "srgb",
+   "components": [
+    0.0,
+    0.066667,
+    0.070588
+   ],
+   "hex": "#001112"
+  },
+  "color.surface.band": "{color.brand.100}",
+  "color.surface.brand": "{color.brand.exact}",
   "color.surface.card": "{color.base.white}",
+  "color.surface.code": "{color.neutral.100}",
   "color.surface.inverse": "{color.neutral.900}",
   "color.surface.page": "{color.neutral.50}",
   "color.surface.raised": "{color.base.white}",
   "color.surface.selected": "{color.brand.100}",
+  "color.surface.stripe": "{color.neutral.50}",
   "color.surface.sunken": "{color.neutral.recess-light}",
+  "color.surface.tint": "{color.brand.50}",
+  "color.syntax.comment": "{color.neutral.600}",
+  "color.syntax.function": "{color.info.700}",
+  "color.syntax.keyword": "{color.brand.800}",
+  "color.syntax.number": "{color.warning.700}",
+  "color.syntax.plain": "{color.neutral.900}",
+  "color.syntax.string": "{color.success.700}",
+  "color.text.accent": "{color.brand.800}",
   "color.text.default": "{color.neutral.900}",
   "color.text.disabled": "{color.neutral.400}",
   "color.text.inverse": "{color.neutral.50}",
   "color.text.link": "{color.brand.800}",
   "color.text.muted": "{color.neutral.600}",
   "color.text.on-action": "{color.base.black}",
+  "color.text.on-brand": "{color.base.black}",
   "color.text.on-danger": "{color.base.white}",
+  "color.text.support": "{color.support.700}",
   "color.tint.10": {
    "alpha": 0.101961,
    "colorSpace": "srgb",
@@ -1342,6 +1582,24 @@
    "light": "#1F0300",
    "light-high": "#1F0300"
   },
+  "color.decorative.brand": {
+   "dark": "#B29300",
+   "dark-high": "#B29300",
+   "light": "#EAC63B",
+   "light-high": "#EAC63B"
+  },
+  "color.decorative.neutral": {
+   "dark": "#5D5B56",
+   "dark-high": "#5D5B56",
+   "light": "#A6A4A0",
+   "light-high": "#A6A4A0"
+  },
+  "color.decorative.support": {
+   "dark": "#007579",
+   "dark-high": "#007579",
+   "light": "#75BCBF",
+   "light-high": "#75BCBF"
+  },
   "color.focus.ring": {
    "dark": "#F5DF92",
    "dark-high": "#FBEBB4",
@@ -1353,6 +1611,12 @@
    "dark-high": "#5B4A00",
    "light": "#EFD36C",
    "light-high": "#F5DF92"
+  },
+  "color.illustration.line": {
+   "dark": "#EAC63B",
+   "dark-high": "#F5DF92",
+   "light": "#856E00",
+   "light-high": "#5B4A00"
   },
   "color.info.100": {
    "dark": "#BEE3F8",
@@ -1420,6 +1684,12 @@
    "light": "#000F19",
    "light-high": "#000F19"
   },
+  "color.line.accent": {
+   "dark": "#EFD36C",
+   "dark-high": "#F5DF92",
+   "light": "#856E00",
+   "light-high": "#5B4A00"
+  },
   "color.line.danger": {
    "dark": "#CA7A63",
    "dark-high": "#DB9783",
@@ -1443,6 +1713,12 @@
    "dark-high": "#5D5B56",
    "light": "#C0BFBC",
    "light-high": "#8C8A86"
+  },
+  "color.logo": {
+   "dark": "#FFD400",
+   "dark-high": "#FFD400",
+   "light": "#856E00",
+   "light-high": "#856E00"
   },
   "color.neutral.100": {
    "dark": "#DBDAD8",
@@ -1720,11 +1996,95 @@
    "light": "#031200",
    "light-high": "#031200"
   },
+  "color.support.100": {
+   "dark": "#C0E7E8",
+   "dark-high": "#C0E7E8",
+   "light": "#C0E7E8",
+   "light-high": "#C0E7E8"
+  },
+  "color.support.200": {
+   "dark": "#9BD1D3",
+   "dark-high": "#9BD1D3",
+   "light": "#9BD1D3",
+   "light-high": "#9BD1D3"
+  },
+  "color.support.300": {
+   "dark": "#75BCBF",
+   "dark-high": "#75BCBF",
+   "light": "#75BCBF",
+   "light-high": "#75BCBF"
+  },
+  "color.support.400": {
+   "dark": "#4BA7AB",
+   "dark-high": "#4BA7AB",
+   "light": "#4BA7AB",
+   "light-high": "#4BA7AB"
+  },
+  "color.support.50": {
+   "dark": "#E4FCFD",
+   "dark-high": "#E4FCFD",
+   "light": "#E4FCFD",
+   "light-high": "#E4FCFD"
+  },
+  "color.support.500": {
+   "dark": "#009297",
+   "dark-high": "#009297",
+   "light": "#009297",
+   "light-high": "#009297"
+  },
+  "color.support.600": {
+   "dark": "#007579",
+   "dark-high": "#007579",
+   "light": "#007579",
+   "light-high": "#007579"
+  },
+  "color.support.700": {
+   "dark": "#005A5D",
+   "dark-high": "#005A5D",
+   "light": "#005A5D",
+   "light-high": "#005A5D"
+  },
+  "color.support.800": {
+   "dark": "#004042",
+   "dark-high": "#004042",
+   "light": "#004042",
+   "light-high": "#004042"
+  },
+  "color.support.900": {
+   "dark": "#002729",
+   "dark-high": "#002729",
+   "light": "#002729",
+   "light-high": "#002729"
+  },
+  "color.support.950": {
+   "dark": "#001112",
+   "dark-high": "#001112",
+   "light": "#001112",
+   "light-high": "#001112"
+  },
+  "color.surface.band": {
+   "dark": "#342A00",
+   "dark-high": "#342A00",
+   "light": "#FBEBB4",
+   "light-high": "#FBEBB4"
+  },
+  "color.surface.brand": {
+   "dark": "#FFD400",
+   "dark-high": "#FFD400",
+   "light": "#FFD400",
+   "light-high": "#FFD400"
+  },
   "color.surface.card": {
    "dark": "#201F1C",
    "dark-high": "#201F1C",
    "light": "#FFFFFF",
    "light-high": "#FFFFFF"
+  },
+  "color.surface.code": {
+   "dark": "#070605",
+   "dark-high": "#000000",
+   "light": "#DBDAD8",
+   "light-high": "#DBDAD8"
   },
   "color.surface.inverse": {
    "dark": "#DBDAD8",
@@ -1750,11 +2110,65 @@
    "light": "#FBEBB4",
    "light-high": "#FFF7DB"
   },
+  "color.surface.stripe": {
+   "dark": "#0E0D0B",
+   "dark-high": "#33322E",
+   "light": "#F7F7F5",
+   "light-high": "#DBDAD8"
+  },
   "color.surface.sunken": {
    "dark": "#070605",
    "dark-high": "#000000",
    "light": "#EBEBE9",
    "light-high": "#EBEBE9"
+  },
+  "color.surface.tint": {
+   "dark": "#120D00",
+   "dark-high": "#120D00",
+   "light": "#FFF7DB",
+   "light-high": "#FFF7DB"
+  },
+  "color.syntax.comment": {
+   "dark": "#8C8A86",
+   "dark-high": "#A6A4A0",
+   "light": "#5D5B56",
+   "light-high": "#33322E"
+  },
+  "color.syntax.function": {
+   "dark": "#72B4D7",
+   "dark-high": "#99CBE7",
+   "light": "#005271",
+   "light-high": "#003A52"
+  },
+  "color.syntax.keyword": {
+   "dark": "#EFD36C",
+   "dark-high": "#F5DF92",
+   "light": "#5B4A00",
+   "light-high": "#342A00"
+  },
+  "color.syntax.number": {
+   "dark": "#C6A56C",
+   "dark-high": "#DABF93",
+   "light": "#634500",
+   "light-high": "#473000"
+  },
+  "color.syntax.plain": {
+   "dark": "#F7F7F5",
+   "dark-high": "#FFFFFF",
+   "light": "#201F1C",
+   "light-high": "#0E0D0B"
+  },
+  "color.syntax.string": {
+   "dark": "#8FB882",
+   "dark-high": "#AECEA3",
+   "light": "#2A5817",
+   "light-high": "#174002"
+  },
+  "color.text.accent": {
+   "dark": "#EFD36C",
+   "dark-high": "#F5DF92",
+   "light": "#5B4A00",
+   "light-high": "#342A00"
   },
   "color.text.default": {
    "dark": "#F7F7F5",
@@ -1778,7 +2192,7 @@
    "dark": "#EFD36C",
    "dark-high": "#F5DF92",
    "light": "#5B4A00",
-   "light-high": "#5B4A00"
+   "light-high": "#342A00"
   },
   "color.text.muted": {
    "dark": "#A6A4A0",
@@ -1792,11 +2206,23 @@
    "light": "#000000",
    "light-high": "#000000"
   },
+  "color.text.on-brand": {
+   "dark": "#000000",
+   "dark-high": "#000000",
+   "light": "#000000",
+   "light-high": "#000000"
+  },
   "color.text.on-danger": {
    "dark": "#000000",
    "dark-high": "#000000",
    "light": "#FFFFFF",
    "light-high": "#FFFFFF"
+  },
+  "color.text.support": {
+   "dark": "#75BCBF",
+   "dark-high": "#9BD1D3",
+   "light": "#005A5D",
+   "light-high": "#004042"
   },
   "color.tint.10": {
    "dark": "#FFFFFF1A",

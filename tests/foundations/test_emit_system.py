@@ -346,6 +346,6 @@ def test_the_report_states_the_brand_color_in_every_context():
     report = make_system("#E85D04", NEUTRAL, NEUTRAL_SOURCE).report
     section = report.split("## Brand color\n\n", 1)[1].split("\n## ", 1)[0]
     lines = [line for line in section.splitlines() if line.startswith("- ")]
-    assert len(lines) == 4
+    assert len(lines) == 5 and lines[4].startswith("- The logo (color.logo) is the brand color")
     assert lines[0].startswith("- Light mode: the button is the brand color #E85D04 exactly")
     assert report.index("## Brand color") < report.index("## Notes")

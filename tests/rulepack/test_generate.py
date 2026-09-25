@@ -180,7 +180,8 @@ def test_pairing_rows_are_the_build_and_the_contracts_and_nothing_else():
     reference = PACK_FILES[f"{PACK}/color/reference.md"]
     color = next(f for f in FOUNDATIONS if f.name == "color")
     assert _rows(reference, "## Pairings") == [
-        f"| `{p.fg}` | `{p.bg}` | {p.minimum:g}:1 | {_high(p)} | WCAG {p.criterion} |"
+        f"| `{p.fg}` | `{p.bg}` | {p.minimum:g}:1 | {_high(p)} | "
+        f"{'our floor' if p.criterion == 'system' else 'WCAG ' + p.criterion} |"
         for p in color.pairings]
     intro = next(line for line in reference.split("\n")
                  if line.startswith("Contracts add these pairings"))

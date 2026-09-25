@@ -74,6 +74,8 @@ def cite(minimum: float, criterion: str) -> str:
             return f"WCAG {criterion} needs {minimum:g}:1"
         return (f"the declared floor is {minimum:g}:1 "
                 f"(WCAG {criterion} asks {WCAG_RATIOS[criterion]:g}:1)")
+    if criterion == "system":
+        return f"our floor is {minimum:g}:1"
     return f"the declared floor for {criterion} is {minimum:g}:1"
 
 

@@ -19,6 +19,10 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Motion has seven interaction roles and reduced motion is a mode](motion-roles.md)
 - [Layout tokens cover the page grid; regions and panes belong to page patterns](layout-scope.md)
 - [Nine text styles as composites, faces chosen per script](type-roles.md)
+- [The axes choose whether the brand fills the action, marks words or draws edges](brand-roles.md)
+- [The brand reaches surfaces as a tint, a band or one brand band](brand-surfaces.md)
+- [A supporting accent takes a second hue placed by the axes](support-accent.md)
+- [Code blocks and tables have their own surfaces](code-and-table-colors.md)
 
 ## Contrast and the gate
 
@@ -38,6 +42,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [In dark mode, surfaces lighten as they rise](dark-elevation-cue.md)
 - [The primary fill keeps the exact brand color whenever text reads on it](brand-fidelity.md)
 - [The focus ring never weakens under high contrast, and is measured against the fill](ring-never-weaker.md)
+- [The logo keeps the brand color, and decoration has a visibility floor of ours](logo-and-decoration.md)
 
 ## Shape, space and motion
 

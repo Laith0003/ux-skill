@@ -281,7 +281,7 @@ def test_high_contrast_ring_never_weakens_and_is_checked(monkeypatch):
 def test_ring_is_not_paired_with_the_button_fill():
     fills = ("color.action.primary",) + color_module._FILL_STATES["color.action.primary"]
     assert not [p for p in PAIRINGS if p.fg == "color.focus.ring" and p.bg in fills]
-    assert all(p.high is None for p in PAIRINGS)
+    assert all(p.high is None for p in PAIRINGS if p.criterion != "system")
 
 
 def test_ring_keeps_every_surface_pairing_at_its_minimum():
@@ -475,7 +475,12 @@ def _assert_cites_only_wcag(text):
 def test_every_failure_message_cites_only_what_wcag_says(p, mode):
     from engine.foundations.gate import GateFinding
     minimum, criterion = required(p, mode)
-    _assert_cites_only_wcag(GateFinding(p.fg, p.bg, mode, 1.0, minimum, criterion).message())
+    message = GateFinding(p.fg, p.bg, mode, 1.0, minimum, criterion).message()
+    if p.criterion == "system":
+        # a floor of ours (logo, decoration): named as ours, no WCAG claim
+        assert f"our floor is {minimum:g}:1" in message and "WCAG" not in message
+    else:
+        _assert_cites_only_wcag(message)
 
 
 def test_high_contrast_non_text_floor_is_named_as_ours():
@@ -504,6 +509,8 @@ def test_retune_notes_cite_only_what_wcag_says(seed, monkeypatch):
     assert any("our high-contrast floor is 4.5:1 (WCAG 1.4.11 asks 3:1)" in n
                for n in notes), seed
     for note in notes:
+        if "our floor is" in note and "WCAG" not in note:
+            continue  # a floor of ours, named as ours
         _assert_cites_only_wcag(note)
 
 
@@ -760,10 +767,12 @@ def test_generated_line_subtle_differs_from_card_and_raised(seed):
 
 _TEXT_ROLES = ("color.text.default", "color.text.muted", "color.text.link",
                "color.status.danger.text", "color.status.warning.text",
-               "color.status.success.text", "color.status.info.text")
-_TEXT_SURFACES = _SURFACES + ("color.surface.selected",)
+               "color.status.success.text", "color.status.info.text",
+               "color.text.accent", "color.text.support")
+_TEXT_SURFACES = _SURFACES + ("color.surface.selected", "color.surface.tint",
+                              "color.surface.band", "color.surface.stripe")
 _LINE_ROLES = ("color.line.input", "color.line.selected", "color.line.danger",
-               "color.focus.ring")
+               "color.line.accent", "color.focus.ring")
 
 
 def test_the_coverage_tables_name_every_text_and_line_role():
@@ -804,7 +813,14 @@ def test_every_other_pairing_is_kept():
                              "color.action.danger-pressed")]
             + [Pairing(f"color.status.{s}.strong", "color.surface.page", 3.0, "1.4.11")
                for s in color_module.STATUS_HUES]
-            + [Pairing("color.focus.ring-inverse", "color.surface.inverse", 3.0, "1.4.11")])
+            + [Pairing("color.focus.ring-inverse", "color.surface.inverse", 3.0, "1.4.11")]
+            + [Pairing("color.text.on-brand", "color.surface.brand", 4.5, "1.4.3")]
+            + [Pairing(r, "color.surface.code", 4.5, "1.4.3") for r in color_module.SYNTAX_ROLES]
+            + [Pairing("color.illustration.line", bg, 3.0, "1.4.11")
+               for bg in ("color.surface.page", "color.surface.card", "color.surface.raised")]
+            + [Pairing(r, bg, 1.5, "system", high=1.5) for r in color_module.DECORATIVE_ROLES
+               for bg in ("color.surface.page", "color.surface.card")]
+            + [Pairing("color.logo", "color.surface.page", 3.0, "system", high=3.0)])
     for p in kept:
         assert p in PAIRINGS, p
     covered = len(_TEXT_ROLES) * len(_TEXT_SURFACES) + len(_LINE_ROLES) * len(_SURFACES)
@@ -837,7 +853,7 @@ def test_the_ring_solver_reads_the_ring_surfaces_from_the_pairings(monkeypatch):
     assert color_module._paired_with("color.focus.ring") == _SURFACES
     extra = color_module.build_pairings(line_surfaces=_SURFACES + ("color.surface.selected",))
     monkeypatch.setattr(color_module, "PAIRINGS", extra)
-    assert color_module._paired_with("color.focus.ring") == _TEXT_SURFACES
+    assert color_module._paired_with("color.focus.ring") == _SURFACES + ("color.surface.selected",)
 
 
 @pytest.mark.parametrize("seed", SEEDS + _SWEEP_SEEDS)
@@ -886,11 +902,47 @@ def test_a_role_added_only_to_the_semantic_table_is_named():
 def test_brand_fidelity_states_every_context_and_names_an_identity_loss():
     ts = generate_color(AXES, "#E85D04").tokens
     lines = color_module.brand_fidelity(ts)
-    assert [line.split(":")[0] for line in lines] == [
+    assert [line.split(":")[0] for line in lines[:4]] == [
         "Light mode", "Dark mode", "Light mode, high contrast", "Dark mode, high contrast"]
+    assert lines[4] == "The logo (color.logo) is the brand color #E85D04 exactly in every mode."
     assert lines[0].startswith("Light mode: the button is the brand color #E85D04 exactly, with "
                                "black text at 5.99:1 (white would be 3.50:1).")
     assert "black on a mid tone reads muddy in this mode" in lines[1]
     assert "reads as a different color from the brand (OKLab distance 0.14)" in lines[2]
-    assert all("The focus ring measures " in line for line in lines)
+    assert all("The focus ring measures " in line for line in lines[:4])
     assert "different color" not in lines[1]
+
+
+@pytest.mark.parametrize("axes, role", [
+    (AxisValues(0.85, 0.5, 0.5, 0.5, 0.2, 0.6, 0.5), "fill"),
+    (AxisValues(0.7, 0.4, 0.5, 0.75, 0.7, 0.1, 0.7), "accent"),
+    (AxisValues(0.3, 0.7, 0.6, 0.2, 0.65, 0.4, 0.0), "edge"),
+])
+def test_the_axes_choose_the_brand_role_and_every_role_passes(axes, role):
+    from engine.foundations import character
+    assert character.brand_role(axes) == role
+    ts = build_color(axes, "#6D28D9").tokens
+    light = "scheme:light,contrast:standard"
+    primary = ts.raw("color.action.primary", light)
+    link = ts.raw("color.text.link", light)
+    assert primary.startswith("{color.brand.") == (role == "fill")
+    assert link.startswith("{color.brand.") == (role != "edge")
+    assert ts.raw("color.line.accent", light).startswith("{color.brand.")
+    lines = color_module.brand_fidelity(ts)
+    assert ("ink" in lines[0]) == (role != "fill")
+
+
+def test_a_brief_can_name_the_brand_role():
+    ts = generate_color(AXES, "#6D28D9", brand_role="edge").tokens
+    assert ts.raw("color.action.primary", "scheme:light,contrast:standard") == \
+        "{color.neutral.900}"
+    assert "color: brand role edge (set by the brief)" in \
+        generate_color(AXES, "#6D28D9", brand_role="edge").notes
+
+
+def test_the_logo_keeps_the_exact_brand_where_it_clears_our_floor():
+    ts = generate_color(AXES, "#6D28D9").tokens
+    assert ts.resolve("color.logo", "scheme:light,contrast:standard") == "#6D28D9"
+    for mode in COLOR_CONTEXTS:
+        assert contrast(ts.resolve("color.logo", mode),
+                        ts.resolve("color.surface.page", mode)) >= color_module.LOGO_FLOOR

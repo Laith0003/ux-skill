@@ -2,14 +2,14 @@
 
 ## Summary
 
-Color sets every surface, text, line, fill and ring in the product, in light and dark and at standard and high contrast. It is generated from one brand color: the brand anchors its ramp at step 500, a neutral ramp takes the brand hue pulled warm or cool by the warmth axis (decisions/neutral-tint.md), and four status ramps lean toward the brand inside a fixed band of their own hues (decisions/status-harmony.md). The build measures text roles against every surface they can sit on, the input line, the selected line, the error edge and the focus ring against the page, card, sunken and raised surfaces, and the text on each fill against that fill. The primary button keeps the exact brand color as its fill whenever white or black text reads on it (decisions/brand-fidelity.md), and its edge carries its 3:1 against the page (decisions/primary-edge.md). That edge, the danger fill and the strong status fills are measured against the page only: on card, sunken and raised a filled control is found by its label, its edge and its focus ring. The focus ring is also measured against the primary fill, and under high contrast never measures less than the standard ring (decisions/ring-never-weaker.md). Contracts add the pairings their components need. Color does not govern type size, spacing or shadow; those foundations own them.
+Color sets every surface, text, line, fill and ring in the product, in light and dark and at standard and high contrast. It is generated from one brand color and the axes. The axes choose the brand's role: it fills the main action (fill), marks words and links while the main action is ink (accent), or draws edges, rules and underlines while actions and links are ink (edge) (decisions/brand-roles.md). The brand anchors its ramp at step 500, a supporting accent takes a second hue the axes place (decisions/support-accent.md), a neutral ramp takes the brand hue pulled warm or cool by the warmth axis (decisions/neutral-tint.md), and four status ramps lean toward the brand inside a fixed band of their own hues (decisions/status-harmony.md). The build measures text roles against every surface they can sit on, the input line, the selected line, the error edge and the focus ring against the page, card, sunken and raised surfaces, and the text on each fill against that fill. The primary button keeps the exact brand color as its fill whenever white or black text reads on it (decisions/brand-fidelity.md), and its edge carries its 3:1 against the page (decisions/primary-edge.md). That edge, the danger fill and the strong status fills are measured against the page only: on card, sunken and raised a filled control is found by its label, its edge and its focus ring. The focus ring is also measured against the primary fill, and under high contrast never measures less than the standard ring (decisions/ring-never-weaker.md). Contracts add the pairings their components need. Color does not govern type size, spacing or shadow; those foundations own them.
 
 ## Principles
 
 - **Hierarchy by contrast.** The strongest contrast goes to primary content and the one main action; supporting content steps down. When everything is loud, nothing leads.
 - **One meaning per role.** A role means the same thing on every screen and in every component. A role is never borrowed for its value.
-- **Separate families.** Brand color marks identity and the main action, neutral carries structure and reading, status colors report outcomes. A family never stands in for another.
-- **Saturation is an accent.** Fully saturated color goes on controls, focus and status, not on large surfaces, where it tires the eye and drowns the accent.
+- **Separate families.** Brand color marks identity, and by its role the main action, the words or the edges; neutral carries structure and reading; status colors report outcomes. A family never stands in for another.
+- **Saturation is an accent.** Fully saturated color goes on controls, focus, status and at most one brand band per view. Elsewhere the brand reaches surfaces as a tint or a band, never behind running text at full strength (decisions/brand-surfaces.md).
 - **Depth by lightness.** A surface that sits higher is never darker than the one below it. In dark the page, card and raised surfaces are each their own lighter step, and the step, not the shadow, is the main depth cue (decisions/dark-elevation-cue.md). Where two levels share a color, as card and raised do in light, the shadow or an edge tells them apart. Modes lists the order in each context as built.
 - **Never color alone.** Anything color says, an icon, a word, a shape or a heavier edge says too (WCAG 1.4.1).
 - **Measured, not hoped.** Every pairing the build declares is measured in all four color contexts, and a system that fails one is not written. A pairing the build does not declare, such as a fill on a raised surface, is not measured until a contract declares it.
@@ -44,6 +44,19 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - `color.focus.ring`: the keyboard focus ring on every surface except inverse.
 - `color.focus.ring-inverse`: the focus ring on the inverse surface.
 - `color.scrim`: the translucent dimming behind a dialog; a layer, never a surface for content.
+- `color.text.accent`: words in the brand color that are not links, such as an eyebrow above a heading or a highlighted figure; never body copy.
+- `color.line.accent`: a brand rule or underline: a link's underline when links are ink, a section rule, the edge of a featured card.
+- `color.text.support`: words in the supporting accent's hue, such as a tag or a second highlight; never a link and never body copy.
+- `color.surface.tint`: a quiet brand tint behind a group, such as a feature panel or a callout.
+- `color.surface.band`: a band in the brand's hue that sets one section of a long page apart.
+- `color.surface.brand`: the exact brand color as a band, such as a closing call to action; only color.text.on-brand goes on it.
+- `color.text.on-brand`: text and icons on the brand band.
+- `color.surface.stripe`: every other row of a table, one step off the card.
+- `color.surface.code`: the background of a code block.
+- `color.syntax.<name>`: <name> tokens in a code block, on color.surface.code only.
+- `color.decorative.<name>`: a <name> shape or pattern with no meaning, such as a form in generated art; never text and never the only cue.
+- `color.illustration.line`: lines in a drawing that carry meaning, such as a diagram's arrows or a chart's axis.
+- `color.logo`: the logo and brand mark: the exact brand color wherever it clears our 3:1 floor against the page (decisions/logo-and-decoration.md).
 - `color.status.danger.text`: danger words in running text, such as an error message under a field, and the label of a danger secondary or ghost button.
 - `color.status.danger.soft`: the quiet danger tint of a danger status banner or badge, and the hover and pressed fill of a danger secondary or ghost button.
 - `color.status.danger.strong`: the solid danger color for the icon of a danger status banner, a field's error icon, the edge of a danger secondary button and of a danger ghost button under hover or press, and a danger badge.
@@ -79,6 +92,14 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 | A separator inside a card | color.line.subtle | color.line.input |
 | A selected item | color.surface.selected with color.line.selected and a heavier edge | the tint alone |
 | An error, warning, success or note | the matching color.status roles with an icon and words | the brand color |
+| An eyebrow or a highlighted word | color.text.accent | color.text.link, which reads as clickable |
+| A group set apart on the page | color.surface.tint | the brand band, which is for one section |
+| One section of a long page set apart | color.surface.band | a status soft fill |
+| A closing call to action in the brand color | color.surface.brand with color.text.on-brand | a primary button stretched wide |
+| A table's alternate rows | color.surface.stripe | color.surface.sunken, which reads as recessed |
+| A code block | color.surface.code with the color.syntax roles | text colors meant for surfaces |
+| A shape in generated art | a color.decorative role | a status color |
+| The logo | color.logo | color.action.primary, which moves for text contrast |
 
 Choose a button's emphasis by how it must be found. A primary button is the one main action on a view; its edge is paired with the page only, so elsewhere its label, edge and ring identify it. A secondary button keeps its edge in every state: color.line.selected, paired at 3:1 with every surface the button contract lists, turning to color.text.disabled when disabled, so it reads as a control at rest and when unavailable. Use it for the second action of a pair, a standalone action beside content, and any action on a busy surface. A ghost button has no fill and no edge at rest or when disabled; they appear only on hover and press. At rest only its label, color.text.link at 4.5:1, marks it, and a disabled ghost shows only color.text.disabled, which has no contrast minimum. Use it for low-weight actions that repeat, or that sit where the layout already says they are actions, such as a toolbar, a table row or a card's actions; never as the only control in an open area, and never where a disabled action must still read as a control (decisions/button-intents.md).
 

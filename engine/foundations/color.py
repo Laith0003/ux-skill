@@ -84,14 +84,67 @@ _SEMANTIC: Dict[str, Tuple[str, str]] = {
     "color.focus.ring": ("color.brand.700", "color.brand.200"),
     "color.focus.ring-inverse": ("color.brand.300", "color.brand.700"),
     "color.scrim": ("color.shade.40", "color.shade.60"),
+    # Brand roles by character: an accent for words, an edge for rules and
+    # underlines, a supporting accent from a second hue.
+    "color.text.accent": ("color.brand.700", "color.brand.300"),
+    "color.line.accent": ("color.brand.600", "color.brand.300"),
+    "color.text.support": ("color.support.700", "color.support.300"),
+    # Brand-tinted surfaces: a quiet tint, a section band, and the exact
+    # brand as a band with its own text.
+    "color.surface.tint": ("color.brand.50", "color.brand.950"),
+    "color.surface.band": ("color.brand.100", "color.brand.900"),
+    "color.surface.brand": ("color.brand.exact", "color.brand.exact"),
+    "color.text.on-brand": ("color.base.white", "color.base.white"),
+    # Table stripes and the code surface with its syntax colors.
+    "color.surface.stripe": ("color.neutral.50", "color.neutral.950"),
+    "color.surface.code": ("color.neutral.100", "color.neutral.recess-dark"),
+    "color.syntax.plain": ("color.neutral.900", "color.neutral.50"),
+    "color.syntax.keyword": ("color.brand.700", "color.brand.300"),
+    "color.syntax.string": ("color.success.700", "color.success.300"),
+    "color.syntax.number": ("color.warning.700", "color.warning.300"),
+    "color.syntax.function": ("color.info.700", "color.info.300"),
+    "color.syntax.comment": ("color.neutral.600", "color.neutral.400"),
+    # Decoration and illustration: shapes with no meaning, and lines that
+    # carry meaning in a drawing.
+    "color.decorative.brand": ("color.brand.300", "color.brand.600"),
+    "color.decorative.support": ("color.support.300", "color.support.600"),
+    "color.decorative.neutral": ("color.neutral.300", "color.neutral.600"),
+    "color.illustration.line": ("color.brand.600", "color.brand.400"),
+    # The logo keeps the exact brand color wherever it clears our floor.
+    "color.logo": ("color.brand.exact", "color.brand.exact"),
 }
 for _s in STATUS_HUES:
     _SEMANTIC[f"color.status.{_s}.text"] = (f"color.{_s}.700", f"color.{_s}.300")
     _SEMANTIC[f"color.status.{_s}.soft"] = (f"color.{_s}.100", f"color.{_s}.900")
     _SEMANTIC[f"color.status.{_s}.strong"] = (f"color.{_s}.600", f"color.{_s}.400")
     _SEMANTIC[f"color.status.{_s}.on-strong"] = ("color.base.white", "color.base.black")
+
+
+def _grouped(table: Dict[str, Tuple[str, str]]) -> Dict[str, Tuple[str, str]]:
+    """The table in the order a DTCG document nests it: each group's
+    members together, groups in the order they first appear. A role added
+    at the end of its table still sits beside its siblings, so tokens.json
+    reads back in the order it was written."""
+    tree: Dict[str, object] = {}
+    for path in table:
+        node = tree
+        for part in path.split("."):
+            node = node.setdefault(part, {})  # type: ignore[assignment]
+    out: List[str] = []
+
+    def walk(node: Dict[str, object], prefix: str) -> None:
+        for key, child in node.items():
+            path = f"{prefix}.{key}" if prefix else key
+            if path in table:
+                out.append(path)
+            walk(child, path)  # type: ignore[arg-type]
+
+    walk(tree, "")
+    return {path: table[path] for path in out}
+
+
 # Read-only view: role -> (light primitive, dark primitive).
-SEMANTIC: Mapping[str, Tuple[str, str]] = MappingProxyType(_SEMANTIC)
+SEMANTIC: Mapping[str, Tuple[str, str]] = MappingProxyType(_grouped(_SEMANTIC))
 
 # Starting points in contrast:high contexts, per scheme: extreme surfaces,
 # text a step or two further out. The retune and the group solver then
@@ -124,12 +177,48 @@ _HIGH: Dict[str, Tuple[str, str]] = {
     "color.focus.ring": ("color.brand.800", "color.brand.100"),
     "color.focus.ring-inverse": ("color.brand.200", "color.brand.800"),
     "color.scrim": ("color.shade.60", "color.shade.80"),
+    "color.text.accent": ("color.brand.800", "color.brand.200"),
+    "color.line.accent": ("color.brand.800", "color.brand.200"),
+    "color.text.support": ("color.support.800", "color.support.200"),
+    "color.surface.stripe": ("color.neutral.100", "color.neutral.800"),
+    "color.surface.code": ("color.neutral.100", "color.base.black"),
+    "color.syntax.plain": ("color.neutral.950", "color.base.white"),
+    "color.syntax.keyword": ("color.brand.800", "color.brand.200"),
+    "color.syntax.string": ("color.success.800", "color.success.200"),
+    "color.syntax.number": ("color.warning.800", "color.warning.200"),
+    "color.syntax.function": ("color.info.800", "color.info.200"),
+    "color.syntax.comment": ("color.neutral.700", "color.neutral.300"),
+    "color.illustration.line": ("color.brand.800", "color.brand.200"),
 }
 for _s in STATUS_HUES:
     _HIGH[f"color.status.{_s}.text"] = (f"color.{_s}.800", f"color.{_s}.200")
     _HIGH[f"color.status.{_s}.soft"] = (f"color.{_s}.50", f"color.{_s}.950")
     _HIGH[f"color.status.{_s}.strong"] = (f"color.{_s}.800", f"color.{_s}.200")
 HIGH_CONTRAST: Mapping[str, Tuple[str, str]] = MappingProxyType(_HIGH)
+
+# The brand's role (character.brand_role): with "fill" the brand fills the
+# main action; with "accent" or "edge" the main action is ink, a neutral
+# at the far end of the ramp, and the brand marks words (accent) or edges,
+# underlines and rules (edge; links are ink with a brand underline). These
+# replace the standard and high contrast starting points of the roles
+# they name.
+INK: Mapping[str, Tuple[str, str]] = MappingProxyType({
+    "color.action.primary": ("color.neutral.900", "color.neutral.100"),
+    "color.action.primary-hover": ("color.neutral.800", "color.neutral.200"),
+    "color.action.primary-pressed": ("color.neutral.700", "color.neutral.300"),
+    "color.action.primary-edge": ("color.neutral.900", "color.neutral.100"),
+})
+INK_HIGH: Mapping[str, Tuple[str, str]] = MappingProxyType({
+    "color.action.primary": ("color.neutral.950", "color.neutral.50"),
+    "color.action.primary-hover": ("color.neutral.900", "color.neutral.100"),
+    "color.action.primary-pressed": ("color.neutral.800", "color.neutral.200"),
+    "color.action.primary-edge": ("color.neutral.950", "color.neutral.50"),
+})
+EDGE_LINK: Mapping[str, Tuple[str, str]] = MappingProxyType({
+    "color.text.link": ("color.neutral.800", "color.neutral.200")})
+EDGE_LINK_HIGH: Mapping[str, Tuple[str, str]] = MappingProxyType({
+    "color.text.link": ("color.neutral.950", "color.base.white")})
+BRAND_ROLES: Tuple[str, ...] = ("fill", "accent", "edge")
 
 # Coverage by construction. Every role read as text pairs with every surface
 # text can sit on, at the text minimum (WCAG 1.4.3 4.5:1; 1.4.6 7:1 in high
@@ -138,12 +227,25 @@ HIGH_CONTRAST: Mapping[str, Tuple[str, str]] = MappingProxyType(_HIGH)
 # 3:1; our 4.5:1 floor in high contrast). A role or surface added to a table
 # gets every pairing it needs; build_pairings writes them.
 TEXT_ROLES: Tuple[str, ...] = ("color.text.default", "color.text.muted", "color.text.link") \
-    + tuple(f"color.status.{s}.text" for s in STATUS_HUES)
+    + tuple(f"color.status.{s}.text" for s in STATUS_HUES) \
+    + ("color.text.accent", "color.text.support")
 TEXT_SURFACES: Tuple[str, ...] = ("color.surface.page", "color.surface.card",
                                   "color.surface.sunken", "color.surface.raised",
-                                  "color.surface.selected")
+                                  "color.surface.selected", "color.surface.tint",
+                                  "color.surface.band", "color.surface.stripe")
 LINE_ROLES: Tuple[str, ...] = ("color.line.input", "color.line.selected", "color.line.danger",
-                                "color.focus.ring")
+                                "color.line.accent", "color.focus.ring")
+# Syntax colors sit on the code surface only; plain is the text between them.
+SYNTAX_ROLES: Tuple[str, ...] = ("color.syntax.plain", "color.syntax.keyword",
+                                 "color.syntax.string", "color.syntax.number",
+                                 "color.syntax.function", "color.syntax.comment")
+DECORATIVE_ROLES: Tuple[str, ...] = ("color.decorative.brand", "color.decorative.support",
+                                     "color.decorative.neutral")
+# Our floor for a decorative shape against the page and card: visible, but
+# no contrast minimum applies to decoration.
+DECORATIVE_FLOOR = 1.5
+# Our floor for the logo against the page; WCAG exempts logotypes.
+LOGO_FLOOR = 3.0
 LINE_SURFACES: Tuple[str, ...] = ("color.surface.page", "color.surface.card",
                                   "color.surface.sunken", "color.surface.raised")
 # Roles in the four families the tables cover (text, surface, line,
@@ -160,6 +262,9 @@ COVERAGE_EXEMPT: Mapping[str, str] = MappingProxyType({
     "color.line.subtle": "a decorative separator with no contrast minimum; "
                          "line-subtle-visible keeps it apart from the surfaces it divides",
     "color.focus.ring-inverse": "the ring for color.surface.inverse and is paired there",
+    "color.surface.brand": "a band whose only text is color.text.on-brand, paired there",
+    "color.text.on-brand": "sits only on color.surface.brand and is paired there",
+    "color.surface.code": "a background whose syntax colors are paired against it",
 })
 COVERAGE_FAMILIES: Tuple[str, ...] = ("color.text.", "color.surface.", "color.line.",
                                       "color.focus.")
@@ -221,6 +326,13 @@ def build_pairings(text_roles: Tuple[str, ...] = TEXT_ROLES,
         # One ring cannot also stand out from the inverse surface, so that
         # surface gets its own.
         + [Pairing("color.focus.ring-inverse", "color.surface.inverse", 3.0, "1.4.11")]
+        + [Pairing("color.text.on-brand", "color.surface.brand", 4.5, "1.4.3")]
+        + [Pairing(role, "color.surface.code", 4.5, "1.4.3") for role in SYNTAX_ROLES]
+        + [Pairing("color.illustration.line", bg, 3.0, "1.4.11")
+           for bg in ("color.surface.page", "color.surface.card", "color.surface.raised")]
+        + [Pairing(role, bg, DECORATIVE_FLOOR, "system", high=DECORATIVE_FLOOR)
+           for role in DECORATIVE_ROLES for bg in ("color.surface.page", "color.surface.card")]
+        + [Pairing("color.logo", "color.surface.page", LOGO_FLOOR, "system", high=LOGO_FLOOR)]
     )
 
 
@@ -241,6 +353,9 @@ class _Group:
     on: str
     states: Tuple[str, ...] = ()
     ring: str = ""
+    # Whether the fill (or its edge) must clear the page: a control must, a
+    # band of brand color behind a section need not.
+    page: bool = True
     # The role that carries the fill's contrast against the page, drawn as
     # an edge around it; "" when the fill and its states carry it.
     edge: str = ""
@@ -254,7 +369,8 @@ GROUPS: Tuple[_Group, ...] = (
            _FILL_STATES["color.action.primary"], "color.focus.ring",
            edge="color.action.primary-edge", brand=True),
     _Group("color.action.danger", "color.text.on-danger", _FILL_STATES["color.action.danger"]),
-) + tuple(_Group(f"color.status.{s}.strong", f"color.status.{s}.on-strong") for s in STATUS_HUES)
+) + tuple(_Group(f"color.status.{s}.strong", f"color.status.{s}.on-strong") for s in STATUS_HUES) \
+    + (_Group("color.surface.brand", "color.text.on-brand", page=False, brand=True),)
 _GROUP_ROLES = frozenset(r for g in GROUPS for r in (g.fill, g.on, g.ring, g.edge) + g.states
                          if r)
 EXACT = "color.brand.exact"
@@ -275,10 +391,16 @@ def _scheme(mode: str) -> str:
     return parse(mode).get("scheme", "light")
 
 
-def _default(role: str, mode: str) -> str:
+def _default(role: str, mode: str, brand_role: str = "fill") -> str:
     """Where a role starts in one context, before any retune."""
-    table = HIGH_CONTRAST if parse(mode).get("contrast") == "high" and role in HIGH_CONTRAST \
-        else SEMANTIC
+    high = parse(mode).get("contrast") == "high"
+    tables = []
+    if brand_role != "fill":
+        tables += [INK_HIGH, INK] if high else [INK]
+    if brand_role == "edge":
+        tables += [EDGE_LINK_HIGH, EDGE_LINK] if high else [EDGE_LINK]
+    tables += [HIGH_CONTRAST, SEMANTIC] if high else [SEMANTIC]
+    table = next(t for t in tables if role in t)
     return table[role][0 if _scheme(mode) == "light" else 1]
 
 
@@ -307,7 +429,9 @@ def _shift(hx: str, delta: float) -> str:
 def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str, str]:
     prims = {"color.base.white": "#FFFFFF", "color.base.black": "#000000"}
     seeds = {"brand": brand_hex, "neutral": _neutral_seed(brand_hex, axes)}
-    brand_hue = hex_to_oklch(brand_hex)[2]
+    _, brand_chroma, brand_hue = hex_to_oklch(brand_hex)
+    seeds["support"] = oklch_to_hex(0.6, min(0.16, max(0.06, 0.9 * brand_chroma)),
+                                    character.support_hue(axes, brand_hue))
     seeds.update({s: oklch_to_hex(*character.status_seed(s, axes, brand_hue))
                   for s in STATUS_HUES})
     for family, seed in seeds.items():
@@ -332,6 +456,8 @@ def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str,
 
 def _step_path(path: str, delta: int) -> str:
     family, step = path.rsplit(".", 1)
+    if path == EXACT:
+        step = str(ANCHOR)  # the exact brand steps as its ramp's anchor does
     if not step.isdigit():
         return ""
     i = STEPS.index(int(step)) + delta
@@ -470,7 +596,7 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
     family = defaults[g.fill].rsplit(".", 1)[0]
     conv = +1 if _scheme(mode) == "light" else -1
     need_text = _need(g.on, g.fill, mode)
-    need_fill = 0.0 if g.edge else _need(g.fill, "color.surface.page", mode)
+    need_fill = 0.0 if g.edge or not g.page else _need(g.fill, "color.surface.page", mode)
     rings = _ring_candidates(mode, defaults[g.ring]) if g.ring else []
     ring_bgs = [(prims[pick[mode][bg]], _need(g.ring, bg, mode))
                 for bg in _paired_with(g.ring)] if g.ring else []
@@ -748,18 +874,24 @@ def _ring_floor(mode: str, prims: Dict[str, str], pick: Dict[str, Dict[str, str]
     return _ring_low(prims[pick[std]["color.focus.ring"]], std, prims, pick)
 
 
-def generate_color(axes: AxisValues, brand_hex: str) -> Generated:
+def generate_color(axes: AxisValues, brand_hex: str, brand_role: Optional[str] = None) -> Generated:
     """Low-level call: build_system (and build_color, its color-only
     shortcut) wraps it with input checks, validate and the gate, so prefer
     those unless you need the raw generator.
 
     Returns the color TokenSet and the retune notes. It never raises for a
     failing pairing: when the ramp cannot reach a minimum it keeps the
-    closest step, notes it, and leaves the failure to the gate.
+    closest step, notes it, and leaves the failure to the gate. The brand's
+    role is `brand_role` when given (a brief can name it), else the one the
+    axes score highest (character.brand_role).
     """
     notes: List[str] = []
     prims = _primitives(axes, brand_hex.upper(), notes)
-    pick = {mode: {role: _default(role, mode) for role in SEMANTIC} for mode in COLOR_CONTEXTS}
+    role = brand_role or character.brand_role(axes)
+    scores = character.brand_role_scores(axes)
+    notes.append(f"color: brand role {role} (" + ("set by the brief" if brand_role else ", ".join(
+        f"{k} {scores[k]:.2f}" for k in BRAND_ROLES)) + ")")
+    pick = {mode: {r: _default(r, mode, role) for r in SEMANTIC} for mode in COLOR_CONTEXTS}
 
     def value(mode: str, role: str) -> str:
         return prims[pick[mode][role]]
@@ -824,7 +956,9 @@ def brand_fidelity(ts: TokenSet) -> List[str]:
     if not all(ts.has(p) for p in roles):
         return []
     exact = ts.resolve(EXACT)
-    out = []
+    out = _role_lines(ts)
+    if out:
+        return out + _logo_lines(ts, exact)
     for mode, words in _CONTEXT_WORDS:
         fill, on, edge, ring = (ts.resolve(p, mode) for p in roles[:4])
         text = "black" if on == "#000000" else ("white" if on == "#FFFFFF" else on)
@@ -852,17 +986,47 @@ def brand_fidelity(ts: TokenSet) -> List[str]:
                     f"{_ratio(contrast(on, fill))}; {why}.")
             if distance > IDENTITY_DISTANCE:
                 line += (f" This fill reads as a different color from the brand (OKLab distance "
-                         f"{distance:.2f}), so the button does not carry the brand here; keep "
-                         "it in other places, such as the logo and the links.")
+                         f"{distance:.2f}), so the button does not carry the brand here; the "
+                         "logo (color.logo) and the accents still do.")
         if edge != fill:
             line += f" Its edge is {edge}, so the button still stands out from the page."
         line += f" The focus ring measures {_ratio(contrast(ring, fill))} against the fill."
         out.append(line)
-    return out
+    return out + _logo_lines(ts, exact)
+
+
+def _role_lines(ts: TokenSet) -> List[str]:
+    """For an ink action, the sentence that says where the brand goes
+    instead; empty when the brand fills the action."""
+    raw = ts.raw("color.action.primary", COLOR_CONTEXTS[0])
+    if not (is_alias(raw) and alias_target(raw).startswith("color.neutral.")):
+        return []
+    link = ts.raw("color.text.link", COLOR_CONTEXTS[0]) if ts.has("color.text.link") else ""
+    if is_alias(link) and alias_target(link).startswith("color.neutral."):
+        return ["The main action and the links are ink, a neutral from the end of the ramp; the "
+                "brand draws edges, rules and link underlines (color.line.accent), the selected "
+                "state and the focus ring."]
+    return ["The main action is ink, a neutral from the end of the ramp; the brand colors the "
+            "links, accents (color.text.accent), the selected state and the focus ring."]
+
+
+def _logo_lines(ts: TokenSet, exact: str) -> List[str]:
+    """Where the logo keeps the exact brand color, and where it moves."""
+    if not ts.has("color.logo"):
+        return []
+    moved = [(words, ts.resolve("color.logo", mode), alias_target(ts.raw("color.logo", mode)))
+             for mode, words in _CONTEXT_WORDS if ts.resolve("color.logo", mode) != exact]
+    if not moved:
+        return [f"The logo (color.logo) is the brand color {exact} exactly in every mode."]
+    return [f"The logo (color.logo) is the brand color {exact} except in "
+            + "; ".join(f"{words.lower()}, where it is {hx} ({path})" for words, hx, path in moved)
+            + ", the nearest step that clears our 3:1 floor against the page."]
 
 
 def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
-    return generate_color(axes, inputs.brand_hex)
+    if inputs.brand_role is None:
+        return generate_color(axes, inputs.brand_hex)
+    return generate_color(axes, inputs.brand_hex, inputs.brand_role)
 
 
 FOUNDATION = Foundation(name="color", generate=_generate, pairings=PAIRINGS,

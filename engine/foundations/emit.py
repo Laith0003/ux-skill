@@ -447,6 +447,11 @@ def _contrast_note(note: str) -> Optional[str]:
 
 
 def _other_note(note: str) -> str:
+    role = _ROLE_NOTE.match(note)
+    if role:
+        why = ("the brief set it" if role["why"] == "set by the brief"
+               else f"the axes scored {role['why']}, and the highest wins")
+        return f"Brand role {role['role']}: {_ROLE_WORDS[role['role']]} ({why})."
     m = _RAMP_NOTE.match(note)
     if not m:
         return _in_words(note)
@@ -519,9 +524,14 @@ _PACK_LINE = ("- rule-pack/: the rules for AI agents and people: per foundation 
               "architecture, reference, audit and handoff file, the content and right-to-left "
               "rules, the component contracts and the decision records. Start at "
               "rule-pack/README.md.")
-_FIDELITY_LEAD = ("The main button keeps the exact brand color whenever white or black text "
-                  "reads on it. Where a mode needs more contrast, the button moves to the nearest "
-                  "step of the brand's scale, and the line says how far.")
+_FIDELITY_LEAD = ("Where the brand color appears, and whether it stays exact in each mode. A "
+                  "brand fill keeps the exact color whenever white or black text reads on it; "
+                  "where a mode needs more contrast it moves to the nearest step of the brand's "
+                  "scale, and the line says how far.")
+_ROLE_NOTE = re.compile(r"^color: brand role (?P<role>\w+) \((?P<why>.+)\)$")
+_ROLE_WORDS = {"fill": "the brand fills the main action",
+               "accent": "the brand marks words and links, and the main action is ink",
+               "edge": "the brand draws edges and rules, and actions and links are ink"}
 _MODES_LINE = ("Switch a mode with an attribute on the html element: data-theme=\"dark\" for dark "
                "mode, data-contrast=\"high\" for high contrast, data-density=\"compact\" for "
                "compact spacing, dir=\"rtl\" for right to left, data-motion=\"reduced\" for "
