@@ -75,9 +75,10 @@ define, and a selector list naming more than one mode.
 from __future__ import annotations
 
 import re
+from bisect import bisect_right
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from engine.foundations.errors import InputError
 from engine.foundations.modes import AXES, CSS_AXES, join
@@ -187,22 +188,31 @@ def _matching(text: str, start: int, name: str) -> int:
                      "closes; add the missing } and import it again")
 
 
-def _body(text: str, start: int, end: int,
-          name: str) -> Tuple[Tuple[Declaration, ...], List[Tuple[str, int, int]]]:
-    """The custom property declarations between `start` and `end`, and the
-    blocks nested there as (prelude, offset of their {, offset of their }).
-    A nested block is cut out, so it never swallows the declaration after
-    it; a custom property whose value holds braces keeps them."""
+def _body(text: str, start: int, end: int, name: str, every: bool = False,
+          line: Optional[Callable[[int], int]] = None
+          ) -> Tuple[Tuple[Declaration, ...], List[Tuple[str, int, int]]]:
+    """The custom property declarations between `start` and `end` (with
+    `every`, every declaration, and each @apply as a declaration named
+    @apply), and the blocks nested there as (prelude, offset of their {,
+    offset of their }). A nested block is cut out, so it never swallows the
+    declaration after it; a custom property whose value holds braces keeps
+    them. `line` gives an offset's line (parse_css passes an index, so a
+    long stylesheet is not counted from its start for every declaration)."""
     out: List[Declaration] = []
     nested: List[Tuple[str, int, int]] = []
+    if line is None:
+        def line(at: int) -> int:
+            return _line(text, at)
 
     def declaration(a: int, b: int) -> None:
         part = text[a:b]
         stripped = part.strip()
-        if stripped.startswith("--") and ":" in stripped:
+        at = a + len(part) - len(part.lstrip())
+        if every and stripped.startswith("@apply"):
+            out.append(Declaration("@apply", stripped[len("@apply"):].strip(), line(at)))
+        elif (every or stripped.startswith("--")) and ":" in stripped:
             prop, _, value = stripped.partition(":")
-            at = a + len(part) - len(part.lstrip())
-            out.append(Declaration(prop.strip(), value.strip(), _line(text, at)))
+            out.append(Declaration(prop.strip(), value.strip(), line(at)))
 
     i = seg = start
     depth, quote = 0, ""
@@ -239,19 +249,25 @@ def _nest(parent: str, child: str) -> str:
                      for p in parents for c in split_top(child, ","))
 
 
-def parse_css(text: str, name: str = "the stylesheet") -> List[Rule]:
+def parse_css(text: str, name: str = "the stylesheet", every: bool = False) -> List[Rule]:
     """Every style rule in `text`, with the media queries around it.
     @layer and @theme blocks are read through; other at-rules are kept as
     media so the importer can name them. A rule nested in a rule is a rule
     of its own, read to any depth: its selector joins the parent's (`&` is
     the parent, anything else a descendant), and a nested @media or other
-    at-rule adds to the parent's media."""
+    at-rule adds to the parent's media. A rule keeps its custom property
+    declarations, or with `every` all its declarations, as the codebase
+    scanner reads them."""
     text = _blank_comments(text)
     rules: List[Rule] = []
+    starts = [0] + [m.end() for m in re.finditer("\n", text)]
+
+    def line(at: int) -> int:
+        return bisect_right(starts, at)
 
     def rule(selector: str, media: Tuple[str, ...], brace: int, close: int) -> None:
-        declarations, nested = _body(text, brace + 1, close, name)
-        rules.append(Rule(selector, media, declarations, _line(text, brace)))
+        declarations, nested = _body(text, brace + 1, close, name, every, line)
+        rules.append(Rule(selector, media, declarations, line(brace)))
         for prelude, start, end in nested:
             if prelude.startswith("@media"):
                 rule(selector, media + (prelude[len("@media"):].strip(),), start, end)
