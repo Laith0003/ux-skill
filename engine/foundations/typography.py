@@ -711,15 +711,23 @@ def fit_problems(ts: TokenSet, mode: str = "") -> List[str]:
         if _typed(ts, ARABIC_DISPLAY_FACE) else None
     if face is None:
         return []
+    # The standard contrast context in each direction, over the axes the set has.
+    std = ["contrast:standard"] if "contrast" in ts.axes else []
+    ltr = ",".join(std + (["direction:ltr"] if "direction" in ts.axes else []))
+    rtl = ",".join(std + ["direction:rtl"])
     out = []
     for tier in FIT_TIERS:
-        margin = _px(ts.resolve(f"layout.margin-inline.{tier}", mode))
-        content = min(VIEWPORTS[tier] - 2 * margin, _px(ts.resolve("layout.container.max")))
-        col = content * (1.0 if tier == "tablet" else SPLIT_SHARE)
         f = tier_factor(ts, "type.text.display", tier)
-        sizes = [("latin", "contrast:standard,direction:ltr", face)]
-        if arabic is not None:
-            sizes.append(("arabic", "contrast:standard,direction:rtl", arabic))
+        sizes = [("latin", ltr, face)]
+        if arabic is not None and "direction" in ts.axes:
+            sizes.append(("arabic", rtl, arabic))
+        margin = f"layout.margin-inline.{tier}"
+        if not ts.has(margin):
+            sizes = []  # no column to measure at this tier; the order below still holds
+        else:
+            content = min(VIEWPORTS[tier] - 2 * _px(ts.resolve(margin, mode)),
+                          _px(ts.resolve("layout.container.max")))
+            col = content * (1.0 if tier == "tablet" else SPLIT_SHARE)
         for script, ctx, fc in sizes:
             width = word_px(fc, _px(ts.resolve("type.text.display", ctx)["fontSize"]) * f, script)
             if width > col + 0.5:
@@ -727,11 +735,10 @@ def fit_problems(ts: TokenSet, mode: str = "") -> List[str]:
                            f"letter {script} word {width:.0f}px wide in a {col:.0f}px column; "
                            f"point {fit_token('type.text.display', tier)} at a factor that "
                            "fits it")
-        chain = [(r, _px(ts.resolve(r, "contrast:standard,direction:ltr")["fontSize"])
-                  * tier_factor(ts, r, tier)) for r in PHONE_ROLES if _typed(ts, r)]
+        chain = [(r, _px(ts.resolve(r, ltr)["fontSize"]) * tier_factor(ts, r, tier))
+                 for r in PHONE_ROLES if _typed(ts, r)]
         if _typed(ts, PHONE_FLOOR_ROLE):
-            chain.append((PHONE_FLOOR_ROLE, _px(ts.resolve(
-                PHONE_FLOOR_ROLE, "contrast:standard,direction:ltr")["fontSize"])))
+            chain.append((PHONE_FLOOR_ROLE, _px(ts.resolve(PHONE_FLOOR_ROLE, ltr)["fontSize"])))
         for (a, pa), (b, pb) in zip(chain, chain[1:]):
             if pa < pb * MIN_LEVEL_RATIO - 0.01:
                 out.append(f"{a} at the {tier} tier is {pa:.1f}px, less than {MIN_LEVEL_RATIO:g} "

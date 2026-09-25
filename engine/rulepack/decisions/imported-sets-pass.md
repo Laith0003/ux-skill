@@ -15,7 +15,7 @@ An edited tokens.json or an imported system has the core roles its authors neede
 
 ## Decision
 
-check_system validates the set and gates it through gate_foundations, the same gate build_system uses, and returns the structural problems and the gate report together without raising. It checks the foundations whose root the set has, or the ones named. Each check runs over the axes the set has. A pairing on a role the set does not define is skipped and listed with the gate's skipped pairings, never failed. With strict, each skipped pairing is a skipped-pairing failure that names the missing token and says to define it or map the role to one of the system's tokens.
+check_system validates the set and gates it through gate_foundations, the same gate build_system uses, and returns the structural problems and the gate report together without raising. It checks the foundations whose root the set has, or the ones named. Each check runs over the axes the set has. A pairing on a role the set does not define is skipped and listed with the gate's skipped pairings, never failed. A pairing on a role that is, or aliases, a token validate reports as a bad value is left to that problem. With strict, each skipped pairing is a skipped-pairing failure that names every missing token and says to define it or map the role to one of the system's tokens.
 
 ## Why
 
@@ -23,7 +23,7 @@ A migration is not a redesign: the gate judges what a system has, and a system g
 
 ## What it touches
 
-build.gate_foundations, build.check_system, build.SystemCheck, build.foundations_in and build.SKIPPED_PAIRING; build_system gates through gate_foundations. typography's rem-sizes check reads right to left sizes only when the set has the direction axis.
+build.gate_foundations, build.check_system, build.SystemCheck, build.foundations_in and build.SKIPPED_PAIRING; build_system gates through gate_foundations. typography's rem-sizes check reads right to left sizes only when the set has the direction axis, and display-fits reads the contrast and direction contexts the set has and measures a tier's column only when the set has its inline margin.
 
 ## Consequences
 
