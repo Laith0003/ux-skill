@@ -711,7 +711,7 @@ def _build_server() -> Any:  # pragma: no cover - requires mcp lib
     if not MCP_AVAILABLE:
         raise RuntimeError(
             "The 'mcp' Python package is required to run the ux-skill MCP server. "
-            "Install it with:  pip install 'uxskill[mcp]'   or   pip install 'mcp>=1.10,<2'.\n"
+            "Install it with:  pip install 'uxskill[mcp]'   or   pip install 'mcp>=1.28.1,<2'.\n"
             f"Original import error: {_MCP_IMPORT_ERROR!r}"
         )
 
@@ -757,7 +757,7 @@ def run_server() -> None:
     if not MCP_AVAILABLE:
         raise RuntimeError(
             "The 'mcp' Python package is required to run the ux-skill MCP server. "
-            "Install it with:  pip install 'uxskill[mcp]'   or   pip install 'mcp>=1.10,<2'."
+            "Install it with:  pip install 'uxskill[mcp]'   or   pip install 'mcp>=1.28.1,<2'."
         )
 
     import asyncio

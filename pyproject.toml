@@ -46,7 +46,7 @@ dependencies = [
 # holds until the server moves to the mcp 2.x API, which removed the
 # decorators it uses.
 mcp = [
-  "mcp>=1.10,<2; python_version >= '3.10'"
+  "mcp>=1.28.1,<2; python_version >= '3.10'"
 ]
 # Render check (`uxskill lint --render`): measures the real layout in
 # headless Chromium. Uses installed Google Chrome, else run
@@ -67,7 +67,7 @@ dev = [
   "pyyaml>=6.0.1",
   # MCP transport is optional in dev too — guarded by Python version so
   # CI's 3.9 matrix entry can still install dev deps for non-MCP testing.
-  "mcp>=1.10,<2; python_version >= '3.10'"
+  "mcp>=1.28.1,<2; python_version >= '3.10'"
 ]
 
 [project.urls]
