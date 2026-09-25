@@ -137,3 +137,31 @@ def test_layout_names_what_the_density_axis_moves_and_what_is_fixed():
         for mode in ("", "density:compact"):
             assert lo.resolve(role, mode) == hi.resolve(role, mode), (role, mode)
     assert lo.resolve("layout.container.max") != hi.resolve("layout.container.max")
+
+
+def test_the_sharp_end_of_the_radius_scale_is_stated_as_built():
+    ts = build_system(AxisValues(0.5, 0.5, 0.5, 0.0, 1.0, 0.5, 0.5), "#3366FF").tokens
+    got = [ts.resolve(r)["value"] for r in ("radius.joined", "radius.control", "radius.card",
+                                            "radius.dialog")]
+    assert got == [0, 2, 3, 4]
+    record = (GUIDANCE_DIR.parent / "decisions" / "roundness.md").read_text(encoding="utf-8")
+    radius = (GUIDANCE_DIR / "radius.md").read_text(encoding="utf-8")
+    for text in (record, radius):
+        assert "controls are 2px, cards 3px and dialogs 4px" in text
+        assert "only radius.joined is square" in text
+    assert "square controls" not in record and "from sharp (0px)" not in radius
+
+
+def test_field_guidance_matches_the_field_contracts():
+    color = (GUIDANCE_DIR / "color.md").read_text(encoding="utf-8")
+    typ = (GUIDANCE_DIR / "type.md").read_text(encoding="utf-8")
+    direction = (GUIDANCE_DIR / "direction.md").read_text(encoding="utf-8")
+    muted = next(line for line in color.splitlines() if line.startswith("- `color.text.muted`"))
+    assert "such as helper text" not in muted and "never for a field's helper text" in muted
+    ui = next(line for line in typ.splitlines() if line.startswith("- `type.text.ui`:"))
+    assert "buttons, fields" not in ui and "A field's label takes type.text.ui-large" in ui
+    assert "a ui label with body helper text" not in typ
+    assert "a ui-large label with body-small helper text" in typ
+    assert "people must read it to act; use body-small" in typ
+    currency = next(line for line in direction.splitlines() if "Western digits" in line)
+    assert "when the market reads it that way" in currency

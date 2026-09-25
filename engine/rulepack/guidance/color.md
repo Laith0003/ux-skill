@@ -23,7 +23,7 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - `color.surface.inverse`: a surface in the opposite scheme, such as a tooltip or a snackbar; only inverse text and the inverse ring go on it.
 - `color.surface.selected`: the tint of a selected item and the hover and pressed fill of secondary and ghost buttons.
 - `color.text.default`: body copy, headings, labels and values; the text people read first.
-- `color.text.muted`: supporting copy such as helper text, metadata and placeholders; never for disabled text.
+- `color.text.muted`: supporting copy such as metadata and placeholders; never for disabled text, and never for a field's helper text, which reads at color.text.default so it differs from the placeholder.
 - `color.text.link`: links and the labels of secondary and ghost buttons, in the brand color.
 - `color.text.inverse`: text on the inverse surface only.
 - `color.text.disabled`: the label of an unavailable control, and its edge where it has one (a secondary button, a check box); never to make active text quieter.

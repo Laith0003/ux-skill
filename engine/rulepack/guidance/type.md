@@ -26,7 +26,7 @@
 - `type.text.heading-3`: the title of a card, a panel or a group.
 - `type.text.body`: paragraphs and any text people read in full.
 - `type.text.body-small`: secondary paragraphs and dense reading, such as table cells.
-- `type.text.ui`: labels on buttons, fields, tabs and menus; short, one line.
+- `type.text.ui`: labels on buttons, tabs and menus; short, one line. A field's label takes type.text.ui-large.
 - `type.text.ui-large`: the label of a field and of a large button; body size at the ui weight, so a label is never smaller than the value it names.
 - `type.text.label`: an eyebrow above a heading, a tag or a line of metadata, spaced open; set in the mono face in a technical system.
 - `type.text.fine`: captions, timestamps and small print nobody must read to act.
@@ -59,7 +59,7 @@
 | A timestamp, a caption | type.text.fine |
 | Code or an identifier | type.text.code |
 
-Styles that work together: a label above a section title or a hero; a heading above body text; a hero with body text or a ui action directly below it; a heading-3 with fine metadata below it, or with ui actions beside it kept at the ui weight; a ui label with body helper text; code with a fine caption. A heading never sits inside a card at the page title level, body text never labels a button, and fine print never carries text people must read to act, such as a field's error or helper text.
+Styles that work together: a label above a section title or a hero; a heading above body text; a hero with body text or a ui action directly below it; a heading-3 with fine metadata below it, or with ui actions beside it kept at the ui weight; a ui-large label with body-small helper text; code with a fine caption. A heading never sits inside a card at the page title level, body text never labels a button, and fine print never carries text people must read to act, such as a field's error or helper text.
 
 ## Modes
 
@@ -120,5 +120,5 @@ Styles that work together: a label above a section title or a hero; a heading ab
 - Using a heading level inside a card that belongs to the page: the hierarchy inverts.
 - Using fine print for text people must read: it is too small to sustain.
 {arabic} - Tightening letter spacing on Arabic text: the letters disconnect.
-- Using fine print for a field's helper or error text: people must read it to act; use body.
+- Using fine print for a field's helper or error text: people must read it to act; use body-small.
 - Setting body text in the display face: the display face is drawn for large sizes.

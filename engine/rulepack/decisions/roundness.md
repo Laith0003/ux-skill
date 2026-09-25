@@ -27,4 +27,4 @@ character.roundness; radius.base_corner, scale, roles, MAX_BASE_PX, CHIP_PILL_FR
 
 ## Consequences
 
-A sharp formal brand can have square controls; radius.joined stays 0 and the nesting rule still holds.
+At the sharp end the base corner is 0px, but the scale keeps each step at least 1px above the one below, so controls are 2px, cards 3px and dialogs 4px, and only radius.joined is square. Roundness from 0 to about 0.1 therefore gives the same corners. The nesting rule still holds.
