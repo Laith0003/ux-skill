@@ -15,7 +15,7 @@ A status palette at fixed hues and a fixed chroma reads the same on every brand:
 
 ## Decision
 
-Each status family keeps its own hue (danger 25, warning 75, success 150, info 245, in OKLCH degrees) and leans a quarter of the way toward the brand hue and a fifth of the way toward a warm or a cool hue with the warmth axis, never more than 12 degrees from its own hue. The brand lean fades to zero within 15 degrees of the status hue's opposite, so a brand there pulls neither way and two brands a degree apart on either side of it get the same status hue, not hues 24 degrees apart. Its chroma follows the contrast axis, from 0.07 for a muted brand to 0.18 for a bold one; its lightness stays at 0.58. The soft, text and strong steps come from that ramp as before.
+Each status family keeps its own hue (danger 25, warning 75, success 150, info 245, in OKLCH degrees) and leans a quarter of the way toward the brand hue (weighted by the brand's chroma, so a grey brand does not lean it, decisions/grey-brands-steer-no-hue.md) and a fifth of the way toward a warm or a cool hue with the warmth axis, never more than 12 degrees from its own hue. The brand lean fades to zero within 15 degrees of the status hue's opposite, so a brand there pulls neither way and two brands a degree apart on either side of it get the same status hue, not hues 24 degrees apart. Its chroma follows the contrast axis, from 0.07 for a muted brand to 0.18 for a bold one; its lightness stays at 0.58. The soft, text and strong steps come from that ramp as before.
 
 ## Why
 

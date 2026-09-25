@@ -2077,7 +2077,9 @@
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
-              "scheme:dark": "{color.brand.100}"
+              "contrast:high": "{color.brand.950}",
+              "scheme:dark": "{color.brand.100}",
+              "scheme:dark,contrast:high": "{color.brand.100}"
             }
           }
         }

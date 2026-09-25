@@ -84,22 +84,33 @@ def scrim_alpha(base: str, need: float, text: str = WHITE) -> int:
     return 255
 
 
+# Chroma of the scrim base, and of the duotone highlight at the brand's hue
+# and at the warm or cool anchor, for a brand at full hue weight.
+SCRIM_C = 0.03
+HIGHLIGHT_C = (0.04, 0.07)
+
+
 def scrim_base(brand_hex: str) -> str:
     """A near black in the brand's hue, so a scrim reads as part of the
-    palette rather than as grey fog."""
-    _, _, hue = hex_to_oklch(brand_hex)
-    return oklch_to_hex(0.16, 0.03, hue)
+    palette rather than as grey fog. Its chroma scales with the brand's
+    (character.hue_weight), so a grey brand gets a grey scrim."""
+    _, chroma, hue = hex_to_oklch(brand_hex)
+    return oklch_to_hex(0.16, SCRIM_C * character.hue_weight(chroma), hue)
 
 
 def duotone(axes: AxisValues, brand_hex: str) -> Tuple[str, str]:
-    """(shadow, highlight): the brand hue deep, and a light pulled warm or
-    cool with warmth."""
+    """(shadow, highlight): the brand hue deep, and a light that travels
+    in a straight line in the OKLab a/b plane from the brand hue toward a
+    warm or a cool hue with warmth, so it never passes through a third hue.
+    Both take chroma from the brand in proportion, so a grey brand gets a
+    grey pair at the middle warmth."""
     _, chroma, hue = hex_to_oklch(brand_hex)
     shadow = oklch_to_hex(0.24, min(0.12, chroma), hue)
     anchor = character.WARM_HUE if axes.warmth >= 0.5 else character.COOL_HUE
-    light_hue = character.mix_hue(hue, anchor, 0.6 * character.warm_pull(axes))
-    highlight = oklch_to_hex(0.94, 0.04 + 0.03 * character.warm_pull(axes), light_hue)
-    return shadow, highlight
+    light_hue, light_c = character.ab_mix(
+        hue, HIGHLIGHT_C[0] * character.hue_weight(chroma), anchor, HIGHLIGHT_C[1],
+        0.6 * character.warm_pull(axes))
+    return shadow, oklch_to_hex(0.94, light_c, light_hue)
 
 
 def tint_alpha(axes: AxisValues) -> int:

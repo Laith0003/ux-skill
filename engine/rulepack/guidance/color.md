@@ -2,7 +2,7 @@
 
 ## Summary
 
-Color sets every surface, text, line, fill and ring in the product, in light and dark and at standard and high contrast. It is generated from one brand color and the axes. The axes choose the brand's role: it fills the main action (fill), marks words and links while the main action is ink (accent), or draws edges, rules and underlines while actions and links are ink (edge) (decisions/brand-roles.md). The brand anchors its ramp at step 500, a supporting accent takes a second hue the axes place (decisions/support-accent.md), a neutral ramp takes the brand hue pulled warm or cool by the warmth axis (decisions/neutral-tint.md), and four status ramps lean toward the brand inside a fixed band of their own hues (decisions/status-harmony.md). The build measures text roles against every surface they can sit on, the input line, the selected line, the error edge and the focus ring against the page, card, sunken and raised surfaces, and the text on each fill against that fill. The primary button keeps the exact brand color as its fill whenever white or black text reads on it (decisions/brand-fidelity.md), and its edge carries its 3:1 against the page (decisions/primary-edge.md). That edge, the danger fill and the strong status fills are measured against the page only: on card, sunken and raised a filled control is found by its label, its edge and its focus ring. The focus ring is also measured against the primary fill, and under high contrast never measures less than the standard ring (decisions/ring-never-weaker.md). Contracts add the pairings their components need. Color does not govern type size, spacing or shadow; those foundations own them.
+Color sets every surface, text, line, fill and ring in the product, in light and dark and at standard and high contrast. It is generated from one brand color and the axes. The axes choose the brand's role: it fills the main action (fill), marks words and links while the main action is ink (accent), or draws edges, rules and underlines while actions and links are ink (edge) (decisions/brand-roles.md). The brand anchors its ramp at step 500, a supporting accent takes a second hue the axes place (decisions/support-accent.md), a neutral ramp takes the brand hue pulled warm or cool by the warmth axis, through grey rather than around the wheel (decisions/warmth-through-grey.md), a grey brand steers no hue (decisions/grey-brands-steer-no-hue.md), and four status ramps lean toward the brand inside a fixed band of their own hues (decisions/status-harmony.md). The build measures text roles against every surface they can sit on, the input line, the selected line, the error edge, the accent line and the focus ring against every surface a control sits on (the page, card, sunken and raised surfaces, the tint, the band and the table stripe), and the text on each fill against that fill. A control on the brand band takes color.text.on-brand for its focus ring and its edges (decisions/controls-on-brand-surfaces.md). The primary button keeps the exact brand color as its fill whenever white or black text reads on it (decisions/brand-fidelity.md), and its edge carries its 3:1 against the page (decisions/primary-edge.md). That edge, the danger fill and the strong status fills are measured against the page only: on card, sunken and raised a filled control is found by its label, its edge and its focus ring. The focus ring is also measured against the primary fill, and under high contrast never measures less than the standard ring (decisions/ring-never-weaker.md). Contracts add the pairings their components need. Color does not govern type size, spacing or shadow; those foundations own them.
 
 ## Principles
 
@@ -31,8 +31,8 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - `color.text.on-danger`: text and icons on the danger fill and its hover and pressed steps.
 - `color.action.primary`: the fill of the one main action on a view; the exact brand color whenever white or black text reads on it.
 - `color.action.primary-edge`: the edge of the primary button: the fill itself when the fill clears the page, else the nearest step of its ramp that does.
-- `color.action.primary-hover`: the primary fill under a pointer.
-- `color.action.primary-pressed`: the primary fill while pressed.
+- `color.action.primary-hover`: the primary fill under a pointer, a visible step away from the fill.
+- `color.action.primary-pressed`: the primary fill while pressed, a visible step further than hover, in the same direction (decisions/exact-fill-states.md).
 - `color.action.danger`: the fill of an action that destroys data.
 - `color.action.danger-hover`: the danger fill under a pointer.
 - `color.action.danger-pressed`: the danger fill while pressed.
@@ -41,7 +41,7 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - `color.line.input`: the edge of a field, a check box, a status banner, a row under hover or press, and any control that must be found by its edge.
 - `color.line.selected`: the edge and check mark of a selected item, and the edge of a secondary button and of a ghost button under hover or press.
 - `color.line.danger`: the edge of a field in error; it carries no text, so it keeps its red under high contrast (decisions/error-edge.md).
-- `color.focus.ring`: the keyboard focus ring on every surface except inverse.
+- `color.focus.ring`: the keyboard focus ring on every surface except inverse and the brand band.
 - `color.focus.ring-inverse`: the focus ring on the inverse surface.
 - `color.scrim`: the translucent dimming behind a dialog; a layer, never a surface for content.
 - `color.text.accent`: words in the brand color that are not links, such as an eyebrow above a heading or a highlighted figure; never body copy.
@@ -49,8 +49,8 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - `color.text.support`: words in the supporting accent's hue, such as a tag or a second highlight; never a link and never body copy.
 - `color.surface.tint`: a quiet brand tint behind a group, such as a feature panel or a callout.
 - `color.surface.band`: a band in the brand's hue that sets one section of a long page apart.
-- `color.surface.brand`: the exact brand color as a band, such as a closing call to action; only color.text.on-brand goes on it.
-- `color.text.on-brand`: text and icons on the brand band.
+- `color.surface.brand`: the exact brand color as a band, such as a closing call to action; only color.text.on-brand goes on it, and a control on it takes color.text.on-brand for its focus ring and edges.
+- `color.text.on-brand`: text and icons on the brand band, and the focus ring and edges of a control on it.
 - `color.surface.stripe`: every other row of a table, one step off the card.
 - `color.surface.code`: the background of a code block.
 - `color.syntax.<name>`: <name> tokens in a code block, on color.surface.code only.

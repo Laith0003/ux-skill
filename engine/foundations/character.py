@@ -2,9 +2,11 @@
 seven axes.
 
 Each function is a pure, continuous function of the axes. The hues also
-read the brand hue: status_seed is continuous in it, while neutral_tint
-and support_hue turn toward their anchor the short way and so flip
-direction where the brand sits opposite the anchor (see each docstring).
+read the brand hue, weighted by the brand's chroma (hue_weight), so a grey
+brand, whose hue is noise, steers nothing. status_seed and neutral_tint are
+continuous in the brand color; support_hue turns toward its anchor the
+short way and so flips direction where its offset hue sits opposite the
+anchor (see its docstring).
 No function looks up an industry, a keyword or a band:
 a foundation that needs a discrete choice (a face, a pill corner, a brand
 role) takes it from one of these quantities, so two briefs that differ on
@@ -42,6 +44,13 @@ STATUS_BAND = 12.0
 # to zero, so a brand there pulls neither way and the hue has no seam.
 STATUS_FADE = 15.0
 STATUS_L = 0.58
+# Brand chroma at and above which the brand hue counts in full. Below it the
+# hue's pull shrinks in proportion, to nothing at grey, where the hue is
+# noise (#808080 reads 0 degrees, #7F8080 197).
+HUE_CHROMA = 0.04
+# The neutral seed's chroma: a whisper of the brand at warmth 0.5, the warm
+# or cool anchor's at either end.
+NEUTRAL_C = (0.008, 0.030)
 
 
 def clamp(v: float, lo: float = 0.0, hi: float = 1.0) -> float:
@@ -56,6 +65,27 @@ def hue_delta(from_h: float, to_h: float) -> float:
 def mix_hue(a: float, b: float, t: float) -> float:
     """The hue t of the way from a to b along the shorter arc."""
     return (a + hue_delta(a, b) * t) % 360.0
+
+
+def hue_weight(chroma: float) -> float:
+    """How much a brand hue counts, 0 for grey to 1 at HUE_CHROMA and above,
+    in proportion between."""
+    return clamp(chroma / HUE_CHROMA)
+
+
+def ab_mix(h1: float, c1: float, h2: float, c2: float, t: float) -> Tuple[float, float]:
+    """(hue, chroma) t of the way from (h1, c1) to (h2, c2) on a straight
+    line in the OKLab a/b plane. Between two far hues the path runs close to
+    grey instead of around the wheel, so it never passes through a third
+    hue, and it is continuous in both ends."""
+    if t <= 0.0:
+        return h1 % 360.0, c1
+    if t >= 1.0:
+        return h2 % 360.0, c2
+    a = (1 - t) * c1 * math.cos(math.radians(h1)) + t * c2 * math.cos(math.radians(h2))
+    b = (1 - t) * c1 * math.sin(math.radians(h1)) + t * c2 * math.sin(math.radians(h2))
+    chroma = math.hypot(a, b)
+    return (math.degrees(math.atan2(b, a)) % 360.0 if chroma > 1e-12 else h2 % 360.0), chroma
 
 
 def roundness(axes: AxisValues) -> float:
@@ -76,29 +106,32 @@ def warm_pull(axes: AxisValues) -> float:
     return abs(axes.warmth - 0.5) * 2.0
 
 
-def neutral_tint(axes: AxisValues, brand_hue: float) -> Tuple[float, float]:
+def neutral_tint(axes: AxisValues, brand_hue: float,
+                 brand_chroma: float = HUE_CHROMA) -> Tuple[float, float]:
     """(hue, chroma) of the neutral seed. At warmth 0.5 the neutrals take
-    the brand hue at a whisper of chroma; toward either end they move to a
-    warm or a cool hue and gain chroma, so a warm brand gets cream and a
-    cool one blue grey. Continuous in the axes; in the brand hue it turns
-    the short way to the anchor, so away from warmth 0.5 it flips direction
-    where the brand sits opposite the anchor (a warm brief with a brand
-    near 250, a cool one with a brand near 70)."""
-    t = warm_pull(axes)
+    the brand hue at a whisper of chroma (none for a grey brand); toward
+    either end they travel in a straight line in the OKLab a/b plane to a
+    warm or a cool hue at more chroma, reaching it at warmth 0 and 1, so a
+    warm brief gets cream and sand and a cool one blue grey whatever the
+    brand hue: a blue brand with a warm brief passes near grey on the way,
+    never through mauve. Continuous in the axes and in the brand color."""
     anchor = WARM_HUE if axes.warmth >= 0.5 else COOL_HUE
-    return mix_hue(brand_hue, anchor, 0.8 * t), 0.008 + 0.022 * t
+    return ab_mix(brand_hue, NEUTRAL_C[0] * hue_weight(brand_chroma), anchor, NEUTRAL_C[1],
+                  warm_pull(axes))
 
 
-def status_seed(status: str, axes: AxisValues, brand_hue: float) -> Tuple[float, float, float]:
+def status_seed(status: str, axes: AxisValues, brand_hue: float,
+                brand_chroma: float = HUE_CHROMA) -> Tuple[float, float, float]:
     """(L, C, H) of one status seed. The hue leans a quarter of the way
     toward the brand and toward warm or cool with warmth, never more than
     STATUS_BAND from its own hue, so danger stays red. The brand lean fades
     to zero within STATUS_FADE degrees of the status hue's opposite, so the
-    hue is continuous in the brand hue too. Chroma follows the contrast
-    axis: a muted brand gets quiet status colors."""
+    hue is continuous in the brand hue too, and scales with hue_weight, so a
+    grey brand leans nothing. Chroma follows the contrast axis: a muted
+    brand gets quiet status colors."""
     base = STATUS_HUES[status]
     d = hue_delta(base, brand_hue)
-    lean = 0.25 * d * clamp((180.0 - abs(d)) / STATUS_FADE)
+    lean = 0.25 * d * clamp((180.0 - abs(d)) / STATUS_FADE) * hue_weight(brand_chroma)
     anchor = WARM_HUE if axes.warmth >= 0.5 else COOL_HUE
     lean += 0.2 * warm_pull(axes) * hue_delta(base, anchor)
     hue = (base + clamp(lean, -STATUS_BAND, STATUS_BAND)) % 360.0

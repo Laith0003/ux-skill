@@ -96,3 +96,44 @@ def test_text_between_the_two_composites_meets_a_grey_image_at_one_to_one():
     check = next(c for c in CHECKS if c.id == "scrim-text")
     assert check.run(ts, "")[0].startswith(
         "imagery.on-scrim on imagery.scrim over a grey image () is 1.00:1")
+
+
+def _grey(hx):
+    r, g, b = (int(hx[i:i + 2], 16) for i in (1, 3, 5))
+    return max(r, g, b) - min(r, g, b) <= 1
+
+
+@pytest.mark.parametrize("brand", ["#000000", "#808080", "#FFFFFF"])
+def test_a_grey_brand_gets_a_neutral_scrim_and_highlight(brand):
+    """A grey brand has no hue (hex_to_oklch reads 0 degrees), so its scrim
+    and, at the middle warmth, its duotone highlight stay grey."""
+    assert _grey(scrim_base(brand))
+    shadow, highlight = duotone(axes(), brand)
+    assert _grey(shadow) and _grey(highlight)
+
+
+def test_near_greys_get_the_same_scrim_and_highlight():
+    """#7F8080 reads 197 degrees, #80807F 106 and #807F80 326, at a chroma
+    of about 0.002: they must not turn cyan, olive or magenta."""
+    from engine.foundations.color_math import oklab_distance
+    for warmth in (0.0, 0.5, 1.0):
+        looks = [(scrim_base(b),) + duotone(axes(warmth=warmth), b)
+                 for b in ("#808080", "#7F8080", "#80807F", "#807F80")]
+        for i in range(3):
+            assert max(oklab_distance(looks[0][i], other[i]) for other in looks[1:]) <= 0.006
+
+
+def test_the_scrim_and_highlight_keep_the_hue_of_a_colorful_brand():
+    from engine.foundations.color_math import hex_to_oklch
+    assert scrim_base("#3366FF") == "#070D1A"
+    assert abs(hex_to_oklch(duotone(axes(), "#3366FF")[1])[2] - hex_to_oklch("#3366FF")[2]) < 3
+
+
+@pytest.mark.parametrize("brand_hue", [30.0, 60.0, 144.0, 265.0])
+def test_the_highlight_turns_warm_or_cool_without_crossing_a_third_hue(brand_hue):
+    from engine.foundations import character
+    from engine.foundations.color_math import hex_to_oklch, oklch_to_hex
+    brand = oklch_to_hex(0.55, 0.12, brand_hue)
+    for warmth, anchor in ((0.0, character.COOL_HUE), (1.0, character.WARM_HUE)):
+        hue = hex_to_oklch(duotone(axes(warmth=warmth), brand)[1])[2]
+        assert abs(character.hue_delta(anchor, hue)) <= 40.0, (brand, warmth, hue)

@@ -607,6 +607,7 @@
   --color-line-selected: var(--color-brand-800);
   --color-line-danger: var(--color-danger-700);
   --color-line-accent: var(--color-brand-800);
+  --color-focus-ring: var(--color-brand-950);
   --color-focus-ring-inverse: var(--color-brand-200);
   --color-scrim: var(--color-shade-60);
   --color-syntax-plain: var(--color-neutral-950);
@@ -705,6 +706,7 @@
     --color-line-selected: var(--color-brand-800);
     --color-line-danger: var(--color-danger-700);
     --color-line-accent: var(--color-brand-800);
+    --color-focus-ring: var(--color-brand-950);
     --color-focus-ring-inverse: var(--color-brand-200);
     --color-scrim: var(--color-shade-60);
     --color-syntax-plain: var(--color-neutral-950);
@@ -884,6 +886,7 @@
   --color-line-selected: var(--color-brand-200);
   --color-line-danger: var(--color-danger-300);
   --color-line-accent: var(--color-brand-200);
+  --color-focus-ring: var(--color-brand-100);
   --color-focus-ring-inverse: var(--color-brand-800);
   --color-scrim: var(--color-shade-80);
   --color-syntax-plain: var(--color-base-white);
@@ -931,6 +934,7 @@
     --color-line-selected: var(--color-brand-200);
     --color-line-danger: var(--color-danger-300);
     --color-line-accent: var(--color-brand-200);
+    --color-focus-ring: var(--color-brand-100);
     --color-focus-ring-inverse: var(--color-brand-800);
     --color-scrim: var(--color-shade-80);
     --color-syntax-plain: var(--color-base-white);
@@ -979,6 +983,7 @@
     --color-line-selected: var(--color-brand-200);
     --color-line-danger: var(--color-danger-300);
     --color-line-accent: var(--color-brand-200);
+    --color-focus-ring: var(--color-brand-100);
     --color-focus-ring-inverse: var(--color-brand-800);
     --color-scrim: var(--color-shade-80);
     --color-syntax-plain: var(--color-base-white);
@@ -1027,6 +1032,7 @@
     --color-line-selected: var(--color-brand-200);
     --color-line-danger: var(--color-danger-300);
     --color-line-accent: var(--color-brand-200);
+    --color-focus-ring: var(--color-brand-100);
     --color-focus-ring-inverse: var(--color-brand-800);
     --color-scrim: var(--color-shade-80);
     --color-syntax-plain: var(--color-base-white);

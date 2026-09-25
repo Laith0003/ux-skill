@@ -159,3 +159,47 @@ def test_log_position_names_the_argument_and_the_fix(args, name):
 
 def test_a_whitespace_industry_reads_as_no_industry():
     assert compute_axes({"industry": "   "}) == compute_axes({})
+
+
+@pytest.mark.parametrize("brand_hue", [30.0, 60.0, 144.0, 265.0])
+@pytest.mark.parametrize("warmth, anchor", [(0.1, character.COOL_HUE),
+                                            (0.9, character.WARM_HUE)])
+def test_the_neutral_tint_reaches_its_anchor_without_crossing_a_third_hue(
+        brand_hue, warmth, anchor):
+    """A blue brand with a warm brief gets cream, a brown brand with a cool
+    brief gets blue grey: never mauve or rose on the way round the wheel."""
+    from engine.foundations.color import generate_color
+    from engine.foundations.color_math import hex_to_oklch, oklch_to_hex
+    axes = AxisValues(warmth, *[0.5] * 6)
+    hue, _ = character.neutral_tint(axes, brand_hue)
+    assert abs(character.hue_delta(anchor, hue)) <= 40.0
+    brand = oklch_to_hex(0.55, 0.12, brand_hue)
+    prims = {t.path: t.value for t in generate_color(axes, brand).tokens.tokens()}
+    assert abs(character.hue_delta(anchor, hex_to_oklch(prims["color.neutral.500"])[2])) <= 40.0
+
+
+def test_the_neutral_tint_reaches_the_anchor_at_either_end():
+    for warmth, anchor in ((0.0, character.COOL_HUE), (1.0, character.WARM_HUE)):
+        for brand_hue in range(0, 360, 15):
+            hue, chroma = character.neutral_tint(AxisValues(warmth, *[0.5] * 6), float(brand_hue))
+            assert hue == pytest.approx(anchor) and chroma == pytest.approx(0.03)
+
+
+def test_the_neutral_seed_is_continuous_in_the_brand_hue():
+    from engine.foundations.color_math import oklab_distance, oklch_to_hex
+    for warmth in (0.0, 0.3, 0.45, 0.55, 0.7, 1.0):
+        axes = AxisValues(warmth, *[0.5] * 6)
+        seeds = [oklch_to_hex(0.55, *reversed(character.neutral_tint(axes, i / 4)))
+                 for i in range(1441)]
+        assert max(oklab_distance(a, b) for a, b in zip(seeds, seeds[1:])) <= 0.004, warmth
+
+
+def test_a_grey_brand_steers_no_hue():
+    """An achromatic brand has no stable hue: #808080 reads 0 degrees and
+    #7F8080 197. Its hue must not lean the neutrals or the status colors."""
+    mid = AxisValues(*[0.5] * 7)
+    assert character.hue_weight(0.0) == 0.0 and character.hue_weight(0.2) == 1.0
+    assert character.neutral_tint(mid, 197.0, 0.0)[1] == 0.0
+    for status, base in character.STATUS_HUES.items():
+        for brand_hue in (0.0, 106.0, 197.0):
+            assert character.status_seed(status, mid, brand_hue, 0.0)[2] == pytest.approx(base)

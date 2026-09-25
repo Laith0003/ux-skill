@@ -27,4 +27,4 @@ color.EXACT (the color.brand.exact primitive), _fill_candidates, _muddy, MUDDY_L
 
 ## Consequences
 
-A brand that needs black text keeps black text in light. Hover and pressed steps move away from the text color, so a black text brand gets lighter hover and pressed steps. Under high contrast many brands move; the report names the move and the distance.
+A brand that needs black text keeps black text in light. Hover and pressed steps step away from the fill from where the fill sits in its ramp, darker in light and lighter in dark, and against that direction only when the text on them needs it (decisions/exact-fill-states.md). Under high contrast many brands move; the report names the move and the distance.

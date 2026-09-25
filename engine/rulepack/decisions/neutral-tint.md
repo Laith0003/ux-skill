@@ -1,10 +1,10 @@
 ---
 id: neutral-tint
 title: Warmth sets the hue and chroma of the neutrals
-status: active
+status: superseded
 areas: [color]
 supersedes: null
-superseded_by: null
+superseded_by: warmth-through-grey
 ---
 
 # Warmth sets the hue and chroma of the neutrals

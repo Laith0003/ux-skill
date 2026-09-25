@@ -15,7 +15,7 @@ The strong danger fill carries white text at 7:1 under high contrast, so it goes
 
 ## Decision
 
-color.line.danger is the error edge of a field. It carries no text, so it is paired only as a non-text part, at 3:1 against the page, card, sunken and raised surfaces (our 4.5:1 floor under high contrast). The error-edge-hue check keeps its high contrast step within one ramp step of its standard step, and fails closed: a high contrast edge that is a literal color or a step of another ramp is a finding, since it can lose the red just as a far step does.
+color.line.danger is the error edge of a field. It carries no text, so it is paired only as a non-text part, at 3:1 against every surface a control sits on: the page, card, sunken and raised surfaces, the tint, the band and the table stripe (our 4.5:1 floor under high contrast). The error-edge-hue check keeps its high contrast step within one ramp step of its standard step, and fails closed: a high contrast edge that is a literal color or a step of another ramp is a finding, since it can lose the red just as a far step does.
 
 ## Why
 

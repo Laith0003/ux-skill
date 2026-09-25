@@ -27,11 +27,13 @@ EXPECTED = {
     "imagery-foundation", "generated-art", "page-composition", "distinctness",
     "readable-fields", "button-sizes", "card-and-banner-reading", "form-contracts",
     "display-and-navigation-contracts", "arabic-market-content", "scrim-worst-image",
+    "controls-on-brand-surfaces", "warmth-through-grey", "grey-brands-steer-no-hue",
+    "exact-fill-states",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",
               "type-roles": "type-three-faces", "strong-equals-heading-weight": "strong-weight",
-              "layout-scope": "page-regions"}
+              "layout-scope": "page-regions", "neutral-tint": "warmth-through-grey"}
 
 
 def test_every_shipped_record_is_valid_and_routed():

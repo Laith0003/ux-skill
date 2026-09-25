@@ -339,8 +339,12 @@ _LIGHT = "scheme:light,contrast:standard"
 
 
 def _gray_ramp(monkeypatch, lightnesses):
-    _brand_ramp(monkeypatch, "#3366FF",
+    """A grey brand whose exact color is the hand-built ramp's step 500, so
+    the exact fill sits where its ramp says it does. Returns the brand."""
+    brand = oklch_to_hex(lightnesses[STEPS.index(500)], 0.0, 0.0)
+    _brand_ramp(monkeypatch, brand,
                 {s: oklch_to_hex(l, 0.0, 0.0) for s, l in zip(STEPS, lightnesses)})
+    return brand
 
 
 def _group(ts):
@@ -348,45 +352,48 @@ def _group(ts):
                                                                  "color.focus.ring"))
 
 
+# Only one step (600) sits darker than the fill, and 700 to 950 are near
+# white, so the darker side has no room for two states.
+_ONE_DARKER = [0.983, 0.95, 0.85, 0.52, 0.47, 0.43, 0.40, 0.983, 0.983, 0.983, 0.983]
+
+
 def test_solver_order_fill_distance_before_state_direction(monkeypatch):
-    # The exact brand carries white text, but 600 and 700 are near white,
+    # The exact brand carries white text, but the darker side has one step,
     # so hover and pressed cannot go the conventional (darker) way. The fill
-    # stays and the states go lighter. An order that put the state
-    # direction first would move the fill to keep darker states. The ring
-    # takes the first brand step that clears every surface and stands 3:1
-    # off the fill and the tinted fills: brand.950.
-    _gray_ramp(monkeypatch, [0.983, 0.95, 0.85, 0.49, 0.465, 0.43, 0.983, 0.983, 0.37, 0.31, 0.27])
-    assert _group(generate_color(AXES, "#3366FF").tokens) == (
+    # stays and the states go lighter, each further from the fill: the
+    # fill's distance from the brand outranks the states' direction.
+    brand = _gray_ramp(monkeypatch, _ONE_DARKER)
+    assert _group(generate_color(AXES, brand).tokens)[:5] == (
         "color.brand.exact", "color.brand.400", "color.brand.300", "color.base.white",
-        "color.brand.exact", "color.brand.950")
+        "color.brand.exact")
 
 
 def test_solver_order_conventional_direction_at_equal_distance(monkeypatch):
-    # The exact brand carries white text; its states step the conventional
-    # (darker) way, and the ring takes brand.950, the first step that also
-    # stands 3:1 off the fill and the tinted fills.
-    _gray_ramp(monkeypatch, [0.983, 0.95, 0.85, 0.49, 0.465, 0.8, 0.43, 0.39, 0.34, 0.31, 0.27])
-    assert _group(generate_color(AXES, "#3366FF").tokens) == (
+    # 400 and 600 sit the same lightness from the fill; the states step the
+    # conventional (darker) way.
+    brand = _gray_ramp(monkeypatch, [0.983, 0.95, 0.85, 0.5, 0.465, 0.43, 0.395, 0.36, 0.33,
+                                     0.3, 0.27])
+    assert _group(generate_color(AXES, brand).tokens)[:5] == (
         "color.brand.exact", "color.brand.600", "color.brand.700", "color.base.white",
-        "color.brand.exact", "color.brand.950")
+        "color.brand.exact")
 
 
 def test_ring_prefers_a_color_other_than_the_fill(monkeypatch):
-    # With only white and the fill itself on offer, the ring takes white,
-    # which differs from the fill, over a ring equal to the fill.
-    _gray_ramp(monkeypatch, [0.983, 0.95, 0.85, 0.49, 0.465, 0.43, 0.983, 0.983, 0.43, 0.31, 0.27])
+    # With only the fill itself and a neutral on offer, the ring takes the
+    # neutral, which differs from the fill, over a ring equal to the fill.
+    brand = _gray_ramp(monkeypatch, _ONE_DARKER)
     monkeypatch.setattr(color_module, "_ring_candidates",
                         lambda mode, default_ring: ["color.brand.exact", "color.neutral.950"])
-    assert _group(generate_color(AXES, "#3366FF").tokens)[-1] == "color.neutral.950"
+    assert _group(generate_color(AXES, brand).tokens)[-1] == "color.neutral.950"
 
 
 def test_the_fill_never_moves_to_make_the_ring_differ(monkeypatch):
     # When the only ring on offer is the fill itself, the ring equals the
     # fill; the fill does not move to make room.
-    _gray_ramp(monkeypatch, [0.983, 0.95, 0.85, 0.49, 0.465, 0.43, 0.983, 0.983, 0.37, 0.31, 0.27])
+    brand = _gray_ramp(monkeypatch, _ONE_DARKER)
     monkeypatch.setattr(color_module, "_ring_candidates",
                         lambda mode, default_ring: ["color.brand.exact"])
-    assert _group(generate_color(AXES, "#3366FF").tokens) == (
+    assert _group(generate_color(AXES, brand).tokens) == (
         "color.brand.exact", "color.brand.400", "color.brand.300", "color.base.white",
         "color.brand.exact", "color.brand.exact")
 
@@ -656,8 +663,11 @@ def test_scheme_polarity_catches_a_dark_scheme_with_a_light_palette():
 # surface the ring does, and a separator never equals the surface it
 # divides.
 
-_SURFACES = ("color.surface.page", "color.surface.card", "color.surface.sunken",
-             "color.surface.raised")
+_BASE_SURFACES = ("color.surface.page", "color.surface.card", "color.surface.sunken",
+                  "color.surface.raised")
+# Every surface a control sits on: the base four and the brand-tinted ones.
+_SURFACES = _BASE_SURFACES + ("color.surface.tint", "color.surface.band",
+                              "color.surface.stripe")
 
 
 def test_line_selected_pairs_with_every_surface_the_ring_does():
@@ -768,8 +778,8 @@ _TEXT_ROLES = ("color.text.default", "color.text.muted", "color.text.link",
                "color.status.danger.text", "color.status.warning.text",
                "color.status.success.text", "color.status.info.text",
                "color.text.accent", "color.text.support")
-_TEXT_SURFACES = _SURFACES + ("color.surface.selected", "color.surface.tint",
-                              "color.surface.band", "color.surface.stripe")
+_TEXT_SURFACES = _BASE_SURFACES + ("color.surface.selected", "color.surface.tint",
+                                   "color.surface.band", "color.surface.stripe")
 _LINE_ROLES = ("color.line.input", "color.line.selected", "color.line.danger",
                "color.line.accent", "color.focus.ring")
 
@@ -998,3 +1008,109 @@ def test_the_status_harmony_record_states_the_fade_at_the_opposite_hue():
     text = _record("status-harmony")
     assert f"within {character.STATUS_FADE:g} degrees of the status hue's opposite" in text
     assert "never reads as orange" not in text
+
+
+@pytest.mark.parametrize("warmth", [0.2, 0.5, 0.8])
+def test_near_grey_brands_get_the_same_neutrals_and_status_colors(warmth):
+    """#808080, #7F8080, #80807F and #807F80 look the same; their noise hues
+    (0, 197, 106 and 326 degrees) must not give them different neutrals or
+    status hues."""
+    from engine.foundations.color_math import oklab_distance
+    axes = AxisValues(warmth, *[0.5] * 6)
+    sets = [{t.path: t.value for t in generate_color(axes, s).tokens.tokens()}
+            for s in ("#808080", "#7F8080", "#80807F", "#807F80")]
+    for family in ("neutral",) + tuple(color_module.STATUS_HUES):
+        for step in STEPS:
+            path = f"color.{family}.{step}"
+            assert max(oklab_distance(sets[0][path], s[path]) for s in sets[1:]) <= 0.006, path
+
+
+@pytest.mark.parametrize("seed", ["#000000", "#808080", "#FFFFFF"])
+def test_a_grey_brand_gets_grey_neutrals_at_the_middle_warmth(seed):
+    ts = generate_color(AXES, seed).tokens
+    for step in STEPS:
+        r, g, b = (int(ts.resolve(f"color.neutral.{step}")[i:i + 2], 16) for i in (1, 3, 5))
+        assert max(r, g, b) - min(r, g, b) <= 1, step
+
+
+def test_the_primitives_pin_the_recess_and_the_status_seeds():
+    """The recess sits RECESS_L below the page step with its hue and chroma,
+    following the warmth; each status ramp anchors at its character seed."""
+    from engine.foundations import character
+    from engine.foundations.color_math import hex_to_oklch, oklch_to_hex
+    for warmth in (0.1, 0.9):
+        axes = AxisValues(warmth, *[0.5] * 6)
+        prims = color_module._primitives(axes, "#3366FF", [])
+        for recess, page in (("recess-light", 50), ("recess-dark", 950)):
+            got = hex_to_oklch(prims[f"color.neutral.{recess}"])
+            want = hex_to_oklch(prims[f"color.neutral.{page}"])
+            assert got[0] == pytest.approx(want[0] - color_module.RECESS_L, abs=0.004)
+            assert got[1] == pytest.approx(want[1], abs=0.004)
+        _, chroma, hue = hex_to_oklch("#3366FF")
+        for status in color_module.STATUS_HUES:
+            seed = oklch_to_hex(*character.status_seed(status, axes, hue, chroma))
+            assert prims[f"color.{status}.500"] == seed
+    cool = color_module._primitives(AxisValues(0.1, *[0.5] * 6), "#3366FF", [])
+    warm = color_module._primitives(AxisValues(0.9, *[0.5] * 6), "#3366FF", [])
+    assert cool["color.neutral.recess-light"] != warm["color.neutral.recess-light"]
+
+
+def _states_move_away(ts, mode):
+    from engine.foundations.color_math import hex_to_oklch, oklab_distance
+    fill, hover, pressed = (ts.resolve(r, mode) for r in (
+        "color.action.primary", "color.action.primary-hover", "color.action.primary-pressed"))
+    lf, lh, lp = (hex_to_oklch(x)[0] for x in (fill, hover, pressed))
+    dh, dp = oklab_distance(hover, fill), oklab_distance(pressed, fill)
+    return ((lf < lh < lp) or (lf > lh > lp)) and dp > dh >= color_module.JUST_VISIBLE, \
+        (fill, hover, pressed, round(dh, 4), round(dp, 4))
+
+
+@pytest.mark.parametrize("seed", SEEDS + _SWEEP_SEEDS + ["#DAC4E5", "#FFD400", "#E2E0BB"])
+def test_hover_and_pressed_move_away_from_the_fill_in_order(seed):
+    """Hover and pressed step from the fill's own place in its ramp: each a
+    visible step further from the fill, in one direction."""
+    ts = generate_color(AXES, seed).tokens
+    for mode in COLOR_CONTEXTS:
+        ok, why = _states_move_away(ts, mode)
+        assert ok, (seed, mode, why)
+
+
+_ROLE_AXES = {"fill": AxisValues(0.85, 0.5, 0.5, 0.5, 0.2, 0.6, 0.5),
+              "accent": AxisValues(0.7, 0.4, 0.5, 0.75, 0.7, 0.1, 0.7),
+              "edge": AxisValues(0.3, 0.7, 0.6, 0.2, 0.65, 0.4, 0.0)}
+_CONTROL_SURFACES = ("color.surface.tint", "color.surface.band", "color.surface.stripe")
+
+
+def test_controls_are_measured_on_the_tint_the_band_and_the_stripe():
+    for bg in _CONTROL_SURFACES:
+        assert bg in color_module.LINE_SURFACES
+        for role in color_module.LINE_ROLES:
+            assert (role, bg) in {(p.fg, p.bg) for p in PAIRINGS}
+
+
+@pytest.mark.parametrize("role", list(_ROLE_AXES))
+def test_every_line_role_and_the_ring_clear_the_tint_band_and_stripe(role):
+    """A table row takes the stripe, a feature panel the tint, a section
+    the band; the controls on them keep their edges and focus ring."""
+    misses = []
+    for seed in SEEDS + _SWEEP_SEEDS:
+        ts = build_color(_ROLE_AXES[role], seed).tokens
+        for mode in COLOR_CONTEXTS:
+            need = 4.5 if "high" in mode else 3.0
+            for line in color_module.LINE_ROLES:
+                for bg in _CONTROL_SURFACES:
+                    ratio = contrast(ts.resolve(line, mode), ts.resolve(bg, mode))
+                    if ratio < need:
+                        misses.append((seed, mode, line, bg, round(ratio, 2)))
+    assert misses == []
+
+
+def test_the_ring_on_the_brand_band_is_named_and_reads_there():
+    """On the brand band a control takes color.text.on-brand for its ring and
+    edges; it is held to the text minimum there, above the non-text one."""
+    from engine.rulepack.records import RECORDS_DIR
+    guide = (RECORDS_DIR.parent / "guidance" / "color.md").read_text(encoding="utf-8")
+    record = _record("controls-on-brand-surfaces")
+    for text in (guide, record):
+        assert "color.text.on-brand" in text and "focus ring" in text
+    assert ("color.text.on-brand", "color.surface.brand") in {(p.fg, p.bg) for p in PAIRINGS}

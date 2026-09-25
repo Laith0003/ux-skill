@@ -246,8 +246,14 @@ DECORATIVE_ROLES: Tuple[str, ...] = ("color.decorative.brand", "color.decorative
 DECORATIVE_FLOOR = 1.5
 # Our floor for the logo against the page; WCAG exempts logotypes.
 LOGO_FLOOR = 3.0
+# Controls sit on the brand-tinted surfaces too: a ghost button in a striped
+# table row, a field in a tinted panel, a link in a band. The brand band is
+# not here: a control on it takes color.text.on-brand for its ring and
+# edges, held to the text minimum against the band.
 LINE_SURFACES: Tuple[str, ...] = ("color.surface.page", "color.surface.card",
-                                  "color.surface.sunken", "color.surface.raised")
+                                  "color.surface.sunken", "color.surface.raised",
+                                  "color.surface.tint", "color.surface.band",
+                                  "color.surface.stripe")
 # Roles in the four families the tables cover (text, surface, line,
 # focus) that sit in no table, each with the reason it needs no row there.
 # A role added to one of those families must join a table or this map, or
@@ -379,6 +385,9 @@ EXACT = "color.brand.exact"
 MUDDY_L = 0.72
 # The ring prefers a color that also stands 3:1 off the primary fill.
 RING_ON_FILL = 3.0
+# The least OKLab distance a hover or pressed step keeps from its fill: a
+# just visible step.
+JUST_VISIBLE = 0.02
 # A brand fill further than this from the brand color (OKLab distance)
 # reads as another color; the report says so.
 IDENTITY_DISTANCE = 0.12
@@ -410,9 +419,11 @@ def _need(fg: str, bg: str, mode: str) -> float:
 
 
 def _neutral_seed(brand_hex: str, axes: AxisValues) -> str:
-    """The neutral ramp's seed: the brand hue at warmth 0.5, pulled toward
-    a warm or a cool hue, with more chroma, toward either end."""
-    hue, chroma = character.neutral_tint(axes, hex_to_oklch(brand_hex)[2])
+    """The neutral ramp's seed: the brand hue at warmth 0.5 (weighted by
+    the brand's chroma), moving to a warm or a cool hue, with more chroma,
+    toward either end."""
+    _, brand_chroma, brand_hue = hex_to_oklch(brand_hex)
+    hue, chroma = character.neutral_tint(axes, brand_hue, brand_chroma)
     return oklch_to_hex(0.55, chroma, hue)
 
 
@@ -432,7 +443,7 @@ def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str,
     _, brand_chroma, brand_hue = hex_to_oklch(brand_hex)
     seeds["support"] = oklch_to_hex(0.6, min(0.16, max(0.06, 0.9 * brand_chroma)),
                                     character.support_hue(axes, brand_hue))
-    seeds.update({s: oklch_to_hex(*character.status_seed(s, axes, brand_hue))
+    seeds.update({s: oklch_to_hex(*character.status_seed(s, axes, brand_hue, brand_chroma))
                   for s in STATUS_HUES})
     for family, seed in seeds.items():
         r = ramp(seed)
@@ -489,15 +500,44 @@ def _ring_candidates(mode: str, default_ring: str) -> List[str]:
         base if light else list(reversed(base)))
 
 
-def _state_offsets(conv: int, n: int) -> List[Tuple[int, ...]]:
-    """Ramp offsets from the fill for n interaction states, in preference
-    order: each state one step further in the conventional direction, then
-    against it, then with a gap of two."""
+def _side(fill_hex: str, family: str, d: int, prims: Dict[str, str]) -> List[str]:
+    """The steps of a ramp on one side of a fill, darker than it for d = +1
+    and lighter for d = -1, nearest in lightness first, keeping a step only
+    when it sits at least JUST_VISIBLE from the step before it (the fill
+    first) and further from the fill than that step does. Walking from the
+    fill's own lightness, not from a step number, lets the exact brand step
+    from wherever it sits in its ramp, and each state kept this way moves
+    visibly further from the fill than the one before it."""
+    fill_l = hex_to_oklch(fill_hex)[0]
+    steps = []
+    for i, step in enumerate(STEPS):
+        path = f"{family}.{step}"
+        step_l = hex_to_oklch(prims[path])[0]
+        if (step_l < fill_l) if d > 0 else (step_l > fill_l):
+            steps.append((round(abs(step_l - fill_l), 6), i if d > 0 else -i, path))
+    out: List[str] = []
+    prev, prev_d = fill_hex, 0.0
+    for _, _, path in sorted(steps):
+        dist = oklab_distance(prims[path], fill_hex)
+        if dist > prev_d and oklab_distance(prims[path], prev) >= JUST_VISIBLE:
+            out.append(path)
+            prev, prev_d = prims[path], dist
+    return out
+
+
+def _state_paths(fill_hex: str, family: str, conv: int, n: int,
+                 prims: Dict[str, str]) -> List[Tuple[str, ...]]:
+    """Ramp steps for n interaction states, in preference order: each state
+    one visible step further from the fill in the conventional direction,
+    then against it, then with a gap of two, so every state moves away from
+    the fill and each further than the one before."""
     if n == 0:
         return [()]
-    out: List[Tuple[int, ...]] = []
-    for d in (conv, -conv, 2 * conv, -2 * conv):
-        out.append(tuple(d * (k + 1) for k in range(n)))
+    out: List[Tuple[str, ...]] = []
+    for gap, d in ((1, conv), (1, -conv), (2, conv), (2, -conv)):
+        side = _side(fill_hex, family, d, prims)
+        if len(side) >= gap * n:
+            out.append(tuple(side[gap * (k + 1) - 1] for k in range(n)))
     return out
 
 
@@ -519,21 +559,20 @@ def _choose_ring(rings: List[str], fit: Callable[[str], float], fill_hex: str,
 
 
 def _fill_candidates(g: _Group, default: str, conv: int,
-                     prims: Dict[str, str]) -> List[Tuple[str, int]]:
-    """(fill path, ramp index its states step from), in preference order.
-    A brand group whose default is the exact brand color tries it first,
-    then every brand step by OKLab distance from it, so a move keeps as
-    much of the brand as the text allows. Any other group walks its ramp
-    outward from the default, the conventional direction first."""
+                     prims: Dict[str, str]) -> List[str]:
+    """Fill paths in preference order. A brand group whose default is the
+    exact brand color tries it first, then every brand step by OKLab
+    distance from it, so a move keeps as much of the brand as the text
+    allows. Any other group walks its ramp outward from the default, the
+    conventional direction first."""
     family, step = default.rsplit(".", 1)
     if g.brand and default == EXACT:
-        anchor = STEPS.index(ANCHOR)
-        steps = [(f"{family}.{s}", i) for i, s in enumerate(STEPS)]
-        order = _order_from(anchor, conv)
-        steps.sort(key=lambda p: (round(oklab_distance(prims[p[0]], prims[EXACT]), 6),
-                                  order.index(p[1])))
-        return [(EXACT, anchor)] + steps
-    return [(f"{family}.{STEPS[i]}", i) for i in _order_from(STEPS.index(int(step)), conv)]
+        order = _order_from(STEPS.index(ANCHOR), conv)
+        steps = sorted(range(len(STEPS)), key=lambda i: (
+            round(oklab_distance(prims[f"{family}.{STEPS[i]}"], prims[EXACT]), 6),
+            order.index(i)))
+        return [EXACT] + [f"{family}.{STEPS[i]}" for i in steps]
+    return [f"{family}.{STEPS[i]}" for i in _order_from(STEPS.index(int(step)), conv)]
 
 
 def _muddy(fill_hex: str, on: str, mode: str) -> bool:
@@ -565,8 +604,11 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
          steps by OKLab distance from it; for any other group the ramp
          outward from its default, the conventional direction (darker in
          light, lighter in dark) first at equal distance;
-      2. its states (hover, then pressed) one and two steps on in the
-         conventional direction, then against it, then with gaps of two;
+      2. its states (hover, then pressed) one and two steps on from the
+         fill's own lightness in the conventional direction, then against
+         it, then with gaps of two, each at least JUST_VISIBLE from the
+         fill (_state_paths), so the exact brand steps from where it sits
+         in its ramp, not from step 500;
       3. the text on it as base.white, then base.black; in dark and high
          contrast the brand group first skips black text on a fill darker
          than MUDDY_L, and takes it only when nothing else clears;
@@ -631,12 +673,9 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
     best: Optional[Tuple[float, Tuple[str, ...], List[str], str]] = None
     candidates = _fill_candidates(g, defaults[g.fill], conv, prims)
     for allow_muddy in ((False, True) if g.brand else (True,)):
-        for fill_path, fill_idx in candidates:
-            for offsets in _state_offsets(conv, len(g.states)):
-                idxs = [fill_idx + o for o in offsets]
-                if not all(0 <= i < len(STEPS) for i in idxs):
-                    continue
-                paths = [fill_path] + [f"{family}.{STEPS[i]}" for i in idxs]
+        for fill_path in candidates:
+            for states in _state_paths(prims[fill_path], family, conv, len(g.states), prims):
+                paths = [fill_path] + list(states)
                 hexes = [prims[p] for p in paths]
                 if len(set(hexes)) != len(hexes):
                     continue

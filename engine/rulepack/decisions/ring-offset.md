@@ -15,7 +15,7 @@ A focus ring drawn flush against a filled button touches two colors: the fill an
 
 ## Decision
 
-The ring is drawn with an offset of at least 1px (border.focus-ring.offset, 2px as generated), so the color next to it is always the surface, never the fill. color.focus.ring is paired with the page, card, sunken and raised surfaces at 3:1 (WCAG 1.4.11) and is not paired with the fill. The inverse surface has its own ring, color.focus.ring-inverse. The ring is at least 2px wide and wider than a resting outline.
+The ring is drawn with an offset of at least 1px (border.focus-ring.offset, 2px as generated), so the color next to it is always the surface, never the fill. color.focus.ring is paired at 3:1 (WCAG 1.4.11) with every surface a control sits on, the page, card, sunken and raised surfaces, the tint, the band and the table stripe (decisions/controls-on-brand-surfaces.md), and is not paired with the fill. The inverse surface has its own ring, color.focus.ring-inverse. The ring is at least 2px wide and wider than a resting outline.
 
 ## Why
 
