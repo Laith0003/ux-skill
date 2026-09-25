@@ -1,23 +1,28 @@
-"""Anti-AI-slop linter — Python port of ``bin/ux-lint.sh``.
+"""Anti-AI-slop linter: the Python port of ``bin/ux-lint.sh``.
 
 Reads ``data/anti-patterns.json`` (the source of truth for rules) and walks the
 target paths, applying each rule's regex with the rule's flags. Output is JSON
 by default, with a human-readable table when ``--pretty`` is passed.
 
+Each rule reads one or more channels of a file (markup, css, classes, text,
+code, raw); see ``engine/linter/views.py``.
+
 Public surface
 --------------
 ``lint(paths, severity_threshold) -> LintReport``
+``lint_text(name, text) -> List[Finding]`` lints one file's contents.
 ``LintReport`` is JSON-serialisable via ``to_dict()``.
 """
 from __future__ import annotations
 
 import re
-import sys
+from bisect import bisect_right
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
 from engine.data_loader import load
+from engine.linter.views import CHANNELS, FileViews, is_mention
 
 
 SEVERITY_RANK = {"low": 0, "medium": 1, "high": 2, "critical": 3}
@@ -95,24 +100,64 @@ class LintReport:
         return out
 
 
+IGNORED_DIRS = {
+    "node_modules", ".git", "dist", "build", ".next", ".nuxt", ".svelte-kit",
+    ".astro", "vendor", ".ux", ".venv", "venv", "__pycache__", "coverage",
+}
+_DISABLE = re.compile(
+    r"ux-lint-disable(-next-line)?"
+    r"(?:[:\s]+([a-z0-9][\w-]*(?:\s*,\s*[a-z0-9][\w-]*)*))?",
+    re.IGNORECASE,
+)
+_RULE_CACHE: Dict[int, List[Dict[str, Any]]] = {}
+
+
+def _flags(flag_str: str) -> int:
+    flags = 0
+    if "i" in flag_str:
+        flags |= re.IGNORECASE
+    if "m" in flag_str:
+        flags |= re.MULTILINE
+    if "s" in flag_str:
+        flags |= re.DOTALL
+    return flags
+
+
+def _targets(det: Dict[str, Any]) -> tuple:
+    target = det.get("target", "markup")
+    targets = (target,) if isinstance(target, str) else tuple(target)
+    return tuple(t for t in targets if t in CHANNELS) or ("markup",)
+
+
+def _compile_pass(det: Dict[str, Any], flags: int) -> Dict[str, Any]:
+    """One regex pass: a pattern, the channels it reads, and an optional
+    ``unless`` pattern that waives the pass for the whole file."""
+    targets = _targets(det)
+    unless_target = det.get("unless_target", targets)
+    return {
+        "regex": re.compile(det["pattern"], flags),
+        "targets": targets,
+        "unless": re.compile(det["unless"], flags) if det.get("unless") else None,
+        "unless_targets": (unless_target,) if isinstance(unless_target, str) else tuple(unless_target),
+    }
+
+
 def _compile_rules() -> List[Dict[str, Any]]:
     data = load("anti-patterns")
+    cached = _RULE_CACHE.get(id(data))
+    if cached is not None:
+        return cached
     rules: List[Dict[str, Any]] = []
     for entry in data.get("entries", []):
         det = entry.get("detection", {})
         if det.get("type") != "regex":
             continue
-        flags = 0
-        flag_str = det.get("flags", "")
-        if "i" in flag_str:
-            flags |= re.IGNORECASE
-        if "m" in flag_str:
-            flags |= re.MULTILINE
-        if "s" in flag_str:
-            flags |= re.DOTALL
+        flags = _flags(det.get("flags", ""))
         try:
-            compiled = re.compile(det["pattern"], flags)
-        except re.error:
+            passes = [_compile_pass(det, flags)]
+            passes.extend(_compile_pass(extra, _flags(extra.get("flags", det.get("flags", ""))))
+                          for extra in det.get("also", []))
+        except (re.error, KeyError):
             continue
         rules.append({
             "id": entry.get("id"),
@@ -121,18 +166,33 @@ def _compile_rules() -> List[Dict[str, Any]]:
             "category": entry.get("category", "General"),
             "fix": entry.get("fix", ""),
             "scope": set(det.get("scope", [])),
-            "regex": compiled,
+            "regex": passes[0]["regex"],
+            "passes": passes,
+            "skip_inside": tuple(x.lower() for x in det.get("skip_inside", [])),
         })
+    _RULE_CACHE.clear()
+    _RULE_CACHE[id(data)] = rules
     return rules
 
 
 def _walk_paths(paths: Iterable[Path]) -> Iterable[Path]:
+    seen = set()
     for p in paths:
         if p.is_file():
-            yield p
+            candidates: Iterable[Path] = [p]
         elif p.is_dir():
-            for glob in DEFAULT_GLOBS:
-                yield from p.rglob(glob)
+            candidates = (
+                f for glob in DEFAULT_GLOBS for f in p.rglob(glob)
+                if not IGNORED_DIRS.intersection(f.relative_to(p).parts[:-1])
+            )
+        else:
+            continue
+        for f in candidates:
+            key = f.resolve()
+            if key in seen:
+                continue
+            seen.add(key)
+            yield f
 
 
 def _scope_matches(path: Path, scope: set) -> bool:
@@ -146,6 +206,90 @@ def _scope_matches(path: Path, scope: set) -> bool:
     if name.endswith(".blade.php") and "blade" in scope:
         return True
     return False
+
+
+def _suppressions(text: str) -> Dict[int, Optional[set]]:
+    """Map line number to the rule ids waived there (``None`` means all)."""
+    out: Dict[int, Optional[set]] = {}
+    if "ux-lint-disable" not in text:
+        return out
+    for line_no, line in enumerate(text.splitlines(), start=1):
+        for m in _DISABLE.finditer(line):
+            target = line_no + 1 if m.group(1) else line_no
+            ids = {x.strip().lower() for x in m.group(2).split(",")} if m.group(2) else None
+            if ids is None or out.get(target, set()) is None:
+                out[target] = None
+            else:
+                out.setdefault(target, set()).update(ids)  # type: ignore[union-attr]
+    return out
+
+
+def _inside(text: str, pos: int, names: tuple) -> bool:
+    """True when ``pos`` sits inside an open element named in ``names``."""
+    low = text[:pos].lower()
+    for name in names:
+        opened = max(low.rfind("<" + name + ">"), low.rfind("<" + name + " "))
+        if opened != -1 and low.rfind("</" + name, opened) == -1:
+            return True
+    return False
+
+
+def _pass_targets(rule: Dict[str, Any]) -> Iterable[tuple]:
+    for rpass in rule["passes"]:
+        for target in rpass["targets"]:
+            yield rpass, target
+
+
+def lint_text(name: str, text: str, rules: Optional[List[Dict[str, Any]]] = None) -> List[Finding]:
+    """Lint one file's contents. ``name`` supplies the extension and the
+    path reported in each finding."""
+    rules = _compile_rules() if rules is None else rules
+    path = Path(name)
+    views = FileViews(path.name, text)
+    line_starts = [0] + [m.end() for m in re.finditer("\n", text)]
+    lines = text.splitlines()
+    waived = _suppressions(text)
+    findings: List[Finding] = []
+    for rule in rules:
+        if not _scope_matches(path, rule["scope"]):
+            continue
+        seen_lines = set()
+        for rpass, target in _pass_targets(rule):
+            if rpass["unless"] is not None and any(
+                (uv := views.get(ut)) is not None and rpass["unless"].search(uv.text)
+                for ut in rpass["unless_targets"]
+            ):
+                continue
+            view = views.get(target)
+            if view is None or not view.text:
+                continue
+            for match in rpass["regex"].finditer(view.text):
+                if target == "text" and is_mention(view.text, match.start(), match.end()):
+                    continue
+                start = view.orig(match.start())
+                if rule["skip_inside"] and _inside(text, start, rule["skip_inside"]):
+                    continue
+                line_no = bisect_right(line_starts, start)
+                if line_no in seen_lines:
+                    continue
+                w = waived.get(line_no, set())
+                if w is None or (rule["id"] or "").lower() in w:
+                    continue
+                seen_lines.add(line_no)
+                col_no = start - line_starts[line_no - 1] + 1
+                excerpt = lines[line_no - 1] if 0 < line_no <= len(lines) else match.group(0)
+                findings.append(Finding(
+                    rule_id=rule["id"] or "unknown",
+                    rule_name=rule["name"] or "Unknown rule",
+                    severity=rule["severity"],
+                    category=rule["category"],
+                    file=str(name),
+                    line=line_no,
+                    column=col_no,
+                    excerpt=excerpt[:200],
+                    fix=rule["fix"],
+                ))
+    return findings
 
 
 def lint(
@@ -170,27 +314,7 @@ def lint(
         except OSError:
             continue
         files_scanned += 1
-        lines = text.splitlines()
-
-        for rule in rules:
-            if not _scope_matches(path, rule["scope"]):
-                continue
-            for match in rule["regex"].finditer(text):
-                start = match.start()
-                line_no = text.count("\n", 0, start) + 1
-                col_no = start - (text.rfind("\n", 0, start) + 1) + 1
-                excerpt = lines[line_no - 1] if 0 < line_no <= len(lines) else match.group(0)
-                findings.append(Finding(
-                    rule_id=rule["id"] or "unknown",
-                    rule_name=rule["name"] or "Unknown rule",
-                    severity=rule["severity"],
-                    category=rule["category"],
-                    file=str(path),
-                    line=line_no,
-                    column=col_no,
-                    excerpt=excerpt[:200],
-                    fix=rule["fix"],
-                ))
+        findings.extend(lint_text(str(path), text, rules))
 
     fatal = any(SEVERITY_RANK.get(f.severity, 0) >= threshold for f in findings)
     score = compute_score(findings, files_scanned)

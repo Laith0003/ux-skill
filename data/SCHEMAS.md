@@ -243,6 +243,18 @@ UI/design styles (Bento, Brutalism, Editorial Warm, Glass, Neo-Brutalism, etc.)
 }
 ```
 
+Optional `detection` fields read by `engine/linter`:
+
+| Field | Meaning |
+|---|---|
+| `target` | Channel or list of channels the pattern runs on: `markup` (default), `css`, `classes`, `text`, `code`, `raw`. See the channel table in `commands/ux-lint.md`. |
+| `also` | Extra passes, each `{ "pattern", "target", "flags"?, "unless"?, "unless_target"? }`. A finding from any pass reports under the rule id. |
+| `unless` | Regex; when it matches anywhere in `unless_target` (default: the pass's own targets), the pass is skipped for that file. |
+| `unless_target` | Channel or list of channels `unless` reads. |
+| `skip_inside` | Element names; a match inside an open element of that name is ignored (for example `["picture"]`). |
+
+Every rule needs a fixture at `tests/lint_corpus/dirty/<id>.<ext>` that it fires on, and must stay silent on `tests/lint_corpus/clean/`.
+
 ## `brands/*.json` — 72 entries (our moat — converted from existing DESIGN.md)
 
 ```jsonc

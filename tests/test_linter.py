@@ -381,10 +381,17 @@ def test_every_regex_rule_compiles():
     """The loader skips rules whose pattern fails to compile. A broken pattern
     must fail here instead of silently disabling the rule."""
     from engine.data_loader import load
+    from engine.linter.views import CHANNELS
     for entry in load("anti-patterns")["entries"]:
         det = entry.get("detection", {})
         if det.get("type") == "regex":
-            re.compile(det["pattern"])
+            for part in [det] + det.get("also", []):
+                re.compile(part["pattern"])
+                if part.get("unless"):
+                    re.compile(part["unless"])
+                targets = part.get("target", "markup")
+                for target in [targets] if isinstance(targets, str) else targets:
+                    assert target in CHANNELS, f"{entry['id']}: unknown target channel {target!r}"
 
 
 # --- Responsive gate (dogfood P6): full-viewport-width-overflow (both-direction) ---
@@ -403,3 +410,127 @@ def test_full_viewport_width_ignores_max_width_100vw(tmp_path):
     f.write_text(".hero { max-width: 100vw; }\n.bar { width: 100%; }", encoding="utf-8")
     ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
     assert "full-viewport-width-overflow" not in ids
+
+
+# --- JSX awareness: CSS rules read style objects and class strings, never
+# --- prop names or plain text.
+
+@pytest.mark.parametrize("name,snippet,rule_id,should_fire", [
+    # style objects: camelCase keys, numbers become px
+    ("a.tsx", '<div style={{ zIndex: 9999 }} />', "arbitrary-z-index-9999", True),
+    ("a.tsx", '<h1 style={{ fontSize: 96 }}>Hi</h1>', "hero-text-arbitrary-90px", True),
+    ("a.tsx", '<h1 style={{ lineHeight: 96 }}>Hi</h1>', "hero-text-arbitrary-90px", False),
+    ("a.jsx", '<div style={{ width: "100vw" }} />', "full-viewport-width-overflow", True),
+    ("a.tsx", '<Box sx={{ transition: "all 200ms", "&:hover": { zIndex: 99999 } }} />',
+     "transition-property-all", True),
+    ("a.tsx", '<Box sx={{ "&:hover": { zIndex: 99999 } }} />', "arbitrary-z-index-9999", True),
+    ("a.tsx", '<div style={{ transition: `height ${ms}ms` }} />', "animating-layout-properties", True),
+    ("a.vue", '<template><div :style="{ zIndex: 9999 }"></div></template>', "arbitrary-z-index-9999", True),
+    # class strings: className, class expressions, template literals
+    ("a.tsx", '<div className="transition-all" />', "transition-property-all", True),
+    ("a.tsx", '<div className={cn("h-screen", open && "flex")} />', "h-screen-no-dvh-fallback", True),
+    ("a.tsx", '<div className={`w-screen ${x}`} />', "full-viewport-width-overflow", True),
+    ("a.tsx", 'export const panel = "fixed inset-0 z-[9999] bg-black/50";', "arbitrary-z-index-9999", True),
+    # prop names are not CSS
+    ("a.tsx", '<Modal zIndex={9999} />', "arbitrary-z-index-9999", False),
+    ("a.tsx", '<Frame width="100vw" transition="all" />', "full-viewport-width-overflow", False),
+    ("a.tsx", '<Frame width="100vw" transition="all" />', "transition-property-all", False),
+    # plain text is not CSS
+    ("a.tsx", "<p>Never write transition: all or z-index: 9999.</p>", "transition-property-all", False),
+    ("a.tsx", "<p>Never write transition: all or z-index: 9999.</p>", "arbitrary-z-index-9999", False),
+    ("a.html", "<p>The class transition-all animates layout.</p>", "transition-property-all", False),
+    ("a.html", "<pre><code>.a { width: 100vw; }</code></pre>", "full-viewport-width-overflow", False),
+    # custom-property-only style attributes pass runtime values to CSS
+    ("a.tsx", '<div style={{ "--progress": `${pct}%` }} />', "inline-style-attribute", False),
+    ("a.html", '<div style="--progress: 40%"></div>', "inline-style-attribute", False),
+    ("a.html", '<div style="--progress: 40%; color: red"></div>', "inline-style-attribute", True),
+])
+def test_jsx_awareness(tmp_path, name, snippet, rule_id, should_fire):
+    f = tmp_path / name
+    f.write_text(snippet, encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert (rule_id in ids) is should_fire, ids
+
+
+def test_jsx_finding_points_at_the_style_key(tmp_path):
+    f = tmp_path / "a.tsx"
+    f.write_text('export const A = () => (\n  <div\n    style={{\n      zIndex: 9999,\n    }}\n  />\n);\n',
+                 encoding="utf-8")
+    hits = [x for x in lint([str(f)]).to_dict()["findings"] if x["rule_id"] == "arbitrary-z-index-9999"]
+    assert [h["line"] for h in hits] == [4]
+
+
+# --- Comments, strings and data URIs are not code.
+
+@pytest.mark.parametrize("name,snippet", [
+    ("a.css", "/* .x { transition: all 1s; z-index: 9999; } */"),
+    ("a.scss", "// .x { transition: all 1s; z-index: 9999; }\n.y { color: red; }"),
+    ("a.tsx", "// transition: all; z-index: 9999\nexport const x = 1;"),
+    ("a.tsx", "/* <div className=\"transition-all\"> */ export const x = 1;"),
+    ("a.tsx", "export const A = () => <div>{/* transition-all z-[9999] */}</div>;"),
+    ("a.html", "<!-- <div class=\"transition-all\" style=\"z-index: 9999\"></div> -->"),
+    ("a.blade.php", "{{-- <div class=\"transition-all\" style=\"z-index: 9999\"></div> --}}"),
+    ("a.css", ".a { background: url(\"data:image/svg+xml;utf8,<svg><style>*{transition:all 1s}</style></svg>\"); }"),
+])
+def test_comments_and_data_uris_are_not_linted(tmp_path, name, snippet):
+    f = tmp_path / name
+    f.write_text(snippet, encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert "transition-property-all" not in ids and "arbitrary-z-index-9999" not in ids, ids
+
+
+@pytest.mark.parametrize("name,snippet,should_fire", [
+    ("a.tsx", 'export const EVENT = "cta-cutting-edge-click";', False),
+    ("a.html", '<a href="/blog/why-we-dropped-cutting-edge">Why we changed our copy</a>', False),
+    ("a.html", "<p>Drafts often say &ldquo;cutting-edge&rdquo;; we do not.</p>", False),
+    ("a.tsx", 'const hero = { title: "Cutting-edge routing for carriers" };', True),
+    ("a.html", "<p>Cutting-edge routing for carriers.</p>", True),
+])
+def test_copy_rules_read_visible_copy_only(tmp_path, name, snippet, should_fire):
+    f = tmp_path / name
+    f.write_text(snippet, encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert ("marketing-buzz-cutting-edge" in ids) is should_fire, ids
+
+
+# --- Suppression comments.
+
+@pytest.mark.parametrize("snippet,suppressed", [
+    ('.a { z-index: 9999; } /* ux-lint-disable */', True),
+    ('.a { z-index: 9999; } /* ux-lint-disable arbitrary-z-index-9999 */', True),
+    ('.a { z-index: 9999; } /* ux-lint-disable transition-property-all */', False),
+    ('/* ux-lint-disable-next-line arbitrary-z-index-9999 */\n.a { z-index: 9999; }', True),
+    ('/* ux-lint-disable-next-line */\n\n.a { z-index: 9999; }', False),
+])
+def test_ux_lint_disable(tmp_path, snippet, suppressed):
+    f = tmp_path / "a.css"
+    f.write_text(snippet, encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert ("arbitrary-z-index-9999" not in ids) is suppressed
+
+
+# --- Walking.
+
+def test_blade_file_is_scanned_once(tmp_path):
+    (tmp_path / "view.blade.php").write_text("<p>ok</p>", encoding="utf-8")
+    assert lint([str(tmp_path)]).files_scanned == 1
+
+
+def test_dependency_and_build_dirs_are_skipped(tmp_path):
+    for d in ("node_modules/pkg", "dist", ".next/static", "vendor/lib"):
+        (tmp_path / d).mkdir(parents=True)
+        (tmp_path / d / "x.css").write_text(".a { z-index: 9999; }", encoding="utf-8")
+    (tmp_path / "src").mkdir()
+    (tmp_path / "src" / "x.css").write_text(".a { color: red; }", encoding="utf-8")
+    report = lint([str(tmp_path)])
+    assert report.files_scanned == 1
+    assert report.findings == []
+
+
+def test_an_explicit_file_inside_an_ignored_dir_is_still_linted(tmp_path):
+    d = tmp_path / "dist"
+    d.mkdir()
+    f = d / "x.css"
+    f.write_text(".a { z-index: 9999; }", encoding="utf-8")
+    ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+    assert "arbitrary-z-index-9999" in ids

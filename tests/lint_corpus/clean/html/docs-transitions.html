@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Motion guidelines: transitions</title>
+  <link rel="stylesheet" href="/docs.css">
+</head>
+<body>
+  <main id="main" class="docs">
+    <article class="docs-article">
+      <h1>Transitions</h1>
+      <p>
+        Name the properties you animate. Writing <code>transition: all 300ms</code> animates
+        layout changes you did not plan for, and <code>width: 100vw</code> adds a horizontal
+        scrollbar on desktop when the page has a vertical one.
+      </p>
+      <p>
+        The utility <code>transition-all</code> has the same problem. Prefer
+        <code>transition-colors</code> or <code>transition-transform</code>.
+      </p>
+      <h2>Examples</h2>
+      <pre><code class="language-css">/* Avoid */
+.card { transition: all 300ms; z-index: 9999; }
+
+/* Prefer */
+.card { transition: transform 150ms ease-out, opacity 150ms ease-out; }</code></pre>
+      <p>
+        Headlines in marketing drafts often say things like &ldquo;next-generation&rdquo; or
+        &ldquo;cutting-edge&rdquo;. The copy guide lists replacements; this page only covers motion.
+      </p>
+      <h2>Reduced motion</h2>
+      <p>
+        Wrap non-essential motion in <code>@media (prefers-reduced-motion: no-preference)</code>
+        so the default is still.
+      </p>
+    </article>
+  </main>
+</body>
+</html>

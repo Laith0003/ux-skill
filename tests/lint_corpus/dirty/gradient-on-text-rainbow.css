@@ -1,0 +1,4 @@
+.headline {
+  background-clip: text;
+  background-image: linear-gradient(90deg, #f00, #00f);
+}

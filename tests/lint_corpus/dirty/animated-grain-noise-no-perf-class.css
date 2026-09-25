@@ -1,0 +1,3 @@
+.overlay {
+  animation: grain 8s steps(10) infinite;
+}

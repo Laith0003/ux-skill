@@ -1,0 +1,60 @@
+/* Logical properties first, so one stylesheet serves dir="ltr" and dir="rtl". */
+
+.media {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+}
+
+.media__figure {
+  flex: none;
+  margin-inline-end: var(--space-3);
+}
+
+.media__body {
+  padding-inline-start: var(--space-2);
+  border-inline-start: 2px solid var(--line);
+  text-align: start;
+}
+
+.breadcrumbs li + li::before {
+  content: "/";
+  margin-inline: var(--space-2);
+  color: var(--ink-muted);
+}
+
+.drawer {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-end: 0;
+  inline-size: min(24rem, 100%);
+  transform: translateX(100%);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+[dir="rtl"] .drawer {
+  transform: translateX(-100%);
+}
+
+.drawer[data-open="true"] {
+  transform: none;
+}
+
+/* Arrows that point "forward" flip in RTL. */
+[dir="rtl"] .icon-forward {
+  transform: scaleX(-1);
+}
+
+.price {
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+:lang(ar) {
+  line-height: 1.8;
+  letter-spacing: 0;
+}
+
+.bleed {
+  margin-inline: calc(var(--space-4) * -1);
+}

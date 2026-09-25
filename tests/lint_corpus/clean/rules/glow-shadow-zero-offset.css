@@ -1,0 +1,21 @@
+/* Focus rings are spread with no blur; elevation has a light source. */
+.field:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(180 83 9 / 0.45);
+}
+
+.menu {
+  box-shadow: 0 8px 24px rgb(28 25 23 / 0.14);
+}
+
+.chip--selected {
+  box-shadow: 0 0 0 1px var(--ink), 0 1px 2px rgb(28 25 23 / 0.1);
+}
+
+.map-pin {
+  filter: drop-shadow(0 2px 4px rgb(0 0 0 / 0.3));
+}
+
+.badge-live {
+  box-shadow: 0 0 6px rgb(21 128 61 / 0.5);
+}

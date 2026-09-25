@@ -1,0 +1,50 @@
+---
+interface Photo {
+  slug: string;
+  alt: string;
+  width: number;
+  height: number;
+  // Tiny blurred preview, inlined so the grid never jumps while loading.
+  lqip: string;
+}
+const { photos } = Astro.props as { photos: Photo[] };
+const fallbackPreview =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'%3E%3Crect width='4' height='3' fill='%23e7e5e4'/%3E%3C/svg%3E";
+---
+
+<ul class="gallery">
+  {photos.map((photo) => (
+    <li class="gallery__item">
+      <picture>
+        <source srcset={`/photos/${photo.slug}.avif`} type="image/avif" />
+        <source srcset={`/photos/${photo.slug}.webp`} type="image/webp" />
+        <img
+          src={`/photos/${photo.slug}.jpg`}
+          alt={photo.alt}
+          width={photo.width}
+          height={photo.height}
+          loading="lazy"
+          decoding="async"
+          style={`background-image: url(${photo.lqip || fallbackPreview})`}
+        />
+      </picture>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: var(--space-3);
+    padding: 0;
+    list-style: none;
+  }
+
+  .gallery__item img {
+    inline-size: 100%;
+    block-size: auto;
+    background-size: cover;
+    border-radius: var(--radius-sm);
+  }
+</style>

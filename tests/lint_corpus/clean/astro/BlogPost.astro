@@ -1,0 +1,75 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { formatDate } from "../lib/dates";
+
+interface Props {
+  title: string;
+  description: string;
+  published: Date;
+  cover: { src: string; alt: string; width: number; height: number };
+  tags: string[];
+  featured?: boolean;
+}
+
+// A post frontmatter never says "cutting-edge" in the title; the CMS
+// preview rejects it. This comment is not copy.
+const { title, description, published, cover, tags, featured = false } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class:list={["post", { "post--featured": featured }]}>
+    <header class="post__header">
+      <p class="post__date"><time datetime={published.toISOString()}>{formatDate(published)}</time></p>
+      <h1 class="post__title">{title}</h1>
+      <p class="post__lede">{description}</p>
+    </header>
+    <img
+      class="post__cover"
+      src={cover.src}
+      alt={cover.alt}
+      width={cover.width}
+      height={cover.height}
+      decoding="async"
+    />
+    <div class="post__body prose">
+      <slot />
+    </div>
+    <footer class="post__footer">
+      <ul class="post__tags" aria-label="Tags">
+        {tags.map((tag) => <li><a href={`/tags/${tag}`}>{tag}</a></li>)}
+      </ul>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .post {
+    --measure: 68ch;
+    display: grid;
+    gap: var(--space-6);
+    max-inline-size: var(--measure);
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+  }
+
+  .post__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1.4rem + 2.5vw, 3.25rem);
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+
+  .post__cover {
+    inline-size: 100%;
+    block-size: auto;
+    border-radius: var(--radius-md);
+  }
+
+  .post__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: 0;
+    list-style: none;
+  }
+</style>
