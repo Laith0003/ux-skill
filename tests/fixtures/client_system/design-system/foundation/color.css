@@ -1,0 +1,9 @@
+/* Fixture color foundation: semantic roles over the primitives. */
+:root {
+  --color-harbor-500: #1C64D9;
+  --color-harbor-600: #1551B3;
+  --color-slate-900: #1E2329;
+  --brand-primary: var(--color-harbor-500);
+  --brand-primary-hover: var(--color-harbor-600);
+  --text-primary: var(--color-slate-900);
+}

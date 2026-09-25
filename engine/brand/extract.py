@@ -10,8 +10,11 @@ signals captured from the live page into a structured BrandProfile that:
      drifts off-brand cannot pass.
 
 Two hard-won rules (see references/process/brand-extraction.md):
-  * COLOR comes from the LOGO, not the most-painted CSS. The logo's dominant
-    non-neutral color is the primary; CSS chrome colors are secondary.
+  * COLOR comes from the project's DECLARED TOKENS when it has a design system
+    (the `declared` block of `ux system detect`), else from the LOGO, never the
+    most-painted CSS. The logo's dominant non-neutral color is the primary when
+    nothing is declared; CSS chrome colors are secondary; a dark, low-chroma
+    color is the text color, never a secondary.
   * TYPE comes from the LOGO's letterform style, and known DEFAULT fonts
     (Roboto/Inter/system-ui/...) are rejected rather than preserved -- a default
     is the absence of a brand choice.
@@ -26,6 +29,8 @@ import colorsys
 import re
 from dataclasses import dataclass, field, asdict
 from typing import Any, Dict, List, Optional
+
+from engine.existing import normalize_hex
 
 
 # Known default / theme fonts: their presence signals the ABSENCE of a type
@@ -92,6 +97,30 @@ def _is_default_font(name: str) -> bool:
     return bool(name) and name.lower() in _DEFAULT_FONTS
 
 
+def _same_hex(a: str, b: str) -> bool:
+    return normalize_hex(a) == normalize_hex(b) != ""
+
+
+def _is_text_like(hexstr: str) -> bool:
+    """Dark and low in chroma: reads as a text color, not a brand hue."""
+    hsv = _hex_to_hsv(hexstr)
+    return bool(hsv) and hsv[2] < 0.2 and hsv[1] < 0.35
+
+
+_LANGUAGE_NAMES = {
+    "arabic": "ar", "english": "en", "french": "fr", "german": "de", "spanish": "es",
+    "hebrew": "he", "persian": "fa", "farsi": "fa", "urdu": "ur", "turkish": "tr",
+    "chinese": "zh", "japanese": "ja", "korean": "ko", "hindi": "hi", "portuguese": "pt",
+    "italian": "it", "russian": "ru",
+}
+
+
+def _language_from_voice(voice: str) -> str:
+    """"Arabic-first" (or "Arabic first") in the voice line names the language."""
+    m = re.search(r"\b([a-z]+)[\s-]+first\b", (voice or "").lower())
+    return _LANGUAGE_NAMES.get(m.group(1), "") if m else ""
+
+
 def _hexes(raw) -> List[str]:
     out: List[str] = []
     for c in (raw or []):
@@ -109,9 +138,11 @@ class BrandProfile:
     language: str = "en"                                       # standard frontmatter
     logo: Dict[str, Any] = field(default_factory=dict)         # {url, alt}
     logo_style: str = ""                                       # vision read of the wordmark
-    primary: str = ""                                          # from LOGO pixels (rule 3)
+    primary: str = ""                                          # declared token, else LOGO pixels (rule 3)
     primary_family: str = ""
-    primary_source: str = ""                                   # "logo" | "css" | "brand-md"
+    primary_source: str = ""                                   # "tokens" | "logo" | "css" | "brand-md"
+    logo_primary: str = ""                                     # the logo pixel sample, reported beside a declared primary
+    text_color: str = ""                                       # the text role; never a secondary
     secondary: List[str] = field(default_factory=list)
     colors_to_avoid: List[str] = field(default_factory=list)   # house colors + signals; spec "colors to avoid"
     fonts: Dict[str, str] = field(default_factory=dict)        # display/body/type_personality/display_source
@@ -132,7 +163,9 @@ def build_profile(signals: Dict[str, Any]) -> BrandProfile:
     Signal keys (all optional): source/url, name, logo{url/src,alt},
     logo_colors[{hex,score}] (sampled from the logo image), brand_colors/colors
     (from CSS), logo_type_style/logo_style (vision read of the wordmark),
-    fonts{display,h1,h2,body}, imagery[url], voice.
+    fonts{display,h1,h2,body}, imagery[url], voice, language, and declared
+    (the `declared` block of `ux system detect`: primary, primary_token, text,
+    languages). A declared primary beats the logo pixels; both are reported.
     """
     p = BrandProfile()
     p.source = signals.get("source", "") or signals.get("url", "")
@@ -149,18 +182,48 @@ def build_profile(signals: Dict[str, Any]) -> BrandProfile:
         name = name.replace("logo", "").replace("Logo", "").strip(" -_|")
         p.name = " ".join(w.capitalize() if w.islower() else w for w in name.split())
 
-    # --- Color: the LOGO wins; CSS is supporting (rule 3) ---
+    # --- Color: DECLARED TOKENS win; then the LOGO; CSS is supporting (rule 3) ---
+    # A project's own token file (the `declared` block of `ux system detect`)
+    # states the primary outright; logo pixels are only a sample of it.
+    declared = signals.get("declared") or {}
+    declared_primary = normalize_hex(declared.get("primary"))
+    declared_text = normalize_hex(declared.get("text"))
     logo_hexes = _hexes(signals.get("logo_colors"))
     css_hexes = _hexes(signals.get("brand_colors") or signals.get("colors"))
-    primary = (next((h for h in logo_hexes if hue_family(h) != "neutral"), None)
-               or next((h for h in css_hexes if hue_family(h) != "neutral"), None)
-               or (logo_hexes[0] if logo_hexes else (css_hexes[0] if css_hexes else "")))
+    logo_pick = next((h for h in logo_hexes if hue_family(h) != "neutral"), "")
+    p.logo_primary = logo_pick
+    if declared_primary:
+        primary = declared_primary
+        p.primary_source = "tokens"
+        token = declared.get("primary_token") or "the primary token"
+        if logo_pick and _same_hex(logo_pick, primary):
+            p.notes.append("Primary %s comes from the declared token %s; the logo pixels agree."
+                           % (primary, token))
+        elif logo_pick:
+            p.notes.append("Primary %s comes from the declared token %s. The logo pixels sample "
+                           "as %s; the declared token wins and both are reported."
+                           % (primary, token, logo_pick))
+    else:
+        primary = (logo_pick
+                   or next((h for h in css_hexes if hue_family(h) != "neutral"), None)
+                   or (logo_hexes[0] if logo_hexes else (css_hexes[0] if css_hexes else "")))
+        p.primary_source = "logo" if primary in logo_hexes else ("css" if primary else "")
     p.primary = primary
     p.primary_family = hue_family(primary) if primary else ""
-    p.primary_source = "logo" if primary in logo_hexes else ("css" if primary else "")
+    # The text color is a role, not a secondary brand color: the declared one,
+    # else the first dark, low-chroma color among the signals.
+    p.text_color = declared_text or next(
+        (h for h in (css_hexes + logo_hexes) if _is_text_like(h) and not _same_hex(h, primary)),
+        "")
+    skip = {primary.upper(), p.text_color.upper()}
+    if declared_primary and logo_pick:
+        skip.add(logo_pick.upper())   # a sample of the primary, reported as logo_primary
     seen = set()
+    # Dark neutrals are text or ink, never a secondary brand color, even when
+    # a declared text color already fills the text role.
     p.secondary = [h for h in (logo_hexes + css_hexes)
-                   if h != primary and not (h in seen or seen.add(h))][:4]
+                   if h.upper() not in skip and not _is_text_like(h)
+                   and not (h.upper() in seen or seen.add(h.upper()))][:4]
     if css_hexes and logo_hexes and p.primary_source == "logo":
         p.notes.append("Primary taken from the logo, not the most-painted CSS color.")
 
@@ -189,7 +252,13 @@ def build_profile(signals: Dict[str, Any]) -> BrandProfile:
 
     # --- Standard-spec fields the engine can honestly fill (rest stay empty) ---
     p.tagline = signals.get("tagline", "") or ""
-    p.language = signals.get("language") or "en"
+    # Language: stated in the signals, else the project's own HTML, else a
+    # "<language>-first" phrase in the voice, else English.
+    languages = declared.get("languages") or []
+    p.language = (signals.get("language")
+                  or (languages[0] if languages else "")
+                  or _language_from_voice(p.voice)
+                  or "en")
 
     # colors_to_avoid: ALWAYS list the engine's house colors that are not this
     # brand's primary (so the engine's own style can never leak in), then append
@@ -370,6 +439,16 @@ def render_md(p: BrandProfile) -> str:
     else:
         lines += ["- **Colors to avoid:** (none)"]
     lines += [""]
+    # Color roles: the text color and the logo pixel sample. Their own section,
+    # so the Colors round-trip never reads them as secondary or avoid colors.
+    roles: List[str] = []
+    if p.text_color:
+        roles += ["- **Text:** `%s`. The text color, not a brand color." % p.text_color]
+    if p.logo_primary and not _same_hex(p.logo_primary, p.primary):
+        roles += ["- **Logo pixels:** `%s`. A sample of the logo; the declared primary "
+                  "above wins." % p.logo_primary]
+    if roles:
+        lines += ["### Color roles", ""] + roles + [""]
 
     # Typography. A deferred display/body font uses the _NOT_EXTRACTED sentinel in
     # the value slot (with the logo-style guidance as trailing context) so the
@@ -533,6 +612,16 @@ def parse_brand_md(text: str) -> BrandProfile:
         p.primary_family = hue_family(primary) if primary else ""
         p.secondary = secondary
         p.colors_to_avoid = avoid
+
+    # Color roles: the text color and the logo pixel sample.
+    for line in vis_h3.get("color roles", "").splitlines():
+        found = _hexes_in(line)
+        if not found:
+            continue
+        if "**text:**" in line.lower():
+            p.text_color = found[0]
+        elif "**logo pixels:**" in line.lower():
+            p.logo_primary = found[0]
 
     # Typography: display font (rejected if a known default), body font.
     typ_text = vis_h3.get("typography", "")

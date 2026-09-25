@@ -49,8 +49,12 @@ CHANGELOG_BETA = CHANGELOG[CHANGELOG.index("## [4.0.0-beta.1]"):CHANGELOG.index(
 
 
 def _build_flags():
-    build = cli.commands["system"].commands["build"]
-    return {opt for p in build.params for opt in p.opts} | {"--no-pretty", "--pretty"}
+    """The flags of `system build`, and of `system detect`, which step 3 runs first."""
+    flags = {"--no-pretty", "--pretty"}
+    for name in ("build", "detect"):
+        command = cli.commands["system"].commands[name]
+        flags |= {opt for p in command.params for opt in p.opts}
+    return flags
 
 
 def test_every_flag_the_create_mode_names_exists():

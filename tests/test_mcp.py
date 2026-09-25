@@ -53,6 +53,7 @@ def test_server_imports():
         "ux_decisions_stats",
         # 4.0 beta foundations engine
         "ux_system_build",
+        "ux_system_detect",
     }
     assert set(TOOLS.keys()) == expected_tools, (
         f"missing: {expected_tools - set(TOOLS.keys())}; "

@@ -29,9 +29,17 @@ from __future__ import annotations
 import datetime as _dt
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from engine import __version__
+from engine.existing import (
+    OWNER_KEY, OWNER_VALUE, detect_existing_system, is_ux_skill_file, ownership, stamp_digest,
+)
+
+# The owner mark written into every file persist creates. Ownership itself is
+# the digest stamp_digest adds: a file is persist's only while its text still
+# matches that digest, so a hand-edited or hand-written file is never overwritten.
+OWNER_MARK = OWNER_VALUE + " persist"
 
 # Marker that frontmatter is delimited by --- lines
 _FM_DELIM = "---"
@@ -427,18 +435,80 @@ def _resolve_project_name(project_root: str, brief: Dict[str, Any]) -> str:
     return resolved.name or "untitled"
 
 
+BESIDE_SUFFIX = ".ux-skill.md"
+
+
+def _owned_target(path: Path) -> Tuple[Path, bool]:
+    """The file to write: ``path`` when ux-skill owns it or it does not exist,
+    else a sibling ``<stem>.ux-skill.md``. The second value is True when the
+    write goes beside a hand-written file."""
+    if not path.exists() or is_ux_skill_file(path):
+        return path, False
+    beside = path.with_name(path.stem + BESIDE_SUFFIX)
+    if beside.exists() and not is_ux_skill_file(beside):
+        raise ValueError(f"{path} and {beside} are both hand-written, so persist did not write; "
+                         f"move {beside} aside or pass another --project-root")
+    return beside, True
+
+
+def _beside_note(path: Path, target: Path) -> str:
+    how = {"edited": "was changed by hand after ux-skill wrote it",
+           "legacy": "has no ux-skill digest, so it may hold hand edits"}.get(
+        ownership(path), "is hand-written")
+    return (f"{path} {how}, so persist did not write it; it wrote {target} beside it. "
+            "The existing file stays the source of truth.")
+
+
+def _render_existing_system(project_root: str) -> str:
+    found = detect_existing_system(project_root)
+    if not found.get("found"):
+        return ""
+    lines = ["## Existing design system", "",
+             "This project has its own design system. Its files are fixed input and win over "
+             "every recommendation below; the picks here are suggestions for gaps only.", ""]
+    for src in found["sources"]:
+        lines.append(f"- {src['kind']}: `{src['path']}`")
+    declared = found.get("declared") or {}
+    if declared.get("primary"):
+        lines.append(f"- declared primary: {declared['primary']} "
+                     f"({declared.get('primary_token') or 'unnamed'})")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def save_master_result(project_root: str, recommendation: Dict[str, Any],
+                       brief: Dict[str, Any]) -> Dict[str, Any]:
+    """Write MASTER.md and say where. Never overwrites a hand-written
+    MASTER.md: ux-skill marks the files it writes (``generated_by`` in the
+    frontmatter), and when the file there is not one of them the write goes
+    beside it as ``MASTER.ux-skill.md``. Returns ``{path, wrote_beside, note}``."""
+    master = _master_path(project_root)
+    master.parent.mkdir(parents=True, exist_ok=True)
+    target, beside = _owned_target(master)
+    path = _save_master_to(target, project_root, recommendation, brief)
+    return {"path": path, "wrote_beside": beside,
+            "note": _beside_note(master, target) if beside else ""}
+
+
 def save_master(project_root: str, recommendation: Dict[str, Any], brief: Dict[str, Any]) -> str:
-    """Write ``<project_root>/.ux/design-system/MASTER.md``.
+    """Write ``<project_root>/.ux/design-system/MASTER.md`` (or beside a
+    hand-written one; see ``save_master_result``).
 
     Idempotent: re-using the existing ``last_updated`` timestamp when the
     substantive body has not changed. Returns the absolute path written.
     """
-    target = _master_path(project_root)
-    target.parent.mkdir(parents=True, exist_ok=True)
+    return save_master_result(project_root, recommendation, brief)["path"]
 
+
+def _save_master_to(target: Path, project_root: str, recommendation: Dict[str, Any],
+                    brief: Dict[str, Any]) -> str:
     pages = list_pages(project_root)
     project_name = _resolve_project_name(project_root, brief)
     body = _render_body(recommendation or {}, brief or {}, pages)
+    existing = _render_existing_system(project_root)
+    if existing:
+        head, _, rest = body.partition("\n\n")
+        body = head + "\n\n" + existing + "\n" + rest
 
     # Idempotency: if body matches, reuse the old timestamp so the bytes are
     # bit-for-bit identical. Anything else is a real change.
@@ -456,32 +526,118 @@ def save_master(project_root: str, recommendation: Dict[str, Any], brief: Dict[s
         "project": project_name,
         "last_updated": last_updated,
         "ux_skill_version": __version__,
+        OWNER_KEY: OWNER_MARK,
     }
-    payload = _write_frontmatter(meta) + "\n" + body
+    payload = stamp_digest(_write_frontmatter(meta) + "\n" + body)
     target.write_text(payload, encoding="utf-8")
     return str(target)
+
+
+_HEADING_RE = re.compile(r"^(#{1,6})\s+(.*?)\s*#*\s*$")
+_BULLET_RE = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+(.*)$")
+_FIELD_RE = re.compile(r"^\*\*(.+?)(?::\*\*|\*\*\s*:)\s*(.*)$")
+_TABLE_SEP_RE = re.compile(r"^\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$")
+
+
+def _cells(line: str) -> List[str]:
+    return [c.strip() for c in line.strip().strip("|").split("|")]
+
+
+def parse_sections(body: str) -> List[Dict[str, Any]]:
+    """The Markdown body as sections: one per heading, each with its
+    ``title``, ``level``, ``fields`` (``- **Key:** value`` bullets),
+    ``items`` (other bullets), ``tables`` (rows as dicts keyed by the header)
+    and ``text`` (the remaining prose). Text before the first heading is a
+    section with an empty title."""
+    sections: List[Dict[str, Any]] = []
+
+    def new(title: str, level: int) -> Dict[str, Any]:
+        sec = {"title": title, "level": level, "fields": {}, "items": [], "tables": [],
+               "text": ""}
+        sections.append(sec)
+        return sec
+
+    current: Optional[Dict[str, Any]] = None
+    prose: List[str] = []
+    lines = body.splitlines()
+    i = 0
+
+    def flush() -> None:
+        if current is not None:
+            current["text"] = "\n".join(prose).strip()
+        prose.clear()
+
+    while i < len(lines):
+        line = lines[i]
+        heading = _HEADING_RE.match(line)
+        if heading:
+            flush()
+            current = new(heading.group(2).strip(), len(heading.group(1)))
+            i += 1
+            continue
+        if current is None:
+            if not line.strip():
+                i += 1
+                continue
+            current = new("", 0)
+        if line.lstrip().startswith("|") and i + 1 < len(lines) and _TABLE_SEP_RE.match(lines[i + 1].strip()):
+            header = _cells(line)
+            rows = []
+            i += 2
+            while i < len(lines) and lines[i].lstrip().startswith("|"):
+                cells = _cells(lines[i])
+                rows.append({h: (cells[n] if n < len(cells) else "") for n, h in enumerate(header)})
+                i += 1
+            current["tables"].append(rows)
+            continue
+        bullet = _BULLET_RE.match(line)
+        if bullet:
+            item = bullet.group(1).strip()
+            field_match = _FIELD_RE.match(item)
+            if field_match:
+                current["fields"][field_match.group(1).strip()] = field_match.group(2).strip()
+            else:
+                current["items"].append(item)
+        else:
+            prose.append(line)
+        i += 1
+    flush()
+    return sections
 
 
 def load_master(project_root: str) -> Optional[Dict[str, Any]]:
     """Read MASTER.md back into a structured dict, or None if absent.
 
-    The returned dict has top-level keys ``meta`` (frontmatter values) and
-    ``body`` (the raw Markdown body). For programmatic access, additional
-    parsed fields are best derived from the recommendation JSON that fed
-    ``save_master`` — this loader stays intentionally simple.
+    Returns ``meta`` (frontmatter values), ``body`` (the raw Markdown),
+    ``sections`` (the body's structure, see ``parse_sections``), ``owner``
+    (``ux-skill`` or ``hand-written``), ``path`` and ``pages``. When the
+    MASTER.md is hand-written and ux-skill wrote its own copy beside it,
+    ``ux_skill_copy`` is that copy's path.
     """
     target = _master_path(project_root)
     if not target.exists():
-        return None
+        # The project's own MASTER.md, where a client keeps its system.
+        root = Path(project_root).resolve()
+        target = next((c for c in (root / "design-system" / "MASTER.md", root / "MASTER.md")
+                       if c.is_file()), None)
+        if target is None:
+            return None
     text = target.read_text(encoding="utf-8")
     meta = _parse_frontmatter(text) or {}
     body = _strip_frontmatter(text)
-    return {
+    owned = is_ux_skill_file(target)
+    result: Dict[str, Any] = {
         "meta": meta,
         "body": body,
+        "sections": parse_sections(body),
+        "owner": "ux-skill" if owned else "hand-written",
         "path": str(target),
         "pages": list_pages(project_root),
     }
+    beside = target.with_name(target.stem + BESIDE_SUFFIX)
+    if not owned and beside.exists():
+        result["ux_skill_copy"] = str(beside)
+    return result
 
 
 def save_page(
@@ -490,17 +646,31 @@ def save_page(
     brief: Dict[str, Any],
     output: Dict[str, Any],
 ) -> str:
-    """Write a per-page persistence file under ``pages/``.
+    """Write a per-page persistence file under ``pages/`` (or beside a
+    hand-written one; see ``save_page_result``). Returns the path written.
+    """
+    return save_page_result(project_root, page_name, brief, output)["path"]
 
-    ``output`` is a free-form dict describing the generated artifact —
+
+def save_page_result(
+    project_root: str,
+    page_name: str,
+    brief: Dict[str, Any],
+    output: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Write a per-page file and say where: ``{path, wrote_beside, note}``.
+
+    ``output`` is a free-form dict describing the generated artifact,
     typically the bundle from ``engine.generator.generate`` plus any lint
-    findings and design decisions. Returns the absolute path written.
+    findings and design decisions. A page file ux-skill does not own is
+    never overwritten; the write goes beside it as ``<page>.ux-skill.md``.
     """
     pages_dir = _pages_dir(project_root)
     pages_dir.mkdir(parents=True, exist_ok=True)
 
     stem = _slugify(page_name)
-    target = pages_dir / f"{stem}.md"
+    path = pages_dir / f"{stem}.md"
+    target, beside = _owned_target(path)
 
     body_sections: List[str] = []
     body_sections.append(f"# Page — {page_name.strip() or stem}")
@@ -568,10 +738,12 @@ def save_page(
         "page": stem,
         "last_updated": last_updated,
         "ux_skill_version": __version__,
+        OWNER_KEY: OWNER_MARK,
     }
-    payload = _write_frontmatter(meta) + "\n" + new_body
+    payload = stamp_digest(_write_frontmatter(meta) + "\n" + new_body)
     target.write_text(payload, encoding="utf-8")
-    return str(target)
+    return {"path": str(target), "wrote_beside": beside,
+            "note": _beside_note(path, target) if beside else ""}
 
 
 def list_pages(project_root: str) -> List[str]:
@@ -581,5 +753,7 @@ def list_pages(project_root: str) -> List[str]:
         return []
     out: List[str] = []
     for path in sorted(pages_dir.glob("*.md")):
+        if path.name.endswith(BESIDE_SUFFIX):
+            continue   # ux-skill's copy beside a hand-written page, not a page of its own
         out.append(path.stem)
     return out

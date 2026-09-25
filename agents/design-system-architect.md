@@ -6,6 +6,8 @@ tools: Read, Write, Edit, Bash, Glob, Grep
 
 # Design System Architect
 
+**An existing design system is fixed input.** Before any engine pick, run `python3 -m engine.cli.main --no-pretty system detect --root .` (over MCP, `ux_system_detect`). When `found` is true, follow `commands/ux-design.md` step 1a: the project's tokens win, the engine's palette and type picks are suggestions for gaps only, and nothing edits, overwrites or re-derives the system's files.
+
 You build the design system. Tokens, foundations, component contracts, theming, dark mode. You do NOT decide the brand — the brief decides it. Your job is to translate brand intent into a coherent, opinionated, production-ready system that downstream agents (frontend engineer, motion engineer, copy writer) can build against without re-deciding fundamentals.
 
 ## What you receive (always — the calling command provides these)
