@@ -1,0 +1,23 @@
+/* A navy surface with a purple accent is fine; blending one into the other
+   is the tell. The band below fades within one hue. */
+.site-hero {
+  background-color: #0f172a;
+  color: #f8fafc;
+}
+
+.site-hero__badge {
+  background: #7c3aed;
+  color: #ffffff;
+}
+
+.site-hero__band {
+  background: linear-gradient(180deg, #0f172a, #1e293b);
+}
+
+.chart-legend__navy {
+  background: #1e3a8a;
+}
+
+.chart-legend__violet {
+  background: #8b5cf6;
+}

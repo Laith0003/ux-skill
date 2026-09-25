@@ -1,0 +1,14 @@
+/* Four layers at the boundary: a smooth elevation shadow, each layer a small
+   offset step with its own blur. Careful systems stop here. */
+.card--raised {
+  box-shadow:
+    0 1px 1px hsl(220 30% 20% / 0.08),
+    0 2px 2px hsl(220 30% 20% / 0.08),
+    0 4px 4px hsl(220 30% 20% / 0.08),
+    0 8px 8px hsl(220 30% 20% / 0.08);
+}
+
+/* Three layers: umbra, penumbra and ambient, as in an elevation scale. */
+.menu {
+  box-shadow: 0 5px 5px -3px rgb(0 0 0 / 0.2), 0 8px 10px 1px rgb(0 0 0 / 0.14), 0 3px 14px 2px rgb(0 0 0 / 0.12);
+}

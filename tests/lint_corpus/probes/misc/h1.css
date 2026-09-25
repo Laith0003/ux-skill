@@ -1,0 +1,3 @@
+.card .actions { opacity: 0; }
+.card:hover .actions { opacity: 1; }
+.tile:focus-within .menu { opacity: 1; }

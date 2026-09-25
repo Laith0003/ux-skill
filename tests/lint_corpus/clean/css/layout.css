@@ -1,0 +1,76 @@
+/* App shell. Comments here may name things we avoid: transition: all,
+   z-index: 9999, width: 100vw, outline: none. None of them are rules. */
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  block-size: 3.5rem;
+  line-height: 24px;
+  color: var(--ink);
+  background: var(--surface);
+  border-block-end: 1px solid var(--line);
+}
+
+.help-aside {
+  position: sticky;
+  inset-block-start: 4.5rem;
+  background: rgb(255 255 255 / 0.85);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.help-article li strong {
+  font-weight: 700;
+}
+
+.help-article p {
+  max-inline-size: 68ch;
+}
+
+.btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.route-card .route-card__actions {
+  opacity: 0.6;
+}
+
+.route-card:hover .route-card__actions,
+.route-card:focus-within .route-card__actions {
+  opacity: 1;
+}
+
+.scrim {
+  background: linear-gradient(to top, rgba(12, 10, 9, 0.72), rgba(12, 10, 9, 0));
+}
+
+.popover {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 2px rgba(28, 25, 23, 0.06), 0 4px 12px rgba(28, 25, 23, 0.08);
+}
+
+.dialog {
+  border: 0;
+  box-shadow: 0 24px 48px rgb(28 25 23 / 0.2);
+}
+
+.legend-swatch--series-2 {
+  background: var(--chart-series-2);
+}
+
+.legend-swatch--series-3 {
+  background: var(--chart-series-3);
+}
+
+.band {
+  background: linear-gradient(180deg, #0f766e, #115e59);
+}
+
+.page-head {
+  --page-head-height: 12rem;
+  min-block-size: var(--page-head-height);
+  background-color: #0f172a;
+  color: #f5f5f4;
+}

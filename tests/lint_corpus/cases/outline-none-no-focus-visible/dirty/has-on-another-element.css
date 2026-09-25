@@ -1,0 +1,7 @@
+.toolbar:has(button:focus-visible) {
+  outline: 2px solid var(--focus);
+}
+
+.choice input:focus-visible {
+  outline: none;
+}

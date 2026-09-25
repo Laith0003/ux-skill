@@ -1,0 +1,66 @@
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    animation: fade-up 240ms var(--ease-out) both;
+  }
+
+  .live-dot {
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  .accordion__panel {
+    transition: grid-template-rows var(--duration-base) var(--ease-out);
+  }
+}
+
+.accordion__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+}
+
+.accordion__panel[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+.accordion__inner {
+  overflow: hidden;
+}
+
+.chip {
+  transition: color 120ms ease-out, background-color 120ms ease-out;
+}
+
+.spinner {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  border: 2px solid var(--line);
+  border-block-start-color: var(--action);
+  border-radius: 50%;
+  animation: spin 800ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}

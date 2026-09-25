@@ -1,0 +1,54 @@
+---
+const year = new Date().getFullYear();
+const columns = [
+  { heading: "Product", links: [["/pricing", "Pricing"], ["/changelog", "Changelog"], ["/security", "Security"]] },
+  { heading: "Company", links: [["/about", "About us"], ["/careers", "Careers"], ["/press", "Press kit"]] },
+];
+---
+
+<footer class="footer">
+  <div class="footer__grid">
+    {columns.map((column) => (
+      <section aria-labelledby={`footer-${column.heading}`}>
+        <h2 id={`footer-${column.heading}`} class="footer__heading">{column.heading}</h2>
+        <ul class="footer__list">
+          {column.links.map(([href, label]) => <li><a href={href}>{label}</a></li>)}
+        </ul>
+      </section>
+    ))}
+    <section aria-labelledby="footer-contact">
+      <h2 id="footer-contact" class="footer__heading">Contact</h2>
+      <address class="footer__address">
+        Building 14, King Hussein Business Park<br />
+        Amman, Jordan
+      </address>
+      <a href="https://social.example/freightline" target="_blank" rel="noopener">Follow updates</a>
+    </section>
+  </div>
+  <p class="footer__legal">&copy; {year} Freightline Logistics LLC. VAT 100-442-918.</p>
+</footer>
+
+<style>
+  .footer {
+    padding-block: var(--space-12) var(--space-8);
+    border-block-start: 1px solid var(--line);
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--space-8);
+  }
+
+  .footer__heading {
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  .footer__list {
+    display: grid;
+    gap: var(--space-2);
+    padding: 0;
+    list-style: none;
+  }
+</style>

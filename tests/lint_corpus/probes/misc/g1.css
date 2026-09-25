@@ -1,0 +1,8 @@
+.a { background: linear-gradient(90deg, #ff0000, #ff8800, #ffee00, #00cc44); }
+.b { background: linear-gradient(90deg, #111, #333, #555); }
+.c { transition: max-height 300ms; }
+.d { transition: min-width 200ms; }
+body.dark { font-weight: 700; }
+p.lead { text-shadow: 0 1px 2px #000; }
+pre { font-weight: 700; }
+picture { cursor: pointer; }

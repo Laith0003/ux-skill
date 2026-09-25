@@ -1,0 +1,53 @@
+// Type system. A reviewer once asked for "Inter as display, bold, 96px";
+// we pair a serif display with a sans body instead. That request lives in
+// this comment only.
+
+$display-stack: "Fraunces", "Iowan Old Style", Georgia, serif;
+$body-stack: "Public Sans", system-ui, sans-serif;
+
+@mixin measure($ch: 68) {
+  max-inline-size: #{$ch}ch;
+}
+
+body {
+  font-family: $body-stack;
+  font-size: 1rem;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.display {
+  font-family: $display-stack;
+  font-size: var(--text-display);
+  font-weight: 500;
+  font-variation-settings: "opsz" 144;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+}
+
+.prose {
+  @include measure;
+
+  p + p {
+    margin-block-start: 1em;
+  }
+
+  h2 {
+    font-family: $display-stack;
+    font-size: 1.75rem;
+    line-height: 1.2;
+    margin-block: 2em 0.5em;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+  }
+}
+
+.eyebrow {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}

@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head><meta charset="utf-8"><title>Page</title></head>
+<body>
+<form action="/subscribe" method="post">
+  <label for="email">Work email</label>
+  <input id="email" name="email" type="email" placeholder="you@company.com" autocomplete="email">
+  <button type="submit">Subscribe</button>
+</form>
+<p>The label sits after the form in source order below, and still names the field.</p>
+<form action="/search">
+  <input id="q" name="q" type="search" placeholder="Try: invoices">
+  <label for="q">Search the help center</label>
+</form>
+</body>
+</html>
