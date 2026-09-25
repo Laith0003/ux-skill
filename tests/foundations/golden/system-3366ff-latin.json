@@ -2692,6 +2692,30 @@
             }
           }
         }
+      },
+      "padding-inline-large": {
+        "$type": "dimension",
+        "$value": "{space.8}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "density:compact": "{space.6}"
+            }
+          }
+        }
+      },
+      "padding-block-large": {
+        "$type": "dimension",
+        "$value": "{space.4}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "density:compact": "{space.3}"
+            }
+          }
+        }
       }
     },
     "field": {
@@ -4589,6 +4613,18 @@
           }
         }
       },
+      "56": {
+        "$type": "dimension",
+        "$value": {
+          "value": 56,
+          "unit": "px"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
       "1120": {
         "$type": "dimension",
         "$value": {
@@ -4990,6 +5026,15 @@
             "modes": {
               "density:compact": "{layout.width.32}"
             }
+          }
+        }
+      },
+      "large": {
+        "$type": "dimension",
+        "$value": "{layout.width.56}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
           }
         }
       }
@@ -5488,6 +5533,30 @@
               "contrast:high": {
                 "fontFamily": "{type.face.text}",
                 "fontSize": "{type.size.latin.2}",
+                "fontWeight": "{type.weight.600}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.2}"
+              }
+            }
+          }
+        }
+      },
+      "ui-large": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{type.face.text}",
+          "fontSize": "{type.size.latin.3}",
+          "fontWeight": "{type.weight.500}",
+          "letterSpacing": "{type.tracking.0}",
+          "lineHeight": "{type.leading.latin.2}"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "contrast:high": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.3}",
                 "fontWeight": "{type.weight.600}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.latin.2}"

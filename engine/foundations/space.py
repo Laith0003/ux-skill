@@ -24,6 +24,8 @@ ROLES: Dict[str, Tuple[int, int, int]] = {
     "space.control.gap": (3, 2, 2),
     "space.control.padding-inline": (5, 3, 2),
     "space.control.padding-block": (3, 2, 1),
+    "space.control.padding-inline-large": (8, 6, 4),
+    "space.control.padding-block-large": (4, 3, 2),
     "space.field.label-gap": (2, 1, 1),
     "space.field.message-gap": (2, 1, 1),
     "space.table.cell-padding-inline": (4, 3, 2),

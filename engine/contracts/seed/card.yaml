@@ -8,6 +8,7 @@ parts:
   - {name: media, rtlBehavior: logical}
   - {name: title, rtlBehavior: logical}
   - {name: body, rtlBehavior: logical}
+  - {name: meta, rtlBehavior: logical}
   - {name: actions, rtlBehavior: logical}
 variants:
   - {name: level, values: [standard, lifted], default: standard}
@@ -26,8 +27,10 @@ tokens:
   - {part: title, property: text, role: color.text.default}
   - {part: title, property: font, role: type.text.heading-3}
   - {part: title, property: stack-gap, role: space.text.gap}
-  - {part: body, property: text, role: color.text.muted}
+  - {part: body, property: text, role: color.text.default}
   - {part: body, property: font, role: type.text.body}
+  - {part: meta, property: text, role: color.text.muted}
+  - {part: meta, property: font, role: type.text.fine}
   - {part: actions, property: gap, role: space.control.gap}
 contrast:
   - {fg: color.text.default, bg: color.surface.card, minimum: 4.5, criterion: "1.4.3"}
@@ -46,7 +49,8 @@ copy:
 usage:
   do:
     - Keep an edge on every card; in light high contrast the card and the page are the same color
-    - Round inner media by the card radius minus the padding, never by the card radius itself
+    - Keep the card's main content in the default text color; muted text is for metadata such as a date
+    - Round inner media by the card radius minus the padding, never by the card radius itself, and never below 0; where the padding is larger than the radius, the media takes radius.joined
     - Put actions at the end of the card in reading order
     - Use lifted for one card that must stand above its siblings, not for several
   dont:

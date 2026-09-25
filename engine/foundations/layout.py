@@ -39,6 +39,8 @@ MEASURE_REM = {"text": 38, "form": 32}
 MAX_TEXT_MEASURE_REM = 40
 TARGET_PX = {"comfortable": 44, "compact": 32}
 MIN_TARGET_PX, COMFORTABLE_TARGET_PX = 24, 44
+# A large control (the call to action of a hero) stands this much taller.
+LARGE_EXTRA_PX = 12
 
 
 def _units(pair: Tuple[int, int], density: float) -> Tuple[int, int]:
@@ -67,7 +69,8 @@ def generate_layout(axes: AxisValues, target_px: int = TARGET_PX["comfortable"],
         ts.add(Token(f"layout.viewport.{px}", "dimension", {"value": px, "unit": "px"}))
     for n in sorted(set(COLUMNS.values())):
         ts.add(Token(f"layout.column-count.{n}", "number", n))
-    for px in sorted(set(CONTAINERS) | set(TARGET_PX.values()) | set(targets.values())):
+    for px in sorted(set(CONTAINERS) | set(TARGET_PX.values()) | set(targets.values())
+                     | {targets["comfortable"] + LARGE_EXTRA_PX}):
         ts.add(Token(f"layout.width.{px}", "dimension", {"value": px, "unit": "px"}))
     for rem in sorted(set(MEASURE_REM.values()) | set(measures.values())):
         ts.add(Token(f"layout.rem.{rem}", "dimension", {"value": rem, "unit": "rem"}))
@@ -101,6 +104,9 @@ def generate_layout(axes: AxisValues, target_px: int = TARGET_PX["comfortable"],
                  modes={} if targets["compact"] == targets["comfortable"] else
                  {"density:compact": "{layout.width.%d}" % targets["compact"]},
                  layer="semantic"))
+    ts.add(Token("layout.target.large", "dimension",
+                 "{layout.width.%d}" % (targets["comfortable"] + LARGE_EXTRA_PX),
+                 layer="semantic"))
     return Generated(tokens=ts, notes=[f"layout: container {container_px(d)}px"])
 
 
@@ -117,6 +123,7 @@ ROLE_TYPES: Dict[str, str] = {
     "layout.container.max": "dimension",
     **{f"layout.measure.{name}": "dimension" for name in MEASURE_REM},
     "layout.target.min": "dimension",
+    "layout.target.large": "dimension",
 }
 COMPACT = "density:compact"
 

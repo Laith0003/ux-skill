@@ -27,6 +27,7 @@
 - `type.text.body`: paragraphs and any text people read in full.
 - `type.text.body-small`: secondary paragraphs and dense reading, such as table cells.
 - `type.text.ui`: labels on buttons, fields, tabs and menus; short, one line.
+- `type.text.ui-large`: the label of a field and of a large button; body size at the ui weight, so a label is never smaller than the value it names.
 - `type.text.label`: an eyebrow above a heading, a tag or a line of metadata, spaced open; set in the mono face in a technical system.
 - `type.text.fine`: captions, timestamps and small print nobody must read to act.
 - `type.text.code`: code, token names and values that need fixed-width characters.
@@ -49,9 +50,11 @@
 | A price or a key amount shown large | type.text.figure |
 | A block title, a dialog title | type.text.heading-2 |
 | A card or panel title | type.text.heading-3 |
-| A paragraph, a banner body, a field's helper text or error message | type.text.body |
+| A paragraph, a banner body | type.text.body |
+| A field's helper text or error message | type.text.body-small |
 | A dense paragraph, a table cell | type.text.body-small |
-| A button, a field label, a tab | type.text.ui |
+| A button, a tab, a menu item | type.text.ui |
+| A field's label, a large call to action | type.text.ui-large |
 | An eyebrow, a tag, metadata | type.text.label |
 | A timestamp, a caption | type.text.fine |
 | Code or an identifier | type.text.code |

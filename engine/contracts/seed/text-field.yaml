@@ -23,13 +23,15 @@ tokens:
   - {part: input, property: padding-inline, role: space.control.padding-inline}
   - {part: input, property: padding-block, role: space.control.padding-block}
   - {part: input, property: min-size, role: layout.target.min}
-  - {part: input, property: max-width, role: layout.measure.form}
   - {part: placeholder, property: text, role: color.text.muted}
   - {part: label, property: text, role: color.text.default}
-  - {part: label, property: font, role: type.text.ui}
-  - {part: label, property: stack-gap, role: space.text.gap}
-  - {part: helper, property: text, role: color.text.muted}
-  - {part: helper, property: font, role: type.text.fine}
+  - {part: label, property: font, role: type.text.ui-large}
+  - {part: label, property: stack-gap, role: space.field.label-gap}
+  - {part: helper, property: text, role: color.text.default}
+  - {part: helper, property: font, role: type.text.body-small}
+  - {part: helper, property: stack-gap, role: space.field.message-gap}
+  # hover: a heavier edge, the same color
+  - {part: input, property: border-width, role: border.emphasis, state: hover}
   # focus
   - {part: input, property: focus-ring, role: color.focus.ring, state: focus}
   - {part: input, property: focus-ring-width, role: border.focus-ring.width, state: focus}
@@ -39,7 +41,8 @@ tokens:
   - {part: input, property: border-color, role: color.line.danger, state: error}
   - {part: icon, property: icon, role: color.status.danger.strong, state: error}
   - {part: message, property: text, role: color.status.danger.text, state: error}
-  - {part: message, property: font, role: type.text.fine, state: error}
+  - {part: message, property: font, role: type.text.body-small, state: error}
+  - {part: message, property: stack-gap, role: space.field.message-gap, state: error}
   # disabled
   - {part: input, property: fill, role: color.surface.sunken, state: disabled}
   - {part: input, property: border-color, role: color.line.subtle, state: disabled}
@@ -78,8 +81,12 @@ usage:
     - Size the field for the longest expected value in the longest language, since Arabic runs 10 to 25 percent longer
     - Let phone numbers, codes and email addresses run left to right inside a right-to-left form
     - Show the error when the person leaves the field or submits, not on every keystroke
+    - Reserve one line of the message's height under every field before an error appears, so an error shown on blur never moves the submit button out from under the pointer
+    - Cap the width of the form, not of each field, at layout.measure.form
+    - Keep the placeholder an example in the value's format; the helper text, in the default text color, says the rule
     - A disabled component takes no hover or pressed binding; a disabled component that can take focus keeps its focus ring; selected and error still apply, and where disabled and another state bind the same part and property, disabled wins. Apply this first, then the specificity rule
     - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
+    - When two states apply at once, error wins over hover
   dont:
     - Do not use the placeholder as the label
     - Do not mark an error with a red border alone

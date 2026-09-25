@@ -45,10 +45,10 @@ CASES = [(name, variant, states) for name, c in CONTRACTS.items()
 
 
 def test_every_reachable_combination_is_run():
-    # button: 6 variant choices by 2**5 state sets; the row 2 by 2**5; the
+    # button: 12 variant choices by 2**5 state sets; the row 2 by 2**5; the
     # text field 2 by 2**4.
     counts = {name: sum(1 for n, _, _ in CASES if n == name) for name in CONTRACTS}
-    assert counts == {"button": 192, "card": 2, "dialog": 4, "selectable-row": 64,
+    assert counts == {"button": 384, "card": 2, "dialog": 4, "selectable-row": 64,
                       "status-banner": 8, "text-field": 32}
 
 

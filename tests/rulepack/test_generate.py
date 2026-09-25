@@ -222,8 +222,8 @@ def test_a_new_contract_pairing_or_description_shows_up_in_the_pack(tmp_path):
                         "Holds related content in one bounded block")
     card.write_text(text, encoding="utf-8")
     files = build_rule_pack(TS, contracts_dir=contracts)
-    row = "| card | title text | `color.text.default` | `color.surface.page` | 4.5:1 | " \
-          "7:1 (WCAG 1.4.6, AAA) | WCAG 1.4.3 |"
+    row = "| card | title text, body text | `color.text.default` | " \
+          "`color.surface.page` | 4.5:1 | 7:1 (WCAG 1.4.6, AAA) | WCAG 1.4.3 |"
     assert row in files[f"{PACK}/color/reference.md"]
     assert row not in PACK_FILES[f"{PACK}/color/reference.md"]
     assert "Holds related content in one bounded block" in files[f"{PACK}/README.md"]
@@ -283,7 +283,8 @@ def test_the_precedence_lines_are_the_contracts_own_and_every_overlap_has_them()
             continue
         head = f"- {c.name} (states that meet: {pairs})" + (":" if own else ".")
         assert "\n".join([head] + [f"  - {line}" for line in own]) in listed
-    assert "- text-field (states that meet: disabled and error).\n" in listed
+    assert "- text-field (states that meet: disabled and error):\n  - When two states apply at " \
+           "once, error wins over hover\n" in listed
 
 
 def test_the_states_that_meet_come_from_the_bindings(tmp_path):

@@ -23,9 +23,10 @@ tokens:
   - {part: container, property: fill, role: color.status.danger.soft, when: {status: danger}}
   - {part: icon, property: icon, role: color.status.danger.strong, when: {status: danger}}
   - {part: title, property: text, role: color.text.default}
-  - {part: title, property: font, role: type.text.ui}
+  - {part: title, property: font, role: type.text.body}
+  - {part: title, property: font-weight, role: type.strong}
   - {part: body, property: text, role: color.text.default}
-  - {part: body, property: font, role: type.text.body-small}
+  - {part: body, property: font, role: type.text.body}
   - {part: action, property: text, role: color.text.link}
   - {part: action, property: font, role: type.text.ui}
   - {part: container, property: radius, role: radius.card}
@@ -90,7 +91,7 @@ usage:
   dont:
     - Do not use a banner for a success the result already shows
     - Do not tell status apart by color alone; the icon and the title carry it too
-    - Do not put more than one action in a banner
+    - Do not put more than one action button in a banner; an error summary is the exception that lists a link to each field in error, and those links are not actions
 provenance:
   figma: {node: null, variantCount: null, lastVerified: null}
   drift: []

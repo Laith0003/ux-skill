@@ -51,6 +51,7 @@ ROLES: Dict[str, Tuple[Any, str, str, int, str]] = {
     "type.text.body": (3, "text", "regular", 3, "none"),
     "type.text.body-small": (2, "text", "regular", 3, "none"),
     "type.text.ui": ("ui", "text", "medium", 2, "none"),
+    "type.text.ui-large": (3, "text", "medium", 2, "none"),
     "type.text.label": (2, "label", "medium", 2, "label"),
     "type.text.fine": (1, "text", "regular", 3, "none"),
     "type.text.code": (2, "mono", "regular", 3, "none"),

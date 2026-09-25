@@ -24,6 +24,8 @@ Space sets the distances inside and between things: the padding of a control, th
 - `space.group.gap`: between groups of related content inside one region, such as sections of a form.
 - `space.card.padding`: inside a container such as a card, a panel, a banner or a dialog.
 - `space.region.gap`: between major regions of a page at the widest tier; per breakpoint use layout.region-gap.
+- `space.control.padding-inline-large`: inside a large control, such as the call to action of a hero, along the line.
+- `space.control.padding-block-large`: inside a large control, across the line.
 - `space.field.label-gap`: between a field's label and the field.
 - `space.field.message-gap`: between a field and its helper text or error message.
 - `space.table.cell-padding-inline`: inside a table cell, along the line.

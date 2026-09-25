@@ -173,6 +173,8 @@
   --space-control-gap: var(--space-2);
   --space-control-padding-inline: var(--space-3);
   --space-control-padding-block: var(--space-2);
+  --space-control-padding-inline-large: var(--space-6);
+  --space-control-padding-block-large: var(--space-3);
   --space-field-label-gap: var(--space-1);
   --space-field-message-gap: var(--space-1);
   --space-table-cell-padding-inline: var(--space-3);
@@ -292,6 +294,7 @@
   --layout-column-count-12: 12;
   --layout-width-32: 32px;
   --layout-width-44: 44px;
+  --layout-width-56: 56px;
   --layout-width-1120: 1120px;
   --layout-width-1280: 1280px;
   --layout-width-1440: 1440px;
@@ -326,6 +329,7 @@
   --layout-measure-text: var(--layout-rem-38);
   --layout-measure-form: var(--layout-rem-32);
   --layout-target-min: var(--layout-width-44);
+  --layout-target-large: var(--layout-width-56);
   --type-face-display: "Space Grotesk", "Space Grotesk Fallback", sans-serif;
   --type-face-text: "IBM Plex Sans", "IBM Plex Sans Fallback", system-ui, sans-serif;
   --type-face-mono: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, monospace;
@@ -412,6 +416,11 @@
   --type-text-ui-font-weight: var(--type-weight-500);
   --type-text-ui-letter-spacing: var(--type-tracking-0);
   --type-text-ui-line-height: var(--type-leading-latin-2);
+  --type-text-ui-large-font-family: var(--type-face-text);
+  --type-text-ui-large-font-size: var(--type-size-latin-3);
+  --type-text-ui-large-font-weight: var(--type-weight-500);
+  --type-text-ui-large-letter-spacing: var(--type-tracking-0);
+  --type-text-ui-large-line-height: var(--type-leading-latin-2);
   --type-text-label-font-family: var(--type-face-mono);
   --type-text-label-font-size: var(--type-size-latin-2);
   --type-text-label-font-weight: var(--type-weight-500);
@@ -675,6 +684,11 @@
   --type-text-ui-font-weight: var(--type-weight-600);
   --type-text-ui-letter-spacing: var(--type-tracking-0);
   --type-text-ui-line-height: var(--type-leading-latin-2);
+  --type-text-ui-large-font-family: var(--type-face-text);
+  --type-text-ui-large-font-size: var(--type-size-latin-3);
+  --type-text-ui-large-font-weight: var(--type-weight-600);
+  --type-text-ui-large-letter-spacing: var(--type-tracking-0);
+  --type-text-ui-large-line-height: var(--type-leading-latin-2);
   --type-text-label-font-family: var(--type-face-mono);
   --type-text-label-font-size: var(--type-size-latin-2);
   --type-text-label-font-weight: var(--type-weight-600);
@@ -768,6 +782,11 @@
     --type-text-ui-font-weight: var(--type-weight-600);
     --type-text-ui-letter-spacing: var(--type-tracking-0);
     --type-text-ui-line-height: var(--type-leading-latin-2);
+    --type-text-ui-large-font-family: var(--type-face-text);
+    --type-text-ui-large-font-size: var(--type-size-latin-3);
+    --type-text-ui-large-font-weight: var(--type-weight-600);
+    --type-text-ui-large-letter-spacing: var(--type-tracking-0);
+    --type-text-ui-large-line-height: var(--type-leading-latin-2);
     --type-text-label-font-family: var(--type-face-mono);
     --type-text-label-font-size: var(--type-size-latin-2);
     --type-text-label-font-weight: var(--type-weight-600);
@@ -790,6 +809,8 @@
 :root[data-density="compact"] {
   --space-control-padding-inline: var(--space-2);
   --space-control-padding-block: var(--space-1);
+  --space-control-padding-inline-large: var(--space-5);
+  --space-control-padding-block-large: var(--space-2);
   --space-table-cell-padding-inline: var(--space-2);
   --space-table-cell-padding-block: var(--space-1);
   --space-text-gap: var(--space-1);
@@ -865,6 +886,11 @@
   --type-text-ui-font-weight: var(--type-weight-500);
   --type-text-ui-letter-spacing: var(--type-tracking-0);
   --type-text-ui-line-height: var(--type-leading-arabic-2);
+  --type-text-ui-large-font-family: var(--type-face-arabic);
+  --type-text-ui-large-font-size: var(--type-size-arabic-3);
+  --type-text-ui-large-font-weight: var(--type-weight-500);
+  --type-text-ui-large-letter-spacing: var(--type-tracking-0);
+  --type-text-ui-large-line-height: var(--type-leading-arabic-2);
   --type-text-label-font-family: var(--type-face-arabic);
   --type-text-label-font-size: var(--type-size-arabic-2);
   --type-text-label-font-weight: var(--type-weight-500);
@@ -1149,6 +1175,11 @@
   --type-text-ui-font-weight: var(--type-weight-600);
   --type-text-ui-letter-spacing: var(--type-tracking-0);
   --type-text-ui-line-height: var(--type-leading-arabic-2);
+  --type-text-ui-large-font-family: var(--type-face-arabic);
+  --type-text-ui-large-font-size: var(--type-size-arabic-3);
+  --type-text-ui-large-font-weight: var(--type-weight-600);
+  --type-text-ui-large-letter-spacing: var(--type-tracking-0);
+  --type-text-ui-large-line-height: var(--type-leading-arabic-2);
   --type-text-label-font-family: var(--type-face-arabic);
   --type-text-label-font-size: var(--type-size-arabic-2);
   --type-text-label-font-weight: var(--type-weight-600);
@@ -1188,6 +1219,11 @@
     --type-text-ui-font-weight: var(--type-weight-600);
     --type-text-ui-letter-spacing: var(--type-tracking-0);
     --type-text-ui-line-height: var(--type-leading-arabic-2);
+    --type-text-ui-large-font-family: var(--type-face-arabic);
+    --type-text-ui-large-font-size: var(--type-size-arabic-3);
+    --type-text-ui-large-font-weight: var(--type-weight-600);
+    --type-text-ui-large-letter-spacing: var(--type-tracking-0);
+    --type-text-ui-large-line-height: var(--type-leading-arabic-2);
     --type-text-label-font-family: var(--type-face-arabic);
     --type-text-label-font-size: var(--type-size-arabic-2);
     --type-text-label-font-weight: var(--type-weight-600);

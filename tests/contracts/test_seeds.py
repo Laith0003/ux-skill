@@ -29,7 +29,7 @@ def test_the_six_seeds_load_and_are_experimental():
     assert tuple(c.name for c in seeds) == NAMES
     assert all(c.status == "experimental" for c in seeds)
     assert {c.name: c.variant_product() for c in seeds} == {
-        "button": 6, "card": 2, "dialog": 2, "selectable-row": 2, "status-banner": 4,
+        "button": 12, "card": 2, "dialog": 2, "selectable-row": 2, "status-banner": 4,
         "text-field": 2}
     assert all(c.provenance.node is None and c.provenance.drift == () for c in seeds)
 
@@ -195,3 +195,49 @@ def test_the_card_says_in_which_high_contrast_its_fill_meets_the_page():
         dark = [ts.resolve(r, "scheme:dark,contrast:high") for r in ("color.surface.card",
                                                                      "color.surface.page")]
         assert light[0] == light[1] and dark[0] != dark[1], brand
+
+
+def _binding(contract, part, prop, state=None, when=()):
+    return next((b.role for b in contract.tokens if (b.part, b.property, b.state) ==
+                 (part, prop, state) and b.when == tuple(when)), None)
+
+
+def test_a_field_is_readable_and_its_label_is_never_smaller_than_its_value():
+    field = next(c for c in seed_contracts() if c.name == "text-field")
+    assert _binding(field, "helper", "font") == "type.text.body-small"
+    assert _binding(field, "message", "font", "error") == "type.text.body-small"
+    assert _binding(field, "label", "font") == "type.text.ui-large"
+    assert _binding(field, "helper", "text") != _binding(field, "placeholder", "text")
+    assert _binding(field, "input", "border-width", "hover") == "border.emphasis"
+    assert _binding(field, "input", "max-width") is None
+    assert _binding(field, "label", "stack-gap") == "space.field.label-gap"
+    assert any("never moves the submit button" in line for line in field.do)
+    for axes in AXES:
+        ts = build_system(axes, "#3366FF").tokens
+        for mode in ("", "direction:rtl"):
+            label = ts.resolve("type.text.ui-large", mode)["fontSize"]
+            value = ts.resolve("type.text.body", mode)["fontSize"]
+            assert label == value
+
+
+def test_a_card_keeps_its_body_readable_and_its_inner_corners_whole():
+    card = next(c for c in seed_contracts() if c.name == "card")
+    assert _binding(card, "body", "text") == "color.text.default"
+    assert _binding(card, "meta", "text") == "color.text.muted"
+    assert any("never below 0" in line and "radius.joined" in line for line in card.do)
+
+
+def test_a_banner_reads_at_body_size_and_allows_an_error_summary():
+    banner = next(c for c in seed_contracts() if c.name == "status-banner")
+    assert _binding(banner, "title", "font") == _binding(banner, "body", "font") == \
+        "type.text.body"
+    assert _binding(banner, "title", "font-weight") == "type.strong"
+    assert any("error summary" in line for line in banner.dont)
+
+
+def test_a_button_has_a_large_size_and_a_view_is_defined():
+    button = next(c for c in seed_contracts() if c.name == "button")
+    large = (("size", "large"),)
+    assert _binding(button, "container", "min-size", when=large) == "layout.target.large"
+    assert _binding(button, "label", "font", when=large) == "type.text.ui-large"
+    assert any("A view is what one screen shows without scrolling" in line for line in button.do)

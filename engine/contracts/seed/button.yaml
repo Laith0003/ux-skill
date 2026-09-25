@@ -12,6 +12,7 @@ parts:
 variants:
   - {name: emphasis, values: [primary, secondary, ghost], default: primary}
   - {name: intent, values: [neutral, danger], default: neutral}
+  - {name: size, values: [medium, large], default: medium}
 states: [default, hover, pressed, focus, disabled, loading]
 tokens:
   # primary fills and the text on them
@@ -64,6 +65,11 @@ tokens:
   - {part: container, property: gap, role: space.control.gap}
   - {part: container, property: min-size, role: layout.target.min}
   - {part: label, property: font, role: type.text.ui}
+  # large: the call to action of a hero or a band, taller and at body size
+  - {part: container, property: padding-inline, role: space.control.padding-inline-large, when: {size: large}}
+  - {part: container, property: padding-block, role: space.control.padding-block-large, when: {size: large}}
+  - {part: container, property: min-size, role: layout.target.large, when: {size: large}}
+  - {part: label, property: font, role: type.text.ui-large, when: {size: large}}
   # focus and press
   - {part: container, property: focus-ring, role: color.focus.ring, state: focus}
   - {part: container, property: focus-ring-width, role: border.focus-ring.width, state: focus}
@@ -104,7 +110,8 @@ copy:
     - Keep the same verb while the spinner runs; never switch to a gerund
 usage:
   do:
-    - Use one primary button per view, for the action most people take next
+    - Use one primary button per view, for the action most people take next. A view is what one screen shows without scrolling; on a long page each section may have its own primary, as long as two never share one screen
+    - Use the large size for the one call to action of a hero or a band, and medium everywhere else
     - Use secondary for another action that must read as a control at rest and when disabled, such as the second of a pair or an action on a busy surface
     - Use ghost for light, repeated actions where the layout already marks them as actions, such as a toolbar or a table row
     - Put the icon at the start of the label in both directions; mirror only a glyph that points

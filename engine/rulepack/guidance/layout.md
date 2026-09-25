@@ -30,6 +30,7 @@ Layout sets the page grid and the page regions: three breakpoints that start fou
 - `layout.container.max`: the widest the page content grows.
 - `layout.measure.text`: the widest a block of running text grows, about 80 characters.
 - `layout.measure.form`: the widest a form or a dialog grows.
+- `layout.target.large`: the height of a large control, such as the call to action of a hero; 12px above the minimum target.
 - `layout.target.min`: the smallest size of anything a person taps or clicks, including icon-only controls such as a dialog's close and a banner's dismiss.
 
 ## Choosing
