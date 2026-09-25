@@ -46,7 +46,7 @@
 
 - Phone numbers, codes, card numbers, email addresses and Latin identifiers are fixed: they run left to right inside right-to-left text and never mirror.
 - A fixed run never breaks across lines: wrap it in an element with dir="ltr" and white-space: nowrap, so a phone number never splits and its plus sign stays in front.
-{arabic} - An amount with its currency is one fixed run too: 50 د.أ keeps the amount and the abbreviation on one line (content.md).
+{arabic} - An amount with its currency stays on one line (a no-break space or white-space: nowrap), but it keeps the page direction: never wrap 50 د.أ in dir="ltr", which would show the abbreviation before the amount to a right to left reader (content.md).
 - Use Western digits and put the currency after the amount with a space (content.md).
 - Mixed runs are wrapped so their direction is explicit and punctuation lands where the reader expects it.
 
