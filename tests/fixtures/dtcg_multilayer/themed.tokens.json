@@ -1,0 +1,76 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+  "$extensions": {"org.example.themes": {"modes": ["light", "dark"], "default": "light"}},
+  "primitive": {
+    "color": {
+      "$type": "color",
+      "white": {"$value": {"colorSpace": "srgb", "components": [1, 1, 1], "hex": "#ffffff"}},
+      "ink": {"$value": {"colorSpace": "srgb", "components": [0.0471, 0.0392, 0.0353], "hex": "#0c0a09"}},
+      "stone": {"$value": {"colorSpace": "srgb", "components": [0.4706, 0.4431, 0.4235], "hex": "#78716c"}},
+      "blue": {"$value": {"colorSpace": "oklch", "components": [0.623, 0.214, 259.815], "hex": "#2b7fff"}}
+    },
+    "size": {
+      "$type": "dimension",
+      "1": {"$value": {"value": 4, "unit": "px"}},
+      "2": {"$value": {"value": 8, "unit": "px"}},
+      "4": {"$value": {"value": 16, "unit": "px"}}
+    }
+  },
+  "semantic": {
+    "surface": {
+      "$type": "color",
+      "page": {
+        "$value": "{primitive.color.white}",
+        "$extensions": {"org.example.themes": {"dark": "{primitive.color.ink}"}}
+      },
+      "text": {
+        "$value": "{primitive.color.ink}",
+        "$extensions": {"org.example.themes": {"dark": "{primitive.color.white}"}}
+      },
+      "muted": {"$value": {"$ref": "#/primitive/color/stone/$value"}}
+    },
+    "action": {
+      "$type": "color",
+      "primary": {"$value": "{primitive.color.blue}", "$description": "Buttons and links."}
+    },
+    "gap": {
+      "inline": {"$value": "{primitive.size.2}"},
+      "stack": {"$value": "{primitive.size.4}"}
+    }
+  },
+  "component": {
+    "button": {
+      "padding-x": {"$type": "dimension", "$value": "{semantic.gap.stack}"},
+      "label": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": ["Inter", "sans-serif"],
+          "fontSize": {"value": 14, "unit": "px"},
+          "fontWeight": "semi-bold",
+          "letterSpacing": {"value": 0, "unit": "px"},
+          "lineHeight": 1.25,
+          "textTransform": "none"
+        }
+      },
+      "shadow": {
+        "$type": "shadow",
+        "$value": [
+          {"color": {"colorSpace": "srgb", "components": [0, 0, 0], "alpha": 0.08},
+           "offsetX": {"value": 0, "unit": "px"}, "offsetY": {"value": 1, "unit": "px"},
+           "blur": {"value": 2, "unit": "px"}, "spread": {"value": 0, "unit": "px"}},
+          {"color": {"colorSpace": "srgb", "components": [0, 0, 0], "alpha": 0.04},
+           "offsetX": {"value": 0, "unit": "px"}, "offsetY": {"value": 4, "unit": "px"},
+           "blur": {"value": 8, "unit": "px"}, "spread": {"value": -2, "unit": "px"}}
+        ]
+      },
+      "outline": {
+        "$type": "border",
+        "$value": {"color": "{semantic.action.primary}", "width": {"value": 2, "unit": "px"}, "style": "solid"}
+      },
+      "press": {
+        "$type": "transition",
+        "$value": {"duration": {"value": 120, "unit": "ms"}, "delay": {"value": 0, "unit": "ms"}, "timingFunction": [0.2, 0, 0, 1]}
+      }
+    }
+  }
+}
