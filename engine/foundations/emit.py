@@ -18,13 +18,14 @@ import os
 import re
 import shutil
 import tempfile
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from engine.foundations.audience import (
     FIELDS as AUDIENCE_FIELDS, HOW_TO_PASS, Audience, AudienceError, effects, read_audience)
 from engine.foundations.build import FOUNDATIONS, ValidationError, build_system
+from engine.foundations.composition import choose as choose_composition
 from engine.foundations.color import brand_fidelity
 from engine.foundations.color_math import hex_to_rgb, rgb_to_hex
 from engine.foundations.export import dump_dtcg, to_css
@@ -407,12 +408,14 @@ class SystemOutput:
     stale_reason: str = ""
     audience: Audience = Audience()
     unread: Tuple[str, ...] = ()
+    composition: Mapping[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         return {"passed": self.passed, "gate": self.gate, "brand": self.brand,
                 "axes": self.axes.to_dict(), "axes_source": self.axes_source,
                 "arabic": self.arabic, "audience": self.audience.to_dict(),
-                "unread": list(self.unread), "findings": [f.to_dict() for f in self.findings]}
+                "unread": list(self.unread), "composition": dict(self.composition),
+                "findings": [f.to_dict() for f in self.findings]}
 
 
 def _gate_findings(report: GateReport) -> List[SystemFinding]:
@@ -612,6 +615,9 @@ _FONTS_LEAD = ("The tokens name these faces and fonts.css loads them: link fonts
                "folder beside fonts.css, so put the WOFF2 files there to self-host (each file is "
                "named in fonts.css). Each face also has a metric-matched fallback, so text keeps "
                "its size and line breaks while the face loads.")
+_COMPOSITION_LEAD = ("The layout a landing page starts from, scored from the axes and the brief's "
+                     "fields; the landing playbooks build on it, and the JSON result names it as "
+                     "composition.")
 _ART_LEAD = ("Generated from the axes and the colors above, so a page is never empty for want "
              "of photos: geometry sets the shapes, warmth the palette and formality how many "
              "shapes there are and how regular they sit.")
@@ -637,7 +643,8 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
                   findings: Sequence[SystemFinding], rule_pack: bool = False,
                   fidelity: Sequence[str] = (), fonts: Sequence[str] = (),
                   font_link: str = "", audience: Sequence[str] = (),
-                  unread: Sequence[str] = (), art: bool = False) -> str:
+                  unread: Sequence[str] = (), art: bool = False,
+                  composition: str = "", sentence: str = "") -> str:
     """system-report.md: one sentence on what was built, what it was built
     from, the gate result, every note or finding in plain words, and how to
     use the files, the rule pack among them when it was written. No time
@@ -645,6 +652,7 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
     scripts = ("Latin and Arabic. Right to left (dir=\"rtl\") switches text to the Arabic face "
                "and type scale." if arabic else "Latin only (built with the Latin-only option).")
     lines = ["# Design system report", "", _opening(brand, gate_line, findings), "",
+             *([sentence, ""] if sentence and not findings else []),
              "## Built from", "", f"- Brand color: {brand}", f"- Scripts: {scripts}",
              f"- Axes: {axes_source}.", "", *_axes_table(axes), "",
              "## WCAG gate", "", gate_line, "", _CHECKS_LINE, ""]
@@ -679,6 +687,8 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
                   "To load them from Google Fonts instead of your own files, add this link to "
                   "the page head and remove the first block of @font-face rules in fonts.css:",
                   "", f"    {font_link}", ""]
+    if composition:
+        lines += ["## Page composition", "", _COMPOSITION_LEAD, "", f"- {composition}", ""]
     if art:
         lines += ["## Brand art", "", _ART_LEAD, "", *[f"- {a}" for a in art_lines()], ""]
     lines += ["## Files", "",
@@ -695,6 +705,31 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
     return "\n".join(lines) + "\n"
 
 
+_ROLE_PHRASE = {"fill": "the brand fills the main action",
+                "accent": "the brand marks links and accents beside ink actions",
+                "edge": "the brand draws edges and rules around ink actions"}
+
+
+def character_sentence(axes: AxisValues, ts: Any, composition: str) -> str:
+    """One sentence that says what the system is like: the axes that lean
+    clearly one way, the brand's role, the display face and the page
+    composition. Read from the built tokens, so it states what was built."""
+    words = []
+    for name, value in axes.to_dict().items():
+        _, low, high = _AXIS_WORDS[name]
+        if value <= 0.35:
+            words.append(low)
+        elif value >= 0.65:
+            words.append(high)
+    lead = _and(words) if words else "balanced on every axis"
+    raw = ts.raw("color.action.primary", "scheme:light,contrast:standard")
+    link = ts.raw("color.text.link", "scheme:light,contrast:standard")
+    role = "fill" if "brand" in raw else ("edge" if "neutral" in link else "accent")
+    display = ts.resolve("type.face.display")[0]
+    return (f"Character: {lead}. In this system {_ROLE_PHRASE[role]}, {display} sets the display "
+            f"type, and a landing page starts from the {composition} composition.")
+
+
 def make_system(brand: str, axes: AxisValues, axes_source: str, *,
                 arabic: bool = True, rule_pack: bool = False,
                 audience: Optional[Audience] = None,
@@ -705,6 +740,7 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
     `findings` names every problem, so a caller can never write a failing
     system."""
     audience = audience or Audience()
+    composition = choose_composition(axes, audience)
     notes: Sequence[str] = ()
     fidelity: Sequence[str] = ()
     fonts: Sequence[str] = ()
@@ -746,11 +782,14 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
                            rule_pack=bool(pack), fidelity=fidelity, fonts=fonts,
                            font_link=font_link,
                            audience=[e.line() for e in effects(audience)], unread=unread,
-                           art=bool(art))
+                           art=bool(art), composition=composition.line() if tokens else "",
+                           sentence=character_sentence(axes, built.tokens, composition.name)
+                           if tokens else "")
     files = {**tokens, "system-report.md": report, **art, **pack} if tokens else {}
     return SystemOutput(passed=bool(tokens), files=files, report=report, gate=gate,
                         findings=findings, brand=brand, axes=axes, axes_source=axes_source,
-                        arabic=arabic, audience=audience, unread=tuple(unread))
+                        arabic=arabic, audience=audience, unread=tuple(unread),
+                        composition=composition.to_dict())
 
 
 def failure_text(output: SystemOutput) -> str:

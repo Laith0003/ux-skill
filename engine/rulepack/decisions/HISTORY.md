@@ -75,3 +75,4 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [A container whose fill measures below 1.2:1 against its surface draws an edge](container-edge.md)
 - [Buttons have two intents, neutral and danger](button-intents.md)
 - [A field's error edge has its own role and keeps its red](error-edge.md)
+- [A landing page starts from one of five compositions, scored from the axes](page-composition.md)
