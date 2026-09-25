@@ -1,9 +1,10 @@
 """Deterministic page-level section-sequence picker.
 
 Picks a whole-page template (from ``data/page-sequences.json``) for a landing
-page. ``select_for_brief`` reads a 4.0 brief: an explicit ``page_sequence``
-first, then ``stage``, then the ``industry``, ``product_type`` and
-``project_type`` fields, then the brief's own phrases. ``select_sequence``
+page. ``select_for_brief`` reads a 4.0 brief in tiers: an explicit
+``page_sequence``, then ``stage``, then ``product_type``, ``project_type`` and
+``industry``, then the brief's own phrases, and ``general-landing`` when
+nothing points elsewhere, so it always returns a sequence. ``select_sequence``
 scores free text alone. A call-to-action verb ("book", "buy", "download")
 never picks a sequence: any page might say it.
 
@@ -18,7 +19,7 @@ always returns the same sequence, and ties are broken by manifest order.
 
 Public surface
 --------------
-``select_for_brief(brief) -> Optional[Dict]``           -- the pick for a 4.0 brief
+``select_for_brief(brief) -> Dict``                     -- the pick for a 4.0 brief
 ``select_sequence(goal_or_keywords) -> Optional[Dict]`` -- best match for free text
 ``score_sequence(entry, tokens, raw) -> float``         -- the text score (exposed for tests)
 ``load_sequences() -> List[Dict]``                      -- raw manifest entries
@@ -55,12 +56,11 @@ PROOF_LABELS = {
     "reviews": "attributed reviews", "case-studies": "case studies",
     "certifications": "certifications", "press": "press coverage",
 }
+GENERAL = "general-landing"
 # Plain text fields read for phrases. Tone words and must-haves shape the look,
-# not the page's sections, so they are left out.
-TEXT_FIELDS = ("goal", "primary_goal", "product_type", "project_type", "industry", "audience",
-               "description", "product", "summary", "offer")
-FIELD_WEIGHTS = (("industry", "industries", 12.0), ("product_type", "product_types", 10.0),
-                 ("project_type", "project_types", 8.0))
+# not the page's sections, and the structured fields decide in their own tiers,
+# so none of them is read again as a phrase.
+TEXT_FIELDS = ("goal", "primary_goal", "audience", "description", "product", "summary", "offer")
 
 
 def load_sequences() -> List[Dict[str, Any]]:
@@ -190,13 +190,37 @@ def _choice_list(fields: Mapping[str, Any], name: str, choices: Tuple[str, ...])
     return out
 
 
-def _field_hits(entry: Mapping[str, Any], fields: Mapping[str, Any]) -> List[Tuple[str, float]]:
-    hits: List[Tuple[str, float]] = []
-    for field, key, weight in FIELD_WEIGHTS:
-        value = str(fields.get(field) or "").strip().lower()
-        if value and value in [str(x).lower() for x in entry.get(key) or []]:
-            hits.append((f"{field} {value}", weight))
-    return hits
+def _field_value(fields: Mapping[str, Any], name: str) -> str:
+    return "-".join(str(fields.get(name) or "").strip().lower().split())
+
+
+def _industry(fields: Mapping[str, Any]) -> str:
+    """The brief's industry as the look engine reads it: its other names
+    (building-materials, wholesale...) resolve to the seeded id."""
+    from engine.synthesizer.axes import INDUSTRY_ALIASES
+    value = _field_value(fields, "industry")
+    return INDUSTRY_ALIASES.get(value, value)
+
+
+def product_type_vocabulary() -> Tuple[Tuple[str, ...], Mapping[str, str]]:
+    """The one product_type vocabulary the look engine and this picker share
+    (engine.foundations.audience), and its alias map."""
+    from engine.foundations.audience import PRODUCT_ALIASES, PRODUCT_TYPES
+    return tuple(PRODUCT_TYPES), dict(PRODUCT_ALIASES)
+
+
+def _product_type(fields: Mapping[str, Any]) -> Tuple[str, str]:
+    """``(value, written)``: product_type read by the engine's own reader, so
+    an alias maps as it does for the system build, and any other value is a
+    ValueError naming the field, the values and the aliases."""
+    from engine.foundations.audience import AudienceError, product_type_of
+    written = _field_value(fields, "product_type")
+    if not written:
+        return "", ""
+    try:
+        return product_type_of(fields.get("product_type"), label="brief"), written
+    except AudienceError as err:
+        raise ValueError(str(err)) from None
 
 
 def _phrases(entry: Mapping[str, Any], raw: str) -> List[str]:
@@ -204,20 +228,59 @@ def _phrases(entry: Mapping[str, Any], raw: str) -> List[str]:
             if _content(_tokenize(k)) and _phrase_in(k.lower(), raw)]
 
 
-def _best(entries: List[Dict[str, Any]], fields: Mapping[str, Any]) -> Tuple[Optional[Dict[str, Any]], str]:
-    raw, tokens = _normalize_query(" ".join(_text(fields.get(f)) for f in TEXT_FIELDS).replace("-", " "))
-    best: Optional[Dict[str, Any]] = None
-    best_score, best_why = 0.0, ""
-    for entry in entries:
-        if entry.get("id") == PRE_LAUNCH:
+def _best(entries: List[Dict[str, Any]], fields: Mapping[str, Any]) -> Tuple[Dict[str, Any], str]:
+    """Pick in tiers: product_type narrows the entries, then project_type,
+    then industry; the brief's phrases choose among what is left. With no
+    phrase, the first entry that lists the product_type first wins, then
+    manifest order. With nothing to go on, general-landing."""
+    live = [e for e in entries if e["id"] not in (PRE_LAUNCH, GENERAL)]
+    cands, why = live, []
+    pt, written = _product_type(fields)
+    tiers = (("product_type", pt, "product_types"),
+             ("project_type", _field_value(fields, "project_type"), "project_types"),
+             ("industry", _industry(fields), "industries"))
+    for name, value, key in tiers:
+        if not value:
             continue
-        hits = _field_hits(entry, fields)
-        score = sum(w for _, w in hits) + (score_sequence(entry, tokens, raw) if raw else 0.0)
-        if score > best_score:
-            phrases = _phrases(entry, raw) if raw else []
-            parts = [h for h, _ in hits] + ([f"phrases {', '.join(phrases[:4])}"] if phrases else [])
-            best, best_score, best_why = entry, score, "; ".join(parts) or "shared words in the brief"
-    return best, best_why
+        narrowed = [e for e in cands if value in (e.get(key) or [])]
+        if narrowed:
+            label = f"{name} {value}"
+            if name == "product_type" and written != value:
+                label += f" (from {written})"
+            cands, why = narrowed, why + [label]
+    raw, tokens = _normalize_query(" ".join(_text(fields.get(f)) for f in TEXT_FIELDS).replace("-", " "))
+    best, best_score = None, 0.0
+    if raw:
+        for entry in cands:
+            s = score_sequence(entry, tokens, raw)
+            if s > best_score:
+                best, best_score = entry, s
+    if best is not None:
+        phrases = _phrases(best, raw)
+        why.append(f"phrases {', '.join(phrases[:4])}" if phrases else "shared words in the brief")
+        return best, "; ".join(why)
+    if why:
+        rank = {e["id"]: i for i, e in enumerate(cands)}
+        pick = min(cands, key=lambda e: ((e.get("product_types") or [pt]).index(pt)
+                                         if pt in (e.get("product_types") or []) else 9, rank[e["id"]]))
+        return pick, "; ".join(why)
+    general = next(e for e in entries if e["id"] == GENERAL)
+    return general, ("general: no field or phrase in the brief points to a specific sequence, so the "
+                     "general landing sequence; set page_sequence to choose another")
+
+
+def _without_phone(seq: Dict[str, Any], contact: Optional[List[str]]) -> None:
+    """Swap in the phone-free text when the brief's contact has no phone, and
+    drop the alternates from the result either way."""
+    no_phone = contact is not None and "phone" not in contact
+    for s in seq["section_sequence"]:
+        alt = s.pop("without_phone", None)
+        if no_phone and alt:
+            s["purpose"] = alt
+    for key in ("cta_placement", "footer"):
+        alt = seq.pop(f"{key}_without_phone", None)
+        if no_phone and alt:
+            seq[key] = alt
 
 
 def _drop_unproven(seq: Dict[str, Any], proof: Optional[List[str]],
@@ -254,26 +317,27 @@ def _drop_unproven(seq: Dict[str, Any], proof: Optional[List[str]],
     return dropped
 
 
-def select_for_brief(brief: Mapping[str, Any]) -> Optional[Dict[str, Any]]:
-    """Pick the page sequence for a 4.0 brief, and say why.
+def select_for_brief(brief: Mapping[str, Any]) -> Dict[str, Any]:
+    """Pick the page sequence for a 4.0 brief, and say why. Always returns one.
 
     Reads a flat brief (``.ux/system-brief.json``, the MCP ``brief`` object) or
-    a discovery file (``{"answers": {...}}``). Structured fields, all optional:
+    a discovery file (``{"answers": {...}}``). In order:
 
-    * ``page_sequence``: a sequence id; wins outright.
-    * ``stage``: ``live`` or ``pre-launch``; pre-launch picks the honest
-      pre-launch pattern, which has no proof section.
-    * ``industry``, ``product_type``, ``project_type``: weigh the entries that
-      list them.
-    * ``proof``: the proof the client really has, from PROOF_KINDS; ``[]``
-      when it has none. A section or mechanism needing a missing kind is
-      dropped with a reason. Left out, proof sections stay, marked by kind,
-      and ``proof_unknown`` is true.
-    * ``contact``: the contact routes the client has, from CONTACT_KINDS.
+    1. ``page_sequence``: a sequence id; wins outright.
+    2. ``stage``: ``live`` or ``pre-launch``; pre-launch picks the honest
+       pre-launch pattern, which has no proof section.
+    3. ``product_type`` (the look engine's list: app, software,
+       marketing-site, editorial, commerce), then ``project_type``, then
+       ``industry`` (the /ux-system list, or one of its other names): each
+       narrows the entries that list it.
+    4. The brief's own phrases choose among what is left.
+    5. With nothing to go on, ``general-landing``.
 
-    Returns a copy of the entry with ``why``, ``dropped`` and
-    ``proof_unknown``, or ``None`` when the brief gives no signal. A field
-    outside its choices raises ``ValueError`` naming the field and the choices.
+    ``proof`` (from PROOF_KINDS, ``[]`` for none) and ``contact`` (from
+    CONTACT_KINDS) drop what the client cannot back, each with a reason; with
+    ``proof`` left out, proof sections stay, marked by kind, and
+    ``proof_unknown`` is true. A field outside its choices raises
+    ``ValueError`` naming the field and the choices.
     """
     fields = _fields(brief or {})
     entries = load_sequences()
@@ -284,6 +348,7 @@ def select_for_brief(brief: Mapping[str, Any]) -> Optional[Dict[str, Any]]:
     if stage and stage not in STAGES:
         raise ValueError(f"stage: {fields.get('stage')!r} is not one of {', '.join(STAGES)}; use "
                          f"pre-launch when the product has no customers yet")
+    _product_type(fields)
 
     explicit = str(fields.get("page_sequence") or "").strip()
     dropped: List[Dict[str, str]] = []
@@ -295,18 +360,22 @@ def select_for_brief(brief: Mapping[str, Any]) -> Optional[Dict[str, Any]]:
     elif stage == PRE_LAUNCH and PRE_LAUNCH in by_id:
         entry = by_id[PRE_LAUNCH]
         live, _ = _best(entries, fields)
-        proof_sections = [s["section"] for s in (live or {}).get("section_sequence", []) if s.get("proof")]
-        why = "stage pre-launch" + (f"; the live pick would be {live['id']}" if live else "")
+        proof_sections = [s["section"] for s in live.get("section_sequence", []) if s.get("proof")]
+        why = f"stage pre-launch; the live pick would be {live['id']}"
         reason = ("the product has not launched, so the client has no {} yet; the page states what exists "
                   "instead of inventing it.")
         dropped = [{"section": name, "reason": f"{name}: " + reason.format("proof of this kind")}
                    for name in proof_sections] or [{"section": "Proof", "reason": "Proof: " + reason.format("proof")}]
+        if proof:
+            dropped.append({"section": "Proof", "reason": (
+                f"The brief lists proof ({', '.join(proof)}) with stage pre-launch. If that proof is "
+                f"real, set stage to live: {live['id']} shows it in its proof sections. The pre-launch "
+                f"pattern shows none.")})
     else:
         entry, why = _best(entries, fields)
-        if entry is None:
-            return None
 
     seq = copy.deepcopy(entry)
+    _without_phone(seq, contact)
     if seq["id"] != PRE_LAUNCH:
         dropped += _drop_unproven(seq, proof, contact)
     seq["why"] = why

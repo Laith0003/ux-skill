@@ -85,3 +85,23 @@ def test_the_scores_named_match_the_engine():
         line = next(ln for ln in _one(name).splitlines() if ln.startswith("**The engine picks it**"))
         for w in words:
             assert w in line.lower(), f"{name}: the pick line lacks {w!r}"
+
+
+def _part(sec: str, label: str) -> str:
+    line = next(ln for ln in sec.splitlines() if ln.startswith(label))
+    return line.lower()
+
+
+@pytest.mark.parametrize("name", sorted(DESCRIPTIONS))
+@pytest.mark.parametrize("width", ["**At 1440.**", "**At 375.**"])
+def test_each_width_places_the_hero_the_proof_and_the_call_to_action(name, width):
+    part = _part(_one(name), width)
+    for word in ("hero", "proof", "call to action"):
+        assert word in part, f"{name} {width} does not place the {word}"
+
+
+def test_the_shared_rules_name_the_landing_tokens():
+    sec = _compositions()
+    shared = sec[:sec.index("### ")]
+    assert "`type.text.display`" in shared and "`layout.landing-gap.<tier>`" in shared
+    assert "where it has one" not in shared

@@ -1,0 +1,3 @@
+$duration-300: 300ms;
+.reveal .b3 { transition-delay: $duration-300; }
+.reveal .b4 { animation-delay: @duration-300; }
