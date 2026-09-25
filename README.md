@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-152-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-4858_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-5151_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -45,7 +45,7 @@ uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out des
 
 pip and pipx skip pre-releases unless asked, so a plain `pip install uxskill` still gives 3.2. Pin the beta with `pip install uxskill==4.0.0b1`; for the MCP server, `pip install --upgrade --pre 'uxskill[mcp]'`. With pipx, `pipx install --pip-args=--pre uxskill` (over an installed 3.x, `pipx upgrade --pip-args=--pre uxskill`). With npm, `npx uxskill@beta`.
 
-**Building a product or a landing page?** You get `tokens.css` to link from your page, `fonts.css` that loads the chosen faces with metric-matched fallbacks, `tokens.json` for tools, decorative brand art in `art/`, and `system-report.md`, which says in plain words what was built, why, and which page composition to start from. Style with the roles (`var(--color-action-primary)`, `var(--color-text-default)`, `var(--color-surface-page)`), and switch dark mode, high contrast, compact spacing, right to left or reduced motion with one attribute on `<html>`. Link `fonts.css` before `tokens.css`; it loads each face from the reader's own copy, then from self-hosted files, and the report gives the Google Fonts link. With `--brief`, the look follows the industry and tone when the brief names them, and structured fields (age, languages, default scheme, reading context) set text size, targets, scripts and which scheme opens; discovery does not ask for an industry, so `/ux-system create` asks for one. In Claude Code, `/ux-system create` checks the installed version, runs the build and explains the report.
+**Building a product or a landing page?** You get `tokens.css` to link from your page, `fonts.css` with metric-matched fallbacks for the chosen faces, `fonts-self-host.css` that loads the faces from your own files, `tokens.json` for tools, decorative brand art in `art/`, and `system-report.md`, which says in plain words what was built, why, and which page composition to start from. Style with the roles (`var(--color-action-primary)`, `var(--color-text-default)`, `var(--color-surface-page)`), and switch dark mode, high contrast, compact spacing, right to left or reduced motion with one attribute on `<html>`. Load the faces with the Google Fonts link the report gives, or with `fonts-self-host.css` and a `fonts/` folder, and link `fonts.css` with either one, before `tokens.css`; edit neither file. With `--brief`, the look follows the industry and tone when the brief names them, and structured fields (age, languages, default scheme, reading context) set text size, targets, scripts and which scheme opens; discovery does not ask for an industry, so `/ux-system create` asks for one. In Claude Code, `/ux-system create` checks the installed version, runs the build and explains the report.
 
 **Designing a design system?** Nine foundations (color, type, space, layout, radius, border, elevation, motion, imagery), each varying continuously with the seven axes, with primitives and semantic roles, in the W3C design tokens format (DTCG 2025.10) with every mode's values. Same inputs, same bytes. Over MCP, `ux_system_build` returns the report, the gate result and each file's size, and writes the same files as the command when given `out`.
 
@@ -59,7 +59,7 @@ This beta builds new systems; it does not read an existing one yet. 4.1 adds imp
 
 **Surface playbooks.** Landing, dashboard and component rules live in `references/surfaces/`, one playbook each. `/ux-design` loads exactly one, picked by its mode, so a dashboard build never reads hero rules.
 
-Tests **4858 passing**. Offline. Deterministic. No LLM ever called.
+Tests **5151 passing**. Offline. Deterministic. No LLM ever called.
 
 ### New in v3.1: brand-true, responsive, alive
 

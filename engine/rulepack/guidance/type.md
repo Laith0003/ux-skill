@@ -31,7 +31,7 @@
 - `type.text.label`: an eyebrow above a heading, a tag or a line of metadata, spaced open; set in the mono face in a technical system.
 - `type.text.fine`: captions, timestamps and small print nobody must read to act.
 - `type.text.code`: code, token names and values that need fixed-width characters.
-- `type.strong`: the weight of emphasis inside any style; the same as the heading weight.
+- `type.strong`: the weight of emphasis inside any style; the heading weight, and under high contrast at least 200 above body text, since body text gets heavier there (decisions/strong-under-high-contrast.md).
 {arabic} - `type.run.latin`: the face for a Latin run, such as a brand name or a code, inside a right-to-left paragraph.
 {latin} - `type.run.latin`: the text face, for a run that must keep it inside a style set in another face.
 {arabic} - `type.run.arabic`: the face for an Arabic run inside a left-to-right paragraph.
@@ -63,7 +63,7 @@ Styles that work together: a label above a section title or a hero; a heading ab
 
 ## Modes
 
-{arabic} Type varies on direction and contrast. Under dir="rtl" every style but code uses its Arabic face, the display styles the Arabic display face, at a size larger than the Latin size at the same step by the ratio the two faces' metrics give (at least 1px, at most a fifth), with taller line heights and letter spacing at 0, since spacing breaks the joins between Arabic letters. Code keeps its face, size and leading in both directions, with no letter spacing under right to left; a label set in the mono face switches to the Arabic face like any other text. Under high contrast every style in the text or mono face is one weight heavier, within what the face ships (decisions/high-contrast-weights.md). Type does not change by breakpoint or with the density mode; sizes are rem (decisions/breakpoints-are-reference-values.md). The brief's density axis sets the reading line heights and the ui size once, at build time.
+{arabic} Type varies on direction and contrast. Under dir="rtl" every style but code uses its Arabic face, the display styles the Arabic display face, at a size larger than the Latin size at the same step by the ratio the two faces' metrics give (at least 1px, at most a fifth), with taller line heights and letter spacing at 0, since spacing breaks the joins between Arabic letters. Code keeps its face, size and leading in both directions, with no letter spacing under right to left; a label set in the mono face switches to the Arabic face like any other text. Under high contrast every style in the text or mono face is one weight heavier, within what the face ships (decisions/high-contrast-weights.md). Under right to left every weight, type.strong's too, is one the Arabic face ships, so a static face never gets a weight it lacks (decisions/font-files.md). Type does not change by breakpoint or with the density mode; sizes are rem (decisions/breakpoints-are-reference-values.md). The brief's density axis sets the reading line heights and the ui size once, at build time.
 {latin} Type varies on contrast: under high contrast every style in the text or mono face is one weight heavier, within what the face ships (decisions/high-contrast-weights.md). Type does not change by breakpoint or with the density mode; sizes are rem (decisions/breakpoints-are-reference-values.md). The brief's density axis sets the reading line heights and the ui size once, at build time.
 
 ## Changing the system
@@ -92,6 +92,7 @@ Styles that work together: a label above a section title or a hero; a heading ab
 {arabic} - `type-hierarchy`: hero, heading-1, section-title, heading-2, heading-3 and body fall in size, in both directions.
 {latin} - `type-hierarchy`: hero, heading-1, section-title, heading-2, heading-3 and body fall in size.
 - `high-contrast-weights`: under high contrast no style is lighter than at standard contrast.
+- `strong-weight`: under high contrast type.strong is at least 200 above body text.
 - `icon-sizes`: inline, control and feature icons rise in size, and the stroke stays between 1 and 3 units.
 
 ## Beyond the gate
@@ -107,7 +108,7 @@ Styles that work together: a label above a section title or a hero; a heading ab
 
 - Each style is five custom properties: font-family, font-size, font-weight, line-height and letter-spacing, named after the style, such as --type-text-body-font-size.
 - Apply a style as a whole, all five properties together; never size text with a raw value.
-- fonts.css, written beside tokens.css, loads the faces: link it before tokens.css. Each face loads from the reader's own copy first, then from a fonts/ folder beside it; the system report gives the Google Fonts link for loading them from there instead. Each face has a metric-matched fallback, named "<face> Fallback", so text keeps its size and line breaks while the face loads.
+- fonts.css, written beside tokens.css, holds a metric-matched fallback for each face, named "<face> Fallback", so text keeps its size and line breaks while the face loads; it does not load the faces. Load them with the Google Fonts link the system report gives, or with fonts-self-host.css and the files it names in a fonts/ folder, and link fonts.css with either one, before tokens.css. Edit neither file (decisions/font-files.md).
 - Set type.text.figure with font-variant-numeric: tabular-nums, so amounts line up.
 - Draw line icons with stroke-width from type.icon.stroke and size them with the type.icon.size roles.
 {arabic} - Direction switches with dir on the html element; a right-to-left run inside a left-to-right page sets its five properties from the style's Arabic values by hand (decisions/axes-on-the-root.md).

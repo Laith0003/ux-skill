@@ -5786,7 +5786,7 @@
               "contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.3}",
-                "fontWeight": "{type.weight.600}",
+                "fontWeight": "{type.weight.700}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.2}"
               }
@@ -5824,7 +5824,7 @@
               "contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.3}",
-                "fontWeight": "{type.weight.600}",
+                "fontWeight": "{type.weight.700}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.2}"
               }
@@ -5862,7 +5862,7 @@
               "contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.2}",
-                "fontWeight": "{type.weight.600}",
+                "fontWeight": "{type.weight.700}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.2}"
               }

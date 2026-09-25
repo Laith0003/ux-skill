@@ -5645,7 +5645,10 @@
       "$value": "{type.weight.600}",
       "$extensions": {
         "io.github.laith0003.ux-skill": {
-          "layer": "semantic"
+          "layer": "semantic",
+          "modes": {
+            "contrast:high": "{type.weight.700}"
+          }
         }
       }
     },

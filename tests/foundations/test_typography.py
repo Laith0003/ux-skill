@@ -177,7 +177,7 @@ def test_every_axis_mix_is_valid_and_passes(contrast, density, personality, form
     ts = generate_type(a).tokens
     assert validate(ts) == []
     report = gate(ts, [], CHECKS)
-    assert report.passed and report.rules_checked == 17
+    assert report.passed and report.rules_checked == 21
 
 
 def _hand():
@@ -255,7 +255,8 @@ def test_only_the_leading_rule_cites_wcag():
     assert ids == {"type-sizes": "system", "reading-leading": "1.4.8",
                    "reading-tracking": "system", "arabic-text": "system",
                    "rem-sizes": "system", "type-hierarchy": "system",
-                   "high-contrast-weights": "system", "icon-sizes": "system"}
+                   "high-contrast-weights": "system", "icon-sizes": "system",
+                   "strong-weight": "system"}
 
 
 def test_a_role_of_the_wrong_type_is_named_once_not_a_crash():
@@ -387,3 +388,76 @@ def test_a_mono_label_switches_to_the_arabic_face_under_rtl():
     rtl = ts.resolve("type.text.label", "direction:rtl")
     assert rtl["fontFamily"] == ts.resolve("type.face.arabic")
     assert rtl["letterSpacing"]["value"] == 0
+
+
+HIGH_CONTEXTS = ("contrast:high,direction:ltr", "contrast:high,direction:rtl")
+
+
+@pytest.mark.parametrize("contrast", [0.0, 0.2, 0.5, 0.8, 1.0])
+@pytest.mark.parametrize("personality, warmth, geometry", [
+    (0.5, 0.5, 0.5), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), (0.5, 0.9, 0.9), (0.9, 0.2, 0.3)])
+@pytest.mark.parametrize("arabic", [True, False])
+def test_strong_stays_200_above_body_under_high_contrast(contrast, personality, warmth,
+                                                         geometry, arabic):
+    ax = axes(contrast=contrast, type_personality=personality, warmth=warmth, geometry=geometry)
+    ts = generate_type(ax, arabic=arabic).tokens
+    for mode in HIGH_CONTEXTS if arabic else ("contrast:high",):
+        strong = ts.resolve("type.strong", mode)
+        body = ts.resolve("type.text.body", mode)["fontWeight"]
+        assert strong - body >= 200, (mode, strong, body)
+    assert ts.resolve("type.strong") == ts.resolve("type.text.heading-3")["fontWeight"]
+    assert gate(ts, [], CHECKS, raise_on_fail=False).passed
+
+
+def test_a_low_contrast_brand_keeps_its_emphasis_under_high_contrast():
+    ts = generate_type(axes(contrast=0.1, formality=0.9)).tokens
+    assert ts.resolve("type.strong") == 500
+    assert ts.resolve("type.text.body", "contrast:high")["fontWeight"] == 500
+    assert ts.resolve("type.strong", "contrast:high") == 700
+
+
+def test_the_strong_check_names_the_context_and_the_fix():
+    ts = TokenSet()
+    for t in generate_type(axes()).tokens.tokens():
+        ts.add(t if t.path != "type.strong" else
+               Token("type.strong", "fontWeight", "{type.weight.600}", layer="semantic"))
+    report = gate(ts, [], CHECKS, raise_on_fail=False)
+    found = [f.message for f in report.failures if f.check == "strong-weight"]
+    assert found and found[0].startswith(
+        "type.strong (contrast:high,direction:ltr) is weight 600, only 100 above "
+        "type.text.body at 500; bold words must stay at least 200 above body text under high "
+        "contrast, so point its contrast:high value at type.weight.700 or heavier")
+
+
+@pytest.mark.parametrize("brand_axes", [
+    axes(warmth=0.8, contrast=0.9, density=0.2, geometry=0.9, formality=0.3, motion=0.9,
+         type_personality=0.8),
+    axes(warmth=0.8, formality=0.3, type_personality=0.55, contrast=0.9),
+])
+def test_every_weight_a_style_names_is_one_its_face_ships(brand_axes):
+    ts = generate_type(brand_axes).tokens
+    c = fonts.choose(brand_axes)
+    ctxs = ("contrast:standard,direction:ltr", "contrast:high,direction:ltr",
+            "contrast:standard,direction:rtl", "contrast:high,direction:rtl")
+    for role in ("type.text.body", "type.text.ui", "type.text.label", "type.text.heading-2",
+                 "type.text.hero"):
+        for mode in ctxs:
+            v = ts.resolve(role, mode)
+            face = fonts.BY_FAMILY[v["fontFamily"][0]]
+            assert _ships(face, v["fontWeight"]), (role, mode, face.family, v["fontWeight"])
+    for mode in ctxs[2:]:
+        assert _ships(c.arabic, ts.resolve("type.strong", mode)), mode
+
+
+def _ships(face, weight):
+    if face.stops:
+        return weight in face.stops
+    return face.weights[0] <= weight <= face.weights[1]
+
+
+def test_the_static_arabic_case_is_exercised():
+    c = fonts.choose(axes(warmth=0.8, formality=0.3, type_personality=0.55, contrast=0.9))
+    assert c.arabic.family == "Tajawal"
+    ts = generate_type(axes(warmth=0.8, formality=0.3, type_personality=0.55,
+                            contrast=0.9)).tokens
+    assert ts.resolve("type.text.ui", "contrast:high,direction:rtl")["fontWeight"] == 700

@@ -1,10 +1,10 @@
 ---
 id: font-loading
 title: The build writes fonts.css with local faces first and matched fallbacks
-status: active
+status: superseded
 areas: [type, output]
 supersedes: null
-superseded_by: null
+superseded_by: font-files
 ---
 
 # The build writes fonts.css with local faces first and matched fallbacks

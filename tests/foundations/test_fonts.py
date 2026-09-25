@@ -76,3 +76,51 @@ def test_the_cdn_family_names_a_range_or_the_weights_used():
     assert fonts.css2_family(fonts.BY_FAMILY["Manrope"], (400, 600)) == "Manrope:wght@200..800"
     assert fonts.css2_family(fonts.BY_FAMILY["IBM Plex Mono"], (500, 400, 400)) == \
         "IBM+Plex+Mono:wght@400;500"
+
+
+def test_a_static_face_records_the_weights_it_ships():
+    for f in fonts.FACES:
+        if f.variable:
+            assert f.stops == (), f.family
+        else:
+            assert f.stops == tuple(sorted(set(f.stops))) and f.stops, f.family
+            assert (f.stops[0], f.stops[-1]) == f.weights, f.family
+    assert fonts.BY_FAMILY["Tajawal"].stops == (200, 300, 400, 500, 700, 800, 900)
+    assert fonts.BY_FAMILY["Amiri"].stops == (400, 700)
+    assert fonts.BY_FAMILY["IBM Plex Mono"].stops == (100, 200, 300, 400, 500, 600, 700)
+    assert fonts.BY_FAMILY["IBM Plex Sans Arabic"].stops == (100, 200, 300, 400, 500, 600, 700)
+
+
+@pytest.mark.parametrize("face", fonts.FACES, ids=lambda f: f.slug)
+def test_every_weight_snaps_to_one_the_face_ships(face):
+    for w in range(100, 1001, 50):
+        got = face.clamp(w)
+        if face.variable:
+            assert face.weights[0] <= got <= face.weights[1]
+        else:
+            assert got in face.stops
+            assert all(abs(s - w) >= abs(got - w) for s in face.stops)
+        family = fonts.css2_family(face, (400, w))
+        if not face.variable:
+            asked = [int(x) for x in family.split("@", 1)[1].split(";")]
+            assert set(asked) <= set(face.stops), family
+
+
+def test_a_weight_between_two_shipped_weights_takes_the_heavier():
+    assert fonts.BY_FAMILY["Tajawal"].clamp(600) == 700
+    assert fonts.BY_FAMILY["Amiri"].clamp(500) == 400
+    assert fonts.BY_FAMILY["Amiri"].clamp(600) == 700
+    assert fonts.css2_family(fonts.BY_FAMILY["Tajawal"], (400, 600)) == "Tajawal:wght@400;700"
+
+
+def test_local_names_are_per_weight_and_no_two_weights_share_one():
+    assert fonts.local_names(fonts.BY_FAMILY["Tajawal"], 700) == ("Tajawal Bold", "Tajawal-Bold")
+    assert fonts.local_names(fonts.BY_FAMILY["IBM Plex Mono"], 400) == (
+        "IBM Plex Mono Regular", "IBMPlexMono-Regular")
+    seen = {}
+    for f in fonts.FACES:
+        for w in f.stops:
+            for name in fonts.local_names(f, w):
+                assert name not in seen, (name, seen.get(name), (f.family, w))
+                seen[name] = (f.family, w)
+    assert fonts.local_names(fonts.BY_FAMILY["Outfit"], 700) == ()

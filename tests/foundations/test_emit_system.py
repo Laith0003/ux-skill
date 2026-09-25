@@ -13,7 +13,7 @@ from engine.foundations.validate import Problem
 from engine.synthesizer.axes import AxisValues
 
 
-def test_passing_build_returns_all_three_files():
+def test_passing_build_returns_every_file():
     out = make_system("#3366FF", NEUTRAL, NEUTRAL_SOURCE)
     assert out.passed and out.findings == ()
     assert tuple(out.files) == FILES + ART_FILES
@@ -311,17 +311,18 @@ def test_failure_text_of_a_passing_system_is_empty():
     assert failure_text(out) == "" and failure_message(out) == ""
 
 
-# The rule pack: off by default, written after the three files when asked,
+# The rule pack: off by default, written after the system files when asked,
 # and a pack that does not fit the build writes nothing.
-def test_the_rule_pack_is_off_by_default_and_follows_the_three_files():
+def test_the_rule_pack_is_off_by_default_and_follows_the_system_files():
     from engine.foundations.emit import ART_FILES, FILES, RULE_PACK_DIR
     plain = make_system("#3366FF", NEUTRAL, "x")
     assert tuple(plain.files) == FILES + ART_FILES and "rule-pack" not in plain.report
     packed = make_system("#3366FF", NEUTRAL, "x", rule_pack=True)
     names = list(packed.files)
-    assert tuple(names[:7]) == FILES + ART_FILES and names[7] == f"{RULE_PACK_DIR}/README.md"
-    assert all(n.startswith(f"{RULE_PACK_DIR}/") for n in names[7:])
-    assert {k: packed.files[k] for k in FILES[:3]} == {k: plain.files[k] for k in FILES[:3]}
+    n = len(FILES + ART_FILES)
+    assert tuple(names[:n]) == FILES + ART_FILES and names[n] == f"{RULE_PACK_DIR}/README.md"
+    assert all(name.startswith(f"{RULE_PACK_DIR}/") for name in names[n:])
+    assert {k: packed.files[k] for k in FILES[:4]} == {k: plain.files[k] for k in FILES[:4]}
     assert "- rule-pack/: the rules for AI agents and people" in packed.report
     assert packed.files["system-report.md"] == packed.report
 
@@ -353,23 +354,51 @@ def test_the_report_states_the_brand_color_in_every_context():
     assert report.index("## Brand color") < report.index("## Notes")
 
 
-def test_fonts_css_loads_every_face_local_first_with_a_matched_fallback():
+def test_fonts_css_holds_only_the_matched_fallbacks():
     out = make_system("#3366FF", NEUTRAL, NEUTRAL_SOURCE)
     css = out.files["fonts.css"]
-    assert css.startswith("/* Fonts for this design system. Link this file before tokens.css.")
+    assert css.startswith("/* Metric-matched fallback faces for this design system.")
+    blocks = css.split("@font-face {")[1:]
+    assert len(blocks) == 5 and "url(" not in css
     for family in ("Outfit", "Noto Sans", "IBM Plex Mono", "Noto Sans Arabic", "Alexandria"):
-        assert f'  src: local("{family}"), url("fonts/' in css, family
         assert f'  font-family: "{family} Fallback";' in css, family
+    assert "  size-adjust: 99.32%;" in css
+    arabic = [b for b in blocks if '"Noto Sans Arabic Fallback"' in b
+              or '"Alexandria Fallback"' in b]
+    latin = [b for b in blocks if b not in arabic]
+    assert len(arabic) == 2 and all("  unicode-range: U+0600-06FF" in b for b in arabic)
+    assert not any("unicode-range" in b for b in latin)
+    assert "--" not in css.replace("--type", "")
+
+
+def test_fonts_self_host_css_loads_every_face_with_per_weight_local_names():
+    out = make_system("#3366FF", NEUTRAL, NEUTRAL_SOURCE)
+    css = out.files["fonts-self-host.css"]
+    assert css.startswith("/* The faces of this design system, self-hosted.")
+    assert "Fallback" not in css.split("*/", 1)[1]
+    # variable faces: one file, no local(), since an installed copy may be
+    # a single weight
+    for family, slug in (("Outfit", "outfit"), ("Noto Sans", "noto-sans"),
+                         ("Noto Sans Arabic", "noto-sans-arabic")):
+        assert (f'  font-family: "{family}";\n  src: url("fonts/{slug}.woff2") '
+                'format("woff2");') in css, family
+    # a static face: one block per weight, each with its own names
+    assert ('  src: local("IBM Plex Mono Medium"), local("IBMPlexMono-Medium"), '
+            'url("fonts/ibm-plex-mono-500.woff2") format("woff2");') in css
+    names = [n for line in css.splitlines() if "local(" in line
+             for n in line.split('local("')[1:]]
+    assert len(names) == len(set(names)) > 0
     assert css.count("  font-display: swap;") == 8
-    assert "  size-adjust: 99.32%;" in css and "  unicode-range: U+0600-06FF" in css
-    assert "https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Noto+Sans" in css
+    assert "  unicode-range: U+0600-06FF" in css
     assert "--" not in css.replace("--type", "")
 
 
 def test_the_report_says_how_to_load_the_fonts():
     report = make_system("#3366FF", NEUTRAL, NEUTRAL_SOURCE).report
     fonts = report.split("## Fonts\n\n", 1)[1].split("\n## ", 1)[0]
-    assert "link fonts.css before tokens.css" in fonts
     assert "- Outfit (display), weights 400, 500, 600, 700, OFL-1.1." in fonts
-    assert "https://fonts.googleapis.com/css2?family=" in fonts
-    assert "- fonts.css: the faces and their metric-matched fallbacks" in report
+    assert '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=' in fonts
+    assert "fonts-self-host.css" in fonts and "edit neither file" in fonts
+    assert "remove" not in fonts
+    assert "- fonts.css: metric-matched fallback faces" in report
+    assert "- fonts-self-host.css: the faces from your own fonts/ folder" in report

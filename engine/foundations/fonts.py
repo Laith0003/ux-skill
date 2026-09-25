@@ -58,12 +58,20 @@ class Face:
     # formality, warmth, roundness, type personality, contrast, 0 to 1
     place: Tuple[float, float, float, float, float] = (0.5, 0.5, 0.5, 0.5, 0.5)
     arabic: str = ""                # the Arabic face drawn to sit beside it
+    # A static face: every weight it ships, one file each. Empty for a
+    # variable face, which ships every weight between its two ends.
+    stops: Tuple[int, ...] = ()
 
     @property
     def slug(self) -> str:
         return self.family.lower().replace(" ", "-")
 
     def clamp(self, weight: int) -> int:
+        """The weight the face draws for `weight`: within the range of a
+        variable face; the nearest weight a static face ships, the heavier
+        of two at the same distance."""
+        if self.stops:
+            return min(self.stops, key=lambda s: (abs(s - weight), -s))
         return max(self.weights[0], min(self.weights[1], weight))
 
 
@@ -116,25 +124,27 @@ FACES: Tuple[Face, ...] = (
     # mono faces
     Face("IBM Plex Mono", "mono", "monospace", (100, 700), False,
          _m(1000, 1025, 275, 0, 516, 698, 600.0, None, None),
-         (0.75, 0.45, 0.35, 0.5, 0.4)),
+         (0.75, 0.45, 0.35, 0.5, 0.4), stops=(100, 200, 300, 400, 500, 600, 700)),
     Face("JetBrains Mono", "mono", "monospace", (100, 800), True,
          _m(1000, 1020, 300, 0, 550, 730, 600.0, None, None),
          (0.5, 0.3, 0.45, 0.1, 0.55)),
     # Arabic partners
     Face("IBM Plex Sans Arabic", "arabic", "sans-serif", (100, 700), False,
-         _m(1000, 1085, 415, 0, 516, 698, 454.1, 675.7, 409.5)),
+         _m(1000, 1085, 415, 0, 516, 698, 454.1, 675.7, 409.5),
+         stops=(100, 200, 300, 400, 500, 600, 700)),
     Face("Noto Naskh Arabic", "arabic", "serif", (400, 700), True,
          _m(1000, 1069, 634, 0, 536, 714, 480.4, 644.4, 364.0)),
     Face("Readex Pro", "arabic", "sans-serif", (160, 700), True,
          _m(1000, 1000, 250, 0, 525, 700, 488.5, 763.9, 438.0)),
     Face("Tajawal", "arabic", "sans-serif", (200, 900), False,
-         _m(1000, 643, 357, 200, 454, 633, 427.3, 716.4, 440.0)),
+         _m(1000, 643, 357, 200, 454, 633, 427.3, 716.4, 440.0),
+         stops=(200, 300, 400, 500, 700, 800, 900)),
     Face("Noto Sans Arabic", "arabic", "sans-serif", (100, 900), True,
          _m(1000, 1374, 738, 0, 536, 714, 479.0, 727.0, 403.0)),
     Face("El Messiri", "arabic", "sans-serif", (400, 700), True,
          _m(1000, 1019, 544, 0, 480, 660, 430.5, 696.6, 480.0)),
     Face("Amiri", "arabic", "serif", (400, 700), False,
-         _m(1000, 1124, 634, 0, 433, 646, 405.1, 673.3, 376.0)),
+         _m(1000, 1124, 634, 0, 433, 646, 405.1, 673.3, 376.0), stops=(400, 700)),
     Face("Baloo Bhaijaan 2", "arabic", "sans-serif", (400, 800), True,
          _m(1000, 1080, 632, 0, 460, 602, 435.4, 661.8, 379.5)),
     Face("Alexandria", "arabic", "sans-serif", (100, 900), True,
@@ -243,11 +253,32 @@ def fallback_name(face: Face) -> str:
 
 def css2_family(face: Face, weights: Tuple[int, ...]) -> str:
     """The family parameter for the Google Fonts CSS2 API: a weight range
-    for a variable face, the weights used for a static one."""
+    for a variable face; for a static one, the weights used, each snapped
+    to one the face ships, since the API refuses the whole link for a
+    weight a static family does not have."""
     name = face.family.replace(" ", "+")
     if face.variable:
         return f"{name}:wght@{face.weights[0]}..{face.weights[1]}"
-    return f"{name}:wght@" + ";".join(str(w) for w in sorted(set(weights)))
+    return f"{name}:wght@" + ";".join(str(w) for w in sorted({face.clamp(w) for w in weights}))
+
+
+# The style name a font file gives each weight, in its full name and its
+# PostScript name.
+STYLE_NAMES: Mapping[int, str] = MappingProxyType({
+    100: "Thin", 200: "ExtraLight", 300: "Light", 400: "Regular", 500: "Medium",
+    600: "SemiBold", 700: "Bold", 800: "ExtraBold", 900: "Black"})
+
+
+def local_names(face: Face, weight: int) -> Tuple[str, ...]:
+    """The names local() looks for to find one installed weight of a
+    static face: its full name and its PostScript name ("Tajawal Bold",
+    "Tajawal-Bold"). A family name alone would match the Regular file at
+    every weight. A variable face gets none: an installed copy may hold a
+    single weight."""
+    if face.variable:
+        return ()
+    style = STYLE_NAMES[face.clamp(weight)]
+    return (f"{face.family} {style}", f"{face.family.replace(' ', '')}-{style}")
 
 
 # The Arabic blocks an Arabic face covers, so a page loads it only when it
@@ -283,53 +314,83 @@ def cdn_url(ts: "TokenSet") -> str:
     return f"{CDN}?{params}&display=swap"
 
 
+_PRECONNECT = ('<link rel="preconnect" href="https://fonts.googleapis.com">',
+               '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>')
+
+
+def link_tags(ts: "TokenSet") -> List[str]:
+    """The page head tags that load every face from Google Fonts."""
+    return [*_PRECONNECT, f'<link rel="stylesheet" href="{cdn_url(ts)}">']
+
+
 def fonts_css(ts: "TokenSet") -> str:
-    """fonts.css: an @font-face per face (local() first, then a WOFF2 in
-    fonts/ beside the file, font-display swap, Arabic faces limited to the
-    Arabic blocks), then a metric-matched fallback per face, and a comment
-    that says how to self-host or load from the CDN instead."""
-    used = weights_in(ts)
+    """fonts.css: a metric-matched fallback face per face, and nothing
+    that loads the faces themselves, so the file is the same whichever
+    way the page loads them (the Google Fonts link, or
+    fonts-self-host.css). The Arabic fallbacks cover only the Arabic
+    blocks, so Latin letters, digits and spaces in an Arabic run reach the
+    Latin face next in the stack."""
     lines = [
-        "/* Fonts for this design system. Link this file before tokens.css.",
-        "   Each face loads from the reader's own copy first (local()), then from",
-        "   the fonts/ folder beside this file: to self-host, put the WOFF2 files",
-        "   named below in fonts/. To load from Google Fonts instead, remove the",
-        "   first block of @font-face rules and add to the page head:",
-        '   <link rel="preconnect" href="https://fonts.googleapis.com">',
-        '   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
-        f'   <link rel="stylesheet" href="{cdn_url(ts)}">',
-        "   Keep the Fallback faces either way: they give the system font the web",
-        "   face's width and height, so text does not move when the face arrives.",
+        "/* Metric-matched fallback faces for this design system. Each gives a",
+        "   system font the web face's width and height, so text keeps its size",
+        "   and line breaks while the face loads. This file does not load the",
+        "   faces; load them one of two ways, each together with this file, and",
+        "   link both before tokens.css. Edit neither file.",
+        "   1. From Google Fonts: add to the page head",
+        *[f"      {tag}" for tag in link_tags(ts)],
+        "   2. Self-hosted: link fonts-self-host.css and put the files it names",
+        "      in a fonts/ folder beside it.",
         "   Every face is under the SIL Open Font License 1.1. */",
     ]
-    for _, face in faces_in(ts):
-        arabic = face.role == "arabic"
-        if face.variable:
-            srcs = [(f"fonts/{face.slug}.woff2", f"{face.weights[0]} {face.weights[1]}")]
-        else:
-            srcs = [(f"fonts/{face.slug}-{w}.woff2", str(w))
-                    for w in sorted({face.clamp(w) for w in used})]
-        for url, weight in srcs:
-            lines += ["", "@font-face {", f'  font-family: "{face.family}";',
-                      f'  src: local("{face.family}"), url("{url}") format("woff2");',
-                      f"  font-weight: {weight};", "  font-style: normal;",
-                      "  font-display: swap;"]
-            if arabic:
-                lines.append(f"  unicode-range: {ARABIC_RANGE};")
-            lines.append("}")
     for _, face in faces_in(ts):
         kind = "arabic" if face.role == "arabic" else face.generic
         names = FALLBACKS[kind][0]
         lines += ["", "@font-face {", f'  font-family: "{fallback_name(face)}";',
                   "  src: " + ", ".join(f'local("{n}")' for n in names) + ";"]
         lines += [f"  {k}: {v};" for k, v in fallback_overrides(face).items()]
+        if kind == "arabic":
+            lines.append(f"  unicode-range: {ARABIC_RANGE};")
         lines.append("}")
     return "\n".join(lines) + "\n"
 
 
+def self_host_css(ts: "TokenSet") -> str:
+    """fonts-self-host.css: an @font-face per face and weight file, loading
+    from the fonts/ folder beside it with font-display swap. A static face
+    looks for the reader's installed copy of each weight first, by that
+    weight's own names; a variable face loads its one file. Arabic faces
+    cover only the Arabic blocks, so a page without Arabic never downloads
+    them."""
+    used = weights_in(ts)
+    lines = [
+        "/* The faces of this design system, self-hosted. Link this file and",
+        "   fonts.css before tokens.css, and put the WOFF2 files named below in a",
+        "   fonts/ folder beside this file: convert the TTF files from each",
+        "   family's Google Fonts download, and give each the name below. Edit",
+        "   nothing here. To load the faces from Google Fonts instead, leave this",
+        "   file out and use the link in fonts.css.",
+        "   Every face is under the SIL Open Font License 1.1. */",
+    ]
+    for _, face in faces_in(ts):
+        if face.variable:
+            srcs = [(f"fonts/{face.slug}.woff2", f"{face.weights[0]} {face.weights[1]}", ())]
+        else:
+            srcs = [(f"fonts/{face.slug}-{w}.woff2", str(w), local_names(face, w))
+                    for w in sorted({face.clamp(w) for w in used})]
+        for url, weight, names in srcs:
+            src = ", ".join([*(f'local("{n}")' for n in names), f'url("{url}") format("woff2")'])
+            lines += ["", "@font-face {", f'  font-family: "{face.family}";', f"  src: {src};",
+                      f"  font-weight: {weight};", "  font-style: normal;",
+                      "  font-display: swap;"]
+            if face.role == "arabic":
+                lines.append(f"  unicode-range: {ARABIC_RANGE};")
+            lines.append("}")
+    return "\n".join(lines) + "\n"
+
+
 def loading_lines(ts: "TokenSet") -> List[str]:
-    """The report's words on loading the faces: what each is for, the
-    weights, how fonts.css loads them and the two ways to supply the files."""
+    """The report's lines on the faces: each face, what it is for, the
+    weights the tokens use and its license."""
     used = weights_in(ts)
     role_words = {"type.face.display": "display", "type.face.text": "text",
                   "type.face.mono": "mono", "type.face.arabic": "Arabic text",

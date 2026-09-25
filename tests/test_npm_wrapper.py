@@ -218,5 +218,6 @@ def test_a_project_with_its_own_engine_package_does_not_shadow_ours(tmp_path):
     assert not (project / "PROJECT_ENGINE_RAN").exists()
     # A relative --out still lands in the project folder.
     assert {p.name for p in (project / "ds").iterdir()} == {
-        "tokens.json", "tokens.css", "fonts.css", "system-report.md", "art"}
+        "tokens.json", "tokens.css", "fonts.css", "fonts-self-host.css", "system-report.md",
+        "art"}
     assert json.loads(out.stdout)["status"] == "written"

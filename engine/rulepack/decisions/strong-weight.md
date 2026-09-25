@@ -1,10 +1,10 @@
 ---
 id: strong-weight
 title: Emphasis inside text uses the text face's heading weight
-status: active
+status: superseded
 areas: [type]
 supersedes: strong-equals-heading-weight
-superseded_by: null
+superseded_by: strong-under-high-contrast
 ---
 
 # Emphasis inside text uses the text face's heading weight

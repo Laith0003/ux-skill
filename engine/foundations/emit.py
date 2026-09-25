@@ -1,5 +1,5 @@
 """From user inputs to the files a builder keeps: tokens.json, tokens.css,
-fonts.css and system-report.md.
+fonts.css, fonts-self-host.css and system-report.md.
 
 The CLI (`uxskill system build`) and the MCP tool (`ux_system_build`) are
 thin callers of this module, so both read inputs, word errors and gate the
@@ -32,7 +32,7 @@ from engine.foundations.color_math import hex_to_rgb, rgb_to_hex
 from engine.foundations.export import dump_dtcg, to_css
 from engine.foundations.art import art_files
 from engine.foundations.art import report_lines as art_lines
-from engine.foundations.fonts import cdn_url, fonts_css, loading_lines
+from engine.foundations.fonts import fonts_css, link_tags, loading_lines, self_host_css
 from engine.foundations.gate import GateFailure, GateReport
 from engine.synthesizer.axes import (
     AXIS_NAMES, FORBIDDEN_CLAMPS, INDUSTRY_SEEDS, TONE_NUDGES, AxisValues, _apply_tone_nudges,
@@ -40,7 +40,8 @@ from engine.synthesizer.axes import (
 )
 
 # The files a build writes, in the order they are written and reported.
-FILES: Tuple[str, ...] = ("tokens.json", "tokens.css", "fonts.css", "system-report.md")
+FILES: Tuple[str, ...] = ("tokens.json", "tokens.css", "fonts.css", "fonts-self-host.css",
+                          "system-report.md")
 # The generated art, written after FILES (engine.foundations.art).
 ART_FILES: Tuple[str, ...] = ("art/pattern.svg", "art/shapes.svg", "art/gradient.svg")
 # The folder the rule pack is written into, inside the out folder, when asked.
@@ -636,11 +637,13 @@ _FIDELITY_LEAD = ("Where the brand color appears, and whether it stays exact in 
                   "brand fill keeps the exact color whenever white or black text reads on it; "
                   "where a mode needs more contrast it moves to the nearest step of the brand's "
                   "scale, and the line says how far.")
-_FONTS_LEAD = ("The tokens name these faces and fonts.css loads them: link fonts.css before "
-               "tokens.css. Each face loads from the reader's own copy first, then from a fonts/ "
-               "folder beside fonts.css, so put the WOFF2 files there to self-host (each file is "
-               "named in fonts.css). Each face also has a metric-matched fallback, so text keeps "
-               "its size and line breaks while the face loads.")
+_FONTS_LEAD = ("The tokens name these faces. fonts.css holds a metric-matched fallback for "
+               "each, so text keeps its size and line breaks while a face loads; it does not "
+               "load the faces. Load them one of two ways, each together with fonts.css, both "
+               "linked before tokens.css, and edit neither file.")
+_FONTS_SELF_HOST = ("Self-hosted: link fonts-self-host.css and put the WOFF2 files it names in "
+                    "a fonts/ folder beside it. A static face looks for the reader's installed "
+                    "copy of each weight first.")
 _COMPOSITION_LEAD = ("The layout a landing page starts from, scored from the axes and the brief's "
                      "fields; the landing playbooks build on it, and the JSON result names it as "
                      "composition.")
@@ -668,7 +671,7 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
                   gate_line: str, notes: Sequence[str],
                   findings: Sequence[SystemFinding], rule_pack: bool = False,
                   fidelity: Sequence[str] = (), fonts: Sequence[str] = (),
-                  font_link: str = "", audience: Sequence[str] = (),
+                  font_link: Sequence[str] = (), audience: Sequence[str] = (),
                   unread: Sequence[str] = (), art: bool = False,
                   composition: str = "", sentence: str = "") -> str:
     """system-report.md: one sentence on what was built, what it was built
@@ -710,9 +713,8 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
             lines += ["### Other choices", "", *[f"- {n}" for n in other], ""]
     if fonts:
         lines += ["## Fonts", "", _FONTS_LEAD, "", *[f"- {f}" for f in fonts], "",
-                  "To load them from Google Fonts instead of your own files, add this link to "
-                  "the page head and remove the first block of @font-face rules in fonts.css:",
-                  "", f"    {font_link}", ""]
+                  "From Google Fonts: add these tags to the page head, then link fonts.css.",
+                  "", *[f"    {tag}" for tag in font_link], "", _FONTS_SELF_HOST, ""]
     if composition:
         lines += ["## Page composition", "", _COMPOSITION_LEAD, "", f"- {composition}", ""]
     if art:
@@ -721,8 +723,10 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
               "- tokens.json: every token in the W3C design tokens format (DTCG 2025.10), with "
               "its values for each mode.",
               f"- tokens.css: CSS custom properties. {_MODES_LINE}",
-              "- fonts.css: the faces and their metric-matched fallbacks; link it before "
-              "tokens.css.",
+              "- fonts.css: metric-matched fallback faces; link it before tokens.css, together "
+              "with the Google Fonts link or fonts-self-host.css (see Fonts).",
+              "- fonts-self-host.css: the faces from your own fonts/ folder, for pages that "
+              "do not load them from Google Fonts.",
               "- system-report.md: this report."]
     if art:
         lines.append("- art/: generated brand art, decorative SVG (see Brand art).")
@@ -760,7 +764,8 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
                 arabic: bool = True, rule_pack: bool = False,
                 audience: Optional[Audience] = None,
                 unread: Sequence[str] = ()) -> SystemOutput:
-    """Build, validate and gate. On success `files` holds all three texts,
+    """Build, validate and gate. On success `files` holds every file in FILES
+    and the art,
     and with rule_pack every rule pack file under RULE_PACK_DIR after them;
     on a validation, gate or rule pack failure `files` is empty and
     `findings` names every problem, so a caller can never write a failing
@@ -770,7 +775,7 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
     notes: Sequence[str] = ()
     fidelity: Sequence[str] = ()
     fonts: Sequence[str] = ()
-    font_link = ""
+    font_link: Sequence[str] = ()
     tokens: Dict[str, str] = {}
     art: Dict[str, str] = {}
     pack: Dict[str, str] = {}
@@ -789,11 +794,12 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
         gate = built.report.summary().splitlines()[0]
         notes = built.notes
         fidelity = brand_fidelity(built.tokens)
-        fonts, font_link = loading_lines(built.tokens), cdn_url(built.tokens)
+        fonts, font_link = loading_lines(built.tokens), link_tags(built.tokens)
         art = art_files(built.tokens, axes, brand)
         tokens = {"tokens.json": dump_dtcg(built.tokens),
                   "tokens.css": to_css(built.tokens, audience.default_scheme),
-                  "fonts.css": fonts_css(built.tokens)}
+                  "fonts.css": fonts_css(built.tokens),
+                  "fonts-self-host.css": self_host_css(built.tokens)}
         if rule_pack:
             from engine.rulepack.generate import RulePackError, build_rule_pack
             try:

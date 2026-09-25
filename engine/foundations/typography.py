@@ -60,6 +60,8 @@ READING = ("type.text.body", "type.text.body-small", "type.text.fine")
 HIERARCHY = ("type.text.hero", "type.text.heading-1", "type.text.section-title",
              "type.text.heading-2", "type.text.heading-3", "type.text.body")
 MIN_BODY_PX, MIN_FINE_PX, MIN_READING_LEADING = 16, 12, 1.5
+# Under high contrast, bold words stay at least this far above body text.
+STRONG_GAP = 200
 # Face roles: the token each face is written to.
 FACE_TOKENS = {"display": "type.face.display", "text": "type.face.text",
                "mono": "type.face.mono", "arabic": "type.face.arabic",
@@ -180,7 +182,8 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
         face = choice.arabic_display if ROLES[role][1] == "display" else choice.arabic
         return face.clamp(w)
 
-    used = sorted(set(std.values()) | set(high.values())
+    strong = _strong(std, high, choice, in_arabic if arabic else None)
+    used = sorted(set(std.values()) | set(high.values()) | set(strong.values())
                   | ({in_arabic(r, w) for r, w in list(std.items()) + list(high.items())}
                      if arabic else set()))
     for w in used:
@@ -245,8 +248,11 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
             per_context = {k.split(",")[0]: v for k, v in per_context.items()}
         base, modes = compress(per_context)
         ts.add(Token(role, "typography", base, modes=modes, layer="semantic"))
-    ts.add(Token("type.strong", "fontWeight", "{type.weight.%d}" % std["type.text.heading-3"],
-                 layer="semantic"))
+    per_strong = {k: "{type.weight.%d}" % w for k, w in strong.items()}
+    if not arabic:
+        per_strong = {k.split(",")[0]: v for k, v in per_strong.items() if "rtl" not in k}
+    base, modes = compress(per_strong)
+    ts.add(Token("type.strong", "fontWeight", base, modes=modes, layer="semantic"))
     for run, face in RUNS.items():
         if arabic or run == "type.run.latin":
             ts.add(Token(run, "fontFamily", "{%s}" % face, layer="semantic"))
@@ -265,6 +271,22 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
                                         "Latin size" if arabic else "")
              + f", ratio {ratio(axes):g}, display weight {std['type.text.hero']}"]
     return Generated(tokens=ts, notes=notes)
+
+
+def _strong(std: Dict[str, int], high: Dict[str, int], choice: fonts.Choice,
+            in_arabic: Optional[Any]) -> Dict[str, int]:
+    """type.strong per context: the text face's heading weight, and under
+    high contrast at least STRONG_GAP above body text, which gets heavier
+    there too. Under rtl each weight is one the Arabic face ships."""
+    h3, body = "type.text.heading-3", "type.text.body"
+    out = {"contrast:standard,direction:ltr": std[h3],
+           "contrast:high,direction:ltr": choice.text.clamp(
+               max(high[h3], high[body] + STRONG_GAP))}
+    arabic = in_arabic or (lambda role, w: w)
+    out["contrast:standard,direction:rtl"] = arabic(body, std[h3])
+    out["contrast:high,direction:rtl"] = arabic(
+        body, max(high[h3], arabic(body, high[body]) + STRONG_GAP))
+    return out
 
 
 def _heavier(role: str, weight: int, choice: fonts.Choice) -> int:
@@ -434,6 +456,23 @@ def _high_weights(ts: TokenSet, mode: str) -> List[str]:
             if ts.resolve(role, mode)["fontWeight"] < ts.resolve(role, std)["fontWeight"]]
 
 
+def _strong_gap(ts: TokenSet, mode: str) -> List[str]:
+    """Under high contrast, bold words stay STRONG_GAP above body text, so
+    emphasis survives the heavier body the mode gives."""
+    if "contrast:high" not in mode or not (_typed(ts, "type.strong")
+                                           and _typed(ts, "type.text.body")):
+        return []
+    strong = ts.resolve("type.strong", mode)
+    body = ts.resolve("type.text.body", mode)["fontWeight"]
+    if strong - body >= STRONG_GAP:
+        return []
+    want = int(body + STRONG_GAP)
+    return [f"type.strong ({mode}) is weight {strong:g}, only {strong - body:g} above "
+            f"type.text.body at {body:g}; bold words must stay at least {STRONG_GAP} above body "
+            "text under high contrast, so point its contrast:high value at "
+            f"type.weight.{want} or heavier"]
+
+
 def _icons(ts: TokenSet, mode: str) -> List[str]:
     sizes = [r for r in ("type.icon.size.inline", "type.icon.size.control",
                          "type.icon.size.feature") if _typed(ts, r)]
@@ -465,6 +504,7 @@ CHECKS: Tuple[Check, ...] = (
     Check("type-hierarchy", "system", _hierarchy, axes=("direction",),
           exempt_axes=_WEIGHT_ONLY),
     Check("high-contrast-weights", "system", _high_weights, axes=("contrast", "direction")),
+    Check("strong-weight", "system", _strong_gap, axes=("contrast", "direction")),
     Check("icon-sizes", "system", _icons,
           exempt_axes=(("direction", "icon sizes and the stroke never carry modes"),
                        ("contrast", "icon sizes and the stroke never carry modes"))),

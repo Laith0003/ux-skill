@@ -5140,6 +5140,15 @@
             "layer": "primitive"
           }
         }
+      },
+      "700": {
+        "$type": "fontWeight",
+        "$value": 700,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
       }
     },
     "size": {
@@ -5959,7 +5968,10 @@
       "$value": "{type.weight.500}",
       "$extensions": {
         "io.github.laith0003.ux-skill": {
-          "layer": "semantic"
+          "layer": "semantic",
+          "modes": {
+            "contrast:high": "{type.weight.700}"
+          }
         }
       }
     },

@@ -777,7 +777,8 @@ else:
     @click.option("--latin-only", is_flag=True,
                   help="Leave out the Arabic face and scale.")
     @click.option("--out", "out_dir", required=True,
-                  help="Folder for tokens.json, tokens.css and system-report.md.")
+                  help="Folder for tokens.json, tokens.css, fonts.css, fonts-self-host.css, "
+                       "system-report.md and art/.")
     @click.option("--rule-pack", "rule_pack", is_flag=True,
                   help="Also write the AI rule pack into --out/rule-pack/: per foundation "
                        "architecture, reference, audit and handoff files, plus the contracts "
@@ -787,8 +788,9 @@ else:
     @click.pass_context
     def system_build_cmd(ctx, brand, brief_path, axes_text, latin_only, out_dir, rule_pack,
                          force) -> None:
-        """Build tokens.json, tokens.css and system-report.md into --out,
-        and with --rule-pack the rule pack into --out/rule-pack/.
+        """Build tokens.json, tokens.css, fonts.css, fonts-self-host.css,
+        system-report.md and art/ into --out, and with --rule-pack the rule
+        pack into --out/rule-pack/.
 
         Axes come from --brief, else --axes, else 0.5 on every axis; the
         report says which. Exit 0 when the files are written or already

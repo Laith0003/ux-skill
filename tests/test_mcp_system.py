@@ -132,8 +132,9 @@ def test_a_default_passing_result_is_small_enough_for_an_agent():
         assert result["report"] == expected.report
         assert result["files"] == [
             {"name": name, "bytes": len(expected.files[name].encode("utf-8"))}
-            for name in ("tokens.json", "tokens.css", "fonts.css", "system-report.md",
-                         "art/pattern.svg", "art/shapes.svg", "art/gradient.svg")]
+            for name in ("tokens.json", "tokens.css", "fonts.css", "fonts-self-host.css",
+                         "system-report.md", "art/pattern.svg", "art/shapes.svg",
+                         "art/gradient.svg")]
 
 
 def test_include_files_returns_the_texts():
@@ -161,8 +162,9 @@ def test_out_writes_the_same_bytes_as_the_cli(tmp_path):
     out = tmp_path / "mcp"
     result = handle_ux_system_build({"brand": "#3366FF", "brief": brief, "out": str(out)})
     assert result["status"] == "written" and result["passed"] is True
-    assert result["written"] == ["tokens.json", "tokens.css", "fonts.css", "system-report.md",
-                                 "art/pattern.svg", "art/shapes.svg", "art/gradient.svg"]
+    assert result["written"] == ["tokens.json", "tokens.css", "fonts.css", "fonts-self-host.css",
+                                 "system-report.md", "art/pattern.svg", "art/shapes.svg",
+                                 "art/gradient.svg"]
     assert result["unchanged"] == [] and result["conflicts"] == []
     assert "css" not in result
     for name in result["written"]:
@@ -170,8 +172,9 @@ def test_out_writes_the_same_bytes_as_the_cli(tmp_path):
 
     again = handle_ux_system_build({"brand": "#3366FF", "brief": brief, "out": str(out)})
     assert again["status"] == "unchanged" and again["written"] == []
-    assert again["unchanged"] == ["tokens.json", "tokens.css", "fonts.css", "system-report.md",
-                                  "art/pattern.svg", "art/shapes.svg", "art/gradient.svg"]
+    assert again["unchanged"] == ["tokens.json", "tokens.css", "fonts.css", "fonts-self-host.css",
+                                  "system-report.md", "art/pattern.svg", "art/shapes.svg",
+                                  "art/gradient.svg"]
 
 
 def test_out_refuses_a_differing_file_without_force(tmp_path):
@@ -180,9 +183,10 @@ def test_out_refuses_a_differing_file_without_force(tmp_path):
               if p.is_file()}
     result = handle_ux_system_build({"brand": "#AA3300", "out": str(tmp_path)})
     assert result["status"] == "refused" and result["passed"] is True
-    # fonts.css follows the axes, not the brand, so it is left as it is
-    assert result["written"] == [] and set(result["conflicts"]) == set(before) - {"fonts.css"}
-    assert result["unchanged"] == ["fonts.css"]
+    # the two font files follow the axes, not the brand, so they are left as they are
+    fonts = {"fonts.css", "fonts-self-host.css"}
+    assert result["written"] == [] and set(result["conflicts"]) == set(before) - fonts
+    assert result["unchanged"] == ["fonts.css", "fonts-self-host.css"]
     assert "Pass force: true to replace them, or pass a different out folder." in result["message"]
     assert {str(p.relative_to(tmp_path)): p.read_bytes() for p in tmp_path.rglob("*")
             if p.is_file()} == before

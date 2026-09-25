@@ -27,4 +27,4 @@ typography.weights, tracking_em and the tracking primitives; character.display_w
 
 ## Consequences
 
-type.strong equals the heading weight. The reading-tracking check still refuses negative spacing on reading styles.
+At standard contrast type.strong equals the heading weight (decisions/strong-under-high-contrast.md). The reading-tracking check still refuses negative spacing on reading styles.

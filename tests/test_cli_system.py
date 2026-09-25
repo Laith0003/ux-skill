@@ -21,8 +21,8 @@ from engine.foundations.emit import NEUTRAL, make_system  # noqa: E402
 from engine.synthesizer.axes import compute_axes  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-FILES = ("tokens.json", "tokens.css", "fonts.css", "system-report.md", "art/pattern.svg",
-         "art/shapes.svg", "art/gradient.svg")
+FILES = ("tokens.json", "tokens.css", "fonts.css", "fonts-self-host.css", "system-report.md",
+         "art/pattern.svg", "art/shapes.svg", "art/gradient.svg")
 
 
 def _runner():
@@ -278,11 +278,11 @@ def test_help_says_system_pack_is_3x_and_points_at_system_build():
     assert "3.x" in line and "system build" in line, line
 
 
-def test_rule_pack_flag_writes_the_pack_beside_the_three_files(tmp_path):
+def test_rule_pack_flag_writes_the_pack_beside_the_system_files(tmp_path):
     out = tmp_path / "ds"
     result, payload = _run("--brand", "#3366FF", "--out", str(out), "--rule-pack")
     assert result.exit_code == 0, result.output
-    assert payload["written"][:7] == list(FILES)
+    assert payload["written"][:len(FILES)] == list(FILES)
     assert "rule-pack/README.md" in payload["written"]
     assert (out / "rule-pack" / "color" / "audit.md").is_file()
     assert (out / "rule-pack" / "contracts" / "button.yaml").is_file()

@@ -258,9 +258,10 @@ class UxSystemBuildInput(BaseModel):
     out: Any = Field(
         default=None,
         description="Optional folder path, best absolute. When given, the tool writes "
-                    "tokens.json, tokens.css and system-report.md there, as `uxskill system "
-                    "build --out` does: identical files are left alone, and if any file "
-                    "differs nothing is written unless force is true.")
+                    "tokens.json, tokens.css, fonts.css, fonts-self-host.css, system-report.md "
+                    "and art/ there, as `uxskill system build --out` does: identical files "
+                    "are left alone, and if any file differs nothing is written unless force "
+                    "is true.")
     include_files: Any = Field(
         default=False,
         description="Optional true or false (default false). True adds the tokens.css text "
@@ -690,7 +691,8 @@ TOOLS: Dict[str, ToolEntry] = {
         "elevation, motion, imagery) with light, dark, high contrast, density, right-to-left "
         "Arabic and reduced motion modes. Returns status, passed, the gate line, findings, a "
         "plain report and each file's size. Pass out (a folder) to write tokens.json, "
-        "tokens.css, fonts.css and system-report.md there, refused when a file differs unless "
+        "tokens.css, fonts.css, fonts-self-host.css, system-report.md and art/ there, refused "
+        "when a file differs unless "
         "force is true; pass "
         "include_files true to get the css and dtcg text back instead. Without out it writes "
         "nothing.",

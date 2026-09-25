@@ -67,7 +67,7 @@ Older and mixed-age readers get larger body text and targets, a wider focus ring
 
 ### 3. Look before writing
 
-List the output folder first (`ls design-system/`). If `tokens.json`, `tokens.css`, `fonts.css`, `system-report.md` or a `rule-pack/` folder is already there, tell the user and run without `--force`: the engine then writes nothing if any file differs, and leaves identical files alone. When a `rule-pack/` folder is there, pass `--rule-pack` again whenever you change the system: a build without it leaves the pack as it was, and if the new `tokens.json` no longer matches the digest in `rule-pack/built-from.json`, the result and `system-report.md` name the pack as stale, with the fix (build again with `--rule-pack`, or remove the folder). The engine never deletes it.
+List the output folder first (`ls design-system/`). If `tokens.json`, `tokens.css`, `fonts.css`, `fonts-self-host.css`, `system-report.md` or a `rule-pack/` folder is already there, tell the user and run without `--force`: the engine then writes nothing if any file differs, and leaves identical files alone. When a `rule-pack/` folder is there, pass `--rule-pack` again whenever you change the system: a build without it leaves the pack as it was, and if the new `tokens.json` no longer matches the digest in `rule-pack/built-from.json`, the result and `system-report.md` name the pack as stale, with the fix (build again with `--rule-pack`, or remove the folder). The engine never deletes it.
 
 ### 4. Run the engine
 
@@ -108,7 +108,7 @@ Read `design-system/system-report.md` and explain it. Do not paste it.
 
 ### 7. Fonts: the page has to load them
 
-The tokens name the font families, and `fonts.css`, written beside `tokens.css`, loads them: tell the user to link `fonts.css` before `tokens.css`. It loads each face from the reader's own copy first, then from a `fonts/` folder beside it, so self-hosted font files go there under the names `fonts.css` gives. To load from Google Fonts instead, the report's "Fonts" section gives the link. Until the page links `fonts.css`, nothing loads the faces and the browser falls back to system faces; each face has a metric-matched fallback, so text keeps its size and line breaks while a face loads.
+The tokens name the font families. `fonts.css`, written beside `tokens.css`, holds a metric-matched fallback for each face, so text keeps its size and line breaks while a face loads; it does not load the faces. Tell the user to load them one of two ways, each together with `fonts.css`, and to link `fonts.css` before `tokens.css`: the Google Fonts tags the report's "Fonts" section gives, or `fonts-self-host.css`, self-hosted from a `fonts/` folder beside it under the file names it gives (a static face finds the reader's installed copy of each weight first). Neither file is edited, so the next build leaves them alone. Until the page uses one of the two, nothing loads the faces and the browser falls back to system faces through the matched fallbacks.
 
 The engine picks three faces from a small catalog of open-license faces by the axes: a display face for the hero, the page and section titles and large figures, a text face for reading and controls, and a mono face for code. Each Latin face has an Arabic face drawn beside it. The report names the faces under "Other choices" (for example "type: display Outfit, text Noto Sans, mono IBM Plex Mono, Arabic Noto Sans Arabic and Alexandria").
 

@@ -83,7 +83,8 @@ gives 3.2. Ask for the beta:
 - One command writes the system into a folder:
   `uxskill system build --brand '#3366FF' --out design-system`.
   `tokens.css` holds CSS custom properties to link from your page,
-  `fonts.css` loads the faces, `tokens.json` holds the same tokens for tools,
+  `fonts.css` holds matched fallbacks for the faces, `fonts-self-host.css`
+  loads them from your own files, `tokens.json` holds the same tokens for tools,
   `art/` holds decorative brand art, and `system-report.md` says in plain
   words what was built, from what, and what the engine adjusted.
 - Style with the roles, not raw colors: `var(--color-action-primary)` for a
@@ -100,10 +101,11 @@ gives 3.2. Ask for the beta:
   `data-density="compact"`, `dir="rtl"` or `data-motion="reduced"` on the
   html element. With no attribute, dark mode, high contrast and reduced motion
   follow the operating system.
-- Fonts: link `fonts.css` before `tokens.css`. It loads each face from the
-  reader's own copy first, then from self-hosted files in `fonts/`, and the
-  report gives the Google Fonts link. Until a face loads, its matched
-  fallback keeps text the same size. The report names the faces chosen.
+- Fonts: load the faces with the Google Fonts link the report gives, or with
+  `fonts-self-host.css` and the files it names in `fonts/`, and link
+  `fonts.css` with either one, before `tokens.css`. Edit neither file. Until
+  a face loads, its matched fallback in `fonts.css` keeps text the same size.
+  The report names the faces chosen.
 - In Claude Code, `/ux-system create` checks that the installed uxskill is
   the beta, asks for the brand color, runs the build, and explains the
   report.
@@ -140,9 +142,10 @@ The 4.0 beta builds systems with character: every foundation now varies
 continuously with the seven axes, so two briefs of different character build
 systems a person can tell apart. No industry or keyword table picks a look.
 
-- A build writes `fonts.css` (the chosen faces, local copies first, then
-  self-hosted files, with metric-matched fallbacks) and decorative brand art
-  in `art/` beside `tokens.json`, `tokens.css` and `system-report.md`.
+- A build writes `fonts.css` (metric-matched fallbacks for the chosen faces),
+  `fonts-self-host.css` (the faces from self-hosted files, a static face's
+  installed weights first) and decorative brand art in `art/` beside
+  `tokens.json`, `tokens.css` and `system-report.md`.
 - Three type roles: a display face, a text face and a mono face, chosen from
   a small catalog of open-license faces by the axes, each with an Arabic
   partner. Weight and letter spacing change along the scale; new styles for

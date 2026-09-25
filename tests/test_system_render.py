@@ -67,6 +67,14 @@ PAGE = Template("""<!doctype html>
     letter-spacing: var(--type-text-heading-2-letter-spacing);
     line-height: var(--type-text-heading-2-line-height);
   }
+  .display {
+    margin: 0;
+    font-family: var(--type-text-heading-1-font-family);
+    font-size: var(--type-text-heading-1-font-size);
+    font-weight: var(--type-text-heading-1-font-weight);
+    letter-spacing: var(--type-text-heading-1-letter-spacing);
+    line-height: var(--type-text-heading-1-line-height);
+  }
   p { margin: 0; color: var(--color-text-muted); }
   .field { display: flex; flex-direction: column; gap: var(--space-text-gap); }
   label {
@@ -103,6 +111,7 @@ PAGE = Template("""<!doctype html>
 <body>
 <main>
   <section class="card">
+    <p class="display">$display</p>
     <h1>$heading</h1>
     <p>$body</p>
     <div class="field">
@@ -117,10 +126,12 @@ PAGE = Template("""<!doctype html>
 """)
 
 COPY = {
-    "ltr": dict(lang="en", dir="", title="Workspace", heading="Create your workspace",
+    "ltr": dict(lang="en", dir="", title="Workspace", display="Welcome",
+                heading="Create your workspace",
                 body="Every color, size and space on this card comes from the generated tokens.",
                 label="Workspace name", action="Continue"),
-    "rtl": dict(lang="ar", dir=' dir="rtl"', title="مساحة العمل", heading="أنشئ مساحة العمل",
+    "rtl": dict(lang="ar", dir=' dir="rtl"', title="مساحة العمل", display="أهلا",
+                heading="أنشئ مساحة العمل",
                 body="كل لون وحجم ومسافة في هذه البطاقة مأخوذ من الرموز المولّدة.",
                 label="اسم مساحة العمل", action="متابعة"),
 }
@@ -241,6 +252,19 @@ def test_dir_rtl_switches_to_the_arabic_face_and_scale(page, tokens):
     assert _style(page, "body", "letter-spacing") in ("normal", "0px")
     assert _style(page, "h1", "letter-spacing") in ("normal", "0px")
     assert float(_style(page, "body", "line-height").removesuffix("px")) > 0
+
+
+def test_dir_rtl_sets_a_display_style_in_the_arabic_display_face(page, tokens):
+    latin_display = tokens.resolve("type.face.display", "")[0]
+    assert latin_display in _style(page, ".display", "font-family").split(",")[0]
+    assert _style(page, ".display", "letter-spacing") not in ("normal", "0px")
+    _set(page, dir="rtl")
+    arabic_display = tokens.resolve("type.face.arabic-display", "")[0]
+    assert arabic_display != tokens.resolve("type.face.arabic", "")[0]
+    assert arabic_display in _style(page, ".display", "font-family").split(",")[0]
+    assert _style(page, ".display", "letter-spacing") in ("normal", "0px")
+    size = tokens.resolve("type.text.heading-1", "direction:rtl")["fontSize"]
+    assert _style(page, ".display", "font-size") == f"{size['value'] * 16:g}px"
 
 
 def test_compact_density_shrinks_the_gaps(page, tokens):

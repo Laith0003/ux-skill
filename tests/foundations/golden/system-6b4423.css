@@ -338,6 +338,7 @@
   --type-weight-400: 400;
   --type-weight-500: 500;
   --type-weight-600: 600;
+  --type-weight-700: 700;
   --type-size-latin-1: 0.75rem;
   --type-size-latin-2: 0.875rem;
   --type-size-latin-3: 1rem;
@@ -704,6 +705,7 @@
   --type-text-code-font-weight: var(--type-weight-500);
   --type-text-code-letter-spacing: var(--type-tracking-0);
   --type-text-code-line-height: var(--type-leading-latin-3);
+  --type-strong: var(--type-weight-700);
   --imagery-scrim: var(--imagery-shade-high);
 }
 
@@ -802,6 +804,7 @@
     --type-text-code-font-weight: var(--type-weight-500);
     --type-text-code-letter-spacing: var(--type-tracking-0);
     --type-text-code-line-height: var(--type-leading-latin-3);
+    --type-strong: var(--type-weight-700);
     --imagery-scrim: var(--imagery-shade-high);
   }
 }
