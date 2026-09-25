@@ -85,7 +85,7 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 - **Mobile-first or desktop-first** — Default is mobile-first; ask if the audience is desktop-dominant (B2B admin, professional tools).
 - **Existing copy** — "Have copy already, or should I draft it?"
 - **Animation appetite** — "Heavy motion, restrained, or static?"
-- **Surface-specific follow-ups** live in the playbook for the surface: the landing-page sections question is in `references/surfaces/landing.md`.
+- **Sections / IA hint** (landing briefs only): "Sections you know you want, in order? Or trust the AIDA default?" The default order and the section rules live in `references/surfaces/landing.md`.
 
 ---
 

@@ -68,7 +68,7 @@ Optional but useful: specific behavior (auto-sort, multi-step, infinite scroll, 
 
 **Dials (step 3).** DESIGN_VARIANCE 5 (4 for system components, 6 for marketing components). MOTION_INTENSITY 4 (3 for utility components, 5 for marketing components). VISUAL_DENSITY 5 (7 for tables/charts, 4 for buttons/modals).
 
-**Dispatch (step 4).** `frontend-engineer` gets the spec verbatim, the dials, the 1-2 patterns, the full `references/styles/anti-slop.md`, the target stack, and an instruction to return code + self-review on bans avoided + patterns used. Dispatch `motion-engineer` in parallel if the spec involves motion (loading states, optimistic UI, micro-interactions, transitions). Dispatch `copy-writer` in parallel if the component has non-trivial copy (form labels, empty states, error messages, CTAs).
+**Dispatch (step 4).** `frontend-engineer` gets the spec verbatim, the dials, the 1-2 patterns, the full `references/styles/anti-slop.md`, the full `references/surfaces/component.md` (the playbook step 1c picks for this mode), the target stack, and an instruction to return code + self-review on bans avoided + patterns used. Dispatch `motion-engineer` in parallel if the spec involves motion (loading states, optimistic UI, micro-interactions, transitions). Dispatch `copy-writer` in parallel if the component has non-trivial copy (form labels, empty states, error messages, CTAs).
 
 **Generation (v2 step 4).** Look up the requested component name in `.ux/last-recommendation.json`'s `components` list. If present, generate using its `anatomy`, `states`, `tokens_used`, and `motion` fields as the spec. If not present, search `data/components.json` directly via `cat data/components.json | jq '.entries[] | select(.name | test("<name>"; "i"))'`. The page-sequence step (v2 step 2.5) does not apply. The brand anchor applies as in page mode: the component must use the brand primary color, the logo where one belongs, and logo-style type, and ship real imagery when it carries visuals, or it fails the brand-fidelity floor. A house-style component for a client brand is wrong no matter how clean.
 
@@ -114,6 +114,7 @@ Other moves: /ux-polish      (cosmetic pass)
   "timestamp": "<ISO8601>",
   "type": "<component type>",
   "stack": "<stack>",
+  "surface": "component",
   "voice": "<voice>",
   "dials": { "variance": <n>, "motion": <n>, "density": <n> },
   "patterns": ["<arsenal patterns>"],
@@ -123,12 +124,7 @@ Other moves: /ux-polish      (cosmetic pass)
 
 The `command` value stays `ux-component` so `/ux-next` keeps reading it.
 
-**Component hard rules** (in addition to the shared hard rules):
-- All four interaction states (default / hover / active / disabled). Non-negotiable. Buttons/inputs that look identical when hovered, active, or disabled = failure.
-- Loading + error + empty states wherever the component can hit them.
-- Mandatory imagery if visual (avatars, product shots, illustrations): real and on-brand, client assets first, then curated Unsplash/Pexels chosen to match the brand + temperature.
-- Inter is allowed. Do not ban it.
-- No 3-equal-cards layouts for grouped components.
+**Component hard rules** live in `references/surfaces/component.md` (Component build rules). They apply in addition to the shared hard rules.
 
 **Component failure modes and errors:**
 
@@ -159,18 +155,11 @@ Triggers: "build a dashboard", "design the admin panel", "make a metrics page", 
 
 If anything's missing, ask once: *"One line: data shape, key metrics, audience (operator/analyst/exec), stack?"*
 
-**Arsenal picks (step 2).** Pick 3-5 dashboard patterns:
-- **Bento grid**: asymmetric, intentional, never 3-equal-cards
-- **Intelligent list**: auto-sorting, contextual ordering
-- **Command input**: keyboard-driven filter/search
-- **Live status with overshoot**: for real-time indicators, used sparingly
-- **Wide data stream**: infinite carousel of metrics when there's more than fits
-- **Contextual focus mode**: click a metric, get the deep-dive without page change
-- **Hairline-separated metric blocks**: for tight KPI rows, no cards needed
+**Arsenal picks (step 2).** Pick 3-5 dashboard patterns. The five live-product archetypes (intelligent list, command input, live status, wide data stream, contextual focus) live in `references/styles/arsenal.md` (Live-product archetypes). The dashboard patterns (the archetype bento, replace cards with hairlines, compact stat tile, cockpit density) live in `references/surfaces/dashboard.md`.
 
 **Dials (step 3).** DESIGN_VARIANCE 4 (dashboards are calmer than landings). MOTION_INTENSITY 3 (data should feel still until it changes). VISUAL_DENSITY 8 (dashboards are cockpits, not galleries).
 
-**Dispatch (step 4).** `frontend-engineer` gets the brief verbatim, data shape + key metrics + audience, stack, dials, the 3-5 patterns, the full `references/styles/anti-slop.md`, and an explicit instruction: monospace tabular numbers, no purple gradients, max 2 live indicators per viewport, semantic state colors only. Dispatch `motion-engineer` in parallel for live indicators and state transitions. Dispatch `copy-writer` in parallel for empty states, error messages, and metric labels.
+**Dispatch (step 4).** `frontend-engineer` gets the brief verbatim, data shape + key metrics + audience, stack, dials, the 3-5 patterns, the full `references/styles/anti-slop.md`, the full `references/surfaces/dashboard.md` (the playbook step 1c picks for this mode), and an explicit instruction to follow the playbook's rules on tabular numbers, live indicators and semantic state colors. Dispatch `motion-engineer` in parallel for live indicators and state transitions. Dispatch `copy-writer` in parallel for empty states, error messages, and metric labels.
 
 **Generation (v2 step 4).** The page-sequence step (v2 step 2.5) does not apply: no section sequence, no conversion mechanisms, no hero. Filter `components` from the recommendation for dashboard patterns (`category: Data Display`, `Charts & Viz`). Build a dashboard grid using the picked palette in dark mode (force `mode=dark` if not already set in the recommendation). Give `frontend-engineer` the `chart-types.json` picks scoped to the data the user described. With a client brand, dark mode still holds, but the brand primary (not the house pick) is the accent on every state color, the logo sits in the chrome, and type matches the logo style; the dashboard must clear the brand-fidelity floor.
 
@@ -216,6 +205,7 @@ Other moves: /ux-polish      (cosmetic pass)
   "metrics": ["<key metrics>"],
   "audience": "<operator|analyst|exec>",
   "stack": "<stack>",
+  "surface": "dashboard",
   "dials": { "variance": <n>, "motion": <n>, "density": <n> },
   "patterns": ["<arsenal patterns>"],
   "live_indicator_count": <n>,
@@ -223,14 +213,7 @@ Other moves: /ux-polish      (cosmetic pass)
 }
 ```
 
-**Dashboard hard rules** (in addition to the shared hard rules):
-- Numbers use `font-mono` with tabular figures (`font-variant-numeric: tabular-nums`). Non-negotiable.
-- NEVER 3-equal-cards for KPIs. Use asymmetric bento or hairline-separated metric blocks.
-- Maximum 2 "breathing" / live-pulse indicators per viewport. More = noise.
-- Default monochrome. Semantic state colors only (success / warning / danger / info).
-- Charts: every series has a non-color indicator (pattern, shape, label). Never color alone.
-- Empty, loading and error states for every widget.
-- Group via negative space, hairlines (`border-t`), or `divide-y`. Don't card-wrap everything.
+**Dashboard hard rules** live in `references/surfaces/dashboard.md` (Principles, Banned dashboard patterns and the Checklist). They apply in addition to the shared hard rules.
 
 **Dashboard failure modes and errors:**
 
@@ -334,16 +317,17 @@ If a `DESIGN.md` exists in the project root, read it FIRST and treat it as the s
 
 ### 1c. Pick exactly one surface playbook
 
-Surface-specific rules live in playbooks under `references/surfaces/`. Read the brief and pick exactly one:
+Surface-specific rules live in playbooks under `references/surfaces/`. The mode (see Modes) decides the playbook, so pick exactly one:
 
-| Brief | Playbook |
+| Mode | Playbook |
 |---|---|
-| A page that explains, sells or converts: landing page, homepage, launch, waitlist, pricing, service or lead-gen page | `references/surfaces/landing.md` |
-| A data surface: dashboard, admin panel, analytics, ops or monitoring console, internal tool | `references/surfaces/dashboard.md` |
-| One component or a small set: card grid, form, table, modal, sheet, drawer | `references/surfaces/component.md` |
-| Anything else (signed-in app screen, docs, portfolio, email) | none |
+| page, when the page explains, sells or converts: landing page, homepage, launch, waitlist, pricing, service or lead-gen page | `references/surfaces/landing.md` |
+| page, any other page: signed-in app screen, docs, portfolio, email | none |
+| component | `references/surfaces/component.md` |
+| dashboard | `references/surfaces/dashboard.md` |
+| image | the playbook of the build mode it stacks with; none with `--extract-only` |
 
-Load only the playbook you picked. Never load two. If the brief straddles two surfaces, pick the one that owns the primary deliverable and state the choice in the design brief output. Record it as `surface` in `.ux/last-design.json`.
+Load only the playbook you picked. Never load two surface playbooks. The one-playbook rule applies to surface playbooks only: component contracts (`references/foundations/component-behaviors.md`, `references/components/library.md`, `references/foundations/components.md`) and the shared foundations still load when a build needs them, so a landing page with a quote form or a comparison table reads the form and data table contracts. If the brief straddles two surfaces, pick the one that owns the primary deliverable and state the choice in the first line of the output. Record it as `surface` in the state file of the build mode: `.ux/last-design.json`, `.ux/last-component.json` or `.ux/last-dashboard.json`.
 
 ### 2. Read the references
 
@@ -351,7 +335,7 @@ Before writing a single line of code, read:
 - `references/styles/anti-slop.md` — the ban list. Internalize every forbidden pattern.
 - `references/styles/arsenal.md` — the high-end pattern library. Pick 2-4 patterns that fit the brief.
 - `references/foundations/wow.md`: derive the **WOW LAYER**: 2-3 coordinated signature moments (one hero moment + a motion signature + an optional section moment; component and dashboard modes skip the hero moment) from the brand temperature + industry + goal. The page must do something a visitor remembers, not just be clean. Derived + varied to THIS brand, never a stamped recipe.
-- `references/foundations/responsive.md`: mobile-first mechanics. The build is verified at 360px (no horizontal scroll, no wrapping nav/wordmark/label, sticky chrome <= ~96px).
+- `references/foundations/responsive.md` and `references/foundations/component-behaviors.md`: mobile-first mechanics and the component contracts (card grid, form, data table, modal and drawer). The build is verified at 360px (no horizontal scroll, no wrapping nav/wordmark/label, sticky chrome <= ~96px).
 - The surface playbook picked in step 1c, if any. Its rules are as binding as the ban list.
 
 These are non-negotiable. The output's distinction from generic AI output IS the value of this command.
@@ -600,7 +584,7 @@ Exit code non-zero means a high+ finding landed in your output. Fix before decla
 > Real headless Chrome at a TRUE device viewport (self-calibrated so a lying viewport is caught), it measures **(a) horizontal overflow** and **(e) sticky-chrome height** reliably and **writes a screenshot per width so you can SEE the page.** Honesty contract: exit `0` = verified clean · `1` = FAIL (it names the cause — usually a fixed min-width wider than the device, or a tall pinned bar) · `2` = DEGRADED/UNVERIFIED (no Chrome, or the viewport was not honored) — **you have NOT verified; eyeball on a real device and never claim passed.** It does NOT catch **(b)/(c)/(d)** nav wrap/collision or the *feel* — open the screenshots it writes and check those by eye. A green from a DEGRADED run is not a green. See `references/foundations/responsive.md`.
 
 - **(a) No horizontal scroll** — `document.documentElement.scrollWidth <= window.innerWidth`. The page never scrolls sideways on a phone.
-- **(b) The header/nav stayed one row** — the sticky header/primary nav bar stays a single row. `scrollWidth` alone MISSES this: a nav that wrapped to two rows still reports `scrollWidth == innerWidth`, so it sails through a scroll-only gate. Detect the wrap directly: the bar's `offsetHeight` exceeds ~1.6x its single-row content height, OR its flex children span more than one distinct row (compare child vertical centers, not raw `offsetTop`, since `align-items:center` shifts each child). The **utility/announcement topbar is NOT a strict one-row bar** — but its intended mobile state is now ONE compact centered line (middot-separated claims), or fewer claims, and it is **non-sticky** (see Header and navigation in `references/surfaces/landing.md`). Check it for "not ragged AND not tall": its `|` dividers are hidden on mobile, it does not wrap mid-phrase with dangling dividers, and it does not balloon into a tall stacked block. (A topbar collapsed to one line passes the strict one-row check too; the stacked-lines escape hatch is reserved for 1–2 short items and must never make the header tall — its height is policed by (e).)
+- **(b) The header/nav stayed one row**: the sticky header/primary nav bar stays a single row. `scrollWidth` alone MISSES this: a nav that wrapped to two rows still reports `scrollWidth == innerWidth`, so it sails through a scroll-only gate. Detect the wrap directly: the bar's `offsetHeight` exceeds ~1.6x its single-row content height, OR its flex children span more than one distinct row (compare child vertical centers, not raw `offsetTop`, since `align-items:center` shifts each child). The **utility/announcement topbar is NOT a strict one-row bar**. Its intended mobile state is ONE compact centered line (middot-separated claims), or fewer claims, and it is **non-sticky** (see Header and navigation in `references/surfaces/landing.md`). Check it for "not ragged AND not tall": its `|` dividers are hidden on mobile, it does not wrap mid-phrase with dangling dividers, and it does not balloon into a tall stacked block. (A topbar collapsed to one line passes the strict one-row check too. The stacked-lines escape hatch is reserved for 1 or 2 short items and must never make the header tall; (e) polices its height.)
 - **(c) No short inline label wrapped** — for the brand wordmark and every button/CTA label, assert it is on ONE line: `el.scrollHeight <= 1.4 * lineHeight`. (Measure the label element itself, not its button wrapper — a chip/icon inside the button inflates the button's `scrollHeight` and gives a false positive. Wrap a bare label text node in its own `<span>` so it is measurable. Resolve `line-height:normal` to `fontSize * 1.2`.)
 - **(d) Header-bar children do not collide/overlap** — `nowrap` (the fix for (c)) does not always cause horizontal scroll; inside a flex bar it can instead make the wordmark **overlap the CTA** while `scrollWidth == innerWidth` AND each label still measures one line — so (a), (b), and (c) ALL pass on a visibly-broken bar (observed). Catch it directly: no two of the header bar's one-row children's rects may intersect, i.e. each child's `right` must stay within the next child's `left` (and within the bar's content box). When the wordmark cannot fit beside the logo + CTA without colliding, the fix is to shrink it or **collapse to the logomark** (hide the words) — never overlap, never two lines.
 - **(e) The sticky/fixed top chrome is not too tall** — sum the `offsetHeight` of every **top-anchored** `position:sticky` / `position:fixed` element, **de-duped for nesting** (drop any element contained by another in the set; count the OUTERMOST only, so a sticky child inside a sticky parent is not double-counted). "Top-anchored" means it pins at the top: computed `position` is sticky/fixed AND computed `top` ≈ 0. **Do NOT also require resting `getBoundingClientRect().top` ≈ 0** — when a non-sticky utility bar sits ABOVE a `sticky; top:0` header, that header's rest `rect.top` equals the bar's height (e.g. ~26px), so a rest-rect check would wrongly EXCLUDE the very header this gate exists to measure. A bottom-fixed bar (`bottom:0`, so `top:auto`) yields `NaN` for `top` and is excluded; a `top:80px` side rail is excluded by `|top| > 1`. **FAIL if the sum exceeds ~96px (hard ceiling) OR > ~20% of `window.innerHeight`.** This is the bug observed on a real phone: a tall sticky header (~168px — a utility bar stacked to four centered lines, pinned together with the nav) crushes the viewport and reads as broken. The page TARGET is ≤72px (one nav row); the 96px is the absolute gate ceiling. An over-tall sticky header is a failure — report it and fix it (drop decorative bars out of the sticky container so only the nav stays pinned, trim padding) before declaring done. Note: a sticky element is bounded by its containing block, so the correct fix is to keep the sticky wrapper around the nav ALONE — a utility bar left inside the sticky `<header>` both inflates this number AND lets the nav unstick once the header box scrolls past.

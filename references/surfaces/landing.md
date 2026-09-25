@@ -1,6 +1,6 @@
 # Landing page playbook
 
-The surface playbook for marketing pages. `/ux-design` loads this file, and only this file, when the brief is a landing page. It holds every rule that is specific to landing pages: layout archetypes, section flow, hero, header, proof, pricing, CTA, footer, and Arabic and RTL delivery. Cross-surface rules (color, type, spacing, motion, content, responsive mechanics) stay in `references/styles/anti-slop.md`, `references/styles/arsenal.md` and `references/foundations/`.
+The surface playbook for marketing pages. `/ux-design` loads this file, and no other surface playbook, in page mode when the page explains, sells or converts. It holds every rule that is specific to landing pages: layout archetypes, section flow, hero, header, proof, pricing, CTA, footer, and Arabic and RTL delivery. Cross-surface rules (color, type, spacing, motion, content, responsive mechanics, component contracts) stay in `references/styles/anti-slop.md`, `references/styles/arsenal.md` and `references/foundations/`; a landing page with a form or a comparison table also reads the contracts in `references/foundations/component-behaviors.md`.
 
 ---
 
@@ -14,7 +14,7 @@ Load this playbook when the brief asks for a page whose job is to explain, sell 
 
 Do not load it for a dashboard, an admin tool, a signed-in app screen, a single component, documentation or a portfolio gallery. Those use `references/surfaces/dashboard.md`, `references/surfaces/component.md`, or no playbook.
 
-**Discovery follow-up for landings.** When the brief does not name its sections, ask: "Sections you know you want, in order? Or trust the AIDA default?"
+Discovery asks landing briefs for their sections in order (`references/process/discovery-protocol.md`). When the answer is "trust the default", the archetype and the section flow below set the order.
 
 ---
 
@@ -32,7 +32,7 @@ Pick one archetype per page and commit to it. Each one is a complete skeleton. M
 
 **Structure.** A centered, single-line display headline. Two to four sentences of body-size prose under it. One CTA with at most one secondary link. Then long-form argument sections, a before and after panel, a short proof band, and a closing CTA that restates the thesis.
 **Pick it when.** The brand voice is the product: editorial positioning, AI and research products, a company with a point of view to argue.
-**It fails when.** Centering is the fallback rather than the choice, the H1 wraps past three lines, or the hero grows a toolbar of buttons. A thesis page with no argument under the hero is a slogan, not a page.
+**It fails when.** The archetype is picked by default rather than deliberately, which breaks the centered-hero rule: Centered hero only when DESIGN_VARIANCE is 4 or below, or when the archetype is Thesis statement or Cinematic brand and was chosen deliberately. It also fails when the H1 wraps past three lines, or the hero grows a toolbar of buttons. A thesis page with no argument under the hero is a slogan, not a page.
 
 ### 3. Product demo led
 
@@ -42,7 +42,7 @@ Pick one archetype per page and commit to it. Each one is a complete skeleton. M
 
 ### 4. Editorial long form
 
-**Structure.** Sections read as magazine spreads: text-left and image-right, then text-right and image-left, then an occasional full-bleed image. Cards inside sections are deliberately not identical. A chapter narrative runs top to bottom and ends in one CTA.
+**Structure.** Sections read as magazine spreads: text-left and image-right, then text-right and image-left, then an occasional full-bleed image. Cards inside sections are deliberately not identical. The grid is felt but not enforced. The alternation is the rhythm. A chapter narrative runs top to bottom and ends in one CTA.
 **Pick it when.** The page is story-led or content-led: a product large enough to feel like a journey, a brand story, a manifesto, a long product explainer.
 **It fails when.** Every section keeps the same orientation, sections carry decorative "SECTION 01" labels, or chapter framing is applied to a single-purpose tool with nothing to narrate.
 
@@ -56,13 +56,13 @@ Pick one archetype per page and commit to it. Each one is a complete skeleton. M
 
 **Structure.** A full-bleed image or muted video with a dark radial wash. Centered statement, exactly two high-contrast CTAs. Image-led sections below: lifestyle photography at 4:5 or near-square, one product detail section, a short story, a closing CTA.
 **Pick it when.** Imagery carries the value: premium consumer products, hospitality, hardware, brand-led launches with real photography.
-**It fails when.** It is chosen by default when DESIGN_VARIANCE is above 4, the text sits on the image without a legible scrim, or the imagery is generic stock that could advertise anything.
+**It fails when.** The archetype is picked by default rather than deliberately, which breaks the centered-hero rule: Centered hero only when DESIGN_VARIANCE is 4 or below, or when the archetype is Thesis statement or Cinematic brand and was chosen deliberately. It also fails when the text sits on the image without a legible scrim, or the imagery is generic stock that could advertise anything.
 
 ### 7. Service lead generation
 
 **Structure.** The quote or contact form lives in the hero. A proof and stats bar under it. Trust signals (ratings, accreditations, years in business) and a visible phone affordance. Service or coverage cards with real backdrop images. A FAQ. A final CTA that points back to the form. This is the `lead-gen-service` page sequence in the engine.
 **Pick it when.** The business sells a service and the conversion is a call, a quote or a booking: trades, clinics, local services, agencies.
-**It fails when.** The ratings bar stacks into a tall sticky block, a hero button scrolls to the form that is already visible, or every service size carries the same icon.
+**It fails when.** The ratings bar stacks into a tall sticky block, a hero button scrolls to the form that is already visible, or every service card carries the same icon.
 
 ### Pattern pairings by brief
 
@@ -86,6 +86,8 @@ Pick one archetype per page and commit to it. Each one is a complete skeleton. M
 - **Interest (features, bento).** High-density, mathematically intentional grid or interactive components.
 - **Desire (motion, media).** Pinned sections, horizontal scroll, scroll-driven reveals, customer outcomes.
 - **Action (pricing, footer).** Massive high-contrast CTA, clean footer.
+
+The section order comes from the archetype above and from the engine's page sequence for the brief's goal. Section orders observed by cohort (B2B, editorial, developer tooling, creative) are catalogued in `references/styles/exemplars.md` (Section-flow patterns).
 
 ### When to include a section
 
@@ -116,6 +118,12 @@ Pick one archetype per page and commit to it. Each one is a complete skeleton. M
 
 ## Hero
 
+### Hero composition
+
+- One headline, one supporting line, one primary CTA (filled) and at most one secondary (ghost button or text link), one product image or short motion. The CTA section below holds the button rules.
+- Above the fold, nothing else fights for attention. No carousel, no slideshow, no rotating taglines.
+- A "Built for X" line ("Built for finance", "Built for sales teams") under or beside the H1 pre-qualifies the visitor in one breath. It never sits above the H1; the eyebrow owns that slot.
+
 ### Hero patterns
 
 **Asymmetric split hero.** Text aligned left or right, media asset on the opposite side, no centering. The background fades subtly into the page background (lighter on light mode, darker on dark mode). The split is intentionally uneven, 7/5 or 5/7 columns, not 6/6. It defeats the "centered hero over dark image" default: the asymmetry creates hierarchy without typography variance. Cost: zero, pure layout.
@@ -126,9 +134,9 @@ Pick one archetype per page and commit to it. Each one is a complete skeleton. M
 
 **Asymmetric hero with stylistic fade.** For brand-driven launch pages and premium consumer products. A high-quality relevant background image with a subtle stylistic fade (darkening or lightening into the page background depending on mode). Text aligned cleanly left or right. Cost: low, image processing plus a CSS gradient mask.
 
-**Cinematic center hero.** For marketing surfaces where a single statement carries the entire value proposition. Text perfectly centered, ultra-wide H1 container (`max-w-5xl` or wider), exactly two high-contrast CTAs below. Behind everything, a full-bleed background image with a dark radial wash. Buttons stay legible: a dark background gets white text, a light background gets dark text. When centered is the intentional choice (not the default), it functions as a declaration of confidence. Cost: low, careful contrast tuning and image processing.
+**Cinematic center hero.** For marketing surfaces where a single statement carries the entire value proposition. Text perfectly centered, ultra-wide H1 container (`max-w-5xl` or wider), exactly two high-contrast CTAs below. Behind everything, a full-bleed background image with a dark radial wash. Buttons stay legible: a dark background gets white text, a light background gets dark text. When centered is the intentional choice (not the default), it functions as a declaration of confidence; the centered-hero rule in Hero bans decides when it is allowed. Cost: low, careful contrast tuning and image processing.
 
-**Thesis-statement hero.** For editorial, AI and research-positioning products. Large centered display headline (single line if possible), 2-4 sentences of body-size prose under it, single CTA with at most one secondary link. No multi-button toolbar. The cliff between display scale and body scale is the design. Cost: zero, typographic discipline.
+**Thesis-statement hero.** For editorial, AI and research-positioning products. Large centered display headline (single line if possible), 2-4 sentences of body-size prose under it, single CTA with at most one secondary link. No multi-button toolbar. The cliff between display scale and body scale is the design. Confidence reads as willingness to use full sentences in the subhead. Cost: zero, typographic discipline.
 
 **Email-capture hero.** A single email input plus a single button as the hero's primary CTA. See archetype 5. Cost: low, form plus state.
 
@@ -138,15 +146,15 @@ Pick one archetype per page and commit to it. Each one is a complete skeleton. M
 
 **Large product mock.** The canonical hero image is the actual UI: a dashboard, a workflow, a chat interface. Cropped close, with extreme detail visible and real-looking data inside it. Soft drop shadow and subtle rounded corners (12-24px). Box-shadow at low opacity and high blur (for example `0 24px 64px rgba(0,0,0,0.08)`). The screenshot floats above the page without harsh edges.
 
-**Cropped dashboard preview.** For B2B marketing that shows dashboards or admin interfaces. Cropped, never full-page. The reader sees one card, one chart, a sliver of nav: enough to read "this is software," not enough to parse the dashboard. Real data shapes (sparklines, log lines, plausible numbers) instead of stock chart shapes.
+**Cropped dashboard preview.** For B2B marketing that shows dashboards or admin interfaces. Cropped, never full-page. The reader sees one card, one chart, a sliver of nav: enough to read "this is software," not enough to parse the dashboard. Real data shapes (sparklines, log lines, plausible numbers) instead of stock chart shapes. Cost: zero, design discipline.
 
-**Code as hero content.** For developer-tooling and infrastructure marketing. Treat a code block like hero photography. Short (6-14 lines), syntax-highlighted with a custom theme that matches the page accent, inside window chrome (traffic-light dots, a title bar with the filename). Built in HTML and CSS, not a screenshot, so it scales crisply.
+**Code as hero content.** For developer-tooling and infrastructure marketing. Treat a code block like hero photography. Short (6-14 lines), syntax-highlighted with a custom theme that matches the page accent, inside window chrome (traffic-light dots, a title bar with the filename). Built in HTML and CSS, not a screenshot, so it scales crisply. Cost: medium, a custom syntax theme plus window chrome styling.
 
-**Terminal mockup.** For infrastructure, CLI and dev-tool marketing. Near-black window with traffic-light chrome and a `$` or `>` prompt. The command is short, declarative, and runnable exactly as written. Multi-line terminals fade older lines with reduced opacity. Output is monospace and color-coded (green success, gray chatter, bright neutral for user input).
+**Terminal mockup.** For infrastructure, CLI and dev-tool marketing. Near-black window with traffic-light chrome and a `$` or `>` prompt. The command is short, declarative, and runnable exactly as written. Multi-line terminals fade older lines with reduced opacity. Output is monospace and color-coded (green success, gray chatter, bright neutral for user input). Cost: low, CSS plus content.
 
 **Interactive product demo.** A real, manipulable instance of the product running inline. The user can drag, type and click, and the product responds with actual logic, not a video loop. The strongest "designed by designers" signal available. Affordances: subtle pulsing dots, ghost hand-cursor hints, a "try it" label on the first interactable element.
 
-**Animated metric callouts.** Numbers tick up from 0 on entry over 800-1500ms. Restricted to 2-3 stats; more dilutes the effect. The counter triggers once per page entry.
+**Animated metric callouts.** Numbers tick up from 0 on entry over 800-1500ms. Restricted to 2-3 stats; more dilutes the effect. The counter triggers once per page entry, then stays static. Numbers use tabular figures, so the layout does not shift during the count, and an eyebrow above each stat names what it counts.
 
 **Kinetic headline reveal.** Hero text appears almost instantly; the heavier interactive demo or 3D render fades in 200-400ms behind it. Never make users wait for first meaningful paint.
 
@@ -162,13 +170,19 @@ Pick one archetype per page and commit to it. Each one is a complete skeleton. M
 
 **Synthetic screenshot composition.** When the product is too abstract to screenshot (a workflow, an agent conversation, a queue of work), the hero becomes a stylized composition of UI fragments: a card, a notification, a chat bubble, a status pill, floating against a soft background.
 
-**Narrative chat thread.** A multi-turn conversation between an agent and a person, shown inline. The reader absorbs the capability through the conversation instead of prose explaining it.
+**Narrative chat thread.** A multi-turn conversation between an agent and a person, shown inline. The reader absorbs the capability through the conversation instead of prose explaining it. Replaces older "feature screenshot" treatments for AI-adjacent capabilities.
+
+**Cropped interface fragment.** A standard split where the visual is a real interface fragment, not a stock illustration, and it overflows the viewport on purpose (a cropped right edge) to imply scale. The deliberate crop is the signal. Cost: zero, layout.
+
+**Stacked-card collage.** Two to four UI fragments (a panel, an overlay, a tooltip, a popup) layered at varying depths. The overlap is choreographed so layers imply depth without hiding meaning. Use it when the product has several distinct surfaces to show at once. Cost: medium, z-stacking, crop and shadow management.
+
+**Tilted product frame.** Product shots tilted 6-12 degrees on the Y axis with a subtle perspective shadow, floating against the section background, so the screenshot reads as a design object. For high-end maximalist and creative-tool styles. Cost: low, a CSS transform plus a shadow.
 
 ### Hero bans
 
 | Don't | Do instead |
 |---|---|
-| Centered hero with text over dark image as the default | Asymmetric hero: text left or right, image with a subtle stylistic fade. Centered only as a deliberate choice (cinematic or thesis) and only when DESIGN_VARIANCE is 4 or below |
+| Centered hero with text over dark image as the default | Asymmetric hero: text left or right, image with a subtle stylistic fade. Centered hero only when DESIGN_VARIANCE is 4 or below, or when the archetype is Thesis statement or Cinematic brand and was chosen deliberately. |
 | Symmetric 50/50 split-screen heroes | 7/5 or 5/7 split. The asymmetry creates hierarchy without typography variance |
 | Cookie-cutter left-text-right-image hero as the default reach | Editorial split (massive whitespace between halves), curtain reveal, asymmetric float, or full-bleed background |
 | `h-screen` on the hero | `min-h-[100dvh]`. The iOS Safari address-bar collapse breaks `h-screen` |
@@ -229,7 +243,7 @@ Proof is what makes the claims above it believable. It is specific, attributed a
 
 ### Monochrome logo wall
 
-For trust strips and customer-proof sections. 6-10 customer logos in a single row, all desaturated to the page's neutral text color, at uniform optical weight (not pixel size: each logo is adjusted so they read evenly). Generous gutters. Often introduced by a short label ("Working with", "Trusted by teams at"). The wall reads as a single block of social proof. Cost: zero, a CSS filter or pre-rendered greyscale assets. Place it once near the hero and optionally once before the final CTA; never more.
+For trust strips and customer-proof sections. 6-10 customer logos in a single row, all desaturated to the page's neutral text color, at uniform optical weight (not pixel size: each logo is adjusted so they read evenly). Generous gutters. Often introduced by a short label ("Working with", "Trusted by teams at"). The wall reads as a single block of social proof. Cost: zero, a CSS filter or pre-rendered greyscale assets. Place it once near the hero and optionally once before the final CTA; never more. A second appearance uses the identical treatment, and only one appearance carries the eyebrow label.
 
 ### Proof bans
 
@@ -275,7 +289,8 @@ For trust strips and customer-proof sections. 6-10 customer logos in a single ro
 | Sticky chatbot bubbles in the corner on first load | None. Wait for engagement |
 | Cookie banners blocking first paint | Slim, monochrome, bottom-bar or sidebar treatment that respects the page |
 
-- **The final CTA band repeats the primary action**, with the same verb as the hero CTA, on a full-width band with the page's strongest contrast.
+- **The final CTA band repeats the primary action**, with the same verb as the hero CTA, on a full-width band with the page's strongest contrast: a tinted band, a full-dark band, or the brand's strongest color. One line restates the value proposition above a single filled CTA. The hero held back; the closer does not.
+- **A FAQ, when present, sits above the final CTA**, never below it.
 - **A CTA never points at itself.** A button that scrolls to a form already on screen is redundant (see Form in the hero).
 - **On long pages, the primary CTA is reachable at every scroll depth** through the sticky nav's single CTA, not through a floating button that covers content.
 
@@ -288,7 +303,8 @@ For trust strips and customer-proof sections. 6-10 customer logos in a single ro
 | Footer treated as filler | The footer is a sitemap: 4-6 columns by audience (Product, Solutions, Resources, Company, Legal) |
 | Thin one-row footer with three social icons | The footer is generosity after the page's restraint |
 
-- **The footer carries** the legal links, the contact route, the language switcher on multilingual sites, and the newsletter field if the page has one.
+- **The footer carries** the legal links, the contact route, the language switcher on multilingual sites, the wordmark, social links, a status indicator for operational products, and the newsletter field if the page has one. The newsletter field sits above the sitemap columns, not at the absolute foot.
+- **Each column holds 4 to 8 links.** The footer takes a slightly darker or lighter band than the page.
 - **Footer on mobile.** Link columns stack to a single column, or collapse into accordion sections. Legible spacing, never a cramped 4-column grid squeezed into 360px.
 
 ---
@@ -299,13 +315,13 @@ A landing page that ships in Arabic is designed in Arabic, not mirrored after th
 
 - **Set direction on the document.** `<html lang="ar" dir="rtl">`. Every layout rule then flows from logical properties.
 - **Use logical properties everywhere.** `margin-inline-start`, `padding-inline-end`, `inset-inline-start`, `border-inline-start`, `text-align: start`. Physical `left` and `right` in layout CSS break the mirror. In Tailwind, use `ms-*`, `me-*`, `ps-*`, `pe-*`, `start-*`, `end-*`.
-- **Mirror directional glyphs, not containers.** The grid mirrors itself through `dir="rtl"`. Arrows, chevrons, back and forward icons, progress direction and carousel order flip. Logos, media playback controls, checkmarks, clocks, charts' time axes and photographs do not flip. Never apply `transform: scaleX(-1)` to a whole section.
+- **Mirror directional glyphs, not containers.** The grid mirrors itself through `dir="rtl"`. Arrows, chevrons, back and forward icons, progress direction and carousel order flip. Logos, media playback controls, checkmarks, clocks and photographs do not flip. A chart's time axis is a product choice: mirror it or keep it left to right, and keep the choice the same on every chart. Never apply `transform: scaleX(-1)` to a whole section.
 - **Letter-spacing is 0 under `dir="rtl"`.** Arabic is a connected script; any tracking breaks the joins between letters. Reset the tracked eyebrow and display styles: `[dir="rtl"] * { letter-spacing: 0; }` or an equivalent per-style override. All-caps and uppercase transforms do not apply to Arabic either.
 - **Set the Arabic face 1 to 2px larger than the Latin face at the same step.** Arabic glyphs sit smaller on the same em. Keep one scale and add the offset per step, and raise line-height for body text so diacritics clear.
 - **Name the Arabic face explicitly** in the font stack. Never let a Latin stack fall back to a system Arabic face.
 - **Budget for copy 10 to 25 percent longer** than the English source. Headlines, buttons and nav labels need that room at 360px without wrapping; test with the real Arabic copy, not with English placeholders.
 - **Use Western numerals** (0-9) for prices, stats, phone numbers and dates, and keep them consistent across the page.
-- **Put the currency after the amount** ("250 ر.س", "49 د.إ", "1,200 ج.م"). Keep the number and the currency together with a no-break space so they never split across lines.
+- **Put the currency after the amount** ("250 ر.س", "49 د.إ", "1,200 ج.م"). Keep the number and the currency together with a no-break space (U+00A0, as in these examples) so they never split across lines.
 - **Mixed-direction strings stay intact.** Wrap Latin brand names, emails and URLs inside Arabic sentences in `<bdi>` or `dir="auto"` so punctuation lands on the correct side.
 - **Stagger and slide motion mirrors.** A left-to-right cascade in LTR runs right to left in RTL.
 
@@ -320,7 +336,7 @@ A landing page that ships in Arabic is designed in Arabic, not mirrored after th
 
 ### High
 - [ ] One archetype chosen and committed; the page does not mix skeletons
-- [ ] Centered hero only when DESIGN_VARIANCE is 4 or below, or by intentional choice
+- [ ] Centered hero only when DESIGN_VARIANCE is 4 or below, or when the archetype is Thesis statement or Cinematic brand and was chosen deliberately.
 - [ ] No hero button that scrolls to a form already visible in the hero
 - [ ] No customer logos in original full color
 - [ ] Specific CTAs, not "Get Started" / "Learn More" reflexively
@@ -331,6 +347,7 @@ A landing page that ships in Arabic is designed in Arabic, not mirrored after th
 - [ ] No press logos from publications nobody recognizes
 - [ ] No "Trusted by 10,000+ developers" with no logos shown
 - [ ] Logo wall appears at most twice
+- [ ] A FAQ, when present, sits above the final CTA
 - [ ] Pricing on the homepage is a teaser line, not a full table
 
 ### Low

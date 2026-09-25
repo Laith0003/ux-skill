@@ -4,13 +4,13 @@
 
 ## Principles
 
-1. **AIDA is the spine of landing pages** — Attention (hero) → Interest (features) → Desire (motion / proof / outcomes) → Action (final CTA). Every landing page follows this sequence. Page hierarchy must announce itself without reading.
+1. **Landing-page structure lives in its playbook.** AIDA is the default framing for landing pages, and it, the hero, the logo wall, the final CTA and the footer are specified in `references/surfaces/landing.md`. This file holds the layout mechanics every surface shares: containers, grids, bento, rhythm and collapse. Page hierarchy must announce itself without reading.
 
 2. **Ultra-wide containers prevent H1 failure** — H1 containers at `max-w-5xl`, `max-w-6xl`, or `w-full`. Narrow containers cause 6-line wraps and reflexive failure. The width prevents the wrap, not the font size alone.
 
 3. **2-line H1 rule** — H1 never exceeds 2 to 3 lines at any breakpoint from 375px to 1440px. 4 lines is failure; 5 is catastrophic; 6 is disqualifying.
 
-4. **Anti-center bias** — Centered hero sections used as a fallback are banned at DESIGN_VARIANCE > 4. Force split-screen, left-aligned-content-with-right-asset, or asymmetric whitespace. Center only intentionally with massive width.
+4. **Center by choice, never by fallback.** When a hero may be centered is a landing rule (`references/surfaces/landing.md`, Hero bans). Elsewhere, center a block only when the composition calls for it; a centered-everything page is the fallback this rule bans.
 
 5. **Asymmetric beats symmetric** — Use fractional grid columns (`2fr 1fr 1fr`) instead of `grid-cols-3`. Use 7/5 or 5/7 splits, not 6/6. Asymmetry creates hierarchy without needing different sizes of typography.
 
@@ -51,45 +51,7 @@
 
 ## Examples
 
-### Pattern: AIDA landing structure
-**Use when**: Any marketing landing page.
-**Anti-pattern**: 12 unstructured sections, no clear hero, multiple competing CTAs.
-**How**:
-1. Premium navigation bar (floating glass pill, minimal split nav) — first paint.
-2. **Attention** — hero with ultra-wide H1, 2 to 3 lines max, 2 high-contrast CTAs.
-3. **Interest** — bento grid or interactive typographic component density.
-4. **Desire** — motion / scroll-driven section (pinned, scrubbed, stacked).
-5. **Action** — high-contrast CTA + clean footer.
-
-### Pattern: Canonical premium SaaS section flow
-**Use when**: B2B marketing pages, enterprise tools, developer surfaces.
-**Anti-pattern**: 20 sections with random order, no narrative arc.
-**How**:
-1. Hero (one-line value-prop + one-line sub + 1 or 2 CTAs + product image or motion)
-2. Social proof strip (logo marquee, single row, monochrome)
-3. Problem framing or "old way vs new way"
-4. Core feature pillars (3 to 4, alternating image-left, image-right)
-5. "How it works" — numbered step sequence (3 to 5 steps)
-6. Use-case or persona section (tabbed switcher or carousel)
-7. Outcome / ROI (customer quote + headline metric)
-8. Trust & security (compliance badges + paragraph)
-9. FAQ (5 to 8 questions, accordion-collapsed) — optional, above final CTA
-10. Final CTA section (restated value-prop, single filled CTA, tinted band)
-11. Footer (navigation + secondary links + small print)
-
-### Pattern: Hero composition
-**Use when**: Any hero landing.
-**Anti-pattern**: Carousel hero with 4 rotating slides, or 5+ CTAs in the hero.
-**How**: One headline, one sub-paragraph, one or two CTAs, one product image or short motion. No carousel, no slideshow, no rotating taglines. Premium pages do not hedge. Asymmetric hero with product image right-aligned, copy left-aligned (or reversed). A "headline / sub / two CTAs" stack: primary action filled, secondary action ghost or text-link.
-
-### Pattern: Hero paradigms — choose one
-**Use when**: Picking the structural variant for the hero.
-**Anti-pattern**: Reflexive left-text-right-image default with no variant chosen.
-**How**:
-- **Cinematic Center (preferred default)** — text perfectly centered, massive width, ultra-wide H1 container, two high-contrast CTAs below, stunning full-bleed background with dark radial wash.
-- **Artistic Asymmetry** — text offset left, artistic floating image overlapping from bottom right, generous negative space.
-- **Editorial Split** — text left, image right, massive negative space between (60/40 or 65/35, not 50/50).
-- **Asymmetric Hero with Stylistic Fade** — high-quality background image with subtle stylistic fade (darkening or lightening into the page background), text aligned cleanly left or right.
+Landing-page patterns (AIDA structure, section order, hero composition and hero paradigms, the logo wall, the final CTA and the footer) live in `references/surfaces/landing.md`.
 
 ### Pattern: Bento grid (modern SaaS)
 **Use when**: Feature showcases, dashboards, "what's in the box" sections.
@@ -121,20 +83,10 @@
 **Anti-pattern**: Six near-identical feature sections, each with the same product screenshot in different states.
 **How**: A short headline + bullet list pins on the left while a stack of product screenshots scrolls past on the right, swapping in at scroll triggers. Frame 1: empty state. Frame 2: user types. Frame 3: result appears. Frame 4: AI responds. Couples narrative with motion without requiring autoplay.
 
-### Pattern: Logo marquee under hero
-**Use when**: Social proof immediately after the hero.
-**Anti-pattern**: A row of full-color logos at native pixel heights.
-**How**: 6 to 10 customer logos in a single grayscale or monotone treatment. Single horizontal row, evenly weighted (adjusted per logo so they read evenly, not at native pixel heights). Often with a small eyebrow ("Trusted by teams at," "Used by"). Auto-scrolling marquees cycle 20 to 60 seconds; pause on hover.
-
 ### Pattern: Brutalist edge-bleed macro-typography
 **Use when**: Industrial, technical, anti-mainstream aesthetic.
 **Anti-pattern**: Containing brutalist headlines inside a polite SaaS max-width.
 **How**: Macro-typography is allowed and encouraged to bleed past viewport edges, cropping a numeral or letter. Reinforces the "this is a printed plate" feeling. Use fluid clamps like `clamp(4rem, 10vw, 15rem)` so headlines visibly press against viewport edges. Push macro-headlines to one rail; cluster telemetry tight against the opposite edge.
-
-### Pattern: Final CTA section
-**Use when**: Closing the page after objections are resolved.
-**Anti-pattern**: FAQ noise after the final CTA, or email capture wall before the close.
-**How**: The page ends with a quiet, restated value-prop in one line and a single filled CTA, centered. On a slightly tinted background or full-dark band. FAQs (when present) live ABOVE the final CTA, not below. The footer follows the CTA but is a separate visual concern.
 
 ### Pattern: Adaptive navigation
 **Use when**: Cross-platform products needing both mobile and desktop nav.
@@ -180,11 +132,6 @@
 **Anti-pattern**: Listing 50 integrations as identical small tiles.
 **How**: A grid of partner logos with one-line use cases ("Sync with X", "Export to Y") in the lower third of the page, after features, before pricing. Demonstrates ecosystem without being the centerpiece. Logos rendered in monochrome treatment matching the rest of the chrome.
 
-### Pattern: Pre-footer full-bleed CTA
-**Use when**: Creative-tool and premium SaaS marketing surfaces.
-**Anti-pattern**: A small CTA buried at the bottom of the page.
-**How**: Before the footer, a horizontal band in the brand's strongest color carries one headline, one CTA. Full-bleed background, centered content. The hero held back; the closer doesn't. This is the page's loudest moment and earns it by being last.
-
 ### Pattern: Sticky in-page nav (long pages)
 **Use when**: Long marketing pages with multiple major sections.
 **Anti-pattern**: Forcing users to scroll up to reorient.
@@ -199,11 +146,6 @@
 **Use when**: Any operationally-mature product.
 **Anti-pattern**: Burying uptime data on a separate status site.
 **How**: A small green dot + "all systems operational" link to the status page, in the footer or quietly in nav. Tiny but powerful trust signal. Performed transparency.
-
-### Pattern: Dense multi-column footer
-**Use when**: Compensating for narrative-led upper sections.
-**Anti-pattern**: A thin one-row footer with a single copyright line.
-**How**: 4 to 6 columns of links organized by audience (Product, Solutions, Resources, Company, Legal). Each column 4 to 8 links. Includes language picker, social icons, wordmark, status indicator. The dense footer is the page's apology for being narrative-led above. The newsletter signup, if present, goes above the sitemap.
 
 ## Tokens / values
 
@@ -237,22 +179,6 @@
 - Bento dense: `grid-flow-dense` with mixed `col-span` and `row-span`
 - 12-column underlying grid for editorial layouts
 - Inside the grid, content modules at 8 of 12 columns is common; outer columns provide breathing room
-
-### Hero structures
-- Cinematic Center: ultra-wide H1, two high-contrast CTAs, full-bleed background
-- Artistic Asymmetry: text offset left, image overlapping from bottom right
-- Editorial Split: text left, image right, 60/40 or 65/35 split
-- Asymmetric with Stylistic Fade: high-quality background image with subtle fade
-- Above-the-fold density: low — nothing else fights for attention
-
-### Hero composition rules
-- Single CTA pair: primary filled + secondary ghost or text-link
-- Two filled CTAs of equal weight is banned (dilutes primary path)
-- No more than 2 CTAs above the fold
-- No floating stamp / badge icons on hero text
-- No pill-tags under the hero
-- No raw stats in the hero (move to dedicated stat section)
-- One claim, one supporting line, one call to action
 
 ### Section vertical rhythm
 - Hero: `min-h-[100dvh]` with centered or split content
@@ -288,74 +214,27 @@
 - Destructive actions (delete account, logout) visually and spatially separated from normal nav items
 - Skip-to-main-content link as first focusable element on web pages with significant chrome
 
-### Footer structure
-- Multi-column: 4 to 8 columns of links organized by audience (Product, Solutions, Resources, Company, Legal)
-- Language picker, social icons, wordmark
-- Status indicator: small green dot + "all systems operational" link to status page
-- Address and a single legal line; no more
-- Newsletter signup (if present): above the sitemap, not at the absolute foot
-- Footer takes a slightly darker or lighter band than the page
-
 ### Banned layout patterns
 - `h-screen` (use `min-h-[100dvh]`)
 - Flex percentage math (use Grid)
 - 3-column equal card feature rows
 - Center-everything fallback at VARIANCE > 4
-- Reflexive left-text-right-image default hero
 - Bento grids with empty cells (use `grid-flow-dense`)
 - 8+ cards in a single bento grid
 - Cramped sections (`py-12` on marketing)
 - Horizontal scroll on mobile body content
-- Floating stamp / badge icons on hero text
-- Pill-tags directly under the hero
-- Raw stats / data dumped in the hero
 - Tab bar + sidebar + bottom nav at the same hierarchy level
 - Bottom nav with 6+ items
 - Bottom nav locations changing between pages
 - Mega-menus that require hovering through 3 levels
 - Mystery-meat icon-only navigation
-- Footer thin (one row) — must be sitemap-dense
 
 ### Anti-AI defaults
 - No centered-everything as fallback
 - No "purple gradient AI" hero backgrounds
 - No "Acme / Nexus" filler brand names
 - No 3-equal-card feature grids
-- No reflexive left-text-right-image hero
 - No edge-to-edge floating elements with awkward gaps (mathematics must be perfect)
-
-### Hero metric callouts
-- Used when a single number is part of the proof
-- Animated counter ticks up from 0 on entry (once, then static)
-- 2 to 3 stats max per section; more dilutes the effect
-- Tabular figures so layout does not shift during count-up
-- Numbers in mono variant for engineering credibility
-- Eyebrow above the stat ("Customers," "Documents/day," "Users")
-
-### "Built for X" sub-positioning
-- A small line under the hero ("Built for finance," "Built for sales teams")
-- Pre-qualifies the visitor in one breath
-- Reduces bounce — visitor immediately knows whether they're in the right place
-- Appears beneath or to the side of the H1, never above (eyebrow has that slot)
-
-### Section flow primitives (premium SaaS canonical)
-1. Hero — one-line value-prop + one-line sub + 1 or 2 CTAs + product image or motion
-2. Logo strip — monochrome, single row, after hero
-3. Problem framing / "old way vs new way" — short comparison
-4. Core feature pillars — 3 to 4, alternating image-left, image-right
-5. "How it works" — numbered 3 to 5 step sequence
-6. Use-case / persona section — tabbed switcher or carousel
-7. Outcome / ROI — customer quote + headline metric
-8. Trust & security — compliance badges + paragraph
-9. FAQ — 5 to 8 questions, accordion-collapsed (optional)
-10. Final CTA — restated value-prop, single filled CTA, tinted band
-11. Footer — dense multi-column sitemap
-
-### Logo wall repetition
-- A single mid-page logo strip is more credible than three
-- Optional: repeat the wall 2 to 3x at strategic points (after hero, mid-page, before close) to compound trust without overloading any one section
-- Each appearance uses identical treatment (monochrome, uniform optical height, generous gutters)
-- Mark the wall with an eyebrow ("Trusted by," "Used by teams at") for one of the appearances; subsequent appearances are unframed
 
 ## Checklist (severity-tagged)
 
@@ -365,7 +244,6 @@
 - [ ] Outer container caps at `max-w-7xl` or `max-w-[1400px]` (severity: Medium)
 - [ ] Page wrapped in `overflow-x-hidden w-full max-w-full` if motion is used (severity: Critical)
 - [ ] No horizontal scroll on mobile body content (severity: Critical)
-- [ ] AIDA structure followed on landing pages (Attention → Interest → Desire → Action) (severity: High)
 - [ ] CSS Grid used for layout; no flex percentage math (severity: High)
 - [ ] Bento grids use `grid-flow-dense`; no empty cells (severity: High)
 - [ ] Bento card count is 3 to 5, not 8 (severity: Medium)
@@ -374,24 +252,16 @@
 - [ ] Sections feel like distinct cinematic chapters, not cramped slabs (severity: Medium)
 - [ ] Asymmetric layouts collapse to single-column below 768px (severity: Critical)
 - [ ] Verified at 375px, 768px, 1024px, 1440px (severity: Critical)
-- [ ] One primary CTA per section, one filled + one ghost in hero (severity: High)
-- [ ] No floating stamp / badge icons on hero text (severity: Medium)
-- [ ] No pill-tags under the hero (severity: Medium)
-- [ ] No raw stats in the hero (severity: Medium)
 - [ ] Center-everything fallback used intentionally, not by default (severity: High)
+- [ ] Landing pages pass the checklist in `references/surfaces/landing.md` (hero, logo wall, final CTA, footer) (severity: High)
 - [ ] Alternating image-left / image-right on feature sections (severity: Medium)
 - [ ] Bottom nav (mobile) capped at 5 items with icon + text label (severity: High)
 - [ ] Persistent core nav reachable from deep pages (severity: Medium)
-- [ ] Logo marquee under hero is monochrome at uniform optical height (severity: Medium)
-- [ ] Final CTA section on tinted band, single filled CTA (severity: Medium)
-- [ ] FAQs sit above the final CTA, never below (severity: Cosmetic)
-- [ ] Footer is dense multi-column sitemap, not a thin one-row strip (severity: Medium)
 - [ ] Status indicator in footer (green dot + status page link) (severity: Cosmetic)
 - [ ] Adaptive horizontal gutters by breakpoint (severity: Medium)
 - [ ] Safe areas respected for status bar, notch, home indicator (severity: Critical for mobile)
 - [ ] No `z-50` or `z-[9999]` spam; z-index documented for systemic layers only (severity: Medium)
 - [ ] Skip-to-main-content link as first focusable element on web pages (severity: High)
-- [ ] No carousel hero with auto-advancing slides (severity: High)
 - [ ] No multiple gradient sections on a single page (severity: Medium)
 - [ ] No "SECTION 01" / "QUESTION 05" meta-labels (severity: High)
 
@@ -402,5 +272,6 @@
 - See **interaction.md** for navigation touch targets and tap feedback.
 - See **accessibility.md** for skip-links, heading hierarchy, and orientation support.
 - See **motion.md** for scroll-triggered reveals and pinned-section choreography.
-- See `references/surfaces/dashboard.md` for data-dense layout density and the 5 dashboard archetypes.
+- See `references/surfaces/landing.md` for landing-page structure: AIDA, hero, logo wall, final CTA and footer.
+- See `references/surfaces/dashboard.md` for data-dense layout density and how the live-product archetypes in `references/styles/arsenal.md` combine on a dashboard.
 - See **components.md** for navbar, modal, and bento card contracts.

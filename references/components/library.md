@@ -332,7 +332,7 @@ The overlay patterns. Each blocks or interrupts the user differently; choosing t
 
 ### Sheet (bottom drawer on mobile)
 
-The sheet pattern and the mobile contract for modals and drawers live in `references/surfaces/component.md`.
+The sheet pattern lives in `references/surfaces/component.md` (Sheet). The mobile contract for modals, sheets and drawers lives in `references/foundations/component-behaviors.md`.
 
 ### Drawer (side-anchored panel)
 
@@ -601,7 +601,7 @@ The data grid pattern. Tables are inherently dense; the design choice is how den
 
 ### Responsive collapse
 
-The table's responsive collapse lives in `references/surfaces/component.md` (Data table).
+The table's responsive collapse lives in `references/foundations/component-behaviors.md` (Data table).
 
 ### General table guidance
 
@@ -619,7 +619,7 @@ How users provide structured input. The form pattern shapes the entire flow.
 
 ### Single-column and two-column forms
 
-Single-column and two-column form layouts, with their mobile collapse, live in `references/surfaces/component.md` (Form).
+Single-column and two-column form layouts live in `references/surfaces/component.md` (Form layouts). The form's mobile contract lives in `references/foundations/component-behaviors.md` (Form).
 
 ### Multi-step wizard
 

@@ -1,6 +1,6 @@
 # Dashboard playbook
 
-The surface playbook for data UI. `/ux-design` loads this file, and only this file, when the brief is a dashboard; `/ux-dashboard` reads it as its surface reference.
+The surface playbook for data UI. `/ux-design` loads this file, and no other surface playbook, in dashboard mode (`--dashboard`, or a brief for a dashboard, admin panel, metrics page or console).
 
 > Data UI lives by different rules than marketing surfaces. Density is the product. Cards lose their job. Typography becomes data. Color carries semantic state. Restraint is the visual signature; density is the value proposition.
 
@@ -38,8 +38,6 @@ Load this playbook when the brief is an analytics dashboard, an admin panel, an 
 | Replace cards with `border-t` or `divide-y` in dense data | Wrap every metric in a `<Card>` |
 | Use neo-grotesque sans (Geist, Satoshi, Inter) | Use serifs in dashboard typography |
 | Use semantic color (green/red/amber) only for state | Use semantic colors as brand decoration |
-| Right-align numeric columns in tables | Mix alignments in numeric data |
-| Sticky headers on long tables (>10 rows) | Force users to scroll back to remember column meaning |
 | Right-align action columns | Place action buttons in the leftmost column |
 | Use sparklines inline for at-a-glance trends | Embed a full chart for every metric |
 | Use compact stat tiles with monospaced numerals | Use 3D charts or rainbow gradients |
@@ -56,7 +54,6 @@ Load this playbook when the brief is an analytics dashboard, an admin panel, an 
 
 ## Hardening rules (when VISUAL_DENSITY > 7)
 
-- Numbers right-aligned in `font-mono` (tabular figures).
 - Empty rows show empty states across the full width, never collapse silently.
 - 1px hairline borders for surface elevation in dark mode rather than drop shadows.
 - 4-5 step surface lightness ladder (page, card, raised, popover, overlay).
@@ -123,17 +120,7 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 ### Pattern: 5 dashboard archetypes (bento cards)
 **Use when**: Composing a feature-rich dashboard with varied card content.
 **Anti-pattern**: 8 identical small cards with the same shape and metric type.
-**How**: Mix archetypes across the bento grid. A common arrangement: Row 1 with 3 columns, Row 2 with 2 columns split 70/30.
-
-1. **The Intelligent List.** Vertical stack of items with an infinite auto-sorting loop. Items swap positions using shared element transitions (shared layout IDs), simulating an AI prioritizing tasks in real time. Best for queues, inboxes, priority lists, and "this is a smart product" surfaces.
-
-2. **The Command Input.** Search / AI bar with multi-step typewriter effect. Cycles through complex prompts. Includes blinking cursor and "processing" state with shimmering loading gradient. Best for AI assistants, search-first UIs.
-
-3. **The Live Status.** Scheduling interface with breathing status indicators. Pop-up notification badge emerges with overshoot spring, holds for 3 seconds, vanishes cleanly. Best for ops, calendars, live monitoring.
-
-4. **The Wide Data Stream.** Horizontal infinite carousel of data cards or metrics. Loop is seamless via `x: ["0%", "-100%"]` at 15 to 25s speed. Best for tickers, leaderboards, recent events, telemetry and observability.
-
-5. **The Contextual Focus.** Document view animating a staggered highlight of a text block, followed by float-in of a floating action toolbar with micro-icons. Best for note editors, document analysis, focused review, AI-assisted document tools.
+**How**: Mix the five live-product archetypes from `references/styles/arsenal.md` (intelligent list, command input, live status, wide data stream, contextual focus) across the bento grid. A common arrangement: Row 1 with 3 columns, Row 2 with 2 columns split 70/30.
 
 ### Pattern: Live status indicator
 **Use when**: Real-time element (online presence, live data, active operation).
@@ -152,7 +139,7 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 **How**:
 - **Empty**: "No data yet" + guidance ("Connect your first source to see metrics")
 - **Loading**: skeleton or shimmer placeholder matching chart shape
-- **Error**: error message with retry action
+- **Error**: what failed, and a retry action
 - **Default**: chart renders with proper axes, legends, and tooltips
 
 ### Pattern: Chart accessibility
@@ -162,9 +149,9 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 - Color supplemented by patterns, textures, or shapes
 - Color contrast ≥3:1 for data lines/bars; ≥4.5:1 for text labels
 - Tooltip works on hover (mouse), tap (touch), AND keyboard focus
-- Legend visible near chart, clickable to toggle series visibility
 - `aria-label` on chart summarizing key insight
 - Parallel data table provided as accessible alternative
+- The full chart contract (legend, tooltip, states, reflow) lives in `references/foundations/components.md` (Chart)
 
 ### Pattern: Sortable table with sticky header
 **Use when**: Long tabular data with multiple columns.
@@ -235,7 +222,7 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 
 | Brief | Patterns |
 |---|---|
-| Dashboard (cockpit density) | Tiered surface elevation + intelligent list + wide data stream + cropped dashboard preview |
+| Dashboard (cockpit density) | Tiered surface elevation + intelligent list + wide data stream + compact stat tiles |
 
 ### Combination to avoid
 
@@ -326,11 +313,9 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 ### Table specs (dashboard)
 - Row height: 32 to 48px (default); 28 to 36px (cockpit); 48 to 56px (comfortable)
 - Header height: tighter than rows by 4 to 8px
-- Numbers: right-aligned, `font-mono`, tabular figures
-- Sticky headers on >10 rows
-- Selected row: brand accent at low opacity + checkbox
 - Empty state: full-width row with composed message
 - Mobile: collapse to cards or enable horizontal scroll
+- Alignment, sticky headers, selection and the rest of the table contract live in `references/foundations/components.md` (Table)
 
 ### Mobile collapse rules (dashboards)
 - Below 768px: cockpit density caps at "daily-app"
@@ -340,15 +325,14 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 - Below 768px: motion intensity reduces by 2 levels
 
 ### Banned dashboard patterns
+- Three equal cards for a KPI row (use an asymmetric bento or hairline-separated metric blocks)
+- A widget without empty, loading and error states
 - Serif typography on dashboards
 - Mixed proportional and tabular figures on the same page
 - Generic 3D charts (distort perception)
 - Pie charts with >5 wedges
 - Red-green as the only color signals in charts
 - Color-only data signals (no pattern, no text)
-- Tooltips only on hover (no keyboard, no mobile)
-- Chart Y-axis that doesn't start at zero on bar charts (misleading)
-- Charts without empty / loading / error states
 - Cards wrapping every metric in dense data UI (use hairlines instead)
 - Semantic state colors used as brand decoration
 - Multiple accent colors in dashboard chrome
@@ -357,7 +341,6 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 - Auto-refreshing pages that lose user scroll position
 - Modal-only filtering (use inline filter bar)
 - Pulsing live indicators on every row
-- Sticky chatbot bubble overlapping primary actions
 - Floating UI windows with drop shadows and tilted-perspective screenshots
 - Stock photography in dashboard surfaces
 
@@ -383,14 +366,11 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 - [ ] One accent color in chrome, applied only on CTAs and focus rings (severity: High)
 - [ ] Chrome stays monochrome; chromatic load carried by data (severity: Medium)
 - [ ] Numbers right-aligned in tables (severity: Medium)
-- [ ] Action columns right-aligned (severity: Medium)
-- [ ] Sticky table headers on tables >10 rows (severity: Medium)
 - [ ] Sortable columns include `aria-sort` attribute (severity: High)
 - [ ] Maximum 2 perpetual pulses per viewport (severity: Medium)
 - [ ] Live indicators only on truly live elements (severity: Medium)
 - [ ] Live indicators isolated in memoized leaf client components (severity: High)
 - [ ] All charts have empty / loading / error states designed (severity: High)
-- [ ] Chart tooltips work on hover, tap, AND keyboard focus (severity: Critical)
 - [ ] Chart legends visible and clickable to toggle series (severity: High)
 - [ ] Chart color contrast ≥3:1 for data lines, ≥4.5:1 for text labels (severity: Critical)
 - [ ] Chart palettes survive color-blindness (no red-green only) (severity: Critical)
@@ -423,5 +403,6 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 - `references/foundations/spacing.md` for cockpit-density padding and section grouping rules.
 - `references/foundations/motion.md` for live indicator pulse specs and chart entry animations.
 - `references/foundations/accessibility.md` for chart tooltip accessibility and data table alternatives.
-- `references/foundations/layout.md` for dashboard archetype patterns and bento layout rules.
+- `references/styles/arsenal.md` for the five live-product archetypes.
+- `references/foundations/layout.md` for bento layout rules.
 - `references/foundations/interaction.md` for sortable column behavior and filter bar interactions.

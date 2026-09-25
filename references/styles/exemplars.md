@@ -6,7 +6,7 @@ Use this catalog to build surfaces that compete with the best in the world. Each
 
 This file is organized by surface and intent:
 - Premium SaaS catalog overview
-- Hero treatments observed (~20 distinct patterns)
+- Hero treatments (in `references/surfaces/landing.md`)
 - Navigation patterns observed (~12 distinct patterns)
 - Section-flow patterns
 - Imagery treatments observed
@@ -19,7 +19,7 @@ This file is organized by surface and intent:
 
 ## Premium SaaS catalog overview
 
-The premium SaaS aesthetic in current marketing surfaces is built on a foundation of subtraction. Each premium product removes the things a less mature brand would add. No second typeface, no second accent color, no second CTA in the hero, no decorative AI iconography, no stock photo, no parallax, no scroll-jacking, no exclamation, no superlative. The negative space — visual, typographic, and rhetorical — is the personality.
+The premium SaaS aesthetic in current marketing surfaces is built on a foundation of subtraction. Each premium product removes the things a less mature brand would add. No second typeface, no second accent color, no competing primary CTA in the hero, no decorative AI iconography, no stock photo, no parallax, no scroll-jacking, no exclamation, no superlative. The negative space (visual, typographic, and rhetorical) is the personality.
 
 What converges across the premium tier:
 
@@ -50,154 +50,7 @@ The premium signal is composure. The hardest pattern to copy is the discipline t
 
 ## Hero treatments observed
 
-A catalog of distinct hero compositions across premium marketing surfaces. Each treatment carries a specific signal; pick based on what the product is selling.
-
-### Centered thesis hero
-Large centered display headline (1 line if possible, 2 max), 2-4 sentences of body-size prose under it, single primary CTA with at most one secondary text link. No multi-button toolbar.
-
-- **When to use**: editorial / AI / research-positioning products where the brand voice is "we have something to say."
-- **Distinctive marker**: the cliff between display scale and body scale. The willingness to use full sentences in the subhead.
-- **Cost**: zero — typographic discipline.
-
-### Asymmetric split hero
-Text left, image right (or reversed), with massive negative space between. The split is intentionally uneven — 60/40 or 65/35, not 50/50.
-
-- **When to use**: premium B2B SaaS, content-led products.
-- **Distinctive marker**: the breathing room in the middle of the split. The hero feels composed, not stuffed.
-- **Cost**: zero — layout discipline.
-
-### Editorial column rhythm hero
-Standard SaaS split, but the visual is treated as a real interface fragment, not a stock illustration. The fragment overflows the viewport intentionally (cropped right edge) to imply scale.
-
-- **When to use**: developer tools, infrastructure marketing.
-- **Distinctive marker**: the deliberate crop. The interface fragment isn't centered or framed — it bleeds out.
-- **Cost**: zero — layout.
-
-### Cinematic center hero
-Text centered, massive width, ultra-wide H1 container. Two high-contrast CTAs below. Full-bleed background image with a dark radial wash. Buttons perfectly legible — dark background gets white text.
-
-- **When to use**: marketing surfaces where a single statement carries the entire value proposition.
-- **Distinctive marker**: when centered is the intentional choice (not the default), it functions as a declaration.
-- **Cost**: low — careful contrast tuning, image processing.
-
-### Artistic asymmetry hero
-Text offset to the left. An artistic floating image overlapping the text from the bottom right. Generous negative space.
-
-- **When to use**: brand-forward marketing, creative-tool landings.
-- **Distinctive marker**: the floating image overlap. The image isn't behind the text — it's in front and overlapping.
-- **Cost**: low — layout + image z-stacking.
-
-### Email-capture hero
-A single email input + a single button as the hero's primary CTA, replacing a "Sign Up" button. The hero copy implies the field IS the start.
-
-- **When to use**: fintech, signup-led products.
-- **Distinctive marker**: the absence of a multi-step funnel. The implied promise is "one field is enough."
-- **Cost**: low — form + state.
-
-### Interactive product demo hero
-A real, manipulable instance of the product running inline. The user can drag, type, click — and the product responds with actual logic, not a video loop. Subtle pulsing dots, ghost hand-cursor hints, or a "try it" label on the first interactable element.
-
-- **When to use**: creative tools, design platforms, design-led SaaS where the marketing site has to prove the tool's taste.
-- **Distinctive marker**: the strongest "designed by designers" signal available. Converts the prospect into a user 5 seconds in.
-- **Cost**: high — real product engine running in the browser. Worth the build cost when 60+ seconds of engagement justifies it.
-
-### Auto-playing muted hero video
-Hero video plays automatically, muted, looped, at reduced contrast or with a subtle dark gradient overlay to keep overlaid text legible. The video runs in the background of attention.
-
-- **When to use**: products that are visual or temporal (AI-generated content, audio, motion).
-- **Distinctive marker**: the video shows actual product output, not abstract motion graphics.
-- **Cost**: medium — production + compression. Cap at 4MB for a 30-second loop.
-
-### Large product mock hero
-The canonical hero image is the actual UI — a dashboard, workflow, chat interface. Cropped close, with extreme detail visible. Real-looking data inside it. Soft drop shadow + subtle rounded corners. The screenshot floats above the page.
-
-- **When to use**: B2B SaaS, analytics products, dashboard tools.
-- **Distinctive marker**: the close crop. Not the whole app at 30% zoom — a tight crop on the specific feature.
-- **Cost**: zero — screenshot + container styling.
-
-### Stacked-card collage hero
-2-4 UI fragments layered at varying z-depths — a panel, an overlay, a tooltip, a popup — creating dimensional composition. Suggests "here are several features at once."
-
-- **When to use**: products with multiple distinct surfaces or capabilities to show.
-- **Distinctive marker**: the choreographed overlap. Layers overlap intentionally to imply depth without obscuring meaning.
-- **Cost**: medium — z-stacking + intentional crop + shadow management.
-
-### Tilted product frame hero
-Product shots tilted 6-12° on the Y-axis, given a subtle perspective shadow, floated against the section background. Creates the "design object" framing.
-
-- **When to use**: high-end maximalist / creative-tool styles.
-- **Distinctive marker**: the screenshot becomes an artifact, not documentation. The tilt is what reframes it.
-- **Cost**: low — CSS transform + shadow.
-
-### Animated metric callouts in hero
-Numbers tick up from 0 on entry over 800-1500ms. Restricted to 2-3 stats max; more dilutes the effect. Counter triggers once per page entry, not on every scroll past.
-
-- **When to use**: when the number is the proof. Skip when the number is incidental.
-- **Distinctive marker**: the count animation is the demo. The number is doing the persuading.
-- **Cost**: low — counter component.
-
-### Kinetic headline reveal
-Hero text appears almost instantly; the heavier interactive demo or 3D render fades in 200-400ms behind it. Never make users wait for first meaningful paint.
-
-- **When to use**: any premium hero with substantial visual payload.
-- **Distinctive marker**: the text never waits for the asset. First contentful paint is held under 400ms.
-- **Cost**: zero — load order discipline.
-
-### 3D marquee object hero
-A single hero-render of the product as a physical thing — soft-clay device, glass orb, metallic monolith. Rotates on scroll. Matte (not glossy) PBR materials with strong rim light and soft floor shadow.
-
-- **When to use**: premium consumer brands, hardware companion apps.
-- **Distinctive marker**: anchors the brand in physical-design vocabulary. The product is positioned as an object.
-- **Cost**: high — Blender or equivalent render. Subtle scroll-driven rotation.
-
-### Pulsing globe / animated map hero
-Recurring shorthand for "global infrastructure." The animation is slow (3-6s loop), low-saturation, never obstructs the headline. Labels only on the regions you actually have presence in.
-
-- **When to use**: infrastructure products, CDN, edge networking, anything with genuine global presence.
-- **Distinctive marker**: the restraint. Slow pulses, low saturation, no labels except real regions.
-- **Cost**: medium — SVG or canvas animation.
-
-### Slow ambient hero motion
-A slow rotating gradient, a chart that gently animates, a token sliding across a connection. Subtle enough that you only notice it on a second look.
-
-- **When to use**: pages that need to feel alive without demanding attention.
-- **Distinctive marker**: the amplitude is so small you have to look directly at it.
-- **Cost**: low — CSS keyframes.
-
-### Two-column hero with metaphor image
-Text does the heavy lifting; image carries metaphor. The image is atmospheric (water, light, fabric, sky) as metaphor for the feeling the product evokes.
-
-- **When to use**: support and customer-experience categories.
-- **Distinctive marker**: the image isn't product UI. It's mood.
-- **Cost**: low — photography + layout.
-
-### Synthetic screenshot composition
-When the surface is too abstract to screenshot, the imagery becomes a stylized composition of UI fragments: a card, a notification, a chat bubble, a status pill, all floating against a soft background.
-
-- **When to use**: workflow products, AI agent products, products that orchestrate other things.
-- **Distinctive marker**: implies a product without committing to a literal frame.
-- **Cost**: medium — design composition.
-
-### Narrative chat thread hero
-Multi-turn conversation between an agent and a person, shown inline on the marketing page.
-
-- **When to use**: AI-assistant products, conversational interfaces, language-model tools.
-- **Distinctive marker**: the reader absorbs the capability through the conversation, not through prose.
-- **Cost**: zero — layout + content discipline.
-
-### Code-as-design-content hero
-Monospace, syntax-highlighted, with a window chrome (traffic-light dots, title bar with filename). The sample is short (6-14 lines), often runnable. Custom syntax theme matches the page accent — not a third-party scheme.
-
-- **When to use**: developer-tooling marketing.
-- **Distinctive marker**: code is treated like hero photography. Pixel-perfect HTML/CSS, not a screenshot.
-- **Cost**: medium — custom syntax theme + window chrome.
-
-### Terminal mockup hero
-Near-black window with traffic-light chrome and a `$` or `>` prompt. Command is short, declarative, often runnable exactly as written.
-
-- **When to use**: CLI products, infrastructure tools.
-- **Distinctive marker**: the command shown is shippable. The CTA is "run this," not "sign up."
-- **Cost**: low — CSS + content.
+Hero treatments (thesis, split, cinematic, email capture, product mock, demo, code, terminal, metric callouts, ambient motion, video, globe, 3D object, collage, tilted frame) and the rules for picking one live in `references/surfaces/landing.md` (Hero).
 
 ---
 
@@ -353,7 +206,7 @@ The structural spine of a premium marketing page. Different cohorts converge on 
 ### Section flow rules
 
 - **Trust signals stack progressively through the page.** Logos (hero proximity) → quantified outcomes (mid-page) → security/compliance (pre-CTA).
-- **Pricing is teased on the homepage, not detailed.** Full pricing tables on the homepage feel sales-y. A single "starts at $X" or "free to start" line plus a link to the full pricing page is the typical move.
+- **Pricing on the homepage** follows the pricing rules in `references/surfaces/landing.md` (Pricing).
 - **Testimonials appear after the buyer has seen what the product does.** Testimonials shown too early feel like deflection.
 - **One CTA goal, repeated.** Hero CTA, mid-page CTAs, pre-footer CTA all push toward the same action.
 - **Final CTA gets the heaviest typography.** The closer earns the visual weight the hero held back from.
@@ -384,7 +237,7 @@ Not the whole app at 30% zoom — a tight crop on the specific feature being dis
 - **Source**: design discipline.
 
 ### Floating screenshot with soft drop shadow
-Subtle 12-24px corner radius. Box-shadow at low opacity, high blur (e.g., `0 24px 64px rgba(0,0,0,0.08)`). The screenshot floats above the page without harsh edges.
+The radius and shadow values live in `references/surfaces/landing.md` (Large product mock).
 
 - **Distinctive marker**: the shadow is barely there. Heavy shadows read as 2018-era card-elevation aesthetic.
 - **Source**: CSS treatment on `<img>`.
@@ -422,10 +275,7 @@ For AI products: sample images, audio waveforms with transcript captions, sample
 - **Source**: curated assets + grid layout.
 
 ### Monochrome customer logo wall
-6-10 customer logos in a single row, all desaturated to the page's neutral text color, at uniform optical weight. Spaced with generous gutters. Introduced by a short label ("Working with", "Trusted by teams at").
-
-- **Distinctive marker**: the harmony. Removes visual chaos; the wall reads as a single block.
-- **Source**: CSS filter or pre-rendered greyscale assets.
+The logo wall and its placement rules live in `references/surfaces/landing.md` (Proof).
 
 ### Auto-scrolling logo marquee
 Customer logo rows infinite-scroll horizontally at 20-40 seconds per loop — slow enough that the eye doesn't snap to motion, fast enough that the row never feels static.
@@ -554,7 +404,7 @@ When a more specific verb is available, use it. "Get Started" appears only as a 
 - Premium testimonials are case-study fragments, not vibes.
 
 **Attribution required**
-Name + role + company at minimum. Quotes with no attribution read as fabricated.
+The attribution rules live in `references/surfaces/landing.md` (Proof bans).
 
 **Customer voice unornamented**
 Set the quote at body-plus size, regular weight, with name + role beneath. No oversized quotation marks, no decorative quote-card chrome.
@@ -629,7 +479,6 @@ The user remains the protagonist; the AI is the tool.
 - Buzzword stacking ("AI-powered next-gen platform").
 - Vague verbs (empower, unlock, accelerate, transform, leverage).
 - Corporate hedging ("we believe", "we think", "our mission").
-- "Trusted by 10,000+ developers" with no logos shown.
 - Industry jargon used unless it's been earned.
 - Filler verbs (Elevate, Seamless, Unleash, Next-Gen, Empower, Revolutionize).
 - Question-form headlines as faux-rhetorical setup.
@@ -821,7 +670,7 @@ A consolidated list of the cross-cohort moves that consistently signal premium t
 Force all customer logos to the page's text color. Removes visual chaos; the wall reads as a single block of social proof.
 
 ### Code as design content
-Treat a code block like hero photography. Short, beautiful, cropped, with custom syntax theming that matches the page.
+The code-block treatment lives in `references/surfaces/landing.md` (Code as hero content).
 
 ### Cropped real interfaces
 Show a sliver of dashboard, not the whole thing. The crop implies "there's more here, and what you see is real."
@@ -961,7 +810,7 @@ The most counter-intuitive lesson: the more confident the company, the quieter t
 
 ### Subtraction over addition
 
-Premium pages are built on what they refuse to include. No second typeface. No second accent. No second CTA in the hero. No decorative AI iconography. No stock photo. No parallax. No scroll-jacking. No exclamation. No superlative.
+Premium pages are built on what they refuse to include. No second typeface. No second accent. No competing primary CTA in the hero. No decorative AI iconography. No stock photo. No parallax. No scroll-jacking. No exclamation. No superlative.
 
 Every removed element creates room for the remaining ones to land. The discipline to leave things out is the hardest pattern to copy.
 

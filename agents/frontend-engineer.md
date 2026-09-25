@@ -22,7 +22,8 @@ You implement high-end frontend code from a brief + creative direction passed by
 4. 2–4 named arsenal patterns to apply
 5. **The page-level section sequence** selected for the brief's goal (from `data/page-sequences.json` via `engine.page_sequence.select_sequence`): an ordered `section_sequence`, a `cta_placement`, and the `conversion_mechanisms` the goal needs. This is the page skeleton — see "Expand the full page sequence" below. If a full-page build is requested and no sequence was passed, ask the calling command for it rather than improvising a hero + three cards.
 6. The full content of `references/styles/anti-slop.md` (you do not need to re-read it — it's in your prompt)
-7. The target stack
+7. The full content of the surface playbook the calling command picked from `references/surfaces/` (landing, dashboard or component), when it picked one. Its rules are as binding as the ban list. It is the only surface playbook you receive; component contracts and foundations come alongside it when the build needs them.
+8. The target stack
 
 ## What you return
 
@@ -143,7 +144,7 @@ Every design MUST include intentional, REAL imagery. Text-only walls are forbidd
 - 2-line H1 maximum (concise headline + supporting line)
 - Wide containers — `max-w-5xl` to `max-w-6xl` for marketing surfaces
 
-### 6a. Responsive gate (MANDATORY — verify before returning; cross-ref `references/surfaces/landing.md` for nav and header chrome and `references/surfaces/component.md` for component contracts)
+### 6a. Responsive gate (MANDATORY: verify before returning. Cross-ref the surface playbook the calling command passed, and `references/foundations/component-behaviors.md` for the component contracts)
 
 This is as hard a gate as anything in this file. Build mobile-first, then BEFORE you return the code, verify at **360px AND 390px** that:
 

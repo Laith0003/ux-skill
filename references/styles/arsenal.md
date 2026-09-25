@@ -85,12 +85,12 @@ Hero and landing-page patterns (hero variants, section flow, AIDA framing) live 
 **What it is**: Asymmetric tile grouping. Different tile sizes; uses `grid-flow-dense` for tight packing. Each tile has its own micro-interaction. Tile size carries hierarchy instead of headline weight; larger tiles carry marquee features, smaller tiles carry supporting capabilities.
 **Why it works**: Implies depth + density without overwhelming. Lets each tile carry its own story.
 **Cost**: design effort medium, code low (CSS Grid).
-**Combine with**: perpetual micro-interactions per tile; the 5 card archetypes for dashboards.
+**Combine with**: perpetual micro-interactions per tile; the five live-product archetypes below (Live-product archetypes), mixed across a dashboard bento as `references/surfaces/dashboard.md` describes.
 
 ### Masonry layout
 **Use when**: galleries, portfolios, content-heavy pages.
 **What it is**: Staggered grid with no fixed row heights.
-**Cost**: low — use CSS columns or a masonry library.
+**Cost**: low: use CSS columns or a masonry library.
 
 ### Split-screen scroll
 **Use when**: storytelling, dual-narrative content.
@@ -309,7 +309,7 @@ Hero and landing-page patterns (hero variants, section flow, AIDA framing) live 
 ### Keyboard shortcut chip
 **Use when**: products that have been designed by people who care about keyboard speed.
 **What it is**: Compressed monospace inside a low-radius pill with a 1px hairline border. Appears in nav, body text, hero illustrations. `<kbd>` markup: `border: 1px solid #EAEAEA`, `border-radius: 4px`, `background: #F7F6F3`, monospace font.
-**Cost**: zero — markup discipline.
+**Cost**: zero: markup discipline.
 
 ### Headline + deflating qualifier
 **Use when**: ambitious-but-honest brand voice (creative tools, AI products).
@@ -415,7 +415,31 @@ Every clickable card or image reacts on hover:
 
 ---
 
-Dashboard card archetypes, density hardening and surface elevation live in `references/surfaces/dashboard.md`. Code, terminal and cropped-dashboard hero media for product marketing live in `references/surfaces/landing.md`.
+## Live-product archetypes
+
+Five patterns that make a surface read as a working product. They are cross-surface: a dashboard mixes them across its bento grid (`references/surfaces/dashboard.md`), a component build uses one inside a single element, and a landing page uses the command input as an AI hero demo.
+
+### The Intelligent List
+Vertical stack of items with an infinite auto-sorting loop. Items swap positions using shared element transitions (shared layout IDs), simulating an AI prioritizing tasks in real time.
+**Use for**: queues, inboxes, priority lists, and "this is a smart product" surfaces.
+
+### The Command Input
+Search or AI bar with a multi-step typewriter effect. Cycles through complex prompts. Includes a blinking cursor and a "processing" state with a shimmering loading gradient.
+**Use for**: hero placement on AI products, search-first surfaces, AI assistants.
+
+### The Live Status
+Scheduling interface with breathing status indicators. A pop-up notification badge emerges with an overshoot spring, holds for 3 seconds, and vanishes cleanly.
+**Use for**: ops, calendars, live monitoring, live-data products.
+
+### The Wide Data Stream
+Horizontal infinite carousel of data cards or metrics. The loop is seamless via `x: ["0%", "-100%"]` at 15 to 25s speed.
+**Use for**: tickers, leaderboards, recent events, telemetry and observability.
+
+### The Contextual Focus
+Document view animating a staggered highlight of a text block, followed by the float-in of a floating action toolbar with micro-icons.
+**Use for**: note editors, document analysis, focused review, AI-assisted document tools.
+
+Density hardening and surface elevation for dashboards live in `references/surfaces/dashboard.md`. Code, terminal and cropped-dashboard hero media for product marketing live in `references/surfaces/landing.md`.
 
 ---
 
