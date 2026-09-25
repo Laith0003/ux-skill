@@ -26,7 +26,10 @@ brand-fidelity hard floor are unchanged.
 3. **Color comes from the LOGO, not the CSS.** A site's most-painted CSS color is
    usually theme chrome (e.g. a green section background), not the brand. Sample the
    logo's pixels; its dominant non-neutral color is the primary. (InstantSkipHire:
-   logo is amber `#f0890f`; the CSS green `#1c3829` is secondary.)
+   logo is amber `#f0890f`; the CSS green `#1c3829` is secondary.) This holds
+   unless `ux system detect` declares a primary; then the declared token wins and the
+   logo sample is only reported (`logo_primary`). A dark, near-neutral color is the
+   text color, never a secondary.
 4. **Type comes from the LOGO's letterform style, and default fonts are rejected.**
    A site font that is a known default (Roboto/Roboto Flex, Inter, Arial, Helvetica,
    system-ui, Open Sans, Lato, Segoe UI, Source Sans) is the *absence* of a type

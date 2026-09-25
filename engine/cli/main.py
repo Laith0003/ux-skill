@@ -15,6 +15,7 @@ Subcommands
 ``ux image-extract``    -- read a design image, return brief + hints + recommendation
 ``ux stats``            -- show data manifest counts
 ``ux system build``     build a WCAG-gated design system (4.0 beta)
+``ux system detect``    find an existing design system and what it declares
 ``ux version``          -- print version
 """
 from __future__ import annotations
@@ -180,14 +181,31 @@ else:
             return payload["brand"]
         return payload if isinstance(payload, dict) else None
 
+    def _page_root(html_path):
+        """The project folder a page's links may reach: the working folder
+        when the page is inside it, else the page's own folder."""
+        page = Path(html_path).resolve()
+        here = Path.cwd().resolve()
+        return str(here if here in page.parents else page.parent)
+
+    def _existing_system(root):
+        """The `ux system detect` result for ``root`` when it found a system, else None."""
+        from engine.existing import detect_existing_system
+        found = detect_existing_system(root or ".")
+        return found if found.get("found") else None
+
     @cli.command("brand")
     @click.option("--signals-file", type=click.Path(exists=True), required=False,
                   help="JSON of captured brand signals (logo_colors, logo, fonts, voice, imagery).")
     @click.option("--from-brand-md", "from_brand_md", type=click.Path(exists=True), required=False,
                   help="An EXISTING open-standard brand.md to ingest (instead of extracting).")
     @click.option("--out", default=".ux", help="Output dir for brand.md + brand.json (default .ux).")
+    @click.option("--project-root", default=".",
+                  help="Project whose files are read with the signals (default: here): a "
+                       "declared primary in its tokens beats logo pixels, and its HTML sets "
+                       "the language.")
     @click.pass_context
-    def brand_cmd(ctx, signals_file, from_brand_md, out) -> None:
+    def brand_cmd(ctx, signals_file, from_brand_md, out, project_root) -> None:
         """Build brand.md + brand.json from captured signals OR an existing brand.md.
 
         Two mutually-exclusive inputs:
@@ -210,6 +228,11 @@ else:
             profile = parse_brand_md(Path(from_brand_md).read_text(encoding="utf-8"))
         elif signals_file:
             signals = json.loads(Path(signals_file).read_text(encoding="utf-8"))
+            if not isinstance(signals.get("declared"), dict):
+                from engine.existing import detect_existing_system
+                declared = detect_existing_system(project_root).get("declared") or {}
+                if declared:
+                    signals["declared"] = declared
             profile = build_profile(signals)
         else:
             raise click.UsageError(
@@ -227,6 +250,9 @@ else:
             "name": profile.name,
             "primary": profile.primary,
             "primary_source": profile.primary_source,
+            "logo_primary": profile.logo_primary,
+            "text_color": profile.text_color,
+            "language": profile.language,
             "display_source": profile.fonts.get("display_source"),
         }, ctx.obj["pretty"])
 
@@ -246,9 +272,12 @@ else:
                   help="Existing site/brand URL. Arms the capture gate: if set but no brand is "
                        "captured (--brand-file), recommend warns loudly instead of silently "
                        "shipping the house palette as brand:None.")
+    @click.option("--project-root", default=".",
+                  help="Project to check for an existing design system (default: here). When "
+                       "one is found its tokens win and palette and type_pair are suggestions.")
     @click.pass_context
     def recommend_cmd(ctx, project_type, industry, audience, tone, must_have, forbidden,
-                      stack, region, brief_file, brand_file, brand_url) -> None:
+                      stack, region, brief_file, brand_file, brand_url, project_root) -> None:
         """Run the 5-parallel-search recommender."""
         if brief_file:
             payload = json.loads(Path(brief_file).read_text(encoding="utf-8"))
@@ -283,6 +312,7 @@ else:
             brief.brand = _load_brand_dict(brand_file)
         if brand_url:
             brief.brand_url = brand_url
+        brief.existing_system = _existing_system(project_root)
         rec = run_recommend(brief)
         _emit(rec.to_dict(), ctx.obj["pretty"])
 
@@ -374,14 +404,22 @@ else:
     @cli.command("generate")
     @click.option("--brief-file", type=click.Path(exists=True), required=False)
     @click.option("--out-dir", default="./.ux/generated")
+    @click.option("--project-root", default=".",
+                  help="Project to check for an existing design system (default: here). When "
+                       "one is found the emitted tokens are suggestions its tokens override.")
     @click.pass_context
-    def generate_cmd(ctx, brief_file, out_dir) -> None:
+    def generate_cmd(ctx, brief_file, out_dir, project_root) -> None:
         """Emit tokens + manifest from a recommendation."""
         if brief_file:
+            from engine.recommender import BriefError, brief_from_dict
             brief_payload = json.loads(Path(brief_file).read_text(encoding="utf-8"))
-            brief = Brief(**brief_payload)
+            try:
+                brief = brief_from_dict(brief_payload, "--brief-file")
+            except BriefError as exc:
+                raise click.UsageError(str(exc)) from None
         else:
             brief = Brief()
+        brief.existing_system = _existing_system(project_root)
         rec = run_recommend(brief)
         bundle = run_generate(rec, brief, out_dir)
         _emit(bundle.to_dict(), ctx.obj["pretty"])
@@ -393,21 +431,64 @@ else:
     @click.option("--brand-file", type=click.Path(exists=True), required=False,
                   help="A brand.json from `ux brand` to anchor the palette and type on your brand.")
     @click.option("--out", default="./DESIGN.md", help="Where to write the DESIGN.md.")
+    @click.option("--project-root", default=".",
+                  help="Project to check for an existing design system (default: here).")
+    @click.option("--from-system", is_flag=True,
+                  help="Write the DESIGN.md from the project's existing design system, in its "
+                       "own naming, instead of from the engine's picks.")
     @click.pass_context
-    def design_md_cmd(ctx, brief_file, brand_file, out) -> None:
+    def design_md_cmd(ctx, brief_file, brand_file, out, project_root, from_system) -> None:
         """Emit a DESIGN.md (Google Stitch / awesome-design-md standard) from a recommendation.
 
         Pipeline: `ux brand` -> brand.json -> `ux design-md --brand-file brand.json`
         emits a DESIGN.md anchored on that brand (same brand flow as recommend/synthesize).
+
+        An existing design system is fixed input. When `ux system detect` finds
+        one under --project-root, design-md writes nothing (exit 1) unless
+        --from-system is given, which mirrors that system. It never overwrites
+        a DESIGN.md it did not write. Exit 2 for a bad brief.
         """
+        from engine.generator import DesignMdRefused, design_md_from_system
+        from engine.recommender import BriefError, brief_from_dict
+        brief = Brief()
         if brief_file:
-            brief = Brief(**json.loads(Path(brief_file).read_text(encoding="utf-8")))
-        else:
-            brief = Brief()
-        if brand_file:
-            brief.brand = _load_brand_dict(brand_file)
-        rec = run_recommend(brief)
-        result = run_design_md(rec, brief, out)
+            try:
+                payload = json.loads(Path(brief_file).read_text(encoding="utf-8"))
+            except ValueError as exc:
+                raise click.UsageError(
+                    f"--brief-file {brief_file} is not valid JSON ({exc}); fix the file or pass "
+                    'a JSON object such as {"industry": "saas"}') from None
+            try:
+                brief = brief_from_dict(payload, "--brief-file")
+            except BriefError as exc:
+                raise click.UsageError(str(exc)) from None
+        existing = _existing_system(project_root)
+        try:
+            if from_system:
+                if not existing:
+                    raise click.UsageError(
+                        f"--from-system was given but no existing design system was found under "
+                        f"{project_root}; pass --project-root with the folder that holds it, or "
+                        "drop --from-system")
+                result = design_md_from_system(existing, out)
+            else:
+                if existing:
+                    paths = ", ".join(s["path"] for s in existing["sources"][:6])
+                    click.echo(
+                        f"Error: {project_root} has an existing design system ({paths}). "
+                        "design-md did not write a DESIGN.md, because the engine's picks could "
+                        "contradict it. Pass --from-system to write one from that system, or use "
+                        "the system's own files as the contract.", err=True)
+                    sys.exit(1)
+                if brand_file:
+                    brief.brand = _load_brand_dict(brand_file)
+                rec = run_recommend(brief)
+                result = run_design_md(rec, brief, out)
+        except DesignMdRefused as exc:
+            click.echo(f"Error: {exc}", err=True)
+            sys.exit(1)
+        if result.get("note"):
+            click.echo(result["note"], err=True)
         _emit(result, ctx.obj["pretty"])
 
     # -------- ux persist -------------------------------------------------
@@ -462,8 +543,15 @@ else:
         brief_dict = _load_brief_dict(from_brief)
         brief_obj = _brief_dict_to_dataclass(brief_dict)
         rec_dict = _load_recommendation_dict(from_recommendation, brief_obj)
-        path = save_master(project_root, rec_dict, brief_dict)
-        _emit({"path": path}, ctx.obj["pretty"])
+        from engine.persist import save_master_result
+        try:
+            result = save_master_result(project_root, rec_dict, brief_dict)
+        except ValueError as exc:
+            click.echo(f"Error: {exc}", err=True)
+            sys.exit(1)
+        if result["wrote_beside"]:
+            click.echo(result["note"], err=True)
+        _emit(result, ctx.obj["pretty"])
 
     @persist_grp.command("save-page")
     @click.argument("name")
@@ -480,8 +568,15 @@ else:
             payload = json.loads(Path(from_output).read_text(encoding="utf-8"))
             if isinstance(payload, dict):
                 output = payload
-        path = save_page(project_root, name, brief_dict, output)
-        _emit({"path": path}, ctx.obj["pretty"])
+        from engine.persist import save_page_result
+        try:
+            result = save_page_result(project_root, name, brief_dict, output)
+        except ValueError as exc:
+            click.echo(f"Error: {exc}", err=True)
+            sys.exit(1)
+        if result["wrote_beside"]:
+            click.echo(result["note"], err=True)
+        _emit(result, ctx.obj["pretty"])
 
     @persist_grp.command("load")
     @click.option("--project-root", default=".")
@@ -511,8 +606,10 @@ else:
     @click.option("--save", type=click.Path(),
                   default=".ux/last-image-extract.json",
                   help="Path to write the JSON result; pass empty string to skip.")
+    @click.option("--project-root", default=".",
+                  help="Project to check for an existing design system (default: here).")
     @click.pass_context
-    def image_extract_cmd(ctx, path, with_recommendation, save) -> None:
+    def image_extract_cmd(ctx, path, with_recommendation, save, project_root) -> None:
         """Read a design image, return brief + hints + (optional) recommendation.
 
         Pure CV pipeline — Pillow only. Extracts the dominant 5 colors via
@@ -542,7 +639,9 @@ else:
                 if k in {"project_type", "industry", "audience", "tone",
                          "must_have", "forbidden", "stack", "region"}
             }
-            rec = run_recommend(Brief(**brief_kwargs))
+            image_brief = Brief(**brief_kwargs)
+            image_brief.existing_system = _existing_system(project_root)
+            rec = run_recommend(image_brief)
             result["recommendation"] = rec.to_dict()
 
         # Strip the embedded matched_palette / matched_style dicts from the
@@ -603,9 +702,12 @@ else:
                   help="Extracted client brand.json -- stamps the client's primary/type over the synthesis.")
     @click.option("--strict", is_flag=True, help="With --brand: 100% brand tokens, no synthesis.")
     @click.option("--no-log", is_flag=True, help="Don't write to .ux/decisions.jsonl.")
+    @click.option("--project-root", default=".",
+                  help="Project to check for an existing design system (default: here). When "
+                       "one is found the synthesis is a suggestion its tokens override.")
     @click.pass_context
     def synthesize_cmd(ctx, industry, tone, audience, must_have, forbidden,
-                       brand, brand_file, strict, no_log) -> None:
+                       brand, brand_file, strict, no_log, project_root) -> None:
         """Synthesize a fresh design language from a brief (v2.1).
 
         Modes (auto-dispatched):
@@ -644,7 +746,9 @@ else:
             })
         except Exception:
             pass
-        _emit(sys_out.to_dict(), ctx.obj["pretty"])
+        from engine.existing import mark_suggestions
+        _emit(mark_suggestions(sys_out.to_dict(), _existing_system(project_root)),
+              ctx.obj["pretty"])
 
     # -------- ux system-pack (v3.1) ---------------------------------------
 
@@ -728,6 +832,8 @@ else:
             force=force,
             max_rounds=max_rounds,
             brand_profile=_load_brand_dict(brand_file),
+            base_dir=str(Path(html_path).resolve().parent),
+            root=_page_root(html_path),
         )
 
         # Persist outputs only if above gate or forced
@@ -765,7 +871,7 @@ else:
 
     @cli.group("system")
     def system_grp() -> None:
-        """Build a WCAG-gated design system (4.0 foundations engine)."""
+        """Build a WCAG-gated design system (4.0 foundations engine), or detect an existing one."""
 
     @system_grp.command("build")
     @click.option("--brand", required=True,
@@ -788,9 +894,12 @@ else:
                        "and decision records.")
     @click.option("--force", is_flag=True,
                   help="Replace files in --out that differ. Without it nothing is overwritten.")
+    @click.option("--replace-client-files", "replace_client", is_flag=True,
+                  help="Also replace files in --out that ux-skill did not build, such as a "
+                       "client's own tokens.json. --force alone never does.")
     @click.pass_context
     def system_build_cmd(ctx, brand, brief_path, axes_text, latin_only, out_dir, rule_pack,
-                         force) -> None:
+                         force, replace_client) -> None:
         """Build tokens.json, tokens.css, fonts.css, fonts-self-host.css,
         system-report.md and art/ into --out, and with --rule-pack the rule
         pack into --out/rule-pack/.
@@ -818,7 +927,19 @@ else:
         system = make_system(brand_hex, axes, source, arabic=arabic, rule_pack=rule_pack,
                              audience=audience, unread=unread_lines(brief, "--brief"))
         system = note_rule_pack(system, out, force=force)
-        outcome = write_outcome(system, out, force=force)
+        from engine.existing import client_files_in
+        theirs = client_files_in(out, system.files) if (force and not replace_client) else []
+        if theirs:
+            outcome = {
+                "status": "refused", "written": [], "unchanged": [], "conflicts": theirs,
+                "stale_rule_pack": None,
+                "message": (f"Nothing was written: {out} holds a design system ux-skill did not "
+                            f"build, and {', '.join(theirs)} would be replaced. An existing "
+                            "design system is fixed input. Build into a new folder, or pass "
+                            "--replace-client-files as well as --force to replace them."),
+            }
+        else:
+            outcome = write_outcome(system, out, force=force)
         status = outcome["status"]
         _emit({**system.to_dict(), "out": str(out), **outcome}, ctx.obj["pretty"])
         if status == "failed":
@@ -827,6 +948,25 @@ else:
             click.echo(f"Error: {outcome['message']}\n", err=True, nl=False)
         if STATUS_EXIT[status]:
             sys.exit(STATUS_EXIT[status])
+
+    @system_grp.command("detect")
+    @click.option("--root", default=".", help="Project root to look in (default: here).")
+    @click.pass_context
+    def system_detect_cmd(ctx, root) -> None:
+        """Find an existing design system and print what it declares.
+
+        Looks for a DTCG or tokens.json file, a token build script, CSS
+        custom-property foundation files, MASTER.md, DESIGN.md, a
+        design-system/ folder or a packages/tokens folder. Reads files only.
+        An existing system is fixed input: every command reads it first and
+        none overrides it. Exit 0 either way; "found" says which.
+        """
+        from engine.existing import detect_existing_system
+        if not Path(root).expanduser().is_dir():
+            click.echo(f"Error: --root {root} does not exist or is not a folder; pass the "
+                       "project folder, for example --root .", err=True)
+            sys.exit(2)
+        _emit(detect_existing_system(root), ctx.obj["pretty"])
 
     # -------- ux version -------------------------------------------------
 

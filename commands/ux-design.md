@@ -311,9 +311,19 @@ The 10 required fields are:
 
 NEVER proceed to step 2 without the wow moment field populated. If the user says "anything's fine", push back: "Give me one concrete moment, even tiny — something a visitor would remember."
 
+### 1a. An existing design system is fixed input
+
+Before any engine pick, run `python3 -m engine.cli.main --no-pretty system detect --root .`. It looks for a DTCG or `tokens.json` file, a token build script, CSS custom-property foundation files, a hand-written `MASTER.md` or `DESIGN.md`, a `design-system/` folder or a `packages/tokens` folder. When `found` is true:
+
+1. The page's tokens come from that system. Link its built CSS; if the build output is missing, run its build script. Use its custom properties by their own names.
+2. Skip the engine's palette, type pair and every `recommend` pick for color and type (Step 3 reads them as suggestions only). Skip `ux design-md`; with `--from-system` it only mirrors the system.
+3. Never edit, overwrite or re-derive the system's files. `ux persist save` writes beside a hand-written MASTER.md.
+4. A gap the page needs (a token the system lacks) goes in a separate extension file next to the page CSS, named after the system, such as `<system>-ext.css`. Name each new token in the system's own naming, and log one comment per token: what it is and why the system lacked it.
+5. Pass `detect`'s `declared` block into the brand step: the declared primary beats logo pixels.
+
 ### 1b. DESIGN.md is the visual contract
 
-If a `DESIGN.md` exists in the project root, read it FIRST and treat it as the source of truth for the visual system (colors, typography, spacing, rounded, components). Match it exactly. If none exists, after discovery emit one for this project with `ux design-md` (the Google Stitch / awesome-design-md standard) and treat it as the contract the generated UI must satisfy.
+If a `DESIGN.md` exists in the project root, read it FIRST and treat it as the source of truth for the visual system (colors, typography, spacing, rounded, components). Match it exactly. If none exists and step 1a found no system, after discovery emit one for this project with `ux design-md` (the Google Stitch / awesome-design-md standard) and treat it as the contract the generated UI must satisfy. When 1a found a system, that system is the contract.
 
 ### 1c. Pick exactly one surface playbook
 
@@ -485,13 +495,13 @@ This parses the standard brand.md into `.ux/brand.json` (travels through the eng
 
 If the brief names a reference site/URL or provides a screenshot, the output MUST look like THEM, not the house style. Extract the brand FIRST — canonical rules in `references/process/brand-extraction.md`. The engine is offline, so YOU capture the signals; the engine normalizes + enforces.
 
-1. **Capture the signals.** Open the URL / read the screenshot and **sample the logo pixels** for the dominant non-neutral color (the brand primary comes from the LOGO, not the most-painted CSS), read the logo's letterform style, and collect 2–3 secondary colors, the fonts, any real imagery URLs, and the voice. Write `.ux/brand-signals.json`:
+1. **Capture the signals.** Open the URL / read the screenshot and **sample the logo pixels** for the dominant non-neutral color (the brand primary comes from the LOGO, not the most-painted CSS, unless `ux system detect` declares a primary; then the declared token wins and the logo sample is only reported), read the logo's letterform style, and collect 2–3 secondary colors, the fonts, any real imagery URLs, and the voice. Write `.ux/brand-signals.json`:
    `{"name":"…","logo":{"src":"…","alt":"…"},"logo_colors":[{"hex":"#…"}],"brand_colors":[{"hex":"#…"}],"logo_type_style":"…","fonts":{"h1":"…","body":"…"},"imagery":["…"],"voice":"…"}`
 2. **Build the anchor:**
    ```bash
    python3 -m engine.cli.main brand --signals-file .ux/brand-signals.json --out .ux
    ```
-   Writes `.ux/brand.json` (travels through the engine) and `.ux/brand.md` (the human-readable anchor).
+   Writes `.ux/brand.json` (travels through the engine) and `.ux/brand.md` (the human-readable anchor). `ux brand` also reads the project (`--project-root`, default here): a primary declared in its token files beats the logo pixels (both are reported, as `primary` and `logo_primary`), the text color is kept out of the secondaries, and the language comes from the project's HTML.
 3. **CONFIRM before locking (do not skip).** Show the user the extracted `brand.md` — primary color, type direction, logo — in one short message and get a yes. A wrong auto-read (clay instead of amber) poisons the entire build; the 5-second check is the guardrail. If they correct it, edit `.ux/brand-signals.json` and re-run step 2.
 
 If there is NO reference brand, skip this step (pure synthesis from the brief).
@@ -555,10 +565,10 @@ Pass the selected sequence to the frontend-engineer sub-agent as the page skelet
 
 ### Step 3 — Use the recommendation as hard constraints
 
-The engine's picks are not suggestions — they're constraints:
+When step 1a found an existing design system, its tokens win: the recommendation carries an `existing_system` block, and `palette` and `type_pair` are marked `"status": "suggestion"`. Use them only to fill a gap the system leaves, logged in the extension file. Otherwise the engine's picks are constraints:
 - The picked `style.tokens` are the design vocabulary you generate from
-- The picked `palette.colors` are the only color tokens used
-- The picked `type_pair` is the only typography (display + body + mono)
+- With no existing design system, the picked `palette.colors` are the only color tokens used
+- With no existing design system, the picked `type_pair` is the only typography (display + body + mono)
 - The 35+ `guardrails` are checked-against during generation — do NOT emit code that matches any anti-pattern regex
 - The 5 `brand_exemplars` are the visual reference for taste
 
@@ -708,12 +718,16 @@ If Playwright is not installed, read the SAME signals through any headless-DOM t
 
 ```bash
 python3 -c "
-import json, sys
+import json, sys, os
 from engine.evaluator import evaluate
 from engine.brand.extract import BrandProfile
 b = json.load(open('.ux/brand.json'))
 prof = BrandProfile(**{k: v for k, v in b.items() if k in BrandProfile.__dataclass_fields__})
-ev = evaluate(html=open('<output.html>').read(), brand_profile=prof)
+page = '<output.html>'
+# base_dir: the page's folder, so linked stylesheets and custom properties are read too;
+# root: the project, so a page in en/ can link ../css/.
+ev = evaluate(html=open(page).read(), brand_profile=prof,
+              base_dir=os.path.dirname(os.path.abspath(page)), root=os.getcwd())
 print('brand_fidelity', ev.brand_fidelity, '| imagery', ev.imagery, '| passed', ev.brand_passed)
 [print(' -', n) for n in ev.notes if 'BRAND FLOOR' in n]
 sys.exit(0 if ev.brand_passed else 1)

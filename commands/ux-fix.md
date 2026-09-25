@@ -6,6 +6,8 @@ disable-model-invocation: false
 
 # /ux-fix
 
+**An existing design system is fixed input.** Before any engine pick, run `python3 -m engine.cli.main --no-pretty system detect --root .` (over MCP, `ux_system_detect`). When `found` is true, follow `commands/ux-design.md` step 1a: the project's tokens win, the engine's palette and type picks are suggestions for gaps only, and nothing edits, overwrites or re-derives the system's files.
+
 You are running the `/ux-fix` command from the `ux` plugin. The job is to take a report already produced by another `ux-*` command, apply its findings as atomic commits via the right sub-agents, and re-verify by re-running the originating command.
 
 ## When to use

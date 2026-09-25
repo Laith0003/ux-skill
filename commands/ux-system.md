@@ -67,6 +67,8 @@ Older and mixed-age readers get larger body text and targets, a wider focus ring
 
 ### 3. Look before writing
 
+Run `python3 -m engine.cli.main --no-pretty system detect --root .` first. When `found` is true the project already has a design system, and it is fixed input: do not build a new one over it. Tell the user what was found (the `sources` and the declared primary) and build only into a new folder, as a reference for gaps, never into the system's own folder. `system build --force` refuses to replace files ux-skill did not build; `--replace-client-files` exists only for a user who asks for exactly that.
+
 List the output folder first (`ls design-system/`). If `tokens.json`, `tokens.css`, `fonts.css`, `fonts-self-host.css`, `system-report.md` or a `rule-pack/` folder is already there, tell the user and run without `--force`: the engine then writes nothing if any file differs, and leaves identical files alone. When a `rule-pack/` folder is there, pass `--rule-pack` again whenever you change the system: a build without it leaves the pack as it was, and if the new `tokens.json` no longer matches the digest in `rule-pack/built-from.json`, the result and `system-report.md` name the pack as stale, with the fix (build again with `--rule-pack`, or remove the folder). The engine never deletes it.
 
 ### 4. Run the engine
@@ -274,7 +276,7 @@ Write to `.ux/last-system.json`:
 
 | Error condition | Recovery |
 |---|---|
-| Existing partial system detected | Ask whether to extend or replace; never silently overwrite |
+| Existing partial system detected | It is fixed input: extend it in a separate extension file in its own naming (see `commands/ux-design.md` step 1a); never overwrite or replace it |
 | Brand brief missing | Reuse brand library from `references/brands/` if a brand was named; otherwise ask the user to paste a brief or pick "your call" |
 | Source material is a screenshot only | Extract tokens visually with stated uncertainty; flag derived tokens for user confirmation |
 | Target stack unclear | Ask for the stack before dispatching the architect — token output format is stack-dependent |
@@ -330,10 +332,10 @@ print('GUARDRAILS:', len(r.get('guardrails', [])), 'anti-pattern rules active')
 
 ### Step 3 — Use the recommendation as hard constraints
 
-The engine's picks are not suggestions — they're constraints:
+When `system detect` found an existing design system, its tokens win and the recommendation's `palette` and `type_pair` are marked `"status": "suggestion"`; use them only for gaps. Otherwise the engine's picks are constraints:
 - The picked `style.tokens` are the design vocabulary you generate from
-- The picked `palette.colors` are the only color tokens used
-- The picked `type_pair` is the only typography (display + body + mono)
+- With no existing design system, the picked `palette.colors` are the only color tokens used
+- With no existing design system, the picked `type_pair` is the only typography (display + body + mono)
 - The 35+ `guardrails` are checked-against during generation — do NOT emit code that matches any anti-pattern regex
 - The 5 `brand_exemplars` are the visual reference for taste
 

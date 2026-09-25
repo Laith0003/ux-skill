@@ -1,0 +1,6 @@
+/* Fixture type foundation. Labels are set at zero tracking on purpose. */
+:root {
+  --font-family-base: "Fixture Sans", system-ui, sans-serif;
+  --label-letter-spacing: 0;
+  --label-text-transform: none;
+}

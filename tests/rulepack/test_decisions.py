@@ -40,7 +40,7 @@ EXPECTED = {
     "natural-text-on-the-brand", "neutrals-follow-the-brand", "support-clear-of-banned-pairs",
     "fills-on-every-placement", "distinctness-on-a-grey-reference",
     "eyebrow-is-text",
-    "edge-weight-inside", "faq-and-footer-contracts",
+    "edge-weight-inside", "faq-and-footer-contracts", "existing-system-wins",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",
