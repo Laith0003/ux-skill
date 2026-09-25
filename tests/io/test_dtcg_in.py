@@ -787,3 +787,11 @@ def test_a_composite_with_every_field_aliased_or_none_has_no_literal_note():
     imported = _import(doc)
     assert imported.tokens.get("type.body").layer == "primitive"
     assert not [i for i in imported.report.notes if "literal inside" in i.message]
+
+
+def test_a_bare_dark_json_in_a_light_folder_pairs(tmp_path):
+    src = _write(tmp_path / "light" / "tokens.json", LIGHT)
+    _write(tmp_path / "light" / "dark.json", DARK)
+    imported = read_dtcg(src)
+    assert imported.tokens.get("color.bg").modes == {"scheme:dark": "#111111"}
+    assert not any("named for light" in i.message for i in imported.report.notes)

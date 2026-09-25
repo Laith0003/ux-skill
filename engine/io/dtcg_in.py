@@ -986,10 +986,10 @@ def _dark_sibling(path: Path) -> Optional[Path]:
     """The file beside `path` that holds its dark scheme, by name: the
     light file's name with light turned to dark, the name with .dark after
     its first part (tokens.json, tokens.dark.json), dark.json when `path`
-    is named for light (light.json, theme.light.json), or the same name in
-    a dark/ folder. None when `path` itself is the dark one. A bare
-    dark.json beside a file not named for light is only a candidate (see
-    _bare_dark)."""
+    is named for light (light.json, theme.light.json) or sits in a light/
+    folder, or the same name in a dark/ folder. None when `path` itself is
+    the dark one. A bare dark.json beside a file not named for light is
+    only a candidate (see _bare_dark)."""
     words = [w.lower() for w in path.name.split(".")]
     if _dark_named(path):
         return None
@@ -1000,7 +1000,7 @@ def _dark_sibling(path: Path) -> Optional[Path]:
                                                for w in path.name.split("."))))
     if rest:
         options.append(path.with_name(f"{first}.dark.{rest}"))
-    if "light" in words[:-1]:
+    if "light" in words[:-1] or path.parent.name.lower() == "light":
         options.append(path.with_name("dark.json"))
     options.append(path.parent / "dark" / path.name)
     if path.parent.name.lower() == "light":
