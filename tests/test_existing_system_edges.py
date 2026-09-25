@@ -314,18 +314,19 @@ def test_mcp_image_extract_reads_the_existing_system(client: Path) -> None:
 def test_detect_reads_hues_and_hsl_through_the_value_reader():
     """detect keeps a lenient reading for what the importer refuses, but a
     hue and an hsl color are converted by the value reader's own helpers,
-    not by copies of them."""
-    import ast
-    import inspect
-
+    so the two read one color one way."""
     from engine.existing import detect
+    from engine.io.values_in import hsl_to_rgb, hue_degrees, read_value
 
-    source = inspect.getsource(detect)
-    tree = ast.parse(source)
-    imported = {a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names}
-    assert "colorsys" not in imported
-    assert '"grad"' not in source and "_hsl_hex" not in source
     # The lenient paths still read, in the reader's units.
     assert detect.normalize_hex("hsl(0.5turn, 100%, 50%, 1, 2)") == "#00FFFF"
     assert detect.normalize_hex("oklch(60% 0.1 3.14rad, 1)") == "#239382"
-    assert detect.normalize_hex({"colorSpace": "hsl", "components": [225, 100, 60]}) == "#3366FF"
+    for unit, angle in (("deg", "225deg"), ("turn", "0.625turn"), ("rad", "3.92699rad"),
+                        ("grad", "250grad")):
+        assert round(detect._hue(angle)) == round(hue_degrees(angle)) == 225, unit
+    # The DTCG hsl object is converted by the reader's own hsl conversion.
+    for h, s, lt in ((225, 100, 60), (225, 50, 40), (10, 80, 30), (300, 20, 90)):
+        want = "#%02X%02X%02X" % tuple(int(round(c)) for c in hsl_to_rgb(h, s / 100, lt / 100))
+        assert detect.normalize_hex({"colorSpace": "hsl", "components": [h, s, lt]}) == want
+    assert detect.normalize_hex({"colorSpace": "hsl", "components": [225, 100, 60]}) \
+        == read_value("hsl(225 100% 60%)")[1]
