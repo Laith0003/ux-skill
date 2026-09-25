@@ -40,7 +40,7 @@ import re
 from collections import deque
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable, Dict, Iterable, List, Optional, Set, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
 
 from engine.foundations.color_math import gamut_map_oklch, hex_to_rgb, rgb_to_hex
 from engine.foundations.errors import InputError
@@ -49,6 +49,7 @@ from engine.foundations.modes import AXES, ModeError, parse
 from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
 from engine.foundations.validate import LAYERS
 from engine.foundations.values import TYPES, TYPOGRAPHY_FIELDS
+from engine.io.graph import cycles
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source, read_source
 from engine.io.values_in import GamutMapped, NotRead, read_value
 
@@ -623,69 +624,6 @@ def _tool_dark(value: Any) -> Tuple[Optional[str], Any, List[str]]:
     return None, None, []
 
 
-def _cycles(order: List[str], succ: Callable[[str], List[str]]) -> Dict[str, List[str]]:
-    """Each token on a reference loop, with the loop from it back to it
-    (Tarjan's strongly connected components, iterative)."""
-    index: Dict[str, int] = {}
-    low: Dict[str, int] = {}
-    stack: List[str] = []
-    on: Set[str] = set()
-    loops: Dict[str, List[str]] = {}
-    for start in order:
-        if start in index:
-            continue
-        index[start] = low[start] = len(index)
-        stack.append(start)
-        on.add(start)
-        work = [(start, iter(succ(start)))]
-        while work:
-            v, it = work[-1]
-            for w in it:
-                if w not in index:
-                    index[w] = low[w] = len(index)
-                    stack.append(w)
-                    on.add(w)
-                    work.append((w, iter(succ(w))))
-                    break
-                if w in on:
-                    low[v] = min(low[v], index[w])
-            else:
-                work.pop()
-                if work:
-                    low[work[-1][0]] = min(low[work[-1][0]], low[v])
-                if low[v] == index[v]:
-                    comp: List[str] = []
-                    while True:
-                        w = stack.pop()
-                        on.discard(w)
-                        comp.append(w)
-                        if w == v:
-                            break
-                    if len(comp) > 1 or v in succ(v):
-                        members = set(comp)
-                        for m in comp:
-                            loops[m] = _loop(m, members, succ)
-    return loops
-
-
-def _loop(m: str, members: Set[str], succ: Callable[[str], List[str]]) -> List[str]:
-    """The shortest path from m back to m inside one loop."""
-    parent: Dict[str, Optional[str]] = {m: None}
-    queue = deque([m])
-    while queue:
-        x = queue.popleft()
-        for y in succ(x):
-            if y == m:
-                path = [x]
-                while parent[path[-1]] is not None:
-                    path.append(parent[path[-1]])
-                return path[::-1] + [m]
-            if y in members and y not in parent:
-                parent[y] = x
-                queue.append(y)
-    return [m, m]
-
-
 def import_dtcg(text: str, source: Source,
                 dark: Optional[Tuple[str, Source]] = None) -> Imported:
     """The tokens a DTCG document holds, in its own names, and the report.
@@ -965,7 +903,7 @@ def import_dtcg(text: str, source: Source,
             t = kept[p]
             value = t.modes.get(context, t.value) if context else t.value
             return [r for r in dict.fromkeys(_refs(value)) if r in kept]
-        for p, loop in _cycles(list(kept), succ).items():
+        for p, loop in cycles(list(kept), succ).items():
             looped.setdefault(p, (loop, context))
     for p in [p for p in list(kept) if p in looped]:
         loop, context = looped[p]

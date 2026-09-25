@@ -139,9 +139,9 @@ def test_the_report_names_what_it_renamed_noted_and_did_not_read():
          "since a mode axis holds two values; pass the second mode to read with second_modes, "
          "for example {\"Type\": \"SM\"}")]
     assert _rows(report.not_read) == [
-        ("brand/shared", "references v:remote, a variable from another file that this export "
-                         "does not hold; give it a local value or alias in Figma, or import "
-                         "that library's variables too"),
+        ("brand/shared", "references v:remote in the mode Light of Color, a variable from "
+                         "another file that this export does not hold; import that library's "
+                         "export too, or detach the variable in Figma"),
         ("flag/beta", "a boolean, and the engine holds no boolean tokens; keep it in Figma, "
                       "where it switches components"),
         ("label/copy", "a text variable scoped to TEXT_CONTENT; the engine reads text only as "
@@ -328,12 +328,14 @@ def test_references_to_what_was_not_read_and_loops_are_named():
     assert _rows(imported.report.not_read) == [
         ("flag", "a boolean, and the engine holds no boolean tokens; keep it in Figma, where it "
                  "switches components"),
-        ("uses-flag", "references flag, which was not read; fix flag and import again"),
-        ("a", "references b, which leads back to it (a -> b -> a); point one of them at a "
-              "value in Figma"),
-        ("b", "references a, which leads back to it (b -> a -> b); point one of them at a "
-              "value in Figma"),
-        ("on-a", "references a, which was not read; fix a and import again")]
+        ("uses-flag", "references flag in the mode Value of Color, which was not read; fix flag "
+                      "and import again"),
+        ("a", "references b in the mode Value of Color, which leads back to it (a -> b -> a); "
+              "point one of them at a value in Figma"),
+        ("b", "references a in the mode Value of Color, which leads back to it (b -> a -> b); "
+              "point one of them at a value in Figma"),
+        ("on-a", "references a in the mode Value of Color, which was not read; fix a and "
+                 "import again")]
 
 
 def test_two_variables_on_one_path_keep_the_first():
@@ -386,3 +388,138 @@ def test_the_package_exports_the_importer():
     assert engine.io.read_figma is read_figma and engine.io.import_figma is import_figma
     assert {"import_figma", "read_figma", "import_markdown", "Mapped", "GamutMapped",
             "CSS_KEYWORDS"} <= set(engine.io.__all__)
+
+
+# The REST export also holds the library variables the file uses, marked
+# remote, with their collections. They belong to another file.
+LIBRARY = {
+    "variableCollections": {
+        "c:lib": {"id": "c:lib", "name": "Shared Palette", "remote": True,
+                  "defaultModeId": "m:a", "modes": [{"modeId": "m:a", "name": "Default"},
+                                                    {"modeId": "m:b", "name": "Partner"}],
+                  "variableIds": ["v:lib1"]},
+        "c:own": _collection("c:own", "Color", ["Light", "Dark"], ["v:1", "v:2", "v:3"]),
+    },
+    "variables": {
+        "v:lib1": dict(_var("v:lib1", "white", "c:lib", "COLOR",
+                            {"m:a": {"r": 1, "g": 1, "b": 1, "a": 1},
+                             "m:b": {"r": 1, "g": 1, "b": 1, "a": 1}}), remote=True),
+        "v:1": _var("v:1", "surface/base", "c:own", "COLOR",
+                    {"c:own:Light": _alias("v:lib1"),
+                     "c:own:Dark": {"r": 0, "g": 0, "b": 0, "a": 1}}),
+        "v:2": _var("v:2", "surface/raised", "c:own", "COLOR",
+                    {"c:own:Light": _alias("v:gone"),
+                     "c:own:Dark": {"r": 0, "g": 0, "b": 0, "a": 1}}),
+        "v:3": _var("v:3", "ink", "c:own", "COLOR",
+                    {"c:own:Light": {"r": 0, "g": 0, "b": 0, "a": 1},
+                     "c:own:Dark": {"r": 1, "g": 1, "b": 1, "a": 1}}),
+    },
+}
+
+
+def test_library_variables_in_the_export_are_not_read_as_the_files_own():
+    imported = _import(LIBRARY)
+    assert [t.path for t in imported.tokens.tokens()] == ["ink"]
+    assert dict(imported.tokens.axes) == {"scheme": ("light", "dark")}
+    report = imported.report
+    assert report.entries == 3 and report.tokens == 1
+    assert [(i.where, i.name, i.message) for i in report.notes] == [
+        ("variables.json Shared Palette", "Shared Palette",
+         "is a library collection from another file (remote in the export); the 1 variable "
+         "of it this file uses was not read as this file's tokens; import that library's own "
+         "export to read them"),
+        ("variables.json Color", "Color",
+         "has the modes Light and Dark, read as the scheme axis: Light is the base and Dark "
+         "is scheme:dark")]
+    assert _rows(report.not_read) == [
+        ("surface/base", "references white in the mode Light of Color, a variable of the "
+                         "library collection Shared Palette in another file; import that "
+                         "library's export too, or detach the variable in Figma"),
+        ("surface/raised", "references v:gone in the mode Light of Color, a variable from "
+                           "another file that this export does not hold; import that "
+                           "library's export too, or detach the variable in Figma")]
+
+
+def test_a_remote_variable_is_library_even_in_a_collection_not_marked_remote():
+    doc = copy.deepcopy(LIBRARY)
+    del doc["variableCollections"]["c:lib"]["remote"]
+    imported = _import(doc)
+    assert [t.path for t in imported.tokens.tokens()] == ["ink"]
+    assert "main-partner" not in imported.tokens.axes
+    assert _rows(imported.report.not_read)[0][1].startswith(
+        "references white in the mode Light of Color, a variable of the library collection "
+        "Shared Palette")
+
+
+def test_second_modes_naming_a_library_collection_is_named():
+    with pytest.raises(InputError) as exc:
+        _import(LIBRARY, second_modes={"Shared Palette": "Partner"})
+    assert str(exc.value) == ("second_modes names Shared Palette, a library collection from "
+                              "another file, whose variables are not read as this file's "
+                              "tokens; leave Shared Palette out of second_modes")
+
+
+def test_a_size_that_aliases_an_unscoped_number_names_the_fix():
+    col = _collection("c:1", "Size", ["Value"], ["v:1", "v:2", "v:3"])
+    doc = _one(col, [_var("v:1", "num/8", "c:1", "FLOAT", {"c:1:Value": 8}),
+                     _var("v:2", "space/md", "c:1", "FLOAT", {"c:1:Value": _alias("v:1")},
+                          ["GAP"]),
+                     _var("v:3", "weight/body", "c:1", "FLOAT", {"c:1:Value": _alias("v:1")},
+                          ["FONT_WEIGHT"])])
+    notes = _rows(_import(doc).report.notes)
+    assert notes[1:] == [
+        ("space/md", "aliases num/8 in the mode Value of Size, which was read as a number, "
+                     "where a dimension is wanted; give num/8 a size scope in Figma (Gap, "
+                     "Corner radius, Font size and so on) and import again"),
+        ("weight/body", "aliases num/8 in the mode Value of Size, which was read as a number, "
+                        "where a fontWeight is wanted; give num/8 only the Font weight scope in "
+                        "Figma and import again")]
+
+
+def test_standard_and_high_are_contrast_only_where_contrast_is_named():
+    def axes(collection, modes):
+        col = _collection("c:1", collection, modes, ["v:1"])
+        doc = _one(col, [_var("v:1", "gap", "c:1", "FLOAT",
+                              {f"c:1:{m}": 8 for m in modes}, ["GAP"])])
+        return dict(_import(doc).tokens.axes)
+    assert axes("Density", ["Standard", "High"]) == {"standard-high": ("standard", "high")}
+    assert axes("Contrast", ["Standard", "High"]) == {"contrast": ("standard", "high")}
+    assert axes("Theme", ["Standard", "High contrast"]) == {"contrast": ("standard", "high")}
+
+
+def test_light_and_dark_among_more_modes_read_the_scheme_when_chosen():
+    col = _collection("c:1", "Theme", ["Light", "Dark", "Dim"], ["v:1"])
+    doc = _one(col, [_var("v:1", "bg", "c:1", "COLOR", {
+        "c:1:Light": {"r": 1, "g": 1, "b": 1, "a": 1},
+        "c:1:Dark": {"r": 0, "g": 0, "b": 0, "a": 1},
+        "c:1:Dim": {"r": 0.2, "g": 0.2, "b": 0.2, "a": 1}})])
+    assert "for example {\"Theme\": \"Dark\"}" in _import(doc).report.notes[0].message
+    imported = _import(doc, second_modes={"Theme": "Dark"})
+    assert dict(imported.tokens.axes) == {"scheme": ("light", "dark")}
+    assert imported.tokens.get("bg").modes == {"scheme:dark": "#000000"}
+    assert _rows(imported.report.notes) == [
+        ("Theme", "has the modes Light, Dark and Dim, read as the scheme axis: Light is the "
+                  "base and Dark is scheme:dark; Dim was not read")]
+
+
+def test_a_mapped_color_names_its_mode_and_keeps_its_alpha():
+    col = _collection("c:1", "Color", ["Light", "Dark"], ["v:1"])
+    doc = _one(col, [_var("v:1", "vivid", "c:1", "COLOR", {
+        "c:1:Light": {"r": 0, "g": 0, "b": 0, "a": 1},
+        "c:1:Dark": {"r": 1.2, "g": 0.1, "b": -0.05, "a": 0.5}})])
+    imported = _import(doc)
+    [mapped] = imported.report.mapped
+    assert mapped.where == "variables.json Color/vivid in the mode Dark"
+    assert mapped.hex.endswith("80") and len(mapped.hex) == 9
+    assert imported.tokens.get("vivid").modes == {"scheme:dark": mapped.hex}
+
+
+def test_a_path_is_free_again_when_its_first_holder_is_not_read():
+    col = _collection("c:1", "Color", ["Value"], ["v:1", "v:2", "v:3"])
+    doc = _one(col, [_var("v:1", "flag", "c:1", "BOOLEAN", {"c:1:Value": True}),
+                     _var("v:2", "color/bg", "c:1", "COLOR", {"c:1:Value": _alias("v:1")}),
+                     _var("v:3", "color/bg", "c:1", "COLOR",
+                          {"c:1:Value": {"r": 1, "g": 1, "b": 1, "a": 1}})])
+    imported = _import(doc)
+    assert imported.tokens.get("color.bg").value == "#FFFFFF"
+    assert [n for n, _ in _rows(imported.report.not_read)] == ["flag", "color/bg"]
