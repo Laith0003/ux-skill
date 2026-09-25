@@ -526,8 +526,9 @@ def _neutral_seed(brand_hex: str, axes: AxisValues) -> str:
 
 # How far a recess sits below the page, in OKLCH lightness.
 RECESS_L = 0.035
-# Our floor between a tinted surface and the page: an area of fill is seen
-# at a smaller step than a hairline edge needs (container-edge, 1.2:1).
+# Our floor between the tint and the page. The tint is a wash behind a
+# group, not a container: a panel on it that must read as a container draws
+# an edge (decisions/container-edge.md), so the wash only has to be seen.
 TINT_FLOOR = 1.1
 # The container-edge floor (contracts.bind.EDGE_FLOOR). The light code
 # surface stands this far off the card, so a code block needs no edge
@@ -598,17 +599,25 @@ def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str,
             # The tints stand TINT_FLOOR off the page in each scheme (the
             # neutral ramp's 50 and 950), at the brand's 50 and 950 hue and
             # chroma.
+            # Each tint's chroma stays at or under its scheme's band cap, so the
+            # quiet surface is never louder than the band.
             pages = ramp(seeds["neutral"]).stops
+            caps = {"light": character.light_band_chroma(axes),
+                    "dark": character.dark_band_chroma(axes)}
             for scheme, step, page in (("light", 50, pages[50]), ("dark", 950, pages[950])):
                 _, c, h = hex_to_oklch(r.stops[step])
-                prims[f"color.brand.tint-{scheme}"] = stand_off(page, c, h, TINT_FLOOR)
+                prims[f"color.brand.tint-{scheme}"] = stand_off(page, min(c, caps[scheme]), h,
+                                                                TINT_FLOOR)
             band = _with_chroma(r.stops[100], cap=character.light_band_chroma(axes))
             if contrast(pages[50], band) < BAND_FLOOR:
                 _, c, h = hex_to_oklch(band)
                 band = stand_off(pages[50], c, h, BAND_FLOOR)
             prims["color.brand.band-light"] = band
-            prims["color.brand.band-dark"] = _with_chroma(
-                r.stops[900], cap=character.dark_band_chroma(axes))
+            band = _with_chroma(r.stops[900], cap=caps["dark"])
+            if contrast(pages[950], band) < BAND_FLOOR:
+                _, c, h = hex_to_oklch(band)
+                band = stand_off(pages[950], c, h, BAND_FLOOR)
+            prims["color.brand.band-dark"] = band
             for path, need in NATURAL_FILLS.items():
                 fill, hover, pressed = natural_fill(brand_hex, need)
                 prims[path], prims[path + "-hover"], prims[path + "-pressed"] = \
@@ -620,7 +629,8 @@ def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str,
             prims["color.neutral.recess-light"] = _shift(r.stops[50], -RECESS_L)
             prims["color.neutral.recess-dark"] = _midpoint(r.stops[950], r.stops[900])
             _, c50, h50 = hex_to_oklch(r.stops[50])
-            prims["color.neutral.code-light"] = stand_off("#FFFFFF", c50, h50, CODE_EDGE)
+            card = prims[_SEMANTIC["color.surface.card"][0]]
+            prims["color.neutral.code-light"] = stand_off(card, c50, h50, CODE_EDGE)
         if family in STATUS_HUES:
             for step in SOFT_STEPS:
                 prims[f"color.{family}.soft-{step}"] = _with_chroma(
@@ -1231,7 +1241,36 @@ def _on_color_natural(ts: TokenSet, mode: str) -> List[str]:
             f":1; point {fill} at {natural} and {on} at color.base.white"]
 
 
+def _surfaces_apart(ts: TokenSet, mode: str) -> List[str]:
+    """The tint stands TINT_FLOOR off the page and the band BAND_FLOOR, the
+    band beyond the tint, and in light the code surface CODE_EDGE off the
+    card (decisions/surfaces-stand-apart.md, clean-code-surface.md)."""
+    page, tint, band = "color.surface.page", "color.surface.tint", "color.surface.band"
+    if not all(_typed(ts, r) for r in (page, tint, band)):
+        return []
+    pg = ts.resolve(page, mode)
+    if any(len(ts.resolve(r, mode)) != 7 for r in (page, tint, band)):
+        return []  # a translucent surface is opaque-pairing's finding
+    ratio = {r: contrast(pg, ts.resolve(r, mode)) for r in (tint, band)}
+    out = [f"{r} measures {math.floor(ratio[r] * 1000) / 1000:.3f}:1 against {page} ({mode}); "
+           f"our floor is {floor:g}:1, so point {r} at a step further from the page"
+           for r, floor in ((tint, TINT_FLOOR), (band, BAND_FLOOR)) if ratio[r] < floor]
+    if ratio[band] <= ratio[tint]:
+        out.append(f"{band} sits no further from {page} than {tint} ({mode}); a band marks a "
+                   f"section beyond the tint, so point {band} at a step further from the page")
+    code, card = "color.surface.code", "color.surface.card"
+    if "scheme:light" in mode and _typed(ts, code) and _typed(ts, card) \
+            and len(ts.resolve(code, mode)) == len(ts.resolve(card, mode)) == 7:
+        r = contrast(ts.resolve(code, mode), ts.resolve(card, mode))
+        if r < CODE_EDGE:
+            out.append(f"{code} measures {math.floor(r * 1000) / 1000:.3f}:1 against {card} "
+                       f"({mode}); our container-edge floor is {CODE_EDGE:g}:1, so point {code} "
+                       "at a step further from the card")
+    return out
+
+
 CHECKS: Tuple[Check, ...] = (
+    Check("surfaces-stand-apart", "system", _surfaces_apart, axes=("scheme", "contrast")),
     Check("media-veil", "1.4.3", _media_veil, axes=("scheme", "contrast")),
     Check("on-color-natural", "system", _on_color_natural, axes=("scheme", "contrast")),
     Check("ring-not-weaker", "system", _ring_not_weaker, axes=("scheme", "contrast")),

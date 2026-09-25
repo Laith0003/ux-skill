@@ -15,7 +15,7 @@ On real landing pages the figure style came out at 27 to 29px, the size of a car
 
 ## Decision
 
-type.text.figure takes heading-1's step (typography.ROLES), in the display face at the display weight with the tightest display leading, so at a mid contrast it is about 40px at 1440 and it follows the scale ratio like every other step. It stays outside the size order of hero, headings and body, since a figure is a number, not a level.
+type.text.figure takes heading-1's step (typography.ROLES), in the display face at the display weight with the tightest display leading, so at a mid contrast it is about 40px at 1440 and it follows the scale ratio like every other step. It stays outside the size order of hero, headings and body, since a figure is a number, not a level, and it takes heading-1's factors on a phone and at each tier (type.phone.figure and heading-1's fit factors), so it never outranks the headline on a phone; the phone-hierarchy check holds it at or under heading-1 there.
 
 ## Why
 
@@ -23,7 +23,7 @@ A proof band is a section whose content is its numbers; at the page title's size
 
 ## What it touches
 
-typography.ROLES; guidance/type.md.
+typography.ROLES, FOLLOWS, the phone-hierarchy check; guidance/type.md.
 
 ## Consequences
 

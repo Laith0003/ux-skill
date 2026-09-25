@@ -233,11 +233,13 @@ def _arabic_place(face: Face) -> Tuple[float, ...]:
 def arabic_cost(face: Face, latin: Face, axes: AxisValues, depth: float) -> float:
     """What an Arabic face costs beside a Latin one: PARTNER_GAP unless it
     is the face drawn beside it, its place's weighted distance from the
-    Latin face's place, and its book_cost."""
+    Latin face's place, its book_cost, and BOOK_WEIGHT times the squared
+    gap between its bookishness and the Latin face's, so a sans Latin face
+    never pairs with a book Arabic face."""
     w = WEIGHTS["text"]
     gap = sum(k * (a - b) ** 2 for k, a, b in zip(w, _arabic_place(face), latin.place))
     return (0.0 if face.family == latin.arabic else PARTNER_GAP) + gap \
-        + book_cost(face, axes, depth)
+        + book_cost(face, axes, depth) + BOOK_WEIGHT * (bookish(face) - bookish(latin)) ** 2
 
 
 def arabic_for(latin: Face, axes: AxisValues, depth: Optional[float] = None) -> Face:

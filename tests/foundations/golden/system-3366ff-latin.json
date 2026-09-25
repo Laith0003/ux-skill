@@ -289,11 +289,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.015686,
-            0.066667,
-            0.298039
+            0.054902,
+            0.094118,
+            0.188235
           ],
-          "hex": "#04114C"
+          "hex": "#0E1830"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -323,11 +323,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.078431,
-            0.121569,
-            0.219608
+            0.082353,
+            0.12549,
+            0.223529
           ],
-          "hex": "#141F38"
+          "hex": "#152039"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -6556,6 +6556,251 @@
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic"
+          }
+        }
+      },
+      "figure": {
+        "$type": "number",
+        "$value": "{type.phone-scale.8}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      }
+    },
+    "tier-scale": {
+      "10": {
+        "tablet": {
+          "$type": "number",
+          "$value": 1.0,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
+        "laptop": {
+          "$type": "number",
+          "$value": 1.0,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
+        "desktop": {
+          "$type": "number",
+          "$value": 1.0,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        }
+      },
+      "9": {
+        "tablet": {
+          "$type": "number",
+          "$value": 1.0,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
+        "laptop": {
+          "$type": "number",
+          "$value": 1.0,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
+        "desktop": {
+          "$type": "number",
+          "$value": 1.0,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        }
+      },
+      "8": {
+        "tablet": {
+          "$type": "number",
+          "$value": 1.0,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
+        "laptop": {
+          "$type": "number",
+          "$value": 1.0,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
+        "desktop": {
+          "$type": "number",
+          "$value": 1.0,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        }
+      },
+      "7": {
+        "tablet": {
+          "$type": "number",
+          "$value": 1.0,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
+        "laptop": {
+          "$type": "number",
+          "$value": 1.0,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
+        "desktop": {
+          "$type": "number",
+          "$value": 1.0,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        }
+      }
+    },
+    "fit": {
+      "display": {
+        "tablet": {
+          "$type": "number",
+          "$value": "{type.tier-scale.10.tablet}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic"
+            }
+          }
+        },
+        "laptop": {
+          "$type": "number",
+          "$value": "{type.tier-scale.10.laptop}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic"
+            }
+          }
+        },
+        "desktop": {
+          "$type": "number",
+          "$value": "{type.tier-scale.10.desktop}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic"
+            }
+          }
+        }
+      },
+      "hero": {
+        "tablet": {
+          "$type": "number",
+          "$value": "{type.tier-scale.9.tablet}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic"
+            }
+          }
+        },
+        "laptop": {
+          "$type": "number",
+          "$value": "{type.tier-scale.9.laptop}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic"
+            }
+          }
+        },
+        "desktop": {
+          "$type": "number",
+          "$value": "{type.tier-scale.9.desktop}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic"
+            }
+          }
+        }
+      },
+      "heading-1": {
+        "tablet": {
+          "$type": "number",
+          "$value": "{type.tier-scale.8.tablet}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic"
+            }
+          }
+        },
+        "laptop": {
+          "$type": "number",
+          "$value": "{type.tier-scale.8.laptop}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic"
+            }
+          }
+        },
+        "desktop": {
+          "$type": "number",
+          "$value": "{type.tier-scale.8.desktop}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic"
+            }
+          }
+        }
+      },
+      "section-title": {
+        "tablet": {
+          "$type": "number",
+          "$value": "{type.tier-scale.7.tablet}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic"
+            }
+          }
+        },
+        "laptop": {
+          "$type": "number",
+          "$value": "{type.tier-scale.7.laptop}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic"
+            }
+          }
+        },
+        "desktop": {
+          "$type": "number",
+          "$value": "{type.tier-scale.7.desktop}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic"
+            }
           }
         }
       }
