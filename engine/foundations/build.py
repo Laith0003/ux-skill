@@ -1,14 +1,18 @@
 """Build pipeline: generate every foundation, validate, gate. One error
 type per stage.
 
-build_system is the single entry point. Generators return tokens and notes
-and never gate themselves; the build validates the merged set once (raises
-ValidationError carrying every Problem), gates it once with every
-foundation's pairings and checks plus one role-types check over every
-declared role (a pairing on a mistyped role is left to that check),
-attaches each foundation's hints to the findings it owns, and raises
-GateFailure carrying the report. On success the report is returned with
-the tokens.
+build_system is the single entry point for a generated system.
+Generators return tokens and notes and never gate themselves; the build
+validates the merged set once (raises ValidationError carrying every
+Problem), gates it once through gate_foundations with every foundation's
+pairings and checks plus one role-types check over every declared role (a
+pairing on a mistyped role is left to that check), attaches each
+foundation's hints to the findings it owns, and raises GateFailure
+carrying the report. On success the report is returned with the tokens.
+
+check_system is the entry point for a set the engine did not generate (an
+edited tokens.json, an import): the same validate and the same
+gate_foundations, returned together and never raised.
 """
 from __future__ import annotations
 
@@ -23,7 +27,7 @@ from engine.foundations import (
 from engine.foundations.audience import Audience
 from engine.foundations.color_math import hex_to_rgb
 from engine.foundations.foundation import BrandInputs, Foundation, mistyped, role_types_check
-from engine.foundations.gate import CheckFailure, GateFailure, GateReport, gate
+from engine.foundations.gate import Check, CheckFailure, GateFailure, GateReport, gate
 from engine.foundations.tokens import TokenSet
 from engine.foundations.validate import Problem, validate
 from engine.synthesizer.axes import AxisValues
@@ -124,6 +128,84 @@ def _attach_hints(ts: TokenSet, report: GateReport, chosen: Sequence[Foundation]
     report.findings[:] = hinted
 
 
+# Check id for a pairing strict mode fails because a token is not defined.
+SKIPPED_PAIRING = "skipped-pairing"
+
+
+def _narrow(check: Check, ts: TokenSet) -> Check:
+    """The check over the axes the set has: an imported set may lack one of
+    ours, and a check reads only the contexts the set can be in."""
+    axes = tuple(a for a in check.axes if a in ts.axes)
+    return check if axes == check.axes else dataclasses.replace(check, axes=axes)
+
+
+def gate_foundations(ts: TokenSet, chosen: Sequence[Foundation],
+                     strict: bool = False) -> GateReport:
+    """Gate `ts` with the chosen foundations' pairings and checks and one
+    role-types check over their roles. Checks run over the axes the set
+    has. With strict, each pairing that could not be checked because a
+    token is not defined is a failure. Failing findings get their
+    foundation's hints. Never raises for what it finds."""
+    checks = ([role_types_check(chosen)] if chosen else []) \
+        + [_narrow(c, ts) for f in chosen for c in f.checks]
+    # A pairing on a mistyped role cannot be measured; role-types names the
+    # role, so the pairing waits until it is fixed.
+    skip = set(mistyped(ts, chosen))
+    pairings = [p for f in chosen for p in f.pairings if p.fg not in skip and p.bg not in skip]
+    report = gate(ts, pairings, checks, raise_on_fail=False)
+    if strict:
+        for p in report.skipped_pairings:
+            missing = p.fg if not ts.has(p.fg) else p.bg
+            report.failures.append(CheckFailure(
+                SKIPPED_PAIRING, "system", "",
+                f"{p.fg} on {p.bg} was not checked because {missing} is not defined; define "
+                "it, or for an imported system map the role to one of its tokens"))
+    if not report.passed:
+        _attach_hints(ts, report, chosen)
+    return report
+
+
+@dataclass(frozen=True)
+class SystemCheck:
+    """What check_system found: every structural problem, the gate report
+    and the foundations it checked, in build order."""
+    problems: Tuple[Problem, ...]
+    report: GateReport
+    foundations: Tuple[str, ...]
+
+    @property
+    def passed(self) -> bool:
+        return not self.problems and self.report.passed
+
+
+def foundations_in(ts: TokenSet) -> Tuple[str, ...]:
+    """The foundations whose root the set has, in build order."""
+    roots = {t.path.split(".", 1)[0] for t in ts.tokens()}
+    return tuple(f.name for f in FOUNDATIONS if f.name in roots)
+
+
+def check_system(ts: TokenSet, foundations: Optional[Sequence[str]] = None, *,
+                 strict: bool = False) -> SystemCheck:
+    """Validate and gate a token set the engine did not generate, without
+    raising for what it finds. Checks the named foundations, or every
+    foundation whose root the set has. A foundation named that requires
+    another is checked on its own; an alias into a foundation the set lacks
+    is a validate problem."""
+    if foundations is None:
+        chosen = tuple(f for f in FOUNDATIONS if f.name in foundations_in(ts))
+    else:
+        known = [f.name for f in FOUNDATIONS]
+        for name in foundations:
+            if name not in known:
+                raise ValueError(f"foundations names {name!r}, which is not one of {known}; "
+                                 "use those names or leave foundations out to check every "
+                                 "foundation the set has")
+        chosen = tuple(f for f in FOUNDATIONS if f.name in foundations)
+    return SystemCheck(problems=tuple(validate(ts)),
+                       report=gate_foundations(ts, chosen, strict),
+                       foundations=tuple(f.name for f in chosen))
+
+
 def build_system(axes: AxisValues, brand_hex: str, *, arabic: bool = True,
                  foundations: Optional[Sequence[str]] = None,
                  audience: Optional[Audience] = None) -> BuildResult:
@@ -154,14 +236,8 @@ def build_system(axes: AxisValues, brand_hex: str, *, arabic: bool = True,
     problems = validate(ts)
     if problems:
         raise ValidationError(problems)
-    checks = [role_types_check(chosen)] + [c for f in chosen for c in f.checks]
-    # A pairing on a mistyped role cannot be measured; role-types names the
-    # role, so the pairing waits until it is fixed.
-    skip = set(mistyped(ts, chosen))
-    pairings = [p for f in chosen for p in f.pairings if p.fg not in skip and p.bg not in skip]
-    report = gate(ts, pairings, checks, raise_on_fail=False)
+    report = gate_foundations(ts, chosen)
     if not report.passed:
-        _attach_hints(ts, report, chosen)
         raise GateFailure(report)
     return BuildResult(tokens=ts, notes=tuple(notes), report=report)
 

@@ -576,7 +576,8 @@ def _rem_sizes(ts: TokenSet, mode: str) -> List[str]:
                    f"rem or {fix}")
     if "direction:rtl" in mode:
         return out
-    for role in _roles(ts, ROLES):
+    # A set without the direction axis has no right to left sizes to name.
+    for role in _roles(ts, ROLES) if "direction" in ts.axes else ():
         named.add(_size_source(ts, role, "direction:rtl"))
     return out + [f"{t.path} is in {t.value['unit']}; sizes in rem follow the reader's default "
                   "text size, so express it in rem"

@@ -24,6 +24,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Distinctness scales are measured on a grey reference brand, which leaves every color feature to the axes](distinctness-on-a-grey-reference.md)
 - [Distinctness is measured on a grey and on four saturated reference brands, each with its corner floor](distinctness-on-saturated-brands.md)
 - [Checks compare dimensions in px and durations in ms, and read scale steps by their number](checks-read-one-unit.md)
+- [A set the engine did not generate passes the same gate, a role it lacks is skipped, and only strict fails it](imported-sets-pass.md)
 
 ## Roles per foundation
 
