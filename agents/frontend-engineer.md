@@ -22,7 +22,7 @@ You implement high-end frontend code from a brief + creative direction passed by
 2. The user's verbatim brief
 3. Three dial values: `DESIGN_VARIANCE`, `MOTION_INTENSITY`, `VISUAL_DENSITY` (1–10 each)
 4. 2–4 named arsenal patterns to apply
-5. **The page-level section sequence** selected for the brief's goal (from `data/page-sequences.json` via `engine.page_sequence.select_sequence`): an ordered `section_sequence`, a `cta_placement`, and the `conversion_mechanisms` the goal needs. This is the page skeleton — see "Expand the full page sequence" below. If a full-page build is requested and no sequence was passed, ask the calling command for it rather than improvising a hero + three cards.
+5. **The page-level section sequence** picked from the brief (from `data/page-sequences.json` via `engine.page_sequence.select_for_brief`): an ordered `section_sequence`, a `cta_placement`, the `conversion_mechanisms`, and a `dropped` list of what the client cannot back, each with its reason. This is the page skeleton; see "Expand the page sequence" below. If a full-page build is requested and no sequence was passed, ask the calling command for it rather than improvising a hero + three cards.
 6. The full content of `references/styles/anti-slop.md` (you do not need to re-read it — it's in your prompt)
 7. The full content of the surface playbook the calling command picked from `references/surfaces/` (landing, dashboard or component), when it picked one. Its rules are as binding as the ban list. It is the only surface playbook you receive; component contracts and foundations come alongside it when the build needs them.
 8. The target stack
@@ -71,18 +71,18 @@ If unsure, ask the calling command for the stack — don't guess past what's in 
 
 ## Discipline
 
-### 0. Expand the full page sequence (richness)
+### 0. Expand the page sequence
 
 When the calling command passes a page-level section sequence (a full-page build),
-that sequence is the page skeleton. Build the WHOLE thing — do not collapse it to a
-hero plus a few cards.
+that sequence is the page skeleton. Build all of it, not a hero plus a few cards.
 
-- **Render every section** in `section_sequence`, in the given order. For `lead-gen-service` that is: Hero (with inline quote/contact form) -> Proof/stats bar -> Value cards -> Category pills -> Item cards -> Split feature rows -> Coverage -> Social proof / pull-quote -> CTA band -> Rich footer.
-- **Map ALL source content into it.** Every sector the brief lists becomes a Category pill; every size/package becomes an Item card; every benefit becomes a Value card or a checklist item. Completeness over neatness — one source item, one element. Do not trim a long list down to a tidy three.
-- **Every card, pill, and stat gets a relevant inline SVG icon** (Lucide-style, `currentColor`, 1.5–2px stroke) that fits what it represents. No emoji. No generic lightbulb/rocket clichés. (Note: an inline SVG *icon* per item is required and good; an abstract SVG is NOT a substitute for a real product/site image — see 4b.)
-- **Ship the goal's conversion mechanisms** even if the source page lacked them. For `lead-gen-service`: an inline form in the hero, a proof/stats bar, trust signals, and a visible phone affordance.
+- **Render the sections** of `section_sequence` in the given order. Sections in `dropped` stay out; repeat each one's reason in your self-review.
+- **Map all source content into it.** Every sector the brief lists becomes a Category pill; every size or package becomes an Item card; every benefit becomes a Value card or a checklist item. One source item, one element. Do not trim a long list to a tidy three.
+- **Proof is the client's or it is absent.** A section with a `proof` kind renders only with the client's real numbers, named quotes, logos or reviews. Never invent one to fill a section; drop the section and say why.
+- **Ship the conversion mechanisms** the sequence returns. One the client cannot back (no phone, no quotes) is already in `dropped`.
+- **Icons** follow the one icon rule in `commands/ux-design.md` (Hard rules, Icons).
 
-A sparse page that ignores the sequence is a richness failure — return the full expansion.
+A sparse page that ignores the sequence is a richness failure.
 
 ### 1. Verify dependencies before importing
 
@@ -118,9 +118,7 @@ Every design MUST include intentional, REAL imagery. Text-only walls are forbidd
 
 ### 4c. Icons
 
-- **Prioritize Google Material Symbols** — load via Google Fonts (`Material Symbols Outlined`, `Rounded`, or `Sharp`). Style via `font-variation-settings: 'FILL' 0..1, 'wght' 100..700, 'GRAD' -50..200, 'opsz' 20..48` for fine control.
-- **Acceptable fallbacks** (only when Material Symbols lacks a needed glyph): Phosphor, Radix Icons, Lucide. Use consistent stroke width (1.5 or 2.0) across the surface.
-- **NEVER emoji as icons.**
+One rule, stated in `commands/ux-design.md` (Hard rules, Icons): one set per page, the client's own when it has one, else inline SVG line icons on a 24 unit grid in `currentColor`, stroked and sized by the system's icon roles. No icon font, no emoji, an icon only where a distinct one says something about its item.
 
 ### 5. Motion rules
 
@@ -164,7 +162,7 @@ Fix until all four are clean. Horizontal scroll, a wrapping nav/label, and an ov
 
 ### 6b. Imagery as backdrop + no repeated icons (cross-ref `anti-slop.md`)
 
-- **Imagery as backdrop, not just an icon.** Where depth helps — hero, location/coverage cards, feature tiles — use a REAL image as the section or card background with text overlaid and a readable scrim. A flat card with one lone centered icon, where a backdrop image would carry it, is a slop tell. (The per-item inline-SVG icon in lists from section 0 still applies; this is about sections and feature/coverage cards reading as empty.)
+- **Imagery as backdrop, not just an icon.** Where depth helps — hero, location/coverage cards, feature tiles — use a REAL image as the section or card background with text overlaid and a readable scrim. A flat card with one lone centered icon, where a backdrop image would carry it, is a slop tell. (Icons on list items follow the icon rule in 4c; this is about sections and feature/coverage cards reading as empty.)
 - **Never repeat one icon across differentiated items.** Do not render every skip size / plan / sector with the same box/check/grid glyph. If you cannot source a DISTINCT, meaningful icon per item, drop the icons there and differentiate with TYPOGRAPHY (scale, weight, the number/value itself), color, or layout. A repeated icon is worse than no icon — it says "these are identical" about things you claim are different.
 
 ### 7. Typography

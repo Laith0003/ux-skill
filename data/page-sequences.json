@@ -1,11 +1,11 @@
 {
   "_meta": {
-    "version": "2.0.0",
-    "entries": 6,
-    "last_updated": "2026-05-30",
-    "source": "ux-skill v2 - page-level section sequences (richness module)",
-    "schema_version": "1.0",
-    "purpose": "Whole-page templates keyed by GOAL. The build flow selects one by goal/keywords, then EXPANDS the entire ordered section_sequence and maps ALL source content into it (every sector -> a pill, every size -> a card, every benefit -> a checklist item). Each card/pill/stat gets a relevant inline SVG icon (Lucide-style, never emoji). The conversion_mechanisms are added even when the source page lacked them. The complement to landing-patterns.json (section-level) -- this manifest is the page-level skeleton that sequences those sections."
+    "version": "4.0.0",
+    "entries": 8,
+    "last_updated": "2026-09-25",
+    "source": "ux-skill 4.0 page-level section sequences",
+    "schema_version": "2.0",
+    "purpose": "Whole-page templates the picker chooses from a 4.0 brief (engine.page_sequence.select_for_brief): an explicit page_sequence first, then stage, then the industry, product_type and project_type fields and the brief's phrases. A single call-to-action verb never keys a sequence. A section with a proof kind renders only with the client's real proof of that kind; the picker drops it with a stated reason when the brief's proof list lacks it. mechanism_needs names what each conversion mechanism needs (a proof kind or a contact route)."
   },
   "entries": [
     {
@@ -13,20 +13,19 @@
       "goal": "lead-gen-service",
       "keywords": [
         "lead gen", "lead generation", "service business", "quote", "get a quote",
-        "request a quote", "contact form", "book", "booking", "enquiry", "inquiry",
-        "skip hire", "trades", "tradesperson", "plumber", "electrician", "builder",
-        "removals", "cleaning", "local service", "commercial service", "hire",
-        "consultation", "free estimate", "call us", "phone", "coverage area"
+        "request a quote", "contact form", "enquiry", "inquiry", "skip hire", "trades",
+        "tradesperson", "plumber", "electrician", "builder", "removals", "cleaning",
+        "local service", "commercial service", "consultation", "free estimate", "coverage area"
       ],
       "section_sequence": [
         {"section": "Hero (with inline quote/contact form)", "purpose": "Capture the lead at first paint. Text left (headline + one-line value + phone affordance), inline quote or contact form right. The form is the wow moment and the conversion path -- never buried below."},
-        {"section": "Proof/stats bar", "purpose": "A thin band of 3-5 real, organic numbers (jobs completed, years operating, response time, coverage radius) directly under the hero -- instant credibility before the scroll."},
-        {"section": "Value cards", "purpose": "3-5 cards naming the concrete reasons to choose this service (speed, price transparency, licensing, same-day). Each card carries a relevant inline SVG icon, a tight heading, and one sentence."},
-        {"section": "Category pills", "purpose": "Every service category / sector the business covers, rendered as a scannable row of pills (each with an inline SVG glyph). Map EVERY sector from the source into a pill -- do not trim to a tidy few."},
-        {"section": "Item cards", "purpose": "Every concrete offering (every skip size, every package, every product line) as its own card with an inline SVG icon, spec line, and an action. Completeness over neatness: one source item -> one card."},
+        {"section": "Proof/stats bar", "purpose": "A thin band of 3-5 real, organic numbers (jobs completed, years operating, response time, coverage radius) directly under the hero -- instant credibility before the scroll.", "proof": "stats"},
+        {"section": "Value cards", "purpose": "3-5 cards naming the concrete reasons to choose this service (speed, price transparency, licensing, same-day). Each card has a tight heading and one sentence."},
+        {"section": "Category pills", "purpose": "Every service category / sector the business covers, rendered as a scannable row of pills. Map EVERY sector from the source into a pill -- do not trim to a tidy few."},
+        {"section": "Item cards", "purpose": "Every concrete offering (every skip size, every package, every product line) as its own card with a spec line and an action. Completeness over neatness: one source item -> one card."},
         {"section": "Split feature rows", "purpose": "2-column zig-zag rows that expand the marquee differentiators with depth -- alternating media/text, each row earning its own visual. Not a 3-equal-card grid."},
         {"section": "Coverage", "purpose": "Where the service operates -- a map, a region list, or a coverage statement. For a local/commercial service this answers the 'do you cover me?' question that gates the lead."},
-        {"section": "Social proof / pull-quote", "purpose": "A named, quantified testimonial or a strong pull-quote with attribution (name, role/company). One strong quote beats fifteen vibes-only blurbs."},
+        {"section": "Social proof / pull-quote", "purpose": "A named, quantified testimonial or a strong pull-quote with attribution (name, role/company). One strong quote beats fifteen vibes-only blurbs.", "proof": "testimonials"},
         {"section": "CTA band", "purpose": "A focused conversion band repeating the primary action (get a quote / call now) with the phone affordance, after the page has earned the click."},
         {"section": "Rich footer", "purpose": "A sitemap footer: services, coverage areas, company, contact (phone + hours), legal. Generosity after the page's restraint -- never a thin one-row strip."}
       ],
@@ -41,24 +40,29 @@
         "repeated CTA band"
       ],
       "footer": "Rich sitemap footer: Services, Coverage areas, Company, Contact (phone + hours), Legal.",
-      "notes": "Models the spirit of ui-ux-pro-max's 'Trust & Authority + Conversion' page but richer and brand-accurate. The inline hero form + proof bar + phone affordance are mandatory conversion mechanisms for a lead-gen service even if the original site lacked them. Map ALL source content in: every sector -> a pill, every size/package -> an item card, every benefit -> a value card or checklist item. Every card/pill/stat gets a relevant inline SVG icon (Lucide-style, no emoji)."
+      "notes": "The inline hero form is the conversion path. Proof and the phone come from the client: a proof section renders only with the client's real numbers or named quotes, and the phone affordance only with a real number; without them the picker drops them and says why. Map every sector into a pill, every size or package into an item card, every benefit into a value card. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item.",
+      "industries": [],
+      "product_types": [
+        "service", "local-service"
+      ],
+      "project_types": [],
+      "mechanism_needs": {"proof/stats bar": "stats", "named testimonial": "testimonials", "phone affordance": "phone"}
     },
     {
       "id": "saas-marketing",
       "goal": "saas-marketing",
       "keywords": [
-        "saas", "software", "platform", "product marketing", "marketing site",
-        "app", "tool", "dashboard product", "b2b", "developer tool", "api",
-        "sign up", "start free", "free trial", "pricing", "integrations", "workflow"
+        "saas", "software", "platform", "product marketing", "marketing site", "dashboard product",
+        "b2b", "developer tool", "api", "free trial", "pricing", "integrations", "workflow"
       ],
       "section_sequence": [
         {"section": "Hero (product mock + primary CTA)", "purpose": "Asymmetric hero: value headline + one-line lede + primary CTA on one side, a real product mock (screenshot or interactive demo) on the other. The mock is the proof."},
-        {"section": "Logo / trust strip", "purpose": "A single monochrome customer-logo row near the hero -- social proof before the feature tour. Skip if there are no real logos."},
-        {"section": "Value cards", "purpose": "3-5 outcome-led cards (not feature lists), each with an inline SVG icon and a concrete claim with a number where possible."},
+        {"section": "Logo / trust strip", "purpose": "A single monochrome customer-logo row near the hero -- social proof before the feature tour. Skip if there are no real logos.", "proof": "logos"},
+        {"section": "Value cards", "purpose": "3-5 outcome-led cards (not feature lists), each with a concrete claim with a number where possible."},
         {"section": "Split feature rows", "purpose": "3-5 marquee feature sections, each a 2-column zig-zag with a deep visual (annotated screenshot, before/after, synthetic UI). Depth over a dense feature grid."},
         {"section": "Integrations / ecosystem", "purpose": "The integrations or ecosystem the product plugs into, as a labelled grid of marks. Maps EVERY integration the source lists."},
-        {"section": "Metrics / outcomes band", "purpose": "A stats band of real outcomes (latency, time saved, adoption) -- organic numbers, not round marketing figures."},
-        {"section": "Social proof / case quote", "purpose": "A named, quantified customer quote or mini case study with attribution and a real metric."},
+        {"section": "Metrics / outcomes band", "purpose": "A stats band of real outcomes (latency, time saved, adoption) -- organic numbers, not round marketing figures.", "proof": "stats"},
+        {"section": "Social proof / case quote", "purpose": "A named, quantified customer quote or mini case study with attribution and a real metric.", "proof": "testimonials"},
         {"section": "Pricing teaser", "purpose": "A 'starts at $X' teaser linking out to full pricing -- never a full pricing table on the homepage."},
         {"section": "CTA band", "purpose": "A focused sign-up / start-free band repeating the single primary action."},
         {"section": "Rich footer", "purpose": "Sitemap footer by audience: Product, Solutions, Resources, Company, Legal."}
@@ -74,23 +78,31 @@
         "repeated CTA band"
       ],
       "footer": "Sitemap footer by audience: Product, Solutions, Resources, Company, Legal.",
-      "notes": "One primary path. Map every integration into the integrations grid and every differentiator into its own split feature row. Each value card / integration mark / stat gets an inline SVG icon (no emoji)."
+      "notes": "One primary path. Map every integration into the integrations grid and every differentiator into its own split feature row. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item.",
+      "industries": [
+        "saas", "developer-tools", "productivity", "ai-ml"
+      ],
+      "product_types": [
+        "saas", "software", "platform", "developer-tool", "api"
+      ],
+      "project_types": [],
+      "mechanism_needs": {"logo strip": "logos", "outcome metrics band": "stats", "named case quote": "testimonials"}
     },
     {
       "id": "ecommerce-product",
       "goal": "ecommerce-product",
       "keywords": [
-        "ecommerce", "e-commerce", "product page", "shop", "store", "buy",
-        "add to cart", "checkout", "retail", "dtc", "d2c", "merch", "catalog",
-        "product detail", "shipping", "returns", "in stock", "variants"
+        "ecommerce", "e-commerce", "product page", "store", "add to cart", "checkout",
+        "retail", "dtc", "d2c", "merch", "catalog", "product detail", "shipping", "returns",
+        "in stock", "variants"
       ],
       "section_sequence": [
         {"section": "Product hero (gallery + buy box)", "purpose": "Product imagery gallery on one side, buy box (title, price, variant pickers, add-to-cart) on the other. The buy box is the conversion path, above the fold."},
-        {"section": "Trust / shipping bar", "purpose": "A thin band of trust signals: free shipping threshold, returns window, secure checkout, in-stock status. Each with an inline SVG icon."},
-        {"section": "Key benefits / spec cards", "purpose": "Cards covering the concrete reasons to buy (materials, warranty, what's in the box), each with an inline SVG icon and a spec line."},
+        {"section": "Trust / shipping bar", "purpose": "A thin band of trust signals: free shipping threshold, returns window, secure checkout, in-stock status."},
+        {"section": "Key benefits / spec cards", "purpose": "Cards covering the concrete reasons to buy (materials, warranty, what's in the box) and a spec line."},
         {"section": "Variant / option grid", "purpose": "Every variant, size, or option as a selectable card/swatch. Map EVERY option the source lists -- one variant, one tile."},
         {"section": "Split feature rows", "purpose": "Zig-zag rows telling the product story with real photography or detail shots -- craft, use, results."},
-        {"section": "Reviews / social proof", "purpose": "Real, attributed reviews with a rating distribution -- named, specific, not 'amazing!'."},
+        {"section": "Reviews / social proof", "purpose": "Real, attributed reviews with a rating distribution -- named, specific, not 'amazing!'.", "proof": "reviews"},
         {"section": "Related / cross-sell", "purpose": "A small, curated set of related products -- not an endless grid."},
         {"section": "FAQ / shipping & returns", "purpose": "The objection-handling section: shipping, returns, sizing, care. Answers the questions that block checkout."},
         {"section": "CTA band (add to cart)", "purpose": "A sticky or repeated add-to-cart band so the conversion action is always reachable."},
@@ -107,23 +119,30 @@
         "FAQ objection handling"
       ],
       "footer": "Sitemap footer: Shop, Help (shipping & returns), Company, Legal, contact.",
-      "notes": "Conversion is the buy box. Vary image aspect ratios; never clip every shot to 1:1. Map every variant into the option grid; every spec into a card. Icons on trust signals and spec cards are inline SVG, no emoji."
+      "notes": "Conversion is the buy box. Vary image aspect ratios; never clip every shot to 1:1. Map every variant into the option grid; every spec into a card. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item.",
+      "industries": [
+        "ecommerce", "consumer-lifestyle", "luxury"
+      ],
+      "product_types": [
+        "store", "shop", "ecommerce", "physical-product"
+      ],
+      "project_types": [],
+      "mechanism_needs": {"attributed reviews": "reviews"}
     },
     {
       "id": "portfolio-agency",
       "goal": "portfolio-agency",
       "keywords": [
-        "portfolio", "agency", "studio", "creative", "designer", "freelance",
-        "case study", "work", "projects", "services agency", "branding",
-        "design studio", "showcase", "clients", "hire me", "let's talk"
+        "portfolio", "agency", "studio", "creative", "designer", "freelance", "case study",
+        "projects", "services agency", "branding", "design studio", "showcase", "clients"
       ],
       "section_sequence": [
         {"section": "Hero (statement + selected work peek)", "purpose": "A confident positioning statement with a peek of selected work. Editorial, asymmetric -- the work carries the page."},
         {"section": "Selected work grid", "purpose": "An irregular, editorial grid of case studies (varied aspect ratios, generous gaps). Each tile is a real project, not a card box."},
-        {"section": "Services / capabilities", "purpose": "What the studio does, as capability cards or a list -- each with an inline SVG icon. Map EVERY discipline the source lists."},
+        {"section": "Services / capabilities", "purpose": "What the studio does, as capability cards or a list. Map EVERY discipline the source lists."},
         {"section": "Split feature rows (case depth)", "purpose": "1-3 deep case studies as zig-zag rows: problem, approach, result with a real metric."},
         {"section": "Process / approach", "purpose": "How the studio works -- a few honest steps, not numbered chapter signposting for its own sake."},
-        {"section": "Client logos / proof", "purpose": "A monochrome client-logo wall or named testimonials with attribution."},
+        {"section": "Client logos / proof", "purpose": "A monochrome client-logo wall or named testimonials with attribution.", "proof": "logos"},
         {"section": "About / team", "purpose": "Who's behind the work -- real people, real photos or styled portraits."},
         {"section": "CTA band (start a project)", "purpose": "A direct 'start a project / let's talk' band with a real contact path."},
         {"section": "Rich footer", "purpose": "Sitemap footer: Work, Services, About, Contact, social."}
@@ -139,20 +158,25 @@
         "repeated CTA band"
       ],
       "footer": "Sitemap footer: Work, Services, About, Contact, social.",
-      "notes": "The work is the proof; description is supplementary. Use varied image ratios and an irregular grid -- never a tidy 3-equal-card row. Every capability and stat gets an inline SVG icon, no emoji."
+      "notes": "The work is the proof; description is supplementary. Use varied image ratios and an irregular grid -- never a tidy 3-equal-card row. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item.",
+      "industries": [],
+      "product_types": [
+        "portfolio", "agency", "studio"
+      ],
+      "project_types": [],
+      "mechanism_needs": {"client logo wall": "logos", "named testimonial": "testimonials"}
     },
     {
       "id": "content-publication",
       "goal": "content-publication",
       "keywords": [
-        "blog", "publication", "magazine", "editorial", "newsletter", "article",
-        "content site", "news", "media", "stories", "essays", "reading",
-        "subscribe", "archive", "writing", "journal"
+        "blog", "publication", "magazine", "editorial", "newsletter", "article", "content site",
+        "news", "media", "stories", "essays", "archive", "journal"
       ],
       "section_sequence": [
         {"section": "Hero (lead story + masthead)", "purpose": "A masthead with the lead story given editorial weight -- big headline, real image, byline. Sets the publication's voice."},
         {"section": "Featured stories grid", "purpose": "An editorial grid of featured pieces with varied prominence (one dominant, several secondary) -- not equal cards."},
-        {"section": "Category pills / sections", "purpose": "Every section/topic the publication covers, as a row of pills (each with an inline SVG glyph). Map EVERY category from the source."},
+        {"section": "Category pills / sections", "purpose": "Every section/topic the publication covers, as a row of pills. Map EVERY category from the source."},
         {"section": "Latest articles list", "purpose": "A scannable list of recent pieces with byline, date, and reading time -- typographic, not boxed."},
         {"section": "Editor's pick / pull-quote", "purpose": "A highlighted piece or a pull-quote that carries the editorial point of view, with attribution."},
         {"section": "Newsletter signup", "purpose": "An inline newsletter capture (not a timed modal) with a clear value line and a single email field."},
@@ -171,23 +195,30 @@
         "repeated subscribe band"
       ],
       "footer": "Sitemap footer: Sections, Archive, About, Subscribe, legal.",
-      "notes": "Typography and hierarchy carry the page. Map every topic into a category pill and every recent piece into the list. Newsletter capture is inline, never a timed interstitial. Icons are inline SVG, no emoji."
+      "notes": "Typography and hierarchy carry the page. Map every topic into a category pill and every recent piece into the list. Newsletter capture is inline, never a timed interstitial. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item.",
+      "industries": [
+        "editorial-media"
+      ],
+      "product_types": [
+        "editorial", "publication", "media", "blog", "newsletter"
+      ],
+      "project_types": [],
+      "mechanism_needs": {}
     },
     {
       "id": "app-mobile-landing",
       "goal": "app-mobile-landing",
       "keywords": [
-        "mobile app", "ios app", "android app", "app landing", "download",
-        "app store", "play store", "get the app", "phone app", "mobile",
-        "app marketing", "install", "screenshots", "features app"
+        "mobile app", "ios app", "android app", "app landing", "app store", "play store",
+        "get the app", "phone app", "app marketing", "screenshots", "features app"
       ],
       "section_sequence": [
         {"section": "Hero (device mock + store badges)", "purpose": "A device mock (real app screen) beside a value headline and app-store badges. The store badges are the conversion path, above the fold."},
-        {"section": "Proof/stats bar", "purpose": "A thin band of real numbers (downloads, rating, active users) -- organic, not round marketing figures."},
-        {"section": "Value cards", "purpose": "3-5 cards naming what the app does for the user, each with an inline SVG icon and a concrete benefit."},
+        {"section": "Proof/stats bar", "purpose": "A thin band of real numbers (downloads, rating, active users) -- organic, not round marketing figures.", "proof": "stats"},
+        {"section": "Value cards", "purpose": "3-5 cards naming what the app does for the user, each with a concrete benefit."},
         {"section": "Screenshot carousel / gallery", "purpose": "Real app screenshots in device frames showing the key flows -- varied, not all clipped to one ratio."},
         {"section": "Split feature rows", "purpose": "Zig-zag rows expanding the marquee features with a screenshot each -- depth over a dense grid."},
-        {"section": "Social proof / reviews", "purpose": "Named, specific app-store reviews or a rating breakdown -- not 'great app!'."},
+        {"section": "Social proof / reviews", "purpose": "Named, specific app-store reviews or a rating breakdown -- not 'great app!'.", "proof": "reviews"},
         {"section": "How it works / onboarding", "purpose": "A short, honest set of steps from install to value."},
         {"section": "CTA band (download)", "purpose": "A focused download band repeating the store badges and the single primary action."},
         {"section": "Rich footer", "purpose": "Sitemap footer: App, Support, Company, Legal, store links."}
@@ -203,7 +234,93 @@
         "repeated download band"
       ],
       "footer": "Sitemap footer: App, Support, Company, Legal, store links.",
-      "notes": "Conversion is the store badge. Use real device-framed screenshots with varied crops. Map every feature into a split row and every screen into the gallery. Icons on value cards and trust signals are inline SVG, no emoji."
+      "notes": "Conversion is the store badge. Use real device-framed screenshots with varied crops. Map every feature into a split row and every screen into the gallery. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item.",
+      "industries": [],
+      "product_types": [
+        "mobile-app"
+      ],
+      "project_types": [
+        "mobile-app"
+      ],
+      "mechanism_needs": {"proof/stats bar": "stats", "attributed reviews": "reviews"}
+    },
+    {
+      "id": "b2b-marketplace",
+      "goal": "b2b-marketplace",
+      "keywords": [
+        "b2b marketplace", "marketplace", "wholesale", "wholesaler", "suppliers", "supplier",
+        "distributors", "distributor", "procurement", "trade accounts", "trade account",
+        "bulk orders", "bulk ordering", "in bulk", "sourcing", "pharmacy supply",
+        "drug warehouses", "warehouses", "building materials", "b2b ordering", "reorder",
+        "catalog of suppliers"
+      ],
+      "industries": [
+        "b2b-marketplace", "marketplace", "pharmacy-supply"
+      ],
+      "product_types": [
+        "marketplace", "b2b-marketplace"
+      ],
+      "project_types": [],
+      "section_sequence": [
+        {"section": "Hero (two-sided promise + account request)", "purpose": "Who buys from whom, in one headline, and the primary action: open an account or request access. A real product view (the catalog, an order, the app) on the other side. The supplier path is a secondary link, never a second filled button."},
+        {"section": "Buyer and supplier paths", "purpose": "Two panels side by side, one per side of the market, each with what that side gets and its own action. Unequal widths when one side is the main audience."},
+        {"section": "Categories", "purpose": "Every category the catalog carries, as a scannable list or pills. Counts only when the client gives real ones."},
+        {"section": "How ordering works", "purpose": "Three to five steps from search to delivery: search, compare, order, receive, pay. Real screens where the client has them."},
+        {"section": "Split feature rows (real app screens)", "purpose": "The marquee capabilities (reorder, price comparison, credit, tracking), each a row with a real screen."},
+        {"section": "Delivery, coverage and payment terms", "purpose": "Where it delivers, how fast, and the payment terms (credit, cash on delivery, invoices). This answers the questions a trade buyer asks before an account."},
+        {"section": "Numbers band", "proof": "stats", "purpose": "Real numbers from the client (buyers, suppliers, orders, cities). Only numbers the client has measured."},
+        {"section": "Buyer or supplier quote", "proof": "testimonials", "purpose": "One named quote from a real buyer or supplier, with the business name and city."},
+        {"section": "CTA band (open an account, or join as a supplier)", "purpose": "The primary action repeated, with the supplier path as a secondary link."},
+        {"section": "FAQ (terms, minimum order, delivery, returns)", "purpose": "The objections that stop a trade account: minimum order, delivery windows, returns, credit, who can register."},
+        {"section": "Rich footer", "purpose": "Sitemap footer: For buyers, For suppliers, Categories, Company, Contact, Legal, app store links when there is an app."}
+      ],
+      "cta_placement": "Open an account (or request access) in the hero and the CTA band; the supplier path as a secondary link in both; the app store links in the footer when there is an app.",
+      "conversion_mechanisms": [
+        "account request in hero",
+        "separate buyer and supplier paths",
+        "category navigation",
+        "delivery and payment terms stated",
+        "proof/stats bar",
+        "named testimonial",
+        "FAQ objection handling",
+        "repeated CTA band"
+      ],
+      "mechanism_needs": {"proof/stats bar": "stats", "named testimonial": "testimonials"},
+      "footer": "Rich sitemap footer: For buyers, For suppliers, Categories, Company, Contact, Legal.",
+      "notes": "A marketplace sells to two sides at once; the page names both and leads with the side the brief names as the main audience. Show the real catalog and ordering screens. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item."
+    },
+    {
+      "id": "pre-launch",
+      "goal": "pre-launch",
+      "keywords": [
+        "pre-launch", "prelaunch", "waitlist", "wait list", "coming soon", "early access",
+        "launching soon", "not launched", "private beta"
+      ],
+      "industries": [],
+      "product_types": [],
+      "project_types": [],
+      "section_sequence": [
+        {"section": "Hero (promise + early-access form)", "purpose": "What the product will do and for whom, in one headline. The early-access form is the call to action. The launch status is stated plainly: a date, a season, or in private pilot."},
+        {"section": "The problem", "purpose": "The problem the product solves, in the audience's own words. No figure the client has not measured."},
+        {"section": "How it will work", "purpose": "Three to five honest steps, or a real prototype screen labelled as a prototype."},
+        {"section": "What early access gets you", "purpose": "What joining now gives: first access, founding pricing, a say in what gets built. Only what the client will honor."},
+        {"section": "Who is building it", "purpose": "The real team or founder, named, and why they are building it. Before there are customers, the people are the reason to believe."},
+        {"section": "FAQ", "purpose": "When it launches, what it will cost, where it works, what happens to the email address."},
+        {"section": "CTA band (join early access)", "purpose": "The early-access form repeated, with the launch status."},
+        {"section": "Compact footer", "purpose": "Contact, legal, social. Short, since there is little to map yet."}
+      ],
+      "cta_placement": "The early-access form in the hero and repeated in the CTA band; nothing else asks for the visitor's details.",
+      "conversion_mechanisms": [
+        "early-access form in hero",
+        "launch status stated",
+        "named team or founder",
+        "privacy line under the form",
+        "FAQ objection handling",
+        "repeated early-access band"
+      ],
+      "mechanism_needs": {},
+      "footer": "Compact footer: contact, legal, social.",
+      "notes": "No proof section before there is proof. A page that shows invented numbers, quotes or client marks spends the trust it is asking for. When a pilot gives real results, move to the live sequence for the business. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item."
     }
   ]
 }

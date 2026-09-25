@@ -40,7 +40,7 @@ EXPECTED = {
     "natural-text-on-the-brand", "neutrals-follow-the-brand", "support-clear-of-banned-pairs",
     "fills-on-every-placement", "distinctness-on-a-grey-reference",
     "eyebrow-is-text",
-    "edge-weight-inside", "faq-and-footer-contracts", "existing-system-wins",
+    "edge-weight-inside", "faq-and-footer-contracts", "existing-system-wins", "client-identity-wins",
     "brand-leads-by-reach", "natural-fill-for-white-text", "neutrals-lean-along-the-brand",
     "support-in-the-brand-family", "grey-support-is-neutral", "fills-on-every-control-surface",
     "links-on-status-soft-fills", "distinctness-on-saturated-brands",
