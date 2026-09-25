@@ -1,10 +1,10 @@
 ---
 id: distinctness
 title: Opposite characters build measurably different systems
-status: active
+status: superseded
 areas: [output]
 supersedes: null
-superseded_by: null
+superseded_by: distinctness-at-a-glance
 ---
 
 # Opposite characters build measurably different systems

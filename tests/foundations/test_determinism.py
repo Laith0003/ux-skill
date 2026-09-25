@@ -13,6 +13,8 @@ from pathlib import Path
 from engine.foundations import Token, TokenSet, build_color, dump_dtcg, to_css, to_dtcg
 from engine.synthesizer.axes import AxisValues
 
+from tests.foundations.trials import TRIALS
+
 REPO = Path(__file__).resolve().parents[2]
 SEEDS = ("#3366FF", "#FFD400", "#6B4423")
 
@@ -26,7 +28,7 @@ for seed in sys.argv[1:]:
     ts = build_color(axes, seed).tokens
     out[seed] = {"css": to_css(ts), "dtcg": dump_dtcg(ts)}
 sys.stdout.write(json.dumps(out))
-"""
+""".replace("TRIALS_HERE", json.dumps(TRIALS))
 
 
 def _run(hash_seed):
@@ -86,8 +88,7 @@ from pathlib import Path
 from engine.foundations.emit import (
     brief_audience, choose_axes, make_system, resolve_arabic, unread_lines)
 out = {}
-for name, brand in (("clinic", "#0F766E"), ("devtool", "#6D28D9"), ("restaurant", "#E85D04"),
-                    ("fintech-ar", "#2563EB")):
+for name, brand in TRIALS_HERE.items():
     brief = json.loads(Path("tests/foundations/briefs", name + ".json").read_text("utf-8"))
     axes, source = choose_axes(brief, None)
     audience = brief_audience(brief)
@@ -95,7 +96,7 @@ for name, brand in (("clinic", "#0F766E"), ("devtool", "#6D28D9"), ("restaurant"
                          rule_pack=True, audience=audience, unread=unread_lines(brief))
     out[name] = dict(system.files)
 sys.stdout.write(json.dumps(out))
-"""
+""".replace("TRIALS_HERE", json.dumps(TRIALS))
 
 
 def test_the_trial_briefs_give_byte_identical_files_across_hash_seeds():

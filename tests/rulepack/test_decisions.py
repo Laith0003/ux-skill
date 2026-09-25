@@ -31,7 +31,7 @@ EXPECTED = {
     "exact-fill-states", "ring-room", "brief-fields-checked", "font-files",
     "strong-under-high-contrast", "grey-brand-support-hue", "art-composition",
     "motion-check-owners", "space-relationship-roles", "page-regions-by-tier", "layout-aliases",
-    "grey-accent-clear-of-status",
+    "distinctness-at-a-glance", "grey-accent-clear-of-status",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",
@@ -42,6 +42,7 @@ SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-e
               "expressive-motion": "motion-check-owners",
               "space-roles": "space-relationship-roles", "page-regions": "page-regions-by-tier",
               "breakpoints-are-reference-values": "layout-aliases",
+              "distinctness": "distinctness-at-a-glance",
               "grey-brand-support-hue": "grey-accent-clear-of-status"}
 
 

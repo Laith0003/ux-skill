@@ -10,6 +10,8 @@ from engine.foundations.composition import DESCRIPTIONS, SCORES, choose
 from engine.foundations.emit import brief_audience, choose_axes, make_system
 from engine.synthesizer.axes import AxisValues
 
+from tests.foundations.trials import TRIALS
+
 BRIEFS = Path(__file__).resolve().parent / "briefs"
 
 
@@ -49,8 +51,7 @@ def test_the_report_and_the_result_say_which_and_why():
 
 def test_the_report_opens_with_one_character_sentence_per_system():
     sentences = {}
-    for name, brand in (("clinic", "#0F766E"), ("devtool", "#6D28D9"),
-                        ("restaurant", "#E85D04"), ("fintech-ar", "#2563EB")):
+    for name, brand in TRIALS.items():
         axes, audience = _trial(name)
         report = make_system(brand, axes, "x", audience=audience).report
         sentences[name] = report.split("\n")[4]

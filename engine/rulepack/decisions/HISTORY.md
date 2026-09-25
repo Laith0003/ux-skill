@@ -15,6 +15,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Languages are tags, an Arabic primary script ships Arabic, and every field gets a line](brief-fields-checked.md)
 - [A brief can open the page dark, and color-scheme follows every scheme](default-scheme.md)
 - [Opposite characters build measurably different systems](distinctness.md)
+- [Distinctness is measured on what a person sees at a glance, and each axis moves a named quantity](distinctness-at-a-glance.md)
 
 ## Roles per foundation
 

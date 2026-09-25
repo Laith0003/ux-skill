@@ -1,18 +1,94 @@
 """Character: every axis reaches every foundation it should, continuously,
 over a range wide enough to see; the quantities keep their documented
 ranges; and industry words written with spaces."""
+import functools
+import math
+
 import pytest
 
-from engine.foundations import build_system, character
+from engine.foundations import build_system, character, fonts
 from engine.foundations.build import FOUNDATIONS
+from engine.foundations.color_math import hex_to_oklch
 from engine.synthesizer.axes import AXIS_NAMES, AxisValues, compute_axes
 
-MID = dict(zip(AXIS_NAMES, [0.5] * 7))
+from tests.foundations.trials import MID
 
 
-def _dump(axes, root):
-    ts = build_system(axes, "#3366FF").tokens
-    return [(t.path, t.value, t.modes) for t in ts.tokens() if t.path.split(".", 1)[0] == root]
+def _px(v):
+    return v["value"] * (16 if v.get("unit") == "rem" else 1)
+
+
+def _b(hx):
+    _, chroma, hue = hex_to_oklch(hx[:7])
+    return chroma * math.sin(math.radians(hue))
+
+
+def _alpha(hx):
+    return int(hx[7:9], 16)
+
+
+def _status_chroma(ts):
+    return sum(hex_to_oklch(ts.resolve(f"color.{s}.500"))[1]
+               for s in character.STATUS_HUES) / len(character.STATUS_HUES)
+
+
+# For every axis-to-foundation pair in INFLUENCE, the visible quantities
+# that must move as the axis goes from 0 to 1 with the others at 0.5 (brand
+# #3366FF): (what, read from the built tokens, direction, least total move).
+# Direction 1: it never falls along the sweep; -1: it never rises. The
+# least move is ours, about two thirds of what the engine moves it.
+QUANTITIES = {
+    ("warmth", "color"): (
+        ("neutral b, cool to warm", lambda ts: _b(ts.resolve("color.neutral.500")), 1, 0.04),
+        ("info hue, turning toward the warm hue",
+         lambda ts: character.hue_delta(245.0, hex_to_oklch(ts.resolve("color.info.500"))[2]),
+         -1, 12.0)),
+    ("warmth", "imagery"): (
+        ("brand wash alpha", lambda ts: _alpha(ts.resolve("imagery.tint")), 1, 40),),
+    ("contrast", "color"): (("mean status chroma", _status_chroma, 1, 0.06),),
+    ("contrast", "type"): (
+        ("hero size px", lambda ts: _px(ts.resolve("type.text.hero")["fontSize"]), 1, 40),),
+    ("contrast", "elevation"): (
+        ("card shadow alpha", lambda ts: _alpha(ts.resolve("elevation.card")[0]["color"]),
+         1, 25),),
+    ("contrast", "border"): (
+        ("focus ring px", lambda ts: _px(ts.resolve("border.focus-ring.width")), 1, 1),),
+    ("density", "space"): (
+        ("card padding px", lambda ts: _px(ts.resolve("space.card.padding")), -1, 12),),
+    ("density", "layout"): (
+        ("desktop region gap px", lambda ts: _px(ts.resolve("layout.region-gap.desktop")),
+         -1, 48),),
+    ("density", "type"): (
+        ("body line height", lambda ts: ts.resolve("type.text.body")["lineHeight"], -1, 0.08),),
+    ("geometry", "radius"): (
+        ("control radius px", lambda ts: _px(ts.resolve("radius.control")), 1, 8),),
+    ("geometry", "imagery"): (
+        ("card image ratio", lambda ts: ts.resolve("imagery.ratio.card"), -1, 0.15),),
+    ("formality", "radius"): (
+        ("control radius px", lambda ts: _px(ts.resolve("radius.control")), -1, 4),),
+    ("formality", "type"): (
+        ("label tracking px", lambda ts: ts.resolve("type.tracking.label")["value"], 1, 0.6),),
+    ("formality", "elevation"): (
+        ("card shadow alpha", lambda ts: _alpha(ts.resolve("elevation.card")[0]["color"]),
+         -1, 8),),
+    ("formality", "motion"): (
+        ("expressive overshoot", lambda ts: ts.resolve("motion.expressive.curve")[1], -1, 0.2),),
+    ("formality", "imagery"): (
+        ("card image ratio", lambda ts: ts.resolve("imagery.ratio.card"), 1, 0.15),),
+    ("motion", "motion"): (
+        ("expressive overshoot", lambda ts: ts.resolve("motion.expressive.curve")[1], 1, 0.3),
+        ("reveal duration ms", lambda ts: ts.resolve("motion.reveal.duration")["value"],
+         1, 100)),
+    ("type_personality", "type"): (
+        ("display face's type personality",
+         lambda ts: fonts.BY_FAMILY[ts.resolve("type.face.display")[0]].place[3], 1, 0.5),),
+}
+
+
+@functools.lru_cache(maxsize=None)
+def _sweep(axis):
+    return tuple(build_system(AxisValues(**dict(MID, **{axis: i / 10})), "#3366FF").tokens
+                 for i in range(11))
 
 
 def test_influence_names_every_axis_and_real_foundations():
@@ -23,12 +99,20 @@ def test_influence_names_every_axis_and_real_foundations():
     assert reached == names
 
 
-@pytest.mark.parametrize("axis, root", [(a, r) for a, roots in character.INFLUENCE.items()
-                                        for r in roots])
-def test_each_axis_moves_each_foundation_it_names(axis, root):
-    low = AxisValues(**dict(MID, **{axis: 0.0}))
-    high = AxisValues(**dict(MID, **{axis: 1.0}))
-    assert _dump(low, root) != _dump(high, root), (axis, root)
+def test_every_influence_pair_names_a_quantity():
+    pairs = {(a, r) for a, roots in character.INFLUENCE.items() for r in roots}
+    assert set(QUANTITIES) == pairs
+
+
+@pytest.mark.parametrize("axis, root", sorted(QUANTITIES))
+def test_each_axis_moves_a_named_quantity_one_way_and_far_enough(axis, root):
+    """Not only that some token under the root changes: each named quantity
+    moves one way along the whole sweep, by at least the stated amount."""
+    for what, read, direction, least in QUANTITIES[(axis, root)]:
+        values = [direction * read(ts) for ts in _sweep(axis)]
+        steps = [b - a for a, b in zip(values, values[1:])]
+        assert min(steps) >= -1e-9, (axis, root, what, values)
+        assert values[-1] - values[0] >= least, (axis, root, what, values)
 
 
 @pytest.mark.parametrize("fn", [character.roundness, character.depth, character.overshoot,

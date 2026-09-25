@@ -12,9 +12,12 @@ a foundation that needs a discrete choice (a face, a pill corner, a brand
 role) takes it from one of these quantities, so two briefs that differ on
 an axis differ in the output.
 
-INFLUENCE says which axes reach which foundation. A test moves each axis
-from 0 to 1 with the others at 0.5 and requires every foundation it names
-to change, so a mapping cannot quietly drop an axis.
+INFLUENCE says which axes reach which foundation. For every pair a test
+names one visible quantity in the built tokens (the neutrals' b, the
+status chroma, the card padding and so on), moves the axis from 0 to 1
+with the others at 0.5, and requires that quantity to move one way only
+and by at least a stated amount, so a mapping cannot quietly drop an axis
+while another token in the same foundation still moves.
 """
 from __future__ import annotations
 
@@ -24,7 +27,8 @@ from typing import Dict, Mapping, Tuple
 
 from engine.synthesizer.axes import AxisValues
 
-# axis -> the foundations it must move (tests/foundations/test_character.py).
+# axis -> the foundations it must move; each pair's quantity is in
+# tests/foundations/test_character.py (QUANTITIES).
 INFLUENCE: Mapping[str, Tuple[str, ...]] = MappingProxyType({
     "warmth": ("color", "imagery"),
     "contrast": ("color", "type", "elevation", "border"),
