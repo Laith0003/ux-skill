@@ -317,8 +317,17 @@ def test_checks_citing_aaa_block_and_so_do_our_floors():
         assert "| blocking | fails WCAG at level A or AA; or fails a check the gate runs or a " \
                "contract pairing, AAA criteria and our floors included |" in audit
         assert "misses an AAA criterion the system does not apply |" in audit
-        assert "10 percent" not in audit and "hand edit" not in audit
+        assert "hand edit" not in audit
+        assert "A value that passes but sits within 10 percent of its minimum is a minor " \
+               "finding: record it, never block on it." in audit
         assert "A missing contract is a serious finding" in audit
+
+
+def test_a_handoff_starts_only_when_asked():
+    for f in FOUNDATIONS:
+        handoff = PACK_FILES[f"{PACK}/{f.name}/handoff.md"]
+        assert "- Hand off only when someone asks for a handoff; a build or an audit does not " \
+               "start one." in handoff
 
 
 def test_the_pack_is_the_same_under_every_hash_seed():

@@ -417,8 +417,9 @@ def _audit(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[RoleEntry
               "criterion the system does not apply |",
               "| minor | rare and does not stop the task |", "",
               "A missing contract is a serious finding: nothing states how that element must "
-              "behave. Every finding has a level. A value that cannot be measured is reported as "
-              "unmeasured, never as a pass.", "",
+              "behave. A value that passes but sits within 10 percent of its minimum is a minor "
+              "finding: record it, never block on it. Every finding has a level. A value that "
+              "cannot be measured is reported as unmeasured, never as a pass.", "",
               "## Report", "",
               "```",
               f"{title} audit: <what was audited>; modes <the modes audited>",
@@ -439,6 +440,8 @@ def _handoff(f: Foundation, g: Guidance, ts: TokenSet, entries: Sequence[RoleEnt
     lines = [f"# {title} handoff", "",
              f"Use this file to hand the {title.lower()} tokens to developers. It documents "
              "what is built; it does not audit or redesign.", "", "## Inputs", "",
+             "- Hand off only when someone asks for a handoff; a build or an audit does not "
+             "start one.",
              "- tokens.css and tokens.json from the build are the source. Never retype a "
              "value; link or import the files.",
              "- CSS custom properties are the default output and tokens.css already holds "
