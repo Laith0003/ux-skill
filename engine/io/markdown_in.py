@@ -37,6 +37,7 @@ from engine.foundations.errors import InputError, _brief_text
 from engine.foundations.modes import AXES
 from engine.foundations.values import GENERIC_FAMILIES, STROKE_STYLES
 from engine.foundations.tokens import Token, TokenSet
+from engine.io.mode_words import axis_of
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source
 from engine.io.values_in import (COLOR_KEYWORDS, CSS_KEYWORDS, EASING_KEYWORDS, GamutMapped,
                                  NotRead, css_alias, read_value, split_top)
@@ -161,13 +162,12 @@ def _valueish(cell: str) -> bool:
                                                 for p in split_top(text))
 
 
-def _known_axis(*words: str) -> Optional[str]:
-    """The named axis whose values are these words (both values, or the
-    non-base one alone), or None."""
-    for axis, values in AXES.items():
-        if (len(words) == 2 and set(words) == set(values)) or words == (values[1],):
-            return axis
-    return None
+def _known_axis(words: Sequence[str], headers: Sequence[str]) -> Optional[Tuple[str, int]]:
+    """(axis, index of its base) when the mode words name an engine axis
+    (both values, or the non-base one alone, index -1), by the importers'
+    shared matcher; the headers as written may hold the axis's own name,
+    which contrast and motion need. None otherwise."""
+    return axis_of(list(words), headers) if all(words) else None
 
 
 def _path(name: str) -> str:
@@ -221,11 +221,12 @@ def _table(raw: List[str]) -> Optional[_Table]:
                 f"{raw[value[0]]} was read and {_and(left)} {'were' if len(left) > 1 else 'was'} "
                 "left out; keep one value column, or head the columns with mode names such as "
                 "Light and Dark if they differ by mode")
-        modes = [(c, _mode_word(raw[c])) for c in other if _known_axis(_mode_word(raw[c]))]
+        modes = [(c, hit[0]) for c in other
+                 for hit in [_known_axis([_mode_word(raw[c])], [raw[c]])]
+                 if hit is not None and hit[1] == -1]
         if len(modes) == 1:
-            table.mode, word = modes[0]
-            table.axis = _known_axis(word) or ""
-            table.values = AXES[table.axis][0], word
+            table.mode, table.axis = modes[0]
+            table.values = AXES[table.axis][:2]
         left = [raw[c] for c in other if c != table.mode]
         if left:
             table.notes.append(
@@ -255,10 +256,10 @@ def _table(raw: List[str]) -> Optional[_Table]:
                            "read, since a mode is named with letters; head them with mode names "
                            "such as Light and Dark")
         return table
-    axis = _known_axis(*words)
-    if axis:
-        base_word = AXES[axis][0]
-        table.base, table.mode = other if words[0] == base_word else other[::-1]
+    known = _known_axis(words, [raw[c] for c in other])
+    if known is not None and known[1] != -1:
+        axis = known[0]
+        table.base, table.mode = other if known[1] == 0 else other[::-1]
         table.axis, table.values = axis, AXES[axis][:2]
     else:
         table.base, table.mode = other
