@@ -187,7 +187,9 @@ def _alpha(text: Optional[str]) -> float:
     return _channel(text, 1)
 
 
-def _hsl_to_rgb(h: float, s: float, lightness: float) -> Tuple[float, float, float]:
+def hsl_to_rgb(h: float, s: float, lightness: float) -> Tuple[float, float, float]:
+    """An hsl color (hue in degrees, saturation and lightness from 0 to 1)
+    as sRGB channels from 0 to 255."""
     c = (1 - abs(2 * lightness - 1)) * s
     hp = (h % 360) / 60
     x = c * (1 - abs(hp % 2 - 1))
@@ -210,6 +212,12 @@ def _hue(text: str, part: str) -> float:
     return _finite(float(part))
 
 
+def hue_degrees(part: str) -> float:
+    """A hue in degrees: a number, or an angle in deg, turn, rad or grad.
+    Raises NotRead, naming the fix, for any other unit."""
+    return _hue(part, part)
+
+
 def _color_function(text: str, name: str, body: str,
                     mapped: Optional[List[GamutMapped]] = None) -> str:
     name = name.lower()
@@ -229,7 +237,7 @@ def _color_function(text: str, name: str, body: str,
                               f"comma syntax does not allow; write {name}({channels[0]}, "
                               f"{channels[1].rstrip('%')}%, {channels[2].rstrip('%')}%)")
             sat, light = (_channel(c.rstrip("%"), 1) / 100 for c in channels[1:])
-            rgb = _hsl_to_rgb(hue, sat, light)
+            rgb = hsl_to_rgb(hue, sat, light)
         else:  # oklch, oklab
             lightness = _channel(channels[0], 1)
             if name == "oklch":

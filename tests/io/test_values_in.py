@@ -342,3 +342,13 @@ def test_the_duration_in_a_shorthand_is_matched_in_any_case(text):
     with pytest.raises(NotRead) as exc:
         read_value(text)
     assert "is a transition or animation shorthand" in str(exc.value)
+
+
+def test_a_font_with_a_duration_like_word_needs_a_generic_family_or_quotes():
+    # The limit of the reading: without a generic family last, the text is
+    # as much a transition list as a font stack, so it is named as the
+    # shorthand and the fix is to quote the name.
+    with pytest.raises(NotRead) as exc:
+        read_value("Font 2s, Inter")
+    assert "is a transition or animation shorthand" in str(exc.value)
+    assert read_value('"Font 2s", Inter') == ("fontFamily", ["Font 2s", "Inter"])
