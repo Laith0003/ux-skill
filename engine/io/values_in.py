@@ -369,6 +369,14 @@ def read_value(text: Any, mapped: Optional[List[GamutMapped]] = None) -> Tuple[s
             return "cubicBezier", curve
         raise NotRead(f"{text} uses {name}(), which this reader does not read; write a plain "
                       "value")
+    # A transition or animation shorthand, one member or a comma list of
+    # them: a member of several words that holds a duration. Checked before
+    # the font reading, which would take `opacity 200ms ease` as a name.
+    if any(len(split_top(p, " ")) > 1 and any(
+            (_UNIT.match(w) or [None] * 3)[2] in ("ms", "s") for w in split_top(p, " "))
+           for p in split_top(text)):
+        raise NotRead(f"{text} is a transition or animation shorthand; write its duration and "
+                      "its curve as separate tokens")
     names = _font_names(text)
     if names is not None:
         return "fontFamily", names
@@ -386,9 +394,6 @@ def read_value(text: Any, mapped: Optional[List[GamutMapped]] = None) -> Tuple[s
                       "height as separate tokens")
     if re.fullmatch(_NUMBER + r"\s+" + _NUMBER + r"%\s+" + _NUMBER + "%", text):
         raise NotRead(f"{text} is hsl channels without hsl(); write hsl({text}) or hex")
-    if len(words) > 1 and any((_UNIT.match(w) or [None] * 3)[2] in ("ms", "s") for w in words):
-        raise NotRead(f"{text} is a transition or animation shorthand; write its duration and "
-                      "its curve as separate tokens")
     layers = split_top(text)
     # A shadow layer has two lengths at least; a length here is 0 or any
     # length unit, so a relative one gets its own refusal from the layer.

@@ -301,3 +301,25 @@ def test_float_noise_at_the_gamut_edge_is_not_reported_as_mapped():
     # #FF0000 written as oklch with the usual rounding sits a hair outside sRGB.
     assert read_value("oklch(62.8% 0.258 29.234)", mapped) == ("color", "#FF0000")
     assert mapped == []
+
+
+@pytest.mark.parametrize("text", [
+    "opacity 200ms ease, transform 300ms ease",
+    "opacity 200ms",
+    "color .2s linear, background-color 150ms",
+    "fade 1s ease-out",
+])
+def test_a_transition_list_is_named_not_read_as_a_font_stack(text):
+    with pytest.raises(NotRead) as exc:
+        read_value(text)
+    assert str(exc.value) == (f"{text} is a transition or animation shorthand; write its "
+                              "duration and its curve as separate tokens")
+
+
+@pytest.mark.parametrize("text,names", [
+    ('"Inter", system-ui, sans-serif', ["Inter", "system-ui", "sans-serif"]),
+    ("Body Sans, ui-sans-serif, sans-serif", ["Body Sans", "ui-sans-serif", "sans-serif"]),
+    ('"Font 2s", serif', ["Font 2s", "serif"]),
+])
+def test_a_font_stack_still_reads_after_the_transition_check(text, names):
+    assert read_value(text) == ("fontFamily", names)
