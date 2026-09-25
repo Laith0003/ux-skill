@@ -15,7 +15,7 @@ Border systems can name a width for every structural level and every state, seve
 
 ## Decision
 
-Border has four width roles: border.separator between siblings, border.outline for a resting edge, border.emphasis for an edge that must outrank its neighbors, and border.active for a selected edge. The focus ring has its own width and offset roles, and two style roles cover solid and placeholder strokes. Border colors live in color: an edge at rest or selected takes a color.line role (subtle, input, selected), a danger or error edge takes color.status.danger.strong, and a disabled edge takes the role its contract names. A border role never carries a color.
+Border has four width roles: border.separator between siblings, border.outline for a resting edge, border.emphasis for an edge that must outrank its neighbors, and border.active for a selected edge. The focus ring has its own width and offset roles, and two style roles cover solid and placeholder strokes. Border colors live in color: an edge at rest or selected takes a color.line role (subtle, input, selected), a danger or error edge takes color.status.danger.strong, and a disabled edge, in error or not, takes the role its contract names. A border role never carries a color.
 
 ## Why
 
