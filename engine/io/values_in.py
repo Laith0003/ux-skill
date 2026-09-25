@@ -52,7 +52,8 @@ EASING_KEYWORDS = {
     "ease-out": [0, 0, 0.58, 1], "ease-in-out": [0.42, 0, 0.58, 1],
 }
 # CSS keywords that take a value from elsewhere: none of them is a value.
-CSS_KEYWORDS = ("inherit", "initial", "unset", "revert", "currentcolor", "auto", "none")
+CSS_KEYWORDS = ("inherit", "initial", "unset", "revert", "revert-layer", "currentcolor", "auto",
+                "none")
 # The three color keywords read as colors; any other bare word is ambiguous.
 COLOR_KEYWORDS = {"white": "#FFFFFF", "black": "#000000", "transparent": "#00000000"}
 _RELATIVE = {"em": "the parent's font size", "%": "its container", "vw": "the viewport",
@@ -319,7 +320,8 @@ def read_value(text: Any, mapped: Optional[List[GamutMapped]] = None) -> Tuple[s
                       "on, so write the color as hex")
     if lower in CSS_KEYWORDS:
         raise NotRead(f"{text} is a CSS keyword that takes its value from elsewhere, so it has no "
-                      "value of its own")
+                      "value of its own; leave it out, or write the value it stands for as a "
+                      "token")
     if _HEX.match(text):
         return "color", _hex(text)
     if lower in COLOR_KEYWORDS:

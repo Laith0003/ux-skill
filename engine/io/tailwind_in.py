@@ -60,7 +60,10 @@ def import_tailwind_json(text: str, source: Source) -> Imported:
     if not isinstance(doc, dict):
         raise InputError(f"{source.path} does not hold a JSON object; export the theme with "
                          f"{EXPORT_COMMAND}")
-    theme = doc["theme"] if isinstance(doc.get("theme"), dict) else {
+    if "theme" in doc and not isinstance(doc["theme"], dict):
+        raise InputError(f"{source.path} holds theme as {json.dumps(doc['theme'])}, not an "
+                         f"object; export the resolved theme instead: {EXPORT_COMMAND}")
+    theme = doc["theme"] if "theme" in doc else {
         k: v for k, v in doc.items() if k not in _CONFIG_KEYS}
     if "extend" in theme:
         raise InputError(f"{source.path} holds theme.extend, which Tailwind has not merged yet; "
@@ -92,8 +95,13 @@ def import_tailwind_json(text: str, source: Source) -> Imported:
                 walk(value, src)
                 continue
             entries += 1
-            dst = [_SEGMENT.sub("_", k) for k in src]
+            dst = [_SEGMENT.sub("_", k) or "_" for k in src]
             path = ".".join(dst)
+            if value is None or isinstance(value, bool):
+                not_read.append(Item(where, source_name, f"is {json.dumps(value)}, a JSON "
+                                     "literal, not a theme value; write the value as a string, "
+                                     "or remove the key"))
+                continue
             text_value, extra = _tailwind_value(src[0], value)
             try:
                 if isinstance(text_value, list):
@@ -110,8 +118,9 @@ def import_tailwind_json(text: str, source: Source) -> Imported:
                                      "key already names; rename one of the two keys"))
                 continue
             if dst != src:
+                why = "cannot be empty" if "" in src else "holds only letters, digits, '_' and '-'"
                 renamed.append(Item(where, source_name, f"read as {path}, since a path segment "
-                                    "holds only letters, digits, '_' and '-'"))
+                                    f"{why}"))
             if extra:
                 notes.append(Item(where, source_name, extra))
             ts.add(Token(path, kind, literal))
@@ -130,7 +139,7 @@ def _tailwind_value(key: str, value: Any) -> Tuple[Any, str]:
     [names, {fontFeatureSettings}]; the note names what was left out. Any
     other list (a drop shadow's layers) is read as one comma list."""
     if not isinstance(value, list):
-        return str(value), ""
+        return (value if isinstance(value, str) else json.dumps(value)), ""
     if key == "fontSize" and len(value) == 2 and isinstance(value[1], (dict, str)):
         pairs = value[1] if isinstance(value[1], dict) else {"lineHeight": value[1]}
         left = [f"{label} {pairs[field]}" for field, label in _SIZE_FIELDS if field in pairs]

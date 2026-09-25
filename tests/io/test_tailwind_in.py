@@ -100,9 +100,11 @@ def test_v3_reads_the_resolved_theme_in_its_own_names():
                           "as their own tokens, so add one if you need it")]
     assert [(i.name, i.message) for i in report.not_read] == [
         ("colors.inherit", "inherit is a CSS keyword that takes its value from elsewhere, so it "
-                           "has no value of its own"),
+                           "has no value of its own; leave it out, or write the value it "
+                           "stands for as a token"),
         ("boxShadow.none", "none is a CSS keyword that takes its value from elsewhere, so it "
-                           "has no value of its own"),
+                           "has no value of its own; leave it out, or write the value it "
+                           "stands for as a token"),
         ("width.1/2", "50% is relative to its container, so it has no fixed value; write it in "
                       "px or rem")]
 
@@ -335,13 +337,14 @@ def test_a_json_theme_maps_an_oklch_color_and_reports_it():
         ("t.json colors.blue.500", "colors.blue.500")]
 
 
-@pytest.mark.parametrize("word", ["inherit", "initial", "unset", "revert", "auto", "none",
-                                  "Inherit"])
+@pytest.mark.parametrize("word", ["inherit", "initial", "unset", "revert", "revert-layer",
+                                  "auto", "none", "Inherit"])
 def test_css_keywords_have_no_value_of_their_own(word):
     with pytest.raises(NotRead) as exc:
         read_value(word)
     assert str(exc.value) == (f"{word} is a CSS keyword that takes its value from elsewhere, "
-                              "so it has no value of its own")
+                              "so it has no value of its own; leave it out, or write the value "
+                              "it stands for as a token")
     assert word.lower() in CSS_KEYWORDS
 
 
@@ -350,3 +353,66 @@ def test_a_nested_dark_class_joins_the_root_selector():
     assert [t.path for t in imported.tokens.tokens()] == ["a", "b"]
     assert imported.tokens.get("a").modes == {"scheme:dark": "#000000"}
     assert imported.forms == {"scheme": (".dark", "")}
+
+
+@pytest.mark.parametrize("variant", [
+    "@custom-variant dark (&:where(:not(.light), :not(.light) *));",
+    "@custom-variant dark (&:not([data-theme=light] *));",
+])
+def test_a_dark_variant_that_names_only_what_dark_is_not_is_not_guessed(variant):
+    text = (f"{variant}\n:root {{\n  --bg: #111;\n  @variant dark {{\n    --bg: #000;\n  }}\n}}\n"
+            ".card {\n  --pad: 4px;\n  @variant dark {\n    --pad: 8px;\n  }\n}\n")
+    imported = _css(text)
+    ts = imported.tokens
+    # The root value is kept; the dark value is named, never read as the base.
+    assert [(t.path, t.value, t.modes) for t in ts.tokens()] == [("bg", "#111111", {})]
+    assert dict(ts.axes) == {}
+    report = imported.report
+    written = variant[len("@custom-variant dark ("):-len(");")]
+    assert [(i.where, i.name, i.message) for i in report.notes] == [
+        ("app.css:1", "@custom-variant dark",
+         f"is declared as {written}, which names no dark selector, only what dark is not, so "
+         "no value is read as the dark scheme through it; name one, such as "
+         "&:where(.dark, .dark *), and set the dark values under that selector")]
+    assert [(i.where, i.name, i.message) for i in report.not_read] == [
+        ("app.css:5", "--bg",
+         f"is set under :root @variant dark, and @custom-variant dark ({written}) names no dark "
+         "selector, only what dark is not; name one in it, such as &:where(.dark, .dark *) or "
+         "&:where([data-theme=dark], [data-theme=dark] *), and set the dark values under that "
+         "selector"),
+        ("app.css:9", "--pad", "is set on .card, not on the root or a theme selector; a "
+                               "property set on a component is not a system token; move it to "
+                               ":root if it is one"),
+        ("app.css:11", "--pad", "is set on .card @variant dark, not on the root or a theme "
+                                "selector; a property set on a component is not a system token; "
+                                "move it to :root if it is one")]
+
+
+def test_a_component_under_the_dark_variant_is_named_as_the_file_writes_it():
+    text = ("@custom-variant dark (&:where([data-appearance=night], [data-appearance=night] *));\n"
+            ".card {\n  --pad: 4px;\n  @variant dark {\n    --pad: 8px;\n  }\n}\n")
+    report = _css(text).report
+    assert [i.message.split(",")[0] for i in report.not_read] == [
+        "is set on .card", "is set on .card @variant dark"]
+
+
+def test_json_literals_and_a_theme_that_is_not_an_object_are_named():
+    text = json.dumps({"colors": {"ink": None, "paper": True, "": {"x": "#111"}},
+                       "zIndex": {"10": 10}})
+    imported = import_tailwind_json(text, Source("t.json", "tailwind-json", "0" * 64,
+                                                 len(text)))
+    assert [(t.path, t.value) for t in imported.tokens.tokens()] == [
+        ("colors._.x", "#111111"), ("zIndex.10", 10)]
+    report = imported.report
+    assert [(i.name, i.message) for i in report.not_read] == [
+        ("colors.ink", "is null, a JSON literal, not a theme value; write the value as a "
+                       "string, or remove the key"),
+        ("colors.paper", "is true, a JSON literal, not a theme value; write the value as a "
+                         "string, or remove the key")]
+    assert [(i.name, i.message) for i in report.renamed] == [
+        ("colors..x", "read as colors._.x, since a path segment cannot be empty")]
+    bad = json.dumps({"content": [], "theme": None})
+    with pytest.raises(InputError) as exc:
+        import_tailwind_json(bad, Source("cfg.json", "tailwind-json", "0" * 64, len(bad)))
+    assert str(exc.value) == ("cfg.json holds theme as null, not an object; export the "
+                              f"resolved theme instead: {EXPORT_COMMAND}")
