@@ -118,6 +118,8 @@ def test_a_category_matches_the_first_entry_in_it(category):
     ("luxury-fashion", "ecommerce-luxury-fashion"), ("real estate", "consumer-real-estate-rental"),
     ("k-12", "education-k12-edtech"), ("b2b saas", "saas-accounting"),
     ("fintech app", "fintech-neobank"),
+    # a synthesizer industry id no entry spells out, kept by an explicit alias
+    ("fintech-banking", "fintech-neobank"), ("Fintech Banking", "fintech-neobank"),
 ])
 def test_sensible_words_keep_their_entry(word, entry_id):
     assert industry_of(word) == entry_id
