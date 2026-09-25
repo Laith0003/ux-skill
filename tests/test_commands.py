@@ -113,6 +113,40 @@ def test_the_changelog_marks_every_alias_for_removal_in_4_1():
         assert f"`/{alias}`" in section, alias
 
 
+def _dashboard_section() -> str:
+    doc = (COMMANDS / "ux-design.md").read_text(encoding="utf-8")
+    start = doc.index("### Dashboard mode (`--dashboard`)")
+    return doc[start:doc.index("\n### ", start + 1)]
+
+
+def test_dashboard_mode_skips_the_page_sequence():
+    assert "The page-sequence step (v2 step 2.5) does not apply" in _dashboard_section()
+
+
+def test_the_modes_table_keeps_page_steps_out_of_component_and_dashboard():
+    doc = (COMMANDS / "ux-design.md").read_text(encoding="utf-8")
+    rows = {}
+    for line in doc.splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) == 4 and cells[1:] in (["yes", "no", "no"], ["yes", "yes", "yes"]):
+            rows[cells[0]] = cells[1:]
+    page_only = [k for k, v in rows.items() if v == ["yes", "no", "no"]]
+    assert any("2.5" in k for k in page_only)
+    assert any("hero" in k for k in page_only)
+    assert any("SEO" in k for k in page_only)
+    assert any("(b)" in k and "(d)" in k for k in page_only)
+    shared = [k for k, v in rows.items() if v == ["yes", "yes", "yes"]]
+    assert any("(a)" in k and "(e)" in k for k in shared)
+    assert any("brand" in k for k in shared)
+
+
+def test_default_polish_never_touches_the_original_file():
+    doc = (COMMANDS / "ux-polish.md").read_text(encoding="utf-8")
+    assert "The original file is never touched" in doc
+    assert "**`--loop-only` or `--fix`:** first validate a clean working tree" in doc
+    assert "On `gate_failed` without `--force`" in doc
+
+
 def test_the_polish_loop_defaults_to_three_rounds_and_a_score_of_90():
     doc = (COMMANDS / "ux-polish.md").read_text(encoding="utf-8")
     assert "reaches 90 or three rounds pass" in _frontmatter(COMMANDS / "ux-polish.md")["description"]
@@ -136,6 +170,15 @@ def test_the_readme_says_18_commands():
     assert "## The 18 slash commands: detailed reference" in readme
     assert "25 slash commands" not in readme.replace("25 slash commands become 18", "")
     assert "### Aliases, removed in 4.1" in readme
+
+
+def test_the_readme_reference_documents_exactly_the_18_commands():
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    start = readme.index("## The 18 slash commands: detailed reference")
+    section = readme[start:readme.index("### Aliases, removed in 4.1", start)]
+    documented = re.findall(r"^#### `/(ux-[a-z0-9-]+)`", section, re.M)
+    assert len(documented) == len(set(documented)), documented
+    assert set(documented) == CANONICAL
 
 
 def test_the_commands_page_lists_18_commands_and_the_aliases():

@@ -1,6 +1,6 @@
 ---
 description: Polish a surface. Loops lint, fix, re-lint until the score reaches 90 or three rounds pass, then a taste pass on spacing, hierarchy, tokens and AI-slop tells. --fix applies the taste findings.
-allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(grep:*), Bash(find:*), Bash(mkdir:*), Bash(date:*), Bash(uxskill:*), Bash(python3:*), Glob, Grep, Task, WebFetch
+allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(grep:*), Bash(find:*), Bash(mkdir:*), Bash(date:*), Bash(git:*), Bash(uxskill:*), Bash(python3:*), Glob, Grep, Task, WebFetch
 disable-model-invocation: false
 ---
 
@@ -14,10 +14,10 @@ You are running the `/ux-polish` command from the `ux` plugin. The job is a cosm
 
 | Mode | Flag | What it does |
 |---|---|---|
-| loop + taste (default) | none | Step 0 loop on a local HTML file, then steps 1 to 6 on the result |
-| loop only | `--loop-only` | Step 0 alone, then the loop report. No taste pass (the old `/ux-evolve`) |
+| loop + taste (default) | none | Step 0 loop on a local HTML file, then steps 1 to 6 on `<artifact>.evolved.html`. The original file is never touched |
+| loop only | `--loop-only` | Step 0 alone, then the loop report. No taste pass. Replaces the original after the clean-tree check (the old `/ux-evolve`) |
 | taste only | `--no-loop` | Steps 1 to 6 alone. Used automatically when the input is a URL, a screenshot, or a snippet, because the loop needs a file |
-| fix | `--fix` | After the report, apply the taste findings (step 7) |
+| fix | `--fix` | Replaces the original with the loop output after the clean-tree check, then applies the taste findings (step 7) |
 
 | Flag | Meaning |
 |---|---|
@@ -83,7 +83,14 @@ It reads the target artifact paths, `data/anti-patterns.json` (for lint scoring)
 
 #### Quality gate
 
-If the final score is < 65, the loop refuses to commit by default and returns `stopped_reason: "gate_failed"`. The user can override with `--force` to ship anyway. Below 65 and not forced: do NOT replace the original file. Above 65 OR forced: replace the original `<file>.html` with the evolved version (the user can diff it in version control). The recommended next move on a gate failure is to regenerate the artifact via `/ux-design` with different axis hints (for example, add `forbidden: [low-contrast]` if the linter is flagging contrast issues).
+If the final score is < 65, the loop refuses to commit by default and returns `stopped_reason: "gate_failed"`. The user can override with `--force` to ship anyway.
+
+Who may touch the original file:
+
+- **Default (no `--loop-only`, no `--fix`):** never. The loop output stays at `<artifact>.evolved.html` (and `.evolved.css`) and the original is left as it was, whatever the score. The taste pass reads `<artifact>.evolved.html` when the loop cleared the gate or `--force` was passed.
+- **`--loop-only` or `--fix`:** first validate a clean working tree (the same check as step 7: `git status --porcelain <file>` must print nothing for the original and its CSS). If the file has uncommitted changes, stop, say so, and leave the evolved file next to it. Then, above 65 OR forced: replace the original `<file>.html` (and its CSS) with the evolved version; the user can diff it in version control. Below 65 and not forced: do NOT replace the original.
+
+On `gate_failed` without `--force`, the evolved file is still written but never promoted. The taste pass then reads the original `<file>.html`, not the evolved one, because the loop output did not clear the gate; say so in the report. The recommended next move on a gate failure is to regenerate the artifact via `/ux-design` with different axis hints (for example, add `forbidden: [low-contrast]` if the linter is flagging contrast issues).
 
 #### Loop report
 
@@ -92,7 +99,7 @@ Print:
 - Number of rounds (for example `3 rounds`)
 - Stop reason (`target_hit` / `plateau` / `max_rounds` / `gate_failed`)
 - The polish passes applied per round (for example `round 1: strip_inline_styles, replace_generic_ctas; round 2: normalize_spacing`)
-- Where the evolved output landed
+- Where the evolved output landed, and whether the original was replaced (only under `--loop-only` or `--fix`)
 - If gate_failed and not forced: the regenerate axis hints
 
 End the loop report with:
@@ -113,7 +120,7 @@ Things outside its remit (rerun `/ux-design` or `/ux-system`):
 - Stack mismatch (user wants Next.js, you generated Blade)
 - Brand axis target wildly off (tone_match < 30 means the axes are wrong, not the polish)
 
-Flag these in the report instead of pushing them through more rounds. Do not add LLM-driven cosmetic passes inside the loop; it is meant to be fast and predictable. The taste pass below is where judgment happens, and it runs on the loop's output.
+Flag these in the report instead of pushing them through more rounds. Do not add LLM-driven cosmetic passes inside the loop; it is meant to be fast and predictable. The taste pass below is where judgment happens. It reads `<artifact>.evolved.html`, or, after the original was replaced, the original path; on `gate_failed` without `--force` it reads the original file.
 
 ### 1. Run the AI-slop tell list
 
@@ -249,7 +256,7 @@ The `auto_fixable` flag marks findings safe for `/ux-polish --fix` to apply with
 
 If the user passed `--fix`:
 
-1. Validate clean working tree.
+1. Validate clean working tree. With the loop run, this is the check step 0 already did before replacing the original.
 2. Apply auto-fixable findings directly via Edit. Commit atomically.
 3. For non-auto-fixable findings, dispatch the `frontend-engineer` sub-agent via the Task tool with the full polish report and the prioritized fix list.
 4. After fixes, re-run the polish pass on the new state and report deltas.

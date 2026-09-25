@@ -75,7 +75,7 @@ Full notes in [CHANGELOG.md](CHANGELOG.md).
 - **Three auto-dispatched modes**: `strict_brand` (100% of one brand), `brand_anchor` (70% one brand + 30% axis-adapted siblings), `pure_synthesis` (no brand named, distill from 8 axis-matching exemplars).
 - **Decisions ledger drives the recommender.** `.ux/decisions.jsonl` re-ranks candidates by past wins in the same `(industry, ui_type)` bucket. Cold-start safe. Counts only `lint_score >= 80` + `user_accepted = true` decisions.
 - **Axis interaction matrix**: explicit conflict resolution between competing axes (dense + corporate → 4px, airy + corporate → 12px, soft + playful → 18px radius). No more silent ad-hoc rules.
-- **`/ux-evolve` auto-loop** (in 4.0, the default loop of `/ux-polish`): lint → polish → re-lint until score ≥ 90 or plateau or 5 rounds. Quality gate at 65.
+- **`/ux-evolve` auto-loop** (in 4.0, the default loop of `/ux-polish`): lint → polish → re-lint until score ≥ 90 or plateau or 3 rounds in 4.0 (5 in v3). Quality gate at 65.
 - **3 new MCP tools** (15 → 18): `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`.
 - **Local stats dashboard**: `uxskill stats --html` writes `.ux/stats.html` showing what YOUR install has learned. No telemetry, no global aggregate.
 - **223 tests pass.** Offline. Deterministic. No LLM ever called.
@@ -334,7 +334,7 @@ ux-skill (package name: uxskill)
 
 Every command is shipped as a `.md` file under `commands/` with `description`, `allowed-tools`, `triggers`, `when to use`, `when to skip`, `input`, `process`, and `output state file`. The descriptions below are condensed; the full source is the canonical spec.
 
-Commands are grouped into six buckets: **bootstrap & inventory**, **discovery & recommendation**, **generation**, **audit & verify**, **fix & polish**, **discovery & narrative**, and **conductor**. Seven 3.x names still work as [aliases](#aliases-removed-in-41) until 4.1.
+Commands are grouped into seven buckets: **bootstrap & inventory**, **discovery & recommendation**, **generation**, **audit & verify**, **fix & polish**, **discovery & narrative**, and **conductor**. Seven 3.x names still work as [aliases](#aliases-removed-in-41) until 4.1.
 
 ### Bootstrap & inventory
 
@@ -347,6 +347,15 @@ Commands are grouped into six buckets: **bootstrap & inventory**, **discovery & 
 - **Output:** Per-IDE artifact (see [The 17-IDE installer](#the-17-ide-installer)) + `.ux/` directory + stdout summary. `--stats`: JSON to stdout (see [Verify install](#verify-install) above).
 - **Chains to:** `/ux-discover` next. `--stats` is diagnostic only.
 
+#### `/ux-mcp`: run the engine as an MCP server
+
+- **What:** Starts the engine as a Model Context Protocol server over stdio. Eighteen tools (recommender, linter, persistence, synthesizer, decisions ledger, image extraction, and the data manifests) become callable from any MCP-capable host without the plugin.
+- **When to use:** You work in another MCP-capable host and want the same engine. You run a multi-agent pipeline that needs one source of design constraints. You want the recommender or linter as a long-running process in CI.
+- **When to skip:** You are inside Claude Code with the plugin installed; the slash commands already reach the engine. You need a one-shot answer; `uxskill recommend` or `uxskill lint` is simpler.
+- **Invocation:** `/ux-mcp`, or `ux-mcp` from the shell after `pip install 'uxskill[mcp]'`.
+- **Output:** A stdio JSON-RPC server. See [MCP server](#mcp-server-the-asymmetric-move) and `commands/ux-mcp.md` for per-client config.
+- **Chains to:** Nothing; it is a transport, not a step.
+
 ### Discovery & recommendation
 
 #### `/ux-discover`: the forcing function (10-field intake, framing, recommendation)
@@ -355,7 +364,7 @@ Commands are grouped into six buckets: **bootstrap & inventory**, **discovery & 
 - **Modes:** `--frame` captures who-it's-for, outcome, hypothesis, and success signal in a four-field framing block, lighter than the full intake. `--recommend` runs only the recommender, from a saved brief or one-shot flags.
 - **When to use:** Before any `/ux-design` or `/ux-system`. Whenever a previous brief has gone stale. `--frame` at the start of a project, sprint, or one-off engagement, or mid-stream when a conversation has drifted. `--recommend` when pivoting a tired-looking product.
 - **When to skip:** You're fixing a bug (`/ux-fix`). You're only running a linter pass (`/ux-lint`). The brief is unchanged from the last session.
-- **Invocation (Claude Code):** `/ux-discover`, `/ux-discover --frame "loyalty wallet for MENA Bashiti pilot"`, or `/ux-discover --recommend`.
+- **Invocation (Claude Code):** `/ux-discover`, `/ux-discover --frame "loyalty wallet for a MENA retail pilot"`, or `/ux-discover --recommend`.
   **Invocation (CLI):**
   ```bash
   ux recommend \
@@ -469,11 +478,11 @@ Commands are grouped into six buckets: **bootstrap & inventory**, **discovery & 
 
 #### `/ux-polish`: lint, fix, re-lint loop + AI-slop kill
 
-- **What:** First a deterministic loop on a local HTML file: lint, apply six idempotent polish passes, re-lint, until the score reaches 90, the score plateaus, or three rounds pass (`--rounds` changes the cap). A quality gate at 65 keeps a failing result from replacing the original unless `--force`; with `--brand-file` the brand-fidelity floor holds at every exit. Then the taste pass: spacing rhythm, hierarchy sharpening, AI-slop detection, token consistency. The LLM-driven counterpart to `/ux-lint`, uses your judgment on taste calls. `--loop-only` runs just the loop; `--no-loop` just the taste pass; `--fix` applies the taste findings.
+- **What:** First a deterministic loop on a local HTML file: lint, apply six idempotent polish passes, re-lint, until the score reaches 90, the score plateaus, or three rounds pass (`--rounds` changes the cap). By default the loop output stays at `<file>.evolved.html` and the original is never touched. Only `--loop-only` or `--fix` replace the original, after a clean-tree check, and a quality gate at 65 keeps a failing result from replacing it unless `--force`; with `--brand-file` the brand-fidelity floor holds at every exit. Then the taste pass: spacing rhythm, hierarchy sharpening, AI-slop detection, token consistency. The LLM-driven counterpart to `/ux-lint`, uses your judgment on taste calls. `--loop-only` runs just the loop; `--no-loop` just the taste pass; `--fix` applies the taste findings.
 - **When to use:** Structure is right but execution is loose. "Polish", "tighten this up", "remove the AI-slop", "make it premium", "make this less AI-looking", "the spacing feels off", "this looks generic", "needs more taste", "improve until score 90+", "make it ship-ready".
 - **When to skip:** Surface is missing core functionality (fix that first). Needs a redesign, not a polish (use `/ux-design`). Copy issues (use `/ux-copy`). Motion issues (use `/ux-motion`). A11y issues (use `/ux-a11y`).
 - **Invocation:** `/ux-polish src/components/Hero.tsx`, `/ux-polish out/landing.html --css out/landing.css`, `/ux-polish out/landing.html --loop-only --rounds 5`.
-- **Output:** Updated code, `<file>.evolved.html` from the loop, `.ux/last-evolve.json`, one line in `.ux/decisions.jsonl`, and `.ux/last-polish.json` describing the taste findings.
+- **Output:** `<file>.evolved.html` from the loop (promoted over the original only under `--loop-only` or `--fix`), updated code under `--fix`, `.ux/last-evolve.json`, one line in `.ux/decisions.jsonl`, and `.ux/last-polish.json` describing the taste findings.
 - **Chains to:** `/ux-lint` → verify the polish held. `/ux-a11y` → re-check accessibility.
 
 ### Discovery & narrative

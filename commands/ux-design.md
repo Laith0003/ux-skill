@@ -25,13 +25,25 @@ Triggers: "design a", "build me a", "generate a landing page", "create a dashboa
 
 A flag always wins over the words. Image mode stacks with the others: `--from-image ref.png --dashboard` reads the image, then builds a dashboard. Say which mode you picked in the first line of the output so the user can stop you.
 
-Every mode runs the same Process below (discovery, references, dials, dispatch, output, state) and the same v2 steps (brief, brand, recommendation, sequence, generation, lint and responsive and brand gates). The mode sections list only what changes.
+Every mode runs the same Process below (discovery, references, dials, dispatch, output, state) and the v2 steps (brief, brand, recommendation, generation, lint, responsive gate, brand floor). Some shared steps are page steps only. This table says which apply per mode; the mode sections list only what else changes.
+
+| Shared step | page | component | dashboard |
+|---|---|---|---|
+| v2 step 2.5 page-level section sequence, and the section-sequence bullet in step 4 dispatch | yes | no | no |
+| WOW layer, hero moment (step 2) | yes | no | no |
+| WOW layer, motion signature and section moment (step 2) | yes | yes | yes |
+| SEO section | yes | no | no |
+| Responsive gate (a) no horizontal scroll and (e) sticky chrome height | yes | yes | yes |
+| Responsive gate (b) nav one row, (c) wordmark and CTA labels one line, (d) nav children do not collide | yes | no | no |
+| Lint and brand-fidelity floor | yes | yes | yes |
+
+Image mode follows the column of the build mode it stacks with. A component or dashboard run that skips gate checks (b) to (d) is not DEGRADED for their absence; the gate is (a) and (e) for those modes.
 
 | Flag | Meaning |
 |---|---|
 | `--component [name]` | Component mode |
 | `--dashboard` | Dashboard mode |
-| `--from-image <path>` | Image mode: read the image first |
+| `--from-image <path>` | Image mode: read the image first. The path is the first argument that is not a flag, wherever it sits, so `--from-image --no-recommendation ref.png` reads `ref.png` |
 | `--extract-only` | Image mode: stop after the extraction and print its JSON. No build |
 | `--no-recommendation` | Image mode: hints only, no recommender run. Implies `--extract-only` |
 | `--save <path>` | Image mode: where to write the extraction (default `.ux/last-image-extract.json`; empty string skips the write) |
@@ -160,7 +172,7 @@ If anything's missing, ask once: *"One line: data shape, key metrics, audience (
 
 **Dispatch (step 4).** `frontend-engineer` gets the brief verbatim, data shape + key metrics + audience, stack, dials, the 3-5 patterns, the full `references/styles/anti-slop.md`, and an explicit instruction: monospace tabular numbers, no purple gradients, max 2 live indicators per viewport, semantic state colors only. Dispatch `motion-engineer` in parallel for live indicators and state transitions. Dispatch `copy-writer` in parallel for empty states, error messages, and metric labels.
 
-**Generation (v2 step 4).** Filter `components` from the recommendation for dashboard patterns (`category: Data Display`, `Charts & Viz`). Build a dashboard grid using the picked palette in dark mode (force `mode=dark` if not already set in the recommendation). Give `frontend-engineer` the `chart-types.json` picks scoped to the data the user described. With a client brand, dark mode still holds, but the brand primary (not the house pick) is the accent on every state color, the logo sits in the chrome, and type matches the logo style; the dashboard must clear the brand-fidelity floor.
+**Generation (v2 step 4).** The page-sequence step (v2 step 2.5) does not apply: no section sequence, no conversion mechanisms, no hero. Filter `components` from the recommendation for dashboard patterns (`category: Data Display`, `Charts & Viz`). Build a dashboard grid using the picked palette in dark mode (force `mode=dark` if not already set in the recommendation). Give `frontend-engineer` the `chart-types.json` picks scoped to the data the user described. With a client brand, dark mode still holds, but the brand primary (not the house pick) is the accent on every state color, the logo sits in the chrome, and type matches the logo style; the dashboard must clear the brand-fidelity floor.
 
 **Output (step 5).**
 
@@ -325,7 +337,7 @@ If a `DESIGN.md` exists in the project root, read it FIRST and treat it as the s
 Before writing a single line of code, read:
 - `references/styles/anti-slop.md` — the ban list. Internalize every forbidden pattern.
 - `references/styles/arsenal.md` — the high-end pattern library. Pick 2-4 patterns that fit the brief.
-- `references/foundations/wow.md` — derive the **WOW LAYER**: 2-3 coordinated signature moments (one hero moment + a motion signature + an optional section moment) from the brand temperature + industry + goal. The page must do something a visitor remembers, not just be clean — derived + varied to THIS brand, never a stamped recipe.
+- `references/foundations/wow.md`: derive the **WOW LAYER**: 2-3 coordinated signature moments (one hero moment + a motion signature + an optional section moment; component and dashboard modes skip the hero moment) from the brand temperature + industry + goal. The page must do something a visitor remembers, not just be clean. Derived + varied to THIS brand, never a stamped recipe.
 - `references/foundations/responsive.md` + `references/foundations/component-behaviors.md` — mobile-first mechanics + per-component responsive contracts. The build is verified at 360px (no horizontal scroll, no wrapping nav/wordmark/label, sticky chrome <= ~96px).
 
 These are non-negotiable. The output's distinction from generic AI output IS the value of this command.
@@ -347,7 +359,7 @@ Call the Task tool with `subagent_type: "frontend-engineer"`. Pass the agent:
 - The brief (verbatim from the user)
 - Your dial values
 - The 2-4 arsenal patterns you picked
-- **The page-level section sequence** selected for the brief's goal (see the v2 Python integration step below). Instruct the sub-agent to expand the ENTIRE ordered sequence, map all source content into it (every sector -> a pill, every size -> a card, every benefit -> a checklist item — do not trim), give every card/pill/stat a relevant inline SVG icon, and ship the goal's conversion mechanisms.
+- **The page-level section sequence** (page mode only; component and dashboard modes skip this bullet) selected for the brief's goal (see the v2 Python integration step below). Instruct the sub-agent to expand the ENTIRE ordered sequence, map all source content into it (every sector -> a pill, every size -> a card, every benefit -> a checklist item; do not trim), give every card/pill/stat a relevant inline SVG icon, and ship the goal's conversion mechanisms.
 - The full content of `references/styles/anti-slop.md` (paste into the prompt — do not assume the sub-agent has read it)
 - The target stack
 - An instruction to return:
@@ -403,7 +415,7 @@ This lets `/ux-next` and downstream commands pick up where you left off.
 
 ## SEO is mandatory for public-web outputs
 
-For any landing page or public-facing surface, read `references/foundations/seo.md` and require the frontend-engineer to ship the full SEO foundation (head surface, OG + Twitter, JSON-LD, semantic HTML, image discipline, CWV targets). Surface this requirement in your dispatch prompt. The output is incomplete without it. Derive sensible real values from the brief + source when the brief doesn't supply them (canonical/og:url from the source URL, og:image from a real CDN image the page references). **Never let the frontend-engineer ship a literal `{TODO_FILL...}` token inside the rendered markup** — the linter flags it HIGH and it is a draft-state leak. Where a value is genuinely absent (no phone, no OG image), OMIT that element gracefully (drop the `<meta>` / the affordance); surface any "you should patch this" note to the user OUTSIDE the code, never as a placeholder in the HTML.
+Page mode only; component and dashboard modes skip this section. For any landing page or public-facing surface, read `references/foundations/seo.md` and require the frontend-engineer to ship the full SEO foundation (head surface, OG + Twitter, JSON-LD, semantic HTML, image discipline, CWV targets). Surface this requirement in your dispatch prompt. The output is incomplete without it. Derive sensible real values from the brief + source when the brief doesn't supply them (canonical/og:url from the source URL, og:image from a real CDN image the page references). **Never let the frontend-engineer ship a literal `{TODO_FILL...}` token inside the rendered markup**: the linter flags it HIGH and it is a draft-state leak. Where a value is genuinely absent (no phone, no OG image), OMIT that element gracefully (drop the `<meta>` / the affordance); surface any "you should patch this" note to the user OUTSIDE the code, never as a placeholder in the HTML.
 
 ## Hard rules (non-negotiable)
 
@@ -428,7 +440,7 @@ If you find yourself reaching for any of these, stop. Re-read `anti-slop.md`. Pi
 ## Failure modes to watch
 
 - **Stack drift**: user said React, sub-agent returns Vue. Catch this in your review of the sub-agent's output, ask for a redo.
-- **Slop creep**: sub-agent claims it avoided Inter but actually used it. Grep the output for `Inter` and `font-family: Inter`. Reject and redo if found.
+- **Slop creep** (page mode only; component and dashboard modes allow Inter): sub-agent claims it avoided Inter but actually used it. Grep the output for `Inter` and `font-family: Inter`. Reject and redo if found.
 - **Missing states**: sub-agent shows a happy-path component with no loading/error/empty. Reject and redo.
 - **Bare-bones output**: sub-agent returns 30 lines for a "landing page" request. Push back — landing pages have multiple sections.
 
@@ -511,6 +523,8 @@ print('GUARDRAILS:', len(r.get('guardrails', [])), 'anti-pattern rules active')
 
 ### Step 2.5 — Select the page-level section sequence (richness)
 
+Page mode only. Component and dashboard modes skip this step.
+
 A recommendation gives you the *vocabulary* (style/palette/type). The page
 *skeleton* — what sections appear and in what order — comes from the page-sequence
 selector. Pick one by the brief's goal so the output is RICH and COMPLETE, not a
@@ -560,7 +574,7 @@ python3 -m engine.cli.main --no-pretty lint <output-paths> --threshold high
 
 Exit code non-zero means a high+ finding landed in your output. Fix before declaring done.
 
-**Responsive gate — HARD, as hard as the brand gate. This is WRAP-AWARE and HEIGHT-AWARE, not scroll-only.** Run at **390px AND 360px** in a headless DOM and assert ALL of (a)–(e):
+**Responsive gate: HARD, as hard as the brand gate. This is WRAP-AWARE and HEIGHT-AWARE, not scroll-only.** Run at **390px AND 360px** in a headless DOM and assert ALL of (a) to (e) in page mode. Component and dashboard modes assert (a) and (e) only; see the table under Modes.
 
 > **Run the packaged verifier first** — it is the real gate, not a guess:
 > ```bash

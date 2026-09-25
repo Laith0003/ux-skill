@@ -46,6 +46,11 @@ def test_readme_badge_and_changelog_match():
     # An [Unreleased] section may sit above the current release.
     first = re.search(r"^## \[(?!Unreleased\])([^\]]+)\]", changelog, re.M).group(1)
     assert first == semver(__version__)
+    # When [Unreleased] exists it must be the top section, so its notes
+    # cannot sit stranded below a release that already shipped.
+    headings = re.findall(r"^## \[([^\]]+)\]", changelog, re.M)
+    if "Unreleased" in headings:
+        assert headings[0] == "Unreleased"
 
 
 def test_npm_publishes_a_pre_release_under_its_own_tag():
