@@ -43,11 +43,11 @@ tokens:
   - {part: input, property: font, role: type.text.body}
   - {part: input, property: padding-inline, role: space.control.padding-inline}
   - {part: input, property: padding-block, role: space.control.padding-block}
-  - {part: group, property: border-width, role: border.emphasis, state: hover}
+  - {part: group, property: edge-weight, role: border.emphasis, state: hover}
   - {part: group, property: focus-ring, role: color.focus.ring, state: focus}
   - {part: group, property: focus-ring-width, role: border.focus-ring.width, state: focus}
   - {part: group, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
-  - {part: group, property: border-width, role: border.emphasis, state: error}
+  - {part: group, property: edge-weight, role: border.emphasis, state: error}
   - {part: group, property: border-color, role: color.line.danger, state: error}
   - {part: message, property: text, role: color.status.danger.text, state: error}
   - {part: message, property: font, role: type.text.body-small, state: error}
@@ -82,6 +82,7 @@ copy:
     - Name what is wrong with the part the person typed and give the fix, such as Enter the 9 digits after +962
 usage:
   do:
+    - Draw the heavier edge of hover and error with edge-weight, keeping the border at border-width and drawing the difference inside it as an inset box-shadow in the state's border color, never an outline, which the focus ring owns, so the field never moves by a pixel
     - With position start, the prefix and the typed value sit in the run, one left to right run with white-space nowrap, so a phone reads +962 791234567 with the code first in both directions; use it for dialing codes, card and account codes, and a currency the market writes before the amount
     - With position end, the suffix follows the amount in the page's direction, as the market writes it, such as 50 JOD, or the Arabic abbreviation after the amount under right to left (content.md); the amount itself is a fixed run
     - Wrap the code in the label, helper and message in its own fixed run too, so +962 keeps its plus sign in front inside right to left text

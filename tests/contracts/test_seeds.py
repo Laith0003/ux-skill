@@ -14,9 +14,9 @@ from engine.foundations.modes import contexts
 from engine.synthesizer.axes import AxisValues
 
 ROOT = Path(__file__).resolve().parents[2]
-NAMES = ("badge", "button", "card", "checkbox", "chip", "date", "dialog", "input-prefix", "link",
-         "nav", "progress", "radio", "select", "selectable-row", "status-banner", "table",
-         "text-field", "textarea")
+NAMES = ("badge", "button", "card", "checkbox", "chip", "date", "dialog", "faq-accordion",
+         "input-prefix", "link", "nav", "progress", "radio", "select", "selectable-row",
+         "site-footer", "status-banner", "table", "text-field", "textarea")
 BRANDS = ("#3366FF", "#6B4423", "#FFD400", "#E11D48", "#16A34A", "#0EA5E9", "#7C3AED",
           "#F97316", "#111827", "#F5F5F5", "#00FFFF", "#FF00FF",
           # A near-gray brand whose selected surface matches a card in dark high
@@ -32,8 +32,8 @@ def test_the_seeds_load_and_are_experimental():
     assert all(c.status == "experimental" for c in seeds)
     assert {c.name: c.variant_product() for c in seeds} == {
         "badge": 6, "button": 24, "card": 2, "checkbox": 3, "chip": 2, "date": 1, "dialog": 2,
-        "input-prefix": 2, "link": 2, "nav": 2, "progress": 2, "radio": 2, "select": 1,
-        "selectable-row": 2, "status-banner": 4, "table": 6, "text-field": 2, "textarea": 2}
+        "faq-accordion": 1, "input-prefix": 2, "link": 2, "nav": 2, "progress": 2, "radio": 2, "select": 1,
+        "selectable-row": 2, "site-footer": 1, "status-banner": 4, "table": 6, "text-field": 2, "textarea": 2}
     assert all(c.provenance.node is None and c.provenance.drift == () for c in seeds)
 
 
@@ -213,7 +213,8 @@ def test_a_field_is_readable_and_its_label_is_never_smaller_than_its_value():
     assert _binding(field, "message", "font", "error") == "type.text.body-small"
     assert _binding(field, "label", "font") == "type.text.ui-large"
     assert _binding(field, "helper", "text") != _binding(field, "placeholder", "text")
-    assert _binding(field, "input", "border-width", "hover") == "border.emphasis"
+    assert _binding(field, "input", "border-width", "hover") is None
+    assert _binding(field, "input", "edge-weight", "hover") == "border.emphasis"
     assert _binding(field, "input", "max-width") is None
     assert _binding(field, "label", "stack-gap") == "space.field.label-gap"
     assert any("never moves the submit button" in line for line in field.do)

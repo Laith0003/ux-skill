@@ -176,9 +176,10 @@ systems a person can tell apart. No industry or keyword table picks a look.
   Arabic type applies on any `dir="rtl"` or `lang="ar"` subtree. Status soft
   fills stay quiet, a band in dark stays a quiet tint, and tone words also
   move the corners and the type.
-- Eighteen component contracts, the form controls, chip, badge, link,
-  navigation, progress and table among them, and fixes to the text field,
-  card and status banner.
+- Twenty component contracts, the form controls, chip, badge, link,
+  navigation, progress, table, FAQ accordion and site footer among them, and
+  fixes to the text field, card and status banner. A field's heavier hover
+  and error edge is drawn inside its border, so the layout never moves.
 
 ### The WCAG gate
 - Every text, control and focus color pairing is measured in light and dark,
