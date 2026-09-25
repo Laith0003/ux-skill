@@ -457,8 +457,10 @@ def test_a_name_set_again_after_an_unreadable_first_value_says_so():
         ("rules.md:1", "a", "3em is relative to the parent's font size, so it has no fixed "
                             "value; write it in px or rem"),
         ("rules.md:2", "a", "is set again with another value (4px); rules.md:1 set it first to "
-                            "3em, which could not be read and was not kept; fix that line or "
-                            "remove it, and keep one")]
+                            "3em, which was not read (3em is relative to the parent's font size, "
+                            "so it has no fixed value; write it in px or rem); the first value "
+                            "wins, so no value is used for a; fix that line or remove it, and "
+                            "keep one")]
 
 
 def test_an_indented_code_block_is_not_read():
@@ -484,3 +486,60 @@ def test_a_folder_is_read_in_name_order(tmp_path):
     (folder / "b.md").write_text("- `second`: 8px\n", encoding="utf-8")
     (folder / "a.md").write_text("- `first`: 4px\n", encoding="utf-8")
     assert [t.path for t in read_markdown(folder).tokens.tokens()] == ["first", "second"]
+
+
+def test_a_name_set_again_after_a_first_value_dropped_for_a_reference_says_so():
+    report = _import("- `a`: {missing}\n- `a`: 4px\n").report
+    assert _rows(report.not_read) == [
+        ("rules.md:1", "a", "references missing, which no file defines; define it or write the "
+                            "value"),
+        ("rules.md:2", "a", "is set again with another value (4px); rules.md:1 set it first to "
+                            "{missing}, which was not read (references missing, which no file "
+                            "defines; define it or write the value); the first value wins, so no "
+                            "value is used for a; fix that line or remove it, and keep one")]
+    assert report.tokens == 0
+
+
+@pytest.mark.parametrize("value", ["Links, Buttons", "Gray, Slate", "Small, Medium, Large"])
+def test_a_comma_list_of_names_without_font_evidence_is_a_rule(value):
+    for text in (f"- `link`: {value}\n", f"| Token | Value |\n|---|---|\n| `link` | {value} |\n"):
+        imported = _import(text)
+        assert imported.report.tokens == 0 and imported.report.not_read == []
+        [note] = imported.report.notes
+        assert note.message.startswith("1 line holds a rule, not a value")
+        assert note.message.endswith("; a font list reads when its font names are quoted or it "
+                                     "ends in a generic family such as sans-serif")
+
+
+@pytest.mark.parametrize("line", [
+    "- `font.body`: Inter, Arial",
+    "- `brand.family`: Inter, Arial",
+    "- `body`: Inter, Arial, sans-serif",
+    "- `body`: Inter, Arial, ui-sans-serif",
+    "- `body`: Inter, Arial, emoji",
+    "- `body`: \"Brand Sans\", Arial",
+    "- `body`: helvetica neue, arial, sans-serif",
+])
+def test_a_comma_list_of_names_with_evidence_is_a_font(line):
+    imported = _import(line + "\n")
+    [token] = imported.tokens.tokens()
+    assert token.type == "fontFamily" and imported.report.notes == []
+
+
+def test_a_type_column_header_is_font_evidence():
+    text = "| Name | Typeface |\n|---|---|\n| `body` | Inter, Arial |\n"
+    assert _import(text).tokens.get("body").value == ["Inter", "Arial"]
+
+
+def test_a_font_column_of_unquoted_stacks_reads():
+    text = ("| Token | Font |\n|---|---|\n| `body` | Inter, system-ui, sans-serif |\n"
+            "| `mono` | Mono Face, Courier |\n")
+    imported = _import(text)
+    assert imported.tokens.get("body").value == ["Inter", "system-ui", "sans-serif"]
+    assert imported.tokens.get("mono").value == ["Mono Face", "Courier"]
+    assert imported.report.notes == []
+
+
+def test_a_prose_rule_does_not_get_the_font_hint():
+    [note] = _import("- `accent`: use for links, never for text\n").report.notes
+    assert "font list" not in note.message

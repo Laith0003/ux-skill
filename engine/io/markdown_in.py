@@ -129,11 +129,35 @@ def _prose(text: str) -> bool:
     return False
 
 
+_FONT_PART = re.compile(r"-?[A-Za-z][A-Za-z0-9 _-]*")
+_TYPE_CONTEXT = re.compile(r"font|family|typeface|type", re.I)
+
+
+def _font_shaped(text: str) -> bool:
+    """True for an unquoted or quoted comma list of names, the shape of a
+    font stack (Inter, system-ui, sans-serif)."""
+    parts = split_top(text)
+    return len(parts) > 1 and all(
+        p and (p[0] in "\"'" and p[-1:] == p[0] or _FONT_PART.fullmatch(p))
+        and len(p.split()) <= 5 for p in parts)
+
+
+def _font_evidence(text: str, context: str) -> bool:
+    """True when a comma list of names is a font stack for certain: a part
+    is quoted, it ends in a generic family, or its name or column header
+    speaks of type."""
+    parts = split_top(text)
+    last = parts[-1].lower()
+    return (any(p[0] in "\"'" for p in parts) or last in GENERIC_FAMILIES
+            or last.startswith("ui-") or bool(_TYPE_CONTEXT.search(context)))
+
+
 def _valueish(cell: str) -> bool:
     """True when a cell could hold a value: a digit, a hex, a function, a
     reference, a quote or a CSS keyword."""
     text = _unquote(cell)
-    return bool(_VALUEISH.search(text)) or text.lower() in _KEYWORDS
+    return bool(_VALUEISH.search(text)) or any(p.lower() in _KEYWORDS
+                                                for p in split_top(text))
 
 
 def _known_axis(*words: str) -> Optional[str]:
@@ -268,17 +292,34 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
     entries = 0
     # file -> [(line, name)] of lines whose value is a rule, not a value
     rules: Dict[str, List[Tuple[int, str]]] = {}
+    # files where a rule has the shape of a font list, so the note says how
+    # a font list reads
+    font_rules: set = set()
     # (path, where, name, what the second says, where the first was, what it set)
     again: List[Tuple[str, str, str, str, str, str]] = []
 
     def add(name: str, where: str, values: Dict[str, str], labels: Dict[str, str]) -> None:
         nonlocal entries
         written = _unquote(re.sub(r"^(\*{1,2}|_{1,2})(.+)\1$", r"\2", name.strip()))
-        if written and _NAME.fullmatch(written) and any(_prose(_unquote(v))
-                                                         for v in values.values()):
-            file_name, _, line = where.rpartition(":")
-            rules.setdefault(file_name, []).append((int(line), written))
-            return
+        if written and _NAME.fullmatch(written):
+            # A comma list of names is a font only with evidence; without it,
+            # and for any value written in words, the line is a rule.
+            ruled = fonty = False
+            for ctx, v in values.items():
+                text = _unquote(v)
+                shaped = _font_shaped(text)
+                if shaped and _font_evidence(text, f"{written} {labels.get(ctx, '')}"):
+                    continue
+                if shaped or _prose(text):
+                    ruled = True
+                    bare = text.rstrip(".")
+                    fonty = fonty or (_font_shaped(bare) and not _prose(bare))
+            if ruled:
+                file_name, _, line = where.rpartition(":")
+                rules.setdefault(file_name, []).append((int(line), written))
+                if fonty:
+                    font_rules.add(file_name)
+                return
         entries += 1
         if not written:
             not_read.append(Item(where, "", f"has no name; write the token's name in the "
@@ -361,6 +402,7 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                     notes += [Item(where, "", n) for n in table.notes]
                 if table is not None and table.base >= 0 and not table.axis \
                         and raw[table.base].lower() not in VALUE_HEADERS \
+                        and not _TYPE_CONTEXT.search(raw[table.base]) \
                         and not any(_valueish(c[table.base]) for c in
                                     (_split(x) for x in lines[i + 2:end]) if len(c) > table.base):
                     notes.append(Item(where, "", (
@@ -404,11 +446,14 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                 if count > 1 else "1 line holds a rule, not a value, and was kept as a rule")
         notes.append(Item(f"{file_name}:{found_rules[0][0]}", "", (
             f"{head}: {listed}; to make {'one' if count > 1 else 'it'} a token, write only its "
-            "value after the colon or in the cell, and put the rule on its own line")))
+            "value after the colon or in the cell, and put the rule on its own line"
+            + ("; a font list reads when its font names are quoted or it ends in a generic "
+               "family such as sans-serif" if file_name in font_rules else ""))))
 
     # Decode each value; a reference is kept as an alias to its target.
     defined = set(found)
-    failed = set()
+    # path -> why its first value was not read
+    failed: Dict[str, str] = {}
     for path in list(found):
         entry = found[path]
         try:
@@ -421,17 +466,13 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                         from None
         except NotRead as exc:
             not_read.append(Item(entry.where, entry.written, str(exc)))
-            failed.add(path)
+            failed[path] = str(exc)
             del found[path]
-    for path, where, written, said, first_where, kept in again:
-        fate = ("which could not be read and was not kept; fix that line or remove it, and keep "
-                "one" if path in failed else "which was kept, so keep one")
-        not_read.append(Item(where, written, f"is set again with {said}; {first_where} set it "
-                             f"first {kept}, {fate}"))
 
     def drop(path: str, why: str) -> None:
         entry = found.pop(path)
         not_read.append(Item(entry.where, entry.written, why))
+        failed[path] = why
 
     def targets(path: str) -> List[str]:
         return [v for k, v in found[path].decoded.values() if k == "alias"]
@@ -486,6 +527,14 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
             drop(path, why)
         if not typeless and not mixed:
             break
+
+    # A name set again: the first value wins; when it was not read, neither is used.
+    for path, where, written, said, first_where, kept in again:
+        fate = (f"which was not read ({failed[path]}); the first value wins, so no value is "
+                f"used for {written}; fix that line or remove it, and keep one" if path in failed
+                else "which was kept, so keep one")
+        not_read.append(Item(where, written, f"is set again with {said}; {first_where} set it "
+                             f"first {kept}, {fate}"))
 
     ts = TokenSet(axes)
     kept_notes: List[Item] = list(notes)
