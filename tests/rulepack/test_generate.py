@@ -91,7 +91,7 @@ def test_the_pack_is_plain_ascii_with_no_dashes():
     arabic_ok = (f"{PACK}/content.md", f"{PACK}/direction.md")
     for path, text in PACK_FILES.items():
         outside = [c for c in text if not c.isascii()
-                   and not (path in arabic_ok and "؀" <= c <= "ۿ")]
+                   and not (path in arabic_ok and "\u0600" <= c <= "\u06ff")]
         assert outside == [], path
         assert not re.search(r"\s--\s", text), path
 

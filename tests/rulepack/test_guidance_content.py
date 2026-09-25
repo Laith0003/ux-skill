@@ -92,7 +92,7 @@ ARABIC_ALLOWED = ("content.md", "direction.md")
 
 
 def _outside(text, arabic):
-    return [c for c in text if not c.isascii() and not (arabic and "؀" <= c <= "ۿ")]
+    return [c for c in text if not c.isascii() and not (arabic and "\u0600" <= c <= "\u06ff")]
 
 
 def test_guidance_is_ascii_without_dashes():
