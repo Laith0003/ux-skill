@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0d0f12;
@@ -186,7 +188,7 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
@@ -252,7 +254,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -345,7 +348,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <style>
     html, body {
       overflow-x: clip;
@@ -561,7 +565,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         Unten steht ein vereinfachter Hero-Block aus einem Next.js-Starter, der drei Regeln verletzt, und die umgeschriebene Variante, die mit Exit-Code 0 durchläuft. Gleiche Konversionsabsicht, anderer Fingerprint.
       </p>
-      <pre class="code"><span class="c">// Vorher: 3 High-Findings</span>
+      <!-- ux-lint-off purple-to-blue-gradient, tailwind-color-named-vague --><pre class="code"><span class="c">// Vorher: 3 High-Findings</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -590,7 +594,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
     &lt;Card className=<span class="s">"col-span-5"</span>
       title=<span class="s">"Carrier-Ranking"</span> /&gt;
   &lt;/div&gt;
-&lt;/section&gt;</pre>
+&lt;/section&gt;</pre><!-- ux-lint-on -->
       <p>
         Im Vorher schlagen drei Regeln an: Inter bei <code>text-7xl</code>, der kanonische KI-Verlauf und das Dreierraster identischer Karten. Im Nachher paart die Vorlage Fraunces (Display) mit Inter (Body), nutzt eine flache Oberfläche und tauscht in ein asymmetrisches 7-zu-5-Raster. Gleiche Absicht, kein Fingerprint mehr.
       </p>
@@ -648,7 +652,7 @@ $ uxskill mcp-config --target cursor
 
       <div class="honesty">
         <div class="label">Ehrlicher Scope</div>
-        <h4>Die Regeln fangen Struktur. Sie fangen keinen Geschmack.</h4>
+        <h3 class="h4">Die Regeln fangen Struktur. Sie fangen keinen Geschmack.</h3>
         <p>Der Linter wird nie melden „dieser Abschnitt hat den falschen Rhythmus" oder „diese Copy klingt kalt". Das ist die Aufgabe eines Menschen oder eines Review-LLM. Was die Regex dagegen <em>zuverlässig</em> einfängt, ist jeder Fingerprint, der sich als literaler Token, Muster oder Form ausdrücken lässt, also der Großteil aller KI-Defaults, weil das Modell immer wieder zum selben Artefakt zurückkehrt.</p>
         <p>Wir lassen bewusst keinen LLM-Judge in der CI laufen. Wenn dein Maßstab „sieht aus wie von einem Designer gemacht" ist, dann ist das Code-Review, kein Lint. ux-skill stellt <code>ux critique</code> für diesen Durchlauf bereit, aber im Editor auf Abruf, nicht in der CI.</p>
       </div>
@@ -672,9 +676,9 @@ $ uxskill mcp-config --target cursor
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· oder ·</div>
+        <div class="row row--note">· oder ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· oder ·</div>
+        <div class="row row--note">· oder ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

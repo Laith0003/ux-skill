@@ -66,6 +66,8 @@
 </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0d0f12;
@@ -188,13 +190,14 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 {
+    h4,
+    h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px;
       color: var(--ink);
@@ -259,7 +262,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -373,7 +377,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
@@ -737,7 +742,7 @@
 
       <div class="honesty">
         <div class="label">Honest scope</div>
-        <h4>The bridge does not replace a designer.</h4>
+        <h3 class="h4">The bridge does not replace a designer.</h3>
         <p>If you have a designer on the team, they own the Figma file. ux-skill makes the system they built durable through the AI handoff. It does not generate the Figma file, does not draw frames, and does not replace the taste call on a hero composition.</p>
         <p>If you don't have a designer, ux-skill's recommender gets you to a defensible system from a written brief. The output is not Figma-quality polish, it's a working system you can hand to an AI session and not lose in translation. The taste call still needs a human or a sharper tool.</p>
       </div>
@@ -768,9 +773,9 @@
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
+        <div class="row row--note">, or, </div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
+        <div class="row row--note">, or, </div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

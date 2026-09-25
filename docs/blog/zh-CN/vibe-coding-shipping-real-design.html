@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0f1115;
@@ -176,13 +178,14 @@
       color: var(--ink); margin: 64px 0 18px;
     }
     h2 .accent { color: var(--scene-accent); }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 700; font-size: 18px;
       color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 {
+    h4,
+    h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 700; font-size: 16px;
       color: var(--ink);
@@ -247,7 +250,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 700; font-size: 16px; color: var(--ink);
       margin-bottom: 10px;
@@ -341,7 +345,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     html, body {
@@ -641,7 +646,7 @@
 
       <div class="honesty">
         <div class="label">范围澄清</div>
-        <h4>正则抓的是结构性指纹,不是品味。</h4>
+        <h3 class="h4">正则抓的是结构性指纹,不是品味。</h3>
         <p>lint 永远不会判定「这一段的节奏不对」或「文案读起来太冷」。那是审稿的工作。正则确实能抓住的,是每一个有字面 token、class 名、十六进制值或 DOM 形状的指纹,这刚好覆盖了 AI 默认值里的绝大多数,因为模型每次都会伸手抓同一个产物。</p>
         <p>如果想在 lint 之上加一层「品味检查」,同一个包里附带 <code>/ux-critique</code> 命令,在编辑器内按需触发。我们刻意不把它放在 CI 里,CI 是放「确定性地板」的地方。</p>
       </div>
@@ -683,9 +688,9 @@
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· 或 ·</div>
+        <div class="row row--note">· 或 ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· 或 ·</div>
+        <div class="row row--note">· 或 ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

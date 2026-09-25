@@ -76,6 +76,9 @@
   .ap-head { display: grid; grid-template-columns: auto auto auto; gap: 8px 12px; align-items: center; margin-bottom: 14px; }
   .ap-id { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
   .ap-sev { font-family: var(--mono); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.08em; }
+  .ap-sev--high { background: #ff5d5d; color: #FFFFFF; }
+  .ap-sev--medium { background: #e8a63c; color: #07080a; }
+  .ap-sev--low { background: #8be9b1; color: #07080a; }
   .ap-cat { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.10em; text-transform: uppercase; }
   .ap-name { grid-column: 1 / -1; font-size: 20px; font-weight: 600; color: var(--ink); line-height: 1.2; }
   .ap-applies { grid-column: 1 / -1; display: flex; gap: 6px; flex-wrap: wrap; }
@@ -486,7 +489,7 @@
 </div>
 <section class="top">
   <div class="container">
-    <p class="top__eyebrow">Linter catalogue · v3.0.0</p>
+    <p class="top__eyebrow">Linter catalogue · v3.2.1</p>
     <h1 class="top__title">145 fingerprints of <em>AI design slop.</em></h1>
     <p class="top__lead">
       Every rule in <code>data/anti-patterns.json</code>, browseable. Run the linter (<code>uxskill lint</code>) and it scans your HTML/CSS/JS for these regex patterns in &lt;50&#x20;ms: no LLM, no API call, no telemetry. Each rule names the fingerprint, explains why it's slop, and tells the AI session what to ship instead.
@@ -516,13 +519,12 @@
 <section>
   <div class="container">
     <div class="grid" id="ap-grid">
-      
     <article class="ap-card" id="anchor-no-href-as-button">
       <header class="ap-head">
         <span class="ap-id">#anchor-no-href-as-button</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">Anchor styled as button without href</h3>
+        <h2 class="ap-name">Anchor styled as button without href</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -540,9 +542,9 @@
     <article class="ap-card" id="aria-live-polite-on-error">
       <header class="ap-head">
         <span class="ap-id">#aria-live-polite-on-error</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">aria-live=&#x27;polite&#x27; on a critical error region</h3>
+        <h2 class="ap-name">aria-live=&#x27;polite&#x27; on a critical error region</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -560,9 +562,9 @@
     <article class="ap-card" id="cursor-not-allowed-no-visual">
       <header class="ap-head">
         <span class="ap-id">#cursor-not-allowed-no-visual</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">cursor: not-allowed with no visible disabled state</h3>
+        <h2 class="ap-name">cursor: not-allowed with no visible disabled state</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -580,9 +582,9 @@
     <article class="ap-card" id="generic-alt-image-photo-icon">
       <header class="ap-head">
         <span class="ap-id">#generic-alt-image-photo-icon</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">Generic alt text: image / photo / picture / icon</h3>
+        <h2 class="ap-name">Generic alt text: image / photo / picture / icon</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -600,9 +602,9 @@
     <article class="ap-card" id="generic-alt-untitled-screenshot-logo-banner">
       <header class="ap-head">
         <span class="ap-id">#generic-alt-untitled-screenshot-logo-banner</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">Generic alt text: untitled / screenshot / logo / banner</h3>
+        <h2 class="ap-name">Generic alt text: untitled / screenshot / logo / banner</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -620,9 +622,9 @@
     <article class="ap-card" id="hover-only-card-actions">
       <header class="ap-head">
         <span class="ap-id">#hover-only-card-actions</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">Card actions revealed only on hover</h3>
+        <h2 class="ap-name">Card actions revealed only on hover</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -640,9 +642,9 @@
     <article class="ap-card" id="iframe-without-title">
       <header class="ap-head">
         <span class="ap-id">#iframe-without-title</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">&lt;iframe&gt; missing title attribute</h3>
+        <h2 class="ap-name">&lt;iframe&gt; missing title attribute</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -660,9 +662,9 @@
     <article class="ap-card" id="img-no-alt">
       <header class="ap-head">
         <span class="ap-id">#img-no-alt</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">Image missing alt attribute</h3>
+        <h2 class="ap-name">Image missing alt attribute</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -680,9 +682,9 @@
     <article class="ap-card" id="inline-svg-no-aria">
       <header class="ap-head">
         <span class="ap-id">#inline-svg-no-aria</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">SVG without aria-label or aria-hidden</h3>
+        <h2 class="ap-name">SVG without aria-label or aria-hidden</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -700,9 +702,9 @@
     <article class="ap-card" id="lang-attribute-missing">
       <header class="ap-head">
         <span class="ap-id">#lang-attribute-missing</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">&lt;html&gt; without lang attribute</h3>
+        <h2 class="ap-name">&lt;html&gt; without lang attribute</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -720,9 +722,9 @@
     <article class="ap-card" id="link-onclick-no-href">
       <header class="ap-head">
         <span class="ap-id">#link-onclick-no-href</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">Anchor with onClick but no href</h3>
+        <h2 class="ap-name">Anchor with onClick but no href</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -740,9 +742,9 @@
     <article class="ap-card" id="link-without-href">
       <header class="ap-head">
         <span class="ap-id">#link-without-href</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">&lt;a&gt; element without an href attribute</h3>
+        <h2 class="ap-name">&lt;a&gt; element without an href attribute</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -760,9 +762,9 @@
     <article class="ap-card" id="meta-refresh-redirect">
       <header class="ap-head">
         <span class="ap-id">#meta-refresh-redirect</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">&lt;meta http-equiv=&#x27;refresh&#x27;&gt; redirect</h3>
+        <h2 class="ap-name">&lt;meta http-equiv=&#x27;refresh&#x27;&gt; redirect</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -780,9 +782,9 @@
     <article class="ap-card" id="overflow-hidden-on-html">
       <header class="ap-head">
         <span class="ap-id">#overflow-hidden-on-html</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">overflow: hidden applied to &lt;html&gt;</h3>
+        <h2 class="ap-name">overflow: hidden applied to &lt;html&gt;</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -800,9 +802,9 @@
     <article class="ap-card" id="placeholder-as-label">
       <header class="ap-head">
         <span class="ap-id">#placeholder-as-label</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">Input placeholder used as the only label</h3>
+        <h2 class="ap-name">Input placeholder used as the only label</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -820,9 +822,9 @@
     <article class="ap-card" id="pointer-events-none-on-link">
       <header class="ap-head">
         <span class="ap-id">#pointer-events-none-on-link</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">&lt;a&gt; with pointer-events: none and no aria-disabled</h3>
+        <h2 class="ap-name">&lt;a&gt; with pointer-events: none and no aria-disabled</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -840,9 +842,9 @@
     <article class="ap-card" id="role-button-on-anchor-without-href">
       <header class="ap-head">
         <span class="ap-id">#role-button-on-anchor-without-href</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">&lt;a role=&#x27;button&#x27;&gt; with no href</h3>
+        <h2 class="ap-name">&lt;a role=&#x27;button&#x27;&gt; with no href</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -860,9 +862,9 @@
     <article class="ap-card" id="select-without-label">
       <header class="ap-head">
         <span class="ap-id">#select-without-label</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">&lt;select&gt; with no associated &lt;label&gt; or aria-label</h3>
+        <h2 class="ap-name">&lt;select&gt; with no associated &lt;label&gt; or aria-label</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -880,9 +882,9 @@
     <article class="ap-card" id="tabindex-positive">
       <header class="ap-head">
         <span class="ap-id">#tabindex-positive</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">Positive tabindex value</h3>
+        <h2 class="ap-name">Positive tabindex value</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -900,9 +902,9 @@
     <article class="ap-card" id="target-blank-no-noopener">
       <header class="ap-head">
         <span class="ap-id">#target-blank-no-noopener</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">target=&quot;_blank&quot; without rel=&quot;noopener noreferrer&quot;</h3>
+        <h2 class="ap-name">target=&quot;_blank&quot; without rel=&quot;noopener noreferrer&quot;</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -920,9 +922,9 @@
     <article class="ap-card" id="tooltip-on-required-info">
       <header class="ap-head">
         <span class="ap-id">#tooltip-on-required-info</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">Load-bearing copy hidden in a title attribute</h3>
+        <h2 class="ap-name">Load-bearing copy hidden in a title attribute</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -940,9 +942,9 @@
     <article class="ap-card" id="video-without-captions">
       <header class="ap-head">
         <span class="ap-id">#video-without-captions</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">&lt;video&gt; element without &lt;track kind=&#x27;captions&#x27;&gt;</h3>
+        <h2 class="ap-name">&lt;video&gt; element without &lt;track kind=&#x27;captions&#x27;&gt;</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -960,9 +962,9 @@
     <article class="ap-card" id="chrome-y-multi-stop-gradient">
       <header class="ap-head">
         <span class="ap-id">#chrome-y-multi-stop-gradient</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Color</span>
-        <h3 class="ap-name">Chrome-y multi-stop gradient</h3>
+        <h2 class="ap-name">Chrome-y multi-stop gradient</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -980,9 +982,9 @@
     <article class="ap-card" id="dark-text-on-dark-card">
       <header class="ap-head">
         <span class="ap-id">#dark-text-on-dark-card</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Color</span>
-        <h3 class="ap-name">Low-contrast text on card</h3>
+        <h2 class="ap-name">Low-contrast text on card</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1000,9 +1002,9 @@
     <article class="ap-card" id="gradient-on-text-rainbow">
       <header class="ap-head">
         <span class="ap-id">#gradient-on-text-rainbow</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Color</span>
-        <h3 class="ap-name">Rainbow gradient on display text</h3>
+        <h2 class="ap-name">Rainbow gradient on display text</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1020,9 +1022,9 @@
     <article class="ap-card" id="purple-to-blue-gradient">
       <header class="ap-head">
         <span class="ap-id">#purple-to-blue-gradient</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Color</span>
-        <h3 class="ap-name">Default purple-to-blue AI gradient</h3>
+        <h2 class="ap-name">Default purple-to-blue AI gradient</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1040,9 +1042,9 @@
     <article class="ap-card" id="cta-text-read-more">
       <header class="ap-head">
         <span class="ap-id">#cta-text-read-more</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Generic CTA text: Read more / View more / See more</h3>
+        <h2 class="ap-name">Generic CTA text: Read more / View more / See more</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1060,9 +1062,9 @@
     <article class="ap-card" id="emoji-in-ui">
       <header class="ap-head">
         <span class="ap-id">#emoji-in-ui</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Emoji used as UI element</h3>
+        <h2 class="ap-name">Emoji used as UI element</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1080,9 +1082,9 @@
     <article class="ap-card" id="filler-marketing-verbs">
       <header class="ap-head">
         <span class="ap-id">#filler-marketing-verbs</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Filler marketing verb in headline</h3>
+        <h2 class="ap-name">Filler marketing verb in headline</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1100,9 +1102,9 @@
     <article class="ap-card" id="generic-cta-text">
       <header class="ap-head">
         <span class="ap-id">#generic-cta-text</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Generic CTA text (Click here, Learn more)</h3>
+        <h2 class="ap-name">Generic CTA text (Click here, Learn more)</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1120,9 +1122,9 @@
     <article class="ap-card" id="icon-emoji-stamp">
       <header class="ap-head">
         <span class="ap-id">#icon-emoji-stamp</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Emoji used as icon stamp</h3>
+        <h2 class="ap-name">Emoji used as icon stamp</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1140,13 +1142,13 @@
     <article class="ap-card" id="lorem-ipsum-leak">
       <header class="ap-head">
         <span class="ap-id">#lorem-ipsum-leak</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Lorem ipsum in shipping code</h3>
+        <!-- ux-lint-off lorem-ipsum-leak, placeholder-token-shipped --><h2 class="ap-name">Lorem ipsum in shipping code</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Lorem ipsum in production source code is unshipped placeholder content - the most obvious draft-state leak.</p></div>
+      <!-- ux-lint-off lorem-ipsum-leak, placeholder-token-shipped --><div class="ap-why"><span class="ap-sub">Why bad</span><p>Lorem ipsum in production source code is unshipped placeholder content - the most obvious draft-state leak.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Write real copy that makes a specific claim about the product. If you can&#x27;t write it yet, mark the block with TODO and a content owner.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\b(?:Lorem\s+ipsum|lorem\s+ipsum\s+dolor|consectetur\s+adipiscing|sed\s+do\s+eiusmod)\b</code></pre>
       <div class="ap-examples">
@@ -1160,9 +1162,9 @@
     <article class="ap-card" id="picsum-photos-seed">
       <header class="ap-head">
         <span class="ap-id">#picsum-photos-seed</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">picsum.photos lorem-picsum placeholder</h3>
+        <h2 class="ap-name">picsum.photos lorem-picsum placeholder</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1180,9 +1182,9 @@
     <article class="ap-card" id="placeholder-as-pricing">
       <header class="ap-head">
         <span class="ap-id">#placeholder-as-pricing</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Default AI pricing tier amounts</h3>
+        <h2 class="ap-name">Default AI pricing tier amounts</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1200,9 +1202,9 @@
     <article class="ap-card" id="placeholder-com-direct">
       <header class="ap-head">
         <span class="ap-id">#placeholder-com-direct</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">placeholder.com direct placeholder</h3>
+        <h2 class="ap-name">placeholder.com direct placeholder</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1220,9 +1222,9 @@
     <article class="ap-card" id="placeholder-via-com">
       <header class="ap-head">
         <span class="ap-id">#placeholder-via-com</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">via.placeholder.com placeholder image</h3>
+        <h2 class="ap-name">via.placeholder.com placeholder image</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1240,9 +1242,9 @@
     <article class="ap-card" id="placekitten-com">
       <header class="ap-head">
         <span class="ap-id">#placekitten-com</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">placekitten.com kitten placeholder</h3>
+        <h2 class="ap-name">placekitten.com kitten placeholder</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1260,9 +1262,9 @@
     <article class="ap-card" id="testimonial-fake-five-stars">
       <header class="ap-head">
         <span class="ap-id">#testimonial-fake-five-stars</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Hardcoded five-star testimonial</h3>
+        <h2 class="ap-name">Hardcoded five-star testimonial</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1280,9 +1282,9 @@
     <article class="ap-card" id="unsplash-photo-id-no-alt">
       <header class="ap-head">
         <span class="ap-id">#unsplash-photo-id-no-alt</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Unsplash photo URL with empty or missing alt</h3>
+        <h2 class="ap-name">Unsplash photo URL with empty or missing alt</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1300,15 +1302,15 @@
     <article class="ap-card" id="h-screen-no-dvh-fallback">
       <header class="ap-head">
         <span class="ap-id">#h-screen-no-dvh-fallback</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Layout</span>
-        <h3 class="ap-name">100vh without 100dvh fallback for mobile</h3>
+        <h2 class="ap-name">100vh without 100dvh fallback for mobile</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>100vh on mobile includes the browser chrome that retracts on scroll, so the layout jumps as the address bar collapses - dynamic viewport units (dvh) fix this.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use height: 100dvh or h-[100dvh] as the primary, with h-screen / 100vh as the legacy fallback for browsers that lack dvh.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:height\s*:\s*100vh|class=[^&gt;]*h-screen)(?![^}]*100dvh)</code></pre>
+      <!-- ux-lint-off h-screen-no-dvh-fallback --><pre class="ap-pre ap-pre--rx"><code>(?:height\s*:\s*100vh|class=[^&gt;]*h-screen)(?![^}]*100dvh)</code></pre><!-- ux-lint-on -->
       <div class="ap-examples">
         
         
@@ -1320,9 +1322,9 @@
     <article class="ap-card" id="three-equal-card-grid">
       <header class="ap-head">
         <span class="ap-id">#three-equal-card-grid</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Layout</span>
-        <h3 class="ap-name">Three equal cards in a row</h3>
+        <h2 class="ap-name">Three equal cards in a row</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1340,9 +1342,9 @@
     <article class="ap-card" id="animating-layout-properties">
       <header class="ap-head">
         <span class="ap-id">#animating-layout-properties</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Motion</span>
-        <h3 class="ap-name">Transition on a layout property</h3>
+        <h2 class="ap-name">Transition on a layout property</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1360,9 +1362,9 @@
     <article class="ap-card" id="autoplay-without-muted">
       <header class="ap-head">
         <span class="ap-id">#autoplay-without-muted</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Motion</span>
-        <h3 class="ap-name">&lt;video autoplay&gt; without muted attribute</h3>
+        <h2 class="ap-name">&lt;video autoplay&gt; without muted attribute</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1380,9 +1382,9 @@
     <article class="ap-card" id="marquee-tag">
       <header class="ap-head">
         <span class="ap-id">#marquee-tag</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Motion</span>
-        <h3 class="ap-name">&lt;marquee&gt; element used</h3>
+        <h2 class="ap-name">&lt;marquee&gt; element used</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1400,9 +1402,9 @@
     <article class="ap-card" id="img-no-dimensions">
       <header class="ap-head">
         <span class="ap-id">#img-no-dimensions</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Performance</span>
-        <h3 class="ap-name">Image without width and height attributes</h3>
+        <h2 class="ap-name">Image without width and height attributes</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1420,9 +1422,9 @@
     <article class="ap-card" id="console-log-leak">
       <header class="ap-head">
         <span class="ap-id">#console-log-leak</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Quality</span>
-        <h3 class="ap-name">console.log in component code</h3>
+        <h2 class="ap-name">console.log in component code</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1440,9 +1442,9 @@
     <article class="ap-card" id="font-weight-numeric-100-or-900-on-body">
       <header class="ap-head">
         <span class="ap-id">#font-weight-numeric-100-or-900-on-body</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Typography</span>
-        <h3 class="ap-name">Body or paragraph font-weight set to 100 or 900</h3>
+        <h2 class="ap-name">Body or paragraph font-weight set to 100 or 900</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1460,9 +1462,9 @@
     <article class="ap-card" id="inter-as-display">
       <header class="ap-head">
         <span class="ap-id">#inter-as-display</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Typography</span>
-        <h3 class="ap-name">Inter used as display font</h3>
+        <h2 class="ap-name">Inter used as display font</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1480,9 +1482,9 @@
     <article class="ap-card" id="emoji-bullet-marker">
       <header class="ap-head">
         <span class="ap-id">#emoji-bullet-marker</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Visual</span>
-        <h3 class="ap-name">Emoji at start of list item</h3>
+        <h2 class="ap-name">Emoji at start of list item</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1500,9 +1502,9 @@
     <article class="ap-card" id="lone-emoji-as-icon">
       <header class="ap-head">
         <span class="ap-id">#lone-emoji-as-icon</span>
-        <span class="ap-sev" style="background:#ff5d5d;color:#FFFFFF">HIGH</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Visual</span>
-        <h3 class="ap-name">Lone emoji used as functional icon</h3>
+        <h2 class="ap-name">Lone emoji used as functional icon</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1520,9 +1522,9 @@
     <article class="ap-card" id="aria-busy-without-aria-live">
       <header class="ap-head">
         <span class="ap-id">#aria-busy-without-aria-live</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">aria-busy=&#x27;true&#x27; with no aria-live companion</h3>
+        <h2 class="ap-name">aria-busy=&#x27;true&#x27; with no aria-live companion</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1540,9 +1542,9 @@
     <article class="ap-card" id="button-no-type">
       <header class="ap-head">
         <span class="ap-id">#button-no-type</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">Button missing type attribute</h3>
+        <h2 class="ap-name">Button missing type attribute</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1560,9 +1562,9 @@
     <article class="ap-card" id="cursor-pointer-non-interactive">
       <header class="ap-head">
         <span class="ap-id">#cursor-pointer-non-interactive</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">cursor:pointer on non-interactive element</h3>
+        <h2 class="ap-name">cursor:pointer on non-interactive element</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1580,9 +1582,9 @@
     <article class="ap-card" id="fieldset-without-legend">
       <header class="ap-head">
         <span class="ap-id">#fieldset-without-legend</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">&lt;fieldset&gt; missing a &lt;legend&gt; child</h3>
+        <h2 class="ap-name">&lt;fieldset&gt; missing a &lt;legend&gt; child</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1600,9 +1602,9 @@
     <article class="ap-card" id="generic-alt-decorative-not-empty">
       <header class="ap-head">
         <span class="ap-id">#generic-alt-decorative-not-empty</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">alt=&#x27;decorative&#x27; instead of empty alt</h3>
+        <h2 class="ap-name">alt=&#x27;decorative&#x27; instead of empty alt</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1620,9 +1622,9 @@
     <article class="ap-card" id="heading-skip-h1-h3">
       <header class="ap-head">
         <span class="ap-id">#heading-skip-h1-h3</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">Skipped heading level</h3>
+        <h2 class="ap-name">Skipped heading level</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1640,9 +1642,9 @@
     <article class="ap-card" id="infinite-scroll-no-pagination">
       <header class="ap-head">
         <span class="ap-id">#infinite-scroll-no-pagination</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">Infinite scroll without keyboard fallback</h3>
+        <h2 class="ap-name">Infinite scroll without keyboard fallback</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1660,9 +1662,9 @@
     <article class="ap-card" id="inline-style-display-none-no-aria">
       <header class="ap-head">
         <span class="ap-id">#inline-style-display-none-no-aria</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">Interactive element hidden via inline display:none without aria-hidden</h3>
+        <h2 class="ap-name">Interactive element hidden via inline display:none without aria-hidden</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1680,13 +1682,13 @@
     <article class="ap-card" id="safe-area-inset-only-bottom">
       <header class="ap-head">
         <span class="ap-id">#safe-area-inset-only-bottom</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">safe-area-inset-bottom without top/left/right siblings</h3>
+        <h2 class="ap-name">safe-area-inset-bottom without top/left/right siblings</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Reaching only for env(safe-area-inset-bottom) signals the dev copied the iPhone-X home-indicator fix without thinking about the notch (top), Dynamic Island, landscape mode, or rotated devices where left/right inset matters. The layout punches into hardware on three sides while pretending to be device-safe.</p></div>
+      <!-- ux-lint-off safe-area-inset-only-bottom --><div class="ap-why"><span class="ap-sub">Why bad</span><p>Reaching only for env(safe-area-inset-bottom) signals the dev copied the iPhone-X home-indicator fix without thinking about the notch (top), Dynamic Island, landscape mode, or rotated devices where left/right inset matters. The layout punches into hardware on three sides while pretending to be device-safe.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>If the surface goes edge-to-edge, set all four insets (or `padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)` and let CSS pick the active ones). For a bottom-fixed nav, that&#x27;s fine - but verify landscape with rotation doesn&#x27;t expose the issue.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>env\(\s*safe-area-inset-bottom\s*\)(?![\s\S]{0,400}env\(\s*safe-area-inset-(?:top|left|right)\s*\))</code></pre>
       <div class="ap-examples">
@@ -1700,9 +1702,9 @@
     <article class="ap-card" id="screen-reader-only-without-class">
       <header class="ap-head">
         <span class="ap-id">#screen-reader-only-without-class</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">Skip-to-content link with no sr-only / visually-hidden class</h3>
+        <h2 class="ap-name">Skip-to-content link with no sr-only / visually-hidden class</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1720,9 +1722,9 @@
     <article class="ap-card" id="card-glow-purple-shadow">
       <header class="ap-head">
         <span class="ap-id">#card-glow-purple-shadow</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Color</span>
-        <h3 class="ap-name">Purple glow shadow on cards</h3>
+        <h2 class="ap-name">Purple glow shadow on cards</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1740,9 +1742,9 @@
     <article class="ap-card" id="glass-without-fallback">
       <header class="ap-head">
         <span class="ap-id">#glass-without-fallback</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Color</span>
-        <h3 class="ap-name">backdrop-filter blur without background fallback</h3>
+        <!-- ux-lint-off glass-morphism-default --><h2 class="ap-name">backdrop-filter blur without background fallback</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1760,9 +1762,9 @@
     <article class="ap-card" id="gradient-mesh-purple-pink">
       <header class="ap-head">
         <span class="ap-id">#gradient-mesh-purple-pink</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Color</span>
-        <h3 class="ap-name">Purple-pink mesh gradient hero</h3>
+        <h2 class="ap-name">Purple-pink mesh gradient hero</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1780,9 +1782,9 @@
     <article class="ap-card" id="gradient-text-rainbow">
       <header class="ap-head">
         <span class="ap-id">#gradient-text-rainbow</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Color</span>
-        <h3 class="ap-name">Multi-stop gradient text</h3>
+        <h2 class="ap-name">Multi-stop gradient text</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1800,15 +1802,15 @@
     <article class="ap-card" id="before-after-100-percent">
       <header class="ap-head">
         <span class="ap-id">#before-after-100-percent</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Magnitude-default before-after claim</h3>
+        <h2 class="ap-name">Magnitude-default before-after claim</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>0 to 100 / 100% guaranteed / 100% effective are the magnitude-by-default phrases AI reaches for - readers have learned to discount them.</p></div>
+      <!-- ux-lint-off before-after-100-percent, round-number-stats --><div class="ap-why"><span class="ap-sub">Why bad</span><p>0 to 100 / 100% guaranteed / 100% effective are the magnitude-by-default phrases AI reaches for - readers have learned to discount them.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Quote the real spread: &#x27;from 14 manual steps to 3 automated&#x27;. If you can&#x27;t measure it, don&#x27;t claim it.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:0 to 100|100% (?:guaranteed|effective|accurate|certain))</code></pre>
+      <!-- ux-lint-off before-after-100-percent --><pre class="ap-pre ap-pre--rx"><code>(?:0 to 100|100% (?:guaranteed|effective|accurate|certain))</code></pre><!-- ux-lint-on -->
       <div class="ap-examples">
         
         
@@ -1820,9 +1822,9 @@
     <article class="ap-card" id="cta-text-tap-continue-go">
       <header class="ap-head">
         <span class="ap-id">#cta-text-tap-continue-go</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Generic CTA text: Tap here / Continue / Go</h3>
+        <h2 class="ap-name">Generic CTA text: Tap here / Continue / Go</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -1840,13 +1842,13 @@
     <article class="ap-card" id="fake-line-of-code-count">
       <header class="ap-head">
         <span class="ap-id">#fake-line-of-code-count</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Unsourced large-number marketing claim</h3>
+        <h2 class="ap-name">Unsourced large-number marketing claim</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>We saved 10,000 hours / Generated 1,000,000 lines of code / Reduced 50,000 tickets - large round numbers with no citation that signal the magnitude was invented to sound impressive.</p></div>
+      <!-- ux-lint-off fake-line-of-code-count --><div class="ap-why"><span class="ap-sub">Why bad</span><p>We saved 10,000 hours / Generated 1,000,000 lines of code / Reduced 50,000 tickets - large round numbers with no citation that signal the magnitude was invented to sound impressive.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use the real measured number with the real source: &#x27;In Q1 2026, customers saved 4,217 support hours (mean across 38 teams)&#x27;. Real numbers are messy and specific.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?:saved|generated|reduced|increased)\s+\d{1,3}(?:[,.]?\d{3})+\s+(?:hours|lines|users|teams)</code></pre>
       <div class="ap-examples">
@@ -1860,13 +1862,13 @@
     <article class="ap-card" id="fake-name-john-doe">
       <header class="ap-head">
         <span class="ap-id">#fake-name-john-doe</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Generic placeholder names</h3>
+        <h2 class="ap-name">Generic placeholder names</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>John/Jane Doe and their cousins signal that nobody thought about who would actually use the product - immediate AI-generated-tutorial vibe.</p></div>
+      <!-- ux-lint-off fake-name-john-doe --><div class="ap-why"><span class="ap-sub">Why bad</span><p>John/Jane Doe and their cousins signal that nobody thought about who would actually use the product - immediate AI-generated-tutorial vibe.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use plausible names that fit the target market: Maya Iqbal, Adam Levin, Wen Zhang, Layla Haddad. Match region for regional products.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\b(?:John\s+Doe|Jane\s+Doe|John\s+Smith|Jane\s+Smith|Sarah\s+Chan|Test\s+User|Demo\s+User|Foo\s+Bar)\b|\b(?:john\.doe|jane\.doe|test\.user)@(?:example|test|demo)\.com\b</code></pre>
       <div class="ap-examples">
@@ -1880,13 +1882,13 @@
     <article class="ap-card" id="marketing-buzz-ai-powered-driven">
       <header class="ap-head">
         <span class="ap-id">#marketing-buzz-ai-powered-driven</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Buzzword: AI-powered / AI-driven</h3>
+        <!-- ux-lint-off marketing-buzz-ai-powered-driven --><h2 class="ap-name">Buzzword: AI-powered / AI-driven</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;AI-powered&#x27; has become the new &#x27;cloud-based&#x27; - every landing page claims it, nobody asks what model, what data, what task. Empty by saturation.</p></div>
+      <!-- ux-lint-off marketing-buzz-ai-powered-driven --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;AI-powered&#x27; has become the new &#x27;cloud-based&#x27; - every landing page claims it, nobody asks what model, what data, what task. Empty by saturation.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the model and the function: &#x27;uses Claude to generate brand-aware tokens&#x27;, &#x27;embeddings from text-embedding-3-small for palette match&#x27;. Or drop the qualifier and just describe the feature.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\bAI[\s-]?(?:powered|driven|enabled|enhanced|first)\b</code></pre>
       <div class="ap-examples">
@@ -1900,13 +1902,13 @@
     <article class="ap-card" id="marketing-buzz-best-in-class">
       <header class="ap-head">
         <span class="ap-id">#marketing-buzz-best-in-class</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Buzzword: best-in-class</h3>
+        <!-- ux-lint-off marketing-buzz-best-in-class --><h2 class="ap-name">Buzzword: best-in-class</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Best-in-class&#x27; is a vendor pitch phrase with no defined benchmark - reads as marketing autopilot. If you really are best at something, name the comparison.</p></div>
+      <!-- ux-lint-off marketing-buzz-best-in-class --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Best-in-class&#x27; is a vendor pitch phrase with no defined benchmark - reads as marketing autopilot. If you really are best at something, name the comparison.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace with a measurable claim: &#x27;fastest CI lint at 90ms&#x27;, &#x27;most rules in the category at 145&#x27;. If no comparison exists, drop the phrase.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\bbest[\s-]in[\s-]class\b</code></pre>
       <div class="ap-examples">
@@ -1920,13 +1922,13 @@
     <article class="ap-card" id="marketing-buzz-cutting-edge">
       <header class="ap-head">
         <span class="ap-id">#marketing-buzz-cutting-edge</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Buzzword: cutting-edge</h3>
+        <!-- ux-lint-off marketing-buzz-cutting-edge --><h2 class="ap-name">Buzzword: cutting-edge</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Cutting-edge&#x27; is the laziest tech adjective in marketing copy - empty signal that means &#x27;we don&#x27;t want to commit to a specific claim&#x27;. Skipped by anyone reading critically.</p></div>
+      <!-- ux-lint-off marketing-buzz-cutting-edge --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Cutting-edge&#x27; is the laziest tech adjective in marketing copy - empty signal that means &#x27;we don&#x27;t want to commit to a specific claim&#x27;. Skipped by anyone reading critically.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace with a concrete capability: &#x27;ships in under 50ms&#x27;, &#x27;covers 152 anti-patterns&#x27;, &#x27;runs inside Cursor and Windsurf&#x27;. Specifics beat adjectives.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\bcutting[\s-]edge\b</code></pre>
       <div class="ap-examples">
@@ -1940,13 +1942,13 @@
     <article class="ap-card" id="marketing-buzz-game-changing">
       <header class="ap-head">
         <span class="ap-id">#marketing-buzz-game-changing</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Buzzword: game-changing / game-changer</h3>
+        <!-- ux-lint-off marketing-buzz-game-changing --><h2 class="ap-name">Buzzword: game-changing / game-changer</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Game-changing&#x27; is the most overused tech-PR adjective in the last decade - means the writer wanted hype without committing to a specific shift. Reads instantly as filler.</p></div>
+      <!-- ux-lint-off marketing-buzz-game-changing --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Game-changing&#x27; is the most overused tech-PR adjective in the last decade - means the writer wanted hype without committing to a specific shift. Reads instantly as filler.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Describe the shift in one sentence: &#x27;design intelligence in the model context, not just in Figma&#x27;. Concrete &gt; grandiose.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\bgame[\s-]chang(?:er|ing|e)\b</code></pre>
       <div class="ap-examples">
@@ -1960,13 +1962,13 @@
     <article class="ap-card" id="marketing-buzz-industry-leading">
       <header class="ap-head">
         <span class="ap-id">#marketing-buzz-industry-leading</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Buzzword: industry-leading</h3>
+        <!-- ux-lint-off marketing-buzz-industry-leading --><h2 class="ap-name">Buzzword: industry-leading</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Industry-leading&#x27; is unverifiable by definition - every category leader and every follower uses it identically. Removes signal, adds slop.</p></div>
+      <!-- ux-lint-off marketing-buzz-industry-leading --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Industry-leading&#x27; is unverifiable by definition - every category leader and every follower uses it identically. Removes signal, adds slop.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Cite the specific lead: &#x27;first design linter in Claude Code marketplace&#x27;, &#x27;4x more rules than the next entrant&#x27;. No claim, no superlative.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\bindustry[\s-]leading\b</code></pre>
       <div class="ap-examples">
@@ -1980,15 +1982,15 @@
     <article class="ap-card" id="marketing-buzz-leverage-ai-harness">
       <header class="ap-head">
         <span class="ap-id">#marketing-buzz-leverage-ai-harness</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Buzzword: leverage / harness the power of</h3>
+        <!-- ux-lint-off marketing-buzz-leverage-ai-harness --><h2 class="ap-name">Buzzword: leverage / harness the power of</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Leverage AI&#x27;, &#x27;harness the power of&#x27;, &#x27;tap into the power of&#x27; are LinkedIn-thinkpiece formulas - immediately telegraphs generated marketing copy with no specifics.</p></div>
+      <!-- ux-lint-off marketing-buzz-leverage-ai-harness --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Leverage AI&#x27;, &#x27;harness the power of&#x27;, &#x27;tap into the power of&#x27; are LinkedIn-thinkpiece formulas - immediately telegraphs generated marketing copy with no specifics.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use &#x27;use&#x27; or name the verb directly: &#x27;uses Claude for layout suggestions&#x27;. Plain verbs beat power-of-X scaffolding.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>\b(?:leverage(?:\s+the\s+power\s+of)?\s+AI|harness(?:\s+the\s+power\s+of)?|tap\s+into\s+the\s+power\s+of)\b</code></pre>
+      <!-- ux-lint-off marketing-buzz-leverage-ai-harness --><pre class="ap-pre ap-pre--rx"><code>\b(?:leverage(?:\s+the\s+power\s+of)?\s+AI|harness(?:\s+the\s+power\s+of)?|tap\s+into\s+the\s+power\s+of)\b</code></pre><!-- ux-lint-on -->
       <div class="ap-examples">
         
         
@@ -2000,13 +2002,13 @@
     <article class="ap-card" id="marketing-buzz-next-generation">
       <header class="ap-head">
         <span class="ap-id">#marketing-buzz-next-generation</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Buzzword: next-generation</h3>
+        <!-- ux-lint-off marketing-buzz-next-generation --><h2 class="ap-name">Buzzword: next-generation</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Next-generation&#x27; is a category-leader cliche that names nothing - every press release in the last 30 years has claimed it. The phrase signals unedited marketing copy and shows the writer skipped the work of saying what is actually new.</p></div>
+      <!-- ux-lint-off marketing-buzz-next-generation --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Next-generation&#x27; is a category-leader cliche that names nothing - every press release in the last 30 years has claimed it. The phrase signals unedited marketing copy and shows the writer skipped the work of saying what is actually new.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the specific capability that is new (e.g., &#x27;first MCP-native design engine&#x27;, &#x27;first regex linter with 152 rules&#x27;). If you can&#x27;t name a specific advance, drop the qualifier.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\bnext[\s-]generation\b</code></pre>
       <div class="ap-examples">
@@ -2020,13 +2022,13 @@
     <article class="ap-card" id="marketing-buzz-world-class">
       <header class="ap-head">
         <span class="ap-id">#marketing-buzz-world-class</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Buzzword: world-class</h3>
+        <!-- ux-lint-off marketing-buzz-world-class --><h2 class="ap-name">Buzzword: world-class</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;World-class&#x27; is consultancy filler - signals the writer either had nothing concrete to say or was scared to commit. Costs trust in a landing page.</p></div>
+      <!-- ux-lint-off marketing-buzz-world-class --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;World-class&#x27; is consultancy filler - signals the writer either had nothing concrete to say or was scared to commit. Costs trust in a landing page.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the specific bar you cleared: &#x27;tested in 17 IDEs&#x27;, &#x27;WCAG AA on every component&#x27;. If there&#x27;s no bar, the word does not belong.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\bworld[\s-]class\b</code></pre>
       <div class="ap-examples">
@@ -2040,13 +2042,13 @@
     <article class="ap-card" id="marketing-unlock-unleash-potential">
       <header class="ap-head">
         <span class="ap-id">#marketing-unlock-unleash-potential</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Buzzword: unlock / unleash the potential, reach new heights</h3>
+        <!-- ux-lint-off filler-marketing-verbs, marketing-unlock-unleash-potential --><h2 class="ap-name">Buzzword: unlock / unleash the potential, reach new heights</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Unlock the potential&#x27; / &#x27;unleash your creativity&#x27; / &#x27;reach new heights&#x27; / &#x27;take it to the next level&#x27; / &#x27;the future is here&#x27; is the strongest cluster of LinkedIn-thinkpiece phrases in any landing page - immediate AI-generated marketing copy tell.</p></div>
+      <!-- ux-lint-off marketing-unlock-unleash-potential --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Unlock the potential&#x27; / &#x27;unleash your creativity&#x27; / &#x27;reach new heights&#x27; / &#x27;take it to the next level&#x27; / &#x27;the future is here&#x27; is the strongest cluster of LinkedIn-thinkpiece phrases in any landing page - immediate AI-generated marketing copy tell.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Describe what the user can do that they could not do before: &#x27;lint AI-generated code in 50ms&#x27;, &#x27;install in three IDEs from one command&#x27;. Specifics beat &#x27;unlock&#x27; every time.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\b(?:unlock(?:\s+the)?\s+(?:potential|power|magic|future)|unleash\s+(?:your|the)\s+(?:potential|creativity|power)|reach\s+new\s+heights|take\s+(?:it|things)\s+to\s+the\s+next\s+level|the\s+future\s+is\s+here)\b</code></pre>
       <div class="ap-examples">
@@ -2060,15 +2062,15 @@
     <article class="ap-card" id="round-number-stats">
       <header class="ap-head">
         <span class="ap-id">#round-number-stats</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Round number marketing stat</h3>
+        <h2 class="ap-name">Round number marketing stat</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>99.99%, 10x faster, 100% guaranteed - the suspiciously round numbers AI invents to sound credible. Real measurements are messy and specific.</p></div>
+      <!-- ux-lint-off before-after-100-percent, round-number-stats --><div class="ap-why"><span class="ap-sub">Why bad</span><p>99.99%, 10x faster, 100% guaranteed - the suspiciously round numbers AI invents to sound credible. Real measurements are messy and specific.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use the real number you measured: 99.93% uptime over Q1, 4.2x faster median build, refunded 218 of 244 reported issues. Specificity is the signal.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:99\.99%|99\.9%|10x faster|100% guaranteed|10x more)</code></pre>
+      <!-- ux-lint-off before-after-100-percent, round-number-stats --><pre class="ap-pre ap-pre--rx"><code>(?:99\.99%|99\.9%|10x faster|100% guaranteed|10x more)</code></pre><!-- ux-lint-on -->
       <div class="ap-examples">
         
         
@@ -2080,9 +2082,9 @@
     <article class="ap-card" id="timestamp-just-now">
       <header class="ap-head">
         <span class="ap-id">#timestamp-just-now</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Fake just-now timestamp in static markup</h3>
+        <h2 class="ap-name">Fake just-now timestamp in static markup</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2100,13 +2102,13 @@
     <article class="ap-card" id="trust-badge-no-source">
       <header class="ap-head">
         <span class="ap-id">#trust-badge-no-source</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Unsourced trust-by claim</h3>
+        <h2 class="ap-name">Unsourced trust-by claim</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Trusted by 1000+ teams / Used by Fortune 500 / Loved by 50k developers - unsourced trust claims that signal the generator invented the number to fill space.</p></div>
+      <!-- ux-lint-off trust-badge-no-source --><div class="ap-why"><span class="ap-sub">Why bad</span><p>Trusted by 1000+ teams / Used by Fortune 500 / Loved by 50k developers - unsourced trust claims that signal the generator invented the number to fill space.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the actual companies, link to the actual case studies, or show the actual review aggregate. Specificity beats magnitude every time.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?:Trusted by|Used by|Loved by|Joined by)\s+\d+</code></pre>
       <div class="ap-examples">
@@ -2120,9 +2122,9 @@
     <article class="ap-card" id="aspect-ratio-1-1-default">
       <header class="ap-head">
         <span class="ap-id">#aspect-ratio-1-1-default</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Layout</span>
-        <h3 class="ap-name">Square aspect-ratio as default everywhere</h3>
+        <h2 class="ap-name">Square aspect-ratio as default everywhere</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2140,14 +2142,14 @@
     <article class="ap-card" id="avatar-stack-overlapping">
       <header class="ap-head">
         <span class="ap-id">#avatar-stack-overlapping</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Layout</span>
-        <h3 class="ap-name">Generic overlapping avatar stack</h3>
+        <h2 class="ap-name">Generic overlapping avatar stack</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Three overlapping circular avatars in the nav as &#x27;our team&#x27; or &#x27;join 10k users&#x27; is a content-marketing template tell.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use real customer logos, named testimonials with quotes, or specific signal (Used by 312 engineering teams at Series-A companies).</p></div>
+      <!-- ux-lint-off trust-badge-no-source --><div class="ap-fix"><span class="ap-sub">Fix</span><p>Use real customer logos, named testimonials with quotes, or specific signal (Used by 312 engineering teams at Series-A companies).</p></div><!-- ux-lint-on -->
       <pre class="ap-pre ap-pre--rx"><code>class=&quot;[^&quot;]*-space-x-[0-9]+[^&quot;]*&quot;[^&gt;]*&gt;(?:\s*&lt;(?:img|div)[^&gt;]*class=&quot;[^&quot;]*(?:avatar|rounded-full)[^&quot;]*&quot;[^&gt;]*/?&gt;\s*){3,}</code></pre>
       <div class="ap-examples">
         
@@ -2160,9 +2162,9 @@
     <article class="ap-card" id="centered-everything-hero">
       <header class="ap-head">
         <span class="ap-id">#centered-everything-hero</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Layout</span>
-        <h3 class="ap-name">Centered hero composition</h3>
+        <h2 class="ap-name">Centered hero composition</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2180,9 +2182,9 @@
     <article class="ap-card" id="cta-buttons-clustered-in-hero">
       <header class="ap-head">
         <span class="ap-id">#cta-buttons-clustered-in-hero</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Layout</span>
-        <h3 class="ap-name">Three-plus CTA buttons clustered in hero</h3>
+        <h2 class="ap-name">Three-plus CTA buttons clustered in hero</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2200,9 +2202,9 @@
     <article class="ap-card" id="display-table-for-layout">
       <header class="ap-head">
         <span class="ap-id">#display-table-for-layout</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Layout</span>
-        <h3 class="ap-name">display: table used for layout outside data tables</h3>
+        <h2 class="ap-name">display: table used for layout outside data tables</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2220,9 +2222,9 @@
     <article class="ap-card" id="fixed-height-text-block">
       <header class="ap-head">
         <span class="ap-id">#fixed-height-text-block</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Layout</span>
-        <h3 class="ap-name">Pixel height on a text container</h3>
+        <h2 class="ap-name">Pixel height on a text container</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2240,9 +2242,9 @@
     <article class="ap-card" id="logo-cloud-no-real-logos">
       <header class="ap-head">
         <span class="ap-id">#logo-cloud-no-real-logos</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Layout</span>
-        <h3 class="ap-name">Logo cloud image with empty alt</h3>
+        <h2 class="ap-name">Logo cloud image with empty alt</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2260,9 +2262,9 @@
     <article class="ap-card" id="negative-margin-pull-left-right">
       <header class="ap-head">
         <span class="ap-id">#negative-margin-pull-left-right</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Layout</span>
-        <h3 class="ap-name">Large negative horizontal margin on body content</h3>
+        <h2 class="ap-name">Large negative horizontal margin on body content</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2280,9 +2282,9 @@
     <article class="ap-card" id="animation-duration-too-long">
       <header class="ap-head">
         <span class="ap-id">#animation-duration-too-long</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Motion</span>
-        <h3 class="ap-name">Micro-interaction with animation-duration over 800ms</h3>
+        <h2 class="ap-name">Micro-interaction with animation-duration over 800ms</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2300,9 +2302,9 @@
     <article class="ap-card" id="cta-arrow-rightward-bouncing">
       <header class="ap-head">
         <span class="ap-id">#cta-arrow-rightward-bouncing</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Motion</span>
-        <h3 class="ap-name">Bouncing arrow on CTA</h3>
+        <h2 class="ap-name">Bouncing arrow on CTA</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2320,9 +2322,9 @@
     <article class="ap-card" id="transition-duration-500ms-or-longer">
       <header class="ap-head">
         <span class="ap-id">#transition-duration-500ms-or-longer</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Motion</span>
-        <h3 class="ap-name">Interactive transition-duration 500ms or longer</h3>
+        <h2 class="ap-name">Interactive transition-duration 500ms or longer</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2340,14 +2342,14 @@
     <article class="ap-card" id="transition-property-all">
       <header class="ap-head">
         <span class="ap-id">#transition-property-all</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Motion</span>
-        <h3 class="ap-name">transition: all (lazy property list)</h3>
+        <!-- ux-lint-off transition-property-all --><h2 class="ap-name">transition: all (lazy property list)</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>transition: all is the lazy default that animates every property change - including layout-triggering ones like width/height/margin - causing jank and unintended motion. It also fires on properties the author never meant to transition.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>List the exact properties: transition: transform 200ms ease, opacity 200ms ease. In Tailwind, prefer transition-colors, transition-opacity, transition-transform over transition-all.</p></div>
+      <!-- ux-lint-off transition-property-all --><div class="ap-why"><span class="ap-sub">Why bad</span><p>transition: all is the lazy default that animates every property change - including layout-triggering ones like width/height/margin - causing jank and unintended motion. It also fires on properties the author never meant to transition.</p></div><!-- ux-lint-on -->
+      <!-- ux-lint-off transition-property-all --><div class="ap-fix"><span class="ap-sub">Fix</span><p>List the exact properties: transition: transform 200ms ease, opacity 200ms ease. In Tailwind, prefer transition-colors, transition-opacity, transition-transform over transition-all.</p></div><!-- ux-lint-on -->
       <pre class="ap-pre ap-pre--rx"><code>transition\s*:\s*all\b|transition-property\s*:\s*all\b|\btransition-all\b</code></pre>
       <div class="ap-examples">
         
@@ -2360,9 +2362,9 @@
     <article class="ap-card" id="event-listener-no-passive-on-scroll">
       <header class="ap-head">
         <span class="ap-id">#event-listener-no-passive-on-scroll</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Performance</span>
-        <h3 class="ap-name">addEventListener(&#x27;scroll&#x27; | &#x27;touchmove&#x27; | &#x27;wheel&#x27;) without passive</h3>
+        <h2 class="ap-name">addEventListener(&#x27;scroll&#x27; | &#x27;touchmove&#x27; | &#x27;wheel&#x27;) without passive</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2380,13 +2382,13 @@
     <article class="ap-card" id="image-format-jpg-no-webp-avif">
       <header class="ap-head">
         <span class="ap-id">#image-format-jpg-no-webp-avif</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Performance</span>
-        <h3 class="ap-name">&lt;img src=&quot;*.jpg&quot;&gt; without &lt;picture&gt; source AVIF/WebP</h3>
+        <h2 class="ap-name">&lt;img src=&quot;*.jpg&quot;&gt; without &lt;picture&gt; source AVIF/WebP</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A raw &lt;img&gt; with a .jpg or .png source ships 3-10x more bytes than the same image as AVIF or WebP. On a hero photo this is 800KB vs 80KB - directly hurts LCP, mobile data, and Core Web Vitals. The fact that &lt;picture&gt;+&lt;source type=&quot;image/avif&quot;&gt; has been universal since 2023 means this is now a generator-default tell.</p></div>
+      <!-- ux-lint-off round-number-stats --><div class="ap-why"><span class="ap-sub">Why bad</span><p>A raw &lt;img&gt; with a .jpg or .png source ships 3-10x more bytes than the same image as AVIF or WebP. On a hero photo this is 800KB vs 80KB - directly hurts LCP, mobile data, and Core Web Vitals. The fact that &lt;picture&gt;+&lt;source type=&quot;image/avif&quot;&gt; has been universal since 2023 means this is now a generator-default tell.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Wrap in &lt;picture&gt; with AVIF first, WebP next, JPG fallback: &lt;picture&gt;&lt;source srcset=&quot;hero.avif&quot; type=&quot;image/avif&quot;&gt;&lt;source srcset=&quot;hero.webp&quot; type=&quot;image/webp&quot;&gt;&lt;img src=&quot;hero.jpg&quot; alt=&quot;...&quot; width=&quot;...&quot; height=&quot;...&quot;&gt;&lt;/picture&gt;. For framework images (next/image, astro:assets), the conversion is automatic - use them.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>&lt;img\s[^&gt;]*src\s*=\s*[&#x27;&quot;][^&#x27;&quot;]+\.(?:jpg|jpeg|png)[&#x27;&quot;][^&gt;]*&gt;</code></pre>
       <div class="ap-examples">
@@ -2400,9 +2402,9 @@
     <article class="ap-card" id="any-type-leak">
       <header class="ap-head">
         <span class="ap-id">#any-type-leak</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Quality</span>
-        <h3 class="ap-name">TypeScript any type</h3>
+        <h2 class="ap-name">TypeScript any type</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2420,13 +2422,13 @@
     <article class="ap-card" id="arbitrary-z-index-9999">
       <header class="ap-head">
         <span class="ap-id">#arbitrary-z-index-9999</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Quality</span>
-        <h3 class="ap-name">Lazy z-index value</h3>
+        <h2 class="ap-name">Lazy z-index value</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>z-index: 9999 is the &#x27;I gave up on the stacking system&#x27; value - signals there&#x27;s no z-scale token map and stacking bugs are coming.</p></div>
+      <!-- ux-lint-off arbitrary-z-index-9999 --><div class="ap-why"><span class="ap-sub">Why bad</span><p>z-index: 9999 is the &#x27;I gave up on the stacking system&#x27; value - signals there&#x27;s no z-scale token map and stacking bugs are coming.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Define a z-scale token set (z-base: 0, z-dropdown: 10, z-sticky: 20, z-modal: 50, z-toast: 60). Use the tokens, never a raw 9999.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>z-index:\s*(?:9999+|99999+|2147483647)\b|\bz-\[(?:9999+|99999+)\]</code></pre>
       <div class="ap-examples">
@@ -2440,9 +2442,9 @@
     <article class="ap-card" id="body-cursor-pointer-default">
       <header class="ap-head">
         <span class="ap-id">#body-cursor-pointer-default</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Quality</span>
-        <h3 class="ap-name">body or main given cursor: pointer</h3>
+        <h2 class="ap-name">body or main given cursor: pointer</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2460,9 +2462,9 @@
     <article class="ap-card" id="inline-style-attribute">
       <header class="ap-head">
         <span class="ap-id">#inline-style-attribute</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Quality</span>
-        <h3 class="ap-name">Inline style attribute</h3>
+        <h2 class="ap-name">Inline style attribute</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2480,9 +2482,9 @@
     <article class="ap-card" id="all-caps-large">
       <header class="ap-head">
         <span class="ap-id">#all-caps-large</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Typography</span>
-        <h3 class="ap-name">ALL CAPS at body-text size or larger</h3>
+        <h2 class="ap-name">ALL CAPS at body-text size or larger</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2500,9 +2502,9 @@
     <article class="ap-card" id="body-font-weight-bold-or-700-keyword">
       <header class="ap-head">
         <span class="ap-id">#body-font-weight-bold-or-700-keyword</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Typography</span>
-        <h3 class="ap-name">body / p / li set to font-weight: bold or 700</h3>
+        <h2 class="ap-name">body / p / li set to font-weight: bold or 700</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2520,9 +2522,9 @@
     <article class="ap-card" id="body-letter-spacing-too-wide">
       <header class="ap-head">
         <span class="ap-id">#body-letter-spacing-too-wide</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Typography</span>
-        <h3 class="ap-name">Excessive letter-spacing on body / paragraph</h3>
+        <h2 class="ap-name">Excessive letter-spacing on body / paragraph</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2540,9 +2542,9 @@
     <article class="ap-card" id="body-text-shadow-on-prose">
       <header class="ap-head">
         <span class="ap-id">#body-text-shadow-on-prose</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Typography</span>
-        <h3 class="ap-name">text-shadow applied to body or prose</h3>
+        <h2 class="ap-name">text-shadow applied to body or prose</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2560,9 +2562,9 @@
     <article class="ap-card" id="display-bold-700">
       <header class="ap-head">
         <span class="ap-id">#display-bold-700</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Typography</span>
-        <h3 class="ap-name">Display heading at 700+ font-weight</h3>
+        <h2 class="ap-name">Display heading at 700+ font-weight</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2580,13 +2582,13 @@
     <article class="ap-card" id="hero-text-arbitrary-90px">
       <header class="ap-head">
         <span class="ap-id">#hero-text-arbitrary-90px</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Typography</span>
-        <h3 class="ap-name">Arbitrary hero font size</h3>
+        <h2 class="ap-name">Arbitrary hero font size</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Arbitrary px values like text-[90px] or text-[112px] bypass the type scale and signal the size was picked by eye, not by system.</p></div>
+      <!-- ux-lint-off hero-text-arbitrary-90px --><div class="ap-why"><span class="ap-sub">Why bad</span><p>Arbitrary px values like text-[90px] or text-[112px] bypass the type scale and signal the size was picked by eye, not by system.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Extend the Tailwind theme scale or use clamp() for fluid hero typography. text-6xl/text-7xl/text-8xl exist for a reason.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>text-\[(?:9[0-9]|1[0-9]{2})px\]|font-size:\s*(?:9[0-9]|1[0-9]{2})px\b</code></pre>
       <div class="ap-examples">
@@ -2600,9 +2602,9 @@
     <article class="ap-card" id="letterspacing-tracking-tight-display">
       <header class="ap-head">
         <span class="ap-id">#letterspacing-tracking-tight-display</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Typography</span>
-        <h3 class="ap-name">Tight letter-spacing on heavy display heading</h3>
+        <h2 class="ap-name">Tight letter-spacing on heavy display heading</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2620,13 +2622,13 @@
     <article class="ap-card" id="text-3xl-4xl-5xl-stack">
       <header class="ap-head">
         <span class="ap-id">#text-3xl-4xl-5xl-stack</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Typography</span>
-        <h3 class="ap-name">Tailwind text-3xl text-4xl text-5xl AI hero stack</h3>
+        <h2 class="ap-name">Tailwind text-3xl text-4xl text-5xl AI hero stack</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>text-3xl md:text-4xl lg:text-5xl (and the 4xl/5xl/6xl shift) is the verbatim Tailwind tutorial cadence for every AI-generated hero - signals the responsive type was set by stepping through preset utilities, not by tuning the actual feel at each breakpoint.</p></div>
+      <!-- ux-lint-off text-3xl-4xl-5xl-stack --><div class="ap-why"><span class="ap-sub">Why bad</span><p>text-3xl md:text-4xl lg:text-5xl (and the 4xl/5xl/6xl shift) is the verbatim Tailwind tutorial cadence for every AI-generated hero - signals the responsive type was set by stepping through preset utilities, not by tuning the actual feel at each breakpoint.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use clamp() for fluid type: text-[clamp(2.5rem,5vw,4.5rem)] or define a custom step in tailwind.config that jumps by content priority, not utility index.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\btext-3xl\b[^&quot;]*\bmd:text-4xl\b[^&quot;]*\blg:text-5xl\b|\btext-4xl\b[^&quot;]*\bmd:text-5xl\b[^&quot;]*\blg:text-6xl\b|\btext-5xl\b[^&quot;]*\bmd:text-6xl\b[^&quot;]*\blg:text-7xl\b</code></pre>
       <div class="ap-examples">
@@ -2640,9 +2642,9 @@
     <article class="ap-card" id="title-case-headlines">
       <header class="ap-head">
         <span class="ap-id">#title-case-headlines</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Typography</span>
-        <h3 class="ap-name">Title Case On Display Headings</h3>
+        <!-- ux-lint-off title-case-headlines --><h2 class="ap-name">Title Case On Display Headings</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2660,9 +2662,9 @@
     <article class="ap-card" id="align-html-attribute">
       <header class="ap-head">
         <span class="ap-id">#align-html-attribute</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Visual</span>
-        <h3 class="ap-name">Presentational align= HTML attribute</h3>
+        <h2 class="ap-name">Presentational align= HTML attribute</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2680,9 +2682,9 @@
     <article class="ap-card" id="bgcolor-html-attribute">
       <header class="ap-head">
         <span class="ap-id">#bgcolor-html-attribute</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Visual</span>
-        <h3 class="ap-name">Presentational bgcolor= attribute</h3>
+        <h2 class="ap-name">Presentational bgcolor= attribute</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2700,9 +2702,9 @@
     <article class="ap-card" id="box-shadow-multilayer-default">
       <header class="ap-head">
         <span class="ap-id">#box-shadow-multilayer-default</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Visual</span>
-        <h3 class="ap-name">Five-plus box-shadow layers stacked</h3>
+        <h2 class="ap-name">Five-plus box-shadow layers stacked</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2720,9 +2722,9 @@
     <article class="ap-card" id="dynamic-island-glow-everywhere">
       <header class="ap-head">
         <span class="ap-id">#dynamic-island-glow-everywhere</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Visual</span>
-        <h3 class="ap-name">Dynamic Island inner glow on cards</h3>
+        <h2 class="ap-name">Dynamic Island inner glow on cards</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2740,13 +2742,13 @@
     <article class="ap-card" id="glass-morphism-default">
       <header class="ap-head">
         <span class="ap-id">#glass-morphism-default</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Visual</span>
-        <h3 class="ap-name">Backdrop-blur frosted-glass on four-plus surfaces</h3>
+        <!-- ux-lint-off blur-bg-only-decoration, glass-morphism-default --><h2 class="ap-name">Backdrop-blur frosted-glass on four-plus surfaces</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Frosted-glass everywhere is the iOS-aesthetic AI tell - signals the generator confused &#x27;depth&#x27; with &#x27;blur every surface&#x27;. Four-plus backdrop-blur layers on a single page is the visual equivalent of using bold on every word.</p></div>
+      <!-- ux-lint-off blur-bg-only-decoration --><div class="ap-why"><span class="ap-sub">Why bad</span><p>Frosted-glass everywhere is the iOS-aesthetic AI tell - signals the generator confused &#x27;depth&#x27; with &#x27;blur every surface&#x27;. Four-plus backdrop-blur layers on a single page is the visual equivalent of using bold on every word.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Reserve glass for one or two surfaces that have a clear reason to feel translucent (a floating nav, a notification toast). Solid surfaces with restraint read more premium than four blurred panels.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?:backdrop-(?:blur|filter)|backdrop-filter\s*:\s*blur)[\s\S]{0,1500}?(?:backdrop-(?:blur|filter)|backdrop-filter\s*:\s*blur)[\s\S]{0,1500}?(?:backdrop-(?:blur|filter)|backdrop-filter\s*:\s*blur)[\s\S]{0,1500}?(?:backdrop-(?:blur|filter)|ba</code></pre>
       <div class="ap-examples">
@@ -2760,9 +2762,9 @@
     <article class="ap-card" id="noise-texture-overlay">
       <header class="ap-head">
         <span class="ap-id">#noise-texture-overlay</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Visual</span>
-        <h3 class="ap-name">Repeating noise or grain texture overlay</h3>
+        <h2 class="ap-name">Repeating noise or grain texture overlay</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2780,9 +2782,9 @@
     <article class="ap-card" id="scroll-to-top-button-everywhere">
       <header class="ap-head">
         <span class="ap-id">#scroll-to-top-button-everywhere</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">Fixed scroll-to-top button on short pages</h3>
+        <h2 class="ap-name">Fixed scroll-to-top button on short pages</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2800,13 +2802,13 @@
     <article class="ap-card" id="tailwind-color-named-vague">
       <header class="ap-head">
         <span class="ap-id">#tailwind-color-named-vague</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Color</span>
-        <h3 class="ap-name">Named Tailwind colors with no semantic token</h3>
+        <h2 class="ap-name">Named Tailwind colors with no semantic token</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Raw bg-blue-500 / bg-purple-500 with no semantic token (primary, success, danger) signals the color system was never designed.</p></div>
+      <!-- ux-lint-off tailwind-color-named-vague --><div class="ap-why"><span class="ap-sub">Why bad</span><p>Raw bg-blue-500 / bg-purple-500 with no semantic token (primary, success, danger) signals the color system was never designed.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Define semantic tokens in tailwind.config or CSS custom properties: bg-primary, text-success, ring-accent. Map them once.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\b(?:bg|text|border|ring|from|to|via)-(?:blue|red|green|yellow|purple|pink|indigo|orange)-(?:400|500|600)\b</code></pre>
       <div class="ap-examples">
@@ -2820,14 +2822,14 @@
     <article class="ap-card" id="footer-built-with-love-coffee">
       <header class="ap-head">
         <span class="ap-id">#footer-built-with-love-coffee</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Footer: Built with love / Made with coffee / Crafted with care</h3>
+        <!-- ux-lint-off footer-built-with-love-coffee --><h2 class="ap-name">Footer: Built with love / Made with coffee / Crafted with care</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Built with love&#x27; / &#x27;Made with coffee&#x27; / &#x27;Crafted with care&#x27; is the universal indie-hacker footer template - signals the writer reached for a meme line because they did not want to commit to a real footer voice. Reads as the most generated of all generated lines.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use a real footer line - your domain, the year, a one-line manifesto, a credit. If you want to be warm, be specific: &#x27;Shipped from Amman&#x27; / &#x27;Open source since 2026&#x27; beats &#x27;made with love&#x27; every time.</p></div>
+      <!-- ux-lint-off footer-built-with-love-coffee --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Built with love&#x27; / &#x27;Made with coffee&#x27; / &#x27;Crafted with care&#x27; is the universal indie-hacker footer template - signals the writer reached for a meme line because they did not want to commit to a real footer voice. Reads as the most generated of all generated lines.</p></div><!-- ux-lint-on -->
+      <!-- ux-lint-off footer-built-with-love-coffee --><div class="ap-fix"><span class="ap-sub">Fix</span><p>Use a real footer line - your domain, the year, a one-line manifesto, a credit. If you want to be warm, be specific: &#x27;Shipped from Amman&#x27; / &#x27;Open source since 2026&#x27; beats &#x27;made with love&#x27; every time.</p></div><!-- ux-lint-on -->
       <pre class="ap-pre ap-pre--rx"><code>\b(?:(?:Built|Made|Crafted|Designed|Forged|Brewed)\s+with\s+(?:love|care|coffee|caffeine|passion|heart|joy|pride)|with\s+love\s+from)\b</code></pre>
       <div class="ap-examples">
         
@@ -2840,9 +2842,9 @@
     <article class="ap-card" id="version-1-0-0-evergreen">
       <header class="ap-head">
         <span class="ap-id">#version-1-0-0-evergreen</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Content</span>
-        <h3 class="ap-name">Hardcoded v1.0.0 in nav or footer</h3>
+        <h2 class="ap-name">Hardcoded v1.0.0 in nav or footer</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2860,9 +2862,9 @@
     <article class="ap-card" id="flex-center-center-default">
       <header class="ap-head">
         <span class="ap-id">#flex-center-center-default</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Layout</span>
-        <h3 class="ap-name">flex + justify-center + align-center as the default block</h3>
+        <h2 class="ap-name">flex + justify-center + align-center as the default block</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2880,9 +2882,9 @@
     <article class="ap-card" id="grid-cols-3-1fr-default">
       <header class="ap-head">
         <span class="ap-id">#grid-cols-3-1fr-default</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Layout</span>
-        <h3 class="ap-name">repeat(3, 1fr) as a default grid</h3>
+        <h2 class="ap-name">repeat(3, 1fr) as a default grid</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2900,9 +2902,9 @@
     <article class="ap-card" id="nav-equal-hamburger-desktop">
       <header class="ap-head">
         <span class="ap-id">#nav-equal-hamburger-desktop</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Layout</span>
-        <h3 class="ap-name">Hamburger menu on desktop</h3>
+        <h2 class="ap-name">Hamburger menu on desktop</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -2920,14 +2922,14 @@
     <article class="ap-card" id="pill-rounded-full-everywhere">
       <header class="ap-head">
         <span class="ap-id">#pill-rounded-full-everywhere</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Layout</span>
-        <h3 class="ap-name">rounded-full applied to everything</h3>
+        <h2 class="ap-name">rounded-full applied to everything</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>rounded-full on every button and input is the iOS-tutorial fingerprint - signals the radius decision was skipped entirely.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>rounded-full for pills, avatars, icon buttons only. Use rounded-md or rounded-lg for primary buttons; rounded-xl or rounded-2xl for cards.</p></div>
+      <!-- ux-lint-off border-radius-2xl-default --><div class="ap-fix"><span class="ap-sub">Fix</span><p>rounded-full for pills, avatars, icon buttons only. Use rounded-md or rounded-lg for primary buttons; rounded-xl or rounded-2xl for cards.</p></div><!-- ux-lint-on -->
       <pre class="ap-pre ap-pre--rx"><code>&lt;button[^&gt;]*class=&quot;[^&quot;]*\brounded-full\b[^&quot;]*&quot;[^&gt;]*&gt;(?![^&lt;]*(?:×|close|menu|search))|&lt;(?:input|textarea)[^&gt;]*class=&quot;[^&quot;]*\brounded-full\b</code></pre>
       <div class="ap-examples">
         
@@ -2940,13 +2942,13 @@
     <article class="ap-card" id="cubic-bezier-material-only">
       <header class="ap-head">
         <span class="ap-id">#cubic-bezier-material-only</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Motion</span>
-        <h3 class="ap-name">Material default easing everywhere</h3>
+        <h2 class="ap-name">Material default easing everywhere</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>cubic-bezier(0.4, 0, 0.2, 1) is Material Design&#x27;s default standard ease - using it as the only curve signals no taste decision was made.</p></div>
+      <!-- ux-lint-off cubic-bezier-material-only --><div class="ap-why"><span class="ap-sub">Why bad</span><p>cubic-bezier(0.4, 0, 0.2, 1) is Material Design&#x27;s default standard ease - using it as the only curve signals no taste decision was made.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use cubic-bezier(0.16, 1, 0.3, 1) for premium exits, cubic-bezier(0.34, 1.56, 0.64, 1) for playful overshoot, or spring physics.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>cubic-bezier\(\s*0?\.4\s*,\s*0\s*,\s*0?\.2\s*,\s*1\s*\)</code></pre>
       <div class="ap-examples">
@@ -2960,14 +2962,14 @@
     <article class="ap-card" id="scale-1-1-on-card-hover">
       <header class="ap-head">
         <span class="ap-id">#scale-1-1-on-card-hover</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Motion</span>
-        <h3 class="ap-name">Over-the-top hover scale</h3>
+        <h2 class="ap-name">Over-the-top hover scale</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>scale(1.1) or higher on hover reads as amateur - it shouts when a 1-2 percent nudge or a shadow lift would be more confident.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use scale(1.01) to scale(1.03), or replace the scale with a translateY(-2px) plus shadow shift. Restraint reads premium.</p></div>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>scale(1.1) or higher on hover reads as amateur - it shouts when a border or background shift would be more confident.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Drop the scale from the card :hover rule and shift its border or background instead. Hover never changes a card&#x27;s elevation; only a drag lifts. Restraint reads premium.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>:hover[^{]*\{[^}]*transform[^;]*scale\(1\.[1-9]\d*\)</code></pre>
       <div class="ap-examples">
         
@@ -2980,15 +2982,15 @@
     <article class="ap-card" id="timing-300ms-default">
       <header class="ap-head">
         <span class="ap-id">#timing-300ms-default</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Motion</span>
-        <h3 class="ap-name">Default 300ms transition timing</h3>
+        <h2 class="ap-name">Default 300ms transition timing</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>300ms is the editor default - using it everywhere signals zero motion intent and reads as laziness to anyone who tunes animation curves.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Micro-interactions 150-220ms, complex transitions 250-400ms, exit 60-70% of entry. Pick durations that match the feel, not the default.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:transition(?:-duration)?|animation-duration):\s*300ms\b|duration-300\b|\bduration:\s*0\.3s\b</code></pre>
+      <!-- ux-lint-off timing-300ms-default --><pre class="ap-pre ap-pre--rx"><code>(?:transition(?:-duration)?|animation-duration):\s*300ms\b|duration-300\b|\bduration:\s*0\.3s\b</code></pre><!-- ux-lint-on -->
       <div class="ap-examples">
         
         
@@ -3000,9 +3002,9 @@
     <article class="ap-card" id="animated-grain-noise-no-perf-class">
       <header class="ap-head">
         <span class="ap-id">#animated-grain-noise-no-perf-class</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Performance</span>
-        <h3 class="ap-name">Animated grain or noise without GPU hint</h3>
+        <h2 class="ap-name">Animated grain or noise without GPU hint</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3020,9 +3022,9 @@
     <article class="ap-card" id="class-multiple-utility-than-token">
       <header class="ap-head">
         <span class="ap-id">#class-multiple-utility-than-token</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Quality</span>
-        <h3 class="ap-name">Five-plus utility classes where a token would do</h3>
+        <h2 class="ap-name">Five-plus utility classes where a token would do</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3040,14 +3042,14 @@
     <article class="ap-card" id="data-testid-in-production-markup">
       <header class="ap-head">
         <span class="ap-id">#data-testid-in-production-markup</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Quality</span>
-        <h3 class="ap-name">data-testid left in production markup</h3>
+        <h2 class="ap-name">data-testid left in production markup</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>data-testid attributes are test-runner hooks that have no business in the production payload - they bloat the DOM, leak internal test names to anyone who Views Source, and signal the build pipeline strips nothing. AI-pasted-from-example-code fingerprint.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Strip data-testid at build time (Vite / Webpack / esbuild plugin) or move identifiers to data-test-* / aria-label that the test harness reads. Keep production HTML free of test-only attributes.</p></div>
+      <!-- ux-lint-off marketing-buzz-leverage-ai-harness --><div class="ap-fix"><span class="ap-sub">Fix</span><p>Strip data-testid at build time (Vite / Webpack / esbuild plugin) or move identifiers to data-test-* / aria-label that the test harness reads. Keep production HTML free of test-only attributes.</p></div><!-- ux-lint-on -->
       <pre class="ap-pre ap-pre--rx"><code>\sdata-testid\s*=\s*[&#x27;\&quot;][^&#x27;\&quot;]+[&#x27;\&quot;]</code></pre>
       <div class="ap-examples">
         
@@ -3060,9 +3062,9 @@
     <article class="ap-card" id="generic-class-container-wrapper-only">
       <header class="ap-head">
         <span class="ap-id">#generic-class-container-wrapper-only</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Quality</span>
-        <h3 class="ap-name">div with only &#x27;wrapper&#x27; / &#x27;box&#x27; / &#x27;inner&#x27; as class</h3>
+        <h2 class="ap-name">div with only &#x27;wrapper&#x27; / &#x27;box&#x27; / &#x27;inner&#x27; as class</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3080,9 +3082,9 @@
     <article class="ap-card" id="numbered-placeholder-classname">
       <header class="ap-head">
         <span class="ap-id">#numbered-placeholder-classname</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Quality</span>
-        <h3 class="ap-name">Numbered placeholder class names (card-1, feature-2)</h3>
+        <h2 class="ap-name">Numbered placeholder class names (card-1, feature-2)</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3100,9 +3102,9 @@
     <article class="ap-card" id="padding-shorthand-4-vals-zero-first">
       <header class="ap-head">
         <span class="ap-id">#padding-shorthand-4-vals-zero-first</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Quality</span>
-        <h3 class="ap-name">Verbose 4-value padding/margin where 3 would do</h3>
+        <h2 class="ap-name">Verbose 4-value padding/margin where 3 would do</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3120,9 +3122,9 @@
     <article class="ap-card" id="shadcn-default-everywhere">
       <header class="ap-head">
         <span class="ap-id">#shadcn-default-everywhere</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Quality</span>
-        <h3 class="ap-name">Default shadcn token block unmodified</h3>
+        <h2 class="ap-name">Default shadcn token block unmodified</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3140,9 +3142,9 @@
     <article class="ap-card" id="todo-fixme-comment">
       <header class="ap-head">
         <span class="ap-id">#todo-fixme-comment</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Quality</span>
-        <h3 class="ap-name">TODO or FIXME in shipping code</h3>
+        <h2 class="ap-name">TODO or FIXME in shipping code</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3160,9 +3162,9 @@
     <article class="ap-card" id="font-family-monospace-fallback-default">
       <header class="ap-head">
         <span class="ap-id">#font-family-monospace-fallback-default</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Typography</span>
-        <h3 class="ap-name">font-family: monospace with no specific stack</h3>
+        <h2 class="ap-name">font-family: monospace with no specific stack</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3180,9 +3182,9 @@
     <article class="ap-card" id="font-system-only">
       <header class="ap-head">
         <span class="ap-id">#font-system-only</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Typography</span>
-        <h3 class="ap-name">System font stack with no chosen typeface</h3>
+        <h2 class="ap-name">System font stack with no chosen typeface</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3200,15 +3202,15 @@
     <article class="ap-card" id="blur-bg-only-decoration">
       <header class="ap-head">
         <span class="ap-id">#blur-bg-only-decoration</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Visual</span>
-        <h3 class="ap-name">Backdrop blur with no glass surface</h3>
+        <h2 class="ap-name">Backdrop blur with no glass surface</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Backdrop blur applied without a translucent surface behind it is GPU work for zero visual benefit - decoration, not design.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Pair backdrop-blur with a translucent fill: bg-white/70 or bg-zinc-950/60. Otherwise remove the blur entirely.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:backdrop-blur(?:-(?:sm|md|lg|xl|2xl|3xl))?|backdrop-filter:\s*blur\([^)]+\))(?![^&quot;&#x27;;]*(?:bg-white/[0-9]|bg-black/[0-9]|bg-[a-z]+-[0-9]+/[0-9]|background:[^;]*rgba))</code></pre>
+      <!-- ux-lint-off blur-bg-only-decoration --><pre class="ap-pre ap-pre--rx"><code>(?:backdrop-blur(?:-(?:sm|md|lg|xl|2xl|3xl))?|backdrop-filter:\s*blur\([^)]+\))(?![^&quot;&#x27;;]*(?:bg-white/[0-9]|bg-black/[0-9]|bg-[a-z]+-[0-9]+/[0-9]|background:[^;]*rgba))</code></pre><!-- ux-lint-on -->
       <div class="ap-examples">
         
         
@@ -3220,9 +3222,9 @@
     <article class="ap-card" id="body-background-color-inherit">
       <header class="ap-head">
         <span class="ap-id">#body-background-color-inherit</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Visual</span>
-        <h3 class="ap-name">body { background-color: inherit }</h3>
+        <!-- ux-lint-off body-background-color-inherit --><h2 class="ap-name">body { background-color: inherit }</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3240,13 +3242,13 @@
     <article class="ap-card" id="border-radius-2xl-default">
       <header class="ap-head">
         <span class="ap-id">#border-radius-2xl-default</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Visual</span>
-        <h3 class="ap-name">rounded-2xl or larger applied to everything</h3>
+        <!-- ux-lint-off border-radius-2xl-default --><h2 class="ap-name">rounded-2xl or larger applied to everything</h2><!-- ux-lint-on -->
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>rounded-2xl/3xl (24-32px+) on every card, button, and input is the Tailwind AI signature - signals the radius was set once and copy-pasted instead of being calibrated per element size. Buttons end up looking like pills, inputs lose definition, dense surfaces feel cartoonish.</p></div>
+      <!-- ux-lint-off border-radius-2xl-default --><div class="ap-why"><span class="ap-sub">Why bad</span><p>rounded-2xl/3xl (24-32px+) on every card, button, and input is the Tailwind AI signature - signals the radius was set once and copy-pasted instead of being calibrated per element size. Buttons end up looking like pills, inputs lose definition, dense surfaces feel cartoonish.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Calibrate radius to element size: 4-8px for inputs, 8-12px for buttons, 12-16px for cards, 16-24px for marketing surfaces only. Define a 4-5 step radius scale and use the tokens.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\brounded-(?:2xl|3xl)\b|border-radius\s*:\s*(?:24|28|32|36|40)px\b|border-radius\s*:\s*1\.[5-9]rem\b|border-radius\s*:\s*[2-3]rem\b</code></pre>
       <div class="ap-examples">
@@ -3260,9 +3262,9 @@
     <article class="ap-card" id="cursor-pointer-on-disabled">
       <header class="ap-head">
         <span class="ap-id">#cursor-pointer-on-disabled</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Visual</span>
-        <h3 class="ap-name">cursor:pointer applied to :disabled state</h3>
+        <h2 class="ap-name">cursor:pointer applied to :disabled state</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3280,14 +3282,14 @@
     <article class="ap-card" id="loader-spinner-border-default">
       <header class="ap-head">
         <span class="ap-id">#loader-spinner-border-default</span>
-        <span class="ap-sev" style="background:#8be9b1;color:#07080a">LOW</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Visual</span>
-        <h3 class="ap-name">Default CSS border-spin loader recipe</h3>
+        <h2 class="ap-name">Default CSS border-spin loader recipe</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>The 4-border-color, border-top-different, animation: spin recipe is the textbook 1998 spinner that every AI generator emits for any loading state - signals the loading affordance was set by default, not designed. Modern systems use skeleton screens, progress bars, or branded indicators.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace with a skeleton screen for content loading, a progress indicator for known-duration tasks, or a branded SVG mark animated via transform: rotate. The bordered spinner is the loading equivalent of Lorem ipsum.</p></div>
+      <!-- ux-lint-off lorem-ipsum-leak, placeholder-token-shipped --><div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace with a skeleton screen for content loading, a progress indicator for known-duration tasks, or a branded SVG mark animated via transform: rotate. The bordered spinner is the loading equivalent of Lorem ipsum.</p></div><!-- ux-lint-on -->
       <pre class="ap-pre ap-pre--rx"><code>border\s*:\s*\d+px\s+solid[^;}]*[;}][^{]*border-top(?:-color)?\s*:[^;]+;[^}]*animation\s*:[^;]*spin|\.(?:loader|spinner)[^{]*\{[^}]*border-radius\s*:\s*50%[^}]*animation[^}]*:[^}]*spin</code></pre>
       <div class="ap-examples">
         
@@ -3300,9 +3302,9 @@
     <article class="ap-card" id="aria-hidden-on-interactive">
       <header class="ap-head">
         <span class="ap-id">#aria-hidden-on-interactive</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">aria-hidden on a focusable interactive element</h3>
+        <h2 class="ap-name">aria-hidden on a focusable interactive element</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3320,9 +3322,9 @@
     <article class="ap-card" id="blink-tag">
       <header class="ap-head">
         <span class="ap-id">#blink-tag</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">&lt;blink&gt; element used</h3>
+        <h2 class="ap-name">&lt;blink&gt; element used</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3340,9 +3342,9 @@
     <article class="ap-card" id="div-onclick-no-role">
       <header class="ap-head">
         <span class="ap-id">#div-onclick-no-role</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">Click handler on &lt;div&gt; without role or tabindex</h3>
+        <h2 class="ap-name">Click handler on &lt;div&gt; without role or tabindex</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3360,9 +3362,9 @@
     <article class="ap-card" id="onclick-on-non-button">
       <header class="ap-head">
         <span class="ap-id">#onclick-on-non-button</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">onclick handler on non-interactive element</h3>
+        <h2 class="ap-name">onclick handler on non-interactive element</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3380,9 +3382,9 @@
     <article class="ap-card" id="outline-none-no-focus-visible">
       <header class="ap-head">
         <span class="ap-id">#outline-none-no-focus-visible</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">outline removed without focus-visible replacement</h3>
+        <h2 class="ap-name">outline removed without focus-visible replacement</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3400,9 +3402,9 @@
     <article class="ap-card" id="viewport-no-zoom">
       <header class="ap-head">
         <span class="ap-id">#viewport-no-zoom</span>
-        <span class="ap-sev" style="background:#e8a63c;color:#07080a">MED</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">A11y</span>
-        <h3 class="ap-name">Viewport blocks pinch-zoom</h3>
+        <h2 class="ap-name">Viewport blocks pinch-zoom</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3415,7 +3417,6 @@
       </div>
       <a href="#viewport-no-zoom" class="ap-anchor" aria-label="Link to rule #viewport-no-zoom">link</a>
     </article>
-    
     </div>
   </div>
 </section>

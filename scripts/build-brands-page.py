@@ -10,6 +10,7 @@ High-value because:
 Re-run after data/brands/_index.json changes.
 """
 from pathlib import Path
+import sys
 import json
 import html
 import re
@@ -25,6 +26,13 @@ def sanitize_dashes(s):
 
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def site_version():
+    """The package version from pyproject.toml, the version the site states."""
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from site_version import version
+    return version()
 INDEX = ROOT / "data" / "brands" / "_index.json"
 BRANDS_DIR = ROOT / "data" / "brands"
 OUT = ROOT / "docs" / "brands.html"
@@ -62,7 +70,7 @@ def render_swatches(dl):
     if not colors:
         return ""
     spans = "".join(
-        f'<span class="br-sw" style="background:{html.escape(c)};" title="{html.escape(name)}: {html.escape(c)}"></span>'
+        f'<span class="br-sw" style="--sw:{html.escape(c)}" title="{html.escape(name)}: {html.escape(c)}"></span>'
         for name, c in colors[:6]
     )
     return f'<div class="br-swatches" aria-hidden="true">{spans}</div>'
@@ -185,7 +193,7 @@ def build_html(brands, version):
   .toolbar {{ padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); position: sticky; top: 0; background: rgba(7,8,10,0.92); backdrop-filter: blur(8px); z-index: 10; }}
   .toolbar__row {{ display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }}
   .br-search {{ flex: 1; min-width: 260px; padding: 10px 14px; background: var(--surface-1); border: 1px solid var(--hairline); border-radius: 8px; color: var(--ink); font-family: var(--sans); font-size: 14px; }}
-  .br-search:focus {{ outline: none; border-color: var(--accent); }}
+  .br-search:focus {{ outline: 2px solid transparent; border-color: var(--accent); }}
   .br-chip {{ background: var(--surface-1); border: 1px solid var(--hairline); color: var(--body); padding: 6px 12px; border-radius: 999px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; }}
   .br-chip small {{ color: var(--muted); font-weight: 400; }}
   .br-chip.is-active {{ background: var(--accent); color: var(--canvas); border-color: var(--accent); }}
@@ -200,7 +208,7 @@ def build_html(brands, version):
   .br-cat {{ font-family: var(--mono); font-size: 9.5px; color: var(--muted); letter-spacing: 0.10em; text-transform: uppercase; text-align: right; }}
   .br-name {{ grid-column: 1 / -1; font-size: 22px; font-weight: 600; color: var(--ink); line-height: 1.15; margin-top: 2px; }}
   .br-swatches {{ display: flex; gap: 4px; margin-bottom: 14px; height: 8px; border-radius: 4px; overflow: hidden; }}
-  .br-sw {{ flex: 1; min-width: 0; border: 1px solid rgba(255,255,255,0.05); border-radius: 2px; }}
+  .br-sw {{ flex: 1; min-width: 0; border: 1px solid rgba(255,255,255,0.05); border-radius: 2px; background: var(--sw); }}
   .br-phil {{ color: var(--body); font-size: 13.5px; line-height: 1.55; flex: 1; margin-bottom: 14px; }}
   .br-phil-empty {{ color: var(--muted); font-style: italic; font-size: 12.5px; }}
   .br-links {{ display: flex; gap: 8px; flex-wrap: wrap; }}
@@ -215,6 +223,11 @@ def build_html(brands, version):
   @media (max-width: 640px) {{
     .grid {{ grid-template-columns: 1fr; }}
   }}
+  .sr-only {{ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }}
+  .docfig {{ margin: 32px 0; border: 1px solid rgba(255,255,255,0.10); border-radius: 14px; overflow: hidden; background: #0b0d12; }}
+  .docfig img {{ display: block; width: 100%; height: auto; }}
+  .docfig figcaption {{ margin: 0; padding: 12px 16px; font-size: 13px; line-height: 1.5; color: #8a8f96; border-top: 1px solid rgba(255,255,255,0.08); }}
+  .docfig--narrow {{ max-width: 720px; }}
 </style>
 </head>
 <body>
@@ -234,7 +247,7 @@ def build_html(brands, version):
 
 <section class="top">
   <div class="container">
-    <p class="top__eyebrow">Brand catalogue · v{html.escape(str(version)) if version else ""}</p>
+    <p class="top__eyebrow">Brand catalogue · v{site_version()}</p>
     <h1 class="top__title">{total} brand <em>DESIGN.md</em> specs.</h1>
     <p class="top__lead">
       The recommender doesn't guess. Each brand is a queryable <code>spec.json</code> and a prose <code>DESIGN.md</code>: palette, typography, philosophy, components observed, voice do's-don'ts, anti-patterns to avoid. The AI session pulls the whole spec, not a slogan. Apple, Stripe, Linear, Vercel, Ferrari, Anthropic, and {total - 6} more.
@@ -244,6 +257,10 @@ def build_html(brands, version):
       <span class="top__stat"><b>{len(categories)}</b> categories</span>
       <span class="top__stat">MIT · no telemetry</span>
     </div>
+    <figure class="docfig docfig--narrow">
+      <img src="/screenshots/brand-mosaic.webp" width="1600" height="1000" alt="A grid of twelve brand tiles, each set in its own typeface and accent color, showing how far real brand systems diverge from one another." loading="lazy" decoding="async">
+      <figcaption>Twelve of the {total} specs. Each brand keeps its own type and accent, and the engine learns from that spread, not from the average.</figcaption>
+    </figure>
   </div>
 </section>
 
@@ -257,6 +274,7 @@ def build_html(brands, version):
 
 <section>
   <div class="container">
+    <h2 class="sr-only">All brand specs</h2>
     <div class="grid" id="br-grid">
       {cards}
     </div>

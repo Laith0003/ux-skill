@@ -87,7 +87,7 @@ The site uses a 12-column grid with a max content width of 1280–1440px. Sectio
 
 ## 7. Motion Vocabulary
 
-Editorial fade-in reveals on scroll (250ms ease-out). Carousel cross-fade at 1.2–1.5s — deliberately slow. Hover lifts on product cards are minimal — a slight 100ms opacity dip on the price line. The motion philosophy matches the prestige restraint.
+Editorial fade-in reveals on scroll (250ms ease-out). Carousel cross-fade at 1.2–1.5s — deliberately slow. Hover on product cards is a slight 100ms opacity dip on the price line. The motion philosophy matches the prestige restraint.
 
 ## 8. Anti-patterns to Avoid
 

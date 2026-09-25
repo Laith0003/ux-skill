@@ -85,7 +85,7 @@ The site uses a 12-column grid with a max content width of 1280–1440px. Hero s
 
 ## 7. Motion Vocabulary
 
-Characters have idle animations on landing pages — Astro might blink, float gently, or wave. Hover lifts on cards use a soft 200ms ease-out with a slight scale (1.02). Mega-menu drops with a 250ms ease-out. The character animations are signature; reducing them to static illustration flattens the brand.
+Characters have idle animations on landing pages — Astro might blink, float gently, or wave. Cards lift on hover with a soft 200ms ease-out and a slight scale (1.02). Mega-menu drops with a 250ms ease-out. The character animations are signature; reducing them to static illustration flattens the brand.
 
 ## 8. Anti-patterns to Avoid
 

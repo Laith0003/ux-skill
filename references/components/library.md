@@ -26,7 +26,7 @@ The action trigger. Every interactive surface uses buttons; getting them right i
 
 **Required states.**
 - Default: high-contrast fill, brand or accent color background, clear label.
-- Hover: slight darkening (5-10%), optional shadow lift, cursor pointer.
+- Hover: slight darkening (5-10%), cursor pointer. No shadow change.
 - Active: deeper darkening (15%), optional slight scale-down (0.97-0.98) or position shift.
 - Focus: visible ring (2-3px) at offset (2-4px). Never rely on default browser ring; style explicitly.
 - Disabled: 40-50% opacity, no hover effect, cursor not-allowed.
@@ -421,7 +421,7 @@ The surface container. Often overused; the right card pattern is the one that ea
 ### Required states for interactive cards
 
 - Default: card surface with the chosen elevation.
-- Hover: slight elevation increase (lift), subtle scale (1.01-1.02) optional.
+- Hover: border or background shift. Hover, focus and press never change a card's elevation; only a drag lifts.
 - Active: scale-down slightly (0.99), shadow decrease.
 - Focus: focus ring around the entire card.
 - Loading: skeleton inside the card preserves the shape.

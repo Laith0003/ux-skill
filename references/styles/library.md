@@ -1283,7 +1283,7 @@ Appropriate motion:
 
 - Aggressive scroll entries: type rises from `translate-y-32` with rotation snapping to neutral over `800ms`.
 - Marquee scrolls with bold type that loops without pause.
-- Gestural hover effects: cards that lift, rotate, and reveal additional content on hover.
+- Gestural hover effects: cards that rotate and reveal additional content on hover.
 - Color flips on tap: backgrounds change color at the press of a CTA.
 - Sound on intentional interaction (with a clearly-marked mute toggle).
 
@@ -1299,14 +1299,14 @@ Buttons:
 
 - Bold, oversized, saturated fill. Padding generous: `20px 32px` minimum.
 - Type is bold uppercase at `16px` to `18px`, tracked moderately.
-- Hover: a scale-up to `1.05` with a snappy spring.
+- Hover: the fill flips to the ink color with a snappy 120ms ease. No scale.
 - Active: scale to `0.95` with a satisfying physical feel.
 
 Cards:
 
 - Filled, high-contrast, often rotated slightly.
 - Internal padding is moderate to allow content to breathe within the loud frame.
-- Hover: a lift with a hard shadow offset (e.g., `8px 8px 0 currentColor`).
+- Hover: border or background shift. The card stays at rest.
 
 Navigation:
 

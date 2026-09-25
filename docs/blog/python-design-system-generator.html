@@ -37,6 +37,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface: #0f1115;
@@ -179,7 +181,7 @@
       color: var(--scene-accent);
       margin-bottom: 22px;
     }
-    h1, h2, h3, h4 {
+    h1, h2, h3:where(:not(.h4)), h4 , h3:where(.h4) {
       font-family: var(--display);
       color: var(--ink);
       margin: 0;
@@ -223,7 +225,7 @@
       margin: 56px 0 16px;
     }
     h2 .accent { color: var(--scene-accent); }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 32, 'wght' 600;
       font-size: 19px;
@@ -360,7 +362,8 @@
       color: var(--scene-accent);
       margin-bottom: 10px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 600;
       font-size: 18px;
@@ -854,7 +857,7 @@
 
       <div class="honesty">
         <div class="label">Honesty card</div>
-        <h4>About the catalog depth claim</h4>
+        <h3 class="h4">About the catalog depth claim</h3>
         <p>ui-ux-pro-max-skill is the comparator here. Their recommender pioneered the 5-parallel-search architecture (we adopted it directly) and has ~600 structured entries. ux-skill v2 extends to 998. The architecture is shared; the depth is ours.</p>
         <p>The 998 number is not the moat. The moat is the four nets new (145-rule deterministic linter, 92 named brand specs, 57 motion presets, 148-component catalog) that don't exist in ui-ux-pro-max's recommender.</p>
       </div>

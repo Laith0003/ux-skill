@@ -66,6 +66,8 @@
 </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface: #0f1115;
@@ -216,7 +218,7 @@
       color: var(--scene-accent);
       margin-bottom: 22px;
     }
-    h1, h2, h3, h4 {
+    h1, h2, h3:where(:not(.h4)), h4 , h3:where(.h4) {
       font-family: var(--display);
       color: var(--ink);
       margin: 0;
@@ -260,7 +262,7 @@
       margin: 56px 0 16px;
     }
     h2 .accent { color: var(--scene-accent); }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 32, 'wght' 600;
       font-size: 19px;
@@ -289,7 +291,7 @@
       line-height: 1;
       margin-bottom: 6px;
     }
-    .install-step h3 {
+    .install-step h3:where(:not(.h4)) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 32, 'wght' 620;
       font-size: 21px;
@@ -364,7 +366,8 @@
       color: var(--scene-accent);
       margin-bottom: 10px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 600;
       font-size: 18px;
@@ -803,7 +806,7 @@
 
       <div class="honesty">
         <div class="label">Honesty card</div>
-        <h4>About the 14-star claim</h4>
+        <h3 class="h4">About the 14-star claim</h3>
         <p>ux-skill v2 is new (v2.0.0-alpha.1 shipped a few weeks ago) and solo-maintained. We don't have the install base ui-ux-pro-max or hallmark have. The case for installing is architecture, Python engine, 1,243 entries, 145-rule deterministic linter, 160 brand specs, cross-IDE distribution, not awareness.</p>
         <p>Install it for the linter and the brand specs. If you only need a prompt-only taste primer, taste-skill (25k stars) is also reasonable. Both are MIT.</p>
       </div>

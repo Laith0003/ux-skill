@@ -84,7 +84,7 @@ The site uses a 12-column grid with a max content width of 1280–1440px. Sectio
 
 ## 7. Motion Vocabulary
 
-Confident product-led motion. Browser screenshot mockups have subtle scroll-reveal animations. The lion brand mark has occasional idle paw gestures on landing pages. Hover lift on cards (1.02 scale + 200ms ease). The motion is restrained-confident.
+Confident product-led motion. Browser screenshot mockups have subtle scroll-reveal animations. The lion brand mark has occasional idle paw gestures on landing pages. Cards lift on hover (1.02 scale, 200ms ease). The motion is restrained-confident.
 
 ## 8. Anti-patterns to Avoid
 

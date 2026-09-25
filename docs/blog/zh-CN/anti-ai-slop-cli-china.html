@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0d0f12;
@@ -186,7 +188,7 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 18px;
       letter-spacing: -0.005em; color: var(--ink);
@@ -252,7 +254,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -345,7 +348,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     html, body {
@@ -540,7 +544,7 @@
           </thead>
           <tbody>
             <tr><td>无障碍</td><td class="num">28</td><td>缺失 alt 文本、仅颜色的状态、低对比度配对、点击目标小于 44px、无焦点样式、装饰性 SVG 无 <code>aria-hidden</code>。</td></tr>
-            <tr><td>内容</td><td class="num">18</td><td>「John Doe」占位符、「L&#111;rem ipsum」、「Beautiful experiences」、「Revolutionizing X」、通用图床 URL、emoji 标题。</td></tr>
+            <tr><td>内容</td><td class="num">18</td><!-- ux-lint-off fake-name-john-doe --><td>「John Doe」占位符、「L&#111;rem ipsum」、「Beautiful experiences」、「Revolutionizing X」、通用图床 URL、emoji 标题。</td><!-- ux-lint-on --></tr>
             <tr><td>排印</td><td class="num">16</td><td>Inter 当显示字体、90px 字号 + 1.0 行高、全大写正文、纯无衬线字栈、100 字重发丝线、无 font-feature-settings。</td></tr>
             <tr><td>色彩</td><td class="num">14</td><td>紫到蓝渐变(<code>#7C3AED → #3B82F6</code> 家族)、600/400 默认配对、白底霓虹光晕、三种靛色。</td></tr>
             <tr><td>布局</td><td class="num">14</td><td>三张同款卡一排、「Hero + 三栏 + CTA」模板、全宽渐变 Hero、所有元素居中对齐。</td></tr>
@@ -645,7 +649,7 @@ $ uxskill lint --json | jq '.findings | length'</pre>
 
       <div class="honesty">
         <div class="label">诚实范围</div>
-        <h4>正则捕获结构性指纹,不捕获品味。</h4>
+        <h3 class="h4">正则捕获结构性指纹,不捕获品味。</h3>
         <p>linter 永远不会捕获「这一节的节奏不对」或「这段文案太冷」。这些需要人或模型。正则<em>能</em>捕获的,是每一个有字面 token、模式或形状的指纹,这覆盖了 AI 默认值的大部分,因为模型每次都会伸手去拿同一件工件。</p>
         <p>我们刻意不在 CI 里跑 LLM 裁判。如果你的标准是「看起来像设计师做的」,那是 code review,不是 lint。ux-skill 提供 <code>/ux-critique</code> 用于品味检查,但它在编辑器里按需运行,不在 CI 里。</p>
       </div>
@@ -672,7 +676,7 @@ $ uxskill lint --json | jq '.findings | length'</pre>
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
         <div class="row"><span class="prompt">$</span> uxskill lint --threshold <span class="arg">high</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· or ·</div>
+        <div class="row row--note">· or ·</div>
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
       </div>

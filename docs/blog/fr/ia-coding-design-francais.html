@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0d0f12;
@@ -186,7 +188,7 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
@@ -252,7 +254,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -345,7 +348,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <style>
     html, body {
       overflow-x: clip;
@@ -561,7 +565,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         Voici un bloc héros simplifié, tiré d'un starter Next.js, qui échoue à trois règles, et sa réécriture qui sort en exit 0. Même intention commerciale, empreinte différente.
       </p>
-      <pre class="code"><span class="c">// Avant: 3 détections high</span>
+      <!-- ux-lint-off purple-to-blue-gradient, tailwind-color-named-vague --><pre class="code"><span class="c">// Avant: 3 détections high</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -590,7 +594,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
     &lt;Card className=<span class="s">"col-span-5"</span>
       title=<span class="s">"Classement transporteurs"</span> /&gt;
   &lt;/div&gt;
-&lt;/section&gt;</pre>
+&lt;/section&gt;</pre><!-- ux-lint-on -->
       <p>
         Dans l'avant, trois règles se déclenchent : Inter à <code>text-7xl</code>, le dégradé canonique de l'IA, et la grille de trois cartes identiques. Dans l'après, on apparie Fraunces (display) avec Inter (corps), on adopte une surface plate, et l'on passe à une grille asymétrique 7-et-5. Même intention, l'empreinte a disparu.
       </p>
@@ -644,7 +648,7 @@ $ /plugin install ux@ux-skill</pre>
 
       <div class="honesty">
         <div class="label">Périmètre honnête</div>
-        <h4>Les règles attrapent la structure. Pas le goût.</h4>
+        <h3 class="h4">Les règles attrapent la structure. Pas le goût.</h3>
         <p>Le linter ne signalera jamais « cette section a un mauvais rythme » ni « cette copie sonne froide ». Cela relève d'une revue humaine ou d'un LLM critique. En revanche, la regex attrape <em>de façon fiable</em> toute empreinte exprimable par un token littéral, un motif ou une forme, c'est-à-dire l'essentiel des défauts d'IA, parce que le modèle revient toujours au même artefact.</p>
         <p>Nous évitons délibérément de faire tourner un juge LLM en CI. Si votre étalon est « ça ressemble à du travail de designer », alors c'est de la revue de code, pas du lint. ux-skill fournit <code>ux critique</code> pour ce passage, mais à la demande dans l'éditeur, pas en CI.</p>
       </div>
@@ -668,9 +672,9 @@ $ /plugin install ux@ux-skill</pre>
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· ou ·</div>
+        <div class="row row--note">· ou ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· ou ·</div>
+        <div class="row row--note">· ou ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

@@ -80,6 +80,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0f1115;
@@ -156,7 +158,7 @@
       line-height: 1.18; letter-spacing: -0.022em;
       color: var(--ink); margin: 64px 0 18px;
     }
-    h3 { font-family: var(--body-face); font-weight: 600; font-size: 19px; letter-spacing: -0.005em; color: var(--ink); margin: 36px 0 14px; }
+    h3:where(:not(.h4)) { font-family: var(--body-face); font-weight: 600; font-size: 19px; letter-spacing: -0.005em; color: var(--ink); margin: 36px 0 14px; }
     p { margin-bottom: 18px; color: var(--body); }
     p strong { color: var(--ink); font-weight: 600; }
     em { color: var(--ink); }
@@ -195,7 +197,8 @@
       border-radius: 0 14px 14px 0; margin: 32px 0;
     }
     .honesty .label { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--scene-accent); margin-bottom: 8px; }
-    .honesty h4 { font-family: var(--body-face); font-weight: 600; font-size: 17px; color: var(--ink); margin-bottom: 10px; }
+    .honesty h4,
+    .honesty h3:where(.h4) { font-family: var(--body-face); font-weight: 600; font-size: 17px; color: var(--ink); margin-bottom: 10px; }
     .honesty p { margin-bottom: 8px; }
     .honesty p:last-child { margin-bottom: 0; }
 
@@ -232,7 +235,8 @@
 
     @media (max-width: 720px) { .wrap { padding: 40px 20px 72px; } h1 { font-size: clamp(34px, 7vw, 48px); } }
     @media (max-width: 480px) { .lede { font-size: 18px; } }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <style>
     html, body { overflow-x: clip; max-width: 100%; }
     section, header, footer, main, article { max-width: 100vw; }
@@ -418,7 +422,7 @@
       <p>We ran the exact workflow above against a real UK lead-gen page: the commercial skip-hire page at instantskiphire.com. No design brief from the client, just the live URL.</p>
       <figure class="shot">
         <img src="/blog/skiphire-redesign.webp" width="1280" height="860" alt="The ux-skill redesign of the Instant Skip Hire commercial page: dark green navigation, an amber accent, a construction-site hero photo, and a quote-request form on the right." loading="lazy">
-        <figcaption>The rebuilt page: brand-true amber on the company's own green, a real lead-capture form, generated end to end by the workflow above. <a href="/dogfood/skiphire.html" class="link">View the full page &rarr;</a></figcaption>
+        <figcaption>The rebuilt page: brand-true amber on the company's own green, a real lead-capture form, generated end to end by the workflow above. <a href="/dogfood/skiphire.html" class="link">View the full page <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a></figcaption>
       </figure>
       <p>What the engine did, unprompted:</p>
       <ul>
@@ -443,7 +447,7 @@
 
       <div class="honesty">
         <div class="label">Honesty card</div>
-        <h4>The gate is the product, not the prompt.</h4>
+        <h3 class="h4">The gate is the product, not the prompt.</h3>
         <p>Any model can generate a nicer-looking page. What is asymmetric here is the refusal: the brand-fidelity hard floor and the 152-rule linter <em>fail the build</em> when the output drops your brand or reaches for the generic centroid. ux-skill is less "make it pretty" and more "you may not ship slop."</p>
         <p>It is not magic. A vague brief still yields a vague system: <code>/ux-discover</code> is a forcing function for a reason. And the AI still writes the markup; the engine sets the rails and checks the result on the way back.</p>
       </div>
@@ -459,7 +463,7 @@
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">or the CLI</div>
+        <div class="row row--note">or the CLI</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
       </div>
     </section>

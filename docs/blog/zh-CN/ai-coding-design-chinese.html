@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0d0f12;
@@ -186,7 +188,7 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
@@ -252,7 +254,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -345,7 +348,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <style>
     html, body {
       overflow-x: clip;
@@ -561,7 +565,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         下面是一段从 Next.js 起始模板里截出来的简化 Hero,会命中三条规则;下方是改写后能以 exit 0 通过的版本。同样的转化意图,完全不同的指纹。
       </p>
-      <pre class="code"><span class="c">// 改写前, 命中 3 条 high</span>
+      <!-- ux-lint-off purple-to-blue-gradient, tailwind-color-named-vague --><pre class="code"><span class="c">// 改写前, 命中 3 条 high</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
   to-blue-500 py-32"</span>&gt;
@@ -590,7 +594,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
     &lt;Card className=<span class="s">"col-span-5"</span>
       title=<span class="s">"承运人排名"</span> /&gt;
   &lt;/div&gt;
-&lt;/section&gt;</pre>
+&lt;/section&gt;</pre><!-- ux-lint-on -->
       <p>
         改写前命中三条规则:Inter 用在 <code>text-7xl</code>、AI 标志性渐变、三张同款卡的三列网格。改写后用 Fraunces (显示字) 配 Inter (正文),底色变成平的浅米色,网格换成 7-5 非对称布局。意图没变,指纹消失了。
       </p>
@@ -648,7 +652,7 @@ $ uxskill mcp-config --target cursor
 
       <div class="honesty">
         <div class="label">坦白的边界</div>
-        <h4>规则只接得住结构,接不住品味。</h4>
+        <h3 class="h4">规则只接得住结构,接不住品味。</h3>
         <p>linter 永远不会报「这一段节奏不对」「这句文案冷冰冰的」。那是人来做的事,或者是评审用的 LLM 来做的事。但凡能用字面 token、模式、形状表达的指纹,正则都能 <em>稳稳地</em> 接住, 这恰恰是 AI 默认行为里的绝大部分,因为模型每次都跑回同一种产物。</p>
         <p>我们故意不在 CI 上跑 LLM 评委。如果你的标准是「看起来像设计师做的」,那就是 code review,不是 lint。ux-skill 提供 <code>ux critique</code> 来做这一步, 但只在编辑器里按需运行,不进 CI。</p>
       </div>
@@ -672,9 +676,9 @@ $ uxskill mcp-config --target cursor
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, 或, </div>
+        <div class="row row--note">, 或, </div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, 或, </div>
+        <div class="row row--note">, 或, </div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

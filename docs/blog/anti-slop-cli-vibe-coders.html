@@ -67,6 +67,8 @@
 </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0f1115;
@@ -189,13 +191,14 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 {
+    h4,
+    h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px;
       color: var(--ink);
@@ -260,7 +263,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -353,7 +357,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     html, body {
@@ -730,7 +735,7 @@ npx uxskill@latest lint --threshold high --staged || exit 1</pre>
 
       <div class="honesty">
         <div class="label">Honest scope</div>
-        <h4>The CLI is the floor, not the ceiling.</h4>
+        <h3 class="h4">The CLI is the floor, not the ceiling.</h3>
         <p>The linter catches structural fingerprints, literal tokens, class names, hex values, DOM shapes. It does not catch "the section rhythm is wrong" or "the copy reads cold." Those need a review pass, by a human or a stronger model. The CLI is the deterministic floor; <code>/ux-critique</code> ships in the same package for the taste pass.</p>
         <p>The reason the CLI never calls an LLM is the same reason a unit test never calls an LLM. Reproducibility is the entire value proposition. If the lint result depends on a model's mood, the lint is no longer a lint, it is a recommendation, and recommendations belong in a different layer.</p>
       </div>
@@ -798,9 +803,9 @@ src/**/*.stories.tsx                   fade-in-up-everywhere</pre>
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
+        <div class="row row--note">, or, </div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
+        <div class="row row--note">, or, </div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

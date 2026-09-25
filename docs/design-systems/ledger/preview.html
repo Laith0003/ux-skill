@@ -435,6 +435,22 @@ button:focus-visible {
   flex: none;
 }
 
+.dot-success {
+  color: var(--color-success);
+}
+
+.dot-warning {
+  color: var(--color-warning);
+}
+
+.dot-info {
+  color: var(--color-info);
+}
+
+.dot-danger {
+  color: var(--color-danger);
+}
+
 /* Stat tile */
 .stat {
   background: var(--color-surface);
@@ -685,7 +701,7 @@ button:focus-visible {
 
 .sh-mock-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-md);
   margin-bottom: var(--space-lg);
 }
@@ -706,7 +722,7 @@ button:focus-visible {
 
 .sh-cols {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-lg);
 }
 
@@ -721,6 +737,7 @@ button:focus-visible {
 .sh-bar {
   flex: 1;
   min-height: 6px;
+  height: var(--h);
   background: var(--color-primary);
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
   transition: opacity var(--motion-base) var(--motion-ease);
@@ -738,6 +755,26 @@ button:focus-visible {
   opacity: 1;
 }
 
+.sh-trend {
+  display: block;
+  width: 100%;
+  height: 132px;
+  margin-top: var(--space-sm);
+}
+
+.sh-trend-area {
+  fill: color-mix(in srgb, var(--color-primary) 14%, transparent);
+}
+
+.sh-trend-line {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
 .sh-bars-h {
   font-family: var(--font-display);
   font-size: 15px;
@@ -748,6 +785,7 @@ button:focus-visible {
 
 .sh-type-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-md);
@@ -757,6 +795,25 @@ button:focus-visible {
 
 .sh-type-row:last-child {
   border-bottom: 0;
+}
+
+.sh-type-display {
+  font-family: var(--font-display);
+  font-size: 34px;
+  color: var(--color-ink);
+  letter-spacing: -0.02em;
+}
+
+.sh-type-body {
+  font-family: var(--font-body);
+  font-size: 17px;
+  color: var(--color-ink);
+}
+
+.sh-type-mono {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--color-body);
 }
 
 .sh-type-meta {
@@ -787,6 +844,7 @@ button:focus-visible {
 .sh-sw-chip {
   width: 56px;
   height: 56px;
+  background: var(--sw);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
 }
@@ -830,11 +888,11 @@ button:focus-visible {
 
 @media (max-width: 680px) {
   .sh-cols {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .sh-mock-stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 @media(max-width:620px){.nav{flex-wrap:wrap;row-gap:10px}.nav-links{flex-wrap:wrap;gap:16px}.table{font-size:13px}.table th,.table td{padding:8px 9px}}</style></head><body>
@@ -886,17 +944,10 @@ button:focus-visible {
         </div>
       </div>
 
-      <div class="sh-bars" role="img" aria-label="Revenue trend across the last nine weeks">
-        <span class="sh-bar" style="height:38%"></span>
-        <span class="sh-bar" style="height:54%"></span>
-        <span class="sh-bar" style="height:47%"></span>
-        <span class="sh-bar alt" style="height:71%"></span>
-        <span class="sh-bar" style="height:63%"></span>
-        <span class="sh-bar" style="height:82%"></span>
-        <span class="sh-bar" style="height:58%"></span>
-        <span class="sh-bar alt" style="height:94%"></span>
-        <span class="sh-bar" style="height:76%"></span>
-      </div>
+      <svg class="sh-trend" viewBox="0 0 360 132" preserveAspectRatio="none" role="img" aria-label="Revenue trend across the last nine weeks">
+        <path class="sh-trend-area" d="M0,82 L45,63 L90,72 L135,43 L180,52 L225,30 L270,58 L315,15 L360,37 L360,132 L0,132 Z"/>
+        <path class="sh-trend-line" d="M0,82 L45,63 L90,72 L135,43 L180,52 L225,30 L270,58 L315,15 L360,37"/>
+      </svg>
     </div>
   </section>
 
@@ -914,7 +965,7 @@ button:focus-visible {
         <h3 class="card-title">Color tokens</h3>
         <p class="card-body muted">Semantic roles, not raw values. Swap the source and every surface updates.</p>
         <div class="stack">
-          <div class="sh-swatches"><div class="sh-sw"><div class="sh-sw-chip" style="background:#f6f8fc"></div><span>canvas</span><span>#f6f8fc</span></div><div class="sh-sw"><div class="sh-sw-chip" style="background:#eef0f5"></div><span>surface</span><span>#eef0f5</span></div><div class="sh-sw"><div class="sh-sw-chip" style="background:#162132"></div><span>ink</span><span>#162132</span></div><div class="sh-sw"><div class="sh-sw-chip" style="background:#505967"></div><span>body</span><span>#505967</span></div><div class="sh-sw"><div class="sh-sw-chip" style="background:#d22d2d"></div><span>primary</span><span>#d22d2d</span></div><div class="sh-sw"><div class="sh-sw-chip" style="background:#17834d"></div><span>success</span><span>#17834d</span></div><div class="sh-sw"><div class="sh-sw-chip" style="background:#906d1a"></div><span>warning</span><span>#906d1a</span></div><div class="sh-sw"><div class="sh-sw-chip" style="background:#bf3722"></div><span>danger</span><span>#bf3722</span></div><div class="sh-sw"><div class="sh-sw-chip" style="background:#226bbf"></div><span>info</span><span>#226bbf</span></div></div>
+          <div class="sh-swatches"><div class="sh-sw"><div class="sh-sw-chip" style="--sw:#f6f8fc"></div><span>canvas</span><span>#f6f8fc</span></div><div class="sh-sw"><div class="sh-sw-chip" style="--sw:#eef0f5"></div><span>surface</span><span>#eef0f5</span></div><div class="sh-sw"><div class="sh-sw-chip" style="--sw:#162132"></div><span>ink</span><span>#162132</span></div><div class="sh-sw"><div class="sh-sw-chip" style="--sw:#505967"></div><span>body</span><span>#505967</span></div><div class="sh-sw"><div class="sh-sw-chip" style="--sw:#d22d2d"></div><span>primary</span><span>#d22d2d</span></div><div class="sh-sw"><div class="sh-sw-chip" style="--sw:#17834d"></div><span>success</span><span>#17834d</span></div><div class="sh-sw"><div class="sh-sw-chip" style="--sw:#906d1a"></div><span>warning</span><span>#906d1a</span></div><div class="sh-sw"><div class="sh-sw-chip" style="--sw:#bf3722"></div><span>danger</span><span>#bf3722</span></div><div class="sh-sw"><div class="sh-sw-chip" style="--sw:#226bbf"></div><span>info</span><span>#226bbf</span></div></div>
         </div>
       </div>
 
@@ -923,7 +974,7 @@ button:focus-visible {
         <h3 class="card-title">Type scale</h3>
         <p class="card-body muted">One display family, one body family, one mono for figures and labels.</p>
         <div class="stack">
-          <div class="sh-type-row"><span style="font-family:var(--font-display);font-size:34px;color:var(--color-ink);letter-spacing:-.02em">Display</span><span class="sh-type-meta">Inter Tight</span></div><div class="sh-type-row"><span style="font-family:var(--font-body);font-size:17px;color:var(--color-ink)">The quick brown fox</span><span class="sh-type-meta">Inter</span></div><div class="sh-type-row"><span style="font-family:var(--font-mono);font-size:14px;color:var(--color-body)">const tokens = system;</span><span class="sh-type-meta">JetBrains Mono</span></div>
+          <div class="sh-type-row"><span class="sh-type-display">Display</span><span class="sh-type-meta">Inter Tight</span></div><div class="sh-type-row"><span class="sh-type-body">The quick brown fox</span><span class="sh-type-meta">Inter</span></div><div class="sh-type-row"><span class="sh-type-mono">const tokens = system;</span><span class="sh-type-meta">JetBrains Mono</span></div>
         </div>
       </div>
     </div>
@@ -1085,14 +1136,14 @@ button:focus-visible {
       <div class="card">
         <p class="sh-bars-h">Sessions by region</p>
         <div class="sh-bars" role="img" aria-label="Sessions across eight regions">
-          <span class="sh-bar" style="height:88%"></span>
-          <span class="sh-bar" style="height:62%"></span>
-          <span class="sh-bar alt" style="height:74%"></span>
-          <span class="sh-bar" style="height:41%"></span>
-          <span class="sh-bar" style="height:57%"></span>
-          <span class="sh-bar alt" style="height:33%"></span>
-          <span class="sh-bar" style="height:49%"></span>
-          <span class="sh-bar" style="height:28%"></span>
+          <span class="sh-bar" style="--h:88%"></span>
+          <span class="sh-bar" style="--h:62%"></span>
+          <span class="sh-bar alt" style="--h:74%"></span>
+          <span class="sh-bar" style="--h:41%"></span>
+          <span class="sh-bar" style="--h:57%"></span>
+          <span class="sh-bar alt" style="--h:33%"></span>
+          <span class="sh-bar" style="--h:49%"></span>
+          <span class="sh-bar" style="--h:28%"></span>
         </div>
       </div>
 
@@ -1100,22 +1151,22 @@ button:focus-visible {
         <p class="sh-bars-h">Today</p>
         <div class="sh-checklist">
           <div class="sh-check">
-            <span class="dot" style="color: var(--color-success)"></span>
+            <span class="dot dot-success"></span>
             <span class="sh-check-label">Approve the September billing run</span>
             <span class="chip">Done</span>
           </div>
           <div class="sh-check">
-            <span class="dot" style="color: var(--color-warning)"></span>
+            <span class="dot dot-warning"></span>
             <span class="sh-check-label">Review 3 flagged refund requests</span>
             <span class="chip">In review</span>
           </div>
           <div class="sh-check">
-            <span class="dot" style="color: var(--color-info)"></span>
+            <span class="dot dot-info"></span>
             <span class="sh-check-label">Publish the v2 onboarding flow</span>
             <span class="chip">Queued</span>
           </div>
           <div class="sh-check">
-            <span class="dot" style="color: var(--color-danger)"></span>
+            <span class="dot dot-danger"></span>
             <span class="sh-check-label">Investigate the latency spike on us-east-2</span>
             <span class="chip">Blocked</span>
           </div>

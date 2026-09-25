@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0f1115;
@@ -177,13 +179,14 @@
       color: var(--ink); margin: 64px 0 18px;
     }
     h2 .accent { color: var(--scene-accent); }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 700; font-size: 18px;
       letter-spacing: 0; color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 {
+    h4,
+    h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 700; font-size: 16px;
       color: var(--ink);
@@ -248,7 +251,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 700; font-size: 16px; color: var(--ink);
       margin-bottom: 10px;
@@ -342,7 +346,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     html, body {
@@ -642,7 +647,7 @@
 
       <div class="honesty">
         <div class="label">正直な適用範囲</div>
-        <h4>正規表現が捕まえるのは構造的指紋、センスではない。</h4>
+        <h3 class="h4">正規表現が捕まえるのは構造的指紋、センスではない。</h3>
         <p>リントが「このセクションのリズムは違う」「コピーが冷たく読める」と判定することはない。それはレビューの仕事だ。正規表現が確実に捕まえるのは、リテラルなトークン、クラス名、16進値、DOMの形を持つすべての指紋,つまりAIの既定値の大半だ。なぜならモデルは毎回同じアーティファクトに手を伸ばすからだ。</p>
         <p>リントの上にセンスのパスを置きたければ、同じパッケージに<code>/ux-critique</code>が同梱されていて、エディタ内で要求時に動く。これを意図的にCIで走らせないのは、CIが決定論的な床のためにある場所だからだ。</p>
       </div>
@@ -684,9 +689,9 @@
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· または ·</div>
+        <div class="row row--note">· または ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· または ·</div>
+        <div class="row row--note">· または ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

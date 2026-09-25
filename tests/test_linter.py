@@ -403,3 +403,298 @@ def test_full_viewport_width_ignores_max_width_100vw(tmp_path):
     f.write_text(".hero { max-width: 100vw; }\n.bar { width: 100%; }", encoding="utf-8")
     ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
     assert "full-viewport-width-overflow" not in ids
+
+
+# --- Site lint false positives (docs/ dogfood). Each case is a minimal copy of the
+# --- page markup that fired, plus the real violation the rule must still catch.
+
+def _ids(tmp_path, name, body):
+    f = tmp_path / name
+    f.write_text(body, encoding="utf-8")
+    return [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
+
+
+def test_animating_layout_ignores_transition_none_before_later_css(tmp_path):
+    """docs/*.html nav: `transition:none}` has no `;`, so the old pattern ran on
+    into later markup until it met a word like `left`."""
+    html = ('<style>@media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>\n'
+            '<div class="x" style="margin-left:4px;">a</div>')
+    assert "animating-layout-properties" not in _ids(tmp_path, "nav.html", html)
+
+
+def test_animating_layout_ignores_svg_transition_delay(tmp_path):
+    """docs/index.html hero wiring: a transition-delay on an SVG node."""
+    html = ('<circle class="wnode" cx="200" cy="110" r="7" style="transition-delay:.55s"/>\n'
+            '<rect width="10" height="10"/><p style="padding:0;">x</p>')
+    assert "animating-layout-properties" not in _ids(tmp_path, "wire.html", html)
+
+
+def test_animating_layout_still_flags_width_transition(tmp_path):
+    assert "animating-layout-properties" in _ids(
+        tmp_path, "bad.css", ".bar { transition: width .3s ease }")
+    assert "animating-layout-properties" in _ids(
+        tmp_path, "bad.html", '<div style="transition: height 1s">x</div>')
+
+
+def test_inline_style_custom_properties_only_not_flagged(tmp_path):
+    """docs/design-systems.html cards and index.html wiring pass data in as CSS vars."""
+    html = ('<a class="ds-card" style="--c:#00040c;--i:#e5f1ff;--p:#db3291">x</a>\n'
+            '<span class="sw" style="--sw:#bf3722"></span>')
+    assert "inline-style-attribute" not in _ids(tmp_path, "vars.html", html)
+
+
+def test_inline_style_ignores_svg_path_tag(tmp_path):
+    """`<p` must not match `<path`."""
+    html = '<svg><path class="wire" d="M40 110 H200" style="stroke-dasharray:160"/></svg>'
+    assert "inline-style-attribute" not in _ids(tmp_path, "svg.html", html)
+
+
+def test_inline_style_still_flags_real_declarations(tmp_path):
+    assert "inline-style-attribute" in _ids(
+        tmp_path, "bad.html", '<div style="margin-top:14px; opacity:0.6;">x</div>')
+    assert "inline-style-attribute" in _ids(
+        tmp_path, "mixed.html", '<span style="--sw:#fff;background:var(--sw)"></span>')
+
+
+def test_imagery_counts_an_iframe_of_the_product(tmp_path):
+    """docs/design-systems/<slug>/index.html: the main visual is a live iframe."""
+    html = ('<!doctype html><html><body><main><h1>Iris</h1>'
+            '<iframe src="/design-systems/iris/preview.html" title="Iris preview"></iframe>'
+            '</main></body></html>')
+    assert "imagery-mandatory-missing" not in _ids(tmp_path, "detail.html", html)
+
+
+def test_multi_stop_gradient_ignores_commas_inside_rgba(tmp_path):
+    """docs/blog/index.html: a two-stop gradient whose stops are rgba()."""
+    css = ".post { background: linear-gradient(180deg, rgba(34,211,238,0.06), rgba(16, 185, 129, 0.02)); }"
+    assert "chrome-y-multi-stop-gradient" not in _ids(tmp_path, "two.css", css)
+
+
+def test_multi_stop_gradient_still_flags_four_stops(tmp_path):
+    css = ".chrome { background: linear-gradient(180deg, #fff, #ccc 40%, #999 60%, #eee); }"
+    assert "chrome-y-multi-stop-gradient" in _ids(tmp_path, "four.css", css)
+
+
+def test_box_shadow_two_color_mix_layers_not_flagged(tmp_path):
+    """docs/design-systems/*/css/tokens.css .card-elevated: two layers, the
+    ambient plus contact pair the rule's own fix recommends."""
+    css = (".card-elevated {\n  box-shadow:\n"
+           "    0 1px 2px color-mix(in srgb, var(--color-ink) 6%, transparent),\n"
+           "    0 18px 40px color-mix(in srgb, var(--color-ink) 8%, transparent);\n}")
+    assert "box-shadow-multilayer-default" not in _ids(tmp_path, "tokens.css", css)
+
+
+def test_box_shadow_four_layer_elevation_not_flagged(tmp_path):
+    """Boundary: an elevation scale builds depth from up to four layers."""
+    css = (".c { box-shadow: 0 1px 1px rgba(0,0,0,.08), 0 2px 2px rgba(0,0,0,.08), "
+           "0 4px 4px rgba(0,0,0,.08), 0 8px 8px rgba(0,0,0,.08); }")
+    assert "box-shadow-multilayer-default" not in _ids(tmp_path, "four.css", css)
+
+
+def test_box_shadow_five_layers_flagged(tmp_path):
+    """Boundary: the fifth layer is the AI-premium stack the rule exists for."""
+    css = (".c { box-shadow: 0 1px 1px rgba(0,0,0,.08), 0 2px 2px rgba(0,0,0,.08), "
+           "0 4px 4px rgba(0,0,0,.08), 0 8px 8px rgba(0,0,0,.08), 0 16px 16px rgba(0,0,0,.08); }")
+    assert "box-shadow-multilayer-default" in _ids(tmp_path, "five.css", css)
+
+
+def test_fixed_height_ignores_letters_inside_other_words(tmp_path):
+    """tokens.css: the `p` in `display` and the `div` in `.divider` are not selectors."""
+    css = (".grid {\n  display: grid;\n}\n\n.divider {\n  height: 1px;\n"
+           "  background: var(--color-border);\n}")
+    assert "fixed-height-text-block" not in _ids(tmp_path, "tokens.css", css)
+
+
+def test_fixed_height_still_flags_text_div(tmp_path):
+    css = "div.note { height: 40px; color: #333; }"
+    assert "fixed-height-text-block" in _ids(tmp_path, "bad.css", css)
+
+
+def test_glass_with_background_before_blur_not_flagged(tmp_path):
+    """docs/faq.html nav drawer: background-color is declared above the blur."""
+    css = (".nav__drawer {\n  background-color: rgba(7, 8, 10, 0.94);\n"
+           "  backdrop-filter: blur(18px);\n  -webkit-backdrop-filter: blur(18px);\n}")
+    assert "glass-without-fallback" not in _ids(tmp_path, "drawer.css", css)
+
+
+def test_glass_without_background_still_flagged(tmp_path):
+    assert "glass-without-fallback" in _ids(
+        tmp_path, "bad.css", ".x { backdrop-filter: blur(10px); }\n.y { background: red; }")
+    assert "glass-without-fallback" in _ids(
+        tmp_path, "bad.html", '<div style="backdrop-filter: blur(8px)">x</div>')
+
+
+def test_placeholder_with_label_for_not_flagged(tmp_path):
+    """preview.html specimen form: a visible <label for> plus a placeholder hint."""
+    html = ('<label class="field-label" for="sh-email">Work email</label>\n'
+            '<input class="input" id="sh-email" type="email" name="email" '
+            'placeholder="you@studio.com" autocomplete="email">')
+    assert "placeholder-as-label" not in _ids(tmp_path, "form.html", html)
+
+
+def test_placeholder_as_only_label_still_flagged(tmp_path):
+    assert "placeholder-as-label" in _ids(
+        tmp_path, "bad.html", '<input type="email" placeholder="Email">')
+
+
+def _hits(tmp_path, name, body, rule):
+    f = tmp_path / name
+    f.write_text(body, encoding="utf-8")
+    report = lint([str(f)])
+    return [x for x in report.to_dict()["findings"] if x["rule_id"] == rule], report
+
+
+def test_region_waives_only_the_rules_it_names(tmp_path):
+    """docs/anti-patterns.html quotes the rules it documents. A ux-lint-off
+    region waives the named rules on its lines; other rules still fire there,
+    and lines after ux-lint-on are linted as usual."""
+    html = ('<!-- ux-lint-off lorem-ipsum-leak, placeholder-token-shipped -->\n'
+            '<h3 class="ap-name">Lorem ipsum in shipping code</h3>\n'
+            '<p>We saved John Doe 10 hours.</p>\n'
+            '<!-- ux-lint-on -->\n'
+            '<p>lorem ipsum dolor</p>\n')
+    lorem, report = _hits(tmp_path, "catalog.html", html, "lorem-ipsum-leak")
+    assert [x["line"] for x in lorem] == [5]
+    names, _ = _hits(tmp_path, "catalog.html", html, "fake-name-john-doe")
+    assert [x["line"] for x in names] == [3]
+    assert report.waived_lines == 4
+    assert report.to_dict()["waived_lines"] == 4
+
+
+def test_unclosed_region_waives_nothing_and_is_a_finding(tmp_path):
+    html = '<p>ok</p>\n<!-- ux-lint-off lorem-ipsum-leak -->\n<p>Lorem ipsum</p>\n'
+    lorem, _ = _hits(tmp_path, "open.html", html, "lorem-ipsum-leak")
+    assert [x["line"] for x in lorem] == [3]
+    broken, report = _hits(tmp_path, "open.html", html, "lint-waiver-region")
+    assert [x["line"] for x in broken] == [2]
+    assert broken[0]["severity"] == "high"
+    assert "line 2" in broken[0]["fix"] and "ux-lint-on" in broken[0]["fix"]
+    assert report.exit_code == 1
+
+
+def test_region_without_rule_ids_waives_nothing_and_is_a_finding(tmp_path):
+    html = '<!-- ux-lint-off -->\n<p>Lorem ipsum</p>\n<!-- ux-lint-on -->\n'
+    lorem, _ = _hits(tmp_path, "bare.html", html, "lorem-ipsum-leak")
+    assert [x["line"] for x in lorem] == [2]
+    broken, _ = _hits(tmp_path, "bare.html", html, "lint-waiver-region")
+    assert [x["line"] for x in broken] == [1] and "names no rule" in broken[0]["fix"]
+
+
+def test_stray_region_close_is_a_finding(tmp_path):
+    broken, _ = _hits(tmp_path, "stray.html", "<p>ok</p>\n<!-- ux-lint-on -->\n", "lint-waiver-region")
+    assert [x["line"] for x in broken] == [2]
+
+
+def test_disable_comment_waives_its_own_line_only(tmp_path):
+    """commands/ux-lint.md: `ux-lint-disable` on a line skips that line."""
+    html = ('<p>Acme Inc, Lorem ipsum <!-- ux-lint-disable --></p>\n'
+            '<p>Lorem ipsum</p>\n'
+            '<p>Lorem ipsum <!-- ux-lint-disable fake-name-john-doe --></p>\n'
+            '<!-- ux-lint-disable-next-line lorem-ipsum-leak -->\n'
+            '<p>Lorem ipsum</p>\n')
+    lorem, _ = _hits(tmp_path, "line.html", html, "lorem-ipsum-leak")
+    assert [x["line"] for x in lorem] == [2, 3]
+
+
+def test_passive_listener_explicit_false_not_flagged(tmp_path):
+    """docs/index.html pins a scene and blocks scroll on purpose: an explicit
+    `{passive:false}` is the opt-out the rule's own fix allows."""
+    js = ("function lockScroll(){document.addEventListener('wheel',noScroll,{passive:false});"
+          "document.addEventListener('touchmove',noScroll,{passive:false});}")
+    assert "event-listener-no-passive-on-scroll" not in _ids(tmp_path, "pin.js", js)
+
+
+def test_passive_listener_missing_option_still_flagged(tmp_path):
+    js = "window.addEventListener('scroll', onScroll);"
+    assert "event-listener-no-passive-on-scroll" in _ids(tmp_path, "bad.js", js)
+
+
+# --- placeholder-as-label: pass only with a real accessible name ---
+
+@pytest.mark.parametrize("name,body", [
+    ("id-no-label.html", '<input id="email" type="email" placeholder="Email">'),
+    ("search.tsx", '<input id="search" placeholder="Search" />'),
+    ("label-elsewhere.html", '<label for="other">Name</label><input id="email" placeholder="Email">'),
+    ("data-id.html", '<input data-id="x" placeholder="Search">'),
+    ("testid.html", '<input data-testid="q" placeholder="Search">'),
+    ("labelledby-missing.html", '<input aria-labelledby="nope" placeholder="Search">'),
+    ("empty-aria-label.html", '<input aria-label="" placeholder="Search">'),
+    ("closed-label.html", '<label>Name</label><input placeholder="Search">'),
+])
+def test_placeholder_without_accessible_name_fires(tmp_path, name, body):
+    assert "placeholder-as-label" in _ids(tmp_path, name, body)
+
+
+@pytest.mark.parametrize("name,body", [
+    ("label-for.html", '<label for="email">Email</label>\n<input id="email" placeholder="you@x.com">'),
+    ("label-after.html", '<input id="q" placeholder="Search"><label for="q">Search</label>'),
+    ("html-for.tsx", '<label htmlFor="q">Search</label><input id="q" placeholder="Search" />'),
+    ("wrapping.html", '<label>Email <input type="email" placeholder="you@x.com"></label>'),
+    ("aria-label.html", '<input aria-label="Search" placeholder="Search">'),
+    ("labelledby.html", '<span id="lbl">Search</span><input aria-labelledby="lbl" placeholder="Search">'),
+])
+def test_placeholder_with_accessible_name_passes(tmp_path, name, body):
+    assert "placeholder-as-label" not in _ids(tmp_path, name, body)
+
+
+def test_box_shadow_tailwind_composite_not_flagged(tmp_path):
+    css = (".ring { box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), "
+           "var(--tw-shadow, 0 0 #0000); }")
+    assert "box-shadow-multilayer-default" not in _ids(tmp_path, "tw.css", css)
+
+
+def test_box_shadow_five_hex_layers_flagged(tmp_path):
+    css = ".c { box-shadow: 0 1px #0001, 0 2px #0001, 0 4px #0001, 0 8px #0001, 0 16px #0001; }"
+    assert "box-shadow-multilayer-default" in _ids(tmp_path, "hex.css", css)
+
+
+def test_three_layer_zero_offset_glow_is_caught_by_the_glow_rule(tmp_path):
+    """A 3-layer glow is below the layer threshold; glow-shadow-zero-offset catches it."""
+    css = ".c { box-shadow: 0 0 20px #22d3ee, 0 0 40px #22d3ee, 0 0 80px #22d3ee; }"
+    ids = _ids(tmp_path, "glow.css", css)
+    assert "glow-shadow-zero-offset" in ids and "box-shadow-multilayer-default" not in ids
+
+
+def test_offset_shadow_and_focus_ring_are_not_glows(tmp_path):
+    css = ".c { box-shadow: 0 4px 12px rgb(0 0 0 / .12); }\n.f:focus-visible { box-shadow: 0 0 0 3px #22d3ee; }"
+    assert "glow-shadow-zero-offset" not in _ids(tmp_path, "ok.css", css)
+
+
+def test_glass_word_background_in_transition_is_not_a_fallback(tmp_path):
+    css = ".x { transition: background .2s; backdrop-filter: blur(8px); }"
+    assert "glass-without-fallback" in _ids(tmp_path, "t.css", css)
+
+
+def test_glass_finding_points_at_the_blur_line(tmp_path):
+    css = ".x {\n  color: red;\n  backdrop-filter: blur(8px);\n}\n"
+    hits, _ = _hits(tmp_path, "l.css", css, "glass-without-fallback")
+    assert [x["line"] for x in hits] == [3]
+
+
+# --- A rule's own slug in an id, href, aria-label or #anchor text is an identifier, not copy ---
+
+@pytest.mark.parametrize("rule,phrase", [
+    ("marketing-buzz-next-generation", "next-generation"),
+    ("marketing-buzz-cutting-edge", "cutting-edge"),
+    ("marketing-buzz-best-in-class", "best-in-class"),
+    ("marketing-buzz-world-class", "world-class"),
+    ("marketing-buzz-industry-leading", "industry-leading"),
+    ("marketing-buzz-game-changing", "game-changing"),
+    ("marketing-buzz-ai-powered-driven", "AI-powered"),
+    ("marketing-buzz-leverage-ai-harness", "harness the power of"),
+])
+def test_buzzword_ignores_identifiers_but_fires_on_copy(tmp_path, rule, phrase):
+    """docs/anti-patterns.html card chrome: <article id>, <span>#slug</span>, <a href aria-label>."""
+    slug = rule
+    chrome = (f'<article class="ap-card" id="{slug}">\n<span class="ap-id">#{slug}</span>\n'
+              f'<a href="#{slug}" class="ap-anchor" aria-label="Link to rule #{slug}">link</a>\n'
+              f'<div class="hero-{slug}-x"></div>\n')
+    assert rule not in _ids(tmp_path, "chrome.html", chrome)
+    assert rule in _ids(tmp_path, "copy.html", f"<p>Our {phrase} platform.</p>")
+
+
+def test_h_screen_only_counts_the_class_attribute(tmp_path):
+    anchor = ('<a href="#h-screen-no-dvh-fallback" class="ap-anchor" '
+              'aria-label="Link to rule #h-screen-no-dvh-fallback">link</a>')
+    assert "h-screen-no-dvh-fallback" not in _ids(tmp_path, "a.html", anchor)
+    assert "h-screen-no-dvh-fallback" in _ids(tmp_path, "b.html", '<section class="hero h-screen">x</section>')

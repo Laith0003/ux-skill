@@ -574,7 +574,7 @@ Marketing surfaces use generous breathing room between feature card bands. Works
 | Level | Treatment | Use |
 |---|---|---|
 | 0 (flat) | No shadow; `{colors.hairline}` border | Default cards, table rows |
-| 1 (subtle) | `rgba(15, 15, 15, 0.04) 0px 1px 2px 0px` | Hover-elevated tiles |
+| 1 (subtle) | `rgba(15, 15, 15, 0.04) 0px 1px 2px 0px` | Raised tiles |
 | 2 (card) | `rgba(15, 15, 15, 0.08) 0px 4px 12px 0px` | Feature cards |
 | 3 (mockup) | `rgba(15, 15, 15, 0.20) 0px 24px 48px -8px` | Hero workspace mockup card |
 | 4 (modal) | `rgba(15, 15, 15, 0.16) 0px 16px 48px -8px` | Modals, dropdowns |

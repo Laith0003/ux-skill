@@ -66,6 +66,8 @@
 </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0f1115;
@@ -188,13 +190,14 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 {
+    h4,
+    h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px;
       color: var(--ink);
@@ -259,7 +262,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -373,7 +377,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
@@ -572,7 +577,7 @@
           </thead>
           <tbody>
             <tr><td>A11y</td><td class="num">12</td><td>Missing alt text, color-only state, low-contrast pairs, click targets under 44px, no focus styles, decorative SVG without <code>aria-hidden</code>.</td></tr>
-            <tr><td>Content</td><td class="num">8</td><td>"John Doe" placeholders, "L&#111;rem ipsum," "Beautiful experiences," "Revolutionizing X," generic stock imagery URLs, emoji headlines.</td></tr>
+            <tr><td>Content</td><td class="num">8</td><!-- ux-lint-off fake-name-john-doe --><td>"John Doe" placeholders, "L&#111;rem ipsum," "Beautiful experiences," "Revolutionizing X," generic stock imagery URLs, emoji headlines.</td><!-- ux-lint-on --></tr>
             <tr><td>Typography</td><td class="num">6</td><td>Inter as display, 90px font-size at 1.0 line-height, all-caps body, sans-only stack, hairline 100-weight, no font-feature-settings.</td></tr>
             <tr><td>Color</td><td class="num">6</td><td>Purple-to-blue gradient (<code>#7C3AED → #3B82F6</code> family), 600/400 default pairs, neon glow on white, three indigo shades.</td></tr>
             <tr><td>Layout</td><td class="num">6</td><td>Three equal cards in a row, "Hero + 3-up + CTA" boilerplate, full-bleed gradient hero, centered-everything axis.</td></tr>
@@ -770,7 +775,7 @@ $ uxskill lint --json | jq '.findings | length'</pre>
 
       <div class="honesty">
         <div class="label">Honest scope</div>
-        <h4>Regex catches structural fingerprints, not taste.</h4>
+        <h3 class="h4">Regex catches structural fingerprints, not taste.</h3>
         <p>The linter will never catch "this section is the wrong rhythm" or "the copy reads cold." Those need a human or a model. What regex <em>does</em> catch is every fingerprint that has a literal token, pattern, or shape, which is most of the AI defaults, because the model reaches for the same artifact every time.</p>
         <p>We deliberately don't run an LLM judge in CI. If your bar is "looks like a designer made it," that's a code review, not a lint. ux-skill ships <code>/ux-critique</code> for the taste pass, but that runs in your editor on demand, not in CI.</p>
       </div>
@@ -804,9 +809,9 @@ $ uxskill lint --json | jq '.findings | length'</pre>
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">or</div>
+        <div class="row row--note">or</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">or</div>
+        <div class="row row--note">or</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

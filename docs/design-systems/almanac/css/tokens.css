@@ -435,6 +435,22 @@ button:focus-visible {
   flex: none;
 }
 
+.dot-success {
+  color: var(--color-success);
+}
+
+.dot-warning {
+  color: var(--color-warning);
+}
+
+.dot-info {
+  color: var(--color-info);
+}
+
+.dot-danger {
+  color: var(--color-danger);
+}
+
 /* Stat tile */
 .stat {
   background: var(--color-surface);

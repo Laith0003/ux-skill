@@ -12,6 +12,7 @@ Re-run after data/anti-patterns.json changes.
 """
 from pathlib import Path
 import json
+import sys
 import html
 import re
 
@@ -25,6 +26,13 @@ def sanitize_dashes(s):
 
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def site_version():
+    """The package version from pyproject.toml, the version the site states."""
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from site_version import version
+    return version()
 SRC = ROOT / "data" / "anti-patterns.json"
 OUT = ROOT / "docs" / "anti-patterns.html"
 
@@ -62,6 +70,7 @@ def render_rule_card(rule):
     category = html.escape(str(rule.get("category", "")))
     severity = (rule.get("severity") or "medium").lower()
     sev_color, sev_ink, sev_label = SEVERITY_BADGE.get(severity, SEVERITY_BADGE["medium"])
+    sev_class = severity if severity in SEVERITY_BADGE else "medium"
     # Real schema uses "detection.regex" + "why" + "fix"; legacy uses
     # "description", "why_bad", "example_bad", "example_good".
     detection = rule.get("detection") or {}
@@ -100,9 +109,9 @@ def render_rule_card(rule):
     <article class="ap-card" id="{rid}">
       <header class="ap-head">
         <span class="ap-id">#{rid}</span>
-        <span class="ap-sev" style="background:#{sev_color};color:#{sev_ink}">{sev_label}</span>
+        <span class="ap-sev ap-sev--{sev_class}">{sev_label}</span>
         <span class="ap-cat">{category}</span>
-        <h3 class="ap-name">{name}</h3>
+        <h2 class="ap-name">{name}</h2>
         <div class="ap-applies">{applies_pills}</div>
       </header>
       <p class="ap-desc">{desc}</p>
@@ -197,7 +206,7 @@ def build_html(rules, version):
   .toolbar {{ padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); position: sticky; top: 0; background: rgba(7,8,10,0.92); backdrop-filter: blur(8px); z-index: 10; }}
   .toolbar__row {{ display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }}
   .ap-search {{ flex: 1; min-width: 260px; padding: 10px 14px; background: var(--surface-1); border: 1px solid var(--hairline); border-radius: 8px; color: var(--ink); font-family: var(--sans); font-size: 14px; }}
-  .ap-search:focus {{ outline: none; border-color: var(--accent); }}
+  .ap-search:focus {{ outline: 2px solid transparent; border-color: var(--accent); }}
   .ap-chip {{ background: var(--surface-1); border: 1px solid var(--hairline); color: var(--body); padding: 6px 12px; border-radius: 999px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; }}
   .ap-chip.is-active {{ background: var(--accent); color: var(--canvas); border-color: var(--accent); }}
   .ap-chip:hover {{ border-color: var(--hairline-2); }}
@@ -207,6 +216,9 @@ def build_html(rules, version):
   .ap-head {{ display: grid; grid-template-columns: auto auto auto; gap: 8px 12px; align-items: center; margin-bottom: 14px; }}
   .ap-id {{ font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }}
   .ap-sev {{ font-family: var(--mono); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.08em; }}
+  .ap-sev--high {{ background: #ff5d5d; color: #FFFFFF; }}
+  .ap-sev--medium {{ background: #e8a63c; color: #07080a; }}
+  .ap-sev--low {{ background: #8be9b1; color: #07080a; }}
   .ap-cat {{ font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.10em; text-transform: uppercase; }}
   .ap-name {{ grid-column: 1 / -1; font-size: 20px; font-weight: 600; color: var(--ink); line-height: 1.2; }}
   .ap-applies {{ grid-column: 1 / -1; display: flex; gap: 6px; flex-wrap: wrap; }}
@@ -236,6 +248,10 @@ def build_html(rules, version):
   @media (max-width: 640px) {{
     .grid {{ grid-template-columns: 1fr; }}
   }}
+  .docfig {{ margin: 32px 0; border: 1px solid rgba(255,255,255,0.10); border-radius: 14px; overflow: hidden; background: #0b0d12; }}
+  .docfig img {{ display: block; width: 100%; height: auto; }}
+  .docfig figcaption {{ margin: 0; padding: 12px 16px; font-size: 13px; line-height: 1.5; color: #8a8f96; border-top: 1px solid rgba(255,255,255,0.08); }}
+  .docfig--narrow {{ max-width: 720px; }}
 </style>
 </head>
 <body>
@@ -254,7 +270,7 @@ def build_html(rules, version):
 
 <section class="top">
   <div class="container">
-    <p class="top__eyebrow">Linter catalogue · v{html.escape(str(version)) if version else ""}</p>
+    <p class="top__eyebrow">Linter catalogue · v{site_version()}</p>
     <h1 class="top__title">{total} fingerprints of <em>AI design slop.</em></h1>
     <p class="top__lead">
       Every rule in <code>data/anti-patterns.json</code>, browseable. Run the linter (<code>uxskill lint</code>) and it scans your HTML/CSS/JS for these regex patterns in &lt;50&#x20;ms: no LLM, no API call, no telemetry. Each rule names the fingerprint, explains why it's slop, and tells the AI session what to ship instead.
@@ -266,6 +282,10 @@ def build_html(rules, version):
       <span class="top__stat"><b>{low}</b> low</span>
       <span class="top__stat"><b>{len(categories)}</b> categories</span>
     </div>
+    <figure class="docfig docfig--narrow">
+      <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="A terminal running ux lint on a docs folder: two high-severity findings, a purple-to-blue gradient and leftover placeholder text, each shown with its file, line and fix, then exit code 1." loading="lazy" decoding="async">
+      <figcaption>Every rule on this page runs in ux lint. This is what a finding looks like in the terminal.</figcaption>
+    </figure>
   </div>
 </section>
 
@@ -325,9 +345,67 @@ def build_html(rules, version):
 """
 
 
+# Each card quotes its rule in four fields: the name, the why, the fix and
+# the regex. Those quotes are the subject of the page. A field is wrapped in a
+# ux-lint-off region only for rules that (1) fire on the field's text, not its
+# markup, and (2) fire on that rule's own name, why, fix, regex or examples as
+# plain text. The allowlist comes from the rule data, never from what fails on
+# the page, so card chrome (the article, the id badge, the permalink) and any
+# markup inside a field are always linted.
+QUOTED_FIELDS = (
+    r'<h2 class="ap-name">.*?</h2>',
+    r'<div class="ap-why">.*?</div>',
+    r'<div class="ap-fix">.*?</div>',
+    r'<pre class="ap-pre[^"]*">.*?</pre>',
+)
+
+
+def quoted_rule_ids(rules):
+    """{rule id: rule ids its quoted text trips}, from the data alone. Each
+    field is linted on its own, the way the card shows it, and the card's
+    fields are linted together."""
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from lint_waivers import lint_findings
+    frags = {}
+    for i, r in enumerate(rules):
+        det = r.get("detection") or {}
+        fields = [r.get("why_bad") or r.get("why", ""), r.get("fix", ""),
+                  det.get("regex") or det.get("pattern") or "", det.get("example_bad") or "",
+                  det.get("example_good") or ""]
+        esc = lambda x: sanitize_dashes(html.escape(str(x)))  # noqa: E731
+        frags[f"c{i}-name.html"] = f'<h2 class="ap-name">{esc(r.get("name", ""))}</h2>'
+        for k, field in enumerate(fields):
+            if field:
+                frags[f"c{i}-{k}.html"] = f"<p>{esc(field)}</p>"
+        # and the card as a whole, for rules that count repeats across fields
+        frags[f"c{i}-all.html"] = (f'<h2 class="ap-name">{esc(r.get("name", ""))}</h2>\n'
+                                   + "\n".join(f"<p>{esc(x)}</p>" for x in fields if x))
+    found = lint_findings(frags)
+    out = {}
+    for name, findings in found.items():
+        i = int(name[1:].split("-")[0])
+        out.setdefault(str(rules[i].get("id", "")), set()).update(f.rule_id for f in findings)
+    return out
+
+
+def waive_quotes(page, rules):
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from lint_waivers import wrap_quoted
+    allowed = quoted_rule_ids(rules)
+
+    def allow(text, pos):
+        opened = text.rfind('<article class="ap-card" id="', 0, pos)
+        if opened == -1:
+            return set()
+        rid = text[opened:].split('id="', 1)[1].split('"', 1)[0]
+        return allowed.get(html.unescape(rid), set())
+
+    return wrap_quoted(page, [(pattern, allow) for pattern in QUOTED_FIELDS])
+
+
 def main():
     rules, version = load_rules()
-    out_html = build_html(rules, version)
+    out_html = waive_quotes(build_html(rules, version), rules)
     OUT.write_text(out_html, encoding="utf-8")
     print(f"ok  {len(rules)} rules  →  docs/anti-patterns.html")
 

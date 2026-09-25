@@ -37,6 +37,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface: #0f1115;
@@ -178,7 +180,7 @@
       color: var(--scene-accent);
       margin-bottom: 22px;
     }
-    h1, h2, h3, h4 {
+    h1, h2, h3:where(:not(.h4)), h4 , h3:where(.h4) {
       font-family: var(--display);
       color: var(--ink);
       margin: 0;
@@ -222,7 +224,7 @@
       margin: 56px 0 16px;
     }
     h2 .accent { color: var(--scene-accent); }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 32, 'wght' 600;
       font-size: 19px;
@@ -259,7 +261,7 @@
       background: var(--surface-2);
       border-color: var(--scene-accent);
     }
-    .rank-card h3 {
+    .rank-card h3:where(:not(.h4)) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 620;
       font-size: 26px;
@@ -313,7 +315,8 @@
       margin: 18px 0;
       line-height: 1.45;
     }
-    .rank-card h4 {
+    .rank-card h4,
+    .rank-card h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600;
       font-size: 14px;
@@ -391,7 +394,8 @@
       color: var(--scene-accent);
       margin-bottom: 10px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 600;
       font-size: 18px;
@@ -925,7 +929,7 @@
 
       <div class="honesty">
         <div class="label">The honest position</div>
-        <h4>About the ux-skill ranking at #6</h4>
+        <h3 class="h4">About the ux-skill ranking at #6</h3>
         <p>If we were ranking by stars, ux-skill would be #8 of 8: 14 stars is the smallest installed base in the list. We ranked by scope (1,243 entries, 25 commands, 5 sub-agents, 35 linter rules, 160 brand specs, 17 IDEs) and put it where the architecture says it lands. Read that as a self-aware bias.</p>
         <p>The cards above are accurate on what each tool actually ships. Star counts will move (they're live as of 2026-05-28). Pick by the problem, not the badge.</p>
       </div>

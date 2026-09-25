@@ -20,7 +20,7 @@
 
 8. **Magnetic micro-physics use motion values, never state** — `useMotionValue` and `useTransform` for continuous hover and cursor-tracked motion. `useState` triggers re-renders that collapse performance on mobile.
 
-9. **Tactile feedback is the difference between toy and tool** — Press states with translation, scale, or elevation shift. Hover states with shadow lift on cards. Color shift on links. The user feels the interface respond.
+9. **Tactile feedback is the difference between toy and tool** — Press states with translation, scale, or elevation shift. Hover states on cards shift border or background, never elevation. Color shift on links. The user feels the interface respond.
 
 10. **System gestures are sacred** — Pinch-zoom is preserved (never `user-scalable=no`). Predictive back works. Tab Bar swipe doesn't block content scroll. Don't fight the OS.
 
@@ -39,7 +39,7 @@
 | Maintain 8 to 12px movement threshold before drag starts | Trigger drag immediately on touch (causes accidental drags) |
 | Provide both gesture AND tappable control for critical actions | Make swipe the only path to a critical action |
 | Use `useMotionValue` and `useTransform` for continuous animation | Use `useState` for continuous hover or magnetic effects |
-| Provide hover lift on cards (200 to 300ms ease) | Apply scale animations to CTAs (looks toy-like) |
+| Signal card hover with a border or background shift (150 to 250ms) | Apply scale animations to CTAs (looks toy-like) |
 | Preserve pinch-zoom in viewport meta | Set `user-scalable=no` |
 | Use `touch-action: manipulation` to remove 300ms tap delay | Ignore tap delay on web |
 | Use haptic feedback on confirmations and important actions | Use haptic on every tap (exhausting) |
@@ -64,10 +64,10 @@
 **Anti-pattern**: Press states that scale dramatically (1.2x) and shift surrounding layout.
 **How**: On `:active`, apply `-translate-y-[1px]` or `scale-[0.98]`. Duration 80 to 150ms. Restore on release. The user feels a physical push. The transform stays subtle enough that surrounding content doesn't shift.
 
-### Pattern: Hover lift on interactive cards
+### Pattern: Hover on interactive cards
 **Use when**: Clickable cards, image tiles, feature blocks.
-**Anti-pattern**: Cards that snap on hover, or that scale dramatically (1.2x) and shift surrounding layout.
-**How**: `translateY(-2px)` to `translateY(-4px)` combined with shadow elevation shift. Duration 200 to 300ms with `cubic-bezier(0.16, 1, 0.3, 1)`. Reserved for clickable cards and primary CTAs; not every element.
+**Anti-pattern**: Cards that snap on hover, that scale dramatically (1.2x) and shift surrounding layout, or that rise on hover.
+**How**: Hover, focus and press never change a card's elevation; only a drag lifts. Shift the border or background by one step over 150 to 250ms. Reserved for clickable cards; not every element.
 
 ### Pattern: Magnetic button (high-end)
 **Use when**: Hero CTAs in premium marketing surfaces.
@@ -177,14 +177,12 @@ Threshold disambiguates: short tap with no movement = tap; sustained movement pa
 ### Feedback timings
 - Tap visual response: 80 to 150ms
 - Hover transition: 150 to 250ms
-- Card hover lift duration: 200 to 300ms
 - Active press transform: 80 to 150ms
 - Disabled state transition: 200ms
 - Disabled to enabled state change: 200ms ease
 
 ### Tactile transform values
 - Press feedback: `-translate-y-[1px]` or `scale-[0.98]`
-- Card hover lift: `translateY(-2px)` to `translateY(-4px)`
 - Card image hover scale: `scale-[1.02]` to `scale-[1.05]` inside `overflow-hidden`
 - Magnetic button maximum translate: 4 to 8px
 - Cursor parallax rotation cap: 4 to 8 degrees
@@ -280,7 +278,7 @@ Threshold disambiguates: short tap with no movement = tap; sustained movement pa
 - [ ] 8px minimum gap between adjacent touch targets (severity: Critical)
 - [ ] Tap feedback lands within 80 to 150ms (severity: High)
 - [ ] Press states use `-translate-y-[1px]` or `scale-[0.98]` (severity: Medium)
-- [ ] Hover lift on cards uses 200 to 300ms ease (severity: Medium)
+- [ ] Card hover changes border or background only, never elevation (severity: Medium)
 - [ ] No hover-only primary interactions — primary CTAs work without hover (severity: Critical)
 - [ ] `cursor: pointer` on all clickable elements (web) (severity: High)
 - [ ] `touch-action: manipulation` removes 300ms tap delay (web) (severity: Medium)

@@ -55,6 +55,8 @@
 </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface: #0f1115;
@@ -205,7 +207,7 @@
       color: var(--scene-accent);
       margin-bottom: 22px;
     }
-    h1, h2, h3, h4 {
+    h1, h2, h3:where(:not(.h4)), h4 , h3:where(.h4) {
       font-family: var(--display);
       color: var(--ink);
       margin: 0;
@@ -249,7 +251,7 @@
       margin: 56px 0 16px;
     }
     h2 .accent { color: var(--scene-accent); }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 32, 'wght' 600;
       font-size: 19px;
@@ -289,7 +291,7 @@
       font-size: 12px; letter-spacing: 0.1em;
       text-transform: uppercase; color: var(--muted);
     }
-    .plugin-card h3 {
+    .plugin-card h3:where(:not(.h4)) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 620;
       font-size: 22px;
@@ -327,7 +329,8 @@
       text-transform: uppercase; color: var(--scene-accent);
       margin-bottom: 10px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 600;
       font-size: 18px;
@@ -779,7 +782,7 @@
 
       <div class="honesty">
         <div class="label">Honesty card</div>
-        <h4>Star counts compress what each plugin actually does.</h4>
+        <h3 class="h4">Star counts compress what each plugin actually does.</h3>
         <p>ui-ux-pro-max owns 84,000 stars because it shipped first and the recommender pattern is genuinely sound. ux-skill at 14 stars isn't comparable on awareness; it's comparable on the four nets new (linter, brand specs, motion presets, components) we shipped on top of the same architecture.</p>
         <p>The ranking above is by install volume, not by quality. Pick by what you're missing, not by the star count.</p>
       </div>

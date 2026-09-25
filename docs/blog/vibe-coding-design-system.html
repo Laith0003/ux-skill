@@ -67,6 +67,8 @@
 </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0f1115;
@@ -189,13 +191,14 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 {
+    h4,
+    h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px;
       color: var(--ink);
@@ -260,7 +263,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -353,7 +357,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
@@ -659,7 +664,7 @@
 
       <div class="honesty">
         <div class="label">Honest scope</div>
-        <h4>Regex catches structural fingerprints, not taste.</h4>
+        <h3 class="h4">Regex catches structural fingerprints, not taste.</h3>
         <p>The lint will never catch "the rhythm of this section is wrong" or "the copy reads cold." Those are review calls. What regex does catch is every fingerprint that has a literal token, class name, hex value, or DOM shape, which is most of the AI defaults, because the model reaches for the same artifact every time.</p>
         <p>If you want a taste pass on top of the lint, <code>/ux-critique</code> ships in the same package and runs in your editor on demand. We deliberately do not run it in CI; CI is for the deterministic floor.</p>
       </div>
@@ -702,9 +707,9 @@
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">or</div>
+        <div class="row row--note">or</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">or</div>
+        <div class="row row--note">or</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

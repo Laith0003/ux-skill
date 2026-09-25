@@ -11,8 +11,8 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ux-skill roadmap · v2.0 to v3.0</title>
-  <meta name="description" content="What's shipped (v2.0-alpha.24) and what's coming next: v2.1 adds 17 anti-pattern rules, v2.2 adds i18n + MCP server, v2.3 adds hi-fi prototype output.">
+  <title>ux-skill roadmap · v3.2 today, and the May 2026 plan</title>
+  <meta name="description" content="The current release is v3.2.1, with a render check that measures the real layout. Below it, the plan as written in May 2026, kept for the record, and what we will never build.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/roadmap.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -20,8 +20,8 @@
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/roadmap.html">
-  <meta property="og:title" content="ux-skill roadmap · v2.0 to v3.0">
-  <meta property="og:description" content="Now: v2.0.0-alpha.24 (1,243 entries, 25 commands). Next: v2.1, v2.2, v2.3, v3.0, and an explicit won't-do list.">
+  <meta property="og:title" content="ux-skill roadmap · v3.2 today, and the May 2026 plan">
+  <meta property="og:description" content="Now: v3.2.1, with the uxskill lint --render layout check. Below it, the May 2026 plan and an explicit won't-do list.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/roadmap.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -29,7 +29,7 @@
   <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/roadmap.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ux-skill roadmap · v2.0 to v3.0">
+  <meta name="twitter:title" content="ux-skill roadmap · v3.2 today, and the May 2026 plan">
   <meta name="twitter:description" content="Public roadmap with codenames, ship targets, and an explicit list of what we will never build.">
 
   <script type="application/ld+json">
@@ -38,13 +38,24 @@
     "@type": "ItemList",
     "name": "ux-skill release roadmap",
     "url": "https://uxskill.laithjunaidy.com/roadmap.html",
-    "description": "Public release roadmap for the ux-skill open-source design engine, from v2.0 through v3.0.",
+    "description": "Public roadmap for the ux-skill open-source design engine: the current release, v3.2.1, and the plan as written in May 2026.",
     "itemListOrder": "https://schema.org/ItemListOrderAscending",
-    "numberOfItems": 5,
+    "numberOfItems": 6,
     "itemListElement": [
       {
         "@type": "ListItem",
         "position": 1,
+        "item": {
+          "@type": "SoftwareApplication",
+          "name": "ux-skill v3.2.1 (Sees the Page)",
+          "softwareVersion": "3.2.1",
+          "datePublished": "2026-09-24",
+          "description": "Current release. Opt-in render check (uxskill lint --render) that measures the real layout in headless Chromium; decorative-accent-ruler rule; the MCP server starts on a fresh install again."
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
         "item": {
           "@type": "SoftwareApplication",
           "name": "ux-skill v2.0.0-alpha.24",
@@ -55,7 +66,7 @@
       },
       {
         "@type": "ListItem",
-        "position": 2,
+        "position": 3,
         "item": {
           "@type": "SoftwareApplication",
           "name": "ux-skill v2.1 (Stoic)",
@@ -65,7 +76,7 @@
       },
       {
         "@type": "ListItem",
-        "position": 3,
+        "position": 4,
         "item": {
           "@type": "SoftwareApplication",
           "name": "ux-skill v2.2 (Polyglot)",
@@ -75,7 +86,7 @@
       },
       {
         "@type": "ListItem",
-        "position": 4,
+        "position": 5,
         "item": {
           "@type": "SoftwareApplication",
           "name": "ux-skill v2.3 (Atelier)",
@@ -85,7 +96,7 @@
       },
       {
         "@type": "ListItem",
-        "position": 5,
+        "position": 6,
         "item": {
           "@type": "SoftwareApplication",
           "name": "ux-skill v3.0 (Mirror)",
@@ -973,17 +984,41 @@
 </div>
 <main id="main">
   <div class="page">
-    <span class="eyebrow">Roadmap &middot; v2.0 &rarr; v3.0 &middot; public &middot; 2026-2027</span>
-    <h1>ux-skill <span class="accent">roadmap</span> · v2.0 to v3.0.</h1>
+    <span class="eyebrow">Roadmap &middot; v3.2.1 &middot; public &middot; 2026</span>
+    <h1>ux-skill <span class="accent">roadmap</span> · v3.2 today.</h1>
     <p class="lede">
       Where we are, where we're headed, and what we will never build. Every release has a codename, a ship target, and a vote-on-this link so you can push the order of work. Dates are intent, not promise. This is a solo project with a real day job. If you want something faster, send a PR.
+      The current release is v3.2.1. The cards after it are the plan as written in May 2026, kept for the record; the <a href="https://github.com/Laith0003/ux-skill/blob/main/CHANGELOG.md">changelog</a> lists what shipped.
     </p>
     <figure class="docfig">
       <img src="/screenshots/claude-code-running-ux.webp" width="1600" height="1000" alt="A Claude Code session running /ux-recommend and then /ux-design hero: the brief resolves to a style, palette, type pair and motion preset, and the generated hero lints at 0 critical and 0 high." loading="lazy" decoding="async">
       <figcaption>Where v3 stands today: brief to recommendation to linted component, in one Claude Code session.</figcaption>
     </figure>
 
+    <h2 class="sr-only">Releases</h2>
     <article class="release current">
+      <div class="head">
+        <div class="meta">
+          <span class="version">v3.2.1</span>
+          <span class="codename">"Sees the Page"</span>
+        </div>
+        <span class="status shipped">Shipped &middot; 2026-09-24</span>
+      </div>
+      <h3>Now: the linter looks at the rendered page.</h3>
+      <p class="summary">
+        Some layout failures only exist after the browser lays the page out. v3.2 adds an opt-in render check that measures them, and v3.2.1 makes the MCP server start again on a fresh install.
+      </p>
+      <h4>What's in v3.2</h4>
+      <ul>
+        <li><strong>Render check</strong>: <code>uxskill lint --render</code> loads every HTML file in headless Chromium at 390, 430, 768 and 1280 px, in LTR and RTL, and reports centered text whose box sits off center and pages that scroll sideways, with the source line</li>
+        <li><strong>New lint rule</strong>: <code>decorative-accent-ruler</code> flags a short 1 to 2 px line used as ornament</li>
+        <li><strong>Fixed</strong>: <code>placeholder-token-shipped</code> no longer fires on ordinary JSX style objects</li>
+        <li><strong>MCP starts again (v3.2.1)</strong>: the dependency is now <code>mcp&gt;=1.10,&lt;2</code>, and CI builds the real server</li>
+      </ul>
+      <a href="https://github.com/Laith0003/ux-skill/blob/main/CHANGELOG.md" class="vote">Read the changelog</a>
+    </article>
+
+    <article class="release">
       <div class="head">
         <div class="meta">
           <span class="version">v2.0.0-alpha.24</span>
@@ -991,7 +1026,7 @@
         </div>
         <span class="status shipped">Shipped &middot; 2026-05-28</span>
       </div>
-      <h3>Now: the engine, the manifests, the linter, the IDE bridge.</h3>
+      <h3>May 2026: the engine, the manifests, the linter, the IDE bridge.</h3>
       <p class="summary">
         Everything ux-skill is named after. The Python engine reads nine manifests, the 5-parallel-search recommender returns a structured plan, the 22 slash-commands run inside Claude Code / Cursor / Windsurf / 14 other adapters, and the anti-slop linter blocks 35 fingerprints from ever reaching <code>git add</code>.
       </p>
@@ -1013,7 +1048,7 @@
           <span class="version">v2.1</span>
           <span class="codename">"Stoic"</span>
         </div>
-        <span class="status planned">Planned &middot; Q3 2026</span>
+        <span class="status planned">May 2026 plan &middot; Q3 2026</span>
       </div>
       <h3>Deepen the linter. Cross-wire the manifests. Add landing-patterns.</h3>
       <p class="summary">
@@ -1036,7 +1071,7 @@
           <span class="version">v2.2</span>
           <span class="codename">"Polyglot"</span>
         </div>
-        <span class="status planned">Planned &middot; Q4 2026</span>
+        <span class="status planned">May 2026 plan &middot; Q4 2026</span>
       </div>
       <h3>Localize the README. Add an MCP server. Bridge to Figma.</h3>
       <p class="summary">
@@ -1059,7 +1094,7 @@
           <span class="version">v2.3</span>
           <span class="codename">"Atelier"</span>
         </div>
-        <span class="status planned">Planned &middot; Q1 2027</span>
+        <span class="status planned">May 2026 plan &middot; Q1 2027</span>
       </div>
       <h3>Hi-fi prototype output. Local preview server. Motion MP4 export.</h3>
       <p class="summary">
@@ -1082,7 +1117,7 @@
           <span class="version">v3.0</span>
           <span class="codename">"Mirror"</span>
         </div>
-        <span class="status planned">Planned &middot; Q2 2027</span>
+        <span class="status planned">May 2026 plan &middot; Q2 2027</span>
       </div>
       <h3>Real-time live preview. Image-to-code reverse bridge. Multi-language gen.</h3>
       <p class="summary">

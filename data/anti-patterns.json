@@ -1,7 +1,7 @@
 {
   "_meta": {
     "version": "2.0.0",
-    "entries": 153,
+    "entries": 154,
     "last_updated": "2026-09-23",
     "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
     "schema_version": "1.0"
@@ -469,7 +469,7 @@
       "category": "Quality",
       "detection": {
         "type": "regex",
-        "pattern": "<(?:div|span|p|section|article|h[1-6]|button|a|img)[^>]*\\sstyle=\"[^\"]+\"",
+        "pattern": "<(?:div|span|p|section|article|h[1-6]|button|a|img)\\b[^>]*\\sstyle=\"(?!\\s*--[\\w-]+\\s*:[^;\"]*(?:;\\s*--[\\w-]+\\s*:[^;\"]*)*;?\\s*\")[^\"]+\"",
         "flags": "i",
         "scope": [
           "tsx",
@@ -800,7 +800,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<input(?![^>]*\\baria-label=)(?![^>]*\\baria-labelledby=)[^>]+placeholder=",
+        "pattern": "<input\\b[^>]*?(?<![\\w-])placeholder\\s*=",
         "flags": "i",
         "scope": [
           "tsx",
@@ -863,7 +863,7 @@
       "category": "Layout",
       "detection": {
         "type": "regex",
-        "pattern": "(?:height\\s*:\\s*100vh|class=[^>]*h-screen)(?![^}]*100dvh)",
+        "pattern": "(?:height\\s*:\\s*100vh|class=[\"']?[^\"'>]*(?<![\\w-])h-screen(?![\\w-]))(?![^}]*100dvh)",
         "flags": "i",
         "scope": [
           "css",
@@ -1035,7 +1035,7 @@
       "category": "Motion",
       "detection": {
         "type": "regex",
-        "pattern": "transition[^;]*:\\s*[^;]*(?:width|height|top|left|margin|padding)[^;]*;",
+        "pattern": "transition[^;{}<>]*:\\s*[^;{}<>]*(?:width|height|top|left|margin|padding)[^;{}<>]*[;}\"]",
         "flags": "i",
         "scope": [
           "css",
@@ -1098,7 +1098,7 @@
       "category": "Color",
       "detection": {
         "type": "regex",
-        "pattern": "linear-gradient\\([^)]+,[^)]+,[^)]+,[^)]+,",
+        "pattern": "linear-gradient\\((?:(?:[^(),;]|\\((?:[^()]|\\([^()]*\\))*\\))+,){4}",
         "flags": "im",
         "scope": [
           "css",
@@ -1121,7 +1121,7 @@
       "category": "Visual",
       "detection": {
         "type": "regex",
-        "pattern": "box-shadow:\\s*([^,;]+,[^,;]+,[^,;]+,[^,;]+,[^,;]+,)",
+        "pattern": "(?<![\\w-])box-shadow\\s*:(?:[^(),;{}]|\\([^()]*\\))*(?:,(?:[^(),;{}]|\\([^()]*\\))*){4,}",
         "flags": "im",
         "scope": [
           "css",
@@ -1132,8 +1132,32 @@
           "html"
         ]
       },
-      "why": "Stacking five or more shadow layers is the AI's idea of premium depth; reads as visual bloat and chews the GPU on paint.",
+      "why": "Stacking five or more shadow layers is the AI's idea of premium depth; reads as visual bloat and chews the GPU on paint. The rule fires at five layers, not three: careful design systems build depth from up to four layers (an elevation scale's umbra, penumbra and ambient layers, or a four-step smooth shadow), so a lower threshold would flag real work. A stacked glow of zero-offset layers is caught at any count by glow-shadow-zero-offset.",
       "fix": "Use one ambient diffusion shadow (e.g. 0 20px 40px -15px rgba(0,0,0,0.08)) and at most one tight contact shadow. Depth comes from contrast, not layer count."
+    },
+    {
+      "id": "glow-shadow-zero-offset",
+      "name": "Glow shadow with zero offset and large blur",
+      "severity": "medium",
+      "category": "Depth",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:(?<![\\w-])(?:box-shadow|text-shadow)|--[\\w-]*(?:shadow|glow)[\\w-]*)\\s*:(?:[^;{}]*?,)?\\s*(?!inset)0(?:px)?\\s+0(?:px)?\\s+(?:(?:1[6-9]|[2-9]\\d|\\d{3,})px|[1-9]\\d*(?:\\.\\d+)?r?em)|drop-shadow\\(\\s*0(?:px)?\\s+0(?:px)?\\s+(?:(?:1[6-9]|[2-9]\\d|\\d{3,})px|[1-9]\\d*(?:\\.\\d+)?r?em)|(?<![\\w-])(?:shadow|drop-shadow)-\\[0(?:px)?_0(?:px)?_(?:(?:1[6-9]|[2-9]\\d|\\d{3,})px|[1-9]\\d*(?:\\.\\d+)?rem)",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "svelte"
+        ]
+      },
+      "why": "A shadow with no offset and a wide blur is not a shadow, it is a halo. Light has no source, so the element floats in neon instead of sitting on the page.",
+      "fix": "Give the shadow a light source: a small y offset and a blur about twice the offset, for example box-shadow: 0 4px 12px rgb(0 0 0 / 0.12). For focus, use a spread ring with no blur (0 0 0 3px)."
     },
     {
       "id": "fixed-height-text-block",
@@ -1142,7 +1166,7 @@
       "category": "Layout",
       "detection": {
         "type": "regex",
-        "pattern": "(?:p|div|span)[^{]*\\{[^}]*height\\s*:\\s*\\d+px[^}]*color",
+        "pattern": "(?<![\\w-])(?:p|div|span)\\b[^{};]*\\{[^}]*height\\s*:\\s*\\d+px[^}]*color",
         "flags": "im",
         "scope": [
           "css",
@@ -1166,8 +1190,8 @@
           "scss"
         ]
       },
-      "why": "scale(1.1) or higher on hover reads as amateur - it shouts when a 1-2 percent nudge or a shadow lift would be more confident.",
-      "fix": "Use scale(1.01) to scale(1.03), or replace the scale with a translateY(-2px) plus shadow shift. Restraint reads premium."
+      "why": "scale(1.1) or higher on hover reads as amateur - it shouts when a border or background shift would be more confident.",
+      "fix": "Drop the scale from the card :hover rule and shift its border or background instead. Hover never changes a card's elevation; only a drag lifts. Restraint reads premium."
     },
     {
       "id": "dynamic-island-glow-everywhere",
@@ -1197,7 +1221,7 @@
       "category": "Color",
       "detection": {
         "type": "regex",
-        "pattern": "backdrop-filter\\s*:\\s*blur[^;]+;(?![^}]*background)",
+        "pattern": "(?<![\\w-])backdrop-filter\\s*:\\s*blur",
         "flags": "im",
         "scope": [
           "css",
@@ -1948,7 +1972,7 @@
       "category": "Performance",
       "detection": {
         "type": "regex",
-        "pattern": "addEventListener\\s*\\(\\s*['\"](?:scroll|touchmove|touchstart|wheel|mousewheel)['\"]\\s*,(?:(?!passive\\s*:\\s*true)[^)])*\\)",
+        "pattern": "addEventListener\\s*\\(\\s*['\"](?:scroll|touchmove|touchstart|wheel|mousewheel)['\"]\\s*,(?:(?!passive\\s*:\\s*(?:true|false))[^)])*\\)",
         "flags": "i",
         "scope": [
           "ts",
@@ -2528,7 +2552,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\bnext[\\s-]generation\\b",
+        "pattern": "(?<![\\w#-])next[\\s-]generation(?![\\w-])",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2550,7 +2574,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\bcutting[\\s-]edge\\b",
+        "pattern": "(?<![\\w#-])cutting[\\s-]edge(?![\\w-])",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2572,7 +2596,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\bbest[\\s-]in[\\s-]class\\b",
+        "pattern": "(?<![\\w#-])best[\\s-]in[\\s-]class(?![\\w-])",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2594,7 +2618,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\bworld[\\s-]class\\b",
+        "pattern": "(?<![\\w#-])world[\\s-]class(?![\\w-])",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2616,7 +2640,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\bindustry[\\s-]leading\\b",
+        "pattern": "(?<![\\w#-])industry[\\s-]leading(?![\\w-])",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2638,7 +2662,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\bgame[\\s-]chang(?:er|ing|e)\\b",
+        "pattern": "(?<![\\w#-])game[\\s-]chang(?:er|ing|e)(?![\\w-])",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2660,7 +2684,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\bAI[\\s-]?(?:powered|driven|enabled|enhanced|first)\\b",
+        "pattern": "(?<![\\w#-])AI[\\s-]?(?:powered|driven|enabled|enhanced|first)(?![\\w-])",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2682,7 +2706,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\b(?:leverage(?:\\s+the\\s+power\\s+of)?\\s+AI|harness(?:\\s+the\\s+power\\s+of)?|tap\\s+into\\s+the\\s+power\\s+of)\\b",
+        "pattern": "(?<![\\w#-])(?:leverage(?:\\s+the\\s+power\\s+of)?\\s+AI|harness(?:\\s+the\\s+power\\s+of)?|tap\\s+into\\s+the\\s+power\\s+of)(?![\\w-])",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2808,7 +2832,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\A(?=[\\s\\S]*<body\\b)(?![\\s\\S]*(?:<img\\b|<picture\\b|<video\\b|<svg\\b[^>]*(?:\\s(?:width|height)\\s*=\\s*[\"']?\\s*[1-9]\\d{2,}|viewBox\\s*=\\s*[\"']\\s*[-\\d.]+\\s+[-\\d.]+\\s+[1-9]\\d{2,})|url\\([^)]*\\.(?:png|jpe?g|webp|avif|gif)))[\\s\\S]{0,80}",
+        "pattern": "\\A(?=[\\s\\S]*<body\\b)(?![\\s\\S]*(?:<img\\b|<picture\\b|<video\\b|<iframe\\b|<svg\\b[^>]*(?:\\s(?:width|height)\\s*=\\s*[\"']?\\s*[1-9]\\d{2,}|viewBox\\s*=\\s*[\"']\\s*[-\\d.]+\\s+[-\\d.]+\\s+[1-9]\\d{2,})|url\\([^)]*\\.(?:png|jpe?g|webp|avif|gif)))[\\s\\S]{0,80}",
         "flags": "i",
         "scope": [
           "html",

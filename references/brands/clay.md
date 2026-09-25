@@ -401,7 +401,7 @@ Clay uses generous whitespace around big rounded display headlines and saturated
 | Soft hairline | 1px `{colors.hairline}` border | Inputs, small content cards |
 | Saturated card | Brand pink/teal/lavender/peach/ochre fill — no shadow | Feature cards |
 | Cream card | `{colors.surface-card}` background — no shadow | Testimonial, secondary cards |
-| Subtle drop shadow | Faint shadow at low alpha | Hover-elevated states (rare) |
+| Subtle drop shadow | Faint shadow at low alpha | Raised states (rare) |
 
 The system uses no heavy shadows. Depth comes from the saturated color contrast between cream canvas and bright feature cards.
 

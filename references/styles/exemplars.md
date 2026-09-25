@@ -756,7 +756,7 @@ Motion is restrained in premium cohorts. The premium ones tend to be slower and 
 
 **Hover on CTA**: background brightens 2-4% L, sometimes a subtle inner glow for dark-mode primary buttons. No translate-on-hover for premium-feel buttons.
 
-**Hover on cards**: lift -2 to -4px with shadow elevation. 200-300ms ease. Reserved for clickable cards.
+**Hover on cards**: border or background shift, 150-250ms ease. Hover, focus and press never change a card's elevation; only a drag lifts. Reserved for clickable cards.
 
 **Number counters**: animate on enter-view (800-1500ms ease-out). Once, not on every scroll past.
 
@@ -768,7 +768,7 @@ Motion is restrained in premium cohorts. The premium ones tend to be slower and 
 
 **Color transitions**: long, eased curves. Background-color and gradient transitions run 600-1200ms with custom cubic-bezier curves. Slowness reads as confidence.
 
-**Hover states**: choreographed micro-events. A card hover does multiple things in concert: background lifts (translate -2px), shadow expands, border brightens, an inner icon rotates 10°, an arrow slides 4px right. The hover is a small show.
+**Hover states**: choreographed micro-events. A card hover does several things in concert while the card stays at rest: the border brightens, an inner icon rotates 10°, an arrow slides 4px right. The hover is a small show.
 
 **Scroll-pinned product walks**: pin the visual, scrub through 4-6 states as the user scrolls. Storytelling without autoplay.
 

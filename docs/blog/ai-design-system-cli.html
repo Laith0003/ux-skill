@@ -57,6 +57,8 @@
 </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0f1115;
@@ -179,13 +181,14 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 {
+    h4,
+    h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px;
       color: var(--ink);
@@ -250,7 +253,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -370,7 +374,8 @@
     }
     .step-list li:last-child { border-bottom: 0; }
     .step-list li strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
@@ -799,7 +804,7 @@ Recommendation saved to .ux/last-recommendation.json</pre>
 
       <div class="honesty">
         <div class="label">Honesty card</div>
-        <h4>The CLI is not the differentiator on its own.</h4>
+        <h3 class="h4">The CLI is not the differentiator on its own.</h3>
         <p>A few other design system generators have CLIs. What is asymmetric about ux-skill is the engine sitting underneath: 959 structured entries, 145 deterministic regex anti-patterns, 160 brand specs, and an MCP server. The CLI is the most direct way to drive the engine; it is not the engine itself.</p>
         <p>For a deeper look at why the engine is the actual moat, read the <a href="/blog/python-design-system-generator.html" class="link">Python design system generator post</a>.</p>
       </div>
@@ -835,9 +840,9 @@ manifest.json  MASTER.md  tokens.css</pre>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
+        <div class="row row--note">, or, </div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, or as a Claude Code plugin, </div>
+        <div class="row row--note">, or as a Claude Code plugin, </div>
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
       </div>

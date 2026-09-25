@@ -90,7 +90,7 @@ def build_one(base: str, loc: str) -> str:
                f'<span class="eyebrow">{blogw} &middot; {autonym}</span>', h, count=1, flags=re.S)
     h = re.sub(r'<h1>.*?</h1>', f'<h1>{blogw}</h1>', h, count=1, flags=re.S)
     h = re.sub(r'<p class="lede">.*?</p>',
-               '<p class="lede"><a href="/blog/">Read the full blog in English &rarr;</a></p>',
+               '<p class="lede"><a href="/blog/">Read the full blog in English <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a></p>',
                h, count=1, flags=re.S)
 
     # 6) post-list -> locale cards

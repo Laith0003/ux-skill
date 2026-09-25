@@ -149,10 +149,22 @@ NAV_INSERTION_MARKER = '<header class="nav" id="nav">'
 NAV_BTN_MARKER = '<button type="button" class="nav__menu-btn"'  # we'll insert the picker BEFORE the hamburger button (markup carries type="button")
 
 
+def version_strings(strings: dict) -> dict:
+    """Fill {version} and {line} from pyproject.toml, so a release only changes
+    pyproject.toml and the English source."""
+    import sys
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from site_version import line, version
+    full, short = version(), line()
+    return {key: {lang: text.replace("{version}", full).replace("{line}", short)
+                  for lang, text in bag.items()}
+            for key, bag in strings.items()}
+
+
 def build_lang(data: dict, lang: str) -> str:
     html = base_html()
     langs = data["languages"]
-    strings = data["strings"]
+    strings = version_strings(data["strings"])
     info = langs[lang]
 
     # 1. Set <html lang> and dir

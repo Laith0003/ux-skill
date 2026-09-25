@@ -597,7 +597,15 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
-<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}    /* moved out of inline style attributes */
+    .post-meta.post-meta--accent { color: var(--scene-accent); margin-bottom: 6px; }
+    div.post-inner { padding: 4px 0; }
+    h2.post-title--sm { font-size: 18px; margin-bottom: 6px; }
+    .text-right { text-align: right; }
+    .post.post--quiet { background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.04); }
+    .post.post--featured { border-color: rgba(34,211,238,0.30); background: linear-gradient(180deg, rgba(34,211,238,0.06), var(--surface)); }
+    .tag.tag--cyan { color: #22d3ee; }
+  </style>
 </head>
 <body>
   <a class="skip-link sr-only" href="#main">Go to articles</a>
@@ -696,8 +704,8 @@
 
     <ul class="post-list">
       <!-- v3.0 · THE BRAIN launch (2026-05-28) -->
-      <li class="post" style="border-color: rgba(34,211,238,0.30); background: linear-gradient(180deg, rgba(34,211,238,0.06), var(--surface));"><a href="/blog/v3-the-brain-launch.html">
-        <div class="post-meta"><span class="tag" style="color: #22d3ee;">launch</span> &middot; v3.0 &middot; ~3,300 words &middot; ~12 min</div>
+      <li class="post post--featured"><a href="/blog/v3-the-brain-launch.html">
+        <div class="post-meta"><span class="tag tag--cyan">launch</span> &middot; v3.0 &middot; ~3,300 words &middot; ~12 min</div>
         <h2>ux-skill v3.0: we shipped The Brain. Brand specs are training data now, not templates.</h2>
         <p>The biggest architectural shift since v1. 7-axis synthesizer. Triple-mode dispatch (<code>strict_brand</code> / <code>brand_anchor</code> / <code>pure_synthesis</code>). Axis interaction matrix with four documented conflicts. Decisions ledger closes the feedback loop. New <code>/ux-evolve</code> auto-loop with a 65 quality gate. Fully offline. No LLM ever called.</p>
       </a></li>
@@ -823,8 +831,8 @@
 
       <li class="post"><a href="/blog/ar/v3-the-brain.html">
         <div class="post-meta"><span class="tag">العربية &middot; launch v3.0</span> &middot; ~14,900 chars &middot; ~12 min</div>
-        <h2 dir="rtl" style="text-align: right;">ux-skill v3.0: أطلقنا The Brain. مواصفات العلامات صارت بيانات تدريب لا قوالب.</h2>
-        <p dir="rtl" style="text-align: right;">في v2 كنّا نختار من الكتالوج. في v3 نُقطّر منه. مُولِّد بسبعة محاور، ثلاثة أوضاع تلقائيّة، مصفوفة تفاعُل المحاور، سِجلّ قرارات يُغلِق حلقة التغذية الراجعة، وحلقة <code>/ux-evolve</code> الجديدة ببوّابة جودة عند 65.</p>
+        <h2 dir="rtl" class="text-right">ux-skill v3.0: أطلقنا The Brain. مواصفات العلامات صارت بيانات تدريب لا قوالب.</h2>
+        <p dir="rtl" class="text-right">في v2 كنّا نختار من الكتالوج. في v3 نُقطّر منه. مُولِّد بسبعة محاور، ثلاثة أوضاع تلقائيّة، مصفوفة تفاعُل المحاور، سِجلّ قرارات يُغلِق حلقة التغذية الراجعة، وحلقة <code>/ux-evolve</code> الجديدة ببوّابة جودة عند 65.</p>
       </a></li>
 
       <li class="post"><a href="/blog/es/v3-the-brain.html">
@@ -1056,9 +1064,9 @@
         <p>The handoff problem in 2026: why Figma MCP and AI coding tools drop tokens, and how ux-skill&rsquo;s catalog plus its 145-rule linter keeps the system intact from Figma file to Cursor and Claude Code.</p>
       </a></li>
 
-      <li class="post" style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.04);"><div style="padding: 4px 0;">
-        <div class="post-meta" style="color: var(--scene-accent); margin-bottom: 6px;">more languages</div>
-        <h2 style="font-size: 18px; margin-bottom: 6px;">Read in your language</h2>
+      <li class="post post--quiet"><div class="post-inner">
+        <div class="post-meta post-meta--accent">more languages</div>
+        <h2 class="post-title--sm">Read in your language</h2>
         <p>Long-form SEO writing in twelve locales: same depth, native prose. Topics: what ux-skill does, how to install for Claude Code / Cursor / Windsurf, why the anti-AI-slop linter matters.</p>
         <p class="blog-langs">Each locale has its own blog index:
           <a href="/blog/ar/">العربية</a> &middot;
@@ -1108,8 +1116,8 @@
 
       <li class="post"><a href="/blog/ar/ai-coding-design-arabic.html">
         <div class="post-meta"><span class="tag">العربية</span> &middot; ~2000 words &middot; ~9 min</div>
-        <h2 dir="rtl" style="text-align: right;">تصميم برمجة الذكاء الاصطناعي: كيف تبني نظام تصميم لـ Claude Code</h2>
-        <p dir="rtl" style="text-align: right;">كل أداة برمجة بالذكاء الاصطناعي تنتج نفس الافتراضات الثمانية البصرية: خط Inter في حجم العنوان، تدرّج من البنفسجي إلى الأزرق، ثلاث بطاقات متطابقة. يوقف ux-skill هذه الأنماط في الـ CI عبر 145 قاعدة Regex حتمية.</p>
+        <h2 dir="rtl" class="text-right">تصميم برمجة الذكاء الاصطناعي: كيف تبني نظام تصميم لـ Claude Code</h2>
+        <p dir="rtl" class="text-right">كل أداة برمجة بالذكاء الاصطناعي تنتج نفس الافتراضات الثمانية البصرية: خط Inter في حجم العنوان، تدرّج من البنفسجي إلى الأزرق، ثلاث بطاقات متطابقة. يوقف ux-skill هذه الأنماط في الـ CI عبر 145 قاعدة Regex حتمية.</p>
       </a></li>
 
       <li class="post"><a href="/blog/pt-BR/ai-coding-design-portuguese.html">

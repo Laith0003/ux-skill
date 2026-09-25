@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0f1115;
@@ -197,13 +199,14 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 { font-family: var(--body-face); font-weight: 600; font-size: 17px; color: var(--ink); }
+    h4,
+    h3:where(.h4) { font-family: var(--body-face); font-weight: 600; font-size: 17px; color: var(--ink); }
     p { margin-bottom: 18px; color: var(--body); }
     p strong { color: var(--ink); font-weight: 600; }
     em { color: var(--ink); }
@@ -259,7 +262,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 { font-weight: 600; font-size: 17px; color: var(--ink); margin-bottom: 10px; }
+    .honesty h4,
+    .honesty h3:where(.h4) { font-weight: 600; font-size: 17px; color: var(--ink); margin-bottom: 10px; }
 
     .axis-table {
       width: 100%;
@@ -318,7 +322,8 @@
       font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .mode-card h4 { font-size: 19px; margin-bottom: 8px; color: var(--ink); }
+    .mode-card h4,
+    .mode-card h3:where(.h4) { font-size: 19px; margin-bottom: 8px; color: var(--ink); }
     .mode-card p { margin-bottom: 0; font-size: 15px; }
 
     .stats-row {
@@ -408,7 +413,8 @@
       nav.crumbs { gap: 18px; flex-wrap: wrap; }
       .wrap { padding: 40px 20px 72px; }
     }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <style>
     html, body { overflow-x: clip; max-width: 100%; }
     section, header, footer, main, article { max-width: 100vw; }
@@ -478,7 +484,9 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
-<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}    /* moved out of inline style attributes */
+    p.post-footnote { margin-top: 28px; font-size: 14px; }
+  </style>
 </head>
 <body>
   
@@ -712,7 +720,7 @@ sys = synthesize(brief)
 
       <div class="mode-card">
         <div class="mode-name">strict_brand &middot; el más rápido</div>
-        <h4>100% la marca nombrada</h4>
+        <h3 class="h4">100% la marca nombrada</h3>
         <p>
           <code>reference_brands=[stripe]</code> con <code>strict=True</code> devuelve la spec de Stripe tal cual. Sin interpretación, sin mezcla, sin síntesis. Útil cuando la marca existe, la spec es autoritativa y el brief solo quiere los tokens. Es el camino cuando tienes un Figma y un sistema documentado y necesitas código que no improvise.
         </p>
@@ -720,7 +728,7 @@ sys = synthesize(brief)
 
       <div class="mode-card">
         <div class="mode-name">brand_anchor &middot; 70 / 30</div>
-        <h4>Anclado a la marca, ajustado por ejes al brief</h4>
+        <h3 class="h4">Anclado a la marca, ajustado por ejes al brief</h3>
         <p>
           <code>reference_brands=[stripe]</code> sin <code>strict=True</code> devuelve un 70% de tokens de Stripe fusionado con un 30% de deltas derivados de los ejes de cuatro marcas hermanas elegidas por proximidad axial. La salida sigue siendo inconfundiblemente Stripe, pero se inclina hacia el tono del brief: un Stripe más juguetón para una función de consumo, un Stripe más formal para un panel de empresa. La marca ancla sobrevive a todos los conflictos.
         </p>
@@ -728,7 +736,7 @@ sys = synthesize(brief)
 
       <div class="mode-card">
         <div class="mode-name">pure_synthesis &middot; espacio infinito</div>
-        <h4>Sin marca nombrada, lenguaje nuevo en cada llamada</h4>
+        <h3 class="h4">Sin marca nombrada, lenguaje nuevo en cada llamada</h3>
         <p>
           Sin <code>reference_brands</code> en el brief. El sintetizador puntúa los siete ejes desde el brief, encuentra los ocho ejemplares más cercanos del catálogo por distancia axial, destila la estructura compartida entre ellos y emite un bundle fresco de paleta, tipografía, espaciado, radius y motion. Briefs distintos aterrizan en regiones distintas del mismo espacio; cada salida es internamente coherente e identificable como propia.
         </p>
@@ -914,7 +922,7 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
 
       <div class="honesty">
         <div class="label">Alcance honesto</div>
-        <h4>v3 es una base, no un destino terminado.</h4>
+        <h3 class="h4">v3 es una base, no un destino terminado.</h3>
         <p>El sintetizador de 7 ejes es el trabajo para el que hemos publicado evidencia. Los ejes 8 y 9 (<code>saturation_strategy</code>, <code>surface_depth</code>) están esbozados pero no enviados, profundizarían el split dark / light y la estrategia de gradiente. El registro de decisiones solo lo consume hoy el re-rank del recomendador; esperamos que el evaluador y el scorer del linter empiecen a leerlo en v3.1. La propuesta maximalista v2.1 que rechazamos no está muerta, algunas de esas ideas aterrizarán más tarde, cuando podamos probar que ayudan.</p>
         <p>Si encuentras un brief que produce salidas insatisfactorias, o una resolución de la matriz que choca con tu gusto, abre un issue. La matriz está commiteada, los tests están commiteados, el cerebro está en tu repo. Las discusiones se dan ahora sobre un sustrato que puedes leer.</p>
       </div>
@@ -943,13 +951,13 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· o ·</div>
+        <div class="row row--note">· o ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· o ·</div>
+        <div class="row row--note">· o ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@latest init</span></div>
       </div>
 
-      <p style="margin-top: 28px; font-size: 14px;">
+      <p class="post-footnote">
         Código en GitHub: <a class="link" href="https://github.com/Laith0003/ux-skill">Laith0003/ux-skill</a> &middot;
         README en español: <a class="link" href="https://github.com/Laith0003/ux-skill/blob/main/README.es.md">README.es.md</a> &middot;
         npm: <a class="link" href="https://www.npmjs.com/package/uxskill">uxskill</a> &middot;
