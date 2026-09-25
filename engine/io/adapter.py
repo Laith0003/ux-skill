@@ -4,7 +4,11 @@ A mapping says which of the system's tokens plays each of the engine's
 roles and which of its modes is each of the engine's axes. It is a JSON
 file the owner edits (dump_mapping, load_mapping); propose() writes a first
 one from names alone, marking each entry "by": "name" so the owner can see
-what to confirm (an entry the owner writes says "by": "owner").
+what to confirm (an entry the owner writes says "by": "owner"). The owner
+keeps a role or an axis out of the check with a "not mapped" entry,
+{"token": null, "by": "owner"} or {"from": null, "by": "owner"}; view()
+leaves it out with a note, merge() never fills it again and propose()
+never writes one.
 
 propose() maps a role only when a token's name is the role's own path
 written with other separators (color.text.default, color-text-default,
@@ -40,7 +44,10 @@ ROLE_TYPES: Dict[str, str] = {path: kind for f in FOUNDATIONS
 VERSION = 1
 BY = ("name", "owner")
 _KEYS = ("version", "axes", "roles")
-_ROLE_FIX = "{\"token\": \"<your token>\", \"by\": \"owner\"}"
+_ROLE_FIX = ("{\"token\": \"<your token>\", \"by\": \"owner\"}, or {\"token\": null, \"by\": "
+             "\"owner\"} to keep it out of the check")
+_ROLE_OUT = "{\"token\": null, \"by\": \"owner\"}"
+_AXIS_OUT = "{\"from\": null, \"by\": \"owner\"}"
 # Words a theme selector or mode name uses for a non-base value of our axes.
 _AXIS_WORDS: Dict[str, str] = {
     "dark": "scheme", "rtl": "direction", "compact": "density", "high": "contrast",
@@ -53,16 +60,18 @@ _BASE_WORDS = ("light", "ltr", "comfortable", "standard", "default", "base", "of
 
 @dataclass(frozen=True)
 class RoleMap:
-    """The token that plays a role, and who said so."""
-    token: str
+    """The token that plays a role, and who said so. A token of None is
+    the owner's "not mapped": the role stays out of the check."""
+    token: Optional[str]
     by: str = "owner"
 
 
 @dataclass(frozen=True)
 class AxisMap:
     """The mode axis of the system that is one of ours: its name there, and
-    our value -> its value."""
-    source: str
+    our value -> its value. A source of None (and no values) is the
+    owner's "not mapped": the axis stays out of the check."""
+    source: Optional[str]
     values: Dict[str, str] = field(hash=False)
     by: str = "owner"
 
@@ -122,20 +131,37 @@ def _our_axis(name: str, base: str, other: str) -> Optional[str]:
     return _AXIS_WORDS.get(word)
 
 
-def merge(proposed: Mapping, existing: Mapping) -> Mapping:
-    """The mapping to write when a system is imported again: every entry
-    the owner wrote ("by": "owner") as it is, and the new proposal only for
-    the roles and axes the owner has not set. An entry the engine proposed
-    before is replaced by the new proposal, or dropped when names no longer
-    say it. Roles and axes come in the engine's order."""
+def merge(proposed: Mapping, existing: Mapping,
+          name: str = "mapping.json") -> Tuple[Mapping, List[str]]:
+    """The mapping to write when a system is imported again, and notes on
+    what was proposed for the first time. Every entry the owner wrote
+    ("by": "owner"), a "not mapped" one included, stays as it is; the new
+    proposal fills only the roles and axes the owner has not set. An entry
+    the engine proposed before is replaced by the new proposal, or dropped
+    when names no longer say it. A role or axis the file does not have at
+    all is proposed and named in a note, so the owner can write "not
+    mapped" for it. Roles and axes come in the engine's order."""
     roles = {r: m for r, m in existing.roles.items() if m.by == "owner"}
     for r, m in proposed.roles.items():
         roles.setdefault(r, m)
     axes = {a: m for a, m in existing.axes.items() if m.by == "owner"}
     for a, m in proposed.axes.items():
         axes.setdefault(a, m)
-    return Mapping({r: roles[r] for r in ROLE_TYPES if r in roles},
-                   {a: axes[a] for a in AXES if a in axes})
+    merged = Mapping({r: roles[r] for r in ROLE_TYPES if r in roles},
+                     {a: axes[a] for a in AXES if a in axes})
+    new = [r for r in merged.roles if r not in existing.roles]
+    notes: List[str] = []
+    if len(new) == 1:
+        notes.append(f"{name} did not map {new[0]}, so it was proposed as "
+                     f"{merged.roles[new[0]].token} by name; to keep it out of the check, write "
+                     f"{_ROLE_OUT} for it")
+    elif new:
+        notes.append(f"{name} did not map {_few(new)}, so they were proposed by name; to keep "
+                     f"one out of the check, write {_ROLE_OUT} for it")
+    notes += [f"{name} did not map the axis {a}, so it was proposed from {m.source} by name; "
+              f"to keep it out of the check, write {_AXIS_OUT} for it"
+              for a, m in merged.axes.items() if a not in existing.axes]
+    return merged, notes
 
 
 # ---------------------------------------------------------------- file
@@ -143,7 +169,8 @@ def merge(proposed: Mapping, existing: Mapping) -> Mapping:
 
 def dump_mapping(mapping: Mapping) -> str:
     doc = {"version": VERSION,
-           "axes": {a: {"from": m.source, "values": dict(m.values), "by": m.by}
+           "axes": {a: ({"from": m.source, "values": dict(m.values), "by": m.by}
+                        if m.source is not None else {"from": None, "by": m.by})
                     for a, m in mapping.axes.items()},
            "roles": {r: {"token": m.token, "by": m.by} for r, m in mapping.roles.items()}}
     return json.dumps(doc, indent=2, ensure_ascii=False) + "\n"
@@ -170,7 +197,8 @@ def parse_mapping(text: str, name: str) -> Mapping:
         raise InputError(f"{name} has version {json.dumps(doc['version'])}; this engine reads "
                          f"version {VERSION}, so write \"version\": {VERSION}")
     for key, what in (("roles", f"role to {_ROLE_FIX}"),
-                      ("axes", "axis to {\"from\": ..., \"values\": ..., \"by\": \"owner\"}")):
+                      ("axes", "axis to {\"from\": ..., \"values\": ..., \"by\": \"owner\"}, "
+                               f"or {_AXIS_OUT} to keep it out of the check")):
         if not isinstance(doc.get(key) or {}, dict):
             raise InputError(f"{name} {key} is {json.dumps(doc[key])}; write it as an object of "
                              f"{what}")
@@ -182,8 +210,10 @@ def parse_mapping(text: str, name: str) -> Mapping:
                        else "for example color.text.default")
             raise InputError(f"{name} maps {role}, which is not a role the engine checks; use "
                              f"one of its roles, {example}")
-        if not (isinstance(entry, dict) and isinstance(entry.get("token"), str)
-                and entry["token"] and entry.get("by", "owner") in BY):
+        by = entry.get("by", "owner") if isinstance(entry, dict) else None
+        token = entry.get("token", "") if isinstance(entry, dict) else ""
+        if not (by in BY and (isinstance(token, str) and token
+                              or token is None and by == "owner")):
             raise InputError(f"{name} role {role} is {json.dumps(entry)}; write {_ROLE_FIX}")
         roles[role] = RoleMap(entry["token"], entry.get("by", "owner"))
     axes: Dict[str, AxisMap] = {}
@@ -192,13 +222,18 @@ def parse_mapping(text: str, name: str) -> Mapping:
             raise InputError(f"{name} maps the axis {axis}, which is not one of the engine's "
                              "axes; use scheme, contrast, density, direction or motion")
         values = entry.get("values") if isinstance(entry, dict) else None
+        if isinstance(entry, dict) and "from" in entry and entry["from"] is None \
+                and entry.get("by", "owner") == "owner" and not values:
+            axes[axis] = AxisMap(None, {}, "owner")
+            continue
         if not (isinstance(entry, dict) and isinstance(entry.get("from"), str)
                 and isinstance(values, dict) and set(values) == set(AXES[axis])
                 and all(isinstance(v, str) for v in values.values())
                 and entry.get("by", "owner") in BY):
             raise InputError(f"{name} axis {axis} is {json.dumps(entry)}; write {{\"from\": "
                              f"\"<your mode axis>\", \"values\": {{\"{AXES[axis][0]}\": \"...\", "
-                             f"\"{AXES[axis][1]}\": \"...\"}}, \"by\": \"owner\"}}")
+                             f"\"{AXES[axis][1]}\": \"...\"}}, \"by\": \"owner\"}}, or {_AXIS_OUT} "
+                             "to keep it out of the check")
         axes[axis] = AxisMap(entry["from"], {v: values[v] for v in AXES[axis]},
                              entry.get("by", "owner"))
     return Mapping(roles, axes)
@@ -220,12 +255,14 @@ def load_mapping(path: Any, label: str = "--mapping") -> Mapping:
 
 def _check(ts: TokenSet, mapping: Mapping, name: str) -> None:
     for role, m in mapping.roles.items():
-        if not ts.has(m.token) and not (ROLE_TYPES[role] == "typography"
+        if m.token is not None and not ts.has(m.token) and not (ROLE_TYPES[role] == "typography"
                                         and _has_fields(ts, m.token)):
             raise InputError(f"{name} sends {role} to {m.token}, which the imported system "
                              "does not have; point it at one of its tokens, or remove the line")
     used: Dict[str, str] = {}
     for axis, m in mapping.axes.items():
+        if m.source is None:
+            continue
         if m.source not in ts.axes:
             have = ", ".join(ts.axes) or "none"
             raise InputError(f"{name} reads {axis} from the mode axis {m.source}, which the "
@@ -267,6 +304,11 @@ def _and(names: List[str]) -> str:
     return names[0] if len(names) == 1 else f"{', '.join(names[:-1])} and {names[-1]}"
 
 
+def _few(names: List[str]) -> str:
+    """The names, or the first three and how many more."""
+    return _and(names if len(names) <= 4 else names[:3] + [f"{len(names) - 3} more"])
+
+
 def _left_out(ts: TokenSet, mapping: Mapping, name: str) -> List[str]:
     """A note on the roles the set has under their own paths that the
     mapping leaves out: the owner took them out, so they are not checked."""
@@ -276,8 +318,7 @@ def _left_out(ts: TokenSet, mapping: Mapping, name: str) -> List[str]:
     if len(gone) == 1:
         return [f"{name} leaves out {gone[0]}, which the imported system has under the role's "
                 "own name, so it was not checked; map it to check it"]
-    shown = gone if len(gone) <= 4 else gone[:3] + [f"{len(gone) - 3} more"]
-    return [f"{name} leaves out {_and(shown)}, which the imported system has under each role's "
+    return [f"{name} leaves out {_few(gone)}, which the imported system has under each role's "
             "own name, so they were not checked; map each one to check it"]
 
 
@@ -294,14 +335,21 @@ def view(ts: TokenSet, mapping: Mapping,
     are in it: a role or axis the owner took out of the mapping is not
     checked, and an axis left out is held at the system's base. A mapping
     that names every role and axis the set has, each as itself, with
-    nothing read differently, gives the system itself. Raises InputError
-    for a token or axis value the system lacks; `name` is the mapping file
-    its messages name."""
+    nothing read differently, gives the system itself. A "not mapped"
+    entry keeps its role or axis out with a note. Raises InputError for a
+    token or axis value the system lacks; `name` is the mapping file its
+    messages name."""
     _check(ts, mapping, name)
-    axes = {a: AXES[a] for a in AXES if a in mapping.axes}
+    axes = {a: AXES[a] for a in AXES if a in mapping.axes and mapping.axes[a].source is not None}
     out = TokenSet(axes)
-    notes: List[str] = _left_out(ts, mapping, name)
+    notes: List[str] = [f"the axis {a} is not checked: the owner left it out in {name}, so every "
+                        "role is read at the system's base"
+                        for a, m in mapping.axes.items() if m.source is None]
+    notes += _left_out(ts, mapping, name)
     for role, m in mapping.roles.items():
+        if m.token is None:
+            notes.append(f"{role} is not checked: the owner left it out in {name}")
+            continue
         want = ROLE_TYPES[role]
         values: Dict[str, Any] = {}
         try:
@@ -338,7 +386,8 @@ def their_names(text: str, mapping: Mapping) -> str:
     they differ. A role is matched whole: a longer path that starts with it
     is left, and a period that ends a sentence after it is not part of
     it."""
-    roles = sorted(mapping.roles, key=len, reverse=True)
+    roles = sorted((r for r, m in mapping.roles.items() if m.token is not None),
+                   key=len, reverse=True)
     if roles:
         pattern = re.compile(r"(?<![\w.-])(" + "|".join(re.escape(r) for r in roles)
                              + r")(?![\w-]|\.[\w-])")
@@ -349,7 +398,8 @@ def their_names(text: str, mapping: Mapping) -> str:
 
 def _their_context(whole: str, key: str, mapping: Mapping) -> str:
     pairs = [p.split(":") for p in key.split(",")]
-    if not all(a in mapping.axes and v in AXES[a] for a, v in pairs):
+    if not all(a in mapping.axes and mapping.axes[a].source is not None and v in AXES[a]
+               for a, v in pairs):
         return whole
     theirs = ",".join(f"{mapping.axes[a].source}:{mapping.axes[a].values[v]}" for a, v in pairs)
     return whole if theirs == key else f"({key}; your {theirs})"
