@@ -1,0 +1,612 @@
+"""Import CSS custom properties in their own names.
+
+What is read: custom properties set on the root (`:root`, `html`, `:host`,
+and Tailwind's `@theme` block), on a theme selector (`[data-theme="dark"]`,
+`.dark`, `[dir="rtl"]`, or several of them joined on the root), and inside
+the preference media queries prefers-color-scheme, prefers-contrast and
+prefers-reduced-motion. Each property becomes a token whose path is its
+name without the leading dashes, so the system keeps its names; a
+`var(--x)` value is an alias to x.
+
+Modes: the attributes and media queries this engine writes (data-theme,
+data-contrast, data-density, dir, data-motion and the three preference
+queries) map to its own axes. A right to left subtree (`[lang|="ar"]`, or
+`:root :is([dir="rtl"], [lang|="ar"])` as tokens.css writes it) is the
+direction axis too. `:root:not([data-theme="light"])` outside a media query
+opens the dark scheme, and Imported.scheme records which scheme a file
+opens.
+
+A dark scheme is read wherever stylesheets keep it: `[data-theme="dark"]`,
+`.dark`, `[data-mode="dark"]` and `@media (prefers-color-scheme: dark)`.
+Each property a dark rule sets is paired by name with the one on the root
+and read as scheme:dark; a dark rule written in a form this engine does not
+write is named under notes with the pairing, and Imported.forms records its
+selector (with the media query when the file uses both) so the exporter
+writes the scheme back the way it came.
+
+Any other theme selector becomes an axis of its own, named after it
+(`.compact` is the axis class-compact, off and on; `[data-brand="alt"]` is
+data-brand, base and alt), and Imported.forms records the selector. Mapping
+such an axis to one of ours is the naming adapter's job.
+
+The viewport is not a mode. A root property whose value is a var()
+reference and that a min-width media query sets again is a switch between
+other properties: it is named under notes and not made a token, since each
+value it switches between is read where it is defined. A size written as
+calc(var(--a) * var(--scale)), where such a switch sets --scale to plain
+numbers, reads as var(--a) with a note: its value from the first
+breakpoint up when --scale is 1 there, otherwise its unscaled value.
+
+An oklch() or oklab() color outside sRGB is mapped into sRGB by CSS Color 4
+gamut mapping and listed under "Mapped into sRGB", never refused.
+
+What is not read, each with the fix: properties set on components or under
+other media queries, a property set only under a mode, values with no
+single reading (values_in), references to a property the file does not
+define, and a selector list naming more than one mode.
+"""
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+
+from engine.foundations.emit import InputError
+from engine.foundations.modes import AXES, CSS_AXES, join
+from engine.foundations.tokens import Token, TokenSet
+from engine.io.report import Imported, ImportReport, Item, Mapped, Source, read_source
+from engine.io.values_in import GamutMapped, NotRead, css_alias, read_value, split_top
+
+# The scheme a stylesheet opens (export.SCHEME_DEFAULTS): it follows the
+# system when prefers-color-scheme sets the dark values, opens dark when
+# :not([data-theme="light"]) sets them outside a media query, and opens
+# light when only a dark selector ([data-theme="dark"], .dark) does.
+SYSTEM, LIGHT, DARK = "system", "light", "dark"
+
+# Root selectors: a property set here is the base value.
+ROOTS = (":root", "html", ":host", "@theme")
+# Media features this engine writes, and the axis value each one sets.
+MEDIA_AXES: Dict[str, Tuple[str, str]] = {
+    "(prefers-color-scheme: dark)": ("scheme", "dark"),
+    "(prefers-contrast: more)": ("contrast", "high"),
+    "(prefers-reduced-motion: reduce)": ("motion", "reduced"),
+}
+# Selectors this engine does not write that stylesheets switch the scheme
+# with, and the scheme each one sets.
+SCHEME_SELECTORS: Dict[str, str] = {
+    ".dark": "dark",
+    '[data-mode="dark"]': "dark",
+    '[data-mode="light"]': "light",
+}
+_ATTR_AXES = {attr: axis for axis, (attr, _) in CSS_AXES.items()}
+_ATTR = re.compile(r'\[([a-z][a-z0-9-]*)="([^"]*)"\]')
+_NOT = re.compile(r':not\(\[([a-z][a-z0-9-]*)="([^"]*)"\]\)')
+_CLASS = re.compile(r"\.([a-z][a-z0-9-]*)")
+# An Arabic language selector: right to left, the direction axis at rtl.
+_LANG = re.compile(r'\[lang\|="ar"\]')
+# Subtrees inside the root that read right to left.
+RTL_SUBTREES = ('[dir="rtl"]', '[lang|="ar"]', ':is([dir="rtl"], [lang|="ar"])',
+                ':is([lang|="ar"], [dir="rtl"])')
+# A viewport query: a width from which a value holds.
+_MIN_WIDTH = re.compile(r"\(min-width: ?([0-9.]+(?:px|rem|em))\)")
+# Any width query, for the message a value under one gets.
+_WIDTH = re.compile(r"\((?:min|max)-width\s*:")
+# A size that a viewport switch scales.
+_SCALED = re.compile(r"calc\(\s*var\(--([A-Za-z0-9_-]+)\)\s*\*\s*var\(--([A-Za-z0-9_-]+)\)\s*\)")
+
+
+@dataclass(frozen=True)
+class Declaration:
+    name: str
+    value: str
+    line: int
+
+
+@dataclass(frozen=True)
+class Rule:
+    """One style rule: its selector text, the media queries around it
+    (outermost first) and its custom property declarations."""
+    selector: str
+    media: Tuple[str, ...]
+    declarations: Tuple[Declaration, ...]
+    line: int
+
+
+def _blank_comments(text: str) -> str:
+    """Comments replaced by spaces, newlines kept, so offsets and lines hold."""
+    return re.sub(r"/\*.*?\*/", lambda m: re.sub(r"[^\n]", " ", m.group(0)), text, flags=re.S)
+
+
+def _line(text: str, offset: int) -> int:
+    return text.count("\n", 0, offset) + 1
+
+
+def _matching(text: str, start: int, name: str) -> int:
+    """The offset of the } closing the { at `start`."""
+    depth, quote = 0, ""
+    for i in range(start, len(text)):
+        ch = text[i]
+        if quote:
+            quote = "" if ch == quote else quote
+        elif ch in "\"'":
+            quote = ch
+        elif ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                return i
+    raise InputError(f"{name} has a block opened on line {_line(text, start)} that never "
+                     "closes; add the missing } and import it again")
+
+
+def _declarations(text: str, body_start: int, body: str) -> Tuple[Declaration, ...]:
+    out = []
+    offset = body_start
+    for part in split_top(body, ";"):
+        stripped = part.strip()
+        at = text.index(stripped, offset) if stripped else offset
+        offset = at + len(stripped)
+        if stripped.startswith("--") and ":" in stripped:
+            name, _, value = stripped.partition(":")
+            out.append(Declaration(name.strip(), value.strip(), _line(text, at)))
+    return tuple(out)
+
+
+def parse_css(text: str, name: str = "the stylesheet") -> List[Rule]:
+    """Every style rule in `text`, with the media queries around it.
+    @layer and @theme blocks are read through; other at-rules are kept as
+    media so the importer can name them."""
+    text = _blank_comments(text)
+    rules: List[Rule] = []
+
+    def block(start: int, end: int, media: Tuple[str, ...]) -> None:
+        i = start
+        while i < end:
+            brace = text.find("{", i, end)
+            semi = text.find(";", i, end)
+            if brace == -1:
+                return
+            if semi != -1 and semi < brace:  # a statement such as @import
+                i = semi + 1
+                continue
+            prelude = " ".join(text[i:brace].split())
+            close = _matching(text, brace, name)
+            if prelude.startswith("@media"):
+                block(brace + 1, close, media + (prelude[len("@media"):].strip(),))
+            elif prelude.startswith("@layer"):
+                block(brace + 1, close, media)
+            elif prelude.startswith("@theme"):
+                rules.append(Rule("@theme", media, _declarations(
+                    text, brace + 1, text[brace + 1:close]), _line(text, brace)))
+            elif prelude.startswith("@"):
+                block(brace + 1, close, media + (prelude,))
+            else:
+                rules.append(Rule(prelude, media, _declarations(
+                    text, brace + 1, text[brace + 1:close]), _line(text, brace)))
+            i = close + 1
+
+    block(0, len(text), ())
+    return rules
+
+
+class _Modes:
+    """Turns selectors and media into contexts. The attributes and media
+    this engine writes map to its axes, and so do the dark selectors in
+    SCHEME_SELECTORS; any other theme selector becomes an axis of its own
+    when it is registered."""
+
+    def __init__(self) -> None:
+        self.custom: Dict[str, Tuple[str, str]] = {}
+        self.forms: Dict[str, Tuple[str, str]] = {}
+        self.ours: List[str] = []
+        # Axes set outside a media query by :not([attr="base"]).
+        self.unpinned: List[str] = []
+        # Axes set by a preference media query.
+        self.by_media: List[str] = []
+
+    @staticmethod
+    def parse(sel: str) -> Optional[List[Tuple[str, str, str]]]:
+        """(axis, value, form) for each part of one selector: form "" for
+        an attribute this engine writes, ":not" for one set by
+        :not([attr="base"]), and the selector text for any other; None when
+        it is not a root or theme selector."""
+        rest = sel
+        for root in ROOTS:
+            if rest.startswith(root):
+                rest = rest[len(root):]
+                break
+        parts: List[Tuple[str, str, str]] = []
+        while rest:
+            if rest[0].isspace():
+                if rest.strip() not in RTL_SUBTREES:
+                    return None
+                parts.append(("direction", "rtl", ""))
+                break
+            m = _NOT.match(rest) or _LANG.match(rest) or _ATTR.match(rest) or _CLASS.match(rest)
+            if not m:
+                return None
+            token = m.group(0)
+            if token in SCHEME_SELECTORS:
+                parts.append(("scheme", SCHEME_SELECTORS[token], token))
+            elif token.startswith(":not"):
+                axis = _ATTR_AXES.get(m.group(1))
+                if axis is None or len(AXES[axis]) != 2 or m.group(2) != AXES[axis][0]:
+                    return None
+                parts.append((axis, AXES[axis][1], ":not"))
+            elif _LANG.match(token):
+                parts.append(("direction", "rtl", ""))
+            elif token.startswith("["):
+                attr, value = m.group(1), m.group(2)
+                axis = _ATTR_AXES.get(attr)
+                if axis is not None and value in AXES[axis]:
+                    parts.append((axis, value, ""))
+                else:
+                    parts.append((attr, value, token))
+            elif token.startswith("."):
+                parts.append((f"class-{m.group(1)}", "on", token))
+            rest = rest[len(token):]
+        return parts
+
+    def register(self, parts: List[Tuple[str, str, str]],
+                 media: Dict[str, str]) -> Optional[Dict[str, str]]:
+        """The non-base pairs the parts set, registering new axes; None when
+        an attribute axis meets a second value (split it into its own
+        selector). :not([attr="base"]) inside the media query of its own
+        axis is the media form and adds nothing; outside one it sets the
+        other value. A dark selector this engine does not write sets the
+        scheme and is kept in forms, the first one met."""
+        pairs: Dict[str, str] = {}
+        for axis, value, form in parts:
+            if axis in AXES:
+                if axis not in self.ours:
+                    self.ours.append(axis)
+                if form == ":not":
+                    if axis in media:
+                        continue
+                    if axis not in self.unpinned:
+                        self.unpinned.append(axis)
+                if value != AXES[axis][0]:
+                    pairs[axis] = value
+                    if form not in ("", ":not"):
+                        self.forms.setdefault(axis, (form, ""))
+                continue
+            if axis not in self.custom:
+                self.custom[axis] = ("off", "on") if axis.startswith("class-") \
+                    else ("base", value)
+                self.forms[axis] = (form, "")
+            if self.custom[axis][1] != value:
+                return None
+            pairs[axis] = value
+        return pairs
+
+    @staticmethod
+    def media(media: Tuple[str, ...]) -> Optional[Dict[str, str]]:
+        """The pairs the preference media queries around a rule set, or None
+        when one of them is a query this engine does not read."""
+        pairs: Dict[str, str] = {}
+        for query in media:
+            for part in (p.strip() for p in query.split(" and ")):
+                part = re.sub(r"\s*:\s*", ": ", part)
+                if part not in MEDIA_AXES:
+                    return None
+                axis, value = MEDIA_AXES[part]
+                pairs[axis] = value
+        return pairs
+
+    def register_media(self, pairs: Dict[str, str]) -> None:
+        """Registers the axes a rule read under media queries sets."""
+        for axis in pairs:
+            if axis not in self.ours:
+                self.ours.append(axis)
+            if axis not in self.by_media:
+                self.by_media.append(axis)
+
+    def axes(self) -> Dict[str, Tuple[str, str]]:
+        ours = {a: AXES[a] for a in AXES if a in self.ours}
+        return {**ours, **self.custom}
+
+    def scheme(self) -> str:
+        """The scheme the stylesheet opens."""
+        if "scheme" not in self.ours or "scheme" in self.by_media:
+            return SYSTEM
+        return DARK if "scheme" in self.unpinned else LIGHT
+
+    def finish(self) -> None:
+        """A scheme kept in a selector of the file's own that the file also
+        sets under prefers-color-scheme is written back in both forms."""
+        if "scheme" in self.forms and "scheme" in self.by_media:
+            self.forms["scheme"] = (self.forms["scheme"][0], CSS_AXES["scheme"][1])
+
+
+def _ours(sel: str, parts: List[Tuple[str, str, str]]) -> bool:
+    """True when a selector that sets the scheme is one this engine writes:
+    :root with data-theme, or with :not([data-theme="light"])."""
+    return sel.startswith(":root") and any(
+        axis == "scheme" and form in ("", ":not") for axis, _, form in parts)
+
+
+def _viewport(rules: List[Rule]) -> Dict[str, List[Tuple[str, str, int]]]:
+    """Root properties a min-width media query sets: name -> [(width, value,
+    line)], the root value first with width ""."""
+    root: Dict[str, Tuple[str, int]] = {}
+    tiers: Dict[str, List[Tuple[str, str, int]]] = {}
+    for rule in rules:
+        if _Modes.parse(rule.selector) != []:
+            continue
+        widths = [_MIN_WIDTH.fullmatch(m.strip()) for m in rule.media]
+        if not rule.media:
+            for d in rule.declarations:
+                root.setdefault(d.name, (d.value, d.line))
+        elif len(widths) == 1 and widths[0]:
+            for d in rule.declarations:
+                tiers.setdefault(d.name, []).append((widths[0].group(1), d.value, d.line))
+    return {name: [("", *root[name])] + tiers[name] for name in tiers
+            if name in root and _aliases(root[name][0])}
+
+
+def _aliases(text: str) -> bool:
+    """True when `text` is one var() reference."""
+    try:
+        return css_alias(text) is not None
+    except NotRead:
+        return False
+
+
+def _number(text: str, root: Dict[str, str]) -> Optional[str]:
+    """The plain number `text` comes to, following var() references through
+    the root's properties, or None when it is not one."""
+    seen: List[str] = []
+    while True:
+        try:
+            alias = css_alias(text)
+        except NotRead:
+            return None
+        if alias is None:
+            break
+        if alias[0] in seen or f"--{alias[0]}" not in root:
+            return None
+        seen.append(alias[0])
+        text = root[f"--{alias[0]}"]
+    try:
+        kind, _ = read_value(text)
+    except NotRead:
+        return None
+    return text.strip() if kind == "number" else None
+
+
+def _switch_text(values: List[Tuple[str, str, int]]) -> str:
+    first, *rest = values
+    return ", then ".join([first[1]] + [f"{v} from {w}" for w, v, _ in rest])
+
+
+def _scaled_note(text: str, size: str, factor: str, steps: List[Tuple[str, str]]) -> str:
+    """The note on a size that a viewport scale multiplies: read as its
+    value from the first breakpoint up when the scale is 1 there, else as
+    its unscaled value."""
+    width = steps[1][0]
+    if all(float(v) == 1 for _, v in steps[1:]):
+        return (f"is {text}, and {factor} is 1 from {width} up, so it was read as "
+                f"var(--{size}), its value from {width} up; below {width} {factor} scales it")
+    scale = ", then ".join([steps[0][1]] + [f"{v} from {w}" for w, v in steps[1:]])
+    return (f"is {text}, and {factor} scales it with the viewport ({scale}), so it was read "
+            f"as var(--{size}), its unscaled value; the viewport is not a mode, so the scale "
+            "is not a token")
+
+
+_COMPONENT = ("is set on {sel}, not on the root or a theme selector; a property set on a "
+              "component is not a system token")
+
+
+def _media_message(media: Tuple[str, ...]) -> str:
+    queries = " and ".join(m if m.startswith("@") else f"@media {m}" for m in media)
+    reads = ("which is not a mode the engine reads; it reads prefers-color-scheme, "
+             "prefers-contrast and prefers-reduced-motion")
+    if all(_WIDTH.search(m) and not m.startswith("@") for m in media):
+        return (f"is set under {queries}, {reads}, so keep viewport values in the layout "
+                "breakpoints")
+    return f"is set under {queries}, {reads}, so set it on the root or under one of those"
+
+
+def import_css(text: str, source: Source) -> Imported:
+    """The custom properties a stylesheet sets, as tokens in their own
+    names, and the report. A class or attribute selector this engine does
+    not write, other than a dark selector, counts as a theme selector only
+    when every property it sets is also set on the root: it switches
+    existing tokens, as a mode does."""
+    name = Path(source.path).name
+    rules = parse_css(text, source.path)
+    modes = _Modes()
+    switches = _viewport(rules)
+    root_values: Dict[str, str] = {}
+    for r in rules:
+        if not r.media and _Modes.parse(r.selector) == []:
+            for d in r.declarations:
+                root_values.setdefault(d.name, d.value)
+    # Switches between plain numbers: a scale factor, name -> [(width, number)].
+    factors: Dict[str, List[Tuple[str, str]]] = {}
+    for prop, steps in switches.items():
+        numbers = [_number(v, root_values) for _, v, _ in steps]
+        if len(steps) > 1 and all(n is not None for n in numbers):
+            factors[prop] = [(w, n) for (w, _, _), n in zip(steps, numbers)]
+    root_names = set(root_values)
+    # property -> {sorted non-base pairs: (value text, line)}, in the order read
+    found: Dict[str, Dict[Tuple[Tuple[str, str], ...], Tuple[str, int]]] = {}
+    not_read: List[Tuple[int, Item]] = []
+    notes: List[Tuple[int, Item]] = []
+    # Dark rules in a form this engine does not write: (line, label, properties).
+    paired: List[Tuple[int, str, List[str]]] = []
+    # property -> (context, first (value, line), second (value, line)): set
+    # twice in one context with different values.
+    clashes: Dict[str, Tuple[Tuple[Tuple[str, str], ...], Tuple[str, int], Tuple[str, int]]] = {}
+    entries = 0
+    for rule in rules:
+        if not rule.declarations:  # a rule with no custom property sets no mode
+            continue
+        media = modes.media(rule.media)
+        options = [_Modes.parse(s) for s in split_top(rule.selector, ",")]
+        custom = any(axis not in AXES for o in options if o for axis, _, _ in o)
+        outside = any(o is None for o in options)
+        component = outside or (
+            custom and not all(d.name in root_names for d in rule.declarations))
+        keys = set()
+        if media is not None and not component:
+            modes.register_media(media)
+            for o in options:
+                pairs = modes.register(o, media)
+                keys.add(None if pairs is None else tuple(sorted({**media, **pairs}.items())))
+        dark = [p for p in rule.declarations if p.name not in switches] if (
+            len(keys) == 1 and None not in keys and ("scheme", "dark") in next(iter(keys))
+            and not all(_ours(s, o) for s, o in zip(split_top(rule.selector, ","), options)
+                        if o is not None)) else []
+        if dark:
+            label = " ".join([*(f"@media {m}" for m in rule.media), rule.selector])
+            paired.append((rule.line, label, [d.name for d in dark]))
+        for d in rule.declarations:
+            entries += 1
+            if d.name in switches:
+                continue
+            item = None
+            if outside:
+                item = _COMPONENT.format(sel=rule.selector)
+            elif media is None:
+                item = _media_message(rule.media)
+            elif component:
+                item = _COMPONENT.format(sel=rule.selector)
+            elif len(keys) > 1 or None in keys:
+                item = (f"is set under {rule.selector}, which names more than one mode; split "
+                        "it into one rule per mode")
+            if item:
+                not_read.append((d.line, Item(f"{name}:{d.line}", d.name, item)))
+                continue
+            key = next(iter(keys))
+            prior = found.setdefault(d.name, {}).setdefault(key, (d.value, d.line))
+            if " ".join(prior[0].split()) != " ".join(d.value.split()):
+                clashes.setdefault(d.name, (key, prior, (d.value, d.line)))
+    modes.finish()
+
+    for prop, values in switches.items():
+        at = values[0][2]
+        notes.append((at, Item(f"{name}:{at}", prop, f"switches with the viewport "
+                                                     f"({_switch_text(values)}); the viewport is "
+                                                     "not a mode, so it was not made a token, and "
+                                                     "each property it points at is read as its "
+                                                     "own token")))
+    axes = modes.axes()
+    # path -> [(context key, kind or "alias", value, line)] in the order read
+    values: Dict[str, List[Tuple[str, str, Any, int]]] = {}
+    mapped: List[Tuple[int, Mapped]] = []
+    for prop, by_key in found.items():
+        path = prop[2:]
+        line = min(line for _, line in by_key.values())
+        if () not in by_key:
+            under = ", ".join(sorted({modes.forms.get(a, (f"{a}:{v}", ""))[0]
+                                      for key in by_key for a, v in key}))
+            not_read.append((line, Item(f"{name}:{line}", prop, f"is set only under {under}; "
+                             "give it a value on :root too, so the base mode has one")))
+            continue
+        if prop in clashes:
+            key, (first, one), (second, two) = clashes[prop]
+            where = join(dict(key), axes) or "the base mode"
+            not_read.append((two, Item(f"{name}:{two}", prop, (
+                f"is {first} on line {one} and {second} on line {two}, both in {where}; "
+                "keep one, or make them agree"))))
+            continue
+        read: List[Tuple[str, str, Any, int]] = []
+        own_notes: List[Tuple[int, Item]] = []
+        own_mapped: List[Tuple[int, Mapped]] = []
+        try:
+            for key, (value_text, at) in by_key.items():
+                scaled = _SCALED.fullmatch(value_text.strip())
+                if scaled and f"--{scaled.group(2)}" in factors:
+                    size, factor = scaled.group(1), f"--{scaled.group(2)}"
+                    if not any(n[1].name == prop for n in notes + own_notes):
+                        own_notes.append((at, Item(f"{name}:{at}", prop, _scaled_note(
+                            value_text.strip(), size, factor, factors[factor]))))
+                    value_text = f"var(--{size})"
+                alias = css_alias(value_text)
+                if alias is not None:
+                    read.append((join(dict(key), axes), "alias", alias[0], at))
+                    if alias[1]:
+                        own_notes.append((at, Item(f"{name}:{at}", prop, f"its fallback "
+                                          f"{alias[1]} was left out; the reference holds the "
+                                          "value")))
+                else:
+                    gamut: List[GamutMapped] = []
+                    kind, value = read_value(value_text, gamut)
+                    read.append((join(dict(key), axes), kind, value, at))
+                    own_mapped += [(at, Mapped.of(f"{name}:{at}", prop, g)) for g in gamut]
+        except NotRead as exc:
+            not_read.append((line, Item(f"{name}:{line}", prop, str(exc))))
+            continue
+        values[path] = read
+        notes += own_notes
+        mapped += own_mapped
+
+    def drop(path: str, at: int, why: str) -> None:
+        nonlocal notes, mapped
+        not_read.append((at, Item(f"{name}:{at}", f"--{path}", why)))
+        notes = [n for n in notes if n[1].name != f"--{path}"]
+        mapped = [m for m in mapped if m[1].name != f"--{path}"]
+        del values[path]
+
+    # A reference to a property that was not read, or not defined, is not read.
+    changed = True
+    while changed:
+        changed = False
+        for path in list(values):
+            gone = next(((v, at) for _, k, v, at in values[path] if k == "alias"
+                         and v not in values), None)
+            if gone is None:
+                continue
+            target, at = gone
+            why = (f"references --{target}, which was not read; fix --{target} and import "
+                   "again") if f"--{target}" in found or f"--{target}" in switches else (
+                f"references --{target}, which this file does not define; define it or write "
+                "the value")
+            drop(path, at, why)
+            changed = True
+
+    def kind_of(path: str, seen: Tuple[str, ...] = ()) -> str:
+        """Literals decide a type; an alias takes its target's."""
+        literal = next((k for _, k, _, _ in values[path] if k != "alias"), "")
+        if literal or path in seen:
+            return literal
+        return next((got for _, k, v, _ in values[path]
+                     for got in [kind_of(v, seen + (path,))] if got), "")
+
+    kinds = {path: kind_of(path) for path in values}
+    ts = TokenSet(axes)
+    for path, read in list(values.items()):
+        kind = kinds[path]
+        odd = next((k for _, k, _, _ in read if k not in ("alias", kind)), None)
+        if odd or not kind:
+            at = read[0][3]
+            drop(path, at, f"holds a {kind} in one mode and a {odd} in another; give it one "
+                           "type" if odd else "references only itself; give it a value")
+            continue
+        written = {ctx: ("{" + v + "}" if k == "alias" else v) for ctx, k, v, _ in read}
+        mode_values = {ctx: v for ctx, v in written.items() if ctx}
+        aliased = any(k == "alias" for _, k, _, _ in read)
+        ts.add(Token(path, kind, written[""], modes=mode_values,
+                     layer="semantic" if aliased or mode_values else "primitive"))
+    for line, label, props in paired:
+        read_here = [p for p in props if ts.has(p[2:])]
+        if read_here:
+            count = (f"{len(read_here)} properties were" if len(read_here) > 1
+                     else "1 property was")
+            notes.append((line, Item(f"{name}:{line}", label, (
+                f"is the dark scheme; {count} paired by name with the root's and read as "
+                "scheme:dark"))))
+    report = ImportReport.of(source, ts, entries=entries)
+    report.notes = [i for _, i in sorted(notes, key=lambda x: x[0])]
+    report.not_read = [i for _, i in sorted(not_read, key=lambda x: x[0])]
+    report.mapped = [i for _, i in sorted(mapped, key=lambda x: x[0])]
+    return Imported(ts, report, dict(modes.forms), modes.scheme())
+
+
+def read_css(path: Any, label: str = "--from") -> Imported:
+    """Read and import a CSS file."""
+    source, text = read_source(path, "css", label)
+    return import_css(text, source)

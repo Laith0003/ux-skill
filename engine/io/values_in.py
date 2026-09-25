@@ -265,6 +265,12 @@ def _font_names(text: str) -> Optional[List[str]]:
     return names
 
 
+def _is_length(word: str) -> bool:
+    """True for a word a shadow layer reads as a length: 0, px or rem."""
+    m = _UNIT.match(word)
+    return word == "0" or bool(m and m.group(2).lower() in ("px", "rem"))
+
+
 def _shadow_layer(text: str, mapped: Optional[List[GamutMapped]]) -> dict:
     words = split_top(text, " ")
     inset = "inset" in (w.lower() for w in words)
@@ -367,7 +373,8 @@ def read_value(text: Any, mapped: Optional[List[GamutMapped]] = None) -> Tuple[s
         raise NotRead(f"{text} has no fixed value; it takes the color of the element it sits "
                       "on, so write the color as hex")
     layers = split_top(text)
-    if any(ch.isdigit() for ch in text) and all(len(split_top(p, " ")) >= 3 for p in layers):
+    if all(len(split_top(p, " ")) >= 3 and sum(map(_is_length, split_top(p, " "))) >= 2
+           for p in layers):
         return "shadow", [_shadow_layer(p, mapped) for p in layers]
     if re.fullmatch(r"[A-Za-z][A-Za-z-]*", text):
         raise NotRead(f"{text} is a single word that could be a color name, a font name or a "

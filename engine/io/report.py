@@ -172,8 +172,10 @@ class ImportReport:
 class Imported:
     """An imported system: its tokens in the source's own names, the
     report, and for a CSS source how each mode axis was switched there
-    (axis -> (selector for the non-base value, media query or "")), so the
-    system can be written back the way it came."""
+    (axis -> (selector for the non-base value, media query or "")) and
+    which scheme it opens (system, light or dark), so the system can be
+    written back the way it came."""
     tokens: TokenSet
     report: ImportReport
     forms: Mapping[str, Tuple[str, str]] = field(default_factory=dict)
+    scheme: str = "system"

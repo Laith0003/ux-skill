@@ -1,0 +1,126 @@
+@layer properties;
+@layer theme, base, components, utilities;
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    *, :before, :after, ::backdrop {
+      --tw-shadow: 0 0 #0000;
+      --tw-ring-offset-width: 0px;
+    }
+  }
+}
+@layer theme {
+  :root, :host {
+    --font-sans: "Grotesk Text", ui-sans-serif, system-ui, sans-serif;
+    --color-signal-500: oklch(63.7% 0.237 25.331);
+    --color-leaf-500: oklch(72.3% 0.219 149.579);
+    --color-white: #fff;
+    --spacing: 0.25rem;
+    --text-sm: 0.875rem;
+    --text-sm--line-height: calc(1.25 / 0.875);
+    --default-transition-duration: 150ms;
+    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    --animate-spin: spin 1s linear infinite;
+    --default-font-family: var(--font-sans);
+  }
+}
+@layer base {
+  *, ::after, ::before, ::backdrop { box-sizing: border-box; border: 0 solid; margin: 0; padding: 0; }
+  html, :host { line-height: 1.5; font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif); }
+}
+:root {
+  /* Neutral ramp */
+  --neutral-0: #ffffff;
+  --neutral-50: #f7f7f5;
+  --neutral-200: #e4e4e0;
+  --neutral-500: #74746c;
+  --neutral-800: #2a2a26;
+  --neutral-950: #111110;
+
+  /* Brand and status ramps, written in oklch; the vivid steps sit outside sRGB. */
+  --brand-300: oklch(0.809 0.105 251.813);
+  --brand-500: oklch(0.623 0.214 259.815);
+  --brand-700: oklch(0.488 0.243 264.376);
+  --danger-500: oklch(0.637 0.237 25.331);
+  --success-600: rgb(0 166 62);
+  --overlay: rgb(17 17 16 / 0.6);
+
+  /* Space, radius, type, motion */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-4: 16px;
+  --space-8: 2rem;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-pill: 9999px;
+  --font-sans: "Grotesk Text", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Mono Code", ui-monospace, monospace;
+  --font-size-body: 1rem;
+  --font-size-small: 0.875rem;
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+  --line-height-body: 1.5;
+  --tracking-tight: -0.02em;
+  --duration-fast: 120ms;
+  --duration-base: .2s;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --shadow-raised: 0 1px 2px rgb(17 17 16 / 0.08), 0 4px 12px -2px rgb(17 17 16 / 0.12);
+  --content-max: min(72rem, 100vw - 2rem);
+
+  /* Semantic layer */
+  --surface-page: var(--neutral-0);
+  --surface-raised: var(--neutral-50);
+  --text-primary: var(--neutral-950);
+  --text-muted: var(--neutral-500);
+  --border-subtle: var(--neutral-200);
+  --action-primary: var(--brand-500);
+  --action-primary-hover: var(--brand-700);
+  --focus-ring: var(--brand-300);
+  --status-danger: var(--danger-500);
+  --status-success: var(--success-600);
+  --radius-control: var(--radius-md);
+  --gap-stack: var(--space-4);
+  --motion-hover: var(--duration-fast);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-hover: 0ms;
+    --ease-standard: linear;
+  }
+}
+
+:root {
+  --header-height: 64px;
+}
+
+/* The app's dark theme: the foundation ships light only. */
+.dark {
+  --surface-page: var(--neutral-950);
+  --surface-raised: var(--neutral-800);
+  --text-primary: var(--neutral-50);
+  --text-muted: oklch(0.72 0.01 90);
+  --border-subtle: rgb(255 255 255 / 0.12);
+  --action-primary: var(--brand-300);
+  --shadow-raised: 0 1px 2px rgb(0 0 0 / 0.4);
+}
+
+@layer base {
+  body {
+    background: var(--surface-page);
+    color: var(--text-primary);
+  }
+  .prose-card {
+    --card-padding: var(--space-4);
+  }
+}
+@layer utilities {
+  .bg-surface { background-color: var(--surface-page); }
+  .shadow-raised { --tw-shadow: 0 1px 2px var(--tw-shadow-color, rgb(17 17 16 / 0.08)); box-shadow: var(--tw-shadow); }
+  .dark\:bg-surface-raised:where(.dark, .dark *) { background-color: var(--surface-raised); }
+  .px-4 { padding-inline: calc(var(--spacing) * 4); }
+  @media (min-width: 40rem) {
+    .sm\:px-6 { padding-inline: calc(var(--spacing) * 6); }
+  }
+}
+@property --tw-shadow { syntax: "*"; inherits: false; initial-value: 0 0 #0000; }
+@keyframes spin { to { transform: rotate(360deg); } }

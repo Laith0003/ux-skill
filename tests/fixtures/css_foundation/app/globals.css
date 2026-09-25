@@ -1,0 +1,40 @@
+@import "tailwindcss";
+@import "../tokens/foundation.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-surface: var(--surface-page);
+  --color-surface-raised: var(--surface-raised);
+  --color-ink: var(--text-primary);
+  --color-ink-muted: var(--text-muted);
+  --color-action: var(--action-primary);
+  --radius-lg: var(--radius-control);
+  --font-display: var(--font-sans);
+}
+
+:root {
+  --header-height: 64px;
+}
+
+/* The app's dark theme: the foundation ships light only. */
+.dark {
+  --surface-page: var(--neutral-950);
+  --surface-raised: var(--neutral-800);
+  --text-primary: var(--neutral-50);
+  --text-muted: oklch(0.72 0.01 90);
+  --border-subtle: rgb(255 255 255 / 0.12);
+  --action-primary: var(--brand-300);
+  --shadow-raised: 0 1px 2px rgb(0 0 0 / 0.4);
+}
+
+@layer base {
+  body {
+    background: var(--surface-page);
+    color: var(--text-primary);
+  }
+
+  .prose-card {
+    --card-padding: var(--space-4);
+  }
+}

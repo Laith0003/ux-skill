@@ -240,7 +240,7 @@ def test_dtcg_with_its_own_two_value_axis_round_trips():
 ])
 def test_the_default_scheme_decides_which_scheme_opens(scheme, opens_dark, follows_os):
     ts = _color_set(**{"scheme:dark": "{color.n.2}"})
-    css = to_css(ts, scheme)
+    css = to_css(ts, scheme=scheme)
     assert opens_dark + "\n  color-scheme: dark;" in css
     assert ("prefers-color-scheme" in css) == follows_os
     if scheme == "dark":
@@ -250,4 +250,4 @@ def test_the_default_scheme_decides_which_scheme_opens(scheme, opens_dark, follo
 
 def test_an_unknown_default_scheme_is_refused():
     with pytest.raises(ValueError, match="scheme is 'dim'; use one of"):
-        to_css(_color_set(**{"scheme:dark": "{color.n.2}"}), "dim")
+        to_css(_color_set(**{"scheme:dark": "{color.n.2}"}), scheme="dim")
