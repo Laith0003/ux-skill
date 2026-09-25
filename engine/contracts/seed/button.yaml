@@ -106,7 +106,7 @@ usage:
     - Put the icon at the start of the label in both directions; mirror only a glyph that points
     - Keep the radius the same in every state
     - Apply the binding for a state over the one without a state, and the one with more variant conditions over the one with fewer
-    - When two states apply at once, disabled wins over every other state
+    - When two states apply at once, disabled wins over every other state, and pressed wins over hover
   dont:
     - Do not use a button to navigate inside running text; use a link
     - Do not make a ghost button the only control in an open area; at rest only its label marks it
