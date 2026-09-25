@@ -44,7 +44,7 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - `color.focus.ring`: the keyboard focus ring on every surface except inverse and the brand band.
 - `color.focus.ring-inverse`: the focus ring on the inverse surface.
 - `color.scrim`: the translucent dimming behind a dialog; a layer, never a surface for content.
-- `color.text.accent`: words in the brand color that are not links, such as an eyebrow above a heading or a highlighted figure; never body copy.
+- `color.text.accent`: words in the brand color that are not links, such as an eyebrow above a heading or a highlighted figure; never body copy. It colors the eyebrow's words only, never a line, dash or dot drawn before or after them (decisions/eyebrow-is-text.md).
 - `color.line.accent`: a brand rule or underline: a link's underline when links are ink, a section rule, the edge of a featured card.
 - `color.text.support`: words in the supporting accent's hue, such as a tag or a second highlight; never a link and never body copy.
 - `color.surface.tint`: a quiet brand tint behind a group, such as a feature panel or a callout.

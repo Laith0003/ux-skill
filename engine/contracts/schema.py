@@ -41,11 +41,15 @@ RTL_BEHAVIORS: Tuple[str, ...] = ("logical", "mirror", "fixed")
 # divider-color draw one side only: the side where a part inside a group
 # meets the rest of the group (the inline end of a part at the start, the
 # inline start of a part at the end, the end edge of a sticky column); its
-# other sides lie on the group's own edge.
+# other sides lie on the group's own edge. edge-weight is the full weight of
+# a part's edge in a state: the border keeps border-width, and the difference
+# is drawn inside it as an inset box-shadow in the border color (never an
+# outline, which the focus ring owns), so a heavier edge never moves the layout.
 PROPERTY_TYPES: Mapping[str, str] = MappingProxyType({
     "fill": "color", "text": "color", "icon": "color", "border-color": "color",
     "focus-ring": "color", "divider-color": "color",
     "border-width": "dimension", "focus-ring-width": "dimension", "divider-width": "dimension",
+    "edge-weight": "dimension",
     "focus-ring-offset": "dimension", "border-style": "strokeStyle",
     "radius": "dimension", "padding-inline": "dimension", "padding-block": "dimension",
     "gap": "dimension", "stack-gap": "dimension", "min-size": "dimension",

@@ -1,0 +1,4 @@
+.eyebrow {
+  letter-spacing: .1em;
+  &::before { content: ""; width: var(--space-7); height: var(--border-strong); background: var(--color-ink-accent); }
+}

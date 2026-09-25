@@ -1,0 +1,4 @@
+.eyebrow::before { content: "\2014"; margin-inline-end: 0.5em; }
+.kicker::before { content: "• "; }
+.eyebrow--plain { letter-spacing: 0.08em; text-transform: uppercase; }
+.eyebrow--count::after { content: " (3)"; }

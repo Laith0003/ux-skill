@@ -77,13 +77,13 @@ tokens:
   - {part: notice, property: padding-inline, role: space.control.padding-inline}
   - {part: notice, property: padding-block, role: space.control.padding-block}
   # hover: a heavier edge on the closed field
-  - {part: trigger, property: border-width, role: border.emphasis, state: hover}
+  - {part: trigger, property: edge-weight, role: border.emphasis, state: hover}
   # focus
   - {part: trigger, property: focus-ring, role: color.focus.ring, state: focus}
   - {part: trigger, property: focus-ring-width, role: border.focus-ring.width, state: focus}
   - {part: trigger, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
   # error
-  - {part: trigger, property: border-width, role: border.emphasis, state: error}
+  - {part: trigger, property: edge-weight, role: border.emphasis, state: error}
   - {part: trigger, property: border-color, role: color.line.danger, state: error}
   - {part: icon, property: icon, role: color.status.danger.strong, state: error}
   - {part: message, property: text, role: color.status.danger.text, state: error}
@@ -131,6 +131,7 @@ copy:
     - Never apologize, never blame, never write that the choice is invalid without saying why
 usage:
   do:
+    - Draw the heavier edge of hover and error with edge-weight, keeping the border at border-width and drawing the difference inside it as an inset box-shadow in the state's border color, never an outline, which the focus ring owns, so the field never moves by a pixel
     - Use a select for five or more options; for fewer, use radio buttons so every option shows
     - Open the list below the field and keep the chosen option in view when it opens
     - Reserve one line of the message's height under the field, so an error never moves what follows

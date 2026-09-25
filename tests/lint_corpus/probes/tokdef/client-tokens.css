@@ -1,0 +1,23 @@
+:root {
+  --transition-duration: 300ms;
+  --motion-duration-300: 300ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-glow: 0 0 24px rgba(0, 0, 0, 0.2);
+  --font-sans: "Inter", sans-serif;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-5: 20px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+  --space-40: 160px;
+}
+@media (prefers-color-scheme: dark) { :root { color-scheme: dark; --space-4: 16px; } }
+.btn { transition-duration: 300ms; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }

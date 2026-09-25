@@ -1,0 +1,4 @@
+.section-label { border-inline-start: 3px solid var(--accent); padding-inline-start: 12px; }
+.eyebrow { border-left: 2px solid currentColor; padding-left: 0.5rem; }
+.pretitle { border-inline-start-width: 2px; border-inline-start-style: solid; }
+.eyebrow--quiet { border-left: 0; }

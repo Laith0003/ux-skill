@@ -22,6 +22,10 @@ tokens:
   - {part: bar, property: border-color, role: color.line.subtle}
   - {part: bar, property: layer, role: elevation.order.sticky}
   - {part: logo, property: icon, role: color.logo}
+  - {part: logo, property: min-size, role: layout.target.min}
+  - {part: logo, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: logo, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: logo, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
   - {part: item, property: text, role: color.text.default}
   - {part: item, property: font, role: type.text.ui}
   - {part: item, property: min-size, role: layout.target.min}

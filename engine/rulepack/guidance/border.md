@@ -18,7 +18,7 @@ Border sets the width of every stroke: separators, the edges of containers and c
 
 - `border.separator`: a line between siblings inside one parent, such as plain table rows, menu groups, or the divider between a field's prefix and its value; a striped row takes border.outline, since its fill can match the card and its edge is then a container edge (decisions/container-edge.md).
 - `border.outline`: the resting edge of a container or a control, such as a card, a field or a secondary button.
-- `border.emphasis`: an edge that must outrank the edges around it, such as a highlighted module, a field in error or the boundary of a check box.
+- `border.emphasis`: an edge that must outrank the edges around it, such as a highlighted module, a field in error or the boundary of a check box. On a field's hover and error it is the edge-weight: the full weight of the edge, drawn inside the resting border (decisions/edge-weight-inside.md).
 - `border.active`: the edge of a selected or active item, such as a selected row or an active tab.
 - `border.focus-ring.width`: the width of the keyboard focus ring; at least 2px and wider than an outline.
 - `border.focus-ring.offset`: the gap of surface color between an element and its focus ring; at least 1px.
@@ -77,6 +77,7 @@ Audits the width roles and the rules between them: whole pixels, the weight orde
 
 - Border roles hold widths only; write the stroke as three properties: border-width from the role, border-style from border.style.default, and border-color from the color role the contract binds for that variant and state: a color.line role, color.action.primary-edge for a primary button, color.action.on-brand for the primary button on the brand band, color.line.danger for a field in error, color.status.danger.strong for a danger button's edge, or, on a disabled control, the disabled edge color the contract names.
 - Draw focus with outline, outline-width from border.focus-ring.width and outline-offset from border.focus-ring.offset, so it never moves the layout.
+- Draw a state's edge-weight inside the border, never as a wider border: keep border-width at the resting role and add an inset box-shadow in the state's border color for the difference, box-shadow: inset 0 0 0 calc(var(--border-emphasis) - var(--border-outline)) var(--color-line-input) on hover and var(--color-line-danger) in error. Never draw it with an outline: the focus ring is the outline, and a hover outline would replace it on a focused field. The field keeps its size on hover and in error.
 - Use logical sides for single edges: border-block-end for a row separator, border-inline-start for a leading indicator.
 - The separator and the outline can share a value; keep both properties in the code so a later change to one does not move the other.
 
@@ -86,4 +87,5 @@ Audits the width roles and the rules between them: whole pixels, the weight orde
 - Putting selection or focus widths on passive elements: people read a state that does not exist.
 - Adding borders where space or a surface already separates: the noise rises and real edges lose weight.
 - Drawing focus with a border: the element jumps by the ring's width.
+- Widening a field's border on hover or in error: the field and everything after it move by a pixel; draw the edge-weight inside the border.
 - A hairline border: it disappears on standard screens.

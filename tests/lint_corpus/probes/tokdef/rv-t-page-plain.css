@@ -1,0 +1,12 @@
+:root {
+  --dur: 300ms;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --hero: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+  --z-top: 9999;
+  --lift: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --text-shadow: 0 1px 2px rgb(0 0 0 / .5);
+}
+.hero { background: var(--hero); color: #fff; padding: 64px 24px; }
+.card { transition: all var(--dur) var(--ease); box-shadow: var(--lift); z-index: var(--z-top); border: 1px solid #e5e7eb; }
+.card:hover { transform: translateY(-4px); }
+p { text-shadow: var(--text-shadow); }

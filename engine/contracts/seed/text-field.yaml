@@ -31,14 +31,14 @@ tokens:
   - {part: helper, property: text, role: color.text.default}
   - {part: helper, property: font, role: type.text.body-small}
   - {part: helper, property: stack-gap, role: space.field.message-gap}
-  # hover: a heavier edge, the same color
-  - {part: input, property: border-width, role: border.emphasis, state: hover}
+  # hover: a heavier edge drawn inside the border, the same color
+  - {part: input, property: edge-weight, role: border.emphasis, state: hover}
   # focus
   - {part: input, property: focus-ring, role: color.focus.ring, state: focus}
   - {part: input, property: focus-ring-width, role: border.focus-ring.width, state: focus}
   - {part: input, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
-  # error: a heavier edge in the danger color, an icon and a message
-  - {part: input, property: border-width, role: border.emphasis, state: error}
+  # error: a heavier edge inside the border in the danger color, an icon and a message
+  - {part: input, property: edge-weight, role: border.emphasis, state: error}
   - {part: input, property: border-color, role: color.line.danger, state: error}
   - {part: icon, property: icon, role: color.status.danger.strong, state: error}
   - {part: message, property: text, role: color.status.danger.text, state: error}
@@ -78,6 +78,7 @@ copy:
     - Never apologize, never blame, never write that the input is invalid without saying why
 usage:
   do:
+    - Draw the heavier edge of hover and error with edge-weight, keeping the border at border-width and drawing the difference inside it as an inset box-shadow in the state's border color, never an outline, which the focus ring owns, so the field never moves by a pixel
     - Keep the label visible above the field in both directions
     - Size the field for the longest expected value in the longest language, since Arabic runs 10 to 25 percent longer
     - Let phone numbers, codes and email addresses run left to right inside a right-to-left form
