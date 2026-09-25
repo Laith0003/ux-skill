@@ -90,7 +90,7 @@ The site uses a 12-column grid with a max content width of 1440–1600px. Sectio
 
 ## 7. Motion Vocabulary
 
-Racing-grade motion. Auto-playing engineering-cinematic video heroes. Slow ken-burns pans on still imagery (10-second cycles). Configurator changes use a hard cut at 150ms — racing-precision, no spring.
+Racing-grade motion. Auto-playing engineering-cinematic video heroes. Slow ken-burns pans on still imagery (10-second cycles). Vehicle cards lift on hover (1.04 scale, 200ms ease). Configurator changes use a hard cut at 150ms — racing-precision, no spring.
 
 ## 8. Anti-patterns to Avoid
 

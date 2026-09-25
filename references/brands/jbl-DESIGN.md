@@ -84,7 +84,7 @@ The site uses a 12-column grid with a max content width of 1440px. Section paddi
 
 ## 7. Motion Vocabulary
 
-High-energy motion. Auto-playing lifestyle video heroes. Carousel transitions at 400–600ms with a slight ease. Sound-wave ring animations on product pages run continuously. The motion budget is generous compared to Bose/Sonos — JBL leans into kinetic chrome.
+High-energy motion. Auto-playing lifestyle video heroes. Carousel transitions at 400–600ms with a slight ease. Cards lift on hover (1.04 scale, 200ms ease). Sound-wave ring animations on product pages run continuously. The motion budget is generous compared to Bose/Sonos — JBL leans into kinetic chrome.
 
 ## 8. Anti-patterns to Avoid
 

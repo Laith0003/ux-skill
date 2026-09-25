@@ -24,7 +24,7 @@ Porsche is the Stuttgart sports-car house whose visual discipline is the opposit
 8-base (8/16/24/32/48/64/96/128). Section padding 96–128px. Configurator pages widen to full viewport with vehicle 3D-spinner at center. Spec-sheet tables align in precise 12-column grids. Hero motorsport video consumes 80vh.
 
 ## Motion signature
-Cinematic motorsport. Hero videos auto-play silent: 911s carving through Pyrenees passes, slow-motion engine-bay close-ups, paddock pit-stops. Cross-fades at 1.2s — fast enough to feel kinetic but slower than Tesla's quick cuts. Configurator color-changes animate the car body via 800ms color-tween.
+Cinematic motorsport. Hero videos auto-play silent: 911s carving through Pyrenees passes, slow-motion engine-bay close-ups, paddock pit-stops. Cross-fades at 1.2s — fast enough to feel kinetic but slower than Tesla's quick cuts. Product tiles rise 6px with a sharp shadow on hover (engineering precision, not soft luxury). Configurator color-changes animate the car body via 800ms color-tween.
 
 ## Components observed
 - `cinematic-car-hero-video` — full-bleed motorsport video

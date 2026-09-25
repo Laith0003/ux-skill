@@ -6,7 +6,7 @@ EA's web presence is sports-and-blockbuster-gaming chrome — the EA wordmark in
 
 The franchise architecture is the brand's most important navigational decision. Each franchise — FC, Madden, Battlefield, Sims, Apex — has its own visual identity with a dedicated palette and tone. EA Sports FC leans football-green and stadium-photography; Madden leans NFL-navy and turf textures; Battlefield leans dusty-orange and war-photography; Sims leans Plumbob-green and cheerful character art; Apex Legends leans pure-black-and-red and esports-broadcast. The EA master brand is the connective tissue: the dark canvas, the wordmark, and the EA Play subscription chrome.
 
-EA Play — the subscription product — has its own chrome treatment. Premium subscriber content is marked with a vertical accent bar on hover, an "EA Play" badge. The chrome reads as "this content is part of your membership" rather than "this is a separately priced product."
+EA Play — the subscription product — has its own chrome treatment. Premium subscriber content is marked with a vertical accent bar on hover, an "EA Play" badge, and slightly elevated card styling. The chrome reads as "this content is part of your membership" rather than "this is a separately priced product."
 
 **Key Characteristics:**
 - Dark canvas (#0d0d0d) on franchise and game pages

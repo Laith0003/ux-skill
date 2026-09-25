@@ -1299,13 +1299,14 @@ Buttons:
 
 - Bold, oversized, saturated fill. Padding generous: `20px 32px` minimum.
 - Type is bold uppercase at `16px` to `18px`, tracked moderately.
-- Hover: a scale-up to `1.05` with a snappy spring.
+- Hover: the fill flips to the ink color with a snappy 120ms ease. No scale.
 - Active: scale to `0.95` with a satisfying physical feel.
 
 Cards:
 
 - Filled, high-contrast, often rotated slightly.
 - Internal padding is moderate to allow content to breathe within the loud frame.
+- Hover: border or background shift. The card stays at rest.
 
 Navigation:
 

@@ -87,7 +87,7 @@ The site uses a 12-column grid with a max content width of 1280–1440px. Sectio
 
 ## 7. Motion Vocabulary
 
-Functional minimal motion — 150ms hover on links and buttons. Model card "like" button has a satisfying scale-tick on click. The brand reads as developer-platform functional, never marketing-flashy.
+Functional minimal motion — 150ms hover on links and buttons, and cards lift slightly on hover (1.01 scale). Model card "like" button has a satisfying scale-tick on click. The brand reads as developer-platform functional, never marketing-flashy.
 
 ## 8. Anti-patterns to Avoid
 

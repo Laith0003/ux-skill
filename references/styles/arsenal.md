@@ -456,11 +456,11 @@ Every clickable card or image reacts on hover:
 - Image scale with eased duration inside `overflow-hidden`: `group-hover:scale-105 transition-transform duration-700 ease-out`
 - Border or backdrop transitions
 - Subtle shadow lift
-- Multiple effects in concert (border brightens + inner icon rotates 10° + arrow slides 4px right) read as one composite motion, not five separate animations
+- Multiple effects in concert (border brightens + inner icon rotates 10° + arrow slides 4px right) read as one composite motion, not three separate animations
 
 ### Choreographed micro-events on cards
 **Use when**: feature cards, premium grid surfaces.
-**What it is**: A card hover does several things in concert while the card stays at rest: the border brightens, an inner icon rotates 10°, an arrow slides 4px right. The composite effect reads as one motion, not five separate animations.
+**What it is**: A card hover does several things in concert while the card stays at rest: the border brightens, an inner icon rotates 10°, an arrow slides 4px right. The composite effect reads as one motion, not three separate animations.
 **Cost**: zero — CSS transitions with consistent timing.
 
 ---

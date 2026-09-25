@@ -84,7 +84,7 @@ The site uses a 12-column grid with a max content width of 1280–1440px. Sectio
 
 ## 7. Motion Vocabulary
 
-Friendly micro-animations. Playful idle animations on hero illustrations (the recording person occasionally blinks or gestures). Soft spring on button press (50ms scale-down + 100ms back). Video player previews auto-play silently on hover.
+Friendly micro-animations — cards lift on hover (1.02 scale, 200ms ease). Playful idle animations on hero illustrations (the recording person occasionally blinks or gestures). Soft spring on button press (50ms scale-down + 100ms back). Video player previews auto-play silently on hover.
 
 ## 8. Anti-patterns to Avoid
 

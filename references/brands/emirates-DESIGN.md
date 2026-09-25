@@ -25,7 +25,7 @@ Emirates is the Dubai-headquartered flag carrier whose brand identity is the cin
 8-base (8/16/24/32/48/64/96). Section padding 64–96px. Hero cabin photography frequently consumes the full viewport (no horizontal padding) — the cabin is the marketing. Destination cards stack 3-up at desktop with image + bilingual destination name + flight-time metadata.
 
 ## Motion signature
-Cinematic A380 cabin footage as hero — slow tracking shots through first-class suites, champagne pours, lounge bars at altitude. Cross-fades at 1.5s — slower than budget carriers, faster than ultra-luxury hotels. The globe-with-routes hero animates flight arcs radiating from Dubai at slow 8s loops.
+Cinematic A380 cabin footage as hero — slow tracking shots through first-class suites, champagne pours, lounge bars at altitude. Cross-fades at 1.5s — slower than budget carriers, faster than ultra-luxury hotels. Product tiles rise 4px with a soft shadow on hover. The globe-with-routes hero animates flight arcs radiating from Dubai at slow 8s loops.
 
 ## Components observed
 - `a380-cabin-cinematic-hero` — full-viewport tracking shot of cabin
