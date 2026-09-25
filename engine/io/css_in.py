@@ -17,7 +17,10 @@ opens the dark scheme, and Imported.scheme records which scheme a file
 opens.
 
 A dark scheme is read wherever stylesheets keep it: `[data-theme="dark"]`,
-`.dark`, `[data-mode="dark"]` and `@media (prefers-color-scheme: dark)`.
+`.dark`, `[data-mode="dark"]`, any other attribute set to dark, and
+`@media (prefers-color-scheme: dark)`, with an attribute value quoted
+either way or bare. A selector list is the root when each member is the
+root or a theme selector at its base value (`:root, [data-x=light]`).
 Each property a dark rule sets is paired by name with the one on the root
 and read as scheme:dark; a dark rule written in a form this engine does not
 write is named under notes with the pairing, and Imported.forms records its
@@ -40,6 +43,11 @@ breakpoint up when --scale is 1 there, otherwise its unscaled value.
 An oklch() or oklab() color outside sRGB is mapped into sRGB by CSS Color 4
 gamut mapping and listed under "Mapped into sRGB", never refused.
 
+Nested rules (CSS Nesting) are rules of their own, read to any depth:
+`&` stands for the parent, any other selector is a descendant of it, and
+a nested @media adds to the parent's media. A nested rule never folds
+into its parent, so a component nested in :root is a component.
+
 What is not read, each with the fix: properties set on components or under
 other media queries, a property set only under a mode, values with no
 single reading (values_in), references to a property the file does not
@@ -52,7 +60,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-from engine.foundations.emit import InputError
+from engine.foundations.errors import InputError
 from engine.foundations.modes import AXES, CSS_AXES, join
 from engine.foundations.tokens import Token, TokenSet
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source, read_source
@@ -73,15 +81,23 @@ MEDIA_AXES: Dict[str, Tuple[str, str]] = {
     "(prefers-reduced-motion: reduce)": ("motion", "reduced"),
 }
 # Selectors this engine does not write that stylesheets switch the scheme
-# with, and the scheme each one sets.
+# with, and the scheme each one sets. Any other attribute set to dark or
+# light ([data-mode=dark], [data-color-scheme="dark"]) sets it too.
 SCHEME_SELECTORS: Dict[str, str] = {
     ".dark": "dark",
+    ".light": "light",
     '[data-mode="dark"]': "dark",
     '[data-mode="light"]': "light",
 }
 _ATTR_AXES = {attr: axis for axis, (attr, _) in CSS_AXES.items()}
-_ATTR = re.compile(r'\[([a-z][a-z0-9-]*)="([^"]*)"\]')
-_NOT = re.compile(r':not\(\[([a-z][a-z0-9-]*)="([^"]*)"\]\)')
+# An attribute value in double quotes, in single quotes or bare.
+_VALUE = r"""=(?:"([^"]*)"|'([^']*)'|([A-Za-z0-9_-]+))"""
+_ATTR = re.compile(r"\[([a-z][a-z0-9-]*)" + _VALUE + r"\]")
+_NOT = re.compile(r":not\(\[([a-z][a-z0-9-]*)" + _VALUE + r"\]\)")
+# A selector that names a scheme in a form the importer does not read.
+_SCHEMEISH = re.compile(r"""\.(?:dark|light)\b|=\s*["']?(?:dark|light)\b""")
+# Media types that leave a preference query meaning what it says on screen.
+_MEDIA_TYPES = ("screen", "all", "only screen", "only all")
 _CLASS = re.compile(r"\.([a-z][a-z0-9-]*)")
 # An Arabic language selector: right to left, the direction axis at rtl.
 _LANG = re.compile(r'\[lang\|="ar"\]')
@@ -141,25 +157,80 @@ def _matching(text: str, start: int, name: str) -> int:
                      "closes; add the missing } and import it again")
 
 
-def _declarations(text: str, body_start: int, body: str) -> Tuple[Declaration, ...]:
-    out = []
-    offset = body_start
-    for part in split_top(body, ";"):
+def _body(text: str, start: int, end: int,
+          name: str) -> Tuple[Tuple[Declaration, ...], List[Tuple[str, int, int]]]:
+    """The custom property declarations between `start` and `end`, and the
+    blocks nested there as (prelude, offset of their {, offset of their }).
+    A nested block is cut out, so it never swallows the declaration after
+    it; a custom property whose value holds braces keeps them."""
+    out: List[Declaration] = []
+    nested: List[Tuple[str, int, int]] = []
+
+    def declaration(a: int, b: int) -> None:
+        part = text[a:b]
         stripped = part.strip()
-        at = text.index(stripped, offset) if stripped else offset
-        offset = at + len(stripped)
         if stripped.startswith("--") and ":" in stripped:
-            name, _, value = stripped.partition(":")
-            out.append(Declaration(name.strip(), value.strip(), _line(text, at)))
-    return tuple(out)
+            prop, _, value = stripped.partition(":")
+            at = a + len(part) - len(part.lstrip())
+            out.append(Declaration(prop.strip(), value.strip(), _line(text, at)))
+
+    i = seg = start
+    depth, quote = 0, ""
+    while i < end:
+        ch = text[i]
+        if quote:
+            quote = "" if ch == quote else quote
+        elif ch in "\"'":
+            quote = ch
+        elif ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+        elif depth == 0 and ch == ";":
+            declaration(seg, i)
+            seg = i + 1
+        elif depth == 0 and ch == "{":
+            close = _matching(text, i, name)
+            if not text[seg:i].strip().startswith("--"):
+                nested.append((" ".join(text[seg:i].split()), i, close))
+                seg = close + 1
+            i = close + 1
+            continue
+        i += 1
+    declaration(seg, end)
+    return tuple(out), nested
+
+
+def _nest(parent: str, child: str) -> str:
+    """A nested rule's selector: `&` stands for the parent, and a selector
+    without `&` is a descendant of it (CSS Nesting)."""
+    parents = [":root" if p == "@theme" else p for p in split_top(parent, ",")]
+    return ", ".join(c.replace("&", p) if "&" in c else f"{p} {c}"
+                     for p in parents for c in split_top(child, ","))
 
 
 def parse_css(text: str, name: str = "the stylesheet") -> List[Rule]:
     """Every style rule in `text`, with the media queries around it.
     @layer and @theme blocks are read through; other at-rules are kept as
-    media so the importer can name them."""
+    media so the importer can name them. A rule nested in a rule is a rule
+    of its own, read to any depth: its selector joins the parent's (`&` is
+    the parent, anything else a descendant), and a nested @media or other
+    at-rule adds to the parent's media."""
     text = _blank_comments(text)
     rules: List[Rule] = []
+
+    def rule(selector: str, media: Tuple[str, ...], brace: int, close: int) -> None:
+        declarations, nested = _body(text, brace + 1, close, name)
+        rules.append(Rule(selector, media, declarations, _line(text, brace)))
+        for prelude, start, end in nested:
+            if prelude.startswith("@media"):
+                rule(selector, media + (prelude[len("@media"):].strip(),), start, end)
+            elif prelude.startswith("@layer"):
+                rule(selector, media, start, end)
+            elif prelude.startswith("@"):
+                rule(selector, media + (prelude,), start, end)
+            else:
+                rule(_nest(selector, prelude), media, start, end)
 
     def block(start: int, end: int, media: Tuple[str, ...]) -> None:
         i = start
@@ -178,13 +249,11 @@ def parse_css(text: str, name: str = "the stylesheet") -> List[Rule]:
             elif prelude.startswith("@layer"):
                 block(brace + 1, close, media)
             elif prelude.startswith("@theme"):
-                rules.append(Rule("@theme", media, _declarations(
-                    text, brace + 1, text[brace + 1:close]), _line(text, brace)))
+                rule("@theme", media, brace, close)
             elif prelude.startswith("@"):
                 block(brace + 1, close, media + (prelude,))
             else:
-                rules.append(Rule(prelude, media, _declarations(
-                    text, brace + 1, text[brace + 1:close]), _line(text, brace)))
+                rule(prelude, media, brace, close)
             i = close + 1
 
     block(0, len(text), ())
@@ -205,6 +274,8 @@ class _Modes:
         self.unpinned: List[str] = []
         # Axes set by a preference media query.
         self.by_media: List[str] = []
+        # The last value refused for an imported axis: (axis, its value, refused).
+        self.refused: Optional[Tuple[str, str, str]] = None
 
     @staticmethod
     def parse(sel: str) -> Optional[List[Tuple[str, str, str]]]:
@@ -228,24 +299,25 @@ class _Modes:
             if not m:
                 return None
             token = m.group(0)
-            if token in SCHEME_SELECTORS:
-                parts.append(("scheme", SCHEME_SELECTORS[token], token))
-            elif token.startswith(":not"):
-                axis = _ATTR_AXES.get(m.group(1))
-                if axis is None or len(AXES[axis]) != 2 or m.group(2) != AXES[axis][0]:
-                    return None
-                parts.append((axis, AXES[axis][1], ":not"))
-            elif _LANG.match(token):
+            if m.re is _CLASS:
+                parts.append(("scheme", SCHEME_SELECTORS[token], token) if token in SCHEME_SELECTORS
+                             else (f"class-{m.group(1)}", "on", token))
+            elif m.re is _LANG:
                 parts.append(("direction", "rtl", ""))
-            elif token.startswith("["):
-                attr, value = m.group(1), m.group(2)
+            else:
+                attr = m.group(1)
+                value = next(g for g in m.groups()[1:] if g is not None)
                 axis = _ATTR_AXES.get(attr)
-                if axis is not None and value in AXES[axis]:
+                if m.re is _NOT:
+                    if axis is None or len(AXES[axis]) != 2 or value != AXES[axis][0]:
+                        return None
+                    parts.append((axis, AXES[axis][1], ":not"))
+                elif axis is not None and value in AXES[axis]:
                     parts.append((axis, value, ""))
+                elif value in AXES["scheme"]:
+                    parts.append(("scheme", value, token))
                 else:
                     parts.append((attr, value, token))
-            elif token.startswith("."):
-                parts.append((f"class-{m.group(1)}", "on", token))
             rest = rest[len(token):]
         return parts
 
@@ -277,6 +349,7 @@ class _Modes:
                     else ("base", value)
                 self.forms[axis] = (form, "")
             if self.custom[axis][1] != value:
+                self.refused = (axis, self.custom[axis][1], value)
                 return None
             pairs[axis] = value
         return pairs
@@ -289,6 +362,8 @@ class _Modes:
         for query in media:
             for part in (p.strip() for p in query.split(" and ")):
                 part = re.sub(r"\s*:\s*", ": ", part)
+                if part.lower() in _MEDIA_TYPES:
+                    continue
                 if part not in MEDIA_AXES:
                     return None
                 axis, value = MEDIA_AXES[part]
@@ -327,13 +402,33 @@ def _ours(sel: str, parts: List[Tuple[str, str, str]]) -> bool:
         axis == "scheme" and form in ("", ":not") for axis, _, form in parts)
 
 
+def _base(selector: str) -> bool:
+    """True when every selector in the list is the root, or a theme selector
+    at its base value (`:root, :host`, `:root, [data-x=light]`)."""
+    for one in split_top(selector, ","):
+        parts = _Modes.parse(one)
+        if parts is None or any(a not in AXES or v != AXES[a][0] for a, v, _ in parts):
+            return False
+    return True
+
+
+def _reading(text: str) -> Any:
+    """What a value text reads as, for telling two spellings of one value
+    from two values; None when it has no single reading."""
+    try:
+        alias = css_alias(text)
+        return ("alias", alias[0]) if alias else read_value(text)
+    except NotRead:
+        return None
+
+
 def _viewport(rules: List[Rule]) -> Dict[str, List[Tuple[str, str, int]]]:
     """Root properties a min-width media query sets: name -> [(width, value,
     line)], the root value first with width ""."""
     root: Dict[str, Tuple[str, int]] = {}
     tiers: Dict[str, List[Tuple[str, str, int]]] = {}
     for rule in rules:
-        if _Modes.parse(rule.selector) != []:
+        if not _base(rule.selector):
             continue
         widths = [_MIN_WIDTH.fullmatch(m.strip()) for m in rule.media]
         if not rule.media:
@@ -396,11 +491,28 @@ def _scaled_note(text: str, size: str, factor: str, steps: List[Tuple[str, str]]
 
 
 _COMPONENT = ("is set on {sel}, not on the root or a theme selector; a property set on a "
-              "component is not a system token")
+              "component is not a system token; move it to :root if it is one")
+_UNREAD_SCHEME = ("is set on {sel}, a scheme selector in a form this importer does not read; "
+                  'write the dark values under .dark, [data-theme="dark"] or @media '
+                  "(prefers-color-scheme: dark) on :root")
+
+
+def _outside_message(selector: str, options: List[Any]) -> str:
+    """Why a rule outside the root and theme selectors is not read: a scheme
+    selector in a form not read, or a component."""
+    for one, parts in zip(split_top(selector, ","), options):
+        bare = re.sub(r"\([^()]*\)", "()", one)
+        if parts is None and _SCHEMEISH.search(one) and (
+                " " not in bare.strip() or bare.strip().endswith(" *")):
+            return _UNREAD_SCHEME.format(sel=selector)
+    return _COMPONENT.format(sel=selector)
 
 
 def _media_message(media: Tuple[str, ...]) -> str:
     queries = " and ".join(m if m.startswith("@") else f"@media {m}" for m in media)
+    if any(re.search(r"prefers-color-scheme\s*:\s*light", m) for m in media):
+        return (f"is set under {queries}; light is the base scheme, so its values belong on "
+                ":root")
     reads = ("which is not a mode the engine reads; it reads prefers-color-scheme, "
              "prefers-contrast and prefers-reduced-motion")
     if all(_WIDTH.search(m) and not m.startswith("@") for m in media):
@@ -421,7 +533,7 @@ def import_css(text: str, source: Source) -> Imported:
     switches = _viewport(rules)
     root_values: Dict[str, str] = {}
     for r in rules:
-        if not r.media and _Modes.parse(r.selector) == []:
+        if not r.media and _base(r.selector):
             for d in r.declarations:
                 root_values.setdefault(d.name, d.value)
     # Switches between plain numbers: a scale factor, name -> [(width, number)].
@@ -451,6 +563,7 @@ def import_css(text: str, source: Source) -> Imported:
         component = outside or (
             custom and not all(d.name in root_names for d in rule.declarations))
         keys = set()
+        modes.refused = None
         if media is not None and not component:
             modes.register_media(media)
             for o in options:
@@ -462,18 +575,26 @@ def import_css(text: str, source: Source) -> Imported:
                         if o is not None)) else []
         if dark:
             label = " ".join([*(f"@media {m}" for m in rule.media), rule.selector])
-            paired.append((rule.line, label, [d.name for d in dark]))
+            form = next((f for o in options if o for a, _, f in o
+                         if a == "scheme" and f not in ("", ":not")),
+                        "@media" if "scheme" in (media or {}) else "")
+            paired.append((rule.line, label, [d.name for d in dark], form))
         for d in rule.declarations:
             entries += 1
             if d.name in switches:
                 continue
             item = None
             if outside:
-                item = _COMPONENT.format(sel=rule.selector)
+                item = _outside_message(rule.selector, options)
             elif media is None:
                 item = _media_message(rule.media)
             elif component:
                 item = _COMPONENT.format(sel=rule.selector)
+            elif modes.refused:
+                axis, held, value = modes.refused
+                item = (f"is set under {rule.selector}, but [{axis}] already switches to "
+                        f"{held}; an imported axis has one value besides its base, so give "
+                        f"{value} an attribute of its own")
             elif len(keys) > 1 or None in keys:
                 item = (f"is set under {rule.selector}, which names more than one mode; split "
                         "it into one rule per mode")
@@ -504,10 +625,13 @@ def import_css(text: str, source: Source) -> Imported:
             under = ", ".join(sorted({modes.forms.get(a, (f"{a}:{v}", ""))[0]
                                       for key in by_key for a, v in key}))
             not_read.append((line, Item(f"{name}:{line}", prop, f"is set only under {under}; "
-                             "give it a value on :root too, so the base mode has one")))
+                             "give it a value on :root too, so the base mode has one, or import "
+                             "it together with the file that sets its base value")))
             continue
-        if prop in clashes:
-            key, (first, one), (second, two) = clashes[prop]
+        clash = clashes.get(prop)
+        if clash and (_reading(clash[1][0]) is None
+                      or _reading(clash[1][0]) != _reading(clash[2][0])):
+            key, (first, one), (second, two) = clash
             where = join(dict(key), axes) or "the base mode"
             not_read.append((two, Item(f"{name}:{two}", prop, (
                 f"is {first} on line {one} and {second} on line {two}, both in {where}; "
@@ -518,6 +642,9 @@ def import_css(text: str, source: Source) -> Imported:
         own_mapped: List[Tuple[int, Mapped]] = []
         try:
             for key, (value_text, at) in by_key.items():
+                if re.search(r"!\s*important\s*$", value_text, re.I):
+                    raise NotRead("is marked !important; drop !important, since a token holds "
+                                  "only the value")
                 scaled = _SCALED.fullmatch(value_text.strip())
                 if scaled and f"--{scaled.group(2)}" in factors:
                     size, factor = scaled.group(1), f"--{scaled.group(2)}"
@@ -564,7 +691,7 @@ def import_css(text: str, source: Source) -> Imported:
             why = (f"references --{target}, which was not read; fix --{target} and import "
                    "again") if f"--{target}" in found or f"--{target}" in switches else (
                 f"references --{target}, which this file does not define; define it or write "
-                "the value")
+                "the value, or import it together with the file that defines it")
             drop(path, at, why)
             changed = True
 
@@ -591,14 +718,18 @@ def import_css(text: str, source: Source) -> Imported:
         aliased = any(k == "alias" for _, k, _, _ in read)
         ts.add(Token(path, kind, written[""], modes=mode_values,
                      layer="semantic" if aliased or mode_values else "primitive"))
-    for line, label, props in paired:
+    written_as = modes.forms.get("scheme")
+    for line, label, props, form in paired:
         read_here = [p for p in props if ts.has(p[2:])]
         if read_here:
             count = (f"{len(read_here)} properties were" if len(read_here) > 1
                      else "1 property was")
+            back = ""
+            if written_as and form != written_as[0] and not (form == "@media" and written_as[1]):
+                back = f"; it is written back as {written_as[0]}"
             notes.append((line, Item(f"{name}:{line}", label, (
                 f"is the dark scheme; {count} paired by name with the root's and read as "
-                "scheme:dark"))))
+                f"scheme:dark ({', '.join(read_here)}){back}"))))
     report = ImportReport.of(source, ts, entries=entries)
     report.notes = [i for _, i in sorted(notes, key=lambda x: x[0])]
     report.not_read = [i for _, i in sorted(not_read, key=lambda x: x[0])]

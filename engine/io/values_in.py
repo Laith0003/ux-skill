@@ -278,7 +278,7 @@ def _shadow_layer(text: str, mapped: Optional[List[GamutMapped]]) -> dict:
     lengths, color = [], None
     for w in words:
         m = _UNIT.match(w)
-        if w == "0" or (m and m.group(2).lower() in ("px", "rem")):
+        if _is_length(w):
             lengths.append({"value": _number(m.group(1)) if m else 0,
                             "unit": m.group(2).lower() if m else "px"})
         elif color is None:
@@ -372,8 +372,11 @@ def read_value(text: Any, mapped: Optional[List[GamutMapped]] = None) -> Tuple[s
     if lower == "currentcolor":
         raise NotRead(f"{text} has no fixed value; it takes the color of the element it sits "
                       "on, so write the color as hex")
+    if re.fullmatch(_NUMBER + r"\s+" + _NUMBER + r"%\s+" + _NUMBER + "%", text):
+        raise NotRead(f"{text} is hsl channels without hsl(); write hsl({text}) or hex")
     layers = split_top(text)
-    if all(len(split_top(p, " ")) >= 3 and sum(map(_is_length, split_top(p, " "))) >= 2
+    if all(len(split_top(p, " ")) >= 3
+           and sum(1 for w in split_top(p, " ") if w == "0" or _UNIT.match(w)) >= 2
            for p in layers):
         return "shadow", [_shadow_layer(p, mapped) for p in layers]
     if re.fullmatch(r"[A-Za-z][A-Za-z-]*", text):

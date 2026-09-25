@@ -156,7 +156,8 @@ def test_the_report_names_every_entry_it_did_not_read():
         ("theme.css:14", "--focus-ring", "its fallback #36f was left out; the reference holds "
                                          "the value"),
         ("theme.css:22", ".dark", "is the dark scheme; 2 properties were paired by name with "
-                                  "the root's and read as scheme:dark")]
+                                  "the root's and read as scheme:dark (--text-body, "
+                                  "--surface-page)")]
     assert [(i.where, i.name, i.message) for i in report.not_read] == [
         ("theme.css:15", "--measure", "65ch is relative to the font, so it has no fixed value; "
                                       "write it in px or rem"),
@@ -172,7 +173,8 @@ def test_the_report_names_every_entry_it_did_not_read():
                                       "prefers-contrast and prefers-reduced-motion, so keep "
                                       "viewport values in the layout breakpoints"),
         ("theme.css:36", "--card-gap", "is set on .card, not on the root or a theme selector; a "
-                                       "property set on a component is not a system token")]
+                                       "property set on a component is not a system token; "
+                                       "move it to :root if it is one")]
 
 
 def test_a_foreign_file_round_trips_through_its_own_selectors():
@@ -190,16 +192,16 @@ def test_a_property_set_only_under_a_mode_is_named():
     report = _import(':root { --a: 1px; }\n[data-theme="dark"] { --b: #000; }\n').report
     assert [(i.name, i.message) for i in report.not_read] == [
         ("--b", "is set only under scheme:dark; give it a value on :root too, so the base mode "
-                "has one")]
+                "has one, or import it together with the file that sets its base value")]
 
 
 def test_a_class_that_sets_new_properties_is_a_component_not_a_mode():
     report = _import(":root { --a: 1px; }\n.compact { --a: 2px; --b: #000; }\n").report
     assert [(i.name, i.message) for i in report.not_read] == [
         ("--a", "is set on .compact, not on the root or a theme selector; a property set on a "
-                "component is not a system token"),
+                "component is not a system token; move it to :root if it is one"),
         ("--b", "is set on .compact, not on the root or a theme selector; a property set on a "
-                "component is not a system token")]
+                "component is not a system token; move it to :root if it is one")]
 
 
 def test_a_class_that_switches_root_properties_is_an_axis_of_its_own():
@@ -213,7 +215,7 @@ def test_a_reference_to_an_undefined_property_is_named():
     report = _import(":root { --a: var(--missing); }\n").report
     assert [(i.name, i.message) for i in report.not_read] == [
         ("--a", "references --missing, which this file does not define; define it or write the "
-                "value")]
+                "value, or import it together with the file that defines it")]
 
 
 def test_a_selector_list_that_mixes_modes_is_named():
@@ -253,6 +255,14 @@ def test_unbalanced_braces_are_named_with_the_line():
     ('[data-mode="dark"] {', "", {"scheme": ('[data-mode="dark"]', "")}, "light", 6,
      '[data-mode="dark"]'),
     ('[data-theme="dark"] {', "", {}, "light", 6, '[data-theme="dark"]'),
+    ("[data-theme=dark] {", "", {}, "light", 6, "[data-theme=dark]"),
+    ("[data-theme='dark'] {", "", {}, "light", 6, "[data-theme='dark']"),
+    ("[data-mode=dark] {", "", {"scheme": ("[data-mode=dark]", "")}, "light", 6,
+     "[data-mode=dark]"),
+    ('[data-color-scheme="dark"] {', "", {"scheme": ('[data-color-scheme="dark"]', "")},
+     "light", 6, '[data-color-scheme="dark"]'),
+    ("@media screen and (prefers-color-scheme: dark) {\n  :root {", "}", {}, "system", 7,
+     "@media screen and (prefers-color-scheme: dark) :root"),
     ("@media (prefers-color-scheme: dark) {\n  :root {", "}", {}, "system", 7,
      "@media (prefers-color-scheme: dark) :root"),
     ('@media (prefers-color-scheme:dark) {\n  :root {', "}", {}, "system", 7,
@@ -267,8 +277,9 @@ def test_every_dark_form_pairs_into_scheme_dark(opens, form, forms, scheme, wher
     assert imported.tokens.get("gap").modes == {}
     assert (imported.forms, imported.scheme) == (forms, scheme)
     assert [(i.where, i.name, i.message) for i in imported.report.notes] == [
-        (f"theme.css:{where}", label, "is the dark scheme; 2 properties were paired by name with "
-                               "the root's and read as scheme:dark")]
+        (f"theme.css:{where}", label, "is the dark scheme; 2 properties were paired by name "
+                                      "with the root's and read as scheme:dark (--ink, "
+                                      "--paper)")]
     assert imported.report.not_read == []
 
 
@@ -301,10 +312,10 @@ def test_a_property_set_only_under_a_dark_class_is_named():
     report = _import(":root { --a: 1px; }\n.dark { --a: 2px; --b: #000; }\n").report
     assert [(i.name, i.message) for i in report.not_read] == [
         ("--b", "is set only under .dark; give it a value on :root too, so the base mode "
-                "has one")]
+                "has one, or import it together with the file that sets its base value")]
     assert [(i.name, i.message) for i in report.notes] == [
         (".dark", "is the dark scheme; 1 property was paired by name with the root's and "
-                  "read as scheme:dark")]
+                  "read as scheme:dark (--a)")]
 
 
 def test_two_dark_values_for_one_property_are_named_not_chosen():
@@ -386,10 +397,11 @@ def test_the_app_globals_alone_name_what_the_foundation_holds():
         "references --surface-page, which was not read; fix --surface-page and import again")
     assert (report.not_read[5].name, report.not_read[5].message) == (
         "--radius-lg", "references --radius-control, which this file does not define; define "
-                       "it or write the value")
+                       "it or write the value, or import it together with the file that "
+                       "defines it")
     assert report.not_read[-1].message == (
         "is set on .prose-card, not on the root or a theme selector; a property set on a "
-        "component is not a system token")
+        "component is not a system token; move it to :root if it is one")
     assert report.notes == []
 
 
@@ -408,7 +420,9 @@ def test_the_compiled_stylesheet_pairs_the_app_dark_theme_into_the_foundation():
     assert ts.get("default-font-family").value == "{font-sans}"
     assert [(i.where, i.name, i.message) for i in report.notes] == [
         ("app.css:97", ".dark", "is the dark scheme; 7 properties were paired by name with "
-                                "the root's and read as scheme:dark")]
+                                "the root's and read as scheme:dark (--surface-page, "
+                                "--surface-raised, --text-primary, --text-muted, "
+                                "--border-subtle, --action-primary, --shadow-raised)")]
     assert [(m.where, m.name) for m in report.mapped] == [
         ("app.css:15", "--color-leaf-500"), ("app.css:40", "--brand-300"),
         ("app.css:41", "--brand-500")]
@@ -419,7 +433,7 @@ def test_the_compiled_stylesheet_pairs_the_app_dark_theme_into_the_foundation():
         ("app.css:113", "--card-padding"), ("app.css:118", "--tw-shadow")]
     assert report.not_read[0].message == (
         "is set on *, :before, :after, ::backdrop, not on the root or a theme selector; a "
-        "property set on a component is not a system token")
+        "property set on a component is not a system token; move it to :root if it is one")
     assert report.not_read[3].message == (
         "spin 1s linear infinite is not a value this reader knows; write a hex color, a "
         "length in px or rem, a duration in ms or s, a number, a curve or a quoted font list")
@@ -435,3 +449,214 @@ def test_the_compiled_stylesheet_round_trips_through_its_own_dark_class():
         (t.path, t.type, t.value, t.modes, t.layer) for t in first.tokens.tokens()]
     assert second.report.not_read == []
     assert to_css(second.tokens, scheme=second.scheme, forms=second.forms) == text
+
+
+# Nested rules are rules of their own: `&` and a descendant join the
+# parent's selector, and a nested block never folds into its parent.
+def test_a_rule_nested_in_the_root_is_a_component_and_the_root_keeps_its_properties():
+    imported = _import(":root {\n  .card { color: red; --card-pad: 16px; }\n  --a: 1px;\n}\n")
+    report = imported.report
+    assert [t.path for t in imported.tokens.tokens()] == ["a"]
+    assert report.entries == 2
+    assert [(i.where, i.name, i.message) for i in report.not_read] == [
+        ("theme.css:2", "--card-pad", "is set on :root .card, not on the root or a theme "
+                                      "selector; a property set on a component is not a system "
+                                      "token; move it to :root if it is one")]
+
+
+def test_properties_after_a_nested_rule_are_read():
+    imported = _import(":root { --a: 1px; .x { --b: 2px; } --c: 3px; }\n")
+    assert [t.path for t in imported.tokens.tokens()] == ["a", "c"]
+    assert [i.name for i in imported.report.not_read] == ["--b"]
+    assert imported.report.entries == 3
+
+
+def test_a_nested_dark_class_and_a_nested_dark_query_are_the_dark_scheme():
+    imported = read_css(PROBES / "nested.css")
+    ts, report = imported.tokens, imported.report
+    assert [t.path for t in ts.tokens()] == ["ink", "gap"]
+    assert ts.get("ink").modes == {"scheme:dark": "#EEEEEE"}
+    assert (imported.forms, imported.scheme) == (
+        {"scheme": (".dark", "(prefers-color-scheme: dark)")}, "system")
+    assert report.entries == 5
+    assert [(i.where, i.name) for i in report.not_read] == [("nested.css:5", "--card-pad")]
+    assert [(i.where, i.name) for i in report.notes] == [
+        ("nested.css:3", ":root.dark"),
+        ("nested.css:4", "@media (prefers-color-scheme: dark) :root")]
+
+
+def test_an_unclosed_nested_block_is_named_with_its_line():
+    with pytest.raises(InputError) as exc:
+        _import(":root {\n  --a: 1px;\n  .x {\n    --b: 2px;\n}\n")
+    assert "block opened on line 1 that never closes" in str(exc.value)
+
+
+# The exporter keeps a file's own selector for an axis wherever the axis
+# sits in a combined key.
+def test_a_custom_form_after_an_engine_axis_round_trips():
+    first = _import(':root { --gap: 8px; }\n.x { --gap: 6px; }\n'
+                    '[data-density="compact"].x { --gap: 2px; }\n')
+    assert first.forms == {"class-x": (".x", "")}
+    text = to_css(first.tokens, scheme=first.scheme, forms=first.forms)
+    assert ':root[data-density="compact"].x {\n  --gap: 2px;\n}' in text
+    second = _import(text)
+    assert second.forms == first.forms
+    assert second.tokens.get("gap").modes == first.tokens.get("gap").modes
+    assert to_css(second.tokens, scheme=second.scheme, forms=second.forms) == text
+
+
+# A selector list is the root when each member is the root or a theme
+# selector at its base value.
+def test_a_root_list_is_the_root_for_a_mode_class():
+    imported = _import(":root, :host { --a: 1px; }\n.compact { --a: 2px; }\n")
+    assert dict(imported.tokens.axes) == {"class-compact": ("off", "on")}
+    assert imported.tokens.get("a").modes == {"class-compact:on": {"value": 2, "unit": "px"}}
+    assert imported.report.not_read == []
+
+
+def test_the_root_listed_with_its_light_attribute_is_the_base():
+    imported = read_css(PROBES / "root-and-light-attribute.css")
+    ts, report = imported.tokens, imported.report
+    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    assert (imported.forms, imported.scheme) == ({"scheme": ("[data-ui-theme=dark]", "")},
+                                                 "light")
+    assert [t.path for t in ts.tokens()] == [
+        "ui-blue", "ui-white", "ui-gray-900", "ui-primary", "ui-body-color", "ui-body-bg",
+        "ui-font-sans-serif", "ui-body-font-size", "ui-body-line-height", "ui-border-radius",
+        "ui-box-shadow"]
+    assert ts.get("ui-body-bg").modes == {"scheme:dark": "#212529"}
+    assert [i.name for i in report.not_read] == [
+        "--ui-primary-rgb", "--ui-gradient", "--ui-link-color-rgb"]
+    assert [(i.name, i.message) for i in report.notes] == [
+        ("[data-ui-theme=dark]", "is the dark scheme; 2 properties were paired by name with "
+                                 "the root's and read as scheme:dark (--ui-body-color, "
+                                 "--ui-body-bg)")]
+    text = to_css(ts, scheme=imported.scheme, forms=imported.forms)
+    assert ":root[data-ui-theme=dark] {\n  color-scheme: dark;\n" in text
+    again = _import(text)
+    assert (again.forms, again.scheme) == (imported.forms, imported.scheme)
+
+
+# Refusals name the input and a fix that works.
+def test_a_light_scheme_query_says_where_light_values_belong():
+    report = _import(":root { --ink: #111111; }\n"
+                     "@media (prefers-color-scheme: light) { :root { --ink: #000000; } }\n").report
+    assert [(i.name, i.message) for i in report.not_read] == [
+        ("--ink", "is set under @media (prefers-color-scheme: light); light is the base "
+                  "scheme, so its values belong on :root")]
+
+
+def test_a_third_value_of_an_imported_axis_names_the_cause():
+    report = _import(':root { --a: 1px; }\n[data-brand="alt"] { --a: 2px; }\n'
+                     '[data-brand="other"] { --a: 3px; }\n').report
+    assert [(i.where, i.name, i.message) for i in report.not_read] == [
+        ("theme.css:3", "--a", 'is set under [data-brand="other"], but [data-brand] already '
+                               "switches to alt; an imported axis has one value besides its "
+                               "base, so give other an attribute of its own")]
+
+
+@pytest.mark.parametrize("selector", [
+    ":root:not(.light)", ":where(.dark)", ":host(.dark)", ".dark, .dark *", "body.dark"])
+def test_a_scheme_selector_in_a_form_not_read_is_named(selector):
+    text = (":root { --ink: #111111; }\n"
+            f"@media (prefers-color-scheme: dark) {{ {selector} {{ --ink: #EEEEEE; }} }}\n"
+            if selector == ":root:not(.light)" else
+            f":root {{ --ink: #111111; }}\n{selector} {{ --ink: #EEEEEE; }}\n")
+    report = _import(text).report
+    assert [(i.name, i.message) for i in report.not_read] == [
+        ("--ink", f"is set on {selector}, a scheme selector in a form this importer does not "
+                  'read; write the dark values under .dark, [data-theme="dark"] or @media '
+                  "(prefers-color-scheme: dark) on :root")]
+
+
+def test_a_value_marked_important_is_named():
+    report = _import(":root { --a: 4px !important; }\n").report
+    assert [(i.name, i.message) for i in report.not_read] == [
+        ("--a", "is marked !important; drop !important, since a token holds only the value")]
+
+
+def test_a_shadow_in_em_names_the_unit():
+    report = _import(":root { --s: 0 0.1em 0.2em #000; }\n").report
+    assert [(i.name, i.message) for i in report.not_read] == [
+        ("--s", "0.1em is relative to the parent's font size, so it has no fixed value; write "
+                "it in px or rem")]
+
+
+def test_equal_dark_values_in_two_forms_are_not_a_clash():
+    imported = _import(":root { --a: #000000; }\n.dark { --a: #fff; }\n"
+                       "@media (prefers-color-scheme: dark) { :root { --a: #FFFFFF; } }\n")
+    assert imported.report.not_read == []
+    assert imported.tokens.get("a").modes == {"scheme:dark": "#FFFFFF"}
+
+
+def test_a_second_dark_form_says_how_it_is_written_back():
+    imported = _import(":root { --ink: #111111; }\n.dark { --ink: #EEEEEE; }\n"
+                       '[data-mode="dark"] { --ink: #EEEEEE; }\n')
+    assert imported.forms == {"scheme": (".dark", "")}
+    assert [(i.name, i.message) for i in imported.report.notes] == [
+        (".dark", "is the dark scheme; 1 property was paired by name with the root's and read "
+                  "as scheme:dark (--ink)"),
+        ('[data-mode="dark"]', "is the dark scheme; 1 property was paired by name with the "
+                               "root's and read as scheme:dark (--ink); it is written back as "
+                               ".dark")]
+
+
+# The real-world shapes a review probed, as neutral fixtures.
+PROBES = Path(__file__).resolve().parents[1] / "fixtures" / "css_probes"
+
+
+def test_hsl_channels_are_named_with_the_function_to_write():
+    imported = read_css(PROBES / "hsl-channels-globals.css")
+    report = imported.report
+    assert [t.path for t in imported.tokens.tokens()] == ["radius"]
+    assert [(i.where, i.name, i.message) for i in report.not_read][:2] == [
+        ("hsl-channels-globals.css:5", "--background", "0 0% 100% is hsl channels without "
+                                                       "hsl(); write hsl(0 0% 100%) or hex"),
+        ("hsl-channels-globals.css:6", "--foreground", "222.2 84% 4.9% is hsl channels "
+                                                       "without hsl(); write hsl(222.2 84% "
+                                                       "4.9%) or hex")]
+    assert [i.name for i in report.not_read] == [
+        "--background", "--foreground", "--primary", "--primary-foreground", "--border"]
+
+
+def test_the_oklch_form_pairs_its_dark_class_and_maps_the_vivid_color():
+    imported = read_css(PROBES / "oklch-theme-inline.css")
+    ts, report = imported.tokens, imported.report
+    assert [t.path for t in ts.tokens()] == [
+        "radius", "background", "foreground", "primary", "chart-1", "color-background",
+        "color-primary"]
+    assert [t.path for t in ts.tokens() if t.modes] == [
+        "background", "foreground", "primary", "chart-1"]
+    assert [(m.where, m.name) for m in report.mapped] == [
+        ("oklch-theme-inline.css:8", "--chart-1")]
+    assert [i.name for i in report.not_read] == ["--radius-sm"]
+    assert [i.name for i in report.notes] == [".dark"]
+
+
+def test_the_compiled_utility_theme_reads_its_theme_layer():
+    imported = read_css(PROBES / "utility-compiled.css")
+    ts, report = imported.tokens, imported.report
+    assert len(ts.tokens()) == 12 and dict(ts.axes) == {}
+    assert ts.get("default-font-family").value == "{font-sans}"
+    assert [i.name for i in report.not_read] == ["--text-base--line-height"]
+    assert [(m.where, m.name) for m in report.mapped] == [
+        ("utility-compiled.css:6", "--color-sky-500")]
+    assert report.entries == 13
+
+
+def test_every_layer_is_read_through():
+    imported = read_css(PROBES / "layers.css")
+    ts, report = imported.tokens, imported.report
+    assert [t.path for t in ts.tokens()] == ["ink", "gap", "gap-lg"]
+    assert ts.get("ink").modes == {"scheme:dark": "#EEEEEE"}
+    assert [i.name for i in report.not_read] == ["--btn-pad"]
+    assert [i.name for i in report.notes] == ['[data-theme="dark"]']
+
+
+def test_a_scoped_theme_with_no_root_is_named_with_its_fix():
+    report = read_css(PROBES / "scoped-theme.css").report
+    assert [(i.name, i.message) for i in report.not_read] == [
+        (n, f"is set on {sel}, not on the root or a theme selector; a property set on a "
+            "component is not a system token; move it to :root if it is one")
+        for n, sel in [("--ink", ".theme-harbor"), ("--gap", ".theme-harbor"),
+                       ("--ink", ".theme-harbor.dark")]]

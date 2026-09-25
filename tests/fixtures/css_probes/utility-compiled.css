@@ -1,0 +1,28 @@
+@layer theme, base, components, utilities;
+@layer theme {
+  :root, :host {
+    --font-sans: ui-sans-serif, system-ui, sans-serif, "Color Emoji";
+    --color-signal-500: oklch(63.7% 0.237 25.331);
+    --color-sky-500: oklch(62.3% 0.214 259.815);
+    --color-black: #000;
+    --spacing: 0.25rem;
+    --container-md: 28rem;
+    --text-base: 1rem;
+    --text-base--line-height: calc(1.5 / 1);
+    --font-weight-bold: 700;
+    --radius-lg: 0.5rem;
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --default-transition-duration: 150ms;
+    --default-font-family: var(--font-sans);
+  }
+}
+@layer base {
+  *, ::after, ::before { box-sizing: border-box; }
+}
+@layer utilities {
+  .mx-auto { margin-inline: auto; }
+  .p-4 { padding: calc(var(--spacing) * 4); }
+  .text-signal-500 { color: var(--color-signal-500); }
+  .dark\:bg-black { &:where(.dark, .dark *) { background-color: var(--color-black); } }
+  .md\:p-8 { @media (width >= 48rem) { padding: calc(var(--spacing) * 8); } }
+}

@@ -145,12 +145,12 @@ def _rules(ts: TokenSet, key: str, scheme: str = "system",
         if axis == "scheme" and scheme == "dark":
             options.append([("", f':not([{attr}="{ts.axes[axis][0]}"])', "")])
             continue
-        forms = [("", f'[{attr}="{value}"]', "")]
+        choices = [("", f'[{attr}="{value}"]', "")]
         if media and not (axis == "scheme" and scheme == "light"):
-            forms.append((media, f':not([{attr}="{ts.axes[axis][0]}"])', ""))
+            choices.append((media, f':not([{attr}="{ts.axes[axis][0]}"])', ""))
         if axis == "direction" and value == "rtl":
-            forms.append(("", "", NESTED_RTL))
-        options.append(forms)
+            choices.append(("", "", NESTED_RTL))
+        options.append(choices)
     out = []
     for combo in itertools.product(*options):
         media = " and ".join(m for m, _, _ in combo if m)
@@ -170,7 +170,9 @@ def to_css(ts: TokenSet, *, scheme: str = "system",
     so native controls follow it. A rule over more axes has higher
     specificity, so a combined override wins over single-axis ones in every
     case. `forms` gives an imported system's own selector for an axis
-    (css_in records it), so the system is written back the way it came.
+    (css_in records it), so the system is written back the way it came. An
+    imported set with a scheme axis gets color-scheme too; on :root it
+    outranks an app's own `html { color-scheme: light dark }`.
     Last come the layout's responsive aliases (layout.responsive_css), one
     property per tiered role that follows the viewport."""
     if scheme not in SCHEME_DEFAULTS:
